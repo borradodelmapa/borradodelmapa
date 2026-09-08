@@ -5303,6 +5303,31 @@ body {
   vertical-align: middle;
 }
 
+/* ── Fase 6 simplificada — plan multitramo (lista de tramos) ── */
+.mtl-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+  padding:11px 12px; background:var(--gris); border:1px solid var(--linea-fuerte); border-bottom:2px solid var(--accent); }
+.mtl-head-k { font-family:var(--font-cond); font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted); }
+.mtl-head-v { font-family:var(--font-cond); font-size:15px; font-weight:800; text-transform:uppercase; color:var(--accent); text-align:right; }
+.mtl-row { background:var(--gris); border:1px solid var(--linea); border-top:none; }
+.mtl-row-head { display:flex; align-items:center; gap:10px; padding:11px 12px; cursor:pointer; }
+.mtl-ico { width:26px; height:26px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--linea-fuerte); font-size:13px; }
+.mtl-row-main { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.mtl-kind { font-family:var(--font-cond); font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); }
+.mtl-title { font-size:13px; font-weight:600; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mtl-side { font-family:var(--font-cond); font-size:12px; font-weight:700; color:var(--accent); white-space:nowrap; flex-shrink:0; }
+.mtl-arrow { font-size:11px; color:var(--accent); flex-shrink:0; transition:transform .2s; }
+.mtl-row.open .mtl-arrow { transform:rotate(180deg); }
+.mtl-row-body { display:none; padding:0 12px 10px; }
+.mtl-row.open .mtl-row-body { display:block; }
+/* dentro del tramo, la cabecera de resultados es redundante con el título del tramo */
+.mtl-row-body .salma-results-header { display:none; }
+.mtl-row-body .salma-action-results { margin:0; padding:0; }
+.mtl-cta { width:100%; border:0; cursor:pointer; background:var(--accent); color:#0D0F10;
+  font-family:var(--font-cond); text-transform:uppercase; font-weight:800; letter-spacing:.05em; font-size:14px; padding:13px; }
+.mtl-cta:hover { filter:brightness(1.1); }
+.mtl-cta:disabled { opacity:.6; cursor:default; }
+
 /* ═══════════════════════════════════════════
    PROFILE V2 — Premium Redesign
    ═══════════════════════════════════════════ */

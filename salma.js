@@ -2572,6 +2572,10 @@ const salma = {
   _renderActionResults(results) {
     const area = this._getChatArea();
     if (!area) return;
+    // Fase 6 simplificada — si en la MISMA respuesta llegan ≥2 resultados reservables
+    // (vuelos/hoteles/lugares), es una petición multitramo → vista de plan por tramos.
+    const legs = (results || []).filter(r => r && !r.error && ['flights', 'hotels', 'places'].includes(r.type));
+    if (legs.length >= 2) { this._renderMultiLeg(legs, area); return; }
     for (const result of results) {
       if (!result || result.error) continue;
       const wrap = document.createElement('div');
@@ -2587,6 +2591,90 @@ const salma = {
         this._scrollToBottom(true);
       }
     }
+  },
+
+  // Fase 6 simplificada (frontend, sin Worker): agrupa los resultados como tramos de un plan.
+  // NO hay detección de conflictos ni progreso por tramo — eso es follow-up de Worker.
+  _legMeta(r) {
+    if (r.type === 'flights') {
+      const prices = (r.flights || []).map(f => parseFloat(f.price)).filter(n => !isNaN(n));
+      const side = prices.length ? `~${Math.round(Math.min(...prices))} €` : (r.flights && r.flights.length ? `${r.flights.length} opc.` : '');
+      return { icon: '✈', kind: 'Vuelo', title: `${r.origin || ''} → ${r.destination || ''}`.trim(), side };
+    }
+    if (r.type === 'hotels') {
+      const isAir = !!r.airbnb_link && !(r.hotels && r.hotels.length);
+      return { icon: isAir ? '🏠' : '🏨', kind: isAir ? 'Alojamiento' : 'Hotel', title: r.city || 'la zona', side: (r.hotels && r.hotels.length) ? `${r.hotels.length} opc.` : 'Airbnb' };
+    }
+    return { icon: '📍', kind: 'Lugares', title: r.query || '', side: (r.places && r.places.length) ? `${r.places.length}` : '' };
+  },
+
+  _renderMultiLeg(legs, area) {
+    const wrap = document.createElement('div');
+    wrap.className = 'salma-action-results mtl';
+
+    // Total aproximado: solo suma vuelos (los hoteles no traen precio numérico).
+    let flightTotal = 0, hasFlightPrice = false;
+    for (const r of legs) {
+      if (r.type === 'flights' && Array.isArray(r.flights) && r.flights.length) {
+        const prices = r.flights.map(f => parseFloat(f.price)).filter(n => !isNaN(n));
+        if (prices.length) { flightTotal += Math.min(...prices); hasFlightPrice = true; }
+      }
+    }
+    const head = document.createElement('div');
+    head.className = 'mtl-head';
+    head.innerHTML = `<span class="mtl-head-k">Plan</span><span class="mtl-head-v">${legs.length} tramos${hasFlightPrice ? ` · vuelos desde ~${Math.round(flightTotal)} €` : ''}</span>`;
+    wrap.appendChild(head);
+
+    legs.forEach((r, i) => {
+      const meta = this._legMeta(r);
+      const row = document.createElement('div');
+      row.className = 'mtl-row';
+      row.innerHTML = `
+        <div class="mtl-row-head">
+          <span class="mtl-ico">${meta.icon}</span>
+          <div class="mtl-row-main">
+            <span class="mtl-kind">Tramo ${i + 1} · ${meta.kind}</span>
+            <span class="mtl-title">${escapeHTML(meta.title)}</span>
+          </div>
+          <span class="mtl-side">${escapeHTML(meta.side || '')}</span>
+          <span class="mtl-arrow">▾</span>
+        </div>
+        <div class="mtl-row-body"></div>`;
+      const body = row.querySelector('.mtl-row-body');
+      const sub = document.createElement('div');
+      sub.className = 'salma-action-results';
+      if (r.type === 'flights') this._renderFlightResults(r, sub);
+      else if (r.type === 'hotels') this._renderHotelResults(r, sub);
+      else this._renderPlaceResults(r, sub);
+      body.appendChild(sub);
+      row.querySelector('.mtl-row-head').addEventListener('click', () => row.classList.toggle('open'));
+      wrap.appendChild(row);
+    });
+
+    const cta = document.createElement('button');
+    cta.className = 'mtl-cta';
+    cta.textContent = 'Guardar plan';
+    cta.addEventListener('click', () => {
+      const summary = legs.map((r, i) => {
+        const m = this._legMeta(r);
+        return `Tramo ${i + 1} · ${m.kind}: ${m.title}${m.side ? ' (' + m.side + ')' : ''}`;
+      }).join('\n');
+      if (window.currentUser && typeof notasManager !== 'undefined' && notasManager.create) {
+        try {
+          notasManager.create({ texto: 'Plan de viaje\n\n' + summary, tipo: 'transporte', origen: 'salma', fuente: 'multitramo' });
+          cta.textContent = 'Guardado ✓';
+          cta.disabled = true;
+        } catch (_) { this.send && this.send('Guárdame este plan de viaje en una nota'); }
+      } else {
+        this.send && this.send('Guárdame este plan de viaje en una nota');
+      }
+    });
+    wrap.appendChild(cta);
+
+    area.appendChild(wrap);
+    const first = wrap.querySelector('.mtl-row');
+    if (first) first.classList.add('open');
+    this._scrollToBottom(true);
   },
 
   _renderFlightResults(result, wrap) {
