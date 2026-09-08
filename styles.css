@@ -1667,6 +1667,38 @@ body {
 }
 .btn-ghost:hover { border-color:var(--dorado); color:var(--dorado); }
 
+/* ═══════════════════════════════════════════════════════════════
+   Rediseño "viajero real" (doc 8 sep) — capa de reskin: chat + guía
+   de etapas. Radio 0, acento único naranja, Barlow para cifras/labels.
+   Va como capa al final para no tocar las reglas de arriba.
+   ═══════════════════════════════════════════════════════════════ */
+/* burbujas de chat */
+.msg-avatar { border-color:var(--accent); }
+.msg-salma-name { font-family:var(--font-cond); color:var(--accent); }
+.msg-body-salma { border-radius:0; border-color:rgba(236,235,232,.20); }
+.msg-body-salma a { color:var(--accent); }
+.msg-body-user { border-radius:0; background:var(--accent); color:#0D0F10; }
+.loading-dots span { background:var(--accent); }
+#loading-status { font-family:var(--font-cond); color:var(--accent); }
+.loading-motiv { font-family:var(--font-cond); }
+/* tarjeta de guía */
+.guide-card { border-radius:0; border-color:rgba(236,235,232,.22); border-top:2px solid var(--accent); }
+.guide-header { border-bottom:1.5px solid var(--accent); }
+.guide-title { font-family:var(--font-cond); font-weight:800; letter-spacing:0; }
+.guide-meta { font-family:var(--font-cond); color:var(--accent); }
+.guide-summary { color:var(--text-secondary); }
+.guide-map-container, .guide-day-map { border-radius:0; }
+.guide-days-label, .guide-day-num, .guide-day-arrow { font-family:var(--font-cond); color:var(--accent); }
+.guide-day { border-radius:0; border-color:rgba(236,235,232,.18); }
+.guide-day-head { background:rgba(244,99,11,.06); }
+.guide-day-head:hover { background:rgba(244,99,11,.12); }
+.guide-day-count { font-family:var(--font-cond); color:var(--accent); opacity:.85; }
+/* botones de la guía (ámbito acotado, el barrido global va en Fase 4) */
+.guide-actions .btn-primary { border-radius:0; background:var(--accent); color:#0D0F10; font-family:var(--font-cond); font-size:12px; }
+.guide-actions .btn-primary:hover { filter:brightness(1.1); background:var(--accent); }
+.guide-actions .btn-ghost { border-radius:0; border-color:rgba(236,235,232,.45); color:var(--text-primary); font-family:var(--font-cond); font-size:12px; }
+.guide-actions .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+
 /* ═══ STATE 3: MIS VIAJES ═══ */
 .viajes-header { padding:16px 20px 12px; }
 .viajes-title {
