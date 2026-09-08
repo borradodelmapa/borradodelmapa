@@ -269,6 +269,15 @@ const guideRenderer = {
       const isFirstStop = isFirstDay && i === 0;
       const gmapsUrl = this._stopGmapsUrl(s, country);
 
+      // Confianza del dato (regla UX 1 / bug A) — se deduce de lo que trae verifyAllStops:
+      // place_id = lugar existe en Google Places; _soft_match = coincidencia floja.
+      const confHtml = s.place_id
+        ? (s._soft_match
+            ? '<span class="gc-approx">≈ Coincidencia aproximada</span>'
+            : '<span class="gc-verified">✓ Lugar verificado</span>')
+        : '<span class="gc-estimated">Lugar sin verificar</span>';
+      const hasSalmaText = !!(s.narrative || s.context || s.local_secret || s.food_nearby || s.alt_bad_weather);
+
       // Badge de ruta (km + carretera) — si hay km desde la parada anterior
       let routeBadgeHtml = '';
       if (s.km_from_previous && s.km_from_previous > 0) {
@@ -305,7 +314,7 @@ const guideRenderer = {
         const eatParts = [];
         if (s.eat.name) eatParts.push('<strong>' + escapeHTML(s.eat.name) + '</strong>');
         if (s.eat.dish) eatParts.push(linkify(s.eat.dish));
-        if (s.eat.price_approx) eatParts.push(escapeHTML(s.eat.price_approx));
+        if (s.eat.price_approx) eatParts.push(escapeHTML(s.eat.price_approx) + ' <span class="gc-estimated">est.</span>');
         tagsHtml += `<div class="guide-stop-tag tag-eat">
           <span class="guide-stop-tag-label">🍽️ COMER AQUÍ</span>
           ${eatParts.join(' · ')}
@@ -322,7 +331,7 @@ const guideRenderer = {
         if (s.sleep.name) sleepParts.push('<strong>' + escapeHTML(s.sleep.name) + '</strong>');
         if (s.sleep.zone) sleepParts.push(escapeHTML(s.sleep.zone));
         if (s.sleep.type) sleepParts.push(escapeHTML(s.sleep.type));
-        if (s.sleep.price_range) sleepParts.push(escapeHTML(s.sleep.price_range));
+        if (s.sleep.price_range) sleepParts.push(escapeHTML(s.sleep.price_range) + ' <span class="gc-estimated">est.</span>');
         tagsHtml += `<div class="guide-stop-tag tag-sleep">
           <span class="guide-stop-tag-label">🛏️ DORMIR</span>
           ${sleepParts.join(' · ')}
@@ -335,7 +344,8 @@ const guideRenderer = {
         </div>`;
       }
       if (s.practical) {
-        tagsHtml += `<div class="guide-stop-practical">${linkify(s.practical)}</div>`;
+        const pv = s.place_id ? '<span class="gc-verified">Horario verificado</span> ' : '';
+        tagsHtml += `<div class="guide-stop-practical">${pv}${linkify(s.practical)}</div>`;
       }
 
       // Foto: lazy load — si hay photo_ref usa eso, si no busca por nombre+coords
@@ -352,9 +362,11 @@ const guideRenderer = {
             <span class="guide-stop-arrow">▾</span>
           </div>
           <div class="guide-stop-body">
+            <div class="gc-line">${confHtml}</div>
             ${photoHtml}
             ${s.narrative ? `<p class="guide-stop-narrative">${linkify(s.narrative)}</p>` : ''}
             ${tagsHtml}
+            ${hasSalmaText ? '<p class="gc-disclaimer">Contexto y recomendaciones: estimación de Salma, sin verificar.</p>' : ''}
             ${gmapsUrl ? `<a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
               VER EN GOOGLE MAPS →
             </a>` : ''}

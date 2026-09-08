@@ -1741,6 +1741,19 @@ body {
 .guide-nearby-nav { border-radius:0; color:var(--accent); border-color:rgba(236,235,232,.4); }
 .guide-nearby-nav:hover { background:rgba(244,99,11,.10); }
 
+/* ── Fase 5 mitad A: dato verificado vs estimado (regla UX 1 / bug A) ── */
+.gc-line { margin:0 0 9px; }
+.gc-verified, .gc-approx, .gc-estimated {
+  display:inline-block; font-family:var(--font-cond); font-size:9px; font-weight:700;
+  letter-spacing:.09em; text-transform:uppercase; line-height:1;
+}
+.gc-verified { color:var(--text-muted); }        /* verificado: sin color */
+.gc-approx, .gc-estimated { color:var(--accent); } /* estimado / aproximado: acento */
+.gc-disclaimer {
+  margin:9px 0 0; font-family:var(--font-cond); font-size:9px; font-weight:600;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted);
+}
+
 /* ═══ STATE 3: MIS VIAJES ═══ */
 .viajes-header { padding:16px 20px 12px; }
 .viajes-title {
