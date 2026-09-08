@@ -541,14 +541,13 @@ function _renderChatEmpty() {
       if (!_rStopped) _rTimer = setInterval(_adv, 6000);
       _rot.addEventListener('click', () => {
         _stopRot();
-        // Pasa el ejemplo al chat de abajo, hace foco, y quita la caja de ejemplos
-        // + su CTA: a partir de aquí el usuario escribe su ruta directamente abajo.
+        // Quita la caja de ejemplos + su CTA y deja el input de Salma de abajo
+        // VACÍO y con el foco: el usuario escribe su ruta desde cero.
         const inp = document.getElementById('main-input');
         if (inp) {
-          inp.value = _exs[_ri];
+          inp.value = '';
           inp.focus();
           try { inp.dispatchEvent(new Event('input', { bubbles: true })); } catch (_) {}
-          try { inp.setSelectionRange(inp.value.length, inp.value.length); } catch (_) {}
         }
         _rot.remove();
         const cta = area.querySelector('[data-ce-rotable-cta]');
