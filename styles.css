@@ -6282,6 +6282,13 @@ body {
 .ce-rotable-cta:active{transform:scale(.99);}
 .ce-scrollhint{text-align:center;font-family:var(--ce-sign);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ce-ink3);padding:12px 0 0;}
 .ce-split{margin:14px 0 0;border-top:2px dashed var(--ce-line);}
+/* botón que revela el billete rápido — destacado pero secundario (no relleno sólido) */
+.ce-openbillete{width:100%;margin:11px 0 0;cursor:pointer;background:transparent;
+  border:1.5px solid var(--ce-amber);color:var(--ce-amber);
+  font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;letter-spacing:.05em;font-size:13px;
+  padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.ce-openbillete:hover{background:var(--ce-amber);color:#0D0F10;}
+.ce-openbillete span{font-size:11px;}
 
 /* cabecera tipo tablero */
 .ce-top{

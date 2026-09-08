@@ -354,7 +354,6 @@ function _renderChatEmpty() {
       <div class="ce-stub">
         <button class="ce-emit" data-ce-emit>Trazar ruta <span>→</span></button>
         <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
-        ${hasActive ? '<button class="ce-back-active" data-ce-back-active>← Volver a la ruta activa</button>' : ''}
       </div>`;
 
   // Tablero de RUTA ACTIVA — modo compañero. Abre la GUÍA del viaje + billete nuevo.
@@ -414,15 +413,14 @@ function _renderChatEmpty() {
           </div>
         </div>
         <button class="ce-rotable-cta" data-ce-hero data-ce-rotable-cta>Trazar ruta <span>→</span></button>
-        <div class="ce-scrollhint" data-ce-hero>↓ Desliza para el billete rápido ↓</div>
-        <div class="ce-split" data-ce-hero></div>`;
+        <button class="ce-openbillete" data-ce-hero data-ce-openbillete>Desliza para trazar ruta rápida <span>↓</span></button>
+        ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
 
     area.innerHTML = `
       <div class="chat-empty">
         <div class="ce-top"><span class="ce-hi">${_ceHi}</span><span class="ce-meta">${_ceMonth}</span></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
-        <div class="${_initCard.cls}" id="ce-card">${_initCard.html}</div>
-        <div class="ce-or">o <b>${_ceActive ? 'pregúntale a Salma' : 'díctame el plan entero'}</b> abajo ↓</div>
+        <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
       </div>`;
 
@@ -449,27 +447,10 @@ function _renderChatEmpty() {
         if (e.target.closest('[data-ce-newbillete]')) {
           ceCard.className = 'ce-card ce-ticket';
           ceCard.innerHTML = _ceBilleteHTML(true);
+          ceCard.hidden = true;              // arranca oculto tras "Desliza para trazar ruta rápida"
           const g = area.querySelector('.ce-greet');
           if (g) g.remove();                 // el eslogan hero lo sustituye
-          _ensureHero();                     // eslogan + caja rotable encima del billete
-          const or = area.querySelector('.ce-or b');
-          if (or) or.textContent = 'díctame el plan entero';
-          const dest = ceCard.querySelector('.ce-tk-dest');
-          if (dest) dest.focus();
-          return;
-        }
-        // Billete → volver a la ruta activa (solo si se llegó desde el modo compañero)
-        if (e.target.closest('[data-ce-back-active]')) {
-          if (_ceActive) {
-            ceCard.className = 'ce-card ce-active';
-            ceCard.innerHTML = _ceRouteHTML(_ceActive);
-            area.querySelectorAll('[data-ce-hero]').forEach(el => el.remove());  // fuera eslogan/rotable
-            if (!area.querySelector('.ce-greet')) {
-              ceCard.insertAdjacentHTML('beforebegin', '<div class="ce-greet">¿Cómo va el viaje?</div>');
-            }
-            const or = area.querySelector('.ce-or b');
-            if (or) or.textContent = 'pregúntale a Salma';
-          }
+          _ensureHero();                     // eslogan + rotable + botón "Desliza..." + volver a ruta activa
           return;
         }
         // Billete — desplegar "Afinar"
@@ -577,9 +558,38 @@ function _renderChatEmpty() {
     const _ensureHero = () => {
       const card = area.querySelector('#ce-card');
       if (card && !area.querySelector('[data-ce-hero]')) card.insertAdjacentHTML('beforebegin', _ceHeroHTML);
+      if (card) card.hidden = true;
       _wireRotable();
     };
     if (!_ceActive) _wireRotable();
+
+    // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
+    // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
+    area.addEventListener('click', (e) => {
+      if (e.target.closest('[data-ce-openbillete]')) {
+        const card = area.querySelector('#ce-card');
+        if (card) {
+          card.hidden = false;
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const dest = card.querySelector('.ce-tk-dest');
+          if (dest) setTimeout(() => { try { dest.focus(); } catch (_) {} }, 320);
+        }
+        const ob = area.querySelector('[data-ce-openbillete]');
+        if (ob) ob.hidden = true;
+        return;
+      }
+      if (e.target.closest('[data-ce-back-active]')) {
+        const card = area.querySelector('#ce-card');
+        if (_ceActive && card) {
+          card.className = 'ce-card ce-active';
+          card.hidden = false;
+          card.innerHTML = _ceRouteHTML(_ceActive);
+          area.querySelectorAll('[data-ce-hero]').forEach(el => el.remove());
+          if (!area.querySelector('.ce-greet')) card.insertAdjacentHTML('beforebegin', '<div class="ce-greet">¿Cómo va el viaje?</div>');
+        }
+        return;
+      }
+    });
   } catch (err) {
     console.warn('[chat-empty] render nuevo falló, uso fallback', err);
     area.innerHTML = _ceFallback;
