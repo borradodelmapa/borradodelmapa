@@ -9019,7 +9019,11 @@ REGLAS:
         // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
         // PIEZA A — en el Tiempo 1 (recomendaciones) NO se inyectan: ni "Cómo llegar" por
         // parada ni "Ruta completa en Google Maps". Esos enlaces son para la guía ya montada.
-        if (!route && !guidedIsReco && env.GOOGLE_PLACES_KEY) {
+        // BUG A (8 sep) — tampoco en respuestas a FOTOS: la identificación por imagen es una
+        // conjetura; si el nombre casa con algún sitio real, se inyectaba un enlace autoritativo
+        // a un lugar que podía no ser el de la foto. El flujo de "guardar en el mapa" usa
+        // SALMA_ACTION:MAP_PIN, no estos enlaces, así que no se rompe.
+        if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY) {
           // Extraer destino del mensaje del usuario (prioritario sobre GPS)
           let _msgDest = (message || '').trim();
           _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
