@@ -1699,6 +1699,45 @@ body {
 .guide-actions .btn-ghost { border-radius:0; border-color:rgba(236,235,232,.45); color:var(--text-primary); font-family:var(--font-cond); font-size:12px; }
 .guide-actions .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
 
+/* ── Fase 3b: nivel parada ── */
+.guide-stop { border-bottom-color:rgba(236,235,232,.10); }
+.guide-stop-name { font-family:var(--font-cond); }
+.guide-stop-arrow { color:var(--accent); }
+.guide-stop-photo, .guide-stop-photo-placeholder, .guide-stop-img { border-radius:0; }
+.guide-stop-narrative { color:var(--text-secondary); }
+/* tags: sin colores decorativos, la etiqueta hace el trabajo (regla "un solo acento") */
+.guide-stop-tag,
+.tag-secret, .tag-food, .tag-context, .tag-eat, .tag-sleep, .tag-weather {
+  border-radius:0; background:var(--gris2);
+  border-left:3px solid rgba(236,235,232,.28); color:var(--text-secondary);
+}
+.guide-stop-tag .guide-stop-tag-label { font-family:var(--font-cond); color:var(--text-muted); }
+.guide-stop-route-badge { font-family:var(--font-cond); border-left-color:rgba(236,235,232,.30); }
+.guide-stop-practical { font-family:var(--font-cond); border-radius:0; }
+.guide-stop-gmaps { font-family:var(--font-cond); color:var(--accent); }
+.guide-stop-gmaps:hover { color:var(--accent); filter:brightness(1.15); }
+.guide-day-km { font-family:var(--font-cond); color:var(--accent); }
+.guide-gmaps-link { font-family:var(--font-cond); color:var(--accent); }
+.guide-day-gmaps, .guide-day-gmaps-link {
+  border-radius:0; font-family:var(--font-cond);
+  background:transparent; border:1px solid rgba(236,235,232,.35); color:var(--text-primary);
+}
+.guide-day-gmaps-link:hover { background:rgba(244,99,11,.10); border-color:var(--accent); color:var(--text-primary); }
+
+/* ── Fase 3c: secciones secundarias ── */
+.guide-section { border-radius:0; }
+.guide-section-label, .guide-tips-label, .guide-nearby-label { font-family:var(--font-cond); color:var(--accent); }
+.guide-info-block { color:var(--text-secondary); border-bottom-color:rgba(236,235,232,.10); }
+.guide-budget-total { font-family:var(--font-cond); color:var(--accent); }
+.guide-phrase-original { color:var(--text-primary); }
+.guide-tips { border-radius:0; border-color:rgba(236,235,232,.22); }
+.guide-nearby { border-radius:0; border-color:rgba(236,235,232,.22); background:rgba(244,99,11,.045); }
+.guide-nearby-item { border-top-color:rgba(236,235,232,.15); }
+.guide-nearby-name { font-family:var(--font-cond); }
+.guide-nearby-km { border-radius:0; font-family:var(--font-cond); color:var(--accent); border-color:rgba(236,235,232,.3); }
+.guide-nearby-nav { border-radius:0; color:var(--accent); border-color:rgba(236,235,232,.4); }
+.guide-nearby-nav:hover { background:rgba(244,99,11,.10); }
+
 /* ═══ STATE 3: MIS VIAJES ═══ */
 .viajes-header { padding:16px 20px 12px; }
 .viajes-title {
