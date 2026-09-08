@@ -2174,7 +2174,7 @@ const salma = {
       $c.innerHTML = `
         <div class="cons-area fade-in">
           <div class="cons-header">
-            <button class="sv-back" onclick="history.back()" aria-label="Volver">‹</button>
+            <button class="sv-back" onclick="if(typeof showState==='function')showState('chat')" aria-label="Volver">‹</button>
             <div class="cons-title">Últimas consultas</div>
           </div>
           ${guest ? '<div class="cons-guest">Entra para tener tus consultas en todos tus dispositivos.</div>' : ''}

@@ -97,9 +97,11 @@ function showState(state) {
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
   } else if (state === 'chat') {
-    // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
-    const welcomeEl = $content.querySelector('.welcome-area');
-    if (welcomeEl) $content.innerHTML = '';
+    // Si venimos de una vista a pantalla completa (welcome, notas, vuelos, consultas…)
+    // el $content tiene OTRO markup: hay que recrear el #chat-area antes de restaurar.
+    if (!$content.querySelector('#chat-area')) {
+      $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+    }
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
     // Resetear botones cam/mic/send al volver al chat
@@ -112,8 +114,9 @@ function showState(state) {
       layer.className = 'chat-bg-layer';
       document.body.insertBefore(layer, document.body.firstChild);
     }
-    // Restaurar sesión previa o mostrar estado vacío
-    if (!document.getElementById('chat-area') || !document.getElementById('chat-area').querySelector('.msg')) {
+    // Restaurar sesión previa (conversación que estabas viendo) o estado vacío
+    const _ca = document.getElementById('chat-area');
+    if (!_ca || !_ca.querySelector('.msg')) {
       const restored = typeof salma !== 'undefined' && salma._restoreSession();
       if (!restored) _renderChatEmpty();
     }
@@ -367,8 +370,8 @@ function _renderChatEmpty() {
       <div class="ce-stops">${rt.stopsHtml}</div>
       <div class="ce-stats">${rt.stats.map(s => `<div class="ce-stat"><div class="ce-k">${s[0]}</div><div class="ce-v">${s[1]}</div></div>`).join('')}</div>
       <div class="ce-cta ce-cta--dual">
-        <button class="ce-cta-main" data-ce-guide>Abrir la guía <span>→</span></button>
-        <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete>Billete nuevo <span>+</span></button>
+        <button class="ce-cta-main" data-ce-guide>Abrir ruta <span>→</span></button>
+        <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete>Trazar nueva ruta <span>+</span></button>
       </div>`;
 
   // "Ruta nueva" quitado (Fase 5): el billete ya es el creador de ruta; ese chip
