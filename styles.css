@@ -466,6 +466,17 @@ body {
 .app-input:focus { border-color:var(--linea-fuerte); }
 /* doc 8 sep — radio 0 en la barra de escribir (input + micro/cámara/voz/enviar). Respuesta de Paco: radio 0 en burbujas y botones */
 .app-input, .app-mic, .app-cam, .app-voice-toggle, .app-send-arrow { border-radius:0 !important; }
+/* Fase 4b — radio 0 también en los botones-icono redondos de toda la app (doc: "ni botones").
+   Los avatares (fotos de personas) y los puntos decorativos siguen redondos. */
+.chat-photo-cancel, .foto-detail-close, .galeria-item-delete, .galeria-select-cancel-btn,
+.galeria-album-confirm, .galeria-album-cancel, .ve-photo-remove, .galeria-video-badge,
+.welcome-send, .fab-map, .app-help-btn,
+.viaje-card-delete, .viaje-card-dl, .viaje-card-video,
+.ccs-send, .ccs-cam-btn, .ccs-mic-btn, .sip-close,
+.map-compass-close, .map-search-mic,
+.profile-avatar-edit, .profile-info-btn, .notas-add-btn, .sos-config-num,
+.reminder-check, .diario-photo-delete,
+#chat-fresh { border-radius:0 !important; }
 .app-send-arrow {
   width:40px; height:40px; border-radius:50%; flex-shrink:0;
   background:var(--dorado); border:none; cursor:pointer;
