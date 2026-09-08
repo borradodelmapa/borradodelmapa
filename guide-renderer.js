@@ -637,7 +637,8 @@ const guideRenderer = {
 
   // ═══ MAPAS LEAFLET ═══
 
-  _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
+  // Paleta de día atenuada, día 1 en el acento (rediseño "viajero real", doc 8 sep). Igual que mapa-ruta.js.
+  _dayColors: ['#F4630B', '#B26A3C', '#6E8B6A', '#5E7E92', '#A65A4E', '#8A7093', '#C79A5C'],
   _maps: {},
 
   _getValidStops(stops) {
@@ -926,8 +927,8 @@ const guideRenderer = {
     badge.className = 'map-road-warning';
     badge.textContent = `⚠️ Parte de esta ruta no sigue la ${roadCheck.target}: ${detail}`;
     badge.style.cssText = 'position:absolute;left:8px;right:8px;bottom:8px;z-index:500;'
-      + 'background:rgba(20,20,20,0.88);color:#f5d78e;font-size:11px;line-height:1.35;'
-      + 'padding:6px 10px;border-radius:8px;border:1px solid rgba(245,215,142,0.35);pointer-events:none;';
+      + 'background:rgba(13,15,16,0.92);color:#F4630B;font-size:11px;line-height:1.35;'
+      + 'padding:6px 10px;border-radius:0;border:1px solid rgba(244,99,11,0.45);pointer-events:none;';
 
     mapEl.style.position = 'relative';
     mapEl.appendChild(badge);

@@ -2901,6 +2901,18 @@ body {
   position:absolute; bottom:0; left:50%; transform:translateX(-50%);
 }
 
+/* ── Fase 3d-ii: brújula, controles y popups del mapa (capa de reskin, doc 8 sep) ── */
+.map-ctrl-btn { border-radius:0; }
+.map-util-menu { border-radius:0; }
+.map-compass-n,.map-compass-s,.map-compass-e,.map-compass-w { font-family:var(--font-cond); }
+.map-compass-n { color:var(--accent); }
+.map-compass-needle-n { border-bottom-color:var(--accent); filter:drop-shadow(0 0 3px rgba(244,99,11,.45)); }
+.map-overlay-popup { border-radius:0; background:#0D0F10; border-color:rgba(236,235,232,.25); }
+.map-popup-photo { border-radius:0; }
+.map-popup-day, .map-popup-link { font-family:var(--font-cond); color:var(--accent); }
+.dark-popup .leaflet-popup-content-wrapper { border-radius:0; background:#0D0F10; border-color:rgba(236,235,232,.20); }
+.dark-popup .leaflet-popup-tip { background:#0D0F10; }
+
 /* ═══ SEARCH BAR (buscador sobre el mapa) ═══ */
 .map-search-bar {
   position:absolute; top:16px; left:64px; right:70px; z-index:500;
