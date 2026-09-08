@@ -3958,19 +3958,25 @@ let _liveRouteStops = [];
 let _liveInfoWindow = null;
 let _activeRouteData = null;
 
+// Persiste la ruta activa (localStorage + Firestore) SIN tocar el mapa.
+// Se llama al ver una guía guardada → la última visitada pasa a ser la activa.
+function setActiveRoute(routeData, docId) {
+  try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch (_) {}
+  try { if (docId) localStorage.setItem('bdm_live_active_route_id', docId); else localStorage.removeItem('bdm_live_active_route_id'); } catch (_) {}
+  if (typeof currentUser !== 'undefined' && currentUser && typeof db !== 'undefined') {
+    db.collection('users').doc(currentUser.uid)
+      .set({ active_route_id: docId || null }, { merge: true })
+      .catch(() => {});
+  }
+}
+window.setActiveRoute = setActiveRoute;
+
 function selectRouteOnMap(routeData, docId) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
   _activeRouteData = routeData;
   _activeRouteDocId = docId || null;
-  try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch(_){}
-  try { if (docId) localStorage.setItem('bdm_live_active_route_id', docId); else localStorage.removeItem('bdm_live_active_route_id'); } catch(_){}
-  // Sincronizar con Firestore (entre dispositivos)
-  if (currentUser && typeof db !== 'undefined') {
-    db.collection('users').doc(currentUser.uid)
-      .set({ active_route_id: docId || null }, { merge: true })
-      .catch(() => {});
-  }
+  setActiveRoute(routeData, docId);
 
   const dayColors = ['#F4630B','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);

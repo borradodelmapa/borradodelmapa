@@ -499,6 +499,12 @@ const mapaItinerario = {
     window._itinViewDocId = docId;
     window._itinViewOptions = options;
 
+    // La última guía guardada que se abre pasa a ser la RUTA ACTIVA (índice + mapa).
+    // Solo si es una guía guardada (tiene docId); los borradores del chat no.
+    if (docId && typeof window.setActiveRoute === 'function') {
+      try { window.setActiveRoute(routeData, docId); } catch (_) {}
+    }
+
     const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');

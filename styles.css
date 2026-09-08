@@ -6297,6 +6297,7 @@ body {
 .ce-top{
   display:flex;justify-content:space-between;align-items:center;
   border-bottom:1px solid var(--ce-line);padding-bottom:10px;
+  padding-right:46px;   /* deja sitio al icono fijo 🕐 de "últimas consultas" */
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
 .ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -6460,11 +6461,15 @@ body {
   display:none;align-items:center;justify-content:center;
   -webkit-tap-highlight-color:transparent;
 }
-#chat-fresh{right:12px;}
-#chat-history{right:54px;}
+#chat-history{right:12px;}
+#chat-fresh{right:54px;}
 #chat-fresh:active, #chat-history:active{transform:scale(.92);}
-body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh,
-body:has(#app-content.app-content--chat #chat-area .msg) #chat-history{display:flex;}
+/* "empezar de cero" solo con conversación; "últimas consultas" SIEMPRE en el chat (incl. índice) */
+body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:flex;}
+body:has(#app-content.app-content--chat) #chat-history{display:flex;}
+/* pero fuera cuando hay una vista a pantalla completa encima */
+body:has(#itin-view:not([style*="none"])) #chat-history,
+body:has(#live-map-view:not([style*="none"])) #chat-history{display:none;}
 
 /* ── Historial de consultas (últimas 10) ── */
 .cons-area{padding:0 0 40px;}
