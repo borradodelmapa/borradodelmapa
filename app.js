@@ -395,29 +395,27 @@ function _renderChatEmpty() {
       ? { cls: 'ce-card ce-active', html: _ceRouteHTML(_ceActive) }
       : { cls: 'ce-card ce-ticket', html: _ceBilleteHTML() };
     const _greet = _ceActive ? '¿Cómo va el viaje?' : '¿A dónde vamos?';
-    // Eslogan hero + línea de apoyo (doc 8 sep) — solo en modo crear-ruta, no en modo compañero
-    const _ceHero = _ceActive ? '' : `
-        <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
-        <div class="ce-tagline"><p>Pregunta lo <span>imposible</span></p></div>`;
-    // Caja de ejemplo rotable + billete rápido debajo (doc 8 sep) — solo en modo crear-ruta
-    const _ceRotable = _ceActive ? '' : `
-        <div class="ce-rotable" id="ce-rotable">
+    // Eslogan hero + línea de apoyo + caja de ejemplo rotable (doc 8 sep).
+    // Van SIEMPRE que se muestre el billete: al arrancar sin ruta activa, y también
+    // cuando desde el modo compañero se pulsa "Billete nuevo" (ver _ensureHero).
+    const _ceHeroHTML = `
+        <div class="ce-hero" data-ce-hero><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
+        <div class="ce-tagline" data-ce-hero><p>Pregunta lo <span>imposible</span></p></div>
+        <div class="ce-rotable" id="ce-rotable" data-ce-hero>
           <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
           <div class="ce-rotable-foot">
             <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span></div>
             <span class="ce-rotable-hint">Toca para escribir la tuya</span>
           </div>
         </div>
-        <button class="ce-rotable-cta" data-ce-rotable-cta>Trazar ruta <span>→</span></button>
-        <div class="ce-scrollhint">↓ Desliza para el billete rápido ↓</div>
-        <div class="ce-split"></div>`;
+        <button class="ce-rotable-cta" data-ce-hero data-ce-rotable-cta>Trazar ruta <span>→</span></button>
+        <div class="ce-scrollhint" data-ce-hero>↓ Desliza para el billete rápido ↓</div>
+        <div class="ce-split" data-ce-hero></div>`;
 
     area.innerHTML = `
       <div class="chat-empty">
         <div class="ce-top"><span class="ce-hi">${_ceHi}</span><span class="ce-meta">${_ceMonth}</span></div>
-        ${_ceHero}
-        ${_ceRotable}
-        ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : ''}
+        ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card">${_initCard.html}</div>
         <div class="ce-or">o <b>${_ceActive ? 'pregúntale a Salma' : 'díctame el plan entero'}</b> abajo ↓</div>
         ${_ceChipsRow}
@@ -447,7 +445,8 @@ function _renderChatEmpty() {
           ceCard.className = 'ce-card ce-ticket';
           ceCard.innerHTML = _ceBilleteHTML(true);
           const g = area.querySelector('.ce-greet');
-          if (g) g.textContent = '¿A dónde vamos?';
+          if (g) g.remove();                 // el eslogan hero lo sustituye
+          _ensureHero();                     // eslogan + caja rotable encima del billete
           const or = area.querySelector('.ce-or b');
           if (or) or.textContent = 'díctame el plan entero';
           const dest = ceCard.querySelector('.ce-tk-dest');
@@ -459,8 +458,10 @@ function _renderChatEmpty() {
           if (_ceActive) {
             ceCard.className = 'ce-card ce-active';
             ceCard.innerHTML = _ceRouteHTML(_ceActive);
-            const g = area.querySelector('.ce-greet');
-            if (g) g.textContent = '¿Cómo va el viaje?';
+            area.querySelectorAll('[data-ce-hero]').forEach(el => el.remove());  // fuera eslogan/rotable
+            if (!area.querySelector('.ce-greet')) {
+              ceCard.insertAdjacentHTML('beforebegin', '<div class="ce-greet">¿Cómo va el viaje?</div>');
+            }
             const or = area.querySelector('.ce-or b');
             if (or) or.textContent = 'pregúntale a Salma';
           }
@@ -526,8 +527,10 @@ function _renderChatEmpty() {
     }
 
     // ── Caja de ejemplo rotable (doc 8 sep) — 4 perfiles en orden fijo ──
-    const _rot = area.querySelector('#ce-rotable');
-    if (_rot) {
+    const _wireRotable = () => {
+      const _rot = area.querySelector('#ce-rotable');
+      if (!_rot || _rot._wired) return;
+      _rot._wired = true;
       const _exs = [
         'Somos 2 adultos y 2 niños, 8 días en Portugal en coche, necesito hoteles con piscina y que no haya más de 3h de trayecto entre paradas',
         'Trabajo remoto 3 semanas en Lisboa, necesito alojamiento con buen wifi cerca de coworkings, y una escapada de fin de semana a Oporto en tren',
@@ -564,7 +567,14 @@ function _renderChatEmpty() {
         _stopRot();
         if (typeof salma !== 'undefined' && salma.send) salma.send(_exs[_ri]);
       });
-    }
+    };
+    // Inserta eslogan + caja rotable encima del billete si no están, y los cablea.
+    const _ensureHero = () => {
+      const card = area.querySelector('#ce-card');
+      if (card && !area.querySelector('[data-ce-hero]')) card.insertAdjacentHTML('beforebegin', _ceHeroHTML);
+      _wireRotable();
+    };
+    if (!_ceActive) _wireRotable();
   } catch (err) {
     console.warn('[chat-empty] render nuevo falló, uso fallback', err);
     area.innerHTML = _ceFallback;
