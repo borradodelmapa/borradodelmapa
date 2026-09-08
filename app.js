@@ -92,6 +92,10 @@ function showState(state) {
     if (typeof flightWatches !== 'undefined') flightWatches.renderVuelosView();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
+  } else if (state === 'consultas') {
+    if (typeof salma !== 'undefined') salma.renderConsultasView();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'chat') {
     // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
     const welcomeEl = $content.querySelector('.welcome-area');
@@ -239,6 +243,7 @@ function _renderChatEmpty() {
     { label: 'Hoteles', icon: '', msg: 'Busca alojamiento' },
   ];
   const chipsRight = [
+    { label: 'Consultas', icon: '', msg: null, action: 'consultas' },
     { label: 'Notas', icon: '', msg: null, action: 'notas' },
     { label: 'Moneda', icon: '', msg: null, action: 'moneda' },
     { label: 'Traductor', icon: '', msg: null, action: 'traductor' },
@@ -624,6 +629,10 @@ function _renderChatEmpty() {
       if (action === 'notas') {
         if (!currentUser) { window._afterLogin = 'notas'; openModal(); return; }
         showState('notas');
+        return;
+      }
+      if (action === 'consultas') {
+        showState('consultas');   // funciona sin login (guarda en localStorage)
         return;
       }
       if (action === 'galeria') {

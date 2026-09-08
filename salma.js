@@ -1397,6 +1397,7 @@ const salma = {
         this.history.push({ role: 'assistant', content: data.reply });
       }
       this._saveSession();
+      this._persistThread();   // historial de consultas (últimas 10, continuables)
 
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
@@ -1449,6 +1450,7 @@ const salma = {
           this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
           this.history = [];
           this._saveSession();
+          this._threadId = null;   // la guía cierra la consulta; la siguiente empieza un hilo nuevo
           // Chip Historia para el destino recién generado
           const _histDestino = data.route.title || data.route.name || data.route.stops?.[0]?.name;
           if (_histDestino && typeof historiaModule !== 'undefined') {
@@ -2029,6 +2031,7 @@ const salma = {
 
   newChat() {
     this.history = [];
+    this._threadId = null;
     this._pendingRouteInfo = null;
     this._pendingTaxiDest = false;
     try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
@@ -2068,6 +2071,137 @@ const salma = {
       }
       return true;
     } catch (_) { return false; }
+  },
+
+  // ═══ HISTORIAL DE CONSULTAS — últimas 10, continuables ═══
+  // Persiste cada conversación en users/{uid}/chats/{id} (Firestore) + espejo en
+  // localStorage (única fuente para invitados). Solo texto: al reabrir se repintan
+  // las burbujas y this.history vuelve, así el Worker recibe el contexto sin cambios.
+  _threadId: null,
+
+  _chatCol() {
+    return (window.db && window.currentUser) ? db.collection('users').doc(window.currentUser.uid).collection('chats') : null;
+  },
+
+  _persistThread() {
+    if (!this.history || !this.history.length) return;
+    if (!this._threadId) this._threadId = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const firstUser = this.history.find(t => t.role === 'user');
+    const title = ((firstUser && firstUser.content) || 'Consulta').replace(/\s+/g, ' ').trim().slice(0, 70);
+    const rec = { title, turns: this.history.slice(-40), msgCount: this.history.length, updatedAt: Date.now() };
+    const col = this._chatCol();
+    if (col) col.doc(this._threadId).set(rec, { merge: true }).then(() => this._pruneThreads()).catch(() => {});
+    try {
+      const all = JSON.parse(localStorage.getItem('bdm_chats') || '{}');
+      all[this._threadId] = Object.assign({ id: this._threadId }, rec);
+      const ids = Object.keys(all).sort((a, b) => (all[b].updatedAt || 0) - (all[a].updatedAt || 0));
+      for (const old of ids.slice(10)) delete all[old];
+      localStorage.setItem('bdm_chats', JSON.stringify(all));
+    } catch (_) {}
+  },
+
+  async _pruneThreads() {
+    const col = this._chatCol();
+    if (!col) return;
+    try {
+      const snap = await col.orderBy('updatedAt', 'desc').get();
+      snap.docs.slice(10).forEach(d => col.doc(d.id).delete().catch(() => {}));
+    } catch (_) {}
+  },
+
+  async listThreads() {
+    const col = this._chatCol();
+    if (col) {
+      try {
+        const snap = await col.orderBy('updatedAt', 'desc').limit(10).get();
+        return snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
+      } catch (_) {}
+    }
+    try {
+      const all = JSON.parse(localStorage.getItem('bdm_chats') || '{}');
+      return Object.values(all).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).slice(0, 10);
+    } catch (_) { return []; }
+  },
+
+  async deleteThread(id) {
+    const col = this._chatCol();
+    if (col) { try { await col.doc(id).delete(); } catch (_) {} }
+    try {
+      const all = JSON.parse(localStorage.getItem('bdm_chats') || '{}');
+      delete all[id];
+      localStorage.setItem('bdm_chats', JSON.stringify(all));
+    } catch (_) {}
+    if (this._threadId === id) this._threadId = null;
+  },
+
+  async loadThread(id) {
+    let rec = null;
+    const col = this._chatCol();
+    if (col) { try { const d = await col.doc(id).get(); if (d.exists) rec = d.data(); } catch (_) {} }
+    if (!rec) { try { rec = (JSON.parse(localStorage.getItem('bdm_chats') || '{}'))[id]; } catch (_) {} }
+    if (!rec || !Array.isArray(rec.turns) || !rec.turns.length) return;
+    this._threadId = id;
+    this.history = rec.turns.slice();
+    if (typeof showState === 'function') showState('chat');
+    const area = this._getChatArea();
+    if (area) {
+      area.innerHTML = '';
+      for (const t of rec.turns) {
+        if (t.role === 'user') this._addUserBubble(t.content);
+        else this._addSalmaBubble(t.content);
+      }
+    }
+    this._saveSession();
+    this._scrollToBottom(true);
+  },
+
+  _relTime(ts) {
+    if (!ts) return '';
+    const d = Date.now() - ts, m = 60000, h = 3600000, day = 86400000;
+    if (d < h) return 'hace ' + Math.max(1, Math.round(d / m)) + ' min';
+    if (d < day) return 'hace ' + Math.round(d / h) + ' h';
+    if (d < 2 * day) return 'ayer';
+    if (d < 7 * day) return 'hace ' + Math.round(d / day) + ' días';
+    return new Date(ts).toLocaleDateString('es', { day: 'numeric', month: 'short' });
+  },
+
+  renderConsultasView() {
+    const $c = document.getElementById('app-content');
+    if (!$c) return;
+    $c.innerHTML = `<div class="cons-area fade-in"><div class="cons-loading">Cargando…</div></div>`;
+    this.listThreads().then(threads => {
+      const guest = !(window.db && window.currentUser);
+      $c.innerHTML = `
+        <div class="cons-area fade-in">
+          <div class="cons-header">
+            <button class="sv-back" onclick="history.back()" aria-label="Volver">‹</button>
+            <div class="cons-title">Últimas consultas</div>
+          </div>
+          ${guest ? '<div class="cons-guest">Entra para tener tus consultas en todos tus dispositivos.</div>' : ''}
+          <div class="cons-list">
+            ${threads.length === 0
+              ? `<div class="cons-empty"><div class="cons-empty-icon">🕐</div><div class="cons-empty-text">Aún no tienes consultas guardadas</div></div>`
+              : threads.map(t => `
+                <div class="cons-row" data-id="${escapeHTML(t.id)}">
+                  <div class="cons-row-main">
+                    <span class="cons-row-title">${escapeHTML(t.title || 'Consulta')}</span>
+                    <span class="cons-row-meta">${this._relTime(t.updatedAt)} · ${t.msgCount || (t.turns ? t.turns.length : 0)} mensajes</span>
+                  </div>
+                  <button class="cons-row-del" data-id="${escapeHTML(t.id)}" aria-label="Borrar">✕</button>
+                </div>`).join('')
+            }
+          </div>
+        </div>`;
+      $c.querySelectorAll('.cons-row').forEach(row => {
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('.cons-row-del')) {
+            this.deleteThread(row.dataset.id).then(() => row.remove());
+            return;
+          }
+          this.loadThread(row.dataset.id);
+        });
+      });
+    });
   },
 
   // ═══ NARRADOR EN RUTA ═══
