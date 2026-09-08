@@ -1913,11 +1913,17 @@ body {
   color:var(--blanco); letter-spacing:.04em; text-align:center;
   line-height:.95; width:100%;
 }
-.auth-logo span { color:var(--dorado); }
+.auth-logo span { color:var(--accent); }
 .auth-logo.small { font-size:18px; margin-bottom:6px; letter-spacing:.06em; }
+/* Eslogan bajo la marca — aparece desde el primer segundo (doc 8 sep) */
+.auth-slogan {
+  font-family:var(--font-cond); font-weight:800; font-size:30px; line-height:.95;
+  text-transform:uppercase; color:var(--blanco); text-align:center; margin:14px 0 0;
+}
+.auth-slogan span { color:var(--accent); }
 .auth-tagline {
-  font-family:var(--font-mono); font-size:10px; letter-spacing:.2em;
-  color:var(--dorado); margin-top:12px; text-align:center; opacity:.9;
+  font-family:var(--font-cond); font-size:11px; font-weight:600; letter-spacing:.16em;
+  color:var(--text-muted); margin-top:10px; text-align:center; text-transform:uppercase;
 }
 
 
@@ -1925,29 +1931,29 @@ body {
 .auth-actions { display:flex; flex-direction:column; gap:14px; padding-bottom:8px; }
 
 
-/* Botón Google dorado — CTA principal del gate */
+/* Botón Google — CTA principal del gate. Naranja sólido, radio 0 (doc 8 sep) */
 .auth-btn-google-primary {
   width:100%; padding:17px;
-  background:var(--dorado); color:var(--negro); border:none;
-  border-radius:50px; font-family:var(--font-mono);
-  font-size:12px; font-weight:700; letter-spacing:.12em;
-  cursor:pointer; transition:background .2s, transform .1s;
+  background:var(--accent); color:#0D0F10; border:none;
+  border-radius:0; font-family:var(--font-cond);
+  font-size:14px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+  cursor:pointer; transition:filter .2s, transform .1s;
   display:flex; align-items:center; justify-content:center; gap:10px;
 }
-.auth-btn-google-primary:hover { background:var(--dorado2); }
+.auth-btn-google-primary:hover { filter:brightness(1.1); }
 .auth-btn-google-primary:active { transform:scale(.98); }
 .auth-btn-google-primary svg { flex-shrink:0; }
 
-/* Botón huella inline — secundario */
+/* Botón huella — secundario. Outline neutro, radio 0 (doc 8 sep) */
 .auth-btn-fingerprint {
   width:100%; padding:15px;
-  background:transparent; color:var(--dorado);
-  border:1.5px solid rgba(212,160,23,.5); border-radius:50px;
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
+  background:transparent; color:var(--text-primary);
+  border:1.5px solid rgba(236,235,232,.5); border-radius:0;
+  font-family:var(--font-cond); font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
   cursor:pointer; transition:all .2s;
   display:flex; align-items:center; justify-content:center; gap:10px;
 }
-.auth-btn-fingerprint:hover { border-color:var(--dorado); background:rgba(212,160,23,.08); }
+.auth-btn-fingerprint:hover { border-color:var(--accent); background:rgba(244,99,11,.08); }
 .auth-btn-fingerprint.success { border-color:#22c55e; color:#22c55e; background:rgba(34,197,94,.08); }
 .auth-btn-fingerprint.error { border-color:var(--rojo); color:var(--rojo); background:rgba(239,68,68,.08); }
 .auth-btn-fingerprint svg { flex-shrink:0; }
@@ -3110,48 +3116,48 @@ body {
 .profile-legal a:hover { color:rgba(244,239,230,.5); }
 .profile-legal span { color:rgba(244,239,230,.1); font-size:10px; }
 
-/* ── Onboarding ── */
+/* ── Onboarding (doc 8 sep — pantalla completa, sin tarjeta flotante) ── */
 .onboarding-overlay {
   position:fixed; inset:0; z-index:9000;
-  background:rgba(6,5,3,.92); backdrop-filter:blur(8px);
+  background:var(--bg-base);
   display:flex; align-items:center; justify-content:center; padding:24px;
 }
 .onboarding-card {
-  background:var(--gris); border:1px solid var(--linea-fuerte);
-  border-radius:24px; padding:32px 28px 28px;
-  max-width:360px; width:100%;
-  display:flex; flex-direction:column; align-items:center; gap:20px;
+  background:var(--bg-base); border:0;
+  border-radius:0; padding:32px 24px 28px;
+  max-width:none; width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px;
   position:relative; text-align:center;
 }
 .onboarding-skip {
-  position:absolute; top:18px; right:18px;
+  position:absolute; top:calc(env(safe-area-inset-top, 18px) + 6px); right:18px;
   background:none; border:none; cursor:pointer;
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.06em;
-  color:rgba(244,239,230,.3); transition:color .2s;
+  font-family:var(--font-cond); font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--text-muted); transition:color .2s;
 }
-.onboarding-skip:hover { color:rgba(244,239,230,.6); }
-.onboarding-icon { color:var(--dorado); }
+.onboarding-skip:hover { color:var(--text-secondary); }
+.onboarding-icon { color:var(--accent); }
 .onboarding-title {
-  font-family:var(--font-tight); font-size:26px; font-weight:800;
-  color:var(--blanco); letter-spacing:-.03em; line-height:1.1;
+  font-family:var(--font-cond); font-size:32px; font-weight:800;
+  color:var(--blanco); letter-spacing:0; line-height:1.02;
 }
-.onboarding-title em { color:var(--dorado2); font-style:italic; }
+.onboarding-title em { color:var(--accent); font-style:normal; }
 .onboarding-body {
-  font-size:14px; color:rgba(244,239,230,.6); line-height:1.6; max-width:280px;
+  font-size:14px; color:var(--text-secondary); line-height:1.6; max-width:300px;
 }
 .onboarding-dots { display:flex; gap:6px; }
 .onboarding-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:rgba(244,239,230,.2); transition:background .3s;
+  width:16px; height:3px; border-radius:0;
+  background:rgba(236,235,232,.28); transition:background .3s;
 }
-.onboarding-dot-active { background:var(--dorado); }
+.onboarding-dot-active { background:var(--accent); }
 .onboarding-next {
-  width:100%; padding:14px; border-radius:12px;
-  background:var(--dorado); color:var(--negro); border:none; cursor:pointer;
-  font-family:var(--font-mono); font-size:14px; font-weight:700; letter-spacing:.08em;
-  transition:opacity .2s;
+  width:100%; max-width:360px; padding:15px; border-radius:0;
+  background:var(--accent); color:#0D0F10; border:none; cursor:pointer;
+  font-family:var(--font-cond); font-size:15px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+  transition:filter .2s;
 }
-.onboarding-next:hover { opacity:.85; }
+.onboarding-next:hover { filter:brightness(1.1); }
 
 .profile-logout-link {
   display:block; width:100%; background:none; border:none; cursor:pointer;

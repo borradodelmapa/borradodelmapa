@@ -5930,10 +5930,10 @@ Object.defineProperty(window, 'currentUser', {
 function showOnboarding() {
   const slides = [
     {
-      icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
-      title: 'Dime dónde vamos.',
-      titleEm: 'De lo demás yo me encargo.',
-      body: 'Cuéntame tu destino y los días que tienes. En un minuto te monto la ruta con mapa, fotos y todo lo que necesitas saber.'
+      icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M13 2 4 14h7v8l9-12h-7z"/></svg>`,
+      title: 'Pregunta lo',
+      titleEm: 'imposible.',
+      body: 'Un Uber, un vuelo, un hotel, una ruta de 10 días con camping cada noche — todo en una sola frase. Yo lo cruzo.'
     },
     {
       icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>`,
