@@ -20,8 +20,8 @@
 #mm-searchbox { position: absolute; top: 14px; left: 14px; z-index: 11; background: #fff; border-radius: 22px; padding: 8px 14px; width: min(340px, calc(100% - 80px)); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 #mm-searchbox input { width: 100%; border: 0; outline: 0; font-size: 14px; font-family: 'Inter', sans-serif; color: #111; background: transparent; }
 #mm-searchbox input::placeholder { color: #999; }
-#mm-open { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #f0b429; color: #060503; border: none; padding: 12px 20px; border-radius: 22px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 12; box-shadow: 0 4px 14px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
-#mm-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #f0b429; font-size: 14px; z-index: 5; font-family: 'Inter', sans-serif; background: rgba(0,0,0,0.7); padding: 10px 16px; border-radius: 8px; }
+#mm-open { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #F4630B; color: #060503; border: none; padding: 12px 20px; border-radius: 22px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 12; box-shadow: 0 4px 14px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
+#mm-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #F4630B; font-size: 14px; z-index: 5; font-family: 'Inter', sans-serif; background: rgba(0,0,0,0.7); padding: 10px 16px; border-radius: 8px; }
     `;
     document.head.appendChild(s);
   }
@@ -105,7 +105,7 @@
         title: name,
         icon: {
           path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z',
-          fillColor: '#f0b429',
+          fillColor: '#F4630B',
           fillOpacity: 1,
           strokeColor: '#060503',
           strokeWeight: 2,
@@ -126,7 +126,7 @@
         const ds = new google.maps.DirectionsService();
         const dr = new google.maps.DirectionsRenderer({
           map: _mmMap, suppressMarkers: true, preserveViewport: false,
-          polylineOptions: { strokeColor: '#f0b429', strokeWeight: 5, strokeOpacity: 0.85 },
+          polylineOptions: { strokeColor: '#F4630B', strokeWeight: 5, strokeOpacity: 0.85 },
         });
         ds.route({ origin: userLoc, destination: loc, travelMode: google.maps.TravelMode.DRIVING }, (r, st) => {
           console.log('[map-modal] DirectionsService status:', st);
@@ -136,7 +136,7 @@
             // Fallback: polyline recta dorada
             new google.maps.Polyline({
               path: [userLoc, loc], map: _mmMap,
-              strokeColor: '#f0b429', strokeWeight: 4, strokeOpacity: 0.7,
+              strokeColor: '#F4630B', strokeWeight: 4, strokeOpacity: 0.7,
               geodesic: true,
             });
             const b = new google.maps.LatLngBounds();
@@ -170,7 +170,7 @@
             valid.forEach((pt, idx) => {
               new google.maps.Marker({
                 position: pt.loc, map: _mmMap, title: pt.name,
-                icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#060503', strokeWeight: 3, scale: 14 },
+                icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#060503', strokeWeight: 3, scale: 14 },
                 label: { text: String(idx + 1), color: '#060503', fontSize: '12px', fontWeight: '700' },
                 zIndex: 999,
               });
@@ -185,7 +185,7 @@
               const ds = new google.maps.DirectionsService();
               const dr = new google.maps.DirectionsRenderer({
                 map: _mmMap, suppressMarkers: true, preserveViewport: true,
-                polylineOptions: { strokeColor: '#f0b429', strokeWeight: 5, strokeOpacity: 0.85 },
+                polylineOptions: { strokeColor: '#F4630B', strokeWeight: 5, strokeOpacity: 0.85 },
               });
               ds.route({ origin, destination, waypoints, travelMode: google.maps.TravelMode.DRIVING }, (result, status) => {
                 if (status === 'OK') dr.setDirections(result);
@@ -246,7 +246,7 @@
             const content = `
               <div style="font-family:'Inter',sans-serif;max-width:240px">
                 <div style="font-weight:700;font-size:14px;color:#111">${p.name || ''}</div>
-                ${p.rating ? `<div style="color:#f0b429;font-size:12px">★ ${p.rating}</div>` : ''}
+                ${p.rating ? `<div style="color:#F4630B;font-size:12px">★ ${p.rating}</div>` : ''}
                 ${p.formatted_address ? `<div style="color:#777;font-size:11px;margin-top:4px">${p.formatted_address}</div>` : ''}
               </div>`;
             _mmInfoWindow.setContent(content);

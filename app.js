@@ -3445,7 +3445,7 @@ const _catConfig = {
   lodging:  { types: ['lodging'],                                                     color: '#5BC0DE', label: 'H' },
   shopping: { types: ['supermarket', 'grocery_or_supermarket', 'convenience_store'],  color: '#AA66CC', label: 'S' },
   parks:    { types: ['park'],                                                        color: '#5CB85C', label: 'P' },
-  culture:  { types: ['museum', 'tourist_attraction', 'art_gallery'],                 color: '#D4A843', label: 'A' },
+  culture:  { types: ['museum', 'tourist_attraction', 'art_gallery'],                 color: '#F4630B', label: 'A' },
   transit:  { types: ['transit_station', 'bus_station', 'subway_station'],            color: '#666',    label: 'T' },
 };
 
@@ -3927,7 +3927,7 @@ function selectRouteOnMap(routeData, docId) {
       .catch(() => {});
   }
 
-  const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
+  const dayColors = ['#F4630B','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
   if (!valid.length) { showToast('Esta ruta no tiene coordenadas'); return; }
 
@@ -3952,7 +3952,7 @@ function selectRouteOnMap(routeData, docId) {
   _liveRoutePolyline = new google.maps.Polyline({
     path: valid.map(s => ({ lat: s.lat, lng: s.lng })),
     map: _liveMap,
-    strokeColor: '#D4A843',
+    strokeColor: '#F4630B',
     strokeWeight: 3,
     strokeOpacity: 0.7,
   });
@@ -4049,7 +4049,7 @@ function _updateNearestChip() {
   chip.style.pointerEvents = 'auto';
   chip.style.cursor = 'pointer';
   chip.onclick = () => {
-    const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
+    const dayColors = ['#F4630B','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
     const color = dayColors[((nearest.stop.day || 1) - 1) % dayColors.length];
     _liveMap.panTo({ lat: nearest.stop.lat, lng: nearest.stop.lng });
     _liveMap.setZoom(14);
@@ -4137,7 +4137,7 @@ async function _loadSavedPins() {
       if (_savedPinsData.some(p => p._pinId === pinId)) return;
       const marker = new google.maps.Marker({
         map: _liveMap, position: { lat: d.lat, lng: d.lng },
-        icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
+        icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
         title: d.locName || 'Pin guardado', zIndex: 150,
       });
       marker._pinId = pinId;
@@ -4249,7 +4249,7 @@ function _showPinInfo(marker) {
         <div style="font-size:11px;color:#888;margin-bottom:10px">${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
         <div style="display:flex;gap:5px;flex-wrap:wrap">
           <a href="${navUrl}" target="_blank" rel="noopener"
-            style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;text-decoration:none;min-width:60px">
+            style="flex:1;text-align:center;background:#F4630B;color:#0a0a0f;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;text-decoration:none;min-width:60px">
             Ir aquí
           </a>
           <button onclick="window._sharePinById('${lat}','${lng}','${encodeURIComponent(d.locName || 'Pin guardado')}','${encodeURIComponent(d.photoUrl || '')}')"
@@ -4460,7 +4460,7 @@ async function diarioPickSave() {
     const pinId = 'spin_' + (++_pinIdCounter) + '_' + Date.now();
     const marker = new google.maps.Marker({
       map: _liveMap, position: { lat, lng },
-      icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
+      icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
       title: _diario.locName, zIndex: 150,
     });
     marker._pinId = pinId;
@@ -4831,7 +4831,7 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
   let logoX=phX;
   ctx.fillStyle='#111';ctx.fillText('BORRADO',logoX,logoY);
   logoX+=ctx.measureText('BORRADO').width;
-  ctx.fillStyle='#D4A843';ctx.fillText('DEL',logoX,logoY);
+  ctx.fillStyle='#F4630B';ctx.fillText('DEL',logoX,logoY);
   logoX+=ctx.measureText('DEL').width;
   ctx.fillStyle='#111';ctx.fillText('MAPA',logoX,logoY);
   const shortLoc=loc.length>26?loc.substring(0,24)+'…':loc;
@@ -4876,7 +4876,7 @@ function _diarioDropPermanentPin() {
   const marker = new google.maps.Marker({
     map: _liveMap,
     position: { lat: _diario.lat, lng: _diario.lng },
-    icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
+    icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
     title: _diario.locName, zIndex: 150,
   });
   marker._pinId = pinId;
@@ -5001,7 +5001,7 @@ function _onMapTap(e) {
       position: _tapLatLng,
       icon: {
         path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
-        fillColor: '#D4A843', fillOpacity: 1,
+        fillColor: '#F4630B', fillOpacity: 1,
         strokeColor: '#fff', strokeWeight: 1.5,
         scale: 1.5,
         anchor: new google.maps.Point(12, 22),
@@ -5239,7 +5239,7 @@ async function _handleMapPin(action, status, photoBase64 = null) {
 
 function _placeMapPin({ name, address, description, place_type, checkin, checkout, confirmation, photo, lat, lng }) {
   if (!_liveMap) return;
-  const pinColors = { hotel: '#5BC0DE', monument: '#D4A843', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
+  const pinColors = { hotel: '#5BC0DE', monument: '#F4630B', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
   const pinEmojis = { hotel: '🏨', monument: '🏛️', restaurant: '🍽️', beach: '🏖️', park: '🌿', other: '⭐' };
   const color = pinColors[place_type] || '#AA66CC';
   const pinId = ++_pinIdCounter;
@@ -5879,7 +5879,7 @@ window.openMapsModal = function(url) {
       '<div id="maps-modal-sheet" style="position:absolute;bottom:0;left:0;right:0;height:70vh;background:#141209;border-radius:16px 16px 0 0;display:flex;flex-direction:column;animation:mapsSheetUp 0.25s ease-out;overflow:hidden;">' +
         '<div style="width:40px;height:4px;background:#555;border-radius:2px;margin:8px auto;flex-shrink:0;"></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 12px 8px;flex-shrink:0;gap:8px;">' +
-          '<button id="maps-modal-open" style="background:#f0b429;color:#060503;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">📍 Abrir en Google Maps</button>' +
+          '<button id="maps-modal-open" style="background:#F4630B;color:#060503;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">📍 Abrir en Google Maps</button>' +
           '<button id="maps-modal-close" style="background:transparent;color:#fff;border:none;font-size:28px;cursor:pointer;padding:0 12px;line-height:1;">×</button>' +
         '</div>' +
         '<iframe src="' + embedUrl + '" style="flex:1;width:100%;border:0;" frameborder="0" allowfullscreen></iframe>' +

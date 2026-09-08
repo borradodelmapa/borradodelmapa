@@ -129,19 +129,19 @@
     const s = document.createElement('style');
     s.id = 'dbg-styles';
     s.textContent = `
-      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;width:42px;height:42px;border-radius:50%;background:#060503;color:#f0b429;border:1.5px solid #f0b429;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;opacity:.55;padding:0;display:flex;align-items:center;justify-content:center}
+      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;width:42px;height:42px;border-radius:50%;background:#060503;color:#F4630B;border:1.5px solid #F4630B;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;opacity:.55;padding:0;display:flex;align-items:center;justify-content:center}
       #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;border-color:#fff;opacity:1;animation:dbg-pulse 1s infinite}
       @keyframes dbg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
-      #dbg-head{display:flex;gap:8px;padding:10px;background:#141209;border-bottom:1px solid #f0b429}
-      #dbg-head button{flex:1;background:#f0b429;color:#060503;border:none;border-radius:8px;padding:10px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
+      #dbg-head{display:flex;gap:8px;padding:10px;background:#141209;border-bottom:1px solid #F4630B}
+      #dbg-head button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:10px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
       #dbg-head .dbg-sec{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.3)}
       #dbg-body{flex:1;overflow-y:auto;padding:8px;font-size:11px;line-height:1.5;color:#f5f0e8}
-      .dbg-line{padding:4px 6px;border-bottom:1px solid rgba(240,180,41,.08);word-break:break-word;white-space:pre-wrap}
+      .dbg-line{padding:4px 6px;border-bottom:1px solid rgba(244,99,11,.08);word-break:break-word;white-space:pre-wrap}
       .dbg-line.error{background:rgba(239,68,68,.12);color:#ff8b8b}
-      .dbg-line.warn{background:rgba(240,180,41,.08);color:#f0b429}
+      .dbg-line.warn{background:rgba(244,99,11,.08);color:#F4630B}
       .dbg-t{color:rgba(245,240,232,.4);margin-right:6px}
-      #dbg-ver{padding:8px 10px;background:#1e190f;border-bottom:1px solid rgba(240,180,41,.25);color:#f0b429;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+      #dbg-ver{padding:8px 10px;background:#1e190f;border-bottom:1px solid rgba(244,99,11,.25);color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
     `;
     document.head.appendChild(s);
   }
