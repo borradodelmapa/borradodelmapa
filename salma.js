@@ -2516,8 +2516,9 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
-    // Banner del tiempo
-    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Banner del tiempo — fuera de la pantalla de inicio (doc 8 sep, limpieza C).
+    // Solo aparece cuando ya hay conversación; se re-activa al mandar el primer mensaje (ver _addUserBubble).
+    if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
     // Banner de recordatorios (una vez al día)
@@ -2540,6 +2541,8 @@ const salma = {
     div.innerHTML = `<div class="msg-body-user">${photoHtml}${textHtml}</div>`;
     area.appendChild(div);
     this._scrollToBottom(true);
+    // El banner del tiempo se oculta en el inicio; vuelve al empezar la conversación (doc 8 sep, limpieza C)
+    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
   },
 
   _addSalmaBubble(text) {

@@ -78,6 +78,27 @@
   --radius: 14px;
   --radius-sm: 10px;
   --radius-pill: 999px;
+
+  /* ═══════════════════════════════════════════════════════════════
+     REDISEÑO "viajero real" — doc 8 sept 2026 (rama rediseno-visual)
+     Tokens NUEVOS. Conviven con los de arriba; se migra pantalla a
+     pantalla. Cuando todo esté migrado se retiran los viejos.
+     Referencia: Lonely Planet × Gaia GPS × extracto de reserva.
+     Un solo acento vivo (--accent). Todo lo demás, escala de grises.
+     Radio de esquina: 0 en todo el árbol.
+     ═══════════════════════════════════════════════════════════════ */
+  --bg-base: #0D0F10;        /* fondo de pantalla, negro casi puro */
+  --bg-row: #17191B;         /* fondo de fila/bloque sobre el base */
+  --bg-row-alt: #131516;     /* fila alterna en listas (días, tramos) */
+  --border: #2B2E30;         /* bordes por defecto, divisores */
+  --border-subtle: #1C1E20;  /* divisores entre filas de una lista */
+  --accent: #F4630B;         /* ÚNICO acento: CTA, precios, iconos activos, headers */
+  --text-primary: #ECEBE8;   /* texto principal sobre oscuro */
+  --text-secondary: #C4C7C9; /* subtítulos de fila */
+  --text-muted: #7E8285;     /* etiquetas, metadatos, apoyo */
+  --text-on-accent: #0D0F10; /* texto sobre naranja */
+
+  --font-cond: 'Barlow Condensed', 'Archivo', sans-serif; /* titulares, cifras, botones, marca */
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
@@ -440,6 +461,8 @@ body {
 }
 .app-input::placeholder { color:rgba(244,239,230,.4); }
 .app-input:focus { border-color:var(--linea-fuerte); }
+/* doc 8 sep — radio 0 en la barra de escribir (input + micro/cámara/voz/enviar). Respuesta de Paco: radio 0 en burbujas y botones */
+.app-input, .app-mic, .app-cam, .app-voice-toggle, .app-send-arrow { border-radius:0 !important; }
 .app-send-arrow {
   width:40px; height:40px; border-radius:50%; flex-shrink:0;
   background:var(--dorado); border:none; cursor:pointer;
@@ -2471,13 +2494,14 @@ body {
 .bottom-tab {
   display:flex; flex-direction:column; align-items:center; gap:2px;
   background:none; border:none; cursor:pointer;
-  color:rgba(244,239,230,.4); font-size:10px; font-family:var(--font-mono);
-  letter-spacing:.05em; padding:4px 10px; transition:color .2s; flex:1;
+  color:rgba(236,235,232,.55); font-size:11px; font-family:var(--font-cond);
+  font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+  padding:4px 10px; transition:color .2s; flex:1;
 }
 .bottom-tab svg { stroke:currentColor; }
-.bottom-tab-active { color:var(--dorado); }
-.bottom-tab:hover { color:rgba(244,239,230,.7); }
-.bottom-tab-active:hover { color:var(--dorado); }
+.bottom-tab-active { color:var(--accent); }
+.bottom-tab:hover { color:rgba(236,235,232,.85); }
+.bottom-tab-active:hover { color:var(--accent); }
 /* SOS configurado — rojo */
 .bottom-tab-sos { color:#ef5350; }
 .bottom-tab-sos:hover { color:#ff1744; }
@@ -6074,22 +6098,49 @@ body {
    Rama rediseno-visual · sept 2026
    ═══════════════════════════════════════════════════════════ */
 .chat-empty{
-  --ce-ink:#ffffff;
-  --ce-ink2:#d9d4c6;
-  --ce-ink3:#9c978a;
-  --ce-panel:#0a0a0a;
-  --ce-flap:#171613;
-  --ce-line:rgba(255,255,255,.34);
-  --ce-line-hi:rgba(255,255,255,.60);
-  --ce-amber:#f0b429;
-  --ce-amber-hi:#ffc947;
-  --ce-green:#43d977;
-  --ce-red:#ff5a5a;
-  --ce-sign:'Archivo', var(--font-tight), sans-serif;
-  --ce-flapf:'JetBrains Mono', monospace;
+  /* Rediseño "viajero real" (doc 8 sep 2026) — opción B: se respeta el doc en
+     color/tipografía/radio, pero los bordes van BRILLANTES (regla de la calle
+     a pleno sol, ver feedback_contraste_calle), no el #2B2E30 sutil del doc. */
+  --ce-ink:#ECEBE8;       /* --text-primary */
+  --ce-ink2:#C4C7C9;      /* --text-secondary */
+  --ce-ink3:#7E8285;      /* --text-muted */
+  --ce-panel:#17191B;     /* --bg-row */
+  --ce-flap:#131516;      /* --bg-row-alt */
+  --ce-line:rgba(255,255,255,.40);     /* borde brillante (doc: #2B2E30 → subido) */
+  --ce-line-hi:rgba(255,255,255,.66);
+  --ce-amber:#F4630B;     /* --accent — acento único */
+  --ce-amber-hi:#FF7A2E;  /* hover del acento (derivado) */
+  --ce-green:#43d977;     /* provisional: chips "intereses" (se unifica al acento en paso posterior) */
+  --ce-red:#ff5a5a;       /* provisional: SOS */
+  --ce-sign:'Barlow Condensed','Archivo',var(--font-tight),sans-serif;
+  --ce-flapf:'Barlow Condensed',var(--font-tight),sans-serif;
   padding:16px 14px 8px;
 }
 .chat-empty *{box-sizing:border-box;}
+/* doc 8 sep: radio de esquina 0 en TODO el árbol del índice, sin excepción */
+.chat-empty,.chat-empty *{border-radius:0 !important;}
+
+/* ── Eslogan hero + línea de apoyo (doc 8 sep) ── */
+.ce-hero{padding:12px 0 0;}
+.ce-slogan{margin:0;font-family:var(--ce-sign);font-weight:800;font-size:38px;line-height:.95;letter-spacing:.005em;text-transform:uppercase;color:var(--ce-ink);}
+.ce-slogan span{color:var(--ce-amber);}
+.ce-tagline{margin:14px 0 2px;border-top:1px solid var(--ce-line);border-bottom:1px solid var(--ce-line);padding:11px 0;}
+.ce-tagline p{margin:0;font-family:var(--ce-sign);font-weight:700;font-size:18px;letter-spacing:.01em;text-transform:uppercase;color:var(--ce-ink);}
+.ce-tagline span{color:var(--ce-amber);}
+
+/* ── Caja de ejemplo rotable + jerarquía de modos (doc 8 sep) ── */
+.ce-rotable{margin:14px 0 0;border:1.5px solid var(--ce-amber);background:var(--ce-panel);padding:12px 13px 10px;cursor:pointer;}
+.ce-rotable-ex{margin:0;font-family:var(--font-body,'Inter'),sans-serif;font-size:13px;line-height:1.5;color:var(--ce-ink2);}
+.ce-rotable-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;padding-top:8px;border-top:1px solid var(--ce-line);}
+.ce-rotable-dots{display:flex;gap:5px;flex-shrink:0;}
+.ce-rotable-dots span{width:5px;height:5px;background:var(--ce-line-hi);}
+.ce-rotable-dots span.on{background:var(--ce-amber);}
+.ce-rotable-hint{font-family:var(--ce-sign);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-ink3);text-align:right;}
+.ce-rotable-cta{width:100%;margin:8px 0 0;border:0;cursor:pointer;background:var(--ce-amber);color:#0D0F10;font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;letter-spacing:.04em;font-size:15px;padding:13px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.ce-rotable-cta:hover{background:var(--ce-amber-hi);}
+.ce-rotable-cta:active{transform:scale(.99);}
+.ce-scrollhint{text-align:center;font-family:var(--ce-sign);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ce-ink3);padding:12px 0 0;}
+.ce-split{margin:14px 0 0;border-top:2px dashed var(--ce-line);}
 
 /* cabecera tipo tablero */
 .ce-top{
@@ -6185,10 +6236,11 @@ body {
 
 /* ── BILLETE (índice = creador de ruta) — ámbito .chat-empty ── */
 .chat-empty .ce-card.ce-ticket{padding:0;}
-.ce-tk-head{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;border-bottom:1.5px solid var(--ce-amber);background:linear-gradient(90deg,var(--ce-amber),var(--ce-amber-hi));}
-.ce-tk-b{font-family:var(--f-display,'Bebas Neue'),sans-serif;font-size:16px;letter-spacing:.09em;color:#0a0a0a;}
-.ce-tk-b span{color:#0a0a0a;opacity:.55;}
-.ce-tk-head .ce-tk-t{color:#0a0a0a;font-weight:700;}
+/* cabecera del billete: banda fina, sin relleno naranja sólido (doc 8 sep — un solo relleno sólido por pantalla) */
+.ce-tk-head{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-bottom:1.5px solid var(--ce-amber);background:var(--ce-flap);}
+.ce-tk-b{font-family:var(--ce-sign);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);}
+.ce-tk-b span{color:var(--ce-ink3);}
+.ce-tk-head .ce-tk-t{color:var(--ce-ink2);font-weight:700;}
 .ce-tk-pax{display:flex;justify-content:space-between;align-items:baseline;padding:11px 13px;border-bottom:1px dashed var(--ce-line);}
 .ce-tk-pax-v{font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;font-size:14px;letter-spacing:.08em;color:var(--ce-ink);}
 .ce-tk-t{font-family:var(--ce-flapf);font-size:9px;letter-spacing:.18em;color:var(--ce-ink2);text-transform:uppercase;}
@@ -6220,8 +6272,9 @@ body {
 .ce-perf::before{left:-16px;}
 .ce-perf::after{right:-16px;}
 .ce-stub{padding:13px;}
-.ce-emit{width:100%;border:0;cursor:pointer;background:var(--ce-amber);color:#0a0a0a;font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;letter-spacing:.06em;font-size:15px;padding:15px;border-radius:4px;display:flex;align-items:center;justify-content:space-between;}
-.ce-emit:hover{background:var(--ce-amber-hi);}
+/* billete rápido = modo secundario → CTA en OUTLINE, nunca sólido a la vez que "Trazar ruta" de la caja rotable (doc 8 sep) */
+.ce-emit{width:100%;border:1.5px solid var(--ce-line-hi);cursor:pointer;background:transparent;color:var(--ce-ink);font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;letter-spacing:.06em;font-size:15px;padding:14px;display:flex;align-items:center;justify-content:space-between;}
+.ce-emit:hover{border-color:var(--ce-amber);color:var(--ce-amber);}
 .ce-emit:active{transform:scale(.99);}
 .ce-stub-hint{text-align:center;font-family:var(--ce-flapf);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ce-ink3);margin-top:9px;}
 

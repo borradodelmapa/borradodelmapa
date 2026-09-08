@@ -347,7 +347,7 @@ function _renderChatEmpty() {
       </div>
       <div class="ce-perf"></div>
       <div class="ce-stub">
-        <button class="ce-emit" data-ce-emit>Emitir billete <span>→</span></button>
+        <button class="ce-emit" data-ce-emit>Trazar ruta <span>→</span></button>
         <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
         ${hasActive ? '<button class="ce-back-active" data-ce-back-active>← Volver a la ruta activa</button>' : ''}
       </div>`;
@@ -395,11 +395,29 @@ function _renderChatEmpty() {
       ? { cls: 'ce-card ce-active', html: _ceRouteHTML(_ceActive) }
       : { cls: 'ce-card ce-ticket', html: _ceBilleteHTML() };
     const _greet = _ceActive ? '¿Cómo va el viaje?' : '¿A dónde vamos?';
+    // Eslogan hero + línea de apoyo (doc 8 sep) — solo en modo crear-ruta, no en modo compañero
+    const _ceHero = _ceActive ? '' : `
+        <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
+        <div class="ce-tagline"><p>Pregunta lo <span>imposible</span></p></div>`;
+    // Caja de ejemplo rotable + billete rápido debajo (doc 8 sep) — solo en modo crear-ruta
+    const _ceRotable = _ceActive ? '' : `
+        <div class="ce-rotable" id="ce-rotable">
+          <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
+          <div class="ce-rotable-foot">
+            <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span></div>
+            <span class="ce-rotable-hint">Toca para escribir la tuya</span>
+          </div>
+        </div>
+        <button class="ce-rotable-cta" data-ce-rotable-cta>Trazar ruta <span>→</span></button>
+        <div class="ce-scrollhint">↓ Desliza para el billete rápido ↓</div>
+        <div class="ce-split"></div>`;
 
     area.innerHTML = `
       <div class="chat-empty">
         <div class="ce-top"><span class="ce-hi">${_ceHi}</span><span class="ce-meta">${_ceMonth}</span></div>
-        <div class="ce-greet">${_greet}</div>
+        ${_ceHero}
+        ${_ceRotable}
+        ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : ''}
         <div class="${_initCard.cls}" id="ce-card">${_initCard.html}</div>
         <div class="ce-or">o <b>${_ceActive ? 'pregúntale a Salma' : 'díctame el plan entero'}</b> abajo ↓</div>
         ${_ceChipsRow}
@@ -504,6 +522,47 @@ function _renderChatEmpty() {
           }
           return;
         }
+      });
+    }
+
+    // ── Caja de ejemplo rotable (doc 8 sep) — 4 perfiles en orden fijo ──
+    const _rot = area.querySelector('#ce-rotable');
+    if (_rot) {
+      const _exs = [
+        'Somos 2 adultos y 2 niños, 8 días en Portugal en coche, necesito hoteles con piscina y que no haya más de 3h de trayecto entre paradas',
+        'Trabajo remoto 3 semanas en Lisboa, necesito alojamiento con buen wifi cerca de coworkings, y una escapada de fin de semana a Oporto en tren',
+        'Voy a hacer la N2 de Portugal en moto en septiembre, de sur a norte desde Faro, unos 200km diarios. Dame guía, mejores paradas y un camping al final de cada día',
+        'El 10 nov me voy a Tailandia desde Málaga, necesito Uber a las 17h, vuelo, 1 noche en Bangkok y alojamiento en Koh Samui cerca de un gym de Muay Thai'
+      ];
+      const _exEl = area.querySelector('#ce-rotable-ex');
+      const _dots = area.querySelector('#ce-rotable-dots');
+      let _ri = 0, _rTimer = null, _rStopped = false;
+      const _paint = () => {
+        if (_exEl) _exEl.textContent = '“' + _exs[_ri] + '”';
+        if (_dots) [..._dots.children].forEach((d, i) => d.classList.toggle('on', i === _ri));
+      };
+      const _adv = () => {
+        if (!_exEl || !_exEl.isConnected) { if (_rTimer) { clearInterval(_rTimer); _rTimer = null; } return; }
+        _ri = (_ri + 1) % _exs.length; _paint();
+      };
+      const _stopRot = () => { if (_rTimer) { clearInterval(_rTimer); _rTimer = null; } _rStopped = true; };
+      _paint();
+      if (!_rStopped) _rTimer = setInterval(_adv, 6000);
+      _rot.addEventListener('click', () => {
+        _stopRot();
+        const inp = document.getElementById('main-input');
+        if (inp) {
+          inp.value = _exs[_ri];
+          inp.focus();
+          try { inp.dispatchEvent(new Event('input', { bubbles: true })); } catch (_) {}
+        }
+      });
+      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); _stopRot(); _adv(); });
+      const _rcta = area.querySelector('[data-ce-rotable-cta]');
+      if (_rcta) _rcta.addEventListener('click', (e) => {
+        e.stopPropagation();
+        _stopRot();
+        if (typeof salma !== 'undefined' && salma.send) salma.send(_exs[_ri]);
       });
     }
   } catch (err) {
