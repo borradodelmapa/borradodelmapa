@@ -307,6 +307,7 @@ function _renderChatEmpty() {
       <div class="ce-fld">
         <div class="ce-k">Días</div>
         ${_ceChips('duracion_dias', [
+          { v: '1', l: '1' }, { v: '2', l: '2' },
           { v: '3-4', l: '3–4' }, { v: '5-7', l: '5–7', on: true },
           { v: '8-14', l: '8–14' }, { v: '+14', l: '+14' }
         ], true)}
@@ -1010,13 +1011,14 @@ async function renderProfile() {
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-galeria">
+          <!-- Galería oculta de la UI (pendiente C, doc 8 sep). No se borra: reactivar quitando hidden. -->
+          <div class="prof-row" id="prof-galeria" hidden>
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
             <span class="prof-row-label">Galería</span>
             <button class="prof-row-info-btn" id="prof-galeria-info" onclick="event.stopPropagation()">i</button>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div class="prof-row-sep"></div>
+          <div class="prof-row-sep" data-sep-for="prof-galeria"></div>
           <div class="prof-row" id="prof-bitacora">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></span>
             <span class="prof-row-label">Cuaderno de Viaje</span>
@@ -1063,8 +1065,9 @@ async function renderProfile() {
             <span class="prof-coins-badge">${coins}</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-help">
+          <div class="prof-row-sep" data-sep-for="prof-help"></div>
+          <!-- "¿Qué puedo hacer?" oculto de la UI (pendiente C, doc 8 sep). No se borra: reactivar quitando hidden. -->
+          <div class="prof-row" id="prof-help" hidden>
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             <span class="prof-row-label">¿Qué puedo hacer?</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>

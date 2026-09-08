@@ -5543,6 +5543,9 @@ body {
   background: rgba(244,239,230,.04);
   margin: 0 16px;
 }
+/* separadores huérfanos de filas ocultas (pendiente C) */
+#prof-galeria[hidden] + .prof-row-sep { display: none; }
+.prof-row-sep:has(+ #prof-help[hidden]) { display: none; }
 
 /* ── Row Icon ── */
 .prof-row-icon {
