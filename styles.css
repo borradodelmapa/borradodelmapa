@@ -6296,7 +6296,8 @@ body {
   border-bottom:1px solid var(--ce-line);padding-bottom:10px;
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
-.ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);}
+.ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.ce-top .ce-brand:active{opacity:.7;}
 .ce-top .ce-brand span{color:var(--ce-ink3);}
 .ce-top .ce-meta{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.12em;color:var(--ce-ink2);}
 .ce-greet{

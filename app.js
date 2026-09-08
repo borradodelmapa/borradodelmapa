@@ -411,7 +411,7 @@ function _renderChatEmpty() {
           <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
           <div class="ce-rotable-foot">
             <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span></div>
-            <span class="ce-rotable-hint">Toca para escribir la tuya</span>
+            <span class="ce-rotable-hint">Toca para escribir la ruta</span>
           </div>
         </div>
         <button class="ce-rotable-cta" data-ce-hero data-ce-rotable-cta>Trazar ruta <span>→</span></button>
@@ -420,7 +420,7 @@ function _renderChatEmpty() {
 
     area.innerHTML = `
       <div class="chat-empty">
-        <div class="ce-top"><span class="ce-brand">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta">${_ceMonth}</span></div>
+        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta">${_ceMonth}</span></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
@@ -541,12 +541,18 @@ function _renderChatEmpty() {
       if (!_rStopped) _rTimer = setInterval(_adv, 6000);
       _rot.addEventListener('click', () => {
         _stopRot();
+        // Pasa el ejemplo al chat de abajo, hace foco, y quita la caja de ejemplos
+        // + su CTA: a partir de aquí el usuario escribe su ruta directamente abajo.
         const inp = document.getElementById('main-input');
         if (inp) {
           inp.value = _exs[_ri];
           inp.focus();
           try { inp.dispatchEvent(new Event('input', { bubbles: true })); } catch (_) {}
+          try { inp.setSelectionRange(inp.value.length, inp.value.length); } catch (_) {}
         }
+        _rot.remove();
+        const cta = area.querySelector('[data-ce-rotable-cta]');
+        if (cta) cta.remove();
       });
       if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); _stopRot(); _adv(); });
       const _rcta = area.querySelector('[data-ce-rotable-cta]');
@@ -568,6 +574,12 @@ function _renderChatEmpty() {
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
     area.addEventListener('click', (e) => {
+      // Logo → volver al índice limpio
+      if (e.target.closest('[data-ce-home]')) {
+        if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
+        try { window.scrollTo(0, 0); } catch (_) {}
+        return;
+      }
       if (e.target.closest('[data-ce-openbillete]')) {
         const card = area.querySelector('#ce-card');
         if (card) {
