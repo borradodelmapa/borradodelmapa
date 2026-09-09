@@ -6258,7 +6258,7 @@ body {
   --ce-red:#ff5a5a;       /* provisional: SOS */
   --ce-sign:'Barlow Condensed','Archivo',var(--font-tight),sans-serif;
   --ce-flapf:'Barlow Condensed',var(--font-tight),sans-serif;
-  padding:16px 14px 8px;
+  padding:16px 16px 8px;
 }
 .chat-empty *{box-sizing:border-box;}
 /* doc 8 sep: radio de esquina 0 en TODO el árbol del índice, sin excepción */
@@ -6268,7 +6268,7 @@ body {
 .ce-hero{padding:12px 0 0;}
 .ce-slogan{margin:0;font-family:var(--ce-sign);font-weight:800;font-size:38px;line-height:.95;letter-spacing:.005em;text-transform:uppercase;color:var(--ce-ink);}
 .ce-slogan span{color:var(--ce-amber);}
-.ce-tagline{margin:14px 0 2px;border-top:1px solid var(--ce-line);border-bottom:1px solid var(--ce-line);padding:11px 0;}
+.ce-tagline{margin:14px 0 2px;padding:11px 0;}
 .ce-tagline p{margin:0;font-family:var(--ce-sign);font-weight:700;font-size:18px;letter-spacing:.01em;text-transform:uppercase;color:var(--ce-ink);}
 .ce-tagline span{color:var(--ce-amber);}
 
@@ -6296,7 +6296,7 @@ body {
 /* cabecera tipo tablero */
 .ce-top{
   display:flex;justify-content:space-between;align-items:center;
-  border-bottom:1px solid var(--ce-line);padding-bottom:10px;
+  padding-bottom:10px;
   padding-right:46px;   /* deja sitio al icono fijo 🕐 de "últimas consultas" */
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
@@ -6364,7 +6364,7 @@ body {
 /* ── chips = etiquetas de embarque · dos columnas alineadas ── */
 .chat-empty .chat-empty-chips{
   display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start;
-  padding:1px 1px 4px;max-width:none;margin:0;overflow:visible;
+  padding:1px 1px 4px;max-width:none;margin:16px 0 0;overflow:visible;
 }
 .chat-empty .ce-chip-row{display:flex;flex-direction:column;gap:7px;}
 .chat-empty .chat-empty-col{flex-direction:row;flex:0 0 auto;gap:7px;}
