@@ -6364,7 +6364,7 @@ body {
 /* ── chips = etiquetas de embarque · dos columnas alineadas ── */
 .chat-empty .chat-empty-chips{
   display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start;
-  padding:1px 1px 4px;max-width:none;margin:0;overflow:visible;
+  padding:1px 1px 4px;max-width:none;margin:16px 0 0;overflow:visible;
 }
 .chat-empty .ce-chip-row{display:flex;flex-direction:column;gap:7px;}
 .chat-empty .chat-empty-col{flex-direction:row;flex:0 0 auto;gap:7px;}
