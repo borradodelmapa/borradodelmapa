@@ -242,8 +242,8 @@ function _renderChatEmpty() {
     // "Quiero ir a..." → desactivado 2026-04-17. Ver PENDIENTES.md
     { label: 'Cerca mía', icon: '', msg: 'Hazme una ruta desde donde estoy', action: 'ruta-aqui' },
     { label: 'Vuelos', icon: '', msg: 'Busca vuelos' },
-    { label: 'Alertas', icon: '', msg: null, action: 'vuelos' },
-    { label: 'Hoteles', icon: '', msg: 'Busca alojamiento' },
+    { label: 'Alertas vuelos', icon: '', msg: null, action: 'vuelos' },
+    { label: 'Alojamiento', icon: '', msg: 'Busca alojamiento' },
   ];
   const chipsRight = [
     { label: 'Consultas', icon: '', msg: null, action: 'consultas' },
