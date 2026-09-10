@@ -902,6 +902,14 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   (entró limpio, sin restos del bucle viejo) pero **todavía sin probar en pantalla** — la
   ráfaga solo se ve caminando por una zona con varios POIs juntos. Pendiente de que Paco
   lo pruebe con el Narrador activado moviéndose; si algo no cuadra, es sobre esto.
+- **GPS confirmado antes de activar el Narrador** → **fusionado a `main` el 10 sept**,
+  escrito de cero (no de `claude/vigorous-panini`, que era del 5 abril y chocaba con la
+  reescritura del 11 abril y con el chip de hoy — ver detalle en el commit). Antes,
+  `startNarrator()` decía "activado" aunque el usuario denegara el GPS, y se quedaba mudo
+  para siempre sin avisar. Ahora espera la respuesta real del navegador y si se deniega,
+  devuelve `false` (el toast ya existente de app.js lo cubre). **Sin probar en pantalla
+  todavía** — Paco lo probará en marcha: bloquear ubicación del sitio, activar Narrador,
+  confirmar que avisa en vez de quedarse "encendido" en falso.
 - ~~Scroll del chat (`claude/hopeful-goldstine`)~~ → **descartada, 10 sept, ya estaba
   resuelta**: `main` tiene el mismo arreglo palabra por palabra (mismos comentarios,
   misma lógica), comiteado **28 segundos después** que esta rama, el mismo 6 de abril.
@@ -945,7 +953,6 @@ a hacer distinto después) y probarla, una por una, con confirmación de Paco.
 | Rama | Qué trae (por los commits) | Tamaño del cambio |
 |---|---|---|
 | `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to`. **Aparcada por decisión de Paco (10 sept) — no es necesaria de momento, no fusionar sin que él lo pida.** | medio (salma.js + worker) |
-| `claude/vigorous-panini` | `_requestGPSAndNotifications()` para que el Narrador pida permisos sin GPS previo | medio (salma.js) |
 | `claude/hungry-tereshkova` | Rediseño de navegación: quita el chat modal flotante, deja solo la barra inferior, limpia elementos flotantes del mapa | **grande** (app.js, index.html, styles.css — ~600 líneas eliminadas, parece un bloque de trabajo completo y coherente) |
 | `trabajo-5-sept-2026` (tag `v-5sept-completo`) | Copia de referencia del día que se borró el Worker (protocolo §1) — histórico, no es "trabajo nuevo" que fusionar | — |
 
