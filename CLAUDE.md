@@ -914,6 +914,13 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   resuelta**: `main` tiene el mismo arreglo palabra por palabra (mismos comentarios,
   misma lógica), comiteado **28 segundos después** que esta rama, el mismo 6 de abril.
   No hace falta fusionar nada.
+- ~~Chat modal flotante (`claude/hungry-tereshkova`)~~ → **descartada, 10 sept, ya estaba
+  resuelta, por otro camino más tardío**: esta rama (5 abril) borraba un `<div id="chat-modal">`
+  completo de `index.html` con su propio input/cámara/micro. Ese bloque **no existe en el
+  código actual** — el 7 de septiembre se hizo un rediseño de navegación mucho más completo
+  ("Navegación Fase 1" a "Fase 5": barra fija de 4, cabeceras con historial, vista itinerario
+  sin monkey-patch) que rehizo esta zona de cero y llegó al mismo sitio por más camino.
+  No hace falta fusionar nada.
 - ~~Whitelist ferry/bus (`claude/vibrant-bassi`)~~ → **descartada, 10 sept, ya estaba
   resuelta**: los 5 dominios (balearia, ferryscanner, directferries, clickferry, omio)
   ya están en la whitelist de `app.js` y del Worker — commit con el mismo mensaje exacto
@@ -953,11 +960,15 @@ a hacer distinto después) y probarla, una por una, con confirmación de Paco.
 | Rama | Qué trae (por los commits) | Tamaño del cambio |
 |---|---|---|
 | `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to`. **Aparcada por decisión de Paco (10 sept) — no es necesaria de momento, no fusionar sin que él lo pida.** | medio (salma.js + worker) |
-| `claude/hungry-tereshkova` | Rediseño de navegación: quita el chat modal flotante, deja solo la barra inferior, limpia elementos flotantes del mapa | **grande** (app.js, index.html, styles.css — ~600 líneas eliminadas, parece un bloque de trabajo completo y coherente) |
 | `trabajo-5-sept-2026` (tag `v-5sept-completo`) | Copia de referencia del día que se borró el Worker (protocolo §1) — histórico, no es "trabajo nuevo" que fusionar | — |
 
-`claude/vibrant-bassi` y `claude/hungry-tereshkova` son las más grandes — revisarlas con
-más calma porque `main` se ha movido bastante desde que se crearon y puede haber conflictos.
+Todas las demás ramas rescatadas del 10 sept ya se revisaron una a una: 2 se fusionaron
+de verdad (ruta duplicada, narrador sin ráfaga + GPS confirmado — este último escrito de
+cero), y 4 (`vigorous-lichterman`, `hopeful-goldstine`, `vibrant-bassi`,
+`hungry-tereshkova`) resultaron estar ya resueltas en `main` por otro commit hecho
+independientemente, casi siempre el mismo día o unos meses después con un rediseño más
+completo — ver detalle de cada una en "✅ Ya resuelto" arriba. Solo queda
+`vigilant-nightingale-3b17ca`, aparcada a propósito.
 
 ### 📋 Sesiones de Code sueltas (29 ago – 10 sept) — revisar en tu ordenador
 
