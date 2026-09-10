@@ -847,8 +847,6 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   `{amount, coins, user_id}` y espera `{client_secret}` para `stripe.confirmCardPayment`.
   Falta la Fase 2 de `docs/pasarela-premium.md` (modal "Hazte Premium" + retorno `?pago=ok`)
   para cerrarlo cuando Paco decida retomarlo.
-- **Credenciales en git** — `scripts/publish-destinos-salma.js` sigue con email+password
-  de la cuenta de Salma bot en texto plano commiteado.
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
@@ -871,6 +869,11 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   fallback a `/index.html`.
 - ~~Manifest PWA básico~~ → ya tiene `shortcuts` (Chat, Mis Viajes), icono 512 maskable,
   `share_target`.
+- ~~Credenciales en git (`publish-destinos-salma.js`)~~ → esto llevaba **resuelto desde el
+  11 de abril** (commit "seguridad: auditoría completa P0-P3"), el email/password van por
+  variables de entorno (`SALMA_EMAIL`/`SALMA_PASS`), el script falla si no se le dan. Se
+  había apuntado mal como pendiente en el barrido del 10 sept sin comprobarlo del todo —
+  error de esa auditoría, no del código.
 
 *(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
 con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
