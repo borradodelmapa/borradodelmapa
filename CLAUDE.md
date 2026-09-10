@@ -741,6 +741,8 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 - [x] Guardado de notas
 
 ### Narrador
+- [x] Chip "Narrador" en pantalla de inicio del chat, con popup explicativo antes de
+      activarlo (añadido 10 sept — antes no tenía ningún botón accesible)
 - [x] Check cada 30s de POIs cercanos (Google Places, radio 500m)
 - [x] Narración con GPT-4o-mini (personalidad Salma)
 - [x] Push notifications
@@ -885,6 +887,16 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   `_elevenLabsDown`) comiteado 3 minutos después que esta rama, el mismo 17 de abril —
   y más completo (desbloquea el sintetizador en el toggle Y en el primer mensaje, no solo
   en el toggle). No hace falta fusionar nada.
+- ~~Narrador sin botón~~ → **10 sept, fusionado a `main` y probado por Paco en pantalla**:
+  al revisar la rama `claude/optimistic-dhawan` (fix de ráfaga de notificaciones) se
+  descubrió que el Narrador no tenía NINGÚN botón que lo activara — `startNarrator()`
+  solo lo llamaba un chip (`data-action="explorar"`) que dejó de existir en un rediseño
+  anterior. Se añadió el chip "Narrador" (junto a Consultas/Notas/SOS) con un popup
+  explicando qué hace antes de pedir ubicación. Esto NO estaba en las listas de
+  pendientes anteriores — nadie sabía que el botón faltaba porque no rompía nada, solo
+  no hacía nada. Con el botón ya puesto, el fix de la ráfaga de `optimistic-dhawan` (ver
+  "🧵 Ramas rescatadas") vuelve a ser relevante — antes de esto era arreglar un problema
+  en una función a la que nadie podía llegar.
 
 *(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
 con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
