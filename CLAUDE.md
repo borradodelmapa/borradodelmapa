@@ -826,6 +826,14 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 > 2026, porque el trabajo se pide unas veces por Code y otras por chat normal y esta lista
 > llevaba tiempo sin coincidir con lo que hay realmente desplegado. Ver "Metodología y
 > límites" al final de esta sección antes de fiarte de que está completa.
+>
+> **Cuando Paco diga "anota esto pendiente" (o algo parecido):** añadirlo aquí mismo, en
+> el subapartado que corresponda (🔴 Crítico / 🟡 Importante / 🔧 Deuda técnica), hacer
+> `commit` y `push` **directo a `main`** antes de terminar el turno — no dejarlo en una
+> rama suelta que no se fusiona. Solo funciona si la sesión tiene este repo enlazado
+> (Code/Cowork); un chat normal sin el repo no puede tocar este archivo, así que si el
+> pendiente surgió ahí hay que traerlo a mano a una sesión con el repo. Esto es justo lo
+> que causó el desfase que motivó el barrido del 10 de septiembre — no repetirlo.
 
 ### 🔴 Crítico — verificado ahora mismo
 
