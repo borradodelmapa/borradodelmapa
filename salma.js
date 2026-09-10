@@ -2208,6 +2208,26 @@ const salma = {
 
   // ═══ NARRADOR EN RUTA ═══
 
+  // Pide una posición GPS puntual (no continua) y espera la respuesta real del
+  // navegador, para saber con certeza si el usuario la concedió o no.
+  _requestGPSFix() {
+    if (!navigator.geolocation) return Promise.resolve(false);
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          this._userLocation = {
+            lat: Math.round(pos.coords.latitude * 10000) / 10000,
+            lng: Math.round(pos.coords.longitude * 10000) / 10000,
+            accuracy: Math.round(pos.coords.accuracy)
+          };
+          resolve(true);
+        },
+        () => resolve(false),
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    });
+  },
+
   async startNarrator() {
     if (this._narratorActive) return;
     // Pedir permiso notificaciones
@@ -2221,6 +2241,16 @@ const salma = {
     if ('Notification' in window && Notification.permission === 'denied') {
       console.log('[Salma] Narrador: notificaciones bloqueadas');
       return false;
+    }
+    // GPS es obligatorio: confirmar que lo tenemos (o conseguirlo) ANTES de decir que
+    // el Narrador está activo. Sin esto, si el usuario deniega el GPS, el Narrador se
+    // queda "encendido" pero mudo para siempre, sin que nadie sepa por qué.
+    if (!this._userLocation) {
+      const gpsOk = await this._requestGPSFix();
+      if (!gpsOk) {
+        console.log('[Salma] Narrador: GPS denegado o no disponible');
+        return false;
+      }
     }
     this._narratorActive = true;
     // Restaurar dedup desde sessionStorage (sobrevive recargas)
