@@ -1330,10 +1330,17 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   // "Ruta completa" al final: con lat/lng reales (Google los entiende literal).
   // Formato /maps/dir/place_id:X/place_id:Y NO funciona — Google lo lee como texto literal.
   // Usamos lat,lng que vienen de getValidatedPlace (son coords reales de Google Places).
+  // 10 sept: el formato viejo /maps/dir/lat,lng/lat,lng/... (sin ?api=1) no abre de forma
+  // fiable la app desde el WebView de la PWA — Paco reportó que el link no funcionaba
+  // mientras que los "Cómo llegar" por parada (que sí llevan ?api=1) abrían bien.
+  // Se pasa al esquema oficial documentado por Google (origin+destination+waypoints).
   const validPlaces = results.filter(r => r.placeId && r.lat && r.lng);
   if (validPlaces.length >= 2 && !skipRouteLink) {
-    const segments = validPlaces.map(r => `${r.lat},${r.lng}`).join('/');
-    const routeUrl = `https://www.google.com/maps/dir/${segments}`;
+    const origin = `${validPlaces[0].lat},${validPlaces[0].lng}`;
+    const destination = `${validPlaces[validPlaces.length - 1].lat},${validPlaces[validPlaces.length - 1].lng}`;
+    const middle = validPlaces.slice(1, -1);
+    const waypointsParam = middle.length ? `&waypoints=${middle.map(r => `${r.lat},${r.lng}`).join('|')}` : '';
+    const routeUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${waypointsParam}`;
     enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
   }
 

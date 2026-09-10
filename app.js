@@ -5858,7 +5858,8 @@ function formatMessage(str) {
       if (closes > opens) { trailing = ')' + trailing; url = url.slice(0, -1); } else break;
     }
     var label = url;
-    if (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1) label = '🗺️ Cómo llegar';
+    if (url.indexOf('origin=') !== -1 && (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1)) label = '🗺️ Ruta completa en Google Maps';
+    else if (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1) label = '🗺️ Cómo llegar';
     else if (url.indexOf('google.com/maps/dir/') !== -1) label = '🗺️ Ruta completa en Google Maps';
     else if (url.indexOf('google.com/maps') !== -1) label = '📍 Abrir en Google Maps';
     else if (url.indexOf('booking.com') !== -1) label = '🏨 Ver en Booking';
