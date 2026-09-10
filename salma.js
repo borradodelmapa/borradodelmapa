@@ -2290,14 +2290,10 @@ const salma = {
     const toast = document.createElement('div');
     toast.id = 'narrator-toast';
     toast.className = 'narrator-toast narrator-toast-in';
-    const mapsLink = poi && poi.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${poi.place_id}`
-      : poi ? `https://www.google.com/maps/search/?api=1&query=${poi.lat},${poi.lng}` : '';
     toast.innerHTML = `
       <div class="narrator-toast-close" onclick="this.parentElement.remove()">✕</div>
       ${poi ? `<div class="narrator-toast-poi">\uD83D\uDCCD ${poi.name}</div>` : ''}
-      <div class="narrator-toast-text">${text}</div>
-      ${mapsLink ? `<a class="narrator-toast-link" href="${mapsLink}" target="_blank" rel="noopener">Ver en Google Maps</a>` : ''}`;
+      <div class="narrator-toast-text">${text}</div>`;
     document.body.appendChild(toast);
     const autoDismiss = duration || 10000;
     setTimeout(() => {
