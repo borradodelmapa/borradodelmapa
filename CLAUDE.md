@@ -939,6 +939,17 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
+- **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
+  confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del
+  7-8 sept) se quedaba enganchado a CUALQUIER enlace `google.com/maps` del chat — también
+  al de "cómo llegar" a una sola parada, que debía abrir Google Maps directo. Causa: en
+  `app.js` (`formatMessage`), la variable `isMaps` metía en el modal todo lo que llevara
+  `google.com/maps`, sin distinguir ruta completa de parada suelta. Se separó en
+  `isRouteMaps` (`app.js?v=100`): solo "Ruta completa" (varias paradas) abre el modal;
+  "Cómo llegar" y el genérico "Abrir en Google Maps" abren con `window.open` directo, como
+  cualquier otro enlace. Falta que Paco confirme en pantalla: pedir una parada suelta en
+  el chat, tocar "Cómo llegar", comprobar que abre Google Maps (app o pestaña nueva)
+  directamente, sin pasar por el mapa fullscreen de la web.
 - **Enlace "Ruta completa en Google Maps" del chat — fusionado a `main` (10 sept), falta
   desplegar el Worker.** El link agregado (al final de una respuesta con varias paradas en
   negrita) usaba el formato viejo `/maps/dir/lat,lng/lat,lng/...` sin `?api=1`, que no abre
