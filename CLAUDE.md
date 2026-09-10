@@ -743,7 +743,10 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 ### Narrador
 - [x] Chip "Narrador" en pantalla de inicio del chat, con popup explicativo antes de
       activarlo (añadido 10 sept — antes no tenía ningún botón accesible)
-- [x] Check cada 30s de POIs cercanos (Google Places, radio 500m)
+- [x] Check cada 30s de POIs cercanos (Google Places, radio 20m — reducido desde 500m el
+      10 sept a petición de Paco)
+- [x] Toast del narrador: sin auto-cierre, solo se cierra con la X (antes se cerraba solo
+      a los 10s y no daba tiempo a leer — cambiado el 10 sept)
 - [x] Narración con GPT-4o-mini (personalidad Salma)
 - [x] Push notifications
 - [x] Deduplicación por place_id/nombre

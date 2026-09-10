@@ -2284,25 +2284,17 @@ const salma = {
     if (typeof updateBottomBar === 'function') updateBottomBar();
   },
 
-  showNarratorToast(text, duration, poi) {
+  showNarratorToast(text, poi) {
     const existing = document.getElementById('narrator-toast');
     if (existing) existing.remove();
     const toast = document.createElement('div');
     toast.id = 'narrator-toast';
     toast.className = 'narrator-toast narrator-toast-in';
     toast.innerHTML = `
-      <div class="narrator-toast-close" onclick="this.parentElement.remove()">✕</div>
+      <div class="narrator-toast-close" onclick="this.parentElement.classList.add('narrator-toast-out');setTimeout(()=>this.parentElement.remove(),400)">✕</div>
       ${poi ? `<div class="narrator-toast-poi">\uD83D\uDCCD ${poi.name}</div>` : ''}
       <div class="narrator-toast-text">${text}</div>`;
     document.body.appendChild(toast);
-    const autoDismiss = duration || 10000;
-    setTimeout(() => {
-      if (toast.parentElement) {
-        toast.classList.remove('narrator-toast-in');
-        toast.classList.add('narrator-toast-out');
-        setTimeout(() => toast.remove(), 400);
-      }
-    }, autoDismiss);
   },
 
   async checkNearbyPOIs() {
@@ -2315,7 +2307,7 @@ const salma = {
     console.log('[Salma] Narrator check:', lat, lng);
 
     try {
-      const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=500');
+      const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=20');
       if (!res.ok) return;
       const data = await res.json();
       if (!data.pois || !data.pois.length) return;
@@ -2384,7 +2376,7 @@ const salma = {
           ccsArea.appendChild(bubble);
           ccsArea.scrollTop = ccsArea.scrollHeight;
         } else {
-          this.showNarratorToast(narData.narrative, 10000, poi);
+          this.showNarratorToast(narData.narrative, poi);
         }
       } else {
         // App en background: solo push nativa
