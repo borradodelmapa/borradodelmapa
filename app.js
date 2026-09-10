@@ -258,6 +258,7 @@ function _renderChatEmpty() {
     { label: 'Notas', icon: '', msg: null, action: 'notas' },
     { label: 'Moneda', icon: '', msg: null, action: 'moneda' },
     { label: 'Traductor', icon: '', msg: null, action: 'traductor' },
+    { label: 'Narrador', icon: '', msg: null, action: 'explorar' },
     { label: 'SOS', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
   ];
   const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
@@ -634,13 +635,10 @@ function _renderChatEmpty() {
           if (salma._narratorActive) {
             salma.stopNarrator();
             salma.showNarratorToast('Narrador desactivado.', 3000);
+            updateBottomBar();
           } else {
-            salma.startNarrator().then(ok => {
-              if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.', 5000);
-              else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', 5000);
-            });
+            showNarratorConfirm();
           }
-          updateBottomBar();
         }
         return;
       }
@@ -5382,6 +5380,39 @@ function _buildSOSMessage(coords) {
         .replace('{nombre}', userName)
     : defaultMsg;
   return { message: raw, mapsUrl };
+}
+
+function showNarratorConfirm() {
+  let overlay = document.getElementById('narrator-confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'narrator-confirm-overlay';
+    overlay.className = 'narrator-confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div class="narrator-confirm-modal">
+      <div class="narrator-confirm-icon">📍</div>
+      <h2 class="narrator-confirm-title">Narrador</h2>
+      <p class="narrator-confirm-text">Te cuenta curiosidades de lo que tienes cerca mientras te mueves — con notificaciones y, si quieres, en voz. Necesita acceso a tu ubicación.</p>
+      <div class="narrator-confirm-btns">
+        <button class="narrator-confirm-cancel" id="narrator-confirm-cancel">Cancelar</button>
+        <button class="narrator-confirm-go" id="narrator-confirm-go">Activar</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+
+  document.getElementById('narrator-confirm-cancel').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+  document.getElementById('narrator-confirm-go').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    salma.startNarrator().then(ok => {
+      if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.', 5000);
+      else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', 5000);
+      updateBottomBar();
+    });
+  });
 }
 
 function showSOSConfirm() {
