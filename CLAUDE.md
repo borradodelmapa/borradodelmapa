@@ -962,6 +962,25 @@ antiguo — tratarlo como tal.)*
   llegar". Falta que Paco haga, desde su ordenador: `cd worker; npx wrangler deploy -c
   wrangler.toml`, y que confirme en pantalla tocando el enlace en una respuesta con ruta
   de varias paradas (ej. algo por la N-2 de Portugal).
+- **Respuesta del chat cortada a media frase al generar una ruta — fusionado a `main`
+  (10 sept, commit `d7e3154`), falta desplegar el Worker.** Paco reportó (chip "Hazme
+  una ruta desde donde estoy", destino Chaves) que la prosa de presentación se cortaba
+  a media palabra ("...cierra con un caldo en una tas") y saltaba directo a "Generando
+  tu ruta...". Causa: en `worker/salma-worker.js` (`readAnthropicStream` y
+  `readOpenAIStream`), el reenvío de cada trozo del streaming a `t: chunk` decidía si
+  mandarlo o no mirando si `fullText` ya contenía el marcador `SALMA_ROUTE` completo —
+  si un mismo trozo traía pegados el final de la prosa y el arranque del marcador, se
+  descartaba el trozo ENTERO (prosa incluida) en vez de solo el marcador. Se cambió para
+  mandar la parte de prosa que venga delante del marcador dentro de ese mismo trozo, y
+  solo entonces pasar a `generating: true`. Probado con `node --check`, sin tocar
+  frontend (no hace falta subir ningún `?v=`). **Verificado que sigue en el Worker viejo**:
+  el 10 sept a las 16:48 UTC el `/version` devolvía `2856c741` desplegado a las
+  08:18:16 UTC — de **antes** del commit (16:31 UTC) — así que el fix aún no ha corrido
+  en producción. Paco estaba con el móvil y no pudo desplegar en el momento. Falta, desde
+  su ordenador: `git pull origin main` (confirmar que baja `d7e3154` o posterior), luego
+  `cd worker; npx wrangler deploy -c wrangler.toml`, comprobar que `deployed_at` en
+  `/version` es posterior al pull, y probar el chip de ruta varias veces (el bug depende
+  de dónde caiga el corte del trozo del stream, no siempre se repite).
 - Stripe sigue en modo test — falta decidir cuándo pasar a `sk_live_`.
 - Google Maps key sin restricción de dominio en GCP Console (no verificable desde el repo).
 - **Modelo de negocio a medias**: "Salma Coins" (documentado más abajo en este archivo) y
