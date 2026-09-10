@@ -906,6 +906,10 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   resuelta**: `main` tiene el mismo arreglo palabra por palabra (mismos comentarios,
   misma lógica), comiteado **28 segundos después** que esta rama, el mismo 6 de abril.
   No hace falta fusionar nada.
+- ~~Whitelist ferry/bus (`claude/vibrant-bassi`)~~ → **descartada, 10 sept, ya estaba
+  resuelta**: los 5 dominios (balearia, ferryscanner, directferries, clickferry, omio)
+  ya están en la whitelist de `app.js` y del Worker — commit con el mismo mensaje exacto
+  en `main`, el mismo 6 de abril. Mismo patrón que las dos anteriores.
 
 *(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
 con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
@@ -941,7 +945,6 @@ a hacer distinto después) y probarla, una por una, con confirmación de Paco.
 | Rama | Qué trae (por los commits) | Tamaño del cambio |
 |---|---|---|
 | `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to`. **Aparcada por decisión de Paco (10 sept) — no es necesaria de momento, no fusionar sin que él lo pida.** | medio (salma.js + worker) |
-| `claude/vibrant-bassi` | Whitelist de URLs ferry/bus (omio, balearia, ferryscanner, directferries, clickferry) | grande (app.js + worker, revisar si se solapa con cambios posteriores del worker) |
 | `claude/vigorous-panini` | `_requestGPSAndNotifications()` para que el Narrador pida permisos sin GPS previo | medio (salma.js) |
 | `claude/hungry-tereshkova` | Rediseño de navegación: quita el chat modal flotante, deja solo la barra inferior, limpia elementos flotantes del mapa | **grande** (app.js, index.html, styles.css — ~600 líneas eliminadas, parece un bloque de trabajo completo y coherente) |
 | `trabajo-5-sept-2026` (tag `v-5sept-completo`) | Copia de referencia del día que se borró el Worker (protocolo §1) — histórico, no es "trabajo nuevo" que fusionar | — |
