@@ -939,6 +939,15 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
+- **Enlace "Ruta completa en Google Maps" del chat — fusionado a `main` (10 sept), falta
+  desplegar el Worker.** El link agregado (al final de una respuesta con varias paradas en
+  negrita) usaba el formato viejo `/maps/dir/lat,lng/lat,lng/...` sin `?api=1`, que no abre
+  bien desde el WebView de la PWA — a diferencia de los enlaces "Cómo llegar" por parada,
+  que sí llevan `?api=1&destination=...` y funcionaban. Se cambió al esquema oficial de
+  Google (`?api=1&origin=...&destination=...&waypoints=...`), igual que los de "Cómo
+  llegar". Falta que Paco haga, desde su ordenador: `cd worker; npx wrangler deploy -c
+  wrangler.toml`, y que confirme en pantalla tocando el enlace en una respuesta con ruta
+  de varias paradas (ej. algo por la N-2 de Portugal).
 - Stripe sigue en modo test — falta decidir cuándo pasar a `sk_live_`.
 - Google Maps key sin restricción de dominio en GCP Console (no verificable desde el repo).
 - **Modelo de negocio a medias**: "Salma Coins" (documentado más abajo en este archivo) y
