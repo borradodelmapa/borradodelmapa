@@ -880,6 +880,11 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   de cero, probada contra el caso real y contra falsos positivos antes de subir. Paco lo
   desplegó en una rama de prueba, lo probó pidiendo una ruta real y confirmó que iba bien
   antes de fusionar.
+- ~~Voz de fallback si falla ElevenLabs (`claude/vigorous-lichterman`)~~ → **descartada,
+  10 sept, ya estaba resuelta**: `main` tiene un arreglo equivalente (`_warmUpSpeech` +
+  `_elevenLabsDown`) comiteado 3 minutos después que esta rama, el mismo 17 de abril —
+  y más completo (desbloquea el sintetizador en el toggle Y en el primer mensaje, no solo
+  en el toggle). No hace falta fusionar nada.
 
 *(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
 con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
@@ -915,7 +920,6 @@ a hacer distinto después) y probarla, una por una, con confirmación de Paco.
 | Rama | Qué trae (por los commits) | Tamaño del cambio |
 |---|---|---|
 | `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to`. **Aparcada por decisión de Paco (10 sept) — no es necesaria de momento, no fusionar sin que él lo pida.** | medio (salma.js + worker) |
-| `claude/vigorous-lichterman` | Voz del navegador como fallback inmediato si falla ElevenLabs | pequeño (salma.js) |
 | `claude/optimistic-dhawan` | Narrador sin ráfaga: cola, dedup persistente, 1 notificación por ciclo, reutiliza GPS activo | medio (salma.js) |
 | `claude/vibrant-bassi` | Whitelist de URLs ferry/bus (omio, balearia, ferryscanner, directferries, clickferry) | grande (app.js + worker, revisar si se solapa con cambios posteriores del worker) |
 | `claude/hopeful-goldstine` | Scroll controlado en el chat: sigue el texto en streaming, se para si el usuario sube a mano | pequeño (salma.js) |
