@@ -821,25 +821,110 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ## Pendiente / Problemas conocidos
 
-### Crítico (seguridad / dinero)
-- **Stripe webhook** — pagos se confirman client-side (manipulable). Falta webhook server-side + pasar a live.
-- **Chat sin auth** — `POST /` del Worker no verifica token Firebase. Coins no validados server-side.
-- **public_guides sin ownership** — cualquier user autenticado puede sobrescribir slugs ajenos en Firestore.
-- **Credenciales en git** — `scripts/publish-destinos-salma.js` tiene email+password de Salma bot commiteado.
-- **Legal incompleta** — `legal.html` tiene [PENDIENTE] en nombre titular, CIF, email, dirección (obligatorio LSSI/GDPR).
+> **Este es el único archivo de pendientes del proyecto — no crear otro.** Auditado contra
+> el código real (no contra memoria ni contra lo que decía esta lista antes) el 10 sept
+> 2026, porque el trabajo se pide unas veces por Code y otras por chat normal y esta lista
+> llevaba tiempo sin coincidir con lo que hay realmente desplegado. Ver "Metodología y
+> límites" al final de esta sección antes de fiarte de que está completa.
 
-### Importante (UX / compliance)
-- **Cookie consent sin UI** — GA4 se carga sin consentimiento (ilegal UE).
-- **Sin modo offline** — SW no cachea nada. App en blanco sin red.
-- **Stripe en test mode** — falta pasar a live para cobrar.
-- **Google Maps key sin restricción** — aceptable pero debería restringirse por dominio en GCP Console.
+### 🔴 Crítico — verificado ahora mismo
 
-### Técnico (deuda técnica)
-- **Código duplicado** — `_groupByDay`, `_sampleWaypoints`, `_fullRouteGmapsUrl`, `escapeHTML` en 3+ archivos.
-- **Monkey-patch frágil** — `mapa-itinerario.js` parchea `bitacoraRenderer.renderDiario` en runtime.
-- **Deep links transport incompletos** — Solo Uber y Lyft tienen deep links. Bolt, Grab, DiDi etc. tienen `null`.
-- **Manifest PWA básico** — sin `shortcuts`, sin `screenshots`, icono 192px sin versión maskable dedicada.
-- **2 funciones dead code** — `injectGoogleMapsLink()` e `injectTransportBlock()` en el Worker hacen `return` inmediato.
+- **Pago posiblemente roto en producción** (no estaba documentado). El commit `5a6b2f8`
+  (7 sept, sesión "Pasarela de pago Stripe") reescribió `/create-payment` en el Worker
+  para el modelo Premium por periodos: espera `{plan: '1viaje'|'trimestral'|'semestral'|'anual'}`
+  y devuelve `{url}` de una Stripe Checkout Session; añadió `/stripe-webhook` que acredita
+  `premium_until`. **`app.js` (`openCoinsModal`, ~línea 3241) sigue con el flujo viejo de
+  coins**: manda `{amount, coins, user_id}` y espera `{client_secret}` para
+  `stripe.confirmCardPayment`. Si el Worker con ese commit está desplegado, comprar
+  coins está roto ahora mismo. Falta la Fase 2 de `docs/pasarela-premium.md` (modal
+  "Hazte Premium" + retorno `?pago=ok`). **Antes de tocar nada: pedirle a Paco que
+  confirme si ha probado un pago real en la app desde el 7 de septiembre.**
+- **Credenciales en git** — `scripts/publish-destinos-salma.js` sigue con email+password
+  de la cuenta de Salma bot en texto plano commiteado.
+- **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
+  titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
+- **Trabajo posiblemente perdido en sesiones sueltas** — ver la tabla más abajo, hay al
+  menos una rama que nunca llegó a GitHub y un commit que se quedó solo en un portátil.
+
+### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
+
+- ~~Chat sin auth~~ → `POST /` exige token Firebase (`verifyAuthAndGetUser`); sin token
+  responde 401 `auth_required`.
+- ~~Coins no validados server-side~~ → se leen de Firestore server-side (comentario en
+  el propio código: "P0-2 — no confiar en el frontend").
+- ~~`public_guides` sin ownership~~ → `firestore.rules` ya exige
+  `request.resource.data.uid == request.auth.uid` al crear, y solo el dueño edita/borra.
+- ~~Cookie consent sin UI~~ → GA4 solo se carga tras `cookie_consent === 'all'` en
+  localStorage (comentario "P1-6"), hay banner en `index.html`.
+- ~~Sin modo offline~~ → `sw.js` (v14) cachea con network-first + fallback a caché +
+  fallback a `/index.html`.
+- ~~Manifest PWA básico~~ → ya tiene `shortcuts` (Chat, Mis Viajes), icono 512 maskable,
+  `share_target`.
+
+*(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
+con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
+antiguo — tratarlo como tal.)*
+
+### 🟡 Importante
+
+- Stripe sigue en modo test — falta decidir cuándo pasar a `sk_live_`.
+- Google Maps key sin restricción de dominio en GCP Console (no verificable desde el repo).
+- **Modelo de negocio a medias**: "Salma Coins" (documentado más abajo en este archivo) y
+  el Premium por periodos de `docs/pasarela-premium.md` conviven ahora mismo en el código
+  — el Worker ya habla de planes/meses, el frontend todavía de coins. Hay que decidir y
+  terminar la migración (Fases 2-4 del documento) o revertir el Worker, no dejarlo a medias.
+- WebAuthn/fingerprint sigue parcial (solo recuerda email).
+
+### 🔧 Deuda técnica (sin cambios, no re-verificado a fondo en este barrido salvo lo dicho)
+
+- **Código duplicado** — `_groupByDay`, `_sampleWaypoints`, `_fullRouteGmapsUrl`,
+  `escapeHTML` en 3+ archivos.
+- **Monkey-patch frágil** — `mapa-itinerario.js` parchea `bitacoraRenderer.renderDiario`
+  en runtime.
+- **Deep links transport incompletos** — Solo Uber y Lyft tienen deep links.
+- **2 funciones dead code confirmadas** — `injectGoogleMapsLink()` e
+  `injectTransportBlock()` en el Worker (~línea 3290) solo hacen `return reply` sin tocar nada.
+
+### 📋 Sesiones de Code sueltas (29 ago – 10 sept) — revisar en tu ordenador
+
+No pude leer el contenido de estas conversaciones (ver límites abajo), solo metadatos.
+Están ordenadas de más a menos reciente. "Señal git" es lo que se veía en el árbol de
+trabajo al terminar cada sesión — no dice si el problema se resolvió, solo si el cambio
+llegó a un commit y si ese commit llegó a GitHub.
+
+| Fecha | Título | Rama | Señal git | Acción sugerida |
+|---|---|---|---|---|
+| 8 sept | Diseño tokens estudio | `worktree-rediseno-visual` | sin commitear, rama nunca pusheada | Revisar si queda algo que rescatar antes de borrar el worktree |
+| 7 sept | Guía con mapa no funciona | `main` | cambios sin commitear al cerrar | Confirmar con Paco si el mapa ya va bien; si no, retomar |
+| 7 sept | Rediseño visual de la app | `main` | cambios sin commitear al cerrar | Puede solaparse con "Diseño tokens estudio" — mirar juntas |
+| 7 sept | Pasarela de pago Stripe | `worktree-pasarela-pago` | Fase 0+1 sí llegaron a `main` (commits `200706a`, `5a6b2f8`); la rama en sí nunca se pusheó | Ver el crítico de pago roto arriba — esto es la causa |
+| 6 sept | Road-trips reales con búsqueda web | `main` | cambios sin commitear, sin commit identificable en el historial | Confirmar si se llegó a implementar algo o quedó en nada |
+| 6 sept | Anclar país y radio de búsqueda (x2) | `main` | limpia | Parece resuelto — `anchorCountry` ya está en el Worker |
+| 6 sept | Saca lo pendiente | `main` | sesión de 21s, sin cambios | No hizo nada, ignorar |
+| 5 sept | Rutas: respuestas y recomendaciones | `main` | **1 commit sin pushear** al cerrar | Comprobar si ese commit sigue solo en el portátil de Paco |
+| 5 sept | Geolocalización incorrecta en rutas | `main` | limpia, sin commit identificable | Confirmar si el bug de geolocalización sigue vivo |
+| 5 sept | Cambios no reflejados en la app de rutas (x3, Opus) | `main` | cambios sin commitear en las tres | Es el incidente que motivó el protocolo del §1 de este archivo — confirmar que ya no pasa |
+| 4-5 sept | Rutas con Web Search y simplificación (x2) | `main` | una limpia, otra con cambios sin commitear | Sin commit identificable con ese tema — confirmar si se perdió |
+| 31 ago | Auditoría validador URLs y trazado rutas Salma | `main` | cambios sin commitear al cerrar | La sanitización de URLs ya está documentada como implementada — probablemente ok |
+| 30 ago | Ajustes UI pantalla principal Salma | `main` | cambios sin commitear al cerrar | Revisar si quedó algo suelto |
+| 30 ago | Actualizar KV (Portugal + verificación global) | `claude/lucid-kirch-e19278` | **la rama no existe en GitHub** (comprobado) | El trabajo de esta sesión no parece haber llegado nunca al repo — probablemente perdido |
+| 30 ago | Auditoría estado actual Portugal en SALMA | `main` | cambios sin commitear al cerrar | Ligado a la sesión anterior |
+| 30 ago | Auditoría y validador de URLs de Google Maps | `main` | cambios sin commitear al cerrar | Revisar solapamiento con la del 31 ago |
+| 29 ago | BRIEFING: Flujo Guiado de Creación | `main` | cambios sin commitear al cerrar | El flujo guiado de 8 pasos ya existe en `app.js` ("Afinar") — probablemente se integró en otro commit posterior |
+
+### Metodología y límites de este barrido
+
+- Comparado contra el código real (`git log`, `git ls-remote`, `grep` en Worker/frontend/
+  `firestore.rules`) el 10 sept 2026 — no contra lo que decían sesiones anteriores.
+- **Sin acceso a conversaciones de chat normal (claude.ai)**: si algo se decidió o se pidió
+  ahí y no llegó al repo, no está en esta lista. Si Paco recuerda algo de esas
+  conversaciones que falte aquí, decírselo a la sesión y se añade.
+- De las sesiones de Code de la tabla, solo se pudieron ver metadatos (título, fecha,
+  rama, si quedaron cambios sin commitear/pushear) — el ordenador de Paco estaba
+  desconectado durante este barrido y no se pudo leer el contenido de esas conversaciones.
+  Reconectarlo permite revisarlas una a una.
+- Actualizar esta sección (no crear una nueva) cada vez que se cierre o se abandone algo
+  pendiente, para que no se repita el desfase que motivó este barrido.
 
 ---
 
