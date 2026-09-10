@@ -829,16 +829,16 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
-- **Pago posiblemente roto en producción** (no estaba documentado). El commit `5a6b2f8`
-  (7 sept, sesión "Pasarela de pago Stripe") reescribió `/create-payment` en el Worker
-  para el modelo Premium por periodos: espera `{plan: '1viaje'|'trimestral'|'semestral'|'anual'}`
-  y devuelve `{url}` de una Stripe Checkout Session; añadió `/stripe-webhook` que acredita
-  `premium_until`. **`app.js` (`openCoinsModal`, ~línea 3241) sigue con el flujo viejo de
-  coins**: manda `{amount, coins, user_id}` y espera `{client_secret}` para
-  `stripe.confirmCardPayment`. Si el Worker con ese commit está desplegado, comprar
-  coins está roto ahora mismo. Falta la Fase 2 de `docs/pasarela-premium.md` (modal
-  "Hazte Premium" + retorno `?pago=ok`). **Antes de tocar nada: pedirle a Paco que
-  confirme si ha probado un pago real en la app desde el 7 de septiembre.**
+- **Pago posiblemente roto en producción — confirmado con Paco (10 sept): lo sabe, no es
+  una sorpresa, lo tiene aparcado a propósito priorizando otras cosas. No perseguir sin que
+  él lo pida.** El commit `5a6b2f8` (7 sept, sesión "Pasarela de pago Stripe") reescribió
+  `/create-payment` en el Worker para el modelo Premium por periodos: espera
+  `{plan: '1viaje'|'trimestral'|'semestral'|'anual'}` y devuelve `{url}` de una Stripe
+  Checkout Session; añadió `/stripe-webhook` que acredita `premium_until`. `app.js`
+  (`openCoinsModal`, ~línea 3241) sigue con el flujo viejo de coins: manda
+  `{amount, coins, user_id}` y espera `{client_secret}` para `stripe.confirmCardPayment`.
+  Falta la Fase 2 de `docs/pasarela-premium.md` (modal "Hazte Premium" + retorno `?pago=ok`)
+  para cerrarlo cuando Paco decida retomarlo.
 - **Credenciales en git** — `scripts/publish-destinos-salma.js` sigue con email+password
   de la cuenta de Salma bot en texto plano commiteado.
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
