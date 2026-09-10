@@ -3807,6 +3807,31 @@ async function verifyAllStops(route, placesKey, opts = {}) {
     if (inArea.length >= 2) finalStops = inArea;    // no vaciar la ruta si el filtro se pasa de listo
     else nearbyStops = [];                          // revertir: mejor road trip que ruta vacía
   }
+
+  // ── DEDUP POR CERCANÍA — mismo sitio con dos place_id distintos ──
+  // Google a veces mantiene fichas separadas para el mismo lugar (p.ej. "River beach
+  // Fragas de Sao Simao" y "Fragas de Sao Simao" a 6m una de otra, con place_id distintos).
+  // El filtro de arriba solo pilla place_id idéntico, así que esto se colaba duplicado.
+  // Dos paradas son la misma si están a <250m Y el nombre normalizado de una contiene al
+  // de la otra — así no fusiona dos monumentos distintos de la misma plaza (nombres
+  // distintos aunque estén cerca).
+  const _normStopName = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const deduped = [];
+  finalStops.forEach(s => {
+    const sLat = s.lat, sLng = s.lng;
+    const sNameN = _normStopName(s.name || s.headline || '');
+    const isDup = sNameN && typeof sLat === 'number' && typeof sLng === 'number' && deduped.some(prev => {
+      if (typeof prev.lat !== 'number' || typeof prev.lng !== 'number') return false;
+      if (haversineKm(sLat, sLng, prev.lat, prev.lng) > 0.25) return false;
+      const prevNameN = _normStopName(prev.name || prev.headline || '');
+      return !!prevNameN && (sNameN.includes(prevNameN) || prevNameN.includes(sNameN));
+    });
+    if (isDup) console.log(`[VERIFY] ⚠ DEDUP cercanía "${s.name}" — misma parada que otra a <250m`);
+    else deduped.push(s);
+  });
+  finalStops = deduped;
+
   finalStops.forEach((s, i) => { if ('n' in s) s.n = i + 1; if ('order' in s) s.order = i + 1; });
 
   route.stops = finalStops;
