@@ -843,11 +843,14 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   de la cuenta de Salma bot en texto plano commiteado.
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
-- **Trabajo posiblemente perdido en sesiones sueltas** — ver la tabla más abajo, hay al
-  menos una rama que nunca llegó a GitHub y un commit que se quedó solo en un portátil.
-
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
 
+- ~~Trabajo perdido en sesiones sueltas~~ → **10 sept, con Paco en el ordenador**: se
+  encontraron 9 ramas con commits que solo existían en su portátil (`git log --branches
+  --not --remotes`) y se subieron todas a GitHub (`git push origin <ramas>`). La rama del
+  KV de Portugal que se temía perdida (`claude/lucid-kirch-e19278`) resultó no tener
+  ningún commit propio — no había nada que rescatar ahí. **Nada se perdió al final.**
+  Ver "🧵 Ramas rescatadas" más abajo — están a salvo pero siguen sin fusionar a `main`.
 - ~~Chat sin auth~~ → `POST /` exige token Firebase (`verifyAuthAndGetUser`); sin token
   responde 401 `auth_required`.
 - ~~Coins no validados server-side~~ → se leen de Firestore server-side (comentario en
@@ -885,6 +888,28 @@ antiguo — tratarlo como tal.)*
 - **2 funciones dead code confirmadas** — `injectGoogleMapsLink()` e
   `injectTransportBlock()` en el Worker (~línea 3290) solo hacen `return reply` sin tocar nada.
 
+### 🧵 Ramas rescatadas (10 sept) — con trabajo real, sin fusionar a `main`
+
+Estaban solo en el portátil de Paco, ya están en GitHub, **pero ninguna está fusionada
+en `main` todavía** — son ramas propias, con historia que ha divergido de `main`. Antes
+de fusionar cualquiera: mirar si sigue mereciendo la pena (puede que algo se haya vuelto
+a hacer distinto después) y probarla, una por una, con confirmación de Paco.
+
+| Rama | Qué trae (por los commits) | Tamaño del cambio |
+|---|---|---|
+| `mi-trabajo-local-5sept` | Fix: la ruta se mostraba duplicada (prompt contradictorio + dedup por cercanía) | pequeño (worker) |
+| `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to` | medio (salma.js + worker) |
+| `claude/vigorous-lichterman` | Voz del navegador como fallback inmediato si falla ElevenLabs | pequeño (salma.js) |
+| `claude/optimistic-dhawan` | Narrador sin ráfaga: cola, dedup persistente, 1 notificación por ciclo, reutiliza GPS activo | medio (salma.js) |
+| `claude/vibrant-bassi` | Whitelist de URLs ferry/bus (omio, balearia, ferryscanner, directferries, clickferry) | grande (app.js + worker, revisar si se solapa con cambios posteriores del worker) |
+| `claude/hopeful-goldstine` | Scroll controlado en el chat: sigue el texto en streaming, se para si el usuario sube a mano | pequeño (salma.js) |
+| `claude/vigorous-panini` | `_requestGPSAndNotifications()` para que el Narrador pida permisos sin GPS previo | medio (salma.js) |
+| `claude/hungry-tereshkova` | Rediseño de navegación: quita el chat modal flotante, deja solo la barra inferior, limpia elementos flotantes del mapa | **grande** (app.js, index.html, styles.css — ~600 líneas eliminadas, parece un bloque de trabajo completo y coherente) |
+| `trabajo-5-sept-2026` (tag `v-5sept-completo`) | Copia de referencia del día que se borró el Worker (protocolo §1) — histórico, no es "trabajo nuevo" que fusionar | — |
+
+`claude/vibrant-bassi` y `claude/hungry-tereshkova` son las más grandes — revisarlas con
+más calma porque `main` se ha movido bastante desde que se crearon y puede haber conflictos.
+
 ### 📋 Sesiones de Code sueltas (29 ago – 10 sept) — revisar en tu ordenador
 
 No pude leer el contenido de estas conversaciones (ver límites abajo), solo metadatos.
@@ -894,23 +919,27 @@ llegó a un commit y si ese commit llegó a GitHub.
 
 | Fecha | Título | Rama | Señal git | Acción sugerida |
 |---|---|---|---|---|
-| 8 sept | Diseño tokens estudio | `worktree-rediseno-visual` | sin commitear, rama nunca pusheada | Revisar si queda algo que rescatar antes de borrar el worktree |
+| 8 sept | Diseño tokens estudio | `worktree-rediseno-visual` | comprobado 10 sept: sin commits propios (nada exclusivo del portátil) | Nada que rescatar — lo que hubiera de valioso no llegó a commitearse |
 | 7 sept | Guía con mapa no funciona | `main` | cambios sin commitear al cerrar | Confirmar con Paco si el mapa ya va bien; si no, retomar |
 | 7 sept | Rediseño visual de la app | `main` | cambios sin commitear al cerrar | Puede solaparse con "Diseño tokens estudio" — mirar juntas |
 | 7 sept | Pasarela de pago Stripe | `worktree-pasarela-pago` | Fase 0+1 sí llegaron a `main` (commits `200706a`, `5a6b2f8`); la rama en sí nunca se pusheó | Ver el crítico de pago roto arriba — esto es la causa |
 | 6 sept | Road-trips reales con búsqueda web | `main` | cambios sin commitear, sin commit identificable en el historial | Confirmar si se llegó a implementar algo o quedó en nada |
 | 6 sept | Anclar país y radio de búsqueda (x2) | `main` | limpia | Parece resuelto — `anchorCountry` ya está en el Worker |
 | 6 sept | Saca lo pendiente | `main` | sesión de 21s, sin cambios | No hizo nada, ignorar |
-| 5 sept | Rutas: respuestas y recomendaciones | `main` | **1 commit sin pushear** al cerrar | Comprobar si ese commit sigue solo en el portátil de Paco |
+| 5 sept | Rutas: respuestas y recomendaciones | `main` | **rescatado 10 sept** → commit `mi-trabajo-local-5sept` | Ver "🧵 Ramas rescatadas" arriba |
 | 5 sept | Geolocalización incorrecta en rutas | `main` | limpia, sin commit identificable | Confirmar si el bug de geolocalización sigue vivo |
 | 5 sept | Cambios no reflejados en la app de rutas (x3, Opus) | `main` | cambios sin commitear en las tres | Es el incidente que motivó el protocolo del §1 de este archivo — confirmar que ya no pasa |
 | 4-5 sept | Rutas con Web Search y simplificación (x2) | `main` | una limpia, otra con cambios sin commitear | Sin commit identificable con ese tema — confirmar si se perdió |
 | 31 ago | Auditoría validador URLs y trazado rutas Salma | `main` | cambios sin commitear al cerrar | La sanitización de URLs ya está documentada como implementada — probablemente ok |
 | 30 ago | Ajustes UI pantalla principal Salma | `main` | cambios sin commitear al cerrar | Revisar si quedó algo suelto |
-| 30 ago | Actualizar KV (Portugal + verificación global) | `claude/lucid-kirch-e19278` | **la rama no existe en GitHub** (comprobado) | El trabajo de esta sesión no parece haber llegado nunca al repo — probablemente perdido |
+| 30 ago | Actualizar KV (Portugal + verificación global) | `claude/lucid-kirch-e19278` | comprobado 10 sept: la rama existe en el portátil pero sin ningún commit propio | Nada que rescatar — la sesión no llegó a commitear el trabajo de Portugal |
 | 30 ago | Auditoría estado actual Portugal en SALMA | `main` | cambios sin commitear al cerrar | Ligado a la sesión anterior |
 | 30 ago | Auditoría y validador de URLs de Google Maps | `main` | cambios sin commitear al cerrar | Revisar solapamiento con la del 31 ago |
 | 29 ago | BRIEFING: Flujo Guiado de Creación | `main` | cambios sin commitear al cerrar | El flujo guiado de 8 pasos ya existe en `app.js` ("Afinar") — probablemente se integró en otro commit posterior |
+
+**Housekeeping pendiente:** el `main` del portátil de Paco seguía 10 commits por detrás
+de GitHub el 10 sept (comprobado con `git status`). Antes de la próxima sesión de trabajo
+ahí, hacer `git pull origin main` — es un fast-forward, seguro.
 
 ### Metodología y límites de este barrido
 
