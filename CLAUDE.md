@@ -897,6 +897,11 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   no hacía nada. Con el botón ya puesto, el fix de la ráfaga de `optimistic-dhawan` (ver
   "🧵 Ramas rescatadas") vuelve a ser relevante — antes de esto era arreglar un problema
   en una función a la que nadie podía llegar.
+- **Narrador sin ráfaga (`claude/optimistic-dhawan`)** → **fusionado a `main` el 10 sept**
+  (cola de avisos, dedup persistente, separación foreground/background). Código verificado
+  (entró limpio, sin restos del bucle viejo) pero **todavía sin probar en pantalla** — la
+  ráfaga solo se ve caminando por una zona con varios POIs juntos. Pendiente de que Paco
+  lo pruebe con el Narrador activado moviéndose; si algo no cuadra, es sobre esto.
 
 *(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
 con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
@@ -932,7 +937,6 @@ a hacer distinto después) y probarla, una por una, con confirmación de Paco.
 | Rama | Qué trae (por los commits) | Tamaño del cambio |
 |---|---|---|
 | `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to`. **Aparcada por decisión de Paco (10 sept) — no es necesaria de momento, no fusionar sin que él lo pida.** | medio (salma.js + worker) |
-| `claude/optimistic-dhawan` | Narrador sin ráfaga: cola, dedup persistente, 1 notificación por ciclo, reutiliza GPS activo | medio (salma.js) |
 | `claude/vibrant-bassi` | Whitelist de URLs ferry/bus (omio, balearia, ferryscanner, directferries, clickferry) | grande (app.js + worker, revisar si se solapa con cambios posteriores del worker) |
 | `claude/hopeful-goldstine` | Scroll controlado en el chat: sigue el texto en streaming, se para si el usuario sube a mano | pequeño (salma.js) |
 | `claude/vigorous-panini` | `_requestGPSAndNotifications()` para que el Narrador pida permisos sin GPS previo | medio (salma.js) |
