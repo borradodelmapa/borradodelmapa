@@ -6299,10 +6299,9 @@ body {
 .ce-top{
   display:flex;justify-content:space-between;align-items:center;
   padding-bottom:10px;
-  padding-right:46px;   /* deja sitio al icono fijo 🕐 de "últimas consultas" */
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
-.ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ce-top .ce-brand:active{opacity:.7;}
 .ce-top .ce-brand span{color:var(--ce-ink3);}
 .ce-top .ce-meta{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.12em;color:var(--ce-ink2);}
@@ -6454,7 +6453,9 @@ body {
 .chat-empty .ce-back-active:hover{color:var(--ce-amber);}
 
 /* ── Botón "empezar de cero" — Fase 1 navegación ── */
-#chat-fresh, #chat-history{
+/* "Últimas consultas" (antes #chat-history, reloj fijo arriba) ahora es una
+   pestaña del menú de abajo — ver .app-bottom-bar / #tab-consultas. */
+#chat-fresh{
   position:fixed;top:calc(env(safe-area-inset-top) + 10px);z-index:900;
   width:34px;height:34px;border-radius:0;
   border:1.5px solid var(--linea-fuerte);
@@ -6462,16 +6463,11 @@ body {
   color:var(--dorado);cursor:pointer;
   display:none;align-items:center;justify-content:center;
   -webkit-tap-highlight-color:transparent;
+  right:12px;
 }
-#chat-history{right:12px;}
-#chat-fresh{right:54px;}
-#chat-fresh:active, #chat-history:active{transform:scale(.92);}
-/* "empezar de cero" solo con conversación; "últimas consultas" SIEMPRE en el chat (incl. índice) */
+#chat-fresh:active{transform:scale(.92);}
+/* "empezar de cero" solo con conversación */
 body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:flex;}
-body:has(#app-content.app-content--chat) #chat-history{display:flex;}
-/* pero fuera cuando hay una vista a pantalla completa encima */
-body:has(#itin-view:not([style*="none"])) #chat-history,
-body:has(#live-map-view:not([style*="none"])) #chat-history{display:none;}
 
 /* ── Historial de consultas (últimas 10) ── */
 .cons-area{padding:0 0 40px;}
