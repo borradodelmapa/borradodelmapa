@@ -964,3 +964,21 @@ git checkout v1-stable-20260410
 # Backup completo en Desktop
 # C:\Users\User\Desktop\salma-v1-stable-20260410\
 ```
+
+## Reparto de worktrees — 7 septiembre 2026
+
+Hoy se trabaja en 4 frentes. Recordatorio: la app de escritorio crea un worktree automático por cada sesión nueva (botón "+ New session" en la pestaña Code) — no hace falta usar `-w` a mano ni `git worktree add` manualmente.
+
+**En paralelo (máx. 2 sesiones activas a la vez):**
+
+1. `roadtrip-reales` — cerrar la tarea de road trips reales (bloque 1-Ruta de F2-Calidad: día a día, carreteras reales, dificultad, alternativas). Toca: `mapa-ruta.js`, renderizado de ruta en `salma.js`, prompt/Worker (con aprobación explícita — ver Protocolo, punto 5).
+2. `pasarela-pago` — pasarela de pago (Stripe, bundles). Evitar tocar `index.html`/`styles.css` más allá del propio checkout.
+
+**En cola (después de fusionar las dos anteriores a main, una detrás de otra — no en paralelo entre sí):**
+
+3. `rediseno-visual` — rediseño visual amplio (layout, colores, componentes). Va primero para fijar la base visual antes de tocar Historia.
+4. `historia-tab` — continuar el apartado Historia (ya existen `historia.js`/`historia.css` en el repo, no se parte de cero). Arranca solo cuando `rediseno-visual` esté fusionado a main, para heredar el estilo nuevo en vez de remaquetar dos veces.
+
+**Notas aparte (no relacionadas con este reparto, detectadas al revisar el repo):**
+- Hay ~40 worktrees viejos marcados `prunable` en `.claude/worktrees/` de sesiones anteriores ya cerradas. Se pueden limpiar con `git worktree prune` cuando quieras — no borra nada en uso, solo limpia referencias muertas.
+- El repo tiene actualmente un diff enorme sin commitear (~619.000 líneas en ~1950 ficheros) que parece ser mezcla de finales de línea CRLF/LF, no cambios de contenido reales — no lo he tocado. Convendría revisarlo y decidir cómo normalizarlo antes del próximo commit, para no arrastrar sin querer un commit gigante de miles de ficheros.
