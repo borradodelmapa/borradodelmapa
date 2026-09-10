@@ -5858,9 +5858,10 @@ function formatMessage(str) {
       if (closes > opens) { trailing = ')' + trailing; url = url.slice(0, -1); } else break;
     }
     var label = url;
-    if (url.indexOf('origin=') !== -1 && (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1)) label = '🗺️ Ruta completa en Google Maps';
+    var isRouteMaps = false;
+    if (url.indexOf('origin=') !== -1 && (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1)) { label = '🗺️ Ruta completa en Google Maps'; isRouteMaps = true; }
     else if (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1) label = '🗺️ Cómo llegar';
-    else if (url.indexOf('google.com/maps/dir/') !== -1) label = '🗺️ Ruta completa en Google Maps';
+    else if (url.indexOf('google.com/maps/dir/') !== -1) { label = '🗺️ Ruta completa en Google Maps'; isRouteMaps = true; }
     else if (url.indexOf('google.com/maps') !== -1) label = '📍 Abrir en Google Maps';
     else if (url.indexOf('booking.com') !== -1) label = '🏨 Ver en Booking';
     else if (url.indexOf('kiwi.com') !== -1) label = '✈️ Ver vuelo';
@@ -5901,8 +5902,7 @@ function formatMessage(str) {
     else if (url.indexOf('olacabs.com') !== -1) label = '🟡 Descargar Ola';
     else if (url.indexOf('airbnb.com') !== -1) label = '🏠 Ver en Airbnb';
     else if (url.indexOf('hostelworld.com') !== -1) label = '🛏️ Ver en Hostelworld';
-    var isMaps = url.indexOf('google.com/maps') !== -1;
-    var clickHandler = isMaps ? 'openMapsModal(this.href);return false;' : 'window.open(this.href);return false;';
+    var clickHandler = isRouteMaps ? 'openMapsModal(this.href);return false;' : 'window.open(this.href);return false;';
     return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="' + clickHandler + '">' + label + '</a>' + trailing;
   });
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
