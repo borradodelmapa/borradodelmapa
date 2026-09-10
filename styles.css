@@ -6258,7 +6258,9 @@ body {
   --ce-red:#ff5a5a;       /* provisional: SOS */
   --ce-sign:'Barlow Condensed','Archivo',var(--font-tight),sans-serif;
   --ce-flapf:'Barlow Condensed',var(--font-tight),sans-serif;
-  padding:16px 16px 8px;
+  /* horizontal en 0: .chat-area (padre) ya pone 16px a cada lado — poner
+     padding aquí también lo duplicaba a 32px, el doble que la caja del chat. */
+  padding:16px 0 8px;
 }
 .chat-empty *{box-sizing:border-box;}
 /* doc 8 sep: radio de esquina 0 en TODO el árbol del índice, sin excepción */
@@ -6268,7 +6270,7 @@ body {
 .ce-hero{padding:12px 0 0;}
 .ce-slogan{margin:0;font-family:var(--ce-sign);font-weight:800;font-size:38px;line-height:.95;letter-spacing:.005em;text-transform:uppercase;color:var(--ce-ink);}
 .ce-slogan span{color:var(--ce-amber);}
-.ce-tagline{margin:14px 0 2px;padding:11px 0;}
+.ce-tagline{margin:14px 0 2px;border-top:1px solid var(--ce-line);padding:11px 0;}
 .ce-tagline p{margin:0;font-family:var(--ce-sign);font-weight:700;font-size:18px;letter-spacing:.01em;text-transform:uppercase;color:var(--ce-ink);}
 .ce-tagline span{color:var(--ce-amber);}
 
