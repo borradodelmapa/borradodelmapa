@@ -914,7 +914,7 @@ a hacer distinto después) y probarla, una por una, con confirmación de Paco.
 
 | Rama | Qué trae (por los commits) | Tamaño del cambio |
 |---|---|---|
-| `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to` | medio (salma.js + worker) |
+| `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to`. **Aparcada por decisión de Paco (10 sept) — no es necesaria de momento, no fusionar sin que él lo pida.** | medio (salma.js + worker) |
 | `claude/vigorous-lichterman` | Voz del navegador como fallback inmediato si falla ElevenLabs | pequeño (salma.js) |
 | `claude/optimistic-dhawan` | Narrador sin ráfaga: cola, dedup persistente, 1 notificación por ciclo, reutiliza GPS activo | medio (salma.js) |
 | `claude/vibrant-bassi` | Whitelist de URLs ferry/bus (omio, balearia, ferryscanner, directferries, clickferry) | grande (app.js + worker, revisar si se solapa con cambios posteriores del worker) |
