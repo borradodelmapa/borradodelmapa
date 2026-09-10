@@ -910,6 +910,13 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   devuelve `false` (el toast ya existente de app.js lo cubre). **Sin probar en pantalla
   todavía** — Paco lo probará en marcha: bloquear ubicación del sitio, activar Narrador,
   confirmar que avisa en vez de quedarse "encendido" en falso.
+- **Enlace "Ver en Google Maps" del narrador** → **fusionado a `main` el 10 sept**
+  (`salma.js:showNarratorToast`, `?v=73`). Paco reportó que el enlace del toast del
+  narrador (construido con `place_id`/lat,lng del POI) no llevaba a ningún sitio válido;
+  como el narrador solo avisa de sitios a <500m, se quitó el enlace en vez de arreglarlo
+  — estando delante del sitio no aporta nada. **Pendiente de que Paco lo revise en
+  pantalla** (panel 🐛 → confirmar `salma.js?v=73` cargado, activar Narrador cerca de un
+  POI, comprobar que el toast ya no muestra el enlace).
 - ~~Scroll del chat (`claude/hopeful-goldstine`)~~ → **descartada, 10 sept, ya estaba
   resuelta**: `main` tiene el mismo arreglo palabra por palabra (mismos comentarios,
   misma lógica), comiteado **28 segundos después** que esta rama, el mismo 6 de abril.
