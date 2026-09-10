@@ -5358,13 +5358,21 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
         // Text content
         if (delta.content) {
           const chunk = delta.content;
+          const prevLen = fullText.length;
           fullText += chunk;
           if (forwardText && writer) {
-            if (!fullText.includes('SALMA_ROUTE')) {
-              await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
-            } else if (!routeSignalSent) {
-              routeSignalSent = true;
-              await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
+            if (!routeSignalSent) {
+              const markerIdx = fullText.indexOf('SALMA_ROUTE');
+              if (markerIdx === -1) {
+                await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
+              } else {
+                // El marcador empieza dentro de este trozo: mandar la prosa que
+                // venga pegada delante (no descartar el trozo entero) y avisar aparte.
+                const prosePart = markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '';
+                if (prosePart) await writer.write(encoder.encode(`data: ${JSON.stringify({ t: prosePart })}\n\n`));
+                routeSignalSent = true;
+                await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
+              }
             } else if ((++routeHeartbeat % 30) === 0) {
               // JSON largo generándose en silencio: latido cada ~30 chunks para no perder la conexión
               try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
@@ -5447,13 +5455,21 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
           if (evt.delta.type === 'text_delta') {
             const chunk = evt.delta.text;
             b.text = (b.text || '') + chunk;
+            const prevLen = fullText.length;
             fullText += chunk;
             if (forwardText && writer) {
-              if (!fullText.includes('SALMA_ROUTE')) {
-                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`)); } catch (_) {}
-              } else if (!routeSignalSent) {
-                routeSignalSent = true;
-                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
+              if (!routeSignalSent) {
+                const markerIdx = fullText.indexOf('SALMA_ROUTE');
+                if (markerIdx === -1) {
+                  try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`)); } catch (_) {}
+                } else {
+                  // El marcador empieza dentro de este trozo: mandar la prosa que
+                  // venga pegada delante (no descartar el trozo entero) y avisar aparte.
+                  const prosePart = markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '';
+                  if (prosePart) { try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: prosePart })}\n\n`)); } catch (_) {} }
+                  routeSignalSent = true;
+                  try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
+                }
               } else if ((++routeHeartbeat % 30) === 0) {
                 // JSON largo generándose en silencio: latido cada ~30 chunks para no perder la conexión
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
