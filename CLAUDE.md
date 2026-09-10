@@ -874,6 +874,12 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   variables de entorno (`SALMA_EMAIL`/`SALMA_PASS`), el script falla si no se le dan. Se
   había apuntado mal como pendiente en el barrido del 10 sept sin comprobarlo del todo —
   error de esa auditoría, no del código.
+- ~~Ruta duplicada (`mi-trabajo-local-5sept`)~~ → **10 sept, fusionado a `main`**: el
+  commit original solo traía la mitad del arreglo (el prompt); la parte 2 (dedup de
+  paradas a <250m con distinto `place_id` de Google) no existía en el código y se escribió
+  de cero, probada contra el caso real y contra falsos positivos antes de subir. Paco lo
+  desplegó en una rama de prueba, lo probó pidiendo una ruta real y confirmó que iba bien
+  antes de fusionar.
 
 *(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
 con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
@@ -908,7 +914,6 @@ a hacer distinto después) y probarla, una por una, con confirmación de Paco.
 
 | Rama | Qué trae (por los commits) | Tamaño del cambio |
 |---|---|---|
-| `mi-trabajo-local-5sept` | Fix: la ruta se mostraba duplicada (prompt contradictorio + dedup por cercanía) | pequeño (worker) |
 | `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to` | medio (salma.js + worker) |
 | `claude/vigorous-lichterman` | Voz del navegador como fallback inmediato si falla ElevenLabs | pequeño (salma.js) |
 | `claude/optimistic-dhawan` | Narrador sin ráfaga: cola, dedup persistente, 1 notificación por ciclo, reutiliza GPS activo | medio (salma.js) |
@@ -937,7 +942,7 @@ llegó a un commit y si ese commit llegó a GitHub.
 | 6 sept | Road-trips reales con búsqueda web | `main` | cambios sin commitear, sin commit identificable en el historial | Confirmar si se llegó a implementar algo o quedó en nada |
 | 6 sept | Anclar país y radio de búsqueda (x2) | `main` | limpia | Parece resuelto — `anchorCountry` ya está en el Worker |
 | 6 sept | Saca lo pendiente | `main` | sesión de 21s, sin cambios | No hizo nada, ignorar |
-| 5 sept | Rutas: respuestas y recomendaciones | `main` | **rescatado 10 sept** → commit `mi-trabajo-local-5sept` | Ver "🧵 Ramas rescatadas" arriba |
+| 5 sept | Rutas: respuestas y recomendaciones | `main` | **rescatado y fusionado a `main` el 10 sept** (probado por Paco en producción) | Cerrado |
 | 5 sept | Geolocalización incorrecta en rutas | `main` | limpia, sin commit identificable | Confirmar si el bug de geolocalización sigue vivo |
 | 5 sept | Cambios no reflejados en la app de rutas (x3, Opus) | `main` | cambios sin commitear en las tres | Es el incidente que motivó el protocolo del §1 de este archivo — confirmar que ya no pasa |
 | 4-5 sept | Rutas con Web Search y simplificación (x2) | `main` | una limpia, otra con cambios sin commitear | Sin commit identificable con ese tema — confirmar si se perdió |
