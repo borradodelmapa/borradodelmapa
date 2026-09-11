@@ -2811,8 +2811,20 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   const hasPhoto = !!imageBase64;
 
   if (currentRoute && currentRoute.stops && currentRoute.stops.length > 0) {
-    const stopSummary = currentRoute.stops.map((s, i) => `Día ${s.day}: ${s.name}`).join(', ');
-    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas: ${stopSummary}. Si el usuario pide CAMBIOS (añadir, quitar, reordenar), devuelve la ruta completa actualizada en SALMA_ROUTE_JSON manteniendo las paradas que no cambian. Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
+    // Ficha EXACTA de cada parada (no solo el nombre) — si el usuario pide un cambio,
+    // el modelo debe poder copiar literalmente (mismo lat/lng/narrative/día) las paradas
+    // que no cambian, en vez de reconstruirlas de memoria a partir de una lista de nombres.
+    // Reconstruir de memoria es lo que hizo que una ruta de 10 paradas reales acabase con
+    // paradas de otra zona al pedir solo añadir 1 — la ruta original se perdió al guardar.
+    const stopsCompact = currentRoute.stops.map(s => ({
+      name: s.name, headline: s.headline, narrative: s.narrative, day_title: s.day_title,
+      type: s.type, day: s.day, lat: s.lat, lng: s.lng,
+      km_from_previous: s.km_from_previous, road_name: s.road_name,
+      road_difficulty: s.road_difficulty, estimated_hours: s.estimated_hours
+    }));
+    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. DATOS EXACTOS de cada parada (JSON): ${JSON.stringify(stopsCompact)}
+Si el usuario pide CAMBIOS (añadir, quitar, reordenar): devuelve la ruta completa actualizada en SALMA_ROUTE_JSON. Las paradas que NO cambian van LITERALES — mismo name, lat, lng, narrative, day y el resto de campos que ya tenían arriba, sin reescribirlas ni "mejorarlas". Solo generas de nuevo la parada que se añade o se modifica explícitamente.
+Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
   }
 
   if (hasPhoto) {
