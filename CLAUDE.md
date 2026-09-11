@@ -988,6 +988,15 @@ antiguo — tratarlo como tal.)*
   — el Worker ya habla de planes/meses, el frontend todavía de coins. Hay que decidir y
   terminar la migración (Fases 2-4 del documento) o revertir el Worker, no dejarlo a medias.
 - WebAuthn/fingerprint sigue parcial (solo recuerda email).
+- **[Prioridad baja] Resumen/narrativa post-viaje** — auditado 11 sept: no existe ningún
+  sistema de "estados" de Salma (Exploradora/Buscadora/Acompañante/Crisis/Historiadora),
+  ni `getSalmaState()`, ni nada que cambie el prompt según si un viaje está activo o
+  completado — la selección de prompt (`buildMessages()` en `worker/salma-worker.js`)
+  es solo por patrón de mensaje, no por ciclo de vida del viaje. Tampoco hay concepto de
+  "viaje completado" en Firestore (`users/{uid}/maps/{mapId}` no tiene campo `status`).
+  Lo único parecido a un "resumen" es el vídeo Canvas (`video-player.js`, tipo `resumen`)
+  y es un slideshow visual bajo petición explícita del usuario, no una narrativa de texto
+  automática. Sin prisa — no hay nada roto, es una feature nueva a valorar más adelante.
 
 ### 🔧 Deuda técnica (sin cambios, no re-verificado a fondo en este barrido salvo lo dicho)
 
