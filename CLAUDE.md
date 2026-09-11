@@ -58,6 +58,17 @@ chat. Una captura al principio ahorra media tarde.
    dice cuál. La terminal de Paco es PowerShell, donde `&&` **no existe**; se encadena
    con `;`:
    `cd C:\Users\User\Desktop\salma\worker; npx wrangler deploy -c wrangler.toml`
+
+   **Alternativa desde el móvil (sin terminal) — Cloudflare Workers Builds, montado y
+   probado el 11 sept 2026:** el Worker `salma-api` tiene conectado el repo de GitHub
+   (Cloudflare dashboard → salma-api → Settings → Builds). Cualquier commit directo a
+   `main` (se puede hacer editando un fichero desde github.com en el navegador del
+   móvil, sin `git` local) dispara un build y deploy automático — mismo comando,
+   `npx wrangler deploy -c wrangler.toml`, con **Directorio raíz = `worker`** para que
+   no coja el `wrangler.jsonc` de la raíz. El paso 5 (comprobar `/version`) sigue
+   haciendo falta igual, solo que se abre la URL directamente en el navegador del móvil
+   en vez de `curl.exe`. Esto **no sustituye** el paso 1 (subir `?v=`) ni el 6 (Paco
+   prueba en la app) — solo cambia cómo se ejecuta el paso 4.
 5. Comprobar que el Worker que corre es el que crees — el `Current Version ID` del
    deploy tiene que coincidir con el que devuelve el endpoint:
    `curl.exe -s https://salma-api.paco-defoto.workers.dev/version`
