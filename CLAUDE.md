@@ -953,7 +953,7 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
-- **Workers Builds (11 sept 2026) — sin confirmar si es seguro para uso rutinario, hizo
+- **Workers Builds (11 sept 2026) — resuelto y confirmado seguro la misma noche, hizo
   falta un rescate de emergencia el mismo día que se montó.** Tras conectar Cloudflare
   Workers Builds (push a `main` → deploy automático, ver alternativa del checklist §4),
   `ANTHROPIC_API_KEY` desapareció del Worker en producción — Salma dejó de responder a
@@ -972,12 +972,14 @@ antiguo — tratarlo como tal.)*
   bug del texto cortado al generar ruta, ya arreglado en `main`). Se corrigió con
   `git pull origin main` + nuevo `wrangler deploy`. Esto es un problema aparte de Workers
   Builds — repetir el housekeeping del 10 sept, `git pull` antes de cualquier deploy manual.
-  **Pendiente antes de confiar en Workers Builds para trabajo rutinario:**
-  1. Apagar "Habilitar compilaciones de vista previa" en salma-api → Settings → Builds.
-  2. Prueba de fuego: un commit de prueba a `main`, y comprobar justo después (mensaje real
-     en el chat, no solo `/version`) si `ANTHROPIC_API_KEY` sigue viva. Si desaparece otra
-     vez, desconectar Workers Builds y volver a `wrangler deploy` manual hasta entender el
-     porqué — no reintentar a ciegas.
+  **Resuelto la misma noche (11 sept, ~23:45):** se apagó "Compilaciones para ramas que
+  no son de producción" (salma-api → Settings → Builds → Control de ramas) — esa es la
+  casilla sospechosa de crear versiones sin desplegar. Prueba de fuego: commit de prueba
+  a `main`, deploy automático, y mensaje real en el chat ("ruta de los faros") — Salma
+  respondió completo, con fotos y guía, sin ningún aviso de "falta API key". **Workers
+  Builds queda confirmado seguro para uso rutinario desde el móvil**, con esa casilla
+  apagada. Causa raíz exacta sin confirmar del todo (no se aisló si era esa casilla u
+  otra cosa de la conexión inicial), pero el síntoma no ha reaparecido tras el fix.
 - **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
   confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del
   7-8 sept) se quedaba enganchado a CUALQUIER enlace `google.com/maps` del chat — también
