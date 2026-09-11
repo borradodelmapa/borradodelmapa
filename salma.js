@@ -3834,6 +3834,14 @@ const salma = {
   _cleanDestino(msg) {
     if (!msg) return '';
     let s = String(msg).trim();
+    // "ruta de los faros DESDE DONDE ESTOY" no tiene destino de texto que geocodificar —
+    // lo que sobrevive a la limpieza ("la los faros", "los faros"...) se mandaba igual
+    // como dest_hint, y el worker lo geocodificaba con Google Find Place como si fuera
+    // un sitio real. Con un texto sin sentido, Google devuelve el candidato que mejor
+    // le suene (visto: una ruta de faros pedida desde Fisterra ancló en Lisboa) y ESE
+    // sitio pasa a ser el centro del radio que valida/descarta el resto de paradas.
+    // Sin destino de texto, mejor sin ancla — el worker ya filtra por route.country.
+    if (/\b(desde donde estoy|desde aqu[ií]|donde estoy|cerca de m[ií]|por aqu[ií])\b/i.test(s)) return '';
     s = s.replace(/^\s*salma[,\s]+hazme una gu[ií]a\s*:?\s*/i, '');
     s = s.replace(/^\s*hazme una gu[ií]a\s*(de|por|para)?\s*:?\s*/i, '');
     s = s.replace(/\b(\d{1,2}|un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s+d[ií]as?\b/gi, ' ');
