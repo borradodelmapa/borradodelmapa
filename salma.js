@@ -1404,7 +1404,8 @@ const salma = {
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
         const isEdit = this.currentRouteId && this.currentRoute;
-        const prevStopsCount = this.currentRoute?.stops?.length || 0;
+        const prevStops = this.currentRoute?.stops || [];
+        const prevStopsCount = prevStops.length;
         this.currentRoute = data.route;
         if (!data._hadDraft || data._isBlocks) {
           // Ruta nueva o ruta de bloques: abrir vista itinerario
@@ -1433,29 +1434,48 @@ const salma = {
         }
 
         if (isEdit) {
-          // Editando ruta guardada — actualizar Firestore
-          this._addSalmaBubble('Ruta actualizada. Dime si quieres más cambios.');
-          try {
-            const docRef = db.collection('users').doc(window.currentUser.uid)
-              .collection('maps').doc(this.currentRouteId);
-            // Backup de la versión anterior ANTES de pisarla — si la IA reconstruye mal
-            // la ruta al editar, esto es lo único que permite recuperarla.
-            let prevItinerarioIA = null;
-            try {
-              const prevSnap = await docRef.get();
-              prevItinerarioIA = prevSnap.exists ? (prevSnap.data().itinerarioIA || null) : null;
-            } catch (_) {}
-            const updateData = {
-              itinerarioIA: JSON.stringify(data.route),
-              nombre: data.route.title || data.route.name || 'Mi ruta',
-              updatedAt: new Date().toISOString()
-            };
-            if (prevItinerarioIA) {
-              updateData.itinerarioIA_prev = prevItinerarioIA;
-              updateData.itinerarioIA_prev_at = new Date().toISOString();
+          // Comprobación de cordura: si la "edición" ha cambiado casi todas las paradas
+          // (nombres que ya no aparecen ni uno), probablemente la IA ha reconstruido mal
+          // la ruta en vez de editarla de verdad. No sobrescribir Firestore sin más —
+          // pedir confirmación explícita primero.
+          const _normName = (s) => (s || '').toString().trim().toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          const _newNames = new Set((data.route.stops || []).map(s => _normName(s.name)));
+          const _keptCount = prevStops.filter(s => _newNames.has(_normName(s.name))).length;
+          const _keptRatio = prevStopsCount > 0 ? (_keptCount / prevStopsCount) : 1;
+          const _looksLikeCorruption = prevStopsCount >= 3 && _keptRatio < 0.5;
+
+          if (_looksLikeCorruption) {
+            this._addSalmaBubble('Espera — este cambio ha reescrito casi todas las paradas, no solo lo que pediste. Puede que se me haya ido la olla reconstruyendo la ruta. ¿La guardo igualmente, o la descarto y seguimos con la que tenías?');
+            const _area = this._getChatArea();
+            if (_area) {
+              const _rw = document.createElement('div');
+              _rw.className = 'historia-chat-chip-wrap';
+              const _saveBtn = document.createElement('button');
+              _saveBtn.className = 'historia-chat-chip';
+              _saveBtn.textContent = '💾 Guardar así de todos modos';
+              _saveBtn.addEventListener('click', async () => {
+                _rw.remove();
+                await this._commitRouteEdit(data.route);
+                this._addSalmaBubble('Vale, guardada. Dime si quieres más cambios.');
+              });
+              const _discardBtn = document.createElement('button');
+              _discardBtn.className = 'historia-chat-chip';
+              _discardBtn.textContent = '↩️ Descartar, mantener la de antes';
+              _discardBtn.addEventListener('click', () => {
+                _rw.remove();
+                this._addSalmaBubble('Descartado — no he tocado tu ruta guardada.');
+                if (typeof this.cargarGuia === 'function') this.cargarGuia(this.currentRouteId);
+              });
+              _rw.appendChild(_saveBtn);
+              _rw.appendChild(_discardBtn);
+              _area.appendChild(_rw);
+              this._scrollToBottom(true);
             }
-            await docRef.update(updateData);
-          } catch (e) { console.warn('Error actualizando guía:', e); }
+          } else {
+            this._addSalmaBubble('Ruta actualizada. Dime si quieres más cambios.');
+            await this._commitRouteEdit(data.route);
+          }
         } else {
           // Pueblo pequeño: ruta corta dentro del casco + escapadas al lado → Salma da opciones.
           if (data.route.nearby_note) {
@@ -2013,6 +2033,32 @@ const salma = {
     // PIEZA A — Enrich (Pasada 2 GPT-4o-mini) eliminado: era una 2ª llamada a otro
     // modelo por ruta. Los datos de cada parada (rating/horario/foto) los rellena
     // mapaItinerario._enrichAll con Google Places, sin IA.
+  },
+
+  // Guarda en Firestore la ruta editada sobre this.currentRouteId, con backup de la
+  // versión anterior (itinerarioIA_prev). Usado tanto en el guardado directo como al
+  // confirmar "Guardar así de todos modos" tras la comprobación de cordura.
+  async _commitRouteEdit(routeData) {
+    if (!this.currentRouteId || !window.currentUser) return;
+    try {
+      const docRef = db.collection('users').doc(window.currentUser.uid)
+        .collection('maps').doc(this.currentRouteId);
+      let prevItinerarioIA = null;
+      try {
+        const prevSnap = await docRef.get();
+        prevItinerarioIA = prevSnap.exists ? (prevSnap.data().itinerarioIA || null) : null;
+      } catch (_) {}
+      const updateData = {
+        itinerarioIA: JSON.stringify(routeData),
+        nombre: routeData.title || routeData.name || 'Mi ruta',
+        updatedAt: new Date().toISOString()
+      };
+      if (prevItinerarioIA) {
+        updateData.itinerarioIA_prev = prevItinerarioIA;
+        updateData.itinerarioIA_prev_at = new Date().toISOString();
+      }
+      await docRef.update(updateData);
+    } catch (e) { console.warn('Error actualizando guía:', e); }
   },
 
   // ═══ GUARDAR ═══
