@@ -1436,12 +1436,25 @@ const salma = {
           // Editando ruta guardada — actualizar Firestore
           this._addSalmaBubble('Ruta actualizada. Dime si quieres más cambios.');
           try {
-            await db.collection('users').doc(window.currentUser.uid)
-              .collection('maps').doc(this.currentRouteId).update({
-                itinerarioIA: JSON.stringify(data.route),
-                nombre: data.route.title || data.route.name || 'Mi ruta',
-                updatedAt: new Date().toISOString()
-              });
+            const docRef = db.collection('users').doc(window.currentUser.uid)
+              .collection('maps').doc(this.currentRouteId);
+            // Backup de la versión anterior ANTES de pisarla — si la IA reconstruye mal
+            // la ruta al editar, esto es lo único que permite recuperarla.
+            let prevItinerarioIA = null;
+            try {
+              const prevSnap = await docRef.get();
+              prevItinerarioIA = prevSnap.exists ? (prevSnap.data().itinerarioIA || null) : null;
+            } catch (_) {}
+            const updateData = {
+              itinerarioIA: JSON.stringify(data.route),
+              nombre: data.route.title || data.route.name || 'Mi ruta',
+              updatedAt: new Date().toISOString()
+            };
+            if (prevItinerarioIA) {
+              updateData.itinerarioIA_prev = prevItinerarioIA;
+              updateData.itinerarioIA_prev_at = new Date().toISOString();
+            }
+            await docRef.update(updateData);
           } catch (e) { console.warn('Error actualizando guía:', e); }
         } else {
           // Pueblo pequeño: ruta corta dentro del casco + escapadas al lado → Salma da opciones.
