@@ -942,6 +942,35 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
+- **Historia reactivada (cápsula ampliable en guías + chat) — 11 sept, EN RAMA
+  `claude/salma-history-module-52q11h`, no fusionada a `main` todavía, nada desplegado.**
+  Se reactivó `historia.js`/`historia.css` (estaban desactivados desde el 7 sept) y se
+  añadió un modo compacto (`historiaModule.renderCompactInto`): botón "📖 Historia de X"
+  por parada en `guide-renderer.js`/`mapa-itinerario.js` (oculto si Claude marca la parada
+  `con_historia:false` al generar la ruta) + uno de país en la cabecera de la guía, y un
+  botón bajo la respuesta del chat cuando Claude emite el marcador nuevo `HISTORIA_LUGAR:X`
+  (mismo patrón que `SALMA_ACTION`/`FOTO_TAG`, en `BLOQUE_ACCION`). Backend: reutiliza
+  `/historia-lugar` tal cual (Claude Haiku + foto Google Places + caché KV 30 días), con
+  un matiz en su prompt para narrar bien carreteras/comarcas/países, no solo puntos.
+  Falta, en este orden, desde tu ordenador:
+  1. `git fetch origin claude/salma-history-module-52q11h` y revisar/fusionar esa rama a
+     `main` (o pedir que se haga si la sesión sigue abierta).
+  2. Confirmar que GitHub Pages sirve los `?v=` nuevos (`app.js?v=101`, `salma.js?v=75`,
+     `guide-renderer.js?v=52`, `mapa-itinerario.js?v=53`, `historia.js?v=2`,
+     `historia.css?v=3`): `curl.exe -s https://borradodelmapa.com/index.html | Select-String '\.js\?v='`.
+  3. `cd worker; npx wrangler deploy -c wrangler.toml` — el Worker lleva el campo
+     `con_historia`, el marcador `HISTORIA_LUGAR` y el ajuste de `/historia-lugar`, nada
+     de eso corre todavía en producción.
+  4. Comprobar `Current Version ID` contra `curl.exe -s https://salma-api.paco-defoto.workers.dev/version`.
+  5. Probar en pantalla: pedir "3 días en Ronda" y comprobar que aparece el botón de
+     historia por parada y el de país arriba; y preguntar algo tipo "info de Gaucín" en el
+     chat suelto y comprobar que sale el botón debajo de la respuesta. Sin esto, no está
+     terminado — nada de lo anterior se ha visto todavía en la app real.
+  Pendiente aparte, de decisión tuya, sin prisa: en `salma.js` (~línea 1458) sigue un chip
+  antiguo "📚 Historia de [destino]" que al reactivar el módulo vuelve a funcionar y
+  navega a la vista de pantalla completa — puede quedar redundante con el botón de país
+  nuevo dentro de la propia guía. Revisar y decir si se quita.
+
 - **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
   confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del
   7-8 sept) se quedaba enganchado a CUALQUIER enlace `google.com/maps` del chat — también
