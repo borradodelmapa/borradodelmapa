@@ -1,5 +1,7 @@
 # Salma API — Cloudflare Worker
 
+<!-- prueba de fuego Workers Builds: 11 sept 2026, verificar que ANTHROPIC_API_KEY sobrevive -->
+
 Worker basado en el **prompt de Salma** (`docs/prompt salma.txt`). Expone un único endpoint POST que recibe el mensaje del usuario y el historial y devuelve la respuesta de Salma y, si aplica, la ruta en JSON para el mapa.
 
 ## Contrato del API
