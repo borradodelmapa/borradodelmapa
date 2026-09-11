@@ -9297,6 +9297,13 @@ REGLAS:
           }
 
           // ── PASO 3: Verify con Google Places (fotos + coords reales) ──
+          // Keepalive mientras dura: con rutas de muchas paradas dispersas (varias rondas
+          // de búsqueda por parada) esta llamada puede tardar bastante, y sin nada viajando
+          // por el stream algunas redes/proxies cortan la conexión (network error en el
+          // cliente a media espera, sin que llegue a verse la guía).
+          const _verifyKa = setInterval(() => {
+            writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)).catch(() => {});
+          }, 3000);
           try {
             if (env.GOOGLE_PLACES_KEY) {
               const _anchorDays = extractDaysFromMessage(message)
@@ -9316,7 +9323,10 @@ REGLAS:
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts);
               if (verified) route = verified;
             }
-          } catch (_) {}
+          } catch (_) {
+          } finally {
+            clearInterval(_verifyKa);
+          }
 
           // Traza en servidor (wrangler tail) del anclaje y el ceñido. NO toca route.title.
           if (route) {

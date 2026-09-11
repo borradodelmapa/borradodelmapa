@@ -1418,6 +1418,26 @@ const salma = {
             }
           } catch (renderErr) {
             console.error('Error renderizando guía:', renderErr);
+            // Si openItinerarioView revienta a medias (p.ej. coords inválidas al pintar
+            // el mapa) puede dejar la app oculta y la vista de itinerario en blanco —
+            // pantalla negra sin ningún aviso. Deshacer el cambio de pantalla y ofrecer
+            // reintento, mismo patrón que el resto de fallos de "montar el mapa".
+            if (typeof window._teardownItinView === 'function') window._teardownItinView();
+            this._addSalmaBubble('La ruta se generó pero algo ha fallado al montar el mapa. Dale a "Reintentar" y lo vuelvo a montar.');
+            const _area = this._getChatArea();
+            if (_area) {
+              const _rw = document.createElement('div');
+              _rw.className = 'historia-chat-chip-wrap';
+              const _rb = document.createElement('button');
+              _rb.className = 'historia-chat-chip';
+              _rb.textContent = '🔄 Reintentar mapa';
+              const _retryMsg = this._lastMsg || msg;
+              const _retryExtra = Object.assign({}, this._lastExtra || {});
+              _rb.addEventListener('click', () => { _rw.remove(); this._doSend(_retryMsg, _retryExtra); });
+              _rw.appendChild(_rb);
+              _area.appendChild(_rw);
+              this._scrollToBottom(true);
+            }
           }
         } else {
           // Ruta normal con draft: parchear con datos verificados (fotos, coords)

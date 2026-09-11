@@ -3985,7 +3985,15 @@ function selectRouteOnMap(routeData, docId) {
   setActiveRoute(routeData, docId);
 
   const dayColors = ['#F4630B','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
-  const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
+  // Coord usable: número finito, dentro de rango, no (0,0) — igual criterio que mapaRuta._validStops.
+  // "s.lat && s.lng" dejaba pasar basura (NaN de string, fuera de rango) que reventaba
+  // los Marker de Google Maps con "Lat/Long not supported" y cortaba el resto del pintado.
+  const valid = (routeData.stops || []).filter(s => {
+    if (!s) return false;
+    const la = +s.lat, ln = +s.lng;
+    return isFinite(la) && isFinite(ln) && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+      && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+  });
   if (!valid.length) { showToast('Esta ruta no tiene coordenadas'); return; }
 
   _liveRouteStops = valid;
