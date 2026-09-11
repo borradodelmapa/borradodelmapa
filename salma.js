@@ -1563,6 +1563,17 @@ const salma = {
         this._renderVideoPlayer(enrichedParams);
       }
 
+      // Botón "Historia de [lugar]" — Salma marcó un lugar/carretera/comarca/país relevante
+      if (data.historia_lugar && typeof historiaModule !== 'undefined') {
+        const _histArea = this._getChatArea();
+        if (_histArea) {
+          const _histMount = document.createElement('div');
+          _histMount.className = 'hist-inline-mount hist-inline-mount--chat';
+          _histArea.appendChild(_histMount);
+          historiaModule.renderCompactInto(_histMount, { place: data.historia_lugar });
+        }
+      }
+
       this._scrollToBottom();
 
       // Si el usuario escribió desde el itinerario y la respuesta NO abre ruta nueva,
@@ -1704,7 +1715,8 @@ const salma = {
                   _isBlocks: isBlocksRoute,
                   map_stage_failed: evt.map_stage_failed === true,
                   offer_map_button: evt.offer_map_button === true,
-                  map_base_msg: evt.map_base_msg || null
+                  map_base_msg: evt.map_base_msg || null,
+                  historia_lugar: evt.historia_lugar || null
                 });
                 return;
               }

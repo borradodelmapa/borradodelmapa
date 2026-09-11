@@ -72,6 +72,7 @@ const guideRenderer = {
         <div class="guide-title">${escapeHTML(r.title || r.name || 'Tu ruta')}</div>
         <div class="guide-meta">${totalDays} DÍAS · ${escapeHTML(country.toUpperCase())} · ${totalStops} PARADAS</div>
         ${r.summary ? `<p class="guide-summary">${escapeHTML(r.summary)}</p>` : ''}
+        ${country ? `<div class="hist-inline-mount" data-place="${escapeHTML(country)}"></div>` : ''}
       </div>
 
       <div class="guide-map-container" id="guide-map-main"></div>
@@ -97,6 +98,7 @@ const guideRenderer = {
 
     // Cargar fotos de paradas visibles (primera parada abierta)
     this._loadVisiblePhotos(card);
+    this._initHistoriaBtn(card);
 
     // Inicializar mapa general
     this._initMainMap(stops, days);
@@ -127,6 +129,7 @@ const guideRenderer = {
         // Lazy load foto al abrir
         if (stop.classList.contains('open')) {
           this._lazyLoadPhoto(stop);
+          this._initHistoriaBtn(stop);
         }
         return;
       }
@@ -365,6 +368,7 @@ const guideRenderer = {
             <div class="gc-line">${confHtml}</div>
             ${photoHtml}
             ${s.narrative ? `<p class="guide-stop-narrative">${linkify(s.narrative)}</p>` : ''}
+            ${s.con_historia !== false ? `<div class="hist-inline-mount" data-place="${escapeHTML(s.name || s.headline || '')}" data-lat="${s.lat != null ? s.lat : ''}" data-lng="${s.lng != null ? s.lng : ''}"></div>` : ''}
             ${tagsHtml}
             ${hasSalmaText ? '<p class="gc-disclaimer">Contexto y recomendaciones: estimación de Salma, sin verificar.</p>' : ''}
             ${gmapsUrl ? `<a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
@@ -612,6 +616,19 @@ const guideRenderer = {
     return result;
   },
 
+  // ═══ BOTÓN HISTORIA (por parada) ═══
+  _initHistoriaBtn(stopEl) {
+    const mount = stopEl.querySelector && stopEl.querySelector('.hist-inline-mount');
+    if (!mount || mount.dataset.init) return;
+    mount.dataset.init = '1';
+    if (typeof historiaModule === 'undefined') return;
+    historiaModule.renderCompactInto(mount, {
+      place: mount.dataset.place,
+      lat: mount.dataset.lat ? parseFloat(mount.dataset.lat) : null,
+      lng: mount.dataset.lng ? parseFloat(mount.dataset.lng) : null,
+    });
+  },
+
   // ═══ LAZY LOAD FOTOS ═══
   _lazyLoadPhoto(stopEl) {
     const photoDiv = stopEl.querySelector('.guide-stop-photo');
@@ -644,7 +661,7 @@ const guideRenderer = {
 
   _loadVisiblePhotos(card) {
     const openStops = card.querySelectorAll('.guide-stop.open');
-    openStops.forEach(stop => this._lazyLoadPhoto(stop));
+    openStops.forEach(stop => { this._lazyLoadPhoto(stop); this._initHistoriaBtn(stop); });
   },
 
   // ═══ MAPAS LEAFLET ═══
@@ -953,6 +970,7 @@ const guideRenderer = {
     card.querySelectorAll('.guide-stop').forEach(s => {
       s.classList.add('open');
       this._lazyLoadPhoto(s);
+      this._initHistoriaBtn(s);
     });
 
     // Invalidar mapas para que se rendericen bien

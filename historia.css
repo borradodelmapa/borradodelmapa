@@ -583,3 +583,118 @@
   color: rgba(244,239,230,.4);
   white-space: nowrap;
 }
+
+/* ─── Modo compacto — botón "ampliar" en paradas de guía y chat ──────────── */
+
+.hist-inline-mount--chat {
+  margin: 4px 0 12px;
+  padding: 0 16px;
+}
+
+.hist-inline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  background: none;
+  border: 1px solid rgba(240,180,41,.3);
+  border-radius: var(--radius-pill);
+  color: var(--dorado);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.hist-inline-toggle:hover:not(:disabled) {
+  background: rgba(240,180,41,.1);
+  border-color: var(--dorado);
+}
+
+.hist-inline-toggle:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.hist-inline-toggle--open {
+  width: 100%;
+  text-align: left;
+  white-space: normal;
+}
+
+.hist-inline-body-wrap {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radius-sm);
+  background: rgba(0,0,0,.15);
+}
+
+.hist-inline-thumb {
+  width: 100%;
+  height: 120px;
+  border-radius: var(--radius-sm);
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 10px;
+}
+
+.hist-inline-desc {
+  font-size: 0.82rem;
+  color: rgba(244,239,230,.75);
+  margin: 0 0 12px;
+}
+
+.hist-inline-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hist-inline-parada {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.hist-inline-parada:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hist-inline-year {
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--dorado);
+  min-width: 52px;
+}
+
+.hist-inline-ptitle {
+  font-size: 0.9rem;
+  color: var(--crema);
+  margin: 0 0 4px;
+}
+
+.hist-inline-psub {
+  font-size: 0.78rem;
+  color: rgba(244,239,230,.55);
+  margin: 0 0 6px;
+  font-style: italic;
+}
+
+.hist-inline-pcontent {
+  font-size: 0.82rem;
+  color: rgba(244,239,230,.85);
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+
+.hist-inline-facts {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 0.76rem;
+  color: rgba(244,239,230,.6);
+}

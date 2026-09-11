@@ -276,12 +276,13 @@ Escribe en el chat solo el resumen breve e incluye al final:
 Primera línea exactamente: SALMA_ROUTE_JSON
 Segunda línea: el JSON (sin markdown, sin backticks)
 
-{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
+{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","con_historia":true,"day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
 
 FORMATO DE PARADA:
 — name/headline: nombre exacto como en Google Maps
 — narrative: 1-2 frases de viajero (por qué merece la pena, qué sensación da — sin datos factuales como distancias u horarios)
 — day_title: 3-5 palabras, igual para todas las paradas del mismo día
+— con_historia: true si el lugar tiene interés histórico o cultural real que merece profundizar (casco antiguo, monumento, sitio con pasado notable). false si es un lugar funcional sin más (aparcamiento, gasolinera, restaurante sin historia particular). Por defecto true si no estás seguro.
 — type, day (entero, nunca string), lat, lng
 — km_from_previous, road_name, road_difficulty, estimated_hours
 NO incluyas: context, food_nearby, local_secret, alternative, practical, links, sleep, eat, alt_bad_weather (el sistema los añade después)
@@ -410,6 +411,9 @@ SALMA_ACTION — acciones especiales que el sistema detecta y ejecuta automátic
 SOLO existen estos 5 tipos: SEARCH_FLIGHTS, SEARCH_HOTELS, SEARCH_PLACES, SAVE_NOTE, MAP_PIN. NO inventes otros. Airbnb, hostal, apartamento → SEARCH_HOTELS. Taxi, grúa, farmacia → SEARCH_PLACES.
 Cuando el usuario pida apartamento o Airbnb, usa SEARCH_HOTELS igualmente — el sistema genera automáticamente el enlace a Airbnb. NO escribas tú la URL de Airbnb, el sistema la pone.
 Usa SALMA_ACTION además de tu respuesta normal, no en lugar de ella.
+
+HISTORIA_LUGAR — marcador aparte, NO es un SALMA_ACTION: cuando tu respuesta trate sobre un lugar, monumento, carretera, comarca o país con interés histórico o cultural real que merezca profundizar, añade al final de tu respuesta, en su propia línea: HISTORIA_LUGAR: Nombre del lugar/carretera/comarca/país
+Solo cuando de verdad haya algo que contar — nunca para una reserva, un restaurante sin más, un trámite o una gasolinera. Como mucho una línea HISTORIA_LUGAR por respuesta. Es invisible para el usuario, no la menciones ni la expliques.
 
 DATO PRIMERO SIEMPRE — OBLIGATORIO:
 1. Responde EXACTAMENTE lo que pide el usuario. Si pide taxi, da taxi. No sugieras alternativas antes de resolver.
@@ -3020,6 +3024,7 @@ function extractRouteFromReply(text) {
         day_title: s.day_title || '',
         links: Array.isArray(s.links) ? s.links : [],
         type: s.type || 'lugar',
+        con_historia: s.con_historia !== false,
         day: typeof s.day === 'number' ? s.day : (parseInt(s.day) || 1),
         lat: typeof s.lat === 'number' ? s.lat : (s.lat != null && !isNaN(parseFloat(s.lat)) ? parseFloat(s.lat) : null),
         lng: typeof s.lng === 'number' ? s.lng : (s.lng != null && !isNaN(parseFloat(s.lng)) ? parseFloat(s.lng) : null),
@@ -3160,7 +3165,7 @@ async function convertProseToRouteJson(text, env, opts = {}) {
     : '';
   const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
-{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","con_historia":true,"day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
 
 REGLAS:
 - Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
@@ -7378,7 +7383,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
 
       // 2. Generar con Claude Haiku
-      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra:
+      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.
+
+Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia.
 
 {
   "title": "Nombre: subtítulo histórico",
@@ -8923,6 +8930,16 @@ INSTRUCCIONES:
           }
         }
 
+        // ── Extraer HISTORIA_LUGAR si la hubo ──
+        let historiaLugar = null;
+        {
+          const histMatch = allText.match(/\n?HISTORIA_LUGAR:\s*(.+)/i);
+          if (histMatch) {
+            historiaLugar = histMatch[1].trim();
+            allText = allText.replace(/\n?HISTORIA_LUGAR:\s*.+/i, '').trim();
+          }
+        }
+
         // ── Inyectar Google Maps y transporte como stream chunks (antes de procesar reply) ──
         {
           const tempReply = replyWithoutRouteBlock(allText);
@@ -8967,7 +8984,7 @@ INSTRUCCIONES:
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
-{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","con_historia":true,"day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
 
 REGLAS:
 - Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
@@ -9401,6 +9418,7 @@ REGLAS:
           if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }
         }
         if (photoTag) doneEvt.photo_tag = photoTag;
+        if (historiaLugar) doneEvt.historia_lugar = historiaLugar;
         // Caption breve para la galería (primera frase de la respuesta de Salma)
         if (imageBase64 && reply) {
           const firstSentence = reply.split(/[.\n]/).filter(s => s.trim().length > 5)[0];
@@ -9586,7 +9604,7 @@ REGLAS:
   async _cronNivel3(env) {
     const MAX_ROUTES = 3; // máx rutas por ejecución (~$0.18)
     const ROUTE_PROMPT_TEMPLATE = (destName, country, days, region) =>
-      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico.`;
+      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","con_historia":true,"day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico. con_historia:true si el lugar tiene interés histórico/cultural real, false si es funcional (aparcamiento, gasolinera).`;
 
     try {
       // Leer índice de destinos con rutas generadas
