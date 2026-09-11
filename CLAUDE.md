@@ -1079,6 +1079,17 @@ ahí, hacer `git pull origin main` — es un fast-forward, seguro.
 
 ## Normas de desarrollo
 
+### Autonomía de la sesión (acordado con Paco, 11 sept 2026 — trabaja bastantes días desde el móvil)
+
+- **Bajo riesgo** (documentación, `CLAUDE.md`, housekeeping de git, subir algo que ya se
+  ha hablado y probado en la misma conversación) → la sesión puede hacerlo directo, sin
+  preguntar paso a paso.
+- **Todo lo demás** (código de `app.js`/`salma-worker.js`/cualquier `.js` de la app, el
+  prompt, deploys que afecten a producción, cualquier cosa que cambie lo que ve un
+  usuario) → sigue el resto de reglas de esta sección tal cual: se pregunta y se confirma
+  en cada paso, **salvo** que Paco diga explícitamente "hazlo" para ese caso concreto en
+  ese momento — eso no es un permiso permanente, solo vale para esa acción.
+
 - **Nunca** meter `const db` duplicado fuera de `app.js`
 - **Nunca** poner API keys en el código — van en Cloudflare secrets
 - **Nunca** usar `window.onload` — Firebase se inicializa en el head
