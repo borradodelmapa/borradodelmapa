@@ -953,6 +953,31 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
+- **Workers Builds (11 sept 2026) — sin confirmar si es seguro para uso rutinario, hizo
+  falta un rescate de emergencia el mismo día que se montó.** Tras conectar Cloudflare
+  Workers Builds (push a `main` → deploy automático, ver alternativa del checklist §4),
+  `ANTHROPIC_API_KEY` desapareció del Worker en producción — Salma dejó de responder a
+  todo el mundo con "no está configurada (falta API key)". La pantalla de "Variables y
+  secretos en tiempo de ejecución" del dashboard estaba bloqueada para editar (mensaje
+  "Worker que solo tenga recursos estáticos", no verificado si es la causa real o un
+  efecto colateral). **No se confirmó la causa raíz**: al intentar reponer el secret con
+  `wrangler secret put` salió el error "the latest version of your Worker isn't currently
+  deployed" — indica que había una versión subida y sin desplegar rondando, sospechosamente
+  relacionado con la casilla "Habilitar compilaciones de vista previa" que se dejó activada
+  al conectar el repo. Arreglo aplicado (desde el portátil, PowerShell):
+  `npx wrangler deploy -c wrangler.toml` (alinea versión desplegada = última) seguido de
+  `npx wrangler secret put ANTHROPIC_API_KEY -c wrangler.toml` — funcionó.
+  **Efecto colateral descubierto en el rescate**: el portátil de Paco estaba 37 commits
+  por detrás de `origin/main` — el deploy de emergencia subió código viejo (reapareció el
+  bug del texto cortado al generar ruta, ya arreglado en `main`). Se corrigió con
+  `git pull origin main` + nuevo `wrangler deploy`. Esto es un problema aparte de Workers
+  Builds — repetir el housekeeping del 10 sept, `git pull` antes de cualquier deploy manual.
+  **Pendiente antes de confiar en Workers Builds para trabajo rutinario:**
+  1. Apagar "Habilitar compilaciones de vista previa" en salma-api → Settings → Builds.
+  2. Prueba de fuego: un commit de prueba a `main`, y comprobar justo después (mensaje real
+     en el chat, no solo `/version`) si `ANTHROPIC_API_KEY` sigue viva. Si desaparece otra
+     vez, desconectar Workers Builds y volver a `wrangler deploy` manual hasta entender el
+     porqué — no reintentar a ciegas.
 - **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
   confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del
   7-8 sept) se quedaba enganchado a CUALQUIER enlace `google.com/maps` del chat — también
