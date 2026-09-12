@@ -3181,7 +3181,8 @@ REGLAS:
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
 - "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
 - NO inventes paradas que no estén en el plan.
-- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.`;
+- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.
+- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.`;
 
   const fallbackUser = `Plan a convertir:\n\n${text.substring(0, 40000)}${_anchor}`;
 
@@ -8988,7 +8989,8 @@ REGLAS:
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
 - "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
 - NO inventes paradas que no estén en el plan.
-- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.`;
+- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.
+- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.`;
 
             const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 40000)}`;
 

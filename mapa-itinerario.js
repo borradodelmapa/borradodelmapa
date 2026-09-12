@@ -263,24 +263,33 @@ const mapaItinerario = {
     const photoDiv = (cardEl && cardEl.querySelector('.itin-card-photo')) || document.getElementById(`itin-photo-${index}`);
     if (!photoDiv) return;
 
+    // Sin console.warn en los fallos, esto no dejaba ningún rastro en el panel 🐛 cuando
+    // una foto no cargaba — imposible saber si era el endpoint, Google sin foto para ese
+    // sitio, o un error de red, solo se veía "no salió la foto".
     if (stop.photo_ref) {
       fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
             photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+          } else {
+            console.warn(`[FOTO] sin url para "${stop.name}" (ref):`, data);
           }
         })
-        .catch(() => {});
+        .catch(e => console.warn(`[FOTO] fetch falló para "${stop.name}" (ref):`, e));
     } else if (stop.name && stop.lat && stop.lng) {
       fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
             photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+          } else {
+            console.warn(`[FOTO] sin url para "${stop.name}" (name+coords):`, data);
           }
         })
-        .catch(() => {});
+        .catch(e => console.warn(`[FOTO] fetch falló para "${stop.name}" (name+coords):`, e));
+    } else {
+      console.warn(`[FOTO] "${stop.name}" sin photo_ref y sin lat/lng — no se intenta buscar foto`);
     }
   },
 
