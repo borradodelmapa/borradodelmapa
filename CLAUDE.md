@@ -953,8 +953,25 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
-- **Workers Builds (11 sept 2026) — resuelto y confirmado seguro la misma noche, hizo
-  falta un rescate de emergencia el mismo día que se montó.** Tras conectar Cloudflare
+- **Workers Builds — REABIERTO (12 sept 2026, madrugada): la "prueba de fuego" del 11
+  sept dio falso positivo, se ha perdido una SEGUNDA key (`GOOGLE_PLACES_KEY`).** Tras el
+  "confirmado seguro" de abajo, un deploy automático posterior (entre las 22:14 y la
+  01:10 del 12 sept, sin aislar cuál exactamente) volvió a dejar el Worker sin un secret
+  — esta vez `GOOGLE_PLACES_KEY`. Se descubrió porque `/photo` empezó a devolver
+  `{"error":"missing params"}` para TODAS las fotos de una ruta (mismo código exacto que
+  devuelve si faltan los parámetros de la URL, así que el síntoma no gritaba "falta la
+  key" — hubo que leer el código para verlo). El chat seguía funcionando normal
+  (`ANTHROPIC_API_KEY` sí sobrevivió esta vez), por eso nadie lo notó hasta que faltaron
+  las fotos. **Conclusión de Paco, con la que la sesión está de acuerdo: no fiarse de
+  Workers Builds para deploys de producción hasta entender de verdad qué se lleva por
+  delante los secrets — puede haberse llevado alguno más sin que aún se haya notado.**
+  Pendiente: `npx wrangler secret list -c wrangler.toml` y comparar contra las 15 de la
+  tabla de abajo; reponer `GOOGLE_PLACES_KEY` con `npx wrangler secret put
+  GOOGLE_PLACES_KEY -c wrangler.toml`; y decidir si Workers Builds se desconecta del todo
+  o se queda solo para cambios que no toquen nada sensible, verificando `/health` después
+  de cada deploy automático (no solo probando el chat).
+- **Workers Builds (11 sept 2026) — se dio por resuelto y confirmado seguro la misma
+  noche; ver entrada de arriba (12 sept), NO lo estaba.** Tras conectar Cloudflare
   Workers Builds (push a `main` → deploy automático, ver alternativa del checklist §4),
   `ANTHROPIC_API_KEY` desapareció del Worker en producción — Salma dejó de responder a
   todo el mundo con "no está configurada (falta API key)". La pantalla de "Variables y
@@ -972,12 +989,14 @@ antiguo — tratarlo como tal.)*
   bug del texto cortado al generar ruta, ya arreglado en `main`). Se corrigió con
   `git pull origin main` + nuevo `wrangler deploy`. Esto es un problema aparte de Workers
   Builds — repetir el housekeeping del 10 sept, `git pull` antes de cualquier deploy manual.
-  **Resuelto la misma noche (11 sept, ~23:45):** se apagó "Compilaciones para ramas que
-  no son de producción" (salma-api → Settings → Builds → Control de ramas) — esa es la
-  casilla sospechosa de crear versiones sin desplegar. Prueba de fuego: commit de prueba
-  a `main`, deploy automático, y mensaje real en el chat ("ruta de los faros") — Salma
-  respondió completo, con fotos y guía, sin ningún aviso de "falta API key". **Workers
-  Builds queda confirmado seguro para uso rutinario desde el móvil**, con esa casilla
+  **Se creyó resuelto la misma noche (11 sept, ~23:45) — NO lo estaba, ver entrada de
+  arriba (12 sept):** se apagó "Compilaciones para ramas que no son de producción"
+  (salma-api → Settings → Builds → Control de ramas) — esa es la casilla sospechosa de
+  crear versiones sin desplegar. Prueba de fuego: commit de prueba a `main`, deploy
+  automático, y mensaje real en el chat ("ruta de los faros") — Salma respondió completo,
+  con fotos y guía (la prueba no llegó a comprobar TODAS las paradas, solo que hubo
+  alguna foto). **Workers Builds NO está confirmado seguro** — se perdió una segunda key
+  horas después. Con esa casilla
   apagada. Causa raíz exacta sin confirmar del todo (no se aisló si era esa casilla u
   otra cosa de la conexión inicial), pero el síntoma no ha reaparecido tras el fix.
 - **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
