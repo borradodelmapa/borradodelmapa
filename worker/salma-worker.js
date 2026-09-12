@@ -3737,6 +3737,23 @@ async function verifyAllStops(route, placesKey, opts = {}) {
       const last = a3[i] || a2[i] || attempt1[i];
       const lc = last?.candidates?.[0];
       const reason = !lc?.geometry?.location ? 'no_google_result' : (validateCandidate(lc, stop).reason || 'no_match');
+      // "no_google_result" = Google no devolvió NADA para ese nombre — frecuente en faros
+      // pequeños/automáticos sin ficha propia en Places. Antes se descartaban siempre,
+      // aunque Claude trajera coordenadas reales y usables ("se comen faros" de rutas
+      // costeras). Si hay coords válidas y Google no contradice nada (no encontró un sitio
+      // DISTINTO, solo no encontró ninguno), se mantiene sin verificar en vez de desaparecer.
+      // Los demás motivos (nombre no coincide, fuera de radio, demasiado lejos) SÍ se
+      // descartan igual que antes — ahí Google encontró algo real y no es lo que pedimos.
+      const la = +stop.lat, ln = +stop.lng;
+      const hasUsableCoords = isFinite(la) && isFinite(ln) && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+        && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+      if (reason === 'no_google_result' && hasUsableCoords) {
+        stop._unverified = true;
+        stop._verifyReason = reason;
+        validatedStops.push(stop);
+        console.log(`[VERIFY] ⚠ SIN VERIFICAR "${stop.name}" (${reason}) — se mantiene con coords de Claude (${la}, ${ln})`);
+        return;
+      }
       discarded.push({ name: stop.name || stop.headline || '(sin nombre)', day: stop.day || null, reason });
       console.log(`[VERIFY] ✗ DESCARTADA "${stop.name}" (${reason})`);
       return;
