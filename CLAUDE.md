@@ -867,6 +867,41 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
 
+- **Saga "ruta de los faros" (11-12 sept 2026) — 5 bugs reales encontrados y arreglados,
+  todos en `main`. Pendiente de un último redeploy del Worker para el quinto (ver abajo).**
+  Todo empezó con "pantalla negra al abrir el mapa de una guía". Se fueron pelando capas:
+  1. **Pantalla negra** (`app.js:selectRouteOnMap`, commit `07062dd`) — el filtro de
+     coordenadas válidas era `s.lat && s.lng` (deja pasar basura tipo NaN de string o
+     fuera de rango). Con eso colado, Google Maps reventaba a media construcción de
+     marcadores ("Lat/Long not supported") y dejaba la app oculta con la vista de
+     itinerario en blanco, sin ningún aviso. Ahora valida número finito + rango real,
+     y si aun así falla algo, `salma.js` deshace el cambio de pantalla y ofrece
+     "Reintentar" en vez de quedarse muda.
+  2. **Ruta saltando a Lisboa** (`worker/salma-worker.js`, commit `7bef91f`) — para una
+     ruta pedida "desde donde estoy" (sin nombre de destino), lo que quedaba de limpiar
+     el mensaje se mandaba igual como `dest_hint`, y el Worker lo geocodificaba con
+     Google Find Place como si fuera un lugar real — con texto sin sentido, Google
+     devolvía cualquier cosa dentro del radio de sesgo, y ESE punto pasaba a ser el
+     centro del radio de 35km que valida las paradas. Ahora, si el mensaje es del tipo
+     "desde donde estoy/aquí/cerca de mí", no se manda ningún `dest_hint` de texto.
+  3. **Orden de paradas sin sentido geográfico** (commit `39c4711`) — el prompt de
+     conversión texto→JSON no tenía ninguna instrucción de orden; las paradas salían en
+     el orden en que Claude las mencionó en la prosa (agrupadas por tema), no por
+     cercanía real. Añadida regla de orden geográfico dentro de cada día.
+  4. **Ruta regional entera cramada en 1 solo día** (commit `ca92b2c`) — "si no se indica
+     número de días, haz 1 día" no distinguía una ciudad de una ruta/road trip explícita
+     por una costa entera. Ahora, para rutas/road trips sin días especificados, calcula
+     los días razonables por distancia real en vez de forzar 1.
+  5. **Verify descartaba faros reales sin ficha en Google** (commit `f74cfaf`) — regla
+     única "sin place_id de Google, la parada no entra" descartaba también sitios reales
+     que Google simplemente no indexa como POI (faros pequeños/automáticos). Ahora, solo
+     cuando el motivo es "Google no encontró nada" (no cuando encontró algo distinto o
+     fuera de rango) y Claude trae coordenadas usables, la parada se mantiene sin
+     verificar en vez de desaparecer. **Este es el único de los 5 sin confirmar aún que
+     esté desplegado en producción — comprobar `/version` o repetir la prueba de la ruta
+     de los faros y mirar si ya no faltan sitios conocidos.**
+  De paso salió también todo el lío de Workers Builds perdiendo secrets (ver entrada
+  propia arriba) y se montó el GitHub Action de deploy manual — ver esa misma entrada.
 - ~~Trabajo perdido en sesiones sueltas~~ → **10 sept, con Paco en el ordenador**: se
   encontraron 9 ramas con commits que solo existían en su portátil (`git log --branches
   --not --remotes`) y se subieron todas a GitHub (`git push origin <ramas>`). La rama del
@@ -953,6 +988,29 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
+- **Workers Builds DESCONECTADO del todo (12 sept 2026, mañana) — sustituido por GitHub
+  Action manual.** Tras la segunda pérdida de secrets (ver entrada de abajo), Paco
+  desconectó el repo de GitHub en salma-api → Settings → Builds. Ya no hay ningún deploy
+  automático en cada push — ni desde esta sesión ni desde ninguna otra. Para desplegar el
+  Worker ahora: repo → pestaña **Actions** → **"Deploy Worker"** (`.github/workflows/
+  deploy-worker.yml`, añadido esta madrugada) → botón **"Run workflow"**, disparo manual,
+  funciona desde el navegador del móvil sin terminal. Ejecuta literalmente
+  `npx wrangler deploy -c wrangler.toml` en un runner de GitHub — el mismo comando que se
+  ha usado siempre desde el portátil, no toca secrets. Requiere el secret de GitHub
+  `CLOUDFLARE_API_TOKEN` (ya configurado). **Probado una vez (12 sept, ~13:00): deploy en
+  25s, éxito, y confirmado que NO tocó los secrets ya puestos** — la única secret que
+  pareció faltar tras esa prueba era porque no se habían repuesto todas, no porque el
+  deploy las borrara.
+  **Estado de los 15 secrets a mediodía del 12 sept — solo 3 confirmados puestos:**
+  `ANTHROPIC_API_KEY`, `GOOGLE_PLACES_KEY`, `OPENAI_API_KEY`. **Faltan por reponer estos
+  12**: `BRAVE_SEARCH_KEY`, `DUFFEL_ACCESS_TOKEN`, `RAPIDAPI_KEY`, `ELEVENLABS_API_KEY`,
+  `SERPER_API_KEY`, `OPENWEATHER_KEY`, `STRIPE_SECRET_KEY`, `TWILIO_ACCOUNT_SID`,
+  `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`, `ADMIN_TOKEN`, `GA4_CREDENTIALS`. Con las 3
+  que hay funciona lo esencial (chat, generación de rutas, verificación Google, fotos) —
+  lo que falta es vuelos, hoteles/coches, voz, eventos, clima, Stripe, SOS por SMS,
+  endpoints admin/`/health` y GA4. Reponer desde el dashboard de Cloudflare (Variables y
+  secretos en tiempo de ejecución → Agregar variable → tipo Secreto) o con
+  `worker/restaurar-secrets.cjs` en cuanto haya portátil.
 - **Workers Builds — REABIERTO (12 sept 2026, madrugada): la "prueba de fuego" del 11
   sept dio falso positivo, se ha perdido una SEGUNDA key (`GOOGLE_PLACES_KEY`).** Tras el
   "confirmado seguro" de abajo, un deploy automático posterior (entre las 22:14 y la
