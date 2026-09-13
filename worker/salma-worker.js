@@ -1327,20 +1327,29 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     enriched = enriched.replace(bold, `${bold} (${link})`);
   }
 
-  // "Ruta completa" al final: con lat/lng reales (Google los entiende literal).
-  // Formato /maps/dir/place_id:X/place_id:Y NO funciona — Google lo lee como texto literal.
-  // Usamos lat,lng que vienen de getValidatedPlace (son coords reales de Google Places).
-  // 10 sept: el formato viejo /maps/dir/lat,lng/lat,lng/... (sin ?api=1) no abre de forma
-  // fiable la app desde el WebView de la PWA — Paco reportó que el link no funcionaba
-  // mientras que los "Cómo llegar" por parada (que sí llevan ?api=1) abrían bien.
-  // Se pasa al esquema oficial documentado por Google (origin+destination+waypoints).
+  // "Ruta completa" al final. Formato /maps/dir/place_id:X/place_id:Y NO funciona —
+  // Google lo lee como texto literal, por eso antes se mandaba solo lat,lng. Pero el
+  // esquema oficial SÍ admite nombre+place_id por parámetro separado (origin_place_id,
+  // waypoint_place_ids…), igual que ya hace el "Cómo llegar" de una sola parada un poco
+  // más arriba — con eso Google etiqueta cada punto con su nombre real en vez de con el
+  // sitio indexado más cercano a la coordenada (bug real: una parada con ficha en Google
+  // salía en el mapa con el nombre de un negocio distinto que caía justo al lado).
+  // Solo cae a coordenadas sueltas si por lo que sea no hay placeId para ese punto.
   const validPlaces = results.filter(r => r.placeId && r.lat && r.lng);
   if (validPlaces.length >= 2 && !skipRouteLink) {
-    const origin = `${validPlaces[0].lat},${validPlaces[0].lng}`;
-    const destination = `${validPlaces[validPlaces.length - 1].lat},${validPlaces[validPlaces.length - 1].lng}`;
+    const point = (r) => r.placeId ? encodeURIComponent(r.googleName || r.name || '') : `${r.lat},${r.lng}`;
+    const first = validPlaces[0];
+    const last = validPlaces[validPlaces.length - 1];
     const middle = validPlaces.slice(1, -1);
-    const waypointsParam = middle.length ? `&waypoints=${middle.map(r => `${r.lat},${r.lng}`).join('|')}` : '';
-    const routeUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${waypointsParam}`;
+    let routeUrl = `https://www.google.com/maps/dir/?api=1`
+      + `&origin=${point(first)}${first.placeId ? `&origin_place_id=${first.placeId}` : ''}`
+      + `&destination=${point(last)}${last.placeId ? `&destination_place_id=${last.placeId}` : ''}`;
+    if (middle.length) {
+      routeUrl += `&waypoints=${middle.map(point).join('|')}`;
+      if (middle.some(r => r.placeId)) {
+        routeUrl += `&waypoint_place_ids=${middle.map(r => r.placeId || '').join('|')}`;
+      }
+    }
     enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
   }
 
