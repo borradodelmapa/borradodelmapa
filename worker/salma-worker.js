@@ -1574,6 +1574,21 @@ function haversineKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// Distancia REAL por carretera (Directions API), no línea recta. En zonas de montaña
+// (p.ej. Ronda↔Costa del Sol por la A-397) la única carretera puede doblar la distancia
+// en línea recta — Ronda→Estepona son 35km en línea recta pero 83km/1h40 conduciendo.
+// null = no se pudo calcular (API caída/timeout) → el llamador debe decidir un fallback.
+async function drivingDistanceKm(lat1, lng1, lat2, lng2, placesKey) {
+  if (!placesKey) return null;
+  try {
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${lat1},${lng1}&destination=${lat2},${lng2}&mode=driving&key=${placesKey}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    const data = await res.json();
+    const meters = data?.routes?.[0]?.legs?.[0]?.distance?.value;
+    return typeof meters === 'number' ? meters / 1000 : null;
+  } catch (_) { return null; }
+}
+
 function getFlexDate(daysFromNow) {
   const d = new Date();
   d.setDate(d.getDate() + daysFromNow);
@@ -3807,18 +3822,37 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   });
 
   // Red de seguridad — destino de punto: fuera cualquier parada que, pese a todo, quede
-  // a más de MAX_ANCHOR_KM del ancla (coord basura que se coló por el rescate blando, etc.).
+  // lejos del ancla. Dos pasos: (1) línea recta con MAX_ANCHOR_KM (barato, descarta lo
+  // absurdamente lejos sin gastar llamadas), (2) para lo que sobrevive a >10km, distancia
+  // REAL por carretera (Directions) contra MAX_ANCHOR_DRIVE_KM — los km del propio prompt
+  // ("2b. RADIO SEGÚN DÍAS", 1-2 días→30km, 3-4 días→60km) en vez de línea recta, que en
+  // zonas de montaña se queda corta (bug real: "3 días en Ronda" colaba Benahavís/Estepona,
+  // 83km reales por la A-397, porque en línea recta caían dentro del radio de 120km viejo).
+  // Fallo de Directions (API caída) → se cae a la decisión de línea recta, no se rompe la ruta.
+  const MAX_ANCHOR_DRIVE_KM = _durDays <= 2 ? 30 : (_durDays <= 4 ? 60 : 160);
   let finalStops = validatedStops;
   if (pointAnchor) {
+    const withCoords = validatedStops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
+    const straightKm = new Map(withCoords.map(s => [s, haversineKm(anchorLat, anchorLng, s.lat, s.lng)]));
+    const needsDrive = withCoords.filter(s => straightKm.get(s) <= MAX_ANCHOR_KM && straightKm.get(s) > 10);
+    const driveResults = await Promise.all(needsDrive.map(s => drivingDistanceKm(anchorLat, anchorLng, s.lat, s.lng, placesKey)));
+    const driveKm = new Map(needsDrive.map((s, i) => [s, driveResults[i]]));
+
     finalStops = [];
     validatedStops.forEach(s => {
-      const dOk = (typeof s.lat === 'number' && typeof s.lng === 'number')
-        ? haversineKm(anchorLat, anchorLng, s.lat, s.lng) <= MAX_ANCHOR_KM : false;
-      if (dOk) finalStops.push(s);
-      else {
+      const sKm = straightKm.get(s);
+      if (sKm == null || sKm > MAX_ANCHOR_KM) {
         discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'fuera_del_radio_ancla' });
         console.log(`[VERIFY] ✗ DESCARTADA (radio ancla) "${s.name}" (${s.lat}, ${s.lng})`);
+        return;
       }
+      const dKm = driveKm.get(s); // undefined = no hizo falta comprobar (≤10km línea recta)
+      if (typeof dKm === 'number' && dKm > MAX_ANCHOR_DRIVE_KM) {
+        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'lejos_por_carretera' });
+        console.log(`[VERIFY] ✗ DESCARTADA (${dKm.toFixed(1)}km por carretera > ${MAX_ANCHOR_DRIVE_KM}km) "${s.name}"`);
+        return;
+      }
+      finalStops.push(s);
     });
   }
 
