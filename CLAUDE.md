@@ -865,15 +865,31 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   para cerrarlo cuando Paco decida retomarlo.
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
-- **Ruta de Ronda pintó el mapa en Benahavís/San Pedro de Alcántara (13 sept, reportado
-  por Paco en pantalla) — sin investigar todavía.** Pidió "3 días en Ronda" y el mapa de
-  la guía trazó hasta la costa (Benahavís), a ~80km y sin relación con el destino pedido.
-  Mismo patrón que el bug ya arreglado de "ruta 'desde donde estoy' anclaba en Lisboa"
-  (`worker/salma-worker.js`, commit `7bef91f`, ver "✅ Ya resuelto") — probablemente el
-  mismo tipo de fallo de anclaje geográfico, pero en un caso distinto (destino con nombre
-  explícito, no "desde donde estoy"). Sin diagnosticar aún — seguir el dato de punta a
-  punta (qué anchor/country se calculó para esta petición, y por qué el radio de
-  validación dejó pasar paradas tan lejos de Ronda) antes de tocar nada.
+- **Ruta de Ronda pintó el mapa en Benahavís/San Pedro de Alcántara (13 sept) — fix
+  desplegado (commit `c33faccb`, worker `408e65a7`), SIN confirmar en pantalla por Paco
+  con el escenario exacto.** Diagnóstico distinto del que se sospechaba al principio: NO
+  era el bug de ancla tipo "Lisboa" (`7bef91f`) — el destino sí se resolvía bien a Ronda
+  real. La causa era que `verifyAllStops()` medía la distancia de cada parada al ancla en
+  **línea recta** (`haversineKm`), y con el radio de 3-4 días (120km, además el doble de
+  lo que el propio prompt promete en la línea 223: 60km) Benahavís/San Pedro/Estepona
+  quedaban dentro. Por carretera real (única vía de montaña, A-397) Estepona son 83km/1h40
+  — coincide casi exacto con el "~80km" que describió Paco — mientras que Grazalema/Setenil
+  (pueblos blancos legítimos cerca de Ronda) se quedan muy por debajo en ambos cálculos.
+  Confirmado con `/directions` real antes de tocar código (ver commit para las cifras).
+  Fix: nueva `drivingDistanceKm()` (Directions API) sustituye la línea recta en la "red de
+  seguridad" final de `verifyAllStops`, con el radio alineado al prompt (30km 1-2 días,
+  60km 3-4 días). Probado UNA vez en pantalla tras desplegar: Ronda 3 días salió limpio
+  (Cueva de la Pileta, Benaoján, Montejaque — nada de costa), pero Paco cortó la sesión
+  antes de repetir la prueba a fondo — pendiente de una confirmación más sólida.
+  **Limitación conocida, aceptada por Paco de momento:** Benahavís/San Pedro (43-52km
+  reales, <1h de coche) siguen dentro del radio de 60km y podrían seguir apareciendo — no
+  se apretó más el radio a propósito, a la espera de ver si molesta en la práctica.
+  **Sin tocar, pendiente aparte:** el filtro por localidad/provincia de más abajo en la
+  misma función (3+ días) sigue comparando por texto de provincia sin distancia real —
+  para Ronda esto es contraintuitivo porque los pueblos blancos "buenos" (Grazalema,
+  Setenil, Zahara) están en Cádiz, no en Málaga como Ronda, así que ese filtro podría
+  relegarlos a "cerca de" en vez de dejarlos en la ruta principal. No se ha visto pasar en
+  pantalla, solo detectado leyendo el código — investigar si da problemas.
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
 
 - **Historia reactivada (cápsula ampliable en guías + chat) — 13 sept, CONFIRMADO EN
