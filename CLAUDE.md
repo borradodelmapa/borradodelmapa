@@ -1067,6 +1067,24 @@ antiguo — tratarlo como tal.)*
   horas después. Con esa casilla
   apagada. Causa raíz exacta sin confirmar del todo (no se aisló si era esa casilla u
   otra cosa de la conexión inicial), pero el síntoma no ha reaparecido tras el fix.
+- **Historia reactivada (cápsula ampliable en guías + chat) — 13 sept, fusionada a `main`,
+  desplegando ahora vía GitHub Action "Deploy Worker".** Se reactivó `historia.js`/
+  `historia.css` (estaban desactivados desde el 7 sept) y se añadió un modo compacto
+  (`historiaModule.renderCompactInto`): botón "📖 Historia de X" por parada en
+  `guide-renderer.js`/`mapa-itinerario.js` (oculto si Claude marca la parada
+  `con_historia:false` al generar la ruta) + uno de país en la cabecera de la guía, y un
+  botón bajo la respuesta del chat cuando Claude emite el marcador nuevo `HISTORIA_LUGAR:X`
+  (mismo patrón que `SALMA_ACTION`/`FOTO_TAG`, en `BLOQUE_ACCION`). Backend: reutiliza
+  `/historia-lugar` tal cual (Claude Haiku + foto Google Places + caché KV 30 días), con
+  un matiz en su prompt para narrar bien carreteras/comarcas/países, no solo puntos.
+  También se quitó (13 sept) un chip antiguo "📚 Historia de [destino]" en el chat que
+  navegaba a la vista de pantalla completa — redundante con el botón de país nuevo dentro
+  de la propia guía, y rompía el "sin salir de contexto" que era el objetivo del cambio.
+  Falta, tras el deploy de este momento: probar en pantalla — pedir "3 días en Ronda" y
+  comprobar que aparece el botón de historia por parada y el de país arriba; y preguntar
+  algo tipo "info de Gaucín" en el chat suelto y comprobar que sale el botón debajo de la
+  respuesta. Sin esto, no está terminado — nada de lo anterior se ha visto todavía en la
+  app real.
 - **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
   confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del
   7-8 sept) se quedaba enganchado a CUALQUIER enlace `google.com/maps` del chat — también
@@ -1113,6 +1131,15 @@ antiguo — tratarlo como tal.)*
   — el Worker ya habla de planes/meses, el frontend todavía de coins. Hay que decidir y
   terminar la migración (Fases 2-4 del documento) o revertir el Worker, no dejarlo a medias.
 - WebAuthn/fingerprint sigue parcial (solo recuerda email).
+- **[Prioridad baja] Resumen/narrativa post-viaje** — auditado 11 sept: no existe ningún
+  sistema de "estados" de Salma (Exploradora/Buscadora/Acompañante/Crisis/Historiadora),
+  ni `getSalmaState()`, ni nada que cambie el prompt según si un viaje está activo o
+  completado — la selección de prompt (`buildMessages()` en `worker/salma-worker.js`)
+  es solo por patrón de mensaje, no por ciclo de vida del viaje. Tampoco hay concepto de
+  "viaje completado" en Firestore (`users/{uid}/maps/{mapId}` no tiene campo `status`).
+  Lo único parecido a un "resumen" es el vídeo Canvas (`video-player.js`, tipo `resumen`)
+  y es un slideshow visual bajo petición explícita del usuario, no una narrativa de texto
+  automática. Sin prisa — no hay nada roto, es una feature nueva a valorar más adelante.
 
 ### 🔧 Deuda técnica (sin cambios, no re-verificado a fondo en este barrido salvo lo dicho)
 

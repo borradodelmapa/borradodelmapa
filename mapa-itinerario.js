@@ -42,9 +42,14 @@ const mapaItinerario = {
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
         <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
+        ${country ? `<div class="hist-inline-mount" data-place="${this._esc(country)}"></div>` : ''}
       </div>
     `;
     this._container.appendChild(header);
+    if (country && typeof historiaModule !== 'undefined') {
+      const countryMount = header.querySelector('.hist-inline-mount');
+      if (countryMount) historiaModule.renderCompactInto(countryMount, { place: country });
+    }
 
     // Barra de acciones flotante — se añade al body para escapar del stacking context
     {
@@ -203,6 +208,7 @@ const mapaItinerario = {
         ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
         ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
+        ${stop.con_historia !== false ? `<div class="hist-inline-mount" data-place="${this._esc(stop.name || stop.headline || '')}" data-lat="${stop.lat != null ? stop.lat : ''}" data-lng="${stop.lng != null ? stop.lng : ''}"></div>` : ''}
         ${mapsDirUrl ? `<div class="itin-card-actions">
           <a class="itin-card-nav" href="${mapsDirUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🗺️ Cómo llegar</a>
         </div>` : ''}
@@ -253,6 +259,16 @@ const mapaItinerario = {
 
     // Cargar foto inicial — pasamos el card directamente porque aún no está en el DOM
     this._loadInitialPhoto(stop, index, card);
+
+    // Botón "Historia de [parada]"
+    const histMount = card.querySelector('.hist-inline-mount');
+    if (histMount && typeof historiaModule !== 'undefined') {
+      historiaModule.renderCompactInto(histMount, {
+        place: histMount.dataset.place,
+        lat: histMount.dataset.lat ? parseFloat(histMount.dataset.lat) : null,
+        lng: histMount.dataset.lng ? parseFloat(histMount.dataset.lng) : null,
+      });
+    }
 
     return card;
   },

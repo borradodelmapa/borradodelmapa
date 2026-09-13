@@ -1506,22 +1506,6 @@ const salma = {
           this.history = [];
           this._saveSession();
           this._threadId = null;   // la guía cierra la consulta; la siguiente empieza un hilo nuevo
-          // Chip Historia para el destino recién generado
-          const _histDestino = data.route.title || data.route.name || data.route.stops?.[0]?.name;
-          if (_histDestino && typeof historiaModule !== 'undefined') {
-            const _chatArea = this._getChatArea();
-            if (_chatArea) {
-              const _chipWrap = document.createElement('div');
-              _chipWrap.className = 'historia-chat-chip-wrap';
-              const _chip = document.createElement('button');
-              _chip.className = 'historia-chat-chip';
-              _chip.textContent = '📚 Historia de ' + _histDestino;
-              _chip.addEventListener('click', () => { historiaModule.loadPlace(_histDestino); showState('historia'); });
-              _chipWrap.appendChild(_chip);
-              _chatArea.appendChild(_chipWrap);
-              this._scrollToBottom(true);
-            }
-          }
         }
 
         // Flujo guiado: la ruta ya está generada → el borrador incremental
@@ -1614,6 +1598,17 @@ const salma = {
             .map(s => ({ name: s.name || '', lat: s.lat, lng: s.lng, day: s.day }));
         }
         this._renderVideoPlayer(enrichedParams);
+      }
+
+      // Botón "Historia de [lugar]" — Salma marcó un lugar/carretera/comarca/país relevante
+      if (data.historia_lugar && typeof historiaModule !== 'undefined') {
+        const _histArea = this._getChatArea();
+        if (_histArea) {
+          const _histMount = document.createElement('div');
+          _histMount.className = 'hist-inline-mount hist-inline-mount--chat';
+          _histArea.appendChild(_histMount);
+          historiaModule.renderCompactInto(_histMount, { place: data.historia_lugar });
+        }
       }
 
       this._scrollToBottom();
@@ -1757,7 +1752,8 @@ const salma = {
                   _isBlocks: isBlocksRoute,
                   map_stage_failed: evt.map_stage_failed === true,
                   offer_map_button: evt.offer_map_button === true,
-                  map_base_msg: evt.map_base_msg || null
+                  map_base_msg: evt.map_base_msg || null,
+                  historia_lugar: evt.historia_lugar || null
                 });
                 return;
               }

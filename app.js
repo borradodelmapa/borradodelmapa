@@ -50,8 +50,6 @@ function showState(state) {
   }
   // 'welcome' está deprecado (Fase 5 navegación): el estado por defecto es el chat.
   if (state === 'welcome') state = 'chat';
-  // Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md): cualquier intento → chat.
-  if (state === 'historia') state = 'chat';
   currentState = state;
   updateHeader();
 
@@ -75,6 +73,10 @@ function showState(state) {
     $content.style.paddingBottom = '80px';
   } else if (state === 'documentos') {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
+  } else if (state === 'historia') {
+    if (typeof historiaModule !== 'undefined') historiaModule.render();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
   } else if (state === 'galeria') {
