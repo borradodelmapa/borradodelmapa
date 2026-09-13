@@ -1001,19 +1001,26 @@ antiguo — tratarlo como tal.)*
   25s, éxito, y confirmado que NO tocó los secrets ya puestos** — la única secret que
   pareció faltar tras esa prueba era porque no se habían repuesto todas, no porque el
   deploy las borrara.
-  **Estado de los 15 secrets al mediodía del 13 sept — 7 confirmados puestos (más
+  **Estado de los 15 secrets a la tarde del 13 sept — 9 confirmados puestos (más
   `GOOGLE_TTS_KEY`, que no es de los 15 y el Worker no la usa):** `ANTHROPIC_API_KEY`,
   `GOOGLE_PLACES_KEY`, `OPENAI_API_KEY` (ya estaban) + `BRAVE_SEARCH_KEY`,
-  `DUFFEL_ACCESS_TOKEN`, `RAPIDAPI_KEY`, `ELEVENLABS_API_KEY` (repuestos 13 sept con
-  `worker/restaurar-secrets.cjs --subir` desde el portátil de Paco, verificado con
-  `wrangler secret list`). **Faltan por reponer estos 8, ninguno con backup local — solo
-  desde su panel**: `SERPER_API_KEY` (serper.dev), `OPENWEATHER_KEY` (openweathermap.org,
-  hay fallback wttr.in), `STRIPE_SECRET_KEY` (dashboard Stripe), `TWILIO_ACCOUNT_SID` /
-  `TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` (consola Twilio), `ADMIN_TOKEN` (te lo
-  inventas tú), `GA4_CREDENTIALS` (service account JSON de Google Analytics). Con los 7
-  que hay ya funciona lo esencial (chat, generación de rutas, verificación Google, fotos,
-  búsqueda web, vuelos, hoteles/coches, voz) — lo que falta es eventos, clima (con
-  fallback), Stripe, SOS por SMS, endpoints admin/`/health` y GA4.
+  `DUFFEL_ACCESS_TOKEN`, `RAPIDAPI_KEY`, `ELEVENLABS_API_KEY` (repuestos con
+  `worker/restaurar-secrets.cjs --subir`) + `OPENWEATHER_KEY` (home.openweathermap.org) +
+  `ADMIN_TOKEN` (generado con `crypto.randomBytes` en sesión, guardado por Paco) — los
+  3 últimos puestos a mano con `wrangler secret put`, todo verificado con
+  `wrangler secret list`. **Faltan por reponer estos 6, ninguno con backup local — solo
+  desde su panel, PAUSADO A PETICIÓN DE PACO (13 sept) — recordárselo en próximas
+  sesiones, no perseguirlo sin que él lo pida**: `SERPER_API_KEY` (serper.dev — su web
+  de registro estaba caída el 13 sept, comprobado también desde el navegador de la
+  sesión, no solo la red de Paco; la API en sí, `google.serper.dev`, respondía normal,
+  reintentar más tarde), `STRIPE_SECRET_KEY` (dashboard Stripe), `TWILIO_ACCOUNT_SID` /
+  `TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` (consola Twilio), `GA4_CREDENTIALS`
+  (service account JSON de Google Analytics — la más laboriosa de las 6, y de las que
+  menos urgen: el endpoint `/ga4` no lo llama ninguna pantalla de la app todavía, así
+  que montarlo ahora no cambia nada visible hasta que se construya un panel de stats en
+  `admin.html`). Con los 9 que hay ya funciona lo esencial (chat, generación de rutas,
+  verificación Google, fotos, búsqueda web, vuelos, hoteles/coches, voz, clima, panel
+  admin) — lo que falta es eventos, Stripe, SOS por SMS y GA4.
 - **Workers Builds — REABIERTO (12 sept 2026, madrugada): la "prueba de fuego" del 11
   sept dio falso positivo, se ha perdido una SEGUNDA key (`GOOGLE_PLACES_KEY`).** Tras el
   "confirmado seguro" de abajo, un deploy automático posterior (entre las 22:14 y la
