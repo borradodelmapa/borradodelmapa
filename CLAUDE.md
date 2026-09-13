@@ -1001,16 +1001,19 @@ antiguo — tratarlo como tal.)*
   25s, éxito, y confirmado que NO tocó los secrets ya puestos** — la única secret que
   pareció faltar tras esa prueba era porque no se habían repuesto todas, no porque el
   deploy las borrara.
-  **Estado de los 15 secrets a mediodía del 12 sept — solo 3 confirmados puestos:**
-  `ANTHROPIC_API_KEY`, `GOOGLE_PLACES_KEY`, `OPENAI_API_KEY`. **Faltan por reponer estos
-  12**: `BRAVE_SEARCH_KEY`, `DUFFEL_ACCESS_TOKEN`, `RAPIDAPI_KEY`, `ELEVENLABS_API_KEY`,
-  `SERPER_API_KEY`, `OPENWEATHER_KEY`, `STRIPE_SECRET_KEY`, `TWILIO_ACCOUNT_SID`,
-  `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`, `ADMIN_TOKEN`, `GA4_CREDENTIALS`. Con las 3
-  que hay funciona lo esencial (chat, generación de rutas, verificación Google, fotos) —
-  lo que falta es vuelos, hoteles/coches, voz, eventos, clima, Stripe, SOS por SMS,
-  endpoints admin/`/health` y GA4. Reponer desde el dashboard de Cloudflare (Variables y
-  secretos en tiempo de ejecución → Agregar variable → tipo Secreto) o con
-  `worker/restaurar-secrets.cjs` en cuanto haya portátil.
+  **Estado de los 15 secrets al mediodía del 13 sept — 7 confirmados puestos (más
+  `GOOGLE_TTS_KEY`, que no es de los 15 y el Worker no la usa):** `ANTHROPIC_API_KEY`,
+  `GOOGLE_PLACES_KEY`, `OPENAI_API_KEY` (ya estaban) + `BRAVE_SEARCH_KEY`,
+  `DUFFEL_ACCESS_TOKEN`, `RAPIDAPI_KEY`, `ELEVENLABS_API_KEY` (repuestos 13 sept con
+  `worker/restaurar-secrets.cjs --subir` desde el portátil de Paco, verificado con
+  `wrangler secret list`). **Faltan por reponer estos 8, ninguno con backup local — solo
+  desde su panel**: `SERPER_API_KEY` (serper.dev), `OPENWEATHER_KEY` (openweathermap.org,
+  hay fallback wttr.in), `STRIPE_SECRET_KEY` (dashboard Stripe), `TWILIO_ACCOUNT_SID` /
+  `TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` (consola Twilio), `ADMIN_TOKEN` (te lo
+  inventas tú), `GA4_CREDENTIALS` (service account JSON de Google Analytics). Con los 7
+  que hay ya funciona lo esencial (chat, generación de rutas, verificación Google, fotos,
+  búsqueda web, vuelos, hoteles/coches, voz) — lo que falta es eventos, clima (con
+  fallback), Stripe, SOS por SMS, endpoints admin/`/health` y GA4.
 - **Workers Builds — REABIERTO (12 sept 2026, madrugada): la "prueba de fuego" del 11
   sept dio falso positivo, se ha perdido una SEGUNDA key (`GOOGLE_PLACES_KEY`).** Tras el
   "confirmado seguro" de abajo, un deploy automático posterior (entre las 22:14 y la
