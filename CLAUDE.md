@@ -865,6 +865,15 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   para cerrarlo cuando Paco decida retomarlo.
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
+- **Ruta de Ronda pintó el mapa en Benahavís/San Pedro de Alcántara (13 sept, reportado
+  por Paco en pantalla) — sin investigar todavía.** Pidió "3 días en Ronda" y el mapa de
+  la guía trazó hasta la costa (Benahavís), a ~80km y sin relación con el destino pedido.
+  Mismo patrón que el bug ya arreglado de "ruta 'desde donde estoy' anclaba en Lisboa"
+  (`worker/salma-worker.js`, commit `7bef91f`, ver "✅ Ya resuelto") — probablemente el
+  mismo tipo de fallo de anclaje geográfico, pero en un caso distinto (destino con nombre
+  explícito, no "desde donde estoy"). Sin diagnosticar aún — seguir el dato de punta a
+  punta (qué anchor/country se calculó para esta petición, y por qué el radio de
+  validación dejó pasar paradas tan lejos de Ronda) antes de tocar nada.
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
 
 - **Saga "ruta de los faros" (11-12 sept 2026) — 5 bugs reales encontrados y arreglados,
