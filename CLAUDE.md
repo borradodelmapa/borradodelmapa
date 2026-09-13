@@ -1065,6 +1065,14 @@ antiguo — tratarlo como tal.)*
      ningún `offline-tiles.js` ni `offline-pois.js` en el repo.
   Ninguna se ha hablado con Paco para decidir si retomarlas — solo quedan anotadas aquí
   para que no se vuelvan a perder de vista como pasó la primera vez.
+  **13 sept 2026, tarde**: a Paco le gustó mucho el mockup visual de la propuesta 1
+  (mapa siempre visible) — "le da un caché enorme a la app". Siguiente paso sugerido,
+  **sin empezar todavía, no tocar código sin que lo pida explícitamente**: arrancar solo
+  por la **Fase A** (mapa de fondo permanente, ~1 sesión, sin riesgo) — es un cambio
+  invisible a propósito: el live-map se queda vivo detrás en vez de crearse/destruirse
+  cada vez, pero las pantallas siguen tapándolo del todo, igual que hoy. El salto visual
+  real (mapa asomando, barra semitransparente) no llega hasta la Fase B — no confundir
+  las dos al retomarlo.
 
 - **GPS mostrando ubicación de Portugal — CASI CERRADO (13 sept 2026): pinta a geolocalización
   de escritorio poco fiable, no a bug de la app.** Detectado de paso investigando el bug de
