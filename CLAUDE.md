@@ -955,7 +955,7 @@ antiguo — tratarlo como tal.)*
   Falta, en este orden, desde tu ordenador:
   1. `git fetch origin claude/salma-history-module-52q11h` y revisar/fusionar esa rama a
      `main` (o pedir que se haga si la sesión sigue abierta).
-  2. Confirmar que GitHub Pages sirve los `?v=` nuevos (`app.js?v=101`, `salma.js?v=75`,
+  2. Confirmar que GitHub Pages sirve los `?v=` nuevos (`app.js?v=101`, `salma.js?v=76`,
      `guide-renderer.js?v=52`, `mapa-itinerario.js?v=53`, `historia.js?v=2`,
      `historia.css?v=3`): `curl.exe -s https://borradodelmapa.com/index.html | Select-String '\.js\?v='`.
   3. `cd worker; npx wrangler deploy -c wrangler.toml` — el Worker lleva el campo
@@ -966,10 +966,13 @@ antiguo — tratarlo como tal.)*
      historia por parada y el de país arriba; y preguntar algo tipo "info de Gaucín" en el
      chat suelto y comprobar que sale el botón debajo de la respuesta. Sin esto, no está
      terminado — nada de lo anterior se ha visto todavía en la app real.
-  Pendiente aparte, de decisión tuya, sin prisa: en `salma.js` (~línea 1458) sigue un chip
-  antiguo "📚 Historia de [destino]" que al reactivar el módulo vuelve a funcionar y
-  navega a la vista de pantalla completa — puede quedar redundante con el botón de país
-  nuevo dentro de la propia guía. Revisar y decir si se quita.
+  ~~Decisión pendiente sobre el chip antiguo "📚 Historia de [destino]"~~ → **13 sept,
+  resuelta: se quitó** (`salma.js?v=76`). Aparecía tras guardar cualquier ruta nueva y
+  navegaba a la vista de pantalla completa de Historia — redundante con el botón de país
+  nuevo dentro de la propia guía, y rompía el "sin salir de contexto" que era el objetivo
+  de este cambio. La clase CSS `historia-chat-chip`/`historia-chat-chip-wrap` sigue en uso
+  por los chips de "🔄 Reintentar ruta"/"🔄 Reintentar mapa" (sin relación con Historia,
+  solo compartían nombre de clase) — no tocados.
 
 - **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
   confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del

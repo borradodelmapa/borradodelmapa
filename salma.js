@@ -1453,22 +1453,6 @@ const salma = {
           this.history = [];
           this._saveSession();
           this._threadId = null;   // la guía cierra la consulta; la siguiente empieza un hilo nuevo
-          // Chip Historia para el destino recién generado
-          const _histDestino = data.route.title || data.route.name || data.route.stops?.[0]?.name;
-          if (_histDestino && typeof historiaModule !== 'undefined') {
-            const _chatArea = this._getChatArea();
-            if (_chatArea) {
-              const _chipWrap = document.createElement('div');
-              _chipWrap.className = 'historia-chat-chip-wrap';
-              const _chip = document.createElement('button');
-              _chip.className = 'historia-chat-chip';
-              _chip.textContent = '📚 Historia de ' + _histDestino;
-              _chip.addEventListener('click', () => { historiaModule.loadPlace(_histDestino); showState('historia'); });
-              _chipWrap.appendChild(_chip);
-              _chatArea.appendChild(_chipWrap);
-              this._scrollToBottom(true);
-            }
-          }
         }
 
         // Flujo guiado: la ruta ya está generada → el borrador incremental
