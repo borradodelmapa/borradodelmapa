@@ -7424,7 +7424,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       // 2. Generar con Claude Haiku
       const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.
 
-Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia.
+Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia. Ojo: abreviaturas típicas de Google Maps como "Rte." (restaurante), "Avda."/"Av." (avenida), "C/" (calle), "Pza." (plaza) NO indican una carretera ni un corredor — son solo el nombre de un local o dirección; genera la historia de ESE lugar concreto (el negocio, el edificio, la calle), no de una ruta ni de una persona a la que haga referencia el nombre.
 
 {
   "title": "Nombre: subtítulo histórico",
