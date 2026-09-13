@@ -413,9 +413,26 @@ const mapaItinerario = {
     if (valid.length === 0) return null;
     if (valid.length === 1) return this._stopDirUrl(valid[0]);
     const sampled = this._sampleWaypoints(valid, 25);
-    // /dir/ usa lat,lng — place_id: no funciona en path de /dir/
-    const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
-    return 'https://www.google.com/maps/dir/' + segments;
+    // Con nombre+place_id cuando lo hay (igual que _stopDirUrl) — si solo se manda la
+    // coordenada, Google Maps le pone al waypoint la etiqueta del sitio indexado más
+    // cercano a ese punto, que puede no ser el real. Visto en producción: la Cueva de
+    // Tito Bustillo (que SÍ tiene ficha en Google Places) salía en el mapa como "Club
+    // Piragüismo" porque solo se mandaban las coordenadas, sin nombre ni place_id.
+    const point = (p) => p.place_id
+      ? encodeURIComponent(p.headline || p.name || '')
+      : `${p.lat}%2C${p.lng}`;
+    const origin = sampled[0], destination = sampled[sampled.length - 1];
+    const middle = sampled.slice(1, -1);
+    let url = 'https://www.google.com/maps/dir/?api=1'
+      + `&origin=${point(origin)}${origin.place_id ? `&origin_place_id=${origin.place_id}` : ''}`
+      + `&destination=${point(destination)}${destination.place_id ? `&destination_place_id=${destination.place_id}` : ''}`;
+    if (middle.length) {
+      url += `&waypoints=${middle.map(point).join('%7C')}`;
+      if (middle.some(p => p.place_id)) {
+        url += `&waypoint_place_ids=${middle.map(p => p.place_id || '').join('%7C')}`;
+      }
+    }
+    return url;
   },
 
   // Enlace /dir/ con ~10 puntos repartidos por el trazado real de la carretera.

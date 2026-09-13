@@ -585,8 +585,21 @@ const guideRenderer = {
     if (valid.length === 0) return null;
     if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
-    return 'https://www.google.com/maps/dir/' + segments;
+    // Con nombre+place_id — así Google etiqueta cada parada con su nombre real en vez
+    // de con el sitio indexado más cercano a la coordenada (bug real visto en producción:
+    // una cueva con ficha real en Google Places salía en el mapa con el nombre de un
+    // club de piragüismo cercano, por mandar solo lat,lng sin nombre ni place_id).
+    const name = (p) => encodeURIComponent(p.headline || p.name || '');
+    const origin = sampled[0], destination = sampled[sampled.length - 1];
+    const middle = sampled.slice(1, -1);
+    let url = 'https://www.google.com/maps/dir/?api=1'
+      + `&origin=${name(origin)}&origin_place_id=${origin.place_id}`
+      + `&destination=${name(destination)}&destination_place_id=${destination.place_id}`;
+    if (middle.length) {
+      url += `&waypoints=${middle.map(name).join('%7C')}`;
+      url += `&waypoint_place_ids=${middle.map(p => p.place_id).join('%7C')}`;
+    }
+    return url;
   },
 
   // Enlace /dir/ con ~10 puntos del trazado real de la carretera nombrada (N2…)
