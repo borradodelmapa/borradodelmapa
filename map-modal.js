@@ -36,10 +36,24 @@
   function _extractDest(url) {
     let name = '', placeId = null, multiStop = null;
     try {
-      if (/\/maps\/dir\/\?api=1/i.test(url)) {
+      if (/\/maps\/dir\/?\?api=1/i.test(url)) {
         const u = new URL(url);
-        name = u.searchParams.get('destination') || '';
-        placeId = u.searchParams.get('destination_place_id') || null;
+        const origin = u.searchParams.get('origin');
+        const destination = u.searchParams.get('destination') || '';
+        const waypointsParam = u.searchParams.get('waypoints');
+        if (origin || waypointsParam) {
+          // "Ruta completa" (esquema oficial origin+waypoints+destination, todo en lat,lng)
+          const points = [];
+          if (origin) points.push(origin);
+          if (waypointsParam) points.push(...waypointsParam.split('|').filter(Boolean));
+          if (destination) points.push(destination);
+          if (points.length >= 2) multiStop = points;
+          else name = destination || origin || '';
+        } else {
+          // "Cómo llegar" a un solo destino con place_id
+          name = destination;
+          placeId = u.searchParams.get('destination_place_id') || null;
+        }
       } else if (/\/maps\/dir\/[^?]/i.test(url)) {
         const parts = url.split('/dir/')[1].split('/').filter(Boolean);
         const places = parts.map(p => decodeURIComponent(p.replace(/\+/g, ' ')));
@@ -50,6 +64,21 @@
       }
     } catch (_) {}
     return { name, placeId, multiStop };
+  }
+
+  // Resuelve un punto de ruta: si ya es "lat,lng" lo usa directo (Places no acepta coords
+  // como query — daba "Lat/Long not supported" e INVALID_REQUEST); si es un nombre, busca
+  // con Places. cb(loc, label) — loc es null si no se pudo resolver el nombre.
+  function _resolvePoint(pointStr, placesService, cb) {
+    const m = String(pointStr).trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);
+    if (m) { cb({ lat: parseFloat(m[1]), lng: parseFloat(m[2]) }, pointStr); return; }
+    placesService.findPlaceFromQuery({ query: pointStr, fields: ['geometry', 'name', 'place_id'] }, (r, s) => {
+      if (s === google.maps.places.PlacesServiceStatus.OK && r && r[0]) {
+        cb(r[0].geometry.location, r[0].name);
+      } else {
+        cb(null, pointStr);
+      }
+    });
   }
 
   function _close() {
@@ -155,11 +184,9 @@
       const bounds = new google.maps.LatLngBounds();
       let pending = dest.multiStop.length;
       const locs = new Array(dest.multiStop.length);
-      dest.multiStop.forEach((name, i) => {
-        placesService.findPlaceFromQuery({ query: name, fields: ['geometry','name','place_id'] }, (r, s) => {
-          if (s === google.maps.places.PlacesServiceStatus.OK && r && r[0]) {
-            locs[i] = { loc: r[0].geometry.location, name: r[0].name, placeId: r[0].place_id };
-          }
+      dest.multiStop.forEach((point, i) => {
+        _resolvePoint(point, placesService, (loc, label) => {
+          if (loc) locs[i] = { loc, name: label };
           if (--pending === 0) {
             const valid = locs.filter(Boolean);
             if (valid.length === 0) {
@@ -205,12 +232,11 @@
     // Usar findPlaceFromQuery directamente → fallback a Geocoder
     if (dest.name) {
       console.log('[map-modal] resolviendo destino:', dest.name);
-      placesService.findPlaceFromQuery({ query: dest.name, fields: ['geometry','name','place_id'] }, (r, st) => {
-        console.log('[map-modal] findPlaceFromQuery status:', st, 'resultados:', r ? r.length : 0);
-        if (st === google.maps.places.PlacesServiceStatus.OK && r && r[0] && r[0].geometry) {
-          markDest(r[0].geometry.location, r[0].name);
+      _resolvePoint(dest.name, placesService, (loc, label) => {
+        if (loc) {
+          markDest(loc, label);
         } else {
-          // Fallback Geocoder
+          // Fallback Geocoder (nombres que Places no encuentra tal cual)
           new google.maps.Geocoder().geocode({ address: dest.name }, (res, gst) => {
             console.log('[map-modal] Geocoder status:', gst);
             if (gst === 'OK' && res[0]) markDest(res[0].geometry.location, dest.name);

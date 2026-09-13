@@ -318,7 +318,7 @@ CÓMO PRESENTAR RESULTADOS:
 — Coches: nombre, precio total y por día, plazas, transmisión, proveedor, punto de recogida.
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork si lo hay.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
-— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay.
+— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay. NO escribas tú la web del sitio (ni el dominio suelto) — si Google Places la tiene, el sistema la añade automáticamente al final como enlace real.
 — Búsqueda web (buscar_web): responde SOLO con el dato, con tus palabras. NO listes fuentes ni pegues URLs de blogs/artículos/guías. Solo pon un enlace si el usuario lo pide explícitamente ("dame el enlace", "la fuente", "de dónde lo sacas") o si es la web oficial de reserva de un transporte que ha pedido reservar.
 — Cuando SÍ toque poner un enlace: cada uno en su propia línea, sin markdown, sin corchetes. Solo la URL.
 — URLs permitidas: SOLO las que devuelve una herramienta (buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, y buscar_web solo en los dos casos de arriba). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
@@ -8686,7 +8686,8 @@ INSTRUCCIONES:
         // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
-        let _toolUrls = []; // URLs de buscar_lugar y buscar_web para inyectar si Claude no las pone
+        let _toolUrls = []; // URLs de buscar_web para inyectar si Claude no las pone (solo si el usuario pide enlaces)
+        let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web) — se muestran siempre, como el teléfono
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
@@ -8879,11 +8880,12 @@ INSTRUCCIONES:
                 const _pfKey = (toolResult.lugar || '').toLowerCase().trim();
                 if (_pfKey && toolResult.fotos[0] && toolResult.fotos[0].url) _placePhotosByName.set(_pfKey, toolResult.fotos[0].url);
               }
-              // Capturar URLs de resultados de herramientas para inyectar si Claude no las pone
+              // Capturar la web oficial de cada lugar (buscar_lugar devuelve el campo como
+              // "web", no "website" — con el nombre viejo esto nunca se disparaba y la web
+              // nunca llegaba a la respuesta, aunque Google Places sí la traía)
               if (block.name === 'buscar_lugar' && toolResult.lugares) {
                 for (const l of toolResult.lugares) {
-                  if (l.website) _toolUrls.push({ titulo: l.nombre || l.name, url: l.website });
-                  if (l.maps_link) _toolUrls.push({ titulo: (l.nombre || l.name) + ' en Maps', url: l.maps_link });
+                  if (l.web) _lugarWebUrls.push({ titulo: l.nombre || l.name, url: l.web });
                 }
                 // Capturar coords del primer resultado para deep links de transporte
                 const _firstLugar = toolResult.lugares[0];
@@ -9159,8 +9161,8 @@ REGLAS:
 
         // (transport_actions ya emitidos ANTES de Claude)
 
-        // ── Inyectar URLs de tools (buscar_lugar, buscar_web) que Claude no incluyó ──
-        // Solo si el usuario quiere ver enlaces. Por defecto NO se añade ninguna URL.
+        // ── Inyectar URLs de buscar_web que Claude no incluyó ──
+        // Solo si el usuario quiere ver enlaces. Por defecto NO se añade ninguna URL de blogs/webs.
         if (!route && _toolUrls.length > 0 && _userWantsLinks) {
           const missingUrls = _toolUrls
             .filter(u => u.url && !reply.includes(u.url))
@@ -9173,6 +9175,25 @@ REGLAS:
             }
             reply += toolLinksBlock;
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: toolLinksBlock })}\n\n`)); } catch (_) {}
+          }
+        }
+
+        // ── Inyectar la web oficial de cada lugar recomendado (buscar_lugar) ──
+        // A diferencia de buscar_web, esto SIEMPRE se muestra si Google Places la tiene —
+        // es un dato del propio sitio (como el teléfono), no un enlace externo a un blog/guía.
+        if (!route && _lugarWebUrls.length > 0) {
+          const missingWebs = _lugarWebUrls
+            .filter(u => u.url && !reply.includes(u.url))
+            .slice(0, 3);
+          if (missingWebs.length > 0) {
+            let webBlock = '\n';
+            for (const u of missingWebs) {
+              // 🔗 (no 🌐): el frontend solo trata como URL de confianza (sin filtrar por
+              // dominio) las líneas que empiezan por 🔗 — ver sanitizeUrls() en app.js
+              webBlock += `\n🔗 ${(u.titulo || '').slice(0, 60)} — ${u.url}`;
+            }
+            reply += webBlock;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: webBlock })}\n\n`)); } catch (_) {}
           }
         }
 
