@@ -1041,16 +1041,24 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
-- **GPS mostrando ubicación cacheada/obsoleta (13 sept 2026) — detectado de paso mientras se
-  investigaba el bug de Ronda, sin diagnosticar aún.** Paco estaba físicamente en Galicia y el
-  panel 🐛 mostró `[Salma] Ubicación: 39.9224 -8.1332 ±500m` (centro de Portugal, cerca de
-  Torres Novas/Ourém) y `[Salma] Copiloto (caché): Portugal pt` — la etiqueta "(caché)" del
-  propio log sugiere que el copiloto sirvió una posición vieja en vez de pedir GPS fresco. Sin
-  confirmar si es: caché de `geo:{lat}:{lng}` en KV (24h TTL) devolviendo una entrada vieja por
-  coincidencia de celda, un `watchPosition`/posición cacheada del navegador con `maximumAge` alto,
-  o un último-known-location de sesión anterior en Portugal que nunca se refrescó. Pendiente de
-  reproducir con Paco (panel 🐛 + confirmar de qué sesión/fecha viene esa cache) antes de tocar
-  nada — no se ha investigado el código todavía, solo observado en pantalla.
+- **GPS mostrando ubicación de Portugal — CASI CERRADO (13 sept 2026): pinta a geolocalización
+  de escritorio poco fiable, no a bug de la app.** Detectado de paso investigando el bug de
+  Ronda: con Paco físicamente en Galicia, el panel 🐛 mostró `[Salma] Ubicación: 39.9224
+  -8.1332 ±500m` (centro de Portugal) y `[Salma] Copiloto (caché): Portugal pt`. Paco confirmó
+  después el dato clave: **en el portátil sale mal posicionado (Portugal), en el móvil sale bien
+  posicionado**, mismo momento. Un portátil no tiene chip GPS — el navegador de escritorio estima
+  la posición por WiFi/IP (compara redes WiFi vistas contra la base de ubicaciones de Google, o
+  cae a la IP), y si esa base tiene mal geolocalizado el router de Paco (o el bloque de IP de su
+  ISP está registrado en Portugal), da una coordenada de Portugal con `±500m` de "confianza"
+  aunque esté mal. El móvil sí tiene GPS por satélite real, por eso acierta. Se revisó el código
+  (`app.js`) y las llamadas principales ya piden `enableHighAccuracy: true`
+  ([app.js:3853](app.js:3853), [app.js:5734](app.js:5734)) — no es que la app pida poca
+  precisión; sin chip GPS esa opción no cambia nada. Conclusión: probablemente **no es un bug
+  arreglable en el código**, es una limitación de hardware/red del portátil. La etiqueta
+  "(caché)" del log del copiloto queda aparte, sin relación con esto — simplemente cachea lo que
+  el navegador le dio, que ya venía mal desde el origen. **Sin tocar nada de código.** Si vuelve
+  a salir raro en el MÓVIL (no en el portátil), eso sí sería la caché de `geo:{lat}:{lng}` en KV
+  (24h TTL) o algo del `watchPosition` — investigar entonces, no antes.
 
 - **Workers Builds DESCONECTADO del todo (12 sept 2026, mañana) — sustituido por GitHub
   Action manual.** Tras la segunda pérdida de secrets (ver entrada de abajo), Paco
