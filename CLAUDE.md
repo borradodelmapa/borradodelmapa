@@ -892,13 +892,18 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   cargar — coincide con la intermitencia de red de esa misma sesión (`curl.exe` daba
   timeout, Copiloto daba "Failed to fetch", la carga general iba lenta), no parece ser
   un bug de Historia: el botón "reintentar" funcionó tal como está pensado.
-  **Cabo suelto real, menor, sin arreglar:** para "Rte. Pedro Romero Ronda", Claude
-  interpretó la abreviatura de Google Maps "Rte." (Restaurante) como si insinuara una
-  "ruta/corredor" — con el matiz que se añadió al prompt de `/historia-lugar` para narrar
-  bien carreteras — y generó la biografía del torero Pedro Romero a modo de itinerario
-  en vez de la historia del propio restaurante. Contenido igualmente interesante, pero no
-  es lo que pedía el botón. Arreglo pendiente: aclarar en el prompt que abreviaturas tipo
-  "Rte.", "Avda.", "C/" etc. no son indicio de carretera/corredor.
+  **Cabo suelto — arreglado en código y desplegado (13 sept, commit `01ccdf8`, Worker
+  Version ID `faf82643-a8ea-4746-bd60-baff689cf9c9`), PENDIENTE DE COMPROBAR EN
+  PANTALLA.** Para "Rte. Pedro Romero Ronda", Claude interpretó la abreviatura de Google
+  Maps "Rte." (Restaurante) como si insinuara una "ruta/corredor" — con el matiz que se
+  añadió al prompt de `/historia-lugar` para narrar bien carreteras — y generó la
+  biografía del torero Pedro Romero a modo de itinerario en vez de la historia del propio
+  restaurante. Se aclaró en el prompt que Rte./Avda./C/Pza. son solo nombre o dirección
+  de un lugar, no indicio de carretera. **Ojo al probarlo:** ese lugar concreto puede
+  seguir cacheado en KV (`historia:rte-pedro-romero-ronda`, TTL 30 días) con la versión
+  vieja del torero — si al pulsar "Historia" en ese restaurante sigue saliendo lo mismo,
+  no es que el fix no funcione, es la caché; probar con un restaurante distinto con
+  abreviatura similar, o borrar esa clave KV a mano para forzar regeneración.
 - **Saga "ruta de los faros" (11-12 sept 2026) — 5 bugs reales encontrados y arreglados,
   todos en `main`. Pendiente de un último redeploy del Worker para el quinto (ver abajo).**
   Todo empezó con "pantalla negra al abrir el mapa de una guía". Se fueron pelando capas:
