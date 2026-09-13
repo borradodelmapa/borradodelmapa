@@ -1025,6 +1025,17 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
+- **GPS mostrando ubicación cacheada/obsoleta (13 sept 2026) — detectado de paso mientras se
+  investigaba el bug de Ronda, sin diagnosticar aún.** Paco estaba físicamente en Galicia y el
+  panel 🐛 mostró `[Salma] Ubicación: 39.9224 -8.1332 ±500m` (centro de Portugal, cerca de
+  Torres Novas/Ourém) y `[Salma] Copiloto (caché): Portugal pt` — la etiqueta "(caché)" del
+  propio log sugiere que el copiloto sirvió una posición vieja en vez de pedir GPS fresco. Sin
+  confirmar si es: caché de `geo:{lat}:{lng}` en KV (24h TTL) devolviendo una entrada vieja por
+  coincidencia de celda, un `watchPosition`/posición cacheada del navegador con `maximumAge` alto,
+  o un último-known-location de sesión anterior en Portugal que nunca se refrescó. Pendiente de
+  reproducir con Paco (panel 🐛 + confirmar de qué sesión/fecha viene esa cache) antes de tocar
+  nada — no se ha investigado el código todavía, solo observado en pantalla.
+
 - **Workers Builds DESCONECTADO del todo (12 sept 2026, mañana) — sustituido por GitHub
   Action manual.** Tras la segunda pérdida de secrets (ver entrada de abajo), Paco
   desconectó el repo de GitHub en salma-api → Settings → Builds. Ya no hay ningún deploy
