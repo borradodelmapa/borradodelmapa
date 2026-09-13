@@ -876,6 +876,29 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   validación dejó pasar paradas tan lejos de Ronda) antes de tocar nada.
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
 
+- **Historia reactivada (cápsula ampliable en guías + chat) — 13 sept, CONFIRMADO EN
+  PANTALLA por Paco.** Fusionada a `main` (`623b41e`) y Worker desplegado (GitHub Action
+  "Deploy Worker", run #7, Version ID `dd949a07-6415-4ae8-9694-9be8bb4ff373`). Se
+  reactivó `historia.js`/`historia.css` (desactivados desde el 7 sept) y se añadió un
+  modo compacto (`historiaModule.renderCompactInto`): botón "📖 Historia de X" por parada
+  en `guide-renderer.js`/`mapa-itinerario.js` (oculto si Claude marca la parada
+  `con_historia:false`) + uno de país en la cabecera, y uno bajo la respuesta del chat
+  con el marcador nuevo `HISTORIA_LUGAR:X` (mismo patrón que `SALMA_ACTION`/`FOTO_TAG`).
+  Backend: reutiliza `/historia-lugar` (Claude Haiku + foto Google Places + caché KV 30
+  días). También se quitó un chip antiguo redundante que navegaba fuera del chat.
+  **Probado por Paco pidiendo "3 días en Ronda": botón sale en todas las paradas y
+  funciona de verdad — contenido real generado (ej. historia de Pedro Romero para el
+  restaurante homónimo).** Necesitó reintentar 2-3 veces en varias paradas antes de
+  cargar — coincide con la intermitencia de red de esa misma sesión (`curl.exe` daba
+  timeout, Copiloto daba "Failed to fetch", la carga general iba lenta), no parece ser
+  un bug de Historia: el botón "reintentar" funcionó tal como está pensado.
+  **Cabo suelto real, menor, sin arreglar:** para "Rte. Pedro Romero Ronda", Claude
+  interpretó la abreviatura de Google Maps "Rte." (Restaurante) como si insinuara una
+  "ruta/corredor" — con el matiz que se añadió al prompt de `/historia-lugar` para narrar
+  bien carreteras — y generó la biografía del torero Pedro Romero a modo de itinerario
+  en vez de la historia del propio restaurante. Contenido igualmente interesante, pero no
+  es lo que pedía el botón. Arreglo pendiente: aclarar en el prompt que abreviaturas tipo
+  "Rte.", "Avda.", "C/" etc. no son indicio de carretera/corredor.
 - **Saga "ruta de los faros" (11-12 sept 2026) — 5 bugs reales encontrados y arreglados,
   todos en `main`. Pendiente de un último redeploy del Worker para el quinto (ver abajo).**
   Todo empezó con "pantalla negra al abrir el mapa de una guía". Se fueron pelando capas:
@@ -1076,27 +1099,6 @@ antiguo — tratarlo como tal.)*
   horas después. Con esa casilla
   apagada. Causa raíz exacta sin confirmar del todo (no se aisló si era esa casilla u
   otra cosa de la conexión inicial), pero el síntoma no ha reaparecido tras el fix.
-- **Historia reactivada (cápsula ampliable en guías + chat) — 13 sept, fusionada a `main`
-  (`623b41e`) y Worker desplegado (GitHub Action "Deploy Worker", run #7, Current Version
-  ID `dd949a07-6415-4ae8-9694-9be8bb4ff373`, verificado en el log del runner — bindings
-  KV/R2 intactos, no tocó secrets). Falta solo la prueba en pantalla.** Se reactivó
-  `historia.js`/`historia.css` (estaban desactivados desde el 7 sept) y se añadió un modo
-  compacto (`historiaModule.renderCompactInto`): botón "📖 Historia de X" por parada en
-  `guide-renderer.js`/`mapa-itinerario.js` (oculto si Claude marca la parada
-  `con_historia:false` al generar la ruta) + uno de país en la cabecera de la guía, y un
-  botón bajo la respuesta del chat cuando Claude emite el marcador nuevo `HISTORIA_LUGAR:X`
-  (mismo patrón que `SALMA_ACTION`/`FOTO_TAG`, en `BLOQUE_ACCION`). Backend: reutiliza
-  `/historia-lugar` tal cual (Claude Haiku + foto Google Places + caché KV 30 días), con
-  un matiz en su prompt para narrar bien carreteras/comarcas/países, no solo puntos.
-  También se quitó (13 sept) un chip antiguo "📚 Historia de [destino]" en el chat que
-  navegaba a la vista de pantalla completa — redundante con el botón de país nuevo dentro
-  de la propia guía, y rompía el "sin salir de contexto" que era el objetivo del cambio.
-  **Falta, ahora mismo:** confirmar `curl.exe -s https://salma-api.paco-defoto.workers.dev/version`
-  (debe devolver `dd949a07-6415-4ae8-9694-9be8bb4ff373`) y probar en pantalla — pedir
-  "3 días en Ronda" y comprobar que aparece el botón de historia por parada y el de país
-  arriba; y preguntar algo tipo "info de Gaucín" en el chat suelto y comprobar que sale el
-  botón debajo de la respuesta. Sin esto último, no está terminado — nada de lo anterior
-  se ha visto todavía en la app real.
 - **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
   confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del
   7-8 sept) se quedaba enganchado a CUALQUIER enlace `google.com/maps` del chat — también
