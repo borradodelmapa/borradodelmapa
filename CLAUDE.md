@@ -1041,6 +1041,31 @@ antiguo — tratarlo como tal.)*
 
 ### 🟡 Importante
 
+- **Dos propuestas de diseño de abril 2026, "analizadas y documentadas, no implementar
+  hasta que Paco lo pida", revisadas contra el código real el 13 sept 2026 — siguen sin
+  tocar, y una de ellas (mapa fijo) se ha vuelto más urgente, no menos:**
+  1. **Mapa siempre visible (V5)** — el live-map pasa a ser fondo permanente de toda la
+     app; welcome/chat/perfil/rutas flotan encima como sheets semitransparentes en vez de
+     pantallas que se ocultan/muestran. Objetivo secundario: unificar los mapas
+     duplicados en uno solo. Documento completo en memoria de sesión
+     (`project_mapa_fijo_v5.md`). **Verificado hoy:** la colisión de z-index que motivó
+     parte del plan sigue intacta (`.app-bottom-bar` y `.itin-view` comparten
+     `z-index:900` en `styles.css`), y el problema de "mapas duplicados" que quería
+     resolver la Fase C ha crecido de 3 a **al menos 5** instancias independientes de
+     `google.maps.Map`/Leaflet (`app.js`, `mapa-ruta.js`, `guide-renderer.js`,
+     `bitacora-renderer.js`, y el nuevo `map-modal.js` del rediseño de navegación del 7
+     sept) — el rediseño de septiembre fue en dirección contraria a la unificación. La
+     lista de "6 archivos afectados" del documento original ya se ha quedado corta.
+  2. **Modo offline completo** — mapa OSM descargable + POIs + rutas pre-cacheadas para
+     viajar sin datos, en 4 fases (O1-O4). Documento completo en memoria de sesión
+     (`project_offline_mode.md`). **Verificado hoy:** la Fase O1 (persistencia Firestore)
+     ya está hecha (`db.enablePersistence()` en `app.js`, línea ~9) — probablemente como
+     efecto colateral de otro trabajo, nadie lo marcó como parte de este plan. Las fases
+     O2-O4 (tiles OSM, POIs offline, rutas pre-cacheadas) siguen sin empezar — no existe
+     ningún `offline-tiles.js` ni `offline-pois.js` en el repo.
+  Ninguna se ha hablado con Paco para decidir si retomarlas — solo quedan anotadas aquí
+  para que no se vuelvan a perder de vista como pasó la primera vez.
+
 - **GPS mostrando ubicación de Portugal — CASI CERRADO (13 sept 2026): pinta a geolocalización
   de escritorio poco fiable, no a bug de la app.** Detectado de paso investigando el bug de
   Ronda: con Paco físicamente en Galicia, el panel 🐛 mostró `[Salma] Ubicación: 39.9224
