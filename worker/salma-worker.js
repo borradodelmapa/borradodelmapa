@@ -5710,6 +5710,47 @@ async function logUrlIncidents(incidents, idToken) {
   }));
 }
 
+// ─── WhatsApp (F5.1 — webhook de eco sobre Twilio Sandbox) ───
+
+// Valida que el POST viene realmente de Twilio, no de cualquiera que descubra la URL
+// del webhook — sin esto, cualquiera podría disparar mensajes/costes a nuestra cuenta.
+// Algoritmo oficial de Twilio: HMAC-SHA1(authToken, url + params ordenados por clave).
+async function validateTwilioSignature(requestUrl, params, signatureHeader, authToken) {
+  if (!signatureHeader || !authToken) return false;
+  let data = requestUrl;
+  for (const key of [...params.keys()].sort()) {
+    data += key + params.get(key);
+  }
+  const enc = new TextEncoder();
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw', enc.encode(authToken), { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
+  );
+  const sigBuffer = await crypto.subtle.sign('HMAC', cryptoKey, enc.encode(data));
+  const computed = btoa(String.fromCharCode(...new Uint8Array(sigBuffer)));
+  return computed === signatureHeader;
+}
+
+// Envía un mensaje de WhatsApp vía la API REST de Twilio. Reutilizable en F5.2+ para
+// las respuestas reales de Salma y en F5.5 para plantillas proactivas.
+async function sendWhatsAppMessage(env, to, text) {
+  const body = new URLSearchParams({ From: env.TWILIO_WHATSAPP_FROM, To: to, Body: text });
+  const res = await fetch(
+    `https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
+    }
+  );
+  if (!res.ok) {
+    console.error('Error enviando mensaje de WhatsApp:', await res.text().catch(() => ''));
+  }
+  return res;
+}
+
 export default {
   async fetch(request, env, ctx) {
     // CORS
@@ -6535,6 +6576,41 @@ export default {
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
+    }
+
+    // ─── ENDPOINT /whatsapp (F5.1 — webhook de eco, Twilio Sandbox) ───
+    // Sin IA, sin Firestore todavía — solo valida que Twilio -> Worker -> respuesta
+    // funciona de extremo a extremo. Twilio manda application/x-www-form-urlencoded,
+    // NO JSON.
+    if (request.method === 'POST' && url.pathname === '/whatsapp') {
+      if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_WHATSAPP_FROM) {
+        console.error('WhatsApp: faltan secrets de Twilio (ACCOUNT_SID/AUTH_TOKEN/WHATSAPP_FROM)');
+        return new Response('Twilio not configured', { status: 500 });
+      }
+
+      const bodyText = await request.text();
+      const params = new URLSearchParams(bodyText);
+
+      const signatureOk = await validateTwilioSignature(
+        request.url, params, request.headers.get('X-Twilio-Signature'), env.TWILIO_AUTH_TOKEN
+      );
+      if (!signatureOk) {
+        console.error('WhatsApp: firma de Twilio inválida, petición rechazada');
+        return new Response('Invalid signature', { status: 403 });
+      }
+
+      const from = params.get('From');
+      const body = params.get('Body');
+      const profileName = params.get('ProfileName');
+
+      console.log(`[WhatsApp] Mensaje de ${from} (${profileName}): "${body}"`);
+
+      const replyText = `Hola${profileName ? ' ' + profileName : ''} 👋 Soy Salma (modo prueba).\nRecibí tu mensaje: "${body}"`;
+      await sendWhatsAppMessage(env, from, replyText);
+
+      // Twilio solo necesita un 200 rápido aquí — el mensaje real ya se manda aparte
+      // vía sendWhatsAppMessage().
+      return new Response('OK', { status: 200 });
     }
 
     // ─── ENDPOINT /nearby-pois (Narrador — POIs cercanos via Google Places) ───

@@ -883,12 +883,34 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 > pendiente surgió ahí hay que traerlo a mano a una sesión con el repo. Esto es justo lo
 > que causó el desfase que motivó el barrido del 10 de septiembre — no repetirlo.
 
-### 📱 Nueva feature en estudio — Salma en WhatsApp (F5)
+### 📱 Salma en WhatsApp (F5)
 
 - **14 sept 2026: Paco trae los primeros documentos de diseño para llevar a Salma a
-  WhatsApp como canal adicional (no sustituye la web). Fase de estudio — NO se ha
-  escrito ni desplegado nada de código todavía, esta entrada es solo para no perder el
-  contexto entre sesiones mientras se decide si y cómo se desarrolla.**
+  WhatsApp como canal adicional (no sustituye la web).**
+  **F5.1 (webhook de eco) — código escrito, SIN DESPLEGAR, sin probar por Paco.**
+  Endpoint nuevo `POST /whatsapp` en `worker/salma-worker.js` (junto al bloque `/sos`,
+  mismo patrón de llamada a la API de Twilio que ya usa el SOS): parsea el payload
+  `application/x-www-form-urlencoded` de Twilio (no JSON), valida la firma
+  `X-Twilio-Signature` (HMAC-SHA1 con `TWILIO_AUTH_TOKEN`, algoritmo verificado contra
+  el vector de prueba oficial de la documentación de Twilio antes de dar el código por
+  bueno) y responde con un eco fijo. Sin IA, sin Firestore todavía — es justo el
+  alcance de F5.1, validar que la tubería Twilio → Worker → respuesta funciona de
+  extremo a extremo.
+  **Falta, antes de poder probarlo:**
+  1. Secret nuevo en Cloudflare: `TWILIO_WHATSAPP_FROM` (el número de sandbox, algo
+     como `whatsapp:+14155238886` — mirar el valor exacto en el panel de Twilio,
+     WhatsApp Sandbox Settings). Esta sesión NO tiene credenciales de Cloudflare para
+     ponerlo — hace falta que Paco lo haga: `npx wrangler secret put
+     TWILIO_WHATSAPP_FROM -c wrangler.toml` desde `worker/`, o desde el dashboard.
+     `TWILIO_ACCOUNT_SID` y `TWILIO_AUTH_TOKEN` ya están puestos (se usan para el SOS).
+  2. Activar el Twilio Sandbox de WhatsApp si no está ya (F5.0) y unirse mandando
+     `join <código>` al número de sandbox desde el WhatsApp de Paco.
+  3. En la consola de Twilio: Sandbox → "When a message comes in" → URL
+     `https://salma-api.paco-defoto.workers.dev/whatsapp`, método POST.
+  4. Desplegar el Worker (esta sesión lo hace vía GitHub Action "Deploy Worker" en
+     cuanto se fusione a `main` — anotar aquí el `Current Version ID` cuando pase).
+  Cuando los 4 pasos estén hechos, Paco manda un WhatsApp al número de sandbox y
+  confirma si le llega el eco — hasta entonces, F5.1 sigue sin cerrar.
   - Documentos recibidos: `Salma-WhatsApp.md` (documento técnico completo — arquitectura,
     proveedor, plantillas, casos de uso, plan de fases F5.0-F5.6) y
     `whatsapp-webhook-eco.js` (borrador de código para F5.1: webhook mínimo de eco sobre
