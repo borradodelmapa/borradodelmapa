@@ -1,0 +1,32 @@
+# Usado solo por preview/wrangler-preview.toml (Worker de preview del
+# rediseño). No afecta a GitHub Pages ni al Worker real — es exclusivo de ese
+# despliegue de prueba. Formato .gitignore: todo lo que no es parte del
+# frontend público se queda fuera del Worker de preview.
+
+.claude/
+.github/
+.git/
+node_modules/
+backups/
+docs/
+mockups/
+scripts/
+worker/
+preview/
+
+CLAUDE.md
+PENDIENTES.md
+AUDIT-MAPS-LINKS.md
+AUDIT-USABILITY.md
+INFORME_TECNICO.md.txt
+SECURITY-FIRESTORE.md
+SEO-EDITORIAL-STRATEGY-COMPLETE.md
+pendiente v1 segun claude.txt
+prueba_ruta.txt
+auth_test.json
+firebase.json
+firestore.rules
+wrangler.jsonc
+serve.sh
+CNAME
+CNAME.txt

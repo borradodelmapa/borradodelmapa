@@ -1,0 +1,27 @@
+name: Deploy Preview (rediseño)
+
+# Disparo manual únicamente — nunca en cada push. Despliega SOLO el frontend
+# estático (index.html, styles.css, *.js, blog/, destinos/...) como un Worker
+# aparte, "salma-preview", con su propia URL *.workers.dev. Nunca toca
+# salma-api (Worker real, con los 15 secrets) ni GitHub Pages (producción) —
+# son recursos totalmente distintos.
+#
+# Uso: pestaña Actions → "Deploy Preview (rediseño)" → Run workflow → elegir
+# la rama del rediseño en el desplegable "Use workflow from" (arriba del
+# botón verde). Funciona desde el navegador del móvil, igual que
+# "Deploy Worker". Repetir cada vez que quieras ver cambios nuevos en el
+# preview — no es automático.
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: preview
+    steps:
+      - uses: actions/checkout@v4
+      - run: npx wrangler deploy -c wrangler-preview.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

@@ -1,0 +1,18 @@
+name = "salma-preview"
+compatibility_date = "2024-01-01"
+
+# Worker de SOLO estáticos para previsualizar el rediseño visual sin tocar
+# GitHub Pages (producción) ni el Worker real (salma-api). Sirve el repo
+# entero como estaba en el momento del deploy (no en vivo desde git) — cada
+# vez que quieras ver cambios nuevos, vuelve a lanzar la Action.
+#
+# Las llamadas a la API (SALMA_API en app.js/salma.js) siguen apuntando a
+# https://salma-api.paco-defoto.workers.dev de siempre — el backend real, con
+# datos reales — así que el rediseño se prueba con la app funcionando de
+# verdad, no con mocks.
+#
+# ../ = raíz del repo (este archivo vive en preview/). Lo que no debe
+# publicarse está listado en .assetsignore, en la raíz del repo.
+[assets]
+directory = "../"
+not_found_handling = "404-page"
