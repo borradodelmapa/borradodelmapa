@@ -853,16 +853,6 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
-- **Pago posiblemente roto en producción — confirmado con Paco (10 sept): lo sabe, no es
-  una sorpresa, lo tiene aparcado a propósito priorizando otras cosas. No perseguir sin que
-  él lo pida.** El commit `5a6b2f8` (7 sept, sesión "Pasarela de pago Stripe") reescribió
-  `/create-payment` en el Worker para el modelo Premium por periodos: espera
-  `{plan: '1viaje'|'trimestral'|'semestral'|'anual'}` y devuelve `{url}` de una Stripe
-  Checkout Session; añadió `/stripe-webhook` que acredita `premium_until`. `app.js`
-  (`openCoinsModal`, ~línea 3241) sigue con el flujo viejo de coins: manda
-  `{amount, coins, user_id}` y espera `{client_secret}` para `stripe.confirmCardPayment`.
-  Falta la Fase 2 de `docs/pasarela-premium.md` (modal "Hazte Premium" + retorno `?pago=ok`)
-  para cerrarlo cuando Paco decida retomarlo.
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
 - **Ruta de Ronda pintó el mapa en Benahavís/San Pedro de Alcántara (13 sept) — fix
@@ -891,6 +881,31 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   relegarlos a "cerca de" en vez de dejarlos en la ruta principal. No se ha visto pasar en
   pantalla, solo detectado leyendo el código — investigar si da problemas.
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
+
+- **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
+  CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se
+  acreditó y la app muestra "Premium hasta 14 de septiembre de 2027".** Fusionado a `main`
+  (commit `c775ab5`). La Fase 1 (Worker: `/create-payment` reescrito a Checkout por
+  planes + `/stripe-webhook` con verificación de firma e idempotencia) ya estaba en
+  `main` desde el 7 sept. Lo que faltaba y se cerró hoy es la Fase 2: `app.js`
+  (`openCoinsModal`) seguía con el flujo viejo de coins (`{client_secret}` +
+  `stripe.confirmCardPayment`), incompatible con lo que el Worker nuevo devuelve
+  (`{url}` de una Checkout Session) — de ahí que no funcionara nada. Se reescribió el
+  modal a "Hazte Premium" (4 planes, redirige a Stripe Checkout hospedado) y se añadió
+  el manejo de `?pago=ok` (sondea `premium_until` en Firestore) / `?pago=cancel`.
+  **3 secrets nuevos puestos en Cloudflare** (antes ninguno lo estaba, por eso los
+  primeros intentos fallaban): `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+  `FIREBASE_SERVICE_ACCOUNT` (JSON de cuenta de servicio de Firebase — descargado de
+  Firebase Console → Configuración del proyecto → Cuentas de servicio; da acceso de
+  administrador a Firestore, solo lo usa el webhook). Webhook de Stripe creado
+  apuntando a `/stripe-webhook`, evento `checkout.session.completed`, probado con
+  "Vuelve a enviarlo" hasta dar 200 antes de dar la Fase por buena.
+  **Sigue en modo test** (`sk_test_`) — pasar a `sk_live_` es un cambio de 2 secrets
+  cuando Paco decida cobrar de verdad (ver más abajo, "Stripe sigue en modo test").
+  **Sin hacer todavía, a propósito (Fases 3-4 del documento, no bloquean el cobro):**
+  gates de uso free/premium, migración de coins existentes a días de Premium, contadores
+  de fair use, y el prompt de Salma sigue mencionando "coins" en vez de "Premium" — el
+  stat "COINS" del perfil también se queda como está hasta entonces.
 
 - **Historia reactivada (cápsula ampliable en guías + chat) — 13 sept, CONFIRMADO EN
   PANTALLA por Paco.** Fusionada a `main` (`623b41e`) y Worker desplegado (GitHub Action
