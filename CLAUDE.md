@@ -20,6 +20,38 @@ imposible saber qué versión se está probando.
 - **Si un `git push` sale rechazado (`non-fast-forward`), PARAR.** No es un trámite de
   git: significa que alguien más está escribiendo aquí. Mirar quién antes de seguir.
 
+#### 1B. Realidad desde el 13-14 sept: varias sesiones de Code a la vez, cada una con su
+propio clon (móvil, portátil, nube) — no todas en worktree del mismo árbol local. Esto
+es distinto del caso de un solo Worker borrado del 5 sept, pero puede liarse igual si no
+se sigue esto. Un rechazo de push aquí **no es la catástrofe del 5 sept** — es rutina de
+git, se resuelve en un minuto con los pasos de abajo. No hay que asustarse, hay que
+seguir el proceso.
+
+- **Cuando Paco abra varias sesiones para cosas distintas, decirle a cada una qué toca y
+  qué NO** (ej. "esta sesión es solo Historia, no toques el generador de rutas"). Reduce
+  al mínimo que dos sesiones editen el mismo trozo de archivo a la vez.
+- **`git fetch origin main` antes de cualquier commit que vaya a subirse**, sobre todo si
+  la sesión lleva un rato abierta — la otra puede haber subido cosas mientras tanto. No
+  fiarse de lo que había al principio de la conversación.
+- **Commits pequeños y push frecuente**, no acumular cambios grandes sin subir. Si hay
+  conflicto, que sea pequeño y fácil de leer, no una bola de nieve.
+- **Push rechazado → PARAR → `git fetch origin main` → `git log --oneline
+  HEAD..origin/main`** para ver qué ha cambiado (los mensajes de commit dicen de qué
+  sesión/tema viene — escribirlos siempre claros por esto mismo) → **confirmar con Paco
+  quién es** antes de tocar nada → si confirma, `git rebase origin/main` (nunca
+  `push --force`) → **verificar que el propio cambio sigue intacto** (grep de las piezas
+  clave que se tocaron, no fiarse solo de "rebase sin conflictos") → recién entonces
+  `git push`.
+- **`CLAUDE.md` es zona común** — las sesiones simultáneas casi siempre escriben aquí
+  (pendientes). Git suele fusionar líneas distintas sin problema; si hay choque de verdad
+  (mismo párrafo tocado por las dos), tratarlo como cualquier conflicto: parar, mirar,
+  fusionar a mano conservando las dos aportaciones — nunca pisar el trabajo de la otra
+  sesión con la propia versión sin mirar qué decía.
+- **Despliegue del Worker: la sesión que hace push del cambio es la que lo despliega**
+  (GitHub Action "Deploy Worker") justo después, y **anota el `Current Version ID` en el
+  propio pendiente de `CLAUDE.md`** — así la otra sesión (o Paco) sabe qué versión es la
+  vigente sin tener que adivinar ni volver a desplegar por si acaso.
+
 ### 2. UN CAMBIO, UNA PRUEBA, UNA CONFIRMACIÓN DE PACO
 
 Aquel día se encadenaron cinco arreglos sin verificar ninguno. Cuando algo seguía
@@ -935,6 +967,25 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   vieja del torero — si al pulsar "Historia" en ese restaurante sigue saliendo lo mismo,
   no es que el fix no funcione, es la caché; probar con un restaurante distinto con
   abreviatura similar, o borrar esa clave KV a mano para forzar regeneración.
+  **Segundo bug real, más grave, arreglado y desplegado (14 sept, commit `b3fd758`,
+  Worker Version ID `3eaaab15-b9cd-44ea-817e-012bb59f61e2`), PENDIENTE DE COMPROBAR EN
+  PANTALLA.** Paco probó el botón GPS "📍 Historia de aquí" de pie en el Cementerio de
+  los Ingleses de Camariñas (Costa da Morte, Galicia — ligado al naufragio del HMS
+  Serpent, 1890) y salió la historia del Cementerio de los Ingleses de **Lisboa** (1654,
+  homónimo). Causa: el frontend sí manda `lat`/`lng` al Worker, pero el prompt a Claude
+  Haiku nunca los incluía — sin pista de ubicación, Claude tira del homónimo más
+  documentado en su entrenamiento, no del real. Se añadió el lat/lng como pista explícita
+  de desambiguación en el prompt. De paso, la clave de caché KV solo usaba el nombre del
+  sitio (`historia:{slug}`) — dos homónimos en lugares distintos se pisaban la caché
+  entre sí 30 días; ahora lleva un bucket de coordenadas (~11km) cuando hay GPS
+  (`historia:{slug}:{lat}:{lng}`). **Ojo al probarlo — mismo problema de caché que el
+  cabo suelto de arriba:** la entrada vieja `historia:cementerio-de-los-ingleses` (sin
+  bucket, con la versión de Lisboa) sigue en KV y solo la sirven ahora las peticiones
+  SIN coordenadas (búsqueda manual por texto, o el marcador del chat, que no manda
+  lat/lng) — el botón GPS ya no la toca porque su clave cambió de formato. Comando para
+  borrarla a mano si hace falta: `npx wrangler kv key delete
+  "historia:cementerio-de-los-ingleses" --binding=SALMA_KB --remote -c wrangler.toml`
+  desde `worker/`.
 - **Saga "ruta de los faros" (11-12 sept 2026) — 5 bugs reales encontrados y arreglados,
   todos en `main`. Pendiente de un último redeploy del Worker para el quinto (ver abajo).**
   Todo empezó con "pantalla negra al abrir el mapa de una guía". Se fueron pelando capas:
