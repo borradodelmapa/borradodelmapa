@@ -1770,3 +1770,74 @@ Hoy se trabaja en 4 frentes. Recordatorio: la app de escritorio crea un worktree
 **Notas aparte (no relacionadas con este reparto, detectadas al revisar el repo):**
 - Hay ~40 worktrees viejos marcados `prunable` en `.claude/worktrees/` de sesiones anteriores ya cerradas. Se pueden limpiar con `git worktree prune` cuando quieras — no borra nada en uso, solo limpia referencias muertas.
 - El repo tiene actualmente un diff enorme sin commitear (~619.000 líneas en ~1950 ficheros) que parece ser mezcla de finales de línea CRLF/LF, no cambios de contenido reales — no lo he tocado. Convendría revisarlo y decidir cómo normalizarlo antes del próximo commit, para no arrastrar sin querer un commit gigante de miles de ficheros.
+
+## Reparto de trabajo — 15 septiembre 2026
+
+Tres líneas (rediseño visual fuerte, ampliar KV, WhatsApp), preparadas el 14 sept
+para no chocar entre sí. Decisión de Paco: **primero solo el rediseño, validado del
+todo y fusionado sin roces, y solo entonces se arranca con KV y WhatsApp** — no las
+tres en paralelo como se planteó al principio.
+
+### 1. Rediseño visual — la única línea activa por ahora
+
+- Rama `feature/rediseno-visual` (creada el 14 sept desde `main`, ya tiene el
+  preview montado — ver más abajo).
+- **Preview aislado, nunca sobre lo que está online**: Worker nuevo `salma-preview`
+  (solo estáticos — `preview/wrangler-preview.toml` + `.assetsignore` en la raíz,
+  que excluye `worker/`, `backups/`, `docs/`, etc.), con su propia URL
+  `*.workers.dev`. No toca `salma-api` (el Worker real, con los 15 secrets) ni
+  GitHub Pages — son recursos Cloudflare totalmente distintos. Las llamadas a la
+  API del frontend (`SALMA_API` en `app.js`/`salma.js`) siguen apuntando al backend
+  real de siempre, así que el rediseño se prueba con datos y lógica reales.
+  - Para ver cambios: pestaña **Actions** → **"Deploy Preview (rediseño)"** → Run
+    workflow → elegir `feature/rediseno-visual` en el desplegable "Use workflow
+    from". Manual, no automático — repetir cada vez que quieras ver algo nuevo.
+    Funciona desde el móvil, igual que "Deploy Worker".
+  - No se reconectó Workers Builds (GitHub→deploy automático) para nada de esto —
+    es la misma conexión que os borró los secrets dos veces (ver "Workers Builds"
+    en Pendiente). Todo lo de aquí es disparo manual con el mismo
+    `CLOUDFLARE_API_TOKEN` que ya usa "Deploy Worker", cero contacto con secrets.
+- Reglas de la sesión que lo trabaje: no tocar `worker/` en absoluto; `app.js` solo
+  copy/texto, nunca lógica (si el rediseño obliga a tocar lógica, parar y
+  preguntar). Antes de tocar `index.html`/`styles.css`, listar los IDs/clases que
+  `app.js`, `salma.js`, `mapa-ruta.js`, `guide-renderer.js`, `bitacora-renderer.js`,
+  `mapa-itinerario.js` enganchan (`getElementById`/`querySelector*`) — ese listado
+  es el contrato que no se puede romper sin actualizar también el JS que lo usa, en
+  el mismo commit.
+- **Checklist para pasar a producción, solo cuando esté validado en el preview**:
+  1. `git tag pre-rediseno-merge` sobre `main` — punto de restauración (§7).
+  2. `git fetch origin main` + rebase de la rama sobre el `main` real (puede haber
+     cambiado mientras tanto — nunca fiarse de lo que había al principio).
+  3. Reconfirmar el contrato de IDs/clases tras el rebase.
+  4. Volver a probar en el preview ya rebasado, antes de tocar `main`.
+  5. Merge a `main` + subir `?v=` de cada `.js`/`.css` tocado en `index.html`.
+  6. Solo GitHub Pages — no hace falta deploy de Worker, el rediseño no toca
+     `salma-worker.js`.
+  7. Paco prueba en la app real. Hasta ahí no está terminado.
+
+### 2. KV — después del rediseño
+
+Ampliar visados a 15 nacionalidades + historia/cultura. El KV nivel 1 **ya existe**
+para 193 países (`SALMA_KB`, no confundir con "crearlo desde cero") — hoy solo
+cubre `visado_espanoles`/`visado_eu` y no tiene campo de historia, así que es una
+ampliación de una ficha que ya está en producción, no una regeneración. El script
+debe **fusionar** los campos nuevos en el JSON existente, nunca sobrescribir la
+ficha entera. Probar primero en un namespace KV de prueba con 3-5 países antes de
+tocar `SALMA_KB` real.
+
+### 3. WhatsApp — después del rediseño
+
+Seguir desde **F5.2** (F5.1 — webhook de eco — ya está fusionado y desplegado, ver
+pendiente "📱 Salma en WhatsApp (F5)"; no reabrir la discusión de arquitectura, ya
+está cerrada). Probar con `wrangler versions upload` (da una preview URL de esa
+versión del Worker) antes de tocar producción — apuntar el webhook de Twilio
+Sandbox ahí primero, promoverlo con el deploy normal solo cuando esté validado.
+
+### Aviso para cuando se retomen 2 y 3
+
+Ambas pueden acabar tocando `worker/salma-worker.js` (KV si hace falta exponer las
+nacionalidades nuevas en el prompt de chat; WhatsApp para reutilizar el motor de
+chat en `/whatsapp`). Si coinciden en el tiempo, que una se fusione antes de que la
+otra edite ese mismo archivo — nunca las dos a la vez sobre el mismo bloque. Fuera
+de ese punto, no chocan entre sí (KV es datos + `worker/kv/*.js`, WhatsApp es el
+endpoint `/whatsapp`).
