@@ -965,12 +965,12 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
          Salma a HTML (`html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')`) — sin
          duplicados en `guide-renderer.js`/`bitacora-renderer.js`/`mapa-itinerario.js`
          (comprobado, no lo tocan). Cambiar el regex a un solo asterisco.
-       **Detalle a no olvidar al implementarlo:** las guías y notas ya guardadas en
-       Firestore tienen texto con `**doble asterisco**` de antes del cambio. Si el
-       regex nuevo solo reconoce un asterisco, ese contenido histórico se vería con
-       los asteriscos sueltos en pantalla. El regex nuevo debe reconocer los dos
-       formatos a la vez (probar primero `\*\*(.+?)\*\*` y luego `\*(.+?)\*`) para que
-       lo viejo se siga viendo bien sin tener que migrar nada en Firestore.
+       **Decisión de Paco (14 sept): no hace falta compatibilidad con el formato
+       viejo.** Las guías y notas ya guardadas en Firestore con `**doble asterisco**`
+       pueden quedarse mostrando los asteriscos sueltos — Paco es el único usuario
+       activo del proyecto ahora mismo, así que perder ese detalle visual en contenido
+       antiguo no importa. El regex de `app.js` se cambia limpio a un solo asterisco
+       (`\*(.+?)\*`), sin lógica de doble formato ni migración de Firestore.
   - **No tocar código de esto sin que Paco lo pida explícitamente** — estamos en fase de
     estudio de los documentos, no de desarrollo.
 
