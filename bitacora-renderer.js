@@ -673,12 +673,12 @@ const bitacoraRenderer = {
     }
 
     // Branding
-    ctx.fillStyle = 'rgba(212,168,67,0.4)';
+    ctx.fillStyle = 'rgba(244,99,11,0.4)';
     ctx.font = '600 18px JetBrains Mono, monospace';
     ctx.fillText('borradodelmapa.com', w / 2, h - 40);
 
     // Línea dorada decorativa
-    ctx.strokeStyle = 'rgba(212,168,67,0.3)';
+    ctx.strokeStyle = 'rgba(244,99,11,0.3)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(w * 0.3, h - 70);
@@ -726,7 +726,7 @@ const bitacoraRenderer = {
     ctx1.font = '500 22px Inter';
     const totalKm = Math.round(stops.reduce((s, st) => s + (st.km_from_previous || 0), 0));
     ctx1.fillText(`${dayNums.length} días · ${stops.length} paradas · ${totalKm} km`, w / 2, h * 0.62);
-    ctx1.fillStyle = 'rgba(212,168,67,0.4)';
+    ctx1.fillStyle = 'rgba(244,99,11,0.4)';
     ctx1.font = '600 16px JetBrains Mono';
     ctx1.fillText('borradodelmapa.com', w / 2, h - 40);
 
@@ -747,7 +747,7 @@ const bitacoraRenderer = {
       ctx.fillRect(0, 0, w, h);
 
       // Número de día
-      ctx.fillStyle = 'rgba(212,168,67,0.2)';
+      ctx.fillStyle = 'rgba(244,99,11,0.2)';
       ctx.font = 'bold 200px Inter';
       ctx.textAlign = 'center';
       ctx.fillText(dayNum, w / 2, h * 0.25);
@@ -783,7 +783,7 @@ const bitacoraRenderer = {
       }
 
       ctx.textAlign = 'center';
-      ctx.fillStyle = 'rgba(212,168,67,0.3)';
+      ctx.fillStyle = 'rgba(244,99,11,0.3)';
       ctx.font = '600 14px JetBrains Mono';
       ctx.fillText('borradodelmapa.com', w / 2, h - 30);
 

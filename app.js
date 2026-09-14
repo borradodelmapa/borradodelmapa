@@ -43,16 +43,19 @@ const $toast = document.getElementById('toast');
 // ═══ NAVEGACIÓN — 3 estados ═══
 
 function showState(state) {
+  // Navegación Fase 4: si la vista itinerario estaba abierta y el usuario
+  // navega (bottom bar), desmontarla primero. Sin tocar historial.
+  if (window._itinViewOpen && typeof window._teardownItinView === 'function') {
+    window._teardownItinView();
+  }
+  // 'welcome' está deprecado (Fase 5 navegación): el estado por defecto es el chat.
+  if (state === 'welcome') state = 'chat';
   currentState = state;
   updateHeader();
 
   const inputBar = document.querySelector('.app-input-bar');
 
-  if (state === 'welcome') {
-    renderWelcome();
-    if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '0';
-  } else if (state === 'rutas') {
+  if (state === 'rutas') {
     loadUserGuides();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
@@ -72,6 +75,10 @@ function showState(state) {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
+  } else if (state === 'historia') {
+    if (typeof historiaModule !== 'undefined') historiaModule.render();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'galeria') {
     $content.classList.remove('app-content--chat');
     $content.style.paddingBottom = '80px';
@@ -87,14 +94,16 @@ function showState(state) {
     if (typeof flightWatches !== 'undefined') flightWatches.renderVuelosView();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
-  } else if (state === 'historia') {
-    if (typeof historiaModule !== 'undefined') historiaModule.render();
+  } else if (state === 'consultas') {
+    if (typeof salma !== 'undefined') salma.renderConsultasView();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
   } else if (state === 'chat') {
-    // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
-    const welcomeEl = $content.querySelector('.welcome-area');
-    if (welcomeEl) $content.innerHTML = '';
+    // Si venimos de una vista a pantalla completa (welcome, notas, vuelos, consultas…)
+    // el $content tiene OTRO markup: hay que recrear el #chat-area antes de restaurar.
+    if (!$content.querySelector('#chat-area')) {
+      $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+    }
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
     // Resetear botones cam/mic/send al volver al chat
@@ -107,8 +116,9 @@ function showState(state) {
       layer.className = 'chat-bg-layer';
       document.body.insertBefore(layer, document.body.firstChild);
     }
-    // Restaurar sesión previa o mostrar estado vacío
-    if (!document.getElementById('chat-area') || !document.getElementById('chat-area').querySelector('.msg')) {
+    // Restaurar sesión previa (conversación que estabas viendo) o estado vacío
+    const _ca = document.getElementById('chat-area');
+    if (!_ca || !_ca.querySelector('.msg')) {
       const restored = typeof salma !== 'undefined' && salma._restoreSession();
       if (!restored) _renderChatEmpty();
     }
@@ -132,9 +142,11 @@ function showState(state) {
   // Limpiar barra flotante de guía si quedó huérfana
   const _orphanBar = document.body.querySelector('.itin-action-bar');
   if (_orphanBar) _orphanBar.remove();
-  // FAB mapa: visible en todo menos welcome
+  // FAB mapa DESACTIVADO 7 sept 2026 — popup "Cómo llegar" roto + botones del picker raros.
+  // Ver PENDIENTES.md. Reactivar: volver a la línea de abajo comentada.
   const fab = document.getElementById('fab-map');
-  if (fab) fab.style.display = (state === 'welcome' || !currentUser) ? 'none' : '';
+  if (fab) fab.style.display = 'none';
+  // if (fab) fab.style.display = (state === 'welcome' || !currentUser) ? 'none' : '';
 }
 
 function updateHeader() {
@@ -151,29 +163,24 @@ function updateBottomBar() {
     document.body.appendChild(bar);
   }
 
-  const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
-  const isVuelos = currentState === 'vuelos';
-  const isHistoria = currentState === 'historia';
-  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas' || currentState === 'galeria';
+  const isConsultas = currentState === 'consultas';
+  const isProfile = ['profile', 'bitacora', 'diario', 'documentos', 'notas', 'galeria', 'vuelos'].includes(currentState);
 
+  // Barra fija de 4 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md)
   bar.innerHTML = `
+    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Salma</span>
+    </button>
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
-    <button class="bottom-tab ${isHistoria ? 'bottom-tab-active' : ''}" id="tab-historia">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 0 3-3h7z"/></svg>
-      <span>Historia</span>
-    </button>
-    ${isChat ? `<button class="bottom-tab bottom-tab-newchat" id="tab-newchat">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      <span>Nuevo</span>
-    </button>` : ''}
-    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Salma</span>
+    <button class="bottom-tab ${isConsultas ? 'bottom-tab-active' : ''}" id="tab-consultas">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span>Consultas</span>
     </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -181,36 +188,17 @@ function updateBottomBar() {
     </button>`;
 
   document.getElementById('tab-chat').addEventListener('click', () => {
-    // Si hay guía abierta, cerrarla primero
-    if (window._itinViewOpen && typeof closeItinerarioView === 'function') {
-      closeItinerarioView();
-    } else if (window._itinViewOpen) {
-      const _view = document.getElementById('itin-view');
-      const _appContent = document.getElementById('app-content');
-      const _inputBar = document.getElementById('app-input-bar');
-      window._itinViewOpen = false;
-      // Quitar barra flotante (Google Maps + Compartir) del body
-      const _actionBar = document.body.querySelector('.itin-action-bar');
-      if (_actionBar) _actionBar.remove();
-      if (_view) _view.style.display = 'none';
-      if (_appContent) _appContent.style.display = '';
-      if (_inputBar) _inputBar.style.display = '';
-      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
-      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
-    }
+    // La vista itinerario la desmonta showState() (Fase 4). Aquí solo al chat.
     if (typeof salma !== 'undefined') salma._initChat();
     showState('chat');
-  });
-  const tabNewchat = document.getElementById('tab-newchat');
-  if (tabNewchat) tabNewchat.addEventListener('click', () => {
-    if (typeof salma !== 'undefined') salma.newChat();
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
-  const tabHistoria = document.getElementById('tab-historia');
-  if (tabHistoria) tabHistoria.addEventListener('click', () => showState('historia'));
+  document.getElementById('tab-consultas').addEventListener('click', () => {
+    showState('consultas');
+  });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
@@ -222,7 +210,35 @@ function handleAvatarClick() {
   }
 }
 
-// ═══ CHAT VACÍO — saludo + chips ═══
+// ═══ Fase 3 navegación — los modales participan en el historial ═══
+// Al abrir un modal se empuja una entrada. El botón atrás del móvil la
+// deshace y cierra el modal, en vez de navegar por la pantalla de debajo.
+window._modalStack = [];
+window.pushModal = function (name, closeFn) {
+  var top = window._modalStack[window._modalStack.length - 1];
+  if (top && top.name === name) { top.closeFn = closeFn; return; } // ya hay uno arriba: refrescar, no duplicar
+  window._modalStack.push({ name: name, closeFn: closeFn });
+  try { history.pushState({ state: history.state && history.state.state, modal: name }, ''); } catch (_) {}
+};
+// Llamar cuando el modal se cierra por su propia ✕ / Esc / clic-fuera:
+// consume la entrada de historial sin volver a cerrar nada.
+window.popModal = function (name) {
+  var top = window._modalStack[window._modalStack.length - 1];
+  if (!top || (name && top.name !== name)) return;
+  window._modalStack.pop();
+  window._skipModalPop = true;
+  try { history.back(); } catch (_) { window._skipModalPop = false; }
+};
+window.addEventListener('popstate', function (e) {
+  if (window._skipModalPop) { window._skipModalPop = false; return; }
+  if (window._modalStack.length) {
+    var m = window._modalStack.pop();
+    e.stopImmediatePropagation();
+    try { m.closeFn(); } catch (_) {}
+  }
+});
+
+// ═══ CHAT VACÍO — chips de acceso rápido ═══
 
 function _renderChatEmpty() {
   if (!document.getElementById('chat-area')) {
@@ -231,49 +247,378 @@ function _renderChatEmpty() {
   const area = document.getElementById('chat-area');
   if (!area || area.querySelector('.msg')) return;
 
-  const saludos = [
-    'Dime. Ruta, hotel, restaurante, vuelo — lo que necesites.',
-    'Ey, ¿qué plan tienes? Cuéntame y lo montamos.',
-    '¿A dónde vamos? Te armo la ruta entera.',
-    'Aquí estoy. Dime destino o lo que necesites resolver.'
-  ];
-  const saludo = saludos[Math.floor(Math.random() * saludos.length)];
-
   const _ci = (d) => `<svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   const chipsLeft = [
     // "Quiero ir a..." → desactivado 2026-04-17. Ver PENDIENTES.md
-    { label: 'Ruta desde aquí', icon: _ci('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>'), msg: 'Hazme una ruta desde donde estoy' },
-    { label: 'Buscar vuelo', icon: _ci('<path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5 5.2 3L5.8 13 4 12.5l-1 1 3 2 2 3 1-1-.5-1.8 2.8-2.8 3 5.2.5-.3c.4-.2.6-.6.5-1.1z"/>'), msg: 'Busca vuelos' },
-    { label: 'Alerta vuelos', icon: _ci('<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>'), msg: null, action: 'vuelos' },
-    { label: 'Pide taxi', icon: _ci('<path d="M5 17h14v-5H5z"/><path d="M7 12V9a1 1 0 011-1h8a1 1 0 011 1v3"/><path d="M5 17l-1 2h1M19 17l1 2h-1"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/><path d="M9 8l1-3h4l1 3"/>'), msg: null, action: 'taxi' },
-    { label: 'Hotel cerca', icon: _ci('<path d="M3 21V7a2 2 0 012-2h6v16"/><path d="M13 21V3h6a2 2 0 012 2v16"/><path d="M7 9h2M7 13h2M15 9h2M15 13h2"/>'), msg: 'Busca un hotel cerca' },
-    { label: 'Dónde comer', icon: _ci('<path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>'), msg: 'Recomiéndame dónde comer cerca' },
+    { label: 'Cerca mía', icon: '', msg: 'Hazme una ruta desde donde estoy', action: 'ruta-aqui' },
+    { label: 'Vuelos', icon: '', msg: 'Busca vuelos' },
+    { label: 'Alertas vuelos', icon: '', msg: null, action: 'vuelos' },
+    { label: 'Alojamiento', icon: '', msg: 'Busca alojamiento' },
   ];
   const chipsRight = [
-    { label: 'Mis Notas', icon: _ci('<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'), msg: null, action: 'notas' },
-    { label: 'Galería', icon: _ci('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'), msg: null, action: 'galeria' },
-    // "Explorar zona" (narrador) → desactivado 2026-04-17. Ver PENDIENTES.md
-    { label: 'Cambio moneda', icon: _ci('<circle cx="9" cy="9" r="6"/><path d="M15.5 15.5a6 6 0 10-6-6"/><path d="M7.5 9h3M9 7.5v3"/><path d="M13.5 15h3M15 13.5v3"/>'), msg: null, action: 'moneda' },
-    { label: 'Traductor', icon: _ci('<path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.686 8-6 8"/><path d="M5 9a8 8 0 006 3"/><path d="M12 20l4-9 4 9"/><path d="M19 18h-6"/>'), msg: null, action: 'traductor' },
-    { label: 'Emergencia', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos', emoji: '🆘' },
+    { label: 'Consultas', icon: '', msg: null, action: 'consultas' },
+    { label: 'Notas', icon: '', msg: null, action: 'notas' },
+    { label: 'Moneda', icon: '', msg: null, action: 'moneda' },
+    { label: 'Traductor', icon: '', msg: null, action: 'traductor' },
+    { label: 'Narrador', icon: '', msg: null, action: 'explorar' },
+    { label: 'SOS', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
   ];
   const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
 
-  area.innerHTML = `
-    <div class="chat-empty">
-      <div class="msg msg-salma">
-        <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
-        <div class="msg-body-salma">${saludo}</div>
+  // ── Rediseño v1 (rama rediseno-visual) — tablero de guía + chips estilo panel de aeropuerto ──
+  const _mapIco = '<svg class="chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>';
+
+  const _ceMonth = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'][new Date().getMonth()];
+  let _ceName = '';
+  try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
+  const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
+
+  // Normaliza una ruta real (itinerarioIA parseado) para el tablero
+  const _ceFromRoute = (r, docId, docData) => {
+    const stops = (r && Array.isArray(r.stops)) ? r.stops : [];
+    if (!stops.length) return null;
+    const named = stops.map(s => s.name || s.headline).filter(Boolean);
+    const days = stops.reduce((m, s) => Math.max(m, s.day || 1), 1);
+    const withCoords = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01).length;
+    const title = r.title || r.name || (docData && docData.nombre) || (named[0] || 'Tu ruta');
+    const head = named.slice(0, 3).map(escapeHTML).join(' · ') + (named.length > 3 ? ` <b>· +${named.length - 3}</b>` : '');
+    const _a = named[0], _z = named[named.length - 1];
+    const code = (named.length >= 2 && _a && _z) ? `${_a} → ${_z}`.toUpperCase() : String(title).toUpperCase();
+    return {
+      title: String(title),
+      code: code,
+      ribbon: (named.slice(0, 4).join(' · ').toUpperCase()) || 'RUTA',
+      sub: `${days} día${days > 1 ? 's' : ''} · ${stops.length} paradas`,
+      stopsHtml: head,
+      stats: [['DÍAS', String(days)], ['PARADAS', String(stops.length)], ['EN MAPA', String(withCoords)]],
+      docId: docId || null,
+      docData: docData || null
+    };
+  };
+
+  // ── BILLETE: el índice es el creador de ruta. Destino + días a la vista,
+  //    los otros 6 campos (= los 8 pasos del flujo guiado) plegados en "Afinar".
+  const _ceChips = (field, opts, single) =>
+    `<div class="ce-chips" data-field="${field}"${single ? ' data-single' : ''}>` +
+    opts.map(o => `<button class="ce-chip${o.on ? ' on' : ''}" data-v="${o.v}">${o.l}</button>`).join('') +
+    `</div>`;
+
+  const _paxName = (_ceName ? String(_ceName).trim().split(/\s+/)[0] : 'Viajero').toUpperCase();
+  const _tkNum = 'BDM·' + String(new Date().getMonth() + 1).padStart(2, '0') + String(new Date().getDate()).padStart(2, '0');
+
+  const _ceBilleteHTML = (hasActive) => `
+      <div class="ce-tk-head">
+        <span class="ce-tk-t">Nº ${_tkNum}</span>
       </div>
-      <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">
-        <svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-        Crear ruta nueva
-      </button>
+      <div class="ce-tk-pax"><span class="ce-k">Pasajero</span><span class="ce-tk-pax-v">${_paxName}</span></div>
+      <div class="ce-fld">
+        <div class="ce-k">Destino</div>
+        <input class="ce-tk-dest" type="text" autocomplete="off" placeholder="¿A dónde?">
+      </div>
+      <div class="ce-fld">
+        <div class="ce-k">Días</div>
+        ${_ceChips('duracion_dias', [
+          { v: '1', l: '1' }, { v: '2', l: '2' },
+          { v: '3-4', l: '3–4' }, { v: '5-7', l: '5–7', on: true },
+          { v: '8-14', l: '8–14' }, { v: '+14', l: '+14' }
+        ], true)}
+      </div>
+      <button class="ce-afinar" data-ce-afinar>Afinar la ruta <span class="ce-afinar-c">6 detalles · opcional ▾</span></button>
+      <div class="ce-more">
+        <div class="ce-fld">
+          <div class="ce-k">Fechas</div>
+          ${_ceChips('fechas', [{ v: '', l: 'A ojo', on: true }, { v: '__fechas__', l: 'Tengo fechas' }], true)}
+          <div class="ce-tk-fechas" hidden>
+            <label>Ida <input class="ce-tk-f1" type="date"></label>
+            <label>Vuelta <input class="ce-tk-f2" type="date"></label>
+          </div>
+        </div>
+        <div class="ce-fld">
+          <div class="ce-k">Con quién</div>
+          ${_ceChips('compania', [
+            { v: 'solo', l: 'Solo' }, { v: 'pareja', l: 'Pareja' },
+            { v: 'familia', l: 'Familia' }, { v: 'amigos', l: 'Amigos' }
+          ], true)}
+        </div>
+        <div class="ce-fld">
+          <div class="ce-k">Presupuesto / día</div>
+          ${_ceChips('presupuesto', [
+            { v: 'ajustado', l: 'Ajustado' }, { v: 'medio', l: 'Medio' }, { v: 'sin_limite', l: 'Sin límite' }
+          ], true)}
+        </div>
+        <div class="ce-fld">
+          <div class="ce-k">Ritmo</div>
+          ${_ceChips('ritmo', [
+            { v: 'tranquilo', l: 'Tranquilo' }, { v: 'equilibrado', l: 'Equilibrado' }, { v: 'intenso', l: 'Intenso' }
+          ], true)}
+        </div>
+        <div class="ce-fld">
+          <div class="ce-k">Intereses</div>
+          ${_ceChips('intereses', [
+            { v: 'cultura', l: 'Cultura' }, { v: 'naturaleza', l: 'Naturaleza' }, { v: 'gastronomia', l: 'Gastronomía' },
+            { v: 'playa', l: 'Playa' }, { v: 'fiesta', l: 'Fiesta' }, { v: 'compras', l: 'Compras' }
+          ], false)}
+        </div>
+        <div class="ce-fld ce-fld--last">
+          <div class="ce-k">Notas</div>
+          <input class="ce-tk-notes" type="text" autocomplete="off" placeholder="Dieta, movilidad, lo que sea…">
+        </div>
+      </div>
+      <div class="ce-perf"></div>
+      <div class="ce-stub">
+        <button class="ce-emit" data-ce-emit>Trazar ruta <span>→</span></button>
+        <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
+      </div>`;
+
+  // Tablero de RUTA ACTIVA — modo compañero. Abre la GUÍA del viaje + billete nuevo.
+  const _ceRouteHTML = (rt) => `
+      <div class="ce-card-ribbon"><span>${rt.ribbon}</span></div>
+      <div class="ce-row"><span class="ce-code">${escapeHTML(rt.code)}</span><span class="ce-arr"></span></div>
+      <div class="ce-head">
+        <span class="ce-eyebrow">En ruta</span>
+        <div class="ce-title">${escapeHTML(rt.title)}</div>
+        <div class="ce-sub">${rt.sub}</div>
+      </div>
+      <div class="ce-stops">${rt.stopsHtml}</div>
+      <div class="ce-stats">${rt.stats.map(s => `<div class="ce-stat"><div class="ce-k">${s[0]}</div><div class="ce-v">${s[1]}</div></div>`).join('')}</div>
+      <div class="ce-cta ce-cta--dual">
+        <button class="ce-cta-main" data-ce-guide>Abrir ruta <span>→</span></button>
+        <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete>Trazar nueva ruta <span>+</span></button>
+      </div>`;
+
+  // "Ruta nueva" quitado (Fase 5): el billete ya es el creador de ruta; ese chip
+  // abría el flujo viejo de 8 preguntas y duplicaba la función.
+  const _ceChipsRow = `
       <div class="chat-empty-chips">
-        <div class="chat-empty-col">${chipsLeft.map(renderChip).join('')}</div>
-        <div class="chat-empty-col">${chipsRight.map(renderChip).join('')}</div>
+        <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
+        <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
+      </div>`;
+
+  const _ceFallback = `
+    <div class="chat-empty">
+      <div class="chat-empty-chips">
+        <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
+        <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>
     </div>`;
+
+  // ¿Hay ruta activa? (localStorage — igual criterio que _restoreActiveRoute)
+  let _ceActive = null;
+  try {
+    const raw = localStorage.getItem('bdm_live_active_route');
+    if (raw) _ceActive = _ceFromRoute(JSON.parse(raw), localStorage.getItem('bdm_live_active_route_id') || null, null);
+  } catch (e) { _ceActive = null; }
+  try {
+    const _initCard = _ceActive
+      ? { cls: 'ce-card ce-active', html: _ceRouteHTML(_ceActive) }
+      : { cls: 'ce-card ce-ticket', html: _ceBilleteHTML() };
+    const _greet = _ceActive ? '¿Cómo va el viaje?' : '¿A dónde vamos?';
+    // Eslogan hero + línea de apoyo + caja de ejemplo rotable (doc 8 sep).
+    // Van SIEMPRE que se muestre el billete: al arrancar sin ruta activa, y también
+    // cuando desde el modo compañero se pulsa "Billete nuevo" (ver _ensureHero).
+    const _ceHeroHTML = `
+        <div class="ce-hero" data-ce-hero><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
+        <div class="ce-tagline" data-ce-hero><p>Pregunta lo <span>imposible</span></p></div>
+        <div class="ce-rotable" id="ce-rotable" data-ce-hero>
+          <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
+          <div class="ce-rotable-foot">
+            <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span></div>
+            <span class="ce-rotable-hint">Toca para escribir la ruta</span>
+          </div>
+        </div>
+        <button class="ce-rotable-cta" data-ce-hero data-ce-rotable-cta>Trazar ruta <span>→</span></button>
+        <button class="ce-openbillete" data-ce-hero data-ce-openbillete>Desliza para trazar ruta rápida <span>↓</span></button>
+        ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
+
+    area.innerHTML = `
+      <div class="chat-empty">
+        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta">${_ceMonth}</span></div>
+        ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
+        <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
+        ${_ceChipsRow}
+      </div>`;
+
+    const ceCard = area.querySelector('#ce-card');
+    if (ceCard) {
+      ceCard.addEventListener('click', (e) => {
+        // Ruta activa → abrir la GUÍA de ese viaje (vista itinerario)
+        if (e.target.closest('[data-ce-guide]')) {
+          try {
+            const raw = localStorage.getItem('bdm_live_active_route');
+            const rd = raw ? JSON.parse(raw) : null;
+            const id = localStorage.getItem('bdm_live_active_route_id') || null;
+            if (rd && rd.stops && rd.stops.length && typeof window.openItinerarioView === 'function') {
+              window.openItinerarioView(rd, id, { saved: true, fromChat: false });
+            } else if (id && typeof salma !== 'undefined' && salma.cargarGuia) {
+              salma.cargarGuia(id, null);
+            } else if (typeof openLiveMap === 'function') {
+              openLiveMap();
+            }
+          } catch (_) {}
+          return;
+        }
+        // Ruta activa → empezar un billete nuevo sin perder la ruta
+        if (e.target.closest('[data-ce-newbillete]')) {
+          ceCard.className = 'ce-card ce-ticket';
+          ceCard.innerHTML = _ceBilleteHTML(true);
+          ceCard.hidden = true;              // arranca oculto tras "Desliza para trazar ruta rápida"
+          const g = area.querySelector('.ce-greet');
+          if (g) g.remove();                 // el eslogan hero lo sustituye
+          _ensureHero();                     // eslogan + rotable + botón "Desliza..." + volver a ruta activa
+          return;
+        }
+        // Billete — desplegar "Afinar"
+        const afinar = e.target.closest('[data-ce-afinar]');
+        if (afinar) {
+          const more = ceCard.querySelector('.ce-more');
+          const open = more.classList.toggle('open');
+          const c = afinar.querySelector('.ce-afinar-c');
+          if (c) c.textContent = open ? 'ocultar ▴' : '6 detalles · opcional ▾';
+          return;
+        }
+        // Billete — chips
+        const chip = e.target.closest('.ce-chip');
+        if (chip) {
+          const grp = chip.parentElement;
+          if (grp.hasAttribute('data-single')) {
+            grp.querySelectorAll('.ce-chip').forEach(x => x.classList.remove('on'));
+            chip.classList.add('on');
+            if (grp.dataset.field === 'fechas') {
+              const box = ceCard.querySelector('.ce-tk-fechas');
+              if (box) box.hidden = chip.dataset.v !== '__fechas__';
+            }
+          } else {
+            chip.classList.toggle('on');
+          }
+          return;
+        }
+        // Billete — emitir
+        if (e.target.closest('[data-ce-emit]')) {
+          const cv = f => { const el = ceCard.querySelector(`.ce-chips[data-field="${f}"] .ce-chip.on`); return el ? (el.dataset.v || null) : null; };
+          const mv = f => [...ceCard.querySelectorAll(`.ce-chips[data-field="${f}"] .ce-chip.on`)].map(x => x.dataset.v);
+          const dest = ceCard.querySelector('.ce-tk-dest');
+          const destino = dest ? dest.value.trim() : '';
+          if (!destino) {
+            if (dest) { dest.classList.add('ce-tk-dest--err'); dest.focus(); setTimeout(() => dest.classList.remove('ce-tk-dest--err'), 1600); }
+            return;
+          }
+          let fechas = null;
+          if (cv('fechas') === '__fechas__') {
+            const i = ceCard.querySelector('.ce-tk-f1'), f = ceCard.querySelector('.ce-tk-f2');
+            const ini = i && i.value ? i.value : null, fin = f && f.value ? f.value : null;
+            if (ini || fin) fechas = { inicio: ini, fin: fin };
+          }
+          const notas = ceCard.querySelector('.ce-tk-notes');
+          if (typeof salma !== 'undefined' && salma.emitirBillete) {
+            salma.emitirBillete({
+              destino,
+              duracion_dias: cv('duracion_dias') || '5-7',
+              fechas,
+              compania: cv('compania'),
+              presupuesto: cv('presupuesto'),
+              ritmo: cv('ritmo'),
+              intereses: mv('intereses'),
+              restricciones: notas ? notas.value : null
+            });
+          }
+          return;
+        }
+      });
+    }
+
+    // ── Caja de ejemplo rotable (doc 8 sep) — 4 perfiles en orden fijo ──
+    const _wireRotable = () => {
+      const _rot = area.querySelector('#ce-rotable');
+      if (!_rot || _rot._wired) return;
+      _rot._wired = true;
+      const _exs = [
+        'Somos 2 adultos y 2 niños, 8 días en Portugal en coche, necesito hoteles con piscina y que no haya más de 3h de trayecto entre paradas',
+        'Trabajo remoto 3 semanas en Lisboa, necesito alojamiento con buen wifi cerca de coworkings, y una escapada de fin de semana a Oporto en tren',
+        'Voy a hacer la N2 de Portugal en moto en septiembre, de sur a norte desde Faro, unos 200km diarios. Dame guía, mejores paradas y un camping al final de cada día',
+        'El 10 nov me voy a Tailandia desde Málaga, necesito Uber a las 17h, vuelo, 1 noche en Bangkok y alojamiento en Koh Samui cerca de un gym de Muay Thai'
+      ];
+      const _exEl = area.querySelector('#ce-rotable-ex');
+      const _dots = area.querySelector('#ce-rotable-dots');
+      let _ri = 0, _rTimer = null, _rStopped = false;
+      const _paint = () => {
+        if (_exEl) _exEl.textContent = '“' + _exs[_ri] + '”';
+        if (_dots) [..._dots.children].forEach((d, i) => d.classList.toggle('on', i === _ri));
+      };
+      const _adv = () => {
+        if (!_exEl || !_exEl.isConnected) { if (_rTimer) { clearInterval(_rTimer); _rTimer = null; } return; }
+        _ri = (_ri + 1) % _exs.length; _paint();
+      };
+      const _stopRot = () => { if (_rTimer) { clearInterval(_rTimer); _rTimer = null; } _rStopped = true; };
+      _paint();
+      if (!_rStopped) _rTimer = setInterval(_adv, 6000);
+      _rot.addEventListener('click', () => {
+        _stopRot();
+        // Quita la caja de ejemplos + su CTA y deja el input de Salma de abajo
+        // VACÍO y con el foco: el usuario escribe su ruta desde cero.
+        const inp = document.getElementById('main-input');
+        if (inp) {
+          inp.value = '';
+          inp.focus();
+          try { inp.dispatchEvent(new Event('input', { bubbles: true })); } catch (_) {}
+        }
+        _rot.remove();
+        const cta = area.querySelector('[data-ce-rotable-cta]');
+        if (cta) cta.remove();
+      });
+      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); _stopRot(); _adv(); });
+      const _rcta = area.querySelector('[data-ce-rotable-cta]');
+      if (_rcta) _rcta.addEventListener('click', (e) => {
+        e.stopPropagation();
+        _stopRot();
+        if (typeof salma !== 'undefined' && salma.send) salma.send(_exs[_ri]);
+      });
+    };
+    // Inserta eslogan + caja rotable encima del billete si no están, y los cablea.
+    const _ensureHero = () => {
+      const card = area.querySelector('#ce-card');
+      if (card && !area.querySelector('[data-ce-hero]')) card.insertAdjacentHTML('beforebegin', _ceHeroHTML);
+      if (card) card.hidden = true;
+      _wireRotable();
+    };
+    if (!_ceActive) _wireRotable();
+
+    // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
+    // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
+    area.addEventListener('click', (e) => {
+      // Logo → volver al índice limpio
+      if (e.target.closest('[data-ce-home]')) {
+        if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
+        try { window.scrollTo(0, 0); } catch (_) {}
+        return;
+      }
+      if (e.target.closest('[data-ce-openbillete]')) {
+        const card = area.querySelector('#ce-card');
+        if (card) {
+          card.hidden = false;
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const dest = card.querySelector('.ce-tk-dest');
+          if (dest) setTimeout(() => { try { dest.focus(); } catch (_) {} }, 320);
+        }
+        const ob = area.querySelector('[data-ce-openbillete]');
+        if (ob) ob.hidden = true;
+        return;
+      }
+      if (e.target.closest('[data-ce-back-active]')) {
+        const card = area.querySelector('#ce-card');
+        if (_ceActive && card) {
+          card.className = 'ce-card ce-active';
+          card.hidden = false;
+          card.innerHTML = _ceRouteHTML(_ceActive);
+          area.querySelectorAll('[data-ce-hero]').forEach(el => el.remove());
+          if (!area.querySelector('.ce-greet')) card.insertAdjacentHTML('beforebegin', '<div class="ce-greet">¿Cómo va el viaje?</div>');
+        }
+        return;
+      }
+    });
+  } catch (err) {
+    console.warn('[chat-empty] render nuevo falló, uso fallback', err);
+    area.innerHTML = _ceFallback;
+  }
 
   area.querySelectorAll('.chat-empty-chip').forEach(chip => {
     chip.addEventListener('click', () => {
@@ -292,13 +637,10 @@ function _renderChatEmpty() {
           if (salma._narratorActive) {
             salma.stopNarrator();
             salma.showNarratorToast('Narrador desactivado.', 3000);
+            updateBottomBar();
           } else {
-            salma.startNarrator().then(ok => {
-              if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.', 5000);
-              else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', 5000);
-            });
+            showNarratorConfirm();
           }
-          updateBottomBar();
         }
         return;
       }
@@ -321,6 +663,10 @@ function _renderChatEmpty() {
         showState('notas');
         return;
       }
+      if (action === 'consultas') {
+        showState('consultas');   // funciona sin login (guarda en localStorage)
+        return;
+      }
       if (action === 'galeria') {
         if (!currentUser) { window._afterLogin = 'galeria'; openModal(); return; }
         showState('galeria');
@@ -333,6 +679,10 @@ function _renderChatEmpty() {
       if (action === 'traductor') {
         if (typeof window.openTranslator === 'function') window.openTranslator();
         else if (typeof showToast === 'function') showToast('Traductor no disponible');
+        return;
+      }
+      if (action === 'ruta-aqui') {
+        if (typeof salma !== 'undefined') salma.send(chip.dataset.msg, { routeFromHere: true });
         return;
       }
       if (chip.dataset.msg && typeof salma !== 'undefined') salma.send(chip.dataset.msg);
@@ -669,13 +1019,14 @@ async function renderProfile() {
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-galeria">
+          <!-- Galería oculta de la UI (pendiente C, doc 8 sep). No se borra: reactivar quitando hidden. -->
+          <div class="prof-row" id="prof-galeria" hidden>
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
             <span class="prof-row-label">Galería</span>
             <button class="prof-row-info-btn" id="prof-galeria-info" onclick="event.stopPropagation()">i</button>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div class="prof-row-sep"></div>
+          <div class="prof-row-sep" data-sep-for="prof-galeria"></div>
           <div class="prof-row" id="prof-bitacora">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></span>
             <span class="prof-row-label">Cuaderno de Viaje</span>
@@ -722,8 +1073,9 @@ async function renderProfile() {
             <span class="prof-coins-badge">${coins}</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-help">
+          <div class="prof-row-sep" data-sep-for="prof-help"></div>
+          <!-- "¿Qué puedo hacer?" oculto de la UI (pendiente C, doc 8 sep). No se borra: reactivar quitando hidden. -->
+          <div class="prof-row" id="prof-help" hidden>
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             <span class="prof-row-label">¿Qué puedo hacer?</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -1173,6 +1525,7 @@ async function renderGaleria(albumFilter) {
   $c.innerHTML = `
     <div class="galeria-area fade-in">
       <div class="galeria-header">
+        <button class="sv-back" onclick="history.back()" aria-label="Volver">‹</button>
         <span class="galeria-title">Galería</span>
         <div class="galeria-header-btns">
           ${activeAlbum && activeAlbum !== '__sin_album__'
@@ -2036,7 +2389,6 @@ async function loadUserGuides() {
         <div class="viaje-card-body">
           <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
           <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
-          ${d.destino ? `<button class="viaje-card-historia" data-destino="${escapeHTML(d.destino)}" title="Historia de ${escapeHTML(d.destino)}">📚 Historia</button>` : ''}
         </div>
         <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
       card.addEventListener('click', (e) => {
@@ -2574,8 +2926,7 @@ async function guardarGuiaDirecto(routeData) {
     const slug = generateSlug(r.title || r.name || 'mi-ruta');
     publishGuide(docRef.id, ruta, slug, r).catch(() => {});
 
-    // Enriquecer en background (no esperar)
-    enrichGuia(docRef.id, r);
+    // PIEZA A — Enrich (Pasada 2) eliminado: era una 2ª llamada de IA por ruta.
 
     return docRef.id;
   } catch (e) {
@@ -2632,58 +2983,11 @@ async function publishGuide(docId, rutaData, slug, routeData) {
   }
 }
 
-// ═══ ENRIQUECIMIENTO (Pasada 2 — Haiku en background) ═══
-
-async function enrichGuia(docId, routeData) {
-  if (!currentUser || !docId || !routeData) return;
-  try {
-    const res = await fetch(window.SALMA_API + '/enrich', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ route: routeData })
-    });
-    const data = await res.json();
-
-    if (data.route && data.route.stops) {
-      const enrichedJSON = JSON.stringify(data.route);
-      await db.collection('users').doc(currentUser.uid)
-        .collection('maps').doc(docId).update({
-          itinerarioIA: enrichedJSON,
-          enriched: true,
-          enrichedAt: new Date().toISOString()
-        });
-
-      // Actualizar guía pública también
-      try {
-        const userDoc = await db.collection('users').doc(currentUser.uid)
-          .collection('maps').doc(docId).get();
-        const slug = userDoc.data()?.slug;
-        if (slug) {
-          await db.collection('public_guides').doc(slug).update({
-            itinerarioIA: enrichedJSON,
-            updatedAt: new Date().toISOString()
-          });
-        }
-      } catch (_) {}
-
-      // Si el usuario sigue viendo esta guía, actualizar la vista
-      if (typeof salma !== 'undefined' && salma.currentRouteId === docId) {
-        salma.currentRoute = data.route;
-        // Actualizar cards de mapaItinerario si está activo
-        if (typeof mapaItinerario !== 'undefined' && typeof mapaItinerario.updateEnrichedFields === 'function') {
-          mapaItinerario.updateEnrichedFields(data.route.stops);
-        } else {
-          guideRenderer.render(data.route, { saved: true });
-        }
-      }
-    }
-  } catch (e) {
-    console.warn('Enriquecimiento fallido:', e);
-    // No pasa nada — la guía ligera funciona perfectamente
-  }
-}
-
-window.enrichGuia = enrichGuia;
+// ═══ ENRIQUECIMIENTO (Pasada 2) — ELIMINADO en PIEZA A ═══
+// Era una 2ª llamada de IA (GPT-4o-mini) por ruta para rellenar context/food/sleep/eat.
+// Corte limpio: los datos de cada parada (rating, horario, foto) los da Google Places
+// vía mapaItinerario._enrichAll, sin IA y sin llamada extra.
+// El endpoint /enrich del worker queda inerte — se retira en la Pieza D.
 
 // ═══ INPUT — textarea auto-resize + enviar ═══
 
@@ -3030,8 +3334,10 @@ function openCoinsModal() {
   document.body.appendChild(overlay);
 
   // Cerrar
-  document.getElementById('coins-modal-close').addEventListener('click', () => overlay.remove());
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  const closeCoins = () => { if (window.popModal) window.popModal('coins'); overlay.remove(); };
+  document.getElementById('coins-modal-close').addEventListener('click', closeCoins);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCoins(); });
+  if (window.pushModal) window.pushModal('coins', closeCoins);
 
   // Acordeón
   document.getElementById('coins-accordion').addEventListener('click', () => {
@@ -3192,7 +3498,7 @@ const _catConfig = {
   lodging:  { types: ['lodging'],                                                     color: '#5BC0DE', label: 'H' },
   shopping: { types: ['supermarket', 'grocery_or_supermarket', 'convenience_store'],  color: '#AA66CC', label: 'S' },
   parks:    { types: ['park'],                                                        color: '#5CB85C', label: 'P' },
-  culture:  { types: ['museum', 'tourist_attraction', 'art_gallery'],                 color: '#D4A843', label: 'A' },
+  culture:  { types: ['museum', 'tourist_attraction', 'art_gallery'],                 color: '#F4630B', label: 'A' },
   transit:  { types: ['transit_station', 'bus_station', 'subway_station'],            color: '#666',    label: 'T' },
 };
 
@@ -3660,22 +3966,36 @@ let _liveRouteStops = [];
 let _liveInfoWindow = null;
 let _activeRouteData = null;
 
+// Persiste la ruta activa (localStorage + Firestore) SIN tocar el mapa.
+// Se llama al ver una guía guardada → la última visitada pasa a ser la activa.
+function setActiveRoute(routeData, docId) {
+  try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch (_) {}
+  try { if (docId) localStorage.setItem('bdm_live_active_route_id', docId); else localStorage.removeItem('bdm_live_active_route_id'); } catch (_) {}
+  if (typeof currentUser !== 'undefined' && currentUser && typeof db !== 'undefined') {
+    db.collection('users').doc(currentUser.uid)
+      .set({ active_route_id: docId || null }, { merge: true })
+      .catch(() => {});
+  }
+}
+window.setActiveRoute = setActiveRoute;
+
 function selectRouteOnMap(routeData, docId) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
   _activeRouteData = routeData;
   _activeRouteDocId = docId || null;
-  try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch(_){}
-  try { if (docId) localStorage.setItem('bdm_live_active_route_id', docId); else localStorage.removeItem('bdm_live_active_route_id'); } catch(_){}
-  // Sincronizar con Firestore (entre dispositivos)
-  if (currentUser && typeof db !== 'undefined') {
-    db.collection('users').doc(currentUser.uid)
-      .set({ active_route_id: docId || null }, { merge: true })
-      .catch(() => {});
-  }
+  setActiveRoute(routeData, docId);
 
-  const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
-  const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
+  const dayColors = ['#F4630B','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
+  // Coord usable: número finito, dentro de rango, no (0,0) — igual criterio que mapaRuta._validStops.
+  // "s.lat && s.lng" dejaba pasar basura (NaN de string, fuera de rango) que reventaba
+  // los Marker de Google Maps con "Lat/Long not supported" y cortaba el resto del pintado.
+  const valid = (routeData.stops || []).filter(s => {
+    if (!s) return false;
+    const la = +s.lat, ln = +s.lng;
+    return isFinite(la) && isFinite(ln) && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+      && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+  });
   if (!valid.length) { showToast('Esta ruta no tiene coordenadas'); return; }
 
   _liveRouteStops = valid;
@@ -3699,7 +4019,7 @@ function selectRouteOnMap(routeData, docId) {
   _liveRoutePolyline = new google.maps.Polyline({
     path: valid.map(s => ({ lat: s.lat, lng: s.lng })),
     map: _liveMap,
-    strokeColor: '#D4A843',
+    strokeColor: '#F4630B',
     strokeWeight: 3,
     strokeOpacity: 0.7,
   });
@@ -3796,7 +4116,7 @@ function _updateNearestChip() {
   chip.style.pointerEvents = 'auto';
   chip.style.cursor = 'pointer';
   chip.onclick = () => {
-    const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
+    const dayColors = ['#F4630B','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
     const color = dayColors[((nearest.stop.day || 1) - 1) % dayColors.length];
     _liveMap.panTo({ lat: nearest.stop.lat, lng: nearest.stop.lng });
     _liveMap.setZoom(14);
@@ -3884,7 +4204,7 @@ async function _loadSavedPins() {
       if (_savedPinsData.some(p => p._pinId === pinId)) return;
       const marker = new google.maps.Marker({
         map: _liveMap, position: { lat: d.lat, lng: d.lng },
-        icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
+        icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
         title: d.locName || 'Pin guardado', zIndex: 150,
       });
       marker._pinId = pinId;
@@ -3996,7 +4316,7 @@ function _showPinInfo(marker) {
         <div style="font-size:11px;color:#888;margin-bottom:10px">${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
         <div style="display:flex;gap:5px;flex-wrap:wrap">
           <a href="${navUrl}" target="_blank" rel="noopener"
-            style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;text-decoration:none;min-width:60px">
+            style="flex:1;text-align:center;background:#F4630B;color:#0a0a0f;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;text-decoration:none;min-width:60px">
             Ir aquí
           </a>
           <button onclick="window._sharePinById('${lat}','${lng}','${encodeURIComponent(d.locName || 'Pin guardado')}','${encodeURIComponent(d.photoUrl || '')}')"
@@ -4207,7 +4527,7 @@ async function diarioPickSave() {
     const pinId = 'spin_' + (++_pinIdCounter) + '_' + Date.now();
     const marker = new google.maps.Marker({
       map: _liveMap, position: { lat, lng },
-      icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
+      icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
       title: _diario.locName, zIndex: 150,
     });
     marker._pinId = pinId;
@@ -4578,7 +4898,7 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
   let logoX=phX;
   ctx.fillStyle='#111';ctx.fillText('BORRADO',logoX,logoY);
   logoX+=ctx.measureText('BORRADO').width;
-  ctx.fillStyle='#D4A843';ctx.fillText('DEL',logoX,logoY);
+  ctx.fillStyle='#F4630B';ctx.fillText('DEL',logoX,logoY);
   logoX+=ctx.measureText('DEL').width;
   ctx.fillStyle='#111';ctx.fillText('MAPA',logoX,logoY);
   const shortLoc=loc.length>26?loc.substring(0,24)+'…':loc;
@@ -4623,7 +4943,7 @@ function _diarioDropPermanentPin() {
   const marker = new google.maps.Marker({
     map: _liveMap,
     position: { lat: _diario.lat, lng: _diario.lng },
-    icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
+    icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
     title: _diario.locName, zIndex: 150,
   });
   marker._pinId = pinId;
@@ -4748,7 +5068,7 @@ function _onMapTap(e) {
       position: _tapLatLng,
       icon: {
         path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
-        fillColor: '#D4A843', fillOpacity: 1,
+        fillColor: '#F4630B', fillOpacity: 1,
         strokeColor: '#fff', strokeWeight: 1.5,
         scale: 1.5,
         anchor: new google.maps.Point(12, 22),
@@ -4986,7 +5306,7 @@ async function _handleMapPin(action, status, photoBase64 = null) {
 
 function _placeMapPin({ name, address, description, place_type, checkin, checkout, confirmation, photo, lat, lng }) {
   if (!_liveMap) return;
-  const pinColors = { hotel: '#5BC0DE', monument: '#D4A843', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
+  const pinColors = { hotel: '#5BC0DE', monument: '#F4630B', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
   const pinEmojis = { hotel: '🏨', monument: '🏛️', restaurant: '🍽️', beach: '🏖️', park: '🌿', other: '⭐' };
   const color = pinColors[place_type] || '#AA66CC';
   const pinId = ++_pinIdCounter;
@@ -5070,6 +5390,39 @@ function _buildSOSMessage(coords) {
         .replace('{nombre}', userName)
     : defaultMsg;
   return { message: raw, mapsUrl };
+}
+
+function showNarratorConfirm() {
+  let overlay = document.getElementById('narrator-confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'narrator-confirm-overlay';
+    overlay.className = 'narrator-confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div class="narrator-confirm-modal">
+      <div class="narrator-confirm-icon">📍</div>
+      <h2 class="narrator-confirm-title">Narrador</h2>
+      <p class="narrator-confirm-text">Te cuenta curiosidades de lo que tienes cerca mientras te mueves — con notificaciones y, si quieres, en voz. Necesita acceso a tu ubicación.</p>
+      <div class="narrator-confirm-btns">
+        <button class="narrator-confirm-cancel" id="narrator-confirm-cancel">Cancelar</button>
+        <button class="narrator-confirm-go" id="narrator-confirm-go">Activar</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+
+  document.getElementById('narrator-confirm-cancel').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+  document.getElementById('narrator-confirm-go').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    salma.startNarrator().then(ok => {
+      if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.', 5000);
+      else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', 5000);
+      updateBottomBar();
+    });
+  });
 }
 
 function showSOSConfirm() {
@@ -5515,8 +5868,10 @@ function formatMessage(str) {
       if (closes > opens) { trailing = ')' + trailing; url = url.slice(0, -1); } else break;
     }
     var label = url;
-    if (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1) label = '🗺️ Cómo llegar';
-    else if (url.indexOf('google.com/maps/dir/') !== -1) label = '🗺️ Ruta completa en Google Maps';
+    var isRouteMaps = false;
+    if (url.indexOf('origin=') !== -1 && (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1)) { label = '🗺️ Ruta completa en Google Maps'; isRouteMaps = true; }
+    else if (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1) label = '🗺️ Cómo llegar';
+    else if (url.indexOf('google.com/maps/dir/') !== -1) { label = '🗺️ Ruta completa en Google Maps'; isRouteMaps = true; }
     else if (url.indexOf('google.com/maps') !== -1) label = '📍 Abrir en Google Maps';
     else if (url.indexOf('booking.com') !== -1) label = '🏨 Ver en Booking';
     else if (url.indexOf('kiwi.com') !== -1) label = '✈️ Ver vuelo';
@@ -5557,8 +5912,7 @@ function formatMessage(str) {
     else if (url.indexOf('olacabs.com') !== -1) label = '🟡 Descargar Ola';
     else if (url.indexOf('airbnb.com') !== -1) label = '🏠 Ver en Airbnb';
     else if (url.indexOf('hostelworld.com') !== -1) label = '🛏️ Ver en Hostelworld';
-    var isMaps = url.indexOf('google.com/maps') !== -1;
-    var clickHandler = isMaps ? 'openMapsModal(this.href);return false;' : 'window.open(this.href);return false;';
+    var clickHandler = isRouteMaps ? 'openMapsModal(this.href);return false;' : 'window.open(this.href);return false;';
     return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="' + clickHandler + '">' + label + '</a>' + trailing;
   });
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
@@ -5626,7 +5980,7 @@ window.openMapsModal = function(url) {
       '<div id="maps-modal-sheet" style="position:absolute;bottom:0;left:0;right:0;height:70vh;background:#141209;border-radius:16px 16px 0 0;display:flex;flex-direction:column;animation:mapsSheetUp 0.25s ease-out;overflow:hidden;">' +
         '<div style="width:40px;height:4px;background:#555;border-radius:2px;margin:8px auto;flex-shrink:0;"></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 12px 8px;flex-shrink:0;gap:8px;">' +
-          '<button id="maps-modal-open" style="background:#f0b429;color:#060503;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">📍 Abrir en Google Maps</button>' +
+          '<button id="maps-modal-open" style="background:#F4630B;color:#060503;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">📍 Abrir en Google Maps</button>' +
           '<button id="maps-modal-close" style="background:transparent;color:#fff;border:none;font-size:28px;cursor:pointer;padding:0 12px;line-height:1;">×</button>' +
         '</div>' +
         '<iframe src="' + embedUrl + '" style="flex:1;width:100%;border:0;" frameborder="0" allowfullscreen></iframe>' +
@@ -5677,10 +6031,10 @@ Object.defineProperty(window, 'currentUser', {
 function showOnboarding() {
   const slides = [
     {
-      icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
-      title: 'Dime dónde vamos.',
-      titleEm: 'De lo demás yo me encargo.',
-      body: 'Cuéntame tu destino y los días que tienes. En un minuto te monto la ruta con mapa, fotos y todo lo que necesitas saber.'
+      icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M13 2 4 14h7v8l9-12h-7z"/></svg>`,
+      title: 'Pregunta lo',
+      titleEm: 'imposible.',
+      body: 'Un Uber, un vuelo, un hotel, una ruta de 10 días con camping cada noche — todo en una sola frase. Yo lo cruzo.'
     },
     {
       icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>`,
@@ -5888,6 +6242,7 @@ function openCurrencyConverter() {
   });
 
   function close() {
+    if (window.popModal) window.popModal('moneda');
     backdrop.remove();
     document.removeEventListener('keydown', onKey);
   }
@@ -5895,6 +6250,7 @@ function openCurrencyConverter() {
   document.addEventListener('keydown', onKey);
   backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
   backdrop.querySelector('.currency-close').addEventListener('click', close);
+  if (window.pushModal) window.pushModal('moneda', close);
 
   // Cargar rates
   _fetchCurrencyRates().then(data => {

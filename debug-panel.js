@@ -58,23 +58,90 @@
     push('error', ['UnhandledRejection: ' + (r && (r.stack || r.message || r) || 'unknown')]);
   });
 
+  // ═══ MARCADOR DE VERSIÓN ═══
+  // Para que en la captura ya se vea qué versión del frontend y del Worker
+  // está corriendo de verdad en esa pantalla, sin tener que preguntar.
+  let workerVer = null; // null = aún no pedido
+
+  function frontVersions() {
+    try {
+      return Array.from(document.querySelectorAll('script[src]')).map(s => {
+        const u = s.getAttribute('src') || '';
+        const q = u.indexOf('.js?v=');
+        if (q === -1) return null;
+        const name = u.slice(0, q).split('/').pop();
+        const ver = u.slice(q + 6).split('&')[0];
+        return name + ':' + ver;
+      }).filter(Boolean);
+    } catch (_) { return []; }
+  }
+
+  // Pide /version SIEMPRE, sin cachear: si se despliega el Worker con la app
+  // abierta, la cabecera tiene que reflejarlo. Mientras llega la respuesta se
+  // sigue mostrando el ultimo valor conocido, asi no parpadea.
+  async function loadWorkerVersion() {
+    try {
+      if (!window.SALMA_API) throw new Error('SALMA_API no definido');
+      const res = await fetch(window.SALMA_API + '/version', { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      workerVer = await res.json();
+    } catch (e) {
+      workerVer = { error: (e && e.message) || String(e) };
+    }
+    return workerVer;
+  }
+
+  function versionText() {
+    let w;
+    if (!workerVer) w = 'cargando…';
+    else if (workerVer.error) w = 'ERROR — ' + workerVer.error;
+    else if (workerVer.version_short) w = workerVer.version_short + (workerVer.deployed_at ? '  (' + workerVer.deployed_at + ')' : '');
+    else w = 'sin version_id — ¿falta el binding version_metadata?';
+    const f = frontVersions();
+    return 'WORKER  ' + w +
+           '\nFRONT   ' + (f.length ? f.join('  ') : '(ningún script con ?v=)') +
+           '\nURL     ' + location.href +
+           '\nUA      ' + navigator.userAgent;
+  }
+
+  let verTimer = null;
+
+  function startVerRefresh() {
+    stopVerRefresh();
+    verTimer = setInterval(() => {
+      const ov = document.getElementById('dbg-overlay');
+      if (!ov || ov.style.display === 'none') { stopVerRefresh(); return; }
+      loadWorkerVersion().then(renderVersion);
+    }, 15000);
+  }
+
+  function stopVerRefresh() {
+    if (verTimer) { clearInterval(verTimer); verTimer = null; }
+  }
+
+  function renderVersion() {
+    const el = document.getElementById('dbg-ver');
+    if (el) el.textContent = versionText();
+  }
+
   function injectStyles() {
     if (document.getElementById('dbg-styles')) return;
     const s = document.createElement('style');
     s.id = 'dbg-styles';
     s.textContent = `
-      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;width:42px;height:42px;border-radius:50%;background:#060503;color:#f0b429;border:1.5px solid #f0b429;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;opacity:.55;padding:0;display:flex;align-items:center;justify-content:center}
+      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;width:42px;height:42px;border-radius:50%;background:#060503;color:#F4630B;border:1.5px solid #F4630B;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;opacity:.55;padding:0;display:flex;align-items:center;justify-content:center}
       #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;border-color:#fff;opacity:1;animation:dbg-pulse 1s infinite}
       @keyframes dbg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
-      #dbg-head{display:flex;gap:8px;padding:10px;background:#141209;border-bottom:1px solid #f0b429}
-      #dbg-head button{flex:1;background:#f0b429;color:#060503;border:none;border-radius:8px;padding:10px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
+      #dbg-head{display:flex;gap:8px;padding:10px;background:#141209;border-bottom:1px solid #F4630B}
+      #dbg-head button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:10px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
       #dbg-head .dbg-sec{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.3)}
       #dbg-body{flex:1;overflow-y:auto;padding:8px;font-size:11px;line-height:1.5;color:#f5f0e8}
-      .dbg-line{padding:4px 6px;border-bottom:1px solid rgba(240,180,41,.08);word-break:break-word;white-space:pre-wrap}
+      .dbg-line{padding:4px 6px;border-bottom:1px solid rgba(244,99,11,.08);word-break:break-word;white-space:pre-wrap}
       .dbg-line.error{background:rgba(239,68,68,.12);color:#ff8b8b}
-      .dbg-line.warn{background:rgba(240,180,41,.08);color:#f0b429}
+      .dbg-line.warn{background:rgba(244,99,11,.08);color:#F4630B}
       .dbg-t{color:rgba(245,240,232,.4);margin-right:6px}
+      #dbg-ver{padding:8px 10px;background:#1e190f;border-bottom:1px solid rgba(244,99,11,.25);color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
     `;
     document.head.appendChild(s);
   }
@@ -103,7 +170,12 @@
   function openPanel() {
     document.getElementById('dbg-btn')?.classList.remove('dbg-has-error');
     let overlay = document.getElementById('dbg-overlay');
-    if (overlay) { overlay.style.display = 'flex'; return; }
+    if (overlay) {
+      overlay.style.display = 'flex';
+      loadWorkerVersion().then(renderVersion);
+      startVerRefresh();
+      return;
+    }
     overlay = document.createElement('div');
     overlay.id = 'dbg-overlay';
     overlay.innerHTML = `
@@ -112,14 +184,19 @@
         <button id="dbg-clear" class="dbg-sec">Limpiar</button>
         <button id="dbg-close" class="dbg-sec">✕</button>
       </div>
+      <div id="dbg-ver"></div>
       <div id="dbg-body"></div>`;
     document.body.appendChild(overlay);
     const body = overlay.querySelector('#dbg-body');
     renderLogs(body);
-    overlay.querySelector('#dbg-close').addEventListener('click', () => { overlay.style.display = 'none'; });
+    renderVersion();
+    loadWorkerVersion().then(renderVersion);
+    startVerRefresh();
+    overlay.querySelector('#dbg-close').addEventListener('click', () => { overlay.style.display = 'none'; stopVerRefresh(); });
     overlay.querySelector('#dbg-clear').addEventListener('click', () => { logs.length = 0; renderLogs(body); });
     overlay.querySelector('#dbg-copy').addEventListener('click', async () => {
-      const text = logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
+      const text = versionText() + '\n────────────\n' +
+        logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
       try {
         await navigator.clipboard.writeText(text);
         const btn = overlay.querySelector('#dbg-copy');
@@ -144,5 +221,5 @@
   }
 
   // Exponer por si queremos abrirlo desde código
-  window.__dbg = { open: openPanel, logs };
+  window.__dbg = { open: openPanel, logs, version: versionText, worker: loadWorkerVersion };
 })();

@@ -27,7 +27,13 @@ const mapaItinerario = {
     this._container.innerHTML = '';
 
     const country = routeData.country || routeData.region || '';
-    const mapsUrl = this._fullRouteGmapsUrl(stops, country);
+    // Si la ruta sigue una carretera con nombre (N2…), el enlace a Google Maps se
+    // arma con puntos del trazado real, no solo con las paradas → Google no se
+    // desvía a la autopista paralela.
+    const _rg = routeData.road_geometry;
+    const mapsUrl = (_rg && Array.isArray(_rg.coords) && _rg.coords.length > 2)
+      ? this._roadGmapsUrl(_rg.coords)
+      : this._fullRouteGmapsUrl(stops, country);
 
     // Header de la ruta (título + volver — desktop)
     const header = document.createElement('div');
@@ -36,9 +42,14 @@ const mapaItinerario = {
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
         <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
+        ${country ? `<div class="hist-inline-mount" data-place="${this._esc(country)}"></div>` : ''}
       </div>
     `;
     this._container.appendChild(header);
+    if (country && typeof historiaModule !== 'undefined') {
+      const countryMount = header.querySelector('.hist-inline-mount');
+      if (countryMount) historiaModule.renderCompactInto(countryMount, { place: country });
+    }
 
     // Barra de acciones flotante — se añade al body para escapar del stacking context
     {
@@ -82,7 +93,11 @@ const mapaItinerario = {
 
     // Extras: antes de salir, info práctica, tips (reutiliza guide-renderer)
     if (typeof guideRenderer !== 'undefined') {
+      try { console.log('[NEARBY] itin.init nearby:', (routeData.nearby_stops||[]).length, 'loc:', routeData.anchor_locality || null, 'fn:', typeof guideRenderer._renderNearby); } catch (_) {}
       const extrasHtml = [
+        (typeof guideRenderer._renderNearby === 'function'
+          ? guideRenderer._renderNearby(routeData.nearby_stops || null, country, routeData.anchor_locality || '')
+          : ''),
         guideRenderer._renderPreDeparture(routeData.pre_departure || null),
         guideRenderer._renderPracticalInfo(routeData.practical_info || null),
         guideRenderer._renderTips(routeData.tips || null),
@@ -167,10 +182,10 @@ const mapaItinerario = {
     const horas = stop.estimated_hours || stop.duracion_horas || null;
     const km = stop.km_from_previous || 0;
 
-    // Regla única: sin place_id validado → no hay enlace a Maps.
-    const mapsNavUrl = stop.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : null;
+    // "Cómo llegar" = direcciones hasta ESA parada (Google pone el origen = ubicación del
+    // usuario). place_id si lo hay; si no, coordenadas; si no, el nombre. Siempre sale.
+    const mapsDirUrl = this._stopDirUrl(stop);
+    const notaLarga = nota && nota.length > 140;
 
     card.innerHTML = `
       <div class="itin-card-photo" id="itin-photo-${index}">
@@ -186,13 +201,17 @@ const mapaItinerario = {
           ${km > 0 ? `<span class="itin-card-km">${Math.round(km)} km</span>` : ''}
           ${horas ? `<span class="itin-card-hours">${this._formatHours(horas)}</span>` : ''}
         </div>
-        ${nota ? `<div class="itin-card-nota">${this._esc(nota)}</div>` : ''}
+        ${nota ? `<div class="itin-card-nota${notaLarga ? '' : ' expanded'}">${this._esc(nota)}</div>` : ''}
+        ${notaLarga ? `<span class="itin-card-leermas">Leer más</span>` : ''}
         ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
         ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
         ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
         ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
-        ${mapsNavUrl ? `<a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>` : ''}
+        ${stop.con_historia !== false ? `<div class="hist-inline-mount" data-place="${this._esc(stop.name || stop.headline || '')}" data-lat="${stop.lat != null ? stop.lat : ''}" data-lng="${stop.lng != null ? stop.lng : ''}"></div>` : ''}
+        ${mapsDirUrl ? `<div class="itin-card-actions">
+          <a class="itin-card-nav" href="${mapsDirUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🗺️ Cómo llegar</a>
+        </div>` : ''}
       </div>
     `;
 
@@ -226,8 +245,30 @@ const mapaItinerario = {
       });
     }
 
+    // "Leer más" — desplegar/plegar la descripción de la parada
+    const leermas = card.querySelector('.itin-card-leermas');
+    if (leermas) {
+      leermas.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const nd = card.querySelector('.itin-card-nota');
+        if (!nd) return;
+        const expandida = nd.classList.toggle('expanded');
+        leermas.textContent = expandida ? 'Leer menos' : 'Leer más';
+      });
+    }
+
     // Cargar foto inicial — pasamos el card directamente porque aún no está en el DOM
     this._loadInitialPhoto(stop, index, card);
+
+    // Botón "Historia de [parada]"
+    const histMount = card.querySelector('.hist-inline-mount');
+    if (histMount && typeof historiaModule !== 'undefined') {
+      historiaModule.renderCompactInto(histMount, {
+        place: histMount.dataset.place,
+        lat: histMount.dataset.lat ? parseFloat(histMount.dataset.lat) : null,
+        lng: histMount.dataset.lng ? parseFloat(histMount.dataset.lng) : null,
+      });
+    }
 
     return card;
   },
@@ -238,24 +279,33 @@ const mapaItinerario = {
     const photoDiv = (cardEl && cardEl.querySelector('.itin-card-photo')) || document.getElementById(`itin-photo-${index}`);
     if (!photoDiv) return;
 
+    // Sin console.warn en los fallos, esto no dejaba ningún rastro en el panel 🐛 cuando
+    // una foto no cargaba — imposible saber si era el endpoint, Google sin foto para ese
+    // sitio, o un error de red, solo se veía "no salió la foto".
     if (stop.photo_ref) {
       fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
             photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+          } else {
+            console.warn(`[FOTO] sin url para "${stop.name}" (ref):`, data);
           }
         })
-        .catch(() => {});
+        .catch(e => console.warn(`[FOTO] fetch falló para "${stop.name}" (ref):`, e));
     } else if (stop.name && stop.lat && stop.lng) {
       fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
             photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+          } else {
+            console.warn(`[FOTO] sin url para "${stop.name}" (name+coords):`, data);
           }
         })
-        .catch(() => {});
+        .catch(e => console.warn(`[FOTO] fetch falló para "${stop.name}" (name+coords):`, e));
+    } else {
+      console.warn(`[FOTO] "${stop.name}" sin photo_ref y sin lat/lng — no se intenta buscar foto`);
     }
   },
 
@@ -360,14 +410,58 @@ const mapaItinerario = {
 
   // ═══ GOOGLE MAPS RUTA COMPLETA ═══
   // Regla única: sin place_id validado → no hay enlace.
+  // URL de "cómo llegar" a UNA parada. Preferencia: place_id > coords > nombre.
+  _stopDirUrl(stop) {
+    if (!stop) return null;
+    const base = 'https://www.google.com/maps/dir/?api=1&';
+    if (stop.place_id) {
+      return base + `destination=${encodeURIComponent(stop.headline || stop.name || '')}&destination_place_id=${stop.place_id}`;
+    }
+    if (typeof stop.lat === 'number' && typeof stop.lng === 'number' && Math.abs(stop.lat) > 0.01) {
+      return base + `destination=${stop.lat}%2C${stop.lng}`;
+    }
+    if (stop.name || stop.headline) return base + `destination=${encodeURIComponent(stop.name || stop.headline)}`;
+    return null;
+  },
+
   _fullRouteGmapsUrl(stops, country) {
-    const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
+    const valid = (stops || []).filter(s => s && s.lat && s.lng && Math.abs(s.lat) > 0.01);
     if (valid.length === 0) return null;
-    if (valid.length === 1) return 'https://www.google.com/maps/place/?q=place_id:' + valid[0].place_id;
+    if (valid.length === 1) return this._stopDirUrl(valid[0]);
     const sampled = this._sampleWaypoints(valid, 25);
-    // /dir/ usa lat,lng — place_id: no funciona en path de /dir/
-    const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
-    return 'https://www.google.com/maps/dir/' + segments;
+    // Con nombre+place_id cuando lo hay (igual que _stopDirUrl) — si solo se manda la
+    // coordenada, Google Maps le pone al waypoint la etiqueta del sitio indexado más
+    // cercano a ese punto, que puede no ser el real. Visto en producción: la Cueva de
+    // Tito Bustillo (que SÍ tiene ficha en Google Places) salía en el mapa como "Club
+    // Piragüismo" porque solo se mandaban las coordenadas, sin nombre ni place_id.
+    const point = (p) => p.place_id
+      ? encodeURIComponent(p.headline || p.name || '')
+      : `${p.lat}%2C${p.lng}`;
+    const origin = sampled[0], destination = sampled[sampled.length - 1];
+    const middle = sampled.slice(1, -1);
+    let url = 'https://www.google.com/maps/dir/?api=1'
+      + `&origin=${point(origin)}${origin.place_id ? `&origin_place_id=${origin.place_id}` : ''}`
+      + `&destination=${point(destination)}${destination.place_id ? `&destination_place_id=${destination.place_id}` : ''}`;
+    if (middle.length) {
+      url += `&waypoints=${middle.map(point).join('%7C')}`;
+      if (middle.some(p => p.place_id)) {
+        url += `&waypoint_place_ids=${middle.map(p => p.place_id || '').join('%7C')}`;
+      }
+    }
+    return url;
+  },
+
+  // Enlace /dir/ con ~10 puntos repartidos por el trazado real de la carretera.
+  // Con tantos waypoints Google no tiene margen para irse por la autopista.
+  _roadGmapsUrl(coords) {
+    const n = (coords || []).length;
+    if (n < 2) return null;
+    const MAX = 10;
+    const step = Math.max(1, Math.floor((n - 1) / (MAX - 1)));
+    const pts = [];
+    for (let i = 0; i < n; i += step) pts.push(coords[i]);
+    if (pts[pts.length - 1] !== coords[n - 1]) pts.push(coords[n - 1]);
+    return 'https://www.google.com/maps/dir/' + pts.map(c => `${c[0]},${c[1]}`).join('/');
   },
 
   _sampleWaypoints(arr, max) {
@@ -437,6 +531,8 @@ const mapaItinerario = {
   let _openedFromChat = false;
 
   function openItinerarioView(routeData, docId, options = {}) {
+    // Si ya había una vista abierta, cerrarla (sin tocar historial) antes de reabrir
+    if (window._itinViewOpen) _teardownItinView();
     _openedFromChat = !!options.fromChat;
 
     // Guardar referencia global para que salma.js pueda reabrir la vista
@@ -444,6 +540,12 @@ const mapaItinerario = {
     window._itinViewRoute = routeData;
     window._itinViewDocId = docId;
     window._itinViewOptions = options;
+
+    // La última guía guardada que se abre pasa a ser la RUTA ACTIVA (índice + mapa).
+    // Solo si es una guía guardada (tiene docId); los borradores del chat no.
+    if (docId && typeof window.setActiveRoute === 'function') {
+      try { window.setActiveRoute(routeData, docId); } catch (_) {}
+    }
 
     const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
@@ -467,7 +569,7 @@ const mapaItinerario = {
 
     // Inicializar mapa (preview: sin controles, solo botón "Ir al mapa") y cards
     const stops = routeData.stops;
-    mapaRuta.init('itin-map-container', stops, { preview: true });
+    mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: routeData.road_geometry || null });
     mapaItinerario.init('itin-cards-container', stops, routeData, options);
 
     // Asegurar que el mapa se dimensiona bien
@@ -486,59 +588,43 @@ const mapaItinerario = {
     };
     document.addEventListener('itin:open-live-map', _onOpenLiveMap);
 
-    // Interceptar showState para cerrar la vista si el usuario navega con el bottom bar
-    const _origShowState = window.showState;
-    window.showState = function(state) {
-      if (view.style.display !== 'none') {
-        view.style.display = 'none';
-        if (appContent) appContent.style.display = '';
-        if (inputBar) inputBar.style.display = '';
-        document.querySelector('.app-header')?.style.removeProperty('display');
-        const bb = document.getElementById('app-bottom-bar');
-        if (bb) bb.style.display = '';
-        // Quitar barra flotante (Google Maps + Compartir)
-        document.body.querySelectorAll('.itin-action-bar').forEach(el => el.remove());
-        mapaRuta.destroy();
-        mapaItinerario.destroy();
-        window.showState = _origShowState;
-      }
-      _origShowState(state);
-    };
-
+    // Navegación Fase 4: la vista itinerario se comporta como un modal en el
+    // historial (pushModal / popModal). El botón atrás del móvil la cierra.
+    // Fuera el monkey-patch de window.showState (causaba un leak: cada
+    // apertura/cierre por ✕ apilaba otro wrapper sin restaurarlo).
+    if (window.pushModal) window.pushModal('itinerario', _teardownItinView);
   }
 
-  function closeItinerarioView() {
+  // Desmontaje puro de la vista (DOM + mapas). NO toca historial.
+  function _teardownItinView() {
+    if (!window._itinViewOpen) return;
+    window._itinViewOpen = false;
+
+    try { mapaRuta.destroy(); } catch (_) {}
+    try { mapaItinerario.destroy(); } catch (_) {}
+
+    document.body.querySelectorAll('.itin-action-bar').forEach(el => el.remove());
+
     const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');
-
-    window._itinViewOpen = false;
-
-    mapaRuta.destroy();
-    mapaItinerario.destroy();
-
-    // Quitar barra flotante (Google Maps + Compartir) del body
-    const actionBar = document.body.querySelector('.itin-action-bar');
-    if (actionBar) actionBar.remove();
-
     if (view) view.style.display = 'none';
     if (appContent) appContent.style.display = '';
     if (inputBar) inputBar.style.display = '';
+    document.querySelector('.app-header')?.style.removeProperty('display');
     const bottomBar = document.getElementById('app-bottom-bar');
     if (bottomBar) bottomBar.style.display = '';
+  }
+  window._teardownItinView = _teardownItinView;
 
-    // Restaurar showState si fue interceptado
-    if (window.showState !== window._showStateOriginal && typeof window._showStateOriginal === 'function') {
-      window.showState = window._showStateOriginal;
-    }
-
-    // Solo volver a bitácora si veníamos de ella (no del chat)
-    if (!_openedFromChat && typeof showState === 'function') showState('bitacora');
+  // Cierre "de verdad" (✕ / itin:close / Ir al mapa): desmonta y consume
+  // la entrada de historial. El botón atrás llega por popModal → _teardownItinView.
+  function closeItinerarioView() {
+    if (!window._itinViewOpen) return;
+    _teardownItinView();
+    if (window.popModal) window.popModal('itinerario');
   }
 
-  // Exponer globalmente para que app.js y salma.js puedan llamarlo (P2-11: ya no hay monkey-patch)
   window.openItinerarioView = openItinerarioView;
-
-  // Escuchar cierre desde el botón back
   document.addEventListener('itin:close', closeItinerarioView);
 })();

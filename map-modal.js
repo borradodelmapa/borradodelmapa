@@ -20,8 +20,8 @@
 #mm-searchbox { position: absolute; top: 14px; left: 14px; z-index: 11; background: #fff; border-radius: 22px; padding: 8px 14px; width: min(340px, calc(100% - 80px)); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 #mm-searchbox input { width: 100%; border: 0; outline: 0; font-size: 14px; font-family: 'Inter', sans-serif; color: #111; background: transparent; }
 #mm-searchbox input::placeholder { color: #999; }
-#mm-open { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #f0b429; color: #060503; border: none; padding: 12px 20px; border-radius: 22px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 12; box-shadow: 0 4px 14px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
-#mm-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #f0b429; font-size: 14px; z-index: 5; font-family: 'Inter', sans-serif; background: rgba(0,0,0,0.7); padding: 10px 16px; border-radius: 8px; }
+#mm-open { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #F4630B; color: #060503; border: none; padding: 12px 20px; border-radius: 22px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 12; box-shadow: 0 4px 14px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
+#mm-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #F4630B; font-size: 14px; z-index: 5; font-family: 'Inter', sans-serif; background: rgba(0,0,0,0.7); padding: 10px 16px; border-radius: 8px; }
     `;
     document.head.appendChild(s);
   }
@@ -36,10 +36,24 @@
   function _extractDest(url) {
     let name = '', placeId = null, multiStop = null;
     try {
-      if (/\/maps\/dir\/\?api=1/i.test(url)) {
+      if (/\/maps\/dir\/?\?api=1/i.test(url)) {
         const u = new URL(url);
-        name = u.searchParams.get('destination') || '';
-        placeId = u.searchParams.get('destination_place_id') || null;
+        const origin = u.searchParams.get('origin');
+        const destination = u.searchParams.get('destination') || '';
+        const waypointsParam = u.searchParams.get('waypoints');
+        if (origin || waypointsParam) {
+          // "Ruta completa" (esquema oficial origin+waypoints+destination, todo en lat,lng)
+          const points = [];
+          if (origin) points.push(origin);
+          if (waypointsParam) points.push(...waypointsParam.split('|').filter(Boolean));
+          if (destination) points.push(destination);
+          if (points.length >= 2) multiStop = points;
+          else name = destination || origin || '';
+        } else {
+          // "Cómo llegar" a un solo destino con place_id
+          name = destination;
+          placeId = u.searchParams.get('destination_place_id') || null;
+        }
       } else if (/\/maps\/dir\/[^?]/i.test(url)) {
         const parts = url.split('/dir/')[1].split('/').filter(Boolean);
         const places = parts.map(p => decodeURIComponent(p.replace(/\+/g, ' ')));
@@ -50,6 +64,21 @@
       }
     } catch (_) {}
     return { name, placeId, multiStop };
+  }
+
+  // Resuelve un punto de ruta: si ya es "lat,lng" lo usa directo (Places no acepta coords
+  // como query — daba "Lat/Long not supported" e INVALID_REQUEST); si es un nombre, busca
+  // con Places. cb(loc, label) — loc es null si no se pudo resolver el nombre.
+  function _resolvePoint(pointStr, placesService, cb) {
+    const m = String(pointStr).trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);
+    if (m) { cb({ lat: parseFloat(m[1]), lng: parseFloat(m[2]) }, pointStr); return; }
+    placesService.findPlaceFromQuery({ query: pointStr, fields: ['geometry', 'name', 'place_id'] }, (r, s) => {
+      if (s === google.maps.places.PlacesServiceStatus.OK && r && r[0]) {
+        cb(r[0].geometry.location, r[0].name);
+      } else {
+        cb(null, pointStr);
+      }
+    });
   }
 
   function _close() {
@@ -105,7 +134,7 @@
         title: name,
         icon: {
           path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z',
-          fillColor: '#f0b429',
+          fillColor: '#F4630B',
           fillOpacity: 1,
           strokeColor: '#060503',
           strokeWeight: 2,
@@ -126,7 +155,7 @@
         const ds = new google.maps.DirectionsService();
         const dr = new google.maps.DirectionsRenderer({
           map: _mmMap, suppressMarkers: true, preserveViewport: false,
-          polylineOptions: { strokeColor: '#f0b429', strokeWeight: 5, strokeOpacity: 0.85 },
+          polylineOptions: { strokeColor: '#F4630B', strokeWeight: 5, strokeOpacity: 0.85 },
         });
         ds.route({ origin: userLoc, destination: loc, travelMode: google.maps.TravelMode.DRIVING }, (r, st) => {
           console.log('[map-modal] DirectionsService status:', st);
@@ -136,7 +165,7 @@
             // Fallback: polyline recta dorada
             new google.maps.Polyline({
               path: [userLoc, loc], map: _mmMap,
-              strokeColor: '#f0b429', strokeWeight: 4, strokeOpacity: 0.7,
+              strokeColor: '#F4630B', strokeWeight: 4, strokeOpacity: 0.7,
               geodesic: true,
             });
             const b = new google.maps.LatLngBounds();
@@ -155,11 +184,9 @@
       const bounds = new google.maps.LatLngBounds();
       let pending = dest.multiStop.length;
       const locs = new Array(dest.multiStop.length);
-      dest.multiStop.forEach((name, i) => {
-        placesService.findPlaceFromQuery({ query: name, fields: ['geometry','name','place_id'] }, (r, s) => {
-          if (s === google.maps.places.PlacesServiceStatus.OK && r && r[0]) {
-            locs[i] = { loc: r[0].geometry.location, name: r[0].name, placeId: r[0].place_id };
-          }
+      dest.multiStop.forEach((point, i) => {
+        _resolvePoint(point, placesService, (loc, label) => {
+          if (loc) locs[i] = { loc, name: label };
           if (--pending === 0) {
             const valid = locs.filter(Boolean);
             if (valid.length === 0) {
@@ -170,7 +197,7 @@
             valid.forEach((pt, idx) => {
               new google.maps.Marker({
                 position: pt.loc, map: _mmMap, title: pt.name,
-                icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#060503', strokeWeight: 3, scale: 14 },
+                icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#F4630B', fillOpacity: 1, strokeColor: '#060503', strokeWeight: 3, scale: 14 },
                 label: { text: String(idx + 1), color: '#060503', fontSize: '12px', fontWeight: '700' },
                 zIndex: 999,
               });
@@ -185,7 +212,7 @@
               const ds = new google.maps.DirectionsService();
               const dr = new google.maps.DirectionsRenderer({
                 map: _mmMap, suppressMarkers: true, preserveViewport: true,
-                polylineOptions: { strokeColor: '#f0b429', strokeWeight: 5, strokeOpacity: 0.85 },
+                polylineOptions: { strokeColor: '#F4630B', strokeWeight: 5, strokeOpacity: 0.85 },
               });
               ds.route({ origin, destination, waypoints, travelMode: google.maps.TravelMode.DRIVING }, (result, status) => {
                 if (status === 'OK') dr.setDirections(result);
@@ -205,12 +232,11 @@
     // Usar findPlaceFromQuery directamente → fallback a Geocoder
     if (dest.name) {
       console.log('[map-modal] resolviendo destino:', dest.name);
-      placesService.findPlaceFromQuery({ query: dest.name, fields: ['geometry','name','place_id'] }, (r, st) => {
-        console.log('[map-modal] findPlaceFromQuery status:', st, 'resultados:', r ? r.length : 0);
-        if (st === google.maps.places.PlacesServiceStatus.OK && r && r[0] && r[0].geometry) {
-          markDest(r[0].geometry.location, r[0].name);
+      _resolvePoint(dest.name, placesService, (loc, label) => {
+        if (loc) {
+          markDest(loc, label);
         } else {
-          // Fallback Geocoder
+          // Fallback Geocoder (nombres que Places no encuentra tal cual)
           new google.maps.Geocoder().geocode({ address: dest.name }, (res, gst) => {
             console.log('[map-modal] Geocoder status:', gst);
             if (gst === 'OK' && res[0]) markDest(res[0].geometry.location, dest.name);
@@ -246,7 +272,7 @@
             const content = `
               <div style="font-family:'Inter',sans-serif;max-width:240px">
                 <div style="font-weight:700;font-size:14px;color:#111">${p.name || ''}</div>
-                ${p.rating ? `<div style="color:#f0b429;font-size:12px">★ ${p.rating}</div>` : ''}
+                ${p.rating ? `<div style="color:#F4630B;font-size:12px">★ ${p.rating}</div>` : ''}
                 ${p.formatted_address ? `<div style="color:#777;font-size:11px;margin-top:4px">${p.formatted_address}</div>` : ''}
               </div>`;
             _mmInfoWindow.setContent(content);

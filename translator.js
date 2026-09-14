@@ -590,6 +590,7 @@
     renderHistory();
 
     const close = () => {
+      if (window.popModal) window.popModal('traductor');
       stopRec();
       try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (_) {}
       bd.remove();
@@ -597,6 +598,7 @@
     };
     bd.querySelector('.translator-close').addEventListener('click', close);
     bd.addEventListener('click', (e) => { if (e.target === bd) close(); });
+    if (window.pushModal) window.pushModal('traductor', close);
 
     document.getElementById('tr-sel-a').addEventListener('change', (e) => {
       state.langA = e.target.value; savePrefs(); updateMicLabels();

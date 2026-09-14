@@ -51,6 +51,10 @@ const guideRenderer = {
 
     const r = routeData;
     const stops = r.stops || [];
+    this._preferredRoad = r.preferred_road || null;
+    // FASE 2 — trazado real de la carretera nombrada (OSM), si el worker lo adjuntó
+    this._roadGeometry = (r.road_geometry && Array.isArray(r.road_geometry.coords) && r.road_geometry.coords.length > 1)
+      ? r.road_geometry : null;
     const country = r.country || r.region || '';
 
     // Agrupar stops por día
@@ -68,6 +72,7 @@ const guideRenderer = {
         <div class="guide-title">${escapeHTML(r.title || r.name || 'Tu ruta')}</div>
         <div class="guide-meta">${totalDays} DÍAS · ${escapeHTML(country.toUpperCase())} · ${totalStops} PARADAS</div>
         ${r.summary ? `<p class="guide-summary">${escapeHTML(r.summary)}</p>` : ''}
+        ${country ? `<div class="hist-inline-mount" data-place="${escapeHTML(country)}"></div>` : ''}
       </div>
 
       <div class="guide-map-container" id="guide-map-main"></div>
@@ -77,13 +82,14 @@ const guideRenderer = {
         ${this._renderDays(days, country, r.maps_links)}
       </div>
 
+      ${this._renderNearby(r.nearby_stops, country, r.anchor_locality)}
       ${this._renderPreDeparture(r.pre_departure)}
       ${this._renderPracticalInfo(r.practical_info)}
       ${this._renderTips(r.tips)}
 
       ${options.partial ? '<div class="guide-actions"><div class="guide-loading-blocks">Cargando más días...</div></div>' : `<div class="guide-actions">
         ${options.saved ? '' : '<button class="btn-primary" id="guide-save-btn">GUARDAR MI GUÍA</button>'}
-        ${(() => { const u = options.showGmapsOffer ? this._fullRouteGmapsUrl(stops, country) : null; return u ? `<a class="btn-primary" id="guide-gmaps-btn" href="${u}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''; })()}
+        ${(() => { const u = options.showGmapsOffer ? (this._roadGeometry ? this._roadGmapsUrl(this._roadGeometry.coords) : this._fullRouteGmapsUrl(stops, country)) : null; return u ? `<a class="btn-primary" id="guide-gmaps-btn" href="${u}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''; })()}
         <button class="btn-ghost" id="guide-share-btn">COMPARTIR</button>
       </div>`}
     `;
@@ -92,6 +98,7 @@ const guideRenderer = {
 
     // Cargar fotos de paradas visibles (primera parada abierta)
     this._loadVisiblePhotos(card);
+    this._initHistoriaBtn(card);
 
     // Inicializar mapa general
     this._initMainMap(stops, days);
@@ -122,6 +129,7 @@ const guideRenderer = {
         // Lazy load foto al abrir
         if (stop.classList.contains('open')) {
           this._lazyLoadPhoto(stop);
+          this._initHistoriaBtn(stop);
         }
         return;
       }
@@ -264,6 +272,15 @@ const guideRenderer = {
       const isFirstStop = isFirstDay && i === 0;
       const gmapsUrl = this._stopGmapsUrl(s, country);
 
+      // Confianza del dato (regla UX 1 / bug A) — se deduce de lo que trae verifyAllStops:
+      // place_id = lugar existe en Google Places; _soft_match = coincidencia floja.
+      const confHtml = s.place_id
+        ? (s._soft_match
+            ? '<span class="gc-approx">≈ Coincidencia aproximada</span>'
+            : '<span class="gc-verified">✓ Lugar verificado</span>')
+        : '<span class="gc-estimated">Lugar sin verificar</span>';
+      const hasSalmaText = !!(s.narrative || s.context || s.local_secret || s.food_nearby || s.alt_bad_weather);
+
       // Badge de ruta (km + carretera) — si hay km desde la parada anterior
       let routeBadgeHtml = '';
       if (s.km_from_previous && s.km_from_previous > 0) {
@@ -300,7 +317,7 @@ const guideRenderer = {
         const eatParts = [];
         if (s.eat.name) eatParts.push('<strong>' + escapeHTML(s.eat.name) + '</strong>');
         if (s.eat.dish) eatParts.push(linkify(s.eat.dish));
-        if (s.eat.price_approx) eatParts.push(escapeHTML(s.eat.price_approx));
+        if (s.eat.price_approx) eatParts.push(escapeHTML(s.eat.price_approx) + ' <span class="gc-estimated">est.</span>');
         tagsHtml += `<div class="guide-stop-tag tag-eat">
           <span class="guide-stop-tag-label">🍽️ COMER AQUÍ</span>
           ${eatParts.join(' · ')}
@@ -317,7 +334,7 @@ const guideRenderer = {
         if (s.sleep.name) sleepParts.push('<strong>' + escapeHTML(s.sleep.name) + '</strong>');
         if (s.sleep.zone) sleepParts.push(escapeHTML(s.sleep.zone));
         if (s.sleep.type) sleepParts.push(escapeHTML(s.sleep.type));
-        if (s.sleep.price_range) sleepParts.push(escapeHTML(s.sleep.price_range));
+        if (s.sleep.price_range) sleepParts.push(escapeHTML(s.sleep.price_range) + ' <span class="gc-estimated">est.</span>');
         tagsHtml += `<div class="guide-stop-tag tag-sleep">
           <span class="guide-stop-tag-label">🛏️ DORMIR</span>
           ${sleepParts.join(' · ')}
@@ -330,7 +347,8 @@ const guideRenderer = {
         </div>`;
       }
       if (s.practical) {
-        tagsHtml += `<div class="guide-stop-practical">${linkify(s.practical)}</div>`;
+        const pv = s.place_id ? '<span class="gc-verified">Horario verificado</span> ' : '';
+        tagsHtml += `<div class="guide-stop-practical">${pv}${linkify(s.practical)}</div>`;
       }
 
       // Foto: lazy load — si hay photo_ref usa eso, si no busca por nombre+coords
@@ -347,9 +365,12 @@ const guideRenderer = {
             <span class="guide-stop-arrow">▾</span>
           </div>
           <div class="guide-stop-body">
+            <div class="gc-line">${confHtml}</div>
             ${photoHtml}
             ${s.narrative ? `<p class="guide-stop-narrative">${linkify(s.narrative)}</p>` : ''}
+            ${s.con_historia !== false ? `<div class="hist-inline-mount" data-place="${escapeHTML(s.name || s.headline || '')}" data-lat="${s.lat != null ? s.lat : ''}" data-lng="${s.lng != null ? s.lng : ''}"></div>` : ''}
             ${tagsHtml}
+            ${hasSalmaText ? '<p class="gc-disclaimer">Contexto y recomendaciones: estimación de Salma, sin verificar.</p>' : ''}
             ${gmapsUrl ? `<a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
               VER EN GOOGLE MAPS →
             </a>` : ''}
@@ -489,6 +510,37 @@ const guideRenderer = {
     return html;
   },
 
+  // PIEZA A — paradas que verify apartó por caer FUERA de la localidad del destino
+  // ("Gaucín 1 día" → Ronda a 40 km). No van en la ruta numerada ni en el mapa;
+  // se listan aparte como "escapadas cerca".
+  _renderNearby(nearby, country, anchorLoc) {
+    if (!Array.isArray(nearby) || !nearby.length) return '';
+    const _e = (typeof escapeHTML === 'function') ? escapeHTML : (s => String(s == null ? '' : s));
+    const loc = (anchorLoc || '').toString().trim();
+    const label = (loc || country || '').toString().toUpperCase();
+    const dirUrl = (s) => {
+      const b = 'https://www.google.com/maps/dir/?api=1&';
+      if (s.place_id) return b + 'destination=' + encodeURIComponent(s.name || '') + '&destination_place_id=' + s.place_id;
+      if (typeof s.lat === 'number' && typeof s.lng === 'number' && Math.abs(s.lat) > 0.01) return b + 'destination=' + s.lat + '%2C' + s.lng;
+      if (s.name) return b + 'destination=' + encodeURIComponent(s.name);
+      return null;
+    };
+    let html = `<div class="guide-nearby"><div class="guide-nearby-label">🔭 CERCA${label ? ' DE ' + _e(label) : ''}</div>`;
+    html += `<p class="guide-nearby-intro">No entran en la ruta${loc ? ' de ' + _e(loc) : ''}, pero están a un paso si te sobra tiempo.</p>`;
+    for (const s of nearby) {
+      const u = dirUrl(s);
+      const km = s.dist_km ? `<span class="guide-nearby-km">${Math.round(s.dist_km)} km</span>` : '';
+      const desc = s.narrative ? `<p class="guide-nearby-desc">${_e(String(s.narrative).slice(0, 220))}</p>` : '';
+      html += `<div class="guide-nearby-item">
+        <div class="guide-nearby-name">${_e(s.name || '')} ${km}</div>
+        ${desc}
+        ${u ? `<a class="guide-nearby-nav" href="${u}" target="_blank" rel="noopener">🗺️ Cómo llegar</a>` : ''}
+      </div>`;
+    }
+    html += '</div>';
+    return html;
+  },
+
   // ═══ GOOGLE MAPS URLS ═══
 
   // BLOQUE E (frontend) — true si la URL de Maps NO lleva coords imposibles. Sin red.
@@ -537,8 +589,34 @@ const guideRenderer = {
     if (valid.length === 0) return null;
     if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
-    return 'https://www.google.com/maps/dir/' + segments;
+    // Con nombre+place_id — así Google etiqueta cada parada con su nombre real en vez
+    // de con el sitio indexado más cercano a la coordenada (bug real visto en producción:
+    // una cueva con ficha real en Google Places salía en el mapa con el nombre de un
+    // club de piragüismo cercano, por mandar solo lat,lng sin nombre ni place_id).
+    const name = (p) => encodeURIComponent(p.headline || p.name || '');
+    const origin = sampled[0], destination = sampled[sampled.length - 1];
+    const middle = sampled.slice(1, -1);
+    let url = 'https://www.google.com/maps/dir/?api=1'
+      + `&origin=${name(origin)}&origin_place_id=${origin.place_id}`
+      + `&destination=${name(destination)}&destination_place_id=${destination.place_id}`;
+    if (middle.length) {
+      url += `&waypoints=${middle.map(name).join('%7C')}`;
+      url += `&waypoint_place_ids=${middle.map(p => p.place_id).join('%7C')}`;
+    }
+    return url;
+  },
+
+  // Enlace /dir/ con ~10 puntos del trazado real de la carretera nombrada (N2…)
+  // para que Google no se desvíe a la autopista paralela.
+  _roadGmapsUrl(coords) {
+    const n = (coords || []).length;
+    if (n < 2) return null;
+    const MAX = 10;
+    const step = Math.max(1, Math.floor((n - 1) / (MAX - 1)));
+    const pts = [];
+    for (let i = 0; i < n; i += step) pts.push(coords[i]);
+    if (pts[pts.length - 1] !== coords[n - 1]) pts.push(coords[n - 1]);
+    return 'https://www.google.com/maps/dir/' + pts.map(c => `${c[0]},${c[1]}`).join('/');
   },
 
   _sampleWaypoints(arr, max) {
@@ -549,6 +627,19 @@ const guideRenderer = {
       result.push(arr[Math.floor(i * step)]);
     }
     return result;
+  },
+
+  // ═══ BOTÓN HISTORIA (por parada) ═══
+  _initHistoriaBtn(stopEl) {
+    const mount = stopEl.querySelector && stopEl.querySelector('.hist-inline-mount');
+    if (!mount || mount.dataset.init) return;
+    mount.dataset.init = '1';
+    if (typeof historiaModule === 'undefined') return;
+    historiaModule.renderCompactInto(mount, {
+      place: mount.dataset.place,
+      lat: mount.dataset.lat ? parseFloat(mount.dataset.lat) : null,
+      lng: mount.dataset.lng ? parseFloat(mount.dataset.lng) : null,
+    });
   },
 
   // ═══ LAZY LOAD FOTOS ═══
@@ -583,16 +674,30 @@ const guideRenderer = {
 
   _loadVisiblePhotos(card) {
     const openStops = card.querySelectorAll('.guide-stop.open');
-    openStops.forEach(stop => this._lazyLoadPhoto(stop));
+    openStops.forEach(stop => { this._lazyLoadPhoto(stop); this._initHistoriaBtn(stop); });
   },
 
   // ═══ MAPAS LEAFLET ═══
 
-  _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
+  // Paleta de día atenuada, día 1 en el acento (rediseño "viajero real", doc 8 sep). Igual que mapa-ruta.js.
+  _dayColors: ['#F4630B', '#B26A3C', '#6E8B6A', '#5E7E92', '#A65A4E', '#8A7093', '#C79A5C'],
   _maps: {},
 
   _getValidStops(stops) {
-    return (stops || []).filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    return (stops || []).filter(s => {
+      if (!s) return false;
+      const la = +s.lat, ln = +s.lng;
+      return isFinite(la) && isFinite(ln)
+        && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+        && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+    });
+  },
+
+  // fitBounds que no aborta el render si los bounds salen mal (Leaflet peta con "reading 'min'")
+  _safeFit(map, bounds, opts) {
+    try {
+      if (map && bounds && bounds.isValid && bounds.isValid()) map.fitBounds(bounds, opts);
+    } catch (e) { console.warn('[guide] fitBounds ignorado:', e && e.message); }
   },
 
   _initMainMap(allStops, days) {
@@ -626,7 +731,7 @@ const guideRenderer = {
     });
 
     // Ajustar vista a todos los puntos — limitado a la ruta
-    map.fitBounds(bounds, { padding: [30, 30] });
+    this._safeFit(map, bounds, { padding: [30, 30] });
     this._maps['main'] = map;
 
     // Brújula (centro-izquierda)
@@ -737,12 +842,25 @@ const guideRenderer = {
     });
 
     // Ajustar vista — limitado a la ruta
-    map.fitBounds(bounds, { padding: [20, 20] });
+    this._safeFit(map, bounds, { padding: [20, 20] });
     this._maps[mapId] = map;
 
-    // Pedir ruta real a Google Directions
-    if (valid.length >= 2) {
-      this._loadDirections(map, valid, color);
+    // Trazado: si el usuario nombró una carretera concreta y tenemos su geometría
+    // real de OSM, pintar ESA (Directions se va por la autopista paralela). Si no,
+    // Google Directions como siempre.
+    if (this._roadGeometry) {
+      this._drawRoadGeometry(map, this._roadGeometry, color, valid);
+    } else if (valid.length >= 2) {
+      this._loadDirections(map, valid, color, this._preferredRoad);
+    }
+  },
+
+  _drawRoadGeometry(map, rg, color, stops) {
+    try {
+      const line = L.polyline(rg.coords, { color: color, weight: 4, opacity: 0.85 }).addTo(map);
+      try { this._safeFit(map, line.getBounds(), { padding: [24, 24] }); } catch (_) {}
+    } catch (_) {
+      if (Array.isArray(stops) && stops.length >= 2) this._loadDirections(map, stops, color, this._preferredRoad);
     }
   },
 
@@ -811,24 +929,51 @@ const guideRenderer = {
     });
   },
 
-  _loadDirections(map, stops, color) {
+  _loadDirections(map, stops, color, preferredRoad) {
     const origin = stops[0].lat + ',' + stops[0].lng;
     const dest = stops[stops.length - 1].lat + ',' + stops[stops.length - 1].lng;
     const waypoints = stops.slice(1, -1).map(s => s.lat + ',' + s.lng).join('|');
 
-    const url = window.SALMA_API + '/directions?origin=' + origin + '&destination=' + dest
+    let url = window.SALMA_API + '/directions?origin=' + origin + '&destination=' + dest
       + (waypoints ? '&waypoints=' + waypoints : '');
+    if (preferredRoad) url += '&preferRoad=' + encodeURIComponent(preferredRoad);
 
     fetch(url).then(r => r.json()).then(data => {
       if (data.polyline) {
         const coords = this._decodePolyline(data.polyline);
         L.polyline(coords, { color: color, weight: 3, opacity: 0.7 }).addTo(map);
       }
+      // Aviso honesto si la ruta real se aparta de la carretera pedida (B-lite)
+      if (data.road_check) {
+        this._renderRoadWarning(map.getContainer(), data.road_check);
+      }
     }).catch(() => {
       // Fallback: línea recta entre paradas
       const coords = stops.map(s => [s.lat, s.lng]);
       L.polyline(coords, { color: color, weight: 2, opacity: 0.5, dashArray: '6,8' }).addTo(map);
     });
+  },
+
+  // Aviso discreto en el propio mapa cuando la ruta real se desvía de la carretera pedida
+  _renderRoadWarning(mapEl, roadCheck) {
+    if (!mapEl) return;
+    mapEl.querySelectorAll('.map-road-warning').forEach(el => el.remove());
+    if (!roadCheck || !roadCheck.flagged) return;
+
+    const topRoad = roadCheck.segments && roadCheck.segments[0];
+    const detail = topRoad
+      ? `~${roadCheck.offKm} km pasan por la ${topRoad.road}`
+      : `~${roadCheck.offKm} km se apartan de la ${roadCheck.target}`;
+
+    const badge = document.createElement('div');
+    badge.className = 'map-road-warning';
+    badge.textContent = `⚠️ Parte de esta ruta no sigue la ${roadCheck.target}: ${detail}`;
+    badge.style.cssText = 'position:absolute;left:8px;right:8px;bottom:8px;z-index:500;'
+      + 'background:rgba(13,15,16,0.92);color:#F4630B;font-size:11px;line-height:1.35;'
+      + 'padding:6px 10px;border-radius:0;border:1px solid rgba(244,99,11,0.45);pointer-events:none;';
+
+    mapEl.style.position = 'relative';
+    mapEl.appendChild(badge);
   },
 
   // ═══ PRINT / PDF ═══
@@ -838,6 +983,7 @@ const guideRenderer = {
     card.querySelectorAll('.guide-stop').forEach(s => {
       s.classList.add('open');
       this._lazyLoadPhoto(s);
+      this._initHistoriaBtn(s);
     });
 
     // Invalidar mapas para que se rendericen bien
@@ -895,6 +1041,7 @@ const guideRenderer = {
   _updateMaps(routeData) {
     const stops = routeData.stops || [];
     const days = this._groupByDay(stops);
+    if (routeData.preferred_road) this._preferredRoad = routeData.preferred_road;
 
     // Mapa principal
     const mainMap = this._maps['main'];
@@ -914,7 +1061,7 @@ const guideRenderer = {
           });
         });
         const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
-        mainMap.fitBounds(bounds, { padding: [30, 30] });
+        this._safeFit(mainMap, bounds, { padding: [30, 30] });
       }
     }
 
@@ -939,10 +1086,10 @@ const guideRenderer = {
         this._bindRichPopup(marker, s, dayNum);
       });
       const bounds = L.latLngBounds(dayStops.map(s => [s.lat, s.lng]));
-      map.fitBounds(bounds, { padding: [20, 20] });
+      this._safeFit(map, bounds, { padding: [20, 20] });
 
       // Re-pedir ruta
-      if (dayStops.length >= 2) this._loadDirections(map, dayStops, color);
+      if (dayStops.length >= 2) this._loadDirections(map, dayStops, color, this._preferredRoad);
     }
   },
 

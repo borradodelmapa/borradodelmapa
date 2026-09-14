@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navegación — mapa visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0a;--panel:#151513;--card:#1e1c18;--ink:#fff;--ink2:#d7d2c6;--ink3:#8f8a7e;
+  --amber:#f0b429;--green:#43d977;--red:#ff5a5a;--line:rgba(255,255,255,.16);
+  --sign:'Archivo',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;padding:26px 14px 90px;}
+.wrap{max-width:1000px;margin:0 auto;}
+.kick{display:block;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);}
+h1{font-family:var(--sign);text-transform:uppercase;letter-spacing:.03em;font-size:22px;font-weight:800;text-align:center;margin:6px 0 14px;}
+
+.toggle{display:flex;border:1px solid var(--line);border-radius:5px;overflow:hidden;width:max-content;margin:0 auto 22px;}
+.toggle button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:0;background:var(--panel);color:var(--ink2);padding:9px 18px;cursor:pointer;}
+.toggle button+button{border-left:1px solid var(--line);}
+.toggle button.on{background:var(--amber);color:#000;font-weight:700;}
+
+.view{display:none;}
+.view.on{display:block;}
+
+.legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:0 0 22px;font-size:11px;color:var(--ink2);}
+.legend span{display:flex;align-items:center;gap:6px;}
+.dot{width:12px;height:12px;border-radius:3px;border:2px solid;}
+.dot.g{border-color:var(--green);} .dot.r{border-color:var(--red);} .dot.a{border-color:var(--amber);}
+
+/* pantallas */
+.band{margin:22px 0 8px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);text-align:center;}
+
+.bar{display:flex;gap:6px;max-width:520px;margin:0 auto;}
+.bar .t{flex:1;text-align:center;background:var(--panel);border:1.5px solid var(--line);border-radius:6px;padding:11px 4px;font-family:var(--sign);text-transform:uppercase;font-weight:700;font-size:10.5px;letter-spacing:.03em;color:var(--ink2);}
+.bar .t.act{border-color:var(--amber);color:var(--amber);}
+.bar .t.bad{border-color:var(--red);color:var(--red);}
+.bar .t.good{border-color:var(--green);color:var(--green);}
+
+.down{width:2px;height:20px;background:var(--line);margin:0 auto;}
+.down.g{background:var(--green);} .down.r{background:var(--red);} .down.a{background:var(--amber);}
+
+.hubs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:640px;margin:0 auto;}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:11px 10px;text-align:center;}
+.box .n{font-family:var(--sign);text-transform:uppercase;font-weight:800;font-size:12px;letter-spacing:.03em;}
+.box .s{font-family:var(--mono);font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);margin-top:4px;line-height:1.4;}
+.box.g{border-color:var(--green);}
+.box.r{border-color:var(--red);}
+.box.a{border-color:var(--amber);}
+.box .flag{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:8px;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:3px;}
+.flag.r{background:rgba(255,90,90,.16);color:var(--red);}
+.flag.g{background:rgba(67,217,119,.16);color:var(--green);}
+.flag.a{background:rgba(240,180,41,.16);color:var(--amber);}
+
+.subs{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px;max-width:760px;margin:0 auto;}
+.sub{background:var(--panel);border:1.5px solid var(--line);border-radius:7px;padding:10px 9px;}
+.sub .n{font-family:var(--sign);text-transform:uppercase;font-weight:700;font-size:10.5px;letter-spacing:.03em;}
+.sub .b{font-family:var(--mono);font-size:8px;letter-spacing:.04em;text-transform:uppercase;margin-top:5px;}
+.sub.hasback{border-color:var(--green);}
+.sub.hasback .b{color:var(--green);}
+.sub.noback{border-color:var(--red);}
+.sub.noback .b{color:var(--red);}
+.sub.mid{border-color:var(--amber);}
+.sub.mid .b{color:var(--amber);}
+
+.floaty{max-width:760px;margin:14px auto 0;border:2px dashed var(--red);border-radius:10px;padding:14px;position:relative;}
+.floaty.g{border-style:solid;border-color:var(--green);}
+.floaty .cap{position:absolute;top:-9px;left:16px;background:var(--bg);padding:0 8px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);}
+.floaty.g .cap{color:var(--green);}
+.floaty .row{display:flex;flex-wrap:wrap;gap:8px;}
+.floaty .row .pill{background:var(--card);border:1.5px solid var(--line);border-radius:6px;padding:9px 11px;font-family:var(--sign);text-transform:uppercase;font-weight:700;font-size:10px;letter-spacing:.03em;}
+.floaty .expl{font-size:11.5px;color:var(--ink2);margin-top:10px;}
+.floaty .expl b{color:var(--ink);}
+
+.arrowlbl{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:5px 0;}
+.arrowlbl.g{color:var(--green);} .arrowlbl.r{color:var(--red);}
+
+.foot{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);text-align:center;line-height:1.9;}
+.foot b{color:var(--ink2);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="kick">Borrado del Mapa · navegación</span>
+  <h1>Mapa visual · ahora vs propuesta</h1>
+
+  <div class="toggle">
+    <button class="on" data-v="now">Ahora</button>
+    <button data-v="new">Propuesta</button>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot g"></span> El botón atrás funciona</span>
+    <span><span class="dot r"></span> Atrás roto / te quedas atrapado</span>
+    <span><span class="dot a"></span> Raro / a medias</span>
+  </div>
+
+  <!-- ═══════════ AHORA ═══════════ -->
+  <div class="view on" id="v-now">
+
+    <div class="band">La barra de abajo — salta de 4 a 5 botones</div>
+    <div class="bar">
+      <div class="t act">Salma</div>
+      <div class="t">Mis Viajes</div>
+      <div class="t bad">Nuevo</div>
+      <div class="t">Historia</div>
+      <div class="t">Perfil</div>
+    </div>
+    <div class="arrowlbl">“Nuevo” solo aparece en el chat · hace casi lo mismo que “Salma”</div>
+
+    <div class="down"></div>
+    <div class="band">Cada pestaña abre su pantalla</div>
+    <div class="hubs">
+      <div class="box g"><div class="n">Chat</div><div class="s">billete · guía</div><span class="flag g">atrás ok</span></div>
+      <div class="box g"><div class="n">Mis Viajes</div><div class="s">rutas guardadas</div><span class="flag g">atrás ok</span></div>
+      <div class="box a"><div class="n">Historia</div><div class="s">artículos</div><span class="flag a">no está en el historial</span></div>
+      <div class="box g"><div class="n">Perfil</div><div class="s">hub de nivel 2</div><span class="flag g">atrás ok</span></div>
+    </div>
+
+    <div class="down r"></div>
+    <div class="band">Perfil abre 6 sub-pantallas — casi ninguna con ←</div>
+    <div class="subs">
+      <div class="sub noback"><div class="n">Notas</div><div class="b">✗ sin ←</div></div>
+      <div class="sub noback"><div class="n">Galería</div><div class="b">✗ sin ←</div></div>
+      <div class="sub mid"><div class="n">Cuaderno</div><div class="b">~ sin ← arriba</div></div>
+      <div class="sub hasback"><div class="n">Documentos</div><div class="b">✓ tiene ‹</div></div>
+      <div class="sub noback"><div class="n">Coins</div><div class="b">modal</div></div>
+      <div class="sub mid"><div class="n">SOS</div><div class="b">~ config sí, confirmar no</div></div>
+    </div>
+    <div class="arrowlbl">Cuaderno → Diario: tiene ← pero <b style="color:var(--red)">no está en el historial</b></div>
+
+    <div class="floaty">
+      <span class="cap">Perdida · Vuelos</span>
+      <div class="row"><span class="pill">Vuelos / Alertas</span></div>
+      <div class="expl"><b>No tiene sitio.</b> Se entra desde un chip del billete. No ilumina ninguna pestaña. No tiene ←. El botón atrás no vuelve.</div>
+    </div>
+
+    <div class="floaty">
+      <span class="cap">Overlays · tapan TODO</span>
+      <div class="row"><span class="pill">Mapa live</span><span class="pill">Vista guía</span></div>
+      <div class="expl">
+        Ocupan toda la pantalla y <b>ocultan la barra entera</b>. Único escape: su ✕.<br>
+        El ✕ de la <b>Vista guía</b> depende de un parche de <code style="font-family:var(--mono);color:var(--amber)">showState</code> que <b style="color:var(--red)">está roto</b> — si cierras con el ✕ el parche se queda pegado y cada reapertura apila otro.
+      </div>
+    </div>
+
+    <div class="floaty">
+      <span class="cap">Modales · el atrás NO los cierra</span>
+      <div class="row">
+        <span class="pill">Login</span><span class="pill">Moneda</span><span class="pill">Traductor</span>
+        <span class="pill">Coins</span><span class="pill">¿Qué puedo hacer?</span><span class="pill">SOS</span>
+      </div>
+      <div class="expl">El botón atrás del móvil cierra la <b>pantalla de debajo</b> y deja el modal colgando, o te saca de la app.</div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════ PROPUESTA ═══════════ -->
+  <div class="view" id="v-new">
+
+    <div class="band">Barra fija de 4 · siempre visible, no salta</div>
+    <div class="bar">
+      <div class="t good act">Salma</div>
+      <div class="t good">Mis Viajes</div>
+      <div class="t good">Historia</div>
+      <div class="t good">Perfil</div>
+    </div>
+    <div class="arrowlbl g">“Empezar de cero” es un ↻ dentro del chat, no un botón de la barra</div>
+
+    <div class="down g"></div>
+    <div class="band">4 hubs · el botón atrás funciona en todos</div>
+    <div class="hubs">
+      <div class="box g"><div class="n">Chat</div><div class="s">billete · guía</div><span class="flag g">atrás ok</span></div>
+      <div class="box g"><div class="n">Mis Viajes</div><div class="s">rutas</div><span class="flag g">atrás ok</span></div>
+      <div class="box g"><div class="n">Historia</div><div class="s">artículos</div><span class="flag g">atrás ok</span></div>
+      <div class="box g"><div class="n">Perfil</div><div class="s">hub de nivel 2</div><span class="flag g">atrás ok</span></div>
+    </div>
+
+    <div class="down g"></div>
+    <div class="band">Todo lo que cuelga de un hub lleva cabecera “← Título”</div>
+    <div class="subs">
+      <div class="sub hasback"><div class="n">Notas</div><div class="b">✓ ← a Perfil</div></div>
+      <div class="sub hasback"><div class="n">Galería</div><div class="b">✓ ← a Perfil</div></div>
+      <div class="sub hasback"><div class="n">Cuaderno</div><div class="b">✓ ←</div></div>
+      <div class="sub hasback"><div class="n">Diario</div><div class="b">✓ ← a Cuaderno</div></div>
+      <div class="sub hasback"><div class="n">Documentos</div><div class="b">✓ ←</div></div>
+      <div class="sub hasback"><div class="n">Vuelos</div><div class="b">✓ ← · ya con sitio</div></div>
+      <div class="sub hasback"><div class="n">SOS</div><div class="b">✓ ←</div></div>
+      <div class="sub hasback"><div class="n">Coins</div><div class="b">✓ ←</div></div>
+    </div>
+    <div class="arrowlbl g">El ← siempre hace history.back() → cae en el sitio correcto</div>
+
+    <div class="floaty g">
+      <span class="cap">Mapa y Guía · ya no son overlays</span>
+      <div class="row"><span class="pill">Mapa</span><span class="pill">Guía</span></div>
+      <div class="expl">
+        Son <b>estados normales</b>. Mantienen un <b>← fijo visible</b> (y la barra). El ✕ pasa a ser <code style="font-family:var(--mono);color:var(--green)">history.back()</code>: te devuelve <b>de donde viniste</b> (chat, Mis Viajes o Cuaderno), no siempre al chat.<br>
+        Se quita el parche de <code style="font-family:var(--mono);color:var(--green)">showState</code> → <b>adiós al bug</b>.
+      </div>
+    </div>
+
+    <div class="floaty g">
+      <span class="cap">Modales · el atrás los cierra</span>
+      <div class="row">
+        <span class="pill">Login</span><span class="pill">Moneda</span><span class="pill">Traductor</span>
+        <span class="pill">Coins</span><span class="pill">¿Qué puedo hacer?</span><span class="pill">SOS</span>
+      </div>
+      <div class="expl">Cada modal empuja una entrada de historial. El botón atrás lo cierra y deja la pantalla de debajo <b>intacta</b>.</div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    Mismo contenido que el estudio, en dibujo · <b>mockups/navegacion-mapa.html</b><br>
+    Se hace por fases · empezamos por la barra fija de 4
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.toggle button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.toggle button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  document.getElementById('v-now').classList.toggle('on', b.dataset.v==='now');
+  document.getElementById('v-new').classList.toggle('on', b.dataset.v==='new');
+});
+</script>
+</body>
+</html>

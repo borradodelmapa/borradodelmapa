@@ -7,7 +7,7 @@
 
   <meta name="description" content="Salma es tu compañera de viaje inteligente. Te diseña la ruta, te guía con voz, te resuelve imprevistos en tiempo real y documenta tu aventura. No es otra app de viajes. Es la persona que te falta.">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#0D0F10">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="format-detection" content="telephone=no">
   <meta http-equiv="Permissions-Policy" content="geolocation=(self), microphone=()">
@@ -61,7 +61,7 @@
   }
   </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Barlow+Condensed:wght@600;700;800&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <!-- Google Maps JS — carga bajo demanda al activar Copiloto -->
@@ -77,9 +77,9 @@ window._loadGoogleMaps = function() {
   });
 };
 </script>
-<link rel="stylesheet" href="styles.css?v=50">
-<link rel="stylesheet" href="docs-viajero.css?v=2">
-<link rel="stylesheet" href="historia.css?v=2">
+<link rel="stylesheet" href="styles.css?v=90">
+<link rel="stylesheet" href="docs-viajero.css?v=3">
+<link rel="stylesheet" href="historia.css?v=3">
 <!-- Google Analytics 4 — se carga solo tras consentimiento de cookies (P1-6) -->
 <script>
 window.dataLayer=window.dataLayer||[];
@@ -107,6 +107,11 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 <!-- ═══ CONTENT ═══ -->
 <main class="app-content" id="app-content"></main>
 
+<!-- ═══ Empezar de cero (solo en el chat con conversación) — "Últimas consultas" vive ahora en el menú de abajo ═══ -->
+<button id="chat-fresh" onclick="if(typeof salma!=='undefined')salma.newChat()" title="Empezar de cero" aria-label="Empezar de cero">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+</button>
+
 <!-- ═══ FAB MAPA (flotante, oculto en welcome) ═══ -->
 <button class="fab-map" id="fab-map" style="display:none" aria-label="Abrir mapa">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -116,7 +121,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 
 <!-- ═══ VISTA ITINERARIO (ruta enriquecida) ═══ -->
 <div class="itin-view" id="itin-view" style="display:none">
-  <button class="itin-mobile-back" id="itin-mobile-back-btn" aria-label="Volver" onclick="document.dispatchEvent(new CustomEvent('itin:close'))">←</button>
+  <button class="itin-mobile-back" id="itin-mobile-back-btn" aria-label="Cerrar" onclick="document.dispatchEvent(new CustomEvent('itin:close'))">✕</button>
   <div class="itin-layout">
     <div class="itin-map-col" id="itin-map-container"></div>
     <div class="itin-cards-col" id="itin-cards-container"></div>
@@ -129,7 +134,9 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
   <button id="live-map-back" onclick="closeLiveMap()">✕</button>
   <button id="live-map-routes-btn" onclick="openRouteSelector()" title="Mis Rutas">📍 Mis Rutas</button>
   <button id="live-map-clear-route" onclick="clearRouteFromLiveMap()" style="display:none" title="Quitar ruta">✕ Ruta</button>
+  <!-- Historia DESACTIVADA 7 sept 2026 — ver PENDIENTES.md
   <button id="live-map-historia-btn" title="Historia del lugar" onclick="liveMapAbrirHistoria()">📚</button>
+  -->
   <div id="live-map-nearest-chip" style="display:none"></div>
   <div id="live-map-routes-sheet" style="display:none">
     <div class="lmrs-header">
@@ -313,6 +320,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
   <div class="auth-view" id="auth-welcome-view">
     <div class="auth-logo-wrap">
       <div class="auth-logo">BORRADO<br><span>DEL</span>MAPA</div>
+      <p class="auth-slogan">Sin mapa, <span>con rumbo.</span></p>
       <div class="auth-tagline">SALMA · TU COMPAÑERA DE VIAJE</div>
     </div>
     <div class="auth-actions">
@@ -333,31 +341,8 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 
 </div>
 
-<!-- ═══ MODAL: QUÉ PUEDE HACER SALMA ═══ -->
-<div class="salma-info-overlay" id="salma-info-overlay" style="display:none">
-  <div class="salma-info-modal">
-    <button class="salma-info-close" id="salma-info-close">&times;</button>
-    <div class="salma-info-hero">
-      <div class="salma-info-hero-line">Antes, durante y después</div>
-      <div class="salma-info-hero-line">Siempre contigo</div>
-      <div class="salma-info-hero-big">Salma te resuelve</div>
-    </div>
-    <div class="salma-info-list">
-      <div class="salma-info-item done">No sé por dónde empezar → Te monta la ruta</div>
-      <div class="salma-info-item done">Son las 11pm y no tengo hotel → Te busca uno abierto</div>
-      <div class="salma-info-item done">No entiendo el menú → Te traduce</div>
-      <div class="salma-info-item done">Me han robado la cartera → Embajada + teléfonos</div>
-      <div class="salma-info-item done">¿Necesito visado? → Te lo dice al momento</div>
-      <div class="salma-info-item done">¿Este barrio es seguro? → Te avisa</div>
-      <div class="salma-info-item done">¿Cuánto me va a costar? → Presupuesto real</div>
-      <div class="salma-info-item done">Llueve y se me cae el plan → Plan B listo</div>
-      <div class="salma-info-item done">Quiero compartir mi ruta → Link directo</div>
-      <div class="salma-info-item soon">Avería en carretera → Grúa + mecánico cerca</div>
-      <div class="salma-info-item soon">Audio guía en ruta</div>
-      <div class="salma-info-item soon">Salma te acompaña en tiempo real</div>
-    </div>
-  </div>
-</div>
+<!-- (modal "Qué puede hacer Salma" eliminado — Fase 5: era código muerto,
+     nunca se mostraba. La pantalla real es renderSalmaCan en app.js.) -->
 
 <!-- ═══ TOAST ═══ -->
 <div class="toast" id="toast"></div>
@@ -431,37 +416,29 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 <script src="https://js.stripe.com/v3/"></script>
 
 <!-- ═══ APP ═══ -->
-<script src="debug-panel.js?v=1"></script>
-<script src="country-utils.js"></script>
-<script src="app.js?v=58"></script>
-<script src="nav-history.js"></script>
-<script src="notas.js"></script>
-<script src="flight-watches.js?v=1"></script>
-<script src="salma.js?v=49"></script>
+<script src="debug-panel.js?v=4"></script>
+<script src="country-utils.js?v=1"></script>
+<script src="app.js?v=102"></script>
+<script src="nav-history.js?v=4"></script>
+<script src="notas.js?v=2"></script>
+<script src="flight-watches.js?v=2"></script>
+<script src="salma.js?v=79"></script>
 <script src="video-player.js?v=3"></script>
 <script src="video-assembly.js?v=2"></script>
-<script src="guide-renderer.js?v=44"></script>
-<script src="bitacora-renderer.js?v=3"></script>
-<script src="mapa-ruta.js"></script>
-<script src="mapa-itinerario.js?v=44"></script>
+<script src="guide-renderer.js?v=53"></script>
+<script src="bitacora-renderer.js?v=4"></script>
+<script src="mapa-ruta.js?v=6"></script>
+<script src="mapa-itinerario.js?v=55"></script>
 <script src="docs-viajero.js?v=1"></script>
-<script src="map-modal.js?v=7"></script>
+<script src="map-modal.js?v=9"></script>
 <script src="share-inbox.js?v=9"></script>
-<script src="translator.js?v=13"></script>
-<script src="historia.js?v=1"></script>
+<script src="translator.js?v=14"></script>
+<script src="historia.js?v=2"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
 if (typeof salma !== 'undefined') { salma.initGeolocation(); salma.initVoices(); salma.initVoiceToggle(); }
-
-// Salma info modal
-document.getElementById('salma-info-close')?.addEventListener('click', () => {
-  document.getElementById('salma-info-overlay').style.display = 'none';
-});
-document.getElementById('salma-info-overlay')?.addEventListener('click', (e) => {
-  if (e.target.id === 'salma-info-overlay') e.target.style.display = 'none';
-});
 
 // Cookie consent
 (function() {

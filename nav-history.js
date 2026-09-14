@@ -14,14 +14,14 @@
 
   // Estados principales que merecen entrada en el historial
   // 'diario' no está — es sub-vista de bitácora, su back lo gestiona itin:close
-  const PUSH_STATES = ['welcome', 'chat', 'rutas', 'profile', 'bitacora', 'notas', 'documentos', 'galeria'];
+  const PUSH_STATES = ['chat', 'rutas', 'profile', 'bitacora', 'notas', 'documentos', 'galeria', 'vuelos'];
 
   // Guardar referencia ANTES de sobreescribir
   const _orig = showState;
 
   // Reemplazar historia actual con el estado inicial
   try {
-    history.replaceState({ state: typeof currentState !== 'undefined' ? currentState : 'welcome' }, '');
+    history.replaceState({ state: typeof currentState !== 'undefined' ? currentState : 'chat' }, '');
   } catch (_) {}
 
   // Sobreescribir showState global

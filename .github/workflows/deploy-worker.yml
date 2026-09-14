@@ -1,0 +1,21 @@
+name: Deploy Worker
+
+# Disparo manual únicamente — nunca en cada push. Se dispara a mano desde
+# GitHub (botón "Run workflow", funciona desde el navegador del móvil) cuando
+# el código del Worker ya está en main y quieres desplegarlo de verdad.
+# No toca secrets de Cloudflare para nada: solo sube el código, igual que
+# hacer "npx wrangler deploy -c wrangler.toml" a mano desde el portátil.
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+      - run: npx wrangler deploy -c wrangler.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

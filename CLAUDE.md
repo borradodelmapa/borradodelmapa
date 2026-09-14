@@ -1,4 +1,117 @@
 # CLAUDE.md — Borrado del Mapa
+---
+
+## ⛔ PROTOCOLO DE TRABAJO — LEER ANTES DE TOCAR NADA
+
+Escrito el 5 septiembre 2026 después de una sesión en la que se arreglaron seis
+fallos reales y **ninguno se llegó a ver en la app**, se restauró todo al día
+anterior y se perdieron las 15 API keys del Worker. Las causas no fueron técnicas:
+fueron de método. Estas reglas existen para que no vuelva a pasar.
+
+### 1. UNA SOLA SESIÓN sobre `C:\Users\User\Desktop\salma`
+
+Aquel día había **tres sesiones de Claude Code editando los mismos ficheros y
+desplegando el mismo Worker**. Dos hicieron los mismos arreglos por duplicado; una
+tercera borró el Worker entero. Con varias sesiones sobre el mismo directorio es
+imposible saber qué versión se está probando.
+
+- Antes de empezar: comprobar que no hay otra sesión abierta sobre este directorio.
+- Si hacen falta dos a la vez, la segunda **en worktree aparte**, nunca en el mismo árbol.
+- **Si un `git push` sale rechazado (`non-fast-forward`), PARAR.** No es un trámite de
+  git: significa que alguien más está escribiendo aquí. Mirar quién antes de seguir.
+
+### 2. UN CAMBIO, UNA PRUEBA, UNA CONFIRMACIÓN DE PACO
+
+Aquel día se encadenaron cinco arreglos sin verificar ninguno. Cuando algo seguía
+mal, ya era imposible saber cuál había servido.
+
+- No se toca el siguiente fallo hasta que Paco diga qué ve en su pantalla.
+- **Nunca decir "arreglado"**. Se dice: *"desplegado — dime qué ves"*. Que un `grep`
+  encuentre una función no prueba que en la pantalla de Paco pase nada.
+- Verificar **comportamiento**, no código. El código desplegado y correcto puede no
+  cambiar nada de lo que el usuario ve — eso fue exactamente lo que pasó.
+
+### 3. PEDIR EVIDENCIA DE SU PANTALLA, Y PRONTO
+
+Se estuvo horas arreglando la vista del mapa mientras Paco hablaba del texto del
+chat. Una captura al principio ahorra media tarde.
+
+- Ante un "sigue igual": pedir **captura de pantalla** y el panel **🐛** (botón flotante
+  abajo-derecha → "Copiar"), que trae los errores de JavaScript de su navegador y, en
+  la cabecera, la versión del Worker y el `?v=` de cada script que ese navegador tiene
+  cargado. Esa cabecera es lo primero que hay que leer.
+- Si menciona una demo, un diseño o un comportamiento esperado: **preguntar qué es
+  exactamente**, no suponerlo.
+- Diagnóstico en vivo: `npx wrangler tail salma-api --format pretty` mientras él prueba.
+
+### 4. CHECKLIST DE DESPLIEGUE — SIEMPRE EN ESTE ORDEN
+
+1. Subir versión `?v=` en `index.html` de **cada** `.js` modificado (si no, el navegador
+   sirve el viejo aunque el fichero esté subido). Los 18 scripts locales llevan `?v=`;
+   ninguno debe quedarse sin él.
+2. `git add` + `commit` + `push`.
+3. Comprobar que la web ya sirve la versión nueva — GitHub Pages tarda entre 45 s y
+   varios minutos:
+   `curl.exe -s https://borradodelmapa.com/index.html | Select-String '\.js\?v='`
+4. Desde `worker\`: `npx wrangler deploy -c wrangler.toml` — **siempre con `-c`**: en la
+   raíz del proyecto hay un `wrangler.jsonc` que wrangler coge por error si no se le
+   dice cuál. La terminal de Paco es PowerShell, donde `&&` **no existe**; se encadena
+   con `;`:
+   `cd C:\Users\User\Desktop\salma\worker; npx wrangler deploy -c wrangler.toml`
+
+   **Alternativa desde el móvil (sin terminal) — Cloudflare Workers Builds, montado y
+   probado el 11 sept 2026:** el Worker `salma-api` tiene conectado el repo de GitHub
+   (Cloudflare dashboard → salma-api → Settings → Builds). Cualquier commit directo a
+   `main` (se puede hacer editando un fichero desde github.com en el navegador del
+   móvil, sin `git` local) dispara un build y deploy automático — mismo comando,
+   `npx wrangler deploy -c wrangler.toml`, con **Directorio raíz = `worker`** para que
+   no coja el `wrangler.jsonc` de la raíz. El paso 5 (comprobar `/version`) sigue
+   haciendo falta igual, solo que se abre la URL directamente en el navegador del móvil
+   en vez de `curl.exe`. Esto **no sustituye** el paso 1 (subir `?v=`) ni el 6 (Paco
+   prueba en la app) — solo cambia cómo se ejecuta el paso 4.
+5. Comprobar que el Worker que corre es el que crees — el `Current Version ID` del
+   deploy tiene que coincidir con el que devuelve el endpoint:
+   `curl.exe -s https://salma-api.paco-defoto.workers.dev/version`
+   Ojo: en PowerShell `curl` a secas es `Invoke-WebRequest` y se queda pidiendo `Uri:`.
+   Hay que escribir `curl.exe`.
+6. **Paco prueba en la app.** Hasta aquí no está terminado. Si hay cualquier duda de si
+   está viendo lo nuevo o algo de su caché: panel 🐛 → la cabecera dorada trae el
+   Version ID del Worker y el `?v=` de cada script cargado, y el botón "Copiar" lo pega
+   delante de los logs.
+
+### 5. NO SE BORRA EL WORKER. NUNCA
+
+Ni el fichero ni el Worker de Cloudflare. **Al eliminarse un Worker, Cloudflare
+destruye sus secrets de forma irreversible** — son de solo escritura y no hay copia.
+Aquel día costó dos horas reponer 15 claves, y varias no estaban en local.
+
+- Copia de seguridad de secrets: `worker/restaurar-secrets.cjs` sube los que hay en
+  `api\*.txt` (carpeta gitignored). Los que no estén ahí hay que sacarlos de su panel.
+- Diagnóstico de claves de Google: `worker/probar-google-keys.cjs`.
+- Comprobar qué hay puesto: `npx wrangler secret list -c wrangler.toml` (son 15).
+
+### 6. ANTES DE DAR UN FALLO POR ENTENDIDO
+
+Aquel día se cambió tres veces de sospechoso porque se miraba una sola capa.
+
+- Un dato puede **calcularse bien y no llegar a pantalla**: el Worker mandaba la ruta
+  verificada y el frontend la descartaba. Seguir el dato **de punta a punta**.
+- Al hacer un corte limpio, buscar **todos** los escritores y lectores en el repo
+  entero (worker + scripts + crons), no solo la función obvia. Había un segundo motor
+  de rutas vivo, en un cron, con prioridad sobre el nuevo.
+- Al tocar el prompt, buscar **contradicciones entre bloques**: tres instrucciones
+  distintas pedían el plan completo en el chat *y* en el JSON. La duplicación estaba
+  escrita en el propio prompt.
+
+### 7. RESTAURAR SIN DESTRUIR
+
+- Volver atrás con un **commit nuevo que restaure el árbol**, nunca reescribiendo la
+  historia: `git restore --source=<commit> --worktree --staged .`
+- Antes de cualquier vuelta atrás, dejar un tag o rama de salvaguarda.
+- Puntos de restauración del 5 sept 2026: tags `v-5sept-antes-de-volver-atras` y
+  `v-5sept-antes-de-borrar` (todo el trabajo de ese día, Worker intacto).
+
+---
 ## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
 ## V3 Share + Fotos — 17 abril 2026 (sesión)
 
@@ -336,6 +449,7 @@ Post-procesado que corrige cada parada de una ruta generada:
 | POST | `/admin/apply-fix` | Aplicar fix IA al prompt, guardar con historial en Firestore |
 | POST | `/admin/save-prompt` | Guardar prompt editado manualmente |
 | GET | `/health` | Health check de todos los servicios (admin) |
+| GET | `/version` | Version ID del despliegue (publico, sin token) — para saber que worker corre |
 | GET | `/sitemap.xml` | Sitemap index (1h caché) |
 | GET | `/sitemap-guides.xml` | Sitemap dinámico de guías públicas desde Firestore |
 
@@ -638,7 +752,12 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 - [x] Guardado de notas
 
 ### Narrador
-- [x] Check cada 30s de POIs cercanos (Google Places, radio 500m)
+- [x] Chip "Narrador" en pantalla de inicio del chat, con popup explicativo antes de
+      activarlo (añadido 10 sept — antes no tenía ningún botón accesible)
+- [x] Check cada 30s de POIs cercanos (Google Places, radio 20m — reducido desde 500m el
+      10 sept a petición de Paco)
+- [x] Toast del narrador: sin auto-cierre, solo se cierra con la X (antes se cerraba solo
+      a los 10s y no daba tiempo a leer — cambiado el 10 sept)
 - [x] Narración con GPT-4o-mini (personalidad Salma)
 - [x] Push notifications
 - [x] Deduplicación por place_id/nombre
@@ -718,29 +837,486 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ## Pendiente / Problemas conocidos
 
-### Crítico (seguridad / dinero)
-- **Stripe webhook** — pagos se confirman client-side (manipulable). Falta webhook server-side + pasar a live.
-- **Chat sin auth** — `POST /` del Worker no verifica token Firebase. Coins no validados server-side.
-- **public_guides sin ownership** — cualquier user autenticado puede sobrescribir slugs ajenos en Firestore.
-- **Credenciales en git** — `scripts/publish-destinos-salma.js` tiene email+password de Salma bot commiteado.
-- **Legal incompleta** — `legal.html` tiene [PENDIENTE] en nombre titular, CIF, email, dirección (obligatorio LSSI/GDPR).
+> **Este es el único archivo de pendientes del proyecto — no crear otro.** Auditado contra
+> el código real (no contra memoria ni contra lo que decía esta lista antes) el 10 sept
+> 2026, porque el trabajo se pide unas veces por Code y otras por chat normal y esta lista
+> llevaba tiempo sin coincidir con lo que hay realmente desplegado. Ver "Metodología y
+> límites" al final de esta sección antes de fiarte de que está completa.
+>
+> **Cuando Paco diga "anota esto pendiente" (o algo parecido):** añadirlo aquí mismo, en
+> el subapartado que corresponda (🔴 Crítico / 🟡 Importante / 🔧 Deuda técnica), hacer
+> `commit` y `push` **directo a `main`** antes de terminar el turno — no dejarlo en una
+> rama suelta que no se fusiona. Solo funciona si la sesión tiene este repo enlazado
+> (Code/Cowork); un chat normal sin el repo no puede tocar este archivo, así que si el
+> pendiente surgió ahí hay que traerlo a mano a una sesión con el repo. Esto es justo lo
+> que causó el desfase que motivó el barrido del 10 de septiembre — no repetirlo.
 
-### Importante (UX / compliance)
-- **Cookie consent sin UI** — GA4 se carga sin consentimiento (ilegal UE).
-- **Sin modo offline** — SW no cachea nada. App en blanco sin red.
-- **Stripe en test mode** — falta pasar a live para cobrar.
-- **Google Maps key sin restricción** — aceptable pero debería restringirse por dominio en GCP Console.
+### 🔴 Crítico — verificado ahora mismo
 
-### Técnico (deuda técnica)
-- **Código duplicado** — `_groupByDay`, `_sampleWaypoints`, `_fullRouteGmapsUrl`, `escapeHTML` en 3+ archivos.
-- **Monkey-patch frágil** — `mapa-itinerario.js` parchea `bitacoraRenderer.renderDiario` en runtime.
-- **Deep links transport incompletos** — Solo Uber y Lyft tienen deep links. Bolt, Grab, DiDi etc. tienen `null`.
-- **Manifest PWA básico** — sin `shortcuts`, sin `screenshots`, icono 192px sin versión maskable dedicada.
-- **2 funciones dead code** — `injectGoogleMapsLink()` e `injectTransportBlock()` en el Worker hacen `return` inmediato.
+- **Pago posiblemente roto en producción — confirmado con Paco (10 sept): lo sabe, no es
+  una sorpresa, lo tiene aparcado a propósito priorizando otras cosas. No perseguir sin que
+  él lo pida.** El commit `5a6b2f8` (7 sept, sesión "Pasarela de pago Stripe") reescribió
+  `/create-payment` en el Worker para el modelo Premium por periodos: espera
+  `{plan: '1viaje'|'trimestral'|'semestral'|'anual'}` y devuelve `{url}` de una Stripe
+  Checkout Session; añadió `/stripe-webhook` que acredita `premium_until`. `app.js`
+  (`openCoinsModal`, ~línea 3241) sigue con el flujo viejo de coins: manda
+  `{amount, coins, user_id}` y espera `{client_secret}` para `stripe.confirmCardPayment`.
+  Falta la Fase 2 de `docs/pasarela-premium.md` (modal "Hazte Premium" + retorno `?pago=ok`)
+  para cerrarlo cuando Paco decida retomarlo.
+- **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
+  titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
+- **Ruta de Ronda pintó el mapa en Benahavís/San Pedro de Alcántara (13 sept) — fix
+  desplegado (commit `c33faccb`, worker `408e65a7`), SIN confirmar en pantalla por Paco
+  con el escenario exacto.** Diagnóstico distinto del que se sospechaba al principio: NO
+  era el bug de ancla tipo "Lisboa" (`7bef91f`) — el destino sí se resolvía bien a Ronda
+  real. La causa era que `verifyAllStops()` medía la distancia de cada parada al ancla en
+  **línea recta** (`haversineKm`), y con el radio de 3-4 días (120km, además el doble de
+  lo que el propio prompt promete en la línea 223: 60km) Benahavís/San Pedro/Estepona
+  quedaban dentro. Por carretera real (única vía de montaña, A-397) Estepona son 83km/1h40
+  — coincide casi exacto con el "~80km" que describió Paco — mientras que Grazalema/Setenil
+  (pueblos blancos legítimos cerca de Ronda) se quedan muy por debajo en ambos cálculos.
+  Confirmado con `/directions` real antes de tocar código (ver commit para las cifras).
+  Fix: nueva `drivingDistanceKm()` (Directions API) sustituye la línea recta en la "red de
+  seguridad" final de `verifyAllStops`, con el radio alineado al prompt (30km 1-2 días,
+  60km 3-4 días). Probado UNA vez en pantalla tras desplegar: Ronda 3 días salió limpio
+  (Cueva de la Pileta, Benaoján, Montejaque — nada de costa), pero Paco cortó la sesión
+  antes de repetir la prueba a fondo — pendiente de una confirmación más sólida.
+  **Limitación conocida, aceptada por Paco de momento:** Benahavís/San Pedro (43-52km
+  reales, <1h de coche) siguen dentro del radio de 60km y podrían seguir apareciendo — no
+  se apretó más el radio a propósito, a la espera de ver si molesta en la práctica.
+  **Sin tocar, pendiente aparte:** el filtro por localidad/provincia de más abajo en la
+  misma función (3+ días) sigue comparando por texto de provincia sin distancia real —
+  para Ronda esto es contraintuitivo porque los pueblos blancos "buenos" (Grazalema,
+  Setenil, Zahara) están en Cádiz, no en Málaga como Ronda, así que ese filtro podría
+  relegarlos a "cerca de" en vez de dejarlos en la ruta principal. No se ha visto pasar en
+  pantalla, solo detectado leyendo el código — investigar si da problemas.
+### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
+
+- **Historia reactivada (cápsula ampliable en guías + chat) — 13 sept, CONFIRMADO EN
+  PANTALLA por Paco.** Fusionada a `main` (`623b41e`) y Worker desplegado (GitHub Action
+  "Deploy Worker", run #7, Version ID `dd949a07-6415-4ae8-9694-9be8bb4ff373`). Se
+  reactivó `historia.js`/`historia.css` (desactivados desde el 7 sept) y se añadió un
+  modo compacto (`historiaModule.renderCompactInto`): botón "📖 Historia de X" por parada
+  en `guide-renderer.js`/`mapa-itinerario.js` (oculto si Claude marca la parada
+  `con_historia:false`) + uno de país en la cabecera, y uno bajo la respuesta del chat
+  con el marcador nuevo `HISTORIA_LUGAR:X` (mismo patrón que `SALMA_ACTION`/`FOTO_TAG`).
+  Backend: reutiliza `/historia-lugar` (Claude Haiku + foto Google Places + caché KV 30
+  días). También se quitó un chip antiguo redundante que navegaba fuera del chat.
+  **Probado por Paco pidiendo "3 días en Ronda": botón sale en todas las paradas y
+  funciona de verdad — contenido real generado (ej. historia de Pedro Romero para el
+  restaurante homónimo).** Necesitó reintentar 2-3 veces en varias paradas antes de
+  cargar — coincide con la intermitencia de red de esa misma sesión (`curl.exe` daba
+  timeout, Copiloto daba "Failed to fetch", la carga general iba lenta), no parece ser
+  un bug de Historia: el botón "reintentar" funcionó tal como está pensado.
+  **Cabo suelto — arreglado en código y desplegado (13 sept, commit `01ccdf8`, Worker
+  Version ID `faf82643-a8ea-4746-bd60-baff689cf9c9`), PENDIENTE DE COMPROBAR EN
+  PANTALLA.** Para "Rte. Pedro Romero Ronda", Claude interpretó la abreviatura de Google
+  Maps "Rte." (Restaurante) como si insinuara una "ruta/corredor" — con el matiz que se
+  añadió al prompt de `/historia-lugar` para narrar bien carreteras — y generó la
+  biografía del torero Pedro Romero a modo de itinerario en vez de la historia del propio
+  restaurante. Se aclaró en el prompt que Rte./Avda./C/Pza. son solo nombre o dirección
+  de un lugar, no indicio de carretera. **Ojo al probarlo:** ese lugar concreto puede
+  seguir cacheado en KV (`historia:rte-pedro-romero-ronda`, TTL 30 días) con la versión
+  vieja del torero — si al pulsar "Historia" en ese restaurante sigue saliendo lo mismo,
+  no es que el fix no funcione, es la caché; probar con un restaurante distinto con
+  abreviatura similar, o borrar esa clave KV a mano para forzar regeneración.
+- **Saga "ruta de los faros" (11-12 sept 2026) — 5 bugs reales encontrados y arreglados,
+  todos en `main`. Pendiente de un último redeploy del Worker para el quinto (ver abajo).**
+  Todo empezó con "pantalla negra al abrir el mapa de una guía". Se fueron pelando capas:
+  1. **Pantalla negra** (`app.js:selectRouteOnMap`, commit `07062dd`) — el filtro de
+     coordenadas válidas era `s.lat && s.lng` (deja pasar basura tipo NaN de string o
+     fuera de rango). Con eso colado, Google Maps reventaba a media construcción de
+     marcadores ("Lat/Long not supported") y dejaba la app oculta con la vista de
+     itinerario en blanco, sin ningún aviso. Ahora valida número finito + rango real,
+     y si aun así falla algo, `salma.js` deshace el cambio de pantalla y ofrece
+     "Reintentar" en vez de quedarse muda.
+  2. **Ruta saltando a Lisboa** (`worker/salma-worker.js`, commit `7bef91f`) — para una
+     ruta pedida "desde donde estoy" (sin nombre de destino), lo que quedaba de limpiar
+     el mensaje se mandaba igual como `dest_hint`, y el Worker lo geocodificaba con
+     Google Find Place como si fuera un lugar real — con texto sin sentido, Google
+     devolvía cualquier cosa dentro del radio de sesgo, y ESE punto pasaba a ser el
+     centro del radio de 35km que valida las paradas. Ahora, si el mensaje es del tipo
+     "desde donde estoy/aquí/cerca de mí", no se manda ningún `dest_hint` de texto.
+  3. **Orden de paradas sin sentido geográfico** (commit `39c4711`) — el prompt de
+     conversión texto→JSON no tenía ninguna instrucción de orden; las paradas salían en
+     el orden en que Claude las mencionó en la prosa (agrupadas por tema), no por
+     cercanía real. Añadida regla de orden geográfico dentro de cada día.
+  4. **Ruta regional entera cramada en 1 solo día** (commit `ca92b2c`) — "si no se indica
+     número de días, haz 1 día" no distinguía una ciudad de una ruta/road trip explícita
+     por una costa entera. Ahora, para rutas/road trips sin días especificados, calcula
+     los días razonables por distancia real en vez de forzar 1.
+  5. **Verify descartaba faros reales sin ficha en Google** (commit `f74cfaf`) — regla
+     única "sin place_id de Google, la parada no entra" descartaba también sitios reales
+     que Google simplemente no indexa como POI (faros pequeños/automáticos). Ahora, solo
+     cuando el motivo es "Google no encontró nada" (no cuando encontró algo distinto o
+     fuera de rango) y Claude trae coordenadas usables, la parada se mantiene sin
+     verificar en vez de desaparecer. **Este es el único de los 5 sin confirmar aún que
+     esté desplegado en producción — comprobar `/version` o repetir la prueba de la ruta
+     de los faros y mirar si ya no faltan sitios conocidos.**
+  De paso salió también todo el lío de Workers Builds perdiendo secrets (ver entrada
+  propia arriba) y se montó el GitHub Action de deploy manual — ver esa misma entrada.
+- ~~Trabajo perdido en sesiones sueltas~~ → **10 sept, con Paco en el ordenador**: se
+  encontraron 9 ramas con commits que solo existían en su portátil (`git log --branches
+  --not --remotes`) y se subieron todas a GitHub (`git push origin <ramas>`). La rama del
+  KV de Portugal que se temía perdida (`claude/lucid-kirch-e19278`) resultó no tener
+  ningún commit propio — no había nada que rescatar ahí. **Nada se perdió al final.**
+  Ver "🧵 Ramas rescatadas" más abajo — están a salvo pero siguen sin fusionar a `main`.
+- ~~Chat sin auth~~ → `POST /` exige token Firebase (`verifyAuthAndGetUser`); sin token
+  responde 401 `auth_required`.
+- ~~Coins no validados server-side~~ → se leen de Firestore server-side (comentario en
+  el propio código: "P0-2 — no confiar en el frontend").
+- ~~`public_guides` sin ownership~~ → `firestore.rules` ya exige
+  `request.resource.data.uid == request.auth.uid` al crear, y solo el dueño edita/borra.
+- ~~Cookie consent sin UI~~ → GA4 solo se carga tras `cookie_consent === 'all'` en
+  localStorage (comentario "P1-6"), hay banner en `index.html`.
+- ~~Sin modo offline~~ → `sw.js` (v14) cachea con network-first + fallback a caché +
+  fallback a `/index.html`.
+- ~~Manifest PWA básico~~ → ya tiene `shortcuts` (Chat, Mis Viajes), icono 512 maskable,
+  `share_target`.
+- ~~Credenciales en git (`publish-destinos-salma.js`)~~ → esto llevaba **resuelto desde el
+  11 de abril** (commit "seguridad: auditoría completa P0-P3"), el email/password van por
+  variables de entorno (`SALMA_EMAIL`/`SALMA_PASS`), el script falla si no se le dan. Se
+  había apuntado mal como pendiente en el barrido del 10 sept sin comprobarlo del todo —
+  error de esa auditoría, no del código.
+- ~~Ruta duplicada (`mi-trabajo-local-5sept`)~~ → **10 sept, fusionado a `main`**: el
+  commit original solo traía la mitad del arreglo (el prompt); la parte 2 (dedup de
+  paradas a <250m con distinto `place_id` de Google) no existía en el código y se escribió
+  de cero, probada contra el caso real y contra falsos positivos antes de subir. Paco lo
+  desplegó en una rama de prueba, lo probó pidiendo una ruta real y confirmó que iba bien
+  antes de fusionar.
+- ~~Voz de fallback si falla ElevenLabs (`claude/vigorous-lichterman`)~~ → **descartada,
+  10 sept, ya estaba resuelta**: `main` tiene un arreglo equivalente (`_warmUpSpeech` +
+  `_elevenLabsDown`) comiteado 3 minutos después que esta rama, el mismo 17 de abril —
+  y más completo (desbloquea el sintetizador en el toggle Y en el primer mensaje, no solo
+  en el toggle). No hace falta fusionar nada.
+- ~~Narrador sin botón~~ → **10 sept, fusionado a `main` y probado por Paco en pantalla**:
+  al revisar la rama `claude/optimistic-dhawan` (fix de ráfaga de notificaciones) se
+  descubrió que el Narrador no tenía NINGÚN botón que lo activara — `startNarrator()`
+  solo lo llamaba un chip (`data-action="explorar"`) que dejó de existir en un rediseño
+  anterior. Se añadió el chip "Narrador" (junto a Consultas/Notas/SOS) con un popup
+  explicando qué hace antes de pedir ubicación. Esto NO estaba en las listas de
+  pendientes anteriores — nadie sabía que el botón faltaba porque no rompía nada, solo
+  no hacía nada. Con el botón ya puesto, el fix de la ráfaga de `optimistic-dhawan` (ver
+  "🧵 Ramas rescatadas") vuelve a ser relevante — antes de esto era arreglar un problema
+  en una función a la que nadie podía llegar.
+- **Narrador sin ráfaga (`claude/optimistic-dhawan`)** → **fusionado a `main` el 10 sept**
+  (cola de avisos, dedup persistente, separación foreground/background). Código verificado
+  (entró limpio, sin restos del bucle viejo) pero **todavía sin probar en pantalla** — la
+  ráfaga solo se ve caminando por una zona con varios POIs juntos. Pendiente de que Paco
+  lo pruebe con el Narrador activado moviéndose; si algo no cuadra, es sobre esto.
+- **GPS confirmado antes de activar el Narrador** → **fusionado a `main` el 10 sept**,
+  escrito de cero (no de `claude/vigorous-panini`, que era del 5 abril y chocaba con la
+  reescritura del 11 abril y con el chip de hoy — ver detalle en el commit). Antes,
+  `startNarrator()` decía "activado" aunque el usuario denegara el GPS, y se quedaba mudo
+  para siempre sin avisar. Ahora espera la respuesta real del navegador y si se deniega,
+  devuelve `false` (el toast ya existente de app.js lo cubre). **Sin probar en pantalla
+  todavía** — Paco lo probará en marcha: bloquear ubicación del sitio, activar Narrador,
+  confirmar que avisa en vez de quedarse "encendido" en falso.
+- **Enlace "Ver en Google Maps" del narrador** → **fusionado a `main` el 10 sept**
+  (`salma.js:showNarratorToast`, `?v=73`). Paco reportó que el enlace del toast del
+  narrador (construido con `place_id`/lat,lng del POI) no llevaba a ningún sitio válido;
+  como el narrador solo avisa de sitios a <500m, se quitó el enlace en vez de arreglarlo
+  — estando delante del sitio no aporta nada. **Pendiente de que Paco lo revise en
+  pantalla** (panel 🐛 → confirmar `salma.js?v=73` cargado, activar Narrador cerca de un
+  POI, comprobar que el toast ya no muestra el enlace).
+- ~~Scroll del chat (`claude/hopeful-goldstine`)~~ → **descartada, 10 sept, ya estaba
+  resuelta**: `main` tiene el mismo arreglo palabra por palabra (mismos comentarios,
+  misma lógica), comiteado **28 segundos después** que esta rama, el mismo 6 de abril.
+  No hace falta fusionar nada.
+- ~~Chat modal flotante (`claude/hungry-tereshkova`)~~ → **descartada, 10 sept, ya estaba
+  resuelta, por otro camino más tardío**: esta rama (5 abril) borraba un `<div id="chat-modal">`
+  completo de `index.html` con su propio input/cámara/micro. Ese bloque **no existe en el
+  código actual** — el 7 de septiembre se hizo un rediseño de navegación mucho más completo
+  ("Navegación Fase 1" a "Fase 5": barra fija de 4, cabeceras con historial, vista itinerario
+  sin monkey-patch) que rehizo esta zona de cero y llegó al mismo sitio por más camino.
+  No hace falta fusionar nada.
+- ~~Whitelist ferry/bus (`claude/vibrant-bassi`)~~ → **descartada, 10 sept, ya estaba
+  resuelta**: los 5 dominios (balearia, ferryscanner, directferries, clickferry, omio)
+  ya están en la whitelist de `app.js` y del Worker — commit con el mismo mensaje exacto
+  en `main`, el mismo 6 de abril. Mismo patrón que las dos anteriores.
+
+*(No significa que estén bien probadas en pantalla — solo que el código ya no coincide
+con esta lista. Si algo de esto sigue fallando para Paco, es un bug nuevo, no el pendiente
+antiguo — tratarlo como tal.)*
+
+### 🟡 Importante
+
+- **Dos propuestas de diseño de abril 2026, "analizadas y documentadas, no implementar
+  hasta que Paco lo pida", revisadas contra el código real el 13 sept 2026 — siguen sin
+  tocar, y una de ellas (mapa fijo) se ha vuelto más urgente, no menos:**
+  1. **Mapa siempre visible (V5)** — el live-map pasa a ser fondo permanente de toda la
+     app; welcome/chat/perfil/rutas flotan encima como sheets semitransparentes en vez de
+     pantallas que se ocultan/muestran. Objetivo secundario: unificar los mapas
+     duplicados en uno solo. Documento completo en memoria de sesión
+     (`project_mapa_fijo_v5.md`). **Verificado hoy:** la colisión de z-index que motivó
+     parte del plan sigue intacta (`.app-bottom-bar` y `.itin-view` comparten
+     `z-index:900` en `styles.css`), y el problema de "mapas duplicados" que quería
+     resolver la Fase C ha crecido de 3 a **al menos 5** instancias independientes de
+     `google.maps.Map`/Leaflet (`app.js`, `mapa-ruta.js`, `guide-renderer.js`,
+     `bitacora-renderer.js`, y el nuevo `map-modal.js` del rediseño de navegación del 7
+     sept) — el rediseño de septiembre fue en dirección contraria a la unificación. La
+     lista de "6 archivos afectados" del documento original ya se ha quedado corta.
+  2. **Modo offline completo** — mapa OSM descargable + POIs + rutas pre-cacheadas para
+     viajar sin datos, en 4 fases (O1-O4). Documento completo en memoria de sesión
+     (`project_offline_mode.md`). **Verificado hoy:** la Fase O1 (persistencia Firestore)
+     ya está hecha (`db.enablePersistence()` en `app.js`, línea ~9) — probablemente como
+     efecto colateral de otro trabajo, nadie lo marcó como parte de este plan. Las fases
+     O2-O4 (tiles OSM, POIs offline, rutas pre-cacheadas) siguen sin empezar — no existe
+     ningún `offline-tiles.js` ni `offline-pois.js` en el repo.
+  Ninguna se ha hablado con Paco para decidir si retomarlas — solo quedan anotadas aquí
+  para que no se vuelvan a perder de vista como pasó la primera vez.
+  **13 sept 2026, tarde**: a Paco le gustó mucho el mockup visual de la propuesta 1
+  (mapa siempre visible) — "le da un caché enorme a la app". Siguiente paso sugerido,
+  **sin empezar todavía, no tocar código sin que lo pida explícitamente**: arrancar solo
+  por la **Fase A** (mapa de fondo permanente, ~1 sesión, sin riesgo) — es un cambio
+  invisible a propósito: el live-map se queda vivo detrás en vez de crearse/destruirse
+  cada vez, pero las pantallas siguen tapándolo del todo, igual que hoy. El salto visual
+  real (mapa asomando, barra semitransparente) no llega hasta la Fase B — no confundir
+  las dos al retomarlo.
+
+- **GPS mostrando ubicación de Portugal — CASI CERRADO (13 sept 2026): pinta a geolocalización
+  de escritorio poco fiable, no a bug de la app.** Detectado de paso investigando el bug de
+  Ronda: con Paco físicamente en Galicia, el panel 🐛 mostró `[Salma] Ubicación: 39.9224
+  -8.1332 ±500m` (centro de Portugal) y `[Salma] Copiloto (caché): Portugal pt`. Paco confirmó
+  después el dato clave: **en el portátil sale mal posicionado (Portugal), en el móvil sale bien
+  posicionado**, mismo momento. Un portátil no tiene chip GPS — el navegador de escritorio estima
+  la posición por WiFi/IP (compara redes WiFi vistas contra la base de ubicaciones de Google, o
+  cae a la IP), y si esa base tiene mal geolocalizado el router de Paco (o el bloque de IP de su
+  ISP está registrado en Portugal), da una coordenada de Portugal con `±500m` de "confianza"
+  aunque esté mal. El móvil sí tiene GPS por satélite real, por eso acierta. Se revisó el código
+  (`app.js`) y las llamadas principales ya piden `enableHighAccuracy: true`
+  ([app.js:3853](app.js:3853), [app.js:5734](app.js:5734)) — no es que la app pida poca
+  precisión; sin chip GPS esa opción no cambia nada. Conclusión: probablemente **no es un bug
+  arreglable en el código**, es una limitación de hardware/red del portátil. La etiqueta
+  "(caché)" del log del copiloto queda aparte, sin relación con esto — simplemente cachea lo que
+  el navegador le dio, que ya venía mal desde el origen. **Sin tocar nada de código.** Si vuelve
+  a salir raro en el MÓVIL (no en el portátil), eso sí sería la caché de `geo:{lat}:{lng}` en KV
+  (24h TTL) o algo del `watchPosition` — investigar entonces, no antes.
+
+- **Workers Builds DESCONECTADO del todo (12 sept 2026, mañana) — sustituido por GitHub
+  Action manual.** Tras la segunda pérdida de secrets (ver entrada de abajo), Paco
+  desconectó el repo de GitHub en salma-api → Settings → Builds. Ya no hay ningún deploy
+  automático en cada push — ni desde esta sesión ni desde ninguna otra. Para desplegar el
+  Worker ahora: repo → pestaña **Actions** → **"Deploy Worker"** (`.github/workflows/
+  deploy-worker.yml`, añadido esta madrugada) → botón **"Run workflow"**, disparo manual,
+  funciona desde el navegador del móvil sin terminal. Ejecuta literalmente
+  `npx wrangler deploy -c wrangler.toml` en un runner de GitHub — el mismo comando que se
+  ha usado siempre desde el portátil, no toca secrets. Requiere el secret de GitHub
+  `CLOUDFLARE_API_TOKEN` (ya configurado). **Probado una vez (12 sept, ~13:00): deploy en
+  25s, éxito, y confirmado que NO tocó los secrets ya puestos** — la única secret que
+  pareció faltar tras esa prueba era porque no se habían repuesto todas, no porque el
+  deploy las borrara.
+  **Estado de los 15 secrets a la tarde del 13 sept — 9 confirmados puestos (más
+  `GOOGLE_TTS_KEY`, que no es de los 15 y el Worker no la usa):** `ANTHROPIC_API_KEY`,
+  `GOOGLE_PLACES_KEY`, `OPENAI_API_KEY` (ya estaban) + `BRAVE_SEARCH_KEY`,
+  `DUFFEL_ACCESS_TOKEN`, `RAPIDAPI_KEY`, `ELEVENLABS_API_KEY` (repuestos con
+  `worker/restaurar-secrets.cjs --subir`) + `OPENWEATHER_KEY` (home.openweathermap.org) +
+  `ADMIN_TOKEN` (generado con `crypto.randomBytes` en sesión, guardado por Paco) — los
+  3 últimos puestos a mano con `wrangler secret put`, todo verificado con
+  `wrangler secret list`. **Faltan por reponer estos 6, ninguno con backup local — solo
+  desde su panel, PAUSADO A PETICIÓN DE PACO (13 sept) — recordárselo en próximas
+  sesiones, no perseguirlo sin que él lo pida**: `SERPER_API_KEY` (serper.dev — su web
+  de registro estaba caída el 13 sept, comprobado también desde el navegador de la
+  sesión, no solo la red de Paco; la API en sí, `google.serper.dev`, respondía normal,
+  reintentar más tarde), `STRIPE_SECRET_KEY` (dashboard Stripe), `TWILIO_ACCOUNT_SID` /
+  `TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` (consola Twilio), `GA4_CREDENTIALS`
+  (service account JSON de Google Analytics — la más laboriosa de las 6, y de las que
+  menos urgen: el endpoint `/ga4` no lo llama ninguna pantalla de la app todavía, así
+  que montarlo ahora no cambia nada visible hasta que se construya un panel de stats en
+  `admin.html`). Con los 9 que hay ya funciona lo esencial (chat, generación de rutas,
+  verificación Google, fotos, búsqueda web, vuelos, hoteles/coches, voz, clima, panel
+  admin) — lo que falta es eventos, Stripe, SOS por SMS y GA4.
+- **Workers Builds — REABIERTO (12 sept 2026, madrugada): la "prueba de fuego" del 11
+  sept dio falso positivo, se ha perdido una SEGUNDA key (`GOOGLE_PLACES_KEY`).** Tras el
+  "confirmado seguro" de abajo, un deploy automático posterior (entre las 22:14 y la
+  01:10 del 12 sept, sin aislar cuál exactamente) volvió a dejar el Worker sin un secret
+  — esta vez `GOOGLE_PLACES_KEY`. Se descubrió porque `/photo` empezó a devolver
+  `{"error":"missing params"}` para TODAS las fotos de una ruta (mismo código exacto que
+  devuelve si faltan los parámetros de la URL, así que el síntoma no gritaba "falta la
+  key" — hubo que leer el código para verlo). El chat seguía funcionando normal
+  (`ANTHROPIC_API_KEY` sí sobrevivió esta vez), por eso nadie lo notó hasta que faltaron
+  las fotos. **Conclusión de Paco, con la que la sesión está de acuerdo: no fiarse de
+  Workers Builds para deploys de producción hasta entender de verdad qué se lleva por
+  delante los secrets — puede haberse llevado alguno más sin que aún se haya notado.**
+  Pendiente: `npx wrangler secret list -c wrangler.toml` y comparar contra las 15 de la
+  tabla de abajo; reponer `GOOGLE_PLACES_KEY` con `npx wrangler secret put
+  GOOGLE_PLACES_KEY -c wrangler.toml`; y decidir si Workers Builds se desconecta del todo
+  o se queda solo para cambios que no toquen nada sensible, verificando `/health` después
+  de cada deploy automático (no solo probando el chat).
+- **Workers Builds (11 sept 2026) — se dio por resuelto y confirmado seguro la misma
+  noche; ver entrada de arriba (12 sept), NO lo estaba.** Tras conectar Cloudflare
+  Workers Builds (push a `main` → deploy automático, ver alternativa del checklist §4),
+  `ANTHROPIC_API_KEY` desapareció del Worker en producción — Salma dejó de responder a
+  todo el mundo con "no está configurada (falta API key)". La pantalla de "Variables y
+  secretos en tiempo de ejecución" del dashboard estaba bloqueada para editar (mensaje
+  "Worker que solo tenga recursos estáticos", no verificado si es la causa real o un
+  efecto colateral). **No se confirmó la causa raíz**: al intentar reponer el secret con
+  `wrangler secret put` salió el error "the latest version of your Worker isn't currently
+  deployed" — indica que había una versión subida y sin desplegar rondando, sospechosamente
+  relacionado con la casilla "Habilitar compilaciones de vista previa" que se dejó activada
+  al conectar el repo. Arreglo aplicado (desde el portátil, PowerShell):
+  `npx wrangler deploy -c wrangler.toml` (alinea versión desplegada = última) seguido de
+  `npx wrangler secret put ANTHROPIC_API_KEY -c wrangler.toml` — funcionó.
+  **Efecto colateral descubierto en el rescate**: el portátil de Paco estaba 37 commits
+  por detrás de `origin/main` — el deploy de emergencia subió código viejo (reapareció el
+  bug del texto cortado al generar ruta, ya arreglado en `main`). Se corrigió con
+  `git pull origin main` + nuevo `wrangler deploy`. Esto es un problema aparte de Workers
+  Builds — repetir el housekeeping del 10 sept, `git pull` antes de cualquier deploy manual.
+  **Se creyó resuelto la misma noche (11 sept, ~23:45) — NO lo estaba, ver entrada de
+  arriba (12 sept):** se apagó "Compilaciones para ramas que no son de producción"
+  (salma-api → Settings → Builds → Control de ramas) — esa es la casilla sospechosa de
+  crear versiones sin desplegar. Prueba de fuego: commit de prueba a `main`, deploy
+  automático, y mensaje real en el chat ("ruta de los faros") — Salma respondió completo,
+  con fotos y guía (la prueba no llegó a comprobar TODAS las paradas, solo que hubo
+  alguna foto). **Workers Builds NO está confirmado seguro** — se perdió una segunda key
+  horas después. Con esa casilla
+  apagada. Causa raíz exacta sin confirmar del todo (no se aisló si era esa casilla u
+  otra cosa de la conexión inicial), pero el síntoma no ha reaparecido tras el fix.
+- **Enlace "Cómo llegar" de una parada — fusionado a `main` (10 sept), falta que Paco
+  confirme en pantalla.** El modal fullscreen de `map-modal.js` (del rediseño visual del
+  7-8 sept) se quedaba enganchado a CUALQUIER enlace `google.com/maps` del chat — también
+  al de "cómo llegar" a una sola parada, que debía abrir Google Maps directo. Causa: en
+  `app.js` (`formatMessage`), la variable `isMaps` metía en el modal todo lo que llevara
+  `google.com/maps`, sin distinguir ruta completa de parada suelta. Se separó en
+  `isRouteMaps` (`app.js?v=100`): solo "Ruta completa" (varias paradas) abre el modal;
+  "Cómo llegar" y el genérico "Abrir en Google Maps" abren con `window.open` directo, como
+  cualquier otro enlace. Falta que Paco confirme en pantalla: pedir una parada suelta en
+  el chat, tocar "Cómo llegar", comprobar que abre Google Maps (app o pestaña nueva)
+  directamente, sin pasar por el mapa fullscreen de la web.
+- **Enlace "Ruta completa en Google Maps" del chat — fusionado a `main` (10 sept), falta
+  desplegar el Worker.** El link agregado (al final de una respuesta con varias paradas en
+  negrita) usaba el formato viejo `/maps/dir/lat,lng/lat,lng/...` sin `?api=1`, que no abre
+  bien desde el WebView de la PWA — a diferencia de los enlaces "Cómo llegar" por parada,
+  que sí llevan `?api=1&destination=...` y funcionaban. Se cambió al esquema oficial de
+  Google (`?api=1&origin=...&destination=...&waypoints=...`), igual que los de "Cómo
+  llegar". Falta que Paco haga, desde su ordenador: `cd worker; npx wrangler deploy -c
+  wrangler.toml`, y que confirme en pantalla tocando el enlace en una respuesta con ruta
+  de varias paradas (ej. algo por la N-2 de Portugal).
+- **Respuesta del chat cortada a media frase al generar una ruta — fusionado a `main`
+  (10 sept, commit `d7e3154`), falta desplegar el Worker.** Paco reportó (chip "Hazme
+  una ruta desde donde estoy", destino Chaves) que la prosa de presentación se cortaba
+  a media palabra ("...cierra con un caldo en una tas") y saltaba directo a "Generando
+  tu ruta...". Causa: en `worker/salma-worker.js` (`readAnthropicStream` y
+  `readOpenAIStream`), el reenvío de cada trozo del streaming a `t: chunk` decidía si
+  mandarlo o no mirando si `fullText` ya contenía el marcador `SALMA_ROUTE` completo —
+  si un mismo trozo traía pegados el final de la prosa y el arranque del marcador, se
+  descartaba el trozo ENTERO (prosa incluida) en vez de solo el marcador. Se cambió para
+  mandar la parte de prosa que venga delante del marcador dentro de ese mismo trozo, y
+  solo entonces pasar a `generating: true`. Probado con `node --check`, sin tocar
+  frontend (no hace falta subir ningún `?v=`). **Verificado que sigue en el Worker viejo**:
+  el 10 sept a las 16:48 UTC el `/version` devolvía `2856c741` desplegado a las
+  08:18:16 UTC — de **antes** del commit (16:31 UTC) — así que el fix aún no ha corrido
+  en producción. Paco estaba con el móvil y no pudo desplegar en el momento. Falta, desde
+  su ordenador: `git pull origin main` (confirmar que baja `d7e3154` o posterior), luego
+  `cd worker; npx wrangler deploy -c wrangler.toml`, comprobar que `deployed_at` en
+  `/version` es posterior al pull, y probar el chip de ruta varias veces (el bug depende
+  de dónde caiga el corte del trozo del stream, no siempre se repite).
+- Stripe sigue en modo test — falta decidir cuándo pasar a `sk_live_`.
+- Google Maps key sin restricción de dominio en GCP Console (no verificable desde el repo).
+- **Modelo de negocio a medias**: "Salma Coins" (documentado más abajo en este archivo) y
+  el Premium por periodos de `docs/pasarela-premium.md` conviven ahora mismo en el código
+  — el Worker ya habla de planes/meses, el frontend todavía de coins. Hay que decidir y
+  terminar la migración (Fases 2-4 del documento) o revertir el Worker, no dejarlo a medias.
+- WebAuthn/fingerprint sigue parcial (solo recuerda email).
+- **[Prioridad baja] Resumen/narrativa post-viaje** — auditado 11 sept: no existe ningún
+  sistema de "estados" de Salma (Exploradora/Buscadora/Acompañante/Crisis/Historiadora),
+  ni `getSalmaState()`, ni nada que cambie el prompt según si un viaje está activo o
+  completado — la selección de prompt (`buildMessages()` en `worker/salma-worker.js`)
+  es solo por patrón de mensaje, no por ciclo de vida del viaje. Tampoco hay concepto de
+  "viaje completado" en Firestore (`users/{uid}/maps/{mapId}` no tiene campo `status`).
+  Lo único parecido a un "resumen" es el vídeo Canvas (`video-player.js`, tipo `resumen`)
+  y es un slideshow visual bajo petición explícita del usuario, no una narrativa de texto
+  automática. Sin prisa — no hay nada roto, es una feature nueva a valorar más adelante.
+
+### 🔧 Deuda técnica (sin cambios, no re-verificado a fondo en este barrido salvo lo dicho)
+
+- **Código duplicado** — `_groupByDay`, `_sampleWaypoints`, `_fullRouteGmapsUrl`,
+  `escapeHTML` en 3+ archivos.
+- **Monkey-patch frágil** — `mapa-itinerario.js` parchea `bitacoraRenderer.renderDiario`
+  en runtime.
+- **Deep links transport incompletos** — Solo Uber y Lyft tienen deep links.
+- **2 funciones dead code confirmadas** — `injectGoogleMapsLink()` e
+  `injectTransportBlock()` en el Worker (~línea 3290) solo hacen `return reply` sin tocar nada.
+
+### 🧵 Ramas rescatadas (10 sept) — con trabajo real, sin fusionar a `main`
+
+Estaban solo en el portátil de Paco, ya están en GitHub, **pero ninguna está fusionada
+en `main` todavía** — son ramas propias, con historia que ha divergido de `main`. Antes
+de fusionar cualquiera: mirar si sigue mereciendo la pena (puede que algo se haya vuelto
+a hacer distinto después) y probarla, una por una, con confirmación de Paco.
+
+| Rama | Qué trae (por los commits) | Tamaño del cambio |
+|---|---|---|
+| `claude/vigilant-nightingale-3b17ca` | Flujo `go_to`: pregunta el mes antes de buscar vuelos (solo ida) + fix de "aquí cerca" no debe disparar `go_to`. **Aparcada por decisión de Paco (10 sept) — no es necesaria de momento, no fusionar sin que él lo pida.** | medio (salma.js + worker) |
+| `trabajo-5-sept-2026` (tag `v-5sept-completo`) | Copia de referencia del día que se borró el Worker (protocolo §1) — histórico, no es "trabajo nuevo" que fusionar | — |
+
+Todas las demás ramas rescatadas del 10 sept ya se revisaron una a una: 2 se fusionaron
+de verdad (ruta duplicada, narrador sin ráfaga + GPS confirmado — este último escrito de
+cero), y 4 (`vigorous-lichterman`, `hopeful-goldstine`, `vibrant-bassi`,
+`hungry-tereshkova`) resultaron estar ya resueltas en `main` por otro commit hecho
+independientemente, casi siempre el mismo día o unos meses después con un rediseño más
+completo — ver detalle de cada una en "✅ Ya resuelto" arriba. Solo queda
+`vigilant-nightingale-3b17ca`, aparcada a propósito.
+
+### 📋 Sesiones de Code sueltas (29 ago – 10 sept) — revisar en tu ordenador
+
+No pude leer el contenido de estas conversaciones (ver límites abajo), solo metadatos.
+Están ordenadas de más a menos reciente. "Señal git" es lo que se veía en el árbol de
+trabajo al terminar cada sesión — no dice si el problema se resolvió, solo si el cambio
+llegó a un commit y si ese commit llegó a GitHub.
+
+| Fecha | Título | Rama | Señal git | Acción sugerida |
+|---|---|---|---|---|
+| 8 sept | Diseño tokens estudio | `worktree-rediseno-visual` | comprobado 10 sept: sin commits propios (nada exclusivo del portátil) | Nada que rescatar — lo que hubiera de valioso no llegó a commitearse |
+| 7 sept | Guía con mapa no funciona | `main` | cambios sin commitear al cerrar | Confirmar con Paco si el mapa ya va bien; si no, retomar |
+| 7 sept | Rediseño visual de la app | `main` | cambios sin commitear al cerrar | Puede solaparse con "Diseño tokens estudio" — mirar juntas |
+| 7 sept | Pasarela de pago Stripe | `worktree-pasarela-pago` | Fase 0+1 sí llegaron a `main` (commits `200706a`, `5a6b2f8`); la rama en sí nunca se pusheó | Ver el crítico de pago roto arriba — esto es la causa |
+| 6 sept | Road-trips reales con búsqueda web | `main` | cambios sin commitear, sin commit identificable en el historial | Confirmar si se llegó a implementar algo o quedó en nada |
+| 6 sept | Anclar país y radio de búsqueda (x2) | `main` | limpia | Parece resuelto — `anchorCountry` ya está en el Worker |
+| 6 sept | Saca lo pendiente | `main` | sesión de 21s, sin cambios | No hizo nada, ignorar |
+| 5 sept | Rutas: respuestas y recomendaciones | `main` | **rescatado y fusionado a `main` el 10 sept** (probado por Paco en producción) | Cerrado |
+| 5 sept | Geolocalización incorrecta en rutas | `main` | limpia, sin commit identificable | Confirmar si el bug de geolocalización sigue vivo |
+| 5 sept | Cambios no reflejados en la app de rutas (x3, Opus) | `main` | cambios sin commitear en las tres | Es el incidente que motivó el protocolo del §1 de este archivo — confirmar que ya no pasa |
+| 4-5 sept | Rutas con Web Search y simplificación (x2) | `main` | una limpia, otra con cambios sin commitear | Sin commit identificable con ese tema — confirmar si se perdió |
+| 31 ago | Auditoría validador URLs y trazado rutas Salma | `main` | cambios sin commitear al cerrar | La sanitización de URLs ya está documentada como implementada — probablemente ok |
+| 30 ago | Ajustes UI pantalla principal Salma | `main` | cambios sin commitear al cerrar | Revisar si quedó algo suelto |
+| 30 ago | Actualizar KV (Portugal + verificación global) | `claude/lucid-kirch-e19278` | comprobado 10 sept: la rama existe en el portátil pero sin ningún commit propio | Nada que rescatar — la sesión no llegó a commitear el trabajo de Portugal |
+| 30 ago | Auditoría estado actual Portugal en SALMA | `main` | cambios sin commitear al cerrar | Ligado a la sesión anterior |
+| 30 ago | Auditoría y validador de URLs de Google Maps | `main` | cambios sin commitear al cerrar | Revisar solapamiento con la del 31 ago |
+| 29 ago | BRIEFING: Flujo Guiado de Creación | `main` | cambios sin commitear al cerrar | El flujo guiado de 8 pasos ya existe en `app.js` ("Afinar") — probablemente se integró en otro commit posterior |
+
+**Housekeeping pendiente:** el `main` del portátil de Paco seguía 10 commits por detrás
+de GitHub el 10 sept (comprobado con `git status`). Antes de la próxima sesión de trabajo
+ahí, hacer `git pull origin main` — es un fast-forward, seguro.
+
+### Metodología y límites de este barrido
+
+- Comparado contra el código real (`git log`, `git ls-remote`, `grep` en Worker/frontend/
+  `firestore.rules`) el 10 sept 2026 — no contra lo que decían sesiones anteriores.
+- **Sin acceso a conversaciones de chat normal (claude.ai)**: si algo se decidió o se pidió
+  ahí y no llegó al repo, no está en esta lista. Si Paco recuerda algo de esas
+  conversaciones que falte aquí, decírselo a la sesión y se añade.
+- De las sesiones de Code de la tabla, solo se pudieron ver metadatos (título, fecha,
+  rama, si quedaron cambios sin commitear/pushear) — el ordenador de Paco estaba
+  desconectado durante este barrido y no se pudo leer el contenido de esas conversaciones.
+  Reconectarlo permite revisarlas una a una.
+- Actualizar esta sección (no crear una nueva) cada vez que se cierre o se abandone algo
+  pendiente, para que no se repita el desfase que motivó este barrido.
 
 ---
 
 ## Normas de desarrollo
+
+### Autonomía de la sesión (acordado con Paco, 11 sept 2026 — trabaja bastantes días desde el móvil)
+
+- **Bajo riesgo** (documentación, `CLAUDE.md`, housekeeping de git, subir algo que ya se
+  ha hablado y probado en la misma conversación) → la sesión puede hacerlo directo, sin
+  preguntar paso a paso.
+- **Todo lo demás** (código de `app.js`/`salma-worker.js`/cualquier `.js` de la app, el
+  prompt, deploys que afecten a producción, cualquier cosa que cambie lo que ve un
+  usuario) → sigue el resto de reglas de esta sección tal cual: se pregunta y se confirma
+  en cada paso, **salvo** que Paco diga explícitamente "hazlo" para ese caso concreto en
+  ese momento — eso no es un permiso permanente, solo vale para esa acción.
 
 - **Nunca** meter `const db` duplicado fuera de `app.js`
 - **Nunca** poner API keys en el código — van en Cloudflare secrets
@@ -861,3 +1437,21 @@ git checkout v1-stable-20260410
 # Backup completo en Desktop
 # C:\Users\User\Desktop\salma-v1-stable-20260410\
 ```
+
+## Reparto de worktrees — 7 septiembre 2026
+
+Hoy se trabaja en 4 frentes. Recordatorio: la app de escritorio crea un worktree automático por cada sesión nueva (botón "+ New session" en la pestaña Code) — no hace falta usar `-w` a mano ni `git worktree add` manualmente.
+
+**En paralelo (máx. 2 sesiones activas a la vez):**
+
+1. `roadtrip-reales` — cerrar la tarea de road trips reales (bloque 1-Ruta de F2-Calidad: día a día, carreteras reales, dificultad, alternativas). Toca: `mapa-ruta.js`, renderizado de ruta en `salma.js`, prompt/Worker (con aprobación explícita — ver Protocolo, punto 5).
+2. `pasarela-pago` — pasarela de pago (Stripe, bundles). Evitar tocar `index.html`/`styles.css` más allá del propio checkout.
+
+**En cola (después de fusionar las dos anteriores a main, una detrás de otra — no en paralelo entre sí):**
+
+3. `rediseno-visual` — rediseño visual amplio (layout, colores, componentes). Va primero para fijar la base visual antes de tocar Historia.
+4. `historia-tab` — continuar el apartado Historia (ya existen `historia.js`/`historia.css` en el repo, no se parte de cero). Arranca solo cuando `rediseno-visual` esté fusionado a main, para heredar el estilo nuevo en vez de remaquetar dos veces.
+
+**Notas aparte (no relacionadas con este reparto, detectadas al revisar el repo):**
+- Hay ~40 worktrees viejos marcados `prunable` en `.claude/worktrees/` de sesiones anteriores ya cerradas. Se pueden limpiar con `git worktree prune` cuando quieras — no borra nada en uso, solo limpia referencias muertas.
+- El repo tiene actualmente un diff enorme sin commitear (~619.000 líneas en ~1950 ficheros) que parece ser mezcla de finales de línea CRLF/LF, no cambios de contenido reales — no lo he tocado. Convendría revisarlo y decidir cómo normalizarlo antes del próximo commit, para no arrastrar sin querer un commit gigante de miles de ficheros.

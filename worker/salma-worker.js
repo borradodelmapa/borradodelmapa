@@ -9458,7 +9458,6 @@ REGLAS:
           }
         }
 
-        // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
         // Adjuntar carretera preferida detectada (p.ej. "sin salirte de la N2")
         // para que el frontend pueda pedir /directions con preferRoad y avisar si se desvía.
         if (route) {
@@ -9495,6 +9494,50 @@ REGLAS:
         if (route) {
           const _days3 = route.duration_days || (route.stops || []).filter((s, i, arr) => i === 0 || s.day !== arr[i-1]?.day).length;
           await cacheGeneratedRoute(env, ctx, route, _days3);
+        }
+
+        // ── Catch-all: Claude a veces escribe la web como texto plano en su propia
+        // línea (p.ej. "campinglagomar.es" suelto) a pesar de que el prompt se lo
+        // prohíbe expresamente — pasa cuando reutiliza un lugar que ya conocía de
+        // antes en la conversación, sin volver a llamar a buscar_lugar. Detectamos
+        // esa línea (solo caracteres de dominio, un punto, TLD alfabético al final)
+        // y la convertimos en enlace real en vez de dejarla sin subrayar.
+        if (!route) {
+          reply = reply.replace(
+            /^[ \t]*([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,24})[ \t]*$/gim,
+            (_m, domain) => `🔗 https://${domain}`
+          );
+        }
+
+        // ── Inyectar la web oficial de cada lugar recomendado (buscar_lugar) ──
+        // A diferencia de buscar_web, esto SIEMPRE se muestra si Google Places la tiene —
+        // es un dato del propio sitio (como el teléfono), no un enlace externo a un blog/guía.
+        // OJO: va DESPUÉS de la "RED DE SEGURIDAD" (arriba) que borra cualquier línea con URL
+        // cuando !_userWantsLinks — si se pone antes, esa limpieza se come esta línea igual
+        // que se comía cualquier otra (bug real: se probó y desapareció).
+        if (!route && _lugarWebUrls.length > 0) {
+          const missingWebs = _lugarWebUrls
+            .filter(u => {
+              if (!u.url || reply.includes(u.url)) return false;
+              // Comparar también por dominio (no solo URL exacta) — si el catch-all
+              // de arriba ya convirtió el nombre suelto en enlace, no duplicar.
+              try {
+                const host = new URL(u.url).hostname.replace(/^www\./, '');
+                if (host && reply.includes(host)) return false;
+              } catch (_) {}
+              return true;
+            })
+            .slice(0, 3);
+          if (missingWebs.length > 0) {
+            let webBlock = '\n';
+            for (const u of missingWebs) {
+              // 🔗 (no 🌐): el frontend solo trata como URL de confianza (sin filtrar por
+              // dominio) las líneas que empiezan por 🔗 — ver sanitizeUrls() en app.js
+              webBlock += `\n🔗 ${(u.titulo || '').slice(0, 60)} — ${u.url}`;
+            }
+            reply += webBlock;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: webBlock })}\n\n`)); } catch (_) {}
+          }
         }
 
         // ── Catch-all: Claude a veces escribe la web como texto plano en su propia

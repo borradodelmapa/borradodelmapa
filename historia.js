@@ -534,6 +534,62 @@ const historiaModule = (() => {
     setTimeout(() => _onBuscar(place), 50);
   }
 
-  return { render, loadPlace };
+  // ─── Modo compacto — botón "ampliar" embebido en guías y chat ─────────────
+  // A diferencia de render()/loadPlace(), no toma #app-content: pinta dentro
+  // del contenedor que le pases (una tarjeta de parada, una burbuja de chat).
+
+  function _paradaCompactHTML(p) {
+    const factsHTML = p.key_facts && p.key_facts.length
+      ? `<ul class="hist-inline-facts">${p.key_facts.map(f => `<li>${f}</li>`).join('')}</ul>`
+      : '';
+    return `
+      <div class="hist-inline-parada">
+        <div class="hist-inline-year">${p.year}</div>
+        <div class="hist-inline-body">
+          <h4 class="hist-inline-ptitle">${p.title}</h4>
+          ${p.subtitle ? `<p class="hist-inline-psub">${p.subtitle}</p>` : ''}
+          <p class="hist-inline-pcontent">${p.content}</p>
+          ${factsHTML}
+        </div>
+      </div>`;
+  }
+
+  function renderCompactInto(container, opts) {
+    if (!container || !opts || !opts.place) return;
+    const place = opts.place;
+
+    container.innerHTML = `<button class="hist-inline-toggle" type="button">📖 Historia de ${place}</button>`;
+    const btn = container.querySelector('.hist-inline-toggle');
+
+    async function _abrir() {
+      btn.disabled = true;
+      btn.textContent = 'Buscando historia...';
+      try {
+        const historia = await _buscarHistoria(place, opts.lat, opts.lng);
+        const thumb = _thumbUrl(historia);
+        const paradasHTML = (historia.paradas || []).map(_paradaCompactHTML).join('');
+        container.innerHTML = `
+          <button class="hist-inline-toggle hist-inline-toggle--open" type="button">📖 ${historia.emoji || ''} ${historia.title || place}</button>
+          <div class="hist-inline-body-wrap">
+            ${thumb ? `<div class="hist-inline-thumb" style="background-image:url('${thumb}')"></div>` : ''}
+            ${historia.description ? `<p class="hist-inline-desc">${historia.description}</p>` : ''}
+            <div class="hist-inline-timeline">${paradasHTML}</div>
+          </div>`;
+        container.querySelector('.hist-inline-toggle--open').addEventListener('click', () => {
+          const body = container.querySelector('.hist-inline-body-wrap');
+          if (body) body.hidden = !body.hidden;
+        });
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'No se pudo cargar — reintentar';
+        btn.addEventListener('click', _abrir, { once: true });
+        return;
+      }
+    }
+
+    btn.addEventListener('click', _abrir, { once: true });
+  }
+
+  return { render, loadPlace, renderCompactInto };
 
 })();

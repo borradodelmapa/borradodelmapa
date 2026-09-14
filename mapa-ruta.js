@@ -18,8 +18,20 @@ const mapaRuta = {
   _searchMarker: null, // Marker de búsqueda temporal
   _autocomplete: null, // Google Places Autocomplete
 
-  // Colores por día
-  _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
+  // Colores por día — rediseño "viajero real" (doc 8 sep): paleta atenuada,
+  // día 1 en el acento (#F4630B). Es wayfinding funcional en el mapa, no decoración.
+  _dayColors: ['#F4630B', '#B26A3C', '#6E8B6A', '#5E7E92', '#A65A4E', '#8A7093', '#C79A5C'],
+
+  // Paradas con coordenada usable: número finito, dentro de rango, no (0,0).
+  // Una coord imposible (lat 999, lat/lng cambiados) reventaba fitBounds con "reading 'min'".
+  _validStops(stops) {
+    return (stops || []).filter(s => {
+      if (!s) return false;
+      const la = +s.lat, ln = +s.lng;
+      return isFinite(la) && isFinite(ln) && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+        && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+    });
+  },
 
   // ═══ INIT ═══
   init(containerId, stops, options) {
@@ -29,9 +41,17 @@ const mapaRuta = {
     this._currentContainerId = containerId;
     this._currentStops = stops;
     this._previewMode = !!(options && options.preview);
+    // FASE 2 — trazado real de la carretera nombrada (OSM), si el worker lo adjuntó
+    const rg = options && options.roadGeometry;
+    this._roadGeometry = (rg && Array.isArray(rg.coords) && rg.coords.length > 1) ? rg : null;
     this.destroy();
 
     this._initGoogleMaps(containerId, stops);
+  },
+
+  // [[lat,lng],…] del trazado real, listo para Google/Leaflet
+  _roadGeomPath() {
+    return this._roadGeometry ? this._roadGeometry.coords.map(c => ({ lat: c[0], lng: c[1] })) : null;
   },
 
 
@@ -53,11 +73,11 @@ const mapaRuta = {
     btnMaps.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
     btnMaps.addEventListener('click', () => {
       if (!this._map || this._mapType !== 'google' || !window.google) return;
-      const valid = this._currentStops.filter(s => s.lat && s.lng);
+      const valid = this._validStops(this._currentStops);
       if (!valid.length) return;
       const bounds = new google.maps.LatLngBounds();
       valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
-      this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 });
+      try { this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
     });
 
     // Botón Compartir
@@ -173,7 +193,11 @@ const mapaRuta = {
   },
 
   // ═══ BOTÓN "IR AL MAPA" (modo preview del itinerario) ═══
+  // DESACTIVADO 6 sept 2026 (decisión de Paco). Detrás de este botón está el acceso al
+  // mapa live con TODO el set de herramientas en construcción: I'M FINE, IR AQUÍ, GUARDAR,
+  // añadir fotos, CENTRAR, TIPO, CAPAS, SOS, buscar lugar. Reactivar quitando este return.
   _renderGoToMapButton(containerId) {
+    return;
     const el = document.getElementById(containerId);
     if (!el) return;
     el.querySelector('.itin-go-to-map')?.remove();
@@ -361,7 +385,7 @@ const mapaRuta = {
       title: title,
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
-        fillColor: '#f0b429',
+        fillColor: '#F4630B',
         fillOpacity: 1,
         strokeColor: '#fff',
         strokeWeight: 2,
@@ -385,7 +409,7 @@ const mapaRuta = {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    const valid = this._validStops(stops);
     if (!valid.length) { el.style.display = 'none'; return; }
 
     const KEY = 'AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
@@ -402,7 +426,7 @@ const mapaRuta = {
 
     // Ruta como línea recta inicial
     const pathCoords = valid.map(s => `${s.lat},${s.lng}`).join('|');
-    const path = `path=color:0xD4A843CC|weight:3|${pathCoords}`;
+    const path = `path=color:0xF4630BCC|weight:3|${pathCoords}`;
 
     // Dark style Salma (colores suficientemente contrastados para ser visibles)
     const styles = [
@@ -460,7 +484,7 @@ const mapaRuta = {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    const valid = this._validStops(stops);
     if (!valid.length) { el.style.display = 'none'; return; }
 
     el.innerHTML = ''; // Limpiar imagen estática
@@ -521,20 +545,23 @@ const mapaRuta = {
       return marker;
     });
 
-    // Polyline provisional recta
+    // Polyline: si hay trazado real de la carretera nombrada (OSM), pintar ESE;
+    // si no, línea provisional recta hasta que llegue Directions.
+    const _roadPath = this._roadGeomPath();
     this._polyline = new google.maps.Polyline({
-      path: valid.map(s => ({ lat: s.lat, lng: s.lng })),
+      path: _roadPath || valid.map(s => ({ lat: s.lat, lng: s.lng })),
       map: this._map,
-      strokeColor: '#D4A843',
-      strokeWeight: 3,
-      strokeOpacity: 0.6,
-      icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#D4A843' }, repeat: '80px' }],
+      strokeColor: '#F4630B',
+      strokeWeight: _roadPath ? 4 : 3,
+      strokeOpacity: _roadPath ? 0.9 : 0.6,
+      icons: _roadPath ? [] : [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#F4630B' }, repeat: '80px' }],
     });
 
-    // Ajustar bounds
+    // Ajustar bounds (incluye el trazado de la carretera si lo hay)
     const bounds = new google.maps.LatLngBounds();
     valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
-    this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 });
+    if (_roadPath) _roadPath.forEach(p => bounds.extend(p));
+    try { this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
 
     // Aplicar ruta real (pre-fetched en paralelo o fetch ahora)
     if (dirPromise) {
@@ -577,18 +604,30 @@ const mapaRuta = {
 
   // Aplicar polyline real + steps turn-by-turn
   _applyDirections(data) {
-    if (!data.polyline || !this._map || this._mapType !== 'google') return;
+    if (!this._map || this._mapType !== 'google') return;
 
+    // Con trazado real de la carretera: NO tocar la polyline (Directions se va por
+    // la autopista). Aprovechar solo los pasos turn-by-turn.
+    if (this._roadGeometry) {
+      if (data && data.steps && data.steps.length) {
+        this._steps = data.steps;
+        this._currentStep = 0;
+        this._updateTurnPanel();
+      }
+      return;
+    }
+
+    if (!data.polyline) return;
     if (this._polyline) this._polyline.setMap(null);
 
     const decoded = this._decodePolyline(data.polyline);
     this._polyline = new google.maps.Polyline({
       path: decoded.map(([lat, lng]) => ({ lat, lng })),
       map: this._map,
-      strokeColor: '#D4A843',
+      strokeColor: '#F4630B',
       strokeWeight: 3,
       strokeOpacity: 0.85,
-      icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#D4A843' }, repeat: '80px' }],
+      icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#F4630B' }, repeat: '80px' }],
     });
 
     if (data.steps && data.steps.length) {
@@ -621,8 +660,13 @@ const mapaRuta = {
       return marker;
     });
 
-    this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
-    this._map.fitBounds(bounds, { padding: [40, 40] });
+    if (this._roadGeometry) {
+      this._polyline = L.polyline(this._roadGeometry.coords, { color: '#F4630B', weight: 4, opacity: 0.9 }).addTo(this._map);
+      try { bounds.extend(this._polyline.getBounds()); } catch (_) {}
+    } else {
+      this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#F4630B', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
+    }
+    try { this._map.fitBounds(bounds, { padding: [40, 40] }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
 
     // En modo preview (itinerario) solo botón "Ir al mapa"
     if (!this._previewMode) {
@@ -781,16 +825,19 @@ const mapaRuta = {
     const marker = this._markers[index];
     if (!marker) return;
 
-    const gmapsUrl = stop.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : null;
-    const dayColor = this._dayColors ? this._dayColors[((stop.day || 1) - 1) % this._dayColors.length] : '#D4A843';
+    // "Cómo llegar" a ESA parada: place_id > coords > nombre. Siempre sale.
+    let gmapsUrl = null;
+    const _b = 'https://www.google.com/maps/dir/?api=1&';
+    if (stop.place_id) gmapsUrl = _b + `destination=${encodeURIComponent(stop.headline || stop.name || '')}&destination_place_id=${stop.place_id}`;
+    else if (typeof stop.lat === 'number' && typeof stop.lng === 'number' && Math.abs(stop.lat) > 0.01) gmapsUrl = _b + `destination=${stop.lat}%2C${stop.lng}`;
+    else if (stop.name || stop.headline) gmapsUrl = _b + `destination=${encodeURIComponent(stop.name || stop.headline)}`;
+    const dayColor = this._dayColors ? this._dayColors[((stop.day || 1) - 1) % this._dayColors.length] : '#F4630B';
 
     const _buildContent = (photoHtml) => `
-      <div style="font-family:'Inter',sans-serif;width:280px;max-height:380px;background:#0c0a06;border-radius:10px;overflow:hidden;color:#f4efe6;display:flex;flex-direction:column;">
+      <div style="font-family:'Inter',sans-serif;width:280px;max-height:380px;background:#0D0F10;border-radius:0;overflow:hidden;color:#ECEBE8;display:flex;flex-direction:column;">
         ${photoHtml}
         <div style="padding:12px 14px 14px;overflow-y:auto;flex:1;">
-          <div style="font-size:10px;color:#D4A843;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">Día ${stop.day || ''}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;color:#F4630B;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">Día ${stop.day || ''}</div>
           <div style="font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.3;">${stop.headline || stop.name || ''}</div>
           ${stop.narrative ? `<p style="font-size:12px;color:rgba(244,239,230,.65);line-height:1.5;margin:0 0 10px;">${stop.narrative}</p>` : ''}
           ${stop.context ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">📖 ${stop.context}</p>` : ''}
@@ -798,20 +845,20 @@ const mapaRuta = {
           ${stop.local_secret ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">🔑 ${stop.local_secret}</p>` : ''}
           ${gmapsUrl ? `<a href="${gmapsUrl}" target="_blank" rel="noopener"
              style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
-                    color:#f4efe6;text-decoration:none;padding:5px 10px;border-radius:6px;
-                    background:rgba(66,133,244,.15);border:1px solid rgba(66,133,244,.3);">
+                    color:#ECEBE8;text-decoration:none;padding:6px 10px;border-radius:0;
+                    background:rgba(255,255,255,.06);border:1px solid rgba(236,235,232,.35);">
             <svg width="12" height="12" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>
-            Ver en Google Maps
+            Cómo llegar
           </a>` : ''}
         </div>
       </div>`;
 
     const _photoImgHtml = (url) => `<img src="${url}"
-      style="width:100%;height:160px;object-fit:cover;display:block;border-radius:8px 8px 0 0;flex-shrink:0;"
+      style="width:100%;height:160px;object-fit:cover;display:block;border-radius:0;flex-shrink:0;"
       onerror="this.style.display='none'">`;
 
     // Placeholder de color mientras carga la foto
-    const placeholderHtml = `<div style="width:100%;height:160px;flex-shrink:0;background:linear-gradient(135deg,${dayColor}44,${dayColor}11);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;">
+    const placeholderHtml = `<div style="width:100%;height:160px;flex-shrink:0;background:linear-gradient(135deg,${dayColor}44,${dayColor}11);border-radius:0;display:flex;align-items:center;justify-content:center;">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="${dayColor}" fill-opacity=".2"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="${dayColor}" fill-opacity=".7"/><circle cx="12" cy="9" r="2.5" fill="#fff" fill-opacity=".9"/></svg>
     </div>`;
 

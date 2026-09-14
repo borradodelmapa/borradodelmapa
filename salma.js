@@ -30,6 +30,8 @@ const salma = {
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
   _narratorInterval: null,
+  _narratorQueue: [],
+  _narratorProcessing: false,
   _voices: [],
   _currentAudio: null,
   _ttsQueue: [],
@@ -871,7 +873,7 @@ const salma = {
   },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
-  async send(msg) {
+  async send(msg, opts = {}) {
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;
     if (photo) {
@@ -914,8 +916,8 @@ const salma = {
     // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
     if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this.initGeolocation();
 
-    // Transicionar a chat si estamos en welcome
-    if (currentState === 'welcome' || currentState === 'viajes') {
+    // Transicionar a chat si venimos de otra vista
+    if (currentState === 'viajes') {
       this._initChat();
     }
 
@@ -932,6 +934,7 @@ const salma = {
       if (needsLocation) {
         this._addUserBubble(msg);
         this._pendingGeoMessage = msg;  // guardar para reenviar tras GPS
+        this._pendingGeoRouteFromHere = !!opts.routeFromHere;
         this._showGeoPrompt();
         return;
       }
@@ -942,7 +945,7 @@ const salma = {
     // NO push a history aquí — se hace en _doSend tras recibir respuesta
 
     // Todo va directo al worker — Salma decide si preguntar
-    this._doSend(msg || '', { photo });
+    this._doSend(msg || '', { photo, route_from_here: !!opts.routeFromHere });
   },
 
   // ═══════════════════════════════════════════
@@ -1014,6 +1017,41 @@ const salma = {
     }
     this._addSalmaBubble('Vale, vamos a montar esto bien. Te hago unas preguntas rápidas — chip o texto, como quieras.');
     this._rutaPregunta(0);
+  },
+
+  // ─────────────────────────────────────────────
+  //  BILLETE — mismo flujo guiado, pero los 8 campos llegan de una sola vez
+  //  desde el formulario del índice (rediseño v1). Reutiliza _rutaFinalizar.
+  //  f: { destino, duracion_dias, fechas, compania, presupuesto, ritmo, intereses[], restricciones }
+  // ─────────────────────────────────────────────
+  emitirBillete(f) {
+    f = f || {};
+    if (!f.destino || !String(f.destino).trim()) return false;
+    this.reset();
+    if (currentState !== 'chat') this._initChat();
+    const area = this._getChatArea();
+    if (area) { const e = area.querySelector('.chat-empty'); if (e) e.remove(); }
+    if (window.currentUser && typeof db !== 'undefined') {
+      db.collection('users').doc(window.currentUser.uid).collection('maps')
+        .where('estado', '==', 'borrador').get()
+        .then(snap => snap.forEach(doc => doc.ref.delete().catch(() => {})))
+        .catch(() => {});
+    }
+    this._rutaDraft = {
+      destino: String(f.destino).trim(),
+      duracion_dias: f.duracion_dias || '5-7',
+      fechas: f.fechas || null,
+      compania: f.compania || null,
+      presupuesto: f.presupuesto || null,
+      ritmo: f.ritmo || null,
+      intereses: Array.isArray(f.intereses) ? f.intereses : [],
+      restricciones: (f.restricciones && String(f.restricciones).trim()) || null,
+      step: this._RUTA_STEPS.length,
+      tripId: null,
+      _campoTexto: null
+    };
+    this._rutaFinalizar();
+    return true;
   },
 
   _rutaCancelUI() {
@@ -1175,18 +1213,62 @@ const salma = {
     const d = this._rutaDraft;
     this._rutaCancelUI();
     this._rutaGuiadaWaitingText = false;
-    this._addSalmaBubble('Perfecto, dame un segundo que te arme la ruta 🗺️');
     // Copia limpia (sin campos internos) para el worker
     const guided = {
       destino: d.destino, duracion_dias: d.duracion_dias, fechas: d.fechas,
       compania: d.compania, presupuesto: d.presupuesto, ritmo: d.ritmo,
       intereses: d.intereses, restricciones: d.restricciones
     };
-    // Día concreto según el rango elegido → el mensaje lleva "N días" para que
-    // el worker use su ruta de generación de siempre (bloques si es larga, verify, etc.)
     const diasNum = { '3-4': 4, '5-7': 6, '8-14': 11, '+14': 16 }[d.duracion_dias] || 7;
-    const msg = `Hazme una ruta de ${diasNum} días por ${d.destino || 'el destino indicado'}.`;
-    this._doSend(msg, { guided_route: guided });
+
+    // El borrador incremental ya cumplió su función (sobrevivir a un abandono
+    // durante las preguntas). A partir de aquí el contexto vive en _pendingGuidedRoute.
+    const _draftId = d.tripId;
+    if (_draftId && window.currentUser && typeof db !== 'undefined') {
+      db.collection('users').doc(window.currentUser.uid)
+        .collection('maps').doc(_draftId).delete().catch(() => {});
+    }
+    this._rutaDraft = null;
+
+    // PIEZA A — TIEMPO 1: recomendaciones en prosa. NO la frase-disparador:
+    // el worker responde en modo texto con el contexto de guided_route y NO genera
+    // el JSON. El mapa se pide en el Tiempo 2 con el botón "Crear ruta con mapa".
+    this._pendingGuidedRoute = guided;
+    this._pendingGuidedBaseMsg = `una guía de ${diasNum} días por ${d.destino || 'el destino indicado'}`;
+    this._addSalmaBubble('Perfecto, dame un segundo que te preparo las recomendaciones 📝');
+    const msg = `Recomiéndame un plan de ${diasNum} días por ${d.destino || 'el destino indicado'}.`;
+    this._doSend(msg, { guided_route: guided, guided_stage: 'reco' });
+  },
+
+  // ─────────────────────────────────────────────
+  //  PIEZA A — Botón "Crear ruta con mapa" (TIEMPO 2)
+  //  Camino único para el flujo guiado y para el chat libre: convierte el texto
+  //  de recomendaciones que YA se generó en guía con mapa vía fast-path
+  //  (source_text → JSON en el worker), sin repetir la búsqueda.
+  // ─────────────────────────────────────────────
+  _offerCrearRutaConMapa({ baseMsg, sourceText, guidedRoute } = {}) {
+    const area = this._getChatArea();
+    if (!area) return;
+    // No duplicar el botón si ya hay uno pendiente
+    area.querySelectorAll('.crear-ruta-mapa-wrap').forEach(el => el.remove());
+    const wrap = document.createElement('div');
+    wrap.className = 'historia-chat-chip-wrap crear-ruta-mapa-wrap';
+    const btn = document.createElement('button');
+    btn.className = 'crear-ruta-btn';
+    btn.innerHTML = '<span>🗺️</span> Crear ruta con mapa <span class="crb-arrow">→</span>';
+    btn.addEventListener('click', () => {
+      wrap.remove();
+      const extra = Object.assign({}, this._lastExtra || {}, {
+        source_text: sourceText || '',
+        guided_stage: 'map',   // TIEMPO 2 — el worker convierte el texto en guía, no regenera
+        dest_hint: this._cleanDestino(baseMsg || this._lastMsg || ''),  // ancla de país fiable (no depende del regex del worker)
+      });
+      if (guidedRoute) extra.guided_route = guidedRoute;
+      this._doSend('Salma hazme una guía: ' + (baseMsg || this._lastMsg || 'la ruta de arriba'), extra);
+    });
+    wrap.appendChild(btn);
+    area.appendChild(wrap);
+    this._scrollToBottom(true);
   },
 
   // ═══ ENVÍO AL WORKER ═══
@@ -1203,15 +1285,19 @@ const salma = {
     const _itinSavedDocId = window._itinViewDocId || null;
     const _itinSavedOptions = window._itinViewOptions || null;
     if (_itinWasOpen) {
-      const _view = document.getElementById('itin-view');
-      const _appContent = document.getElementById('app-content');
-      const _inputBar = document.getElementById('app-input-bar');
-      window._itinViewOpen = false;
-      if (_view) _view.style.display = 'none';
-      if (_appContent) _appContent.style.display = '';
-      if (_inputBar) _inputBar.style.display = '';
-      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
-      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
+      if (typeof window._teardownItinView === 'function') {
+        window._teardownItinView();
+      } else {
+        const _view = document.getElementById('itin-view');
+        const _appContent = document.getElementById('app-content');
+        const _inputBar = document.getElementById('app-input-bar');
+        window._itinViewOpen = false;
+        if (_view) _view.style.display = 'none';
+        if (_appContent) _appContent.style.display = '';
+        if (_inputBar) _inputBar.style.display = '';
+        if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
+        if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
+      }
     }
 
     this._streaming = true;
@@ -1219,10 +1305,36 @@ const salma = {
     $send.disabled = true;
     const camBtn = document.getElementById('cam-btn');
     if (camBtn) camBtn.disabled = true;
-    const loadingPhrase = this._isRouteMsg(msg)
-      ? null  // aleatoria del pool de rutas
-      : this._loadingPhrasesSimple[Math.floor(Math.random() * this._loadingPhrasesSimple.length)];
+    const _isMapBuild = !!(extra && extra.guided_stage === 'map');
+    const loadingPhrase = _isMapBuild
+      ? 'Leyendo tu plan...'  // T2: pasos propios abajo, sin rotación aleatoria
+      : this._isRouteMsg(msg)
+        ? null  // aleatoria del pool de rutas
+        : this._loadingPhrasesSimple[Math.floor(Math.random() * this._loadingPhrasesSimple.length)];
     const loadingEl = this._addLoading(loadingPhrase);
+
+    // TIEMPO 2 (botón "Crear ruta con mapa"): la conversión + verify tarda. En vez de una
+    // frase suelta, enseñar pasos que avanzan para que se note que está trabajando.
+    if (_isMapBuild) {
+      const steps = [
+        'Leyendo tu plan...',
+        'Colocando las paradas en el mapa...',
+        'Verificando cada sitio con Google...',
+        'Ajustando coordenadas y cargando fotos...',
+        'Casi listo, montando la guía...',
+      ];
+      let si = 0;
+      const setStep = () => {
+        const el = document.getElementById('loading-status');
+        if (el) el.textContent = steps[si];
+      };
+      setStep();
+      this._mapBuildTimer = setInterval(() => {
+        si = Math.min(si + 1, steps.length - 1);
+        setStep();
+        if (si === steps.length - 1) { clearInterval(this._mapBuildTimer); this._mapBuildTimer = null; }
+      }, 6000);
+    }
 
     try {
       const body = {
@@ -1236,6 +1348,7 @@ const salma = {
       // coins_saldo y rutas_gratis_usadas se leen server-side desde Firestore
       // (ya no se envían desde el frontend por seguridad — P0-2)
       if (this._userLocation) body.user_location = this._userLocation;
+      if (extra && extra.route_from_here) body.route_from_here = true;
       // Inyectar notas del usuario (sistema unificado)
       if (window.currentUser && typeof notasManager !== 'undefined') {
         try {
@@ -1258,6 +1371,20 @@ const salma = {
       if (extra.with_kids) body.with_kids = extra.with_kids;
       // Flujo guiado de ruta: los 8 campos ya recogidos → el worker los inyecta en el system prompt
       if (extra.guided_route) body.guided_route = extra.guided_route;
+      // PIEZA A — respuesta en 2 tiempos. guided_stage:'reco' → Tiempo 1: el worker
+      // responde recomendaciones en prosa (con el contexto de guided_route) y NO genera
+      // el JSON de ruta. El mapa se pide en el Tiempo 2 con el botón "Crear ruta con mapa".
+      if (extra.guided_stage) body.guided_stage = extra.guided_stage;
+      if (extra.source_text) body.source_text = extra.source_text; // Fast-path: texto ya generado, convertir directo a mapa
+      // PIEZA A — destino limpio para el ancla de país (el regex del worker fallaba con "Ciudad Real")
+      if (extra.guided_route && extra.guided_route.destino) {
+        body.dest_hint = String(extra.guided_route.destino).slice(0, 80);
+      } else if (extra.dest_hint) {
+        body.dest_hint = String(extra.dest_hint).slice(0, 80);
+      } else if (this._isRouteMsg(msg) || extra.guided_stage) {
+        const _dh = this._cleanDestino(msg);
+        if (_dh && _dh.length >= 2) body.dest_hint = _dh.slice(0, 80);
+      }
       // Foto del chat
       if (extra.photo) {
         body.image_base64 = extra.photo.base64;
@@ -1272,11 +1399,13 @@ const salma = {
         this.history.push({ role: 'assistant', content: data.reply });
       }
       this._saveSession();
+      this._persistThread();   // historial de consultas (últimas 10, continuables)
 
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
         const isEdit = this.currentRouteId && this.currentRoute;
-        const prevStopsCount = this.currentRoute?.stops?.length || 0;
+        const prevStops = this.currentRoute?.stops || [];
+        const prevStopsCount = prevStops.length;
         this.currentRoute = data.route;
         if (!data._hadDraft || data._isBlocks) {
           // Ruta nueva o ruta de bloques: abrir vista itinerario
@@ -1289,6 +1418,26 @@ const salma = {
             }
           } catch (renderErr) {
             console.error('Error renderizando guía:', renderErr);
+            // Si openItinerarioView revienta a medias (p.ej. coords inválidas al pintar
+            // el mapa) puede dejar la app oculta y la vista de itinerario en blanco —
+            // pantalla negra sin ningún aviso. Deshacer el cambio de pantalla y ofrecer
+            // reintento, mismo patrón que el resto de fallos de "montar el mapa".
+            if (typeof window._teardownItinView === 'function') window._teardownItinView();
+            this._addSalmaBubble('La ruta se generó pero algo ha fallado al montar el mapa. Dale a "Reintentar" y lo vuelvo a montar.');
+            const _area = this._getChatArea();
+            if (_area) {
+              const _rw = document.createElement('div');
+              _rw.className = 'historia-chat-chip-wrap';
+              const _rb = document.createElement('button');
+              _rb.className = 'historia-chat-chip';
+              _rb.textContent = '🔄 Reintentar mapa';
+              const _retryMsg = this._lastMsg || msg;
+              const _retryExtra = Object.assign({}, this._lastExtra || {});
+              _rb.addEventListener('click', () => { _rw.remove(); this._doSend(_retryMsg, _retryExtra); });
+              _rw.appendChild(_rb);
+              _area.appendChild(_rw);
+              this._scrollToBottom(true);
+            }
           }
         } else {
           // Ruta normal con draft: parchear con datos verificados (fotos, coords)
@@ -1305,37 +1454,58 @@ const salma = {
         }
 
         if (isEdit) {
-          // Editando ruta guardada — actualizar Firestore
-          this._addSalmaBubble('Ruta actualizada. Dime si quieres más cambios.');
-          try {
-            await db.collection('users').doc(window.currentUser.uid)
-              .collection('maps').doc(this.currentRouteId).update({
-                itinerarioIA: JSON.stringify(data.route),
-                nombre: data.route.title || data.route.name || 'Mi ruta',
-                updatedAt: new Date().toISOString()
+          // Comprobación de cordura: si la "edición" ha cambiado casi todas las paradas
+          // (nombres que ya no aparecen ni uno), probablemente la IA ha reconstruido mal
+          // la ruta en vez de editarla de verdad. No sobrescribir Firestore sin más —
+          // pedir confirmación explícita primero.
+          const _normName = (s) => (s || '').toString().trim().toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          const _newNames = new Set((data.route.stops || []).map(s => _normName(s.name)));
+          const _keptCount = prevStops.filter(s => _newNames.has(_normName(s.name))).length;
+          const _keptRatio = prevStopsCount > 0 ? (_keptCount / prevStopsCount) : 1;
+          const _looksLikeCorruption = prevStopsCount >= 3 && _keptRatio < 0.5;
+
+          if (_looksLikeCorruption) {
+            this._addSalmaBubble('Espera — este cambio ha reescrito casi todas las paradas, no solo lo que pediste. Puede que se me haya ido la olla reconstruyendo la ruta. ¿La guardo igualmente, o la descarto y seguimos con la que tenías?');
+            const _area = this._getChatArea();
+            if (_area) {
+              const _rw = document.createElement('div');
+              _rw.className = 'historia-chat-chip-wrap';
+              const _saveBtn = document.createElement('button');
+              _saveBtn.className = 'historia-chat-chip';
+              _saveBtn.textContent = '💾 Guardar así de todos modos';
+              _saveBtn.addEventListener('click', async () => {
+                _rw.remove();
+                await this._commitRouteEdit(data.route);
+                this._addSalmaBubble('Vale, guardada. Dime si quieres más cambios.');
               });
-          } catch (e) { console.warn('Error actualizando guía:', e); }
+              const _discardBtn = document.createElement('button');
+              _discardBtn.className = 'historia-chat-chip';
+              _discardBtn.textContent = '↩️ Descartar, mantener la de antes';
+              _discardBtn.addEventListener('click', () => {
+                _rw.remove();
+                this._addSalmaBubble('Descartado — no he tocado tu ruta guardada.');
+                if (typeof this.cargarGuia === 'function') this.cargarGuia(this.currentRouteId);
+              });
+              _rw.appendChild(_saveBtn);
+              _rw.appendChild(_discardBtn);
+              _area.appendChild(_rw);
+              this._scrollToBottom(true);
+            }
+          } else {
+            this._addSalmaBubble('Ruta actualizada. Dime si quieres más cambios.');
+            await this._commitRouteEdit(data.route);
+          }
         } else {
+          // Pueblo pequeño: ruta corta dentro del casco + escapadas al lado → Salma da opciones.
+          if (data.route.nearby_note) {
+            try { this._addSalmaBubble(data.route.nearby_note); } catch (_) {}
+          }
           // Ruta nueva — indicar que hay que pulsar GUARDAR
           this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
           this.history = [];
           this._saveSession();
-          // Chip Historia para el destino recién generado
-          const _histDestino = data.route.title || data.route.name || data.route.stops?.[0]?.name;
-          if (_histDestino && typeof historiaModule !== 'undefined') {
-            const _chatArea = this._getChatArea();
-            if (_chatArea) {
-              const _chipWrap = document.createElement('div');
-              _chipWrap.className = 'historia-chat-chip-wrap';
-              const _chip = document.createElement('button');
-              _chip.className = 'historia-chat-chip';
-              _chip.textContent = '📚 Historia de ' + _histDestino;
-              _chip.addEventListener('click', () => { historiaModule.loadPlace(_histDestino); showState('historia'); });
-              _chipWrap.appendChild(_chip);
-              _chatArea.appendChild(_chipWrap);
-              this._scrollToBottom(true);
-            }
-          }
+          this._threadId = null;   // la guía cierra la consulta; la siguiente empieza un hilo nuevo
         }
 
         // Flujo guiado: la ruta ya está generada → el borrador incremental
@@ -1349,6 +1519,73 @@ const salma = {
           this._rutaDraft = null;
           this._rutaGuiadaWaitingText = false;
         }
+        // PIEZA A — Tiempo 2 completado: limpiar el contexto guiado pendiente.
+        this._pendingGuidedRoute = null;
+        this._pendingGuidedBaseMsg = null;
+      } else if (this._pendingGuidedRoute) {
+        // PIEZA A — Tiempo 1 del flujo guiado: Salma ya ha dado las recomendaciones
+        // en prosa (arriba). Ofrecemos el paso 2 con el mismo botón que el chat libre.
+        this._removeLoading();
+        this._addSalmaBubble('Ahí tienes las recomendaciones 👆. Cuando lo veas claro, te lo monto como guía con mapa para guardarla y seguirla paso a paso.');
+        this._offerCrearRutaConMapa({
+          baseMsg: this._pendingGuidedBaseMsg,
+          sourceText: data.reply || '',
+          guidedRoute: this._pendingGuidedRoute,
+        });
+        this._pendingGuidedRoute = null;
+        this._pendingGuidedBaseMsg = null;
+      } else if (this._rutaDraft) {
+        // Fallo real durante flujo guiado/borrador incremental (no un simple desajuste de frase).
+        // No dejar spinner colgado: avisar y ofrecer reintento.
+        this._removeLoading();
+        this._addSalmaBubble('Uf, se me ha atascado el mapa a mitad. El texto de arriba es la ruta que tenía pensada — dame a "Reintentar" y te la monto en condiciones.');
+        const _area = this._getChatArea();
+        if (_area) {
+          const _rw = document.createElement('div');
+          _rw.className = 'historia-chat-chip-wrap';
+          const _rb = document.createElement('button');
+          _rb.className = 'historia-chat-chip';
+          _rb.textContent = '🔄 Reintentar ruta';
+          const _retryMsg = this._lastMsg || msg;
+          const _retryExtra = this._lastExtra || {};
+          _rb.addEventListener('click', () => { _rw.remove(); this._doSend(_retryMsg, _retryExtra); });
+          _rw.appendChild(_rb);
+          _area.appendChild(_rw);
+          this._scrollToBottom(true);
+        }
+        // El borrador incremental se conserva por si el reintento también falla.
+      } else if (data.map_stage_failed || (this._lastExtra && this._lastExtra.guided_stage === 'map')) {
+        // PIEZA A — Tiempo 2 falló al convertir el texto en mapa. Reintento con el
+        // mismo source_text (no regenera nada, no duplica).
+        this._removeLoading();
+        this._addSalmaBubble(data.reply || 'No me ha salido montar el mapa. Dale otra vez y lo reintento.');
+        const _area = this._getChatArea();
+        if (_area) {
+          const _rw = document.createElement('div');
+          _rw.className = 'historia-chat-chip-wrap crear-ruta-mapa-wrap';
+          const _rb = document.createElement('button');
+          _rb.className = 'historia-chat-chip';
+          _rb.textContent = '🔄 Reintentar mapa';
+          const _retryMsg = this._lastMsg || msg;
+          const _retryExtra = Object.assign({}, this._lastExtra || {});
+          _rb.addEventListener('click', () => {
+            _rw.remove();
+            this._doSend(_retryMsg, _retryExtra);
+          });
+          _rw.appendChild(_rb);
+          _area.appendChild(_rw);
+          this._scrollToBottom(true);
+        }
+      } else if (data.offer_map_button || this._isRouteMsg(msg)) {
+        // PIEZA A — FLUJO ÚNICO. Toda petición de ruta/destino (chat libre o worker-detectada)
+        // se responde primero con recomendaciones en texto. Aquí ofrecemos el botón para
+        // montar la guía con mapa — mismo camino que el chip de 8 preguntas.
+        this._removeLoading();
+        this._addSalmaBubble('Ahí tienes el plan 👆. Cuando lo veas claro, dale al botón y te lo monto como guía con mapa para guardarla y seguirla paso a paso.');
+        this._offerCrearRutaConMapa({
+          baseMsg: data.map_base_msg || this._lastMsg || msg,
+          sourceText: data.reply || '',
+        });
       }
 
       // Si hay video_params, renderizar player inline
@@ -1361,6 +1598,17 @@ const salma = {
             .map(s => ({ name: s.name || '', lat: s.lat, lng: s.lng, day: s.day }));
         }
         this._renderVideoPlayer(enrichedParams);
+      }
+
+      // Botón "Historia de [lugar]" — Salma marcó un lugar/carretera/comarca/país relevante
+      if (data.historia_lugar && typeof historiaModule !== 'undefined') {
+        const _histArea = this._getChatArea();
+        if (_histArea) {
+          const _histMount = document.createElement('div');
+          _histMount.className = 'hist-inline-mount hist-inline-mount--chat';
+          _histArea.appendChild(_histMount);
+          historiaModule.renderCompactInto(_histMount, { place: data.historia_lugar });
+        }
       }
 
       this._scrollToBottom();
@@ -1450,7 +1698,10 @@ const salma = {
                 if (textEl && evt.reply && fullText.trim() && evt.reply.trim() !== fullText.trim()) {
                   const replyHasExtras = /google\.com\/maps/i.test(evt.reply) && !/google\.com\/maps/i.test(fullText);
                   const replyLonger = evt.reply.length > fullText.length + 20;
-                  if (replyHasExtras || replyLonger) {
+                  // El worker quita URLs de blogs/webs no pedidas → el reply final es más corto:
+                  // re-renderizar para que no queden a la vista las que se hayan colado en streaming.
+                  const replyStrippedUrls = /https?:\/\//i.test(fullText) && !/https?:\/\//i.test(evt.reply);
+                  if (replyHasExtras || replyLonger || replyStrippedUrls) {
                     let display = evt.reply;
                     const markerPos = display.indexOf('SALMA_ROUTE');
                     if (markerPos !== -1) display = display.substring(0, markerPos);
@@ -1498,7 +1749,11 @@ const salma = {
                   route: evt.route || null,
                   video_params: evt.video_params || null,
                   _hadDraft: draftSent,
-                  _isBlocks: isBlocksRoute
+                  _isBlocks: isBlocksRoute,
+                  map_stage_failed: evt.map_stage_failed === true,
+                  offer_map_button: evt.offer_map_button === true,
+                  map_base_msg: evt.map_base_msg || null,
+                  historia_lugar: evt.historia_lugar || null
                 });
                 return;
               }
@@ -1663,7 +1918,7 @@ const salma = {
                 // Esconder botón reintentar si existe
                 const retryBtn = document.querySelector('.btn-retry-salma');
                 if (retryBtn) retryBtn.remove();
-                if (textEl && !document.getElementById('salma-searching-dots')) {
+                if (textEl && !textEl.dataset.loader && !document.getElementById('salma-searching-dots')) {
                   const dots = document.createElement('div');
                   dots.id = 'salma-searching-dots';
                   dots.className = 'loading-dots searching-dots';
@@ -1676,6 +1931,8 @@ const salma = {
 
               // TEXT CHUNK
               if (evt.t) {
+                // Primer contenido real → fuera el indicador de carga (puntitos + frase + Reintentar)
+                this._clearStreamLoader();
                 // Quitar dots de búsqueda cuando llega contenido real
                 const searchingDots = document.getElementById('salma-searching-dots');
                 if (searchingDots) searchingDots.remove();
@@ -1789,12 +2046,35 @@ const salma = {
     if (typeof window.openItinerarioView === 'function') {
       window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: false });
     }
+    // PIEZA A — Enrich (Pasada 2 GPT-4o-mini) eliminado: era una 2ª llamada a otro
+    // modelo por ruta. Los datos de cada parada (rating/horario/foto) los rellena
+    // mapaItinerario._enrichAll con Google Places, sin IA.
+  },
 
-    // Si no está enriquecida, enriquecer ahora en background
-    const isEnriched = docData && docData.enriched === true;
-    if (!isEnriched && docId && typeof enrichGuia === 'function') {
-      enrichGuia(docId, routeData);
-    }
+  // Guarda en Firestore la ruta editada sobre this.currentRouteId, con backup de la
+  // versión anterior (itinerarioIA_prev). Usado tanto en el guardado directo como al
+  // confirmar "Guardar así de todos modos" tras la comprobación de cordura.
+  async _commitRouteEdit(routeData) {
+    if (!this.currentRouteId || !window.currentUser) return;
+    try {
+      const docRef = db.collection('users').doc(window.currentUser.uid)
+        .collection('maps').doc(this.currentRouteId);
+      let prevItinerarioIA = null;
+      try {
+        const prevSnap = await docRef.get();
+        prevItinerarioIA = prevSnap.exists ? (prevSnap.data().itinerarioIA || null) : null;
+      } catch (_) {}
+      const updateData = {
+        itinerarioIA: JSON.stringify(routeData),
+        nombre: routeData.title || routeData.name || 'Mi ruta',
+        updatedAt: new Date().toISOString()
+      };
+      if (prevItinerarioIA) {
+        updateData.itinerarioIA_prev = prevItinerarioIA;
+        updateData.itinerarioIA_prev_at = new Date().toISOString();
+      }
+      await docRef.update(updateData);
+    } catch (e) { console.warn('Error actualizando guía:', e); }
   },
 
   // ═══ GUARDAR ═══
@@ -1828,6 +2108,7 @@ const salma = {
 
   newChat() {
     this.history = [];
+    this._threadId = null;
     this._pendingRouteInfo = null;
     this._pendingTaxiDest = false;
     try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
@@ -1869,7 +2150,158 @@ const salma = {
     } catch (_) { return false; }
   },
 
+  // ═══ HISTORIAL DE CONSULTAS — últimas 10, continuables ═══
+  // Persiste cada conversación en users/{uid}/chats/{id} (Firestore) + espejo en
+  // localStorage (única fuente para invitados). Solo texto: al reabrir se repintan
+  // las burbujas y this.history vuelve, así el Worker recibe el contexto sin cambios.
+  _threadId: null,
+
+  _chatCol() {
+    return (window.db && window.currentUser) ? db.collection('users').doc(window.currentUser.uid).collection('chats') : null;
+  },
+
+  _persistThread() {
+    if (!this.history || !this.history.length) return;
+    if (!this._threadId) this._threadId = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const firstUser = this.history.find(t => t.role === 'user');
+    const title = ((firstUser && firstUser.content) || 'Consulta').replace(/\s+/g, ' ').trim().slice(0, 70);
+    const rec = { title, turns: this.history.slice(-40), msgCount: this.history.length, updatedAt: Date.now() };
+    const col = this._chatCol();
+    if (col) col.doc(this._threadId).set(rec, { merge: true }).then(() => this._pruneThreads()).catch(() => {});
+    try {
+      const all = JSON.parse(localStorage.getItem('bdm_chats') || '{}');
+      all[this._threadId] = Object.assign({ id: this._threadId }, rec);
+      const ids = Object.keys(all).sort((a, b) => (all[b].updatedAt || 0) - (all[a].updatedAt || 0));
+      for (const old of ids.slice(10)) delete all[old];
+      localStorage.setItem('bdm_chats', JSON.stringify(all));
+    } catch (_) {}
+  },
+
+  async _pruneThreads() {
+    const col = this._chatCol();
+    if (!col) return;
+    try {
+      const snap = await col.orderBy('updatedAt', 'desc').get();
+      snap.docs.slice(10).forEach(d => col.doc(d.id).delete().catch(() => {}));
+    } catch (_) {}
+  },
+
+  async listThreads() {
+    const col = this._chatCol();
+    if (col) {
+      try {
+        const snap = await col.orderBy('updatedAt', 'desc').limit(10).get();
+        return snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
+      } catch (_) {}
+    }
+    try {
+      const all = JSON.parse(localStorage.getItem('bdm_chats') || '{}');
+      return Object.values(all).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).slice(0, 10);
+    } catch (_) { return []; }
+  },
+
+  async deleteThread(id) {
+    const col = this._chatCol();
+    if (col) { try { await col.doc(id).delete(); } catch (_) {} }
+    try {
+      const all = JSON.parse(localStorage.getItem('bdm_chats') || '{}');
+      delete all[id];
+      localStorage.setItem('bdm_chats', JSON.stringify(all));
+    } catch (_) {}
+    if (this._threadId === id) this._threadId = null;
+  },
+
+  async loadThread(id) {
+    let rec = null;
+    const col = this._chatCol();
+    if (col) { try { const d = await col.doc(id).get(); if (d.exists) rec = d.data(); } catch (_) {} }
+    if (!rec) { try { rec = (JSON.parse(localStorage.getItem('bdm_chats') || '{}'))[id]; } catch (_) {} }
+    if (!rec || !Array.isArray(rec.turns) || !rec.turns.length) return;
+    this._threadId = id;
+    this.history = rec.turns.slice();
+    if (typeof showState === 'function') showState('chat');
+    const area = this._getChatArea();
+    if (area) {
+      area.innerHTML = '';
+      for (const t of rec.turns) {
+        if (t.role === 'user') this._addUserBubble(t.content);
+        else this._addSalmaBubble(t.content);
+      }
+    }
+    this._saveSession();
+    this._scrollToBottom(true);
+  },
+
+  _relTime(ts) {
+    if (!ts) return '';
+    const d = Date.now() - ts, m = 60000, h = 3600000, day = 86400000;
+    if (d < h) return 'hace ' + Math.max(1, Math.round(d / m)) + ' min';
+    if (d < day) return 'hace ' + Math.round(d / h) + ' h';
+    if (d < 2 * day) return 'ayer';
+    if (d < 7 * day) return 'hace ' + Math.round(d / day) + ' días';
+    return new Date(ts).toLocaleDateString('es', { day: 'numeric', month: 'short' });
+  },
+
+  renderConsultasView() {
+    const $c = document.getElementById('app-content');
+    if (!$c) return;
+    $c.innerHTML = `<div class="cons-area fade-in"><div class="cons-loading">Cargando…</div></div>`;
+    this.listThreads().then(threads => {
+      const guest = !(window.db && window.currentUser);
+      $c.innerHTML = `
+        <div class="cons-area fade-in">
+          <div class="cons-header">
+            <button class="sv-back" onclick="if(typeof showState==='function')showState('chat')" aria-label="Volver">‹</button>
+            <div class="cons-title">Últimas consultas</div>
+          </div>
+          ${guest ? '<div class="cons-guest">Entra para tener tus consultas en todos tus dispositivos.</div>' : ''}
+          <div class="cons-list">
+            ${threads.length === 0
+              ? `<div class="cons-empty"><div class="cons-empty-icon">🕐</div><div class="cons-empty-text">Aún no tienes consultas guardadas</div></div>`
+              : threads.map(t => `
+                <div class="cons-row" data-id="${escapeHTML(t.id)}">
+                  <div class="cons-row-main">
+                    <span class="cons-row-title">${escapeHTML(t.title || 'Consulta')}</span>
+                    <span class="cons-row-meta">${this._relTime(t.updatedAt)} · ${t.msgCount || (t.turns ? t.turns.length : 0)} mensajes</span>
+                  </div>
+                  <button class="cons-row-del" data-id="${escapeHTML(t.id)}" aria-label="Borrar">✕</button>
+                </div>`).join('')
+            }
+          </div>
+        </div>`;
+      $c.querySelectorAll('.cons-row').forEach(row => {
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('.cons-row-del')) {
+            this.deleteThread(row.dataset.id).then(() => row.remove());
+            return;
+          }
+          this.loadThread(row.dataset.id);
+        });
+      });
+    });
+  },
+
   // ═══ NARRADOR EN RUTA ═══
+
+  // Pide una posición GPS puntual (no continua) y espera la respuesta real del
+  // navegador, para saber con certeza si el usuario la concedió o no.
+  _requestGPSFix() {
+    if (!navigator.geolocation) return Promise.resolve(false);
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          this._userLocation = {
+            lat: Math.round(pos.coords.latitude * 10000) / 10000,
+            lng: Math.round(pos.coords.longitude * 10000) / 10000,
+            accuracy: Math.round(pos.coords.accuracy)
+          };
+          resolve(true);
+        },
+        () => resolve(false),
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    });
+  },
 
   async startNarrator() {
     if (this._narratorActive) return;
@@ -1885,16 +2317,31 @@ const salma = {
       console.log('[Salma] Narrador: notificaciones bloqueadas');
       return false;
     }
+    // GPS es obligatorio: confirmar que lo tenemos (o conseguirlo) ANTES de decir que
+    // el Narrador está activo. Sin esto, si el usuario deniega el GPS, el Narrador se
+    // queda "encendido" pero mudo para siempre, sin que nadie sepa por qué.
+    if (!this._userLocation) {
+      const gpsOk = await this._requestGPSFix();
+      if (!gpsOk) {
+        console.log('[Salma] Narrador: GPS denegado o no disponible');
+        return false;
+      }
+    }
     this._narratorActive = true;
-    this._narratorNotified = new Set();
+    // Restaurar dedup desde sessionStorage (sobrevive recargas)
+    try {
+      const saved = sessionStorage.getItem('narrator_notified_pois');
+      this._narratorNotified = new Set(saved ? JSON.parse(saved) : []);
+    } catch (_) { this._narratorNotified = new Set(); }
     this._narratorLastCheck = 0;
+    this._narratorQueue = [];
+    this._narratorProcessing = false;
     // Reactivar GPS continuo si se había parado
     if (!this._geoWatchId) this.initGeolocation();
-    // Check periódico cada 30s
-    this._narratorInterval = setInterval(() => this.checkNearbyPOIs(), 30000);
+    // Check periódico cada 60s
+    this._narratorInterval = setInterval(() => this.checkNearbyPOIs(), 60000);
     // Primer check inmediato
     this.checkNearbyPOIs();
-    localStorage.setItem('narrator_active', 'true');
     console.log('[Salma] Narrador activado');
     if (typeof updateBottomBar === 'function') updateBottomBar();
     return true;
@@ -1906,113 +2353,132 @@ const salma = {
       clearInterval(this._narratorInterval);
       this._narratorInterval = null;
     }
-    localStorage.setItem('narrator_active', 'false');
+    this._narratorQueue = [];
+    this._narratorProcessing = false;
     console.log('[Salma] Narrador desactivado');
     if (typeof updateBottomBar === 'function') updateBottomBar();
   },
 
-  showNarratorToast(text, duration, poi) {
+  showNarratorToast(text, poi) {
     const existing = document.getElementById('narrator-toast');
     if (existing) existing.remove();
     const toast = document.createElement('div');
     toast.id = 'narrator-toast';
     toast.className = 'narrator-toast narrator-toast-in';
-    const mapsLink = poi && poi.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${poi.place_id}`
-      : poi ? `https://www.google.com/maps/search/?api=1&query=${poi.lat},${poi.lng}` : '';
     toast.innerHTML = `
-      <div class="narrator-toast-close" onclick="this.parentElement.remove()">✕</div>
+      <div class="narrator-toast-close" onclick="this.parentElement.classList.add('narrator-toast-out');setTimeout(()=>this.parentElement.remove(),400)">✕</div>
       ${poi ? `<div class="narrator-toast-poi">\uD83D\uDCCD ${poi.name}</div>` : ''}
-      <div class="narrator-toast-text">${text}</div>
-      ${mapsLink ? `<a class="narrator-toast-link" href="${mapsLink}" target="_blank" rel="noopener">Ver en Google Maps</a>` : ''}`;
+      <div class="narrator-toast-text">${text}</div>`;
     document.body.appendChild(toast);
-    const autoDismiss = duration || 10000;
-    setTimeout(() => {
-      if (toast.parentElement) {
-        toast.classList.remove('narrator-toast-in');
-        toast.classList.add('narrator-toast-out');
-        setTimeout(() => toast.remove(), 400);
-      }
-    }, autoDismiss);
   },
 
   async checkNearbyPOIs() {
     if (!this._narratorActive || !this._userLocation) return;
     const now = Date.now();
-    if (now - this._narratorLastCheck < 25000) return;
+    if (now - this._narratorLastCheck < 55000) return;
     this._narratorLastCheck = now;
 
     const { lat, lng } = this._userLocation;
     console.log('[Salma] Narrator check:', lat, lng);
 
     try {
-      const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=500');
+      const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=20');
       if (!res.ok) return;
       const data = await res.json();
       if (!data.pois || !data.pois.length) return;
 
-      for (const poi of data.pois) {
-        const key = poi.place_id || poi.name;
-        if (this._narratorNotified.has(key)) continue;
-        this._narratorNotified.add(key);
+      // Filtrar solo POIs no notificados, ordenados por cercanía
+      const newPois = data.pois
+        .filter(p => !this._narratorNotified.has(p.place_id || p.name))
+        .sort((a, b) => (a.distance_m || 0) - (b.distance_m || 0));
 
-        try {
-          const narRes = await fetch(window.SALMA_API + '/narrate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              poi_name: poi.name,
-              lat: poi.lat,
-              lng: poi.lng,
-              country_code: this._copilotCountry || ''
-            })
-          });
-          if (!narRes.ok) continue;
-          const narData = await narRes.json();
-          if (!narData.narrative) continue;
+      if (!newPois.length) return;
 
-          // Notificación push (app en background)
-          if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('Salma', {
-              body: narData.narrative,
-              icon: '/salma_ai_avatar.png',
-              tag: 'narrator-' + key,
-              data: { poi_name: poi.name, narrative: narData.narrative }
-            });
-          }
+      // Encolar solo el más cercano (max 1 por ciclo)
+      const poi = newPois[0];
+      const key = poi.place_id || poi.name;
+      this._narratorNotified.add(key);
+      // Persistir dedup en sessionStorage
+      try { sessionStorage.setItem('narrator_notified_pois', JSON.stringify([...this._narratorNotified])); } catch (_) {}
 
-          // Destino de la burbuja: copiloto si visible, sino toast flotante
-          const ccsArea = document.getElementById('ccs-messages');
-          const itinView = document.getElementById('itin-view');
-          const itinVisible = itinView && itinView.style.display !== 'none';
-
-          if (ccsArea && itinVisible) {
-            const bubble = document.createElement('div');
-            bubble.className = 'msg msg-salma narrator-msg';
-            bubble.innerHTML = `
-              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma \u00b7 narrador</span></div>
-              <div class="msg-body-salma">
-                <div class="narrator-poi-name">\uD83D\uDCCD ${poi.name}</div>
-                ${narData.narrative}
-              </div>`;
-            ccsArea.appendChild(bubble);
-            ccsArea.scrollTop = ccsArea.scrollHeight;
-          } else {
-            this.showNarratorToast(narData.narrative, 10000, poi);
-          }
-
-          if (this._voiceOn) {
-            const narText = narData.narrative;
-            setTimeout(() => this.salmaSpeak(narText), 50);
-          }
-
-          console.log('[Salma] Narrador:', poi.name, '\u2192', narData.narrative.substring(0, 60) + '...');
-        } catch (e) {
-          console.log('[Salma] Narrador: error narrativa', e.message);
-        }
-      }
+      this._narratorQueue.push(poi);
+      console.log('[Salma] Narrator queue: ' + this._narratorQueue.length + ' pending');
+      this._processNarratorQueue();
     } catch (e) {
       console.log('[Salma] Narrador: error check POIs', e.message);
+    }
+  },
+
+  async _processNarratorQueue() {
+    if (this._narratorProcessing || !this._narratorQueue.length || !this._narratorActive) return;
+    this._narratorProcessing = true;
+
+    const poi = this._narratorQueue.shift();
+    const key = poi.place_id || poi.name;
+
+    try {
+      const narRes = await fetch(window.SALMA_API + '/narrate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          poi_name: poi.name,
+          lat: poi.lat,
+          lng: poi.lng,
+          country_code: this._copilotCountry || ''
+        })
+      });
+      if (!narRes.ok) { this._narratorProcessing = false; return; }
+      const narData = await narRes.json();
+      if (!narData.narrative) { this._narratorProcessing = false; return; }
+
+      const isForeground = document.visibilityState === 'visible';
+
+      if (isForeground) {
+        // App visible: solo burbuja/toast, NO push nativa
+        const ccsArea = document.getElementById('ccs-messages');
+        const itinView = document.getElementById('itin-view');
+        const itinVisible = itinView && itinView.style.display !== 'none';
+
+        if (ccsArea && itinVisible) {
+          const bubble = document.createElement('div');
+          bubble.className = 'msg msg-salma narrator-msg';
+          bubble.innerHTML = `
+            <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma \u00b7 narrador</span></div>
+            <div class="msg-body-salma">
+              <div class="narrator-poi-name">\uD83D\uDCCD ${poi.name}</div>
+              ${narData.narrative}
+            </div>`;
+          ccsArea.appendChild(bubble);
+          ccsArea.scrollTop = ccsArea.scrollHeight;
+        } else {
+          this.showNarratorToast(narData.narrative, poi);
+        }
+      } else {
+        // App en background: solo push nativa
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('Salma', {
+            body: narData.narrative,
+            icon: '/salma_ai_avatar.png',
+            tag: 'narrator-' + key,
+            data: { poi_name: poi.name, narrative: narData.narrative }
+          });
+        }
+      }
+
+      if (this._voiceOn && isForeground) {
+        const narText = narData.narrative;
+        setTimeout(() => this.salmaSpeak(narText), 50);
+      }
+
+      console.log('[Salma] Narrador:', poi.name, '\u2192', narData.narrative.substring(0, 60) + '...');
+    } catch (e) {
+      console.log('[Salma] Narrador: error narrativa', e.message);
+    }
+
+    this._narratorProcessing = false;
+    // Si quedan más en cola, procesar siguiente con spacing de 20s
+    if (this._narratorQueue.length && this._narratorActive) {
+      setTimeout(() => this._processNarratorQueue(), 20000);
     }
   },
 
@@ -2315,8 +2781,9 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
-    // Banner del tiempo
-    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Banner del tiempo — fuera de la pantalla de inicio (doc 8 sep, limpieza C).
+    // Solo aparece cuando ya hay conversación; se re-activa al mandar el primer mensaje (ver _addUserBubble).
+    if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
     // Banner de recordatorios (una vez al día)
@@ -2339,6 +2806,8 @@ const salma = {
     div.innerHTML = `<div class="msg-body-user">${photoHtml}${textHtml}</div>`;
     area.appendChild(div);
     this._scrollToBottom(true);
+    // El banner del tiempo se oculta en el inicio; vuelve al empezar la conversación (doc 8 sep, limpieza C)
+    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
   },
 
   _addSalmaBubble(text) {
@@ -2368,6 +2837,10 @@ const salma = {
   _renderActionResults(results) {
     const area = this._getChatArea();
     if (!area) return;
+    // Fase 6 simplificada — si en la MISMA respuesta llegan ≥2 resultados reservables
+    // (vuelos/hoteles/lugares), es una petición multitramo → vista de plan por tramos.
+    const legs = (results || []).filter(r => r && !r.error && ['flights', 'hotels', 'places'].includes(r.type));
+    if (legs.length >= 2) { this._renderMultiLeg(legs, area); return; }
     for (const result of results) {
       if (!result || result.error) continue;
       const wrap = document.createElement('div');
@@ -2383,6 +2856,90 @@ const salma = {
         this._scrollToBottom(true);
       }
     }
+  },
+
+  // Fase 6 simplificada (frontend, sin Worker): agrupa los resultados como tramos de un plan.
+  // NO hay detección de conflictos ni progreso por tramo — eso es follow-up de Worker.
+  _legMeta(r) {
+    if (r.type === 'flights') {
+      const prices = (r.flights || []).map(f => parseFloat(f.price)).filter(n => !isNaN(n));
+      const side = prices.length ? `~${Math.round(Math.min(...prices))} €` : (r.flights && r.flights.length ? `${r.flights.length} opc.` : '');
+      return { icon: '✈', kind: 'Vuelo', title: `${r.origin || ''} → ${r.destination || ''}`.trim(), side };
+    }
+    if (r.type === 'hotels') {
+      const isAir = !!r.airbnb_link && !(r.hotels && r.hotels.length);
+      return { icon: isAir ? '🏠' : '🏨', kind: isAir ? 'Alojamiento' : 'Hotel', title: r.city || 'la zona', side: (r.hotels && r.hotels.length) ? `${r.hotels.length} opc.` : 'Airbnb' };
+    }
+    return { icon: '📍', kind: 'Lugares', title: r.query || '', side: (r.places && r.places.length) ? `${r.places.length}` : '' };
+  },
+
+  _renderMultiLeg(legs, area) {
+    const wrap = document.createElement('div');
+    wrap.className = 'salma-action-results mtl';
+
+    // Total aproximado: solo suma vuelos (los hoteles no traen precio numérico).
+    let flightTotal = 0, hasFlightPrice = false;
+    for (const r of legs) {
+      if (r.type === 'flights' && Array.isArray(r.flights) && r.flights.length) {
+        const prices = r.flights.map(f => parseFloat(f.price)).filter(n => !isNaN(n));
+        if (prices.length) { flightTotal += Math.min(...prices); hasFlightPrice = true; }
+      }
+    }
+    const head = document.createElement('div');
+    head.className = 'mtl-head';
+    head.innerHTML = `<span class="mtl-head-k">Plan</span><span class="mtl-head-v">${legs.length} tramos${hasFlightPrice ? ` · vuelos desde ~${Math.round(flightTotal)} €` : ''}</span>`;
+    wrap.appendChild(head);
+
+    legs.forEach((r, i) => {
+      const meta = this._legMeta(r);
+      const row = document.createElement('div');
+      row.className = 'mtl-row';
+      row.innerHTML = `
+        <div class="mtl-row-head">
+          <span class="mtl-ico">${meta.icon}</span>
+          <div class="mtl-row-main">
+            <span class="mtl-kind">Tramo ${i + 1} · ${meta.kind}</span>
+            <span class="mtl-title">${escapeHTML(meta.title)}</span>
+          </div>
+          <span class="mtl-side">${escapeHTML(meta.side || '')}</span>
+          <span class="mtl-arrow">▾</span>
+        </div>
+        <div class="mtl-row-body"></div>`;
+      const body = row.querySelector('.mtl-row-body');
+      const sub = document.createElement('div');
+      sub.className = 'salma-action-results';
+      if (r.type === 'flights') this._renderFlightResults(r, sub);
+      else if (r.type === 'hotels') this._renderHotelResults(r, sub);
+      else this._renderPlaceResults(r, sub);
+      body.appendChild(sub);
+      row.querySelector('.mtl-row-head').addEventListener('click', () => row.classList.toggle('open'));
+      wrap.appendChild(row);
+    });
+
+    const cta = document.createElement('button');
+    cta.className = 'mtl-cta';
+    cta.textContent = 'Guardar plan';
+    cta.addEventListener('click', () => {
+      const summary = legs.map((r, i) => {
+        const m = this._legMeta(r);
+        return `Tramo ${i + 1} · ${m.kind}: ${m.title}${m.side ? ' (' + m.side + ')' : ''}`;
+      }).join('\n');
+      if (window.currentUser && typeof notasManager !== 'undefined' && notasManager.create) {
+        try {
+          notasManager.create({ texto: 'Plan de viaje\n\n' + summary, tipo: 'transporte', origen: 'salma', fuente: 'multitramo' });
+          cta.textContent = 'Guardado ✓';
+          cta.disabled = true;
+        } catch (_) { this.send && this.send('Guárdame este plan de viaje en una nota'); }
+      } else {
+        this.send && this.send('Guárdame este plan de viaje en una nota');
+      }
+    });
+    wrap.appendChild(cta);
+
+    area.appendChild(wrap);
+    const first = wrap.querySelector('.mtl-row');
+    if (first) first.classList.add('open');
+    this._scrollToBottom(true);
   },
 
   _renderFlightResults(result, wrap) {
@@ -2990,12 +3547,18 @@ const salma = {
       existing.id = 'salma-stream-msg';
       const body = existing.querySelector('.msg-body-salma');
       if (body) {
-        body.innerHTML = '';
         body.id = 'salma-stream-text';
+        // NO vaciar la burbuja: se dejan los puntitos + la frase girando hasta que
+        // llegue el primer chunk real (los quita _clearStreamLoader en evt.t / _fixStreamBubble).
+        // Antes se ponía innerHTML='' y quedaba una burbuja vacía y muda varios segundos
+        // mientras el worker preparaba la respuesta (rutas, road-trips). — 7 sept 2026
+        if (!body.querySelector('.loading-dots')) {
+          body.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+        }
+        body.dataset.loader = '1';
       }
-      // Limpiar intervalos de loading
-      if (this._loadingInterval) { clearInterval(this._loadingInterval); this._loadingInterval = null; }
-      if (this._retryTimer) { clearTimeout(this._retryTimer); this._retryTimer = null; }
+      // Se MANTIENEN vivos this._loadingInterval (frase) y this._retryTimer (botón
+      // "Reintentar" a los 18s) hasta el primer chunk — así nunca hay burbuja muda.
       return document.getElementById('salma-stream-text');
     }
     // Fallback: crear nueva burbuja
@@ -3006,12 +3569,27 @@ const salma = {
     div.id = 'salma-stream-msg';
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
-      <div class="msg-body-salma" id="salma-stream-text"></div>`;
+      <div class="msg-body-salma" id="salma-stream-text"><div class="loading-dots"><span></span><span></span><span></span></div></div>`;
     area.appendChild(div);
-    return document.getElementById('salma-stream-text');
+    const _t = document.getElementById('salma-stream-text');
+    if (_t) _t.dataset.loader = '1';
+    return _t;
+  },
+
+  // Quita el indicador de carga (puntitos + frase + botón Reintentar) de la burbuja de
+  // stream en cuanto llega contenido real. Idempotente.
+  _clearStreamLoader() {
+    if (this._loadingInterval) { clearInterval(this._loadingInterval); this._loadingInterval = null; }
+    if (this._retryTimer) { clearTimeout(this._retryTimer); this._retryTimer = null; }
+    const txt = document.getElementById('salma-stream-text');
+    if (txt && txt.dataset.loader) {
+      txt.innerHTML = '';
+      delete txt.dataset.loader;
+    }
   },
 
   _fixStreamBubble() {
+    this._clearStreamLoader();
     const el = document.getElementById('salma-stream-msg');
     if (el) {
       el.removeAttribute('id');
@@ -3067,7 +3645,9 @@ const salma = {
     let m;
     while ((m = re.exec(html)) !== null) {
       const name = m[1].replace(/<[^>]*>/g, '').trim();
-      if (name.length < 3 || /salma|gu[ií]a|dónde comer|donde comer/i.test(name)) continue;
+      // Excluir texto en negrita que NO es un lugar: el CTA de cierre "Crear ruta con mapa"
+      // y variantes. Antes se colaba una foto random delante de esa frase (7 sept 2026).
+      if (name.length < 3 || /salma|gu[ií]a|d[oó]nde comer|crear ruta|ruta con mapa|si te encaja|aqu[ií] abajo/i.test(name)) continue;
       // Buscar URL Maps cercana para extraer query con ciudad
       const afterStr = html.slice(m.index, m.index + 500);
       const mapsMatch = afterStr.match(/maps\/search\/([^"&<]+)/);
@@ -3163,8 +3743,10 @@ const salma = {
         // Reenviar el mensaje original automáticamente
         if (this._pendingGeoMessage) {
           const pendingMsg = this._pendingGeoMessage;
+          const pendingRFH = this._pendingGeoRouteFromHere;
           this._pendingGeoMessage = null;
-          setTimeout(() => this.send(pendingMsg), 400);
+          this._pendingGeoRouteFromHere = false;
+          setTimeout(() => this.send(pendingMsg, { routeFromHere: pendingRFH }), 400);
         }
       },
       (err) => {
@@ -3240,6 +3822,30 @@ const salma = {
   ],
   _isRouteMsg(msg) {
     return /ruta|itinerario|días|dias|semana|viaje a |voy a |me voy a |quiero ir|visitar|recorrer|\d+\s*d[íi]/i.test(msg);
+  },
+
+  // PIEZA A — extrae el destino "limpio" de un mensaje de ruta ("3 días Ciudad Real" → "Ciudad Real",
+  // "Salma hazme una guía: Estepona un día" → "Estepona"). Se manda como dest_hint para que el
+  // worker ancle el país sin depender de su propio regex, que fallaba con frases de 2+ palabras.
+  _cleanDestino(msg) {
+    if (!msg) return '';
+    let s = String(msg).trim();
+    // "ruta de los faros DESDE DONDE ESTOY" no tiene destino de texto que geocodificar —
+    // lo que sobrevive a la limpieza ("la los faros", "los faros"...) se mandaba igual
+    // como dest_hint, y el worker lo geocodificaba con Google Find Place como si fuera
+    // un sitio real. Con un texto sin sentido, Google devuelve el candidato que mejor
+    // le suene (visto: una ruta de faros pedida desde Fisterra ancló en Lisboa) y ESE
+    // sitio pasa a ser el centro del radio que valida/descarta el resto de paradas.
+    // Sin destino de texto, mejor sin ancla — el worker ya filtra por route.country.
+    if (/\b(desde donde estoy|desde aqu[ií]|donde estoy|cerca de m[ií]|por aqu[ií])\b/i.test(s)) return '';
+    s = s.replace(/^\s*salma[,\s]+hazme una gu[ií]a\s*:?\s*/i, '');
+    s = s.replace(/^\s*hazme una gu[ií]a\s*(de|por|para)?\s*:?\s*/i, '');
+    s = s.replace(/\b(\d{1,2}|un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s+d[ií]as?\b/gi, ' ');
+    s = s.replace(/\b(un|una)\s+semana\b/gi, ' ').replace(/\bfin de semana\b/gi, ' ');
+    s = s.replace(/\b(una?\s+)?(ruta|itinerario|viaje|gu[ií]a|escapada)\s+(de|por|a|para|en)\b/gi, ' ');
+    s = s.replace(/^\s*(a|en|por|para|de)\s+/i, '');
+    s = s.replace(/\s{2,}/g, ' ').replace(/^[\s,.:;–-]+|[\s,.:;–-]+$/g, '');
+    return s.trim();
   },
   _loadingInterval: null,
 
@@ -3335,6 +3941,10 @@ const salma = {
     if (this._retryTimer) {
       clearTimeout(this._retryTimer);
       this._retryTimer = null;
+    }
+    if (this._mapBuildTimer) {
+      clearInterval(this._mapBuildTimer);
+      this._mapBuildTimer = null;
     }
   },
 
