@@ -961,8 +961,8 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   enlaces de Google Maps de cada parada (hasta 15, 3s cada uno) sin mandar nada por el
   stream mientras espera, así que la conexión puede cortarse por silencio con la ruta
   ya generada pero sin llegar a mostrarse. Se le puso el mismo keepalive de 3s que ya
-  tenía el verify. **No confirmado en pantalla** — falta que Paco genere otra ruta y
-  confirme que ya no se corta.
+  tenía el verify. **CONFIRMADO EN PANTALLA por Paco** — generó otra ruta después del
+  deploy y esta vez no se cortó.
 
   **Aviso para la próxima sesión — `main` local corrupto detectado en este contenedor,
   no en GitHub:** al fusionar, `git checkout main` en esta sesión aterrizó en un commit
