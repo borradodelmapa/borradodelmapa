@@ -964,6 +964,23 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   tenía el verify. **CONFIRMADO EN PANTALLA por Paco** — generó otra ruta después del
   deploy y esta vez no se cortó.
 
+  **Foto como imagen: CONFIRMADO EN PANTALLA por Paco (captura de Luarca, Asturias) —
+  las 2 fotos salieron como imagen de verdad, no como texto.** El "primero sale la URL
+  larga" que describió es solo el texto en vivo mientras Salma "escribe" (sin reparar
+  todavía, normal); se corrige solo en cuanto el Worker manda el `done`.
+
+  **Bug nuevo encontrado en esa misma captura, arreglado — 14 sept, commit `0e0dcef`,
+  solo frontend (`salma.js?v=80`), YA EN GITHUB PAGES, sin confirmar en pantalla:**
+  `HISTORIA_LUGAR: Luarca Asturias` salía como texto plano al final del mensaje. El
+  Worker ya lo quita del `reply` final y lo manda aparte como `data.historia_lugar`
+  (para el botón "📖 Historia de..."), pero el frontend solo aplicaba ese `reply`
+  limpio si el evento `done` disparaba un re-render (enlaces Maps nuevos, etc.) — la
+  mayoría de las veces no lo dispara, y se queda el último texto ya streameado tal cual
+  lo escribió Claude, marcador incluido. `SALMA_ACTION:{...}` ya se ocultaba así
+  durante el streaming; a `HISTORIA_LUGAR:` le faltaba el mismo tratamiento — añadido
+  en los mismos dos sitios de `salma.js`. **Falta**: que Paco pida otra foto/historia y
+  confirme que ya no sale el marcador en texto.
+
   **Aviso para la próxima sesión — `main` local corrupto detectado en este contenedor,
   no en GitHub:** al fusionar, `git checkout main` en esta sesión aterrizó en un commit
   (`c4bc918`, "Historial de consultas siempre visible...", 8 sept) que **no comparte
