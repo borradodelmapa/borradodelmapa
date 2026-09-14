@@ -7480,7 +7480,12 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
       const placeName = place.trim();
       const slug = placeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      const kvKey = `historia:${slug}`;
+      // Nombres homónimos existen en sitios distintos (ej. "Cementerio de los Ingleses"
+      // en Lisboa y en Camariñas) — si hay coordenadas, se meten en la clave de caché
+      // (bucket ~11km) para que no se pisen entre sí durante los 30 días de TTL.
+      const hasCoords = typeof lat === 'number' && typeof lng === 'number';
+      const geoBucket = hasCoords ? `:${lat.toFixed(1)}:${lng.toFixed(1)}` : '';
+      const kvKey = `historia:${slug}${geoBucket}`;
 
       // 1. Cache KV
       if (env.SALMA_KB) {
@@ -7493,7 +7498,10 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
 
       // 2. Generar con Claude Haiku
-      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.
+      const geoHint = hasCoords
+        ? `\n\nUBICACIÓN REAL DEL USUARIO: lat ${lat}, lng ${lng}. Si existe más de un lugar con el nombre o similar a "${placeName}" (nombres homónimos, tipo "Cementerio de los Ingleses" en Lisboa Y en Camariñas), usa el que esté geográficamente cerca de esas coordenadas — NUNCA el más famoso o más documentado si no es el que está cerca. Ante la duda de cuál es el real en esa zona, dilo en la propia "description" en vez de inventar o asumir el homónimo equivocado.`
+        : '';
+      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.${geoHint}
 
 Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia. Ojo: abreviaturas típicas de Google Maps como "Rte." (restaurante), "Avda."/"Av." (avenida), "C/" (calle), "Pza." (plaza) NO indican una carretera ni un corredor — son solo el nombre de un local o dirección; genera la historia de ESE lugar concreto (el negocio, el edificio, la calle), no de una ruta ni de una persona a la que haga referencia el nombre.
 
