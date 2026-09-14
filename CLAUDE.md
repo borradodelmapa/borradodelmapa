@@ -931,6 +931,46 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     (`buscar_vuelos`) y **Booking.com vía RapidAPI** (`buscar_hotel`/`buscar_coche`),
     igual que en el resto de la app. Cuando se implemente WhatsApp, usar estos dos tal
     cual ya están en el Worker — no añadir ni Kiwi ni Trivago.
+  - **Ajustes al plan, propuestos por la sesión y aceptados por Paco (14 sept) — a
+    aplicar cuando se desarrolle, no ahora:**
+    1. **Async sin Cloudflare Queues.** El documento propone Queues para F5.3
+       (responder rápido al webhook y mandar el resultado real después). Este proyecto
+       no usa Queues en ningún sitio hoy, y montarlas (activar el producto, worker
+       consumidor aparte, binding en `wrangler.toml`) es más infraestructura de la que
+       hace falta. Empezar con `ctx.waitUntil()` dentro del propio Worker: Twilio no
+       espera la respuesta real, así que el Worker puede seguir trabajando en segundo
+       plano tras devolver el 200 OK y mandar el mensaje real por su cuenta. Pasar a
+       Queues solo si en producción real aparece un problema concreto (reintentos,
+       sobrecarga) que lo justifique.
+    2. **Validar la firma de Twilio (`X-Twilio-Signature`) desde F5.1-F5.2, no
+       "antes de producción".** El borrador de código lo deja como TODO para más
+       adelante. Pero en cuanto F5.2 conecte con el motor real de Salma, una URL de
+       webhook sin proteger deja que cualquiera que la descubra dispare búsquedas de
+       vuelos/hoteles/Places/GPT-4o-mini a costa de Paco sin pasar por WhatsApp de
+       verdad. Meterla ya en F5.1-F5.2.
+    3. **Decidir antes de F5.3 cómo cuentan los límites del plan gratis** (3 rutas
+       gratis, 20 msg/día) para un número de WhatsApp sin vincular a un `uid`. Si cada
+       número suelto empieza "de cero" en Firestore sin relación con el límite real de
+       ningún usuario, alguien podría abrir sesiones de sandbox indefinidamente para
+       saltárselo. Cerrar esta decisión de negocio antes de escribir el código de
+       F5.3, no parchearla después.
+    4. **Unificar el formato de negritas a un solo asterisco (`*negrita*`) para web
+       y WhatsApp por igual — idea de Paco (14 sept), mejor que traducir el formato
+       canal por canal.** WhatsApp ya renderiza `*texto*` como negrita de forma nativa;
+       si Salma emite esa misma convención, no hace falta ninguna traducción en el
+       post-procesado del canal WhatsApp. Toca dos sitios cuando se implemente:
+       - `worker/salma-worker.js` línea 189 (`BLOQUE_FORMATO`): cambiar la instrucción
+         de `**Negritas**` a `*Negritas*` (y los ejemplos de la línea 196).
+       - `app.js` línea 5873, único sitio del código vivo que convierte el markdown de
+         Salma a HTML (`html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')`) — sin
+         duplicados en `guide-renderer.js`/`bitacora-renderer.js`/`mapa-itinerario.js`
+         (comprobado, no lo tocan). Cambiar el regex a un solo asterisco.
+       **Detalle a no olvidar al implementarlo:** las guías y notas ya guardadas en
+       Firestore tienen texto con `**doble asterisco**` de antes del cambio. Si el
+       regex nuevo solo reconoce un asterisco, ese contenido histórico se vería con
+       los asteriscos sueltos en pantalla. El regex nuevo debe reconocer los dos
+       formatos a la vez (probar primero `\*\*(.+?)\*\*` y luego `\*(.+?)\*`) para que
+       lo viejo se siga viendo bien sin tener que migrar nada en Firestore.
   - **No tocar código de esto sin que Paco lo pida explícitamente** — estamos en fase de
     estudio de los documentos, no de desarrollo.
 
