@@ -942,9 +942,18 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   llama tanto en el sitio de siempre como dentro del `catch` de emergencia, para que un
   fallo en cualquier otra parte del post-procesado no deje pasar el markdown roto sin
   reparar. Probado con 4 casos en Node (roto-con-nombre, truncado-con-nombre,
-  bien-formado-sin-nombre, ya-correcto) — los 4 se comportan como se espera. **Falta**:
-  desplegar el Worker (`wrangler deploy -c wrangler.toml`) y que Paco pida una foto de un
-  lugar y confirme que sale como imagen, no como texto.
+  bien-formado-sin-nombre, ya-correcto) — los 4 se comportan como se espera.
+  **Desplegado 14 sept 2026 ~17:35 UTC vía GitHub Action "Deploy Worker" disparada
+  manualmente desde `claude/ruta-4-rias-mapa-c3e29a` (commit `1416f57`, el mismo que
+  trae también el fix del mapa de arriba) — `Current Version ID:
+  9f6e0d21-4989-4285-8338-909c9418afdf`.** Ojo: este deploy salió de la RAMA, no de
+  `main` (`main` todavía no tiene ninguno de los dos fixes de hoy) — el Worker en
+  producción ya lleva el arreglo, pero si alguien despliega otra vez desde `main` sin
+  fusionar antes esta rama, lo pisa. El fix del modal del mapa (`map-modal.js`/
+  `index.html`) es solo frontend — ese SÍ necesita que la rama llegue a `main` para que
+  GitHub Pages lo sirva; el del Worker ya está vivo sin depender de eso. **Falta**: que
+  Paco pida una foto de un lugar en el chat y confirme que sale como imagen, no como
+  texto/markdown crudo.
   **Dos síntomas más del mismo reporte, investigados, SIN tocar código:**
   1. *Buscador del mapa fullscreen ("Buscar hoteles, farmacias...") no responde* — no
      se ha encontrado la causa exacta; Paco mismo apuntó que puede no merecer la pena
