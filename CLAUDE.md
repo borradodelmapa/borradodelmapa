@@ -883,6 +883,60 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 > pendiente surgió ahí hay que traerlo a mano a una sesión con el repo. Esto es justo lo
 > que causó el desfase que motivó el barrido del 10 de septiembre — no repetirlo.
 
+### 📱 Nueva feature en estudio — Salma en WhatsApp (F5)
+
+- **14 sept 2026: Paco trae los primeros documentos de diseño para llevar a Salma a
+  WhatsApp como canal adicional (no sustituye la web). Fase de estudio — NO se ha
+  escrito ni desplegado nada de código todavía, esta entrada es solo para no perder el
+  contexto entre sesiones mientras se decide si y cómo se desarrolla.**
+  - Documentos recibidos: `Salma-WhatsApp.md` (documento técnico completo — arquitectura,
+    proveedor, plantillas, casos de uso, plan de fases F5.0-F5.6) y
+    `whatsapp-webhook-eco.js` (borrador de código para F5.1: webhook mínimo de eco sobre
+    Twilio Sandbox — solo existe en la conversación, no está guardado en el repo).
+  - **Arquitectura propuesta**: Twilio (webhook + envío) → endpoint nuevo en el Worker
+    (`/whatsapp`, sin decidir si en `salma-worker.js` o archivo aparte) → Firestore
+    `whatsapp_sessions/{numero}` (historial, uid vinculado, estado) → mismo
+    motor/prompt/tools de Salma que ya existen → Cloudflare Queues para respuestas que
+    tardan (búsquedas externas) → Twilio de vuelta. Las rutas guardadas usarían el mismo
+    esquema Firestore que la web (el documento dice `rutas/{uid}/...`; en este proyecto
+    real es `users/{uid}/maps/{mapId}` — contrastar nomenclatura antes de implementar).
+  - **Proveedor**: Twilio para todo (ya se usa para el SOS por SMS) — número, webhook,
+    envío y plantillas. Se descartaron Meta Cloud API directa (más trabajo de
+    cumplimiento propio) y 360dialog (solo compensa a partir de ~10.000 msgs/mes).
+  - **Bloqueo actual**: la verificación de negocio de Meta (obligatoria para producción
+    real) exige alta como autónomo, y Paco no está dado de alta todavía. Mientras tanto
+    se arrancaría con **Twilio Sandbox** (número compartido, testers se unen con
+    `join <código>`, sesión caduca a 72h, solo plantillas de ejemplo predefinidas) —
+    mismo SDK/código, solo cambian credenciales y número al migrar a producción.
+  - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
+    subidos si se retoma en otra sesión):
+    - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
+    - F5.1 — webhook mínimo + eco (borrador de código ya listo, sin IA ni Firestore)
+    - F5.2 — conectar con el motor de Salma (texto libre, sin memoria entre mensajes)
+    - F5.3 — memoria (`whatsapp_sessions`) + tools (búsquedas) + Cloudflare Queues
+    - F5.4 — vinculación de cuenta (código de un solo uso, número ↔ uid)
+    - F5.5 — proactivo con plantillas reales (requiere alta autónomo + verificación Meta)
+    - F5.6 — exploración a futuro (modo grupo, ubicación en tiempo real, marca blanca)
+  - **Cambio de coste a vigilar**: desde el 1 de octubre de 2026 los mensajes de
+    servicio/utility de WhatsApp dentro de la ventana de 24h dejan de ser gratis —
+    afecta al margen del canal, hay que llevarlo aparte del ~97% de margen de la web.
+  - **Decisiones abiertas según el propio documento**: si el endpoint va en
+    `salma-worker.js` o en archivo aparte; diseño del prompt "modo chat corto" para
+    WhatsApp; dónde/cómo se genera el código de vinculación de cuenta (web o WhatsApp,
+    entrega por email o chat); textos de las primeras plantillas (bienvenida, alerta de
+    precio); y el alta como autónomo de Paco, condición previa para F5.5 y para
+    producción real (fuera del ámbito técnico).
+  - **Aviso para cuando se retome**: el documento menciona Kiwi.com y Trivago como tools
+    "ya integradas" — no coincide con el inventario real de este `CLAUDE.md` (sección "8
+    Tools" más arriba): aquí `buscar_vuelos` es Duffel y `buscar_hotel`/`buscar_coche`
+    son Booking.com vía RapidAPI, no hay tool de Kiwi ni Trivago en el Worker actual.
+    Parece que el documento se escribió pensando en una versión distinta
+    (`salma-worker-v1-final.js`, nombrado en el propio documento) — antes de implementar,
+    confirmar con Paco si el plan real es sustituir Duffel/Booking por Kiwi/Trivago, o si
+    es solo una descripción desactualizada del documento.
+  - **No tocar código de esto sin que Paco lo pida explícitamente** — estamos en fase de
+    estudio de los documentos, no de desarrollo.
+
 ### 🔴 Crítico — verificado ahora mismo
 
 - **"Ver ruta completa" en el modal de mapa (map-modal.js) solo pintaba 1 parada de
