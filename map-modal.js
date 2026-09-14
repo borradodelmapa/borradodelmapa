@@ -34,25 +34,36 @@
   }
 
   function _extractDest(url) {
-    let name = '', placeId = null, multiStop = null;
+    let name = '', placeId = null, multiStop = null, multiStopIds = null;
     try {
       if (/\/maps\/dir\/?\?api=1/i.test(url)) {
         const u = new URL(url);
         const origin = u.searchParams.get('origin');
         const destination = u.searchParams.get('destination') || '';
         const waypointsParam = u.searchParams.get('waypoints');
+        const originId = u.searchParams.get('origin_place_id');
+        const destinationId = u.searchParams.get('destination_place_id');
+        const waypointIdsParam = u.searchParams.get('waypoint_place_ids');
         if (origin || waypointsParam) {
-          // "Ruta completa" (esquema oficial origin+waypoints+destination, todo en lat,lng)
+          // "Ruta completa" (esquema oficial origin+waypoints+destination). Cada punto puede
+          // venir como lat,lng o como nombre+place_id (el Worker manda nombre siempre que
+          // tiene place_id validado — ver salma-worker.js buildEnrichedReply). Guardamos los
+          // place_id en paralelo para resolver por ellos, no solo por el texto del nombre.
           const points = [];
-          if (origin) points.push(origin);
-          if (waypointsParam) points.push(...waypointsParam.split('|').filter(Boolean));
-          if (destination) points.push(destination);
-          if (points.length >= 2) multiStop = points;
-          else name = destination || origin || '';
+          const ids = [];
+          if (origin) { points.push(origin); ids.push(originId || null); }
+          if (waypointsParam) {
+            const wps = waypointsParam.split('|').filter(Boolean);
+            const wpIds = waypointIdsParam ? waypointIdsParam.split('|') : [];
+            wps.forEach((wp, i) => { points.push(wp); ids.push(wpIds[i] || null); });
+          }
+          if (destination) { points.push(destination); ids.push(destinationId || null); }
+          if (points.length >= 2) { multiStop = points; multiStopIds = ids; }
+          else { name = destination || origin || ''; placeId = destinationId || originId || null; }
         } else {
           // "Cómo llegar" a un solo destino con place_id
           name = destination;
-          placeId = u.searchParams.get('destination_place_id') || null;
+          placeId = destinationId || null;
         }
       } else if (/\/maps\/dir\/[^?]/i.test(url)) {
         const parts = url.split('/dir/')[1].split('/').filter(Boolean);
@@ -63,13 +74,29 @@
         }
       }
     } catch (_) {}
-    return { name, placeId, multiStop };
+    return { name, placeId, multiStop, multiStopIds };
   }
 
-  // Resuelve un punto de ruta: si ya es "lat,lng" lo usa directo (Places no acepta coords
-  // como query — daba "Lat/Long not supported" e INVALID_REQUEST); si es un nombre, busca
-  // con Places. cb(loc, label) — loc es null si no se pudo resolver el nombre.
-  function _resolvePoint(pointStr, placesService, cb) {
+  // Resuelve un punto de ruta. Prioridad: 1) place_id ya validado por el Worker contra
+  // Google (getDetails — el mismo ID, fiable, sin ambigüedad de nombre) 2) "lat,lng" literal
+  // 3) búsqueda por nombre a ciegas (findPlaceFromQuery, sin sesgo geográfico — falla a
+  // menudo con pueblos/miradores pequeños, es el último recurso). cb(loc, label) — loc es
+  // null si no se pudo resolver de ninguna forma.
+  function _resolvePoint(pointStr, placeId, placesService, cb) {
+    if (placeId) {
+      placesService.getDetails({ placeId, fields: ['geometry', 'name'] }, (r, s) => {
+        if (s === google.maps.places.PlacesServiceStatus.OK && r && r.geometry) {
+          cb(r.geometry.location, r.name || pointStr);
+        } else {
+          _resolvePointByNameOrCoords(pointStr, placesService, cb);
+        }
+      });
+      return;
+    }
+    _resolvePointByNameOrCoords(pointStr, placesService, cb);
+  }
+
+  function _resolvePointByNameOrCoords(pointStr, placesService, cb) {
     const m = String(pointStr).trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);
     if (m) { cb({ lat: parseFloat(m[1]), lng: parseFloat(m[2]) }, pointStr); return; }
     placesService.findPlaceFromQuery({ query: pointStr, fields: ['geometry', 'name', 'place_id'] }, (r, s) => {
@@ -185,7 +212,8 @@
       let pending = dest.multiStop.length;
       const locs = new Array(dest.multiStop.length);
       dest.multiStop.forEach((point, i) => {
-        _resolvePoint(point, placesService, (loc, label) => {
+        const pointId = dest.multiStopIds && dest.multiStopIds[i];
+        _resolvePoint(point, pointId, placesService, (loc, label) => {
           if (loc) locs[i] = { loc, name: label };
           if (--pending === 0) {
             const valid = locs.filter(Boolean);
@@ -232,7 +260,7 @@
     // Usar findPlaceFromQuery directamente → fallback a Geocoder
     if (dest.name) {
       console.log('[map-modal] resolviendo destino:', dest.name);
-      _resolvePoint(dest.name, placesService, (loc, label) => {
+      _resolvePoint(dest.name, null, placesService, (loc, label) => {
         if (loc) {
           markDest(loc, label);
         } else {

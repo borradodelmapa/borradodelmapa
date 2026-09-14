@@ -885,6 +885,44 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **"Ver ruta completa" en el modal de mapa (map-modal.js) solo pintaba 1 parada de
+  varias — 14 sept 2026, fix en rama `claude/ruta-4-rias-mapa-c3e29a`, SIN desplegar
+  ni confirmar en pantalla.** Reportado por Paco con ruta "4 rías" (Galicia): el chat
+  generó bien la guía con varias paradas, pero al tocar "🗺️ Ruta completa en Google
+  Maps" el modal fullscreen solo mostraba el marker "1", sin las demás. Causa: el
+  mismo día (commit `2894d00`, "sincronizar rama con main") el Worker cambió el
+  formato del enlace de ruta — de mandar `lat,lng` puros a mandar **nombre del lugar +
+  `place_id`** por parámetro separado (`origin_place_id`/`waypoint_place_ids`/
+  `destination_place_id`), buscando enlaces más fieles (bug real que arregló: una
+  parada con ficha en Google salía con el nombre de otro negocio al lado). Pero
+  `map-modal.js` se había arreglado el día ANTES (commit `bcfa6ca`, 13 sept) asumiendo
+  justo el formato viejo — solo sabía leer `origin`/`waypoints`/`destination` como
+  texto y nunca miraba los `*_place_id`, así que cada parada se re-buscaba por nombre a
+  ciegas (`findPlaceFromQuery`, sin sesgo geográfico) en vez de usar el ID que el
+  Worker ya había verificado contra Google — y esa búsqueda por nombre falla a menudo
+  con pueblos/miradores pequeños (exactamente el tipo de parada de una ruta de rías).
+  Fix: `_extractDest()` ahora también parsea los `*_place_id` de la URL, y
+  `_resolvePoint()` los usa con `getDetails()` como fuente primaria (mismo ID, fiable)
+  — solo cae a `lat,lng`/búsqueda por nombre si no hay `place_id` para ese punto. El
+  destino único ("Cómo llegar" a una sola parada) se dejó intacto a propósito (sigue
+  sin usar `placeId`, como ya estaba) para no ampliar el cambio más allá del bug
+  reportado. `?v=` de `map-modal.js` subido a 10 en `index.html`. **Falta**: desplegar
+  (push a main + GitHub Pages, no requiere Worker) y que Paco repita "ruta completa" de
+  una guía con varias paradas y confirme que salen todas numeradas.
+  **Dos síntomas más del mismo reporte, investigados, SIN tocar código:**
+  1. *Buscador del mapa fullscreen ("Buscar hoteles, farmacias...") no responde* — no
+     se ha encontrado la causa exacta; Paco mismo apuntó que puede no merecer la pena
+     arreglarlo porque este modal es candidato a desaparecer con la propuesta "mapa
+     siempre visible" (V5, ver 🟡 Importante). Queda pendiente de decidir, no de
+     diagnosticar más a fondo por ahora.
+  2. *"Se ha aturrullado" + `Stream read error: TypeError: network error` (3 veces en
+     los logs del panel 🐛, sesión de las 15:49/17:01/17:14)* — el Worker ya tiene
+     keepalive activo durante generación y verificación de rutas (cada 3s), así que no
+     parece un timeout del servidor. La captura de pantalla de Paco muestra señal móvil
+     floja (Orange, 6.2 K/s) en ese momento — coincide con el mismo patrón de
+     intermitencia de red ya documentado el 13 sept (curl con timeout, Copiloto
+     "Failed to fetch") que se concluyó que no era bug de la app. No se ha tocado nada;
+     si se repite con buena señal, ahí sí habría que mirar con `wrangler tail` en vivo.
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
 - **Ruta de Ronda pintó el mapa en Benahavís/San Pedro de Alcántara (13 sept) — fix
