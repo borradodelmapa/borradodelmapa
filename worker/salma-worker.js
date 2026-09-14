@@ -9460,21 +9460,32 @@ REGLAS:
         }
 
         // ── BLOQUE E: validar enlaces de Google Maps antes de cachear y entregar ──
+        // Keepalive mientras dura: hace HEAD-checks a Google Maps (hasta 15, 3s c/u) sin
+        // que viaje nada por el stream — mismo motivo que el keepalive de PASO 3 (verify)
+        // unas líneas más arriba, y mismo síntoma: "network error" en el cliente a media
+        // espera con la ruta ya generada pero sin llegar a mostrarse.
         {
           const _surface = route ? 'ruta_guiada' : 'chat_libre';
-          if (route) {
-            try {
-              const _r = await validarYCorregirLinksMaps(route, { surface: _surface, region: route.region || route.country || '', userId: uid });
-              route = _r.value;
-              _urlIncidents.push(..._r.incidents);
-            } catch (_) {}
-          }
-          if (reply && typeof reply === 'string') {
-            try {
-              const _r = await validarYCorregirLinksMaps(reply, { surface: _surface, userId: uid });
-              reply = _r.value;
-              _urlIncidents.push(..._r.incidents);
-            } catch (_) {}
+          const _blockEKa = setInterval(() => {
+            writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)).catch(() => {});
+          }, 3000);
+          try {
+            if (route) {
+              try {
+                const _r = await validarYCorregirLinksMaps(route, { surface: _surface, region: route.region || route.country || '', userId: uid });
+                route = _r.value;
+                _urlIncidents.push(..._r.incidents);
+              } catch (_) {}
+            }
+            if (reply && typeof reply === 'string') {
+              try {
+                const _r = await validarYCorregirLinksMaps(reply, { surface: _surface, userId: uid });
+                reply = _r.value;
+                _urlIncidents.push(..._r.incidents);
+              } catch (_) {}
+            }
+          } finally {
+            clearInterval(_blockEKa);
           }
         }
 
