@@ -886,8 +886,8 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 ### 🔴 Crítico — verificado ahora mismo
 
 - **"Ver ruta completa" en el modal de mapa (map-modal.js) solo pintaba 1 parada de
-  varias — 14 sept 2026, fix en rama `claude/ruta-4-rias-mapa-c3e29a`, SIN desplegar
-  ni confirmar en pantalla.** Reportado por Paco con ruta "4 rías" (Galicia): el chat
+  varias — 14 sept 2026, FUSIONADO Y DESPLEGADO, sin confirmar en pantalla.** Reportado
+  por Paco con ruta "4 rías" (Galicia): el chat
   generó bien la guía con varias paradas, pero al tocar "🗺️ Ruta completa en Google
   Maps" el modal fullscreen solo mostraba el marker "1", sin las demás. Causa: el
   mismo día (commit `2894d00`, "sincronizar rama con main") el Worker cambió el
@@ -906,13 +906,13 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   — solo cae a `lat,lng`/búsqueda por nombre si no hay `place_id` para ese punto. El
   destino único ("Cómo llegar" a una sola parada) se dejó intacto a propósito (sigue
   sin usar `placeId`, como ya estaba) para no ampliar el cambio más allá del bug
-  reportado. `?v=` de `map-modal.js` subido a 10 en `index.html`. **Falta**: desplegar
-  (push a main + GitHub Pages, no requiere Worker) y que Paco repita "ruta completa" de
-  una guía con varias paradas y confirme que salen todas numeradas.
+  reportado. `?v=` de `map-modal.js` subido a 10 en `index.html`. **Fusionado a `main`
+  (fast-forward, commit `d0604b5`) y ya en GitHub Pages** — solo queda que Paco repita
+  "ruta completa" de una guía con varias paradas y confirme que salen todas numeradas.
 - **Fotos del chat a veces salen como markdown crudo (`![Nombre](https://salma-api...` +
   URL larguísima de 200-300 caracteres pegada como texto/enlace, en vez de la imagen) —
-  14 sept 2026, fix en la misma rama `claude/ruta-4-rias-mapa-c3e29a`, SIN desplegar ni
-  confirmar en pantalla.** Mismo reporte de las 4 rías: la foto de "Costa da Morte" salió
+  14 sept 2026, FUSIONADO Y DESPLEGADO, sin confirmar en pantalla.** Mismo reporte de
+  las 4 rías: la foto de "Costa da Morte" salió
   así. Causa, en dos capas — la propia `salma-worker.js` ya documentaba (comentario
   previo a este fix, línea ~9171) que "Sonnet a veces emite `![Name](` + saltos de línea,
   o `![Name](url...` que nunca cierra con `)` (URL de foto larga truncada al copiarla)":
@@ -943,17 +943,31 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   fallo en cualquier otra parte del post-procesado no deje pasar el markdown roto sin
   reparar. Probado con 4 casos en Node (roto-con-nombre, truncado-con-nombre,
   bien-formado-sin-nombre, ya-correcto) — los 4 se comportan como se espera.
-  **Desplegado 14 sept 2026 ~17:35 UTC vía GitHub Action "Deploy Worker" disparada
-  manualmente desde `claude/ruta-4-rias-mapa-c3e29a` (commit `1416f57`, el mismo que
-  trae también el fix del mapa de arriba) — `Current Version ID:
-  9f6e0d21-4989-4285-8338-909c9418afdf`.** Ojo: este deploy salió de la RAMA, no de
-  `main` (`main` todavía no tiene ninguno de los dos fixes de hoy) — el Worker en
-  producción ya lleva el arreglo, pero si alguien despliega otra vez desde `main` sin
-  fusionar antes esta rama, lo pisa. El fix del modal del mapa (`map-modal.js`/
-  `index.html`) es solo frontend — ese SÍ necesita que la rama llegue a `main` para que
-  GitHub Pages lo sirva; el del Worker ya está vivo sin depender de eso. **Falta**: que
-  Paco pida una foto de un lugar en el chat y confirme que sale como imagen, no como
-  texto/markdown crudo.
+  **Desplegado dos veces 14 sept 2026 vía GitHub Action "Deploy Worker" disparada
+  manualmente: primero ~17:35 UTC desde la rama (commit `1416f57`,
+  `Current Version ID: 9f6e0d21-4989-4285-8338-909c9418afdf`), y otra vez ~17:43 UTC ya
+  desde `main` tras fusionar (commit `d0604b5`, `Current Version ID:
+  7b9a94b0-563d-4783-b271-d08e4e76c0d3` — este es el vigente, el anterior queda
+  superado).** Rama y `main` ya están sincronizados (fast-forward limpio, sin
+  conflictos) — no hay riesgo de que un deploy futuro desde `main` pise este arreglo.
+  **Falta**: que Paco pida una foto de un lugar en el chat y confirme que sale como
+  imagen, no como texto/markdown crudo.
+
+  **Aviso para la próxima sesión — `main` local corrupto detectado en este contenedor,
+  no en GitHub:** al fusionar, `git checkout main` en esta sesión aterrizó en un commit
+  (`c4bc918`, "Historial de consultas siempre visible...", 8 sept) que **no comparte
+  ningún ancestro común** con el `main` real de GitHub (`git merge` dio "refusing to
+  merge unrelated histories"). No es un problema del repo en GitHub — `origin/main`
+  estaba bien, con sus 153 commits hasta hoy; era solo el puntero `main` LOCAL de este
+  contenedor concreto el que apuntaba a una instantánea vieja y desconectada (probable
+  resto de cómo se preparó este contenedor, no un caso de historia perdida real — el
+  propio trabajo de esta sesión ya partía correctamente de `origin/main`). Se arregló
+  con `git checkout -B main origin/main` (realinea el puntero local con el remoto, no
+  toca nada en GitHub) antes de fusionar. Si otra sesión en OTRO contenedor ve el mismo
+  "unrelated histories" al tocar `main`: no es la catástrofe del 5 sept, es este mismo
+  problema de puntero local — comprobar con `git merge-base main origin/main` (si da
+  vacío, es esto) y aplicar el mismo arreglo, nunca forzar un merge de historias no
+  relacionadas a ciegas.
   **Dos síntomas más del mismo reporte, investigados, SIN tocar código:**
   1. *Buscador del mapa fullscreen ("Buscar hoteles, farmacias...") no responde* — no
      se ha encontrado la causa exacta; Paco mismo apuntó que puede no merecer la pena
