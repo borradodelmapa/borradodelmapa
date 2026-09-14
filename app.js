@@ -2757,6 +2757,7 @@ auth.onAuthStateChanged(async (user) => {
       name: userData.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Viajero'),
       email: user.email || '',
       isPremium: userData.isPremium || false,
+      premium_until: userData.premium_until ? (userData.premium_until.toDate ? userData.premium_until.toDate().toISOString() : userData.premium_until) : null,
       country: userData.country || '',
       coins_saldo: userData.coins_saldo || 0,
       rutas_gratis_usadas: userData.rutas_gratis_usadas || 0,
@@ -2805,8 +2806,17 @@ auth.onAuthStateChanged(async (user) => {
       window._fingerprintUnlock = false;
       return;
     }
+    const pagoParam = new URLSearchParams(window.location.search).get('pago');
     const goParam = new URLSearchParams(window.location.search).get('go');
-    if (goParam) {
+    if (pagoParam === 'ok') {
+      history.replaceState(null, '', '/');
+      showState('profile');
+      _verificarPagoPremium();
+    } else if (pagoParam === 'cancel') {
+      history.replaceState(null, '', '/');
+      showState('profile');
+      openCoinsModal();
+    } else if (goParam) {
       history.replaceState(null, '', '/');
       showState(goParam);
     } else if (window._afterLogin) {
@@ -3236,15 +3246,25 @@ document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerpr
 
 // Logo eliminado — navegación solo por bottom bar
 
-// ═══ MODAL COINS ═══
+// ═══ MODAL PREMIUM (Stripe Checkout hospedado — pago único por periodo) ═══
+
+const PREMIUM_PLANS_FRONT = {
+  '1viaje':     { label: '1 viaje',    months: 1,  price: '4,99€',  note: '1 mes de Premium' },
+  'trimestral': { label: 'Trimestral', months: 3,  price: '8,99€',  note: '3 meses de Premium · 3€/mes' },
+  'semestral':  { label: 'Semestral',  months: 6,  price: '14,99€', note: '6 meses de Premium · 2,50€/mes' },
+  'anual':      { label: 'Anual',      months: 12, price: '24,99€', note: '12 meses de Premium · 2,08€/mes' },
+};
 
 function openCoinsModal() {
   // Cerrar si ya existe
   const existing = document.getElementById('coins-modal-overlay');
   if (existing) { existing.remove(); return; }
 
-  const coins = currentUser ? (currentUser.coins_saldo || 0) : 0;
-  const rutasGratis = currentUser ? Math.max(0, 3 - (currentUser.rutas_gratis_usadas || 0)) : 3;
+  const premiumUntilMs = currentUser && currentUser.premium_until ? new Date(currentUser.premium_until).getTime() : 0;
+  const premiumActivo = premiumUntilMs > Date.now();
+  const estadoTxt = premiumActivo
+    ? 'Premium hasta ' + new Date(premiumUntilMs).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+    : 'Plan gratuito';
 
   const overlay = document.createElement('div');
   overlay.id = 'coins-modal-overlay';
@@ -3253,49 +3273,47 @@ function openCoinsModal() {
     <div class="coins-modal">
       <button class="coins-modal-close" id="coins-modal-close">&times;</button>
 
-      <!-- Saldo -->
+      <!-- Estado -->
       <div class="coins-modal-saldo">
         <div class="coins-modal-saldo-row">
-          <span class="coins-modal-saldo-label">Crédito</span>
-          <span class="coins-modal-saldo-val">${coins} coins</span>
-        </div>
-        <div class="coins-modal-saldo-row">
-          <span class="coins-modal-saldo-label">Rutas gratis</span>
-          <span class="coins-modal-saldo-val coins-modal-saldo-free">${rutasGratis} de 3</span>
+          <span class="coins-modal-saldo-label">Tu plan</span>
+          <span class="coins-modal-saldo-val ${premiumActivo ? 'coins-modal-saldo-free' : ''}">${estadoTxt}</span>
         </div>
       </div>
 
-      <!-- Pago integrado -->
-      <div id="stripe-card-wrapper" class="stripe-card-wrapper">
-        <div id="stripe-card-element" class="stripe-card-element"></div>
-        <div id="stripe-card-errors" class="stripe-card-errors"></div>
-      </div>
-
-      <!-- Selector de pack -->
+      <!-- Selector de plan -->
       <div class="coins-packs" id="coins-packs">
-        <label class="coins-pack" data-pack="starter" data-coins="10" data-price="4,99€" data-price-raw="499">
-          <input type="radio" name="coins-pack" value="starter">
+        <label class="coins-pack" data-plan="1viaje">
+          <input type="radio" name="premium-plan" value="1viaje">
           <div class="coins-pack-inner">
-            <div class="coins-pack-coins">10 <span>coins</span></div>
-            <div class="coins-pack-name">Starter</div>
+            <div class="coins-pack-coins">1 <span>mes</span></div>
+            <div class="coins-pack-name">1 viaje</div>
             <div class="coins-pack-price">4,99€</div>
           </div>
         </label>
-        <label class="coins-pack coins-pack-featured" data-pack="viajero" data-coins="25" data-price="9,99€" data-price-raw="999">
-          <input type="radio" name="coins-pack" value="viajero" checked>
+        <label class="coins-pack" data-plan="trimestral">
+          <input type="radio" name="premium-plan" value="trimestral">
           <div class="coins-pack-inner">
-            <div class="coins-pack-badge">Popular</div>
-            <div class="coins-pack-coins">25 <span>coins</span></div>
-            <div class="coins-pack-name">Viajero</div>
-            <div class="coins-pack-price">9,99€</div>
+            <div class="coins-pack-coins">3 <span>meses</span></div>
+            <div class="coins-pack-name">Trimestral</div>
+            <div class="coins-pack-price">8,99€</div>
           </div>
         </label>
-        <label class="coins-pack" data-pack="explorador" data-coins="60" data-price="19,99€" data-price-raw="1999">
-          <input type="radio" name="coins-pack" value="explorador">
+        <label class="coins-pack" data-plan="semestral">
+          <input type="radio" name="premium-plan" value="semestral">
           <div class="coins-pack-inner">
-            <div class="coins-pack-coins">60 <span>coins</span></div>
-            <div class="coins-pack-name">Explorador</div>
-            <div class="coins-pack-price">19,99€</div>
+            <div class="coins-pack-coins">6 <span>meses</span></div>
+            <div class="coins-pack-name">Semestral</div>
+            <div class="coins-pack-price">14,99€</div>
+          </div>
+        </label>
+        <label class="coins-pack coins-pack-featured" data-plan="anual">
+          <input type="radio" name="premium-plan" value="anual" checked>
+          <div class="coins-pack-inner">
+            <div class="coins-pack-badge">Mejor precio</div>
+            <div class="coins-pack-coins">12 <span>meses</span></div>
+            <div class="coins-pack-name">Anual</div>
+            <div class="coins-pack-price">24,99€</div>
           </div>
         </label>
       </div>
@@ -3303,31 +3321,15 @@ function openCoinsModal() {
       <!-- Botón pagar -->
       <div class="coins-modal-plan">
         <div class="coins-modal-plan-row">
-          <div class="coins-modal-plan-note" id="coins-plan-note">25 coins · no caducan</div>
-          <button class="coins-modal-pay" id="coins-pay-btn" disabled>9,99€</button>
+          <div class="coins-modal-plan-note" id="coins-plan-note">${PREMIUM_PLANS_FRONT.anual.note}</div>
+          <button class="coins-modal-pay" id="coins-pay-btn">${PREMIUM_PLANS_FRONT.anual.price}</button>
         </div>
         <div class="stripe-test-badge">MODO PRUEBA · no se cobrará</div>
+        <div id="stripe-card-errors" class="stripe-card-errors"></div>
       </div>
       <div id="stripe-loading" class="stripe-loading" style="display:none">
         <div class="stripe-spinner"></div>
-        <span>Procesando pago...</span>
-      </div>
-      <div id="stripe-success" class="stripe-success" style="display:none">
-        ✓ ¡<span id="stripe-success-coins">25</span> coins añadidos!
-      </div>
-
-      <!-- Acordeón: qué puedes hacer -->
-      <button class="coins-modal-accordion" id="coins-accordion">
-        <span>¿Qué puedes hacer con coins?</span>
-        <span class="coins-modal-accordion-arrow">›</span>
-      </button>
-      <div class="coins-modal-accordion-body" id="coins-accordion-body">
-        <div class="coins-modal-cost"><span>Buscar vuelos reales</span><span>1</span></div>
-        <div class="coins-modal-cost"><span>Buscar hoteles reales</span><span>1</span></div>
-        <div class="coins-modal-cost"><span>Crear ruta con IA</span><span>2</span></div>
-        <div class="coins-modal-cost"><span>Copiloto en tu viaje</span><span>3</span></div>
-        <div class="coins-modal-cost"><span>Modo emergencia</span><span>2</span></div>
-        <div class="coins-modal-cost"><span>Resumen post-viaje</span><span>1</span></div>
+        <span>Conectando con Stripe...</span>
       </div>
     </div>`;
 
@@ -3339,143 +3341,90 @@ function openCoinsModal() {
   overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCoins(); });
   if (window.pushModal) window.pushModal('coins', closeCoins);
 
-  // Acordeón
-  document.getElementById('coins-accordion').addEventListener('click', () => {
-    const body = document.getElementById('coins-accordion-body');
-    const arrow = overlay.querySelector('.coins-modal-accordion-arrow');
-    const open = body.classList.toggle('open');
-    arrow.style.transform = open ? 'rotate(90deg)' : '';
-  });
-
-  // Selección de pack — actualiza botón y nota
+  // Selección de plan — actualiza botón y nota
   overlay.querySelectorAll('.coins-pack').forEach(label => {
     label.addEventListener('click', () => {
       overlay.querySelectorAll('.coins-pack').forEach(l => l.classList.remove('selected'));
       label.classList.add('selected');
       label.querySelector('input').checked = true;
+      const plan = PREMIUM_PLANS_FRONT[label.dataset.plan];
       const payBtn = document.getElementById('coins-pay-btn');
       const noteEl = document.getElementById('coins-plan-note');
-      if (payBtn) payBtn.textContent = label.dataset.price;
-      if (noteEl) noteEl.textContent = label.dataset.coins + ' coins · no caducan';
+      if (payBtn) payBtn.textContent = plan.price;
+      if (noteEl) noteEl.textContent = plan.note;
     });
   });
-  // Marcar viajero como seleccionado por defecto
+  // Marcar anual como seleccionado por defecto
   const defaultPack = overlay.querySelector('.coins-pack-featured');
   if (defaultPack) defaultPack.classList.add('selected');
 
-  // Stripe Elements — formulario de tarjeta integrado
-  initStripeCard(overlay);
-}
+  // Pagar → crear Checkout Session en el worker y redirigir a Stripe
+  document.getElementById('coins-pay-btn').addEventListener('click', async () => {
+    const payBtn = document.getElementById('coins-pay-btn');
+    const packsEl = document.getElementById('coins-packs');
+    const loadingEl = document.getElementById('stripe-loading');
+    const errorsEl = document.getElementById('stripe-card-errors');
+    const selectedLabel = overlay.querySelector('.coins-pack.selected') || overlay.querySelector('.coins-pack-featured');
+    const planKey = selectedLabel ? selectedLabel.dataset.plan : 'anual';
 
-// ═══ STRIPE ELEMENTS — Tarjeta integrada ═══
-
-function initStripeCard(overlay) {
-  // STRIPE_PK: tu publishable key de Stripe (test o live)
-  // De momento usa la test key. Cuando tengas la real, cámbiala aquí.
-  const STRIPE_PK = 'pk_test_51TEhUfDT9GNHUXNZJB0yABaUKu4KIR7HPihR2RJaHIOeSmDfBZvcplmXjcFfeUVQbBYSHURE0HmXoRz1DeD5l0Qc00R0YSOWwe';
-
-  const cardEl = document.getElementById('stripe-card-element');
-  const errorsEl = document.getElementById('stripe-card-errors');
-  const payBtn = document.getElementById('coins-pay-btn');
-  const loadingEl = document.getElementById('stripe-loading');
-  const successEl = document.getElementById('stripe-success');
-  const wrapperEl = document.getElementById('stripe-card-wrapper');
-
-  // Si Stripe no cargó o no hay key real, mostrar placeholder
-  if (typeof Stripe === 'undefined' || STRIPE_PK.includes('PLACEHOLDER')) {
-    cardEl.innerHTML = '<div class="stripe-placeholder">Introduce tu Stripe key para activar pagos</div>';
     payBtn.disabled = true;
-    return;
-  }
-
-  const stripe = Stripe(STRIPE_PK);
-  const elements = stripe.elements();
-  const card = elements.create('card', {
-    hidePostalCode: true,
-    style: {
-      base: {
-        color: '#f5f0e8',
-        fontFamily: '"Inter", sans-serif',
-        fontSize: '15px',
-        '::placeholder': { color: 'rgba(244,239,230,.35)' }
-      },
-      invalid: { color: '#ef4444' }
-    }
-  });
-  card.mount('#stripe-card-element');
-
-  card.on('change', (event) => {
-    errorsEl.textContent = event.error ? event.error.message : '';
-    payBtn.disabled = !event.complete;
-  });
-
-  payBtn.addEventListener('click', async () => {
-    payBtn.disabled = true;
-    wrapperEl.style.display = 'none';
+    if (errorsEl) errorsEl.textContent = '';
+    packsEl.style.display = 'none';
     loadingEl.style.display = 'flex';
 
     try {
-      // Leer pack seleccionado del modal
-      const selectedLabel = overlay.querySelector('.coins-pack.selected') || overlay.querySelector('.coins-pack-featured');
-      const selectedPack = selectedLabel ? selectedLabel.dataset.pack : 'viajero';
-      const selectedCoins = parseInt(selectedLabel ? selectedLabel.dataset.coins : '25', 10);
-      const selectedPrice = selectedLabel ? selectedLabel.dataset.price : '9,99€';
+      const authUser = auth.currentUser;
+      if (!authUser) throw new Error('Tu sesión ha caducado, vuelve a entrar');
+      const idToken = await authUser.getIdToken();
 
-      // 1. Pedir PaymentIntent al worker
       const res = await fetch(window.SALMA_API + '/create-payment', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: currentUser.uid,
-          pack: selectedPack
-        })
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+        body: JSON.stringify({ plan: planKey })
       });
-      const payData = await res.json();
-      if (!payData.client_secret) throw new Error(payData.error || 'Error creando pago');
-      const { client_secret, coins: coinsFromServer } = payData;
-      const coinsToAdd = coinsFromServer || selectedCoins;
+      const data = await res.json();
+      if (!data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
 
-      // 2. Confirmar pago con Stripe
-      const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
-        payment_method: { card: card }
-      });
-
-      if (error) {
-        loadingEl.style.display = 'none';
-        wrapperEl.style.display = '';
-        errorsEl.textContent = error.message;
-        payBtn.disabled = false;
-        return;
-      }
-
-      if (paymentIntent.status === 'succeeded') {
-        // TODO: P0-1 — Los coins se sumarán via Stripe webhook (server-side).
-        // La actualización client-side se ha eliminado por seguridad.
-        // Cuando el webhook esté implementado, el server actualizará Firestore
-        // y el frontend detectará el cambio automáticamente.
-
-        // Mostrar confirmación de pago (sin sumar coins localmente)
-        const coinsSpan = document.getElementById('stripe-success-coins');
-        if (coinsSpan) coinsSpan.textContent = coinsToAdd;
-        loadingEl.style.display = 'none';
-        successEl.style.display = 'flex';
-
-        // Cerrar modal tras 2s
-        setTimeout(() => {
-          overlay.remove();
-          showToast('Pago confirmado — coins pendientes de activar');
-        }, 2000);
-      }
+      window.location.href = data.url; // Redirige a Stripe Checkout (pantalla hospedada)
     } catch (e) {
       loadingEl.style.display = 'none';
-      wrapperEl.style.display = '';
-      errorsEl.textContent = 'Error de conexión. Inténtalo de nuevo.';
+      packsEl.style.display = '';
       payBtn.disabled = false;
+      if (errorsEl) errorsEl.textContent = e.message || 'Error de conexión. Inténtalo de nuevo.';
     }
   });
 }
 
 window.openCoinsModal = openCoinsModal;
+
+// ═══ RETORNO DE PAGO STRIPE (?pago=ok / ?pago=cancel) ═══
+
+async function _verificarPagoPremium() {
+  if (!currentUser) return;
+  showToast('Verificando tu pago…');
+  const baselineMs = currentUser.premium_until ? new Date(currentUser.premium_until).getTime() : 0;
+  const nowMs = Date.now();
+
+  for (let i = 0; i < 8; i++) {
+    await new Promise(r => setTimeout(r, 2000));
+    try {
+      const snap = await db.collection('users').doc(currentUser.uid).get();
+      const data = snap.exists ? snap.data() : {};
+      const pu = data.premium_until;
+      const puMs = pu ? (pu.toDate ? pu.toDate().getTime() : new Date(pu).getTime()) : 0;
+      if (puMs > baselineMs && puMs > nowMs) {
+        currentUser.premium_until = pu.toDate ? pu.toDate().toISOString() : pu;
+        currentUser.isPremium = true;
+        if (currentState === 'profile' || currentState === 'viajes') renderProfile();
+        showToast('¡Premium activado! Ya tienes acceso completo.');
+        return;
+      }
+    } catch (e) {
+      console.warn('[Premium] Error comprobando pago:', e);
+    }
+  }
+  showToast('Pago recibido — tu Premium se activa en unos minutos. Si no aparece, escríbeme.');
+}
 
 // ═══ COPILOTO — toggle con lógica de Coins ═══
 
