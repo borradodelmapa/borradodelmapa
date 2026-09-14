@@ -926,14 +926,11 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     entrega por email o chat); textos de las primeras plantillas (bienvenida, alerta de
     precio); y el alta como autónomo de Paco, condición previa para F5.5 y para
     producción real (fuera del ámbito técnico).
-  - **Aviso para cuando se retome**: el documento menciona Kiwi.com y Trivago como tools
-    "ya integradas" — no coincide con el inventario real de este `CLAUDE.md` (sección "8
-    Tools" más arriba): aquí `buscar_vuelos` es Duffel y `buscar_hotel`/`buscar_coche`
-    son Booking.com vía RapidAPI, no hay tool de Kiwi ni Trivago en el Worker actual.
-    Parece que el documento se escribió pensando en una versión distinta
-    (`salma-worker-v1-final.js`, nombrado en el propio documento) — antes de implementar,
-    confirmar con Paco si el plan real es sustituir Duffel/Booking por Kiwi/Trivago, o si
-    es solo una descripción desactualizada del documento.
+  - **Confirmado por Paco (14 sept):** el documento menciona Kiwi.com y Trivago, pero
+    eso está desactualizado — los proveedores reales y correctos son **Duffel**
+    (`buscar_vuelos`) y **Booking.com vía RapidAPI** (`buscar_hotel`/`buscar_coche`),
+    igual que en el resto de la app. Cuando se implemente WhatsApp, usar estos dos tal
+    cual ya están en el Worker — no añadir ni Kiwi ni Trivago.
   - **No tocar código de esto sin que Paco lo pida explícitamente** — estamos en fase de
     estudio de los documentos, no de desarrollo.
 
