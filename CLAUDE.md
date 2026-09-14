@@ -953,6 +953,17 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   **Falta**: que Paco pida una foto de un lugar en el chat y confirme que sale como
   imagen, no como texto/markdown crudo.
 
+  **Añadido justo después (14 sept, commit `d5aa423`, Worker `Current Version ID:
+  430aab22-5c2a-4a6e-85d7-d515cdd07d48`, YA DESPLEGADO): keepalive en "BLOQUE E"
+  (`validarYCorregirLinksMaps`).** Paco reprodujo el "network error" generando una ruta
+  justo después del deploy anterior — sin relación con el fix de fotos de arriba, es la
+  misma familia de bug que el de PASO 3 (verify): BLOQUE E hace HEAD-checks a los
+  enlaces de Google Maps de cada parada (hasta 15, 3s cada uno) sin mandar nada por el
+  stream mientras espera, así que la conexión puede cortarse por silencio con la ruta
+  ya generada pero sin llegar a mostrarse. Se le puso el mismo keepalive de 3s que ya
+  tenía el verify. **No confirmado en pantalla** — falta que Paco genere otra ruta y
+  confirme que ya no se corta.
+
   **Aviso para la próxima sesión — `main` local corrupto detectado en este contenedor,
   no en GitHub:** al fusionar, `git checkout main` en esta sesión aterrizó en un commit
   (`c4bc918`, "Historial de consultas siempre visible...", 8 sept) que **no comparte
