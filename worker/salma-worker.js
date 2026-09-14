@@ -7,6 +7,8 @@
  *   - Secret: ELEVENLABS_API_KEY
  */
 
+import { resolveNamedRoad, toGeoJSON, toGPX, extractRoadQuery } from './roads/road-resolver.js';
+
 const ELEVENLABS_VOICE_ID = 'fzAdMudUtRHNnk5tjJRR';
 
 // ═══════════════════════════════════════════════════════════════
@@ -197,7 +199,7 @@ FORMATO PROHIBIDO:
 — Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
-Cuando generes ruta: escribe el plan completo en prosa narrativa como si lo contaras en un bar — tiempos del día (Mañana/Mediodía/Tarde/Noche), paradas con nombre, dato histórico o cultural de cada una, opinión sobre por qué merece la pena, dónde comer (nombre del sitio + plato + precio), avisos prácticos (días que cierra, código de vestimenta, cola típica). Usa **negritas** para los nombres de lugares. Este texto se va escribiendo en el chat en tiempo real. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
+Cuando generes ruta: en el chat van SOLO 2-3 frases presentando el viaje (qué zona cubre, qué tipo de ruta es, algún aviso importante). NO enumeres las paradas en el chat, NO cuentes el día a día, NO metas horarios ni dónde comer: todo eso va en SALMA_ROUTE_JSON, que es lo que el usuario ve en la guía con mapa. Si lo escribes en los dos sitios, el usuario lee la misma ruta DOS VECES seguidas y la guía pierde su sentido. Después de esas frases, incluye SALMA_ROUTE_JSON con la estructura completa. Nunca digas "aquí la tienes" ni variantes.
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
@@ -267,19 +269,20 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
 — Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
-TEXTO EN EL CHAT: plan completo en prosa narrativa con tiempos del día, paradas, historia/cultura y avisos. NUNCA coordenadas en el chat — las coords van solo en el JSON.
+TEXTO EN EL CHAT: 2-3 frases presentando la ruta — qué zona cubre, qué tipo de viaje es y algún aviso importante si lo hay. NADA MÁS. El detalle (las paradas, el día a día, la historia, los horarios) va SOLO en el JSON, porque es lo que el usuario ve en la guía con mapa. Si además escribes las paradas en el chat, el usuario ve la misma ruta DOS VECES: una en tu texto y otra en la guía. NUNCA coordenadas en el chat.
 
 FORMATO DE RESPUESTA CON RUTA
 Escribe en el chat solo el resumen breve e incluye al final:
 Primera línea exactamente: SALMA_ROUTE_JSON
 Segunda línea: el JSON (sin markdown, sin backticks)
 
-{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
+{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","con_historia":true,"day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
 
 FORMATO DE PARADA:
 — name/headline: nombre exacto como en Google Maps
 — narrative: 1-2 frases de viajero (por qué merece la pena, qué sensación da — sin datos factuales como distancias u horarios)
 — day_title: 3-5 palabras, igual para todas las paradas del mismo día
+— con_historia: true si el lugar tiene interés histórico o cultural real que merece profundizar (casco antiguo, monumento, sitio con pasado notable). false si es un lugar funcional sin más (aparcamiento, gasolinera, restaurante sin historia particular). Por defecto true si no estás seguro.
 — type, day (entero, nunca string), lat, lng
 — km_from_previous, road_name, road_difficulty, estimated_hours
 NO incluyas: context, food_nearby, local_secret, alternative, practical, links, sleep, eat, alt_bad_weather (el sistema los añade después)
@@ -307,7 +310,7 @@ buscar_coche → alquiler de coche, moto, scooter
 buscar_lugar → CUALQUIER lugar físico: restaurante, bar, café, dónde comer/cenar, gimnasio, farmacia, museo, spa, cajero, cambio de divisa, clínica, supermercado, tienda… Para comida pasa tipo_places: "restaurant". Para el resto omite tipo_places.
 buscar_vuelos → vuelo, billete de avión
 buscar_foto → cuando recomiendes un lugar concreto con nombre propio. 1-3 fotos por respuesta. No usar cuando generes ruta (la ruta tiene sus propias fotos).
-buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener las URLs reales de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca. IMPORTANTE: cuando buscar_web devuelva resultados con URLs, INCLUYE las URLs relevantes en tu respuesta como fuente. Formato: dato + URL en su propia línea. Las URLs de buscar_web son de herramienta — SÍ puedes usarlas.
+buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener la URL real de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca. USO DE LAS URLs: úsalas para darte el dato, pero NO las pegues en tu respuesta. Cuenta el dato con tus palabras y ya está. Pega una URL SOLO si (a) el usuario pide explícitamente el enlace, la fuente o "de dónde lo sacas", o (b) es la web OFICIAL de reserva de un transporte que el usuario ha pedido reservar (ferry/bus/tren). NUNCA pegues blogs, artículos ni guías de viaje.
 
 RESTAURANTES: si el sistema ya te proporciona resultados en el contexto, preséntalos directamente. Si no, usa buscar_lugar con tipo_places: "restaurant". Nunca respondas con texto inventado cuando pidan dónde comer.
 
@@ -316,10 +319,10 @@ CÓMO PRESENTAR RESULTADOS:
 — Coches: nombre, precio total y por día, plazas, transmisión, proveedor, punto de recogida.
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork si lo hay.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
-— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay.
-— Búsqueda web (buscar_web): responde con el dato + INCLUYE la URL fuente en su propia línea. Hasta 3 URLs si hay varias fuentes.
-— Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
-— URLs permitidas: SOLO las que devuelve una herramienta (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos...). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
+— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay. NO escribas tú la web del sitio (ni el dominio suelto) — si Google Places la tiene, el sistema la añade automáticamente al final como enlace real.
+— Búsqueda web (buscar_web): responde SOLO con el dato, con tus palabras. NO listes fuentes ni pegues URLs de blogs/artículos/guías. Solo pon un enlace si el usuario lo pide explícitamente ("dame el enlace", "la fuente", "de dónde lo sacas") o si es la web oficial de reserva de un transporte que ha pedido reservar.
+— Cuando SÍ toque poner un enlace: cada uno en su propia línea, sin markdown, sin corchetes. Solo la URL.
+— URLs permitidas: SOLO las que devuelve una herramienta (buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, y buscar_web solo en los dos casos de arriba). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
 
 const BLOQUE_VISION = `FOTOS DEL VIAJERO
 Cuando el usuario te envía una foto, la recibes como imagen en el mensaje. Analízala según el contexto:
@@ -409,6 +412,9 @@ SOLO existen estos 5 tipos: SEARCH_FLIGHTS, SEARCH_HOTELS, SEARCH_PLACES, SAVE_N
 Cuando el usuario pida apartamento o Airbnb, usa SEARCH_HOTELS igualmente — el sistema genera automáticamente el enlace a Airbnb. NO escribas tú la URL de Airbnb, el sistema la pone.
 Usa SALMA_ACTION además de tu respuesta normal, no en lugar de ella.
 
+HISTORIA_LUGAR — marcador aparte, NO es un SALMA_ACTION: cuando tu respuesta trate sobre un lugar, monumento, carretera, comarca o país con interés histórico o cultural real que merezca profundizar, añade al final de tu respuesta, en su propia línea: HISTORIA_LUGAR: Nombre del lugar/carretera/comarca/país
+Solo cuando de verdad haya algo que contar — nunca para una reserva, un restaurante sin más, un trámite o una gasolinera. Como mucho una línea HISTORIA_LUGAR por respuesta. Es invisible para el usuario, no la menciones ni la expliques.
+
 DATO PRIMERO SIEMPRE — OBLIGATORIO:
 1. Responde EXACTAMENTE lo que pide el usuario. Si pide taxi, da taxi. No sugieras alternativas antes de resolver.
 2. La solución con enlaces va PRIMERO. Precio, enlace, cómo reservar.
@@ -426,10 +432,10 @@ VELOCIDAD — REGLA CRÍTICA: cuando el usuario pide varias cosas a la vez (vuel
 
 PROHIBIDO INVENTAR:
 1. No inventes URLs, teléfonos, direcciones, horarios ni precios. Solo datos de herramientas o KV.
-2. URLs de herramientas (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, buscar_foto): SIEMPRE inclúyelas en tu respuesta. Son datos reales — para eso las buscaste.
-3. TRANSPORTE (taxi, cómo llegar, apps de movilidad): usa buscar_web SIEMPRE antes de responder. Incluye SOLO enlaces a webs oficiales de las apps/servicios (NO blogs, NO artículos, NO guías de viaje). Nombra la fuente de cada dato.
+2. URLs de herramientas de reserva (buscar_hotel, buscar_vuelos, buscar_coche) y de buscar_lugar: inclúyelas cuando el usuario ha pedido ESE servicio (hotel, vuelo, coche, un sitio concreto). buscar_web: NO pegues su URL salvo que el usuario pida explícitamente el enlace/la fuente, o sea la web oficial de reserva de un transporte que ha pedido reservar. NUNCA blogs, artículos ni guías de viaje.
+3. TRANSPORTE (taxi, cómo llegar, apps de movilidad): usa buscar_web SIEMPRE antes de responder. Da el dato con tus palabras; pon un enlace SOLO si es la web oficial de la app/servicio y el usuario quiere reservar (NO blogs, NO artículos, NO guías de viaje).
 4. Si no tienes el dato o no estás seguro, usa buscar_web. No asumas, no inventes, no rellenes con datos genéricos.
-5. Cada recomendación debe incluir su enlace oficial si existe (web del servicio, reserva).
+5. Los servicios que el usuario ha pedido (hotel, vuelo, coche) llevan su enlace oficial de reserva. El resto de respuestas NO llevan enlaces salvo que los pida.
 6. NUNCA generes enlaces de Google Maps tú mismo. El sistema los añade cuando procede. Si pones un enlace de Maps inventado, se rompe.
 
 No dejes tirado al viajero. Si tienes los datos, resuélvelo.
@@ -611,6 +617,169 @@ function toFirestoreFields(obj) {
   return { fields };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// PASARELA PREMIUM — service account de Firebase + Stripe
+// ═══════════════════════════════════════════════════════════════
+
+// base64url de un string o de bytes (Uint8Array / ArrayBuffer)
+function _b64url(input) {
+  let bytes;
+  if (typeof input === 'string') bytes = new TextEncoder().encode(input);
+  else if (input instanceof ArrayBuffer) bytes = new Uint8Array(input);
+  else bytes = input;
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
+
+// PEM PKCS#8 → ArrayBuffer DER
+function _pemToPkcs8(pem) {
+  const b64 = String(pem || '')
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s+/g, '');
+  const bin = atob(b64);
+  const buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return buf.buffer;
+}
+
+/**
+ * Access token OAuth de una service account de Google (scope datastore).
+ * Se usa SOLO en el webhook de Stripe para escribir en Firestore sin token de
+ * usuario. Cacheado en KV (_sa_token, ~55 min).
+ */
+async function getServiceAccountToken(env) {
+  try {
+    const cached = env.SALMA_KB && await env.SALMA_KB.get('_sa_token');
+    if (cached) return cached;
+  } catch (_) {}
+
+  const raw = env.FIREBASE_SERVICE_ACCOUNT;
+  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT no configurado');
+  let sa;
+  try { sa = JSON.parse(raw); } catch (e) { throw new Error('FIREBASE_SERVICE_ACCOUNT no es JSON válido'); }
+  if (!sa.client_email || !sa.private_key) throw new Error('FIREBASE_SERVICE_ACCOUNT sin client_email/private_key');
+
+  const now = Math.floor(Date.now() / 1000);
+  const header = { alg: 'RS256', typ: 'JWT' };
+  const claim = {
+    iss: sa.client_email,
+    scope: 'https://www.googleapis.com/auth/datastore',
+    aud: 'https://oauth2.googleapis.com/token',
+    iat: now,
+    exp: now + 3600,
+  };
+  const unsigned = _b64url(JSON.stringify(header)) + '.' + _b64url(JSON.stringify(claim));
+  const key = await crypto.subtle.importKey(
+    'pkcs8', _pemToPkcs8(sa.private_key),
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(unsigned));
+  const jwt = unsigned + '.' + _b64url(new Uint8Array(sig));
+
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: jwt,
+    }).toString(),
+    signal: AbortSignal.timeout(8000),
+  });
+  const data = await res.json();
+  if (!data.access_token) throw new Error('OAuth token error: ' + JSON.stringify(data).slice(0, 200));
+  try {
+    if (env.SALMA_KB) await env.SALMA_KB.put('_sa_token', data.access_token, { expirationTtl: 3300 });
+  } catch (_) {}
+  return data.access_token;
+}
+
+// GET de un documento Firestore con el token de service account. null si 404.
+async function firestoreAdminGet(env, path) {
+  const token = await getServiceAccountToken(env);
+  const res = await fetch(`${FIRESTORE_BASE}/${path}`, {
+    headers: { 'Authorization': 'Bearer ' + token },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('Firestore GET ' + path + ' → ' + res.status);
+  return await res.json();
+}
+
+// PATCH (crea o mergea) un documento Firestore. `fields` ya en formato REST.
+async function firestoreAdminPatch(env, path, fields) {
+  const token = await getServiceAccountToken(env);
+  const mask = Object.keys(fields).map(f => 'updateMask.fieldPaths=' + encodeURIComponent(f)).join('&');
+  const res = await fetch(`${FIRESTORE_BASE}/${path}?${mask}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ fields }),
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) throw new Error('Firestore PATCH ' + path + ' → ' + res.status + ' ' + (await res.text()).slice(0, 200));
+  return await res.json();
+}
+
+// POST form-urlencoded a la API de Stripe. Devuelve el JSON parseado.
+async function stripeApi(env, path, params) {
+  const res = await fetch('https://api.stripe.com/v1/' + path, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Basic ' + btoa(env.STRIPE_SECRET_KEY + ':'),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(params).toString(),
+    signal: AbortSignal.timeout(10000),
+  });
+  return await res.json();
+}
+
+function _timingSafeEqualHex(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
+  let out = 0;
+  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return out === 0;
+}
+
+/**
+ * Verifica la firma de un webhook de Stripe (cabecera Stripe-Signature).
+ * HMAC-SHA256 sobre "{t}.{payload}" con STRIPE_WEBHOOK_SECRET. Rechaza si t
+ * tiene más de 5 min (replay). Fail-closed: sin secret → false.
+ */
+async function stripeVerifyWebhook(payload, sigHeader, secret) {
+  if (!sigHeader || !secret) return false;
+  let t = null;
+  const v1s = [];
+  for (const part of sigHeader.split(',')) {
+    const idx = part.indexOf('=');
+    if (idx === -1) continue;
+    const k = part.slice(0, idx).trim();
+    const v = part.slice(idx + 1).trim();
+    if (k === 't') t = v;
+    else if (k === 'v1') v1s.push(v);
+  }
+  if (!t || v1s.length === 0) return false;
+  const ts = parseInt(t, 10);
+  if (!ts || Math.abs(Date.now() / 1000 - ts) > 300) return false;
+
+  const key = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(t + '.' + payload));
+  const expected = [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
+  return v1s.some(v => _timingSafeEqualHex(v, expected));
+}
+
+// Planes Premium — pago único que da N meses de acceso. Tabla dura, nunca del cliente.
+const PREMIUM_PLANS = {
+  '1viaje':     { label: '1 viaje',    amount: 499,  months: 1  },
+  'trimestral': { label: 'Trimestral', amount: 899,  months: 3  },
+  'semestral':  { label: 'Semestral',  amount: 1499, months: 6  },
+  'anual':      { label: 'Anual',      amount: 2499, months: 12 },
+};
+
 /**
  * Normaliza nombre de lugar → variantes de clave para buscar en KV (spot:xxx).
  * Devuelve array de variantes en orden de prioridad: [full, withoutCity, firstTwo, first]
@@ -628,6 +797,32 @@ function normalizeSpotKey(rawName) {
   if (firstTwo && !variants.includes(firstTwo)) variants.push(firstTwo);
   if (first.length > 4 && !variants.includes(first)) variants.push(first);
   return variants;
+}
+
+/**
+ * Cachea una ruta generada en KV nivel 3 con como mucho 2 keys deterministas
+ * (país y primera palabra de la región) — nunca 3, y nunca adivina el código
+ * de país: si 'kw:{país}' no está en el índice, no cachea nada (antes se
+ * usaba country.substring(0,2), que podía mezclar rutas de países distintos
+ * bajo el mismo prefijo, ej. "Estados Unidos" -> "es", el mismo que España).
+ */
+async function cacheGeneratedRoute(env, ctx, route, days) {
+  if (!env.SALMA_KB || !route || !route.stops || route.stops.length === 0 || !days) return;
+  try {
+    const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-');
+    const country = norm(route.country);
+    const region = norm(route.region);
+    if (!country) return;
+    const cc = await env.SALMA_KB.get('kw:' + country);
+    if (!cc) return;
+    const routeJson = JSON.stringify(route);
+    const ttl = { expirationTtl: 2592000 }; // 30 días
+    ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${country}:${days}`, routeJson, ttl));
+    const simpleKey = region.split(',')[0].split('-')[0].trim();
+    if (simpleKey && simpleKey !== country) {
+      ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${simpleKey}:${days}`, routeJson, ttl));
+    }
+  } catch (_) {}
 }
 
 /**
@@ -871,7 +1066,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_web",
-    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve resultados con título, snippet, URL y contenido de la página. SIEMPRE incluye las URLs de los resultados relevantes en tu respuesta como fuente — son URLs reales de herramienta, no inventadas.",
+    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve resultados con título, snippet, URL y contenido de la página. Usa ese contenido para dar el dato con tus palabras; NO pegues las URLs de los resultados en tu respuesta salvo que el usuario pida explícitamente el enlace o la fuente, o sea la web oficial de reserva de un transporte que ha pedido reservar. Nunca blogs, artículos ni guías de viaje.",
     input_schema: {
       type: "object",
       properties: {
@@ -975,7 +1170,22 @@ function isRouteRequest(message, history) {
   if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
   // "un/dos/tres... días en X" (palabras) → ruta completa con mapa
   if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
+  // "un solo día" / "solo un día" / "sólo un día" — variantes habituales para pedir ruta de un día
+  if (/\b(un\s+solo|solo\s+un|s[óo]lo\s+un)\s+d[ií]a\b/i.test(message)) return true;
   return false;
+}
+
+// Detecta si el usuario pide seguir estrictamente una carretera concreta
+// (p.ej. "sin salirte de la N2", "por la A-2", "siguiendo la N-340") y devuelve
+// el código normalizado ("N-2") o null si no aplica.
+function extractPreferredRoad(message) {
+  if (!message) return null;
+  const m = message.match(/(?:sin\s+salir(?:te)?\s+de\s+la|sin\s+salir(?:te)?\s+de|por\s+la|siguiendo\s+la|carretera)\s+([A-Za-z]{1,3}\s?-?\s?\d{1,4})\b/i);
+  if (!m) return null;
+  const raw = m[1].toUpperCase().replace(/\s+/g, '').replace(/-/g, '');
+  const match = raw.match(/^([A-Z]{1,3})(\d{1,4})$/);
+  if (!match) return null;
+  return `${match[1]}-${match[2]}`;
 }
 
 // Detecta "destino + días" sin ser petición de guía → respuesta estructurada por días (no JSON)
@@ -1147,13 +1357,29 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     enriched = enriched.replace(bold, `${bold} (${link})`);
   }
 
-  // "Ruta completa" al final: con lat/lng reales (Google los entiende literal).
-  // Formato /maps/dir/place_id:X/place_id:Y NO funciona — Google lo lee como texto literal.
-  // Usamos lat,lng que vienen de getValidatedPlace (son coords reales de Google Places).
+  // "Ruta completa" al final. Formato /maps/dir/place_id:X/place_id:Y NO funciona —
+  // Google lo lee como texto literal, por eso antes se mandaba solo lat,lng. Pero el
+  // esquema oficial SÍ admite nombre+place_id por parámetro separado (origin_place_id,
+  // waypoint_place_ids…), igual que ya hace el "Cómo llegar" de una sola parada un poco
+  // más arriba — con eso Google etiqueta cada punto con su nombre real en vez de con el
+  // sitio indexado más cercano a la coordenada (bug real: una parada con ficha en Google
+  // salía en el mapa con el nombre de un negocio distinto que caía justo al lado).
+  // Solo cae a coordenadas sueltas si por lo que sea no hay placeId para ese punto.
   const validPlaces = results.filter(r => r.placeId && r.lat && r.lng);
   if (validPlaces.length >= 2 && !skipRouteLink) {
-    const segments = validPlaces.map(r => `${r.lat},${r.lng}`).join('/');
-    const routeUrl = `https://www.google.com/maps/dir/${segments}`;
+    const point = (r) => r.placeId ? encodeURIComponent(r.googleName || r.name || '') : `${r.lat},${r.lng}`;
+    const first = validPlaces[0];
+    const last = validPlaces[validPlaces.length - 1];
+    const middle = validPlaces.slice(1, -1);
+    let routeUrl = `https://www.google.com/maps/dir/?api=1`
+      + `&origin=${point(first)}${first.placeId ? `&origin_place_id=${first.placeId}` : ''}`
+      + `&destination=${point(last)}${last.placeId ? `&destination_place_id=${last.placeId}` : ''}`;
+    if (middle.length) {
+      routeUrl += `&waypoints=${middle.map(point).join('|')}`;
+      if (middle.some(r => r.placeId)) {
+        routeUrl += `&waypoint_place_ids=${middle.map(r => r.placeId || '').join('|')}`;
+      }
+    }
     enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
   }
 
@@ -1256,6 +1482,8 @@ function needsWebSearchTool(message) {
   if (/\b(busca|search|consulta|averigua|investiga|find|look up|comprueba|verifica)\b.*\b(info|informacion|dato|web|pagina|enlace|horario|precio)\b/i.test(m)) return true;
   // Noticias o alertas de viaje
   if (/\b(alerta|aviso|warning|noticias|news|cerrado|cortado|huelga|strike)\b/i.test(m)) return true;
+  // Nivel 2 — requisitos de conducción (cambian por ciudad/país, no fiarse de memoria)
+  if (/\b(zona de bajas emisiones|zbe|lez|low emission zone|permiso internacional de conducir|peaje obligatorio|vineta)\b/i.test(m)) return true;
   return false;
 }
 
@@ -1370,6 +1598,21 @@ function haversineKm(lat1, lng1, lat2, lng2) {
   const dLng = (lng2 - lng1) * Math.PI / 180;
   const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// Distancia REAL por carretera (Directions API), no línea recta. En zonas de montaña
+// (p.ej. Ronda↔Costa del Sol por la A-397) la única carretera puede doblar la distancia
+// en línea recta — Ronda→Estepona son 35km en línea recta pero 83km/1h40 conduciendo.
+// null = no se pudo calcular (API caída/timeout) → el llamador debe decidir un fallback.
+async function drivingDistanceKm(lat1, lng1, lat2, lng2, placesKey) {
+  if (!placesKey) return null;
+  try {
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${lat1},${lng1}&destination=${lat2},${lng2}&mode=driving&key=${placesKey}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    const data = await res.json();
+    const meters = data?.routes?.[0]?.legs?.[0]?.distance?.value;
+    return typeof meters === 'number' ? meters / 1000 : null;
+  } catch (_) { return null; }
 }
 
 function getFlexDate(daysFromNow) {
@@ -1628,7 +1871,7 @@ async function generateMiniResumen(dest, collectedData, userLocationName, env, u
   if (collectedData.kvBase?.mejor_epoca) parts.push(`Mejor época: ${collectedData.kvBase.mejor_epoca}.`);
   if (collectedData.kvDestinos) {
     const d = collectedData.kvDestinos;
-    const tops = d.top_destinos || d.destinos || [];
+    const tops = Array.isArray(d) ? d : (d.top_destinos || d.destinos || []);
     if (Array.isArray(tops) && tops.length) {
       parts.push(`Destinos top: ${tops.slice(0, 6).map(t => t.nombre || t.name || '').filter(Boolean).join(', ')}.`);
     }
@@ -2319,7 +2562,9 @@ function tryKVDirectAnswer(message, country, destination) {
   }
 
   // ── Seguridad ──
-  if (/segur|seguridad|peligro|safe|dangerous|robo|estafa|scam|cuidado/i.test(m)) {
+  // OJO: límites de palabra obligatorios. Sin \b, "scam" se colaba dentro de "búscame"
+  // y una petición de ruta ("búscame camping al final") se tomaba como pregunta de seguridad.
+  if (/\bsegur|\bpeligr|\bsafe\b|\bdangerous\b|\brobo\b|\brobos\b|\bestafa|\bscam\b|\bcuidado\b/i.test(m)) {
     return `**Seguridad en ${pais}:** ${c.seguridad}\n\nEmergencias: ${c.emergencias}`;
   }
 
@@ -2436,16 +2681,20 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
   // IMPORTANTE: dynamicPrompt (Firestore) incluye BLOQUE_RUTAS, así que solo se usa para rutas
   // guidedRoute → el usuario completó el flujo guiado de 8 preguntas: forzar modo ruta.
-  const isRoute = isRouteRequest(message, history) || !!guidedRoute;
+  // PIEZA A — guidedIsReco (Tiempo 1): NUNCA modo ruta aunque el mensaje lleve "N días".
+  // Se responde con recomendaciones en prosa día por día, sin JSON. El mapa es el Tiempo 2.
+  const isRoute = !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute || !!routeFromHere);
   const hasCurrentRouteEdit = currentRoute && currentRoute.stops && currentRoute.stops.length > 0;
   let systemPrompt;
-  if (isRoute || hasCurrentRouteEdit) {
+  if (guidedIsReco) {
+    systemPrompt = SALMA_SYSTEM_PLAN;  // recomendaciones por días, sin BLOQUE_RUTAS
+  } else if (isRoute || hasCurrentRouteEdit) {
     systemPrompt = dynamicPrompt || SALMA_SYSTEM_ROUTE;
   } else if (isDaysDestination(message)) {
     systemPrompt = SALMA_SYSTEM_PLAN;  // días+destino → formato estructurado por días
@@ -2501,6 +2750,16 @@ function buildMessages(history, message, currentRoute, userName, userNationality
     }
     const _intereses = Array.isArray(g.intereses) && g.intereses.length ? g.intereses.join(', ') : 'sin preferencia marcada';
     const _restr = (g.restricciones && String(g.restricciones).trim()) ? g.restricciones : 'ninguna';
+    // ANCLA DE PAÍS — el destino ("Córdoba") ya se resolvió a país concreto por Geocoding.
+    // Sin esto el modelo mezcla homónimos (Córdoba España + Córdoba Argentina) en una ruta.
+    const _anclaPais = (anchorCountry && anchorCountry.countryName)
+      ? `\n- PAÍS (ANCLA DURA): ${anchorCountry.countryName}. TODAS las paradas y recomendaciones DENTRO de este país. Si existe un lugar con el mismo nombre en otro país, usa SIEMPRE el de ${anchorCountry.countryName}. No cruces fronteras salvo que el usuario lo pida explícitamente.`
+      : '';
+    const _guidedTail = guidedIsReco
+      // PIEZA A — Tiempo 1: SOLO recomendaciones en prosa. Prohibido el JSON aquí.
+      ? `Con estos datos, dame RECOMENDACIONES en prosa organizadas por día. NO generes SALMA_ROUTE_JSON ni ningún JSON — eso es el paso siguiente, cuando el usuario pulse el botón. Si hay restricciones, respétalas a rajatabla.`
+      : `Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.
+En el JSON: "country" = ${anchorCountry && anchorCountry.countryName ? `"${anchorCountry.countryName}" (obligatorio, no otro)` : `país real (ej. "Portugal")`}; "region" = región o zona real (ej. "Algarve" o "Faro"), NUNCA el texto literal del destino con "desde", números de carretera (N2) ni el medio de transporte.${anchorCountry && anchorCountry.countryName ? ` Descarta cualquier parada que no esté en ${anchorCountry.countryName}.` : ''} Si el destino es una carretera o ruta lineal (N2, Ruta 40, costa…), traza las paradas siguiendo ese trazado en orden geográfico y respeta el punto de salida indicado.`;
     ctx.push(`[RUTA SOLICITADA POR EL USUARIO — datos recogidos en el cuestionario guiado. Úsalos TODOS. NO vuelvas a preguntar nada de esto:
 - Destino: ${g.destino || 'sin especificar'}
 - Duración: ${g.duracion_dias || 'sin especificar'} días
@@ -2509,8 +2768,8 @@ function buildMessages(history, message, currentRoute, userName, userNationality
 - Presupuesto por día: ${_presupuesto}
 - Ritmo deseado: ${_ritmo}
 - Intereses: ${_intereses}
-- Restricciones: ${_restr}
-Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.]`);
+- Restricciones: ${_restr}${_anclaPais}
+${_guidedTail}]`);
   }
 
   // ── Datos verificados del KV (nivel 1 + nivel 2) ──
@@ -2606,15 +2865,39 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   const hasPhoto = !!imageBase64;
 
   if (currentRoute && currentRoute.stops && currentRoute.stops.length > 0) {
-    const stopSummary = currentRoute.stops.map((s, i) => `Día ${s.day}: ${s.name}`).join(', ');
-    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas: ${stopSummary}. Si el usuario pide CAMBIOS (añadir, quitar, reordenar), devuelve la ruta completa actualizada en SALMA_ROUTE_JSON manteniendo las paradas que no cambian. Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
+    // Ficha EXACTA de cada parada (no solo el nombre) — si el usuario pide un cambio,
+    // el modelo debe poder copiar literalmente (mismo lat/lng/narrative/día) las paradas
+    // que no cambian, en vez de reconstruirlas de memoria a partir de una lista de nombres.
+    // Reconstruir de memoria es lo que hizo que una ruta de 10 paradas reales acabase con
+    // paradas de otra zona al pedir solo añadir 1 — la ruta original se perdió al guardar.
+    const stopsCompact = currentRoute.stops.map(s => ({
+      name: s.name, headline: s.headline, narrative: s.narrative, day_title: s.day_title,
+      type: s.type, day: s.day, lat: s.lat, lng: s.lng,
+      km_from_previous: s.km_from_previous, road_name: s.road_name,
+      road_difficulty: s.road_difficulty, estimated_hours: s.estimated_hours
+    }));
+    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. DATOS EXACTOS de cada parada (JSON): ${JSON.stringify(stopsCompact)}
+Si el usuario pide CAMBIOS (añadir, quitar, reordenar): devuelve la ruta completa actualizada en SALMA_ROUTE_JSON. Las paradas que NO cambian van LITERALES — mismo name, lat, lng, narrative, day y el resto de campos que ya tenían arriba, sin reescribirlas ni "mejorarlas". Solo generas de nuevo la parada que se añade o se modifica explícitamente.
+Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
   }
 
   if (hasPhoto) {
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
-  } else if (isRouteRequest(message, history) || guidedRoute) {
+  } else if (guidedIsReco) {
+    // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
+    userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
+PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar coins/guías.
+QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado en el contexto (compañía, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos; si no los hay, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
+Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Si NO se indica número de días: para una ciudad o pueblo, haz 1 día. Pero si es una RUTA/ROAD TRIP explícita por una costa, comarca o varios pueblos (el usuario dice "ruta", "road trip", "de sur a norte", "recorrido", o nombra varios sitios lejos entre sí) — **NUNCA lo metas en 1 solo día por defecto**: calcula tú cuántos días son razonables a ritmo de carretera normal (aprox. 100-150km con paradas por día, motos y coches turísticos más despacio que autovía) y repártelo en esos días, de punta a punta en orden geográfico, sin saltar de un extremo a otro y volver. Dilo explícito: "Esto da para N días" al principio. Breve: 2-3 frases por sitio.
+RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si es ruta/road trip por varios sitios, aplica el reparto de arriba en su lugar):
+- 1-2 días → TODO dentro de esa localidad y su entorno inmediato (máx ~30 min en coche). NADA de rutas comarcales, pueblos blancos ni excursiones lejanas salvo que el usuario pida expresamente "ruta"/"road trip"/varios pueblos. Ej.: "Estepona 1 día" = casco antiguo, Orquidario, paseo marítimo, playa — NO Ronda ni Grazalema.
+- 3-4 días → la ciudad da de sobra; como MUCHO 1 excursión de medio día a algo a <45 min, y dícelo claro ("excursión opcional a X"). El resto, dentro.
+- 5+ días → como MUCHO 1-2 excursiones de día entero a <1h, el resto en la ciudad y su área metropolitana. Prioriza barrios, museos, mercados, vida local y sitios menos obvios ANTES que irte fuera. Nunca metas dos provincias distintas.
+Si la ciudad "se queda corta" para los días pedidos, NO rellenes con pueblos lejanos: propón menos días o más profundidad (rincones, tiendas, rutas a pie temáticas).
+CIERRE EXACTO — termina con esta frase y nada más: "Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación."]`;
+  } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
-— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de presentación (sin enumerar paradas, sin día a día — eso se mostraría duplicado, porque va en el JSON y el usuario lo ve en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio. Si "tengo tiempo" sin número de días: 8-10 días.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
@@ -2623,6 +2906,14 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 — Coordenadas REALES del lugar exacto, en el país correcto.
 — Continuidad: la primera parada del día N+1 empieza donde acabó el día N.
 — Respeta restricciones del usuario: si dice "no quiero X", NO incluyas X.]`;
+    if (routeFromHere && userLocation) {
+      const _rfhWhere = userLocationName || 'su ubicación actual';
+      userContent += `\n\n[RUTA DESDE DONDE ESTOY — el viajero pulsó un botón de un toque:
+— NO hagas NINGUNA pregunta de vuelta. Genera la ruta directamente ahora.
+— El viajero está en ${_rfhWhere} (lat=${userLocation.lat}, lng=${userLocation.lng}). La ruta ARRANCA de ahí.
+— Decide el tipo según el sitio: ciudad o pueblo grande con centro caminable → RUTA A PIE por la ciudad (plazas, miradores, barrios con encanto, sitios de comer de verdad). Pueblo pequeño o zona rural → ESCAPADA EN COCHE por los alrededores, radio máximo 1 hora de conducción.
+— Duración: medio día. 4-7 paradas reales, un solo día.]`;
+    }
   } else if (isDaysDestination(message)) {
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
@@ -2719,6 +3010,26 @@ ${formatted}
 Si alguno de estos eventos o festivales coincide con las fechas del viaje, menciónalo brevemente en el día que toque como dato útil. NO reestructures la ruta por un evento. Si ninguno encaja con las fechas, ignóralos. NUNCA inventes eventos.]`;
   }
 
+  // Inyectar verificación de hechos críticos (D + Nivel 1 — ya buscado, no es opcional para Claude)
+  if (factCheckData) {
+    if (factCheckData.road) {
+      userContent += `\n\n[VERIFICACIÓN DE CARRETERA — búsqueda web real:
+${factCheckData.road}
+Si estos resultados indican que la carretera tiene tramos discontinuos, renombrados, cortados o en obras, dilo explícitamente en tu respuesta — no des la carretera por continua sin más. Si los resultados no aclaran nada, dilo con la incertidumbre correspondiente ("no he podido confirmar si el tramo X es continuo") — nunca lo presentes como un hecho seguro sin haberlo comprobado. NUNCA inventes.]`;
+    }
+    if (factCheckData.visaBorderSafety) {
+      userContent += `\n\n[VERIFICACIÓN DE VISADO/FRONTERA/SEGURIDAD — búsqueda web real:
+${factCheckData.visaBorderSafety}
+Usa estos resultados para responder con datos actuales. Si mencionan requisitos concretos (visado, e-visa, estado de la frontera, riesgo de seguridad), inclúyelos. Si los resultados son insuficientes o contradictorios, dilo claramente y recomienda confirmar en fuente oficial antes de viajar — NUNCA afirmes con seguridad un dato de visado/frontera/seguridad que no esté respaldado aquí.]`;
+    }
+  }
+
+  // Nivel 2 — requisitos de conducción (zona de bajas emisiones, permiso internacional, peajes/viñetas):
+  // mismo mecanismo que [OBLIGATORIO — GENERA RUTA AHORA], obliga a comprobar en vez de fiarse de memoria.
+  if (/\b(zona de bajas emisiones|zbe|lez|low emission zone|permiso internacional de conducir|peaje obligatorio|vi[nñ]eta)\b/i.test(message)) {
+    userContent += `\n\n[OBLIGATORIO — VERIFICA CON buscar_web: el usuario pregunta por requisitos de conducción (zona de bajas emisiones, permiso internacional, peajes o viñetas). Estos requisitos cambian por ciudad/país y no son fiables de memoria. Llama a buscar_web con una consulta específica (ciudad o país + el requisito exacto) ANTES de responder. Si buscar_web no da un dato claro, dilo explícitamente en vez de inventar un requisito.]`;
+  }
+
   // Si hay imagen, enviar como content array (vision Anthropic)
   if (imageBase64) {
     messages.push({
@@ -2775,6 +3086,7 @@ function extractRouteFromReply(text) {
         day_title: s.day_title || '',
         links: Array.isArray(s.links) ? s.links : [],
         type: s.type || 'lugar',
+        con_historia: s.con_historia !== false,
         day: typeof s.day === 'number' ? s.day : (parseInt(s.day) || 1),
         lat: typeof s.lat === 'number' ? s.lat : (s.lat != null && !isNaN(parseFloat(s.lat)) ? parseFloat(s.lat) : null),
         lng: typeof s.lng === 'number' ? s.lng : (s.lng != null && !isNaN(parseFloat(s.lng)) ? parseFloat(s.lng) : null),
@@ -2804,6 +3116,191 @@ function replyWithoutRouteBlock(text) {
   const idx = text.indexOf('SALMA_ROUTE_JSON');
   const clean = idx === -1 ? text.trim() : text.slice(0, idx).trim();
   return sanitizeInventedUrls(clean);
+}
+
+// ── RESCATE de SALMA_ROUTE_JSON truncado (stop_reason: max_tokens) ──
+// El modelo empezó a escribir el JSON pero se quedó sin tokens a mitad de "stops".
+// Recuperamos la cabecera (title/country/region/…) + todas las paradas COMPLETAS
+// y cerramos el array + el objeto. Los campos opcionales de cola (tips/tags/…) se pierden
+// y los rellena extractRouteFromReply con defaults. Devuelve string JSON o null.
+function salvageIncompleteRouteJson(text) {
+  if (!text || typeof text !== 'string') return null;
+  const marker = 'SALMA_ROUTE_JSON';
+  const mi = text.indexOf(marker);
+  if (mi === -1) return null;
+  let s = text.slice(mi + marker.length).replace(/^\s*```(?:json)?\s*/i, '').trim();
+  const start = s.indexOf('{');
+  if (start === -1) return null;
+  s = s.slice(start);
+
+  // ¿ya es válido tal cual? (a veces solo faltaba el cierre de ``` )
+  try {
+    const r = JSON.parse(s);
+    if (r && Array.isArray(r.stops) && r.stops.length) return JSON.stringify(r);
+  } catch (_) {}
+
+  const stopsAt = s.search(/"stops"\s*:\s*\[/);
+  if (stopsAt === -1) return null;
+  const arrOpen = s.indexOf('[', stopsAt);
+  if (arrOpen === -1) return null;
+
+  let depth = 0, inStr = false, esc = false, lastComplete = -1;
+  for (let i = arrOpen + 1; i < s.length; i++) {
+    const c = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') { inStr = true; continue; }
+    if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) lastComplete = i; }
+    else if (c === ']' && depth === 0) { lastComplete = Math.max(lastComplete, i - 1); break; }
+  }
+  if (lastComplete === -1) return null; // ni una parada completa
+
+  const candidate = s.slice(0, arrOpen + 1) + s.slice(arrOpen + 1, lastComplete + 1) + ']}';
+  try {
+    const r = JSON.parse(candidate);
+    if (r && Array.isArray(r.stops) && r.stops.length >= 2) {
+      r._salvaged = true;
+      return JSON.stringify(r);
+    }
+  } catch (_) {}
+  return null;
+}
+
+// ─── Conversión directa de prosa (ruta ya escrita) a JSON estructurado ───
+// Usada por el fast-path del botón "Generar guía con mapa": en vez de repetir toda
+// la búsqueda desde cero (riesgo real de quedarse sin iteraciones en rutas de varias
+// paradas, ver MAX_TOOL_ITERATIONS), convierte el texto YA generado en la respuesta
+// anterior directamente a la estructura del mapa. Misma lógica que el RESCATE 2 del
+// flujo normal (más abajo), extraída aquí para poder llamarla sin pasar por el bucle.
+// Motivo del último fallo de convertProseToRouteJson. Se traza en servidor
+// ([T2-FAIL] en wrangler tail); NO se muestra al usuario.
+let _convertFailReason = '';
+
+// Normaliza la respuesta CRUDA del modelo a objeto de ruta.
+// claude-sonnet-4-6 NO admite prefill de assistant, así que el modelo devuelve el JSON
+// entero él mismo: puede venir con fences ```json, con prosa antes/después, o truncado.
+// Recorta al objeto por profundidad de llaves (respetando strings) y, si no parsea,
+// tira de salvageIncompleteRouteJson.
+function parseModelRouteJson(raw) {
+  if (!raw || typeof raw !== 'string') return null;
+  let s = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+  const start = s.indexOf('{');
+  if (start < 0) return null;
+  s = s.slice(start);
+  let depth = 0, inStr = false, esc = false, end = -1;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+    } else if (c === '"') inStr = true;
+    else if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) { end = i; break; } }
+  }
+  const candidate = end >= 0 ? s.slice(0, end + 1) : s;
+  try { return JSON.parse(candidate); } catch (_) {}
+  const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + s);
+  if (sv) { try { return JSON.parse(sv); } catch (_) {} }
+  return null;
+}
+
+async function convertProseToRouteJson(text, env, opts = {}) {
+  if (!text || typeof text !== 'string' || text.length < 100) return null;
+  const guided = opts.guided || null;
+  const anchorCountry = opts.anchorCountry || null;
+  const _anchorPaisLine = (anchorCountry && anchorCountry.countryName)
+    ? `\n- PAÍS: ${anchorCountry.countryName} — "country" DEBE ser exactamente "${anchorCountry.countryName}". Descarta del JSON cualquier parada que no esté en ${anchorCountry.countryName} (homónimos en otro país NO valen).`
+      + ((typeof anchorCountry.lat === 'number' && anchorCountry.pointScope)
+          ? `\n- El destino está centrado en lat ${anchorCountry.lat.toFixed(4)}, lng ${anchorCountry.lng.toFixed(4)}. TODAS las paradas deben quedar a menos de ~1 h de ese punto. Si un lugar con el mismo nombre existe en varias ciudades (cadenas, museos, mercados), usa SIEMPRE el de ${guided?.destino || 'esa ciudad'} y sus coordenadas reales ahí — nunca las de otra ciudad.`
+          : '')
+    : '';
+  const _anchor = (guided || anchorCountry)
+    ? `\n\nDATOS DEL VIAJE (úsalos para "country"/"region"/"duration_days" si el texto no los deja claros):
+- Destino: ${guided?.destino || '—'}
+- Días: ${guided?.duracion_dias || '—'}${_anchorPaisLine}`
+    : '';
+  const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
+
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","con_historia":true,"day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+
+REGLAS:
+- Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
+- "country" = país real (ej. "Portugal"). "region" = región o zona real (ej. "Algarve"), nunca con "desde", números de carretera ni medio de transporte.
+- "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
+- "lat"/"lng" = coordenadas reales del lugar (decimales).
+- "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
+- NO inventes paradas que no estén en el plan.
+- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.
+- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.`;
+
+  const fallbackUser = `Plan a convertir:\n\n${text.substring(0, 40000)}${_anchor}`;
+
+  // Hasta 2 intentos: el timeout de 60s se quedaba corto para rutas de muchas paradas
+  // (JSON de 8-12k tokens) y devolvía null → el flujo caía al bucle largo. Ahora 150s + reintento.
+  _convertFailReason = '';
+  for (let attempt = 1; attempt <= 2; attempt++) {
+  try {
+    const fallbackRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        // claude-sonnet-4-6 NO admite prefill de assistant → la conversación acaba en user.
+        // El JSON grande que se trunque lo rescata salvageIncompleteRouteJson.
+        max_tokens: 20000,
+        system: fallbackSys,
+        messages: [
+          { role: 'user', content: fallbackUser },
+        ],
+      }),
+      signal: AbortSignal.timeout(150000),
+    });
+    if (!fallbackRes.ok) {
+      let _body = '';
+      try { _body = (await fallbackRes.text()).slice(0, 300); } catch (_) {}
+      console.log(`[FAST-PATH] intento ${attempt}: HTTP ${fallbackRes.status} ${_body}`);
+      _convertFailReason = `HTTP ${fallbackRes.status} intento ${attempt}${_body ? ' — ' + _body : ''}`;
+      continue;
+    }
+    const fallbackData = await fallbackRes.json();
+    const parsed = parseModelRouteJson(fallbackData.content?.[0]?.text || '');
+    if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
+      const route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
+      route._fallback = true;
+      console.log(`[FAST-PATH] ✓ intento ${attempt}: ${route.stops.length} paradas`);
+      return route;
+    }
+    console.log(`[FAST-PATH] intento ${attempt}: JSON sin paradas suficientes (${parsed?.stops?.length || 0})`);
+    _convertFailReason = `JSON sin paradas suficientes (${parsed?.stops?.length || 0}) intento ${attempt}`;
+  } catch (e) {
+    console.log(`[FAST-PATH] intento ${attempt}: ${e.message}`);
+    _convertFailReason = `${e.name === 'TimeoutError' ? 'timeout' : (e.message || 'error')} intento ${attempt}`;
+  }
+  }
+  return null;
+}
+
+// Limpia una cadena de región/país para usarla como sesgo de búsqueda en Google Places.
+// "N2 Portugal desde Faro en moto" → "Portugal". Evita que verifyAllStops falle todas las paradas.
+function cleanRegionForSearch(raw) {
+  if (!raw || typeof raw !== 'string') return '';
+  let r = raw.trim();
+  r = r.replace(/\s+(desde|saliendo de|partiendo de|empezando en|hasta|a trav[eé]s de|por la?)\s+.+$/i, '');
+  r = r.replace(/\b(en|con)\s+(moto|coche|bici|bicicleta|furgoneta|autocaravana|caravana|tren|autob[uú]s|coche de alquiler)\b/gi, '');
+  r = r.replace(/\b(ruta|itinerario|road\s?trip|viaje)\b/gi, '');
+  r = r.replace(/\bN-?\d{1,3}\b/g, ''); // códigos de carretera sueltos (N2, N-340…) no ayudan al bias
+  r = r.replace(/\s{2,}/g, ' ').replace(/^[\s,·\-–]+|[\s,·\-–]+$/g, '').trim();
+  return r;
 }
 
 // Elimina URLs inventadas por Claude que no vienen de herramientas.
@@ -2922,7 +3419,7 @@ Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de est
 
   const result = await callOpenAI(apiKey, {
     model: 'gpt-4o-mini',
-    max_tokens: 4000,
+    max_tokens: 16000, // un bloque = 5-7 días × 5-7 paradas: 4000 truncaba el JSON (tope gpt-4o-mini: 16384)
     temperature: 0.7,
     system: systemPrompt,
     messages: [{ role: 'user', content: blockPrompt }],
@@ -2930,7 +3427,11 @@ Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de est
 
   if (result.error) return null;
   const text = result.text || '';
-  const route = extractRouteFromReply(text);
+  let route = extractRouteFromReply(text);
+  if (!route && text.includes('SALMA_ROUTE_JSON')) {
+    const sv = salvageIncompleteRouteJson(text);
+    if (sv) route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + sv);
+  }
   const reply = replyWithoutRouteBlock(text);
   return { route, reply, block };
 }
@@ -3085,17 +3586,55 @@ function addressContainsLocation(formattedAddress, ...locations) {
   return locations.filter(Boolean).map(normalizeForMatch).some(c => c && c.length > 2 && normAddr.includes(c));
 }
 
-async function verifyAllStops(route, placesKey) {
+async function verifyAllStops(route, placesKey, opts = {}) {
   if (!route?.stops || !placesKey) return route;
 
-  const region = route.region || route.country || '';
-  const country = route.country || '';
-  const countryCode = country ? getCountryCode(country) : '';
+  // ANCLA DE PAÍS — si el destino se resolvió a un país concreto antes de generar,
+  // manda ESE país por encima de route.country (que lo escribe el modelo y puede
+  // equivocar: Córdoba España vs Córdoba Argentina).
+  const forceCC = (opts.forceCountryCode || '').toUpperCase();
+  const anchorLat = typeof opts.anchorLat === 'number' ? opts.anchorLat : null;
+  const anchorLng = typeof opts.anchorLng === 'number' ? opts.anchorLng : null;
+  // Destino de PUNTO (ciudad/pueblo): las búsquedas se sesgan por el ancla (no por las
+  // coords que inventó el modelo) y se descarta toda parada a >MAX_ANCHOR_KM del ancla.
+  // Mata "Hammam Al Ándalus" resuelto a Madrid o una parada con lat/lng en Portugal.
+  const pointAnchor = !!opts.anchorPointScope && anchorLat != null && anchorLng != null;
+  // Radio según nº de días: 1 día = te quedas en la ciudad; 3+ días = day-trips de provincia OK.
+  // Estepona 1 día NO debe irse a Ronda (50 km) ni Zahara (55 km); Córdoba 5 días SÍ llega a Almodóvar (25).
+  const _durDays = Number(opts.anchorDays) || Number(route.duration_days) ||
+    (Array.isArray(route.stops) ? new Set(route.stops.map(s => s.day || 1)).size : 1);
+  const MAX_ANCHOR_KM = _durDays <= 1 ? 35 : (_durDays === 2 ? 70 : (_durDays <= 4 ? 120 : 160));
+  // Sesgo de búsqueda de Places APRETADO (22 km): cuando el modelo ata una parada a la
+  // ciudad del ancla, Places debe devolver la de la ciudad y no una homónima de la
+  // provincia ("Bodegas Cruz Conde" → la de Córdoba capital, no la de Montilla a 40 km).
+  // El descarte de largo alcance sigue siendo MAX_ANCHOR_KM; esto solo guía la búsqueda.
+  const ANCHOR_BIAS_M = 22000;
+
+  // Región saneada para el sesgo de búsqueda: "N2 Portugal desde Faro en moto" → "Portugal".
+  // Sin esto, las queries salían como "Miradouro X, N2 Portugal desde Faro" y no validaba ninguna parada.
+  const region = cleanRegionForSearch(route.region || route.country || '') || (route.country || '');
+  let country = route.country || '';
+  let countryCode = country ? getCountryCode(country) : '';
+  // Si el país no resuelve, intentar deducirlo de la región saneada (p.ej. "Portugal" dentro de "N2 Portugal")
+  if (!countryCode && region) {
+    const m = region.match(/\b(Portugal|España|Spain|France|Francia|Italia|Italy|Marruecos|Morocco|Alemania|Germany|Reino Unido|United Kingdom|Irlanda|Ireland|Países Bajos|Netherlands|Bélgica|Belgium|Suiza|Switzerland|Austria|Grecia|Greece|Croacia|Croatia|Portugal)\b/i);
+    if (m) { countryCode = getCountryCode(m[1]) || ''; if (countryCode && !country) country = m[1]; }
+  }
+  // El ancla gana: fuerza el filtro de país y corrige route.country si el modelo puso otro.
+  if (forceCC) {
+    if (countryCode && countryCode.toUpperCase() !== forceCC) {
+      console.log(`[VERIFY] ancla de país: route.country="${country}" (${countryCode}) → forzado a ${forceCC}`);
+    }
+    countryCode = forceCC;
+    if (opts.forceCountryName) { country = opts.forceCountryName; route.country = opts.forceCountryName; }
+  }
   const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
   const FIELDS = 'place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary,business_status';
   const DETAIL_FIELDS = 'name,photos,geometry,editorial_summary,opening_hours,business_status,formatted_address';
 
   async function findPlace(name, biasLat, biasLng, radiusM) {
+    // Punto: sesgar SIEMPRE por el ancla, ignorando las coords del modelo (que es lo que falla).
+    if (pointAnchor) { biasLat = anchorLat; biasLng = anchorLng; radiusM = ANCHOR_BIAS_M; }
     const q = region ? `${name}, ${region}` : name;
     const bias = (biasLat && biasLng && Math.abs(biasLat) > 0.01) ? `&locationbias=circle:${radiusM}@${biasLat},${biasLng}` : '';
     try {
@@ -3105,8 +3644,9 @@ async function verifyAllStops(route, placesKey) {
 
   async function textSearch(name) {
     const q = region ? `${name} ${region}` : name;
+    const bias = pointAnchor ? `&location=${anchorLat},${anchorLng}&radius=${ANCHOR_BIAS_M}` : '';
     try {
-      const data = await (await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${countryFilter}&language=es&key=${placesKey}`)).json();
+      const data = await (await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${bias}${countryFilter}&language=es&key=${placesKey}`)).json();
       if (data?.results?.[0]) return { candidates: [data.results[0]] };
       return null;
     } catch (_) { return null; }
@@ -3118,6 +3658,15 @@ async function verifyAllStops(route, placesKey) {
     if (candidate.business_status === 'CLOSED_PERMANENTLY') return { valid: false, reason: 'closed' };
     const nameOk = strictNameMatch(stop.name || stop.headline || '', candidate.name || '');
     const addrOk = addressContainsLocation(candidate.formatted_address, region, route.region, country);
+    // Punto: la referencia de distancia es el ANCLA, no las coords del modelo.
+    // Nombre correcto + dentro del radio del ancla = válido; fuera del radio = fuera, sin más.
+    if (pointAnchor) {
+      const distAnchor = haversineKm(anchorLat, anchorLng, pLat, pLng);
+      if (distAnchor > MAX_ANCHOR_KM) return { valid: false, reason: 'fuera_del_radio_ancla', distKm: distAnchor };
+      if (nameOk) return { valid: true, distKm: distAnchor };
+      if (addrOk) return { valid: true, distKm: distAnchor };
+      return { valid: false, reason: 'name_mismatch', distKm: distAnchor };
+    }
     let distKm = Infinity;
     if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
     if (nameOk && (addrOk || distKm < 3)) return { valid: true, distKm };
@@ -3204,8 +3753,12 @@ async function verifyAllStops(route, placesKey) {
       const hasGood = cTypes.some(t => GOOD_PLACE_TYPES.has(t));
       if (hasBad && !hasGood) continue;
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
+      // ANCLA — el rescate blando NO acepta candidatos lejos del ancla: >MAX_ANCHOR_KM si el
+      // destino es un punto (ciudad), >400 km en otro caso (mataba el salto España↔Argentina).
+      if (anchorLat != null && haversineKm(anchorLat, anchorLng, cLat, cLng) > (pointAnchor ? MAX_ANCHOR_KM : 400)) continue;
       let inRange = false;
-      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
+      if (pointAnchor) inRange = true; // ya filtrado por radio del ancla arriba
+      else if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
       else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
       if (inRange) {
         bestCandidates[i] = { candidate: c, soft: true };
@@ -3239,6 +3792,23 @@ async function verifyAllStops(route, placesKey) {
       const last = a3[i] || a2[i] || attempt1[i];
       const lc = last?.candidates?.[0];
       const reason = !lc?.geometry?.location ? 'no_google_result' : (validateCandidate(lc, stop).reason || 'no_match');
+      // "no_google_result" = Google no devolvió NADA para ese nombre — frecuente en faros
+      // pequeños/automáticos sin ficha propia en Places. Antes se descartaban siempre,
+      // aunque Claude trajera coordenadas reales y usables ("se comen faros" de rutas
+      // costeras). Si hay coords válidas y Google no contradice nada (no encontró un sitio
+      // DISTINTO, solo no encontró ninguno), se mantiene sin verificar en vez de desaparecer.
+      // Los demás motivos (nombre no coincide, fuera de radio, demasiado lejos) SÍ se
+      // descartan igual que antes — ahí Google encontró algo real y no es lo que pedimos.
+      const la = +stop.lat, ln = +stop.lng;
+      const hasUsableCoords = isFinite(la) && isFinite(ln) && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+        && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+      if (reason === 'no_google_result' && hasUsableCoords) {
+        stop._unverified = true;
+        stop._verifyReason = reason;
+        validatedStops.push(stop);
+        console.log(`[VERIFY] ⚠ SIN VERIFICAR "${stop.name}" (${reason}) — se mantiene con coords de Claude (${la}, ${ln})`);
+        return;
+      }
       discarded.push({ name: stop.name || stop.headline || '(sin nombre)', day: stop.day || null, reason });
       console.log(`[VERIFY] ✗ DESCARTADA "${stop.name}" (${reason})`);
       return;
@@ -3277,11 +3847,119 @@ async function verifyAllStops(route, placesKey) {
     console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${(candidate.place_id||'').substring(0, 20)}`);
   });
 
-  route.stops = validatedStops;
-  route.discarded_stops = discarded;
-  route.maps_links = buildMapsLinksFromStops(validatedStops, region);
+  // Red de seguridad — destino de punto: fuera cualquier parada que, pese a todo, quede
+  // lejos del ancla. Dos pasos: (1) línea recta con MAX_ANCHOR_KM (barato, descarta lo
+  // absurdamente lejos sin gastar llamadas), (2) para lo que sobrevive a >10km, distancia
+  // REAL por carretera (Directions) contra MAX_ANCHOR_DRIVE_KM — los km del propio prompt
+  // ("2b. RADIO SEGÚN DÍAS", 1-2 días→30km, 3-4 días→60km) en vez de línea recta, que en
+  // zonas de montaña se queda corta (bug real: "3 días en Ronda" colaba Benahavís/Estepona,
+  // 83km reales por la A-397, porque en línea recta caían dentro del radio de 120km viejo).
+  // Fallo de Directions (API caída) → se cae a la decisión de línea recta, no se rompe la ruta.
+  const MAX_ANCHOR_DRIVE_KM = _durDays <= 2 ? 30 : (_durDays <= 4 ? 60 : 160);
+  let finalStops = validatedStops;
+  if (pointAnchor) {
+    const withCoords = validatedStops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
+    const straightKm = new Map(withCoords.map(s => [s, haversineKm(anchorLat, anchorLng, s.lat, s.lng)]));
+    const needsDrive = withCoords.filter(s => straightKm.get(s) <= MAX_ANCHOR_KM && straightKm.get(s) > 10);
+    const driveResults = await Promise.all(needsDrive.map(s => drivingDistanceKm(anchorLat, anchorLng, s.lat, s.lng, placesKey)));
+    const driveKm = new Map(needsDrive.map((s, i) => [s, driveResults[i]]));
 
-  console.log(`[VERIFY] Resumen: ${validatedStops.length} validadas, ${discarded.length} descartadas`);
+    finalStops = [];
+    validatedStops.forEach(s => {
+      const sKm = straightKm.get(s);
+      if (sKm == null || sKm > MAX_ANCHOR_KM) {
+        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'fuera_del_radio_ancla' });
+        console.log(`[VERIFY] ✗ DESCARTADA (radio ancla) "${s.name}" (${s.lat}, ${s.lng})`);
+        return;
+      }
+      const dKm = driveKm.get(s); // undefined = no hizo falta comprobar (≤10km línea recta)
+      if (typeof dKm === 'number' && dKm > MAX_ANCHOR_DRIVE_KM) {
+        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'lejos_por_carretera' });
+        console.log(`[VERIFY] ✗ DESCARTADA (${dKm.toFixed(1)}km por carretera > ${MAX_ANCHOR_DRIVE_KM}km) "${s.name}"`);
+        return;
+      }
+      finalStops.push(s);
+    });
+  }
+
+  // ── FILTRO POR LOCALIDAD / PROVINCIA (destino de punto, cualquier duración) ──
+  // El destino es UNA ciudad ("Córdoba 7 días", "Gaucín 1 día"). El radio no distingue
+  // "en Córdoba" de "Sevilla a 140 km". Regla: una parada entra en la ruta si su dirección
+  // menciona la localidad O la provincia del ancla; si no hay dirección (miradores, naturaleza)
+  // se acepta por cercanía. El resto NO se borra → route.nearby_stops.
+  //  - 1-2 días: solo la localidad (Gaucín, no Ronda).
+  //  - 3+ días: toda la provincia del ancla (Córdoba entera sí, Sevilla no).
+  const _locNorm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const anchorLocN = _locNorm(opts.anchorLocality);
+  const anchorProvN = _locNorm(opts.anchorProvince);
+  const useProvince = _durDays >= 3 && !!anchorProvN;
+  const _nearRadiusNoAddr = _durDays <= 2 ? 8 : (_durDays <= 4 ? 40 : 70); // solo para paradas SIN dirección
+  let nearbyStops = [];
+  if (pointAnchor && (anchorLocN || anchorProvN) && finalStops.length > 3) {
+    const inArea = [];
+    finalStops.forEach(s => {
+      const addrN = _locNorm(s.verified_address);
+      const dKm = (typeof s.lat === 'number' && typeof s.lng === 'number')
+        ? haversineKm(anchorLat, anchorLng, s.lat, s.lng) : 999;
+      const locHit = anchorLocN && addrN.includes(anchorLocN);
+      const provHit = useProvince && anchorProvN && addrN.includes(anchorProvN);
+      if (locHit || provHit || (!addrN && dKm <= _nearRadiusNoAddr) || dKm <= 5) {
+        inArea.push(s);
+      } else {
+        nearbyStops.push({
+          name: s.name || s.headline || '', day: s.day || null,
+          lat: s.lat, lng: s.lng, place_id: s.place_id || '', photo_ref: s.photo_ref || '',
+          verified_address: s.verified_address || '',
+          narrative: s.narrative || s.description || '', dist_km: Math.round(dKm),
+        });
+        console.log(`[VERIFY] ↪ CERCA (fuera de ${opts.anchorLocality || opts.anchorProvince}) "${s.name}" ${Math.round(dKm)}km addr="${s.verified_address || ''}"`);
+      }
+    });
+    if (inArea.length >= 2) finalStops = inArea;    // no vaciar la ruta si el filtro se pasa de listo
+    else nearbyStops = [];                          // revertir: mejor road trip que ruta vacía
+  }
+
+  // ── DEDUP POR CERCANÍA — mismo sitio con dos place_id distintos ──
+  // Google a veces mantiene fichas separadas para el mismo lugar (p.ej. "River beach
+  // Fragas de Sao Simao" y "Fragas de Sao Simao" a 6m una de otra, con place_id distintos).
+  // El filtro de arriba solo pilla place_id idéntico, así que esto se colaba duplicado.
+  // Dos paradas son la misma si están a <250m Y el nombre normalizado de una contiene al
+  // de la otra — así no fusiona dos monumentos distintos de la misma plaza (nombres
+  // distintos aunque estén cerca).
+  const _normStopName = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const deduped = [];
+  finalStops.forEach(s => {
+    const sLat = s.lat, sLng = s.lng;
+    const sNameN = _normStopName(s.name || s.headline || '');
+    const isDup = sNameN && typeof sLat === 'number' && typeof sLng === 'number' && deduped.some(prev => {
+      if (typeof prev.lat !== 'number' || typeof prev.lng !== 'number') return false;
+      if (haversineKm(sLat, sLng, prev.lat, prev.lng) > 0.25) return false;
+      const prevNameN = _normStopName(prev.name || prev.headline || '');
+      return !!prevNameN && (sNameN.includes(prevNameN) || prevNameN.includes(sNameN));
+    });
+    if (isDup) console.log(`[VERIFY] ⚠ DEDUP cercanía "${s.name}" — misma parada que otra a <250m`);
+    else deduped.push(s);
+  });
+  finalStops = deduped;
+
+  finalStops.forEach((s, i) => { if ('n' in s) s.n = i + 1; if ('order' in s) s.order = i + 1; });
+
+  route.stops = finalStops;
+  route.nearby_stops = nearbyStops;
+  if (nearbyStops.length && opts.anchorLocality) route.anchor_locality = opts.anchorLocality;
+  route.discarded_stops = discarded;
+  route.maps_links = buildMapsLinksFromStops(finalStops, region);
+
+  // Pueblo pequeño: la ruta dentro del casco queda corta y hay escapadas al lado.
+  // Salma lo dice y ofrece salidas (estirar el día, hacerlo en 2, o ruta por la zona).
+  if (nearbyStops.length && finalStops.length <= 3 && opts.anchorLocality) {
+    const _loc = opts.anchorLocality;
+    const _ex = nearbyStops.slice(0, 3).map(s => s.name).filter(Boolean).join(', ');
+    route.nearby_note = `${_loc} en sí se ve en poco tiempo: la ruta son ${finalStops.length} parada${finalStops.length === 1 ? '' : 's'} dentro del pueblo. Abajo te dejo ${nearbyStops.length} escapada${nearbyStops.length === 1 ? '' : 's'} al lado${_ex ? ` (${_ex})` : ''} por si quieres estirar el día. Si prefieres, dime **"${_loc} en 2 días"** o **"ruta por la zona de ${_loc}"** y te lo monto entero.`;
+  }
+
+  console.log(`[VERIFY] Resumen: ${finalStops.length} validadas, ${discarded.length} descartadas, ${nearbyStops.length} cerca${pointAnchor ? ' (ancla de punto ON)' : ''}`);
 
   return route;
 }
@@ -4091,6 +4769,129 @@ function generarVideo(input) {
 // BUSCAR LUGAR — Google Places genérico (gym, farmacia, museo…)
 // ═══════════════════════════════════════════════════════════════
 
+// Geocodifica una ciudad a coordenadas para sesgar buscar_lugar — cache en memoria del isolate
+// (una ciudad siempre geocodifica igual, no hace falta repetir la llamada entre requests).
+const _ciudadGeocodeCache = {};
+async function geocodeCiudad(ciudad, placesKey) {
+  if (!ciudad) return null;
+  const key = ciudad.trim().toLowerCase();
+  if (key in _ciudadGeocodeCache) return _ciudadGeocodeCache[key];
+  try {
+    const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(ciudad)}&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
+    const data = await res.json();
+    const loc = data?.results?.[0]?.geometry?.location;
+    const result = (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') ? { lat: loc.lat, lng: loc.lng } : null;
+    _ciudadGeocodeCache[key] = result;
+    return result;
+  } catch (e) {
+    _ciudadGeocodeCache[key] = null;
+    return null;
+  }
+}
+
+// ─── ANCLA DE PAÍS DEL DESTINO ───────────────────────────────────
+// Resuelve el destino del flujo guiado (texto libre: "Córdoba") a un país concreto
+// ANTES de generar nada. Sin esto, un homónimo (Córdoba España vs Córdoba Argentina)
+// lo decide el modelo a ciegas y mezcla paradas de los dos.
+//   - Geocoding de Google SIN filtro de país (queremos todos los candidatos).
+//   - Si hay más de un país entre los resultados y tenemos GPS del viajero,
+//     gana el candidato más cercano (Córdoba desde Portugal → España, no Argentina).
+//   - Si el destino ya trae país ("Córdoba, Argentina"), Geocoding lo resuelve solo.
+//   - Caché KV 30 días. Si algo falla → null → el flujo se comporta como antes.
+const _anchorPaisCache = {};
+async function resolverPaisDestino(destino, userLocation, env) {
+  if (!destino || typeof destino !== 'string') return null;
+  const placesKey = env.GOOGLE_PLACES_KEY;
+  if (!placesKey) return null;
+  let d = destino.trim().replace(/^(provincia|regi[oó]n|comunidad|estado|departamento)\s+de\s+/i, '').trim();
+  if (d.length < 2) return null;
+  const norm = d.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  if (norm in _anchorPaisCache) return _anchorPaisCache[norm];
+
+  // v7: se guarda localidad + PROVINCIA del ancla (filtro por provincia en verify).
+  // Datos prácticamente inmutables (una ciudad no cambia de país ni se mueve) → TTL 30 días.
+  // A KV solo se escribe cuando la resolución es FIRME (país + geometría reales, más abajo);
+  // los fallos (sin candidato, sin país, excepción) se quedan solo en el cache de isolate.
+  // Si se cuela un sitio mal resuelto: purga puntual con `wrangler kv key delete geocity:anchor7:<slug>`
+  // o sube el prefijo a anchor8 para invalidar todo de golpe.
+  const kvKey = 'geocity:anchor7:' + norm;
+  if (env.SALMA_KB) {
+    try {
+      const cached = await env.SALMA_KB.get(kvKey);
+      if (cached) {
+        const p = JSON.parse(cached);
+        if (p && typeof p.pointScope === 'boolean' && typeof p.countryCode === 'string' && p.countryCode) {
+          _anchorPaisCache[norm] = p; return p;
+        }
+      }
+    } catch (_) {}
+  }
+
+  // ¿El destino es un PUNTO (ciudad/pueblo/POI) al que ceñir la ruta por radio?
+  // Por defecto SÍ. Se desactiva solo si el texto es una ruta lineal / región amplia.
+  const textIsRegion =
+    /\b(ruta|carretera|costa|litoral|road\s?trip|circuito|vuelta a|c[oô]te|amalfit|andaluc[ií]a|galicia|catalu|arag[oó]n|castilla|extremadura|asturias|cantabria|navarra|rioja|murcia|toscana|provenza|algarve|regi[oó]n|comarca)\b/i.test(d)
+    || /\bn-?\d{1,3}\b/i.test(d)
+    || /\ba-?\d{2,3}\b/i.test(d);
+
+  // Places API (findplacefromtext + details), NO Geocoding API — la key está habilitada
+  // para Places (verify funciona) pero puede NO estarlo para Geocoding (→ REQUEST_DENIED
+  // silencioso → anchorCountry null → todo el anclaje se saltaba).
+  try {
+    const bias = (userLocation && typeof userLocation.lat === 'number')
+      ? `&locationbias=circle:2000000@${userLocation.lat},${userLocation.lng}` : '';
+    const fRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(d)}&inputtype=textquery&fields=place_id,geometry,formatted_address,types,name${bias}&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
+    const fData = await fRes.json();
+    const cand = fData?.candidates?.[0];
+    if (!cand?.geometry?.location || typeof cand.geometry.location.lat !== 'number') {
+      console.log(`[ANCLA] findplace SIN candidato "${d}" status=${fData?.status} err=${fData?.error_message || ''}`);
+      _anchorPaisCache[norm] = null; return null;
+    }
+    const lat = cand.geometry.location.lat, lng = cand.geometry.location.lng;
+
+    // País + LOCALIDAD: address_components de Place Details; fallback país = último trozo de formatted_address.
+    let countryCode = '', countryName = '', locality = '', province = '';
+    try {
+      const dRes = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${cand.place_id}&fields=address_component&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
+      const dData = await dRes.json();
+      const comps = dData?.result?.address_components || [];
+      const cc = comps.find(c => Array.isArray(c.types) && c.types.includes('country'));
+      if (cc) { countryCode = (cc.short_name || '').toUpperCase(); countryName = cc.long_name || ''; }
+      const locComp = comps.find(c => c.types.includes('locality'))
+        || comps.find(c => c.types.includes('postal_town'))
+        || comps.find(c => c.types.includes('administrative_area_level_3'));
+      if (locComp) locality = locComp.long_name || '';
+      const provComp = comps.find(c => c.types.includes('administrative_area_level_2'))
+        || comps.find(c => c.types.includes('administrative_area_level_1'));
+      if (provComp) province = provComp.long_name || '';
+    } catch (_) {}
+    if (!countryCode && cand.formatted_address) {
+      const last = cand.formatted_address.split(',').pop().trim();
+      const cc2 = getCountryCode(last);
+      if (cc2) { countryCode = cc2.toUpperCase(); countryName = last; }
+    }
+    if (!countryCode) {
+      console.log(`[ANCLA] SIN país "${d}" addr="${cand.formatted_address}"`);
+      _anchorPaisCache[norm] = null; return null;
+    }
+
+    const types = Array.isArray(cand.types) ? cand.types : [];
+    const isBigAdmin = types.includes('country') || types.includes('administrative_area_level_1');
+    const pointScope = !isBigAdmin && !textIsRegion;
+    const chosen = { countryCode, countryName, lat, lng, pointScope, locality, province, _types: types.join(',') };
+    console.log(`[ANCLA] destino="${d}" → ${countryName} (${countryCode}) loc="${locality}" prov="${province}" pointScope=${pointScope} ${lat.toFixed(3)},${lng.toFixed(3)} types=[${chosen._types}]`);
+    _anchorPaisCache[norm] = chosen;
+    if (env.SALMA_KB) {
+      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 2592000 }); } catch (_) {}
+    }
+    return chosen;
+  } catch (e) {
+    console.log(`[ANCLA] excepción "${d}": ${e.message}`);
+    _anchorPaisCache[norm] = null;
+    return null;
+  }
+}
+
 async function buscarLugar(input, placesKey, userCoords) {
   if (!placesKey) return { error: 'Google Places key no configurada' };
 
@@ -4107,8 +4908,18 @@ async function buscarLugar(input, placesKey, userCoords) {
     let url;
     const typeParam = input.tipo_places ? `&type=${encodeURIComponent(input.tipo_places)}` : (esComida ? '&type=restaurant' : '');
     const radius = esComida ? 1500 : 3000;
-    if (userCoords && userCoords.lat && userCoords.lng) {
-      url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&location=${userCoords.lat},${userCoords.lng}&radius=${radius}${typeParam}&key=${placesKey}`;
+    // ── Sesgo de ubicación: por la CIUDAD pedida, NUNCA por el GPS real del usuario ──
+    // Bug real detectado: si Salma planifica una ruta en otro país (p.ej. Portugal) mientras
+    // el usuario está físicamente en otro sitio, usar userCoords como sesgo hacía que un nombre
+    // genérico ("Restaurante Porta") devolviera un resultado homónimo cerca de donde está el
+    // usuario de verdad, no cerca de la ciudad de la ruta — coordenadas a cientos de km de donde
+    // debían estar, rompiendo el enlace "cómo llegar" y el trazado de la ruta en el mapa.
+    // userCoords solo se usa como último recurso si la ciudad no se pudo geocodificar (p.ej. el
+    // modelo mandó "cerca de mí" en vez de una ciudad real) — ahí sí tiene sentido.
+    const ciudadCoords = ciudad ? await geocodeCiudad(ciudad, placesKey) : null;
+    const biasCoords = ciudadCoords || (userCoords && userCoords.lat && userCoords.lng ? userCoords : null);
+    if (biasCoords) {
+      url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&location=${biasCoords.lat},${biasCoords.lng}&radius=${radius}${typeParam}&key=${placesKey}`;
     } else {
       url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es${typeParam}&key=${placesKey}`;
     }
@@ -4620,6 +5431,7 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
   let contentBlocks = [];
   let stopReason = null;
   let routeSignalSent = false;
+  let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
   // Track tool calls being built
   const toolCallsInProgress = {}; // indexed by tool call index
 
@@ -4650,13 +5462,24 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
         // Text content
         if (delta.content) {
           const chunk = delta.content;
+          const prevLen = fullText.length;
           fullText += chunk;
           if (forwardText && writer) {
-            if (!fullText.includes('SALMA_ROUTE')) {
-              await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
-            } else if (!routeSignalSent) {
-              routeSignalSent = true;
-              await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
+            if (!routeSignalSent) {
+              const markerIdx = fullText.indexOf('SALMA_ROUTE');
+              if (markerIdx === -1) {
+                await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
+              } else {
+                // El marcador empieza dentro de este trozo: mandar la prosa que
+                // venga pegada delante (no descartar el trozo entero) y avisar aparte.
+                const prosePart = markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '';
+                if (prosePart) await writer.write(encoder.encode(`data: ${JSON.stringify({ t: prosePart })}\n\n`));
+                routeSignalSent = true;
+                await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
+              }
+            } else if ((++routeHeartbeat % 30) === 0) {
+              // JSON largo generándose en silencio: latido cada ~30 chunks para no perder la conexión
+              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
             }
           }
         }
@@ -4714,6 +5537,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
   let contentBlocks = [];
   let stopReason = null;
   let routeSignalSent = false;
+  let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
   const blocksInProgress = {};
 
   while (true) {
@@ -4735,12 +5559,23 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
           if (evt.delta.type === 'text_delta') {
             const chunk = evt.delta.text;
             b.text = (b.text || '') + chunk;
+            const prevLen = fullText.length;
             fullText += chunk;
             if (forwardText && writer) {
-              if (!fullText.includes('SALMA_ROUTE')) {
-                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`)); } catch (_) {}
-              } else if (!routeSignalSent) {
-                routeSignalSent = true;
+              if (!routeSignalSent) {
+                const markerIdx = fullText.indexOf('SALMA_ROUTE');
+                if (markerIdx === -1) {
+                  try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`)); } catch (_) {}
+                } else {
+                  // El marcador empieza dentro de este trozo: mandar la prosa que
+                  // venga pegada delante (no descartar el trozo entero) y avisar aparte.
+                  const prosePart = markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '';
+                  if (prosePart) { try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: prosePart })}\n\n`)); } catch (_) {} }
+                  routeSignalSent = true;
+                  try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
+                }
+              } else if ((++routeHeartbeat % 30) === 0) {
+                // JSON largo generándose en silencio: latido cada ~30 chunks para no perder la conexión
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
               }
             }
@@ -5049,6 +5884,26 @@ export default {
       return new Response(object.body, { headers });
     }
 
+    // ─── ENDPOINT /version (que version corre de verdad) ───
+    // Publico a proposito: el Version ID no es un secreto y hace falta poder
+    // consultarlo desde el movil sin token. Lo usa el panel de debug.
+    if (request.method === 'GET' && url.pathname === '/version') {
+      const meta = env.CF_VERSION_METADATA || {};
+      return new Response(JSON.stringify({
+        version_id: meta.id || null,
+        version_short: meta.id ? String(meta.id).slice(0, 8) : null,
+        tag: meta.tag || null,
+        deployed_at: meta.timestamp || null,
+        now: new Date().toISOString()
+      }, null, 2), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-store'
+        }
+      });
+    }
+
     // ─── ENDPOINT /health (monitoreo de APIs) ───
     if (request.method === 'GET' && url.pathname === '/health') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
@@ -5258,6 +6113,16 @@ export default {
               }
             } catch (_) {}
           }
+          // Caché de lugares NO catalogados — prefijo propio, nunca pisa el índice curado 'spot:*'
+          if (!photoRef) {
+            try {
+              const cached = await env.SALMA_KB.get('spotcache:' + (variants[0] || ''));
+              if (cached) {
+                const c = JSON.parse(cached);
+                if (c.photo_ref) photoRef = c.photo_ref;
+              }
+            } catch (_) {}
+          }
         }
 
         // Si no hay KV hit, Find Place API (fallback)
@@ -5277,9 +6142,10 @@ export default {
               if (distKm > 30) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
             }
           }
-          // Cachear photo_ref en KV para futuras llamadas (30 días)
+          // Cachear photo_ref en KV para futuras llamadas (30 días) — prefijo propio,
+          // nunca pisa el índice curado permanente 'spot:*'
           if (env.SALMA_KB && photoRef) {
-            const cacheKey = 'spot:' + normalizeSpotKey(name)[0];
+            const cacheKey = 'spotcache:' + normalizeSpotKey(name)[0];
             const existing = await env.SALMA_KB.get(cacheKey).catch(() => null);
             const spotData = existing ? JSON.parse(existing) : {};
             spotData.photo_ref = photoRef;
@@ -5341,6 +6207,37 @@ export default {
       }
     }
 
+    // Compara los pasos ("steps") de una ruta de Google Directions con la carretera
+    // pedida por el usuario. Cuenta como "fuera de ruta" cada tramo cuya instrucción
+    // menciona explícitamente una carretera distinta a la pedida.
+    function _scoreRouteAgainstRoad(googleRoute, preferRoad) {
+      const targetNorm = preferRoad.replace(/-/g, '').toUpperCase();
+      let totalMeters = 0;
+      let offMeters = 0;
+      const offByRoad = {};
+      for (const leg of googleRoute.legs || []) {
+        for (const step of leg.steps || []) {
+          const meters = step.distance?.value || 0;
+          totalMeters += meters;
+          const text = (step.html_instructions || '').replace(/<[^>]*>/g, '');
+          const codes = text.toUpperCase().match(/\b[A-Z]{1,3}-?\s?\d{1,4}\b/g) || [];
+          for (const raw of codes) {
+            const norm = raw.replace(/[\s-]/g, '');
+            if (norm !== targetNorm) {
+              offMeters += meters;
+              const pretty = norm.replace(/^([A-Z]{1,3})(\d{1,4})$/, '$1-$2');
+              offByRoad[pretty] = (offByRoad[pretty] || 0) + meters;
+              break; // contar el tramo una sola vez aunque mencione varios códigos
+            }
+          }
+        }
+      }
+      const offSegments = Object.entries(offByRoad)
+        .map(([road, m]) => ({ road, km: Math.round(m / 100) / 10 }))
+        .sort((a, b) => b.km - a.km);
+      return { offMeters, totalMeters, offSegments };
+    }
+
     // ─── ENDPOINT /directions (polyline para mini-mapas) ───
     if (request.method === 'GET' && url.pathname === '/directions') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
@@ -5349,6 +6246,7 @@ export default {
       const destination = url.searchParams.get('destination') || '';
       const waypoints = url.searchParams.get('waypoints') || '';
       const mode = url.searchParams.get('mode') || 'driving';
+      const preferRoad = url.searchParams.get('preferRoad') || '';
 
       if (!origin || !destination || !placesKey) {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
@@ -5357,6 +6255,7 @@ export default {
       try {
         let dirUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&mode=${mode}&key=${placesKey}`;
         if (waypoints) dirUrl += `&waypoints=${encodeURIComponent(waypoints)}`;
+        if (preferRoad) dirUrl += `&alternatives=true`;
 
         const res = await fetch(dirUrl);
         const data = await res.json();
@@ -5365,7 +6264,30 @@ export default {
           return new Response(JSON.stringify({ error: data.status || 'No route' }), { status: 404, headers: corsH });
         }
 
-        const route = data.routes[0];
+        // Si se pidió una carretera concreta ("sin salirte de la N2"), puntuamos cada
+        // alternativa que ofrece Google por km fuera de esa carretera y nos quedamos
+        // con la que menos se desvía (opción E). Si aun así se desvía por encima del
+        // umbral, lo marcamos en road_check para que el frontend avise (opción B-lite).
+        let route = data.routes[0];
+        let roadCheck = null;
+        if (preferRoad && data.routes.length > 0) {
+          let best = null;
+          for (const candidate of data.routes) {
+            const score = _scoreRouteAgainstRoad(candidate, preferRoad);
+            if (!best || score.offMeters < best.score.offMeters) best = { candidate, score };
+          }
+          route = best.candidate;
+          const { offMeters, totalMeters, offSegments } = best.score;
+          const offPct = totalMeters > 0 ? offMeters / totalMeters : 0;
+          roadCheck = {
+            target: preferRoad,
+            offKm: Math.round(offMeters / 100) / 10,
+            offPct: Math.round(offPct * 1000) / 10, // porcentaje, 1 decimal
+            flagged: offPct > 0.12,
+            segments: offSegments.slice(0, 3),
+          };
+        }
+
         const polyline = route.overview_polyline?.points || '';
         const legs = (route.legs || []).map(l => ({
           distance: l.distance?.text || '',
@@ -5388,9 +6310,55 @@ export default {
         }
 
         const payload = includeSteps ? { polyline, legs, steps } : { polyline, legs };
+        if (roadCheck) payload.road_check = roadCheck;
         return new Response(JSON.stringify(payload), {
           headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
         });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /roads/resolve (DEBUG — resolver de carreteras con nombre vía OSM) ───
+    // Gate con ?token=ADMIN_TOKEN. NO cambia ningún otro flujo. Fase 1 del motor de
+    // road-trips: por ahora solo sirve para probar road-resolver.js en vivo.
+    if (request.method === 'GET' && url.pathname === '/roads/resolve') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const tok = url.searchParams.get('token') || (request.headers.get('Authorization') || '').replace('Bearer ', '');
+      if (!env.ADMIN_TOKEN || tok !== env.ADMIN_TOKEN) {
+        return new Response(JSON.stringify({ error: 'forbidden' }), { status: 403, headers: corsH });
+      }
+      const q = url.searchParams.get('q') || '';
+      const country = url.searchParams.get('country') || '';
+      const relationId = url.searchParams.get('relationId') || '';
+      const nocache = url.searchParams.get('nocache') === '1';
+      const raw = url.searchParams.get('raw') === '1'; // saltar extractRoadQuery, ir directo
+      const format = url.searchParams.get('format') || 'json';
+      if (!q && !relationId) {
+        return new Response(JSON.stringify({ error: 'falta ?q= o ?relationId=' }), { status: 400, headers: corsH });
+      }
+      try {
+        // Camino real (como lo usará Fase 2): extractRoadQuery -> input con slug/relationId.
+        let input;
+        if (relationId) input = { relationId: Number(relationId), country };
+        else if (!raw) input = extractRoadQuery(q, country) || { query: q, country };
+        else input = { query: q, country };
+        const result = await resolveNamedRoad(input, {
+          kv: env.ROAD_GEOM,
+          // desde un Worker de CF: maps.mail.ru responde; overpass-api.de suele dar timeout
+          endpoints: [
+            'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+            'https://overpass-api.de/api/interpreter',
+          ],
+          nocache,
+        });
+        if (format === 'geojson') {
+          return new Response(JSON.stringify(toGeoJSON(result)), { headers: { ...corsH, 'Content-Type': 'application/geo+json' } });
+        }
+        if (format === 'gpx') {
+          return new Response(toGPX(result), { headers: { ...corsH, 'Content-Type': 'application/gpx+xml' } });
+        }
+        return new Response(JSON.stringify({ _input: input, ...result }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
@@ -5840,13 +6808,18 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
-    // ─── ENDPOINT /create-payment (Stripe PaymentIntent) ───
+    // ─── ENDPOINT /create-payment (Stripe Checkout — Premium por periodos) ───
     if (request.method === 'POST' && url.pathname === '/create-payment') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
 
-      const stripeKey = env.STRIPE_SECRET_KEY;
-      if (!stripeKey) {
+      if (!env.STRIPE_SECRET_KEY) {
         return new Response(JSON.stringify({ error: 'Stripe not configured' }), { status: 500, headers: corsH });
+      }
+
+      // Token Firebase obligatorio (antes se aceptaba cualquier user_id del body)
+      const authUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+      if (!authUser) {
+        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
       }
 
       let payBody;
@@ -5854,50 +6827,126 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
       }
 
-      const userId = payBody.user_id;
-      if (!userId) {
-        return new Response(JSON.stringify({ error: 'user_id required' }), { status: 400, headers: corsH });
+      const planKey = String(payBody.plan || 'anual').toLowerCase();
+      const PLAN = PREMIUM_PLANS[planKey];
+      if (!PLAN) {
+        return new Response(JSON.stringify({ error: 'plan inválido' }), { status: 400, headers: corsH });
       }
 
-      // Packs disponibles — Starter, Viajero, Explorador
-      const PACKS = {
-        starter:   { name: 'starter',   amount: 499,  coins: 10,  currency: 'eur' },
-        viajero:   { name: 'viajero',   amount: 999,  coins: 25,  currency: 'eur' },
-        explorador:{ name: 'explorador', amount: 1999, coins: 60,  currency: 'eur' },
-      };
-      const packKey = (payBody.pack || 'viajero').toLowerCase();
-      const PACK = PACKS[packKey] || PACKS.viajero;
-
+      const origin = 'https://borradodelmapa.com';
       try {
-        // Crear PaymentIntent en Stripe
-        const stripeRes = await fetch('https://api.stripe.com/v1/payment_intents', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Basic ' + btoa(stripeKey + ':'),
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            amount: PACK.amount.toString(),
-            currency: PACK.currency,
-            'metadata[user_id]': userId,
-            'metadata[pack]': PACK.name,
-            'metadata[coins]': PACK.coins.toString(),
-          }).toString(),
+        const session = await stripeApi(env, 'checkout/sessions', {
+          'mode': 'payment',
+          'client_reference_id': authUser.uid,
+          'success_url': origin + '/?pago=ok&sid={CHECKOUT_SESSION_ID}',
+          'cancel_url': origin + '/?pago=cancel',
+          'line_items[0][quantity]': '1',
+          'line_items[0][price_data][currency]': 'eur',
+          'line_items[0][price_data][unit_amount]': String(PLAN.amount),
+          'line_items[0][price_data][product_data][name]': 'Borrado del Mapa Premium — ' + PLAN.label,
+          'metadata[user_id]': authUser.uid,
+          'metadata[plan]': planKey,
+          'metadata[months]': String(PLAN.months),
+          'payment_intent_data[metadata][user_id]': authUser.uid,
+          'payment_intent_data[metadata][months]': String(PLAN.months),
         });
 
-        const intent = await stripeRes.json();
-
-        if (intent.error) {
-          return new Response(JSON.stringify({ error: intent.error.message }), { status: 400, headers: corsH });
+        if (session.error) {
+          return new Response(JSON.stringify({ error: session.error.message }), { status: 400, headers: corsH });
         }
 
         return new Response(JSON.stringify({
-          client_secret: intent.client_secret,
-          amount: PACK.amount,
-          coins: PACK.coins,
+          url: session.url,
+          plan: planKey,
+          months: PLAN.months,
+          amount: PLAN.amount,
         }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /stripe-webhook (confirma el pago server-side y acredita Premium) ───
+    if (request.method === 'POST' && url.pathname === '/stripe-webhook') {
+      const jsonH = { 'Content-Type': 'application/json' };
+      const payload = await request.text();
+      const sig = request.headers.get('Stripe-Signature') || '';
+
+      const validSig = await stripeVerifyWebhook(payload, sig, env.STRIPE_WEBHOOK_SECRET);
+      if (!validSig) {
+        return new Response(JSON.stringify({ error: 'bad signature' }), { status: 400, headers: jsonH });
+      }
+
+      let event;
+      try { event = JSON.parse(payload); } catch (e) {
+        return new Response(JSON.stringify({ error: 'bad json' }), { status: 400, headers: jsonH });
+      }
+
+      // Solo el pago completado de Checkout lleva nuestra metadata en la sesión
+      if (event.type !== 'checkout.session.completed') {
+        return new Response(JSON.stringify({ received: true, ignored: event.type }), { headers: jsonH });
+      }
+
+      const session = (event.data && event.data.object) || {};
+      if (session.payment_status !== 'paid') {
+        return new Response(JSON.stringify({ received: true, not_paid: session.payment_status || null }), { headers: jsonH });
+      }
+
+      const sessionId = session.id;
+      const meta = session.metadata || {};
+      const uid = meta.user_id || session.client_reference_id;
+      const months = parseInt(meta.months || '0', 10);
+
+      if (!uid || !months || !sessionId) {
+        return new Response(JSON.stringify({ received: true, error: 'missing uid/months/id' }), { headers: jsonH });
+      }
+
+      try {
+        // Idempotencia: Stripe reintenta webhooks — no acreditar dos veces
+        const already = await firestoreAdminGet(env, 'processed_payments/' + sessionId);
+        if (already) {
+          return new Response(JSON.stringify({ received: true, duplicate: true }), { headers: jsonH });
+        }
+
+        // premium_until = max(actual, ahora) + N meses de calendario
+        const userDoc = await firestoreAdminGet(env, 'users/' + uid);
+        const curStr = userDoc && userDoc.fields && userDoc.fields.premium_until && userDoc.fields.premium_until.timestampValue;
+        const now = Date.now();
+        const baseMs = curStr ? Math.max(new Date(curStr).getTime(), now) : now;
+        const until = new Date(baseMs);
+        until.setMonth(until.getMonth() + months);
+        const untilIso = until.toISOString();
+        const nowIso = new Date(now).toISOString();
+
+        await firestoreAdminPatch(env, 'users/' + uid, {
+          premium_until:      { timestampValue: untilIso },
+          isPremium:          { booleanValue: true },
+          premium_last_plan:  { stringValue: meta.plan || '' },
+          premium_updated_at: { timestampValue: nowIso },
+        });
+
+        await firestoreAdminPatch(env, 'processed_payments/' + sessionId, {
+          uid:           { stringValue: uid },
+          plan:          { stringValue: meta.plan || '' },
+          months:        { integerValue: String(months) },
+          amount_total:  { integerValue: String(session.amount_total || 0) },
+          currency:      { stringValue: session.currency || 'eur' },
+          premium_until: { timestampValue: untilIso },
+          created_at:    { timestampValue: nowIso },
+        });
+
+        return new Response(JSON.stringify({ received: true, uid, premium_until: untilIso }), { headers: jsonH });
+      } catch (e) {
+        // Firma válida pero fallo al acreditar: el pago está cobrado. Registrar y
+        // devolver 500 para que Stripe reintente el webhook.
+        try {
+          await firestoreAdminPatch(env, 'payment_failures/' + sessionId, {
+            uid:   { stringValue: uid || '' },
+            error: { stringValue: String((e && e.message) || e).slice(0, 400) },
+            at:    { timestampValue: new Date().toISOString() },
+          });
+        } catch (_) {}
+        return new Response(JSON.stringify({ received: true, credit_error: String((e && e.message) || e) }), { status: 500, headers: jsonH });
       }
     }
 
@@ -6444,7 +7493,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
 
       // 2. Generar con Claude Haiku
-      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra:
+      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.
+
+Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia. Ojo: abreviaturas típicas de Google Maps como "Rte." (restaurante), "Avda."/"Av." (avenida), "C/" (calle), "Pza." (plaza) NO indican una carretera ni un corredor — son solo el nombre de un local o dirección; genera la historia de ESE lugar concreto (el negocio, el edificio, la calle), no de una ruta ni de una persona a la que haga referencia el nombre.
 
 {
   "title": "Nombre: subtítulo histórico",
@@ -6926,6 +7977,9 @@ REGLAS:
     }
     const userNationality = body.nationality || null;
     const userLocation = body.user_location || null;
+    // Chip "Cerca mía" (o frase equivalente escrita a mano) → ruta directa desde la ubicación, sin preguntas
+    const routeFromHere = body.route_from_here === true ||
+      /\bruta\b[^.?!\n]*\b(desde donde estoy|desde aqu[ií]|donde estoy|cerca de m[ií]|por aqu[ií])\b/i.test(message || '');
     const travelDates = body.travel_dates || null;
     const transport = body.transport || null;
     const withKids = body.with_kids || false;
@@ -6938,7 +7992,54 @@ REGLAS:
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
     const guidedRoute = body.guided_route || null; // Flujo guiado: 8 campos ya recogidos por el frontend
+    // PIEZA A — Tiempo 2: el botón "Crear ruta con mapa". Convierte el texto de
+    // recomendaciones (source_text) en guía con mapa SIN volver a generar el plan
+    // ni re-escribirlo en el chat. Si la conversión falla, se avisa — NO se cae al
+    // bucle largo de búsquedas (eso duplicaba el texto y tardaba minutos).
+    const guidedMapStage = body.guided_stage === 'map';
+    const sourceText = typeof body.source_text === 'string' ? body.source_text.trim() : ''; // Fast-path: texto ya generado, convertir directo a mapa
+    // PIEZA A — FLUJO ÚNICO. TODA petición de ruta/destino escrita en el chat (no el botón de
+    // mapa, no editando una ruta ya abierta) se responde como Tiempo 1: recomendaciones en
+    // prosa + botón "Crear ruta con mapa". Sin mapa hasta que el usuario pulsa el botón.
+    // Así "3 días Málaga", "San Pedro Alcántara" y el chip de 8 preguntas se comportan igual.
+    const _guidedStageReco = body.guided_stage === 'reco';
+    // "Editando" solo si hay ruta cargada Y el mensaje suena a retoque ("quita la parada 2",
+    // "añade un día", "en vez de..."). Un destino nuevo escrito con una ruta abierta NO es
+    // edición: va por el Tiempo 1 igual que si no hubiera nada cargado.
+    const _looksLikeEdit = /\b(quita|quíta|elimina|borra|a[ñn]ade|agrega|mete|cambia|sustituye|reempla|mueve|pon(?:le|me)?|swap|m[aá]s d[ií]as|menos d[ií]as|en vez de|en lugar de|otra parada|esa parada|la parada)\b/i.test(message || '');
+    const _editingRoute = _looksLikeEdit && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
+    const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 &&
+      (isRouteRequest(message, history) || isDaysDestination(message));
+    const guidedIsReco = _guidedStageReco || _tiempo1Chat;
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
+
+    // ─── ANCLA DE PAÍS DEL DESTINO (flujo guiado) ───
+    // Resuelve "Córdoba" → país concreto por Geocoding (con desempate por cercanía al GPS)
+    // ANTES de generar. Se reutiliza en buildMessages, convertProseToRouteJson y verifyAllStops.
+    // Si falla → null → todo se comporta como antes.
+    let anchorCountry = null;
+    let _anchorSrc = '';
+    {
+      // Destino: del cuestionario guiado, o extraído del mensaje. Se calcula para el Tiempo 1
+      // (ancla en la prosa: "Córdoba" no se va a Argentina) y para el Tiempo 2 (ancla en verify).
+      let _anchorDestino = (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino) : null;
+      if (_anchorDestino) _anchorSrc = 'guided';
+      // dest_hint viene del front ya limpio ("3 días Ciudad Real" → "Ciudad Real"). Es lo fiable.
+      if (!_anchorDestino && typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) {
+        _anchorDestino = body.dest_hint.trim();
+        _anchorSrc = 'hint';
+      }
+      if (!_anchorDestino && (isRouteRequest(message, history) || isDaysDestination(message) || guidedMapStage)) {
+        try {
+          const _loc = extractHelpLocation(message, history, currentRoute);
+          if (_loc && String(_loc).trim().length >= 2) { _anchorDestino = String(_loc).trim(); _anchorSrc = 'extract'; }
+        } catch (_) {}
+      }
+      if (_anchorDestino) {
+        try { anchorCountry = await resolverPaisDestino(_anchorDestino, userLocation, env); } catch (_) {}
+        console.log(`[ANCLA-PAIS] src=${_anchorSrc} "${_anchorDestino}" → ${anchorCountry ? anchorCountry.countryName + ' (' + anchorCountry.countryCode + ') pointScope=' + anchorCountry.pointScope + ' ' + anchorCountry.lat + ',' + anchorCountry.lng : 'NULL'}`);
+      }
+    }
 
     // ─── BYPASS: petición explícita de enlace Google Maps ───
     // Si el usuario pide un link (enlace/link/maps/cómo llegar/dónde está/ubicación/dirección),
@@ -7162,6 +8263,37 @@ INSTRUCCIONES:
       } catch (e) { /* Fallo silencioso */ }
     }
 
+    // ─── D + NIVEL 1: VERIFICACIÓN DE HECHOS CRÍTICOS (pre-Claude) ───
+    // Para categorías donde inventar sale caro (carretera única, visado, frontera, seguridad),
+    // el backend busca por su cuenta ANTES de que Claude responda — igual que ya se hace con
+    // el tiempo real — para no depender de que el modelo decida buscar por su cuenta.
+    let factCheckData = null;
+    if (env.BRAVE_SEARCH_KEY) {
+      const _fcQueries = {};
+      const _fcRoad = extractPreferredRoad(message);
+      if (_fcRoad) {
+        _fcQueries.road = `carretera ${_fcRoad} tramos discontinuos cortada cerrada 2026`;
+      }
+      if (/\b(visado|visa|e-visa|frontera|cruzar a pie|es seguro viajar a|es peligroso ir a|zona de conflicto|alerta de viaje|guerra en)\b/i.test(message)) {
+        const nat = userNationality || 'español';
+        _fcQueries.visaBorderSafety = `${message.slice(0, 90)} visado frontera seguridad ${nat} 2026`;
+      }
+      const fcKeys = Object.keys(_fcQueries);
+      if (fcKeys.length) {
+        try {
+          const fcResults = await Promise.all(fcKeys.map(k => buscarWeb({ query: _fcQueries[k] }, env.BRAVE_SEARCH_KEY).catch(() => null)));
+          const fcData = {};
+          fcKeys.forEach((k, i) => {
+            const r = fcResults[i];
+            if (r && Array.isArray(r.resultados) && r.resultados.length) {
+              fcData[k] = r.resultados.slice(0, 3).map(x => `${x.titulo}: ${x.snippet}`).join('\n');
+            }
+          });
+          if (Object.keys(fcData).length) factCheckData = fcData;
+        } catch (e) { /* Fallo silencioso — Claude sigue sin este dato, no se bloquea la respuesta */ }
+      }
+    }
+
     // ─── KV LOOKUP (pre-Claude) ───
     let kvCountryData = null;
     let kvDestinationData = null;
@@ -7230,7 +8362,7 @@ INSTRUCCIONES:
             'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
             'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
             'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
-            'nepal': 'NP', 'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
+            'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
             'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN', 'ruanda': 'RW', 'rwanda': 'RW',
           };
 
@@ -7288,7 +8420,10 @@ INSTRUCCIONES:
           // Leer KV en paralelo (en vez de secuencial — ahorra ~200ms)
           const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
           const days = daysMatch ? daysMatch[1] : null;
-          const routeKey = (isRouteRequest(message, history) && days)
+          // PIEZA A — ni en el Tiempo 1 (recomendaciones) ni en el Tiempo 2 (botón) se
+          // sirve una ruta cacheada por delante: el Tiempo 2 debe montar el mapa a partir
+          // del texto de recomendaciones que el usuario acaba de ver, no otra ruta distinta.
+          const routeKey = (isRouteRequest(message, history) && days && !guidedIsReco && !guidedMapStage)
             ? 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days
             : null;
 
@@ -7324,7 +8459,12 @@ INSTRUCCIONES:
     const _cachedDaySet = new Set((kvCachedRoute?.stops || []).map(s => s.day));
     const _cachedDayCount = _cachedDaySet.size || 1;
     const _cachedQuality = _cachedStops / _cachedDayCount >= 3;
-    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
+    // PIEZA A — cortocircuito de caché DESACTIVADO. Servía rutas viejas (de un cron
+    // sin verificar) por delante de la IA: respuesta instantánea pero errónea, saltándose
+    // el flujo de recomendaciones + botón. Se regenera siempre. Reactivar solo con un
+    // marcador de versión de motor y calidad garantizada.
+    const _CACHE_SHORTCIRCUIT_ENABLED = false;
+    if (_CACHE_SHORTCIRCUIT_ENABLED && kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
       // BLOQUE E — la ruta de KV no pasó por verifyAllStops: validar sus enlaces de Maps
       try {
         const _r = await validarYCorregirLinksMaps(kvCachedRoute, { surface: 'ruta_guiada', region: kvCachedRoute.region || kvCachedRoute.country || '', userId: uid });
@@ -7341,11 +8481,19 @@ INSTRUCCIONES:
     }
 
     // KV solo para rutas y guías — en todo lo demás Claude usa sus tools
-    const isRoute = isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute;
-    const skipKV = !isRoute;
+    // PIEZA A — guidedIsReco (Tiempo 1): NO es modo ruta (no genera JSON) aunque el
+    // mensaje lleve "N días", pero SÍ merece contexto KV para unas buenas recomendaciones.
+    const isRoute = !guidedIsReco && (isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute);
+    const skipKV = !isRoute && !guidedIsReco;
+
+    // No cortar con una respuesta corta de KV si el usuario pide EXPLÍCITAMENTE una guía/ruta
+    // o viene del botón "Crear ruta con mapa" (T2). Blindaje contra colisiones de subcadena
+    // (una palabra suelta del texto secuestrando la petición y devolviendo un factoide).
+    const _explicitRouteAsk = guidedMapStage || !!guidedRoute ||
+      /hazme\s+una\s+(gu[ií]a|ruta)|mont[ae]me\s+una\s+ruta|cr[eé]a(?:me)?\s+una\s+ruta/i.test(message || '');
 
     // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para rutas/guías ───
-    if (kvCountryData && !skipKV && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
+    if (kvCountryData && !skipKV && !_explicitRouteAsk && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
       const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
       if (kvDirectReply) {
         return new Response(
@@ -7357,7 +8505,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -7400,7 +8548,12 @@ INSTRUCCIONES:
     // Todo va a Claude Sonnet (visión nativa incluida)
     const useAnthropic = true;
     const reqModel = 'gpt-4o-mini'; // fallback legacy (no se usa si useAnthropic=true)
-    const reqMaxTokens = needsTools ? 6000 : 3000;
+    // Rutas: la respuesta = prosa larga + SALMA_ROUTE_JSON con 16-40 paradas (cada una ~180 tokens).
+    // Con 6000 se truncaba el JSON a mitad y la ruta llegaba null. Sonnet admite hasta 64k de salida.
+    // 24000 da margen para una ruta de 7 días (el tope single-shot; ≥8 días va por bloques).
+    // PIEZA A — el Tiempo 1 (recomendaciones) no es "isRoute" pero puede ser largo
+    // (viajes de 11-16 días en prosa) → margen amplio para que no se trunque.
+    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (needsTools ? 6000 : 3000));
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -7440,7 +8593,7 @@ INSTRUCCIONES:
     // Todo el flujo (incluido el bucle agentic) ocurre dentro de ctx.waitUntil
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
-      const MAX_TOOL_ITERATIONS = 5;  // Seguridad: máximo 5 tool calls por turno
+      const MAX_TOOL_ITERATIONS = 10;  // Seguridad: máximo 10 tool calls por turno (subido de 5 — rutas con restricción de carretera única necesitan varias búsquedas de buscar_lugar antes de cerrar el JSON)
       const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
@@ -7525,7 +8678,10 @@ INSTRUCCIONES:
         }
 
         // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
-        if (longRoute) {
+        // PIEZA A — NO en el Tiempo 1: este pipeline (gpt-4o-mini, sin grounding) genera
+        // la ruta entera con JSON e ignora guidedIsReco → se saltaba las recomendaciones
+        // y devolvía puntos por toda la región. En 'reco' se usa el camino normal de prosa.
+        if (longRoute && !guidedIsReco) {
           const days = extractDaysFromMessage(message);
           try {
             // 1. Texto intro streameado
@@ -7564,26 +8720,8 @@ INSTRUCCIONES:
                   _urlIncidents.push(..._r.incidents);
                 } catch (_) {}
 
-                // Guardar en KV nivel 3 — con múltiples keys para matchear
-                if (route.stops && route.stops.length > 0 && env.SALMA_KB) {
-                  try {
-                    const routeJson = JSON.stringify(route);
-                    const ttl = { expirationTtl: 2592000 }; // 30 días
-                    const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-                    const region = (route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-                    const title = (route.title || route.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-                    const cc = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
-                    // Key principal (region completa)
-                    if (region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${region}:${days}`, routeJson, ttl));
-                    // Key simple (solo país/destino — para matchear "3 días en Sevilla")
-                    if (country && country !== region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${country}:${days}`, routeJson, ttl));
-                    // Key por primera palabra relevante del destino
-                    const simpleKey = region.split(',')[0].split('-')[0].trim();
-                    if (simpleKey && simpleKey !== country && simpleKey !== region) {
-                      ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${simpleKey}:${days}`, routeJson, ttl));
-                    }
-                  } catch (_) {}
-                }
+                // Guardar en KV nivel 3 (máx. 2 keys deterministas, ver cacheGeneratedRoute)
+                await cacheGeneratedRoute(env, ctx, route, days);
 
                 const doneEvtB = { done: true, reply, route };
                 if (photoUploadPromise) {
@@ -7617,12 +8755,55 @@ INSTRUCCIONES:
         // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
-        let _toolUrls = []; // URLs de buscar_lugar y buscar_web para inyectar si Claude no las pone
+        let _toolUrls = []; // URLs de buscar_web para inyectar si Claude no las pone (solo si el usuario pide enlaces)
+        let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web) — se muestran siempre, como el teléfono
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
+        let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
         let _pendingTransportActions = null; // Acciones de transporte para enviar en done event
         let _pendingTransportTip = null;
+        let lastStopReason = null; // 'max_tokens' | 'end_turn' | 'tool_use'… — para detectar truncado y rescatar el JSON
 
+        // ── FAST-PATH: convertir texto ya generado directamente a guía con mapa ──
+        // Botón "Crear ruta con mapa": en vez de repetir toda la búsqueda desde cero
+        // (riesgo real de agotar MAX_TOOL_ITERATIONS en rutas de varias paradas, cortando
+        // el turno a medias sin JSON), convertimos el texto que YA se generó en la respuesta
+        // anterior directamente. Si falla o no hay sourceText, cae al flujo normal sin cambios.
+        let _fastPathRoute = null;
+        let _mapStageFailed = false;
+        if (sourceText && sourceText.length > 400 && isRouteRequest(message, history)) {
+          // Antes se mandaba un chunk de texto ("Montando tu ruta con mapa...") que
+          // el front convertía en burbuja y mataba el spinner → 15s de silencio.
+          // Ahora: {generating} (spinner persistente "Generando tu ruta…") + keepalive
+          // cada 3s mientras convierte, para que no se quede mudo.
+          try {
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
+          } catch (_) {}
+          const _kaTimer = setInterval(() => {
+            writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)).catch(() => {});
+          }, 3000);
+          try {
+            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry });
+            if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
+          } catch (e) {
+            _fastPathRoute = null;
+            _convertFailReason = _convertFailReason || (e.message || 'excepción');
+          } finally {
+            clearInterval(_kaTimer);
+          }
+          // PIEZA A — Tiempo 2 (botón guiado): si la conversión falla NO caemos al bucle
+          // largo (duplicaba el plan en el chat y tardaba minutos). Se avisa y se corta.
+          if (!_fastPathRoute && guidedMapStage) _mapStageFailed = true;
+        }
+
+        if (_mapStageFailed) {
+          if (_convertFailReason) console.log(`[T2-FAIL] ${_convertFailReason}`);
+          const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
+          return; // el finally cierra el writer
+        }
+
+        if (!_fastPathRoute) {
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
           let apiRes;
           let result;
@@ -7709,6 +8890,7 @@ INSTRUCCIONES:
           }
 
           allText += result.fullText;
+          lastStopReason = result.stopReason;
 
           // ── Si terminó (no pide herramientas), salir del bucle ──
           if (result.stopReason !== 'tool_use') {
@@ -7762,11 +8944,17 @@ INSTRUCCIONES:
                   }
                 }
               }
-              // Capturar URLs de resultados de herramientas para inyectar si Claude no las pone
+              // Capturar fotos de buscar_foto (lugares/paradas) para reparar markdown roto de Claude
+              if (block.name === 'buscar_foto' && Array.isArray(toolResult.fotos) && toolResult.fotos.length > 0) {
+                const _pfKey = (toolResult.lugar || '').toLowerCase().trim();
+                if (_pfKey && toolResult.fotos[0] && toolResult.fotos[0].url) _placePhotosByName.set(_pfKey, toolResult.fotos[0].url);
+              }
+              // Capturar la web oficial de cada lugar (buscar_lugar devuelve el campo como
+              // "web", no "website" — con el nombre viejo esto nunca se disparaba y la web
+              // nunca llegaba a la respuesta, aunque Google Places sí la traía)
               if (block.name === 'buscar_lugar' && toolResult.lugares) {
                 for (const l of toolResult.lugares) {
-                  if (l.website) _toolUrls.push({ titulo: l.nombre || l.name, url: l.website });
-                  if (l.maps_link) _toolUrls.push({ titulo: (l.nombre || l.name) + ' en Maps', url: l.maps_link });
+                  if (l.web) _lugarWebUrls.push({ titulo: l.nombre || l.name, url: l.web });
                 }
                 // Capturar coords del primer resultado para deep links de transporte
                 const _firstLugar = toolResult.lugares[0];
@@ -7795,15 +8983,28 @@ INSTRUCCIONES:
           _searchingActive = false;
 
           // Añadir resultados de herramientas al historial
+          const _toolResultContent = [...toolResults];
+          // ── B: quedan pocas iteraciones libres — forzar cierre del JSON YA con lo verificado ──
+          // en vez de arriesgarse a agotar MAX_TOOL_ITERATIONS a mitad de más búsquedas
+          // (rutas atadas a una sola carretera necesitan muchas verificaciones de buscar_lugar).
+          // OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico — isRoute
+          // también es true para isDaysDestination (MODO PLAN), que PROHÍBE el JSON a propósito.
+          if (!guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute) && iteration >= MAX_TOOL_ITERATIONS - 2) {
+            _toolResultContent.push({
+              type: 'text',
+              text: '[AVISO DEL SISTEMA — quedan pocas oportunidades de búsqueda antes de que se corte tu turno. NO llames a más herramientas de verificación. Con las paradas que ya tienes verificadas hasta ahora, cierra tu respuesta YA: prosa + SALMA_ROUTE_JSON completo. Si te falta verificar alguna parada, usa el nombre y ubicación que ya conoces — no sigas buscando.]'
+            });
+          }
           currentMessages.push({
             role: 'user',
-            content: toolResults
+            content: _toolResultContent
           });
 
           // Separador entre texto de la iteración anterior y la siguiente
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: '\n\n' })}\n\n`)); } catch (_) {}
 
           // El for vuelve al inicio: OpenAI recibe los resultados y decide qué hacer
+        }
         }
 
         // ── Inyectar enlace de vuelos si GPT no lo incluyó ──
@@ -7820,6 +9021,16 @@ INSTRUCCIONES:
           if (tagMatch) {
             photoTag = tagMatch[1].toLowerCase();
             allText = allText.replace(/\n?FOTO_TAG:\s*\w+/i, '').trim();
+          }
+        }
+
+        // ── Extraer HISTORIA_LUGAR si la hubo ──
+        let historiaLugar = null;
+        {
+          const histMatch = allText.match(/\n?HISTORIA_LUGAR:\s*(.+)/i);
+          if (histMatch) {
+            historiaLugar = histMatch[1].trim();
+            allText = allText.replace(/\n?HISTORIA_LUGAR:\s*.+/i, '').trim();
           }
         }
 
@@ -7841,26 +9052,45 @@ INSTRUCCIONES:
         }
 
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
-        let route = extractRouteFromReply(allText);
+        // PIEZA A — Tiempo 1 (recomendaciones): aunque el modelo se saltase la orden y
+        // emitiera un SALMA_ROUTE_JSON, aquí NO se convierte en ruta. Solo prosa + botón.
+        let route = _fastPathRoute || (guidedIsReco ? null : extractRouteFromReply(allText));
         let reply = replyWithoutRouteBlock(allText);
+        if (_fastPathRoute && !reply) reply = _fastPathRoute.title ? `Tu ruta por ${_fastPathRoute.title} está lista.` : 'Tu ruta está lista.';
 
-        // ── FALLBACK: era petición de guía pero el modelo olvidó SALMA_ROUTE_JSON ──
-        // Pasa cuando el modelo escribe el plan en prosa larga y se olvida del JSON al final.
-        // Hacemos una 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
-        if (!route && isRouteRequest(message, history) && allText && allText.length > 600) {
+        // ── RESCATE 1: el JSON empezó pero se cortó por max_tokens ──
+        // Reconstituimos con las paradas completas antes de gastar otra llamada a Claude.
+        // (En Tiempo 1 NO — aunque el modelo se salte la orden y emita JSON, no hay mapa.)
+        if (!route && !guidedIsReco && allText.includes('SALMA_ROUTE_JSON')) {
+          const salvaged = salvageIncompleteRouteJson(allText);
+          if (salvaged) {
+            route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + salvaged);
+            if (route) console.log(`[RESCATE] ✓ JSON truncado reconstruido: ${route.stops.length} paradas (stop_reason: ${lastStopReason || 'n/d'})`);
+          }
+        }
+
+        // ── RESCATE 2 (FALLBACK): era petición de ruta pero no hay JSON usable ──
+        // Cubre: (a) el modelo escribió el plan en prosa y se olvidó del JSON,
+        //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
+        // 2ª llamada a Claude para extraer el JSON del texto (sin prefill: el modelo no lo admite).
+        // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
+        if (!route && !guidedIsReco && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
-{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","con_historia":true,"day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
 
 REGLAS:
-- Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no).
+- Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
+- "country" = país real (ej. "Portugal"). "region" = región o zona real (ej. "Algarve"), nunca con "desde", números de carretera ni medio de transporte.
 - "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
-- "narrative" = 1-2 frases del plan original sobre la parada.
-- NO inventes paradas que no estén en el plan.`;
+- "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
+- NO inventes paradas que no estén en el plan.
+- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.
+- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.`;
 
-            const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 12000)}`;
+            const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 40000)}`;
 
             const fallbackRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
               method: 'POST',
@@ -7871,28 +9101,25 @@ REGLAS:
               },
               body: JSON.stringify({
                 model: 'claude-sonnet-4-6',
-                max_tokens: 6000,
+                // claude-sonnet-4-6 NO admite prefill de assistant → la conversación acaba en user.
+                max_tokens: 20000,
                 system: fallbackSys,
                 messages: [
                   { role: 'user', content: fallbackUser },
-                  { role: 'assistant', content: '{' },  // prefill — fuerza JSON desde la primera línea
                 ],
               }),
-              signal: AbortSignal.timeout(45000),
+              signal: AbortSignal.timeout(60000),
             });
 
             if (fallbackRes.ok) {
               const fallbackData = await fallbackRes.json();
-              const jsonTail = fallbackData.content?.[0]?.text || '';
-              const fullJson = '{' + jsonTail; // recomponer con el prefill
-              try {
-                const parsed = JSON.parse(fullJson);
-                if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 3) {
-                  route = parsed;
-                  console.log(`[FALLBACK] ✓ JSON generado a posteriori: ${parsed.stops.length} paradas`);
-                }
-              } catch (e) {
-                console.log(`[FALLBACK] ✗ JSON inválido: ${e.message}`);
+              const parsed = parseModelRouteJson(fallbackData.content?.[0]?.text || '');
+              if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
+                route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
+                route._fallback = true;
+                console.log(`[FALLBACK] ✓ JSON generado a posteriori: ${parsed.stops.length} paradas`);
+              } else {
+                console.log(`[FALLBACK] ✗ JSON sin paradas suficientes`);
               }
             }
           } catch (e) {
@@ -7900,13 +9127,31 @@ REGLAS:
           }
         }
 
-        // ── Reparar markdown de imagen roto de Claude en respuestas de hotel ──
-        // Sonnet a veces emite ![Name]( + saltos de línea + url_enlace en vez de ![Name](url_foto).
+        // ── C: si tras ambos rescates seguimos sin ruta pero era intención de ruta,
+        //    decirlo claramente en vez de entregar la respuesta como si nada
+        //    (antes solo quedaba constancia en el log — el usuario no se enteraba).
+        //    OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico —
+        //    isRoute también es true para isDaysDestination (MODO PLAN), que PROHÍBE
+        //    el JSON a propósito; ahí route=null es el comportamiento correcto, no un fallo. ──
+        if (!route && !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute)) {
+          console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
+          const _honestNote = '\n\n_No he podido montar el mapa interactivo de esta ruta — aquí tienes toda la información en texto. Puedes pedírmelo de nuevo o pulsar "Generar guía con mapa" para reintentarlo._';
+          reply = (reply || '').trimEnd() + _honestNote;
+          allText += _honestNote;
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _honestNote })}\n\n`)); } catch (_) {}
+        }
+
+        // ── Reparar markdown de imagen roto de Claude (hoteles y lugares/buscar_foto) ──
+        // Sonnet a veces emite ![Name]( + saltos de línea, o ![Name](url... que nunca cierra con '\)'
+        // (URL de foto larga truncada al copiarla), en vez de ![Name](url_foto) bien formado.
         // Sustituimos por la foto correcta del tool result; si no hay match, quitamos el fragmento huérfano.
-        if (_hotelPhotosByName.size > 0 && !route) {
-          reply = reply.replace(/!\[([^\]]+)\]\(\s*(?:\n|$)/g, (_match, name) => {
-            const entry = _hotelPhotosByName.get(name.toLowerCase().trim());
-            if (entry && entry.foto) return `![${name}](${entry.foto})\n`;
+        if ((_hotelPhotosByName.size > 0 || _placePhotosByName.size > 0) && !route) {
+          reply = reply.replace(/!\[([^\]]+)\]\(([^)]*)(?=\n|!\[|$)/g, (_match, name, _partial) => {
+            const key = name.toLowerCase().trim();
+            const hotelEntry = _hotelPhotosByName.get(key);
+            if (hotelEntry && hotelEntry.foto) return `![${name}](${hotelEntry.foto})`;
+            const placeUrl = _placePhotosByName.get(key);
+            if (placeUrl) return `![${name}](${placeUrl})`;
             return '';
           });
         }
@@ -7922,8 +9167,23 @@ REGLAS:
           reply = formatDayHeaders(reply, _numDays);
         }
 
+        // ── ¿El usuario quiere ver enlaces? ── Por defecto NO: nada de URLs de blogs/webs/
+        // artículos en la respuesta. Solo si lo pide explícitamente, o si es transporte
+        // (donde una URL oficial de reserva SÍ es el resultado que ha pedido). — 7 sept 2026
+        const _userWantsLinks =
+          /\b(enlace|enlaces|link|links|url|p[aá]gina web|web oficial|fuente|fuentes|referencia|de d[oó]nde (?:lo )?(?:sacas|sale)|d[oó]nde (?:lo )?(?:pone|dice|has visto))\b/i.test(message || '')
+          || helpCategory === 'transport'
+          || isHotelRequest(message) || isFlightRequest(message)
+          || /\balquil|coche.*alquil|rent.*car\b/i.test(message || '');
+
         // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
-        if (!route && env.GOOGLE_PLACES_KEY) {
+        // PIEZA A — en el Tiempo 1 (recomendaciones) NO se inyectan: ni "Cómo llegar" por
+        // parada ni "Ruta completa en Google Maps". Esos enlaces son para la guía ya montada.
+        // BUG A (8 sep) — tampoco en respuestas a FOTOS: la identificación por imagen es una
+        // conjetura; si el nombre casa con algún sitio real, se inyectaba un enlace autoritativo
+        // a un lugar que podía no ser el de la foto. El flujo de "guardar en el mapa" usa
+        // SALMA_ACTION:MAP_PIN, no estos enlaces, así que no se rompe.
+        if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY) {
           // Extraer destino del mensaje del usuario (prioritario sobre GPS)
           let _msgDest = (message || '').trim();
           _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
@@ -7980,11 +9240,12 @@ REGLAS:
 
         // (transport_actions ya emitidos ANTES de Claude)
 
-        // ── Inyectar URLs de tools (buscar_lugar, buscar_web) que Claude no incluyó ──
-        if (!route && _toolUrls.length > 0) {
+        // ── Inyectar URLs de buscar_web que Claude no incluyó ──
+        // Solo si el usuario quiere ver enlaces. Por defecto NO se añade ninguna URL de blogs/webs.
+        if (!route && _toolUrls.length > 0 && _userWantsLinks) {
           const missingUrls = _toolUrls
             .filter(u => u.url && !reply.includes(u.url))
-            .filter(u => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(u.url))
+            .filter(u => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage|viajero|turismo|mundo|rutas?\b/i.test(u.url))
             .slice(0, 3);
           if (missingUrls.length > 0) {
             let toolLinksBlock = '\n';
@@ -7999,7 +9260,11 @@ REGLAS:
         // ── POST-PROCESADO FOTOS: buscar fotos e inyectar junto a cada lugar en negrita ──
         if (!route && env.GOOGLE_PLACES_KEY) {
           try {
-            // Extraer destino del mensaje del usuario (igual que injectVerifiedMapsLinks)
+            // Destino para sesgar las fotos. Prioridad: localidad del ancla ya resuelta →
+            // dest_hint limpio del front → destino del cuestionario guiado → recorte del
+            // mensaje → nombre de ciudad del GPS. El chip mandaba "Recomiéndame un plan de N
+            // días por X" (no empieza por número) → el recorte fallaba → caía al GPS (Portugal)
+            // → fotos sin resultados. Con el ancla/dest_hint eso ya no pasa.
             let _photoRegion = (message || '').trim();
             _photoRegion = _photoRegion.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
             _photoRegion = _photoRegion.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
@@ -8007,7 +9272,13 @@ REGLAS:
             const _photoValidDest = _photoRegion.length >= 3 && _photoRegion.length <= 60
               && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_photoRegion)
               && _photoRegion.split(/\s+/).length <= 8;
-            const _photoLocHint = _photoValidDest ? _photoRegion : (userLocationName || '');
+            const _dh = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
+            const _photoLocHint =
+              (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
+              : _dh ? _dh
+              : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
+              : _photoValidDest ? _photoRegion
+              : (userLocationName || '');
 
             const boldNames = [];
             const boldRegex = /\*\*([^*]{3,50})\*\*/g;
@@ -8015,6 +9286,8 @@ REGLAS:
             while ((bm = boldRegex.exec(allText)) !== null) {
               const name = bm[1].trim();
               if (/^\d|^€|^USD|^Día\s|^Tip:|^Nota:|^Precio|^Gratis|^Abierto|^Cerrado/i.test(name)) continue;
+              // No es un lugar: es la llamada a la acción del cierre ("Crear ruta con mapa").
+              if (/\b(crear ruta con mapa|crear ruta|ruta con mapa|generar (?:la )?ruta|hazme una gu[ií]a|dale a|pulsa)\b/i.test(name)) continue;
               // Rechazar 1 palabra solo si es corta (Día, Tip, Ojo…). Acepta Alhambra, Louvre, Coliseo…
               if (name.split(/\s+/).length === 1 && name.length < 5) continue;
               if (!boldNames.includes(name)) boldNames.push(name);
@@ -8044,6 +9317,34 @@ REGLAS:
               }
             }
           } catch (_) {}
+        }
+
+        // ── RED DE SEGURIDAD: fuera URLs de blogs/webs/artículos si el usuario no las ha pedido ──
+        // Aunque el prompt ya se lo dice, si el modelo cuela una URL igualmente, aquí se quita.
+        // Se respeta el markdown de imagen ![...](...) (fotos) y los enlaces de Google Maps
+        // verificados que añade el propio sistema.
+        if (!route && !_userWantsLinks) {
+          const _stripLooseUrls = (s) => {
+            if (typeof s !== 'string' || !/https?:\/\//i.test(s)) return s;
+            const _keep = [];
+            // proteger fotos ![alt](url) y enlaces Maps verificados
+            s = s.replace(/!\[[^\]]*\]\([^)]+\)/g, (m) => { _keep.push(m); return `~K${_keep.length - 1}~`; });
+            s = s.replace(/\[[^\]]*\]\(https?:\/\/(?:www\.)?google\.[^)]*\/maps[^)]*\)/gi, (m) => { _keep.push(m); return `~K${_keep.length - 1}~`; });
+            s = s.replace(/https?:\/\/(?:www\.)?google\.[^\s)]*\/maps[^\s)]*/gi, (m) => { _keep.push(m); return `~K${_keep.length - 1}~`; });
+            // líneas que son básicamente una cita/fuente con URL → fuera enteras
+            s = s.replace(/^[ \t>]*[-•*]?[ \t]*(?:[\u{1F300}-\u{1FAFF}☀-➿]️?[ \t]*)?[^\n]*https?:\/\/[^\n]*$/gmu, '');
+            // enlaces markdown [txt](url) → dejar solo txt
+            s = s.replace(/\[([^\]]+)\]\(https?:\/\/[^)]+\)/g, '$1');
+            // cualquier URL suelta que quede
+            s = s.replace(/\(?\bhttps?:\/\/[^\s)]+\)?/g, '');
+            // limpieza de restos
+            s = s.replace(/[ \t]+$/gm, '').replace(/\n{3,}/g, '\n\n')
+                 .replace(/^[ \t]*[|—–\-·:]+[ \t]*$/gm, '').trim();
+            s = s.replace(/~K(\d+)~/g, (_, i) => _keep[+i] || '');
+            return s;
+          };
+          reply = _stripLooseUrls(reply);
+          if (typeof allText === 'string') allText = _stripLooseUrls(allText);
         }
 
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
@@ -8085,15 +9386,57 @@ REGLAS:
           }
 
           // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
-          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
+          // El front pinta el borrador en el mapa y luego, en una ruta con borrador, SOLO
+          // parchea fotos — nunca quita ni mueve las paradas que verify descarta/corrige.
+          // En el Tiempo 2 guiado (o con ancla) las coords vienen SIN verificar por
+          // definición → NO se manda borrador, se manda la ruta una sola vez ya verificada.
+          if (!guidedMapStage && !anchorCountry) {
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
+          } else {
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
+          }
 
           // ── PASO 3: Verify con Google Places (fotos + coords reales) ──
+          // Keepalive mientras dura: con rutas de muchas paradas dispersas (varias rondas
+          // de búsqueda por parada) esta llamada puede tardar bastante, y sin nada viajando
+          // por el stream algunas redes/proxies cortan la conexión (network error en el
+          // cliente a media espera, sin que llegue a verse la guía).
+          const _verifyKa = setInterval(() => {
+            writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)).catch(() => {});
+          }, 3000);
           try {
             if (env.GOOGLE_PLACES_KEY) {
-              const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
+              const _anchorDays = extractDaysFromMessage(message)
+                || (guidedRoute && parseInt(guidedRoute.duracion_dias, 10))
+                || (sourceText && extractDaysFromMessage(sourceText))
+                || 0;
+              const _vOpts = anchorCountry ? {
+                forceCountryCode: anchorCountry.countryCode,
+                forceCountryName: anchorCountry.countryName,
+                anchorLat: anchorCountry.lat,
+                anchorLng: anchorCountry.lng,
+                anchorPointScope: !!anchorCountry.pointScope,
+                anchorDays: _anchorDays,
+                anchorLocality: anchorCountry.locality || '',
+                anchorProvince: anchorCountry.province || '',
+              } : {};
+              const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts);
               if (verified) route = verified;
             }
-          } catch (_) {}
+          } catch (_) {
+          } finally {
+            clearInterval(_verifyKa);
+          }
+
+          // Traza en servidor (wrangler tail) del anclaje y el ceñido. NO toca route.title.
+          if (route) {
+            const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
+            const _near = Array.isArray(route.nearby_stops) ? route.nearby_stops.length : 0;
+            const _a = anchorCountry
+              ? `${anchorCountry.countryCode} loc:"${anchorCountry.locality||'?'}" prov:"${anchorCountry.province||'?'}" ps:${anchorCountry.pointScope ? 'T' : 'F'}`
+              : 'NULL';
+            console.log(`[CEÑIDO] ancla=${_a} ${_fastPathRoute ? 'fp' : 'gen'} ${route.stops?.length || 0}ok/${_disc}desc/${_near}near`);
+          }
         }
 
         // ── BLOQUE E: validar enlaces de Google Maps antes de cachear y entregar ──
@@ -8116,31 +9459,104 @@ REGLAS:
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
-        if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
+        // Adjuntar carretera preferida detectada (p.ej. "sin salirte de la N2")
+        // para que el frontend pueda pedir /directions con preferRoad y avisar si se desvía.
+        if (route) {
+          const _preferredRoad = extractPreferredRoad(message);
+          if (_preferredRoad) route.preferred_road = _preferredRoad;
+
+          // FASE 2 — si el usuario nombró una carretera concreta ("sigue la N2",
+          // "Great Ocean Road"…), adjuntar su geometría real de OSM (precargada en
+          // KV ROAD_GEOM) para que el mapa trace ESA carretera en vez de "la más
+          // rápida" de Directions. cacheOnly = nunca llama a Overpass en el hot path.
           try {
-            const routeJson = JSON.stringify(route);
-            const ttl = { expirationTtl: 2592000 }; // 30 días
-            const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-            const region = (route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-            const days = route.duration_days || route.stops.filter((s, i, arr) => i === 0 || s.day !== arr[i-1]?.day).length;
-            const cc = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
-            if (region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${region}:${days}`, routeJson, ttl));
-            if (country && country !== region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${country}:${days}`, routeJson, ttl));
-            const simpleKey = region.split(',')[0].split('-')[0].trim();
-            if (simpleKey && simpleKey !== country && simpleKey !== region) {
-              ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${simpleKey}:${days}`, routeJson, ttl));
+            const _rq = extractRoadQuery(message, (anchorCountry && anchorCountry.countryCode) || route.country || '');
+            if (_rq) {
+              const _road = await resolveNamedRoad(_rq, { kv: env.ROAD_GEOM, cacheOnly: true });
+              if (_road && _road.ok && Array.isArray(_road.geometry) && _road.geometry.length > 1) {
+                route.road_geometry = {
+                  name: _road.road.name || null,
+                  ref: _road.road.ref || _rq.ref || null,
+                  coords: _road.geometry,           // [[lat,lng], …] simplificada
+                  length_km: _road.length_km,
+                  continuity: _road.continuity,     // clean | minor_gaps | fragmented
+                  osm_relation: _road.road.relation_id || null,
+                };
+                if (!route.preferred_road && route.road_geometry.ref) {
+                  route.preferred_road = route.road_geometry.ref;
+                }
+                console.log(`[ROAD] ${_rq.cacheSlug || _rq.ref || _rq.name} → ${_road.length_km}km [${_road.continuity}] ${_road.geometry.length}pts`);
+              }
             }
-          } catch (_) { /* fallo silencioso */ }
+          } catch (e) { console.log('[ROAD] skip: ' + e.message); }
+        }
+
+        // Guardar ruta en KV (nivel 3 — máx. 2 keys deterministas, ver cacheGeneratedRoute)
+        if (route) {
+          const _days3 = route.duration_days || (route.stops || []).filter((s, i, arr) => i === 0 || s.day !== arr[i-1]?.day).length;
+          await cacheGeneratedRoute(env, ctx, route, _days3);
+        }
+
+        // ── Catch-all: Claude a veces escribe la web como texto plano en su propia
+        // línea (p.ej. "campinglagomar.es" suelto) a pesar de que el prompt se lo
+        // prohíbe expresamente — pasa cuando reutiliza un lugar que ya conocía de
+        // antes en la conversación, sin volver a llamar a buscar_lugar. Detectamos
+        // esa línea (solo caracteres de dominio, un punto, TLD alfabético al final)
+        // y la convertimos en enlace real en vez de dejarla sin subrayar.
+        if (!route) {
+          reply = reply.replace(
+            /^[ \t]*([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,24})[ \t]*$/gim,
+            (_m, domain) => `🔗 https://${domain}`
+          );
+        }
+
+        // ── Inyectar la web oficial de cada lugar recomendado (buscar_lugar) ──
+        // A diferencia de buscar_web, esto SIEMPRE se muestra si Google Places la tiene —
+        // es un dato del propio sitio (como el teléfono), no un enlace externo a un blog/guía.
+        // OJO: va DESPUÉS de la "RED DE SEGURIDAD" (arriba) que borra cualquier línea con URL
+        // cuando !_userWantsLinks — si se pone antes, esa limpieza se come esta línea igual
+        // que se comía cualquier otra (bug real: se probó y desapareció).
+        if (!route && _lugarWebUrls.length > 0) {
+          const missingWebs = _lugarWebUrls
+            .filter(u => {
+              if (!u.url || reply.includes(u.url)) return false;
+              // Comparar también por dominio (no solo URL exacta) — si el catch-all
+              // de arriba ya convirtió el nombre suelto en enlace, no duplicar.
+              try {
+                const host = new URL(u.url).hostname.replace(/^www\./, '');
+                if (host && reply.includes(host)) return false;
+              } catch (_) {}
+              return true;
+            })
+            .slice(0, 3);
+          if (missingWebs.length > 0) {
+            let webBlock = '\n';
+            for (const u of missingWebs) {
+              // 🔗 (no 🌐): el frontend solo trata como URL de confianza (sin filtrar por
+              // dominio) las líneas que empiezan por 🔗 — ver sanitizeUrls() en app.js
+              webBlock += `\n🔗 ${(u.titulo || '').slice(0, 60)} — ${u.url}`;
+            }
+            reply += webBlock;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: webBlock })}\n\n`)); } catch (_) {}
+          }
         }
 
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
+        // PIEZA A — FLUJO ÚNICO: si esto fue Tiempo 1 (recomendaciones sin mapa), decirle al
+        // front que muestre el botón "Crear ruta con mapa". map_base_msg = destino/petición
+        // original, para que el Tiempo 2 sepa de qué ruta hablar.
+        if (guidedIsReco && !guidedMapStage && !route) {
+          doneEvt.offer_map_button = true;
+          doneEvt.map_base_msg = _guidedStageReco ? null : (message || '').slice(0, 200);
+        }
         if (photoUploadPromise) {
           const photoResult = await photoUploadPromise;
           if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }
         }
         if (photoTag) doneEvt.photo_tag = photoTag;
+        if (historiaLugar) doneEvt.historia_lugar = historiaLugar;
         // Caption breve para la galería (primera frase de la respuesta de Salma)
         if (imageBase64 && reply) {
           const firstSentence = reply.split(/[.\n]/).filter(s => s.trim().length > 5)[0];
@@ -8326,7 +9742,7 @@ REGLAS:
   async _cronNivel3(env) {
     const MAX_ROUTES = 3; // máx rutas por ejecución (~$0.18)
     const ROUTE_PROMPT_TEMPLATE = (destName, country, days, region) =>
-      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico.`;
+      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","con_historia":true,"day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico. con_historia:true si el lugar tiene interés histórico/cultural real, false si es funcional (aparcamiento, gasolinera).`;
 
     try {
       // Leer índice de destinos con rutas generadas
@@ -8351,7 +9767,9 @@ REGLAS:
 
         const destJson = await env.SALMA_KB.get('dest:' + code + ':destinos');
         if (!destJson) continue;
-        const destinos = JSON.parse(destJson);
+        const destParsed = JSON.parse(destJson);
+        // Admite ambos formatos históricos: array pelado o {pais,codigo,destinos:[...]}
+        const destinos = Array.isArray(destParsed) ? destParsed : (destParsed.destinos || []);
 
         // Ficha del país para el nombre
         const baseJson = await env.SALMA_KB.get('dest:' + code + ':base');
@@ -8372,7 +9790,7 @@ REGLAS:
             const prompt = ROUTE_PROMPT_TEMPLATE(dest.nombre, countryName, dest.dias_recomendados || 3, dest.region || '');
             const result = await callOpenAI(env.OPENAI_API_KEY, {
               model: 'gpt-4o-mini',
-              max_tokens: 6000,
+              max_tokens: 16000, // ruta cacheada nivel 3: 6000 truncaba destinos de 5+ días (tope gpt-4o-mini: 16384)
               temperature: 0.7,
               messages: [{ role: 'user', content: prompt }],
             });
@@ -8381,7 +9799,12 @@ REGLAS:
             const jsonMatch = text.match(/\{[\s\S]*\}/);
             if (!jsonMatch) throw new Error('No JSON');
 
-            const route = JSON.parse(jsonMatch[0]);
+            let route;
+            try { route = JSON.parse(jsonMatch[0]); } catch (_) {
+              const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + jsonMatch[0]);
+              if (!sv) throw new Error('JSON inválido');
+              route = JSON.parse(sv);
+            }
             if (!route.stops || route.stops.length === 0) throw new Error('Sin paradas');
 
             // Validar calidad de la ruta antes de guardar

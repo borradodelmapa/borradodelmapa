@@ -1,0 +1,6 @@
+{
+  "name": "bdm-road-resolver",
+  "private": true,
+  "type": "module",
+  "description": "Resolver de carreteras con nombre vía OSM/Overpass. Aislado: salma-worker.js lo importa; una futura app (moteros) puede reusarlo tal cual."
+}
