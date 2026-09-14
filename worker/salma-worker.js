@@ -8767,6 +8767,25 @@ INSTRUCCIONES:
         let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web) — se muestran siempre, como el teléfono
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
+        // Repara ![Name](...) roto o corrupto de Claude usando la URL real que ya devolvió
+        // el tool_result (nunca la que Claude haya podido teclear mal). Antes solo se
+        // detectaba el caso "nunca cierra con )" (URL truncada); un ![Name](url con un
+        // espacio o carácter de más COLADO en medio del photo_ref larguísimo, pero que
+        // por casualidad sí cierra con ')', se colaba entero — el frontend no lo reconoce
+        // como imagen (su regex exige que la URL no tenga espacios) y el usuario ve el
+        // markdown crudo + la URL larga como texto/enlace. Con nombre conocido, siempre
+        // se sustituye por la URL buena; sin nombre conocido, solo se quita si nunca cerró.
+        const _repairBrokenPhotoMarkdown = (s) => {
+          if ((_hotelPhotosByName.size === 0 && _placePhotosByName.size === 0) || typeof s !== 'string') return s;
+          return s.replace(/!\[([^\]]+)\]\(([^)\n]*)\)?/g, (fullMatch, name, _partial) => {
+            const key = name.toLowerCase().trim();
+            const hotelEntry = _hotelPhotosByName.get(key);
+            if (hotelEntry && hotelEntry.foto) return `![${name}](${hotelEntry.foto})`;
+            const placeUrl = _placePhotosByName.get(key);
+            if (placeUrl) return `![${name}](${placeUrl})`;
+            return fullMatch.endsWith(')') ? fullMatch : '';
+          });
+        };
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
         let _pendingTransportActions = null; // Acciones de transporte para enviar en done event
         let _pendingTransportTip = null;
@@ -9152,17 +9171,10 @@ REGLAS:
         // ── Reparar markdown de imagen roto de Claude (hoteles y lugares/buscar_foto) ──
         // Sonnet a veces emite ![Name]( + saltos de línea, o ![Name](url... que nunca cierra con '\)'
         // (URL de foto larga truncada al copiarla), en vez de ![Name](url_foto) bien formado.
-        // Sustituimos por la foto correcta del tool result; si no hay match, quitamos el fragmento huérfano.
-        if ((_hotelPhotosByName.size > 0 || _placePhotosByName.size > 0) && !route) {
-          reply = reply.replace(/!\[([^\]]+)\]\(([^)]*)(?=\n|!\[|$)/g, (_match, name, _partial) => {
-            const key = name.toLowerCase().trim();
-            const hotelEntry = _hotelPhotosByName.get(key);
-            if (hotelEntry && hotelEntry.foto) return `![${name}](${hotelEntry.foto})`;
-            const placeUrl = _placePhotosByName.get(key);
-            if (placeUrl) return `![${name}](${placeUrl})`;
-            return '';
-          });
-        }
+        // También puede cerrar bien pero con un carácter colado en medio del photo_ref
+        // larguísimo (el frontend entonces no lo reconoce como imagen y el usuario ve el
+        // markdown crudo). _repairBrokenPhotoMarkdown() cubre ambos casos.
+        if (!route) reply = _repairBrokenPhotoMarkdown(reply);
         // Inyectar Google Maps automáticamente si aplica
         reply = injectGoogleMapsLink(reply, userLocation, message, isLocalQuery);
         // Inyectar bloque de transporte (app + descarga) si aplica
@@ -9640,7 +9652,13 @@ REGLAS:
           model: reqModel,
         }));
       } catch (e) {
-        try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: allText || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
+        // El post-procesado normal (reparar fotos, links, etc.) puede no haber llegado a
+        // correr si algo de ahí arriba lanzó esta excepción — reparar aquí también antes de
+        // mandar allText en crudo, si no, el markdown de foto roto de Claude (ver
+        // _repairBrokenPhotoMarkdown) se le enseña al usuario tal cual, con la URL larguísima.
+        let _fallbackReply = allText;
+        try { _fallbackReply = _repairBrokenPhotoMarkdown(allText); } catch (_) {}
+        try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _fallbackReply || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
         // Log error
         ctx.waitUntil(logToFirestore({
           timestamp: new Date().toISOString(),

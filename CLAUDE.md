@@ -909,6 +909,42 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   reportado. `?v=` de `map-modal.js` subido a 10 en `index.html`. **Falta**: desplegar
   (push a main + GitHub Pages, no requiere Worker) y que Paco repita "ruta completa" de
   una guía con varias paradas y confirme que salen todas numeradas.
+- **Fotos del chat a veces salen como markdown crudo (`![Nombre](https://salma-api...` +
+  URL larguísima de 200-300 caracteres pegada como texto/enlace, en vez de la imagen) —
+  14 sept 2026, fix en la misma rama `claude/ruta-4-rias-mapa-c3e29a`, SIN desplegar ni
+  confirmar en pantalla.** Mismo reporte de las 4 rías: la foto de "Costa da Morte" salió
+  así. Causa, en dos capas — la propia `salma-worker.js` ya documentaba (comentario
+  previo a este fix, línea ~9171) que "Sonnet a veces emite `![Name](` + saltos de línea,
+  o `![Name](url...` que nunca cierra con `)` (URL de foto larga truncada al copiarla)":
+  Claude tiene que teclear literalmente el `photo_ref` de Google Places dentro del
+  markdown (`buscar_foto` se lo da ya hecho y le pide que lo copie), y ese token es un
+  string opaco de 200+ caracteres sin significado — un caso conocido de los LLM al
+  reproducir cadenas largas al carácter. Ya había un "reparador" para el caso "nunca
+  cierra", pero:
+  1. Solo cubría el caso sin `)` de cierre. Si Claude colaba un espacio u otro carácter
+     de más EN MEDIO del token pero el markdown sí llegaba a cerrar con `)`, el reparador
+     no lo tocaba (su regex exigía que lo siguiente al `(` fuera literalmente un salto de
+     línea/`![`/fin de texto) — y el frontend tampoco lo reconoce como imagen (su regex
+     de `![alt](url)` exige que la URL no tenga espacios), así que se veía el markdown +
+     URL en crudo, justo el síntoma reportado.
+  2. Ese reparador vivía DENTRO de un bloque `try` enorme (post-procesado: enlaces Maps,
+     fotos, días, etc.) cuyo `catch` de emergencia (línea ~9654) manda `allText` —el
+     texto sin reparar de ningún tipo— si CUALQUIER cosa de ese bloque lanza una
+     excepción (muy plausible justo con la intermitencia de red de esa sesión, ver más
+     abajo: varias llamadas a Google Places dentro de ese mismo bloque). En ese caso el
+     reparador ni siquiera llegaba a ejecutarse.
+  Fix: la lógica de reparación se movió a una función (`_repairBrokenPhotoMarkdown`,
+  declarada junto a los mapas `_hotelPhotosByName`/`_placePhotosByName`, de los que ya
+  se tira la URL BUENA — la que devolvió Google, nunca la que Claude haya podido teclear
+  mal) que ahora cubre los dos casos: con nombre reconocido, SIEMPRE sustituye por la
+  URL correcta (cierre bien o mal el markdown de Claude); sin nombre reconocido, solo
+  quita el fragmento si de verdad nunca cerró (mismo comportamiento de antes ahí). Y se
+  llama tanto en el sitio de siempre como dentro del `catch` de emergencia, para que un
+  fallo en cualquier otra parte del post-procesado no deje pasar el markdown roto sin
+  reparar. Probado con 4 casos en Node (roto-con-nombre, truncado-con-nombre,
+  bien-formado-sin-nombre, ya-correcto) — los 4 se comportan como se espera. **Falta**:
+  desplegar el Worker (`wrangler deploy -c wrangler.toml`) y que Paco pida una foto de un
+  lugar y confirme que sale como imagen, no como texto.
   **Dos síntomas más del mismo reporte, investigados, SIN tocar código:**
   1. *Buscador del mapa fullscreen ("Buscar hoteles, farmacias...") no responde* — no
      se ha encontrado la causa exacta; Paco mismo apuntó que puede no merecer la pena
@@ -923,6 +959,10 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
      intermitencia de red ya documentado el 13 sept (curl con timeout, Copiloto
      "Failed to fetch") que se concluyó que no era bug de la app. No se ha tocado nada;
      si se repite con buena señal, ahí sí habría que mirar con `wrangler tail` en vivo.
+     (Dato nuevo de este barrido: el bloque de post-procesado que puede estar fallando
+     por esa misma intermitencia — ver fix de fotos justo arriba— hace varias llamadas a
+     Google Places seguidas; si el `catch` de emergencia salta a menudo por eso, sería
+     una pista más a mirar con `wrangler tail` si se repite.)
 - **Legal incompleta** — `legal.html` sigue con `[PENDIENTE]` en 5 sitios: nombre del
   titular, CIF/NIF, dirección y email de contacto (obligatorio LSSI/GDPR).
 - **Ruta de Ronda pintó el mapa en Benahavís/San Pedro de Alcántara (13 sept) — fix
