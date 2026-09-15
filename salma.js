@@ -2717,6 +2717,7 @@ const salma = {
             <span class="wx-dot">·</span>
             <span>💨 ${d.wind_kmph} <span class="wx-dir">${d.wind_dir}</span></span>
           </div>
+          <button class="wx-toggle" onclick="salma._wxToggle()" title="Expandir">↓</button>
         </div>`;
     } else {
       banner.innerHTML = `
@@ -2726,6 +2727,7 @@ const salma = {
             <span class="wx-temp">${icon} ${d.temp}°</span>
             <span class="wx-desc">${escapeHTML(d.description)}</span>
           </div>
+          <button class="wx-toggle" onclick="salma._wxToggle()" title="Minimizar">↑</button>
         </div>
         <div class="wx-extras">
           <span>Sens. ${d.feels_like}°</span>
@@ -2736,14 +2738,6 @@ const salma = {
           ${aqiHtml}
         </div>
         ${fcHtml}`;
-    }
-    // El botón de expandir/minimizar el tiempo vive ahora en la cabecera (#ce-wx-toggle,
-    // donde antes estaba "SEP") en vez de un icono pequeño dentro del propio banner —
-    // Paco lo confundía con un botón de refrescar por lo poco visible que era.
-    const ceToggle = document.getElementById('ce-wx-toggle');
-    if (ceToggle) {
-      ceToggle.textContent = min ? '↓' : '↑';
-      ceToggle.title = min ? 'Expandir tiempo' : 'Minimizar tiempo';
     }
   },
 
