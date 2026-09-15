@@ -1278,17 +1278,24 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   bordes del toast con margen negativo) queda justo debajo, camuflándola. Le puse fondo
   circular oscuro semitransparente (`--radius-pill`) para que se lea encima de
   cualquier imagen. `?v=` de `styles.css` a 94.
-  **Chip en verde — Paco reportó que sigue sin verse, sin confirmar si fue con el
-  código nuevo cargado (la primera vez podía ser caché — ver más abajo). Sin cambios de
-  código adicionales todavía, pendiente de un debug-panel fresco antes de tocar nada
-  más.** Revisada la lógica (`_renderChatEmpty()` en `app.js` solo se ejecuta una vez al
-  entrar al chat — el resto depende de `updateNarratorChipUI()`, llamada tras activar/
-  desactivar desde los dos menús) y no se ve ningún fallo obvio por lectura de código —
-  puede ser que la prueba fallida fuera con `app.js`/`styles.css` viejos en caché
-  (mismo patrón que otras veces esta semana). **Pendiente: que Paco mande el panel 🐛
-  DESPUÉS de esta última recarga (para confirmar `app:106 styles:94` cargados) y repita
-  la prueba activando el Narrador desde cero, para saber si el chip sigue sin ponerse
-  verde con el código realmente nuevo puesto.**
+  **Chip en verde — causa real encontrada, arreglado, 15 sept, FUSIONADO.** Con
+  `app:106`/`styles:94` confirmados cargados (Paco probó hasta en incógnito para
+  descartar caché) y el Narrador realmente activado (`[Salma] Narrador activado` en el
+  log, sin bloqueo de notificaciones), el chip seguía sin ponerse verde — no era caché
+  ni un fallo de lógica en JS. Causa real: existe una capa CSS más nueva y más
+  específica del rediseño de septiembre, `.chat-empty .chat-empty-chip` (línea ~6430),
+  que fija su propio `background`/`border`/`color` para TODOS los chips — con más
+  especificidad (dos clases) que mi regla `.chat-empty-chip--narrator-on` (una clase),
+  así que ganaba siempre sin importar el orden en el archivo. El chip SOS ya tenía este
+  mismo problema resuelto con su propia regla más específica
+  (`.chat-empty .chat-empty-chip--sos`, línea 6439) — se replicó el mismo patrón para
+  el verde (`.chat-empty .chat-empty-chip--narrator-on`). `?v=` de `styles.css` a 95.
+  **Pendiente: que Paco recargue y confirme que el chip se pone verde de verdad esta
+  vez.**
+  **Aparte, no confirmado si vio el toast "Permite notificaciones y ubicación..."
+  cuando probó en incógnito (con las notificaciones bloqueadas por política del propio
+  Chrome incógnito, no por la app) — sin acción pendiente, solo queda anotado por si
+  vuelve a probar ahí.**
 
 - **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
   CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se

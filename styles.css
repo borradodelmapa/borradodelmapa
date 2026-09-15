@@ -6439,6 +6439,9 @@ body {
 .chat-empty .chat-empty-chip--sos{background:var(--ce-panel);border-color:var(--ce-red);color:var(--ce-red);}
 .chat-empty .chat-empty-chip--sos:hover,
 .chat-empty .chat-empty-chip--sos:active{background:var(--ce-red);border-color:var(--ce-red);color:#0a0a0a;}
+.chat-empty .chat-empty-chip--narrator-on{background:var(--ce-panel);border-color:var(--verde);color:var(--verde);}
+.chat-empty .chat-empty-chip--narrator-on:hover,
+.chat-empty .chat-empty-chip--narrator-on:active{background:var(--verde);border-color:var(--verde);color:#0a0a0a;}
 .chat-empty .chat-empty-chip--ruta{
   width:auto;max-width:none;margin:0;flex-shrink:0;
   background:transparent;border:1.5px solid var(--ce-line-hi);
