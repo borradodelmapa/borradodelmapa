@@ -1272,8 +1272,23 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   ya mira `salma._narratorActive`) y al cambiar de estado sin recargar la pantalla
   (`updateNarratorChipUI()`, nueva, llamada tras activar/desactivar desde los menús).
   `?v=` subidos: `salma.js` a 85, `app.js` a 106, `styles.css` a 93, en `index.html`.
-  **Pendiente: que Paco recargue, pruebe "Olvidar avisos" y confirme que ahora sí
-  reacciona al momento, y que el chip "Narrador" se pone verde al activarlo.**
+  **Botón de cerrar (X) del toast ilegible sobre la foto — arreglado, 15 sept,
+  FUSIONADO.** Paco lo reportó tras la foto de la entrada de arriba: la "X" tenía solo
+  color de texto tenue (`rgba(...,.4)`) sin fondo, y la foto (que sangra hasta los
+  bordes del toast con margen negativo) queda justo debajo, camuflándola. Le puse fondo
+  circular oscuro semitransparente (`--radius-pill`) para que se lea encima de
+  cualquier imagen. `?v=` de `styles.css` a 94.
+  **Chip en verde — Paco reportó que sigue sin verse, sin confirmar si fue con el
+  código nuevo cargado (la primera vez podía ser caché — ver más abajo). Sin cambios de
+  código adicionales todavía, pendiente de un debug-panel fresco antes de tocar nada
+  más.** Revisada la lógica (`_renderChatEmpty()` en `app.js` solo se ejecuta una vez al
+  entrar al chat — el resto depende de `updateNarratorChipUI()`, llamada tras activar/
+  desactivar desde los dos menús) y no se ve ningún fallo obvio por lectura de código —
+  puede ser que la prueba fallida fuera con `app.js`/`styles.css` viejos en caché
+  (mismo patrón que otras veces esta semana). **Pendiente: que Paco mande el panel 🐛
+  DESPUÉS de esta última recarga (para confirmar `app:106 styles:94` cargados) y repita
+  la prueba activando el Narrador desde cero, para saber si el chip sigue sin ponerse
+  verde con el código realmente nuevo puesto.**
 
 - **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
   CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se
