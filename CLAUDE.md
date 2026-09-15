@@ -1005,37 +1005,6 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
-- **Narrador: radio de detección subido de 20m a 50m — 15 sept 2026, FUSIONADO, sin
-  confirmar en pantalla.** El 10 sept se bajó de 500m a 20m a petición de Paco, pero
-  20m es muy poco para un monumento grande: el pin de Google Places de un edificio así
-  suele estar en la entrada o el centro geométrico, y con Paco en la plaza (a unos
-  pasos de la fachada) puede quedar fuera de esos 20m mientras un comercio pegado a él
-  sí entra — encaja con el bug de la tienda de artesanía de las entradas de arriba, aun
-  con el filtro de tipos ya arreglado. `salma.js` línea 2390 (`checkNearbyPOIs`),
-  `?v=` subido a 82 en `index.html`. **Pendiente: que Paco recargue la web (refrescar
-  para que el navegador coja `salma.js?v=82`) y confirme si ahora sí reconoce el
-  monumento real.**
-- **Narrador: elegía un negocio pequeño en vez del monumento real — 15 sept 2026,
-  DESPLEGADO, sin confirmar en pantalla.** Segundo aviso de Paco sobre lo mismo de
-  Mondoñedo: aunque el fix del geoHint (ver entrada de abajo) resuelve la confusión de
-  homónimos, el problema de fondo era otro y más grave — el Narrador ni siquiera debía
-  haber elegido esa tienda de artesanía en primer lugar, teniendo la catedral delante.
-  Causa real, en `worker/salma-worker.js` (`/nearby-pois`, ~línea 6617): la API de
-  Google Nearby Search solo admite **un** valor en el parámetro `type` — el código
-  mandaba una lista con `|` (`tourist_attraction|museum|church|...`), inválida para ese
-  parámetro (el `types` en plural con OR está retirado hace años). Google ignora en
-  silencio ese filtro roto y devuelve cualquier sitio cercano sin filtrar — así se coló
-  una tienda de cerámica. Encima, el código cortaba a los 5 primeros resultados de
-  Google (orden de relevancia, no de distancia) ANTES de calcular la distancia y
-  ordenar — si la catedral no estaba entre esos 5 "relevantes" de Google, ni siquiera
-  llegaba a compararse. Fix: se quita el `type` inválido y se filtra de verdad contra el
-  array `types` real que Google sí devuelve por cada sitio (iglesia, museo, mirador,
-  parque, galería...), sobre TODOS los resultados antes de ordenar por distancia y
-  recién entonces cortar a 5. Sin cambios en frontend — no hace falta `?v=`.
-  **Desplegado (commit `ac24571`, GitHub Action "Deploy Worker" run #15, Worker Version
-  ID `17b47adf-97cf-46f2-ad84-3bc27d7d74d4`). Pendiente: que Paco repita el Narrador
-  delante de un monumento con comercios alrededor y confirme que ahora sí prioriza el
-  sitio real.**
 - **Chip "parada más cercana" del mapa decía 30km cuando la distancia real por
   carretera eran 44km — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Reportado
   también desde Mondoñedo. Causa: `_updateNearestChip()` en `app.js` (~línea 4050) usa
@@ -1053,26 +1022,6 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   caché) — a definir con Paco antes de tocar esto, no se ha implementado.
   `?v=` de `app.js` subido a 104 en `index.html`. **Fusionado a `main` (commit
   `ac24571`) y ya en GitHub Pages.**
-- **Narrador: historia de un lugar totalmente ajeno (homónimo en otra región) — 15 sept
-  2026, DESPLEGADO, sin confirmar en pantalla.** Paco probó el Narrador de pie delante
-  de una iglesia barroca del s.XVIII en Mondoñedo (Lugo) y le salió la historia de
-  "Lourenza Nadal", una ceramista de Mallorca — nada que ver. Con la cámara (identificar
-  por foto) sí acertó. Causa: mismo tipo de bug que ya se arregló en Historia (13-14
-  sept, ver "Historia reactivada" más abajo) — `salma.js` (`_processNarratorQueue`,
-  línea ~2425) SÍ manda `lat`/`lng` del POI al pedir `/narrate`, pero el endpoint del
-  Worker (`worker/salma-worker.js`, ~línea 6665) solo leía `poi_name` y `country_code`
-  del body — las coordenadas llegaban y se ignoraban del todo. Sin ninguna pista de
-  ubicación más allá del país, Claude Haiku genera la biografía del homónimo más
-  documentado en vez de investigar quién es real en ese punto exacto. El POI en sí era
-  correcto (viene de Google Places `nearbysearch` con `radius=20` alrededor del GPS real
-  del usuario, así que el lugar sí estaba ahí) — el fallo estaba solo en la narración,
-  no en la detección del sitio. Fix: el endpoint ahora también lee `lat`/`lng` del body
-  y, si vienen, añade al prompt de Haiku la coordenada exacta con instrucción explícita
-  de no mezclar con homónimos de otros sitios y de admitir que no tiene datos fiables
-  antes que inventar. Sin cambios en frontend (ya mandaba las coordenadas) — no hace
-  falta subir `?v=`. **Desplegado (commit `7232e6d`, GitHub Action "Deploy Worker" run
-  #14, Worker Version ID `b46ebb37-611c-43b1-ab36-7a27237998af`). Pendiente: que Paco
-  confirme en pantalla repitiendo el Narrador en un sitio con nombre ambiguo.**
 - **`FOTO_TAG: palabra` se veía como texto crudo en el chat al identificar un lugar con
   la cámara — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Mismo reporte de
   Mondoñedo: la respuesta sobre la catedral (correcta en contenido) terminaba con
@@ -1248,6 +1197,42 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   relegarlos a "cerca de" en vez de dejarlos en la ruta principal. No se ha visto pasar en
   pantalla, solo detectado leyendo el código — investigar si da problemas.
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
+
+- **Narrador dando información de sitios equivocados (3 bugs seguidos) — 15 sept 2026,
+  CONFIRMADO EN PANTALLA por Paco en Lourenzá/Lorenzana (Lugo): "ha funcionado, me ha
+  dado dos datos, uno centro de interpretación de las fabas/fabes y datos de la Iglesia
+  ahora sí correctos".** Empezó con un solo síntoma (narración de un homónimo de otra
+  región, una ceramista de Mallorca en vez de lo real) y al investigar salieron tres
+  causas distintas apiladas, las tres arregladas:
+  1. `/narrate` (Worker) recibía `lat`/`lng` del POI pero nunca los usaba en el prompt
+     de Claude Haiku — sin pista de ubicación narraba el homónimo más documentado en
+     vez de investigar qué hay real en ese punto. Commit `7232e6d`, Worker Version ID
+     `b46ebb37-611c-43b1-ab36-7a27237998af`.
+  2. `/nearby-pois` (Worker) mandaba a Google Nearby Search una lista de tipos separada
+     por `|` en el parámetro `type`, que solo admite un valor — Google ignoraba el
+     filtro en silencio y devolvía cualquier sitio cercano sin filtrar (así se coló una
+     tienda de artesanía delante de una catedral), y encima cortaba a los 5 primeros
+     resultados de Google por relevancia ANTES de calcular distancia, dejando fuera del
+     todo a un monumento real si no estaba entre esos 5. Commit `ac24571`, Worker
+     Version ID `17b47adf-97cf-46f2-ad84-3bc27d7d74d4`.
+  3. Radio de detección en 20m (bajado desde 500m el 10 sept) — demasiado ajustado para
+     un edificio grande, cuyo pin de Google puede no coincidir con dónde se para el
+     usuario en la plaza. Subido a 50m. Commit `805271f`, `salma.js?v=82`.
+  De paso se aclaró que el chip "en línea recta" del mapa (ver crítico arriba, sin
+  confirmar todavía) es un bug distinto y separado, sin relación con estos tres.
+  **Foto en el aviso del Narrador — implementado el mismo 15 sept, sin confirmar en
+  pantalla.** Propuesta de Paco justo tras confirmar que ya iba bien: cuando salta el
+  toast/burbuja del Narrador, mostrar también una foto del sitio para poder comparar a
+  simple vista que es el mismo que tiene delante. `/nearby-pois` ya devolvía
+  `photo_ref` por POI (no hacía falta tocar el Worker) — solo faltaba pintarlo en
+  frontend. Añadida `<img>` (vía el proxy ya existente `GET /photo?ref=...`) tanto en
+  `showNarratorToast` (toast flotante) como en la burbuja de chat cuando la vista de
+  itinerario está abierta (`_processNarratorQueue`), con `onerror` que la quita sola si
+  el sitio no tiene foto en Google — no pasa nada visible si no hay imagen. Clases CSS
+  nuevas en `styles.css`: `.narrator-toast-photo` (bleed a los bordes del toast) y
+  `.narrator-msg-photo` (dentro de la burbuja). `?v=` subidos: `salma.js` a 83,
+  `styles.css` a 91, en `index.html`. **Pendiente: que Paco recargue y confirme que la
+  foto aparece y ayuda a verificar que es el mismo sitio.**
 
 - **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
   CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se

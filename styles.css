@@ -3042,6 +3042,10 @@ body {
   font-family:var(--font-tight); font-weight:700;
   color:var(--dorado); margin-bottom:4px; font-size:14px;
 }
+.narrator-msg-photo {
+  display:block; width:100%; max-height:160px; object-fit:cover;
+  border-radius:0; margin-bottom:8px;
+}
 
 /* Toggle switch (perfil) */
 .profile-toggle {
@@ -3101,6 +3105,10 @@ body {
   line-height:1; padding:4px;
 }
 .narrator-toast-close:hover { color:var(--blanco); }
+.narrator-toast-photo {
+  display:block; width:calc(100% + 32px); margin:-14px -16px 10px;
+  max-height:140px; object-fit:cover; border-radius:0;
+}
 .narrator-toast-poi {
   font-family:var(--font-tight); font-weight:700;
   color:var(--dorado); font-size:14px; margin-bottom:6px;

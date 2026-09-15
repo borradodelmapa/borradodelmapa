@@ -2374,8 +2374,10 @@ const salma = {
     const toast = document.createElement('div');
     toast.id = 'narrator-toast';
     toast.className = 'narrator-toast narrator-toast-in';
+    const photoUrl = poi && poi.photo_ref ? `${window.SALMA_API}/photo?ref=${encodeURIComponent(poi.photo_ref)}` : null;
     toast.innerHTML = `
       <div class="narrator-toast-close" onclick="this.parentElement.classList.add('narrator-toast-out');setTimeout(()=>this.parentElement.remove(),400)">✕</div>
+      ${photoUrl ? `<img class="narrator-toast-photo" src="${photoUrl}" alt="" onerror="this.remove()">` : ''}
       ${poi ? `<div class="narrator-toast-poi">\uD83D\uDCCD ${poi.name}</div>` : ''}
       <div class="narrator-toast-text">${text}</div>`;
     document.body.appendChild(toast);
@@ -2454,6 +2456,7 @@ const salma = {
           bubble.innerHTML = `
             <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma \u00b7 narrador</span></div>
             <div class="msg-body-salma">
+              ${poi.photo_ref ? `<img class="narrator-msg-photo" src="${window.SALMA_API}/photo?ref=${encodeURIComponent(poi.photo_ref)}" alt="" onerror="this.remove()">` : ''}
               <div class="narrator-poi-name">\uD83D\uDCCD ${poi.name}</div>
               ${narData.narrative}
             </div>`;
