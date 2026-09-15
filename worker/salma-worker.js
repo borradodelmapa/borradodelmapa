@@ -1908,7 +1908,7 @@ async function searchNearbyPlaces(lat, lng, type, googleKey) {
       photo_ref: p.photos?.[0]?.photo_reference || null,
       address: p.vicinity || '',
       open_now: p.opening_hours?.open_now ?? null,
-      maps_link: `https://www.google.com/maps/place/?q=place_id:${p.place_id}`,
+      maps_link: mapsPlaceFichaUrl(p.name, p.place_id),
     }));
   } catch (_) { return []; }
 }
@@ -4050,7 +4050,7 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
     name: c.name,
     lat: c.geometry.location.lat,
     lng: c.geometry.location.lng,
-    url: 'https://www.google.com/maps/place/?q=place_id:' + c.place_id,
+    url: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.name || '') + '&query_place_id=' + c.place_id,
     photo_ref: photoRef,
     formatted_address: c.formatted_address || ''
   };
@@ -4061,9 +4061,12 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
 // Red de seguridad que corre DESPUÉS de verifyAllStops / buildMapsLinksFromStops,
 // justo antes de entregar una ruta o una respuesta de chat al frontend.
 // Regla dura (Opción B): un enlace de Maps solo puede ser
-//   (a) ficha real de Google  →  place/?q=place_id:XXX   (place_id verificado)
+//   (a) ficha real de Google  →  search/?api=1&query=<nombre>&query_place_id=XXX  (place_id verificado)
 //   (b) búsqueda por nombre    →  search/?api=1&query=<nombre>
 // Nunca un pin sobre coordenadas inventadas por el modelo.
+// (15 sept: (a) cambió de formato — ver mapsPlaceFichaUrl() — el viejo
+// place/?q=place_id:XXX no se resolvía bien; el place_id pegado ahí sin más no
+// es algo que Maps sepa interpretar solo, por eso Paco lo vio como "no funciona".)
 // ═══════════════════════════════════════════════════════════════
 
 // Coordenada geográficamente posible: número finito, en rango, y no la "isla nula" 0,0.
@@ -4080,6 +4083,16 @@ function isValidCoord(lat, lng) {
 function mapsSearchUrlByName(name, regionCtx) {
   const q = [name, regionCtx].filter(Boolean).join(', ').trim();
   return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q || name || '');
+}
+
+// Ficha real de un lugar verificado — esquema oficial de Google ("Search Action" con
+// query_place_id), no el viejo /maps/place/?q=place_id:X. Ese formato antiguo no lo
+// resuelve bien un WebView/PWA (mismo tipo de bug ya visto y arreglado en los enlaces
+// de "Cómo llegar" el 10 sept) y, sin el parámetro query, Maps no tiene con qué mostrar
+// resultado si el place_id no se interpreta — con query+query_place_id, Google localiza
+// el sitio exacto de verdad.
+function mapsPlaceFichaUrl(name, placeId) {
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name || '') + '&query_place_id=' + placeId;
 }
 
 // Genera maps_links por día. Opción B:
@@ -4109,14 +4122,15 @@ function buildMapsLinksFromStops(stops, regionCtx = '') {
     let url;
     if (arr.length === 1) {
       url = arr[0].place_id
-        ? 'https://www.google.com/maps/place/?q=place_id:' + arr[0].place_id
+        ? mapsPlaceFichaUrl(firstName, arr[0].place_id)
         : mapsSearchUrlByName(firstName, regionCtx);
     } else if (trusted.length >= 2) {
       // Ruta del día SOLO con paradas fiables
       const segments = trusted.map(p => `${p.lat},${p.lng}`).join('/');
       url = 'https://www.google.com/maps/dir/' + segments;
     } else if (trusted.length === 1) {
-      url = 'https://www.google.com/maps/place/?q=place_id:' + trusted[0].place_id;
+      const trustedName = trusted[0].name || trusted[0].headline || firstName;
+      url = mapsPlaceFichaUrl(trustedName, trusted[0].place_id);
     } else {
       // Ninguna parada fiable ese día → búsqueda por nombre de la primera
       url = mapsSearchUrlByName(firstName, regionCtx);
@@ -4715,7 +4729,7 @@ async function buscarRestaurante(input, placesKey, userCoords) {
           const d = details[i]?.result;
           const nombre = d?.name || p.name;
           const gmapsLink = p.place_id
-            ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}`
+            ? mapsPlaceFichaUrl(nombre, p.place_id)
             : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre + ' ' + (input.ciudad || ''))}`;
           return {
             nombre,
@@ -4951,7 +4965,7 @@ async function buscarLugar(input, placesKey, userCoords) {
       const d = details[i]?.result;
       const nombre = d?.name || p.name;
       const gmapsLink = p.place_id
-        ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}`
+        ? mapsPlaceFichaUrl(nombre, p.place_id)
         : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre + ' ' + ciudad)}`;
       const entry = {
         nombre,
@@ -5298,7 +5312,7 @@ async function searchHotelsPlaces(params, placesKey, userLocation) {
     photo_ref: p.photos?.[0]?.photo_reference || null,
     lat: p.geometry?.location?.lat,
     lng: p.geometry?.location?.lng,
-    maps_link: p.place_id ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}` : null,
+    maps_link: p.place_id ? mapsPlaceFichaUrl(p.name, p.place_id) : null,
     open_now: p.opening_hours?.open_now ?? null,
   }));
 
@@ -5333,7 +5347,7 @@ async function searchPlacesGoogle(params, placesKey, userLocation) {
     photo_ref: p.photos?.[0]?.photo_reference || null,
     lat: p.geometry?.location?.lat,
     lng: p.geometry?.location?.lng,
-    maps_link: p.place_id ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}` : null,
+    maps_link: p.place_id ? mapsPlaceFichaUrl(p.name, p.place_id) : null,
     open_now: p.opening_hours?.open_now ?? null,
   }));
 
