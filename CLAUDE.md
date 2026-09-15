@@ -1022,9 +1022,10 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   array `types` real que Google sí devuelve por cada sitio (iglesia, museo, mirador,
   parque, galería...), sobre TODOS los resultados antes de ordenar por distancia y
   recién entonces cortar a 5. Sin cambios en frontend — no hace falta `?v=`.
-  **Desplegado (commit pendiente de subir en este mismo push). Pendiente: que Paco
-  repita el Narrador delante de un monumento con comercios alrededor y confirme que
-  ahora sí prioriza el sitio real.**
+  **Desplegado (commit `ac24571`, GitHub Action "Deploy Worker" run #15, Worker Version
+  ID `17b47adf-97cf-46f2-ad84-3bc27d7d74d4`). Pendiente: que Paco repita el Narrador
+  delante de un monumento con comercios alrededor y confirme que ahora sí prioriza el
+  sitio real.**
 - **Chip "parada más cercana" del mapa decía 30km cuando la distancia real por
   carretera eran 44km — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Reportado
   también desde Mondoñedo. Causa: `_updateNearestChip()` en `app.js` (~línea 4050) usa
@@ -1040,7 +1041,8 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   limit de Google sin necesidad. Si se quiere la distancia real, habría que limitar
   cuánto se pide (ej. solo cuando cambia la parada más cercana, o cada X minutos, con
   caché) — a definir con Paco antes de tocar esto, no se ha implementado.
-  `?v=` de `app.js` subido a 104 en `index.html`.
+  `?v=` de `app.js` subido a 104 en `index.html`. **Fusionado a `main` (commit
+  `ac24571`) y ya en GitHub Pages.**
 - **Narrador: historia de un lugar totalmente ajeno (homónimo en otra región) — 15 sept
   2026, DESPLEGADO, sin confirmar en pantalla.** Paco probó el Narrador de pie delante
   de una iglesia barroca del s.XVIII en Mondoñedo (Lugo) y le salió la historia de
