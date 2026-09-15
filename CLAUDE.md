@@ -1005,6 +1005,19 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Toast "Narrador desactivado" (y otros de confirmación simple) se quedaban en
+  pantalla para siempre — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.**
+  Reportado por Paco: al desactivar el Narrador el toast no se borraba solo. Causa:
+  `showNarratorToast()` nunca tuvo auto-cierre (decisión del 10 sept, pero era para
+  los avisos CON CONTENIDO real de un sitio — dar tiempo a leerlos). Los toasts de
+  confirmación simple ("activado"/"desactivado"/"avisos olvidados") heredaron ese
+  mismo comportamiento sin necesitarlo. Fix: `showNarratorToast()` acepta ahora un
+  tercer parámetro `autoCloseMs` opcional — añadido en los 3 sitios de confirmación
+  simple (`app.js`): activado (4s), avisos olvidados (4s), desactivado (3s). El
+  toast de "permite notificaciones" (necesita que el usuario actúe) y el de
+  contenido real de un POI (con narrativa/foto) se quedan SIN auto-cierre, como
+  hasta ahora. `?v=` de `salma.js` a 86, `app.js` a 107. **Pendiente: que Paco
+  desactive el Narrador y confirme que el toast desaparece solo a los 3s.**
 - **Enlace "Abrir en Google Maps" de sitios buscados (buscar_lugar/hoteles) no
   llevaba a ningún sitio — 15 sept 2026, DESPLEGADO, sin confirmar en pantalla.**
   Reportado por Paco con "Camping Playa de Tapia": el enlace salía bien pintado
@@ -1040,6 +1053,21 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   caché) — a definir con Paco antes de tocar esto, no se ha implementado.
   `?v=` de `app.js` subido a 104 en `index.html`. **Fusionado a `main` (commit
   `ac24571`) y ya en GitHub Pages.**
+  **Distancia real de carretera — implementada, 15 sept, FUSIONADO, sin confirmar en
+  pantalla.** Confirmado con Paco: sí la quiere, con el límite de 5 minutos que él
+  mismo propuso (~$0,005/llamada Directions API — a 5 min, céntimos por hora de
+  viaje en vez de varios euros). Implementado en `app.js`: `_updateNearestChip()`
+  sigue calculando la línea recta al momento (instantáneo, sin coste) pero ahora,
+  si la parada más cercana está a ≥1km, además dispara `_fetchRealNearestDistance()`
+  — llama al `/directions` del Worker (ya existía, no hace falta tocar el Worker) y
+  cachea el resultado en `_nearestChipRealDist` — **solo si cambió la parada más
+  cercana desde la última vez, o pasaron ≥5 min**, nunca en cada GPS tick (~5s). En
+  cuanto llega la respuesta, el chip pasa de "X km recta" a la distancia real de
+  Google (ej. "44 km"), sin la palabra "recta". Si Directions falla o no hay red, se
+  queda con "recta" hasta el siguiente intento — nunca se bloquea ni rompe el chip.
+  `?v=` de `app.js` subido a 107 en `index.html`. **Pendiente: que Paco conduzca un
+  rato con el mapa live abierto y confirme que el chip pasa de "recta" a la
+  distancia real a los pocos segundos, y que se actualiza si cambia de parada.**
 - **`FOTO_TAG: palabra` se veía como texto crudo en el chat al identificar un lugar con
   la cámara — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Mismo reporte de
   Mondoñedo: la respuesta sobre la catedral (correcta en contenido) terminaba con

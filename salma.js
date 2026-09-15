@@ -2380,9 +2380,13 @@ const salma = {
     console.log('[Salma] Narrador: avisos olvidados');
   },
 
-  showNarratorToast(text, poi) {
+  // autoCloseMs: solo para confirmaciones simples (activado/desactivado/avisos
+  // olvidados) - los avisos con contenido real (narrativa de un POI, con o sin foto)
+  // se quedan sin auto-cierre a proposito, decision del 10 sept, para dar tiempo a leer.
+  showNarratorToast(text, poi, autoCloseMs) {
     const existing = document.getElementById('narrator-toast');
     if (existing) existing.remove();
+    if (this._narratorToastTimer) { clearTimeout(this._narratorToastTimer); this._narratorToastTimer = null; }
     const toast = document.createElement('div');
     toast.id = 'narrator-toast';
     toast.className = 'narrator-toast narrator-toast-in';
@@ -2393,6 +2397,13 @@ const salma = {
       ${poi ? `<div class="narrator-toast-poi">\uD83D\uDCCD ${poi.name}</div>` : ''}
       <div class="narrator-toast-text">${text}</div>`;
     document.body.appendChild(toast);
+    if (autoCloseMs) {
+      this._narratorToastTimer = setTimeout(() => {
+        if (!document.body.contains(toast)) return;
+        toast.classList.add('narrator-toast-out');
+        setTimeout(() => toast.remove(), 400);
+      }, autoCloseMs);
+    }
   },
 
   async checkNearbyPOIs() {

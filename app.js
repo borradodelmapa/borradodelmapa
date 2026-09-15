@@ -3921,6 +3921,11 @@ function closeRouteSelector() {
 
 let _liveRouteStops = [];
 let _liveInfoWindow = null;
+// Distancia real de carretera para el chip "parada más cercana" — cacheada, se
+// refresca solo al cambiar de parada más cercana o cada 5 min (nunca en cada GPS tick,
+// dispararía llamadas a Directions API sin necesidad — decisión con Paco, 15 sept).
+let _nearestChipRealDist = null; // { stopIndex, text, fetchedAt }
+let _nearestChipFetching = false;
 let _activeRouteData = null;
 
 // Persiste la ruta activa (localStorage + Firestore) SIN tocar el mapa.
@@ -4066,9 +4071,18 @@ function _updateNearestChip() {
     if (d < minDist) { minDist = d; nearest = { stop, i }; }
   });
   if (!nearest) return;
-  // "recta" avisa de que es línea recta (haversine), no carretera real — por carretera
-  // suele quedarse corta, sobre todo en zonas de costa/montaña con curvas
-  const dist = minDist < 1 ? Math.round(minDist * 1000) + ' m' : minDist.toFixed(1) + ' km recta';
+  // Bajo 1km mostramos metros en línea recta directamente (Directions no aporta nada
+  // fiable a esa escala peatonal). A partir de 1km, usamos la distancia real de
+  // carretera si ya la tenemos cacheada para ESTA parada; si no, "km recta" de momento
+  // — se corrige sola en cuanto llega la respuesta de _fetchRealNearestDistance.
+  let dist;
+  if (minDist < 1) {
+    dist = Math.round(minDist * 1000) + ' m';
+  } else if (_nearestChipRealDist && _nearestChipRealDist.stopIndex === nearest.i) {
+    dist = _nearestChipRealDist.text;
+  } else {
+    dist = minDist.toFixed(1) + ' km recta';
+  }
   const label = nearest.stop.headline || nearest.stop.name || `Parada ${nearest.i + 1}`;
   chip.textContent = `📍 #${nearest.i + 1} ${label} · ${dist}`;
   chip.style.display = 'block';
@@ -4081,6 +4095,34 @@ function _updateNearestChip() {
     _liveMap.setZoom(14);
     _showStopInfo(nearest.stop, nearest.i, _liveRouteMarkers[nearest.i], color);
   };
+
+  // Distancia real de carretera (Directions API) — solo al cambiar de parada más
+  // cercana o cada 5 min, NUNCA en cada tick de GPS (~5s): dispararía coste y rate
+  // limit de Google sin necesidad. Confirmado con Paco, 15 sept.
+  if (minDist >= 1 && !_nearestChipFetching) {
+    const stale = !_nearestChipRealDist || _nearestChipRealDist.stopIndex !== nearest.i ||
+      (Date.now() - _nearestChipRealDist.fetchedAt) >= 5 * 60 * 1000;
+    if (stale) _fetchRealNearestDistance(pos, nearest);
+  }
+}
+
+async function _fetchRealNearestDistance(pos, nearest) {
+  _nearestChipFetching = true;
+  try {
+    const origin = pos.lat() + ',' + pos.lng();
+    const destination = nearest.stop.lat + ',' + nearest.stop.lng;
+    const res = await fetch(`${window.SALMA_API}/directions?origin=${origin}&destination=${destination}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const distText = data.legs && data.legs[0] && data.legs[0].distance;
+    if (!distText) return;
+    _nearestChipRealDist = { stopIndex: nearest.i, text: distText, fetchedAt: Date.now() };
+    _updateNearestChip(); // repinta ya con la distancia real en vez de "recta"
+  } catch (_) {
+    // sin conexión o fallo puntual — se queda con "recta" hasta el próximo intento
+  } finally {
+    _nearestChipFetching = false;
+  }
 }
 
 function clearRouteFromLiveMap() {
@@ -5378,7 +5420,7 @@ function showNarratorConfirm() {
     overlay.style.display = 'none';
     salma.startNarrator().then(ok => {
       if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.');
-      else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.');
+      else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', null, 4000);
       updateBottomBar();
       updateNarratorChipUI();
     });
@@ -5412,12 +5454,12 @@ function showNarratorActiveMenu() {
   document.getElementById('narrator-active-reset').addEventListener('click', () => {
     overlay.style.display = 'none';
     salma.resetNarratorNotified();
-    salma.showNarratorToast('Avisos olvidados — te avisaré otra vez de los sitios de cerca.');
+    salma.showNarratorToast('Avisos olvidados — te avisaré otra vez de los sitios de cerca.', null, 4000);
   });
   document.getElementById('narrator-active-stop').addEventListener('click', () => {
     overlay.style.display = 'none';
     salma.stopNarrator();
-    salma.showNarratorToast('Narrador desactivado.');
+    salma.showNarratorToast('Narrador desactivado.', null, 3000);
     updateBottomBar();
     updateNarratorChipUI();
   });
