@@ -29,6 +29,7 @@ const salma = {
   _narratorActive: false,
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
+  _narratorLastCheckedPos: null,  // {lat,lng} del último check REAL a Google — gate anti-parado
   _narratorInterval: null,
   _narratorQueue: [],
   _narratorProcessing: false,
@@ -2343,6 +2344,7 @@ const salma = {
       this._narratorNotified = new Set(saved ? JSON.parse(saved) : []);
     } catch (_) { this._narratorNotified = new Set(); }
     this._narratorLastCheck = 0;
+    this._narratorLastCheckedPos = null;
     this._narratorQueue = [];
     this._narratorProcessing = false;
     // Reactivar GPS continuo si se había parado
@@ -2376,6 +2378,7 @@ const salma = {
     try { sessionStorage.removeItem('narrator_notified_pois'); } catch (_) {}
     // Forzar chequeo inmediato (si no, hay que esperar al próximo ciclo de 60s)
     this._narratorLastCheck = 0;
+    this._narratorLastCheckedPos = null;
     if (this._narratorActive) this.checkNearbyPOIs();
     console.log('[Salma] Narrador: avisos olvidados');
   },
@@ -2410,9 +2413,25 @@ const salma = {
     if (!this._narratorActive || !this._userLocation) return;
     const now = Date.now();
     if (now - this._narratorLastCheck < 55000) return;
-    this._narratorLastCheck = now;
 
     const { lat, lng } = this._userLocation;
+
+    // Coste real: cada check pega a Google (Nearby Search de pago). Si el usuario
+    // sigue prácticamente en el mismo sitio (coche parado, sentado en un restaurante),
+    // no tiene sentido volver a preguntarle a Google cada 55-60s — no va a haber nada
+    // nuevo. Seguimos comprobando el reloj cada ciclo (por si retoma la marcha) pero
+    // sin gastar la llamada mientras no se mueva lo suficiente.
+    if (this._narratorLastCheckedPos) {
+      const dLat = (lat - this._narratorLastCheckedPos.lat) * Math.PI / 180;
+      const dLng = (lng - this._narratorLastCheckedPos.lng) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(this._narratorLastCheckedPos.lat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+      const movedM = 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      if (movedM < 30) return;
+    }
+
+    this._narratorLastCheck = now;
+    this._narratorLastCheckedPos = { lat, lng };
     console.log('[Salma] Narrator check:', lat, lng);
 
     try {

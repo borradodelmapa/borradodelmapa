@@ -1895,13 +1895,22 @@ async function generateMiniResumen(dest, collectedData, userLocationName, env, u
   } catch (_) { return null; }
 }
 
-async function searchNearbyPlaces(lat, lng, type, googleKey) {
+async function searchNearbyPlaces(lat, lng, type, googleKey, env) {
   if (!googleKey || !lat || !lng) return [];
+  // Caché KV 7 días por tipo + celda de ~1km — "quiero ir a Sevilla" preguntado por
+  // cien personas distintas no debe pegarle a Nearby Search cien veces.
+  const kvKey = env?.SALMA_KB ? `nearbycache:${type}:${lat.toFixed(2)}:${lng.toFixed(2)}` : null;
+  if (kvKey) {
+    try {
+      const cached = await env.SALMA_KB.get(kvKey);
+      if (cached) return JSON.parse(cached);
+    } catch (_) {}
+  }
   try {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=${type}&language=es&key=${googleKey}`;
     const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
     const data = await res.json();
-    return (data.results || []).slice(0, 5).map(p => ({
+    const out = (data.results || []).slice(0, 5).map(p => ({
       name: p.name,
       rating: p.rating || null,
       reviews: p.user_ratings_total || null,
@@ -1910,6 +1919,8 @@ async function searchNearbyPlaces(lat, lng, type, googleKey) {
       open_now: p.opening_hours?.open_now ?? null,
       maps_link: mapsPlaceFichaUrl(p.name, p.place_id),
     }));
+    if (kvKey && out.length) env.SALMA_KB.put(kvKey, JSON.stringify(out), { expirationTtl: 604800 }).catch(() => {});
+    return out;
   } catch (_) { return []; }
 }
 
@@ -1991,8 +2002,8 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     const tcCC = (userCountryCode || '').toLowerCase();
     if (tcCC && env.SALMA_KB) promises.transport = env.SALMA_KB.get('transport:' + tcCC).then(r => r ? JSON.parse(r) : null).catch(() => null);
     if (dest.destLat && env.GOOGLE_PLACES_KEY) {
-      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY);
-      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY);
+      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY, env);
+      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY, env);
     }
 
     const keys = Object.keys(promises);
@@ -2040,8 +2051,8 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     }
     // Qué ver y dónde comer
     if (dest.destLat && env.GOOGLE_PLACES_KEY) {
-      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY);
-      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY);
+      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY, env);
+      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY, env);
     }
     // KV destinos
     if (tcCC && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + tcCC + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
@@ -2199,7 +2210,7 @@ function extractHelpLocation(message, history, currentRoute) {
   return null;
 }
 
-async function searchPlacesForHelp(query, location, placesKey, coords) {
+async function searchPlacesForHelp(query, location, placesKey, coords, env) {
   if (!query || !location || !placesKey) return null;
 
   const searchText = `${query} ${location}`;
@@ -2219,22 +2230,24 @@ async function searchPlacesForHelp(query, location, placesKey, coords) {
 
   if (!searchResults?.results?.length) return null;
 
-  // Top 3 resultados → Place Details en paralelo para teléfono
+  // Top 3 resultados → Place Details en paralelo, SOLO para el teléfono (lo único que
+  // el Text Search de arriba no trae ya gratis). name/address/rating salen del propio
+  // resultado del Text Search — pedirlos otra vez en Details recargaba el mismo dato.
+  // Cacheado 30 días por place_id.
   const top = searchResults.results.slice(0, 3);
   const detailPromises = top.map(place => {
     if (!place.place_id) return Promise.resolve(null);
-    return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_phone_number,international_phone_number,formatted_address,rating,opening_hours&language=es&key=${placesKey}`)
-      .then(r => r.json()).catch(() => null);
+    return _getPlaceDetailsCached(env, placesKey, place.place_id, 'formatted_phone_number,international_phone_number');
   });
   const details = await Promise.all(detailPromises);
 
   const results = [];
   top.forEach((place, i) => {
-    const detail = details[i]?.result;
-    const name = detail?.name || place.name || '';
+    const detail = details[i];
+    const name = place.name || '';
     const phone = detail?.international_phone_number || detail?.formatted_phone_number || '';
-    const address = detail?.formatted_address || place.formatted_address || '';
-    const rating = detail?.rating || place.rating || null;
+    const address = place.formatted_address || '';
+    const rating = place.rating || null;
 
     if (name) {
       results.push({
@@ -3436,7 +3449,7 @@ Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de est
   return { route, reply, block };
 }
 
-async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, placesKey, writer, encoder) {
+async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, placesKey, writer, encoder, env) {
   const results = [];
   const totalBlocks = blocks.length;
 
@@ -3463,7 +3476,7 @@ async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, 
 
       // 3. Verificar este bloque
       try {
-        genResult.route = await verifyAllStops(genResult.route, placesKey);
+        genResult.route = await verifyAllStops(genResult.route, placesKey, {}, env);
       } catch (_) {
         // Si verify falla, mantener la ruta sin verificar
       }
@@ -3586,7 +3599,7 @@ function addressContainsLocation(formattedAddress, ...locations) {
   return locations.filter(Boolean).map(normalizeForMatch).some(c => c && c.length > 2 && normAddr.includes(c));
 }
 
-async function verifyAllStops(route, placesKey, opts = {}) {
+async function verifyAllStops(route, placesKey, opts = {}, env) {
   if (!route?.stops || !placesKey) return route;
 
   // ANCLA DE PAÍS — si el destino se resolvió a un país concreto antes de generar,
@@ -3629,8 +3642,59 @@ async function verifyAllStops(route, placesKey, opts = {}) {
     if (opts.forceCountryName) { country = opts.forceCountryName; route.country = opts.forceCountryName; }
   }
   const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
-  const FIELDS = 'place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary,business_status';
-  const DETAIL_FIELDS = 'name,photos,geometry,editorial_summary,opening_hours,business_status,formatted_address';
+  // opening_hours/editorial_summary NO se leen nunca del candidato de Find Place (solo
+  // del Place Details posterior, más abajo) — pedirlos aquí recargaba Contact/Atmosphere
+  // Data en TODAS las búsquedas de TODAS las paradas sin que ese dato se usara nunca.
+  const FIELDS = 'place_id,photos,geometry,name,formatted_address,business_status';
+
+  // ── REUSO DE PARADAS SIN CAMBIOS (edición/regeneración) ──
+  // Cada edición de ruta volvía a verificar TODAS las paradas contra Google, cambiaran
+  // o no — el mismo restaurante/monumento de siempre se re-pagaba entero cada vez que
+  // el usuario tocaba una sola parada. Si opts.previousStops trae la ruta ya guardada
+  // (misma edición, no una ruta nueva), las paradas cuyo nombre coincide EXACTO con una
+  // ya verificada antes se copian tal cual — cero llamadas a Google para ellas. Solo se
+  // activa si el país no ha cambiado respecto a esa ruta anterior (si cambió de país,
+  // más vale verificar todo de cero que arrastrar un place_id de otro sitio distinto).
+  const _prevStops = Array.isArray(opts.previousStops) ? opts.previousStops : [];
+  const _prevCountryOk = _prevStops.length > 0 &&
+    (!opts.previousCountry || !country || opts.previousCountry.toLowerCase() === country.toLowerCase());
+  const reuse = new Array(route.stops.length).fill(null);
+  const _norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  if (_prevCountryOk) {
+    const prevByName = new Map();
+    _prevStops.forEach(ps => {
+      if (ps.place_id && (ps.name || ps.headline)) prevByName.set(_norm(ps.name || ps.headline), ps);
+    });
+    route.stops.forEach((stop, i) => {
+      const key = _norm(stop.name || stop.headline);
+      const match = key && prevByName.get(key);
+      if (match) reuse[i] = match;
+    });
+  }
+
+  // KV — el mismo sitio verificado en OTRA ruta (otro usuario, u otra vez el mismo)
+  // también se reutiliza, no solo dentro de la misma edición. Clave por país + nombre
+  // normalizado (evita mezclar homónimos de países distintos). 30 días de TTL.
+  const _verifiedKvKey = (stop) => {
+    const key = _norm(stop.name || stop.headline || '');
+    if (!key) return null;
+    return 'verifiedspot:' + (countryCode || country || '??').toLowerCase() + ':' + key;
+  };
+  if (env?.SALMA_KB) {
+    const pending = route.stops.map((s, i) => (!reuse[i] && _verifiedKvKey(s)) ? i : -1).filter(i => i >= 0);
+    if (pending.length) {
+      const kvResults = await Promise.all(pending.map(i =>
+        env.SALMA_KB.get(_verifiedKvKey(route.stops[i])).catch(() => null)
+      ));
+      pending.forEach((i, j) => {
+        if (!kvResults[j]) return;
+        try {
+          const cached = JSON.parse(kvResults[j]);
+          if (cached?.place_id) reuse[i] = cached;
+        } catch (_) {}
+      });
+    }
+  }
 
   async function findPlace(name, biasLat, biasLng, radiusM) {
     // Punto: sesgar SIEMPRE por el ancla, ignorando las coords del modelo (que es lo que falla).
@@ -3676,7 +3740,8 @@ async function verifyAllStops(route, placesKey, opts = {}) {
     return { valid: false, reason: 'too_far', distKm };
   }
 
-  const attempt1 = await Promise.all(route.stops.map(stop => {
+  const attempt1 = await Promise.all(route.stops.map((stop, i) => {
+    if (reuse[i]) return Promise.resolve(null); // reutilizada — no hace falta preguntarle a Google
     const name = stop.name || stop.headline || '';
     if (!name || name.length < 3) return Promise.resolve(null);
     return findPlace(name, stop.lat, stop.lng, 5000);
@@ -3684,6 +3749,7 @@ async function verifyAllStops(route, placesKey, opts = {}) {
 
   const needsA2 = [];
   attempt1.forEach((r, i) => {
+    if (reuse[i]) return;
     const c = r?.candidates?.[0];
     if (!c?.geometry?.location || !validateCandidate(c, route.stops[i]).valid) needsA2.push(i);
   });
@@ -3705,6 +3771,7 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   }
 
   const bestCandidates = route.stops.map((stop, i) => {
+    if (reuse[i]) return null; // se resuelve aparte, en el forEach final, sin candidato de Google
     for (const result of [attempt1[i], a2[i], a3[i]]) {
       const c = result?.candidates?.[0];
       if (!c?.geometry?.location) continue;
@@ -3773,10 +3840,17 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   const toFetch = bestCandidates.map((bc, i) => bc?.candidate?.place_id ? i : -1).filter(i => i >= 0);
   for (let b = 0; b < toFetch.length; b += BATCH_SIZE) {
     const batch = toFetch.slice(b, b + BATCH_SIZE);
-    const results = await Promise.all(batch.map(i =>
-      fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${bestCandidates[i].candidate.place_id}&fields=${DETAIL_FIELDS}&language=es&key=${placesKey}`)
-        .then(r => r.json()).catch(() => null)
-    ));
+    const results = await Promise.all(batch.map(i => {
+      // Field mask condicional: opening_hours/editorial_summary solo si esta parada
+      // concreta no trae ya ese dato (de Claude o de una verificación anterior) —
+      // pedirlos siempre aunque no hagan falta recargaba Contact/Atmosphere Data por nada.
+      const s = route.stops[i];
+      let fields = 'name,photos,geometry,business_status,formatted_address';
+      if (!s.practical) fields += ',opening_hours';
+      if (!s.description) fields += ',editorial_summary';
+      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${bestCandidates[i].candidate.place_id}&fields=${fields}&language=es&key=${placesKey}`)
+        .then(r => r.json()).catch(() => null);
+    }));
     batch.forEach((idx, j) => { detailResults[idx] = results[j]; });
   }
 
@@ -3785,6 +3859,28 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   const discarded = [];
 
   route.stops.forEach((stop, i) => {
+    if (reuse[i]) {
+      // Reutilizada de la ruta anterior — se copian los datos ya verificados, sin
+      // haber gastado ni una llamada a Google para esta parada.
+      const prev = reuse[i];
+      stop.lat = prev.lat;
+      stop.lng = prev.lng;
+      stop.place_id = prev.place_id;
+      delete stop._unverified;
+      delete stop._verifyReason;
+      delete stop._soft_match;
+      if (prev.verified_address) stop.verified_address = prev.verified_address;
+      if (prev.photo_ref) stop.photo_ref = prev.photo_ref;
+      if (!stop.practical && prev.practical) stop.practical = prev.practical;
+      if (!stop.description && prev.description) stop.description = prev.description;
+      if (prev.name && strictNameMatch(stop.name || stop.headline || '', prev.name)) {
+        stop.name = prev.name; stop.headline = prev.name;
+      }
+      validatedStops.push(stop);
+      console.log(`[VERIFY] ↺ REUTILIZADA "${stop.name}" (sin llamada a Google, ya verificada antes)`);
+      return;
+    }
+
     const bc = bestCandidates[i];
     const detail = detailResults[i]?.result;
 
@@ -3842,6 +3938,22 @@ async function verifyAllStops(route, placesKey, opts = {}) {
 
     const desc = detail?.editorial_summary?.overview || '';
     if (desc && !stop.description) stop.description = desc;
+
+    // Cachear en KV 30 días — el mismo sitio en otra ruta futura se reutiliza sin
+    // volver a pagar Find Place + Details. Solo verificaciones de confianza (nombre
+    // coincide de verdad), nunca rescates blandos (bc.soft), para no propagar un
+    // match dudoso a otras rutas que ni siquiera lo pidieron.
+    if (env?.SALMA_KB && !bc.soft) {
+      const kvKey = _verifiedKvKey(stop);
+      if (kvKey) {
+        env.SALMA_KB.put(kvKey, JSON.stringify({
+          place_id: stop.place_id, lat: stop.lat, lng: stop.lng,
+          name: stop.name, verified_address: stop.verified_address || '',
+          photo_ref: stop.photo_ref || '', practical: stop.practical || '',
+          description: stop.description || '',
+        }), { expirationTtl: 2592000 }).catch(() => {});
+      }
+    }
 
     validatedStops.push(stop);
     console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${(candidate.place_id||'').substring(0, 20)}`);
@@ -4906,7 +5018,31 @@ async function resolverPaisDestino(destino, userLocation, env) {
   }
 }
 
-async function buscarLugar(input, placesKey, userCoords) {
+// Place Details cacheado en KV 30 días, por place_id + el set de fields pedido —
+// evita re-pagar el mismo teléfono/web/horario cada vez que alguien pregunta por el
+// mismo sitio (otro usuario, u otra vez el mismo). Si SALMA_KB no está disponible,
+// funciona igual pero sin cachear (siempre pide a Google).
+async function _getPlaceDetailsCached(env, placesKey, placeId, fields) {
+  const kvKey = 'placedetails:' + placeId + ':' + fields;
+  if (env?.SALMA_KB) {
+    try {
+      const cached = await env.SALMA_KB.get(kvKey);
+      if (cached) return JSON.parse(cached);
+    } catch (_) {}
+  }
+  let result = {};
+  try {
+    const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&language=es&key=${placesKey}`);
+    const data = await res.json();
+    result = data?.result || {};
+  } catch (_) {}
+  if (env?.SALMA_KB) {
+    env.SALMA_KB.put(kvKey, JSON.stringify(result), { expirationTtl: 2592000 }).catch(() => {});
+  }
+  return result;
+}
+
+async function buscarLugar(input, placesKey, userCoords, env) {
   if (!placesKey) return { error: 'Google Places key no configurada' };
 
   // Compatibilidad con llamadas legacy de buscar_restaurante (sin campo query)
@@ -4954,32 +5090,36 @@ async function buscarLugar(input, placesKey, userCoords) {
     }
 
     const top = data.results.slice(0, 5);
+    // Solo pedimos a Place Details lo que el Text Search de arriba NO trae ya gratis
+    // (teléfono y web). rating/price_level/opening_hours/name/formatted_address vienen
+    // en el propio resultado del Text Search — pedirlos otra vez en Details recargaba
+    // el mismo dato sin necesidad. Cacheado 30 días por place_id (mismo sitio preguntado
+    // por otro usuario, u otra vez por el mismo, sale de KV en vez de pagar de nuevo).
     const detailPromises = top.map(p => {
       if (!p.place_id) return Promise.resolve(null);
-      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${p.place_id}&fields=name,formatted_phone_number,international_phone_number,formatted_address,rating,price_level,opening_hours,website&language=es&key=${placesKey}`)
-        .then(r => r.json()).catch(() => null);
+      return _getPlaceDetailsCached(env, placesKey, p.place_id, 'formatted_phone_number,international_phone_number,website');
     });
     const details = await Promise.all(detailPromises);
 
     const lugares = top.map((p, i) => {
-      const d = details[i]?.result;
-      const nombre = d?.name || p.name;
+      const d = details[i];
+      const nombre = p.name;
       const gmapsLink = p.place_id
         ? mapsPlaceFichaUrl(nombre, p.place_id)
         : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre + ' ' + ciudad)}`;
       const entry = {
         nombre,
         telefono: d?.international_phone_number || d?.formatted_phone_number || '',
-        direccion: d?.formatted_address || p.formatted_address || '',
-        rating: (d?.rating || p.rating) ? `${d?.rating || p.rating}★` : '',
-        abierto: d?.opening_hours?.open_now != null ? (d.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
+        direccion: p.formatted_address || '',
+        rating: p.rating ? `${p.rating}★` : '',
+        abierto: p.opening_hours?.open_now != null ? (p.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
         web: d?.website || '',
         google_maps: gmapsLink,
         lat: p.geometry?.location?.lat || null,
         lng: p.geometry?.location?.lng || null,
       };
-      if (esComida && (d?.price_level || p.price_level)) {
-        entry.precio = '€'.repeat(d?.price_level || p.price_level);
+      if (esComida && p.price_level) {
+        entry.precio = '€'.repeat(p.price_level);
       }
       return entry;
     }).filter(l => l.nombre);
@@ -5090,7 +5230,7 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
       return await buscarCochesBooking(toolInput, env.RAPIDAPI_KEY);
     case 'buscar_restaurante': // alias legacy — redirige a buscar_lugar
     case 'buscar_lugar':
-      return await buscarLugar(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
+      return await buscarLugar(toolInput, env.GOOGLE_PLACES_KEY, userCoords, env);
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
     case 'buscar_web':
@@ -6124,6 +6264,38 @@ export default {
       }
     }
 
+    // Hash estable para usar el photo_reference de Google como clave de R2 (el ref
+    // en sí trae caracteres/longitud poco cómodos para una key, el hash no).
+    async function _sha256Hex(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Descarga la foto de Google Places (Places Photo, de pago) UNA sola vez y la deja
+    // en R2 para siempre — antes /photo no cacheaba nada en el servidor y cada
+    // visualización de una guía ya generada volvía a pagar la misma foto a Google.
+    // Reutiliza el bucket SALMA_PHOTOS ya existente (prefijo propio 'photocache/',
+    // servido después por la ruta /photo/* que ya lee de este mismo bucket).
+    async function _getCachedPlacePhoto(placesKey, photoRef) {
+      const r2Key = 'photocache/' + (await _sha256Hex(photoRef)) + '.jpg';
+      if (env.SALMA_PHOTOS) {
+        try {
+          const cached = await env.SALMA_PHOTOS.get(r2Key);
+          if (cached) {
+            return { r2Key, body: cached.body, contentType: cached.httpMetadata?.contentType || 'image/jpeg' };
+          }
+        } catch (_) {}
+      }
+      const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
+      if (!imgRes.ok) return null;
+      const contentType = imgRes.headers.get('Content-Type') || 'image/jpeg';
+      const buf = await imgRes.arrayBuffer();
+      if (env.SALMA_PHOTOS) {
+        env.SALMA_PHOTOS.put(r2Key, buf, { httpMetadata: { contentType } }).catch(() => {});
+      }
+      return { r2Key, body: buf, contentType };
+    }
+
     // ─── ENDPOINT /photo ───
     if (request.method === 'GET' && url.pathname === '/photo') {
       const name = url.searchParams.get('name') || '';
@@ -6135,15 +6307,15 @@ export default {
 
       if (ref && placesKey) {
         try {
-          const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${ref}&key=${placesKey}`);
-          if (!imgRes.ok) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
+          const photo = await _getCachedPlacePhoto(placesKey, ref);
+          if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
           if (url.searchParams.get('json') === '1') {
-            return new Response(JSON.stringify({ url: imgRes.url }), {
+            return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo/${photo.r2Key}` }), {
               headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
             });
           }
-          return new Response(imgRes.body, {
-            headers: { 'Content-Type': imgRes.headers.get('Content-Type') || 'image/jpeg', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=86400' }
+          return new Response(photo.body, {
+            headers: { 'Content-Type': photo.contentType, 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=31536000' }
           });
         } catch (e) {
           return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -6212,15 +6384,15 @@ export default {
           }
         }
 
-        const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
-        if (!imgRes.ok) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
+        const photo = await _getCachedPlacePhoto(placesKey, photoRef);
+        if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
         if (url.searchParams.get('json') === '1') {
-          return new Response(JSON.stringify({ url: imgRes.url }), {
+          return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo/${photo.r2Key}` }), {
             headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
           });
         }
-        return new Response(imgRes.body, {
-          headers: { 'Content-Type': imgRes.headers.get('Content-Type') || 'image/jpeg', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=86400' }
+        return new Response(photo.body, {
+          headers: { 'Content-Type': photo.contentType, 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=31536000' }
         });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -6246,8 +6418,8 @@ export default {
         const photoRef = r.photos?.[0]?.photo_reference || '';
         let photoUrl = '';
         if (photoRef) {
-          const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
-          if (imgRes.ok) photoUrl = imgRes.url;
+          const photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
+          if (photo) photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${photo.r2Key}`;
         }
         return new Response(JSON.stringify({
           name: r.name || '',
@@ -8331,7 +8503,7 @@ REGLAS:
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
           } else {
-            helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
+            helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords, env);
           }
         } catch (e) {
           // Fallo silencioso — Salma responde sin datos de búsqueda
@@ -8821,7 +8993,7 @@ INSTRUCCIONES:
               let route = null;
               try {
                 // Pipeline: cada bloque genera→verifica→emite independientemente
-                const blockResults = await generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, env.GOOGLE_PLACES_KEY, writer, encoder);
+                const blockResults = await generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, env.GOOGLE_PLACES_KEY, writer, encoder, env);
 
                 if (blockResults.length > 0) {
                   route = mergeBlocks(blockResults, message);
@@ -9552,7 +9724,13 @@ REGLAS:
                 anchorLocality: anchorCountry.locality || '',
                 anchorProvince: anchorCountry.province || '',
               } : {};
-              const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts);
+              // Edición de una ruta ya guardada — pasar las paradas anteriores para que
+              // verifyAllStops pueda reutilizar las que no cambiaron sin re-preguntar a Google.
+              if (_editingRoute && currentRoute?.stops?.length) {
+                _vOpts.previousStops = currentRoute.stops;
+                _vOpts.previousCountry = currentRoute.country || '';
+              }
+              const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts, env);
               if (verified) route = verified;
             }
           } catch (_) {
