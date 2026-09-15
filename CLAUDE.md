@@ -143,17 +143,26 @@ Aquel día se cambió tres veces de sospechoso porque se miraba una sola capa.
 - Puntos de restauración del 5 sept 2026: tags `v-5sept-antes-de-volver-atras` y
   `v-5sept-antes-de-borrar` (todo el trabajo de ese día, Worker intacto).
 
-### 8. CUALQUIER COSA QUE PUEDA MOVER LA FACTURA, SE DICE — SIN EXCEPCIÓN
+### 8. CUALQUIER COSA QUE PUEDA MOVER LA FACTURA, SE DICE — SIEMPRE, SIN EXCEPCIÓN, POR MÍNIMA QUE SEA
 
 Añadido el 15 sept 2026 tras el susto de 82€ en 14 días en Google Places (ver 🔴 Crítico
 en "Pendiente / Problemas conocidos", y el detalle completo en "Normas de desarrollo").
+Reforzado el mismo día porque la primera redacción dejaba margen a decidir "esto es
+tan pequeño que no hace falta decirlo" — **no existe ese margen. Nunca.**
 
-- **Cualquier cambio que pueda mover el gasto en una API de pago (Google Places/Maps,
-  Anthropic, OpenAI, Duffel, RapidAPI, Twilio, ElevenLabs, Stripe, Brave, Serper,
-  OpenWeather...) se le dice a Paco explícitamente** — qué se toca, por qué puede afectar
-  al coste, estimación aunque sea a ojo. Subir el gasto o bajarlo da igual, se avisa igual.
+- **SIEMPRE, en TODO cambio, por mínimo que parezca, que toque una línea de código que
+  llame (o pueda llegar a llamar) a una API de pago** (Google Places/Maps, Anthropic,
+  OpenAI, Duffel, RapidAPI, Twilio, ElevenLabs, Stripe, Brave, Serper, OpenWeather...) —
+  se le dice a Paco explícitamente: qué se toca y por qué puede afectar al coste,
+  estimación aunque sea a ojo. Subir el gasto, bajarlo, o "seguramente no cambia nada"
+  cuentan igual — se avisa igual, sin excepción.
+- **No hay umbral de "esto es tan pequeño que no cuenta".** Cambiar un solo parámetro,
+  un solo field mask, una sola condición de una caché, un solo número de un intervalo —
+  todo eso ES un cambio que puede mover la factura, y se dice igual que uno grande.
 - No es "bajo riesgo" aunque el cambio sea pequeño, sea solo código, o sea un fix que
   promete ahorrar dinero — un arreglo de coste sigue necesitando decir qué se tocó.
+- Nunca decidir en solitario que algo "no hace falta mencionarlo". Si hay duda de si
+  cuenta, cuenta — se dice.
 - No esperar a que Paco pregunte. Decirlo antes o en el momento, nunca como nota de después.
 
 ---
@@ -1878,16 +1887,20 @@ ahí, hacer `git pull origin main` — es un fast-forward, seguro.
   usuario) → sigue el resto de reglas de esta sección tal cual: se pregunta y se confirma
   en cada paso, **salvo** que Paco diga explícitamente "hazlo" para ese caso concreto en
   ese momento — eso no es un permiso permanente, solo vale para esa acción.
-- **⚠️ Coste de APIs — esto NO entra en "bajo riesgo" aunque sea solo tocar código o
-  documentación.** Regla añadida el 15 sept 2026, a fuego, tras la factura de Google
-  Places de 82€ en 14 días (ver 🔴 Crítico): **cualquier cambio que pueda mover el gasto
-  en una API de pago (Google Places/Maps, Anthropic, OpenAI, Duffel, RapidAPI, Twilio,
-  ElevenLabs, Stripe, Brave, Serper, OpenWeather...) — subirlo o bajarlo, tanto da — se le
-  dice a Paco explícitamente, ANTES o en el momento, no como nota de después.** Decirlo
-  significa: qué se toca, por qué puede afectar al coste, y una estimación aunque sea a
-  ojo. No hace falta esperar a que él pregunte. Aplica a arreglos de coste igual que a
-  features nuevas — un fix que promete ahorrar dinero SIGUE necesitando decir qué se tocó
-  y por qué, no basta con "ya está arreglado".
+- **⚠️ Coste de APIs — esto NO entra en "bajo riesgo" NUNCA, ni siquiera si el cambio es
+  mínimo, ni siquiera si es solo tocar código o documentación.** Regla añadida el 15 sept
+  2026, a fuego, tras la factura de Google Places de 82€ en 14 días (ver 🔴 Crítico) y
+  reforzada el mismo día porque Paco insistió en que aplica **SIEMPRE — sin umbral de
+  "esto es tan pequeño que no cuenta", sin excepciones, en cualquier cambio mínimo**:
+  **cualquier cambio, por pequeño que sea, en cualquier línea que llame o pueda llegar a
+  llamar a una API de pago** (Google Places/Maps, Anthropic, OpenAI, Duffel, RapidAPI,
+  Twilio, ElevenLabs, Stripe, Brave, Serper, OpenWeather...) — subirlo o bajarlo, tanto
+  da — **se le dice a Paco explícitamente, ANTES o en el momento, no como nota de
+  después.** Decirlo significa: qué se toca, por qué puede afectar al coste, y una
+  estimación aunque sea a ojo. No hace falta esperar a que él pregunte, y no es decisión
+  de la sesión juzgar si "esto es tan poco que no merece mención" — si hay duda, se dice.
+  Aplica a arreglos de coste igual que a features nuevas — un fix que promete ahorrar
+  dinero SIGUE necesitando decir qué se tocó y por qué, no basta con "ya está arreglado".
 
 - **Nunca** meter `const db` duplicado fuera de `app.js`
 - **Nunca** poner API keys en el código — van en Cloudflare secrets
