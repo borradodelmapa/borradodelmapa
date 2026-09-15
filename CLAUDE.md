@@ -1005,6 +1005,24 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Enlace "Abrir en Google Maps" de sitios buscados (buscar_lugar/hoteles) no
+  llevaba a ningún sitio — 15 sept 2026, DESPLEGADO, sin confirmar en pantalla.**
+  Reportado por Paco con "Camping Playa de Tapia": el enlace salía bien pintado
+  ("📍 Abrir en Google Maps") pero al tocarlo no resolvía nada — lo probó pegando el
+  `place_id` a mano en la app de Google Maps y dio "No hay resultados". Causa: 8 sitios
+  del Worker generaban el enlace con el formato viejo `maps/place/?q=place_id:XXX` —
+  un `place_id` pegado ahí sin más no es un formato de URL que Maps sepa resolver de
+  forma fiable por sí solo (mismo tipo de fallo que ya se arregló el 10 sept para los
+  enlaces "Cómo llegar", que entonces tampoco llevaban `?api=1`). Fix: función nueva
+  `mapsPlaceFichaUrl(name, placeId)` con el esquema oficial de Google (Search Action:
+  `search/?api=1&query=<nombre>&query_place_id=<id>`), que si localiza el sitio exacto.
+  Reemplazado en los 8 sitios que generaban el enlace roto: `searchNearbyPlaces`,
+  `findPlace` (verify), 2 casos en `buildMapsLinksFromStops`, 2 handlers de
+  `buscar_lugar`/restaurantes, y `searchHotelsGoogle`/`searchPlacesGoogle`. Sin cambios
+  en frontend — no hace falta `?v=`. **Desplegado (commit `dbae99a`, GitHub Action
+  "Deploy Worker" run #16, Worker Version ID `34214c93-395a-4a24-a544-4af9ba3acf56`).
+  Pendiente: que Paco pida otro sitio (restaurante, camping, hotel...) y confirme que
+  el enlace "Abrir en Google Maps" sí abre el sitio correcto esta vez.**
 - **Chip "parada más cercana" del mapa decía 30km cuando la distancia real por
   carretera eran 44km — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Reportado
   también desde Mondoñedo. Causa: `_updateNearestChip()` en `app.js` (~línea 4050) usa
