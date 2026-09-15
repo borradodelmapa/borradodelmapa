@@ -1022,8 +1022,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   y, si vienen, añade al prompt de Haiku la coordenada exacta con instrucción explícita
   de no mezclar con homónimos de otros sitios y de admitir que no tiene datos fiables
   antes que inventar. Sin cambios en frontend (ya mandaba las coordenadas) — no hace
-  falta subir `?v=`. **Pendiente: desplegar el Worker (GitHub Action "Deploy Worker") y
-  que Paco confirme en pantalla repitiendo el Narrador en un sitio con nombre ambiguo.**
+  falta subir `?v=`. **Desplegado (commit `7232e6d`, GitHub Action "Deploy Worker" run
+  #14, Worker Version ID `b46ebb37-611c-43b1-ab36-7a27237998af`). Pendiente: que Paco
+  confirme en pantalla repitiendo el Narrador en un sitio con nombre ambiguo.**
 - **`FOTO_TAG: palabra` se veía como texto crudo en el chat al identificar un lugar con
   la cámara — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Mismo reporte de
   Mondoñedo: la respuesta sobre la catedral (correcta en contenido) terminaba con
@@ -1034,8 +1035,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   pero eso solo llega a pantalla si el evento `done` dispara un re-render; si no, se
   queda el texto ya streameado en vivo, marcador incluido. Añadido en los mismos dos
   sitios donde ya se ocultan `SALMA_ACTION`/`HISTORIA_LUGAR` (chunk en vivo + re-render
-  del done). `?v=` de `salma.js` subido a 81 en `index.html`. **Pendiente: push a
-  `main`, y que Paco confirme en pantalla identificando un lugar con la cámara.**
+  del done). `?v=` de `salma.js` subido a 81 en `index.html`. **Fusionado a `main`
+  (commit `7232e6d`) y ya en GitHub Pages. Pendiente: que Paco confirme en pantalla
+  identificando un lugar con la cámara.**
   **Propuesta de Paco, sin implementar todavía**: añadir un botón de "foto" fácil de
   encontrar dentro del propio módulo Narrador, ya que identificar por foto SÍ dio el
   resultado correcto mientras el Narrador por GPS no — a valorar cuando confirme si el
