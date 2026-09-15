@@ -271,11 +271,6 @@ body {
   border-radius:0; padding: 0 4px; font-size: 11px; font-weight: 600;
 }
 .wx-dot { color: rgba(255,255,255,.2); }
-.wx-toggle {
-  background: none; border: none; cursor: pointer; flex-shrink: 0;
-  color: rgba(255,255,255,.3); font-size: 16px; padding: 2px 0 2px 6px; line-height: 1;
-}
-.wx-toggle:hover { color: rgba(255,255,255,.7); }
 /* Pronóstico varios días */
 .wx-forecast {
   display: flex; gap: 6px; margin-top: 8px;
@@ -6362,7 +6357,14 @@ body {
 .ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ce-top .ce-brand:active{opacity:.7;}
 .ce-top .ce-brand span{color:var(--ce-ink3);}
-.ce-top .ce-meta{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.12em;color:var(--ce-ink2);}
+.ce-top .ce-wx-toggle{
+  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;flex-shrink:0;
+  background:rgba(240,180,41,.12);border:1.5px solid var(--ce-amber);border-radius:0;
+  color:var(--ce-amber);font-size:16px;font-weight:700;line-height:1;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:background .15s;
+}
+.ce-top .ce-wx-toggle:active{background:var(--ce-amber);color:#0a0a0a;}
 .ce-greet{
   font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;
   font-size:25px;letter-spacing:.02em;line-height:1;color:var(--ce-ink);

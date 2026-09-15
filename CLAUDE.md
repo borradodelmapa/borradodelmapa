@@ -1005,19 +1005,22 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
-- **Toast "Narrador desactivado" (y otros de confirmación simple) se quedaban en
-  pantalla para siempre — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.**
-  Reportado por Paco: al desactivar el Narrador el toast no se borraba solo. Causa:
-  `showNarratorToast()` nunca tuvo auto-cierre (decisión del 10 sept, pero era para
-  los avisos CON CONTENIDO real de un sitio — dar tiempo a leerlos). Los toasts de
-  confirmación simple ("activado"/"desactivado"/"avisos olvidados") heredaron ese
-  mismo comportamiento sin necesitarlo. Fix: `showNarratorToast()` acepta ahora un
-  tercer parámetro `autoCloseMs` opcional — añadido en los 3 sitios de confirmación
-  simple (`app.js`): activado (4s), avisos olvidados (4s), desactivado (3s). El
-  toast de "permite notificaciones" (necesita que el usuario actúe) y el de
-  contenido real de un POI (con narrativa/foto) se quedan SIN auto-cierre, como
-  hasta ahora. `?v=` de `salma.js` a 86, `app.js` a 107. **Pendiente: que Paco
-  desactive el Narrador y confirme que el toast desaparece solo a los 3s.**
+- **Botón de expandir/minimizar el tiempo — reubicado y hecho más visible, 15 sept
+  2026, FUSIONADO, sin confirmar en pantalla.** Paco preguntó por el icono junto al
+  tiempo en la cabecera (lo confundía con un botón de "refrescar") — era el toggle
+  de expandir/minimizar el banner del tiempo (`_wxToggle()`), pero como icono suelto
+  y tenue dentro del propio banner (`.wx-toggle`, sin fondo ni borde) pasaba
+  desapercibido. A petición suya: quitado el label "SEP" (mes actual, poco útil) de
+  la cabecera junto al logo, y puesto ahí el botón de expandir/minimizar el tiempo,
+  ahora bien visible — cuadrado con borde y fondo dorado (`.ce-wx-toggle`, `app.js`
+  línea ~445), mismo `_wxToggle()` de siempre. Quitado el botón viejo y pequeño
+  del propio banner (`salma.js:_wxRender()`) para no duplicar el control — ahora
+  solo hay uno, y `_wxRender()` sincroniza su icono (↓/↑) y su texto ("Expandir
+  tiempo"/"Minimizar tiempo") cada vez que cambia de estado. `?v=` subidos:
+  `salma.js` a 87, `app.js` a 108, `styles.css` a 96. **Pendiente: que Paco recargue
+  y confirme que el botón nuevo (donde antes ponía "SEP") expande/minimiza el
+  tiempo correctamente, con más detalle (sensación térmica, humedad, calidad del
+  aire, previsión) al desplegarlo.**
 - **Enlace "Abrir en Google Maps" de sitios buscados (buscar_lugar/hoteles) no
   llevaba a ningún sitio — 15 sept 2026, DESPLEGADO, sin confirmar en pantalla.**
   Reportado por Paco con "Camping Playa de Tapia": el enlace salía bien pintado
@@ -1342,6 +1345,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   cuando probó en incógnito (con las notificaciones bloqueadas por política del propio
   Chrome incógnito, no por la app) — sin acción pendiente, solo queda anotado por si
   vuelve a probar ahí.**
+  **Toast "Narrador desactivado" con auto-cierre — CONFIRMADO EN PANTALLA por Paco,
+  probado 2 veces.** El `autoCloseMs` añadido a `showNarratorToast()` funciona: el
+  toast se borra solo a los 3s al desactivar, sin tener que tocar la X.
 
 - **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
   CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se
