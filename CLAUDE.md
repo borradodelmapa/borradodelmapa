@@ -1005,6 +1005,42 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Narrador: elegía un negocio pequeño en vez del monumento real — 15 sept 2026,
+  DESPLEGADO, sin confirmar en pantalla.** Segundo aviso de Paco sobre lo mismo de
+  Mondoñedo: aunque el fix del geoHint (ver entrada de abajo) resuelve la confusión de
+  homónimos, el problema de fondo era otro y más grave — el Narrador ni siquiera debía
+  haber elegido esa tienda de artesanía en primer lugar, teniendo la catedral delante.
+  Causa real, en `worker/salma-worker.js` (`/nearby-pois`, ~línea 6617): la API de
+  Google Nearby Search solo admite **un** valor en el parámetro `type` — el código
+  mandaba una lista con `|` (`tourist_attraction|museum|church|...`), inválida para ese
+  parámetro (el `types` en plural con OR está retirado hace años). Google ignora en
+  silencio ese filtro roto y devuelve cualquier sitio cercano sin filtrar — así se coló
+  una tienda de cerámica. Encima, el código cortaba a los 5 primeros resultados de
+  Google (orden de relevancia, no de distancia) ANTES de calcular la distancia y
+  ordenar — si la catedral no estaba entre esos 5 "relevantes" de Google, ni siquiera
+  llegaba a compararse. Fix: se quita el `type` inválido y se filtra de verdad contra el
+  array `types` real que Google sí devuelve por cada sitio (iglesia, museo, mirador,
+  parque, galería...), sobre TODOS los resultados antes de ordenar por distancia y
+  recién entonces cortar a 5. Sin cambios en frontend — no hace falta `?v=`.
+  **Desplegado (commit pendiente de subir en este mismo push). Pendiente: que Paco
+  repita el Narrador delante de un monumento con comercios alrededor y confirme que
+  ahora sí prioriza el sitio real.**
+- **Chip "parada más cercana" del mapa decía 30km cuando la distancia real por
+  carretera eran 44km — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Reportado
+  también desde Mondoñedo. Causa: `_updateNearestChip()` en `app.js` (~línea 4050) usa
+  `_haversineKm` — línea recta entre el GPS del usuario y la parada, no la carretera
+  real. En zonas de costa/montaña con curvas (como Galicia) la diferencia puede ser
+  grande. **Arreglo aplicado ahora, deliberadamente parcial**: el chip ya dice "44.0 km
+  recta" en vez de "44.0 km" a secas, para que no se lea como si fuera la distancia real
+  de carretera — cambio de una línea, sin coste, desplegado ya.
+  **Lo que NO se ha hecho, a propósito, y necesita que Paco decida**: calcular la
+  distancia real de carretera (Directions API) en vez de la línea recta. No es trivial
+  porque este chip se recalcula en cada posición GPS nueva (`watchPosition`, cada ~5s
+  mientras se mueve) — pedir Directions esa frecuencia dispararía el coste y el rate
+  limit de Google sin necesidad. Si se quiere la distancia real, habría que limitar
+  cuánto se pide (ej. solo cuando cambia la parada más cercana, o cada X minutos, con
+  caché) — a definir con Paco antes de tocar esto, no se ha implementado.
+  `?v=` de `app.js` subido a 104 en `index.html`.
 - **Narrador: historia de un lugar totalmente ajeno (homónimo en otra región) — 15 sept
   2026, DESPLEGADO, sin confirmar en pantalla.** Paco probó el Narrador de pie delante
   de una iglesia barroca del s.XVIII en Mondoñedo (Lugo) y le salió la historia de

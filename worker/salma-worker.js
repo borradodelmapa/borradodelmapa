@@ -6627,34 +6627,46 @@ export default {
         if (!placesKey) {
           return new Response(JSON.stringify({ error: 'No Places key' }), { status: 500, headers: corsH });
         }
-        const types = 'tourist_attraction|museum|church|mosque|synagogue|hindu_temple|park|art_gallery';
-        const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${types}&key=${placesKey}&language=es`;
+        // Google Nearby Search solo admite UN valor en "type" — una lista con "|" no es
+        // válida ahí (a diferencia del viejo parámetro "types" en plural, ya retirado) y
+        // Google la ignora en silencio, devolviendo cualquier sitio cercano sin filtrar
+        // (así se coló una tienda de artesanía junto a una catedral). El filtro real se
+        // hace aquí, contra el array "types" que Google sí devuelve por cada resultado.
+        const typeWhitelist = ['tourist_attraction', 'museum', 'church', 'place_of_worship', 'mosque', 'synagogue', 'hindu_temple', 'park', 'art_gallery'];
+        const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&key=${placesKey}&language=es`;
         const pRes = await fetch(placesUrl);
         const pData = await pRes.json();
         if (!pData.results || !pData.results.length) {
           return new Response(JSON.stringify({ pois: [] }), { headers: corsH });
         }
-        // Calcular distancia y devolver top 5
         const userLat = parseFloat(lat);
         const userLng = parseFloat(lng);
-        const pois = pData.results.slice(0, 5).map(p => {
-          const pLat = p.geometry.location.lat;
-          const pLng = p.geometry.location.lng;
-          const dLat = (pLat - userLat) * Math.PI / 180;
-          const dLng = (pLng - userLng) * Math.PI / 180;
-          const a = Math.sin(dLat/2)**2 + Math.cos(userLat*Math.PI/180)*Math.cos(pLat*Math.PI/180)*Math.sin(dLng/2)**2;
-          const dist = 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-          return {
-            name: p.name,
-            lat: pLat,
-            lng: pLng,
-            place_id: p.place_id,
-            types: (p.types || []).slice(0, 3),
-            distance_m: Math.round(dist),
-            photo_ref: p.photos && p.photos[0] ? p.photos[0].photo_reference : null,
-            rating: p.rating || null
-          };
-        }).sort((a, b) => a.distance_m - b.distance_m);
+        // Filtrar por tipo real primero, y sobre TODOS los que pasan (no solo los 5
+        // primeros de Google, que vienen ordenados por relevancia, no por distancia) —
+        // si no, un sitio real de interés podía quedar fuera del top 5 antes de calcularse
+        // siquiera su distancia.
+        const pois = pData.results
+          .filter(p => (p.types || []).some(t => typeWhitelist.includes(t)))
+          .map(p => {
+            const pLat = p.geometry.location.lat;
+            const pLng = p.geometry.location.lng;
+            const dLat = (pLat - userLat) * Math.PI / 180;
+            const dLng = (pLng - userLng) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(userLat*Math.PI/180)*Math.cos(pLat*Math.PI/180)*Math.sin(dLng/2)**2;
+            const dist = 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return {
+              name: p.name,
+              lat: pLat,
+              lng: pLng,
+              place_id: p.place_id,
+              types: (p.types || []).slice(0, 3),
+              distance_m: Math.round(dist),
+              photo_ref: p.photos && p.photos[0] ? p.photos[0].photo_reference : null,
+              rating: p.rating || null
+            };
+          })
+          .sort((a, b) => a.distance_m - b.distance_m)
+          .slice(0, 5);
         return new Response(JSON.stringify({ pois }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });

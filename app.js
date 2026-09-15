@@ -4058,7 +4058,9 @@ function _updateNearestChip() {
     if (d < minDist) { minDist = d; nearest = { stop, i }; }
   });
   if (!nearest) return;
-  const dist = minDist < 1 ? Math.round(minDist * 1000) + ' m' : minDist.toFixed(1) + ' km';
+  // "recta" avisa de que es línea recta (haversine), no carretera real — por carretera
+  // suele quedarse corta, sobre todo en zonas de costa/montaña con curvas
+  const dist = minDist < 1 ? Math.round(minDist * 1000) + ' m' : minDist.toFixed(1) + ' km recta';
   const label = nearest.stop.headline || nearest.stop.name || `Parada ${nearest.i + 1}`;
   chip.textContent = `📍 #${nearest.i + 1} ${label} · ${dist}`;
   chip.style.display = 'block';
