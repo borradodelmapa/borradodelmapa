@@ -1005,19 +1005,15 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
-- **Toast "Narrador desactivado" (y otros de confirmación simple) se quedaban en
-  pantalla para siempre — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.**
-  Reportado por Paco: al desactivar el Narrador el toast no se borraba solo. Causa:
-  `showNarratorToast()` nunca tuvo auto-cierre (decisión del 10 sept, pero era para
-  los avisos CON CONTENIDO real de un sitio — dar tiempo a leerlos). Los toasts de
-  confirmación simple ("activado"/"desactivado"/"avisos olvidados") heredaron ese
-  mismo comportamiento sin necesitarlo. Fix: `showNarratorToast()` acepta ahora un
-  tercer parámetro `autoCloseMs` opcional — añadido en los 3 sitios de confirmación
-  simple (`app.js`): activado (4s), avisos olvidados (4s), desactivado (3s). El
-  toast de "permite notificaciones" (necesita que el usuario actúe) y el de
-  contenido real de un POI (con narrativa/foto) se quedan SIN auto-cierre, como
-  hasta ahora. `?v=` de `salma.js` a 86, `app.js` a 107. **Pendiente: que Paco
-  desactive el Narrador y confirme que el toast desaparece solo a los 3s.**
+- **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
+  quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
+  el tiempo, más grande y visible (commit `cf6fcd5`). Paco pidió revertirlo
+  ("retrocede, déjalo como estaba") — deshecho con `git revert --no-edit cf6fcd5`
+  (commit `960dd78`, nunca se reescribe historia). Vuelto exactamente a como
+  estaba: "SEP" de nuevo en la cabecera, el toggle pequeño (`.wx-toggle`, sin
+  fondo ni borde) de vuelta dentro del propio banner del tiempo. `?v=` bajados de
+  vuelta: `salma.js` a 86, `app.js` a 107, `styles.css` a 95. **Sin nada pendiente
+  de esto** — cerrado, no se retoma salvo que Paco lo pida de nuevo explícitamente.
 - **Enlace "Abrir en Google Maps" de sitios buscados (buscar_lugar/hoteles) no
   llevaba a ningún sitio — 15 sept 2026, DESPLEGADO, sin confirmar en pantalla.**
   Reportado por Paco con "Camping Playa de Tapia": el enlace salía bien pintado
@@ -1342,6 +1338,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   cuando probó en incógnito (con las notificaciones bloqueadas por política del propio
   Chrome incógnito, no por la app) — sin acción pendiente, solo queda anotado por si
   vuelve a probar ahí.**
+  **Toast "Narrador desactivado" con auto-cierre — CONFIRMADO EN PANTALLA por Paco,
+  probado 2 veces.** El `autoCloseMs` añadido a `showNarratorToast()` funciona: el
+  toast se borra solo a los 3s al desactivar, sin tener que tocar la X.
 
 - **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
   CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se
