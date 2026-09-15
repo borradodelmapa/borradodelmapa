@@ -1005,6 +1005,60 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Facturación de Google Places disparada a 82,26€ en los primeros 14 días de sept
+  (+15.420% vs periodo anterior) — auditoría completa + fixes DESPLEGADOS, 15 sept
+  2026, sin confirmar en pantalla.** Paco vio el cargo en Google Cloud Billing
+  (Find Place 21,21€, Atmosphere Data 19,54€, Places Photo 18,79€, Contact Data
+  22,19€) y pidió estudiar el Worker línea por línea, no solo los dos sitios obvios.
+  Fusionado a `main` (commit `14955c6`) y desplegado (GitHub Action "Deploy Worker"
+  run #17, **Worker Version ID `fa3b910f-b941-4b63-bd5e-7a17a9aca5f0`**) — esta
+  sesión no pudo confirmarlo además contra `/version` porque el proxy de red del
+  contenedor bloquea las llamadas salientes a `salma-api.paco-defoto.workers.dev`
+  (mismo bloqueo ya documentado el 14 sept, política de la organización, no del
+  Worker) — Paco o una sesión sin esa restricción puede comprobarlo con
+  `curl.exe -s https://salma-api.paco-defoto.workers.dev/version`.
+  **Arreglado:**
+  1. Narrador: `/nearby-pois` (Nearby Search de pago) se pedía cada 55-60s aunque el
+     usuario estuviera parado — ahora solo si se movió >30m desde el último check
+     real (`salma.js:checkNearbyPOIs`). El botón "Olvidar avisos" y el chequeo
+     forzado al activar el Narrador se reseteó aparte para que sigan disparando al
+     momento, no se vean bloqueados por el nuevo gate.
+  2. `/photo`: las fotos de Google Places ya se guardan en R2 (bucket `SALMA_PHOTOS`
+     existente, prefijo `photocache/`, hash del `photo_reference`) la primera vez y
+     se sirven de ahí siempre después — antes cada visualización de una guía ya
+     generada volvía a pagar la misma foto a Google, indefinidamente. `/place-details`
+     reutiliza la misma caché en vez de pegarle a Google por su cuenta.
+  3. `buscarLugar`/`searchPlacesForHelp` (tool `buscar_lugar` + búsqueda automática de
+     ayuda en 6 de las 8 categorías): ya no piden `rating`/`price_level`/
+     `opening_hours` a Place Details — esos datos ya venían gratis en el Text Search
+     anterior (o, en el caso de `opening_hours` de `searchPlacesForHelp`, no se
+     usaban en ningún sitio del código). Lo que sí hace falta (teléfono, web) se
+     cachea 30 días en KV por `place_id` (`placedetails:{place_id}:{fields}`).
+  4. `verifyAllStops` (la función que verifica cada parada al generar o editar una
+     ruta — el mayor cargo de los cuatro): al editar/regenerar una ruta guardada,
+     las paradas cuyo nombre coincide exacto con una ya verificada se copian tal
+     cual, sin llamar a Google (por la ruta anterior, `opts.previousStops`, o por
+     una caché KV de 30 días `verifiedspot:{país}:{nombre}` entre rutas distintas
+     de usuarios distintos). Además, `opening_hours`/`editorial_summary` — que no se
+     leen nunca del candidato de Find Place, solo del Place Details posterior — se
+     quitaron del `FIELDS` de Find Place, y en el Place Details final solo se piden
+     si esa parada concreta aún no los tiene. **A propósito NO se tocó el backoff de
+     attempt2/attempt3** (los reintentos con radio mayor / Text Search cuando Find
+     Place falla) — es lo único de toda la auditoría con riesgo real de bajar la
+     calidad de verificación en vez de solo el coste (son los que rescataron los
+     faros de la ruta costera de la saga del 11-12 sept) — queda pendiente de
+     decidirlo con Paco aparte, no se recortó a lo bruto.
+  5. `searchNearbyPlaces` (flujo "quiero ir a..."): caché KV 7 días por tipo + celda
+     de ~1km — cien personas preguntando por el mismo destino no disparaban cien
+     Nearby Search idénticas.
+  Nada de esto cambia lo que ve el usuario en una ruta ya verificada — solo evita
+  repetir llamadas a Google que no aportaban nada nuevo. `?v=` de `salma.js` subido
+  a 87 en `index.html`.
+  **Pendiente: que Paco confirme `/version` contra el Version ID de arriba, genere/
+  edite una ruta real para comprobar que no cambió nada de lo que ve, y deje el
+  Narrador activo un rato parado (coche/restaurante) para confirmar que ya no
+  dispara solo cada minuto.**
+
 - **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
   quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
   el tiempo, más grande y visible (commit `cf6fcd5`). Paco pidió revertirlo
