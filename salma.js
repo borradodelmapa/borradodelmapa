@@ -2374,6 +2374,9 @@ const salma = {
   resetNarratorNotified() {
     this._narratorNotified = new Set();
     try { sessionStorage.removeItem('narrator_notified_pois'); } catch (_) {}
+    // Forzar chequeo inmediato (si no, hay que esperar al próximo ciclo de 60s)
+    this._narratorLastCheck = 0;
+    if (this._narratorActive) this.checkNearbyPOIs();
     console.log('[Salma] Narrador: avisos olvidados');
   },
 

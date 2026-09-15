@@ -1256,10 +1256,24 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   sept) — ese segundo argumento es en realidad `poi`, así que ese número se colaba como
   si fuera un POI y el toast renderizaba "📍 undefined" debajo del título. Quitados los
   números sueltos en los 4 sitios (`app.js`).
-  `?v=` subidos: `salma.js` a 84, `app.js` a 105, `styles.css` a 92, en `index.html`.
-  **Pendiente: que Paco recargue, pruebe "Olvidar avisos" en el mismo sitio de antes y
-  confirme que vuelve a avisar (con foto) sin el "📍 undefined" de antes en ningún
-  toast.**
+  **"Olvidar avisos" no iba del todo — arreglado, 15 sept, FUSIONADO.** Paco lo probó:
+  desactivar+reactivar sí hacía saltar el aviso, pero "Olvidar avisos" solo a veces.
+  Causa: el botón limpiaba la lista de sitios vistos pero no forzaba ningún chequeo —
+  el siguiente real no llegaba hasta el próximo tic del `setInterval` (cada 60s),
+  mientras que desactivar+reactivar sí llama a `checkNearbyPOIs()` al momento
+  (`startNarrator()` ya lo hacía así). Ahora `resetNarratorNotified()` también resetea
+  `_narratorLastCheck` y llama a `checkNearbyPOIs()` de inmediato si el Narrador sigue
+  activo — mismo efecto instantáneo que apagar/encender, sin tener que hacerlo.
+  **Chip "Narrador" en verde cuando está activo — añadido a petición de Paco, 15 sept,
+  FUSIONADO.** No había ninguna pista visual de que estuviera encendido (las clases CSS
+  `bottom-tab-narrator-on`/`narrator-pulse` existían desde antes pero no las usaba
+  ningún JS — código muerto). Añadida clase `.chat-empty-chip--narrator-on` (fondo/borde
+  verde, `--verde`) aplicada en dos sitios: al pintar el chip (`renderChip` en `app.js`,
+  ya mira `salma._narratorActive`) y al cambiar de estado sin recargar la pantalla
+  (`updateNarratorChipUI()`, nueva, llamada tras activar/desactivar desde los menús).
+  `?v=` subidos: `salma.js` a 85, `app.js` a 106, `styles.css` a 93, en `index.html`.
+  **Pendiente: que Paco recargue, pruebe "Olvidar avisos" y confirme que ahora sí
+  reacciona al momento, y que el chip "Narrador" se pone verde al activarlo.**
 
 - **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
   CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se

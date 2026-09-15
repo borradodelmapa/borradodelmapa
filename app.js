@@ -202,6 +202,13 @@ function updateBottomBar() {
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
+function updateNarratorChipUI() {
+  const on = typeof salma !== 'undefined' && !!salma._narratorActive;
+  document.querySelectorAll('.chat-empty-chip[data-action="explorar"]').forEach(el => {
+    el.classList.toggle('chat-empty-chip--narrator-on', on);
+  });
+}
+
 function handleAvatarClick() {
   if (currentUser) {
     showState('profile');
@@ -263,7 +270,10 @@ function _renderChatEmpty() {
     { label: 'Narrador', icon: '', msg: null, action: 'explorar' },
     { label: 'SOS', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
   ];
-  const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
+  const renderChip = c => {
+    const narratorOn = c.action === 'explorar' && typeof salma !== 'undefined' && salma._narratorActive;
+    return `<button class="chat-empty-chip ${c.cls || ''} ${narratorOn ? 'chat-empty-chip--narrator-on' : ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
+  };
 
   // ── Rediseño v1 (rama rediseno-visual) — tablero de guía + chips estilo panel de aeropuerto ──
   const _mapIco = '<svg class="chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>';
@@ -5370,6 +5380,7 @@ function showNarratorConfirm() {
       if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.');
       else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.');
       updateBottomBar();
+      updateNarratorChipUI();
     });
   });
 }
@@ -5408,6 +5419,7 @@ function showNarratorActiveMenu() {
     salma.stopNarrator();
     salma.showNarratorToast('Narrador desactivado.');
     updateBottomBar();
+    updateNarratorChipUI();
   });
 }
 
