@@ -143,6 +143,19 @@ Aquel día se cambió tres veces de sospechoso porque se miraba una sola capa.
 - Puntos de restauración del 5 sept 2026: tags `v-5sept-antes-de-volver-atras` y
   `v-5sept-antes-de-borrar` (todo el trabajo de ese día, Worker intacto).
 
+### 8. CUALQUIER COSA QUE PUEDA MOVER LA FACTURA, SE DICE — SIN EXCEPCIÓN
+
+Añadido el 15 sept 2026 tras el susto de 82€ en 14 días en Google Places (ver 🔴 Crítico
+en "Pendiente / Problemas conocidos", y el detalle completo en "Normas de desarrollo").
+
+- **Cualquier cambio que pueda mover el gasto en una API de pago (Google Places/Maps,
+  Anthropic, OpenAI, Duffel, RapidAPI, Twilio, ElevenLabs, Stripe, Brave, Serper,
+  OpenWeather...) se le dice a Paco explícitamente** — qué se toca, por qué puede afectar
+  al coste, estimación aunque sea a ojo. Subir el gasto o bajarlo da igual, se avisa igual.
+- No es "bajo riesgo" aunque el cambio sea pequeño, sea solo código, o sea un fix que
+  promete ahorrar dinero — un arreglo de coste sigue necesitando decir qué se tocó.
+- No esperar a que Paco pregunte. Decirlo antes o en el momento, nunca como nota de después.
+
 ---
 ## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
 ## V3 Share + Fotos — 17 abril 2026 (sesión)
@@ -1865,6 +1878,16 @@ ahí, hacer `git pull origin main` — es un fast-forward, seguro.
   usuario) → sigue el resto de reglas de esta sección tal cual: se pregunta y se confirma
   en cada paso, **salvo** que Paco diga explícitamente "hazlo" para ese caso concreto en
   ese momento — eso no es un permiso permanente, solo vale para esa acción.
+- **⚠️ Coste de APIs — esto NO entra en "bajo riesgo" aunque sea solo tocar código o
+  documentación.** Regla añadida el 15 sept 2026, a fuego, tras la factura de Google
+  Places de 82€ en 14 días (ver 🔴 Crítico): **cualquier cambio que pueda mover el gasto
+  en una API de pago (Google Places/Maps, Anthropic, OpenAI, Duffel, RapidAPI, Twilio,
+  ElevenLabs, Stripe, Brave, Serper, OpenWeather...) — subirlo o bajarlo, tanto da — se le
+  dice a Paco explícitamente, ANTES o en el momento, no como nota de después.** Decirlo
+  significa: qué se toca, por qué puede afectar al coste, y una estimación aunque sea a
+  ojo. No hace falta esperar a que él pregunte. Aplica a arreglos de coste igual que a
+  features nuevas — un fix que promete ahorrar dinero SIGUE necesitando decir qué se tocó
+  y por qué, no basta con "ya está arreglado".
 
 - **Nunca** meter `const db` duplicado fuera de `app.js`
 - **Nunca** poner API keys en el código — van en Cloudflare secrets
@@ -1874,6 +1897,9 @@ ahí, hacer `git pull origin main` — es un fast-forward, seguro.
 - **Nunca** iterar cambios al prompt/código sin aprobación en cada paso
 - **Nunca** ejecutar scripts KV sin explicar qué hacen. Si KV vacío, restaurar desde JSONs locales
 - **Nunca** subestimar costes API — calcular tokens reales + reintentos + dar rango
+- **Nunca** tocar ni desplegar nada que llame a una API de pago (nueva llamada, cambio de
+  frecuencia, de field mask, de caché, de límites...) sin decir el impacto de coste
+  esperado — ver regla de arriba, esto es lo mismo dicho dos veces a propósito
 - Antes de refactorizar algo que funciona, confirmarlo con Paco
 - Los commits van en español, mensajes cortos y claros
 - Cuando algo se rompe, revertir a la última versión estable antes de parchear
