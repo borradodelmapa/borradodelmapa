@@ -1705,9 +1705,9 @@ const salma = {
                     let display = evt.reply;
                     const markerPos = display.indexOf('SALMA_ROUTE');
                     if (markerPos !== -1) display = display.substring(0, markerPos);
-                    display = display.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n{3,}/g, '\n\n');
+                    display = display.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n?FOTO_TAG:\s*\w*/gi, '').replace(/\n{3,}/g, '\n\n');
                     textEl.innerHTML = formatMessage(display.trim());
-                    textEl.dataset.raw = evt.reply.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').trim();
+                    textEl.dataset.raw = evt.reply.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n?FOTO_TAG:\s*\w*/gi, '').trim();
                     this._scrollToBottom();
                   }
                 }
@@ -1954,8 +1954,12 @@ const salma = {
                   // pero eso solo se aplica si hay un re-render en el evento done; si no, el texto
                   // en crudo tal como lo fue tecleando Claude se queda visible para siempre)
                   display = display.replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n{3,}/g, '\n\n');
+                  // Ocultar FOTO_TAG:palabra del streaming (mismo motivo que HISTORIA_LUGAR —
+                  // el Worker lo quita del reply final para el análisis de fotos, pero el texto
+                  // ya streameado en vivo se queda visible tal cual si no hay re-render)
+                  display = display.replace(/\n?FOTO_TAG:\s*\w*/gi, '').replace(/\n{3,}/g, '\n\n');
                   textEl.innerHTML = formatMessage(display.trim());
-                  textEl.dataset.raw = fullText.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').trim();
+                  textEl.dataset.raw = fullText.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n?FOTO_TAG:\s*\w*/gi, '').trim();
                   this._scrollToBottom();
                 }
                 // TTS en tiempo real: alimentar cola con cada chunk

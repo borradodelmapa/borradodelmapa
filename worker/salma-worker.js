@@ -6668,7 +6668,7 @@ export default {
       try { body = await request.json(); } catch (e) {
         return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
       }
-      const { poi_name, country_code } = body;
+      const { poi_name, country_code, lat, lng } = body;
       if (!poi_name) {
         return new Response(JSON.stringify({ error: 'Missing poi_name' }), { status: 400, headers: corsH });
       }
@@ -6683,6 +6683,16 @@ export default {
           }
         }
 
+        // Coordenadas reales del POI (vienen de Google Places nearbysearch, ya son el
+        // lugar correcto) — sin esto, Claude solo tiene el nombre y puede confundirlo
+        // con un homónimo más documentado en otra parte (mismo bug ya visto en Historia).
+        const narLat = typeof lat === 'number' ? lat : parseFloat(lat);
+        const narLng = typeof lng === 'number' ? lng : parseFloat(lng);
+        const hasNarCoords = Number.isFinite(narLat) && Number.isFinite(narLng);
+        const geoHint = hasNarCoords
+          ? ` Está exactamente en lat ${narLat}, lng ${narLng} — si existe algún lugar o persona con nombre igual o parecido en otro sitio, ignóralo: cuéntale SOLO lo real de este punto concreto, y si no tienes datos fiables de él, dilo en vez de inventar o mezclar con el homónimo más famoso.`
+          : '';
+
         const narrateRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
           method: 'POST',
           headers: {
@@ -6695,7 +6705,7 @@ export default {
             max_tokens: 200,
             messages: [{
               role: 'user',
-              content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
+              content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}.${geoHint} Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
             }]
           }),
         });

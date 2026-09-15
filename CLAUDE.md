@@ -1005,6 +1005,42 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Narrador: historia de un lugar totalmente ajeno (homónimo en otra región) — 15 sept
+  2026, DESPLEGADO, sin confirmar en pantalla.** Paco probó el Narrador de pie delante
+  de una iglesia barroca del s.XVIII en Mondoñedo (Lugo) y le salió la historia de
+  "Lourenza Nadal", una ceramista de Mallorca — nada que ver. Con la cámara (identificar
+  por foto) sí acertó. Causa: mismo tipo de bug que ya se arregló en Historia (13-14
+  sept, ver "Historia reactivada" más abajo) — `salma.js` (`_processNarratorQueue`,
+  línea ~2425) SÍ manda `lat`/`lng` del POI al pedir `/narrate`, pero el endpoint del
+  Worker (`worker/salma-worker.js`, ~línea 6665) solo leía `poi_name` y `country_code`
+  del body — las coordenadas llegaban y se ignoraban del todo. Sin ninguna pista de
+  ubicación más allá del país, Claude Haiku genera la biografía del homónimo más
+  documentado en vez de investigar quién es real en ese punto exacto. El POI en sí era
+  correcto (viene de Google Places `nearbysearch` con `radius=20` alrededor del GPS real
+  del usuario, así que el lugar sí estaba ahí) — el fallo estaba solo en la narración,
+  no en la detección del sitio. Fix: el endpoint ahora también lee `lat`/`lng` del body
+  y, si vienen, añade al prompt de Haiku la coordenada exacta con instrucción explícita
+  de no mezclar con homónimos de otros sitios y de admitir que no tiene datos fiables
+  antes que inventar. Sin cambios en frontend (ya mandaba las coordenadas) — no hace
+  falta subir `?v=`. **Pendiente: desplegar el Worker (GitHub Action "Deploy Worker") y
+  que Paco confirme en pantalla repitiendo el Narrador en un sitio con nombre ambiguo.**
+- **`FOTO_TAG: palabra` se veía como texto crudo en el chat al identificar un lugar con
+  la cámara — 15 sept 2026, FUSIONADO, sin confirmar en pantalla.** Mismo reporte de
+  Mondoñedo: la respuesta sobre la catedral (correcta en contenido) terminaba con
+  "FOTO_TAG: monumento" visible tal cual. Mismo bug exacto que `HISTORIA_LUGAR` (ver
+  commit `0e0dcef`, 14 sept, arreglado horas antes por la otra sesión) pero en
+  `FOTO_TAG`, que nunca había tenido el mismo tratamiento — de hecho no existía NINGÚN
+  `.replace()` de `FOTO_TAG` en todo `salma.js`. El Worker sí lo quita del `reply` final,
+  pero eso solo llega a pantalla si el evento `done` dispara un re-render; si no, se
+  queda el texto ya streameado en vivo, marcador incluido. Añadido en los mismos dos
+  sitios donde ya se ocultan `SALMA_ACTION`/`HISTORIA_LUGAR` (chunk en vivo + re-render
+  del done). `?v=` de `salma.js` subido a 81 en `index.html`. **Pendiente: push a
+  `main`, y que Paco confirme en pantalla identificando un lugar con la cámara.**
+  **Propuesta de Paco, sin implementar todavía**: añadir un botón de "foto" fácil de
+  encontrar dentro del propio módulo Narrador, ya que identificar por foto SÍ dio el
+  resultado correcto mientras el Narrador por GPS no — a valorar cuando confirme si el
+  fix de coordenadas de arriba ya resuelve el problema de raíz o si además conviene el
+  atajo.
 - **"Ver ruta completa" en el modal de mapa (map-modal.js) solo pintaba 1 parada de
   varias — 14 sept 2026, FUSIONADO Y DESPLEGADO, sin confirmar en pantalla.** Reportado
   por Paco con ruta "4 rías" (Galicia): el chat
