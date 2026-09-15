@@ -1005,6 +1005,16 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Narrador: radio de detección subido de 20m a 50m — 15 sept 2026, FUSIONADO, sin
+  confirmar en pantalla.** El 10 sept se bajó de 500m a 20m a petición de Paco, pero
+  20m es muy poco para un monumento grande: el pin de Google Places de un edificio así
+  suele estar en la entrada o el centro geométrico, y con Paco en la plaza (a unos
+  pasos de la fachada) puede quedar fuera de esos 20m mientras un comercio pegado a él
+  sí entra — encaja con el bug de la tienda de artesanía de las entradas de arriba, aun
+  con el filtro de tipos ya arreglado. `salma.js` línea 2390 (`checkNearbyPOIs`),
+  `?v=` subido a 82 en `index.html`. **Pendiente: que Paco recargue la web (refrescar
+  para que el navegador coja `salma.js?v=82`) y confirme si ahora sí reconoce el
+  monumento real.**
 - **Narrador: elegía un negocio pequeño en vez del monumento real — 15 sept 2026,
   DESPLEGADO, sin confirmar en pantalla.** Segundo aviso de Paco sobre lo mismo de
   Mondoñedo: aunque el fix del geoHint (ver entrada de abajo) resuelve la confusión de

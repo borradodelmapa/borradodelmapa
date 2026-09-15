@@ -2391,7 +2391,7 @@ const salma = {
     console.log('[Salma] Narrator check:', lat, lng);
 
     try {
-      const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=20');
+      const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=50');
       if (!res.ok) return;
       const data = await res.json();
       if (!data.pois || !data.pois.length) return;
