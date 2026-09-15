@@ -1230,9 +1230,36 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   itinerario está abierta (`_processNarratorQueue`), con `onerror` que la quita sola si
   el sitio no tiene foto en Google — no pasa nada visible si no hay imagen. Clases CSS
   nuevas en `styles.css`: `.narrator-toast-photo` (bleed a los bordes del toast) y
-  `.narrator-msg-photo` (dentro de la burbuja). `?v=` subidos: `salma.js` a 83,
-  `styles.css` a 91, en `index.html`. **Pendiente: que Paco recargue y confirme que la
-  foto aparece y ayuda a verificar que es el mismo sitio.**
+  `.narrator-msg-photo` (dentro de la burbuja). **Pendiente: que Paco recargue y
+  confirme que la foto aparece y ayuda a verificar que es el mismo sitio.**
+
+  **Al probar la foto, "no salta" — investigado, NO es un bug, es el antibucle
+  funcionando tal como se diseñó el 10 sept.** Paco reactivó el Narrador en el mismo
+  punto de antes (Lourenzá) y no volvió a avisar de nada — el log solo mostraba
+  "Narrator check" sin ninguna cola ni toast detrás, sin error. Causa: `checkNearbyPOIs`
+  descarta en silencio cualquier POI que ya esté en `_narratorNotified` (dedup por
+  `place_id`), y ese set se restaura desde `sessionStorage` en cada `startNarrator()` —
+  o sea que apagar y encender el Narrador NO lo resetea, solo cerrar la pestaña del
+  todo. Como la Iglesia y el Centro de las Fabas ya estaban notificados de la prueba de
+  hace un momento, quedaron descartados sin más.
+  **Añadido a petición de Paco ("Sí, añádelo"): botón "Olvidar avisos" en el propio
+  módulo del Narrador — 15 sept, FUSIONADO, sin confirmar en pantalla.** Antes, tocar el
+  chip "Narrador" estando ya activo lo desactivaba directo. Ahora abre un menú
+  (`showNarratorActiveMenu()` en `app.js`, reutiliza el modal de
+  `showNarratorConfirm()`) con dos opciones: "Olvidar avisos" (llama a la función nueva
+  `salma.resetNarratorNotified()` — vacía el Set y borra la clave de `sessionStorage`,
+  sin desactivar el Narrador) y, más abajo, "Desactivar Narrador" (el comportamiento de
+  antes). CSS nueva `.narrator-active-stop` en `styles.css`.
+  **De paso, arreglado un bug menor encontrado al tocar esta misma función**: 4 sitios
+  llamaban a `showNarratorToast('texto', 3000)` con un número de "duración" que la
+  función nunca soportó (no hay auto-cierre, solo la X, según quedó decidido el 10
+  sept) — ese segundo argumento es en realidad `poi`, así que ese número se colaba como
+  si fuera un POI y el toast renderizaba "📍 undefined" debajo del título. Quitados los
+  números sueltos en los 4 sitios (`app.js`).
+  `?v=` subidos: `salma.js` a 84, `app.js` a 105, `styles.css` a 92, en `index.html`.
+  **Pendiente: que Paco recargue, pruebe "Olvidar avisos" en el mismo sitio de antes y
+  confirme que vuelve a avisar (con foto) sin el "📍 undefined" de antes en ningún
+  toast.**
 
 - **Pago roto en producción (Fase 1+2 de `docs/pasarela-premium.md`) — 14 sept 2026,
   CONFIRMADO EN PANTALLA por Paco: comprado un plan anual de test, `premium_until` se

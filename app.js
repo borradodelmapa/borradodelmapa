@@ -635,9 +635,7 @@ function _renderChatEmpty() {
       if (action === 'explorar') {
         if (typeof salma !== 'undefined') {
           if (salma._narratorActive) {
-            salma.stopNarrator();
-            salma.showNarratorToast('Narrador desactivado.', 3000);
-            updateBottomBar();
+            showNarratorActiveMenu();
           } else {
             showNarratorConfirm();
           }
@@ -5369,10 +5367,47 @@ function showNarratorConfirm() {
   document.getElementById('narrator-confirm-go').addEventListener('click', () => {
     overlay.style.display = 'none';
     salma.startNarrator().then(ok => {
-      if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.', 5000);
-      else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', 5000);
+      if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.');
+      else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.');
       updateBottomBar();
     });
+  });
+}
+
+function showNarratorActiveMenu() {
+  let overlay = document.getElementById('narrator-confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'narrator-confirm-overlay';
+    overlay.className = 'narrator-confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div class="narrator-confirm-modal">
+      <div class="narrator-confirm-icon">📍</div>
+      <h2 class="narrator-confirm-title">Narrador activo</h2>
+      <p class="narrator-confirm-text">Ya no te avisa de sitios que ha visto antes en esta sesión. Si quieres que te vuelva a hablar de ellos (por ejemplo si has vuelto a pasar por el mismo sitio), puedes olvidarlos.</p>
+      <div class="narrator-confirm-btns">
+        <button class="narrator-confirm-cancel" id="narrator-active-cancel">Cerrar</button>
+        <button class="narrator-confirm-go" id="narrator-active-reset">Olvidar avisos</button>
+      </div>
+      <button class="narrator-active-stop" id="narrator-active-stop">Desactivar Narrador</button>
+    </div>`;
+  overlay.style.display = 'flex';
+
+  document.getElementById('narrator-active-cancel').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+  document.getElementById('narrator-active-reset').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    salma.resetNarratorNotified();
+    salma.showNarratorToast('Avisos olvidados — te avisaré otra vez de los sitios de cerca.');
+  });
+  document.getElementById('narrator-active-stop').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    salma.stopNarrator();
+    salma.showNarratorToast('Narrador desactivado.');
+    updateBottomBar();
   });
 }
 

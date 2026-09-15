@@ -3434,6 +3434,12 @@ body {
   letter-spacing:.05em; cursor:pointer; transition:background .2s;
 }
 .narrator-confirm-go:hover { background:var(--dorado2); }
+.narrator-active-stop {
+  display:block; width:100%; margin-top:12px; padding:10px;
+  border:none; background:none; color:var(--rojo);
+  font-size:13px; opacity:.75; cursor:pointer; transition:opacity .2s;
+}
+.narrator-active-stop:hover { opacity:1; }
 
 .sos-overlay {
   position:fixed; inset:0; z-index:9998;

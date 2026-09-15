@@ -2368,6 +2368,15 @@ const salma = {
     if (typeof updateBottomBar === 'function') updateBottomBar();
   },
 
+  // Olvida los sitios ya avisados (el dedup de checkNearbyPOIs) para que el Narrador
+  // pueda volver a avisar de los mismos — útil al probar en el mismo punto, o si vuelves
+  // a pasar por delante de algo que te interesa ver otra vez.
+  resetNarratorNotified() {
+    this._narratorNotified = new Set();
+    try { sessionStorage.removeItem('narrator_notified_pois'); } catch (_) {}
+    console.log('[Salma] Narrador: avisos olvidados');
+  },
+
   showNarratorToast(text, poi) {
     const existing = document.getElementById('narrator-toast');
     if (existing) existing.remove();
