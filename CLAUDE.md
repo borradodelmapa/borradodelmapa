@@ -1278,6 +1278,50 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   una ruta real para confirmar que el resto de los fixes de facturación
   (`verifyAllStops`, `buscar_lugar`) no cambiaron nada de lo que ve en una ruta nueva.
 
+- **Endpoint `/pin` (identificar lugar por foto) llevaba tiempo roto sin que nadie lo
+  supiera — encontrado y arreglado el 16 sept 2026 al implementar la cámara del
+  Narrador, DESPLEGADO, sin confirmar en pantalla.** Buscando cómo reutilizar la
+  identificación de lugar por foto para una función nueva, se comprobó (varios `grep`
+  sobre `worker/salma-worker.js` sin ningún resultado) que el endpoint `POST /pin` —
+  documentado en la tabla de endpoints de este mismo archivo y todavía llamado por
+  `app.js` desde la hoja de "foto → pin en el mapa" del diario — **ya no existe en el
+  Worker actual**. En algún punto de la historia del código se perdió (existía en un
+  backup de abril, `backups/salma-worker-20260406.js`, con GPT-4o-mini) sin que ningún
+  commit lo borrase a propósito ni nadie lo notara — daba 404 en silencio. Restaurado
+  con el mismo patrón que `/narrate`/`/historia-lugar`: Claude Sonnet con visión (antes
+  GPT-4o-mini) vía el mismo Cloudflare AI Gateway que ya usa el chat principal, más una
+  pista de lat/lng para no confundir el sitio real con un homónimo de otra parte del
+  mundo (mismo bug de desambiguación que ya se arregló en `/historia-lugar` el 14 sept).
+  **Aviso de coste (protocolo §8):** esto restaura una llamada a Claude Sonnet con
+  visión que YA formaba parte del producto (mismo modelo, mismo Gateway que analizar
+  una foto en el chat normal) — no es una ruta de gasto nueva, es arreglar un acceso
+  que llevaba tiempo devolviendo error sin coste real (nunca llegaba a llamar a
+  Claude). Coste por uso: el mismo que ya tiene identificar una foto en el chat.
+
+- **Cámara dentro del propio módulo Narrador — implementado 16 sept 2026, DESPLEGADO,
+  sin confirmar en pantalla.** Propuesta de Paco tras notar que identificar por foto
+  (chat) había acertado en algún caso donde el Narrador por GPS aún tenía bugs (ver 15
+  sept, sección "✅ Ya resuelto") — con esos bugs de GPS ya arreglados esto pasa a ser un
+  atajo más, no un respaldo de emergencia. Antes de implementarlo se consultó con Paco
+  si convenía un banner persistente mientras el Narrador está activo explicando la
+  opción de cámara; se descartó a favor de algo menos intrusivo, que fue lo que se
+  implementó: botón "📷 Identificar por foto" dentro del menú que ya se abre al tocar el
+  chip Narrador estando activo (`showNarratorActiveMenu()` en `app.js`, junto a
+  "Olvidar avisos"/"Desactivar Narrador"), más un aviso puntual **una sola vez**
+  (`localStorage: bdm_narrator_camera_tip_seen`) la primera vez que se activa el
+  Narrador tras este cambio, explicando dónde está el botón — no un banner fijo.
+  Funciones nuevas en `app.js`: `narratorTakePhoto()` (input de archivo oculto con
+  `capture="environment"`) y `_processNarratorPhoto(file)` (reutiliza
+  `salma._compressImage()`, ya existente para la cámara del chat, y llama a `/pin`
+  restaurado arriba). CSS nueva `.narrator-active-camera` en `styles.css`. `?v=` de
+  `app.js` a 108 y `styles.css` a 96 en `index.html`. Fusionado a `main` (commit
+  `3b23747`) y desplegado (GitHub Action "Deploy Worker" run #20, **Worker Version ID
+  `010ea7f9-0bbc-495e-9738-b85059ff0911`**). **Aviso de coste:** ver entrada de `/pin`
+  justo arriba — este botón es la única puerta de entrada nueva a esa llamada, sin
+  coste adicional respecto a lo que ya existía. **Pendiente: que Paco active el
+  Narrador, confirme que ve el aviso puntual la primera vez, y pruebe el botón "📷
+  Identificar por foto" con un sitio delante para confirmar que responde bien.**
+
 - **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
   quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
   el tiempo, más grande y visible (commit `cf6fcd5`). Paco pidió revertirlo
