@@ -1265,11 +1265,18 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   el que la ruta cargó bien. Con el `no-store` ya desplegado, esto no debería volver a
   hacer falta para nadie que pida una foto POR PRIMERA VEZ a partir de ahora — el borrado
   manual solo hizo falta esta vez porque el caché ya estaba puesto desde antes.
-  **Sigue pendiente**: que Paco genere/edite una ruta real para confirmar que el resto
-  de los fixes de facturación no cambiaron nada más de lo que ve, y que deje el
-  Narrador activo un rato parado (coche/restaurante) para confirmar que ya no dispara
-  solo cada minuto — ninguno de los dos se ha probado todavía, toda la sesión de hoy
-  se fue en el problema de las fotos.
+  **Narrador parado — CONFIRMADO EN PANTALLA por Paco (16 sept, Luarca), con log
+  completo revisado línea por línea.** Primer check a las 10:56:38; durante los 10
+  minutos siguientes (hasta desactivarlo a las 11:06:35) la posición nunca se movió
+  más de ~23m del punto comprobado — **cero checks adicionales** en toda esa ventana
+  (antes del fix habría sido una Nearby Search de pago cada 60s sin parar). Al
+  reactivarlo (11:19:58) el chequeo forzado saltó al instante, como está diseñado. Al
+  moverse de verdad y superar los 30m (11:21:15), volvió a chequear solo y narró
+  correctamente la Casa Natal de Severo Ochoa. Comportamiento exactamente el buscado.
+
+  **Sigue pendiente, lo único que queda de toda esta saga**: que Paco genere o edite
+  una ruta real para confirmar que el resto de los fixes de facturación
+  (`verifyAllStops`, `buscar_lugar`) no cambiaron nada de lo que ve en una ruta nueva.
 
 - **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
   quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
