@@ -1170,6 +1170,72 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Fotos del itinerario fallando en cadena con "Failed to fetch" en una guía de
+  varios días de antigüedad ("Oriente salvaje", Asturias/Picos, 12 paradas) — 16 sept
+  2026, DOS BUGS REALES ENCONTRADOS Y CORREGIDOS, pero el síntoma sigue sin
+  resolverse del todo: hay un problema de conexión de red aparte, sin diagnosticar.**
+  Reportado por Paco, reproducido en dos dispositivos y dos redes distintas (móvil
+  datos Orange + PC WiFi) — descarta problema del dispositivo/red de Paco como causa
+  única, aunque sí hay una pieza de red real de por medio (ver más abajo).
+  **Bug 1 (real, corregido):** las 12 fotos se pedían todas en el mismo milisegundo al
+  abrir el itinerario, sin ningún control de concurrencia ni timeout en la llamada del
+  Worker a Google — si Google iba lento, el fetch se quedaba colgado hasta que
+  Cloudflare cortaba el Worker por su cuenta. Fix: fotos por tandas (`_processPhotoQueue`
+  en `mapa-itinerario.js`) + timeout de 8s en `_getCachedPlacePhoto` (`salma-worker.js`).
+  Commit `5fac525`, Worker Version ID `a82788ee-f757-494a-a98c-111f159dde1d`.
+  **Bug 2 (real, corregido, 2 vueltas):** el `photo_reference` de Google Places **no es
+  un ID permanente** — caduca con el tiempo, y con una guía de días de antigüedad el
+  `ref` guardado en su día ya no resolvía nada en Google. El endpoint `/photo` no tenía
+  ningún plan B: si el ref fallaba, 404 sin más. Fix: si el `ref` falla y llega el
+  nombre de la parada (mapa-itinerario.js lo manda siempre desde ahora, junto al ref),
+  el Worker busca una foto NUEVA por nombre+coords antes de rendirse — mismo mecanismo
+  que ya existía para paradas sin ref guardado. **Primera versión de este fix tenía a su
+  vez un bug** (si el KV tenía guardada OTRA referencia igual de caducada, se probaba,
+  fallaba, y ahí se paraba sin llegar a Find Place) — encontrado leyendo el código YA
+  DESPLEGADO directo desde Cloudflare (no desde git) tras el primer "sigue sin ir".
+  Corregido en una segunda vuelta: si la ref del KV también falla, se sigue a Find
+  Place igual que si no hubiera habido ningún hit de KV. Commits `278b906` y `849421b`,
+  Worker Version IDs `9d697677-4a4e-4123-a1eb-787f070a30d7` y
+  `cf5f181e-c8f8-4010-bd56-9dd0e9669dfd` (este último es el vigente).
+  **Con los dos bugs corregidos y confirmados desplegados (verificado leyendo el código
+  REAL en producción, no solo el commiteado), el síntoma seguía sin resolverse —
+  probado en pantalla por Paco tras cada deploy.** Diagnóstico posterior, con evidencia
+  dura, no solo sospecha:
+  1. Las tandas y el reintento SÍ funcionan tal como se diseñaron (confirmado en el
+     panel 🐛 de Paco: las peticiones salen agrupadas de 4 en 4, y el reintento salta
+     exactamente a los 3s como estaba programado).
+  2. El fallo real pasó de tardar 20-53s (antes del fix 1) a solo ~6-7s — más rápido,
+     pero **sigue siendo "Failed to fetch"**, no un error JSON limpio como daría
+     nuestro propio timeout de 8s si fuera el que estuviera disparándose.
+  3. **Prueba definitiva de que ya no es un bug de este código**: `/practical-info`
+     (usado por el Copiloto) es una lectura de KV pura, sin ninguna llamada externa,
+     con try/catch completo — es imposible que produzca "Failed to fetch" desde su
+     propia lógica (cualquier error interno ahí da un JSON normal). Falló con el mismo
+     síntoma exacto, en la misma ventana de tiempo, que las fotos.
+  4. Paco ejecutó `npx wrangler tail salma-api` para diagnosticar en vivo — la sesión
+     de tail se creó bien en Cloudflare, pero su ordenador **no pudo conectar con el
+     servidor de logs en vivo de Cloudflare**: `ETIMEDOUT` (IPv4, `188.114.96.5` y
+     `188.114.97.5`) y `ENETUNREACH` (IPv6, `2a06:98c1:3120::5` y `2a06:98c1:3121::5`)
+     simultáneos. El DNS del propio Worker sí resuelve bien (`104.21.75.154` /
+     `172.67.178.108`, IPs normales de Cloudflare) — comprobado desde esta sesión.
+  **Conclusión de esta sesión, con la información disponible**: hay algo en la ruta de
+  red entre el lado de Paco y (una parte de) la infraestructura de Cloudflare que no
+  está funcionando bien — no se ha podido aislar más sin acceso a analíticas/logs de
+  Cloudflare (esta sesión no tiene esa herramienta) ni a `wrangler tail` (bloqueado por
+  la misma razón que se investiga). **Mitigación aplicada mientras tanto, sin poder
+  arreglar la causa de fondo**: tandas de fotos más pequeñas (4→2) y más espaciadas
+  (400ms→900ms), y hasta 2 reintentos en vez de 1 (4s y 8s de margen). Commit `7b7e5be`
+  — solo frontend, `mapa-itinerario.js?v=59` en `index.html`, no hace falta redeploy
+  del Worker.
+  **Pendiente, sin cerrar**: que Paco (desde el ordenador donde falló `wrangler tail`)
+  compruebe el panel de Cloudflare (dash.cloudflare.com → Workers → salma-api →
+  Metrics, o Analytics) para ver si hay errores 5xx marcados en las últimas horas —
+  eso confirmaría si el corte está en la infraestructura de Cloudflare en sí o en algo
+  intermedio (VPN, antivirus con inspección de red, firewall, IPv6 mal configurado)
+  específico de esa red/máquina. También merece la pena probar la guía desde una red
+  completamente distinta (datos móviles de otra compañía, o el móvil de otra persona)
+  para terminar de aislarlo.
+
 - **Facturación de Google Places disparada a 82,26€ en los primeros 14 días de sept
   (+15.420% vs periodo anterior) — auditoría completa + fixes DESPLEGADOS, 15 sept
   2026, sin confirmar en pantalla.** Paco vio el cargo en Google Cloud Billing
