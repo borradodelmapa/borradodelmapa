@@ -6372,40 +6372,49 @@ export default {
             if (photoRef === ref) photoRef = null;
           }
 
-          // Si no hay KV hit (o era el mismo ref caducado), Find Place API (fallback)
-          if (!photoRef) {
+          // BUG del primer intento de este mismo fix, encontrado al revisar el código
+          // ya desplegado: si el KV tenía guardada OTRA referencia (de la misma
+          // generación de la guía, tan caducada como la que ya falló), se probaba,
+          // fallaba también, y aquí se paraba — nunca llegaba a pedir una foto de
+          // verdad a Google. Ahora, si esa referencia del KV TAMBIÉN falla al
+          // probarla, se sigue a Find Place igual que si el KV no hubiera tenido nada.
+          if (photoRef) {
+            photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
+            if (photo) resolvedRef = photoRef;
+          }
+
+          if (!photo) {
             const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
             const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
             const findData = await findRes.json();
             const candidate = findData.candidates?.[0];
-            photoRef = candidate?.photos?.[0]?.photo_reference || null;
+            let freshRef = candidate?.photos?.[0]?.photo_reference || null;
 
-            if (photoRef && lat && lng) {
+            if (freshRef && lat && lng) {
               const pLat = candidate?.geometry?.location?.lat;
               const pLng = candidate?.geometry?.location?.lng;
               if (pLat && pLng) {
                 const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
-                if (distKm > 30) photoRef = null;
+                if (distKm > 30) freshRef = null;
               }
             }
             // Cachear photo_ref en KV para futuras llamadas (30 días) — prefijo propio,
             // nunca pisa el índice curado permanente 'spot:*'
-            if (env.SALMA_KB && photoRef) {
+            if (env.SALMA_KB && freshRef) {
               const cacheKey = 'spotcache:' + normalizeSpotKey(name)[0];
               const existing = await env.SALMA_KB.get(cacheKey).catch(() => null);
               const spotData = existing ? JSON.parse(existing) : {};
-              spotData.photo_ref = photoRef;
+              spotData.photo_ref = freshRef;
               if (candidate?.geometry?.location) {
                 spotData.lat = spotData.lat || candidate.geometry.location.lat;
                 spotData.lng = spotData.lng || candidate.geometry.location.lng;
               }
               env.SALMA_KB.put(cacheKey, JSON.stringify(spotData), { expirationTtl: 2592000 }).catch(() => {});
             }
-          }
-
-          if (photoRef) {
-            photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
-            if (photo) resolvedRef = photoRef;
+            if (freshRef) {
+              photo = await _getCachedPlacePhoto(placesKey, freshRef).catch(() => null);
+              if (photo) resolvedRef = freshRef;
+            }
           }
         }
 
