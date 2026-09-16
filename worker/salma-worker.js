@@ -6941,6 +6941,71 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /pin — Identificar lugar por foto (mapa live + cámara del Narrador) ───
+    // Restaurado 16 sept 2026: existía en el Worker hace meses (visto en un backup, con
+    // GPT-4o-mini) pero se perdió en algún punto — app.js seguía llamándolo desde la hoja
+    // de "foto → pin en el mapa" sin que nadie notara que daba 404. Modernizado a Claude
+    // Sonnet con visión (el mismo modelo que ya analiza fotos en el chat principal, en vez
+    // del GPT-4o-mini de la versión vieja) y con la misma pista de coordenadas que ya usan
+    // /narrate y /historia-lugar para no confundir el sitio real con un homónimo.
+    if (request.method === 'POST' && url.pathname === '/pin') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const body = await request.json();
+        const { image_base64, lat, lng } = body;
+        if (!image_base64) {
+          return new Response(JSON.stringify({ name: null, error: 'missing image_base64' }), { status: 400, headers: corsH });
+        }
+        if (!env.ANTHROPIC_API_KEY) {
+          return new Response(JSON.stringify({ name: null, error: 'no_anthropic_key' }), { status: 500, headers: corsH });
+        }
+
+        const pinLat = typeof lat === 'number' ? lat : parseFloat(lat);
+        const pinLng = typeof lng === 'number' ? lng : parseFloat(lng);
+        const hasPinCoords = Number.isFinite(pinLat) && Number.isFinite(pinLng);
+        const geoHint = hasPinCoords
+          ? ` La foto se tomó en lat ${pinLat}, lng ${pinLng} — identifica el lugar real que hay en ese punto concreto, no un homónimo más famoso de otra parte del mundo.`
+          : '';
+
+        const promptText = `Analiza esta foto de viaje y extrae el lugar principal que aparece (hotel, monumento, restaurante, playa, catedral, mercado...).${geoHint} Responde SOLO con JSON válido, sin markdown, sin explicaciones. Formato exacto (JSON null —no el texto "null"— si no hay dato): {"name":"nombre exacto del lugar","address":"ciudad, país","description":"una frase descriptiva breve","place_type":"hotel|monument|restaurant|beach|park|other"}. Si no puedes identificar el nombre exacto del lugar con certeza, pon "name":null en vez de inventar.`;
+
+        const pinRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 300,
+            messages: [{
+              role: 'user',
+              content: [
+                { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: image_base64 } },
+                { type: 'text', text: promptText },
+              ],
+            }],
+          }),
+        });
+        if (!pinRes.ok) {
+          const errText = await pinRes.text().catch(() => '');
+          throw new Error('Anthropic ' + pinRes.status + ': ' + errText);
+        }
+        const pinData = await pinRes.json();
+        const raw = pinData.content?.[0]?.text?.trim() || '';
+        const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        try {
+          const result = JSON.parse(cleaned);
+          return new Response(JSON.stringify(result), { headers: corsH });
+        } catch (_) {
+          return new Response(JSON.stringify({ name: null, error: 'parse_error' }), { headers: corsH });
+        }
+      } catch (e) {
+        return new Response(JSON.stringify({ name: null, error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /enrich (Pasada 2 — Haiku rellena campos) ───
     if (request.method === 'POST' && url.pathname === '/enrich') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };

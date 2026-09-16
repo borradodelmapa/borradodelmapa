@@ -5420,7 +5420,15 @@ function showNarratorConfirm() {
     overlay.style.display = 'none';
     salma.startNarrator().then(ok => {
       if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.');
-      else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', null, 4000);
+      else if (ok === true) {
+        salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', null, 4000);
+        if (!localStorage.getItem('bdm_narrator_camera_tip_seen')) {
+          localStorage.setItem('bdm_narrator_camera_tip_seen', '1');
+          setTimeout(() => {
+            salma.showNarratorToast('Consejo: si no acierto con el sitio, toca el chip Narrador y luego 📷 para identificar por foto.', null, 6000);
+          }, 4500);
+        }
+      }
       updateBottomBar();
       updateNarratorChipUI();
     });
@@ -5444,6 +5452,7 @@ function showNarratorActiveMenu() {
         <button class="narrator-confirm-cancel" id="narrator-active-cancel">Cerrar</button>
         <button class="narrator-confirm-go" id="narrator-active-reset">Olvidar avisos</button>
       </div>
+      <button class="narrator-active-camera" id="narrator-active-camera">📷 Identificar por foto</button>
       <button class="narrator-active-stop" id="narrator-active-stop">Desactivar Narrador</button>
     </div>`;
   overlay.style.display = 'flex';
@@ -5456,6 +5465,10 @@ function showNarratorActiveMenu() {
     salma.resetNarratorNotified();
     salma.showNarratorToast('Avisos olvidados — te avisaré otra vez de los sitios de cerca.', null, 4000);
   });
+  document.getElementById('narrator-active-camera').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    narratorTakePhoto();
+  });
   document.getElementById('narrator-active-stop').addEventListener('click', () => {
     overlay.style.display = 'none';
     salma.stopNarrator();
@@ -5464,6 +5477,59 @@ function showNarratorActiveMenu() {
     updateNarratorChipUI();
   });
 }
+
+// ═══ CÁMARA DEL NARRADOR — identificar lugar por foto sin salir del módulo ═══
+// 16 sept 2026: reutiliza /pin (Claude Sonnet con visión, restaurado el mismo día —
+// existía hace meses y se había perdido del Worker). Útil porque identificar por foto
+// ya dio el dato correcto en ocasiones donde el Narrador por GPS aún tenía bugs (ver
+// CLAUDE.md, 15 sept) — con los bugs de GPS ya arreglados, esto es un atajo más, no un
+// respaldo de emergencia.
+let _narratorCameraInput = null;
+function narratorTakePhoto() {
+  if (!_narratorCameraInput) {
+    _narratorCameraInput = document.createElement('input');
+    _narratorCameraInput.type = 'file';
+    _narratorCameraInput.accept = 'image/*';
+    _narratorCameraInput.capture = 'environment';
+    _narratorCameraInput.style.display = 'none';
+    _narratorCameraInput.addEventListener('change', () => {
+      const file = _narratorCameraInput.files[0];
+      _narratorCameraInput.value = '';
+      if (file) _processNarratorPhoto(file);
+    });
+    document.body.appendChild(_narratorCameraInput);
+  }
+  _narratorCameraInput.click();
+}
+
+async function _processNarratorPhoto(file) {
+  salma.showNarratorToast('🔍 Identificando el lugar...');
+  try {
+    const blob = await salma._compressImage(file, 1024, 0.8);
+    const base64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+    const loc = salma._userLocation || {};
+    const res = await fetch(window.SALMA_API + '/pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_base64: base64, lat: loc.lat, lng: loc.lng }),
+    });
+    const data = await res.json();
+    if (data.name) {
+      salma.showNarratorToast(data.description || 'Lugar identificado.', { name: data.name });
+    } else {
+      salma.showNarratorToast('No he podido identificar el lugar en la foto.', null, 3500);
+    }
+  } catch (e) {
+    console.warn('[Narrador] Error identificando foto:', e);
+    salma.showNarratorToast('Error al identificar la foto — inténtalo otra vez.', null, 3500);
+  }
+}
+window.narratorTakePhoto = narratorTakePhoto;
 
 function showSOSConfirm() {
   let overlay = document.getElementById('sos-confirm-overlay');
