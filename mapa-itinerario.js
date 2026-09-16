@@ -281,23 +281,30 @@ const mapaItinerario = {
     return card;
   },
 
-  // ═══ COLA DE FOTOS — tandas de 4, no las 12+ de golpe ═══
+  // ═══ COLA DE FOTOS — tandas pequeñas y espaciadas, no las 12+ de golpe ═══
+  // 16 sept, tercera vuelta: con wrangler tail bloqueado por la propia red (ETIMEDOUT
+  // hacia la infraestructura de logs de Cloudflare, confirmado por Paco) no hay forma
+  // de ver en vivo qué le pasa al Worker desde aquí. Sin ese diagnóstico, se reduce el
+  // tamaño de tanda (4→2) y se espacian más (400ms→900ms) — menos peticiones a la vez
+  // en cualquier escenario (rate limiting, Worker bajo carga, red intermedia con poco
+  // margen) reduce las probabilidades de fallo sea cual sea la causa exacta.
   _processPhotoQueue() {
     const queue = this._photoQueue || [];
-    const BATCH = 4;
+    const BATCH = 2;
     let i = 0;
     const next = () => {
       const batch = queue.slice(i, i + BATCH);
       if (!batch.length) return;
       i += BATCH;
       batch.forEach(({ stop, index, cardEl }) => this._loadInitialPhoto(stop, index, cardEl));
-      if (i < queue.length) setTimeout(next, 400);
+      if (i < queue.length) setTimeout(next, 900);
     };
     next();
   },
 
   // ═══ FOTO INICIAL ═══
-  _loadInitialPhoto(stop, index, cardEl, _isRetry) {
+  _loadInitialPhoto(stop, index, cardEl, _retryNum) {
+    _retryNum = _retryNum || 0;
     // Buscar dentro del card (antes de estar en el DOM) o en el documento si ya está
     const photoDiv = (cardEl && cardEl.querySelector('.itin-card-photo')) || document.getElementById(`itin-photo-${index}`);
     if (!photoDiv) return;
@@ -308,16 +315,18 @@ const mapaItinerario = {
     // 16 sept: añadido también log al ARRANCAR el fetch y onerror en el propio <img> —
     // el fetch que trae la URL puede ir bien y aun así la imagen fallar al cargar de
     // verdad en el navegador, y ESO no dejaba ningún rastro (ni warn ni catch) hasta hoy.
-    // 16 sept, misma tarde: un solo reintento automático a los 3s si falla — con el
-    // Worker ahora fallando rápido (timeout de 8s a Google, ver salma-worker.js) y las
-    // fotos pedidas por tandas de 4 en vez de las 12 de golpe, un segundo intento ya no
-    // compite con las otras 11 y tiene bastantes más papeletas de ir bien.
+    // 16 sept, tercera vuelta: hasta 2 reintentos (antes 1), con más espera cada vez
+    // (4s, luego 8s) — sin diagnóstico en vivo del Worker (wrangler tail bloqueado por
+    // la red), dar más margen a que un fallo puntual se resuelva solo es lo único que
+    // se puede hacer desde aquí sin más información.
+    const MAX_RETRIES = 2;
     const retry = () => {
-      if (_isRetry) return;
-      setTimeout(() => this._loadInitialPhoto(stop, index, cardEl, true), 3000);
+      if (_retryNum >= MAX_RETRIES) return;
+      const delay = 4000 * (_retryNum + 1);
+      setTimeout(() => this._loadInitialPhoto(stop, index, cardEl, _retryNum + 1), delay);
     };
     if (stop.photo_ref) {
-      console.log(`[FOTO] pidiendo (ref) para "${stop.name}"${_isRetry ? ' (reintento)' : ''}`);
+      console.log(`[FOTO] pidiendo (ref) para "${stop.name}"${_retryNum ? ` (reintento ${_retryNum})` : ''}`);
       // Se manda también nombre+coords (si hay) junto al ref: el photo_reference de una
       // guía guardada puede caducar con los días — si el Worker ve que el ref ya no
       // resuelve, con el nombre puede buscar una foto nueva en vez de rendirse.
@@ -336,7 +345,7 @@ const mapaItinerario = {
         })
         .catch(e => { console.warn(`[FOTO] fetch falló para "${stop.name}" (ref):`, e); retry(); });
     } else if (stop.name && stop.lat && stop.lng) {
-      console.log(`[FOTO] pidiendo (name+coords) para "${stop.name}"${_isRetry ? ' (reintento)' : ''}`);
+      console.log(`[FOTO] pidiendo (name+coords) para "${stop.name}"${_retryNum ? ` (reintento ${_retryNum})` : ''}`);
       fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
         .then(r => r.json())
         .then(data => {
