@@ -30,10 +30,12 @@ binding = "SALMA_PHOTOS"
 bucket_name = "salma-photos"
 
 # Cron: lunes 4:00 UTC = regenera fichas nivel 1 caducadas
-# Cron: miércoles 4:00 UTC = genera rutas nivel 3 para países sin rutas
 # Cron: diario 6:00 UTC = monitoreo precios vuelos (flight watches)
+# (el de miércoles 4:00, rutas nivel 3, se quitó el 17 sept 2026 — nunca generó
+# ni una ruta en producción: bug de scan con limit:500 sobre >3000 claves dest:*
+# + sin verificación real de Google Places. Ver project_kv_estado en memoria.)
 [triggers]
-crons = ["0 4 * * 1", "0 4 * * 3", "0 6 * * *"]
+crons = ["0 4 * * 1", "0 6 * * *"]
 
 [vars]
 # Optional: use Workers AI instead — set USE_CLOUDFLARE_AI = "1" and add binding:

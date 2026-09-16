@@ -656,17 +656,18 @@ Todos en Cloudflare Worker secrets (`wrangler secret put`).
 | `fw_alerts:{uid}` | — | Alertas generadas (bajada de precio / presupuesto alcanzado) | Por usuario |
 | `flight_watch_users` | — | Lista de UIDs con alguna vigilancia activa — la recorre el cron diario | 1 clave |
 
-### ⏰ 3 crons del Worker (`worker/wrangler.toml` → `[triggers]`) — no estaban documentados hasta este barrido
+### ⏰ 2 crons del Worker (`worker/wrangler.toml` → `[triggers]`) — el de rutas nivel 3 se eliminó el 17 sept 2026
 
-El Worker tiene `scheduled()` en `salma-worker.js` (línea ~9985) con 3 disparos automáticos, **ya desplegados y corriendo en producción ahora mismo**, sin que nadie los active a mano:
+El Worker tiene `scheduled()` en `salma-worker.js` con 2 disparos automáticos, ya desplegados y corriendo en producción ahora mismo, sin que nadie los active a mano:
 
 | Cron (UTC) | Qué hace | Llama a una API de pago |
 |---|---|---|
 | Lunes 4:00 | Regenera hasta 5 fichas nivel 1 (`dest:{cc}:base`) caducadas (>180 días) | **Sí — GPT-4o-mini**, ~5 llamadas/semana, coste marginal (céntimos) |
-| Miércoles 4:00 | Genera hasta 3 rutas nivel 3 (`route:{cc}:{dest}:{days}`) para destinos que aún no tienen una cacheada | **Sí — GPT-4o-mini**, ~3 llamadas/semana, coste marginal (céntimos), ya reflejado en la tabla de scripts de abajo |
 | Diario 6:00 | `_cronFlightWatches` — recorre `flight_watch_users`, comprueba precio actual de hasta 20 vigilancias de vuelo activas y crea alerta si baja >15% o entra en presupuesto | **Sí — Duffel API**, hasta 20 búsquedas de vuelo/día, automático, sin que el usuario pida nada en ese momento |
 
-**Por qué se dice esto aquí y no se toca nada:** los 3 crons ya estaban en el código antes de esta sesión (no son un cambio de hoy), pero el de vuelos no aparecía mencionado en ningún sitio de este archivo — es un gasto recurrente diario en Duffel que corre solo, y la norma de "cualquier cosa que pueda mover la factura, se dice" (ver más abajo) aplica igual a algo que ya existe y no se sabía que existía. Nadie ha tocado su código en esta sesión.
+**Por qué el de vuelos se dice aquí y no se toca:** no aparecía mencionado en ningún sitio de este archivo hasta el barrido del 16 sept — es un gasto recurrente diario en Duffel que corre solo, y la norma de "cualquier cosa que pueda mover la factura, se dice" aplica igual a algo que ya existía y no se sabía que existía. Nadie ha tocado su código.
+
+**Cron de rutas nivel 3 (miércoles 4:00) — ELIMINADO el 17 sept 2026, con OK de Paco.** Comprobado con `_index:routes` (no existía en el KV): **nunca llegó a generar ni una sola ruta en producción**, a pesar de llevar desplegado desde antes de esta sesión. Causa encontrada en el código: escaneaba `env.SALMA_KB.list({ prefix: 'dest:', limit: 500 })` para encontrar países con destinos, pero con >3.000 claves reales bajo ese prefijo (bases + destinos + prácticos + spots de 193 países), el límite de 500 solo alcanzaba a ver ~30 países por orden alfabético — nunca llegaba ni a la mitad del abecedario. Además, igual que el resto de generación nivel 3, no verificaba coordenadas con Google Places (solo comprobaba que no fueran `0,0`) — menos calidad que una ruta real de chat. Decisión: en vez de arreglar este cron (limit + verificación), se sustituye por el proceso manual controlado que genera y verifica rutas nivel 3 país por país (ver [[project_kv_estado]] en memoria) — evita el mismo problema de raíz de abril (dos escritores automáticos distintos tocando la misma clave `route:*` sin coordinarse).
 
 ### Scripts de generación (`worker/kv/`)
 
