@@ -5254,7 +5254,7 @@ async function _processSalmaMapRequest(imageBase64) {
   status.style.display = 'block';
 
   try {
-    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const SALMA_API = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
     const res = await fetch(SALMA_API + '/pin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -5915,7 +5915,7 @@ function sanitizeUrls(text) {
   if (!text) return text;
   var allowed = [
     'google.com/maps', 'googleusercontent.com', 'places.googleapis.com',
-    'salma-api.paco-defoto.workers.dev',
+    'salma-api.borradodelmapa-api.workers.dev',
     'booking.com', 'airbnb.com', 'hostelworld.com',
     'kiwi.com', 'skyscanner.es', 'skyscanner.com',
     'rentalcars.com', 'discovercars.com',

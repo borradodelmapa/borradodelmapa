@@ -52,7 +52,7 @@
     { code: 'af',    bcp: 'af-ZA', name: 'Afrikáans',          flag: '🇿🇦' },
   ];
 
-  const API = (typeof SALMA_API !== 'undefined' && SALMA_API) || 'https://salma-api.paco-defoto.workers.dev';
+  const API = (typeof SALMA_API !== 'undefined' && SALMA_API) || 'https://salma-api.borradodelmapa-api.workers.dev';
   const LS_PREFS = 'bdm_translator_langs';
   const LS_ELEVEN_DOWN = 'bdm_11labs_out_until';
 

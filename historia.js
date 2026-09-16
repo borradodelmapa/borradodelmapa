@@ -232,7 +232,7 @@ const historiaModule = (() => {
     if (!historia) return '';
     if (historia.thumbnail) return historia.thumbnail;
     if (historia.photo_ref) {
-      const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+      const api = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
       return `${api}/photo?ref=${encodeURIComponent(historia.photo_ref)}&maxwidth=600`;
     }
     return '';
@@ -241,7 +241,7 @@ const historiaModule = (() => {
   // ─── Buscar lugar en el Worker ────────────────────────────────────────────
 
   async function _buscarHistoria(place, lat, lng) {
-    const apiUrl = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const apiUrl = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
     const res = await fetch(`${apiUrl}/historia-lugar`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

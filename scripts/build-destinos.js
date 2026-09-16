@@ -487,7 +487,7 @@ ${activitiesHTML}
 
   <script>
   window.DESTINO = ${JSON.stringify({ nombre: dest.nombre, pais: countryName, id: dest.id, code: countryCode })};
-  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
   <script src="/destinos/destinos.js"></script>
 </body>
@@ -643,7 +643,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
 
   <script>
   window.DESTINO = ${JSON.stringify({ nombre: countryName, pais: countryName, id: countryCode, code: countryCode })};
-  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
   <script src="/destinos/destinos.js"></script>
 </body>
@@ -780,7 +780,7 @@ function buildIndexHTML(countriesByContinent) {
 
   <script>
   window.DESTINO = { nombre: 'Destinos', pais: '', id: 'index', code: '' };
-  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
   <script src="/destinos/destinos.js"></script>
 </body>

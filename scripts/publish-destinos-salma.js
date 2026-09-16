@@ -104,7 +104,7 @@ async function firestoreSet(collection, docId, data, token) {
 
 // ── Build guide data from KV destination ─────────────────
 
-const WORKER_API = 'https://salma-api.paco-defoto.workers.dev';
+const WORKER_API = 'https://salma-api.borradodelmapa-api.workers.dev';
 
 async function destCoverPhoto(dest, countryName) {
   try {

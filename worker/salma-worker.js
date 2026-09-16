@@ -3331,7 +3331,7 @@ function sanitizeInventedUrls(text) {
     }
     if (url.includes('googleusercontent.com') || url.includes('places.googleapis.com')) return url;
     // URLs del proxy propio del worker (fotos permanentes)
-    if (url.includes('salma-api.paco-defoto.workers.dev')) return url;
+    if (url.includes('salma-api.borradodelmapa-api.workers.dev')) return url;
     if (url.includes('thefork.com') || url.includes('thefork.es')) return url;
     if (url.includes('booking.com')) return url;
     if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
@@ -5270,7 +5270,7 @@ async function buscarFotoLugar(input, placesKey) {
     for (let i = 0; i < maxPhotos; i++) {
       const photoRef = place.photos[i]?.photo_reference;
       if (!photoRef) continue;
-      const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
+      const photoUrl = `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
       fotos.push({
         url: photoUrl,
         markdown: `![${cleanName}](${photoUrl})`,
@@ -5951,7 +5951,7 @@ export default {
           customMetadata: { uid, mapId, day, stop }
         });
 
-        const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}`;
+        const photoUrl = `https://salma-api.borradodelmapa-api.workers.dev/photo/${encodeURIComponent(key)}`;
         return new Response(JSON.stringify({ key, url: photoUrl }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -5983,7 +5983,7 @@ export default {
           httpMetadata: { contentType: photo.type || 'image/jpeg' },
           customMetadata: { uid, source: 'gallery' }
         });
-        const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}`;
+        const photoUrl = `https://salma-api.borradodelmapa-api.workers.dev/photo/${encodeURIComponent(key)}`;
         return new Response(JSON.stringify({ key, url: photoUrl }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -6042,7 +6042,7 @@ export default {
           httpMetadata: { contentType: file.type || 'application/octet-stream' },
           customMetadata: { uid, docId, originalName: file.name }
         });
-        const docUrl = `https://salma-api.paco-defoto.workers.dev/doc/${encodeURIComponent(key)}`;
+        const docUrl = `https://salma-api.borradodelmapa-api.workers.dev/doc/${encodeURIComponent(key)}`;
         return new Response(JSON.stringify({ key, url: docUrl }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -6175,7 +6175,7 @@ export default {
   <sitemap><loc>https://borradodelmapa.com/sitemap-static.xml</loc></sitemap>
   <sitemap><loc>https://borradodelmapa.com/sitemap-destinos.xml</loc></sitemap>
   <sitemap><loc>https://borradodelmapa.com/sitemap-blog.xml</loc></sitemap>
-  <sitemap><loc>https://salma-api.paco-defoto.workers.dev/sitemap-guides.xml</loc></sitemap>
+  <sitemap><loc>https://salma-api.borradodelmapa-api.workers.dev/sitemap-guides.xml</loc></sitemap>
 </sitemapindex>`;
       return new Response(sitemapIndex, {
         headers: { 'Content-Type': 'application/xml', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=3600' }
@@ -6431,7 +6431,7 @@ export default {
           // el fix ya estaba desplegado pero el navegador seguía devolviendo la URL
           // rota de la respuesta cacheada de un rato antes). La foto en sí ya tiene
           // su propio caché fuerte (1 año) en /photo?ref=, esto no necesita el suyo.
-          return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(resolvedRef)}` }), {
+          return new Response(JSON.stringify({ url: `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(resolvedRef)}` }), {
             headers: { ...corsH, 'Cache-Control': 'no-store' }
           });
         }
@@ -6465,7 +6465,7 @@ export default {
           const photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
           // URL propia /photo?ref= — no /photo/<r2Key>, que dependía de un .put() a R2
           // sin await/waitUntil y podía no existir todavía cuando se pedía.
-          if (photo) photoUrl = `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
+          if (photo) photoUrl = `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
         }
         return new Response(JSON.stringify({
           name: r.name || '',
@@ -8988,7 +8988,7 @@ INSTRUCCIONES:
             httpMetadata: { contentType: 'image/jpeg' },
             customMetadata: { uid, source: 'chat' }
           });
-          return { key, url: `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}` };
+          return { key, url: `https://salma-api.borradodelmapa-api.workers.dev/photo/${encodeURIComponent(key)}` };
         } catch (e) {
           console.error('R2 chat photo upload error:', e);
           return null;

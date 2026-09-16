@@ -149,7 +149,7 @@ const salma = {
   // ElevenLabs desactivado temporalmente por inestabilidad de cuota.
   // Para volver a ElevenLabs: cambiar '/tts-google' por '/tts' y quitar el body extra.
   async _ttsFetchAudio(text, signal) {
-    const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const api = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
     const res = await fetch(api + '/tts-google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -3028,7 +3028,7 @@ const salma = {
     const hasResults = items.length > 0;
     const hasAirbnb = !!result.airbnb_link;
     if (!hasResults && !hasAirbnb) return;
-    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const SALMA_API = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
     const header = document.createElement('div');
     header.className = 'salma-results-header';
     header.textContent = hasAirbnb
@@ -3073,7 +3073,7 @@ const salma = {
   _renderPlaceResults(result, wrap) {
     const items = result.places;
     if (!items || items.length === 0) return;
-    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const SALMA_API = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
     const header = document.createElement('div');
     header.className = 'salma-results-header';
     header.textContent = `📍 ${result.query}`;
@@ -3306,7 +3306,7 @@ const salma = {
   _renderGoToPlaces(data, title) {
     const c = this._getGoToContainer();
     if (!c || !data.places?.length) return;
-    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const SALMA_API = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
     const sec = document.createElement('div');
     sec.className = 'salma-goto-section';
     let html = `<div class="salma-goto-section-title">${this._esc(title)}</div><div class="salma-result-grid">`;
@@ -3547,7 +3547,7 @@ const salma = {
 
       // Subir imágenes a R2 en background
       const files = [];
-      const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+      const api = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
       const uid = window.currentUser.uid;
       for (const img of imageUrls) {
         try {
