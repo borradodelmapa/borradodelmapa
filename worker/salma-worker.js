@@ -6286,7 +6286,23 @@ export default {
           }
         } catch (_) {}
       }
-      const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
+      // 16 sept, misma tarde: 12 paradas sin R2 cache aún piden foto a Google A LA VEZ.
+      // Sin timeout propio, si Google responde lento a alguna, ese fetch se queda
+      // colgado hasta que Cloudflare corta el Worker por su cuenta (con la respuesta
+      // ya perdida) — el navegador lo ve como "Failed to fetch" sin ninguna pista de
+      // qué pasó. Con timeout propio de 8s, el fallo es rápido y explícito (404 con
+      // CORS, no un cuelgue silencioso) — no cambia CUÁNTAS llamadas se hacen a
+      // Google, solo cuánto se espera cada una antes de rendirse.
+      const abortCtrl = new AbortController();
+      const timeoutId = setTimeout(() => abortCtrl.abort(), 8000);
+      let imgRes;
+      try {
+        imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`, { signal: abortCtrl.signal });
+      } catch (_) {
+        return null;
+      } finally {
+        clearTimeout(timeoutId);
+      }
       if (!imgRes.ok) return null;
       const contentType = imgRes.headers.get('Content-Type') || 'image/jpeg';
       const buf = await imgRes.arrayBuffer();

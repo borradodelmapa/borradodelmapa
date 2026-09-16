@@ -24,6 +24,7 @@ const mapaItinerario = {
     this._stops = stops;
     this._cards = [];
     this._activeIdx = -1;
+    this._photoQueue = [];
     this._container.innerHTML = '';
 
     const country = routeData.country || routeData.region || '';
@@ -90,6 +91,9 @@ const mapaItinerario = {
     });
 
     this._container.appendChild(scroll);
+
+    // Fotos por tandas, no todas a la vez (ver comentario en _createCard)
+    this._processPhotoQueue();
 
     // Extras: antes de salir, info práctica, tips (reutiliza guide-renderer)
     if (typeof guideRenderer !== 'undefined') {
@@ -257,8 +261,12 @@ const mapaItinerario = {
       });
     }
 
-    // Cargar foto inicial — pasamos el card directamente porque aún no está en el DOM
-    this._loadInitialPhoto(stop, index, card);
+    // Foto inicial — encolada, no se pide aquí. Con rutas de muchas paradas (12+) las
+    // pedía TODAS a la vez en el mismo milisegundo, y si alguna foto no estaba aún en
+    // caché R2 (llamada real a Google), 12 llamadas simultáneas competían entre sí y
+    // acababan fallando en cadena con "Failed to fetch" — reportado 16 sept, tarde.
+    // _processPhotoQueue() (llamado al final de init()) las pide en tandas pequeñas.
+    (this._photoQueue = this._photoQueue || []).push({ stop, index, cardEl: card });
 
     // Botón "Historia de [parada]"
     const histMount = card.querySelector('.hist-inline-mount');
@@ -273,8 +281,23 @@ const mapaItinerario = {
     return card;
   },
 
+  // ═══ COLA DE FOTOS — tandas de 4, no las 12+ de golpe ═══
+  _processPhotoQueue() {
+    const queue = this._photoQueue || [];
+    const BATCH = 4;
+    let i = 0;
+    const next = () => {
+      const batch = queue.slice(i, i + BATCH);
+      if (!batch.length) return;
+      i += BATCH;
+      batch.forEach(({ stop, index, cardEl }) => this._loadInitialPhoto(stop, index, cardEl));
+      if (i < queue.length) setTimeout(next, 400);
+    };
+    next();
+  },
+
   // ═══ FOTO INICIAL ═══
-  _loadInitialPhoto(stop, index, cardEl) {
+  _loadInitialPhoto(stop, index, cardEl, _isRetry) {
     // Buscar dentro del card (antes de estar en el DOM) o en el documento si ya está
     const photoDiv = (cardEl && cardEl.querySelector('.itin-card-photo')) || document.getElementById(`itin-photo-${index}`);
     if (!photoDiv) return;
@@ -285,8 +308,16 @@ const mapaItinerario = {
     // 16 sept: añadido también log al ARRANCAR el fetch y onerror en el propio <img> —
     // el fetch que trae la URL puede ir bien y aun así la imagen fallar al cargar de
     // verdad en el navegador, y ESO no dejaba ningún rastro (ni warn ni catch) hasta hoy.
+    // 16 sept, misma tarde: un solo reintento automático a los 3s si falla — con el
+    // Worker ahora fallando rápido (timeout de 8s a Google, ver salma-worker.js) y las
+    // fotos pedidas por tandas de 4 en vez de las 12 de golpe, un segundo intento ya no
+    // compite con las otras 11 y tiene bastantes más papeletas de ir bien.
+    const retry = () => {
+      if (_isRetry) return;
+      setTimeout(() => this._loadInitialPhoto(stop, index, cardEl, true), 3000);
+    };
     if (stop.photo_ref) {
-      console.log(`[FOTO] pidiendo (ref) para "${stop.name}"`);
+      console.log(`[FOTO] pidiendo (ref) para "${stop.name}"${_isRetry ? ' (reintento)' : ''}`);
       fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
         .then(r => r.json())
         .then(data => {
@@ -295,11 +326,12 @@ const mapaItinerario = {
             photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">`;
           } else {
             console.warn(`[FOTO] sin url para "${stop.name}" (ref):`, data);
+            retry();
           }
         })
-        .catch(e => console.warn(`[FOTO] fetch falló para "${stop.name}" (ref):`, e));
+        .catch(e => { console.warn(`[FOTO] fetch falló para "${stop.name}" (ref):`, e); retry(); });
     } else if (stop.name && stop.lat && stop.lng) {
-      console.log(`[FOTO] pidiendo (name+coords) para "${stop.name}"`);
+      console.log(`[FOTO] pidiendo (name+coords) para "${stop.name}"${_isRetry ? ' (reintento)' : ''}`);
       fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
         .then(r => r.json())
         .then(data => {
@@ -308,9 +340,10 @@ const mapaItinerario = {
             photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">`;
           } else {
             console.warn(`[FOTO] sin url para "${stop.name}" (name+coords):`, data);
+            retry();
           }
         })
-        .catch(e => console.warn(`[FOTO] fetch falló para "${stop.name}" (name+coords):`, e));
+        .catch(e => { console.warn(`[FOTO] fetch falló para "${stop.name}" (name+coords):`, e); retry(); });
     } else {
       console.warn(`[FOTO] "${stop.name}" sin photo_ref y sin lat/lng — no se intenta buscar foto`);
     }
