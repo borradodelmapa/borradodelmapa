@@ -728,6 +728,36 @@ escriben `route:` — o el pipeline masivo usa un prefijo/clave distinto al del 
 se le añade el mismo `_index:routes` para que el cron y el chat sepan "esto ya está subido
 permanente, no lo toques".
 
+### 📦 16 sept 2026 — Dos ramas huérfanas con datos KV reales, recuperables, sin fusionar
+
+Buscando qué se podía recuperar de lo perdido en abril, salió una **tercera rama** que nadie
+había mencionado hasta ahora, con contenido real y completo:
+
+- **`claude/priceless-shannon`** (commit `2ca8c901`, **3 abril 2026**, no es ancestro de
+  `main`) — `worker/kv/output-nivel2/` con **los 193 países completos** (destinos, spots,
+  keywords, transporte por país), más su propio script de subida (`upload-nivel2-now.mjs`)
+  y una suite de tests (`test-suite.js`, `test-salma.js`). Confirmado con
+  `git log --all --diff-filter=D` que **nunca se ha borrado ni un solo fichero de esa
+  carpeta en ninguna rama** — está exactamente como se dejó ese día.
+- **`claude/brave-satoshi`** (commit `38175703`, 12 abril, ver más arriba) — además del
+  sistema de backup, trae `worker/kv/transport-routes/{es,th,np,vn}.json` (68 rutas + 21
+  aeropuertos verificados) intactos, con `upload-transport-routes.js`.
+- **Lo que NO aparece en ninguna rama, nunca**: nivel 1 (solo Vietnam en todo el historial)
+  y nivel 3 más allá de las 11 rutas de Nepal que ya hay en `main`. Si se generó más de
+  esto y no se comiteó, no hay copia en git — solo podría estar en un backup del Desktop
+  de Paco, fuera del repo.
+
+**Plan propuesto (sin ejecutar, pendiente de que Paco lo revise desde su ordenador)**: no
+fusionar las ramas enteras (arrancan de puntos de `main` muy viejos, chocarían con medio año
+de rediseños) — traer solo los JSON de datos a la carpeta `worker/kv/` de hoy
+(`git checkout <rama> -- worker/kv/output-nivel2/` y lo mismo con `transport-routes/`) y
+subirlos con los scripts de subida, revisando antes que esos scripts solo escriben en KV
+(gratis) y no disparan de paso ninguna llamada a Google Places/Anthropic/OpenAI (ver norma de
+coste del punto 8 del protocolo antes de ejecutar cualquier subida).
+
+**Paco decidió (16 sept) aparcar esto hasta tener el ordenador delante** — no investigar más
+por ahora. Retomar cuando lo pida, empezando por esta sección en vez de desde cero.
+
 **JSONs de respaldo en `worker/kv/`:** `countries.json` (195 países base), `_index.json`, `_nivel2_1.json`
 
 El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápido, más barato.
