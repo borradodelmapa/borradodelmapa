@@ -1235,11 +1235,31 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   `6136baf`) y desplegado (GitHub Action "Deploy Worker" run #18, **Worker Version ID
   `bf3db6a4-fdf2-4bef-992c-12a75ce5583f`**).
 
-  **Pendiente: que Paco confirme `/version` contra `bf3db6a4-fdf2-4bef-992c-12a75ce5583f`,
+  **SEGUNDA vuelta de la misma regresión, mismo día — causa real: caché HTTP del
+  navegador, no el Worker.** El fix de arriba SÍ se desplegó bien (confirmado con el
+  log de Paco: `[FOTO] url recibida` seguía devolviendo el patrón viejo
+  `/photo/photocache/<hash>.jpg` con el Worker ya en `bf3db6a4`), pero las respuestas
+  de `/photo?...&json=1` y `/place-details` llevaban `Cache-Control: max-age=86400`
+  (24h) — cualquier navegador que hubiera pedido esa misma foto ANTES del primer fix se
+  quedó sirviendo, de su propia caché, la respuesta vieja con la URL rota, sin volver a
+  preguntarle nada al Worker aunque este ya estuviera arreglado. Diagnosticado gracias a
+  un log de diagnóstico añadido a propósito en `mapa-itinerario.js` (`console.log` al
+  pedir cada foto + `onerror` en el `<img>`, `?v=56`) que confirmó que el fetch SÍ
+  llegaba y SÍ traía una URL — solo que la URL en sí era la vieja. Fix: esas 3
+  respuestas (son solo un puntero a la foto, no la imagen) pasan a `Cache-Control:
+  no-store` — la imagen real sigue con su caché fuerte de 1 año en `/photo?ref=X`, eso
+  no cambia. **Coste: cero cambio en llamadas a Google** — `no-store` solo afecta a
+  cuántas veces el navegador pregunta al propio Worker por la URL (barato), la caché en
+  R2 que evita pagarle a Google sigue intacta. Fusionado a `main` (commit `08db8c8`) y
+  desplegado (GitHub Action "Deploy Worker" run #19, **Worker Version ID
+  `23a51468-183a-4aea-8ba8-fc2017077818`**).
+
+  **Pendiente: que Paco confirme `/version` contra `23a51468-183a-4aea-8ba8-fc2017077818`,
   recargue la MISMA ruta de la captura ("Playa de Penarronda") y confirme que la foto
-  ya carga, genere/edite una ruta real para comprobar que no cambió nada más de lo que
-  ve, y deje el Narrador activo un rato parado (coche/restaurante) para confirmar que
-  ya no dispara solo cada minuto.**
+  ya carga (esta vez sí debería, sin necesitar incógnito ni borrar caché — `no-store`
+  hace que el navegador vuelva a preguntar al Worker siempre), genere/edite una ruta
+  real para comprobar que no cambió nada más de lo que ve, y deje el Narrador activo un
+  rato parado (coche/restaurante) para confirmar que ya no dispara solo cada minuto.**
 
 - **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
   quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
