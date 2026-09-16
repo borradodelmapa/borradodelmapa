@@ -1254,12 +1254,22 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   desplegado (GitHub Action "Deploy Worker" run #19, **Worker Version ID
   `23a51468-183a-4aea-8ba8-fc2017077818`**).
 
-  **Pendiente: que Paco confirme `/version` contra `23a51468-183a-4aea-8ba8-fc2017077818`,
-  recargue la MISMA ruta de la captura ("Playa de Penarronda") y confirme que la foto
-  ya carga (esta vez sí debería, sin necesitar incógnito ni borrar caché — `no-store`
-  hace que el navegador vuelva a preguntar al Worker siempre), genere/edite una ruta
-  real para comprobar que no cambió nada más de lo que ve, y deje el Narrador activo un
-  rato parado (coche/restaurante) para confirmar que ya no dispara solo cada minuto.**
+  **CONFIRMADO EN PANTALLA por Paco (16 sept) — con matiz importante sobre `no-store`.**
+  El `no-store` de arriba es correcto pero **no es retroactivo**: solo evita que el
+  navegador guarde la respuesta a partir de ese despliegue, no invalida una copia que
+  ya tuviera guardada de antes (con la regla vieja de 24h) — mientras esa copia siga
+  "fresca" según la política con la que se guardó, el navegador ni siquiera vuelve a
+  preguntarle al Worker. Por eso, tras desplegar el fix, Paco SEGUÍA viendo la URL
+  rota — hasta que borró manualmente "imágenes y archivos en caché" desde Chrome
+  (Configuración → Privacidad y seguridad → Borrar datos de navegación), momento en
+  el que la ruta cargó bien. Con el `no-store` ya desplegado, esto no debería volver a
+  hacer falta para nadie que pida una foto POR PRIMERA VEZ a partir de ahora — el borrado
+  manual solo hizo falta esta vez porque el caché ya estaba puesto desde antes.
+  **Sigue pendiente**: que Paco genere/edite una ruta real para confirmar que el resto
+  de los fixes de facturación no cambiaron nada más de lo que ve, y que deje el
+  Narrador activo un rato parado (coche/restaurante) para confirmar que ya no dispara
+  solo cada minuto — ninguno de los dos se ha probado todavía, toda la sesión de hoy
+  se fue en el problema de las fotos.
 
 - **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
   quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
