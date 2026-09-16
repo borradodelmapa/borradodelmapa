@@ -1318,9 +1318,28 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   `3b23747`) y desplegado (GitHub Action "Deploy Worker" run #20, **Worker Version ID
   `010ea7f9-0bbc-495e-9738-b85059ff0911`**). **Aviso de coste:** ver entrada de `/pin`
   justo arriba — este botón es la única puerta de entrada nueva a esa llamada, sin
-  coste adicional respecto a lo que ya existía. **Pendiente: que Paco active el
-  Narrador, confirme que ve el aviso puntual la primera vez, y pruebe el botón "📷
-  Identificar por foto" con un sitio delante para confirmar que responde bien.**
+  coste adicional respecto a lo que ya existía.
+
+  **Simplificado el mismo 16 sept 2026, a petición de Paco ("se queda un poco escondido
+  y enrevesado") — DESPLEGADO (solo frontend, GitHub Pages), sin confirmar en
+  pantalla.** El acceso de arriba (botón dentro del menú del chip) seguía necesitando
+  tocar el chip → abrir el menú → encontrar el botón entre otros dos. Ahora hay dos
+  atajos directos, sin pasar por ningún menú:
+  1. **Badge 📷 en la esquina del propio chip Narrador** (solo visible cuando está
+     activo, igual que se pone verde) — tocarlo abre la cámara al momento;
+     `updateNarratorChipUI()` lo añade/quita al activar/desactivar sin recargar.
+  2. **Botón dentro del propio toast/aviso** del Narrador — para identificar la foto
+     justo cuando salta la notificación, sin ni tocar el chip.
+  El botón del menú se queda como tercer acceso (ya no es el único). Texto unificado
+  en los tres sitios, a petición explícita de Paco: **"Identifica lo que ves al
+  momento por foto"** (se quitó cualquier mención a que Salma "no ha acertado").
+  Fusionado a `main` (commit `f755915`) — cambio solo en `app.js`/`salma.js`/
+  `styles.css`/`index.html` (`?v=`: `app.js` 109, `salma.js` 88, `styles.css` 97), no
+  toca el Worker, no hace falta redeploy. **Sin coste** — sigue siendo el mismo
+  endpoint `/pin` de arriba, solo cambia cómo se llega a él. **Pendiente: que Paco
+  active el Narrador, confirme que ve el aviso puntual la primera vez, que el chip
+  muestra el 📷 en verde, y que tocarlo (o el botón del toast) identifica el sitio
+  bien.**
 
 - **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
   quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
