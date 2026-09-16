@@ -206,6 +206,17 @@ function updateNarratorChipUI() {
   const on = typeof salma !== 'undefined' && !!salma._narratorActive;
   document.querySelectorAll('.chat-empty-chip[data-action="explorar"]').forEach(el => {
     el.classList.toggle('chat-empty-chip--narrator-on', on);
+    let badge = el.querySelector('[data-camera-badge]');
+    if (on && !badge) {
+      badge = document.createElement('span');
+      badge.className = 'chip-camera-badge';
+      badge.dataset.cameraBadge = '1';
+      badge.title = 'Identifica lo que ves al momento por foto';
+      badge.textContent = '📷';
+      el.appendChild(badge);
+    } else if (!on && badge) {
+      badge.remove();
+    }
   });
 }
 
@@ -272,7 +283,8 @@ function _renderChatEmpty() {
   ];
   const renderChip = c => {
     const narratorOn = c.action === 'explorar' && typeof salma !== 'undefined' && salma._narratorActive;
-    return `<button class="chat-empty-chip ${c.cls || ''} ${narratorOn ? 'chat-empty-chip--narrator-on' : ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
+    const cameraBadge = narratorOn ? '<span class="chip-camera-badge" data-camera-badge="1" title="Identifica lo que ves al momento por foto">📷</span>' : '';
+    return `<button class="chat-empty-chip ${c.cls || ''} ${narratorOn ? 'chat-empty-chip--narrator-on' : ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}${cameraBadge}</button>`;
   };
 
   // ── Rediseño v1 (rama rediseno-visual) — tablero de guía + chips estilo panel de aeropuerto ──
@@ -631,8 +643,13 @@ function _renderChatEmpty() {
   }
 
   area.querySelectorAll('.chat-empty-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
+    chip.addEventListener('click', (e) => {
       const action = chip.dataset.action;
+      if (action === 'explorar' && e.target.closest('[data-camera-badge]')) {
+        e.stopPropagation();
+        narratorTakePhoto();
+        return;
+      }
       if (action === 'crear-ruta') {
         if (typeof salma !== 'undefined' && salma.startRutaGuiada) salma.startRutaGuiada();
         return;
@@ -5425,7 +5442,7 @@ function showNarratorConfirm() {
         if (!localStorage.getItem('bdm_narrator_camera_tip_seen')) {
           localStorage.setItem('bdm_narrator_camera_tip_seen', '1');
           setTimeout(() => {
-            salma.showNarratorToast('Consejo: si no acierto con el sitio, toca el chip Narrador y luego 📷 para identificar por foto.', null, 6000);
+            salma.showNarratorToast('Consejo: toca el 📷 del chip Narrador para identificar lo que ves al momento por foto.', null, 6000);
           }, 4500);
         }
       }
@@ -5452,7 +5469,7 @@ function showNarratorActiveMenu() {
         <button class="narrator-confirm-cancel" id="narrator-active-cancel">Cerrar</button>
         <button class="narrator-confirm-go" id="narrator-active-reset">Olvidar avisos</button>
       </div>
-      <button class="narrator-active-camera" id="narrator-active-camera">📷 Identificar por foto</button>
+      <button class="narrator-active-camera" id="narrator-active-camera">📷 Identifica lo que ves al momento por foto</button>
       <button class="narrator-active-stop" id="narrator-active-stop">Desactivar Narrador</button>
     </div>`;
   overlay.style.display = 'flex';

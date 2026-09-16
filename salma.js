@@ -2398,7 +2398,8 @@ const salma = {
       <div class="narrator-toast-close" onclick="this.parentElement.classList.add('narrator-toast-out');setTimeout(()=>this.parentElement.remove(),400)">✕</div>
       ${photoUrl ? `<img class="narrator-toast-photo" src="${photoUrl}" alt="" onerror="this.remove()">` : ''}
       ${poi ? `<div class="narrator-toast-poi">\uD83D\uDCCD ${poi.name}</div>` : ''}
-      <div class="narrator-toast-text">${text}</div>`;
+      <div class="narrator-toast-text">${text}</div>
+      <button type="button" class="narrator-toast-camera" onclick="window.narratorTakePhoto && window.narratorTakePhoto()">\uD83D\uDCF7 Identifica lo que ves al momento por foto</button>`;
     document.body.appendChild(toast);
     if (autoCloseMs) {
       this._narratorToastTimer = setTimeout(() => {

@@ -180,9 +180,16 @@ body {
 }
 .chat-empty-chip--narrator-on {
   background:rgba(74,222,128,.15); border-color:rgba(74,222,128,.5); color:var(--verde);
+  position:relative;
 }
 .chat-empty-chip--narrator-on:hover {
   background:rgba(74,222,128,.25); border-color:var(--verde); color:var(--verde);
+}
+.chip-camera-badge {
+  position:absolute; top:-8px; right:-8px; width:26px; height:26px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--verde); border:2px solid var(--negro); border-radius:50%;
+  font-size:13px; line-height:1; cursor:pointer; z-index:2;
 }
 .salma-transport-tip {
   font-size:12px; color:rgba(255,255,255,.5); font-style:italic; margin:6px 0 10px 2px;
@@ -3130,6 +3137,14 @@ body {
   text-decoration:none; opacity:.8;
 }
 .narrator-toast-link:hover { opacity:1; }
+.narrator-toast-camera {
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  width:100%; margin-top:2px; padding:9px;
+  border:1px solid var(--linea-fuerte); border-radius:var(--radius-sm);
+  background:rgba(240,180,41,.08); color:var(--dorado);
+  font-size:12.5px; font-weight:600; cursor:pointer; transition:background .2s;
+}
+.narrator-toast-camera:hover { background:rgba(240,180,41,.16); }
 
 /* ═══ PERFIL DE USUARIO ═══ */
 .profile-area {
