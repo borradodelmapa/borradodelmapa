@@ -282,23 +282,30 @@ const mapaItinerario = {
     // Sin console.warn en los fallos, esto no dejaba ningún rastro en el panel 🐛 cuando
     // una foto no cargaba — imposible saber si era el endpoint, Google sin foto para ese
     // sitio, o un error de red, solo se veía "no salió la foto".
+    // 16 sept: añadido también log al ARRANCAR el fetch y onerror en el propio <img> —
+    // el fetch que trae la URL puede ir bien y aun así la imagen fallar al cargar de
+    // verdad en el navegador, y ESO no dejaba ningún rastro (ni warn ni catch) hasta hoy.
     if (stop.photo_ref) {
+      console.log(`[FOTO] pidiendo (ref) para "${stop.name}"`);
       fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
-            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+            console.log(`[FOTO] url recibida para "${stop.name}":`, data.url);
+            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">`;
           } else {
             console.warn(`[FOTO] sin url para "${stop.name}" (ref):`, data);
           }
         })
         .catch(e => console.warn(`[FOTO] fetch falló para "${stop.name}" (ref):`, e));
     } else if (stop.name && stop.lat && stop.lng) {
+      console.log(`[FOTO] pidiendo (name+coords) para "${stop.name}"`);
       fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
-            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+            console.log(`[FOTO] url recibida para "${stop.name}":`, data.url);
+            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">`;
           } else {
             console.warn(`[FOTO] sin url para "${stop.name}" (name+coords):`, data);
           }
@@ -482,7 +489,7 @@ const mapaItinerario = {
       fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
         .then(r => r.json())
         .then(data => {
-          if (data.url) photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+          if (data.url) photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror, updateVerified) para índice ${i}:', this.src)">`;
         })
         .catch(() => {});
     });
