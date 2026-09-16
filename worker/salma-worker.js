@@ -6291,7 +6291,11 @@ export default {
       const contentType = imgRes.headers.get('Content-Type') || 'image/jpeg';
       const buf = await imgRes.arrayBuffer();
       if (env.SALMA_PHOTOS) {
-        env.SALMA_PHOTOS.put(r2Key, buf, { httpMetadata: { contentType } }).catch(() => {});
+        // waitUntil: sin esto, el guardado en R2 podía quedarse a medias si Cloudflare
+        // corta el Worker justo después de mandar la respuesta — la próxima vez que se
+        // pidiera esta misma foto no la encontraría cacheada y volvería a pagarla.
+        const putPromise = env.SALMA_PHOTOS.put(r2Key, buf, { httpMetadata: { contentType } }).catch(() => {});
+        if (ctx?.waitUntil) ctx.waitUntil(putPromise);
       }
       return { r2Key, body: buf, contentType };
     }
@@ -6310,7 +6314,11 @@ export default {
           const photo = await _getCachedPlacePhoto(placesKey, ref);
           if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
           if (url.searchParams.get('json') === '1') {
-            return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo/${photo.r2Key}` }), {
+            // Apunta a nuestro propio /photo?ref= (siempre válido, resuelve de R2 o de
+            // Google al vuelo) — NUNCA a /photo/<r2Key> directo: ese depende de que el
+            // .put() a R2 de más abajo ya haya terminado, y al no llevar await/waitUntil
+            // no hay garantía de que exista todavía cuando el navegador pide esa URL.
+            return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(ref)}` }), {
               headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
             });
           }
@@ -6387,7 +6395,9 @@ export default {
         const photo = await _getCachedPlacePhoto(placesKey, photoRef);
         if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
         if (url.searchParams.get('json') === '1') {
-          return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo/${photo.r2Key}` }), {
+          // Mismo motivo que en la rama "ref" de arriba: URL propia siempre válida,
+          // no la que depende del .put() a R2 sin confirmar.
+          return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}` }), {
             headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
           });
         }
@@ -6419,7 +6429,9 @@ export default {
         let photoUrl = '';
         if (photoRef) {
           const photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
-          if (photo) photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${photo.r2Key}`;
+          // URL propia /photo?ref= — no /photo/<r2Key>, que dependía de un .put() a R2
+          // sin await/waitUntil y podía no existir todavía cuando se pedía.
+          if (photo) photoUrl = `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
         }
         return new Response(JSON.stringify({
           name: r.name || '',
