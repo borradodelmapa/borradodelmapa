@@ -686,6 +686,48 @@ El Worker tiene `scheduled()` en `salma-worker.js` (línea ~9985) con 3 disparos
 - **Sí se ha confirmado, comparando el código fuente que Cloudflare devuelve del Worker desplegado contra `salma-worker.js` de esta rama (equivalente al `main` de hoy), que el contenido coincide** — se buscaron marcadores específicos del último fix de facturación (15 sept, `photocache/`, `verifiedspot:`, `opts.previousStops`, `nearbycache:`) y los 4 están presentes en el Worker en producción. No se ha podido comparar el `Current Version ID` exacto (ese dato solo lo expone `/version` en tiempo de ejecución, y la red de este contenedor sigue bloqueando `salma-api.paco-defoto.workers.dev`, mismo bloqueo ya documentado el 14 sept) — pero a nivel de código, **lo desplegado y lo que hay en el repo hoy son lo mismo**. Esto responde a varios "pendiente: confirmar `/version`" que quedaban sueltos en el 🔴 Crítico de la factura de Google Places.
 - **Los 15 endpoints nuevos y las claves de Vigilancia de Vuelos (`fw:`, `fw_alerts:`, `flight_watch_users`) y del cron diario de Duffel llevaban invisibles en este archivo** desde que se implementaron — no se ha encontrado ningún commit que los documentara aquí. Añadidos en este barrido (ver tablas de arriba).
 
+### 🔍 Reconstruido 16 sept 2026: qué pasó con la subida de KV de abril ("se borró todo a los 30 días")
+
+Paco recordaba haber subido nivel 1+2+3 en abril y haber perdido todo a los 30 días — un coste
+real de generación tirado. Este contenedor tenía un **clon `shallow` de git que cortaba justo
+antes de abril** (el primer commit visible era del 25 de abril); se arregló con
+`git fetch --unshallow origin` para poder mirar el historial completo. Con eso, esto es lo que
+sale del código real, no de memoria:
+
+- **Nivel 1/2 (`dest:{cc}:base` / `:destinos`)**: revisados **todos** los scripts de subida que
+  han existido en el repo (`upload-kv.js`, `upload-kv-nivel2.js`, `upload-all-kv.cjs`,
+  `upload-wrangler.js`, `scripts/progressive-load.js`) — **ninguno, nunca, les ha puesto
+  caducidad.** Si estos también se perdieron, no fue por TTL — solo se confirma mirando el KV
+  real.
+- **Nivel 3 (`route:{cc}:{región}:{días}`) — sí hay una causa concreta y verificada por código**:
+  hay dos caminos distintos que escriben la MISMA clave:
+  1. El pipeline masivo (`scripts/progressive-load.js`) sube con `wrangler kv bulk put`
+     **sin ninguna caducidad** — permanente por diseño.
+  2. El motor de chat en vivo — desde el primer commit que metió caché de rutas
+     (`21bf3e97`, **25 marzo 2026**, sigue igual hoy) — cada vez que una ruta generada en el
+     chat (o el cron de los miércoles, `_cronNivel3`) coincide con esa misma clave, la
+     reescribe con `expirationTtl: 2592000` (30 días), **a propósito**, para que el caché de
+     uso normal no se quede rancio.
+  Si una clave subida permanente por el camino 1 se vuelve a tocar por el camino 2 (alguien
+  pide esa misma ruta en el chat, o el cron de los miércoles la regenera sin saber que ya
+  existía — su índice `_index:routes` nunca se entera de lo que sube el pipeline masivo), pasa
+  de permanente a caducar en 30 días **sin que nadie lo decidiera**. Encaja con lo que describe
+  Paco.
+- **La red de seguridad que se construyó para esto nunca llegó a producción.** El 12 de abril
+  2026 se montó un sistema completo de backup (cron semanal Worker→R2 de todo el KV, script
+  manual `backup-kv.js`, restauración documentada) — commit `74b3ee26`, en la rama
+  `claude/brave-satoshi`. **Esa rama nunca se fusionó a `main`** (confirmado con
+  `git merge-base --is-ancestor` — no es ancestro). Hoy no existe ni el fichero
+  `backup-kv.js` ni el cron de backup ni `_cronBackup` en `salma-worker.js` — comprobado en el
+  código actual. Si el nivel 3 se perdió en abril, no había ninguna copia de seguridad real
+  corriendo que lo hubiera evitado, y **sigue sin haberla hoy**.
+
+**Pendiente de decidir con Paco**: revisar y traer `claude/brave-satoshi` a `main` antes de
+subir países otra vez (para tener red de seguridad real esta vez), y separar las dos vías que
+escriben `route:` — o el pipeline masivo usa un prefijo/clave distinto al del chat en vivo, o
+se le añade el mismo `_index:routes` para que el cron y el chat sepan "esto ya está subido
+permanente, no lo toques".
+
 **JSONs de respaldo en `worker/kv/`:** `countries.json` (195 países base), `_index.json`, `_nivel2_1.json`
 
 El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápido, más barato.
