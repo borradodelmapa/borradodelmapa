@@ -6318,8 +6318,14 @@ export default {
             // Google al vuelo) — NUNCA a /photo/<r2Key> directo: ese depende de que el
             // .put() a R2 de más abajo ya haya terminado, y al no llevar await/waitUntil
             // no hay garantía de que exista todavía cuando el navegador pide esa URL.
+            // no-store: esta respuesta es solo un puntero — cachearla en el navegador
+            // deja a cualquier cliente que la pidió antes de un deploy sirviendo la URL
+            // vieja durante horas después de arreglarla en el Worker (pasó el 16 sept:
+            // el fix ya estaba desplegado pero el navegador seguía devolviendo la URL
+            // rota de la respuesta cacheada de un rato antes). La foto en sí ya tiene
+            // su propio caché fuerte (1 año) en /photo?ref=, esto no necesita el suyo.
             return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(ref)}` }), {
-              headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
+              headers: { ...corsH, 'Cache-Control': 'no-store' }
             });
           }
           return new Response(photo.body, {
@@ -6396,9 +6402,10 @@ export default {
         if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
         if (url.searchParams.get('json') === '1') {
           // Mismo motivo que en la rama "ref" de arriba: URL propia siempre válida,
-          // no la que depende del .put() a R2 sin confirmar.
+          // no la que depende del .put() a R2 sin confirmar. no-store: es solo un
+          // puntero, no lo cacheamos en el navegador (ver comentario en la rama "ref").
           return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}` }), {
-            headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
+            headers: { ...corsH, 'Cache-Control': 'no-store' }
           });
         }
         return new Response(photo.body, {
@@ -6440,7 +6447,10 @@ export default {
           photo_url: photoUrl,
           hours: r.opening_hours?.weekday_text || [],
           open_now: r.opening_hours?.open_now ?? null,
-        }), { headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' } });
+          // no-store: photo_url es un puntero a /photo?ref=, no lo cacheamos aquí por el
+          // mismo motivo que en /photo?json=1 (ver ese comentario) — cachear esta
+          // respuesta puede dejar servida una URL vieja horas después de un deploy.
+        }), { headers: { ...corsH, 'Cache-Control': 'no-store' } });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
