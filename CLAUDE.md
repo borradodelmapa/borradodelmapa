@@ -1219,10 +1219,27 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   Nada de esto cambia lo que ve el usuario en una ruta ya verificada — solo evita
   repetir llamadas a Google que no aportaban nada nuevo. `?v=` de `salma.js` subido
   a 87 en `index.html`.
-  **Pendiente: que Paco confirme `/version` contra el Version ID de arriba, genere/
-  edite una ruta real para comprobar que no cambió nada de lo que ve, y deje el
-  Narrador activo un rato parado (coche/restaurante) para confirmar que ya no
-  dispara solo cada minuto.**
+
+  **REGRESIÓN encontrada y arreglada el mismo día (16 sept 2026): fotos rotas en el
+  itinerario tras el fix de arriba.** Paco reportó (captura de "Playa de Penarronda"
+  en una ruta ya generada) icono de imagen rota en las tarjetas del itinerario.
+  Causa: el guardado en R2 de la foto (punto 2 de arriba) se lanzaba en segundo plano
+  sin esperar a que terminase; el JSON de `/photo?...&json=1` (usado por
+  `mapa-itinerario.js`, `guide-renderer.js`, `mapa-ruta.js`, `app.js`,
+  `bitacora-renderer.js`, `salma.js`) devolvía una URL apuntando directo al fichero de
+  R2, que si aún no existía daba 404 → icono roto. Fix: esa URL ahora apunta a nuestro
+  propio `/photo?ref=X` (siempre válido, resuelve de R2 o de Google al vuelo) en vez
+  del fichero de R2 directo, y el guardado en R2 ahora usa `ctx.waitUntil()` para no
+  cortarse a medias. **No cambia el coste** — misma llamada a Google que ya estaba
+  contada arriba, solo corrige qué URL se entrega. Fusionado a `main` (commit
+  `6136baf`) y desplegado (GitHub Action "Deploy Worker" run #18, **Worker Version ID
+  `bf3db6a4-fdf2-4bef-992c-12a75ce5583f`**).
+
+  **Pendiente: que Paco confirme `/version` contra `bf3db6a4-fdf2-4bef-992c-12a75ce5583f`,
+  recargue la MISMA ruta de la captura ("Playa de Penarronda") y confirme que la foto
+  ya carga, genere/edite una ruta real para comprobar que no cambió nada más de lo que
+  ve, y deje el Narrador activo un rato parado (coche/restaurante) para confirmar que
+  ya no dispara solo cada minuto.**
 
 - **Botón de expandir/minimizar el tiempo — REVERTIDO, 15 sept 2026.** Se probó
   quitar el label "SEP" de la cabecera y poner ahí el toggle de expandir/minimizar
