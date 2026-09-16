@@ -1227,14 +1227,44 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   (400ms→900ms), y hasta 2 reintentos en vez de 1 (4s y 8s de margen). Commit `7b7e5be`
   — solo frontend, `mapa-itinerario.js?v=59` en `index.html`, no hace falta redeploy
   del Worker.
-  **Pendiente, sin cerrar**: que Paco (desde el ordenador donde falló `wrangler tail`)
-  compruebe el panel de Cloudflare (dash.cloudflare.com → Workers → salma-api →
-  Metrics, o Analytics) para ver si hay errores 5xx marcados en las últimas horas —
-  eso confirmaría si el corte está en la infraestructura de Cloudflare en sí o en algo
-  intermedio (VPN, antivirus con inspección de red, firewall, IPv6 mal configurado)
-  específico de esa red/máquina. También merece la pena probar la guía desde una red
-  completamente distinta (datos móviles de otra compañía, o el móvil de otra persona)
-  para terminar de aislarlo.
+  **RESUELTO — 16 sept 2026, noche.** Lo que esta sesión veía como "algo raro en la
+  red de Paco" era la primera fase del mismo corte: unas horas después, **todo**
+  `*.paco-defoto.workers.dev` (no solo `wrangler tail`) dejó de responder — `/`, `/photo`,
+  `/practical-info`, todo, con el mismo patrón exacto (`Failed to fetch`, mismas IPs
+  `188.114.96.5`/`97.5`). Diagnóstico definitivo: el subdominio `workers.dev` de la
+  CUENTA (no un Worker en concreto — le pasaba también al Worker viejo `salma`) estaba
+  enrutando a un tramo de IPs de la red WARP de Cloudflare que no respondía —
+  confirmado con `nslookup` (local y 8.8.8.8) y con una conexión TCP pura al puerto 443
+  (timeout antes de TLS, antes de que el Worker ejecute nada). Prueba de aislamiento:
+  un Worker de OTRA cuenta Cloudflare cualquiera resolvía a IPs normales
+  (`104.21.x`/`172.67.x`) y respondía al instante. Causa de fondo del lado de
+  Cloudflare sin confirmar (no hay banner ni incidencia visible en el dashboard de
+  Paco); las teorías de "abuso por tráfico anómalo" o "Zero Trust mal configurado" se
+  descartaron sin evidencia real que las sostuviera — no dar por buena ninguna causa
+  sin prueba dura si vuelve a pasar.
+  **Fix aplicado (sin esperar a que Cloudflare lo arreglara)**: Paco renombró el
+  subdominio `workers.dev` de la cuenta desde el dashboard (Trabajadores y Pajes →
+  cambiar subdominio) de `paco-defoto` a **`borradodelmapa-api`** — el nuevo nombre
+  resolvió de inmediato a IPs sanas. Commit `1f33303c`: `window.SALMA_API`
+  (`index.html`, `404.html`), `admin.html`, fallbacks en `app.js`/`salma.js`/
+  `historia.js`/`translator.js`, y las URLs hardcodeadas del Worker (`/photo`, `/doc`,
+  `sitemap-guides.xml`) actualizadas al dominio nuevo. Worker desplegado, Version ID
+  `a81a96d6-0fe9-415f-a797-2e384d6db7e3`. **Confirmado en pantalla por Paco.**
+  Los dos bugs reales de fotos caducadas de más arriba (Bug 1 y Bug 2) siguen siendo
+  arreglos válidos y quedan — no eran la causa de este corte, pero eran bugs reales
+  aparte.
+  **Pendiente, nuevo**: fotos de galería/diario/avatares/documentos **subidas antes de
+  hoy** pueden seguir rotas — su URL absoluta quedó guardada en Firestore con el
+  dominio viejo (`paco-defoto.workers.dev`), que ya no enruta a nada y no se puede
+  recuperar. Las fotos del itinerario (Google Places, pedidas en caliente vía
+  `/photo?ref=`) NO tienen este problema — se arreglaron solas con el cambio de
+  dominio. Si Paco confirma que ve galería/diario con fotos rotas: la solución más
+  simple es reescribir el dominio viejo→nuevo al renderizar (mismo path, mismo R2, solo
+  cambia el hostname), no hace falta migrar Firestore.
+  Además: quedó una `git stash` sin usar en el repo del portátil de Paco (edición de
+  esta sesión hecha sobre una copia local que estaba 60 commits desactualizada,
+  superada por el fix real ya commiteado) — inofensiva, se puede borrar cuando se
+  quiera con `git stash drop`.
 
 - **Facturación de Google Places disparada a 82,26€ en los primeros 14 días de sept
   (+15.420% vs periodo anterior) — auditoría completa + fixes DESPLEGADOS, 15 sept
