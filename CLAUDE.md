@@ -242,13 +242,14 @@ Repo: https://github.com/borradodelmapa/borradodelmapa
 
 El usuario es **Paco**, founder y único desarrollador. Trabaja desde portátil, tablet y móvil. Quiere aprender mientras trabajamos — enseñar proactivamente y proponer mejoras.
 
-**Números clave:**
-- 15 archivos JS principales (~700KB código)
-- 1 Worker Cloudflare (~316KB) con 25+ endpoints
+**Números clave:** (recontados 16 sept 2026 — antes decía "15 archivos JS / 25+ endpoints", desactualizado)
+- 19 archivos JS principales en la raíz (~900KB código)
+- 1 Worker Cloudflare (~316KB, 10.400 líneas) con **43 endpoints** + 3 crons automáticos
+- 2 namespaces KV (`SALMA_KB` + `ROAD_GEOM`, confirmados por API de Cloudflare)
 - 1,793 páginas de destinos SEO
 - 12 artículos de blog
-- 193 países en KV (3 niveles de datos)
-- 8 tools de IA
+- 193 países en KV (3 niveles de datos) — cobertura de contenido sin verificar en este barrido (ver KV más abajo)
+- 8 tools de IA en el chat (Vigilancia de Vuelos es CRUD aparte, no tool de chat)
 - 15 API keys/secrets externos
 
 ---
@@ -299,10 +300,18 @@ El usuario es **Paco**, founder y único desarrollador. Trabaja desde portátil,
 ├── bitacora-renderer.js    # "Mi Diario": timeline por días, fotos, notas, compartir redes
 ├── notas.js                # Gestor de notas: CRUD Firestore, recordatorios, filtros, adjuntos R2
 ├── video-player.js         # Generador de vídeos Canvas: Ken Burns, mapa animado, documental/historia
+├── video-assembly.js       # Smart Assembly: selección automática de fotos para generar vídeo (1 tap)
 ├── country-utils.js        # Mapeo 190+ países (ES/EN → ISO), emojis bandera, detección en texto
 ├── nav-history.js          # Browser back/forward con History API
 ├── docs-viajero.js         # Documentos del viajero: pasaporte, visado, seguro. CRUD + R2
 ├── docs-viajero.css        # Estilos del módulo documentos
+├── flight-watches.js       # Vigilancia de precios de vuelos: CRUD Firestore + alertas del cron del Worker
+├── map-modal.js            # Modal fullscreen Google Maps nativo (Street View, capas, búsqueda) para "ruta completa"
+├── share-inbox.js          # Handler de fotos compartidas desde galería del móvil (Share Target Android)
+├── translator.js           # Traductor simultáneo push-to-talk (voz ES vía ElevenLabs, resto Web Speech)
+├── historia.js             # Cápsula de historia ampliable (parada/país en guías + chat), Claude Haiku
+├── historia.css            # Estilos del módulo Historia
+├── debug-panel.js          # Panel 🐛 flotante: logs, errores JS, Version ID Worker + `?v=` scripts cargados
 ├── styles.css              # Sistema de diseño: mobile-first, dark theme, dorado (175KB)
 ├── transport-apps.json     # Base de datos de apps de transporte mundial (84KB)
 ├── admin.html              # Panel admin: gestión prompt, testing automático, fixes IA
@@ -324,17 +333,19 @@ El usuario es **Paco**, founder y único desarrollador. Trabaja desde portátil,
 ├── backups/                # Copias de seguridad
 ├── CLAUDE.md               # Este archivo
 └── worker/
-    ├── salma-worker.js     # Worker principal (~316KB) — prompt + Claude + GPT-4o-mini + tools + verify + KV
-    ├── wrangler.toml       # Config Cloudflare Workers (KV binding + R2 bucket)
-    └── kv/                 # Scripts de generación KV nivel 1, 2, 2.5 + JSONs de respaldo
+    ├── salma-worker.js     # Worker principal (~316KB, 10.4K líneas) — prompt + Claude + GPT-4o-mini + tools + verify + KV + crons
+    ├── wrangler.toml       # Config Cloudflare Workers (2 KV bindings + R2 bucket + crons)
+    ├── kv/                 # Scripts de generación KV nivel 1, 2, 2.5 + JSONs de respaldo
+    └── roads/
+        └── road-resolver.js # Geometría real de carreteras (OSM) para `/roads/resolve`, cachea en KV ROAD_GEOM
 ```
 
-### Orden de carga de scripts (index.html)
+### Orden de carga de scripts (index.html) — verificado 16 sept 2026 contra el `<head>` real
 1. Firebase SDK 8.10.1 → firebase init inline → `window.SALMA_API`
 2. Stripe.js v3
-3. `country-utils.js` → `app.js` → `nav-history.js` → `notas.js`
-4. `salma.js` → `video-player.js` → `guide-renderer.js`
-5. `bitacora-renderer.js` → `mapa-ruta.js` → `mapa-itinerario.js` → `docs-viajero.js`
+3. `debug-panel.js` → `country-utils.js` → `app.js` → `nav-history.js` → `notas.js` → `flight-watches.js`
+4. `salma.js` → `video-player.js` → `video-assembly.js` → `guide-renderer.js`
+5. `bitacora-renderer.js` → `mapa-ruta.js` → `mapa-itinerario.js` → `docs-viajero.js` → `map-modal.js` → `share-inbox.js` → `translator.js` → `historia.js`
 6. Inline: SW register, salma.initGeolocation/Voices/VoiceToggle, cookie consent
 
 **Dependencias entre módulos:**
@@ -352,6 +363,13 @@ mapa-ruta.js (google.maps lazy, Leaflet fallback, db, SALMA_API, salma)
 mapa-itinerario.js (mapaRuta, guideRenderer, salma, db, showToast)
   └─ monkey-patches bitacoraRenderer.renderDiario en runtime
 docs-viajero.js (db, currentUser, firebase.firestore.Timestamp, SALMA_API, showState)
+flight-watches.js (db, currentUser, firebase.auth, SALMA_API, showToast) — no documentado hasta este barrido (16 sept)
+map-modal.js (google.maps, salma, showToast) — no documentado hasta este barrido
+share-inbox.js (db, currentUser, SALMA_API, showToast, Cache Storage vía sw.js)
+translator.js (SALMA_API, showToast, ElevenLabs vía /tts, Web Speech API) — no documentado hasta este barrido
+historia.js (SALMA_API, db — caché KV vía /historia-lugar)
+video-assembly.js (videoPlayer, db, currentUser) — no documentado hasta este barrido
+debug-panel.js (puro, intercepta console.*/window errors, sin deps de otros módulos)
 ```
 
 **Código duplicado (pendiente de refactorizar):**
@@ -498,6 +516,7 @@ Post-procesado que corrige cada parada de una ruta generada:
 | POST | `/admin-chat` | Chat admin con GPT-4o-mini (admin) |
 | POST | `/admin/init-prompt` | Migrar prompt hardcoded a Firestore |
 | GET | `/admin/get-prompt` | Leer prompt actual desde Firestore |
+| GET | `/admin/verify-place` | Debug manual del verify de una parada contra Google Places (admin) |
 | POST | `/admin/test-extract` | Extraer 10-15 reglas testeables del prompt |
 | POST | `/admin/test-rule` | Testear una regla con mensajes trampa + evaluación |
 | POST | `/admin/apply-fix` | Aplicar fix IA al prompt, guardar con historial en Firestore |
@@ -506,6 +525,22 @@ Post-procesado que corrige cada parada de una ruta generada:
 | GET | `/version` | Version ID del despliegue (publico, sin token) — para saber que worker corre |
 | GET | `/sitemap.xml` | Sitemap index (1h caché) |
 | GET | `/sitemap-guides.xml` | Sitemap dinámico de guías públicas desde Firestore |
+| GET | `/weather` | Proxy clima (OpenWeatherMap, fallback wttr.in) para el copiloto/mapa |
+| GET | `/staticmap` | Proxy Google Static Maps (evita CORS) — fondo del story del diario |
+| GET | `/transport` | KV lookup `transport:{cc}` — apps de transporte por país |
+| GET | `/roads/resolve` | Geometría real de carretera (OSM, vía `road-resolver.js`) — caché en KV `ROAD_GEOM` |
+| POST | `/translate` | Traducción de texto para `translator.js` (traductor push-to-talk) |
+| POST | `/tts-google` | TTS alternativo (Google) — junto a `/tts` (ElevenLabs) |
+| POST | `/historia-lugar` | Historia de un lugar/país (Claude Haiku + foto Google Places), caché KV 30 días |
+| POST | `/whatsapp` | Webhook Twilio WhatsApp (F5.1 — eco, sin IA todavía, ver 📱 Salma en WhatsApp) |
+| POST | `/stripe-webhook` | Confirma pago Stripe server-side (`checkout.session.completed`), firma verificada |
+| GET | `/flight-places` | Autocomplete de aeropuertos/ciudades para Vigilancia de Vuelos |
+| GET/POST/DELETE | `/flight-watches` | CRUD de vigilancias de precio de vuelo (Firestore `flight_watches` + índice KV `fw:{uid}`) |
+| PUT | `/flight-watches/pause` | Pausar/reanudar una vigilancia |
+| GET | `/flight-alerts` | Alertas de bajada de precio/presupuesto alcanzado (KV `fw_alerts:{uid}`) |
+| PUT | `/flight-alerts/mark-seen` | Marcar alerta como vista |
+
+**Nota de este barrido (16 sept 2026):** esta tabla llevaba sin auditar contra el código real desde el 10 sept — faltaban 15 endpoints que ya existen y están desplegados (Vigilancia de Vuelos completa, WhatsApp, Stripe webhook, roads/resolve, weather, transport, translate, tts-google, historia-lugar, admin/verify-place). Ver también "🧠 KV — situación real" más abajo para el resto de hallazgos de este barrido.
 
 ### Flujo del chat principal (POST /)
 
@@ -586,9 +621,14 @@ Todos en Cloudflare Worker secrets (`wrangler secret put`).
 
 ## KV — Base de conocimiento por país
 
-Cloudflare KV namespace `SALMA_KB` (id: `b2056c0613d94feb955b92279ba02fb6`)
+**2 namespaces** (confirmado 16 sept 2026 vía API de Cloudflare — coinciden con `worker/wrangler.toml`, sin drift):
 
-### Estructura de claves
+| Binding | ID | Contenido |
+|---------|-----|-----------|
+| `SALMA_KB` | `b2056c0613d94feb955b92279ba02fb6` | Todo lo de abajo — países, spots, rutas, cachés, vigilancia de vuelos |
+| `ROAD_GEOM` | `39ff0d3316ab43d9b78f1f14b746e5ad` | Geometría real de carreteras (OSM) para `/roads/resolve`, clave `road_geom:v1:{cc}:{slug}` — namespace propio a propósito, pensado para poder compartirse con una futura app aparte sin migración |
+
+### Estructura de claves — `SALMA_KB`
 
 | Patrón | Nivel | Contenido | Cobertura |
 |--------|-------|-----------|-----------|
@@ -597,12 +637,36 @@ Cloudflare KV namespace `SALMA_KB` (id: `b2056c0613d94feb955b92279ba02fb6`)
 | `dest:{cc}:practical` | 2.5 | Frases, emergencias, apps, salud, conectividad, kit, presupuesto | 193 países |
 | `transport:{cc}` | — | Apps transporte (ride-hailing, tren, metro/bus, ferry, especial) | 193 países |
 | `spot:{slug}` | — | POI individual (lat/lng, photo_ref, verified_address) | Variable |
+| `spotcache:{variant}` | — | Caché auxiliar de resolución de spot por variante de nombre | Dinámico |
 | `kw:{keyword}` | — | Índice ciudad→código ISO país | Miles |
 | `route:{cc}:{dest}:{days}` | 3 | Rutas pre-generadas con paradas y coords (30 días TTL) | Algunos destinos |
+| `verifiedspot:{país}:{nombre}` | — | Caché de verify Google Places entre rutas de usuarios distintos (30 días TTL) — fix de coste del 15 sept | Dinámico |
+| `placedetails:{place_id}:{fields}` | — | Caché de Place Details (teléfono/web) por lugar (30 días TTL) — fix de coste del 15 sept | Dinámico |
+| `nearbycache:{type}:{lat}:{lng}` | — | Caché Nearby Search por tipo + celda ~1km (7 días TTL) — fix de coste del 15 sept | Dinámico |
 | `geo:{lat}:{lng}` | — | Caché reverse geocoding (24h TTL) | Dinámico |
 | `geocity:{word}` | — | Caché Nominatim ciudad→país (30 días TTL) | Dinámico |
+| `geocity:anchor7:{norm}` | — | Caché de geocodificación de ancla de ruta (7 decimales) | Dinámico |
+| `historia:{slug}` / `historia:{slug}:{lat}:{lng}` | — | Caché de `/historia-lugar` (30 días TTL) — con bucket GPS desde el fix del 14 sept | Dinámico |
 | `_cache:prompt` | — | Caché prompt Firestore (5 min TTL) | 1 clave |
+| `_index:countries` | — | Índice de países con fecha de última generación — lo usa el cron de los lunes | 1 clave |
+| `_index:routes` | — | Índice de rutas nivel 3 ya generadas — lo usa el cron de los miércoles | 1 clave |
+| `_sa_token` | — | Token de acceso cacheado de alguna integración con service account (TTL 3300s) | 1 clave |
 | `sos_rate:{ip}` | — | Rate limiting SOS (10 min TTL) | Dinámico |
+| `fw:{uid}` | — | Vigilancias de vuelo activas de un usuario (Vigilancia de Vuelos) | Por usuario |
+| `fw_alerts:{uid}` | — | Alertas generadas (bajada de precio / presupuesto alcanzado) | Por usuario |
+| `flight_watch_users` | — | Lista de UIDs con alguna vigilancia activa — la recorre el cron diario | 1 clave |
+
+### ⏰ 3 crons del Worker (`worker/wrangler.toml` → `[triggers]`) — no estaban documentados hasta este barrido
+
+El Worker tiene `scheduled()` en `salma-worker.js` (línea ~9985) con 3 disparos automáticos, **ya desplegados y corriendo en producción ahora mismo**, sin que nadie los active a mano:
+
+| Cron (UTC) | Qué hace | Llama a una API de pago |
+|---|---|---|
+| Lunes 4:00 | Regenera hasta 5 fichas nivel 1 (`dest:{cc}:base`) caducadas (>180 días) | **Sí — GPT-4o-mini**, ~5 llamadas/semana, coste marginal (céntimos) |
+| Miércoles 4:00 | Genera hasta 3 rutas nivel 3 (`route:{cc}:{dest}:{days}`) para destinos que aún no tienen una cacheada | **Sí — GPT-4o-mini**, ~3 llamadas/semana, coste marginal (céntimos), ya reflejado en la tabla de scripts de abajo |
+| Diario 6:00 | `_cronFlightWatches` — recorre `flight_watch_users`, comprueba precio actual de hasta 20 vigilancias de vuelo activas y crea alerta si baja >15% o entra en presupuesto | **Sí — Duffel API**, hasta 20 búsquedas de vuelo/día, automático, sin que el usuario pida nada en ese momento |
+
+**Por qué se dice esto aquí y no se toca nada:** los 3 crons ya estaban en el código antes de esta sesión (no son un cambio de hoy), pero el de vuelos no aparecía mencionado en ningún sitio de este archivo — es un gasto recurrente diario en Duffel que corre solo, y la norma de "cualquier cosa que pueda mover la factura, se dice" (ver más abajo) aplica igual a algo que ya existe y no se sabía que existía. Nadie ha tocado su código en esta sesión.
 
 ### Scripts de generación (`worker/kv/`)
 
@@ -614,6 +678,13 @@ Cloudflare KV namespace `SALMA_KB` (id: `b2056c0613d94feb955b92279ba02fb6`)
 | `generate-nivel3.js` | GPT-4o-mini (cron) | Nivel 3 — `route:{cc}:{dest}:{days}` | ~$0.06 / ruta |
 
 **Otros scripts KV:** `upload-kv.js`, `upload-kv-nivel2.js`, `upload-all-kv.cjs`, `upload-spots-bulk.cjs`, `upload-transport.js`, `upload-wrangler.js`, `enrich-spots.cjs`, `stats.js`, `stats-nivel2.js`
+
+### Situación real verificada 16 sept 2026 (esta sesión, sin tocar código ni desplegar nada)
+
+- **No se han leído claves ni valores reales del KV** — el conector de Cloudflare disponible en esta sesión solo gestiona namespaces (crear/listar/borrar), no tiene una herramienta para leer/listar claves concretas dentro de un namespace, y esta sesión no tiene credenciales de `wrangler login` ni un `CLOUDFLARE_API_TOKEN` en el entorno para usar la CLI directamente. Para saber cuántas de las 193 fichas están realmente pobladas (nivel 1/2/2.5) o cuántas rutas nivel 3 hay cacheadas de verdad, hace falta `npx wrangler kv key list --binding=SALMA_KB --remote -c wrangler.toml` desde un sitio con esas credenciales (portátil de Paco, o una sesión sin este bloqueo).
+- **Sí se ha confirmado, vía la API de Cloudflare, que los 2 namespaces (`SALMA_KB`, `ROAD_GEOM`) existen y sus IDs coinciden exactamente con `wrangler.toml`** — no hay namespace huérfano ni desalineado.
+- **Sí se ha confirmado, comparando el código fuente que Cloudflare devuelve del Worker desplegado contra `salma-worker.js` de esta rama (equivalente al `main` de hoy), que el contenido coincide** — se buscaron marcadores específicos del último fix de facturación (15 sept, `photocache/`, `verifiedspot:`, `opts.previousStops`, `nearbycache:`) y los 4 están presentes en el Worker en producción. No se ha podido comparar el `Current Version ID` exacto (ese dato solo lo expone `/version` en tiempo de ejecución, y la red de este contenedor sigue bloqueando `salma-api.paco-defoto.workers.dev`, mismo bloqueo ya documentado el 14 sept) — pero a nivel de código, **lo desplegado y lo que hay en el repo hoy son lo mismo**. Esto responde a varios "pendiente: confirmar `/version`" que quedaban sueltos en el 🔴 Crítico de la factura de Google Places.
+- **Los 15 endpoints nuevos y las claves de Vigilancia de Vuelos (`fw:`, `fw_alerts:`, `flight_watch_users`) y del cron diario de Duffel llevaban invisibles en este archivo** desde que se implementaron — no se ha encontrado ningún commit que los documentara aquí. Añadidos en este barrido (ver tablas de arriba).
 
 **JSONs de respaldo en `worker/kv/`:** `countries.json` (195 países base), `_index.json`, `_nivel2_1.json`
 
@@ -1872,6 +1943,37 @@ ahí, hacer `git pull origin main` — es un fast-forward, seguro.
   Reconectarlo permite revisarlas una a una.
 - Actualizar esta sección (no crear una nueva) cada vez que se cierre o se abandone algo
   pendiente, para que no se repita el desfase que motivó este barrido.
+
+### Barrido del 16 sept 2026 — "situación y estudio" de KV, sin tocar código
+
+Paco pidió una puesta al día de la situación de KV. Al comparar la documentación de este
+archivo contra `salma-worker.js`, `index.html` y la API real de Cloudflare (namespaces +
+código fuente desplegado del Worker), salieron 3 hallazgos que llevaban tiempo sin
+reflejarse aquí — ninguno es un bug, es documentación desfasada:
+
+1. **Un segundo namespace KV** (`ROAD_GEOM`, para geometría de carreteras) que no aparecía
+   mencionado en la sección de KV, solo en `wrangler.toml`.
+2. **15 endpoints del Worker sin documentar** que ya están desplegados y en uso: toda la
+   familia de Vigilancia de Vuelos (`/flight-watches`, `/flight-alerts`, `/flight-places`),
+   `/whatsapp`, `/stripe-webhook`, `/roads/resolve`, `/weather`, `/transport`, `/translate`,
+   `/tts-google`, `/historia-lugar`, `/admin/verify-place`.
+3. **7 archivos JS de la raíz sin listar** en "Archivos principales": `flight-watches.js`,
+   `map-modal.js`, `share-inbox.js`, `translator.js`, `historia.js` (+ `historia.css`),
+   `video-assembly.js`, `debug-panel.js` — todos cargados de verdad en `index.html`, no
+   código muerto.
+
+El hallazgo con relevancia de coste (norma de la sección "⛔ PROTOCOLO", punto 8): el cron
+diario de las 6:00 UTC (`_cronFlightWatches`) lleva ya desplegado un tiempo y llama a la
+API de Duffel automáticamente, hasta 20 veces al día, sin que ningún usuario pida nada en
+ese momento — no es un cambio de esta sesión, pero no estaba dicho en ningún sitio y debía
+estarlo. Detalle en la sección de KV, tabla "3 crons del Worker".
+
+**Límite de este barrido**: no se ha podido leer el contenido real de las claves KV (cuántas
+de las 193 fichas nivel 1/2/2.5 hay pobladas de verdad, cuántas rutas nivel 3 cacheadas) —
+el conector de Cloudflare de esta sesión solo gestiona namespaces, no claves individuales, y
+no hay credenciales de `wrangler login` en este contenedor. Para ese dato exacto:
+`npx wrangler kv key list --binding=SALMA_KB --remote -c wrangler.toml` (y lo mismo con
+`--prefix=dest:`, `--prefix=route:`, etc.) desde un sitio con esas credenciales.
 
 ---
 
