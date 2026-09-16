@@ -318,7 +318,12 @@ const mapaItinerario = {
     };
     if (stop.photo_ref) {
       console.log(`[FOTO] pidiendo (ref) para "${stop.name}"${_isRetry ? ' (reintento)' : ''}`);
-      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
+      // Se manda también nombre+coords (si hay) junto al ref: el photo_reference de una
+      // guía guardada puede caducar con los días — si el Worker ve que el ref ya no
+      // resuelve, con el nombre puede buscar una foto nueva en vez de rendirse.
+      const fallbackQS = (stop.name && stop.lat && stop.lng)
+        ? `&name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}` : '';
+      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}${fallbackQS}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {

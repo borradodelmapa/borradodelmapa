@@ -6325,102 +6325,104 @@ export default {
       const placesKey = env.GOOGLE_PLACES_KEY;
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
 
-      if (ref && placesKey) {
-        try {
-          const photo = await _getCachedPlacePhoto(placesKey, ref);
-          if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
-          if (url.searchParams.get('json') === '1') {
-            // Apunta a nuestro propio /photo?ref= (siempre válido, resuelve de R2 o de
-            // Google al vuelo) — NUNCA a /photo/<r2Key> directo: ese depende de que el
-            // .put() a R2 de más abajo ya haya terminado, y al no llevar await/waitUntil
-            // no hay garantía de que exista todavía cuando el navegador pide esa URL.
-            // no-store: esta respuesta es solo un puntero — cachearla en el navegador
-            // deja a cualquier cliente que la pidió antes de un deploy sirviendo la URL
-            // vieja durante horas después de arreglarla en el Worker (pasó el 16 sept:
-            // el fix ya estaba desplegado pero el navegador seguía devolviendo la URL
-            // rota de la respuesta cacheada de un rato antes). La foto en sí ya tiene
-            // su propio caché fuerte (1 año) en /photo?ref=, esto no necesita el suyo.
-            return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(ref)}` }), {
-              headers: { ...corsH, 'Cache-Control': 'no-store' }
-            });
-          }
-          return new Response(photo.body, {
-            headers: { 'Content-Type': photo.contentType, 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=31536000' }
-          });
-        } catch (e) {
-          return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
-        }
-      }
-
-      if (!name || !placesKey) {
+      if (!placesKey || (!ref && !name)) {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
       }
+
       try {
-        // KV-first: buscar photo_ref cacheado antes de llamar a Find Place ($0.017)
-        let photoRef = null;
-        if (env.SALMA_KB) {
-          const variants = normalizeSpotKey(name);
-          for (const v of variants) {
-            try {
-              const spotJson = await env.SALMA_KB.get('spot:' + v);
-              if (spotJson) {
-                const spot = JSON.parse(spotJson);
-                if (spot.photo_ref) { photoRef = spot.photo_ref; }
-                break;
-              }
-            } catch (_) {}
+        let photo = null;
+        let resolvedRef = ref || null;
+
+        if (ref) {
+          photo = await _getCachedPlacePhoto(placesKey, ref).catch(() => null);
+        }
+
+        // 16 sept, misma tarde: el photo_reference que guarda una guía NO es un ID
+        // permanente de Google — puede caducar con los días (visto en una guía de
+        // varios días de antigüedad: el ref guardado ya no resolvía nada). Antes,
+        // si el ref fallaba, aquí se acababa con un 404 sin más. Ahora, si además
+        // llega el nombre de la parada (mapa-itinerario.js ya lo manda siempre desde
+        // hoy), se resuelve una foto NUEVA por nombre+coords — mismo camino que ya
+        // existía para paradas sin ref guardado — en vez de rendirse.
+        if (!photo && name) {
+          let photoRef = null;
+          if (env.SALMA_KB) {
+            const variants = normalizeSpotKey(name);
+            for (const v of variants) {
+              try {
+                const spotJson = await env.SALMA_KB.get('spot:' + v);
+                if (spotJson) {
+                  const spot = JSON.parse(spotJson);
+                  if (spot.photo_ref) { photoRef = spot.photo_ref; }
+                  break;
+                }
+              } catch (_) {}
+            }
+            // Caché de lugares NO catalogados — prefijo propio, nunca pisa el índice curado 'spot:*'
+            if (!photoRef) {
+              try {
+                const cached = await env.SALMA_KB.get('spotcache:' + (variants[0] || ''));
+                if (cached) {
+                  const c = JSON.parse(cached);
+                  if (c.photo_ref) photoRef = c.photo_ref;
+                }
+              } catch (_) {}
+            }
+            // Si el ref cacheado en KV es justo el mismo que ya falló, no sirve de nada
+            if (photoRef === ref) photoRef = null;
           }
-          // Caché de lugares NO catalogados — prefijo propio, nunca pisa el índice curado 'spot:*'
+
+          // Si no hay KV hit (o era el mismo ref caducado), Find Place API (fallback)
           if (!photoRef) {
-            try {
-              const cached = await env.SALMA_KB.get('spotcache:' + (variants[0] || ''));
-              if (cached) {
-                const c = JSON.parse(cached);
-                if (c.photo_ref) photoRef = c.photo_ref;
+            const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
+            const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
+            const findData = await findRes.json();
+            const candidate = findData.candidates?.[0];
+            photoRef = candidate?.photos?.[0]?.photo_reference || null;
+
+            if (photoRef && lat && lng) {
+              const pLat = candidate?.geometry?.location?.lat;
+              const pLng = candidate?.geometry?.location?.lng;
+              if (pLat && pLng) {
+                const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
+                if (distKm > 30) photoRef = null;
               }
-            } catch (_) {}
+            }
+            // Cachear photo_ref en KV para futuras llamadas (30 días) — prefijo propio,
+            // nunca pisa el índice curado permanente 'spot:*'
+            if (env.SALMA_KB && photoRef) {
+              const cacheKey = 'spotcache:' + normalizeSpotKey(name)[0];
+              const existing = await env.SALMA_KB.get(cacheKey).catch(() => null);
+              const spotData = existing ? JSON.parse(existing) : {};
+              spotData.photo_ref = photoRef;
+              if (candidate?.geometry?.location) {
+                spotData.lat = spotData.lat || candidate.geometry.location.lat;
+                spotData.lng = spotData.lng || candidate.geometry.location.lng;
+              }
+              env.SALMA_KB.put(cacheKey, JSON.stringify(spotData), { expirationTtl: 2592000 }).catch(() => {});
+            }
+          }
+
+          if (photoRef) {
+            photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
+            if (photo) resolvedRef = photoRef;
           }
         }
 
-        // Si no hay KV hit, Find Place API (fallback)
-        if (!photoRef) {
-          const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
-          const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
-          const findData = await findRes.json();
-          const candidate = findData.candidates?.[0];
-          photoRef = candidate?.photos?.[0]?.photo_reference;
-          if (!photoRef) return new Response(JSON.stringify({ error: 'not found' }), { status: 404, headers: corsH });
-
-          if (lat && lng) {
-            const pLat = candidate?.geometry?.location?.lat;
-            const pLng = candidate?.geometry?.location?.lng;
-            if (pLat && pLng) {
-              const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
-              if (distKm > 30) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
-            }
-          }
-          // Cachear photo_ref en KV para futuras llamadas (30 días) — prefijo propio,
-          // nunca pisa el índice curado permanente 'spot:*'
-          if (env.SALMA_KB && photoRef) {
-            const cacheKey = 'spotcache:' + normalizeSpotKey(name)[0];
-            const existing = await env.SALMA_KB.get(cacheKey).catch(() => null);
-            const spotData = existing ? JSON.parse(existing) : {};
-            spotData.photo_ref = photoRef;
-            if (candidate?.geometry?.location) {
-              spotData.lat = spotData.lat || candidate.geometry.location.lat;
-              spotData.lng = spotData.lng || candidate.geometry.location.lng;
-            }
-            env.SALMA_KB.put(cacheKey, JSON.stringify(spotData), { expirationTtl: 2592000 }).catch(() => {});
-          }
-        }
-
-        const photo = await _getCachedPlacePhoto(placesKey, photoRef);
         if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
+
         if (url.searchParams.get('json') === '1') {
-          // Mismo motivo que en la rama "ref" de arriba: URL propia siempre válida,
-          // no la que depende del .put() a R2 sin confirmar. no-store: es solo un
-          // puntero, no lo cacheamos en el navegador (ver comentario en la rama "ref").
-          return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}` }), {
+          // Apunta a nuestro propio /photo?ref= (siempre válido, resuelve de R2 o de
+          // Google al vuelo) — NUNCA a /photo/<r2Key> directo: ese depende de que el
+          // .put() a R2 de más abajo ya haya terminado, y al no llevar await/waitUntil
+          // no hay garantía de que exista todavía cuando el navegador pide esa URL.
+          // no-store: esta respuesta es solo un puntero — cachearla en el navegador
+          // deja a cualquier cliente que la pidió antes de un deploy sirviendo la URL
+          // vieja durante horas después de arreglarla en el Worker (pasó el 16 sept:
+          // el fix ya estaba desplegado pero el navegador seguía devolviendo la URL
+          // rota de la respuesta cacheada de un rato antes). La foto en sí ya tiene
+          // su propio caché fuerte (1 año) en /photo?ref=, esto no necesita el suyo.
+          return new Response(JSON.stringify({ url: `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(resolvedRef)}` }), {
             headers: { ...corsH, 'Cache-Control': 'no-store' }
           });
         }
