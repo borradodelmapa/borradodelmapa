@@ -1403,8 +1403,16 @@ const salma = {
       this._saveSession();
       this._persistThread();   // historial de consultas (últimas 10, continuables)
 
-      // Si hay ruta, renderizar guide-card
-      if (data.route && data.route.stops) {
+      // Si hay ruta, renderizar guide-card — pero NUNCA mientras el popup de
+      // "consulta" sobre una guía está abierto (_chatAreaOverride): Paco lo
+      // pidió explícito — es una consulta rápida, sin redirecciones. Sin este
+      // guard, cualquier mensaje que el Worker clasificara como petición de
+      // ruta abría una vista de itinerario nueva encima de la que ya se
+      // estaba viendo (currentRouteId no está sincronizado con esa guía, así
+      // que ni siquiera la editaba bien — abría un borrador distinto). El
+      // texto de la respuesta ya se ha mostrado por streaming; aquí solo se
+      // salta el efecto de abrir/editar la guía.
+      if (data.route && data.route.stops && !this._chatAreaOverride) {
         const isEdit = this.currentRouteId && this.currentRoute;
         const prevStops = this.currentRoute?.stops || [];
         const prevStopsCount = prevStops.length;
