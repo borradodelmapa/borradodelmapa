@@ -1402,22 +1402,23 @@ const salma = {
       }
       this._saveSession();
       this._persistThread();   // historial de consultas (últimas 10, continuables)
+      // Historial propio de ESTA ruta (popup de consulta sobre una guía,
+      // ver mapa-itinerario.js) — solo mientras ese popup está abierto.
+      if (this._chatAreaOverride) this._persistRouteQueryHistory();
 
-      // Si hay ruta, renderizar guide-card — pero NUNCA mientras el popup de
-      // "consulta" sobre una guía está abierto (_chatAreaOverride): Paco lo
-      // pidió explícito — es una consulta rápida, sin redirecciones. Sin este
-      // guard, cualquier mensaje que el Worker clasificara como petición de
-      // ruta abría una vista de itinerario nueva encima de la que ya se
-      // estaba viendo (currentRouteId no está sincronizado con esa guía, así
-      // que ni siquiera la editaba bien — abría un borrador distinto). El
-      // texto de la respuesta ya se ha mostrado por streaming; aquí solo se
-      // salta el efecto de abrir/editar la guía.
-      if (data.route && data.route.stops && !this._chatAreaOverride) {
+      // Si hay ruta, renderizar guide-card.
+      if (data.route && data.route.stops) {
         const isEdit = this.currentRouteId && this.currentRoute;
         const prevStops = this.currentRoute?.stops || [];
         const prevStopsCount = prevStops.length;
         this.currentRoute = data.route;
-        if (!data._hadDraft || data._isBlocks) {
+        // Mientras el popup de "consulta" sobre una guía está abierto
+        // (_chatAreaOverride, ver mapa-itinerario.js), nunca navegar — si es
+        // una edición de ESA guía (isEdit true: currentRouteId se sincroniza
+        // al abrir el popup), se parchea en el sitio igual que ya hace el
+        // chat normal cuando editas una ruta con draft; solo se abre una
+        // vista NUEVA si de verdad es una ruta distinta sin relación.
+        if ((!data._hadDraft || data._isBlocks) && !(this._chatAreaOverride && isEdit)) {
           // Ruta nueva o ruta de bloques: abrir vista itinerario
           this._removeLoading();
           try {
@@ -2136,6 +2137,18 @@ const salma = {
     if (typeof _renderChatEmpty === 'function') _renderChatEmpty();
     if (this._copilotData) this.showCopilotCard();
     if (typeof showToast === 'function') showToast('Nueva conversación');
+  },
+
+  // ═══ HISTORIAL POR RUTA — popup de "consulta" de mapa-itinerario.js ═══
+  // Guarda el hilo de preguntas/cambios de ESTA guía en su propio documento,
+  // aparte del historial de sesión general — así al reabrir el popup de esa
+  // misma ruta (aunque sea otro día) se ve lo ya hablado sobre ella.
+  async _persistRouteQueryHistory() {
+    if (!this.currentRouteId || !window.currentUser || typeof db === 'undefined') return;
+    try {
+      await db.collection('users').doc(window.currentUser.uid).collection('maps').doc(this.currentRouteId)
+        .set({ query_history: this.history.slice(-20) }, { merge: true });
+    } catch (_) {}
   },
 
   // ═══ PERSISTENCIA CHAT — sessionStorage ═══

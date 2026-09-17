@@ -695,14 +695,12 @@ const mapaItinerario = {
 
   let _itinQueryObserver = null;
 
-  function _openItinQuery() {
+  async function _openItinQuery() {
     const overlay = document.getElementById('itin-query-overlay');
     const answer = document.getElementById('itin-query-answer');
     const input = document.getElementById('itin-query-input');
     if (!overlay || !answer || !input) return;
 
-    // Consulta nueva cada vez a propósito — nada de restaurar una conversación
-    // anterior (podía ser sobre otra ruta totalmente distinta, confundía).
     answer.innerHTML = '<div class="itin-chat-hint">Pregúntame lo que quieras sobre esta ruta, o pídeme un cambio.</div>';
     input.value = '';
     overlay.style.display = 'flex';
@@ -711,7 +709,18 @@ const mapaItinerario = {
     // Mientras el popup esté abierto, todo lo que salma.send() renderice
     // (burbujas, "buscando...", etc.) va a este contenedor en vez de a
     // #chat-area — mismo motor de siempre, solo cambia dónde pinta.
-    if (typeof salma !== 'undefined') salma._chatAreaOverride = 'itin-query-answer';
+    if (typeof salma === 'undefined') return;
+    salma._chatAreaOverride = 'itin-query-answer';
+    // Guardar el historial que hubiera en curso (chat normal) para devolverlo
+    // tal cual al cerrar — el de aquí es el de ESTA ruta, no se mezclan.
+    salma._prevHistoryBackup = salma.history.slice();
+    salma.history = [];
+    // Sincronizar qué ruta es "la actual" para salma.send(): sin esto,
+    // currentRouteId se queda del último hilo de chat normal (o vacío) y
+    // un "quita esta parada" desde aquí no editaba la guía que se está
+    // viendo — la trataba como ruta nueva sin relación (isEdit=false).
+    salma.currentRouteId = window._itinViewDocId || null;
+    salma.currentRoute = window._itinViewRoute || null;
 
     if (_itinQueryObserver) _itinQueryObserver.disconnect();
     _itinQueryObserver = new MutationObserver(() => { answer.scrollTop = answer.scrollHeight; });
@@ -725,13 +734,35 @@ const mapaItinerario = {
     input.onkeydown = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); _sendItinQuery(); }
     };
+
+    // Historial de ESTA ruta, si ya se había hablado con ella antes (aunque
+    // fuera otro día) — vive en su propio documento, no en sessionStorage.
+    if (salma.currentRouteId && window.currentUser && typeof db !== 'undefined') {
+      try {
+        const doc = await db.collection('users').doc(window.currentUser.uid).collection('maps').doc(salma.currentRouteId).get();
+        const hist = doc.exists && Array.isArray(doc.data().query_history) ? doc.data().query_history : [];
+        if (hist.length) {
+          salma.history = hist;
+          answer.innerHTML = '';
+          for (const m of hist) {
+            if (m.role === 'user') salma._addUserBubble(m.content);
+            else salma._addSalmaBubble(m.content);
+          }
+        }
+      } catch (_) {}
+    }
   }
 
   function _closeItinQuery() {
     const overlay = document.getElementById('itin-query-overlay');
     if (overlay) overlay.style.display = 'none';
     if (_itinQueryObserver) { _itinQueryObserver.disconnect(); _itinQueryObserver = null; }
-    if (typeof salma !== 'undefined') salma._chatAreaOverride = null;
+    if (typeof salma === 'undefined') return;
+    salma._chatAreaOverride = null;
+    if (salma._prevHistoryBackup) {
+      salma.history = salma._prevHistoryBackup;
+      salma._prevHistoryBackup = null;
+    }
   }
 
   function _sendItinQuery() {
