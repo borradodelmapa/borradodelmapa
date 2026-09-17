@@ -6264,6 +6264,65 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /route-thumbnail (miniatura de la ruta para la tarjeta de "ruta activa") ───
+    // Google Static Maps (de pago) se llama COMO MUCHO una vez por ruta: la
+    // clave en R2 es el propio mapId, no un hash de los parámetros — si ya existe,
+    // no se vuelve a pedir a Google nunca (a diferencia de /staticmap, que no
+    // cachea nada). Requiere login para que no sea una puerta abierta a generar
+    // miniaturas gratis con mapIds inventados.
+    if (request.method === 'POST' && url.pathname === '/route-thumbnail') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+      if (!authUser) {
+        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
+      }
+      if (!env.SALMA_PHOTOS) {
+        return new Response(JSON.stringify({ error: 'R2 not configured' }), { status: 500, headers: corsH });
+      }
+      let rtBody;
+      try { rtBody = await request.json(); } catch (_) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
+      }
+      const mapId = String(rtBody.mapId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80);
+      const stops = Array.isArray(rtBody.stops)
+        ? rtBody.stops.filter(s => s && Number.isFinite(s.lat) && Number.isFinite(s.lng) && Math.abs(s.lat) > 0.01)
+        : [];
+      if (!mapId || stops.length < 2) {
+        return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
+      }
+      const r2Key = `mapthumb/${mapId}.jpg`;
+      try {
+        const existing = await env.SALMA_PHOTOS.head(r2Key);
+        if (existing) {
+          return new Response(JSON.stringify({ url: `${url.origin}/photo/${r2Key}` }), { headers: corsH });
+        }
+      } catch (_) {}
+      const apiKey = env.GOOGLE_PLACES_KEY;
+      if (!apiKey) return new Response(JSON.stringify({ error: 'no key' }), { status: 500, headers: corsH });
+      // Sin center/zoom a propósito: Google encuadra solo con los marcadores.
+      // Static Maps solo admite un carácter por etiqueta — a partir de la 10ª
+      // parada el punto se queda sin número, se ve igual el resto de la ruta.
+      let gmUrl = `https://maps.googleapis.com/maps/api/staticmap?size=640x300&scale=2&maptype=roadmap&key=${apiKey}`;
+      stops.slice(0, 25).forEach((s, i) => {
+        const label = i < 9 ? `label:${i + 1}|` : '';
+        gmUrl += `&markers=color:0xf0b429|${label}${s.lat},${s.lng}`;
+      });
+      if (typeof rtBody.road_geometry === 'string' && rtBody.road_geometry) {
+        gmUrl += `&path=color:0xf0b429cc|weight:3|enc:${encodeURIComponent(rtBody.road_geometry)}`;
+      }
+      try {
+        const imgRes = await fetch(gmUrl);
+        if (!imgRes.ok) return new Response(JSON.stringify({ error: 'map error' }), { status: 502, headers: corsH });
+        const contentType = imgRes.headers.get('Content-Type') || 'image/png';
+        const buf = await imgRes.arrayBuffer();
+        const putPromise = env.SALMA_PHOTOS.put(r2Key, buf, { httpMetadata: { contentType } }).catch(() => {});
+        if (ctx?.waitUntil) ctx.waitUntil(putPromise); else await putPromise;
+        return new Response(JSON.stringify({ url: `${url.origin}/photo/${r2Key}` }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'server error' }), { status: 500, headers: corsH });
+      }
+    }
+
     // Hash estable para usar el photo_reference de Google como clave de R2 (el ref
     // en sí trae caracteres/longitud poco cómodos para una key, el hash no).
     async function _sha256Hex(str) {

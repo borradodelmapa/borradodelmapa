@@ -6441,6 +6441,7 @@ body {
   overflow:hidden;
 }
 .ce-card.ce-active{border-color:var(--ce-amber);box-shadow:inset 0 2px 0 rgba(244,99,11,.35);}
+.ce-card-thumb{width:100%;height:140px;object-fit:cover;display:block;cursor:pointer;border-bottom:1.5px solid var(--ce-amber);}
 .ce-card-ribbon{
   min-height:60px;display:flex;align-items:flex-end;padding:8px 12px;
   border-bottom:1.5px solid var(--ce-amber);

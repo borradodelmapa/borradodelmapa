@@ -312,6 +312,7 @@ function _renderChatEmpty() {
       ribbon: (named.slice(0, 4).join(' · ').toUpperCase()) || 'RUTA',
       sub: `${days} día${days > 1 ? 's' : ''} · ${stops.length} paradas`,
       stopsHtml: head,
+      thumbUrl: r.map_thumbnail_url || null,
       stats: [['DÍAS', String(days)], ['PARADAS', String(stops.length)], ['EN MAPA', String(withCoords)]],
       docId: docId || null,
       docData: docData || null
@@ -393,7 +394,12 @@ function _renderChatEmpty() {
       </div>`;
 
   // Tablero de RUTA ACTIVA — modo compañero. Abre la GUÍA del viaje + billete nuevo.
+  // Miniatura con mapa+paradas en vez de solo texto (18 sept): tocar la imagen abre
+  // la guía igual que el botón — mismo atributo data-ce-guide, mismo listener de
+  // abajo, sin cablear nada nuevo. Si aún no hay imagen generada (ruta recién abierta
+  // por primera vez, ver _ensureRouteThumbnail) se queda solo con el ribbon de texto.
   const _ceRouteHTML = (rt) => `
+      ${rt.thumbUrl ? `<img class="ce-card-thumb" data-ce-guide src="${escapeHTML(rt.thumbUrl)}" alt="Mapa de la ruta" loading="lazy">` : ''}
       <div class="ce-card-ribbon"><span>${rt.ribbon}</span></div>
       <div class="ce-row"><span class="ce-code">${escapeHTML(rt.code)}</span><span class="ce-arr"></span></div>
       <div class="ce-head">
@@ -3954,9 +3960,46 @@ function setActiveRoute(routeData, docId) {
     db.collection('users').doc(currentUser.uid)
       .set({ active_route_id: docId || null }, { merge: true })
       .catch(() => {});
+    if (docId && routeData && !routeData.map_thumbnail_url) _ensureRouteThumbnail(routeData, docId);
   }
 }
 window.setActiveRoute = setActiveRoute;
+
+// Miniatura de la ruta (mapa + paradas) para la tarjeta de "ruta activa" — se pide
+// UNA sola vez por ruta (18 sept). El Worker la genera con Google Static Maps (de
+// pago) solo la primera vez y la deja fija en R2 bajo la clave del propio mapId; a
+// partir de ahí este mismo POST solo devuelve esa URL ya guardada, sin volver a
+// llamar a Google — por eso aquí no hace falta ninguna caché propia ni comprobar
+// nada antes de llamar, el Worker ya resuelve "¿ya existe?" el mismo.
+async function _ensureRouteThumbnail(routeData, docId) {
+  if (!currentUser || !window.SALMA_API) return;
+  const stops = (routeData.stops || [])
+    .filter(s => s && isFinite(+s.lat) && isFinite(+s.lng) && Math.abs(+s.lat) > 0.01)
+    .map(s => ({ lat: +s.lat, lng: +s.lng }));
+  if (stops.length < 2) return;
+  try {
+    const token = await currentUser.getIdToken();
+    const res = await fetch(`${window.SALMA_API}/route-thumbnail`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ mapId: docId, stops, road_geometry: routeData.road_geometry || null })
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.url) return;
+    routeData.map_thumbnail_url = data.url;
+    db.collection('users').doc(currentUser.uid).collection('maps').doc(docId)
+      .set({ map_thumbnail_url: data.url }, { merge: true }).catch(() => {});
+    // Solo si esta ruta sigue siendo la activa ahora mismo (pudo cambiar mientras
+    // esperábamos la respuesta) — si no, la próxima vez que se abra ya la lee del campo.
+    if (localStorage.getItem('bdm_live_active_route_id') === docId) {
+      try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch (_) {}
+      if (currentState === 'chat' && document.querySelector('.chat-empty')) _renderChatEmpty();
+    }
+  } catch (_) {
+    // sin red o fallo puntual — se reintenta sola la próxima vez que se abra esta guía
+  }
+}
 
 function selectRouteOnMap(routeData, docId) {
   if (!_liveMap || !window.google) return;
