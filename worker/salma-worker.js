@@ -6312,7 +6312,14 @@ export default {
       }
       try {
         const imgRes = await fetch(gmUrl);
-        if (!imgRes.ok) return new Response(JSON.stringify({ error: 'map error' }), { status: 502, headers: corsH });
+        if (!imgRes.ok) {
+          // Sacar el motivo real de Google (clave/cuota/parámetro), no solo "falló" —
+          // sin esto no había forma de saber por qué desde el panel 🐛 del frontend.
+          let detail = '';
+          try { detail = (await imgRes.text()).slice(0, 400); } catch (_) {}
+          console.log('[route-thumbnail] Google Static Maps error', imgRes.status, detail);
+          return new Response(JSON.stringify({ error: 'map error', google_status: imgRes.status, google_detail: detail }), { status: 502, headers: corsH });
+        }
         const contentType = imgRes.headers.get('Content-Type') || 'image/png';
         const buf = await imgRes.arrayBuffer();
         const putPromise = env.SALMA_PHOTOS.put(r2Key, buf, { httpMetadata: { contentType } }).catch(() => {});

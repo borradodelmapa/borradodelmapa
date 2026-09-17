@@ -4013,7 +4013,9 @@ async function _ensureRouteThumbnail(routeData, docId) {
       body: JSON.stringify({ mapId: docId, stops, road_geometry: routeData.road_geometry || null })
     });
     if (!res.ok) {
-      console.warn('[Salma] Miniatura ruta: el Worker respondió', res.status);
+      let errBody = null;
+      try { errBody = await res.json(); } catch (_) {}
+      console.warn('[Salma] Miniatura ruta: el Worker respondió', res.status, errBody);
       return;
     }
     const data = await res.json();
