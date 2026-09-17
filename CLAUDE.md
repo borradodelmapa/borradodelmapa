@@ -235,6 +235,42 @@ tan pequeño que no hace falta decirlo" — **no existe ese margen. Nunca.**
 
 ---
 
+## Sesión 17-18 sept 2026 — Chat flotante sobre la guía + miniatura de ruta
+
+Arranque de la propuesta "mapa siempre visible" pero por el lado más simple: no unificar
+los 5 mapas ni reescribir el layout, solo dos piezas sueltas y autocontenidas.
+
+1. **FAB 💬 en la vista de itinerario** (`mapa-itinerario.js`): abre el chat de siempre
+   (`#app-content`/`#app-input-bar`) como capa encima de la guía, sin destruir el mapa ni
+   las cards — al volver, la guía sigue exactamente como estaba. Botón "←" para volver,
+   posición distinta a propósito (abajo-derecha para abrir / arriba-izquierda para volver,
+   por no chocar con el input bar ni con `#chat-fresh`).
+   **Bug encontrado y arreglado el mismo día**: la primera versión dejaba `#app-content`
+   tal cual estaba antes de entrar en la guía — con ruta activa y sin conversación, eso es
+   la pantalla del billete (con su propio botón ABRIR RUTA), así que el FAB parecía
+   "devolver atrás" en vez de abrir un sitio para escribir. Fix: fuerza un `#chat-area`
+   limpio (o restaura la conversación reciente si la había) con un aviso corto invitando a
+   preguntar/pedir cambios.
+2. **Miniatura de la ruta en la tarjeta de "ruta activa"** (antes solo texto): nuevo
+   endpoint `POST /route-thumbnail` en el Worker — genera con Google Static Maps (de pago)
+   una imagen con las paradas numeradas, pero **como mucho una vez por ruta**: la clave en
+   R2 es el propio `mapId`, no un hash de parámetros, así que a partir de la primera vez ya
+   no se vuelve a llamar a Google. Se pide sola al abrir una guía por primera vez
+   (`setActiveRoute` → `_ensureRouteThumbnail` en `app.js`) y el resultado se guarda en el
+   propio documento de la ruta (`map_thumbnail_url`, Firestore + localStorage). Requiere
+   login (evita que sea una puerta abierta a generar miniaturas gratis con mapIds
+   inventados). Tocar la imagen abre la guía, igual que el botón de siempre.
+   **Coste**: una llamada a Static Maps por ruta guardada, no por vista — céntimos.
+
+Desplegado (GitHub Action "Deploy Worker" run #24, commit `da5775f`, **Worker Version ID
+`79e8d7b7-3c29-48f0-a71d-557ab83f45a5`**) — esta sesión no pudo confirmarlo además contra
+`/version` porque el proxy de red del contenedor bloquea las llamadas salientes a
+`salma-api.borradodelmapa-api.workers.dev` (mismo bloqueo ya documentado otras veces).
+**Pendiente: que Paco pruebe las dos cosas en pantalla** — el FAB (ya con el fix) y que la
+miniatura aparezca en la tarjeta de "ruta activa" la próxima vez que abra una guía.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
