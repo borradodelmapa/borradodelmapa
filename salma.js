@@ -1873,7 +1873,15 @@ const salma = {
                 textDone = true;
                 this._fixStreamBubble();
                 this._removeLoading();
-                if (evt.route && evt.route.stops) {
+                // Este draft llega A MITAD del streaming, antes de que el post-
+                // procesado (más abajo, tras resolverse _stream) pueda decidir si
+                // es edición o ruta nueva — por eso aquí SIEMPRE abría una vista
+                // nueva con docId=null. Con el popup de consulta abierto eso cerraba
+                // el popup a mitad de respuesta (_teardownItinView → _closeItinQuery)
+                // y el resto del texto acababa en el chat normal. Mientras el popup
+                // esté abierto, se deja intacto — el post-procesado ya se encarga de
+                // parchear la guía activa en el sitio.
+                if (evt.route && evt.route.stops && !this._chatAreaOverride) {
                   this.currentRoute = evt.route;
                   try {
                     if (typeof window.openItinerarioView === 'function') {
