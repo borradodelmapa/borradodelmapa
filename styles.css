@@ -4802,6 +4802,39 @@ body {
 .itin-mobile-back:hover { background: rgba(244,99,11,.15); }
 .itin-mobile-back:active { background: rgba(244,99,11,.25); }
 
+/* ── FAB chat sobre la guía (fuera de .itin-view a propósito: tiene que
+   seguir visible cuando el chat tapa la guía, y .itin-view en ese momento
+   está en display:none).
+   Dos posiciones distintas a propósito, no solo dos colores: en modo guía
+   (abrir chat) va abajo-derecha porque ahí no hay input bar debajo. En modo
+   chat (volver a la guía) NO puede quedarse en ese mismo sitio — se comería
+   el botón de enviar del input bar — así que se mueve arriba-izquierda,
+   lejos también de #chat-fresh (arriba-derecha). ── */
+.itin-chat-fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  z-index: 1000;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--dorado); border: none;
+  color: var(--negro); font-size: 22px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.45);
+  transition: transform .2s, box-shadow .2s;
+}
+.itin-chat-fab:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+.itin-chat-fab:active { transform: scale(.93); }
+.itin-chat-fab--back {
+  right: auto; left: 12px;
+  bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 10px);
+  z-index: 1200;
+  width: 40px; height: 40px; font-size: 17px;
+  background: rgba(8,7,4,.9); color: var(--dorado);
+  border: 1.5px solid var(--linea-fuerte);
+  box-shadow: none;
+}
+
 /* ── Header ── */
 .itin-header {
   display: flex;

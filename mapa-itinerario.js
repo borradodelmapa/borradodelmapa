@@ -629,6 +629,10 @@ const mapaItinerario = {
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
 
+    // FAB de chat sobre la guía: siempre arranca en modo "abrir chat"
+    window._itinChatOverlayOpen = false;
+    _setupItinChatFab();
+
     // Botón "Ir al mapa" → cierra itinerario + abre mapa live con la ruta cargada + pins
     const _onOpenLiveMap = () => {
       document.removeEventListener('itin:open-live-map', _onOpenLiveMap);
@@ -653,6 +657,7 @@ const mapaItinerario = {
   function _teardownItinView() {
     if (!window._itinViewOpen) return;
     window._itinViewOpen = false;
+    window._itinChatOverlayOpen = false;
 
     try { mapaRuta.destroy(); } catch (_) {}
     try { mapaItinerario.destroy(); } catch (_) {}
@@ -668,8 +673,64 @@ const mapaItinerario = {
     document.querySelector('.app-header')?.style.removeProperty('display');
     const bottomBar = document.getElementById('app-bottom-bar');
     if (bottomBar) bottomBar.style.display = '';
+
+    const fab = document.getElementById('itin-chat-fab');
+    if (fab) fab.style.display = 'none';
   }
   window._teardownItinView = _teardownItinView;
+
+  // ── FAB "hablar con Salma" sobre la guía ──
+  // Reutiliza el chat de siempre (#app-content + #app-input-bar) como capa
+  // encima de la guía, sin destruir el mapa/las cards de abajo — al volver,
+  // la guía sigue exactamente como estaba, sin recargar nada.
+  function _setupItinChatFab() {
+    const fab = document.getElementById('itin-chat-fab');
+    if (!fab) return;
+    fab.style.display = 'flex';
+    fab.classList.remove('itin-chat-fab--back');
+    fab.textContent = '💬';
+    fab.setAttribute('aria-label', 'Hablar con Salma');
+    fab.onclick = () => {
+      if (window._itinChatOverlayOpen) _hideItinChatOverlay();
+      else _showItinChatOverlay();
+    };
+  }
+
+  function _showItinChatOverlay() {
+    if (!window._itinViewOpen || window._itinChatOverlayOpen) return;
+    window._itinChatOverlayOpen = true;
+
+    const view = document.getElementById('itin-view');
+    const appContent = document.getElementById('app-content');
+    const inputBar = document.getElementById('app-input-bar');
+    if (view) view.style.display = 'none';
+    if (appContent) appContent.style.display = '';
+    if (inputBar) inputBar.style.display = '';
+    document.querySelector('.app-header')?.style.removeProperty('display');
+
+    const fab = document.getElementById('itin-chat-fab');
+    if (fab) {
+      fab.classList.add('itin-chat-fab--back');
+      fab.textContent = '←';
+      fab.setAttribute('aria-label', 'Volver a la guía');
+    }
+  }
+
+  function _hideItinChatOverlay() {
+    if (!window._itinChatOverlayOpen) return;
+    window._itinChatOverlayOpen = false;
+
+    const view = document.getElementById('itin-view');
+    const appContent = document.getElementById('app-content');
+    const inputBar = document.getElementById('app-input-bar');
+    if (appContent) appContent.style.display = 'none';
+    if (inputBar) inputBar.style.display = 'none';
+    document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
+    if (view) view.style.display = 'block';
+    setTimeout(() => mapaRuta.invalidateSize(), 50);
+
+    _setupItinChatFab();
+  }
 
   // Cierre "de verdad" (✕ / itin:close / Ir al mapa): desmonta y consume
   // la entrada de historial. El botón atrás llega por popModal → _teardownItinView.
