@@ -680,6 +680,23 @@ const mapaItinerario = {
   }
   window._teardownItinView = _teardownItinView;
 
+  // Refresca mapa + tarjetas con datos NUEVOS sin tocar visibilidad/historial —
+  // para cuando se edita la ruta desde el popup de consulta (añadir/quitar
+  // parada) y hay que reflejarlo en la guía de detrás. mapaItinerario.updateVerified()
+  // no vale aquí: solo repone fotos de paradas que YA existían en el mismo
+  // índice, no sabe insertar/quitar/reordenar — por eso se rehace init() entero.
+  function _refreshItinInPlace(routeData, docId) {
+    if (!window._itinViewOpen || !routeData || !Array.isArray(routeData.stops)) return;
+    window._itinViewRoute = routeData;
+    if (docId) window._itinViewDocId = docId;
+    try { mapaRuta.destroy(); } catch (_) {}
+    try { mapaItinerario.destroy(); } catch (_) {}
+    mapaRuta.init('itin-map-container', routeData.stops, { preview: true, roadGeometry: routeData.road_geometry || null });
+    mapaItinerario.init('itin-cards-container', routeData.stops, routeData, window._itinViewOptions || {});
+    setTimeout(() => mapaRuta.invalidateSize(), 200);
+  }
+  window._refreshItinInPlace = _refreshItinInPlace;
+
   // ── FAB "hablar con Salma" sobre la guía → popup de consulta ──
   // v2 (18 sept): Paco pidió el mismo patrón visual que el modal del Narrador
   // (overlay oscuro + tarjeta pequeña) en vez de tapar/traslucir la pantalla

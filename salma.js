@@ -1281,8 +1281,14 @@ const salma = {
     this._currentReader = null;
     this._currentAbort = new AbortController();
 
-    // Si el itinerario está abierto, cerrarlo para mostrar la respuesta en el chat
-    const _itinWasOpen = !!(window._itinViewOpen);
+    // Si el itinerario está abierto, cerrarlo para mostrar la respuesta en el chat.
+    // ESTE era el bloqueador real de "el popup de consulta se cierra y va a
+    // guías" — no los otros dos sitios ya arreglados (esos son sobre volver a
+    // ABRIR una vista; este cierra la que ya había, en cuanto se manda CUALQUIER
+    // mensaje con el itinerario abierto, sea por el chat normal o por el popup).
+    // Con el popup (_chatAreaOverride) la guía se queda tal cual a propósito —
+    // es justo lo que pidió Paco — así que aquí no se aplica.
+    const _itinWasOpen = !!(window._itinViewOpen) && !this._chatAreaOverride;
     const _itinSavedRoute = window._itinViewRoute || null;
     const _itinSavedDocId = window._itinViewDocId || null;
     const _itinSavedOptions = window._itinViewOptions || null;
@@ -1453,8 +1459,13 @@ const salma = {
         } else {
           // Ruta normal con draft: parchear con datos verificados (fotos, coords)
           try {
-            // Vista itinerario (mapa-itinerario.js)
-            if (window._itinViewOpen && typeof mapaItinerario !== 'undefined') {
+            // Vista itinerario (mapa-itinerario.js). Si es una edición desde el
+            // popup de consulta (paradas añadidas/quitadas, no solo fotos),
+            // updateVerified() no basta — no sabe insertar ni reordenar tarjetas,
+            // solo repone fotos por índice. Rehacer mapa+tarjetas enteros ahí.
+            if (window._itinViewOpen && this._chatAreaOverride && typeof window._refreshItinInPlace === 'function') {
+              window._refreshItinInPlace(data.route, this.currentRouteId);
+            } else if (window._itinViewOpen && typeof mapaItinerario !== 'undefined') {
               mapaItinerario.updateVerified(data.route.stops);
             }
             // Vista guía clásica (guide-renderer.js)
