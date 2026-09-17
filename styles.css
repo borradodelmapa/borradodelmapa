@@ -4844,6 +4844,20 @@ body {
   border-radius: var(--radius-sm, 10px);
 }
 
+/* ── Chat sobre la guía como panel traslúcido (18 sept) — la guía se queda
+   visible detrás (mapa + cards de #itin-view, z-index:900) en vez de tapada
+   del todo; #app-content pasa a flotar encima con fondo semitransparente. ── */
+body.itin-chat-popup-active #app-content {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+  background: rgba(6,5,3,.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 64px);
+  padding-bottom: 180px;
+}
+
 /* ── Header ── */
 .itin-header {
   display: flex;

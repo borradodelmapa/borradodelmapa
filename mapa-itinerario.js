@@ -700,10 +700,17 @@ const mapaItinerario = {
     if (!window._itinViewOpen || window._itinChatOverlayOpen) return;
     window._itinChatOverlayOpen = true;
 
-    const view = document.getElementById('itin-view');
+    // La guía NO se oculta (a propósito, 18 sept): Paco pidió que el chat sea un
+    // panel traslúcido con la guía visible detrás, no una pantalla que la tape
+    // del todo. #app-content pasa a flotar encima (clase .itin-chat-popup-active
+    // en <body>, ver styles.css) con fondo semitransparente.
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');
-    if (view) view.style.display = 'none';
+    document.body.classList.add('itin-chat-popup-active');
+    // La barra flotante de la guía (Google Maps / Compartir) vive en <body>, no
+    // dentro de #itin-view — sin esto se queda flotando encima del chat aunque
+    // la guía esté "detrás". Solo se esconde, no se borra: la guía sigue intacta.
+    document.body.querySelectorAll('.itin-action-bar').forEach(el => { el.dataset.itinHidden = '1'; el.style.display = 'none'; });
     if (appContent) {
       appContent.style.display = '';
       // OJO: no reusar tal cual lo que hubiera en #app-content antes de abrir la
@@ -719,7 +726,6 @@ const mapaItinerario = {
       }
     }
     if (inputBar) inputBar.style.display = '';
-    document.querySelector('.app-header')?.style.removeProperty('display');
     if (typeof resetInputButtons === 'function') resetInputButtons();
 
     const fab = document.getElementById('itin-chat-fab');
@@ -734,14 +740,12 @@ const mapaItinerario = {
     if (!window._itinChatOverlayOpen) return;
     window._itinChatOverlayOpen = false;
 
-    const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');
+    document.body.classList.remove('itin-chat-popup-active');
+    document.body.querySelectorAll('.itin-action-bar[data-itin-hidden]').forEach(el => { el.style.display = ''; delete el.dataset.itinHidden; });
     if (appContent) appContent.style.display = 'none';
     if (inputBar) inputBar.style.display = 'none';
-    document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
-    if (view) view.style.display = 'block';
-    setTimeout(() => mapaRuta.invalidateSize(), 50);
 
     _setupItinChatFab();
   }
