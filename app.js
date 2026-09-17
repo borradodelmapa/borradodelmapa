@@ -434,7 +434,15 @@ function _renderChatEmpty() {
   let _ceActive = null;
   try {
     const raw = localStorage.getItem('bdm_live_active_route');
-    if (raw) _ceActive = _ceFromRoute(JSON.parse(raw), localStorage.getItem('bdm_live_active_route_id') || null, null);
+    if (raw) {
+      const _rawRoute = JSON.parse(raw);
+      const _rawId = localStorage.getItem('bdm_live_active_route_id') || null;
+      _ceActive = _ceFromRoute(_rawRoute, _rawId, null);
+      // Rutas que ya estaban activas ANTES de que existiera esta miniatura (18 sept)
+      // nunca vuelven a pasar por setActiveRoute si no se reabre la guía — sin esto
+      // se quedarían sin imagen para siempre. Pedirla aquí también cubre ese caso.
+      if (_rawId && !_rawRoute.map_thumbnail_url) _ensureRouteThumbnail(_rawRoute, _rawId);
+    }
   } catch (e) { _ceActive = null; }
   try {
     const _initCard = _ceActive
@@ -3971,12 +3979,24 @@ window.setActiveRoute = setActiveRoute;
 // partir de ahí este mismo POST solo devuelve esa URL ya guardada, sin volver a
 // llamar a Google — por eso aquí no hace falta ninguna caché propia ni comprobar
 // nada antes de llamar, el Worker ya resuelve "¿ya existe?" el mismo.
+// Logs con el mismo prefijo "[Salma]" que ya usa el resto de la app — así se ven en
+// el panel 🐛 si algo no llega a pedirse o el Worker no responde lo esperado.
+const _thumbInFlight = new Set();
 async function _ensureRouteThumbnail(routeData, docId) {
-  if (!currentUser || !window.SALMA_API) return;
+  if (!docId || _thumbInFlight.has(docId)) return;
+  if (!currentUser || !window.SALMA_API) {
+    console.log('[Salma] Miniatura ruta: sin sesión o sin API, no se pide');
+    return;
+  }
   const stops = (routeData.stops || [])
     .filter(s => s && isFinite(+s.lat) && isFinite(+s.lng) && Math.abs(+s.lat) > 0.01)
     .map(s => ({ lat: +s.lat, lng: +s.lng }));
-  if (stops.length < 2) return;
+  if (stops.length < 2) {
+    console.log('[Salma] Miniatura ruta: sin coordenadas suficientes, no se pide');
+    return;
+  }
+  _thumbInFlight.add(docId);
+  console.log('[Salma] Miniatura ruta: pidiendo para', docId);
   try {
     const token = await currentUser.getIdToken();
     const res = await fetch(`${window.SALMA_API}/route-thumbnail`, {
@@ -3984,9 +4004,16 @@ async function _ensureRouteThumbnail(routeData, docId) {
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
       body: JSON.stringify({ mapId: docId, stops, road_geometry: routeData.road_geometry || null })
     });
-    if (!res.ok) return;
+    if (!res.ok) {
+      console.warn('[Salma] Miniatura ruta: el Worker respondió', res.status);
+      return;
+    }
     const data = await res.json();
-    if (!data.url) return;
+    if (!data.url) {
+      console.warn('[Salma] Miniatura ruta: respuesta sin url', data);
+      return;
+    }
+    console.log('[Salma] Miniatura ruta: lista', data.url);
     routeData.map_thumbnail_url = data.url;
     db.collection('users').doc(currentUser.uid).collection('maps').doc(docId)
       .set({ map_thumbnail_url: data.url }, { merge: true }).catch(() => {});
@@ -3996,8 +4023,10 @@ async function _ensureRouteThumbnail(routeData, docId) {
       try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch (_) {}
       if (currentState === 'chat' && document.querySelector('.chat-empty')) _renderChatEmpty();
     }
-  } catch (_) {
-    // sin red o fallo puntual — se reintenta sola la próxima vez que se abra esta guía
+  } catch (e) {
+    console.warn('[Salma] Miniatura ruta: fallo de red', e);
+  } finally {
+    _thumbInFlight.delete(docId);
   }
 }
 
