@@ -4844,19 +4844,60 @@ body {
   border-radius: var(--radius-sm, 10px);
 }
 
-/* ── Chat sobre la guía como panel traslúcido (18 sept) — la guía se queda
-   visible detrás (mapa + cards de #itin-view, z-index:900) en vez de tapada
-   del todo; #app-content pasa a flotar encima con fondo semitransparente. ── */
-body.itin-chat-popup-active #app-content {
-  position: fixed;
-  inset: 0;
-  z-index: 950;
-  background: rgba(6,5,3,.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  padding-top: calc(env(safe-area-inset-top, 0px) + 64px);
-  padding-bottom: 180px;
+/* ── Popup "consulta" sobre la guía (18 sept, v2) — Paco pidió el mismo
+   patrón visual que el modal de confirmación del Narrador: overlay oscuro con
+   blur y una tarjeta pequeña encima, en vez de tapar/traslucir toda la pantalla
+   con el chat completo (versión anterior, descartada — mezclaba conversación
+   vieja sin relación y el banner del tiempo, confuso). Aquí NO se reutiliza
+   #app-content: es un cuadro de texto + respuesta de Salma autocontenido,
+   mientras la guía se ve detrás, atenuada. */
+.itin-query-overlay {
+  position: fixed; inset: 0; z-index: 1300;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
 }
+.itin-query-modal {
+  position: relative;
+  background: var(--gris); border: 2px solid var(--dorado);
+  border-radius: 0; padding: 20px 20px 16px;
+  max-width: 420px; width: 100%; max-height: 72vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 8px 40px rgba(240,180,41,.25);
+}
+.itin-query-close {
+  position: absolute; top: 10px; right: 10px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,.06); border: none;
+  color: rgba(244,239,230,.6); font-size: 14px; cursor: pointer;
+}
+.itin-query-title {
+  font-family: var(--font-mono); font-size: 15px; font-weight: 700;
+  color: var(--dorado2); letter-spacing: .05em;
+  margin: 0 28px 12px 0; flex-shrink: 0;
+}
+.itin-query-answer {
+  flex: 1; overflow-y: auto; min-height: 60px;
+  margin-bottom: 12px;
+}
+.itin-query-answer .itin-chat-hint { margin: 8px 0 0; }
+.itin-query-inputrow {
+  display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
+}
+.itin-query-input {
+  flex: 1; resize: none; max-height: 90px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(244,239,230,.15);
+  border-radius: 0; color: var(--crema); font-size: 14px;
+  padding: 10px 12px; font-family: inherit;
+}
+.itin-query-input:focus { outline: none; border-color: var(--dorado); }
+.itin-query-send {
+  width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%;
+  background: var(--dorado); border: none; color: var(--negro);
+  font-size: 16px; cursor: pointer;
+}
+.itin-query-send:hover { background: var(--dorado2); }
 
 /* ── Header ── */
 .itin-header {

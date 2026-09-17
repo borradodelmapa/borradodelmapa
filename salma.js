@@ -17,6 +17,7 @@ const salma = {
   currentRoute: null,
   currentRouteId: null,
   _streaming: false,
+  _chatAreaOverride: null,  // id de un contenedor alternativo — ver popup de "consulta" sobre una guía
   _userScrolled: false,
   _rateTimes: [],
   _userLocation: null,
@@ -2848,6 +2849,10 @@ const salma = {
   },
 
   _getChatArea() {
+    if (this._chatAreaOverride) {
+      const el = document.getElementById(this._chatAreaOverride);
+      if (el) return el;
+    }
     return document.getElementById('chat-area');
   },
 
