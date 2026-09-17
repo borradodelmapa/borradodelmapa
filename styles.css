@@ -4834,6 +4834,15 @@ body {
   border: 1.5px solid var(--linea-fuerte);
   box-shadow: none;
 }
+.itin-chat-hint {
+  margin: 60px 24px 0;
+  padding: 16px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(244,239,230,.55);
+  border: 1px dashed var(--linea);
+  border-radius: var(--radius-sm, 10px);
+}
 
 /* ── Header ── */
 .itin-header {

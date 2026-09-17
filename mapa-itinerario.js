@@ -704,9 +704,23 @@ const mapaItinerario = {
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');
     if (view) view.style.display = 'none';
-    if (appContent) appContent.style.display = '';
+    if (appContent) {
+      appContent.style.display = '';
+      // OJO: no reusar tal cual lo que hubiera en #app-content antes de abrir la
+      // guía — si no hay conversación en curso eso es la pantalla del billete
+      // ("¿Cómo va el viaje?" + botón ABRIR RUTA), y aquí se ve como si el FAB
+      // "te devolviera atrás" en vez de abrir un chat. Chat en blanco listo para
+      // escribir, o la conversación reciente si la había (misma sesión, <30 min).
+      appContent.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+      const restored = typeof salma !== 'undefined' && typeof salma._restoreSession === 'function' && salma._restoreSession();
+      if (!restored) {
+        const ca = document.getElementById('chat-area');
+        if (ca) ca.innerHTML = '<div class="itin-chat-hint">Pregúntame lo que quieras sobre esta ruta, o pídeme un cambio.</div>';
+      }
+    }
     if (inputBar) inputBar.style.display = '';
     document.querySelector('.app-header')?.style.removeProperty('display');
+    if (typeof resetInputButtons === 'function') resetInputButtons();
 
     const fab = document.getElementById('itin-chat-fab');
     if (fab) {
