@@ -3998,7 +3998,15 @@ async function _ensureRouteThumbnail(routeData, docId) {
   _thumbInFlight.add(docId);
   console.log('[Salma] Miniatura ruta: pidiendo para', docId);
   try {
-    const token = await currentUser.getIdToken();
+    // currentUser (arriba) es un objeto propio armado desde Firestore, no el
+    // usuario real de Firebase Auth — no tiene getIdToken(). El de verdad es
+    // auth.currentUser (mismo patrón que ya usa el pago con Stripe, app.js:3415).
+    const authUser = auth.currentUser;
+    if (!authUser) {
+      console.warn('[Salma] Miniatura ruta: sin auth.currentUser, no se pide');
+      return;
+    }
+    const token = await authUser.getIdToken();
     const res = await fetch(`${window.SALMA_API}/route-thumbnail`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
