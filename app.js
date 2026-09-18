@@ -1264,7 +1264,7 @@ async function _loadProfileGuides() {
 function _createGuideCard(doc, d, isOffline) {
   const card = document.createElement('div');
   card.className = 'viaje-card' + (isOffline ? ' viaje-card-offline' : '');
-  const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
+  const photo = d.map_thumbnail_url || d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
   const offlineBadge = isOffline ? '<span class="viaje-card-offline-badge">📵 offline</span>' : '';
   const isCached = !isOffline && !!localStorage.getItem('offline_route_' + doc.id);
   card.innerHTML = `
@@ -1325,6 +1325,22 @@ function _createGuideCard(doc, d, isOffline) {
     if (!result) { showToast('Necesitas al menos 3 fotos en esta ruta'); return; }
     _showVideoModal(result.photoUrls, result.params);
   });
+  // Miniatura de mapa con las paradas: si esta guía todavía no la tiene (nunca se
+  // abrió como ruta activa), generarla ahora — una sola vez, Google Static Maps,
+  // se cachea para siempre — y sustituir la foto genérica de destPhoto() en cuanto
+  // llegue. Mismo endpoint que ya usa la tarjeta de "ruta activa" (_ensureRouteThumbnail).
+  if (!isOffline && !d.map_thumbnail_url && d.itinerarioIA) {
+    let routeDataThumb = null;
+    try { routeDataThumb = JSON.parse(d.itinerarioIA); } catch (_) {}
+    if (routeDataThumb) {
+      _ensureRouteThumbnail(routeDataThumb, doc.id).then(() => {
+        if (routeDataThumb.map_thumbnail_url) {
+          const img = card.querySelector('.viaje-card-img');
+          if (img) img.style.backgroundImage = `url('${routeDataThumb.map_thumbnail_url}')`;
+        }
+      });
+    }
+  }
   return card;
 }
 
@@ -2426,7 +2442,7 @@ async function loadUserGuides() {
     function createCard(doc, d) {
       const card = document.createElement('div');
       card.className = 'viaje-card';
-      const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
+      const photo = d.map_thumbnail_url || d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
       card.innerHTML = `
         <div class="viaje-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
         <div class="viaje-card-body">
@@ -2467,6 +2483,21 @@ async function loadUserGuides() {
           showToast('Error al eliminar');
         }
       });
+      // Miniatura de mapa con las paradas: si esta guía todavía no la tiene, generarla
+      // ahora (una sola vez, se cachea para siempre) y sustituir la foto genérica en
+      // cuanto llegue — mismo endpoint que ya usa la tarjeta de "ruta activa".
+      if (!d.map_thumbnail_url && d.itinerarioIA) {
+        let routeDataThumb = null;
+        try { routeDataThumb = JSON.parse(d.itinerarioIA); } catch (_) {}
+        if (routeDataThumb) {
+          _ensureRouteThumbnail(routeDataThumb, doc.id).then(() => {
+            if (routeDataThumb.map_thumbnail_url) {
+              const img = card.querySelector('.viaje-card-img');
+              if (img) img.style.backgroundImage = `url('${routeDataThumb.map_thumbnail_url}')`;
+            }
+          });
+        }
+      }
       return card;
     }
 
