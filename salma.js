@@ -1406,11 +1406,20 @@ const salma = {
       if (data.reply) {
         this.history.push({ role: 'assistant', content: data.reply });
       }
-      this._saveSession();
-      this._persistThread();   // historial de consultas (últimas 10, continuables)
-      // Historial propio de ESTA ruta (popup de consulta sobre una guía,
-      // ver mapa-itinerario.js) — solo mientras ese popup está abierto.
-      if (this._chatAreaOverride) this._persistRouteQueryHistory();
+      // Mientras el popup de "consulta" sobre una guía está abierto, this.history
+      // es el hilo AISLADO de esa ruta (ver _openItinQuery en mapa-itinerario.js) —
+      // guardarlo en sessionStorage/Firestore aquí pisaba el hilo del chat normal:
+      // al cerrar el popup y volver al chat, salma._restoreSession() repintaba la
+      // conversación de la guía en #chat-area, y el historial de "Consultas"
+      // (_persistThread) se contaminaba con el mismo hilo. Ninguno de los dos debe
+      // tocarse desde el popup — su propio historial va solo a query_history.
+      if (!this._chatAreaOverride) {
+        this._saveSession();
+        this._persistThread();   // historial de consultas (últimas 10, continuables)
+      } else {
+        // Historial propio de ESTA ruta (popup de consulta sobre una guía).
+        this._persistRouteQueryHistory();
+      }
 
       // Si hay ruta, renderizar guide-card.
       if (data.route && data.route.stops) {
