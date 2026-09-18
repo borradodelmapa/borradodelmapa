@@ -343,10 +343,10 @@ maquetación. Todo confirmado en pantalla salvo el último (recién desplegado).
    **Aviso de coste (protocolo §8):** mismo turno de Claude que ya se pagaba por
    responder — no hay ninguna llamada nueva, solo una instrucción más en el prompt
    (unos tokens de entrada más) y, cuando aplica, una línea más en la respuesta.
-   **Pendiente: que Paco repita el mismo mensaje ("dime un par de cosas...") o cualquier
-   otro sin "días" desde el popup, y confirme que (a) si la respuesta propone algo
-   concreto sale el botón "Añadir a la guía" sin que se vea ningún marcador en el texto,
-   y (b) al tocarlo se suma bien a la ruta.**
+   **CONFIRMADO EN PANTALLA por Paco** — repitió el mismo caso, salió el botón "Añadir a
+   la guía" sin marcador visible en el texto, y al tocarlo se sumó bien a la ruta activa.
+   Cerrada la saga de los 5 arreglos de este apartado (botón fantasma → contaminación de
+   sesión → cierre sin botón → Tiempo 1 no cubría el caso → marcador que sí lo cubre).
    **Sin implementar aparte, a petición explícita de Paco (para después, no ahora):**
    pintar de forma distinta en la guía las paradas añadidas así (highlight/badge de
    "nuevo") — queda anotado, no se ha tocado nada de esto todavía.
