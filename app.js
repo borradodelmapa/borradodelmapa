@@ -3104,8 +3104,11 @@ function sendMessage() {
     if (activeMicBtn) activeMicBtn.classList.remove('listening');
     if (activeInputEl) {
       activeInputEl.classList.remove('mic-active');
-      activeInputEl.placeholder = activeInputEl.id === 'welcome-input'
-        ? '¿A dónde vamos?' : 'Escribe aquí...';
+      const _placeholders = {
+        'welcome-input': '¿A dónde vamos?',
+        'itin-query-input': 'Pregunta o pide un cambio...'
+      };
+      activeInputEl.placeholder = _placeholders[activeInputEl.id] || 'Escribe aquí...';
     }
     activeMicBtn = null;
     activeInputEl = null;
@@ -3126,6 +3129,10 @@ function sendMessage() {
       if (isMapSearch) {
         document.dispatchEvent(new CustomEvent('map:search-submit', { detail: { query: inputEl.value.trim() } }));
         inputEl.value = '';
+      } else if (inputEl.id === 'itin-query-input') {
+        // Popup de consulta sobre una guía (mapa-itinerario.js) — su propio
+        // envío, no el del chat general.
+        if (typeof window._sendItinQuery === 'function') window._sendItinQuery();
       } else if (isWelcome) {
         const msg = inputEl.value.trim();
         inputEl.value = '';

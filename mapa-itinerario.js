@@ -751,6 +751,66 @@ const mapaItinerario = {
     input.onkeydown = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); _sendItinQuery(); }
     };
+    input.oninput = () => {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+    };
+
+    // Foto: botón cámara + menú hacer foto/galería, misma UX que el chat
+    // normal pero con su propia preview (ver _handleItinPhotoSelected).
+    const camBtn = document.getElementById('itin-query-cam');
+    const camMenu = document.getElementById('itin-query-cam-menu');
+    const camPhotoInput = document.getElementById('itin-query-photo-input');
+    const camCameraInput = document.getElementById('itin-query-camera-input');
+    const camCancelBtn = document.getElementById('itin-query-photo-cancel');
+    if (camBtn && camMenu) {
+      camBtn.onclick = (e) => {
+        if (salma._streaming) return;
+        e.stopPropagation();
+        camMenu.style.display = camMenu.style.display === 'none' ? '' : 'none';
+      };
+    }
+    document.getElementById('itin-query-cam-foto')?.addEventListener('click', () => {
+      camMenu.style.display = 'none';
+      if (camCameraInput) camCameraInput.click();
+    });
+    document.getElementById('itin-query-cam-galeria')?.addEventListener('click', () => {
+      camMenu.style.display = 'none';
+      if (camPhotoInput) camPhotoInput.click();
+    });
+    const _handleItinFileChange = (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (file) _handleItinPhotoSelected(file);
+    };
+    if (camPhotoInput) camPhotoInput.onchange = _handleItinFileChange;
+    if (camCameraInput) camCameraInput.onchange = _handleItinFileChange;
+    if (camCancelBtn) camCancelBtn.onclick = _clearItinQueryPhoto;
+    if (!overlay._camMenuOutsideClick) {
+      overlay._camMenuOutsideClick = true;
+      overlay.addEventListener('click', () => { if (camMenu) camMenu.style.display = 'none'; });
+    }
+
+    // Accesos rápidos, debajo del cuadro de texto
+    const nearBtn = document.getElementById('itin-query-near');
+    const narradorBtn = document.getElementById('itin-query-narrador');
+    if (nearBtn) {
+      nearBtn.onclick = () => {
+        input.value = '¿Qué tengo cerca?';
+        _sendItinQuery();
+      };
+    }
+    if (narradorBtn) {
+      narradorBtn.onclick = () => {
+        // Mismo camino que el chip Narrador del chat: si ya está activo abre
+        // el menú (olvidar avisos/desactivar), si no el modal de activación.
+        if (salma._narratorActive && typeof showNarratorActiveMenu === 'function') {
+          showNarratorActiveMenu();
+        } else if (typeof showNarratorConfirm === 'function') {
+          showNarratorConfirm();
+        }
+      };
+    }
 
     // Historial de ESTA ruta, si ya se había hablado con ella antes (aunque
     // fuera otro día) — vive en su propio documento, no en sessionStorage.
@@ -772,7 +832,10 @@ const mapaItinerario = {
 
   function _closeItinQuery() {
     const overlay = document.getElementById('itin-query-overlay');
+    const camMenu = document.getElementById('itin-query-cam-menu');
     if (overlay) overlay.style.display = 'none';
+    if (camMenu) camMenu.style.display = 'none';
+    _clearItinQueryPhoto();
     if (_itinQueryObserver) { _itinQueryObserver.disconnect(); _itinQueryObserver = null; }
     if (typeof salma === 'undefined') return;
     salma._chatAreaOverride = null;
@@ -785,13 +848,64 @@ const mapaItinerario = {
   function _sendItinQuery() {
     const input = document.getElementById('itin-query-input');
     const answer = document.getElementById('itin-query-answer');
-    const msg = input && input.value.trim();
-    if (!msg || typeof salma === 'undefined') return;
-    input.value = '';
+    if (typeof salma === 'undefined') return;
+    const msg = input ? input.value.trim() : '';
+    const hasPendingPhoto = !!salma._pendingPhoto;
+    if (!msg && !hasPendingPhoto) return;
+    if (input) { input.value = ''; input.style.height = 'auto'; }
     const hint = answer && answer.querySelector('.itin-chat-hint');
     if (hint) hint.remove();
+    _hideItinQueryPhotoPreview();
     salma.send(msg);
   }
+
+  // ═══ FOTO EN EL POPUP DE CONSULTA — reutiliza _pendingPhoto/_compressImage
+  // de salma.js (mismo objeto que lee salma.send()), pero con su propia
+  // preview: la del chat normal (#chat-photo-preview) queda tapada detrás
+  // del overlay y el usuario no la vería.
+  async function _handleItinPhotoSelected(file) {
+    if (typeof salma === 'undefined' || !file) return;
+    if (!file.type.startsWith('image/')) {
+      if (typeof showToast === 'function') showToast('Solo se permiten imágenes');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      if (typeof showToast === 'function') showToast('Imagen demasiado grande (máx 10MB)');
+      return;
+    }
+    try {
+      const blob = await salma._compressImage(file, 1024, 0.8);
+      const base64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(blob);
+      });
+      const localUrl = URL.createObjectURL(blob);
+      salma._pendingPhoto = { blob, base64, localUrl };
+      const preview = document.getElementById('itin-query-photo-preview');
+      const thumb = document.getElementById('itin-query-photo-thumb');
+      if (preview && thumb) { thumb.src = localUrl; preview.style.display = ''; }
+    } catch (e) {
+      console.error('[Salma] Error procesando foto (popup itinerario):', e);
+      if (typeof showToast === 'function') showToast('Error al procesar la foto');
+    }
+  }
+
+  function _hideItinQueryPhotoPreview() {
+    const preview = document.getElementById('itin-query-photo-preview');
+    if (preview) preview.style.display = 'none';
+  }
+
+  function _clearItinQueryPhoto() {
+    if (typeof salma !== 'undefined' && salma._pendingPhoto?.localUrl) {
+      URL.revokeObjectURL(salma._pendingPhoto.localUrl);
+    }
+    if (typeof salma !== 'undefined') salma._pendingPhoto = null;
+    _hideItinQueryPhotoPreview();
+  }
+  // El micro (app.js, sistema de dictado compartido) llama a esta misma
+  // función al terminar de hablar — necesita encontrarla en window.
+  window._sendItinQuery = _sendItinQuery;
 
   // Cierre "de verdad" (✕ / itin:close / Ir al mapa): desmonta y consume
   // la entrada de historial. El botón atrás llega por popModal → _teardownItinView.
