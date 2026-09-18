@@ -6512,6 +6512,7 @@ body {
 .ce-eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor;}
 .ce-card.ce-active .ce-eyebrow{color:var(--ce-amber-hi);}
 .ce-title{font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;font-size:21px;letter-spacing:.02em;line-height:1.05;color:var(--ce-ink);margin:9px 0 5px;}
+.ce-card.ce-active .ce-title{cursor:pointer;}
 .ce-sub{font-family:var(--ce-flapf);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ce-ink2);}
 .ce-stops{padding:11px 12px;border-bottom:1px solid var(--ce-line);font-family:var(--ce-flapf);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-ink);}
 .ce-stops b{color:var(--ce-ink3);font-weight:500;}

@@ -404,7 +404,7 @@ function _renderChatEmpty() {
       <div class="ce-row"><span class="ce-code">${escapeHTML(rt.code)}</span><span class="ce-arr"></span></div>
       <div class="ce-head">
         <span class="ce-eyebrow">En ruta</span>
-        <div class="ce-title">${escapeHTML(rt.title)}</div>
+        <div class="ce-title" data-ce-guide>${escapeHTML(rt.title)}</div>
         <div class="ce-sub">${rt.sub}</div>
       </div>
       <div class="ce-stops">${rt.stopsHtml}</div>
