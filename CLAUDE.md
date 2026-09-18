@@ -271,6 +271,68 @@ miniatura aparezca en la tarjeta de "ruta activa" la próxima vez que abra una g
 
 ---
 
+## Sesión 18 sept 2026 — Popup de consulta sobre la guía: maquetación + 3 bugs reales
+
+Continuación de la sesión de arriba (17-18 sept): el FAB pasó de abrir el chat completo a
+un popup tipo "consulta" (textbox + respuesta, la guía se ve detrás, atenuada) — ver
+`mapa-itinerario.js:_openItinQuery/_closeItinQuery/_sendItinQuery`. Con el popup ya
+funcionando, Paco lo probó de verdad y salieron 3 bugs reales encima del diseño, más
+maquetación. Todo confirmado en pantalla salvo el último (recién desplegado).
+
+1. **Maquetación** — cuadro de texto más grande (ocupa todo el ancho), botones
+   cámara/micro/enviar bajan a su propia fila debajo (antes todo apretado en una línea),
+   botón "Narrador" sin emoji y refleja si está activo (verde + badge 📷, mismo patrón que
+   el chip del chat normal — `updateNarratorChipUI()` ahora sincroniza también este botón),
+   "Cerca mía" pide una posición GPS fresca al navegador (gratis, sin API de pago) en vez
+   de la última guardada — antes podía estar rancia y decir un sitio a 50km de donde
+   estabas de verdad. **CONFIRMADO.**
+2. **Bug 1 — "Crear ruta con mapa" apareciendo al editar la ruta activa.** `_isRouteMsg()`
+   (regex amplio: "días", "visitar", "recorrer"...) saltaba con peticiones normales de
+   edición desde el popup; si el Worker respondía en prosa (sin `data.route`), esa rama
+   ofrecía crear una ruta NUEVA desde cero, tirando el contexto de la que ya estaba
+   abierta. Arreglado con un guardián (`!(_chatAreaOverride && currentRouteId)`) — solo
+   frontend, commit `383755e`.
+3. **Bug 2 — conversación del popup contaminando el chat normal y "Consultas".**
+   `_saveSession()`/`_persistThread()` se llamaban sin mirar si el mensaje venía del popup
+   — mientras está abierto, `this.history` es el hilo AISLADO de esa ruta, así que cada
+   mensaje ahí pisaba sessionStorage del chat normal (al volver, `_restoreSession()`
+   repintaba la conversación de la guía en `#chat-area`) y contaminaba el historial de
+   "Consultas" en Firestore. Ahora, si `_chatAreaOverride` está activo, esos dos guardados
+   se saltan del todo. Solo frontend, commit `37d4644`. **CONFIRMADO** (Paco: "cuando
+   abres el chat normal" se quedaba ahí).
+4. **Bug 3 — el botón desaparecía (bug 1) pero el TEXTO seguía prometiéndolo.** Causa real,
+   en el Worker: la frase "Si te encaja, dale a **Crear ruta con mapa**..." está en el
+   propio prompt (línea ~2910, bloque MODO RECOMENDACIONES / Tiempo 1 de PIEZA A), no la
+   inventa el frontend. Con el guardián del bug 1 puesto, el botón ya no salía pero la
+   frase seguía ahí, colgada, sin nada que hacer — peor que antes.
+   **Arreglo real, en 3 piezas, commit `200de73`, Worker Version ID
+   `cda4280b-cea1-458c-af76-e90c1433b57a` (desplegado — GitHub Action "Deploy Worker"
+   run #27 — pero esta sesión no pudo confirmarlo contra `/version`, mismo bloqueo de red
+   del contenedor de siempre):**
+   - `editing_active_route` (mandado por el frontend cuando el popup está abierto sobre
+     una ruta activa) cambia el CIERRE EXACTO del Tiempo 1 a "dale a **Añadir a la
+     guía**..." — sigue preguntando primero, no añade nada sin que Paco lo confirme (a
+     petición explícita suya: "que pregunte si te cuadra").
+   - Botón nuevo "➕ Añadir a la guía" (`salma._offerAddToRoute`, análogo a
+     `_offerCrearRutaConMapa`) — al tocarlo, `merge_into_route: true`.
+   - En el Worker, con `merge_into_route`, los stops nuevos (de `convertProseToRouteJson`,
+     que solo conoce el trozo de texto nuevo) se fusionan al final de `currentRoute` como
+     día(s) nuevo(s) — título/país/región/días de la ruta activa NO se tocan. Las paradas
+     que ya existían se reutilizan sin re-verificar contra Google (mismo mecanismo
+     `previousStops` de cualquier edición) — **coste sin cambios** respecto a editar una
+     ruta ya guardada, solo se paga la verificación de lo realmente nuevo. Umbral de
+     "texto mínimo para convertir" bajado de 400 a 100 caracteres solo para este caso (una
+     propuesta de un día es mucho más corta que un plan multi-día completo).
+   **Pendiente: que Paco pida algo tipo "cueva por la mañana, playa por la tarde, cena en
+   Casa Marisa" desde el popup y confirme que (a) el cierre dice "Añadir a la guía", (b) el
+   botón aparece, y (c) al tocarlo la parada nueva se suma a la ruta sin tocar lo que ya
+   había.**
+   **Sin implementar aparte, a petición explícita de Paco (para después, no ahora):**
+   pintar de forma distinta en la guía las paradas añadidas así (highlight/badge de
+   "nuevo") — queda anotado, no se ha tocado nada de esto todavía.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
