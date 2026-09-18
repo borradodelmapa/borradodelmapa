@@ -323,10 +323,30 @@ maquetación. Todo confirmado en pantalla salvo el último (recién desplegado).
      ruta ya guardada, solo se paga la verificación de lo realmente nuevo. Umbral de
      "texto mínimo para convertir" bajado de 400 a 100 caracteres solo para este caso (una
      propuesta de un día es mucho más corta que un plan multi-día completo).
-   **Pendiente: que Paco pida algo tipo "cueva por la mañana, playa por la tarde, cena en
-   Casa Marisa" desde el popup y confirme que (a) el cierre dice "Añadir a la guía", (b) el
-   botón aparece, y (c) al tocarlo la parada nueva se suma a la ruta sin tocar lo que ya
-   había.**
+   **Probado en pantalla — el botón NO salió.** Causa real, distinta de la del punto 4: el
+   mensaje de Paco ("dime un par de cosas que hacer mañana solo dos cerca") no lleva
+   "días" en ningún formato, así que ni `isRouteRequest` ni `isDaysDestination` lo
+   detectan — nunca entra en `guidedIsReco` (Tiempo 1), donde vivía el arreglo del punto 4.
+   Cae en MODO CONVERSACIONAL normal (respuesta con "Cómo llegar"/"Ruta completa"
+   automáticos, sin botón de ningún tipo).
+
+5. **Arreglo 5 — marcador `SALMA_OFFER_ADD_TO_ROUTE`, en vez de seguir ampliando el
+   regex.** Commit `fbafe78`, **Worker Version ID `edea4b6e-4fb8-493d-9cd8-48caccb4d974`**
+   (GitHub Action "Deploy Worker" run #28 — mismo bloqueo de red de siempre, sin
+   confirmar contra `/version`). Mientras se edita una ruta activa desde el popup y el
+   mensaje no entra en ningún modo de ruta (`editingActiveRoute && !guidedIsReco &&
+   !isRoute`), se inyecta una instrucción para que decida Salma: si su respuesta propone
+   algo concreto y añadible, termina con un marcador invisible — mismo patrón que
+   `HISTORIA_LUGAR`/`FOTO_TAG`. El Worker lo quita antes de mostrar la respuesta y lo
+   convierte en el mismo botón "Añadir a la guía" ya implementado (reutiliza
+   `offer_add_to_route`/`merge_into_route`, sin tocar nada del frontend).
+   **Aviso de coste (protocolo §8):** mismo turno de Claude que ya se pagaba por
+   responder — no hay ninguna llamada nueva, solo una instrucción más en el prompt
+   (unos tokens de entrada más) y, cuando aplica, una línea más en la respuesta.
+   **Pendiente: que Paco repita el mismo mensaje ("dime un par de cosas...") o cualquier
+   otro sin "días" desde el popup, y confirme que (a) si la respuesta propone algo
+   concreto sale el botón "Añadir a la guía" sin que se vea ningún marcador en el texto,
+   y (b) al tocarlo se suma bien a la ruta.**
    **Sin implementar aparte, a petición explícita de Paco (para después, no ahora):**
    pintar de forma distinta en la guía las paradas añadidas así (highlight/badge de
    "nuevo") — queda anotado, no se ha tocado nada de esto todavía.
