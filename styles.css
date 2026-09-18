@@ -4883,15 +4883,18 @@ body {
 }
 .itin-query-answer .itin-chat-hint { margin: 8px 0 0; }
 .itin-query-inputrow {
-  display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
 }
 .itin-query-input {
-  flex: 1; resize: none; min-height: 64px; max-height: 140px;
+  width: 100%; box-sizing: border-box; resize: none; min-height: 64px; max-height: 140px;
   background: rgba(255,255,255,.05); border: 1px solid rgba(244,239,230,.15);
   border-radius: 0; color: var(--crema); font-size: 14px;
   padding: 10px 12px; font-family: inherit; line-height: 1.4;
 }
 .itin-query-input:focus { outline: none; border-color: var(--dorado); }
+.itin-query-actionsrow {
+  display: flex; gap: 8px; justify-content: flex-end; align-items: center;
+}
 .itin-query-inputrow .app-cam,
 .itin-query-inputrow .app-mic {
   width: 38px; height: 38px;
@@ -4913,9 +4916,15 @@ body {
   flex: 1; padding: 10px 8px; border-radius: 0;
   border: 1px solid rgba(244,239,230,.15); background: rgba(255,255,255,.04);
   color: rgba(244,239,230,.75); font-size: 12.5px; font-weight: 600;
-  cursor: pointer; transition: all .15s;
+  cursor: pointer; transition: all .15s; position: relative;
 }
 .itin-query-quick:hover, .itin-query-quick:active { border-color: var(--dorado); color: var(--dorado2); }
+.itin-query-quick--narrator-on {
+  background: rgba(74,222,128,.15); border-color: rgba(74,222,128,.5); color: var(--verde);
+}
+.itin-query-quick--narrator-on:hover, .itin-query-quick--narrator-on:active {
+  background: rgba(74,222,128,.25); border-color: var(--verde); color: var(--verde);
+}
 
 /* ── Header ── */
 .itin-header {

@@ -204,8 +204,13 @@ function updateBottomBar() {
 
 function updateNarratorChipUI() {
   const on = typeof salma !== 'undefined' && !!salma._narratorActive;
-  document.querySelectorAll('.chat-empty-chip[data-action="explorar"]').forEach(el => {
-    el.classList.toggle('chat-empty-chip--narrator-on', on);
+  const targets = [
+    ...document.querySelectorAll('.chat-empty-chip[data-action="explorar"]'),
+    ...document.querySelectorAll('#itin-query-narrador')
+  ];
+  targets.forEach(el => {
+    if (el.classList.contains('chat-empty-chip')) el.classList.toggle('chat-empty-chip--narrator-on', on);
+    if (el.id === 'itin-query-narrador') el.classList.toggle('itin-query-quick--narrator-on', on);
     let badge = el.querySelector('[data-camera-badge]');
     if (on && !badge) {
       badge = document.createElement('span');

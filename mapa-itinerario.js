@@ -795,13 +795,45 @@ const mapaItinerario = {
     const nearBtn = document.getElementById('itin-query-near');
     const narradorBtn = document.getElementById('itin-query-narrador');
     if (nearBtn) {
+      const _nearLabel = nearBtn.textContent;
       nearBtn.onclick = () => {
-        input.value = '¿Qué tengo cerca?';
-        _sendItinQuery();
+        // Pedir una posición GPS fresca antes de preguntar "qué tengo cerca":
+        // this._userLocation puede llevar rato sin refrescarse (el watch se
+        // para al llegar a <500m de precisión si el Narrador no está activo,
+        // ver salma.js:initGeolocation) — con el usuario en movimiento eso da
+        // una ubicación vieja y una respuesta que no tiene que ver con dónde
+        // está de verdad. Sin coste: getCurrentPosition es una llamada del
+        // propio navegador, no toca ninguna API de pago.
+        if (!navigator.geolocation) { input.value = '¿Qué tengo cerca?'; _sendItinQuery(); return; }
+        nearBtn.disabled = true;
+        nearBtn.textContent = 'Localizando…';
+        const _finish = () => {
+          nearBtn.disabled = false;
+          nearBtn.textContent = _nearLabel;
+          input.value = '¿Qué tengo cerca?';
+          _sendItinQuery();
+        };
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            salma._userLocation = {
+              lat: Math.round(pos.coords.latitude * 10000) / 10000,
+              lng: Math.round(pos.coords.longitude * 10000) / 10000,
+              accuracy: Math.round(pos.coords.accuracy)
+            };
+            _finish();
+          },
+          () => _finish(),
+          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+        );
       };
     }
     if (narradorBtn) {
-      narradorBtn.onclick = () => {
+      narradorBtn.onclick = (e) => {
+        if (e.target.closest('[data-camera-badge]')) {
+          e.stopPropagation();
+          if (typeof narratorTakePhoto === 'function') narratorTakePhoto();
+          return;
+        }
         // Mismo camino que el chip Narrador del chat: si ya está activo abre
         // el menú (olvidar avisos/desactivar), si no el modal de activación.
         if (salma._narratorActive && typeof showNarratorActiveMenu === 'function') {
@@ -810,6 +842,8 @@ const mapaItinerario = {
           showNarratorConfirm();
         }
       };
+      // Estado inicial (verde + 📷 si el Narrador ya estaba activo al abrir el popup)
+      if (typeof updateNarratorChipUI === 'function') updateNarratorChipUI();
     }
 
     // Historial de ESTA ruta, si ya se había hablado con ella antes (aunque
