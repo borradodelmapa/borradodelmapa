@@ -1273,6 +1273,37 @@ const salma = {
     this._scrollToBottom(true);
   },
 
+  // ─────────────────────────────────────────────
+  //  PIEZA A — Botón "Añadir a la guía" (TIEMPO 2, modo fusión)
+  //  Mismo fast-path que "Crear ruta con mapa" (source_text → JSON), pero en vez de
+  //  montar una ruta nueva, el Worker fusiona los stops nuevos en la ruta activa
+  //  (merge_into_route). Solo aparece cuando el popup de consulta sobre una guía
+  //  está abierto (_chatAreaOverride) — ver editingActiveRoute en salma-worker.js.
+  // ─────────────────────────────────────────────
+  _offerAddToRoute({ baseMsg, sourceText } = {}) {
+    const area = this._getChatArea();
+    if (!area) return;
+    area.querySelectorAll('.crear-ruta-mapa-wrap').forEach(el => el.remove());
+    const wrap = document.createElement('div');
+    wrap.className = 'historia-chat-chip-wrap crear-ruta-mapa-wrap';
+    const btn = document.createElement('button');
+    btn.className = 'crear-ruta-btn';
+    btn.innerHTML = '<span>➕</span> Añadir a la guía <span class="crb-arrow">→</span>';
+    btn.addEventListener('click', () => {
+      wrap.remove();
+      const extra = Object.assign({}, this._lastExtra || {}, {
+        source_text: sourceText || '',
+        guided_stage: 'map',
+        merge_into_route: true,
+        dest_hint: this.currentRoute?.country || this.currentRoute?.region || '',
+      });
+      this._doSend('Salma hazme una guía: ' + (baseMsg || this._lastMsg || 'lo de arriba'), extra);
+    });
+    wrap.appendChild(btn);
+    area.appendChild(wrap);
+    this._scrollToBottom(true);
+  },
+
   // ═══ ENVÍO AL WORKER ═══
   async _doSend(msg, extra) {
     // Guardar para poder reintentar
@@ -1357,6 +1388,11 @@ const salma = {
       // (ya no se envían desde el frontend por seguridad — P0-2)
       if (this._userLocation) body.user_location = this._userLocation;
       if (extra && extra.route_from_here) body.route_from_here = true;
+      // Popup de "consulta" sobre una guía activa (mapa-itinerario.js): decirle al
+      // Worker que ya hay una ruta en edición, para que no la trate como petición
+      // de ruta nueva (ver editingActiveRoute en salma-worker.js).
+      if (this._chatAreaOverride && this.currentRouteId) body.editing_active_route = true;
+      if (extra && extra.merge_into_route) body.merge_into_route = true;
       // Inyectar notas del usuario (sistema unificado)
       if (window.currentUser && typeof notasManager !== 'undefined') {
         try {
@@ -1623,6 +1659,16 @@ const salma = {
           baseMsg: data.map_base_msg || this._lastMsg || msg,
           sourceText: data.reply || '',
         });
+      } else if (data.offer_add_to_route) {
+        // Editando la ruta activa desde el popup de consulta: mismo flujo de arriba
+        // pero con el botón "Añadir a la guía" (fusiona en la ruta abierta, no crea
+        // una nueva). El CTA ya viene escrito dentro de data.reply (ver
+        // editingActiveRoute en el prompt del Worker), no hace falta bubble aparte.
+        this._removeLoading();
+        this._offerAddToRoute({
+          baseMsg: data.map_base_msg || this._lastMsg || msg,
+          sourceText: data.reply || '',
+        });
       }
 
       // Si hay video_params, renderizar player inline
@@ -1789,6 +1835,7 @@ const salma = {
                   _isBlocks: isBlocksRoute,
                   map_stage_failed: evt.map_stage_failed === true,
                   offer_map_button: evt.offer_map_button === true,
+                  offer_add_to_route: evt.offer_add_to_route === true,
                   map_base_msg: evt.map_base_msg || null,
                   historia_lugar: evt.historia_lugar || null
                 });

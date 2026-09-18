@@ -2694,7 +2694,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
@@ -2907,7 +2907,9 @@ RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si 
 - 3-4 días → la ciudad da de sobra; como MUCHO 1 excursión de medio día a algo a <45 min, y dícelo claro ("excursión opcional a X"). El resto, dentro.
 - 5+ días → como MUCHO 1-2 excursiones de día entero a <1h, el resto en la ciudad y su área metropolitana. Prioriza barrios, museos, mercados, vida local y sitios menos obvios ANTES que irte fuera. Nunca metas dos provincias distintas.
 Si la ciudad "se queda corta" para los días pedidos, NO rellenes con pueblos lejanos: propón menos días o más profundidad (rincones, tiendas, rutas a pie temáticas).
-CIERRE EXACTO — termina con esta frase y nada más: "Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación."]`;
+CIERRE EXACTO — termina con esta frase y nada más: "${editingActiveRoute
+  ? 'Si te cuadra, dale a **Añadir a la guía** aquí abajo y te lo meto en la ruta que ya tienes.'
+  : 'Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación.'}"]`;
   } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de presentación (sin enumerar paradas, sin día a día — eso se mostraría duplicado, porque va en el JSON y el usuario lo ve en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
@@ -8489,6 +8491,14 @@ REGLAS:
     const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 &&
       (isRouteRequest(message, history) || isDaysDestination(message));
     const guidedIsReco = _guidedStageReco || _tiempo1Chat;
+    // Popup de "consulta" sobre una guía ya abierta (mapa-itinerario.js) — el frontend
+    // ya SABE que hay una ruta activa en edición, no hace falta adivinarlo por verbos
+    // como _looksLikeEdit. Solo cambia el CIERRE del Tiempo 1 ("Añadir a la guía" en
+    // vez de "Crear ruta con mapa") — sigue preguntando antes de tocar nada.
+    const editingActiveRoute = body.editing_active_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
+    // Botón "➕ Añadir a la guía" pulsado: fusionar los stops nuevos en currentRoute
+    // en vez de generar una ruta nueva desde cero (ver más abajo, tras convertProseToRouteJson).
+    const mergeIntoRoute = body.merge_into_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
     // ─── ANCLA DE PAÍS DEL DESTINO (flujo guiado) ───
@@ -8983,7 +8993,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -9268,7 +9278,12 @@ INSTRUCCIONES:
         // anterior directamente. Si falla o no hay sourceText, cae al flujo normal sin cambios.
         let _fastPathRoute = null;
         let _mapStageFailed = false;
-        if (sourceText && sourceText.length > 400 && isRouteRequest(message, history)) {
+        // "Añadir a la guía" (mergeIntoRoute): el texto a convertir es solo la propuesta
+        // nueva (a veces un único día), no un plan multi-día completo — el mínimo de 400
+        // caracteres pensado para "Crear ruta con mapa" la rechazaría sin motivo real.
+        // convertProseToRouteJson ya se niega por su cuenta si hay menos de 100.
+        const _sourceTextMinLen = mergeIntoRoute ? 100 : 400;
+        if (sourceText && sourceText.length > _sourceTextMinLen && isRouteRequest(message, history)) {
           // Antes se mandaba un chunk de texto ("Montando tu ruta con mapa...") que
           // el front convertía en burbuja y mataba el spinner → 15s de silencio.
           // Ahora: {generating} (spinner persistente "Generando tu ruta…") + keepalive
@@ -9638,6 +9653,25 @@ REGLAS:
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _honestNote })}\n\n`)); } catch (_) {}
         }
 
+        // ── "Añadir a la guía" (botón del popup de consulta, Tiempo 2 en modo fusión) ──
+        // route aquí son SOLO los stops nuevos de lo que Salma acababa de proponer en
+        // prosa (convertProseToRouteJson no conoce la ruta completa, solo ese trozo de
+        // texto) — se fusionan al final de currentRoute como día(s) nuevo(s), y se
+        // descartan title/country/region/duration_days que route haya adivinado del
+        // trozo: la identidad de la ruta sigue siendo la de currentRoute.
+        if (mergeIntoRoute && route && Array.isArray(route.stops) && route.stops.length &&
+            currentRoute && Array.isArray(currentRoute.stops) && currentRoute.stops.length) {
+          const _maxDay = currentRoute.stops.reduce((m, s) => Math.max(m, parseInt(s.day, 10) || 1), 1);
+          const _newStops = route.stops.map(s => Object.assign({}, s, { day: (parseInt(s.day, 10) || 1) + _maxDay }));
+          const _mergedStops = currentRoute.stops.concat(_newStops);
+          route = Object.assign({}, currentRoute, {
+            stops: _mergedStops,
+            duration_days: _mergedStops.reduce((m, s) => Math.max(m, parseInt(s.day, 10) || 1), 1),
+          });
+          route._merged = true;
+          if (!reply) reply = 'Hecho, lo he añadido a tu guía.';
+        }
+
         // ── Reparar markdown de imagen roto de Claude (hoteles y lugares/buscar_foto) ──
         // Sonnet a veces emite ![Name]( + saltos de línea, o ![Name](url... que nunca cierra con '\)'
         // (URL de foto larga truncada al copiarla), en vez de ![Name](url_foto) bien formado.
@@ -9910,9 +9944,12 @@ REGLAS:
                 anchorLocality: anchorCountry.locality || '',
                 anchorProvince: anchorCountry.province || '',
               } : {};
-              // Edición de una ruta ya guardada — pasar las paradas anteriores para que
-              // verifyAllStops pueda reutilizar las que no cambiaron sin re-preguntar a Google.
-              if (_editingRoute && currentRoute?.stops?.length) {
+              // Edición de una ruta ya guardada (o fusión desde "Añadir a la guía") — pasar
+              // las paradas anteriores para que verifyAllStops pueda reutilizar las que no
+              // cambiaron sin re-preguntar a Google (las paradas fusionadas ya llevan los
+              // nombres de currentRoute.stops dentro de route.stops, así que se emparejan
+              // por nombre igual que en una edición normal).
+              if ((_editingRoute || mergeIntoRoute) && currentRoute?.stops?.length) {
                 _vOpts.previousStops = currentRoute.stops;
                 _vOpts.previousCountry = currentRoute.country || '';
               }
@@ -10095,10 +10132,16 @@ REGLAS:
         const doneEvt = { done: true, reply, route: route || null };
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
         // PIEZA A — FLUJO ÚNICO: si esto fue Tiempo 1 (recomendaciones sin mapa), decirle al
-        // front que muestre el botón "Crear ruta con mapa". map_base_msg = destino/petición
-        // original, para que el Tiempo 2 sepa de qué ruta hablar.
+        // front que muestre el botón. map_base_msg = destino/petición original, para que el
+        // Tiempo 2 sepa de qué ruta hablar. Con una ruta activa en edición (popup de consulta),
+        // el botón es "Añadir a la guía" (fusiona en la ruta que ya existe) en vez de
+        // "Crear ruta con mapa" (que monta una ruta nueva desde cero) — ver editingActiveRoute.
         if (guidedIsReco && !guidedMapStage && !route) {
-          doneEvt.offer_map_button = true;
+          if (editingActiveRoute) {
+            doneEvt.offer_add_to_route = true;
+          } else {
+            doneEvt.offer_map_button = true;
+          }
           doneEvt.map_base_msg = _guidedStageReco ? null : (message || '').slice(0, 200);
         }
         if (photoUploadPromise) {
