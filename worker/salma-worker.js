@@ -6242,7 +6242,12 @@ export default {
       const maptype = url.searchParams.get('maptype') || 'satellite';
       const scale = url.searchParams.get('scale') || '1';
       const pathEnc = url.searchParams.get('path') || '';
-      const apiKey = url.searchParams.get('key') || env.GOOGLE_PLACES_KEY;
+      // GOOGLE_PLACES_KEY no tiene Maps Static API habilitada (Google no deja
+      // combinarla en la misma clave que Street View Static/Directions/Places)
+      // — clave nueva dedicada solo a esto, 18 sept. Fallback a la vieja por si
+      // GOOGLE_STATIC_MAPS_KEY no está puesta todavía (mismo comportamiento de
+      // antes, no rompe nada mientras se despliega).
+      const apiKey = url.searchParams.get('key') || env.GOOGLE_STATIC_MAPS_KEY || env.GOOGLE_PLACES_KEY;
       if (!lat || !lng || !apiKey) {
         return new Response('Missing params', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
       }
@@ -6297,7 +6302,8 @@ export default {
           return new Response(JSON.stringify({ url: `${url.origin}/photo/${r2Key}` }), { headers: corsH });
         }
       } catch (_) {}
-      const apiKey = env.GOOGLE_PLACES_KEY;
+      // Misma clave nueva dedicada que /staticmap — ver comentario ahí.
+      const apiKey = env.GOOGLE_STATIC_MAPS_KEY || env.GOOGLE_PLACES_KEY;
       if (!apiKey) return new Response(JSON.stringify({ error: 'no key' }), { status: 500, headers: corsH });
       // Sin center/zoom a propósito: Google encuadra solo con los marcadores.
       // Static Maps solo admite un carácter por etiqueta — a partir de la 10ª
