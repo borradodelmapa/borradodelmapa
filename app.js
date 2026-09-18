@@ -587,10 +587,12 @@ function _renderChatEmpty() {
       const _stopRot = () => { if (_rTimer) { clearInterval(_rTimer); _rTimer = null; } _rStopped = true; };
       _paint();
       if (!_rStopped) _rTimer = setInterval(_adv, 6000);
-      _rot.addEventListener('click', () => {
+      // Quita la caja de ejemplos + su CTA y deja el input de Salma de abajo
+      // VACÍO y con el foco: el usuario escribe su ruta desde cero. Los ejemplos
+      // son solo inspiración — nunca se mandan a Salma tal cual (ni al tocar la
+      // caja ni al tocar "Trazar ruta", que antes mandaba el ejemplo visible).
+      const _goToChat = () => {
         _stopRot();
-        // Quita la caja de ejemplos + su CTA y deja el input de Salma de abajo
-        // VACÍO y con el foco: el usuario escribe su ruta desde cero.
         const inp = document.getElementById('main-input');
         if (inp) {
           inp.value = '';
@@ -600,14 +602,11 @@ function _renderChatEmpty() {
         _rot.remove();
         const cta = area.querySelector('[data-ce-rotable-cta]');
         if (cta) cta.remove();
-      });
+      };
+      _rot.addEventListener('click', _goToChat);
       if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); _stopRot(); _adv(); });
       const _rcta = area.querySelector('[data-ce-rotable-cta]');
-      if (_rcta) _rcta.addEventListener('click', (e) => {
-        e.stopPropagation();
-        _stopRot();
-        if (typeof salma !== 'undefined' && salma.send) salma.send(_exs[_ri]);
-      });
+      if (_rcta) _rcta.addEventListener('click', (e) => { e.stopPropagation(); _goToChat(); });
     };
     // Inserta eslogan + caja rotable encima del billete si no están, y los cablea.
     const _ensureHero = () => {
