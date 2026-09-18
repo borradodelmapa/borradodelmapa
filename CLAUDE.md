@@ -353,6 +353,32 @@ maquetación. Todo confirmado en pantalla salvo el último (recién desplegado).
 
 ---
 
+## Sesión 18 sept 2026 (nueva) — Mis Viajes/Perfil: miniatura real en vez de foto genérica
+
+Petición de Paco: en Mis Viajes casi todas las guías salían con la misma foto genérica.
+Causa: `destPhoto()` (`app.js`) es una lista fija de 4 fotos de Unsplash por destino
+(Vietnam/Tailandia/Japón/España) + una de respaldo para todo lo demás — la mayoría de
+guías caían en la de respaldo. Ya existía la pieza para arreglarlo de verdad: la
+miniatura de Google Static Maps con las paradas numeradas que se genera para la tarjeta
+de "ruta activa" (sesión 17-18 sept, campo `map_thumbnail_url`).
+
+Commit `f2c65ea`, solo frontend (`app.js?v=118`), sin tocar el Worker. Dos partes,
+confirmadas las dos en pantalla por Paco (Mis Viajes y Perfil):
+1. Si la guía ya tiene `map_thumbnail_url`, se usa esa en la tarjeta en vez de
+   `destPhoto()`/`cover_image` — sin coste, solo reutiliza lo que ya había.
+2. Si no la tiene todavía (nunca se abrió como ruta activa), se genera en el momento al
+   listar Mis Viajes o el Perfil (una llamada a Google Static Maps por guía, una sola
+   vez — se cachea en R2 para siempre, igual que ya hacía `_ensureRouteThumbnail`) y la
+   tarjeta cambia de la foto genérica a la real en cuanto llega. **Aviso de coste dado
+   y confirmado con Paco antes de implementar** (protocolo §8): del orden de milésimas
+   de dólar por imagen, céntimos en total.
+Aplicado en los dos sitios que renderizan tarjetas de guía: `_createGuideCard()` (Perfil)
+y el `createCard()` local de `loadUserGuides()` (Mis Viajes) — mismo patrón en los dos,
+sin deduplicar (siguen siendo funciones separadas, código repetido ya señalado como
+deuda técnica aparte).
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
