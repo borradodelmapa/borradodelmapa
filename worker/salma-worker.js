@@ -2969,6 +2969,18 @@ QUÉ HACER:
 — Habla con opinión propia, dato directo, sin rodeos.]`;
   }
 
+  // PIEZA A — "Añadir a la guía" vía marcador: mientras se edita una ruta activa
+  // desde el popup de consulta, la mayoría de mensajes no son "petición de ruta"
+  // ni una edición con verbo explícito (esas van por sus propios modos, arriba) —
+  // son preguntas o propuestas sueltas ("dime dos cosas cerca", "cueva por la
+  // mañana, playa por la tarde..."). Ningún regex cubre eso de forma fiable, así
+  // que decide Salma: si su respuesta propone algo concreto que tendría sentido
+  // sumar a la ruta, lo marca. Invisible para el usuario, el Worker lo quita antes
+  // de mostrar la respuesta y lo convierte en el botón "Añadir a la guía".
+  if (editingActiveRoute && !guidedIsReco && !isRoute) {
+    userContent += `\n\n[Estás hablando sobre una ruta que ya existe y está guardada — no estás creando una ruta nueva. Si tu respuesta de arriba propone algo CONCRETO que tendría sentido añadir a esa ruta (una parada nueva, un plan para un día, un sitio) — y SOLO en ese caso, no si es solo información o una respuesta a una pregunta sin propuesta — termina tu respuesta, después de todo lo demás y en su propia línea, con exactamente: SALMA_OFFER_ADD_TO_ROUTE. Si no hay nada que añadir, no escribas esa línea.]`;
+  }
+
   // Si Salma preguntó antes y el usuario responde, forzar generación
   // SOLO cuando hay ruta activa o es petición de guía — en conversación normal NO
   if (isRoute || hasCurrentRouteEdit) {
@@ -9546,6 +9558,20 @@ INSTRUCCIONES:
           }
         }
 
+        // ── Extraer SALMA_OFFER_ADD_TO_ROUTE si la hubo ──
+        // PIEZA A — "Añadir a la guía", vía marcador (ver instrucción inyectada en
+        // buildMessages cuando editingActiveRoute && !guidedIsReco && !isRoute):
+        // en el MODO CONVERSACIONAL (o cualquier otro fuera de guidedIsReco/isRoute),
+        // no hay ningún regex fiable para saber si la respuesta propone algo añadible
+        // a la ruta activa — decide Salma y lo marca, invisible para el usuario.
+        let offerAddMarker = false;
+        if (editingActiveRoute && !guidedIsReco && !isRoute) {
+          if (/\n?SALMA_OFFER_ADD_TO_ROUTE\s*$/i.test(allText)) {
+            offerAddMarker = true;
+            allText = allText.replace(/\n?SALMA_OFFER_ADD_TO_ROUTE\s*$/i, '').trim();
+          }
+        }
+
         // ── Inyectar Google Maps y transporte como stream chunks (antes de procesar reply) ──
         {
           const tempReply = replyWithoutRouteBlock(allText);
@@ -10143,6 +10169,11 @@ REGLAS:
             doneEvt.offer_map_button = true;
           }
           doneEvt.map_base_msg = _guidedStageReco ? null : (message || '').slice(0, 200);
+        } else if (offerAddMarker && !route) {
+          // Mismo botón que arriba, pero decidido por el marcador SALMA_OFFER_ADD_TO_ROUTE
+          // (mensaje que no encajaba en ningún modo de ruta — ver buildMessages).
+          doneEvt.offer_add_to_route = true;
+          doneEvt.map_base_msg = (message || '').slice(0, 200);
         }
         if (photoUploadPromise) {
           const photoResult = await photoUploadPromise;
