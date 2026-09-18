@@ -1207,26 +1207,6 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
-- **Botón "Trazar ruta" de la caja de ejemplos rotable mandaba el ejemplo tal cual a
-  Salma en vez de abrir el chat vacío — 18 sept 2026, FUSIONADO A MAIN, sin confirmar
-  en pantalla (Paco sin cobertura para probarlo).** Reportado por Paco con captura: en
-  la pantalla de bienvenida, la caja "Toca para escribir la ruta" rota 4 ejemplos
-  (Portugal en coche, Lisboa remoto, N2 en moto, Tailandia); tocar el botón "TRAZAR
-  RUTA →" generaba directamente la ruta del ejemplo que estuviera visible en ese
-  momento, en vez de llevar al usuario a escribir la suya — solo tocar la propia caja
-  de texto (no el botón) hacía lo correcto (vaciar el input y darle foco). Causa:
-  `_wireRotable()` en `app.js` tenía dos handlers de click distintos: el de la caja
-  de texto vaciaba el input y le daba foco (correcto), pero el del botón
-  `data-ce-rotable-cta` llamaba a `salma.send(_exs[_ri])` con el texto del ejemplo en
-  pantalla (incorrecto). Unificados ambos en una sola función `_goToChat()`: los dos
-  hacen ahora exactamente lo mismo (vaciar `#main-input`, foco, quitar la caja de
-  ejemplos) y ninguno manda nunca un ejemplo a Salma. Sin cambios en el Worker — no
-  hace falta redeploy. `?v=` de `app.js` subido a 115 en `index.html`. Fusionado a
-  `main` (commit `3e4fcd4`) y ya en GitHub Pages. **Pendiente: que Paco recargue
-  forzando caché, confirme en el panel 🐛 que carga `app:115`, y compruebe que el
-  botón "TRAZAR RUTA" con un ejemplo en pantalla abre el chat vacío en vez de
-  generar esa ruta de muestra.**
-
 - **Fotos del itinerario fallando en cadena con "Failed to fetch" en una guía de
   varios días de antigüedad ("Oriente salvaje", Asturias/Picos, 12 paradas) — 16 sept
   2026, DOS BUGS REALES ENCONTRADOS Y CORREGIDOS, pero el síntoma sigue sin
@@ -1728,6 +1708,21 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   relegarlos a "cerca de" en vez de dejarlos en la ruta principal. No se ha visto pasar en
   pantalla, solo detectado leyendo el código — investigar si da problemas.
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
+
+- **Botón "Trazar ruta" de la caja de ejemplos rotable mandaba el ejemplo tal cual a
+  Salma en vez de abrir el chat vacío — 18 sept 2026, CONFIRMADO EN PANTALLA por
+  Paco.** En la pantalla de bienvenida, la caja "Toca para escribir la ruta" rota 4
+  ejemplos (Portugal en coche, Lisboa remoto, N2 en moto, Tailandia); tocar el botón
+  "TRAZAR RUTA →" generaba directamente la ruta del ejemplo que estuviera visible en
+  ese momento, en vez de llevar al usuario a escribir la suya — solo tocar la propia
+  caja de texto (no el botón) hacía lo correcto. Causa: `_wireRotable()` en `app.js`
+  tenía dos handlers de click distintos: el de la caja de texto vaciaba el input y le
+  daba foco (correcto), pero el del botón `data-ce-rotable-cta` llamaba a
+  `salma.send(_exs[_ri])` con el texto del ejemplo en pantalla (incorrecto).
+  Unificados ambos en una sola función `_goToChat()`: los dos hacen ahora exactamente
+  lo mismo (vaciar `#main-input`, foco, quitar la caja de ejemplos) y ninguno manda
+  nunca un ejemplo a Salma. Sin cambios en el Worker. `?v=` de `app.js` subido a 115
+  en `index.html`. Fusionado a `main` (commit `3e4fcd4`).
 
 - **Narrador dando información de sitios equivocados (3 bugs seguidos) — 15 sept 2026,
   CONFIRMADO EN PANTALLA por Paco en Lourenzá/Lorenzana (Lugo): "ha funcionado, me ha
