@@ -1598,10 +1598,16 @@ const salma = {
           _area.appendChild(_rw);
           this._scrollToBottom(true);
         }
-      } else if (data.offer_map_button || this._isRouteMsg(msg)) {
+      } else if ((data.offer_map_button || this._isRouteMsg(msg)) && !(this._chatAreaOverride && this.currentRouteId)) {
         // PIEZA A — FLUJO ÚNICO. Toda petición de ruta/destino (chat libre o worker-detectada)
         // se responde primero con recomendaciones en texto. Aquí ofrecemos el botón para
         // montar la guía con mapa — mismo camino que el chip de 8 preguntas.
+        // Guardián añadido: mientras se edita una ruta activa desde el popup de
+        // consulta (_chatAreaOverride + currentRouteId), _isRouteMsg() es un regex
+        // muy amplio ("días", "visitar", "recorrer"...) que saltaba con peticiones
+        // de EDICIÓN normales — si el Worker respondía en prosa (sin data.route),
+        // esta rama ofrecía "Crear ruta con mapa" como si fuera una ruta nueva
+        // desde cero, tirando el contexto de la que ya estaba abierta.
         this._removeLoading();
         this._addSalmaBubble('Ahí tienes el plan 👆. Cuando lo veas claro, dale al botón y te lo monto como guía con mapa para guardarla y seguirla paso a paso.');
         this._offerCrearRutaConMapa({
