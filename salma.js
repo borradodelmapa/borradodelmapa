@@ -2144,8 +2144,17 @@ const salma = {
     if (typeof mapaRuta !== 'undefined') mapaRuta._copilotActive = false;
 
     // Abrir directamente la guía seleccionada
+    // 19 sept 2026 — openItinerarioView ahora lanza si routeData.stops llega vacío (antes se
+    // quedaba en pantalla negra en silencio); este sitio no tenía try/catch, así que ese throw
+    // se colaría sin capturar. El chequeo de arriba (!routeData.stops) no pilla un array vacío
+    // ([] es "truthy"), así que sí puede llegar aquí una guía guardada sin paradas.
     if (typeof window.openItinerarioView === 'function') {
-      window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: false });
+      try {
+        window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: false });
+      } catch (e) {
+        console.error('Error abriendo guía guardada:', e);
+        showToast('Esta guía no tiene paradas que mostrar.');
+      }
     }
     // PIEZA A — Enrich (Pasada 2 GPT-4o-mini) eliminado: era una 2ª llamada a otro
     // modelo por ruta. Los datos de cada parada (rating/horario/foto) los rellena
@@ -4022,8 +4031,15 @@ const salma = {
     btn.textContent = '← Volver a la ruta';
     btn.addEventListener('click', () => {
       div.remove();
+      // 19 sept 2026 — mismo motivo que en cargarGuia: openItinerarioView ahora lanza con
+      // 0 paradas en vez de quedarse muda, y este sitio tampoco tenía try/catch.
       if (typeof window.openItinerarioView === 'function') {
-        window.openItinerarioView(route, docId, options || { fromChat: true });
+        try {
+          window.openItinerarioView(route, docId, options || { fromChat: true });
+        } catch (e) {
+          console.error('Error volviendo a la ruta:', e);
+          showToast('No se pudo volver a la ruta.');
+        }
       }
     });
     div.appendChild(btn);

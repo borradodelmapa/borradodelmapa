@@ -585,6 +585,16 @@ const mapaItinerario = {
   let _openedFromChat = false;
 
   function openItinerarioView(routeData, docId, options = {}) {
+    // 19 sept 2026 — pantalla en negro real encontrada: si routeData.stops llega vacío
+    // (ej. el verify de Google descartó TODAS las paradas de una ruta sin ancla de país,
+    // como una guía montada desde una foto sin lugares verificables), mapaRuta.init()
+    // simplemente hace `if (!stops.length) return;` sin avisar — el mapa y las tarjetas
+    // no pintan nada y la vista se queda negra, sin el aviso de "Reintentar" que ya
+    // existe para otros fallos de este mismo botón (ver catch en salma.js). Lanzar aquí
+    // para que ese catch, ya escrito, se encargue de deshacer la vista y avisar.
+    if (!Array.isArray(routeData?.stops) || routeData.stops.length === 0) {
+      throw new Error('Ruta sin paradas válidas — 0 stops al abrir la vista de itinerario.');
+    }
     // Si ya había una vista abierta, cerrarla (sin tocar historial) antes de reabrir
     if (window._itinViewOpen) _teardownItinView();
     _openedFromChat = !!options.fromChat;
