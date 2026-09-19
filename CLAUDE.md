@@ -1395,6 +1395,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   (protocolo §8):** es solo una instrucción de texto más en el prompt (unos tokens de
   entrada de más) — no añade ninguna llamada nueva a ninguna API; el presupuesto de
   salida (14.000 tokens, fix de arriba) no cambia.
+  Desplegado (GitHub Action "Deploy Worker" run #31, commit `cc14993`, **Worker Version
+  ID `288ab6a4-e8ac-4e16-b6d4-ad149580e9a2`**) — sin confirmar contra `/version`, mismo
+  bloqueo de red del contenedor de siempre.
   **Dos cosas más, pedidas por Paco explícitamente para dejar SOLO anotadas, sin tocar
   código hoy:**
   1. **El sistema de coins hay que estudiarlo aparte.** El bloque `[INSTRUCCIONES SOBRE
