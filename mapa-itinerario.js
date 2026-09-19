@@ -154,16 +154,28 @@ const mapaItinerario = {
     this._doShare(routeData, id);
   },
 
+  // A diferencia del link de SEO (public_guides, lectura abierta sin login),
+  // esto escribe en shared_routes — el que abre el link tiene que registrarse/
+  // entrar para verla (app.js lo intercepta con ?compartir=ID al iniciar sesión).
   async _doShare(routeData, id) {
-    // Buscar el slug de la guía pública (no el ID del documento)
-    let slug = id;
     try {
-      if (typeof db !== 'undefined' && typeof currentUser !== 'undefined' && currentUser) {
-        const doc = await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get();
-        if (doc.exists && doc.data().slug) slug = doc.data().slug;
+      if (typeof db === 'undefined' || typeof currentUser === 'undefined' || !currentUser) {
+        if (typeof showToast !== 'undefined') showToast('Inicia sesión para compartir');
+        return;
       }
-    } catch (_) {}
-    const url = window.location.origin + '/' + slug;
+      await db.collection('shared_routes').doc(id).set({
+        uid: currentUser.uid,
+        owner_name: currentUser.name || 'Un viajero',
+        nombre: routeData.title || routeData.name || 'Mi ruta',
+        itinerarioIA: JSON.stringify(routeData),
+        createdAt: new Date().toISOString()
+      });
+    } catch (e) {
+      console.warn('Error preparando ruta compartida:', e);
+      if (typeof showToast !== 'undefined') showToast('No se pudo preparar el link para compartir');
+      return;
+    }
+    const url = window.location.origin + '/?compartir=' + id;
     const title = routeData.title || routeData.name || 'Mi ruta';
     const text = `Te comparto esta ruta: ${title}`;
     if (navigator.share) {

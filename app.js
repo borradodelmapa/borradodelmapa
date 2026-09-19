@@ -3036,6 +3036,29 @@ function authErrorMsg(e) {
 
 // ═══ AUTH STATE ═══
 
+// ?compartir=ID en la URL (link del botón Compartir de una guía) — a diferencia
+// de una guía pública de SEO, esta SÍ exige login: como el gate ya obliga a
+// cualquier visitante sin sesión a registrarse/entrar antes de ver nada de la
+// app, solo hace falta guardar el ID aquí y recogerlo cuando onAuthStateChanged
+// confirme sesión (recién logueado o ya la tenía).
+window._pendingShareId = new URLSearchParams(window.location.search).get('compartir') || null;
+
+async function _openSharedRoute(shareId) {
+  try {
+    const doc = await db.collection('shared_routes').doc(shareId).get();
+    if (!doc.exists) { showToast('Este link ya no está disponible'); return; }
+    const d = doc.data();
+    const routeData = JSON.parse(d.itinerarioIA || '{}');
+    if (!routeData.stops || !routeData.stops.length) { showToast('Esta ruta no tiene paradas'); return; }
+    if (typeof window.openItinerarioView === 'function') {
+      window.openItinerarioView(routeData, null, { fromChat: false, saved: false });
+    }
+  } catch (e) {
+    console.warn('Error cargando ruta compartida:', e);
+    showToast('No se pudo cargar la ruta compartida');
+  }
+}
+
 auth.onAuthStateChanged(async (user) => {
   if (user) {
     closeModal();
@@ -3103,7 +3126,14 @@ auth.onAuthStateChanged(async (user) => {
     }
     const pagoParam = new URLSearchParams(window.location.search).get('pago');
     const goParam = new URLSearchParams(window.location.search).get('go');
-    if (pagoParam === 'ok') {
+    if (window._pendingShareId) {
+      const shareId = window._pendingShareId;
+      window._pendingShareId = null;
+      history.replaceState(null, '', '/');
+      if (typeof salma !== 'undefined') salma._initChat();
+      showState('chat');
+      _openSharedRoute(shareId);
+    } else if (pagoParam === 'ok') {
       history.replaceState(null, '', '/');
       showState('profile');
       _verificarPagoPremium();
