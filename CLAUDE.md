@@ -1406,7 +1406,12 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   bloqueo de red del contenedor de siempre.
   **Pendiente: que Paco repita una ruta multi-día (con o sin segunda captura añadida
   desde el popup) y confirme que el orden de días ya no salta de un extremo del mapa a
-  otro.**
+  otro.** **Pausado a petición explícita de Paco (19 sept 2026)**: no quiere generar más
+  rutas de prueba hasta asegurarse de que no está generando gasto extra en Google u
+  otras APIs — aclarado que este fix concreto no añade ninguna llamada nueva (pieza 1 es
+  solo más texto en un prompt que ya se pagaba, pieza 2 es matemática pura sin API), pero
+  la propia prueba (generar una ruta) sigue costando lo mismo que cualquier ruta normal
+  ya cuesta hoy. No perseguir esta confirmación hasta que Paco lo pida.
 
 - **Séptimo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar
   en pantalla — corrige además un error de diagnóstico propio de la entrada de arriba.**
