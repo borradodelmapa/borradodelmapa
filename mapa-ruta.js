@@ -642,7 +642,12 @@ const mapaRuta = {
     const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
     this._map = L.map(el, { scrollWheelZoom: true, zoomControl: false, attributionControl: false });
     L.control.zoom({ position: 'bottomleft' }).addTo(this._map);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(this._map);
+    // 19 sept 2026 — CARTO (basemaps.cartocdn.com) dejó de servir sus tiles "dark_all" en
+    // anónimo sin API key en algún momento tras abril (llevaba roto en silencio: esta ruta
+    // solo se pisa cuando Google Maps JS falla al cargar, algo raro). Cambiado a OpenStreetMap
+    // estándar, que sigue siendo gratis sin clave — el único coste real es visual: mapa claro
+    // en vez de oscuro mientras dure este fallback, en vez de un watermark "API KEY REQUIRED".
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(this._map);
 
     this._markers = valid.map((stop, i) => {
       const color = this._dayColors[((stop.day || 1) - 1) % this._dayColors.length];

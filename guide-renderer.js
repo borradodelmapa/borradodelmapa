@@ -713,8 +713,10 @@ const guideRenderer = {
       maxBounds: bounds.pad(0.3), maxBoundsViscosity: 0.8,
       dragging: !L.Browser.mobile, tap: !L.Browser.mobile
     });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 18
+    // 19 sept 2026 — CARTO dejó de servir "dark_all" sin API key; cambiado a OpenStreetMap
+    // estándar (gratis, sin clave). Ver mismo comentario en mapa-ruta.js.
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
     }).addTo(map);
 
     // Pins por día con colores distintos
@@ -829,8 +831,8 @@ const guideRenderer = {
       maxBounds: bounds.pad(0.3), maxBoundsViscosity: 0.8,
       dragging: !L.Browser.mobile, tap: !L.Browser.mobile
     });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 18
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
     }).addTo(map);
 
     // Pins
