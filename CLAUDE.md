@@ -1365,6 +1365,42 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Séptimo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar
+  en pantalla — corrige además un error de diagnóstico propio de la entrada de arriba.**
+  Paco probó otra vez: la captura original SÍ tiene 10 puntos (confirmado, la volvió a
+  mandar) — en eso no me equivoqué — pero el mapa final solo montó 5 paradas, así que mi
+  teoría de "se corta en la 9ª de 10 por agotar el tope de iteraciones" (entrada de
+  arriba, commit `2c4242b`) no encaja con lo que pasó de verdad: con 5 paradas reales de
+  foto no se acerca ni de lejos al tope de 10. Ese fix queda igual (es una mejora válida
+  para cuando sí haya muchas paradas de foto en una respuesta), pero no era la causa de
+  esto — **sin confirmar todavía por qué el conversor texto→mapa deja el reportaje en 5
+  paradas en vez de las que hubiera en el texto; pendiente de investigar aparte, no se ha
+  tocado nada de eso hoy.**
+  **Lo que sí se diagnosticó y arregló de verdad, mirando el código**: la foto rota de
+  "Elizondo y el Valle de Baztán" — la función que repara markdown de fotos mal escrito
+  por Claude (`_repairBrokenPhotoMarkdown`) comparaba el nombre que Claude pone en el
+  texto contra el nombre que devuelve Google (o el que se pidió) exigiendo coincidencia
+  EXACTA — con nombres compuestos ("Elizondo y Baztán" vs "Elizondo y el Valle de
+  Baztán") casi nunca coinciden letra por letra, así que la reparación no encontraba la
+  URL buena. **Arreglado, commit `af892fb`:**
+  1. La clave se guarda también bajo el nombre que Claude pidió al llamar a
+     `buscar_foto` (`block.input.lugar`), no solo el nombre canónico de Google.
+  2. La búsqueda ahora admite coincidencia parcial (un nombre contenido en el otro), no
+     solo exacta.
+  3. Si aun así no hay ninguna coincidencia: antes, un markdown "cerrado" (con `)`) se
+     dejaba tal cual asumiendo que probablemente estaba bien; ahora se quita siempre —
+     Claude puede cerrar el markdown y aun así teclear mal un carácter dentro del
+     `photo_ref` larguísimo (mismo patrón ya documentado el 14 sept), y una foto que
+     falta es mejor que un enlace roto visible como texto.
+  Probado con 3 casos en Node (nombre compuesto sin cerrar, nombre compuesto cerrado con
+  URL mala, nombre sin ninguna relación) — los 3 se comportan como se espera.
+  Desplegado (GitHub Action "Deploy Worker" run #34, commit `af892fb`, **Worker Version
+  ID `c16509a2-4976-467f-9b70-0893c0ece113`**) — sin confirmar contra `/version`, mismo
+  bloqueo de red del contenedor de siempre.
+  **Pendiente: que Paco repita la guía desde la captura de 10 puntos y confirme que la
+  foto de Elizondo (o cualquier nombre compuesto) ya no sale rota, y que alguien mire
+  aparte por qué el mapa final se queda en 5 paradas en vez de las que describa el texto.**
+
 - **Quinto y sexto hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADOS, sin
   confirmar en pantalla.** La foto duplicada ya no salió (fix anterior confirmado
   funcionando), pero Paco reportó dos cosas más probando otra vez:
