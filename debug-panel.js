@@ -257,6 +257,19 @@
       shotBtn.style.display = '';
     });
 
+    // Compartida entre "Enviar" y "Copiar" — si hay captura pendiente, la sube a
+    // R2 (mismo endpoint de galería, sin API de pago) y devuelve la URL.
+    async function uploadPendingShot() {
+      if (!pendingShot) return '';
+      const user = window.firebase && firebase.auth && firebase.auth().currentUser;
+      const fd = new FormData();
+      fd.append('photo', pendingShot.blob, 'captura.jpg');
+      fd.append('uid', user?.uid || 'anon');
+      const upRes = await fetch(window.SALMA_API + '/upload-gallery-photo', { method: 'POST', body: fd });
+      const upData = await upRes.json().catch(() => ({}));
+      return (upRes.ok && upData.url) ? upData.url : '';
+    }
+
     overlay.querySelector('#dbg-close').addEventListener('click', () => {
       overlay.style.display = 'none';
       stopVerRefresh();
@@ -266,8 +279,19 @@
 
     copyBtn.addEventListener('click', async () => {
       const note = noteEl.value.trim();
-      const shotNote = pendingShot ? '(hay una captura adjunta — el portapapeles solo copia texto, usa "Enviar" para incluirla)\n\n' : '';
-      const text = shotNote + (note ? 'NOTA: ' + note + '\n\n' : '') + versionText() + '\n────────────\n' + logsAsText();
+      let shotLine = '';
+      if (pendingShot) {
+        copyBtn.disabled = true;
+        copyBtn.textContent = 'Subiendo captura…';
+        try {
+          const shotUrl = await uploadPendingShot();
+          shotLine = shotUrl ? `📎 Captura: ${shotUrl}\n\n` : '(no se pudo subir la captura — inténtalo de nuevo)\n\n';
+        } catch (e) {
+          shotLine = '(no se pudo subir la captura — inténtalo de nuevo)\n\n';
+        }
+        copyBtn.disabled = false;
+      }
+      const text = shotLine + (note ? 'NOTA: ' + note + '\n\n' : '') + versionText() + '\n────────────\n' + logsAsText();
       try {
         await navigator.clipboard.writeText(text);
       } catch (e) {
@@ -297,12 +321,7 @@
         let screenshotUrl = '';
         if (pendingShot) {
           statusEl.textContent = 'Subiendo captura…';
-          const fd = new FormData();
-          fd.append('photo', pendingShot.blob, 'captura.jpg');
-          fd.append('uid', user.uid);
-          const upRes = await fetch(window.SALMA_API + '/upload-gallery-photo', { method: 'POST', body: fd });
-          const upData = await upRes.json().catch(() => ({}));
-          if (upRes.ok && upData.url) screenshotUrl = upData.url;
+          screenshotUrl = await uploadPendingShot();
         }
 
         statusEl.textContent = 'Enviando…';

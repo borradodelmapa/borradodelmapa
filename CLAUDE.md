@@ -579,6 +579,15 @@ llegue de verdad. **Aviso de coste:** no llama a ninguna API de pago (Google/Ant
 OpenAI/etc.) — solo guarda el fichero en R2, el mismo almacenamiento que ya usa cada
 foto de la app (céntimos por miles de fotos, irrelevante a este volumen de testers).
 
+**Séptimo ajuste el mismo día — "Copiar" también sube la captura, `debug-panel.js?v=12`.**
+Paco notó que "Copiar" no incluía la URL de la foto, solo avisaba de que había una
+pendiente. Corregido: la subida a R2 se movió a una función compartida
+(`uploadPendingShot()`) que usan tanto "Enviar" como "Copiar" — al tocar Copiar, si hay
+captura, primero la sube (mismo endpoint de galería de siempre) y mete la URL ya
+resuelta al principio del texto copiado (`📎 Captura: https://...`), listo para pegar
+aquí sin tener que pasar por "Enviar". Mismo aviso de coste que el ajuste anterior —
+sigue siendo solo almacenamiento R2, cero llamadas a APIs de pago.
+
 ---
 
 ## Sesión 19 sept 2026 — Simplificación de chips del chat vacío: 6 fijos + "Más opciones"
