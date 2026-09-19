@@ -7119,6 +7119,87 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /perfil-ia-extract — Perfil de viajero (memoria) ───
+    // Añadido 19 sept 2026: tras guardar una ruta, el frontend manda en segundo plano
+    // (sin bloquear) un resumen de la guía + últimos mensajes del chat + los datos que
+    // ya tiene guardados, y esto devuelve como mucho 3 datos NUEVOS para
+    // users/{uid}.perfil_ia (pantalla "Lo que Salma sabe de ti"). Requiere login — mismo
+    // motivo que /route-thumbnail: sin esto sería una puerta abierta a gastar en GPT-4o-mini
+    // sin usuario real detrás. GPT-4o-mini, no Claude — mismo modelo ya usado en /enrich,
+    // coste marginal por ruta guardada (~$0,0006), avisado a Paco antes de implementar.
+    if (request.method === 'POST' && url.pathname === '/perfil-ia-extract') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+
+      const authUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+      if (!authUser) {
+        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
+      }
+
+      const apiKey = env.OPENAI_API_KEY;
+      if (!apiKey) {
+        return new Response(JSON.stringify({ error: 'No API key' }), { status: 500, headers: corsH });
+      }
+
+      let piBody;
+      try { piBody = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
+      }
+
+      const guideSummary = piBody.guideSummary || {};
+      const existingFacts = Array.isArray(piBody.existingFacts) ? piBody.existingFacts.slice(0, 40) : [];
+      const recentMessages = Array.isArray(piBody.recentMessages) ? piBody.recentMessages.slice(-12) : [];
+      const CATEGORIAS_VALIDAS = ['estilo', 'restricciones', 'patrones', 'trato'];
+
+      if (!guideSummary.nombre && !guideSummary.destino) {
+        return new Response(JSON.stringify({ facts: [] }), { headers: corsH });
+      }
+
+      const prompt = `Eres un analista que extrae datos breves y reales sobre un viajero, para un perfil de memoria de una app de viajes. No inventes nada — si no hay nada nuevo que aportar, devuelve un array vacío.
+
+DATOS QUE YA TIENE GUARDADOS (no los repitas, no los contradigas sin un motivo claro):
+${JSON.stringify(existingFacts)}
+
+RUTA QUE ACABA DE GUARDAR:
+${JSON.stringify(guideSummary)}
+
+ÚLTIMOS MENSAJES DEL CHAT CON SALMA:
+${recentMessages.map(m => `${m.role === 'user' ? 'Viajero' : 'Salma'}: ${String(m.text || '').slice(0, 300)}`).join('\n') || '(sin mensajes recientes)'}
+
+Categorías posibles, exactamente estas 4:
+- "estilo": ritmo de viaje, tipo de interés (naturaleza, historia, gastronomía...), presupuesto habitual.
+- "restricciones": con quién viaja, qué evita (coche de alquiler, madrugar...), dietas, mascotas.
+- "patrones": hábitos que se repiten entre rutas (añade siempre un día de descanso, busca parking...).
+- "trato": cómo reacciona a las respuestas de Salma — le sirvió, le pareció borde, pidió que fuera más breve, etc. Solo si el chat lo deja claro, nunca lo supongas.
+
+Devuelve COMO MUCHO 3 datos nuevos o que corrigen uno existente. Cada texto en español, una frase corta y concreta (máximo 100 caracteres), sin repetir la categoría en el texto.
+
+Responde SOLO con JSON válido, sin markdown, sin backticks. Formato exacto: [{"categoria":"estilo","texto":"..."}]`;
+
+      try {
+        const result = await callOpenAI(apiKey, {
+          model: 'gpt-4o-mini',
+          max_tokens: 400,
+          messages: [{ role: 'user', content: prompt }],
+        });
+        if (result.error) {
+          return new Response(JSON.stringify({ error: result.error }), { status: 500, headers: corsH });
+        }
+        const cleaned = (result.text || '').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        let parsed;
+        try { parsed = JSON.parse(cleaned); } catch (e) {
+          const match = cleaned.match(/\[[\s\S]*\]/);
+          parsed = match ? JSON.parse(match[0]) : [];
+        }
+        const facts = (Array.isArray(parsed) ? parsed : [])
+          .filter(f => f && CATEGORIAS_VALIDAS.includes(f.categoria) && typeof f.texto === 'string' && f.texto.trim())
+          .slice(0, 3)
+          .map(f => ({ categoria: f.categoria, texto: f.texto.trim().slice(0, 140) }));
+        return new Response(JSON.stringify({ facts }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /enrich (Pasada 2 — Haiku rellena campos) ───
     if (request.method === 'POST' && url.pathname === '/enrich') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };

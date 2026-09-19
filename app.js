@@ -1484,6 +1484,47 @@ async function _perfilIASetProactive(value) {
   }
 }
 
+// Llamada en segundo plano tras guardar una ruta — GPT-4o-mini extrae como mucho
+// 3 datos nuevos (estilo/restricciones/patrones/trato) a partir de la ruta y del
+// chat reciente. Silenciosa: si falla, no molesta ni bloquea el guardado de la ruta.
+async function _perfilIAExtract(ruta) {
+  if (!currentUser) return;
+  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+
+  const authUser = auth.currentUser;
+  if (!authUser) return;
+  const token = await authUser.getIdToken();
+
+  const existingFacts = (perfilIA.facts || []).map(f => ({ categoria: f.categoria, texto: f.texto }));
+  const recentMessages = (typeof salma !== 'undefined' && Array.isArray(salma.history))
+    ? salma.history.slice(-12).map(m => ({ role: m.role, text: m.content }))
+    : [];
+  const guideSummary = {
+    nombre: ruta.nombre,
+    destino: ruta.destino,
+    num_dias: ruta.num_dias,
+    notas: (ruta.notas || '').slice(0, 500)
+  };
+
+  const res = await fetch(`${window.SALMA_API}/perfil-ia-extract`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ guideSummary, existingFacts, recentMessages })
+  });
+  if (!res.ok) return;
+  const { facts } = await res.json();
+  if (!Array.isArray(facts) || !facts.length) return;
+
+  const newFacts = facts.map(f => ({
+    id: 'auto-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+    categoria: f.categoria,
+    texto: f.texto,
+    origen: 'auto',
+    fecha: Date.now()
+  }));
+  await _perfilIASave({ ...perfilIA, facts: [...(perfilIA.facts || []), ...newFacts] });
+}
+
 // ═══ BITÁCORA — Organizada por países ═══
 
 async function renderBitacora() {
@@ -3151,6 +3192,11 @@ async function guardarGuiaDirecto(routeData) {
     publishGuide(docRef.id, ruta, slug, r).catch(() => {});
 
     // PIEZA A — Enrich (Pasada 2) eliminado: era una 2ª llamada de IA por ruta.
+
+    // Perfil IA (memoria) — en segundo plano, sin bloquear ni frenar el guardado.
+    // Aviso de coste dado y confirmado con Paco (19 sept 2026): GPT-4o-mini,
+    // ~$0,0006 por ruta guardada — ver renderPerfilIA()/_perfilIAExtract().
+    _perfilIAExtract(ruta).catch(() => {});
 
     return docRef.id;
   } catch (e) {
