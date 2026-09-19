@@ -75,6 +75,10 @@ function showState(state) {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
+  } else if (state === 'perfil-ia') {
+    renderPerfilIA();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'historia') {
     if (typeof historiaModule !== 'undefined') historiaModule.render();
     if (inputBar) inputBar.style.display = 'none';
@@ -1056,6 +1060,12 @@ async function renderProfile() {
       <div class="prof-group">
         <div class="prof-group-title">TU VIAJE</div>
         <div class="prof-card">
+          <div class="prof-row prof-row-highlight" id="prof-perfil-ia">
+            <span class="prof-row-icon prof-row-icon-accent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2a4.5 4.5 0 0 0-4.5 4.5v.34A3.5 3.5 0 0 0 3 10v1a3.5 3.5 0 0 0 1.35 2.76A4.5 4.5 0 0 0 9 18.5V21"/><path d="M14.5 2a4.5 4.5 0 0 1 4.5 4.5v.34A3.5 3.5 0 0 1 21 10v1a3.5 3.5 0 0 1-1.35 2.76A4.5 4.5 0 0 1 15 18.5V21"/><path d="M9 21h6"/></svg></span>
+            <span class="prof-row-label">Lo que Salma sabe de ti</span>
+            <span class="prof-row-badge">${(currentUser.perfil_ia?.facts || []).length} DATOS</span>
+          </div>
+          <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-notas">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
             <span class="prof-row-label">Mis Notas</span>
@@ -1172,6 +1182,7 @@ async function renderProfile() {
     avatarInput.addEventListener('change', (e) => handleAvatarFile(e.target.files[0]));
     avatarCamera.addEventListener('change', (e) => handleAvatarFile(e.target.files[0]));
   }
+  document.getElementById('prof-perfil-ia').addEventListener('click', () => showState('perfil-ia'));
   document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
   document.getElementById('prof-notas').addEventListener('click', () => showState('notas'));
@@ -1342,6 +1353,130 @@ function _createGuideCard(doc, d, isOffline) {
     }
   }
   return card;
+}
+
+// ═══ PERFIL IA — "Lo que Salma sabe de ti" ═══
+// Perfil de viajero: se guarda en users/{uid}.perfil_ia (facts + proactive).
+// Esta pantalla es solo lectura/edición manual sobre Firestore — no llama a
+// ninguna IA. La extracción automática de facts (GPT-4o-mini tras cada ruta)
+// es un paso aparte, pendiente de aviso de coste antes de implementarse.
+
+const PERFIL_IA_CATEGORIAS = [
+  { id: 'estilo', title: 'ESTILO DE VIAJE' },
+  { id: 'restricciones', title: 'RESTRICCIONES' },
+  { id: 'patrones', title: 'PATRONES DETECTADOS' }
+];
+
+function renderPerfilIA() {
+  const $c = document.getElementById('app-content');
+  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+  const facts = perfilIA.facts || [];
+
+  const gruposHtml = PERFIL_IA_CATEGORIAS.map(cat => {
+    const factsCat = facts.filter(f => f.categoria === cat.id);
+    const factsHtml = factsCat.length
+      ? factsCat.map(f => `
+        <div class="perfil-ia-fact">
+          <span class="perfil-ia-fact-text">${escapeHTML(f.texto)}</span>
+          <button class="perfil-ia-fact-remove" data-fact-id="${f.id}" aria-label="Quitar este dato" type="button">✕</button>
+        </div>`).join('')
+      : `<div class="perfil-ia-empty">Nada guardado aquí todavía.</div>`;
+    return `
+      <div class="perfil-ia-group">
+        <div class="perfil-ia-group-title">${cat.title}</div>
+        ${factsHtml}
+      </div>`;
+  }).join('');
+
+  $c.innerHTML = `
+    <div class="perfil-ia-area fade-in">
+      <div class="perfil-ia-header">
+        <button class="perfil-ia-back" id="perfil-ia-back">← PERFIL</button>
+        <div class="perfil-ia-title">Lo que Salma sabe de ti</div>
+        <div class="perfil-ia-sub">Lo va aprendiendo solo de tus rutas y notas — nunca con un formulario. Puedes corregirlo o borrarlo cuando quieras.</div>
+      </div>
+
+      ${gruposHtml}
+
+      <div class="perfil-ia-add">
+        <input class="perfil-ia-add-input" id="perfil-ia-add-input" type="text" placeholder="Añade algo tú mismo…" maxlength="140">
+        <button class="perfil-ia-add-btn" id="perfil-ia-add-btn" type="button">AÑADIR</button>
+      </div>
+
+      <div class="perfil-ia-toggle-row">
+        <div style="flex:1;min-width:0;">
+          <div class="perfil-ia-toggle-title">Que Salma use esto para avisarte sola</div>
+          <div class="perfil-ia-toggle-sub">Ej: recordarte el aniversario de un viaje, o un seguro a punto de caducar.</div>
+        </div>
+        <label class="profile-toggle">
+          <input type="checkbox" id="perfil-ia-proactive" ${perfilIA.proactive !== false ? 'checked' : ''}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>`;
+
+  document.querySelector('.app-input-bar').style.display = 'none';
+  currentState = 'perfil-ia';
+
+  document.getElementById('perfil-ia-back').addEventListener('click', () => {
+    document.querySelector('.app-input-bar').style.display = '';
+    showState('profile');
+  });
+
+  $c.querySelectorAll('.perfil-ia-fact-remove').forEach(btn => {
+    btn.addEventListener('click', () => _perfilIARemoveFact(btn.dataset.factId));
+  });
+
+  document.getElementById('perfil-ia-add-btn').addEventListener('click', _perfilIAAddFact);
+  document.getElementById('perfil-ia-add-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') _perfilIAAddFact();
+  });
+
+  document.getElementById('perfil-ia-proactive').addEventListener('change', (e) => {
+    _perfilIASetProactive(e.target.checked);
+  });
+}
+
+async function _perfilIASave(newPerfilIA) {
+  await db.collection('users').doc(currentUser.uid).update({ perfil_ia: newPerfilIA });
+  currentUser.perfil_ia = newPerfilIA;
+}
+
+async function _perfilIARemoveFact(factId) {
+  if (!currentUser || !factId) return;
+  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+  const newPerfilIA = { ...perfilIA, facts: (perfilIA.facts || []).filter(f => f.id !== factId) };
+  try {
+    await _perfilIASave(newPerfilIA);
+    renderPerfilIA();
+  } catch (e) {
+    showToast('Error al borrar');
+  }
+}
+
+async function _perfilIAAddFact() {
+  const input = document.getElementById('perfil-ia-add-input');
+  const texto = (input?.value || '').trim();
+  if (!texto || !currentUser) return;
+  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+  const newFact = { id: 'manual-' + Date.now(), categoria: 'estilo', texto, origen: 'manual', fecha: Date.now() };
+  const newPerfilIA = { ...perfilIA, facts: [...(perfilIA.facts || []), newFact] };
+  try {
+    await _perfilIASave(newPerfilIA);
+    renderPerfilIA();
+  } catch (e) {
+    showToast('Error al guardar');
+  }
+}
+
+async function _perfilIASetProactive(value) {
+  if (!currentUser) return;
+  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+  try {
+    await _perfilIASave({ ...perfilIA, proactive: value });
+  } catch (e) {
+    showToast('Error al guardar');
+  }
 }
 
 // ═══ BITÁCORA — Organizada por países ═══

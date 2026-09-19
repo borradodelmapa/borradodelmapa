@@ -5909,6 +5909,68 @@ body {
   font-size: 13px;
 }
 
+/* ── Perfil IA: fila destacada en "Tu Viaje" + pantalla "Lo que Salma sabe de ti" ── */
+.prof-row-icon-accent { color: var(--dorado) !important; background: rgba(244,99,11,.1) !important; }
+.prof-row-highlight { background: rgba(244,99,11,.045); }
+.prof-row-highlight:hover { background: rgba(244,99,11,.08); }
+.prof-row-badge {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--dorado); background: rgba(244,99,11,.1);
+  padding: 3px 8px; border-radius: 0; border: 1px solid rgba(244,99,11,.2); flex-shrink: 0;
+}
+
+.perfil-ia-area { max-width: 480px; margin: 0 auto; padding: 0 16px 40px; }
+.perfil-ia-header { padding: 20px 0 16px; }
+.perfil-ia-back {
+  display: inline-flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  color: rgba(244,239,230,.5); padding: 0; margin-bottom: 10px;
+}
+.perfil-ia-back:hover { color: var(--crema); }
+.perfil-ia-title { font-family: var(--font-tight); font-size: 24px; font-weight: 700; color: var(--blanco); letter-spacing: -.01em; line-height: 1.15; }
+.perfil-ia-sub { font-size: 12.5px; color: rgba(244,239,230,.5); line-height: 1.5; margin-top: 6px; }
+
+.perfil-ia-group { margin-bottom: 18px; }
+.perfil-ia-group-title { font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; color: var(--dorado); padding: 0 2px 8px; }
+.perfil-ia-fact {
+  display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 13px;
+  background: rgba(255,255,255,.025); border: 1px solid rgba(244,239,230,.06);
+  border-radius: 0; margin-bottom: 6px;
+}
+.perfil-ia-fact:last-child { margin-bottom: 0; }
+.perfil-ia-fact-text { flex: 1; font-size: 13.5px; color: var(--crema); line-height: 1.4; }
+.perfil-ia-fact-remove {
+  width: 20px; height: 20px; border-radius: 50%; border: none; background: rgba(255,255,255,.06);
+  color: rgba(244,239,230,.5); font-size: 12px; line-height: 1; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.perfil-ia-fact-remove:hover { background: rgba(239,68,68,.18); color: var(--rojo); }
+.perfil-ia-empty { font-size: 12.5px; color: rgba(244,239,230,.3); padding: 8px 2px; }
+
+.perfil-ia-add {
+  display: flex; align-items: center; gap: 8px; padding: 10px 6px 10px 14px;
+  border: 1px dashed rgba(244,239,230,.15); margin-bottom: 20px;
+}
+.perfil-ia-add-input {
+  flex: 1; background: transparent; border: none; outline: none; color: var(--crema);
+  font-size: 13.5px; font-family: var(--font-body); min-width: 0;
+}
+.perfil-ia-add-input::placeholder { color: rgba(244,239,230,.3); }
+.perfil-ia-add-btn {
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: .06em;
+  color: var(--negro); background: var(--dorado); border: none; border-radius: 0;
+  padding: 7px 12px; cursor: pointer; flex-shrink: 0;
+}
+.perfil-ia-add-btn:hover { opacity: .85; }
+
+.perfil-ia-toggle-row {
+  display: flex; align-items: center; gap: 12px; padding: 15px;
+  background: rgba(255,255,255,.025); border: 1px solid rgba(244,239,230,.06);
+  border-radius: 0; margin-bottom: 16px;
+}
+.perfil-ia-toggle-title { font-size: 13.5px; color: var(--crema); font-weight: 600; line-height: 1.35; }
+.perfil-ia-toggle-sub { font-size: 11.5px; color: rgba(244,239,230,.45); margin-top: 3px; line-height: 1.45; }
+
 /* ── Coins Icon & Badge ── */
 .prof-row-icon-coins {
   color: var(--dorado) !important;
