@@ -521,6 +521,24 @@ Se quitaron de la vista "Limpiar" y la lista de logs en crudo (antes visibles po
 defecto) — puro ruido para el tester, y Paco ya tiene su caso de uso cubierto con
 "Copiar". Sin cambios en el Worker ni en costes.
 
+**Segundo ajuste el mismo día, tras confirmar en pantalla que la función ya iba bien
+(captura de Paco: "la función trabaja bien copia cuadro de texto más LOG")** —
+3 retoques finos, todos frontend, `debug-panel.js?v=7`:
+1. **Orden invertido**: el cuadro de texto ahora es el primer elemento de la pantalla
+   (antes iba la versión primero) — "que lo primero que se vea sea el cuadro de texto".
+   La versión de Worker+scripts baja a justo debajo del textarea, sigue visible igual.
+2. **Mensaje cambiado**: el texto de ayuda de antes ("Cuéntanos qué ha pasado — se
+   manda junto con los logs...") pasa a ser el placeholder del propio textarea, con
+   redacción nueva pedida por Paco: *"Cuéntanos tu experiencia, si has tenido algún
+   problema o ideas para mejorar..."* — menos centrado en "algo se ha roto", más
+   abierto a feedback general.
+3. **Botón flotante rediseñado**: de un círculo 🐛 semitransparente (opacity .55, sin
+   texto visible, solo un `title` que en móvil no se ve nunca) a una píldora naranja
+   sólida con texto — **"💬 Tu opinión"** — a petición explícita de Paco ("que el
+   usuario sepa para qué sirve"). El estado de error (JS error capturado) lo sigue
+   marcando en rojo pulsante, mismo mecanismo de antes.
+Sin cambios en el Worker ni en costes — solo maquetación y copy.
+
 ---
 
 ## Qué es este proyecto

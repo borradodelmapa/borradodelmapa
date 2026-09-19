@@ -127,15 +127,14 @@
     const s = document.createElement('style');
     s.id = 'dbg-styles';
     s.textContent = `
-      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;width:42px;height:42px;border-radius:50%;background:#060503;color:#F4630B;border:1.5px solid #F4630B;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;opacity:.55;padding:0;display:flex;align-items:center;justify-content:center}
-      #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;border-color:#fff;opacity:1;animation:dbg-pulse 1s infinite}
+      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;display:flex;align-items:center;gap:6px;padding:11px 16px;border-radius:999px;background:#F4630B;color:#060503;border:none;font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 3px 14px rgba(0,0,0,.45);cursor:pointer}
+      #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;animation:dbg-pulse 1s infinite}
       @keyframes dbg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
       #dbg-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.35);font-size:14px;cursor:pointer}
       #dbg-body{flex:1;overflow-y:auto;box-sizing:border-box;padding:52px 14px 14px;display:flex;flex-direction:column;gap:12px}
       #dbg-ver{background:#1e190f;border:1px solid rgba(244,99,11,.25);border-radius:8px;padding:8px 10px;color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
       #dbg-fb{display:flex;flex-direction:column;gap:10px;flex:1}
-      #dbg-fb p{margin:0;color:rgba(245,240,232,.7);font-size:12px;line-height:1.4}
       #dbg-fb textarea{width:100%;box-sizing:border-box;flex:1;min-height:140px;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical}
       #dbg-fb-actions{display:flex;gap:8px}
       #dbg-fb-actions button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:12px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
@@ -152,8 +151,8 @@
     const b = document.createElement('button');
     b.id = 'dbg-btn';
     b.type = 'button';
-    b.textContent = '🐛';
-    b.title = 'Debug logs';
+    b.textContent = '💬 Tu opinión';
+    b.title = 'Cuéntanos tu experiencia';
     b.addEventListener('click', openPanel);
     document.body.appendChild(b);
   }
@@ -162,7 +161,7 @@
     return logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
   }
 
-  // Un solo botón 🐛 → cae directo en el cuadro de texto, sin lista de logs en medio
+  // Un solo botón "💬 Tu opinión" → cae directo en el cuadro de texto, sin lista de logs en medio
   // (confundía al tester). "Enviar" manda nota+logs a Paco (POST /beta-feedback);
   // "Copiar" pone nota+versión+logs en el portapapeles para pegarlo en el chat con
   // Claude. Los logs se siguen capturando igual por detrás, solo dejan de listarse.
@@ -181,10 +180,9 @@
     overlay.innerHTML = `
       <button id="dbg-close" aria-label="Cerrar">✕</button>
       <div id="dbg-body">
-        <div id="dbg-ver"></div>
         <div id="dbg-fb">
-          <p>Cuéntanos qué ha pasado — se manda junto con los logs y la versión de esta pantalla.</p>
-          <textarea id="dbg-fb-note" rows="6" placeholder="Ej: al tocar &quot;Añadir a la guía&quot; no ha pasado nada..."></textarea>
+          <textarea id="dbg-fb-note" rows="6" placeholder="Cuéntanos tu experiencia, si has tenido algún problema o ideas para mejorar..."></textarea>
+          <div id="dbg-ver"></div>
           <div id="dbg-fb-actions">
             <button id="dbg-fb-send" type="button">Enviar</button>
             <button id="dbg-fb-copy" type="button" class="dbg-sec">📋 Copiar</button>
