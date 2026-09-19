@@ -9370,15 +9370,35 @@ INSTRUCCIONES:
         // como imagen (su regex exige que la URL no tenga espacios) y el usuario ve el
         // markdown crudo + la URL larga como texto/enlace. Con nombre conocido, siempre
         // se sustituye por la URL buena; sin nombre conocido, solo se quita si nunca cerró.
+        // 19 sept 2026 — dos ajustes tras un caso real (guía desde foto, "Elizondo y el
+        // Valle de Baztán" salió como markdown roto sin reparar):
+        // 1. _fuzzyFind: antes exigía coincidencia EXACTA del nombre. Claude puede escribir
+        //    el markdown con una versión distinta del nombre a la que devolvió Google (o a
+        //    la que él mismo pidió) — "Elizondo y Baztán" vs "Elizondo y el Valle de Baztán".
+        //    Ahora, si no hay coincidencia exacta, prueba si un nombre conocido está
+        //    contenido en el otro (en cualquier dirección).
+        // 2. Nombre sin ninguna coincidencia, ni exacta ni parcial: antes, si el markdown
+        //    cerraba con ')', se dejaba tal cual asumiendo que probablemente estaba bien.
+        //    Pero Claude puede cerrar el markdown y aun así teclear mal un carácter DENTRO
+        //    del photo_ref (documentado desde el 14 sept) — con fotos reales de por medio en
+        //    este turno, es más seguro quitar una que no cuadra con ninguna que arriesgarse
+        //    a dejar la URL rota visible como texto/enlace en crudo.
         const _repairBrokenPhotoMarkdown = (s) => {
           if ((_hotelPhotosByName.size === 0 && _placePhotosByName.size === 0) || typeof s !== 'string') return s;
-          return s.replace(/!\[([^\]]+)\]\(([^)\n]*)\)?/g, (fullMatch, name, _partial) => {
+          const _fuzzyFind = (map, key) => {
+            if (map.has(key)) return map.get(key);
+            for (const k of map.keys()) {
+              if (k.length >= 4 && (key.includes(k) || k.includes(key))) return map.get(k);
+            }
+            return null;
+          };
+          return s.replace(/!\[([^\]]+)\]\(([^)\n]*)\)?/g, (fullMatch, name) => {
             const key = name.toLowerCase().trim();
-            const hotelEntry = _hotelPhotosByName.get(key);
+            const hotelEntry = _fuzzyFind(_hotelPhotosByName, key);
             if (hotelEntry && hotelEntry.foto) return `![${name}](${hotelEntry.foto})`;
-            const placeUrl = _placePhotosByName.get(key);
+            const placeUrl = _fuzzyFind(_placePhotosByName, key);
             if (placeUrl) return `![${name}](${placeUrl})`;
-            return fullMatch.endsWith(')') ? fullMatch : '';
+            return '';
           });
         };
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
@@ -9572,9 +9592,20 @@ INSTRUCCIONES:
                 }
               }
               // Capturar fotos de buscar_foto (lugares/paradas) para reparar markdown roto de Claude
+              // 19 sept 2026 — la clave solo usaba toolResult.lugar (el nombre CANÓNICO que
+              // devuelve Google, ej. "Elizondo"), pero Claude a menudo escribe el markdown con
+              // el nombre que ÉL mismo usó al pedir la foto (ej. "Elizondo y el Valle de Baztán"
+              // o una versión más corta) — si no coincide ni una ni otra, la reparación no
+              // encuentra la URL buena y el markdown roto de Claude se queda tal cual. Se guarda
+              // también bajo el nombre que Claude pidió (block.input.lugar), para que cualquiera
+              // de las dos formas de escribirlo encuentre la foto real.
               if (block.name === 'buscar_foto' && Array.isArray(toolResult.fotos) && toolResult.fotos.length > 0) {
                 const _pfKey = (toolResult.lugar || '').toLowerCase().trim();
-                if (_pfKey && toolResult.fotos[0] && toolResult.fotos[0].url) _placePhotosByName.set(_pfKey, toolResult.fotos[0].url);
+                const _pfKeyAsked = (block.input?.lugar || '').toLowerCase().trim();
+                if (_pfKey && toolResult.fotos[0] && toolResult.fotos[0].url) {
+                  _placePhotosByName.set(_pfKey, toolResult.fotos[0].url);
+                  if (_pfKeyAsked && _pfKeyAsked !== _pfKey) _placePhotosByName.set(_pfKeyAsked, toolResult.fotos[0].url);
+                }
               }
               // Capturar la web oficial de cada lugar (buscar_lugar devuelve el campo como
               // "web", no "website" — con el nombre viejo esto nunca se disparaba y la web
