@@ -580,6 +580,80 @@ pago, commit `1b10d49`, fusionado directo a `main` (fast-forward):**
 
 ---
 
+## Sesión 19 sept 2026 (nueva) — Bug del botón Compartir + Compartir ahora exige login
+
+**Bug real, CONFIRMADO EN PANTALLA por Paco tras el fix.** El botón Compartir de la
+vista de itinerario decía "no hay ruta guardada" y no ofrecía compartir nada. Causa:
+`_handleShare()` (`mapa-itinerario.js`) depende de `salma.currentRoute`/`currentRouteId`
+para saber qué ruta compartir, pero eso solo se sincronizaba al abrir el chat flotante
+(FAB) sobre la guía — abrir una guía guardada desde la tarjeta "ruta activa" del billete
+o desde Mi Diario llama a `openItinerarioView()` directo, sin pasar por
+`salma.cargarGuia()`, así que `currentRoute` se quedaba a `null`. Tocar Compartir sin
+haber abierto antes el chat intentaba "guardar" primero, veía `currentRoute` vacío,
+mostraba "No hay ruta para guardar" y no hacía nada más.
+**Arreglo, commit `c9ab097`:** la sincronización se movió dentro de `openItinerarioView()`
+mismo, así que funciona sea cual sea el punto de entrada. `mapa-itinerario.js?v=69`.
+
+**Petición de Paco tras confirmar el fix — 3 cambios más sobre el mismo botón:**
+1. Que el link vaya acompañado de un mensaje ("Te comparto esta ruta: X"), no solo la
+   URL a secas. Commit `e3a72e4`, solo frontend, sin coste — `mapa-itinerario.js?v=70`.
+2. Que quien reciba el link tenga que registrarse/entrar para verlo.
+3. Que la vista que vea sea la vista de itinerario real de la app (mapa + tarjetas), no
+   la página pública estática (404.html) que hasta ahora usaba el link de compartir.
+
+**Antes de tocar 2 y 3 se preguntó a Paco**, porque el link de "Compartir" usaba el
+MISMO mecanismo que las guías públicas de SEO (`public_guides`, lectura abierta sin
+login — cada ruta que se guarda se publica ahí automáticamente, es lo que indexa
+Google en las guías de usuarios) — exigir login a TODAS las guías públicas habría roto
+esa indexación. Paco confirmó: login **solo** para lo compartido por el botón, las
+guías de SEO se quedan igual; y el visitante, una vez dentro, **puede guardarse la
+ruta en su propia cuenta** (no solo verla).
+
+**Implementado, commit `4569e9e`, `app.js?v=124` + `mapa-itinerario.js?v=71` +
+`firestore.rules` (colección nueva) — DESPLEGADO EL FRONTEND, sin confirmar en
+pantalla, y con un paso manual pendiente (ver abajo) antes de que funcione de punta a
+punta:**
+- Colección nueva `shared_routes/{id}` (mismo id que la guía del dueño en
+  `users/{uid}/maps/`) — lectura solo autenticada, escritura solo del dueño
+  (`firestore.rules`, patrón "solo alta" ya usado en `beta_feedback`/
+  `url_validation_incidents`, aquí con `update`/`delete` propios añadidos por si el
+  dueño edita la ruta y vuelve a compartir).
+- `_doShare()` (`mapa-itinerario.js`) ya no busca el slug de `public_guides` — escribe
+  la ruta completa en `shared_routes/{id}` y arma el link como
+  `origin + '/?compartir=' + id`, sobre la propia app (no sobre el truco de 404.html).
+- `app.js`: al cargar, si la URL trae `?compartir=ID` se guarda en
+  `window._pendingShareId`. Como el gate de `index.html` ya obliga a cualquier
+  visitante sin sesión a registrarse/entrar antes de ver nada de la app (no hace falta
+  ninguna pantalla nueva de aviso), basta con recogerlo dentro de
+  `auth.onAuthStateChanged` en cuanto hay sesión (recién registrado o ya la tenía) →
+  `_openSharedRoute()` lee `shared_routes/{id}` y abre `openItinerarioView(routeData,
+  null, {...})` — con `docId=null` a propósito, para que el botón GUARDAR de esa vista
+  cree una guía NUEVA en la cuenta del visitante en vez de intentar tocar la del dueño
+  (que además las reglas de Firestore no dejarían).
+
+**Pendiente, antes de que esto funcione de punta a punta — nada de esto se ha hecho
+desde esta sesión (sin credenciales de Firebase en este contenedor):**
+1. **Desplegar `firestore.rules`** (`firebase deploy --only firestore:rules`) — sin
+   esto, escribir en `shared_routes` (o sea, pulsar Compartir) lo rechaza Firestore con
+   permiso denegado, aunque el código del botón ya esté en producción.
+2. **Probar en pantalla**: compartir una ruta, abrir el link en una sesión sin login
+   (incógnito o otro dispositivo), confirmar que pide registro/login antes de enseñar
+   nada, y que tras entrar se abre la vista de itinerario real con el botón GUARDAR
+   visible — y que "Guardar" la deja en Mis Viajes de esa segunda cuenta sin tocar la
+   del dueño original.
+   **Nunca decir "arreglado" de esto hasta que ese flujo completo se vea en pantalla.**
+
+**Sin implementar, a petición explícita de Paco (opinión pedida, no desarrollo):**
+Paco planteó, para pensar y no para ahora, aprovechar esto para crear grupos de viaje
+usando WhatsApp. Opinión dada en el chat (no en este archivo, retomar la conversación
+si se quiere recuperar el razonamiento completo): encaja mejor como una fase posterior
+del canal de WhatsApp ya planeado (F5, ver más abajo) que como parte de esta feature de
+compartir — comparten infraestructura (Twilio, `whatsapp_sessions`) pero son productos
+distintos (un link de una ruta suelta vs. un grupo con varias personas viendo/editando
+la misma). No tocar nada de esto sin que Paco lo pida explícitamente.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
@@ -746,6 +820,7 @@ debug-panel.js (puro, intercepta console.*/window errors, sin deps de otros mód
 | `admin_logs/{logId}` | Auth required | Logs de uso del Worker |
 | `url_validation_incidents/{id}` | Read: auth / Create: auth (solo alta) | Sustituciones de enlaces Maps rotos (Bloque E) |
 | `beta_feedback/{id}` | Read: auth / Create: auth (solo alta) | Feedback de testers: nota + logs del panel 🐛 + versión, mandado desde `POST /beta-feedback` |
+| `shared_routes/{id}` | Read: auth / Write: solo el dueño | Ruta compartida desde el botón Compartir de la vista de itinerario — a diferencia de `public_guides`, exige login para verse. Mismo id que la guía en `users/{uid}/maps/`. **Pendiente desplegar la regla (19 sept 2026) — ver sesión correspondiente.** |
 
 - **Regla importante**: `const db` solo se inicializa en `app.js`, nunca duplicado
 - Firebase se inicializa en el `<head>` del `index.html`
@@ -759,6 +834,7 @@ config/{doc}/**                → read: auth, write: false
 admin_logs/{logId}             → read/write: auth
 url_validation_incidents/{id}  → read: auth, create: auth (solo alta, sin editar/borrar)
 beta_feedback/{id}             → read: auth, create: auth (solo alta, sin editar/borrar)
+shared_routes/{id}             → read: auth, create/update/delete: solo el dueño (uid) — PENDIENTE DE DESPLEGAR
 ```
 
 ---
