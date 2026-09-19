@@ -1365,6 +1365,54 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Segundo incidente con foto+guía el mismo 19 sept 2026, DISTINTO del de arriba aunque
+  con la misma raíz de fondo — DESPLEGADO, sin confirmar en pantalla.** Paco repitió la
+  prueba con otra captura de Navarra y esta vez NO hubo corte por `max_tokens` — Salma
+  directamente no procesó la lista: respondió algo ambiguo y fuera de personaje ("Paco,
+  esto activa el modo guía completo y tienes 1 Salma Coin disponible — lo uso para
+  generarte la guía ahora. ¿Cómo lo hacemos?", sin listar ni un solo sitio de la
+  captura). Paco contestó "Sí" y Salma, con razón desde lo poco que tenía pero mal
+  explicado, dijo que no le había llegado ninguna captura ni lista — la imagen ya no
+  estaba disponible en ese segundo turno.
+  **Causa de fondo, la misma que la de arriba con otro disparador**: el historial de
+  conversación (`salma.js`, `this.history.push(...)`) solo guarda TEXTO — nunca una
+  descripción de lo que había en una imagen. Si el primer turno con foto no deja
+  constancia en texto de lo que había en ella (por corte, como el caso de arriba, o por
+  no procesarla bien, como este), el turno siguiente no tiene ninguna forma de saberlo —
+  la imagen en sí no sobrevive nunca más de un turno.
+  **Encima, `buildMessages()` no tenía NINGUNA instrucción específica para "captura con
+  lista de sitios"**: con foto adjunta se salta a propósito todos los bloques de modo
+  (RUTA/PLAN/RECOMENDACIONES) y solo queda el `BLOQUE_VISION` genérico (comida/lugar/
+  menú/cartel/paisaje/avería) — ninguno de esos 6 casos cubre "captura con lista de
+  paradas para una ruta". Sin instrucción clara, Claude se quedó a medias entre el
+  bloque de contexto de coins (que se inyecta siempre, en todos los mensajes) y la
+  petición real, y salió con esa respuesta ambigua.
+  **Arreglo aplicado ahora, commit `7b113d4` (fusionado a `main`)**: nueva instrucción en
+  `buildMessages()` para cuando hay foto adjunta — si es una captura con lista de
+  sitios/paradas, la respuesta debe EMPEZAR transcribiendo cada parada en texto plano
+  antes de cualquier otra cosa (así queda guardada en el historial de texto pase lo que
+  pase después) y evitar preguntas ambiguas tipo "¿cómo lo hacemos?". **Aviso de coste
+  (protocolo §8):** es solo una instrucción de texto más en el prompt (unos tokens de
+  entrada de más) — no añade ninguna llamada nueva a ninguna API; el presupuesto de
+  salida (14.000 tokens, fix de arriba) no cambia.
+  **Dos cosas más, pedidas por Paco explícitamente para dejar SOLO anotadas, sin tocar
+  código hoy:**
+  1. **El sistema de coins hay que estudiarlo aparte.** El bloque `[INSTRUCCIONES SOBRE
+     COINS...]` que se inyecta en TODOS los mensajes (línea ~2728 de `buildMessages()`)
+     parece ser lo que confundió a Claude en este incidente — mezcla instrucciones sobre
+     cuándo mencionar coins con la petición real del usuario. Antes de tocarlo hay que
+     revisarlo con calma (no es un fix de una línea, es entender cómo interactúa con
+     cada modo/flujo) — pendiente de sesión propia.
+  2. **Principio general para cuando Salma no puede hacer algo o algo falla**: no debe
+     dar respuestas ambiguas — debe decir claramente qué está pasando y proponer una
+     solución concreta (ej. "se me perdió la lista, vuelve a mandarla y sigo" en vez de
+     "¿cómo lo hacemos?"). Salma se conoce mejor que nadie — cuando algo no cuadra por
+     su lado, debería saber explicarlo. Queda como principio a aplicar la próxima vez
+     que se toque el prompt (`BLOQUE_ACCION`/`BLOQUE_ANTIPAJA`), no implementado hoy.
+  **Pendiente: que Paco repita la prueba con una captura de lista de sitios y confirme
+  que Salma empieza transcribiendo la lista en vez de responder ambiguo, y que un
+  "sigue"/"sí" después sí conserva el contexto.**
+
 - **Guía pedida a partir de una captura (lista de puntos) se cortaba a media respuesta,
   y luego Salma no sabía que había sido ella la que se cortó — 19 sept 2026, DESPLEGADO,
   sin confirmar en pantalla.** Reportado por Paco con vídeo: pidió una guía de Navarra a
