@@ -379,6 +379,55 @@ deuda técnica aparte).
 
 ---
 
+## Sesión 19 sept 2026 — Perfil IA: "Lo que Salma sabe de ti" + extracción automática
+
+Punto de partida: conversación con Paco sobre cómo hacer que Salma sepa de verdad de cada
+viajero (gustos, restricciones, patrones) para ganarse su confianza a largo plazo, sin
+que se sienta como vigilancia.
+
+1. **Pantalla nueva en Perfil** (`app.js`, `styles.css`, commits `128db86`/`1da63fe`,
+   solo frontend): fila nueva "Lo que Salma sabe de ti" en Perfil → Tu Viaje (con el
+   contador real de datos guardados), que abre `renderPerfilIA()` — 4 categorías
+   (**estilo de viaje**, **restricciones**, **patrones detectados**, **trato y
+   satisfacción** — esta última para señales tipo "esto no me sirvió"/"qué borde"
+   detectadas en el chat), cada dato con su botón de borrar, un campo para añadir algo a
+   mano, y un interruptor de "que Salma use esto para avisarte sola" (control de si
+   puede ser proactiva, no solo pasiva). Todo contra `users/{uid}.perfil_ia`
+   (`{facts:[{id,categoria,texto,origen,fecha}], proactive}`), sin llamar a ninguna IA —
+   la pantalla en sí es solo lectura/edición manual de Firestore.
+2. **Extracción automática** (commit `8a99d8c`, Worker + frontend): endpoint nuevo
+   `POST /perfil-ia-extract` — recibe un resumen de la ruta recién guardada + últimos 12
+   mensajes del chat + los facts que ya existen, y GPT-4o-mini devuelve como mucho 3
+   datos nuevos clasificados en las 4 categorías (nunca inventa; array vacío si no hay
+   nada real que aportar). Requiere login (mismo motivo que `/route-thumbnail`: sin esto
+   sería puerta abierta a gastar sin usuario real detrás). `guardarGuiaDirecto()` la
+   llama en segundo plano justo donde antes vivía el Enrich Pass 2 ya eliminado
+   (comentario "PIEZA A" en el código) — no bloquea el guardado y si falla no molesta.
+   **Aviso de coste dado y confirmado con Paco antes de implementar** (protocolo §8):
+   GPT-4o-mini, ~$0,0006 por ruta guardada — atado 1:1 a rutas que ya consumen coins/
+   gratis, sin ninguna llamada suelta sin control. A escala (ej. 10.000 usuarios × 1
+   ruta/mes) serían ~6€/mes en total.
+   **Aviso aparte, dado a Paco al proponerlo**: esto reintroduce el patrón de "llamada
+   extra de IA justo al guardar la ruta" que ya se había eliminado una vez por el mismo
+   motivo (ver comentario "PIEZA A" en `app.js`) — confirmado explícitamente que se quería
+   así de todos modos, con el coste mucho menor que el de aquella (esta es un resumen
+   corto, no enrich de cada parada).
+   Fusionado a `main` y desplegado (GitHub Action "Deploy Worker" run #29, commit
+   `8a99d8c`, **Worker Version ID `9ef33d88-b247-4e68-ace4-4cd7b0343e85`**) — esta sesión
+   no pudo confirmarlo además contra `/version` porque el proxy de red del contenedor
+   bloquea las llamadas salientes a `salma-api.borradodelmapa-api.workers.dev` (mismo
+   bloqueo ya documentado otras veces).
+   **Decisión de diseño, a propósito**: el interruptor de "avisarte sola" (proactivo) NO
+   frena la extracción automática — son dos cosas distintas (aprender vs. usar lo
+   aprendido para escribir primero). Si en el futuro se quiere poder apagar también el
+   aprendizaje en sí, hace falta un interruptor aparte con su propio texto, no reusar
+   este.
+   `?v=` subidos: `styles.css` a 106, `app.js` a 121.
+   **Pendiente: que Paco pruebe la pantalla y, tras guardar una ruta nueva, confirme que
+   aparecen datos nuevos solos en "Lo que Salma sabe de ti".**
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
@@ -683,6 +732,7 @@ Post-procesado que corrige cada parada de una ruta generada:
 | PUT | `/flight-watches/pause` | Pausar/reanudar una vigilancia |
 | GET | `/flight-alerts` | Alertas de bajada de precio/presupuesto alcanzado (KV `fw_alerts:{uid}`) |
 | PUT | `/flight-alerts/mark-seen` | Marcar alerta como vista |
+| POST | `/perfil-ia-extract` | Extrae hasta 3 datos nuevos del perfil de viajero (GPT-4o-mini) tras guardar una ruta — requiere login |
 
 **Nota de este barrido (16 sept 2026):** esta tabla llevaba sin auditar contra el código real desde el 10 sept — faltaban 15 endpoints que ya existen y están desplegados (Vigilancia de Vuelos completa, WhatsApp, Stripe webhook, roads/resolve, weather, transport, translate, tts-google, historia-lugar, admin/verify-place). Ver también "🧠 KV — situación real" más abajo para el resto de hallazgos de este barrido.
 
