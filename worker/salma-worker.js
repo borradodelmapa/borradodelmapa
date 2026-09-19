@@ -3279,7 +3279,8 @@ REGLAS:
 - "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
 - NO inventes paradas que no estén en el plan.
 - RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.
-- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.`;
+- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.
+- ESTO TAMBIÉN VALE ENTRE DÍAS, no solo dentro de cada uno: el "day" que le asignes a cada parada tiene que formar, día a día, un recorrido continuo — el Día 2 debe empezar cerca de donde terminó el Día 1, el Día 3 cerca de donde terminó el Día 2, y así. Nunca asignes los días agrupando por tema o por el orden en que aparecen en el texto si eso obliga a saltar de un extremo del mapa a otro y volver — usa las coordenadas de TODAS las paradas para decidir qué bloque de paradas cercanas entre sí va en cada día, en progresión geográfica de principio a fin (si el usuario pide una dirección, ej. "de sur a norte", que esa progresión la respete).`;
 
   const fallbackUser = `Plan a convertir:\n\n${text.substring(0, 40000)}${_anchor}`;
 
@@ -9772,7 +9773,8 @@ REGLAS:
 - "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
 - NO inventes paradas que no estén en el plan.
 - RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.
-- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.`;
+- ORDEN GEOGRÁFICO, no orden de aparición en el texto: dentro de cada día, ordena las paradas por cercanía real (lat/lng), como una ruta que se conduce de un extremo a otro sin ir y volver sobre el mismo tramo. El plan en prosa puede mencionarlas agrupadas por tema (todos los miradores, luego todas las playas...) — eso no es el orden de visita. Usa tus coordenadas de cada parada para encadenarlas de la más cercana a la siguiente, no el orden en que aparecen escritas.
+- ESTO TAMBIÉN VALE ENTRE DÍAS, no solo dentro de cada uno: el "day" que le asignes a cada parada tiene que formar, día a día, un recorrido continuo — el Día 2 debe empezar cerca de donde terminó el Día 1, el Día 3 cerca de donde terminó el Día 2, y así. Nunca asignes los días agrupando por tema o por el orden en que aparecen en el texto si eso obliga a saltar de un extremo del mapa a otro y volver — usa las coordenadas de TODAS las paradas para decidir qué bloque de paradas cercanas entre sí va en cada día, en progresión geográfica de principio a fin (si el usuario pide una dirección, ej. "de sur a norte", que esa progresión la respete).`;
 
             const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 40000)}`;
 
@@ -9830,17 +9832,66 @@ REGLAS:
         // ── "Añadir a la guía" (botón del popup de consulta, Tiempo 2 en modo fusión) ──
         // route aquí son SOLO los stops nuevos de lo que Salma acababa de proponer en
         // prosa (convertProseToRouteJson no conoce la ruta completa, solo ese trozo de
-        // texto) — se fusionan al final de currentRoute como día(s) nuevo(s), y se
-        // descartan title/country/region/duration_days que route haya adivinado del
-        // trozo: la identidad de la ruta sigue siendo la de currentRoute.
+        // texto) — se descartan title/country/region/duration_days que route haya
+        // adivinado del trozo: la identidad de la ruta sigue siendo la de currentRoute.
+        // El bloque nuevo (puede traer más de un día) se inserta como TRAMO CONTIGUO en
+        // el hueco de la secuencia de días existente que menos rodeo añada (centroide del
+        // bloque nuevo vs. centroide de cada día ya existente, cálculo puro con
+        // haversineKm, sin llamar a ninguna API) — antes SIEMPRE se pegaba al final,
+        // aunque el bloque nuevo cayera geográficamente junto al Día 1.
         if (mergeIntoRoute && route && Array.isArray(route.stops) && route.stops.length &&
             currentRoute && Array.isArray(currentRoute.stops) && currentRoute.stops.length) {
-          const _maxDay = currentRoute.stops.reduce((m, s) => Math.max(m, parseInt(s.day, 10) || 1), 1);
-          const _newStops = route.stops.map(s => Object.assign({}, s, { day: (parseInt(s.day, 10) || 1) + _maxDay }));
-          const _mergedStops = currentRoute.stops.concat(_newStops);
+          const _groupByDayNum = (stops) => {
+            const nums = [...new Set(stops.map(s => parseInt(s.day, 10) || 1))].sort((a, b) => a - b);
+            return nums.map(d => stops.filter(s => (parseInt(s.day, 10) || 1) === d));
+          };
+          const _centroidOf = (stops) => {
+            const valid = stops.filter(s => typeof s.lat === 'number' && isFinite(s.lat) && typeof s.lng === 'number' && isFinite(s.lng));
+            if (!valid.length) return null;
+            return {
+              lat: valid.reduce((a, s) => a + s.lat, 0) / valid.length,
+              lng: valid.reduce((a, s) => a + s.lng, 0) / valid.length,
+            };
+          };
+          const _existingGroups = _groupByDayNum(currentRoute.stops);
+          const _newGroups = _groupByDayNum(route.stops);
+          const _existingCentroids = _existingGroups.map(_centroidOf);
+          const _newBlockCentroid = _centroidOf(route.stops);
+
+          let _insertAt = _existingGroups.length; // por defecto al final (comportamiento anterior)
+          if (_newBlockCentroid) {
+            let _bestCost = Infinity;
+            for (let i = 0; i <= _existingGroups.length; i++) {
+              const prev = i > 0 ? _existingCentroids[i - 1] : null;
+              const next = i < _existingGroups.length ? _existingCentroids[i] : null;
+              let cost;
+              if (prev && next) {
+                cost = haversineKm(_newBlockCentroid.lat, _newBlockCentroid.lng, prev.lat, prev.lng)
+                     + haversineKm(_newBlockCentroid.lat, _newBlockCentroid.lng, next.lat, next.lng)
+                     - haversineKm(prev.lat, prev.lng, next.lat, next.lng);
+              } else if (prev) {
+                cost = haversineKm(_newBlockCentroid.lat, _newBlockCentroid.lng, prev.lat, prev.lng);
+              } else if (next) {
+                cost = haversineKm(_newBlockCentroid.lat, _newBlockCentroid.lng, next.lat, next.lng);
+              } else {
+                cost = 0;
+              }
+              if (cost < _bestCost) { _bestCost = cost; _insertAt = i; }
+            }
+          }
+
+          const _mergedGroups = [
+            ..._existingGroups.slice(0, _insertAt),
+            ..._newGroups,
+            ..._existingGroups.slice(_insertAt),
+          ];
+          const _mergedStops = [];
+          _mergedGroups.forEach((grp, idx) => {
+            grp.forEach(s => _mergedStops.push(Object.assign({}, s, { day: idx + 1 })));
+          });
           route = Object.assign({}, currentRoute, {
             stops: _mergedStops,
-            duration_days: _mergedStops.reduce((m, s) => Math.max(m, parseInt(s.day, 10) || 1), 1),
+            duration_days: _mergedGroups.length,
           });
           route._merged = true;
           if (!reply) reply = 'Hecho, lo he añadido a tu guía.';
