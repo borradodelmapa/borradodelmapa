@@ -1365,6 +1365,49 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Octavo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar en
+  pantalla.** Con las fotos y la pantalla negra ya arregladas (entradas de abajo), Paco
+  probó la ruta de Navarra de 10 paradas de verdad y confirmó que "sí que va", pero
+  señaló un problema de fondo distinto: Salma dice "te monto ruta de sur a norte" pero
+  el resultado **salta muchos kilómetros de un día a otro sin criterio geográfico
+  coherente** (captura: Día 1 al este cerca de la frontera con Aragón, Día siguiente al
+  norte cerca de Donostia, otro al oeste en Estella, otro al sur en Olite/Calahorra).
+  Encontradas DOS causas reales leyendo el código de `convertProseToRouteJson` (la
+  función que convierte el plan en prosa a JSON de ruta) y del merge del popup:
+  1. La instrucción "ORDEN GEOGRÁFICO" que ya existía (duplicada en dos sitios del
+     Worker) solo decía "dentro de cada día, ordena las paradas por cercanía" — nunca
+     decía nada sobre cómo debía encadenarse un día con el siguiente. Claude podía
+     ordenar bien las paradas DENTRO del Día 1 y DENTRO del Día 4, pero asignar qué
+     parada va en qué día sin ningún criterio de continuidad — de ahí el salto.
+  2. El botón "Añadir a la guía" del popup (`merge_into_route`) pegaba las paradas de
+     la segunda captura **siempre al final** como día(s) nuevos, sin mirar dónde caían
+     geográficamente — si esa segunda captura tenía paradas cerca del Día 1, igual
+     aterrizaban al final de todo, empeorando el salto.
+  **Arreglo, commit `11694fc`, dos piezas:**
+  1. Ampliada la instrucción de orden geográfico (en los dos sitios donde está
+     duplicada) para que también encadene los DÍAS entre sí sin retroceder — el Día 2
+     debe empezar cerca de donde terminó el Día 1, respetando la dirección si el
+     usuario la pide (ej. "de sur a norte").
+  2. El merge del popup ahora calcula, con matemática pura (`haversineKm`, ya existía
+     en el código, sin llamar a ninguna API), en qué hueco de la secuencia de días ya
+     existente encaja mejor el bloque de paradas nuevas (comparando centroides) y lo
+     inserta ahí — no siempre al final. Si las paradas nuevas no tienen coordenadas
+     válidas, cae al comportamiento anterior (al final), sin romper nada.
+  Probado con 4 casos sintéticos en Node antes de desplegar (bloque nuevo cerca del
+  Día 1 → se inserta ahí; bloque nuevo entre dos días intermedios → se inserta en medio;
+  bloque nuevo más lejos que todo lo demás → va al final; bloque sin coordenadas → va al
+  final como antes) — los 4 se comportan como se espera.
+  **Aviso de coste (protocolo §8):** la pieza 1 añade unas pocas líneas de instrucción a
+  un prompt de una llamada a Claude Sonnet que ya se pagaba siempre (unos pocos tokens
+  de entrada más, céntimos de céntimo). La pieza 2 no llama a ninguna API, es solo
+  cálculo de distancia entre coordenadas ya conocidas — coste cero.
+  Desplegado (GitHub Action "Deploy Worker" run #35, commit `11694fc`, **Worker Version
+  ID `1d8cf715-5f73-4dea-8206-22ca4ef9b274`**) — sin confirmar contra `/version`, mismo
+  bloqueo de red del contenedor de siempre.
+  **Pendiente: que Paco repita una ruta multi-día (con o sin segunda captura añadida
+  desde el popup) y confirme que el orden de días ya no salta de un extremo del mapa a
+  otro.**
+
 - **Séptimo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar
   en pantalla — corrige además un error de diagnóstico propio de la entrada de arriba.**
   Confirmado por Paco: la captura real tenía **5 puntos, no 10** — mi lectura inicial de
