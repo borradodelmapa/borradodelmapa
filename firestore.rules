@@ -52,5 +52,14 @@ service cloud.firestore {
                     && request.resource.data.user_id == request.auth.uid;
       allow update, delete: if false;
     }
+
+    // Feedback de testers (nota + logs del panel 🐛). Escribe el Worker autenticado
+    // como el propio tester — solo alta, sin editar/borrar desde el cliente.
+    match /beta_feedback/{feedbackId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+                    && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if false;
+    }
   }
 }

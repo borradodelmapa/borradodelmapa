@@ -6950,6 +6950,76 @@ export default {
       return new Response('OK', { status: 200 });
     }
 
+    // ─── ENDPOINT /beta-feedback (testers — nota + logs desde el panel 🐛) ───
+    // Escribe en Firestore autenticado con el ID token del propio tester (mismo patrón
+    // que url_validation_incidents/flight_watches — la regla de Firestore exige que
+    // user_id coincida con el uid real verificado por Firestore al validar el token,
+    // así que un token falso o de otro uid nunca puede colarse aquí). Avisa a Paco por
+    // WhatsApp con sendWhatsAppMessage() (reutiliza F5.1) sin bloquear la respuesta.
+    if (request.method === 'POST' && url.pathname === '/beta-feedback') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization');
+      const user = await verifyAuthAndGetUser(authHeader);
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
+      }
+      const idToken = authHeader.slice(7);
+
+      let body;
+      try { body = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'invalid_json' }), { status: 400, headers: corsH });
+      }
+      const note = String(body.note || '').trim().slice(0, 2000);
+      if (!note) {
+        return new Response(JSON.stringify({ error: 'empty_note' }), { status: 400, headers: corsH });
+      }
+      const logsText = String(body.logs_text || '').slice(-20000);
+      const nowIso = new Date().toISOString();
+      const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      const fields = {
+        note:           { stringValue: note },
+        user_id:        { stringValue: user.uid },
+        user_name:      { stringValue: String(user.name || '') },
+        email:          { stringValue: String(body.email || '') },
+        page:           { stringValue: String(body.page || '').slice(0, 300) },
+        url:            { stringValue: String(body.url || '').slice(0, 500) },
+        worker_version: { stringValue: String(body.worker_version || '') },
+        front_versions: { stringValue: (Array.isArray(body.front_versions) ? body.front_versions.join(' ') : '').slice(0, 1000) },
+        user_agent:     { stringValue: String(body.user_agent || '').slice(0, 300) },
+        logs_text:      { stringValue: logsText },
+        timestamp:      { timestampValue: nowIso },
+        seen:           { booleanValue: false },
+      };
+
+      try {
+        const fsRes = await fetch(`${FIRESTORE_BASE}/beta_feedback/${docId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+          body: JSON.stringify({ fields }),
+          signal: AbortSignal.timeout(8000),
+        });
+        if (!fsRes.ok) {
+          const errText = await fsRes.text().catch(() => '');
+          return new Response(JSON.stringify({ error: 'firestore_write_failed', detail: errText.slice(0, 300) }), { status: 502, headers: corsH });
+        }
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+
+      // Aviso a Paco por WhatsApp — best effort, no bloquea la respuesta al tester.
+      // Requiere 2 secrets nuevos que aún no están puestos: TWILIO_WHATSAPP_FROM
+      // (ya pendiente desde F5.1) y PACO_WHATSAPP_TO (número de Paco, con prefijo
+      // "whatsapp:+34..."). Sin ellos, el feedback se guarda igual, solo no avisa.
+      if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
+        const who = body.email || user.name || user.uid.slice(0, 8);
+        const lastLines = logsText.split('\n').slice(-15).join('\n');
+        const waText = `🧪 Feedback tester\n${who}\n${String(body.page || '')}\n\n"${note}"\n\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
+        ctx.waitUntil(sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, waText));
+      }
+
+      return new Response(JSON.stringify({ ok: true, id: docId }), { status: 200, headers: corsH });
+    }
+
     // ─── ENDPOINT /nearby-pois (Narrador — POIs cercanos via Google Places) ───
     if (request.method === 'GET' && url.pathname === '/nearby-pois') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };

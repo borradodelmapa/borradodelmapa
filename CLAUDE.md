@@ -444,6 +444,69 @@ que se sienta como vigilancia.
 
 ---
 
+## Sesión 19 sept 2026 — Sistema de feedback de testers (nota + logs por WhatsApp)
+
+Paco quiere probar la app con varios viajeros testers y que sus anotaciones (con los
+logs de lo que vieron) le lleguen sin fricción. Diseño hablado antes de tocar código:
+extender el panel 🐛 ya existente (captura logs/errores/versión) en vez de montar algo
+nuevo, y avisar por WhatsApp reutilizando la infraestructura de Twilio de F5.1 — sin
+esperar a que el resto del canal WhatsApp (F5.2+) esté terminado, porque esto solo
+necesita mandar, no recibir.
+
+**Cambios:**
+1. **Botón "📝 Feedback" en el panel 🐛** (`debug-panel.js`, junto a "Copiar"). Al
+   tocarlo, sustituye la vista de logs por un textbox corto ("¿qué ha pasado?"); al
+   enviar, manda la nota + todos los logs/errores ya capturados + versión del Worker y
+   de los scripts (`?v=`) + pantalla + user agent. Pide login (mismo requisito que el
+   resto de la app para escribir en Firestore) — sin sesión, avisa en vez de fallar en
+   silencio. "Cancelar" vuelve a la vista de logs sin perder nada.
+2. **Endpoint nuevo `POST /beta-feedback`** (`worker/salma-worker.js`, junto a
+   `/whatsapp`). Verifica el token del tester (`verifyAuthAndGetUser`, mismo guardián
+   que el chat principal) y escribe en Firestore `beta_feedback/{id}` **autenticado con
+   el propio ID token del tester** — mismo patrón que `url_validation_incidents`
+   (Bloque E) y `flight_watches`: la regla de Firestore exige que `user_id` coincida con
+   el uid que Firestore verifica de verdad al validar la firma del token, así que un
+   token falso o de otro usuario no puede colarse aquí aunque el campo lo mande el
+   cliente. Colección nueva, solo alta (sin editar/borrar desde el cliente) — regla
+   añadida a `firestore.rules`.
+3. **Aviso a Paco por WhatsApp**, reutilizando `sendWhatsAppMessage()` (la misma función
+   de F5.1) con `ctx.waitUntil()` para no bloquear la respuesta al tester si Twilio va
+   lento. Manda quién es (email), en qué pantalla estaba, la nota completa y las últimas
+   15 líneas de log.
+   **Aviso de coste (protocolo §8):** esto añade una llamada a Twilio (WhatsApp) por
+   cada feedback que mande un tester — con un puñado de testers probando de vez en
+   cuando, unas pocas llamadas a la semana, fracciones de céntimo cada una. Si no llega
+   a mandarse (faltan secrets, ver abajo), el feedback se guarda igual en Firestore, solo
+   no avisa — no es un fallo bloqueante.
+   `?v=` de `debug-panel.js` subido a 5 en `index.html`.
+
+**Pendiente, antes de que esto funcione de punta a punta — nada de esto se ha hecho
+desde esta sesión (sin credenciales de Cloudflare/Firebase en este contenedor):**
+1. **Desplegar el Worker** (GitHub Action "Deploy Worker" o `wrangler deploy -c
+   wrangler.toml` desde `worker/`) — sin esto, `POST /beta-feedback` da 404.
+2. **Desplegar las reglas de Firestore** (`firebase deploy --only firestore:rules`) —
+   sin esto, la escritura a `beta_feedback` la rechaza Firestore con permiso denegado,
+   aunque el Worker sí exista.
+3. **2 secrets nuevos en Cloudflare** para que llegue el aviso de WhatsApp (sin ellos, el
+   feedback se guarda pero no avisa — el propio código lo comprueba y no revienta):
+   - `TWILIO_WHATSAPP_FROM` — el mismo que lleva pendiente desde F5.1 (14 sept), número
+     de sandbox de Twilio tipo `whatsapp:+14155238886`.
+   - `PACO_WHATSAPP_TO` (nuevo) — el número de Paco con el mismo formato,
+     `whatsapp:+34...`. Tiene que haberse unido antes al sandbox de Twilio (mandar
+     `join <código>` desde su WhatsApp) si el proyecto sigue en modo sandbox.
+   Con `npx wrangler secret put NOMBRE -c wrangler.toml` desde `worker/`.
+4. **Probar en pantalla**: loguearse, abrir 🐛, tocar "📝 Feedback", mandar una nota de
+   prueba, y confirmar (a) que aparece en Firestore `beta_feedback` y (b) que llega el
+   WhatsApp — con los 2 secrets puestos.
+   **Nunca decir "arreglado" de esto hasta que ese WhatsApp llegue de verdad.**
+
+**No implementado a propósito, para no ampliar el encargo sin que Paco lo pida:**
+una vista en `admin.html` para leer el feedback sin entrar a la consola de Firebase.
+Por ahora, ver la colección `beta_feedback` directamente en Firebase Console. Si con
+varios testers a la vez esto se queda corto, es el siguiente paso natural.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
@@ -608,6 +671,8 @@ debug-panel.js (puro, intercepta console.*/window errors, sin deps de otros mód
 | `public_guides/{slug}` | Read: public / Write: auth (⚠ SIN ownership check) | Guías públicas SEO |
 | `config/salma-prompt` | Read: auth / Write: blocked | Prompt dinámico (gestionado via Worker admin) |
 | `admin_logs/{logId}` | Auth required | Logs de uso del Worker |
+| `url_validation_incidents/{id}` | Read: auth / Create: auth (solo alta) | Sustituciones de enlaces Maps rotos (Bloque E) |
+| `beta_feedback/{id}` | Read: auth / Create: auth (solo alta) | Feedback de testers: nota + logs del panel 🐛 + versión, mandado desde `POST /beta-feedback` |
 
 - **Regla importante**: `const db` solo se inicializa en `app.js`, nunca duplicado
 - Firebase se inicializa en el `<head>` del `index.html`
@@ -615,10 +680,12 @@ debug-panel.js (puro, intercepta console.*/window errors, sin deps de otros mód
 ### Firestore Rules actuales
 
 ```
-users/{userId}/**        → read/write: auth.uid == userId
-public_guides/{slug}     → read: true, write: auth != null (⚠ sin ownership)
-config/{doc}/**          → read: auth, write: false
-admin_logs/{logId}       → read/write: auth
+users/{userId}/**              → read/write: auth.uid == userId
+public_guides/{slug}           → read: true, write: auth != null (⚠ sin ownership)
+config/{doc}/**                → read: auth, write: false
+admin_logs/{logId}             → read/write: auth
+url_validation_incidents/{id}  → read: auth, create: auth (solo alta, sin editar/borrar)
+beta_feedback/{id}             → read: auth, create: auth (solo alta, sin editar/borrar)
 ```
 
 ---
@@ -749,6 +816,7 @@ Post-procesado que corrige cada parada de una ruta generada:
 | GET | `/flight-alerts` | Alertas de bajada de precio/presupuesto alcanzado (KV `fw_alerts:{uid}`) |
 | PUT | `/flight-alerts/mark-seen` | Marcar alerta como vista |
 | POST | `/perfil-ia-extract` | Extrae hasta 3 datos nuevos del perfil de viajero (GPT-4o-mini) tras guardar una ruta — requiere login |
+| POST | `/beta-feedback` | Feedback de testers desde el panel 🐛: nota + logs → Firestore `beta_feedback` + aviso a Paco por WhatsApp |
 
 **Nota de este barrido (16 sept 2026):** esta tabla llevaba sin auditar contra el código real desde el 10 sept — faltaban 15 endpoints que ya existen y están desplegados (Vigilancia de Vuelos completa, WhatsApp, Stripe webhook, roads/resolve, weather, transport, translate, tts-google, historia-lugar, admin/verify-place). Ver también "🧠 KV — situación real" más abajo para el resto de hallazgos de este barrido.
 

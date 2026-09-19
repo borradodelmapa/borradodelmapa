@@ -142,6 +142,14 @@
       .dbg-line.warn{background:rgba(244,99,11,.08);color:#F4630B}
       .dbg-t{color:rgba(245,240,232,.4);margin-right:6px}
       #dbg-ver{padding:8px 10px;background:#1e190f;border-bottom:1px solid rgba(244,99,11,.25);color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+      #dbg-fb{padding:6px;display:flex;flex-direction:column;gap:10px}
+      #dbg-fb p{margin:0;color:rgba(245,240,232,.7);font-size:12px;line-height:1.4}
+      #dbg-fb textarea{width:100%;box-sizing:border-box;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical}
+      #dbg-fb-actions{display:flex;gap:8px}
+      #dbg-fb-actions button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:10px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
+      #dbg-fb-actions button:disabled{opacity:.5}
+      #dbg-fb-actions .dbg-sec{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.3)}
+      #dbg-fb-status{font-size:11px;color:#F4630B;min-height:14px}
     `;
     document.head.appendChild(s);
   }
@@ -181,6 +189,7 @@
     overlay.innerHTML = `
       <div id="dbg-head">
         <button id="dbg-copy">📋 Copiar</button>
+        <button id="dbg-feedback">📝 Feedback</button>
         <button id="dbg-clear" class="dbg-sec">Limpiar</button>
         <button id="dbg-close" class="dbg-sec">✕</button>
       </div>
@@ -194,6 +203,7 @@
     startVerRefresh();
     overlay.querySelector('#dbg-close').addEventListener('click', () => { overlay.style.display = 'none'; stopVerRefresh(); });
     overlay.querySelector('#dbg-clear').addEventListener('click', () => { logs.length = 0; renderLogs(body); });
+    overlay.querySelector('#dbg-feedback').addEventListener('click', () => openFeedbackForm(body));
     overlay.querySelector('#dbg-copy').addEventListener('click', async () => {
       const text = versionText() + '\n────────────\n' +
         logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
@@ -210,6 +220,66 @@
         ta.select();
         try { document.execCommand('copy'); } catch (_) {}
         ta.remove();
+      }
+    });
+  }
+
+  // ═══ FEEDBACK DE TESTERS ═══
+  // Manda una nota escrita por el tester + los logs de esta pantalla al Worker
+  // (POST /beta-feedback), que los guarda en Firestore y avisa a Paco por WhatsApp.
+  // Requiere estar logueado (mismo requisito que el resto de la app para escribir en
+  // Firestore) — sin sesión, se avisa en vez de fallar en silencio.
+  function openFeedbackForm(body) {
+    body.innerHTML = `
+      <div id="dbg-fb">
+        <p>Cuéntanos qué ha pasado — se manda junto con los logs y la versión de esta pantalla.</p>
+        <textarea id="dbg-fb-note" rows="6" placeholder="Ej: al tocar &quot;Añadir a la guía&quot; no ha pasado nada..."></textarea>
+        <div id="dbg-fb-actions">
+          <button id="dbg-fb-send" type="button">Enviar</button>
+          <button id="dbg-fb-cancel" type="button" class="dbg-sec">Cancelar</button>
+        </div>
+        <div id="dbg-fb-status"></div>
+      </div>`;
+    const noteEl = body.querySelector('#dbg-fb-note');
+    const sendBtn = body.querySelector('#dbg-fb-send');
+    const statusEl = body.querySelector('#dbg-fb-status');
+    noteEl.focus();
+    body.querySelector('#dbg-fb-cancel').addEventListener('click', () => renderLogs(body));
+    sendBtn.addEventListener('click', async () => {
+      const note = noteEl.value.trim();
+      if (!note) { statusEl.textContent = 'Escribe algo antes de enviar.'; return; }
+      sendBtn.disabled = true;
+      statusEl.textContent = 'Enviando…';
+      try {
+        const user = window.firebase && firebase.auth && firebase.auth().currentUser;
+        if (!user) throw new Error('Inicia sesión para enviar feedback');
+        if (!window.SALMA_API) throw new Error('SALMA_API no definido');
+        const idToken = await user.getIdToken();
+        if (!workerVer) await loadWorkerVersion();
+        const logsText = logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
+        const res = await fetch(window.SALMA_API + '/beta-feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+          body: JSON.stringify({
+            note,
+            email: user.email || '',
+            page: location.pathname + location.search,
+            url: location.href,
+            worker_version: (workerVer && workerVer.version_short) || '',
+            front_versions: frontVersions(),
+            user_agent: navigator.userAgent,
+            logs_text: logsText,
+          }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || ('HTTP ' + res.status));
+        }
+        statusEl.textContent = '✓ Enviado. ¡Gracias!';
+        setTimeout(() => renderLogs(body), 1500);
+      } catch (e) {
+        statusEl.textContent = 'Error: ' + ((e && e.message) || e);
+        sendBtn.disabled = false;
       }
     });
   }
