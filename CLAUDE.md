@@ -1365,6 +1365,45 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Tercer y cuarto incidente foto+guía, mismo 19 sept 2026, DESPLEGADOS, sin confirmar
+  en pantalla — uno era regresión propia de esta misma sesión, el otro un bug real
+  distinto encontrado con certeza en el código.** Paco probó otra vez la guía de Navarra
+  desde foto y reportó dos cosas:
+  1. **Foto duplicada por parada.** Causa: el arreglo del incidente anterior (transcribir
+     la lista antes de nada) estaba redactado como DOS pasadas sobre la misma lista
+     ("EMPIEZA transcribiendo... Después continúa normal: cuenta cada parada...") — Claude
+     hizo las dos de verdad y llamó a `buscar_foto` en ambas, duplicando la foto (y la
+     llamada a Google Places Photo) por parada. **Regresión mía, de esta misma sesión,
+     no de Paco.** Arreglado, commit `826bbbe`: reescrito a una sola pasada — contar cada
+     parada YA sirve de transcripción, como mucho una llamada a `buscar_foto` por sitio.
+     **Aviso de coste (protocolo §8):** esto BAJA el coste (deshace un doblado accidental
+     que yo mismo introduje), no lo sube.
+  2. **Pantalla en negro al pulsar "Generar guía con mapa".** Encontrado con certeza
+     leyendo el código, no por sospecha: `mapaRuta.init()` (`mapa-ruta.js:39`) hace
+     `if (!stops.length) return;` — si la ruta que llega a la vista de itinerario tiene
+     **0 paradas válidas** (muy posible aquí: una ruta armada desde una foto no verificada
+     contra Google, sin ancla de país, donde el verify final puede descartarlas todas), el
+     mapa y las tarjetas no dibujan nada, nada lanza ningún error, y la vista se queda
+     completamente negra — sin el aviso de "Reintentar" que ya existe en `salma.js` para
+     otros fallos de este mismo botón, porque para que ese aviso salte hace falta que algo
+     LANCE una excepción, y aquí no lanzaba ninguna.
+     Arreglado, commit `9bf81a8`: `openItinerarioView()` (`mapa-itinerario.js`) ahora lanza
+     si `routeData.stops` llega vacío, para que el `catch` ya existente en `salma.js` se
+     encargue de deshacer la vista y avisar. De paso, revisados TODOS los sitios que llaman
+     a `openItinerarioView` — dos (`cargarGuia`, botón "Volver a la ruta") no tenían
+     `try/catch` y se habrían roto con este `throw` nuevo sin capturar nada; protegidos los
+     dos con su propio aviso (`showToast`). Solo frontend, `?v=`: `salma.js` a 98,
+     `mapa-itinerario.js` a 68. **Sin coste** — no toca ninguna API de pago, solo convierte
+     un fallo silencioso en uno visible.
+  Desplegado el Worker (GitHub Action "Deploy Worker" run #32, commit `9bf81a8`, **Worker
+  Version ID `56ad9988-f5e5-4e0d-bbd1-706c6d228f57`**) — sin confirmar contra `/version`,
+  mismo bloqueo de red del contenedor de siempre.
+  **Pendiente: que Paco repita la guía desde foto y confirme que sale una sola foto por
+  parada, y que si "Generar guía con mapa" no encuentra paradas válidas, ahora avisa con
+  "Reintentar" en vez de quedarse en negro** (si el problema de fondo es que esta ruta en
+  concreto no tiene ningún sitio verificable por Google, seguirá sin poder montar el mapa
+  — pero al menos ya no debería quedarse muda sin decir nada).
+
 - **Segundo incidente con foto+guía el mismo 19 sept 2026, DISTINTO del de arriba aunque
   con la misma raíz de fondo — DESPLEGADO, sin confirmar en pantalla.** Paco repitió la
   prueba con otra captura de Navarra y esta vez NO hubo corte por `max_tokens` — Salma
