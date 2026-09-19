@@ -9622,6 +9622,18 @@ INSTRUCCIONES:
               text: '[AVISO DEL SISTEMA — quedan pocas oportunidades de búsqueda antes de que se corte tu turno. NO llames a más herramientas de verificación. Con las paradas que ya tienes verificadas hasta ahora, cierra tu respuesta YA: prosa + SALMA_ROUTE_JSON completo. Si te falta verificar alguna parada, usa el nombre y ubicación que ya conoces — no sigas buscando.]'
             });
           }
+          // 19 sept 2026 — mismo aviso pero para el caso de foto con lista de paradas: cada
+          // parada gasta una llamada a buscar_foto, así que una lista de 10 sitios agota el
+          // tope de MAX_TOOL_ITERATIONS justo al final, cortando la respuesta a media frase
+          // (encontrado en pantalla: se cortó en la 9ª de 10 paradas, con el markdown de la
+          // foto sin cerrar). Sin ruta ni JSON de por medio aquí — el aviso es solo "cierra
+          // en texto, sin más fotos".
+          else if (imageBase64 && iteration >= MAX_TOOL_ITERATIONS - 2) {
+            _toolResultContent.push({
+              type: 'text',
+              text: '[AVISO DEL SISTEMA — quedan pocas oportunidades de búsqueda antes de que se corte tu turno. Si aún te quedan paradas de la lista por contar, ciérralas YA en texto, sin pedir más fotos — mejor una guía completa sin foto en las últimas paradas que dejarla a medias.]'
+            });
+          }
           currentMessages.push({
             role: 'user',
             content: _toolResultContent
@@ -10267,8 +10279,13 @@ REGLAS:
         // 10 puntos, 19 sept 2026 — se cortó en el punto 3 y luego, al preguntarle por qué,
         // contestó que no le había llegado ninguna captura). _truncationNoteAdded evita duplicar
         // el aviso si el bloque C (fallo de ruta) ya dijo algo.
-        if (!route && !_truncationNoteAdded && lastStopReason === 'max_tokens') {
-          console.log(`[CORTE] Respuesta truncada por max_tokens sin ruta de por medio (len: ${allText.length})`);
+        // 19 sept 2026 — segundo disparador real encontrado: `lastStopReason === 'tool_use'`
+        // al llegar aquí significa que el bucle se acabó por agotar MAX_TOOL_ITERATIONS (el
+        // for termina sin `break`, sin que Claude llegara a un cierre natural) — no es un
+        // corte por max_tokens, pero el síntoma para el usuario es el mismo (texto a medias,
+        // a veces con una foto sin terminar de pedir). Mismo aviso para los dos casos.
+        if (!route && !_truncationNoteAdded && (lastStopReason === 'max_tokens' || lastStopReason === 'tool_use')) {
+          console.log(`[CORTE] Respuesta truncada (motivo: ${lastStopReason}) sin ruta de por medio (len: ${allText.length})`);
           // Quita un ![Nombre](... final que nunca llegó a cerrar con ')' — la URL de foto
           // a medio teclear que suele causar el corte (no siempre la repara _repairBrokenPhotoMarkdown:
           // si el corte llegó antes de que buscar_foto devolviera resultado, no hay URL real que poner).
