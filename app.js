@@ -1488,11 +1488,11 @@ async function _perfilIASetProactive(value) {
 // 3 datos nuevos (estilo/restricciones/patrones/trato) a partir de la ruta y del
 // chat reciente. Silenciosa: si falla, no molesta ni bloquea el guardado de la ruta.
 async function _perfilIAExtract(ruta) {
-  if (!currentUser) return;
+  if (!currentUser) { console.log('[PerfilIA] sin currentUser, no se llama'); return; }
   const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
 
   const authUser = auth.currentUser;
-  if (!authUser) return;
+  if (!authUser) { console.log('[PerfilIA] sin auth.currentUser, no se llama'); return; }
   const token = await authUser.getIdToken();
 
   const existingFacts = (perfilIA.facts || []).map(f => ({ categoria: f.categoria, texto: f.texto }));
@@ -1505,15 +1505,27 @@ async function _perfilIAExtract(ruta) {
     num_dias: ruta.num_dias,
     notas: (ruta.notas || '').slice(0, 500)
   };
+  console.log('[PerfilIA] pidiendo extracción', { guideSummary, existingFactsCount: existingFacts.length, recentMessagesCount: recentMessages.length });
 
-  const res = await fetch(`${window.SALMA_API}/perfil-ia-extract`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-    body: JSON.stringify({ guideSummary, existingFacts, recentMessages })
-  });
-  if (!res.ok) return;
+  let res;
+  try {
+    res = await fetch(`${window.SALMA_API}/perfil-ia-extract`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ guideSummary, existingFacts, recentMessages })
+    });
+  } catch (e) {
+    console.warn('[PerfilIA] fetch falló:', e.message);
+    return;
+  }
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    console.warn('[PerfilIA] respuesta no OK:', res.status, errText);
+    return;
+  }
   const { facts } = await res.json();
-  if (!Array.isArray(facts) || !facts.length) return;
+  console.log('[PerfilIA] facts recibidos:', facts);
+  if (!Array.isArray(facts) || !facts.length) { console.log('[PerfilIA] sin datos nuevos que aportar'); return; }
 
   const newFacts = facts.map(f => ({
     id: 'auto-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
@@ -1523,6 +1535,7 @@ async function _perfilIAExtract(ruta) {
     fecha: Date.now()
   }));
   await _perfilIASave({ ...perfilIA, facts: [...(perfilIA.facts || []), ...newFacts] });
+  console.log('[PerfilIA] guardados', newFacts.length, 'datos nuevos en Firestore');
 }
 
 // ═══ BITÁCORA — Organizada por países ═══
@@ -3196,7 +3209,7 @@ async function guardarGuiaDirecto(routeData) {
     // Perfil IA (memoria) — en segundo plano, sin bloquear ni frenar el guardado.
     // Aviso de coste dado y confirmado con Paco (19 sept 2026): GPT-4o-mini,
     // ~$0,0006 por ruta guardada — ver renderPerfilIA()/_perfilIAExtract().
-    _perfilIAExtract(ruta).catch(() => {});
+    _perfilIAExtract(ruta).catch(e => console.warn('[PerfilIA] error inesperado:', e.message));
 
     return docRef.id;
   } catch (e) {
