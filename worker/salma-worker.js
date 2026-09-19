@@ -2904,7 +2904,13 @@ Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
     // qué contenía la captura — un mensaje de seguimiento ("sigue", "sí") se queda ciego, y Salma
     // puede llegar a decir que no le llegó ninguna foto aunque sí llegara. Instrucción para que el
     // contenido quede siempre guardado en texto desde el primer momento, pase lo que pase después.
-    userContent += `\n\n[FOTO ADJUNTA — si es una captura con una LISTA de sitios/paradas para una ruta (post de red social, notas, itinerario ajeno, capturas de otra guía), tu respuesta debe EMPEZAR transcribiendo cada parada de la lista en texto plano (nombre + 1 línea), antes de cualquier otra cosa. Así, aunque la conversación se corte o el usuario conteste después, la lista queda en el propio texto y no depende de la imagen — que no vuelves a tener en el turno siguiente. Después continúa normal: cuenta cada parada en 2-3 frases como cualquier guía. No preguntes nada ambiguo tipo "¿cómo lo hacemos?" — ve directa a listar y contar. No menciones coins ni "modo guía" en este caso.]`;
+    // 19 sept 2026, corrección del mismo día: la redacción original ("EMPIEZA transcribiendo...
+    // Después continúa normal: cuenta cada parada...") sonaba a DOS pasadas sobre la misma lista
+    // — Claude las hizo de verdad (transcripción rápida + relato detallado) y llamó a buscar_foto
+    // en las dos, duplicando la foto (y la llamada a Google Places Photo, coste doblado) por
+    // parada. Reescrito para que quede claro que es UNA sola pasada: la propia "cuenta cada
+    // parada" ES la transcripción que queda en el historial, no algo aparte.
+    userContent += `\n\n[FOTO ADJUNTA — si es una captura con una LISTA de sitios/paradas para una ruta (post de red social, notas, itinerario ajeno, capturas de otra guía): UNA SOLA PASADA por la lista, parada a parada, contando cada una en 2-3 frases (esto ya sirve de transcripción — no hace falta listar los nombres antes por separado ni repetir la ronda). Así, aunque la conversación se corte o el usuario conteste después, el contenido queda en el propio texto y no depende de la imagen — que no vuelves a tener en el turno siguiente. Como mucho UNA llamada a buscar_foto por parada — si ya conseguiste foto de un sitio en esta respuesta, no la vuelvas a pedir. No preguntes nada ambiguo tipo "¿cómo lo hacemos?" — ve directa a contarlas. No menciones coins ni "modo guía" en este caso.]`;
   } else if (guidedIsReco) {
     // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
     userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
