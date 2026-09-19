@@ -164,10 +164,12 @@ const mapaItinerario = {
       }
     } catch (_) {}
     const url = window.location.origin + '/' + slug;
+    const title = routeData.title || routeData.name || 'Mi ruta';
+    const text = `Te comparto esta ruta: ${title}`;
     if (navigator.share) {
-      navigator.share({ title: routeData.title || routeData.name || 'Mi ruta', url }).catch(() => {});
+      navigator.share({ title, text, url }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(url).then(() => {
+      navigator.clipboard.writeText(`${text}\n${url}`).then(() => {
         if (typeof showToast !== 'undefined') showToast('Link copiado');
       }).catch(() => {
         if (typeof showToast !== 'undefined') showToast('Link: ' + url);
