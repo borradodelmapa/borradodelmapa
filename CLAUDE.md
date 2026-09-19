@@ -505,6 +505,22 @@ una vista en `admin.html` para leer el feedback sin entrar a la consola de Fireb
 Por ahora, ver la colección `beta_feedback` directamente en Firebase Console. Si con
 varios testers a la vez esto se queda corto, es el siguiente paso natural.
 
+**Rediseño del mismo día, a petición de Paco tras ver el botón en pantalla:** el flujo
+de dos pasos (lista de logs → botón "Feedback" → formulario) confundía al usuario
+normal, y a Paco le faltaba una forma rápida de copiarse él mismo la nota+logs para
+pegarlos aquí en el chat. Simplificado a una sola pantalla (`debug-panel.js?v=6`): el
+🐛 abre **directo** el cuadro de texto (sin pasar por la lista de logs en crudo, que
+desaparece de la vista aunque los logs se siguen capturando igual por detrás), con la
+versión de Worker+scripts siempre visible arriba, y dos botones:
+- **"Enviar"** — el de los testers, manda nota+logs a `POST /beta-feedback` (sin
+  cambios respecto a antes).
+- **"📋 Copiar"** — nuevo, para el propio Paco: copia nota + versión + logs en un solo
+  texto al portapapeles, listo para pegarlo en el chat con Claude Code sin pasos
+  intermedios.
+Se quitaron de la vista "Limpiar" y la lista de logs en crudo (antes visibles por
+defecto) — puro ruido para el tester, y Paco ya tiene su caso de uso cubierto con
+"Copiar". Sin cambios en el Worker ni en costes.
+
 ---
 
 ## Qué es este proyecto

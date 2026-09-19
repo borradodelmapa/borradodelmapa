@@ -1,6 +1,7 @@
 // debug-panel.js — Panel de logs visible en el móvil
-// Intercepta console.* y errores, muestra un botón flotante que abre
-// un overlay con todos los logs + botón de Copiar.
+// Intercepta console.* y errores en segundo plano. El botón flotante 🐛 abre
+// directo un cuadro de texto (versión + nota) con dos acciones: "Enviar" manda
+// nota+logs a Paco (POST /beta-feedback) y "Copiar" los pone en el portapapeles.
 //
 // Se carga primero en index.html para capturar desde el arranque.
 
@@ -25,9 +26,6 @@
         m: msg
       });
       if (logs.length > MAX) logs.shift();
-      // Reflejar en el panel si está abierto
-      const body = document.getElementById('dbg-body');
-      if (body) renderLogs(body);
       // Badge rojo en el botón si hay error
       if (kind === 'error') {
         const btn = document.getElementById('dbg-btn');
@@ -133,20 +131,14 @@
       #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;border-color:#fff;opacity:1;animation:dbg-pulse 1s infinite}
       @keyframes dbg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
-      #dbg-head{display:flex;gap:8px;padding:10px;background:#141209;border-bottom:1px solid #F4630B}
-      #dbg-head button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:10px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
-      #dbg-head .dbg-sec{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.3)}
-      #dbg-body{flex:1;overflow-y:auto;padding:8px;font-size:11px;line-height:1.5;color:#f5f0e8}
-      .dbg-line{padding:4px 6px;border-bottom:1px solid rgba(244,99,11,.08);word-break:break-word;white-space:pre-wrap}
-      .dbg-line.error{background:rgba(239,68,68,.12);color:#ff8b8b}
-      .dbg-line.warn{background:rgba(244,99,11,.08);color:#F4630B}
-      .dbg-t{color:rgba(245,240,232,.4);margin-right:6px}
-      #dbg-ver{padding:8px 10px;background:#1e190f;border-bottom:1px solid rgba(244,99,11,.25);color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
-      #dbg-fb{padding:6px;display:flex;flex-direction:column;gap:10px}
+      #dbg-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.35);font-size:14px;cursor:pointer}
+      #dbg-body{flex:1;overflow-y:auto;box-sizing:border-box;padding:52px 14px 14px;display:flex;flex-direction:column;gap:12px}
+      #dbg-ver{background:#1e190f;border:1px solid rgba(244,99,11,.25);border-radius:8px;padding:8px 10px;color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+      #dbg-fb{display:flex;flex-direction:column;gap:10px;flex:1}
       #dbg-fb p{margin:0;color:rgba(245,240,232,.7);font-size:12px;line-height:1.4}
-      #dbg-fb textarea{width:100%;box-sizing:border-box;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical}
+      #dbg-fb textarea{width:100%;box-sizing:border-box;flex:1;min-height:140px;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical}
       #dbg-fb-actions{display:flex;gap:8px}
-      #dbg-fb-actions button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:10px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
+      #dbg-fb-actions button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:12px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
       #dbg-fb-actions button:disabled{opacity:.5}
       #dbg-fb-actions .dbg-sec{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.3)}
       #dbg-fb-status{font-size:11px;color:#F4630B;min-height:14px}
@@ -166,15 +158,14 @@
     document.body.appendChild(b);
   }
 
-  function renderLogs(body) {
-    body.innerHTML = logs.map(l => `<div class="dbg-line ${l.k}"><span class="dbg-t">${l.t}</span>${escapeHtml(l.m)}</div>`).join('');
-    body.scrollTop = body.scrollHeight;
+  function logsAsText() {
+    return logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-  }
-
+  // Un solo botón 🐛 → cae directo en el cuadro de texto, sin lista de logs en medio
+  // (confundía al tester). "Enviar" manda nota+logs a Paco (POST /beta-feedback);
+  // "Copiar" pone nota+versión+logs en el portapapeles para pegarlo en el chat con
+  // Claude. Los logs se siguen capturando igual por detrás, solo dejan de listarse.
   function openPanel() {
     document.getElementById('dbg-btn')?.classList.remove('dbg-has-error');
     let overlay = document.getElementById('dbg-overlay');
@@ -182,38 +173,44 @@
       overlay.style.display = 'flex';
       loadWorkerVersion().then(renderVersion);
       startVerRefresh();
+      overlay.querySelector('#dbg-fb-note')?.focus();
       return;
     }
     overlay = document.createElement('div');
     overlay.id = 'dbg-overlay';
     overlay.innerHTML = `
-      <div id="dbg-head">
-        <button id="dbg-copy">📋 Copiar</button>
-        <button id="dbg-feedback">📝 Feedback</button>
-        <button id="dbg-clear" class="dbg-sec">Limpiar</button>
-        <button id="dbg-close" class="dbg-sec">✕</button>
-      </div>
-      <div id="dbg-ver"></div>
-      <div id="dbg-body"></div>`;
+      <button id="dbg-close" aria-label="Cerrar">✕</button>
+      <div id="dbg-body">
+        <div id="dbg-ver"></div>
+        <div id="dbg-fb">
+          <p>Cuéntanos qué ha pasado — se manda junto con los logs y la versión de esta pantalla.</p>
+          <textarea id="dbg-fb-note" rows="6" placeholder="Ej: al tocar &quot;Añadir a la guía&quot; no ha pasado nada..."></textarea>
+          <div id="dbg-fb-actions">
+            <button id="dbg-fb-send" type="button">Enviar</button>
+            <button id="dbg-fb-copy" type="button" class="dbg-sec">📋 Copiar</button>
+          </div>
+          <div id="dbg-fb-status"></div>
+        </div>
+      </div>`;
     document.body.appendChild(overlay);
-    const body = overlay.querySelector('#dbg-body');
-    renderLogs(body);
     renderVersion();
     loadWorkerVersion().then(renderVersion);
     startVerRefresh();
+
+    const noteEl = overlay.querySelector('#dbg-fb-note');
+    const sendBtn = overlay.querySelector('#dbg-fb-send');
+    const copyBtn = overlay.querySelector('#dbg-fb-copy');
+    const statusEl = overlay.querySelector('#dbg-fb-status');
+    noteEl.focus();
+
     overlay.querySelector('#dbg-close').addEventListener('click', () => { overlay.style.display = 'none'; stopVerRefresh(); });
-    overlay.querySelector('#dbg-clear').addEventListener('click', () => { logs.length = 0; renderLogs(body); });
-    overlay.querySelector('#dbg-feedback').addEventListener('click', () => openFeedbackForm(body));
-    overlay.querySelector('#dbg-copy').addEventListener('click', async () => {
-      const text = versionText() + '\n────────────\n' +
-        logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
+
+    copyBtn.addEventListener('click', async () => {
+      const note = noteEl.value.trim();
+      const text = (note ? 'NOTA: ' + note + '\n\n' : '') + versionText() + '\n────────────\n' + logsAsText();
       try {
         await navigator.clipboard.writeText(text);
-        const btn = overlay.querySelector('#dbg-copy');
-        btn.textContent = '✓ Copiado';
-        setTimeout(() => { btn.textContent = '📋 Copiar'; }, 1500);
       } catch (e) {
-        // Fallback
         const ta = document.createElement('textarea');
         ta.value = text;
         document.body.appendChild(ta);
@@ -221,30 +218,10 @@
         try { document.execCommand('copy'); } catch (_) {}
         ta.remove();
       }
+      copyBtn.textContent = '✓ Copiado';
+      setTimeout(() => { copyBtn.textContent = '📋 Copiar'; }, 1500);
     });
-  }
 
-  // ═══ FEEDBACK DE TESTERS ═══
-  // Manda una nota escrita por el tester + los logs de esta pantalla al Worker
-  // (POST /beta-feedback), que los guarda en Firestore y avisa a Paco por WhatsApp.
-  // Requiere estar logueado (mismo requisito que el resto de la app para escribir en
-  // Firestore) — sin sesión, se avisa en vez de fallar en silencio.
-  function openFeedbackForm(body) {
-    body.innerHTML = `
-      <div id="dbg-fb">
-        <p>Cuéntanos qué ha pasado — se manda junto con los logs y la versión de esta pantalla.</p>
-        <textarea id="dbg-fb-note" rows="6" placeholder="Ej: al tocar &quot;Añadir a la guía&quot; no ha pasado nada..."></textarea>
-        <div id="dbg-fb-actions">
-          <button id="dbg-fb-send" type="button">Enviar</button>
-          <button id="dbg-fb-cancel" type="button" class="dbg-sec">Cancelar</button>
-        </div>
-        <div id="dbg-fb-status"></div>
-      </div>`;
-    const noteEl = body.querySelector('#dbg-fb-note');
-    const sendBtn = body.querySelector('#dbg-fb-send');
-    const statusEl = body.querySelector('#dbg-fb-status');
-    noteEl.focus();
-    body.querySelector('#dbg-fb-cancel').addEventListener('click', () => renderLogs(body));
     sendBtn.addEventListener('click', async () => {
       const note = noteEl.value.trim();
       if (!note) { statusEl.textContent = 'Escribe algo antes de enviar.'; return; }
@@ -256,7 +233,6 @@
         if (!window.SALMA_API) throw new Error('SALMA_API no definido');
         const idToken = await user.getIdToken();
         if (!workerVer) await loadWorkerVersion();
-        const logsText = logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
         const res = await fetch(window.SALMA_API + '/beta-feedback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
@@ -268,7 +244,7 @@
             worker_version: (workerVer && workerVer.version_short) || '',
             front_versions: frontVersions(),
             user_agent: navigator.userAgent,
-            logs_text: logsText,
+            logs_text: logsAsText(),
           }),
         });
         if (!res.ok) {
@@ -276,7 +252,8 @@
           throw new Error(err.error || ('HTTP ' + res.status));
         }
         statusEl.textContent = '✓ Enviado. ¡Gracias!';
-        setTimeout(() => renderLogs(body), 1500);
+        noteEl.value = '';
+        sendBtn.disabled = false;
       } catch (e) {
         statusEl.textContent = 'Error: ' + ((e && e.message) || e);
         sendBtn.disabled = false;
