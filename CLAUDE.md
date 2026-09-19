@@ -2872,6 +2872,23 @@ antiguo — tratarlo como tal.)*
   y es un slideshow visual bajo petición explícita del usuario, no una narrativa de texto
   automática. Sin prisa — no hay nada roto, es una feature nueva a valorar más adelante.
 
+- **[Prioridad baja, sin urgencia — Paco lo confirmó explícitamente] Política de red de
+  este tipo de entorno bloquea `borradodelmapa-api.workers.dev`.** 19 sept 2026: al
+  intentar bajar la captura de un tester desde el enlace (para poder verla sin que Paco
+  tuviera que reenviarla como imagen), `curl` dio `403` — diagnosticado con
+  `/root/.ccr/README.md` y `curl http://127.0.0.1:43649/__agentproxy/status`: es un
+  bloqueo de **política de red del entorno** (`"gateway answered 403 to CONNECT (policy
+  denial...)"`), no un problema de certificados ni de configuración de la sesión —
+  confirma y amplía el bloqueo ya documentado varias veces en este archivo contra este
+  mismo dominio. Afecta a cualquier sesión de Claude Code con esta política, sea el
+  enlace de Paco o de un tester — no depende de quién lo mande. **Mientras tanto, sin
+  tocar nada**: si Paco quiere que una sesión vea una captura concreta, la reenvía él
+  como imagen directamente en el chat (funciona ya, sin depender de la red). **Arreglo
+  de fondo, si algún día interesa**: cambiar la política de red de este tipo de entorno
+  (o crear uno con una política menos restrictiva) desde la configuración de Claude Code
+  en la web — https://code.claude.com/docs/en/claude-code-on-the-web. Paco confirmó que
+  le interesa pero no es urgente — no perseguir esto hasta que lo pida.
+
 ### 🔧 Deuda técnica (sin cambios, no re-verificado a fondo en este barrido salvo lo dicho)
 
 - **Código duplicado** — `_groupByDay`, `_sampleWaypoints`, `_fullRouteGmapsUrl`,
