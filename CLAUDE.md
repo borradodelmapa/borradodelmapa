@@ -1365,6 +1365,38 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Quinto y sexto hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADOS, sin
+  confirmar en pantalla.** La foto duplicada ya no salió (fix anterior confirmado
+  funcionando), pero Paco reportó dos cosas más probando otra vez:
+  1. **Sigue cortándose, ahora sin duplicar foto.** Causa DISTINTA a la de `max_tokens`
+     de antes: con 10 paradas y una llamada a `buscar_foto` por cada una, el bucle agota
+     su tope de seguridad de `MAX_TOOL_ITERATIONS` (10) justo al final — visto en
+     pantalla, se cortó en la 9ª parada con el markdown de la foto sin cerrar. Como no
+     es un corte por `max_tokens`, el aviso "se me ha cortado" del incidente anterior no
+     saltaba aquí. **Arreglado, commit `2c4242b`:** (a) aviso previo a Claude cuando
+     quedan pocas iteraciones libres para que cierre en texto sin pedir más fotos —ya
+     existía este aviso para rutas, ahora también para foto+lista—, y (b) el aviso final
+     de corte ahora también salta si el motivo es agotar iteraciones
+     (`lastStopReason === 'tool_use'` al terminar el bucle), no solo por `max_tokens`.
+  2. **"API KEY REQUIRED" pintado sobre el mapa al pulsar "Crear ruta con mapa".** Causa
+     real: Google Maps JS no cargó ese momento (probablemente un bache de red del
+     móvil, nada tocado en esta sesión) y el mapa cayó al modo de reserva (Leaflet) —
+     que usaba CARTO (`basemaps.cartocdn.com`, tiles "dark_all") como proveedor de
+     mapa. CARTO dejó de servir esos tiles en anónimo sin API key en algún momento
+     después de abril — **llevaba roto en silencio meses**, porque este camino de
+     reserva solo se pisa cuando Google Maps falla, algo raro que no se había vuelto a
+     dar hasta hoy. **Arreglado, commit `34d0da6`:** cambiado a OpenStreetMap estándar
+     (gratis, sin clave) en los 3 sitios que usaban CARTO (`mapa-ruta.js`,
+     `guide-renderer.js` x2). **Sin coste** — los dos proveedores son gratis; el único
+     cambio real es visual (mapa claro en vez de oscuro mientras dure el fallback, en
+     vez de un watermark inservible). `?v=`: `mapa-ruta.js` a 7, `guide-renderer.js` a 54.
+  Desplegado el Worker (GitHub Action "Deploy Worker" run #33, commit `34d0da6`,
+  **Worker Version ID `9d611533-04bd-41ad-9c1f-99e8c8d5d69f`**) — sin confirmar contra
+  `/version`, mismo bloqueo de red del contenedor de siempre.
+  **Pendiente: que Paco repita la guía desde foto con 10 paradas y confirme que llega
+  completa (o que, si se corta, ahora avisa con "sigue"), y que si Google Maps vuelve a
+  fallar en algún momento, el mapa de reserva ya no muestre el watermark de API key.**
+
 - **Tercer y cuarto incidente foto+guía, mismo 19 sept 2026, DESPLEGADOS, sin confirmar
   en pantalla — uno era regresión propia de esta misma sesión, el otro un bug real
   distinto encontrado con certeza en el código.** Paco probó otra vez la guía de Navarra
