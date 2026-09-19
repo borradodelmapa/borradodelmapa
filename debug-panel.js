@@ -136,7 +136,7 @@
       #dbg-ver{background:#1e190f;border:1px solid rgba(244,99,11,.25);border-radius:8px;padding:8px 10px;color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
       #dbg-fb{display:flex;flex-direction:column;gap:10px;flex:1}
       #dbg-fb textarea{width:100%;box-sizing:border-box;flex:1;min-height:140px;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical}
-      #dbg-fb-actions{display:flex;gap:8px}
+      #dbg-fb-actions{display:flex;gap:8px;margin-top:10px}
       #dbg-fb-actions button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:12px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
       #dbg-fb-actions button:disabled{opacity:.5}
       #dbg-fb-actions .dbg-sec{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.3)}
@@ -166,7 +166,9 @@
   // "Copiar" pone nota+versión+logs en el portapapeles para pegarlo en el chat con
   // Claude. Los logs se siguen capturando igual por detrás, solo dejan de listarse.
   function openPanel() {
-    document.getElementById('dbg-btn')?.classList.remove('dbg-has-error');
+    const trigger = document.getElementById('dbg-btn');
+    trigger?.classList.remove('dbg-has-error');
+    if (trigger) trigger.style.display = 'none'; // se tapaba con la propia versión al abrir el panel
     let overlay = document.getElementById('dbg-overlay');
     if (overlay) {
       overlay.style.display = 'flex';
@@ -201,7 +203,12 @@
     const statusEl = overlay.querySelector('#dbg-fb-status');
     noteEl.focus();
 
-    overlay.querySelector('#dbg-close').addEventListener('click', () => { overlay.style.display = 'none'; stopVerRefresh(); });
+    overlay.querySelector('#dbg-close').addEventListener('click', () => {
+      overlay.style.display = 'none';
+      stopVerRefresh();
+      const t = document.getElementById('dbg-btn');
+      if (t) t.style.display = 'flex';
+    });
 
     copyBtn.addEventListener('click', async () => {
       const note = noteEl.value.trim();

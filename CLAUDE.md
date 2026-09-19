@@ -539,6 +539,16 @@ defecto) — puro ruido para el tester, y Paco ya tiene su caso de uso cubierto 
    marcando en rojo pulsante, mismo mecanismo de antes.
 Sin cambios en el Worker ni en costes — solo maquetación y copy.
 
+**Tercer ajuste el mismo día, tras captura de Paco: el botón flotante "💬 Tu opinión"
+se quedaba montado ENCIMA de la versión mientras el panel ya estaba abierto** — bug
+real, no solo estético: el botón flotante (`z-index` más alto que el propio overlay,
+a propósito, para que nunca quede tapado por el resto de la app) seguía pintándose
+por encima del panel de feedback también, tapando parte del texto de versión. Corregido
+en `debug-panel.js?v=8`: `openPanel()` oculta el botón flotante al abrir (ya no hace
+falta, el panel ya está abierto) y lo devuelve al cerrar con la ✕. De paso, más espacio
+entre el bloque de versión y los botones Enviar/Copiar (estaban pegados). Sin cambios
+en el Worker ni en costes.
+
 ---
 
 ## Qué es este proyecto
