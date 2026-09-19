@@ -423,8 +423,24 @@ que se sienta como vigilancia.
    aprendizaje en sí, hace falta un interruptor aparte con su propio texto, no reusar
    este.
    `?v=` subidos: `styles.css` a 106, `app.js` a 121.
-   **Pendiente: que Paco pruebe la pantalla y, tras guardar una ruta nueva, confirme que
-   aparecen datos nuevos solos en "Lo que Salma sabe de ti".**
+
+   **Primer intento de confirmación, 19 sept 2026, sin resultado — causa encontrada.**
+   Paco generó una ruta, la guardó y abrió "Lo que Salma sabe de ti": sin datos nuevos.
+   Pidió el log del panel 🐛, pero venía de **reabrir la guía tras refrescar la página**
+   — el panel vacía su buffer en cada refresco, así que el momento real de guardar (que
+   es cuando `_perfilIAExtract` se dispara) ya no estaba en ese log; solo se vieron las
+   peticiones de fotos y el GPS de abrir la guía, nada de `[PerfilIA]`. Se añadió
+   logging de diagnóstico a la función (commit `40c2be3`→`64b195a` tras rebase, `?v=
+   app.js` a 122) para la próxima vez. **Confirmado aparte, mirando el código exacto que
+   corre hoy**: el endpoint `/perfil-ia-extract` sigue intacto en el Worker
+   `1d8cf715` (la otra sesión que arregló el orden geográfico no lo tocó al desplegar
+   encima) — no es un problema de que el endpoint haya desaparecido.
+   **Pausado a petición de Paco (19 sept 2026)**: no va a generar más rutas de prueba
+   por ahora (mismo motivo que la pausa ya anotada más abajo, revisar coste de APIs
+   antes de seguir probando). **No perseguir esto hasta que Paco lo pida.** Cuando
+   retome: guardar una ruta → en cuanto salga el toast "Guía guardada", abrir el panel
+   🐛 y copiar **sin refrescar la página antes** — así sí saldrán las líneas
+   `[PerfilIA] ...` (piden extracción / facts recibidos o error / guardados N datos).
 
 ---
 
