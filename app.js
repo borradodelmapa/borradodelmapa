@@ -275,20 +275,24 @@ function _renderChatEmpty() {
   if (!area || area.querySelector('.msg')) return;
 
   const _ci = (d) => `<svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  // Simplificación 19 sept 2026 (a petición de Paco): solo 6 chips fijos, centrados
+  // en la guía — el resto (uso menos frecuente) vive detrás de "Más opciones".
   const chipsLeft = [
     // "Quiero ir a..." → desactivado 2026-04-17. Ver PENDIENTES.md
     { label: 'Cerca mía', icon: '', msg: 'Hazme una ruta desde donde estoy', action: 'ruta-aqui' },
-    { label: 'Vuelos', icon: '', msg: 'Busca vuelos' },
-    { label: 'Alertas vuelos', icon: '', msg: null, action: 'vuelos' },
-    { label: 'Alojamiento', icon: '', msg: 'Busca alojamiento' },
+    { label: 'Últimas consultas', icon: '', msg: null, action: 'consultas' },
+    { label: 'Mis notas', icon: '', msg: null, action: 'notas' },
   ];
   const chipsRight = [
-    { label: 'Consultas', icon: '', msg: null, action: 'consultas' },
-    { label: 'Notas', icon: '', msg: null, action: 'notas' },
-    { label: 'Moneda', icon: '', msg: null, action: 'moneda' },
-    { label: 'Traductor', icon: '', msg: null, action: 'traductor' },
     { label: 'Narrador', icon: '', msg: null, action: 'explorar' },
+    { label: 'Buscar alojamiento', icon: '', msg: 'Busca alojamiento' },
     { label: 'SOS', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
+  ];
+  const chipsMore = [
+    { label: 'Vuelos', icon: '', msg: 'Busca vuelos' },
+    { label: 'Alertas vuelos', icon: '', msg: null, action: 'vuelos' },
+    { label: 'Cambio moneda', icon: '', msg: null, action: 'moneda' },
+    { label: 'Traductor', icon: '', msg: null, action: 'traductor' },
   ];
   const renderChip = c => {
     const narratorOn = c.action === 'explorar' && typeof salma !== 'undefined' && salma._narratorActive;
@@ -425,11 +429,21 @@ function _renderChatEmpty() {
 
   // "Ruta nueva" quitado (Fase 5): el billete ya es el creador de ruta; ese chip
   // abría el flujo viejo de 8 preguntas y duplicaba la función.
+  let _ceMoreOpen = false;
+  try { _ceMoreOpen = localStorage.getItem('bdm_ce_more_open') === '1'; } catch (_) {}
+  const _ceMoreHTML = `
+      <button class="ce-more-toggle" id="ce-more-toggle" aria-expanded="${_ceMoreOpen}">
+        <span>Más opciones</span>
+        <span class="ce-more-toggle-ic">${_ceMoreOpen ? '▴' : '▾'}</span>
+      </button>
+      <div class="ce-more-chips${_ceMoreOpen ? ' open' : ''}" id="ce-more-chips">${chipsMore.map(renderChip).join('')}</div>`;
+
   const _ceChipsRow = `
       <div class="chat-empty-chips">
         <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
-      </div>`;
+      </div>
+      ${_ceMoreHTML}`;
 
   const _ceFallback = `
     <div class="chat-empty">
@@ -437,6 +451,7 @@ function _renderChatEmpty() {
         <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>
+      ${_ceMoreHTML}
     </div>`;
 
   // ¿Hay ruta activa? (localStorage — igual criterio que _restoreActiveRoute)
@@ -735,6 +750,18 @@ function _renderChatEmpty() {
       if (chip.dataset.msg && typeof salma !== 'undefined') salma.send(chip.dataset.msg);
     });
   });
+
+  const _moreToggle = area.querySelector('#ce-more-toggle');
+  const _moreChips = area.querySelector('#ce-more-chips');
+  if (_moreToggle && _moreChips) {
+    _moreToggle.addEventListener('click', () => {
+      const open = _moreChips.classList.toggle('open');
+      _moreToggle.setAttribute('aria-expanded', String(open));
+      const ic = _moreToggle.querySelector('.ce-more-toggle-ic');
+      if (ic) ic.textContent = open ? '▴' : '▾';
+      try { localStorage.setItem('bdm_ce_more_open', open ? '1' : '0'); } catch (_) {}
+    });
+  }
 }
 
 // ═══ WELCOME (estado 1) ═══
