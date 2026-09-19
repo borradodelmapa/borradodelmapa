@@ -1367,15 +1367,14 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 - **Séptimo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar
   en pantalla — corrige además un error de diagnóstico propio de la entrada de arriba.**
-  Paco probó otra vez: la captura original SÍ tiene 10 puntos (confirmado, la volvió a
-  mandar) — en eso no me equivoqué — pero el mapa final solo montó 5 paradas, así que mi
-  teoría de "se corta en la 9ª de 10 por agotar el tope de iteraciones" (entrada de
-  arriba, commit `2c4242b`) no encaja con lo que pasó de verdad: con 5 paradas reales de
-  foto no se acerca ni de lejos al tope de 10. Ese fix queda igual (es una mejora válida
-  para cuando sí haya muchas paradas de foto en una respuesta), pero no era la causa de
-  esto — **sin confirmar todavía por qué el conversor texto→mapa deja el reportaje en 5
-  paradas en vez de las que hubiera en el texto; pendiente de investigar aparte, no se ha
-  tocado nada de eso hoy.**
+  Confirmado por Paco: la captura real tenía **5 puntos, no 10** — mi lectura inicial de
+  "10 paradas" (basada en los números de los badges de una captura de otra prueba, de
+  otra sesión) no correspondía a la captura de esta prueba en concreto. Con eso resuelto:
+  el mapa montando 5 paradas era **correcto, no un bug** — se cierra esa duda, no hay
+  nada que investigar ahí. Mi teoría de "se corta en la 9ª de 10 por agotar el tope de
+  iteraciones" (entrada de arriba, commit `2c4242b`) tampoco encajaba con esta captura de
+  5 puntos — ese fix queda igual (es una mejora válida para cuando sí haya muchas paradas
+  de foto en una sola respuesta), pero no era la causa de lo que vio Paco aquí.
   **Lo que sí se diagnosticó y arregló de verdad, mirando el código**: la foto rota de
   "Elizondo y el Valle de Baztán" — la función que repara markdown de fotos mal escrito
   por Claude (`_repairBrokenPhotoMarkdown`) comparaba el nombre que Claude pone en el
@@ -1397,9 +1396,8 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   Desplegado (GitHub Action "Deploy Worker" run #34, commit `af892fb`, **Worker Version
   ID `c16509a2-4976-467f-9b70-0893c0ece113`**) — sin confirmar contra `/version`, mismo
   bloqueo de red del contenedor de siempre.
-  **Pendiente: que Paco repita la guía desde la captura de 10 puntos y confirme que la
-  foto de Elizondo (o cualquier nombre compuesto) ya no sale rota, y que alguien mire
-  aparte por qué el mapa final se queda en 5 paradas en vez de las que describa el texto.**
+  **Pendiente: que Paco repita la guía desde una captura con nombres de sitio largos o
+  compuestos (tipo "Elizondo y Baztán") y confirme que la foto ya no sale rota.**
 
 - **Quinto y sexto hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADOS, sin
   confirmar en pantalla.** La foto duplicada ya no salió (fix anterior confirmado
