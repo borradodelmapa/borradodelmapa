@@ -6663,6 +6663,22 @@ body {
 .chat-empty .chat-empty-chip--ruta:hover,
 .chat-empty .chat-empty-chip--ruta:active{background:var(--ce-amber);border-color:var(--ce-amber);color:#0a0a0a;}
 
+/* ── "Más opciones" — vuelos/alertas/moneda/traductor, plegado por defecto (19 sept) ── */
+.chat-empty .ce-more-toggle{
+  width:100%;margin:9px 0 0;border:0;border-top:1px dashed var(--ce-line-hi);
+  background:transparent;color:var(--ce-ink2);cursor:pointer;
+  font-family:var(--ce-sign);text-transform:uppercase;font-weight:700;font-size:10.5px;letter-spacing:.08em;
+  padding:11px 1px 0;display:flex;justify-content:space-between;align-items:center;
+}
+.chat-empty .ce-more-toggle:hover{color:var(--ce-amber);}
+.chat-empty .ce-more-toggle-ic{transition:transform .15s;}
+.chat-empty .ce-more-chips{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;
+  max-height:0;overflow:hidden;opacity:0;margin-top:0;
+  transition:max-height .2s ease,opacity .15s ease,margin-top .2s ease;
+}
+.chat-empty .ce-more-chips.open{max-height:220px;opacity:1;margin-top:7px;}
+
 /* ── BILLETE (índice = creador de ruta) — ámbito .chat-empty ── */
 .chat-empty .ce-card.ce-ticket{padding:0;}
 /* cabecera del billete: banda fina, sin relleno naranja sólido (doc 8 sep — un solo relleno sólido por pantalla) */

@@ -61,5 +61,19 @@ service cloud.firestore {
                     && request.resource.data.user_id == request.auth.uid;
       allow update, delete: if false;
     }
+
+    // Rutas compartidas desde el botón "Compartir" de la vista de itinerario.
+    // A diferencia de public_guides (SEO, lectura abierta sin login), esto SÍ
+    // exige sesión — el visitante tiene que registrarse/entrar para verla.
+    // Solo el dueño puede crear/actualizar/borrar su propia ruta compartida.
+    match /shared_routes/{shareId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+                    && resource.data.uid == request.auth.uid
+                    && request.resource.data.uid == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
   }
 }
