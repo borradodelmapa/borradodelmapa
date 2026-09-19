@@ -5802,7 +5802,7 @@ function showNarratorConfirm() {
     <div class="narrator-confirm-modal">
       <div class="narrator-confirm-icon">📍</div>
       <h2 class="narrator-confirm-title">Narrador</h2>
-      <p class="narrator-confirm-text">Te cuenta curiosidades de lo que tienes cerca mientras te mueves — con notificaciones y, si quieres, en voz. Necesita acceso a tu ubicación.</p>
+      <p class="narrator-confirm-text">Te cuenta curiosidades de lo que tienes cerca mientras te mueves — con notificaciones y, si quieres, en voz. Necesita acceso a tu ubicación. Se apaga solo si llevas 5 minutos parado, para no gastar batería.</p>
       <div class="narrator-confirm-btns">
         <button class="narrator-confirm-cancel" id="narrator-confirm-cancel">Cancelar</button>
         <button class="narrator-confirm-go" id="narrator-confirm-go">Activar</button>

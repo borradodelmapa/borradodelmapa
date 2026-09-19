@@ -2373,6 +2373,33 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   Setenil, Zahara) están en Cádiz, no en Málaga como Ronda, así que ese filtro podría
   relegarlos a "cerca de" en vez de dejarlos en la ruta principal. No se ha visto pasar en
   pantalla, solo detectado leyendo el código — investigar si da problemas.
+- **Narrador daba info de un sitio a 10km justo al activarlo — 19 sept 2026, DESPLEGADO
+  EN CÓDIGO (pendiente push+GitHub Pages), sin confirmar en pantalla.** Reportado por
+  Paco: nada más pulsar "Activar" en el Narrador, el primer aviso fue de un sitio a
+  10km. Causa: `startNarrator()` (`salma.js`) solo pedía un GPS fresco
+  (`_requestGPSFix()`) si `this._userLocation` estaba vacío — y casi nunca lo está,
+  porque es la misma variable global que usa toda la app. Si el GPS continuo ya se
+  había parado por buena precisión (`initGeolocation()`, ahorro de batería) con el
+  Narrador todavía apagado, `_userLocation` se queda congelada en la última posición de
+  entonces — y el primer `checkNearbyPOIs()` al activar corría con esa posición vieja,
+  no con la actual. Fix: `startNarrator()` ahora pide SIEMPRE un fix fresco al activar,
+  quitando la condición `if (!this._userLocation)`.
+  **De paso, a petición de Paco: auto-apagado del Narrador tras 5 min sin moverte más de
+  50m** (ahorro de batería — el GPS continuo se queda encendido todo el rato mientras el
+  Narrador está activo). Nuevo estado `_narratorStationaryPos`/`_narratorStationarySince`,
+  comprobado en cada ciclo de `checkNearbyPOIs()` (colocado ANTES del recorte de coste ya
+  existente que se salta la llamada a Google si no te has movido — si no, con el usuario
+  parado del todo esa comprobación nunca llegaría a ejecutarse). Al apagarse solo, toast
+  "Narrador desactivado — llevas 5 min sin moverte, para ahorrar batería." (autoCloseMs
+  4000). Aviso añadido también al popup de activación (`showNarratorConfirm()` en
+  `app.js`) para que no pille de sorpresa la primera vez.
+  `?v=` subidos: `salma.js` a 99, `app.js` a 125 (sobre la base de `origin/main`, que
+  había avanzado con trabajo de otra sesión — feedback de testers, chips, botón
+  Compartir — fusionado sin conflicto salvo el propio `?v=` de `index.html`, resuelto a
+  mano). **Pendiente: push, confirmar que GitHub Pages sirve la versión nueva, y que
+  Paco active el Narrador en marcha y confirme que el primer aviso ya sale de donde
+  está de verdad — y opcionalmente que compruebe el auto-apagado dejándolo activo 5 min
+  parado.**
 ### ✅ Ya resuelto (estaba aquí como pendiente y ya no lo es)
 
 - **Botón "Trazar ruta" de la caja de ejemplos rotable mandaba el ejemplo tal cual a
