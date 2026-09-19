@@ -1,7 +1,9 @@
 // debug-panel.js — Panel de logs visible en el móvil
-// Intercepta console.* y errores en segundo plano. El botón flotante 🐛 abre
-// directo un cuadro de texto (versión + nota) con dos acciones: "Enviar" manda
-// nota+logs a Paco (POST /beta-feedback) y "Copiar" los pone en el portapapeles.
+// Intercepta console.* y errores en segundo plano. El botón flotante "Tester
+// Member" abre directo un cuadro de texto (nota + captura opcional + versión)
+// con dos acciones: "Enviar" manda nota+captura+logs a Paco (POST /beta-feedback,
+// la captura vía /upload-gallery-photo a R2) y "Copiar" pone nota+versión+logs
+// en el portapapeles (la captura no se copia, solo se manda con "Enviar").
 //
 // Se carga primero en index.html para capturar desde el arranque.
 
@@ -136,6 +138,11 @@
       #dbg-ver{margin-top:8px;background:#1e190f;border:1px solid rgba(244,99,11,.25);border-radius:8px;padding:8px 10px;color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
       #dbg-fb{display:flex;flex-direction:column;gap:10px;flex:1}
       #dbg-fb textarea{width:100%;box-sizing:border-box;flex:1;min-height:140px;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical}
+      #dbg-fb-shot-btn{align-self:flex-start;background:transparent;color:#F4630B;border:1px dashed rgba(244,99,11,.45);border-radius:8px;padding:9px 14px;font-family:inherit;font-size:12px;cursor:pointer}
+      #dbg-fb-shot-preview{display:flex;align-items:center;gap:10px}
+      #dbg-fb-shot-thumb{width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid rgba(244,99,11,.35)}
+      #dbg-fb-shot-preview span{flex:1;color:rgba(245,240,232,.6);font-size:11px}
+      #dbg-fb-shot-remove{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.35);border-radius:50%;width:26px;height:26px;font-size:12px;cursor:pointer}
       #dbg-fb-actions{display:flex;gap:8px}
       #dbg-fb-actions button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:12px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
       #dbg-fb-actions button:disabled{opacity:.5}
@@ -184,6 +191,13 @@
       <div id="dbg-body">
         <div id="dbg-fb">
           <textarea id="dbg-fb-note" rows="6" placeholder="Cuéntanos tu experiencia, si has tenido algún problema o ideas para mejorar..."></textarea>
+          <button id="dbg-fb-shot-btn" type="button">📎 Adjuntar captura</button>
+          <div id="dbg-fb-shot-preview" style="display:none">
+            <img id="dbg-fb-shot-thumb" alt="captura">
+            <span>captura adjunta</span>
+            <button id="dbg-fb-shot-remove" type="button" aria-label="Quitar captura">✕</button>
+          </div>
+          <input id="dbg-fb-shot-input" type="file" accept="image/*" style="display:none">
           <div id="dbg-fb-actions">
             <button id="dbg-fb-send" type="button">Enviar</button>
             <button id="dbg-fb-copy" type="button" class="dbg-sec">📋 Copiar</button>
@@ -201,7 +215,47 @@
     const sendBtn = overlay.querySelector('#dbg-fb-send');
     const copyBtn = overlay.querySelector('#dbg-fb-copy');
     const statusEl = overlay.querySelector('#dbg-fb-status');
+    const shotBtn = overlay.querySelector('#dbg-fb-shot-btn');
+    const shotInput = overlay.querySelector('#dbg-fb-shot-input');
+    const shotPreview = overlay.querySelector('#dbg-fb-shot-preview');
+    const shotThumb = overlay.querySelector('#dbg-fb-shot-thumb');
+    const shotRemove = overlay.querySelector('#dbg-fb-shot-remove');
     noteEl.focus();
+
+    // ═══ CAPTURA ADJUNTA ═══
+    // Reutiliza lo mismo que ya usa el chat para fotos: comprime en el navegador
+    // (salma._compressImage, sin coste) y al enviar la sube a R2 vía el mismo
+    // endpoint que ya usa la galería (/upload-gallery-photo) — no llama a ninguna
+    // API de pago, solo guarda el fichero.
+    let pendingShot = null; // { blob, localUrl }
+
+    shotBtn.addEventListener('click', () => shotInput.click());
+
+    shotInput.addEventListener('change', async () => {
+      const file = shotInput.files[0];
+      shotInput.value = '';
+      if (!file) return;
+      try {
+        const blob = (window.salma && typeof salma._compressImage === 'function')
+          ? await salma._compressImage(file, 1280, 0.85)
+          : file;
+        if (pendingShot?.localUrl) URL.revokeObjectURL(pendingShot.localUrl);
+        const localUrl = URL.createObjectURL(blob);
+        pendingShot = { blob, localUrl };
+        shotThumb.src = localUrl;
+        shotBtn.style.display = 'none';
+        shotPreview.style.display = 'flex';
+      } catch (e) {
+        statusEl.textContent = 'No se pudo procesar la imagen.';
+      }
+    });
+
+    shotRemove.addEventListener('click', () => {
+      if (pendingShot?.localUrl) URL.revokeObjectURL(pendingShot.localUrl);
+      pendingShot = null;
+      shotPreview.style.display = 'none';
+      shotBtn.style.display = '';
+    });
 
     overlay.querySelector('#dbg-close').addEventListener('click', () => {
       overlay.style.display = 'none';
@@ -212,7 +266,8 @@
 
     copyBtn.addEventListener('click', async () => {
       const note = noteEl.value.trim();
-      const text = (note ? 'NOTA: ' + note + '\n\n' : '') + versionText() + '\n────────────\n' + logsAsText();
+      const shotNote = pendingShot ? '(hay una captura adjunta — el portapapeles solo copia texto, usa "Enviar" para incluirla)\n\n' : '';
+      const text = shotNote + (note ? 'NOTA: ' + note + '\n\n' : '') + versionText() + '\n────────────\n' + logsAsText();
       try {
         await navigator.clipboard.writeText(text);
       } catch (e) {
@@ -238,6 +293,19 @@
         if (!window.SALMA_API) throw new Error('SALMA_API no definido');
         const idToken = await user.getIdToken();
         if (!workerVer) await loadWorkerVersion();
+
+        let screenshotUrl = '';
+        if (pendingShot) {
+          statusEl.textContent = 'Subiendo captura…';
+          const fd = new FormData();
+          fd.append('photo', pendingShot.blob, 'captura.jpg');
+          fd.append('uid', user.uid);
+          const upRes = await fetch(window.SALMA_API + '/upload-gallery-photo', { method: 'POST', body: fd });
+          const upData = await upRes.json().catch(() => ({}));
+          if (upRes.ok && upData.url) screenshotUrl = upData.url;
+        }
+
+        statusEl.textContent = 'Enviando…';
         const res = await fetch(window.SALMA_API + '/beta-feedback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
@@ -250,6 +318,7 @@
             front_versions: frontVersions(),
             user_agent: navigator.userAgent,
             logs_text: logsAsText(),
+            screenshot_url: screenshotUrl,
           }),
         });
         if (!res.ok) {
@@ -258,6 +327,7 @@
         }
         statusEl.textContent = '✓ Enviado. ¡Gracias!';
         noteEl.value = '';
+        shotRemove.click();
         sendBtn.disabled = false;
       } catch (e) {
         statusEl.textContent = 'Error: ' + ((e && e.message) || e);

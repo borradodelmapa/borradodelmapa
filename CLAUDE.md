@@ -562,6 +562,23 @@ máximo redondeo posible con texto dentro) — si Paco quería un círculo puro 
 visible, decirlo para ajustar en la próxima vuelta. Sin cambios en el Worker ni en
 costes.
 
+**Sexto ajuste el mismo día — botón de adjuntar captura, `debug-panel.js?v=11` +
+Worker.** Petición de Paco: poder adjuntar una imagen al feedback, reutilizando lo
+mismo que ya usa la cámara del chat. Botón "📎 Adjuntar captura" debajo del cuadro de
+texto (abre el selector de archivos, con `accept="image/*"` — en móvil esto también
+deja elegir "Cámara" directamente, no hace falta un control aparte); al elegir una
+imagen se comprime en el propio navegador con `salma._compressImage()` (la misma
+función que ya usa la cámara del chat normal, sin tocar nada nuevo) y se ve una
+miniatura con opción de quitarla. Al tocar "Enviar", si hay captura, se sube primero a
+R2 por el mismo camino que ya usa la galería (`POST /upload-gallery-photo`, existente,
+sin cambios) y la URL resultante se manda junto con la nota a `POST /beta-feedback`, que
+ahora también la guarda en Firestore (`screenshot_url`) y la incluye como enlace en el
+aviso de WhatsApp. El botón "Copiar" (portapapeles) sigue siendo solo texto — si hay
+una captura pendiente, el texto copiado avisa de que hay que usar "Enviar" para que
+llegue de verdad. **Aviso de coste:** no llama a ninguna API de pago (Google/Anthropic/
+OpenAI/etc.) — solo guarda el fichero en R2, el mismo almacenamiento que ya usa cada
+foto de la app (céntimos por miles de fotos, irrelevante a este volumen de testers).
+
 ---
 
 ## Sesión 19 sept 2026 — Simplificación de chips del chat vacío: 6 fijos + "Más opciones"

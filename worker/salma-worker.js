@@ -6974,6 +6974,7 @@ export default {
         return new Response(JSON.stringify({ error: 'empty_note' }), { status: 400, headers: corsH });
       }
       const logsText = String(body.logs_text || '').slice(-20000);
+      const screenshotUrl = String(body.screenshot_url || '').slice(0, 500);
       const nowIso = new Date().toISOString();
       const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
       const fields = {
@@ -6987,6 +6988,7 @@ export default {
         front_versions: { stringValue: (Array.isArray(body.front_versions) ? body.front_versions.join(' ') : '').slice(0, 1000) },
         user_agent:     { stringValue: String(body.user_agent || '').slice(0, 300) },
         logs_text:      { stringValue: logsText },
+        screenshot_url: { stringValue: screenshotUrl },
         timestamp:      { timestampValue: nowIso },
         seen:           { booleanValue: false },
       };
@@ -7013,7 +7015,8 @@ export default {
       if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
         const who = body.email || user.name || user.uid.slice(0, 8);
         const lastLines = logsText.split('\n').slice(-15).join('\n');
-        const waText = `🧪 Feedback tester\n${who}\n${String(body.page || '')}\n\n"${note}"\n\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
+        const shotLine = screenshotUrl ? `\n📎 Captura: ${screenshotUrl}\n` : '';
+        const waText = `🧪 Feedback tester\n${who}\n${String(body.page || '')}\n\n"${note}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
         ctx.waitUntil(sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, waText));
       }
 
