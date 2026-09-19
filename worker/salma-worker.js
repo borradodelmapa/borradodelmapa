@@ -9134,7 +9134,14 @@ INSTRUCCIONES:
     // 24000 da margen para una ruta de 7 días (el tope single-shot; ≥8 días va por bloques).
     // PIEZA A — el Tiempo 1 (recomendaciones) no es "isRoute" pero puede ser largo
     // (viajes de 11-16 días en prosa) → margen amplio para que no se trunque.
-    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (needsTools ? 6000 : 3000));
+    // 19 sept 2026 — mensaje con foto/captura adjunta (imageBase64) quedaba SIEMPRE en el
+    // tope genérico de 6000 aunque pidiera algo largo (ej. "guía con los puntos de esta
+    // captura" con 10 paradas y una foto cada una): a media guía Claude se quedaba sin
+    // tokens y cortaba a mitad de teclear la URL de una foto — texto roto + turno perdido.
+    // Subido al mismo tope que las recomendaciones normales (14000): el coste solo sube en
+    // los casos que YA se estaban cortando (para una respuesta corta con foto no cambia nada,
+    // Claude para sola antes de llegar al tope).
+    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (imageBase64 ? 14000 : (needsTools ? 6000 : 3000)));
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -9752,12 +9759,14 @@ REGLAS:
         //    OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico —
         //    isRoute también es true para isDaysDestination (MODO PLAN), que PROHÍBE
         //    el JSON a propósito; ahí route=null es el comportamiento correcto, no un fallo. ──
+        let _truncationNoteAdded = false;
         if (!route && !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute)) {
           console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
           const _honestNote = '\n\n_No he podido montar el mapa interactivo de esta ruta — aquí tienes toda la información en texto. Puedes pedírmelo de nuevo o pulsar "Generar guía con mapa" para reintentarlo._';
           reply = (reply || '').trimEnd() + _honestNote;
           allText += _honestNote;
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _honestNote })}\n\n`)); } catch (_) {}
+          _truncationNoteAdded = true;
         }
 
         // ── "Añadir a la guía" (botón del popup de consulta, Tiempo 2 en modo fusión) ──
@@ -10233,6 +10242,25 @@ REGLAS:
             reply += webBlock;
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: webBlock })}\n\n`)); } catch (_) {}
           }
+        }
+
+        // ── D: respuesta normal (sin ruta) cortada por max_tokens a media frase ──
+        // Sin JSON de por medio no hay nada que reconstruir (RESCATE 1/2 son solo para
+        // rutas) — pero dejar el texto colgado a medias, o con un ![Nombre](url_a_medio_teclear
+        // sin cerrar, deja al usuario sin saber qué pasó Y a Salma sin saber en el siguiente
+        // turno que fue ELLA la que se cortó (caso real: guía de Navarra desde una captura con
+        // 10 puntos, 19 sept 2026 — se cortó en el punto 3 y luego, al preguntarle por qué,
+        // contestó que no le había llegado ninguna captura). _truncationNoteAdded evita duplicar
+        // el aviso si el bloque C (fallo de ruta) ya dijo algo.
+        if (!route && !_truncationNoteAdded && lastStopReason === 'max_tokens') {
+          console.log(`[CORTE] Respuesta truncada por max_tokens sin ruta de por medio (len: ${allText.length})`);
+          // Quita un ![Nombre](... final que nunca llegó a cerrar con ')' — la URL de foto
+          // a medio teclear que suele causar el corte (no siempre la repara _repairBrokenPhotoMarkdown:
+          // si el corte llegó antes de que buscar_foto devolviera resultado, no hay URL real que poner).
+          reply = (reply || '').replace(/!\[[^\]]*\]\([^)\n]*$/, '').trimEnd();
+          const _cutNote = '\n\n_Se me ha cortado aquí — dime "sigue" y continúo justo donde lo he dejado, o pídemelo por partes más cortas si lo prefieres._';
+          reply += _cutNote;
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _cutNote })}\n\n`)); } catch (_) {}
         }
 
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
