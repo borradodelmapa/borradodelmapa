@@ -2895,7 +2895,16 @@ Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
   }
 
   if (hasPhoto) {
-    // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
+    // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente.
+    // 19 sept 2026 — excepción real encontrada: si la foto es una CAPTURA con una lista de
+    // sitios/paradas (post de red social, notas, itinerario ajeno) y el usuario pide una guía
+    // con ellos, el historial del frontend (salma.js) solo guarda TEXTO — la imagen en sí no
+    // sobrevive al turno. Si la respuesta no deja constancia en texto de qué había en la foto
+    // (se corta, o Salma no llega a procesarla bien), el turno siguiente no tiene forma de saber
+    // qué contenía la captura — un mensaje de seguimiento ("sigue", "sí") se queda ciego, y Salma
+    // puede llegar a decir que no le llegó ninguna foto aunque sí llegara. Instrucción para que el
+    // contenido quede siempre guardado en texto desde el primer momento, pase lo que pase después.
+    userContent += `\n\n[FOTO ADJUNTA — si es una captura con una LISTA de sitios/paradas para una ruta (post de red social, notas, itinerario ajeno, capturas de otra guía), tu respuesta debe EMPEZAR transcribiendo cada parada de la lista en texto plano (nombre + 1 línea), antes de cualquier otra cosa. Así, aunque la conversación se corte o el usuario conteste después, la lista queda en el propio texto y no depende de la imagen — que no vuelves a tener en el turno siguiente. Después continúa normal: cuenta cada parada en 2-3 frases como cualquier guía. No preguntes nada ambiguo tipo "¿cómo lo hacemos?" — ve directa a listar y contar. No menciones coins ni "modo guía" en este caso.]`;
   } else if (guidedIsReco) {
     // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
     userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
