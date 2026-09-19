@@ -554,6 +554,14 @@ justo debajo del cuadro de texto — no era así, la versión se colaba entre me
 Reordenado en `debug-panel.js?v=9`: cuadro de texto → botones Enviar/Copiar → versión
 (al final, como pie de página). Sin cambios en el Worker ni en costes.
 
+**Quinto ajuste el mismo día**: botón flotante renombrado de "💬 Tu opinión" a
+**"Tester Member 💬"** (texto delante del icono, a petición de Paco), subido un poco
+más arriba en la pantalla (`bottom` de 130px a 170px) — `debug-panel.js?v=10`. La
+forma se deja en píldora totalmente redondeada (`border-radius:999px`, ya era el
+máximo redondeo posible con texto dentro) — si Paco quería un círculo puro sin texto
+visible, decirlo para ajustar en la próxima vuelta. Sin cambios en el Worker ni en
+costes.
+
 ---
 
 ## Qué es este proyecto

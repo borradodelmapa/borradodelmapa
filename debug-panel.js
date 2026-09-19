@@ -127,7 +127,7 @@
     const s = document.createElement('style');
     s.id = 'dbg-styles';
     s.textContent = `
-      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;display:flex;align-items:center;gap:6px;padding:11px 16px;border-radius:999px;background:#F4630B;color:#060503;border:none;font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 3px 14px rgba(0,0,0,.45);cursor:pointer}
+      #dbg-btn{position:fixed;bottom:calc(170px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;display:flex;align-items:center;gap:6px;padding:12px 18px;border-radius:999px;background:#F4630B;color:#060503;border:none;font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 3px 14px rgba(0,0,0,.45);cursor:pointer}
       #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;animation:dbg-pulse 1s infinite}
       @keyframes dbg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
@@ -151,7 +151,7 @@
     const b = document.createElement('button');
     b.id = 'dbg-btn';
     b.type = 'button';
-    b.textContent = '💬 Tu opinión';
+    b.textContent = 'Tester Member 💬';
     b.title = 'Cuéntanos tu experiencia';
     b.addEventListener('click', openPanel);
     document.body.appendChild(b);
@@ -161,7 +161,7 @@
     return logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
   }
 
-  // Un solo botón "💬 Tu opinión" → cae directo en el cuadro de texto, sin lista de logs en medio
+  // Un solo botón "Tester Member 💬" → cae directo en el cuadro de texto, sin lista de logs en medio
   // (confundía al tester). "Enviar" manda nota+logs a Paco (POST /beta-feedback);
   // "Copiar" pone nota+versión+logs en el portapapeles para pegarlo en el chat con
   // Claude. Los logs se siguen capturando igual por detrás, solo dejan de listarse.
