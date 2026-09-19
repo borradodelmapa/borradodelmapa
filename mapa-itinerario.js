@@ -605,6 +605,17 @@ const mapaItinerario = {
     window._itinViewDocId = docId;
     window._itinViewOptions = options;
 
+    // Sincroniza salma.currentRoute/currentRouteId aquí mismo, no solo al abrir
+    // el popup de consulta (_openItinQuery) — bug real: abrir una guía guardada
+    // desde la tarjeta "ruta activa" del billete o desde Mi Diario llama a esta
+    // función directo, sin pasar por salma.cargarGuia(), así que currentRoute se
+    // quedaba a null. Con eso, tocar "Compartir" sin abrir antes el chat creía
+    // que no había ninguna ruta y ni guardaba ni compartía nada.
+    if (typeof salma !== 'undefined') {
+      salma.currentRoute = routeData;
+      salma.currentRouteId = docId || null;
+    }
+
     // La última guía guardada que se abre pasa a ser la RUTA ACTIVA (índice + mapa).
     // Solo si es una guía guardada (tiene docId); los borradores del chat no.
     if (docId && typeof window.setActiveRoute === 'function') {
