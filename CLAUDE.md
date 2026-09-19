@@ -556,6 +556,30 @@ Reordenado en `debug-panel.js?v=9`: cuadro de texto → botones Enviar/Copiar �
 
 ---
 
+## Sesión 19 sept 2026 — Simplificación de chips del chat vacío: 6 fijos + "Más opciones"
+
+Petición de Paco: los 10 chips del chat vacío (repartidos en columnas descompensadas, 4
+vs 6) eran demasiada información — quería centrar la pantalla en la guía y dejar solo lo
+esencial a la vista, sin perder el resto de opciones. Antes de tocar código se hizo un
+mockup interactivo (Design Artifact, no llegó al repo) con las dos versiones lado a lado
+para acordar el diseño con Paco.
+
+**Cambio, solo frontend (`app.js`, `styles.css`), sin tocar el Worker ni ninguna API de
+pago, commit `1b10d49`, fusionado directo a `main` (fast-forward):**
+1. **6 chips fijos**, en grid parejo 2×3 (antes 10 en columnas de 4 y 6): Cerca mía,
+   Últimas consultas (antes "Consultas"), Mis notas (antes "Notas"), Narrador, Buscar
+   alojamiento (antes "Alojamiento"), SOS. Mismas acciones/mensajes de siempre, solo
+   cambian las etiquetas y cuáles se ven por defecto.
+2. **"Más opciones ▾"** nuevo, plegado por defecto, debajo de los 6: Vuelos, Alertas
+   vuelos, Cambio moneda (antes "Moneda"), Traductor — se abre con un tap (animación de
+   `max-height`), y recuerda si Paco lo dejó abierto la última vez
+   (`localStorage: bdm_ce_more_open`).
+`?v=`: `app.js` a 123, `styles.css` a 107 en `index.html`.
+
+**CONFIRMADO EN PANTALLA por Paco** ("So esta correcto") — sin nada pendiente de esto.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
