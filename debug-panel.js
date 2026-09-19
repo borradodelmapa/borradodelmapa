@@ -133,10 +133,10 @@
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
       #dbg-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.35);font-size:14px;cursor:pointer}
       #dbg-body{flex:1;overflow-y:auto;box-sizing:border-box;padding:52px 14px 14px;display:flex;flex-direction:column;gap:12px}
-      #dbg-ver{background:#1e190f;border:1px solid rgba(244,99,11,.25);border-radius:8px;padding:8px 10px;color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+      #dbg-ver{margin-top:8px;background:#1e190f;border:1px solid rgba(244,99,11,.25);border-radius:8px;padding:8px 10px;color:#F4630B;font-size:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
       #dbg-fb{display:flex;flex-direction:column;gap:10px;flex:1}
       #dbg-fb textarea{width:100%;box-sizing:border-box;flex:1;min-height:140px;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.3);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical}
-      #dbg-fb-actions{display:flex;gap:8px;margin-top:10px}
+      #dbg-fb-actions{display:flex;gap:8px}
       #dbg-fb-actions button{flex:1;background:#F4630B;color:#060503;border:none;border-radius:8px;padding:12px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
       #dbg-fb-actions button:disabled{opacity:.5}
       #dbg-fb-actions .dbg-sec{background:transparent;color:#f5f0e8;border:1px solid rgba(245,240,232,.3)}
@@ -184,12 +184,12 @@
       <div id="dbg-body">
         <div id="dbg-fb">
           <textarea id="dbg-fb-note" rows="6" placeholder="Cuéntanos tu experiencia, si has tenido algún problema o ideas para mejorar..."></textarea>
-          <div id="dbg-ver"></div>
           <div id="dbg-fb-actions">
             <button id="dbg-fb-send" type="button">Enviar</button>
             <button id="dbg-fb-copy" type="button" class="dbg-sec">📋 Copiar</button>
           </div>
           <div id="dbg-fb-status"></div>
+          <div id="dbg-ver"></div>
         </div>
       </div>`;
     document.body.appendChild(overlay);

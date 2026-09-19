@@ -549,6 +549,11 @@ falta, el panel ya está abierto) y lo devuelve al cerrar con la ✕. De paso, m
 entre el bloque de versión y los botones Enviar/Copiar (estaban pegados). Sin cambios
 en el Worker ni en costes.
 
+**Cuarto ajuste el mismo día**: Paco preguntó si los botones Enviar/Copiar quedaban
+justo debajo del cuadro de texto — no era así, la versión se colaba entre medio.
+Reordenado en `debug-panel.js?v=9`: cuadro de texto → botones Enviar/Copiar → versión
+(al final, como pie de página). Sin cambios en el Worker ni en costes.
+
 ---
 
 ## Qué es este proyecto
