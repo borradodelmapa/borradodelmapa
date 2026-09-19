@@ -1364,7 +1364,12 @@ function _createGuideCard(doc, d, isOffline) {
 const PERFIL_IA_CATEGORIAS = [
   { id: 'estilo', title: 'ESTILO DE VIAJE' },
   { id: 'restricciones', title: 'RESTRICCIONES' },
-  { id: 'patrones', title: 'PATRONES DETECTADOS' }
+  { id: 'patrones', title: 'PATRONES DETECTADOS' },
+  // Señal de satisfacción/tono detectada en el chat (ej. "esto no me sirvió",
+  // "qué borde", "gracias, genial") — solo para detectar y mostrar, NUNCA para
+  // que el prompt cambie de personalidad solo por queja de un usuario (ver
+  // conversación 19 sept 2026: Salma es una marca con carácter fijo).
+  { id: 'trato', title: 'TRATO Y SATISFACCIÓN' }
 ];
 
 function renderPerfilIA() {
