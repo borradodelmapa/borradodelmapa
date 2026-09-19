@@ -1365,6 +1365,43 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **Guía pedida a partir de una captura (lista de puntos) se cortaba a media respuesta,
+  y luego Salma no sabía que había sido ella la que se cortó — 19 sept 2026, DESPLEGADO,
+  sin confirmar en pantalla.** Reportado por Paco con vídeo: pidió una guía de Navarra a
+  partir de una captura con 10 puntos; Salma respondió bien las 2 primeras paradas (texto
+  + foto) y se cortó a mitad de la 3ª (Selva de Irati) con el markdown de la foto sin
+  cerrar (`![Selva de Irati](https://...` en crudo, sin `)`, como texto/enlace larguísimo).
+  Al preguntarle "¿por qué se corta?", Salma contestó "no me ha llegado ninguna captura,
+  vuélvemela a mandar" — la captura sí había llegado y ya la había usado.
+  Causa real, en `worker/salma-worker.js`: cualquier mensaje con foto/captura adjunta
+  (`imageBase64`) tenía SIEMPRE el tope genérico de **6000 tokens** de salida
+  (línea ~9137), sin mirar si lo que pedía era una guía larga de varios puntos con foto
+  cada uno — muy por debajo de los 14.000 que ya tienen las recomendaciones normales
+  (`guidedIsReco`), justo porque esas están excluidas a propósito cuando hay foto. Con 10
+  paradas y una foto por parada, Claude se quedó sin margen y Anthropic le cortó la
+  respuesta (`stop_reason: max_tokens`) literalmente a mitad de teclear la URL de la 3ª
+  foto. Para respuestas de ruta (JSON) sí existe un rescate para este caso (`RESCATE 1/2`);
+  para una respuesta de texto normal como esta, no había nada — el bucle simplemente
+  paraba y mandaba el texto roto tal cual como respuesta final. Con eso en el historial,
+  el turno siguiente no tenía ninguna pista de que fue la propia Salma la que se quedó
+  corta, y respondió a ciegas con la excusa genérica de "no me llegó la foto".
+  **Arreglo, 2 piezas, commit `c96f3fb` (fusionado a `main` en `fb25c11`):**
+  1. Tope de tokens con foto adjunta subido de 6000 a **14.000** — mismo margen que las
+     recomendaciones normales. **Aviso de coste (protocolo §8), dado y confirmado con
+     Paco antes de implementar:** el coste solo sube en los casos que YA se estaban
+     cortando (como este) — una respuesta corta con foto no cambia nada, Claude para sola
+     antes de llegar al tope nuevo.
+  2. Si aun así una respuesta de texto (no ruta) se corta por `max_tokens`: se limpia
+     cualquier `![Nombre](url-a-medias` sin cerrar al final (para no volcar la URL en
+     crudo) y se añade un aviso claro: *"Se me ha cortado aquí — dime 'sigue' y continúo
+     justo donde lo he dejado, o pídemelo por partes más cortas si lo prefieres."*
+  Desplegado (GitHub Action "Deploy Worker" run #30, commit `fb25c11`, **Worker Version ID
+  `24bbcb68-dbda-4800-86ee-9fecd6c4fa5b`**) — esta sesión no pudo confirmarlo además contra
+  `/version` porque el proxy de red del contenedor bloquea las llamadas salientes a
+  `salma-api.borradodelmapa-api.workers.dev` (mismo bloqueo ya documentado otras veces).
+  **Pendiente: que Paco repita la guía desde una captura con varios puntos y confirme que
+  ya no se corta (o que, si se corta, ahora avisa con "sigue" en vez de dejar texto roto).**
+
 - **Fotos del itinerario fallando en cadena con "Failed to fetch" en una guía de
   varios días de antigüedad ("Oriente salvaje", Asturias/Picos, 12 paradas) — 16 sept
   2026, DOS BUGS REALES ENCONTRADOS Y CORREGIDOS, pero el síntoma sigue sin
