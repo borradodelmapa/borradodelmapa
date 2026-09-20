@@ -248,3 +248,25 @@ function countryTimeString(code) {
   }).format(now);
   return `${name} ${timeStr} ${weekdayCap} ${get('day')} ${get('month')} ${get('year')}`.trim();
 }
+
+// Hora local del dispositivo (sin país conocido todavía) — mismo formato, sin nombre delante
+function deviceTimeString() {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat('es-ES', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  }).formatToParts(now);
+  const get = t => (parts.find(p => p.type === t) || {}).value || '';
+  const weekday = get('weekday');
+  const weekdayCap = weekday ? weekday.charAt(0).toUpperCase() + weekday.slice(1) : '';
+  const timeStr = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(now);
+  return `${timeStr} ${weekdayCap} ${get('day')} ${get('month')} ${get('year')}`.trim();
+}
+
+// "Madrid,ES" — reutiliza la misma ciudad del huso horario para pedir el
+// clima de ese país por /weather?city=, sin mantener una tabla aparte.
+function countryWeatherQuery(code) {
+  const tz = COUNTRY_TZ[code];
+  if (!tz) return null;
+  const city = tz.split('/').pop().replace(/_/g, ' ');
+  return `${city},${code}`;
+}

@@ -303,9 +303,10 @@ function _renderChatEmpty() {
   // ── Rediseño v1 (rama rediseno-visual) — tablero de guía + chips estilo panel de aeropuerto ──
   const _mapIco = '<svg class="chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>';
 
-  let _ceClockCode = 'ES';
-  try { _ceClockCode = localStorage.getItem('bdm_clock_country') || 'ES'; } catch (_) {}
-  const _ceMeta = (typeof countryTimeString === 'function') ? countryTimeString(_ceClockCode) : '';
+  let _ceSkyMode = 'here';
+  try { _ceSkyMode = localStorage.getItem('bdm_clock_country') || 'here'; } catch (_) {}
+  const _ceSky = _ceSkyCompute(_ceSkyMode);
+  const _ceSkyWxCached = (window._ceSkyWxCache && window._ceSkyWxCache[_ceSkyMode]) ? window._ceSkyWxCache[_ceSkyMode].text : '…';
   let _ceName = '';
   try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
@@ -494,7 +495,14 @@ function _renderChatEmpty() {
 
     area.innerHTML = `
       <div class="chat-empty">
-        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta" id="ce-clock-meta" data-ce-clock role="button" tabindex="0" title="Cambiar país">${escapeHTML(_ceMeta)}</span></div>
+        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span></div>
+        <div class="ce-sky" id="ce-sky" data-ce-clock role="button" tabindex="0" title="Cambiar país">
+          <span class="ce-sky-time" id="ce-sky-time">${escapeHTML(_ceSky.timeText)}</span>
+          <span class="ce-sky-dot">·</span>
+          <span class="ce-sky-wx" id="ce-sky-wx">${escapeHTML(_ceSkyWxCached)}</span>
+          <span class="ce-sky-dot">·</span>
+          <span class="ce-sky-country" id="ce-sky-country">${escapeHTML(_ceSky.countryText)}</span>
+        </div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
@@ -646,9 +654,9 @@ function _renderChatEmpty() {
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
     area.addEventListener('click', (e) => {
-      // Reloj mundial → cambiar de país
+      // Hora + tiempo + país → cambiar de país
       if (e.target.closest('[data-ce-clock]')) {
-        _ceClockOpenPicker();
+        _ceSkyOpenPicker();
         return;
       }
       // Logo → volver al índice limpio
@@ -770,34 +778,105 @@ function _renderChatEmpty() {
     });
   }
 
-  _ceClockStartTicker();
+  _ceSkyStartTicker();
+  _ceSkyWeatherRefresh(_ceSkyMode);
 }
 
-// ═══ RELOJ MUNDIAL (cabecera del billete) ═══
-// Solo Intl + huso horario IANA del propio navegador — sin llamar a ninguna API,
-// coste cero. Pensado para escalas de vuelo: cambiar de país y ver su hora real.
+// ═══ HORA + TIEMPO + PAÍS (cabecera del billete) ═══
+// Hora: solo Intl + huso IANA del navegador — sin API, coste cero.
+// Tiempo (clima): reutiliza /weather (OpenWeatherMap) — con caché de 20 min
+// por país/ubicación para no repetir llamadas. Ver aviso de coste dado a
+// Paco al implementarlo (20 sept 2026): con "mi ubicación" no cambia nada
+// (la llamada ya existía); al elegir país sí es una llamada nueva por país,
+// gratis hasta 1000/día en el plan actual.
 
-function _ceClockStartTicker() {
-  if (window._ceClockInterval) return;
-  window._ceClockInterval = setInterval(() => {
-    const el = document.getElementById('ce-clock-meta');
-    if (!el) return;
-    let code = 'ES';
-    try { code = localStorage.getItem('bdm_clock_country') || 'ES'; } catch (_) {}
-    if (typeof countryTimeString === 'function') el.textContent = countryTimeString(code);
-  }, 30000);
+// "España 9:01 AM Domingo 20 sep 2026" → { timeText: "9:01 AM Domingo 20 sep 2026", countryText: "🇪🇸 España" }
+function _ceSkyCompute(mode) {
+  if (mode === 'here') {
+    let code = null;
+    try { code = (typeof salma !== 'undefined' && salma._copilotCountry) ? String(salma._copilotCountry).toUpperCase() : null; } catch (_) {}
+    if (code && typeof COUNTRY_TZ !== 'undefined' && COUNTRY_TZ[code]) {
+      const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[code]) || code;
+      const emoji = (typeof countryEmoji === 'function') ? countryEmoji(code) : '';
+      const full = (typeof countryTimeString === 'function') ? countryTimeString(code) : '';
+      const timeText = full.startsWith(name) ? full.slice(name.length).trim() : full;
+      return { timeText, countryText: `📍 ${emoji} ${name}`.trim(), code };
+    }
+    const timeText = (typeof deviceTimeString === 'function') ? deviceTimeString() : '';
+    return { timeText, countryText: '📍 Detectando país...', code: null };
+  }
+  const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[mode]) || mode;
+  const emoji = (typeof countryEmoji === 'function') ? countryEmoji(mode) : '';
+  const full = (typeof countryTimeString === 'function') ? countryTimeString(mode) : '';
+  const timeText = full.startsWith(name) ? full.slice(name.length).trim() : full;
+  return { timeText, countryText: `${emoji} ${name}`.trim(), code: mode };
 }
 
-function _ceClockSetCountry(code) {
-  try { localStorage.setItem('bdm_clock_country', code); } catch (_) {}
-  const el = document.getElementById('ce-clock-meta');
-  if (el && typeof countryTimeString === 'function') el.textContent = countryTimeString(code);
+function _ceSkyRenderTick() {
+  const time = document.getElementById('ce-sky-time');
+  const country = document.getElementById('ce-sky-country');
+  if (!time && !country) return;
+  let mode = 'here';
+  try { mode = localStorage.getItem('bdm_clock_country') || 'here'; } catch (_) {}
+  const parts = _ceSkyCompute(mode);
+  if (time) time.textContent = parts.timeText;
+  if (country) country.textContent = parts.countryText;
 }
 
-function _ceClockOpenPicker() {
+function _ceSkyStartTicker() {
+  if (window._ceSkyInterval) return;
+  window._ceSkyInterval = setInterval(_ceSkyRenderTick, 30000);
+  // Un par de repasos rápidos al principio, por si el país por GPS (copiloto)
+  // tarda unos segundos en resolver — evita esperar hasta el primer minuto.
+  setTimeout(_ceSkyRenderTick, 3000);
+  setTimeout(_ceSkyRenderTick, 8000);
+}
+
+window._ceSkyWxCache = window._ceSkyWxCache || {};
+
+async function _ceSkyWeatherRefresh(mode) {
+  const FRESH_MS = 20 * 60 * 1000;
+  const cache = window._ceSkyWxCache;
+  const cached = cache[mode];
+  const paint = (txt) => { const el = document.getElementById('ce-sky-wx'); if (el) el.textContent = txt; };
+  if (cached && (Date.now() - cached.ts) < FRESH_MS) { paint(cached.text); return; }
+  try {
+    let url;
+    if (mode === 'here') {
+      let loc = null;
+      try { loc = (typeof salma !== 'undefined') ? salma._userLocation : null; } catch (_) {}
+      if (!loc) { paint(''); return; }
+      url = `${window.SALMA_API}/weather?lat=${loc.lat}&lon=${loc.lng}`;
+    } else {
+      const q = (typeof countryWeatherQuery === 'function') ? countryWeatherQuery(mode) : null;
+      if (!q) { paint(''); return; }
+      url = `${window.SALMA_API}/weather?city=${encodeURIComponent(q)}`;
+    }
+    const res = await fetch(url);
+    if (!res.ok) { paint(''); return; }
+    const data = await res.json();
+    const icon = (typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(data.icon) : '🌡️';
+    const text = `${icon} ${data.temp}°`;
+    cache[mode] = { text, ts: Date.now() };
+    // Puede haber cambiado de modo mientras la petición estaba en vuelo
+    let cur = 'here';
+    try { cur = localStorage.getItem('bdm_clock_country') || 'here'; } catch (_) {}
+    if (cur === mode) paint(text);
+  } catch (_) {
+    paint('');
+  }
+}
+
+function _ceSkySetMode(mode) {
+  try { localStorage.setItem('bdm_clock_country', mode); } catch (_) {}
+  _ceSkyRenderTick();
+  _ceSkyWeatherRefresh(mode);
+}
+
+function _ceSkyOpenPicker() {
   if (document.getElementById('ce-clock-picker')) return;
-  let current = 'ES';
-  try { current = localStorage.getItem('bdm_clock_country') || 'ES'; } catch (_) {}
+  let current = 'here';
+  try { current = localStorage.getItem('bdm_clock_country') || 'here'; } catch (_) {}
   const list = (typeof countryList === 'function') ? countryList() : [];
   const overlay = document.createElement('div');
   overlay.id = 'ce-clock-picker';
@@ -805,9 +884,10 @@ function _ceClockOpenPicker() {
   overlay.innerHTML = `
     <div class="wx-picker">
       <div class="wx-picker-head">
-        <span>Hora en el mundo</span>
+        <span>Hora y tiempo en el mundo</span>
         <button data-ce-clock-close>✕</button>
       </div>
+      <button class="wx-picker-gps${current === 'here' ? ' on' : ''}" data-code="here">📍 Mi ubicación</button>
       <div class="wx-picker-row">
         <input id="ce-clock-search" class="wx-city-input" type="text" placeholder="Buscar país..." autocomplete="off">
       </div>
@@ -828,10 +908,10 @@ function _ceClockOpenPicker() {
       : '<div class="ce-clock-empty">Sin resultados</div>';
   };
   paint('');
-  listEl.addEventListener('click', (e) => {
+  overlay.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-code]');
     if (!btn) return;
-    _ceClockSetCountry(btn.dataset.code);
+    _ceSkySetMode(btn.dataset.code);
     overlay.remove();
   });
   const inp = overlay.querySelector('#ce-clock-search');
