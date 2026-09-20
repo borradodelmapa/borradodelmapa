@@ -6565,14 +6565,30 @@ body {
 
 /* cabecera tipo tablero */
 .ce-top{
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;row-gap:4px;
   padding-bottom:10px;
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
 .ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ce-top .ce-brand:active{opacity:.7;}
 .ce-top .ce-brand span{color:var(--ce-ink3);}
-.ce-top .ce-meta{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.12em;color:var(--ce-ink2);}
+.ce-top .ce-meta{
+  font-family:var(--ce-flapf);font-size:11px;letter-spacing:.08em;color:var(--ce-ink2);
+  text-align:right;flex:1 1 auto;min-width:0;margin-left:10px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.ce-top .ce-meta:active{opacity:.7;}
+
+/* Picker del reloj mundial — reutiliza .wx-picker-overlay/.wx-picker/.wx-picker-head */
+.ce-clock-list{max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;}
+.ce-clock-item{
+  display:flex;align-items:center;gap:8px;text-align:left;
+  background:rgba(255,255,255,.04);border:1px solid transparent;border-radius:var(--radius-sm);
+  padding:10px 12px;color:#fff;font-size:14px;cursor:pointer;font-family:var(--font-body);
+}
+.ce-clock-item:hover{background:rgba(255,255,255,.08);}
+.ce-clock-item.on{border-color:var(--dorado);background:rgba(240,180,41,.12);color:var(--dorado);}
+.ce-clock-empty{text-align:center;color:rgba(255,255,255,.4);font-size:13px;padding:16px 0;}
 .ce-greet{
   font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;
   font-size:25px;letter-spacing:.02em;line-height:1;color:var(--ce-ink);

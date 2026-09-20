@@ -303,7 +303,9 @@ function _renderChatEmpty() {
   // ── Rediseño v1 (rama rediseno-visual) — tablero de guía + chips estilo panel de aeropuerto ──
   const _mapIco = '<svg class="chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>';
 
-  const _ceMonth = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'][new Date().getMonth()];
+  let _ceClockCode = 'ES';
+  try { _ceClockCode = localStorage.getItem('bdm_clock_country') || 'ES'; } catch (_) {}
+  const _ceMeta = (typeof countryTimeString === 'function') ? countryTimeString(_ceClockCode) : '';
   let _ceName = '';
   try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
@@ -492,7 +494,7 @@ function _renderChatEmpty() {
 
     area.innerHTML = `
       <div class="chat-empty">
-        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta">${_ceMonth}</span></div>
+        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta" id="ce-clock-meta" data-ce-clock role="button" tabindex="0" title="Cambiar país">${escapeHTML(_ceMeta)}</span></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
@@ -644,6 +646,11 @@ function _renderChatEmpty() {
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
     area.addEventListener('click', (e) => {
+      // Reloj mundial → cambiar de país
+      if (e.target.closest('[data-ce-clock]')) {
+        _ceClockOpenPicker();
+        return;
+      }
       // Logo → volver al índice limpio
       if (e.target.closest('[data-ce-home]')) {
         if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
@@ -762,6 +769,75 @@ function _renderChatEmpty() {
       try { localStorage.setItem('bdm_ce_more_open', open ? '1' : '0'); } catch (_) {}
     });
   }
+
+  _ceClockStartTicker();
+}
+
+// ═══ RELOJ MUNDIAL (cabecera del billete) ═══
+// Solo Intl + huso horario IANA del propio navegador — sin llamar a ninguna API,
+// coste cero. Pensado para escalas de vuelo: cambiar de país y ver su hora real.
+
+function _ceClockStartTicker() {
+  if (window._ceClockInterval) return;
+  window._ceClockInterval = setInterval(() => {
+    const el = document.getElementById('ce-clock-meta');
+    if (!el) return;
+    let code = 'ES';
+    try { code = localStorage.getItem('bdm_clock_country') || 'ES'; } catch (_) {}
+    if (typeof countryTimeString === 'function') el.textContent = countryTimeString(code);
+  }, 30000);
+}
+
+function _ceClockSetCountry(code) {
+  try { localStorage.setItem('bdm_clock_country', code); } catch (_) {}
+  const el = document.getElementById('ce-clock-meta');
+  if (el && typeof countryTimeString === 'function') el.textContent = countryTimeString(code);
+}
+
+function _ceClockOpenPicker() {
+  if (document.getElementById('ce-clock-picker')) return;
+  let current = 'ES';
+  try { current = localStorage.getItem('bdm_clock_country') || 'ES'; } catch (_) {}
+  const list = (typeof countryList === 'function') ? countryList() : [];
+  const overlay = document.createElement('div');
+  overlay.id = 'ce-clock-picker';
+  overlay.className = 'wx-picker-overlay';
+  overlay.innerHTML = `
+    <div class="wx-picker">
+      <div class="wx-picker-head">
+        <span>Hora en el mundo</span>
+        <button data-ce-clock-close>✕</button>
+      </div>
+      <div class="wx-picker-row">
+        <input id="ce-clock-search" class="wx-city-input" type="text" placeholder="Buscar país..." autocomplete="off">
+      </div>
+      <div id="ce-clock-list" class="ce-clock-list"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay || e.target.closest('[data-ce-clock-close]')) overlay.remove(); });
+
+  const _norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  const listEl = overlay.querySelector('#ce-clock-list');
+  const paint = (q) => {
+    const qq = _norm(q);
+    const filtered = qq ? list.filter(c => _norm(c.name).includes(qq)) : list;
+    listEl.innerHTML = filtered.length
+      ? filtered.slice(0, 80).map(c =>
+          `<button class="ce-clock-item${c.code === current ? ' on' : ''}" data-code="${c.code}">${c.emoji} ${escapeHTML(c.name)}</button>`
+        ).join('')
+      : '<div class="ce-clock-empty">Sin resultados</div>';
+  };
+  paint('');
+  listEl.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-code]');
+    if (!btn) return;
+    _ceClockSetCountry(btn.dataset.code);
+    overlay.remove();
+  });
+  const inp = overlay.querySelector('#ce-clock-search');
+  inp.addEventListener('input', () => paint(inp.value));
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); });
+  setTimeout(() => { try { inp.focus(); } catch (_) {} }, 80);
 }
 
 // ═══ WELCOME (estado 1) ═══
