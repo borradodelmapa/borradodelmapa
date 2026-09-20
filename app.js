@@ -918,11 +918,20 @@ function _ceSkyStartTicker() {
   window._ceSkyInterval = setInterval(_ceSkyRenderTick, 30000);
   // Un par de repasos rápidos al principio: por si el país por GPS (copiloto)
   // tarda unos segundos en resolver, o si la info del país aún no se pidió.
+  // Lo mismo para el tiempo en modo "mi ubicación": si la primera vez que se
+  // pintó la pantalla el GPS (salma._userLocation) todavía no estaba listo,
+  // antes se quedaba en blanco para siempre sin volver a intentarlo — bug
+  // real reportado por Paco (20 sept 2026), corregido con este mismo reintento.
   const catchUp = () => {
     _ceSkyRenderTick();
     const sel = _ceSkyReadSel();
     const cc = _ceSkyInfoCountryFor(sel);
     if (cc) _ceSkyInfoRefresh(cc);
+    if (sel.mode === 'here') {
+      const key = _ceSkyWeatherKey(sel);
+      const cached = window._ceSkyWxCache && window._ceSkyWxCache[key];
+      if (!cached) _ceSkyWeatherRefresh(sel);
+    }
   };
   setTimeout(catchUp, 3000);
   setTimeout(catchUp, 8000);
@@ -965,7 +974,9 @@ async function _ceSkyWeatherRefresh(sel) {
     if (!sel || sel.mode === 'here') {
       let loc = null;
       try { loc = (typeof salma !== 'undefined') ? salma._userLocation : null; } catch (_) {}
-      if (!loc) { paintWx(''); paintFc(null); return; }
+      // Aún sin GPS — no lo dejamos en blanco (parecía "desaparecido"), el
+      // reintento de _ceSkyStartTicker (3s/8s) lo rellena en cuanto lo haya.
+      if (!loc) { paintWx('…'); paintFc(null); return; }
       url = `${window.SALMA_API}/weather?lat=${loc.lat}&lon=${loc.lng}`;
     } else if (sel.mode === 'country') {
       const q = (typeof countryWeatherQuery === 'function') ? countryWeatherQuery(sel.code) : null;
