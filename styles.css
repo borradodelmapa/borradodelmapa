@@ -6593,6 +6593,10 @@ body {
 }
 .ce-sky-fc-toggle:hover,.ce-sky-fc-toggle:active{color:var(--ce-amber);}
 #ce-sky-fc{margin:0 0 10px;}
+/* .wx-forecast fuerza display:flex con la misma especificidad que [hidden]
+   del navegador (display:none) — sin esto, el atributo hidden no ocultaba
+   nada de verdad. El selector por id gana a ambos. */
+#ce-sky-fc[hidden],#ce-sky-fc-toggle[hidden]{display:none;}
 .ce-sky-info-card{margin-top:2px;margin-bottom:14px;}
 
 /* Picker del reloj mundial — reutiliza .wx-picker-overlay/.wx-picker/.wx-picker-head/.wx-picker-gps */
