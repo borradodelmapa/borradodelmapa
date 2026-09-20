@@ -660,7 +660,15 @@ function _renderChatEmpty() {
 
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
-    area.addEventListener('click', (e) => {
+    // _renderChatEmpty() se llama varias veces por sesión (nueva ruta, volver al
+    // índice, etc.) sobre el mismo #chat-area persistente — sin este guardián,
+    // cada llamada apilaba OTRO listener encima sin quitar el anterior, y un
+    // solo toque disparaba la acción 2-3 veces (el toggle de la previsión, al no
+    // ser indiferente a repetirse, abría y cerraba en el mismo click — bug real
+    // reportado por Paco, 20 sept 2026).
+    if (!area._ceEmptyClickWired) {
+      area._ceEmptyClickWired = true;
+      area.addEventListener('click', (e) => {
       // Previsión de varios días → plegar/desplegar (por defecto plegada, no distrae)
       if (e.target.closest('[data-ce-sky-fc-toggle]')) {
         _ceSkyToggleForecast();
@@ -700,7 +708,8 @@ function _renderChatEmpty() {
         }
         return;
       }
-    });
+      });
+    }
   } catch (err) {
     console.warn('[chat-empty] render nuevo falló, uso fallback', err);
     area.innerHTML = _ceFallback;
