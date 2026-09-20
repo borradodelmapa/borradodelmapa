@@ -688,6 +688,54 @@ la misma). No tocar nada de esto sin que Paco lo pida explícitamente.
 
 ---
 
+## Sesión 20 sept 2026 — Hora + tiempo + país juntos en el índice (reloj mundial)
+
+Petición de Paco: el "SEP" fijo de la cabecera del billete (pantalla de inicio) no
+aportaba nada útil, y "el tiempo" (clima) llevaba oculto de esa misma pantalla desde
+el 8 sept ("limpieza C", solo aparecía tras el primer mensaje) — sin que quedara
+anotado aquí, porque se pidió en otro chat sin el repo enlazado. Motivo explícito de
+Paco, no capricho: consultar la hora de un país al comprar vuelos con escalas.
+
+**Parte 1 — reloj mundial, solo Intl, sin coste.** `country-utils.js`: `COUNTRY_TZ`
+(mapa código ISO2 → huso IANA, 187 países, aproximación por capital/ciudad principal
+en países con varios husos) + `countryTimeString(code)` (usa `Intl.DateTimeFormat`
+del propio navegador, sin llamar a ninguna API) + `countryList()` para el buscador.
+`app.js`: cabecera pasa de `<span class="ce-meta">SEP</span>` a un reloj tocable que
+abre un picker de país (busca sin acentos, guarda elección en `localStorage:
+bdm_clock_country`). **CONFIRMADO EN PANTALLA por Paco.**
+
+**Parte 2 — fusión con el clima, mismo día, a petición de Paco tras ver el reloj.**
+Preguntado explícitamente antes de tocar nada (protocolo §8, toca `/weather` →
+OpenWeatherMap): ¿el clima de la barra es siempre el de tu ubicación real (gratis,
+sin cambios) o el del país que elijas en el reloj (útil para la escala, pero llamada
+nueva a OpenWeather por país)? Paco pidió las dos cosas — por defecto tu ubicación,
+y también poder buscar el clima de cualquier país.
+- **Modo "Mi ubicación" (por defecto)**: hora y país vienen del país ya detectado por
+  el Copiloto vía GPS+Nominatim (`salma._copilotCountry`, mecanismo ya existente y
+  gratuito) — sin duplicar esa detección. El clima reutiliza el mismo `/weather?lat=&lon=`
+  que ya se llamaba en otros puntos de la app — **sin llamada nueva**.
+- **Modo país elegido**: hora del país (Parte 1) + `/weather?city=<Ciudad>,<ISO2>`
+  usando la MISMA ciudad que ya lleva el huso horario en `COUNTRY_TZ` (se extrae del
+  propio string de la zona, ej. `Europe/Madrid` → `Madrid` — sin mantener una tabla de
+  capitales aparte). **Esta sí es una llamada nueva a OpenWeatherMap, una por país que
+  se elija** — avisado y confirmado con Paco antes de escribir código. Gratis hasta
+  1000 llamadas/día en el plan actual; a este volumen de uso no debería generar coste
+  real, pero es una llamada que antes no existía en este flujo.
+- Caché de 20 min en memoria (`window._ceSkyWxCache`) por modo, para no repetir la
+  llamada de clima cada vez que se re-renderiza la pantalla de inicio.
+- Orden pedido por Paco, tal cual: hora y día → tiempo (clima) → info del país.
+  Barra `.ce-sky` bajo la marca, siempre visible desde el primer vistazo, sin
+  necesidad de mandar un mensaje ni desplegar nada — se actualiza sola cada 30s.
+- Picker ampliado con botón "📍 Mi ubicación" arriba del buscador de país.
+
+`?v=`: `country-utils.js` a 3, `app.js` a 127, `styles.css` a 109. Commits
+`f835b7a` (reloj) y `4e78df1` (fusión con clima), ambos ya en `main`.
+**Pendiente: que Paco confirme en pantalla** que ve las tres cosas juntas (hora,
+clima, país) sin tener que hacer nada, que por defecto sale su propia ubicación, y
+que al elegir otro país en el picker cambian las tres a la vez.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
