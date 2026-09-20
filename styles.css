@@ -6584,7 +6584,14 @@ body {
 .ce-sky .ce-sky-wx{color:var(--ce-ink);}
 .ce-sky .ce-sky-country{color:var(--ce-amber);}
 
-/* Previsión (reutiliza .wx-forecast/.wx-fc-day de la Weather Banner) + tarjeta de info del país */
+/* Previsión — plegada por defecto a propósito, botón pequeño para no llamar
+   la atención (reutiliza .wx-forecast/.wx-fc-day de la Weather Banner) */
+.ce-sky-fc-toggle{
+  display:block;margin:0 0 8px;padding:0;border:0;background:transparent;
+  font-family:var(--ce-flapf);font-size:10px;letter-spacing:.06em;
+  color:var(--ce-ink3);cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.ce-sky-fc-toggle:hover,.ce-sky-fc-toggle:active{color:var(--ce-amber);}
 #ce-sky-fc{margin:0 0 10px;}
 .ce-sky-info-card{margin-top:2px;margin-bottom:14px;}
 

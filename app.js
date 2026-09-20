@@ -309,6 +309,8 @@ function _renderChatEmpty() {
   const _ceSkyWxCached = (window._ceSkyWxCache && window._ceSkyWxCache[_ceSkyWxKey]) ? window._ceSkyWxCache[_ceSkyWxKey].text : '…';
   const _ceSkyFcCached = (window._ceSkyWxCache && window._ceSkyWxCache[_ceSkyWxKey] && window._ceSkyWxCache[_ceSkyWxKey].forecast) || [];
   const _ceSkyFcHTML = _ceSkyForecastHTML(_ceSkyFcCached);
+  let _ceSkyFcOpen = false;
+  try { _ceSkyFcOpen = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
   let _ceName = '';
   try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
@@ -505,7 +507,8 @@ function _renderChatEmpty() {
           <span class="ce-sky-dot">·</span>
           <span class="ce-sky-country" id="ce-sky-country">${escapeHTML(_ceSky.countryText)}</span>
         </div>
-        <div class="wx-forecast" id="ce-sky-fc"${_ceSkyFcCached.length ? '' : ' hidden'}>${_ceSkyFcHTML}</div>
+        <button class="ce-sky-fc-toggle" id="ce-sky-fc-toggle" data-ce-sky-fc-toggle aria-expanded="${_ceSkyFcOpen ? 'true' : 'false'}"${_ceSkyFcCached.length ? '' : ' hidden'}>${_ceSkyFcOpen ? '▴' : '▾'} previsión</button>
+        <div class="wx-forecast" id="ce-sky-fc"${(_ceSkyFcCached.length && _ceSkyFcOpen) ? '' : ' hidden'}>${_ceSkyFcHTML}</div>
         <div id="ce-sky-info"></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
@@ -658,6 +661,11 @@ function _renderChatEmpty() {
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
     area.addEventListener('click', (e) => {
+      // Previsión de varios días → plegar/desplegar (por defecto plegada, no distrae)
+      if (e.target.closest('[data-ce-sky-fc-toggle]')) {
+        _ceSkyToggleForecast();
+        return;
+      }
       // Hora + tiempo + país → cambiar de país
       if (e.target.closest('[data-ce-clock]')) {
         _ceSkyOpenPicker();
@@ -928,12 +936,23 @@ async function _ceSkyWeatherRefresh(sel) {
   const cache = window._ceSkyWxCache;
   const cached = cache[key];
   const paintWx = (txt) => { const el = document.getElementById('ce-sky-wx'); if (el) el.textContent = txt; };
+  // Rellena la previsión pero respeta si está plegada o desplegada (por
+  // defecto plegada, a petición de Paco, para no llamar la atención) —
+  // solo cambia si hay datos o no, nunca fuerza abrirla sola.
   const paintFc = (fc) => {
     const el = document.getElementById('ce-sky-fc');
+    const toggle = document.getElementById('ce-sky-fc-toggle');
     if (!el) return;
-    if (!fc || !fc.length) { el.innerHTML = ''; el.hidden = true; return; }
-    el.hidden = false;
+    if (!fc || !fc.length) {
+      el.innerHTML = ''; el.hidden = true;
+      if (toggle) toggle.hidden = true;
+      return;
+    }
     el.innerHTML = _ceSkyForecastHTML(fc);
+    if (toggle) toggle.hidden = false;
+    let open = false;
+    try { open = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
+    el.hidden = !open;
   };
   if (cached && (Date.now() - cached.ts) < FRESH_MS) {
     paintWx(cached.text);
@@ -971,6 +990,21 @@ async function _ceSkyWeatherRefresh(sel) {
   } catch (_) {
     paintWx('');
     paintFc(null);
+  }
+}
+
+// Plegar/desplegar la previsión — plegada por defecto (petición de Paco, 20
+// sept: no debe ocupar tanta atención), pero disponible con un toque.
+function _ceSkyToggleForecast() {
+  const el = document.getElementById('ce-sky-fc');
+  const toggle = document.getElementById('ce-sky-fc-toggle');
+  if (!el) return;
+  const open = !!el.hidden; // estaba oculta → la vamos a abrir
+  el.hidden = !open;
+  try { localStorage.setItem('bdm_sky_fc_open', open ? '1' : '0'); } catch (_) {}
+  if (toggle) {
+    toggle.textContent = (open ? '▴' : '▾') + ' previsión';
+    toggle.setAttribute('aria-expanded', String(open));
   }
 }
 
