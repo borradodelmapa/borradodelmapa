@@ -270,3 +270,19 @@ function countryWeatherQuery(code) {
   const city = tz.split('/').pop().replace(/_/g, ' ');
   return `${city},${code}`;
 }
+
+// Hora de una ciudad suelta (buscada a mano) a partir del desfase UTC en
+// segundos que devuelve /weather — para ciudades que no están en COUNTRY_TZ
+// (ej. elegir Los Ángeles en vez de Nueva York dentro de EEUU).
+function offsetTimeString(offsetSec) {
+  if (typeof offsetSec !== 'number' || isNaN(offsetSec)) return '';
+  const shifted = new Date(Date.now() + offsetSec * 1000);
+  const parts = new Intl.DateTimeFormat('es-ES', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'
+  }).formatToParts(shifted);
+  const get = t => (parts.find(p => p.type === t) || {}).value || '';
+  const weekday = get('weekday');
+  const weekdayCap = weekday ? weekday.charAt(0).toUpperCase() + weekday.slice(1) : '';
+  const timeStr = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' }).format(shifted);
+  return `${timeStr} ${weekdayCap} ${get('day')} ${get('month')} ${get('year')}`.trim();
+}
