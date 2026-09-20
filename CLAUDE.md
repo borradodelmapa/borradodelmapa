@@ -730,9 +730,47 @@ y también poder buscar el clima de cualquier país.
 
 `?v=`: `country-utils.js` a 3, `app.js` a 127, `styles.css` a 109. Commits
 `f835b7a` (reloj) y `4e78df1` (fusión con clima), ambos ya en `main`.
-**Pendiente: que Paco confirme en pantalla** que ve las tres cosas juntas (hora,
-clima, país) sin tener que hacer nada, que por defecto sale su propia ubicación, y
-que al elegir otro país en el picker cambian las tres a la vez.
+**CONFIRMADO EN PANTALLA por Paco** — pidió tres ampliaciones más (ver Parte 3).
+
+**Parte 3 — previsión, buscar ciudad e info del país, mismo día.** Petición de Paco
+tras confirmar la Parte 2 en pantalla: previsión de varios días, poder elegir una
+ciudad concreta (no solo país) y meter la tarjeta de info práctica del país (Copiloto)
+debajo, cambiando también con la selección.
+- **Previsión**: `/weather` YA devolvía `forecast` (hasta 4 días) — nunca se pintaba en
+  esta barra. Ahora se muestra debajo del tiempo actual, reutilizando `.wx-forecast`/
+  `.wx-fc-day` (mismas clases que ya usaba la Weather Banner del chat). **Sin llamada
+  nueva** — es el mismo `/weather` de siempre, solo que ahora se lee ese campo.
+- **Buscar ciudad**: el picker admite texto libre además de la lista de 187 países —
+  al escribir algo que no es un país, aparece "🔍 Buscar '...' como ciudad", que llama
+  al mismo `/weather?city=` ya usado para país (misma cadencia de llamada ya aprobada
+  en la Parte 2, solo que ahora la ciudad la elige Paco en vez de ser siempre la
+  capital). Para la hora de esa ciudad exacta (necesario en países con varios husos,
+  ej. Los Ángeles vs Nueva York en EEUU) se añadió `utc_offset_sec` a la respuesta de
+  `/weather` en `worker/salma-worker.js` (`fetchWeatherBanner`) — dato que el Worker
+  ya calculaba internamente para la previsión, solo faltaba devolverlo. **Sin llamada
+  nueva tampoco aquí**, es el mismo `/weather` exponiendo un campo más.
+- **Info del país**: tarjeta nueva debajo del tiempo (`#ce-sky-info`, reutiliza las
+  clases `.copilot-card`/`.copilot-section` ya existentes, HTML propio en
+  `_ceSkyInfoHTML()` para no tocar `salma.showCopilotCard()` — que sigue atada a la
+  ubicación GPS real y se usa en otros sitios, no convenía mezclarla). Llama a
+  `/practical-info?country=`, que es **solo lectura de KV de Cloudflare — sin ninguna
+  API de pago detrás**, así que cambia con cada país/ciudad elegido sin coste
+  ninguno. Caché en `sessionStorage` por país para no repetir la lectura.
+- Estado guardado pasa de un string suelto a un objeto JSON
+  (`localStorage: bdm_sky_sel`, `{mode:'here'|'country'|'city', ...}`), con migración
+  automática desde el formato anterior (`bdm_clock_country`) — no hace falta que nadie
+  borre nada a mano.
+
+Worker desplegado (GitHub Action "Deploy Worker", disparada por esta misma sesión vía
+la API de GitHub — confirmado con los logs del job, sin depender de `/version` que
+esta sesión no puede alcanzar): commit `c6bce1d`, **Worker Version ID
+`6160cd0e-4e8c-426e-af7b-a00caf89b826`**.
+
+`?v=`: `country-utils.js` a 4, `app.js` a 128, `styles.css` a 110.
+**Pendiente: que Paco confirme en pantalla** que ve la previsión debajo del tiempo,
+que puede buscar y elegir una ciudad suelta (no solo país) y que la hora de esa
+ciudad es la correcta, y que la tarjeta de info del país aparece debajo y cambia al
+cambiar de país/ciudad.
 
 ---
 
