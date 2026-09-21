@@ -578,9 +578,11 @@ async function verifyAuthAndGetUser(authHeader) {
 // del abuso, no es un candado). También MIDE (tokens de Claude, guías, ediciones, mensajes) para
 // conocer el coste real por usuario — ver GET /usage.
 // Los topes de Premium son PROVISIONALES: se ajustan en el paso 4 con costes reales.
+// 21 sept 2026: editsPerMonth 8 → 40. Los 8 se pusieron cuando editar una guía costaba ~0,3 € (reescribía la
+// ruta entera); con la edición por operaciones (SALMA_ROUTE_EDIT) cuesta céntimos. Revisar con GET /usage.
 const PLAN_LIMITS = {
   free:    { guides: 1, edits: 2, chatPerDay: 20 },                   // guides/edits: TOTAL de por vida
-  premium: { guidesPerMonth: 4, editsPerMonth: 8, chatPerDay: 100 },  // PROVISIONAL
+  premium: { guidesPerMonth: 4, editsPerMonth: 40, chatPerDay: 100 }, // PROVISIONAL
 };
 // Claude Sonnet 4.6, USD por millón de tokens — solo ESTIMACIÓN para medir coste, no es la factura.
 const CLAUDE_USD_PER_MTOK = { in: 3, out: 15 };

@@ -1315,6 +1315,23 @@ const salma = {
     this._scrollToBottom(true);
   },
 
+  // Aviso de límite del plan (chat del día, guías o cambios en guías): el Worker responde con el texto y
+  // `limit_reached`. Botón para abrir el modal del plan (mismo que Perfil → Mi plan) en vez de solo informar.
+  _offerSeePlans() {
+    const area = this._getChatArea();
+    if (!area || typeof window.openCoinsModal !== 'function') return;
+    area.querySelectorAll('.ver-plan-wrap').forEach(el => el.remove());
+    const wrap = document.createElement('div');
+    wrap.className = 'historia-chat-chip-wrap ver-plan-wrap';
+    const btn = document.createElement('button');
+    btn.className = 'crear-ruta-btn';
+    btn.innerHTML = 'Ver mi plan <span class="crb-arrow">→</span>';
+    btn.addEventListener('click', () => { window.openCoinsModal(); });
+    wrap.appendChild(btn);
+    area.appendChild(wrap);
+    this._scrollToBottom(true);
+  },
+
   // ═══ ENVÍO AL WORKER ═══
   async _doSend(msg, extra) {
     // Guardar para poder reintentar
@@ -1689,6 +1706,9 @@ const salma = {
         });
       }
 
+      // Límite del plan alcanzado: el texto ya viene en la respuesta; añadir el botón al plan.
+      if (data.limit_reached) this._offerSeePlans();
+
       // Si hay video_params, renderizar player inline
       if (data.video_params && typeof videoPlayer !== 'undefined') {
         // Enriquecer params con paradas de la ruta activa (para escena del mapa)
@@ -1855,6 +1875,7 @@ const salma = {
                   offer_map_button: evt.offer_map_button === true,
                   offer_add_to_route: evt.offer_add_to_route === true,
                   ops_edit: evt.ops_edit === true,
+                  limit_reached: evt.limit_reached || null,
                   map_base_msg: evt.map_base_msg || null,
                   historia_lugar: evt.historia_lugar || null
                 });
