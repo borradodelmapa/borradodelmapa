@@ -794,9 +794,25 @@ ubicación exacta tipo "Ribadedeva") y subir el tamaño de letra.
   inventar CSS nuevo). La hora queda en su propia línea encima.
   Sin cambios en el Worker ni en costes.
 `?v=`: `styles.css` a 113, `app.js` a 132, `salma.js` a 100. Commit `6759c16`, ya en
-`main`. **Pendiente: que Paco confirme en pantalla que ya no ve el banner duplicado
-arriba, y que la tarjeta de abajo trae todo el detalle (viento, sensación, humedad,
-ubicación exacta) con letra más grande.**
+`main`. **CONFIRMADO EN PANTALLA por Paco** — ya no sale duplicado, pidió 3 retoques
+finos más (ver Parte 5).
+
+**Parte 5 — retoques finos tras confirmar la Parte 4, mismo 21 sept 2026,
+DESPLEGADO, sin confirmar en pantalla.** Solo frontend, sin tocar el Worker:
+1. La línea de sensación/viento/racha/humedad/AQI se envolvía en 2-3 líneas en
+   móvil — ahora va en una sola línea con scroll horizontal si no cabe entera
+   (mismo patrón que la previsión), nunca se pierde información.
+2. Botón "▾ previsión" demasiado pequeño como zona de toque — de 10px a 14px,
+   más relleno vertical.
+3. **Quitada del todo la tarjeta "Info práctica del país"** (la del Copiloto,
+   añadida en la Parte 3 del 20 sept) — Paco pidió explícitamente quitarla de
+   esta barra. `_ceSkyInfoRefresh()`/`_ceSkyInfoHTML()` se borraron (ya no las
+   llama nadie); `_ceSkyInfoCountryFor()` se queda, la sigue usando la bandera
+   de la línea de ubicación del tiempo.
+`?v=`: `styles.css` a 114, `app.js` a 133. Commit `dd9eb3e`, ya en `main`.
+**Pendiente: que Paco confirme que el detalle del tiempo ya cabe en una línea
+(con scroll si hace falta), que el botón de previsión se toca mejor, y que ya
+no ve ninguna tarjeta de info del país en esta pantalla.**
 
 ---
 
