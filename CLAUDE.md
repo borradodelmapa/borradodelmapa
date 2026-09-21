@@ -772,6 +772,32 @@ que puede buscar y elegir una ciudad suelta (no solo país) y que la hora de esa
 ciudad es la correcta, y que la tarjeta de info del país aparece debajo y cambia al
 cambiar de país/ciudad.
 
+**Parte 4 — bug real: banner de tiempo duplicado, 21 sept 2026, DESPLEGADO, sin
+confirmar en pantalla.** Paco mandó captura: el `#weather-banner` viejo del chat
+(existía desde antes de esta saga, se activaba solo al mandar el primer mensaje —
+ver "limpieza C" del 8 sept más abajo en este archivo) se quedaba pegado ENCIMA de
+toda la pantalla de inicio, duplicando la barra nueva de abajo — porque se inserta
+como hermano de `#chat-area`, no dentro, así que sobrevive a los re-render de
+`_renderChatEmpty()` y no desaparece nunca al volver al índice. Paco pidió: quitar
+el viejo, quedarse con el nuevo, pero traerle al nuevo el detalle que el viejo sí
+tenía (sensación térmica, viento con dirección y racha, humedad, calidad del aire,
+ubicación exacta tipo "Ribadedeva") y subir el tamaño de letra.
+- `salma.js`: los dos sitios que llamaban a `initWeatherBanner()` (`_initChat` y
+  `_addUserBubble`) se comentan — la función se queda por si hiciera falta
+  reactivarla, solo se deja de invocar.
+- `app.js`: la caché en memoria (`window._ceSkyWxCache`) pasa de guardar solo el
+  texto ya formateado a guardar la respuesta COMPLETA de `/weather` — de ahí sale
+  gratis todo el detalle que antes solo tenía el banner viejo (mismo endpoint, cero
+  llamadas nuevas). La tarjeta de tiempo reutiliza las clases
+  `.wx-main`/`.wx-loc`/`.wx-temp`/`.wx-desc`/`.wx-extras` que ya usaba el banner
+  viejo (de ahí sale también el tamaño de letra más grande que pidió Paco, sin
+  inventar CSS nuevo). La hora queda en su propia línea encima.
+  Sin cambios en el Worker ni en costes.
+`?v=`: `styles.css` a 113, `app.js` a 132, `salma.js` a 100. Commit `6759c16`, ya en
+`main`. **Pendiente: que Paco confirme en pantalla que ya no ve el banner duplicado
+arriba, y que la tarjeta de abajo trae todo el detalle (viento, sensación, humedad,
+ubicación exacta) con letra más grande.**
+
 ---
 
 ## Qué es este proyecto
