@@ -8424,6 +8424,13 @@ REGLAS:
           plan: authUser.premium_active ? 'premium' : 'free',
           premium_until: authUser.premium_until || null,
           limits: authUser.premium_active ? PLAN_LIMITS.premium : PLAN_LIMITS.free,
+          // Los dos planes lado a lado + precios que cobra Stripe: el modal "Hazte Premium" pinta
+          // de aquí, así no hay números escritos a mano en el frontend que puedan descuadrar.
+          plans: {
+            free:    { ...PLAN_LIMITS.free,    alerts: FW_FREE_LIMIT },
+            premium: { ...PLAN_LIMITS.premium, alerts: FW_PREMIUM_LIMIT },
+          },
+          prices: PREMIUM_PLANS,
           today_msgs: (month.days && month.days[usageToday()]) || 0,
           month, total,
         }), { headers: FW_CORS });
