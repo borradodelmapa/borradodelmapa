@@ -6,7 +6,7 @@
 
 window.flightWatches = (() => {
 
-  const FREE_LIMIT = 3;
+  const FREE_LIMIT = 1;
 
   // ── Helpers ──
   function _uid() { return window.currentUser?.uid; }

@@ -4048,6 +4048,7 @@ function openCoinsModal() {
           <span class="coins-modal-saldo-label">Tu plan</span>
           <span class="coins-modal-saldo-val ${premiumActivo ? 'coins-modal-saldo-free' : ''}">${estadoTxt}</span>
         </div>
+        <div id="plan-usage" style="margin-top:8px;font-size:12px;opacity:.75;line-height:1.4"></div>
       </div>
 
       <!-- Selector de plan -->
@@ -4103,6 +4104,24 @@ function openCoinsModal() {
     </div>`;
 
   document.body.appendChild(overlay);
+
+  // Uso real del plan (mensajes de hoy, guías y cambios) — lo cuenta y limita el Worker
+  (async () => {
+    try {
+      const u = firebase.auth().currentUser;
+      if (!u) return;
+      const t = await u.getIdToken();
+      const r = await fetch(window.SALMA_API + '/usage', { headers: { 'Authorization': 'Bearer ' + t } });
+      if (!r.ok) return;
+      const d = await r.json();
+      const el = document.getElementById('plan-usage');
+      if (!el) return;
+      const l = d.limits || {}, m = d.month || {}, tt = d.total || {};
+      el.textContent = d.plan === 'premium'
+        ? 'Este mes: ' + (m.guides || 0) + '/' + l.guidesPerMonth + ' guías · ' + (m.edits || 0) + '/' + l.editsPerMonth + ' cambios · hoy ' + (d.today_msgs || 0) + '/' + l.chatPerDay + ' mensajes'
+        : 'Guías: ' + (tt.guides || 0) + '/' + l.guides + ' · cambios: ' + (tt.edits || 0) + '/' + l.edits + ' · hoy ' + (d.today_msgs || 0) + '/' + l.chatPerDay + ' mensajes';
+    } catch (_) {}
+  })();
 
   // Cerrar
   const closeCoins = () => { if (window.popModal) window.popModal('coins'); overlay.remove(); };

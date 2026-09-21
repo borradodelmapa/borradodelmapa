@@ -569,6 +569,110 @@ async function verifyAuthAndGetUser(authHeader) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// USO Y LÍMITES POR USUARIO (modelo Premium, paso 3) — 21 sept 2026
+// ═══════════════════════════════════════════════════════════════
+// Contadores en KV (SALMA_KB). El límite se comprueba SIEMPRE aquí, con el plan leído de Firestore
+// (premium_until, solo escribible por el webhook de Stripe) — nunca con nada que mande el cliente.
+// FAIL-OPEN: si KV falla al leer/escribir, el usuario NO queda bloqueado (el límite protege el margen
+// del abuso, no es un candado). También MIDE (tokens de Claude, guías, ediciones, mensajes) para
+// conocer el coste real por usuario — ver GET /usage.
+// Los topes de Premium son PROVISIONALES: se ajustan en el paso 4 con costes reales.
+const PLAN_LIMITS = {
+  free:    { guides: 1, edits: 2, chatPerDay: 20 },                   // guides/edits: TOTAL de por vida
+  premium: { guidesPerMonth: 4, editsPerMonth: 8, chatPerDay: 100 },  // PROVISIONAL
+};
+// Claude Sonnet 4.6, USD por millón de tokens — solo ESTIMACIÓN para medir coste, no es la factura.
+const CLAUDE_USD_PER_MTOK = { in: 3, out: 15 };
+
+function usageMonthKey(uid) { return 'usage:' + uid + ':' + new Date().toISOString().slice(0, 7); }
+function usageTotalKey(uid) { return 'usage:' + uid + ':total'; }
+function usageToday() { return new Date().toISOString().slice(0, 10); }
+
+// {} si no hay dato; null si KV falló (el llamador debe tratarlo como fail-open).
+async function usageRead(env, key) {
+  try {
+    if (!env || !env.SALMA_KB) return null;
+    const raw = await env.SALMA_KB.get(key);
+    return raw ? JSON.parse(raw) : {};
+  } catch (_) { return null; }
+}
+async function usageWrite(env, key, obj, ttl) {
+  try {
+    if (env && env.SALMA_KB) await env.SALMA_KB.put(key, JSON.stringify(obj), ttl ? { expirationTtl: ttl } : undefined);
+  } catch (_) {}
+}
+
+// kind: 'chat' | 'guide' | 'edit'. Devuelve { ok: true } o { ok: false, limit, message }.
+async function usageGate(env, authUser, kind) {
+  try {
+    const premium = !!authUser.premium_active;
+    const month = await usageRead(env, usageMonthKey(authUser.uid));
+    if (month === null) return { ok: true };
+    if (kind === 'chat') {
+      const lim = premium ? PLAN_LIMITS.premium.chatPerDay : PLAN_LIMITS.free.chatPerDay;
+      const today = (month.days && month.days[usageToday()]) || 0;
+      if (today >= lim) {
+        return { ok: false, limit: 'chat', message: premium
+          ? 'Has llegado al límite de mensajes de hoy (' + lim + '). Mañana se renueva.'
+          : 'Has llegado a los ' + lim + ' mensajes de hoy del plan gratuito. Mañana se renueva, o pásate a Premium desde Perfil → Mi plan.' };
+      }
+      return { ok: true };
+    }
+    const isGuide = kind === 'guide';
+    if (premium) {
+      const cap = isGuide ? PLAN_LIMITS.premium.guidesPerMonth : PLAN_LIMITS.premium.editsPerMonth;
+      const used = (isGuide ? month.guides : month.edits) || 0;
+      if (used >= cap) {
+        return { ok: false, limit: kind, message: 'Has llegado al límite de ' + (isGuide ? 'guías' : 'cambios en guías') + ' de este mes (' + cap + '). Se renueva el día 1.' };
+      }
+      return { ok: true };
+    }
+    const total = await usageRead(env, usageTotalKey(authUser.uid));
+    if (total === null) return { ok: true };
+    const cap = isGuide ? PLAN_LIMITS.free.guides : PLAN_LIMITS.free.edits;
+    const used = (isGuide ? total.guides : total.edits) || 0;
+    if (used >= cap) {
+      return { ok: false, limit: kind, message: isGuide
+        ? 'Ya has usado tu guía gratuita. Con Premium puedes crear más: Perfil → Mi plan.'
+        : 'Ya has usado los ' + cap + ' cambios gratuitos de tu guía. Con Premium puedes seguir editándola: Perfil → Mi plan.' };
+    }
+    return { ok: true };
+  } catch (_) { return { ok: true }; }
+}
+
+// Suma uso. delta: { msgs, guides, edits, tin, tout } (todos opcionales). Nunca lanza.
+async function usageRecord(env, authUser, delta) {
+  try {
+    const uid = authUser.uid;
+    const mk = usageMonthKey(uid);
+    const month = (await usageRead(env, mk)) || {};
+    month.msgs   = (month.msgs   || 0) + (delta.msgs   || 0);
+    month.guides = (month.guides || 0) + (delta.guides || 0);
+    month.edits  = (month.edits  || 0) + (delta.edits  || 0);
+    month.tin    = (month.tin    || 0) + (delta.tin    || 0);
+    month.tout   = (month.tout   || 0) + (delta.tout   || 0);
+    const addUsd = ((delta.tin || 0) * CLAUDE_USD_PER_MTOK.in + (delta.tout || 0) * CLAUDE_USD_PER_MTOK.out) / 1e6;
+    month.claude_usd = Math.round(((month.claude_usd || 0) + addUsd) * 10000) / 10000;
+    if (delta.msgs) {
+      month.days = month.days || {};
+      month.days[usageToday()] = (month.days[usageToday()] || 0) + delta.msgs;
+      const keep = Object.keys(month.days).sort().slice(-35);
+      const pruned = {}; keep.forEach(k => { pruned[k] = month.days[k]; }); month.days = pruned;
+    }
+    month.plan = authUser.premium_active ? 'premium' : 'free';
+    month.last_at = new Date().toISOString();
+    await usageWrite(env, mk, month, 60 * 60 * 24 * 100);
+    if (delta.guides || delta.edits) {
+      const tk = usageTotalKey(uid);
+      const total = (await usageRead(env, tk)) || {};
+      total.guides = (total.guides || 0) + (delta.guides || 0);
+      total.edits  = (total.edits  || 0) + (delta.edits  || 0);
+      await usageWrite(env, tk, total);
+    }
+  } catch (_) {}
+}
+
 // ─── Helpers Firestore REST ───
 
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents`;
@@ -3314,6 +3418,7 @@ REGLAS:
       continue;
     }
     const fallbackData = await fallbackRes.json();
+    if (opts.usageAcc && fallbackData.usage) { opts.usageAcc.tin += fallbackData.usage.input_tokens || 0; opts.usageAcc.tout += fallbackData.usage.output_tokens || 0; }
     const parsed = parseModelRouteJson(fallbackData.content?.[0]?.text || '');
     if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
       const route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
@@ -5720,6 +5825,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
   let stopReason = null;
   let routeSignalSent = false;
   let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
+  let usageIn = 0, usageOut = 0; // tokens de esta llamada (medición de coste, paso 3)
   const blocksInProgress = {};
 
   while (true) {
@@ -5764,8 +5870,13 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
           } else if (evt.delta.type === 'input_json_delta') {
             b.partial_json += evt.delta.partial_json;
           }
+        } else if (evt.type === 'message_start') {
+          // Uso de entrada de esta llamada (para medir coste por usuario)
+          const u = evt.message && evt.message.usage;
+          if (u) usageIn += (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0);
         } else if (evt.type === 'message_delta') {
           if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
+          if (evt.usage && typeof evt.usage.output_tokens === 'number') usageOut = evt.usage.output_tokens;
         }
       } catch (e) {}
     }
@@ -5782,7 +5893,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
     }
   }
 
-  return { fullText, contentBlocks, stopReason, routeSignalSent };
+  return { fullText, contentBlocks, stopReason, routeSignalSent, usage: { in: usageIn, out: usageOut } };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -8236,7 +8347,7 @@ REGLAS:
     // ═══ FLIGHT WATCHES — Vigilancia de vuelos ═══
 
     const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-    const FW_FREE_LIMIT = 3;
+    const FW_FREE_LIMIT = 1; // plan gratuito: 1 alerta (decidido 21 sept 2026)
     const FW_PREMIUM_LIMIT = 10; // tope duro: cada vigilancia = 1 búsqueda Duffel diaria en el cron
 
     // ─── GET /flight-places — autocompletado de ciudades/aeropuertos (Duffel) ───
@@ -8297,6 +8408,25 @@ REGLAS:
         const data = await res.json();
         const watches = (data.documents || []).map(parseFirestoreDoc).filter(Boolean);
         return new Response(JSON.stringify({ watches, count: watches.length }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
+    // ─── GET /usage — uso del propio usuario y topes de su plan (medición de coste, paso 3) ───
+    if (request.method === 'GET' && url.pathname === '/usage') {
+      try {
+        const authUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+        const month = (await usageRead(env, usageMonthKey(authUser.uid))) || {};
+        const total = (await usageRead(env, usageTotalKey(authUser.uid))) || {};
+        return new Response(JSON.stringify({
+          plan: authUser.premium_active ? 'premium' : 'free',
+          premium_until: authUser.premium_until || null,
+          limits: authUser.premium_active ? PLAN_LIMITS.premium : PLAN_LIMITS.free,
+          today_msgs: (month.days && month.days[usageToday()]) || 0,
+          month, total,
+        }), { headers: FW_CORS });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
       }
@@ -8673,6 +8803,35 @@ REGLAS:
     // en vez de generar una ruta nueva desde cero (ver más abajo, tras convertProseToRouteJson).
     const mergeIntoRoute = body.merge_into_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
+
+    // ─── LÍMITES DE USO DEL PLAN + MEDICIÓN (modelo Premium, paso 3) ───
+    // Se decide ANTES de cualquier llamada de pago (Google ancla, Claude...). El plan sale de
+    // Firestore vía verifyAuthAndGetUser (premium_until), no del cliente. Fail-open si KV falla.
+    //   guide = "Crear ruta con mapa" (Tiempo 2) → consume 1 guía si sale bien
+    //   edit  = "Añadir a la guía" o edición de la ruta abierta → consume 1 cambio si sale bien
+    //   chat  = todo lo demás → cuenta 1 mensaje del día
+    const _usageKind = (guidedMapStage && !mergeIntoRoute) ? 'guide' : ((mergeIntoRoute || _editingRoute) ? 'edit' : 'chat');
+    const _usageGate = await usageGate(env, authUser, _usageKind);
+    if (!_usageGate.ok) {
+      const _blockedSse = `data: ${JSON.stringify({ t: _usageGate.message })}\n\ndata: ${JSON.stringify({ done: true, reply: _usageGate.message, route: null, limit_reached: _usageGate.limit })}\n\n`;
+      return new Response(_blockedSse, {
+        headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*', 'X-Salma-Limit': _usageGate.limit }
+      });
+    }
+    if (_usageKind === 'chat') ctx.waitUntil(usageRecord(env, authUser, { msgs: 1 }));
+    const _reqUsage = { tin: 0, tout: 0 };  // tokens de Claude de esta petición
+    let _usageConsume = null;               // 'guide' | 'edit' cuando la petición entrega el resultado
+    let _usageFlushed = false;
+    // Apunta el uso de esta petición UNA sola vez (tokens + guía/edición consumida)
+    const _flushUsage = () => {
+      if (_usageFlushed) return;
+      _usageFlushed = true;
+      ctx.waitUntil(usageRecord(env, authUser, {
+        tin: _reqUsage.tin, tout: _reqUsage.tout,
+        guides: _usageConsume === 'guide' ? 1 : 0,
+        edits: _usageConsume === 'edit' ? 1 : 0,
+      }));
+    };
 
     // ─── ANCLA DE PAÍS DEL DESTINO (flujo guiado) ───
     // Resuelve "Córdoba" → país concreto por Geocoding (con desempate por cercanía al GPS)
@@ -9495,8 +9654,10 @@ INSTRUCCIONES:
             writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)).catch(() => {});
           }, 3000);
           try {
-            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry });
+            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry, usageAcc: _reqUsage });
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
+            // Solo consume guía/cambio si la conversión ha salido bien (un fallo no gasta el cupo)
+            if (_fastPathRoute && _usageKind !== 'chat') _usageConsume = _usageKind;
           } catch (e) {
             _fastPathRoute = null;
             _convertFailReason = _convertFailReason || (e.message || 'excepción');
@@ -9510,6 +9671,7 @@ INSTRUCCIONES:
 
         if (_mapStageFailed) {
           if (_convertFailReason) console.log(`[T2-FAIL] ${_convertFailReason}`);
+          _flushUsage(); // los tokens ya se gastaron aunque falle: se miden, pero NO consumen guía
           const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
           return; // el finally cierra el writer
@@ -9548,6 +9710,7 @@ INSTRUCCIONES:
               break;
             }
             result = await readAnthropicStream(apiRes, writer, encoder, decoder, true);
+            if (result && result.usage) { _reqUsage.tin += result.usage.in || 0; _reqUsage.tout += result.usage.out || 0; }
           } else {
             // ── OpenAI gpt-4o-mini (fotos con visión) ──
             const openaiMsgs = [{ role: 'system', content: systemPrompt }];
@@ -9863,6 +10026,7 @@ REGLAS:
 
             if (fallbackRes.ok) {
               const fallbackData = await fallbackRes.json();
+              if (fallbackData.usage) { _reqUsage.tin += fallbackData.usage.input_tokens || 0; _reqUsage.tout += fallbackData.usage.output_tokens || 0; }
               const parsed = parseModelRouteJson(fallbackData.content?.[0]?.text || '');
               if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
                 route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
@@ -10440,6 +10604,11 @@ REGLAS:
           reply += _cutNote;
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _cutNote })}\n\n`)); } catch (_) {}
         }
+
+        // ── Uso (paso 3): si la petición entrega una ruta por un camino no previsto (edición
+        // reescrita entera, generación fuera del botón), también consume; luego se apunta todo una vez.
+        if (route && !_usageConsume) _usageConsume = (_usageKind === 'edit') ? 'edit' : 'guide';
+        _flushUsage();
 
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
