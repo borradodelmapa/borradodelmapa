@@ -2323,7 +2323,7 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
 
 // ═══ FIN "QUIERO IR A..." ═══
 
-function extractHelpLocation(message, history, currentRoute) {
+function extractHelpLocation(message, history, currentRoute, deferRoute) {
   // 1a. Patrón "desde X a/hasta Y" → destino es Y
   const desdeAMatch = message.match(/desde\s+[\wáéíóúñÁÉÍÓÚÑ\s]+?\s+(?:a|hasta|hacia)\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][\wáéíóúñ\u00E0-\u024F\s]{1,30})/i);
   if (desdeAMatch) return desdeAMatch[1].trim();
@@ -2347,6 +2347,9 @@ function extractHelpLocation(message, history, currentRoute) {
   if (loc) return loc;
 
   // 2. Ruta actual del usuario
+  // deferRoute: en vez de decidir aquí, devuelve { __route: zona } y lo decide quien conoce el GPS
+  // (búsquedas de ayuda: si el usuario está lejos de la guía abierta, "cerca" es cerca de ÉL).
+  if (deferRoute && (currentRoute?.region || currentRoute?.country)) return { __route: currentRoute.region || currentRoute.country };
   if (currentRoute?.region) return currentRoute.region;
   if (currentRoute?.country) return currentRoute.country;
 
@@ -9260,12 +9263,38 @@ REGLAS:
 
     // ─── HELP SEARCH / WEATHER (pre-Claude) ───
     let helpResults = null;
+    let helpLocationNote = '';   // dónde se ha buscado (para que Salma lo diga siempre); se añade al final del system prompt
     let weatherData = null;
     let transportSearchData = null;
     const helpCategory = isHelpRequest(message);
     if (helpCategory) {
-      let helpLocation = extractHelpLocation(message, history, currentRoute);
-      const helpLocationFromMessage = !!helpLocation; // true si la ubicación viene del mensaje, no del GPS
+      let helpLocation = extractHelpLocation(message, history, currentRoute, true);
+      // Con una guía abierta y sin lugar en el mensaje, la zona de la guía solo vale si el usuario está cerca de
+      // ella, no tiene GPS/ciudad, o habla de la guía ("de la ruta", "parada 3"). Si está LEJOS, "cerca" es cerca
+      // de su posición real: antes se buscaba siempre en la zona de la guía (21 sept: guía de País Vasco abierta
+      // con el usuario en Asturias → resultados a cientos de km sin decir por qué).
+      if (helpLocation && typeof helpLocation === 'object') {
+        const _routeArea = helpLocation.__route;
+        helpLocation = _routeArea;
+        let _km = Infinity;
+        if (userLocation && typeof userLocation.lat === 'number' && typeof userLocation.lng === 'number') {
+          (currentRoute.stops || []).forEach(st => {
+            if (typeof st.lat === 'number' && typeof st.lng === 'number') {
+              _km = Math.min(_km, haversineKm(userLocation.lat, userLocation.lng, st.lat, st.lng));
+            }
+          });
+        }
+        const _guideRef = /\b(?:de|en|desde|cerca de)\s+(?:la|mi|esta|esa)\s+(?:gu[ií]a|ruta)\b|\bparada\s*\d+\b|\bde la parada\b/i.test(message || '');
+        const _myCity = userLocationName ? userLocationName.split(',')[0].trim() : '';
+        if (_myCity && !_guideRef && isFinite(_km) && _km >= 60) {
+          helpLocation = null;   // cae al GPS de abajo (ciudad + coordenadas del usuario)
+          const _gn = (currentRoute.title || currentRoute.name || _routeArea);
+          helpLocationNote = `[UBICACIÓN DE LA BÚSQUEDA: el usuario tiene abierta la guía "${_gn}" (${_routeArea}), pero su posición actual está a unos ${Math.round(_km)} km de ella, cerca de ${_myCity}. Los datos de búsqueda de arriba son de la zona de SU POSICIÓN (${_myCity}), no de la guía. Empieza tu respuesta con "Cerca de ${_myCity}:" y termina con UNA frase ofreciendo buscar cerca de la guía (${_routeArea}) por si era eso lo que quería. No repitas la búsqueda por tu cuenta.]`;
+        } else {
+          helpLocationNote = `[UBICACIÓN DE LA BÚSQUEDA: el usuario tiene una guía abierta y se ha buscado en su zona (${_routeArea}). Empieza tu respuesta con "Cerca de ${_routeArea}:".]`;
+        }
+      }
+      const helpLocationFromMessage = !!helpLocation; // true si la ubicación viene del mensaje/guía, no del GPS
       // Si no hay location explícita pero tenemos geoloc, usar la ciudad del usuario
       if (!helpLocation && userLocationName) {
         helpLocation = userLocationName.split(',')[0].trim();
@@ -9600,6 +9629,8 @@ INSTRUCCIONES:
     if (weatherFallbackMsg) {
       systemPrompt += '\n\n' + weatherFallbackMsg;
     }
+    // Zona en la que se ha buscado (búsquedas de ayuda con guía abierta): Salma debe decirla siempre.
+    if (helpLocationNote) systemPrompt += '\n\n' + helpLocationNote;
 
     if (transportFallbackMsg) {
       // Inyectar en el último mensaje de usuario (más efectivo que en systemPrompt para formato)
