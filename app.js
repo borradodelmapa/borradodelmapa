@@ -304,10 +304,17 @@ function _renderChatEmpty() {
   const _mapIco = '<svg class="chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>';
 
   const _ceSkySel = _ceSkyReadSel();
-  const _ceSky = _ceSkyCompute(_ceSkySel);
   const _ceSkyWxKey = _ceSkyWeatherKey(_ceSkySel);
-  const _ceSkyWxCached = (window._ceSkyWxCache && window._ceSkyWxCache[_ceSkyWxKey]) ? window._ceSkyWxCache[_ceSkyWxKey].text : '…';
-  const _ceSkyFcCached = (window._ceSkyWxCache && window._ceSkyWxCache[_ceSkyWxKey] && window._ceSkyWxCache[_ceSkyWxKey].forecast) || [];
+  const _ceSkyCachedEntry = (window._ceSkyWxCache && window._ceSkyWxCache[_ceSkyWxKey]) || null;
+  const _ceSkyCachedData = _ceSkyCachedEntry ? _ceSkyCachedEntry.data : null;
+  const _ceSkyTimeInit = _ceSkyTimeText(_ceSkySel);
+  const _ceSkyLocInit = _ceSkyLocLabel(_ceSkySel, _ceSkyCachedData);
+  const _ceSkyTempInit = _ceSkyCachedData
+    ? `${(typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(_ceSkyCachedData.icon) : '🌡️'} ${_ceSkyCachedData.temp}°`
+    : '…';
+  const _ceSkyDescInit = (_ceSkyCachedData && _ceSkyCachedData.description) || '';
+  const _ceSkyExtrasInit = _ceSkyExtrasHTML(_ceSkyCachedData);
+  const _ceSkyFcCached = (_ceSkyCachedData && _ceSkyCachedData.forecast) || [];
   const _ceSkyFcHTML = _ceSkyForecastHTML(_ceSkyFcCached);
   let _ceSkyFcOpen = false;
   try { _ceSkyFcOpen = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
@@ -500,12 +507,16 @@ function _renderChatEmpty() {
     area.innerHTML = `
       <div class="chat-empty">
         <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span></div>
-        <div class="ce-sky" id="ce-sky" data-ce-clock role="button" tabindex="0" title="Cambiar país">
-          <span class="ce-sky-time" id="ce-sky-time">${escapeHTML(_ceSky.timeText)}</span>
-          <span class="ce-sky-dot">·</span>
-          <span class="ce-sky-wx" id="ce-sky-wx">${escapeHTML(_ceSkyWxCached)}</span>
-          <span class="ce-sky-dot">·</span>
-          <span class="ce-sky-country" id="ce-sky-country">${escapeHTML(_ceSky.countryText)}</span>
+        <div class="ce-sky-date" id="ce-sky-time" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">${escapeHTML(_ceSkyTimeInit)}</div>
+        <div class="ce-sky-wx" id="ce-sky-wxcard" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">
+          <div class="wx-main">
+            <span class="wx-loc" id="ce-sky-loc">${escapeHTML(_ceSkyLocInit)}</span>
+            <div class="wx-center">
+              <span class="wx-temp" id="ce-sky-temp">${escapeHTML(_ceSkyTempInit)}</span>
+              <span class="wx-desc" id="ce-sky-desc">${escapeHTML(_ceSkyDescInit)}</span>
+            </div>
+          </div>
+          <div class="wx-extras" id="ce-sky-extras"${_ceSkyCachedData ? '' : ' hidden'}>${_ceSkyExtrasInit}</div>
         </div>
         <button class="ce-sky-fc-toggle" id="ce-sky-fc-toggle" data-ce-sky-fc-toggle aria-expanded="${_ceSkyFcOpen ? 'true' : 'false'}"${_ceSkyFcCached.length ? '' : ' hidden'}>${_ceSkyFcOpen ? '▴' : '▾'} previsión</button>
         <div class="wx-forecast" id="ce-sky-fc"${(_ceSkyFcCached.length && _ceSkyFcOpen) ? '' : ' hidden'}>${_ceSkyFcHTML}</div>
@@ -855,48 +866,61 @@ function _ceSkyInfoCountryFor(sel) {
   return null;
 }
 
-// "España 9:01 AM Domingo 20 sep 2026" → { timeText: "9:01 AM Domingo 20 sep 2026", countryText: "🇪🇸 España" }
-function _ceSkyCompute(sel) {
+// Solo la hora+día, sin nombre de país delante (eso vive en la tarjeta de tiempo)
+function _ceSkyTimeText(sel) {
   if (!sel || sel.mode === 'here') {
     let code = null;
     try { code = (typeof salma !== 'undefined' && salma._copilotCountry) ? String(salma._copilotCountry).toUpperCase() : null; } catch (_) {}
-    if (code && typeof COUNTRY_TZ !== 'undefined' && COUNTRY_TZ[code]) {
+    if (code && typeof COUNTRY_TZ !== 'undefined' && COUNTRY_TZ[code] && typeof countryTimeString === 'function') {
       const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[code]) || code;
-      const emoji = (typeof countryEmoji === 'function') ? countryEmoji(code) : '';
-      const full = (typeof countryTimeString === 'function') ? countryTimeString(code) : '';
-      const timeText = full.startsWith(name) ? full.slice(name.length).trim() : full;
-      return { timeText, countryText: `📍 ${emoji} ${name}`.trim() };
+      const full = countryTimeString(code);
+      return full.startsWith(name) ? full.slice(name.length).trim() : full;
     }
-    const timeText = (typeof deviceTimeString === 'function') ? deviceTimeString() : '';
-    return { timeText, countryText: '📍 Detectando país...' };
+    return (typeof deviceTimeString === 'function') ? deviceTimeString() : '';
   }
   if (sel.mode === 'country') {
     const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[sel.code]) || sel.code;
-    const emoji = (typeof countryEmoji === 'function') ? countryEmoji(sel.code) : '';
     const full = (typeof countryTimeString === 'function') ? countryTimeString(sel.code) : '';
-    const timeText = full.startsWith(name) ? full.slice(name.length).trim() : full;
-    return { timeText, countryText: `${emoji} ${name}`.trim() };
+    return full.startsWith(name) ? full.slice(name.length).trim() : full;
   }
   if (sel.mode === 'city') {
     const key = _ceSkyWeatherKey(sel);
     const cached = window._ceSkyWxCache && window._ceSkyWxCache[key];
-    let timeText;
-    if (cached && typeof cached.offsetSec === 'number' && typeof offsetTimeString === 'function') {
-      timeText = offsetTimeString(cached.offsetSec);
-    } else if (sel.countryCode && typeof COUNTRY_TZ !== 'undefined' && COUNTRY_TZ[sel.countryCode] && typeof countryTimeString === 'function') {
+    const offsetSec = (cached && cached.data && typeof cached.data.utc_offset_sec === 'number') ? cached.data.utc_offset_sec : null;
+    if (offsetSec !== null && typeof offsetTimeString === 'function') return offsetTimeString(offsetSec);
+    if (sel.countryCode && typeof COUNTRY_TZ !== 'undefined' && COUNTRY_TZ[sel.countryCode] && typeof countryTimeString === 'function') {
       const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[sel.countryCode]) || sel.countryCode;
       const full = countryTimeString(sel.countryCode);
-      timeText = full.startsWith(name) ? full.slice(name.length).trim() : full;
-    } else {
-      timeText = (typeof deviceTimeString === 'function') ? deviceTimeString() : '';
+      return full.startsWith(name) ? full.slice(name.length).trim() : full;
     }
-    const countryName = sel.countryCode ? ((typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[sel.countryCode]) || '') : '';
-    const emoji = sel.countryCode ? ((typeof countryEmoji === 'function') ? countryEmoji(sel.countryCode) : '') : '';
-    const label = sel.label || sel.query || '';
-    const countryText = countryName ? `${emoji} ${label}, ${countryName}`.trim() : `${emoji} ${label}`.trim();
-    return { timeText, countryText };
+    return (typeof deviceTimeString === 'function') ? deviceTimeString() : '';
   }
-  return { timeText: '', countryText: '' };
+  return '';
+}
+
+// "📍 Ribadedeva 🇪🇸" — ubicación exacta (de /weather) cuando ya llegó, si no un
+// nombre razonable según el modo mientras se carga.
+function _ceSkyLocLabel(sel, data) {
+  const cc = (data && data.country) ? String(data.country).toUpperCase() : _ceSkyInfoCountryFor(sel);
+  const emoji = cc ? ((typeof countryEmoji === 'function') ? countryEmoji(cc) : '') : '';
+  if (data && data.location) return `📍 ${data.location}${emoji ? ' ' + emoji : ''}`;
+  if (sel && sel.mode === 'country') {
+    const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[sel.code]) || sel.code;
+    return `${emoji} ${name}`.trim();
+  }
+  if (sel && sel.mode === 'city') return `📍 ${sel.label || sel.query || ''}${emoji ? ' ' + emoji : ''}`;
+  return '📍 Buscando...';
+}
+
+// "Sens. 17° · 💨 14 km/h ESE · ráf. 20 · 💧 86% · 🟢 Buena" — mismo formato que
+// la Weather Banner del chat (_wxRender en salma.js), reutilizado aquí.
+function _ceSkyExtrasHTML(data) {
+  if (!data) return '';
+  const aqiLabels = ['', '🟢 Buena', '🟡 Acept.', '🟠 Moder.', '🔴 Mala', '🟣 Muy mala'];
+  const gust = data.wind_gust_kmph ? ` · ráf. ${data.wind_gust_kmph}` : '';
+  const aqi = data.aqi ? ` <span class="wx-dot">·</span> ${aqiLabels[data.aqi] || ''}` : '';
+  return `Sens. ${data.feels_like}° <span class="wx-dot">·</span> 💨 ${data.wind_kmph} km/h ` +
+    `<span class="wx-dir">${escapeHTML(data.wind_dir || '')}</span>${gust} <span class="wx-dot">·</span> 💧 ${data.humidity}%${aqi}`;
 }
 
 function _ceSkyForecastHTML(forecast) {
@@ -914,12 +938,8 @@ function _ceSkyForecastHTML(forecast) {
 
 function _ceSkyRenderTick() {
   const time = document.getElementById('ce-sky-time');
-  const country = document.getElementById('ce-sky-country');
-  if (!time && !country) return;
-  const sel = _ceSkyReadSel();
-  const parts = _ceSkyCompute(sel);
-  if (time) time.textContent = parts.timeText;
-  if (country) country.textContent = parts.countryText;
+  if (!time) return;
+  time.textContent = _ceSkyTimeText(_ceSkyReadSel());
 }
 
 function _ceSkyStartTicker() {
@@ -948,34 +968,53 @@ function _ceSkyStartTicker() {
 
 window._ceSkyWxCache = window._ceSkyWxCache || {};
 
+// Pinta el bloque de tiempo completo (icono+temp+desc, extras de viento/sens./
+// humedad/AQI, ubicación exacta y previsión) a partir de la respuesta de /weather.
+// data === null → todavía no hay nada (cargando o falló), deja los huecos vacíos.
+function _ceSkyPaintWeather(data) {
+  const loc = document.getElementById('ce-sky-loc');
+  const temp = document.getElementById('ce-sky-temp');
+  const desc = document.getElementById('ce-sky-desc');
+  const extras = document.getElementById('ce-sky-extras');
+  const fc = document.getElementById('ce-sky-fc');
+  const fcToggle = document.getElementById('ce-sky-fc-toggle');
+  const sel = _ceSkyReadSel();
+  if (loc) loc.textContent = _ceSkyLocLabel(sel, data);
+  if (!data) {
+    if (temp) temp.textContent = '…';
+    if (desc) desc.textContent = '';
+    if (extras) { extras.innerHTML = ''; extras.hidden = true; }
+    if (fc) { fc.innerHTML = ''; fc.hidden = true; }
+    if (fcToggle) fcToggle.hidden = true;
+    return;
+  }
+  const icon = (typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(data.icon) : '🌡️';
+  if (temp) temp.textContent = `${icon} ${data.temp}°`;
+  if (desc) desc.textContent = data.description || '';
+  if (extras) { extras.innerHTML = _ceSkyExtrasHTML(data); extras.hidden = false; }
+  const forecast = data.forecast || [];
+  if (fcToggle) fcToggle.hidden = !forecast.length;
+  if (fc) {
+    if (!forecast.length) { fc.innerHTML = ''; fc.hidden = true; }
+    else {
+      fc.innerHTML = _ceSkyForecastHTML(forecast);
+      // Rellena la previsión pero respeta si está plegada o desplegada (por
+      // defecto plegada, a petición de Paco, para no llamar la atención).
+      let open = false;
+      try { open = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
+      fc.hidden = !open;
+    }
+  }
+}
+
 async function _ceSkyWeatherRefresh(sel) {
   const key = _ceSkyWeatherKey(sel);
   const FRESH_MS = 20 * 60 * 1000;
   const cache = window._ceSkyWxCache;
   const cached = cache[key];
-  const paintWx = (txt) => { const el = document.getElementById('ce-sky-wx'); if (el) el.textContent = txt; };
-  // Rellena la previsión pero respeta si está plegada o desplegada (por
-  // defecto plegada, a petición de Paco, para no llamar la atención) —
-  // solo cambia si hay datos o no, nunca fuerza abrirla sola.
-  const paintFc = (fc) => {
-    const el = document.getElementById('ce-sky-fc');
-    const toggle = document.getElementById('ce-sky-fc-toggle');
-    if (!el) return;
-    if (!fc || !fc.length) {
-      el.innerHTML = ''; el.hidden = true;
-      if (toggle) toggle.hidden = true;
-      return;
-    }
-    el.innerHTML = _ceSkyForecastHTML(fc);
-    if (toggle) toggle.hidden = false;
-    let open = false;
-    try { open = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
-    el.hidden = !open;
-  };
   if (cached && (Date.now() - cached.ts) < FRESH_MS) {
-    paintWx(cached.text);
-    paintFc(cached.forecast);
-    if (sel.mode === 'city' && typeof cached.offsetSec === 'number') _ceSkyApplyCityOffset();
+    _ceSkyPaintWeather(cached.data);
+    if (sel.mode === 'city') _ceSkyRenderTick();
     return;
   }
   try {
@@ -985,31 +1024,26 @@ async function _ceSkyWeatherRefresh(sel) {
       try { loc = (typeof salma !== 'undefined') ? salma._userLocation : null; } catch (_) {}
       // Aún sin GPS — no lo dejamos en blanco (parecía "desaparecido"), el
       // reintento de _ceSkyStartTicker (3s/8s) lo rellena en cuanto lo haya.
-      if (!loc) { paintWx('…'); paintFc(null); return; }
+      if (!loc) { _ceSkyPaintWeather(null); return; }
       url = `${window.SALMA_API}/weather?lat=${loc.lat}&lon=${loc.lng}`;
     } else if (sel.mode === 'country') {
       const q = (typeof countryWeatherQuery === 'function') ? countryWeatherQuery(sel.code) : null;
-      if (!q) { paintWx(''); paintFc(null); return; }
+      if (!q) { _ceSkyPaintWeather(null); return; }
       url = `${window.SALMA_API}/weather?city=${encodeURIComponent(q)}`;
     } else if (sel.mode === 'city') {
       url = `${window.SALMA_API}/weather?city=${encodeURIComponent(sel.query)}`;
     } else return;
     const res = await fetch(url);
-    if (!res.ok) { paintWx(''); paintFc(null); return; }
+    if (!res.ok) { _ceSkyPaintWeather(null); return; }
     const data = await res.json();
-    const icon = (typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(data.icon) : '🌡️';
-    const text = `${icon} ${data.temp}°`;
-    const offsetSec = (typeof data.utc_offset_sec === 'number') ? data.utc_offset_sec : null;
-    cache[key] = { text, ts: Date.now(), forecast: data.forecast || [], offsetSec };
+    cache[key] = { data, ts: Date.now() };
     // Puede haber cambiado de selección mientras la petición estaba en vuelo
     if (_ceSkyWeatherKey(_ceSkyReadSel()) === key) {
-      paintWx(text);
-      paintFc(data.forecast || []);
-      if (sel.mode === 'city' && typeof offsetSec === 'number') _ceSkyApplyCityOffset();
+      _ceSkyPaintWeather(data);
+      if (sel.mode === 'city' && typeof data.utc_offset_sec === 'number') _ceSkyRenderTick();
     }
   } catch (_) {
-    paintWx('');
-    paintFc(null);
+    _ceSkyPaintWeather(null);
   }
 }
 
@@ -1026,15 +1060,6 @@ function _ceSkyToggleForecast() {
     toggle.textContent = (open ? '▴' : '▾') + ' previsión';
     toggle.setAttribute('aria-expanded', String(open));
   }
-}
-
-// Repinta la hora con el desfase ya cacheado (modo ciudad suelta)
-function _ceSkyApplyCityOffset() {
-  const el = document.getElementById('ce-sky-time');
-  if (!el) return;
-  const sel = _ceSkyReadSel();
-  const parts = _ceSkyCompute(sel);
-  el.textContent = parts.timeText;
 }
 
 async function _ceSkyInfoRefresh(cc) {
@@ -1116,12 +1141,7 @@ async function _ceSkyCitySearch(query, overlay, btnEl) {
     const data = await res.json();
     const sel = { mode: 'city', query, label: data.location || query, countryCode: (data.country || '').toUpperCase() };
     const key = _ceSkyWeatherKey(sel);
-    const icon = (typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(data.icon) : '🌡️';
-    window._ceSkyWxCache[key] = {
-      text: `${icon} ${data.temp}°`, ts: Date.now(),
-      forecast: data.forecast || [],
-      offsetSec: (typeof data.utc_offset_sec === 'number') ? data.utc_offset_sec : null
-    };
+    window._ceSkyWxCache[key] = { data, ts: Date.now() };
     if (overlay) overlay.remove();
     _ceSkySetSel(sel);
   } catch (_) {

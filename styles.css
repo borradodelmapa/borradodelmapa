@@ -6573,16 +6573,20 @@ body {
 .ce-top .ce-brand:active{opacity:.7;}
 .ce-top .ce-brand span{color:var(--ce-ink3);}
 
-/* Hora + tiempo + país — barra siempre visible bajo la marca, sin desplegar nada */
-.ce-sky{
-  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
-  font-family:var(--ce-flapf);font-size:11px;letter-spacing:.06em;color:var(--ce-ink2);
-  padding-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+/* Hora + tiempo + país — barra siempre visible bajo la marca, sin desplegar nada.
+   21 sept 2026: fusionada con el detalle que antes solo traía la Weather Banner
+   del chat (#weather-banner, ya desactivada — se duplicaban) — reutiliza sus
+   mismas clases (.wx-main/.wx-loc/.wx-temp/.wx-desc/.wx-extras) para tener el
+   mismo tamaño de letra legible que ya le gustaba a Paco, en vez de repetirlo. */
+.ce-sky-date{
+  font-family:var(--ce-flapf);font-size:13px;letter-spacing:.06em;color:var(--ce-ink2);
+  padding-bottom:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
-.ce-sky:active{opacity:.7;}
-.ce-sky .ce-sky-dot{color:var(--ce-ink3);}
-.ce-sky .ce-sky-wx{color:var(--ce-ink);}
-.ce-sky .ce-sky-country{color:var(--ce-amber);}
+.ce-sky-date:active{opacity:.7;}
+.ce-sky-wx{padding-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.ce-sky-wx:active{opacity:.85;}
+.ce-sky-wx .wx-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ce-sky-wx .wx-extras{flex-wrap:wrap;white-space:normal;overflow:visible;}
 
 /* Previsión — plegada por defecto a propósito, botón pequeño para no llamar
    la atención (reutiliza .wx-forecast/.wx-fc-day de la Weather Banner) */

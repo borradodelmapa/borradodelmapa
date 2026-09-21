@@ -2981,9 +2981,12 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
-    // Banner del tiempo — fuera de la pantalla de inicio (doc 8 sep, limpieza C).
-    // Solo aparece cuando ya hay conversación; se re-activa al mandar el primer mensaje (ver _addUserBubble).
-    if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Banner del tiempo (#weather-banner) — DESACTIVADO 21 sept 2026: se quedaba pegado
+    // encima de la pantalla de inicio como hermano de #chat-area, duplicando la barra
+    // de hora+tiempo+país (.ce-sky-wx) que ya lo sustituye con más detalle (viento,
+    // sensación, humedad, ubicación exacta — bug real reportado por Paco). No se borra
+    // la función por si hace falta reactivarla, solo se deja de llamar aquí.
+    // if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
     // Banner de recordatorios (una vez al día)
@@ -3010,8 +3013,8 @@ const salma = {
     div.innerHTML = `<div class="msg-body-user">${photoHtml}${textHtml}</div>`;
     area.appendChild(div);
     this._scrollToBottom(true);
-    // El banner del tiempo se oculta en el inicio; vuelve al empezar la conversación (doc 8 sep, limpieza C)
-    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Banner del tiempo — DESACTIVADO 21 sept 2026, ver initChat() para el motivo.
+    // if (!document.getElementById('weather-banner')) this.initWeatherBanner();
   },
 
   _addSalmaBubble(text) {
