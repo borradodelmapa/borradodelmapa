@@ -169,11 +169,17 @@ function updateBottomBar() {
 
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
-  const isConsultas = currentState === 'consultas';
   const isProfile = ['profile', 'bitacora', 'diario', 'documentos', 'notas', 'galeria', 'vuelos'].includes(currentState);
 
-  // Barra fija de 4 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md)
+  // Barra fija de 4 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md).
+  // "Consultas" quitada de aquí el 21 sept 2026 (sigue accesible desde el chip
+  // "Últimas consultas" de la pantalla vacía) — su sitio lo ocupa "Ayuda", que
+  // abre el panel de feedback de testers (debug-panel.js, window.__dbg.open).
   bar.innerHTML = `
+    <button class="bottom-tab bottom-tab-tester" id="tab-tester">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Ayuda</span>
+    </button>
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -182,15 +188,14 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
-    <button class="bottom-tab ${isConsultas ? 'bottom-tab-active' : ''}" id="tab-consultas">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-      <span>Consultas</span>
-    </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
     </button>`;
 
+  document.getElementById('tab-tester').addEventListener('click', () => {
+    if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
+  });
   document.getElementById('tab-chat').addEventListener('click', () => {
     // La vista itinerario la desmonta showState() (Fase 4). Aquí solo al chat.
     if (typeof salma !== 'undefined') salma._initChat();
@@ -199,9 +204,6 @@ function updateBottomBar() {
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
-  });
-  document.getElementById('tab-consultas').addEventListener('click', () => {
-    showState('consultas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
@@ -303,7 +305,21 @@ function _renderChatEmpty() {
   // ── Rediseño v1 (rama rediseno-visual) — tablero de guía + chips estilo panel de aeropuerto ──
   const _mapIco = '<svg class="chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>';
 
-  const _ceMonth = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'][new Date().getMonth()];
+  const _ceSkySel = _ceSkyReadSel();
+  const _ceSkyWxKey = _ceSkyWeatherKey(_ceSkySel);
+  const _ceSkyCachedEntry = (window._ceSkyWxCache && window._ceSkyWxCache[_ceSkyWxKey]) || null;
+  const _ceSkyCachedData = _ceSkyCachedEntry ? _ceSkyCachedEntry.data : null;
+  const _ceSkyTimeInit = _ceSkyTimeText(_ceSkySel);
+  const _ceSkyLocInit = _ceSkyLocLabel(_ceSkySel, _ceSkyCachedData);
+  const _ceSkyTempInit = _ceSkyCachedData
+    ? `${(typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(_ceSkyCachedData.icon) : '🌡️'} ${_ceSkyCachedData.temp}°`
+    : '…';
+  const _ceSkyDescInit = (_ceSkyCachedData && _ceSkyCachedData.description) || '';
+  const _ceSkyExtrasInit = _ceSkyExtrasHTML(_ceSkyCachedData);
+  const _ceSkyFcCached = (_ceSkyCachedData && _ceSkyCachedData.forecast) || [];
+  const _ceSkyFcHTML = _ceSkyForecastHTML(_ceSkyFcCached);
+  let _ceSkyFcOpen = false;
+  try { _ceSkyFcOpen = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
   let _ceName = '';
   try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
@@ -492,7 +508,21 @@ function _renderChatEmpty() {
 
     area.innerHTML = `
       <div class="chat-empty">
-        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta">${_ceMonth}</span></div>
+        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span></div>
+        <div class="ce-sky-date" id="ce-sky-time" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">${escapeHTML(_ceSkyTimeInit)}</div>
+        <div class="ce-sky-wx" id="ce-sky-wxcard" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">
+          <div class="wx-main">
+            <span class="wx-loc" id="ce-sky-loc">${escapeHTML(_ceSkyLocInit)}</span>
+            <div class="wx-center">
+              <span class="wx-temp" id="ce-sky-temp">${escapeHTML(_ceSkyTempInit)}</span>
+              <span class="wx-desc" id="ce-sky-desc">${escapeHTML(_ceSkyDescInit)}</span>
+            </div>
+          </div>
+          <div class="wx-extras" id="ce-sky-extras"${_ceSkyCachedData ? '' : ' hidden'}>${_ceSkyExtrasInit}</div>
+        </div>
+        <button class="ce-sky-fc-toggle" id="ce-sky-fc-toggle" data-ce-sky-fc-toggle aria-expanded="${_ceSkyFcOpen ? 'true' : 'false'}"${_ceSkyFcCached.length ? '' : ' hidden'}>${_ceSkyFcOpen ? '▴' : '▾'} previsión</button>
+        <div class="wx-forecast" id="ce-sky-fc"${(_ceSkyFcCached.length && _ceSkyFcOpen) ? '' : ' hidden'}>${_ceSkyFcHTML}</div>
+        <div id="ce-sky-info"></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
@@ -643,7 +673,25 @@ function _renderChatEmpty() {
 
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
-    area.addEventListener('click', (e) => {
+    // _renderChatEmpty() se llama varias veces por sesión (nueva ruta, volver al
+    // índice, etc.) sobre el mismo #chat-area persistente — sin este guardián,
+    // cada llamada apilaba OTRO listener encima sin quitar el anterior, y un
+    // solo toque disparaba la acción 2-3 veces (el toggle de la previsión, al no
+    // ser indiferente a repetirse, abría y cerraba en el mismo click — bug real
+    // reportado por Paco, 20 sept 2026).
+    if (!area._ceEmptyClickWired) {
+      area._ceEmptyClickWired = true;
+      area.addEventListener('click', (e) => {
+      // Previsión de varios días → plegar/desplegar (por defecto plegada, no distrae)
+      if (e.target.closest('[data-ce-sky-fc-toggle]')) {
+        _ceSkyToggleForecast();
+        return;
+      }
+      // Hora + tiempo + país → cambiar de país
+      if (e.target.closest('[data-ce-clock]')) {
+        _ceSkyOpenPicker();
+        return;
+      }
       // Logo → volver al índice limpio
       if (e.target.closest('[data-ce-home]')) {
         if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
@@ -673,7 +721,8 @@ function _renderChatEmpty() {
         }
         return;
       }
-    });
+      });
+    }
   } catch (err) {
     console.warn('[chat-empty] render nuevo falló, uso fallback', err);
     area.innerHTML = _ceFallback;
@@ -762,6 +811,416 @@ function _renderChatEmpty() {
       try { localStorage.setItem('bdm_ce_more_open', open ? '1' : '0'); } catch (_) {}
     });
   }
+
+  _ceSkyStartTicker();
+  _ceSkyWeatherRefresh(_ceSkySel);
+  const _ceSkyInfoCC = _ceSkyInfoCountryFor(_ceSkySel);
+  if (_ceSkyInfoCC) _ceSkyInfoRefresh(_ceSkyInfoCC);
+}
+
+// ═══ HORA + TIEMPO + PAÍS (cabecera del billete) ═══
+// Hora: Intl + huso IANA (COUNTRY_TZ) para "mi ubicación"/país — sin API,
+// coste cero. Para una ciudad suelta buscada a mano usa el desfase UTC que
+// ya trae /weather (utc_offset_sec), sin tabla propia.
+// Tiempo (clima): reutiliza /weather (OpenWeatherMap) — con caché de 20 min
+// por selección para no repetir llamadas. Aviso de coste dado a Paco al
+// implementarlo (20 sept 2026): con "mi ubicación" no cambia nada (la
+// llamada ya existía); al elegir país o buscar ciudad sí es una llamada
+// nueva por selección, gratis hasta 1000/día en el plan actual.
+// Info del país: /practical-info es solo lectura de KV (Cloudflare), sin
+// ninguna API de pago detrás — cero coste, cambia con la misma selección.
+
+// Estado guardado: {mode:'here'} | {mode:'country', code} | {mode:'city', query, label, countryCode}
+function _ceSkyReadSel() {
+  try {
+    const raw = localStorage.getItem('bdm_sky_sel');
+    if (raw) {
+      const sel = JSON.parse(raw);
+      if (sel && sel.mode) return sel;
+    }
+    // Migración del formato de la sesión anterior (string suelto)
+    const old = localStorage.getItem('bdm_clock_country');
+    if (old) {
+      const sel = (old === 'here') ? { mode: 'here' } : { mode: 'country', code: old };
+      localStorage.setItem('bdm_sky_sel', JSON.stringify(sel));
+      localStorage.removeItem('bdm_clock_country');
+      return sel;
+    }
+  } catch (_) {}
+  return { mode: 'here' };
+}
+
+function _ceSkyWeatherKey(sel) {
+  if (!sel || sel.mode === 'here') return 'here';
+  if (sel.mode === 'country') return 'country:' + sel.code;
+  if (sel.mode === 'city') return 'city:' + String(sel.query || '').toLowerCase();
+  return 'here';
+}
+
+// País a usar para la tarjeta de info práctica (mismo país que la hora/tiempo)
+function _ceSkyInfoCountryFor(sel) {
+  if (!sel) return null;
+  if (sel.mode === 'country') return sel.code;
+  if (sel.mode === 'city') return sel.countryCode || null;
+  if (sel.mode === 'here') {
+    try { return (typeof salma !== 'undefined' && salma._copilotCountry) ? String(salma._copilotCountry).toUpperCase() : null; } catch (_) { return null; }
+  }
+  return null;
+}
+
+// Solo la hora+día, sin nombre de país delante (eso vive en la tarjeta de tiempo)
+function _ceSkyTimeText(sel) {
+  if (!sel || sel.mode === 'here') {
+    let code = null;
+    try { code = (typeof salma !== 'undefined' && salma._copilotCountry) ? String(salma._copilotCountry).toUpperCase() : null; } catch (_) {}
+    if (code && typeof COUNTRY_TZ !== 'undefined' && COUNTRY_TZ[code] && typeof countryTimeString === 'function') {
+      const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[code]) || code;
+      const full = countryTimeString(code);
+      return full.startsWith(name) ? full.slice(name.length).trim() : full;
+    }
+    return (typeof deviceTimeString === 'function') ? deviceTimeString() : '';
+  }
+  if (sel.mode === 'country') {
+    const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[sel.code]) || sel.code;
+    const full = (typeof countryTimeString === 'function') ? countryTimeString(sel.code) : '';
+    return full.startsWith(name) ? full.slice(name.length).trim() : full;
+  }
+  if (sel.mode === 'city') {
+    const key = _ceSkyWeatherKey(sel);
+    const cached = window._ceSkyWxCache && window._ceSkyWxCache[key];
+    const offsetSec = (cached && cached.data && typeof cached.data.utc_offset_sec === 'number') ? cached.data.utc_offset_sec : null;
+    if (offsetSec !== null && typeof offsetTimeString === 'function') return offsetTimeString(offsetSec);
+    if (sel.countryCode && typeof COUNTRY_TZ !== 'undefined' && COUNTRY_TZ[sel.countryCode] && typeof countryTimeString === 'function') {
+      const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[sel.countryCode]) || sel.countryCode;
+      const full = countryTimeString(sel.countryCode);
+      return full.startsWith(name) ? full.slice(name.length).trim() : full;
+    }
+    return (typeof deviceTimeString === 'function') ? deviceTimeString() : '';
+  }
+  return '';
+}
+
+// "📍 Ribadedeva 🇪🇸" — ubicación exacta (de /weather) cuando ya llegó, si no un
+// nombre razonable según el modo mientras se carga.
+function _ceSkyLocLabel(sel, data) {
+  const cc = (data && data.country) ? String(data.country).toUpperCase() : _ceSkyInfoCountryFor(sel);
+  const emoji = cc ? ((typeof countryEmoji === 'function') ? countryEmoji(cc) : '') : '';
+  if (data && data.location) return `📍 ${data.location}${emoji ? ' ' + emoji : ''}`;
+  if (sel && sel.mode === 'country') {
+    const name = (typeof CODE_TO_NAME !== 'undefined' && CODE_TO_NAME[sel.code]) || sel.code;
+    return `${emoji} ${name}`.trim();
+  }
+  if (sel && sel.mode === 'city') return `📍 ${sel.label || sel.query || ''}${emoji ? ' ' + emoji : ''}`;
+  return '📍 Buscando...';
+}
+
+// "Sens. 17° · 💨 14 km/h ESE · ráf. 20 · 💧 86% · 🟢 Buena" — mismo formato que
+// la Weather Banner del chat (_wxRender en salma.js), reutilizado aquí.
+function _ceSkyExtrasHTML(data) {
+  if (!data) return '';
+  const aqiLabels = ['', '🟢 Buena', '🟡 Acept.', '🟠 Moder.', '🔴 Mala', '🟣 Muy mala'];
+  const gust = data.wind_gust_kmph ? ` · ráf. ${data.wind_gust_kmph}` : '';
+  const aqi = data.aqi ? ` <span class="wx-dot">·</span> ${aqiLabels[data.aqi] || ''}` : '';
+  return `Sens. ${data.feels_like}° <span class="wx-dot">·</span> 💨 ${data.wind_kmph} km/h ` +
+    `<span class="wx-dir">${escapeHTML(data.wind_dir || '')}</span>${gust} <span class="wx-dot">·</span> 💧 ${data.humidity}%${aqi}`;
+}
+
+function _ceSkyForecastHTML(forecast) {
+  if (!forecast || !forecast.length) return '';
+  return forecast.map(f => {
+    const icon = (typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(f.icon) : '🌡️';
+    return `<div class="wx-fc-day">
+      <span class="wx-fc-name">${escapeHTML(f.day || '')}</span>
+      <span class="wx-fc-icon">${icon}</span>
+      <span class="wx-fc-temp">${f.max}°</span>
+      <span class="wx-fc-min">${f.min}°</span>
+    </div>`;
+  }).join('');
+}
+
+function _ceSkyRenderTick() {
+  const time = document.getElementById('ce-sky-time');
+  if (!time) return;
+  time.textContent = _ceSkyTimeText(_ceSkyReadSel());
+}
+
+function _ceSkyStartTicker() {
+  if (window._ceSkyInterval) return;
+  window._ceSkyInterval = setInterval(_ceSkyRenderTick, 30000);
+  // Un par de repasos rápidos al principio: por si el país por GPS (copiloto)
+  // tarda unos segundos en resolver, o si la info del país aún no se pidió.
+  // Lo mismo para el tiempo en modo "mi ubicación": si la primera vez que se
+  // pintó la pantalla el GPS (salma._userLocation) todavía no estaba listo,
+  // antes se quedaba en blanco para siempre sin volver a intentarlo — bug
+  // real reportado por Paco (20 sept 2026), corregido con este mismo reintento.
+  const catchUp = () => {
+    _ceSkyRenderTick();
+    const sel = _ceSkyReadSel();
+    const cc = _ceSkyInfoCountryFor(sel);
+    if (cc) _ceSkyInfoRefresh(cc);
+    if (sel.mode === 'here') {
+      const key = _ceSkyWeatherKey(sel);
+      const cached = window._ceSkyWxCache && window._ceSkyWxCache[key];
+      if (!cached) _ceSkyWeatherRefresh(sel);
+    }
+  };
+  setTimeout(catchUp, 3000);
+  setTimeout(catchUp, 8000);
+}
+
+window._ceSkyWxCache = window._ceSkyWxCache || {};
+
+// Pinta el bloque de tiempo completo (icono+temp+desc, extras de viento/sens./
+// humedad/AQI, ubicación exacta y previsión) a partir de la respuesta de /weather.
+// data === null → todavía no hay nada (cargando o falló), deja los huecos vacíos.
+function _ceSkyPaintWeather(data) {
+  const loc = document.getElementById('ce-sky-loc');
+  const temp = document.getElementById('ce-sky-temp');
+  const desc = document.getElementById('ce-sky-desc');
+  const extras = document.getElementById('ce-sky-extras');
+  const fc = document.getElementById('ce-sky-fc');
+  const fcToggle = document.getElementById('ce-sky-fc-toggle');
+  const sel = _ceSkyReadSel();
+  if (loc) loc.textContent = _ceSkyLocLabel(sel, data);
+  if (!data) {
+    if (temp) temp.textContent = '…';
+    if (desc) desc.textContent = '';
+    if (extras) { extras.innerHTML = ''; extras.hidden = true; }
+    if (fc) { fc.innerHTML = ''; fc.hidden = true; }
+    if (fcToggle) fcToggle.hidden = true;
+    return;
+  }
+  const icon = (typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(data.icon) : '🌡️';
+  if (temp) temp.textContent = `${icon} ${data.temp}°`;
+  if (desc) desc.textContent = data.description || '';
+  if (extras) { extras.innerHTML = _ceSkyExtrasHTML(data); extras.hidden = false; }
+  const forecast = data.forecast || [];
+  if (fcToggle) fcToggle.hidden = !forecast.length;
+  if (fc) {
+    if (!forecast.length) { fc.innerHTML = ''; fc.hidden = true; }
+    else {
+      fc.innerHTML = _ceSkyForecastHTML(forecast);
+      // Rellena la previsión pero respeta si está plegada o desplegada (por
+      // defecto plegada, a petición de Paco, para no llamar la atención).
+      let open = false;
+      try { open = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
+      fc.hidden = !open;
+    }
+  }
+}
+
+async function _ceSkyWeatherRefresh(sel) {
+  const key = _ceSkyWeatherKey(sel);
+  const FRESH_MS = 20 * 60 * 1000;
+  const cache = window._ceSkyWxCache;
+  const cached = cache[key];
+  if (cached && (Date.now() - cached.ts) < FRESH_MS) {
+    _ceSkyPaintWeather(cached.data);
+    if (sel.mode === 'city') _ceSkyRenderTick();
+    return;
+  }
+  try {
+    let url;
+    if (!sel || sel.mode === 'here') {
+      let loc = null;
+      try { loc = (typeof salma !== 'undefined') ? salma._userLocation : null; } catch (_) {}
+      // Aún sin GPS — no lo dejamos en blanco (parecía "desaparecido"), el
+      // reintento de _ceSkyStartTicker (3s/8s) lo rellena en cuanto lo haya.
+      if (!loc) { _ceSkyPaintWeather(null); return; }
+      url = `${window.SALMA_API}/weather?lat=${loc.lat}&lon=${loc.lng}`;
+    } else if (sel.mode === 'country') {
+      const q = (typeof countryWeatherQuery === 'function') ? countryWeatherQuery(sel.code) : null;
+      if (!q) { _ceSkyPaintWeather(null); return; }
+      url = `${window.SALMA_API}/weather?city=${encodeURIComponent(q)}`;
+    } else if (sel.mode === 'city') {
+      url = `${window.SALMA_API}/weather?city=${encodeURIComponent(sel.query)}`;
+    } else return;
+    const res = await fetch(url);
+    if (!res.ok) { _ceSkyPaintWeather(null); return; }
+    const data = await res.json();
+    cache[key] = { data, ts: Date.now() };
+    // Puede haber cambiado de selección mientras la petición estaba en vuelo
+    if (_ceSkyWeatherKey(_ceSkyReadSel()) === key) {
+      _ceSkyPaintWeather(data);
+      if (sel.mode === 'city' && typeof data.utc_offset_sec === 'number') _ceSkyRenderTick();
+    }
+  } catch (_) {
+    _ceSkyPaintWeather(null);
+  }
+}
+
+// Plegar/desplegar la previsión — plegada por defecto (petición de Paco, 20
+// sept: no debe ocupar tanta atención), pero disponible con un toque.
+function _ceSkyToggleForecast() {
+  const el = document.getElementById('ce-sky-fc');
+  const toggle = document.getElementById('ce-sky-fc-toggle');
+  if (!el) return;
+  const open = !!el.hidden; // estaba oculta → la vamos a abrir
+  el.hidden = !open;
+  try { localStorage.setItem('bdm_sky_fc_open', open ? '1' : '0'); } catch (_) {}
+  if (toggle) {
+    toggle.textContent = (open ? '▴' : '▾') + ' previsión';
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+}
+
+function _ceSkySetSel(sel) {
+  try { localStorage.setItem('bdm_sky_sel', JSON.stringify(sel)); } catch (_) {}
+  _ceSkyRenderTick();
+  _ceSkyWeatherRefresh(sel);
+  const cc = _ceSkyInfoCountryFor(sel);
+  if (cc) { _ceSkyInfoRefresh(cc); } else { const el = document.getElementById('ce-sky-info'); if (el) el.innerHTML = ''; }
+}
+
+async function _ceSkyInfoRefresh(cc) {
+  const el = document.getElementById('ce-sky-info');
+  if (!el) return;
+  if (!cc) { el.innerHTML = ''; return; }
+  const cacheKey = 'ce_sky_info_' + cc.toLowerCase();
+  let pi = null;
+  try { const cached = sessionStorage.getItem(cacheKey); if (cached) pi = JSON.parse(cached); } catch (_) {}
+  if (!pi) {
+    try {
+      const res = await fetch(`${window.SALMA_API}/practical-info?country=${cc}`);
+      if (!res.ok) { if (_ceSkyInfoCountryFor(_ceSkyReadSel()) === cc) el.innerHTML = ''; return; }
+      const data = await res.json();
+      pi = data.practical_info;
+      if (!pi) { if (_ceSkyInfoCountryFor(_ceSkyReadSel()) === cc) el.innerHTML = ''; return; }
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(pi)); } catch (_) {}
+    } catch (_) { return; }
+  }
+  // Puede haber cambiado de selección mientras la petición estaba en vuelo
+  if (_ceSkyInfoCountryFor(_ceSkyReadSel()) !== cc) return;
+  el.innerHTML = _ceSkyInfoHTML(pi);
+}
+
+function _ceSkyInfoHTML(pi) {
+  let html = '<div class="copilot-card ce-sky-info-card">';
+  html += '<div class="copilot-header" onclick="document.getElementById(\'ce-sky-info-body\').classList.toggle(\'copilot-open\')">';
+  html += '<span class="copilot-title">📍 Info práctica del país</span><span class="copilot-toggle">▸</span></div>';
+  html += '<div id="ce-sky-info-body" class="copilot-body">';
+  if (pi.emergencies) {
+    html += '<div class="copilot-section"><strong>🚨 Emergencias</strong><br>';
+    if (pi.emergencies.general_number) html += '<strong>' + escapeHTML(pi.emergencies.general_number) + '</strong><br>';
+    if (pi.emergencies.embassy) html += '<small>' + escapeHTML(pi.emergencies.embassy) + '</small>';
+    html += '</div>';
+  }
+  if (pi.phrases && pi.phrases.list) {
+    html += '<div class="copilot-section"><strong>🗣️ ' + escapeHTML(pi.phrases.language || 'Frases') + '</strong><div class="copilot-phrases">';
+    for (const p of pi.phrases.list.slice(0, 6)) {
+      html += '<span class="copilot-phrase"><b>' + escapeHTML(p.phrase) + '</b> ' + escapeHTML(p.meaning) + '</span>';
+    }
+    html += '</div></div>';
+  }
+  if (pi.useful_apps && pi.useful_apps.length) {
+    html += '<div class="copilot-section"><strong>📱 Apps</strong><br><small>' + pi.useful_apps.map(escapeHTML).join('<br>') + '</small></div>';
+  }
+  if (pi.connectivity && pi.connectivity.sim_local) {
+    html += '<div class="copilot-section"><strong>📶 Conectividad</strong><br><small>' + escapeHTML(pi.connectivity.sim_local) + '</small></div>';
+  }
+  if (pi.health) {
+    html += '<div class="copilot-section"><strong>🏥 Salud</strong><br>';
+    if (pi.health.hospitals) html += '<small>' + escapeHTML(pi.health.hospitals) + '</small><br>';
+    if (pi.health.water) html += '<small><em>' + escapeHTML(pi.health.water) + '</em></small>';
+    html += '</div>';
+  }
+  if (pi.budget) {
+    html += '<div class="copilot-section"><strong>💰 Presupuesto</strong><br>';
+    if (pi.budget.total_estimated) html += '<small>' + escapeHTML(pi.budget.total_estimated) + '</small><br>';
+    if (pi.budget.exchange_tip) html += '<small><em>' + escapeHTML(pi.budget.exchange_tip) + '</em></small>';
+    html += '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+async function _ceSkyCitySearch(query, overlay, btnEl) {
+  const btn = btnEl || (overlay && overlay.querySelector('[data-city-search]'));
+  if (btn) btn.textContent = 'Buscando...';
+  try {
+    const res = await fetch(`${window.SALMA_API}/weather?city=${encodeURIComponent(query)}`);
+    if (!res.ok) { if (btn) btn.textContent = 'No se encontró esa ciudad — prueba otro nombre'; return; }
+    const data = await res.json();
+    const sel = { mode: 'city', query, label: data.location || query, countryCode: (data.country || '').toUpperCase() };
+    const key = _ceSkyWeatherKey(sel);
+    window._ceSkyWxCache[key] = { data, ts: Date.now() };
+    if (overlay) overlay.remove();
+    _ceSkySetSel(sel);
+  } catch (_) {
+    if (btn) btn.textContent = 'Error buscando — prueba otra vez';
+  }
+}
+
+function _ceSkyOpenPicker() {
+  if (document.getElementById('ce-clock-picker')) return;
+  const current = _ceSkyReadSel();
+  const list = (typeof countryList === 'function') ? countryList() : [];
+  const overlay = document.createElement('div');
+  overlay.id = 'ce-clock-picker';
+  overlay.className = 'wx-picker-overlay';
+  overlay.innerHTML = `
+    <div class="wx-picker">
+      <div class="wx-picker-head">
+        <span>Hora, tiempo y país</span>
+        <button data-ce-clock-close>✕</button>
+      </div>
+      <button class="wx-picker-gps${current.mode === 'here' ? ' on' : ''}" data-code="here">📍 Mi ubicación</button>
+      <div class="wx-picker-row">
+        <input id="ce-clock-search" class="wx-city-input" type="text" placeholder="Buscar país o ciudad..." autocomplete="off">
+      </div>
+      <div id="ce-clock-list" class="ce-clock-list"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  const _norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  // Si el texto coincide EXACTO con un país de la lista (ej. "Catar"), ese país
+  // gana siempre sobre la búsqueda libre de ciudad — evita que un intro/Enter
+  // dispare una geocodificación ambigua que puede devolver cualquier cosa
+  // parecida (bug real: "Catar" resolvió a "Csatár", un pueblo de Hungría).
+  const _exactCountry = (q) => { const qq = _norm(q); return list.find(c => _norm(c.name) === qq) || null; };
+  const listEl = overlay.querySelector('#ce-clock-list');
+  const inp = overlay.querySelector('#ce-clock-search');
+  const paint = (q) => {
+    const qq = _norm(q);
+    const filtered = qq ? list.filter(c => _norm(c.name).includes(qq)) : list;
+    let html = filtered.length
+      ? filtered.slice(0, 80).map(c =>
+          `<button class="ce-clock-item${(current.mode === 'country' && current.code === c.code) ? ' on' : ''}" data-code="${c.code}">${c.emoji} ${escapeHTML(c.name)}</button>`
+        ).join('')
+      : (qq ? '' : '<div class="ce-clock-empty">Sin resultados</div>');
+    // Sin ofrecer "buscar como ciudad" si el texto ya es un país exacto de la
+    // lista — sería una alternativa confusa y más arriesgada que la buena.
+    if (qq && !_exactCountry(q)) {
+      html += `<button class="ce-clock-item ce-clock-item--city" data-city-search="1">🔍 Buscar "${escapeHTML(q.trim())}" como ciudad</button>`;
+    }
+    listEl.innerHTML = html;
+  };
+  paint('');
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay || e.target.closest('[data-ce-clock-close]')) { overlay.remove(); return; }
+    const cityBtn = e.target.closest('[data-city-search]');
+    if (cityBtn) {
+      const q = (inp.value || '').trim();
+      if (q) _ceSkyCitySearch(q, overlay, cityBtn);
+      return;
+    }
+    const btn = e.target.closest('[data-code]');
+    if (!btn) return;
+    _ceSkySetSel(btn.dataset.code === 'here' ? { mode: 'here' } : { mode: 'country', code: btn.dataset.code });
+    overlay.remove();
+  });
+  inp.addEventListener('input', () => paint(inp.value));
+  inp.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const q = (inp.value || '').trim();
+    if (!q) return;
+    const exact = _exactCountry(q);
+    if (exact) { _ceSkySetSel({ mode: 'country', code: exact.code }); overlay.remove(); return; }
+    _ceSkyCitySearch(q, overlay);
+  });
+  setTimeout(() => { try { inp.focus(); } catch (_) {} }, 80);
 }
 
 // ═══ WELCOME (estado 1) ═══

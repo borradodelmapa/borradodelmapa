@@ -2227,7 +2227,9 @@ const salma = {
     const area = document.getElementById('chat-area');
     if (area) area.innerHTML = '';
     if (typeof _renderChatEmpty === 'function') _renderChatEmpty();
-    if (this._copilotData) this.showCopilotCard();
+    // showCopilotCard() DESACTIVADA 21 sept 2026 — duplicaba la tarjeta de info
+    // del país de la barra nueva de hora+tiempo+país (bug real reportado por Paco).
+    // if (this._copilotData) this.showCopilotCard();
     if (typeof showToast === 'function') showToast('Nueva conversación');
   },
 
@@ -2703,7 +2705,10 @@ const salma = {
           this._copilotCountry = countryCode;
           this._copilotData = JSON.parse(cached);
           console.log('[Salma] Copiloto (caché):', geo.address?.country, countryCode);
-          if (currentState === 'chat') this.showCopilotCard();
+          // showCopilotCard() DESACTIVADA 21 sept 2026 (ver _initChat/newChat) —
+          // la detección (_copilotCountry/_copilotData) se queda, la sigue usando
+          // la barra nueva de hora+tiempo+país.
+          // if (currentState === 'chat') this.showCopilotCard();
           return;
         }
       } catch (_) {}
@@ -2718,8 +2723,8 @@ const salma = {
       this._copilotData = piData.practical_info;
       try { sessionStorage.setItem('salma_copilot_' + countryCode, JSON.stringify(piData.practical_info)); } catch (_) {}
       console.log('[Salma] Copiloto activado:', geo.address?.country, countryCode);
-      // Mostrar tarjeta si el chat ya está abierto (initCopilot es async)
-      if (currentState === 'chat') this.showCopilotCard();
+      // showCopilotCard() DESACTIVADA 21 sept 2026, ver arriba en esta misma función.
+      // if (currentState === 'chat') this.showCopilotCard();
     } catch (e) {
       console.log('[Salma] Copiloto: error obteniendo info', e.message);
     }
@@ -2981,11 +2986,14 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
-    // Banner del tiempo — fuera de la pantalla de inicio (doc 8 sep, limpieza C).
-    // Solo aparece cuando ya hay conversación; se re-activa al mandar el primer mensaje (ver _addUserBubble).
-    if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
-    // Mostrar tarjeta copiloto si hay datos del país
-    if (this._copilotData) this.showCopilotCard();
+    // Banner del tiempo (#weather-banner) — DESACTIVADO 21 sept 2026: se quedaba pegado
+    // encima de la pantalla de inicio como hermano de #chat-area, duplicando la barra
+    // de hora+tiempo+país (.ce-sky-wx) que ya lo sustituye con más detalle (viento,
+    // sensación, humedad, ubicación exacta — bug real reportado por Paco). No se borra
+    // la función por si hace falta reactivarla, solo se deja de llamar aquí.
+    // if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Tarjeta copiloto (showCopilotCard) — DESACTIVADA 21 sept 2026, ver newChat().
+    // if (this._copilotData) this.showCopilotCard();
     // Banner de recordatorios (una vez al día)
     if (window.currentUser && typeof notasManager !== 'undefined') {
       notasManager.renderChatReminders(document.getElementById('chat-area'));
@@ -3010,8 +3018,8 @@ const salma = {
     div.innerHTML = `<div class="msg-body-user">${photoHtml}${textHtml}</div>`;
     area.appendChild(div);
     this._scrollToBottom(true);
-    // El banner del tiempo se oculta en el inicio; vuelve al empezar la conversación (doc 8 sep, limpieza C)
-    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Banner del tiempo — DESACTIVADO 21 sept 2026, ver initChat() para el motivo.
+    // if (!document.getElementById('weather-banner')) this.initWeatherBanner();
   },
 
   _addSalmaBubble(text) {

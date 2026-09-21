@@ -2626,6 +2626,16 @@ body {
 /* SOS sin configurar — gris apagado */
 .bottom-tab-sos-off { color:rgba(244,239,230,.25); }
 .bottom-tab-sos-off:hover { color:rgba(244,239,230,.5); }
+/* Ayuda / Tester (feedback de testers, ver debug-panel.js) — primera pestaña,
+   con latido suave para que destaque frente al resto del menú */
+.bottom-tab-tester { color:#F4630B; }
+.bottom-tab-tester:hover { color:#ff8433; }
+.bottom-tab-tester svg { animation: dbg-tab-pulse 2.2s ease-in-out infinite; }
+@keyframes dbg-tab-pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.15); } }
+/* Hay un error nuevo capturado — pulso más rápido y en rojo */
+.bottom-tab-tester.dbg-has-error { color:#ef4444; }
+.bottom-tab-tester.dbg-has-error svg { animation: dbg-tab-pulse-error .9s ease-in-out infinite; filter:drop-shadow(0 0 4px rgba(239,68,68,.5)); }
+@keyframes dbg-tab-pulse-error { 0%,100% { transform:scale(1); } 50% { transform:scale(1.25); } }
 /* SOS flotante */
 .sos-fab {
   position:fixed; right:16px; z-index:950;
@@ -4822,7 +4832,9 @@ body {
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 16px rgba(0,0,0,.45);
   transition: transform .2s, box-shadow .2s;
+  animation: itin-chat-fab-pulse 2.2s ease-in-out infinite;
 }
+@keyframes itin-chat-fab-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
 .itin-chat-fab:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,.5); }
 .itin-chat-fab:active { transform: scale(.93); }
 .itin-chat-fab--back {
@@ -4833,6 +4845,7 @@ body {
   background: rgba(8,7,4,.9); color: var(--dorado);
   border: 1.5px solid var(--linea-fuerte);
   box-shadow: none;
+  animation: none;
 }
 .itin-chat-hint {
   margin: 60px 24px 0;
@@ -6566,13 +6579,62 @@ body {
 /* cabecera tipo tablero */
 .ce-top{
   display:flex;justify-content:space-between;align-items:center;
-  padding-bottom:10px;
+  padding-bottom:8px;
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
 .ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ce-top .ce-brand:active{opacity:.7;}
 .ce-top .ce-brand span{color:var(--ce-ink3);}
-.ce-top .ce-meta{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.12em;color:var(--ce-ink2);}
+
+/* Hora + tiempo + país — barra siempre visible bajo la marca, sin desplegar nada.
+   21 sept 2026: fusionada con el detalle que antes solo traía la Weather Banner
+   del chat (#weather-banner, ya desactivada — se duplicaban) — reutiliza sus
+   mismas clases (.wx-main/.wx-loc/.wx-temp/.wx-desc/.wx-extras) para tener el
+   mismo tamaño de letra legible que ya le gustaba a Paco, en vez de repetirlo. */
+.ce-sky-date{
+  font-family:var(--ce-flapf);font-size:13px;letter-spacing:.06em;color:var(--ce-ink2);
+  padding-bottom:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.ce-sky-date:active{opacity:.7;}
+.ce-sky-wx{padding-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.ce-sky-wx:active{opacity:.85;}
+.ce-sky-wx .wx-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+/* En una sola línea, con scroll horizontal si no cabe entero (nunca se corta
+   la info, solo se desliza) — a petición de Paco, 21 sept. */
+.ce-sky-wx .wx-extras{
+  flex-wrap:nowrap;white-space:nowrap;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.ce-sky-wx .wx-extras::-webkit-scrollbar{display:none;}
+
+/* Previsión — plegada por defecto a propósito (reutiliza .wx-forecast/.wx-fc-day
+   de la Weather Banner). Botón agrandado a petición de Paco, 21 sept — era
+   demasiado pequeño como zona de toque. */
+.ce-sky-fc-toggle{
+  display:block;margin:0 0 10px;padding:6px 0;border:0;background:transparent;
+  font-family:var(--ce-flapf);font-size:14px;letter-spacing:.06em;
+  color:var(--ce-ink3);cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.ce-sky-fc-toggle:hover,.ce-sky-fc-toggle:active{color:var(--ce-amber);}
+#ce-sky-fc{margin:0 0 10px;}
+/* .wx-forecast fuerza display:flex con la misma especificidad que [hidden]
+   del navegador (display:none) — sin esto, el atributo hidden no ocultaba
+   nada de verdad. El selector por id gana a ambos. */
+#ce-sky-fc[hidden],#ce-sky-fc-toggle[hidden]{display:none;}
+.ce-sky-info-card{margin-top:2px;margin-bottom:14px;}
+
+/* Picker del reloj mundial — reutiliza .wx-picker-overlay/.wx-picker/.wx-picker-head/.wx-picker-gps */
+.wx-picker-gps.on{background:rgba(244,99,11,.22);border-color:var(--dorado);}
+.ce-clock-list{max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;}
+.ce-clock-item{
+  display:flex;align-items:center;gap:8px;text-align:left;
+  background:rgba(255,255,255,.04);border:1px solid transparent;border-radius:var(--radius-sm);
+  padding:10px 12px;color:#fff;font-size:14px;cursor:pointer;font-family:var(--font-body);
+}
+.ce-clock-item:hover{background:rgba(255,255,255,.08);}
+.ce-clock-item.on{border-color:var(--dorado);background:rgba(240,180,41,.12);color:var(--dorado);}
+.ce-clock-item--city{color:var(--dorado);border-style:dashed;border-color:var(--linea-fuerte);}
+.ce-clock-empty{text-align:center;color:rgba(255,255,255,.4);font-size:13px;padding:16px 0;}
 .ce-greet{
   font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;
   font-size:25px;letter-spacing:.02em;line-height:1;color:var(--ce-ink);
@@ -6742,8 +6804,10 @@ body {
 .chat-empty .ce-back-active:hover{color:var(--ce-amber);}
 
 /* ── Botón "empezar de cero" — Fase 1 navegación ── */
-/* "Últimas consultas" (antes #chat-history, reloj fijo arriba) ahora es una
-   pestaña del menú de abajo — ver .app-bottom-bar / #tab-consultas. */
+/* "Últimas consultas" (antes #chat-history, reloj fijo arriba) — desde el
+   21 sept 2026 ya no tiene pestaña propia en el menú de abajo (se quitó para
+   dejar sitio a "Ayuda"), se llega por el chip "Últimas consultas" de la
+   pantalla vacía del chat (ver app.js, action:'consultas'). */
 #chat-fresh{
   position:fixed;top:calc(env(safe-area-inset-top) + 10px);z-index:900;
   width:34px;height:34px;border-radius:0;

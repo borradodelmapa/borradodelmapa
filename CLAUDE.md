@@ -604,6 +604,30 @@ resuelta al principio del texto copiado (`📎 Captura: https://...`), listo par
 aquí sin tener que pasar por "Enviar". Mismo aviso de coste que el ajuste anterior —
 sigue siendo solo almacenamiento R2, cero llamadas a APIs de pago.
 
+**Octavo ajuste, 21 sept 2026 — el botón flotante pasa a ser la primera pestaña del
+menú de abajo, y "Consultas" se quita de ahí.** Petición explícita de Paco: el botón
+"Tester Member 💬" flotante (abajo-derecha) molestaba y ocupaba demasiado sitio en
+pantalla. Commit `b241860`, solo frontend (`debug-panel.js?v=13`, `app.js?v=136`,
+`styles.css?v=116`), sin tocar el Worker:
+1. `debug-panel.js` ya no crea ningún botón flotante propio (`injectButton()`
+   eliminada) — solo expone `window.__dbg.open()` para que lo llame quien quiera abrir
+   el panel. El badge rojo de "hay un error capturado" (antes `.dbg-has-error` en el
+   propio botón flotante) ahora se pone en `#tab-tester`.
+2. `app.js` (`updateBottomBar()`): nueva pestaña **"Ayuda"** (`#tab-tester`, icono de
+   círculo con interrogación) como **primera** de las 4 — delante de Salma/Mis
+   Viajes/Perfil —, con animación de latido continuo (`.bottom-tab-tester`,
+   `styles.css`) para que destaque frente al resto del menú, y más rápido/en rojo si
+   hay un error capturado (mismo patrón que ya tenía el botón flotante, solo
+   reubicado). Al tocarla llama a `window.__dbg.open()` — mismo panel de feedback de
+   siempre, sin cambios en su contenido.
+3. **Se quita la pestaña "Consultas" del menú de abajo** (`#tab-consultas`) para dejar
+   sitio — a petición explícita de Paco ("aprovecha y quita de ahí botón consultas").
+   La vista de "Últimas consultas" en sí NO se ha tocado y sigue accesible igual desde
+   el chip "Últimas consultas" de la pantalla vacía del chat (`app.js`, `action:
+   'consultas'` → `showState('consultas')`, sesión 19 sept "Simplificación de chips").
+**Sin coste** — cambio puramente de UI, no toca ninguna API de pago.
+**CONFIRMADO EN PANTALLA por Paco** ("Ok correcto") — sin nada pendiente de esto.
+
 ---
 
 ## Sesión 19 sept 2026 — Simplificación de chips del chat vacío: 6 fijos + "Más opciones"
@@ -701,6 +725,174 @@ del canal de WhatsApp ya planeado (F5, ver más abajo) que como parte de esta fe
 compartir — comparten infraestructura (Twilio, `whatsapp_sessions`) pero son productos
 distintos (un link de una ruta suelta vs. un grupo con varias personas viendo/editando
 la misma). No tocar nada de esto sin que Paco lo pida explícitamente.
+
+---
+
+## Sesión 20 sept 2026 — Hora + tiempo + país juntos en el índice (reloj mundial)
+
+Petición de Paco: el "SEP" fijo de la cabecera del billete (pantalla de inicio) no
+aportaba nada útil, y "el tiempo" (clima) llevaba oculto de esa misma pantalla desde
+el 8 sept ("limpieza C", solo aparecía tras el primer mensaje) — sin que quedara
+anotado aquí, porque se pidió en otro chat sin el repo enlazado. Motivo explícito de
+Paco, no capricho: consultar la hora de un país al comprar vuelos con escalas.
+
+**Parte 1 — reloj mundial, solo Intl, sin coste.** `country-utils.js`: `COUNTRY_TZ`
+(mapa código ISO2 → huso IANA, 187 países, aproximación por capital/ciudad principal
+en países con varios husos) + `countryTimeString(code)` (usa `Intl.DateTimeFormat`
+del propio navegador, sin llamar a ninguna API) + `countryList()` para el buscador.
+`app.js`: cabecera pasa de `<span class="ce-meta">SEP</span>` a un reloj tocable que
+abre un picker de país (busca sin acentos, guarda elección en `localStorage:
+bdm_clock_country`). **CONFIRMADO EN PANTALLA por Paco.**
+
+**Parte 2 — fusión con el clima, mismo día, a petición de Paco tras ver el reloj.**
+Preguntado explícitamente antes de tocar nada (protocolo §8, toca `/weather` →
+OpenWeatherMap): ¿el clima de la barra es siempre el de tu ubicación real (gratis,
+sin cambios) o el del país que elijas en el reloj (útil para la escala, pero llamada
+nueva a OpenWeather por país)? Paco pidió las dos cosas — por defecto tu ubicación,
+y también poder buscar el clima de cualquier país.
+- **Modo "Mi ubicación" (por defecto)**: hora y país vienen del país ya detectado por
+  el Copiloto vía GPS+Nominatim (`salma._copilotCountry`, mecanismo ya existente y
+  gratuito) — sin duplicar esa detección. El clima reutiliza el mismo `/weather?lat=&lon=`
+  que ya se llamaba en otros puntos de la app — **sin llamada nueva**.
+- **Modo país elegido**: hora del país (Parte 1) + `/weather?city=<Ciudad>,<ISO2>`
+  usando la MISMA ciudad que ya lleva el huso horario en `COUNTRY_TZ` (se extrae del
+  propio string de la zona, ej. `Europe/Madrid` → `Madrid` — sin mantener una tabla de
+  capitales aparte). **Esta sí es una llamada nueva a OpenWeatherMap, una por país que
+  se elija** — avisado y confirmado con Paco antes de escribir código. Gratis hasta
+  1000 llamadas/día en el plan actual; a este volumen de uso no debería generar coste
+  real, pero es una llamada que antes no existía en este flujo.
+- Caché de 20 min en memoria (`window._ceSkyWxCache`) por modo, para no repetir la
+  llamada de clima cada vez que se re-renderiza la pantalla de inicio.
+- Orden pedido por Paco, tal cual: hora y día → tiempo (clima) → info del país.
+  Barra `.ce-sky` bajo la marca, siempre visible desde el primer vistazo, sin
+  necesidad de mandar un mensaje ni desplegar nada — se actualiza sola cada 30s.
+- Picker ampliado con botón "📍 Mi ubicación" arriba del buscador de país.
+
+`?v=`: `country-utils.js` a 3, `app.js` a 127, `styles.css` a 109. Commits
+`f835b7a` (reloj) y `4e78df1` (fusión con clima), ambos ya en `main`.
+**CONFIRMADO EN PANTALLA por Paco** — pidió tres ampliaciones más (ver Parte 3).
+
+**Parte 3 — previsión, buscar ciudad e info del país, mismo día.** Petición de Paco
+tras confirmar la Parte 2 en pantalla: previsión de varios días, poder elegir una
+ciudad concreta (no solo país) y meter la tarjeta de info práctica del país (Copiloto)
+debajo, cambiando también con la selección.
+- **Previsión**: `/weather` YA devolvía `forecast` (hasta 4 días) — nunca se pintaba en
+  esta barra. Ahora se muestra debajo del tiempo actual, reutilizando `.wx-forecast`/
+  `.wx-fc-day` (mismas clases que ya usaba la Weather Banner del chat). **Sin llamada
+  nueva** — es el mismo `/weather` de siempre, solo que ahora se lee ese campo.
+- **Buscar ciudad**: el picker admite texto libre además de la lista de 187 países —
+  al escribir algo que no es un país, aparece "🔍 Buscar '...' como ciudad", que llama
+  al mismo `/weather?city=` ya usado para país (misma cadencia de llamada ya aprobada
+  en la Parte 2, solo que ahora la ciudad la elige Paco en vez de ser siempre la
+  capital). Para la hora de esa ciudad exacta (necesario en países con varios husos,
+  ej. Los Ángeles vs Nueva York en EEUU) se añadió `utc_offset_sec` a la respuesta de
+  `/weather` en `worker/salma-worker.js` (`fetchWeatherBanner`) — dato que el Worker
+  ya calculaba internamente para la previsión, solo faltaba devolverlo. **Sin llamada
+  nueva tampoco aquí**, es el mismo `/weather` exponiendo un campo más.
+- **Info del país**: tarjeta nueva debajo del tiempo (`#ce-sky-info`, reutiliza las
+  clases `.copilot-card`/`.copilot-section` ya existentes, HTML propio en
+  `_ceSkyInfoHTML()` para no tocar `salma.showCopilotCard()` — que sigue atada a la
+  ubicación GPS real y se usa en otros sitios, no convenía mezclarla). Llama a
+  `/practical-info?country=`, que es **solo lectura de KV de Cloudflare — sin ninguna
+  API de pago detrás**, así que cambia con cada país/ciudad elegido sin coste
+  ninguno. Caché en `sessionStorage` por país para no repetir la lectura.
+- Estado guardado pasa de un string suelto a un objeto JSON
+  (`localStorage: bdm_sky_sel`, `{mode:'here'|'country'|'city', ...}`), con migración
+  automática desde el formato anterior (`bdm_clock_country`) — no hace falta que nadie
+  borre nada a mano.
+
+Worker desplegado (GitHub Action "Deploy Worker", disparada por esta misma sesión vía
+la API de GitHub — confirmado con los logs del job, sin depender de `/version` que
+esta sesión no puede alcanzar): commit `c6bce1d`, **Worker Version ID
+`6160cd0e-4e8c-426e-af7b-a00caf89b826`**.
+
+`?v=`: `country-utils.js` a 4, `app.js` a 128, `styles.css` a 110.
+**Pendiente: que Paco confirme en pantalla** que ve la previsión debajo del tiempo,
+que puede buscar y elegir una ciudad suelta (no solo país) y que la hora de esa
+ciudad es la correcta, y que la tarjeta de info del país aparece debajo y cambia al
+cambiar de país/ciudad.
+
+**Parte 4 — bug real: banner de tiempo duplicado, 21 sept 2026, DESPLEGADO, sin
+confirmar en pantalla.** Paco mandó captura: el `#weather-banner` viejo del chat
+(existía desde antes de esta saga, se activaba solo al mandar el primer mensaje —
+ver "limpieza C" del 8 sept más abajo en este archivo) se quedaba pegado ENCIMA de
+toda la pantalla de inicio, duplicando la barra nueva de abajo — porque se inserta
+como hermano de `#chat-area`, no dentro, así que sobrevive a los re-render de
+`_renderChatEmpty()` y no desaparece nunca al volver al índice. Paco pidió: quitar
+el viejo, quedarse con el nuevo, pero traerle al nuevo el detalle que el viejo sí
+tenía (sensación térmica, viento con dirección y racha, humedad, calidad del aire,
+ubicación exacta tipo "Ribadedeva") y subir el tamaño de letra.
+- `salma.js`: los dos sitios que llamaban a `initWeatherBanner()` (`_initChat` y
+  `_addUserBubble`) se comentan — la función se queda por si hiciera falta
+  reactivarla, solo se deja de invocar.
+- `app.js`: la caché en memoria (`window._ceSkyWxCache`) pasa de guardar solo el
+  texto ya formateado a guardar la respuesta COMPLETA de `/weather` — de ahí sale
+  gratis todo el detalle que antes solo tenía el banner viejo (mismo endpoint, cero
+  llamadas nuevas). La tarjeta de tiempo reutiliza las clases
+  `.wx-main`/`.wx-loc`/`.wx-temp`/`.wx-desc`/`.wx-extras` que ya usaba el banner
+  viejo (de ahí sale también el tamaño de letra más grande que pidió Paco, sin
+  inventar CSS nuevo). La hora queda en su propia línea encima.
+  Sin cambios en el Worker ni en costes.
+`?v=`: `styles.css` a 113, `app.js` a 132, `salma.js` a 100. Commit `6759c16`, ya en
+`main`. **CONFIRMADO EN PANTALLA por Paco** — ya no sale duplicado, pidió 3 retoques
+finos más (ver Parte 5).
+
+**Parte 5 — retoques finos tras confirmar la Parte 4, mismo 21 sept 2026,
+DESPLEGADO, sin confirmar en pantalla.** Solo frontend, sin tocar el Worker:
+1. La línea de sensación/viento/racha/humedad/AQI se envolvía en 2-3 líneas en
+   móvil — ahora va en una sola línea con scroll horizontal si no cabe entera
+   (mismo patrón que la previsión), nunca se pierde información.
+2. Botón "▾ previsión" demasiado pequeño como zona de toque — de 10px a 14px,
+   más relleno vertical.
+3. **Quitada del todo la tarjeta "Info práctica del país"** (la del Copiloto,
+   añadida en la Parte 3 del 20 sept) — Paco pidió explícitamente quitarla de
+   esta barra. `_ceSkyInfoRefresh()`/`_ceSkyInfoHTML()` se borraron (ya no las
+   llama nadie); `_ceSkyInfoCountryFor()` se queda, la sigue usando la bandera
+   de la línea de ubicación del tiempo.
+`?v=`: `styles.css` a 114, `app.js` a 133. Commit `dd9eb3e`, ya en `main`.
+**CONFIRMADO EN PANTALLA por Paco lo del tiempo (línea única + botón de
+previsión) — pero el punto 3 (quitar info del país) se hizo mal, ver Parte 6.**
+
+**Parte 6 — malentendido corregido: había DOS tarjetas de "Info práctica del
+país" distintas, 21 sept 2026, DESPLEGADO, sin confirmar en pantalla.** Paco
+mandó una segunda captura: la que quité en la Parte 5 era la mía (la nueva,
+debajo del tiempo) — la que él quería quitar era OTRA, más antigua, que
+seguía saliendo más abajo en la pantalla de inicio, justo encima de los 6
+chips (`salma.showCopilotCard()` — la tarjeta del Copiloto por GPS, existía
+desde mucho antes de esta saga, sin relación directa con `.ce-sky`). Se
+disparaba desde 4 sitios de `salma.js` (`newChat()`, `_initChat()`, y dos
+dentro de `initCopilot()`) cada vez que ya había datos de país cacheados —
+por eso seguía apareciendo aunque la mía ya no estuviera.
+- `app.js`: restaurada la tarjeta mía (`_ceSkyInfoRefresh`/`_ceSkyInfoHTML`,
+  contenedor `#ce-sky-info`) tal como estaba en la Parte 3, debajo del tiempo.
+- `salma.js`: los 4 disparadores de `showCopilotCard()` comentados (mismo
+  patrón ya usado con el banner de tiempo viejo, Parte 4) — la detección en
+  sí (`_copilotCountry`/`_copilotData`, gratis, GPS+Nominatim) se queda
+  intacta, la sigue usando `_ceSkyInfoCountryFor()` para el modo "aquí".
+`?v=`: `styles.css` a 115, `app.js` a 134, `salma.js` a 101. Commit `37909e1`,
+ya en `main`. **CONFIRMADO EN PANTALLA por Paco: una sola tarjeta ya, sin
+duplicado** — pero salió un bug real distinto al probar Catar (ver Parte 7).
+
+**Parte 7 — bug real: "Catar" resolvía a Hungría, 21 sept 2026, DESPLEGADO,
+sin confirmar en pantalla.** Paco probó cambiar de país a Catar y tanto el
+tiempo como la info del país salieron de **Hungría** (pueblo "Csatár",
+emergencias/frases en húngaro) — parecía un problema de sincronización
+entre las dos tarjetas, pero no lo era: las dos coincidían entre sí, el
+país elegido de verdad era Hungría, no Catar. Causa real encontrada: el
+picker deja escribir un país de la lista O una ciudad libre, pero pulsar
+Enter/Intro del teclado **siempre** disparaba la búsqueda libre de ciudad
+(`/weather?city=`), nunca el país exacto ya visible en la lista — con
+"Catar" como texto, OpenWeatherMap geocodificó por parecido a "Csatár", un
+pueblo real húngaro.
+Arreglo: si el texto escrito coincide EXACTO (sin acentos/mayúsculas) con
+uno de los 187 países de la lista, ese país gana siempre — al pulsar Enter
+y también se quita el botón "Buscar como ciudad" de la lista en ese caso
+(para no dejar a mano una alternativa más arriesgada). Buscar una ciudad de
+verdad (ej. "Los Angeles") sigue igual. Sin cambios en el Worker ni en
+costes. `?v=`: `app.js` a 135. Commit `2547395`, ya en `main`.
+**Pendiente: que Paco pruebe otra vez escribir "Catar" y pulsar Enter, y
+confirme que ahora sí sale Catar (huso +3h/+4h, tiempo del Golfo) y no
+Hungría.**
 
 ---
 
@@ -1330,7 +1522,7 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 - **Welcome**: "Viaja con alguien que sabe lo que hace", input con placeholder rotativo, chips (rutas guardadas o featured), recordatorios de notas
 - **Chat**: avatar Salma inline (20px) + nombre, texto a ancho completo, cámara, voz, retry 18s
-- **Bottom bar**: Home (solo guests), Chat, Rutas (requiere login), Perfil (Entrar si no logueado)
+- **Bottom bar**: Ayuda (abre el panel de feedback de testers, con latido, 21 sept 2026), Chat, Rutas (requiere login), Perfil (Entrar si no logueado). Nota: esta lista llevaba tiempo desactualizada (mencionaba "Home" en vez de la pestaña real "Consultas", que existió hasta el 21 sept) — corregido en este barrido contra `app.js:updateBottomBar()`.
 - **Perfil**: avatar subible (R2), stats (coins, rutas gratis, total guías)
   - TU VIAJE: Mis Notas, Galería, Cuaderno de Viaje, Documentos del Viajero
   - SEGURIDAD: SOS Emergencia (configurable, SMS Twilio + WhatsApp, cola offline)

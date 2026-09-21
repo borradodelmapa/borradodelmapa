@@ -1,9 +1,12 @@
 // debug-panel.js — Panel de logs visible en el móvil
-// Intercepta console.* y errores en segundo plano. El botón flotante "Tester
-// Member" abre directo un cuadro de texto (nota + captura opcional + versión)
-// con dos acciones: "Enviar" manda nota+captura+logs a Paco (POST /beta-feedback,
-// la captura vía /upload-gallery-photo a R2) y "Copiar" pone nota+versión+logs
-// en el portapapeles (la captura no se copia, solo se manda con "Enviar").
+// Intercepta console.* y errores en segundo plano. La pestaña "Ayuda" del menú
+// de abajo (ver app.js updateBottomBar, #tab-tester) abre directo un cuadro de
+// texto (nota + captura opcional + versión) con dos acciones: "Enviar" manda
+// nota+captura+logs a Paco (POST /beta-feedback, la captura vía
+// /upload-gallery-photo a R2) y "Copiar" pone nota+versión+logs en el
+// portapapeles (la captura no se copia, solo se manda con "Enviar").
+// Ya no crea ningún botón flotante propio — solo expone window.__dbg.open()
+// para que la pestaña del menú lo llame.
 //
 // Se carga primero en index.html para capturar desde el arranque.
 
@@ -28,9 +31,9 @@
         m: msg
       });
       if (logs.length > MAX) logs.shift();
-      // Badge rojo en el botón si hay error
+      // Badge rojo en la pestaña "Ayuda" del menú de abajo si hay error
       if (kind === 'error') {
-        const btn = document.getElementById('dbg-btn');
+        const btn = document.getElementById('tab-tester');
         if (btn) btn.classList.add('dbg-has-error');
       }
     } catch (_) {}
@@ -129,9 +132,6 @@
     const s = document.createElement('style');
     s.id = 'dbg-styles';
     s.textContent = `
-      #dbg-btn{position:fixed;bottom:calc(170px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;display:flex;align-items:center;gap:6px;padding:12px 18px;border-radius:999px;background:#F4630B;color:#060503;border:none;font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 3px 14px rgba(0,0,0,.45);cursor:pointer}
-      #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;animation:dbg-pulse 1s infinite}
-      @keyframes dbg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
       #dbg-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:#141209;color:#f5f0e8;border:1px solid rgba(244,99,11,.35);font-size:14px;cursor:pointer}
       #dbg-body{flex:1;overflow-y:auto;box-sizing:border-box;padding:52px 14px 14px;display:flex;flex-direction:column;gap:12px}
@@ -152,18 +152,6 @@
     document.head.appendChild(s);
   }
 
-  function injectButton() {
-    if (document.getElementById('dbg-btn')) return;
-    injectStyles();
-    const b = document.createElement('button');
-    b.id = 'dbg-btn';
-    b.type = 'button';
-    b.textContent = 'Tester Member 💬';
-    b.title = 'Cuéntanos tu experiencia';
-    b.addEventListener('click', openPanel);
-    document.body.appendChild(b);
-  }
-
   function logsAsText() {
     return logs.map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n');
   }
@@ -173,9 +161,7 @@
   // "Copiar" pone nota+versión+logs en el portapapeles para pegarlo en el chat con
   // Claude. Los logs se siguen capturando igual por detrás, solo dejan de listarse.
   function openPanel() {
-    const trigger = document.getElementById('dbg-btn');
-    trigger?.classList.remove('dbg-has-error');
-    if (trigger) trigger.style.display = 'none'; // se tapaba con la propia versión al abrir el panel
+    document.getElementById('tab-tester')?.classList.remove('dbg-has-error');
     let overlay = document.getElementById('dbg-overlay');
     if (overlay) {
       overlay.style.display = 'flex';
@@ -273,8 +259,6 @@
     overlay.querySelector('#dbg-close').addEventListener('click', () => {
       overlay.style.display = 'none';
       stopVerRefresh();
-      const t = document.getElementById('dbg-btn');
-      if (t) t.style.display = 'flex';
     });
 
     copyBtn.addEventListener('click', async () => {
@@ -355,12 +339,9 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectButton);
-  } else {
-    injectButton();
-  }
+  injectStyles();
 
-  // Exponer por si queremos abrirlo desde código
+  // Expuesto para que la pestaña "Ayuda" del menú de abajo (app.js, #tab-tester)
+  // pueda abrir el panel, y para poder abrirlo desde código.
   window.__dbg = { open: openPanel, logs, version: versionText, worker: loadWorkerVersion };
 })();
