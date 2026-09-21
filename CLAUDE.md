@@ -2009,7 +2009,7 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   el formato y devolvió SALMA_ROUTE_JSON con 1 parada (la alarma (b) evitó guardar 11→1). Arreglo: red de seguridad
   `looksLikeOnlyNewStops` (commit `e71ca9c1`, **Worker Version ID `c309408e-effa-4810-993d-cdf4c72b0523`**, comprobado
   contra `/version`): si con una guía cargada llega una ruta con menos paradas, <50% de nombres en común y centro a
-  <150 km, se trata como "añadir" esas paradas (mismo camino y misma verificación estricta). Sin probar en pantalla.
+  <150 km, se trata como "añadir" esas paradas (mismo camino y misma verificación estricta). **CONFIRMADO EN PANTALLA por Paco (21 sept, popup, `salma:103`):** quitar, sustituir y los tres "añadir" sin verbos ("quiero ir también a la playa", "falta un sitio para comer", "no te olvides de una cascada") se comportan bien, sin alarmas; las propuestas salen con el botón "Añadir a la guía".
   Logs: `[EDIT-OPS]`. **Coste (§8): BAJA** — salida de unos cientos de tokens en vez de la ruta entera.
   OJO cifra: el tope real de `max_tokens` de una edición era 3.000/6.000 si el mensaje no era petición de ruta
   y 24.000 si lo era (`reqMaxTokens`), no siempre "20.000"; la guía de 12 paradas cortada a mitad cuadra con el
