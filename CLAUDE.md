@@ -588,6 +588,32 @@ resuelta al principio del texto copiado (`📎 Captura: https://...`), listo par
 aquí sin tener que pasar por "Enviar". Mismo aviso de coste que el ajuste anterior —
 sigue siendo solo almacenamiento R2, cero llamadas a APIs de pago.
 
+**Octavo ajuste, 21 sept 2026 — el botón flotante pasa a ser la primera pestaña del
+menú de abajo, y "Consultas" se quita de ahí.** Petición explícita de Paco: el botón
+"Tester Member 💬" flotante (abajo-derecha) molestaba y ocupaba demasiado sitio en
+pantalla. Commit `b241860`, solo frontend (`debug-panel.js?v=13`, `app.js?v=136`,
+`styles.css?v=116`), sin tocar el Worker:
+1. `debug-panel.js` ya no crea ningún botón flotante propio (`injectButton()`
+   eliminada) — solo expone `window.__dbg.open()` para que lo llame quien quiera abrir
+   el panel. El badge rojo de "hay un error capturado" (antes `.dbg-has-error` en el
+   propio botón flotante) ahora se pone en `#tab-tester`.
+2. `app.js` (`updateBottomBar()`): nueva pestaña **"Ayuda"** (`#tab-tester`, icono de
+   círculo con interrogación) como **primera** de las 4 — delante de Salma/Mis
+   Viajes/Perfil —, con animación de latido continuo (`.bottom-tab-tester`,
+   `styles.css`) para que destaque frente al resto del menú, y más rápido/en rojo si
+   hay un error capturado (mismo patrón que ya tenía el botón flotante, solo
+   reubicado). Al tocarla llama a `window.__dbg.open()` — mismo panel de feedback de
+   siempre, sin cambios en su contenido.
+3. **Se quita la pestaña "Consultas" del menú de abajo** (`#tab-consultas`) para dejar
+   sitio — a petición explícita de Paco ("aprovecha y quita de ahí botón consultas").
+   La vista de "Últimas consultas" en sí NO se ha tocado y sigue accesible igual desde
+   el chip "Últimas consultas" de la pantalla vacía del chat (`app.js`, `action:
+   'consultas'` → `showState('consultas')`, sesión 19 sept "Simplificación de chips").
+**Sin coste** — cambio puramente de UI, no toca ninguna API de pago.
+**Pendiente: que Paco recargue y confirme en pantalla** que la pestaña "Ayuda" late
+visiblemente en el menú de abajo, que abre el mismo panel de feedback de siempre, y
+que "Consultas" ya no está ahí (pero sigue llegando desde el chip del chat vacío).
+
 ---
 
 ## Sesión 19 sept 2026 — Simplificación de chips del chat vacío: 6 fijos + "Más opciones"
@@ -1482,7 +1508,7 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 - **Welcome**: "Viaja con alguien que sabe lo que hace", input con placeholder rotativo, chips (rutas guardadas o featured), recordatorios de notas
 - **Chat**: avatar Salma inline (20px) + nombre, texto a ancho completo, cámara, voz, retry 18s
-- **Bottom bar**: Home (solo guests), Chat, Rutas (requiere login), Perfil (Entrar si no logueado)
+- **Bottom bar**: Ayuda (abre el panel de feedback de testers, con latido, 21 sept 2026), Chat, Rutas (requiere login), Perfil (Entrar si no logueado). Nota: esta lista llevaba tiempo desactualizada (mencionaba "Home" en vez de la pestaña real "Consultas", que existió hasta el 21 sept) — corregido en este barrido contra `app.js:updateBottomBar()`.
 - **Perfil**: avatar subible (R2), stats (coins, rutas gratis, total guías)
   - TU VIAJE: Mis Notas, Galería, Cuaderno de Viaje, Documentos del Viajero
   - SEGURIDAD: SOS Emergencia (configurable, SMS Twilio + WhatsApp, cola offline)
