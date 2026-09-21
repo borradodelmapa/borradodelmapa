@@ -4902,8 +4902,9 @@ body {
 }
 .itin-query-sub strong { display: block; margin-bottom: 2px; font-size: 13px; color: var(--crema, #f5f0e8); }
 .itin-query-clear {
-  margin-top: 4px; padding: 0; background: none; border: none;
-  color: var(--dorado2); font-size: 11px; text-decoration: underline; cursor: pointer;
+  display: block; width: 100%; margin-top: 10px; padding: 4px 0; flex-shrink: 0;
+  background: none; border: none; text-align: center;
+  color: rgba(244,239,230,.55); font-size: 12px; text-decoration: underline; cursor: pointer;
 }
 .itin-query-inputrow {
   display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;

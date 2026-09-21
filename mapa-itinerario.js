@@ -765,14 +765,10 @@ const mapaItinerario = {
       _st.textContent = _gTitle ? 'Editando «' + _gTitle + '»' : 'Editando esta guía';
       _sub.appendChild(_st);
       _sub.appendChild(document.createTextNode('Añade, quita, cambia o pregunta sobre esta guía. Para buscar cerca de ti: «Cerca mía» o el chat general.'));
-      const _clr = document.createElement('button');
-      _clr.type = 'button';
-      _clr.className = 'itin-query-clear';
-      _clr.textContent = 'Borrar conversación';
-      _clr.onclick = _clearItinQueryHistory;
-      _sub.appendChild(document.createElement('br'));
-      _sub.appendChild(_clr);
     }
+    // "Borrar conversación": botón fijo debajo de "Cerca mía" / "Narrador" (ver index.html)
+    const _clrBtn = document.getElementById('itin-query-clear');
+    if (_clrBtn) _clrBtn.onclick = _clearItinQueryHistory;
     input.value = '';
     overlay.style.display = 'flex';
     setTimeout(() => input.focus(), 50);
