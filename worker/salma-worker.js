@@ -10023,6 +10023,7 @@ INSTRUCCIONES:
         let reply = replyWithoutRouteBlock(allText);
         if (_fastPathRoute && !reply) reply = _fastPathRoute.title ? `Tu ruta por ${_fastPathRoute.title} está lista.` : 'Tu ruta está lista.';
 
+        let _editRejected = false; // edición de guía existente descartada por dejar paradas por el camino (ver RESCATE 1 y comprobación tras RESCATE 2)
         // ── RESCATE 1: el JSON empezó pero se cortó por max_tokens ──
         // Reconstituimos con las paradas completas antes de gastar otra llamada a Claude.
         // (En Tiempo 1 NO — aunque el modelo se salte la orden y emita JSON, no hay mapa.)
@@ -10031,6 +10032,15 @@ INSTRUCCIONES:
           if (salvaged) {
             route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + salvaged);
             if (route) console.log(`[RESCATE] ✓ JSON truncado reconstruido: ${route.stops.length} paradas (stop_reason: ${lastStopReason || 'n/d'})`);
+            // Edición de una guía ya guardada: una ruta reconstruida a medias NO es la guía
+            // editada, es un trozo — darla por buena la sobrescribe con menos paradas
+            // (caso real 21 sept 2026: guía de 19 paradas guardada con 12). Se descarta y
+            // se avisa; la guía guardada no se toca. Sin route no se consume ningún cambio.
+            if (route && _editingRoute && !mergeIntoRoute) {
+              console.log(`[EDIT-CORTE] ✗ edición cortada (${lastStopReason || 'n/d'}): ${route.stops.length} de ${currentRoute.stops.length} paradas — no se devuelve`);
+              route = null;
+              _editRejected = true;
+            }
           }
         }
 
@@ -10039,7 +10049,7 @@ INSTRUCCIONES:
         //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
         // 2ª llamada a Claude para extraer el JSON del texto (sin prefill: el modelo no lo admite).
         // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
-        if (!route && !guidedIsReco && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
+        if (!route && !_editRejected && !guidedIsReco && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
@@ -10100,8 +10110,25 @@ REGLAS:
         //    OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico —
         //    isRoute también es true para isDaysDestination (MODO PLAN), que PROHÍBE
         //    el JSON a propósito; ahí route=null es el comportamiento correcto, no un fallo. ──
+        // ── Edición de guía existente que "añade" pero devuelve MENOS paradas de las que había:
+        //    la IA se ha dejado paradas al reescribir (sin corte, p. ej.). Si el mensaje no pide
+        //    quitar/cambiar nada, no se entrega: la guía guardada se queda como está. ──
+        if (route && _editingRoute && !mergeIntoRoute && !_editRejected && Array.isArray(route.stops) &&
+            route.stops.length < currentRoute.stops.length &&
+            !/\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i.test(message || '')) {
+          console.log(`[EDIT-PERDIDAS] ✗ "añadir" devolvió ${route.stops.length} de ${currentRoute.stops.length} paradas — no se devuelve`);
+          route = null;
+          _editRejected = true;
+        }
         let _truncationNoteAdded = false;
-        if (!route && !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute)) {
+        if (_editRejected) {
+          const _editNote = '\n\n_No he podido aplicar este cambio sin dejarme paradas por el camino (tu guía es larga y al reescribirla entera se me ha cortado). No he tocado tu guía guardada. Prueba a pedírmelo de otra forma, en un cambio más pequeño._';
+          reply = (reply || '').trimEnd() + _editNote;
+          allText += _editNote;
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _editNote })}\n\n`)); } catch (_) {}
+          _truncationNoteAdded = true;
+        }
+        if (!route && !_editRejected && !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute)) {
           console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
           const _honestNote = '\n\n_No he podido montar el mapa interactivo de esta ruta — aquí tienes toda la información en texto. Puedes pedírmelo de nuevo o pulsar "Generar guía con mapa" para reintentarlo._';
           reply = (reply || '').trimEnd() + _honestNote;
