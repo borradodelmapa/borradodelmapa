@@ -520,7 +520,6 @@ function _renderChatEmpty() {
         </div>
         <button class="ce-sky-fc-toggle" id="ce-sky-fc-toggle" data-ce-sky-fc-toggle aria-expanded="${_ceSkyFcOpen ? 'true' : 'false'}"${_ceSkyFcCached.length ? '' : ' hidden'}>${_ceSkyFcOpen ? '▴' : '▾'} previsión</button>
         <div class="wx-forecast" id="ce-sky-fc"${(_ceSkyFcCached.length && _ceSkyFcOpen) ? '' : ' hidden'}>${_ceSkyFcHTML}</div>
-        <div id="ce-sky-info"></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
@@ -812,8 +811,6 @@ function _renderChatEmpty() {
 
   _ceSkyStartTicker();
   _ceSkyWeatherRefresh(_ceSkySel);
-  const _ceSkyInfoCC = _ceSkyInfoCountryFor(_ceSkySel);
-  if (_ceSkyInfoCC) _ceSkyInfoRefresh(_ceSkyInfoCC);
 }
 
 // ═══ HORA + TIEMPO + PAÍS (cabecera del billete) ═══
@@ -954,8 +951,6 @@ function _ceSkyStartTicker() {
   const catchUp = () => {
     _ceSkyRenderTick();
     const sel = _ceSkyReadSel();
-    const cc = _ceSkyInfoCountryFor(sel);
-    if (cc) _ceSkyInfoRefresh(cc);
     if (sel.mode === 'here') {
       const key = _ceSkyWeatherKey(sel);
       const cached = window._ceSkyWxCache && window._ceSkyWxCache[key];
@@ -1062,74 +1057,10 @@ function _ceSkyToggleForecast() {
   }
 }
 
-async function _ceSkyInfoRefresh(cc) {
-  const el = document.getElementById('ce-sky-info');
-  if (!el) return;
-  if (!cc) { el.innerHTML = ''; return; }
-  const cacheKey = 'ce_sky_info_' + cc.toLowerCase();
-  let pi = null;
-  try { const cached = sessionStorage.getItem(cacheKey); if (cached) pi = JSON.parse(cached); } catch (_) {}
-  if (!pi) {
-    try {
-      const res = await fetch(`${window.SALMA_API}/practical-info?country=${cc}`);
-      if (!res.ok) { if (_ceSkyInfoCountryFor(_ceSkyReadSel()) === cc) el.innerHTML = ''; return; }
-      const data = await res.json();
-      pi = data.practical_info;
-      if (!pi) { if (_ceSkyInfoCountryFor(_ceSkyReadSel()) === cc) el.innerHTML = ''; return; }
-      try { sessionStorage.setItem(cacheKey, JSON.stringify(pi)); } catch (_) {}
-    } catch (_) { return; }
-  }
-  // Puede haber cambiado de selección mientras la petición estaba en vuelo
-  if (_ceSkyInfoCountryFor(_ceSkyReadSel()) !== cc) return;
-  el.innerHTML = _ceSkyInfoHTML(pi);
-}
-
-function _ceSkyInfoHTML(pi) {
-  let html = '<div class="copilot-card ce-sky-info-card">';
-  html += '<div class="copilot-header" onclick="document.getElementById(\'ce-sky-info-body\').classList.toggle(\'copilot-open\')">';
-  html += '<span class="copilot-title">📍 Info práctica del país</span><span class="copilot-toggle">▸</span></div>';
-  html += '<div id="ce-sky-info-body" class="copilot-body">';
-  if (pi.emergencies) {
-    html += '<div class="copilot-section"><strong>🚨 Emergencias</strong><br>';
-    if (pi.emergencies.general_number) html += '<strong>' + escapeHTML(pi.emergencies.general_number) + '</strong><br>';
-    if (pi.emergencies.embassy) html += '<small>' + escapeHTML(pi.emergencies.embassy) + '</small>';
-    html += '</div>';
-  }
-  if (pi.phrases && pi.phrases.list) {
-    html += '<div class="copilot-section"><strong>🗣️ ' + escapeHTML(pi.phrases.language || 'Frases') + '</strong><div class="copilot-phrases">';
-    for (const p of pi.phrases.list.slice(0, 6)) {
-      html += '<span class="copilot-phrase"><b>' + escapeHTML(p.phrase) + '</b> ' + escapeHTML(p.meaning) + '</span>';
-    }
-    html += '</div></div>';
-  }
-  if (pi.useful_apps && pi.useful_apps.length) {
-    html += '<div class="copilot-section"><strong>📱 Apps</strong><br><small>' + pi.useful_apps.map(escapeHTML).join('<br>') + '</small></div>';
-  }
-  if (pi.connectivity && pi.connectivity.sim_local) {
-    html += '<div class="copilot-section"><strong>📶 Conectividad</strong><br><small>' + escapeHTML(pi.connectivity.sim_local) + '</small></div>';
-  }
-  if (pi.health) {
-    html += '<div class="copilot-section"><strong>🏥 Salud</strong><br>';
-    if (pi.health.hospitals) html += '<small>' + escapeHTML(pi.health.hospitals) + '</small><br>';
-    if (pi.health.water) html += '<small><em>' + escapeHTML(pi.health.water) + '</em></small>';
-    html += '</div>';
-  }
-  if (pi.budget) {
-    html += '<div class="copilot-section"><strong>💰 Presupuesto</strong><br>';
-    if (pi.budget.total_estimated) html += '<small>' + escapeHTML(pi.budget.total_estimated) + '</small><br>';
-    if (pi.budget.exchange_tip) html += '<small><em>' + escapeHTML(pi.budget.exchange_tip) + '</em></small>';
-    html += '</div>';
-  }
-  html += '</div></div>';
-  return html;
-}
-
 function _ceSkySetSel(sel) {
   try { localStorage.setItem('bdm_sky_sel', JSON.stringify(sel)); } catch (_) {}
   _ceSkyRenderTick();
   _ceSkyWeatherRefresh(sel);
-  const cc = _ceSkyInfoCountryFor(sel);
-  if (cc) { _ceSkyInfoRefresh(cc); } else { const el = document.getElementById('ce-sky-info'); if (el) el.innerHTML = ''; }
 }
 
 async function _ceSkyCitySearch(query, overlay, btnEl) {

@@ -6586,13 +6586,20 @@ body {
 .ce-sky-wx{padding-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ce-sky-wx:active{opacity:.85;}
 .ce-sky-wx .wx-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.ce-sky-wx .wx-extras{flex-wrap:wrap;white-space:normal;overflow:visible;}
+/* En una sola línea, con scroll horizontal si no cabe entero (nunca se corta
+   la info, solo se desliza) — a petición de Paco, 21 sept. */
+.ce-sky-wx .wx-extras{
+  flex-wrap:nowrap;white-space:nowrap;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.ce-sky-wx .wx-extras::-webkit-scrollbar{display:none;}
 
-/* Previsión — plegada por defecto a propósito, botón pequeño para no llamar
-   la atención (reutiliza .wx-forecast/.wx-fc-day de la Weather Banner) */
+/* Previsión — plegada por defecto a propósito (reutiliza .wx-forecast/.wx-fc-day
+   de la Weather Banner). Botón agrandado a petición de Paco, 21 sept — era
+   demasiado pequeño como zona de toque. */
 .ce-sky-fc-toggle{
-  display:block;margin:0 0 8px;padding:0;border:0;background:transparent;
-  font-family:var(--ce-flapf);font-size:10px;letter-spacing:.06em;
+  display:block;margin:0 0 10px;padding:6px 0;border:0;background:transparent;
+  font-family:var(--ce-flapf);font-size:14px;letter-spacing:.06em;
   color:var(--ce-ink3);cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .ce-sky-fc-toggle:hover,.ce-sky-fc-toggle:active{color:var(--ce-amber);}
@@ -6601,7 +6608,6 @@ body {
    del navegador (display:none) — sin esto, el atributo hidden no ocultaba
    nada de verdad. El selector por id gana a ambos. */
 #ce-sky-fc[hidden],#ce-sky-fc-toggle[hidden]{display:none;}
-.ce-sky-info-card{margin-top:2px;margin-bottom:14px;}
 
 /* Picker del reloj mundial — reutiliza .wx-picker-overlay/.wx-picker/.wx-picker-head/.wx-picker-gps */
 .wx-picker-gps.on{background:rgba(244,99,11,.22);border-color:var(--dorado);}
