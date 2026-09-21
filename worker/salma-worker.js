@@ -3348,6 +3348,24 @@ function mergeStopsIntoDays(existingStops, newStops, atEnd) {
   return { stops, addedCount, days: groups.length };
 }
 
+// ¿Estas paradas son "solo lo nuevo" de una edición (y no una guía reescrita ni una ruta nueva)?
+// Sí si: menos de la mitad de sus nombres están en la guía actual Y su centro queda a <150 km del
+// centro de la guía. Sin coordenadas válidas en las nuevas → no (no se puede saber, se deja como está).
+function looksLikeOnlyNewStops(newStops, curStops) {
+  const norm = (s) => (s || '').toString().trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const cur = new Set(curStops.map(s => norm(s.name)));
+  const inCur = newStops.filter(s => cur.has(norm(s.name))).length;
+  if (inCur / newStops.length >= 0.5) return false;
+  const centroid = (arr) => {
+    const v = arr.filter(s => typeof s.lat === 'number' && isFinite(s.lat) && typeof s.lng === 'number' && isFinite(s.lng));
+    if (!v.length) return null;
+    return { lat: v.reduce((a, s) => a + s.lat, 0) / v.length, lng: v.reduce((a, s) => a + s.lng, 0) / v.length };
+  };
+  const a = centroid(newStops), b = centroid(curStops);
+  if (!a || !b) return false;
+  return haversineKm(a.lat, a.lng, b.lat, b.lng) < 150;
+}
+
 // ── EDICIÓN POR OPERACIONES (SALMA_ROUTE_EDIT) — la IA no reescribe la guía, solo dice qué cambia ──
 // {"add":[parada nueva con "day"], "remove":[n,...], "replace":[{"n":N,"with":{parada nueva}}]}
 // "n" = número de la parada en la RUTA ACTUAL (1-based, el mismo que se le pasa en el prompt). Por
@@ -10169,10 +10187,23 @@ INSTRUCCIONES:
         let _opsApplied = false;  // ...y de ahí salió una ruta editada
         let _opsCounts = null;
         let _opsNewNames = {};    // _newId → nombre pedido (para avisar si Google no lo confirma)
+        // Red de seguridad: con una guía cargada, si la IA ignora el formato de operaciones y devuelve una
+        // ruta completa (SALMA_ROUTE_JSON) con MENOS paradas, sin apenas nombres de la guía y en la misma zona,
+        // no es una guía reescrita sino "solo lo nuevo" (caso real 21 sept: "quiero ir también a la playa" →
+        // 1 parada, la guía de 11 estuvo a punto de guardarse con 1). Se trata como "añadir" esas paradas.
+        let _convertedOps = null;
+        if (route && !_fastPathRoute && !guidedIsReco && !guidedMapStage && !mergeIntoRoute && currentRoute &&
+            Array.isArray(currentRoute.stops) && currentRoute.stops.length && Array.isArray(route.stops) &&
+            route.stops.length && route.stops.length < currentRoute.stops.length &&
+            looksLikeOnlyNewStops(route.stops, currentRoute.stops)) {
+          console.log(`[EDIT-OPS] ↪ ruta con ${route.stops.length} paradas (guía: ${currentRoute.stops.length}) tratada como "añadir" — la IA no usó SALMA_ROUTE_EDIT`);
+          _convertedOps = { add: route.stops, remove: [], replace: [] };
+          route = null;
+        }
         if (!route && !guidedIsReco && !mergeIntoRoute && currentRoute && Array.isArray(currentRoute.stops) &&
-            currentRoute.stops.length && allText.includes('SALMA_ROUTE_EDIT')) {
+            currentRoute.stops.length && (_convertedOps || allText.includes('SALMA_ROUTE_EDIT'))) {
           _opsHandled = true;
-          const _ops = extractRouteEditFromReply(allText);
+          const _ops = _convertedOps || extractRouteEditFromReply(allText);
           let _opsNote = '';
           if (!_ops || (!_ops.add.length && !_ops.remove.length && !_ops.replace.length)) {
             console.log(`[EDIT-OPS] ✗ operaciones ilegibles o vacías (stop_reason: ${lastStopReason || 'n/d'})`);
