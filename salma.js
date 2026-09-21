@@ -2227,7 +2227,9 @@ const salma = {
     const area = document.getElementById('chat-area');
     if (area) area.innerHTML = '';
     if (typeof _renderChatEmpty === 'function') _renderChatEmpty();
-    if (this._copilotData) this.showCopilotCard();
+    // showCopilotCard() DESACTIVADA 21 sept 2026 — duplicaba la tarjeta de info
+    // del país de la barra nueva de hora+tiempo+país (bug real reportado por Paco).
+    // if (this._copilotData) this.showCopilotCard();
     if (typeof showToast === 'function') showToast('Nueva conversación');
   },
 
@@ -2703,7 +2705,10 @@ const salma = {
           this._copilotCountry = countryCode;
           this._copilotData = JSON.parse(cached);
           console.log('[Salma] Copiloto (caché):', geo.address?.country, countryCode);
-          if (currentState === 'chat') this.showCopilotCard();
+          // showCopilotCard() DESACTIVADA 21 sept 2026 (ver _initChat/newChat) —
+          // la detección (_copilotCountry/_copilotData) se queda, la sigue usando
+          // la barra nueva de hora+tiempo+país.
+          // if (currentState === 'chat') this.showCopilotCard();
           return;
         }
       } catch (_) {}
@@ -2718,8 +2723,8 @@ const salma = {
       this._copilotData = piData.practical_info;
       try { sessionStorage.setItem('salma_copilot_' + countryCode, JSON.stringify(piData.practical_info)); } catch (_) {}
       console.log('[Salma] Copiloto activado:', geo.address?.country, countryCode);
-      // Mostrar tarjeta si el chat ya está abierto (initCopilot es async)
-      if (currentState === 'chat') this.showCopilotCard();
+      // showCopilotCard() DESACTIVADA 21 sept 2026, ver arriba en esta misma función.
+      // if (currentState === 'chat') this.showCopilotCard();
     } catch (e) {
       console.log('[Salma] Copiloto: error obteniendo info', e.message);
     }
@@ -2987,8 +2992,8 @@ const salma = {
     // sensación, humedad, ubicación exacta — bug real reportado por Paco). No se borra
     // la función por si hace falta reactivarla, solo se deja de llamar aquí.
     // if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
-    // Mostrar tarjeta copiloto si hay datos del país
-    if (this._copilotData) this.showCopilotCard();
+    // Tarjeta copiloto (showCopilotCard) — DESACTIVADA 21 sept 2026, ver newChat().
+    // if (this._copilotData) this.showCopilotCard();
     // Banner de recordatorios (una vez al día)
     if (window.currentUser && typeof notasManager !== 'undefined') {
       notasManager.renderChatReminders(document.getElementById('chat-area'));
