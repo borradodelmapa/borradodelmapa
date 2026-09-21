@@ -2046,6 +2046,13 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   estimado usa 3,75 $/Mtok escritura y 0,30 $/Mtok lectura (`tin` sigue siendo la entrada total). Log `[CACHE] vuelta N: entrada X (guardados Y, leídos de caché Z)`.
   Esperado: en un bucle de ≥2 vueltas, la vuelta 1 guarda (~12k) y las siguientes leen; dos peticiones seguidas <5 min → la 2ª lee desde la vuelta 1. Una petición
   aislada de 1 sola vuelta cuesta ~25% MÁS en la parte fija (~0,01 €). PENDIENTE (con cuidado, aparte): recortar el prompt de sistema (duplicados/contradicciones).
+  **CACHING COMPROBADO por Paco (wrangler tail, 21 sept):** vuelta 0 guarda 16.411 tokens; las siguientes leen 16.411 de caché (~50% menos por llamada con una guía de 19 paradas);
+  quitar una parada por operaciones (`[EDIT-OPS] -1 → 18`) salió con 62 tokens de salida. Lo que queda sin cachear (~12-14k/llamada) es contexto variable, ~6k de ellos la ficha completa de la guía.
+  **BÚSQUEDAS DE AYUDA CON GUÍA ABIERTA, 21 sept — DESPLEGADO, sin probar en pantalla** — commit `cd9c67b6`, **Worker Version ID `ba2a519d-eca2-40b5-bb6a-3412eff1cc97`**:
+  `extractHelpLocation(...,deferRoute)` devuelve `{__route}` y la decisión se toma con el GPS: si el usuario está a ≥60 km de todas las paradas de la guía (y hay ciudad de GPS y el
+  mensaje no habla de la guía: "de/en mi ruta", "parada N"), se busca en SU posición (ciudad + coords) y Salma abre con "Cerca de X:" y ofrece buscar cerca de la guía; si está cerca, no
+  hay GPS o habla de la guía, como antes (zona de la guía) y también dice "Cerca de <zona>:". Nota inyectada al final del system prompt (`helpLocationNote`, parte variable, sin cachear).
+  Motivo: guía de País Vasco abierta con el usuario en Asturias → búsqueda a cientos de km sin explicación. Coste (§8): mismo nº de llamadas a Places/Claude; solo cambia la zona.
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
