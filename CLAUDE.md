@@ -2005,6 +2005,11 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   (`SALMA_ROUTE_JSON`) solo si hay que reordenar/reestructurar todo — sigue protegida por (a) y (b). El
   frontend recibe `ops_edit` y no lanza la alarma de "paradas perdidas". Consume 1 cambio (`edit`) aunque el
   mensaje no cazara el regex de edición (la puerta previa `usageGate` sí sigue usando `_editingRoute`).
+  **Primera prueba de Paco (21 sept): quitar y sustituir OK; "quiero ir también a la playa" NO** — el modelo ignoró
+  el formato y devolvió SALMA_ROUTE_JSON con 1 parada (la alarma (b) evitó guardar 11→1). Arreglo: red de seguridad
+  `looksLikeOnlyNewStops` (commit `e71ca9c1`, **Worker Version ID `c309408e-effa-4810-993d-cdf4c72b0523`**, comprobado
+  contra `/version`): si con una guía cargada llega una ruta con menos paradas, <50% de nombres en común y centro a
+  <150 km, se trata como "añadir" esas paradas (mismo camino y misma verificación estricta). Sin probar en pantalla.
   Logs: `[EDIT-OPS]`. **Coste (§8): BAJA** — salida de unos cientos de tokens en vez de la ruta entera.
   OJO cifra: el tope real de `max_tokens` de una edición era 3.000/6.000 si el mensaje no era petición de ruta
   y 24.000 si lo era (`reqMaxTokens`), no siempre "20.000"; la guía de 12 paradas cortada a mitad cuadra con el
