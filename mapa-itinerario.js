@@ -765,8 +765,15 @@ const mapaItinerario = {
     salma._chatAreaOverride = 'itin-query-answer';
     // Guardar el historial que hubiera en curso (chat normal) para devolverlo
     // tal cual al cerrar — el de aquí es el de ESTA ruta, no se mezclan.
-    salma._prevHistoryBackup = salma.history.slice();
-    salma.history = [];
+    // Si se cerró el popup con una respuesta en curso y se reabre antes de que acabe, el cierre
+    // sigue pendiente (ver _closeItinQuery): se cancela y NO se vuelve a copiar/vaciar el historial.
+    if (_itinQueryClosePoll) {
+      clearInterval(_itinQueryClosePoll);
+      _itinQueryClosePoll = null;
+    } else {
+      salma._prevHistoryBackup = salma.history.slice();
+      salma.history = [];
+    }
     // Sincronizar qué ruta es "la actual" para salma.send(): sin esto,
     // currentRouteId se queda del último hilo de chat normal (o vacío) y
     // un "quita esta parada" desde aquí no editaba la guía que se está
@@ -906,6 +913,26 @@ const mapaItinerario = {
     if (camMenu) camMenu.style.display = 'none';
     _clearItinQueryPhoto();
     if (_itinQueryObserver) { _itinQueryObserver.disconnect(); _itinQueryObserver = null; }
+    if (typeof salma === 'undefined') return;
+    // Si Salma está respondiendo (p. ej. aplicando un cambio a la guía), NO soltar aún el modo popup:
+    // la petición sigue en marcha aunque se cierre la ventana, y su respuesta debe procesarse como
+    // edición de ESTA guía (refrescarla en su sitio), no caer en el chat normal ni contaminar su
+    // historial. Se suelta en cuanto termine (tope 2 min por si algo se quedara colgado).
+    if (salma._streaming && salma._chatAreaOverride) {
+      if (!_itinQueryClosePoll) {
+        const t0 = Date.now();
+        _itinQueryClosePoll = setInterval(() => {
+          if (!salma._streaming || Date.now() - t0 > 120000) _finalizeItinQueryClose();
+        }, 300);
+      }
+      return;
+    }
+    _finalizeItinQueryClose();
+  }
+
+  let _itinQueryClosePoll = null;
+  function _finalizeItinQueryClose() {
+    if (_itinQueryClosePoll) { clearInterval(_itinQueryClosePoll); _itinQueryClosePoll = null; }
     if (typeof salma === 'undefined') return;
     salma._chatAreaOverride = null;
     if (salma._prevHistoryBackup) {

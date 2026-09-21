@@ -3019,13 +3019,16 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // que no cambian, en vez de reconstruirlas de memoria a partir de una lista de nombres.
     // Reconstruir de memoria es lo que hizo que una ruta de 10 paradas reales acabase con
     // paradas de otra zona al pedir solo añadir 1 — la ruta original se perdió al guardar.
+    // Ficha RESUMIDA (n, nombre, día, tipo, coords y 140 caracteres de la descripción): con la edición por
+    // operaciones la IA ya no copia las paradas existentes, así que no hace falta mandarlas enteras (antes
+    // ~300 tokens por parada en CADA mensaje con una guía abierta). Si aun así reescribe la ruta completa,
+    // el Worker restaura los datos originales por nombre (restoreStopsFromCurrent).
+    const _cut = (t, n) => { const x = (t || '').toString().replace(/\s+/g, ' ').trim(); return x.length > n ? x.slice(0, n) + '…' : x; };
     const stopsCompact = currentRoute.stops.map((s, i) => ({
-      n: i + 1, name: s.name, headline: s.headline, narrative: s.narrative, day_title: s.day_title,
-      type: s.type, day: s.day, lat: s.lat, lng: s.lng,
-      km_from_previous: s.km_from_previous, road_name: s.road_name,
-      road_difficulty: s.road_difficulty, estimated_hours: s.estimated_hours
+      n: i + 1, name: s.name, day: s.day, day_title: s.day_title, type: s.type,
+      lat: s.lat, lng: s.lng, resumen: _cut(s.narrative, 140)
     }));
-    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. DATOS EXACTOS de cada parada (JSON): ${JSON.stringify(stopsCompact)}
+    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. RESUMEN de cada parada (JSON; el sistema conserva sus datos completos): ${JSON.stringify(stopsCompact)}
 ${guidedIsReco
   ? `(Solo como contexto para que tus recomendaciones encajen con lo que ya hay: en este modo NO emitas ningún JSON.)]`
   : `CAMBIOS EN ESTA RUTA — NO la reescribas. Si el usuario quiere cambiarla (añadir un sitio o un día, quitar, sustituir una parada por otra; con cualquier frase, no solo con verbos como "añade"), responde con 1-2 frases de qué haces y por qué y, en una línea aparte, SALMA_ROUTE_EDIT seguido de UN JSON en una sola línea:
@@ -3033,7 +3036,7 @@ ${guidedIsReco
 · "n" = el número "n" de la parada tal como aparece arriba. Para quitar o sustituir usa SOLO esos números, nunca nombres. Omite las claves que no uses.
 · Parada nueva = todos sus campos (name, headline, narrative, day_title, type, lat, lng, km_from_previous, estimated_hours, con_historia…). En "add", "day" = nº del día de la ruta actual al que mejor encaja (o el siguiente al último si pide un día nuevo); en "replace" ocupa el sitio y el día de la que sale. Solo sitios REALES que existan en Google Maps.
 · Si pide UNA parada, añade UNA (la mejor) y di cuál es. NUNCA repitas paradas que no cambian: el sistema las conserva tal cual.
-· Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (cada parada que no cambia, literal).${editingActiveRoute
+· Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (las paradas que no cambian con su mismo name y coordenadas; el sistema restaura el resto de sus datos).${editingActiveRoute
   ? `
 · Si el usuario solo PREGUNTA o pide ideas (no pide cambiar la ruta) y tu respuesta propone algo CONCRETO que tendría sentido añadir (una parada, un sitio), o su petición es tan vaga que prefieres que elija entre 2-3 opciones, NO emitas JSON: termina la respuesta con SALMA_OFFER_ADD_TO_ROUTE en su propia línea. Si es solo información, no lo escribas.`
   : ''}
@@ -3346,6 +3349,27 @@ function mergeStopsIntoDays(existingStops, newStops, atEnd) {
   const stops = [];
   groups.forEach((grp, idx) => grp.forEach(s => stops.push(Object.assign({}, s, { day: idx + 1 }))));
   return { stops, addedCount, days: groups.length };
+}
+
+// Reescritura completa de una guía abierta: la IA solo vio un RESUMEN de cada parada, así que lo que devuelve de
+// las que ya existían (mismo nombre) es incompleto. Se restauran sus datos originales (descripción completa,
+// place_id, foto, horarios…) y de lo que devuelve la IA solo se respeta el día/orden — y la descripción si la
+// cambió a propósito (si no es un recorte de la original). Paradas sin coincidencia (nuevas) quedan tal cual.
+function restoreStopsFromCurrent(newStops, curStops) {
+  const norm = (s) => (s || '').toString().trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const byName = new Map(curStops.map(s => [norm(s.name), s]));
+  let restored = 0;
+  const stops = newStops.map(ns => {
+    const old = byName.get(norm(ns.name));
+    if (!old) return ns;
+    const nn = (ns.narrative || '').replace(/…$/, '').trim();
+    const keepModelNarr = nn && !(old.narrative || '').startsWith(nn.slice(0, 100));
+    const merged = Object.assign({}, old, { day: ns.day, day_title: ns.day_title || old.day_title });
+    if (keepModelNarr) merged.narrative = ns.narrative;
+    restored++;
+    return merged;
+  });
+  return { stops, restored };
 }
 
 // ¿Estas paradas son "solo lo nuevo" de una edición (y no una guía reescrita ni una ruta nueva)?
@@ -10321,6 +10345,16 @@ REGLAS:
         //    OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico —
         //    isRoute también es true para isDaysDestination (MODO PLAN), que PROHÍBE
         //    el JSON a propósito; ahí route=null es el comportamiento correcto, no un fallo. ──
+        // ── Reescritura completa con guía abierta: la IA solo vio un resumen de cada parada → restaurar
+        //    los datos originales de las que ya existían (ver restoreStopsFromCurrent). ──
+        if (route && currentRoute && Array.isArray(currentRoute.stops) && currentRoute.stops.length && Array.isArray(route.stops) &&
+            !_opsApplied && !_fastPathRoute && !guidedMapStage && !mergeIntoRoute && !guidedIsReco) {
+          const _rs = restoreStopsFromCurrent(route.stops, currentRoute.stops);
+          if (_rs.restored) {
+            route.stops = _rs.stops;
+            console.log(`[EDIT-RESTORE] ${_rs.restored} de ${route.stops.length} paradas restauradas desde la guía guardada`);
+          }
+        }
         // ── Edición de guía existente que "añade" pero devuelve MENOS paradas de las que había:
         //    la IA se ha dejado paradas al reescribir (sin corte, p. ej.). Si el mensaje no pide
         //    quitar/cambiar nada, no se entrega: la guía guardada se queda como está. ──
