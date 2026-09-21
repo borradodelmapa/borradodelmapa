@@ -1537,7 +1537,8 @@ const salma = {
           // el mensaje, perder aunque sea una parada es sospechoso; con él, se tolera hasta 2.
           const _lostCount = prevStopsCount - _keptCount;
           const _removalIntent = /\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i.test(msg || '');
-          const _looksLikeCorruption = prevStopsCount >= 3 &&
+          // Edición exacta por operaciones (SALMA_ROUTE_EDIT, la decide el Worker): lo que falta lo pidió el usuario.
+          const _looksLikeCorruption = prevStopsCount >= 3 && !data.ops_edit &&
             (_keptRatio < 0.5 || (!_removalIntent && _lostCount >= 1) || _lostCount >= 3);
 
           if (_looksLikeCorruption) {
@@ -1844,6 +1845,7 @@ const salma = {
                   map_stage_failed: evt.map_stage_failed === true,
                   offer_map_button: evt.offer_map_button === true,
                   offer_add_to_route: evt.offer_add_to_route === true,
+                  ops_edit: evt.ops_edit === true,
                   map_base_msg: evt.map_base_msg || null,
                   historia_lugar: evt.historia_lugar || null
                 });
