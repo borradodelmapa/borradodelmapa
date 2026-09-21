@@ -1980,7 +1980,20 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   que la guía, el Worker devuelve `route: null` + aviso ("no he tocado tu guía guardada") y
   salta el RESCATE 2 (evita otra llamada de ~20.000 tokens). Sin route no se consume cambio del
   plan. Sin coste nuevo (no llama a ninguna API). Logs: `[EDIT-CORTE]` / `[EDIT-PERDIDAS]`.
-  **Pendiente: (b) alarma del frontend por paradas perdidas, (c) "añade" sin reescribir la ruta.**
+  **(b) HECHO Y CONFIRMADO por Paco** (quitar una parada sin avisos) — `salma.js?v=102`, commit
+  `39957194`: la alarma de cordura cuenta paradas perdidas (≥1 sin verbo de quitar/cambiar, ≥3 con él).
+  **(c) DESPLEGADO, sin probar en pantalla** — commit `4ddd0d8f`, **Worker Version ID
+  `4084137e-3b86-4b67-ae13-bf4140e74d3e`** (confirmado contra `/version`, 18 secretos). "Añade/agrega/mete/
+  pon/una parada más/más días" sin verbo de quitar/cambiar (`_addOnlyEdit`): al modelo se le pide SOLO
+  lo nuevo (cada parada con su `day`); `mergeStopsIntoDays` lo inserta en la guía en el día que le
+  toca (hueco de menor rodeo, o al final del día con "al final"/"la última"; día nuevo si `day` > último).
+  Las paradas viejas no se reescriben. Si todo ya estaba → "Eso ya está en tu guía". Si la petición es vaga
+  el modelo puede proponer opciones + `SALMA_OFFER_ADD_TO_ROUTE` (botón "Añadir a la guía"). Sigue
+  contando como `edit`. `max_tokens` 8000 para este caso (tope, no gasto). **Coste (§8): BAJA** — la
+  salida pasa de hasta ~20.000 tokens a unos cientos. Logs: `[EDIT-ADD]`.
+  **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
+  no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
+  `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
 
 - **Octavo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar en
   pantalla.** Con las fotos y la pantalla negra ya arregladas (entradas de abajo), Paco
