@@ -1944,6 +1944,26 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     Premium** (cerrado en el paso 1).
   · Las dos: `git fetch origin main` ANTES de cada commit y de cada deploy; commits pequeños.
     Quien haga push de un cambio del Worker lo despliega y anota el `Current Version ID` aquí.
+  **⚠️ ACTUALIZADO 21 sept 2026 (tarde) — LA SESIÓN DE PAGOS YA SUBIÓ LOS PASOS 2 Y 3 A `main`
+  (commits `fda89f14` y `e18c4dce`; Worker `5b090b7a` y luego `4a204319`, el vigente).
+  ANTES de tocar nada haz `git fetch origin main` y TRAE esos cambios (`git pull`/merge): tocan
+  `worker/salma-worker.js`, `app.js` y `flight-watches.js`. Los números de línea de arriba
+  (~8673, ~9820, ~2169, ~1535) YA NO SON FIABLES — el Worker creció ~+250 líneas: busca por
+  NOMBRE (`_looksLikeEdit`, `_editingRoute`, `salvageIncompleteRouteJson`, `_commitRouteEdit`).**
+  Lo que cambió en la zona que vas a tocar, del lado de `POST /` (busca `_usageKind`):
+  · Justo tras `const _urlIncidents = []` hay un bloque nuevo de **límites de uso**: `_usageKind`
+    ('guide' | 'edit' | 'chat'), `usageGate(...)` (puede cortar la petición con un aviso SSE y
+    `limit_reached`), `_reqUsage`, `_usageConsume` y `_flushUsage()`.
+  · **Una edición de ruta ya cuenta como `edit`:** `_usageKind` es 'edit' si `mergeIntoRoute ||
+    _editingRoute`. Un usuario gratuito tiene 2 cambios en total; Premium 8 al mes.
+  · El cupo se CONSUME solo si sale bien: tras `convertProseToRouteJson` válido (camino
+    merge/guía) o en `if (route && !_usageConsume) ...` justo antes del `doneEvt` final.
+    **Tu arreglo NO debe gastar un cambio cuando devuelvas la ruta por RESCATE 1 y decidas no
+    guardarla** (a): pon `route = null` antes de ese punto o no llegará a consumir bien.
+    Si haces (c) (que "añade una parada" use `merge_into_route`), sigue contando como `edit`
+    por `mergeIntoRoute`; no dupliques el conteo.
+  · `readAnthropicStream` ahora devuelve `usage` y `convertProseToRouteJson` acepta
+    `opts.usageAcc`: si añades otra llamada a Claude en esta zona, súmala a `_reqUsage`.
   Paco (harto de fallos en las guías): quería este fallo chequeado antes de seguir con el paso 2.
 
 - **Octavo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar en
