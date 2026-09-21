@@ -735,6 +735,7 @@ desde esta sesión (sin credenciales de Firebase en este contenedor):**
    del dueño original.
    **Nunca decir "arreglado" de esto hasta que ese flujo completo se vea en pantalla.**
    **ACTUALIZACIÓN 21 sept 2026:** el punto 1 (desplegar `firestore.rules`) NO hacía falta: ya estaba publicada. Comprobado con una lectura de solo lectura desde la consola de Paco (ojo: los IDs de documento tipo `__algo__` están reservados por Firestore y dan `invalid-argument`; usar un ID normal). Queda solo el punto 2: probar en pantalla el flujo completo (compartir → abrir el enlace sin sesión → pide login → se ve la guía → GUARDAR la deja en la 2ª cuenta).
+   **CONFIRMADO EN PANTALLA por Paco (21 sept 2026): el flujo completo de Compartir funciona de punta a punta.** Cerrado — sin nada pendiente de esto.
 
 **Sin implementar, a petición explícita de Paco (opinión pedida, no desarrollo):**
 Paco planteó, para pensar y no para ahora, aprovechar esto para crear grupos de viaje
