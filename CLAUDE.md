@@ -516,6 +516,24 @@ endpoint que también use `sendWhatsAppMessage()`:**
   del código — costó bastante más tiempo perseguir la firma de Twilio y la config del
   Worker que este último paso, que era el que realmente faltaba.
 
+**Casi-incidente al desplegar la limpieza final, mismo 21 sept — protocolo §1B en
+acción, sin daño real.** Al quitar el `console.log`/`console.error` de diagnóstico, el
+primer disparo de la GitHub Action "Deploy Worker" se hizo sobre una copia de la rama
+de esta sesión que llevaba **más de 20 commits de retraso respecto a `main`** — otra
+sesión llevaba un rato trabajando en paralelo (previsión de tiempo, buscar ciudad,
+FAB de editar guía, pestaña Ayuda, fix Catar→Hungría). Ese deploy dejó producción sin
+ese trabajo durante ~90 segundos. Se detectó al momento (`git merge-base --is-ancestor`
+contra `origin/main` antes de dar el deploy por bueno — comprobación que debería
+hacerse siempre antes de cualquier deploy disparado desde una rama que no sea `main`
+directamente), se fusionó `origin/main` a la rama de esta sesión sin conflictos, y se
+volvió a desplegar con todo junto. **Desplegado, GitHub Action "Deploy Worker" run #38,
+commit `77f4075` (merge de la rama de WhatsApp + `main`), Worker Version ID
+`cf7dfe37-8fc9-4464-a229-0bc4a596bf91`** — sin confirmar contra `/version` por el mismo
+bloqueo de red del contenedor de siempre. **Lección**: si una sesión dispara un deploy
+desde una rama que no es `main` (vía GitHub Action con `ref` explícito), comprobar
+SIEMPRE primero que esa rama no está por detrás de `main` — el mismo riesgo que ya
+cubre el protocolo §1B para pushes normales aplica igual a un deploy disparado así.
+
 **No implementado a propósito, para no ampliar el encargo sin que Paco lo pida:**
 una vista en `admin.html` para leer el feedback sin entrar a la consola de Firebase.
 Por ahora, ver la colección `beta_feedback` directamente en Firebase Console. Si con
