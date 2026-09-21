@@ -810,9 +810,29 @@ DESPLEGADO, sin confirmar en pantalla.** Solo frontend, sin tocar el Worker:
    llama nadie); `_ceSkyInfoCountryFor()` se queda, la sigue usando la bandera
    de la línea de ubicación del tiempo.
 `?v=`: `styles.css` a 114, `app.js` a 133. Commit `dd9eb3e`, ya en `main`.
-**Pendiente: que Paco confirme que el detalle del tiempo ya cabe en una línea
-(con scroll si hace falta), que el botón de previsión se toca mejor, y que ya
-no ve ninguna tarjeta de info del país en esta pantalla.**
+**CONFIRMADO EN PANTALLA por Paco lo del tiempo (línea única + botón de
+previsión) — pero el punto 3 (quitar info del país) se hizo mal, ver Parte 6.**
+
+**Parte 6 — malentendido corregido: había DOS tarjetas de "Info práctica del
+país" distintas, 21 sept 2026, DESPLEGADO, sin confirmar en pantalla.** Paco
+mandó una segunda captura: la que quité en la Parte 5 era la mía (la nueva,
+debajo del tiempo) — la que él quería quitar era OTRA, más antigua, que
+seguía saliendo más abajo en la pantalla de inicio, justo encima de los 6
+chips (`salma.showCopilotCard()` — la tarjeta del Copiloto por GPS, existía
+desde mucho antes de esta saga, sin relación directa con `.ce-sky`). Se
+disparaba desde 4 sitios de `salma.js` (`newChat()`, `_initChat()`, y dos
+dentro de `initCopilot()`) cada vez que ya había datos de país cacheados —
+por eso seguía apareciendo aunque la mía ya no estuviera.
+- `app.js`: restaurada la tarjeta mía (`_ceSkyInfoRefresh`/`_ceSkyInfoHTML`,
+  contenedor `#ce-sky-info`) tal como estaba en la Parte 3, debajo del tiempo.
+- `salma.js`: los 4 disparadores de `showCopilotCard()` comentados (mismo
+  patrón ya usado con el banner de tiempo viejo, Parte 4) — la detección en
+  sí (`_copilotCountry`/`_copilotData`, gratis, GPS+Nominatim) se queda
+  intacta, la sigue usando `_ceSkyInfoCountryFor()` para el modo "aquí".
+`?v=`: `styles.css` a 115, `app.js` a 134, `salma.js` a 101. Commit `37909e1`,
+ya en `main`. **Pendiente: que Paco confirme que ahora solo hay UNA tarjeta
+de info del país (debajo del tiempo) y que la de más abajo, junto a los
+chips, ya no aparece.**
 
 ---
 
