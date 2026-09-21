@@ -830,9 +830,29 @@ por eso seguía apareciendo aunque la mía ya no estuviera.
   sí (`_copilotCountry`/`_copilotData`, gratis, GPS+Nominatim) se queda
   intacta, la sigue usando `_ceSkyInfoCountryFor()` para el modo "aquí".
 `?v=`: `styles.css` a 115, `app.js` a 134, `salma.js` a 101. Commit `37909e1`,
-ya en `main`. **Pendiente: que Paco confirme que ahora solo hay UNA tarjeta
-de info del país (debajo del tiempo) y que la de más abajo, junto a los
-chips, ya no aparece.**
+ya en `main`. **CONFIRMADO EN PANTALLA por Paco: una sola tarjeta ya, sin
+duplicado** — pero salió un bug real distinto al probar Catar (ver Parte 7).
+
+**Parte 7 — bug real: "Catar" resolvía a Hungría, 21 sept 2026, DESPLEGADO,
+sin confirmar en pantalla.** Paco probó cambiar de país a Catar y tanto el
+tiempo como la info del país salieron de **Hungría** (pueblo "Csatár",
+emergencias/frases en húngaro) — parecía un problema de sincronización
+entre las dos tarjetas, pero no lo era: las dos coincidían entre sí, el
+país elegido de verdad era Hungría, no Catar. Causa real encontrada: el
+picker deja escribir un país de la lista O una ciudad libre, pero pulsar
+Enter/Intro del teclado **siempre** disparaba la búsqueda libre de ciudad
+(`/weather?city=`), nunca el país exacto ya visible en la lista — con
+"Catar" como texto, OpenWeatherMap geocodificó por parecido a "Csatár", un
+pueblo real húngaro.
+Arreglo: si el texto escrito coincide EXACTO (sin acentos/mayúsculas) con
+uno de los 187 países de la lista, ese país gana siempre — al pulsar Enter
+y también se quita el botón "Buscar como ciudad" de la lista en ese caso
+(para no dejar a mano una alternativa más arriesgada). Buscar una ciudad de
+verdad (ej. "Los Angeles") sigue igual. Sin cambios en el Worker ni en
+costes. `?v=`: `app.js` a 135. Commit `2547395`, ya en `main`.
+**Pendiente: que Paco pruebe otra vez escribir "Catar" y pulsar Enter, y
+confirme que ahora sí sale Catar (huso +3h/+4h, tiempo del Golfo) y no
+Hungría.**
 
 ---
 
