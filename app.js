@@ -1171,6 +1171,11 @@ function _ceSkyOpenPicker() {
   document.body.appendChild(overlay);
 
   const _norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  // Si el texto coincide EXACTO con un país de la lista (ej. "Catar"), ese país
+  // gana siempre sobre la búsqueda libre de ciudad — evita que un intro/Enter
+  // dispare una geocodificación ambigua que puede devolver cualquier cosa
+  // parecida (bug real: "Catar" resolvió a "Csatár", un pueblo de Hungría).
+  const _exactCountry = (q) => { const qq = _norm(q); return list.find(c => _norm(c.name) === qq) || null; };
   const listEl = overlay.querySelector('#ce-clock-list');
   const inp = overlay.querySelector('#ce-clock-search');
   const paint = (q) => {
@@ -1181,7 +1186,9 @@ function _ceSkyOpenPicker() {
           `<button class="ce-clock-item${(current.mode === 'country' && current.code === c.code) ? ' on' : ''}" data-code="${c.code}">${c.emoji} ${escapeHTML(c.name)}</button>`
         ).join('')
       : (qq ? '' : '<div class="ce-clock-empty">Sin resultados</div>');
-    if (qq) {
+    // Sin ofrecer "buscar como ciudad" si el texto ya es un país exacto de la
+    // lista — sería una alternativa confusa y más arriesgada que la buena.
+    if (qq && !_exactCountry(q)) {
       html += `<button class="ce-clock-item ce-clock-item--city" data-city-search="1">🔍 Buscar "${escapeHTML(q.trim())}" como ciudad</button>`;
     }
     listEl.innerHTML = html;
@@ -1206,7 +1213,10 @@ function _ceSkyOpenPicker() {
     if (e.key !== 'Enter') return;
     e.preventDefault();
     const q = (inp.value || '').trim();
-    if (q) _ceSkyCitySearch(q, overlay);
+    if (!q) return;
+    const exact = _exactCountry(q);
+    if (exact) { _ceSkySetSel({ mode: 'country', code: exact.code }); overlay.remove(); return; }
+    _ceSkyCitySearch(q, overlay);
   });
   setTimeout(() => { try { inp.focus(); } catch (_) {} }, 80);
 }
