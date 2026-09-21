@@ -753,7 +753,18 @@ const mapaItinerario = {
     const input = document.getElementById('itin-query-input');
     if (!overlay || !answer || !input) return;
 
-    answer.innerHTML = '<div class="itin-chat-hint">Pregúntame lo que quieras sobre esta ruta, o pídeme un cambio.</div>';
+    // Aviso al abrir: dejar claro que aquí se edita ESTA guía (con su nombre) y adónde ir para buscar cerca de uno.
+    // Se monta con nodos de texto (el título de la guía puede llevar cualquier carácter).
+    const _gTitle = (window._itinViewRoute && (window._itinViewRoute.title || window._itinViewRoute.name)) || '';
+    const _hint = document.createElement('div');
+    _hint.className = 'itin-chat-hint';
+    const _hintTitle = document.createElement('strong');
+    _hintTitle.textContent = _gTitle ? 'Estás editando tu guía «' + _gTitle + '».' : 'Estás editando esta guía.';
+    _hintTitle.style.cssText = 'display:block;margin-bottom:6px;color:var(--crema,#f5f0e8)';
+    _hint.appendChild(_hintTitle);
+    _hint.appendChild(document.createTextNode('Desde aquí puedes añadir o quitar paradas, cambiar lo que quieras y preguntarme lo que necesites de esta guía. Para buscar algo cerca de ti (farmacia, restaurante…), usa Cerca mía o el chat general.'));
+    answer.innerHTML = '';
+    answer.appendChild(_hint);
     input.value = '';
     overlay.style.display = 'flex';
     setTimeout(() => input.focus(), 50);
