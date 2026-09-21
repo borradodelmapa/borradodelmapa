@@ -1930,8 +1930,21 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   "Añadir a la guía" (`merge_into_route`, ya existe, solo genera lo nuevo y lo fusiona).
   **Aviso de coste (§8):** (c) BAJA el gasto — hoy cada edición de una guía grande reemite hasta
   ~20.000 tokens de Claude Sonnet (~0,3 €); solo lo nuevo es una fracción. (a) y (b) no llaman a
-  ninguna API. Paco (harto de fallos en las guías): quiere que esto se chequee antes de seguir
-  con el paso 2 del plan de pagos.
+  ninguna API.
+  **REPARTO ENTRE SESIONES (decidido por Paco el 21 sept 2026): este arreglo lo hace OTRA
+  sesión/chat; la sesión de pagos sigue con el paso 2 en paralelo** (Paco: "el arreglo de las
+  guías lo haré en otro chat"). Protocolo §1B — quién toca qué, para no pisarse:
+  · **Sesión "guías" (este pendiente):** `worker/salma-worker.js` solo en la zona de EDICIÓN
+    DE RUTA (`_looksLikeEdit`/`_editingRoute` ~8673 y el RESCATE 1 ~9820) y `salma.js` solo
+    en el guardado de ediciones (`_commitRouteEdit` ~2169, cordura ~1535). Primero RECUPERAR la
+    guía de Paco (ver recuperación arriba), después arreglar.
+  · **Sesión "pagos" (paso 2):** `app.js` (perfil, modal Premium), `flight-watches.js`, el bloque
+    de coins de `buildMessages()` (~2725) y `POST /flight-watches` + `verifyAuthAndGetUser` del
+    Worker. **Ninguna de las dos toca `firestore.rules`, Stripe ni el bloque de reglas de
+    Premium** (cerrado en el paso 1).
+  · Las dos: `git fetch origin main` ANTES de cada commit y de cada deploy; commits pequeños.
+    Quien haga push de un cambio del Worker lo despliega y anota el `Current Version ID` aquí.
+  Paco (harto de fallos en las guías): quería este fallo chequeado antes de seguir con el paso 2.
 
 - **Octavo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar en
   pantalla.** Con las fotos y la pantalla negra ya arregladas (entradas de abajo), Paco
