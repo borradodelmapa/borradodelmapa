@@ -753,7 +753,7 @@ const mapaItinerario = {
     const input = document.getElementById('itin-query-input');
     if (!overlay || !answer || !input) return;
 
-    answer.innerHTML = '<div class="itin-chat-hint">Pregúntame lo que quieras sobre esta ruta, o pídeme un cambio.</div>';
+    answer.innerHTML = '';   // vacío: el aviso fijo de arriba ya explica para qué sirve el popup (no repetirlo aquí)
     // Aviso FIJO (fuera de la conversación, siempre visible aunque haya mensajes de antes): que aquí se edita
     // ESTA guía (con su nombre), adónde ir para buscar cerca de uno, y borrar la conversación guardada de la guía.
     // Nodos de texto: el título de la guía puede llevar cualquier carácter.
@@ -930,7 +930,7 @@ const mapaItinerario = {
     if (!confirm('¿Borrar la conversación de esta guía? No borra la guía.')) return;
     salma.history = [];
     const answer = document.getElementById('itin-query-answer');
-    if (answer) answer.innerHTML = '<div class="itin-chat-hint">Pregúntame lo que quieras sobre esta ruta, o pídeme un cambio.</div>';
+    if (answer) answer.innerHTML = '';
     try {
       if (salma.currentRouteId && window.currentUser && typeof db !== 'undefined') {
         await db.collection('users').doc(window.currentUser.uid).collection('maps').doc(salma.currentRouteId)
