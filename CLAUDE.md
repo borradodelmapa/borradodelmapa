@@ -480,25 +480,41 @@ necesita mandar, no recibir.
    no avisa — no es un fallo bloqueante.
    `?v=` de `debug-panel.js` subido a 5 en `index.html`.
 
-**Pendiente, antes de que esto funcione de punta a punta — nada de esto se ha hecho
-desde esta sesión (sin credenciales de Cloudflare/Firebase en este contenedor):**
-1. **Desplegar el Worker** (GitHub Action "Deploy Worker" o `wrangler deploy -c
-   wrangler.toml` desde `worker/`) — sin esto, `POST /beta-feedback` da 404.
-2. **Desplegar las reglas de Firestore** (`firebase deploy --only firestore:rules`) —
-   sin esto, la escritura a `beta_feedback` la rechaza Firestore con permiso denegado,
-   aunque el Worker sí exista.
-3. **2 secrets nuevos en Cloudflare** para que llegue el aviso de WhatsApp (sin ellos, el
-   feedback se guarda pero no avisa — el propio código lo comprueba y no revienta):
-   - `TWILIO_WHATSAPP_FROM` — el mismo que lleva pendiente desde F5.1 (14 sept), número
-     de sandbox de Twilio tipo `whatsapp:+14155238886`.
-   - `PACO_WHATSAPP_TO` (nuevo) — el número de Paco con el mismo formato,
-     `whatsapp:+34...`. Tiene que haberse unido antes al sandbox de Twilio (mandar
-     `join <código>` desde su WhatsApp) si el proyecto sigue en modo sandbox.
-   Con `npx wrangler secret put NOMBRE -c wrangler.toml` desde `worker/`.
-4. **Probar en pantalla**: loguearse, abrir 🐛, tocar "📝 Feedback", mandar una nota de
-   prueba, y confirmar (a) que aparece en Firestore `beta_feedback` y (b) que llega el
-   WhatsApp — con los 2 secrets puestos.
-   **Nunca decir "arreglado" de esto hasta que ese WhatsApp llegue de verdad.**
+**CERRADO — 19-21 sept 2026, CONFIRMADO EN PANTALLA por Paco de punta a punta.**
+Los 4 pasos que quedaban pendientes se hicieron en sesión de Code con acceso a
+terminal/Firebase de Paco (esta sesión de redacción no tenía esas credenciales):
+1. Worker desplegado (`wrangler deploy -c wrangler.toml`).
+2. **Reglas de Firestore desplegadas** (`firebase deploy --only firestore:rules
+   --project borradodelmapa-85257`) — **esta era la causa real de que no llegara nada**,
+   ver más abajo.
+3. Los 4 secrets de Twilio puestos y confirmados: `TWILIO_ACCOUNT_SID`,
+   `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM` (`whatsapp:+14155238886`, sandbox),
+   `PACO_WHATSAPP_TO` (`whatsapp:+34678668480`).
+4. **Probado en pantalla**: nota de prueba desde "Tester Member 💬" → aparece en
+   Firestore `beta_feedback` y llega el WhatsApp con el aviso "🧪 Feedback tester...".
+
+**Historial de la depuración (21 sept), por si se repite algo parecido en otro
+endpoint que también use `sendWhatsAppMessage()`:**
+- El eco de F5.1 (`/whatsapp`) fallaba primero por **firma de Twilio inválida**
+  (`WhatsApp: firma de Twilio inválida, petición rechazada` en `wrangler tail`) — causa:
+  el Auth Token copiado a Cloudflare era el de la cuenta/proyecto de Twilio equivocado
+  (la consola de Twilio tenía dos proyectos distintos — "Mi nuevo proyecto de chatbot
+  SMS", donde está el Sandbox, y "Cuenta de paco.defoto@gmail.com" — y además Twilio
+  reubicó la página del Auth Token de "General settings" a "API keys & tokens" sin
+  avisar, con un token "en vivo" y otro "de prueba" con SIDs distintos). Resuelto
+  recopiando el Auth Token de **Credenciales en vivo** del proyecto correcto.
+- Con el eco ya funcionando, `/beta-feedback` seguía sin avisar — Firestore devolvía
+  `403 PERMISSION_DENIED` en cuanto se le puso logging de diagnóstico (`console.error`
+  temporal, quitado después de confirmar). La regla de `beta_feedback` estaba escrita
+  en `firestore.rules` desde el 19 sept pero **nunca se había desplegado a Firebase** —
+  exactamente el pendiente #2 de más arriba, que se había quedado sin hacer. El
+  `firebase deploy` necesitó `firebase use --add` (o `--project borradodelmapa-85257`
+  directo, más fiable si el selector interactivo de PowerShell no responde a las
+  flechas) porque el proyecto Firebase de este repo no tiene `.firebaserc` en el árbol.
+- **Lección para la próxima vez que algo similar "no llega" sin error visible**: revisar
+  primero la causa más aburrida (reglas de Firestore sin desplegar) antes de sospechar
+  del código — costó bastante más tiempo perseguir la firma de Twilio y la config del
+  Worker que este último paso, que era el que realmente faltaba.
 
 **No implementado a propósito, para no ampliar el encargo sin que Paco lo pida:**
 una vista en `admin.html` para leer el feedback sin entrar a la consola de Firebase.
