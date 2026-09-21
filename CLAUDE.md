@@ -2037,6 +2037,15 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   hacía falta y habría borrado la medición). **MEDICIÓN REAL (KV `usage:{uid}:2026-09` de Paco, 21 sept 16:32 UTC):** 4 msgs, 0 guías, 9 cambios,
   **451.709 tokens de ENTRADA y 8.504 de salida = 1,48 USD estimados** → ~13 peticiones ≈ 0,11 USD cada una y **~90% es entrada** (~35.000 tokens de entrada por
   petición: prompt de sistema con BLOQUE_RUTAS + datos + cada iteración del bucle de tools). El siguiente ahorro real es prompt caching / reducir el prompt.
+  **PROMPT CACHING, 21 sept (OK de Paco, "primero caching y el prompt lo miramos con sumo cuidado después") — DESPLEGADO, sin comprobar aún que acierta:**
+  commit `489079fc`, **Worker Version ID `100cf14d-6b1c-4fed-847e-b564ed0e78a3`** (comprobado contra `/version`, 18 secretos). SOLO la llamada principal
+  a Claude (bucle de herramientas de `POST /`): `buildMessages` devuelve `systemBase` (la constante del modo, ~8-10k tokens + las herramientas ~3k, que van
+  antes en el prefijo) y `buildCachedSystem` lo marca `cache_control: ephemeral` (5 min) y deja detrás, sin cachear, el contexto variable (fecha, usuario,
+  ubicación, notas, KV…). NO toca `convertProseToRouteJson` (guía con mapa), ni narrar/pin/historia/enrich. Si la base no es prefijo del prompt o es
+  corta, la llamada sale como antes. `readAnthropicStream` devuelve `cw`/`cr` (guardados/leídos); `usageRecord` guarda `tcw`/`tcr` y el coste
+  estimado usa 3,75 $/Mtok escritura y 0,30 $/Mtok lectura (`tin` sigue siendo la entrada total). Log `[CACHE] vuelta N: entrada X (guardados Y, leídos de caché Z)`.
+  Esperado: en un bucle de ≥2 vueltas, la vuelta 1 guarda (~12k) y las siguientes leen; dos peticiones seguidas <5 min → la 2ª lee desde la vuelta 1. Una petición
+  aislada de 1 sola vuelta cuesta ~25% MÁS en la parte fija (~0,01 €). PENDIENTE (con cuidado, aparte): recortar el prompt de sistema (duplicados/contradicciones).
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
