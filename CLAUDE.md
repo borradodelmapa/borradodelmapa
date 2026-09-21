@@ -2072,6 +2072,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   más el Worker (paso 2 "una sola zona" y paso 3 quedan sin hacer a propósito) y se aclara con TEXTO: al abrir el popup ahora sale "Estás editando tu guía «título». Desde aquí puedes añadir o quitar paradas… Para buscar algo cerca de ti,
   usa Cerca mía o el chat general" (`mapa-itinerario.js?v=74`, commit de esta línea, solo frontend, coste cero). Sigue abierto y conocido: "peluquería cerca" SIN "de mí" escapa de `isNearbySearch`
   (y "peluquería" no es categoría de `isHelpRequest`), así que el popup aún puede ofrecer "Añadir a la guía" ahí.
+  **AJUSTE 21 sept (Paco: el aviso de v74 no se veía):** solo salía con el popup VACÍO — con historial de esa guía (`query_history`, hasta 20 mensajes, se manda a Claude como contexto) se sustituía por los mensajes.
+  Ahora es un aviso FIJO (`#itin-query-sub`, bajo el título) con "Editando «título»" + una línea + enlace "Borrar conversación" (`_clearItinQueryHistory`: vacía pantalla, `salma.history` y
+  `query_history` con `FieldValue.delete()`; no toca la guía; bloqueado mientras Salma responde). `mapa-itinerario.js?v=75`, `styles.css?v=121`, `index.html` (contenedor). Solo frontend, coste cero. Pendiente de probar en móvil.
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
