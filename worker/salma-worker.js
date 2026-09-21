@@ -1344,6 +1344,11 @@ function isDaysDestination(message) {
   // Con días explícitos (números o palabras: un/dos/tres...)
   if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
   if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
+  // Una búsqueda de ayuda o de cercanía ("farmacia cerca mía") NO es un destino: sin esto caía aquí (3 palabras,
+  // sin verbo) y se trataba como plan de 1 día con el botón "Crear ruta con mapa" (21 sept 2026).
+  // (La categoría "transport" se deja fuera a propósito: su regex coge "puerto de…", "tren"… que pueden ser un destino.)
+  const _helpCat = isHelpRequest(message);
+  if (isNearbySearch(message) || (_helpCat && _helpCat !== 'transport')) return false;
   // Solo destino (1-4 palabras, sin pregunta, sin verbo de acción) → tratar como plan 1 día
   const clean = message.trim().replace(/^(me apetece|vamos a)\s+/i, '').trim();
   if (clean.length >= 3 && clean.length <= 40 && clean.split(/\s+/).length <= 4
@@ -1542,7 +1547,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
 // (Claude + buscar_lugar con la ubicación del usuario). Caso real 21 sept 2026.
 function isNearbySearch(message) {
   // Sin \b: en JS no detecta el límite detrás de letras con tilde ("mí", "aquí"). Se usa lookbehind/lookahead.
-  return /(?<![\wáéíóúñ])(?:m[aá]s\s+cerca\w*|cerca\w*\s+(?:de\s+)?(?:m[ií]|aqu[ií]|donde\s+estoy)|por\s+aqu[ií]|aqu[ií]\s+cerca|near\s*(?:me|by)|nearest|closest)(?![\wáéíóúñ])/i.test(message || '');
+  return /(?<![\wáéíóúñ])(?:m[aá]s\s+cerca\w*|cerca\w*\s+(?:de\s+)?(?:m[ií][ao]?|aqu[ií]|donde\s+estoy)|por\s+aqu[ií]|aqu[ií]\s+cerca|near\s*(?:me|by)|nearest|closest)(?![\wáéíóúñ])/i.test(message || '');
 }
 
 function isHelpRequest(message) {
@@ -3059,7 +3064,7 @@ ${guidedIsReco
 · "n" = el número "n" de la parada tal como aparece arriba. Para quitar o sustituir usa SOLO esos números, nunca nombres. Omite las claves que no uses.
 · Parada nueva = todos sus campos (name, headline, narrative, day_title, type, lat, lng, km_from_previous, estimated_hours, con_historia…). En "add", "day" = nº del día de la ruta actual al que mejor encaja (o el siguiente al último si pide un día nuevo); en "replace" ocupa el sitio y el día de la que sale. Solo sitios REALES que existan en Google Maps.
 · Si pide UNA parada, añade UNA (la mejor) y di cuál es. NUNCA repitas paradas que no cambian: el sistema las conserva tal cual.
-· Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (las paradas que no cambian, literales).${editingActiveRoute
+· Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (las paradas que no cambian, literales).${(editingActiveRoute && !isHelpRequest(message) && !isNearbySearch(message))
   ? `
 · Si el usuario solo PREGUNTA o pide ideas (no pide cambiar la ruta) y tu respuesta propone algo CONCRETO que tendría sentido añadir (una parada, un sitio), o su petición es tan vaga que prefieres que elija entre 2-3 opciones, NO emitas JSON: termina la respuesta con SALMA_OFFER_ADD_TO_ROUTE en su propia línea. Si es solo información, no lo escribas.`
   : ''}
@@ -10244,7 +10249,7 @@ INSTRUCCIONES:
         // no hay ningún regex fiable para saber si la respuesta propone algo añadible
         // a la ruta activa — decide Salma y lo marca, invisible para el usuario.
         let offerAddMarker = false;
-        if (editingActiveRoute && !guidedIsReco) {
+        if (editingActiveRoute && !guidedIsReco && !isHelpRequest(message) && !isNearbySearch(message)) {
           if (/\n?SALMA_OFFER_ADD_TO_ROUTE\s*$/i.test(allText)) {
             offerAddMarker = true;
             allText = allText.replace(/\n?SALMA_OFFER_ADD_TO_ROUTE\s*$/i, '').trim();
