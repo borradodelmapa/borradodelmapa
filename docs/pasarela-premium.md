@@ -206,7 +206,7 @@ npx wrangler secret put STRIPE_WEBHOOK_SECRET -c wrangler.toml  # whsec_... del 
 npx wrangler secret put FIREBASE_SERVICE_ACCOUNT -c wrangler.toml  # JSON service account, una línea
 ```
 
-- El webhook en Stripe apunta a `https://salma-api.paco-defoto.workers.dev/stripe-webhook`, evento **`checkout.session.completed`**.
+- El webhook en Stripe apunta a `https://salma-api.borradodelmapa-api.workers.dev/stripe-webhook` (dominio actual desde el 16 sept 2026; el `paco-defoto.workers.dev` que figuraba aquí ya no enruta), evento **`checkout.session.completed`**, **estilo de carga "Resumen"** (el Worker lee `event.data.object`; la carga "Breve"/thin no lleva esos datos).
 - Modo **test** hasta que se decida pasar a live (fuera del alcance de este trabajo). El badge "MODO PRUEBA" se mantiene mientras la key sea `sk_test_`.
 
 ---

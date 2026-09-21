@@ -914,6 +914,48 @@ Hungría.**
 
 ---
 
+## Sesión 21 sept 2026 — Modelo de negocio: Premium puro, coins fuera, agujero cerrado
+
+Sesión dedicada solo a coins/pagos (la de WhatsApp sigue aparte, en pausa hasta el alta de
+autónomo y la verificación de Meta). Todo lo de "coste" de abajo son **ESTIMACIONES mías a
+partir del código, no medidas**: el Worker no lee el uso de tokens de Claude ni registra
+coste por usuario, así que hoy no hay dato real. Sustituir por lo medido en cuanto exista.
+
+### Decisiones de Paco
+- **Premium puro por periodos; se eliminan los coins.** Solo hay un usuario real (Paco) → sin migración de coins.
+- **Plan gratuito: 1 guía + 1 alerta de vuelo + 2 ediciones** (antes 3 rutas y 3 alertas).
+- **Precios: SIN cerrar.** Paco quiere que sea rentable o no le interesa. Ver análisis abajo.
+- **Foco a explorar:** road trips + guía suelta + el "viajero constante" (perfil de Paco), sin olvidar a los ocasionales.
+- **Audiencia de Borrado del Mapa: casi nula** (solo un perfil personal, nada publicado de la marca).
+- **Alta de autónomo: NO todavía.** Primero validar con testers; en modo prueba de Stripe no hace falta.
+
+### Lo que se encontró (verificado en código)
+- Contradicción de la doc resuelta: el Worker **lee** coins/rutas gratis de Firestore, pero **no hace cumplir nada**; el descuento lo hacía el cliente después de guardar. No había ningún gate real (ni chat 20/día, ni guías).
+- **Agujero de seguridad:** `firestore.rules` dejaba al dueño escribir cualquier campo de su documento → cualquiera podía darse `premium_until`/`coins_saldo` o resetear sus guías gratis desde la consola.
+- El prompt de Salma sigue mencionando coins ([salma-worker.js:2724](worker/salma-worker.js:2724)); `flight-watches` del Worker descuenta coins con el token del usuario (a quitar en el paso 2).
+
+### Análisis de rentabilidad (estimado — recalcular con datos reales)
+- Coste unitario supuesto: guía ~1,0 € (Claude ~0,4 + Google ~0,6, sube ~0,33 €/día), edición ~0,35 €, mensaje de chat ~0,045 € **sin prompt caching** (~0,015 con él; hoy hay 0 usos de `cache_control`).
+- Precios propuestos y NO decididos: Viaje 14,99 / Trimestral 29,99 / Anual 79,99 € (IVA incluido). **El anual queda 60-100% por encima del mercado** (Wanderlog Pro ~40-50 $/año, Layla ~49 $, TripIt Pro 49 $, Roadtrippers ~50 $, REVER ~40 $, calimoto 40-80 $ o ~13 $/semana, Kurviger 15-30 €, park4night ~12 $).
+- Del precio, con IVA 21% + Stripe, llega ~53% en uso típico; ~10% si el usuario usa todo lo incluido.
+- **El plan gratuito puede comerse el beneficio** (cada gratuito ~0,6-1,5 €): con guía gratis completa hacen falta ≥~14% de conversión; con guía de 1 día ~7%.
+- Con suscripciones puras y poco volumen **no sale a cuenta**: con cuota de autónomo (80 €/mes 1er año con tarifa plana; ~206 €/mes después) + IRPF, cubrir costes exige ~1.000-2.500 registrados/año al 10% de conversión; 1.000 €/mes limpios ≈ 16.000 registrados al 10% (o ~250-320 suscriptores fieles del plan Pro).
+- Ideas a validar, no implementadas: **guía suelta por longitud** (1-3 días 6,99 / 4-7 días 11,99 / 8-14 días 19,99 €); **plan "Viajero Pro"** (~14,99 €/mes o 129,99 €/año, 2 guías/mes, ~300 mensajes; requiere Stripe Billing con renovación automática, hoy el cobro es pago único); pack de guías extra. **Afiliación descartada como pilar** (Paco: difícil de conseguir y que el cliente termine reservando).
+- **Requisito para cualquier plan con chat:** prompt caching (cambio de llamada de pago → necesita OK explícito, §8).
+
+### Plan de 4 pasos (uno por uno, con prueba de Paco entre cada uno)
+1. **Cerrar el agujero — HECHO 21 sept 2026, CONFIRMADO EN PANTALLA.** `firestore.rules`: `premium_until`, `isPremium`, `coins_saldo`, `rutas_gratis_usadas` ya no se pueden escribir desde el cliente (create sin esos campos; update comparando `diff().affectedKeys()`); solo los escribe el Worker con su cuenta de servicio. `app.js?v=137`: el alta ya no escribe esos campos y se quitó el contador cliente de guías gratis/coins (commit `755099a9`, tag de salvaguarda `v-pre-cierre-reglas`; marcha atrás = `git revert` + `firebase deploy --only firestore:rules --project borradodelmapa-85257`). Reglas publicadas con `firebase deploy` desde el portátil de Paco. Pruebas: `update({coins_saldo:999})` → `permission-denied` ✓; `update({mapsCount:0})` → OK ✓; compra de prueba en Stripe acredita `premium_until` ✓ (+1 mes exacto tras el fix del webhook, ver abajo). **Efecto conocido:** hasta el paso 3 no se cuentan guías gratis; `flight-watches` del Worker intentará descontar 1 coin con el token del usuario y fallará en silencio (irrelevante sin coins).
+2. **Quitar los coins** (perfil "COINS"/"Salma Coins", toasts, bloque del prompt, cobro en `flight-watches`, campos en el alta) y mostrar el plan real: "Gratis · te queda 1 guía" / "Premium hasta …". Chequear contradicciones entre bloques del prompt (§6).
+3. **Gates + contadores server-side** (guía gratis contada ANTES de generar, ediciones, alertas, chat) con KV y fail-open; registrar tokens/llamadas por usuario para conocer el **coste real** (aviso §8: sin llamadas de pago nuevas). El propio uso de Paco calibra el plan Pro.
+4. **Planes/precios de prueba** cuando haya datos (tabla `PREMIUM_PLANS` en el Worker + `PREMIUM_PLANS_FRONT` en `app.js`); después prompt caching (OK aparte).
+Antes de invitar testers: contarles cómo pagar en modo prueba (tarjeta `4242 4242 4242 4242`, cualquier fecha futura, cualquier CVC) y pasarles una pregunta de disposición a pagar — en modo prueba nadie paga de verdad, así que Stripe valida el flujo, no el precio.
+
+### Incidente resuelto: el webhook de Stripe no llegaba (descubierto probando el paso 1)
+Tras el cambio de dominio del 16 sept (`paco-defoto` → `borradodelmapa-api`), **los dos destinos de webhook del entorno de pruebas de Stripe seguían apuntando al dominio muerto**: Stripe cobraba y el Worker nunca se enteraba (0 llamadas a `/stripe-webhook` en `wrangler tail`). Solo la compra del 14 sept (anterior al cambio) se acreditó. Arreglo: editar en Stripe el destino **`STRIPE_WEBHOOK_SECRET`** (carga **"Resumen"**, la que necesita el Worker) a `https://salma-api.borradodelmapa-api.workers.dev/stripe-webhook` — la clave de firma no cambió. El otro destino, `upbeat-finesse-thin` (carga "Breve"), **no sirve** al Worker (no trae `data.object`) y sigue apuntando al dominio viejo; se puede borrar. Al editarlo, Stripe reenvió avisos atrasados (5 llamadas de golpe); una compra limpia posterior sumó +1 mes exacto. **Las compras atrasadas no se acreditaron todas** (salió +12 meses por el anual, no el total esperado) — sin explicar, irrelevante en modo prueba.
+**Lecciones:** (a) el panel de Stripe está en **producción por defecto**; el entorno de pruebas se ve por la franja azul "Entorno de prueba" arriba y se abre con `https://dashboard.stripe.com/test/webhooks`; (b) cualquier cambio de dominio del Worker obliga a revisar la URL del webhook en Stripe (y en Twilio para WhatsApp); (c) `wrangler tail` mientras el usuario prueba fue lo que localizó la causa en minutos.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
@@ -1066,7 +1108,7 @@ debug-panel.js (puro, intercepta console.*/window errors, sin deps de otros mód
 
 | Colección | Acceso | Contenido |
 |-----------|--------|-----------|
-| `users/{uid}` | Owner only | Perfil: name, email, isPremium, coins_saldo, rutas_gratis_usadas, avatarURL, sos_config, copilot_data |
+| `users/{uid}` | Owner read/write, **salvo** `premium_until`, `isPremium`, `coins_saldo`, `rutas_gratis_usadas` (solo el Worker, desde 21 sept 2026) | Perfil: name, email, isPremium, coins_saldo, rutas_gratis_usadas, avatarURL, sos_config, copilot_data |
 | `users/{uid}/maps/{mapId}` | Owner only | Guías guardadas (itinerarioIA, slug, published, enriched, photos, notes) |
 | `users/{uid}/fotos/{fotoId}` | Owner only | Galería de fotos (url, r2Key, albumId) |
 | `users/{uid}/albumes/{albumId}` | Owner only | Álbumes de fotos |
@@ -3114,6 +3156,8 @@ antiguo — tratarlo como tal.)*
   el Premium por periodos de `docs/pasarela-premium.md` conviven ahora mismo en el código
   — el Worker ya habla de planes/meses, el frontend todavía de coins. Hay que decidir y
   terminar la migración (Fases 2-4 del documento) o revertir el Worker, no dejarlo a medias.
+  **21 sept 2026: DECIDIDO — Premium puro, se eliminan los coins.** Plan de 4 pasos y estado
+  en la sección "Sesión 21 sept 2026 — Modelo de negocio". Paso 1 hecho; pasos 2-4 pendientes.
 - WebAuthn/fingerprint sigue parcial (solo recuerda email).
 - **[Prioridad baja] Resumen/narrativa post-viaje** — auditado 11 sept: no existe ningún
   sistema de "estados" de Salma (Exploradora/Buscadora/Acompañante/Crisis/Historiadora),
