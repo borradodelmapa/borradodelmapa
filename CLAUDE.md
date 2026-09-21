@@ -2016,7 +2016,7 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   tope bajo. Pendiente (paso 2 acordado con Paco): recortar la ficha de paradas que se manda en cada edición
   (hoy con `narrative` completo) — reduce ENTRADA. Después, prompt caching (necesita OK aparte).
   **Paso 2 + popup, DESPLEGADOS 21 sept, sin probar en pantalla** — commit `d76365dd`, **Worker Version ID
-  `9f64aa81-1487-4c48-8628-4a40a74b2c88`**, `mapa-itinerario.js?v=73`. (i) ENTRADA: con una guía abierta el prompt lleva una
+  `9f64aa81-1487-4c48-8628-4a40a74b2c88`**, `mapa-itinerario.js?v=73`. (i) [REVERTIDO — ver abajo] ENTRADA: con una guía abierta el prompt lleva una
   ficha RESUMIDA por parada (n, name, day, day_title, type, lat, lng, 140 caracteres de narrative) en vez de la ficha
   completa (~300 → ~90 tokens/parada, en CADA mensaje); si la IA reescribe la ruta entera, `restoreStopsFromCurrent`
   restaura por nombre los datos originales (descripción completa, place_id, foto…) y solo respeta día/orden (y la
@@ -2026,6 +2026,10 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   cierre pendiente) → la respuesta se procesa como edición de ESA guía, no cae en el chat normal. (iii) `salma.js?v=104`,
   `app.js?v=142`: mientras Salma responde no se puede enviar y NO se vacía la caja (`salma.isBusyNotify()`; chat, bienvenida,
   dictado y popup). Pendiente de probar en pantalla junto con lo de arriba.
+  **REVERTIDO (i) a petición de Paco, 21 sept:** ahorraba ~0,01 €/mensaje y recortaba lo que Salma sabe de las paradas (qué comer, km,
+  carretera…) → no compensa. Vuelve la ficha completa por parada (con el nº `n`); commit `7768e39b`, **Worker Version ID
+  `d571bd05-cd7d-48d3-87f2-e0834adb529a`** (comprobado contra `/version`, 18 secretos). `restoreStopsFromCurrent` se queda como
+  protección inocua. (ii) y (iii) siguen. Siguiente ahorro real, pendiente de OK de Paco: prompt caching (§8).
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
