@@ -3019,16 +3019,16 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // que no cambian, en vez de reconstruirlas de memoria a partir de una lista de nombres.
     // Reconstruir de memoria es lo que hizo que una ruta de 10 paradas reales acabase con
     // paradas de otra zona al pedir solo añadir 1 — la ruta original se perdió al guardar.
-    // Ficha RESUMIDA (n, nombre, día, tipo, coords y 140 caracteres de la descripción): con la edición por
-    // operaciones la IA ya no copia las paradas existentes, así que no hace falta mandarlas enteras (antes
-    // ~300 tokens por parada en CADA mensaje con una guía abierta). Si aun así reescribe la ruta completa,
-    // el Worker restaura los datos originales por nombre (restoreStopsFromCurrent).
-    const _cut = (t, n) => { const x = (t || '').toString().replace(/\s+/g, ' ').trim(); return x.length > n ? x.slice(0, n) + '…' : x; };
+    // Ficha COMPLETA de cada parada, con su número "n" (para quitar/sustituir por número en SALMA_ROUTE_EDIT).
+    // Se probó mandar solo un resumen (140 caracteres) y se REVIRTIÓ el 21 sept: ahorraba ~0,01 € por mensaje y
+    // Salma perdía detalle al responder preguntas sobre la guía (qué comer, km, carretera…) — no compensa.
     const stopsCompact = currentRoute.stops.map((s, i) => ({
-      n: i + 1, name: s.name, day: s.day, day_title: s.day_title, type: s.type,
-      lat: s.lat, lng: s.lng, resumen: _cut(s.narrative, 140)
+      n: i + 1, name: s.name, headline: s.headline, narrative: s.narrative, day_title: s.day_title,
+      type: s.type, day: s.day, lat: s.lat, lng: s.lng,
+      km_from_previous: s.km_from_previous, road_name: s.road_name,
+      road_difficulty: s.road_difficulty, estimated_hours: s.estimated_hours
     }));
-    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. RESUMEN de cada parada (JSON; el sistema conserva sus datos completos): ${JSON.stringify(stopsCompact)}
+    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. DATOS EXACTOS de cada parada (JSON): ${JSON.stringify(stopsCompact)}
 ${guidedIsReco
   ? `(Solo como contexto para que tus recomendaciones encajen con lo que ya hay: en este modo NO emitas ningún JSON.)]`
   : `CAMBIOS EN ESTA RUTA — NO la reescribas. Si el usuario quiere cambiarla (añadir un sitio o un día, quitar, sustituir una parada por otra; con cualquier frase, no solo con verbos como "añade"), responde con 1-2 frases de qué haces y por qué y, en una línea aparte, SALMA_ROUTE_EDIT seguido de UN JSON en una sola línea:
@@ -3036,7 +3036,7 @@ ${guidedIsReco
 · "n" = el número "n" de la parada tal como aparece arriba. Para quitar o sustituir usa SOLO esos números, nunca nombres. Omite las claves que no uses.
 · Parada nueva = todos sus campos (name, headline, narrative, day_title, type, lat, lng, km_from_previous, estimated_hours, con_historia…). En "add", "day" = nº del día de la ruta actual al que mejor encaja (o el siguiente al último si pide un día nuevo); en "replace" ocupa el sitio y el día de la que sale. Solo sitios REALES que existan en Google Maps.
 · Si pide UNA parada, añade UNA (la mejor) y di cuál es. NUNCA repitas paradas que no cambian: el sistema las conserva tal cual.
-· Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (las paradas que no cambian con su mismo name y coordenadas; el sistema restaura el resto de sus datos).${editingActiveRoute
+· Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (las paradas que no cambian, literales).${editingActiveRoute
   ? `
 · Si el usuario solo PREGUNTA o pide ideas (no pide cambiar la ruta) y tu respuesta propone algo CONCRETO que tendría sentido añadir (una parada, un sitio), o su petición es tan vaga que prefieres que elija entre 2-3 opciones, NO emitas JSON: termina la respuesta con SALMA_OFFER_ADD_TO_ROUTE en su propia línea. Si es solo información, no lo escribas.`
   : ''}
