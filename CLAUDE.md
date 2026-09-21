@@ -610,9 +610,7 @@ pantalla. Commit `b241860`, solo frontend (`debug-panel.js?v=13`, `app.js?v=136`
    el chip "Últimas consultas" de la pantalla vacía del chat (`app.js`, `action:
    'consultas'` → `showState('consultas')`, sesión 19 sept "Simplificación de chips").
 **Sin coste** — cambio puramente de UI, no toca ninguna API de pago.
-**Pendiente: que Paco recargue y confirme en pantalla** que la pestaña "Ayuda" late
-visiblemente en el menú de abajo, que abre el mismo panel de feedback de siempre, y
-que "Consultas" ya no está ahí (pero sigue llegando desde el chip del chat vacío).
+**CONFIRMADO EN PANTALLA por Paco** ("Ok correcto") — sin nada pendiente de esto.
 
 ---
 
