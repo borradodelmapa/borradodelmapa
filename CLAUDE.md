@@ -2015,6 +2015,17 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   y 24.000 si lo era (`reqMaxTokens`), no siempre "20.000"; la guía de 12 paradas cortada a mitad cuadra con el
   tope bajo. Pendiente (paso 2 acordado con Paco): recortar la ficha de paradas que se manda en cada edición
   (hoy con `narrative` completo) — reduce ENTRADA. Después, prompt caching (necesita OK aparte).
+  **Paso 2 + popup, DESPLEGADOS 21 sept, sin probar en pantalla** — commit `d76365dd`, **Worker Version ID
+  `9f64aa81-1487-4c48-8628-4a40a74b2c88`**, `mapa-itinerario.js?v=73`. (i) ENTRADA: con una guía abierta el prompt lleva una
+  ficha RESUMIDA por parada (n, name, day, day_title, type, lat, lng, 140 caracteres de narrative) en vez de la ficha
+  completa (~300 → ~90 tokens/parada, en CADA mensaje); si la IA reescribe la ruta entera, `restoreStopsFromCurrent`
+  restaura por nombre los datos originales (descripción completa, place_id, foto…) y solo respeta día/orden (y la
+  descripción si la cambió a propósito). Log `[EDIT-RESTORE]`. Coste (§8): BAJA (~4.000 tokens de entrada por mensaje con
+  una guía de ~19 paradas ≈ 0,01 € con Sonnet a 3 $/Mtok). (ii) POPUP: cerrar el popup con una respuesta en curso ya no
+  suelta el modo popup hasta que termine (`_closeItinQuery` → `_finalizeItinQueryClose`, tope 2 min; reabrir cancela el
+  cierre pendiente) → la respuesta se procesa como edición de ESA guía, no cae en el chat normal. (iii) `salma.js?v=104`,
+  `app.js?v=142`: mientras Salma responde no se puede enviar y NO se vacía la caja (`salma.isBusyNotify()`; chat, bienvenida,
+  dictado y popup). Pendiente de probar en pantalla junto con lo de arriba.
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
