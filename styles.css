@@ -4823,7 +4823,7 @@ body {
 .itin-chat-fab {
   position: fixed;
   right: 16px;
-  bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   z-index: 1000;
   width: 52px; height: 52px; border-radius: 50%;
   background: var(--dorado); border: none;
