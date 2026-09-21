@@ -1536,6 +1536,15 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   return enriched;
 }
 
+// "la peluquería más cercana, ¿dónde está?" es una BÚSQUEDA de lo que hay cerca del usuario, no la petición
+// del enlace de Maps de un sitio con nombre. Los atajos de "enlace / dónde está / cómo llegar" (que buscan el
+// texto del mensaje como si fuera el nombre de un lugar) no deben cogerla: se resuelve por el camino normal
+// (Claude + buscar_lugar con la ubicación del usuario). Caso real 21 sept 2026.
+function isNearbySearch(message) {
+  // Sin \b: en JS no detecta el límite detrás de letras con tilde ("mí", "aquí"). Se usa lookbehind/lookahead.
+  return /(?<![\wáéíóúñ])(?:m[aá]s\s+cerca\w*|cerca\w*\s+(?:de\s+)?(?:m[ií]|aqu[ií]|donde\s+estoy)|por\s+aqu[ií]|aqu[ií]\s+cerca|near\s*(?:me|by)|nearest|closest)(?![\wáéíóúñ])/i.test(message || '');
+}
+
 function isHelpRequest(message) {
   if (!message) return null;
   const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -9130,6 +9139,7 @@ REGLAS:
     // Resultado: link validado con place_id O frase fija. Siempre <1s, siempre seguro.
     if (!currentRoute && !imageBase64 && message && message.length <= 200 &&
         /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(message) &&
+        !isNearbySearch(message) &&
         env.GOOGLE_PLACES_KEY) {
       const _cleanMsg = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
       const candidateName = _cleanMsg
@@ -10574,7 +10584,7 @@ REGLAS:
           const _hasMapsLink = /google\.com\/maps\/(dir|place)/i.test(reply);
           if (!_hasMapsLink && message && message.length > 3 && message.length < 200) {
             const _msgClean = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
-            const _isExplicitLinkRequest = /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(_msgClean);
+            const _isExplicitLinkRequest = /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(_msgClean) && !isNearbySearch(_msgClean);
 
             let _candidateName = _msgClean
               .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
