@@ -2068,6 +2068,10 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   respuesta (el Worker elige GPS/guía y dice a Claude que no relance `buscar_lugar` por su cuenta — hoy la nota solo lo dice en el caso "lejos"); (3) el botón lo pone el sistema,
   el modelo no debe escribir "puedes añadirlo a la ruta" (texto sin botón, mismo fallo que el 18 sept). Riesgo restante: el regex `_isRouteMsg` del frontend (salma.js) también puede
   poner "Crear ruta con mapa" con palabras como "ruta"/"días"/"visitar".
+  **CONFIRMADO por Paco (21 sept):** capturas 1 y 3 OK tras el paso 1. **DECISIÓN de Paco sobre el popup:** dentro del popup la referencia es la GUÍA ("peluquería cerca" → cerca de la parada 1 es coherente); NO se toca
+  más el Worker (paso 2 "una sola zona" y paso 3 quedan sin hacer a propósito) y se aclara con TEXTO: al abrir el popup ahora sale "Estás editando tu guía «título». Desde aquí puedes añadir o quitar paradas… Para buscar algo cerca de ti,
+  usa Cerca mía o el chat general" (`mapa-itinerario.js?v=74`, commit de esta línea, solo frontend, coste cero). Sigue abierto y conocido: "peluquería cerca" SIN "de mí" escapa de `isNearbySearch`
+  (y "peluquería" no es categoría de `isHelpRequest`), así que el popup aún puede ofrecer "Añadir a la guía" ahí.
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
