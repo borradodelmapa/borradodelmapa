@@ -2030,6 +2030,13 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   carretera…) → no compensa. Vuelve la ficha completa por parada (con el nº `n`); commit `7768e39b`, **Worker Version ID
   `d571bd05-cd7d-48d3-87f2-e0834adb529a`** (comprobado contra `/version`, 18 secretos). `restoreStopsFromCurrent` se queda como
   protección inocua. (ii) y (iii) siguen. Siguiente ahorro real, pendiente de OK de Paco: prompt caching (§8).
+  **Límite del plan, 21 sept (a petición de Paco tras toparse con "límite de cambios (8)"):** commit `ed88eb9c`, **Worker Version ID
+  `083e5300-5876-4066-9701-15868a06583e`** (comprobado contra `/version`, 18 secretos), `salma.js?v=105`. (1) El aviso de límite (chat/guías/cambios)
+  lleva ahora el botón "Ver mi plan →" (abre `openCoinsModal`; `_offerSeePlans`, el done copia `limit_reached`). (2) `PLAN_LIMITS.premium.editsPerMonth` 8 → 40 (los 8 eran
+  de cuando editar costaba ~0,3 €; el modal lee los topes de `GET /usage`, no hay cifra hardcodeada). (3) NO se reseteó el contador de Paco (con el tope a 40 ya no
+  hacía falta y habría borrado la medición). **MEDICIÓN REAL (KV `usage:{uid}:2026-09` de Paco, 21 sept 16:32 UTC):** 4 msgs, 0 guías, 9 cambios,
+  **451.709 tokens de ENTRADA y 8.504 de salida = 1,48 USD estimados** → ~13 peticiones ≈ 0,11 USD cada una y **~90% es entrada** (~35.000 tokens de entrada por
+  petición: prompt de sistema con BLOQUE_RUTAS + datos + cada iteración del bucle de tools). El siguiente ahorro real es prompt caching / reducir el prompt.
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
