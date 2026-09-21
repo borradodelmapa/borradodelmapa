@@ -3351,9 +3351,31 @@ function showAuthError(id, msg) {
   if (el) { el.textContent = msg; el.classList.add('show'); }
 }
 
+// Una sola ventana de Google a la vez. Un segundo signInWithPopup con el primero abierto (doble toque, volver a
+// pulsar porque el popup tarda en el móvil, o el respaldo de la huella a la vez que el botón) hace que Firebase
+// cancele el primero con "auth/cancelled-popup-request" y salga un error rojo en inglés (21 sept 2026).
+let _googlePopupBusy = false;
+async function _signInWithGooglePopup() {
+  if (_googlePopupBusy) return null;   // ya hay una ventana abierta: ignorar este toque
+  _googlePopupBusy = true;
+  const btn = document.getElementById('btn-google-login');
+  if (btn) btn.disabled = true;
+  try {
+    return await auth.signInWithPopup(googleProvider);
+  } finally {
+    _googlePopupBusy = false;
+    if (btn) btn.disabled = false;
+  }
+}
+// Cancelaciones que no son un fallo: el usuario cerró la ventana o se abrió otra encima. Sin mensaje rojo.
+function _isBenignPopupCancel(e) {
+  return !!e && (e.code === 'auth/cancelled-popup-request' || e.code === 'auth/popup-closed-by-user');
+}
+
 async function doGoogleLogin() {
   try {
-    const result = await auth.signInWithPopup(googleProvider);
+    const result = await _signInWithGooglePopup();
+    if (!result) return;   // había otra ventana abierta: no hacer nada
     const user = result.user;
     const doc = await db.collection('users').doc(user.uid).get();
     if (!doc.exists) {
@@ -3372,6 +3394,7 @@ async function doGoogleLogin() {
       registerFingerprint(user.email);
     }
   } catch (e) {
+    if (_isBenignPopupCancel(e)) { console.log('Google login cancelado (' + e.code + ')'); return; }
     console.error('Google login error:', e);
     showAuthError('login-error', authErrorMsg(e));
   }
@@ -3408,9 +3431,10 @@ async function doFingerprintLogin() {
       }
       // Sin sesión Firebase → necesitamos Google popup como fallback
       try {
-        await auth.signInWithPopup(googleProvider);
-        closeModal();
+        const gRes = await _signInWithGooglePopup();
+        if (gRes) closeModal();   // null = ya había otra ventana de Google abierta: no abrir otra
       } catch (gErr) {
+        if (_isBenignPopupCancel(gErr)) { console.log('Google (respaldo huella) cancelado (' + gErr.code + ')'); return; }
         btn.classList.remove('success');
         btn.classList.add('error');
         showAuthError('login-error', 'Sesión expirada. Usa el botón de Google.');
