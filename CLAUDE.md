@@ -2053,6 +2053,12 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   mensaje no habla de la guía: "de/en mi ruta", "parada N"), se busca en SU posición (ciudad + coords) y Salma abre con "Cerca de X:" y ofrece buscar cerca de la guía; si está cerca, no
   hay GPS o habla de la guía, como antes (zona de la guía) y también dice "Cerca de <zona>:". Nota inyectada al final del system prompt (`helpLocationNote`, parte variable, sin cachear).
   Motivo: guía de País Vasco abierta con el usuario en Asturias → búsqueda a cientos de km sin explicación. Coste (§8): mismo nº de llamadas a Places/Claude; solo cambia la zona.
+  **Aclaración (21 sept, por la prueba de Paco):** en el chat normal (pestaña Salma) la guía NO está cargada (`salma.reset()` al entrar → `currentRoute` null), así que "parada 3" no existe
+  ahí y las búsquedas usan el GPS; la guía abierta solo cuenta en el popup de consulta / al abrir la vista de la guía. **ATAJO "DÓNDE ESTÁ" ARREGLADO — DESPLEGADO, sin probar** — commit `0a176ef6`,
+  **Worker Version ID `c09ab8af-be82-4b80-85d8-6ba830230749`**: "la peluquería más cercana, ¿dónde está?" caía en el atajo de enlace de Maps (buscaba el texto entero como nombre de lugar →
+  "No he encontrado ese sitio en Google Maps con seguridad"). Nuevo `isNearbySearch` (más cercan*, cerca de mí/aquí, por aquí, near me…, con lookbehind porque `` no funciona detrás de tildes)
+  saca esas frases de los DOS atajos (bypass previo a Claude y frase de "no encontrado" al final) → van por Claude + buscar_lugar con el GPS. Coste (§8): esas consultas dejaban de
+  costar 1 llamada a Places (sin Claude) y ahora usan la ruta normal (Claude ~0,04-0,10 € + Places): sube algo por consulta, pero antes daban una respuesta equivocada.
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
