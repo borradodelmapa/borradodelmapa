@@ -585,7 +585,7 @@ const PLAN_LIMITS = {
   premium: { guidesPerMonth: 4, editsPerMonth: 40, chatPerDay: 100 }, // PROVISIONAL
 };
 // Claude Sonnet 4.6, USD por millón de tokens — solo ESTIMACIÓN para medir coste, no es la factura.
-const CLAUDE_USD_PER_MTOK = { in: 3, out: 15 };
+const CLAUDE_USD_PER_MTOK = { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 };
 
 function usageMonthKey(uid) { return 'usage:' + uid + ':' + new Date().toISOString().slice(0, 7); }
 function usageTotalKey(uid) { return 'usage:' + uid + ':total'; }
@@ -654,7 +654,12 @@ async function usageRecord(env, authUser, delta) {
     month.edits  = (month.edits  || 0) + (delta.edits  || 0);
     month.tin    = (month.tin    || 0) + (delta.tin    || 0);
     month.tout   = (month.tout   || 0) + (delta.tout   || 0);
-    const addUsd = ((delta.tin || 0) * CLAUDE_USD_PER_MTOK.in + (delta.tout || 0) * CLAUDE_USD_PER_MTOK.out) / 1e6;
+    // tin = TODA la entrada (normal + guardada + leída de caché). tcw/tcr = parte guardada / leída de la caché de prompt.
+    month.tcw    = (month.tcw    || 0) + (delta.cw     || 0);
+    month.tcr    = (month.tcr    || 0) + (delta.cr     || 0);
+    const _plainIn = Math.max(0, (delta.tin || 0) - (delta.cw || 0) - (delta.cr || 0));
+    const addUsd = (_plainIn * CLAUDE_USD_PER_MTOK.in + (delta.cw || 0) * CLAUDE_USD_PER_MTOK.cacheWrite +
+                    (delta.cr || 0) * CLAUDE_USD_PER_MTOK.cacheRead + (delta.tout || 0) * CLAUDE_USD_PER_MTOK.out) / 1e6;
     month.claude_usd = Math.round(((month.claude_usd || 0) + addUsd) * 10000) / 10000;
     if (delta.msgs) {
       month.days = month.days || {};
@@ -2861,6 +2866,10 @@ function buildMessages(history, message, currentRoute, userName, userNationality
     systemPrompt = SALMA_SYSTEM_CHAT;  // conversación normal
   }
 
+  // Parte FIJA del system prompt (la constante del modo elegido): es lo que se cachea (ver buildCachedSystem).
+  // Todo lo que se le añada después (fecha, usuario, ubicación, notas…) es variable y va detrás, sin cachear.
+  const systemBase = systemPrompt;
+
   // Contexto mínimo del usuario + fecha actual
   const ctx = [];
   const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
@@ -3233,7 +3242,7 @@ Usa estos resultados para responder con datos actuales. Si mencionan requisitos 
     messages.push({ role: 'user', content: userContent });
   }
 
-  return { systemPrompt, messages };
+  return { systemPrompt, systemBase, messages };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -3524,6 +3533,19 @@ function salvageIncompleteRouteJson(text) {
     }
   } catch (_) {}
   return null;
+}
+
+// Prompt caching de Anthropic: el system prompt = instrucciones FIJAS (miles de tokens, idénticas en cada
+// petición del mismo modo) + contexto VARIABLE al final. Se marca solo la parte fija como cacheable
+// (la caché cubre también las herramientas, que van antes en el orden del prefijo): si se marcara todo, la fecha,
+// el usuario o las notas harían que nunca acertase y solo se pagaría el 25% extra de guardar. Si algo no
+// cuadra (base vacía o no es prefijo), devuelve el texto tal cual y la llamada sale como siempre.
+function buildCachedSystem(base, full) {
+  if (!base || typeof full !== 'string' || base.length < 4000 || !full.startsWith(base)) return full;
+  const blocks = [{ type: 'text', text: base, cache_control: { type: 'ephemeral' } }];
+  const tail = full.slice(base.length);
+  if (tail.trim()) blocks.push({ type: 'text', text: tail });
+  return blocks;
 }
 
 // ─── Conversión directa de prosa (ruta ya escrita) a JSON estructurado ───
@@ -6037,6 +6059,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
   let routeSignalSent = false;
   let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
   let usageIn = 0, usageOut = 0; // tokens de esta llamada (medición de coste, paso 3)
+  let cacheW = 0, cacheR = 0;    // de esos, guardados en / leídos de la caché de prompt
   const blocksInProgress = {};
 
   while (true) {
@@ -6084,7 +6107,11 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
         } else if (evt.type === 'message_start') {
           // Uso de entrada de esta llamada (para medir coste por usuario)
           const u = evt.message && evt.message.usage;
-          if (u) usageIn += (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0);
+          if (u) {
+            usageIn += (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0);
+            cacheW += u.cache_creation_input_tokens || 0;
+            cacheR += u.cache_read_input_tokens || 0;
+          }
         } else if (evt.type === 'message_delta') {
           if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
           if (evt.usage && typeof evt.usage.output_tokens === 'number') usageOut = evt.usage.output_tokens;
@@ -6104,7 +6131,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
     }
   }
 
-  return { fullText, contentBlocks, stopReason, routeSignalSent, usage: { in: usageIn, out: usageOut } };
+  return { fullText, contentBlocks, stopReason, routeSignalSent, usage: { in: usageIn, out: usageOut, cw: cacheW, cr: cacheR } };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -9052,7 +9079,7 @@ REGLAS:
       });
     }
     if (_usageKind === 'chat') ctx.waitUntil(usageRecord(env, authUser, { msgs: 1 }));
-    const _reqUsage = { tin: 0, tout: 0 };  // tokens de Claude de esta petición
+    const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0 };  // tokens de Claude de esta petición
     let _usageConsume = null;               // 'guide' | 'edit' cuando la petición entrega el resultado
     let _usageFlushed = false;
     // Apunta el uso de esta petición UNA sola vez (tokens + guía/edición consumida)
@@ -9060,7 +9087,7 @@ REGLAS:
       if (_usageFlushed) return;
       _usageFlushed = true;
       ctx.waitUntil(usageRecord(env, authUser, {
-        tin: _reqUsage.tin, tout: _reqUsage.tout,
+        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr,
         guides: _usageConsume === 'guide' ? 1 : 0,
         edits: _usageConsume === 'edit' ? 1 : 0,
       }));
@@ -9558,7 +9585,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute);
+    let { systemPrompt, systemBase, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -9928,7 +9955,7 @@ INSTRUCCIONES:
                 body: JSON.stringify({
                   model: 'claude-sonnet-4-6',
                   max_tokens: reqMaxTokens,
-                  system: systemPrompt,
+                  system: buildCachedSystem(systemBase, systemPrompt),
                   messages: currentMessages,
                   tools: ANTHROPIC_TOOLS,
                   stream: true,
@@ -9943,7 +9970,11 @@ INSTRUCCIONES:
               break;
             }
             result = await readAnthropicStream(apiRes, writer, encoder, decoder, true);
-            if (result && result.usage) { _reqUsage.tin += result.usage.in || 0; _reqUsage.tout += result.usage.out || 0; }
+            if (result && result.usage) {
+              _reqUsage.tin += result.usage.in || 0; _reqUsage.tout += result.usage.out || 0;
+              _reqUsage.cw += result.usage.cw || 0; _reqUsage.cr += result.usage.cr || 0;
+              console.log(`[CACHE] vuelta ${iteration}: entrada ${result.usage.in || 0} (guardados ${result.usage.cw || 0}, leídos de caché ${result.usage.cr || 0}) salida ${result.usage.out || 0}`);
+            }
           } else {
             // ── OpenAI gpt-4o-mini (fotos con visión) ──
             const openaiMsgs = [{ role: 'system', content: systemPrompt }];
