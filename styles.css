@@ -5765,6 +5765,12 @@ body {
 /* separadores huérfanos de filas ocultas (pendiente C) */
 #prof-galeria[hidden] + .prof-row-sep { display: none; }
 .prof-row-sep:has(+ #prof-help[hidden]) { display: none; }
+/* 21 sept 2026 — Mis Notas y Galería ocultos del perfil de momento (a petición de Paco). Hasta hoy
+   `.prof-row { display:flex }` ganaba al atributo `hidden`, así que la Galería "oculta" seguía
+   viéndose. Solo se arregla para estas dos filas; "¿Qué puedo hacer?" NO se toca (sigue visible).
+   Reactivar = quitar `hidden` en app.js (renderProfile). */
+#prof-notas[hidden], #prof-galeria[hidden] { display: none; }
+#prof-notas[hidden] + .prof-row-sep { display: none; }
 
 /* ── Row Icon ── */
 .prof-row-icon {

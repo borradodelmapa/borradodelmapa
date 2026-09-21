@@ -1543,13 +1543,20 @@ async function renderProfile() {
       <div class="prof-group">
         <div class="prof-group-title">TU VIAJE</div>
         <div class="prof-card">
+          <div class="prof-row" id="prof-plan">
+            <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
+            <span class="prof-row-label">Mi plan</span>
+            <span class="prof-coins-badge">${planBadge}</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
           <div class="prof-row prof-row-highlight" id="prof-perfil-ia">
             <span class="prof-row-icon prof-row-icon-accent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2a4.5 4.5 0 0 0-4.5 4.5v.34A3.5 3.5 0 0 0 3 10v1a3.5 3.5 0 0 0 1.35 2.76A4.5 4.5 0 0 0 9 18.5V21"/><path d="M14.5 2a4.5 4.5 0 0 1 4.5 4.5v.34A3.5 3.5 0 0 1 21 10v1a3.5 3.5 0 0 1-1.35 2.76A4.5 4.5 0 0 1 15 18.5V21"/><path d="M9 21h6"/></svg></span>
             <span class="prof-row-label">Lo que Salma sabe de ti</span>
             <span class="prof-row-badge">${(currentUser.perfil_ia?.facts || []).length} DATOS</span>
           </div>
           <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-notas">
+          <div class="prof-row" id="prof-notas" hidden>
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
             <span class="prof-row-label">Mis Notas</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -1603,12 +1610,6 @@ async function renderProfile() {
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-plan">
-            <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
-            <span class="prof-row-label">Mi plan</span>
-            <span class="prof-coins-badge">${planBadge}</span>
-            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
           <div class="prof-row-sep" data-sep-for="prof-help"></div>
           <!-- "¿Qué puedo hacer?" oculto de la UI (pendiente C, doc 8 sep). No se borra: reactivar quitando hidden. -->
           <div class="prof-row" id="prof-help" hidden>
