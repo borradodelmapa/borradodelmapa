@@ -3245,6 +3245,7 @@ antiguo — tratarlo como tal.)*
   `admin.html`). Con los 9 que hay ya funciona lo esencial (chat, generación de rutas,
   verificación Google, fotos, búsqueda web, vuelos, hoteles/coches, voz, clima, panel
   admin) — lo que falta es eventos, Stripe, SOS por SMS y GA4.
+  **ACTUALIZADO 21 sept 2026 (comprobado con `wrangler secret list`, solo nombres): ya NO son 6, faltan 3.** Hoy hay 18 secrets. Repuestos/añadidos desde entonces: `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` (14 sept, pagos), `TWILIO_ACCOUNT_SID` + `TWILIO_AUTH_TOKEN` (repuestos) + `TWILIO_WHATSAPP_FROM` + `PACO_WHATSAPP_TO` (feedback de testers, 19-21 sept), `FIREBASE_SERVICE_ACCOUNT`, `GOOGLE_STATIC_MAPS_KEY`, `GOOGLE_TTS_KEY`. **Faltan SOLO:** `TWILIO_PHONE_NUMBER` (número desde el que sale el SMS del SOS — sin él `/sos` responde "Twilio not configured" y no manda SMS; es el único con efecto real hoy; Paco tiene Twilio en modo prueba, vale el número de prueba de la cuenta), `SERPER_API_KEY` (búsqueda de eventos al pedir ruta con fechas; sin ella se salta en silencio) y `GA4_CREDENTIALS` (panel de stats del admin, que no existe todavía). Serper y GA4 pueden seguir pausados sin problema; los secrets los pone Paco con `wrangler secret put`, la sesión no toca claves.
 - **Workers Builds — REABIERTO (12 sept 2026, madrugada): la "prueba de fuego" del 11
   sept dio falso positivo, se ha perdido una SEGUNDA key (`GOOGLE_PLACES_KEY`).** Tras el
   "confirmado seguro" de abajo, un deploy automático posterior (entre las 22:14 y la
