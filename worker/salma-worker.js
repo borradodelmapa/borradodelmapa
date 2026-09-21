@@ -2432,6 +2432,7 @@ async function fetchWeatherBanner(lat, lon, key) {
       wind_gust_kmph: d.wind?.gust ? Math.round(d.wind.gust * 3.6) : null,
       aqi,
       forecast,
+      utc_offset_sec: (typeof d.timezone === 'number') ? d.timezone : null,
       _lat: lat,
       _lon: lon,
     };

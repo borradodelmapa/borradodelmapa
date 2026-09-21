@@ -152,3 +152,137 @@ function detectCountryInMessage(msg) {
   }
   return best;
 }
+
+// ═══════════════════════════════════════════════════════════════
+// RELOJ MUNDIAL — hora local de cualquier país, sin llamar a ninguna
+// API (Intl + IANA timezone del propio navegador, coste cero).
+// Un país grande con varios husos usa el de su capital/mayor ciudad
+// — aproximación suficiente para saber la hora en una escala de vuelo.
+// ═══════════════════════════════════════════════════════════════
+
+const COUNTRY_TZ = {
+  // Europa
+  AL:'Europe/Tirane', AD:'Europe/Andorra', AT:'Europe/Vienna', BY:'Europe/Minsk',
+  BE:'Europe/Brussels', BA:'Europe/Sarajevo', BG:'Europe/Sofia', HR:'Europe/Zagreb',
+  CY:'Asia/Nicosia', CZ:'Europe/Prague', DK:'Europe/Copenhagen', EE:'Europe/Tallinn',
+  FI:'Europe/Helsinki', FR:'Europe/Paris', DE:'Europe/Berlin', GR:'Europe/Athens',
+  HU:'Europe/Budapest', IS:'Atlantic/Reykjavik', IE:'Europe/Dublin', IT:'Europe/Rome',
+  LV:'Europe/Riga', LI:'Europe/Vaduz', LT:'Europe/Vilnius', LU:'Europe/Luxembourg',
+  MK:'Europe/Skopje', MT:'Europe/Malta', MD:'Europe/Chisinau', MC:'Europe/Monaco',
+  ME:'Europe/Podgorica', NL:'Europe/Amsterdam', NO:'Europe/Oslo', PL:'Europe/Warsaw',
+  PT:'Europe/Lisbon', RO:'Europe/Bucharest', RU:'Europe/Moscow', SM:'Europe/San_Marino',
+  RS:'Europe/Belgrade', SK:'Europe/Bratislava', SI:'Europe/Ljubljana', ES:'Europe/Madrid',
+  SE:'Europe/Stockholm', CH:'Europe/Zurich', UA:'Europe/Kyiv', GB:'Europe/London',
+  VA:'Europe/Vatican',
+  // Asia
+  AF:'Asia/Kabul', AM:'Asia/Yerevan', AZ:'Asia/Baku', BH:'Asia/Bahrain',
+  BD:'Asia/Dhaka', BT:'Asia/Thimphu', BN:'Asia/Brunei', KH:'Asia/Phnom_Penh',
+  CN:'Asia/Shanghai', GE:'Asia/Tbilisi', IN:'Asia/Kolkata', ID:'Asia/Jakarta',
+  IR:'Asia/Tehran', IQ:'Asia/Baghdad', IL:'Asia/Jerusalem', JP:'Asia/Tokyo',
+  JO:'Asia/Amman', KZ:'Asia/Almaty', KW:'Asia/Kuwait', KG:'Asia/Bishkek',
+  LA:'Asia/Vientiane', LB:'Asia/Beirut', MY:'Asia/Kuala_Lumpur', MV:'Indian/Maldives',
+  MN:'Asia/Ulaanbaatar', MM:'Asia/Yangon', NP:'Asia/Kathmandu', KP:'Asia/Pyongyang',
+  OM:'Asia/Muscat', PK:'Asia/Karachi', PS:'Asia/Gaza', PH:'Asia/Manila',
+  QA:'Asia/Qatar', SA:'Asia/Riyadh', SG:'Asia/Singapore', KR:'Asia/Seoul',
+  LK:'Asia/Colombo', SY:'Asia/Damascus', TW:'Asia/Taipei', TJ:'Asia/Dushanbe',
+  TH:'Asia/Bangkok', TL:'Asia/Dili', TR:'Europe/Istanbul', TM:'Asia/Ashgabat',
+  AE:'Asia/Dubai', UZ:'Asia/Tashkent', VN:'Asia/Ho_Chi_Minh', YE:'Asia/Aden',
+  KI:'Pacific/Tarawa',
+  // África
+  AO:'Africa/Luanda', BJ:'Africa/Porto-Novo', BW:'Africa/Gaborone', BF:'Africa/Ouagadougou',
+  BI:'Africa/Bujumbura', CV:'Atlantic/Cape_Verde', CM:'Africa/Douala', CF:'Africa/Bangui',
+  TD:'Africa/Ndjamena', KM:'Indian/Comoro', CG:'Africa/Brazzaville', CI:'Africa/Abidjan',
+  DJ:'Africa/Djibouti', EG:'Africa/Cairo', GQ:'Africa/Malabo', ER:'Africa/Asmara',
+  SZ:'Africa/Mbabane', ET:'Africa/Addis_Ababa', GA:'Africa/Libreville', GM:'Africa/Banjul',
+  GH:'Africa/Accra', GN:'Africa/Conakry', GW:'Africa/Bissau', KE:'Africa/Nairobi',
+  LS:'Africa/Maseru', LR:'Africa/Monrovia', LY:'Africa/Tripoli', MG:'Indian/Antananarivo',
+  MW:'Africa/Blantyre', ML:'Africa/Bamako', MR:'Africa/Nouakchott', MU:'Indian/Mauritius',
+  MA:'Africa/Casablanca', MZ:'Africa/Maputo', NA:'Africa/Windhoek', NE:'Africa/Niamey',
+  NG:'Africa/Lagos', RW:'Africa/Kigali', ST:'Africa/Sao_Tome', SN:'Africa/Dakar',
+  SC:'Indian/Mahe', SL:'Africa/Freetown', SO:'Africa/Mogadishu', ZA:'Africa/Johannesburg',
+  SS:'Africa/Juba', SD:'Africa/Khartoum', TZ:'Africa/Dar_es_Salaam', TG:'Africa/Lome',
+  TN:'Africa/Tunis', UG:'Africa/Kampala', ZM:'Africa/Lusaka', ZW:'Africa/Harare',
+  // América
+  AR:'America/Argentina/Buenos_Aires', BS:'America/Nassau', BB:'America/Barbados',
+  BZ:'America/Belize', BO:'America/La_Paz', BR:'America/Sao_Paulo', CA:'America/Toronto',
+  CL:'America/Santiago', CO:'America/Bogota', CR:'America/Costa_Rica', CU:'America/Havana',
+  DM:'America/Dominica', DO:'America/Santo_Domingo', EC:'America/Guayaquil',
+  SV:'America/El_Salvador', GD:'America/Grenada', GT:'America/Guatemala',
+  GY:'America/Guyana', HT:'America/Port-au-Prince', HN:'America/Tegucigalpa',
+  JM:'America/Jamaica', MX:'America/Mexico_City', NI:'America/Managua',
+  PA:'America/Panama', PY:'America/Asuncion', PE:'America/Lima', SR:'America/Paramaribo',
+  TT:'America/Port_of_Spain', US:'America/New_York', UY:'America/Montevideo',
+  VE:'America/Caracas',
+  // Oceanía
+  AU:'Australia/Sydney', FJ:'Pacific/Fiji', FM:'Pacific/Pohnpei', NZ:'Pacific/Auckland',
+  PW:'Pacific/Palau', PG:'Pacific/Port_Moresby', WS:'Pacific/Apia', TO:'Pacific/Tongatapu',
+  TV:'Pacific/Funafuti', VU:'Pacific/Efate'
+};
+
+// Lista única de países con huso conocido (código + nombre + bandera), para el buscador del reloj
+let _countryListCache = null;
+function countryList() {
+  if (_countryListCache) return _countryListCache;
+  _countryListCache = Object.keys(COUNTRY_TZ)
+    .map(code => ({ code, name: CODE_TO_NAME[code] || code, emoji: countryEmoji(code) }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  return _countryListCache;
+}
+
+// "España 9:01 AM Domingo 20 septiembre 2026" — hora/fecha real de un país por su código ISO2
+function countryTimeString(code) {
+  const name = CODE_TO_NAME[code] || code || '';
+  const rawTz = COUNTRY_TZ[code] || 'UTC';
+  let tz = rawTz;
+  try { new Intl.DateTimeFormat('es-ES', { timeZone: tz }); }
+  catch (_) { tz = 'UTC'; }
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat('es-ES', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: tz
+  }).formatToParts(now);
+  const get = t => (parts.find(p => p.type === t) || {}).value || '';
+  const weekday = get('weekday');
+  const weekdayCap = weekday ? weekday.charAt(0).toUpperCase() + weekday.slice(1) : '';
+  const timeStr = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz
+  }).format(now);
+  return `${name} ${timeStr} ${weekdayCap} ${get('day')} ${get('month')} ${get('year')}`.trim();
+}
+
+// Hora local del dispositivo (sin país conocido todavía) — mismo formato, sin nombre delante
+function deviceTimeString() {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat('es-ES', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  }).formatToParts(now);
+  const get = t => (parts.find(p => p.type === t) || {}).value || '';
+  const weekday = get('weekday');
+  const weekdayCap = weekday ? weekday.charAt(0).toUpperCase() + weekday.slice(1) : '';
+  const timeStr = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(now);
+  return `${timeStr} ${weekdayCap} ${get('day')} ${get('month')} ${get('year')}`.trim();
+}
+
+// "Madrid,ES" — reutiliza la misma ciudad del huso horario para pedir el
+// clima de ese país por /weather?city=, sin mantener una tabla aparte.
+function countryWeatherQuery(code) {
+  const tz = COUNTRY_TZ[code];
+  if (!tz) return null;
+  const city = tz.split('/').pop().replace(/_/g, ' ');
+  return `${city},${code}`;
+}
+
+// Hora de una ciudad suelta (buscada a mano) a partir del desfase UTC en
+// segundos que devuelve /weather — para ciudades que no están en COUNTRY_TZ
+// (ej. elegir Los Ángeles en vez de Nueva York dentro de EEUU).
+function offsetTimeString(offsetSec) {
+  if (typeof offsetSec !== 'number' || isNaN(offsetSec)) return '';
+  const shifted = new Date(Date.now() + offsetSec * 1000);
+  const parts = new Intl.DateTimeFormat('es-ES', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'
+  }).formatToParts(shifted);
+  const get = t => (parts.find(p => p.type === t) || {}).value || '';
+  const weekday = get('weekday');
+  const weekdayCap = weekday ? weekday.charAt(0).toUpperCase() + weekday.slice(1) : '';
+  const timeStr = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' }).format(shifted);
+  return `${timeStr} ${weekdayCap} ${get('day')} ${get('month')} ${get('year')}`.trim();
+}

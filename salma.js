@@ -34,6 +34,8 @@ const salma = {
   _narratorInterval: null,
   _narratorQueue: [],
   _narratorProcessing: false,
+  _narratorStationaryPos: null,   // última posición de referencia para el auto-apagado por inactividad
+  _narratorStationarySince: 0,    // timestamp desde el que no se ha superado el umbral de movimiento
   _voices: [],
   _currentAudio: null,
   _ttsQueue: [],
@@ -2225,7 +2227,9 @@ const salma = {
     const area = document.getElementById('chat-area');
     if (area) area.innerHTML = '';
     if (typeof _renderChatEmpty === 'function') _renderChatEmpty();
-    if (this._copilotData) this.showCopilotCard();
+    // showCopilotCard() DESACTIVADA 21 sept 2026 — duplicaba la tarjeta de info
+    // del país de la barra nueva de hora+tiempo+país (bug real reportado por Paco).
+    // if (this._copilotData) this.showCopilotCard();
     if (typeof showToast === 'function') showToast('Nueva conversación');
   },
 
@@ -2442,14 +2446,20 @@ const salma = {
     // GPS es obligatorio: confirmar que lo tenemos (o conseguirlo) ANTES de decir que
     // el Narrador está activo. Sin esto, si el usuario deniega el GPS, el Narrador se
     // queda "encendido" pero mudo para siempre, sin que nadie sepa por qué.
-    if (!this._userLocation) {
-      const gpsOk = await this._requestGPSFix();
-      if (!gpsOk) {
-        console.log('[Salma] Narrador: GPS denegado o no disponible');
-        return false;
-      }
+    // SIEMPRE se pide un fix fresco aquí (no solo si _userLocation está vacío): esa
+    // variable la comparte toda la app y puede llevar minutos/km congelada si el GPS
+    // continuo ya se había parado por buena precisión (ver initGeolocation) con el
+    // Narrador todavía apagado — usarla tal cual daba el primer aviso centrado en
+    // dónde estabas antes, no donde estás al activar.
+    const gpsOk = await this._requestGPSFix();
+    if (!gpsOk) {
+      console.log('[Salma] Narrador: GPS denegado o no disponible');
+      return false;
     }
     this._narratorActive = true;
+    // Referencia para el auto-apagado por inactividad (ver checkNearbyPOIs)
+    this._narratorStationaryPos = { lat: this._userLocation.lat, lng: this._userLocation.lng };
+    this._narratorStationarySince = Date.now();
     // Restaurar dedup desde sessionStorage (sobrevive recargas)
     try {
       const saved = sessionStorage.getItem('narrator_notified_pois');
@@ -2478,6 +2488,8 @@ const salma = {
     }
     this._narratorQueue = [];
     this._narratorProcessing = false;
+    this._narratorStationaryPos = null;
+    this._narratorStationarySince = 0;
     console.log('[Salma] Narrador desactivado');
     if (typeof updateBottomBar === 'function') updateBottomBar();
   },
@@ -2528,6 +2540,29 @@ const salma = {
     if (now - this._narratorLastCheck < 55000) return;
 
     const { lat, lng } = this._userLocation;
+
+    // Auto-apagado por inactividad: si llevas 5 min sin moverte más de 50m, se
+    // desactiva solo para no gastar batería (GPS continuo activo todo el rato
+    // mientras el Narrador está encendido — ver initGeolocation). Va ANTES del
+    // recorte de coste de abajo (que puede devolver antes de llegar aquí) para que
+    // el contador de inactividad se compruebe en cada ciclo, se acabe pegando a
+    // Google o no.
+    if (!this._narratorStationaryPos) {
+      this._narratorStationaryPos = { lat, lng };
+      this._narratorStationarySince = now;
+    } else {
+      const movedKm = (typeof _haversineKm === 'function')
+        ? _haversineKm(this._narratorStationaryPos.lat, this._narratorStationaryPos.lng, lat, lng)
+        : 0;
+      if (movedKm * 1000 > 50) {
+        this._narratorStationaryPos = { lat, lng };
+        this._narratorStationarySince = now;
+      } else if (now - this._narratorStationarySince >= 5 * 60 * 1000) {
+        this.stopNarrator();
+        this.showNarratorToast('Narrador desactivado — llevas 5 min sin moverte, para ahorrar batería.', null, 4000);
+        return;
+      }
+    }
 
     // Coste real: cada check pega a Google (Nearby Search de pago). Si el usuario
     // sigue prácticamente en el mismo sitio (coche parado, sentado en un restaurante),
@@ -2670,7 +2705,10 @@ const salma = {
           this._copilotCountry = countryCode;
           this._copilotData = JSON.parse(cached);
           console.log('[Salma] Copiloto (caché):', geo.address?.country, countryCode);
-          if (currentState === 'chat') this.showCopilotCard();
+          // showCopilotCard() DESACTIVADA 21 sept 2026 (ver _initChat/newChat) —
+          // la detección (_copilotCountry/_copilotData) se queda, la sigue usando
+          // la barra nueva de hora+tiempo+país.
+          // if (currentState === 'chat') this.showCopilotCard();
           return;
         }
       } catch (_) {}
@@ -2685,8 +2723,8 @@ const salma = {
       this._copilotData = piData.practical_info;
       try { sessionStorage.setItem('salma_copilot_' + countryCode, JSON.stringify(piData.practical_info)); } catch (_) {}
       console.log('[Salma] Copiloto activado:', geo.address?.country, countryCode);
-      // Mostrar tarjeta si el chat ya está abierto (initCopilot es async)
-      if (currentState === 'chat') this.showCopilotCard();
+      // showCopilotCard() DESACTIVADA 21 sept 2026, ver arriba en esta misma función.
+      // if (currentState === 'chat') this.showCopilotCard();
     } catch (e) {
       console.log('[Salma] Copiloto: error obteniendo info', e.message);
     }
@@ -2948,11 +2986,14 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
-    // Banner del tiempo — fuera de la pantalla de inicio (doc 8 sep, limpieza C).
-    // Solo aparece cuando ya hay conversación; se re-activa al mandar el primer mensaje (ver _addUserBubble).
-    if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
-    // Mostrar tarjeta copiloto si hay datos del país
-    if (this._copilotData) this.showCopilotCard();
+    // Banner del tiempo (#weather-banner) — DESACTIVADO 21 sept 2026: se quedaba pegado
+    // encima de la pantalla de inicio como hermano de #chat-area, duplicando la barra
+    // de hora+tiempo+país (.ce-sky-wx) que ya lo sustituye con más detalle (viento,
+    // sensación, humedad, ubicación exacta — bug real reportado por Paco). No se borra
+    // la función por si hace falta reactivarla, solo se deja de llamar aquí.
+    // if (document.querySelector('#chat-area .msg') && !document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Tarjeta copiloto (showCopilotCard) — DESACTIVADA 21 sept 2026, ver newChat().
+    // if (this._copilotData) this.showCopilotCard();
     // Banner de recordatorios (una vez al día)
     if (window.currentUser && typeof notasManager !== 'undefined') {
       notasManager.renderChatReminders(document.getElementById('chat-area'));
@@ -2977,8 +3018,8 @@ const salma = {
     div.innerHTML = `<div class="msg-body-user">${photoHtml}${textHtml}</div>`;
     area.appendChild(div);
     this._scrollToBottom(true);
-    // El banner del tiempo se oculta en el inicio; vuelve al empezar la conversación (doc 8 sep, limpieza C)
-    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
+    // Banner del tiempo — DESACTIVADO 21 sept 2026, ver initChat() para el motivo.
+    // if (!document.getElementById('weather-banner')) this.initWeatherBanner();
   },
 
   _addSalmaBubble(text) {
