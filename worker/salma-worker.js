@@ -2838,7 +2838,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute, addOnlyEdit) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
@@ -3026,8 +3026,11 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
       road_difficulty: s.road_difficulty, estimated_hours: s.estimated_hours
     }));
     userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. DATOS EXACTOS de cada parada (JSON): ${JSON.stringify(stopsCompact)}
-Si el usuario pide CAMBIOS (añadir, quitar, reordenar): devuelve la ruta completa actualizada en SALMA_ROUTE_JSON. Las paradas que NO cambian van LITERALES — mismo name, lat, lng, narrative, day y el resto de campos que ya tenían arriba, sin reescribirlas ni "mejorarlas". Solo generas de nuevo la parada que se añade o se modifica explícitamente.
-Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
+${addOnlyEdit
+  ? `El usuario pide AÑADIR algo a esta ruta. Devuelve en SALMA_ROUTE_JSON SOLO las paradas NUEVAS — NO repitas ninguna de las que ya hay: el sistema las conserva tal cual y coloca las nuevas donde encajan. Cada parada nueva con todos sus campos (name, headline, narrative, day_title, type, lat, lng, km_from_previous, estimated_hours…) y con "day" = el nº del día de la ruta actual al que mejor encaja (o el siguiente al último si pide un día nuevo). Si pide UNA parada, añade UNA — la mejor — y di en 1-2 frases antes del JSON cuál es y por qué; no propongas varias. Solo si la petición es tan vaga que prefieres que el usuario elija entre opciones, NO emitas JSON: propón 2-3 opciones y termina con SALMA_OFFER_ADD_TO_ROUTE en su propia línea.
+Si en realidad pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`
+  : `Si el usuario pide CAMBIOS (añadir, quitar, reordenar): devuelve la ruta completa actualizada en SALMA_ROUTE_JSON. Las paradas que NO cambian van LITERALES — mismo name, lat, lng, narrative, day y el resto de campos que ya tenían arriba, sin reescribirlas ni "mejorarlas". Solo generas de nuevo la parada que se añade o se modifica explícitamente.
+Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`}`;
   }
 
   if (hasPhoto) {
@@ -3061,7 +3064,7 @@ Si la ciudad "se queda corta" para los días pedidos, NO rellenes con pueblos le
 CIERRE EXACTO — termina con esta frase y nada más: "${editingActiveRoute
   ? 'Si te cuadra, dale a **Añadir a la guía** aquí abajo y te lo meto en la ruta que ya tienes.'
   : 'Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación.'}"]`;
-  } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
+  } else if (!addOnlyEdit && (isRouteRequest(message, history) || guidedRoute || routeFromHere)) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de presentación (sin enumerar paradas, sin día a día — eso se mostraría duplicado, porque va en el JSON y el usuario lo ve en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
@@ -3128,7 +3131,7 @@ QUÉ HACER:
   // que decide Salma: si su respuesta propone algo concreto que tendría sentido
   // sumar a la ruta, lo marca. Invisible para el usuario, el Worker lo quita antes
   // de mostrar la respuesta y lo convierte en el botón "Añadir a la guía".
-  if (editingActiveRoute && !guidedIsReco && !isRoute) {
+  if (editingActiveRoute && !guidedIsReco && !isRoute && !addOnlyEdit) {
     userContent += `\n\n[Estás hablando sobre una ruta que ya existe y está guardada — no estás creando una ruta nueva. Si tu respuesta de arriba propone algo CONCRETO que tendría sentido añadir a esa ruta (una parada nueva, un plan para un día, un sitio) — y SOLO en ese caso, no si es solo información o una respuesta a una pregunta sin propuesta — termina tu respuesta, después de todo lo demás y en su propia línea, con exactamente: SALMA_OFFER_ADD_TO_ROUTE. Si no hay nada que añadir, no escribas esa línea.]`;
   }
 
@@ -3294,6 +3297,56 @@ function replyWithoutRouteBlock(text) {
   const idx = text.indexOf('SALMA_ROUTE_JSON');
   const clean = idx === -1 ? text.trim() : text.slice(0, idx).trim();
   return sanitizeInventedUrls(clean);
+}
+
+// ── "Añade una parada" a una guía existente: inserta SOLO las paradas nuevas en la guía ──
+// La IA devuelve únicamente lo nuevo, cada parada con el día (`day`) al que encaja (o N+1 para un
+// día nuevo). Las paradas que ya existían no se tocan (ni se reescriben ni se pueden perder).
+// Dentro del día, cada parada nueva va en el hueco que menos rodeo añada (haversine, sin API);
+// con atEnd ("al final", "la última") va al final del día. Sin coords válidas → al final del día.
+// Devuelve { stops, addedCount, days } — addedCount 0 si todas ya estaban en la guía.
+function mergeStopsIntoDays(existingStops, newStops, atEnd) {
+  const norm = (s) => (s || '').toString().trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const okCoord = (s) => typeof s.lat === 'number' && isFinite(s.lat) && typeof s.lng === 'number' && isFinite(s.lng);
+  const dayOf = (s) => parseInt(s.day, 10) || 1;
+  const nums = [...new Set(existingStops.map(dayOf))].sort((a, b) => a - b);
+  const groups = nums.map(d => existingStops.filter(s => dayOf(s) === d).map(s => Object.assign({}, s)));
+  const known = new Set(existingStops.map(s => norm(s.name)));
+  let addedCount = 0;
+  for (const raw of newStops) {
+    const key = norm(raw.name);
+    if (!key || known.has(key)) continue;   // ya estaba en la guía (o sin nombre)
+    known.add(key);
+    // día destino: índice de grupo (0-based). Un día nº que ya existe → ese; si no → día nuevo al final.
+    let gi = nums.indexOf(dayOf(raw));
+    if (gi === -1) {
+      if (dayOf(raw) < nums[0]) gi = 0;
+      else if (atEnd && groups.length) gi = groups.length - 1;
+      else { groups.push([]); nums.push(dayOf(raw)); gi = groups.length - 1; }   // día nuevo; otras paradas con el mismo nº caen en él
+    }
+    const grp = groups[gi];
+    const st = Object.assign({}, raw);
+    if (grp.length && grp[0].day_title) st.day_title = grp[0].day_title;
+    let pos = grp.length;
+    if (!atEnd && okCoord(st) && grp.length) {
+      let best = Infinity;
+      for (let i = 0; i <= grp.length; i++) {
+        const p = i > 0 && okCoord(grp[i - 1]) ? grp[i - 1] : null;
+        const n = i < grp.length && okCoord(grp[i]) ? grp[i] : null;
+        let cost;
+        if (p && n) cost = haversineKm(st.lat, st.lng, p.lat, p.lng) + haversineKm(st.lat, st.lng, n.lat, n.lng) - haversineKm(p.lat, p.lng, n.lat, n.lng);
+        else if (p) cost = haversineKm(st.lat, st.lng, p.lat, p.lng);
+        else if (n) cost = haversineKm(st.lat, st.lng, n.lat, n.lng);
+        else cost = 0;
+        if (cost <= best) { best = cost; pos = i; }
+      }
+    }
+    grp.splice(pos, 0, st);
+    addedCount++;
+  }
+  const stops = [];
+  groups.forEach((grp, idx) => grp.forEach(s => stops.push(Object.assign({}, s, { day: idx + 1 }))));
+  return { stops, addedCount, days: groups.length };
 }
 
 // ── RESCATE de SALMA_ROUTE_JSON truncado (stop_reason: max_tokens) ──
@@ -8855,6 +8908,14 @@ REGLAS:
     // Botón "➕ Añadir a la guía" pulsado: fusionar los stops nuevos en currentRoute
     // en vez de generar una ruta nueva desde cero (ver más abajo, tras convertProseToRouteJson).
     const mergeIntoRoute = body.merge_into_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
+    // "Añade una parada" sobre una guía abierta: solo se PIDE a la IA lo nuevo (no reemitir toda
+    // la guía, que se corta por max_tokens y la deja con menos paradas — 21 sept 2026); el Worker
+    // inserta lo nuevo en la guía existente (mergeStopsIntoDays). Si el mensaje mezcla "añade" con
+    // quitar/cambiar algo, va por la edición completa de siempre (protegida por el control de pérdidas).
+    const _editRemovalRe = /\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i;
+    const _addOnlyEdit = _editingRoute && !mergeIntoRoute &&
+      /\b(a[ñn]ade|agrega|mete|pon(?:le|me)?|otra parada|una parada m[aá]s|m[aá]s d[ií]as)\b/i.test(message || '') &&
+      !_editRemovalRe.test(message || '');
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
     // ─── LÍMITES DE USO DEL PLAN + MEDICIÓN (modelo Premium, paso 3) ───
@@ -9378,7 +9439,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute, _addOnlyEdit);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -9433,7 +9494,8 @@ INSTRUCCIONES:
     // Subido al mismo tope que las recomendaciones normales (14000): el coste solo sube en
     // los casos que YA se estaban cortando (para una respuesta corta con foto no cambia nada,
     // Claude para sola antes de llegar al tope).
-    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (imageBase64 ? 14000 : (needsTools ? 6000 : 3000)));
+    // _addOnlyEdit: solo se pide lo nuevo (unas pocas paradas), 8000 sobra; es un tope, no gasto.
+    const reqMaxTokens = isRoute ? 24000 : (_addOnlyEdit ? 8000 : guidedIsReco ? 14000 : (imageBase64 ? 14000 : (needsTools ? 6000 : 3000)));
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -9992,7 +10054,7 @@ INSTRUCCIONES:
         // no hay ningún regex fiable para saber si la respuesta propone algo añadible
         // a la ruta activa — decide Salma y lo marca, invisible para el usuario.
         let offerAddMarker = false;
-        if (editingActiveRoute && !guidedIsReco && !isRoute) {
+        if (editingActiveRoute && !guidedIsReco && (!isRoute || _addOnlyEdit)) {
           if (/\n?SALMA_OFFER_ADD_TO_ROUTE\s*$/i.test(allText)) {
             offerAddMarker = true;
             allText = allText.replace(/\n?SALMA_OFFER_ADD_TO_ROUTE\s*$/i, '').trim();
@@ -10036,7 +10098,7 @@ INSTRUCCIONES:
             // editada, es un trozo — darla por buena la sobrescribe con menos paradas
             // (caso real 21 sept 2026: guía de 19 paradas guardada con 12). Se descarta y
             // se avisa; la guía guardada no se toca. Sin route no se consume ningún cambio.
-            if (route && _editingRoute && !mergeIntoRoute) {
+            if (route && _editingRoute && !mergeIntoRoute && !_addOnlyEdit) {
               console.log(`[EDIT-CORTE] ✗ edición cortada (${lastStopReason || 'n/d'}): ${route.stops.length} de ${currentRoute.stops.length} paradas — no se devuelve`);
               route = null;
               _editRejected = true;
@@ -10049,7 +10111,7 @@ INSTRUCCIONES:
         //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
         // 2ª llamada a Claude para extraer el JSON del texto (sin prefill: el modelo no lo admite).
         // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
-        if (!route && !_editRejected && !guidedIsReco && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
+        if (!route && !_editRejected && !_addOnlyEdit && !guidedIsReco && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
@@ -10110,12 +10172,31 @@ REGLAS:
         //    OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico —
         //    isRoute también es true para isDaysDestination (MODO PLAN), que PROHÍBE
         //    el JSON a propósito; ahí route=null es el comportamiento correcto, no un fallo. ──
+        // ── "Añade una parada" (_addOnlyEdit): la IA devolvió SOLO las paradas nuevas → insertarlas
+        //    en la guía existente (mergeStopsIntoDays). La guía original no se reescribe. ──
+        if (_addOnlyEdit && route && Array.isArray(route.stops) && route.stops.length &&
+            currentRoute && Array.isArray(currentRoute.stops) && currentRoute.stops.length) {
+          const _atEnd = /\b(al final|la [uú]ltima|para terminar|al acabar)\b/i.test(message || '');
+          const _m = mergeStopsIntoDays(currentRoute.stops, route.stops, _atEnd);
+          if (_m.addedCount > 0) {
+            console.log(`[EDIT-ADD] +${_m.addedCount} paradas → ${_m.stops.length} (guía tenía ${currentRoute.stops.length}), ${_m.days} días${_atEnd ? ', al final' : ''}`);
+            route = Object.assign({}, currentRoute, { stops: _m.stops, duration_days: _m.days });
+            route._merged = true;
+            if (!reply) reply = 'Hecho, lo he añadido a tu guía.';
+          } else {
+            route = null;
+            const _dupNote = '\n\n_Eso ya está en tu guía, no he añadido nada. Dime otra cosa que quieras sumar._';
+            reply = (reply || '').trimEnd() + _dupNote;
+            allText += _dupNote;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _dupNote })}\n\n`)); } catch (_) {}
+          }
+        }
         // ── Edición de guía existente que "añade" pero devuelve MENOS paradas de las que había:
         //    la IA se ha dejado paradas al reescribir (sin corte, p. ej.). Si el mensaje no pide
         //    quitar/cambiar nada, no se entrega: la guía guardada se queda como está. ──
         if (route && _editingRoute && !mergeIntoRoute && !_editRejected && Array.isArray(route.stops) &&
             route.stops.length < currentRoute.stops.length &&
-            !/\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i.test(message || '')) {
+            !_editRemovalRe.test(message || '')) {
           console.log(`[EDIT-PERDIDAS] ✗ "añadir" devolvió ${route.stops.length} de ${currentRoute.stops.length} paradas — no se devuelve`);
           route = null;
           _editRejected = true;
@@ -10128,7 +10209,7 @@ REGLAS:
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _editNote })}\n\n`)); } catch (_) {}
           _truncationNoteAdded = true;
         }
-        if (!route && !_editRejected && !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute)) {
+        if (!route && !_editRejected && !_addOnlyEdit && !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute)) {
           console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
           const _honestNote = '\n\n_No he podido montar el mapa interactivo de esta ruta — aquí tienes toda la información en texto. Puedes pedírmelo de nuevo o pulsar "Generar guía con mapa" para reintentarlo._';
           reply = (reply || '').trimEnd() + _honestNote;
