@@ -1991,6 +1991,25 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   el modelo puede proponer opciones + `SALMA_OFFER_ADD_TO_ROUTE` (botón "Añadir a la guía"). Sigue
   contando como `edit`. `max_tokens` 8000 para este caso (tope, no gasto). **Coste (§8): BAJA** — la
   salida pasa de hasta ~20.000 tokens a unos cientos. Logs: `[EDIT-ADD]`.
+  **(c) SUSTITUIDO por edición por operaciones — DESPLEGADO, sin probar en pantalla** — commit
+  `a33bd815`, **Worker Version ID `7ee89720-97f0-49b2-b90d-12c12e1ad30f`** (confirmado contra `/version`,
+  18 secretos), `salma.js?v=103`. Motivo (Paco): un regex de verbos ("añade…") no cubre "quiero ir también
+  a X", "falta un sitio para comer", "un día extra"… y reescribir la guía entera es caro. Ahora, con una guía
+  cargada, la IA NO reescribe: responde con 1-2 frases + `SALMA_ROUTE_EDIT {"add":[…],"remove":[n],
+  "replace":[{"n":N,"with":{…}}]}`; el Worker lo aplica (`extractRouteEditFromReply` + `applyRouteEditOps`,
+  reutiliza `mergeStopsIntoDays`). Las paradas se pasan al prompt numeradas (`n`) y quitar/sustituir es
+  SOLO por número (la IA no puede inventarse una existente; nº inválido → se ignora y se avisa). Las paradas
+  antiguas no pasan por la IA (ni se pierden ni se corrompen sus coords/enlaces). **Lo nuevo solo entra si
+  Google lo confirma con `place_id`** (sin la excepción "sin verificar" de los faros); la sustituida solo sale
+  si su reemplazo se confirmó. Sin borrador (`draft`) en estas ediciones. Reescritura completa
+  (`SALMA_ROUTE_JSON`) solo si hay que reordenar/reestructurar todo — sigue protegida por (a) y (b). El
+  frontend recibe `ops_edit` y no lanza la alarma de "paradas perdidas". Consume 1 cambio (`edit`) aunque el
+  mensaje no cazara el regex de edición (la puerta previa `usageGate` sí sigue usando `_editingRoute`).
+  Logs: `[EDIT-OPS]`. **Coste (§8): BAJA** — salida de unos cientos de tokens en vez de la ruta entera.
+  OJO cifra: el tope real de `max_tokens` de una edición era 3.000/6.000 si el mensaje no era petición de ruta
+  y 24.000 si lo era (`reqMaxTokens`), no siempre "20.000"; la guía de 12 paradas cortada a mitad cuadra con el
+  tope bajo. Pendiente (paso 2 acordado con Paco): recortar la ficha de paradas que se manda en cada edición
+  (hoy con `narrative` completo) — reduce ENTRADA. Después, prompt caching (necesita OK aparte).
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
