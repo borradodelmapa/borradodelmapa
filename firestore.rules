@@ -3,9 +3,21 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Usuarios — solo el propio usuario puede leer/escribir
+    // Usuarios — solo el propio usuario puede leer/escribir SU documento, PERO los campos de
+    // plan y pago (premium_until, isPremium, coins_saldo, rutas_gratis_usadas) NO se pueden
+    // escribir desde el cliente: solo el Worker, con su cuenta de servicio (que se salta las
+    // reglas). Sin esto cualquiera se daba Premium o reseteaba sus guías gratis desde la consola.
+    // En update se compara con diff(): un update de otro campo (avatarURL, sos_config...) sigue
+    // funcionando aunque el documento ya contenga esos campos con valor.
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId
+                    && !request.resource.data.keys().hasAny(
+                         ['premium_until', 'isPremium', 'coins_saldo', 'rutas_gratis_usadas']);
+      allow update: if request.auth != null && request.auth.uid == userId
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(
+                         ['premium_until', 'isPremium', 'coins_saldo', 'rutas_gratis_usadas']);
+      allow delete: if request.auth != null && request.auth.uid == userId;
 
       match /{subcollection}/{docId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;

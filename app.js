@@ -3360,10 +3360,9 @@ async function doGoogleLogin() {
       await db.collection('users').doc(user.uid).set({
         name: user.displayName || user.email.split('@')[0],
         email: user.email,
-        isPremium: false,
         mapsCount: 0,
-        coins_saldo: 0,
-        rutas_gratis_usadas: 0,
+        // premium_until / isPremium / coins_saldo / rutas_gratis_usadas: NO se escriben desde
+        // el cliente (las reglas de Firestore lo prohíben). Solo el Worker los toca.
         createdAt: new Date().toISOString()
       });
     }
@@ -3691,30 +3690,9 @@ async function guardarGuiaDirecto(routeData) {
       localStorage.setItem('offline_route_' + docRef.id, JSON.stringify(offlineData));
     } catch (_) {}
 
-    // Contabilizar uso de ruta — gratis (3 primeras) o descontar 2 coins
-    try {
-      const usadas = currentUser.rutas_gratis_usadas || 0;
-      const coins = currentUser.coins_saldo || 0;
-      if (usadas < 3) {
-        // Ruta gratuita — gastar una de las 3 incluidas
-        const newUsadas = usadas + 1;
-        await db.collection('users').doc(currentUser.uid).update({ rutas_gratis_usadas: newUsadas });
-        currentUser.rutas_gratis_usadas = newUsadas;
-        updateHeader();
-      } else if (coins >= 2) {
-        // Descontar 2 coins (coste de ruta IA según modelo de negocio)
-        const newCoins = coins - 2;
-        await db.collection('users').doc(currentUser.uid).update({ coins_saldo: newCoins });
-        currentUser.coins_saldo = newCoins;
-        updateHeader();
-        showToast('−2 Salma Coins · saldo: ' + newCoins);
-      } else {
-        // Sin gratis y sin coins — la ruta ya está guardada, pero avisar
-        showToast('Sin Salma Coins. Recarga para seguir creando rutas.');
-      }
-    } catch (e) {
-      console.warn('Error actualizando contador rutas:', e);
-    }
+    // Contador de rutas gratis / coins: ya NO lo escribe el cliente — cualquier usuario podía
+    // ponérselo a 0 o inflar su saldo desde la consola. El conteo pasa al Worker (paso 3 del
+    // plan de pagos: gates server-side). Hasta entonces no se contabiliza nada aquí.
 
     // Publicar guía pública (no esperar)
     const slug = generateSlug(r.title || r.name || 'mi-ruta');
