@@ -2626,6 +2626,16 @@ body {
 /* SOS sin configurar — gris apagado */
 .bottom-tab-sos-off { color:rgba(244,239,230,.25); }
 .bottom-tab-sos-off:hover { color:rgba(244,239,230,.5); }
+/* Ayuda / Tester (feedback de testers, ver debug-panel.js) — primera pestaña,
+   con latido suave para que destaque frente al resto del menú */
+.bottom-tab-tester { color:#F4630B; }
+.bottom-tab-tester:hover { color:#ff8433; }
+.bottom-tab-tester svg { animation: dbg-tab-pulse 2.2s ease-in-out infinite; }
+@keyframes dbg-tab-pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.15); } }
+/* Hay un error nuevo capturado — pulso más rápido y en rojo */
+.bottom-tab-tester.dbg-has-error { color:#ef4444; }
+.bottom-tab-tester.dbg-has-error svg { animation: dbg-tab-pulse-error .9s ease-in-out infinite; filter:drop-shadow(0 0 4px rgba(239,68,68,.5)); }
+@keyframes dbg-tab-pulse-error { 0%,100% { transform:scale(1); } 50% { transform:scale(1.25); } }
 /* SOS flotante */
 .sos-fab {
   position:fixed; right:16px; z-index:950;
@@ -6742,8 +6752,10 @@ body {
 .chat-empty .ce-back-active:hover{color:var(--ce-amber);}
 
 /* ── Botón "empezar de cero" — Fase 1 navegación ── */
-/* "Últimas consultas" (antes #chat-history, reloj fijo arriba) ahora es una
-   pestaña del menú de abajo — ver .app-bottom-bar / #tab-consultas. */
+/* "Últimas consultas" (antes #chat-history, reloj fijo arriba) — desde el
+   21 sept 2026 ya no tiene pestaña propia en el menú de abajo (se quitó para
+   dejar sitio a "Ayuda"), se llega por el chip "Últimas consultas" de la
+   pantalla vacía del chat (ver app.js, action:'consultas'). */
 #chat-fresh{
   position:fixed;top:calc(env(safe-area-inset-top) + 10px);z-index:900;
   width:34px;height:34px;border-radius:0;

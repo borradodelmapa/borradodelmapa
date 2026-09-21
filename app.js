@@ -169,11 +169,17 @@ function updateBottomBar() {
 
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
-  const isConsultas = currentState === 'consultas';
   const isProfile = ['profile', 'bitacora', 'diario', 'documentos', 'notas', 'galeria', 'vuelos'].includes(currentState);
 
-  // Barra fija de 4 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md)
+  // Barra fija de 4 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md).
+  // "Consultas" quitada de aquí el 21 sept 2026 (sigue accesible desde el chip
+  // "Últimas consultas" de la pantalla vacía) — su sitio lo ocupa "Ayuda", que
+  // abre el panel de feedback de testers (debug-panel.js, window.__dbg.open).
   bar.innerHTML = `
+    <button class="bottom-tab bottom-tab-tester" id="tab-tester">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Ayuda</span>
+    </button>
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -182,15 +188,14 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
-    <button class="bottom-tab ${isConsultas ? 'bottom-tab-active' : ''}" id="tab-consultas">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-      <span>Consultas</span>
-    </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
     </button>`;
 
+  document.getElementById('tab-tester').addEventListener('click', () => {
+    if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
+  });
   document.getElementById('tab-chat').addEventListener('click', () => {
     // La vista itinerario la desmonta showState() (Fase 4). Aquí solo al chat.
     if (typeof salma !== 'undefined') salma._initChat();
@@ -199,9 +204,6 @@ function updateBottomBar() {
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
-  });
-  document.getElementById('tab-consultas').addEventListener('click', () => {
-    showState('consultas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
