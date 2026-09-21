@@ -2059,6 +2059,15 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
   "No he encontrado ese sitio en Google Maps con seguridad"). Nuevo `isNearbySearch` (más cercan*, cerca de mí/aquí, por aquí, near me…, con lookbehind porque `` no funciona detrás de tildes)
   saca esas frases de los DOS atajos (bypass previo a Claude y frase de "no encontrado" al final) → van por Claude + buscar_lugar con el GPS. Coste (§8): esas consultas dejaban de
   costar 1 llamada a Places (sin Claude) y ahora usan la ruta normal (Claude ~0,04-0,10 € + Places): sube algo por consulta, pero antes daban una respuesta equivocada.
+  **PASO 1 DEL "FOLLÓN" DE OFERTAS, 21 sept — DESPLEGADO, sin probar** — commit `b6ade624`, **Worker Version ID `b048e293-4bd3-4189-b4bd-0d74b644a519`**. Tres capturas de Paco:
+  (1) "farmacia cerca mia" en el chat general → "Crear ruta con mapa"; (2) "peluquería cerca" en el popup con una guía de Navarra abierta estando en Asturias → "Añadir a la guía";
+  (3) "restaurante cerca de la parada 1" → 2º resultado en Cangas de Onís (GPS) y texto que promete añadir sin botón (captura 3 no llegó; descrita). CAUSA (1): `isDaysDestination`
+  ("solo destino: 1-4 palabras sin verbo → plan de 1 día") cogía "farmacia cerca mía" → Tiempo 1 → `offer_map_button`. FIX: `isDaysDestination` devuelve false si `isNearbySearch` o
+  `isHelpRequest` (salvo categoría "transport": su regex coge "puerto de…"/"tren", que pueden ser destinos); `isNearbySearch` ahora reconoce "cerca mía/mío/mia"; el marcador
+  `SALMA_OFFER_ADD_TO_ROUTE` (gate del Worker y frase del prompt) NO aplica a búsquedas de ayuda/cercanía. NO tocado aún (siguientes pasos acordados con Paco, uno a uno): (2) UNA sola zona por
+  respuesta (el Worker elige GPS/guía y dice a Claude que no relance `buscar_lugar` por su cuenta — hoy la nota solo lo dice en el caso "lejos"); (3) el botón lo pone el sistema,
+  el modelo no debe escribir "puedes añadirlo a la ruta" (texto sin botón, mismo fallo que el 18 sept). Riesgo restante: el regex `_isRouteMsg` del frontend (salma.js) también puede
+  poner "Crear ruta con mapa" con palabras como "ruta"/"días"/"visitar".
   **Abierto, sin tocar (pensar):** (1) cerrar el popup de consulta mientras hay una petición en curso
   no la aborta: se guarda igual pero la respuesta cae en el chat normal (`mapa-itinerario.js:_closeItinQuery`,
   `_chatAreaOverride = null`); (2) "una parada" vs proponer varias: (c) pide UNA por defecto.
