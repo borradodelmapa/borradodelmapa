@@ -734,6 +734,7 @@ desde esta sesión (sin credenciales de Firebase en este contenedor):**
    visible — y que "Guardar" la deja en Mis Viajes de esa segunda cuenta sin tocar la
    del dueño original.
    **Nunca decir "arreglado" de esto hasta que ese flujo completo se vea en pantalla.**
+   **ACTUALIZACIÓN 21 sept 2026:** el punto 1 (desplegar `firestore.rules`) NO hacía falta: ya estaba publicada. Comprobado con una lectura de solo lectura desde la consola de Paco (ojo: los IDs de documento tipo `__algo__` están reservados por Firestore y dan `invalid-argument`; usar un ID normal). Queda solo el punto 2: probar en pantalla el flujo completo (compartir → abrir el enlace sin sesión → pide login → se ve la guía → GUARDAR la deja en la 2ª cuenta).
 
 **Sin implementar, a petición explícita de Paco (opinión pedida, no desarrollo):**
 Paco planteó, para pensar y no para ahora, aprovechar esto para crear grupos de viaje
@@ -1127,7 +1128,7 @@ debug-panel.js (puro, intercepta console.*/window errors, sin deps de otros mód
 | `admin_logs/{logId}` | Auth required | Logs de uso del Worker |
 | `url_validation_incidents/{id}` | Read: auth / Create: auth (solo alta) | Sustituciones de enlaces Maps rotos (Bloque E) |
 | `beta_feedback/{id}` | Read: auth / Create: auth (solo alta) | Feedback de testers: nota + logs del panel 🐛 + versión, mandado desde `POST /beta-feedback` |
-| `shared_routes/{id}` | Read: auth / Write: solo el dueño | Ruta compartida desde el botón Compartir de la vista de itinerario — a diferencia de `public_guides`, exige login para verse. Mismo id que la guía en `users/{uid}/maps/`. **Pendiente desplegar la regla (19 sept 2026) — ver sesión correspondiente.** |
+| `shared_routes/{id}` | Read: auth / Write: solo el dueño | Ruta compartida desde el botón Compartir de la vista de itinerario — a diferencia de `public_guides`, exige login para verse. Mismo id que la guía en `users/{uid}/maps/`. **Regla YA DESPLEGADA (comprobado 21 sept 2026 leyendo `shared_routes/prueba-lectura` con sesión: devuelve "no existe" sin `permission-denied`; se publicó con el `firebase deploy` del paso 1 de pagos, que sube el fichero entero).** |
 
 - **Regla importante**: `const db` solo se inicializa en `app.js`, nunca duplicado
 - Firebase se inicializa en el `<head>` del `index.html`
@@ -1141,7 +1142,7 @@ config/{doc}/**                → read: auth, write: false
 admin_logs/{logId}             → read/write: auth
 url_validation_incidents/{id}  → read: auth, create: auth (solo alta, sin editar/borrar)
 beta_feedback/{id}             → read: auth, create: auth (solo alta, sin editar/borrar)
-shared_routes/{id}             → read: auth, create/update/delete: solo el dueño (uid) — PENDIENTE DE DESPLEGAR
+shared_routes/{id}             → read: auth, create/update/delete: solo el dueño (uid) — DESPLEGADA (comprobado 21 sept 2026)
 ```
 
 ---
