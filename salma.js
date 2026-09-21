@@ -1532,10 +1532,16 @@ const salma = {
           const _newNames = new Set((data.route.stops || []).map(s => _normName(s.name)));
           const _keptCount = prevStops.filter(s => _newNames.has(_normName(s.name))).length;
           const _keptRatio = prevStopsCount > 0 ? (_keptCount / prevStopsCount) : 1;
-          const _looksLikeCorruption = prevStopsCount >= 3 && _keptRatio < 0.5;
+          // Además del % conservado: contar paradas PERDIDAS. 12 de 19 = 63% no saltaba y la
+          // guía se guardaba con 7 paradas menos (21 sept 2026). Sin verbo de quitar/cambiar en
+          // el mensaje, perder aunque sea una parada es sospechoso; con él, se tolera hasta 2.
+          const _lostCount = prevStopsCount - _keptCount;
+          const _removalIntent = /\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i.test(msg || '');
+          const _looksLikeCorruption = prevStopsCount >= 3 &&
+            (_keptRatio < 0.5 || (!_removalIntent && _lostCount >= 1) || _lostCount >= 3);
 
           if (_looksLikeCorruption) {
-            this._addSalmaBubble('Espera — este cambio ha reescrito casi todas las paradas, no solo lo que pediste. Puede que se me haya ido la olla reconstruyendo la ruta. ¿La guardo igualmente, o la descarto y seguimos con la que tenías?');
+            this._addSalmaBubble(`Espera — con este cambio tu guía pasaría de ${prevStopsCount} a ${(data.route.stops || []).length} paradas (${_lostCount} de las que tenías desaparecen). Puede que se me haya ido la olla reconstruyendo la ruta. ¿La guardo igualmente, o la descarto y seguimos con la que tenías?`);
             const _area = this._getChatArea();
             if (_area) {
               const _rw = document.createElement('div');
