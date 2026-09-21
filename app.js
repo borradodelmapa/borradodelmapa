@@ -1504,9 +1504,11 @@ function renderSalmaCan() {
 async function renderProfile() {
   if (!currentUser) { showState('chat'); return; }
 
-  const coins = currentUser.coins_saldo || 0;
-  const rutas = currentUser.rutas_gratis_usadas || 0;
-  const freeLeft = Math.max(0, 3 - rutas);
+  // Plan del usuario (coins eliminados 21 sept 2026): Premium activo ⇔ premium_until futuro
+  const _puMs = currentUser.premium_until ? new Date(currentUser.premium_until).getTime() : 0;
+  const premiumActivo = _puMs > Date.now();
+  const planNum = premiumActivo ? 'PREMIUM' : 'GRATIS';
+  const planBadge = premiumActivo ? 'Premium' : 'Gratis';
   const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
   const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
 
@@ -1525,14 +1527,9 @@ async function renderProfile() {
         ${avatarHtml}
         <div class="prof-hero-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
         <div class="prof-stats-strip">
-          <div class="prof-stat-card" id="prof-stat-coins">
-            <div class="prof-stat-number">${coins}</div>
-            <div class="prof-stat-label">COINS</div>
-          </div>
-          <div class="prof-stat-divider"></div>
-          <div class="prof-stat-card">
-            <div class="prof-stat-number">${freeLeft}</div>
-            <div class="prof-stat-label">GRATIS</div>
+          <div class="prof-stat-card" id="prof-stat-plan">
+            <div class="prof-stat-number">${planNum}</div>
+            <div class="prof-stat-label">TU PLAN</div>
           </div>
           <div class="prof-stat-divider"></div>
           <div class="prof-stat-card">
@@ -1606,10 +1603,10 @@ async function renderProfile() {
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-coins">
+          <div class="prof-row" id="prof-plan">
             <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
-            <span class="prof-row-label">Salma Coins</span>
-            <span class="prof-coins-badge">${coins}</span>
+            <span class="prof-row-label">Mi plan</span>
+            <span class="prof-coins-badge">${planBadge}</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep" data-sep-for="prof-help"></div>
@@ -1670,7 +1667,7 @@ async function renderProfile() {
   }
   document.getElementById('prof-perfil-ia').addEventListener('click', () => showState('perfil-ia'));
   document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
-  document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
+  document.getElementById('prof-plan').addEventListener('click', openCoinsModal);
   document.getElementById('prof-notas').addEventListener('click', () => showState('notas'));
   document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
   document.getElementById('prof-docs').addEventListener('click', () => {
@@ -1692,8 +1689,8 @@ async function renderProfile() {
   document.getElementById('prof-logout').addEventListener('click', () => {
     if (confirm('¿Cerrar sesión?')) logout();
   });
-  // Stats: click en coins abre modal
-  document.getElementById('prof-stat-coins')?.addEventListener('click', openCoinsModal);
+  // Stats: click en el plan abre el modal Premium
+  document.getElementById('prof-stat-plan')?.addEventListener('click', openCoinsModal);
   // Stats: cargar conteo de guías async
   db.collection('users').doc(currentUser.uid)
     .collection('maps').get().then(snap => {
@@ -3535,8 +3532,6 @@ auth.onAuthStateChanged(async (user) => {
       isPremium: userData.isPremium || false,
       premium_until: userData.premium_until ? (userData.premium_until.toDate ? userData.premium_until.toDate().toISOString() : userData.premium_until) : null,
       country: userData.country || '',
-      coins_saldo: userData.coins_saldo || 0,
-      rutas_gratis_usadas: userData.rutas_gratis_usadas || 0,
       avatarURL: userData.avatarURL || '',
       copilot_data: userData.copilot_data || {},
     };

@@ -31,15 +31,13 @@ window.flightWatches = (() => {
       });
       const result = await res.json();
       if (!res.ok) {
-        if (result.error === 'no_coins') {
-          showToast('Necesitas Salma Coins para mas vigilancias');
+        if (result.error === 'premium_required') {
+          showToast(result.message || 'Con Premium puedes tener más vigilancias');
+          if (typeof window.openCoinsModal === 'function') window.openCoinsModal();
         } else {
-          showToast(result.error || 'Error al crear vigilancia');
+          showToast(result.message || result.error || 'Error al crear vigilancia');
         }
         return null;
-      }
-      if (result.coins_remaining !== undefined && window.currentUser) {
-        window.currentUser.coins_saldo = result.coins_remaining;
       }
       showToast('Vigilancia creada');
       return result.watch;
@@ -154,7 +152,7 @@ window.flightWatches = (() => {
     const freeLeft = Math.max(0, FREE_LIMIT - watches.length);
     const freeText = freeLeft > 0
       ? `${freeLeft} vigilancia${freeLeft !== 1 ? 's' : ''} gratis restante${freeLeft !== 1 ? 's' : ''}`
-      : 'Cada vigilancia extra: 1 Salma Coin';
+      : 'Con Premium puedes tener más vigilancias';
 
     $content.innerHTML = `
       <div class="vuelos-area fade-in">

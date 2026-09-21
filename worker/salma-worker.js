@@ -552,12 +552,17 @@ async function verifyAuthAndGetUser(authHeader) {
     const doc = await firestoreRes.json();
     const fields = doc.fields || {};
 
+    // Premium activo ⇔ premium_until existe y es futuro (el booleano isPremium es legacy: se queda
+    // en true para siempre tras la 1ª compra, no sirve). Solo lo escribe el webhook de Stripe.
+    const premiumUntilStr = fields.premium_until?.timestampValue || null;
+    const premiumUntilMs = premiumUntilStr ? new Date(premiumUntilStr).getTime() : 0;
+
     return {
       uid,
-      coins_saldo: parseInt(fields.coins_saldo?.integerValue || '0', 10),
-      rutas_gratis_usadas: parseInt(fields.rutas_gratis_usadas?.integerValue || '0', 10),
       name: fields.name?.stringValue || null,
       isPremium: fields.isPremium?.booleanValue || false,
+      premium_until: premiumUntilStr,
+      premium_active: premiumUntilMs > Date.now(),
     };
   } catch (e) {
     return null;
@@ -2695,7 +2700,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
@@ -2722,17 +2727,9 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   ctx.push(`[FECHA ACTUAL: ${today}]`);
   if (userName) ctx.push(`[USUARIO: ${userName}]`);
 
-  // ── Coins y rutas gratis ──
-  const rutasGratisRestantes = Math.max(0, 3 - (rutasGratisUsadas || 0));
-  const coins = coinsSaldo || 0;
-  ctx.push(`[SALMA COINS: ${coins} | RUTAS GRATIS RESTANTES: ${rutasGratisRestantes}/3]`);
-  ctx.push(`[INSTRUCCIONES SOBRE COINS — Lee atentamente:
-- El usuario tiene ${rutasGratisRestantes} ruta${rutasGratisRestantes !== 1 ? 's' : ''} gratis y ${coins} Salma Coins.
-- Si le quedan rutas gratis (>0): al generar una ruta, dile de forma natural cuántas le quedan después. Ejemplo: "Ya tienes tu ruta. Te queda 1 ruta gratis más — aprovéchala bien."
-- Si NO le quedan rutas gratis y NO tiene coins: ÚNICAMENTE si el usuario ha escrito exactamente "salma hazme una guía" o "hazme una guía salma", dile que se le acabaron las gratis y que necesita Salma Coins. NUNCA lo menciones por "3 días en X", "itinerario", "ruta", destino+días ni ninguna otra frase — solo esa frase exacta lo activa.
-- Si tiene coins: no hace falta mencionarlos salvo que le quede 1 solo. En ese caso: "Por cierto, te queda 1 coin. Para esta ruta necesitarás alguno más."
-- REGLA CRÍTICA: "3 días en Ronda", "quiero ir a X", "itinerario para Y", "ruta por Z" → responde con información del destino. NUNCA menciones coins, guías ni ventas. Los coins solo aparecen cuando se activa el modo guía con la frase exacta.
-- NUNCA digas precios de los packs ni hagas de vendedora. Solo informa del saldo y señala el botón.]`);
+  // Coins eliminados (21 sept 2026, modelo Premium puro): Salma ya no recibe saldo ni rutas gratis
+  // ni instrucciones de venta. Mientras no haya gates server-side (paso 3) no debe hablar de planes.
+  ctx.push(`[PLANES: NUNCA menciones coins, Salma Coins, rutas gratis, Premium, precios ni límites de uso, y no hagas de vendedora. Si el usuario pregunta cómo pagar o qué incluye su plan, dile que lo vea en Perfil → Mi plan.]`);
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
   if (userLocation) {
     const locName = userLocationName ? ` (${userLocationName})` : '';
@@ -2911,11 +2908,11 @@ Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
     // en las dos, duplicando la foto (y la llamada a Google Places Photo, coste doblado) por
     // parada. Reescrito para que quede claro que es UNA sola pasada: la propia "cuenta cada
     // parada" ES la transcripción que queda en el historial, no algo aparte.
-    userContent += `\n\n[FOTO ADJUNTA — si es una captura con una LISTA de sitios/paradas para una ruta (post de red social, notas, itinerario ajeno, capturas de otra guía): UNA SOLA PASADA por la lista, parada a parada, contando cada una en 2-3 frases (esto ya sirve de transcripción — no hace falta listar los nombres antes por separado ni repetir la ronda). Así, aunque la conversación se corte o el usuario conteste después, el contenido queda en el propio texto y no depende de la imagen — que no vuelves a tener en el turno siguiente. Como mucho UNA llamada a buscar_foto por parada — si ya conseguiste foto de un sitio en esta respuesta, no la vuelvas a pedir. No preguntes nada ambiguo tipo "¿cómo lo hacemos?" — ve directa a contarlas. No menciones coins ni "modo guía" en este caso.]`;
+    userContent += `\n\n[FOTO ADJUNTA — si es una captura con una LISTA de sitios/paradas para una ruta (post de red social, notas, itinerario ajeno, capturas de otra guía): UNA SOLA PASADA por la lista, parada a parada, contando cada una en 2-3 frases (esto ya sirve de transcripción — no hace falta listar los nombres antes por separado ni repetir la ronda). Así, aunque la conversación se corte o el usuario conteste después, el contenido queda en el propio texto y no depende de la imagen — que no vuelves a tener en el turno siguiente. Como mucho UNA llamada a buscar_foto por parada — si ya conseguiste foto de un sitio en esta respuesta, no la vuelvas a pedir. No preguntes nada ambiguo tipo "¿cómo lo hacemos?" — ve directa a contarlas. No menciones planes de pago ni "modo guía" en este caso.]`;
   } else if (guidedIsReco) {
     // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
     userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
-PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar coins/guías.
+PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar guías ni planes de pago.
 QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado en el contexto (compañía, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos; si no los hay, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
 Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Si NO se indica número de días: para una ciudad o pueblo, haz 1 día. Pero si es una RUTA/ROAD TRIP explícita por una costa, comarca o varios pueblos (el usuario dice "ruta", "road trip", "de sur a norte", "recorrido", o nombra varios sitios lejos entre sí) — **NUNCA lo metas en 1 solo día por defecto**: calcula tú cuántos días son razonables a ritmo de carretera normal (aprox. 100-150km con paradas por día, motos y coches turísticos más despacio que autovía) y repártelo en esos días, de punta a punta en orden geográfico, sin saltar de un extremo a otro y volver. Dilo explícito: "Esto da para N días" al principio. Breve: 2-3 frases por sitio.
 RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si es ruta/road trip por varios sitios, aplica el reparto de arriba en su lugar):
@@ -2949,7 +2946,7 @@ CIERRE EXACTO — termina con esta frase y nada más: "${editingActiveRoute
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
 
-PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos, enlaces de Google Maps (el sistema los pone verificados).
+PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías ni planes de pago, inventar URLs, párrafos largos, enlaces de Google Maps (el sistema los pone verificados).
 
 DÍAS: si el usuario no especificó número de días (solo puso el destino), genera UN SOLO DÍA. Si dijo "N días", usa ese número exacto.
 
@@ -2969,7 +2966,7 @@ NO llames a buscar_foto — las fotos se cargan automáticamente en el frontend.
 PROHIBIDO:
 — Generar SALMA_ROUTE_JSON bajo ningún concepto.
 — Preguntar "¿qué tipo de viaje?", "¿con quién vas?", "¿qué quieres hacer?" ni ninguna pregunta para personalizar una ruta.
-— Mencionar guías, rutas, coins, Salma Coins o el modo guía.
+— Mencionar guías, rutas, planes de pago, Premium o el modo guía.
 — Inventar URLs. Solo URLs que devuelve una herramienta. NUNCA enlaces de Google Maps — el sistema los genera verificados.
 — Poner negritas como título en línea sola (**Transporte:**, **Para comer:**). Las negritas son solo para datos inline: **8€**, **Lomprayah**, **2h30**.
 — Hacer preguntas al final del mensaje. Si quieres ofrecer ayuda, ofrece sin preguntar: "Si quieres que te busque hotel o algo concreto, dime." NO "¿Quieres que te busque hotel?"
@@ -8240,6 +8237,7 @@ REGLAS:
 
     const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
     const FW_FREE_LIMIT = 3;
+    const FW_PREMIUM_LIMIT = 10; // tope duro: cada vigilancia = 1 búsqueda Duffel diaria en el cron
 
     // ─── GET /flight-places — autocompletado de ciudades/aeropuertos (Duffel) ───
     if (request.method === 'GET' && url.pathname === '/flight-places') {
@@ -8304,7 +8302,7 @@ REGLAS:
       }
     }
 
-    // ─── POST /flight-watches — crear vigilancia (con limite coins) ───
+    // ─── POST /flight-watches — crear vigilancia (límite gratis / Premium) ───
     if (request.method === 'POST' && url.pathname === '/flight-watches') {
       try {
         const authHeader = request.headers.get('Authorization') || '';
@@ -8325,25 +8323,20 @@ REGLAS:
         const listData = listRes.ok ? await listRes.json() : {};
         const currentCount = (listData.documents || []).length;
 
-        let coinsRemaining = authUser.coins_saldo;
-
-        // Limite: 3 gratis, despues 1 coin
-        if (currentCount >= FW_FREE_LIMIT) {
-          if (authUser.coins_saldo < 1) {
-            return new Response(JSON.stringify({
-              error: 'no_coins',
-              message: 'Necesitas Salma Coins para añadir más vigilancias. Las 3 primeras son gratis.'
-            }), { status: 402, headers: FW_CORS });
-          }
-          // Descontar 1 coin
-          coinsRemaining = authUser.coins_saldo - 1;
-          const userPatchUrl = `${FIRESTORE_BASE}/users/${authUser.uid}?updateMask.fieldPaths=coins_saldo`;
-          await fetch(userPatchUrl, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
-            body: JSON.stringify({ fields: { coins_saldo: { integerValue: String(coinsRemaining) } } }),
-            signal: AbortSignal.timeout(5000)
-          });
+        // Límite: FW_FREE_LIMIT gratis; más solo con Premium activo (premium_until futuro, leído
+        // server-side y solo escribible por el webhook de Stripe) y con un tope duro — cada
+        // vigilancia activa consulta Duffel (de pago) en el cron diario, no puede ser ilimitada.
+        if (!authUser.premium_active && currentCount >= FW_FREE_LIMIT) {
+          return new Response(JSON.stringify({
+            error: 'premium_required',
+            message: 'Las ' + FW_FREE_LIMIT + ' primeras vigilancias son gratis. Con Premium puedes tener más.'
+          }), { status: 402, headers: FW_CORS });
+        }
+        if (authUser.premium_active && currentCount >= FW_PREMIUM_LIMIT) {
+          return new Response(JSON.stringify({
+            error: 'limit_reached',
+            message: 'Has llegado al máximo de ' + FW_PREMIUM_LIMIT + ' vigilancias. Borra alguna para añadir otra.'
+          }), { status: 409, headers: FW_CORS });
         }
 
         // Crear doc
@@ -8405,7 +8398,7 @@ REGLAS:
           }
         }
 
-        return new Response(JSON.stringify({ ok: true, watch: watchDoc, coins_remaining: coinsRemaining }), { status: 201, headers: FW_CORS });
+        return new Response(JSON.stringify({ ok: true, watch: watchDoc }), { status: 201, headers: FW_CORS });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
       }
@@ -8646,9 +8639,6 @@ REGLAS:
     const travelDates = body.travel_dates || null;
     const transport = body.transport || null;
     const withKids = body.with_kids || false;
-    // Coins y rutas gratis se leen server-side desde Firestore (P0-2 — no confiar en el frontend)
-    const coinsSaldo = authUser.coins_saldo;
-    const rutasGratisUsadas = authUser.rutas_gratis_usadas;
     const imageBase64 = body.image_base64 || null;
     const mapMode = body.map_mode || false;
     const uid = authUser.uid; // UID verificado server-side (no confiar en body.uid)
@@ -9176,7 +9166,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
