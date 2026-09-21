@@ -673,6 +673,40 @@ async function usageRecord(env, authUser, delta) {
   } catch (_) {}
 }
 
+// ═══════════════════════════════════════════════════════════════
+// TOPE DIARIO POR IP en endpoints de pago SIN sesión (21 sept 2026)
+// ═══════════════════════════════════════════════════════════════
+// Estos endpoints gastan dinero (Google, Claude, ElevenLabs, Duffel) y NO piden login, así que
+// los límites por usuario del paso 3 no los cubren. Red de seguridad rápida hasta poder exigir
+// sesión en cada uno: máximo de llamadas por IP y por día natural (UTC). FAIL-OPEN si KV falla.
+// Topes PROVISIONALES y generosos a propósito (uso legítimo intenso no debe notarlos); ajustar
+// con datos reales. Ojo: varias personas tras la misma IP (wifi compartida, datos móviles CGNAT)
+// comparten el tope.
+const IP_DAILY_CAPS = {
+  '/tts':           80,   // ElevenLabs — la más cara (una llamada por respuesta hablada)
+  '/narrate':       80,   // Claude Haiku — un aviso del Narrador
+  '/pin':           25,   // Claude Sonnet con visión — identificar un lugar por foto
+  '/nearby-pois':  300,   // Google Nearby Search — cada 30-60 s mientras camina con el Narrador
+  '/translate':    250,   // traductor push-to-talk
+  '/directions':   300,   // Google Directions
+  '/place-details':400,   // Google Place Details (se cachea 30 días por lugar)
+  '/staticmap':    150,   // Google Static Maps
+  '/flight-places':300,   // Duffel — autocompletado de aeropuertos
+  '/photo':       1000,   // Google Places Photo (se cachea en R2 tras la 1ª vez)
+};
+async function ipDailyGate(request, env, path) {
+  const max = IP_DAILY_CAPS[path];
+  if (!max || !env || !env.SALMA_KB) return { ok: true };
+  try {
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+    const key = 'iprate:' + path.slice(1) + ':' + ip + ':' + new Date().toISOString().slice(0, 10);
+    const cur = parseInt((await env.SALMA_KB.get(key)) || '0', 10) || 0;
+    if (cur >= max) return { ok: false, max };
+    await env.SALMA_KB.put(key, String(cur + 1), { expirationTtl: 60 * 60 * 30 });
+    return { ok: true };
+  } catch (_) { return { ok: true }; }
+}
+
 // ─── Helpers Firestore REST ───
 
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents`;
@@ -6058,6 +6092,18 @@ export default {
     }
 
     const url = new URL(request.url);
+
+    // ─── TOPE DIARIO POR IP (endpoints de pago sin sesión — ver IP_DAILY_CAPS) ───
+    if (IP_DAILY_CAPS[url.pathname]) {
+      const _ipGate = await ipDailyGate(request, env, url.pathname);
+      if (!_ipGate.ok) {
+        console.log(`[RATE] ${url.pathname} superó ${_ipGate.max}/día desde una IP`);
+        return new Response(JSON.stringify({
+          error: 'rate_limited',
+          message: 'Has llegado al límite diario de este servicio desde tu conexión. Vuelve mañana.',
+        }), { status: 429, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Retry-After': '3600' } });
+      }
+    }
 
     // ─── ENDPOINT /upload-photo (R2) ───
     if (request.method === 'POST' && url.pathname === '/upload-photo') {
