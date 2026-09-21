@@ -4895,6 +4895,16 @@ body {
   margin-bottom: 12px;
 }
 .itin-query-answer .itin-chat-hint { margin: 8px 0 0; }
+/* Aviso fijo bajo el título: qué guía se edita + para qué sirve el popup (siempre visible, aunque haya mensajes) */
+.itin-query-sub {
+  flex-shrink: 0; margin: -6px 0 10px;
+  font-size: 12px; line-height: 1.4; color: rgba(244,239,230,.6);
+}
+.itin-query-sub strong { display: block; margin-bottom: 2px; font-size: 13px; color: var(--crema, #f5f0e8); }
+.itin-query-clear {
+  margin-top: 4px; padding: 0; background: none; border: none;
+  color: var(--dorado2); font-size: 11px; text-decoration: underline; cursor: pointer;
+}
 .itin-query-inputrow {
   display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
 }

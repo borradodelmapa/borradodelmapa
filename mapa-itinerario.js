@@ -753,18 +753,26 @@ const mapaItinerario = {
     const input = document.getElementById('itin-query-input');
     if (!overlay || !answer || !input) return;
 
-    // Aviso al abrir: dejar claro que aquí se edita ESTA guía (con su nombre) y adónde ir para buscar cerca de uno.
-    // Se monta con nodos de texto (el título de la guía puede llevar cualquier carácter).
-    const _gTitle = (window._itinViewRoute && (window._itinViewRoute.title || window._itinViewRoute.name)) || '';
-    const _hint = document.createElement('div');
-    _hint.className = 'itin-chat-hint';
-    const _hintTitle = document.createElement('strong');
-    _hintTitle.textContent = _gTitle ? 'Estás editando tu guía «' + _gTitle + '».' : 'Estás editando esta guía.';
-    _hintTitle.style.cssText = 'display:block;margin-bottom:6px;color:var(--crema,#f5f0e8)';
-    _hint.appendChild(_hintTitle);
-    _hint.appendChild(document.createTextNode('Desde aquí puedes añadir o quitar paradas, cambiar lo que quieras y preguntarme lo que necesites de esta guía. Para buscar algo cerca de ti (farmacia, restaurante…), usa Cerca mía o el chat general.'));
-    answer.innerHTML = '';
-    answer.appendChild(_hint);
+    answer.innerHTML = '<div class="itin-chat-hint">Pregúntame lo que quieras sobre esta ruta, o pídeme un cambio.</div>';
+    // Aviso FIJO (fuera de la conversación, siempre visible aunque haya mensajes de antes): que aquí se edita
+    // ESTA guía (con su nombre), adónde ir para buscar cerca de uno, y borrar la conversación guardada de la guía.
+    // Nodos de texto: el título de la guía puede llevar cualquier carácter.
+    const _sub = document.getElementById('itin-query-sub');
+    if (_sub) {
+      const _gTitle = (window._itinViewRoute && (window._itinViewRoute.title || window._itinViewRoute.name)) || '';
+      _sub.innerHTML = '';
+      const _st = document.createElement('strong');
+      _st.textContent = _gTitle ? 'Editando «' + _gTitle + '»' : 'Editando esta guía';
+      _sub.appendChild(_st);
+      _sub.appendChild(document.createTextNode('Añade, quita, cambia o pregunta sobre esta guía. Para buscar cerca de ti: «Cerca mía» o el chat general.'));
+      const _clr = document.createElement('button');
+      _clr.type = 'button';
+      _clr.className = 'itin-query-clear';
+      _clr.textContent = 'Borrar conversación';
+      _clr.onclick = _clearItinQueryHistory;
+      _sub.appendChild(document.createElement('br'));
+      _sub.appendChild(_clr);
+    }
     input.value = '';
     overlay.style.display = 'flex';
     setTimeout(() => input.focus(), 50);
@@ -915,6 +923,27 @@ const mapaItinerario = {
         }
       } catch (_) {}
     }
+  }
+
+  // Borra la conversación guardada de ESTA guía (popup de consulta): la pantalla, el historial en memoria y su copia
+  // en Firestore (users/{uid}/maps/{id}.query_history). NO toca la guía. Ese historial se manda a Claude como contexto
+  // en cada mensaje, así que borrarlo también limpia lo que Salma "recuerda" de esta guía.
+  async function _clearItinQueryHistory() {
+    if (typeof salma === 'undefined') return;
+    if (salma._streaming) { salma.isBusyNotify(); return; }
+    if (!confirm('¿Borrar la conversación de esta guía? No borra la guía.')) return;
+    salma.history = [];
+    const answer = document.getElementById('itin-query-answer');
+    if (answer) answer.innerHTML = '<div class="itin-chat-hint">Pregúntame lo que quieras sobre esta ruta, o pídeme un cambio.</div>';
+    try {
+      if (salma.currentRouteId && window.currentUser && typeof db !== 'undefined') {
+        await db.collection('users').doc(window.currentUser.uid).collection('maps').doc(salma.currentRouteId)
+          .update({ query_history: firebase.firestore.FieldValue.delete() });
+      }
+    } catch (e) {
+      console.warn('[Salma] No se pudo borrar el historial guardado de la guía:', e);
+    }
+    if (typeof showToast === 'function') showToast('Conversación borrada');
   }
 
   function _closeItinQuery() {
