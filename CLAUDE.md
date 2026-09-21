@@ -2015,6 +2015,51 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     se arrancaría con **Twilio Sandbox** (número compartido, testers se unen con
     `join <código>`, sesión caduca a 72h, solo plantillas de ejemplo predefinidas) —
     mismo SDK/código, solo cambian credenciales y número al migrar a producción.
+  - **Checklist de Sandbox → producción (21 sept 2026, sin ejecutar, para cuando el alta
+    de autónomo esté hecha).** Verificado contra el código real: `sendWhatsAppMessage()`
+    y el endpoint `/whatsapp` (`salma-worker.js`) ya usan `env.TWILIO_WHATSAPP_FROM` sin
+    ningún valor de sandbox hardcodeado — **el paso a producción no necesita ningún
+    cambio de código**, solo trámite en Twilio/Meta + cambiar el valor de un secret.
+    1. **Pasar la cuenta de Twilio de Trial a pago** — consola Twilio → "Upgrade" →
+       método de pago + verificación de identidad. Quita las restricciones de prueba
+       (nada de "Twilio Trial Account" en los mensajes, se puede escribir a cualquier
+       número, no solo a los verificados).
+    2. **Crear el WhatsApp Sender de producción** — Consola Twilio → Messaging → Senders
+       → WhatsApp senders → "New WhatsApp Sender". Dos caminos: que Twilio cree el Meta
+       Business Manager si no hay uno, o conectar uno ya existente. Elegir número: uno
+       nuevo comprado en Twilio, o uno propio ya existente (tiene que estar "liberado"
+       antes de la app de WhatsApp normal/Business si ya se usa ahí).
+    3. **Verificación de negocio en Meta — el paso bloqueado hoy.** Pide nombre legal del
+       negocio, dirección, documento que acredite la actividad (aquí entra el alta de
+       autónomo) y a veces confirmación por llamada/código al número del negocio. Tarda
+       de días a un par de semanas. Sin esto, el número se queda "pendiente" y no puede
+       mandar nada fuera del Sandbox.
+    4. **Perfil de negocio de WhatsApp** — nombre visible, categoría (ej. "Viajes"),
+       descripción corta, logo, web (borradodelmapa.com).
+    5. **Plantillas de mensaje — solo si Salma va a escribir ella primero.** Si solo
+       responde dentro de la ventana de 24h desde que el usuario escribe (como el eco de
+       F5.1, o el aviso de `/beta-feedback` a Paco), no hace falta plantilla. Si en algún
+       momento inicia la conversación (F5.5, alertas de vuelo proactivas), ese mensaje
+       tiene que ser una plantilla (HSM, con variables) pre-aprobada por Meta desde
+       Twilio Console → Content Template Builder — normalmente unas horas de espera.
+    6. **Configurar el webhook en el número nuevo** — mismo endpoint de siempre,
+       `https://salma-api.borradodelmapa-api.workers.dev/whatsapp`, método POST, en el
+       "Webhook configuration" del Sender ya aprobado (equivalente al "When a message
+       comes in" del Sandbox). No hace falta tocar `validateTwilioSignature()`.
+    7. **Cambiar el secret**: `cd worker; npx wrangler secret put TWILIO_WHATSAPP_FROM -c
+       wrangler.toml` con el número nuevo (`whatsapp:+34XXXXXXXXX`). `TWILIO_ACCOUNT_SID`/
+       `TWILIO_AUTH_TOKEN` se quedan igual si es la misma cuenta/proyecto de Twilio — ojo
+       con el lío ya documentado del 21 sept de dos proyectos Twilio distintos con Auth
+       Tokens distintos, usar el de "Credenciales en vivo" del proyecto correcto.
+    8. **Probar de punta a punta** — WhatsApp real al número de producción, confirmar que
+       llega la respuesta, `wrangler tail salma-api` en paralelo igual que siempre.
+    9. **Aviso de coste (protocolo §8), pendiente de decir con cifra real antes de
+       activarlo de verdad**: en Sandbox los mensajes son gratis; en producción Twilio
+       cobra por conversación (franja de 24h), con precio distinto si el usuario escribe
+       primero ("service") o si Salma inicia ("marketing/utility") — y desde el 1 de
+       octubre de 2026 los mensajes de servicio dentro de esa ventana **dejan de ser
+       gratis** (ya anotado más abajo en "Cambio de coste a vigilar"). No activar
+       producción sin decir a Paco el coste estimado según volumen esperado.
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
