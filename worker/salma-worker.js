@@ -7012,12 +7012,23 @@ export default {
       // Requiere 2 secrets nuevos que aún no están puestos: TWILIO_WHATSAPP_FROM
       // (ya pendiente desde F5.1) y PACO_WHATSAPP_TO (número de Paco, con prefijo
       // "whatsapp:+34..."). Sin ellos, el feedback se guarda igual, solo no avisa.
+      console.log('[BetaFeedback] secrets presentes:', {
+        sid: !!env.TWILIO_ACCOUNT_SID, token: !!env.TWILIO_AUTH_TOKEN,
+        from: !!env.TWILIO_WHATSAPP_FROM, to: !!env.PACO_WHATSAPP_TO,
+      });
       if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
         const who = body.email || user.name || user.uid.slice(0, 8);
         const lastLines = logsText.split('\n').slice(-15).join('\n');
         const shotLine = screenshotUrl ? `\n📎 Captura: ${screenshotUrl}\n` : '';
         const waText = `🧪 Feedback tester\n${who}\n${String(body.page || '')}\n\n"${note}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
-        ctx.waitUntil(sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, waText));
+        console.log('[BetaFeedback] entrando en bloque de envío WhatsApp, longitud texto:', waText.length);
+        ctx.waitUntil(
+          sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, waText)
+            .then(res => console.log('[BetaFeedback] respuesta Twilio, status:', res.status))
+            .catch(e => console.error('[BetaFeedback] excepción al enviar WhatsApp:', e.message))
+        );
+      } else {
+        console.log('[BetaFeedback] NO se manda WhatsApp — falta algún secret');
       }
 
       return new Response(JSON.stringify({ ok: true, id: docId }), { status: 200, headers: corsH });
