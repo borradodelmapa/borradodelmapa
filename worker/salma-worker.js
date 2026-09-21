@@ -7002,9 +7002,11 @@ export default {
         });
         if (!fsRes.ok) {
           const errText = await fsRes.text().catch(() => '');
+          console.error('[BetaFeedback] Firestore write failed, status:', fsRes.status, 'body:', errText.slice(0, 500));
           return new Response(JSON.stringify({ error: 'firestore_write_failed', detail: errText.slice(0, 300) }), { status: 502, headers: corsH });
         }
       } catch (e) {
+        console.error('[BetaFeedback] excepción al escribir en Firestore:', e.message);
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
 
