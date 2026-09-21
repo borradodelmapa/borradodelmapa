@@ -1900,6 +1900,39 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 
 ### 🔴 Crítico — verificado ahora mismo
 
+- **🚨 EDITAR UNA GUÍA GRANDE LA SOBRESCRIBE CON MENOS PARADAS — 21 sept 2026, SIN ARREGLAR.
+  A COMPROBAR/RECUPERAR CUANTO ANTES.** Paco pidió en el popup de consulta sobre su guía de
+  Navarra/País Vasco (~19 paradas): *"Añade una parada más al final, tengo tiempo, naturaleza"*.
+  Salma dijo "lo añado entre la Presa de Irabia y Alto de Larrau", "generó", contestó *"Ruta
+  actualizada"* y **la guía guardada quedó con 12 paradas** (sin la nueva). Sin ningún error visible.
+  **Causa, con evidencia de `wrangler tail`:** `[RESCATE] ✓ JSON truncado reconstruido: 12
+  paradas (stop_reason: max_tokens)`. (1) el mensaje lleva "añade" → `_looksLikeEdit`
+  ([salma-worker.js:8673](worker/salma-worker.js:8673)) lo trata como edición de la ruta
+  entera y le pide a Claude que **reemita las ~19 paradas completas**; (2) eso supera el tope de
+  20.000 tokens de salida y el JSON se corta; (3) el RESCATE 1 ([salma-worker.js:9820](worker/salma-worker.js:9820))
+  reconstruye solo lo que llegó (12) y lo da por bueno; (4) la comprobación de cordura del
+  frontend ([salma.js:1535](salma.js:1535)) solo salta si se conserva **<50%** de las paradas y
+  aquí eran 12/19 = 63% → dice "Ruta actualizada" y `_commitRouteEdit` ([salma.js:2169](salma.js:2169))
+  **guarda las 12 encima de la guía**. NO tiene relación con lo del 21 sept (reglas, coins,
+  Stripe): el flujo es anterior. Con guías de ≥~15 paradas se repetirá cada vez.
+  **Copia de seguridad:** `_commitRouteEdit` guarda la versión anterior en
+  `users/{uid}/maps/{id}.itinerarioIA_prev`, **pero solo la última** — un segundo cambio en la
+  misma guía la pisa. **No editar esa guía hasta recuperarla.**
+  **Recuperación (desde el ordenador, consola F12 con la guía abierta; Paco estaba en el móvil
+  y no pudo hacerlo).** 1º solo lectura, comprobar que la copia tiene ~19:
+  `(async()=>{const ref=firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('maps').doc(salma.currentRouteId);const d=(await ref.get()).data();console.log('paradas ahora:',JSON.parse(d.itinerarioIA).stops.length,'| en la copia:',d.itinerarioIA_prev?JSON.parse(d.itinerarioIA_prev).stops.length:'NO HAY COPIA');})()`
+  2º SOLO si la copia tiene las ~19: restaurar (`ref.update({ itinerarioIA: d.itinerarioIA_prev })`).
+  **Arreglos propuestos, ninguno implementado (Paco no ha dado OK):**
+  (a) si el Worker tuvo que usar el RESCATE 1 por `max_tokens` en una edición, **no devolver la
+  ruta como buena** (avisar, sin sobrescribir); (b) la alarma del frontend debe contar
+  **paradas perdidas** (menos paradas que antes al pedir *añadir*), no solo el % conservado;
+  (c) lo más limpio: que "añade una parada" NO reescriba toda la ruta y use el camino del botón
+  "Añadir a la guía" (`merge_into_route`, ya existe, solo genera lo nuevo y lo fusiona).
+  **Aviso de coste (§8):** (c) BAJA el gasto — hoy cada edición de una guía grande reemite hasta
+  ~20.000 tokens de Claude Sonnet (~0,3 €); solo lo nuevo es una fracción. (a) y (b) no llaman a
+  ninguna API. Paco (harto de fallos en las guías): quiere que esto se chequee antes de seguir
+  con el paso 2 del plan de pagos.
+
 - **Octavo hallazgo del mismo hilo foto+guía, 19 sept 2026, DESPLEGADO, sin confirmar en
   pantalla.** Con las fotos y la pantalla negra ya arregladas (entradas de abajo), Paco
   probó la ruta de Navarra de 10 paradas de verdad y confirmó que "sí que va", pero
