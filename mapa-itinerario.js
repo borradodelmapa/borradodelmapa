@@ -921,6 +921,7 @@ const mapaItinerario = {
     const msg = input ? input.value.trim() : '';
     const hasPendingPhoto = !!salma._pendingPhoto;
     if (!msg && !hasPendingPhoto) return;
+    if (salma.isBusyNotify()) return;   // Salma responde: se puede seguir escribiendo, no enviar ni vaciar la caja
     if (input) { input.value = ''; input.style.height = 'auto'; }
     const hint = answer && answer.querySelector('.itin-chat-hint');
     if (hint) hint.remove();

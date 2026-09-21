@@ -877,6 +877,15 @@ const salma = {
   },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
+  // ¿Salma está respondiendo? send() descarta en silencio lo que llegue mientras tanto, así que quien
+  // envíe debe llamar a esto ANTES de vaciar su caja de texto y no enviar (ni borrar nada) si da true:
+  // se puede seguir escribiendo, pero no mandar hasta que termine.
+  isBusyNotify() {
+    if (!this._streaming) return false;
+    if (typeof showToast === 'function') showToast('Salma está respondiendo — cuando termine, envía tu mensaje');
+    return true;
+  },
+
   async send(msg, opts = {}) {
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;

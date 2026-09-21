@@ -1304,6 +1304,7 @@ async function renderWelcome() {
   if (wSend) wSend.addEventListener('click', () => {
     const msg = wInput.value.trim();
     if (!msg) return;
+    if (typeof salma !== 'undefined' && salma.isBusyNotify()) return;   // Salma responde: no vaciar lo escrito
     wInput.value = '';
     wInput.style.height = 'auto';
     resetWelcomeButtons();
@@ -1319,6 +1320,7 @@ async function renderWelcome() {
       e.preventDefault();
       const msg = wInput.value.trim();
       if (!msg) return;
+      if (typeof salma !== 'undefined' && salma.isBusyNotify()) return;   // Salma responde: no vaciar lo escrito
       wInput.value = '';
       wInput.style.height = 'auto';
       resetWelcomeButtons();
@@ -3801,6 +3803,7 @@ function sendMessage() {
   const msg = $input.value.trim();
   const hasPendingPhoto = typeof salma !== 'undefined' && salma._pendingPhoto;
   if (!msg && !hasPendingPhoto) return;
+  if (typeof salma !== 'undefined' && salma.isBusyNotify()) return;   // Salma responde: no vaciar lo escrito
   $input.value = '';
   $input.style.height = 'auto';
   resetInputButtons();
@@ -3860,6 +3863,7 @@ function sendMessage() {
         if (typeof window._sendItinQuery === 'function') window._sendItinQuery();
       } else if (isWelcome) {
         const msg = inputEl.value.trim();
+        if (msg && typeof salma !== 'undefined' && salma.isBusyNotify()) return;   // Salma responde: no vaciar lo dictado
         inputEl.value = '';
         inputEl.style.height = 'auto';
         // Reset welcome buttons
