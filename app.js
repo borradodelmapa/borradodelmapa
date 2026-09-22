@@ -240,10 +240,13 @@ function _hasUnsavedChatConversation() {
 function _goToFreshBillete() {
   showState('chat');
   if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
-  // Sube a la caja de ejemplos de ARRIBA y la deja lista para escribir (mismo
-  // efecto que tocarla a mano) — NO al billete de "Ruta rápida" más abajo.
-  // Corregido 22 sept 2026: la primera versión llevaba al campo "¿A dónde?" del
-  // billete; Paco aclaró que quería el cuadro de texto de arriba.
+  // Sube a la caja de ejemplos de ARRIBA — NO al billete de "Ruta rápida" más
+  // abajo. Solo la deja a la vista, con los ejemplos rotando tal cual (sin
+  // borrarlos ni entrar en modo edición solo); hace falta tocarla para que se
+  // vuelva editable — eso ya lo hace _startEditing() por su cuenta al tocarla.
+  // Corregido 22 sept 2026 dos veces: primero llevaba al campo "¿A dónde?" del
+  // billete; después entraba en modo edición sola al llegar (Paco: "que no se
+  // borren los ejemplos, que sea al pulsar" — pulsar la caja, no el "+").
   // Si hay ruta activa debajo, "Trazar nueva ruta +" (oculto con `hidden` desde
   // que existe el FAB, sigue en el DOM solo como gancho programático) cambia la
   // tarjeta a hero+billete oculto — así aparece la caja de ejemplos, que si no
@@ -252,10 +255,7 @@ function _goToFreshBillete() {
   const newBtn = document.querySelector('[data-ce-newbillete]');
   if (newBtn) newBtn.click();
   const rot = document.getElementById('ce-rotable');
-  if (rot) {
-    rot.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    rot.click(); // dispara _startEditing() (ver _wireRotable) — deja el cuadro editable y con foco
-  }
+  if (rot) rot.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function goToNewRouteFAB() {
@@ -751,7 +751,7 @@ function _renderChatEmpty() {
         ta.className = 'ce-rotable-input';
         ta.id = 'ce-rotable-input';
         ta.rows = 3;
-        ta.placeholder = 'Escribe la ruta que quieres...';
+        ta.placeholder = 'Escríbeme la ruta que quieres...';
         ta.addEventListener('click', (e) => e.stopPropagation());
         _exEl.replaceWith(ta);
         ta.focus();
