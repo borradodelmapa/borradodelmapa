@@ -1799,10 +1799,24 @@ const salma = {
   async _stream(bodyObj, loadingEl) {
     // Obtener Firebase ID token para auth server-side
     let idToken = null;
-    try {
-      const user = firebase.auth().currentUser;
-      if (user) idToken = await user.getIdToken();
-    } catch (e) { console.warn('[Salma] No se pudo obtener idToken:', e); }
+    const _user = firebase.auth().currentUser;
+    if (_user) {
+      try {
+        idToken = await _user.getIdToken();
+      } catch (e) {
+        // 22 sept 2026: SÍ hay sesión (currentUser existe) pero no se pudo refrescar el
+        // token — normalmente un corte de red justo en ese momento (dispositivos con
+        // intermitencia de red ya documentada en este proyecto). Antes esto se tragaba en
+        // silencio y la petición seguía SIN cabecera: el Worker respondía 401 con "Inicia
+        // sesión para hablar conmigo", que confunde a alguien que sí está logueado. Se
+        // lanza para que lo capture el catch de send() de arriba, que ya tiene el aviso
+        // correcto ("sin conexión..."), en vez de mandar la petición sin autenticar.
+        console.warn('[Salma] No se pudo refrescar el idToken (sesión activa, probable corte de red):', e);
+        throw new Error('No se pudo comprobar tu sesión (probable corte de red)');
+      }
+    }
+    // Sin sesión (currentUser null): se manda sin cabecera a propósito — el Worker
+    // responde 401 con su propio aviso de "inicia sesión", que ahí sí es correcto.
 
     return new Promise((resolve, reject) => {
       const signal = this._currentAbort ? this._currentAbort.signal : undefined;

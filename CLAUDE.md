@@ -1212,6 +1212,33 @@ mensaje mencionando una parada tipo aeropuerto/estación dentro del popup de edi
 confirme que ya no salen botones de Uber/Bolt, que el botón "Añadir a la guía" se ve, y
 que el popup tiene sitio de sobra.**
 
+**Cuarto bug, encontrado al probar el anterior, DISTINTO y SIN RELACIÓN — 22 sept 2026,
+solo frontend, sin desplegar Worker.** Paco probó el fix de arriba (popup sobre "Pirineos
+de oeste a este") y salió otro error: la respuesta de Salma fue *"Inicia sesión para
+hablar conmigo. ¡Es gratis!"* estando logueado de verdad. Causa, en `salma.js`
+(`_stream()`): el ID token de Firebase se pedía con `await user.getIdToken()` dentro de un
+`try/catch` que, si fallaba (típicamente un corte de red justo en ese instante — la
+captura de Paco mostraba `0 K/s` de datos en ese momento, mismo patrón de intermitencia de
+red ya documentado muchas veces en este archivo con este dispositivo), se tragaba el error
+en silencio y la petición se mandaba igual, **sin cabecera `Authorization`**. El Worker
+(`POST /`) trata "sin cabecera" exactamente igual que "no ha iniciado sesión nunca" y
+responde 401 con ese texto — correcto para quien de verdad no tiene cuenta, engañoso para
+alguien que SÍ la tiene y solo tuvo un corte de red al pedir el token.
+**Arreglo**: si `firebase.auth().currentUser` existe (hay sesión) pero `getIdToken()`
+falla, ya no se manda la petición sin autenticar — se lanza la excepción y la recoge el
+`catch` que ya tiene `salma.send()` más arriba, con el aviso que ya usaba para cualquier
+otro corte de red ("Uf, sin conexión o me he aturrullado. Vuelve a intentarlo."). Si de
+verdad no hay sesión (`currentUser` null), se sigue mandando sin cabecera a propósito — ahí
+el 401 del Worker es el comportamiento correcto. `salma.js?v=109` en `index.html`. Solo
+frontend — no toca el Worker, no hace falta redeploy, sin coste.
+**Sin confirmar la causa exacta con el panel 🐛** (no se pidió esta vez, la captura ya traía
+bastante indicio: `0 K/s` de red en el momento del error) — si se repite el mismo mensaje
+CON buena señal de datos, sería un bug distinto (sesión de verdad caducada/revocada) y
+habría que mirarlo aparte con el log del panel 🐛.
+**Pendiente: que Paco repita el mismo caso (o cualquier mensaje en el popup) y confirme que
+ya no sale "Inicia sesión" estando logueado — si vuelve a pasar con buena cobertura de
+datos, decirlo para investigar la causa real en vez de asumir que es de red.**
+
 ---
 
 ## Qué es este proyecto
