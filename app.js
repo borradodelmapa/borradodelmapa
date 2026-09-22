@@ -3512,29 +3512,50 @@ function _isBenignPopupCancel(e) {
   return !!e && (e.code === 'auth/cancelled-popup-request' || e.code === 'auth/popup-closed-by-user');
 }
 
+// Todo lo que hay que hacer tras un login con Google que NO cubre ya
+// auth.onAuthStateChanged (currentUser/enrutado, genérico para popup/redirect/sesión
+// ya abierta): crear el doc de Firestore si es la primera vez, y ofrecer la huella.
+// Compartida entre doGoogleLogin() (popup) y el respaldo por redirect (paso 3, ver
+// abajo) para no duplicar esta lógica en los dos sitios.
+async function _afterGoogleAuth(user) {
+  const doc = await db.collection('users').doc(user.uid).get();
+  if (!doc.exists) {
+    await db.collection('users').doc(user.uid).set({
+      name: user.displayName || user.email.split('@')[0],
+      email: user.email,
+      mapsCount: 0,
+      // premium_until / isPremium / coins_saldo / rutas_gratis_usadas: NO se escriben desde
+      // el cliente (las reglas de Firestore lo prohíben). Solo el Worker los toca.
+      createdAt: new Date().toISOString()
+    });
+  }
+  closeModal();
+  // Ofrecer registrar huella si no la tiene y el dispositivo la soporta
+  if (!localStorage.getItem('bdm_webauthn_cred') && window.PublicKeyCredential) {
+    registerFingerprint(user.email);
+  }
+}
+
 async function doGoogleLogin() {
   try {
     const result = await _signInWithGooglePopup();
     if (!result) return;   // había otra ventana abierta: no hacer nada
-    const user = result.user;
-    const doc = await db.collection('users').doc(user.uid).get();
-    if (!doc.exists) {
-      await db.collection('users').doc(user.uid).set({
-        name: user.displayName || user.email.split('@')[0],
-        email: user.email,
-        mapsCount: 0,
-        // premium_until / isPremium / coins_saldo / rutas_gratis_usadas: NO se escriben desde
-        // el cliente (las reglas de Firestore lo prohíben). Solo el Worker los toca.
-        createdAt: new Date().toISOString()
-      });
-    }
-    closeModal();
-    // Ofrecer registrar huella si no la tiene y el dispositivo la soporta
-    if (!localStorage.getItem('bdm_webauthn_cred') && window.PublicKeyCredential) {
-      registerFingerprint(user.email);
-    }
+    await _afterGoogleAuth(result.user);
   } catch (e) {
     if (_isBenignPopupCancel(e)) { console.log('Google login cancelado (' + e.code + ')'); return; }
+    // Paso 3 del protocolo (22 sept 2026): el navegador bloqueó el popup (frecuente en
+    // Safari/móvil) — reintentar con redirect de página completa. auth.getRedirectResult()
+    // (ver junto a auth.onAuthStateChanged, más abajo) recoge el resultado al volver.
+    if (e && e.code === 'auth/popup-blocked') {
+      console.log('Google: popup bloqueado, reintentando con signInWithRedirect...');
+      try {
+        await auth.signInWithRedirect(googleProvider);
+      } catch (e2) {
+        console.error('Google redirect error:', e2);
+        showAuthError('login-error', authErrorMsg(e2));
+      }
+      return; // signInWithRedirect navega fuera de la página — nada más que hacer aquí
+    }
     console.error('Google login error:', e);
     showAuthError('login-error', authErrorMsg(e));
   }
@@ -3680,6 +3701,18 @@ async function _openSharedRoute(shareId) {
     showToast('No se pudo cargar la ruta compartida');
   }
 }
+
+// Respaldo de doGoogleLogin() por popup bloqueado (paso 3, ver _afterGoogleAuth arriba):
+// al volver de signInWithRedirect(), esto recoge el resultado UNA vez. Si no hay ningún
+// redirect pendiente (carga normal de la página), resuelve con result=null — inofensivo.
+// El enrutado/currentUser los pone igual auth.onAuthStateChanged de abajo, que dispara
+// con cualquier método de login; esto solo cubre lo que ese listener no hace (doc nuevo
+// + huella).
+auth.getRedirectResult().then((result) => {
+  if (result && result.user) _afterGoogleAuth(result.user);
+}).catch((e) => {
+  if (!_isBenignPopupCancel(e)) console.warn('Google getRedirectResult error:', e);
+});
 
 auth.onAuthStateChanged(async (user) => {
   if (user) {

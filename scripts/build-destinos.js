@@ -7,6 +7,8 @@
  *   node scripts/build-destinos.js                → genera todas las páginas
  *   node scripts/build-destinos.js --country vn   → solo un país
  *   node scripts/build-destinos.js --dry-run      → muestra stats sin generar
+ *   node scripts/build-destinos.js --index-only   → solo destinos/index.html
+ *                                                    (no toca las páginas de país/destino)
  */
 
 import fs from 'fs';
@@ -782,13 +784,10 @@ function buildIndexHTML(countriesByContinent) {
 </head>
 <body class="destino-page">
 
-  <header class="app-header">
-    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
-    <div class="app-header-actions" id="header-actions">
-      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
-      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
-    </div>
-  </header>
+  <!-- Sin reloj aquí (no hay un destino concreto al que darle hora) — solo logo+eslogan. -->
+  <div class="chat-empty destino-clock-wrap">
+    ${LOGO_HTML}
+  </div>
 
   <section class="destino-hero">
     <h1 class="destino-title">Destinos</h1>
@@ -817,26 +816,17 @@ function buildIndexHTML(countriesByContinent) {
     ${continentsHTML}
     </div>
 
-    <!-- SALMA INLINE -->
-    <section class="destino-salma-section">
+    <!-- SALMA — solo saludo (ver mismo criterio en buildHTML/buildCountryHTML) -->
+    <a class="destino-salma-section" href="/?go=chat">
       <div class="destino-salma-header">
         <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
         <span class="destino-salma-title">¿No encuentras tu destino? Pregúntale a Salma</span>
       </div>
-      <div class="salma-chat-body" id="salma-chat-body">
+      <div class="salma-chat-body">
         <div class="salma-chat-bubble">Dime adónde quieres ir y te armo la ruta en un minuto.</div>
-        <div class="salma-chat-chips" id="salma-chat-chips">
-          <button class="salma-chip" data-msg="Destinos baratos desde España">💰 Destinos baratos</button>
-          <button class="salma-chip" data-msg="Destinos de playa en invierno">🏖️ Playa en invierno</button>
-          <button class="salma-chip" data-msg="Escapada fin de semana Europa">✈️ Escapada Europa</button>
-        </div>
       </div>
-      <div class="salma-chat-input-bar">
-        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="Japón 2 semanas|playa Caribe presupuesto|trekking Nepal|ruta Marruecos en coche|islas Grecia 7 días">
-        <button class="salma-mic" id="salma-mic" type="button" aria-label="Hablar">🎙️</button>
-        <button class="salma-chat-send" id="salma-chat-send">›</button>
-      </div>
-    </section>
+      <div class="destino-salma-cta">Seguir hablando con Salma <span>→</span></div>
+    </a>
   </main>
 
   <footer class="destino-footer">
@@ -848,6 +838,7 @@ function buildIndexHTML(countriesByContinent) {
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
 
+  ${BOTTOM_NAV}
   <script>
   window.DESTINO = { nombre: 'Destinos', pais: '', id: 'index', code: '' };
   window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
@@ -879,6 +870,11 @@ async function main() {
   const dryRun = args.includes('--dry-run');
   const countryFlag = args.indexOf('--country');
   const onlyCountry = countryFlag >= 0 ? args[countryFlag + 1] : null;
+  // Recalcula datos de todos los países (para el índice/sitemap) pero NO reescribe
+  // ninguna página de destino/país — para tocar solo destinos/index.html sin rehacer
+  // las 1.793 páginas. Útil para cambios de cabecera/menú que también afectan al
+  // índice pero cuyo rollout completo se hace aparte (ver CLAUDE.md protocolo §9).
+  const indexOnly = args.includes('--index-only');
 
   const countries = JSON.parse(fs.readFileSync(COUNTRIES_FILE, 'utf-8'));
   const countryMap = {};
@@ -917,7 +913,7 @@ async function main() {
           prev: i > 0 ? { slug: `${validDests[i-1].id}-${countrySlug}`, name: validDests[i-1].nombre } : null,
           next: i < validDests.length - 1 ? { slug: `${validDests[i+1].id}-${countrySlug}`, name: validDests[i+1].nombre } : null,
         };
-        if (!dryRun) {
+        if (!dryRun && !indexOnly) {
           const route = loadRoute(dest.id, countrySlug);
           fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route, nav));
         }
@@ -926,7 +922,7 @@ async function main() {
       }
 
       // ── Nivel 2: página de país ──
-      if (!dryRun) {
+      if (!dryRun && !indexOnly) {
         fs.writeFileSync(path.join(OUT_DIR, `${countrySlug}.html`), buildCountryHTML(countryName, code, destinos));
       }
       allSitemapUrls.push({ url: `${DOMAIN}/destinos/${countrySlug}.html`, priority: 0.9, freq: 'weekly' });
@@ -954,12 +950,12 @@ async function main() {
     console.log(`   📄 Índice: destinos/index.html`);
   }
 
-  // Sitemap — solo se reescribe en una pasada completa (sin --country), para
-  // que una prueba de un solo país no borre las URLs del resto del sitemap.
-  if (!dryRun && !onlyCountry && allSitemapUrls.length > 0) {
+  // Sitemap — solo se reescribe en una pasada completa que además escriba las páginas
+  // (ni --country ni --index-only), para que una prueba parcial no lo toque sin querer.
+  if (!dryRun && !onlyCountry && !indexOnly && allSitemapUrls.length > 0) {
     fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls));
     console.log(`   🗺️ Sitemap: ${allSitemapUrls.length} URLs`);
-  } else if (onlyCountry) {
+  } else if (onlyCountry || indexOnly) {
     console.log(`   🗺️ Sitemap: sin tocar (solo se regenera en una pasada completa)`);
   }
 
@@ -969,6 +965,7 @@ async function main() {
   console.log(`   📍 Destinos: ${totalDest}`);
   console.log(`   ⚠️ Errores: ${errors}`);
   if (dryRun) console.log(`   (dry-run)`);
+  if (indexOnly) console.log(`   (index-only — países/destinos solo contados, no reescritos)`);
 }
 
 main().catch(console.error);

@@ -1064,13 +1064,53 @@ dos rondas de ajustes (logo, eslogan, quitar chat interactivo, quitar hueco de s
 **Pendiente antes del rollout completo (193 países, 1.793 destinos):**
 1. Mejorar `geocode-destinos.js` para los nombres de zona compuestos (fallback a la
    primera parte del nombre, o al centro de la región).
-2. Aplicar el mismo tratamiento (logo/eslogan/menú) a `buildIndexHTML` (la portada de
-   `/destinos/`) — no tocada todavía, `--country` no la regenera.
+2. ~~Aplicar el mismo tratamiento a `buildIndexHTML`~~ → **HECHO 22 sept 2026**, ver
+   más abajo.
 3. Geocodificar y regenerar país a país (o de golpe, a decidir con Paco), revisando
    alguno más antes de ir a las 1.793 de una vez.
 4. Decidir si versionar también `/styles.css` en estas páginas (hoy solo `destinos.css`
    lleva `?v=` — `styles.css` es el mismo de toda la app y ya se versiona en `index.html`,
    pero aquí seguía sin versión antes de esta sesión y sigue así, sin tocar).
+
+**Continuación 22 sept 2026 (mismo día, sesión de "cosas de pocos tokens"):**
+
+- **Portada `/destinos/` con el mismo diseño — HECHO.** `buildIndexHTML` ya llevaba
+  logo+eslogan (sin reloj — no hay un destino concreto al que darle hora), el chat
+  inline simplificado a saludo + CTA, y el menú de abajo real, igual que el resto.
+  Añadida una opción nueva al generador, **`--index-only`**, para poder regenerar SOLO
+  `destinos/index.html` sin tocar las 1.793 páginas de destino/país (recorre todos los
+  KV para tener el recuento correcto de países/destinos, pero no reescribe sus HTML).
+  **Ojo, encontrado y corregido de paso**: la primera versión de `--index-only`
+  reescribía también `sitemap-destinos.xml` completo como efecto colateral (el mismo
+  problema que ya se blindó para `--country`, no se había pensado para este caso nuevo)
+  — se probó, se vio el diff enorme (+8.971 líneas) antes de comitear nada, se revirtió
+  con `git checkout` y se corrigió el generador para que `--index-only` tampoco toque
+  el sitemap. Probado en el navegador local, sin errores de consola.
+  **Dos hallazgos de propina, SIN TOCAR, solo para que quede anotado:**
+  1. El generador solo encontró **163 países** con JSON en `worker/kv/output-nivel2/`
+     al recorrerlos todos (`--index-only` los cuenta), no los ~193 que dice el resto de
+     `CLAUDE.md` — puede que falten JSONs localmente en este contenedor, o que el
+     número de 193 esté inflado; no investigado más.
+  2. El `sitemap-destinos.xml` que hay comiteado hoy parece **desactualizado/parcial**
+     (mucho más corto que las 1.794 URLs que saldrían de una pasada completa real) —
+     visto de refilón al revertir el punto anterior, no confirmada la causa ni tocado.
+- **Login con Google, paso 3 (redirect de respaldo) — HECHO.** Cuando el navegador
+  bloquea el popup (`auth/popup-blocked`, frecuente en Safari/móvil), `doGoogleLogin()`
+  ahora reintenta con `auth.signInWithRedirect(googleProvider)`. La lógica de "qué hacer
+  tras el login" (crear el doc de Firestore si es la primera vez + ofrecer huella) se
+  sacó a una función compartida, `_afterGoogleAuth(user)`, para no duplicarla entre el
+  camino de popup y el de redirect — el enrutado tras login (a qué pantalla ir) ya lo
+  cubre `auth.onAuthStateChanged`, genérico para cualquier método de login, así que no
+  hacía falta tocarlo. Al volver de un redirect, `auth.getRedirectResult()` (nuevo,
+  junto a `onAuthStateChanged`) recoge el resultado una vez; en una carga normal de la
+  página (sin redirect pendiente) resuelve sin hacer nada, verificado sin errores en el
+  navegador. **No probado con una cuenta de Google real** (necesitaría un navegador de
+  verdad bloqueando el popup para disparar el camino nuevo) — la parte de popup normal
+  sigue exactamente igual que antes.
+  `?v=` subido: `app.js` a 153 en `index.html`.
+
+Todo esto, igual que el resto de la sesión: **en local, sin commitear hasta confirmar
+con Paco, sin desplegar el Worker (no se tocó), sin subir a GitHub.**
 
 ---
 
