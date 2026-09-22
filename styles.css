@@ -6604,8 +6604,20 @@ body {
 /* ── Caja de ejemplo rotable + jerarquía de modos (doc 8 sep) ── */
 .ce-rotable{margin:14px 0 0;border:1.5px solid var(--ce-amber);background:var(--ce-panel);padding:12px 13px 10px;cursor:pointer;}
 .ce-rotable-ex{margin:0;font-family:var(--font-body,'Inter'),sans-serif;font-size:13px;line-height:1.5;color:var(--ce-ink2);}
+/* Campo editable que sustituye al ejemplo al tocar la caja (22 sept 2026) — se
+   escribe la ruta en el mismo sitio, sin bajar al chat de abajo. */
+.ce-rotable-input{
+  display:block;width:100%;margin:0;padding:0;border:0;background:transparent;
+  resize:none;outline:none;-webkit-appearance:none;
+  font-family:var(--font-body,'Inter'),sans-serif;font-size:13px;line-height:1.5;
+  color:var(--ce-ink);
+}
+.ce-rotable-input::placeholder{color:var(--ce-ink3);}
 .ce-rotable-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;padding-top:8px;border-top:1px solid var(--ce-line);}
 .ce-rotable-dots{display:flex;gap:5px;flex-shrink:0;}
+/* Mismo bug ya documentado con #ce-sky-fc: [hidden] pierde contra una regla de
+   clase con display:flex de igual especificidad — el selector por id gana. */
+#ce-rotable-dots[hidden]{display:none;}
 .ce-rotable-dots span{width:5px;height:5px;background:var(--ce-line-hi);}
 .ce-rotable-dots span.on{background:var(--ce-amber);}
 .ce-rotable-hint{font-family:var(--ce-sign);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-ink3);text-align:right;}

@@ -592,7 +592,7 @@ function _renderChatEmpty() {
           </div>
         </div>
         <button class="ce-rotable-cta" data-ce-hero data-ce-rotable-cta>Trazar ruta <span>→</span></button>
-        <button class="ce-openbillete" data-ce-hero data-ce-openbillete>Desliza para trazar ruta rápida <span>↓</span></button>
+        <button class="ce-openbillete" data-ce-hero data-ce-openbillete>Ruta rápida <span>↓</span></button>
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
 
     area.innerHTML = `
@@ -721,7 +721,8 @@ function _renderChatEmpty() {
       ];
       const _exEl = area.querySelector('#ce-rotable-ex');
       const _dots = area.querySelector('#ce-rotable-dots');
-      let _ri = 0, _rTimer = null, _rStopped = false;
+      const _hint = _rot.querySelector('.ce-rotable-hint');
+      let _ri = 0, _rTimer = null, _rStopped = false, _editing = false;
       const _paint = () => {
         if (_exEl) _exEl.textContent = '“' + _exs[_ri] + '”';
         if (_dots) [..._dots.children].forEach((d, i) => d.classList.toggle('on', i === _ri));
@@ -733,26 +734,36 @@ function _renderChatEmpty() {
       const _stopRot = () => { if (_rTimer) { clearInterval(_rTimer); _rTimer = null; } _rStopped = true; };
       _paint();
       if (!_rStopped) _rTimer = setInterval(_adv, 6000);
-      // Quita la caja de ejemplos + su CTA y deja el input de Salma de abajo
-      // VACÍO y con el foco: el usuario escribe su ruta desde cero. Los ejemplos
-      // son solo inspiración — nunca se mandan a Salma tal cual (ni al tocar la
-      // caja ni al tocar "Trazar ruta", que antes mandaba el ejemplo visible).
-      const _goToChat = () => {
+      // Al tocar la caja, se convierte EN SITIO en un campo de texto editable —
+      // antes bajaba al input de Salma más abajo (fix del 18 sept). Los ejemplos
+      // siguen sin mandarse nunca solos: hace falta escribir algo y pulsar
+      // "Trazar ruta" para que se mande (petición de Paco, 22 sept 2026).
+      const _startEditing = () => {
+        if (_editing || !_exEl) return;
+        _editing = true;
         _stopRot();
-        const inp = document.getElementById('main-input');
-        if (inp) {
-          inp.value = '';
-          inp.focus();
-          try { inp.dispatchEvent(new Event('input', { bubbles: true })); } catch (_) {}
-        }
-        _rot.remove();
-        const cta = area.querySelector('[data-ce-rotable-cta]');
-        if (cta) cta.remove();
+        const ta = document.createElement('textarea');
+        ta.className = 'ce-rotable-input';
+        ta.id = 'ce-rotable-input';
+        ta.rows = 3;
+        ta.placeholder = 'Escribe la ruta que quieres...';
+        ta.addEventListener('click', (e) => e.stopPropagation());
+        _exEl.replaceWith(ta);
+        ta.focus();
+        if (_dots) _dots.hidden = true;
+        if (_hint) _hint.textContent = 'Pulsa Trazar ruta para mandarla';
       };
-      _rot.addEventListener('click', _goToChat);
-      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); _stopRot(); _adv(); });
+      _rot.addEventListener('click', _startEditing);
+      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); if (_editing) return; _stopRot(); _adv(); });
       const _rcta = area.querySelector('[data-ce-rotable-cta]');
-      if (_rcta) _rcta.addEventListener('click', (e) => { e.stopPropagation(); _goToChat(); });
+      if (_rcta) _rcta.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const ta = document.getElementById('ce-rotable-input');
+        const text = ta ? ta.value.trim() : '';
+        if (text) { if (typeof salma !== 'undefined' && salma.send) salma.send(text); return; }
+        if (ta) { ta.focus(); return; }
+        _startEditing();
+      });
     };
     // Inserta eslogan + caja rotable encima del billete si no están, y los cablea.
     const _ensureHero = () => {
