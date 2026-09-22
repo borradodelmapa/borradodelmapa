@@ -240,17 +240,22 @@ function _hasUnsavedChatConversation() {
 function _goToFreshBillete() {
   showState('chat');
   if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
-  // Revela el billete de verdad (no solo el hero) — reutiliza los botones que ya
-  // pinta _renderChatEmpty(). Si hay ruta activa debajo, "Trazar nueva ruta +"
-  // (oculto con `hidden` desde que existe el FAB, sigue en el DOM solo como gancho
-  // programático — ver CLAUDE.md 22 sept 2026) cambia la tarjeta a hero+billete
-  // OCULTO, no lo revela directamente — hace falta encadenar el segundo clic.
-  // "Desliza para trazar ruta rápida" es el que de verdad lo enseña, en los dos casos
-  // (con o sin ruta activa). .click() dispara el listener aunque el botón esté oculto.
+  // Sube a la caja de ejemplos de ARRIBA y la deja lista para escribir (mismo
+  // efecto que tocarla a mano) — NO al billete de "Ruta rápida" más abajo.
+  // Corregido 22 sept 2026: la primera versión llevaba al campo "¿A dónde?" del
+  // billete; Paco aclaró que quería el cuadro de texto de arriba.
+  // Si hay ruta activa debajo, "Trazar nueva ruta +" (oculto con `hidden` desde
+  // que existe el FAB, sigue en el DOM solo como gancho programático) cambia la
+  // tarjeta a hero+billete oculto — así aparece la caja de ejemplos, que si no
+  // solo se pinta en el estado "sin ruta activa". .click() dispara el listener
+  // aunque el botón esté oculto.
   const newBtn = document.querySelector('[data-ce-newbillete]');
   if (newBtn) newBtn.click();
-  const openBtn = document.querySelector('[data-ce-openbillete]');
-  if (openBtn) openBtn.click();
+  const rot = document.getElementById('ce-rotable');
+  if (rot) {
+    rot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    rot.click(); // dispara _startEditing() (ver _wireRotable) — deja el cuadro editable y con foco
+  }
 }
 
 function goToNewRouteFAB() {
