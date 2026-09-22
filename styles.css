@@ -2636,6 +2636,18 @@ body {
 .bottom-tab-tester.dbg-has-error { color:#ef4444; }
 .bottom-tab-tester.dbg-has-error svg { animation: dbg-tab-pulse-error .9s ease-in-out infinite; filter:drop-shadow(0 0 4px rgba(239,68,68,.5)); }
 @keyframes dbg-tab-pulse-error { 0%,100% { transform:scale(1); } 50% { transform:scale(1.25); } }
+/* "+" central — nueva ruta. Círculo elevado que sobresale de la barra, a propósito
+   más llamativo que el resto de pestañas (Kabi, ver CLAUDE.md 22 sept 2026). */
+.bottom-tab-fab {
+  flex:0 0 auto; width:52px; height:52px; margin-top:-20px;
+  border-radius:50%; background:var(--dorado); color:var(--negro);
+  box-shadow:0 4px 14px rgba(240,180,41,.45), 0 0 0 4px rgba(12,10,6,.95);
+  align-items:center; justify-content:center; padding:0;
+  transition:transform .15s, background .2s;
+}
+.bottom-tab-fab svg { stroke:var(--negro); }
+.bottom-tab-fab:hover { background:var(--dorado2); transform:scale(1.06); color:var(--negro); }
+.bottom-tab-fab:active { transform:scale(.96); }
 /* SOS flotante */
 .sos-fab {
   position:fixed; right:16px; z-index:950;

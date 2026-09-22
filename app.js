@@ -184,6 +184,9 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
     </button>
+    <button class="bottom-tab bottom-tab-fab" id="tab-newroute" aria-label="Nueva ruta" title="Nueva ruta">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
@@ -201,11 +204,72 @@ function updateBottomBar() {
     if (typeof salma !== 'undefined') salma._initChat();
     showState('chat');
   });
+  document.getElementById('tab-newroute').addEventListener('click', goToNewRouteFAB);
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
+}
+
+// Botón "+" central del bottom bar — pura navegación, no crea nada nuevo: lleva
+// al creador de ruta que ya existe (el billete de destino+días, con "Afinar" para
+// los otros 6 campos). Si hay conversación sin guardar (mensajes en curso sin haber
+// generado/guardado ninguna guía), avisa antes de perderla — una ruta ya guardada
+// nunca corre ese riesgo, vive en Firestore aparte y esto no la toca.
+function _hasUnsavedChatConversation() {
+  try {
+    return typeof salma !== 'undefined' && Array.isArray(salma.history) &&
+      salma.history.length > 0 && !salma.currentRouteId;
+  } catch (_) { return false; }
+}
+
+function _goToFreshBillete() {
+  showState('chat');
+  if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
+  // Revela el billete de verdad (no solo el hero) — reutiliza los botones que ya
+  // pinta _renderChatEmpty(): "Trazar nueva ruta +" si hay ruta activa debajo,
+  // "Desliza para trazar ruta rápida" si no.
+  const newBtn = document.querySelector('[data-ce-newbillete]');
+  const openBtn = document.querySelector('[data-ce-openbillete]');
+  if (newBtn) newBtn.click();
+  else if (openBtn) openBtn.click();
+}
+
+function goToNewRouteFAB() {
+  if (_hasUnsavedChatConversation()) {
+    showNewRouteConfirm();
+  } else {
+    _goToFreshBillete();
+  }
+}
+
+function showNewRouteConfirm() {
+  let overlay = document.getElementById('newroute-confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'newroute-confirm-overlay';
+    overlay.className = 'narrator-confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div class="narrator-confirm-modal">
+      <div class="narrator-confirm-icon">🗺️</div>
+      <h2 class="narrator-confirm-title">¿Ruta nueva?</h2>
+      <p class="narrator-confirm-text">Perderás la conversación actual — todavía no la has guardado como guía.</p>
+      <div class="narrator-confirm-btns">
+        <button class="narrator-confirm-cancel" id="newroute-confirm-cancel">Cancelar</button>
+        <button class="narrator-confirm-go" id="newroute-confirm-go">Empezar</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+  document.getElementById('newroute-confirm-cancel').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+  document.getElementById('newroute-confirm-go').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    _goToFreshBillete();
+  });
 }
 
 function updateNarratorChipUI() {
