@@ -9,6 +9,8 @@
  *   node scripts/build-destinos.js --dry-run      → muestra stats sin generar
  *   node scripts/build-destinos.js --index-only   → solo destinos/index.html
  *                                                    (no toca las páginas de país/destino)
+ *   node scripts/build-destinos.js --sitemap-only → solo sitemap-destinos.xml
+ *                                                    (no toca ninguna página)
  */
 
 import fs from 'fs';
@@ -875,6 +877,11 @@ async function main() {
   // las 1.793 páginas. Útil para cambios de cabecera/menú que también afectan al
   // índice pero cuyo rollout completo se hace aparte (ver CLAUDE.md protocolo §9).
   const indexOnly = args.includes('--index-only');
+  // Igual que --index-only pero al revés: recorre todos los KV para tener la lista
+  // completa y correcta de URLs, y reescribe SOLO sitemap-destinos.xml — ni las páginas
+  // de destino/país ni destinos/index.html. Para cuando el sitemap se queda desfasado
+  // (menos países/destinos reales de los que hay) sin querer tocar ningún HTML.
+  const sitemapOnly = args.includes('--sitemap-only');
 
   const countries = JSON.parse(fs.readFileSync(COUNTRIES_FILE, 'utf-8'));
   const countryMap = {};
@@ -913,7 +920,7 @@ async function main() {
           prev: i > 0 ? { slug: `${validDests[i-1].id}-${countrySlug}`, name: validDests[i-1].nombre } : null,
           next: i < validDests.length - 1 ? { slug: `${validDests[i+1].id}-${countrySlug}`, name: validDests[i+1].nombre } : null,
         };
-        if (!dryRun && !indexOnly) {
+        if (!dryRun && !indexOnly && !sitemapOnly) {
           const route = loadRoute(dest.id, countrySlug);
           fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route, nav));
         }
@@ -922,7 +929,7 @@ async function main() {
       }
 
       // ── Nivel 2: página de país ──
-      if (!dryRun && !indexOnly) {
+      if (!dryRun && !indexOnly && !sitemapOnly) {
         fs.writeFileSync(path.join(OUT_DIR, `${countrySlug}.html`), buildCountryHTML(countryName, code, destinos));
       }
       allSitemapUrls.push({ url: `${DOMAIN}/destinos/${countrySlug}.html`, priority: 0.9, freq: 'weekly' });
@@ -940,7 +947,7 @@ async function main() {
   }
 
   // ── Nivel 1: página índice ──
-  if (!dryRun && !onlyCountry) {
+  if (!dryRun && !onlyCountry && !sitemapOnly) {
     // Sort countries within each continent
     for (const cont of Object.keys(countriesByContinent)) {
       countriesByContinent[cont].sort((a, b) => a.name.localeCompare(b.name, 'es'));
@@ -948,10 +955,14 @@ async function main() {
     fs.writeFileSync(path.join(OUT_DIR, 'index.html'), buildIndexHTML(countriesByContinent));
     allSitemapUrls.push({ url: `${DOMAIN}/destinos/`, priority: 1.0, freq: 'weekly' });
     console.log(`   📄 Índice: destinos/index.html`);
+  } else if (sitemapOnly) {
+    // El propio índice (/destinos/) también va en el sitemap aunque no se reescriba su HTML
+    allSitemapUrls.push({ url: `${DOMAIN}/destinos/`, priority: 1.0, freq: 'weekly' });
   }
 
-  // Sitemap — solo se reescribe en una pasada completa que además escriba las páginas
-  // (ni --country ni --index-only), para que una prueba parcial no lo toque sin querer.
+  // Sitemap — solo se reescribe en una pasada completa (ni --country ni --index-only),
+  // o cuando se pide explícitamente con --sitemap-only, para que una prueba parcial no
+  // lo toque sin querer.
   if (!dryRun && !onlyCountry && !indexOnly && allSitemapUrls.length > 0) {
     fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls));
     console.log(`   🗺️ Sitemap: ${allSitemapUrls.length} URLs`);
@@ -966,6 +977,7 @@ async function main() {
   console.log(`   ⚠️ Errores: ${errors}`);
   if (dryRun) console.log(`   (dry-run)`);
   if (indexOnly) console.log(`   (index-only — países/destinos solo contados, no reescritos)`);
+  if (sitemapOnly) console.log(`   (sitemap-only — solo se reescribió sitemap-destinos.xml)`);
 }
 
 main().catch(console.error);

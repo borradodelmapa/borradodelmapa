@@ -1088,12 +1088,16 @@ dos rondas de ajustes (logo, eslogan, quitar chat interactivo, quitar hueco de s
   el sitemap. Probado en el navegador local, sin errores de consola.
   **Dos hallazgos de propina, SIN TOCAR, solo para que quede anotado:**
   1. El generador solo encontró **163 países** con JSON en `worker/kv/output-nivel2/`
-     al recorrerlos todos (`--index-only` los cuenta), no los ~193 que dice el resto de
-     `CLAUDE.md` — puede que falten JSONs localmente en este contenedor, o que el
-     número de 193 esté inflado; no investigado más.
-  2. El `sitemap-destinos.xml` que hay comiteado hoy parece **desactualizado/parcial**
-     (mucho más corto que las 1.794 URLs que saldrían de una pasada completa real) —
-     visto de refilón al revertir el punto anterior, no confirmada la causa ni tocado.
+     — **CONFIRMADO Y LISTADOS los 30 que faltan** (ver entrada nueva más abajo,
+     "los 30 países que faltan"), no los ~193 que dice el resto de `CLAUDE.md`.
+  2. ~~El `sitemap-destinos.xml` parecía desactualizado/parcial~~ → **CORREGIDO.** Era
+     de verdad: tenía muchas menos URLs de las 1.794 páginas reales que ya existen en
+     `destinos/` (comprobado: las 1.793 páginas + índice ya estaban generadas en disco
+     de una pasada completa anterior a esta sesión — no faltaba ningún archivo, solo el
+     sitemap no las listaba). Arreglado con `node scripts/build-destinos.js
+     --sitemap-only` (opción nueva en el generador, mismo patrón que `--index-only`:
+     recorre todo para tener el recuento correcto, pero solo reescribe
+     `sitemap-destinos.xml`, ningún HTML). Verificado: 1.794 URLs, XML bien formado.
 - **Login con Google, paso 3 (redirect de respaldo) — HECHO.** Cuando el navegador
   bloquea el popup (`auth/popup-blocked`, frecuente en Safari/móvil), `doGoogleLogin()`
   ahora reintenta con `auth.signInWithRedirect(googleProvider)`. La lógica de "qué hacer
@@ -1114,6 +1118,21 @@ dos rondas de ajustes (logo, eslogan, quitar chat interactivo, quitar hueco de s
 (ver Version ID en la entrada de "2 funciones dead code" de Deuda técnica) — todo a
 petición explícita de Paco ("SI Y MAIN" / "SUBELO DESPLIEGA"). Lo único del Worker que
 cambiaba era quitar las 2 funciones muertas — nada nuevo que probar en el chat.**
+
+**Sesión 22 sept 2026 (continuación) — los 30 países que faltan en `output-nivel2`,
+identificados.** Comparando `worker/kv/countries.json` (193, la lista completa) contra
+los JSON reales de contenido en `worker/kv/output-nivel2/` (163) — solo mirar archivos
+locales, cero coste, cero llamadas. **Faltan 30, y no son menores** — varios son
+mercados turísticos grandes: **Italia, Japón, Marruecos, México, Noruega, Nueva
+Zelanda, Países Bajos, Perú, Portugal, Suiza, India**. Lista completa (código ISO2 +
+nombre): in India, it Italia, jp Japón, ma Marruecos, mu Mauricio, mx México,
+mn Mongolia, me Montenegro, mz Mozambique, na Namibia, nr Nauru, ni Nicaragua,
+ne Níger, ng Nigeria, no Noruega, nz Nueva Zelanda, om Omán, nl Países Bajos,
+pk Pakistán, ps Palestina, pa Panamá, pe Perú, pt Portugal, do República Dominicana,
+sl Sierra Leona, sy Siria, ch Suiza, ua Ucrania, ug Uganda, ve Venezuela.
+**Sin generar nada** — rellenar estos 30 significa el mismo coste ya descrito en el
+plan del rollout (Claude Sonnet nivel 1-2 + Haiku nivel 2.5, ver tabla de "Scripts de
+generación" más abajo en este archivo) — decisión de Paco, no se ha tocado.
 
 ---
 
