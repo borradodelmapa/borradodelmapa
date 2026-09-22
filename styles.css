@@ -6775,7 +6775,9 @@ body {
   white-space:nowrap;color:var(--ce-ink);background:var(--ce-panel);
   border:1.5px solid var(--ce-line-hi);border-radius:0;padding:9px 10px;
 }
-.chat-empty .chat-empty-chip .chip-icon{width:13px;height:13px;opacity:1;stroke:currentColor;}
+/* Iconos siempre en naranja, sin depender del color de cada chip (rojo en SOS,
+   verde con el Narrador activo...) — a petición de Paco, 22 sept 2026. */
+.chat-empty .chat-empty-chip .chip-icon{width:13px;height:13px;opacity:1;stroke:var(--ce-amber);}
 .chat-empty .chat-empty-chip:hover,
 .chat-empty .chat-empty-chip:active{background:var(--ce-amber);border-color:var(--ce-amber);color:#0a0a0a;}
 .chat-empty .chat-empty-chip--sos{background:var(--ce-panel);border-color:var(--ce-red);color:var(--ce-red);}
