@@ -6770,7 +6770,12 @@ body {
 .chat-empty .ce-chip-row{display:flex;flex-direction:column;gap:7px;}
 .chat-empty .chat-empty-col{flex-direction:row;flex:0 0 auto;gap:7px;}
 .chat-empty .chat-empty-chip{
-  flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
+  /* Alineado a la izquierda, no centrado — con "CERCA MÍA" vs "ÚLTIMAS CONSULTAS"
+     (largos muy distintos), centrar el grupo icono+texto hacía que el icono
+     "bailara" de posición entre chips, sin quedar nunca en línea recta con los
+     de al lado — se veía descuadrado (Paco, 22 sept 2026). Alineados a la
+     izquierda, el icono cae siempre en el mismo sitio en las dos columnas. */
+  flex-shrink:0;display:flex;align-items:center;justify-content:flex-start;gap:6px;width:100%;
   font-family:var(--ce-sign);text-transform:uppercase;font-weight:700;font-size:10.5px;letter-spacing:.03em;
   white-space:nowrap;color:var(--ce-ink);background:var(--ce-panel);
   border:1.5px solid var(--ce-line-hi);border-radius:0;padding:9px 10px;
