@@ -2652,7 +2652,10 @@ body {
    bancaria, ver CLAUDE.md 22 sept 2026). */
 .bottom-tab-fab {
   position:fixed; left:50%; transform:translateX(-50%);
-  bottom:calc(env(safe-area-inset-bottom, 0px) + 10px); z-index:901;
+  /* z-index por encima de .app-input-bar (1100) — con el chat abierto, la barra
+     de escribir se solapa justo con la parte del círculo que sobresale y, si no,
+     la tapaba (bug real visto en pantalla el 22 sept 2026). */
+  bottom:calc(env(safe-area-inset-bottom, 0px) + 10px); z-index:1101;
   display:flex; width:72px; height:72px;
   border-radius:50%; background:var(--dorado); color:var(--negro); border:none; cursor:pointer;
   box-shadow:0 6px 20px rgba(0,0,0,.4);
