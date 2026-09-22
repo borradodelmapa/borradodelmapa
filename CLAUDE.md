@@ -2060,6 +2060,23 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
        octubre de 2026 los mensajes de servicio dentro de esa ventana **dejan de ser
        gratis** (ya anotado más abajo en "Cambio de coste a vigilar"). No activar
        producción sin decir a Paco el coste estimado según volumen esperado.
+  - **Progreso real, 22 sept 2026 — pasos 1 y parte del 2 en marcha, BLOQUEADO en la
+    compra del número.**
+    1. **Hecho**: cuenta de Twilio ("My New SMS Chatbot...", la misma del Sandbox) ya
+       pasada a pago (Billing → Upgrade). `TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN` en
+       Cloudflare vueltos a poner con los valores exactos de ESTE proyecto (por el lío ya
+       documentado el 21 sept de dos proyectos Twilio con Auth Tokens distintos) —
+       `npx wrangler secret put` para los dos, confirmado con `wrangler secret list`.
+    2. **Bloqueo nuevo, no estaba en el checklist original**: para comprar CUALQUIER
+       número (probado con España Y con EEUU, mismo resultado en los dos) Twilio exige
+       primero un **"compliance profile" (KYC/verificación de identidad) a nivel de
+       cuenta** — distinto de la verificación de negocio de Meta del paso 3. Sale
+       "Your primary compliance profile is currently under review. You cannot make
+       changes until the review is complete." Sin fecha estimada visible en pantalla;
+       Twilio avisa por email cuando se resuelve. **No hay nada que forzar** — pausado
+       hasta que llegue esa aprobación. Retomar desde: Communications → Numbers & senders
+       → Phone Numbers → comprar un número (cualquier país) → Numbers & senders →
+       WhatsApp → "Create new sender".
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
