@@ -2077,6 +2077,31 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
        hasta que llegue esa aprobación. Retomar desde: Communications → Numbers & senders
        → Phone Numbers → comprar un número (cualquier país) → Numbers & senders →
        WhatsApp → "Create new sender".
+    3. **Probado un camino que NO desbloquea el compliance profile — no repetirlo**: a
+       Paco le llegó un correo de Twilio pidiendo verificar el dominio `borradodelmapa.com`
+       a nivel de **Organization** (Settings → Organization settings → Organization
+       overview → "Add domain", método DNS, registro TXT en `_twilio.borradodelmapa.com`
+       — añadido en Netlify DNS, que es donde de verdad está gestionado el DNS del dominio,
+       ver hallazgo aparte más abajo). Verificado con éxito (`✓ Verified domain`, visible
+       en Organization overview), **pero esto NO tiene relación con el compliance profile
+       de números** — comprobado después: la compra de número seguía dando exactamente el
+       mismo bloqueo. Son dos trámites de Twilio independientes. Si se repite este aviso
+       de dominio en el futuro, verificarlo igualmente (no cuesta nada y puede hacer falta
+       para otras cosas), pero no esperar que resuelva el bloqueo de comprar números.
+  - **Hallazgo aparte, sin relación con Twilio — pendiente de investigar cuando haya
+    tiempo, NO TOCAR NADA hasta entonces**: mirando el DNS de `borradodelmapa.com` para
+    añadir el TXT de arriba, salió que el dominio está en **Netlify DNS** (proyecto
+    Netlify `borradodelmapa`, con `borradodelmapa.com` como su dominio principal) — dato
+    que no aparece en ningún sitio de este archivo (dice "Hosting: GitHub Pages"). La
+    zona DNS tiene A LA VEZ los 4 registros `A` de GitHub Pages (`185.199.108-111.153`)
+    Y un registro tipo `NETLIFY` para el mismo dominio apuntando a
+    `borradodelmapa.netlify.app` — contradictorio, sugiere que en algún momento se empezó
+    o completó una migración a Netlify sin documentar aquí. Hay también un proyecto
+    Netlify aparte `creative-boba-c8451a` con dominio `admin.borradodelmapa.com`, y otro
+    `borradodelmapa-vietnan` sin dominio propio conectado. **Sin tocar ningún registro DNS
+    ni desplegar nada** — solo se añadió el TXT de Twilio, nada más. Investigar con Paco
+    qué sirve realmente `borradodelmapa.com` hoy (GitHub Pages o Netlify) antes de dar por
+    buena la arquitectura descrita en este archivo.
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
