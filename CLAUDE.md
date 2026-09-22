@@ -673,6 +673,19 @@ pantalla. Commit `b241860`, solo frontend (`debug-panel.js?v=13`, `app.js?v=136`
 **Sin coste** — cambio puramente de UI, no toca ninguna API de pago.
 **CONFIRMADO EN PANTALLA por Paco** ("Ok correcto") — sin nada pendiente de esto.
 
+**Noveno ajuste, 22 sept 2026 — aviso también por email (Resend), porque el de WhatsApp
+dejó de fiarse a media migración de Twilio a producción (ver "📱 Salma en WhatsApp").
+DESPLEGADO, CONFIRMADO EN PANTALLA por Paco: "si me llega mail".** Commit `8f47a3c`,
+solo Worker (`worker/salma-worker.js`): función nueva `sendFeedbackEmail()` (API REST de
+Resend, mismo patrón que `sendWhatsAppMessage()`) llamada en `/beta-feedback` en paralelo
+al intento de WhatsApp — ninguno bloquea al otro ni la respuesta al tester, y el feedback
+se guarda en Firestore igual aunque los dos avisos fallen. 2 secrets nuevos en Cloudflare,
+puestos y confirmados por Paco: `RESEND_API_KEY`, `PACO_EMAIL_TO` (`paco.defoto@gmail.com`).
+Remitente `onboarding@resend.dev` (sin dominio propio verificado en Resend — suficiente
+para avisar a un solo destinatario). **Aviso de coste (protocolo §8), dado antes de
+implementar:** plan gratuito de Resend, 100 emails/día — a este volumen de testers no
+hay manera realista de acercarse al límite, coste esperado: cero.
+
 ---
 
 ## Sesión 19 sept 2026 — Simplificación de chips del chat vacío: 6 fijos + "Más opciones"
