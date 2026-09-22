@@ -158,6 +158,10 @@ function updateHeader() {
   updateBottomBar();
 }
 
+// ⚠️ CLAUDE.md protocolo §9: si tocas este menú (pestañas, iconos, el "+"), replica
+// el mismo cambio en scripts/build-destinos.js (constante BOTTOM_NAV) y regenera al
+// menos un país de prueba — las 1.793 páginas de /destinos/ usan una copia estática
+// de este mismo menú. No es opcional, Paco lo pidió explícito el 22 sept 2026.
 function updateBottomBar() {
   let bar = document.getElementById('app-bottom-bar');
   if (!bar) {
@@ -602,6 +606,9 @@ function _renderChatEmpty() {
 
     area.innerHTML = `
       <div class="chat-empty">
+        <!-- ⚠️ CLAUDE.md protocolo §9: logo/eslogan replicados en scripts/build-destinos.js
+             (LOGO_HTML) para las 1.793 páginas de /destinos/ — si tocas texto/clases aquí,
+             tócalo también ahí. -->
         <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span></div>
         <div class="ce-sky-date" id="ce-sky-time" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">${escapeHTML(_ceSkyTimeInit)}</div>
         <button class="ce-sky-wx-toggle" id="ce-sky-wx-toggle" data-ce-sky-wx-toggle aria-expanded="${_ceSkyWxOpen ? 'true' : 'false'}">${_ceSkyWxOpen ? '▴ ocultar' : '▾ tiempo'}</button>

@@ -165,6 +165,33 @@ tan pequeño que no hace falta decirlo" — **no existe ese margen. Nunca.**
   cuenta, cuenta — se dice.
 - No esperar a que Paco pregunte. Decirlo antes o en el momento, nunca como nota de después.
 
+### 9. EL MENÚ DE ABAJO (Y LA CABECERA) SON UNA SOLA COSA — APP Y PÁGINAS DE DESTINO A LA VEZ, SIEMPRE
+
+Añadido el 22 sept 2026, sesión de rediseño de las páginas SEO de destino (ver
+"Sesión 22 sept 2026 — Rediseño SEO destinos" más abajo). Paco, tal cual: **"no quiero
+ir detrás mirando si se hace o no se hace"** — esto no es una sugerencia, es checklist
+obligatorio.
+
+- Las 1.793 páginas de `destinos/` (más las de país e índice) llevan la MISMA cabecera
+  (logo + eslogan), el mismo reloj y el mismo menú de abajo que la app real — no por
+  casualidad, sino porque `scripts/build-destinos.js` las genera desde tres constantes
+  compartidas: **`LOGO_HTML`, `BOTTOM_NAV`** (y el reloj, inline en las dos plantillas).
+  Ver el propio comentario junto a `BOTTOM_NAV` en ese archivo.
+- **Cualquier cambio al menú de abajo de la app** (`app.js:updateBottomBar()` — pestañas,
+  iconos, el "+" central, textos, orden) **o a la cabecera/eslogan del index**
+  (`app.js:_renderChatEmpty()`, el bloque `.ce-top`/`.ce-hero`) **se replica ANTES de dar
+  el cambio por terminado** en `scripts/build-destinos.js` (`LOGO_HTML`/`BOTTOM_NAV`), y
+  se regenera al menos el país de prueba (`node scripts/build-destinos.js --country es`)
+  para comprobarlo — el rollout a las 1.793 completas se hace aparte, pero el CÓDIGO del
+  generador nunca se queda desincronizado, ni un commit.
+- Si el cambio afecta a un `?v=` de CSS/JS que las páginas de destino también cargan
+  (`styles.css`, `destinos.css`), subir igual el número en `build-destinos.js`
+  (`DESTINOS_CSS_V` y cualquier otro que se añada) — si no, un visitante real se puede
+  quedar con la versión vieja en caché sin que nadie se entere.
+- Esto aplica igual de fuerte que el punto 8 de arriba: **no hay "esto es tan pequeño que
+  no afecta a destinos"**. Si se toca el menú o la cabecera de la app, se toca a la vez
+  `build-destinos.js` — sin excepción, sin esperar a que Paco lo note en una captura.
+
 ---
 ## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
 ## V3 Share + Fotos — 17 abril 2026 (sesión)
@@ -959,6 +986,91 @@ Antes de invitar testers: contarles cómo pagar en modo prueba (tarjeta `4242 42
 ### Incidente resuelto: el webhook de Stripe no llegaba (descubierto probando el paso 1)
 Tras el cambio de dominio del 16 sept (`paco-defoto` → `borradodelmapa-api`), **los dos destinos de webhook del entorno de pruebas de Stripe seguían apuntando al dominio muerto**: Stripe cobraba y el Worker nunca se enteraba (0 llamadas a `/stripe-webhook` en `wrangler tail`). Solo la compra del 14 sept (anterior al cambio) se acreditó. Arreglo: editar en Stripe el destino **`STRIPE_WEBHOOK_SECRET`** (carga **"Resumen"**, la que necesita el Worker) a `https://salma-api.borradodelmapa-api.workers.dev/stripe-webhook` — la clave de firma no cambió. El otro destino, `upbeat-finesse-thin` (carga "Breve"), **no sirve** al Worker (no trae `data.object`) y sigue apuntando al dominio viejo; se puede borrar. Al editarlo, Stripe reenvió avisos atrasados (5 llamadas de golpe); una compra limpia posterior sumó +1 mes exacto. **Las compras atrasadas no se acreditaron todas** (salió +12 meses por el anual, no el total esperado) — sin explicar, irrelevante en modo prueba.
 **Lecciones:** (a) el panel de Stripe está en **producción por defecto**; el entorno de pruebas se ve por la franja azul "Entorno de prueba" arriba y se abre con `https://dashboard.stripe.com/test/webhooks`; (b) cualquier cambio de dominio del Worker obliga a revisar la URL del webhook en Stripe (y en Twilio para WhatsApp); (c) `wrangler tail` mientras el usuario prueba fue lo que localizó la causa en minutos.
+
+---
+
+## Sesión 22 sept 2026 — Rediseño SEO destinos: cabecera/menú/reloj/mapa
+
+Paco: las 1.793 páginas de `destinos/` estaban menos elaboradas de lo que pensaba (sin
+mapa, cabecera y menú desfasados de la app real desde el rediseño de navegación). Se
+habló el enfoque antes de tocar código (ver protocolo §2): opción B descartada del todo
+(generar guías reales verificadas con Claude+Google costaría ~900-1.800€ para las 1.793 —
+inasumible), opción A adelante (mismo aspecto visual de una guía real, pero con el texto
+que YA existe en el KV nivel 2 — gratis). Empezado con España como país de prueba (10
+destinos + la página de país), **todo local, NADA commiteado ni subido todavía** — a la
+espera de que Paco lo revise y de decidir cuándo se hace el rollout a los 193 países.
+
+**Cambios, todos en `scripts/build-destinos.js` (generador) + `destinos.css`:**
+1. **Cabecera vieja fuera.** La app real ya no tiene `<header>` (se quitó en el rediseño
+   de navegación — `app.js:updateHeader()` es hoy un comentario vacío). Se quitó también
+   de las páginas de destino, por coherencia.
+2. **Logo + eslogan** — mismo wordmark que el index (`app.js:605`, clases `.ce-top`/
+   `.ce-brand`) + el eslogan "Sin mapa, con rumbo." (`app.js:590`, `.ce-hero`/
+   `.ce-slogan`), como enlace a `/`. Constante compartida `LOGO_HTML`.
+3. **Reloj** — hora real del país del destino (`country-utils.js`, `countryTimeString()`,
+   gratis, sin API). **Sin tiempo/clima** — a petición explícita de Paco: menos trabajo, y
+   cuando el visitante entre en la app real ya lo tiene allí. Ojo casing: `countryTimeString`
+   espera el código ISO en MAYÚSCULAS (`CODE_TO_NAME`/`COUNTRY_TZ`), el KV lo da en
+   minúsculas — hay que subirlo con `.toUpperCase()`.
+4. **Mapa** — Leaflet + OpenStreetMap (gratis, sin key) centrado en el destino, con un
+   marker. **Sin interacción propia** (`scrollWheelZoom:false`, `dragging:false`, etc.) —
+   la primera versión atrapaba el scroll de la página al pasar el ratón/dedo por encima;
+   tocarlo abre Google Maps en pestaña nueva. Requiere coordenadas nuevas (ver script 5).
+5. **`scripts/geocode-destinos.js` (nuevo)** — geocodifica cada destino UNA vez con
+   Nominatim (OpenStreetMap, gratis, sin API key; `User-Agent` obligatorio por su política
+   de uso, 1 petición/seg). Cachea en `worker/kv/destinos-coords.json` (git-tracked, se
+   commitea); solo pide lo que falte, así que re-ejecutarlo no repite trabajo. Con España:
+   7/10 destinos geocodificados a la primera — los 3 que fallaron son nombres de zona
+   compuestos ("Asturias y Picos de Europa", "Cádiz y Costa de la Luz", "Camino de
+   Santiago") que Nominatim no resuelve tal cual; pendiente de mejorar la consulta
+   (probar solo la primera parte del nombre) antes del rollout completo.
+6. **Menú de abajo real** — mismas clases CSS que la app (`app-bottom-bar`/`bottom-tab`/
+   `bottom-tab-fab`, ver `styles.css`), como enlaces `<a>` estáticos (sin JS de estado —
+   no hay sesión/`salma` cargados en una página SEO): Ayuda→`/?help=1`, Salma/FAB
+   "+"→`/?go=chat`, Mis Viajes→`/?go=rutas`, Perfil→`/?go=profile`. Constante compartida
+   `BOTTOM_NAV` — **ver protocolo §9, la regla nueva de esta sesión**.
+7. **Chat inline del destino, simplificado a un gancho, no un chat de verdad.** Antes
+   tenía chips + cuadro de texto que llamaban a `POST /` del Worker SIN token — pero ese
+   endpoint YA exige login (`auth_required`, confirmado leyendo `salma-worker.js`), así
+   que en la práctica solo mostraban "Inicia sesión para hablar conmigo" disfrazado de
+   respuesta de Salma. Quitados los chips y el input; queda solo la burbuja de saludo +
+   un botón "Seguir hablando con Salma →" que lleva a `/?go=chat` (login real de la app).
+   Mismo criterio en los 3 CTAs sutiles del acordeón (vuelos/hoteles/plan a medida), que
+   dependían del mismo input. `destinos/destinos.js` (`initSubtleCTAs`) actualizado para
+   convivir con las páginas viejas (con input) y las nuevas (enlace directo) a la vez,
+   mientras dure el rollout gradual.
+8. **`DESTINOS_CSS_V`** — versión `?v=` para `destinos.css` (mismo criterio que ya usa el
+   resto de la app) para que un visitante real no se quede con CSS viejo en caché tras un
+   cambio — súbela cada vez que toques `destinos.css`.
+9. **Seguro añadido en el propio generador**: `node scripts/build-destinos.js --country X`
+   ya NO reescribe `sitemap-destinos.xml` (antes lo dejaba con solo las URLs de ese país,
+   borrando las otras ~1.780) — el sitemap completo solo se regenera en una pasada sin
+   `--country`.
+
+**Coste de todo esto: cero** — reloj (Intl), mapa (OpenStreetMap) y geocodificación
+(Nominatim) son gratis, sin ninguna API de pago de por medio (avisado y confirmado con
+Paco antes de tocar código, protocolo §8).
+
+**Regla nueva de protocolo, a petición explícita de Paco** ("no quiero ir detrás mirando
+si se hace o no se hace"): ver **§9 del protocolo de trabajo, arriba del todo de este
+archivo** — cualquier cambio al menú de abajo o a la cabecera/eslogan de la app se replica
+en `scripts/build-destinos.js` en el mismo cambio, sin excepción.
+
+**Probado en el navegador local** (`.claude/serve.js`, `node scripts/build-destinos.js
+--country es`), con capturas de Granada y de la página de España — confirmado por Paco en
+dos rondas de ajustes (logo, eslogan, quitar chat interactivo, quitar hueco de scroll).
+**NO probado en producción ni con Paco en su propio navegador.**
+
+**Pendiente antes del rollout completo (193 países, 1.793 destinos):**
+1. Mejorar `geocode-destinos.js` para los nombres de zona compuestos (fallback a la
+   primera parte del nombre, o al centro de la región).
+2. Aplicar el mismo tratamiento (logo/eslogan/menú) a `buildIndexHTML` (la portada de
+   `/destinos/`) — no tocada todavía, `--country` no la regenera.
+3. Geocodificar y regenerar país a país (o de golpe, a decidir con Paco), revisando
+   alguno más antes de ir a las 1.793 de una vez.
+4. Decidir si versionar también `/styles.css` en estas páginas (hoy solo `destinos.css`
+   lleva `?v=` — `styles.css` es el mismo de toda la app y ya se versiona en `index.html`,
+   pero aquí seguía sin versión antes de esta sesión y sigue así, sin tocar).
 
 ---
 

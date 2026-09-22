@@ -18,9 +18,14 @@ const ROOT = path.join(__dirname, '..');
 const KV_DIR = path.join(ROOT, 'worker', 'kv', 'output-nivel2');
 const ROUTES_DIR = path.join(ROOT, 'worker', 'kv', 'routes-nivel3');
 const COUNTRIES_FILE = path.join(ROOT, 'worker', 'kv', 'countries.json');
+const COORDS_FILE = path.join(ROOT, 'worker', 'kv', 'destinos-coords.json');
 const OUT_DIR = path.join(ROOT, 'destinos');
 const SITEMAP_FILE = path.join(ROOT, 'sitemap-destinos.xml');
 const DOMAIN = 'https://borradodelmapa.com';
+
+// Coords por destino (lat/lng, ver scripts/geocode-destinos.js) — gratis,
+// generadas una vez con Nominatim. Si el archivo no existe aún, sin mapa.
+const COORDS = fs.existsSync(COORDS_FILE) ? JSON.parse(fs.readFileSync(COORDS_FILE, 'utf-8')) : {};
 
 // ── Helpers ──────────────────────────────────────────────────
 
@@ -58,6 +63,52 @@ const TYPE_BADGES = {
   historico: { emoji: '🏛️', label: 'Histórico' },
   'histórico': { emoji: '🏛️', label: 'Histórico' },
 };
+
+// Subir a mano cada vez que se toque destinos.css — mismo criterio de "?v="
+// que ya usa el resto de la app (ver CLAUDE.md, checklist de despliegue),
+// para que un visitante real no se quede con el CSS viejo en caché tras un
+// cambio.
+const DESTINOS_CSS_V = 2;
+
+// Logo — mismo wordmark y clases que el index de la app (app.js:_renderChatEmpty,
+// ".ce-top .ce-brand"), como enlace estático a "/" (ahí no hay JS de estado que
+// lo controle, solo navegación).
+// Eslogan — mismo texto y clases que el hero del index (app.js:590), debajo
+// del logo a petición de Paco.
+const LOGO_HTML = `<div class="ce-top"><a class="ce-brand" href="/">✦ BORRADO<span>DEL</span>MAPA</a></div>
+    <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>`;
+
+// Menú inferior — ÚNICA fuente para las 1.793 páginas. Mismas clases CSS que
+// la app real (app-bottom-bar/bottom-tab/bottom-tab-fab, ver styles.css), como
+// enlaces estáticos (sin JS de estado — no hay sesión/salma cargados aquí).
+// Cualquier retoque futuro del menú se hace SOLO aquí y se reaplica con
+// `node scripts/build-destinos.js` — nunca a mano en un HTML generado.
+// "Ayuda" apunta a la pantalla "¿Qué puede hacer Salma?" (no al panel de
+// feedback de testers, que requiere login — no tiene sentido para un
+// visitante anónimo de una página SEO).
+const BOTTOM_NAV = `
+  <nav class="app-bottom-bar">
+    <a class="bottom-tab" href="/?help=1">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Ayuda</span>
+    </a>
+    <a class="bottom-tab" href="/?go=chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Salma</span>
+    </a>
+    <div class="bottom-tab-fab-spacer" aria-hidden="true"></div>
+    <a class="bottom-tab" href="/?go=rutas">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
+      <span>Mis Viajes</span>
+    </a>
+    <a class="bottom-tab" href="/?go=profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Perfil</span>
+    </a>
+  </nav>
+  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Nueva ruta" title="Nueva ruta">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </a>`;
 
 // Firebase SDK block (reusable in all templates)
 const FIREBASE_HEAD = `
@@ -238,6 +289,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
   const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs);
   const budget = estimateBudget(dest);
   const minPrice = extractMinPrice(dest.donde_dormir?.mochilero);
+  const coords = COORDS[`${countryCode}:${dest.id}`] || null;
   const pageTitle = `Viajar a ${dest.nombre}: presupuesto, qué ver y mejor época · Borradodelmapa`;
   const metaDesc = `Guía para viajar a ${dest.nombre} (${countryName})${minPrice ? ` desde ${minPrice}€/noche` : ''}. ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Planifica tu ruta con IA.`;
   const canonical = `${DOMAIN}/destinos/${slug}.html`;
@@ -285,22 +337,14 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  ${route ? `<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  ${(route || coords) ? `<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>` : ''}
   ${FIREBASE_HEAD}
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/destinos.css">
+  <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
+  <script src="/country-utils.js"></script>
 </head>
 <body class="destino-page">
-
-  <!-- HEADER -->
-  <header class="app-header">
-    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
-    <div class="app-header-actions" id="header-actions">
-      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
-      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
-    </div>
-  </header>
 
   <!-- NAV BREADCRUMB -->
   <nav class="destino-nav-bar">
@@ -308,6 +352,22 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
     <span class="destino-nav-sep">›</span>
     <a href="/destinos/${slugify(countryName)}.html" class="destino-nav-link">${escapeHTML(countryName)}</a>
   </nav>
+
+  <!-- RELOJ — hora real del destino, gratis (Intl, sin llamar a ninguna API).
+       Mismo lenguaje visual que el reloj del index de la app (.chat-empty/.ce-sky-date). -->
+  <div class="chat-empty destino-clock-wrap">
+    ${LOGO_HTML}
+    <div class="ce-sky-date" id="destino-clock">${escapeHTML(countryName)}</div>
+  </div>
+  <script>
+  (function() {
+    var el = document.getElementById('destino-clock');
+    if (!el || typeof countryTimeString !== 'function') return;
+    function tick() { el.textContent = countryTimeString('${countryCode.toUpperCase()}'); }
+    tick();
+    setInterval(tick, 30000);
+  })();
+  </script>
 
   <!-- HERO -->
   <section class="destino-hero">
@@ -324,6 +384,24 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
 
   <!-- CONTENT -->
   <main class="destino-content">
+
+    ${coords ? `<!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
+    <a class="destino-map-link" href="https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}" target="_blank" rel="noopener" title="Abrir en Google Maps">
+      <div id="destino-map" class="destino-map"></div>
+    </a>
+    <script>
+    (function() {
+      if (typeof L === 'undefined') return;
+      // Mapa fijo, solo para situarte — sin interacción, para que la rueda del
+      // ratón o un dedo sobre el mapa no atrape el scroll de la página.
+      var m = L.map('destino-map', {
+        zoomControl: false, attributionControl: false, scrollWheelZoom: false,
+        dragging: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false
+      }).setView([${coords.lat}, ${coords.lng}], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(m);
+      L.marker([${coords.lat}, ${coords.lng}]).addTo(m);
+    })();
+    </script>` : ''}
 
     <!-- Descripción -->
     <p class="destino-desc">${escapeHTML(dest.descripcion)}</p>
@@ -380,7 +458,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.como_llegar)}</p>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a ${escapeHTML(dest.nombre)}">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -401,7 +479,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
               <p>${escapeHTML(dest.donde_dormir?.comfort || '')}</p>
             </div>
           </div>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en ${escapeHTML(dest.nombre)}">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -411,7 +489,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
           <ul class="destino-list">
 ${activitiesHTML}
           </ul>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en ${escapeHTML(dest.nombre)}">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -450,28 +528,19 @@ ${activitiesHTML}
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
     </div>
 
-    <!-- SALMA INLINE CHAT -->
-    <section class="destino-salma-section">
+    <!-- SALMA — solo saludo como gancho, sin chat interactivo anónimo: para
+         seguir hablando con ella hace falta entrar (gratis), como en el resto
+         de la app. Nada de esto llama al Worker. -->
+    <a class="destino-salma-section" href="/?go=chat">
       <div class="destino-salma-header">
         <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
         <span class="destino-salma-title">Pregúntale a Salma sobre ${escapeHTML(dest.nombre)}</span>
       </div>
-      <div class="salma-chat-body" id="salma-chat-body">
+      <div class="salma-chat-body">
         <div class="salma-chat-bubble">¡Ey! Estás viendo ${escapeHTML(dest.nombre)}. ¿En qué te ayudo?</div>
-        <div class="salma-chat-chips" id="salma-chat-chips">
-          <button class="salma-chip" data-msg="Consejos para viajar a ${escapeHTML(dest.nombre)}">💡 Consejos ${escapeHTML(dest.nombre)}</button>
-          <button class="salma-chip" data-msg="Itinerario en ${escapeHTML(dest.nombre)}">📋 Itinerarios</button>
-          <button class="salma-chip" data-msg="Presupuesto para viajar a ${escapeHTML(dest.nombre)}">💰 Presupuesto</button>
-          <button class="salma-chip" data-msg="Buscar vuelos a ${escapeHTML(dest.nombre)}">✈️ Vuelos</button>
-          <button class="salma-chip" data-msg="Hoteles en ${escapeHTML(dest.nombre)}">🏨 Hoteles</button>
-        </div>
       </div>
-      <div class="salma-chat-input-bar">
-        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en ${escapeHTML(dest.nombre)}?|ruta por ${escapeHTML(countryName)}|¿dónde comer en ${escapeHTML(dest.nombre)}?|${escapeHTML(dest.nombre)} en ${dest.dias_recomendados || 3} días|presupuesto ${escapeHTML(countryName)}|¿es seguro viajar a ${escapeHTML(dest.nombre)}?|mejor época para ${escapeHTML(countryName)}">
-        <button class="salma-mic" id="salma-mic" type="button" aria-label="Hablar">🎙️</button>
-        <button class="salma-chat-send" id="salma-chat-send">›</button>
-      </div>
-    </section>
+      <div class="destino-salma-cta">Seguir hablando con Salma <span>→</span></div>
+    </a>
 
   </main>
 
@@ -490,6 +559,8 @@ ${activitiesHTML}
   window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
   <script src="/destinos/destinos.js"></script>
+
+  ${BOTTOM_NAV}
 </body>
 </html>`;
 }
@@ -576,23 +647,30 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/destinos.css">
+  <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
+  <script src="/country-utils.js"></script>
   ${FIREBASE_HEAD_WITH_FIRESTORE}
 </head>
 <body class="destino-page">
-
-  <header class="app-header">
-    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
-    <div class="app-header-actions" id="header-actions">
-      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
-      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
-    </div>
-  </header>
 
   <!-- NAV -->
   <nav class="destino-nav-bar">
     <a href="/destinos/" class="destino-nav-link">Destinos</a>
   </nav>
+
+  <div class="chat-empty destino-clock-wrap">
+    ${LOGO_HTML}
+    <div class="ce-sky-date" id="destino-clock">${escapeHTML(countryName)}</div>
+  </div>
+  <script>
+  (function() {
+    var el = document.getElementById('destino-clock');
+    if (!el || typeof countryTimeString !== 'function') return;
+    function tick() { el.textContent = countryTimeString('${countryCode.toUpperCase()}'); }
+    tick();
+    setInterval(tick, 30000);
+  })();
+  </script>
 
   <section class="destino-hero">
     <h1 class="destino-title">Viajar a ${escapeHTML(countryName)}</h1>
@@ -610,26 +688,17 @@ function buildCountryHTML(countryName, countryCode, destinos) {
       <div class="destino-community-grid" id="destino-community-grid"></div>
     </section>
 
-    <!-- SALMA INLINE -->
-    <section class="destino-salma-section">
+    <!-- SALMA — solo saludo como gancho (ver mismo criterio en buildHTML) -->
+    <a class="destino-salma-section" href="/?go=chat">
       <div class="destino-salma-header">
         <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
         <span class="destino-salma-title">Planifica tu viaje a ${escapeHTML(countryName)}</span>
       </div>
-      <div class="salma-chat-body" id="salma-chat-body">
+      <div class="salma-chat-body">
         <div class="salma-chat-bubble">¡Ey! ¿Quieres viajar a ${escapeHTML(countryName)}? Pregúntame lo que quieras.</div>
-        <div class="salma-chat-chips" id="salma-chat-chips">
-          <button class="salma-chip" data-msg="Mejor ruta por ${escapeHTML(countryName)}">📋 Mejor ruta</button>
-          <button class="salma-chip" data-msg="Presupuesto para ${escapeHTML(countryName)}">💰 Presupuesto</button>
-          <button class="salma-chip" data-msg="Vuelos a ${escapeHTML(countryName)}">✈️ Vuelos</button>
-        </div>
       </div>
-      <div class="salma-chat-input-bar">
-        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="ruta por ${escapeHTML(countryName)}|presupuesto ${escapeHTML(countryName)}|mejor época ${escapeHTML(countryName)}|¿es seguro ${escapeHTML(countryName)}?">
-        <button class="salma-mic" id="salma-mic" type="button" aria-label="Hablar">🎙️</button>
-        <button class="salma-chat-send" id="salma-chat-send">›</button>
-      </div>
-    </section>
+      <div class="destino-salma-cta">Seguir hablando con Salma <span>→</span></div>
+    </a>
   </main>
 
   <footer class="destino-footer">
@@ -641,6 +710,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
 
+  ${BOTTOM_NAV}
   <script>
   window.DESTINO = ${JSON.stringify({ nombre: countryName, pais: countryName, id: countryCode, code: countryCode })};
   window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
@@ -708,7 +778,7 @@ function buildIndexHTML(countriesByContinent) {
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   ${FIREBASE_HEAD}
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/destinos.css">
+  <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
 </head>
 <body class="destino-page">
 
@@ -884,10 +954,13 @@ async function main() {
     console.log(`   📄 Índice: destinos/index.html`);
   }
 
-  // Sitemap
-  if (!dryRun && allSitemapUrls.length > 0) {
+  // Sitemap — solo se reescribe en una pasada completa (sin --country), para
+  // que una prueba de un solo país no borre las URLs del resto del sitemap.
+  if (!dryRun && !onlyCountry && allSitemapUrls.length > 0) {
     fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls));
     console.log(`   🗺️ Sitemap: ${allSitemapUrls.length} URLs`);
+  } else if (onlyCountry) {
+    console.log(`   🗺️ Sitemap: sin tocar (solo se regenera en una pasada completa)`);
   }
 
   console.log(`\n── Resumen ──`);

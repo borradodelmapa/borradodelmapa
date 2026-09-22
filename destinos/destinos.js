@@ -410,15 +410,18 @@
   // ═══ SUBTLE CTAs ═══
 
   function initSubtleCTAs() {
+    // Páginas nuevas (sin chat inline anónimo): el enlace ya apunta a
+    // /?go=chat por su cuenta — no hace falta JS, se deja navegar normal.
+    // Páginas viejas (con #salma-chat-input, hasta que se regeneren todas):
+    // sigue rellenando el input local, como antes.
     document.querySelectorAll('.destino-cta-subtle').forEach(link => {
+      const msg = link.dataset.salmaMsg;
+      if (!msg || !$input) return; // enlace normal, nada que interceptar
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        const msg = link.dataset.salmaMsg;
-        if (msg && $input) {
-          $input.value = msg;
-          $input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          setTimeout(() => $input.focus(), 400);
-        }
+        $input.value = msg;
+        $input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => $input.focus(), 400);
       });
     });
   }

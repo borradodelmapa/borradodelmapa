@@ -21,6 +21,10 @@ worker/kv/output-nivel2/
 worker/kv/output-nivel25/
 worker/kv/_*.json
 worker/kv/*.json
+# Excepción: caché de coordenadas de destinos (geocode-destinos.js) — pequeño, y
+# regenerarlo cuesta tiempo real (1 petición/seg a Nominatim), aunque sea gratis.
+# Se comitea, no se regenera sin necesidad.
+!worker/kv/destinos-coords.json
 
 # Node modules
 node_modules/

@@ -8,12 +8,36 @@
   background: var(--negro);
   color: var(--crema);
   min-height: 100vh;
-  padding-top: 56px; /* header height */
+  padding-bottom: 80px; /* espacio para app-bottom-bar + FAB, igual que .app-content */
 }
 
 .app-logo-link {
   text-decoration: none;
   color: inherit;
+}
+
+/* ── Reloj (hora del destino) — mismo look que el index de la app ── */
+.destino-clock-wrap {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 14px 20px 0 !important;
+}
+.destino-clock-wrap .ce-sky-date { cursor: default; }
+.destino-clock-wrap .ce-brand { text-decoration: none; display: inline-block; }
+
+/* ── Mapa centrado en el destino (Leaflet + OpenStreetMap, gratis) ──
+   Fijo, sin interacción propia (ver scrollWheelZoom:false etc en el script) —
+   solo para situarte de un vistazo; tocarlo abre Google Maps en una pestaña
+   nueva en vez de intentar navegar dentro de un mapa que no responde. */
+.destino-map-link {
+  display: block;
+  max-width: 700px;
+  margin: 0 auto 24px;
+}
+.destino-map {
+  height: 220px;
+  border: 1px solid rgba(212, 160, 23, .25);
+  cursor: pointer;
 }
 
 /* ── Hero ────────────────────────────────────────────────── */
@@ -105,7 +129,9 @@
 .destino-content {
   max-width: 700px;
   margin: 0 auto;
-  padding: 0 20px 160px;
+  /* El espacio para el menú fijo de abajo ya lo pone .destino-page
+     (padding-bottom, ver arriba) — aquí solo aire antes del footer. */
+  padding: 0 20px 32px;
   padding-right: 70px; /* espacio para FAB flotante */
 }
 
@@ -998,13 +1024,35 @@ details[open] > .destino-acc-header::after {
 /* ── Salma Inline Section ─────────────────────────────────── */
 
 .destino-salma-section {
+  display: block;
   background: var(--gris, #111);
   border: 1px solid rgba(212, 160, 23, .15);
   border-radius: 16px;
   overflow: hidden;
   margin-top: 40px;
   margin-bottom: 60px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .2s;
 }
+.destino-salma-section:hover { border-color: rgba(212, 160, 23, .4); }
+
+/* Solo saludo — para seguir hablando hay que entrar (ver build-destinos.js) */
+.destino-salma-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--linea);
+  font-family: var(--font-tight);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .02em;
+  color: var(--dorado);
+}
+.destino-salma-cta span { transition: transform .2s; }
+.destino-salma-section:hover .destino-salma-cta span { transform: translateX(3px); }
 
 .destino-salma-header {
   display: flex;
@@ -1140,7 +1188,7 @@ details[open] > .destino-acc-header::after {
 
 @media (max-width: 480px) {
   .destino-hero { padding: 32px 16px 24px; }
-  .destino-content { padding: 0 16px 160px; }
+  .destino-content { padding: 0 16px 32px; }
   .destino-facts { gap: 8px; }
   .destino-fact { padding: 12px; }
 

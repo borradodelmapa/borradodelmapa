@@ -1,0 +1,42 @@
+{
+  "es:barcelona": {
+    "lat": 41.3825802,
+    "lng": 2.177073
+  },
+  "es:madrid": {
+    "lat": 40.416782,
+    "lng": -3.703507
+  },
+  "es:sevilla": {
+    "lat": 37.3886303,
+    "lng": -5.9953403
+  },
+  "es:granada": {
+    "lat": 37.1734995,
+    "lng": -3.5995337
+  },
+  "es:san-sebastian": {
+    "lat": 43.3224219,
+    "lng": -1.9838889
+  },
+  "es:mallorca": {
+    "lat": 39.613432,
+    "lng": 2.8829185
+  },
+  "es:toledo": {
+    "lat": 39.8558913,
+    "lng": -4.024265
+  },
+  "es:asturias-picos-europa": {
+    "lat": 43.3133868,
+    "lng": -5.94192
+  },
+  "es:camino-de-santiago": {
+    "lat": 42.7027944,
+    "lng": -1.7086231
+  },
+  "es:cadiz-costa-de-la-luz": {
+    "lat": 36.5297438,
+    "lng": -6.2928976
+  }
+}

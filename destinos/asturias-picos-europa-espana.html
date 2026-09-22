@@ -27,7 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -36,20 +37,10 @@
   if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   </script>
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/destinos.css">
-  <!-- GA4 solo tras consentimiento (P1-6) -->
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}function loadGA4(){if(document.getElementById("ga4-script"))return;var s=document.createElement("script");s.id="ga4-script";s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ";document.head.appendChild(s);gtag("js",new Date());gtag("config","G-B2YWQKPTZZ");}if(localStorage.getItem("cookie_consent")==="all")loadGA4();</script>
+  <link rel="stylesheet" href="/destinos.css?v=2">
+  <script src="/country-utils.js"></script>
 </head>
 <body class="destino-page">
-
-  <!-- HEADER -->
-  <header class="app-header">
-    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
-    <div class="app-header-actions" id="header-actions">
-      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
-      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
-    </div>
-  </header>
 
   <!-- NAV BREADCRUMB -->
   <nav class="destino-nav-bar">
@@ -58,12 +49,29 @@
     <a href="/destinos/espana.html" class="destino-nav-link">España</a>
   </nav>
 
+  <!-- RELOJ — hora real del destino, gratis (Intl, sin llamar a ninguna API).
+       Mismo lenguaje visual que el reloj del index de la app (.chat-empty/.ce-sky-date). -->
+  <div class="chat-empty destino-clock-wrap">
+    <div class="ce-top"><a class="ce-brand" href="/">✦ BORRADO<span>DEL</span>MAPA</a></div>
+    <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
+    <div class="ce-sky-date" id="destino-clock">España</div>
+  </div>
+  <script>
+  (function() {
+    var el = document.getElementById('destino-clock');
+    if (!el || typeof countryTimeString !== 'function') return;
+    function tick() { el.textContent = countryTimeString('ES'); }
+    tick();
+    setInterval(tick, 30000);
+  })();
+  </script>
+
   <!-- HERO -->
   <section class="destino-hero">
     <div class="destino-hero-nav">
       <a href="/destinos/toledo-espana.html" class="destino-arrow destino-arrow-prev" title="Toledo">‹</a>
       <div class="destino-hero-center">
-        <span class="destino-badge">Naturaleza</span>
+        <span class="destino-badge">🌿 Naturaleza</span>
         <h1 class="destino-title">Viajar a Asturias y Picos de Europa</h1>
         <p class="destino-subtitle">Asturias / Cantabria · España</p>
       </div>
@@ -74,13 +82,31 @@
   <!-- CONTENT -->
   <main class="destino-content">
 
+    <!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
+    <a class="destino-map-link" href="https://www.google.com/maps/search/?api=1&query=43.3133868,-5.94192" target="_blank" rel="noopener" title="Abrir en Google Maps">
+      <div id="destino-map" class="destino-map"></div>
+    </a>
+    <script>
+    (function() {
+      if (typeof L === 'undefined') return;
+      // Mapa fijo, solo para situarte — sin interacción, para que la rueda del
+      // ratón o un dedo sobre el mapa no atrape el scroll de la página.
+      var m = L.map('destino-map', {
+        zoomControl: false, attributionControl: false, scrollWheelZoom: false,
+        dragging: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false
+      }).setView([43.3133868, -5.94192], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(m);
+      L.marker([43.3133868, -5.94192]).addTo(m);
+    })();
+    </script>
+
     <!-- Descripción -->
     <p class="destino-desc">El norte verde de España: costa acantilada, aldeas prerrománicas, sidrerías y el macizo de los Picos de Europa con rutas de senderismo entre los más espectaculares de la Península. La Ruta del Cares es uno de los senderos más famosos de España y está al alcance de cualquier viajero sin equipo especializado.</p>
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
       <div class="destino-fact">
-        <span class="destino-fact-icon"></span>
+        <span class="destino-fact-icon">💰</span>
         <span class="destino-fact-label">PRESUPUESTO DIARIO</span>
         <span class="destino-fact-value">18-54€</span>
       </div>
@@ -107,15 +133,15 @@
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
-        <summary class="destino-acc-header">Cómo llegar</summary>
+        <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Madrid: vuelo a Asturias (Oviedo) 1h, ~40-100 EUR. O autobús/tren a Oviedo 5-6h (~25-45 EUR). Para los Picos: autobús desde Oviedo o Cangas de Onís.</p>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Asturias y Picos de Europa">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Dónde dormir</summary>
+        <summary class="destino-acc-header">🛏️ Dónde dormir</summary>
         <div class="destino-acc-body">
           <div class="destino-dormir-grid">
             <div class="destino-dormir-card">
@@ -131,12 +157,12 @@
               <p>Hoteles en Llanes o Cangas de Onís, 80-150 EUR/noche</p>
             </div>
           </div>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Asturias y Picos de Europa">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Qué hacer</summary>
+        <summary class="destino-acc-header">🎯 Qué hacer</summary>
         <div class="destino-acc-body">
           <ul class="destino-list">
           <li>Ruta del Cares (Caín-Poncebos, 12 km sin dificultad técnica, gratis)</li>
@@ -145,33 +171,33 @@
           <li>Sidra natural y queso Cabrales en cualquier sidrería de Oviedo o Gijón</li>
           <li>Casco histórico de Oviedo: prerrománico asturiano (iglesias Santa María del Naranco gratuitas ciertos días)</li>
           </ul>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Asturias y Picos de Europa">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Dónde comer</summary>
+        <summary class="destino-acc-header">🍽️ Dónde comer</summary>
         <div class="destino-acc-body">
           <p>Fabada asturiana, cachopo y queso Cabrales. Las sidrerías de Oviedo (calle Gascona) sirven menús completos con sidra natural por 12-18 EUR. El escanciado de la sidra lo hace el camarero, no hace falta intentarlo uno mismo.</p>
         </div>
       </details>
 
       <details class="destino-acc-item destino-highlight">
-        <summary class="destino-acc-header">Consejo local</summary>
+        <summary class="destino-acc-header">💡 Consejo local</summary>
         <div class="destino-acc-body">
           <p>La Ruta del Cares es más impresionante yendo desde Poncebos (acceso en coche o bus desde Arenas de Cabrales) hacia Caín. El tramo inicial desde Poncebos tiene el cañón más vertical y profundo. Muchos turistas solo hacen la mitad y vuelven.</p>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Plan B si llueve</summary>
+        <summary class="destino-acc-header">🌧️ Plan B si llueve</summary>
         <div class="destino-acc-body">
           <p>Oviedo tiene museos de arte prerrománico únicos en el mundo. El Museo de Bellas Artes de Asturias es gratuito y tiene colección sólida. O visitar la cueva de El Pindal (arte rupestre, 3 EUR).</p>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Preguntas frecuentes</summary>
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
         <div class="destino-acc-body">
           
         <div class="destino-faq-item">
@@ -204,28 +230,19 @@
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
     </div>
 
-    <!-- SALMA INLINE CHAT -->
-    <section class="destino-salma-section">
+    <!-- SALMA — solo saludo como gancho, sin chat interactivo anónimo: para
+         seguir hablando con ella hace falta entrar (gratis), como en el resto
+         de la app. Nada de esto llama al Worker. -->
+    <a class="destino-salma-section" href="/?go=chat">
       <div class="destino-salma-header">
         <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
         <span class="destino-salma-title">Pregúntale a Salma sobre Asturias y Picos de Europa</span>
       </div>
-      <div class="salma-chat-body" id="salma-chat-body">
+      <div class="salma-chat-body">
         <div class="salma-chat-bubble">¡Ey! Estás viendo Asturias y Picos de Europa. ¿En qué te ayudo?</div>
-        <div class="salma-chat-chips" id="salma-chat-chips">
-          <button class="salma-chip" data-msg="Consejos para viajar a Asturias y Picos de Europa">Consejos Asturias y Picos de Europa</button>
-          <button class="salma-chip" data-msg="Qué hacer en Asturias y Picos de Europa">Qué hacer</button>
-          <button class="salma-chip" data-msg="Presupuesto para viajar a Asturias y Picos de Europa">Presupuesto</button>
-          <button class="salma-chip" data-msg="Buscar vuelos a Asturias y Picos de Europa">Vuelos</button>
-          <button class="salma-chip" data-msg="Hoteles en Asturias y Picos de Europa">Hoteles</button>
-        </div>
       </div>
-      <div class="salma-chat-input-bar">
-        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Asturias y Picos de Europa?|ruta por España|¿dónde comer en Asturias y Picos de Europa?|Asturias y Picos de Europa en 5 días|presupuesto España|¿es seguro viajar a Asturias y Picos de Europa?|mejor época para España">
-        <button class="salma-mic app-mic" id="salma-mic" type="button" aria-label="Hablar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="1" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
-        <button class="salma-chat-send" id="salma-chat-send">›</button>
-      </div>
-    </section>
+      <div class="destino-salma-cta">Seguir hablando con Salma <span>→</span></div>
+    </a>
 
   </main>
 
@@ -241,10 +258,32 @@
 
   <script>
   window.DESTINO = {"nombre":"Asturias y Picos de Europa","pais":"España","id":"asturias-picos-europa","code":"es"};
-  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
-  <script src="/guide-renderer.js"></script>
   <script src="/destinos/destinos.js"></script>
-<style>.sbb{position:fixed;bottom:0;left:0;right:0;z-index:900;display:flex;justify-content:space-around;align-items:flex-start;background:rgba(12,10,6,.95);backdrop-filter:blur(12px);border-top:1px solid rgba(244,239,230,.08);padding:6px 0 env(safe-area-inset-bottom,6px);min-height:56px}.sbb a{display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(244,239,230,.4);font-size:10px;font-family:'SF Mono','Fira Code',monospace;letter-spacing:.05em;padding:4px 16px;text-decoration:none;transition:color .2s}.sbb a:hover{color:rgba(244,239,230,.7)}.sbb svg{stroke:currentColor}</style><nav class="sbb"><a href="/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a><a href="/?go=chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Salma</span></a><a href="/?go=rutas"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg><span>Mis Viajes</span></a><a href="/?go=profile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a></nav>
+
+  
+  <nav class="app-bottom-bar">
+    <a class="bottom-tab" href="/?help=1">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Ayuda</span>
+    </a>
+    <a class="bottom-tab" href="/?go=chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Salma</span>
+    </a>
+    <div class="bottom-tab-fab-spacer" aria-hidden="true"></div>
+    <a class="bottom-tab" href="/?go=rutas">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
+      <span>Mis Viajes</span>
+    </a>
+    <a class="bottom-tab" href="/?go=profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Perfil</span>
+    </a>
+  </nav>
+  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Nueva ruta" title="Nueva ruta">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </a>
 </body>
 </html>
