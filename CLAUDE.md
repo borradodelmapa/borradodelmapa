@@ -1153,15 +1153,19 @@ generación" más abajo en este archivo) — decisión de Paco, no se ha tocado.
 
 Paco mandó vídeo + brief técnico detallado (ya con archivo/línea identificados) de 3 fallos
 en el popup de consulta sobre una guía abierta (`itin-query-overlay`, lógica en
-`mapa-itinerario.js`/`salma.js`, backend `worker/salma-worker.js`). Implementados los 3 en
-la rama `claude/guide-editing-errors-rsqqzr` (esta sesión no toca `main` directamente, solo
-desarrolla y hace push a su propia rama) — **SIN FUSIONAR A `main` Y SIN DESPLEGAR
-TODAVÍA.** Falta: fusionar a `main` (esta sesión no tiene permiso para eso ni credenciales
-de Cloudflare), subir el `?v=` ya está hecho en el propio commit, y solo entonces el paso 4
-del checklist de despliegue (`cd worker; npx wrangler deploy -c wrangler.toml`, o la GitHub
-Action "Deploy Worker" — dispara sobre `main`, así que solo sirve DESPUÉS de fusionar) + el
-5 (comprobar `/version`) antes de que el fix 1 llegue a producción. **Nunca decir
-"arreglado" — pendiente de fusionar, desplegar, y de que Paco lo vea en pantalla.**
+`mapa-itinerario.js`/`salma.js`, backend `worker/salma-worker.js`). Implementados los 3,
+**FUSIONADO A `main` (fast-forward, commit `a82b0ac`, sin conflicto — `origin/main` no se
+había movido) Y DESPLEGADO** a petición explícita de Paco ("Si claro subelo"): GitHub
+Action "Deploy Worker" run #39 disparada desde esta sesión (dispatch manual sobre `main`),
+**Worker Version ID `9d4da82e-124d-414e-a564-5fed4992f763`** — leído directo del log del
+job (`Current Version ID` en la salida de `wrangler deploy`), esta sesión no pudo
+confirmarlo además contra `/version` porque el proxy de red del contenedor bloquea las
+llamadas salientes a `salma-api.borradodelmapa-api.workers.dev` (mismo bloqueo ya
+documentado muchas veces en este archivo). Frontend ya en GitHub Pages (`styles.css?v=132`).
+**Nunca decir "arreglado" — pendiente de que Paco lo vea en pantalla**: repetir el caso del
+vídeo (mensaje mencionando una parada tipo aeropuerto/estación dentro del popup de edición)
+y confirmar que ya no salen botones de Uber/Bolt, que el botón "Añadir a la guía" se ve, y
+que el popup tiene sitio de sobra.
 
 1. **El Worker disparaba botones de Uber/Bolt en vez de responder, dentro del popup de
    edición.** Causa: `isHelpRequest()` (`worker/salma-worker.js:1550`) clasificaba por
@@ -1203,10 +1207,10 @@ Action "Deploy Worker" — dispara sobre `main`, así que solo sirve DESPUÉS de
 Text Search (paso 4 del bloque de transporte, geocodifica el "destino" detectado) que se
 disparaban por error dentro del popup de edición sin que el usuario pidiera trasladarse a
 ningún sitio. Sin llamadas nuevas a ninguna API.
-**Pendiente: desplegar el Worker (`wrangler deploy -c wrangler.toml` desde `worker/`,
-comprobar `/version`) y que Paco repita el caso del vídeo — mensaje mencionando una parada
-tipo aeropuerto/estación dentro del popup de edición — y confirme que ya no salen botones
-de Uber/Bolt, que el botón "Añadir a la guía" se ve, y que el popup tiene sitio de sobra.**
+**Ya desplegado (Version ID arriba). Pendiente solo que Paco repita el caso del vídeo —
+mensaje mencionando una parada tipo aeropuerto/estación dentro del popup de edición — y
+confirme que ya no salen botones de Uber/Bolt, que el botón "Añadir a la guía" se ve, y
+que el popup tiene sitio de sobra.**
 
 ---
 
