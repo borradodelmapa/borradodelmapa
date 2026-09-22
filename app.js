@@ -241,12 +241,16 @@ function _goToFreshBillete() {
   showState('chat');
   if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
   // Revela el billete de verdad (no solo el hero) — reutiliza los botones que ya
-  // pinta _renderChatEmpty(): "Trazar nueva ruta +" si hay ruta activa debajo,
-  // "Desliza para trazar ruta rápida" si no.
+  // pinta _renderChatEmpty(). Si hay ruta activa debajo, "Trazar nueva ruta +"
+  // (oculto con `hidden` desde que existe el FAB, sigue en el DOM solo como gancho
+  // programático — ver CLAUDE.md 22 sept 2026) cambia la tarjeta a hero+billete
+  // OCULTO, no lo revela directamente — hace falta encadenar el segundo clic.
+  // "Desliza para trazar ruta rápida" es el que de verdad lo enseña, en los dos casos
+  // (con o sin ruta activa). .click() dispara el listener aunque el botón esté oculto.
   const newBtn = document.querySelector('[data-ce-newbillete]');
-  const openBtn = document.querySelector('[data-ce-openbillete]');
   if (newBtn) newBtn.click();
-  else if (openBtn) openBtn.click();
+  const openBtn = document.querySelector('[data-ce-openbillete]');
+  if (openBtn) openBtn.click();
 }
 
 function goToNewRouteFAB() {
@@ -397,6 +401,11 @@ function _renderChatEmpty() {
   const _ceSkyFcHTML = _ceSkyForecastHTML(_ceSkyFcCached);
   let _ceSkyFcOpen = false;
   try { _ceSkyFcOpen = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
+  // Bloque de tiempo (tarjeta + previsión + info del país) plegado por defecto,
+  // detrás de un botón — la fecha/hora se queda siempre visible fuera del pliegue
+  // (petición de Paco, 22 sept 2026, para descargar el index).
+  let _ceSkyWxOpen = false;
+  try { _ceSkyWxOpen = localStorage.getItem('bdm_sky_wx_open') === '1'; } catch (_) {}
   let _ceName = '';
   try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
@@ -517,7 +526,10 @@ function _renderChatEmpty() {
       <div class="ce-stats">${rt.stats.map(s => `<div class="ce-stat"><div class="ce-k">${s[0]}</div><div class="ce-v">${s[1]}</div></div>`).join('')}</div>
       <div class="ce-cta ce-cta--dual">
         <button class="ce-cta-main" data-ce-guide>Abrir ruta <span>→</span></button>
-        <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete>Trazar nueva ruta <span>+</span></button>
+        <!-- Oculto a propósito (22 sept 2026): con el "+" del bottom bar ya no hace
+             falta este botón visible — carecía de sentido tener los dos. Se queda en
+             el DOM solo como gancho programático de _goToFreshBillete(). -->
+        <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete hidden>Trazar nueva ruta <span>+</span></button>
       </div>`;
 
   // "Ruta nueva" quitado (Fase 5): el billete ya es el creador de ruta; ese chip
@@ -587,19 +599,22 @@ function _renderChatEmpty() {
       <div class="chat-empty">
         <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span></div>
         <div class="ce-sky-date" id="ce-sky-time" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">${escapeHTML(_ceSkyTimeInit)}</div>
-        <div class="ce-sky-wx" id="ce-sky-wxcard" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">
-          <div class="wx-main">
-            <span class="wx-loc" id="ce-sky-loc">${escapeHTML(_ceSkyLocInit)}</span>
-            <div class="wx-center">
-              <span class="wx-temp" id="ce-sky-temp">${escapeHTML(_ceSkyTempInit)}</span>
-              <span class="wx-desc" id="ce-sky-desc">${escapeHTML(_ceSkyDescInit)}</span>
+        <button class="ce-sky-wx-toggle" id="ce-sky-wx-toggle" data-ce-sky-wx-toggle aria-expanded="${_ceSkyWxOpen ? 'true' : 'false'}">${_ceSkyWxOpen ? '▴ ocultar' : '▾ tiempo'}</button>
+        <div class="ce-sky-wx-wrap" id="ce-sky-wx-wrap"${_ceSkyWxOpen ? '' : ' hidden'}>
+          <div class="ce-sky-wx" id="ce-sky-wxcard" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">
+            <div class="wx-main">
+              <span class="wx-loc" id="ce-sky-loc">${escapeHTML(_ceSkyLocInit)}</span>
+              <div class="wx-center">
+                <span class="wx-temp" id="ce-sky-temp">${escapeHTML(_ceSkyTempInit)}</span>
+                <span class="wx-desc" id="ce-sky-desc">${escapeHTML(_ceSkyDescInit)}</span>
+              </div>
             </div>
+            <div class="wx-extras" id="ce-sky-extras"${_ceSkyCachedData ? '' : ' hidden'}>${_ceSkyExtrasInit}</div>
           </div>
-          <div class="wx-extras" id="ce-sky-extras"${_ceSkyCachedData ? '' : ' hidden'}>${_ceSkyExtrasInit}</div>
+          <button class="ce-sky-fc-toggle" id="ce-sky-fc-toggle" data-ce-sky-fc-toggle aria-expanded="${_ceSkyFcOpen ? 'true' : 'false'}"${_ceSkyFcCached.length ? '' : ' hidden'}>${_ceSkyFcOpen ? '▴' : '▾'} previsión</button>
+          <div class="wx-forecast" id="ce-sky-fc"${(_ceSkyFcCached.length && _ceSkyFcOpen) ? '' : ' hidden'}>${_ceSkyFcHTML}</div>
+          <div id="ce-sky-info"></div>
         </div>
-        <button class="ce-sky-fc-toggle" id="ce-sky-fc-toggle" data-ce-sky-fc-toggle aria-expanded="${_ceSkyFcOpen ? 'true' : 'false'}"${_ceSkyFcCached.length ? '' : ' hidden'}>${_ceSkyFcOpen ? '▴' : '▾'} previsión</button>
-        <div class="wx-forecast" id="ce-sky-fc"${(_ceSkyFcCached.length && _ceSkyFcOpen) ? '' : ' hidden'}>${_ceSkyFcHTML}</div>
-        <div id="ce-sky-info"></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
@@ -759,6 +774,12 @@ function _renderChatEmpty() {
     if (!area._ceEmptyClickWired) {
       area._ceEmptyClickWired = true;
       area.addEventListener('click', (e) => {
+      // Bloque de tiempo entero (tarjeta+previsión+info país) → plegar/desplegar,
+      // la fecha/hora queda siempre visible fuera de este toggle.
+      if (e.target.closest('[data-ce-sky-wx-toggle]')) {
+        _ceSkyToggleWx();
+        return;
+      }
       // Previsión de varios días → plegar/desplegar (por defecto plegada, no distrae)
       if (e.target.closest('[data-ce-sky-fc-toggle]')) {
         _ceSkyToggleForecast();
@@ -1123,6 +1144,22 @@ async function _ceSkyWeatherRefresh(sel) {
     }
   } catch (_) {
     _ceSkyPaintWeather(null);
+  }
+}
+
+// Plegar/desplegar el bloque de tiempo entero (tarjeta+previsión+info país) —
+// plegado por defecto (petición de Paco, 22 sept: descargar visualmente el
+// index). La fecha/hora (#ce-sky-time) se queda siempre visible, fuera de esto.
+function _ceSkyToggleWx() {
+  const el = document.getElementById('ce-sky-wx-wrap');
+  const toggle = document.getElementById('ce-sky-wx-toggle');
+  if (!el) return;
+  const open = !!el.hidden; // estaba oculto → lo vamos a abrir
+  el.hidden = !open;
+  try { localStorage.setItem('bdm_sky_wx_open', open ? '1' : '0'); } catch (_) {}
+  if (toggle) {
+    toggle.textContent = open ? '▴ ocultar' : '▾ tiempo';
+    toggle.setAttribute('aria-expanded', String(open));
   }
 }
 

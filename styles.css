@@ -6642,6 +6642,16 @@ body {
   padding-bottom:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .ce-sky-date:active{opacity:.7;}
+/* Botón que pliega/despliega todo el bloque de tiempo (tarjeta+previsión+info
+   país) — la fecha/hora de arriba (.ce-sky-date) se queda siempre visible fuera
+   de este pliegue, a petición de Paco, 22 sept 2026. Mismo patrón visual que
+   .ce-sky-fc-toggle, para que se lea como parte de la misma familia de botones. */
+.ce-sky-wx-toggle{
+  display:block;margin:0 0 8px;padding:6px 0;border:0;background:transparent;
+  font-family:var(--ce-flapf);font-size:14px;letter-spacing:.06em;
+  color:var(--ce-ink3);cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.ce-sky-wx-toggle:hover,.ce-sky-wx-toggle:active{color:var(--ce-amber);}
 .ce-sky-wx{padding-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ce-sky-wx:active{opacity:.85;}
 .ce-sky-wx .wx-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
