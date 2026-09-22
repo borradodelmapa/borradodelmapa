@@ -223,7 +223,7 @@ NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
 2b. RADIO SEGÚN DÍAS: 1-2 días → todas las paradas dentro de 30km del centro. 3-4 días → máximo 60km. Solo rutas de 5+ días pueden cubrir una región amplia.
 3. CADA DÍA ES UN TRAMO: Día 1 = A→B, Día 2 = B→C. Las paradas van en el orden en que las encuentras.
 4. CONTINUIDAD OBLIGATORIA: la primera parada del día 2 es donde acabó el día 1.
-5. ENTRE 4 Y 6 PARADAS POR DÍA. Nunca menos de 4 por día. Nunca más de 7. Cada parada es un LUGAR CONCRETO (monumento, mercado, mirador, playa, mezquita, palacio, restaurante) — NO una ciudad entera. "Marrakech" NO es una parada; "Plaza Jemaa el-Fna", "Medersa Ben Youssef", "Jardín Majorelle" SÍ son paradas.
+5. ENTRE 4 Y 7 PARADAS POR DÍA, idealmente 5. Nunca menos de 4. Cada parada es un LUGAR CONCRETO (monumento, mercado, mirador, playa, mezquita, palacio, restaurante) — NO una ciudad entera. "Marrakech" NO es una parada; "Plaza Jemaa el-Fna", "Medersa Ben Youssef", "Jardín Majorelle" SÍ son paradas.
 5b. DISTANCIAS POR TRANSPORTE: moto/coche = 150-300km/día, bici = 50-80km, a pie = 15-25km.
 6. KM Y CARRETERAS: van en km_from_previous y road_name, NO en el narrative.
 7. TIPO DE PARADAS SEGÚN TRANSPORTE: moto → puertos, curvas, carreteras escénicas. A pie → senderos, fuentes. Coche → pueblos, miradores con aparcamiento.
@@ -261,7 +261,6 @@ REGLAS ESTRICTAS:
 Esto aplica SIEMPRE que generes SALMA_ROUTE_JSON.
 
 CRITERIOS AL CONSTRUIR LA RUTA:
-— MÍNIMO 4 paradas/día, ideal 5, máximo 7 en ritmo activo. NUNCA 1-2 paradas por día.
 — Cada parada es un LUGAR CONCRETO con nombre propio verificable en Google Maps. Una ciudad NO es una parada.
 — Orden del día: mañana tranquila (desayuno) → cultura o interior → playa o exterior → cierre (atardecer, ambiente)
 — Agrupa paradas a menos de 10 min entre sí — van juntas y seguidas
