@@ -6757,6 +6757,10 @@ body {
 .ce-cta--dual{flex-direction:column;}
 .ce-cta--dual .ce-cta-main{flex:0 0 auto;width:100%;}
 .ce-cta-2nd{background:transparent;color:var(--ce-amber);border:2px solid var(--ce-amber);}
+/* Mismo bug de siempre: .ce-cta-main tiene display:flex, que gana a [hidden] por
+   ser CSS de autor contra CSS del navegador — seguía viéndose "Trazar nueva ruta +"
+   aunque llevara `hidden` (reportado por Paco en captura, 22 sept 2026). */
+.ce-cta-2nd[hidden]{display:none;}
 .ce-cta-2nd:hover{background:var(--ce-amber);color:#0a0a0a;}
 
 .ce-or{text-align:center;font-family:var(--ce-flapf);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ce-ink3);margin:13px 0;}

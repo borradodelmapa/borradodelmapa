@@ -811,8 +811,11 @@ function _renderChatEmpty() {
         const card = area.querySelector('#ce-card');
         if (card) {
           card.hidden = false;
-          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Sube directo al cuadro "¿A dónde?", no solo a la tarjeta — con
+          // scrollIntoView sobre la tarjeta entera se veía primero la cabecera
+          // del billete (Nº/Pasajero) en vez del campo de texto (Paco, 22 sept).
           const dest = card.querySelector('.ce-tk-dest');
+          (dest || card).scrollIntoView({ behavior: 'smooth', block: 'center' });
           if (dest) setTimeout(() => { try { dest.focus(); } catch (_) {} }, 320);
         }
         const ob = area.querySelector('[data-ce-openbillete]');
