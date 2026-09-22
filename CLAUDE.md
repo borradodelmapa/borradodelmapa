@@ -1109,8 +1109,11 @@ dos rondas de ajustes (logo, eslogan, quitar chat interactivo, quitar hueco de s
   sigue exactamente igual que antes.
   `?v=` subido: `app.js` a 153 en `index.html`.
 
-Todo esto, igual que el resto de la sesión: **en local, sin commitear hasta confirmar
-con Paco, sin desplegar el Worker (no se tocó), sin subir a GitHub.**
+**ACTUALIZACIÓN — comiteado (`f170f86f`, `f93ef988`, `2bff2eaa`), subido a `main`
+(`git push`, sin conflicto, `origin/main` no se había movido) y Worker desplegado
+(ver Version ID en la entrada de "2 funciones dead code" de Deuda técnica) — todo a
+petición explícita de Paco ("SI Y MAIN" / "SUBELO DESPLIEGA"). Lo único del Worker que
+cambiaba era quitar las 2 funciones muertas — nada nuevo que probar en el chat.**
 
 ---
 
@@ -3623,9 +3626,11 @@ antiguo — tratarlo como tal.)*
   `injectTransportBlock()` en el Worker (llevaban desactivadas desde P2-12, solo hacían
   `return reply`) y los 2 sitios que las llamaban (uno de ellos, un bloque entero que
   nunca podía ejecutar nada — la condición de la que dependía era matemáticamente
-  siempre falsa). Verificado con `node --check`, sin más referencias colgando. **Cambio
-  del Worker, en local, sin desplegar todavía** — no toca ninguna API de pago, es solo
-  quitar código que no hacía nada.
+  siempre falsa). Verificado con `node --check`, sin más referencias colgando — no toca
+  ninguna API de pago, es solo quitar código que no hacía nada. **Desplegado 22 sept
+  2026** (`npx wrangler deploy -c wrangler.toml` desde `worker/`, esta sesión sí tenía
+  credenciales de Cloudflare), **Worker Version ID `cd3f975b-0bdb-4ba0-9230-233258271267`**
+  — confirmado contra `/version`, 18 secretos intactos (`wrangler secret list`).
 
 ### 🧵 Ramas rescatadas (10 sept) — con trabajo real, sin fusionar a `main`
 
