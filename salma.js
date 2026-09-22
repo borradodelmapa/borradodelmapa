@@ -1688,8 +1688,10 @@ const salma = {
         // de EDICIÓN normales — si el Worker respondía en prosa (sin data.route),
         // esta rama ofrecía "Crear ruta con mapa" como si fuera una ruta nueva
         // desde cero, tirando el contexto de la que ya estaba abierta.
+        // Burbuja aparte quitada (22 sept 2026): duplicaba el cierre que ya escribe Salma
+        // en el propio texto de recomendaciones ("Si te encaja, dale a Crear ruta con
+        // mapa..."), sin coordinación entre los dos — decían casi lo mismo dos veces.
         this._removeLoading();
-        this._addSalmaBubble('Ahí tienes el plan 👆. Cuando lo veas claro, dale al botón y te lo monto como guía con mapa para guardarla y seguirla paso a paso.');
         this._offerCrearRutaConMapa({
           baseMsg: data.map_base_msg || this._lastMsg || msg,
           sourceText: data.reply || '',

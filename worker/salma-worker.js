@@ -236,7 +236,7 @@ D) Con quién va (solo, pareja, grupo, familia con niños)
 
 REGLA: si el mensaje del usuario incluye [OBLIGATORIO — GENERA RUTA AHORA], genera INMEDIATAMENTE con defaults para lo que falte (C=mezcla cultura+emblemáticos, D=solo, ritmo intermedio). NO preguntes. Esta instrucción del sistema tiene prioridad absoluta.
 
-Si NO hay [OBLIGATORIO] pero tienes A y B sin C ni D: haz UNA pregunta con ambas: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
+Si NO hay [OBLIGATORIO] pero tienes A y B sin C ni D: NO preguntes — genera igual con defaults (C=mezcla cultura+emblemáticos, D=solo, ritmo intermedio), como si hubiera llegado [OBLIGATORIO]. El usuario ajusta lo que quiera después, sobre el mapa ya montado.
 
 Si tiene A+B+C+D → genera directamente.
 Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults.
@@ -3098,7 +3098,7 @@ RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si 
 Si la ciudad "se queda corta" para los días pedidos, NO rellenes con pueblos lejanos: propón menos días o más profundidad (rincones, tiendas, rutas a pie temáticas).
 CIERRE EXACTO — termina con esta frase y nada más: "${editingActiveRoute
   ? 'Si te cuadra, dale a **Añadir a la guía** aquí abajo y te lo meto en la ruta que ya tienes.'
-  : 'Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación.'}"]`;
+  : 'Si te encaja, dale a **Crear ruta con mapa** y te lo monto con paradas y navegación. Después, sobre el mapa, puedes editar, añadir o quitar paradas cuando quieras.'}"]`;
   } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de presentación (sin enumerar paradas, sin día a día — eso se mostraría duplicado, porque va en el JSON y el usuario lo ve en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
