@@ -3752,11 +3752,10 @@ function sanitizeInventedUrls(text) {
   }).replace(/\n{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '');
 }
 
-// Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
-// y no hay ya un enlace de Google Maps en la respuesta.
-// Desactivadas — Claude genera sus propios enlaces Maps y transporte con buscar_web (P2-12)
-function injectGoogleMapsLink(reply) { return reply; }
-function injectTransportBlock(reply) { return reply; }
+// injectGoogleMapsLink()/injectTransportBlock() se quitaron el 22 sept 2026 (deuda
+// técnica): llevaban desactivadas desde P2-12 (Claude ya genera sus propios enlaces
+// Maps y transporte con buscar_web) y eran solo `return reply` sin tocar nada — código
+// muerto confirmado, sin caller que dependiera de un cambio real. Ver CLAUDE.md.
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUES PARALELOS — Rutas largas (>7 días)
@@ -10253,23 +10252,6 @@ INSTRUCCIONES:
           }
         }
 
-        // ── Inyectar Google Maps y transporte como stream chunks (antes de procesar reply) ──
-        {
-          const tempReply = replyWithoutRouteBlock(allText);
-          const withMaps = injectGoogleMapsLink(tempReply, userLocation, message, isLocalQuery);
-          const withTransport = injectTransportBlock(withMaps, kvTransportData, message, isLocalQuery);
-          // Si se añadió algo, enviar la parte nueva como chunk de texto
-          if (withTransport.length > tempReply.length) {
-            const injected = withTransport.slice(tempReply.length);
-            allText += injected;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: injected })}\n\n`)); } catch (_) {}
-          } else if (withMaps.length > tempReply.length) {
-            const injected = withMaps.slice(tempReply.length);
-            allText += injected;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: injected })}\n\n`)); } catch (_) {}
-          }
-        }
-
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
         // PIEZA A — Tiempo 1 (recomendaciones): aunque el modelo se saltase la orden y
         // emitiera un SALMA_ROUTE_JSON, aquí NO se convierte en ruta. Solo prosa + botón.
@@ -10533,10 +10515,6 @@ REGLAS:
         // larguísimo (el frontend entonces no lo reconoce como imagen y el usuario ve el
         // markdown crudo). _repairBrokenPhotoMarkdown() cubre ambos casos.
         if (!route) reply = _repairBrokenPhotoMarkdown(reply);
-        // Inyectar Google Maps automáticamente si aplica
-        reply = injectGoogleMapsLink(reply, userLocation, message, isLocalQuery);
-        // Inyectar bloque de transporte (app + descarga) si aplica
-        reply = injectTransportBlock(reply, kvTransportData, message, isLocalQuery);
         // Post-procesado: dividir respuesta en días con headers **Día N**
         // Siempre intentar — si no hay ordinales ni suficientes párrafos, devuelve texto sin cambios
         const _daysMatch = message.match(/(\d{1,2})\s*d.{0,2}as?/i);

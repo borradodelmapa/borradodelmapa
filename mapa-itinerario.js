@@ -452,11 +452,10 @@ const mapaItinerario = {
   },
 
   // ═══ HELPERS ═══
+  // Deuda técnica (22 sept 2026): delega en escapeHTML() de app.js — mismo algoritmo
+  // exacto, repetido aquí y en docs-viajero.js.
   _esc(str) {
-    if (!str) return '';
-    const d = document.createElement('div');
-    d.textContent = str;
-    return d.innerHTML;
+    return escapeHTML(str);
   },
 
   _totalDays(stops) {
@@ -532,12 +531,10 @@ const mapaItinerario = {
     return 'https://www.google.com/maps/dir/' + pts.map(c => `${c[0]},${c[1]}`).join('/');
   },
 
+  // Deuda técnica (22 sept 2026): delega en la versión compartida de app.js —
+  // era una copia idéntica del mismo algoritmo, repetida aquí y en guide-renderer.js.
   _sampleWaypoints(arr, max) {
-    if (arr.length <= max) return arr;
-    const step = arr.length / max;
-    const result = [];
-    for (let i = 0; i < max; i++) result.push(arr[Math.floor(i * step)]);
-    return result;
+    return sampleWaypoints(arr, max);
   },
 
   // ═══ ACTUALIZAR FOTOS CON DATOS VERIFICADOS (después del verify del worker) ═══

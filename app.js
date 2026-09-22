@@ -6760,6 +6760,17 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
+// Reparte hasta `max` elementos de `arr` a intervalos regulares (para waypoints de
+// Google Maps). Compartida por guide-renderer.js y mapa-itinerario.js (deuda técnica,
+// 22 sept 2026) — eran dos copias idénticas del mismo algoritmo.
+function sampleWaypoints(arr, max) {
+  if (arr.length <= max) return arr;
+  const step = arr.length / max;
+  const result = [];
+  for (let i = 0; i < max; i++) result.push(arr[Math.floor(i * step)]);
+  return result;
+}
+
 // BLOQUE E (frontend) — true si la URL de Maps NO lleva coords imposibles. Sin red.
 // Gemelo de _mapsUrlCoordsSane() en guide-renderer.js.
 function mapsUrlCoordsSane(url) {
@@ -6904,7 +6915,6 @@ function formatMessage(str) {
     else if (url.indexOf('blablacar') !== -1) label = '🚗 Ver en BlaBlaCar';
     else if (url.indexOf('kiwitaxi.com') !== -1) label = '🚕 Reservar transfer';
     else if (url.indexOf('uber.com') !== -1) label = '🚕 Abrir Uber';
-    else if (url.indexOf('gojek.com') !== -1) label = '🟢 Descargar Gojek';
     else if (url.indexOf('rapido.bike') !== -1) label = '🏍️ Descargar Rapido';
     else if (url.indexOf('olacabs.com') !== -1) label = '🟡 Descargar Ola';
     else if (url.indexOf('airbnb.com') !== -1) label = '🏠 Ver en Airbnb';

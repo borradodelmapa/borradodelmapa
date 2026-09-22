@@ -619,14 +619,10 @@ const guideRenderer = {
     return 'https://www.google.com/maps/dir/' + pts.map(c => `${c[0]},${c[1]}`).join('/');
   },
 
+  // Deuda técnica (22 sept 2026): delega en la versión compartida de app.js —
+  // era una copia idéntica del mismo algoritmo, repetida aquí y en mapa-itinerario.js.
   _sampleWaypoints(arr, max) {
-    if (arr.length <= max) return arr;
-    const step = arr.length / max;
-    const result = [];
-    for (let i = 0; i < max; i++) {
-      result.push(arr[Math.floor(i * step)]);
-    }
-    return result;
+    return sampleWaypoints(arr, max);
   },
 
   // ═══ BOTÓN HISTORIA (por parada) ═══

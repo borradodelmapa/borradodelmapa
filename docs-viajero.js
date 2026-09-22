@@ -370,11 +370,10 @@ const docsViajero = {
   },
 
   // ── Utilidades ──
+  // Deuda técnica (22 sept 2026): delega en escapeHTML() de app.js — mismo algoritmo
+  // exacto, repetido aquí y en mapa-itinerario.js.
   _esc(str) {
-    if (!str) return '';
-    const d = document.createElement('div');
-    d.textContent = str;
-    return d.innerHTML;
+    return escapeHTML(str);
   },
 
   _formatSize(bytes) {

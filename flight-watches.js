@@ -11,7 +11,11 @@ window.flightWatches = (() => {
   // ── Helpers ──
   function _uid() { return window.currentUser?.uid; }
   function _col() { return db.collection('users').doc(_uid()).collection('flight_watches'); }
-  function _esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  // Deuda técnica (22 sept 2026): delega en escapeHTML() de app.js en vez de crear su
+  // propio <div> — de paso corrige un caso raro: esta versión no tenía guarda para
+  // valores vacíos/undefined (los pintaba como el texto literal "undefined"),
+  // escapeHTML() sí la tiene.
+  function _esc(s) { return escapeHTML(s); }
 
   async function _getAuthHeaders() {
     const user = firebase.auth().currentUser;

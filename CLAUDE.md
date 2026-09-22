@@ -1134,7 +1134,7 @@ El usuario es **Paco**, founder y único desarrollador. Trabaja desde portátil,
 ├── app.js                  # Firebase, auth, welcome, perfil, galería, mapa live, diario, SOS, coins (INTOCABLE sin confirmar)
 ├── salma.js                # Motor de conversación: streaming SSE, historial, copiloto, narrador, TTS, cámara
 ├── guide-renderer.js       # Renderiza guía-card: acordeón, mapas Leaflet, fotos, enlaces
-├── mapa-itinerario.js      # Vista itinerario fullscreen: tarjetas + mapa de ruta (monkey-patches bitacoraRenderer)
+├── mapa-itinerario.js      # Vista itinerario fullscreen: tarjetas + mapa de ruta
 ├── mapa-ruta.js            # Google Maps dinámico + Leaflet fallback: marcadores, polyline, turn-by-turn
 ├── bitacora-renderer.js    # "Mi Diario": timeline por días, fotos, notas, compartir redes
 ├── notas.js                # Gestor de notas: CRUD Firestore, recordatorios, filtros, adjuntos R2
@@ -1200,8 +1200,10 @@ video-player.js (puro Canvas, sin deps)
 guide-renderer.js (Leaflet, db, currentUser, SALMA_API, salma, showToast, generateSlug)
 bitacora-renderer.js (Leaflet, db, currentUser, SALMA_API, showToast, videoPlayer)
 mapa-ruta.js (google.maps lazy, Leaflet fallback, db, SALMA_API, salma)
-mapa-itinerario.js (mapaRuta, guideRenderer, salma, db, showToast)
-  └─ monkey-patches bitacoraRenderer.renderDiario en runtime
+mapa-itinerario.js (mapaRuta, guideRenderer, salma, db, showToast) — independiente de
+  bitacora-renderer.js desde el rediseño de navegación de sept 2026 (antes parcheaba
+  bitacoraRenderer.renderDiario en runtime; verificado 22 sept 2026 que ya no queda
+  rastro de eso en el código vivo, solo en backups de abril)
 docs-viajero.js (db, currentUser, firebase.firestore.Timestamp, SALMA_API, showState)
 flight-watches.js (db, currentUser, firebase.auth, SALMA_API, showToast) — no documentado hasta este barrido (16 sept)
 map-modal.js (google.maps, salma, showToast) — no documentado hasta este barrido
@@ -3528,15 +3530,62 @@ antiguo — tratarlo como tal.)*
   en la web — https://code.claude.com/docs/en/claude-code-on-the-web. Paco confirmó que
   le interesa pero no es urgente — no perseguir esto hasta que lo pida.
 
-### 🔧 Deuda técnica (sin cambios, no re-verificado a fondo en este barrido salvo lo dicho)
+### 🔧 Deuda técnica
 
-- **Código duplicado** — `_groupByDay`, `_sampleWaypoints`, `_fullRouteGmapsUrl`,
-  `escapeHTML` en 3+ archivos.
-- **Monkey-patch frágil** — `mapa-itinerario.js` parchea `bitacoraRenderer.renderDiario`
-  en runtime.
-- **Deep links transport incompletos** — Solo Uber y Lyft tienen deep links.
-- **2 funciones dead code confirmadas** — `injectGoogleMapsLink()` e
-  `injectTransportBlock()` en el Worker (~línea 3290) solo hacen `return reply` sin tocar nada.
+- ~~Código duplicado~~ → **HECHO 22 sept 2026, solo lo que era de verdad copia exacta.**
+  Se comparó cada función línea a línea antes de tocar nada (Paco: "asegúrate que no
+  rompa nada"):
+  - `_sampleWaypoints` (`guide-renderer.js`/`mapa-itinerario.js`) — **eran idénticas** →
+    unificadas en `sampleWaypoints()`, global nuevo en `app.js`; las dos ahora delegan.
+  - `escapeHTML`/`_esc` (`mapa-itinerario.js`, `docs-viajero.js`, `flight-watches.js`) —
+    **mismo algoritmo DOM** (`mapa-itinerario.js`/`docs-viajero.js` idénticas incluida la
+    guarda `if(!str) return ''`; `flight-watches.js` sin esa guarda, pintaba el texto
+    literal "undefined" en ese caso — al delegar en `escapeHTML()` de `app.js` de paso se
+    corrige) → las tres delegan ahora en `escapeHTML()` de `app.js`.
+  - `_groupByDay` (`guide-renderer.js`/`bitacora-renderer.js`) — **NO son iguales**:
+    `guide-renderer.js` rellena el título del día con el de una parada posterior si la
+    primera no lo traía; `bitacora-renderer.js` no lo hace. **Dejadas separadas a
+    propósito** — fusionarlas habría cambiado qué título se ve en el Diario en algunos
+    casos.
+  - `_fullRouteGmapsUrl` (`guide-renderer.js`/`mapa-itinerario.js`) — **NO son iguales**:
+    una exige `place_id` en todas las paradas, la otra admite lat/lng sueltas de
+    respaldo. **Dejadas separadas a propósito** — es lógica de producto distinta, no
+    duplicación accidental.
+  Probado en el navegador de la app (`escapeHTML`/`sampleWaypoints`/los `_esc` de cada
+  módulo, resultado idéntico al de antes) — sin tocar el Worker, sin coste. `?v=` subidos
+  en `index.html`: `app.js` 152, `flight-watches.js` 5, `guide-renderer.js` 55,
+  `mapa-itinerario.js` 78, `docs-viajero.js` 2.
+- ~~Monkey-patch frágil~~ → **YA NO EXISTE, verificado 22 sept 2026 — era documentación
+  desactualizada, no código real.** `mapa-itinerario.js` parcheaba en su día
+  `bitacoraRenderer.renderDiario` en runtime, pero el rediseño de navegación de
+  septiembre ("Chat modal flotante", ver sesión del 10 sept, "se rehizo de cero, sin
+  monkey-patch") ya lo quitó — solo quedaba el patch en backups de abril
+  (`backups/mapa-itinerario-20260406.js` y similares), nunca en el código vivo. Corregidas
+  las dos menciones que quedaban sueltas en "Archivos principales"/"Dependencias entre
+  módulos" más arriba en este archivo, que seguían describiendo la arquitectura vieja.
+- **Deep links transport — nota corregida 22 sept 2026, era imprecisa (mismo patrón que
+  el monkey-patch: la realidad ya no coincidía con lo escrito).** No es "solo Uber y Lyft
+  tienen deep link" — hay 3 sitios en el código con cobertura mucho más amplia:
+  `worker/salma-worker.js` (`TRANSPORT_APP_URLS`, `buildGoToTransportActions`/
+  `buildDestTransportInfo`) y `app.js` (`formatMessage`) ya reconocen y etiquetan Uber,
+  Lyft, Grab, Bolt, DiDi, Gojek, Careem, inDrive, Cabify, FREENOW, Kakao T, Ola, Yandex
+  Go y Yango. Lo que sí es cierto y sigue pendiente: de esas, solo **9** (Uber, Lyft, Ola,
+  Yandex, Yango, Google Maps, Waze, Citymapper, Moovit — según el propio
+  `transport-apps.json`) abren la app con el trayecto YA puesto (origen/destino
+  prellenados); el resto abre la app normal sin prellenar, porque su formato de enlace
+  propietario no está investigado — añadirlo bien (sin arriesgarse a un enlace mal
+  formado) es trabajo de investigación real, no una limpieza rápida. **Sin tocar, queda
+  aparte.** De paso, arreglado un bug pequeño encontrado mirando esto: `app.js`
+  (`formatMessage`) tenía la condición `url.indexOf('gojek.com')` duplicada dos veces en
+  la misma cadena de `else if` — la segunda nunca podía ejecutarse, se borró (cero cambio
+  de comportamiento, confirmado en el navegador).
+- ~~2 funciones dead code~~ → **BORRADAS 22 sept 2026.** `injectGoogleMapsLink()` e
+  `injectTransportBlock()` en el Worker (llevaban desactivadas desde P2-12, solo hacían
+  `return reply`) y los 2 sitios que las llamaban (uno de ellos, un bloque entero que
+  nunca podía ejecutar nada — la condición de la que dependía era matemáticamente
+  siempre falsa). Verificado con `node --check`, sin más referencias colgando. **Cambio
+  del Worker, en local, sin desplegar todavía** — no toca ninguna API de pago, es solo
+  quitar código que no hacía nada.
 
 ### 🧵 Ramas rescatadas (10 sept) — con trabajo real, sin fusionar a `main`
 
