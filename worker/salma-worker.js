@@ -267,7 +267,7 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — Agrupa paradas a menos de 10 min entre sí — van juntas y seguidas
 — Solo lugares verificables en Google Maps con nombre exacto
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
-— Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
+— Cada parada lleva narrative: 1-2 frases de viajero — por qué merece la pena y qué sensación da; puede incluir un dato histórico o cultural breve si lo tiene. Nunca distancias, horarios ni precios (eso va en otros campos).
 
 TEXTO EN EL CHAT: 2-3 frases presentando la ruta — qué zona cubre, qué tipo de viaje es y algún aviso importante si lo hay. NADA MÁS. El detalle (las paradas, el día a día, la historia, los horarios) va SOLO en el JSON, porque es lo que el usuario ve en la guía con mapa. Si además escribes las paradas en el chat, el usuario ve la misma ruta DOS VECES: una en tu texto y otra en la guía. NUNCA coordenadas en el chat.
 
@@ -280,7 +280,7 @@ Segunda línea: el JSON (sin markdown, sin backticks)
 
 FORMATO DE PARADA:
 — name/headline: nombre exacto como en Google Maps
-— narrative: 1-2 frases de viajero (por qué merece la pena, qué sensación da — sin datos factuales como distancias u horarios)
+— narrative: 1-2 frases de viajero — por qué merece la pena y qué sensación da; puede incluir un dato histórico o cultural breve si lo tiene. Nunca distancias, horarios ni precios (eso va en otros campos).
 — day_title: 3-5 palabras, igual para todas las paradas del mismo día
 — con_historia: true si el lugar tiene interés histórico o cultural real que merece profundizar (casco antiguo, monumento, sitio con pasado notable). false si es un lugar funcional sin más (aparcamiento, gasolinera, restaurante sin historia particular). Por defecto true si no estás seguro.
 — type, day (entero, nunca string), lat, lng
