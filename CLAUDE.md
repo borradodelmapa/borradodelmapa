@@ -1149,6 +1149,67 @@ generación" más abajo en este archivo) — decisión de Paco, no se ha tocado.
 
 ---
 
+## Sesión 22 sept 2026 (nueva) — 3 bugs del popup "Pregúntale a Salma" (edición de guía)
+
+Paco mandó vídeo + brief técnico detallado (ya con archivo/línea identificados) de 3 fallos
+en el popup de consulta sobre una guía abierta (`itin-query-overlay`, lógica en
+`mapa-itinerario.js`/`salma.js`, backend `worker/salma-worker.js`). Implementados los 3 en
+la rama `claude/guide-editing-errors-rsqqzr` (esta sesión no toca `main` directamente, solo
+desarrolla y hace push a su propia rama) — **SIN FUSIONAR A `main` Y SIN DESPLEGAR
+TODAVÍA.** Falta: fusionar a `main` (esta sesión no tiene permiso para eso ni credenciales
+de Cloudflare), subir el `?v=` ya está hecho en el propio commit, y solo entonces el paso 4
+del checklist de despliegue (`cd worker; npx wrangler deploy -c wrangler.toml`, o la GitHub
+Action "Deploy Worker" — dispara sobre `main`, así que solo sirve DESPUÉS de fusionar) + el
+5 (comprobar `/version`) antes de que el fix 1 llegue a producción. **Nunca decir
+"arreglado" — pendiente de fusionar, desplegar, y de que Paco lo vea en pantalla.**
+
+1. **El Worker disparaba botones de Uber/Bolt en vez de responder, dentro del popup de
+   edición.** Causa: `isHelpRequest()` (`worker/salma-worker.js:1550`) clasificaba por
+   palabras sueltas sin mirar contexto — la categoría `transport` incluía `aeropuerto`,
+   `estacion.?de?.?tren`, `\btren\b`, `train.?station` como sustantivos sueltos, así que
+   cualquier mensaje dentro del popup que solo MENCIONARA una parada tipo "el aeropuerto"
+   o "la estación de tren" (sin pedir trasladarse a ningún sitio) se clasificaba como
+   petición de transporte. Con `helpCategory === 'transport'` y GPS disponible, el bloque
+   de antes de llamar a Claude (línea ~9765) montaba y emitía botones de Google
+   Maps/Uber/Bolt SIN comprobar si el popup estaba editando una guía activa.
+   **Arreglo, 2 piezas:**
+   - Regex `transport` reescrito para exigir intención real de traslado: se quitan
+     `aeropuerto`/`airport`/`estacion.?de?.?tren`/`train.?station`/`\btren\b` como
+     sustantivos sueltos; `taxi`/`uber`/`bolt`/`transfer`/`traslado` solo cuentan si van
+     con un verbo de petición explícito (`necesito`/`quiero`/`busco`/`pedir`/`dame`/`dime`)
+     o es la palabra `traslado` sola; se quedan igual que antes `ferry`, `estación de
+     bus`, `puerto de`, `autobús de/desde/a`, `flixbus`, `renfe`, `AVE`, `high-speed
+     train`, `cómo llegar` (no eran los que causaban el falso positivo).
+   - Añadido `&& !editingActiveRoute` a la condición que dispara los botones de
+     transporte (`worker/salma-worker.js`, línea del bloque "TRANSPORT: buscar destino +
+     emitir botones ANTES de Claude") — aunque alguien SÍ pida un taxi de verdad estando
+     en el popup de edición, ese atajo de botones queda desactivado ahí (el mensaje sigue
+     entrando en el chat normal, con el fallback de texto de Brave Search si aplica, sin
+     los botones de acción que rompían el layout).
+   Probado con 11 casos en Node antes de aplicar (frases con aeropuerto/tren sueltos →
+   ya no disparan; "necesito un taxi"/"quiero un uber"/"busco transfer"/"ferry a la
+   isla"/"traslado al hotel" → siguen disparando) — todos se comportan como se espera.
+2. **Botón "Añadir a la guía" no se veía.** No era un bug de lógica aparte — el frontend
+   ya manda `editing_active_route: true` bien (`salma.js:1446`) y el Worker ya sabía
+   cerrar con ese botón cuando toca; estaba tapado por las tarjetas de Uber/Bolt del
+   punto 1, compartiendo el mismo contenedor con scroll. Se resuelve solo al arreglar 1 y 3.
+3. **Popup demasiado pequeño / sin espacio para el scroll.** `styles.css`:
+   `.itin-query-overlay` `padding: 24px` → `12px`; `.itin-query-modal` `max-width: 420px`
+   / `max-height: 72vh` → `720px` / `88vh`. El scroll de la respuesta
+   (`.itin-query-answer`, ya con `overflow-y:auto`) no se tocó — el problema era espacio
+   insuficiente dentro del propio modal (aviso fijo + botones), no el scroll en sí.
+   `?v=` de `styles.css` subido a 132 en `index.html`.
+**Aviso de coste (protocolo §8):** el fix 1 BAJA el gasto — evita llamadas a Google Places
+Text Search (paso 4 del bloque de transporte, geocodifica el "destino" detectado) que se
+disparaban por error dentro del popup de edición sin que el usuario pidiera trasladarse a
+ningún sitio. Sin llamadas nuevas a ninguna API.
+**Pendiente: desplegar el Worker (`wrangler deploy -c wrangler.toml` desde `worker/`,
+comprobar `/version`) y que Paco repita el caso del vídeo — mensaje mencionando una parada
+tipo aeropuerto/estación dentro del popup de edición — y confirme que ya no salen botones
+de Uber/Bolt, que el botón "Añadir a la guía" se ve, y que el popup tiene sitio de sobra.**
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.

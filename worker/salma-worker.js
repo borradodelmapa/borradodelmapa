@@ -1558,7 +1558,10 @@ function isHelpRequest(message) {
     money: /cajero|atm|cambio.?de.?(divisa|moneda)|currency.?exchange|western.?union|money.?transfer/,
     food: /restaurante.*cerca|restaurant.*near|donde.*comer.*aqui|donde.*comer.*cerca|donde.*cenar.*aqui|donde.*cenar.*cerca|comer.*por.*aqui|cenar.*por.*aqui/,
     logistics: /cerrajero|locksmith|lavanderia|laundry|optica|optician|zapatero|cobbler|tienda.?de?.?electronica|electronics|cargador|charger|adaptador|adapter/,
-    transport: /taxi|transfer|estacion.?de?.?tren|train.?station|estacion.?de?.?bus|bus.?station|ferry|puerto\s+de|aeropuerto|airport|\btren\b|autobus.?(de|desde|a)|flixbus|renfe|\bave\s|high.?speed.?train|como.?llegar/,
+    // Solo intención real de traslado (verbo + taxi/uber/bolt/transfer, "traslado", "cómo llegar") — sin
+    // sustantivos sueltos como "aeropuerto"/"tren"/"estación de tren", que aparecen igual hablando de una
+    // parada de la guía y disparaban el atajo de transporte sin que el usuario pidiera trasladarse (22 sept 2026).
+    transport: /\b(?:necesito|quiero|busco|pedir?|dame|dime)\s+(?:un\s+)?(?:taxi|uber|bolt|transfer|traslado)\b|\btraslado\b|estacion.?de?.?bus|bus.?station|ferry|puerto\s+de|autobus.?(de|desde|a)|flixbus|renfe|\bave\s|high.?speed.?train|como.?llegar/,
     communication: /tarjeta.?sim|sim.?card|wifi|locutorio|internet.?cafe/,
     weather: /tiempo|clima|temperatura|lluvia|llover|pronostico|forecast|weather|rain|cold|frio|calor|heat|humedad|humidity|tormenta|storm|nieve|snow|monzon|monsoon|cuando.?mejor.?ir|mejor.?epoca|best.?time/,
   };
@@ -9762,7 +9765,9 @@ INSTRUCCIONES:
 
       try {
         // ── TRANSPORT: buscar destino + emitir botones ANTES de Claude ──
-        if (helpCategory === 'transport' && userLocation) {
+        // Nunca dentro del popup de edición de una guía abierta (editingActiveRoute): ahí el
+        // usuario está retocando su ruta, no pidiendo un taxi — ver isHelpRequest/transport arriba.
+        if (helpCategory === 'transport' && userLocation && !editingActiveRoute) {
           // 1. País del GPS (SIEMPRE GPS, nunca del mensaje)
           const _tcCC = (userCountryCode || frontendCountryCode || '').toLowerCase();
 

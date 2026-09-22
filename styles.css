@@ -4898,13 +4898,17 @@ body {
   background: rgba(0,0,0,.7);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   display: flex; align-items: center; justify-content: center;
-  padding: 24px;
+  padding: 12px;
 }
 .itin-query-modal {
   position: relative;
   background: var(--gris); border: 2px solid var(--dorado);
   border-radius: 0; padding: 20px 20px 16px;
-  max-width: 420px; width: 100%; max-height: 72vh;
+  /* 22 sept 2026: 420px/72vh se quedaba corto con el aviso fijo + los botones de abajo —
+     el popup entero no cabía y el scroll de la respuesta (.itin-query-answer, ya con
+     overflow-y:auto) no tenía sitio real donde desplazarse. Más ancho y más alto, no
+     tocar el overflow que ya estaba bien. */
+  max-width: 720px; width: 100%; max-height: 88vh;
   display: flex; flex-direction: column;
   box-shadow: 0 8px 40px rgba(240,180,41,.25);
 }
