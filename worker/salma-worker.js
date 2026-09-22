@@ -6295,6 +6295,33 @@ async function sendWhatsAppMessage(env, to, text) {
   return res;
 }
 
+// Envía un email de aviso vía la API REST de Resend — añadido 22 sept 2026 porque el
+// aviso de feedback de testers por WhatsApp dejó de fiarse mientras se migra Twilio a
+// producción (ver CLAUDE.md, "Salma en WhatsApp"). Best effort: nunca lanza, solo loguea.
+async function sendFeedbackEmail(env, to, subject, text) {
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Borrado del Mapa <onboarding@resend.dev>',
+        to: [to],
+        subject,
+        text,
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) {
+      console.error('Error enviando email de feedback:', await res.text().catch(() => ''));
+    }
+  } catch (e) {
+    console.error('Error enviando email de feedback:', e.message);
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     // CORS
@@ -7384,12 +7411,20 @@ export default {
       // Los 4 secrets (TWILIO_ACCOUNT_SID/AUTH_TOKEN/WHATSAPP_FROM/PACO_WHATSAPP_TO) ya
       // están puestos y confirmados en pantalla (19-21 sept 2026). Sin alguno de ellos,
       // el feedback se guarda igual, solo no avisa.
+      const who = body.email || user.name || user.uid.slice(0, 8);
+      const lastLines = logsText.split('\n').slice(-15).join('\n');
+      const shotLine = screenshotUrl ? `\n📎 Captura: ${screenshotUrl}\n` : '';
       if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
-        const who = body.email || user.name || user.uid.slice(0, 8);
-        const lastLines = logsText.split('\n').slice(-15).join('\n');
-        const shotLine = screenshotUrl ? `\n📎 Captura: ${screenshotUrl}\n` : '';
         const waText = `🧪 Feedback tester\n${who}\n${String(body.page || '')}\n\n"${note}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
         ctx.waitUntil(sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, waText));
+      }
+      // Aviso a Paco por email (Resend) — 22 sept 2026, añadido porque el aviso de
+      // WhatsApp dejó de fiarse mientras se migra Twilio a producción (ver CLAUDE.md).
+      // Va SIEMPRE, independiente de si el WhatsApp de arriba funciona o no.
+      if (env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
+        const emailSubject = `🧪 Feedback tester — ${who}`;
+        const emailBody = `${who}\n${String(body.page || '')}\n\n"${note}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 5000);
+        ctx.waitUntil(sendFeedbackEmail(env, env.PACO_EMAIL_TO, emailSubject, emailBody));
       }
 
       return new Response(JSON.stringify({ ok: true, id: docId }), { status: 200, headers: corsH });
