@@ -1262,6 +1262,15 @@ const salma = {
   _offerCrearRutaConMapa({ baseMsg, sourceText, guidedRoute } = {}) {
     const area = this._getChatArea();
     if (!area) return;
+    // Estado del botón pendiente (22 sept 2026): mientras siga sin pulsarse, cualquier cosa
+    // que se hable después ("el primer día quiero ver X", "duermo en camping") se suma aquí
+    // (ver el catch-all de respuestas normales en _doSend) para que al pulsar el botón se
+    // convierta TODO el texto acumulado, no solo la primera respuesta — si no, esa info se
+    // perdía en silencio. Se resetea (no se acumula) cada vez que se ofrece un botón nuevo
+    // desde cero (una recomendación distinta).
+    this._pendingMapSourceText = sourceText || '';
+    this._pendingMapBaseMsg = baseMsg || null;
+    this._pendingMapGuidedRoute = guidedRoute || null;
     // No duplicar el botón si ya hay uno pendiente
     area.querySelectorAll('.crear-ruta-mapa-wrap').forEach(el => el.remove());
     const wrap = document.createElement('div');
@@ -1272,19 +1281,26 @@ const salma = {
     // del botón pase lo que pase con esa fila. Petición de Paco, 22 sept 2026.
     const caption = document.createElement('div');
     caption.className = 'crear-ruta-caption';
-    caption.textContent = 'Según las paradas, puede tardar unos segundos — merece la pena: toda la información verificada con Google, sin pérdida.';
+    caption.textContent = 'Según las paradas, puede tardar un poco — merece la pena: toda la información de la guía verificada con Google, sin pérdida.';
     wrap.appendChild(caption);
     const btn = document.createElement('button');
     btn.className = 'crear-ruta-btn';
     btn.innerHTML = '<span>🗺️</span> Crear ruta con mapa <span class="crb-arrow">→</span>';
     btn.addEventListener('click', () => {
       wrap.remove();
+      // Se pulsa: usa el texto acumulado hasta este momento (this._pendingMapSourceText),
+      // que puede llevar más de lo que había cuando se pintó el botón la primera vez.
+      const _finalSourceText = this._pendingMapSourceText || sourceText || '';
       const extra = Object.assign({}, this._lastExtra || {}, {
-        source_text: sourceText || '',
+        source_text: _finalSourceText,
         guided_stage: 'map',   // TIEMPO 2 — el worker convierte el texto en guía, no regenera
         dest_hint: this._cleanDestino(baseMsg || this._lastMsg || ''),  // ancla de país fiable (no depende del regex del worker)
       });
       if (guidedRoute) extra.guided_route = guidedRoute;
+      // Ya no hay botón pendiente: deja de acumular en el catch-all de respuestas normales.
+      this._pendingMapSourceText = null;
+      this._pendingMapBaseMsg = null;
+      this._pendingMapGuidedRoute = null;
       this._doSend('Salma hazme una guía: ' + (baseMsg || this._lastMsg || 'la ruta de arriba'), extra);
     });
     wrap.appendChild(btn);
@@ -1713,6 +1729,18 @@ const salma = {
         this._offerAddToRoute({
           baseMsg: data.map_base_msg || this._lastMsg || msg,
           sourceText: data.reply || '',
+        });
+      } else if (this._pendingMapSourceText && !this._chatAreaOverride && data.reply) {
+        // Respuesta normal (ninguna de las ramas de arriba aplicó) mientras el botón "Crear
+        // ruta con mapa" sigue sin pulsar: se suma al texto pendiente y se recoloca el botón
+        // bajo el último mensaje — así "el primer día quiero ver X" o "duermo en camping"
+        // no se pierden al pulsar el botón más tarde (22 sept 2026). El propio mensaje ya se
+        // ve en pantalla por el streaming en vivo; aquí solo se actualiza el texto pendiente.
+        this._pendingMapSourceText = (this._pendingMapSourceText + '\n\n' + data.reply).trim();
+        this._offerCrearRutaConMapa({
+          baseMsg: this._pendingMapBaseMsg,
+          sourceText: this._pendingMapSourceText,
+          guidedRoute: this._pendingMapGuidedRoute,
         });
       }
 
@@ -2263,6 +2291,9 @@ const salma = {
     this.currentRouteId = null;
     this._streaming = false;
     this._pendingRouteInfo = null;
+    this._pendingMapSourceText = null;
+    this._pendingMapBaseMsg = null;
+    this._pendingMapGuidedRoute = null;
     try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
   },
 
@@ -2271,6 +2302,9 @@ const salma = {
     this._threadId = null;
     this._pendingRouteInfo = null;
     this._pendingTaxiDest = false;
+    this._pendingMapSourceText = null;
+    this._pendingMapBaseMsg = null;
+    this._pendingMapGuidedRoute = null;
     try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
     const area = document.getElementById('chat-area');
     if (area) area.innerHTML = '';
