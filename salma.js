@@ -1266,6 +1266,14 @@ const salma = {
     area.querySelectorAll('.crear-ruta-mapa-wrap').forEach(el => el.remove());
     const wrap = document.createElement('div');
     wrap.className = 'historia-chat-chip-wrap crear-ruta-mapa-wrap';
+    // Frase pegada al botón (dentro del propio wrap, no en la burbuja): entre la burbuja de
+    // texto y el botón se cuela la fila de iconos copiar/compartir/reproducir/guardar nota
+    // (misma fila que llevan todos los mensajes de Salma) — esto queda siempre justo encima
+    // del botón pase lo que pase con esa fila. Petición de Paco, 22 sept 2026.
+    const caption = document.createElement('div');
+    caption.className = 'crear-ruta-caption';
+    caption.textContent = 'Según las paradas, puede tardar unos segundos — merece la pena: toda la información verificada con Google, sin pérdida.';
+    wrap.appendChild(caption);
     const btn = document.createElement('button');
     btn.className = 'crear-ruta-btn';
     btn.innerHTML = '<span>🗺️</span> Crear ruta con mapa <span class="crb-arrow">→</span>';

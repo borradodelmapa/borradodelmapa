@@ -6874,6 +6874,12 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 
 /* Botón "Crear ruta con mapa" — protagonista, en oro (7 sept 2026) */
 .crear-ruta-mapa-wrap { margin:12px 0 6px; }
+/* Frase pegada al botón (22 sept 2026): siempre justo encima, aunque entre medias
+   se cuele la fila de iconos copiar/compartir/reproducir/guardar nota del mensaje. */
+.crear-ruta-caption {
+  font-size:12.5px; line-height:1.4; color:rgba(244,239,230,.6);
+  margin:0 2px 8px; text-align:center;
+}
 .crear-ruta-btn {
   display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
   background:linear-gradient(180deg, #FF7A2E, #F4630B);
