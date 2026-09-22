@@ -184,9 +184,7 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
     </button>
-    <button class="bottom-tab bottom-tab-fab" id="tab-newroute" aria-label="Nueva ruta" title="Nueva ruta">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </button>
+    <div class="bottom-tab-fab-spacer" aria-hidden="true"></div>
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
@@ -204,12 +202,27 @@ function updateBottomBar() {
     if (typeof salma !== 'undefined') salma._initChat();
     showState('chat');
   });
-  document.getElementById('tab-newroute').addEventListener('click', goToNewRouteFAB);
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
+
+  // FAB "+" real, FUERA de la barra (position:fixed, sibling de #app-bottom-bar) —
+  // .bottom-tab-fab-spacer de arriba solo reserva el hueco en el flex. Si estuviera
+  // DENTRO de la barra, el hueco recortado (mask-image en .app-bottom-bar, ver
+  // styles.css) se comería también el propio círculo donde se solapan.
+  let fab = document.getElementById('tab-newroute');
+  if (!fab) {
+    fab = document.createElement('button');
+    fab.id = 'tab-newroute';
+    fab.className = 'bottom-tab-fab';
+    fab.setAttribute('aria-label', 'Nueva ruta');
+    fab.title = 'Nueva ruta';
+    fab.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+    fab.addEventListener('click', goToNewRouteFAB);
+    document.body.appendChild(fab);
+  }
 }
 
 // Botón "+" central del bottom bar — pura navegación, no crea nada nuevo: lleva

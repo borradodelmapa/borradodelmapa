@@ -2607,6 +2607,11 @@ body {
   border-top:1px solid rgba(244,239,230,.08);
   padding:6px 0 env(safe-area-inset-bottom, 6px);
   min-height:56px; height:auto;
+  /* Hueco recortado para el "+" central (ver .bottom-tab-fab) — mismo efecto que
+     un bottom bar de app bancaria: el círculo se anida en la barra en vez de
+     flotar encima de un borde recto. */
+  -webkit-mask-image: radial-gradient(circle 40px at 50% 2px, transparent 97%, #000 100%);
+  mask-image: radial-gradient(circle 40px at 50% 2px, transparent 97%, #000 100%);
 }
 .bottom-tab {
   display:flex; flex-direction:column; align-items:center; gap:2px;
@@ -2636,18 +2641,27 @@ body {
 .bottom-tab-tester.dbg-has-error { color:#ef4444; }
 .bottom-tab-tester.dbg-has-error svg { animation: dbg-tab-pulse-error .9s ease-in-out infinite; filter:drop-shadow(0 0 4px rgba(239,68,68,.5)); }
 @keyframes dbg-tab-pulse-error { 0%,100% { transform:scale(1); } 50% { transform:scale(1.25); } }
-/* "+" central — nueva ruta. Círculo elevado que sobresale de la barra, a propósito
-   más llamativo que el resto de pestañas (Kabi, ver CLAUDE.md 22 sept 2026). */
+/* Hueco del "+" dentro de la barra — solo reserva el espacio en el flex (mismo
+   ancho que el círculo real), no pinta nada: el botón de verdad va fuera de la
+   barra (ver .bottom-tab-fab) para que el recorte de .app-bottom-bar no se lo coma. */
+.bottom-tab-fab-spacer { flex:0 0 auto; width:72px; }
+/* "+" central — nueva ruta. Elemento independiente (position:fixed), NO hijo de
+   .app-bottom-bar a propósito: si estuviera dentro, el mask-image que recorta el
+   hueco de la barra recortaría también la parte del círculo que se solapa con
+   ella. Grande y elevado para que destaque del resto (Kabi + referencia de app
+   bancaria, ver CLAUDE.md 22 sept 2026). */
 .bottom-tab-fab {
-  flex:0 0 auto; width:52px; height:52px; margin-top:-20px;
-  border-radius:50%; background:var(--dorado); color:var(--negro);
-  box-shadow:0 4px 14px rgba(240,180,41,.45), 0 0 0 4px rgba(12,10,6,.95);
+  position:fixed; left:50%; transform:translateX(-50%);
+  bottom:calc(env(safe-area-inset-bottom, 0px) + 10px); z-index:901;
+  display:flex; width:72px; height:72px;
+  border-radius:50%; background:var(--dorado); color:var(--negro); border:none; cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,.4);
   align-items:center; justify-content:center; padding:0;
   transition:transform .15s, background .2s;
 }
-.bottom-tab-fab svg { stroke:var(--negro); }
-.bottom-tab-fab:hover { background:var(--dorado2); transform:scale(1.06); color:var(--negro); }
-.bottom-tab-fab:active { transform:scale(.96); }
+.bottom-tab-fab svg { width:30px; height:30px; stroke:var(--negro); }
+.bottom-tab-fab:hover { background:var(--dorado2); transform:translateX(-50%) scale(1.06); color:var(--negro); }
+.bottom-tab-fab:active { transform:translateX(-50%) scale(.96); }
 /* SOS flotante */
 .sos-fab {
   position:fixed; right:16px; z-index:950;
