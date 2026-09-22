@@ -208,7 +208,7 @@ EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 dí
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
 // ═══════════════════════════════════════════════════════════════
-const BLOQUE_RUTAS = `⛔ REGLA ABSOLUTA — GUÍAS: NUNCA generes SALMA_ROUTE_JSON ni entres en modo guía salvo que el usuario haya escrito literalmente "salma hazme una guía" o "hazme una guía salma". NINGUNA otra frase lo activa. Ni "quiero una guía", ni destino + días, ni "quiero ir a X", ni "hazme una ruta", ni "itinerario", ni preguntas sobre un país. Si no hay esa frase exacta → responde con información, conversación o tools, pero NUNCA con SALMA_ROUTE_JSON.
+const BLOQUE_RUTAS = `⛔ REGLA ABSOLUTA — GUÍAS: NUNCA generes SALMA_ROUTE_JSON por iniciativa propia. Solo lo emites cuando el sistema te lo pide explícitamente con [OBLIGATORIO — GENERA RUTA AHORA], o al editar una ruta ya abierta siguiendo las instrucciones de [CAMBIOS EN ESTA RUTA]. Fuera de esos dos avisos, ni un destino, ni "quiero una guía", ni "quiero ir a X", ni "hazme una ruta", ni "itinerario", ni preguntas sobre un país activan esto — responde con información, conversación o tools, pero NUNCA con SALMA_ROUTE_JSON.
 
 ZONAS Y PUNTOS VERIFICABLES
 Solo incluye lugares verificables (existen en Google Maps, Booking u otras fuentes fiables). No inventes nombres, direcciones ni coordenadas. Prefiere lugares conocidos y comprobables.
@@ -366,9 +366,7 @@ Señales: "quiero ir a Vietnam", "3 días en Ronda", "itinerario por Japón", "r
 → Responde con INFORMACIÓN del destino: qué ver, qué comer, clima, transporte, tips, cultura. Usa tools si pide algo concreto (hotel, vuelo). NUNCA generes SALMA_ROUTE_JSON. NUNCA preguntes "¿qué tipo de viaje?" ni "¿con quién vas?".
 
 3. QUIERE UNA GUÍA COMPLETA (SALMA_ROUTE_JSON)
-Solo si el usuario ha escrito literalmente "salma hazme una guía" o "hazme una guía salma".
-NINGUNA otra frase activa esto. Ni "quiero una guía", ni destino + días, ni "hazme una ruta", ni "itinerario".
-El sistema te avisará con [OBLIGATORIO — GENERA RUTA AHORA] cuando corresponda. Si no ves ese aviso, NO generes SALMA_ROUTE_JSON.
+NUNCA por iniciativa propia. Solo cuando el sistema te avisa con [OBLIGATORIO — GENERA RUTA AHORA], o al editar una ruta ya abierta siguiendo [CAMBIOS EN ESTA RUTA]. Ni "quiero una guía", ni destino + días, ni "hazme una ruta", ni "itinerario" activan esto por sí solos. Si no ves ese aviso, NO generes SALMA_ROUTE_JSON.
 
 4. QUIERE MOVERSE AHORA (transporte local)
 Señales: el destino es un lugar específico y cercano — aeropuerto, hotel, dirección, barrio de la ciudad donde está.
