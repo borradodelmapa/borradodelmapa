@@ -567,6 +567,38 @@ async function verifyAuthAndGetUser(authHeader) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// AUTH ADMIN — 23 sept 2026
+// ═══════════════════════════════════════════════════════════════
+// Acepta DOS credenciales para los endpoints que usa el panel admin.borradodelmapa.com:
+//   1) ADMIN_TOKEN (secret del Worker) — lo teclea a mano admin.html; nunca debe ir en un fichero público.
+//   2) Sesión de Firebase de una cuenta admin (ADMIN_PANEL_EMAILS) — es lo que usa el panel: manda su ID token
+//      y aquí se valida contra Google (accounts:lookup, gratis). Así no hay ningún token fijo en el navegador.
+// Se valida con Google (firma incluida), no leyendo el payload del JWT a ciegas.
+const ADMIN_PANEL_EMAILS = ['admin@borradodelmapa.com'];
+const FIREBASE_WEB_API_KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA'; // clave web pública de Firebase (la misma de index.html), no es un secreto
+
+async function isAdminRequest(request, env) {
+  const tok = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
+  if (!tok) return false;
+  if (env.ADMIN_TOKEN && tok === env.ADMIN_TOKEN) return true;
+  if (tok.length < 100 || tok.split('.').length !== 3) return false;
+  try {
+    const r = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' + FIREBASE_WEB_API_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken: tok }),
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!r.ok) return false;
+    const d = await r.json();
+    const email = ((d.users && d.users[0] && d.users[0].email) || '').toLowerCase();
+    return ADMIN_PANEL_EMAILS.includes(email);
+  } catch (e) {
+    return false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
 // USO Y LÍMITES POR USUARIO (modelo Premium, paso 3) — 21 sept 2026
 // ═══════════════════════════════════════════════════════════════
 // Contadores en KV (SALMA_KB). El límite se comprueba SIEMPRE aquí, con el plan leído de Firestore
@@ -6564,8 +6596,7 @@ export default {
     // ─── ENDPOINT /health (monitoreo de APIs) ───
     if (request.method === 'GET' && url.pathname === '/health') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-      const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
+      if (!(await isAdminRequest(request, env))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       const checks = {};
@@ -7177,8 +7208,7 @@ export default {
     // ─── ENDPOINT /ga4 (Analytics proxy) ───
     if (request.method === 'POST' && url.pathname === '/ga4') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
-      const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
+      if (!(await isAdminRequest(request, env))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -7209,10 +7239,8 @@ export default {
     if (request.method === 'POST' && url.pathname === '/admin-chat') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
 
-      // Verificar token admin (hash SHA-256 de la contraseña)
-      const authHeader = request.headers.get('Authorization') || '';
-      const adminToken = authHeader.replace('Bearer ', '');
-      if (adminToken !== env.ADMIN_TOKEN) {
+      // Admin: ADMIN_TOKEN o sesión Firebase de la cuenta admin (ver isAdminRequest)
+      if (!(await isAdminRequest(request, env))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
