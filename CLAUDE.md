@@ -1383,6 +1383,29 @@ desde `GET /usage`, feedback de testers, estado de secrets) sin empezar.
   El service worker del panel NO está activo (se registra en `/admin/sw.js`, ruta que no existe en este dominio): la única
   caché es la HTTP de GitHub Pages (`max-age=600`, hasta 10 min), por eso la insignia y los `?v=`.
 
+**🔴 FACTURA DE GOOGLE PLACES, SEPT 2026 — 154 € del 1 al 22 sept (agosto: 0,54 €), 100 % Places API, todo en `Salma
+Project`. Desglose SKU: Find Place 38,84 € (7.662 llamadas), Places Photo 34,37 € (6.722), Contact Data 28,91 € (12.230),
+Atmosphere Data 28,41 € (7.621), Place Details 23,53 € (6.613); Directions/Static/Nearby ≈ 0 € (dentro del cupo gratis).
+Gráfica diaria: picos 4-7 sept (13-14 €/día), 4-9 €/día del 8 al 15, ~1 € el 15, y DESPUÉS 3-26 €/día (≈70 € del 16 al 22;
+el 21 sept: 26 €; el SKU Place Details aparece a partir del 18). Los fixes del 15 sept fueron INCOMPLETOS: cubrieron
+verify/fotos/nearby/buscar_lugar pero NO `/place-details` (cada apertura de guía → `_enrichAll` en `mapa-itinerario.js`
+pide un Details POR PARADA, y solo se cacheaba la foto). Además se dio por cerrado sin mirar la factura real.
+**DECISIÓN DE PACO (23 sept): cada lugar se paga UNA sola vez, para siempre ("no admito ninguna llamada más").** Se acepta el
+riesgo: las condiciones de Google solo permiten guardar sin límite el `place_id` (coordenadas 30 días); Google puede avisar y,
+si no se corrige en 24 h, suspender el uso. Mitigar: NO rellenar el catálogo en bloque (pre-fetch masivo), mostrar la
+atribución de Google, y mantener el catálogo desacoplado del proveedor (por si hubiera que migrar a OpenStreetMap).
+**PLAN "catálogo de lugares" (solo GUÍAS; "Cerca mía" y Narrador son problemas aparte, no tocar):**
+[x] PASO 1 — `/place-details` con catálogo KV `pl:{place_id}` sin TTL (Worker `0cb94d78-41b7-4f97-bbcb-1442e4ea3450`, commit
+`baa11e8f`): 1ª petición = 1 llamada a Google con todos los campos (name, rating, reviews, opening_hours+periods, photos,
+utc_offset), las siguientes 0; "abierto ahora" calculado desde `periods` (`computeOpenNow`, 9 casos probados); cabecera
+`X-Catalog: hit|miss`. Probado con un lugar real (miss 1,5 s → hit 0,36 s ×2). **Falta que Paco lo vea en la app.**
+[ ] PASO 2 — verificación de paradas (`verifyAllStops`): guardar para siempre "nombre+zona → place_id" (hoy `verifiedspot:` 30 d)
+y pedir la ficha COMPLETA una vez para que el catálogo esté completo. [ ] PASO 3 — fotos guardadas por lugar (no depender del
+`photo_reference`, que caduca). [ ] PASO 4 — frontend: que abrir una guía no pida nada a Google (usar lo guardado en la
+parada) y que un re-render tras editar no relance `_enrichAll`. [ ] PASO 5 — rellenar el catálogo con lo que YA está en las
+guías guardadas (Firestore), sin llamar a Google. [ ] Cuotas diarias duras en Google Cloud (Places API → Cuotas) como candado.
+Pendiente de Paco: B1 presupuesto Google (100 € por ahora) y B2 exportación a BigQuery.
+
 **Plan del panel admin nuevo (acordado con Paco 23 sept 2026; el panel será SOLO estadísticas y gastos de proveedores,
 sin chat ni gestión de proyecto — eso se hace con Code). Checklist, marcar al avanzar:**
 - **B — proteger el dinero (Paco, sin código, urgente):** [ ] presupuesto+alertas Google Cloud (~15 €/mes, 50/90/100 %);
