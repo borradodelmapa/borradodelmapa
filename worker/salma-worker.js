@@ -6974,6 +6974,98 @@ export default {
       return new Response(JSON.stringify({ ok: true, caps: { daily_eur: daily, monthly_eur: monthly }, note: 'Los demás nodos del Worker aplican el cambio en como máximo 60 s.' }), { headers: corsH });
     }
 
+    // ─── GET /admin/stats — usuarios, guías y uso por usuario para el panel (solo admin, SOLO LECTURA) ───
+    // El panel no puede leer Firestore directo (las reglas solo dejan a cada usuario su propio documento), así que lo lee el
+    // Worker con su cuenta de servicio. Devuelve totales + lista de usuarios (máx. 1.200) con plan, nº de guías y uso del mes
+    // (contadores KV `usage:{uid}:{mes}`). Coste: lecturas de Firestore (50.000 gratis/día) y KV; ninguna API de pago.
+    if (request.method === 'GET' && url.pathname === '/admin/stats') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      try {
+        const token = await getServiceAccountToken(env);
+        const authH = { 'Authorization': 'Bearer ' + token };
+        const dec = f => {
+          if (!f) return null;
+          if (f.stringValue !== undefined) return f.stringValue;
+          if (f.timestampValue !== undefined) return f.timestampValue;
+          if (f.integerValue !== undefined) return Number(f.integerValue);
+          if (f.doubleValue !== undefined) return f.doubleValue;
+          if (f.booleanValue !== undefined) return f.booleanValue;
+          return null;
+        };
+        const toMs = v => (typeof v === 'number') ? v : (v ? new Date(v).getTime() : NaN);
+
+        // 1) usuarios (páginas de 300, tope 4 páginas)
+        const users = [];
+        let pageToken = '', truncated = false;
+        for (let page = 0; page < 4; page++) {
+          const qs = ['pageSize=300'].concat(['name', 'email', 'createdAt', 'premium_until'].map(f => 'mask.fieldPaths=' + f));
+          if (pageToken) qs.push('pageToken=' + encodeURIComponent(pageToken));
+          const r = await fetch(`${FIRESTORE_BASE}/users?${qs.join('&')}`, { headers: authH, signal: AbortSignal.timeout(10000) });
+          if (!r.ok) throw new Error('Firestore users → ' + r.status);
+          const j = await r.json();
+          for (const d of (j.documents || [])) {
+            const f = d.fields || {};
+            users.push({ uid: d.name.split('/').pop(), name: dec(f.name), email: dec(f.email), createdAt: dec(f.createdAt), premium_until: dec(f.premium_until) });
+          }
+          pageToken = j.nextPageToken || '';
+          if (!pageToken) break;
+          if (page === 3) truncated = true;
+        }
+
+        // 2) guías de todos los usuarios de una vez (consulta de grupo de colecciones "maps", solo la fecha)
+        const perUser = {};
+        const now = Date.now(), d7 = now - 7 * 864e5;
+        let guides = 0, guides7 = 0, guidesTruncated = false;
+        const qr = await fetch(`${FIRESTORE_BASE}:runQuery`, {
+          method: 'POST',
+          headers: Object.assign({ 'Content-Type': 'application/json' }, authH),
+          body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'maps', allDescendants: true }], select: { fields: [{ fieldPath: 'createdAt' }] }, limit: 5000 } }),
+          signal: AbortSignal.timeout(15000),
+        });
+        if (!qr.ok) throw new Error('Firestore guías → ' + qr.status);
+        const rows = await qr.json();
+        for (const row of rows) {
+          if (!row.document) continue;
+          const m = /\/users\/([^/]+)\/maps\/[^/]+$/.exec(row.document.name);
+          if (!m) continue;
+          const ms = toMs(dec((row.document.fields || {}).createdAt));
+          const p = perUser[m[1]] || (perUser[m[1]] = { n: 0, n7: 0 });
+          p.n++; guides++;
+          if (ms >= d7) { p.n7++; guides7++; }
+        }
+        if (rows.filter(r => r.document).length >= 5000) guidesTruncated = true;
+
+        // 3) uso del mes por usuario (KV) + totales
+        const month = new Date().toISOString().slice(0, 7);
+        const usages = await Promise.all(users.map(u => usageRead(env, 'usage:' + u.uid + ':' + month)));
+        let claudeUsd = 0, msgs = 0, premium = 0, users7 = 0;
+        const out = users.map((u, i) => {
+          const us = usages[i] || {};
+          const pm = u.premium_until ? new Date(u.premium_until).getTime() : 0;
+          const active = pm > now;
+          if (active) premium++;
+          if (toMs(u.createdAt) >= d7) users7++;
+          claudeUsd += us.claude_usd || 0; msgs += us.msgs || 0;
+          const g = perUser[u.uid] || { n: 0, n7: 0 };
+          return {
+            uid: u.uid, name: u.name, email: u.email, createdAt: u.createdAt,
+            premium_until: u.premium_until, premium_active: active, guides: g.n,
+            usage: { msgs: us.msgs || 0, guides: us.guides || 0, edits: us.edits || 0, claude_usd: us.claude_usd || 0, last_at: us.last_at || null },
+          };
+        });
+        return new Response(JSON.stringify({
+          totals: { users: users.length, users7, premium, guides, guides7, month, msgs, claude_usd: Math.round(claudeUsd * 100) / 100 },
+          truncated: { users: truncated, guides: guidesTruncated },
+          users: out,
+        }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudieron leer las estadísticas: ' + e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /sitemap.xml (SEO — sitemap index) ───
     if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
       const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
