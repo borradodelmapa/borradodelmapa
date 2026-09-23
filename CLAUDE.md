@@ -1289,8 +1289,35 @@ pasar...", "me voy a Sevilla en marzo", "vamos a pasar el finde en Toledo en oct
 disparan; las 3 que NO hablan de viajar ("hace frío en Bilbao en noviembre", "3 días en
 Sevilla" —esta sola no necesitaba el regex nuevo, ya la cazaba `isRouteRequest`—, "bilbao
 está en el norte de España") no disparan por este camino nuevo.
-**Pendiente: que Paco repita exactamente "voy a pasar unos días este mes en Bilbao" (o
-similar) y confirme que esta vez sí salen eventos.**
+**Diagnosticado en vivo con `wrangler tail` mientras Paco probaba (23 sept) — DOS causas
+reales encontradas, una arreglada y confirmada, la otra sigue abierta:**
+1. **Destino `null` — ARREGLADO Y CONFIRMADO.** El regex de extracción de destino exigía
+   Mayúscula+minúsculas ("Bilbao"); Paco escribe TODO EN MAYÚSCULAS ("BILBAO"), así que
+   nunca coincidía (`[EVENTOS] destino extraido: null` en el log). Arreglo, commit
+   `f0d02709`, DESPLEGADO (Version ID `ce272e70-2b82-4bd9-8fc6-e9c1b57eb74a`, confirmado
+   contra `/version`): se reutiliza `anchorCountry.locality` (el sistema de "ancla de
+   país" que ya resuelve el destino vía Google Find Place para otra cosa, sin depender de
+   mayúsculas) antes que el regex — sin llamada nueva a ninguna API. **Confirmado en el
+   log siguiente**: `[EVENTOS] destino extraido: Bilbao`.
+2. **Serper devuelve 403 "Unauthorized" — SIGUE ROTO, no es cosa de nuestro código.**
+   Con el destino ya bien resuelto, la llamada a Serper (`google.serper.dev/search`)
+   responde 403 tanto con la clave puesta el 23 sept como con una segunda repuesta el
+   mismo día. Probado también DIRECTO contra Serper (sin pasar por nuestro Worker) desde
+   la terminal de Paco: mismo tipo de fallo. **Causa sin confirmar del todo** — puede ser
+   la cuenta de Serper sin activar/verificar del todo, o un copiado incompleto de la
+   clave las dos veces. **Incidente de seguridad de paso**: al hacer esa prueba directa,
+   Paco pegó la clave de Serper EN TEXTO CLARO en esta conversación (sesión de Claude
+   Code) — se le avisó al momento de ir a serper.dev y regenerarla/revocarla, dar por
+   comprometida la que se vio aquí. **Pausado a petición explícita de Paco (23 sept):
+   "paso, déjalo pendiente"** — no perseguir esto hasta que lo retome él. Al retomar:
+   confirmar que regeneró la clave en serper.dev, ponerla de nuevo con `wrangler secret
+   put SERPER_API_KEY -c wrangler.toml`, y repetir la prueba directa (comando con
+   `ConvertTo-Json` en vez de comillas a mano, ver el propio hilo de esta sesión) ANTES
+   de probar desde la app — así se aísla si el problema es la cuenta de Serper o algo de
+   cómo llega el secret al Worker.
+   **Logging temporal añadido para esta depuración** (`[EVENTOS] gate/destino
+   extraido/query/Serper respondió...`, mismo commit `f0d02709`) — se puede quitar cuando
+   esto se cierre, o dejarlo (es barato, solo texto en consola, no afecta a nada).
 
 **Bug real distinto, encontrado de paso probando lo de arriba, 23 sept 2026 — foto
 duplicada en el chat normal.** Paco pegó el texto de la respuesta ("una semana en Bilbao"):
@@ -1300,13 +1327,15 @@ detalle, y puso su foto en las dos — `_repairBrokenPhotoMarkdown()` (la funci�
 sustituye cada `![Nombre](...)` por la URL real de `buscar_foto`) no deduplicaba, así que
 las dos menciones se resolvían a la misma URL y se veían las dos.
 **Arreglo, commit `beea3e47`, DESPLEGADO (Version ID `b123ff2b-c381-4733-b7a4-ac261eb60671`,
-confirmado contra `/version`), sin probar en pantalla:** `_repairBrokenPhotoMarkdown` ahora
+confirmado contra `/version`), CONFIRMADO EN PANTALLA por Paco (dos capturas: al cargar
+salen 3 fotos distintas, al terminar solo queda 1):** `_repairBrokenPhotoMarkdown` ahora
 lleva un `Set` de URLs ya usadas en esa misma respuesta — la primera aparición de una foto
 se queda, cualquier repetición exacta de la misma URL se quita. No toca ninguna API, es
 solo post-procesado de texto. Probado en Node con un caso sintético (Guggenheim repetido +
 una foto distinta sin tocar) antes de desplegar.
-**Pendiente: que Paco repita algo que hable de un sitio en dos partes distintas de la
-respuesta (como el caso de Bilbao/Guggenheim) y confirme que la foto ya solo sale una vez.**
+**Pausado junto con lo de Serper a petición de Paco (23 sept)** — funcionó a la primera
+que se probó, pero no se ha repetido con más casos (varios sitios distintos, no solo dos
+menciones del mismo). Si vuelve a verse una foto repetida, revisar esto primero.
 
 ---
 
