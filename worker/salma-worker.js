@@ -6942,6 +6942,38 @@ export default {
       return new Response(JSON.stringify({ caps, month: { month: mon, eur: Math.round((parseFloat(mRaw) || 0) * 1000) / 1000 }, days, unit_eur: GOOGLE_UNIT_EUR }, null, 2), { headers: corsH });
     }
 
+    // ─── POST /admin/google-caps — cambiar los topes de gasto propio en Google desde el panel (solo admin) ───
+    // Escribe KV `gcap:config` {daily_eur, monthly_eur}. Validación estricta para que un error de tecleo no deje un
+    // tope absurdo: números finitos, diario 0,5–100 €, mensual 1–1000 €, y diario ≤ mensual. Solo cambia el tope PROPIO del
+    // Worker; las cuotas de Google Cloud se cambian en su consola.
+    if (request.method === 'POST' && url.pathname === '/admin/google-caps') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      let body;
+      try { body = await request.json(); } catch (_) {
+        return new Response(JSON.stringify({ error: 'JSON no válido' }), { status: 400, headers: corsH });
+      }
+      const round2 = n => Math.round(Number(n) * 100) / 100;
+      const daily = round2(body?.daily_eur), monthly = round2(body?.monthly_eur);
+      let problem = '';
+      if (!Number.isFinite(daily) || !Number.isFinite(monthly)) problem = 'Los dos topes deben ser números.';
+      else if (daily < 0.5 || daily > 100) problem = 'El tope diario debe estar entre 0,50 € y 100 €.';
+      else if (monthly < 1 || monthly > 1000) problem = 'El tope mensual debe estar entre 1 € y 1.000 €.';
+      else if (daily > monthly) problem = 'El tope diario no puede ser mayor que el mensual.';
+      if (problem) return new Response(JSON.stringify({ error: problem }), { status: 400, headers: corsH });
+      if (!env.SALMA_KB) return new Response(JSON.stringify({ error: 'KV no disponible' }), { status: 500, headers: corsH });
+      try {
+        await env.SALMA_KB.put('gcap:config', JSON.stringify({ daily_eur: daily, monthly_eur: monthly, updated_at: new Date().toISOString() }));
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudo guardar: ' + e.message }), { status: 500, headers: corsH });
+      }
+      _gcapCache = null; // este isolate ya usa los topes nuevos; los demás tardan como mucho 60 s
+      console.log(`[GASTO-GOOGLE] topes cambiados desde el panel: ${daily} €/día, ${monthly} €/mes`);
+      return new Response(JSON.stringify({ ok: true, caps: { daily_eur: daily, monthly_eur: monthly }, note: 'Los demás nodos del Worker aplican el cambio en como máximo 60 s.' }), { headers: corsH });
+    }
+
     // ─── ENDPOINT /sitemap.xml (SEO — sitemap index) ───
     if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
       const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
