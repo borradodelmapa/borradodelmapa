@@ -1436,8 +1436,6 @@ const salma = {
       if (this.currentRoute) body.current_route = this.currentRoute;
       if (window.currentUser?.country) body.nationality = window.currentUser.country;
       if (window.currentUser?.name) body.user_name = window.currentUser.name;
-      // coins_saldo y rutas_gratis_usadas se leen server-side desde Firestore
-      // (ya no se envían desde el frontend por seguridad — P0-2)
       if (this._userLocation) body.user_location = this._userLocation;
       if (extra && extra.route_from_here) body.route_from_here = true;
       // Popup de "consulta" sobre una guía activa (mapa-itinerario.js): decirle al
