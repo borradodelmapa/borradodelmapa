@@ -606,6 +606,59 @@ async function isAdminRequest(request, env) {
 // (y las coordenadas 30 días); guardar el resto es una decisión de negocio de Paco, con ese riesgo aceptado.
 // No rellenar NUNCA en bloque (pre-fetch masivo): solo cuando un usuario pide ese lugar.
 
+// Campos que se piden a Google UNA vez por lugar (unión de todo lo que la app necesita: Basic + Contact +
+// Atmosphere; pedir un campo más de un SKU ya activado no añade coste). Lo usan la verificación de paradas
+// y /place-details, para que el catálogo quede COMPLETO con una sola llamada y no haya que volver a pedir nada.
+const PLACE_DETAIL_FIELDS = 'name,formatted_address,geometry,business_status,photos,opening_hours,editorial_summary,rating,user_ratings_total,utc_offset';
+
+// Ficha del catálogo (v2) a partir de un `result` de Place Details (y, de respaldo, del candidato de Find Place).
+function buildCatalogRecord(r, cand) {
+  const loc = r?.geometry?.location || cand?.geometry?.location || {};
+  return {
+    v: 2,
+    name: r?.name || cand?.name || '',
+    address: r?.formatted_address || cand?.formatted_address || '',
+    lat: typeof loc.lat === 'number' ? loc.lat : null,
+    lng: typeof loc.lng === 'number' ? loc.lng : null,
+    business_status: r?.business_status || cand?.business_status || '',
+    rating: r?.rating || null,
+    reviews: r?.user_ratings_total || 0,
+    hours: r?.opening_hours?.weekday_text || [],
+    periods: r?.opening_hours?.periods || [],
+    utc_offset: typeof r?.utc_offset === 'number' ? r.utc_offset : (typeof r?.utc_offset_minutes === 'number' ? r.utc_offset_minutes : null),
+    photo_ref: r?.photos?.[0]?.photo_reference || cand?.photos?.[0]?.photo_reference || '',
+    summary: r?.editorial_summary?.overview || '',
+    saved: new Date().toISOString(),
+  };
+}
+
+// Reconstruye un objeto con la forma del `result` de Google a partir de una ficha del catálogo, para que el
+// código que ya lee `detail?.name`, `detail?.photos`, `detail?.opening_hours`… funcione igual sin llamar a Google.
+function catalogToDetail(rec) {
+  return {
+    name: rec.name || undefined,
+    formatted_address: rec.address || undefined,
+    geometry: (typeof rec.lat === 'number' && typeof rec.lng === 'number') ? { location: { lat: rec.lat, lng: rec.lng } } : undefined,
+    business_status: rec.business_status || undefined,
+    photos: rec.photo_ref ? [{ photo_reference: rec.photo_ref }] : [],
+    opening_hours: { weekday_text: rec.hours || [], periods: rec.periods || [] },
+    editorial_summary: rec.summary ? { overview: rec.summary } : undefined,
+  };
+}
+
+async function catalogGet(env, placeId) {
+  if (!env?.SALMA_KB || !placeId) return null;
+  try {
+    const raw = await env.SALMA_KB.get('pl:' + placeId);
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+
+async function catalogPut(env, placeId, rec) {
+  if (!env?.SALMA_KB || !placeId || !rec) return;
+  try { await env.SALMA_KB.put('pl:' + placeId, JSON.stringify(rec)); } catch (_) {}
+}
+
 // "Abierto ahora" calculado desde los periodos guardados (opening_hours.periods, formato Places legacy:
 // day 0=domingo, time 'HHMM' en hora local del lugar) + utc_offset en minutos. null si no se puede saber.
 function computeOpenNow(periods, utcOffsetMin, nowMs) {
@@ -4118,7 +4171,16 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
         if (!kvResults[j]) return;
         try {
           const cached = JSON.parse(kvResults[j]);
-          if (cached?.place_id) reuse[i] = cached;
+          if (!cached?.place_id) return;
+          // GUARDA DE HOMÓNIMOS — la clave es país + nombre, y ahora la entrada es PERMANENTE: "Iglesia de
+          // San Pedro" de un pueblo no puede reutilizarse en otro. Si la entrada cae lejos de donde se pide
+          // (ancla de la ruta o coords que dio el modelo), se ignora y se verifica contra Google como una parada nueva.
+          const s = route.stops[i];
+          if (typeof cached.lat === 'number' && typeof cached.lng === 'number') {
+            if (pointAnchor && haversineKm(anchorLat, anchorLng, cached.lat, cached.lng) > MAX_ANCHOR_KM) return;
+            if (s && s.lat && s.lng && Math.abs(s.lat) > 0.01 && haversineKm(s.lat, s.lng, cached.lat, cached.lng) > 25) return;
+          }
+          reuse[i] = cached;
         } catch (_) {}
       });
     }
@@ -4266,25 +4328,41 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   const detailResults = new Array(route.stops.length).fill(null);
   const BATCH_SIZE = 5;
   const toFetch = bestCandidates.map((bc, i) => bc?.candidate?.place_id ? i : -1).filter(i => i >= 0);
-  for (let b = 0; b < toFetch.length; b += BATCH_SIZE) {
-    const batch = toFetch.slice(b, b + BATCH_SIZE);
+
+  // CATÁLOGO DE LUGARES — "cada sitio se paga UNA sola vez" (ver bloque CATÁLOGO DE LUGARES):
+  // si el lugar ya tiene ficha completa (v2), se usa esa y NO se llama a Google. Solo los lugares
+  // nuevos (o con ficha antigua incompleta) pasan por Place Details, y se piden TODOS los campos de
+  // golpe para que la ficha quede completa y /place-details tampoco tenga que volver a preguntar.
+  const catHits = new Array(route.stops.length).fill(false);
+  await Promise.all(toFetch.map(async i => {
+    const rec = await catalogGet(env, bestCandidates[i].candidate.place_id);
+    if (rec && rec.v >= 2) {
+      detailResults[i] = { status: 'OK', result: catalogToDetail(rec) };
+      catHits[i] = true;
+    }
+  }));
+  const toGoogle = toFetch.filter(i => !catHits[i]);
+  if (toFetch.length) console.log(`[VERIFY] catálogo: ${toFetch.length - toGoogle.length} lugares ya conocidos (0 llamadas), ${toGoogle.length} nuevos → Place Details`);
+  const catWrites = [];
+  for (let b = 0; b < toGoogle.length; b += BATCH_SIZE) {
+    const batch = toGoogle.slice(b, b + BATCH_SIZE);
     const results = await Promise.all(batch.map(i => {
-      // Field mask condicional: opening_hours/editorial_summary solo si esta parada
-      // concreta no trae ya ese dato (de Claude o de una verificación anterior) —
-      // pedirlos siempre aunque no hagan falta recargaba Contact/Atmosphere Data por nada.
-      const s = route.stops[i];
-      let fields = 'name,photos,geometry,business_status,formatted_address';
-      if (!s.practical) fields += ',opening_hours';
-      if (!s.description) fields += ',editorial_summary';
-      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${bestCandidates[i].candidate.place_id}&fields=${fields}&language=es&key=${placesKey}`)
+      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${bestCandidates[i].candidate.place_id}&fields=${PLACE_DETAIL_FIELDS}&language=es&key=${placesKey}`)
         .then(r => r.json()).catch(() => null);
     }));
-    batch.forEach((idx, j) => { detailResults[idx] = results[j]; });
+    batch.forEach((idx, j) => {
+      detailResults[idx] = results[j];
+      if (results[j]?.status === 'OK' && results[j].result) {
+        catWrites.push(catalogPut(env, bestCandidates[idx].candidate.place_id, buildCatalogRecord(results[j].result, bestCandidates[idx].candidate)));
+      }
+    });
   }
+  await Promise.all(catWrites);
 
   // Regla única: sin place_id validado por Google Places → la parada NO entra en el JSON final.
   const validatedStops = [];
   const discarded = [];
+  const spotWrites = []; // escrituras del catálogo "nombre → lugar"; se esperan antes de salir (si no, pueden perderse)
 
   route.stops.forEach((stop, i) => {
     if (reuse[i]) {
@@ -4367,25 +4445,26 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     const desc = detail?.editorial_summary?.overview || '';
     if (desc && !stop.description) stop.description = desc;
 
-    // Cachear en KV 30 días — el mismo sitio en otra ruta futura se reutiliza sin
-    // volver a pagar Find Place + Details. Solo verificaciones de confianza (nombre
-    // coincide de verdad), nunca rescates blandos (bc.soft), para no propagar un
-    // match dudoso a otras rutas que ni siquiera lo pidieron.
+    // Guardar en KV PARA SIEMPRE (catálogo "nombre → lugar") — el mismo sitio en otra ruta futura se
+    // reutiliza sin volver a pagar Find Place + Details. Solo verificaciones de confianza (nombre
+    // coincide de verdad), nunca rescates blandos (bc.soft), para no propagar un match dudoso a otras
+    // rutas que ni siquiera lo pidieron. Al leerla hay una guarda de distancia contra homónimos.
     if (env?.SALMA_KB && !bc.soft) {
       const kvKey = _verifiedKvKey(stop);
       if (kvKey) {
-        env.SALMA_KB.put(kvKey, JSON.stringify({
+        spotWrites.push(env.SALMA_KB.put(kvKey, JSON.stringify({
           place_id: stop.place_id, lat: stop.lat, lng: stop.lng,
           name: stop.name, verified_address: stop.verified_address || '',
           photo_ref: stop.photo_ref || '', practical: stop.practical || '',
           description: stop.description || '',
-        }), { expirationTtl: 2592000 }).catch(() => {});
+        })).catch(() => {}));
       }
     }
 
     validatedStops.push(stop);
     console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${(candidate.place_id||'').substring(0, 20)}`);
   });
+  await Promise.all(spotWrites);
 
   // Red de seguridad — destino de punto: fuera cualquier parada que, pese a todo, quede
   // lejos del ancla. Dos pasos: (1) línea recta con MAX_ANCHOR_KM (barato, descarta lo
@@ -7002,44 +7081,25 @@ export default {
       }
       try {
         // CATÁLOGO (ver bloque "CATÁLOGO DE LUGARES"): si el lugar ya está, CERO llamadas a Google.
-        const catKey = 'pl:' + placeId;
-        let cat = null;
-        try {
-          const raw = env.SALMA_KB ? await env.SALMA_KB.get(catKey) : null;
-          if (raw) cat = JSON.parse(raw);
-        } catch (_) { cat = null; }
+        let cat = await catalogGet(env, placeId);
         let source = 'hit';
         if (!cat) {
           source = 'miss';
-          // Única llamada a Google por lugar: se piden TODOS los campos que la app necesita, para no
-          // tener que volver a pedir nada. utc_offset es dato básico (sin coste extra); permite calcular
+          // Única llamada a Google por lugar: se piden TODOS los campos que la app necesita (PLACE_DETAIL_FIELDS),
+          // para no tener que volver a pedir nada. utc_offset es dato básico (sin coste extra); permite calcular
           // "abierto ahora" sin volver a preguntar.
-          const fields = 'name,rating,user_ratings_total,opening_hours,photos,utc_offset';
-          const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&language=es&key=${placesKey}`);
+          const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${PLACE_DETAIL_FIELDS}&language=es&key=${placesKey}`);
           const data = await res.json();
           if (data.status !== 'OK' || !data.result) {
             return new Response(JSON.stringify({ error: data.status || 'not found' }), { status: 404, headers: { ...corsH, 'X-Catalog': 'error' } });
           }
-          const r = data.result;
-          const photoRef = r.photos?.[0]?.photo_reference || '';
-          let keepRef = '';
-          if (photoRef) {
+          cat = buildCatalogRecord(data.result, null);
+          if (cat.photo_ref) {
             // Descarga la foto y la deja en R2 (por hash del ref): a partir de aquí /photo?ref= sale de R2.
-            const photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
-            if (photo) keepRef = photoRef;
+            const photo = await _getCachedPlacePhoto(placesKey, cat.photo_ref).catch(() => null);
+            if (!photo) cat.photo_ref = '';
           }
-          cat = {
-            v: 1,
-            name: r.name || '',
-            rating: r.rating || null,
-            reviews: r.user_ratings_total || 0,
-            hours: r.opening_hours?.weekday_text || [],
-            periods: r.opening_hours?.periods || [],
-            utc_offset: typeof r.utc_offset === 'number' ? r.utc_offset : (typeof r.utc_offset_minutes === 'number' ? r.utc_offset_minutes : null),
-            photo_ref: keepRef,
-            saved: new Date().toISOString(),
-          };
-          try { if (env.SALMA_KB) await env.SALMA_KB.put(catKey, JSON.stringify(cat)); } catch (_) {}
+          await catalogPut(env, placeId, cat);
         }
         // URL propia /photo?ref= — no /photo/<r2Key>, que dependía de un .put() a R2
         // sin await/waitUntil y podía no existir todavía cuando se pedía.
