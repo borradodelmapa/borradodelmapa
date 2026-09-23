@@ -1435,6 +1435,10 @@ Google contestó; `buscarFotoLugar` devuelve SIEMPRE los mismos photo_reference 
 Probado en vivo por Paco (Cantabria, 2 preguntas): `ph:` 16 entradas, `vp:` 0 (correcto: en las recomendaciones —Tiempo 1, `guidedIsReco`— NO se
 inyectan enlaces de Maps, solo fotos; la fuga (1) `getValidatedPlace` aplica a respuestas conversacionales, no a recomendaciones); la guía guardada
 y abierta añadió 11 fichas `pl:` (17→28). Claude escribe respuestas distintas cada vez: el catálogo solo ahorra cuando un NOMBRE SE REPITE.
+[x] FUGA 3 (`/photo`) HECHA — Worker `db787304-9d13-433b-8766-a0472f134fb7` (commit `dc62b61f`): alias KV `pa:{hash(ref)}` → ref bueno (permanente; guías antiguas con
+ref caducado ya no repiten el circuito en cada apertura), `spotcache:` permanente con guarda de homónimos (30 km), `spotmiss:` (no encontrado, 30 d, solo si Google
+contestó), y `_getCachedPlacePhoto(...,r2Only)` para no leer el alias en el caso normal. Probado simulado 9/9 (+ las otras 3 baterías sin regresión). Una guía antigua
+con refs caducados pagará UNA última vez al abrirse y luego 0.
 [x] FILTRO DE FOTOS del chat (Worker `20a81964-fd45-4e22-94cd-dd947a652ec4`, commit `0c46544c`): `shouldLookupPhoto()` descarta SOLO titulares
 ("Dónde comer:", "Qué ver:"…) y platos (primera palabra en lista `_DISH_WORDS`); cualquier otro nombre —p. ej. "Playa del sardinero"— conserva su foto
 (decisión de Paco: "solo platos, nada más"). Probado 32/32 lugares con foto, 25/25 titulares/platos sin foto. Borrada la entrada mala `ph:donde comer:, cantabria`.
