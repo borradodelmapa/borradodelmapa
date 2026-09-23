@@ -7045,6 +7045,68 @@ export default {
       }
     }
 
+    // ─── GET /admin/revenue — compras de Stripe para el panel (solo admin, SOLO LECTURA) ───
+    // Lista las Checkout Sessions pagadas con la MISMA clave de Stripe que ya usa el Worker (no hace falta otra). El modo (prueba o
+    // real) sale del prefijo de la clave: mientras sea sk_test_ los importes son de mentira. Importes brutos (IVA incluido), sin
+    // descontar comisiones de Stripe ni reembolsos. Coste: cero (las lecturas de Stripe no se facturan).
+    if (request.method === 'GET' && url.pathname === '/admin/revenue') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      if (!env.STRIPE_SECRET_KEY) {
+        return new Response(JSON.stringify({ error: 'Falta el secret STRIPE_SECRET_KEY en el Worker.' }), { status: 500, headers: corsH });
+      }
+      try {
+        const paid = [];
+        let after = '', truncated = false;
+        for (let page = 0; page < 5; page++) {
+          const qs = 'limit=100' + (after ? '&starting_after=' + encodeURIComponent(after) : '');
+          const res = await fetch('https://api.stripe.com/v1/checkout/sessions?' + qs, {
+            headers: { 'Authorization': 'Basic ' + btoa(env.STRIPE_SECRET_KEY + ':') },
+            signal: AbortSignal.timeout(10000),
+          });
+          const j = await res.json();
+          if (!res.ok) throw new Error('Stripe → ' + res.status + ' ' + ((j.error && j.error.message) || '').slice(0, 120));
+          for (const s of (j.data || [])) if (s.payment_status === 'paid') paid.push(s);
+          if (!j.has_more || !(j.data || []).length) break;
+          after = j.data[j.data.length - 1].id;
+          if (page === 4) truncated = true;
+        }
+        const now = Date.now(), monthStart = new Date(new Date().toISOString().slice(0, 7) + '-01T00:00:00Z').getTime();
+        const eur = c => Math.round(c) / 100;
+        let gross = 0, month = 0, monthN = 0, d30 = 0, d30N = 0;
+        const byPlan = {};
+        for (const s of paid) {
+          const t = (s.created || 0) * 1000, amt = s.amount_total || 0;
+          gross += amt;
+          if (t >= monthStart) { month += amt; monthN++; }
+          if (t >= now - 30 * 864e5) { d30 += amt; d30N++; }
+          const pk = (s.metadata && s.metadata.plan) || 'otro';
+          const bp = byPlan[pk] || (byPlan[pk] = { plan: pk, label: (PREMIUM_PLANS[pk] && PREMIUM_PLANS[pk].label) || pk, count: 0, gross: 0 });
+          bp.count++; bp.gross += amt;
+        }
+        paid.sort((a, b) => (b.created || 0) - (a.created || 0));
+        return new Response(JSON.stringify({
+          mode: String(env.STRIPE_SECRET_KEY).startsWith('sk_live_') ? 'live' : 'test',
+          currency: 'eur',
+          totals: { count: paid.length, gross: eur(gross), month: eur(month), month_count: monthN, d30: eur(d30), d30_count: d30N, month_key: new Date().toISOString().slice(0, 7) },
+          by_plan: Object.values(byPlan).map(p => ({ plan: p.plan, label: p.label, count: p.count, gross: eur(p.gross) })).sort((a, b) => b.gross - a.gross),
+          recent: paid.slice(0, 20).map(s => ({
+            at: new Date((s.created || 0) * 1000).toISOString(),
+            plan: (s.metadata && s.metadata.plan) || 'otro',
+            label: (s.metadata && PREMIUM_PLANS[s.metadata.plan] && PREMIUM_PLANS[s.metadata.plan].label) || (s.metadata && s.metadata.plan) || 'otro',
+            amount: eur(s.amount_total || 0),
+            email: (s.customer_details && s.customer_details.email) || null,
+            uid: (s.metadata && s.metadata.user_id) || null,
+          })),
+          truncated,
+        }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudieron leer los ingresos: ' + e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /sitemap.xml (SEO — sitemap index) ───
     if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
       const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
