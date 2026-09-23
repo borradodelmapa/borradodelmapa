@@ -6755,6 +6755,21 @@ export default {
       if (!(await isAdminRequest(request, env))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
+      // CACHÉ 10 min (23 sept 2026): cada carga del dashboard del admin disparaba 5 servicios de pago (OpenAI, Google
+      // Find Place, 2 peticiones de RapidAPI que gastan cuota, Duffel). Ahora se responde con la última comprobación
+      // si tiene <10 min; `?force=1` fuerza una comprobación real.
+      const _forceHealth = url.searchParams.get('force') === '1';
+      if (!_forceHealth && env.SALMA_KB) {
+        try {
+          const _c = await env.SALMA_KB.get('health:last');
+          if (_c) {
+            const o = JSON.parse(_c);
+            o.cached = true;
+            o.age_s = Math.round((Date.now() - Date.parse(o.timestamp)) / 1000);
+            return new Response(JSON.stringify(o, null, 2), { status: o.status === 'all_ok' ? 200 : 503, headers: corsH });
+          }
+        } catch (_) {}
+      }
       const checks = {};
       const startTime = Date.now();
 
@@ -6809,12 +6824,14 @@ export default {
       } catch (e) { checks.duffel_flights = { status: 'error', error: e.message }; }
 
       const allOk = Object.values(checks).every(c => c.status === 'ok');
-      return new Response(JSON.stringify({
+      const _healthBody = {
         status: allOk ? 'all_ok' : 'degraded',
         timestamp: new Date().toISOString(),
         total_ms: Date.now() - startTime,
         checks
-      }, null, 2), { status: allOk ? 200 : 503, headers: corsH });
+      };
+      if (env.SALMA_KB) { try { await env.SALMA_KB.put('health:last', JSON.stringify(_healthBody), { expirationTtl: 600 }); } catch (_) {} }
+      return new Response(JSON.stringify(_healthBody, null, 2), { status: allOk ? 200 : 503, headers: corsH });
     }
 
     // ─── ENDPOINT /sitemap.xml (SEO — sitemap index) ───
