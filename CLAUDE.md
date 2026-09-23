@@ -1491,7 +1491,11 @@ sin chat ni gestión de proyecto — eso se hace con Code). Checklist, marcar al
   [ ] colector diario en el cron de las 6:00 UTC: Google (BigQuery por SKU), Anthropic, OpenAI, Twilio (Usage Records),
   ElevenLabs (`/v1/user/subscription`), Stripe; [ ] contadores propios Duffel/Serper (sin API de coste; avisar §8);
   [ ] cuotas fijas (Brave, RapidAPI, OpenWeather, Resend, Cloudflare) configuradas una vez.
-- **E — pantallas:** Resumen, Gastos por proveedor (día/mes/proyección), Coste por usuario y por guía, Ingresos y margen,
+- **E — HECHA la pestaña "Gastos en Google"** (panel `2026-09-23.4`, commit `ed7f502` de `Admin-borradodelmapa`): lee `GET /admin/google-usage` del Worker con la sesión de admin; gasto de
+  hoy y del mes frente a los topes (`gcap:config`), últimos 8 días, desglose de hoy por servicio y los candados de Google (lista informativa en `config.js` → `GOOGLE_QUOTAS`: si se
+  cambia una cuota en Google, actualizar esa lista). Barra verde <60 %, ámbar <90 %, roja ≥90 %. Es una ESTIMACIÓN a precios de lista; el coste real vendrá de BigQuery (`billing_export`,
+  pendiente de leer desde el panel/colector). Probado en jsdom (23 comprobaciones, 0 errores JS) y visto en escritorio y móvil. Falta que Paco lo vea con su sesión real.
+- **E — pantallas restantes:** Resumen, Gastos por proveedor (día/mes/proyección), Coste por usuario y por guía, Ingresos y margen,
   Usuarios, Analytics (falta `GA4_CREDENTIALS`), Calidad y feedback (`beta_feedback`), Alertas por email (Resend) por umbral.
 - Regla: estimado y real se muestran SIEMPRE etiquetados; nunca fingir precisión donde no hay API de coste.
 
