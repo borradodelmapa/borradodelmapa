@@ -1404,6 +1404,33 @@ y pedir la ficha COMPLETA una vez para que el catálogo esté completo. [ ] PASO
 `photo_reference`, que caduca). [ ] PASO 4 — frontend: que abrir una guía no pida nada a Google (usar lo guardado en la
 parada) y que un re-render tras editar no relance `_enrichAll`. [ ] PASO 5 — rellenar el catálogo con lo que YA está en las
 guías guardadas (Firestore), sin llamar a Google. [ ] Cuotas diarias duras en Google Cloud (Places API → Cuotas) como candado.
+[x] PASO 2 HECHO — Worker `7f10c62c-7a20-426a-b68a-a9d7667a0a5a` (commit `c54cdd93`): `verifyAllStops` usa la ficha completa v2 de
+`pl:{place_id}` (1 Find Place + 1 Details por lugar NUEVO; 0 llamadas si ya está), `verifiedspot:` permanente con guarda de
+homónimos (ancla y 25 km). Probado simulado (11/11) y en producción: guía "1 día en Olite" = 5 lugares nuevos (~10-13 céntimos, una
+vez); reabrirla 2 veces = 0 fichas nuevas. Sin confirmar todavía en la factura de Google (mirar mañana en Informes por SKU).
+**AUDITORÍA DE LLAMADAS A GOOGLE (23 sept 2026, hecha línea a línea; lo que faltó el 15 sept):**
+- ✅ cubiertas (pagan una vez): `verifyAllStops`, `/place-details`, `/route-thumbnail` (Static Maps, una vez por ruta).
+- 🔴 NO cubiertas y en el flujo de guías/recomendaciones (LAS GRANDES FUGAS QUE QUEDAN):
+  (1) **`getValidatedPlace` (≈línea 1551, enlaces Maps del texto de cada respuesta)**: por CADA negrita de la respuesta (hasta 6) hace
+  Find Place (+ 2º radio + Text Search) SIN caché → 6-18 llamadas por respuesta de recomendaciones.
+  (2) **Fotos automáticas en el chat (≈línea 10518, `buscarFotoLugar`, hasta 8 por respuesta)**: 1 Find Place por nombre SIN caché.
+  Hipótesis por comprobar: el `photo_reference` cambia en cada respuesta de Google, así que la caché de fotos por hash del ref
+  (R2 `photocache/`) casi nunca acierta entre respuestas → Places Photo se repaga. Solución: guardar los bytes por `place_id`.
+  (3) `/photo?name=&lat=&lng=`: Find Place por petición cuando falla el ref (solo cachea el índice curado).
+- 🟡 cacheadas pero caducan (deberían ser permanentes): `resolverPaisDestino` (ancla de destino, KV 30 d), `/historia-lugar`
+  (Text Search por lugar, KV 30 d), `_getPlaceDetailsCached` (teléfono/web, 30 d). Sin caché de "no encontrado": una parada que Google no
+  localiza repite hasta 3 llamadas cada vez.
+- 🟡 Directions: `drivingDistanceKm` (verify, paradas a >10 km del ancla) y `/directions` (línea de ruta) sin caché en el Worker; hoy
+  ≈157 llamadas/mes dentro del cupo gratis, pero crecería con usuarios (guardar el trazado con la guía).
+- ⚪ Navegador (misma cuenta de Google, no se puede cachear en el Worker): Maps JS (cargas de mapa), `map-modal.js` (getDetails/findPlace
+  por parada al abrir "Ruta completa"), Places Autocomplete (diario, mapa-ruta), Geocoder. La factura NO distingue Worker de navegador:
+  para separarlos, Google Cloud → APIs y servicios → Métricas, agrupado por credencial (clave del Worker vs clave pública).
+- ⚪ Fuera de alcance por decisión de Paco ("Cerca mía" y Narrador aparte): `searchPlacesForHelp`, `buscarLugar`, `searchHotelsPlaces`,
+  `searchPlacesGoogle`, `searchNearbyPlaces` (7 d), `/nearby-pois`, taxi (≈9609), `geocodeCiudad`, `/staticmap` (diario), `/tts-google`.
+  `buscarRestaurante` no tiene ningún llamador (código muerto). `/health` hace un Find Place por cada carga del dashboard del admin.
+**Orden propuesto de arreglos (uno a uno, con OK):** A) (1)+(2)+(3): nombre→lugar y fotos por `place_id` en R2 (la mayor fuga viva);
+B) TTL permanentes + caché de "no encontrado"; C) guardar el trazado de Directions con la guía; D) `/health` cacheado 10 min;
+E) frontend (`map-modal.js`); F) cuotas diarias duras en Google + contadores por SKU en el panel.
 Pendiente de Paco: B1 presupuesto Google (100 € por ahora) y B2 exportación a BigQuery.
 
 **Plan del panel admin nuevo (acordado con Paco 23 sept 2026; el panel será SOLO estadísticas y gastos de proveedores,
