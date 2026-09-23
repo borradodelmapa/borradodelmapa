@@ -1280,7 +1280,7 @@ generar una ruta completa ("3 días en Bilbao"), no para frases naturales en pri
 persona ("voy a pasar unos días..." — "unos días" no cuadra con el patrón "un/dos/tres
 días"). El destino (Bilbao) y el mes ("este mes") sí se detectaban bien — solo la
 condición de "suena a viaje" se quedaba corta.
-**Arreglo, commit `<pendiente>`, DESPLEGADO (Version ID `c570cb05-af8c-494f-9455-ace9515a7557`,
+**Arreglo, commit `cd05f041`, DESPLEGADO (Version ID `c570cb05-af8c-494f-9455-ace9515a7557`,
 confirmado contra `/version`), sin probar en pantalla:** nuevo `_tripIntentRe`
 ([salma-worker.js](worker/salma-worker.js)) que reconoce "voy a", "me voy a", "vamos a",
 "nos vamos a", "iré/ire a", "viajo a", "de viaje a" — se suma a las condiciones de antes.
