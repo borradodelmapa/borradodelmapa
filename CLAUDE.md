@@ -1251,7 +1251,7 @@ sitio del frontend rellenaba ese campo — las fechas del flujo guiado ("Tengo f
 guardan en `guided_route.fechas`, un campo distinto que nunca se traducía a `travel_dates`.
 No era un bug de hoy, era un cable que nunca se llegó a conectar.
 
-**Arreglo, commit `<pendiente>`, solo Worker, DESPLEGADO (Version ID
+**Arreglo, commit `3986e4e6`, solo Worker, DESPLEGADO (Version ID
 `00f7551d-a170-4474-b0fb-79e7f44c45db`, confirmado contra `/version`), sin probar en
 pantalla:**
 1. Función nueva `extractMonthMention(message)` ([salma-worker.js:1629](worker/salma-worker.js:1629))
