@@ -599,6 +599,39 @@ async function isAdminRequest(request, env) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// CATÁLOGO DE LUGARES — "cada sitio se paga UNA sola vez" (23 sept 2026)
+// ═══════════════════════════════════════════════════════════════
+// KV `pl:{place_id}`, SIN caducidad. Lo que Google devuelve de un lugar se guarda la primera vez y no se
+// vuelve a pedir nunca. Nota: las condiciones de Google solo permiten guardar sin límite el place_id
+// (y las coordenadas 30 días); guardar el resto es una decisión de negocio de Paco, con ese riesgo aceptado.
+// No rellenar NUNCA en bloque (pre-fetch masivo): solo cuando un usuario pide ese lugar.
+
+// "Abierto ahora" calculado desde los periodos guardados (opening_hours.periods, formato Places legacy:
+// day 0=domingo, time 'HHMM' en hora local del lugar) + utc_offset en minutos. null si no se puede saber.
+function computeOpenNow(periods, utcOffsetMin, nowMs) {
+  if (!Array.isArray(periods) || periods.length === 0) return null;
+  // Abierto 24/7: un único periodo que abre domingo 0000 y no tiene cierre
+  if (periods.length === 1 && periods[0].open && !periods[0].close && periods[0].open.day === 0 && periods[0].open.time === '0000') return true;
+  const off = typeof utcOffsetMin === 'number' ? utcOffsetMin : null;
+  if (off === null) return null;
+  const local = new Date((nowMs ?? Date.now()) + off * 60000);
+  const WEEK = 7 * 1440;
+  const nowMin = local.getUTCDay() * 1440 + local.getUTCHours() * 60 + local.getUTCMinutes();
+  const toMin = (p) => {
+    const t = String(p.time || '0000');
+    return (Number(p.day) || 0) * 1440 + parseInt(t.slice(0, 2), 10) * 60 + parseInt(t.slice(2, 4), 10);
+  };
+  for (const per of periods) {
+    if (!per.open || !per.close) continue;
+    const o = toMin(per.open);
+    let c = toMin(per.close);
+    if (c <= o) c += WEEK; // cruza la semana o pasa de medianoche
+    if ((nowMin >= o && nowMin < c) || (nowMin + WEEK >= o && nowMin + WEEK < c)) return true;
+  }
+  return false;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // USO Y LÍMITES POR USUARIO (modelo Premium, paso 3) — 21 sept 2026
 // ═══════════════════════════════════════════════════════════════
 // Contadores en KV (SALMA_KB). El límite se comprueba SIEMPRE aquí, con el plan leído de Firestore
@@ -6968,32 +7001,59 @@ export default {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
       }
       try {
-        const fields = 'name,rating,user_ratings_total,opening_hours,photos';
-        const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&language=es&key=${placesKey}`);
-        const data = await res.json();
-        if (data.status !== 'OK' || !data.result) {
-          return new Response(JSON.stringify({ error: data.status || 'not found' }), { status: 404, headers: corsH });
+        // CATÁLOGO (ver bloque "CATÁLOGO DE LUGARES"): si el lugar ya está, CERO llamadas a Google.
+        const catKey = 'pl:' + placeId;
+        let cat = null;
+        try {
+          const raw = env.SALMA_KB ? await env.SALMA_KB.get(catKey) : null;
+          if (raw) cat = JSON.parse(raw);
+        } catch (_) { cat = null; }
+        let source = 'hit';
+        if (!cat) {
+          source = 'miss';
+          // Única llamada a Google por lugar: se piden TODOS los campos que la app necesita, para no
+          // tener que volver a pedir nada. utc_offset es dato básico (sin coste extra); permite calcular
+          // "abierto ahora" sin volver a preguntar.
+          const fields = 'name,rating,user_ratings_total,opening_hours,photos,utc_offset';
+          const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&language=es&key=${placesKey}`);
+          const data = await res.json();
+          if (data.status !== 'OK' || !data.result) {
+            return new Response(JSON.stringify({ error: data.status || 'not found' }), { status: 404, headers: { ...corsH, 'X-Catalog': 'error' } });
+          }
+          const r = data.result;
+          const photoRef = r.photos?.[0]?.photo_reference || '';
+          let keepRef = '';
+          if (photoRef) {
+            // Descarga la foto y la deja en R2 (por hash del ref): a partir de aquí /photo?ref= sale de R2.
+            const photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
+            if (photo) keepRef = photoRef;
+          }
+          cat = {
+            v: 1,
+            name: r.name || '',
+            rating: r.rating || null,
+            reviews: r.user_ratings_total || 0,
+            hours: r.opening_hours?.weekday_text || [],
+            periods: r.opening_hours?.periods || [],
+            utc_offset: typeof r.utc_offset === 'number' ? r.utc_offset : (typeof r.utc_offset_minutes === 'number' ? r.utc_offset_minutes : null),
+            photo_ref: keepRef,
+            saved: new Date().toISOString(),
+          };
+          try { if (env.SALMA_KB) await env.SALMA_KB.put(catKey, JSON.stringify(cat)); } catch (_) {}
         }
-        const r = data.result;
-        const photoRef = r.photos?.[0]?.photo_reference || '';
-        let photoUrl = '';
-        if (photoRef) {
-          const photo = await _getCachedPlacePhoto(placesKey, photoRef).catch(() => null);
-          // URL propia /photo?ref= — no /photo/<r2Key>, que dependía de un .put() a R2
-          // sin await/waitUntil y podía no existir todavía cuando se pedía.
-          if (photo) photoUrl = `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
-        }
+        // URL propia /photo?ref= — no /photo/<r2Key>, que dependía de un .put() a R2
+        // sin await/waitUntil y podía no existir todavía cuando se pedía.
+        const photoUrl = cat.photo_ref ? `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(cat.photo_ref)}` : '';
         return new Response(JSON.stringify({
-          name: r.name || '',
-          rating: r.rating || null,
-          reviews: r.user_ratings_total || 0,
+          name: cat.name || '',
+          rating: cat.rating || null,
+          reviews: cat.reviews || 0,
           photo_url: photoUrl,
-          hours: r.opening_hours?.weekday_text || [],
-          open_now: r.opening_hours?.open_now ?? null,
-          // no-store: photo_url es un puntero a /photo?ref=, no lo cacheamos aquí por el
-          // mismo motivo que en /photo?json=1 (ver ese comentario) — cachear esta
-          // respuesta puede dejar servida una URL vieja horas después de un deploy.
-        }), { headers: { ...corsH, 'Cache-Control': 'no-store' } });
+          hours: cat.hours || [],
+          open_now: computeOpenNow(cat.periods, cat.utc_offset),
+          // no-store: photo_url es un puntero a /photo?ref=; el cliente no debe cachear esta respuesta
+          // (el ahorro está en el catálogo del Worker, no en la caché del navegador).
+        }), { headers: { ...corsH, 'Cache-Control': 'no-store', 'X-Catalog': source } });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
