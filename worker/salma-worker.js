@@ -12,6 +12,79 @@ import { resolveNamedRoad, toGeoJSON, toGPX, extractRoadQuery } from './roads/ro
 const ELEVENLABS_VOICE_ID = 'fzAdMudUtRHNnk5tjJRR';
 
 // ═══════════════════════════════════════════════════════════════
+// TOPE DE GASTO PROPIO EN GOOGLE (23 sept 2026) — segunda capa del candado, en EUROS
+// ═══════════════════════════════════════════════════════════════
+// Un ÚNICO sitio por el que pasa toda llamada a maps.googleapis.com: este módulo redefine `fetch` (el `fetch` de
+// todo este fichero es el de aquí; el global sigue intacto). Antes de cada llamada a Google se suma un coste ESTIMADO
+// (precios de lista, sin cupos gratis: se adelanta a Google) a un contador del día y otro del mes en KV. Si se
+// supera el tope diario o mensual, NO se llama a Google y se responde como Google sin cuota (OVER_QUERY_LIMIT) —
+// nuestras cachés no guardan los errores, así que al día siguiente vuelve solo. FAIL-OPEN: si KV falla, la llamada
+// pasa (esto protege el dinero, no es un candado del que dependa el servicio). Los topes se cambian SIN desplegar
+// escribiendo en KV `gcap:config` = {"daily_eur":8,"monthly_eur":50}. Solo cubre lo que pasa por el Worker: lo que se
+// llama desde el navegador con la clave pública lo frenan las cuotas diarias de Google (Cloud Console → Cuotas).
+const GOOGLE_UNIT_EUR = { find: 0.016, details: 0.025, text: 0.030, nearby: 0.030, photo: 0.0065, directions: 0.009, static: 0.0019, geocode: 0.0046, other: 0.010 };
+const GOOGLE_CAP_DEFAULT = { daily_eur: 8, monthly_eur: 50 };
+let _gateEnv = null;      // env de la petición en curso (se fija al entrar en fetch() y scheduled())
+let _gcapCache = null;    // config en memoria 60 s
+function _googleSku(url) {
+  if (url.includes('/maps/api/place/findplacefromtext')) return 'find';
+  if (url.includes('/maps/api/place/details')) return 'details';
+  if (url.includes('/maps/api/place/textsearch')) return 'text';
+  if (url.includes('/maps/api/place/nearbysearch')) return 'nearby';
+  if (url.includes('/maps/api/place/photo')) return 'photo';
+  if (url.includes('/maps/api/directions')) return 'directions';
+  if (url.includes('/maps/api/staticmap')) return 'static';
+  if (url.includes('/maps/api/geocode')) return 'geocode';
+  return 'other';
+}
+async function _googleCaps(env) {
+  const now = Date.now();
+  if (_gcapCache && now - _gcapCache.t < 60000) return _gcapCache.v;
+  let v = GOOGLE_CAP_DEFAULT;
+  try {
+    const raw = await env.SALMA_KB.get('gcap:config');
+    if (raw) { const c = JSON.parse(raw); v = { daily_eur: Number(c.daily_eur) > 0 ? Number(c.daily_eur) : v.daily_eur, monthly_eur: Number(c.monthly_eur) > 0 ? Number(c.monthly_eur) : v.monthly_eur }; }
+  } catch (_) {}
+  _gcapCache = { t: now, v };
+  return v;
+}
+// Devuelve null si se puede llamar a Google, o la Response "sin cuota" si se ha superado el tope.
+async function _googleGate(env, sku) {
+  if (!env?.SALMA_KB) return null;
+  try {
+    const caps = await _googleCaps(env);
+    const day = new Date().toISOString().slice(0, 10), mon = day.slice(0, 7);
+    const dKey = 'gspend:d:' + day, mKey = 'gspend:m:' + mon;
+    const [dRaw, mRaw] = await Promise.all([env.SALMA_KB.get(dKey), env.SALMA_KB.get(mKey)]);
+    const d = dRaw ? JSON.parse(dRaw) : { eur: 0, n: {} };
+    const mEur = parseFloat(mRaw) || 0;
+    const c = GOOGLE_UNIT_EUR[sku] ?? GOOGLE_UNIT_EUR.other;
+    // Se corta si esta llamada HARÍA superar el tope (así el gasto estimado no lo rebasa ni en una llamada).
+    if ((d.eur || 0) + c > caps.daily_eur || mEur + c > caps.monthly_eur) {
+      console.log(`[GASTO-GOOGLE] TOPE alcanzado (día ${(d.eur || 0).toFixed(2)}€/${caps.daily_eur}€, mes ${mEur.toFixed(2)}€/${caps.monthly_eur}€) — no se llama a Google (${sku})`);
+      if (sku === 'photo' || sku === 'static') return new Response('spend cap', { status: 429, headers: { 'X-Spend-Cap': '1' } });
+      return new Response(JSON.stringify({ status: 'OVER_QUERY_LIMIT', error_message: 'Tope de gasto propio del Worker', candidates: [], results: [], routes: [] }),
+        { status: 200, headers: { 'Content-Type': 'application/json', 'X-Spend-Cap': '1' } });
+    }
+    d.eur = (d.eur || 0) + c; d.n = d.n || {}; d.n[sku] = (d.n[sku] || 0) + 1;
+    await Promise.all([
+      env.SALMA_KB.put(dKey, JSON.stringify(d), { expirationTtl: 40 * 86400 }),
+      env.SALMA_KB.put(mKey, String(mEur + c), { expirationTtl: 400 * 86400 }),
+    ]);
+  } catch (_) { /* fail-open */ }
+  return null;
+}
+// `fetch` del módulo: igual que el global, salvo que las llamadas a Google pasan primero por el guardián de gasto.
+const fetch = async (input, init) => {
+  const url = typeof input === 'string' ? input : (input?.url || '');
+  if (_gateEnv && url.startsWith('https://maps.googleapis.com/')) {
+    const denied = await _googleGate(_gateEnv, _googleSku(url));
+    if (denied) return denied;
+  }
+  return globalThis.fetch(input, init);
+};
+
+// ═══════════════════════════════════════════════════════════════
 // BLOQUE 1 — Identidad
 // ═══════════════════════════════════════════════════════════════
 const BLOQUE_IDENTIDAD = `Eres SALMA, compañera de viaje de Borrado del Mapa. Andaluza, cercana, sin afectación. Tuteas siempre. Si te escriben en otro idioma, respondes en ese idioma manteniendo tu carácter.`;
@@ -6558,6 +6631,7 @@ async function sendFeedbackEmail(env, to, subject, text) {
 
 export default {
   async fetch(request, env, ctx) {
+    _gateEnv = env; // guardián de gasto en Google (ver TOPE DE GASTO PROPIO)
     // CORS
     if (request.method === 'OPTIONS') {
       return new Response(null, {
@@ -6845,6 +6919,27 @@ export default {
       };
       if (env.SALMA_KB) { try { await env.SALMA_KB.put('health:last', JSON.stringify(_healthBody), { expirationTtl: 600 }); } catch (_) {} }
       return new Response(JSON.stringify(_healthBody, null, 2), { status: allOk ? 200 : 503, headers: corsH });
+    }
+
+    // ─── /admin/google-usage — gasto ESTIMADO en Google según el guardián propio (solo admin) ───
+    // Devuelve topes, total del mes y los últimos 8 días con su desglose por servicio. Es una estimación a precios de
+    // lista (se adelanta a Google); la cifra real sale de la factura / la exportación a BigQuery.
+    if (request.method === 'GET' && url.pathname === '/admin/google-usage') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      const caps = await _googleCaps(env);
+      const days = [];
+      for (let i = 0; i < 8; i++) {
+        const dt = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+        let raw = null; try { raw = await env.SALMA_KB.get('gspend:d:' + dt); } catch (_) {}
+        const o = raw ? JSON.parse(raw) : { eur: 0, n: {} };
+        days.push({ day: dt, eur: Math.round((o.eur || 0) * 1000) / 1000, calls: o.n || {} });
+      }
+      const mon = new Date().toISOString().slice(0, 7);
+      let mRaw = null; try { mRaw = await env.SALMA_KB.get('gspend:m:' + mon); } catch (_) {}
+      return new Response(JSON.stringify({ caps, month: { month: mon, eur: Math.round((parseFloat(mRaw) || 0) * 1000) / 1000 }, days, unit_eur: GOOGLE_UNIT_EUR }, null, 2), { headers: corsH });
     }
 
     // ─── ENDPOINT /sitemap.xml (SEO — sitemap index) ───
@@ -11172,6 +11267,7 @@ REGLAS:
   // generar ni una ruta en producción, ver [[project_kv_estado]] en memoria)
   // ═══════════════════════════════════════════════════════════════
   async scheduled(event, env, ctx) {
+    _gateEnv = env; // guardián de gasto en Google (ver TOPE DE GASTO PROPIO)
     if (!env.SALMA_KB) return;
 
     const hour = new Date(event.scheduledTime).getUTCHours();
