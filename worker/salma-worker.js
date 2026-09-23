@@ -7008,6 +7008,30 @@ export default {
           if (page === 3) truncated = true;
         }
 
+        // 1b) estado de la cuenta en Firebase Authentication (deshabilitada, último acceso, proveedor). Si falla, se sigue sin ello.
+        const authInfo = {}; let authOk = false;
+        try {
+          const cp = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/cloud-platform', '_sa_token_cp');
+          let apt = '';
+          for (let page = 0; page < 3; page++) {
+            const ar = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/accounts:batchGet?maxResults=1000${apt ? '&nextPageToken=' + encodeURIComponent(apt) : ''}`, {
+              headers: { 'Authorization': 'Bearer ' + cp }, signal: AbortSignal.timeout(10000),
+            });
+            if (!ar.ok) throw new Error('Auth → ' + ar.status);
+            const aj = await ar.json();
+            for (const a of (aj.users || [])) {
+              authInfo[a.localId] = {
+                disabled: !!a.disabled,
+                last_login: a.lastLoginAt ? new Date(Number(a.lastLoginAt)).toISOString() : null,
+                providers: (a.providerUserInfo || []).map(p => p.providerId),
+              };
+            }
+            apt = aj.nextPageToken || '';
+            if (!apt) break;
+          }
+          authOk = true;
+        } catch (e) { console.log('[ADMIN-STATS] sin datos de Authentication: ' + e.message); }
+
         // 2) guías de todos los usuarios de una vez (consulta de grupo de colecciones "maps", solo la fecha)
         const perUser = {};
         const now = Date.now(), d7 = now - 7 * 864e5;
@@ -7046,12 +7070,13 @@ export default {
           return {
             uid: u.uid, name: u.name, email: u.email, createdAt: u.createdAt,
             premium_until: u.premium_until, premium_active: active, guides: g.n,
+            disabled: (authInfo[u.uid] || {}).disabled === true, last_login: (authInfo[u.uid] || {}).last_login || null, providers: (authInfo[u.uid] || {}).providers || [],
             usage: { msgs: us.msgs || 0, guides: us.guides || 0, edits: us.edits || 0, claude_usd: us.claude_usd || 0, last_at: us.last_at || null },
           };
         });
         return new Response(JSON.stringify({
           totals: { users: users.length, users7, premium, guides, guides7, month, msgs, claude_usd: Math.round(claudeUsd * 100) / 100 },
-          truncated: { users: truncated, guides: guidesTruncated },
+          truncated: { users: truncated, guides: guidesTruncated }, auth_ok: authOk,
           users: out,
         }), { headers: corsH });
       } catch (e) {
@@ -7190,6 +7215,69 @@ export default {
         return new Response(out, { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: 'No se pudo leer BigQuery: ' + e.message, code: 'exception' }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── POST /admin/user-action — acciones de gestión sobre UN usuario (solo admin) ───
+    // premium_add {days 1-730} · premium_remove · disable · enable · reset_free. Nunca borra cuentas. Cada acción queda anotada en KV
+    // (`adminlog:{ms}:{uid}`, 1 año). Premium se escribe con la cuenta de servicio (las reglas de Firestore no dejan al cliente).
+    if (request.method === 'POST' && url.pathname === '/admin/user-action') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      let body;
+      try { body = await request.json(); } catch (_) { return new Response(JSON.stringify({ error: 'JSON no válido' }), { status: 400, headers: corsH }); }
+      const uid = String(body.uid || ''), action = String(body.action || '');
+      if (!/^[A-Za-z0-9]{20,40}$/.test(uid)) return new Response(JSON.stringify({ error: 'uid no válido' }), { status: 400, headers: corsH });
+      if (!['premium_add', 'premium_remove', 'disable', 'enable', 'reset_free'].includes(action)) return new Response(JSON.stringify({ error: 'Acción no válida' }), { status: 400, headers: corsH });
+      let days = 0;
+      if (action === 'premium_add') {
+        days = Math.floor(Number(body.days));
+        if (!Number.isFinite(days) || days < 1 || days > 730) return new Response(JSON.stringify({ error: 'Los días deben estar entre 1 y 730.' }), { status: 400, headers: corsH });
+      }
+      try {
+        const now = Date.now(), nowIso = new Date(now).toISOString();
+        let result = {};
+        if (action === 'premium_add' || action === 'premium_remove') {
+          const doc = await firestoreAdminGet(env, 'users/' + uid);
+          if (!doc) return new Response(JSON.stringify({ error: 'Ese usuario no existe en la base de datos.' }), { status: 404, headers: corsH });
+          if (action === 'premium_add') {
+            const curStr = doc.fields && doc.fields.premium_until && doc.fields.premium_until.timestampValue;
+            const base = Math.max(now, curStr ? new Date(curStr).getTime() : 0);
+            const untilIso = new Date(base + days * 864e5).toISOString();
+            await firestoreAdminPatch(env, 'users/' + uid, {
+              premium_until: { timestampValue: untilIso }, isPremium: { booleanValue: true },
+              premium_last_plan: { stringValue: 'manual-admin' }, premium_updated_at: { timestampValue: nowIso },
+            });
+            result = { premium_until: untilIso };
+          } else {
+            await firestoreAdminPatch(env, 'users/' + uid, {
+              premium_until: { timestampValue: nowIso }, isPremium: { booleanValue: false },
+              premium_last_plan: { stringValue: 'manual-admin-quitado' }, premium_updated_at: { timestampValue: nowIso },
+            });
+            result = { premium_until: nowIso };
+          }
+        } else if (action === 'disable' || action === 'enable') {
+          const cp = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/cloud-platform', '_sa_token_cp');
+          const upd = { localId: uid, disableUser: action === 'disable' };
+          if (action === 'disable') upd.validSince = String(Math.floor(now / 1000));   // además invalida las sesiones ya abiertas
+          const r = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/accounts:update`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cp }, body: JSON.stringify(upd), signal: AbortSignal.timeout(10000),
+          });
+          const j = await r.json().catch(() => ({}));
+          if (!r.ok) throw new Error('Authentication → ' + r.status + ' ' + ((j.error && j.error.message) || '').slice(0, 120));
+          result = { disabled: action === 'disable' };
+        } else if (action === 'reset_free') {
+          if (!env.SALMA_KB) throw new Error('KV no disponible');
+          await env.SALMA_KB.delete(usageTotalKey(uid));
+          result = { reset: 'cupos gratuitos de por vida (guías y cambios) a cero' };
+        }
+        try { if (env.SALMA_KB) await env.SALMA_KB.put('adminlog:' + now + ':' + uid, JSON.stringify({ at: nowIso, action, uid, days: days || undefined, result }), { expirationTtl: 60 * 60 * 24 * 365 }); } catch (_) {}
+        console.log('[ADMIN-ACCION] ' + action + ' ' + uid + (days ? ' ' + days + ' d' : ''));
+        return new Response(JSON.stringify({ ok: true, action, uid, result }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudo hacer: ' + e.message }), { status: 500, headers: corsH });
       }
     }
 
