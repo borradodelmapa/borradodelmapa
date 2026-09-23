@@ -1861,14 +1861,27 @@ function haversineKm(lat1, lng1, lat2, lng2) {
 // (p.ej. Ronda↔Costa del Sol por la A-397) la única carretera puede doblar la distancia
 // en línea recta — Ronda→Estepona son 35km en línea recta pero 83km/1h40 conduciendo.
 // null = no se pudo calcular (API caída/timeout) → el llamador debe decidir un fallback.
-async function drivingDistanceKm(lat1, lng1, lat2, lng2, placesKey) {
+async function drivingDistanceKm(lat1, lng1, lat2, lng2, placesKey, env) {
   if (!placesKey) return null;
+  // GUARDADA PARA SIEMPRE (23 sept 2026): la verificación de una ruta volvía a pedir esta distancia por CADA parada a
+  // >10 km del ancla, también en paradas ya conocidas. La distancia por carretera entre dos puntos no cambia.
+  // Coordenadas a 4 decimales (~11 m). Solo se guarda un valor real de Google (un fallo o un timeout no se guardan).
+  const _k = (env?.SALMA_KB && [lat1, lng1, lat2, lng2].every(v => isFinite(+v)))
+    ? `drv:${(+lat1).toFixed(4)},${(+lng1).toFixed(4)}:${(+lat2).toFixed(4)},${(+lng2).toFixed(4)}` : null;
+  if (_k) {
+    try {
+      const c = await env.SALMA_KB.get(_k);
+      if (c !== null && c !== undefined) { const n = parseFloat(c); if (isFinite(n)) return n; }
+    } catch (_) {}
+  }
   try {
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${lat1},${lng1}&destination=${lat2},${lng2}&mode=driving&key=${placesKey}`;
     const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
     const data = await res.json();
     const meters = data?.routes?.[0]?.legs?.[0]?.distance?.value;
-    return typeof meters === 'number' ? meters / 1000 : null;
+    if (typeof meters !== 'number') return null;
+    if (_k) { try { await env.SALMA_KB.put(_k, String(meters / 1000)); } catch (_) {} }
+    return meters / 1000;
   } catch (_) { return null; }
 }
 
@@ -4480,7 +4493,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     const withCoords = validatedStops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
     const straightKm = new Map(withCoords.map(s => [s, haversineKm(anchorLat, anchorLng, s.lat, s.lng)]));
     const needsDrive = withCoords.filter(s => straightKm.get(s) <= MAX_ANCHOR_KM && straightKm.get(s) > 10);
-    const driveResults = await Promise.all(needsDrive.map(s => drivingDistanceKm(anchorLat, anchorLng, s.lat, s.lng, placesKey)));
+    const driveResults = await Promise.all(needsDrive.map(s => drivingDistanceKm(anchorLat, anchorLng, s.lat, s.lng, placesKey, env)));
     const driveKm = new Map(needsDrive.map((s, i) => [s, driveResults[i]]));
 
     finalStops = [];
@@ -7316,6 +7329,19 @@ export default {
       }
 
       try {
+        // TRAZADO GUARDADO (23 sept 2026) — "el mismo trazado se paga una vez": la guía pide siempre los mismos puntos
+        // (sus paradas), así que la respuesta se guarda en KV, permanente, por todo lo que altera el resultado
+        // (puntos, modo, carretera preferida, pasos). Abrir el mapa de una guía ya vista = 0 llamadas a Directions.
+        const _includeSteps = url.searchParams.get('steps') === '1';
+        const _dirKey = env.SALMA_KB
+          ? 'dir:' + (await _sha256Hex([origin, destination, waypoints, mode, preferRoad, _includeSteps ? 1 : 0].join('|'))).slice(0, 40)
+          : null;
+        if (_dirKey) {
+          try {
+            const _c = await env.SALMA_KB.get(_dirKey);
+            if (_c) return new Response(_c, { headers: { ...corsH, 'Cache-Control': 'public, max-age=86400', 'X-Catalog': 'hit' } });
+          } catch (_) {}
+        }
         let dirUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&mode=${mode}&key=${placesKey}`;
         if (waypoints) dirUrl += `&waypoints=${encodeURIComponent(waypoints)}`;
         if (preferRoad) dirUrl += `&alternatives=true`;
@@ -7374,8 +7400,10 @@ export default {
 
         const payload = includeSteps ? { polyline, legs, steps } : { polyline, legs };
         if (roadCheck) payload.road_check = roadCheck;
-        return new Response(JSON.stringify(payload), {
-          headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
+        const _payloadJson = JSON.stringify(payload);
+        if (_dirKey) { try { await env.SALMA_KB.put(_dirKey, _payloadJson); } catch (_) {} }
+        return new Response(_payloadJson, {
+          headers: { ...corsH, 'Cache-Control': 'public, max-age=86400', 'X-Catalog': 'miss' }
         });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
