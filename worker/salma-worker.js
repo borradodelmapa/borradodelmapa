@@ -6512,27 +6512,6 @@ async function getGoogleAccessToken(creds) {
   return tokenData.access_token;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// LOGGING — Registra cada petición en Firestore para admin
-// ═══════════════════════════════════════════════════════════════
-async function logToFirestore(logData) {
-  try {
-    const projectId = 'borradodelmapa-85257';
-    const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/admin_logs/${docId}`;
-    const fields = {};
-    for (const [k, v] of Object.entries(logData)) {
-      if (typeof v === 'number') fields[k] = { integerValue: String(Math.round(v)) };
-      else fields[k] = { stringValue: String(v || '') };
-    }
-    await fetch(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fields }),
-    });
-  } catch (_) { /* logging no debe romper el flujo */ }
-}
-
 // BLOQUE E — vuelca a Firestore cada sustitución de enlace de Maps.
 // Colección aislada `url_validation_incidents` — Bloque B (monitor de calidad) podrá leerla tal cual.
 // Escribe autenticado con el ID token del propio usuario (mismo patrón que flight_watches).
@@ -7699,39 +7678,6 @@ export default {
         );
         const ga4Data = await ga4Res.json();
         return new Response(JSON.stringify(ga4Data), { headers: corsH });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
-      }
-    }
-
-    // ─── ENDPOINT /admin-chat (Chat del admin con Claude) ───
-    if (request.method === 'POST' && url.pathname === '/admin-chat') {
-      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
-
-      // Admin: ADMIN_TOKEN o sesión Firebase de la cuenta admin (ver isAdminRequest)
-      if (!(await isAdminRequest(request, env))) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
-      }
-
-      let chatBody;
-      try { chatBody = await request.json(); } catch (e) {
-        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
-      }
-
-      const apiKey = env.OPENAI_API_KEY;
-      if (!apiKey) {
-        return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500, headers: corsH });
-      }
-
-      try {
-        const result = await callOpenAI(apiKey, {
-          model: 'gpt-4o-mini',
-          max_tokens: 2000,
-          system: chatBody.system || '',
-          messages: chatBody.messages || [],
-        });
-        // Return in Anthropic-compatible format for any existing consumers
-        return new Response(JSON.stringify({ content: [{ type: 'text', text: result.text }] }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
@@ -10118,16 +10064,6 @@ INSTRUCCIONES:
                 await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvtB)}\n\n`));
 
                 if (_urlIncidents.length) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
-                ctx.waitUntil(logToFirestore({
-                  timestamp: new Date().toISOString(),
-                  type: 'route_blocks',
-                  user_message: message.slice(0, 200),
-                  chars_out: JSON.stringify(route).length,
-                  latency_ms: Date.now() - reqStartTime,
-                  status: 'ok',
-                  error_detail: `${blocks.length} bloques`,
-                  model: reqModel,
-                }));
 
                 await writer.close();
                 return; // Sale del flujo — ruta larga completada
@@ -11347,17 +11283,6 @@ REGLAS:
         // BLOQUE E — volcar sustituciones de enlaces de Maps a Firestore
         if (_urlIncidents.length) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
 
-        // Log exitoso
-        ctx.waitUntil(logToFirestore({
-          timestamp: new Date().toISOString(),
-          type: isRoute ? 'route' : (isFlightReq ? 'flight_search' : 'conversational'),
-          user_message: message.slice(0, 200),
-          chars_out: allText.length,
-          latency_ms: Date.now() - reqStartTime,
-          status: 'ok',
-          error_detail: '',
-          model: reqModel,
-        }));
       } catch (e) {
         // El post-procesado normal (reparar fotos, links, etc.) puede no haber llegado a
         // correr si algo de ahí arriba lanzó esta excepción — reparar aquí también antes de
@@ -11366,17 +11291,6 @@ REGLAS:
         let _fallbackReply = allText;
         try { _fallbackReply = _repairBrokenPhotoMarkdown(allText); } catch (_) {}
         try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _fallbackReply || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
-        // Log error
-        ctx.waitUntil(logToFirestore({
-          timestamp: new Date().toISOString(),
-          type: isRoute ? 'route' : 'conversational',
-          user_message: message.slice(0, 200),
-          chars_out: 0,
-          latency_ms: Date.now() - reqStartTime,
-          status: 'error',
-          error_detail: e.message || 'Stream error',
-          model: reqModel,
-        }));
       } finally {
         await writer.close();
       }

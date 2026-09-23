@@ -49,10 +49,10 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Admin logs — solo autenticados (seguridad en logs sensibles)
+    // Admin logs — CERRADA el 23 sept 2026. Nada la usa: el Worker escribía sin sesión (la regla lo rechazaba siempre)
+    // y el panel nuevo no la lee. Cerrada del todo por seguridad (antes cualquier usuario autenticado podía leer y escribir).
     match /admin_logs/{logId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null;
+      allow read, write: if false;
     }
 
     // BLOQUE E — incidentes de validación de enlaces de Maps.
