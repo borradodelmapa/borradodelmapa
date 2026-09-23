@@ -7189,11 +7189,12 @@ export default {
 
         const rows = (j.rows || []).map(x => x.f.map(c => c.v));
         const today = new Date().toISOString().slice(0, 10), yest = new Date(Date.now() - 864e5).toISOString().slice(0, 10), monthKey = today.slice(0, 7);
-        const perDay = {}, bySku = {}; let currency = 'EUR', lastUsage = '', month = 0, monthCredits = 0;
+        const perDay = {}, bySku = {}, allSku = {}; let currency = 'EUR', lastUsage = '', month = 0, monthCredits = 0;
         for (const [day, service, sku, cur, cost, credits, last] of rows) {
           const net = (Number(cost) || 0) + (Number(credits) || 0);   // los créditos vienen en negativo
           currency = cur || currency;
           perDay[day] = (perDay[day] || 0) + net;
+          allSku[service + ' · ' + sku] = (allSku[service + ' · ' + sku] || 0) + net;
           if (last > lastUsage) lastUsage = last;
           if (day.slice(0, 7) === monthKey) {
             month += net; monthCredits += Number(credits) || 0;
@@ -7209,6 +7210,9 @@ export default {
           month: { key: monthKey, eur: round2(month), credits: round2(monthCredits) },
           by_sku: Object.keys(bySku).map(k => ({ name: k, eur: round2(bySku[k]) })).filter(x => Math.abs(x.eur) >= 0.005).sort((a, b) => b.eur - a.eur).slice(0, 12),
           days,
+          rows_read: rows.length,
+          zero_skus: Object.keys(allSku).filter(k => Math.abs(allSku[k]) < 0.005).slice(0, 10),
+          first_day: Object.keys(perDay).sort()[0] || null,
           note: 'Coste real según la facturación de Google (neto de créditos). Llega con unas horas de retraso: el dato de hoy está incompleto.',
         });
         try { if (env.SALMA_KB) await env.SALMA_KB.put(CACHE_KEY, out, { expirationTtl: 1800 }); } catch (_) {}
