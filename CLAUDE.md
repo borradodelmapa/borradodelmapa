@@ -1461,6 +1461,14 @@ E) frontend (`map-modal.js`); F) cuotas diarias duras en Google + contadores por
   **Places confirmado con captura; las otras 4 (Directions, Static, Geocoding, Maps JS) confirmadas de palabra por Paco el 23 sept, sin captura** (enlaces de comprobación: `console.cloud.google.com/google/maps-apis/quotas?project=gen-lang-client-0108818247&api=<api>-backend.googleapis.com`).
   Se reinician a las 9:00 (hora de España). **Si la app empieza a fallar (fotos, verificación, mapas) con OVER_DAILY_LIMIT/RESOURCE_EXHAUSTED, es este candado**: subir la cuota ahí, no tocar código. Las cuotas se cuentan en
   peticiones, no en euros; el tope en euros por servicio (segunda capa) es del Worker y está PENDIENTE de hacer. Dato: el 23 sept ya había 653 peticiones a Places a las 20:27.
+- SEGUNDA CAPA HECHA — TOPE DE GASTO PROPIO EN EL WORKER (Worker `4554365f-fa98-4e8d-b4c4-d1b54047bb13`, commit `1051796a`): el `fetch` del módulo (`const fetch = …` al
+  principio de `salma-worker.js`, el global queda intacto) pasa TODA llamada a `maps.googleapis.com` por `_googleGate()`, que suma un coste ESTIMADO (precios de lista, sin cupos
+  gratis; `GOOGLE_UNIT_EUR`) a contadores KV `gspend:d:{día}` (JSON {eur, n:{sku:llamadas}}, TTL 40 d) y `gspend:m:{mes}` (TTL 400 d). Si una llamada HARÍA superar el tope,
+  NO llama a Google y responde `OVER_QUERY_LIMIT` (429 en foto y mapa estático); las cachés no guardan errores, así que al día siguiente vuelve solo. FAIL-OPEN si KV falla.
+  **Topes: 8 €/día y 50 €/mes, editables SIN desplegar** con `npx wrangler kv key put "gcap:config" '{"daily_eur":8,"monthly_eur":50}' --binding=SALMA_KB --remote -c wrangler.toml`
+  (memoria de 60 s). Ver el gasto propio: `GET /admin/google-usage` (solo admin) o `wrangler kv key get "gspend:d:<día>" --text …` (¡usar `--text`!). **Si aparece
+  `[GASTO-GOOGLE] TOPE alcanzado` en los logs o fotos/verificación fallan y Google no ha cortado, es ESTE tope: subir `gcap:config`.** No cubre llamadas del navegador con
+  la clave pública (las frena la cuota diaria de Google). Probado 11/11 simulado + 8 baterías sin regresión + producción (1 llamada nueva contada, 1 de caché no).
 - PENDIENTE de Paco: B2 exportación de la facturación a BigQuery (dataset `billing_export`, multirregión EU, "Coste de uso estándar").
 
 **Plan del panel admin nuevo (acordado con Paco 23 sept 2026; el panel será SOLO estadísticas y gastos de proveedores,
