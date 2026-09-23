@@ -2207,6 +2207,53 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     ni desplegar nada** — solo se añadió el TXT de Twilio, nada más. Investigar con Paco
     qué sirve realmente `borradodelmapa.com` hoy (GitHub Pages o Netlify) antes de dar por
     buena la arquitectura descrita en este archivo.
+  - **23 sept 2026 — el "compliance profile" de arriba se resolvió con un RECHAZO
+    formal del Business Profile de Twilio, con 4 causas concretas por email. Una ya
+    arreglada y confirmada; las otras 3 pendientes, una de ellas (18602) depende de una
+    decisión de negocio de Paco, no de código.** Los 4 errores, tal como llegaron:
+    1. **18606 — el email de contacto del perfil no coincidía con el dominio de la
+       web** (llevaba un Gmail, no algo `@borradodelmapa.com`). **ARREGLADO Y
+       CONFIRMADO por Paco (23 sept 2026).** Se creó `paco@borradodelmapa.com` con
+       **ImprovMX** (reenvío de email gratis, sin buzón propio — todo lo que llegue ahí
+       rebota a `paco.defoto@gmail.com`): 2 registros `MX` (prioridad 10 →
+       `mx1.improvmx.com`, prioridad 20 → `mx2.improvmx.com`) + 1 `TXT`/SPF
+       (`v=spf1 include:spf.improvmx.com ~all`) en la raíz (`@`) del dominio, añadidos
+       en **Netlify DNS** (ver hallazgo de arriba — es donde de verdad vive el DNS).
+       ImprovMX confirma "Activo"/verificado. La prueba de enviarse un email a sí mismo
+       desde el mismo Gmail no sirve para comprobarlo (Gmail descarta en silencio un
+       mensaje que vuelve con el mismo Message-ID, para evitar bucles — no es un fallo
+       de la configuración, lo explica el propio ImprovMX por email) — se dio por bueno
+       con el estado "Activo" de ImprovMX sin insistir en esa prueba. Con eso hecho, se
+       cambió el email de contacto del Business Profile en Twilio a
+       `paco@borradodelmapa.com` y **quedó verificado en pantalla**.
+       **Sin coste** — ImprovMX es gratis para reenvío (el plan de pago, no contratado,
+       es solo para poder ENVIAR desde esa dirección vía SMTP, que aquí no hace falta).
+    2. **18601 — nombre del negocio o email no asociados con la web** (`borradodelmapa.com`)
+       — probablemente por el certificado SSL sin datos de organización (SSL normal,
+       no EV) o por no encontrar el nombre del negocio en la propia web. **Sin tocar
+       todavía.**
+    3. **18603 — formato/verificación de la dirección** — la dirección puesta en el
+       perfil no se pudo confirmar en un formato válido. **Sin tocar todavía.**
+    4. **18602 — Business ID (identificador fiscal/registro) no verificable — el
+       bloqueo de fondo, no es un fix de una línea.** Twilio/Meta hacen una
+       comprobación KYB (Know Your Business): cruzan el nombre del negocio + su
+       identificador fiscal/de registro contra un registro oficial de empresas (en
+       España, el Registro Mercantil). Un DNI personal no es una empresa registrada y
+       no pasa esta comprobación — y probablemente darse de alta como autónomo
+       (Hacienda/AEAT) tampoco baste, porque es un registro distinto al que suelen
+       consultar estos proveedores de KYB. El camino más fiable es tener una empresa
+       de verdad (SL) con CIF. **Esto conecta directamente con la decisión ya anotada
+       en la sesión del 21 sept 2026 ("Alta de autónomo: NO todavía. Primero validar
+       con testers") — no es una tarea técnica, es una decisión de negocio de Paco, y
+       no se le va a empujar hacia ella; solo queda anotado aquí el porqué del bloqueo
+       para cuando él quiera decidir.**
+    **Pendiente:** decidir con Paco si se intenta maquillar 18601/18603 sin más (dominio
+    verificado ya ayuda a 18601; revisar el formato exacto de la dirección para 18603) o
+    si se espera a resolver 18602 antes de volver a mandar el perfil a revisión — Twilio
+    normalmente evalúa el conjunto, así que reenviar con solo 3 de 4 arreglados puede
+    volver a rebotar. Enlace de edición del perfil: Twilio Console → Trust Hub →
+    Customer Profiles → el bundle del Business Profile de producción (Paco lo tiene
+    guardado en marcadores/email — no repetido aquí porque incluye el ID de cuenta).
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
