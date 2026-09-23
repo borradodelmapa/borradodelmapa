@@ -6986,7 +6986,7 @@ export default {
     // visualización de una guía ya generada volvía a pagar la misma foto a Google.
     // Reutiliza el bucket SALMA_PHOTOS ya existente (prefijo propio 'photocache/',
     // servido después por la ruta /photo/* que ya lee de este mismo bucket).
-    async function _getCachedPlacePhoto(placesKey, photoRef) {
+    async function _getCachedPlacePhoto(placesKey, photoRef, r2Only = false) {
       const r2Key = 'photocache/' + (await _sha256Hex(photoRef)) + '.jpg';
       if (env.SALMA_PHOTOS) {
         try {
@@ -6996,6 +6996,7 @@ export default {
           }
         } catch (_) {}
       }
+      if (r2Only) return null; // solo mirar R2: NO llamar a Google
       // 16 sept, misma tarde: 12 paradas sin R2 cache aún piden foto a Google A LA VEZ.
       // Sin timeout propio, si Google responde lento a alguna, ese fetch se queda
       // colgado hasta que Cloudflare corta el Worker por su cuenta (con la respuesta
@@ -7043,8 +7044,24 @@ export default {
         let photo = null;
         let resolvedRef = ref || null;
 
+        // CATÁLOGO DE FOTOS (23 sept 2026) — "cada foto se paga UNA vez":
+        // 1) R2 por el ref pedido (caso normal: 0 llamadas a Google). 2) ALIAS `pa:{hash(ref)}` → el ref bueno con el que
+        // ya se resolvió una vez esta foto (guías antiguas con refs caducados: sin alias, cada apertura repetía el circuito
+        // completo). 3) solo entonces, Google con el ref pedido (comportamiento de siempre).
+        let aliasKey = null;
         if (ref) {
-          photo = await _getCachedPlacePhoto(placesKey, ref).catch(() => null);
+          photo = await _getCachedPlacePhoto(placesKey, ref, true).catch(() => null);
+          if (!photo && env.SALMA_KB) {
+            aliasKey = 'pa:' + (await _sha256Hex(ref)).slice(0, 40);
+            try {
+              const al = await env.SALMA_KB.get(aliasKey);
+              if (al) {
+                const p2 = await _getCachedPlacePhoto(placesKey, al).catch(() => null);
+                if (p2) { photo = p2; resolvedRef = al; }
+              }
+            } catch (_) {}
+          }
+          if (!photo) photo = await _getCachedPlacePhoto(placesKey, ref).catch(() => null);
         }
 
         // 16 sept, misma tarde: el photo_reference que guarda una guía NO es un ID
@@ -7074,7 +7091,13 @@ export default {
                 const cached = await env.SALMA_KB.get('spotcache:' + (variants[0] || ''));
                 if (cached) {
                   const c = JSON.parse(cached);
-                  if (c.photo_ref) photoRef = c.photo_ref;
+                  if (c.photo_ref) {
+                    // Guarda de homónimos: ahora estas entradas son PERMANENTES, así que si se pide con coords y la
+                    // entrada guardada cae a >30 km, es otro sitio con el mismo nombre: no se usa.
+                    const okGeo = !(lat && lng && typeof c.lat === 'number' && typeof c.lng === 'number')
+                      || haversineKm(parseFloat(lat), parseFloat(lng), c.lat, c.lng) <= 30;
+                    if (okGeo) photoRef = c.photo_ref;
+                  }
                 }
               } catch (_) {}
             }
@@ -7093,12 +7116,23 @@ export default {
             if (photo) resolvedRef = photoRef;
           }
 
-          if (!photo) {
+          // "No encontrado" guardado (30 días, por nombre y zona): un lugar que Google no tiene con foto no repite la búsqueda
+          // en cada apertura. Solo se guarda si Google llegó a contestar (un error de cuota o de red NO cuenta).
+          const _missKey = env.SALMA_KB
+            ? 'spotmiss:' + (normalizeSpotKey(name)[0] || '') + ((lat && lng) ? ':' + parseFloat(lat).toFixed(1) + ':' + parseFloat(lng).toFixed(1) : '')
+            : null;
+          let _skipFind = false;
+          if (_missKey) { try { if (await env.SALMA_KB.get(_missKey)) _skipFind = true; } catch (_) {} }
+
+          if (!photo && !_skipFind) {
             const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
             const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
             const findData = await findRes.json();
             const candidate = findData.candidates?.[0];
             let freshRef = candidate?.photos?.[0]?.photo_reference || null;
+            if (_missKey && !freshRef && (findData?.status === 'OK' || findData?.status === 'ZERO_RESULTS')) {
+              try { await env.SALMA_KB.put(_missKey, '1', { expirationTtl: 2592000 }); } catch (_) {}
+            }
 
             if (freshRef && lat && lng) {
               const pLat = candidate?.geometry?.location?.lat;
@@ -7108,8 +7142,9 @@ export default {
                 if (distKm > 30) freshRef = null;
               }
             }
-            // Cachear photo_ref en KV para futuras llamadas (30 días) — prefijo propio,
-            // nunca pisa el índice curado permanente 'spot:*'
+            // Cachear photo_ref en KV PARA SIEMPRE (antes 30 días: pasado el plazo, como Google da un ref distinto cada vez,
+            // la foto se repagaba entera) — prefijo propio, nunca pisa el índice curado permanente 'spot:*'.
+            // Al leerla hay guarda de distancia contra homónimos.
             if (env.SALMA_KB && freshRef) {
               const cacheKey = 'spotcache:' + normalizeSpotKey(name)[0];
               const existing = await env.SALMA_KB.get(cacheKey).catch(() => null);
@@ -7119,13 +7154,19 @@ export default {
                 spotData.lat = spotData.lat || candidate.geometry.location.lat;
                 spotData.lng = spotData.lng || candidate.geometry.location.lng;
               }
-              env.SALMA_KB.put(cacheKey, JSON.stringify(spotData), { expirationTtl: 2592000 }).catch(() => {});
+              await env.SALMA_KB.put(cacheKey, JSON.stringify(spotData)).catch(() => {});
             }
             if (freshRef) {
               photo = await _getCachedPlacePhoto(placesKey, freshRef).catch(() => null);
               if (photo) resolvedRef = freshRef;
             }
           }
+        }
+
+        // ALIAS: si el ref pedido no valía y se ha resuelto con otro, se recuerda para siempre (pa:{hash(ref)} → ref bueno).
+        // La próxima apertura de esa guía va directa a la imagen ya guardada en R2, sin probar el ref caducado ni buscar de nuevo.
+        if (photo && ref && aliasKey && resolvedRef && resolvedRef !== ref && env.SALMA_KB) {
+          try { await env.SALMA_KB.put(aliasKey, resolvedRef); } catch (_) {}
         }
 
         if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
