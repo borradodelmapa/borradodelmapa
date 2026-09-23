@@ -2642,6 +2642,7 @@ async function searchEvents(destination, dateFrom, dateTo, serperKey) {
     const month = monthNames[fromDate.getMonth()];
     const year = fromDate.getFullYear();
     const query = `eventos ${destination} ${month} ${year} festivales cultura fiestas`;
+    console.log('[EVENTOS] query:', query);
 
     const res = await fetch('https://google.serper.dev/search', {
       method: 'POST',
@@ -2656,16 +2657,21 @@ async function searchEvents(destination, dateFrom, dateTo, serperKey) {
         num: 5,
       }),
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.log('[EVENTOS] Serper respondió', res.status, await res.text().catch(() => ''));
+      return null;
+    }
     const data = await res.json();
 
     const results = (data.organic || []).slice(0, 5).map(r => ({
       title: r.title || '',
       snippet: r.snippet || '',
     }));
+    console.log('[EVENTOS]', results.length, 'resultados de Serper');
 
     return results.length > 0 ? results : null;
   } catch (e) {
+    console.log('[EVENTOS] error:', e.message);
     return null;
   }
 }
@@ -9443,15 +9449,20 @@ INSTRUCCIONES:
     // lo cazaba isRouteRequest/isDaysDestination y se quedaba sin buscar eventos).
     const _tripIntentRe = /\b(voy a|me voy a|me voy|vamos a|nos vamos a|ir[ée]\s+a|viajo a|de viaje a)\b/i;
     const _talkingAboutTrip = isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute || _tripIntentRe.test(message);
+    console.log('[EVENTOS] gate:', { eventDates: _eventDates, talkingAboutTrip: _talkingAboutTrip, hasKey: !!env.SERPER_API_KEY });
     if (_eventDates && _eventDates.from && _talkingAboutTrip && env.SERPER_API_KEY) {
       try {
-        // Extraer destino del mensaje (simplificado: primera palabra capitalizada significativa)
+        // El regex de mayúscula+minúsculas falla si el usuario escribe TODO EN MAYÚSCULAS
+        // ("BILBAO" no cuadra con [A-Z][a-z]+) — caso real, 23 sept. El ancla de país
+        // (arriba, ~línea 9177) ya resuelve el destino con Google Find Place sin depender
+        // de mayúsculas/minúsculas — se reutiliza aquí primero, sin llamada nueva a nada.
         const destMatch = message.match(/(?:a |en |por |de )([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*)/);
-        const destination = destMatch ? destMatch[1] : (currentRoute ? (currentRoute.name || currentRoute.title) : null);
+        const destination = (anchorCountry && anchorCountry.locality) || (destMatch ? destMatch[1] : null) || (currentRoute ? (currentRoute.name || currentRoute.title) : null);
+        console.log('[EVENTOS] destino extraido:', destination);
         if (destination) {
           eventData = await searchEvents(destination, _eventDates.from, _eventDates.to, env.SERPER_API_KEY);
         }
-      } catch (e) { /* Fallo silencioso */ }
+      } catch (e) { console.log('[EVENTOS] error en el bloque:', e.message); }
     }
 
     // ─── D + NIVEL 1: VERIFICACIÓN DE HECHOS CRÍTICOS (pre-Claude) ───
