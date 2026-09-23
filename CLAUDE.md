@@ -1479,8 +1479,11 @@ sin chat ni gestión de proyecto — eso se hace con Code). Checklist, marcar al
 - **B — proteger el dinero (Paco, sin código, urgente):** [ ] presupuesto+alertas Google Cloud (~15 €/mes, 50/90/100 %);
   [ ] activar exportación de facturación de Google a BigQuery (dataset multi-región; SOLO acumula desde que se activa);
   [ ] mirar si la cuenta de Anthropic tiene "Admin keys" (organización).
-- **C — limpiar (Claude, con OK):** [ ] quitar pestañas Chat/Proyecto/Marketing/Salma/Contabilidad y botón Proyecto;
-  [ ] borrar `/admin-chat` del Worker; [ ] cerrar la regla Firestore `admin_logs` (hoy lee/escribe cualquier usuario
+- **C — limpiar (Claude, con OK):** [x] HECHO 23 sept 2026 (panel `2026-09-23.3`, commit `e2d9161` del repo `Admin-borradodelmapa`): fuera Chat/Proyecto/Marketing/Salma/Contabilidad,
+  botón Proyecto duplicado, "Consulta rápida" y tarjetas Llamadas Salma/Errores; quedan Dashboard, Analytics, Usuarios y Configuración; `admin.js` de 64 KB a 29 KB. El punto
+  de salud "Anthropic" pasó a "OpenAI" (el Worker solo comprueba OpenAI; una comprobación real de Anthropic —`/v1/messages/count_tokens`, gratis— queda pendiente). Probado en jsdom
+  (0 errores, 4 pestañas, 6 puntos verdes). NOTA: `showModal` queda como código muerto en `admin.js`; el Dashboard/Usuarios leen Firestore directo y las reglas solo dejan leer el
+  propio doc → seguirán en "—" hasta el `/admin/stats` del Worker (paso D). [ ] borrar `/admin-chat` del Worker (ya sin ningún llamador en el panel); [ ] cerrar la regla Firestore `admin_logs` (hoy lee/escribe cualquier usuario
   autenticado) y quitar `logToFirestore()` (nunca funcionó: escribe sin sesión y la regla lo rechaza).
 - **D — datos automáticos:** [ ] `/admin/stats` (Worker, `isAdminRequest`, cuenta de servicio; el panel NO lee Firestore
   directo porque las reglas solo dejan leer el propio doc y no hay regla para `admin/*`); [ ] Paco crea secrets: admin key
