@@ -987,9 +987,11 @@ function _pemToPkcs8(pem) {
  * Se usa SOLO en el webhook de Stripe para escribir en Firestore sin token de
  * usuario. Cacheado en KV (_sa_token, ~55 min).
  */
-async function getServiceAccountToken(env) {
+async function getServiceAccountToken(env, scope, cacheKey) {
+  scope = scope || 'https://www.googleapis.com/auth/datastore';
+  cacheKey = cacheKey || '_sa_token';
   try {
-    const cached = env.SALMA_KB && await env.SALMA_KB.get('_sa_token');
+    const cached = env.SALMA_KB && await env.SALMA_KB.get(cacheKey);
     if (cached) return cached;
   } catch (_) {}
 
@@ -1003,7 +1005,7 @@ async function getServiceAccountToken(env) {
   const header = { alg: 'RS256', typ: 'JWT' };
   const claim = {
     iss: sa.client_email,
-    scope: 'https://www.googleapis.com/auth/datastore',
+    scope,
     aud: 'https://oauth2.googleapis.com/token',
     iat: now,
     exp: now + 3600,
@@ -1028,7 +1030,7 @@ async function getServiceAccountToken(env) {
   const data = await res.json();
   if (!data.access_token) throw new Error('OAuth token error: ' + JSON.stringify(data).slice(0, 200));
   try {
-    if (env.SALMA_KB) await env.SALMA_KB.put('_sa_token', data.access_token, { expirationTtl: 3300 });
+    if (env.SALMA_KB) await env.SALMA_KB.put(cacheKey, data.access_token, { expirationTtl: 3300 });
   } catch (_) {}
   return data.access_token;
 }
@@ -7116,6 +7118,78 @@ export default {
         }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: 'No se pudieron leer los ingresos: ' + e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── GET /admin/google-real — coste REAL de Google según la exportación de facturación a BigQuery (solo admin, SOLO LECTURA) ───
+    // La exportación (proyecto Salma Project, dataset billing_export) la rellena Google con lo que de verdad cobra, con unas horas de
+    // retraso. Este endpoint la lee con la cuenta de servicio del Worker (necesita en Salma Project: "BigQuery Job User" +
+    // "BigQuery Data Viewer"). Resultado cacheado 30 min en KV (?force=1 lo salta) para no consultar en cada carga del panel.
+    // Coste: la consulta lee unas pocas MB de una tabla particionada, muy por debajo del 1 TB/mes gratis de BigQuery.
+    if (request.method === 'GET' && url.pathname === '/admin/google-real') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      const BQ_PROJECT = 'gen-lang-client-0108818247';
+      const BQ_TABLE = '`' + BQ_PROJECT + '.billing_export.gcp_billing_export_v1_012460_9B02AE_D84C54`';
+      const CACHE_KEY = 'gbq:cache';
+      const force = url.searchParams.get('force') === '1';
+      try {
+        if (!force && env.SALMA_KB) {
+          const c = await env.SALMA_KB.get(CACHE_KEY);
+          if (c) return new Response(c, { headers: corsH });
+        }
+        const token = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/bigquery', '_sa_token_bq');
+        const sql = 'SELECT FORMAT_DATE("%Y-%m-%d", DATE(usage_start_time)) AS day, service.description AS service, sku.description AS sku, ' +
+          'currency, SUM(cost) AS cost, SUM(IFNULL((SELECT SUM(c.amount) FROM UNNEST(credits) c), 0)) AS credits, ' +
+          'FORMAT_TIMESTAMP("%Y-%m-%dT%H:%M:%SZ", MAX(usage_end_time)) AS last_usage ' +
+          'FROM ' + BQ_TABLE + ' WHERE usage_start_time >= TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 40 DAY)) ' +
+          'GROUP BY day, service, sku, currency';
+        const r = await fetch('https://bigquery.googleapis.com/bigquery/v2/projects/' + BQ_PROJECT + '/queries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ query: sql, useLegacySql: false, location: 'EU', timeoutMs: 20000, maxResults: 10000 }),
+          signal: AbortSignal.timeout(28000),
+        });
+        const j = await r.json();
+        if (!r.ok) {
+          const msg = (j.error && j.error.message) || ('HTTP ' + r.status);
+          let code = 'bq_error';
+          if (r.status === 403) code = 'no_permission';
+          else if (r.status === 404 || /Not found: Table|notFound/i.test(msg)) code = 'no_table';
+          return new Response(JSON.stringify({ error: msg.slice(0, 300), code }), { status: r.status === 403 ? 403 : 502, headers: corsH });
+        }
+        if (!j.jobComplete) return new Response(JSON.stringify({ error: 'BigQuery tardó demasiado; reintenta en un minuto.', code: 'timeout' }), { status: 504, headers: corsH });
+
+        const rows = (j.rows || []).map(x => x.f.map(c => c.v));
+        const today = new Date().toISOString().slice(0, 10), yest = new Date(Date.now() - 864e5).toISOString().slice(0, 10), monthKey = today.slice(0, 7);
+        const perDay = {}, bySku = {}; let currency = 'EUR', lastUsage = '', month = 0, monthCredits = 0;
+        for (const [day, service, sku, cur, cost, credits, last] of rows) {
+          const net = (Number(cost) || 0) + (Number(credits) || 0);   // los créditos vienen en negativo
+          currency = cur || currency;
+          perDay[day] = (perDay[day] || 0) + net;
+          if (last > lastUsage) lastUsage = last;
+          if (day.slice(0, 7) === monthKey) {
+            month += net; monthCredits += Number(credits) || 0;
+            const k = service + ' · ' + sku;
+            bySku[k] = (bySku[k] || 0) + net;
+          }
+        }
+        const round2 = n => Math.round(n * 100) / 100;
+        const days = Object.keys(perDay).sort().reverse().slice(0, 10).map(d => ({ day: d, eur: round2(perDay[d]) }));
+        const out = JSON.stringify({
+          source: 'bigquery', currency, updated_at: new Date().toISOString(), last_usage_at: lastUsage || null,
+          today: round2(perDay[today] || 0), yesterday: round2(perDay[yest] || 0),
+          month: { key: monthKey, eur: round2(month), credits: round2(monthCredits) },
+          by_sku: Object.keys(bySku).map(k => ({ name: k, eur: round2(bySku[k]) })).filter(x => Math.abs(x.eur) >= 0.005).sort((a, b) => b.eur - a.eur).slice(0, 12),
+          days,
+          note: 'Coste real según la facturación de Google (neto de créditos). Llega con unas horas de retraso: el dato de hoy está incompleto.',
+        });
+        try { if (env.SALMA_KB) await env.SALMA_KB.put(CACHE_KEY, out, { expirationTtl: 1800 }); } catch (_) {}
+        return new Response(out, { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudo leer BigQuery: ' + e.message, code: 'exception' }), { status: 500, headers: corsH });
       }
     }
 
