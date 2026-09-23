@@ -1347,7 +1347,11 @@ menciones del mismo). Si vuelve a verse una foto repetida, revisar esto primero.
 `C:\Users\User\Desktop\salma-admin` (clon real, `git push` a `main` = despliegue en ~40 s). NO está
 en este repo (`salma/admin.html`, el editor de prompt, se BORRÓ el 23 sept 2026 — ver más abajo). El proyecto de Netlify
 `creative-boba-c8451a` declara ese dominio pero el DNS NO apunta a él: se desplegó ahí por error el 23
-sept (sin efecto real); no sirve para nada, ignorar.
+sept. **DECISIÓN DE PACO (23 sept): solo existe UN admin, el subdominio `admin.borradodelmapa.com`** (`/admin` de
+`borradodelmapa.com` ya da 404). **PENDIENTE (lo tiene que hacer Paco, no hay herramienta para borrar sitios de Netlify):
+BORRAR el sitio Netlify `creative-boba-c8451a`** (Site configuration → General → Danger zone → Delete site; NO tocar la
+zona DNS ni el proyecto `borradodelmapa`). Motivo: sigue sirviendo un panel duplicado y sus despliegues antiguos (marzo)
+exponen el `config.js` viejo con el hash de la contraseña. No volver a desplegar nada ahí.
 **Qué estaba roto:** `config.js` apuntaba al dominio muerto `paco-defoto.workers.dev` (todo en rojo/"—") y
 llevaba un `ADMIN_CHAT_TOKEN` fijo (ya caducado: el `ADMIN_TOKEN` se regeneró el 13 sept) y el
 `PASSWORD_HASH` SHA-256 de la contraseña — todo público en internet. Además `/health` se llamaba sin token.
