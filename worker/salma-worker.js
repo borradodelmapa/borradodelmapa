@@ -1506,7 +1506,7 @@ function formatDayHeaders(text, numDays) {
 // ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
 // Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
 // y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
-async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false) {
+async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false, env = null) {
   if (!placesKey || !reply) return reply;
 
   // Extraer nombres en negrita: **Nombre del Lugar**
@@ -1548,7 +1548,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   // Regla única: si no pasa validación → no se inyecta link.
   const regionCtx = region || '';
   const results = await Promise.all(matches.map(async ({ bold, name }) => {
-    const v = await getValidatedPlace(name, placesKey, regionCtx, countryCode, null);
+    const v = await getValidatedPlace(name, placesKey, regionCtx, countryCode, null, env);
     if (v) return { bold, name, placeId: v.place_id, googleName: v.name, lat: v.lat, lng: v.lng };
     return { bold, name, placeId: null };
   }));
@@ -4608,8 +4608,37 @@ const GOOD_PLACE_TYPES = new Set([
 // - tipos: rechaza si es barrio/calle/zona administrativa sin ser también POI
 // - (dirección contiene región/país O distancia <10km a coord bias)
 // Si no pasa → null. Regla única: no se devuelve lugar no verificado.
-async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords) {
+// ── CATÁLOGO "nombre → lugar" del chat (23 sept 2026) ──
+// Cada consulta a Google (Find Place / Text Search) se guarda en KV y no se repite: el mismo nombre en otra
+// respuesta, otro chat u otro usuario sale de aquí. Positivos PERMANENTES; "no encontrado" 30 días y solo si
+// Google llegó a contestar (un timeout o un error de cuota NO se guarda como "no existe").
+const _nmNorm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim();
+async function nameCacheGet(env, key) {
+  if (!env?.SALMA_KB) return null;
+  try { const raw = await env.SALMA_KB.get(key); return raw ? JSON.parse(raw) : null; } catch (_) { return null; }
+}
+async function nameCachePut(env, key, value, ttlSeconds) {
+  if (!env?.SALMA_KB) return;
+  try {
+    await env.SALMA_KB.put(key, JSON.stringify(value), ttlSeconds ? { expirationTtl: ttlSeconds } : undefined);
+  } catch (_) {}
+}
+
+async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords, env) {
   if (!placesKey || !query || query.length < 3) return null;
+  // CATÁLOGO: si ya se resolvió este nombre (país + región + nombre), CERO llamadas a Google.
+  // Con coords de sesgo se exige que la ficha guardada caiga a <10 km (misma regla que la validación);
+  // un "no encontrado" guardado solo se cree cuando no hay sesgo (con sesgo el fallo pudo ser por distancia).
+  const _hasBias = !!(biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01);
+  const _vpKey = 'vp:' + (countryCode || '??').toLowerCase() + ':' + _nmNorm(region) + ':' + _nmNorm(query);
+  const _hit = await nameCacheGet(env, _vpKey);
+  if (_hit) {
+    if (_hit.miss) { if (!_hasBias) return null; }
+    else if (_hit.place_id && typeof _hit.lat === 'number' && typeof _hit.lng === 'number') {
+      if (!_hasBias || haversineKm(biasCoords.lat, biasCoords.lng, _hit.lat, _hit.lng) < 10) return _hit;
+    }
+  }
+  let _errored = false; // Google no llegó a contestar bien en algún intento → no guardar "no encontrado"
   const FIELDS = 'place_id,name,geometry,formatted_address,photos,business_status,types';
   const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
   const q = region ? `${query}, ${region}` : query;
@@ -4623,8 +4652,9 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
         { signal: AbortSignal.timeout(3500) }
       );
       const d = await r.json();
+      if (d?.status && d.status !== 'OK' && d.status !== 'ZERO_RESULTS') _errored = true;
       return d?.candidates?.[0] || null;
-    } catch (_) { return null; }
+    } catch (_) { _errored = true; return null; }
   }
 
   async function tryTextSearch() {
@@ -4634,8 +4664,9 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
         { signal: AbortSignal.timeout(3500) }
       );
       const d = await r.json();
+      if (d?.status && d.status !== 'OK' && d.status !== 'ZERO_RESULTS') _errored = true;
       return d?.results?.[0] || null;
-    } catch (_) { return null; }
+    } catch (_) { _errored = true; return null; }
   }
 
   function isValid(cand) {
@@ -4661,10 +4692,13 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
   let c = await tryFindPlace(5000);
   if (!isValid(c)) c = await tryFindPlace(15000);
   if (!isValid(c)) c = await tryTextSearch();
-  if (!isValid(c)) return null;
+  if (!isValid(c)) {
+    if (!_hasBias && !_errored) await nameCachePut(env, _vpKey, { miss: 1 }, 2592000);
+    return null;
+  }
 
   const photoRef = c.photos?.[0]?.photo_reference || '';
-  return {
+  const _result = {
     place_id: c.place_id,
     name: c.name,
     lat: c.geometry.location.lat,
@@ -4673,6 +4707,8 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
     photo_ref: photoRef,
     formatted_address: c.formatted_address || ''
   };
+  await nameCachePut(env, _vpKey, _result);
+  return _result;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -5739,7 +5775,7 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
     case 'buscar_lugar':
       return await buscarLugar(toolInput, env.GOOGLE_PLACES_KEY, userCoords, env);
     case 'buscar_foto':
-      return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
+      return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY, env);
     case 'buscar_web':
       return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY);
     case 'generar_video':
@@ -5752,19 +5788,45 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
 }
 
 // ═══ BUSCAR FOTO — Google Places Photos ═══
-async function buscarFotoLugar(input, placesKey) {
+async function buscarFotoLugar(input, placesKey, env) {
   if (!placesKey || !input.lugar) return { error: 'Falta lugar o API key' };
 
   try {
-    // 1. Buscar el lugar en Google Places
-    const searchRes = await fetch(
-      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(input.lugar)}&inputtype=textquery&fields=name,photos,formatted_address&key=${placesKey}`
-    );
-    const searchData = await searchRes.json();
+    // CATÁLOGO "nombre → lugar + fotos" (23 sept 2026): la primera vez se pregunta a Google y se guarda el lugar
+    // y sus (hasta 3) photo_reference en KV, PARA SIEMPRE. A partir de ahí se devuelven SIEMPRE esos mismos
+    // identificadores: Google da un photo_reference distinto en cada respuesta, y como la imagen se guarda en R2
+    // por hash del identificador, con identificadores nuevos cada vez la foto se repagaba en cada respuesta.
+    // Con el identificador fijo, la imagen ya guardada en R2 se reutiliza siempre (0 llamadas a Google).
+    const _phKey = 'ph:' + _nmNorm(input.lugar);
+    const _phHit = await nameCacheGet(env, _phKey);
+    let place = null;
+    if (_phHit) {
+      if (_phHit.miss) return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
+      if (Array.isArray(_phHit.refs) && _phHit.refs.length) {
+        place = { name: _phHit.name, formatted_address: _phHit.address, photos: _phHit.refs.map(r => ({ photo_reference: r })) };
+      }
+    }
 
-    const place = searchData?.candidates?.[0];
-    if (!place || !place.photos || !place.photos.length) {
-      return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
+    if (!place) {
+      // 1. Buscar el lugar en Google Places (place_id es dato básico: no cambia el coste de la búsqueda)
+      const searchRes = await fetch(
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(input.lugar)}&inputtype=textquery&fields=place_id,name,photos,formatted_address&key=${placesKey}`
+      );
+      const searchData = await searchRes.json();
+
+      const cand = searchData?.candidates?.[0];
+      if (!cand || !cand.photos || !cand.photos.length) {
+        // "No encontrado" solo se guarda si Google llegó a contestar (no por un error de cuota o de red)
+        if (searchData?.status === 'OK' || searchData?.status === 'ZERO_RESULTS') await nameCachePut(env, _phKey, { miss: 1 }, 2592000);
+        return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
+      }
+      place = cand;
+      await nameCachePut(env, _phKey, {
+        place_id: cand.place_id || '',
+        name: cand.name || '',
+        address: cand.formatted_address || '',
+        refs: cand.photos.slice(0, 3).map(p => p.photo_reference).filter(Boolean),
+      });
     }
 
     // 2. Construir URLs PERMANENTES vía el proxy /photo del worker.
@@ -8996,7 +9058,7 @@ REGLAS:
       if (candidateName.length >= 3 && candidateName.length <= 100) {
         try {
           const bias = userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null;
-          const validated = await getValidatedPlace(candidateName, env.GOOGLE_PLACES_KEY, '', frontendCountryCode || '', bias);
+          const validated = await getValidatedPlace(candidateName, env.GOOGLE_PLACES_KEY, '', frontendCountryCode || '', bias, env);
           const reply = validated
             ? validated.url
             : 'No he encontrado ese sitio en Google Maps con seguridad.';
@@ -10418,7 +10480,7 @@ REGLAS:
           const _skipRouteLink = isHotelRequest(message);
           // ─── Inject primero: links en negritas (con límite 6 + timeout 8s) ───
           try {
-            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink);
+            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink, env);
             const _timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('inject_timeout')), 8000));
             reply = await Promise.race([_injectPromise, _timeoutPromise]);
           } catch (_) {}
@@ -10446,7 +10508,8 @@ REGLAS:
                   env.GOOGLE_PLACES_KEY,
                   '',
                   _cc,
-                  userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null
+                  userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null,
+                  env
                 );
                 if (validated) {
                   reply = reply.trimEnd() + `\n\n${validated.url}`;
@@ -10515,7 +10578,7 @@ REGLAS:
             if (boldNames.length > 0) {
               const photoPromises = boldNames.slice(0, 8).map(name => {
                 const query = _photoLocHint ? `${name}, ${_photoLocHint}` : name;
-                return buscarFotoLugar({ lugar: query }, env.GOOGLE_PLACES_KEY).catch(() => null);
+                return buscarFotoLugar({ lugar: query }, env.GOOGLE_PLACES_KEY, env).catch(() => null);
               });
               const photoResults = await Promise.all(photoPromises);
               // Inyectar cada foto justo después de su nombre en negrita
