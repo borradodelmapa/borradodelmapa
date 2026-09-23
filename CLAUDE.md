@@ -1299,7 +1299,7 @@ duplicada en el chat normal.** Paco pegó el texto de la respuesta ("una semana 
 detalle, y puso su foto en las dos — `_repairBrokenPhotoMarkdown()` (la función que
 sustituye cada `![Nombre](...)` por la URL real de `buscar_foto`) no deduplicaba, así que
 las dos menciones se resolvían a la misma URL y se veían las dos.
-**Arreglo, commit `<pendiente>`, DESPLEGADO (Version ID `b123ff2b-c381-4733-b7a4-ac261eb60671`,
+**Arreglo, commit `beea3e47`, DESPLEGADO (Version ID `b123ff2b-c381-4733-b7a4-ac261eb60671`,
 confirmado contra `/version`), sin probar en pantalla:** `_repairBrokenPhotoMarkdown` ahora
 lleva un `Set` de URLs ya usadas en esa misma respuesta — la primera aparición de una foto
 se queda, cualquier repetición exacta de la misma URL se quita. No toca ninguna API, es
