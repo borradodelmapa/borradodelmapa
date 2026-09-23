@@ -1346,12 +1346,11 @@ menciones del mismo). Si vuelve a verse una foto repetida, revisar esto primero.
 `borradodelmapa.github.io`; el fichero `CNAME` del repo no se toca NUNCA). Copia de trabajo local:
 `C:\Users\User\Desktop\salma-admin` (clon real, `git push` a `main` = despliegue en ~40 s). NO está
 en este repo (`salma/admin.html`, el editor de prompt, se BORRÓ el 23 sept 2026 — ver más abajo). El proyecto de Netlify
-`creative-boba-c8451a` declara ese dominio pero el DNS NO apunta a él: se desplegó ahí por error el 23
-sept. **DECISIÓN DE PACO (23 sept): solo existe UN admin, el subdominio `admin.borradodelmapa.com`** (`/admin` de
-`borradodelmapa.com` ya da 404). **PENDIENTE (lo tiene que hacer Paco, no hay herramienta para borrar sitios de Netlify):
-BORRAR el sitio Netlify `creative-boba-c8451a`** (Site configuration → General → Danger zone → Delete site; NO tocar la
-zona DNS ni el proyecto `borradodelmapa`). Motivo: sigue sirviendo un panel duplicado y sus despliegues antiguos (marzo)
-exponen el `config.js` viejo con el hash de la contraseña. No volver a desplegar nada ahí.
+`creative-boba-c8451a` (creado el 9 marzo 2026, conectado a este repo; DNS nunca apuntó a él) **SE BORRÓ el 23 sept
+2026** con `netlify sites:delete 0446fe41-1473-4d76-9acf-2b52376f359d` (la UI de Netlify no mostraba "Danger zone").
+Comprobado: sus URLs de netlify.app dan 404 y el `config.js` viejo con el hash ya no es accesible.
+**DECISIÓN DE PACO (23 sept): solo existe UN admin, el subdominio `admin.borradodelmapa.com`** (`/admin` de
+`borradodelmapa.com` da 404). NO volver a conectar este repo a Netlify ni desplegar el panel en otro sitio.
 **Qué estaba roto:** `config.js` apuntaba al dominio muerto `paco-defoto.workers.dev` (todo en rojo/"—") y
 llevaba un `ADMIN_CHAT_TOKEN` fijo (ya caducado: el `ADMIN_TOKEN` se regeneró el 13 sept) y el
 `PASSWORD_HASH` SHA-256 de la contraseña — todo público en internet. Además `/health` se llamaba sin token.
