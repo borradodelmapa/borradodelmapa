@@ -6853,6 +6853,18 @@ export default {
         checks.openai = { status: res.ok ? 'ok' : 'error', code: res.status, ms: Date.now() - t };
       } catch (e) { checks.openai = { status: 'error', error: e.message }; }
 
+      // 2b. Anthropic (Claude) — count_tokens: endpoint GRATUITO (no genera texto ni se factura), sirve para saber si la clave y el Gateway responden
+      try {
+        const t = Date.now();
+        const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages/count_tokens', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({ model: 'claude-sonnet-4-6', messages: [{ role: 'user', content: 'ping' }] }),
+          signal: AbortSignal.timeout(8000),
+        });
+        checks.anthropic = { status: res.ok ? 'ok' : 'error', code: res.status, ms: Date.now() - t };
+      } catch (e) { checks.anthropic = { status: 'error', error: e.message }; }
+
       // 3. Google Places API
       try {
         const t = Date.now();
