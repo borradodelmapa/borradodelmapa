@@ -9438,7 +9438,11 @@ INSTRUCCIONES:
     // no en cualquier pregunta suelta, para no saturar (pedido explícito de Paco, 23 sept).
     let eventData = null;
     const _eventDates = travelDates || extractDatesFromMessage(message) || extractMonthMention(message);
-    const _talkingAboutTrip = isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute;
+    // "voy a", "me voy a", "vamos a"... — intención de viaje en primera persona, no solo
+    // el patrón técnico de "N días en X" (23 sept: "voy a pasar unos días en Bilbao" no
+    // lo cazaba isRouteRequest/isDaysDestination y se quedaba sin buscar eventos).
+    const _tripIntentRe = /\b(voy a|me voy a|me voy|vamos a|nos vamos a|ir[ée]\s+a|viajo a|de viaje a)\b/i;
+    const _talkingAboutTrip = isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute || _tripIntentRe.test(message);
     if (_eventDates && _eventDates.from && _talkingAboutTrip && env.SERPER_API_KEY) {
       try {
         // Extraer destino del mensaje (simplificado: primera palabra capitalizada significativa)

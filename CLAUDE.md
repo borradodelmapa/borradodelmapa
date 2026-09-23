@@ -1273,6 +1273,25 @@ de implementar.
 **Pendiente: que Paco pruebe "3 días en Sevilla en noviembre" (o similar) y confirme que
 la respuesta menciona algún evento/fiesta real de esas fechas.**
 
+**Primera prueba de Paco (23 sept): "voy a pasar unos días este mes en Bilbao" — dio
+detalles bien, pero SIN eventos.** Causa: el filtro de "¿habla de un viaje?"
+(`isRouteRequest`/`isDaysDestination`) es un chequeo técnico pensado para detectar cuándo
+generar una ruta completa ("3 días en Bilbao"), no para frases naturales en primera
+persona ("voy a pasar unos días..." — "unos días" no cuadra con el patrón "un/dos/tres
+días"). El destino (Bilbao) y el mes ("este mes") sí se detectaban bien — solo la
+condición de "suena a viaje" se quedaba corta.
+**Arreglo, commit `<pendiente>`, DESPLEGADO (Version ID `c570cb05-af8c-494f-9455-ace9515a7557`,
+confirmado contra `/version`), sin probar en pantalla:** nuevo `_tripIntentRe`
+([salma-worker.js](worker/salma-worker.js)) que reconoce "voy a", "me voy a", "vamos a",
+"nos vamos a", "iré/ire a", "viajo a", "de viaje a" — se suma a las condiciones de antes.
+Probado con 6 frases en Node antes de desplegar: las 3 de intención de viaje ("voy a
+pasar...", "me voy a Sevilla en marzo", "vamos a pasar el finde en Toledo en octubre")
+disparan; las 3 que NO hablan de viajar ("hace frío en Bilbao en noviembre", "3 días en
+Sevilla" —esta sola no necesitaba el regex nuevo, ya la cazaba `isRouteRequest`—, "bilbao
+está en el norte de España") no disparan por este camino nuevo.
+**Pendiente: que Paco repita exactamente "voy a pasar unos días este mes en Bilbao" (o
+similar) y confirme que esta vez sí salen eventos.**
+
 ---
 
 ## Qué es este proyecto
