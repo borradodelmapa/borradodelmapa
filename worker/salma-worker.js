@@ -4624,6 +4624,26 @@ async function nameCachePut(env, key, value, ttlSeconds) {
   } catch (_) {}
 }
 
+// ── ¿Merece la pena pedir foto a Google para esta negrita? (23 sept 2026, a petición de Paco) ──
+// Solo se descartan: (1) titulares ("Dónde comer:", "Qué ver:"…) y (2) PLATOS. Nada más: cualquier otro nombre
+// (incluidos lugares en minúscula como "Playa del sardinero") conserva su foto. Los platos se detectan por la
+// primera palabra contra una lista de platos inequívocos — NO por cómo está escrito el nombre — para no descartar
+// nunca un lugar por error. Un plato que no esté en la lista sigue pidiendo foto (como hasta ahora).
+const _DISH_WORDS = new Set(('cocido sobao sobaos quesada quesadas anchoa anchoas rabas calamares paella tortilla chuleton cachopo ' +
+  'marmitako sorropotun pulpo croquetas fabada gazpacho salmorejo churros migas pisto ensaladilla albondigas callos ' +
+  'cochinillo cordero lechazo cabrito bacalao merluza atun jamon chorizo morcilla queso quesos mejillones almejas ' +
+  'langostinos gambas percebes pimientos puchero fideua arroz tarta flan natillas corbatas pastel').split(' '));
+function shouldLookupPhoto(name) {
+  const n = (name || '').trim();
+  if (n.length < 3) return false;
+  if (/[:：]\s*$/.test(n)) return false; // titular acabado en dos puntos
+  if (/^(d[oó]nde (comer|cenar|dormir|alojarse|aparcar|ir|tomar)|qu[eé] (ver|hacer|comer|visitar)|c[oó]mo (llegar|moverse|ir)|cu[aá]ndo ir|cu[aá]nto cuesta|para (dormir|comer|cenar|ir))\b/i.test(n)) return false;
+  if (/^(consejos?|resumen|importante|extras?|alternativa|plan b|log[ií]stica|nota|ojo|cuidado|atenci[oó]n)$/i.test(n)) return false;
+  const first = n.split(/\s+/)[0].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zñ]/g, '');
+  if (_DISH_WORDS.has(first)) return false; // plato
+  return true;
+}
+
 async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords, env) {
   if (!placesKey || !query || query.length < 3) return null;
   // CATÁLOGO: si ya se resolvió este nombre (país + región + nombre), CERO llamadas a Google.
@@ -10573,6 +10593,8 @@ REGLAS:
               if (/\b(crear ruta con mapa|crear ruta|ruta con mapa|generar (?:la )?ruta|hazme una gu[ií]a|dale a|pulsa)\b/i.test(name)) continue;
               // Rechazar 1 palabra solo si es corta (Día, Tip, Ojo…). Acepta Alhambra, Louvre, Coliseo…
               if (name.split(/\s+/).length === 1 && name.length < 5) continue;
+              // Titulares y platos no piden foto (ver shouldLookupPhoto): ahorra consultas y evita fotos absurdas.
+              if (!shouldLookupPhoto(name)) continue;
               if (!boldNames.includes(name)) boldNames.push(name);
             }
             if (boldNames.length > 0) {
