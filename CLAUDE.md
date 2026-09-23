@@ -1432,6 +1432,12 @@ vez); reabrirla 2 veces = 0 fichas nuevas. Sin confirmar todavía en la factura 
 (getValidatedPlace: enlaces Maps) y `ph:{nombre}` (buscarFotoLugar: fotos automáticas), positivos PERMANENTES, "no encontrado" 30 días solo si
 Google contestó; `buscarFotoLugar` devuelve SIEMPRE los mismos photo_reference guardados (imagen en R2 reutilizada). Probado simulado 14/14.
 **Falta: que Paco lo pruebe en el chat (misma pregunta dos veces) y mirar la factura de Google mañana.** (3) `/photo?name=` sigue pendiente.
+Probado en vivo por Paco (Cantabria, 2 preguntas): `ph:` 16 entradas, `vp:` 0 (correcto: en las recomendaciones —Tiempo 1, `guidedIsReco`— NO se
+inyectan enlaces de Maps, solo fotos; la fuga (1) `getValidatedPlace` aplica a respuestas conversacionales, no a recomendaciones); la guía guardada
+y abierta añadió 11 fichas `pl:` (17→28). Claude escribe respuestas distintas cada vez: el catálogo solo ahorra cuando un NOMBRE SE REPITE.
+[x] FILTRO DE FOTOS del chat (Worker `20a81964-fd45-4e22-94cd-dd947a652ec4`, commit `0c46544c`): `shouldLookupPhoto()` descarta SOLO titulares
+("Dónde comer:", "Qué ver:"…) y platos (primera palabra en lista `_DISH_WORDS`); cualquier otro nombre —p. ej. "Playa del sardinero"— conserva su foto
+(decisión de Paco: "solo platos, nada más"). Probado 32/32 lugares con foto, 25/25 titulares/platos sin foto. Borrada la entrada mala `ph:donde comer:, cantabria`.
 **Orden propuesto de arreglos (uno a uno, con OK):** A) (1)+(2)+(3): nombre→lugar y fotos por `place_id` en R2 (la mayor fuga viva);
 B) TTL permanentes + caché de "no encontrado"; C) guardar el trazado de Directions con la guía; D) `/health` cacheado 10 min;
 E) frontend (`map-modal.js`); F) cuotas diarias duras en Google + contadores por SKU en el panel.
