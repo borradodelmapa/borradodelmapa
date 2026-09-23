@@ -1292,6 +1292,22 @@ está en el norte de España") no disparan por este camino nuevo.
 **Pendiente: que Paco repita exactamente "voy a pasar unos días este mes en Bilbao" (o
 similar) y confirme que esta vez sí salen eventos.**
 
+**Bug real distinto, encontrado de paso probando lo de arriba, 23 sept 2026 — foto
+duplicada en el chat normal.** Paco pegó el texto de la respuesta ("una semana en Bilbao"):
+"Guggenheim Museum Bilbao" salía dos veces seguidas con la misma foto — captura confirma
+2 imágenes idénticas. Causa: Claude mencionó el Guggenheim en la intro Y en el párrafo de
+detalle, y puso su foto en las dos — `_repairBrokenPhotoMarkdown()` (la función que
+sustituye cada `![Nombre](...)` por la URL real de `buscar_foto`) no deduplicaba, así que
+las dos menciones se resolvían a la misma URL y se veían las dos.
+**Arreglo, commit `<pendiente>`, DESPLEGADO (Version ID `b123ff2b-c381-4733-b7a4-ac261eb60671`,
+confirmado contra `/version`), sin probar en pantalla:** `_repairBrokenPhotoMarkdown` ahora
+lleva un `Set` de URLs ya usadas en esa misma respuesta — la primera aparición de una foto
+se queda, cualquier repetición exacta de la misma URL se quita. No toca ninguna API, es
+solo post-procesado de texto. Probado en Node con un caso sintético (Guggenheim repetido +
+una foto distinta sin tocar) antes de desplegar.
+**Pendiente: que Paco repita algo que hable de un sitio en dos partes distintas de la
+respuesta (como el caso de Bilbao/Guggenheim) y confirme que la foto ya solo sale una vez.**
+
 ---
 
 ## Qué es este proyecto

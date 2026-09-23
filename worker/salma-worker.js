@@ -9991,13 +9991,20 @@ INSTRUCCIONES:
             }
             return null;
           };
+          // 23 sept 2026: Claude a veces menciona el mismo lugar dos veces en la
+          // respuesta (una vez en la intro, otra en el detalle) y pone su foto en las
+          // dos — misma URL, la misma imagen duplicada en pantalla (caso real: "Ana
+          // pasa unos días en Bilbao", el Guggenheim salía repetido). Se queda solo la
+          // primera aparición de cada URL, la segunda se quita.
+          const _seenPhotoUrls = new Set();
           return s.replace(/!\[([^\]]+)\]\(([^)\n]*)\)?/g, (fullMatch, name) => {
             const key = name.toLowerCase().trim();
             const hotelEntry = _fuzzyFind(_hotelPhotosByName, key);
-            if (hotelEntry && hotelEntry.foto) return `![${name}](${hotelEntry.foto})`;
-            const placeUrl = _fuzzyFind(_placePhotosByName, key);
-            if (placeUrl) return `![${name}](${placeUrl})`;
-            return '';
+            const resolvedUrl = (hotelEntry && hotelEntry.foto) || _fuzzyFind(_placePhotosByName, key);
+            if (!resolvedUrl) return '';
+            if (_seenPhotoUrls.has(resolvedUrl)) return '';
+            _seenPhotoUrls.add(resolvedUrl);
+            return `![${name}](${resolvedUrl})`;
           });
         };
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
