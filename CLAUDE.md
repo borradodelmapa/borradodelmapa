@@ -1383,6 +1383,24 @@ desde `GET /usage`, feedback de testers, estado de secrets) sin empezar.
   El service worker del panel NO está activo (se registra en `/admin/sw.js`, ruta que no existe en este dominio): la única
   caché es la HTTP de GitHub Pages (`max-age=600`, hasta 10 min), por eso la insignia y los `?v=`.
 
+**Plan del panel admin nuevo (acordado con Paco 23 sept 2026; el panel será SOLO estadísticas y gastos de proveedores,
+sin chat ni gestión de proyecto — eso se hace con Code). Checklist, marcar al avanzar:**
+- **B — proteger el dinero (Paco, sin código, urgente):** [ ] presupuesto+alertas Google Cloud (~15 €/mes, 50/90/100 %);
+  [ ] activar exportación de facturación de Google a BigQuery (dataset multi-región; SOLO acumula desde que se activa);
+  [ ] mirar si la cuenta de Anthropic tiene "Admin keys" (organización).
+- **C — limpiar (Claude, con OK):** [ ] quitar pestañas Chat/Proyecto/Marketing/Salma/Contabilidad y botón Proyecto;
+  [ ] borrar `/admin-chat` del Worker; [ ] cerrar la regla Firestore `admin_logs` (hoy lee/escribe cualquier usuario
+  autenticado) y quitar `logToFirestore()` (nunca funcionó: escribe sin sesión y la regla lo rechaza).
+- **D — datos automáticos:** [ ] `/admin/stats` (Worker, `isAdminRequest`, cuenta de servicio; el panel NO lee Firestore
+  directo porque las reglas solo dejan leer el propio doc y no hay regla para `admin/*`); [ ] Paco crea secrets: admin key
+  Anthropic (`/v1/organizations/cost_report`), admin key OpenAI (`/v1/organization/costs`), clave restringida Stripe;
+  [ ] colector diario en el cron de las 6:00 UTC: Google (BigQuery por SKU), Anthropic, OpenAI, Twilio (Usage Records),
+  ElevenLabs (`/v1/user/subscription`), Stripe; [ ] contadores propios Duffel/Serper (sin API de coste; avisar §8);
+  [ ] cuotas fijas (Brave, RapidAPI, OpenWeather, Resend, Cloudflare) configuradas una vez.
+- **E — pantallas:** Resumen, Gastos por proveedor (día/mes/proyección), Coste por usuario y por guía, Ingresos y margen,
+  Usuarios, Analytics (falta `GA4_CREDENTIALS`), Calidad y feedback (`beta_feedback`), Alertas por email (Resend) por umbral.
+- Regla: estimado y real se muestran SIEMPRE etiquetados; nunca fingir precisión donde no hay API de coste.
+
 ---
 
 ## Qué es este proyecto
