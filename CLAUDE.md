@@ -1435,6 +1435,13 @@ Google contestó; `buscarFotoLugar` devuelve SIEMPRE los mismos photo_reference 
 Probado en vivo por Paco (Cantabria, 2 preguntas): `ph:` 16 entradas, `vp:` 0 (correcto: en las recomendaciones —Tiempo 1, `guidedIsReco`— NO se
 inyectan enlaces de Maps, solo fotos; la fuga (1) `getValidatedPlace` aplica a respuestas conversacionales, no a recomendaciones); la guía guardada
 y abierta añadió 11 fichas `pl:` (17→28). Claude escribe respuestas distintas cada vez: el catálogo solo ahorra cuando un NOMBRE SE REPITE.
+[x] PUNTOS 1-3 DE LA LISTA FINAL HECHOS (23 sept 2026, Worker `280e6189-d528-40a5-888b-1ae92eed3aca`, commits `999659cc`, `7097fd13`, `08e3b036`):
+(1) cachés permanentes: `_getPlaceDetailsCached` (teléfono/web; ya NO guarda un fallo como `{}`), ancla de destino `geocity:anchor8:{cubo 10° de la ubicación
+del usuario}:{destino}` (el cubo evita fijar "Córdoba" de Argentina para España), `/historia-lugar` (y el slug ya no rompe tildes). (2) Directions: `/directions` guarda la respuesta
+en KV `dir:{hash}` (puntos+modo+carretera+pasos) y `drivingDistanceKm` (red de seguridad de verify) en `drv:{coords 4 dec}`; prueba real: miss→hit→hit.
+(3) `/health` responde con la última comprobación si tiene <10 min (`health:last`; `?force=1` fuerza una real): cada carga del dashboard disparaba OpenAI, Google,
+RapidAPI ×2 y Duffel. Todo probado con Google/KV simulados (7 baterías) y sin regresión. Pendiente de la lista: (4) modal "Ruta completa" del navegador
+(`map-modal.js`: PlacesService.getDetails + DirectionsService del navegador), (5) cuotas duras en Google + contadores en el panel.
 [x] FUGA 3 (`/photo`) HECHA — Worker `db787304-9d13-433b-8766-a0472f134fb7` (commit `dc62b61f`): alias KV `pa:{hash(ref)}` → ref bueno (permanente; guías antiguas con
 ref caducado ya no repiten el circuito en cada apertura), `spotcache:` permanente con guarda de homónimos (30 km), `spotmiss:` (no encontrado, 30 d, solo si Google
 contestó), y `_getCachedPlacePhoto(...,r2Only)` para no leer el alias en el caso normal. Probado simulado 9/9 (+ las otras 3 baterías sin regresión). Una guía antigua
