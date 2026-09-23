@@ -1469,7 +1469,10 @@ E) frontend (`map-modal.js`); F) cuotas diarias duras en Google + contadores por
   (memoria de 60 s). Ver el gasto propio: `GET /admin/google-usage` (solo admin) o `wrangler kv key get "gspend:d:<día>" --text …` (¡usar `--text`!). **Si aparece
   `[GASTO-GOOGLE] TOPE alcanzado` en los logs o fotos/verificación fallan y Google no ha cortado, es ESTE tope: subir `gcap:config`.** No cubre llamadas del navegador con
   la clave pública (las frena la cuota diaria de Google). Probado 11/11 simulado + 8 baterías sin regresión + producción (1 llamada nueva contada, 1 de caché no).
-- PENDIENTE de Paco: B2 exportación de la facturación a BigQuery (dataset `billing_export`, multirregión EU, "Coste de uso estándar").
+- B2 HECHO (23 sept 2026, confirmado de palabra por Paco; comprobar que "Costo de uso estándar" ponga Habilitado): exportación de la facturación a BigQuery, proyecto `Salma Project`
+  (`gen-lang-client-0108818247`), conjunto `billing_export`, multirregión EU, "Costo de uso estándar" (NO se activó FOCUS ni "detallado"). Primeros datos en unas horas; relleno del
+  mes anterior hasta 5 días. Sirve de fuente del COSTE REAL por SKU y día para el panel de gastos (el tope del Worker es una estimación a precios de lista).
+- (antes PENDIENTE de Paco: B2 exportación de la facturación a BigQuery (dataset `billing_export`, multirregión EU, "Coste de uso estándar").
 
 **Plan del panel admin nuevo (acordado con Paco 23 sept 2026; el panel será SOLO estadísticas y gastos de proveedores,
 sin chat ni gestión de proyecto — eso se hace con Code). Checklist, marcar al avanzar:**
