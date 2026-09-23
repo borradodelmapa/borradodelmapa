@@ -1458,7 +1458,7 @@ E) frontend (`map-modal.js`); F) cuotas diarias duras en Google + contadores por
 - CUOTAS DIARIAS ("prudente", techo ≈10-13 €/día; único corte real en Google — el "límite de inversión" NO existe para Maps/Places: solo Gemini API, Vertex, Cloud Run):
   Places API `Requests per day` = **900** (confirmado por Google; en Places legacy todos los métodos comparten UNA cuota, no se puede poner por método), Directions `Requests per day` = 200,
   Maps Static `Unsigned requests per day` = 100 (era 25.000), Geocoding `v3 requests per day` = 50 (las 4 `v4 … per day` opcionales), Maps JavaScript `Map loads per day` = 1.000.
-  **Solo Places está confirmado con captura; las otras 4 las tiene que verificar Paco** (enlaces `console.cloud.google.com/google/maps-apis/quotas?project=gen-lang-client-0108818247&api=<api>-backend.googleapis.com`).
+  **Places confirmado con captura; las otras 4 (Directions, Static, Geocoding, Maps JS) confirmadas de palabra por Paco el 23 sept, sin captura** (enlaces de comprobación: `console.cloud.google.com/google/maps-apis/quotas?project=gen-lang-client-0108818247&api=<api>-backend.googleapis.com`).
   Se reinician a las 9:00 (hora de España). **Si la app empieza a fallar (fotos, verificación, mapas) con OVER_DAILY_LIMIT/RESOURCE_EXHAUSTED, es este candado**: subir la cuota ahí, no tocar código. Las cuotas se cuentan en
   peticiones, no en euros; el tope en euros por servicio (segunda capa) es del Worker y está PENDIENTE de hacer. Dato: el 23 sept ya había 653 peticiones a Places a las 20:27.
 - PENDIENTE de Paco: B2 exportación de la facturación a BigQuery (dataset `billing_export`, multirregión EU, "Coste de uso estándar").
