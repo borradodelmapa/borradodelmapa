@@ -2254,6 +2254,43 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     volver a rebotar. Enlace de edición del perfil: Twilio Console → Trust Hub →
     Customer Profiles → el bundle del Business Profile de producción (Paco lo tiene
     guardado en marcadores/email — no repetido aquí porque incluye el ID de cuenta).
+  - **23 sept 2026 (tarde) — RESUBIDO el Business Profile completo (flujo Persona/Trust
+    Hub de Twilio, con verificación de identidad — pasaporte incluido otra vez), tocando
+    de paso 18601/18602/18603. MANDADO A REVISIÓN, sin resolución todavía.** Encontrados y
+    corregidos 2 fallos reales al rellenar el formulario, más el muro de fondo del 18602
+    confirmado en vivo:
+    1. **"Company type" estaba mal puesto: "Private Corporation"** — contradecía tener un
+       DNI personal como identificador (no un CIF de empresa). Corregido a **"Sole
+       Proprietorship"** (autónomo/particular), que sí es coherente con la situación real
+       de Paco (sin SL, sin autónomo todavía).
+    2. **Campo "Apt/Suite" de la dirección llevaba código postal + ciudad duplicados**
+       (autorelleno erróneo del navegador) — vaciado. Puede haber contribuido al 18603
+       (dirección no verificable): datos duplicados/contradictorios en el formulario.
+    3. **Confirmado en vivo el bloqueo de fondo del 18602**: con "Sole Proprietorship" +
+       DNI (`78963405N`) como "Business registration number", el propio formulario de
+       Twilio/Persona dio *"Your business registration number and legal name don't
+       match"* — no se pudo verificar automáticamente, exactamente como se predijo: sin
+       alta de autónomo, ese DNI no está activado en ningún registro que Twilio pueda
+       consultar. Dato aparte, útil para cuando Paco decida sobre el alta: en España un
+       autónomo no recibe un número nuevo — su DNI/NIF pasa a servir también como
+       identificador fiscal de negocio en cuanto se da de alta en Hacienda; hoy, sin ese
+       alta, ese mismo número no verifica.
+    4. Twilio SÍ dejó seguir pese al fallo, con la opción **"Continue without
+       resubmission"** (en vez de "Return to registration") — se usó esa, ya que volver
+       a intentarlo no iba a cambiar nada sin el alta. El perfil quedó **enviado a
+       revisión manual** ("Thanks for submitting your primary compliance profile! Your
+       profile is being reviewed... we will update the status of your profile in Trust
+       Hub").
+    **Campos finales enviados** (para referencia si hay que repetir esto): Business
+    identity: Direct Customer · Legal business name: Francisco Gomez Duarte · Business
+    registration ID type: Other · Business registration number: 78963405N · Business
+    industry: TRAVEL · Company type: Sole Proprietorship · Website: borradodelmapa.com ·
+    Business address: Calle Diecinueve de Octubre 16, Apt/Suite (vacío), 29670, Marbella,
+    Málaga, España · Notification email: paco@borradodelmapa.com.
+    **Pendiente: esperar la respuesta de Twilio (revisión manual, puede tardar de días a
+    2 semanas según el propio checklist de arriba).** Si vuelve a rechazar por 18602, la
+    única salida real sigue siendo la decisión de negocio ya anotada (alta de autónomo o
+    formar una SL) — no hay ningún ajuste de formulario más que probar.
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
