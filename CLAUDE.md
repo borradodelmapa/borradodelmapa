@@ -1345,7 +1345,7 @@ menciones del mismo). Si vuelve a verse una foto repetida, revisar esto primero.
 **GitHub Pages** del repo **PÚBLICO `borradodelmapa/Admin-borradodelmapa`** (DNS: CNAME →
 `borradodelmapa.github.io`; el fichero `CNAME` del repo no se toca NUNCA). Copia de trabajo local:
 `C:\Users\User\Desktop\salma-admin` (clon real, `git push` a `main` = despliegue en ~40 s). NO está
-en este repo (`salma/admin.html` es otro panel distinto, el editor de prompt). El proyecto de Netlify
+en este repo (`salma/admin.html`, el editor de prompt, se BORRÓ el 23 sept 2026 — ver más abajo). El proyecto de Netlify
 `creative-boba-c8451a` declara ese dominio pero el DNS NO apunta a él: se desplegó ahí por error el 23
 sept (sin efecto real); no sirve para nada, ignorar.
 **Qué estaba roto:** `config.js` apuntaba al dominio muerto `paco-defoto.workers.dev` (todo en rojo/"—") y
@@ -1353,7 +1353,7 @@ llevaba un `ADMIN_CHAT_TOKEN` fijo (ya caducado: el `ADMIN_TOKEN` se regeneró e
 `PASSWORD_HASH` SHA-256 de la contraseña — todo público en internet. Además `/health` se llamaba sin token.
 **Arreglo (commit `6f342c19` Worker + `60c5634` panel; Worker Version ID `444d5a88-5345-4fcf-8bb5-e7cc19b29a5e`,
 comprobado contra `/version`, 21 secrets intactos):** el Worker tiene `isAdminRequest()` — `/health`, `/ga4` y
-`/admin-chat` aceptan `ADMIN_TOKEN` (admin.html, sin cambios) O un ID token de Firebase de
+`/admin-chat` aceptan `ADMIN_TOKEN` (para llamadas a mano con curl) O un ID token de Firebase de
 `admin@borradodelmapa.com` validado contra Google (`accounts:lookup`, gratis). El panel manda su sesión
 (`adminAuthHeaders`), login directo contra Firebase (sin hash), `WORKER_URL` al dominio nuevo, `sw.js` cache v4.
 Comprobado: token basura / JWT falso con email admin / sin token → 401 en los tres endpoints.
@@ -1365,6 +1365,20 @@ y esa misma contraseña es la de Firebase; (2) probar en pantalla: entrar, tarje
 verde y pestaña Analytics con datos. **Sin confirmar en pantalla todavía.** Además `GA4_CREDENTIALS` sigue sin
 estar en el Worker (Analytics no dará datos hasta ponerlo). Mejoras propuestas del panel (datos de coste real
 desde `GET /usage`, feedback de testers, estado de secrets) sin empezar.
+
+**Mismo día, 2ª tanda (a petición de Paco):**
+- **EL PROMPT SOLO SE TOCA DESDE EL CÓDIGO (`worker/salma-worker.js`), nunca desde una herramienta web.** Se BORRÓ
+  `admin.html` (el editor de prompt que estaba publicado en `borradodelmapa.com/admin.html`) y los 6 endpoints del Worker
+  que lo editaban o leían: `/admin/init-prompt`, `get-prompt`, `save-prompt`, `apply-fix`, `test-extract`, `test-rule`.
+  También se quitó `getSystemPrompt()`: el chat ya no lee `config/salma-prompt` de Firestore (esa lectura daba 403 desde el
+  Worker — sin sesión —, así que SIEMPRE ganaba el prompt del código: el comportamiento es idéntico y se ahorra una lectura
+  fallida + un KV por mensaje). El doc `config/salma-prompt` de Firestore queda sin uso (no se ha borrado). Quedan solo
+  `/admin-chat` y `/admin/verify-place`. NO volver a montar ninguna herramienta que edite el prompt fuera del repo.
+- **Panel admin (`salma-admin`, repo `Admin-borradodelmapa`): paleta de la app** (`#0D0F10`, naranja `#F4630B`, texto
+  `#ECEBE8`; texto oscuro sobre naranja) + **insignia de versión** abajo a la derecha: `Panel <ADMIN_VERSION> · Worker
+  <id>`. `ADMIN_VERSION` está en `config.js` y hay que subirla, junto con los `?v=` de `index.html`, en CADA cambio del panel.
+  El service worker del panel NO está activo (se registra en `/admin/sw.js`, ruta que no existe en este dominio): la única
+  caché es la HTTP de GitHub Pages (`max-age=600`, hasta 10 min), por eso la insignia y los `?v=`.
 
 ---
 
@@ -1448,7 +1462,6 @@ El usuario es **Paco**, founder y único desarrollador. Trabaja desde portátil,
 ├── debug-panel.js          # Panel 🐛 flotante: logs, errores JS, Version ID Worker + `?v=` scripts cargados
 ├── styles.css              # Sistema de diseño: mobile-first, dark theme, dorado (175KB)
 ├── transport-apps.json     # Base de datos de apps de transporte mundial (84KB)
-├── admin.html              # Panel admin: gestión prompt, testing automático, fixes IA
 ├── legal.html              # Aviso legal, privacidad, cookies, términos (PENDIENTE datos titular)
 ├── manifest.json           # PWA: standalone, portrait, iconos 192+512
 ├── sw.js                   # Service Worker: sin caché (todo red), push notifications narrador
@@ -1656,13 +1669,7 @@ Post-procesado que corrige cada parada de una ruta generada:
 | POST | `/pin` | Identificar lugar por foto con Claude Vision |
 | POST | `/ga4` | Proxy Google Analytics 4 Data API (admin) |
 | POST | `/admin-chat` | Chat admin con GPT-4o-mini (admin) |
-| POST | `/admin/init-prompt` | Migrar prompt hardcoded a Firestore |
-| GET | `/admin/get-prompt` | Leer prompt actual desde Firestore |
 | GET | `/admin/verify-place` | Debug manual del verify de una parada contra Google Places (admin) |
-| POST | `/admin/test-extract` | Extraer 10-15 reglas testeables del prompt |
-| POST | `/admin/test-rule` | Testear una regla con mensajes trampa + evaluación |
-| POST | `/admin/apply-fix` | Aplicar fix IA al prompt, guardar con historial en Firestore |
-| POST | `/admin/save-prompt` | Guardar prompt editado manualmente |
 | GET | `/health` | Health check de todos los servicios (admin) |
 | GET | `/version` | Version ID del despliegue (publico, sin token) — para saber que worker corre |
 | GET | `/sitemap.xml` | Sitemap index (1h caché) |
