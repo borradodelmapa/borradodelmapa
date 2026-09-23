@@ -1495,6 +1495,16 @@ sin chat ni gestión de proyecto — eso se hace con Code). Checklist, marcar al
   hoy y del mes frente a los topes (`gcap:config`), últimos 8 días, desglose de hoy por servicio y los candados de Google (lista informativa en `config.js` → `GOOGLE_QUOTAS`: si se
   cambia una cuota en Google, actualizar esa lista). Barra verde <60 %, ámbar <90 %, roja ≥90 %. Es una ESTIMACIÓN a precios de lista; el coste real vendrá de BigQuery (`billing_export`,
   pendiente de leer desde el panel/colector). Probado en jsdom (23 comprobaciones, 0 errores JS) y visto en escritorio y móvil. Falta que Paco lo vea con su sesión real.
+- **PANEL ADMIN — PESTAÑAS QUE FALTAN (pedido por Paco el 23 sept 2026, al cerrar el día):**
+  (1) **INGRESOS** (nueva): compras de Stripe, Premium activos, ingresos menos gastos = margen (Stripe API con clave restringida; ver paso D).
+  (2) **USUARIOS CON SU GESTIÓN** (la actual solo lista nombre/email/registro/rutas y hoy sale vacía por las reglas de Firestore): lista real vía `/admin/stats` del Worker (cuenta de servicio),
+  plan y Premium hasta cuándo, último acceso, uso y coste de Claude por usuario (`usage:{uid}:{mes}`), y acciones de gestión (ver su uso, dar/quitar Premium, deshabilitar cuenta).
+  (3) **ANALÍTICA** (la actual depende de GA4 y sale vacía): falta el secret `GA4_CREDENTIALS` en el Worker (`GA4_PROPERTY_ID` 352732094 ya en `config.js`); añadir estado de indexación en Google.
+  (4) **CONFIGURACIÓN — hoy es casi inútil**, revisada el 23 sept: solo tiene el botón "Limpiar caché y recargar", que borra Cache Storage, pero el service worker del panel NO está activo
+  (se registra en `/admin/sw.js`, que da 404 en este dominio), así que no hay nada que borrar; la caché real es la HTTP de GitHub Pages (`max-age=600`), que ese botón no toca (basta Ctrl+F5).
+  Además `initSettings()` añade un listener nuevo cada vez que se entra en la pestaña, el texto dice "funcione offline" (falso) y el recuadro conserva el azul antiguo. **NO hay botón de cerrar sesión
+  en el panel.** Propuesta: sustituir por versiones (panel/Worker/despliegue), cerrar sesión, editar topes de gasto de Google (necesita `POST /admin/google-caps` en el Worker que escriba `gcap:config`),
+  forzar comprobación de salud (`/health?force=1`) y quitar el botón de caché.
 - **E — pantallas restantes:** Resumen, Gastos por proveedor (día/mes/proyección), Coste por usuario y por guía, Ingresos y margen,
   Usuarios, Analytics (falta `GA4_CREDENTIALS`), Calidad y feedback (`beta_feedback`), Alertas por email (Resend) por umbral.
 - Regla: estimado y real se muestran SIEMPRE etiquetados; nunca fingir precisión donde no hay API de coste.
