@@ -7809,8 +7809,11 @@ export default {
       }
 
       try {
-        const creds = JSON.parse(env.GA4_CREDENTIALS);
-        const token = await getGoogleAccessToken(creds);
+        // Credenciales: si existe el secret GA4_CREDENTIALS se usa; si no, la misma cuenta de servicio de Firebase que ya usa el Worker
+        // (basta darle acceso de lector a la propiedad de Analytics y activar la Google Analytics Data API en su proyecto).
+        let token;
+        if (env.GA4_CREDENTIALS) token = await getGoogleAccessToken(JSON.parse(env.GA4_CREDENTIALS));
+        else token = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/analytics.readonly', '_sa_token_ga');
 
         let reqBody;
         try { reqBody = await request.json(); } catch (_) { reqBody = {}; }
