@@ -5503,7 +5503,13 @@ async function resolverPaisDestino(destino, userLocation, env) {
   // los fallos (sin candidato, sin país, excepción) se quedan solo en el cache de isolate.
   // Si se cuela un sitio mal resuelto: purga puntual con `wrangler kv key delete geocity:anchor7:<slug>`
   // o sube el prefijo a anchor8 para invalidar todo de golpe.
-  const kvKey = 'geocity:anchor7:' + norm;
+  // 23 sept 2026: PERMANENTE (antes 30 días). Como la búsqueda se sesga por la ubicación del usuario, "Córdoba" no es
+  // lo mismo para quien está en España que para quien está en Argentina; una entrada permanente y global habría
+  // fijado el sitio equivocado para siempre. Por eso la clave lleva un cubo GRUESO (10°) de la ubicación del usuario
+  // (anchor8; el prefijo anchor7 antiguo queda huérfano y caduca solo).
+  const _bkt = (userLocation && typeof userLocation.lat === 'number' && typeof userLocation.lng === 'number')
+    ? Math.round(userLocation.lat / 10) + ',' + Math.round(userLocation.lng / 10) : 'x';
+  const kvKey = 'geocity:anchor8:' + _bkt + ':' + norm;
   if (env.SALMA_KB) {
     try {
       const cached = await env.SALMA_KB.get(kvKey);
@@ -5571,7 +5577,7 @@ async function resolverPaisDestino(destino, userLocation, env) {
     console.log(`[ANCLA] destino="${d}" → ${countryName} (${countryCode}) loc="${locality}" prov="${province}" pointScope=${pointScope} ${lat.toFixed(3)},${lng.toFixed(3)} types=[${chosen._types}]`);
     _anchorPaisCache[norm] = chosen;
     if (env.SALMA_KB) {
-      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 2592000 }); } catch (_) {}
+      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen)); } catch (_) {}
     }
     return chosen;
   } catch (e) {
@@ -5594,13 +5600,18 @@ async function _getPlaceDetailsCached(env, placesKey, placeId, fields) {
     } catch (_) {}
   }
   let result = {};
+  let _ok = false;
   try {
     const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&language=es&key=${placesKey}`);
     const data = await res.json();
     result = data?.result || {};
+    _ok = data?.status === 'OK' && Object.keys(result).length > 0;
   } catch (_) {}
-  if (env?.SALMA_KB) {
-    env.SALMA_KB.put(kvKey, JSON.stringify(result), { expirationTtl: 2592000 }).catch(() => {});
+  // PERMANENTE (antes 30 días): teléfono/web/horario de un lugar cambian muy rara vez, y "cada sitio se paga una vez".
+  // Solo se guarda una respuesta REAL de Google: antes se guardaba también un resultado vacío por un fallo de red o de
+  // cuota, y con caché permanente ese vacío se habría quedado para siempre.
+  if (env?.SALMA_KB && _ok) {
+    try { await env.SALMA_KB.put(kvKey, JSON.stringify(result)); } catch (_) {}
   }
   return result;
 }
@@ -8467,7 +8478,8 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
 
       const placeName = place.trim();
-      const slug = placeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      // Sin tildes: "Córdoba" y "Cordoba" son el mismo lugar y deben compartir entrada (antes "Córdoba" → "c-rdoba").
+      const slug = placeName.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       // Nombres homónimos existen en sitios distintos (ej. "Cementerio de los Ingleses"
       // en Lisboa y en Camariñas) — si hay coordenadas, se meten en la clave de caché
       // (bucket ~11km) para que no se pisen entre sí durante los 30 días de TTL.
@@ -8558,9 +8570,11 @@ REGLAS:
         historia.id = slug;
         if (photoRef) historia.photo_ref = photoRef;
 
-        // 3. Guardar en KV 30 días
+        // 3. Guardar en KV PARA SIEMPRE (antes 30 días): la historia de un lugar no cambia y cada generación cuesta
+        // Claude + una búsqueda de Google. Se espera la escritura (sin await podía perderse). Si alguna historia sale
+        // mal, se purga a mano: `wrangler kv key delete historia:<slug>[:lat:lng]`.
         if (env.SALMA_KB) {
-          env.SALMA_KB.put(kvKey, JSON.stringify(historia), { expirationTtl: 2592000 }).catch(() => {});
+          try { await env.SALMA_KB.put(kvKey, JSON.stringify(historia)); } catch (_) {}
         }
 
         return new Response(JSON.stringify({ historia, source: 'claude' }), { headers: corsH });
