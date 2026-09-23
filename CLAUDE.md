@@ -1452,7 +1452,16 @@ con refs caducados pagará UNA última vez al abrirse y luego 0.
 **Orden propuesto de arreglos (uno a uno, con OK):** A) (1)+(2)+(3): nombre→lugar y fotos por `place_id` en R2 (la mayor fuga viva);
 B) TTL permanentes + caché de "no encontrado"; C) guardar el trazado de Directions con la guía; D) `/health` cacheado 10 min;
 E) frontend (`map-modal.js`); F) cuotas diarias duras en Google + contadores por SKU en el panel.
-Pendiente de Paco: B1 presupuesto Google (100 € por ahora) y B2 exportación a BigQuery.
+**CANDADOS DE GOOGLE PUESTOS POR PACO (23 sept 2026, proyecto `Salma Project` = `gen-lang-client-0108818247`, cuenta de facturación `012460-9B02AE-D84C54`):**
+- B1 HECHO — presupuesto "Borrado mapa presupuesto mensual": mensual, todos los proyectos/servicios, **60 €**, "Solo alertas" (NO corta), avisos al 50 % (30 €), 90 % (54 €),
+  100 % (60 €) de gasto REAL y 95 % (57 €) de gasto PREVISTO, por correo a administradores/usuarios de facturación.
+- CUOTAS DIARIAS ("prudente", techo ≈10-13 €/día; único corte real en Google — el "límite de inversión" NO existe para Maps/Places: solo Gemini API, Vertex, Cloud Run):
+  Places API `Requests per day` = **900** (confirmado por Google; en Places legacy todos los métodos comparten UNA cuota, no se puede poner por método), Directions `Requests per day` = 200,
+  Maps Static `Unsigned requests per day` = 100 (era 25.000), Geocoding `v3 requests per day` = 50 (las 4 `v4 … per day` opcionales), Maps JavaScript `Map loads per day` = 1.000.
+  **Solo Places está confirmado con captura; las otras 4 las tiene que verificar Paco** (enlaces `console.cloud.google.com/google/maps-apis/quotas?project=gen-lang-client-0108818247&api=<api>-backend.googleapis.com`).
+  Se reinician a las 9:00 (hora de España). **Si la app empieza a fallar (fotos, verificación, mapas) con OVER_DAILY_LIMIT/RESOURCE_EXHAUSTED, es este candado**: subir la cuota ahí, no tocar código. Las cuotas se cuentan en
+  peticiones, no en euros; el tope en euros por servicio (segunda capa) es del Worker y está PENDIENTE de hacer. Dato: el 23 sept ya había 653 peticiones a Places a las 20:27.
+- PENDIENTE de Paco: B2 exportación de la facturación a BigQuery (dataset `billing_export`, multirregión EU, "Coste de uso estándar").
 
 **Plan del panel admin nuevo (acordado con Paco 23 sept 2026; el panel será SOLO estadísticas y gastos de proveedores,
 sin chat ni gestión de proyecto — eso se hace con Code). Checklist, marcar al avanzar:**
