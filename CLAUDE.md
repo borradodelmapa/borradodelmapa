@@ -1428,6 +1428,10 @@ vez); reabrirla 2 veces = 0 fichas nuevas. Sin confirmar todavía en la factura 
 - ⚪ Fuera de alcance por decisión de Paco ("Cerca mía" y Narrador aparte): `searchPlacesForHelp`, `buscarLugar`, `searchHotelsPlaces`,
   `searchPlacesGoogle`, `searchNearbyPlaces` (7 d), `/nearby-pois`, taxi (≈9609), `geocodeCiudad`, `/staticmap` (diario), `/tts-google`.
   `buscarRestaurante` no tiene ningún llamador (código muerto). `/health` hace un Find Place por cada carga del dashboard del admin.
+[x] ARREGLO A (fugas 1 y 2 del chat) HECHO — Worker `5e6948a4-6ecc-4406-94be-8aed89353c77` (commit `4a52608e`): KV `vp:{cc}:{region}:{nombre}`
+(getValidatedPlace: enlaces Maps) y `ph:{nombre}` (buscarFotoLugar: fotos automáticas), positivos PERMANENTES, "no encontrado" 30 días solo si
+Google contestó; `buscarFotoLugar` devuelve SIEMPRE los mismos photo_reference guardados (imagen en R2 reutilizada). Probado simulado 14/14.
+**Falta: que Paco lo pruebe en el chat (misma pregunta dos veces) y mirar la factura de Google mañana.** (3) `/photo?name=` sigue pendiente.
 **Orden propuesto de arreglos (uno a uno, con OK):** A) (1)+(2)+(3): nombre→lugar y fotos por `place_id` en R2 (la mayor fuga viva);
 B) TTL permanentes + caché de "no encontrado"; C) guardar el trazado de Directions con la guía; D) `/health` cacheado 10 min;
 E) frontend (`map-modal.js`); F) cuotas diarias duras en Google + contadores por SKU en el panel.
