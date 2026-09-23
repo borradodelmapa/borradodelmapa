@@ -1339,6 +1339,35 @@ menciones del mismo). Si vuelve a verse una foto repetida, revisar esto primero.
 
 ---
 
+## Sesión 23 sept 2026 (tarde) — Panel admin: dónde vive, arreglado y sin token en el navegador
+
+**Dónde está el panel (no estaba anotado en ningún sitio):** `admin.borradodelmapa.com` es
+**GitHub Pages** del repo **PÚBLICO `borradodelmapa/Admin-borradodelmapa`** (DNS: CNAME →
+`borradodelmapa.github.io`; el fichero `CNAME` del repo no se toca NUNCA). Copia de trabajo local:
+`C:\Users\User\Desktop\salma-admin` (clon real, `git push` a `main` = despliegue en ~40 s). NO está
+en este repo (`salma/admin.html` es otro panel distinto, el editor de prompt). El proyecto de Netlify
+`creative-boba-c8451a` declara ese dominio pero el DNS NO apunta a él: se desplegó ahí por error el 23
+sept (sin efecto real); no sirve para nada, ignorar.
+**Qué estaba roto:** `config.js` apuntaba al dominio muerto `paco-defoto.workers.dev` (todo en rojo/"—") y
+llevaba un `ADMIN_CHAT_TOKEN` fijo (ya caducado: el `ADMIN_TOKEN` se regeneró el 13 sept) y el
+`PASSWORD_HASH` SHA-256 de la contraseña — todo público en internet. Además `/health` se llamaba sin token.
+**Arreglo (commit `6f342c19` Worker + `60c5634` panel; Worker Version ID `444d5a88-5345-4fcf-8bb5-e7cc19b29a5e`,
+comprobado contra `/version`, 21 secrets intactos):** el Worker tiene `isAdminRequest()` — `/health`, `/ga4` y
+`/admin-chat` aceptan `ADMIN_TOKEN` (admin.html, sin cambios) O un ID token de Firebase de
+`admin@borradodelmapa.com` validado contra Google (`accounts:lookup`, gratis). El panel manda su sesión
+(`adminAuthHeaders`), login directo contra Firebase (sin hash), `WORKER_URL` al dominio nuevo, `sw.js` cache v4.
+Comprobado: token basura / JWT falso con email admin / sin token → 401 en los tres endpoints.
+**Aviso de coste (§8):** no añade llamadas de pago; cierra un agujero (`/admin-chat` gasta OpenAI/Claude y
+antes bastaba un token público). El lookup de Firebase es gratuito.
+**Pendiente, NO hecho (lo tiene que hacer Paco):** (1) cambiar la contraseña de `admin@borradodelmapa.com`
+en Firebase Console → Authentication: el hash SHA-256 estuvo público (y sigue en el historial público del repo)
+y esa misma contraseña es la de Firebase; (2) probar en pantalla: entrar, tarjetas Worker/Anthropic/Places en
+verde y pestaña Analytics con datos. **Sin confirmar en pantalla todavía.** Además `GA4_CREDENTIALS` sigue sin
+estar en el Worker (Analytics no dará datos hasta ponerlo). Mejoras propuestas del panel (datos de coste real
+desde `GET /usage`, feedback de testers, estado de secrets) sin empezar.
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.
