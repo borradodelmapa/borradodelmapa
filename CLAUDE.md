@@ -1241,6 +1241,40 @@ datos, decirlo para investigar la causa real en vez de asumir que es de red.**
 
 ---
 
+## Sesión 23 sept 2026 — Eventos locales (Serper) arreglados: cable roto desde abril
+
+`SERPER_API_KEY` puesta por Paco (ver entrada de secrets más abajo). Al ir a probarla se
+encontró que la búsqueda de eventos llevaba **desde abril sin poder dispararse nunca**:
+el Worker solo la llama si recibe `travel_dates` en la petición
+([salma-worker.js:9413](worker/salma-worker.js:9413) antes de este cambio), pero ningún
+sitio del frontend rellenaba ese campo — las fechas del flujo guiado ("Tengo fechas") se
+guardan en `guided_route.fechas`, un campo distinto que nunca se traducía a `travel_dates`.
+No era un bug de hoy, era un cable que nunca se llegó a conectar.
+
+**Arreglo, commit `<pendiente>`, solo Worker, DESPLEGADO (Version ID
+`00f7551d-a170-4474-b0fb-79e7f44c45db`, confirmado contra `/version`), sin probar en
+pantalla:**
+1. Función nueva `extractMonthMention(message)` ([salma-worker.js:1629](worker/salma-worker.js:1629))
+   — detecta mes suelto ("en octubre"), o relativo ("el mes que viene", "este mes"), sin
+   necesitar fechas exactas. Se suma a `extractDatesFromMessage` (ya existía, detecta
+   fechas exactas tipo "del 10 al 15 de abril", pero tampoco se llamaba desde ningún sitio
+   — dead code desde siempre).
+2. El bloque de búsqueda de eventos ahora prueba, en orden: `travel_dates` del frontend →
+   fecha exacta en el propio mensaje → mes suelto en el propio mensaje. Y solo dispara si
+   además el mensaje suena a que se habla de un viaje/ruta a un sitio
+   (`isRouteRequest`/`isDaysDestination`/`guidedRoute`) — a petición explícita de Paco,
+   para que no salte en cualquier pregunta suelta ("no quiero saturar").
+Con esto, "Sevilla en noviembre" o "voy a Lisboa el mes que viene" ya activan la búsqueda
+de eventos igual que una fecha exacta — sin tocar el frontend, sin `?v=` nuevo.
+**Aviso de coste (protocolo §8):** sube el número de llamadas a Serper (antes nunca se
+llamaba; ahora se llama cuando el mensaje habla de una ruta/viaje con fecha o mes) — dentro
+del crédito gratis de Serper.dev con el volumen actual, avisado y confirmado con Paco antes
+de implementar.
+**Pendiente: que Paco pruebe "3 días en Sevilla en noviembre" (o similar) y confirme que
+la respuesta menciona algún evento/fiesta real de esas fechas.**
+
+---
+
 ## Qué es este proyecto
 
 **borradodelmapa.com** — Salma es tu compañera de viaje. Te diseña la ruta, te guía en ruta, te resuelve imprevistos y documenta tu aventura.

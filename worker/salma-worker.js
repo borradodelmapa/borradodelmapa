@@ -1626,6 +1626,30 @@ function extractDatesFromMessage(message) {
   return null;
 }
 
+// Mes suelto o relativo, sin fechas exactas: "en octubre", "el mes que viene", "este mes"
+function extractMonthMention(message) {
+  const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const now = new Date();
+  const lastDay = (y, m) => new Date(y, m, 0).getDate(); // m en 1-12
+
+  const monthMatch = message.match(/\b(?:en|para|por)\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/i);
+  if (monthMatch) {
+    const m = MONTHS.indexOf(monthMatch[1].toLowerCase()) + 1;
+    const y = (m < now.getMonth() + 1) ? now.getFullYear() + 1 : now.getFullYear();
+    return { from: `${y}-${String(m).padStart(2,'0')}-01`, to: `${y}-${String(m).padStart(2,'0')}-${lastDay(y,m)}` };
+  }
+
+  if (/\b(el\s+mes\s+que\s+viene|pr[oó]ximo\s+mes)\b/i.test(message)) {
+    const d = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    return { from: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`, to: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${lastDay(d.getFullYear(), d.getMonth()+1)}` };
+  }
+  if (/\beste\s+mes\b/i.test(message)) {
+    const y = now.getFullYear(), m = now.getMonth() + 1;
+    return { from: `${y}-${String(m).padStart(2,'0')}-01`, to: `${y}-${String(m).padStart(2,'0')}-${lastDay(y,m)}` };
+  }
+  return null;
+}
+
 // Detectar si el usuario pide alquiler de coche o restaurante
 function isServiceRequest(message) {
   return /alquil|rent.*car|coche.*alquil|moto|scooter|restaurante|restaurant|dónde comer|donde comer|cenar|cena|comida|dónde cenar|donde cenar/i.test(message);
@@ -9408,15 +9432,20 @@ INSTRUCCIONES:
 ]`;
     }
 
-    // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
+    // ─── EVENT SEARCH (pre-Claude) ───
+    // Fechas exactas del frontend/mensaje, o mes suelto ("en octubre", "el mes que viene").
+    // Solo dispara si además el mensaje suena a que se habla de un viaje/ruta a un sitio —
+    // no en cualquier pregunta suelta, para no saturar (pedido explícito de Paco, 23 sept).
     let eventData = null;
-    if (travelDates && travelDates.from && env.SERPER_API_KEY) {
+    const _eventDates = travelDates || extractDatesFromMessage(message) || extractMonthMention(message);
+    const _talkingAboutTrip = isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute;
+    if (_eventDates && _eventDates.from && _talkingAboutTrip && env.SERPER_API_KEY) {
       try {
         // Extraer destino del mensaje (simplificado: primera palabra capitalizada significativa)
         const destMatch = message.match(/(?:a |en |por |de )([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*)/);
         const destination = destMatch ? destMatch[1] : (currentRoute ? (currentRoute.name || currentRoute.title) : null);
         if (destination) {
-          eventData = await searchEvents(destination, travelDates.from, travelDates.to, env.SERPER_API_KEY);
+          eventData = await searchEvents(destination, _eventDates.from, _eventDates.to, env.SERPER_API_KEY);
         }
       } catch (e) { /* Fallo silencioso */ }
     }
