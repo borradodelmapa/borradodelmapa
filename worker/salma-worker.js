@@ -7285,6 +7285,51 @@ export default {
       }
     }
 
+    // ─── GET /admin/feedback y POST /admin/feedback-seen — feedback de testers para el panel (solo admin) ───
+    // Lee la colección beta_feedback (la escribe /beta-feedback) con la cuenta de servicio: las 100 últimas, de más nueva a más vieja.
+    // Los logs se recortan a los últimos 6.000 caracteres para no mandar megas al panel. "seen" se cambia con feedback-seen.
+    if (request.method === 'GET' && url.pathname === '/admin/feedback') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        const token = await getServiceAccountToken(env);
+        const r = await fetch(`${FIRESTORE_BASE}:runQuery`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'beta_feedback' }], orderBy: [{ field: { fieldPath: 'timestamp' }, direction: 'DESCENDING' }], limit: 100 } }),
+          signal: AbortSignal.timeout(12000),
+        });
+        if (!r.ok) throw new Error('Firestore → ' + r.status);
+        const rows = await r.json();
+        const v = f => (f && (f.stringValue !== undefined ? f.stringValue : f.timestampValue !== undefined ? f.timestampValue : f.booleanValue !== undefined ? f.booleanValue : null)) ?? null;
+        const items = [];
+        for (const row of rows) {
+          if (!row.document) continue;
+          const f = row.document.fields || {}, logs = String(v(f.logs_text) || '');
+          items.push({
+            id: row.document.name.split('/').pop(), at: v(f.timestamp), note: v(f.note), email: v(f.email), user_name: v(f.user_name), user_id: v(f.user_id),
+            page: v(f.page), url: v(f.url), worker_version: v(f.worker_version), front_versions: v(f.front_versions), user_agent: v(f.user_agent),
+            screenshot_url: v(f.screenshot_url), seen: v(f.seen) === true, logs_len: logs.length, logs: logs.slice(-6000),
+          });
+        }
+        return new Response(JSON.stringify({ items, unseen: items.filter(i => !i.seen).length }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudo leer el feedback: ' + e.message }), { status: 500, headers: corsH });
+      }
+    }
+    if (request.method === 'POST' && url.pathname === '/admin/feedback-seen') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      let body; try { body = await request.json(); } catch (_) { return new Response(JSON.stringify({ error: 'JSON no válido' }), { status: 400, headers: corsH }); }
+      const id = String(body.id || '');
+      if (!/^[a-z0-9]{6,40}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+      try {
+        await firestoreAdminPatch(env, 'beta_feedback/' + id, { seen: { booleanValue: body.seen !== false } });
+        return new Response(JSON.stringify({ ok: true, id, seen: body.seen !== false }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudo marcar: ' + e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /sitemap.xml (SEO — sitemap index) ───
     if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
       const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
