@@ -2101,6 +2101,12 @@ body {
   background:none; border:none; cursor:pointer;
   color:var(--text-primary); font-size:26px; line-height:1; padding:6px 10px;
 }
+.wa-qr-warn {
+  margin:0 0 14px; padding:8px 10px;
+  background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.4);
+  border-radius:8px; color:#fca5a5;
+  font-family:var(--font-body); font-weight:700; font-size:14px; line-height:1.3;
+}
 .wa-qr-box {
   width:220px; height:220px; margin:0 auto;
   background:#fff; display:flex; align-items:center; justify-content:center;

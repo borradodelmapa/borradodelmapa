@@ -3609,8 +3609,9 @@ async function _openWaQrLogin() {
   ov.id = 'wa-qr-overlay';
   ov.className = 'wa-qr-overlay';
   ov.innerHTML = '<div class="wa-qr-card"><button class="wa-qr-close" aria-label="Cerrar">✕</button>' +
+    '<p class="wa-qr-warn">⚠️ No lo escanees desde WhatsApp</p>' +
     '<div class="wa-qr-box" id="wa-qr-box"></div>' +
-    '<p class="wa-qr-hint">Escanéalo con la cámara del móvil</p></div>';
+    '<p class="wa-qr-hint">Ábrelo con la cámara del móvil (la app de fotos, no WhatsApp)</p></div>';
   document.body.appendChild(ov);
   let timer = null, closed = false;
   const stop = () => { closed = true; if (timer) clearTimeout(timer); ov.remove(); };
