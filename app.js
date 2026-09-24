@@ -3577,6 +3577,27 @@ function _togglePhoneLoginForm() {
   if (form) form.classList.toggle('hidden');
 }
 
+// Botón "Empezar por WhatsApp" (24 sept 2026, F5.4 ampliado) — para quien nunca ha
+// hablado con Salma: un solo toque abre WhatsApp con "Hola Salma" ya escrito, sin
+// pedir número ni pasar por ningún paso intermedio. El número sale de /version
+// (público, sin sesión) para no hardcodearlo — así si algún día cambia (Sandbox →
+// producción) no hace falta tocar el frontend. Sin llamada de pago: /version es
+// una lectura gratuita que el Worker ya servía.
+async function _setupWhatsAppStartButton() {
+  const btn = document.getElementById('btn-whatsapp-start');
+  if (!btn) return;
+  try {
+    const res = await fetch(window.SALMA_API + '/version');
+    const data = await res.json();
+    const digits = (data.whatsapp_number || '').replace(/[^\d]/g, '');
+    if (!digits) return;
+    btn.href = 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Hola Salma');
+    btn.classList.remove('hidden');
+  } catch (e) {
+    // sin número no se muestra el botón — no bloquea el resto del login
+  }
+}
+
 async function _sendPhoneLoginCode() {
   const input = document.getElementById('auth-phone-input');
   const btn = document.getElementById('btn-phone-send');
@@ -4293,6 +4314,7 @@ document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerpr
 document.getElementById('btn-phone-login-toggle')?.addEventListener('click', _togglePhoneLoginForm);
 document.getElementById('btn-phone-send')?.addEventListener('click', _sendPhoneLoginCode);
 document.getElementById('btn-phone-verify')?.addEventListener('click', _verifyPhoneLoginCode);
+_setupWhatsAppStartButton();
 
 // Logo eliminado — navegación solo por bottom bar
 

@@ -6881,7 +6881,12 @@ export default {
         version_short: meta.id ? String(meta.id).slice(0, 8) : null,
         tag: meta.tag || null,
         deployed_at: meta.timestamp || null,
-        now: new Date().toISOString()
+        now: new Date().toISOString(),
+        // Público a propósito (24 sept 2026, F5.4 ampliado): el botón "Empezar por
+        // WhatsApp" del login lo lee sin sesión para armar el enlace wa.me — así no
+        // hay que hardcodear el número en el frontend, y cambia solo si algún día
+        // se pasa de Sandbox a un número de producción.
+        whatsapp_number: (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '') || null
       }, null, 2), {
         headers: {
           'Content-Type': 'application/json',

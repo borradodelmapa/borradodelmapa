@@ -2069,6 +2069,21 @@ body {
 .auth-btn-fingerprint.error { border-color:var(--rojo); color:var(--rojo); background:rgba(239,68,68,.08); }
 .auth-btn-fingerprint svg { flex-shrink:0; }
 
+/* Botón "Empezar por WhatsApp" (24 sept 2026, F5.4 ampliado) — verde WhatsApp,
+   mismo patrón estructural que .auth-btn-fingerprint. Empieza oculto hasta que
+   app.js le pone el href real (lee el número de /version). */
+.auth-btn-whatsapp {
+  width:100%; padding:15px; margin-top:14px;
+  background:rgba(37,211,102,.1); color:#25D366;
+  border:1.5px solid rgba(37,211,102,.5); border-radius:0;
+  font-family:var(--font-cond); font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  cursor:pointer; transition:all .2s; text-decoration:none;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.auth-btn-whatsapp:hover { filter:brightness(1.1); background:rgba(37,211,102,.18); }
+.auth-btn-whatsapp svg { flex-shrink:0; }
+.auth-btn-whatsapp.hidden { display:none; }
+
 /* Divider */
 .auth-divider {
   display:flex; align-items:center; gap:14px; margin:18px 0;
