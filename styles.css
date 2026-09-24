@@ -2084,6 +2084,14 @@ body {
 .auth-btn-whatsapp svg { flex-shrink:0; }
 .auth-btn-whatsapp.hidden { display:none; }
 
+/* Línea de tranquilidad bajo los 2 botones grandes (25 sept 2026) — aclara que ya
+   sirven también para registrarse, sin montar un tercer botón/circuito de "Regístrate". */
+.auth-caption {
+  margin:14px 0 0; padding:0 8px;
+  color:rgba(244,239,230,.42); font-family:var(--font-body); font-size:12px;
+  text-align:center; line-height:1.4;
+}
+
 /* Enlace de texto pequeño — "Entrar con tu número" degradado de botón a esto (25 sept
    2026), para dejar el login en dos botones grandes (Google + WhatsApp). */
 .auth-link-small {
