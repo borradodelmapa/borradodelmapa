@@ -686,6 +686,36 @@ para avisar a un solo destinatario). **Aviso de coste (protocolo §8), dado ante
 implementar:** plan gratuito de Resend, 100 emails/día — a este volumen de testers no
 hay manera realista de acercarse al límite, coste esperado: cero.
 
+**Décimo ajuste, 24 sept 2026 — el aviso por WhatsApp dejó de llegar del todo (el de
+email seguía bien), CONFIRMADO EN PANTALLA por Paco tras el arreglo: "si me llegan desde
+tester".** Diagnosticado con **Twilio Console → Monitor → Logs → Errors** (sin hacer
+falta terminal ni `wrangler tail`) — el mensaje fallido daba **Error 63015: "Channel
+Sandbox can only send messages to phone numbers that have joined the Sandbox"**. Dos
+causas, las dos corregidas:
+1. Al reponer `TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN` en una sesión anterior (22 sept),
+   se sospechaba que se hubiera copiado el token de **"Test Credentials"** en vez de
+   **"Live Credentials"** (mismo lío de siempre, dos paneles distintos en Twilio con
+   nombres parecidos) — se repusieron los dos con `npx wrangler secret put
+   TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN -c wrangler.toml` desde el "Live credentials"
+   de Twilio Console → API Keys & auth tokens → pestaña "AUTH TOKENS" (ojo: no es la
+   pestaña "API KEYS", ni la sección "Public keys" de más arriba en el menú — nombres
+   parecidos, cosas distintas). El email (que no depende de Twilio) seguía llegando bien
+   durante todo este tramo, lo que ayudó a aislar el problema a las credenciales/Sandbox
+   y no al endpoint en sí.
+2. **La causa real, confirmada por el Error 63015**: la sesión del WhatsApp Sandbox
+   caduca a las **72h** — el número de Paco (`PACO_WHATSAPP_TO`) se había desconectado
+   del Sandbox sin que nadie lo notara hasta que se probó el feedback. Se resuelve
+   reuniéndose: Twilio Console → Communications → Numbers & senders → pestaña
+   **WHATSAPP** de "Overview" no sirve (esa es para senders de producción, vacía sin
+   Business Profile aprobado) — el sitio correcto es **Messaging → Overview → pestaña
+   "Try it out" (arriba de la página, no en el menú lateral) → "Send a WhatsApp
+   message"**, que muestra un QR y el código de unión (`join <dos palabras>`) para
+   escanear y reabrir la ventana de 72h. **Esto se repetirá cada vez que pasen 72h sin
+   que Paco le escriba al número de Sandbox** — es una limitación normal del modo de
+   pruebas, no un bug; se resuelve del todo solo pasando a producción (bloqueado hoy por
+   el Business Profile, ver más arriba). Sin cambios de código ni coste — solo
+   credenciales y una reconexión de sesión.
+
 ---
 
 ## Sesión 19 sept 2026 — Simplificación de chips del chat vacío: 6 fijos + "Más opciones"
