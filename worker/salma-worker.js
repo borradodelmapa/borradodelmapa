@@ -7146,6 +7146,59 @@ export default {
       }
     }
 
+    // ─── GET /admin/openai-costs — coste REAL de OpenAI del mes según su API de costes (solo admin, SOLO LECTURA) ───
+    // Usa el secret OPENAI_ADMIN_KEY (clave de administrador de la organización, distinta de OPENAI_API_KEY; solo lee costes).
+    // Devuelve el mes en curso por día y por concepto, en USD. Cacheado 30 min en KV (?force=1 lo salta). Leer costes no se factura.
+    if (request.method === 'GET' && url.pathname === '/admin/openai-costs') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      if (!env.OPENAI_ADMIN_KEY) return new Response(JSON.stringify({ error: 'no_key', detail: 'Falta el secret OPENAI_ADMIN_KEY en el Worker.' }), { status: 500, headers: corsH });
+      const CACHE_KEY = 'oai:cache';
+      const force = url.searchParams.get('force') === '1';
+      try {
+        if (!force && env.SALMA_KB) {
+          const c = await env.SALMA_KB.get(CACHE_KEY);
+          if (c) return new Response(c, { headers: corsH });
+        }
+        const now = new Date();
+        const monthStart = Math.floor(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1) / 1000);
+        const days = {}, lines = {};
+        let page = null, guard = 0;
+        do {
+          const q = 'start_time=' + monthStart + '&bucket_width=1d&limit=31&group_by=line_item' + (page ? '&page=' + encodeURIComponent(page) : '');
+          const r = await fetch('https://api.openai.com/v1/organization/costs?' + q, {
+            headers: { 'Authorization': 'Bearer ' + env.OPENAI_ADMIN_KEY }, signal: AbortSignal.timeout(15000),
+          });
+          if (r.status === 401 || r.status === 403) return new Response(JSON.stringify({ error: 'no_permission', detail: 'OpenAI rechazó la clave de administrador (' + r.status + ').' }), { status: 502, headers: corsH });
+          if (!r.ok) return new Response(JSON.stringify({ error: 'openai_error', detail: 'OpenAI respondió ' + r.status + '.' }), { status: 502, headers: corsH });
+          const d = await r.json();
+          for (const b of (d.data || [])) {
+            const day = new Date(b.start_time * 1000).toISOString().slice(0, 10);
+            for (const it of (b.results || [])) {
+              const usd = Number(it.amount && it.amount.value) || 0;
+              days[day] = (days[day] || 0) + usd;
+              const li = it.line_item || 'otros';
+              lines[li] = (lines[li] || 0) + usd;
+            }
+          }
+          page = d.has_more ? d.next_page : null;
+        } while (page && ++guard < 5);
+        const today = now.toISOString().slice(0, 10);
+        const dayList = Object.keys(days).sort().map(k => ({ day: k, usd: Math.round(days[k] * 10000) / 10000 }));
+        const byLine = Object.keys(lines).map(k => ({ item: k, usd: Math.round(lines[k] * 10000) / 10000 })).sort((a, b) => b.usd - a.usd);
+        const out = JSON.stringify({
+          month: now.toISOString().slice(0, 7), currency: 'USD',
+          month_usd: Math.round(dayList.reduce((a, x) => a + x.usd, 0) * 10000) / 10000,
+          today_usd: Math.round((days[today] || 0) * 10000) / 10000,
+          days: dayList, by_line: byLine, fetched_at: now.toISOString(),
+        });
+        if (env.SALMA_KB) { try { await env.SALMA_KB.put(CACHE_KEY, out, { expirationTtl: 1800 }); } catch (_) {} }
+        return new Response(out, { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'openai_error', detail: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── GET /admin/google-real — coste REAL de Google según la exportación de facturación a BigQuery (solo admin, SOLO LECTURA) ───
     // La exportación (proyecto Salma Project, dataset billing_export) la rellena Google con lo que de verdad cobra, con unas horas de
     // retraso. Este endpoint la lee con la cuenta de servicio del Worker (necesita en Salma Project: "BigQuery Job User" +
