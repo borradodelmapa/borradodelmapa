@@ -2934,6 +2934,20 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     **Pendiente: que Paco vea el login en pantalla y confirme que se lee claro con
     los dos botones + la frase, y que no lo nota como "cuatro opciones a la vez".**
 
+  - **25 sept 2026 — login a SOLO DOS BOTONES y QR de WhatsApp en el ordenador. DESPLEGADO,
+    sin confirmar en pantalla.** Paco: "solo quiero dos botones, sin textos". Fuera la frase de
+    ayuda, el enlace "Entra con tu número" y su formulario; borrado `POST /phone-login-request`.
+    En el MÓVIL, "Entrar con WhatsApp" abre wa.me con "Hola Salma", como antes. En el ORDENADOR
+    enseña un QR (como WhatsApp Web): `POST /wa-qr-start` crea `wa_qr_logins/{código}` en
+    Firestore (pending + secreto que solo conoce ese navegador, 10 min); el QR abre WhatsApp con
+    "Entrar en el ordenador · código XXXXXX"; al enviarlo, `/whatsapp` crea la cuenta si hace
+    falta y marca el documento; el navegador pregunta a `POST /wa-qr-poll` cada 2 s y entra con
+    un custom token. Librería QR en `vendor/qrcode-generator-1.4.4.js` (MIT, se carga solo en
+    el ordenador). Firestore y no KV porque KV tarda hasta 60 s en propagarse entre regiones.
+    Commit `9141069`, `app.js?v=161`, `styles.css?v=137`, **Worker Version ID
+    `9f3e480b-3c48-49c8-8fec-6ed0b38881b9`**. **Aviso de coste (§8):** no llama a Claude ni a
+    ninguna API de pago; 1 respuesta de WhatsApp por entrada y lecturas de Firestore mientras
+    el QR está abierto (cuota gratuita).
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
