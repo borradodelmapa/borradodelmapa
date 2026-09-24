@@ -941,10 +941,17 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   `vendor/qrcode-generator-1.4.4.js`) — **CONFIRMADO EN PANTALLA por Paco (25 sept):
   "el ordenador va bien, código QR"**. Commit `9141069`, Worker
   `9f3e480b-3c48-49c8-8fec-6ed0b38881b9`.
-- **Pendiente de confirmar**: el flujo de móvil ("Entrar con WhatsApp" abre WhatsApp con
-  "Hola Salma" precargado) no se ha vuelto a probar en pantalla desde el último recorte
-  del login — pedirle a Paco que lo pruebe también en el móvil para cerrar el login
-  entero.
+- **Bug real encontrado y arreglado el 26 sept 2026: "Entrar con WhatsApp" desde el móvil
+  con un número ya vinculado no entraba en la web — Salma charlaba pero se quedaba ahí.**
+  Causa: el saludo de bienvenida de vuelta (`isPureGreetingWa`, para quien YA tiene
+  cuenta) nunca llevaba `buildAutoLoginLink` — los otros 3 avisos (alta nueva, colisión,
+  tope diario) sí lo llevaban, a este le faltaba. Arreglado, commit `747331d`, **Worker
+  Version ID `2b57004f-12b8-4319-8780-4e70cb9a4acd`**. Sin coste (misma función ya en
+  uso). **Pendiente: que Paco repita "Entrar con WhatsApp" desde el móvil con su número
+  (ya vinculado) y confirme que ahora sí llega el enlace y entra en la web.**
+- QR del ordenador también arreglado el 25 sept: faltaba avisar de no escanearlo con el
+  propio escáner de WhatsApp (dice "QR inválido") — ahora hay un aviso explícito encima
+  del QR. **CONFIRMADO EN PANTALLA por Paco**, entra bien con la cámara del móvil.
 - **F5.3 (tools + memoria por WhatsApp) sin empezar** — depende de F5.4 (ya hecho) y no
   tiene fecha.
 - **F5.5 (proactivo, plantillas Meta) BLOQUEADO** — Twilio rechazó el Business Profile de
