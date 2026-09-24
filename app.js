@@ -4305,7 +4305,17 @@ async function openWhatsAppLinkModal() {
 
     const textEl = overlay.querySelector('.narrator-confirm-text');
     if (textEl) {
-      textEl.innerHTML = `Manda este código por WhatsApp al número de Salma para vincular tu cuenta — caduca en 10 minutos:<br><br><span style="font-size:28px;font-weight:700;letter-spacing:4px;color:var(--dorado)">${escapeHTML(data.code)}</span><br><br>Una vez vinculado, hablas con Salma por WhatsApp igual que en la app.`;
+      const digits = (data.whatsapp_number || '').replace(/[^\d]/g, '');
+      const waLink = digits
+        ? `https://wa.me/${digits}?text=${encodeURIComponent(data.code)}`
+        : null;
+      textEl.innerHTML = `
+        <span style="font-size:28px;font-weight:700;letter-spacing:4px;color:var(--dorado)">${escapeHTML(data.code)}</span><br><br>
+        ${waLink
+          ? `<a href="${waLink}" target="_blank" rel="noopener" style="display:inline-block;background:var(--dorado);color:#000;font-weight:700;padding:10px 18px;border-radius:999px;text-decoration:none;margin-bottom:10px">Abrir WhatsApp y enviar código</a><br>`
+          : ''}
+        Caduca en 10 minutos. Una vez vinculado, hablas con Salma por WhatsApp igual que en la app.
+        ${data.whatsapp_number ? `<br><br><span style="opacity:.7;font-size:13px">Número de Salma: ${escapeHTML(data.whatsapp_number)} — guárdalo en tus contactos si quieres</span>` : ''}`;
     }
   } catch (e) {
     const textEl = overlay.querySelector('.narrator-confirm-text');

@@ -8293,7 +8293,10 @@ export default {
         const ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
         const code = Array.from({ length: 6 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
         await env.SALMA_KB.put('walink:' + code, user.uid, { expirationTtl: 600 });
-        return new Response(JSON.stringify({ code }), { headers: corsH });
+        // Número de Salma en WhatsApp, para que el frontend pueda armar un enlace
+        // wa.me directo (mínima fricción: abre WhatsApp con el código ya escrito).
+        const waNumber = (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '').trim();
+        return new Response(JSON.stringify({ code, whatsapp_number: waNumber }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
