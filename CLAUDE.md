@@ -964,6 +964,22 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 - Cambio de coste a vigilar: desde el 1 oct 2026 los mensajes de servicio de WhatsApp
   dentro de la ventana de 24h dejan de ser gratis en Twilio — verlo cuando llegue.
 
+**Notas de Paco, 26 sept 2026 — dictadas para no olvidarlas, SIN TOCAR NADA todavía
+("luego seguimos"):**
+1. Panel admin: poder **eliminar usuarios** (hoy solo hay deshabilitar/habilitar,
+   `POST /admin/user-action`, nunca borra nada — habría que decidir si esto cambia esa
+   norma o es una acción nueva aparte).
+2. Panel admin: añadir en la lista de usuarios **de qué tipo es cada registro** (WhatsApp
+   o Google/email) — ya existe el dato (`created_via` en `users/{uid}`), falta pintarlo.
+3. **Personalizar WhatsApp con la imagen de Borrado del Mapa** — el perfil del número de
+   Twilio (foto/nombre visible) y que también se vea así para usuarios nuevos.
+4. **Revisar los textos exactos** que se mandan por WhatsApp al registrarse y a quien ya
+   está registrado — pulir la redacción, no solo que funcionen.
+5. **Que WhatsApp funcione igual que la web**: geolocalización, crear guías, consultar
+   vuelos... todo. Esto es F5.3 (tools + memoria por WhatsApp), ya apuntado más arriba
+   como "sin empezar, sin fecha" — Paco confirma que quiere el alcance completo, no una
+   versión recortada.
+
 ### 🔴 Crítico
 
 - **Nada abierto ahora mismo.** El último crítico real (edición de una guía grande
