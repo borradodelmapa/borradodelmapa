@@ -2084,23 +2084,32 @@ body {
 .auth-btn-whatsapp svg { flex-shrink:0; }
 .auth-btn-whatsapp.hidden { display:none; }
 
-/* Línea de tranquilidad bajo los 2 botones grandes (25 sept 2026) — aclara que ya
-   sirven también para registrarse, sin montar un tercer botón/circuito de "Regístrate". */
-.auth-caption {
-  margin:14px 0 0; padding:0 8px;
-  color:rgba(244,239,230,.42); font-family:var(--font-body); font-size:12px;
-  text-align:center; line-height:1.4;
+/* QR de "Entrar con WhatsApp" desde el ordenador (25 sept 2026). Por encima de
+   .auth-screen (z-index 9999). */
+.wa-qr-overlay {
+  position:fixed; inset:0; z-index:10000;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(6,5,3,.82); padding:16px;
 }
-
-/* Enlace de texto pequeño — "Entrar con tu número" degradado de botón a esto (25 sept
-   2026), para dejar el login en dos botones grandes (Google + WhatsApp). */
-.auth-link-small {
-  display:block; width:100%; margin-top:10px; padding:8px;
+.wa-qr-card {
+  position:relative; width:100%; max-width:340px;
+  background:var(--negro); border:1.5px solid rgba(37,211,102,.5);
+  padding:28px 24px 24px; text-align:center;
+}
+.wa-qr-close {
+  position:absolute; top:6px; right:8px;
   background:none; border:none; cursor:pointer;
-  color:rgba(244,239,230,.5); font-family:var(--font-body); font-size:12.5px;
-  text-align:center; text-decoration:underline; text-underline-offset:2px;
+  color:var(--text-primary); font-size:26px; line-height:1; padding:6px 10px;
 }
-.auth-link-small:hover { color:var(--accent); }
+.wa-qr-box {
+  width:220px; height:220px; margin:0 auto;
+  background:#fff; display:flex; align-items:center; justify-content:center;
+}
+.wa-qr-box svg { width:100%; height:100%; display:block; }
+.wa-qr-hint {
+  margin:18px 0 0; color:var(--text-primary);
+  font-family:var(--font-body); font-size:15px; line-height:1.4;
+}
 
 /* Divider */
 .auth-divider {
@@ -2125,19 +2134,6 @@ body {
   display:flex; flex-direction:column; align-items:center;
 }
 .auth-biometric.hidden { display:none; }
-
-/* Entrar con tu número (24 sept 2026) */
-.auth-phone-form { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
-.auth-phone-form.hidden { display:none; }
-.auth-phone-input {
-  width:100%; padding:14px; box-sizing:border-box;
-  background:rgba(255,255,255,.04); color:var(--text-primary);
-  border:1.5px solid rgba(236,235,232,.25); border-radius:0;
-  font-family:var(--font-mono); font-size:14px; letter-spacing:.04em;
-}
-.auth-phone-input:focus { outline:none; border-color:var(--accent); }
-.auth-phone-code-wrap { display:flex; flex-direction:column; gap:10px; }
-.auth-phone-code-wrap.hidden { display:none; }
 
 /* ═══ TOAST ═══ */
 .toast {

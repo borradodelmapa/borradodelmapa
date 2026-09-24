@@ -906,8 +906,10 @@ const IP_DAILY_CAPS = {
   '/staticmap':    150,   // Google Static Maps
   '/flight-places':300,   // Duffel — autocompletado de aeropuertos
   '/photo':       1000,   // Google Places Photo (se cachea en R2 tras la 1ª vez)
-  '/phone-login-request': 20, // sin sesión, manda un WhatsApp real a un número ajeno si se abusa
+  '/wa-qr-start':   60,   // sin sesión, crea un documento en Firestore por cada QR de entrada
 };
+// Lo que dura un QR de "Entrar con WhatsApp" en el ordenador.
+const WA_QR_TTL_MS = 10 * 60 * 1000;
 async function ipDailyGate(request, env, path) {
   const max = IP_DAILY_CAPS[path];
   if (!max || !env || !env.SALMA_KB) return { ok: true };
@@ -1086,9 +1088,7 @@ async function mintFirebaseCustomToken(env, uid) {
 }
 
 // uid determinista para una cuenta creada desde WhatsApp: el MISMO teléfono da SIEMPRE
-// el mismo uid, sin tabla de traducción aparte — así "entrar con tu número" en la web
-// (POST /phone-login-*) llega exactamente a la cuenta que WhatsApp ya creó, con solo
-// recalcular el hash, sin tener que buscar nada. `whatsapp_sessions/{numero}` sigue
+// el mismo uid, sin tabla de traducción aparte. `whatsapp_sessions/{numero}` sigue
 // haciendo falta igual para el caso de alguien que vincula ese número a una cuenta YA
 // existente de Google (un uid que no sigue este patrón, ver /whatsapp-link-code).
 async function _waUidFromPhone(phoneE164) {
@@ -1109,12 +1109,33 @@ function _normalizePhoneE164(raw) {
   return s;
 }
 
+// Alta de cuenta para un número de WhatsApp que nunca ha tenido una. uid determinista
+// por teléfono (_waUidFromPhone). Devuelve el uid, o null si el número no es válido.
+async function _waCreateAccount(env, from, profileName) {
+  const phoneE164 = _normalizePhoneE164(String(from || '').replace(/^whatsapp:/, ''));
+  const uid = phoneE164 ? await _waUidFromPhone(phoneE164) : null;
+  if (!uid) return null;
+  const nowIso = new Date().toISOString();
+  await firestoreAdminPatch(env, 'users/' + uid, {
+    name: { stringValue: String(profileName || 'Viajero') },
+    phone: { stringValue: phoneE164 },
+    mapsCount: { integerValue: '0' },
+    createdAt: { timestampValue: nowIso },
+    created_via: { stringValue: 'whatsapp' },
+  });
+  await firestoreAdminPatch(env, 'whatsapp_sessions/' + encodeURIComponent(from), {
+    uid: { stringValue: uid },
+    linked_at: { timestampValue: nowIso },
+    profile_name: { stringValue: String(profileName || '') },
+  });
+  return uid;
+}
+
 // Enlace de un solo uso que entra YA logueado, para cuando el Worker menciona la web
 // dentro de un mensaje de WhatsApp a un uid que ya conoce (25 sept 2026, F5.4 —
 // "sigamos pensando" de Paco: quien ya escribe desde un número identificado no debería
-// tener que teclear su número otra vez en el navegador). Mismo mecanismo que
-// /phone-login-verify (custom token de Firebase), solo que el código lo genera el
-// propio Worker en vez de pedírselo al usuario — 10 min, un solo uso. Sin llamadas de
+// tener que teclear su número otra vez en el navegador). Canjeable en
+// /wa-weblogin-verify por un custom token de Firebase — 10 min, un solo uso. Sin llamadas de
 // pago: KV + firmar un JWT, igual que el resto de este flujo.
 async function buildAutoLoginLink(env, uid) {
   try {
@@ -8328,33 +8349,56 @@ export default {
             }
           }
 
+          // Entrada desde el ordenador por QR (25 sept 2026): el QR que enseña la web
+          // abre WhatsApp con "Entrar en el ordenador · código XXXXXX". Se marca ese
+          // código como confirmado con el uid de este número (creando la cuenta si es
+          // nuevo) y el ordenador, que está preguntando por /wa-qr-poll, entra solo.
+          // Va en Firestore y no en KV porque este webhook corre cerca de Twilio y el
+          // ordenador pregunta desde otra región: KV puede tardar hasta 60 s en
+          // propagar el cambio, Firestore no. No llama a Claude.
+          const qrMatch = body.match(/entrar en el ordenador\W*c[oó]digo\W*([A-Z0-9]{6})\s*$/i);
+          if (qrMatch) {
+            const qrPath = 'wa_qr_logins/' + qrMatch[1].toUpperCase();
+            const qrDoc = await firestoreAdminGet(env, qrPath);
+            const qrFields = (qrDoc && qrDoc.fields) || {};
+            const qrCreated = Date.parse(qrFields.created_at?.timestampValue || '') || 0;
+            const qrPending = qrFields.status?.stringValue === 'pending' && Date.now() - qrCreated < WA_QR_TTL_MS;
+            if (!qrPending) {
+              await sendWhatsAppMessage(env, from, 'Ese código ya ha caducado. Vuelve a pulsar "Entrar con WhatsApp" en el ordenador y escanea el QR nuevo.');
+              return;
+            }
+            let createdNow = false;
+            if (!linkedUid) {
+              linkedUid = await _waCreateAccount(env, from, profileName);
+              createdNow = true;
+              if (!linkedUid) {
+                await sendWhatsAppMessage(env, from, 'No he podido identificar bien tu número — vuelve a escribirme.');
+                return;
+              }
+            }
+            await firestoreAdminPatch(env, qrPath, {
+              status: { stringValue: 'ok' },
+              uid: { stringValue: linkedUid },
+              confirmed_at: { timestampValue: new Date().toISOString() },
+            });
+            await sendWhatsAppMessage(env, from, createdNow
+              ? '¡Listo! Te he abierto cuenta gratis con este número y ya estás dentro en el ordenador.'
+              : '¡Listo! Ya estás dentro en el ordenador. Si no has sido tú quien lo ha pedido, avísame.');
+            return;
+          }
+
           if (!linkedUid) {
             // Primer mensaje de un número que nunca ha tocado la web ni tiene código
             // — se le crea cuenta ahí mismo (24 sept 2026, decisión explícita de Paco:
             // "que le cree la cuenta ahí mismo"). uid determinista por teléfono
-            // (_waUidFromPhone): el mismo número siempre da la misma cuenta, así
-            // "Entrar con tu número" en la web (POST /phone-login-*) llega exacto
-            // aquí sin tener que buscar nada aparte. Sin llamadas de pago — solo
-            // Firestore (gratis) y la propia respuesta de WhatsApp que ya se manda.
-            const phoneE164 = _normalizePhoneE164(from.replace(/^whatsapp:/, ''));
-            const newUid = phoneE164 ? await _waUidFromPhone(phoneE164) : null;
+            // (_waUidFromPhone): el mismo número siempre da la misma cuenta. Sin
+            // llamadas de pago — solo Firestore (gratis) y la propia respuesta de
+            // WhatsApp que ya se manda.
+            const newUid = await _waCreateAccount(env, from, profileName);
             if (!newUid) {
               await sendWhatsAppMessage(env, from, 'No he podido identificar bien tu número — vuelve a escribirme.');
               return;
             }
-            const nowIso = new Date().toISOString();
-            await firestoreAdminPatch(env, 'users/' + newUid, {
-              name: { stringValue: String(profileName || 'Viajero') },
-              phone: { stringValue: phoneE164 },
-              mapsCount: { integerValue: '0' },
-              createdAt: { timestampValue: nowIso },
-              created_via: { stringValue: 'whatsapp' },
-            });
-            await firestoreAdminPatch(env, 'whatsapp_sessions/' + encodeURIComponent(from), {
-              uid: { stringValue: newUid },
-              linked_at: { timestampValue: nowIso },
-              profile_name: { stringValue: String(profileName || '') },
-            });
             linkedUid = newUid;
             const welcomeLink = await buildAutoLoginLink(env, newUid);
             await sendWhatsAppMessage(env, from, `¡Hola${profileName ? ' ' + profileName : ''}! Te acabo de abrir cuenta gratis en Borrado del Mapa con este número — ya podemos hablar de tu viaje. Si algún día quieres verlo también desde el ordenador o el móvil por la web, entra aquí, ya con sesión iniciada: ${welcomeLink}`);
@@ -8462,50 +8506,65 @@ export default {
       }
     }
 
-    // ─── ENDPOINT /phone-login-request ("Entrar con tu número") ───
-    // Sin sesión a propósito — es el propio flujo de entrar. Solo funciona para un
-    // número que YA tiene cuenta (whatsapp_sessions/{numero} existe, normalmente
-    // creada sola por /whatsapp la primera vez que escribió) — este endpoint NUNCA
-    // crea cuentas nuevas, solo manda acceso a una que ya existe, para no abrir un
-    // segundo camino de alta que se pueda desincronizar del de WhatsApp.
-    // 25 sept 2026 (Paco: "¿para qué se va a tener que validar? la idea es que entre
-    // del tirón") — ya no manda un código para teclear a mano: manda el mismo enlace
-    // de auto-entrada de un solo toque que usa el resto de mensajes de /whatsapp
-    // (buildAutoLoginLink) — sin validar nada aparte, tocar el enlace ya entra.
-    if (request.method === 'POST' && url.pathname === '/phone-login-request') {
+    // ─── ENDPOINTS /wa-qr-start y /wa-qr-poll — entrar con WhatsApp desde el ordenador ───
+    // (25 sept 2026, sustituyen a "Entrar con tu número"). El ordenador pide un código de
+    // un solo uso y lo enseña dentro de un QR; el móvil lo escanea y manda el WhatsApp ya
+    // escrito; /whatsapp marca el código como confirmado; el ordenador, que pregunta cada
+    // 2 s, recibe un custom token y entra. Sin sesión a propósito (es el propio flujo de
+    // entrar). El `secret` solo lo conoce el navegador que empezó (no va en el QR): quien
+    // vea el código en pantalla no puede usarlo para entrar desde otro sitio.
+    if (request.method === 'POST' && url.pathname === '/wa-qr-start') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       try {
-        const body = await request.json().catch(() => ({}));
-        const phoneE164 = _normalizePhoneE164(body.phone);
-        if (!phoneE164) {
-          return new Response(JSON.stringify({ error: 'bad_phone', message: 'Escribe el número con el prefijo del país (ej. +34...)' }), { status: 400, headers: corsH });
-        }
-        if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_WHATSAPP_FROM) {
-          return new Response(JSON.stringify({ error: 'not_configured' }), { status: 500, headers: corsH });
-        }
-        const from = 'whatsapp:' + phoneE164;
-        const session = await firestoreAdminGet(env, 'whatsapp_sessions/' + encodeURIComponent(from));
-        const uid = session && session.fields && session.fields.uid && session.fields.uid.stringValue;
-        if (!uid) {
-          return new Response(JSON.stringify({
-            error: 'no_account',
-            message: 'Ese número no tiene cuenta todavía. Escríbele primero por WhatsApp a Salma y vuelve aquí después.',
-            whatsapp_number: (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '').trim(),
-          }), { status: 404, headers: corsH });
-        }
-        const link = await buildAutoLoginLink(env, uid);
-        await sendWhatsAppMessage(env, from, `Toca para entrar en borradodelmapa.com, ya con sesión iniciada: ${link} (caduca en 10 minutos). Si no has sido tú, ignora este mensaje.`);
-        return new Response(JSON.stringify({ ok: true }), { headers: corsH });
+        const waNumber = (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '').trim();
+        if (!waNumber) return new Response(JSON.stringify({ error: 'not_configured' }), { status: 500, headers: corsH });
+        const ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+        const code = Array.from({ length: 6 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
+        const secretBytes = crypto.getRandomValues(new Uint8Array(16));
+        const secret = Array.from(secretBytes, b => b.toString(16).padStart(2, '0')).join('');
+        await firestoreAdminPatch(env, 'wa_qr_logins/' + code, {
+          status: { stringValue: 'pending' },
+          secret: { stringValue: secret },
+          created_at: { timestampValue: new Date().toISOString() },
+        });
+        return new Response(JSON.stringify({ code, secret, whatsapp_number: waNumber, ttl_ms: WA_QR_TTL_MS }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    if (request.method === 'POST' && url.pathname === '/wa-qr-poll') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      try {
+        const body = await request.json().catch(() => ({}));
+        const code = String(body.code || '').trim().toUpperCase();
+        const secret = String(body.secret || '');
+        if (!/^[A-Z0-9]{6}$/.test(code) || !secret) {
+          return new Response(JSON.stringify({ status: 'expired' }), { headers: corsH });
+        }
+        const path = 'wa_qr_logins/' + code;
+        const doc = await firestoreAdminGet(env, path);
+        const f = (doc && doc.fields) || {};
+        const created = Date.parse(f.created_at?.timestampValue || '') || 0;
+        if (!doc || f.secret?.stringValue !== secret || Date.now() - created > WA_QR_TTL_MS) {
+          return new Response(JSON.stringify({ status: 'expired' }), { headers: corsH });
+        }
+        const status = f.status?.stringValue;
+        if (status === 'pending') return new Response(JSON.stringify({ status: 'pending' }), { headers: corsH });
+        if (status !== 'ok' || !f.uid?.stringValue) return new Response(JSON.stringify({ status: 'expired' }), { headers: corsH });
+        await firestoreAdminPatch(env, path, { status: { stringValue: 'used' } });
+        const customToken = await mintFirebaseCustomToken(env, f.uid.stringValue);
+        return new Response(JSON.stringify({ status: 'ok', custom_token: customToken }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ status: 'error', error: e.message }), { status: 500, headers: corsH });
       }
     }
 
     // ─── ENDPOINT /wa-weblogin-verify (25 sept 2026) ───
     // Canjea el código de un solo uso que el propio Worker genera (buildAutoLoginLink)
     // cuando manda un enlace a la web dentro de un mensaje de WhatsApp a un uid que ya
-    // conoce — el usuario no teclea nada, solo toca el enlace. Mismo patrón que
-    // /phone-login-verify, sin sesión a propósito (es el propio flujo de entrar).
+    // conoce — el usuario no teclea nada, solo toca el enlace. Sin sesión a propósito
+    // (es el propio flujo de entrar).
     if (request.method === 'POST' && url.pathname === '/wa-weblogin-verify') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       try {
