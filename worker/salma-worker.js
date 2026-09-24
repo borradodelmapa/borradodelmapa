@@ -7783,6 +7783,8 @@ export default {
         // CATÁLOGO (ver bloque "CATÁLOGO DE LUGARES"): si el lugar ya está, CERO llamadas a Google.
         let cat = await catalogGet(env, placeId);
         let source = 'hit';
+        // Las fichas v1 (anteriores al 23 sept) se guardaron sin coordenadas: se renuevan UNA vez y quedan completas para siempre.
+        if (cat && !(cat.v >= 2)) cat = null;
         if (!cat) {
           source = 'miss';
           // Única llamada a Google por lugar: se piden TODOS los campos que la app necesita (PLACE_DETAIL_FIELDS),
