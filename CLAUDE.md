@@ -2630,10 +2630,59 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
       punto 3: cómo cuentan los límites del plan gratis para un número de WhatsApp sin
       vincular a un `uid` — hay que cerrar esto antes de escribir el código de F5.3/F5.4,
       no parchearlo después, tal como ya se acordó el 14 sept).
-    **Pendiente: que Paco le escriba algo real a Salma por el Sandbox (ya reconectado
-    hoy) y confirme que responde con su personalidad de verdad — no el eco — y que
-    avisa con naturalidad cuando le piden algo que todavía no puede hacer (buscar un
-    vuelo, un hotel, etc.).**
+    **CONFIRMADO EN PANTALLA por Paco (24 sept 2026): Salma responde de verdad con su
+    personalidad por WhatsApp (no el eco), y dijo con naturalidad que no sabía dónde
+    estaba — correcto, esperado, GPS no llega por este canal todavía.**
+
+  - **24 sept 2026 (mismo día) — F5.4 ADELANTADO por decisión explícita de Paco: sin
+    cuenta vinculada, Salma ya no responde NADA por WhatsApp salvo cómo vincularse — no
+    solo antes de las tools de F5.3, como se había dejado pendiente de decidir arriba.
+    Pregunta de Paco: "¿se pueden loguear por WhatsApp también?" — respondida así: un
+    login/registro 100% dentro del chat de WhatsApp (pedir email+contraseña o mandar un
+    enlace mágico por ahí) es técnicamente posible pero bastante más arriesgado y
+    complicado (recoger credenciales por chat no es buena práctica, y Meta lo mira con
+    lupa) — se optó por lo más simple y seguro: **registro en la web de siempre (rápido,
+    con Google) + un código corto que vincula el número de WhatsApp a esa cuenta ya
+    creada.** DESPLEGADO, commit `a9672e0`, GitHub Action "Deploy Worker" run #41,
+    **Worker Version ID `3a4d46a8-4cb3-4baf-9f25-db3af99b56f2`** (leído directo del log
+    del deploy).
+    - Nueva colección `whatsapp_sessions/{numero}` (Firestore) — `{uid, linked_at,
+      profile_name}`, la escribe y lee SOLO el Worker vía su service account (mismo
+      mecanismo ya usado por el webhook de Stripe, `firestoreAdminGet`/
+      `firestoreAdminPatch`) — el cliente nunca la toca directamente, así que no hace
+      falta ninguna regla nueva en `firestore.rules`.
+    - Nuevo endpoint **`POST /whatsapp-link-code`** (requiere login, mismo patrón que
+      `/beta-feedback`): genera un código de 6 caracteres (alfabeto sin 0/O/1/I, para no
+      confundir al copiarlo a mano) y lo guarda en KV (`walink:{código}` → uid, 10 min
+      TTL).
+    - **Nueva fila "Vincular WhatsApp" en Perfil → CUENTA** (`app.js?v=155`): pide el
+      código al Worker y lo enseña en un modal con instrucciones — mandarlo por
+      WhatsApp al número de Salma.
+    - **`POST /whatsapp` reescrito**: antes de llamar a Claude, mira si el número que
+      escribe ya tiene `whatsapp_sessions/{numero}`. Si NO:
+      - Si el texto es un código de 6 caracteres válido → lo consume de KV, escribe la
+        vinculación en Firestore y confirma ("¡Listo! Ya tienes tu WhatsApp
+        vinculado...").
+      - Si no es un código válido (caducado o inventado) → avisa que no lo reconoce.
+      - Cualquier otro mensaje → explica que hace falta cuenta + código, con el enlace a
+        la web, y **no llama a Claude** (cero coste en este caso).
+      Si SÍ está vinculado, sigue exactamente el flujo F5.2 de arriba (tope de 60/día +
+      Claude Sonnet + `WHATSAPP_SYSTEM_CHAT`).
+    - **Por qué resuelve la decisión pendiente de arriba** (cómo cuentan los límites del
+      plan gratis para un número sin vincular): ya no hace falta decidir un sistema de
+      cupos aparte para WhatsApp — en cuanto todo pasa por un `uid` real, F5.3 puede
+      reusar tal cual el mismo `PLAN_LIMITS`/`usageGate`/KV `usage:{uid}:{mes}` que ya
+      existe para la web, sin construir nada nuevo.
+    - **Aviso de coste (protocolo §8)**: la vinculación en sí no llama a ninguna API de
+      pago (Firestore + KV, gratis). Lo que sí sigue costando es cada mensaje YA
+      vinculado, igual que en F5.2 — sin cambios ahí.
+    - **Sin tocar a propósito, sigue para F5.3**: memoria entre mensajes, tools
+      (vuelos/hoteles/lugares), y el límite real por plan/uid del propio usuario (hoy
+      solo hay el tope técnico de 60/día por número, no el tope de su plan real).
+    **Pendiente: que Paco pruebe el flujo completo en su móvil — pedir el código desde
+    Perfil, mandarlo por WhatsApp, confirmar que Salma dice "vinculado", y que a partir
+    de ahí vuelve a responder con su personalidad como antes.**
+
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
