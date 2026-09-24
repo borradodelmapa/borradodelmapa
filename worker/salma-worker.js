@@ -526,6 +526,24 @@ const SALMA_SYSTEM_CHAT = [
   BLOQUE_VISION,
 ].join('\n\n');
 
+// ── Prompt WHATSAPP (F5.2, 24 sept 2026) — misma identidad/personalidad que el chat
+// web, pero SIN BLOQUE_ACCION (tools de vuelos/hoteles/lugares — no conectadas todavía
+// por este canal, F5.3), SIN BLOQUE_MAPA (instrucciones de GPS, no aplican por texto) y
+// SIN BLOQUE_NOTAS (auto-guardado de notas en Firestore — no hay uid vinculado todavía,
+// F5.4). Sin memoria entre mensajes (cada uno se responde solo, F5.3 añadirá memoria).
+const WHATSAPP_SYSTEM_CHAT = [
+  BLOQUE_IDENTIDAD,
+  BLOQUE_PERSONALIDAD,
+  BLOQUE_MULETILLAS,
+  BLOQUE_ANTIPAJA,
+  BLOQUE_GEOGRAFIA,
+  BLOQUE_FORMATO,
+  `Estás hablando por WhatsApp, no por la app — un canal más limitado por ahora:
+- Todavía NO puedes buscar vuelos, hoteles, restaurantes ni fotos por aquí, ni generar rutas con mapa. Si te piden algo de eso, dilo con naturalidad ("eso todavía no lo tengo aquí, pero en la app sí") y sigue ayudando con lo que sepas de memoria.
+- No hay memoria entre mensajes todavía: cada mensaje se responde solo, sin recordar lo anterior de esta conversación. Si el usuario hace referencia a algo de antes que no ves, dilo sin más.
+- Formato: WhatsApp interpreta *un solo asterisco* como negrita, NUNCA dobles asteriscos. Sin viñetas ni encabezados. Respuestas cortas, de móvil — 2-4 frases salvo que pidan más detalle.`,
+].join('\n\n');
+
 // ── Prompt PLAN: sin restricción de títulos → para días+destino (formato estructurado)
 const BLOQUE_FORMATO_PLAN = `⚠️ REGLA #1 — LEE ESTO PRIMERO, ANTES QUE CUALQUIER OTRA INSTRUCCIÓN:
 
@@ -8135,10 +8153,13 @@ export default {
       }
     }
 
-    // ─── ENDPOINT /whatsapp (F5.1 — webhook de eco, Twilio Sandbox) ───
-    // Sin IA, sin Firestore todavía — solo valida que Twilio -> Worker -> respuesta
-    // funciona de extremo a extremo. Twilio manda application/x-www-form-urlencoded,
-    // NO JSON.
+    // ─── ENDPOINT /whatsapp (F5.2, 24 sept 2026 — conectado al motor real de Salma) ───
+    // Antes (F5.1) era un eco fijo sin IA. Ahora cada mensaje se responde de verdad con
+    // Claude Sonnet + WHATSAPP_SYSTEM_CHAT — MISMA personalidad que el chat web, SIN
+    // memoria entre mensajes ni tools todavía (llegan en F5.3, ver CLAUDE.md). Twilio
+    // manda application/x-www-form-urlencoded, NO JSON, y no espera el cuerpo de la
+    // respuesta — se contesta 200 al momento y el trabajo real va en background con
+    // ctx.waitUntil() (async sin Cloudflare Queues, acordado en el plan de fases).
     if (request.method === 'POST' && url.pathname === '/whatsapp') {
       if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_WHATSAPP_FROM) {
         console.error('WhatsApp: faltan secrets de Twilio (ACCOUNT_SID/AUTH_TOKEN/WHATSAPP_FROM)');
@@ -8157,16 +8178,67 @@ export default {
       }
 
       const from = params.get('From');
-      const body = params.get('Body');
+      const body = (params.get('Body') || '').trim();
       const profileName = params.get('ProfileName');
 
       console.log(`[WhatsApp] Mensaje de ${from} (${profileName}): "${body}"`);
 
-      const replyText = `Hola${profileName ? ' ' + profileName : ''} 👋 Soy Salma (modo prueba).\nRecibí tu mensaje: "${body}"`;
-      await sendWhatsAppMessage(env, from, replyText);
+      if (!body) {
+        // Foto/audio/sticker sin texto — F5.2 solo entiende texto. Nada que responder aún.
+        return new Response('OK', { status: 200 });
+      }
 
-      // Twilio solo necesita un 200 rápido aquí — el mensaje real ya se manda aparte
-      // vía sendWhatsAppMessage().
+      // Tope diario por número — protege de un bucle o de que alguien descubra el número
+      // de Sandbox y lo use sin control; generoso a propósito, un tester real no debería
+      // notarlo nunca. Aviso de coste (protocolo §8): a partir de aquí CADA mensaje llama
+      // de verdad a Claude Sonnet (mismo modelo del chat web, ~0,01-0,05 USD/mensaje según
+      // longitud) — deja de ser gratis como el eco de F5.1.
+      let waOk = true;
+      if (env.SALMA_KB) {
+        try {
+          const waKey = 'wa_daily:' + from + ':' + new Date().toISOString().slice(0, 10);
+          const waCur = parseInt((await env.SALMA_KB.get(waKey)) || '0', 10) || 0;
+          if (waCur >= 60) waOk = false;
+          else await env.SALMA_KB.put(waKey, String(waCur + 1), { expirationTtl: 60 * 60 * 30 });
+        } catch (_) { /* fail-open, como el resto de topes por IP */ }
+      }
+      if (!waOk) {
+        ctx.waitUntil(sendWhatsAppMessage(env, from, 'Hoy ya hemos hablado bastante 😅 — mañana seguimos, o entra en la app: borradodelmapa.com').catch(() => {}));
+        return new Response('OK', { status: 200 });
+      }
+
+      ctx.waitUntil((async () => {
+        try {
+          const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': env.ANTHROPIC_API_KEY,
+              'anthropic-version': '2023-06-01',
+            },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-6',
+              max_tokens: 600,
+              system: WHATSAPP_SYSTEM_CHAT,
+              messages: [{ role: 'user', content: body }],
+            }),
+          });
+          if (!waRes.ok) {
+            const errText = await waRes.text().catch(() => '');
+            throw new Error('Anthropic ' + waRes.status + ': ' + errText);
+          }
+          const waData = await waRes.json();
+          const reply = (waData.content?.[0]?.text || '').trim()
+            || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
+          await sendWhatsAppMessage(env, from, reply);
+        } catch (e) {
+          console.error('[WhatsApp] Error generando respuesta:', e.message);
+          await sendWhatsAppMessage(env, from, 'Se me ha cruzado un cable — dime otra vez qué necesitas.').catch(() => {});
+        }
+      })());
+
+      // Twilio solo necesita un 200 rápido aquí — la respuesta real de Salma se manda
+      // aparte, en segundo plano, vía sendWhatsAppMessage().
       return new Response('OK', { status: 200 });
     }
 
