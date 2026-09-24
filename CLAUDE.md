@@ -2589,6 +2589,51 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     2 semanas según el propio checklist de arriba).** Si vuelve a rechazar por 18602, la
     única salida real sigue siendo la decisión de negocio ya anotada (alta de autónomo o
     formar una SL) — no hay ningún ajuste de formulario más que probar.
+  - **24 sept 2026 — F5.2 HECHO Y DESPLEGADO: WhatsApp ya conecta con el motor real de
+    Salma (antes era un eco fijo de F5.1). PENDIENTE de que Paco lo pruebe en pantalla.**
+    Commit `5f6f6c5`, GitHub Action "Deploy Worker" run #40, **Worker Version ID
+    `243c5a39-7bcb-403a-8c1e-d94f59ce413f`** (confirmado en el log del propio deploy —
+    esta sesión sí tenía credenciales de Cloudflare vía el Action, no directamente).
+    - Nuevo prompt **`WHATSAPP_SYSTEM_CHAT`** (junto a `SALMA_SYSTEM_CHAT` en el código):
+      mismos bloques de identidad/personalidad/muletillas/antipaja/geografía/formato que
+      el chat web, pero **sin BLOQUE_ACCION** (tools de vuelos/hoteles/lugares — no
+      conectadas por este canal todavía, quedan para F5.3), **sin BLOQUE_MAPA** (GPS, no
+      aplica por texto) y **sin BLOQUE_NOTAS** (auto-guardado de notas en Firestore — no
+      hay `uid` vinculado sin cuenta, eso es F5.4). Añadido un párrafo propio explicando
+      a Salma que está en WhatsApp: sin tools todavía, sin memoria entre mensajes, y que
+      la negrita de WhatsApp es un solo asterisco (`*así*`), no doble — **decidido
+      aplicarlo SOLO al prompt de WhatsApp, no tocar `BLOQUE_FORMATO` compartido con la
+      web** (ese cambio de formato global sigue siendo una decisión abierta aparte, ver
+      "Ajustes al plan" más abajo — no se ha tocado).
+    - `POST /whatsapp` ya no manda el eco fijo: valida la firma de Twilio igual que
+      antes, responde `200 OK` al momento (Twilio no espera el cuerpo) y en segundo plano
+      (`ctx.waitUntil`, sin Cloudflare Queues — según el ajuste ya acordado el 14 sept)
+      llama a Claude Sonnet (mismo modelo `claude-sonnet-4-6` del chat web, mismo AI
+      Gateway que ya usan `/narrate`/`/pin`) con `WHATSAPP_SYSTEM_CHAT` + el mensaje tal
+      cual, sin historial. Un mensaje sin texto (foto/audio/sticker) no dispara nada
+      todavía — F5.2 solo entiende texto.
+    - **Tope de 60 mensajes/día por número** en KV (`wa_daily:{numero}:{fecha}`,
+      fail-open si KV falla) — protección básica contra un bucle o que alguien descubra
+      el número de Sandbox y lo use sin control, generoso a propósito para no notarse en
+      uso normal de un tester.
+    - **Aviso de coste (protocolo §8), dado al implementar**: cada mensaje de WhatsApp
+      pasa de ser gratis (el eco de F5.1 no llamaba a ninguna API) a llamar de verdad a
+      Claude Sonnet — mismo coste aproximado que un mensaje del chat web sin caché
+      (~0,01-0,05 USD según longitud de la respuesta; el prompt de WhatsApp es más corto
+      que el de la web al no llevar BLOQUE_ACCION/MAPA/NOTAS, así que debería quedar en
+      la parte baja de ese rango). Sin prompt caching en este endpoint todavía (se podría
+      añadir después, mismo patrón ya usado en `POST /`).
+    - **Sin tocar a propósito**: tools (F5.3), memoria/sesión entre mensajes (F5.3),
+      vinculación con una cuenta de la app / registro (F5.4) — Paco pidió avanzar "todo
+      lo que se pueda", pero cada pieza depende de la anterior y F5.4 (registro) tiene
+      una decisión de negocio pendiente sin cerrar (ver "Ajustes al plan" más abajo,
+      punto 3: cómo cuentan los límites del plan gratis para un número de WhatsApp sin
+      vincular a un `uid` — hay que cerrar esto antes de escribir el código de F5.3/F5.4,
+      no parchearlo después, tal como ya se acordó el 14 sept).
+    **Pendiente: que Paco le escriba algo real a Salma por el Sandbox (ya reconectado
+    hoy) y confirme que responde con su personalidad de verdad — no el eco — y que
+    avisa con naturalidad cuando le piden algo que todavía no puede hacer (buscar un
+    vuelo, un hotel, etc.).**
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
