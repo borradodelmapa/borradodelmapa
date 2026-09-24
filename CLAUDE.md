@@ -2869,6 +2869,39 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     Claude; (3) tocar el enlace de auto-entrada de cualquiera de esos 3 mensajes y
     confirmar que la web entra directa, sin login, sin teclear nada.**
 
+  - **25 sept 2026 — "Entrar con tu número" (Camino 3) ya no pide teclear ningún
+    código, solo tocar un enlace. DESPLEGADO, sin confirmar en pantalla.** Paco, tras
+    ver el estado de arriba: **"una cosa no es necesario mensaje de verificación o
+    bueno un mensaje saludando pero la idea es que entre del tirón. me explico ¿para
+    qué se va a tener que validar?"** — el único paso manual que quedaba en todo este
+    sistema de login por WhatsApp era justo este: pedía el número, mandaba un código
+    de 6 caracteres por WhatsApp, y había que volver a la web a teclearlo. Se quita
+    ese paso intermedio y se reutiliza el mismo mecanismo de auto-entrada que ya se
+    había construido momentos antes para los 3 mensajes de arriba (`buildAutoLoginLink`
+    / `/wa-weblogin-verify` / `_tryWaAutoLogin()` vía `?entrada=`) — commit `8bda95a`,
+    **Worker Version ID `deeab67f-4173-4f39-80db-67b157e1a2a4`** (leído del log del
+    deploy).
+    - `POST /phone-login-request`: ya no genera un código de 6 caracteres en KV
+      (`phonelogin:`) ni pide teclearlo — llama a `buildAutoLoginLink(env, uid)` y
+      manda por WhatsApp un enlace de un solo toque ("Toca para entrar en
+      borradodelmapa.com, ya con sesión iniciada: ...").
+    - **Borrado `POST /phone-login-verify`** — sin más llamadores (comprobado con
+      grep antes de quitarlo), ya no hace falta: el canje del código lo hace
+      `/wa-weblogin-verify`, que ya existía para los otros 3 mensajes.
+    - `app.js`: borrada `_verifyPhoneLoginCode()`; `_sendPhoneLoginCode()` ya no
+      revela ningún campo de código, solo avisa con un toast ("Te hemos mandado un
+      enlace por WhatsApp — tócalo y entras directo.").
+    - `index.html`: quitado el bloque `#auth-phone-code-wrap` (input de código +
+      botón "Entrar") de `#auth-phone-form` — solo queda el campo de número y un
+      botón, renombrado a "Enviar enlace por WhatsApp".
+    - **Aviso de coste (protocolo §8):** cero llamadas de pago nuevas — mismo
+      mecanismo ya en uso (KV + firmar un JWT local), solo que ahora también lo usa
+      este cuarto sitio.
+    `app.js?v=160`.
+    **Pendiente: que Paco pruebe "Entrar con tu número" con un número que YA tiene
+    cuenta por WhatsApp, y confirme que le llega un enlace (no un código) y que
+    tocarlo le mete directo en la web, sin volver a escribir nada.**
+
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
