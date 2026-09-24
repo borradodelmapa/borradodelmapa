@@ -3568,6 +3568,75 @@ async function doGoogleLogin() {
   }
 }
 
+// ═══ Entrar con tu número (24 sept 2026) ═══
+// Solo entra en una cuenta que YA existe (creada sola la primera vez que se escribió
+// a Salma por WhatsApp) — nunca crea cuenta desde aquí, para no abrir un segundo
+// camino de alta suelto del de WhatsApp (ver CLAUDE.md, "Camino 3").
+function _togglePhoneLoginForm() {
+  const form = document.getElementById('auth-phone-form');
+  if (form) form.classList.toggle('hidden');
+}
+
+async function _sendPhoneLoginCode() {
+  const input = document.getElementById('auth-phone-input');
+  const btn = document.getElementById('btn-phone-send');
+  const phone = (input?.value || '').trim();
+  if (!phone) return;
+  const errEl = document.getElementById('login-error');
+  if (errEl) errEl.classList.remove('show');
+  if (btn) btn.disabled = true;
+  try {
+    const res = await fetch(window.SALMA_API + '/phone-login-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showAuthError('login-error', data.message || 'No se pudo mandar el código.');
+      return;
+    }
+    document.getElementById('auth-phone-code-wrap')?.classList.remove('hidden');
+    if (typeof showToast === 'function') showToast('Código enviado por WhatsApp');
+  } catch (e) {
+    showAuthError('login-error', 'Uf, sin conexión o me he aturrullado. Vuelve a intentarlo.');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function _verifyPhoneLoginCode() {
+  const codeInput = document.getElementById('auth-phone-code-input');
+  const btn = document.getElementById('btn-phone-verify');
+  const code = (codeInput?.value || '').trim();
+  if (!code) return;
+  const errEl = document.getElementById('login-error');
+  if (errEl) errEl.classList.remove('show');
+  if (btn) btn.disabled = true;
+  try {
+    const res = await fetch(window.SALMA_API + '/phone-login-verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.custom_token) {
+      showAuthError('login-error', data.message || 'Código inválido o caducado.');
+      return;
+    }
+    await auth.signInWithCustomToken(data.custom_token);
+    // No hace falta crear doc de Firestore aquí (ya existe, lo escribió el Worker al
+    // crear la cuenta por WhatsApp) — auth.onAuthStateChanged hace el resto igual que
+    // con cualquier otro método de login.
+    closeModal();
+  } catch (e) {
+    console.error('Error entrando con número:', e);
+    showAuthError('login-error', 'No se pudo entrar con ese código. Vuelve a intentarlo.');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 // ═══ WebAuthn — Huella dactilar ═══
 
 async function doFingerprintLogin() {
@@ -4221,6 +4290,9 @@ function sendMessage() {
 
 document.getElementById('btn-google-login')?.addEventListener('click', doGoogleLogin);
 document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerprintLogin);
+document.getElementById('btn-phone-login-toggle')?.addEventListener('click', _togglePhoneLoginForm);
+document.getElementById('btn-phone-send')?.addEventListener('click', _sendPhoneLoginCode);
+document.getElementById('btn-phone-verify')?.addEventListener('click', _verifyPhoneLoginCode);
 
 // Logo eliminado — navegación solo por bottom bar
 

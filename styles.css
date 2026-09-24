@@ -2093,6 +2093,19 @@ body {
 }
 .auth-biometric.hidden { display:none; }
 
+/* Entrar con tu número (24 sept 2026) */
+.auth-phone-form { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.auth-phone-form.hidden { display:none; }
+.auth-phone-input {
+  width:100%; padding:14px; box-sizing:border-box;
+  background:rgba(255,255,255,.04); color:var(--text-primary);
+  border:1.5px solid rgba(236,235,232,.25); border-radius:0;
+  font-family:var(--font-mono); font-size:14px; letter-spacing:.04em;
+}
+.auth-phone-input:focus { outline:none; border-color:var(--accent); }
+.auth-phone-code-wrap { display:flex; flex-direction:column; gap:10px; }
+.auth-phone-code-wrap.hidden { display:none; }
+
 /* ═══ TOAST ═══ */
 .toast {
   position:fixed; bottom:160px; left:50%; transform:translateX(-50%);

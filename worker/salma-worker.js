@@ -906,6 +906,7 @@ const IP_DAILY_CAPS = {
   '/staticmap':    150,   // Google Static Maps
   '/flight-places':300,   // Duffel — autocompletado de aeropuertos
   '/photo':       1000,   // Google Places Photo (se cachea en R2 tras la 1ª vez)
+  '/phone-login-request': 20, // sin sesión, manda un WhatsApp real a un número ajeno si se abusa
 };
 async function ipDailyGate(request, env, path) {
   const max = IP_DAILY_CAPS[path];
@@ -1051,6 +1052,61 @@ async function getServiceAccountToken(env, scope, cacheKey) {
     if (env.SALMA_KB) await env.SALMA_KB.put(cacheKey, data.access_token, { expirationTtl: 3300 });
   } catch (_) {}
   return data.access_token;
+}
+
+/**
+ * Firma un "custom token" de Firebase Auth para el uid dado (24 sept 2026, login por
+ * WhatsApp/teléfono) — el cliente lo canjea con `signInWithCustomToken()`. Es solo un
+ * JWT autofirmado con la clave privada de la service account, sin llamada de red: si
+ * ese uid no existe todavía como usuario de Firebase Auth, Firebase lo crea SOLO en el
+ * momento en que el cliente lo canjea (comportamiento documentado de los custom
+ * tokens) — no hace falta llamar a ningún endpoint de "crear cuenta" aparte.
+ */
+async function mintFirebaseCustomToken(env, uid) {
+  const raw = env.FIREBASE_SERVICE_ACCOUNT;
+  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT no configurado');
+  const sa = JSON.parse(raw);
+  const now = Math.floor(Date.now() / 1000);
+  const header = { alg: 'RS256', typ: 'JWT' };
+  const payload = {
+    iss: sa.client_email,
+    sub: sa.client_email,
+    aud: 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
+    iat: now,
+    exp: now + 3600,
+    uid,
+  };
+  const unsigned = _b64url(JSON.stringify(header)) + '.' + _b64url(JSON.stringify(payload));
+  const key = await crypto.subtle.importKey(
+    'pkcs8', _pemToPkcs8(sa.private_key),
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(unsigned));
+  return unsigned + '.' + _b64url(new Uint8Array(sig));
+}
+
+// uid determinista para una cuenta creada desde WhatsApp: el MISMO teléfono da SIEMPRE
+// el mismo uid, sin tabla de traducción aparte — así "entrar con tu número" en la web
+// (POST /phone-login-*) llega exactamente a la cuenta que WhatsApp ya creó, con solo
+// recalcular el hash, sin tener que buscar nada. `whatsapp_sessions/{numero}` sigue
+// haciendo falta igual para el caso de alguien que vincula ese número a una cuenta YA
+// existente de Google (un uid que no sigue este patrón, ver /whatsapp-link-code).
+async function _waUidFromPhone(phoneE164) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('wa:' + phoneE164));
+  const bytes = new Uint8Array(buf);
+  let hex = '';
+  for (let i = 0; i < 12; i++) hex += bytes[i].toString(16).padStart(2, '0');
+  return 'wa_' + hex;
+}
+
+// "+34678668480", "34678668480", "0034 678 668 480"... → "+34678668480" | null si no
+// parece un teléfono real (mín. 8 dígitos tras el prefijo, máx. 15 por E.164).
+function _normalizePhoneE164(raw) {
+  let s = String(raw || '').trim().replace(/[\s()-]/g, '');
+  if (!s) return null;
+  if (!s.startsWith('+')) s = '+' + s.replace(/^0+/, '');
+  if (!/^\+[1-9]\d{7,14}$/.test(s)) return null;
+  return s;
 }
 
 // GET de un documento Firestore con el token de service account. null si 404.
@@ -8192,37 +8248,86 @@ export default {
       ctx.waitUntil((async () => {
         try {
           // ¿Este número ya está vinculado a una cuenta? whatsapp_sessions/{numero} lo
-          // escribe el propio Worker (service account) al confirmar un código — el
-          // cliente nunca lee ni escribe esta colección directamente, no hace falta
-          // regla de Firestore nueva.
+          // escribe el propio Worker (service account) al confirmar un código o al
+          // crear una cuenta nueva — el cliente nunca lee ni escribe esta colección
+          // directamente, no hace falta regla de Firestore nueva.
           let session = null;
           try {
             session = await firestoreAdminGet(env, 'whatsapp_sessions/' + encodeURIComponent(from));
           } catch (e) {
             console.error('[WhatsApp] Error leyendo whatsapp_sessions:', e.message);
           }
-          const linkedUid = session && session.fields && session.fields.uid && session.fields.uid.stringValue;
+          let linkedUid = session && session.fields && session.fields.uid && session.fields.uid.stringValue;
 
-          if (!linkedUid) {
-            // ¿El mensaje es un código de vinculación de 6 caracteres?
-            if (/^[A-Z0-9]{6}$/i.test(body) && env.SALMA_KB) {
-              const codeKey = 'walink:' + body.toUpperCase();
-              const codeUid = await env.SALMA_KB.get(codeKey);
-              if (codeUid) {
-                await env.SALMA_KB.delete(codeKey);
+          // ¿El mensaje es un código de vinculación de 6 caracteres? Se comprueba
+          // SIEMPRE, esté o no ya vinculado el número — si ya lo estaba con OTRA
+          // cuenta (alguien que registró este número por WhatsApp y luego intenta
+          // vincularlo también desde una cuenta de Google nueva), hay que avisarlo
+          // claro en vez de dejar que el código se trate como un mensaje normal de
+          // chat (24 sept 2026, a petición de Paco: "no quiero líos con los registros").
+          if (/^[A-Z0-9]{6}$/i.test(body) && env.SALMA_KB) {
+            const codeKey = 'walink:' + body.toUpperCase();
+            const codeUid = await env.SALMA_KB.get(codeKey);
+            if (codeUid) {
+              await env.SALMA_KB.delete(codeKey);
+              if (!linkedUid) {
                 await firestoreAdminPatch(env, 'whatsapp_sessions/' + encodeURIComponent(from), {
                   uid: { stringValue: codeUid },
                   linked_at: { timestampValue: new Date().toISOString() },
                   profile_name: { stringValue: String(profileName || '') },
                 });
                 await sendWhatsAppMessage(env, from, `¡Listo${profileName ? ', ' + profileName : ''}! Ya tienes tu WhatsApp vinculado a tu cuenta de Borrado del Mapa — a partir de ahora hablas conmigo aquí igual que en la app. ¿En qué te ayudo?`);
-                return;
+              } else if (linkedUid === codeUid) {
+                await sendWhatsAppMessage(env, from, 'Ese número ya estaba vinculado a esa misma cuenta — no hace falta nada más. ¿En qué te ayudo?');
+              } else {
+                // Colisión real: este número ya tiene SU PROPIA cuenta (normalmente
+                // creada solo, la primera vez que escribió por aquí) y ahora se
+                // intenta vincular a una cuenta de Google DISTINTA — no se fusiona
+                // nada automáticamente (ver CLAUDE.md, decisión del 24 sept: fusionar
+                // cuentas es trabajo delicado, se hace a mano si llega a hacer falta).
+                await sendWhatsAppMessage(env, from, 'Este número de WhatsApp ya tiene su propia cuenta de Borrado del Mapa. Para entrar en ELLA desde la web, usa "Entrar con tu número" en la pantalla de inicio — no hace falta vincular nada más aquí.');
               }
-              await sendWhatsAppMessage(env, from, 'Ese código no lo reconozco o ya ha caducado (duran 10 minutos) — genera uno nuevo desde tu Perfil en la app y mándamelo otra vez.');
               return;
             }
-            await sendWhatsAppMessage(env, from, `¡Hola${profileName ? ' ' + profileName : ''}! Para hablar conmigo por aquí primero necesito que tengas cuenta en Borrado del Mapa (es gratis). Entra en https://borradodelmapa.com, inicia sesión o regístrate, y en tu Perfil dale a *Vincular WhatsApp* — te doy un código de 6 caracteres y me lo mandas aquí. En cuanto lo tenga, seguimos charlando 😉`);
-            return;
+            // Código con la forma correcta pero caducado/inventado: solo merece un
+            // aviso si el número aún no tiene cuenta (si ya la tiene, seguramente no
+            // era un código de verdad — se deja caer al chat normal de abajo).
+            if (!linkedUid) {
+              await sendWhatsAppMessage(env, from, 'Ese código no lo reconozco o ya ha caducado (duran 10 minutos) — genera uno nuevo desde tu Perfil en la app y mándamelo otra vez, o si es tu primera vez, cuéntame qué necesitas y seguimos.');
+              return;
+            }
+          }
+
+          if (!linkedUid) {
+            // Primer mensaje de un número que nunca ha tocado la web ni tiene código
+            // — se le crea cuenta ahí mismo (24 sept 2026, decisión explícita de Paco:
+            // "que le cree la cuenta ahí mismo"). uid determinista por teléfono
+            // (_waUidFromPhone): el mismo número siempre da la misma cuenta, así
+            // "Entrar con tu número" en la web (POST /phone-login-*) llega exacto
+            // aquí sin tener que buscar nada aparte. Sin llamadas de pago — solo
+            // Firestore (gratis) y la propia respuesta de WhatsApp que ya se manda.
+            const phoneE164 = _normalizePhoneE164(from.replace(/^whatsapp:/, ''));
+            const newUid = phoneE164 ? await _waUidFromPhone(phoneE164) : null;
+            if (!newUid) {
+              await sendWhatsAppMessage(env, from, 'No he podido identificar bien tu número — vuelve a escribirme.');
+              return;
+            }
+            const nowIso = new Date().toISOString();
+            await firestoreAdminPatch(env, 'users/' + newUid, {
+              name: { stringValue: String(profileName || 'Viajero') },
+              phone: { stringValue: phoneE164 },
+              mapsCount: { integerValue: '0' },
+              createdAt: { timestampValue: nowIso },
+              created_via: { stringValue: 'whatsapp' },
+            });
+            await firestoreAdminPatch(env, 'whatsapp_sessions/' + encodeURIComponent(from), {
+              uid: { stringValue: newUid },
+              linked_at: { timestampValue: nowIso },
+              profile_name: { stringValue: String(profileName || '') },
+            });
+            linkedUid = newUid;
+            await sendWhatsAppMessage(env, from, `¡Hola${profileName ? ' ' + profileName : ''}! Te acabo de abrir cuenta gratis en Borrado del Mapa con este número — ya podemos hablar de tu viaje. Si algún día quieres verlo también desde el ordenador o el móvil por la web, entra en borradodelmapa.com y usa "Entrar con tu número".`);
+            // Sigue abajo: se responde también a lo que haya escrito, como chat normal.
           }
 
           // Número ya vinculado a linkedUid. Tope diario por número — protege de un
@@ -8297,6 +8402,68 @@ export default {
         // wa.me directo (mínima fricción: abre WhatsApp con el código ya escrito).
         const waNumber = (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '').trim();
         return new Response(JSON.stringify({ code, whatsapp_number: waNumber }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /phone-login-request ("Entrar con tu número", 24 sept 2026) ───
+    // Sin sesión a propósito — es el propio flujo de entrar. Solo funciona para un
+    // número que YA tiene cuenta (whatsapp_sessions/{numero} existe, normalmente
+    // creada sola por /whatsapp la primera vez que escribió) — este endpoint NUNCA
+    // crea cuentas nuevas, solo manda un código de acceso a una que ya existe, para
+    // no abrir un segundo camino de alta que se pueda desincronizar del de WhatsApp.
+    if (request.method === 'POST' && url.pathname === '/phone-login-request') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const body = await request.json().catch(() => ({}));
+        const phoneE164 = _normalizePhoneE164(body.phone);
+        if (!phoneE164) {
+          return new Response(JSON.stringify({ error: 'bad_phone', message: 'Escribe el número con el prefijo del país (ej. +34...)' }), { status: 400, headers: corsH });
+        }
+        if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_WHATSAPP_FROM) {
+          return new Response(JSON.stringify({ error: 'not_configured' }), { status: 500, headers: corsH });
+        }
+        const from = 'whatsapp:' + phoneE164;
+        const session = await firestoreAdminGet(env, 'whatsapp_sessions/' + encodeURIComponent(from));
+        const uid = session && session.fields && session.fields.uid && session.fields.uid.stringValue;
+        if (!uid) {
+          return new Response(JSON.stringify({
+            error: 'no_account',
+            message: 'Ese número no tiene cuenta todavía. Escríbele primero por WhatsApp a Salma y vuelve aquí después.',
+            whatsapp_number: (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '').trim(),
+          }), { status: 404, headers: corsH });
+        }
+        const ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+        const code = Array.from({ length: 6 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
+        await env.SALMA_KB.put('phonelogin:' + code, uid, { expirationTtl: 300 });
+        await sendWhatsAppMessage(env, from, `Tu código para entrar en borradodelmapa.com: ${code} (caduca en 5 minutos). Si no has sido tú, ignora este mensaje.`);
+        return new Response(JSON.stringify({ ok: true }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /phone-login-verify (24 sept 2026) ───
+    // Canjea el código de /phone-login-request por un custom token de Firebase — el
+    // frontend hace signInWithCustomToken(custom_token) y entra en la MISMA cuenta
+    // que ya tenía por WhatsApp (mismo uid, sin crear nada nuevo).
+    if (request.method === 'POST' && url.pathname === '/phone-login-verify') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const body = await request.json().catch(() => ({}));
+        const code = String(body.code || '').trim().toUpperCase();
+        if (!/^[A-Z0-9]{6}$/.test(code)) {
+          return new Response(JSON.stringify({ error: 'bad_code' }), { status: 400, headers: corsH });
+        }
+        const key = 'phonelogin:' + code;
+        const uid = await env.SALMA_KB.get(key);
+        if (!uid) {
+          return new Response(JSON.stringify({ error: 'invalid_code', message: 'Código inválido o caducado — pide uno nuevo.' }), { status: 400, headers: corsH });
+        }
+        await env.SALMA_KB.delete(key);
+        const customToken = await mintFirebaseCustomToken(env, uid);
+        return new Response(JSON.stringify({ custom_token: customToken }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
