@@ -8412,7 +8412,13 @@ export default {
           // protocolo §8: esto BAJA el gasto respecto a mandar cualquier "Hola" a
           // Claude, que es lo que pasaba antes de este cambio).
           if (wasAlreadyLinked) {
-            const bodyNorm = body.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+            // El botón "Entrar con WhatsApp" del login manda literalmente "Hola Salma"
+            // (dos palabras) — este regex solo aceptaba "Hola" a secas, así que nunca
+            // coincidía y el mensaje caía al chat normal con Claude, sin enlace de
+            // entrada. Bug real, 26 sept 2026: se quita "salma" (como palabra suelta)
+            // antes de comparar, así "Hola Salma"/"Salma hola" valen igual que "Hola".
+            const bodyNorm = body.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+              .replace(/\bsalma\b/g, '').replace(/\s+/g, ' ').trim().replace(/\s+([.!¡?])/g, '$1');
             const isPureGreetingWa = /^(hola[.!¡?]*|hey[.!]?|buenas[.!]?|buenos dias[.!]?|buenas (tardes|noches)[.!]?|ey[.!]?|hi[.!]?|hello[.!]?|qu[e']? (tal|pasa|hay)|como estas?[?]?|todo bien[?]?|saludos[.!]?)$/.test(bodyNorm);
             if (isPureGreetingWa) {
               const nombreWa = profileName ? `, ${profileName.split(' ')[0]}` : '';
