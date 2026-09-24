@@ -2812,6 +2812,63 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
       dentro de Perfil (subirlo de posición, un chip en el chat, etc.), es un cambio de
       maquetación aparte, sin decidir todavía.
 
+  - **25 sept 2026 — login a DOS botones (Google + WhatsApp) + saludo de bienvenida de
+    vuelta + auto-entrada al tocar un enlace de WhatsApp. DESPLEGADO, sin confirmar en
+    pantalla.** Paco probó el login en pantalla (captura: 4 elementos — Google, "Empezar
+    por WhatsApp", huella, "Entrar con tu número") y pidió simplificar: **"para no liar
+    vamos a quitar de momento entrar con huella dactilar... quedan tres botones tenemos
+    que dejarlo en dos"**. Hablado antes de tocar código (mismo patrón de esta sesión):
+    la clave es que `/whatsapp` YA distinguía número nuevo de número con cuenta con solo
+    mirar `whatsapp_sessions/{numero}` — así que un ÚNICO botón de WhatsApp sirve para
+    los dos casos, no hacen falta dos. Commit `b6802fa`, **Worker Version ID
+    `b71d27d7-9640-44b6-9e5d-12f25dbb3b28`** (leído del log del deploy).
+    - **Huella dactilar quitada del login** (`#auth-biometric` fuera de `index.html`,
+      "de momento" tal cual pidió Paco) — `doFingerprintLogin()` se queda en `app.js`
+      sin usar, ningún sitio la llama ya, se puede retomar sin reescribir nada.
+    - **"Entrar con tu número de WhatsApp" (Camino 3) degradado de botón grande a
+      enlace de texto pequeño** debajo de los dos botones principales — sigue haciendo
+      exactamente lo mismo (pide el número, manda un código por WhatsApp, entra con
+      `signInWithCustomToken`), solo que ya no cuenta como un tercer botón visual.
+    - **"Empezar por WhatsApp" pasa a ser el único punto de entrada de WhatsApp, para
+      nuevos Y para quien vuelve.** Dentro de `/whatsapp`, si el número YA tenía cuenta
+      (`wasAlreadyLinked`, capturado ANTES del posible alta de este mismo turno) y el
+      mensaje es un saludo puro ("Hola Salma", "Buenas"...), responde con una de varias
+      frases de bienvenida de vuelta elegidas al azar ("¡Un placer verte de nuevo! ¿A
+      dónde vamos hoy?", etc.) — **sin llamar a Claude**, mismo patrón exacto que ya usa
+      el chat web para saludos puros (0 tokens). **Aviso de coste (protocolo §8): esto
+      BAJA el gasto** — antes, CUALQUIER mensaje de WhatsApp (incluido un "Hola" suelto)
+      llamaba a Claude Sonnet; ahora ese caso concreto es gratis.
+    - **Enlaces de auto-entrada — la pregunta de Paco: "en el mensaje se le manda enlace
+      de borradodelmapa.com, ¿tenemos forma de saber que es un usuario registrado y que
+      entre directo?".** Respuesta: sí, y es la misma pieza que el "punto 3" que se
+      había aparcado antes (pagar sin salir de WhatsApp), aplicada de forma general a
+      cualquier enlace. Nueva función `buildAutoLoginLink(env, uid)`: genera un código
+      de un solo uso (KV `waweblogin:{código}`, 10 min) y arma
+      `https://borradodelmapa.com/?entrada=<código>` — el Worker ya sabe el uid en el
+      momento de escribir el mensaje, así que no hace falta que el usuario teclee nada.
+      Nuevo endpoint **`POST /wa-weblogin-verify`** (sin sesión a propósito, mismo
+      patrón que `/phone-login-verify`): canjea el código por un custom token de
+      Firebase. En el frontend, `_tryWaAutoLogin()` (`app.js`, junto a
+      `_pendingShareId`) mira `?entrada=` al cargar la página y hace
+      `signInWithCustomToken()` sola, sin ningún paso manual.
+      **Aplicado a los 3 mensajes de WhatsApp que ya mencionaban el dominio a un uid
+      conocido** (antes con el dominio pelado):
+      1. Alta nueva ("Te acabo de abrir cuenta gratis...").
+      2. Colisión de vinculación (número ya registrado por WhatsApp, alguien intenta
+         vincularlo a una cuenta de Google distinta) — ahora en vez de pedirle que
+         teclee su número en "Entrar con tu número", le da el enlace ya resuelto,
+         directo a SU cuenta.
+      3. Tope diario de 60 mensajes alcanzado ("Hoy ya hemos hablado bastante...").
+    - **Aviso de coste (protocolo §8):** cero llamadas de pago nuevas en todo esto —
+      Firestore + KV + firmar un JWT, exactamente igual que el resto del mecanismo de
+      login por WhatsApp ya construido.
+    `app.js?v=159`, `styles.css?v=135`.
+    **Pendiente: que Paco pruebe en su móvil (1) el login con solo 2 botones a la vista;
+    (2) escribir "Hola Salma" desde un número YA vinculado y confirmar que sale un
+    saludo de bienvenida distinto al de un número nuevo, sin el retraso de la llamada a
+    Claude; (3) tocar el enlace de auto-entrada de cualquiera de esos 3 mensajes y
+    confirmar que la web entra directa, sin login, sin teclear nada.**
+
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
