@@ -2084,6 +2084,16 @@ body {
 .auth-btn-whatsapp svg { flex-shrink:0; }
 .auth-btn-whatsapp.hidden { display:none; }
 
+/* Enlace de texto pequeño — "Entrar con tu número" degradado de botón a esto (25 sept
+   2026), para dejar el login en dos botones grandes (Google + WhatsApp). */
+.auth-link-small {
+  display:block; width:100%; margin-top:10px; padding:8px;
+  background:none; border:none; cursor:pointer;
+  color:rgba(244,239,230,.5); font-family:var(--font-body); font-size:12.5px;
+  text-align:center; text-decoration:underline; text-underline-offset:2px;
+}
+.auth-link-small:hover { color:var(--accent); }
+
 /* Divider */
 .auth-divider {
   display:flex; align-items:center; gap:14px; margin:18px 0;

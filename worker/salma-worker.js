@@ -1109,6 +1109,26 @@ function _normalizePhoneE164(raw) {
   return s;
 }
 
+// Enlace de un solo uso que entra YA logueado, para cuando el Worker menciona la web
+// dentro de un mensaje de WhatsApp a un uid que ya conoce (25 sept 2026, F5.4 —
+// "sigamos pensando" de Paco: quien ya escribe desde un número identificado no debería
+// tener que teclear su número otra vez en el navegador). Mismo mecanismo que
+// /phone-login-verify (custom token de Firebase), solo que el código lo genera el
+// propio Worker en vez de pedírselo al usuario — 10 min, un solo uso. Sin llamadas de
+// pago: KV + firmar un JWT, igual que el resto de este flujo.
+async function buildAutoLoginLink(env, uid) {
+  try {
+    if (!env.SALMA_KB || !uid) return 'https://borradodelmapa.com';
+    const ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const code = Array.from({ length: 10 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
+    await env.SALMA_KB.put('waweblogin:' + code, uid, { expirationTtl: 600 });
+    return 'https://borradodelmapa.com/?entrada=' + code;
+  } catch (e) {
+    console.error('[WhatsApp] Error generando enlace de auto-entrada:', e.message);
+    return 'https://borradodelmapa.com';
+  }
+}
+
 // GET de un documento Firestore con el token de service account. null si 404.
 async function firestoreAdminGet(env, path) {
   const token = await getServiceAccountToken(env);
@@ -8263,6 +8283,10 @@ export default {
             console.error('[WhatsApp] Error leyendo whatsapp_sessions:', e.message);
           }
           let linkedUid = session && session.fields && session.fields.uid && session.fields.uid.stringValue;
+          // Si YA estaba vinculado antes de procesar este mensaje (a diferencia del
+          // alta que puede pasar unas líneas más abajo en el mismo turno) — lo usa el
+          // saludo de bienvenida de vuelta, más adelante en este mismo bloque.
+          const wasAlreadyLinked = !!linkedUid;
 
           // ¿El mensaje es un código de vinculación de 6 caracteres? Se comprueba
           // SIEMPRE, esté o no ya vinculado el número — si ya lo estaba con OTRA
@@ -8290,7 +8314,8 @@ export default {
                 // intenta vincular a una cuenta de Google DISTINTA — no se fusiona
                 // nada automáticamente (ver CLAUDE.md, decisión del 24 sept: fusionar
                 // cuentas es trabajo delicado, se hace a mano si llega a hacer falta).
-                await sendWhatsAppMessage(env, from, 'Este número de WhatsApp ya tiene su propia cuenta de Borrado del Mapa. Para entrar en ELLA desde la web, usa "Entrar con tu número" en la pantalla de inicio — no hace falta vincular nada más aquí.');
+                const collisionLink = await buildAutoLoginLink(env, linkedUid);
+                await sendWhatsAppMessage(env, from, `Este número de WhatsApp ya tiene su propia cuenta de Borrado del Mapa. Entra aquí, ya con sesión iniciada: ${collisionLink} — no hace falta vincular nada más aquí.`);
               }
               return;
             }
@@ -8331,8 +8356,32 @@ export default {
               profile_name: { stringValue: String(profileName || '') },
             });
             linkedUid = newUid;
-            await sendWhatsAppMessage(env, from, `¡Hola${profileName ? ' ' + profileName : ''}! Te acabo de abrir cuenta gratis en Borrado del Mapa con este número — ya podemos hablar de tu viaje. Si algún día quieres verlo también desde el ordenador o el móvil por la web, entra en borradodelmapa.com y usa "Entrar con tu número".`);
+            const welcomeLink = await buildAutoLoginLink(env, newUid);
+            await sendWhatsAppMessage(env, from, `¡Hola${profileName ? ' ' + profileName : ''}! Te acabo de abrir cuenta gratis en Borrado del Mapa con este número — ya podemos hablar de tu viaje. Si algún día quieres verlo también desde el ordenador o el móvil por la web, entra aquí, ya con sesión iniciada: ${welcomeLink}`);
             // Sigue abajo: se responde también a lo que haya escrito, como chat normal.
+          }
+
+          // Saludo puro de alguien que YA tenía cuenta antes de este mensaje (25 sept
+          // 2026, "botón único de WhatsApp": el mismo enlace sirve para nuevos y para
+          // quien vuelve — aquí se nota la diferencia) — respuesta enlatada, sin llamar
+          // a Claude, mismo patrón ya usado para saludos puros en el chat web (0 tokens,
+          // protocolo §8: esto BAJA el gasto respecto a mandar cualquier "Hola" a
+          // Claude, que es lo que pasaba antes de este cambio).
+          if (wasAlreadyLinked) {
+            const bodyNorm = body.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+            const isPureGreetingWa = /^(hola[.!¡?]*|hey[.!]?|buenas[.!]?|buenos dias[.!]?|buenas (tardes|noches)[.!]?|ey[.!]?|hi[.!]?|hello[.!]?|qu[e']? (tal|pasa|hay)|como estas?[?]?|todo bien[?]?|saludos[.!]?)$/.test(bodyNorm);
+            if (isPureGreetingWa) {
+              const nombreWa = profileName ? `, ${profileName.split(' ')[0]}` : '';
+              const respuestasVuelta = [
+                `¡Un placer verte de nuevo${nombreWa}! ¿A dónde vamos hoy?`,
+                `¡Hombre${nombreWa}, ya estás aquí otra vez! ¿Qué se te ha ocurrido esta vez?`,
+                `¡Hola de nuevo${nombreWa}! Cuéntame, ¿seguimos con lo de antes o algo nuevo?`,
+                `¡Ey${nombreWa}, qué alegría! ¿A qué destino le echamos el ojo hoy?`,
+                `¡Buenas${nombreWa}! Aquí sigo. ¿Qué te ronda por la cabeza?`,
+              ];
+              await sendWhatsAppMessage(env, from, respuestasVuelta[Math.floor(Math.random() * respuestasVuelta.length)]);
+              return;
+            }
           }
 
           // Número ya vinculado a linkedUid. Tope diario por número — protege de un
@@ -8350,7 +8399,8 @@ export default {
             } catch (_) { /* fail-open, como el resto de topes por IP */ }
           }
           if (!waOk) {
-            await sendWhatsAppMessage(env, from, 'Hoy ya hemos hablado bastante 😅 — mañana seguimos, o entra en la app: borradodelmapa.com');
+            const capLink = await buildAutoLoginLink(env, linkedUid);
+            await sendWhatsAppMessage(env, from, `Hoy ya hemos hablado bastante 😅 — mañana seguimos, o entra en la app: ${capLink}`);
             return;
           }
 
@@ -8465,6 +8515,32 @@ export default {
         const uid = await env.SALMA_KB.get(key);
         if (!uid) {
           return new Response(JSON.stringify({ error: 'invalid_code', message: 'Código inválido o caducado — pide uno nuevo.' }), { status: 400, headers: corsH });
+        }
+        await env.SALMA_KB.delete(key);
+        const customToken = await mintFirebaseCustomToken(env, uid);
+        return new Response(JSON.stringify({ custom_token: customToken }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /wa-weblogin-verify (25 sept 2026) ───
+    // Canjea el código de un solo uso que el propio Worker genera (buildAutoLoginLink)
+    // cuando manda un enlace a la web dentro de un mensaje de WhatsApp a un uid que ya
+    // conoce — el usuario no teclea nada, solo toca el enlace. Mismo patrón que
+    // /phone-login-verify, sin sesión a propósito (es el propio flujo de entrar).
+    if (request.method === 'POST' && url.pathname === '/wa-weblogin-verify') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const body = await request.json().catch(() => ({}));
+        const code = String(body.code || '').trim().toUpperCase();
+        if (!/^[A-Z0-9]{6,12}$/.test(code)) {
+          return new Response(JSON.stringify({ error: 'bad_code' }), { status: 400, headers: corsH });
+        }
+        const key = 'waweblogin:' + code;
+        const uid = await env.SALMA_KB.get(key);
+        if (!uid) {
+          return new Response(JSON.stringify({ error: 'invalid_code', message: 'Ese enlace ya caducó o se usó — vuelve a pedir uno por WhatsApp.' }), { status: 400, headers: corsH });
         }
         await env.SALMA_KB.delete(key);
         const customToken = await mintFirebaseCustomToken(env, uid);

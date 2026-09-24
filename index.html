@@ -77,7 +77,7 @@ window._loadGoogleMaps = function() {
   });
 };
 </script>
-<link rel="stylesheet" href="styles.css?v=134">
+<link rel="stylesheet" href="styles.css?v=135">
 <link rel="stylesheet" href="docs-viajero.css?v=3">
 <link rel="stylesheet" href="historia.css?v=3">
 <!-- Google Analytics 4 — se carga solo tras consentimiento de cookies (P1-6) -->
@@ -378,30 +378,32 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
         Entrar con Google
       </button>
 
-      <!-- "Empezar por WhatsApp" (24 sept 2026, F5.4 ampliado) — para quien nunca ha
-           hablado con Salma: abre WhatsApp DIRECTO con "Hola Salma" precargado, sin
-           pedir número ni esperar nada. La cuenta se crea sola al mandar ese mensaje
-           (auto-registro ya existente en /whatsapp). El href lo rellena app.js con el
-           número real (lee /version, público) — empieza oculto hasta tenerlo. -->
+      <!-- "Empezar por WhatsApp" (24 sept 2026, F5.4 ampliado; unificado 25 sept) — UN
+           SOLO botón para nuevos y para quien vuelve: abre WhatsApp DIRECTO con "Hola
+           Salma" precargado, sin pedir número ni esperar nada. `/whatsapp` distingue
+           solo por el número: si es nuevo, auto-registro; si ya tiene cuenta, saludo
+           de bienvenida de vuelta (variado, sin llamar a Claude). El href lo rellena
+           app.js con el número real (lee /version, público) — empieza oculto hasta
+           tenerlo. -->
       <a class="auth-btn-whatsapp hidden" id="btn-whatsapp-start" href="#" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.14c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.12-.42-.13-.95-.3-1.64-.6-2.9-1.25-4.79-4.16-4.94-4.35-.15-.2-1.18-1.56-1.18-2.98s.75-2.11 1.02-2.4c.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.14.07.15.11.32.02.51-.09.19-.14.3-.28.46-.14.16-.29.36-.42.48-.14.13-.28.28-.12.55.15.27.68 1.12 1.46 1.82 1 .9 1.85 1.18 2.12 1.31.27.13.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.55.73 1.82.86.27.13.45.19.51.3.07.11.07.62-.17 1.3z"/></svg>
         Empezar por WhatsApp
       </a>
 
-      <div class="auth-biometric hidden" id="auth-biometric">
-        <div class="auth-divider">o</div>
-        <button class="auth-btn-fingerprint" id="btn-fingerprint">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M17.5 5.5C16 4 14.1 3 12 3c-2.1 0-4 .9-5.5 2.5C4.9 7.1 4 9 4 11.2c0 2.8.8 5.4 2.1 7.8"/><path d="M20 11.2c0-4.4-3.6-8-8-8"/><path d="M12 8c-1.7 0-3 1.3-3 3 0 1.8.5 3.5 1.4 5"/><path d="M15 11c0-1.7-1.3-3-3-3"/><path d="M12 11c0 2 .5 3.9 1.4 5.5"/><path d="M7.5 19.5c1 1 2.3 1.7 3.8 1.9"/></svg>
-          Usar huella dactilar
-        </button>
-      </div>
+      <!-- Huella dactilar quitada de momento (25 sept 2026, a petición de Paco: "para
+           no liar, dejarlo en dos botones" — Google + WhatsApp). doFingerprintLogin()
+           se queda en app.js sin usar, por si se retoma más adelante. -->
 
       <!-- Entrar con tu número (24 sept 2026) — para quien ya tiene cuenta creada
            sola por WhatsApp (ver protocolo/CLAUDE.md, "Camino 3"). Nunca crea cuenta
-           aquí: solo entra en una que ya exista, para no abrir un segundo alta. -->
-      <div class="auth-divider">o</div>
-      <button class="auth-btn-fingerprint" id="btn-phone-login-toggle" type="button">
-        Entrar con tu número de WhatsApp
+           aquí: solo entra en una que ya exista, para no abrir un segundo alta.
+           Degradado a enlace de texto pequeño (25 sept 2026) — el botón grande de
+           WhatsApp de arriba ya sirve para nuevos Y para quien vuelve (el propio
+           /whatsapp distingue), así que esto queda solo para quien de verdad quiere
+           entrar en la WEB sin pasar por WhatsApp de nuevo — no cuenta como "botón"
+           a efectos de dejar el login en dos. -->
+      <button class="auth-link-small" id="btn-phone-login-toggle" type="button">
+        ¿Ya tienes cuenta por WhatsApp? Entra con tu número →
       </button>
       <div class="auth-phone-form hidden" id="auth-phone-form">
         <input type="tel" class="auth-phone-input" id="auth-phone-input" placeholder="+34 600 000 000" autocomplete="tel">
@@ -493,7 +495,7 @@ window.SALMA_API="https://salma-api.borradodelmapa-api.workers.dev";
 <!-- ═══ APP ═══ -->
 <script src="debug-panel.js?v=13"></script>
 <script src="country-utils.js?v=4"></script>
-<script src="app.js?v=158"></script>
+<script src="app.js?v=159"></script>
 <script src="premium-modal.js?v=1"></script>
 <script src="nav-history.js?v=4"></script>
 <script src="notas.js?v=2"></script>

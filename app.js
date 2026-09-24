@@ -3783,6 +3783,31 @@ function authErrorMsg(e) {
 // confirme sesión (recién logueado o ya la tenía).
 window._pendingShareId = new URLSearchParams(window.location.search).get('compartir') || null;
 
+// ?entrada=CÓDIGO (25 sept 2026) — enlace de auto-entrada que el Worker mete en un
+// mensaje de WhatsApp cuando ya sabe quién eres (ver buildAutoLoginLink en
+// salma-worker.js): el código ya lleva el uid resuelto, así que aquí solo hace falta
+// canjearlo por un token y entrar — sin escribir número ni código a mano. Si falla
+// (caducado, ya usado, sin red) no rompe nada: se limpia la URL y sigue el login
+// normal (Google / WhatsApp) como si no hubiera parámetro.
+(async function _tryWaAutoLogin() {
+  const code = new URLSearchParams(window.location.search).get('entrada');
+  if (!code) return;
+  history.replaceState(null, '', '/');
+  try {
+    const res = await fetch(window.SALMA_API + '/wa-weblogin-verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+    const data = await res.json();
+    if (res.ok && data.custom_token) {
+      await auth.signInWithCustomToken(data.custom_token);
+    }
+  } catch (e) {
+    console.warn('Auto-entrada por WhatsApp falló:', e);
+  }
+})();
+
 async function _openSharedRoute(shareId) {
   try {
     const doc = await db.collection('shared_routes').doc(shareId).get();
