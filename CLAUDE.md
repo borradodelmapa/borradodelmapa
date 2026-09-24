@@ -2947,7 +2947,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     Commit `9141069`, `app.js?v=161`, `styles.css?v=137`, **Worker Version ID
     `9f3e480b-3c48-49c8-8fec-6ed0b38881b9`**. **Aviso de coste (§8):** no llama a Claude ni a
     ninguna API de pago; 1 respuesta de WhatsApp por entrada y lecturas de Firestore mientras
-    el QR está abierto (cuota gratuita).
+    el QR está abierto (cuota gratuita). **CONFIRMADO EN PANTALLA por Paco (25 sept 2026):
+    "el ordenador va bien, código QR"** — el flujo completo (QR → escanear con el móvil →
+    enviar → entra solo en el ordenador) funciona de punta a punta. Cerrado.
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
