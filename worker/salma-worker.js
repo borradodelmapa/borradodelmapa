@@ -8462,12 +8462,16 @@ export default {
       }
     }
 
-    // ─── ENDPOINT /phone-login-request ("Entrar con tu número", 24 sept 2026) ───
+    // ─── ENDPOINT /phone-login-request ("Entrar con tu número") ───
     // Sin sesión a propósito — es el propio flujo de entrar. Solo funciona para un
     // número que YA tiene cuenta (whatsapp_sessions/{numero} existe, normalmente
     // creada sola por /whatsapp la primera vez que escribió) — este endpoint NUNCA
-    // crea cuentas nuevas, solo manda un código de acceso a una que ya existe, para
-    // no abrir un segundo camino de alta que se pueda desincronizar del de WhatsApp.
+    // crea cuentas nuevas, solo manda acceso a una que ya existe, para no abrir un
+    // segundo camino de alta que se pueda desincronizar del de WhatsApp.
+    // 25 sept 2026 (Paco: "¿para qué se va a tener que validar? la idea es que entre
+    // del tirón") — ya no manda un código para teclear a mano: manda el mismo enlace
+    // de auto-entrada de un solo toque que usa el resto de mensajes de /whatsapp
+    // (buildAutoLoginLink) — sin validar nada aparte, tocar el enlace ya entra.
     if (request.method === 'POST' && url.pathname === '/phone-login-request') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       try {
@@ -8489,36 +8493,9 @@ export default {
             whatsapp_number: (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '').trim(),
           }), { status: 404, headers: corsH });
         }
-        const ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-        const code = Array.from({ length: 6 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
-        await env.SALMA_KB.put('phonelogin:' + code, uid, { expirationTtl: 300 });
-        await sendWhatsAppMessage(env, from, `Tu código para entrar en borradodelmapa.com: ${code} (caduca en 5 minutos). Si no has sido tú, ignora este mensaje.`);
+        const link = await buildAutoLoginLink(env, uid);
+        await sendWhatsAppMessage(env, from, `Toca para entrar en borradodelmapa.com, ya con sesión iniciada: ${link} (caduca en 10 minutos). Si no has sido tú, ignora este mensaje.`);
         return new Response(JSON.stringify({ ok: true }), { headers: corsH });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
-      }
-    }
-
-    // ─── ENDPOINT /phone-login-verify (24 sept 2026) ───
-    // Canjea el código de /phone-login-request por un custom token de Firebase — el
-    // frontend hace signInWithCustomToken(custom_token) y entra en la MISMA cuenta
-    // que ya tenía por WhatsApp (mismo uid, sin crear nada nuevo).
-    if (request.method === 'POST' && url.pathname === '/phone-login-verify') {
-      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-      try {
-        const body = await request.json().catch(() => ({}));
-        const code = String(body.code || '').trim().toUpperCase();
-        if (!/^[A-Z0-9]{6}$/.test(code)) {
-          return new Response(JSON.stringify({ error: 'bad_code' }), { status: 400, headers: corsH });
-        }
-        const key = 'phonelogin:' + code;
-        const uid = await env.SALMA_KB.get(key);
-        if (!uid) {
-          return new Response(JSON.stringify({ error: 'invalid_code', message: 'Código inválido o caducado — pide uno nuevo.' }), { status: 400, headers: corsH });
-        }
-        await env.SALMA_KB.delete(key);
-        const customToken = await mintFirebaseCustomToken(env, uid);
-        return new Response(JSON.stringify({ custom_token: customToken }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }

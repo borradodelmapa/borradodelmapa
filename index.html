@@ -405,13 +405,12 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
       <button class="auth-link-small" id="btn-phone-login-toggle" type="button">
         ¿Ya tienes cuenta por WhatsApp? Entra con tu número →
       </button>
+      <!-- 25 sept 2026: ya no pide teclear un código — el Worker manda un enlace de
+           un solo toque por WhatsApp (buildAutoLoginLink) que entra solo al tocarlo,
+           capturado por _tryWaAutoLogin() en app.js vía ?entrada=. -->
       <div class="auth-phone-form hidden" id="auth-phone-form">
         <input type="tel" class="auth-phone-input" id="auth-phone-input" placeholder="+34 600 000 000" autocomplete="tel">
-        <button class="auth-btn-fingerprint" id="btn-phone-send" type="button">Enviar código por WhatsApp</button>
-        <div class="auth-phone-code-wrap hidden" id="auth-phone-code-wrap">
-          <input type="text" class="auth-phone-input" id="auth-phone-code-input" placeholder="Código de 6 caracteres" maxlength="6" autocomplete="one-time-code">
-          <button class="auth-btn-google-primary" id="btn-phone-verify" type="button">Entrar</button>
-        </div>
+        <button class="auth-btn-fingerprint" id="btn-phone-send" type="button">Enviar enlace por WhatsApp</button>
       </div>
     </div>
   </div>
@@ -495,7 +494,7 @@ window.SALMA_API="https://salma-api.borradodelmapa-api.workers.dev";
 <!-- ═══ APP ═══ -->
 <script src="debug-panel.js?v=13"></script>
 <script src="country-utils.js?v=4"></script>
-<script src="app.js?v=159"></script>
+<script src="app.js?v=160"></script>
 <script src="premium-modal.js?v=1"></script>
 <script src="nav-history.js?v=4"></script>
 <script src="notas.js?v=2"></script>

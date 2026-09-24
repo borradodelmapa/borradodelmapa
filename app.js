@@ -3598,6 +3598,11 @@ async function _setupWhatsAppStartButton() {
   }
 }
 
+// 25 sept 2026 (Paco: "¿para qué se va a tener que validar? la idea es que entre del
+// tirón") — ya no pide teclear ningún código: el Worker manda por WhatsApp un enlace
+// de un solo toque (buildAutoLoginLink) que entra solo al tocarlo, capturado por
+// _tryWaAutoLogin() más abajo. Aquí solo queda pedir el número y avisar que mire
+// WhatsApp — sin segundo paso en la web.
 async function _sendPhoneLoginCode() {
   const input = document.getElementById('auth-phone-input');
   const btn = document.getElementById('btn-phone-send');
@@ -3614,45 +3619,12 @@ async function _sendPhoneLoginCode() {
     });
     const data = await res.json();
     if (!res.ok) {
-      showAuthError('login-error', data.message || 'No se pudo mandar el código.');
+      showAuthError('login-error', data.message || 'No se pudo mandar el enlace.');
       return;
     }
-    document.getElementById('auth-phone-code-wrap')?.classList.remove('hidden');
-    if (typeof showToast === 'function') showToast('Código enviado por WhatsApp');
+    if (typeof showToast === 'function') showToast('Te hemos mandado un enlace por WhatsApp — tócalo y entras directo.');
   } catch (e) {
     showAuthError('login-error', 'Uf, sin conexión o me he aturrullado. Vuelve a intentarlo.');
-  } finally {
-    if (btn) btn.disabled = false;
-  }
-}
-
-async function _verifyPhoneLoginCode() {
-  const codeInput = document.getElementById('auth-phone-code-input');
-  const btn = document.getElementById('btn-phone-verify');
-  const code = (codeInput?.value || '').trim();
-  if (!code) return;
-  const errEl = document.getElementById('login-error');
-  if (errEl) errEl.classList.remove('show');
-  if (btn) btn.disabled = true;
-  try {
-    const res = await fetch(window.SALMA_API + '/phone-login-verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code }),
-    });
-    const data = await res.json();
-    if (!res.ok || !data.custom_token) {
-      showAuthError('login-error', data.message || 'Código inválido o caducado.');
-      return;
-    }
-    await auth.signInWithCustomToken(data.custom_token);
-    // No hace falta crear doc de Firestore aquí (ya existe, lo escribió el Worker al
-    // crear la cuenta por WhatsApp) — auth.onAuthStateChanged hace el resto igual que
-    // con cualquier otro método de login.
-    closeModal();
-  } catch (e) {
-    console.error('Error entrando con número:', e);
-    showAuthError('login-error', 'No se pudo entrar con ese código. Vuelve a intentarlo.');
   } finally {
     if (btn) btn.disabled = false;
   }
@@ -4338,7 +4310,6 @@ document.getElementById('btn-google-login')?.addEventListener('click', doGoogleL
 document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerprintLogin);
 document.getElementById('btn-phone-login-toggle')?.addEventListener('click', _togglePhoneLoginForm);
 document.getElementById('btn-phone-send')?.addEventListener('click', _sendPhoneLoginCode);
-document.getElementById('btn-phone-verify')?.addEventListener('click', _verifyPhoneLoginCode);
 _setupWhatsAppStartButton();
 
 // Logo eliminado — navegación solo por bottom bar
