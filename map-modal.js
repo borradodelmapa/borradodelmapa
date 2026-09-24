@@ -84,6 +84,27 @@
   // null si no se pudo resolver de ninguna forma.
   function _resolvePoint(pointStr, placeId, placesService, cb) {
     if (placeId) {
+      // 1º el catálogo del Worker (GET /place-details): si el lugar ya está guardado son 0 llamadas a Google; si no, el Worker
+      // lo pide UNA vez y lo guarda para siempre. Solo si eso falla se pregunta a Google desde el navegador, como antes.
+      const api = window.SALMA_API;
+      if (api) {
+        fetch(api + '/place-details?place_id=' + encodeURIComponent(placeId), { cache: 'no-store' })
+          .then(r => r.ok ? r.json() : null)
+          .then(d => {
+            if (d && typeof d.lat === 'number' && typeof d.lng === 'number') cb({ lat: d.lat, lng: d.lng }, d.name || pointStr);
+            else _resolvePointBrowser(pointStr, placeId, placesService, cb);
+          })
+          .catch(() => _resolvePointBrowser(pointStr, placeId, placesService, cb));
+        return;
+      }
+      _resolvePointBrowser(pointStr, placeId, placesService, cb);
+      return;
+    }
+    _resolvePointByNameOrCoords(pointStr, placesService, cb);
+  }
+
+  function _resolvePointBrowser(pointStr, placeId, placesService, cb) {
+    if (placeId) {
       placesService.getDetails({ placeId, fields: ['geometry', 'name'] }, (r, s) => {
         if (s === google.maps.places.PlacesServiceStatus.OK && r && r.geometry) {
           cb(r.geometry.location, r.name || pointStr);

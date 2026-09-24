@@ -7806,6 +7806,8 @@ export default {
         const photoUrl = cat.photo_ref ? `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(cat.photo_ref)}` : '';
         return new Response(JSON.stringify({
           name: cat.name || '',
+          lat: typeof cat.lat === 'number' ? cat.lat : null,
+          lng: typeof cat.lng === 'number' ? cat.lng : null,
           rating: cat.rating || null,
           reviews: cat.reviews || 0,
           photo_url: photoUrl,
