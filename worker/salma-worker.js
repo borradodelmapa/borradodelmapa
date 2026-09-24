@@ -8405,54 +8405,33 @@ export default {
             // Sigue abajo: se responde también a lo que haya escrito, como chat normal.
           }
 
-          // Saludo puro de alguien que YA tenía cuenta antes de este mensaje (25 sept
-          // 2026, "botón único de WhatsApp": el mismo enlace sirve para nuevos y para
-          // quien vuelve — aquí se nota la diferencia) — respuesta enlatada, sin llamar
-          // a Claude, mismo patrón ya usado para saludos puros en el chat web (0 tokens,
-          // protocolo §8: esto BAJA el gasto respecto a mandar cualquier "Hola" a
-          // Claude, que es lo que pasaba antes de este cambio).
-          if (wasAlreadyLinked) {
-            // El botón "Entrar con WhatsApp" del login manda literalmente "Hola Salma"
-            // (dos palabras) — este regex solo aceptaba "Hola" a secas, así que nunca
-            // coincidía y el mensaje caía al chat normal con Claude, sin enlace de
-            // entrada. Bug real, 26 sept 2026: se quita "salma" (como palabra suelta)
-            // antes de comparar, así "Hola Salma"/"Salma hola" valen igual que "Hola".
-            const bodyNorm = body.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
-              .replace(/\bsalma\b/g, '').replace(/\s+/g, ' ').trim().replace(/\s+([.!¡?])/g, '$1');
-            const isPureGreetingWa = /^(hola[.!¡?]*|hey[.!]?|buenas[.!]?|buenos dias[.!]?|buenas (tardes|noches)[.!]?|ey[.!]?|hi[.!]?|hello[.!]?|qu[e']? (tal|pasa|hay)|como estas?[?]?|todo bien[?]?|saludos[.!]?)$/.test(bodyNorm);
-            if (isPureGreetingWa) {
-              const nombreWa = profileName ? `, ${profileName.split(' ')[0]}` : '';
-              const respuestasVuelta = [
-                `¡Un placer verte de nuevo${nombreWa}! ¿A dónde vamos hoy?`,
-                `¡Hombre${nombreWa}, ya estás aquí otra vez! ¿Qué se te ha ocurrido esta vez?`,
-                `¡Hola de nuevo${nombreWa}! Cuéntame, ¿seguimos con lo de antes o algo nuevo?`,
-                `¡Ey${nombreWa}, qué alegría! ¿A qué destino le echamos el ojo hoy?`,
-                `¡Buenas${nombreWa}! Aquí sigo. ¿Qué te ronda por la cabeza?`,
-              ];
-              // 26 sept 2026 — bug real, reportado por Paco: al tocar "Entrar con WhatsApp"
-              // desde el MÓVIL con un número ya vinculado, esta respuesta enlatada nunca
-              // llevaba el enlace de entrada — Salma charlaba pero no metía a nadie en la
-              // web. Añadido el mismo buildAutoLoginLink que ya llevan los otros 3 avisos.
-              const backLink = await buildAutoLoginLink(env, linkedUid);
-              const saludo = respuestasVuelta[Math.floor(Math.random() * respuestasVuelta.length)];
-              await sendWhatsAppMessage(env, from, `${saludo}\n\nToca para entrar en la web: ${backLink}`);
-              return;
-            }
-          }
-
-          // Número ya vinculado a linkedUid. Tope diario por número — protege de un
-          // bucle o abuso; el control real por plan/uid llega en F5.3 junto con las
-          // tools. Aviso de coste (protocolo §8): cada mensaje de aquí en adelante llama
-          // de verdad a Claude Sonnet (mismo modelo del chat web, ~0,01-0,05 USD/mensaje
-          // según longitud) — deja de ser gratis como el eco de F5.1.
+          // Reescrito 26 sept 2026 (Paco: "da igual qué escriba el usuario, si ya tiene
+          // cuenta se le da la opción de entrar en la web o seguir chateando — fácil").
+          // Se abandona adivinar la intención por el TEXTO del mensaje (frágil: "Hola
+          // Salma" no coincidía con el regex de saludo puro, y cualquier otra frase se
+          // habría colado igual sin avisar de la opción de entrar). Señal fiable en su
+          // lugar: si es el PRIMER mensaje del día de ese número, viene de tocar el botón
+          // "Entrar con WhatsApp" ahora mismo — se le ofrecen las dos opciones siempre,
+          // sea cual sea el texto. Mensajes siguientes ese mismo día → chat normal.
           let waOk = true;
+          let waIsFirstToday = false;
           if (env.SALMA_KB) {
             try {
               const waKey = 'wa_daily:' + from + ':' + new Date().toISOString().slice(0, 10);
               const waCur = parseInt((await env.SALMA_KB.get(waKey)) || '0', 10) || 0;
+              waIsFirstToday = waCur === 0;
               if (waCur >= 60) waOk = false;
               else await env.SALMA_KB.put(waKey, String(waCur + 1), { expirationTtl: 60 * 60 * 30 });
             } catch (_) { /* fail-open, como el resto de topes por IP */ }
+          }
+          if (wasAlreadyLinked && waIsFirstToday) {
+            const nombreWa = profileName ? `, ${profileName.split(' ')[0]}` : '';
+            const backLink = await buildAutoLoginLink(env, linkedUid);
+            await sendWhatsAppMessage(env, from,
+              `¡Hola de nuevo${nombreWa}! ¿Qué prefieres?\n\n` +
+              `1️⃣ Entrar en la web: ${backLink}\n` +
+              `2️⃣ Seguir aquí contigo — solo dime qué necesitas y seguimos por WhatsApp.`);
+            return; // sin llamar a Claude — protocolo §8: esto BAJA el gasto (0 tokens)
           }
           if (!waOk) {
             const capLink = await buildAutoLoginLink(env, linkedUid);
