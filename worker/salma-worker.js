@@ -8423,7 +8423,13 @@ export default {
                 `¡Ey${nombreWa}, qué alegría! ¿A qué destino le echamos el ojo hoy?`,
                 `¡Buenas${nombreWa}! Aquí sigo. ¿Qué te ronda por la cabeza?`,
               ];
-              await sendWhatsAppMessage(env, from, respuestasVuelta[Math.floor(Math.random() * respuestasVuelta.length)]);
+              // 26 sept 2026 — bug real, reportado por Paco: al tocar "Entrar con WhatsApp"
+              // desde el MÓVIL con un número ya vinculado, esta respuesta enlatada nunca
+              // llevaba el enlace de entrada — Salma charlaba pero no metía a nadie en la
+              // web. Añadido el mismo buildAutoLoginLink que ya llevan los otros 3 avisos.
+              const backLink = await buildAutoLoginLink(env, linkedUid);
+              const saludo = respuestasVuelta[Math.floor(Math.random() * respuestasVuelta.length)];
+              await sendWhatsAppMessage(env, from, `${saludo}\n\nToca para entrar en la web: ${backLink}`);
               return;
             }
           }
