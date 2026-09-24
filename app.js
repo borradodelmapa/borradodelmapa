@@ -3568,66 +3568,97 @@ async function doGoogleLogin() {
   }
 }
 
-// ═══ Entrar con tu número (24 sept 2026) ═══
-// Solo entra en una cuenta que YA existe (creada sola la primera vez que se escribió
-// a Salma por WhatsApp) — nunca crea cuenta desde aquí, para no abrir un segundo
-// camino de alta suelto del de WhatsApp (ver CLAUDE.md, "Camino 3").
-function _togglePhoneLoginForm() {
-  const form = document.getElementById('auth-phone-form');
-  if (form) form.classList.toggle('hidden');
-}
-
-// Botón "Empezar por WhatsApp" (24 sept 2026, F5.4 ampliado) — para quien nunca ha
-// hablado con Salma: un solo toque abre WhatsApp con "Hola Salma" ya escrito, sin
-// pedir número ni pasar por ningún paso intermedio. El número sale de /version
-// (público, sin sesión) para no hardcodearlo — así si algún día cambia (Sandbox →
-// producción) no hace falta tocar el frontend. Sin llamada de pago: /version es
-// una lectura gratuita que el Worker ya servía.
+// Botón "Entrar con WhatsApp" — en el móvil abre WhatsApp con "Hola Salma" ya escrito
+// (cuenta nueva o de vuelta, lo resuelve el Worker). En el ordenador (25 sept 2026)
+// enseña un QR como WhatsApp Web: se escanea con el móvil, se envía el mensaje ya
+// escrito y el ordenador entra solo (/wa-qr-start + /wa-qr-poll). Sin llamadas de pago.
+let _waDigits = '';
 async function _setupWhatsAppStartButton() {
   const btn = document.getElementById('btn-whatsapp-start');
   if (!btn) return;
   try {
     const res = await fetch(window.SALMA_API + '/version');
     const data = await res.json();
-    const digits = (data.whatsapp_number || '').replace(/[^\d]/g, '');
-    if (!digits) return;
-    btn.href = 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Hola Salma');
+    _waDigits = (data.whatsapp_number || '').replace(/[^\d]/g, '');
+    if (!_waDigits) return;
+    btn.href = 'https://wa.me/' + _waDigits + '?text=' + encodeURIComponent('Hola Salma');
     btn.classList.remove('hidden');
+    btn.addEventListener('click', (e) => {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      e.preventDefault();
+      _openWaQrLogin();
+    });
   } catch (e) {
     // sin número no se muestra el botón — no bloquea el resto del login
   }
 }
 
-// 25 sept 2026 (Paco: "¿para qué se va a tener que validar? la idea es que entre del
-// tirón") — ya no pide teclear ningún código: el Worker manda por WhatsApp un enlace
-// de un solo toque (buildAutoLoginLink) que entra solo al tocarlo, capturado por
-// _tryWaAutoLogin() más abajo. Aquí solo queda pedir el número y avisar que mire
-// WhatsApp — sin segundo paso en la web.
-async function _sendPhoneLoginCode() {
-  const input = document.getElementById('auth-phone-input');
-  const btn = document.getElementById('btn-phone-send');
-  const phone = (input?.value || '').trim();
-  if (!phone) return;
-  const errEl = document.getElementById('login-error');
-  if (errEl) errEl.classList.remove('show');
-  if (btn) btn.disabled = true;
-  try {
-    const res = await fetch(window.SALMA_API + '/phone-login-request', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      showAuthError('login-error', data.message || 'No se pudo mandar el enlace.');
-      return;
+function _loadQrLib() {
+  if (window.qrcode) return Promise.resolve();
+  return new Promise((ok, ko) => {
+    const s = document.createElement('script');
+    s.src = '/vendor/qrcode-generator-1.4.4.js';
+    s.onload = ok; s.onerror = ko;
+    document.head.appendChild(s);
+  });
+}
+
+async function _openWaQrLogin() {
+  if (document.getElementById('wa-qr-overlay')) return;
+  const ov = document.createElement('div');
+  ov.id = 'wa-qr-overlay';
+  ov.className = 'wa-qr-overlay';
+  ov.innerHTML = '<div class="wa-qr-card"><button class="wa-qr-close" aria-label="Cerrar">✕</button>' +
+    '<div class="wa-qr-box" id="wa-qr-box"></div>' +
+    '<p class="wa-qr-hint">Escanéalo con la cámara del móvil</p></div>';
+  document.body.appendChild(ov);
+  let timer = null, closed = false;
+  const stop = () => { closed = true; if (timer) clearTimeout(timer); ov.remove(); };
+  ov.querySelector('.wa-qr-close').addEventListener('click', stop);
+  ov.addEventListener('click', (e) => { if (e.target === ov) stop(); });
+  const box = ov.querySelector('#wa-qr-box');
+  const deadline = Date.now() + 10 * 60 * 1000;
+
+  const start = async () => {
+    if (closed) return;
+    if (Date.now() > deadline) { stop(); return; }
+    try {
+      await _loadQrLib();
+      const r = await fetch(window.SALMA_API + '/wa-qr-start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      const d = await r.json();
+      if (!r.ok || !d.code) throw new Error('start');
+      const digits = (d.whatsapp_number || _waDigits).replace(/[^\d]/g, '');
+      const url = 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Entrar en el ordenador · código ' + d.code);
+      const qr = window.qrcode(0, 'M');
+      qr.addData(url); qr.make();
+      box.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+      poll(d.code, d.secret);
+    } catch (e) {
+      box.textContent = 'Sin conexión. Reintentando…';
+      timer = setTimeout(start, 4000);
     }
-    if (typeof showToast === 'function') showToast('Te hemos mandado un enlace por WhatsApp — tócalo y entras directo.');
-  } catch (e) {
-    showAuthError('login-error', 'Uf, sin conexión o me he aturrullado. Vuelve a intentarlo.');
-  } finally {
-    if (btn) btn.disabled = false;
-  }
+  };
+
+  const poll = (code, secret) => {
+    timer = setTimeout(async () => {
+      if (closed) return;
+      if (Date.now() > deadline) { stop(); return; }
+      try {
+        const r = await fetch(window.SALMA_API + '/wa-qr-poll', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, secret }) });
+        const d = await r.json();
+        if (d.status === 'ok' && d.custom_token) {
+          await auth.signInWithCustomToken(d.custom_token);
+          stop();
+          closeModal();
+          return;
+        }
+        if (d.status === 'expired') { start(); return; }
+      } catch (e) { /* bache de red: se reintenta */ }
+      poll(code, secret);
+    }, 2000);
+  };
+
+  start();
 }
 
 // ═══ WebAuthn — Huella dactilar ═══
@@ -4308,8 +4339,6 @@ function sendMessage() {
 
 document.getElementById('btn-google-login')?.addEventListener('click', doGoogleLogin);
 document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerprintLogin);
-document.getElementById('btn-phone-login-toggle')?.addEventListener('click', _togglePhoneLoginForm);
-document.getElementById('btn-phone-send')?.addEventListener('click', _sendPhoneLoginCode);
 _setupWhatsAppStartButton();
 
 // Logo eliminado — navegación solo por bottom bar
