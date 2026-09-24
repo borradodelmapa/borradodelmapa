@@ -2756,6 +2756,62 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     propósito (vincular ese número desde una cuenta de Google distinta) y confirmar que
     avisa claro en vez de tratarlo como chat.**
 
+  - **24 sept 2026 (mismo día) — botón "Empezar por WhatsApp" en el login, para quien
+    nunca ha hablado con Salma. DESPLEGADO, sin confirmar en pantalla.** Hablado antes
+    de tocar código (Paco pidió explícitamente confirmar el punto 1 de su propuesta:
+    **"tiene que abrir el whassa directamente, no pasar por que el usuario tenga que
+    guardar el número esperar... que abre el whassa directamente con el mensaje
+    precargado"**) — distinto del Camino 3 de arriba (que es para ENTRAR en una cuenta
+    ya creada): este botón es la puerta de entrada para alguien sin cuenta todavía,
+    cero pasos intermedios. Commit `e6710ca`, **Worker Version ID
+    `bdc06b09-0cf9-4ccb-b9de-18b0435f3251`** (leído del log del deploy; esta sesión no
+    pudo confirmarlo además contra `/version` porque el proxy de red del contenedor
+    bloquea las llamadas salientes a `salma-api.borradodelmapa-api.workers.dev`, mismo
+    bloqueo ya documentado muchas veces en este archivo).
+    - Botón nuevo en `#auth-welcome-view` (`index.html`), justo debajo de "Entrar con
+      Google": un simple `<a href="https://wa.me/<número>?text=Hola Salma">`. Un solo
+      toque abre WhatsApp (app o web.whatsapp.com) con "Hola Salma" ya escrito, listo
+      para mandar — sin pedir el número de nadie ni pasar por ningún formulario. En
+      cuanto ese mensaje llega, el auto-registro que ya existe en `/whatsapp` (Camino 1
+      de arriba) le crea la cuenta gratis y responde a lo que pregunte, todo en el
+      mismo turno.
+    - `/version` (endpoint público, sin sesión, ya existía para comprobar qué Worker
+      corre) ahora devuelve también `whatsapp_number` — el número de
+      `TWILIO_WHATSAPP_FROM` sin el prefijo `whatsapp:`. `app.js`
+      (`_setupWhatsAppStartButton()`) lo lee al cargar el login y arma el enlace —
+      así el número no queda hardcodeado en el frontend y no hay que tocar código el
+      día que pase de Sandbox a un número de producción, solo cambia el secret.
+    - **Aviso de coste (protocolo §8):** cero llamadas nuevas — `/version` es una
+      lectura gratuita que el Worker ya servía; el resto es un enlace `wa.me` estático,
+      sin backend de por medio.
+    `app.js?v=158`, `styles.css?v=134`.
+    **Pendiente: que Paco toque el botón desde el login (sin sesión) y confirme que
+    abre WhatsApp con "Hola Salma" precargado, y que mandarlo le abre cuenta y le
+    responde como cualquier otro mensaje nuevo.**
+
+  - **24 sept 2026 (mismo día) — puntos 3 y 4 de la propuesta, respuesta de Paco tras
+    ver el plan, SIN TOCAR CÓDIGO todavía.**
+    - **Punto 3 (el puente para pagar sin salir nunca de WhatsApp) — "LO PENSAMOS",
+      aparcado por ahora.** La propuesta (un enlace que entra YA logueado directo a la
+      pantalla de planes, mismo mecanismo de custom token que ya usa "Entrar con tu
+      número") sigue sin implementar — Paco quiere pensarlo con calma antes de
+      construirlo, no es urgente porque hoy mismo, con "Entrar con tu número" (Camino 3,
+      ya desplegado) alguien que solo tenga cuenta por WhatsApp ya puede entrar a la web
+      y pagar por el camino normal — solo que con un paso más (escribir el número + el
+      código) en vez de un enlace directo. No tocar esto hasta que Paco lo pida.
+    - **Punto 4 (destacar "Vincular WhatsApp" para quien ya entra por Google) —
+      aclarado por Paco, no es lo que se había entendido.** No es (solo) una cuestión de
+      hacer más visible el botón para vender Premium — el propósito real es más simple:
+      que un usuario que YA está logueado sepa que puede hablar con Salma por WhatsApp
+      siempre que quiera, sin fricción — "igual se le manda el contacto y que no tenga
+      que hacer nada". Esto coincide con lo que ya se construyó hoy mismo para ese
+      mismo botón (entrada de arriba, "el código de Vincular WhatsApp ahora es un
+      enlace directo"): un toque en "Vincular WhatsApp" (Perfil) ya abre WhatsApp con el
+      código precargado — cero fricción, mismo patrón que el botón de login nuevo. No
+      hace falta trabajo nuevo aquí; si Paco quiere además hacer el botón más visible
+      dentro de Perfil (subirlo de posición, un chip en el chat, etc.), es un cambio de
+      maquetación aparte, sin decidir todavía.
+
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
