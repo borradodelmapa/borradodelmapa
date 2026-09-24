@@ -2902,6 +2902,38 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     cuenta por WhatsApp, y confirme que le llega un enlace (no un código) y que
     tocarlo le mete directo en la web, sin volver a escribir nada.**
 
+  - **25 sept 2026 (mismo día) — reordenado el login: "Entrar con Google" / "Entrar
+    con WhatsApp" como los dos botones grandes, sin montar un tercer circuito de
+    "Regístrate". DESPLEGADO (GitHub Pages, solo HTML/CSS), sin confirmar en
+    pantalla.** Paco pidió explícitamente hablarlo antes de tocar código
+    ("HABLEMOS ANTES DE TOCAR MAS... DIME ANTES DE PONERTE A ESCRIBIR CODIGO"):
+    proponía Google/Wassa arriba grandes y un "Regístrate con Google o WhatsApp"
+    más pequeño debajo. Se le planteó el problema técnico antes de construir nada:
+    los dos botones grandes YA sirven para entrar Y para registrarse (Google crea
+    la cuenta sola si el email es nuevo; el wa.me de WhatsApp crea la cuenta sola
+    si el número es nuevo) — un "Regístrate con Google" aparte sería el MISMO
+    código repetido, y un "Entrar con Wassa" separado del "regístrate" obligaría a
+    teclear el número arriba (más lento) dejando lo rápido (abrir WhatsApp de un
+    toque) abajo, al revés de lo esperado. Paco dio el visto bueno a la propuesta
+    de un solo circuito por canal + una frase de aviso, sin tercer botón. Commit
+    `f541b70`, solo `index.html`/`styles.css` (`styles.css?v=136`), sin tocar el
+    Worker ni app.js — sin coste.
+    - **"Empezar por WhatsApp" renombrado a "Entrar con WhatsApp"** — mismo botón,
+      mismo `wa.me` con "Hola Salma" precargado, mismo comportamiento (nuevo →
+      auto-registro; ya registrado → saludo de vuelta). Solo cambia el texto.
+    - **Línea nueva bajo los dos botones grandes** (`.auth-caption`): *"¿Primera
+      vez por aquí? Estos mismos botones te crean la cuenta al momento."* — quita
+      la duda de "¿esto es solo para quien ya tiene cuenta?" sin añadir ningún
+      botón ni flujo nuevo que mantener.
+    - **El enlace pequeño "Entra con tu número" se queda** (Camino 3, teclear el
+      número + enlace de un toque por WhatsApp, solo para cuentas ya existentes)
+      — reescrito de "¿Ya tienes cuenta por WhatsApp?" a "¿Prefieres no abrir
+      WhatsApp? Entra con tu número →", para que no suene a un segundo registro
+      (nunca lo ha sido: es solo un atajo alternativo para quien no quiere/puede
+      abrir la app de WhatsApp, ej. desde el ordenador).
+    **Pendiente: que Paco vea el login en pantalla y confirme que se lee claro con
+    los dos botones + la frase, y que no lo nota como "cuatro opciones a la vez".**
+
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
