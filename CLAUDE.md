@@ -934,24 +934,25 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 - **F5.1-F5.4 hechos y confirmados en pantalla**: eco → conectado al motor real de Salma
   (`WHATSAPP_SYSTEM_CHAT`, sin tools/memoria todavía) → auto-registro de cuenta nueva
   desde WhatsApp → vinculación con cuenta existente → login desde la web con el número.
-- **Login definitivo (25 sept 2026): dos botones, "Entrar con Google" / "Entrar con
-  WhatsApp".** En móvil abre `wa.me` con "Hola Salma" precargado (nuevo → auto-registro;
-  ya registrado → saludo de vuelta, sin llamar a Claude). En ordenador, QR estilo
-  WhatsApp Web (`/wa-qr-start` + `/wa-qr-poll`, Firestore `wa_qr_logins/{código}`,
-  `vendor/qrcode-generator-1.4.4.js`) — **CONFIRMADO EN PANTALLA por Paco (25 sept):
-  "el ordenador va bien, código QR"**. Commit `9141069`, Worker
-  `9f3e480b-3c48-49c8-8fec-6ed0b38881b9`.
-- **Bug real encontrado y arreglado el 26 sept 2026: "Entrar con WhatsApp" desde el móvil
-  con un número ya vinculado no entraba en la web — Salma charlaba pero se quedaba ahí.**
-  Causa: el saludo de bienvenida de vuelta (`isPureGreetingWa`, para quien YA tiene
-  cuenta) nunca llevaba `buildAutoLoginLink` — los otros 3 avisos (alta nueva, colisión,
-  tope diario) sí lo llevaban, a este le faltaba. Arreglado, commit `747331d`, **Worker
-  Version ID `2b57004f-12b8-4319-8780-4e70cb9a4acd`**. Sin coste (misma función ya en
-  uso). **Pendiente: que Paco repita "Entrar con WhatsApp" desde el móvil con su número
-  (ya vinculado) y confirme que ahora sí llega el enlace y entra en la web.**
-- QR del ordenador también arreglado el 25 sept: faltaba avisar de no escanearlo con el
-  propio escáner de WhatsApp (dice "QR inválido") — ahora hay un aviso explícito encima
-  del QR. **CONFIRMADO EN PANTALLA por Paco**, entra bien con la cámara del móvil.
+- **Login definitivo (25-26 sept 2026): dos botones, "Entrar con Google" / "Entrar con
+  WhatsApp" — CONFIRMADO EN PANTALLA por Paco de punta a punta, ordenador y móvil.**
+  Móvil y ordenador usan EXACTAMENTE el mismo mecanismo: un código de un solo uso que el
+  propio botón mete en el mensaje de WhatsApp, invisible para quien lo manda —
+  `/wa-qr-start` genera el código (Firestore `wa_qr_logins/{código}`, 10 min), el
+  webhook `/whatsapp` lo reconoce con el regex `entrar en (la app|el ordenador)\W*código`
+  (no importa nada más del texto), y el navegador que pregunta por `/wa-qr-poll` entra
+  solo. En el ordenador se enseña como QR (`vendor/qrcode-generator-1.4.4.js`, con aviso
+  de no escanearlo con el propio escáner de WhatsApp — daba "QR inválido"); en el móvil,
+  WhatsApp se abre directo con el texto ya escrito y, al volver a la pestaña
+  (`visibilitychange`/`pageshow` + `localStorage`), la web entra sola sin tocar nada.
+  Auto-registro de cuenta nueva sin tocar (`_waCreateAccount`, mismo camino de siempre).
+  **Dos vueltas de fallos reales antes de esto** (documentadas en `CLAUDE-historial.md`
+  si hace falta el detalle): primero el saludo de bienvenida solo reconocía "Hola" y no
+  "Hola Salma" (el texto real que manda el botón); después, aun arreglado eso, la señal
+  usada ("primer mensaje del día") se rompía al probar el botón varias veces seguidas el
+  mismo día — sustituido por el código de un solo uso, que no depende del texto ni de
+  cuántas veces se pruebe. Commits `9141069` → `747331d` → `ba77386`, **Worker Version
+  ID final `9a72a107-f172-493a-a9b8-a0687c724cda`**, `app.js?v=163`.
 - **F5.3 (tools + memoria por WhatsApp) sin empezar** — depende de F5.4 (ya hecho) y no
   tiene fecha.
 - **F5.5 (proactivo, plantillas Meta) BLOQUEADO** — Twilio rechazó el Business Profile de
