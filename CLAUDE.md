@@ -2683,6 +2683,79 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
     Perfil, mandarlo por WhatsApp, confirmar que Salma dice "vinculado", y que a partir
     de ahí vuelve a responder con su personalidad como antes.**
 
+  - **24 sept 2026 (mismo día) — el código de "Vincular WhatsApp" ahora es un enlace
+    directo, no algo para copiar a mano.** `POST /whatsapp-link-code` devuelve también
+    `whatsapp_number` (el `TWILIO_WHATSAPP_FROM` sin el prefijo `whatsapp:`); el modal
+    de Perfil arma con eso un enlace `wa.me/<número>?text=<código>` — un botón "Abrir
+    WhatsApp y enviar código" que abre WhatsApp con el código ya escrito, un solo toque
+    en vez de copiar+buscar el chat a mano. El número también se enseña como texto por
+    si se prefiere guardarlo en contactos. `app.js?v=156`. Worker `28de59c2`. Sin coste
+    (mismo endpoint de siempre, solo cambia qué devuelve).
+
+  - **24 sept 2026 (mismo día) — F5.4 AMPLIADO: registro automático por WhatsApp +
+    "Entrar con tu número" en la web. DESPLEGADO, sin confirmar en pantalla.** Petición
+    explícita de Paco tras usar la vinculación: **"Si quiero que le cree la cuenta ahí
+    mismo, pero quiero que si llega a la web pueda entrar poniendo su número"** —
+    hablado con calma antes de tocar código (Paco: "tenemos que pensar esto no quiero
+    líos con los registros"), incluido el caso raro que él mismo planteó (alguien con
+    cuenta ya creada por WhatsApp que un día, por costumbre, entra con Google en vez de
+    con su número — dos cuentas para la misma persona). Commit `ddc3258`, **Worker
+    Version ID `557a3674-88be-4f01-a9be-bf5222aaff35`** (leído del log del deploy).
+    **Regla de oro acordada: un número de teléfono = una cuenta, siempre — nunca se
+    fusionan dos cuentas automáticamente** (fusionar de verdad —juntar guías, notas,
+    Premium— es trabajo delicado y con riesgo; si llega a hacer falta, se hace a mano
+    desde Firestore/el panel, no con una herramienta automática para un caso raro).
+    - **Camino 1 — registro solo, desde WhatsApp.** Si escribe un número que nunca ha
+      tocado la web y el mensaje NO es un código de vinculación válido, `/whatsapp` le
+      crea cuenta ahí mismo: `uid = _waUidFromPhone(teléfono)` (hash SHA-256 del
+      teléfono, siempre el mismo uid para el mismo número, sin tabla de traducción
+      aparte), escribe `users/{uid}` (name del `ProfileName` de WhatsApp o "Viajero",
+      `phone`, `created_via:'whatsapp'`) y `whatsapp_sessions/{numero}` → uid, avisa
+      "te acabo de abrir cuenta gratis..." y SIGUE respondiendo de verdad a lo que haya
+      preguntado en ese mismo mensaje (no se pierde el turno). Sin llamadas de pago —
+      solo Firestore, gratis.
+    - **Camino 3 — "Entrar con tu número" en la web (nuevo).** Botón junto a
+      Google/huella en la pantalla de entrada (`index.html`, `#btn-phone-login-toggle`).
+      Escribes el teléfono → `POST /phone-login-request` (sin sesión, a propósito: es
+      el propio flujo de entrar) busca `whatsapp_sessions/{numero}`; si NO existe,
+      **no crea nada** — este endpoint nunca abre un segundo camino de alta, solo entra
+      en una cuenta que YA exista por WhatsApp, para que los dos caminos no se puedan
+      desincronizar. Si existe, genera un código (KV `phonelogin:{código}`, 5 min) y lo
+      manda por WhatsApp con `sendWhatsAppMessage` (Twilio, ya pagado — **no** SMS de
+      verificación de Firebase, que si tiene coste por envío). Ese código se canjea en
+      `POST /phone-login-verify` por un **custom token de Firebase**
+      (`mintFirebaseCustomToken()`, un JWT autofirmado con la clave privada de la
+      service account — mismo patrón de firma que ya usa `getServiceAccountToken` para
+      el OAuth de Firestore, pero con los claims específicos de custom token de
+      Firebase Auth, sin ninguna llamada de red); el navegador hace
+      `auth.signInWithCustomToken(custom_token)` y entra en la MISMA cuenta — si ese uid
+      todavía no existe como usuario de Firebase Auth (nadie ha entrado antes por la
+      web con él), Firebase lo crea solo en ese momento, comportamiento documentado de
+      los custom tokens, no hace falta llamar a ningún endpoint de "crear cuenta"
+      aparte. Tope de 20/día por IP en `/phone-login-request` (`IP_DAILY_CAPS`, ya que
+      es un endpoint sin sesión que manda un WhatsApp real a un número ajeno si alguien
+      abusa).
+    - **Detección de colisión (el caso raro que planteó Paco).** Si alguien con un
+      número YA registrado solo por WhatsApp intenta vincularlo (código desde Perfil)
+      a una cuenta de Google DISTINTA, `/whatsapp` ya no deja que el código se cuele
+      como si fuera un mensaje de chat normal (lo que pasaba antes, sin darse cuenta):
+      ahora compara el uid del código contra `linkedUid` y, si no coinciden, responde
+      claro — *"Este número de WhatsApp ya tiene su propia cuenta... usa 'Entrar con tu
+      número' en la web"* — sin fusionar nada. Si coinciden (re-envío del mismo código
+      a la cuenta que ya tenía), avisa que no hace falta nada más. Consume el código en
+      los dos casos, para que no se pueda reintentar.
+    - **Aviso de coste (protocolo §8):** cero llamadas de pago nuevas — todo el
+      mecanismo (crear cuenta, firmar el token, mandar/verificar el código) es
+      Firestore + KV (gratis) + WhatsApp/Twilio, que ya se paga igual que en F5.2.
+    - **Sin implementar a propósito:** un fusionador de cuentas de verdad para el caso
+      de colisión — decisión explícita de Paco, ver "regla de oro" arriba.
+    **Pendiente: que Paco pruebe en su móvil (1) escribir a Salma desde un número que
+    nunca ha usado y confirmar que le crea cuenta sola y responde a lo que pregunte;
+    (2) el botón "Entrar con tu número" en la web con ese mismo número, confirmar que
+    entra en la cuenta creada por WhatsApp; (3) si le apetece, provocar la colisión a
+    propósito (vincular ese número desde una cuenta de Google distinta) y confirmar que
+    avisa claro en vez de tratarlo como chat.**
+
   - **Plan de fases** (documento completo `Salma-WhatsApp.md`, recuperar de los archivos
     subidos si se retoma en otra sesión):
     - F5.0 — trámite Twilio + activar Sandbox (no bloquea desarrollo)
