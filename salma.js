@@ -1341,19 +1341,51 @@ const salma = {
 
   // Aviso de límite del plan (chat del día, guías o cambios en guías): el Worker responde con el texto y
   // `limit_reached`. Botón para abrir el modal del plan (mismo que Perfil → Mi plan) en vez de solo informar.
+  // 24 sept 2026: guarda lo que se estaba pidiendo (this._lastMsg/_lastExtra, ya actualizados por _doSend
+  // justo antes de esta respuesta) en sessionStorage — sobrevive al redirect de Stripe Checkout (misma
+  // pestaña) — para poder retomarlo solo, sin que Paco tenga que volver a escribir la guía, en cuanto
+  // el pago se confirme (ver _resumePendingRetry, llamado desde _verificarPagoPremium en app.js).
   _offerSeePlans() {
     const area = this._getChatArea();
+    try {
+      sessionStorage.setItem('bdm_pending_retry', JSON.stringify({
+        msg: this._lastMsg || '', extra: this._lastExtra || {}, at: Date.now()
+      }));
+    } catch (_) {}
     if (!area || typeof window.openCoinsModal !== 'function') return;
     area.querySelectorAll('.ver-plan-wrap').forEach(el => el.remove());
     const wrap = document.createElement('div');
     wrap.className = 'historia-chat-chip-wrap ver-plan-wrap';
+    const caption = document.createElement('div');
+    caption.className = 'crear-ruta-caption';
+    caption.textContent = 'Lo que tenías a medias se queda guardado — al recargar, seguimos justo donde lo dejamos.';
+    wrap.appendChild(caption);
     const btn = document.createElement('button');
     btn.className = 'crear-ruta-btn';
-    btn.innerHTML = 'Ver mi plan <span class="crb-arrow">→</span>';
+    btn.innerHTML = '<span>⚡</span> Recargar / Ver mi plan <span class="crb-arrow">→</span>';
     btn.addEventListener('click', () => { window.openCoinsModal(); });
     wrap.appendChild(btn);
     area.appendChild(wrap);
     this._scrollToBottom(true);
+  },
+
+  // Retoma, tras un pago confirmado, lo que se estaba pidiendo cuando saltó el límite del plan
+  // (ver _offerSeePlans). Se llama desde _verificarPagoPremium (app.js) justo al confirmar Premium.
+  // No retoma nada con más de 2h (sesión ya vieja, el contexto puede no aplicar). Devuelve true si
+  // había algo pendiente y lo ha reenviado, false si no había nada que retomar.
+  _resumePendingRetry() {
+    let pending = null;
+    try {
+      const raw = sessionStorage.getItem('bdm_pending_retry');
+      sessionStorage.removeItem('bdm_pending_retry');
+      if (raw) pending = JSON.parse(raw);
+    } catch (_) {}
+    if (!pending || !pending.msg || !pending.at || (Date.now() - pending.at) > 2 * 60 * 60 * 1000) return false;
+    if (typeof this._initChat === 'function') this._initChat();
+    if (typeof window.showState === 'function') window.showState('chat');
+    this._addSalmaBubble('¡Ya tienes margen! Sigo justo donde lo habíamos dejado.');
+    this._doSend(pending.msg, pending.extra || {});
+    return true;
   },
 
   // ═══ ENVÍO AL WORKER ═══
@@ -1646,6 +1678,16 @@ const salma = {
         // PIEZA A — Tiempo 2 completado: limpiar el contexto guiado pendiente.
         this._pendingGuidedRoute = null;
         this._pendingGuidedBaseMsg = null;
+      } else if (data.limit_reached) {
+        // Límite del plan (chat/guía/cambio) — 24 sept 2026. Va ANTES de todas las ramas
+        // de abajo a propósito: ninguna debe ofrecer un botón de "reintentar"/"crear ruta
+        // con mapa" aquí, porque reintentar chocaría otra vez con el MISMO límite (antes
+        // se colaba "🔄 Reintentar mapa" cuando el mensaje bloqueado venía del botón
+        // "Crear ruta con mapa", confuso y sin sentido). El único botón útil es el de
+        // recargar/ver el plan, que se añade más abajo (_offerSeePlans) fuera de esta
+        // cadena de if/else — y esa función ya guarda lo que se estaba pidiendo para
+        // retomarlo solo tras pagar, sin perder la guía a medias.
+        this._removeLoading();
       } else if (this._pendingGuidedRoute) {
         // PIEZA A — Tiempo 1 del flujo guiado: Salma ya ha dado las recomendaciones
         // en prosa (arriba). Ofrecemos el paso 2 con el mismo botón que el chat libre.

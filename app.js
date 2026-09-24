@@ -4279,8 +4279,13 @@ async function _verificarPagoPremium() {
       if (puMs > baselineMs && puMs > nowMs) {
         currentUser.premium_until = pu.toDate ? pu.toDate().toISOString() : pu;
         currentUser.isPremium = true;
-        if (currentState === 'profile' || currentState === 'viajes') renderProfile();
-        showToast('¡Premium activado! Ya tienes acceso completo.');
+        // 24 sept 2026: si el pago vino de "recargar" tras chocar con un límite (guía, cambio
+        // o mensaje), retoma sola lo que se estaba pidiendo — sin esto, comprar Premium no
+        // perdía la guía en Firestore, pero sí obligaba a volver a escribirla desde cero.
+        const _resumed = (typeof salma !== 'undefined' && typeof salma._resumePendingRetry === 'function')
+          ? salma._resumePendingRetry() : false;
+        if (!_resumed && (currentState === 'profile' || currentState === 'viajes')) renderProfile();
+        showToast(_resumed ? '¡Premium activado! Sigo con lo que tenías a medias.' : '¡Premium activado! Ya tienes acceso completo.');
         return;
       }
     } catch (e) {
