@@ -3568,11 +3568,20 @@ async function doGoogleLogin() {
   }
 }
 
-// Botón "Entrar con WhatsApp" — en el móvil abre WhatsApp con "Hola Salma" ya escrito
-// (cuenta nueva o de vuelta, lo resuelve el Worker). En el ordenador (25 sept 2026)
-// enseña un QR como WhatsApp Web: se escanea con el móvil, se envía el mensaje ya
-// escrito y el ordenador entra solo (/wa-qr-start + /wa-qr-poll). Sin llamadas de pago.
+// Botón "Entrar con WhatsApp" — 26 sept 2026, reescrito de cero. Antes, en el móvil se
+// mandaba el texto fijo "Hola Salma" y el Worker intentaba adivinar por el TEXTO si eso
+// significaba "quiero entrar" — frágil (dependía de qué escribiera cada uno) y encima
+// se rompía al probarlo varias veces el mismo día (el primer intento consumía la única
+// pista que tenía el Worker). Ahora móvil y ordenador usan EXACTAMENTE el mismo
+// mecanismo: un código de un solo uso que el propio botón mete en el mensaje, invisible
+// para quien lo manda — no importa nada del texto, cada toque genera un código nuevo
+// (/wa-qr-start + /wa-qr-poll, Firestore `wa_qr_logins/{código}`). En el ordenador se
+// enseña como QR (como WhatsApp Web); en el móvil, WhatsApp se abre directo con el texto
+// ya escrito y, al volver a la pestaña de la web, esta entra sola — sin escribir nada.
 let _waDigits = '';
+const WA_LOGIN_PENDING_KEY = 'bdm_wa_login_pending';
+const WA_LOGIN_TTL_MS = 10 * 60 * 1000;
+
 async function _setupWhatsAppStartButton() {
   const btn = document.getElementById('btn-whatsapp-start');
   if (!btn) return;
@@ -3581,12 +3590,21 @@ async function _setupWhatsAppStartButton() {
     const data = await res.json();
     _waDigits = (data.whatsapp_number || '').replace(/[^\d]/g, '');
     if (!_waDigits) return;
-    btn.href = 'https://wa.me/' + _waDigits + '?text=' + encodeURIComponent('Hola Salma');
     btn.classList.remove('hidden');
-    btn.addEventListener('click', (e) => {
-      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    btn.addEventListener('click', async (e) => {
       e.preventDefault();
-      _openWaQrLogin();
+      const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (isDesktop) { _openWaQrLogin(); return; }
+      // Móvil: generar el código YA (antes de salir a WhatsApp) y guardarlo para
+      // recuperarlo al volver a esta pestaña.
+      try {
+        const d = await _waLoginStart();
+        location.href = _waLoginBuildUrl(d);
+      } catch (err) {
+        // sin conexión para pedir el código: al menos abre WhatsApp con el saludo de
+        // siempre, mejor que no hacer nada — no se podrá auto-entrar, pero no bloquea.
+        location.href = 'https://wa.me/' + _waDigits + '?text=' + encodeURIComponent('Hola Salma');
+      }
     });
   } catch (e) {
     // sin número no se muestra el botón — no bloquea el resto del login
@@ -3603,6 +3621,66 @@ function _loadQrLib() {
   });
 }
 
+// Pide un código nuevo al Worker y lo guarda en localStorage — lo usan tanto el QR del
+// ordenador como el redirect directo del móvil.
+async function _waLoginStart() {
+  const r = await fetch(window.SALMA_API + '/wa-qr-start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+  const d = await r.json();
+  if (!r.ok || !d.code) throw new Error('wa-qr-start');
+  try {
+    localStorage.setItem(WA_LOGIN_PENDING_KEY, JSON.stringify({ code: d.code, secret: d.secret, ts: Date.now() }));
+  } catch (e) { /* localStorage bloqueado: sigue funcionando el QR/redirect, solo no se podrá reanudar al volver */ }
+  return d;
+}
+
+function _waLoginBuildUrl(d) {
+  const digits = (d.whatsapp_number || _waDigits).replace(/[^\d]/g, '');
+  return 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Entrar en la app · código ' + d.code);
+}
+
+// Una sola llamada a /wa-qr-poll. Devuelve el JSON o null si hubo un fallo de red.
+async function _waLoginPollOnce(code, secret) {
+  try {
+    const r = await fetch(window.SALMA_API + '/wa-qr-poll', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, secret }) });
+    return await r.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+// 26 sept 2026 — reanuda el login al volver a esta pestaña desde WhatsApp (móvil): si
+// hay un código pendiente sin caducar y sin sesión activa, pregunta varias veces
+// seguidas (cubre el caso normal de "mandar el WhatsApp y volver enseguida") y se para
+// sola si no hay suerte, sin dejar un temporizador corriendo para siempre en segundo
+// plano. Se llama al cargar la página y cada vez que la pestaña vuelve a ser visible.
+let _waLoginResuming = false;
+async function _waLoginResume() {
+  if (_waLoginResuming) return;
+  let pending;
+  try { pending = JSON.parse(localStorage.getItem(WA_LOGIN_PENDING_KEY) || 'null'); } catch (e) { pending = null; }
+  if (!pending || !pending.code || !pending.secret) return;
+  if (Date.now() - (pending.ts || 0) > WA_LOGIN_TTL_MS) { localStorage.removeItem(WA_LOGIN_PENDING_KEY); return; }
+  if (typeof auth !== 'undefined' && auth.currentUser) { localStorage.removeItem(WA_LOGIN_PENDING_KEY); return; }
+  _waLoginResuming = true;
+  try {
+    for (let i = 0; i < 15; i++) { // ~30s de intentos cada vez que se reanuda
+      const d = await _waLoginPollOnce(pending.code, pending.secret);
+      if (d && d.status === 'ok' && d.custom_token) {
+        localStorage.removeItem(WA_LOGIN_PENDING_KEY);
+        await auth.signInWithCustomToken(d.custom_token);
+        closeModal();
+        return;
+      }
+      if (d && d.status === 'expired') { localStorage.removeItem(WA_LOGIN_PENDING_KEY); return; }
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+  } finally {
+    _waLoginResuming = false;
+  }
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) _waLoginResume(); });
+window.addEventListener('pageshow', () => _waLoginResume());
+
 async function _openWaQrLogin() {
   if (document.getElementById('wa-qr-overlay')) return;
   const ov = document.createElement('div');
@@ -3618,18 +3696,15 @@ async function _openWaQrLogin() {
   ov.querySelector('.wa-qr-close').addEventListener('click', stop);
   ov.addEventListener('click', (e) => { if (e.target === ov) stop(); });
   const box = ov.querySelector('#wa-qr-box');
-  const deadline = Date.now() + 10 * 60 * 1000;
+  const deadline = Date.now() + WA_LOGIN_TTL_MS;
 
   const start = async () => {
     if (closed) return;
     if (Date.now() > deadline) { stop(); return; }
     try {
       await _loadQrLib();
-      const r = await fetch(window.SALMA_API + '/wa-qr-start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-      const d = await r.json();
-      if (!r.ok || !d.code) throw new Error('start');
-      const digits = (d.whatsapp_number || _waDigits).replace(/[^\d]/g, '');
-      const url = 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Entrar en el ordenador · código ' + d.code);
+      const d = await _waLoginStart();
+      const url = _waLoginBuildUrl(d);
       const qr = window.qrcode(0, 'M');
       qr.addData(url); qr.make();
       box.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
@@ -3644,17 +3719,15 @@ async function _openWaQrLogin() {
     timer = setTimeout(async () => {
       if (closed) return;
       if (Date.now() > deadline) { stop(); return; }
-      try {
-        const r = await fetch(window.SALMA_API + '/wa-qr-poll', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, secret }) });
-        const d = await r.json();
-        if (d.status === 'ok' && d.custom_token) {
-          await auth.signInWithCustomToken(d.custom_token);
-          stop();
-          closeModal();
-          return;
-        }
-        if (d.status === 'expired') { start(); return; }
-      } catch (e) { /* bache de red: se reintenta */ }
+      const d = await _waLoginPollOnce(code, secret);
+      if (d && d.status === 'ok' && d.custom_token) {
+        try { localStorage.removeItem(WA_LOGIN_PENDING_KEY); } catch (e) {}
+        await auth.signInWithCustomToken(d.custom_token);
+        stop();
+        closeModal();
+        return;
+      }
+      if (d && d.status === 'expired') { start(); return; }
       poll(code, secret);
     }, 2000);
   };

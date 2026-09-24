@@ -8349,14 +8349,17 @@ export default {
             }
           }
 
-          // Entrada desde el ordenador por QR (25 sept 2026): el QR que enseña la web
-          // abre WhatsApp con "Entrar en el ordenador · código XXXXXX". Se marca ese
-          // código como confirmado con el uid de este número (creando la cuenta si es
-          // nuevo) y el ordenador, que está preguntando por /wa-qr-poll, entra solo.
-          // Va en Firestore y no en KV porque este webhook corre cerca de Twilio y el
-          // ordenador pregunta desde otra región: KV puede tardar hasta 60 s en
-          // propagar el cambio, Firestore no. No llama a Claude.
-          const qrMatch = body.match(/entrar en el ordenador\W*c[oó]digo\W*([A-Z0-9]{6})\s*$/i);
+          // Entrada por código de un solo uso (26 sept 2026, reescrito) — el botón
+          // "Entrar con WhatsApp" de la web (ordenador Y móvil) manda "Entrar en la app
+          // · código XXXXXX"; se marca ese código como confirmado con el uid de este
+          // número (creando la cuenta si hace falta) y el navegador que está
+          // preguntando por /wa-qr-poll entra solo — no importa nada del resto del
+          // texto ni cuántas veces se haya probado ya. Antes esto solo cubría el QR del
+          // ordenador ("entrar en el ordenador"); se acepta también el texto viejo por
+          // si queda algún mensaje en tránsito. Va en Firestore y no en KV porque este
+          // webhook corre cerca de Twilio y el navegador pregunta desde otra región: KV
+          // puede tardar hasta 60 s en propagar el cambio, Firestore no. No llama a Claude.
+          const qrMatch = body.match(/entrar en (?:la app|el ordenador)\W*c[oó]digo\W*([A-Z0-9]{6})\s*$/i);
           if (qrMatch) {
             const qrPath = 'wa_qr_logins/' + qrMatch[1].toUpperCase();
             const qrDoc = await firestoreAdminGet(env, qrPath);
@@ -8364,7 +8367,7 @@ export default {
             const qrCreated = Date.parse(qrFields.created_at?.timestampValue || '') || 0;
             const qrPending = qrFields.status?.stringValue === 'pending' && Date.now() - qrCreated < WA_QR_TTL_MS;
             if (!qrPending) {
-              await sendWhatsAppMessage(env, from, 'Ese código ya ha caducado. Vuelve a pulsar "Entrar con WhatsApp" en el ordenador y escanea el QR nuevo.');
+              await sendWhatsAppMessage(env, from, 'Ese código ya ha caducado. Vuelve a pulsar "Entrar con WhatsApp" en la web.');
               return;
             }
             let createdNow = false;
@@ -8382,8 +8385,8 @@ export default {
               confirmed_at: { timestampValue: new Date().toISOString() },
             });
             await sendWhatsAppMessage(env, from, createdNow
-              ? '¡Listo! Te he abierto cuenta gratis con este número y ya estás dentro en el ordenador.'
-              : '¡Listo! Ya estás dentro en el ordenador. Si no has sido tú quien lo ha pedido, avísame.');
+              ? '¡Listo! Te he abierto cuenta gratis con este número — vuelve a la web, ya deberías estar dentro.'
+              : '¡Listo! Vuelve a la web, ya deberías estar dentro. Si no has sido tú quien lo ha pedido, avísame.');
             return;
           }
 
