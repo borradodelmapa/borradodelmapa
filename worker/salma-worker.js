@@ -8153,13 +8153,14 @@ export default {
       }
     }
 
-    // ─── ENDPOINT /whatsapp (F5.2, 24 sept 2026 — conectado al motor real de Salma) ───
-    // Antes (F5.1) era un eco fijo sin IA. Ahora cada mensaje se responde de verdad con
-    // Claude Sonnet + WHATSAPP_SYSTEM_CHAT — MISMA personalidad que el chat web, SIN
-    // memoria entre mensajes ni tools todavía (llegan en F5.3, ver CLAUDE.md). Twilio
-    // manda application/x-www-form-urlencoded, NO JSON, y no espera el cuerpo de la
-    // respuesta — se contesta 200 al momento y el trabajo real va en background con
-    // ctx.waitUntil() (async sin Cloudflare Queues, acordado en el plan de fases).
+    // ─── ENDPOINT /whatsapp (F5.2 + F5.4 adelantado, 24 sept 2026) ───
+    // F5.2: conectado al motor real de Salma. F5.4 (vinculación de cuenta) adelantado a
+    // petición explícita de Paco, ANTES de F5.3 (tools): sin cuenta vinculada, Salma NO
+    // responde nada por este canal salvo cómo vincularse — así no queda ningún hueco de
+    // uso gratis sin límite de plan cuando lleguen las tools reales (decisión del 24 sept,
+    // ver CLAUDE.md). Twilio manda application/x-www-form-urlencoded, NO JSON, y no
+    // espera el cuerpo de la respuesta — se contesta 200 al momento y el trabajo real va
+    // en background con ctx.waitUntil() (async sin Cloudflare Queues, plan ya acordado).
     if (request.method === 'POST' && url.pathname === '/whatsapp') {
       if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_WHATSAPP_FROM) {
         console.error('WhatsApp: faltan secrets de Twilio (ACCOUNT_SID/AUTH_TOKEN/WHATSAPP_FROM)');
@@ -8184,31 +8185,65 @@ export default {
       console.log(`[WhatsApp] Mensaje de ${from} (${profileName}): "${body}"`);
 
       if (!body) {
-        // Foto/audio/sticker sin texto — F5.2 solo entiende texto. Nada que responder aún.
-        return new Response('OK', { status: 200 });
-      }
-
-      // Tope diario por número — protege de un bucle o de que alguien descubra el número
-      // de Sandbox y lo use sin control; generoso a propósito, un tester real no debería
-      // notarlo nunca. Aviso de coste (protocolo §8): a partir de aquí CADA mensaje llama
-      // de verdad a Claude Sonnet (mismo modelo del chat web, ~0,01-0,05 USD/mensaje según
-      // longitud) — deja de ser gratis como el eco de F5.1.
-      let waOk = true;
-      if (env.SALMA_KB) {
-        try {
-          const waKey = 'wa_daily:' + from + ':' + new Date().toISOString().slice(0, 10);
-          const waCur = parseInt((await env.SALMA_KB.get(waKey)) || '0', 10) || 0;
-          if (waCur >= 60) waOk = false;
-          else await env.SALMA_KB.put(waKey, String(waCur + 1), { expirationTtl: 60 * 60 * 30 });
-        } catch (_) { /* fail-open, como el resto de topes por IP */ }
-      }
-      if (!waOk) {
-        ctx.waitUntil(sendWhatsAppMessage(env, from, 'Hoy ya hemos hablado bastante 😅 — mañana seguimos, o entra en la app: borradodelmapa.com').catch(() => {}));
+        // Foto/audio/sticker sin texto — todavía solo entendemos texto. Nada que responder.
         return new Response('OK', { status: 200 });
       }
 
       ctx.waitUntil((async () => {
         try {
+          // ¿Este número ya está vinculado a una cuenta? whatsapp_sessions/{numero} lo
+          // escribe el propio Worker (service account) al confirmar un código — el
+          // cliente nunca lee ni escribe esta colección directamente, no hace falta
+          // regla de Firestore nueva.
+          let session = null;
+          try {
+            session = await firestoreAdminGet(env, 'whatsapp_sessions/' + encodeURIComponent(from));
+          } catch (e) {
+            console.error('[WhatsApp] Error leyendo whatsapp_sessions:', e.message);
+          }
+          const linkedUid = session && session.fields && session.fields.uid && session.fields.uid.stringValue;
+
+          if (!linkedUid) {
+            // ¿El mensaje es un código de vinculación de 6 caracteres?
+            if (/^[A-Z0-9]{6}$/i.test(body) && env.SALMA_KB) {
+              const codeKey = 'walink:' + body.toUpperCase();
+              const codeUid = await env.SALMA_KB.get(codeKey);
+              if (codeUid) {
+                await env.SALMA_KB.delete(codeKey);
+                await firestoreAdminPatch(env, 'whatsapp_sessions/' + encodeURIComponent(from), {
+                  uid: { stringValue: codeUid },
+                  linked_at: { timestampValue: new Date().toISOString() },
+                  profile_name: { stringValue: String(profileName || '') },
+                });
+                await sendWhatsAppMessage(env, from, `¡Listo${profileName ? ', ' + profileName : ''}! Ya tienes tu WhatsApp vinculado a tu cuenta de Borrado del Mapa — a partir de ahora hablas conmigo aquí igual que en la app. ¿En qué te ayudo?`);
+                return;
+              }
+              await sendWhatsAppMessage(env, from, 'Ese código no lo reconozco o ya ha caducado (duran 10 minutos) — genera uno nuevo desde tu Perfil en la app y mándamelo otra vez.');
+              return;
+            }
+            await sendWhatsAppMessage(env, from, `¡Hola${profileName ? ' ' + profileName : ''}! Para hablar conmigo por aquí primero necesito que tengas cuenta en Borrado del Mapa (es gratis). Entra en https://borradodelmapa.com, inicia sesión o regístrate, y en tu Perfil dale a *Vincular WhatsApp* — te doy un código de 6 caracteres y me lo mandas aquí. En cuanto lo tenga, seguimos charlando 😉`);
+            return;
+          }
+
+          // Número ya vinculado a linkedUid. Tope diario por número — protege de un
+          // bucle o abuso; el control real por plan/uid llega en F5.3 junto con las
+          // tools. Aviso de coste (protocolo §8): cada mensaje de aquí en adelante llama
+          // de verdad a Claude Sonnet (mismo modelo del chat web, ~0,01-0,05 USD/mensaje
+          // según longitud) — deja de ser gratis como el eco de F5.1.
+          let waOk = true;
+          if (env.SALMA_KB) {
+            try {
+              const waKey = 'wa_daily:' + from + ':' + new Date().toISOString().slice(0, 10);
+              const waCur = parseInt((await env.SALMA_KB.get(waKey)) || '0', 10) || 0;
+              if (waCur >= 60) waOk = false;
+              else await env.SALMA_KB.put(waKey, String(waCur + 1), { expirationTtl: 60 * 60 * 30 });
+            } catch (_) { /* fail-open, como el resto de topes por IP */ }
+          }
+          if (!waOk) {
+            await sendWhatsAppMessage(env, from, 'Hoy ya hemos hablado bastante 😅 — mañana seguimos, o entra en la app: borradodelmapa.com');
+            return;
+          }
+
           const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
             method: 'POST',
             headers: {
@@ -8240,6 +8275,28 @@ export default {
       // Twilio solo necesita un 200 rápido aquí — la respuesta real de Salma se manda
       // aparte, en segundo plano, vía sendWhatsAppMessage().
       return new Response('OK', { status: 200 });
+    }
+
+    // ─── ENDPOINT /whatsapp-link-code (F5.4, 24 sept 2026) ───
+    // Genera un código de un solo uso (10 min) para vincular el número de WhatsApp del
+    // usuario a su cuenta real — lo pide el botón "Vincular WhatsApp" del Perfil.
+    // Requiere login (mismo patrón que /beta-feedback): solo quien ya está autenticado
+    // en la app puede generarse un código, nunca un desconocido con la URL.
+    if (request.method === 'POST' && url.pathname === '/whatsapp-link-code') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const user = await verifyAuthAndGetUser(request.headers.get('Authorization'));
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
+      }
+      try {
+        // Alfabeto sin 0/O/1/I (se confunden fácil al copiar a mano un código corto).
+        const ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+        const code = Array.from({ length: 6 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
+        await env.SALMA_KB.put('walink:' + code, user.uid, { expirationTtl: 600 });
+        return new Response(JSON.stringify({ code }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
     }
 
     // ─── ENDPOINT /beta-feedback (testers — nota + logs desde el panel 🐛) ───

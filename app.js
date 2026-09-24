@@ -1746,6 +1746,12 @@ async function renderProfile() {
       <div class="prof-group">
         <div class="prof-group-title">CUENTA</div>
         <div class="prof-card">
+          <div class="prof-row" id="prof-whatsapp">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+            <span class="prof-row-label">Vincular WhatsApp</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-logout">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
             <span class="prof-row-label">Cerrar sesión</span>
@@ -1816,6 +1822,7 @@ async function renderProfile() {
   document.getElementById('prof-docs').addEventListener('click', () => {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
   });
+  document.getElementById('prof-whatsapp').addEventListener('click', () => openWhatsAppLinkModal());
   document.getElementById('prof-galeria-info')?.addEventListener('click', () => {
     showInfoPopup('Aquí puedes organizar las fotos de todos tus viajes. Crear galerías nuevas. Y hacer videos para compartir con tus amigos en redes sociales o como quieras.');
   });
@@ -4260,6 +4267,52 @@ function openCoinsModal() {
 }
 
 window.openCoinsModal = openCoinsModal;
+
+// ═══ VINCULAR WHATSAPP (F5.4, 24 sept 2026) ═══
+// Genera un código de 6 caracteres (10 min) y lo enseña con instrucciones — el usuario
+// se lo manda al número de Salma en WhatsApp y ese número queda vinculado a su cuenta.
+// Sin esto, Salma no responde nada por WhatsApp salvo cómo vincularse (ver worker).
+async function openWhatsAppLinkModal() {
+  let overlay = document.getElementById('narrator-confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'narrator-confirm-overlay';
+    overlay.className = 'narrator-confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div class="narrator-confirm-modal">
+      <div class="narrator-confirm-icon">💬</div>
+      <h2 class="narrator-confirm-title">Vincular WhatsApp</h2>
+      <p class="narrator-confirm-text">Generando tu código...</p>
+      <div class="narrator-confirm-btns">
+        <button class="narrator-confirm-cancel" id="wa-link-close">Cerrar</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+  document.getElementById('wa-link-close').addEventListener('click', () => { overlay.style.display = 'none'; });
+
+  try {
+    const authUser = auth.currentUser;
+    if (!authUser) throw new Error('Tu sesión ha caducado, vuelve a entrar');
+    const idToken = await authUser.getIdToken();
+    const res = await fetch(window.SALMA_API + '/whatsapp-link-code', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + idToken },
+    });
+    const data = await res.json();
+    if (!data.code) throw new Error(data.error || 'No se pudo generar el código');
+
+    const textEl = overlay.querySelector('.narrator-confirm-text');
+    if (textEl) {
+      textEl.innerHTML = `Manda este código por WhatsApp al número de Salma para vincular tu cuenta — caduca en 10 minutos:<br><br><span style="font-size:28px;font-weight:700;letter-spacing:4px;color:var(--dorado)">${escapeHTML(data.code)}</span><br><br>Una vez vinculado, hablas con Salma por WhatsApp igual que en la app.`;
+    }
+  } catch (e) {
+    const textEl = overlay.querySelector('.narrator-confirm-text');
+    if (textEl) textEl.textContent = 'No se pudo generar el código: ' + e.message;
+  }
+}
+window.openWhatsAppLinkModal = openWhatsAppLinkModal;
 
 // ═══ RETORNO DE PAGO STRIPE (?pago=ok / ?pago=cancel) ═══
 
