@@ -1359,6 +1359,14 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   `92b8a1c6-515b-4353-832f-15e3dde730f5`, `app.js?v=169`, `styles.css?v=140`. **Solo queda
   probar:** Perfil → apagar "Compartir mis rutas" → sus rutas desaparecen de Explorar (y al
   encenderlo vuelven). Detalle completo en `CLAUDE-historial.md`.
+  **Rutas guardadas de otros (25 sept 2026, pedido por Paco) — DESPLEGADO, pendiente de
+  confirmar en pantalla.** Antes, GUARDAR una ruta abierta desde Explorar la guardaba como
+  propia y la volvía a publicar en Explorar a nombre de quien la guardaba. Ahora
+  `guardarRutaDeOtro()` la guarda con `saved_from {slug, uid, autor}`, sin publicar, sin
+  pedir foto a Google (usa portada y miniatura del original) y sin Perfil IA; sale en Mis
+  rutas → sección "RUTAS GUARDADAS" ("de Paco") y no cuenta en los viajes del Perfil. No
+  duplica si ya la tienes ni si es tuya. `app.js?v=170`. Las que se guardaron ANTES de este
+  cambio siguen como propias (no se pueden distinguir solas) — borrarlas y volver a guardar.
 
 - **Comunidad de viajeros por WhatsApp, 25-26 sept 2026 — SOLO ESTUDIO, sin desarrollar.**
   Viajeros que coinciden por afinidad/intereses, obligación cero, Salma de puerta, web

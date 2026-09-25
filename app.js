@@ -1865,7 +1865,7 @@ async function renderProfile() {
     .collection('maps').get().then(snap => {
       const el = document.getElementById('prof-stat-guides');
       let n = 0;
-      snap.forEach(doc => { if (doc.data().estado !== 'borrador') n++; }); // no contar rutas guiadas a medias
+      snap.forEach(doc => { const d = doc.data(); if (d.estado !== 'borrador' && !d.saved_from) n++; }); // ni rutas guiadas a medias ni rutas guardadas de otros
       if (el) el.textContent = n;
     }).catch(() => {
       const el = document.getElementById('prof-stat-guides');
@@ -3287,6 +3287,10 @@ async function loadUserGuides() {
       kvDocs.forEach(doc => db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete().catch(() => {}));
     }
 
+    // Rutas de otros viajeros guardadas desde Explorar → sección aparte al final
+    const savedGuides = allGuides.filter(g => g.data.saved_from);
+    for (let i = allGuides.length - 1; i >= 0; i--) if (allGuides[i].data.saved_from) allGuides.splice(i, 1);
+
     // Función para crear una card
     function createCard(doc, d) {
       const card = document.createElement('div');
@@ -3297,6 +3301,7 @@ async function loadUserGuides() {
         <div class="viaje-card-body">
           <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
           <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
+          ${d.saved_from ? `<div class="expl-card-autor">de ${escapeHTML(d.saved_from.autor || 'Viajero')}</div>` : ''}
         </div>
         <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
       card.addEventListener('click', (e) => {
@@ -3384,7 +3389,7 @@ async function loadUserGuides() {
         group.appendChild(groupGrid);
         grid.appendChild(group);
       }
-    } else if (allGuides.length === 0) {
+    } else if (allGuides.length === 0 && savedGuides.length === 0) {
       // Estado vacío — ninguna ruta todavía
       grid.innerHTML = `
         <div class="viajes-empty">
@@ -3404,6 +3409,16 @@ async function loadUserGuides() {
       for (const g of allGuides) {
         grid.appendChild(createCard(g, g.data));
       }
+    }
+    if (savedGuides.length) {
+      const group = document.createElement('div');
+      group.className = 'viaje-group';
+      group.innerHTML = `<div class="viaje-group-header">RUTAS GUARDADAS <span class="viaje-group-count">${savedGuides.length}</span></div>`;
+      const groupGrid = document.createElement('div');
+      groupGrid.className = 'viaje-group-grid';
+      for (const g of savedGuides) groupGrid.appendChild(createCard(g, g.data));
+      group.appendChild(groupGrid);
+      grid.appendChild(group);
     }
   } catch (e) {
     console.error('Error cargando guías:', e);
@@ -3530,18 +3545,25 @@ function _explorarCard(g) {
       <div class="viaje-card-meta">${dias}${escapeHTML((g.destino || '').toUpperCase())}</div>
       <div class="expl-card-autor">por ${escapeHTML(g.autor || 'Viajero')} · ${g.paradas} paradas</div>
     </div>`;
-  card.addEventListener('click', () => _openPublicGuide(g.slug));
+  card.addEventListener('click', () => _openPublicGuide(g.slug, g));
   return card;
 }
 
 // Con sesión: se abre dentro de la app (vista itinerario, igual que una ruta compartida).
 // Sin sesión: la página pública de la guía (404.html), que ya funciona sin login.
-async function _openPublicGuide(slug) {
+async function _openPublicGuide(slug, g) {
   if (!currentUser) { window.location.href = '/' + encodeURIComponent(slug); return; }
   try {
     const doc = await db.collection('public_guides').doc(slug).get();
     if (!doc.exists) { showToast('Esta ruta ya no está disponible'); return; }
-    const routeData = JSON.parse(doc.data().itinerarioIA || '{}');
+    const pg = doc.data();
+    const routeData = JSON.parse(pg.itinerarioIA || '{}');
+    // Marca de "ruta de otro viajero": si se pulsa GUARDAR, guardarGuiaDirecto() la guarda
+    // como ruta guardada (no como propia) y no la vuelve a publicar en Explorar.
+    routeData._saved_from = {
+      slug, uid: pg.uid || '', autor: _firstName(pg.owner_name),
+      thumb: (g && g.thumb) || '', cover: pg.cover_image || '',
+    };
     if (!routeData.stops || !routeData.stops.length) { showToast('Esta ruta no tiene paradas'); return; }
     if (typeof window.openItinerarioView === 'function') {
       window.openItinerarioView(routeData, null, { fromChat: false, saved: false });
@@ -4258,6 +4280,7 @@ async function guardarGuia(routeData) {
 }
 
 async function guardarGuiaDirecto(routeData) {
+  if (routeData && routeData._saved_from) return guardarRutaDeOtro(routeData);
   try {
     const r = routeData;
     const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day || 1))].length : 0);
@@ -4326,6 +4349,51 @@ async function guardarGuiaDirecto(routeData) {
     return docRef.id;
   } catch (e) {
     console.error('Error guardando guía:', e);
+    showToast('Error al guardar: ' + (e.message || ''));
+    return null;
+  }
+}
+
+// Guardar una ruta de OTRO viajero (abierta desde Explorar): queda en Mis Viajes como
+// "ruta guardada" (campo saved_from), no como propia — no se publica en Explorar a nombre
+// de quien la guarda, no pide foto de portada a Google (usa la del original) y no alimenta
+// el Perfil IA. Si ya la tenía guardada o es suya, avisa y no duplica.
+async function guardarRutaDeOtro(routeData) {
+  try {
+    const src = routeData._saved_from;
+    const r = Object.assign({}, routeData);
+    delete r._saved_from;
+    if (src.uid && src.uid === currentUser.uid) { showToast('Esta ruta ya es tuya'); return null; }
+    const dup = await db.collection('users').doc(currentUser.uid).collection('maps')
+      .where('saved_from.slug', '==', src.slug).limit(1).get();
+    if (!dup.empty) { showToast('Ya tienes esta ruta guardada'); return dup.docs[0].id; }
+    const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day || 1))].length : 0);
+    const destino = (r.region || r.country || '').toString();
+    const now = new Date().toISOString();
+    const ruta = {
+      nombre: r.title || r.name || 'Ruta',
+      destino: destino,
+      country: r.country || destino,
+      num_dias: numDias,
+      dias: numDias,
+      notas: r.summary || '',
+      cover_image: src.cover || '',
+      itinerarioIA: JSON.stringify(r),
+      enriched: false,
+      createdAt: now,
+      updatedAt: now,
+      published: false,
+      saved_from: { slug: src.slug, uid: src.uid || '', autor: src.autor || 'Viajero' },
+    };
+    if (src.thumb) ruta.map_thumbnail_url = src.thumb;
+    const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
+    showToast('Guardada en Mis Viajes → Rutas guardadas');
+    try {
+      localStorage.setItem('offline_route_' + docRef.id, JSON.stringify({ id: docRef.id, ...ruta, _savedAt: Date.now() }));
+    } catch (_) {}
+    return docRef.id;
+  } catch (e) {
+    console.error('Error guardando ruta de otro viajero:', e);
     showToast('Error al guardar: ' + (e.message || ''));
     return null;
   }
