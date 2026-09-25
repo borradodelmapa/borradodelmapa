@@ -3253,112 +3253,110 @@ function tryKVDirectAnswer(message, country, destination) {
 
   // ── Vacunas ──
   if (/vacuna|vaccine|inmuniza/i.test(m)) {
-    return `**Vacunas para ${pais}:**\n${c.vacunas}\n\nAgua potable: ${c.agua_potable}\n\nEsto es orientativo — confirma con tu centro de vacunación internacional antes de viajar.`;
+    return `Para ${pais}: ${c.vacunas}\n\nAgua del grifo: ${c.agua_potable}\n\nEsto es orientativo, eh — antes de viajar dale un toque a tu centro de vacunación internacional para que te lo confirmen con tu caso concreto.`;
   }
 
   // ── Visado ──
   if (/visado|visa|pasaporte|documentos?.*entrar|necesito.*para.*entrar|requisitos.*entrada/i.test(m)) {
-    let reply = `**Visado para ${pais}:**\n\nEspañoles: ${c.visado_espanoles}\nCiudadanos EU: ${c.visado_eu}`;
-    reply += `\n\nEsto es orientativo — confirma con la embajada o consulado para tu caso concreto.`;
+    let reply = `Para entrar en ${pais} con pasaporte español: ${c.visado_espanoles}`;
+    if (c.visado_eu && c.visado_eu !== c.visado_espanoles) reply += `\nSi eres de otro país de la UE: ${c.visado_eu}`;
+    reply += `\n\nEsto cambia de un día para otro, así que antes de comprar el vuelo confírmalo en la embajada o el consulado.`;
     return reply;
   }
 
   // ── Moneda / dinero ──
   if (/moneda|currency|dinero|cambio|euros?|dolares?|cajero|atm|pagar|efectivo|tarjeta/i.test(m)) {
-    return `**Moneda en ${pais}:** ${c.moneda}\nCambio aproximado: ${c.cambio_aprox_eur}\n\nPropinas: ${c.propinas}`;
+    return `En ${pais} se paga con ${c.moneda} — el cambio ronda ${c.cambio_aprox_eur}.\n\nPropinas: ${c.propinas}`;
   }
 
   // ── Enchufes ──
   if (/enchufe|plug|adaptador|voltaje|corriente|electricidad/i.test(m)) {
-    return `**Enchufes en ${pais}:** ${c.enchufes}\n\nLlévate un adaptador universal por si acaso.`;
+    return `En ${pais} los enchufes son ${c.enchufes}. Métete un adaptador universal en la maleta y no te la juegas.`;
   }
 
   // ── Seguridad ──
   // OJO: límites de palabra obligatorios. Sin \b, "scam" se colaba dentro de "búscame"
   // y una petición de ruta ("búscame camping al final") se tomaba como pregunta de seguridad.
   if (/\bsegur|\bpeligr|\bsafe\b|\bdangerous\b|\brobo\b|\brobos\b|\bestafa|\bscam\b|\bcuidado\b/i.test(m)) {
-    return `**Seguridad en ${pais}:** ${c.seguridad}\n\nEmergencias: ${c.emergencias}`;
+    return `Sobre la seguridad en ${pais}: ${c.seguridad}\n\nSi se tuerce algo, el número de emergencias es ${c.emergencias}.`;
   }
 
   // ── Mejor época ──
   if (/mejor.?epoca|cuando.*ir|cuando.*viajar|best.*time|temporada|estacion|clima|weather/i.test(m)) {
-    return `**Mejor época para ${pais}:**\n${c.mejor_epoca}\n\n**Evitar:** ${c.evitar_epoca}`;
+    return `Para ${pais}, el mejor momento es ${c.mejor_epoca}.\n\nY evita ir en ${c.evitar_epoca} si puedes elegir.`;
   }
 
   // ── Presupuesto / coste ──
   if (/presupuesto|budget|cuanto.*cuesta|coste|caro|barato|precio|gastar|dinero.*dia|cost/i.test(m)) {
-    return `**Coste diario en ${pais}:**\n\nMochilero: **${c.coste_diario_mochilero}**/día\nViajero medio: **${c.coste_diario_medio}**/día\n\nMoneda: ${c.moneda} (${c.cambio_aprox_eur})\nPropinas: ${c.propinas}`;
+    return `En ${pais}, tirando a mochilero calcula unos **${c.coste_diario_mochilero}** al día, y viajando más normal, **${c.coste_diario_medio}**.\n\nSe paga en ${c.moneda} (${c.cambio_aprox_eur}). Propinas: ${c.propinas}`;
   }
 
   // ── Idioma ──
   if (/idioma|language|hablan|inglés|ingles|comunicar/i.test(m)) {
-    return `**Idioma en ${pais}:** ${c.idioma_oficial}\n\nPara viajeros: ${c.idioma_viajero}`;
+    return `En ${pais} se habla ${c.idioma_oficial}.\n\nPara defenderte como viajero: ${c.idioma_viajero}`;
   }
 
   // ── Emergencias ──
   if (/emergencia|emergency|telefono.*urgencia|numero.*emergencia|policia|ambulancia|hospital/i.test(m)) {
-    return `**Emergencias en ${pais}:** ${c.emergencias}\nPrefijo telefónico: ${c.prefijo_tel}`;
+    return `En ${pais}, para emergencias marca ${c.emergencias}.\n\nY el prefijo del país es ${c.prefijo_tel}, por si tienes que llamar desde fuera.`;
   }
 
   // ── Capital ──
   if (/capital|ciudad.*principal|capital.*pais/i.test(m)) {
-    return `La capital de **${pais}** es **${c.capital}**.`;
+    return `La capital de ${pais} es **${c.capital}**.`;
   }
 
   // ── Prefijo / llamar desde fuera ──
   if (/prefijo|codigo.*pais|codigo.*telefono|llamar.*desde|marcar.*desde|phone.*code|dial/i.test(m)) {
-    return `**Prefijo telefónico de ${pais}:** ${c.prefijo_tel}\n\nEmergencias locales: ${c.emergencias}`;
+    return `El prefijo de ${pais} es ${c.prefijo_tel}.\n\nY si necesitas ayuda estando allí, emergencias es ${c.emergencias}.`;
   }
 
   // ── Apps de transporte / taxi ──
   if (/app.*taxi|app.*transporte|uber|grab|bolt|taxi.*app|como.*moverme|transporte.*local|app.*moverse/i.test(m)) {
     const apps = c.apps_transporte || c.transporte_apps;
-    if (apps) return `**Apps de transporte en ${pais}:**\n\n${apps}`;
+    if (apps) return `Para moverte por ${pais}, esto es lo que mejor funciona:\n\n${apps}`;
   }
 
   // ── Conducción / izquierda o derecha ──
   if (/conduct|conduc|izquierda|derecha|left.*side|right.*side|driving.*side|alquil.*coche|coche.*alquil|manejar/i.test(m)) {
-    const lado = c.conduce_izquierda ? 'por la **izquierda** 🚗' : 'por la **derecha** 🚗';
-    let reply = `En **${pais}** se conduce ${lado}.`;
-    if (c.carnet_internacional) reply += `\n\nCarnet internacional: ${c.carnet_internacional}`;
+    const lado = c.conduce_izquierda ? 'por la izquierda 🚗' : 'por la derecha 🚗';
+    let reply = `En ${pais} se conduce ${lado}.`;
+    if (c.carnet_internacional) reply += `\n\nSobre el carnet: ${c.carnet_internacional}`;
     return reply;
   }
 
   // ── Agua potable ──
   if (/agua.*potable|agua.*grifo|beber.*agua|agua.*segura|tap.*water|drinking.*water/i.test(m)) {
-    return `**Agua en ${pais}:** ${c.agua_potable}`;
+    return `Sobre el agua del grifo en ${pais}: ${c.agua_potable}`;
   }
 
   // ── Propinas ──
   if (/propina|tip|tipping|propinas/i.test(m)) {
-    return `**Propinas en ${pais}:** ${c.propinas}`;
+    return `Propinas en ${pais}: ${c.propinas}`;
   }
 
   // ── SIM / conectividad ──
   if (/sim|tarjeta.*sim|internet.*movil|datos.*movil|esim|roaming|wifi|conectividad/i.test(m)) {
     const sim = c.sim_local || c.conectividad;
-    if (sim) return `**Conectividad en ${pais}:**\n\n${sim}`;
+    if (sim) return `Para tener datos en ${pais}: ${sim}`;
   }
 
   // ── Salud / sanidad ──
   if (/sanidad|sanid|seguro.*medico|medico|salud|health|farmacia|medicine/i.test(m)) {
     const salud = c.salud || c.seguro_medico;
-    if (salud) return `**Salud en ${pais}:**\n\n${salud}\n\nVacunas: ${c.vacunas}`;
+    if (salud) return `Sobre sanidad en ${pais}: ${salud}\n\nY de vacunas: ${c.vacunas}`;
   }
 
   // ── Info general del país (pregunta amplia) ──
   if (/info|informacion|cuentame|dime.*sobre|que.*saber|datos|basico|practica|practico|general/i.test(m)) {
-    let reply = `**${pais}** — Info práctica:\n\n`;
-    reply += `Capital: **${c.capital}**\n`;
-    reply += `Idioma: ${c.idioma_oficial}\n`;
-    reply += `Moneda: ${c.moneda} (${c.cambio_aprox_eur})\n`;
-    reply += `Visado (españoles): ${c.visado_espanoles}\n`;
-    reply += `Enchufes: ${c.enchufes}\n`;
-    reply += `Emergencias: ${c.emergencias}\n`;
+    let reply = `Venga, lo esencial de ${pais}:\n\n`;
+    reply += `Capital ${c.capital}, se habla ${c.idioma_oficial} y se paga en ${c.moneda} (${c.cambio_aprox_eur}).\n`;
+    reply += `Con pasaporte español: ${c.visado_espanoles}\n`;
+    reply += `Enchufes ${c.enchufes} y emergencias al ${c.emergencias}.\n`;
     reply += `Seguridad: ${c.seguridad}\n\n`;
-    reply += `Mejor época: ${c.mejor_epoca}\n\n`;
-    reply += `Coste mochilero: ${c.coste_diario_mochilero}/día | Medio: ${c.coste_diario_medio}/día\n\n`;
-    reply += `${c.curiosidad_viajera}`;
+    reply += `Mejor época para ir: ${c.mejor_epoca}\n\n`;
+    reply += `De presupuesto, mochilero ronda ${c.coste_diario_mochilero}/día y viajando normal ${c.coste_diario_medio}/día.`;
+    if (c.curiosidad_viajera) reply += `\n\n${c.curiosidad_viajera}`;
     return reply;
   }
 
@@ -3366,22 +3364,22 @@ function tryKVDirectAnswer(message, country, destination) {
   if (destination) {
     const d = destination;
     if (/donde.*dormir|alojamiento|hostal|hotel|hospeda|donde.*queda|sleep|stay/i.test(m)) {
-      return `**Dónde dormir en ${d.nombre}:**\n\nMochilero: ${d.donde_dormir?.mochilero}\nMedio: ${d.donde_dormir?.medio}\nConfort: ${d.donde_dormir?.comfort}`;
+      return `Para dormir en ${d.nombre}: de mochilero, ${d.donde_dormir?.mochilero}. Un poco más arriba, ${d.donde_dormir?.medio}. Y si vas a lo cómodo, ${d.donde_dormir?.comfort}.`;
     }
     if (/donde.*comer|restaurante|comida|cena|cenar|eat|food/i.test(m)) {
-      return `**Dónde comer en ${d.nombre}:**\n${d.donde_comer}`;
+      return `Para comer en ${d.nombre}: ${d.donde_comer}`;
     }
     if (/como.*llegar|llegar|transporte|ir.*a|get.*to|how.*get/i.test(m)) {
-      return `**Cómo llegar a ${d.nombre}:**\n${d.como_llegar}`;
+      return `Para llegar a ${d.nombre}: ${d.como_llegar}`;
     }
     if (/que.*hacer|actividades|ver|visit|hacer|planes|things.*do/i.test(m)) {
-      let reply = `**Qué hacer en ${d.nombre} (${d.dias_recomendados} días recomendados):**\n\n`;
-      if (d.que_hacer) reply += d.que_hacer.map(a => '— ' + a).join('\n');
-      if (d.consejo_local) reply += `\n\n**Consejo local:** ${d.consejo_local}`;
+      let reply = `En ${d.nombre} yo le echaría ${d.dias_recomendados} días. Esto es lo que no te puedes perder:\n\n`;
+      if (d.que_hacer) reply += d.que_hacer.join('\n');
+      if (d.consejo_local) reply += `\n\nUn consejo: ${d.consejo_local}`;
       return reply;
     }
     if (/lluvia|llueve|mal.*tiempo|plan.*b|rain/i.test(m)) {
-      return `**Plan B si llueve en ${d.nombre}:**\n${d.plan_b_lluvia}`;
+      return `Si se pone a llover en ${d.nombre}: ${d.plan_b_lluvia}`;
     }
   }
 
