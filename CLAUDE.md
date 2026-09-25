@@ -1137,7 +1137,20 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      esas dos no cazan). Comparado con una captura real de la app ("Si te encaja, dale a
      Crear ruta con mapa..."): mismo patrón en los dos sitios — invitación al siguiente paso
      al final, no una pregunta bloqueante.
-   - **Worker Version ID vigente: `01080fe5-67cb-42fb-a5d0-9728348e5239`** (despliegues
+   - **Enlaces de auto-entrada: el destino ya no se pierde — HECHO, desplegado (Worker +
+     app.js), pendiente de confirmar en pantalla.** Al probar el enlace a Premium (mensaje de
+     límite de guía gratis), Paco vio que abría el index normal, no Perfil/Premium — y esto
+     pasaba con TODOS los enlaces de auto-entrada con parámetro extra, no solo ese. Causa:
+     `app.js:_tryWaAutoLogin()` borra la URL entera (`history.replaceState`) nada más ver
+     `?entrada=CÓDIGO`, antes de que nada pueda leer un `&go=...` pegado al enlace. Arreglo:
+     el destino (`"premium"`) viaja DENTRO del propio código de un solo uso en KV
+     (`buildAutoLoginLink` guarda `{uid, go}` en vez de solo el uid) y `/wa-weblogin-verify`
+     lo devuelve en la respuesta del login, no en la URL — `app.js` lo recoge de ahí
+     (`window._waLoginGo`) y si es `"premium"` abre Perfil + el modal de Premium,
+     reutilizando el mismo camino que ya usa `pago=cancel` (no uno nuevo). Compatible con
+     códigos ya emitidos en el formato viejo (uid en texto plano). Toca `app.js` (confirmado
+     por Paco antes de tocarlo) — `app.js?v=165` en `index.html`.
+   - **Worker Version ID vigente: `bf1c3805-b554-40ac-a7d3-d7624940b5ad`** (despliegues
      intermedios de este punto: `4b26ef45-eb51-4744-8400-758a48330b54` → paso 2 (generar y
      guardar ruta real), `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109` → fix cadena de
      preguntas v3 (texto reutilizado, ver arriba), `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
