@@ -1176,6 +1176,75 @@ async function firestoreAdminPatch(env, path, fields) {
   return await res.json();
 }
 
+// DELETE de un documento Firestore. 404 (ya no existía) no es error, pero se distingue
+// en el valor de vuelta (false) para que quien cuenta cuántos documentos borró de verdad
+// no infle la cifra con documentos que nunca estuvieron ahí.
+async function firestoreAdminDelete(env, path) {
+  const token = await getServiceAccountToken(env);
+  const res = await fetch(`${FIRESTORE_BASE}/${path}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + token },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok && res.status !== 404) throw new Error('Firestore DELETE ' + path + ' → ' + res.status);
+  return res.ok;
+}
+
+// Lista los documentos de una subcolección directamente bajo un documento padre
+// (ej. users/{uid}/maps) — no confundir con una collection-group query (allDescendants),
+// esto solo mira UN nivel bajo `parentPath`. Devuelve [{id, fields}].
+async function firestoreAdminListSubcollection(env, parentPath, collectionId) {
+  const token = await getServiceAccountToken(env);
+  const res = await fetch(`${FIRESTORE_BASE}/${parentPath}:runQuery`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ structuredQuery: { from: [{ collectionId }], limit: 2000 } }),
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error('Firestore runQuery ' + parentPath + '/' + collectionId + ' → ' + res.status);
+  const rows = await res.json();
+  return (rows || []).filter(r => r.document).map(r => ({
+    id: r.document.name.split('/').pop(),
+    fields: r.document.fields || {},
+  }));
+}
+
+// Busca documentos de una colección RAÍZ por el valor de un campo (ej. whatsapp_sessions
+// donde uid == X). Devuelve los `document.name` completos (path desde la raíz).
+async function firestoreAdminQueryByField(env, collectionId, fieldPath, stringValue, limit = 20) {
+  const token = await getServiceAccountToken(env);
+  const res = await fetch(`${FIRESTORE_BASE}:runQuery`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId }],
+        where: { fieldFilter: { field: { fieldPath }, op: 'EQUAL', value: { stringValue } } },
+        limit,
+      },
+    }),
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!res.ok) throw new Error('Firestore runQuery ' + collectionId + ' → ' + res.status);
+  const rows = await res.json();
+  return (rows || []).filter(r => r.document).map(r => r.document.name);
+}
+
+// Borra todos los objetos de R2 bajo un prefijo (ej. photos/{uid}/). Pagina con cursor.
+async function r2DeletePrefix(env, prefix) {
+  if (!env.SALMA_PHOTOS) return 0;
+  let deleted = 0, cursor;
+  do {
+    const listed = await env.SALMA_PHOTOS.list({ prefix, cursor, limit: 500 });
+    for (const obj of listed.objects) {
+      await env.SALMA_PHOTOS.delete(obj.key);
+      deleted++;
+    }
+    cursor = listed.truncated ? listed.cursor : undefined;
+  } while (cursor);
+  return deleted;
+}
+
 // POST form-urlencoded a la API de Stripe. Devuelve el JSON parseado.
 async function stripeApi(env, path, params) {
   const res = await fetch('https://api.stripe.com/v1/' + path, {
@@ -7396,8 +7465,14 @@ export default {
     }
 
     // ─── POST /admin/user-action — acciones de gestión sobre UN usuario (solo admin) ───
-    // premium_add {days 1-730} · premium_remove · disable · enable · reset_free. Nunca borra cuentas. Cada acción queda anotada en KV
-    // (`adminlog:{ms}:{uid}`, 1 año). Premium se escribe con la cuenta de servicio (las reglas de Firestore no dejan al cliente).
+    // premium_add {days 1-730} · premium_remove · disable · enable · reset_free · delete.
+    // Todas menos `delete` NUNCA borran cuentas ni datos — `delete` sí, es irreversible,
+    // a petición explícita de Paco (26 sept 2026): borrado completo (Auth + Firestore +
+    // R2), y el mismo email/número puede volver a registrarse después sin problema (no
+    // se guarda ninguna lista negra). Requiere `confirm: true` en el body además de la
+    // confirmación que ya pide el panel, como segunda red de seguridad para algo que no
+    // se puede deshacer. Cada acción queda anotada en KV (`adminlog:{ms}:{uid}`, 1 año).
+    // Premium se escribe con la cuenta de servicio (las reglas de Firestore no dejan al cliente).
     if (request.method === 'POST' && url.pathname === '/admin/user-action') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
       if (!(await isAdminRequest(request, env))) {
@@ -7407,11 +7482,14 @@ export default {
       try { body = await request.json(); } catch (_) { return new Response(JSON.stringify({ error: 'JSON no válido' }), { status: 400, headers: corsH }); }
       const uid = String(body.uid || ''), action = String(body.action || '');
       if (!/^[A-Za-z0-9]{20,40}$/.test(uid)) return new Response(JSON.stringify({ error: 'uid no válido' }), { status: 400, headers: corsH });
-      if (!['premium_add', 'premium_remove', 'disable', 'enable', 'reset_free'].includes(action)) return new Response(JSON.stringify({ error: 'Acción no válida' }), { status: 400, headers: corsH });
+      if (!['premium_add', 'premium_remove', 'disable', 'enable', 'reset_free', 'delete'].includes(action)) return new Response(JSON.stringify({ error: 'Acción no válida' }), { status: 400, headers: corsH });
       let days = 0;
       if (action === 'premium_add') {
         days = Math.floor(Number(body.days));
         if (!Number.isFinite(days) || days < 1 || days > 730) return new Response(JSON.stringify({ error: 'Los días deben estar entre 1 y 730.' }), { status: 400, headers: corsH });
+      }
+      if (action === 'delete' && body.confirm !== true) {
+        return new Response(JSON.stringify({ error: 'Falta confirmar el borrado (confirm: true) — es irreversible.' }), { status: 400, headers: corsH });
       }
       try {
         const now = Date.now(), nowIso = new Date(now).toISOString();
@@ -7449,6 +7527,91 @@ export default {
           if (!env.SALMA_KB) throw new Error('KV no disponible');
           await env.SALMA_KB.delete(usageTotalKey(uid));
           result = { reset: 'cupos gratuitos de por vida (guías y cambios) a cero' };
+        } else if (action === 'delete') {
+          // Borrado completo — 26 sept 2026. Recorre TODO lo que cuelga de este uid y lo
+          // borra: subcolecciones de Firestore, colecciones raíz que lo referencian por
+          // `uid` (public_guides, shared_routes por su propio id, whatsapp_sessions por
+          // consulta), ficheros en R2 (fotos, documentos/avatar, miniaturas de ruta) y
+          // los contadores en KV. Por último, la cuenta de Firebase Authentication. Cada
+          // paso va en su propio try/catch — un fallo puntual no aborta el resto, y todo
+          // queda contado en el log para poder revisar a mano si algo no se borró.
+          const errors = [];
+          const counts = { subcollections: 0, public_guides: 0, shared_routes: 0, whatsapp_sessions: 0, r2_files: 0 };
+          const SUBCOLLECTIONS = ['maps', 'fotos', 'albumes', 'notas', 'pins', 'map_pins', 'travel_docs', 'paises', 'flight_watches'];
+          const slugs = [], mapIds = [];
+          for (const col of SUBCOLLECTIONS) {
+            try {
+              const docs = await firestoreAdminListSubcollection(env, 'users/' + uid, col);
+              for (const d of docs) {
+                if (col === 'maps') {
+                  mapIds.push(d.id);
+                  const slug = d.fields.slug && d.fields.slug.stringValue;
+                  if (slug) slugs.push(slug);
+                }
+                try { if (await firestoreAdminDelete(env, `users/${uid}/${col}/${d.id}`)) counts.subcollections++; }
+                catch (e) { errors.push(`${col}/${d.id}: ${e.message}`); }
+              }
+            } catch (e) { errors.push(`listar ${col}: ${e.message}`); }
+          }
+          // Firestore borra sin dar error aunque el documento no exista (idempotente) —
+          // no sirve para contar cuántos había de verdad. Se comprueba antes con un GET;
+          // la mayoría de mapas no tienen guía pública ni ruta compartida, así que esto
+          // es solo 1-2 lecturas de más por parada, nada relevante en una acción tan rara.
+          for (const slug of slugs) {
+            try {
+              if (await firestoreAdminGet(env, 'public_guides/' + slug)) {
+                await firestoreAdminDelete(env, 'public_guides/' + slug);
+                counts.public_guides++;
+              }
+            } catch (e) { errors.push('public_guides/' + slug + ': ' + e.message); }
+          }
+          for (const mapId of mapIds) {
+            try {
+              if (await firestoreAdminGet(env, 'shared_routes/' + mapId)) {
+                await firestoreAdminDelete(env, 'shared_routes/' + mapId);
+                counts.shared_routes++;
+              }
+            } catch (e) { errors.push('shared_routes/' + mapId + ': ' + e.message); }
+            try { await env.SALMA_PHOTOS?.delete('mapthumb/' + mapId + '.jpg'); } catch (_) {}
+          }
+          try {
+            const waDocs = await firestoreAdminQueryByField(env, 'whatsapp_sessions', 'uid', uid);
+            for (const name of waDocs) {
+              try { await firestoreAdminDelete(env, name.split('/documents/')[1]); counts.whatsapp_sessions++; }
+              catch (e) { errors.push('whatsapp_sessions: ' + e.message); }
+            }
+          } catch (e) { errors.push('buscar whatsapp_sessions: ' + e.message); }
+          try { await firestoreAdminDelete(env, 'users/' + uid); } catch (e) { errors.push('users/' + uid + ': ' + e.message); }
+          if (env.SALMA_PHOTOS) {
+            try { counts.r2_files += await r2DeletePrefix(env, 'photos/' + uid + '/'); } catch (e) { errors.push('R2 photos/: ' + e.message); }
+            try { counts.r2_files += await r2DeletePrefix(env, 'docs/' + uid + '/'); } catch (e) { errors.push('R2 docs/: ' + e.message); }
+          }
+          if (env.SALMA_KB) {
+            try {
+              await env.SALMA_KB.delete(usageTotalKey(uid));
+              await env.SALMA_KB.delete('fw:' + uid);
+              await env.SALMA_KB.delete('fw_alerts:' + uid);
+              const usageList = await env.SALMA_KB.list({ prefix: 'usage:' + uid + ':' });
+              for (const k of usageList.keys) await env.SALMA_KB.delete(k.name);
+              const fwUsersJson = await env.SALMA_KB.get('flight_watch_users');
+              if (fwUsersJson) {
+                const fwUsers = JSON.parse(fwUsersJson).filter(u => u !== uid);
+                await env.SALMA_KB.put('flight_watch_users', JSON.stringify(fwUsers));
+              }
+            } catch (e) { errors.push('KV: ' + e.message); }
+          }
+          try {
+            const cp = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/cloud-platform', '_sa_token_cp');
+            const r = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/accounts:delete`, {
+              method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cp }, body: JSON.stringify({ localId: uid }), signal: AbortSignal.timeout(10000),
+            });
+            if (!r.ok) {
+              const j = await r.json().catch(() => ({}));
+              // "no encontrado" no es un error real aquí — puede que solo existiera el doc de Firestore
+              if (!/USER_NOT_FOUND/i.test(JSON.stringify(j))) errors.push('Authentication → ' + r.status + ' ' + ((j.error && j.error.message) || '').slice(0, 120));
+            }
+          } catch (e) { errors.push('Authentication: ' + e.message); }
+          result = { deleted: true, counts, errors: errors.length ? errors : undefined };
         }
         try { if (env.SALMA_KB) await env.SALMA_KB.put('adminlog:' + now + ':' + uid, JSON.stringify({ at: nowIso, action, uid, days: days || undefined, result }), { expirationTtl: 60 * 60 * 24 * 365 }); } catch (_) {}
         console.log('[ADMIN-ACCION] ' + action + ' ' + uid + (days ? ' ' + days + ' d' : ''));
