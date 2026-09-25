@@ -8895,9 +8895,9 @@ export default {
                 const ageMin = (Date.now() - Date.parse(savedLoc.sharedAt)) / 60000;
                 const place = savedLoc.name || 'la zona que compartió';
                 if (ageMin < 20) {
-                  waLocationCtx = `\n\n[UBICACIÓN: el usuario compartió hace poco que está en ${place}. Puedes usarlo directo para responder, pero MENCIONA en tu respuesta que lo estás usando (ej: "Como estás en ${place}...") para que pueda corregirte si ya no es así.]`;
+                  waLocationCtx = `\n\n[UBICACIÓN: el usuario compartió hace poco que está en ${place} — es dónde está DE VERDAD, AHORA MISMO, en la vida real, no un destino de viaje del que hayáis hablado antes. Si justo después de compartirla pregunta algo tipo "dónde como/duermo/qué hay cerca", es sobre ESTE sitio real — NO lo relaciones con destinos hipotéticos anteriores de la conversación (aunque hayáis hablado de otro país o ciudad antes), ni le devuelvas la pregunta pidiendo que aclare de qué destino habla. Usa ${place} directo y MENCIÓNALO en tu respuesta (ej: "Como estás en ${place}..."). Recuerda que todavía no puedes buscar sitios reales (restaurantes, etc.) por aquí — dilo con naturalidad y ya, sin además desviar la conversación de vuelta a otros destinos.]`;
                 } else if (ageMin < 90) {
-                  waLocationCtx = `\n\n[UBICACIÓN desactualizada: el usuario compartió hace ${Math.round(ageMin)} min que estaba en ${place}, pero puede haberse movido. Si tu respuesta depende de dónde está AHORA (buscar algo cerca, seguir una ruta...), pregúntale primero "¿Sigues en ${place}?" antes de usarlo — no lo des por hecho.]`;
+                  waLocationCtx = `\n\n[UBICACIÓN desactualizada: el usuario compartió hace ${Math.round(ageMin)} min que estaba en ${place} (su ubicación real, no un destino de viaje), pero puede haberse movido. Si tu respuesta depende de dónde está AHORA (buscar algo cerca, seguir una ruta...), pregúntale primero "¿Sigues en ${place}?" antes de usarlo — no lo des por hecho.]`;
                 }
               }
             } catch (_) {}
