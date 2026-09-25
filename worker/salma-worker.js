@@ -8480,6 +8480,24 @@ export default {
             console.error('[WhatsApp] Error leyendo whatsapp_sessions:', e.message);
           }
           let linkedUid = session && session.fields && session.fields.uid && session.fields.uid.stringValue;
+          // Auto-reparación (25 sept 2026): una sesión puede apuntar a un uid cuyo
+          // documento en users/ ya no existe — pasó de verdad con una cuenta borrada por
+          // admin cuyo whatsapp_sessions no se limpió a tiempo (ver fix de esa fecha), y
+          // podría volver a pasar por cualquier otro borrado a mano en Firestore. Sin
+          // esto, el número se queda para siempre "vinculado" a un perfil fantasma — se
+          // loguea (Firebase Auth no necesita el documento) pero sin datos, invisible en
+          // el panel admin y sin posibilidad de recrearse solo. Se comprueba aquí y, si
+          // no existe, se trata como número nuevo — _waCreateAccount() lo recrea todo
+          // (incluida esta misma sesión) más abajo, sin que el usuario tenga que hacer
+          // nada especial.
+          if (linkedUid) {
+            try {
+              const profileDoc = await firestoreAdminGet(env, 'users/' + linkedUid);
+              if (!profileDoc) linkedUid = null;
+            } catch (e) {
+              console.error('[WhatsApp] Error comprobando users/' + linkedUid + ':', e.message);
+            }
+          }
           // Si YA estaba vinculado antes de procesar este mensaje (a diferencia del
           // alta que puede pasar unas líneas más abajo en el mismo turno) — lo usa el
           // saludo de bienvenida de vuelta, más adelante en este mismo bloque.
