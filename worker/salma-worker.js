@@ -3197,13 +3197,17 @@ function isSaveRouteRequest(message) {
 // confirmado en pantalla por Paco (25 sept 2026) que aun pidiéndoselo explícitamente en el
 // prompt, seguía sin ponerla (prefería ofrecer "te busco restaurantes" en su lugar) — una
 // instrucción de texto no garantiza que el modelo la siga siempre. Se añade aquí de forma
-// determinista si el mensaje del usuario era de ruta/destino (mismo detector que la web,
-// isRouteRequest/isDaysDestination) y la respuesta no la menciona ya.
+// determinista si el mensaje del usuario era de ruta/destino.
+//
+// Bug real, 25 sept 2026 (confirmado en pantalla por Paco): con isDaysDestination() en el
+// detector, "Cualquier día del mes" (una aclaración de fecha para un vuelo, nada que ver con
+// una ruta) colaba como si fuera un destino suelto — esa función está pensada para cazar un
+// nombre de destino corto tecleado solo ("Ronda"), no cualquier frase corta de 4 palabras sin
+// verbo dentro de una conversación con tools. Se saca del detector; isRouteRequest() (día
+// explícito) + la frase local de abajo ya cubren los casos reales que Paco probó.
 function appendGuardarlaCta(reply, userMessage) {
   if (!reply) return reply;
-  // isRouteRequest/isDaysDestination (compartidas con la web) no cazan "hazme una ruta por X"
-  // sin número de días — se añade aquí, local a WhatsApp, sin tocar esas dos funciones.
-  const looksLikeRouteAsk = isRouteRequest(userMessage) || isDaysDestination(userMessage) ||
+  const looksLikeRouteAsk = isRouteRequest(userMessage) ||
     /\bhazme\s+una\s+ruta\b|\britinerario\s+por\b/i.test(userMessage || '');
   if (!looksLikeRouteAsk) return reply;
   if (/gu[aá]rdala/i.test(reply)) return reply;
