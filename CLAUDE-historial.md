@@ -3826,3 +3826,34 @@ Primeras dos de las 5 tareas dictadas por Paco el 26 sept (más arriba, "Notas d
 - Admin panel: `Panel 2026-09-26.3` (repo `admin-borradodelmapa`, badge visible abajo a la derecha).
 
 **Tests:** 55 tests en `.mjs` locales (simulación de Firestore/KV/R2/Twilio contra el propio `salma-worker.js`, sin red real) cubriendo: rechazos (sin confirmar, sin token, uid inválido), borrado completo con conteo exacto, no interferencia con otro usuario, re-borrado idempotente, uid con guion bajo, re-codificación de la URL de `whatsapp_sessions`, auto-reparación de sesión fantasma, y `/admin/stats` con los campos nuevos. No quedan en el repo (eran de `/tmp`, se pierden al cerrar la sesión) — si hace falta reconstruirlos, el patrón está descrito arriba.
+
+---
+
+## Explorar — rutas de otros viajeros (25 sept 2026)
+
+- **Explorar — rutas de otros viajeros (25 sept 2026) — DESPLEGADO y CONFIRMADO EN
+  PANTALLA por Paco ("ya lo veo, funciona"). Sin probar aún a fondo: apagar el interruptor
+  y que desaparezcan sus rutas.**
+  Miniatura del mapa en las tarjetas (la misma de Mis rutas, R2 `mapthumb/`, sin llamar a
+  Google): commit `2bfdca1`, `app.js?v=168`, **Worker `74cbe171-57b5-4ade-86b5-45dc61204da7`** —
+  pendiente de confirmar en pantalla. Las que faltaban se generan solas (OK de Paco, 25 sept:
+  "son pocas"): Google Static Maps ~0,002 € por guía, UNA sola vez (quedan en R2), máx 30 por
+  reconstrucción del índice — misma función `generateRouteThumbnail()` que `/route-thumbnail`. Commit `bd5fecd`,
+  Worker `8c417783`. Países sin
+  repetir + tarjetas de país visuales: commit `37a90f2`, `app.js?v=169`, `styles.css?v=140`,
+  **Worker `92b8a1c6-515b-4353-832f-15e3dde730f5`** (vigente) — pendiente de confirmar en pantalla. Primer despliegue: commit `d26f766`, Worker
+  `ac461d62-22b2-4235-b3bf-b3640b0bd261` (GitHub Action "Deploy Worker", run 80).
+  Decidido con Paco: botón dentro de Rutas (pestañas "Mis rutas | Explorar"), visible sin
+  login (botón "Ver rutas de otros viajeros" en la pantalla de entrada + pestaña Mis Viajes
+  ya no exige sesión), guías existentes incluidas sin repetidas, autor con nombre de pila.
+  Perfil → CUENTA → interruptor "Compartir mis rutas" (activado por defecto, campo
+  `users/{uid}.share_routes`; al cambiarlo marca `listed` en todas sus `public_guides`).
+  Agrupación país → provincia con Nominatim sobre la 1ª parada (gratis, caché KV
+  `prov:`); las guías antiguas se van ubicando solas ~20 por reconstrucción. Se excluyen
+  las guías de la cuenta Salma (ya están en `/destinos/`). **Coste (§8): 0 € en APIs de
+  pago; Firestore lee cada guía pública una vez por reconstrucción del índice (cada 2 h).**
+  `app.js?v=167`, `styles.css?v=139`. Sin cambio en `firestore.rules`. Probar: sin sesión
+  → "Ver rutas de otros viajeros"; con sesión → Mis Viajes → Explorar → abrir una ruta;
+  Perfil → apagar el interruptor → sus rutas desaparecen de Explorar.
+
+**Cierre (25 sept 2026):** confirmado en pantalla por Paco — "OK SALEN TODAS" (mapas en todas las tarjetas, países sin repetir, tarjetas de país visuales).
