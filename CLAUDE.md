@@ -1137,8 +1137,11 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      esas dos no cazan). Comparado con una captura real de la app ("Si te encaja, dale a
      Crear ruta con mapa..."): mismo patrón en los dos sitios — invitación al siguiente paso
      al final, no una pregunta bloqueante.
-   - **Enlaces de auto-entrada: el destino ya no se pierde — HECHO, desplegado (Worker +
-     app.js), pendiente de confirmar en pantalla.** Al probar el enlace a Premium (mensaje de
+   - **Enlaces de auto-entrada: el destino ya no se pierde — HECHO y confirmado en pantalla
+     por Paco, 25 sept 2026 ("ok funciona").** Primer intento con el enlace viejo (generado
+     antes del fix, sin el destino guardado) seguía sin funcionar — normal, ese código nunca
+     llevó "premium" dentro. Con un enlace nuevo (pedido otra vez con "guárdala"), sí abre
+     Perfil + Premium directo. Al probar el enlace a Premium (mensaje de
      límite de guía gratis), Paco vio que abría el index normal, no Perfil/Premium — y esto
      pasaba con TODOS los enlaces de auto-entrada con parámetro extra, no solo ese. Causa:
      `app.js:_tryWaAutoLogin()` borra la URL entera (`history.replaceState`) nada más ver
