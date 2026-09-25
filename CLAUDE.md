@@ -1310,7 +1310,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
         redirección seguida a mano (`waFetchTwilioMedia`).
      8. **Historia**: `/historia-lugar` se extrajo a `getHistoriaLugar()` (web igual). Si Salma
         marca `HISTORIA_LUGAR`, se ofrece "escribe *historia*"; también "historia de X".
-     **CONFIRMADO EN PANTALLA por Paco (25 sept): ayuda, nota de voz, fallo e historia (corta en 1 mensaje + "¿Te explico más?" → completa; mensajes >1600 caracteres se parten, `splitWaMessage`). Worker `859c17d8`. Foto sin probar todavía.** Aviso §8 (aprobado): voz ~0,006 $/min; foto ~0,005-0,01 € más que un texto; historia solo la
+     **CONFIRMADO EN PANTALLA por Paco (25 sept): ayuda, nota de voz, fallo e historia (corta en 1 mensaje + "¿Te explico más?" → completa; mensajes >1600 caracteres se parten, `splitWaMessage`). Worker `859c17d8`. Foto: llega y se analiza sin errores (25 sept); Paco "en principio sí", seguirá probando los próximos días.** **PENDIENTES DECIDIDOS POR PACO (25 sept):** coches → esperar a que contrate la API de coches en RapidAPI; recomendar a amigos → "sumamente importante", espera al número de producción de Twilio (en Sandbox el amigo necesita `join …`). Aviso §8 (aprobado): voz ~0,006 $/min; foto ~0,005-0,01 € más que un texto; historia solo la
      1ª vez por lugar (~0,035 €); el resto sin coste. Los límites del plan BAJAN el gasto máximo.
    - **Worker Version ID vigente: ver `/version`** (anterior: `1990087f-457b-4208-90af-3f21f6e933cf`) (despliegues
      intermedios de este punto: `def5f8bc-98f2-4ca0-b343-2a78735984fb` → búsqueda de vuelos
