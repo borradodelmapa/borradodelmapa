@@ -586,8 +586,9 @@ const WHATSAPP_SYSTEM_CHAT = [
 cómo actuar, defaults, prohibido inventar, jerarquía de herramientas...) aplica igual, con
 estas diferencias reales de este canal:
 - Herramientas conectadas aquí: buscar_lugar, buscar_vuelos, buscar_hotel, buscar_coche —
-  con datos reales (Google Places / Duffel / Booking.com), igual que en la app. buscar_web,
-  buscar_foto, generar_video y guardar_nota (el punto 6 y el "usa buscar_web" de arriba)
+  con datos reales (Google Places / Duffel / Booking.com), igual que en la app — y
+  guardar_nota (la nota se guarda de verdad en "Mis notas" de su cuenta, la misma que ve en
+  la app). buscar_web, buscar_foto y generar_video (el punto 6 y el "usa buscar_web" de arriba)
   todavía NO están conectados en este canal. Si el texto de arriba te pide usar algo que no
   tienes aquí, dilo claro ("eso todavía no lo puedo hacer por WhatsApp, pruébalo en la app")
   — NUNCA finjas que lo has hecho ni inventes el dato que esa herramienta te habría dado.
@@ -620,6 +621,8 @@ estas diferencias reales de este canal:
 - Formato: WhatsApp interpreta *un solo asterisco* como negrita, NUNCA dobles asteriscos.
   Sin viñetas ni encabezados. Respuestas cortas, de móvil — 2-4 frases salvo que pidan más
   detalle.`,
+  // Notas por WhatsApp (25 sept 2026): el MISMO bloque que la web, tal cual.
+  BLOQUE_NOTAS,
 ].join('\n\n');
 
 // ── Prompt PLAN: sin restricción de títulos → para días+destino (formato estructurado)
@@ -3338,7 +3341,46 @@ async function waGenerateAndSaveRoute(env, uid, sourceText) {
 // "resto de tools", mismo día) — del array completo SALMA_TOOLS del chat web. Mismo mecanismo
 // que ya funcionaba para buscar_lugar (waCallClaudeWithTools + executeToolCall, sin código
 // nuevo): ampliar esta lista es lo único que hace falta para que WhatsApp pueda usarlas.
-const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'buscar_hotel', 'buscar_coche'].includes(t.name));
+const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'buscar_hotel', 'buscar_coche', 'guardar_nota'].includes(t.name));
+
+// guardar_nota por WhatsApp (25 sept 2026) — en la web la guarda el navegador
+// (notas.js:create() tras el evento save_nota); aquí no hay navegador, así que la escribe el
+// Worker con su cuenta de servicio en la MISMA colección users/{uid}/notas/{id} y con el
+// MISMO esquema que notas.js:create(), para que salga igual en "Mis notas". Sin coste de API.
+async function waSaveNota(env, uid, nd) {
+  if (!uid) return { saved: false, error: 'Sin cuenta vinculada: no se puede guardar la nota.' };
+  const texto = String((nd && nd.texto) || '').trim().slice(0, 2000);
+  if (!texto) return { saved: false, error: 'Nota vacía.' };
+  const ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const id = Array.from({ length: 20 }, () => ID_CHARS[Math.floor(Math.random() * ID_CHARS.length)]).join('');
+  const now = new Date().toISOString();
+  const fecha = /^\d{4}-\d{2}-\d{2}$/.test(nd.fecha_recordatorio || '') ? nd.fecha_recordatorio : null;
+  const tipos = ['general', 'recordatorio', 'hotel', 'vuelo', 'restaurante', 'lugar', 'visado', 'transporte'];
+  const tipo = tipos.includes(nd.tipo) ? nd.tipo : (fecha ? 'recordatorio' : 'general');
+  const cc = /^[A-Za-z]{2}$/.test(nd.country_code || '') ? nd.country_code.toUpperCase() : null;
+  const str = v => (v == null ? { nullValue: null } : { stringValue: String(v) });
+  try {
+    await firestoreAdminPatch(env, 'users/' + uid + '/notas/' + id, {
+      id: str(id),
+      texto: str(texto),
+      tipo: str(tipo),
+      countryCode: str(cc),
+      countryName: str(nd.country_name || null),
+      emoji: { nullValue: null },
+      fechaRecordatorio: str(fecha),
+      files: { arrayValue: {} },
+      completado: { booleanValue: false },
+      origen: str('salma'),
+      fuente: str('whatsapp'),
+      createdAt: str(now),
+      updatedAt: str(now),
+    });
+    return { saved: true };
+  } catch (e) {
+    console.error('[WhatsApp] Error guardando nota:', e.message);
+    return { saved: false, error: 'No se pudo guardar la nota ahora mismo.' };
+  }
+}
 
 // Llama a Claude con buscar_lugar disponible y resuelve el bucle de tool-use en segundo
 // plano (25 sept 2026, F5.3 punto 6) — sin streaming SSE como la web, aquí basta una
@@ -3361,7 +3403,7 @@ const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'busc
 // sustituye la respuesta de Claude por un mensaje honesto determinista (ver /whatsapp), igual
 // que ya hace appendGuardarlaCta/stripWaLeakedMarkers para otros casos — no confiar en que el
 // modelo se abstenga de inventar cuando no tiene nada real que ofrecer.
-async function waCallClaudeWithTools(env, system, messages, userCoords) {
+async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
   // Fecha actual — la MISMA línea que buildMessages() mete en la web. Faltaba aquí (bug real,
   // 25 sept 2026, visto con [WA-TOOL] en wrangler tail): sin ella Claude buscaba con fechas de
   // 2025 ("esta noche" → 2025-07-14, "noviembre" → 2025-11), Booking daba 422 y Duffel 0 vuelos.
@@ -3398,7 +3440,9 @@ async function waCallClaudeWithTools(env, system, messages, userCoords) {
     usedTools = true;
     msgs = [...msgs, { role: 'assistant', content: data.content }];
     const toolResults = await Promise.all(toolUses.map(async (tu) => {
-      const result = await executeToolCall(tu.name, tu.input, env, userCoords);
+      const result = tu.name === 'guardar_nota'
+        ? await waSaveNota(env, uid, tu.input || {})
+        : await executeToolCall(tu.name, tu.input, env, userCoords);
       // Diagnóstico temporal (25 sept 2026, "no está arreglado ni vuelos ni hoteles"): qué se
       // pide y qué devuelve cada tool en WhatsApp. Solo consola, sin coste.
       console.log('[WA-TOOL]', tu.name, JSON.stringify(tu.input), '→', JSON.stringify(result).slice(0, 600));
@@ -9284,7 +9328,7 @@ export default {
           }
 
           const { text: chatReplyText, usedTools, allFlightSearchesFailed } = await waCallClaudeWithTools(
-            env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords
+            env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords, linkedUid
           );
           const rawReply = stripWaLeakedMarkers(chatReplyText) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
           // Si esta respuesta vino de una tool de búsqueda (vuelo/hotel/coche/lugar), NUNCA le
