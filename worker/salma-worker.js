@@ -3362,6 +3362,10 @@ const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'busc
 // que ya hace appendGuardarlaCta/stripWaLeakedMarkers para otros casos — no confiar en que el
 // modelo se abstenga de inventar cuando no tiene nada real que ofrecer.
 async function waCallClaudeWithTools(env, system, messages, userCoords) {
+  // Fecha actual — la MISMA línea que buildMessages() mete en la web. Faltaba aquí (bug real,
+  // 25 sept 2026, visto con [WA-TOOL] en wrangler tail): sin ella Claude buscaba con fechas de
+  // 2025 ("esta noche" → 2025-07-14, "noviembre" → 2025-11), Booking daba 422 y Duffel 0 vuelos.
+  system = system + `\n\n[FECHA ACTUAL: ${new Date().toISOString().split('T')[0]}]`;
   let msgs = [...messages];
   let usedTools = false;
   const flightSearchResults = []; // true = encontró vuelos reales, false = 0 resultados o error
