@@ -534,8 +534,10 @@ const SALMA_SYSTEM_CHAT = [
 ].join('\n\n');
 
 // ── Prompt WHATSAPP (F5.2, 24 sept 2026) — misma identidad/personalidad que el chat
-// web, pero SIN BLOQUE_ACCION (el bloque completo de tools trae vuelos/hoteles/coches, que
-// siguen sin conectar por este canal — buscar_lugar SÍ se conecta directo, ver más abajo),
+// web, pero SIN BLOQUE_ACCION completo (trae el detalle de SALMA_ACTION/HISTORIA_LUGAR y
+// otras piezas específicas del formato web que no aplican por texto — buscar_lugar,
+// buscar_vuelos, buscar_hotel y buscar_coche SÍ se conectan directo como tools, ver WA_TOOLS
+// más abajo, y BLOQUE_RUTA_INFO_DIRECTA se reutiliza literal, ver esa constante),
 // SIN BLOQUE_MAPA (instrucciones de GPS, no aplican por texto) y SIN BLOQUE_NOTAS
 // (auto-guardado de notas en Firestore — no hay uid vinculado todavía, F5.4). Memoria e
 // info de ubicación añadidas el 25 sept 2026 (F5.3 puntos 1 y 2); buscar_lugar (F5.3 punto
@@ -568,7 +570,7 @@ const WHATSAPP_SYSTEM_CHAT = [
 - Sobre rutas y destinos, la regla es LA MISMA que ya usa la app (no una versión distinta):
 ${BLOQUE_RUTA_INFO_DIRECTA}
 A diferencia de la app, aquí no hay ningún botón que dispare aparte un modo "generar ruta" — así que esta regla va a rajatabla: ninguna pregunta de personalización, sea cual sea (tipo de viaje, con quién vas, si tienes coche, cuántas horas tienes, a qué hora acabas, ritmo, presupuesto...), aunque no sea literalmente una de las dos que cita la regla arriba. Usa siempre tu mejor criterio y defaults razonables (sin fecha → ahora, sin presupuesto → rango variado). Termina la respuesta invitando a guardarla: algo tipo "Si quieres, dime 'guárdala' y la guardamos."
-- Todavía NO puedes buscar vuelos, hoteles ni coches por aquí. Si te piden algo de eso, dilo con naturalidad ("eso todavía no lo tengo aquí, pero en la app sí") y sigue ayudando con lo que sepas de memoria.
+- SÍ puedes buscar vuelos (buscar_vuelos), hoteles (buscar_hotel) y coches de alquiler (buscar_coche) — igual que en la app, con datos y enlaces de reserva reales. Úsalas en cuanto tengas los datos mínimos (origen/destino/fechas para vuelos, ciudad/fechas para hoteles y coches), sin preguntar de más si puedes deducirlo del contexto.
 - SÍ tienes memoria de los últimos mensajes de esta conversación (te llegan como turnos anteriores) — úsala con normalidad, no digas que no recuerdas algo que sí está ahí arriba.
 - WhatsApp no tiene GPS en vivo como la app: solo sabes dónde está el usuario si te lo dice o si comparte su ubicación (clip → Ubicación). Si ves un bloque [UBICACIÓN...] al final de este prompt, síguelo tal cual — incluye la ciudad, úsala directa en buscar_lugar si toca. Si NO lo ves y necesitas saber dónde está para responder bien (buscar algo "cerca", seguir una ruta...), pídele que comparta su ubicación así, o que te diga la ciudad.
 - Formato: WhatsApp interpreta *un solo asterisco* como negrita, NUNCA dobles asteriscos. Sin viñetas ni encabezados. Respuestas cortas, de móvil — 2-4 frases salvo que pidan más detalle.`,
@@ -3249,9 +3251,11 @@ async function waGenerateAndSaveRoute(env, uid, sourceText) {
   return { ok: true, mapId, route: finalRoute };
 }
 
-// Solo el tool buscar_lugar, del array completo SALMA_TOOLS del chat web (F5.3 punto 6, 25
-// sept 2026) — vuelos/hoteles/coches siguen sin conectar a WhatsApp (fuera de esta tarea).
-const WA_TOOLS = SALMA_TOOLS.filter(t => t.name === 'buscar_lugar');
+// buscar_lugar (F5.3 punto 6, 25 sept 2026) + buscar_vuelos/buscar_hotel/buscar_coche (F5.3
+// "resto de tools", mismo día) — del array completo SALMA_TOOLS del chat web. Mismo mecanismo
+// que ya funcionaba para buscar_lugar (waCallClaudeWithTools + executeToolCall, sin código
+// nuevo): ampliar esta lista es lo único que hace falta para que WhatsApp pueda usarlas.
+const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'buscar_hotel', 'buscar_coche'].includes(t.name));
 
 // Llama a Claude con buscar_lugar disponible y resuelve el bucle de tool-use en segundo
 // plano (25 sept 2026, F5.3 punto 6) — sin streaming SSE como la web, aquí basta una
