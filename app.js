@@ -55,7 +55,28 @@ function showState(state) {
 
   const inputBar = document.querySelector('.app-input-bar');
 
-  if (state === 'rutas') {
+  if (state === 'ayuda') {
+    // Propuesta UX (26 sept 2026): "Ayuda" enseña qué puede hacer Salma (igual que
+    // ya hace el menú de /destinos/) y el formulario de fallos queda como opción.
+    renderSalmaCan();
+    const _area = $content.querySelector('.salma-can-area');
+    if (_area) {
+      _area.insertAdjacentHTML('beforeend', `
+        <div class="ayuda-actions">
+          <button class="login-needed-btn" id="ayuda-ask">Pregúntale a Salma <span>→</span></button>
+          <button class="ayuda-fb" id="ayuda-fb">¿Algo no va o tienes una idea? Cuéntanoslo</button>
+        </div>`);
+      document.getElementById('ayuda-ask').addEventListener('click', () => {
+        showState('chat');
+        setTimeout(() => { const i = document.getElementById('salma-input') || $input; if (i) i.focus(); }, 150);
+      });
+      document.getElementById('ayuda-fb').addEventListener('click', () => {
+        if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
+      });
+    }
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
+  } else if (state === 'rutas') {
     loadUserGuides();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
@@ -180,7 +201,7 @@ function updateBottomBar() {
   // "Últimas consultas" de la pantalla vacía) — su sitio lo ocupa "Ayuda", que
   // abre el panel de feedback de testers (debug-panel.js, window.__dbg.open).
   bar.innerHTML = `
-    <button class="bottom-tab bottom-tab-tester" id="tab-tester">
+    <button class="bottom-tab bottom-tab-tester ${currentState === 'ayuda' ? 'bottom-tab-active' : ''}" id="tab-tester">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span>Ayuda</span>
     </button>
@@ -198,9 +219,7 @@ function updateBottomBar() {
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
     </button>`;
 
-  document.getElementById('tab-tester').addEventListener('click', () => {
-    if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
-  });
+  document.getElementById('tab-tester').addEventListener('click', () => showState('ayuda'));
   document.getElementById('tab-chat').addEventListener('click', () => {
     // La vista itinerario la desmonta showState() (Fase 4). Aquí solo al chat.
     if (typeof salma !== 'undefined') salma._initChat();
@@ -369,23 +388,26 @@ function _renderChatEmpty() {
   const _ci = (d) => `<svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   // Simplificación 19 sept 2026 (a petición de Paco): solo 6 chips fijos, centrados
   // en la guía — el resto (uso menos frecuente) vive detrás de "Más opciones".
-  const chipsLeft = [
-    // "Quiero ir a..." → desactivado 2026-04-17. Ver PENDIENTES.md
-    { label: 'Cerca mía', icon: _ci('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'), msg: 'Hazme una ruta desde donde estoy', action: 'ruta-aqui' },
-    { label: 'Últimas consultas', icon: _ci('<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>'), msg: null, action: 'consultas' },
-    { label: 'Mis notas', icon: _ci('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>'), msg: null, action: 'notas' },
-  ];
-  const chipsRight = [
-    { label: 'Narrador', icon: _ci('<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'), msg: null, action: 'explorar' },
-    { label: 'Buscar alojamiento', icon: _ci('<path d="M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7"/><path d="M3 13h18"/><path d="M7 13V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/>'), msg: 'Busca alojamiento' },
-    { label: 'SOS', icon: _ci('<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'), msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
-  ];
-  const chipsMore = [
-    { label: 'Vuelos', icon: _ci('<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>'), msg: 'Busca vuelos' },
-    { label: 'Alertas vuelos', icon: _ci('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>'), msg: null, action: 'vuelos' },
-    { label: 'Cambio moneda', icon: _ci('<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>'), msg: null, action: 'moneda' },
-    { label: 'Traductor', icon: _ci('<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z"/>'), msg: null, action: 'traductor' },
-  ];
+  // Propuesta UX (26 sept 2026): 4 a la vista (lo que más se usa + SOS por
+  // seguridad), el resto en "Más opciones". Lo que exige cuenta (auth:true) no se
+  // enseña sin sesión — antes se veía y al tocarlo pedía entrar.
+  const _hasUser = !!currentUser;
+  const _chipDefs = {
+    cerca: { label: 'Cerca mía', icon: _ci('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'), msg: 'Hazme una ruta desde donde estoy', action: 'ruta-aqui' },
+    consultas: { label: 'Últimas consultas', icon: _ci('<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>'), msg: null, action: 'consultas', auth: true },
+    notas: { label: 'Mis notas', icon: _ci('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>'), msg: null, action: 'notas', auth: true },
+    narrador: { label: 'Narrador', icon: _ci('<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'), msg: null, action: 'explorar' },
+    alojamiento: { label: 'Alojamiento', icon: _ci('<path d="M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7"/><path d="M3 13h18"/><path d="M7 13V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/>'), msg: 'Busca alojamiento' },
+    sos: { label: 'SOS', icon: _ci('<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'), msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
+    vuelos: { label: 'Vuelos', icon: _ci('<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>'), msg: 'Busca vuelos' },
+    alertas: { label: 'Alertas vuelos', icon: _ci('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>'), msg: null, action: 'vuelos', auth: true },
+    moneda: { label: 'Cambio moneda', icon: _ci('<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>'), msg: null, action: 'moneda' },
+    traductor: { label: 'Traductor', icon: _ci('<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z"/>'), msg: null, action: 'traductor' },
+  };
+  const _pick = keys => keys.map(k => _chipDefs[k]).filter(c => _hasUser || !c.auth);
+  const chipsLeft = _pick(['cerca', 'vuelos']);
+  const chipsRight = _pick(['alojamiento', 'sos']);
+  const chipsMore = _pick(['narrador', 'consultas', 'notas', 'alertas', 'moneda', 'traductor']);
   const renderChip = c => {
     const narratorOn = c.action === 'explorar' && typeof salma !== 'undefined' && salma._narratorActive;
     const cameraBadge = narratorOn ? '<span class="chip-camera-badge" data-camera-badge="1" title="Identifica lo que ves al momento por foto">📷</span>' : '';
@@ -601,7 +623,7 @@ function _renderChatEmpty() {
           </div>
         </div>
         <button class="ce-rotable-cta" data-ce-hero data-ce-rotable-cta>Trazar ruta <span>→</span></button>
-        <button class="ce-openbillete" data-ce-hero data-ce-openbillete>Ruta rápida <span>↓</span></button>
+        <button class="ce-openbillete" data-ce-hero data-ce-openbillete>O rellena destino y días <span>↓</span></button>
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
 
     area.innerHTML = `
@@ -3710,10 +3732,30 @@ window.closeModal = closeModal;
 
 // "Ver rutas de otros viajeros" en la pantalla de entrada — sin login, abre Explorar
 document.getElementById('btn-explorar-sin-login')?.addEventListener('click', () => {
+  _skipOnboardingFromGate();
   closeModal();
   window._rutasTab = 'explorar';
   showState('rutas');
 });
+// "Echar un vistazo sin cuenta" — entra al inicio de la app; escribir a Salma pide
+// entrar en ese momento (salma._showLoginNeeded), sin gastar nada.
+document.getElementById('btn-vistazo-sin-login')?.addEventListener('click', (e) => {
+  _skipOnboardingFromGate();
+  // Si la portada se vuelve a abrir desde dentro (ej. "Entrar gratis"), el botón
+  // ya no es "echar un vistazo" sino volver a donde estaba, sin tocar la pantalla.
+  if (e.currentTarget.dataset.inside) { closeModal(); return; }
+  e.currentTarget.dataset.inside = '1';
+  e.currentTarget.textContent = 'Volver sin entrar';
+  closeModal();
+  showState('chat');
+});
+// La portada ya explica qué hace Salma: si el usuario elige un camino desde ahí, el
+// tutorial de 3 pantallas (que estaba DEBAJO de la portada) no se le planta encima.
+function _skipOnboardingFromGate() {
+  try { localStorage.setItem('bdm_onboarding_done', '1'); } catch (_) {}
+  const ob = document.getElementById('onboarding-overlay');
+  if (ob) ob.remove();
+}
 
 function showAuthError(id, msg) {
   const el = document.getElementById(id);

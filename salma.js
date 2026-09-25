@@ -898,6 +898,10 @@ const salma = {
     if (!msg && !photo) return;
     if (this._streaming) return;
 
+    // Sin sesión: avisar ANTES de mandar nada al Worker (antes el Worker contestaba
+    // "Inicia sesión..." y aun así salía el botón "Crear ruta con mapa" debajo).
+    if (!window.currentUser) { this._showLoginNeeded(msg); return; }
+
     // Flujo guiado de ruta: si estamos esperando texto libre (destino o restricciones),
     // el mensaje del usuario va al flujo, NO al worker.
     if (this._rutaGuiadaWaitingText && msg && !photo) {
@@ -1040,6 +1044,10 @@ const salma = {
   emitirBillete(f) {
     f = f || {};
     if (!f.destino || !String(f.destino).trim()) return false;
+    if (!window.currentUser) {
+      this._showLoginNeeded(`Ruta por ${String(f.destino).trim()}, ${f.duracion_dias || '5-7'} días`);
+      return false;
+    }
     this.reset();
     if (currentState !== 'chat') this._initChat();
     const area = this._getChatArea();
@@ -3156,6 +3164,36 @@ const salma = {
     this._scrollToBottom(true);
     // Banner del tiempo — DESACTIVADO 21 sept 2026, ver initChat() para el motivo.
     // if (!document.getElementById('weather-banner')) this.initWeatherBanner();
+  },
+
+  // Sin sesión: la pregunta se queda guardada (_salmaHandoff, lo recoge showState('chat')
+  // al volver) y se ofrece entrar. No llama al Worker — coste 0.
+  _showLoginNeeded(msg) {
+    const area = this._getChatArea();
+    if (!area) return;
+    const empty = area.querySelector('.chat-empty');
+    if (empty) empty.remove();
+    area.querySelectorAll('.login-needed-wrap').forEach(el => el.remove());
+    if (msg) {
+      this._addUserBubble(msg);
+      try { localStorage.setItem('_salmaHandoff', msg); } catch (_) {}
+    }
+    const div = document.createElement('div');
+    div.className = 'msg msg-salma login-needed-wrap';
+    div.innerHTML = `
+      <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
+      <div class="msg-body-salma">Para contestarte necesito que entres — es gratis y tarda cinco segundos.${msg ? ' Tu pregunta te la dejo escrita para cuando vuelvas.' : ''}</div>
+      <div class="login-needed-actions">
+        <button class="login-needed-btn" type="button">Entrar gratis <span>→</span></button>
+        <div class="login-needed-note">Con Google o con WhatsApp · 1 guía completa gratis y 20 mensajes al día</div>
+      </div>`;
+    div.querySelector('.login-needed-btn').addEventListener('click', () => {
+      if (typeof openModal === 'function') openModal();
+    });
+    area.appendChild(div);
+    this._scrollToBottom(true);
+    const input = document.getElementById('salma-input');
+    if (input) { input.value = ''; input.dispatchEvent(new Event('input')); }
   },
 
   _addSalmaBubble(text) {
