@@ -205,12 +205,12 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span>Ayuda</span>
     </button>
-    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Salma</span>
+    <button class="bottom-tab ${isRutas && window._rutasTab === 'explorar' ? 'bottom-tab-active' : ''}" id="tab-explorar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>
+      <span>Explorar</span>
     </button>
     <div class="bottom-tab-fab-spacer" aria-hidden="true"></div>
-    <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
+    <button class="bottom-tab ${isRutas && window._rutasTab !== 'explorar' ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
@@ -220,13 +220,15 @@ function updateBottomBar() {
     </button>`;
 
   document.getElementById('tab-tester').addEventListener('click', () => showState('ayuda'));
-  document.getElementById('tab-chat').addEventListener('click', () => {
-    // La vista itinerario la desmonta showState() (Fase 4). Aquí solo al chat.
-    if (typeof salma !== 'undefined') salma._initChat();
-    showState('chat');
+  // Propuesta UX (26 sept 2026): "Salma" pasa al botón central; su hueco lo ocupa
+  // Explorar (antes escondido dentro de Mis Viajes). Mis Viajes = solo las tuyas.
+  document.getElementById('tab-explorar').addEventListener('click', () => {
+    window._rutasTab = 'explorar';
+    showState('rutas');
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
-    // Sin sesión se puede entrar igual: ve "Explorar" (rutas de otros viajeros).
+    window._rutasTab = 'mis';
+    if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
@@ -240,10 +242,15 @@ function updateBottomBar() {
     fab = document.createElement('button');
     fab.id = 'tab-newroute';
     fab.className = 'bottom-tab-fab';
-    fab.setAttribute('aria-label', 'Nueva ruta');
-    fab.title = 'Nueva ruta';
-    fab.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
-    fab.addEventListener('click', goToNewRouteFAB);
+    fab.setAttribute('aria-label', 'Salma');
+    fab.title = 'Salma';
+    fab.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>';
+    // Central = Salma: retoma la conversación que haya (lo que hacía la pestaña
+    // "Salma"); para empezar otra está "Nueva" (#chat-fresh) arriba a la derecha del chat.
+    fab.addEventListener('click', () => {
+      if (typeof salma !== 'undefined') salma._initChat();
+      showState('chat');
+    });
     document.body.appendChild(fab);
   }
 }
@@ -280,6 +287,7 @@ function _goToFreshBillete() {
   const rot = document.getElementById('ce-rotable');
   if (rot) rot.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
+
 
 function goToNewRouteFAB() {
   if (_hasUnsavedChatConversation()) {
@@ -394,7 +402,7 @@ function _renderChatEmpty() {
   const _hasUser = !!currentUser;
   const _chipDefs = {
     cerca: { label: 'Cerca mía', icon: _ci('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'), msg: 'Hazme una ruta desde donde estoy', action: 'ruta-aqui' },
-    consultas: { label: 'Últimas consultas', icon: _ci('<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>'), msg: null, action: 'consultas', auth: true },
+    consultas: { label: 'Últimas consultas', icon: _ci('<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>'), msg: null, action: 'consultas' },
     notas: { label: 'Mis notas', icon: _ci('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>'), msg: null, action: 'notas', auth: true },
     narrador: { label: 'Narrador', icon: _ci('<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'), msg: null, action: 'explorar' },
     alojamiento: { label: 'Alojamiento', icon: _ci('<path d="M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7"/><path d="M3 13h18"/><path d="M7 13V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/>'), msg: 'Busca alojamiento' },
@@ -408,6 +416,8 @@ function _renderChatEmpty() {
   const chipsLeft = _pick(['cerca', 'vuelos']);
   const chipsRight = _pick(['alojamiento', 'sos']);
   const chipsMore = _pick(['narrador', 'consultas', 'notas', 'alertas', 'moneda', 'traductor']);
+  // Salma en WhatsApp — fila propia a todo lo ancho, no es un acceso más: es otro canal.
+  const _ceWaRow = `<button class="chat-empty-chip ce-wa-chip" data-action="whatsapp"><svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>Salma también en tu WhatsApp</button>`;
   const renderChip = c => {
     const narratorOn = c.action === 'explorar' && typeof salma !== 'undefined' && salma._narratorActive;
     const cameraBadge = narratorOn ? '<span class="chip-camera-badge" data-camera-badge="1" title="Identifica lo que ves al momento por foto">📷</span>' : '';
@@ -579,6 +589,7 @@ function _renderChatEmpty() {
         <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>
+      ${_ceWaRow}
       ${_ceMoreHTML}`;
 
   const _ceFallback = `
@@ -587,6 +598,7 @@ function _renderChatEmpty() {
         <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>
+      ${_ceWaRow}
       ${_ceMoreHTML}
     </div>`;
 
@@ -616,9 +628,10 @@ function _renderChatEmpty() {
         <div class="ce-hero" data-ce-hero><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
         <div class="ce-tagline" data-ce-hero><p>Pregunta lo <span>imposible</span></p></div>
         <div class="ce-rotable" id="ce-rotable" data-ce-hero>
+          <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
           <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
           <div class="ce-rotable-foot">
-            <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span></div>
+            <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
             <span class="ce-rotable-hint">Toca para escribir la ruta</span>
           </div>
         </div>
@@ -747,18 +760,24 @@ function _renderChatEmpty() {
       const _rot = area.querySelector('#ce-rotable');
       if (!_rot || _rot._wired) return;
       _rot._wired = true;
+      // Propuesta UX (26 sept 2026): cada ejemplo enseña una capacidad distinta que
+      // Salma SÍ hace bien (antes 3 de 4 eran Portugal y uno prometía pedir un Uber).
       const _exs = [
-        'Somos 2 adultos y 2 niños, 8 días en Portugal en coche, necesito hoteles con piscina y que no haya más de 3h de trayecto entre paradas',
-        'Trabajo remoto 3 semanas en Lisboa, necesito alojamiento con buen wifi cerca de coworkings, y una escapada de fin de semana a Oporto en tren',
-        'Voy a hacer la N2 de Portugal en moto en septiembre, de sur a norte desde Faro, unos 200km diarios. Dame guía, mejores paradas y un camping al final de cada día',
-        'El 10 nov me voy a Tailandia desde Málaga, necesito Uber a las 17h, vuelo, 1 noche en Bangkok y alojamiento en Koh Samui cerca de un gym de Muay Thai'
+        { tag: 'Ruta', t: '10 días por Vietnam en moto, de norte a sur, sin autopistas y durmiendo en casas locales' },
+        { tag: 'Imprevisto', t: 'Me han robado la cartera en Nápoles, ¿qué hago ahora mismo?' },
+        { tag: 'Aquí y ahora', t: 'Estoy en Ronda con dos niños reventados, ¿dónde comemos ya algo que no sea para turistas?' },
+        { tag: 'Vuelos', t: 'El vuelo más barato de Madrid a Bangkok en noviembre, me da igual el día' },
+        { tag: 'Antes de ir', t: 'Japón en marzo: enchufes, SIM, efectivo y qué no hacer para no quedar mal' },
+        { tag: 'Foto', t: '📷 Mándame una foto de un edificio y te digo qué es y si merece la pena entrar' }
       ];
       const _exEl = area.querySelector('#ce-rotable-ex');
       const _dots = area.querySelector('#ce-rotable-dots');
       const _hint = _rot.querySelector('.ce-rotable-hint');
       let _ri = 0, _rTimer = null, _rStopped = false, _editing = false;
       const _paint = () => {
-        if (_exEl) _exEl.textContent = '“' + _exs[_ri] + '”';
+        if (_exEl) _exEl.textContent = '“' + _exs[_ri].t + '”';
+        const _tagEl = area.querySelector('#ce-rotable-tag');
+        if (_tagEl) _tagEl.textContent = _exs[_ri].tag;
         if (_dots) [..._dots.children].forEach((d, i) => d.classList.toggle('on', i === _ri));
       };
       const _adv = () => {
@@ -785,6 +804,7 @@ function _renderChatEmpty() {
         _exEl.replaceWith(ta);
         ta.focus();
         if (_dots) _dots.hidden = true;
+        const _tg = area.querySelector('#ce-rotable-tag'); if (_tg) _tg.hidden = true;
         if (_hint) _hint.textContent = 'Pulsa Trazar ruta para mandarla';
       };
       _rot.addEventListener('click', _startEditing);
@@ -931,6 +951,10 @@ function _renderChatEmpty() {
       }
       if (action === 'moneda') {
         openCurrencyConverter();
+        return;
+      }
+      if (action === 'whatsapp') {
+        _openSalmaWhatsApp();
         return;
       }
       if (action === 'traductor') {
@@ -1642,6 +1666,11 @@ function renderSalmaCan() {
       icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
       title: 'Protege',
       desc: 'SOS a tus contactos de emergencia. Embajadas, hospitales y policía al instante.'
+    },
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>`,
+      title: 'En tu WhatsApp',
+      desc: 'Todo esto también por WhatsApp: por texto, nota de voz o foto. Vincúlalo en Perfil.'
     }
   ];
 
@@ -3458,6 +3487,10 @@ function _firstName(name) {
 }
 
 function _rutasTabsHtml(active) {
+  // Propuesta UX (26 sept 2026): Explorar y Mis Viajes son ya dos pestañas del menú de
+  // abajo — esta segunda fila duplicaba lo mismo. Se deja sin pintar.
+  return '';
+  // eslint-disable-next-line no-unreachable
   return `<div class="rutas-tabs" role="tablist">
       <button class="rutas-tab ${active === 'mis' ? 'rutas-tab-active' : ''}" data-tab="mis">Mis rutas</button>
       <button class="rutas-tab ${active === 'explorar' ? 'rutas-tab-active' : ''}" data-tab="explorar">Explorar</button>
@@ -4207,6 +4240,7 @@ auth.onAuthStateChanged(async (user) => {
       avatarURL: userData.avatarURL || '',
       copilot_data: userData.copilot_data || {},
       share_routes: userData.share_routes !== false, // "Compartir mis rutas" — activado por defecto
+      phone: userData.phone || '', // solo lo tienen las cuentas creadas desde WhatsApp
     };
 
     currentUserSOSConfig = userData.sos_config || {
@@ -4283,7 +4317,8 @@ auth.onAuthStateChanged(async (user) => {
       openCoinsModal();
     } else if (goParam) {
       history.replaceState(null, '', '/');
-      showState(goParam);
+      if (goParam === 'explorar') { window._rutasTab = 'explorar'; showState('rutas'); }
+      else showState(goParam);
     } else if (window._afterLogin) {
       const dest = window._afterLogin;
       window._afterLogin = null;
@@ -4303,6 +4338,15 @@ auth.onAuthStateChanged(async (user) => {
     currentUser = null;
     updateHeader();
     hideSplash();
+    // Desde el menú de /destinos/: Explorar y Ayuda se pueden ver sin cuenta, sin
+    // pasar por la portada (propuesta UX 26 sept 2026).
+    const _goAnon = new URLSearchParams(window.location.search).get('go');
+    if (_goAnon === 'explorar' || _goAnon === 'ayuda') {
+      history.replaceState(null, '', '/');
+      if (_goAnon === 'explorar') window._rutasTab = 'explorar';
+      showState(_goAnon === 'explorar' ? 'rutas' : 'ayuda');
+      return;
+    }
     openModal();
   }
 });
@@ -4795,6 +4839,53 @@ function openCoinsModal() {
 }
 
 window.openCoinsModal = openCoinsModal;
+
+// ═══ "SALMA TAMBIÉN EN TU WHATSAPP" (propuesta UX 26 sept 2026) ═══
+// Sin sesión → portada (ahí está "Entrar con WhatsApp"). Cuenta creada desde WhatsApp
+// (tiene phone) → abre la conversación directa. Cuenta de Google → la web no sabe si ya
+// vinculó el número (eso vive en whatsapp_sessions, no en users/), así que se pregunta:
+// abrir WhatsApp sin vincular crearía una cuenta aparte con rutas y notas separadas.
+async function _salmaWaDigits() {
+  if (_waDigits) return _waDigits;
+  try {
+    const data = await (await fetch(window.SALMA_API + '/version')).json();
+    _waDigits = (data.whatsapp_number || '').replace(/[^\d]/g, '');
+  } catch (_) {}
+  return _waDigits;
+}
+async function _openSalmaWhatsApp() {
+  if (!currentUser) { openModal(); return; }
+  const digits = await _salmaWaDigits();
+  const waUrl = digits ? 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Hola Salma') : null;
+  if (currentUser.phone && waUrl) { window.open(waUrl, '_blank'); return; }
+  let overlay = document.getElementById('narrator-confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'narrator-confirm-overlay';
+    overlay.className = 'narrator-confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div class="narrator-confirm-modal">
+      <div class="narrator-confirm-icon">💬</div>
+      <h2 class="narrator-confirm-title">Salma en tu WhatsApp</h2>
+      <p class="narrator-confirm-text">Escríbele como a una amiga: rutas, vuelos, hoteles, sitios cerca, notas de voz y fotos. Vincúlalo una vez y tus rutas y notas de WhatsApp aparecen también aquí.</p>
+      <div class="narrator-confirm-btns">
+        <button class="narrator-confirm-cancel" id="salma-wa-open"${waUrl ? '' : ' disabled'}>Ya lo tengo vinculado</button>
+        <button class="narrator-confirm-go" id="salma-wa-link">Vincular mi WhatsApp</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.style.display = 'none'; };
+  document.getElementById('salma-wa-open').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    if (waUrl) window.open(waUrl, '_blank');
+  });
+  document.getElementById('salma-wa-link').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    openWhatsAppLinkModal();
+  });
+}
 
 // ═══ VINCULAR WHATSAPP (F5.4, 24 sept 2026) ═══
 // Genera un código de 6 caracteres (10 min) y lo enseña con instrucciones — el usuario
@@ -7910,6 +8001,8 @@ function openCurrencyConverter() {
 // - Con sesión → directo al chat
 // - Sin sesión → gate obligatorio
 // El splash se mantiene visible hasta que Firebase resuelva el auth
-if (!localStorage.getItem('bdm_onboarding_done')) {
-  showOnboarding();
-}
+// Tutorial de 3 pantallas QUITADO (propuesta UX 26 sept 2026): la portada ya explica
+// qué hace Salma. showOnboarding() se deja por si se quiere recuperar.
+// if (!localStorage.getItem('bdm_onboarding_done')) {
+//   showOnboarding();
+// }

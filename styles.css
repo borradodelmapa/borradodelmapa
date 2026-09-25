@@ -7113,3 +7113,19 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .bottom-tab-tester{color:rgba(236,235,232,.78);}
 .bottom-tab-tester.bottom-tab-active,.bottom-tab-active{color:var(--accent);}
 .login-needed-note{font-size:13px;color:#C4C7C9;}
+/* Botón central = Salma (icono + nombre) y "Nueva conversación" dentro del chat */
+.bottom-tab-fab { flex-direction:column; gap:1px; }
+.bottom-tab-fab svg { width:24px; height:24px; }
+.bottom-tab-fab-label { font-family:var(--font-cond); font-weight:800; font-size:12px; letter-spacing:.04em; text-transform:uppercase; line-height:1; }
+/* "Nueva conversación": el botón que ya existía (#chat-fresh), ahora con texto */
+#chat-fresh{width:auto;padding:0 11px;gap:6px;}
+.chat-fresh-label{font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--crema);}
+/* Acceso "Salma también en tu WhatsApp" — fila propia, verde WhatsApp */
+.chat-empty .chat-empty-chip.ce-wa-chip{margin-top:7px;justify-content:center;color:#25D366;border-color:rgba(37,211,102,.55);background:rgba(37,211,102,.08);}
+.chat-empty .chat-empty-chip.ce-wa-chip .chip-icon{stroke:none;fill:#25D366;}
+.chat-empty .chat-empty-chip.ce-wa-chip:hover{background:#25D366;color:#0a0a0a;border-color:#25D366;}
+/* Etiqueta del ejemplo que rota (RUTA / IMPREVISTO / VUELOS...) */
+.ce-rotable-tag{display:inline-block;margin-bottom:8px;padding:3px 8px;background:var(--ce-amber,#F4630B);color:#0a0a0a;font-family:var(--font-cond);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;}
+.ce-rotable-tag[hidden]{display:none;}
+.bottom-tab-fab { text-decoration:none; }
+.app-bottom-bar a.bottom-tab { text-decoration:none; white-space:nowrap; }

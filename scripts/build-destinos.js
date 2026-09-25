@@ -73,6 +73,10 @@ const TYPE_BADGES = {
 // para que un visitante real no se quede con el CSS viejo en caché tras un
 // cambio.
 const DESTINOS_CSS_V = 2;
+// Igual para styles.css (el de la app, que trae el menú de abajo): antes iba SIN ?v=
+// y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
+// número que styles.css?v= en index.html — subirlo a la vez.
+const APP_CSS_V = 144;
 
 // Logo — mismo wordmark y clases que el index de la app (app.js:_renderChatEmpty,
 // ".ce-top .ce-brand"), como enlace estático a "/" (ahí no hay JS de estado que
@@ -92,13 +96,13 @@ const LOGO_HTML = `<div class="ce-top"><a class="ce-brand" href="/">✦ BORRADO<
 // visitante anónimo de una página SEO).
 const BOTTOM_NAV = `
   <nav class="app-bottom-bar">
-    <a class="bottom-tab" href="/?help=1">
+    <a class="bottom-tab" href="/?go=ayuda">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span>Ayuda</span>
     </a>
-    <a class="bottom-tab" href="/?go=chat">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Salma</span>
+    <a class="bottom-tab" href="/?go=explorar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>
+      <span>Explorar</span>
     </a>
     <div class="bottom-tab-fab-spacer" aria-hidden="true"></div>
     <a class="bottom-tab" href="/?go=rutas">
@@ -110,8 +114,8 @@ const BOTTOM_NAV = `
       <span>Perfil</span>
     </a>
   </nav>
-  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Nueva ruta" title="Nueva ruta">
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Salma" title="Salma">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>
   </a>`;
 
 // Firebase SDK block (reusable in all templates)
@@ -344,7 +348,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
   ${(route || coords) ? `<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>` : ''}
   ${FIREBASE_HEAD}
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=${APP_CSS_V}">
   <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
   <script src="/country-utils.js"></script>
 </head>
@@ -650,7 +654,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=${APP_CSS_V}">
   <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
   <script src="/country-utils.js"></script>
   ${FIREBASE_HEAD_WITH_FIRESTORE}
@@ -781,7 +785,7 @@ function buildIndexHTML(countriesByContinent) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   ${FIREBASE_HEAD}
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=${APP_CSS_V}">
   <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
 </head>
 <body class="destino-page">
