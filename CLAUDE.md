@@ -1103,8 +1103,17 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      día) podían haber roto algo de la web — comprobado con `git diff` que ningún cambio de
      hoy toca `BLOQUE_ACCION`/`SALMA_SYSTEM_CHAT/PLAN/ROUTE` ni ninguna función que use la
      web (todas las funciones tocadas son nuevas, prefijo `wa`), y Paco confirmó en pantalla
-     que "3 días Sevilla" y "moneda de Japón" siguen funcionando bien en la web.
-   - **Worker Version ID vigente: `24667677-df1b-49a2-9870-ccb7c177c149`** (despliegues
+     que "3 días Sevilla" y "moneda de Japón" siguen funcionando bien en la web. Aun así, el
+     primer despliegue del fix seguía preguntando (otra pregunta parecida, no exactamente la
+     misma) — Paco preguntó por qué no se reutilizaba directamente lo que YA funciona bien en
+     la app en vez de una redacción propia. Con razón: v3 extrae el punto 2 de `BLOQUE_ACCION`
+     a `BLOQUE_RUTA_INFO_DIRECTA` y WhatsApp usa ese texto LITERAL (verificado en runtime que
+     `BLOQUE_ACCION` sigue siendo byte a byte idéntico para la web), con un único añadido
+     genuino: sin botón "Crear ruta con mapa" que sustituya la conversación libre, la regla se
+     refuerza a cualquier pregunta de personalización, no solo las dos que cita el texto
+     original. **Norma anotada para el resto de F5.3**: si ya funciona en la app, se reutiliza
+     tal cual — nunca una versión propia para WhatsApp.
+   - **Worker Version ID vigente: `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109`** (despliegues
      intermedios de este punto: `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
