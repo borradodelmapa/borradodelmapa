@@ -1354,8 +1354,9 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 
 ### 🟡 Importante
 
-- **Explorar — rutas de otros viajeros (25 sept 2026) — HECHO en la rama
-  `claude/shared-routes-visibility-s99x1z`, SIN DESPLEGAR (falta pasarlo a `main`).**
+- **Explorar — rutas de otros viajeros (25 sept 2026) — DESPLEGADO, pendiente de
+  confirmar en pantalla por Paco.** En `main` (commit `d26f766`), **Worker Version ID
+  `ac461d62-22b2-4235-b3bf-b3640b0bd261`** (GitHub Action "Deploy Worker", run 80).
   Decidido con Paco: botón dentro de Rutas (pestañas "Mis rutas | Explorar"), visible sin
   login (botón "Ver rutas de otros viajeros" en la pantalla de entrada + pestaña Mis Viajes
   ya no exige sesión), guías existentes incluidas sin repetidas, autor con nombre de pila.
