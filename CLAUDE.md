@@ -1003,8 +1003,17 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      Nominatim no incluía palabras como "enchufe" — un mensaje en minúsculas sin "en X"
      capitalizado ("q enchufe hay en japon") geocodificaba "enchufe" ANTES que el país real
      y devolvía España en vez de Japón. Corregido ampliando esa lista.
-   - **Siguiente paso: punto 2, historial de conversación.**
-   - **Worker Version ID vigente: `3647f893-2891-4f20-a9b3-3b67be93f884`.**
+   - **Historial de conversación: HECHO, 25 sept 2026 — confirmado en pantalla por Paco
+     ("funciona a falta de más pruebas").** WhatsApp no tiene navegador que guarde los
+     últimos turnos como la web, así que los guarda el propio Worker en KV
+     (`wa_history:{numero}`, últimos 20 turnos/40 mensajes, caducidad 6h de inactividad —
+     pasado ese rato se trata como conversación nueva). Solo el chat normal lo toca; los
+     flujos de alta/login no.
+   - **Siguiente paso: punto 1, ubicación** — pregunta ligera ("¿sigues en Logroño?") +
+     detectar ciudad si el usuario la escribe, sin depender de GPS en vivo (Twilio no
+     soporta ubicación en vivo de WhatsApp, solo puntual — confirmado con búsqueda web el
+     25 sept 2026).
+   - **Worker Version ID vigente: `2a37f7e7-3834-40f7-a1ff-6139b384b7f8`.**
 
 ### 🔴 Crítico
 
