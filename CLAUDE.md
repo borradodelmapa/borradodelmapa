@@ -1244,11 +1244,28 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
        final) cuando la búsqueda directa a una isla/ciudad pequeña no da resultados, y
        presentar el itinerario con los DOS precios REALES de esas tools sumados — nunca una
        cifra inventada. Solo si ni el tramo al hub encuentra nada se dice que no hay vuelos.
-       **Desplegado, pendiente de confirmar en pantalla por Paco** (volver a pedir el vuelo a
-       Koh Samui y comprobar que da un itinerario con precios reales Madrid→Bangkok +
-       Bangkok→Koh Samui, no una cifra "orientativa").
-   - **Worker Version ID vigente: `def5f8bc-98f2-4ca0-b343-2a78735984fb`** (despliegues
-     intermedios de este punto: `82e57261-89a4-453b-a201-a5b4a934d820` → frase de reinicio de
+       **Este fix funcionó a medias** — con "Koh Samui" desde Madrid la búsqueda por hub
+       encontró algo, pero al probar "Hanói" ninguna de las dos búsquedas (directa ni por
+       Bangkok) dio resultado, y Claude volvió a inventar (ver siguiente punto).
+     - **Bug real, misma tarde, cuarta vuelta — "Buscame un vuelo a Hanói en noviembre":
+       ni la búsqueda directa ni la del hub (Bangkok) dieron resultado, y Claude SIGUIÓ
+       inventando** un presupuesto "orientativo" (500-700€, Qatar/Emirates/Turkish) y hasta
+       una URL de Google Flights con fechas de 2025 que nadie pidió. Confirmaba lo que ya se
+       veía venir: pedirle por texto "no inventes" no es suficiente cuando el modelo prefiere
+       sonar útil a admitir que no tiene nada. **Arreglo de raíz, por código en vez de más
+       texto de prompt** (mismo patrón que `appendGuardarlaCta`/`stripWaLeakedMarkers`):
+       `waCallClaudeWithTools()` ahora devuelve `allFlightSearchesFailed` — true si se llamó a
+       `buscar_vuelos` al menos una vez en el turno y NINGUNA llamada encontró vuelos reales.
+       El webhook `/whatsapp` IGNORA lo que Claude haya escrito en ese caso y manda
+       `WA_NO_FLIGHTS_FOUND_MSG`, un texto fijo sin precio, sin aerolínea y sin URL. Si al
+       menos una búsqueda SÍ encuentra algo real, el mensaje de Claude pasa normal. **Desplegado,
+       pendiente de confirmar en pantalla por Paco** (volver a pedir el vuelo a Hanói o a
+       cualquier destino sin conexión real y comprobar que ahora dice claramente que no ha
+       encontrado nada, sin precios ni aerolíneas inventadas).
+   - **Worker Version ID vigente: `1990087f-457b-4208-90af-3f21f6e933cf`** (despliegues
+     intermedios de este punto: `def5f8bc-98f2-4ca0-b343-2a78735984fb` → búsqueda de vuelos
+     por hub real (funcionó a medias, seguía inventando cuando el hub también fallaba),
+     `82e57261-89a4-453b-a201-a5b4a934d820` → frase de reinicio de
      conversación (funcionó, pero no era la causa de fondo), `90eeb8af-f3eb-4a78-9dd0-e66a8ac03820` → BLOQUE_ACCION
      completo en WhatsApp (funcionó, pero el historial de pruebas ya contaminado seguía
      repitiendo la invención vieja), `1dd2ed1b-cdfe-4e0d-877e-571cf7eb878b` → fix fecha vaga
@@ -1261,7 +1278,8 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
-     guardar rutas, este último → búsqueda de vuelos por hub real a islas sin conexión directa).
+     guardar rutas, este último → mensaje honesto por código cuando ninguna búsqueda de vuelo
+     real encuentra nada).
 
 ### 🔴 Crítico
 
