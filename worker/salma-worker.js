@@ -3125,7 +3125,16 @@ async function detectCountryAndKV(env, message, history, currentRoute, guidedRou
     // Fallback 2: Nominatim — geocodificar cualquier palabra del mensaje que no sea stopword
     // Va ANTES del escaneo word-by-word de KV porque Nominatim detecta ciudades que KV no tiene
     if (!countryCode) {
-      const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','cosa','info','datos','dato','precio','coste','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia','gym','gimnasio','boxeo','fitness','cerca','mejor','buscame','encuentra','dame']);
+      const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','cosa','info','datos','dato','precio','coste','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia','gym','gimnasio','boxeo','fitness','cerca','mejor','buscame','encuentra','dame',
+        // Palabras "gatillo" de tryKVDirectAnswer (25 sept 2026, bug real: "q enchufe hay en
+        // japon" geocodificaba "enchufe" en Nominatim ANTES de llegar a "japon" y devolvía
+        // España). Sin mayúsculas ni "en X" de por medio (mensajes cortos de WhatsApp), estas
+        // palabras nunca deben tratarse como el lugar a buscar.
+        'enchufe','enchufes','adaptador','voltaje','corriente','electricidad','vacuna','vacunas','inmuniza',
+        'propina','propinas','prefijo','conducir','conduccion','conduce','manejar','izquierda','derecha',
+        'agua','potable','grifo','beber','sim','conectividad','roaming','esim','wifi',
+        'sanidad','salud','medico','medicina','presupuesto','gastar','barato','caro','capital',
+        'transporte','app','apps','uber','curiosidad','cambio','efectivo','tarjeta','cajero','dolares']);
       const candidateWords = message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').match(/\b[a-z]{3,}\b/g) || [];
       const candidates = candidateWords.filter(w => !STOPWORDS.has(w));
 
