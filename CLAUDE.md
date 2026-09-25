@@ -1277,6 +1277,18 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      descarta entradas de Booking sin `hotel_name` (llegaban 2 de 5 vacías a 0 €) — Worker `7b3961c5`, **CONFIRMADO EN PANTALLA por Paco (Llanes, 5 hoteles con nombre y precio)**. El log
      `[WA-TOOL]` se queda (solo consola). El "Hoy ya hemos hablado bastante" que salió era el
      tope `wa_daily` de 60 mensajes/día (Paco lo agotó probando; se borró su contador de hoy).
+   - **Notas por WhatsApp (25 sept 2026, noche) — HECHO, guardado confirmado en el log.**
+     `guardar_nota` conectado (`waSaveNota`: escribe `users/{uid}/notas/{id}` con el esquema de
+     `notas.js:create()`, `fuente: 'whatsapp'`) + `BLOQUE_NOTAS` en el prompt de WhatsApp. Sin
+     coste de API. Paco no las veía en la web porque su número estaba en la cuenta automática
+     `wa_4c1634b76d58c9b42c316476` (sin email), distinta de su cuenta de la web.
+   - **Unir la cuenta `wa_` a la cuenta de la web — CAMBIA LA DECISIÓN DEL 24 SEPT (con OK de
+     Paco, 25 sept): "que cada usuario pueda guardar sus notas desde WhatsApp en la web".**
+     Perfil → Vincular WhatsApp → mandar el código desde el móvil: si el número estaba en una
+     cuenta `wa_…`, ahora pasa a la cuenta de la web y se COPIAN sus notas y rutas
+     (`waCopyAccountData`, mismo id, sin borrar nada de la `wa_`; `whatsapp_sessions.merged_from`
+     guarda la vieja). Si el número estaba unido a OTRA cuenta de Google, sigue avisando sin
+     tocar nada. Log `[WA-UNIR]`. Sin coste de API. Pendiente de probar con la cuenta de Paco.
    - **Worker Version ID vigente: ver `/version`** (anterior: `1990087f-457b-4208-90af-3f21f6e933cf`) (despliegues
      intermedios de este punto: `def5f8bc-98f2-4ca0-b343-2a78735984fb` → búsqueda de vuelos
      por hub real (funcionó a medias, seguía inventando cuando el hub también fallaba),

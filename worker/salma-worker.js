@@ -1279,6 +1279,26 @@ async function firestoreAdminDelete(env, path) {
 // Lista los documentos de una subcolección directamente bajo un documento padre
 // (ej. users/{uid}/maps) — no confundir con una collection-group query (allDescendants),
 // esto solo mira UN nivel bajo `parentPath`. Devuelve [{id, fields}].
+// Unir la cuenta creada sola por WhatsApp (`wa_…`) a la cuenta de la web (25 sept 2026, Paco:
+// "que cada usuario pueda guardar sus notas desde WhatsApp en la web"). Copia notas y rutas
+// guardadas (mismo id, campos tal cual) a la cuenta de destino. NO borra nada de la cuenta
+// `wa_` — solo copia. Devuelve { notas, maps, errors }.
+async function waCopyAccountData(env, fromUid, toUid) {
+  const out = { notas: 0, maps: 0, errors: 0 };
+  for (const col of ['notas', 'maps']) {
+    try {
+      const docs = await firestoreAdminListSubcollection(env, 'users/' + fromUid, col);
+      for (const d of docs) {
+        try {
+          await firestoreAdminPatch(env, `users/${toUid}/${col}/${d.id}`, d.fields);
+          out[col]++;
+        } catch (e) { out.errors++; console.error('[WA-UNIR] copiar', col, d.id, e.message); }
+      }
+    } catch (e) { out.errors++; console.error('[WA-UNIR] listar', col, e.message); }
+  }
+  return out;
+}
+
 async function firestoreAdminListSubcollection(env, parentPath, collectionId) {
   const token = await getServiceAccountToken(env);
   const res = await fetch(`${FIRESTORE_BASE}/${parentPath}:runQuery`, {
@@ -9127,6 +9147,24 @@ export default {
                 await sendWhatsAppMessage(env, from, `¡Listo${profileName ? ', ' + profileName : ''}! Ya tienes tu WhatsApp vinculado a tu cuenta de Borrado del Mapa — a partir de ahora hablas conmigo aquí igual que en la app. ¿En qué te ayudo?`);
               } else if (linkedUid === codeUid) {
                 await sendWhatsAppMessage(env, from, 'Ese número ya estaba vinculado a esa misma cuenta — no hace falta nada más. ¿En qué te ayudo?');
+              } else if (String(linkedUid).startsWith('wa_')) {
+                // El número tenía la cuenta que se crea sola por WhatsApp y ahora el usuario,
+                // con sesión en la web, manda el código desde ese mismo móvil: prueba de que las
+                // dos son suyas. Cambio decidido por Paco el 25 sept 2026 (antes se negaba a
+                // unir): el número pasa a la cuenta de la web y se copian notas y rutas de la
+                // cuenta `wa_` (que se queda como estaba, sin borrar nada). Sin APIs de pago.
+                const copied = await waCopyAccountData(env, linkedUid, codeUid);
+                await firestoreAdminPatch(env, 'whatsapp_sessions/' + encodeURIComponent(from), {
+                  uid: { stringValue: codeUid },
+                  linked_at: { timestampValue: new Date().toISOString() },
+                  profile_name: { stringValue: String(profileName || '') },
+                  merged_from: { stringValue: String(linkedUid) },
+                });
+                console.log('[WA-UNIR]', from, linkedUid, '→', codeUid, JSON.stringify(copied));
+                const traidas = (copied.notas || copied.maps)
+                  ? ` He pasado a tu cuenta ${copied.notas} nota${copied.notas === 1 ? '' : 's'} y ${copied.maps} ruta${copied.maps === 1 ? '' : 's'} que tenías guardadas por aquí.`
+                  : '';
+                await sendWhatsAppMessage(env, from, `¡Listo${profileName ? ', ' + profileName : ''}! Tu WhatsApp ya está unido a tu cuenta de la web — lo que guardes aquí (notas, rutas) lo verás allí.${traidas} ¿En qué te ayudo?`);
               } else {
                 // Colisión real: este número ya tiene SU PROPIA cuenta (normalmente
                 // creada solo, la primera vez que escribió por aquí) y ahora se
