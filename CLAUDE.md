@@ -1038,12 +1038,24 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
         pequeño, lo que está cerca es Colombres... sigo sin poder buscarte sitios por aquí,
         prueba Google Maps o TripAdvisor") es el esperado ahora mismo: WhatsApp todavía no
         tiene el tool `buscar_lugar` conectado — eso es el punto 6, siguiente en la lista.
-   - **Siguiente paso: punto 6, buscar_lugar** — EN MARCHA. Conectar el tool de Google
-     Places a WhatsApp para que sí pueda buscar restaurantes/sitios reales por este canal.
-   - **Worker Version ID vigente: `c7612d4a-c8b8-482b-9040-06dcb0537d19`** (despliegues
+   - **Punto 6, buscar_lugar: HECHO, 25 sept 2026, desplegado — pendiente de que Paco lo
+     confirme en pantalla.** Conectado el mismo tool `buscar_lugar` del chat web (Google
+     Places real: nombre, dirección, teléfono, rating, Google Maps) a WhatsApp, a través de
+     un bucle de tool-use acotado (`waCallClaudeWithTools()`, máx 3 vueltas — sin streaming
+     SSE, aquí basta una respuesta final por turno). Se usa tanto en el chat normal como
+     justo al compartir ubicación, así una vez compartida puede buscar directo en esa ciudad
+     sin volver a preguntarla. Vuelos, hoteles y coches SIGUEN sin conectar (fuera de esta
+     tarea). **Aviso de coste (protocolo §8):** cada vez que alguien pida un lugar concreto
+     por WhatsApp esto añade 1 Google Places Text Search (~0,032€) + hasta 5 Place Details
+     cacheados 30 días (gratis salvo la primera vez que se pregunta por ese sitio) — el
+     mismo coste que ya paga cada búsqueda equivalente en la web.
+   - **Siguiente paso, tras confirmar el punto 6:** seguir con el resto de tools de la lista
+     acordada con Paco (ver tabla completa en `CLAUDE-historial.md`), y después los casos
+     híbridos que se resuelven mejor con un enlace de auto-entrada a la web.
+   - **Worker Version ID vigente: `87898213-72ce-43e2-be38-2cab28577ab5`** (despliegues
      intermedios de este punto: `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
-     `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, este último → fix
-     "se queda callada").
+     `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
+     482b-9040-06dcb0537d19` → fix "se queda callada", este último → buscar_lugar).
 
 ### 🔴 Crítico
 
