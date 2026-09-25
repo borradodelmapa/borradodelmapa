@@ -1032,13 +1032,14 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
         normal y este camino. **Aviso de coste (protocolo §8, aprobado por Paco):** compartir
         ubicación pasa de costar 0 (antes, sin llamar a Claude) a costar como un mensaje
         normal de chat.
-     3. Confirmado por Paco que el contenido de la respuesta en sí es correcto para ahora
-        ("sigo sin poder buscarte sitios para comer por WhatsApp, para eso la app mejor") —
-        WhatsApp todavía no tiene el tool `buscar_lugar` conectado (eso es el punto 6,
-        siguiente en la lista), así que redirigir a la app en vez de inventar una búsqueda es
-        el comportamiento esperado, no un bug.
-   - **Siguiente paso: punto 6, buscar_lugar** — conectar el tool de Google Places a
-     WhatsApp para que sí pueda buscar restaurantes/sitios reales por este canal.
+     3. Confirmado por Paco, EN PANTALLA, que la respuesta ya llega de un tirón nada más
+        compartir ubicación, sin tener que volver a preguntar — el bug "se queda callada"
+        está cerrado de verdad. El contenido de esa respuesta ("Ribadedeva es municipio
+        pequeño, lo que está cerca es Colombres... sigo sin poder buscarte sitios por aquí,
+        prueba Google Maps o TripAdvisor") es el esperado ahora mismo: WhatsApp todavía no
+        tiene el tool `buscar_lugar` conectado — eso es el punto 6, siguiente en la lista.
+   - **Siguiente paso: punto 6, buscar_lugar** — EN MARCHA. Conectar el tool de Google
+     Places a WhatsApp para que sí pueda buscar restaurantes/sitios reales por este canal.
    - **Worker Version ID vigente: `c7612d4a-c8b8-482b-9040-06dcb0537d19`** (despliegues
      intermedios de este punto: `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, este último → fix
