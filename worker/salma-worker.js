@@ -9209,7 +9209,6 @@ export default {
               await sendWhatsAppMessage(env, from, `${gate.message} Entra aquí para pasarte a Premium: ${premiumLink}`);
               return;
             }
-            const link = await buildAutoLoginLink(env, linkedUid);
             let waHistoryForSave = [];
             if (env.SALMA_KB) {
               try { waHistoryForSave = JSON.parse((await env.SALMA_KB.get('wa_history:' + from)) || '[]'); } catch (_) {}
@@ -9226,6 +9225,10 @@ export default {
               return;
             }
             await usageRecord(env, waPlan, { guides: 1 });
+            // Paso 3 (25 sept 2026): el enlace abre directamente ESTA guía (vista de itinerario
+            // con mapa), no el index — el id viaja dentro del código de un solo uso, igual que
+            // "premium" (ver buildAutoLoginLink). app.js lo recoge en window._waLoginGo.
+            const link = await buildAutoLoginLink(env, linkedUid, 'ruta:' + saved.mapId);
             await sendWhatsAppMessage(env, from, `¡Lista! ${saved.route.stops.length} paradas verificadas con Google Maps, ya guardada en tu cuenta (Mis Rutas). Entra aquí para verla en el mapa: ${link}`);
             return; // sin llamar a Claude por aquí — el trabajo ya lo hicieron convertProseToRouteJson/verifyAllStops
           }

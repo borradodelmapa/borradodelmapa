@@ -3994,6 +3994,14 @@ auth.onAuthStateChanged(async (user) => {
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
       _openSharedRoute(shareId);
+    } else if (typeof window._waLoginGo === 'string' && /^ruta:[A-Za-z0-9]{10,40}$/.test(window._waLoginGo)) {
+      // Enlace de auto-entrada por WhatsApp tras "guárdala" (F5.3 paso 3) — abre directa la
+      // guía recién guardada (vista de itinerario con mapa), mismo camino que Mis Viajes.
+      const waMapId = window._waLoginGo.slice(5);
+      window._waLoginGo = null;
+      if (typeof salma !== 'undefined') salma._initChat();
+      showState('chat');
+      if (typeof salma !== 'undefined' && salma.cargarGuia) salma.cargarGuia(waMapId, null);
     } else if (window._waLoginGo === 'premium') {
       // Enlace de auto-entrada por WhatsApp con destino "premium" (ej. al tope de guías
       // gratis) — mismo camino que ya usa pago=cancel: Perfil + el modal de Premium abierto.
