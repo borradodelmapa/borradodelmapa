@@ -8803,20 +8803,16 @@ export default {
             return;
           }
 
-          // Respuestas instantáneas de KV (25 sept 2026, F5.3 punto 1) — la misma función
-          // que usa el chat principal, reutilizada aquí: detecta el país/ciudad por TEXTO
-          // (índice `kw:` + Nominatim gratis de respaldo, sin depender de geolocalización,
-          // que WhatsApp no tiene) y responde sin llamar a Claude si hay dato en KV
-          // (visados, moneda, enchufes, seguridad, emergencias...). Coste: 0 — mismas
-          // fuentes gratuitas que ya usa la web, ninguna llamada de pago nueva.
-          try {
-            const { kvCountryData: waKvCountry, kvDestinationData: waKvDest } = await detectCountryAndKV(env, body, [], null, null, undefined, undefined, {});
-            const waKvReply = waKvCountry ? tryKVDirectAnswer(body, waKvCountry, waKvDest) : null;
-            if (waKvReply) {
-              await sendWhatsAppMessage(env, from, waKvReply);
-              return;
-            }
-          } catch (e) { console.error('[WhatsApp] Error en respuesta instantánea KV:', e.message); }
+          // Respuestas instantáneas de KV — PROBADO y RETIRADO el 25 sept 2026: aunque el
+          // texto sonara a Salma, era una plantilla fija y se quedaba corta contra lo que
+          // Claude sabe de verdad (ej. enchufes de Japón: la plantilla decía "tipo A/B,
+          // 100V" sin más; Claude explica el 50Hz/60Hz según zona, qué adaptador necesita
+          // un español en concreto y dónde comprarlo — visto en pantalla por Paco,
+          // comparando ambas respuestas). Decisión: WhatsApp llama siempre a Claude, igual
+          // que la web, para que la calidad sea la misma — se pierde el coste 0 y la
+          // instantaneidad de esta vía, pero gana consistencia. La función
+          // detectCountryAndKV()/tryKVDirectAnswer() sigue viva y en uso por el chat
+          // principal (web); no se ha tocado, solo se ha dejado de llamar aquí.
 
           const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
             method: 'POST',
