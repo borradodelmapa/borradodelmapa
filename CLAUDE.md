@@ -1218,10 +1218,23 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
        interpreta en el frontend — WhatsApp no tiene ese parser, se colarían tal cual en
        el mensaje), la regla de "sin botón, refuerza a cualquier pregunta de
        personalización" y la de fechas vagas. Añadida `stripWaLeakedMarkers()` como red de
-       seguridad por si el modelo genera esos marcadores de todos modos. **Desplegado,
-       pendiente de confirmar en pantalla por Paco.**
-   - **Worker Version ID vigente: `90eeb8af-f3eb-4a78-9dd0-e66a8ac03820`** (despliegues
-     intermedios de este punto: `1dd2ed1b-cdfe-4e0d-877e-571cf7eb878b` → fix fecha vaga
+       seguridad por si el modelo genera esos marcadores de todos modos.
+     - **Bug real encontrado por Paco al reprobar, 25 sept 2026: "sigue igual" — el mismo
+       vuelo a Koh Samui seguía devolviendo la ruta inventada vía Bangkok/50€.** No era que
+       el fix de `PROHIBIDO INVENTAR` no funcionara — la respuesta empezaba con **"Como te
+       decía"**: Salma estaba siendo consistente con SU PROPIA respuesta inventada de antes
+       del fix, que seguía metida en `wa_history` (dura 6h de inactividad). El fix evita
+       inventar EN UN TURNO NUEVO, pero no borra una invención que ya quedó grabada en el
+       historial de una conversación que llevaba todo el día de pruebas activa. Arreglo:
+       `isResetRequest()` — frases como "reinicia la conversación", "olvida todo" o "borra
+       el historial" borran `wa_history`/`wa_location` de ese número sin llamar a Claude
+       (coste 0). Sirve para probar limpio y para que cualquier usuario real pueda empezar
+       de cero. **Desplegado, pendiente de confirmar en pantalla por Paco** (probar diciendo
+       "reinicia la conversación" y volviendo a pedir el vuelo a Koh Samui desde cero).
+   - **Worker Version ID vigente: `82e57261-89a4-453b-a201-a5b4a934d820`** (despliegues
+     intermedios de este punto: `90eeb8af-f3eb-4a78-9dd0-e66a8ac03820` → BLOQUE_ACCION
+     completo en WhatsApp (funcionó, pero el historial de pruebas ya contaminado seguía
+     repitiendo la invención vieja), `1dd2ed1b-cdfe-4e0d-877e-571cf7eb878b` → fix fecha vaga
      (funcionó, pero destapó el bug de invención), `f5d8c0a6-a810-4d78-856d-5bcbafe223f6` →
      guardarla nunca tras usar una tool, `c5a25472-0bcd-416f-ba36-af432a5e745e` → vuelos/hoteles/
      coches, `bf1c3805-b554-40ac-a7d3-d7624940b5ad` → fix destino en
@@ -1231,7 +1244,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
-     guardar rutas, este último → BLOQUE_ACCION completo en WhatsApp en vez de fragmentos).
+     guardar rutas, este último → frase de reinicio de conversación).
 
 ### 🔴 Crítico
 
