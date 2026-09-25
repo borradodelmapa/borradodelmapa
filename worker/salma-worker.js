@@ -422,6 +422,15 @@ Si menciona una fecha → extrae la fecha como YYYY-MM-DD en fecha_recordatorio.
 Si menciona un país → pon el código ISO en country_code y el nombre en country_name.
 Si dice algo como "recuérdame devolver la moto el 15 de abril" → tipo: recordatorio, fecha_recordatorio: 2026-04-15, texto: "Devolver la moto".`;
 
+// Pieza reutilizable (25 sept 2026) — extraída del punto 2 de BLOQUE_ACCION para poder usar
+// el MISMO texto, ya probado en la app desde hace tiempo, también en WhatsApp — en vez de
+// escribir una paráfrasis nueva cada vez que hace falta (eso fue justo el error de la 1ª
+// versión del fix de "cadena de preguntas" en WhatsApp: una redacción propia que solo cubría
+// dos frases concretas y el modelo generalizó a otras). Un solo texto, dos sitios que lo usan.
+const BLOQUE_RUTA_INFO_DIRECTA = `HABLA DE UN DESTINO O VIAJE
+Señales: "quiero ir a Vietnam", "3 días en Ronda", "itinerario por Japón", "ruta por Marruecos", destino + días, "hazme una ruta"
+→ Responde con INFORMACIÓN del destino: qué ver, qué comer, clima, transporte, tips, cultura. Usa tools si pide algo concreto (hotel, vuelo). NUNCA generes SALMA_ROUTE_JSON. NUNCA preguntes "¿qué tipo de viaje?" ni "¿con quién vas?".`;
+
 const BLOQUE_ACCION = `CÓMO ACTÚAS
 
 Eres experta en viajes. Lo que sabes, lo das directo. Lo que no sabes con certeza o puede haber cambiado, lo buscas — y le dices al usuario qué estás haciendo: "Déjame buscarlo."
@@ -434,9 +443,7 @@ DETECTA QUÉ QUIERE EL USUARIO
 Señales: "¿qué ver en...?", "¿es caro...?", "¿necesito visado?", "¿cuándo ir?", "¿qué tiempo hace?"
 → Responde con lo que sabes. Sin tools, sin ruta, sin taxi.
 
-2. HABLA DE UN DESTINO O VIAJE
-Señales: "quiero ir a Vietnam", "3 días en Ronda", "itinerario por Japón", "ruta por Marruecos", destino + días, "hazme una ruta"
-→ Responde con INFORMACIÓN del destino: qué ver, qué comer, clima, transporte, tips, cultura. Usa tools si pide algo concreto (hotel, vuelo). NUNCA generes SALMA_ROUTE_JSON. NUNCA preguntes "¿qué tipo de viaje?" ni "¿con quién vas?".
+2. ${BLOQUE_RUTA_INFO_DIRECTA}
 
 3. QUIERE UNA GUÍA COMPLETA (SALMA_ROUTE_JSON)
 NUNCA por iniciativa propia. Solo cuando el sistema te avisa con [OBLIGATORIO — GENERA RUTA AHORA], o al editar una ruta ya abierta siguiendo [CAMBIOS EN ESTA RUTA]. Ni "quiero una guía", ni destino + días, ni "hazme una ruta", ni "itinerario" activan esto por sí solos. Si no ves ese aviso, NO generes SALMA_ROUTE_JSON.
@@ -535,11 +542,20 @@ const SALMA_SYSTEM_CHAT = [
 // 6, mismo día) — ver wa_history/wa_location/waCallClaudeWithTools en el webhook
 // /whatsapp; aquí solo las instrucciones de uso.
 //
-// Bug real, 25 sept 2026 (confirmado en pantalla por Paco): al quitar BLOQUE_ACCION entero
-// se fue con él su regla "destino+ruta → info directa, NUNCA '¿qué tipo de viaje?' ni
-// '¿con quién vas?'" — sin ella, Claude caía en la típica cadena de preguntas de bot
-// ("¿día completo o visita rápida?", luego "¿tienes coche?"...) al pedir "hazme una ruta
-// por X". Se porta esa regla concreta (no el bloque entero) al párrafo de abajo.
+// Bug real, 25 sept 2026 (confirmado en pantalla por Paco, 3 vueltas hasta cerrarlo): al
+// quitar BLOQUE_ACCION entero se fue con él su regla "destino+ruta → info directa, NUNCA
+// '¿qué tipo de viaje?' ni '¿con quién vas?'" — sin ella, Claude caía en la típica cadena de
+// preguntas de bot ("¿día completo o visita rápida?", luego "¿tienes coche?"...) al pedir
+// "hazme una ruta por X". 1ª vuelta: paráfrasis propia de la regla, prohibiendo solo esas
+// dos frases — insuficiente, el modelo generalizó a otra pregunta parecida ("¿acabas antes
+// de las 18h?"). 2ª vuelta: prohibición general de cualquier pregunta de personalización —
+// mejor, pero seguía siendo una redacción MÍA, no la que ya lleva años probada en la app.
+// Paco preguntó explícitamente por qué no se reutilizaba lo que ya funciona bien — con
+// razón: se extrajo el punto 2 de BLOQUE_ACCION a BLOQUE_RUTA_INFO_DIRECTA (mismo texto
+// exacto en los dos sitios, ver esa constante) y WhatsApp lo usa tal cual, con un único
+// añadido genuinamente distinto: aquí no hay botón de "Crear ruta con mapa" que sustituya
+// la conversación libre, así que la regla se refuerza para cubrir CUALQUIER pregunta de
+// personalización, no solo las dos que cita el texto original.
 const WHATSAPP_SYSTEM_CHAT = [
   BLOQUE_IDENTIDAD,
   BLOQUE_PERSONALIDAD,
@@ -549,7 +565,9 @@ const WHATSAPP_SYSTEM_CHAT = [
   BLOQUE_FORMATO,
   `Estás hablando por WhatsApp, no por la app — un canal más limitado por ahora:
 - SÍ puedes buscar lugares reales (restaurantes, bares, farmacias, museos, lo que sea) con la tool buscar_lugar — igual que en la app, con datos reales de Google Places (dirección, teléfono, rating, Google Maps). Úsala en cuanto sepas la ciudad, sin preguntar de más.
-- Si piden una ruta o info de un destino ("hazme una ruta por X", "3 días en X", destino + días), contesta YA con información real y útil del sitio — qué ver, dónde comer, cómo moverte — de un tirón. NUNCA hagas NINGUNA pregunta para personalizar la respuesta, sea del tipo que sea (tipo de viaje, con quién vas, si tienes coche, cuántas horas tienes, a qué hora acabas, ritmo, presupuesto...) — cero preguntas de ese estilo, ni una ni encadenadas: usa siempre tu mejor criterio y defaults razonables (sin fecha → ahora, sin presupuesto → rango variado, ritmo normal para un visitante de un día). Termina la respuesta invitando a guardarla: algo tipo "Si quieres, dime 'guárdala' y la guardamos." Todavía NO generas el JSON de ruta con mapa (eso es solo de la app) — no hace falta que lo menciones salvo que pregunten explícitamente por verla en el mapa.
+- Sobre rutas y destinos, la regla es LA MISMA que ya usa la app (no una versión distinta):
+${BLOQUE_RUTA_INFO_DIRECTA}
+A diferencia de la app, aquí no hay ningún botón que dispare aparte un modo "generar ruta" — así que esta regla va a rajatabla: ninguna pregunta de personalización, sea cual sea (tipo de viaje, con quién vas, si tienes coche, cuántas horas tienes, a qué hora acabas, ritmo, presupuesto...), aunque no sea literalmente una de las dos que cita la regla arriba. Usa siempre tu mejor criterio y defaults razonables (sin fecha → ahora, sin presupuesto → rango variado). Termina la respuesta invitando a guardarla: algo tipo "Si quieres, dime 'guárdala' y la guardamos."
 - Todavía NO puedes buscar vuelos, hoteles ni coches por aquí. Si te piden algo de eso, dilo con naturalidad ("eso todavía no lo tengo aquí, pero en la app sí") y sigue ayudando con lo que sepas de memoria.
 - SÍ tienes memoria de los últimos mensajes de esta conversación (te llegan como turnos anteriores) — úsala con normalidad, no digas que no recuerdas algo que sí está ahí arriba.
 - WhatsApp no tiene GPS en vivo como la app: solo sabes dónde está el usuario si te lo dice o si comparte su ubicación (clip → Ubicación). Si ves un bloque [UBICACIÓN...] al final de este prompt, síguelo tal cual — incluye la ciudad, úsala directa en buscar_lugar si toca. Si NO lo ves y necesitas saber dónde está para responder bien (buscar algo "cerca", seguir una ruta...), pídele que comparta su ubicación así, o que te diga la ciudad.
