@@ -3268,8 +3268,15 @@ const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'busc
 // insistiera en seguir llamando a la tool. userCoords es el mismo dato que ya guarda
 // wa_location — solo se usa dentro de buscarLugar() como último recurso si la ciudad no
 // se puede geocodificar, exactamente igual que en el chat web.
+// Devuelve { text, usedTools } — no un string suelto — para que quien llame pueda distinguir
+// una respuesta de tool (búsqueda real de vuelo/hotel/coche/lugar) de una narrativa pura, y no
+// aplicarle cosas pensadas solo para narrativas (ver appendGuardarlaCta más abajo: bug real,
+// 25 sept 2026, "Cualquier día del mes" en medio de una búsqueda de vuelo no debe llevar la
+// invitación a guardar — con este flag se puede exigir "sin tool de por medio", no solo mirar
+// la forma del mensaje).
 async function waCallClaudeWithTools(env, system, messages, userCoords) {
   let msgs = [...messages];
+  let usedTools = false;
   for (let i = 0; i < 3; i++) {
     const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
@@ -3293,8 +3300,10 @@ async function waCallClaudeWithTools(env, system, messages, userCoords) {
     const data = await res.json();
     const toolUses = (data.content || []).filter(b => b.type === 'tool_use');
     if (data.stop_reason !== 'tool_use' || !toolUses.length) {
-      return (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
+      const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
+      return { text, usedTools };
     }
+    usedTools = true;
     msgs = [...msgs, { role: 'assistant', content: data.content }];
     const toolResults = await Promise.all(toolUses.map(async (tu) => ({
       type: 'tool_result',
@@ -3303,7 +3312,7 @@ async function waCallClaudeWithTools(env, system, messages, userCoords) {
     })));
     msgs = [...msgs, { role: 'user', content: toolResults }];
   }
-  return 'Se me ha liado buscando — vuelve a preguntarme.';
+  return { text: 'Se me ha liado buscando — vuelve a preguntarme.', usedTools };
 }
 
 // Detecta el país/ciudad mencionado en el mensaje (o guided_route) y carga los datos de
@@ -8890,9 +8899,10 @@ export default {
             const waLocationCtx = buildWaLocationCtx(locName, 0);
             const waCoords = { lat: parseFloat(waLat), lng: parseFloat(waLng) };
 
-            const reply = (await waCallClaudeWithTools(
+            const { text: locReplyText } = await waCallClaudeWithTools(
               env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: locationMarker }], waCoords
-            )) || `Vale, ya sé que estás en ${locName}.`;
+            );
+            const reply = locReplyText || `Vale, ya sé que estás en ${locName}.`;
             await sendWhatsAppMessage(env, from, reply);
 
             if (env.SALMA_KB) {
@@ -9160,9 +9170,15 @@ export default {
             } catch (_) {}
           }
 
-          const reply = appendGuardarlaCta((await waCallClaudeWithTools(
+          const { text: chatReplyText, usedTools } = await waCallClaudeWithTools(
             env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords
-          )) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.', body);
+          );
+          const rawReply = chatReplyText || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
+          // Si esta respuesta vino de una tool de búsqueda (vuelo/hotel/coche/lugar), NUNCA le
+          // pega la invitación a guardar — es una búsqueda de servicio, no una ruta (bug real,
+          // 25 sept 2026: "Cualquier día del mes" en medio de una búsqueda de vuelo la llevaba
+          // pegada sin sentido).
+          const reply = usedTools ? rawReply : appendGuardarlaCta(rawReply, body);
           await sendWhatsAppMessage(env, from, reply);
 
           if (env.SALMA_KB) {
