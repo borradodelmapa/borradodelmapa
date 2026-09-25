@@ -3883,6 +3883,10 @@ window._pendingShareId = new URLSearchParams(window.location.search).get('compar
     });
     const data = await res.json();
     if (res.ok && data.custom_token) {
+      // La URL se borró justo arriba (history.replaceState), así que un posible destino
+      // (ej. "premium") no puede viajar como query param — viaja en la propia respuesta
+      // del canje de código, ver buildAutoLoginLink()/wa-weblogin-verify en el Worker.
+      if (data.go) window._waLoginGo = data.go;
       await auth.signInWithCustomToken(data.custom_token);
     }
   } catch (e) {
@@ -3990,6 +3994,12 @@ auth.onAuthStateChanged(async (user) => {
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
       _openSharedRoute(shareId);
+    } else if (window._waLoginGo === 'premium') {
+      // Enlace de auto-entrada por WhatsApp con destino "premium" (ej. al tope de guías
+      // gratis) — mismo camino que ya usa pago=cancel: Perfil + el modal de Premium abierto.
+      window._waLoginGo = null;
+      showState('profile');
+      openCoinsModal();
     } else if (pagoParam === 'ok') {
       history.replaceState(null, '', '/');
       showState('profile');

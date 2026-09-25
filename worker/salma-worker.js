@@ -1167,12 +1167,17 @@ async function _waCreateAccount(env, from, profileName) {
 // tener que teclear su número otra vez en el navegador). Canjeable en
 // /wa-weblogin-verify por un custom token de Firebase — 10 min, un solo uso. Sin llamadas de
 // pago: KV + firmar un JWT, igual que el resto de este flujo.
-async function buildAutoLoginLink(env, uid) {
+// `goto` (opcional, ej. "premium") — a dónde debe ir la web tras entrar. NO se manda como
+// parámetro en la URL (`&go=...`): app.js:_tryWaAutoLogin() borra la URL entera nada más ver
+// `?entrada=`, antes de que nada pueda leer otro parámetro — probado en pantalla por Paco,
+// pasaba con TODOS los enlaces, no solo este. En su lugar viaja dentro del propio código de
+// un solo uso (junto al uid) y lo devuelve /wa-weblogin-verify en la respuesta del login.
+async function buildAutoLoginLink(env, uid, goto) {
   try {
     if (!env.SALMA_KB || !uid) return 'https://borradodelmapa.com';
     const ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
     const code = Array.from({ length: 10 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
-    await env.SALMA_KB.put('waweblogin:' + code, uid, { expirationTtl: 600 });
+    await env.SALMA_KB.put('waweblogin:' + code, JSON.stringify({ uid, go: goto || null }), { expirationTtl: 600 });
     return 'https://borradodelmapa.com/?entrada=' + code;
   } catch (e) {
     console.error('[WhatsApp] Error generando enlace de auto-entrada:', e.message);
@@ -9080,11 +9085,12 @@ export default {
           if (isSaveRouteRequest(body)) {
             const waPlan = await waGetUserPlan(env, linkedUid);
             const gate = await usageGate(env, waPlan, 'guide');
-            const link = await buildAutoLoginLink(env, linkedUid);
             if (!gate.ok) {
-              await sendWhatsAppMessage(env, from, `${gate.message} Entra aquí para pasarte a Premium: ${link}`);
+              const premiumLink = await buildAutoLoginLink(env, linkedUid, 'premium');
+              await sendWhatsAppMessage(env, from, `${gate.message} Entra aquí para pasarte a Premium: ${premiumLink}`);
               return;
             }
+            const link = await buildAutoLoginLink(env, linkedUid);
             let waHistoryForSave = [];
             if (env.SALMA_KB) {
               try { waHistoryForSave = JSON.parse((await env.SALMA_KB.get('wa_history:' + from)) || '[]'); } catch (_) {}
@@ -9261,13 +9267,17 @@ export default {
           return new Response(JSON.stringify({ error: 'bad_code' }), { status: 400, headers: corsH });
         }
         const key = 'waweblogin:' + code;
-        const uid = await env.SALMA_KB.get(key);
-        if (!uid) {
+        const raw = await env.SALMA_KB.get(key);
+        if (!raw) {
           return new Response(JSON.stringify({ error: 'invalid_code', message: 'Ese enlace ya caducó o se usó — vuelve a pedir uno por WhatsApp.' }), { status: 400, headers: corsH });
         }
         await env.SALMA_KB.delete(key);
+        // Formato nuevo: JSON {uid, go}. Compatibilidad hacia atrás: un código emitido antes
+        // de este cambio guarda el uid en texto plano — si JSON.parse falla, se usa tal cual.
+        let uid = raw, go = null;
+        try { const parsed = JSON.parse(raw); if (parsed && parsed.uid) { uid = parsed.uid; go = parsed.go || null; } } catch (_) {}
         const customToken = await mintFirebaseCustomToken(env, uid);
-        return new Response(JSON.stringify({ custom_token: customToken }), { headers: corsH });
+        return new Response(JSON.stringify({ custom_token: customToken, go }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
