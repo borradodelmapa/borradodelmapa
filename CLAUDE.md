@@ -975,15 +975,36 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 2. ~~Panel admin: tipo de registro (WhatsApp/Google)~~ — **HECHO** en la misma sesión que
    la tarea 1 (`/admin/stats` expone `phone`/`created_via`; panel `2026-09-26.3`). Salió
    de necesitar distinguir cuentas de WhatsApp para poder probar el borrado.
-3. **Personalizar WhatsApp con la imagen de Borrado del Mapa** — el perfil del número de
-   Twilio (foto/nombre visible) y que también se vea así para usuarios nuevos. Sin
-   empezar.
-4. **Revisar los textos exactos** que se mandan por WhatsApp al registrarse y a quien ya
-   está registrado — pulir la redacción, no solo que funcionen. Sin empezar.
-5. **Que WhatsApp funcione igual que la web**: geolocalización, crear guías, consultar
-   vuelos... todo. Esto es F5.3 (tools + memoria por WhatsApp), ya apuntado más arriba
-   como "sin empezar, sin fecha" — Paco confirma que quiere el alcance completo, no una
-   versión recortada.
+3. **Personalizar WhatsApp con la imagen de Borrado del Mapa** — **BLOQUEADA, mismo motivo
+   que F5.5**: el número de Sandbox (+14155238886) es de Twilio, compartido por todos los
+   que prueban WhatsApp con Twilio en el mundo — no se puede personalizar mientras no haya
+   número propio (que exige WhatsApp Business Account verificado → alta de autónomo/SL,
+   decisión de negocio pendiente de Paco). El "Ok" doble que manda Twilio al unirse al
+   Sandbox es del mismo origen — tampoco se puede tocar ni silenciar desde nuestro código.
+4. **Revisar los textos exactos** — 12 mensajes revisados con Paco el 25 sept 2026 (alta,
+   ya registrado, vinculación con código, errores). El único cambio real de contenido fue
+   quitar el atajo de respuestas de KV (ver punto 5) — el resto de textos, tal cual están,
+   sin más cambios pedidos por ahora.
+5. **Que WhatsApp funcione igual que la web (F5.3)** — EN MARCHA, 25 sept 2026. Checklist
+   acordado con Paco (ver `CLAUDE-historial.md` para la tabla completa función por
+   función): respuestas KV → historial de conversación → ubicación → buscar sitios → resto
+   de tools → los que no caben en chat (rutas completas, mapa en vivo, pagos...) con enlace
+   de auto-entrada a la web.
+   - **Respuestas instantáneas de KV: HECHO Y REVERTIDO en la misma sesión.** Se implementó
+     (reutilizando la detección de país del chat principal, extraída a
+     `detectCountryAndKV()`), se probó, y Paco vio en pantalla que la plantilla fija se
+     quedaba corta contra Claude (enchufes de Japón: la plantilla no distinguía 50Hz/60Hz
+     por zona ni qué adaptador necesita un español). **Decisión: WhatsApp llama siempre a
+     Claude**, como la web — se pierde el coste 0 de esta vía pero la calidad es constante.
+     `detectCountryAndKV()`/`tryKVDirectAnswer()` siguen vivas y en uso por el chat
+     principal, solo se dejaron de llamar desde `/whatsapp`.
+   - De propina, un bug real encontrado y arreglado en el camino (afecta también, aunque
+     rara vez, al chat principal): la lista de palabras a ignorar al geocodificar con
+     Nominatim no incluía palabras como "enchufe" — un mensaje en minúsculas sin "en X"
+     capitalizado ("q enchufe hay en japon") geocodificaba "enchufe" ANTES que el país real
+     y devolvía España en vez de Japón. Corregido ampliando esa lista.
+   - **Siguiente paso: punto 2, historial de conversación.**
+   - **Worker Version ID vigente: `3647f893-2891-4f20-a9b3-3b67be93f884`.**
 
 ### 🔴 Crítico
 
