@@ -1229,10 +1229,27 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
        `isResetRequest()` — frases como "reinicia la conversación", "olvida todo" o "borra
        el historial" borran `wa_history`/`wa_location` de ese número sin llamar a Claude
        (coste 0). Sirve para probar limpio y para que cualquier usuario real pueda empezar
-       de cero. **Desplegado, pendiente de confirmar en pantalla por Paco** (probar diciendo
-       "reinicia la conversación" y volviendo a pedir el vuelo a Koh Samui desde cero).
-   - **Worker Version ID vigente: `82e57261-89a4-453b-a201-a5b4a934d820`** (despliegues
-     intermedios de este punto: `90eeb8af-f3eb-4a78-9dd0-e66a8ac03820` → BLOQUE_ACCION
+       de cero. **Este fix funcionó** (Paco confirmó "Hecho, empezamos de cero" en pantalla),
+       pero al repetir la prueba EN LIMPIO el bug de invención seguía — ver el siguiente punto.
+     - **Bug real, mismo día, con la conversación ya limpia: la invención era genuina, no
+       solo por historial contaminado — Koh Samui no tiene vuelo internacional directo.**
+       Paco, tajante: **"cojones que de el resultado correcto"** — no quería un aviso de "no
+       lo sé", quería el dato real. Causa de fondo: Koh Samui (USM) no tiene vuelo
+       internacional directo (Bangkok Airways no interlina con los vuelos de largo radio), así
+       que `buscar_vuelos` en un solo tramo origen→USM siempre da 0 resultados reales en
+       Duffel — y sin una instrucción mejor, Claude rellenaba el hueco con presupuestos
+       "orientativos" y aerolíneas de memoria (Qatar, Emirates, Turkish) en vez de admitir que
+       no había encontrado nada real. Arreglo: instrucción explícita de partir la búsqueda en
+       DOS llamadas reales a `buscar_vuelos` (origen→hub regional, ej. Bangkok, y hub→destino
+       final) cuando la búsqueda directa a una isla/ciudad pequeña no da resultados, y
+       presentar el itinerario con los DOS precios REALES de esas tools sumados — nunca una
+       cifra inventada. Solo si ni el tramo al hub encuentra nada se dice que no hay vuelos.
+       **Desplegado, pendiente de confirmar en pantalla por Paco** (volver a pedir el vuelo a
+       Koh Samui y comprobar que da un itinerario con precios reales Madrid→Bangkok +
+       Bangkok→Koh Samui, no una cifra "orientativa").
+   - **Worker Version ID vigente: `def5f8bc-98f2-4ca0-b343-2a78735984fb`** (despliegues
+     intermedios de este punto: `82e57261-89a4-453b-a201-a5b4a934d820` → frase de reinicio de
+     conversación (funcionó, pero no era la causa de fondo), `90eeb8af-f3eb-4a78-9dd0-e66a8ac03820` → BLOQUE_ACCION
      completo en WhatsApp (funcionó, pero el historial de pruebas ya contaminado seguía
      repitiendo la invención vieja), `1dd2ed1b-cdfe-4e0d-877e-571cf7eb878b` → fix fecha vaga
      (funcionó, pero destapó el bug de invención), `f5d8c0a6-a810-4d78-856d-5bcbafe223f6` →
@@ -1244,7 +1261,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
-     guardar rutas, este último → frase de reinicio de conversación).
+     guardar rutas, este último → búsqueda de vuelos por hub real a islas sin conexión directa).
 
 ### 🔴 Crítico
 
