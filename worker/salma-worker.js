@@ -8814,6 +8814,17 @@ export default {
           // detectCountryAndKV()/tryKVDirectAnswer() sigue viva y en uso por el chat
           // principal (web); no se ha tocado, solo se ha dejado de llamar aquí.
 
+          // Historial de conversación (25 sept 2026, F5.3 punto 2) — WhatsApp no tiene un
+          // navegador que guarde los últimos turnos como hace la web, así que lo guarda el
+          // propio Worker en KV. `wa_history:{numero}` — últimos 20 turnos (40 mensajes,
+          // igual que la web), caducidad 6h de inactividad: pasado ese rato se trata como
+          // conversación nueva, para no mezclar preguntas de hoy con las de hace días.
+          const waHistKey = 'wa_history:' + from;
+          let waHistory = [];
+          if (env.SALMA_KB) {
+            try { waHistory = JSON.parse((await env.SALMA_KB.get(waHistKey)) || '[]'); } catch (_) { waHistory = []; }
+          }
+
           const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
             method: 'POST',
             headers: {
@@ -8825,7 +8836,7 @@ export default {
               model: 'claude-sonnet-4-6',
               max_tokens: 600,
               system: WHATSAPP_SYSTEM_CHAT,
-              messages: [{ role: 'user', content: body }],
+              messages: [...waHistory, { role: 'user', content: body }],
             }),
           });
           if (!waRes.ok) {
@@ -8836,6 +8847,13 @@ export default {
           const reply = (waData.content?.[0]?.text || '').trim()
             || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
           await sendWhatsAppMessage(env, from, reply);
+
+          if (env.SALMA_KB) {
+            try {
+              const updatedHistory = [...waHistory, { role: 'user', content: body }, { role: 'assistant', content: reply }].slice(-40);
+              await env.SALMA_KB.put(waHistKey, JSON.stringify(updatedHistory), { expirationTtl: 21600 });
+            } catch (e) { console.error('[WhatsApp] Error guardando historial:', e.message); }
+          }
         } catch (e) {
           console.error('[WhatsApp] Error generando respuesta:', e.message);
           await sendWhatsAppMessage(env, from, 'Se me ha cruzado un cable — dime otra vez qué necesitas.').catch(() => {});
