@@ -3610,6 +3610,29 @@ function waExtractHistoriaLugar(text) {
   return { text: m ? text.replace(m[0], '').trim() : text, place: m ? m[1].trim().slice(0, 120) : null };
 }
 
+// Versión corta de la historia, pensada para caber en UN solo mensaje (Paco, 25 sept 2026: "tres
+// mensajes más gasto, ¿se puede ajustar a uno?"): título, descripción y cada hito en una línea
+// (su subtítulo), acabando en pregunta. La versión completa (waFormatHistoria) solo si dice "sí".
+function waFormatHistoriaCorta(h) {
+  if (!h) return '';
+  const cierre = '\n\n¿Te gusta? ¿Quieres que te explique más?';
+  const head = [`${h.emoji || '📖'} *${h.title || 'Historia'}*`];
+  if (h.description) head.push(h.description);
+  let out = head.join('\n') + '\n';
+  for (const p of (h.paradas || []).slice(0, 6)) {
+    const y = typeof p.year === 'number' ? (p.year < 0 ? `${-p.year} a.C.` : String(p.year)) : '';
+    const line = `\n*${y ? y + ' — ' : ''}${p.title || ''}*${p.subtitle ? ': ' + p.subtitle : ''}`;
+    if ((out + line + cierre).length > 1500) break;
+    out += line;
+  }
+  return out + cierre;
+}
+
+function isWaYesMore(message) {
+  const m = _nmNorm(message).replace(/[¿?¡!.,]/g, '').trim();
+  return m.length <= 30 && /^(si|vale|venga|dale|ok|claro|mas|si mas|cuentame mas|explicame mas|quiero mas|si por favor|si cuentame|por favor)\b/.test(m);
+}
+
 function waFormatHistoria(h) {
   if (!h) return '';
   const lines = [`${h.emoji || '📖'} *${h.title || 'Historia'}*`];
@@ -9684,6 +9707,24 @@ export default {
           // (getHistoriaLugar: Claude Haiku + foto de Google, caché KV permanente por lugar).
           // Coste (§8): solo la 1ª vez que alguien pide un lugar (~0,005 € Haiku + 1 búsqueda de
           // Google ~0,03 €); después sale de caché, gratis.
+          // "sí"/"más" justo después de la historia corta → versión completa (sale de la caché,
+          // sin coste de API). Cualquier otra cosa cancela la oferta.
+          let waHistMore = null;
+          try { waHistMore = await env.SALMA_KB.get('wa_hist_more:' + from); } catch (_) {}
+          if (waHistMore) {
+            try { await env.SALMA_KB.delete('wa_hist_more:' + from); } catch (_) {}
+            if (!waImageBlock && isWaYesMore(body)) {
+              try {
+                const { historia } = await getHistoriaLugar(env, waHistMore);
+                await sendWhatsAppMessage(env, from, waFormatHistoria(historia));
+              } catch (e) {
+                console.error('[WhatsApp] Error historia completa:', e.message);
+                await sendWhatsAppMessage(env, from, 'Se me ha atascado — pídemela otra vez en un rato.');
+              }
+              return;
+            }
+          }
+
           const waHistDe = waImageBlock ? null : String(body).match(/^\s*(?:cu[eé]ntame\s+)?(?:la\s+)?historia\s+de(?:l)?\s+(.{2,120})$/i);
           if (!waImageBlock && (waHistDe || isWaHistoriaCommand(body))) {
             let place = waHistDe ? waHistDe[1].replace(/[?¿!.]+$/, '').trim() : null;
@@ -9698,7 +9739,10 @@ export default {
             try {
               const { historia } = await getHistoriaLugar(env, place);
               await usageRecord(env, planH, { msgs: 1 });
-              await sendWhatsAppMessage(env, from, waFormatHistoria(historia) || 'No he podido montar esa historia ahora mismo.');
+              // Versión corta en UN mensaje + "¿Te explico más?" (Paco, 25 sept 2026).
+              const corta = waFormatHistoriaCorta(historia);
+              if (corta) { try { await env.SALMA_KB.put('wa_hist_more:' + from, place, { expirationTtl: 3600 }); } catch (_) {} }
+              await sendWhatsAppMessage(env, from, corta || 'No he podido montar esa historia ahora mismo.');
             } catch (e) {
               console.error('[WhatsApp] Error historia:', e.message);
               await sendWhatsAppMessage(env, from, 'Se me ha atascado la historia — pídemela otra vez en un rato.');
