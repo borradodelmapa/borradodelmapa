@@ -1104,9 +1104,14 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
         §8): esto es EXACTAMENTE el mismo coste que ya paga "Crear ruta con mapa" en la web**
         (1 Claude Sonnet hasta 20K tokens + verify Google Places por parada) — no es un coste
         nuevo, es la misma acción ya tarificada, ahora también accesible desde WhatsApp.
-     3. **Enlace que abre la ruta YA guardada directamente** (sin tener que buscarla en "Mis
-        Rutas") — de momento el enlace es el de auto-entrada normal, sin abrir directo esa
-        guía. Mejora pendiente, no bloqueante.
+     3. **Enlace que abre la ruta YA guardada directamente — HECHO, desplegado, pendiente de
+        confirmar en pantalla.** Commit `6885098a`, **Worker `4b37878b-878b-4325-aae6-aff4eaab790e`**
+        (comprobado contra `/version`), `app.js?v=166`. El código de un solo uso lleva
+        `go: 'ruta:{mapId}'` (mismo mecanismo que `premium`); `app.js` lo recoge en
+        `onAuthStateChanged` y llama a `salma.cargarGuia(mapId)` (mismo camino que Mis Viajes:
+        vista de itinerario con mapa). Cubre también "mapa por WhatsApp con enlace a la web"
+        (el enlace abre la guía sobre el mapa); pagos ya iba con el enlace `premium`. Sin coste
+        (KV + una lectura de Firestore). Probar: pedir ruta → "guárdala" → tocar el enlace.
    - **Bug real encontrado y arreglado, 25 sept 2026, desplegado y confirmado en pantalla
      por Paco: cadena de preguntas al pedir una ruta.** "Hazme una ruta por Santillana del
      Mar" daba la info correcta pero terminaba preguntando "¿día completo o visita rápida?"
