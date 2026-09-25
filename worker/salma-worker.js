@@ -3186,6 +3186,23 @@ function isSaveRouteRequest(message) {
   return /\bguardala\b|\bguardamela\b|\bguarda(r)?\s+(esta\s+|la\s+)?ruta\b/.test(m);
 }
 
+// Invitación a guardar tras una respuesta de ruta — NO se deja a que Claude decida incluirla:
+// confirmado en pantalla por Paco (25 sept 2026) que aun pidiéndoselo explícitamente en el
+// prompt, seguía sin ponerla (prefería ofrecer "te busco restaurantes" en su lugar) — una
+// instrucción de texto no garantiza que el modelo la siga siempre. Se añade aquí de forma
+// determinista si el mensaje del usuario era de ruta/destino (mismo detector que la web,
+// isRouteRequest/isDaysDestination) y la respuesta no la menciona ya.
+function appendGuardarlaCta(reply, userMessage) {
+  if (!reply) return reply;
+  // isRouteRequest/isDaysDestination (compartidas con la web) no cazan "hazme una ruta por X"
+  // sin número de días — se añade aquí, local a WhatsApp, sin tocar esas dos funciones.
+  const looksLikeRouteAsk = isRouteRequest(userMessage) || isDaysDestination(userMessage) ||
+    /\bhazme\s+una\s+ruta\b|\britinerario\s+por\b/i.test(userMessage || '');
+  if (!looksLikeRouteAsk) return reply;
+  if (/gu[aá]rdala/i.test(reply)) return reply;
+  return reply.trim() + '\n\nSi quieres, dime "guárdala" y la guardamos.';
+}
+
 // Genera y guarda una ruta real desde WhatsApp (F5.3, paso 2, 25 sept 2026) — reutiliza el
 // MISMO proceso que la web para "Crear ruta con mapa" (Tiempo 2): convertProseToRouteJson()
 // convierte en JSON el plan en prosa que Salma ya dio, y verifyAllStops() lo verifica contra
@@ -9129,9 +9146,9 @@ export default {
             } catch (_) {}
           }
 
-          const reply = (await waCallClaudeWithTools(
+          const reply = appendGuardarlaCta((await waCallClaudeWithTools(
             env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords
-          )) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
+          )) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.', body);
           await sendWhatsAppMessage(env, from, reply);
 
           if (env.SALMA_KB) {
