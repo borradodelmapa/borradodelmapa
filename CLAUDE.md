@@ -1009,11 +1009,40 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      (`wa_history:{numero}`, últimos 20 turnos/40 mensajes, caducidad 6h de inactividad —
      pasado ese rato se trata como conversación nueva). Solo el chat normal lo toca; los
      flujos de alta/login no.
-   - **Siguiente paso: punto 1, ubicación** — pregunta ligera ("¿sigues en Logroño?") +
-     detectar ciudad si el usuario la escribe, sin depender de GPS en vivo (Twilio no
-     soporta ubicación en vivo de WhatsApp, solo puntual — confirmado con búsqueda web el
-     25 sept 2026).
-   - **Worker Version ID vigente: `2a37f7e7-3834-40f7-a1ff-6139b384b7f8`.**
+   - **Punto 1, ubicación: HECHO y confirmado en pantalla por Paco, 25 sept 2026 — tres
+     vueltas de arreglo antes de darlo por bueno.** Twilio no soporta "ubicación en vivo"
+     de WhatsApp (confirmado con búsqueda web), solo mensajes puntuales (Latitude/Longitude,
+     con Body vacío) — se guarda en KV (`wa_location:{numero}`) con caducidad de 90 min y se
+     trata como un dato que envejece en dos tramos: fresca (<20 min) se usa directa
+     mencionándola; entre 20-90 min Salma pregunta "¿sigues en X?" antes de darla por buena;
+     pasados 90 min caduca sola y es como si no hubiera ubicación.
+     1. Primer intento: al compartir ubicación tras hablar de destinos hipotéticos
+        (Marruecos/Japón), Salma confundía la ubicación real con esos destinos y le devolvía
+        la pregunta ("¿en qué ciudad de Marruecos o Japón quieres comer?") en vez de usar el
+        sitio real. Arreglado dejando explícito en el prompt que la ubicación compartida es
+        "de verdad, ahora mismo, en la vida real", no un destino de viaje del que se haya
+        hablado antes.
+     2. Segundo bug, más grave ("se queda callada"): compartir ubicación mandaba un mensaje
+        fijo de confirmación y paraba ahí SIN llamar a Claude — si justo antes había una
+        pregunta pendiente ("dónde ir a cenar"), se quedaba sin responder hasta que Paco
+        insistía. Arreglado: ahora compartir ubicación llama a Claude con el historial (que
+        tiene la pregunta pendiente) + un aviso de que se acaba de compartir ubicación, para
+        que confirme la ciudad y siga con lo que se estuviera hablando en una sola respuesta.
+        Extraído `buildWaLocationCtx()` para no duplicar la lógica de frescura entre el chat
+        normal y este camino. **Aviso de coste (protocolo §8, aprobado por Paco):** compartir
+        ubicación pasa de costar 0 (antes, sin llamar a Claude) a costar como un mensaje
+        normal de chat.
+     3. Confirmado por Paco que el contenido de la respuesta en sí es correcto para ahora
+        ("sigo sin poder buscarte sitios para comer por WhatsApp, para eso la app mejor") —
+        WhatsApp todavía no tiene el tool `buscar_lugar` conectado (eso es el punto 6,
+        siguiente en la lista), así que redirigir a la app en vez de inventar una búsqueda es
+        el comportamiento esperado, no un bug.
+   - **Siguiente paso: punto 6, buscar_lugar** — conectar el tool de Google Places a
+     WhatsApp para que sí pueda buscar restaurantes/sitios reales por este canal.
+   - **Worker Version ID vigente: `c7612d4a-c8b8-482b-9040-06dcb0537d19`** (despliegues
+     intermedios de este punto: `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
+     `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, este último → fix
+     "se queda callada").
 
 ### 🔴 Crítico
 
