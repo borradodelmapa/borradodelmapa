@@ -592,8 +592,12 @@ estas diferencias reales de este canal:
   todavía NO están conectados en este canal. Si el texto de arriba te pide usar algo que no
   tienes aquí, dilo claro ("eso todavía no lo puedo hacer por WhatsApp, pruébalo en la app")
   — NUNCA finjas que lo has hecho ni inventes el dato que esa herramienta te habría dado.
-- NUNCA generes SALMA_ACTION ni HISTORIA_LUGAR en este canal — aquí no hay nada que los
-  interprete, se colarían tal cual en el mensaje que le llega al usuario.
+- NUNCA generes SALMA_ACTION en este canal — aquí no hay nada que lo interprete, se colaría
+  tal cual en el mensaje que le llega al usuario. HISTORIA_LUGAR SÍ, igual que en la app
+  (el sistema lo quita del mensaje y le ofrece al usuario contarle la historia).
+- Fotos: si te llega una imagen, analízala como dice FOTOS DEL VIAJERO. Aquí la foto NO se
+  guarda en la galería de la web — no digas que se ha guardado.
+- Notas de voz: te llegan ya pasadas a texto, marcadas con [Nota de voz]. Respóndelas normal.
 - Sin botón "Crear ruta con mapa" que sustituya la conversación libre: la regla de destino/
   ruta → información directa, nunca preguntes personalización (punto 2 de arriba) va a
   rajatabla aquí para CUALQUIER pregunta de personalización, no solo las que cita el texto
@@ -623,6 +627,8 @@ estas diferencias reales de este canal:
   detalle.`,
   // Notas por WhatsApp (25 sept 2026): el MISMO bloque que la web, tal cual.
   BLOQUE_NOTAS,
+  // Fotos por WhatsApp (25 sept 2026): el MISMO bloque de visión que la web, tal cual.
+  BLOQUE_VISION,
 ].join('\n\n');
 
 // ── Prompt PLAN: sin restricción de títulos → para días+destino (formato estructurado)
@@ -3304,7 +3310,7 @@ function stripWaLeakedMarkers(text) {
   if (!text) return text;
   return text
     .split('\n')
-    .filter(line => !/^\s*(SALMA_ACTION|HISTORIA_LUGAR)\s*:/i.test(line))
+    .filter(line => !/^\s*(SALMA_ACTION|HISTORIA_LUGAR|FOTO_TAG)\s*:/i.test(line))
     .join('\n')
     .trim();
 }
@@ -3363,6 +3369,116 @@ async function waGenerateAndSaveRoute(env, uid, sourceText) {
 // nuevo): ampliar esta lista es lo único que hace falta para que WhatsApp pueda usarlas.
 const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'buscar_hotel', 'buscar_coche', 'guardar_nota'].includes(t.name));
 
+// Historia de un lugar (Claude Haiku + foto de Google Places, caché KV permanente). Extraída del
+// endpoint /historia-lugar el 25 sept 2026 para usarla también desde WhatsApp — misma lógica,
+// mismo prompt, misma caché. Devuelve { historia, source: "cache"|"claude" } o lanza.
+async function getHistoriaLugar(env, place, lat, lng) {
+  const placeName = place.trim();
+  // Sin tildes: "Córdoba" y "Cordoba" son el mismo lugar y deben compartir entrada (antes "Córdoba" → "c-rdoba").
+  const slug = placeName.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  // Nombres homónimos existen en sitios distintos (ej. "Cementerio de los Ingleses"
+  // en Lisboa y en Camariñas) — si hay coordenadas, se meten en la clave de caché
+  // (bucket ~11km) para que no se pisen entre sí durante los 30 días de TTL.
+  const hasCoords = typeof lat === 'number' && typeof lng === 'number';
+  const geoBucket = hasCoords ? `:${lat.toFixed(1)}:${lng.toFixed(1)}` : '';
+  const kvKey = `historia:${slug}${geoBucket}`;
+
+  // 1. Cache KV
+  if (env.SALMA_KB) {
+    try {
+      const cached = await env.SALMA_KB.get(kvKey);
+      if (cached) {
+        return { historia: JSON.parse(cached), source: 'cache' };
+      }
+    } catch (_) {}
+  }
+
+  // 2. Generar con Claude Haiku
+  const geoHint = hasCoords
+    ? `\n\nUBICACIÓN REAL DEL USUARIO: lat ${lat}, lng ${lng}. Si existe más de un lugar con el nombre o similar a "${placeName}" (nombres homónimos, tipo "Cementerio de los Ingleses" en Lisboa Y en Camariñas), usa el que esté geográficamente cerca de esas coordenadas — NUNCA el más famoso o más documentado si no es el que está cerca. Ante la duda de cuál es el real en esa zona, dilo en la propia "description" en vez de inventar o asumir el homónimo equivocado.`
+    : '';
+  const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.${geoHint}
+
+Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia. Ojo: abreviaturas típicas de Google Maps como "Rte." (restaurante), "Avda."/"Av." (avenida), "C/" (calle), "Pza." (plaza) NO indican una carretera ni un corredor — son solo el nombre de un local o dirección; genera la historia de ESE lugar concreto (el negocio, el edificio, la calle), no de una ruta ni de una persona a la que haga referencia el nombre.
+
+{
+itle": "Nombre: subtítulo histórico",
+escription": "Descripción de 1-2 frases sobre la relevancia histórica del lugar",
+moji": "🏛️",
+ategory": "Europa|Asia|América|África|Oceanía",
+aradas": [
+{
+  "year": 1492,
+  "title": "Título del hito histórico",
+  "subtitle": "Una frase que contextualiza",
+  "content": "Párrafo narrativo de 3-5 frases explicando qué ocurrió, por qué importa y cómo afectó al lugar. Directo, sin paja.",
+  "key_facts": ["Dato clave 1", "Dato clave 2", "Dato clave 3"]
+}
+
+}
+
+REGLAS:
+- Entre 4 y 6 paradas cronológicas cubriendo los momentos más importantes
+- Los años pueden ser negativos (a.C.) si es relevante
+- El emoji debe representar el lugar o su cultura (bandera, monumento, símbolo)
+- Contenido en español, tono cercano y directo
+- Solo devuelve el JSON, sin markdown ni explicaciones`;
+
+  try {
+    // 2a. Claude + Places en paralelo
+    const claudePromise = fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1800,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+      signal: AbortSignal.timeout(20000),
+    });
+
+    const placesPromise = (async () => {
+      if (!env.GOOGLE_PLACES_KEY) return null;
+      const locBias = (lat && lng) ? `&location=${lat},${lng}&radius=50000` : '';
+      const r = await fetch(
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}&language=es${locBias}&key=${env.GOOGLE_PLACES_KEY}`,
+        { signal: AbortSignal.timeout(5000) }
+      );
+      const d = await r.json();
+      return d.results?.[0]?.photos?.[0]?.photo_reference || null;
+    })().catch(() => null);
+
+    const [claudeRes, photoRef] = await Promise.all([claudePromise, placesPromise]);
+
+    if (!claudeRes.ok) throw new Error('Claude ' + claudeRes.status);
+
+    const claudeData = await claudeRes.json();
+    const raw = (claudeData.content?.[0]?.text || '').trim();
+
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Claude no devolvió JSON válido');
+
+    const historia = JSON.parse(jsonMatch[0]);
+    historia.id = slug;
+    if (photoRef) historia.photo_ref = photoRef;
+
+    // 3. Guardar en KV PARA SIEMPRE (antes 30 días): la historia de un lugar no cambia y cada generación cuesta
+    // Claude + una búsqueda de Google. Se espera la escritura (sin await podía perderse). Si alguna historia sale
+    // mal, se purga a mano: `wrangler kv key delete historia:<slug>[:lat:lng]`.
+    if (env.SALMA_KB) {
+      try { await env.SALMA_KB.put(kvKey, JSON.stringify(historia)); } catch (_) {}
+    }
+
+    return { historia, source: 'claude' };
+  } catch (e) {
+    throw e;
+  }
+}
+
 // guardar_nota por WhatsApp (25 sept 2026) — en la web la guarda el navegador
 // (notas.js:create() tras el evento save_nota); aquí no hay navegador, así que la escribe el
 // Worker con su cuenta de servicio en la MISMA colección users/{uid}/notas/{id} y con el
@@ -3408,6 +3524,175 @@ async function waSaveNota(env, uid, nd) {
   }
 }
 
+// ═══ WhatsApp — ayuda, recordatorios, avisos, fallo, historia, fotos y voz (25 sept 2026) ═══
+// Pedido por Paco: que el usuario sepa todo lo que puede hacer por WhatsApp, recordatorios de
+// vez en cuando sin molestar, avisos antes de llegar al tope, poder reiniciar si Salma se lía,
+// "díselo a tus amigos", reportar fallos, fotos, notas de voz e historia de los lugares.
+// Regla: los avisos los añade el CÓDIGO (deterministas) y van DENTRO del mismo mensaje de
+// respuesta, nunca como mensaje aparte (en producción Twilio cobra por mensaje enviado).
+
+function waHelpText(profileName) {
+  const n = profileName ? ' ' + String(profileName).split(' ')[0] : '';
+  return `¡Hola${n}! Soy Salma, tu compañera de viaje. Por aquí puedo:\n\n` +
+    `✈️ *Vuelos* reales — "vuelo Madrid–Roma en octubre"\n` +
+    `🏨 *Hoteles* — "hotel en Oporto del 3 al 5"\n` +
+    `📍 *Sitios cerca de ti* — compárteme tu ubicación (clip → Ubicación) y pídeme dónde comer, una farmacia...\n` +
+    `🗺️ *Guías de viaje* — "3 días en Ronda"; dime *guárdala* y te la dejo en la web con mapa\n` +
+    `📝 *Notas y recordatorios* — "apúntame que..." / "recuérdame el 3 de octubre..."\n` +
+    `📷 *Fotos* — mándame un monumento, un plato o un cartel y te digo qué es\n` +
+    `🎙️ *Notas de voz* — háblame si no te apetece escribir\n` +
+    `📖 *Historia* — de monumentos, pueblos y países\n\n` +
+    `Si me lío, escribe *reinicia* y empezamos de cero. Si algo falla, escribe *fallo:* y lo que ha pasado. ` +
+    `Para ver esto otra vez, escribe *ayuda*.`;
+}
+
+function isWaHelpCommand(message) {
+  return /^(ayuda|menu|help|que puedes hacer\??|que sabes hacer\??|opciones)$/.test(_nmNorm(message).replace(/[¿?¡!.]/g, '').trim());
+}
+
+// "fallo: no me encuentra el hotel" / "bug ..." → devuelve el texto de la nota, o null.
+function waFalloNote(message) {
+  const m = String(message || '').trim().match(/^(fallo|bug|reportar|reporte)\b\s*[:\-–]?\s*([\s\S]*)$/i);
+  return m ? (m[2].trim() || '(sin descripción)') : null;
+}
+
+function isWaHistoriaCommand(message) {
+  return /^(historia|cuentame (la |su )?historia|si,? cuentame(la)?|quiero la historia)$/.test(_nmNorm(message).replace(/[¿?¡!.]/g, '').trim());
+}
+
+// Usuario molesto o Salma equivocándose → recordarle que puede reiniciar.
+function isWaFrustrated(message) {
+  const m = _nmNorm(message);
+  return /\bno es eso\b|\bte equivocas\b|\bte has equivocado\b|\bno me (sirve|entiendes|has entendido)\b|\bno entiendes\b|\ba ?ti (que|q) te importa\b|\bno funciona\b|\binutil\b|\bque dices\b|\beso es mentira\b|\bte lo estas inventando\b|\bno te he pedido\b/.test(m);
+}
+
+const WA_TIPS = [
+  '📍 ¿Sabías que si me compartes tu ubicación (clip → Ubicación) te busco sitios cerca de ti?',
+  '📝 Dime "apúntame..." y lo guardo en tus notas — luego lo ves también en la web.',
+  '✈️ Te busco vuelos reales con precio: "vuelo Madrid–Lisboa en noviembre".',
+  '🏨 También hoteles: "hotel en Sevilla del 10 al 12".',
+  '🗺️ Pídeme una ruta y dime "guárdala": te la dejo en la web con mapa y paradas verificadas.',
+  '📷 Mándame una foto de un monumento, un plato o un cartel y te digo qué es.',
+  '🎙️ Si vas con prisa, mándame una nota de voz.',
+  '🔄 Si alguna vez me lío, escribe "reinicia" y empezamos de cero.',
+  '❓ Escribe "ayuda" y te enseño todo lo que puedo hacer por aquí.',
+];
+
+// Un recordatorio cada 5 respuestas normales, rotando. Contador por número en KV (30 días).
+async function waMaybeTip(env, from) {
+  if (!env.SALMA_KB) return '';
+  try {
+    const k = 'wa_tipn:' + from;
+    const n = (parseInt((await env.SALMA_KB.get(k)) || '0', 10) || 0) + 1;
+    await env.SALMA_KB.put(k, String(n), { expirationTtl: 60 * 60 * 24 * 30 });
+    if (n % 5 !== 0) return '';
+    return WA_TIPS[(n / 5 - 1) % WA_TIPS.length];
+  } catch (_) { return ''; }
+}
+
+// "Díselo a tus amigos" — como mucho una vez por semana por número.
+async function waMaybeReferral(env, from) {
+  if (!env.SALMA_KB) return '';
+  try {
+    const k = 'wa_ref:' + from;
+    if (await env.SALMA_KB.get(k)) return '';
+    await env.SALMA_KB.put(k, '1', { expirationTtl: 60 * 60 * 24 * 7 });
+    const digits = String(env.TWILIO_WHATSAPP_FROM || '').replace(/[^\d]/g, '');
+    const link = digits ? `https://wa.me/${digits}?text=${encodeURIComponent('Hola Salma')}` : 'https://borradodelmapa.com';
+    return `💚 Si te estoy siendo útil, pásale mi número a tus amigos — así me haces crecer: ${link}`;
+  } catch (_) { return ''; }
+}
+
+// Saca la línea HISTORIA_LUGAR (la web la convierte en un botón; aquí, en una oferta).
+function waExtractHistoriaLugar(text) {
+  if (!text) return { text, place: null };
+  const m = text.match(/^\s*HISTORIA_LUGAR\s*:\s*(.+)$/im);
+  return { text: m ? text.replace(m[0], '').trim() : text, place: m ? m[1].trim().slice(0, 120) : null };
+}
+
+function waFormatHistoria(h) {
+  if (!h) return '';
+  const lines = [`${h.emoji || '📖'} *${h.title || 'Historia'}*`];
+  if (h.description) lines.push(h.description);
+  for (const p of (h.paradas || []).slice(0, 6)) {
+    const y = typeof p.year === 'number' ? (p.year < 0 ? `${-p.year} a.C.` : String(p.year)) : '';
+    lines.push(`\n*${y ? y + ' — ' : ''}${p.title || ''}*\n${p.content || ''}`);
+  }
+  return lines.join('\n').slice(0, 3800);
+}
+
+// Descarga un adjunto de Twilio (fotos, audios). Twilio exige Basic auth en las URLs de media.
+async function waFetchTwilioMedia(env, mediaUrl) {
+  // Twilio responde con una redirección a un almacén externo con URL firmada: se sigue a mano y
+  // SIN la cabecera de Twilio (si viaja también, el almacén rechaza la descarga por doble auth).
+  let res = await fetch(mediaUrl, {
+    headers: { 'Authorization': 'Basic ' + btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`) },
+    redirect: 'manual',
+    signal: AbortSignal.timeout(15000),
+  });
+  if (res.status >= 300 && res.status < 400 && res.headers.get('location')) {
+    res = await fetch(new URL(res.headers.get('location'), mediaUrl).toString(), { signal: AbortSignal.timeout(15000) });
+  }
+  if (!res.ok) throw new Error('Twilio media ' + res.status);
+  return { buf: await res.arrayBuffer(), contentType: (res.headers.get('content-type') || '').split(';')[0] };
+}
+
+function waBufToBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+// Nota de voz → texto con OpenAI (whisper-1, ~0,006 $/min). Devuelve '' si no se puede.
+async function waTranscribeAudio(env, buf, contentType) {
+  if (!env.OPENAI_API_KEY) return '';
+  const ext = /mpeg|mp3/.test(contentType) ? 'mp3' : /mp4|m4a|aac/.test(contentType) ? 'm4a' : /wav/.test(contentType) ? 'wav' : 'ogg';
+  const fd = new FormData();
+  fd.append('file', new Blob([buf], { type: contentType || 'audio/ogg' }), 'nota.' + ext);
+  fd.append('model', 'whisper-1');
+  const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + env.OPENAI_API_KEY },
+    body: fd,
+    signal: AbortSignal.timeout(30000),
+  });
+  if (!res.ok) { console.error('[WA-VOZ] Whisper', res.status, (await res.text().catch(() => '')).slice(0, 200)); return ''; }
+  const j = await res.json().catch(() => ({}));
+  return String(j.text || '').trim();
+}
+
+// "fallo: ..." → beta_feedback (mismo formato que el panel 🐛 de la web, sale en la pestaña
+// Feedback del panel admin) + email a Paco. Sin coste de API.
+async function waSaveFallo(env, ctx, uid, from, profileName, note, history) {
+  const nowIso = new Date().toISOString();
+  const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const logsText = (history || []).slice(-10)
+    .map(m => (m.role === 'user' ? '👤 ' : '🤖 ') + String(typeof m.content === 'string' ? m.content : '[adjunto]').slice(0, 600))
+    .join('\n');
+  const str = v => ({ stringValue: String(v || '') });
+  await firestoreAdminPatch(env, 'beta_feedback/' + docId, {
+    note: str(note.slice(0, 2000)),
+    user_id: str(uid),
+    user_name: str(profileName),
+    email: str(''),
+    page: str('WhatsApp ' + String(from || '').replace(/^whatsapp:/, '')),
+    url: str(''),
+    worker_version: str(env.CF_VERSION_METADATA?.id || ''),
+    front_versions: str('whatsapp'),
+    user_agent: str('WhatsApp'),
+    logs_text: str(logsText.slice(-20000)),
+    screenshot_url: str(''),
+    timestamp: { timestampValue: nowIso },
+    seen: { booleanValue: false },
+  });
+  if (env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
+    const who = profileName || String(from || '').replace(/^whatsapp:/, '');
+    ctx.waitUntil(sendFeedbackEmail(env, env.PACO_EMAIL_TO, `🧪 Fallo por WhatsApp — ${who}`,
+      `${who}\n\n"${note}"\n\n— últimos mensajes —\n${logsText || '(sin historial)'}`.slice(0, 5000)));
+  }
+}
+
 // Llama a Claude con buscar_lugar disponible y resuelve el bucle de tool-use en segundo
 // plano (25 sept 2026, F5.3 punto 6) — sin streaming SSE como la web, aquí basta una
 // respuesta final para Twilio. Acotado a 3 vueltas (de sobra para 1-2 búsquedas en
@@ -3437,6 +3722,8 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
   let msgs = [...messages];
   let usedTools = false;
   const flightSearchResults = []; // true = encontró vuelos reales, false = 0 resultados o error
+  // Tokens gastados en el turno (25 sept 2026) — para contar WhatsApp en el plan y en el panel de coste.
+  const usage = { tin: 0, tout: 0, cw: 0, cr: 0 };
   for (let i = 0; i < 3; i++) {
     const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
@@ -3458,10 +3745,15 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
       throw new Error('Anthropic ' + res.status + ': ' + errText);
     }
     const data = await res.json();
+    const u = data.usage || {};
+    usage.cw += u.cache_creation_input_tokens || 0;
+    usage.cr += u.cache_read_input_tokens || 0;
+    usage.tin += (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0);
+    usage.tout += u.output_tokens || 0;
     const toolUses = (data.content || []).filter(b => b.type === 'tool_use');
     if (data.stop_reason !== 'tool_use' || !toolUses.length) {
       const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
-      return { text, usedTools, allFlightSearchesFailed: flightSearchResults.length > 0 && flightSearchResults.every(ok => !ok) };
+      return { text, usedTools, usage, allFlightSearchesFailed: flightSearchResults.length > 0 && flightSearchResults.every(ok => !ok) };
     }
     usedTools = true;
     msgs = [...msgs, { role: 'assistant', content: data.content }];
@@ -3477,7 +3769,7 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
     }));
     msgs = [...msgs, { role: 'user', content: toolResults }];
   }
-  return { text: 'Se me ha liado buscando — vuelve a preguntarme.', usedTools, allFlightSearchesFailed: flightSearchResults.length > 0 && flightSearchResults.every(ok => !ok) };
+  return { text: 'Se me ha liado buscando — vuelve a preguntarme.', usedTools, usage, allFlightSearchesFailed: flightSearchResults.length > 0 && flightSearchResults.every(ok => !ok) };
 }
 
 // Detecta el país/ciudad mencionado en el mensaje (o guided_route) y carga los datos de
@@ -9021,10 +9313,15 @@ export default {
       }
 
       const from = params.get('From');
-      const body = (params.get('Body') || '').trim();
+      let body = (params.get('Body') || '').trim();
       const profileName = params.get('ProfileName');
       const waLat = params.get('Latitude');
       const waLng = params.get('Longitude');
+      // Adjuntos (25 sept 2026): fotos (Claude con visión, como la cámara del chat web) y notas
+      // de voz (OpenAI whisper-1 → texto). Solo se mira el primero.
+      const numMedia = parseInt(params.get('NumMedia') || '0', 10) || 0;
+      const mediaUrl = numMedia ? params.get('MediaUrl0') : null;
+      const mediaType = numMedia ? String(params.get('MediaContentType0') || '') : '';
 
       console.log(`[WhatsApp] Mensaje de ${from} (${profileName}): "${body}"`);
 
@@ -9086,13 +9383,49 @@ export default {
         return new Response('OK', { status: 200 });
       }
 
-      if (!body) {
-        // Foto/audio/sticker sin texto — todavía solo entendemos texto. Nada que responder.
+      if (!body && !mediaUrl) {
+        // Sin texto ni adjunto (sticker, reacción...) — nada que responder.
         return new Response('OK', { status: 200 });
       }
 
       ctx.waitUntil((async () => {
         try {
+          // Adjunto: nota de voz → texto (y sigue como si lo hubiera escrito); foto → imagen para
+          // Claude. Aviso de coste (§8, aprobado por Paco el 25 sept): voz ~0,006 $/min (whisper-1);
+          // foto = una llamada a Claude con imagen (~0,005-0,01 € más que un mensaje de texto).
+          let waImageBlock = null;
+          let waIsVoice = false;
+          if (mediaUrl) {
+            try {
+              const media = await waFetchTwilioMedia(env, mediaUrl);
+              const ct = media.contentType || mediaType;
+              if (/^audio\//i.test(ct)) {
+                const t = await waTranscribeAudio(env, media.buf, ct);
+                console.log('[WA-VOZ]', ct, media.buf.byteLength, '→', t.slice(0, 200));
+                if (!t) {
+                  await sendWhatsAppMessage(env, from, 'No he podido entender la nota de voz — ¿me la repites o me lo escribes?');
+                  return;
+                }
+                body = t;
+                waIsVoice = true;
+              } else if (/^image\/(jpeg|png|webp|gif)$/i.test(ct)) {
+                if (media.buf.byteLength > 4.5 * 1024 * 1024) {
+                  await sendWhatsAppMessage(env, from, 'Esa foto pesa demasiado para mí — mándamela con menos calidad (o una captura) y te digo.');
+                  return;
+                }
+                waImageBlock = { type: 'image', source: { type: 'base64', media_type: ct.toLowerCase(), data: waBufToBase64(media.buf) } };
+                console.log('[WA-FOTO]', ct, media.buf.byteLength);
+              } else {
+                await sendWhatsAppMessage(env, from, 'Por ahora entiendo texto, fotos y notas de voz — ese tipo de archivo todavía no.');
+                return;
+              }
+            } catch (e) {
+              console.error('[WhatsApp] Error con el adjunto:', e.message);
+              await sendWhatsAppMessage(env, from, 'No he podido abrir lo que me has mandado — prueba otra vez.');
+              return;
+            }
+          }
+
           // ¿Este número ya está vinculado a una cuenta? whatsapp_sessions/{numero} lo
           // escribe el propio Worker (service account) al confirmar un código o al
           // crear una cuenta nueva — el cliente nunca lee ni escribe esta colección
@@ -9240,7 +9573,8 @@ export default {
             }
             linkedUid = newUid;
             const welcomeLink = await buildAutoLoginLink(env, newUid);
-            await sendWhatsAppMessage(env, from, `¡Hola${profileName ? ' ' + profileName : ''}! Te acabo de abrir cuenta gratis en Borrado del Mapa con este número — ya podemos hablar de tu viaje. Si algún día quieres verlo también desde el ordenador o el móvil por la web, entra aquí, ya con sesión iniciada: ${welcomeLink}`);
+            // Bienvenida con todo lo que se puede hacer por aquí (25 sept 2026, Paco).
+            await sendWhatsAppMessage(env, from, `${waHelpText(profileName)}\n\nTe he abierto cuenta gratis con este número. Lo que guardes (rutas, notas) lo ves también en la web, ya con sesión iniciada: ${welcomeLink}`);
             // Sigue abajo: se responde también a lo que haya escrito, como chat normal.
           }
 
@@ -9259,7 +9593,9 @@ export default {
               const waKey = 'wa_daily:' + from + ':' + new Date().toISOString().slice(0, 10);
               const waCur = parseInt((await env.SALMA_KB.get(waKey)) || '0', 10) || 0;
               waIsFirstToday = waCur === 0;
-              if (waCur >= 60) waOk = false;
+              // 120 (antes 60): tope de seguridad por número. El límite real de mensajes es el
+              // del plan (20/día gratis, 100 Premium, usageGate más abajo), igual que en la web.
+              if (waCur >= 120) waOk = false;
               else await env.SALMA_KB.put(waKey, String(waCur + 1), { expirationTtl: 60 * 60 * 30 });
             } catch (_) { /* fail-open, como el resto de topes por IP */ }
           }
@@ -9269,7 +9605,8 @@ export default {
             await sendWhatsAppMessage(env, from,
               `¡Hola de nuevo${nombreWa}! ¿Qué prefieres?\n\n` +
               `1️⃣ Entrar en la web: ${backLink}\n` +
-              `2️⃣ Seguir aquí contigo — solo dime qué necesitas y seguimos por WhatsApp.`);
+              `2️⃣ Seguir aquí contigo — solo dime qué necesitas y seguimos por WhatsApp.\n\n` +
+              `Escribe *ayuda* para ver todo lo que puedo hacer por aquí.`);
             return; // sin llamar a Claude — protocolo §8: esto BAJA el gasto (0 tokens)
           }
           if (!waOk) {
@@ -9291,6 +9628,53 @@ export default {
             return;
           }
 
+          // "ayuda" → lista de todo lo que se puede hacer. Sin Claude, coste 0.
+          if (!waImageBlock && isWaHelpCommand(body)) {
+            await sendWhatsAppMessage(env, from, waHelpText(profileName));
+            return;
+          }
+
+          // "fallo: ..." → feedback de tester (panel admin → Feedback) + email a Paco. Coste 0.
+          const waFallo = waImageBlock ? null : waFalloNote(body);
+          if (waFallo) {
+            let hist = [];
+            try { hist = JSON.parse((await env.SALMA_KB.get('wa_history:' + from)) || '[]'); } catch (_) {}
+            try {
+              await waSaveFallo(env, ctx, linkedUid, from, profileName, waFallo, hist);
+              await sendWhatsAppMessage(env, from, 'Apuntado, gracias — se lo paso al equipo con lo último que hemos hablado. Si quieres empezar de cero, escribe *reinicia*.');
+            } catch (e) {
+              console.error('[WhatsApp] Error guardando fallo:', e.message);
+              await sendWhatsAppMessage(env, from, 'No he podido apuntar el fallo ahora mismo — prueba en un rato.');
+            }
+            return;
+          }
+
+          // "historia" (tras la oferta 📖) o "historia de X" → misma historia que el botón de la web
+          // (getHistoriaLugar: Claude Haiku + foto de Google, caché KV permanente por lugar).
+          // Coste (§8): solo la 1ª vez que alguien pide un lugar (~0,005 € Haiku + 1 búsqueda de
+          // Google ~0,03 €); después sale de caché, gratis.
+          const waHistDe = waImageBlock ? null : String(body).match(/^\s*(?:cu[eé]ntame\s+)?(?:la\s+)?historia\s+de(?:l)?\s+(.{2,120})$/i);
+          if (!waImageBlock && (waHistDe || isWaHistoriaCommand(body))) {
+            let place = waHistDe ? waHistDe[1].replace(/[?¿!.]+$/, '').trim() : null;
+            if (!place) { try { place = await env.SALMA_KB.get('wa_hist:' + from); } catch (_) {} }
+            if (!place) {
+              await sendWhatsAppMessage(env, from, 'Dime de qué lugar quieres la historia — por ejemplo "historia de la Alhambra".');
+              return;
+            }
+            const planH = await waGetUserPlan(env, linkedUid);
+            const gateH = await usageGate(env, planH, 'chat');
+            if (!gateH.ok) { await sendWhatsAppMessage(env, from, gateH.message); return; }
+            try {
+              const { historia } = await getHistoriaLugar(env, place);
+              await usageRecord(env, planH, { msgs: 1 });
+              await sendWhatsAppMessage(env, from, waFormatHistoria(historia) || 'No he podido montar esa historia ahora mismo.');
+            } catch (e) {
+              console.error('[WhatsApp] Error historia:', e.message);
+              await sendWhatsAppMessage(env, from, 'Se me ha atascado la historia — pídemela otra vez en un rato.');
+            }
+            return;
+          }
+
           // Guardar ruta por WhatsApp (F5.3, paso 2 de 3, 25 sept 2026) — mismos límites que
           // la app (usageGate, paso 1, ya hecho) y ahora, si le queda margen, genera y verifica
           // la ruta DE VERDAD con las mismas dos funciones que usa la web para "Crear ruta con
@@ -9298,7 +9682,7 @@ export default {
           // un texto aproximado. La fuente es el último plan que Salma le dio en esta misma
           // conversación (igual que en la web, donde "Crear ruta con mapa" convierte el texto
           // de recomendaciones que ya se ve en el chat, sin volver a generarlo).
-          if (isSaveRouteRequest(body)) {
+          if (!waImageBlock && isSaveRouteRequest(body)) {
             const waPlan = await waGetUserPlan(env, linkedUid);
             const gate = await usageGate(env, waPlan, 'guide');
             if (!gate.ok) {
@@ -9326,7 +9710,20 @@ export default {
             // con mapa), no el index — el id viaja dentro del código de un solo uso, igual que
             // "premium" (ver buildAutoLoginLink). app.js lo recoge en window._waLoginGo.
             const link = await buildAutoLoginLink(env, linkedUid, 'ruta:' + saved.mapId);
-            await sendWhatsAppMessage(env, from, `¡Lista! ${saved.route.stops.length} paradas verificadas con Google Maps, ya guardada en tu cuenta (Mis Rutas). Entra aquí para verla en el mapa: ${link}`);
+            // Aviso de cupo de guías (25 sept 2026, Paco: "que avise cuando se acerque al tope").
+            let guideNote = '';
+            try {
+              if (waPlan.premium_active) {
+                const mo = (await usageRead(env, usageMonthKey(linkedUid))) || {};
+                const left = PLAN_LIMITS.premium.guidesPerMonth - (mo.guides || 0);
+                guideNote = left > 0 ? `\n\n⚠️ Te ${left === 1 ? 'queda 1 guía' : 'quedan ' + left + ' guías'} este mes.` : '\n\n⚠️ Era tu última guía de este mes — el día 1 se renueva.';
+              } else {
+                const premiumLink2 = await buildAutoLoginLink(env, linkedUid, 'premium');
+                guideNote = `\n\n⚠️ Esta era tu guía gratuita. Para crear más, pásate a Premium: ${premiumLink2}`;
+              }
+            } catch (_) {}
+            const refLine = await waMaybeReferral(env, from);
+            await sendWhatsAppMessage(env, from, `¡Lista! ${saved.route.stops.length} paradas verificadas con Google Maps, ya guardada en tu cuenta (Mis Rutas). Entra aquí para verla en el mapa: ${link}${guideNote}${refLine ? '\n\n' + refLine : ''}`);
             return; // sin llamar a Claude por aquí — el trabajo ya lo hicieron convertProseToRouteJson/verifyAllStops
           }
 
@@ -9371,22 +9768,63 @@ export default {
             } catch (_) {}
           }
 
-          const { text: chatReplyText, usedTools, allFlightSearchesFailed } = await waCallClaudeWithTools(
-            env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords, linkedUid
+          // Mismo límite de mensajes que la web (25 sept 2026): 20/día gratis, 100 Premium.
+          // Antes WhatsApp solo tenía el tope fijo por número y no contaba en el plan.
+          const waPlanChat = await waGetUserPlan(env, linkedUid);
+          const chatGate = await usageGate(env, waPlanChat, 'chat');
+          if (!chatGate.ok) {
+            const gl = waPlanChat.premium_active ? '' : ' Entra aquí para pasarte a Premium: ' + await buildAutoLoginLink(env, linkedUid, 'premium');
+            await sendWhatsAppMessage(env, from, chatGate.message + gl);
+            return;
+          }
+
+          const waUserText = waImageBlock ? '[Foto] ' + (body || '') : (waIsVoice ? '[Nota de voz] ' + body : body);
+          const waUserContent = waImageBlock
+            ? [waImageBlock, { type: 'text', text: body || '¿Qué es esto?' }]
+            : waUserText;
+          const { text: chatReplyText, usedTools, usage: waUsage, allFlightSearchesFailed } = await waCallClaudeWithTools(
+            env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: waUserContent }], waCoords, linkedUid
           );
-          const rawReply = stripWaLeakedMarkers(chatReplyText) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
+          await usageRecord(env, waPlanChat, { msgs: 1, ...(waUsage || {}) });
+          // HISTORIA_LUGAR: la web lo convierte en un botón; aquí, en una oferta ("escribe historia").
+          const waHx = waExtractHistoriaLugar(chatReplyText);
+          if (waHx.place && env.SALMA_KB) { try { await env.SALMA_KB.put('wa_hist:' + from, waHx.place, { expirationTtl: 21600 }); } catch (_) {} }
+          const rawReply = stripWaLeakedMarkers(waHx.text) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
           // Si esta respuesta vino de una tool de búsqueda (vuelo/hotel/coche/lugar), NUNCA le
           // pega la invitación a guardar — es una búsqueda de servicio, no una ruta (bug real,
           // 25 sept 2026: "Cualquier día del mes" en medio de una búsqueda de vuelo la llevaba
           // pegada sin sentido).
           // Si NINGUNA búsqueda de vuelo del turno encontró nada real, se ignora lo que Claude
           // haya escrito y se manda el mensaje honesto determinista — ver WA_NO_FLIGHTS_FOUND_MSG.
-          const reply = allFlightSearchesFailed ? WA_NO_FLIGHTS_FOUND_MSG : (usedTools ? rawReply : appendGuardarlaCta(rawReply, body));
+          const baseReply = allFlightSearchesFailed ? WA_NO_FLIGHTS_FOUND_MSG : (usedTools ? rawReply : appendGuardarlaCta(rawReply, body));
+          // Avisos al final del MISMO mensaje (25 sept 2026, Paco) — uno como mucho, por prioridad:
+          // tope del plan > "reinicia" si suena molesto > oferta de historia > recomendar a amigos
+          // (tras una búsqueda que salió bien, 1 vez/semana) > recordatorio cada 5 respuestas.
+          let footer = '';
+          try {
+            const lim = waPlanChat.premium_active ? PLAN_LIMITS.premium.chatPerDay : PLAN_LIMITS.free.chatPerDay;
+            const mo = (await usageRead(env, usageMonthKey(linkedUid))) || {};
+            const left = lim - ((mo.days && mo.days[usageToday()]) || 0);
+            if (left <= 0) footer = '⚠️ Era tu último mensaje de hoy — mañana seguimos' + (waPlanChat.premium_active ? '.' : ', o pásate a Premium para tener más.');
+            else if (left <= 3 || left === 5) footer = `⚠️ Te ${left === 1 ? 'queda 1 mensaje' : 'quedan ' + left + ' mensajes'} hoy.`;
+          } catch (_) {}
+          if (!footer && isWaFrustrated(body) && env.SALMA_KB) {
+            try {
+              if (!(await env.SALMA_KB.get('wa_frust:' + from))) {
+                await env.SALMA_KB.put('wa_frust:' + from, '1', { expirationTtl: 1800 });
+                footer = '🔄 Si me he liado, escribe *reinicia* y empezamos de cero. Y si ves un fallo, escribe *fallo:* y lo que ha pasado.';
+              }
+            } catch (_) {}
+          }
+          if (!footer && waHx.place && !allFlightSearchesFailed) footer = `📖 ¿Te cuento la historia de ${waHx.place}? Escribe *historia*.`;
+          if (!footer && usedTools && !allFlightSearchesFailed) footer = await waMaybeReferral(env, from);
+          if (!footer && !usedTools && baseReply === rawReply) footer = await waMaybeTip(env, from);
+          const reply = footer ? baseReply + '\n\n' + footer : baseReply;
           await sendWhatsAppMessage(env, from, reply);
 
           if (env.SALMA_KB) {
             try {
-              const updatedHistory = [...waHistory, { role: 'user', content: body }, { role: 'assistant', content: reply }].slice(-40);
+              const updatedHistory = [...waHistory, { role: 'user', content: waUserText }, { role: 'assistant', content: baseReply }].slice(-40);
               await env.SALMA_KB.put(waHistKey, JSON.stringify(updatedHistory), { expirationTtl: 21600 });
             } catch (e) { console.error('[WhatsApp] Error guardando historial:', e.message); }
           }
@@ -10372,107 +10810,9 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         return new Response(JSON.stringify({ error: 'Falta el nombre del lugar' }), { status: 400, headers: corsH });
       }
 
-      const placeName = place.trim();
-      // Sin tildes: "Córdoba" y "Cordoba" son el mismo lugar y deben compartir entrada (antes "Córdoba" → "c-rdoba").
-      const slug = placeName.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      // Nombres homónimos existen en sitios distintos (ej. "Cementerio de los Ingleses"
-      // en Lisboa y en Camariñas) — si hay coordenadas, se meten en la clave de caché
-      // (bucket ~11km) para que no se pisen entre sí durante los 30 días de TTL.
-      const hasCoords = typeof lat === 'number' && typeof lng === 'number';
-      const geoBucket = hasCoords ? `:${lat.toFixed(1)}:${lng.toFixed(1)}` : '';
-      const kvKey = `historia:${slug}${geoBucket}`;
-
-      // 1. Cache KV
-      if (env.SALMA_KB) {
-        try {
-          const cached = await env.SALMA_KB.get(kvKey);
-          if (cached) {
-            return new Response(JSON.stringify({ historia: JSON.parse(cached), source: 'cache' }), { headers: corsH });
-          }
-        } catch (_) {}
-      }
-
-      // 2. Generar con Claude Haiku
-      const geoHint = hasCoords
-        ? `\n\nUBICACIÓN REAL DEL USUARIO: lat ${lat}, lng ${lng}. Si existe más de un lugar con el nombre o similar a "${placeName}" (nombres homónimos, tipo "Cementerio de los Ingleses" en Lisboa Y en Camariñas), usa el que esté geográficamente cerca de esas coordenadas — NUNCA el más famoso o más documentado si no es el que está cerca. Ante la duda de cuál es el real en esa zona, dilo en la propia "description" en vez de inventar o asumir el homónimo equivocado.`
-        : '';
-      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.${geoHint}
-
-Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia. Ojo: abreviaturas típicas de Google Maps como "Rte." (restaurante), "Avda."/"Av." (avenida), "C/" (calle), "Pza." (plaza) NO indican una carretera ni un corredor — son solo el nombre de un local o dirección; genera la historia de ESE lugar concreto (el negocio, el edificio, la calle), no de una ruta ni de una persona a la que haga referencia el nombre.
-
-{
-  "title": "Nombre: subtítulo histórico",
-  "description": "Descripción de 1-2 frases sobre la relevancia histórica del lugar",
-  "emoji": "🏛️",
-  "category": "Europa|Asia|América|África|Oceanía",
-  "paradas": [
-    {
-      "year": 1492,
-      "title": "Título del hito histórico",
-      "subtitle": "Una frase que contextualiza",
-      "content": "Párrafo narrativo de 3-5 frases explicando qué ocurrió, por qué importa y cómo afectó al lugar. Directo, sin paja.",
-      "key_facts": ["Dato clave 1", "Dato clave 2", "Dato clave 3"]
-    }
-  ]
-}
-
-REGLAS:
-- Entre 4 y 6 paradas cronológicas cubriendo los momentos más importantes
-- Los años pueden ser negativos (a.C.) si es relevante
-- El emoji debe representar el lugar o su cultura (bandera, monumento, símbolo)
-- Contenido en español, tono cercano y directo
-- Solo devuelve el JSON, sin markdown ni explicaciones`;
-
+      // Lógica en getHistoriaLugar() (25 sept 2026) — compartida con WhatsApp.
       try {
-        // 2a. Claude + Places en paralelo
-        const claudePromise = fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': env.ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 1800,
-            messages: [{ role: 'user', content: prompt }],
-          }),
-          signal: AbortSignal.timeout(20000),
-        });
-
-        const placesPromise = (async () => {
-          if (!env.GOOGLE_PLACES_KEY) return null;
-          const locBias = (lat && lng) ? `&location=${lat},${lng}&radius=50000` : '';
-          const r = await fetch(
-            `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}&language=es${locBias}&key=${env.GOOGLE_PLACES_KEY}`,
-            { signal: AbortSignal.timeout(5000) }
-          );
-          const d = await r.json();
-          return d.results?.[0]?.photos?.[0]?.photo_reference || null;
-        })().catch(() => null);
-
-        const [claudeRes, photoRef] = await Promise.all([claudePromise, placesPromise]);
-
-        if (!claudeRes.ok) throw new Error('Claude ' + claudeRes.status);
-
-        const claudeData = await claudeRes.json();
-        const raw = (claudeData.content?.[0]?.text || '').trim();
-
-        const jsonMatch = raw.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) throw new Error('Claude no devolvió JSON válido');
-
-        const historia = JSON.parse(jsonMatch[0]);
-        historia.id = slug;
-        if (photoRef) historia.photo_ref = photoRef;
-
-        // 3. Guardar en KV PARA SIEMPRE (antes 30 días): la historia de un lugar no cambia y cada generación cuesta
-        // Claude + una búsqueda de Google. Se espera la escritura (sin await podía perderse). Si alguna historia sale
-        // mal, se purga a mano: `wrangler kv key delete historia:<slug>[:lat:lng]`.
-        if (env.SALMA_KB) {
-          try { await env.SALMA_KB.put(kvKey, JSON.stringify(historia)); } catch (_) {}
-        }
-
-        return new Response(JSON.stringify({ historia, source: 'claude' }), { headers: corsH });
+        return new Response(JSON.stringify(await getHistoriaLugar(env, place, lat, lng)), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }

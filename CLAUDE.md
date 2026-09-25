@@ -1289,6 +1289,29 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      (`waCopyAccountData`, mismo id, sin borrar nada de la `wa_`; `whatsapp_sessions.merged_from`
      guarda la vieja). Si el número estaba unido a OTRA cuenta de Google, sigue avisando sin
      tocar nada. Log `[WA-UNIR]`. Sin coste de API. **CONFIRMADO EN PANTALLA por Paco (25 sept): unido, notas copiadas y una nota nueva por WhatsApp sale en la web.** Worker `bc81421d`.
+   - **Paquete "que el usuario sepa y use todo" (25 sept 2026, noche, pedido por Paco: "hazlo
+     todo") — DESPLEGADO, sin probar en pantalla.** Todos los avisos los añade el CÓDIGO y van
+     dentro del MISMO mensaje (en producción Twilio cobra por mensaje):
+     1. Bienvenida con todo lo que se puede hacer (`waHelpText`) + comando **`ayuda`** (sin Claude).
+     2. Recordatorio rotativo cada 5 respuestas normales (`WA_TIPS`, KV `wa_tipn:{num}`), nunca
+        tras una búsqueda ni con otra invitación en el mismo mensaje.
+     3. **WhatsApp usa ya los límites del plan** (20 mensajes/día gratis, 100 Premium, `usageGate`
+        'chat') y cuenta tokens en `usage:{uid}:{mes}` (sale en el panel). `wa_daily` sube de 60
+        a 120 (solo red de seguridad). Avisos: quedan 5, ≤3, último; al guardar guía, las que
+        quedan (o "era tu guía gratuita" + enlace Premium).
+     4. "reinicia" visible: en bienvenida/ayuda/recordatorios y automático si el mensaje suena
+        molesto (`isWaFrustrated`, 1 vez cada 30 min).
+     5. "Díselo a tus amigos" (`waMaybeReferral`, 1 vez/semana, tras guardar guía o búsqueda que
+        salió bien). En Sandbox el amigo tiene que mandar antes el `join …` de Twilio.
+     6. **`fallo: …`** → `beta_feedback` (sale en Feedback del panel) con los últimos 10 mensajes +
+        email a Paco (`waSaveFallo`).
+     7. **Fotos** → Claude con visión (`BLOQUE_VISION` de la web, tal cual). **Notas de voz** →
+        OpenAI whisper-1 (~0,006 $/min) y sigue como texto. Descarga de Twilio con Basic auth y
+        redirección seguida a mano (`waFetchTwilioMedia`).
+     8. **Historia**: `/historia-lugar` se extrajo a `getHistoriaLugar()` (web igual). Si Salma
+        marca `HISTORIA_LUGAR`, se ofrece "escribe *historia*"; también "historia de X".
+     Aviso §8 (aprobado): voz ~0,006 $/min; foto ~0,005-0,01 € más que un texto; historia solo la
+     1ª vez por lugar (~0,035 €); el resto sin coste. Los límites del plan BAJAN el gasto máximo.
    - **Worker Version ID vigente: ver `/version`** (anterior: `1990087f-457b-4208-90af-3f21f6e933cf`) (despliegues
      intermedios de este punto: `def5f8bc-98f2-4ca0-b343-2a78735984fb` → búsqueda de vuelos
      por hub real (funcionó a medias, seguía inventando cuando el hub también fallaba),
