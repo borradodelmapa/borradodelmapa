@@ -1128,8 +1128,8 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      refuerza a cualquier pregunta de personalización, no solo las dos que cita el texto
      original. **Norma anotada para el resto de F5.3**: si ya funciona en la app, se reutiliza
      tal cual — nunca una versión propia para WhatsApp.
-   - **Invitación a guardar sin depender del modelo — HECHO, desplegado, pendiente de
-     confirmar en pantalla.** Tras el paso 2, Paco seguía viendo (captura en mano) que la
+   - **Invitación a guardar sin depender del modelo — HECHO y confirmado en pantalla por
+     Paco, 25 sept 2026 ("ya lo hace").** Tras el paso 2, Paco seguía viendo (captura en mano) que la
      respuesta de ruta terminaba en "si quieres te busco restaurantes" en vez de invitar a
      guardar — pedírselo en el prompt no bastaba. `appendGuardarlaCta()` la añade por código,
      determinista, si el mensaje era de ruta/destino y la respuesta no la menciona ya —
