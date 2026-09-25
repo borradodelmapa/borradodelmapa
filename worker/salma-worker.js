@@ -3186,6 +3186,47 @@ function isSaveRouteRequest(message) {
   return /\bguardala\b|\bguardamela\b|\bguarda(r)?\s+(esta\s+|la\s+)?ruta\b/.test(m);
 }
 
+// Genera y guarda una ruta real desde WhatsApp (F5.3, paso 2, 25 sept 2026) — reutiliza el
+// MISMO proceso que la web para "Crear ruta con mapa" (Tiempo 2): convertProseToRouteJson()
+// convierte en JSON el plan en prosa que Salma ya dio, y verifyAllStops() lo verifica contra
+// Google Places — las mismas dos funciones, no una versión aparte para WhatsApp (norma de
+// Paco, 25 sept 2026: "si ya funciona en la app, se reutiliza tal cual"). El guardado en
+// Firestore sí es propio de este camino: WhatsApp no tiene el SDK de cliente que usa
+// app.js:guardarGuiaDirecto(), así que escribe el propio Worker con su cuenta de servicio,
+// con el MISMO esquema de documento que esa función usa, para que abra igual en "Mis Rutas".
+async function waGenerateAndSaveRoute(env, uid, sourceText) {
+  if (!sourceText || sourceText.length < 100) return { ok: false, reason: 'sin_contenido' };
+  const route = await convertProseToRouteJson(sourceText, env, {});
+  if (!route || !route.stops || route.stops.length < 2) return { ok: false, reason: 'convert_failed' };
+  const verified = env.GOOGLE_PLACES_KEY ? await verifyAllStops(route, env.GOOGLE_PLACES_KEY, {}, env) : route;
+  const finalRoute = verified || route;
+
+  const numDias = finalRoute.duration_days ? Number(finalRoute.duration_days)
+    : (finalRoute.stops ? new Set(finalRoute.stops.map(s => s.day || 1)).size : 0);
+  const destino = (finalRoute.region || finalRoute.country || '').toString();
+  const nowIso = new Date().toISOString();
+  const ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const mapId = Array.from({ length: 20 }, () => ID_CHARS[Math.floor(Math.random() * ID_CHARS.length)]).join('');
+
+  await firestoreAdminPatch(env, 'users/' + uid + '/maps/' + mapId, {
+    nombre: { stringValue: finalRoute.title || finalRoute.name || 'Mi ruta' },
+    destino: { stringValue: destino },
+    country: { stringValue: (finalRoute.country || destino || '').toString() },
+    num_dias: { integerValue: String(numDias || 0) },
+    dias: { integerValue: String(numDias || 0) },
+    notas: { stringValue: finalRoute.summary || '' },
+    cover_image: { stringValue: '' },
+    itinerarioIA: { stringValue: JSON.stringify(finalRoute) },
+    enriched: { booleanValue: false },
+    createdAt: { timestampValue: nowIso },
+    updatedAt: { timestampValue: nowIso },
+    published: { booleanValue: false },
+    created_via: { stringValue: 'whatsapp' },
+  });
+
+  return { ok: true, mapId, route: finalRoute };
+}
+
 // Solo el tool buscar_lugar, del array completo SALMA_TOOLS del chat web (F5.3 punto 6, 25
 // sept 2026) — vuelos/hoteles/coches siguen sin conectar a WhatsApp (fuera de esta tarea).
 const WA_TOOLS = SALMA_TOOLS.filter(t => t.name === 'buscar_lugar');
@@ -9012,23 +9053,39 @@ export default {
             return;
           }
 
-          // Guardar ruta por WhatsApp (F5.3, paso 1 de 3, 25 sept 2026) — la idea acordada con
-          // Paco es que WhatsApp funcione con LOS MISMOS límites que la app, no unos aparte: se
-          // consulta usageGate(..., 'guide'), la misma función que ya gatea "Crear ruta con
-          // mapa" en la web, con el plan real del usuario (premium_active, leído de Firestore,
-          // nunca inventado). Paso 1 SOLO decide si puede — generar y verificar la ruta de
-          // verdad (pasos 2-3) todavía no está hecho, así que de momento, si puede, se le manda
-          // a guardarla en la app (que ya sabe hacer esto de punta a punta).
+          // Guardar ruta por WhatsApp (F5.3, paso 2 de 3, 25 sept 2026) — mismos límites que
+          // la app (usageGate, paso 1, ya hecho) y ahora, si le queda margen, genera y verifica
+          // la ruta DE VERDAD con las mismas dos funciones que usa la web para "Crear ruta con
+          // mapa" (convertProseToRouteJson + verifyAllStops, ver waGenerateAndSaveRoute) — no
+          // un texto aproximado. La fuente es el último plan que Salma le dio en esta misma
+          // conversación (igual que en la web, donde "Crear ruta con mapa" convierte el texto
+          // de recomendaciones que ya se ve en el chat, sin volver a generarlo).
           if (isSaveRouteRequest(body)) {
             const waPlan = await waGetUserPlan(env, linkedUid);
             const gate = await usageGate(env, waPlan, 'guide');
             const link = await buildAutoLoginLink(env, linkedUid);
             if (!gate.ok) {
               await sendWhatsAppMessage(env, from, `${gate.message} Entra aquí para pasarte a Premium: ${link}`);
-            } else {
-              await sendWhatsAppMessage(env, from, `Sí, te queda margen en tu plan para guardar una ruta — guardarla ya mismo desde aquí lo estoy terminando de montar. De momento entra en la app con este enlace, ya con tu sesión metida, y la guardas ahí sin más: ${link}`);
+              return;
             }
-            return; // sin llamar a Claude — protocolo §8: esto BAJA el gasto (0 tokens)
+            let waHistoryForSave = [];
+            if (env.SALMA_KB) {
+              try { waHistoryForSave = JSON.parse((await env.SALMA_KB.get('wa_history:' + from)) || '[]'); } catch (_) {}
+            }
+            const lastAssistant = [...waHistoryForSave].reverse().find(m => m.role === 'assistant' && (m.content || '').length >= 100);
+            if (!lastAssistant) {
+              await sendWhatsAppMessage(env, from, 'Todavía no tengo ningún plan de ruta reciente que guardar en esta conversación — pídeme primero una ruta (ej. "1 día en Santillana del Mar") y luego dime "guárdala".');
+              return;
+            }
+            await sendWhatsAppMessage(env, from, 'Dame un momento, la estoy verificando con datos reales de Google Maps...');
+            const saved = await waGenerateAndSaveRoute(env, linkedUid, lastAssistant.content);
+            if (!saved.ok) {
+              await sendWhatsAppMessage(env, from, 'Se me ha atragantado verificando la ruta — vuelve a pedírmela y prueba a guardarla otra vez.');
+              return;
+            }
+            await usageRecord(env, waPlan, { guides: 1 });
+            await sendWhatsAppMessage(env, from, `¡Lista! ${saved.route.stops.length} paradas verificadas con Google Maps, ya guardada en tu cuenta (Mis Rutas). Entra aquí para verla en el mapa: ${link}`);
+            return; // sin llamar a Claude por aquí — el trabajo ya lo hicieron convertProseToRouteJson/verifyAllStops
           }
 
           // Respuestas instantáneas de KV — PROBADO y RETIRADO el 25 sept 2026: aunque el
