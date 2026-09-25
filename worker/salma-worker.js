@@ -8474,6 +8474,7 @@ export default {
           // alta que puede pasar unas líneas más abajo en el mismo turno) — lo usa el
           // saludo de bienvenida de vuelta, más adelante en este mismo bloque.
           const wasAlreadyLinked = !!linkedUid;
+          console.log('[WhatsApp][debug] wasAlreadyLinked=' + wasAlreadyLinked + ' linkedUid=' + (linkedUid || '(ninguno)'));
 
           // ¿El mensaje es un código de vinculación de 6 caracteres? Se comprueba
           // SIEMPRE, esté o no ya vinculado el número — si ya lo estaba con OTRA
