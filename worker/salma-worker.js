@@ -3231,6 +3231,18 @@ function isSaveRouteRequest(message) {
   return /\bguardala\b|\bguardamela\b|\bguarda(r)?\s+(esta\s+|la\s+)?ruta\b/.test(m);
 }
 
+// Reinicia el historial de WhatsApp bajo petición explícita (26 sept 2026) — bug real
+// encontrado por Paco: con wa_history persistiendo 6h, si Salma se inventó un dato en un
+// turno (ej. una ruta de vuelo que no existía), los turnos siguientes seguían repitiendo esa
+// misma invención ("como te decía...") por ser consistente con SU PROPIO historial, no porque
+// volviera a inventar de cero — ni el fix de "prohibido inventar" evita eso, porque el dato ya
+// estaba metido en la conversación antes de desplegarlo. Frase explícita para empezar de cero
+// sin esperar a que caduque solo.
+function isResetRequest(message) {
+  const m = _nmNorm(message);
+  return /\breinicia(r)?(\s+(la\s+)?conversacion)?\b|\bolvida\s+todo\b|\bborra(r)?\s+(el\s+)?historial\b|\bempecemos\s+de\s+cero\b|\bborron\s+y\s+cuenta\s+nueva\b/.test(m);
+}
+
 // Invitación a guardar tras una respuesta de ruta — NO se deja a que Claude decida incluirla:
 // confirmado en pantalla por Paco (25 sept 2026) que aun pidiéndoselo explícitamente en el
 // prompt, seguía sin ponerla (prefería ofrecer "te busco restaurantes" en su lugar) — una
@@ -9142,6 +9154,19 @@ export default {
           if (!waOk) {
             const capLink = await buildAutoLoginLink(env, linkedUid);
             await sendWhatsAppMessage(env, from, `Hoy ya hemos hablado bastante 😅 — mañana seguimos, o entra en la app: ${capLink}`);
+            return;
+          }
+
+          // Reinicio de conversación bajo petición explícita (26 sept 2026, ver isResetRequest)
+          // — borra wa_history y wa_location de este número. Sin llamar a Claude: coste 0.
+          if (isResetRequest(body)) {
+            if (env.SALMA_KB) {
+              try {
+                await env.SALMA_KB.delete('wa_history:' + from);
+                await env.SALMA_KB.delete('wa_location:' + from);
+              } catch (_) { /* no-op */ }
+            }
+            await sendWhatsAppMessage(env, from, 'Hecho, empezamos de cero — no me acuerdo de nada de antes en este chat. ¿Qué necesitas?');
             return;
           }
 
