@@ -3508,7 +3508,7 @@ async function renderExplorar(countryIdx) {
 function _explorarCard(g) {
   const card = document.createElement('div');
   card.className = 'viaje-card';
-  const photo = g.cover || destPhoto(g.destino || g.nombre || '');
+  const photo = g.thumb || g.cover || destPhoto(g.destino || g.nombre || ''); // mismo orden que Mis rutas
   const dias = g.dias ? `${g.dias} ${g.dias == 1 ? 'DÍA' : 'DÍAS'} · ` : '';
   card.innerHTML = `
     <div class="viaje-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>

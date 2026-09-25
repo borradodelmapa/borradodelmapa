@@ -3236,7 +3236,7 @@ async function reverseGeocodeLocation(env, lat, lng) {
 // sale de la 1ª parada con Nominatim (gratis), cacheada en KV para siempre (prov:{lat}:{lng}).
 // Coste: 0 € en APIs de pago. Firestore: 1 lectura por guía pública en cada reconstrucción
 // del índice (caché KV 2 h; 20 min mientras queden provincias por resolver).
-const EXPLORAR_KEY = 'explorar:index:v1';
+const EXPLORAR_KEY = 'explorar:index:v2'; // v2: + miniatura del mapa (thumb)
 const EXPLORAR_SALMA_UID = 'LlXDmuXD1qgM97Xya8FiVHONXDw2';
 
 function _fsVal(v) {
@@ -3277,7 +3277,7 @@ async function _explorarGeocodeProv(env, lat, lng) {
   return out;
 }
 
-async function buildExplorarIndex(env) {
+async function buildExplorarIndex(env, origin) {
   const token = await getServiceAccountToken(env);
   const fields = ['uid', 'ownerDocId', 'nombre', 'destino', 'num_dias', 'cover_image', 'owner_name',
     'createdAt', 'updatedAt', 'itinerarioIA', 'listed', 'estado'];
@@ -3324,6 +3324,7 @@ async function buildExplorarIndex(env) {
       _lat: first ? Number(first.lat) : null,
       _lng: first ? Number(first.lng) : null,
       _country: r.country || '',
+      _docId: g.ownerDocId || '',
     };
     const keys = [(g.uid || item.slug) + '|' + _explorarNorm(item.nombre) + '|' + (item.dias || '')];
     if (g.ownerDocId) keys.push('doc|' + (g.uid || '') + '|' + g.ownerDocId);
@@ -3345,6 +3346,18 @@ async function buildExplorarIndex(env) {
     missing.push(g);
   }));
 
+  // 2b) Miniatura del mapa: la misma que ve el dueño en Mis rutas (R2 mapthumb/{id}.jpg,
+  //     la crea /route-thumbnail). Aquí solo se comprueba si existe — sin llamar a Google.
+  if (env.SALMA_PHOTOS && origin) {
+    await Promise.all(guides.map(async (g) => {
+      const id = String(g._docId).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80);
+      if (!id) return;
+      try {
+        if (await env.SALMA_PHOTOS.head(`mapthumb/${id}.jpg`)) g.thumb = `${origin}/photo/mapthumb/${id}.jpg`;
+      } catch (_) {}
+    }));
+  }
+
   // 3) Agrupar país → provincia
   const countries = {};
   for (const g of guides) {
@@ -3354,7 +3367,7 @@ async function buildExplorarIndex(env) {
     const ck = cc || _explorarNorm(cName);
     const c = countries[ck] || (countries[ck] = { cc, name: cName, count: 0, provinces: {} });
     const p = c.provinces[pName] || (c.provinces[pName] = { name: pName, count: 0, guides: [] });
-    const { _ts, _lat, _lng, _country, _geo, ...pub } = g;
+    const { _ts, _lat, _lng, _country, _geo, _docId, ...pub } = g;
     p.guides.push({ ...pub, _ts });
     p.count++; c.count++;
   }
@@ -8056,7 +8069,7 @@ export default {
       try {
         const cached = env.SALMA_KB ? await env.SALMA_KB.get(EXPLORAR_KEY) : null;
         if (cached) return new Response(cached, { headers: corsH });
-        const { index, missing } = await buildExplorarIndex(env);
+        const { index, missing } = await buildExplorarIndex(env, url.origin);
         const body = JSON.stringify(index);
         if (env.SALMA_KB) {
           await env.SALMA_KB.put(EXPLORAR_KEY, body, { expirationTtl: missing.length ? 1200 : 7200 });

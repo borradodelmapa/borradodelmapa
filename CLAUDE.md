@@ -502,7 +502,7 @@ Post-procesado que corrige cada parada de una ruta generada:
 | GET | `/flight-alerts` | Alertas de bajada de precio/presupuesto alcanzado (KV `fw_alerts:{uid}`) |
 | PUT | `/flight-alerts/mark-seen` | Marcar alerta como vista |
 | POST | `/perfil-ia-extract` | Extrae hasta 3 datos nuevos del perfil de viajero (GPT-4o-mini) tras guardar una ruta — requiere login |
-| GET | `/explorar` | Rutas de la comunidad (público, sin login): índice país → provincia de `public_guides` con `listed != false`, sin repetidas ni <3 paradas. Caché KV `explorar:index:v1` (2 h; 20 min mientras falten provincias) |
+| GET | `/explorar` | Rutas de la comunidad (público, sin login): índice país → provincia de `public_guides` con `listed != false`, sin repetidas ni <3 paradas. Caché KV `explorar:index:v2` (2 h; 20 min mientras falten provincias) |
 | POST | `/explorar/refresh` | Borra la caché de `/explorar` (requiere login) — al cambiar "Compartir mis rutas" o borrar una guía |
 | POST | `/beta-feedback` | Feedback de testers desde el panel 🐛: nota + logs → Firestore `beta_feedback` + aviso a Paco por WhatsApp |
 
@@ -609,7 +609,7 @@ Todos en Cloudflare Worker secrets (`wrangler secret put`).
 | `verifiedspot:{país}:{nombre}` | — | Caché de verify Google Places entre rutas de usuarios distintos (30 días TTL) — fix de coste del 15 sept | Dinámico |
 | `placedetails:{place_id}:{fields}` | — | Caché de Place Details (teléfono/web) por lugar (30 días TTL) — fix de coste del 15 sept | Dinámico |
 | `nearbycache:{type}:{lat}:{lng}` | — | Caché Nearby Search por tipo + celda ~1km (7 días TTL) — fix de coste del 15 sept | Dinámico |
-| `explorar:index:v1` | — | Índice de Explorar (rutas de la comunidad), ver `/explorar` | 1 clave |
+| `explorar:index:v2` | — | Índice de Explorar (rutas de la comunidad), ver `/explorar` | 1 clave |
 | `prov:{lat}:{lng}` | — | País + provincia de un punto (Nominatim, gratis) para agrupar Explorar — sin caducidad | Dinámico |
 | `geo:{lat}:{lng}` | — | Caché reverse geocoding (24h TTL) | Dinámico |
 | `geocity:{word}` | — | Caché Nominatim ciudad→país (30 días TTL) | Dinámico |
