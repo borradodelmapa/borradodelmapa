@@ -3286,6 +3286,13 @@ function stripWaLeakedMarkers(text) {
     .trim();
 }
 
+// Mensaje determinista para cuando NINGUNA búsqueda real de buscar_vuelos en el turno encontró
+// nada (ver allFlightSearchesFailed en waCallClaudeWithTools) — sustituye lo que Claude haya
+// escrito, sea lo que sea, porque el bug real (Koh Samui, luego Hanói) demostró que rellenaba
+// ese hueco con presupuestos "orientativos", aerolíneas de memoria y hasta una URL de Google
+// Flights inventada. Sin precio, sin aerolínea, sin enlace — solo lo cierto: no se encontró nada.
+const WA_NO_FLIGHTS_FOUND_MSG = 'No he encontrado vuelos reales con esos criterios — lo he probado directo y también por un hub intermedio, sin resultado. Puede que no haya buena conexión para esas fechas ahora mismo. ¿Pruebas con otra fecha, otro aeropuerto de origen, o quieres que lo intente de otra forma?';
+
 // Genera y guarda una ruta real desde WhatsApp (F5.3, paso 2, 25 sept 2026) — reutiliza el
 // MISMO proceso que la web para "Crear ruta con mapa" (Tiempo 2): convertProseToRouteJson()
 // convierte en JSON el plan en prosa que Salma ya dio, y verifyAllStops() lo verifica contra
@@ -3340,15 +3347,24 @@ const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'busc
 // insistiera en seguir llamando a la tool. userCoords es el mismo dato que ya guarda
 // wa_location — solo se usa dentro de buscarLugar() como último recurso si la ciudad no
 // se puede geocodificar, exactamente igual que en el chat web.
-// Devuelve { text, usedTools } — no un string suelto — para que quien llame pueda distinguir
-// una respuesta de tool (búsqueda real de vuelo/hotel/coche/lugar) de una narrativa pura, y no
-// aplicarle cosas pensadas solo para narrativas (ver appendGuardarlaCta más abajo: bug real,
-// 25 sept 2026, "Cualquier día del mes" en medio de una búsqueda de vuelo no debe llevar la
-// invitación a guardar — con este flag se puede exigir "sin tool de por medio", no solo mirar
-// la forma del mensaje).
+// Devuelve { text, usedTools, allFlightSearchesFailed } — no un string suelto — para que quien
+// llame pueda distinguir una respuesta de tool (búsqueda real de vuelo/hotel/coche/lugar) de
+// una narrativa pura, y no aplicarle cosas pensadas solo para narrativas (ver appendGuardarlaCta
+// más abajo: bug real, 25 sept 2026, "Cualquier día del mes" en medio de una búsqueda de vuelo
+// no debe llevar la invitación a guardar — con este flag se puede exigir "sin tool de por
+// medio", no solo mirar la forma del mensaje).
+// allFlightSearchesFailed (25 sept 2026, bug real: "cojones que de el resultado correcto") —
+// true cuando se llamó a buscar_vuelos al menos una vez en el turno y NINGUNA llamada encontró
+// vuelos reales (Koh Samui/Hanói: ni la búsqueda directa ni la del hub intermedio dieron
+// resultado). "Prohibido inventar" en el prompt no bastaba — Claude rellenaba con presupuestos
+// "orientativos" y hasta una URL de Google Flights inventada. Con esta señal, el webhook
+// sustituye la respuesta de Claude por un mensaje honesto determinista (ver /whatsapp), igual
+// que ya hace appendGuardarlaCta/stripWaLeakedMarkers para otros casos — no confiar en que el
+// modelo se abstenga de inventar cuando no tiene nada real que ofrecer.
 async function waCallClaudeWithTools(env, system, messages, userCoords) {
   let msgs = [...messages];
   let usedTools = false;
+  const flightSearchResults = []; // true = encontró vuelos reales, false = 0 resultados o error
   for (let i = 0; i < 3; i++) {
     const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
@@ -3373,18 +3389,18 @@ async function waCallClaudeWithTools(env, system, messages, userCoords) {
     const toolUses = (data.content || []).filter(b => b.type === 'tool_use');
     if (data.stop_reason !== 'tool_use' || !toolUses.length) {
       const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
-      return { text, usedTools };
+      return { text, usedTools, allFlightSearchesFailed: flightSearchResults.length > 0 && flightSearchResults.every(ok => !ok) };
     }
     usedTools = true;
     msgs = [...msgs, { role: 'assistant', content: data.content }];
-    const toolResults = await Promise.all(toolUses.map(async (tu) => ({
-      type: 'tool_result',
-      tool_use_id: tu.id,
-      content: JSON.stringify(await executeToolCall(tu.name, tu.input, env, userCoords)),
-    })));
+    const toolResults = await Promise.all(toolUses.map(async (tu) => {
+      const result = await executeToolCall(tu.name, tu.input, env, userCoords);
+      if (tu.name === 'buscar_vuelos') flightSearchResults.push(!!(result && result.encontrados > 0));
+      return { type: 'tool_result', tool_use_id: tu.id, content: JSON.stringify(result) };
+    }));
     msgs = [...msgs, { role: 'user', content: toolResults }];
   }
-  return { text: 'Se me ha liado buscando — vuelve a preguntarme.', usedTools };
+  return { text: 'Se me ha liado buscando — vuelve a preguntarme.', usedTools, allFlightSearchesFailed: flightSearchResults.length > 0 && flightSearchResults.every(ok => !ok) };
 }
 
 // Detecta el país/ciudad mencionado en el mensaje (o guided_route) y carga los datos de
@@ -8971,10 +8987,10 @@ export default {
             const waLocationCtx = buildWaLocationCtx(locName, 0);
             const waCoords = { lat: parseFloat(waLat), lng: parseFloat(waLng) };
 
-            const { text: locReplyText } = await waCallClaudeWithTools(
+            const { text: locReplyText, allFlightSearchesFailed: locFlightsFailed } = await waCallClaudeWithTools(
               env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: locationMarker }], waCoords
             );
-            const reply = stripWaLeakedMarkers(locReplyText) || `Vale, ya sé que estás en ${locName}.`;
+            const reply = locFlightsFailed ? WA_NO_FLIGHTS_FOUND_MSG : (stripWaLeakedMarkers(locReplyText) || `Vale, ya sé que estás en ${locName}.`);
             await sendWhatsAppMessage(env, from, reply);
 
             if (env.SALMA_KB) {
@@ -9255,7 +9271,7 @@ export default {
             } catch (_) {}
           }
 
-          const { text: chatReplyText, usedTools } = await waCallClaudeWithTools(
+          const { text: chatReplyText, usedTools, allFlightSearchesFailed } = await waCallClaudeWithTools(
             env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords
           );
           const rawReply = stripWaLeakedMarkers(chatReplyText) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
@@ -9263,7 +9279,9 @@ export default {
           // pega la invitación a guardar — es una búsqueda de servicio, no una ruta (bug real,
           // 25 sept 2026: "Cualquier día del mes" en medio de una búsqueda de vuelo la llevaba
           // pegada sin sentido).
-          const reply = usedTools ? rawReply : appendGuardarlaCta(rawReply, body);
+          // Si NINGUNA búsqueda de vuelo del turno encontró nada real, se ignora lo que Claude
+          // haya escrito y se manda el mensaje honesto determinista — ver WA_NO_FLIGHTS_FOUND_MSG.
+          const reply = allFlightSearchesFailed ? WA_NO_FLIGHTS_FOUND_MSG : (usedTools ? rawReply : appendGuardarlaCta(rawReply, body));
           await sendWhatsAppMessage(env, from, reply);
 
           if (env.SALMA_KB) {
