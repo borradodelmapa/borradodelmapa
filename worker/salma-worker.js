@@ -530,7 +530,8 @@ const SALMA_SYSTEM_CHAT = [
 // web, pero SIN BLOQUE_ACCION (tools de vuelos/hoteles/lugares — no conectadas todavía
 // por este canal, F5.3), SIN BLOQUE_MAPA (instrucciones de GPS, no aplican por texto) y
 // SIN BLOQUE_NOTAS (auto-guardado de notas en Firestore — no hay uid vinculado todavía,
-// F5.4). Sin memoria entre mensajes (cada uno se responde solo, F5.3 añadirá memoria).
+// F5.4). Memoria e info de ubicación añadidas el 25 sept 2026 (F5.3 puntos 1 y 2) — ver
+// wa_history/wa_location en el webhook /whatsapp; aquí solo las instrucciones de uso.
 const WHATSAPP_SYSTEM_CHAT = [
   BLOQUE_IDENTIDAD,
   BLOQUE_PERSONALIDAD,
@@ -540,7 +541,8 @@ const WHATSAPP_SYSTEM_CHAT = [
   BLOQUE_FORMATO,
   `Estás hablando por WhatsApp, no por la app — un canal más limitado por ahora:
 - Todavía NO puedes buscar vuelos, hoteles, restaurantes ni fotos por aquí, ni generar rutas con mapa. Si te piden algo de eso, dilo con naturalidad ("eso todavía no lo tengo aquí, pero en la app sí") y sigue ayudando con lo que sepas de memoria.
-- No hay memoria entre mensajes todavía: cada mensaje se responde solo, sin recordar lo anterior de esta conversación. Si el usuario hace referencia a algo de antes que no ves, dilo sin más.
+- SÍ tienes memoria de los últimos mensajes de esta conversación (te llegan como turnos anteriores) — úsala con normalidad, no digas que no recuerdas algo que sí está ahí arriba.
+- WhatsApp no tiene GPS en vivo como la app: solo sabes dónde está el usuario si te lo dice o si comparte su ubicación (clip → Ubicación). Si ves un bloque [UBICACIÓN...] al final de este prompt, síguelo tal cual. Si NO lo ves y necesitas saber dónde está para responder bien (buscar algo "cerca", seguir una ruta...), pídele que comparta su ubicación así, o que te diga la ciudad.
 - Formato: WhatsApp interpreta *un solo asterisco* como negrita, NUNCA dobles asteriscos. Sin viñetas ni encabezados. Respuestas cortas, de móvil — 2-4 frases salvo que pidan más detalle.`,
 ].join('\n\n');
 
@@ -3084,6 +3086,37 @@ function getCountryCode(countryName) {
 // ═══════════════════════════════════════════════════════════════
 // RESPUESTA DIRECTA DEL KV — sin llamar a Claude
 // ═══════════════════════════════════════════════════════════════
+
+// Reverse geocoding de una coordenada GPS a nombre de ciudad+país + código ISO, con caché
+// KV 24h (celda de ~1km, redondeado a 2 decimales). Extraído del chat principal (25 sept
+// 2026) para reutilizarlo también en WhatsApp (ubicación compartida). Nominatim/OSM,
+// gratis. Devuelve { name, cc } — ambos null si no se pudo resolver.
+async function reverseGeocodeLocation(env, lat, lng) {
+  const geoKey = `geo:${lat.toFixed(2)}:${lng.toFixed(2)}`;
+  if (env.SALMA_KB) {
+    try {
+      const cached = await env.SALMA_KB.get(geoKey);
+      if (cached) return JSON.parse(cached);
+    } catch (_) {}
+  }
+  let name = null, cc = null;
+  try {
+    const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=10&accept-language=en`;
+    const geoRes = await fetch(geoUrl, {
+      headers: { 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' },
+      signal: AbortSignal.timeout(5000),
+    });
+    const geoData = await geoRes.json();
+    const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.name || '';
+    const country = geoData.address?.country || '';
+    cc = (geoData.address?.country_code || '').toUpperCase();
+    if (city) name = city + (country ? ', ' + country : '');
+    if (env.SALMA_KB && name) {
+      try { await env.SALMA_KB.put(geoKey, JSON.stringify({ name, cc }), { expirationTtl: 86400 }); } catch (_) {}
+    }
+  } catch (e) {}
+  return { name, cc };
+}
 
 // Detecta el país/ciudad mencionado en el mensaje (o guided_route) y carga los datos de
 // KV asociados. Extraído del chat principal (25 sept 2026) para reutilizarlo también en
@@ -8626,8 +8659,32 @@ export default {
       const from = params.get('From');
       const body = (params.get('Body') || '').trim();
       const profileName = params.get('ProfileName');
+      const waLat = params.get('Latitude');
+      const waLng = params.get('Longitude');
 
       console.log(`[WhatsApp] Mensaje de ${from} (${profileName}): "${body}"`);
+
+      // Ubicación compartida (25 sept 2026, F5.3 punto 1) — Twilio NO soporta "ubicación en
+      // vivo" de WhatsApp, solo puntual (confirmado con búsqueda web), así que se guarda con
+      // caducidad corta (90 min) y se trata como un dato que envejece, no como GPS en vivo:
+      // fresca (<20 min) se usa directa, entre 20-90 min Salma pregunta "¿sigues en X?" antes
+      // de darla por buena (ver más abajo, justo antes de llamar a Claude). El mensaje de
+      // ubicación de WhatsApp viene con Body vacío, por eso esto va ANTES del `if (!body)`.
+      if (waLat && waLng) {
+        ctx.waitUntil((async () => {
+          try {
+            const geo = await reverseGeocodeLocation(env, parseFloat(waLat), parseFloat(waLng));
+            const locName = geo.name || params.get('Address') || params.get('Label') || 'esa zona';
+            if (env.SALMA_KB) {
+              await env.SALMA_KB.put('wa_location:' + from, JSON.stringify({
+                lat: parseFloat(waLat), lng: parseFloat(waLng), name: geo.name, cc: geo.cc, sharedAt: new Date().toISOString(),
+              }), { expirationTtl: 5400 });
+            }
+            await sendWhatsAppMessage(env, from, `Vale, ya sé que estás en ${locName}. Te lo recuerdo un rato — si te mueves, dímelo o vuelve a compartir ubicación.`);
+          } catch (e) { console.error('[WhatsApp] Error guardando ubicación:', e.message); }
+        })());
+        return new Response('OK', { status: 200 });
+      }
 
       if (!body) {
         // Foto/audio/sticker sin texto — todavía solo entendemos texto. Nada que responder.
@@ -8825,6 +8882,27 @@ export default {
             try { waHistory = JSON.parse((await env.SALMA_KB.get(waHistKey)) || '[]'); } catch (_) { waHistory = []; }
           }
 
+          // Ubicación compartida (F5.3 punto 1) — envejece en dos tramos en vez de tratarse
+          // como GPS en vivo (Twilio no lo soporta): <20 min se usa directa (mencionándolo,
+          // transparencia); 20-90 min Salma debe preguntar "¿sigues en X?" antes de darla
+          // por buena — puede haberse movido de ciudad en ese rato. Pasados 90 min, KV ya la
+          // ha borrado sola (TTL) y es como si no hubiera ubicación: se le pide de nuevo.
+          let waLocationCtx = '';
+          if (env.SALMA_KB) {
+            try {
+              const savedLoc = JSON.parse((await env.SALMA_KB.get('wa_location:' + from)) || 'null');
+              if (savedLoc && savedLoc.sharedAt) {
+                const ageMin = (Date.now() - Date.parse(savedLoc.sharedAt)) / 60000;
+                const place = savedLoc.name || 'la zona que compartió';
+                if (ageMin < 20) {
+                  waLocationCtx = `\n\n[UBICACIÓN: el usuario compartió hace poco que está en ${place}. Puedes usarlo directo para responder, pero MENCIONA en tu respuesta que lo estás usando (ej: "Como estás en ${place}...") para que pueda corregirte si ya no es así.]`;
+                } else if (ageMin < 90) {
+                  waLocationCtx = `\n\n[UBICACIÓN desactualizada: el usuario compartió hace ${Math.round(ageMin)} min que estaba en ${place}, pero puede haberse movido. Si tu respuesta depende de dónde está AHORA (buscar algo cerca, seguir una ruta...), pregúntale primero "¿Sigues en ${place}?" antes de usarlo — no lo des por hecho.]`;
+                }
+              }
+            } catch (_) {}
+          }
+
           const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
             method: 'POST',
             headers: {
@@ -8835,7 +8913,7 @@ export default {
             body: JSON.stringify({
               model: 'claude-sonnet-4-6',
               max_tokens: 600,
-              system: WHATSAPP_SYSTEM_CHAT,
+              system: WHATSAPP_SYSTEM_CHAT + waLocationCtx,
               messages: [...waHistory, { role: 'user', content: body }],
             }),
           });
@@ -10519,39 +10597,9 @@ REGLAS:
     let userLocationName = null;
     let userCountryCode = null; // ISO 2 letras del país donde está el usuario (por GPS)
     if (userLocation && userLocation.lat && userLocation.lng) {
-      const geoKey = `geo:${userLocation.lat.toFixed(2)}:${userLocation.lng.toFixed(2)}`;
-
-      let geoCache = null;
-      if (env.SALMA_KB) {
-        try {
-          const cached = await env.SALMA_KB.get(geoKey);
-          if (cached) geoCache = JSON.parse(cached);
-        } catch (_) {}
-      }
-
-      if (geoCache) {
-        userLocationName = geoCache.name;
-        userCountryCode = geoCache.cc;
-      } else {
-        try {
-          const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json&zoom=10&accept-language=en`;
-          const geoRes = await fetch(geoUrl, {
-            headers: { 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' },
-            signal: AbortSignal.timeout(5000),
-          });
-          const geoData = await geoRes.json();
-          const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.name || '';
-          const country = geoData.address?.country || '';
-          userCountryCode = (geoData.address?.country_code || '').toUpperCase();
-          if (city) userLocationName = city + (country ? ', ' + country : '');
-
-          if (env.SALMA_KB && userLocationName) {
-            try {
-              await env.SALMA_KB.put(geoKey, JSON.stringify({ name: userLocationName, cc: userCountryCode }), { expirationTtl: 86400 });
-            } catch (_) {}
-          }
-        } catch (e) {}
-      }
+      const geoResult = await reverseGeocodeLocation(env, userLocation.lat, userLocation.lng);
+      userLocationName = geoResult.name;
+      userCountryCode = geoResult.cc;
     }
 
     if (!message.trim() && !imageBase64) {
