@@ -1362,8 +1362,8 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   pendiente de confirmar en pantalla. Las que faltaban se generan solas (OK de Paco, 25 sept:
   "son pocas"): Google Static Maps ~0,002 € por guía, UNA sola vez (quedan en R2), máx 30 por
   reconstrucción del índice — misma función `generateRouteThumbnail()` que `/route-thumbnail`. Commit `bd5fecd`,
-  **Worker `8c417783-ad32-48b4-9938-fc3bdfeb520d`** (vigente). En `main` (commit `d26f766`), **Worker Version ID
-  `ac461d62-22b2-4235-b3bf-b3640b0bd261`** (GitHub Action "Deploy Worker", run 80).
+  **Worker `8c417783-ad32-48b4-9938-fc3bdfeb520d`** (vigente). Primer despliegue: commit `d26f766`, Worker
+  `ac461d62-22b2-4235-b3bf-b3640b0bd261` (GitHub Action "Deploy Worker", run 80).
   Decidido con Paco: botón dentro de Rutas (pestañas "Mis rutas | Explorar"), visible sin
   login (botón "Ver rutas de otros viajeros" en la pantalla de entrada + pestaña Mis Viajes
   ya no exige sesión), guías existentes incluidas sin repetidas, autor con nombre de pila.
