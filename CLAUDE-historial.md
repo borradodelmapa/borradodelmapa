@@ -3798,3 +3798,31 @@ Hoy se trabaja en 4 frentes. Recordatorio: la app de escritorio crea un worktree
 6. **Coche (RapidAPI 403):** suscribirse a la API de coches o quitar `buscar_coche` y su punto de salud en /health.
 7. **Cosas de Paco:** cambiar contraseña de `admin@borradodelmapa.com` en Firebase (su hash estuvo público); `npx -y netlify-cli logout`; regenerar el token de GitHub usado con el repo del panel; probar "Bloquear" con una cuenta real y la pestaña Feedback con sesión real; aclarar el "no sale" de Ingresos; el enlace a usuarios de Firebase Authentication salía vacío.
 8. **Sin confirmar en pantalla aún:** acciones de usuario contra Firebase Auth real, pestaña Feedback con sesión real.
+
+---
+
+## 25 sept 2026 — Panel admin: eliminar usuarios (Tarea 1) + tipo de registro (Tarea 2) — CONFIRMADO EN PANTALLA de punta a punta
+
+Primeras dos de las 5 tareas dictadas por Paco el 26 sept (más arriba, "Notas de Paco") — **AMBAS CERRADAS**, con varias vueltas de bugs reales encontrados en el propio proceso de probarlo, no solo en el código nuevo.
+
+**Tarea 1 — borrado completo de cuenta, con exención (puede volver a registrarse).** Nuevo `POST /admin/user-action` acción `delete` (requiere `confirm: true` en el body, aparte de la confirmación del panel — doble red de seguridad, es irreversible). Borra: las 9 subcolecciones de `users/{uid}` (maps, fotos, albumes, notas, pins, map_pins, travel_docs, paises, flight_watches), `public_guides`/`shared_routes` de cada guía (con GET previo — Firestore borra sin avisar aunque el documento no exista, así que el conteo real necesita comprobar antes), `whatsapp_sessions` por consulta de campo `uid`, ficheros R2 (`photos/{uid}/`, `docs/{uid}/`, miniaturas `mapthumb/{mapId}.jpg`), contadores KV (`usage:*`, `fw:`, `fw_alerts:`, y se quita de `flight_watch_users`) y por último la cuenta de Firebase Authentication. **Sin lista negra a propósito** — el mismo email/número puede volver a registrarse después como si nunca hubiera existido (a petición explícita de Paco). Panel: botón nuevo en "Zona irreversible" de la ficha de usuario.
+
+**Vueltas de bugs reales antes de confirmarlo (todos con tests, no solo arreglados a ojo):**
+1. **Confirmación por texto exacto → simplificada.** El primer diseño pedía teclear el email/nombre exacto para confirmar (como "escribe el nombre del repo para borrarlo"). Para una cuenta de WhatsApp sin email, ese valor caía en el nombre genérico ("Viajero"), no en el móvil que Paco usaba para identificar la cuenta — el borrado se cancelaba en silencio pensando que no coincidía. Sustituido por un segundo `confirm()` simple, sin teclear nada.
+2. **`uid` de WhatsApp rechazado por el propio endpoint.** La validación `/^[A-Za-z0-9]{20,40}$/` de `/admin/user-action` no admitía guion bajo — pero TODAS las cuentas de WhatsApp usan uid `wa_` + hash (`_waUidFromPhone`). Cualquier acción admin sobre una cuenta de WhatsApp (no solo borrar) caía con "uid no válido" antes de ejecutarse nada. Regex ampliada a `[A-Za-z0-9_]`.
+3. **`whatsapp_sessions` no se limpiaba de verdad — encontrado con `wrangler tail` en vivo.** El borrado "funcionaba" (la cuenta desaparecía de la lista, Firebase Auth se borraba) pero al volver a entrar por WhatsApp con el mismo número, el Worker seguía viendo el número como "ya vinculado" a un uid fantasma. Causa: el id de ese documento (`whatsapp:+34...`) se mandaba SIN volver a escapar en la URL del DELETE — un `:` suelto en una URL de la API de Google se interpreta como separador de método especial (el mismo patrón que usamos nosotros mismos con `:runQuery`), así que el borrado de ese documento concreto fallaba en silencio (sin abortar el resto, así que no se veía ningún error). Se re-codifica el último tramo del path antes de borrar.
+4. **Auto-reparación añadida de propina.** Incluso con el fix anterior, una sesión de WhatsApp puede quedar apuntando a un uid sin `users/{uid}` (pasó de verdad durante esta misma sesión de pruebas, y podría volver a pasar por cualquier borrado manual en Firestore). Ahora, antes de dar por bueno un número "ya vinculado", el webhook comprueba que su `users/{uid}` exista de verdad; si no, lo trata como número nuevo y `_waCreateAccount()` lo recrea todo con el mismo uid determinista — sin necesitar borrar nada a mano nunca más.
+
+**Tarea 2 — tipo de registro visible.** `/admin/stats` ahora expone `phone` y `created_via` por usuario (antes solo `name`/`email`/`createdAt`/`premium_until`). El panel muestra el móvil en vez de "—" cuando no hay email, "WhatsApp" como proveedor cuando no hay ninguno de Firebase Auth, y ahora se puede buscar en la tabla por número de teléfono — esto salió de la misma sesión de pruebas porque, sin ello, no había forma de distinguir ni encontrar una cuenta de WhatsApp en la lista.
+
+**CONFIRMADO EN PANTALLA por Paco, de punta a punta:** borrar una cuenta de WhatsApp real → desaparece de la lista → volver a registrarse con el mismo número → aparece de nuevo correctamente en la lista de Usuarios, con su móvil visible. "ok ya funciona, probado de principio a fin (...) funciona."
+
+**Commits y Worker Version IDs de esta sesión (en orden):**
+- `4448e315` — acción `delete` inicial.
+- (frontend admin) confirmación simplificada, doble `confirm()`.
+- `4aace756` — `/admin/stats` con `phone`/`created_via`.
+- `33dd4056` — fix de la regex de `uid` (admite `_`).
+- `caaf6cae` — fix de la URL de `whatsapp_sessions` (re-codificar el id) + auto-reparación de sesión fantasma. **Version ID final y vigente: `caaf6cae-231f-471f-8eaa-eae657be1c38`.**
+- Admin panel: `Panel 2026-09-26.3` (repo `admin-borradodelmapa`, badge visible abajo a la derecha).
+
+**Tests:** 55 tests en `.mjs` locales (simulación de Firestore/KV/R2/Twilio contra el propio `salma-worker.js`, sin red real) cubriendo: rechazos (sin confirmar, sin token, uid inválido), borrado completo con conteo exacto, no interferencia con otro usuario, re-borrado idempotente, uid con guion bajo, re-codificación de la URL de `whatsapp_sessions`, auto-reparación de sesión fantasma, y `/admin/stats` con los campos nuevos. No quedan en el repo (eran de `/tmp`, se pierden al cerrar la sesión) — si hace falta reconstruirlos, el patrón está descrito arriba.

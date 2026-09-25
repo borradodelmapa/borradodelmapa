@@ -964,17 +964,22 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 - Cambio de coste a vigilar: desde el 1 oct 2026 los mensajes de servicio de WhatsApp
   dentro de la ventana de 24h dejan de ser gratis en Twilio — verlo cuando llegue.
 
-**Notas de Paco, 26 sept 2026 — dictadas para no olvidarlas, SIN TOCAR NADA todavía
-("luego seguimos"):**
-1. Panel admin: poder **eliminar usuarios** (hoy solo hay deshabilitar/habilitar,
-   `POST /admin/user-action`, nunca borra nada — habría que decidir si esto cambia esa
-   norma o es una acción nueva aparte).
-2. Panel admin: añadir en la lista de usuarios **de qué tipo es cada registro** (WhatsApp
-   o Google/email) — ya existe el dato (`created_via` en `users/{uid}`), falta pintarlo.
+**Notas de Paco, 26 sept 2026 — 5 tareas dictadas, a hacer en orden:**
+1. ~~Panel admin: eliminar usuarios~~ — **HECHO y CONFIRMADO EN PANTALLA por Paco el 25
+   sept 2026, de punta a punta** (borrar cuenta real de WhatsApp → desaparece de la lista
+   → volver a registrarse con el mismo número → aparece bien otra vez). Costó 3 bugs
+   reales encontrados en el propio proceso (confirmación por texto, uid con guion bajo
+   rechazado, `whatsapp_sessions` que no se limpiaba) + una auto-reparación de propina.
+   **Worker Version ID vigente: `caaf6cae-231f-471f-8eaa-eae657be1c38`.** Detalle completo
+   en `CLAUDE-historial.md`.
+2. ~~Panel admin: tipo de registro (WhatsApp/Google)~~ — **HECHO** en la misma sesión que
+   la tarea 1 (`/admin/stats` expone `phone`/`created_via`; panel `2026-09-26.3`). Salió
+   de necesitar distinguir cuentas de WhatsApp para poder probar el borrado.
 3. **Personalizar WhatsApp con la imagen de Borrado del Mapa** — el perfil del número de
-   Twilio (foto/nombre visible) y que también se vea así para usuarios nuevos.
+   Twilio (foto/nombre visible) y que también se vea así para usuarios nuevos. Sin
+   empezar.
 4. **Revisar los textos exactos** que se mandan por WhatsApp al registrarse y a quien ya
-   está registrado — pulir la redacción, no solo que funcionen.
+   está registrado — pulir la redacción, no solo que funcionen. Sin empezar.
 5. **Que WhatsApp funcione igual que la web**: geolocalización, crear guías, consultar
    vuelos... todo. Esto es F5.3 (tools + memoria por WhatsApp), ya apuntado más arriba
    como "sin empezar, sin fecha" — Paco confirma que quiere el alcance completo, no una
