@@ -7580,7 +7580,17 @@ export default {
           try {
             const waDocs = await firestoreAdminQueryByField(env, 'whatsapp_sessions', 'uid', uid);
             for (const name of waDocs) {
-              try { await firestoreAdminDelete(env, name.split('/documents/')[1]); counts.whatsapp_sessions++; }
+              // El id de whatsapp_sessions es "whatsapp:+34..." (con ':' y '+' sin escapar,
+              // tal cual lo devuelve la query) — un ':' suelto en la URL lo interpreta la
+              // API de Google como separador de método especial (el mismo patrón que
+              // ':runQuery'), así que el DELETE se malinterpretaba y fallaba en silencio
+              // sin borrar nada (bug real, encontrado 25 sept 2026 con wrangler tail: el
+              // borrado completo nunca limpiaba esta colección). Se re-codifica solo el
+              // último tramo (el id), no la colección.
+              const rawPath = name.split('/documents/')[1];
+              const slashIdx = rawPath.lastIndexOf('/');
+              const safePath = rawPath.slice(0, slashIdx + 1) + encodeURIComponent(rawPath.slice(slashIdx + 1));
+              try { await firestoreAdminDelete(env, safePath); counts.whatsapp_sessions++; }
               catch (e) { errors.push('whatsapp_sessions: ' + e.message); }
             }
           } catch (e) { errors.push('buscar whatsapp_sessions: ' + e.message); }
@@ -8474,7 +8484,6 @@ export default {
           // alta que puede pasar unas líneas más abajo en el mismo turno) — lo usa el
           // saludo de bienvenida de vuelta, más adelante en este mismo bloque.
           const wasAlreadyLinked = !!linkedUid;
-          console.log('[WhatsApp][debug] wasAlreadyLinked=' + wasAlreadyLinked + ' linkedUid=' + (linkedUid || '(ninguno)'));
 
           // ¿El mensaje es un código de vinculación de 6 caracteres? Se comprueba
           // SIEMPRE, esté o no ya vinculado el número — si ya lo estaba con OTRA
