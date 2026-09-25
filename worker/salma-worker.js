@@ -3395,6 +3395,9 @@ async function waCallClaudeWithTools(env, system, messages, userCoords) {
     msgs = [...msgs, { role: 'assistant', content: data.content }];
     const toolResults = await Promise.all(toolUses.map(async (tu) => {
       const result = await executeToolCall(tu.name, tu.input, env, userCoords);
+      // Diagnóstico temporal (25 sept 2026, "no está arreglado ni vuelos ni hoteles"): qué se
+      // pide y qué devuelve cada tool en WhatsApp. Solo consola, sin coste.
+      console.log('[WA-TOOL]', tu.name, JSON.stringify(tu.input), '→', JSON.stringify(result).slice(0, 600));
       if (tu.name === 'buscar_vuelos') flightSearchResults.push(!!(result && result.encontrados > 0));
       return { type: 'tool_result', tool_use_id: tu.id, content: JSON.stringify(result) };
     }));
