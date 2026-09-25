@@ -5962,7 +5962,9 @@ async function buscarHotelesBooking(input, rapidApiKey) {
     const noches = Math.round((fechaOut - fechaIn) / (1000 * 60 * 60 * 24));
 
     // Convertir precios de moneda local a EUR por noche
-    let hoteles = searchData.result.map(h => {
+    // Booking mezcla en `result` entradas que no son hoteles (sin hotel_name ni precio) —
+    // visto en wrangler tail el 25 sept 2026: 2 de 5 "hoteles" llegaban vacíos a 0 €.
+    let hoteles = searchData.result.filter(h => h && h.hotel_name).map(h => {
       const precioTotal = h.min_total_price || h.composite_price_breakdown?.gross_amount?.value || 0;
       const moneda = h.currency_code || 'EUR';
       const precioNoche = noches > 0 ? Math.round(precioTotal / noches * 100) / 100 : precioTotal;

@@ -1267,7 +1267,17 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
        pendiente de confirmar en pantalla por Paco** (volver a pedir el vuelo a Hanói o a
        cualquier destino sin conexión real y comprobar que ahora dice claramente que no ha
        encontrado nada, sin precios ni aerolíneas inventadas).
-   - **Worker Version ID vigente: `1990087f-457b-4208-90af-3f21f6e933cf`** (despliegues
+   - **CAUSA REAL de vuelos/hoteles fallando por WhatsApp (25 sept 2026, noche, vista con
+     `wrangler tail` + log `[WA-TOOL]`): WhatsApp no le pasaba a Claude la fecha de hoy** (la
+     web sí: `[FECHA ACTUAL]` en `buildMessages`). Buscaba en 2025 → Booking 422, Duffel 0
+     vuelos; los arreglos de prompt de antes (hub, mensaje honesto) tapaban esto. Arreglado
+     metiendo la misma línea en `waCallClaudeWithTools` (Worker `1354c386`). **CONFIRMADO EN
+     PANTALLA por Paco: hotel esta noche OK, y vuelo Madrid→Koh Samui en noviembre con precios
+     reales (435 € + 124 € por Bangkok).** De paso: `buscarHotelesBooking` (web y WhatsApp)
+     descarta entradas de Booking sin `hotel_name` (llegaban 2 de 5 vacías a 0 €). El log
+     `[WA-TOOL]` se queda (solo consola). El "Hoy ya hemos hablado bastante" que salió era el
+     tope `wa_daily` de 60 mensajes/día (Paco lo agotó probando; se borró su contador de hoy).
+   - **Worker Version ID vigente: ver `/version`** (anterior: `1990087f-457b-4208-90af-3f21f6e933cf`) (despliegues
      intermedios de este punto: `def5f8bc-98f2-4ca0-b343-2a78735984fb` → búsqueda de vuelos
      por hub real (funcionó a medias, seguía inventando cuando el hub también fallaba),
      `82e57261-89a4-453b-a201-a5b4a934d820` → frase de reinicio de
