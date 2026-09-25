@@ -1086,12 +1086,27 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
         esto YA es server-side de verdad, con el plan real de Firestore). Si no le queda,
         mismo mensaje que en la web + enlace a Premium. Si le queda, de momento se le manda a
         guardarla en la app (que ya lo hace bien) — no llama a Claude, coste 0.
-     2. **Generar y verificar la ruta de verdad desde WhatsApp** — sin empezar. Reutilizar el
-        mismo proceso de verificación de Google Places de la web (Find Place + Details por
-        parada), no uno aparte. Coste real por ruta (no el de `buscar_lugar`): varias veces
-        más caro, varias verificaciones por parada — pendiente de dar cifra exacta antes de
-        tocarlo, con aviso explícito a Paco antes de escribir código (protocolo §8).
-     3. **Guardarla en Firestore + enlace que la abre ya montada en la app** — sin empezar.
+     2. **Generar y verificar la ruta de verdad desde WhatsApp — HECHO, desplegado, pendiente
+        de confirmar en pantalla.** Se llegó aquí tras un tramo malo (ver más abajo: v3 del
+        fix de preguntas, desplegado, seguía sin parecerse a la web) que acabó con Paco muy
+        enfadado ("no sé qué cojones estás haciendo") — con razón: yo estaba comparando contra
+        el chat normal de la web, pero "1 día en X" en la web dispara "Tiempo 1" (recomendaciones
+        en prosa, formato **Día N**, con botón "Crear ruta con mapa" debajo) y el mapa/verificado
+        SOLO sale al pulsar ese botón ("Tiempo 2") — dos cosas distintas que yo estaba
+        mezclando. Paco, tras aclarar esto: **"DALE AL PASO 2 DE UNA VEZ Y DEJA DE MAREAR"**.
+        `waGenerateAndSaveRoute()` reutiliza las MISMAS dos funciones del Tiempo 2 de la web
+        —`convertProseToRouteJson()` (convierte a JSON el último plan que Salma dio en la
+        conversación, de `wa_history`) y `verifyAllStops()` (Find Place + Details por parada,
+        con la misma caché de 30 días compartida)— cero motor nuevo. Se guarda en Firestore
+        (`users/{uid}/maps/{id}`) con el MISMO esquema que `app.js:guardarGuiaDirecto()` usa en
+        la web (vía cuenta de servicio del Worker, que no tiene el SDK de cliente), y se
+        descuenta con `usageRecord()`, la misma función de siempre. **Aviso de coste (protocolo
+        §8): esto es EXACTAMENTE el mismo coste que ya paga "Crear ruta con mapa" en la web**
+        (1 Claude Sonnet hasta 20K tokens + verify Google Places por parada) — no es un coste
+        nuevo, es la misma acción ya tarificada, ahora también accesible desde WhatsApp.
+     3. **Enlace que abre la ruta YA guardada directamente** (sin tener que buscarla en "Mis
+        Rutas") — de momento el enlace es el de auto-entrada normal, sin abrir directo esa
+        guía. Mejora pendiente, no bloqueante.
    - **Bug real encontrado y arreglado, 25 sept 2026, desplegado y confirmado en pantalla
      por Paco: cadena de preguntas al pedir una ruta.** "Hazme una ruta por Santillana del
      Mar" daba la info correcta pero terminaba preguntando "¿día completo o visita rápida?"
@@ -1113,8 +1128,9 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      refuerza a cualquier pregunta de personalización, no solo las dos que cita el texto
      original. **Norma anotada para el resto de F5.3**: si ya funciona en la app, se reutiliza
      tal cual — nunca una versión propia para WhatsApp.
-   - **Worker Version ID vigente: `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109`** (despliegues
-     intermedios de este punto: `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
+   - **Worker Version ID vigente: `4b26ef45-eb51-4744-8400-758a48330b54`** (despliegues
+     intermedios de este punto: `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109` → fix cadena de
+     preguntas v3 (texto reutilizado, ver arriba), `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
