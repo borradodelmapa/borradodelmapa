@@ -7183,14 +7183,14 @@ export default {
         const users = [];
         let pageToken = '', truncated = false;
         for (let page = 0; page < 4; page++) {
-          const qs = ['pageSize=300'].concat(['name', 'email', 'createdAt', 'premium_until'].map(f => 'mask.fieldPaths=' + f));
+          const qs = ['pageSize=300'].concat(['name', 'email', 'phone', 'created_via', 'createdAt', 'premium_until'].map(f => 'mask.fieldPaths=' + f));
           if (pageToken) qs.push('pageToken=' + encodeURIComponent(pageToken));
           const r = await fetch(`${FIRESTORE_BASE}/users?${qs.join('&')}`, { headers: authH, signal: AbortSignal.timeout(10000) });
           if (!r.ok) throw new Error('Firestore users → ' + r.status);
           const j = await r.json();
           for (const d of (j.documents || [])) {
             const f = d.fields || {};
-            users.push({ uid: d.name.split('/').pop(), name: dec(f.name), email: dec(f.email), createdAt: dec(f.createdAt), premium_until: dec(f.premium_until) });
+            users.push({ uid: d.name.split('/').pop(), name: dec(f.name), email: dec(f.email), phone: dec(f.phone), created_via: dec(f.created_via), createdAt: dec(f.createdAt), premium_until: dec(f.premium_until) });
           }
           pageToken = j.nextPageToken || '';
           if (!pageToken) break;
@@ -7257,7 +7257,7 @@ export default {
           claudeUsd += us.claude_usd || 0; msgs += us.msgs || 0;
           const g = perUser[u.uid] || { n: 0, n7: 0 };
           return {
-            uid: u.uid, name: u.name, email: u.email, createdAt: u.createdAt,
+            uid: u.uid, name: u.name, email: u.email, phone: u.phone, created_via: u.created_via, createdAt: u.createdAt,
             premium_until: u.premium_until, premium_active: active, guides: g.n,
             disabled: (authInfo[u.uid] || {}).disabled === true, last_login: (authInfo[u.uid] || {}).last_login || null, providers: (authInfo[u.uid] || {}).providers || [],
             usage: { msgs: us.msgs || 0, guides: us.guides || 0, edits: us.edits || 0, claude_usd: us.claude_usd || 0, last_at: us.last_at || null },
