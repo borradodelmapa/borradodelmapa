@@ -3085,6 +3085,166 @@ function getCountryCode(countryName) {
 // RESPUESTA DIRECTA DEL KV — sin llamar a Claude
 // ═══════════════════════════════════════════════════════════════
 
+// Detecta el país/ciudad mencionado en el mensaje (o guided_route) y carga los datos de
+// KV asociados. Extraído del chat principal (25 sept 2026) para reutilizarlo también en
+// el webhook de WhatsApp — funciona por TEXTO (índice `kw:` + Nominatim gratuito de
+// respaldo); el GPS (userCountryCode/frontendCountryCode) es solo el último fallback si
+// el mensaje no da ninguna pista, así que sirve igual de bien sin geolocalización.
+async function detectCountryAndKV(env, message, history, currentRoute, guidedRoute, userCountryCode, frontendCountryCode, opts = {}) {
+  let kvCountryData = null;
+  let kvDestinationData = null;
+  let kvCachedRoute = null;
+  let kvTransportData = null;
+  let countryFromMessage = false;
+  let countryCode = null;
+  if (!env.SALMA_KB) return { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvCachedRoute, kvTransportData };
+  const guidedIsReco = !!opts.guidedIsReco;
+  const guidedMapStage = !!opts.guidedMapStage;
+  try {
+    // Extraer ubicación: primero el extractor normal, luego buscar palabras del mensaje en KV
+    let location = extractHelpLocation(message, history, currentRoute);
+    // Flujo guiado: el destino no está en el mensaje, viene en guided_route
+    if (!location && guidedRoute && guidedRoute.destino) location = guidedRoute.destino;
+    countryCode = null;
+
+    if (location) {
+      const kwNorm = location.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+      countryCode = await env.SALMA_KB.get('kw:' + kwNorm);
+    }
+
+    // Si no encontró con extractHelpLocation, buscar cada palabra capitalizada del mensaje
+    if (!countryCode) {
+      const words = message.match(/[A-ZÁÉÍÓÚÑÀ-ɏ][a-záéíóúñà-ɏ]{2,}/g) || [];
+      for (const word of words) {
+        const norm = word.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        const code = await env.SALMA_KB.get('kw:' + norm);
+        if (code) { countryCode = code; location = word; break; }
+      }
+    }
+
+    // Fallback 2: Nominatim — geocodificar cualquier palabra del mensaje que no sea stopword
+    // Va ANTES del escaneo word-by-word de KV porque Nominatim detecta ciudades que KV no tiene
+    if (!countryCode) {
+      const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','cosa','info','datos','dato','precio','coste','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia','gym','gimnasio','boxeo','fitness','cerca','mejor','buscame','encuentra','dame']);
+      const candidateWords = message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').match(/\b[a-z]{3,}\b/g) || [];
+      const candidates = candidateWords.filter(w => !STOPWORDS.has(w));
+
+      // Probar cada candidato en Nominatim (máx 2 intentos para no gastar tiempo)
+      const countryMap = {
+        'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
+        'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
+        'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'mexico': 'MX',
+        'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL', 'brasil': 'BR',
+        'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP', 'japan': 'JP',
+        'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
+        'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
+        'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
+        'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
+        'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
+        'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
+        'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'viet nam': 'VN',
+        'camboya': 'KH', 'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG',
+        'singapore': 'SG', 'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG',
+        'egypt': 'EG', 'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
+        'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
+        'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
+        'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
+        'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
+        'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
+        'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
+        'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
+        'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
+        'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
+        'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
+        'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
+        'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
+        'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
+        'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
+        'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN', 'ruanda': 'RW', 'rwanda': 'RW',
+      };
+
+      for (const word of candidates.slice(0, 2)) {
+        // Primero comprobar si es un país conocido en el mapa
+        if (countryMap[word]) { countryCode = countryMap[word]; location = location || word; break; }
+        // Si no, geocodificar con Nominatim
+        try {
+          // Caché en KV para no repetir la misma ciudad
+          const geoCacheKey = 'geocity:' + word;
+          let cachedCC = env.SALMA_KB ? await env.SALMA_KB.get(geoCacheKey) : null;
+          if (cachedCC) {
+            countryCode = cachedCC;
+            location = location || word;
+            break;
+          }
+          const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(word)}&format=json&limit=1&accept-language=en`;
+          const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
+          const geoArr = await geoRes.json();
+          if (geoArr.length > 0 && geoArr[0].display_name) {
+            const parts = geoArr[0].display_name.split(',');
+            const countryName = parts[parts.length - 1].trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+            const cc = countryMap[countryName] || null;
+            if (cc) {
+              countryCode = cc;
+              location = location || word;
+              // Cachear en KV para la próxima vez (30 días)
+              if (env.SALMA_KB) {
+                try { await env.SALMA_KB.put(geoCacheKey, cc, { expirationTtl: 2592000 }); } catch (_) {}
+              }
+              break;
+            }
+          }
+        } catch (_) {}
+      }
+    }
+
+    // Guardar si el país se detectó del mensaje (vs GPS) para saber si es consulta local o remota
+    countryFromMessage = !!countryCode;
+
+    // Fallback 3: si hay GPS y no se encontró país por el mensaje, usar el país del GPS
+    if (!countryCode && userCountryCode) {
+      countryCode = userCountryCode;
+    }
+
+    // Fallback 4: país enviado por el frontend (detectado por GPS del navegador)
+    if (!countryCode && frontendCountryCode) {
+      countryCode = frontendCountryCode;
+    }
+
+    if (countryCode) {
+      const kwNorm = (location || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+      const ccLower = countryCode.toLowerCase();
+
+      // Leer KV en paralelo (en vez de secuencial — ahorra ~200ms)
+      const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
+      const days = daysMatch ? daysMatch[1] : null;
+      // PIEZA A — ni en el Tiempo 1 (recomendaciones) ni en el Tiempo 2 (botón) se
+      // sirve una ruta cacheada por delante: el Tiempo 2 debe montar el mapa a partir
+      // del texto de recomendaciones que el usuario acaba de ver, no otra ruta distinta.
+      const routeKey = (isRouteRequest(message, history) && days && !guidedIsReco && !guidedMapStage)
+        ? 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days
+        : null;
+
+      const [baseJson, spotRef, transportJson, cachedRouteJson] = await Promise.all([
+        env.SALMA_KB.get('dest:' + ccLower + ':base'),
+        env.SALMA_KB.get('spot:' + kwNorm),
+        env.SALMA_KB.get('transport:' + ccLower),
+        routeKey ? env.SALMA_KB.get(routeKey) : Promise.resolve(null),
+      ]);
+
+      if (baseJson) kvCountryData = JSON.parse(baseJson);
+      if (cachedRouteJson) kvCachedRoute = JSON.parse(cachedRouteJson);
+      if (transportJson) kvTransportData = JSON.parse(transportJson);
+
+      // Destino específico: si spotRef existe, leer el detalle (segunda ronda, unavoidable)
+      if (spotRef) {
+        const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
+        if (spotJson) kvDestinationData = JSON.parse(spotJson);
+      }
+    }
+  } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
+  return { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvCachedRoute, kvTransportData };
+}
+
 function tryKVDirectAnswer(message, country, destination) {
   if (!country) return null;
   const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -8636,6 +8796,21 @@ export default {
             return;
           }
 
+          // Respuestas instantáneas de KV (25 sept 2026, F5.3 punto 1) — la misma función
+          // que usa el chat principal, reutilizada aquí: detecta el país/ciudad por TEXTO
+          // (índice `kw:` + Nominatim gratis de respaldo, sin depender de geolocalización,
+          // que WhatsApp no tiene) y responde sin llamar a Claude si hay dato en KV
+          // (visados, moneda, enchufes, seguridad, emergencias...). Coste: 0 — mismas
+          // fuentes gratuitas que ya usa la web, ninguna llamada de pago nueva.
+          try {
+            const { kvCountryData: waKvCountry, kvDestinationData: waKvDest } = await detectCountryAndKV(env, body, [], null, null, undefined, undefined, {});
+            const waKvReply = waKvCountry ? tryKVDirectAnswer(body, waKvCountry, waKvDest) : null;
+            if (waKvReply) {
+              await sendWhatsAppMessage(env, from, waKvReply);
+              return;
+            }
+          } catch (e) { console.error('[WhatsApp] Error en respuesta instantánea KV:', e.message); }
+
           const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
             method: 'POST',
             headers: {
@@ -10563,158 +10738,10 @@ INSTRUCCIONES:
       }
     }
 
-    // ─── KV LOOKUP (pre-Claude) ───
-    let kvCountryData = null;
-    let kvDestinationData = null;
-    let kvCachedRoute = null;
-    let kvTransportData = null;
-    let countryFromMessage = false;
-    let countryCode = null;
-    const _kvDebug = {};
-    if (env.SALMA_KB) {
-      try {
-        // Extraer ubicación: primero el extractor normal, luego buscar palabras del mensaje en KV
-        let location = extractHelpLocation(message, history, currentRoute);
-        // Flujo guiado: el destino no está en el mensaje, viene en guided_route
-        if (!location && guidedRoute && guidedRoute.destino) location = guidedRoute.destino;
-        countryCode = null;
-
-        if (location) {
-          const kwNorm = location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-          countryCode = await env.SALMA_KB.get('kw:' + kwNorm);
-        }
-
-        // Si no encontró con extractHelpLocation, buscar cada palabra capitalizada del mensaje
-        if (!countryCode) {
-          const words = message.match(/[A-ZÁÉÍÓÚÑ\u00C0-\u024F][a-záéíóúñ\u00E0-\u024F]{2,}/g) || [];
-          for (const word of words) {
-            const norm = word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            const code = await env.SALMA_KB.get('kw:' + norm);
-            if (code) { countryCode = code; location = word; break; }
-          }
-        }
-
-        // Fallback 2: Nominatim — geocodificar cualquier palabra del mensaje que no sea stopword
-        // Va ANTES del escaneo word-by-word de KV porque Nominatim detecta ciudades que KV no tiene
-        if (!countryCode) {
-          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','cosa','info','datos','dato','precio','coste','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia','gym','gimnasio','boxeo','fitness','cerca','mejor','buscame','encuentra','dame']);
-          const candidateWords = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/\b[a-z]{3,}\b/g) || [];
-          const candidates = candidateWords.filter(w => !STOPWORDS.has(w));
-
-          // Probar cada candidato en Nominatim (máx 2 intentos para no gastar tiempo)
-          const countryMap = {
-            'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
-            'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
-            'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'mexico': 'MX',
-            'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL', 'brasil': 'BR',
-            'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP', 'japan': 'JP',
-            'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
-            'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
-            'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
-            'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
-            'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
-            'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
-            'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'viet nam': 'VN',
-            'camboya': 'KH', 'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG',
-            'singapore': 'SG', 'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG',
-            'egypt': 'EG', 'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
-            'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
-            'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
-            'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
-            'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
-            'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
-            'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
-            'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
-            'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
-            'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
-            'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
-            'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
-            'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
-            'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
-            'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
-            'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN', 'ruanda': 'RW', 'rwanda': 'RW',
-          };
-
-          for (const word of candidates.slice(0, 2)) {
-            // Primero comprobar si es un país conocido en el mapa
-            if (countryMap[word]) { countryCode = countryMap[word]; location = location || word; break; }
-            // Si no, geocodificar con Nominatim
-            try {
-              // Caché en KV para no repetir la misma ciudad
-              const geoCacheKey = 'geocity:' + word;
-              let cachedCC = env.SALMA_KB ? await env.SALMA_KB.get(geoCacheKey) : null;
-              if (cachedCC) {
-                countryCode = cachedCC;
-                location = location || word;
-                break;
-              }
-              const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(word)}&format=json&limit=1&accept-language=en`;
-              const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
-              const geoArr = await geoRes.json();
-              if (geoArr.length > 0 && geoArr[0].display_name) {
-                const parts = geoArr[0].display_name.split(',');
-                const countryName = parts[parts.length - 1].trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                const cc = countryMap[countryName] || null;
-                if (cc) {
-                  countryCode = cc;
-                  location = location || word;
-                  // Cachear en KV para la próxima vez (30 días)
-                  if (env.SALMA_KB) {
-                    try { await env.SALMA_KB.put(geoCacheKey, cc, { expirationTtl: 2592000 }); } catch (_) {}
-                  }
-                  break;
-                }
-              }
-            } catch (_) {}
-          }
-        }
-
-        // Guardar si el país se detectó del mensaje (vs GPS) para saber si es consulta local o remota
-        countryFromMessage = !!countryCode;
-
-        // Fallback 3: si hay GPS y no se encontró país por el mensaje, usar el país del GPS
-        if (!countryCode && userCountryCode) {
-          countryCode = userCountryCode;
-        }
-
-        // Fallback 4: país enviado por el frontend (detectado por GPS del navegador)
-        if (!countryCode && frontendCountryCode) {
-          countryCode = frontendCountryCode;
-        }
-
-        if (countryCode) {
-          const kwNorm = (location || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-          const ccLower = countryCode.toLowerCase();
-
-          // Leer KV en paralelo (en vez de secuencial — ahorra ~200ms)
-          const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
-          const days = daysMatch ? daysMatch[1] : null;
-          // PIEZA A — ni en el Tiempo 1 (recomendaciones) ni en el Tiempo 2 (botón) se
-          // sirve una ruta cacheada por delante: el Tiempo 2 debe montar el mapa a partir
-          // del texto de recomendaciones que el usuario acaba de ver, no otra ruta distinta.
-          const routeKey = (isRouteRequest(message, history) && days && !guidedIsReco && !guidedMapStage)
-            ? 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days
-            : null;
-
-          const [baseJson, spotRef, transportJson, cachedRouteJson] = await Promise.all([
-            env.SALMA_KB.get('dest:' + ccLower + ':base'),
-            env.SALMA_KB.get('spot:' + kwNorm),
-            env.SALMA_KB.get('transport:' + ccLower),
-            routeKey ? env.SALMA_KB.get(routeKey) : Promise.resolve(null),
-          ]);
-
-          if (baseJson) kvCountryData = JSON.parse(baseJson);
-          if (cachedRouteJson) kvCachedRoute = JSON.parse(cachedRouteJson);
-          if (transportJson) kvTransportData = JSON.parse(transportJson);
-
-          // Destino específico: si spotRef existe, leer el detalle (segunda ronda, unavoidable)
-          if (spotRef) {
-            const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
-            if (spotJson) kvDestinationData = JSON.parse(spotJson);
-          }
-        }
-      } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
-    }
+    // ─── KV LOOKUP (pre-Claude) ─── extraído a detectCountryAndKV() — reutilizada también
+    // por el webhook de WhatsApp (25 sept 2026), ver esa función para el detalle.
+    const _kvRes = await detectCountryAndKV(env, message, history, currentRoute, guidedRoute, userCountryCode, frontendCountryCode, { guidedIsReco, guidedMapStage });
+    let { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvCachedRoute, kvTransportData } = _kvRes;
 
     // Determinar si es consulta local (GPS coincide con destino) o remota
     const gpsCountry = (userCountryCode || frontendCountryCode || '').toUpperCase();
