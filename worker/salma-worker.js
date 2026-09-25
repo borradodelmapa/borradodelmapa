@@ -3375,6 +3375,12 @@ async function waSaveNota(env, uid, nd) {
       createdAt: str(now),
       updatedAt: str(now),
     });
+    // Diagnóstico temporal (25 sept 2026, "no la veo en la web"): en qué cuenta se escribe.
+    try {
+      const u = await firestoreAdminGet(env, 'users/' + uid);
+      const f = (u && u.fields) || {};
+      console.log('[WA-NOTA] guardada en users/' + uid + '/notas/' + id, '· email:', (f.email && f.email.stringValue) || '(sin email)', '· via:', (f.created_via && f.created_via.stringValue) || '-');
+    } catch (_) {}
     return { saved: true };
   } catch (e) {
     console.error('[WhatsApp] Error guardando nota:', e.message);
