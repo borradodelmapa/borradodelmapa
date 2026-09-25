@@ -1153,22 +1153,34 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      reutilizando el mismo camino que ya usa `pago=cancel` (no uno nuevo). Compatible con
      códigos ya emitidos en el formato viejo (uid en texto plano). Toca `app.js` (confirmado
      por Paco antes de tocarlo) — `app.js?v=165` en `index.html`.
-   - **Resto de tools (vuelos, hoteles, coches) — HECHO, desplegado, pendiente de confirmar
-     en pantalla.** Cambio mecánico: se amplía `WA_TOOLS` (antes solo `buscar_lugar`) a
-     `buscar_vuelos`/`buscar_hotel`/`buscar_coche` — mismo `waCallClaudeWithTools()` +
-     `executeToolCall()` de siempre, sin despachador nuevo. Coste: Duffel no cobra por
-     búsqueda (solo por reserva, que no pasa aquí); RapidAPI/Booking.com va por cupo mensual
-     ya contratado — esto añade volumen, no un gasto nuevo (sin cifra exacta de cupo
-     restante, ver panel RapidAPI si hace falta precisión).
-   - **Worker Version ID vigente: `c5a25472-0bcd-416f-ba36-af432a5e745e`** (despliegues
-     intermedios de este punto: `bf1c3805-b554-40ac-a7d3-d7624940b5ad` → fix destino en
+   - **Resto de tools (vuelos, hoteles, coches) — HECHO, desplegado, confirmado en pantalla
+     con vuelos por Paco (buscó a Koh Samui).** Cambio mecánico: se amplía `WA_TOOLS` (antes
+     solo `buscar_lugar`) a `buscar_vuelos`/`buscar_hotel`/`buscar_coche` — mismo
+     `waCallClaudeWithTools()` + `executeToolCall()` de siempre, sin despachador nuevo.
+     Coste: Duffel no cobra por búsqueda (solo por reserva, que no pasa aquí);
+     RapidAPI/Booking.com va por cupo mensual ya contratado — esto añade volumen, no un
+     gasto nuevo (sin cifra exacta de cupo restante, ver panel RapidAPI si hace falta
+     precisión).
+     - **Bug real encontrado en la propia prueba, arreglado y desplegado:** al aclarar la
+       fecha de un vuelo con "Cualquier día del mes", la respuesta llevaba pegado "Si
+       quieres, dime 'guárdala'..." sin venir a cuento — `appendGuardarlaCta()` usaba
+       `isDaysDestination()` (pensada para un destino suelto tipo "Ronda"), que trata
+       cualquier frase corta sin verbo como un destino. Se sacó del detector.
+     - **Paco preguntó si el mismo riesgo aplicaba a hoteles/coches — sí aplicaba.**
+       Arreglo de raíz, no un parche puntual: `waCallClaudeWithTools()` ahora devuelve
+       `{text, usedTools}`, y la invitación a guardar NUNCA se añade si en ese turno se
+       ejecutó cualquier tool de búsqueda (vuelo, hotel, coche o lugar) — no depende ya de
+       adivinar por la forma del texto.
+   - **Worker Version ID vigente: `f5d8c0a6-a810-4d78-856d-5bcbafe223f6`** (despliegues
+     intermedios de este punto: `c5a25472-0bcd-416f-ba36-af432a5e745e` → vuelos/hoteles/
+     coches, `bf1c3805-b554-40ac-a7d3-d7624940b5ad` → fix destino en
      enlaces de auto-entrada, `4b26ef45-eb51-4744-8400-758a48330b54` → paso 2 (generar y
      guardar ruta real), `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109` → fix cadena de
      preguntas v3 (texto reutilizado, ver arriba), `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
-     guardar rutas, este último → vuelos/hoteles/coches).
+     guardar rutas, este último → guardarla nunca tras usar una tool).
 
 ### 🔴 Crítico
 
