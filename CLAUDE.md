@@ -1356,7 +1356,11 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 
 - **Explorar — rutas de otros viajeros (25 sept 2026) — DESPLEGADO y CONFIRMADO EN
   PANTALLA por Paco ("ya lo veo, funciona"). Sin probar aún a fondo: apagar el interruptor
-  y que desaparezcan sus rutas.** En `main` (commit `d26f766`), **Worker Version ID
+  y que desaparezcan sus rutas.**
+  Miniatura del mapa en las tarjetas (la misma de Mis rutas, R2 `mapthumb/`, sin llamar a
+  Google): commit `2bfdca1`, `app.js?v=168`, **Worker `74cbe171-57b5-4ade-86b5-45dc61204da7`** —
+  pendiente de confirmar en pantalla. Las guías cuyo dueño nunca abrió Mis rutas no tienen
+  miniatura todavía (generarlas costaría Google Static Maps, pendiente de decidir). En `main` (commit `d26f766`), **Worker Version ID
   `ac461d62-22b2-4235-b3bf-b3640b0bd261`** (GitHub Action "Deploy Worker", run 80).
   Decidido con Paco: botón dentro de Rutas (pestañas "Mis rutas | Explorar"), visible sin
   login (botón "Ver rutas de otros viajeros" en la pantalla de entrada + pestaña Mis Viajes
