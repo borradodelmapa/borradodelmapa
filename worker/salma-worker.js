@@ -527,11 +527,13 @@ const SALMA_SYSTEM_CHAT = [
 ].join('\n\n');
 
 // ── Prompt WHATSAPP (F5.2, 24 sept 2026) — misma identidad/personalidad que el chat
-// web, pero SIN BLOQUE_ACCION (tools de vuelos/hoteles/lugares — no conectadas todavía
-// por este canal, F5.3), SIN BLOQUE_MAPA (instrucciones de GPS, no aplican por texto) y
-// SIN BLOQUE_NOTAS (auto-guardado de notas en Firestore — no hay uid vinculado todavía,
-// F5.4). Memoria e info de ubicación añadidas el 25 sept 2026 (F5.3 puntos 1 y 2) — ver
-// wa_history/wa_location en el webhook /whatsapp; aquí solo las instrucciones de uso.
+// web, pero SIN BLOQUE_ACCION (el bloque completo de tools trae vuelos/hoteles/coches, que
+// siguen sin conectar por este canal — buscar_lugar SÍ se conecta directo, ver más abajo),
+// SIN BLOQUE_MAPA (instrucciones de GPS, no aplican por texto) y SIN BLOQUE_NOTAS
+// (auto-guardado de notas en Firestore — no hay uid vinculado todavía, F5.4). Memoria e
+// info de ubicación añadidas el 25 sept 2026 (F5.3 puntos 1 y 2); buscar_lugar (F5.3 punto
+// 6, mismo día) — ver wa_history/wa_location/waCallClaudeWithTools en el webhook
+// /whatsapp; aquí solo las instrucciones de uso.
 const WHATSAPP_SYSTEM_CHAT = [
   BLOQUE_IDENTIDAD,
   BLOQUE_PERSONALIDAD,
@@ -540,9 +542,10 @@ const WHATSAPP_SYSTEM_CHAT = [
   BLOQUE_GEOGRAFIA,
   BLOQUE_FORMATO,
   `Estás hablando por WhatsApp, no por la app — un canal más limitado por ahora:
-- Todavía NO puedes buscar vuelos, hoteles, restaurantes ni fotos por aquí, ni generar rutas con mapa. Si te piden algo de eso, dilo con naturalidad ("eso todavía no lo tengo aquí, pero en la app sí") y sigue ayudando con lo que sepas de memoria.
+- SÍ puedes buscar lugares reales (restaurantes, bares, farmacias, museos, lo que sea) con la tool buscar_lugar — igual que en la app, con datos reales de Google Places (dirección, teléfono, rating, Google Maps). Úsala en cuanto sepas la ciudad, sin preguntar de más.
+- Todavía NO puedes buscar vuelos, hoteles ni coches por aquí, ni generar rutas completas con mapa. Si te piden algo de eso, dilo con naturalidad ("eso todavía no lo tengo aquí, pero en la app sí") y sigue ayudando con lo que sepas de memoria.
 - SÍ tienes memoria de los últimos mensajes de esta conversación (te llegan como turnos anteriores) — úsala con normalidad, no digas que no recuerdas algo que sí está ahí arriba.
-- WhatsApp no tiene GPS en vivo como la app: solo sabes dónde está el usuario si te lo dice o si comparte su ubicación (clip → Ubicación). Si ves un bloque [UBICACIÓN...] al final de este prompt, síguelo tal cual. Si NO lo ves y necesitas saber dónde está para responder bien (buscar algo "cerca", seguir una ruta...), pídele que comparta su ubicación así, o que te diga la ciudad.
+- WhatsApp no tiene GPS en vivo como la app: solo sabes dónde está el usuario si te lo dice o si comparte su ubicación (clip → Ubicación). Si ves un bloque [UBICACIÓN...] al final de este prompt, síguelo tal cual — incluye la ciudad, úsala directa en buscar_lugar si toca. Si NO lo ves y necesitas saber dónde está para responder bien (buscar algo "cerca", seguir una ruta...), pídele que comparta su ubicación así, o que te diga la ciudad.
 - Formato: WhatsApp interpreta *un solo asterisco* como negrita, NUNCA dobles asteriscos. Sin viñetas ni encabezados. Respuestas cortas, de móvil — 2-4 frases salvo que pidan más detalle.`,
 ].join('\n\n');
 
@@ -3125,11 +3128,60 @@ async function reverseGeocodeLocation(env, lat, lng) {
 // mismo error de "dos motores" que ya se evitó con detectCountryAndKV/reverseGeocodeLocation).
 function buildWaLocationCtx(place, ageMin) {
   if (ageMin < 20) {
-    return `\n\n[UBICACIÓN: el usuario compartió hace poco que está en ${place} — es dónde está DE VERDAD, AHORA MISMO, en la vida real, no un destino de viaje del que hayáis hablado antes. Si justo después de compartirla pregunta algo tipo "dónde como/duermo/qué hay cerca", es sobre ESTE sitio real — NO lo relaciones con destinos hipotéticos anteriores de la conversación (aunque hayáis hablado de otro país o ciudad antes), ni le devuelvas la pregunta pidiendo que aclare de qué destino habla. Usa ${place} directo y MENCIÓNALO en tu respuesta (ej: "Como estás en ${place}..."). Recuerda que todavía no puedes buscar sitios reales (restaurantes, etc.) por aquí — dilo con naturalidad y ya, sin además desviar la conversación de vuelta a otros destinos.]`;
+    return `\n\n[UBICACIÓN: el usuario compartió hace poco que está en ${place} — es dónde está DE VERDAD, AHORA MISMO, en la vida real, no un destino de viaje del que hayáis hablado antes. Si justo después de compartirla pregunta algo tipo "dónde como/duermo/qué hay cerca", es sobre ESTE sitio real — NO lo relaciones con destinos hipotéticos anteriores de la conversación (aunque hayáis hablado de otro país o ciudad antes), ni le devuelvas la pregunta pidiendo que aclare de qué destino habla. Usa ${place} directo y MENCIÓNALO en tu respuesta (ej: "Como estás en ${place}..."), y si pide un sitio concreto (comer, dormir, lo que sea) llama a buscar_lugar con esa ciudad — ya la tienes, no hace falta preguntarla ni desviar la conversación a otros destinos.]`;
   } else if (ageMin < 90) {
     return `\n\n[UBICACIÓN desactualizada: el usuario compartió hace ${Math.round(ageMin)} min que estaba en ${place} (su ubicación real, no un destino de viaje), pero puede haberse movido. Si tu respuesta depende de dónde está AHORA (buscar algo cerca, seguir una ruta...), pregúntale primero "¿Sigues en ${place}?" antes de usarlo — no lo des por hecho.]`;
   }
   return '';
+}
+
+// Solo el tool buscar_lugar, del array completo SALMA_TOOLS del chat web (F5.3 punto 6, 25
+// sept 2026) — vuelos/hoteles/coches siguen sin conectar a WhatsApp (fuera de esta tarea).
+const WA_TOOLS = SALMA_TOOLS.filter(t => t.name === 'buscar_lugar');
+
+// Llama a Claude con buscar_lugar disponible y resuelve el bucle de tool-use en segundo
+// plano (25 sept 2026, F5.3 punto 6) — sin streaming SSE como la web, aquí basta una
+// respuesta final para Twilio. Acotado a 3 vueltas (de sobra para 1-2 búsquedas en
+// paralelo + la respuesta con los resultados) para no dejar un bucle corriendo si Claude
+// insistiera en seguir llamando a la tool. userCoords es el mismo dato que ya guarda
+// wa_location — solo se usa dentro de buscarLugar() como último recurso si la ciudad no
+// se puede geocodificar, exactamente igual que en el chat web.
+async function waCallClaudeWithTools(env, system, messages, userCoords) {
+  let msgs = [...messages];
+  for (let i = 0; i < 3; i++) {
+    const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 600,
+        system,
+        tools: WA_TOOLS,
+        messages: msgs,
+      }),
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error('Anthropic ' + res.status + ': ' + errText);
+    }
+    const data = await res.json();
+    const toolUses = (data.content || []).filter(b => b.type === 'tool_use');
+    if (data.stop_reason !== 'tool_use' || !toolUses.length) {
+      return (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
+    }
+    msgs = [...msgs, { role: 'assistant', content: data.content }];
+    const toolResults = await Promise.all(toolUses.map(async (tu) => ({
+      type: 'tool_result',
+      tool_use_id: tu.id,
+      content: JSON.stringify(await executeToolCall(tu.name, tu.input, env, userCoords)),
+    })));
+    msgs = [...msgs, { role: 'user', content: toolResults }];
+  }
+  return 'Se me ha liado buscando — vuelve a preguntarme.';
 }
 
 // Detecta el país/ciudad mencionado en el mensaje (o guided_route) y carga los datos de
@@ -8714,28 +8766,11 @@ export default {
             }
             const locationMarker = '[Acabo de compartir mi ubicación en tiempo real por WhatsApp.]';
             const waLocationCtx = buildWaLocationCtx(locName, 0);
+            const waCoords = { lat: parseFloat(waLat), lng: parseFloat(waLng) };
 
-            const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': env.ANTHROPIC_API_KEY,
-                'anthropic-version': '2023-06-01',
-              },
-              body: JSON.stringify({
-                model: 'claude-sonnet-4-6',
-                max_tokens: 600,
-                system: WHATSAPP_SYSTEM_CHAT + waLocationCtx,
-                messages: [...waHistory, { role: 'user', content: locationMarker }],
-              }),
-            });
-            if (!waRes.ok) {
-              const errText = await waRes.text().catch(() => '');
-              throw new Error('Anthropic ' + waRes.status + ': ' + errText);
-            }
-            const waData = await waRes.json();
-            const reply = (waData.content?.[0]?.text || '').trim()
-              || `Vale, ya sé que estás en ${locName}.`;
+            const reply = (await waCallClaudeWithTools(
+              env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: locationMarker }], waCoords
+            )) || `Vale, ya sé que estás en ${locName}.`;
             await sendWhatsAppMessage(env, from, reply);
 
             if (env.SALMA_KB) {
@@ -8954,6 +8989,7 @@ export default {
           // por buena — puede haberse movido de ciudad en ese rato. Pasados 90 min, KV ya la
           // ha borrado sola (TTL) y es como si no hubiera ubicación: se le pide de nuevo.
           let waLocationCtx = '';
+          let waCoords = null;
           if (env.SALMA_KB) {
             try {
               const savedLoc = JSON.parse((await env.SALMA_KB.get('wa_location:' + from)) || 'null');
@@ -8961,31 +8997,14 @@ export default {
                 const ageMin = (Date.now() - Date.parse(savedLoc.sharedAt)) / 60000;
                 const place = savedLoc.name || 'la zona que compartió';
                 waLocationCtx = buildWaLocationCtx(place, ageMin);
+                if (savedLoc.lat && savedLoc.lng) waCoords = { lat: savedLoc.lat, lng: savedLoc.lng };
               }
             } catch (_) {}
           }
 
-          const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': env.ANTHROPIC_API_KEY,
-              'anthropic-version': '2023-06-01',
-            },
-            body: JSON.stringify({
-              model: 'claude-sonnet-4-6',
-              max_tokens: 600,
-              system: WHATSAPP_SYSTEM_CHAT + waLocationCtx,
-              messages: [...waHistory, { role: 'user', content: body }],
-            }),
-          });
-          if (!waRes.ok) {
-            const errText = await waRes.text().catch(() => '');
-            throw new Error('Anthropic ' + waRes.status + ': ' + errText);
-          }
-          const waData = await waRes.json();
-          const reply = (waData.content?.[0]?.text || '').trim()
-            || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
+          const reply = (await waCallClaudeWithTools(
+            env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords
+          )) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
           await sendWhatsAppMessage(env, from, reply);
 
           if (env.SALMA_KB) {
