@@ -3272,7 +3272,7 @@ async function generateRouteThumbnail(env, r2Key, stops, roadGeometry, ctx) {
 // sale de la 1ª parada con Nominatim (gratis), cacheada en KV para siempre (prov:{lat}:{lng}).
 // Coste: 0 € en APIs de pago. Firestore: 1 lectura por guía pública en cada reconstrucción
 // del índice (caché KV 2 h; 20 min mientras queden provincias por resolver).
-const EXPLORAR_KEY = 'explorar:index:v2'; // v2: + miniatura del mapa (thumb)
+const EXPLORAR_KEY = 'explorar:index:v3'; // v3: países unidos + generación de miniaturas
 const EXPLORAR_SALMA_UID = 'LlXDmuXD1qgM97Xya8FiVHONXDw2';
 
 function _fsVal(v) {
@@ -3403,10 +3403,18 @@ async function buildExplorarIndex(env, origin) {
   }
 
   // 3) Agrupar país → provincia
+  //    Las guías sin provincia resuelta todavía traen el país como texto y sin código:
+  //    se unen al mismo país que las ya ubicadas por su nombre (si no, salía "España" dos
+  //    veces, una con bandera y otra sin ella — visto por Paco en pantalla).
+  const nameToCc = {}, ccToName = {};
+  for (const g of guides) {
+    if (g._geo?.cc) { nameToCc[_explorarNorm(g._geo.country)] = g._geo.cc; ccToName[g._geo.cc] = g._geo.country; }
+  }
   const countries = {};
   for (const g of guides) {
-    const cName = g._geo?.country || g._country || 'Otros';
-    const cc = g._geo?.cc || '';
+    const rawName = g._geo?.country || g._country || 'Otros';
+    const cc = g._geo?.cc || nameToCc[_explorarNorm(rawName)] || '';
+    const cName = (cc && ccToName[cc]) || rawName;
     const pName = g._geo?.province || (g.destino && _explorarNorm(g.destino) !== _explorarNorm(cName) ? g.destino : 'Otros destinos');
     const ck = cc || _explorarNorm(cName);
     const c = countries[ck] || (countries[ck] = { cc, name: cName, count: 0, provinces: {} });

@@ -3472,16 +3472,29 @@ async function renderExplorar(countryIdx) {
     body.innerHTML = '<div class="expl-msg">Todavía no hay rutas compartidas. ¡Crea la primera con Salma!</div>';
     return;
   }
-  const flag = (cc) => (cc && typeof countryEmoji === 'function') ? countryEmoji(cc) + ' ' : '';
+  // Código de país: el del índice o, si no viene, deducido del nombre (country-utils.js)
+  const ccOf = (co) => co.cc || (typeof normalizeCountry === 'function' ? (normalizeCountry(co.name) || {}).code : '') || '';
+  const flag = (co) => { const cc = ccOf(co); return (cc && typeof countryEmoji === 'function') ? countryEmoji(cc) + ' ' : ''; };
 
   // Nivel 1: lista de países
   const c = Number.isInteger(countryIdx) ? countries[countryIdx] : null;
   if (!c) {
-    body.innerHTML = countries.map((co, i) => `
-      <button class="expl-country" data-i="${i}">
-        <span class="expl-country-name">${flag(co.cc)}${escapeHTML(co.name)}</span>
-        <span class="expl-country-count">${co.count} ${co.count === 1 ? 'ruta' : 'rutas'}</span>
-      </button>`).join('');
+    // Tarjeta por país con el mapa de una de sus rutas de fondo (más visual que una lista)
+    const coverOf = (co) => {
+      for (const p of co.provinces) for (const g of p.guides) if (g.thumb) return g.thumb;
+      for (const p of co.provinces) for (const g of p.guides) if (g.cover) return g.cover;
+      return destPhoto(co.name);
+    };
+    body.innerHTML = `<div class="expl-countries">${countries.map((co, i) => {
+      const cc = ccOf(co);
+      const fl = (cc && typeof countryEmoji === 'function') ? countryEmoji(cc) : '';
+      return `
+      <button class="expl-country" data-i="${i}" style="background-image:url('${escapeHTML(coverOf(co))}')">
+        ${fl ? `<span class="expl-country-flag">${fl}</span>` : ''}
+        <span class="expl-country-name">${escapeHTML(co.name)}</span>
+        <span class="expl-country-count">${co.count} ${co.count === 1 ? 'RUTA' : 'RUTAS'}</span>
+      </button>`;
+    }).join('')}</div>`;
     body.querySelectorAll('.expl-country').forEach(btn => {
       btn.addEventListener('click', () => renderExplorar(Number(btn.dataset.i)));
     });
@@ -3490,7 +3503,7 @@ async function renderExplorar(countryIdx) {
 
   // Nivel 2: un país → provincias con sus rutas
   body.innerHTML = `<button class="expl-back" id="expl-back">‹ Todos los países</button>
-    <div class="expl-country-title">${flag(c.cc)}${escapeHTML(c.name)}</div>`;
+    <div class="expl-country-title">${flag(c)}${escapeHTML(c.name)}</div>`;
   document.getElementById('expl-back').addEventListener('click', () => renderExplorar());
   for (const p of c.provinces) {
     const group = document.createElement('div');
