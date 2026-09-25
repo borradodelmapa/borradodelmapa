@@ -207,7 +207,7 @@ function updateBottomBar() {
     showState('chat');
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
-    if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
+    // Sin sesión se puede entrar igual: ve "Explorar" (rutas de otros viajeros).
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
@@ -1746,6 +1746,12 @@ async function renderProfile() {
       <div class="prof-group">
         <div class="prof-group-title">CUENTA</div>
         <div class="prof-card">
+          <div class="prof-row prof-row-switch" id="prof-share-routes">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+            <span class="prof-row-label">Compartir mis rutas<span class="prof-row-hint">Otros viajeros las ven en Explorar, con tu nombre de pila</span></span>
+            <label class="prof-switch"><input type="checkbox" id="prof-share-toggle" ${currentUser.share_routes !== false ? 'checked' : ''}><span class="prof-switch-track"></span></label>
+          </div>
+          <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-whatsapp">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
             <span class="prof-row-label">Vincular WhatsApp</span>
@@ -1823,6 +1829,19 @@ async function renderProfile() {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
   });
   document.getElementById('prof-whatsapp').addEventListener('click', () => openWhatsAppLinkModal());
+  document.getElementById('prof-share-toggle').addEventListener('change', async (e) => {
+    const on = e.target.checked;
+    e.target.disabled = true;
+    try {
+      await setShareRoutes(on);
+      showToast(on ? 'Tus rutas se ven en Explorar' : 'Tus rutas ya no salen en Explorar');
+    } catch (err) {
+      console.warn('Error cambiando Compartir mis rutas:', err);
+      e.target.checked = !on;
+      showToast('No se pudo cambiar, prueba otra vez');
+    }
+    e.target.disabled = false;
+  });
   document.getElementById('prof-galeria-info')?.addEventListener('click', () => {
     showInfoPopup('Aquí puedes organizar las fotos de todos tus viajes. Crear galerías nuevas. Y hacer videos para compartir con tus amigos en redes sociales o como quieras.');
   });
@@ -3219,7 +3238,8 @@ window._showVideoModal = _showVideoModal;
 // ═══ MIS VIAJES (legacy — redirige a perfil) ═══
 
 async function loadUserGuides() {
-  if (!currentUser) { showState('chat'); return; }
+  // Pestaña activa: sin sesión solo existe "Explorar"
+  if (!currentUser || window._rutasTab === 'explorar') { renderExplorar(); return; }
 
   // Si es el usuario Salma, redirigir al perfil público
   const SALMA_UID = 'LlXDmuXD1qgM97Xya8FiVHONXDw2';
@@ -3233,6 +3253,7 @@ async function loadUserGuides() {
       <h2 class="viajes-title">Mis Viajes</h2>
       <div class="viajes-sub">Nacido para el Ocio</div>
     </div>
+    ${_rutasTabsHtml('mis')}
     <div class="viajes-grid" id="viajes-grid">
       <div class="viaje-card viaje-card-new" id="btn-new-guide">
         <div class="viaje-card-new-icon">+</div>
@@ -3240,6 +3261,7 @@ async function loadUserGuides() {
       </div>
     </div>`;
 
+  _wireRutasTabs();
   document.getElementById('btn-new-guide').addEventListener('click', () => {
     if (typeof salma !== 'undefined') salma.reset();
     if (typeof salma !== 'undefined') salma._initChat();
@@ -3301,6 +3323,7 @@ async function loadUserGuides() {
           const slug = d.slug;
           if (slug) await db.collection('public_guides').doc(slug).delete();
           await db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete();
+          if (slug) _refreshExplorarIndex();
           card.remove();
           // Si el grupo queda vacío, quitar el header
           const group = card.closest('.viaje-group');
@@ -3386,6 +3409,163 @@ async function loadUserGuides() {
     console.error('Error cargando guías:', e);
     showToast('Error al cargar guías');
   }
+}
+
+// ═══ EXPLORAR — rutas de otros viajeros (25 sept 2026) ═══
+// Guías públicas de todos los usuarios que tienen "Compartir mis rutas" activado,
+// agrupadas por país → provincia. El índice lo arma el Worker (GET /explorar, caché KV)
+// para no leer aquí cada guía entera. Visible sin sesión.
+
+function _firstName(name) {
+  return String(name || '').trim().split(/\s+/)[0] || 'Viajero';
+}
+
+function _rutasTabsHtml(active) {
+  return `<div class="rutas-tabs" role="tablist">
+      <button class="rutas-tab ${active === 'mis' ? 'rutas-tab-active' : ''}" data-tab="mis">Mis rutas</button>
+      <button class="rutas-tab ${active === 'explorar' ? 'rutas-tab-active' : ''}" data-tab="explorar">Explorar</button>
+    </div>`;
+}
+
+function _wireRutasTabs() {
+  $content.querySelectorAll('.rutas-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      if (tab === 'mis' && !currentUser) { window._rutasTab = 'mis'; window._afterLogin = 'rutas'; openModal(); return; }
+      window._rutasTab = tab;
+      loadUserGuides();
+    });
+  });
+}
+
+let _explorarData = null, _explorarAt = 0;
+
+async function renderExplorar(countryIdx) {
+  window._rutasTab = 'explorar';
+  $content.innerHTML = `
+    <div class="viajes-header fade-in">
+      <h2 class="viajes-title">Explorar</h2>
+      <div class="viajes-sub">Rutas que otros viajeros han hecho con Salma</div>
+    </div>
+    ${_rutasTabsHtml('explorar')}
+    <div class="viajes-grid" id="expl-body"><div class="expl-msg">Cargando rutas…</div></div>`;
+  _wireRutasTabs();
+  const body = document.getElementById('expl-body');
+
+  try {
+    if (!_explorarData || Date.now() - _explorarAt > 5 * 60 * 1000) {
+      const res = await fetch(window.SALMA_API + '/explorar');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      _explorarData = await res.json();
+      _explorarAt = Date.now();
+    }
+  } catch (e) {
+    console.warn('Explorar: no se pudo cargar el índice', e);
+    body.innerHTML = '<div class="expl-msg">No se pudieron cargar las rutas. Prueba otra vez en un rato.</div>';
+    return;
+  }
+  // Si el usuario ya se fue a otra pantalla mientras cargaba, no pintar encima
+  if (currentState !== 'rutas' || window._rutasTab !== 'explorar' || !document.getElementById('expl-body')) return;
+
+  const countries = _explorarData.countries || [];
+  if (!countries.length) {
+    body.innerHTML = '<div class="expl-msg">Todavía no hay rutas compartidas. ¡Crea la primera con Salma!</div>';
+    return;
+  }
+  const flag = (cc) => (cc && typeof countryEmoji === 'function') ? countryEmoji(cc) + ' ' : '';
+
+  // Nivel 1: lista de países
+  const c = Number.isInteger(countryIdx) ? countries[countryIdx] : null;
+  if (!c) {
+    body.innerHTML = countries.map((co, i) => `
+      <button class="expl-country" data-i="${i}">
+        <span class="expl-country-name">${flag(co.cc)}${escapeHTML(co.name)}</span>
+        <span class="expl-country-count">${co.count} ${co.count === 1 ? 'ruta' : 'rutas'}</span>
+      </button>`).join('');
+    body.querySelectorAll('.expl-country').forEach(btn => {
+      btn.addEventListener('click', () => renderExplorar(Number(btn.dataset.i)));
+    });
+    return;
+  }
+
+  // Nivel 2: un país → provincias con sus rutas
+  body.innerHTML = `<button class="expl-back" id="expl-back">‹ Todos los países</button>
+    <div class="expl-country-title">${flag(c.cc)}${escapeHTML(c.name)}</div>`;
+  document.getElementById('expl-back').addEventListener('click', () => renderExplorar());
+  for (const p of c.provinces) {
+    const group = document.createElement('div');
+    group.className = 'viaje-group';
+    group.innerHTML = `<div class="viaje-group-header">${escapeHTML((p.name || '').toUpperCase())} <span class="viaje-group-count">${p.count}</span></div>`;
+    const grid = document.createElement('div');
+    grid.className = 'viaje-group-grid';
+    for (const g of p.guides) grid.appendChild(_explorarCard(g));
+    group.appendChild(grid);
+    body.appendChild(group);
+  }
+  window.scrollTo(0, 0);
+}
+
+function _explorarCard(g) {
+  const card = document.createElement('div');
+  card.className = 'viaje-card';
+  const photo = g.cover || destPhoto(g.destino || g.nombre || '');
+  const dias = g.dias ? `${g.dias} ${g.dias == 1 ? 'DÍA' : 'DÍAS'} · ` : '';
+  card.innerHTML = `
+    <div class="viaje-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
+    <div class="viaje-card-body">
+      <div class="viaje-card-title">${escapeHTML(g.nombre || 'Ruta')}</div>
+      <div class="viaje-card-meta">${dias}${escapeHTML((g.destino || '').toUpperCase())}</div>
+      <div class="expl-card-autor">por ${escapeHTML(g.autor || 'Viajero')} · ${g.paradas} paradas</div>
+    </div>`;
+  card.addEventListener('click', () => _openPublicGuide(g.slug));
+  return card;
+}
+
+// Con sesión: se abre dentro de la app (vista itinerario, igual que una ruta compartida).
+// Sin sesión: la página pública de la guía (404.html), que ya funciona sin login.
+async function _openPublicGuide(slug) {
+  if (!currentUser) { window.location.href = '/' + encodeURIComponent(slug); return; }
+  try {
+    const doc = await db.collection('public_guides').doc(slug).get();
+    if (!doc.exists) { showToast('Esta ruta ya no está disponible'); return; }
+    const routeData = JSON.parse(doc.data().itinerarioIA || '{}');
+    if (!routeData.stops || !routeData.stops.length) { showToast('Esta ruta no tiene paradas'); return; }
+    if (typeof window.openItinerarioView === 'function') {
+      window.openItinerarioView(routeData, null, { fromChat: false, saved: false });
+    } else {
+      window.location.href = '/' + encodeURIComponent(slug);
+    }
+  } catch (e) {
+    console.warn('Error abriendo ruta de Explorar:', e);
+    window.location.href = '/' + encodeURIComponent(slug);
+  }
+}
+
+// Borra la caché del índice en el Worker para que un cambio (ocultar/borrar) se note ya.
+async function _refreshExplorarIndex() {
+  _explorarData = null;
+  try {
+    const u = auth.currentUser;
+    if (!u) return;
+    const t = await u.getIdToken();
+    await fetch(window.SALMA_API + '/explorar/refresh', { method: 'POST', headers: { 'Authorization': 'Bearer ' + t } });
+  } catch (_) {}
+}
+
+// Interruptor "Compartir mis rutas" del Perfil: guarda la preferencia y marca todas sus
+// guías públicas como visibles/ocultas en Explorar (de paso deja solo el nombre de pila).
+async function setShareRoutes(on) {
+  if (!currentUser) return;
+  await db.collection('users').doc(currentUser.uid).set({ share_routes: on }, { merge: true });
+  currentUser.share_routes = on;
+  const snap = await db.collection('public_guides').where('uid', '==', currentUser.uid).get();
+  const docs = snap.docs;
+  for (let i = 0; i < docs.length; i += 400) {
+    const batch = db.batch();
+    docs.slice(i, i + 400).forEach(d => batch.update(d.ref, { listed: on, owner_name: _firstName(currentUser.name) }));
+    await batch.commit();
+  }
+  await _refreshExplorarIndex();
 }
 
 // ═══ Detección de país de una guía (cascada + cache en Firestore) ═══
@@ -3492,6 +3672,13 @@ function closeModal() {
 
 window.openModal = openModal;
 window.closeModal = closeModal;
+
+// "Ver rutas de otros viajeros" en la pantalla de entrada — sin login, abre Explorar
+document.getElementById('btn-explorar-sin-login')?.addEventListener('click', () => {
+  closeModal();
+  window._rutasTab = 'explorar';
+  showState('rutas');
+});
 
 function showAuthError(id, msg) {
   const el = document.getElementById(id);
@@ -3942,6 +4129,7 @@ auth.onAuthStateChanged(async (user) => {
       country: userData.country || '',
       avatarURL: userData.avatarURL || '',
       copilot_data: userData.copilot_data || {},
+      share_routes: userData.share_routes !== false, // "Compartir mis rutas" — activado por defecto
     };
 
     currentUserSOSConfig = userData.sos_config || {
@@ -4165,7 +4353,8 @@ async function publishGuide(docId, rutaData, slug, routeData) {
       notes: rutaData.notes || null,
       photos: rutaData.photos || null,
       privacy: rutaData.privacy || 'link',
-      owner_name: currentUser?.name || 'Viajero',
+      owner_name: _firstName(currentUser?.name),
+      listed: currentUser?.share_routes !== false, // sale en Explorar salvo que lo desactive en Perfil
       createdAt: rutaData.createdAt,
       updatedAt: rutaData.updatedAt
     });

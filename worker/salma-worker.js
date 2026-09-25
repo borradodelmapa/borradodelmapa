@@ -3228,6 +3228,164 @@ async function reverseGeocodeLocation(env, lat, lng) {
   return { name, cc };
 }
 
+// ═══ EXPLORAR — rutas de la comunidad (25 sept 2026, Paco: "que las guías de los usuarios
+// sean compartidas y visibles a todas las cuentas", organizadas por país → provincia) ═══
+// Lee public_guides (lectura pública ya hoy), filtra (dueño con "Compartir mis rutas"
+// apagado → listed:false, borradores, <3 paradas, guías de la cuenta Salma que ya están en
+// /destinos/), quita repetidas del mismo usuario y agrupa por país → provincia. La provincia
+// sale de la 1ª parada con Nominatim (gratis), cacheada en KV para siempre (prov:{lat}:{lng}).
+// Coste: 0 € en APIs de pago. Firestore: 1 lectura por guía pública en cada reconstrucción
+// del índice (caché KV 2 h; 20 min mientras queden provincias por resolver).
+const EXPLORAR_KEY = 'explorar:index:v1';
+const EXPLORAR_SALMA_UID = 'LlXDmuXD1qgM97Xya8FiVHONXDw2';
+
+function _fsVal(v) {
+  if (!v) return null;
+  if ('stringValue' in v) return v.stringValue;
+  if ('integerValue' in v) return Number(v.integerValue);
+  if ('doubleValue' in v) return v.doubleValue;
+  if ('booleanValue' in v) return v.booleanValue;
+  if ('timestampValue' in v) return v.timestampValue;
+  if ('nullValue' in v) return null;
+  return null;
+}
+
+function _explorarNorm(s) {
+  return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function _provKey(lat, lng) { return `prov:${Number(lat).toFixed(2)}:${Number(lng).toFixed(2)}`; }
+
+// Nominatim zoom 8 (nivel provincia) en español. España: province = "Cádiz"; si no hay
+// provincia (otros países) se usa state/region/county.
+async function _explorarGeocodeProv(env, lat, lng) {
+  const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=8&accept-language=es`, {
+    headers: { 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' },
+    signal: AbortSignal.timeout(6000),
+  });
+  if (!res.ok) return null;
+  const j = await res.json();
+  const a = j.address || {};
+  const out = {
+    country: a.country || '',
+    cc: (a.country_code || '').toUpperCase(),
+    province: a.province || a.state || a.region || a.county || a.state_district || '',
+  };
+  if (!out.country) return null;
+  await env.SALMA_KB.put(_provKey(lat, lng), JSON.stringify(out));
+  return out;
+}
+
+async function buildExplorarIndex(env) {
+  const token = await getServiceAccountToken(env);
+  const fields = ['uid', 'ownerDocId', 'nombre', 'destino', 'num_dias', 'cover_image', 'owner_name',
+    'createdAt', 'updatedAt', 'itinerarioIA', 'listed', 'estado'];
+  const res = await fetch(`${FIRESTORE_BASE}:runQuery`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ structuredQuery: {
+      from: [{ collectionId: 'public_guides' }],
+      select: { fields: fields.map(f => ({ fieldPath: f })) },
+      limit: 3000,
+    } }),
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!res.ok) throw new Error('Firestore public_guides → ' + res.status);
+  const rows = await res.json();
+
+  // 1) Filtrar y quitar repetidas (mismo usuario + mismo título + mismos días, o la misma
+  //    guía publicada dos veces) — se queda la más reciente.
+  const best = new Map();
+  for (const row of rows) {
+    if (!row.document) continue;
+    const f = row.document.fields || {};
+    const g = {};
+    for (const k of fields) g[k] = _fsVal(f[k]);
+    if (g.listed === false) continue;
+    if (g.estado === 'borrador') continue;
+    if (g.uid === EXPLORAR_SALMA_UID) continue;
+    let r = null;
+    try { r = JSON.parse(g.itinerarioIA || '{}'); } catch (_) { continue; }
+    const stops = Array.isArray(r.stops) ? r.stops : [];
+    if (stops.length < 3) continue;
+    const first = stops.find(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)) && (Number(s.lat) || Number(s.lng)));
+    const ts = String(g.updatedAt || g.createdAt || '');
+    const item = {
+      slug: row.document.name.split('/').pop(),
+      nombre: g.nombre || r.title || r.name || 'Ruta',
+      destino: g.destino || r.region || r.country || '',
+      dias: g.num_dias || r.duration_days || null,
+      paradas: stops.length,
+      cover: g.cover_image || '',
+      autor: String(g.owner_name || 'Viajero').trim().split(/\s+/)[0] || 'Viajero',
+      fecha: ts.slice(0, 10),
+      _ts: ts,
+      _lat: first ? Number(first.lat) : null,
+      _lng: first ? Number(first.lng) : null,
+      _country: r.country || '',
+    };
+    const keys = [(g.uid || item.slug) + '|' + _explorarNorm(item.nombre) + '|' + (item.dias || '')];
+    if (g.ownerDocId) keys.push('doc|' + (g.uid || '') + '|' + g.ownerDocId);
+    const prevs = new Set(keys.filter(k => best.has(k)).map(k => best.get(k)));
+    if ([...prevs].some(p => p._ts >= item._ts)) continue;
+    for (const [k, v] of best) if (prevs.has(v)) best.delete(k);
+    for (const k of keys) best.set(k, item);
+  }
+  const guides = [...new Set(best.values())];
+
+  // 2) Provincia desde KV (lo que no esté se resuelve después, en segundo plano)
+  const missing = [];
+  await Promise.all(guides.map(async (g) => {
+    if (g._lat == null) return;
+    try {
+      const c = await env.SALMA_KB.get(_provKey(g._lat, g._lng));
+      if (c) { g._geo = JSON.parse(c); return; }
+    } catch (_) {}
+    missing.push(g);
+  }));
+
+  // 3) Agrupar país → provincia
+  const countries = {};
+  for (const g of guides) {
+    const cName = g._geo?.country || g._country || 'Otros';
+    const cc = g._geo?.cc || '';
+    const pName = g._geo?.province || (g.destino && _explorarNorm(g.destino) !== _explorarNorm(cName) ? g.destino : 'Otros destinos');
+    const ck = cc || _explorarNorm(cName);
+    const c = countries[ck] || (countries[ck] = { cc, name: cName, count: 0, provinces: {} });
+    const p = c.provinces[pName] || (c.provinces[pName] = { name: pName, count: 0, guides: [] });
+    const { _ts, _lat, _lng, _country, _geo, ...pub } = g;
+    p.guides.push({ ...pub, _ts });
+    p.count++; c.count++;
+  }
+  const out = Object.values(countries).map(c => ({
+    cc: c.cc, name: c.name, count: c.count,
+    provinces: Object.values(c.provinces).map(p => ({
+      name: p.name, count: p.count,
+      guides: p.guides.sort((a, b) => b._ts.localeCompare(a._ts)).map(({ _ts, ...x }) => x),
+    })).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'es')),
+  })).sort((a, b) => (a.name === 'Otros') - (b.name === 'Otros') || b.count - a.count || a.name.localeCompare(b.name, 'es'));
+
+  return {
+    index: { generated_at: new Date().toISOString(), total: guides.length, countries: out },
+    missing: missing.map(g => [g._lat, g._lng]),
+  };
+}
+
+// Resuelve provincias pendientes respetando el límite de Nominatim (1 petición/segundo).
+async function _explorarBackfillProv(env, coords) {
+  const seen = new Set();
+  let n = 0;
+  for (const [lat, lng] of coords) {
+    const k = _provKey(lat, lng);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    if (n++ >= 20) break;
+    try { await _explorarGeocodeProv(env, lat, lng); } catch (_) {}
+    await new Promise(r => setTimeout(r, 1100));
+  }
+}
+
 // Construye el bloque [UBICACIÓN...] que se añade al system prompt de WhatsApp según lo
 // vieja que sea la ubicación guardada — extraído (25 sept 2026, fix "se queda callada")
 // para poder usarlo tanto al recibir un mensaje normal como justo al compartir ubicación
@@ -7889,6 +8047,36 @@ export default {
       headers.set('Cache-Control', 'private, max-age=3600');
       headers.set('Access-Control-Allow-Origin', '*');
       return new Response(object.body, { headers });
+    }
+
+    // ─── ENDPOINT /explorar (rutas de la comunidad, público sin login) ───
+    // Índice país → provincia → guías, cacheado en KV. Ver buildExplorarIndex().
+    if (request.method === 'GET' && url.pathname === '/explorar') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=300' };
+      try {
+        const cached = env.SALMA_KB ? await env.SALMA_KB.get(EXPLORAR_KEY) : null;
+        if (cached) return new Response(cached, { headers: corsH });
+        const { index, missing } = await buildExplorarIndex(env);
+        const body = JSON.stringify(index);
+        if (env.SALMA_KB) {
+          await env.SALMA_KB.put(EXPLORAR_KEY, body, { expirationTtl: missing.length ? 1200 : 7200 });
+          if (missing.length) ctx.waitUntil(_explorarBackfillProv(env, missing));
+        }
+        return new Response(body, { headers: corsH });
+      } catch (e) {
+        console.error('[EXPLORAR]', e.message);
+        return new Response(JSON.stringify({ error: 'No se pudieron cargar las rutas' }), { status: 500, headers: corsH });
+      }
+    }
+
+    // POST /explorar/refresh — borra la caché del índice. Lo llama la web (con sesión) al
+    // cambiar "Compartir mis rutas" o borrar una guía, para que se note al momento.
+    if (request.method === 'POST' && url.pathname === '/explorar/refresh') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const user = await verifyAuthAndGetUser(request.headers.get('Authorization'));
+      if (!user) return new Response(JSON.stringify({ error: 'auth' }), { status: 401, headers: corsH });
+      try { await env.SALMA_KB.delete(EXPLORAR_KEY); } catch (_) {}
+      return new Response(JSON.stringify({ ok: true }), { headers: corsH });
     }
 
     // ─── ENDPOINT /version (que version corre de verdad) ───

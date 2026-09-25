@@ -502,6 +502,8 @@ Post-procesado que corrige cada parada de una ruta generada:
 | GET | `/flight-alerts` | Alertas de bajada de precio/presupuesto alcanzado (KV `fw_alerts:{uid}`) |
 | PUT | `/flight-alerts/mark-seen` | Marcar alerta como vista |
 | POST | `/perfil-ia-extract` | Extrae hasta 3 datos nuevos del perfil de viajero (GPT-4o-mini) tras guardar una ruta — requiere login |
+| GET | `/explorar` | Rutas de la comunidad (público, sin login): índice país → provincia de `public_guides` con `listed != false`, sin repetidas ni <3 paradas. Caché KV `explorar:index:v1` (2 h; 20 min mientras falten provincias) |
+| POST | `/explorar/refresh` | Borra la caché de `/explorar` (requiere login) — al cambiar "Compartir mis rutas" o borrar una guía |
 | POST | `/beta-feedback` | Feedback de testers desde el panel 🐛: nota + logs → Firestore `beta_feedback` + aviso a Paco por WhatsApp |
 
 **Nota de este barrido (16 sept 2026):** esta tabla llevaba sin auditar contra el código real desde el 10 sept — faltaban 15 endpoints que ya existen y están desplegados (Vigilancia de Vuelos completa, WhatsApp, Stripe webhook, roads/resolve, weather, transport, translate, tts-google, historia-lugar, admin/verify-place). Ver también "🧠 KV — situación real" más abajo para el resto de hallazgos de este barrido.
@@ -607,6 +609,8 @@ Todos en Cloudflare Worker secrets (`wrangler secret put`).
 | `verifiedspot:{país}:{nombre}` | — | Caché de verify Google Places entre rutas de usuarios distintos (30 días TTL) — fix de coste del 15 sept | Dinámico |
 | `placedetails:{place_id}:{fields}` | — | Caché de Place Details (teléfono/web) por lugar (30 días TTL) — fix de coste del 15 sept | Dinámico |
 | `nearbycache:{type}:{lat}:{lng}` | — | Caché Nearby Search por tipo + celda ~1km (7 días TTL) — fix de coste del 15 sept | Dinámico |
+| `explorar:index:v1` | — | Índice de Explorar (rutas de la comunidad), ver `/explorar` | 1 clave |
+| `prov:{lat}:{lng}` | — | País + provincia de un punto (Nominatim, gratis) para agrupar Explorar — sin caducidad | Dinámico |
 | `geo:{lat}:{lng}` | — | Caché reverse geocoding (24h TTL) | Dinámico |
 | `geocity:{word}` | — | Caché Nominatim ciudad→país (30 días TTL) | Dinámico |
 | `geocity:anchor7:{norm}` | — | Caché de geocodificación de ancla de ruta (7 decimales) | Dinámico |
@@ -1349,6 +1353,21 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   `CLAUDE-historial.md` si hiciera falta reconstruir algo.
 
 ### 🟡 Importante
+
+- **Explorar — rutas de otros viajeros (25 sept 2026) — HECHO en la rama
+  `claude/shared-routes-visibility-s99x1z`, SIN DESPLEGAR (falta pasarlo a `main`).**
+  Decidido con Paco: botón dentro de Rutas (pestañas "Mis rutas | Explorar"), visible sin
+  login (botón "Ver rutas de otros viajeros" en la pantalla de entrada + pestaña Mis Viajes
+  ya no exige sesión), guías existentes incluidas sin repetidas, autor con nombre de pila.
+  Perfil → CUENTA → interruptor "Compartir mis rutas" (activado por defecto, campo
+  `users/{uid}.share_routes`; al cambiarlo marca `listed` en todas sus `public_guides`).
+  Agrupación país → provincia con Nominatim sobre la 1ª parada (gratis, caché KV
+  `prov:`); las guías antiguas se van ubicando solas ~20 por reconstrucción. Se excluyen
+  las guías de la cuenta Salma (ya están en `/destinos/`). **Coste (§8): 0 € en APIs de
+  pago; Firestore lee cada guía pública una vez por reconstrucción del índice (cada 2 h).**
+  `app.js?v=167`, `styles.css?v=139`. Sin cambio en `firestore.rules`. Probar: sin sesión
+  → "Ver rutas de otros viajeros"; con sesión → Mis Viajes → Explorar → abrir una ruta;
+  Perfil → apagar el interruptor → sus rutas desaparecen de Explorar.
 
 - **Catálogo de ideas de Kabi (app similar), 22 sept 2026 — SOLO ESTUDIO, sin decidir.**
   Bottom bar con "+" central ya implementado y confirmado; quedan por decidir: sliders de

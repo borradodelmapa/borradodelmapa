@@ -6977,3 +6977,51 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 }
 .pm-spinner { width:22px; height:22px; border:2px solid var(--linea-fuerte); border-top-color:var(--dorado); border-radius:50%; animation:spin .6s linear infinite; }
 @media (max-width:380px) { .pm-title { font-size:30px; } .pm-meter-row { grid-template-columns:104px 1fr auto; } }
+
+/* ═══ EXPLORAR — rutas de otros viajeros (25 sept 2026) ═══ */
+.rutas-tabs { display:flex; gap:8px; padding:0 16px 14px; }
+.rutas-tab {
+  flex:1; padding:9px 0; background:transparent; cursor:pointer;
+  border:1px solid var(--linea); color:var(--crema);
+  font-family:var(--font-tight); font-size:13px; font-weight:600; letter-spacing:.04em;
+}
+.rutas-tab-active { background:var(--dorado); border-color:var(--dorado); color:var(--negro); }
+.expl-msg { padding:30px 8px; text-align:center; color:var(--crema); opacity:.7; font-size:14px; }
+.expl-country {
+  display:flex; align-items:center; justify-content:space-between; width:100%;
+  padding:14px 16px; background:var(--gris); border:1px solid var(--linea);
+  color:var(--blanco); cursor:pointer; text-align:left;
+  font-family:var(--font-tight); font-size:16px; font-weight:600;
+}
+.expl-country:hover { border-color:var(--linea-fuerte); }
+.expl-country-count { font-family:var(--font-mono); font-size:10px; color:var(--dorado); letter-spacing:.1em; white-space:nowrap; }
+.expl-back {
+  justify-self:start; background:none; border:none; padding:0; cursor:pointer;
+  color:var(--dorado); font-family:var(--font-tight); font-size:14px;
+}
+.expl-country-title { font-family:var(--font-tight); font-size:22px; font-weight:700; color:var(--blanco); }
+.expl-card-autor { margin-top:6px; font-size:12px; color:var(--crema); opacity:.65; }
+
+/* Interruptor "Compartir mis rutas" (Perfil) */
+.prof-row-switch { cursor:default; }
+.prof-row-hint { display:block; font-size:11px; opacity:.55; margin-top:2px; font-weight:400; }
+.prof-switch { position:relative; flex-shrink:0; width:44px; height:24px; margin-left:auto; cursor:pointer; }
+.prof-switch input { position:absolute; opacity:0; width:0; height:0; }
+.prof-switch-track {
+  position:absolute; inset:0; border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.15); transition:background .2s;
+}
+.prof-switch-track::after {
+  content:''; position:absolute; top:3px; left:3px; width:18px; height:18px;
+  border-radius:50%; background:var(--blanco); transition:transform .2s;
+}
+.prof-switch input:checked + .prof-switch-track { background:var(--dorado); }
+.prof-switch input:checked + .prof-switch-track::after { transform:translateX(20px); }
+.prof-switch input:disabled + .prof-switch-track { opacity:.5; }
+
+/* Botón "Ver rutas de otros viajeros" en la pantalla de entrada */
+.auth-btn-explorar {
+  width:100%; margin-top:10px; padding:12px; background:transparent; cursor:pointer;
+  border:none; color:var(--crema); opacity:.8; font-size:14px; text-decoration:underline;
+}
+.auth-btn-explorar:hover { opacity:1; color:var(--dorado); }
