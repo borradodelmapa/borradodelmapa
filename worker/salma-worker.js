@@ -3228,6 +3228,42 @@ async function reverseGeocodeLocation(env, lat, lng) {
   return { name, cc };
 }
 
+// Miniatura de mapa de una ruta: Google Static Maps (DE PAGO, ~0,002 € por imagen) → R2
+// `r2Key`. Extraída de /route-thumbnail (25 sept 2026) para que Explorar genere las que
+// faltan con la MISMA imagen, sin una segunda versión. Quien llama comprueba antes que no
+// exista ya en R2 — así Google se paga como mucho una vez por ruta.
+// Devuelve {} si fue bien, o { error, google_status?, google_detail? }.
+async function generateRouteThumbnail(env, r2Key, stops, roadGeometry, ctx) {
+  // Misma clave nueva dedicada que /staticmap — ver comentario ahí.
+  const apiKey = env.GOOGLE_STATIC_MAPS_KEY || env.GOOGLE_PLACES_KEY;
+  if (!apiKey) return { error: 'no key' };
+  // Sin center/zoom a propósito: Google encuadra solo con los marcadores.
+  // Static Maps solo admite un carácter por etiqueta — a partir de la 10ª
+  // parada el punto se queda sin número, se ve igual el resto de la ruta.
+  let gmUrl = `https://maps.googleapis.com/maps/api/staticmap?size=640x300&scale=2&maptype=roadmap&key=${apiKey}`;
+  stops.slice(0, 25).forEach((s, i) => {
+    const label = i < 9 ? `label:${i + 1}|` : '';
+    gmUrl += `&markers=color:0xf0b429|${label}${s.lat},${s.lng}`;
+  });
+  if (typeof roadGeometry === 'string' && roadGeometry) {
+    gmUrl += `&path=color:0xf0b429cc|weight:3|enc:${encodeURIComponent(roadGeometry)}`;
+  }
+  const imgRes = await fetch(gmUrl);
+  if (!imgRes.ok) {
+    // Sacar el motivo real de Google (clave/cuota/parámetro), no solo "falló" —
+    // sin esto no había forma de saber por qué desde el panel 🐛 del frontend.
+    let detail = '';
+    try { detail = (await imgRes.text()).slice(0, 400); } catch (_) {}
+    console.log('[route-thumbnail] Google Static Maps error', imgRes.status, detail);
+    return { error: 'map error', google_status: imgRes.status, google_detail: detail };
+  }
+  const contentType = imgRes.headers.get('Content-Type') || 'image/png';
+  const buf = await imgRes.arrayBuffer();
+  const putPromise = env.SALMA_PHOTOS.put(r2Key, buf, { httpMetadata: { contentType } }).catch(() => {});
+  if (ctx?.waitUntil) ctx.waitUntil(putPromise); else await putPromise;
+  return {};
+}
+
 // ═══ EXPLORAR — rutas de la comunidad (25 sept 2026, Paco: "que las guías de los usuarios
 // sean compartidas y visibles a todas las cuentas", organizadas por país → provincia) ═══
 // Lee public_guides (lectura pública ya hoy), filtra (dueño con "Compartir mis rutas"
@@ -3325,6 +3361,9 @@ async function buildExplorarIndex(env, origin) {
       _lng: first ? Number(first.lng) : null,
       _country: r.country || '',
       _docId: g.ownerDocId || '',
+      _stops: stops.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)) && Math.abs(Number(s.lat)) > 0.01)
+        .slice(0, 25).map(s => ({ lat: Number(s.lat), lng: Number(s.lng) })),
+      _road: typeof r.road_geometry === 'string' ? r.road_geometry : null,
     };
     const keys = [(g.uid || item.slug) + '|' + _explorarNorm(item.nombre) + '|' + (item.dias || '')];
     if (g.ownerDocId) keys.push('doc|' + (g.uid || '') + '|' + g.ownerDocId);
@@ -3348,13 +3387,18 @@ async function buildExplorarIndex(env, origin) {
 
   // 2b) Miniatura del mapa: la misma que ve el dueño en Mis rutas (R2 mapthumb/{id}.jpg,
   //     la crea /route-thumbnail). Aquí solo se comprueba si existe — sin llamar a Google.
+  //     Si no existe, queda en `missingThumbs` para generarla después (Google, de pago).
+  //     Guías sin ownerDocId (antiguas): clave propia por slug.
+  const missingThumbs = [];
   if (env.SALMA_PHOTOS && origin) {
     await Promise.all(guides.map(async (g) => {
-      const id = String(g._docId).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80);
+      const id = String(g._docId || ('pg_' + g.slug)).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80);
       if (!id) return;
+      const key = `mapthumb/${id}.jpg`;
       try {
-        if (await env.SALMA_PHOTOS.head(`mapthumb/${id}.jpg`)) g.thumb = `${origin}/photo/mapthumb/${id}.jpg`;
-      } catch (_) {}
+        if (await env.SALMA_PHOTOS.head(key)) { g.thumb = `${origin}/photo/${key}`; return; }
+      } catch (_) { return; }
+      if (g._stops.length >= 2) missingThumbs.push({ key, stops: g._stops, road: g._road });
     }));
   }
 
@@ -3367,7 +3411,7 @@ async function buildExplorarIndex(env, origin) {
     const ck = cc || _explorarNorm(cName);
     const c = countries[ck] || (countries[ck] = { cc, name: cName, count: 0, provinces: {} });
     const p = c.provinces[pName] || (c.provinces[pName] = { name: pName, count: 0, guides: [] });
-    const { _ts, _lat, _lng, _country, _geo, _docId, ...pub } = g;
+    const { _ts, _lat, _lng, _country, _geo, _docId, _stops, _road, ...pub } = g;
     p.guides.push({ ...pub, _ts });
     p.count++; c.count++;
   }
@@ -3382,7 +3426,23 @@ async function buildExplorarIndex(env, origin) {
   return {
     index: { generated_at: new Date().toISOString(), total: guides.length, countries: out },
     missing: missing.map(g => [g._lat, g._lng]),
+    missingThumbs,
   };
+}
+
+// Genera miniaturas que faltan (Google Static Maps, ~0,002 € cada una, UNA vez por guía:
+// se quedan en R2 para siempre). Tope 30 por reconstrucción. Si genera alguna, borra la
+// caché del índice para que la próxima visita ya las enseñe.
+async function _explorarBackfillThumbs(env, list) {
+  let done = 0;
+  const batch = [...new Map(list.map(t => [t.key, t])).values()].slice(0, 30);
+  for (let i = 0; i < batch.length; i += 5) {
+    const res = await Promise.all(batch.slice(i, i + 5).map(t =>
+      generateRouteThumbnail(env, t.key, t.stops, t.road, null).catch(e => ({ error: e.message }))));
+    done += res.filter(x => !x.error).length;
+  }
+  console.log('[EXPLORAR] miniaturas generadas:', done, 'de', batch.length, '(pendientes en total:', list.length + ')');
+  if (done) { try { await env.SALMA_KB.delete(EXPLORAR_KEY); } catch (_) {} }
 }
 
 // Resuelve provincias pendientes respetando el límite de Nominatim (1 petición/segundo).
@@ -8069,11 +8129,16 @@ export default {
       try {
         const cached = env.SALMA_KB ? await env.SALMA_KB.get(EXPLORAR_KEY) : null;
         if (cached) return new Response(cached, { headers: corsH });
-        const { index, missing } = await buildExplorarIndex(env, url.origin);
+        const { index, missing, missingThumbs } = await buildExplorarIndex(env, url.origin);
         const body = JSON.stringify(index);
         if (env.SALMA_KB) {
-          await env.SALMA_KB.put(EXPLORAR_KEY, body, { expirationTtl: missing.length ? 1200 : 7200 });
-          if (missing.length) ctx.waitUntil(_explorarBackfillProv(env, missing));
+          await env.SALMA_KB.put(EXPLORAR_KEY, body, { expirationTtl: (missing.length || missingThumbs.length) ? 1200 : 7200 });
+          if (missing.length || missingThumbs.length) {
+            ctx.waitUntil(Promise.all([
+              missingThumbs.length ? _explorarBackfillThumbs(env, missingThumbs) : null,
+              missing.length ? _explorarBackfillProv(env, missing) : null,
+            ]));
+          }
         }
         return new Response(body, { headers: corsH });
       } catch (e) {
@@ -8924,34 +8989,10 @@ export default {
           return new Response(JSON.stringify({ url: `${url.origin}/photo/${r2Key}` }), { headers: corsH });
         }
       } catch (_) {}
-      // Misma clave nueva dedicada que /staticmap — ver comentario ahí.
-      const apiKey = env.GOOGLE_STATIC_MAPS_KEY || env.GOOGLE_PLACES_KEY;
-      if (!apiKey) return new Response(JSON.stringify({ error: 'no key' }), { status: 500, headers: corsH });
-      // Sin center/zoom a propósito: Google encuadra solo con los marcadores.
-      // Static Maps solo admite un carácter por etiqueta — a partir de la 10ª
-      // parada el punto se queda sin número, se ve igual el resto de la ruta.
-      let gmUrl = `https://maps.googleapis.com/maps/api/staticmap?size=640x300&scale=2&maptype=roadmap&key=${apiKey}`;
-      stops.slice(0, 25).forEach((s, i) => {
-        const label = i < 9 ? `label:${i + 1}|` : '';
-        gmUrl += `&markers=color:0xf0b429|${label}${s.lat},${s.lng}`;
-      });
-      if (typeof rtBody.road_geometry === 'string' && rtBody.road_geometry) {
-        gmUrl += `&path=color:0xf0b429cc|weight:3|enc:${encodeURIComponent(rtBody.road_geometry)}`;
-      }
       try {
-        const imgRes = await fetch(gmUrl);
-        if (!imgRes.ok) {
-          // Sacar el motivo real de Google (clave/cuota/parámetro), no solo "falló" —
-          // sin esto no había forma de saber por qué desde el panel 🐛 del frontend.
-          let detail = '';
-          try { detail = (await imgRes.text()).slice(0, 400); } catch (_) {}
-          console.log('[route-thumbnail] Google Static Maps error', imgRes.status, detail);
-          return new Response(JSON.stringify({ error: 'map error', google_status: imgRes.status, google_detail: detail }), { status: 502, headers: corsH });
-        }
-        const contentType = imgRes.headers.get('Content-Type') || 'image/png';
-        const buf = await imgRes.arrayBuffer();
-        const putPromise = env.SALMA_PHOTOS.put(r2Key, buf, { httpMetadata: { contentType } }).catch(() => {});
-        if (ctx?.waitUntil) ctx.waitUntil(putPromise); else await putPromise;
+        const gen = await generateRouteThumbnail(env, r2Key, stops, rtBody.road_geometry, ctx);
+        if (gen.error === 'no key') return new Response(JSON.stringify({ error: 'no key' }), { status: 500, headers: corsH });
+        if (gen.error) return new Response(JSON.stringify({ error: 'map error', google_status: gen.google_status, google_detail: gen.google_detail }), { status: 502, headers: corsH });
         return new Response(JSON.stringify({ url: `${url.origin}/photo/${r2Key}` }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: 'server error' }), { status: 500, headers: corsH });
