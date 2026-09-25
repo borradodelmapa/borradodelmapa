@@ -1288,7 +1288,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      cuenta `wa_…`, ahora pasa a la cuenta de la web y se COPIAN sus notas y rutas
      (`waCopyAccountData`, mismo id, sin borrar nada de la `wa_`; `whatsapp_sessions.merged_from`
      guarda la vieja). Si el número estaba unido a OTRA cuenta de Google, sigue avisando sin
-     tocar nada. Log `[WA-UNIR]`. Sin coste de API. Pendiente de probar con la cuenta de Paco.
+     tocar nada. Log `[WA-UNIR]`. Sin coste de API. **CONFIRMADO EN PANTALLA por Paco (25 sept): unido, notas copiadas y una nota nueva por WhatsApp sale en la web.** Worker `bc81421d`.
    - **Worker Version ID vigente: ver `/version`** (anterior: `1990087f-457b-4208-90af-3f21f6e933cf`) (despliegues
      intermedios de este punto: `def5f8bc-98f2-4ca0-b343-2a78735984fb` → búsqueda de vuelos
      por hub real (funcionó a medias, seguía inventando cuando el hub también fallaba),
