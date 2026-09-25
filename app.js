@@ -3653,29 +3653,34 @@ async function _waLoginPollOnce(code, secret) {
 // seguidas (cubre el caso normal de "mandar el WhatsApp y volver enseguida") y se para
 // sola si no hay suerte, sin dejar un temporizador corriendo para siempre en segundo
 // plano. Se llama al cargar la página y cada vez que la pestaña vuelve a ser visible.
-let _waLoginResuming = false;
+//
+// Contador de generación en vez de un simple booleano "ocupado" (bug real, encontrado
+// 26 sept 2026): si el primer intento de abrir WhatsApp falla o se cancela, este bucle
+// se queda escuchando el código VIEJO (que nunca se va a confirmar) hasta agotar sus
+// ~30s. Con el booleano, un segundo intento que sí manda bien el mensaje y sí se
+// confirma en el servidor quedaba bloqueado sin sondear ese código nuevo mientras el
+// bucle viejo seguía vivo — el usuario recibía el WhatsApp de "ya deberías estar
+// dentro" pero la web nunca llegaba a comprobarlo. Cada llamada ahora sube la
+// generación y cualquier bucle anterior se para solo en su siguiente vuelta.
+let _waLoginResumeGen = 0;
 async function _waLoginResume() {
-  if (_waLoginResuming) return;
   let pending;
   try { pending = JSON.parse(localStorage.getItem(WA_LOGIN_PENDING_KEY) || 'null'); } catch (e) { pending = null; }
   if (!pending || !pending.code || !pending.secret) return;
   if (Date.now() - (pending.ts || 0) > WA_LOGIN_TTL_MS) { localStorage.removeItem(WA_LOGIN_PENDING_KEY); return; }
   if (typeof auth !== 'undefined' && auth.currentUser) { localStorage.removeItem(WA_LOGIN_PENDING_KEY); return; }
-  _waLoginResuming = true;
-  try {
-    for (let i = 0; i < 15; i++) { // ~30s de intentos cada vez que se reanuda
-      const d = await _waLoginPollOnce(pending.code, pending.secret);
-      if (d && d.status === 'ok' && d.custom_token) {
-        localStorage.removeItem(WA_LOGIN_PENDING_KEY);
-        await auth.signInWithCustomToken(d.custom_token);
-        closeModal();
-        return;
-      }
-      if (d && d.status === 'expired') { localStorage.removeItem(WA_LOGIN_PENDING_KEY); return; }
-      await new Promise((r) => setTimeout(r, 2000));
+  const myGen = ++_waLoginResumeGen;
+  for (let i = 0; i < 15; i++) { // ~30s de intentos cada vez que se reanuda
+    if (myGen !== _waLoginResumeGen) return; // se ha lanzado un intento más nuevo (código distinto) — este se para
+    const d = await _waLoginPollOnce(pending.code, pending.secret);
+    if (d && d.status === 'ok' && d.custom_token) {
+      localStorage.removeItem(WA_LOGIN_PENDING_KEY);
+      await auth.signInWithCustomToken(d.custom_token);
+      closeModal();
+      return;
     }
-  } finally {
-    _waLoginResuming = false;
+    if (d && d.status === 'expired') { localStorage.removeItem(WA_LOGIN_PENDING_KEY); return; }
+    await new Promise((r) => setTimeout(r, 2000));
   }
 }
 document.addEventListener('visibilitychange', () => { if (!document.hidden) _waLoginResume(); });
