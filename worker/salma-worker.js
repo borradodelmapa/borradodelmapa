@@ -546,50 +546,72 @@ const SALMA_SYSTEM_CHAT = [
   BLOQUE_VISION,
 ].join('\n\n');
 
-// ── Prompt WHATSAPP (F5.2, 24 sept 2026) — misma identidad/personalidad que el chat
-// web, pero SIN BLOQUE_ACCION completo (trae el detalle de SALMA_ACTION/HISTORIA_LUGAR y
-// otras piezas específicas del formato web que no aplican por texto — buscar_lugar,
-// buscar_vuelos, buscar_hotel y buscar_coche SÍ se conectan directo como tools, ver WA_TOOLS
-// más abajo, y BLOQUE_RUTA_INFO_DIRECTA se reutiliza literal, ver esa constante),
-// SIN BLOQUE_MAPA (instrucciones de GPS, no aplican por texto) y SIN BLOQUE_NOTAS
-// (auto-guardado de notas en Firestore — no hay uid vinculado todavía, F5.4). Memoria e
-// info de ubicación añadidas el 25 sept 2026 (F5.3 puntos 1 y 2); buscar_lugar (F5.3 punto
-// 6, mismo día) — ver wa_history/wa_location/waCallClaudeWithTools en el webhook
-// /whatsapp; aquí solo las instrucciones de uso.
+// ── Prompt WHATSAPP (F5.2, 24 sept 2026; reescrito 25 sept 2026 — ver nota abajo) — misma
+// identidad/personalidad que el chat web, y desde hoy también BLOQUE_ACCION COMPLETO (antes
+// se excluía entero y se iban parcheando fragmentos sueltos a mano cada vez que faltaba
+// algo). SIN BLOQUE_MAPA (instrucciones de GPS de la app, no aplican por texto) y SIN
+// BLOQUE_NOTAS (formato largo de guardado de notas de la web). Memoria e info de ubicación
+// añadidas el 25 sept 2026 (F5.3 puntos 1 y 2); buscar_lugar (F5.3 punto 6, mismo día).
 //
-// Bug real, 25 sept 2026 (confirmado en pantalla por Paco, 3 vueltas hasta cerrarlo): al
-// quitar BLOQUE_ACCION entero se fue con él su regla "destino+ruta → info directa, NUNCA
-// '¿qué tipo de viaje?' ni '¿con quién vas?'" — sin ella, Claude caía en la típica cadena de
-// preguntas de bot ("¿día completo o visita rápida?", luego "¿tienes coche?"...) al pedir
-// "hazme una ruta por X". 1ª vuelta: paráfrasis propia de la regla, prohibiendo solo esas
-// dos frases — insuficiente, el modelo generalizó a otra pregunta parecida ("¿acabas antes
-// de las 18h?"). 2ª vuelta: prohibición general de cualquier pregunta de personalización —
-// mejor, pero seguía siendo una redacción MÍA, no la que ya lleva años probada en la app.
-// Paco preguntó explícitamente por qué no se reutilizaba lo que ya funciona bien — con
-// razón: se extrajo el punto 2 de BLOQUE_ACCION a BLOQUE_RUTA_INFO_DIRECTA (mismo texto
-// exacto en los dos sitios, ver esa constante) y WhatsApp lo usa tal cual, con un único
-// añadido genuinamente distinto: aquí no hay botón de "Crear ruta con mapa" que sustituya
-// la conversación libre, así que la regla se refuerza para cubrir CUALQUIER pregunta de
-// personalización, no solo las dos que cita el texto original.
+// Historial de por qué se llegó aquí (25 sept 2026, mismo día, 3 bugs reales seguidos):
+// 1ª vuelta: excluir BLOQUE_ACCION entero se llevó con él "destino+ruta → info directa,
+// nunca preguntes personalización" → cadena de preguntas de bot. Se extrajo ese punto a
+// BLOQUE_RUTA_INFO_DIRECTA y se pegó a mano en el prompt de WhatsApp.
+// 2ª vuelta: "vuelo a Koh Samui en noviembre" + "solo ida" se quedaba pidiendo fecha exacta
+// en bucle — faltaban el punto 5 ("actúa inmediatamente, sin preguntas previas") y DEFAULTS
+// ("sin fecha → hoy", "sin vuelta → solo ida"). Se extrajeron a BLOQUE_SERVICIO_DIRECTO/
+// BLOQUE_DEFAULTS_SERVICIO y se pegaron también a mano.
+// 3ª vuelta: con la fecha ya resuelta, al no encontrar vuelos reales Claude SE INVENTÓ una
+// ruta vía Bangkok con un precio de Bangkok Airways que no venía de ninguna tool — faltaba
+// "PROHIBIDO INVENTAR" (no inventes horarios ni precios, solo datos de herramientas).
+// Paco, con razón, preguntó por qué no se copiaba la petición entera de la app en vez de
+// seguir parcheando trozo a trozo cada vez que aparece un bug nuevo del mismo origen —
+// bien visto: cada fragmento nuevo era la MISMA causa (BLOQUE_ACCION excluido) apareciendo
+// otra vez por otro lado. Arreglo de raíz: WhatsApp incluye BLOQUE_ACCION completo (herencia
+// automática de cualquier regla presente o futura — "prohibido inventar", jerarquía de
+// herramientas, dato primero, etc. — sin tener que acordarse de extraer nada nunca más).
+// Piezas nuevas SOLO por lo que de verdad es distinto en este canal (menos tools conectadas,
+// sin SALMA_ACTION/HISTORIA_LUGAR porque aquí no hay nada que los lea — con un borrado de
+// seguridad por si el modelo los genera de todos modos, ver stripWaLeakedMarkers en el
+// webhook /whatsapp), sin botón de "generar ruta", sin GPS en vivo.
 const WHATSAPP_SYSTEM_CHAT = [
   BLOQUE_IDENTIDAD,
   BLOQUE_PERSONALIDAD,
   BLOQUE_MULETILLAS,
   BLOQUE_ANTIPAJA,
   BLOQUE_GEOGRAFIA,
+  BLOQUE_ACCION,
   BLOQUE_FORMATO,
-  `Estás hablando por WhatsApp, no por la app — un canal más limitado por ahora:
-- SÍ puedes buscar lugares reales (restaurantes, bares, farmacias, museos, lo que sea) con la tool buscar_lugar — igual que en la app, con datos reales de Google Places (dirección, teléfono, rating, Google Maps). Úsala en cuanto sepas la ciudad, sin preguntar de más.
-- Sobre rutas y destinos, la regla es LA MISMA que ya usa la app (no una versión distinta):
-${BLOQUE_RUTA_INFO_DIRECTA}
-A diferencia de la app, aquí no hay ningún botón que dispare aparte un modo "generar ruta" — así que esta regla va a rajatabla: ninguna pregunta de personalización, sea cual sea (tipo de viaje, con quién vas, si tienes coche, cuántas horas tienes, a qué hora acabas, ritmo, presupuesto...), aunque no sea literalmente una de las dos que cita la regla arriba. Usa siempre tu mejor criterio y defaults razonables (sin fecha → ahora, sin presupuesto → rango variado). Termina la respuesta invitando a guardarla: algo tipo "Si quieres, dime 'guárdala' y la guardamos."
-- SÍ puedes buscar vuelos (buscar_vuelos), hoteles (buscar_hotel) y coches de alquiler (buscar_coche) — igual que en la app, con datos y enlaces de reserva reales. La regla de cuándo usarlas es LA MISMA que ya usa la app (no una versión distinta):
-${BLOQUE_SERVICIO_DIRECTO}
-${BLOQUE_DEFAULTS_SERVICIO}
-Aplica esto también a fechas amplias o vagas ("en noviembre", "cualquier día del mes"): NUNCA pidas una fecha exacta en bucle — usa fecha_ida con un día razonable de ese rango (ej. el día 1) y fecha_rango_hasta con el último día, y busca ya. Solo pregunta algo si de verdad no puedes deducir ni origen ni destino.
-- SÍ tienes memoria de los últimos mensajes de esta conversación (te llegan como turnos anteriores) — úsala con normalidad, no digas que no recuerdas algo que sí está ahí arriba.
-- WhatsApp no tiene GPS en vivo como la app: solo sabes dónde está el usuario si te lo dice o si comparte su ubicación (clip → Ubicación). Si ves un bloque [UBICACIÓN...] al final de este prompt, síguelo tal cual — incluye la ciudad, úsala directa en buscar_lugar si toca. Si NO lo ves y necesitas saber dónde está para responder bien (buscar algo "cerca", seguir una ruta...), pídele que comparta su ubicación así, o que te diga la ciudad.
-- Formato: WhatsApp interpreta *un solo asterisco* como negrita, NUNCA dobles asteriscos. Sin viñetas ni encabezados. Respuestas cortas, de móvil — 2-4 frases salvo que pidan más detalle.`,
+  `Estás hablando por WhatsApp, no por la app — todo lo de arriba (BLOQUE_ACCION incluido:
+cómo actuar, defaults, prohibido inventar, jerarquía de herramientas...) aplica igual, con
+estas diferencias reales de este canal:
+- Herramientas conectadas aquí: buscar_lugar, buscar_vuelos, buscar_hotel, buscar_coche —
+  con datos reales (Google Places / Duffel / Booking.com), igual que en la app. buscar_web,
+  buscar_foto, generar_video y guardar_nota (el punto 6 y el "usa buscar_web" de arriba)
+  todavía NO están conectados en este canal. Si el texto de arriba te pide usar algo que no
+  tienes aquí, dilo claro ("eso todavía no lo puedo hacer por WhatsApp, pruébalo en la app")
+  — NUNCA finjas que lo has hecho ni inventes el dato que esa herramienta te habría dado.
+- NUNCA generes SALMA_ACTION ni HISTORIA_LUGAR en este canal — aquí no hay nada que los
+  interprete, se colarían tal cual en el mensaje que le llega al usuario.
+- Sin botón "Crear ruta con mapa" que sustituya la conversación libre: la regla de destino/
+  ruta → información directa, nunca preguntes personalización (punto 2 de arriba) va a
+  rajatabla aquí para CUALQUIER pregunta de personalización, no solo las que cita el texto
+  original. Termina la respuesta invitando a guardarla: "Si quieres, dime 'guárdala' y la
+  guardamos."
+- Fechas vagas en vuelos/hoteles/coches ("en noviembre", "cualquier día del mes"): no
+  preguntes la fecha exacta en bucle — usa fecha_ida con un día razonable de ese rango y
+  fecha_rango_hasta con el último día, y busca ya. Solo pregunta si de verdad no puedes
+  deducir origen o destino.
+- SÍ tienes memoria de los últimos mensajes de esta conversación (te llegan como turnos
+  anteriores) — úsala con normalidad, no digas que no recuerdas algo que sí está ahí arriba.
+- WhatsApp no tiene GPS en vivo como la app: solo sabes dónde está el usuario si te lo dice
+  o si comparte su ubicación (clip → Ubicación). Si ves un bloque [UBICACIÓN...] al final de
+  este prompt, síguelo tal cual — incluye la ciudad, úsala directa en buscar_lugar si toca.
+  Si NO lo ves y necesitas saber dónde está para responder bien, pídele que comparta su
+  ubicación así, o que te diga la ciudad.
+- Formato: WhatsApp interpreta *un solo asterisco* como negrita, NUNCA dobles asteriscos.
+  Sin viñetas ni encabezados. Respuestas cortas, de móvil — 2-4 frases salvo que pidan más
+  detalle.`,
 ].join('\n\n');
 
 // ── Prompt PLAN: sin restricción de títulos → para días+destino (formato estructurado)
@@ -3228,6 +3250,20 @@ function appendGuardarlaCta(reply, userMessage) {
   if (!looksLikeRouteAsk) return reply;
   if (/gu[aá]rdala/i.test(reply)) return reply;
   return reply.trim() + '\n\nSi quieres, dime "guárdala" y la guardamos.';
+}
+
+// Red de seguridad (25 sept 2026, al incluir BLOQUE_ACCION completo en WhatsApp): SALMA_ACTION
+// e HISTORIA_LUGAR son marcadores invisibles que la web oculta e interpreta en el frontend —
+// WhatsApp no tiene ese parser y manda el texto de Claude tal cual por Twilio. El prompt ya le
+// dice a Claude que NUNCA los genere en este canal, pero por si el modelo los suelta de todas
+// formas (viven en BLOQUE_ACCION, que ahora comparte), se recortan aquí antes de enviar.
+function stripWaLeakedMarkers(text) {
+  if (!text) return text;
+  return text
+    .split('\n')
+    .filter(line => !/^\s*(SALMA_ACTION|HISTORIA_LUGAR)\s*:/i.test(line))
+    .join('\n')
+    .trim();
 }
 
 // Genera y guarda una ruta real desde WhatsApp (F5.3, paso 2, 25 sept 2026) — reutiliza el
@@ -8918,7 +8954,7 @@ export default {
             const { text: locReplyText } = await waCallClaudeWithTools(
               env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: locationMarker }], waCoords
             );
-            const reply = locReplyText || `Vale, ya sé que estás en ${locName}.`;
+            const reply = stripWaLeakedMarkers(locReplyText) || `Vale, ya sé que estás en ${locName}.`;
             await sendWhatsAppMessage(env, from, reply);
 
             if (env.SALMA_KB) {
@@ -9189,7 +9225,7 @@ export default {
           const { text: chatReplyText, usedTools } = await waCallClaudeWithTools(
             env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: body }], waCoords
           );
-          const rawReply = chatReplyText || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
+          const rawReply = stripWaLeakedMarkers(chatReplyText) || 'Uf, se me ha ido el santo al cielo — vuelve a escribirme.';
           // Si esta respuesta vino de una tool de búsqueda (vuelo/hotel/coche/lugar), NUNCA le
           // pega la invitación a guardar — es una búsqueda de servicio, no una ruta (bug real,
           // 25 sept 2026: "Cualquier día del mes" en medio de una búsqueda de vuelo la llevaba
