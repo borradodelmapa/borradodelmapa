@@ -165,7 +165,7 @@
       el.id = 'share-inbox-overlay';
       el.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(5,5,5,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px);';
       el.innerHTML = `
-        <div style="font-family:'Bebas Neue',sans-serif;color:#f0b429;font-size:28px;letter-spacing:.05em;margin-bottom:12px">AÑADIENDO AL MAPA</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;color:#f0b429;font-size:28px;letter-spacing:.05em;margin-bottom:12px">AÑADIENDO AL MAPA</div>
         <div id="share-inbox-msg" style="font-family:'Inter',sans-serif;color:#f5f0e8;font-size:14px;text-align:center;line-height:1.5;max-width:320px"></div>
         <div id="share-inbox-progress" style="margin-top:18px;width:220px;height:4px;background:rgba(240,180,41,.15);border-radius:999px;overflow:hidden">
           <div id="share-inbox-bar" style="height:100%;width:0%;background:#f0b429;transition:width .3s"></div>
@@ -272,7 +272,7 @@
     s.textContent = `
       .sa-overlay{position:fixed;inset:0;z-index:99998;background:#060503;display:flex;flex-direction:column;font-family:'Inter',sans-serif;color:#f5f0e8}
       .sa-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(240,180,41,.18)}
-      .sa-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f0b429;letter-spacing:.04em}
+      .sa-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#f0b429;letter-spacing:.04em}
       .sa-done{background:transparent;border:1px solid rgba(240,180,41,.4);color:#f0b429;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer}
       .sa-controls{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid rgba(240,180,41,.12);align-items:center;flex-wrap:wrap}
       .sa-select{flex:1;min-width:180px;background:#141209;color:#f5f0e8;border:1px solid rgba(240,180,41,.25);border-radius:10px;padding:10px 12px;font-size:13px;font-family:inherit}
@@ -298,7 +298,7 @@
       /* Modal de ubicación */
       .sl-overlay{position:fixed;inset:0;z-index:99999;background:rgba(5,5,5,.92);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:20px}
       .sl-box{background:#141209;border:1px solid rgba(240,180,41,.25);border-radius:16px;padding:20px;width:100%;max-width:440px;display:flex;flex-direction:column;gap:14px}
-      .sl-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f0b429;letter-spacing:.04em}
+      .sl-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#f0b429;letter-spacing:.04em}
       .sl-sub{font-size:12px;color:rgba(245,240,232,.6);line-height:1.5}
       .sl-input{background:#0a0806;color:#f5f0e8;border:1px solid rgba(240,180,41,.25);border-radius:10px;padding:12px;font-size:14px;font-family:inherit;outline:none}
       .sl-input:focus{border-color:rgba(240,180,41,.55)}

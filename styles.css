@@ -7074,3 +7074,42 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .ayuda-actions { display:flex; flex-direction:column; gap:12px; margin:22px 0 10px; }
 .ayuda-fb { background:transparent; border:1px solid rgba(236,235,232,.3); color:var(--crema); padding:13px; font-size:14px; cursor:pointer; }
 .ayuda-fb:hover { border-color:var(--accent); }
+
+/* ═══ Legibilidad (propuesta UX 26 sept 2026, rama ux-preview) ═══
+   Reglas: nada de texto por debajo de 12px (11px solo en el menú de abajo, que va con
+   icono); MAYÚSCULAS solo en marca, titulares y rótulos de 1-2 palabras; el resto en
+   minúscula normal. Gris de apoyo solo a partir de 12px. Medido en pantalla real:
+   estos son los textos que estaban a 9-10.5px. */
+
+/* Inicio */
+.ce-rotable-hint{font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ce-ink2);}
+.chat-empty .chat-empty-chip{font-family:var(--font-body);font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;padding:11px 12px;gap:8px;}
+.chat-empty .chat-empty-chip .chip-icon{width:16px;height:16px;}
+.chat-empty .ce-more-toggle{font-family:var(--font-body);font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;}
+.ce-openbillete{font-family:var(--font-body);}
+.ce-openbillete span{font-size:14px;}
+
+/* Billete "rellena destino y días" */
+.ce-tk-t{font-size:12px;letter-spacing:.1em;}
+.ce-fld .ce-k,.ce-stat .ce-k{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--ce-ink2);}
+.ce-chip{font-family:var(--font-body);font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;padding:9px 12px;}
+.ce-afinar{font-family:var(--font-body);font-size:14px;letter-spacing:0;text-transform:none;}
+.ce-stub-hint{font-family:var(--font-body);font-size:12px;letter-spacing:0;text-transform:none;color:var(--ce-ink2);}
+
+/* Portada: botones de 3 palabras en minúscula normal */
+.auth-tagline{font-size:12px;letter-spacing:.04em;text-transform:none;color:#C4C7C9;}
+.auth-btn-google-primary{font-size:16px;letter-spacing:.01em;text-transform:none;}
+.auth-btn-whatsapp{font-size:15px;letter-spacing:.01em;text-transform:none;}
+
+/* Chat, Ayuda, Explorar */
+.msg-salma-name{font-size:12px;}
+.salma-can-sub{font-size:13px;color:rgba(244,239,230,.7);}
+.viajes-sub{font-size:13px;}
+.expl-country-count{font-size:12px;}
+
+/* Menú de abajo: 11px con icono; inactivos más legibles y "Ayuda" ya no va siempre
+   en naranja (parecía una segunda pestaña activa) */
+.bottom-tab{color:rgba(236,235,232,.78);}
+.bottom-tab-tester{color:rgba(236,235,232,.78);}
+.bottom-tab-tester.bottom-tab-active,.bottom-tab-active{color:var(--accent);}
+.login-needed-note{font-size:13px;color:#C4C7C9;}
