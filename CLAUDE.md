@@ -1274,7 +1274,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      metiendo la misma línea en `waCallClaudeWithTools` (Worker `1354c386`). **CONFIRMADO EN
      PANTALLA por Paco: hotel esta noche OK, y vuelo Madrid→Koh Samui en noviembre con precios
      reales (435 € + 124 € por Bangkok).** De paso: `buscarHotelesBooking` (web y WhatsApp)
-     descarta entradas de Booking sin `hotel_name` (llegaban 2 de 5 vacías a 0 €). El log
+     descarta entradas de Booking sin `hotel_name` (llegaban 2 de 5 vacías a 0 €) — Worker `7b3961c5`, **CONFIRMADO EN PANTALLA por Paco (Llanes, 5 hoteles con nombre y precio)**. El log
      `[WA-TOOL]` se queda (solo consola). El "Hoy ya hemos hablado bastante" que salió era el
      tope `wa_daily` de 60 mensajes/día (Paco lo agotó probando; se borró su contador de hoy).
    - **Worker Version ID vigente: ver `/version`** (anterior: `1990087f-457b-4208-90af-3f21f6e933cf`) (despliegues
