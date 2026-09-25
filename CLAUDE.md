@@ -1083,11 +1083,24 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
         más caro, varias verificaciones por parada — pendiente de dar cifra exacta antes de
         tocarlo, con aviso explícito a Paco antes de escribir código (protocolo §8).
      3. **Guardarla en Firestore + enlace que la abre ya montada en la app** — sin empezar.
-   - **Worker Version ID vigente: `e2901891-cb6f-4814-ae98-df44f9feffdf`** (despliegues
+   - **Bug real encontrado y arreglado, 25 sept 2026, desplegado y confirmado en pantalla
+     por Paco: cadena de preguntas al pedir una ruta.** "Hazme una ruta por Santillana del
+     Mar" daba la info correcta pero terminaba preguntando "¿día completo o visita rápida?"
+     y luego "¿tienes coche o no?" — la típica conversación de bot. Causa: `WHATSAPP_SYSTEM_CHAT`
+     excluye `BLOQUE_ACCION` entero (trae instrucciones de vuelos/hoteles no conectados a
+     este canal) y con él se fue también su regla "destino+ruta → info directa, NUNCA
+     '¿qué tipo de viaje?'". Se portó esa regla concreta (no el bloque entero) al prompt de
+     WhatsApp. Antes de desplegar, Paco preguntó explícitamente si esto (u otros cambios del
+     día) podían haber roto algo de la web — comprobado con `git diff` que ningún cambio de
+     hoy toca `BLOQUE_ACCION`/`SALMA_SYSTEM_CHAT/PLAN/ROUTE` ni ninguna función que use la
+     web (todas las funciones tocadas son nuevas, prefijo `wa`), y Paco confirmó en pantalla
+     que "3 días Sevilla" y "moneda de Japón" siguen funcionando bien en la web.
+   - **Worker Version ID vigente: `24667677-df1b-49a2-9870-ccb7c177c149`** (despliegues
      intermedios de este punto: `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
-     2cab28577ab5` → buscar_lugar, este último → paso 1 de guardar rutas).
+     2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
+     guardar rutas, este último → fix cadena de preguntas).
 
 ### 🔴 Crítico
 
