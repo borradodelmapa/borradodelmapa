@@ -1189,10 +1189,41 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
        quedan byte a byte iguales) y WhatsApp las reutiliza literal, con un único añadido
        genuino: instrucción explícita de usar `fecha_rango_hasta` ante fechas vagas
        ("en noviembre", "cualquier día del mes") en vez de preguntar la fecha exacta en
-       bucle. **Desplegado, pendiente de confirmar en pantalla por Paco.**
-   - **Worker Version ID vigente: `1dd2ed1b-cdfe-4e0d-877e-571cf7eb878b`** (despliegues
-     intermedios de este punto: `f5d8c0a6-a810-4d78-856d-5bcbafe223f6` → guardarla nunca
-     tras usar una tool, `c5a25472-0bcd-416f-ba36-af432a5e745e` → vuelos/hoteles/
+       bucle. **Este fix funcionó** (ya no se queda pidiendo fecha en bucle), pero al
+       probarlo Paco encontró un bug distinto en la misma prueba — ver el siguiente punto.
+     - **Bug real encontrado por Paco en la prueba siguiente, 25 sept 2026: sin resultados
+       de Duffel, Claude se inventaba una ruta y un precio.** Con la fecha ya resuelta,
+       "vuelo a Koh Samui desde Málaga" no encontraba nada en Duffel — y en vez de decir
+       eso, Claude respondió con una ruta inventada ("Málaga → Bangkok, luego Bangkok →
+       Koh Samui con Bangkok Airways, ~50€ aparte") que no venía de ninguna tool. Causa:
+       `PROHIBIDO INVENTAR` ("no inventes horarios ni precios, solo datos de herramientas")
+       vive dentro de `BLOQUE_ACCION`, que WhatsApp seguía excluyendo entero — era la MISMA
+       causa raíz que los dos bugs anteriores (cadena de preguntas, fecha en bucle),
+       apareciendo por tercera vez con otro síntoma.
+     - **Refactor de raíz, 25 sept 2026 — Paco preguntó directamente por qué no se copiaba
+       la petición entera de la app en vez de seguir extrayendo fragmentos uno a uno cada
+       vez que aparecía un bug de esta familia: "por que no hace la petición a la app lo
+       copia y lo manda a whassa. Así no sería más fácil?"** Con razón — los tres bugs
+       eran el mismo síntoma (`BLOQUE_ACCION` excluido) saliendo por sitios distintos.
+       Arreglo: `WHATSAPP_SYSTEM_CHAT` ahora incluye `BLOQUE_ACCION` **completo**, igual
+       que `SALMA_SYSTEM_CHAT` en la web — cualquier regla presente o futura ahí (prohibido
+       inventar, jerarquía de herramientas, dato primero, SALMA_ACTION, etc.) se hereda
+       sola, sin extraer nada a mano nunca más. Verificado en runtime que `BLOQUE_ACCION` y
+       los 3 prompts de la web quedan byte a byte iguales — cero cambios para la web.
+       Piezas añadidas SOLO por lo que de verdad distingue este canal: qué tools están
+       conectadas aquí (`buscar_lugar`/`vuelos`/`hotel`/`coche` — NO `buscar_web` ni
+       `guardar_nota`, con instrucción de decirlo claro si algo del texto de arriba pide
+       una herramienta que aquí no existe, en vez de fingir que se ha hecho), prohibición
+       explícita de generar `SALMA_ACTION`/`HISTORIA_LUGAR` (marcadores que la web
+       interpreta en el frontend — WhatsApp no tiene ese parser, se colarían tal cual en
+       el mensaje), la regla de "sin botón, refuerza a cualquier pregunta de
+       personalización" y la de fechas vagas. Añadida `stripWaLeakedMarkers()` como red de
+       seguridad por si el modelo genera esos marcadores de todos modos. **Desplegado,
+       pendiente de confirmar en pantalla por Paco.**
+   - **Worker Version ID vigente: `90eeb8af-f3eb-4a78-9dd0-e66a8ac03820`** (despliegues
+     intermedios de este punto: `1dd2ed1b-cdfe-4e0d-877e-571cf7eb878b` → fix fecha vaga
+     (funcionó, pero destapó el bug de invención), `f5d8c0a6-a810-4d78-856d-5bcbafe223f6` →
+     guardarla nunca tras usar una tool, `c5a25472-0bcd-416f-ba36-af432a5e745e` → vuelos/hoteles/
      coches, `bf1c3805-b554-40ac-a7d3-d7624940b5ad` → fix destino en
      enlaces de auto-entrada, `4b26ef45-eb51-4744-8400-758a48330b54` → paso 2 (generar y
      guardar ruta real), `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109` → fix cadena de
@@ -1200,7 +1231,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
-     guardar rutas, este último → fecha vaga de vuelo ya busca directo).
+     guardar rutas, este último → BLOQUE_ACCION completo en WhatsApp en vez de fragmentos).
 
 ### 🔴 Crítico
 
