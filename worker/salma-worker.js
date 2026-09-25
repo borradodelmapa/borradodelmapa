@@ -3118,6 +3118,20 @@ async function reverseGeocodeLocation(env, lat, lng) {
   return { name, cc };
 }
 
+// Construye el bloque [UBICACIÓN...] que se añade al system prompt de WhatsApp según lo
+// vieja que sea la ubicación guardada — extraído (25 sept 2026, fix "se queda callada")
+// para poder usarlo tanto al recibir un mensaje normal como justo al compartir ubicación
+// (antes esto solo vivía inline en el chat normal; duplicarlo a mano habría sido el
+// mismo error de "dos motores" que ya se evitó con detectCountryAndKV/reverseGeocodeLocation).
+function buildWaLocationCtx(place, ageMin) {
+  if (ageMin < 20) {
+    return `\n\n[UBICACIÓN: el usuario compartió hace poco que está en ${place} — es dónde está DE VERDAD, AHORA MISMO, en la vida real, no un destino de viaje del que hayáis hablado antes. Si justo después de compartirla pregunta algo tipo "dónde como/duermo/qué hay cerca", es sobre ESTE sitio real — NO lo relaciones con destinos hipotéticos anteriores de la conversación (aunque hayáis hablado de otro país o ciudad antes), ni le devuelvas la pregunta pidiendo que aclare de qué destino habla. Usa ${place} directo y MENCIÓNALO en tu respuesta (ej: "Como estás en ${place}..."). Recuerda que todavía no puedes buscar sitios reales (restaurantes, etc.) por aquí — dilo con naturalidad y ya, sin además desviar la conversación de vuelta a otros destinos.]`;
+  } else if (ageMin < 90) {
+    return `\n\n[UBICACIÓN desactualizada: el usuario compartió hace ${Math.round(ageMin)} min que estaba en ${place} (su ubicación real, no un destino de viaje), pero puede haberse movido. Si tu respuesta depende de dónde está AHORA (buscar algo cerca, seguir una ruta...), pregúntale primero "¿Sigues en ${place}?" antes de usarlo — no lo des por hecho.]`;
+  }
+  return '';
+}
+
 // Detecta el país/ciudad mencionado en el mensaje (o guided_route) y carga los datos de
 // KV asociados. Extraído del chat principal (25 sept 2026) para reutilizarlo también en
 // el webhook de WhatsApp — funciona por TEXTO (índice `kw:` + Nominatim gratuito de
@@ -8668,8 +8682,20 @@ export default {
       // vivo" de WhatsApp, solo puntual (confirmado con búsqueda web), así que se guarda con
       // caducidad corta (90 min) y se trata como un dato que envejece, no como GPS en vivo:
       // fresca (<20 min) se usa directa, entre 20-90 min Salma pregunta "¿sigues en X?" antes
-      // de darla por buena (ver más abajo, justo antes de llamar a Claude). El mensaje de
+      // de darla por buena (ver waLocationCtx más abajo, en el chat normal). El mensaje de
       // ubicación de WhatsApp viene con Body vacío, por eso esto va ANTES del `if (!body)`.
+      //
+      // Fix "se queda callada" (25 sept 2026, confirmado en pantalla por Paco: preguntaba
+      // dónde cenar, compartía ubicación, Salma solo confirmaba la ciudad y no seguía —
+      // había que volver a preguntar). Antes esto mandaba un mensaje fijo y paraba ahí SIN
+      // llamar a Claude, dejando cualquier pregunta pendiente sin responder. Ahora se junta
+      // todo en una sola llamada a Claude, con el historial (que tiene la pregunta pendiente)
+      // más un aviso de que se acaba de compartir ubicación — Claude confirma la ciudad Y
+      // sigue con lo que se estuviera hablando, en una única respuesta.
+      // Aviso de coste (protocolo §8, aprobado por Paco — "adelante", 25 sept 2026): esto
+      // cambia que compartir ubicación pase de costar 0 (antes, sin llamar a Claude) a
+      // costar como un mensaje normal de chat (~0.006-0.01€) — sube el gasto, pero solo
+      // cuando el usuario comparte ubicación, no en cada mensaje.
       if (waLat && waLng) {
         ctx.waitUntil((async () => {
           try {
@@ -8680,8 +8706,48 @@ export default {
                 lat: parseFloat(waLat), lng: parseFloat(waLng), name: geo.name, cc: geo.cc, sharedAt: new Date().toISOString(),
               }), { expirationTtl: 5400 });
             }
-            await sendWhatsAppMessage(env, from, `Vale, ya sé que estás en ${locName}. Te lo recuerdo un rato — si te mueves, dímelo o vuelve a compartir ubicación.`);
-          } catch (e) { console.error('[WhatsApp] Error guardando ubicación:', e.message); }
+
+            const waHistKey = 'wa_history:' + from;
+            let waHistory = [];
+            if (env.SALMA_KB) {
+              try { waHistory = JSON.parse((await env.SALMA_KB.get(waHistKey)) || '[]'); } catch (_) { waHistory = []; }
+            }
+            const locationMarker = '[Acabo de compartir mi ubicación en tiempo real por WhatsApp.]';
+            const waLocationCtx = buildWaLocationCtx(locName, 0);
+
+            const waRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': env.ANTHROPIC_API_KEY,
+                'anthropic-version': '2023-06-01',
+              },
+              body: JSON.stringify({
+                model: 'claude-sonnet-4-6',
+                max_tokens: 600,
+                system: WHATSAPP_SYSTEM_CHAT + waLocationCtx,
+                messages: [...waHistory, { role: 'user', content: locationMarker }],
+              }),
+            });
+            if (!waRes.ok) {
+              const errText = await waRes.text().catch(() => '');
+              throw new Error('Anthropic ' + waRes.status + ': ' + errText);
+            }
+            const waData = await waRes.json();
+            const reply = (waData.content?.[0]?.text || '').trim()
+              || `Vale, ya sé que estás en ${locName}.`;
+            await sendWhatsAppMessage(env, from, reply);
+
+            if (env.SALMA_KB) {
+              try {
+                const updatedHistory = [...waHistory, { role: 'user', content: locationMarker }, { role: 'assistant', content: reply }].slice(-40);
+                await env.SALMA_KB.put(waHistKey, JSON.stringify(updatedHistory), { expirationTtl: 21600 });
+              } catch (e) { console.error('[WhatsApp] Error guardando historial:', e.message); }
+            }
+          } catch (e) {
+            console.error('[WhatsApp] Error procesando ubicación:', e.message);
+            await sendWhatsAppMessage(env, from, 'Vale, ubicación recibida — pero se me ha cruzado un cable respondiendo. Dime otra vez qué necesitas.').catch(() => {});
+          }
         })());
         return new Response('OK', { status: 200 });
       }
@@ -8894,11 +8960,7 @@ export default {
               if (savedLoc && savedLoc.sharedAt) {
                 const ageMin = (Date.now() - Date.parse(savedLoc.sharedAt)) / 60000;
                 const place = savedLoc.name || 'la zona que compartió';
-                if (ageMin < 20) {
-                  waLocationCtx = `\n\n[UBICACIÓN: el usuario compartió hace poco que está en ${place} — es dónde está DE VERDAD, AHORA MISMO, en la vida real, no un destino de viaje del que hayáis hablado antes. Si justo después de compartirla pregunta algo tipo "dónde como/duermo/qué hay cerca", es sobre ESTE sitio real — NO lo relaciones con destinos hipotéticos anteriores de la conversación (aunque hayáis hablado de otro país o ciudad antes), ni le devuelvas la pregunta pidiendo que aclare de qué destino habla. Usa ${place} directo y MENCIÓNALO en tu respuesta (ej: "Como estás en ${place}..."). Recuerda que todavía no puedes buscar sitios reales (restaurantes, etc.) por aquí — dilo con naturalidad y ya, sin además desviar la conversación de vuelta a otros destinos.]`;
-                } else if (ageMin < 90) {
-                  waLocationCtx = `\n\n[UBICACIÓN desactualizada: el usuario compartió hace ${Math.round(ageMin)} min que estaba en ${place} (su ubicación real, no un destino de viaje), pero puede haberse movido. Si tu respuesta depende de dónde está AHORA (buscar algo cerca, seguir una ruta...), pregúntale primero "¿Sigues en ${place}?" antes de usarlo — no lo des por hecho.]`;
-                }
+                waLocationCtx = buildWaLocationCtx(place, ageMin);
               }
             } catch (_) {}
           }
