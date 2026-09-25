@@ -3135,6 +3135,32 @@ function buildWaLocationCtx(place, ageMin) {
   return '';
 }
 
+// Plan del usuario de WhatsApp (guías gratis usadas / Premium) — mismo cálculo que hace
+// verifyAuthAndGetUser (premium_active ⇔ premium_until futuro) pero leído por uid directo
+// vía Firestore admin (service account), porque WhatsApp no tiene el ID token de Firebase
+// que usa la web para identificarse — ya tiene linkedUid vinculado por su propia cuenta.
+// Se pasa tal cual a usageGate(), la MISMA función que ya gatea "Crear ruta con mapa" en la
+// web — nunca un control aparte para WhatsApp, para no acabar con dos economías distintas
+// (F5.3, paso 1 del plan de guardar rutas por WhatsApp, 25 sept 2026).
+async function waGetUserPlan(env, uid) {
+  try {
+    const doc = await firestoreAdminGet(env, 'users/' + uid);
+    const fields = (doc && doc.fields) || {};
+    const premiumUntilStr = fields.premium_until?.timestampValue || null;
+    const premiumUntilMs = premiumUntilStr ? new Date(premiumUntilStr).getTime() : 0;
+    return { uid, premium_until: premiumUntilStr, premium_active: premiumUntilMs > Date.now() };
+  } catch (_) {
+    return { uid, premium_until: null, premium_active: false };
+  }
+}
+
+// Detecta la intención de "guarda esta ruta" en WhatsApp, sobre el texto SIN acentos (vía
+// _nmNorm) para no depender de que el usuario los escriba bien.
+function isSaveRouteRequest(message) {
+  const m = _nmNorm(message);
+  return /\bguardala\b|\bguardamela\b|\bguarda(r)?\s+(esta\s+|la\s+)?ruta\b/.test(m);
+}
+
 // Solo el tool buscar_lugar, del array completo SALMA_TOOLS del chat web (F5.3 punto 6, 25
 // sept 2026) — vuelos/hoteles/coches siguen sin conectar a WhatsApp (fuera de esta tarea).
 const WA_TOOLS = SALMA_TOOLS.filter(t => t.name === 'buscar_lugar');
@@ -8959,6 +8985,25 @@ export default {
             const capLink = await buildAutoLoginLink(env, linkedUid);
             await sendWhatsAppMessage(env, from, `Hoy ya hemos hablado bastante 😅 — mañana seguimos, o entra en la app: ${capLink}`);
             return;
+          }
+
+          // Guardar ruta por WhatsApp (F5.3, paso 1 de 3, 25 sept 2026) — la idea acordada con
+          // Paco es que WhatsApp funcione con LOS MISMOS límites que la app, no unos aparte: se
+          // consulta usageGate(..., 'guide'), la misma función que ya gatea "Crear ruta con
+          // mapa" en la web, con el plan real del usuario (premium_active, leído de Firestore,
+          // nunca inventado). Paso 1 SOLO decide si puede — generar y verificar la ruta de
+          // verdad (pasos 2-3) todavía no está hecho, así que de momento, si puede, se le manda
+          // a guardarla en la app (que ya sabe hacer esto de punta a punta).
+          if (isSaveRouteRequest(body)) {
+            const waPlan = await waGetUserPlan(env, linkedUid);
+            const gate = await usageGate(env, waPlan, 'guide');
+            const link = await buildAutoLoginLink(env, linkedUid);
+            if (!gate.ok) {
+              await sendWhatsAppMessage(env, from, `${gate.message} Entra aquí para pasarte a Premium: ${link}`);
+            } else {
+              await sendWhatsAppMessage(env, from, `Sí, te queda margen en tu plan para guardar una ruta — guardarla ya mismo desde aquí lo estoy terminando de montar. De momento entra en la app con este enlace, ya con tu sesión metida, y la guardas ahí sin más: ${link}`);
+            }
+            return; // sin llamar a Claude — protocolo §8: esto BAJA el gasto (0 tokens)
           }
 
           // Respuestas instantáneas de KV — PROBADO y RETIRADO el 25 sept 2026: aunque el
