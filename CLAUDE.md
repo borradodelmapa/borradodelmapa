@@ -1038,8 +1038,8 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
         pequeño, lo que está cerca es Colombres... sigo sin poder buscarte sitios por aquí,
         prueba Google Maps o TripAdvisor") es el esperado ahora mismo: WhatsApp todavía no
         tiene el tool `buscar_lugar` conectado — eso es el punto 6, siguiente en la lista.
-   - **Punto 6, buscar_lugar: HECHO, 25 sept 2026, desplegado — pendiente de que Paco lo
-     confirme en pantalla.** Conectado el mismo tool `buscar_lugar` del chat web (Google
+   - **Punto 6, buscar_lugar: HECHO y confirmado en pantalla por Paco, 25 sept 2026
+     ("busca bien").** Conectado el mismo tool `buscar_lugar` del chat web (Google
      Places real: nombre, dirección, teléfono, rating, Google Maps) a WhatsApp, a través de
      un bucle de tool-use acotado (`waCallClaudeWithTools()`, máx 3 vueltas — sin streaming
      SSE, aquí basta una respuesta final por turno). Se usa tanto en el chat normal como
