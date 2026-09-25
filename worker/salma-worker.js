@@ -7481,7 +7481,10 @@ export default {
       let body;
       try { body = await request.json(); } catch (_) { return new Response(JSON.stringify({ error: 'JSON no válido' }), { status: 400, headers: corsH }); }
       const uid = String(body.uid || ''), action = String(body.action || '');
-      if (!/^[A-Za-z0-9]{20,40}$/.test(uid)) return new Response(JSON.stringify({ error: 'uid no válido' }), { status: 400, headers: corsH });
+      // Incluye "_": las cuentas creadas desde WhatsApp usan uid "wa_" + hash (_waUidFromPhone) — sin
+      // esto, CUALQUIER acción admin sobre una cuenta de WhatsApp caía aquí con "uid no válido" antes
+      // de llegar a ejecutarse (bug real, 26 sept 2026: el borrado no hacía nada para esas cuentas).
+      if (!/^[A-Za-z0-9_]{20,40}$/.test(uid)) return new Response(JSON.stringify({ error: 'uid no válido' }), { status: 400, headers: corsH });
       if (!['premium_add', 'premium_remove', 'disable', 'enable', 'reset_free', 'delete'].includes(action)) return new Response(JSON.stringify({ error: 'Acción no válida' }), { status: 400, headers: corsH });
       let days = 0;
       if (action === 'premium_add') {
