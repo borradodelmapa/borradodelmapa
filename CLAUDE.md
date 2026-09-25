@@ -1360,6 +1360,10 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   probar:** Perfil → apagar "Compartir mis rutas" → sus rutas desaparecen de Explorar (y al
   encenderlo vuelven). Detalle completo en `CLAUDE-historial.md`.
 
+- **Comunidad de viajeros por WhatsApp, 25-26 sept 2026 — SOLO ESTUDIO, sin desarrollar.**
+  Viajeros que coinciden por afinidad/intereses, obligación cero, Salma de puerta, web
+  como memoria, coincidencias como Premium. Paco: "seguiremos hablando de esto".
+  Conversación y decisiones completas en `docs/idea-comunidad-viajeros.md`.
 - **Catálogo de ideas de Kabi (app similar), 22 sept 2026 — SOLO ESTUDIO, sin decidir.**
   Bottom bar con "+" central ya implementado y confirmado; quedan por decidir: sliders de
   preferencias por tipo de viaje, sección de Eventos, Álbum de viaje (auto-emparejar
