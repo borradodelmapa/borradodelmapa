@@ -1128,13 +1128,23 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      refuerza a cualquier pregunta de personalización, no solo las dos que cita el texto
      original. **Norma anotada para el resto de F5.3**: si ya funciona en la app, se reutiliza
      tal cual — nunca una versión propia para WhatsApp.
-   - **Worker Version ID vigente: `4b26ef45-eb51-4744-8400-758a48330b54`** (despliegues
-     intermedios de este punto: `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109` → fix cadena de
+   - **Invitación a guardar sin depender del modelo — HECHO, desplegado, pendiente de
+     confirmar en pantalla.** Tras el paso 2, Paco seguía viendo (captura en mano) que la
+     respuesta de ruta terminaba en "si quieres te busco restaurantes" en vez de invitar a
+     guardar — pedírselo en el prompt no bastaba. `appendGuardarlaCta()` la añade por código,
+     determinista, si el mensaje era de ruta/destino y la respuesta no la menciona ya —
+     detector: `isRouteRequest`/`isDaysDestination` de la web + "hazme una ruta por X" (que
+     esas dos no cazan). Comparado con una captura real de la app ("Si te encaja, dale a
+     Crear ruta con mapa..."): mismo patrón en los dos sitios — invitación al siguiente paso
+     al final, no una pregunta bloqueante.
+   - **Worker Version ID vigente: `01080fe5-67cb-42fb-a5d0-9728348e5239`** (despliegues
+     intermedios de este punto: `4b26ef45-eb51-4744-8400-758a48330b54` → paso 2 (generar y
+     guardar ruta real), `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109` → fix cadena de
      preguntas v3 (texto reutilizado, ver arriba), `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
-     guardar rutas, este último → fix cadena de preguntas).
+     guardar rutas, este último → invitación a guardar determinista).
 
 ### 🔴 Crítico
 
