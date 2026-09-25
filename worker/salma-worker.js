@@ -7604,7 +7604,38 @@ async function validateTwilioSignature(requestUrl, params, signatureHeader, auth
 
 // Envía un mensaje de WhatsApp vía la API REST de Twilio. Reutilizable en F5.2+ para
 // las respuestas reales de Salma y en F5.5 para plantillas proactivas.
+// Twilio rechaza (error 21617) un Body de más de 1600 caracteres y el mensaje no llega — pasó
+// con la historia de un lugar (25 sept 2026). Si el texto es más largo, se parte por párrafos
+// (o por líneas/palabras si hace falta) en trozos de ≤1500 y se mandan en orden.
+// Coste: en producción cada trozo cuenta como un mensaje; solo pasa con respuestas largas.
+function splitWaMessage(text, max = 1500) {
+  const t = String(text || '');
+  if (t.length <= max) return [t];
+  const parts = [];
+  let cur = '';
+  const push = () => { if (cur.trim()) parts.push(cur.trim()); cur = ''; };
+  const add = (piece, sep) => {
+    while (piece.length > max) { push(); parts.push(piece.slice(0, max)); piece = piece.slice(max); }
+    if (cur && (cur + sep + piece).length > max) push();
+    cur = cur ? cur + sep + piece : piece;
+  };
+  for (const para of t.split(/\n{2,}/)) {
+    if (para.length <= max) { add(para, '\n\n'); continue; }
+    // Párrafo más largo que el límite: se parte por frases.
+    para.split(/(?<=[.!?])\s+/).forEach((s, i) => add(s, i === 0 ? '\n\n' : ' '));
+  }
+  push();
+  return parts;
+}
+
 async function sendWhatsAppMessage(env, to, text) {
+  const chunks = splitWaMessage(text);
+  let res;
+  for (const chunk of chunks) res = await _sendWhatsAppChunk(env, to, chunk);
+  return res;
+}
+
+async function _sendWhatsAppChunk(env, to, text) {
   const body = new URLSearchParams({ From: env.TWILIO_WHATSAPP_FROM, To: to, Body: text });
   const res = await fetch(
     `https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json`,
