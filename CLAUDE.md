@@ -716,15 +716,30 @@ El Worker tiene `scheduled()` en `salma-worker.js` con 2 disparos automáticos, 
 
 ---
 
-## Modelo de negocio — Salma Coins
+## Modelo de negocio — Premium por suscripción
 
-- **Plan gratuito**: 3 rutas con IA (para siempre), 20 mensajes/día
-- **Salma Coins**: créditos que NO caducan, reembolsables si no se usan
-- **Packs**: Starter (10 / 4,99€), Viajero (25 / 9,99€), Explorador (60 / 19,99€)
-- **Costes**: vuelos (1), hoteles (1), ruta IA (2), copiloto (3), emergencia (2), resumen (1)
-- **Stripe**: Checkout funciona (modo test). PENDIENTE: webhook server-side + pasar a live
-- **Coste real por ruta**: ~0.015€ (margen ~97%)
-- **Validación**: coins se envían desde frontend, Worker NO valida server-side
+> **Corregido 25 sept 2026** — esta sección describía el sistema de Salma Coins, que se
+> quitó el 21 sept 2026 (`app.js`: "coins eliminados 21 sept 2026"). Llevaba 4 días
+> desactualizada sin que nadie lo notara — se descubrió al mirar el código real para
+> conectar WhatsApp a los mismos límites que la app (ver F5.3 punto "guardar ruta" más
+> abajo). Lo de abajo es lo que hay REALMENTE en el Worker (`PLAN_LIMITS`, `usageGate()`,
+> `PREMIUM_PLANS` en `salma-worker.js`) y en `app.js:renderProfile()`.
+
+- **Plan gratuito**: 1 guía con IA de por vida, 2 ediciones de esa guía, 20 mensajes de chat/día.
+- **Premium**: 4 guías/mes, 40 ediciones/mes, 100 mensajes/día. Se activa con `premium_until`
+  (fecha futura) en Firestore — el booleano `isPremium` es legacy, se queda en `true` para
+  siempre tras la 1ª compra y no sirve para decidir nada.
+- **Precios** (pago único que suma meses a `premium_until`, no suscripción recurrente de
+  Stripe): 1 viaje (4,99€ / 1 mes), Trimestral (8,99€ / 3 meses), Semestral (14,99€ / 6
+  meses), Anual (24,99€ / 12 meses).
+- **Validación: SÍ es server-side** — `usageGate(env, authUser, kind)` en el Worker
+  comprueba `premium_active` (leído de Firestore, nunca del cliente) ANTES de llamar a
+  Claude o Google, para `kind`: `'chat'` (mensajes/día), `'guide'` (crear ruta con mapa),
+  `'edit'` (editar una ruta). Si se pasa, corta ahí sin gastar nada y responde con el
+  mensaje de límite (dirige a Perfil → Mi plan). Esta misma función es la que a partir del
+  25 sept 2026 usa también WhatsApp para decidir si puede guardar una ruta (ver F5.3 más
+  abajo) — un único sitio que decide el límite, no dos economías distintas.
+- **Stripe**: Checkout funciona (modo test). PENDIENTE: pasar a live.
 
 ---
 
@@ -733,10 +748,10 @@ El Worker tiene `scheduled()` en `salma-worker.js` con 2 disparos automáticos, 
 - **Welcome**: "Viaja con alguien que sabe lo que hace", input con placeholder rotativo, chips (rutas guardadas o featured), recordatorios de notas
 - **Chat**: avatar Salma inline (20px) + nombre, texto a ancho completo, cámara, voz, retry 18s
 - **Bottom bar**: Ayuda (abre el panel de feedback de testers, con latido, 21 sept 2026), Chat, Rutas (requiere login), Perfil (Entrar si no logueado). Nota: esta lista llevaba tiempo desactualizada (mencionaba "Home" en vez de la pestaña real "Consultas", que existió hasta el 21 sept) — corregido en este barrido contra `app.js:updateBottomBar()`.
-- **Perfil**: avatar subible (R2), stats (coins, rutas gratis, total guías)
+- **Perfil**: avatar subible (R2), stats (plan Gratis/Premium, total viajes)
   - TU VIAJE: Mis Notas, Galería, Cuaderno de Viaje, Documentos del Viajero
   - SEGURIDAD: SOS Emergencia (configurable, SMS Twilio + WhatsApp, cola offline)
-  - CUENTA: Salma Coins, ¿Qué puedo hacer?
+  - CUENTA: Mi plan (Premium), ¿Qué puedo hacer?
 - **Mapa live**: Google Maps fullscreen, GPS, brújula, capas POI (restaurantes/farmacias/hoteles/súpers/parques/cultura/tránsito), tipos de mapa, diario Kodak, pins, compartir
 - **Vista itinerario**: fullscreen con tarjetas de paradas + mapa de ruta + turn-by-turn + enrichment Places
 - **Copiloto**: tarjeta info práctica del país activada por geoloc (emergencias, frases, apps, salud, conectividad)
@@ -1049,13 +1064,30 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      por WhatsApp esto añade 1 Google Places Text Search (~0,032€) + hasta 5 Place Details
      cacheados 30 días (gratis salvo la primera vez que se pregunta por ese sitio) — el
      mismo coste que ya paga cada búsqueda equivalente en la web.
-   - **Siguiente paso, tras confirmar el punto 6:** seguir con el resto de tools de la lista
-     acordada con Paco (ver tabla completa en `CLAUDE-historial.md`), y después los casos
-     híbridos que se resuelven mejor con un enlace de auto-entrada a la web.
-   - **Worker Version ID vigente: `87898213-72ce-43e2-be38-2cab28577ab5`** (despliegues
+   - **Casos híbridos (rutas completas) — decidido con Paco, 25 sept 2026: NO bloquear.**
+     Primera propuesta (interceptar "2 días en X" con un mensaje fijo mandando solo a la
+     app) RECHAZADA por Paco: "no me convence, podría contestarte como en la web y dar la
+     opción de guardarla en la web". Se decide en su lugar que WhatsApp funcione con LOS
+     MISMOS límites que la app (Premium/gratis), no un control aparte — y que si el usuario
+     pide guardar, se genere y guarde de verdad, respetando el mismo tope. Partido en 3 pasos:
+     1. **Comprobar si puede guardar — HECHO, desplegado, pendiente de confirmar en pantalla.**
+        `isSaveRouteRequest()` detecta "guárdala"/"guarda esta ruta" en WhatsApp y llama a
+        `usageGate(env, waGetUserPlan(...), 'guide')` — la MISMA función que ya gatea "Crear
+        ruta con mapa" en la web (ver corrección de la sección "Modelo de negocio" más abajo:
+        esto YA es server-side de verdad, con el plan real de Firestore). Si no le queda,
+        mismo mensaje que en la web + enlace a Premium. Si le queda, de momento se le manda a
+        guardarla en la app (que ya lo hace bien) — no llama a Claude, coste 0.
+     2. **Generar y verificar la ruta de verdad desde WhatsApp** — sin empezar. Reutilizar el
+        mismo proceso de verificación de Google Places de la web (Find Place + Details por
+        parada), no uno aparte. Coste real por ruta (no el de `buscar_lugar`): varias veces
+        más caro, varias verificaciones por parada — pendiente de dar cifra exacta antes de
+        tocarlo, con aviso explícito a Paco antes de escribir código (protocolo §8).
+     3. **Guardarla en Firestore + enlace que la abre ya montada en la app** — sin empezar.
+   - **Worker Version ID vigente: `e2901891-cb6f-4814-ae98-df44f9feffdf`** (despliegues
      intermedios de este punto: `464bcc96-e1b4-4d6c-8452-8fedbf62f62a` → ubicación básica,
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
-     482b-9040-06dcb0537d19` → fix "se queda callada", este último → buscar_lugar).
+     482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
+     2cab28577ab5` → buscar_lugar, este último → paso 1 de guardar rutas).
 
 ### 🔴 Crítico
 
