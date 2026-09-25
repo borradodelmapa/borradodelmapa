@@ -1005,6 +1005,15 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
    función): respuestas KV → historial de conversación → ubicación → buscar sitios → resto
    de tools → los que no caben en chat (rutas completas, mapa en vivo, pagos...) con enlace
    de auto-entrada a la web.
+
+   > **⚠️ NORMA para todo este punto (Paco, 25 sept 2026, tras la cadena de preguntas de
+   > "hazme una ruta"):** "si ya funciona en la app, cogemos lo que ya funciona sin
+   > estropearlo en la app" — nunca escribir una redacción/lógica propia para WhatsApp
+   > cuando ya existe la pieza equivalente probada en la app (prompt, función, regla). Se
+   > extrae esa pieza a algo compartido y WhatsApp la reutiliza tal cual, verificando
+   > siempre que lo que usa la app queda exactamente igual (ver caso real:
+   > `BLOQUE_RUTA_INFO_DIRECTA`, extraída de `BLOQUE_ACCION`, más abajo — costó dos
+   > vueltas de bug antes de hacerlo así en vez de parafrasear).
    - **Respuestas instantáneas de KV: HECHO Y REVERTIDO en la misma sesión.** Se implementó
      (reutilizando la detección de país del chat principal, extraída a
      `detectCountryAndKV()`), se probó, y Paco vio en pantalla que la plantilla fija se
