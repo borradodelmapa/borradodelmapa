@@ -1171,8 +1171,28 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
        `{text, usedTools}`, y la invitación a guardar NUNCA se añade si en ese turno se
        ejecutó cualquier tool de búsqueda (vuelo, hotel, coche o lugar) — no depende ya de
        adivinar por la forma del texto.
-   - **Worker Version ID vigente: `f5d8c0a6-a810-4d78-856d-5bcbafe223f6`** (despliegues
-     intermedios de este punto: `c5a25472-0bcd-416f-ba36-af432a5e745e` → vuelos/hoteles/
+     - **Bug real encontrado por Paco en la misma prueba, arreglado y desplegado, 25 sept
+       2026: fecha vaga de vuelo se quedaba pidiendo fecha exacta en bucle.** "Buscame un
+       vuelo a Koh Samui, Tailandia, para noviembre" + "Solo ida" no llegaba a buscar nunca
+       — seguía pidiendo un día concreto, a diferencia de la web, que con el mismo criterio
+       sí busca (Paco lo confirmó probando ambos: **"no funciona en la app si perfectamente
+       con el mismo criterio de búsqueda"**, y preguntó directamente **"o se usa exactamente
+       lo mismo q en la app?"** — no se usaba). Causa real: `WHATSAPP_SYSTEM_CHAT` excluye
+       `BLOQUE_ACCION` entero, y con él se fueron dos reglas que la web sí tiene: el punto 5
+       ("PIDE SERVICIO CONCRETO → usa la herramienta inmediatamente, sin preguntas previas")
+       y el bloque `DEFAULTS` ("sin fecha → hoy", "sin fecha de vuelta → solo ida"). La tool
+       `buscar_vuelos` ya soportaba `fecha_rango_hasta` para fechas amplias — no era un
+       problema de capacidad, faltaba la instrucción de "asume y busca, no preguntes".
+       Mismo patrón que `BLOQUE_RUTA_INFO_DIRECTA`: se extraen esas dos piezas a
+       `BLOQUE_SERVICIO_DIRECTO`/`BLOQUE_DEFAULTS_SERVICIO`, se usan tal cual en
+       `BLOQUE_ACCION` (verificado en runtime que `BLOQUE_ACCION` y los 3 prompts de la web
+       quedan byte a byte iguales) y WhatsApp las reutiliza literal, con un único añadido
+       genuino: instrucción explícita de usar `fecha_rango_hasta` ante fechas vagas
+       ("en noviembre", "cualquier día del mes") en vez de preguntar la fecha exacta en
+       bucle. **Desplegado, pendiente de confirmar en pantalla por Paco.**
+   - **Worker Version ID vigente: `1dd2ed1b-cdfe-4e0d-877e-571cf7eb878b`** (despliegues
+     intermedios de este punto: `f5d8c0a6-a810-4d78-856d-5bcbafe223f6` → guardarla nunca
+     tras usar una tool, `c5a25472-0bcd-416f-ba36-af432a5e745e` → vuelos/hoteles/
      coches, `bf1c3805-b554-40ac-a7d3-d7624940b5ad` → fix destino en
      enlaces de auto-entrada, `4b26ef45-eb51-4744-8400-758a48330b54` → paso 2 (generar y
      guardar ruta real), `fd97d958-e2b7-4fa3-a9ef-aaa9b9c4f109` → fix cadena de
@@ -1180,7 +1200,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      `90783047-1c77-4c3b-bd6b-22155514a3aa` → fix destinos hipotéticos, `c7612d4a-c8b8-
      482b-9040-06dcb0537d19` → fix "se queda callada", `87898213-72ce-43e2-be38-
      2cab28577ab5` → buscar_lugar, `e2901891-cb6f-4814-ae98-df44f9feffdf` → paso 1 de
-     guardar rutas, este último → guardarla nunca tras usar una tool).
+     guardar rutas, este último → fecha vaga de vuelo ya busca directo).
 
 ### 🔴 Crítico
 
