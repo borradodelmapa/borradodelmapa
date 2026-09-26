@@ -6596,6 +6596,9 @@ body {
   font-size:25px;letter-spacing:.02em;line-height:1;color:var(--ce-ink);
   margin:14px 0 15px;
 }
+/* Con guía activa: "¿Y el próximo viaje?" + cuadro de texto debajo de la tarjeta (26 sept 2026) */
+.ce-next{margin:22px 0 4px;}
+.ce-greet--next{font-size:19px;margin:0 0 -4px;}
 
 /* ── tablero de guía ── */
 .ce-card{

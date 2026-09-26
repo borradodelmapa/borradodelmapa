@@ -35,12 +35,15 @@ const path = require('path');
 
 const API = process.env.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
 function token() {
+  // Sesiones de Claude Code en la nube: la llave va como variable de entorno CASES_TOKEN
+  // en los ajustes del entorno (no hay api/cases-token.txt en el clon de la nube).
+  if (process.env.CASES_TOKEN && process.env.CASES_TOKEN.trim()) return process.env.CASES_TOKEN.trim();
   const cands = [
     path.join(__dirname, '..', 'api', 'cases-token.txt'),
     'C:/Users/User/Desktop/salma/api/cases-token.txt',
   ];
   for (const c of cands) { try { const t = fs.readFileSync(c, 'utf8').trim(); if (t) return t; } catch (_) {} }
-  console.error('Falta la llave de casos: api/cases-token.txt'); process.exit(1);
+  console.error('Falta la llave de casos: api/cases-token.txt (o la variable de entorno CASES_TOKEN)'); process.exit(1);
 }
 async function call(p, body) {
   const res = await fetch(API + p, {

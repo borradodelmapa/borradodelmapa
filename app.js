@@ -275,11 +275,17 @@ function updateBottomBar() {
     fab.setAttribute('aria-label', 'Salma');
     fab.title = 'Salma';
     fab.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>';
-    // Central = Salma: retoma la conversación que haya (lo que hacía la pestaña
-    // "Salma"); para empezar otra está "Nueva" (#chat-fresh) arriba a la derecha del chat.
+    // Central = Salma: lleva SIEMPRE a la portada (Paco, 26 sept 2026: "no quiero lío
+    // de botones"). Con guía activa, la portada enseña su tarjeta arriba y el cuadro de
+    // texto debajo. La conversación anterior no se pierde: queda en "Últimas consultas"
+    // (cada hilo se guarda aparte; newChat() solo empieza otro). Antes retomaba la última
+    // conversación y la portada quedaba escondida detrás de "Nueva".
     fab.addEventListener('click', () => {
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
+      // Con una respuesta a medias no se corta: solo se lleva al chat.
+      if (typeof salma !== 'undefined' && salma.newChat && !salma._streaming) salma.newChat();
+      try { window.scrollTo(0, 0); } catch (_) {}
     });
     document.body.appendChild(fab);
   }
@@ -312,8 +318,10 @@ function _goToFreshBillete() {
   // tarjeta a hero+billete oculto — así aparece la caja de ejemplos, que si no
   // solo se pinta en el estado "sin ruta activa". .click() dispara el listener
   // aunque el botón esté oculto.
+  // Desde el 26 sept 2026 la portada con guía activa ya enseña el cuadro de texto
+  // debajo de la tarjeta (#ce-rotable), así que solo hace falta el gancho si no está.
   const newBtn = document.querySelector('[data-ce-newbillete]');
-  if (newBtn) newBtn.click();
+  if (newBtn && !document.getElementById('ce-rotable')) newBtn.click();
   const rot = document.getElementById('ce-rotable');
   if (rot) rot.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
@@ -669,6 +677,24 @@ function _renderChatEmpty() {
         <button class="ce-openbillete" data-ce-hero data-ce-openbillete>O rellena destino y días <span>↓</span></button>
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
 
+    // Con guía activa: el cuadro de texto de siempre DEBAJO de su tarjeta, para pedir
+    // otra ruta o preguntar (Paco, 26 sept 2026). Antes quedaba escondido y quien ya
+    // tenía una guía no encontraba cómo crear otra. Mismos ids que el bloque hero, que
+    // en este modo no se pinta (_wireRotable lo cablea igual).
+    const _ceNextHTML = `
+        <div class="ce-next" data-ce-next>
+          <div class="ce-greet ce-greet--next">¿Y el próximo viaje?</div>
+          <div class="ce-rotable" id="ce-rotable">
+            <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
+            <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
+            <div class="ce-rotable-foot">
+              <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
+              <span class="ce-rotable-hint">Toca para escribir la ruta</span>
+            </div>
+          </div>
+          <button class="ce-rotable-cta" data-ce-rotable-cta>Trazar ruta <span>→</span></button>
+        </div>`;
+
     area.innerHTML = `
       <div class="chat-empty">
         <!-- ⚠️ CLAUDE.md protocolo §9: logo/eslogan replicados en scripts/build-destinos.js
@@ -694,6 +720,7 @@ function _renderChatEmpty() {
         </div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
+        ${_ceActive ? _ceNextHTML : ''}
         ${_ceChipsRow}
       </div>`;
 
@@ -718,6 +745,8 @@ function _renderChatEmpty() {
         }
         // Ruta activa → empezar un billete nuevo sin perder la ruta
         if (e.target.closest('[data-ce-newbillete]')) {
+          // El cuadro de texto ya está debajo de la tarjeta: no duplicarlo (ids repetidos).
+          if (area.querySelector('[data-ce-next]')) return;
           ceCard.className = 'ce-card ce-ticket';
           ceCard.innerHTML = _ceBilleteHTML(true);
           ceCard.hidden = true;              // arranca oculto tras "Desliza para trazar ruta rápida"
@@ -856,7 +885,7 @@ function _renderChatEmpty() {
       if (card) card.hidden = true;
       _wireRotable();
     };
-    if (!_ceActive) _wireRotable();
+    _wireRotable();   // hero (sin guía activa) o el bloque "¿Y el próximo viaje?" (con guía activa)
 
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
@@ -4443,6 +4472,9 @@ auth.onAuthStateChanged(async (user) => {
       history.replaceState(null, '', '/');
       if (goParam === 'explorar') { window._rutasTab = 'explorar'; showState('rutas'); }
       else showState(goParam);
+      // Botón central "Salma" de destinos/blog/404 (/?go=chat): portada siempre, igual que
+      // en la app (26 sept 2026) — no la última conversación de la pestaña.
+      if (goParam === 'chat' && typeof salma !== 'undefined' && salma.newChat) salma.newChat();
     } else if (window._afterLogin) {
       const dest = window._afterLogin;
       window._afterLogin = null;

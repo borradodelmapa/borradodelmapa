@@ -1,0 +1,24 @@
+[
+  {
+    "titulo": "Mensajes de 'Mejora Salma' que llegan por email pero no se ven en el admin",
+    "tipo": "fallo",
+    "zona": "otro",
+    "area": "dev",
+    "gravedad": "media",
+    "modelo": "opus",
+    "ejemplo": "Mensaje de Paco del 26 sept 2026 (~06:15, botón Mejora Salma desde el móvil) sobre el botón central Salma y el flotante de las guías: llegó el email '🧪 Mejora Salma — mensaje — …' pero no aparece en el panel admin.",
+    "nota": "El Worker guarda en Firestore (beta_feedback) ANTES de mandar el email (salma-worker.js ~11209), así que el mensaje está guardado. Después classifyFeedback (GPT-4o-mini) lo mete en un caso nuevo o lo junta a uno abierto (group_id). Mirar en el repo Admin-borradodelmapa qué lista/filtro lo esconde (¿filtro por kind 'panel', por seen, por gravedad baja, o agrupado dentro de otro caso?). Necesita una sesión con acceso al repo del admin.",
+    "estado": "nuevo"
+  },
+  {
+    "titulo": "Llaves y red para que Claude en la nube pueda usar casos (y comprobar despliegues)",
+    "tipo": "tarea",
+    "zona": "otro",
+    "area": "dev",
+    "gravedad": "baja",
+    "modelo": "sonnet",
+    "ejemplo": "26 sept 2026: desde una sesión de Claude Code en la nube no se pudo crear casos: falta api/cases-token.txt y la red del entorno bloquea salma-api.borradodelmapa-api.workers.dev.",
+    "nota": "Hecho en código: scripts/casos.cjs ya lee la variable de entorno CASES_TOKEN. Falta que Paco, en los ajustes del entorno de la nube (menú del entorno en la barra de título de la sesión → Editar): 1) añada la variable CASES_TOKEN con el valor de api/cases-token.txt (SOLO esa llave, nunca ADMIN_TOKEN ni otras API keys); 2) en Acceso a red, permita el dominio salma-api.borradodelmapa-api.workers.dev. Surte efecto en sesiones nuevas. Probar con: node scripts/casos.cjs hoy.",
+    "estado": "nuevo"
+  }
+]

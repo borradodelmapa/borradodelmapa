@@ -77,7 +77,7 @@ window._loadGoogleMaps = function() {
   });
 };
 </script>
-<link rel="stylesheet" href="styles.css?v=150">
+<link rel="stylesheet" href="styles.css?v=151">
 <link rel="stylesheet" href="docs-viajero.css?v=3">
 <link rel="stylesheet" href="historia.css?v=3">
 <!-- Google Analytics 4 — se carga solo tras consentimiento de cookies (P1-6) -->
@@ -131,7 +131,9 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 </div>
 
 <!-- ═══ FAB CHAT SOBRE LA GUÍA (abre el popup de consulta a Salma) ═══ -->
-<button class="itin-chat-fab" id="itin-chat-fab" style="display:none" aria-label="Hablar con Salma">💬</button>
+<!-- Lápiz (26 sept 2026): este botón SOLO sirve para cambiar esta guía con Salma — con el
+     bocadillo 💬 se confundía con el botón central "Salma" del menú de abajo. -->
+<button class="itin-chat-fab" id="itin-chat-fab" style="display:none" aria-label="Cambiar esta guía con Salma" title="Cambiar esta guía"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
 
 <!-- ═══ POPUP "CONSULTA" sobre la guía — la guía se ve detrás, atenuada ═══ -->
 <div class="itin-query-overlay" id="itin-query-overlay" style="display:none">
@@ -486,7 +488,7 @@ window.SALMA_API="https://salma-api.borradodelmapa-api.workers.dev";
 <!-- ═══ APP ═══ -->
 <script src="debug-panel.js?v=19"></script>
 <script src="country-utils.js?v=4"></script>
-<script src="app.js?v=183"></script>
+<script src="app.js?v=184"></script>
 <script src="premium-modal.js?v=3"></script>
 <script src="nav-history.js?v=4"></script>
 <script src="notas.js?v=2"></script>
