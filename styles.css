@@ -7147,3 +7147,14 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .itin-locked-body .irg-text{font-size:14px;margin:6px 0 12px;}
 /* Perfil: con qué cuenta se ha entrado (26 sept 2026) */
 .prof-hero-via{font-family:var(--font-body);font-size:13px;color:#C4C7C9;margin:4px 0 2px;text-align:center;word-break:break-all;}
+/* Borrar mi cuenta (26 sept 2026) */
+.prof-row-danger .prof-row-label,.prof-row-danger .prof-row-icon{color:#ff5a5a;}
+.del-acc-modal{text-align:left;}
+.del-acc-modal .narrator-confirm-icon,.del-acc-modal .narrator-confirm-title{text-align:center;}
+.del-acc-list{margin:4px 0 14px 18px;padding:0;font-size:14px;line-height:1.5;color:var(--crema);}
+.del-acc-list li{margin:3px 0;}
+.del-acc-label{display:block;font-size:14px;color:var(--crema);margin-bottom:6px;}
+.del-acc-input{width:100%;box-sizing:border-box;background:#0D0F10;border:1.5px solid #ff5a5a;color:#fff;font-size:17px;letter-spacing:.12em;text-transform:uppercase;padding:11px 12px;border-radius:0;}
+.del-acc-status{min-height:18px;font-size:13px;color:#C4C7C9;margin:8px 0 4px;}
+.del-acc-go{background:#e53935 !important;color:#fff !important;}
+.del-acc-go:disabled{opacity:.4;cursor:not-allowed;}

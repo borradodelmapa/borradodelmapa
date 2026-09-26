@@ -1805,6 +1805,12 @@ async function renderProfile() {
             <span class="prof-row-label">Cerrar sesión</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
+          <div class="prof-row-sep"></div>
+          <div class="prof-row prof-row-danger" id="prof-delete-account">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>
+            <span class="prof-row-label">Borrar mi cuenta</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
         </div>
       </div>
 
@@ -1884,6 +1890,7 @@ async function renderProfile() {
   document.getElementById('prof-logout').addEventListener('click', () => {
     if (confirm('¿Cerrar sesión?')) logout();
   });
+  document.getElementById('prof-delete-account').addEventListener('click', openDeleteAccountModal);
   // Stats: click en el plan abre el modal Premium
   document.getElementById('prof-stat-plan')?.addEventListener('click', openCoinsModal);
   // Stats: cargar conteo de guías async
@@ -4129,6 +4136,76 @@ function lockScreen() {
 }
 
 // Logout real — cierra sesión Firebase (requiere Google para volver)
+// ═══ BORRAR MI CUENTA (26 sept 2026) — RGPD + requisito de Google Play ═══
+// Mismo borrado que el panel admin (Worker: deleteUserCompletely vía /account/delete).
+// Irreversible: se pide escribir BORRAR. Al terminar se cierra la sesión.
+function openDeleteAccountModal() {
+  let overlay = document.getElementById('narrator-confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'narrator-confirm-overlay';
+    overlay.className = 'narrator-confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  const _pu = currentUser && currentUser.premium_until ? new Date(currentUser.premium_until).getTime() : 0;
+  const premiumAviso = _pu > Date.now()
+    ? '<li><b>Pierdes el Premium</b> que te quede (hasta el ' + new Date(_pu).toLocaleDateString('es-ES') + '), sin devolución.</li>' : '';
+  overlay.innerHTML = `
+    <div class="narrator-confirm-modal del-acc-modal">
+      <div class="narrator-confirm-icon">⚠️</div>
+      <h2 class="narrator-confirm-title">Borrar mi cuenta</h2>
+      <p class="narrator-confirm-text">Se borra <b>para siempre</b> y no se puede recuperar:</p>
+      <ul class="del-acc-list">
+        <li>Tus rutas guardadas y sus guías públicas (también en Explorar)</li>
+        <li>Notas, fotos, documentos del viajero y contactos SOS</li>
+        <li>Lo que Salma sabe de ti y tu WhatsApp vinculado</li>
+        ${premiumAviso}
+      </ul>
+      <label class="del-acc-label" for="del-acc-input">Escribe <b>BORRAR</b> para confirmar</label>
+      <input class="del-acc-input" id="del-acc-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <div class="del-acc-status" id="del-acc-status"></div>
+      <div class="narrator-confirm-btns">
+        <button class="narrator-confirm-cancel" id="del-acc-cancel">Cancelar</button>
+        <button class="narrator-confirm-go del-acc-go" id="del-acc-go" disabled>Borrar para siempre</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+  const input = document.getElementById('del-acc-input');
+  const go = document.getElementById('del-acc-go');
+  const status = document.getElementById('del-acc-status');
+  input.addEventListener('input', () => { go.disabled = input.value.trim().toUpperCase() !== 'BORRAR'; });
+  document.getElementById('del-acc-cancel').addEventListener('click', () => { overlay.style.display = 'none'; });
+  go.addEventListener('click', async () => {
+    if (input.value.trim().toUpperCase() !== 'BORRAR') return;
+    go.disabled = true; input.disabled = true;
+    document.getElementById('del-acc-cancel').disabled = true;
+    status.textContent = 'Borrando tu cuenta… no cierres la app.';
+    try {
+      const u = auth.currentUser;
+      if (!u) throw new Error('Sin sesión');
+      const t = await u.getIdToken(true);
+      const res = await fetch(window.SALMA_API + '/account/delete', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + t },
+        body: JSON.stringify({ confirm: 'BORRAR' })
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok || !j.ok) throw new Error(j.error || ('HTTP ' + res.status));
+      // Datos locales de esta cuenta fuera del móvil
+      try { ['bdm_live_active_route', 'bdm_live_active_route_id', 'bdm_reopen_guia', '_salmaHandoff', '_salmaRouteBackup'].forEach(k => localStorage.removeItem(k)); } catch (_) {}
+      try { sessionStorage.clear(); } catch (_) {}
+      overlay.style.display = 'none';
+      showToast('Cuenta borrada. Gracias por viajar con Salma.');
+      logout();
+    } catch (e) {
+      console.warn('Error borrando cuenta:', e);
+      status.textContent = 'No se ha podido borrar: ' + e.message + '. Prueba otra vez o escríbenos desde Ayuda.';
+      go.disabled = false; input.disabled = false;
+      document.getElementById('del-acc-cancel').disabled = false;
+    }
+  });
+  setTimeout(() => input.focus(), 50);
+}
+
 function logout() {
   auth.signOut();
   currentUser = null;

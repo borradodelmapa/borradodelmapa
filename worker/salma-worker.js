@@ -1305,6 +1305,111 @@ async function waCopyAccountData(env, fromUid, toUid) {
   return out;
 }
 
+// ─── Borrado completo de una cuenta (26 sept 2026) ───
+// Extraído TAL CUAL del botón "Borrar" del panel admin (/admin/user-action, probado en
+// pantalla por Paco el 25 sept) para que "Borrar mi cuenta" del Perfil (/account/delete)
+// use exactamente el mismo borrado — un solo sitio que decide qué se borra.
+// Recorre todo lo que cuelga del uid: subcolecciones de Firestore, public_guides,
+// shared_routes, whatsapp_sessions, ficheros en R2, contadores en KV y la cuenta de
+// Firebase Authentication. Cada paso en su try/catch: un fallo no aborta el resto.
+// Sin APIs de pago: solo Firestore/R2/KV/Identity Toolkit.
+async function deleteUserCompletely(env, uid) {
+    // Borrado completo — 26 sept 2026. Recorre TODO lo que cuelga de este uid y lo
+    // borra: subcolecciones de Firestore, colecciones raíz que lo referencian por
+    // `uid` (public_guides, shared_routes por su propio id, whatsapp_sessions por
+    // consulta), ficheros en R2 (fotos, documentos/avatar, miniaturas de ruta) y
+    // los contadores en KV. Por último, la cuenta de Firebase Authentication. Cada
+    // paso va en su propio try/catch — un fallo puntual no aborta el resto, y todo
+    // queda contado en el log para poder revisar a mano si algo no se borró.
+    const errors = [];
+    const counts = { subcollections: 0, public_guides: 0, shared_routes: 0, whatsapp_sessions: 0, r2_files: 0 };
+    const SUBCOLLECTIONS = ['maps', 'fotos', 'albumes', 'notas', 'pins', 'map_pins', 'travel_docs', 'paises', 'flight_watches'];
+    const slugs = [], mapIds = [];
+    for (const col of SUBCOLLECTIONS) {
+      try {
+        const docs = await firestoreAdminListSubcollection(env, 'users/' + uid, col);
+        for (const d of docs) {
+          if (col === 'maps') {
+            mapIds.push(d.id);
+            const slug = d.fields.slug && d.fields.slug.stringValue;
+            if (slug) slugs.push(slug);
+          }
+          try { if (await firestoreAdminDelete(env, `users/${uid}/${col}/${d.id}`)) counts.subcollections++; }
+          catch (e) { errors.push(`${col}/${d.id}: ${e.message}`); }
+        }
+      } catch (e) { errors.push(`listar ${col}: ${e.message}`); }
+    }
+    // Firestore borra sin dar error aunque el documento no exista (idempotente) —
+    // no sirve para contar cuántos había de verdad. Se comprueba antes con un GET;
+    // la mayoría de mapas no tienen guía pública ni ruta compartida, así que esto
+    // es solo 1-2 lecturas de más por parada, nada relevante en una acción tan rara.
+    for (const slug of slugs) {
+      try {
+        if (await firestoreAdminGet(env, 'public_guides/' + slug)) {
+          await firestoreAdminDelete(env, 'public_guides/' + slug);
+          counts.public_guides++;
+        }
+      } catch (e) { errors.push('public_guides/' + slug + ': ' + e.message); }
+    }
+    for (const mapId of mapIds) {
+      try {
+        if (await firestoreAdminGet(env, 'shared_routes/' + mapId)) {
+          await firestoreAdminDelete(env, 'shared_routes/' + mapId);
+          counts.shared_routes++;
+        }
+      } catch (e) { errors.push('shared_routes/' + mapId + ': ' + e.message); }
+      try { await env.SALMA_PHOTOS?.delete('mapthumb/' + mapId + '.jpg'); } catch (_) {}
+    }
+    try {
+      const waDocs = await firestoreAdminQueryByField(env, 'whatsapp_sessions', 'uid', uid);
+      for (const name of waDocs) {
+        // El id de whatsapp_sessions es "whatsapp:+34..." (con ':' y '+' sin escapar,
+        // tal cual lo devuelve la query) — un ':' suelto en la URL lo interpreta la
+        // API de Google como separador de método especial (el mismo patrón que
+        // ':runQuery'), así que el DELETE se malinterpretaba y fallaba en silencio
+        // sin borrar nada (bug real, encontrado 25 sept 2026 con wrangler tail: el
+        // borrado completo nunca limpiaba esta colección). Se re-codifica solo el
+        // último tramo (el id), no la colección.
+        const rawPath = name.split('/documents/')[1];
+        const slashIdx = rawPath.lastIndexOf('/');
+        const safePath = rawPath.slice(0, slashIdx + 1) + encodeURIComponent(rawPath.slice(slashIdx + 1));
+        try { await firestoreAdminDelete(env, safePath); counts.whatsapp_sessions++; }
+        catch (e) { errors.push('whatsapp_sessions: ' + e.message); }
+      }
+    } catch (e) { errors.push('buscar whatsapp_sessions: ' + e.message); }
+    try { await firestoreAdminDelete(env, 'users/' + uid); } catch (e) { errors.push('users/' + uid + ': ' + e.message); }
+    if (env.SALMA_PHOTOS) {
+      try { counts.r2_files += await r2DeletePrefix(env, 'photos/' + uid + '/'); } catch (e) { errors.push('R2 photos/: ' + e.message); }
+      try { counts.r2_files += await r2DeletePrefix(env, 'docs/' + uid + '/'); } catch (e) { errors.push('R2 docs/: ' + e.message); }
+    }
+    if (env.SALMA_KB) {
+      try {
+        await env.SALMA_KB.delete(usageTotalKey(uid));
+        await env.SALMA_KB.delete('fw:' + uid);
+        await env.SALMA_KB.delete('fw_alerts:' + uid);
+        const usageList = await env.SALMA_KB.list({ prefix: 'usage:' + uid + ':' });
+        for (const k of usageList.keys) await env.SALMA_KB.delete(k.name);
+        const fwUsersJson = await env.SALMA_KB.get('flight_watch_users');
+        if (fwUsersJson) {
+          const fwUsers = JSON.parse(fwUsersJson).filter(u => u !== uid);
+          await env.SALMA_KB.put('flight_watch_users', JSON.stringify(fwUsers));
+        }
+      } catch (e) { errors.push('KV: ' + e.message); }
+    }
+    try {
+      const cp = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/cloud-platform', '_sa_token_cp');
+      const r = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/accounts:delete`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cp }, body: JSON.stringify({ localId: uid }), signal: AbortSignal.timeout(10000),
+      });
+      if (!r.ok) {
+        const j = await r.json().catch(() => ({}));
+        // "no encontrado" no es un error real aquí — puede que solo existiera el doc de Firestore
+        if (!/USER_NOT_FOUND/i.test(JSON.stringify(j))) errors.push('Authentication → ' + r.status + ' ' + ((j.error && j.error.message) || '').slice(0, 120));
+      }
+    } catch (e) { errors.push('Authentication: ' + e.message); }
+  return { deleted: true, counts, errors: errors.length ? errors : undefined };
+}
+
 async function firestoreAdminListSubcollection(env, parentPath, collectionId) {
   const token = await getServiceAccountToken(env);
   const res = await fetch(`${FIRESTORE_BASE}/${parentPath}:runQuery`, {
@@ -8165,6 +8270,33 @@ export default {
       return new Response(JSON.stringify({ ok: true }), { headers: corsH });
     }
 
+    // ─── POST /account/delete — "Borrar mi cuenta" desde el Perfil (26 sept 2026) ───
+    // El uid sale SIEMPRE del token de sesión (nunca del cuerpo): cada uno solo puede borrar
+    // la suya. Exige { confirm: "BORRAR" } escrito a mano en la app. Mismo borrado que el
+    // panel admin (deleteUserCompletely). Queda registro en KV (accountdelete:*) un año.
+    // Obligatorio por RGPD y por Google Play. Sin APIs de pago.
+    if (request.method === 'POST' && url.pathname === '/account/delete') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      const user = await verifyAuthAndGetUser(request.headers.get('Authorization'));
+      if (!user || !user.uid) return new Response(JSON.stringify({ error: 'auth' }), { status: 401, headers: corsH });
+      let body = {};
+      try { body = await request.json(); } catch (_) {}
+      if (body.confirm !== 'BORRAR') {
+        return new Response(JSON.stringify({ error: 'Falta confirmar escribiendo BORRAR.' }), { status: 400, headers: corsH });
+      }
+      const uid = String(user.uid);
+      if (!/^[A-Za-z0-9_]{20,40}$/.test(uid)) return new Response(JSON.stringify({ error: 'uid no válido' }), { status: 400, headers: corsH });
+      try {
+        const result = await deleteUserCompletely(env, uid);
+        const nowIso = new Date().toISOString();
+        try { if (env.SALMA_KB) await env.SALMA_KB.put('accountdelete:' + Date.now() + ':' + uid, JSON.stringify({ at: nowIso, uid, result }), { expirationTtl: 60 * 60 * 24 * 365 }); } catch (_) {}
+        console.log('[BORRAR-CUENTA] ' + uid + ' ' + JSON.stringify(result.counts) + (result.errors ? ' ERRORES: ' + result.errors.join(' | ') : ''));
+        return new Response(JSON.stringify({ ok: true, result }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'No se pudo borrar: ' + e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /version (que version corre de verdad) ───
     // Publico a proposito: el Version ID no es un secreto y hace falta poder
     // consultarlo desde el movil sin token. Lo usa el panel de debug.
@@ -8715,100 +8847,8 @@ export default {
           await env.SALMA_KB.delete(usageTotalKey(uid));
           result = { reset: 'cupos gratuitos de por vida (guías y cambios) a cero' };
         } else if (action === 'delete') {
-          // Borrado completo — 26 sept 2026. Recorre TODO lo que cuelga de este uid y lo
-          // borra: subcolecciones de Firestore, colecciones raíz que lo referencian por
-          // `uid` (public_guides, shared_routes por su propio id, whatsapp_sessions por
-          // consulta), ficheros en R2 (fotos, documentos/avatar, miniaturas de ruta) y
-          // los contadores en KV. Por último, la cuenta de Firebase Authentication. Cada
-          // paso va en su propio try/catch — un fallo puntual no aborta el resto, y todo
-          // queda contado en el log para poder revisar a mano si algo no se borró.
-          const errors = [];
-          const counts = { subcollections: 0, public_guides: 0, shared_routes: 0, whatsapp_sessions: 0, r2_files: 0 };
-          const SUBCOLLECTIONS = ['maps', 'fotos', 'albumes', 'notas', 'pins', 'map_pins', 'travel_docs', 'paises', 'flight_watches'];
-          const slugs = [], mapIds = [];
-          for (const col of SUBCOLLECTIONS) {
-            try {
-              const docs = await firestoreAdminListSubcollection(env, 'users/' + uid, col);
-              for (const d of docs) {
-                if (col === 'maps') {
-                  mapIds.push(d.id);
-                  const slug = d.fields.slug && d.fields.slug.stringValue;
-                  if (slug) slugs.push(slug);
-                }
-                try { if (await firestoreAdminDelete(env, `users/${uid}/${col}/${d.id}`)) counts.subcollections++; }
-                catch (e) { errors.push(`${col}/${d.id}: ${e.message}`); }
-              }
-            } catch (e) { errors.push(`listar ${col}: ${e.message}`); }
-          }
-          // Firestore borra sin dar error aunque el documento no exista (idempotente) —
-          // no sirve para contar cuántos había de verdad. Se comprueba antes con un GET;
-          // la mayoría de mapas no tienen guía pública ni ruta compartida, así que esto
-          // es solo 1-2 lecturas de más por parada, nada relevante en una acción tan rara.
-          for (const slug of slugs) {
-            try {
-              if (await firestoreAdminGet(env, 'public_guides/' + slug)) {
-                await firestoreAdminDelete(env, 'public_guides/' + slug);
-                counts.public_guides++;
-              }
-            } catch (e) { errors.push('public_guides/' + slug + ': ' + e.message); }
-          }
-          for (const mapId of mapIds) {
-            try {
-              if (await firestoreAdminGet(env, 'shared_routes/' + mapId)) {
-                await firestoreAdminDelete(env, 'shared_routes/' + mapId);
-                counts.shared_routes++;
-              }
-            } catch (e) { errors.push('shared_routes/' + mapId + ': ' + e.message); }
-            try { await env.SALMA_PHOTOS?.delete('mapthumb/' + mapId + '.jpg'); } catch (_) {}
-          }
-          try {
-            const waDocs = await firestoreAdminQueryByField(env, 'whatsapp_sessions', 'uid', uid);
-            for (const name of waDocs) {
-              // El id de whatsapp_sessions es "whatsapp:+34..." (con ':' y '+' sin escapar,
-              // tal cual lo devuelve la query) — un ':' suelto en la URL lo interpreta la
-              // API de Google como separador de método especial (el mismo patrón que
-              // ':runQuery'), así que el DELETE se malinterpretaba y fallaba en silencio
-              // sin borrar nada (bug real, encontrado 25 sept 2026 con wrangler tail: el
-              // borrado completo nunca limpiaba esta colección). Se re-codifica solo el
-              // último tramo (el id), no la colección.
-              const rawPath = name.split('/documents/')[1];
-              const slashIdx = rawPath.lastIndexOf('/');
-              const safePath = rawPath.slice(0, slashIdx + 1) + encodeURIComponent(rawPath.slice(slashIdx + 1));
-              try { await firestoreAdminDelete(env, safePath); counts.whatsapp_sessions++; }
-              catch (e) { errors.push('whatsapp_sessions: ' + e.message); }
-            }
-          } catch (e) { errors.push('buscar whatsapp_sessions: ' + e.message); }
-          try { await firestoreAdminDelete(env, 'users/' + uid); } catch (e) { errors.push('users/' + uid + ': ' + e.message); }
-          if (env.SALMA_PHOTOS) {
-            try { counts.r2_files += await r2DeletePrefix(env, 'photos/' + uid + '/'); } catch (e) { errors.push('R2 photos/: ' + e.message); }
-            try { counts.r2_files += await r2DeletePrefix(env, 'docs/' + uid + '/'); } catch (e) { errors.push('R2 docs/: ' + e.message); }
-          }
-          if (env.SALMA_KB) {
-            try {
-              await env.SALMA_KB.delete(usageTotalKey(uid));
-              await env.SALMA_KB.delete('fw:' + uid);
-              await env.SALMA_KB.delete('fw_alerts:' + uid);
-              const usageList = await env.SALMA_KB.list({ prefix: 'usage:' + uid + ':' });
-              for (const k of usageList.keys) await env.SALMA_KB.delete(k.name);
-              const fwUsersJson = await env.SALMA_KB.get('flight_watch_users');
-              if (fwUsersJson) {
-                const fwUsers = JSON.parse(fwUsersJson).filter(u => u !== uid);
-                await env.SALMA_KB.put('flight_watch_users', JSON.stringify(fwUsers));
-              }
-            } catch (e) { errors.push('KV: ' + e.message); }
-          }
-          try {
-            const cp = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/cloud-platform', '_sa_token_cp');
-            const r = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/accounts:delete`, {
-              method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cp }, body: JSON.stringify({ localId: uid }), signal: AbortSignal.timeout(10000),
-            });
-            if (!r.ok) {
-              const j = await r.json().catch(() => ({}));
-              // "no encontrado" no es un error real aquí — puede que solo existiera el doc de Firestore
-              if (!/USER_NOT_FOUND/i.test(JSON.stringify(j))) errors.push('Authentication → ' + r.status + ' ' + ((j.error && j.error.message) || '').slice(0, 120));
-            }
-          } catch (e) { errors.push('Authentication: ' + e.message); }
-          result = { deleted: true, counts, errors: errors.length ? errors : undefined };
+          // Mismo borrado que "Borrar mi cuenta" del Perfil — ver deleteUserCompletely().
+          result = await deleteUserCompletely(env, uid);
         }
         try { if (env.SALMA_KB) await env.SALMA_KB.put('adminlog:' + now + ':' + uid, JSON.stringify({ at: nowIso, action, uid, days: days || undefined, result }), { expirationTtl: 60 * 60 * 24 * 365 }); } catch (_) {}
         console.log('[ADMIN-ACCION] ' + action + ' ' + uid + (days ? ' ' + days + ' d' : ''));
