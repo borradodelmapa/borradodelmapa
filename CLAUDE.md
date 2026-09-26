@@ -191,6 +191,27 @@ obligatorio.
 - Esto aplica igual de fuerte que el punto 8 de arriba: **no hay "esto es tan pequeño que
   no afecta a destinos"**. Si se toca el menú o la cabecera de la app, se toca a la vez
   `build-destinos.js` — sin excepción, sin esperar a que Paco lo note en una captura.
+- **Ojo (26 sept 2026):** el menú de abajo vive en TRES sitios, no dos — también en
+  `404.html` (`addBottomBar()`, página pública de guías). Tocar los tres a la vez.
+
+### 10. POLÍTICA DE ACCESO: "MIRAR SÍ, USAR CON CUENTA" — IGUAL EN TODA LA WEB
+
+Decidida con Paco el 26 sept 2026 ("queremos gente que se registre"). Objetivo: registros.
+Un muro nada más abrir un enlace pierde a la mayoría; se enseña lo justo para enganchar y se
+pide la cuenta en el momento en que el usuario QUIERE algo. Toda pantalla nueva sigue esto:
+
+- **Sin cuenta, se ve:** portada, destinos, blog, la lista de Explorar y el **avance de
+  cualquier ruta** — título, foto, mapa y el **día 1 completo**. Da igual por dónde llegue la
+  ruta (Explorar, enlace compartido, guía pública): **misma regla en los tres sitios**.
+- **Con cuenta (registro gratis):** la ruta entera, guardarla, preguntarle a Salma, crear
+  rutas, chat, notas, WhatsApp, compartir.
+- **El corte** va justo después del día 1, con lo que falta ("Te quedan N días y M paradas")
+  y los dos botones de entrar (Google / WhatsApp). Nunca una pantalla vacía que solo pide cuenta.
+- **Enlace para compartir una ruta = su guía pública** (`borradodelmapa.com/<slug>`): tarjeta
+  con foto en WhatsApp (páginas fijas de `scripts/build-guias.js`) + el mismo avance.
+- Lo que exige cuenta **no se enseña como si funcionara** a quien no la tiene (ej. el botón
+  "Crear ruta con mapa" tras un "inicia sesión" — bug real arreglado el 26 sept).
+- Cambiar esta política (más o menos abierta) es decisión de Paco — no de una sesión.
 
 ---
 ## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
