@@ -38,6 +38,9 @@ bucket_name = "salma-photos"
 crons = ["0 4 * * 1", "0 6 * * *"]
 
 [vars]
+# Remitente de los emails (Resend). Dominio borradodelmapa.com verificado en Resend el 26 sept 2026
+# (DKIM resend._domainkey + CNAME send/rsend en el DNS de Netlify).
+RESEND_FROM = "Salma · Borrado del Mapa <salma@borradodelmapa.com>"
 # Optional: use Workers AI instead — set USE_CLOUDFLARE_AI = "1" and add binding:
 # [ai]
 # binding = "AI"

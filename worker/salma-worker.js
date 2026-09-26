@@ -8496,7 +8496,7 @@ async function sendFeedbackEmail(env, to, subject, text) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Borrado del Mapa <onboarding@resend.dev>',
+        from: env.RESEND_FROM || 'Borrado del Mapa <onboarding@resend.dev>',
         to: [to],
         subject,
         text,
