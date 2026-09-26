@@ -7137,3 +7137,11 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .irg-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;box-sizing:border-box;background:linear-gradient(180deg,#FF7A2E,#F4630B);color:#0a0a0a;border:0;border-radius:0;font-family:var(--font-cond);font-weight:800;font-size:17px;letter-spacing:.02em;padding:15px 18px;cursor:pointer;text-decoration:none;}
 .irg-note{font-family:var(--font-body);font-size:13px;color:#C4C7C9;margin-top:9px;}
 .public-gate{max-width:700px;margin-left:auto;margin-right:auto;}
+/* Tarjeta bloqueada del avance sin cuenta (CLAUDE.md §10) — una parada más del carrusel */
+.itin-card.itin-card-locked{border:1.5px solid var(--accent);cursor:pointer;}
+.itin-locked-photo{position:relative;overflow:hidden;background:linear-gradient(135deg,#1e190f,#2a1a0c);}
+.itin-locked-photo img{width:100%;height:100%;object-fit:cover;filter:blur(9px) brightness(.55);transform:scale(1.15);}
+.itin-locked-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-cond);font-weight:800;font-size:26px;letter-spacing:.06em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.6);}
+.itin-locked-body{padding:14px 14px 16px;text-align:center;}
+.itin-locked-body .irg-count{font-size:19px;}
+.itin-locked-body .irg-text{font-size:14px;margin:6px 0 12px;}

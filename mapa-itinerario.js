@@ -92,13 +92,16 @@ const mapaItinerario = {
       this._cards.push(card);
     });
 
+    // Avance sin cuenta (CLAUDE.md §10): tarjeta bloqueada como una parada más
+    if (options && options._preview) scroll.appendChild(this._createLockedCard(options._preview, routeData));
+
     this._container.appendChild(scroll);
 
     // Fotos por tandas, no todas a la vez (ver comentario en _createCard)
     this._processPhotoQueue();
 
     // Extras: antes de salir, info práctica, tips (reutiliza guide-renderer)
-    if (typeof guideRenderer !== 'undefined') {
+    if (typeof guideRenderer !== 'undefined' && !(options && options._preview)) {
       try { console.log('[NEARBY] itin.init nearby:', (routeData.nearby_stops||[]).length, 'loc:', routeData.anchor_locality || null, 'fn:', typeof guideRenderer._renderNearby); } catch (_) {}
       const extrasHtml = [
         (typeof guideRenderer._renderNearby === 'function'
@@ -208,6 +211,40 @@ const mapaItinerario = {
         if (typeof showToast !== 'undefined') showToast('Link: ' + url);
       });
     }
+  },
+
+  // ═══ TARJETA BLOQUEADA (avance sin cuenta, CLAUDE.md §10) ═══
+  // Mismo tamaño que una parada; foto de la siguiente parada difuminada (vía /photo del
+  // Worker, cacheada en R2 — como mucho 1 foto de Google Places la 1ª vez por ruta).
+  _createLockedCard(preview, routeData) {
+    const card = document.createElement('div');
+    card.className = 'itin-card itin-card-locked';
+    const next = preview.nextStop;
+    const photo = next && next.photo_ref ? `${window.SALMA_API}/photo?ref=${encodeURIComponent(next.photo_ref)}` : '';
+    const d = preview.restDays, p = preview.restStops;
+    const what = d > 0
+      ? `Te ${d === 1 ? 'queda' : 'quedan'} <b>${d} día${d > 1 ? 's' : ''}</b> y <b>${p} parada${p !== 1 ? 's' : ''}</b>`
+      : `Te ${p === 1 ? 'queda' : 'quedan'} <b>${p} parada${p !== 1 ? 's' : ''}</b>`;
+    card.innerHTML = `
+      <div class="itin-card-photo itin-locked-photo">
+        ${photo ? `<img src="${photo}" alt="" loading="lazy">` : ''}
+        <div class="itin-locked-badge">${d > 0 && preview.nextDay ? 'DÍA ' + preview.nextDay + ' ' : ''}🔒</div>
+      </div>
+      <div class="itin-locked-body">
+        <div class="irg-count">${what}</div>
+        <div class="irg-text">Regístrate gratis para ver la ruta completa, guardarla y preguntarle a Salma por ella.</div>
+        <button class="irg-btn" type="button">Ver la ruta completa <span>→</span></button>
+        <div class="irg-note">Con Google o con WhatsApp · en cinco segundos</div>
+      </div>`;
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Al entrar, app.js reabre esta misma ruta ya entera (onAuthStateChanged).
+      window._reopenRouteAfterLogin = routeData;
+      const slug = routeData && routeData._saved_from && routeData._saved_from.slug;
+      try { if (slug) localStorage.setItem('bdm_reopen_guia', slug); } catch (_) {}
+      if (typeof openModal === 'function') openModal();
+    });
+    return card;
   },
 
   // ═══ CREAR CARD ═══
@@ -674,14 +711,14 @@ const mapaItinerario = {
     document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
     view.style.display = 'block';
 
-    // Política "mirar sí, usar con cuenta" (CLAUDE.md §10): sin sesión, avance = solo el
-    // día 1 (mapa + tarjetas) y un corte con lo que falta y el botón de registrarse.
+    // Política "mirar sí, usar con cuenta" (CLAUDE.md §10): sin sesión, avance (día 1, o
+    // la primera mitad si la ruta es de un solo día) y una tarjeta bloqueada DENTRO del
+    // carrusel, justo donde va el dedo, para registrarse. Consejos/info práctica ocultos.
     const _anon = typeof currentUser === 'undefined' || !currentUser;
-    const _preview = _anon ? _previewDay1(routeData.stops) : null;
+    const _preview = _anon ? _previewStops(routeData.stops) : null;
     const stops = _preview ? _preview.stops : routeData.stops;
     mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: _preview ? null : (routeData.road_geometry || null) });
-    mapaItinerario.init('itin-cards-container', stops, routeData, options);
-    if (_preview) _appendRegisterGate('itin-cards-container', _preview, routeData);
+    mapaItinerario.init('itin-cards-container', stops, routeData, _preview ? Object.assign({}, options, { _preview }) : options);
 
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
@@ -709,36 +746,28 @@ const mapaItinerario = {
     if (window.pushModal) window.pushModal('itinerario', _teardownItinView);
   }
 
-  // Avance del día 1 para quien no tiene cuenta. null si la ruta es de un solo día
-  // (entonces se ve entera: el día 1 ES la ruta).
-  function _previewDay1(allStops) {
+  // Avance para quien no tiene cuenta: el día 1 entero; si la ruta es de un solo día,
+  // la primera mitad de sus paradas (siempre queda algo que desbloquear). null si no hay
+  // nada que cortar (una sola parada).
+  function _previewStops(allStops) {
     const day = s => Number(s && s.day) || 1;
     const days = new Set(allStops.map(day));
-    if (days.size <= 1) return null;
-    const first = Math.min(...days);
-    const stops = allStops.filter(s => day(s) === first);
-    return { stops, restDays: days.size - 1, restStops: allStops.length - stops.length };
-  }
-
-  function _appendRegisterGate(containerId, preview, routeData) {
-    const cont = document.getElementById(containerId);
-    if (!cont) return;
-    const gate = document.createElement('div');
-    gate.className = 'itin-register-gate';
-    const d = preview.restDays, p = preview.restStops;
-    gate.innerHTML = `
-      <div class="irg-count">Te ${d === 1 ? 'queda' : 'quedan'} <b>${d} día${d > 1 ? 's' : ''}</b> y <b>${p} parada${p !== 1 ? 's' : ''}</b></div>
-      <div class="irg-text">Regístrate gratis para ver la ruta completa, guardarla y preguntarle a Salma por ella.</div>
-      <button class="irg-btn" type="button">Ver la ruta completa <span>→</span></button>
-      <div class="irg-note">Con Google o con WhatsApp · en cinco segundos</div>`;
-    gate.querySelector('.irg-btn').addEventListener('click', () => {
-      // Al entrar, app.js reabre esta misma ruta ya entera (onAuthStateChanged).
-      window._reopenRouteAfterLogin = routeData;
-      const _slug = routeData && routeData._saved_from && routeData._saved_from.slug;
-      try { if (_slug) localStorage.setItem('bdm_reopen_guia', _slug); } catch (_) {}
-      if (typeof openModal === 'function') openModal();
-    });
-    cont.appendChild(gate);
+    let stops;
+    if (days.size > 1) {
+      const first = Math.min(...days);
+      stops = allStops.filter(s => day(s) === first);
+    } else {
+      if (allStops.length < 2) return null;
+      stops = allStops.slice(0, Math.ceil(allStops.length / 2));
+    }
+    const rest = allStops.slice(stops.length);
+    return {
+      stops,
+      restDays: days.size - 1,
+      restStops: rest.length,
+      nextStop: rest[0] || null,
+      nextDay: rest[0] ? day(rest[0]) : null,
+    };
   }
 
   // Desmontaje puro de la vista (DOM + mapas). NO toca historial.

@@ -201,12 +201,20 @@ Un muro nada más abrir un enlace pierde a la mayoría; se enseña lo justo para
 pide la cuenta en el momento en que el usuario QUIERE algo. Toda pantalla nueva sigue esto:
 
 - **Sin cuenta, se ve:** portada, destinos, blog, la lista de Explorar y el **avance de
-  cualquier ruta** — título, foto, mapa y el **día 1 completo**. Da igual por dónde llegue la
+  cualquier ruta** — título, foto, mapa y el **día 1 completo** (si la ruta es de un solo
+  día: la **primera mitad** de sus paradas — siempre queda algo que desbloquear). Da igual por dónde llegue la
   ruta (Explorar, enlace compartido, guía pública): **misma regla en los tres sitios**.
 - **Con cuenta (registro gratis):** la ruta entera, guardarla, preguntarle a Salma, crear
   rutas, chat, notas, WhatsApp, compartir.
-- **El corte** va justo después del día 1, con lo que falta ("Te quedan N días y M paradas")
-  y los dos botones de entrar (Google / WhatsApp). Nunca una pantalla vacía que solo pide cuenta.
+- **El corte** es una **tarjeta bloqueada dentro del carrusel de paradas**, justo después de
+  la última visible (foto de la siguiente parada difuminada, "DÍA 2 🔒", "Te quedan N días y
+  M paradas", botón → registro). Nunca debajo de todo (el carrusel es horizontal: no se ve) y
+  nunca una pantalla vacía que solo pide cuenta. En el avance se OCULTAN consejos, info
+  práctica y "cerca de" (son de la ruta entera). Al entrar, se reabre la misma ruta entera.
+- **Un solo diseño de ruta:** la vista de itinerario de la app. La página pública
+  (`404.html` / `<slug>.html`) manda a las personas a la app (`/?ruta=<slug>`) y solo
+  queda para WhatsApp/redes/Google. `guide-renderer.js` (vista vieja) está pendiente de
+  eliminar — ver pendientes.
 - **Enlace para compartir una ruta = su guía pública** (`borradodelmapa.com/<slug>`): tarjeta
   con foto en WhatsApp (páginas fijas de `scripts/build-guias.js`) + el mismo avance.
 - Lo que exige cuenta **no se enseña como si funcionara** a quien no la tiene (ej. el botón
