@@ -21,7 +21,7 @@ Si el cambio toca una API de pago, decírselo a Paco antes (§8).
    `main` (editando un fichero desde github.com) dispara build + deploy automático con
    `npx wrangler deploy -c wrangler.toml`, **Directorio raíz = `worker`**. No sustituye el paso 1 ni el 6.
 5. Comprobar que corre el Worker que crees: el `Current Version ID` del deploy = el de
-   `curl.exe -s https://salma-api.paco-defoto.workers.dev/version` (con `curl.exe`; `curl` a secas es Invoke-WebRequest).
+   `curl.exe -s https://salma-api.borradodelmapa-api.workers.dev/version` (con `curl.exe`; `curl` a secas es Invoke-WebRequest).
 6. **Paco prueba en la app.** Hasta aquí no está terminado. Nunca decir "arreglado": decir *"desplegado — dime qué ves"*.
    Duda de caché → panel 🐛 → cabecera dorada (Version ID del Worker + `?v=` de cada script).
 7. Anotar: `node scripts/casos.cjs version "qué se subió" <ids de casos>`.

@@ -51,7 +51,7 @@ Worker perdidas. Las causas fueron de método, no técnicas.
 4. Desde `worker\`: `npx wrangler deploy -c wrangler.toml` — **siempre con `-c`** (en la raíz hay un
    `wrangler.jsonc` que se coge por error). PowerShell no tiene `&&`: encadenar con `;`. Alternativa sin
    terminal: Cloudflare Workers Builds (commit a `main` desde github.com, Directorio raíz = `worker`).
-5. `curl.exe -s https://salma-api.paco-defoto.workers.dev/version` → el Version ID debe coincidir con el del
+5. `curl.exe -s https://salma-api.borradodelmapa-api.workers.dev/version` → el Version ID debe coincidir con el del
    deploy. (`curl.exe`, no `curl`: en PowerShell `curl` es `Invoke-WebRequest`.)
 6. **Paco prueba en la app.** Hasta aquí no está terminado. Duda de caché → panel 🐛, cabecera dorada.
 
@@ -148,8 +148,9 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
 - Premium por suscripción (pago único que suma meses; límites server-side con `usageGate`). Coins eliminados.
 - SEO: 1.793 páginas `destinos/` (`noindex` por ahora), 12 artículos de blog, guías públicas `<slug>.html`.
 - Paneles: admin.borradodelmapa.com (repo aparte `Admin-borradodelmapa`), botón 🐛/"Mejora Salma".
-- Worker: endpoint `https://salma-api.paco-defoto.workers.dev` (POST `/` = chat SSE). Estado de red del
-  contenedor de Claude Code: puede bloquear `borradodelmapa-api.workers.dev`.
+- Worker: endpoint `https://salma-api.borradodelmapa-api.workers.dev` (POST `/` = chat SSE; es el que usa la app,
+  `window.SALMA_API`). La antigua `salma-api.paco-defoto.workers.dev` sigue respondiendo con una versión VIEJA: no
+  sirve para comprobar despliegues. El contenedor de Claude Code en la nube puede no llegar a `*.workers.dev`.
 
 ## Índice: "si vas a tocar X, lee `docs/X`"
 | Vas a tocar… | Lee |

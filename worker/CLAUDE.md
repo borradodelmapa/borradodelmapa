@@ -7,7 +7,7 @@ Detalle: `../docs/worker-endpoints.md` (endpoints, flujo del chat, SSE), `../doc
 - **Desplegar SIEMPRE con `-c`**: `cd C:\Users\User\Desktop\salma\worker ; npx wrangler deploy -c wrangler.toml`
   (en la raíz hay un `wrangler.jsonc` que se coge por error). PowerShell: sin `&&`, usar `;`. Antes de
   desplegar: `git fetch origin main` y `git log HEAD..origin/main` (un deploy desde rama desincronizada borra trabajo).
-  Después: `curl.exe -s https://salma-api.paco-defoto.workers.dev/version` debe coincidir con el Version ID.
+  Después: `curl.exe -s https://salma-api.borradodelmapa-api.workers.dev/version` debe coincidir con el Version ID.
 - **NUNCA borrar el Worker** (se destruyen los 15 secrets). Secrets: `npx wrangler secret list -c wrangler.toml`;
   copia: `restaurar-secrets.cjs` (lee `..\api\*.txt`, gitignored).
 - **Coste (§8):** toda línea que llame o pueda llamar a una API de pago (Google Places, Anthropic, OpenAI, Duffel,
