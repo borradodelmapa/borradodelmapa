@@ -6599,6 +6599,13 @@ body {
 /* Con guía activa: "¿Y el próximo viaje?" + cuadro de texto debajo de la tarjeta (26 sept 2026) */
 .ce-next{margin:22px 0 4px;}
 .ce-greet--next{font-size:19px;margin:0 0 -4px;}
+/* Tarjeta compacta de la ruta activa: una fila que abre la guía (26 sept 2026) */
+.ce-mini{display:flex;align-items:center;gap:12px;padding:10px 12px;cursor:pointer;}
+.ce-mini-thumb{width:64px;height:64px;flex:0 0 64px;object-fit:cover;border:1px solid var(--ce-amber);}
+.ce-mini-thumb--empty{display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(255,255,255,.04);}
+.ce-mini-txt{flex:1;min-width:0;}
+.ce-mini-title{font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;font-size:18px;line-height:1.1;color:var(--ce-ink);margin:3px 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ce-mini-go{flex:0 0 auto;font-size:22px;color:var(--ce-amber);font-weight:800;}
 
 /* ── tablero de guía ── */
 .ce-card{

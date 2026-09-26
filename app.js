@@ -611,6 +611,23 @@ function _renderChatEmpty() {
         <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete hidden>Trazar nueva ruta <span>+</span></button>
       </div>`;
 
+  // Versión compacta de la tarjeta de ruta activa (Paco, 26 sept 2026): la grande
+  // ocupaba casi toda la pantalla del móvil y el cuadro "¿Y el próximo viaje?" quedaba
+  // debajo, con scroll. Una sola fila (miniatura + título + días/paradas + flecha) que
+  // entera abre la guía — las paradas y cifras ya se ven dentro. _ceRouteHTML (la
+  // grande) se queda para no romper nada que la use.
+  const _ceRouteCompactHTML = (rt) => `
+      <div class="ce-mini" data-ce-guide role="button" tabindex="0" aria-label="Abrir ${escapeHTML(rt.title)}">
+        ${rt.thumbUrl ? `<img class="ce-mini-thumb" src="${escapeHTML(rt.thumbUrl)}" alt="" loading="lazy">` : '<div class="ce-mini-thumb ce-mini-thumb--empty" aria-hidden="true">🗺️</div>'}
+        <div class="ce-mini-txt">
+          <span class="ce-eyebrow">En ruta</span>
+          <div class="ce-mini-title">${escapeHTML(rt.title)}</div>
+          <div class="ce-sub">${rt.sub}</div>
+        </div>
+        <span class="ce-mini-go" aria-hidden="true">→</span>
+      </div>
+      <button data-ce-newbillete hidden></button>`;
+
   // "Ruta nueva" quitado (Fase 5): el billete ya es el creador de ruta; ese chip
   // abría el flujo viejo de 8 preguntas y duplicaba la función.
   let _ceMoreOpen = false;
@@ -656,7 +673,7 @@ function _renderChatEmpty() {
   } catch (e) { _ceActive = null; }
   try {
     const _initCard = _ceActive
-      ? { cls: 'ce-card ce-active', html: _ceRouteHTML(_ceActive) }
+      ? { cls: 'ce-card ce-active ce-active--mini', html: _ceRouteCompactHTML(_ceActive) }
       : { cls: 'ce-card ce-ticket', html: _ceBilleteHTML() };
     const _greet = _ceActive ? '¿Cómo va el viaje?' : '¿A dónde vamos?';
     // Eslogan hero + línea de apoyo + caja de ejemplo rotable (doc 8 sep).
@@ -938,9 +955,9 @@ function _renderChatEmpty() {
       if (e.target.closest('[data-ce-back-active]')) {
         const card = area.querySelector('#ce-card');
         if (_ceActive && card) {
-          card.className = 'ce-card ce-active';
+          card.className = 'ce-card ce-active ce-active--mini';
           card.hidden = false;
-          card.innerHTML = _ceRouteHTML(_ceActive);
+          card.innerHTML = _ceRouteCompactHTML(_ceActive);
           area.querySelectorAll('[data-ce-hero]').forEach(el => el.remove());
           if (!area.querySelector('.ce-greet')) card.insertAdjacentHTML('beforebegin', '<div class="ce-greet">¿Cómo va el viaje?</div>');
         }
