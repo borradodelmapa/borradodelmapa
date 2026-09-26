@@ -4978,6 +4978,8 @@ function openCoinsModal() {
       const data = await res.json();
       if (!data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
 
+      // Fecha de Premium ANTES de pagar, para _verificarPagoPremium (vale para cualquier pago, no solo tras un límite)
+      try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); } catch (_) {}
       window.location.href = data.url; // Redirige a Stripe Checkout (pantalla hospedada)
     },
     onClose: () => { if (window.popModal) window.popModal('coins'); },
@@ -5099,10 +5101,15 @@ async function _verificarPagoPremium() {
   // Caso p-mui1yhp9ls1 (26 sept 2026): si el pago viene de chocar con un límite, comparar con la fecha
   // guardada ANTES de ir a Stripe. La cargada al volver ya suele traer la nueva (el webhook llega antes
   // que la página) → nunca veía el cambio, no retomaba la guía y decía "se activa en unos minutos".
+  // bdm_pay_pu: guardada en onPay justo antes de ir a Stripe (cualquier pago). bdm_pending_retry.pu: por si
+  // la pestaña trae el retry de antes de esa versión.
   let _puAntes;
   try {
+    const _pay = JSON.parse(sessionStorage.getItem('bdm_pay_pu') || 'null');
+    sessionStorage.removeItem('bdm_pay_pu');
+    if (_pay && 'pu' in _pay) _puAntes = _pay.pu;
     const _pend = JSON.parse(sessionStorage.getItem('bdm_pending_retry') || 'null');
-    if (_pend && 'pu' in _pend) _puAntes = _pend.pu;
+    if (_puAntes === undefined && _pend && 'pu' in _pend) _puAntes = _pend.pu;
   } catch (_) {}
   if (_puAntes === undefined) _puAntes = currentUser.premium_until;
   const baselineMs = _puAntes ? new Date(_puAntes).getTime() : 0;
