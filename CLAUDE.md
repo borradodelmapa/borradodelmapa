@@ -1406,7 +1406,14 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   QUITADO. Resumen diario por email en el cron de las 6:00 UTC (`feedbackDigest`, sin IA). Panel admin
   (`salma-admin`, `be83009`): Feedback → "Mejora Salma" con vistas Casos / Mensajes y "Clasificar pendientes".
   **Worker `2223fc07-614d-4823-8d9d-773a888ee9e2`.** Probado de punta a punta con un 👎 "PRUEBA de Claude"
-  (descartarlo en el panel). Siguiente: errores automáticos (navegador + Worker) → diagnóstico → Paco valida.
+  (descartarlo en el panel).
+  **Errores automáticos — SUBIDOS 26 sept, Worker `084549ff-d272-470c-bfeb-9f359d1f85f7`, `debug-panel.js?v=18`.**
+  Sin que nadie pulse: errores JS de la web (`POST /client-error`, máx 5/visita, ruido filtrado), y del Worker
+  (envoltorio de `fetch` → el viejo es `_fetch`: 5xx y excepciones; IA del chat sin respuesta; mapa de "Crear
+  ruta con mapa" que no se monta). Casos de id fijo `err-<huella>` (`recordAutoError`/`fbUpsertGroup`), SIN IA,
+  🤖 en el panel con "Detalle técnico". Un caso arreglado que vuelve se REABRE solo y avisa. Dos casos de prueba
+  "PRUEBA … de Claude" → descartarlos. **Siguiente (a estudiar con Paco):** diagnóstico automático de cada caso
+  por una sesión de Claude Code que prepara el arreglo en rama aparte → Paco solo valida (Aprobar/Rechazar).
   **Fase 3:** avisar al que reportó cuando se arregla, "Mejorado gracias a vosotros", insignia de tester.
 
 - **Borrar mi cuenta (26 sept 2026) — DESPLEGADO, pendiente de probar con una cuenta real.**
