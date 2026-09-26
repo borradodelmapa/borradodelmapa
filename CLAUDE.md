@@ -1388,7 +1388,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   (uid SIEMPRE del token, nunca del cuerpo) → `deleteUserCompletely()`, el MISMO borrado del
   panel admin (extraído tal cual de `/admin/user-action`, que ahora lo llama también → volver
   a probar el borrado del panel). Registro en KV `accountdelete:*` (1 año). Sin APIs de pago.
-  **Worker Version ID: `fdaa39ef-b6c5-474b-83cf-237a25c3f87a`** (limpia también la caché de Explorar) · `app.js?v=178`. Requisito
+  **Worker Version ID: `4a01f76d-f1d2-4ea0-b0ac-7167e85da1c2`** (limpia también la caché de Explorar y quita el autor —"Un viajero", sin uid— de las copias que otros guardaron de sus rutas: `anonymizeSavedCopies`) · `app.js?v=178`. Requisito
   RGPD + Google Play. Prueba: cuenta de prueba → guardar una ruta → borrarla → comprobar en el
   panel admin que no queda nada.
 
