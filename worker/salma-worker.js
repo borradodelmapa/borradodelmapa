@@ -9376,7 +9376,7 @@ export default {
             origen: g.origen || 'usuario', detalle: g.detalle || '', estado_at: g.estado_at || '',
             diagnostico: g.diagnostico || null, diagnostico_at: g.diagnostico_at || '',
             area: g.area || fbAreaDefault(g.tipo, g.zona), decision: g.decision || '', comentarios: g.comentarios || [],
-            lock: g.lock || null, confirmado_auto: g.confirmado_auto || '',
+            lock: g.lock || null, confirmado_auto: g.confirmado_auto || '', modelo: g.modelo || '', modelo_por: g.modelo_por || '',
           }));
           return new Response(JSON.stringify({ groups }), { headers: corsH });
         }
@@ -9401,6 +9401,12 @@ export default {
             upd.diagnostico_at = _fS(new Date().toISOString());
           }
           if (b.decision !== undefined) upd.decision = _fS(String(b.decision).slice(0, 400));
+          // Modelo recomendado para trabajar el caso (sonnet = mecánico/barato, opus = diagnosticar/diseñar); '' lo quita
+          if (b.modelo !== undefined) {
+            if (b.modelo && !['sonnet', 'opus'].includes(b.modelo)) return new Response(JSON.stringify({ error: 'modelo no válido (sonnet|opus)' }), { status: 400, headers: corsH });
+            upd.modelo = _fS(b.modelo || '');
+            upd.modelo_por = _fS(String(b.modelo_por || '').slice(0, 200));
+          }
           // Candado de sesión (CLAUDE.md §1): una sesión de Claude coge el caso → ninguna otra lo toca. '' lo suelta.
           if (b.lock !== undefined) {
             upd.lock = b.lock ? { mapValue: { fields: { sesion: _fS(String(b.lock).slice(0, 80)), at: _fS(new Date().toISOString()) } } } : { nullValue: null };
@@ -9437,6 +9443,7 @@ export default {
             titulo: _fS(titulo.slice(0, 120)), tipo: _fS(tipo), zona: _fS(zona), gravedad: _fS(gravedad), estado: _fS(estado),
             origen: _fS(String(b.origen || 'pendiente').slice(0, 20)), count: _fI(0),
             area: _fS(FB_AREAS.includes(b.area) ? b.area : fbAreaDefault(tipo, zona)), decision: _fS(String(b.decision || '').slice(0, 400)),
+            modelo: _fS(['sonnet', 'opus'].includes(b.modelo) ? b.modelo : ''), modelo_por: _fS(String(b.modelo_por || '').slice(0, 200)),
             first_at: { timestampValue: nowIso }, last_at: { timestampValue: nowIso }, estado_at: _fS(nowIso),
             items: _fA([]), reporters: _fA([]), recent: _fA([]),
             ejemplo: _fS(String(b.ejemplo || '').slice(0, 1500)), nota_paco: _fS(String(b.nota || '').slice(0, 2000)), alerted_at: _fS(''),

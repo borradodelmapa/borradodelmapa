@@ -19,7 +19,13 @@
 //   node scripts/casos.cjs area <id> <area>                  fallos|salma|ux|dev|seguridad|costes|negocio|legal
 //   node scripts/casos.cjs decision <id> "pregunta"          lo convierte en decisión de Paco ("" la quita)
 //   node scripts/casos.cjs version "qué se subió" [ids...]   apunta una subida a producción (Worker + commit solos)
+//   node scripts/casos.cjs modelo <id> <sonnet|opus> "por qué"   modelo recomendado para trabajar el caso (Paco lo ve en el panel)
 //
+// Criterio de modelo (26 sept 2026, para ahorrar sin perder calidad): SONNET = trabajo mecánico o ya
+// decidido (mover textos, subir algo aprobado, cambios pequeños y claros, probar, ordenar). OPUS =
+// diagnosticar un fallo con causa desconocida, diseñar, tocar el prompt de Salma, seguridad, pagos,
+// cualquier cosa con riesgo de romper producción. Ante la duda, Opus para diagnosticar y Sonnet para ejecutar.
+// Al crear o diagnosticar un caso, poner siempre su `modelo`.
 // Flujo de un caso (ver CLAUDE.md, "Mejora Salma"): `hoy` → `coger` → leer → diagnosticar → preparar el
 // arreglo en la copia (worktree) → `diagnostico` + `estado propuesta` (suelta el candado) → enseñar a
 // Paco → con su OK subir → `version "…" <id>` + `estado comprobando` (a las 48 h sin avisos pasa solo a
@@ -57,14 +63,14 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
     const sel = groups.filter(g => f === 'todos' ? true : f === 'abiertos' ? !['arreglado', 'descartado'].includes(g.estado) : g.estado === f)
       .sort((x, y) => (GRAV[x.gravedad] - GRAV[y.gravedad]) || (y.count - x.count));
     for (const g of sel) {
-      console.log(`${g.id.padEnd(16)} ${String(g.gravedad).padEnd(8)} ${String(g.estado).padEnd(12)} ${String(g.tipo).padEnd(12)} ${String(g.zona).padEnd(9)} ${String(g.count).padStart(3)}× ${g.titulo}${g.diagnostico ? '  [diagnosticado]' : ''}`);
+      console.log(`${g.id.padEnd(16)} ${String(g.gravedad).padEnd(8)} ${String(g.estado).padEnd(12)} ${String(g.tipo).padEnd(12)} ${String(g.zona).padEnd(9)} ${String(g.count).padStart(3)}× ${g.titulo}${g.diagnostico ? '  [diagnosticado]' : ''}${g.modelo ? '  [' + g.modelo + ']' : ''}`);
     }
     console.log(`\n${sel.length} casos (${f}) de ${groups.length}`);
   } else if (cmd === 'ver') {
     const { groups } = await call('/admin/feedback-groups');
     const g = groups.find(x => x.id === a1);
     if (!g) throw new Error('No existe el caso ' + a1);
-    console.log(`CASO ${g.id} — ${g.titulo}\n${g.tipo} · ${g.zona} · ${g.gravedad} · estado ${g.estado} (${fecha(g.estado_at)}) · origen ${g.origen}`);
+    console.log(`CASO ${g.id} — ${g.titulo}\n${g.tipo} · ${g.zona} · ${g.gravedad} · estado ${g.estado} (${fecha(g.estado_at)}) · origen ${g.origen} · área ${g.area}${g.modelo ? ' · hacer con ' + g.modelo + (g.modelo_por ? ' (' + g.modelo_por + ')' : '') : ''}`);
     console.log(`${g.count} avisos · ${g.reporters} personas · primero ${fecha(g.first_at)} · último ${fecha(g.last_at)}${g.reabierto_at ? ' · REABIERTO ' + fecha(g.reabierto_at) : ''}`);
     if (g.nota) console.log('\nNOTA:\n' + g.nota);
     if (g.ejemplo) console.log('\nEJEMPLO:\n' + g.ejemplo);
@@ -129,6 +135,9 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
   } else if (cmd === 'decision') {
     await call('/admin/feedback-group', { id: a1, decision: a2 || '' });
     console.log(a2 ? 'Decisión apuntada en ' + a1 : 'Decisión quitada de ' + a1);
+  } else if (cmd === 'modelo') {
+    await call('/admin/feedback-group', { id: a1, modelo: a2 || '', modelo_por: process.argv[5] || '' });
+    console.log(a1 + ' → hacer con ' + (a2 || '(sin recomendar)'));
   } else if (cmd === 'version') {
     const { execSync } = require('child_process');
     let commit = '', worker = '', front = '';
