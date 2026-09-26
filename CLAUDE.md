@@ -1387,7 +1387,7 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 
 ### 🟡 Importante
 
-- **Mejora Salma — Fase 1 (26 sept 2026) — SUBIDA, pendiente de confirmar en pantalla.** "Todo el mundo es
+- **Mejora Salma — Fase 1 (26 sept 2026) — CONFIRMADA EN PANTALLA por Paco ("funciona, llega a la admin").** "Todo el mundo es
   tester" (Paco). Botón fijo "✦ Mejora Salma" arriba (chat, Explorar/Mis viajes, Perfil) + tarjeta arriba en
   Ayuda (🐞 Algo no va · 💡 Tengo una idea · ❤️ Me ha encantado); 👍/👎 bajo cada respuesta de Salma
   (`salma.js:_addRateBar`) y al final de cada ruta (`mapa-itinerario.js`, `.itin-rate`); "⚑ ¿Nos avisas?"
@@ -1398,8 +1398,15 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   menos 👍/automáticos, WhatsApp solo formulario. **Premium por fallo confirmado: a mano** (panel admin →
   Añadir Premium; solo con cuenta). Sin APIs de pago. **Worker `3fd56511-002a-4a8b-bafc-3bbd2a04cd01`**,
   `app.js?v=180`, `salma.js?v=113`, `mapa-itinerario.js?v=81`, `debug-panel.js?v=17`, `styles.css?v=150`.
-  **Siguiente (Fase 2):** clasificación automática (GPT-4o-mini/Haiku ~0,001 €/mensaje — avisar §8),
-  agrupar repetidos, aviso inmediato solo de lo urgente + resumen semanal, estados en el panel.
+  **Fase 2 — SUBIDA 26 sept, pendiente de confirmar en pantalla.** Cada mensaje (menos 👍) se clasifica al
+  llegar con GPT-4o-mini (`classifyFeedback`: tipo/zona/gravedad/resumen; los avisos automáticos por regla, sin IA)
+  y se mete en un CASO (`feedback_groups`, estados nuevo/visto/en_marcha/arreglado/descartado). Coste medido:
+  ~500 tokens ≈ 0,0001-0,0003 $/mensaje (§8, avisado). Avisos inmediatos (WhatsApp+email) SOLO si es urgente o 3
+  avisos del mismo caso en 24 h (máx 1/caso/día); email por mensaje solo del formulario; WhatsApp por mensaje
+  QUITADO. Resumen diario por email en el cron de las 6:00 UTC (`feedbackDigest`, sin IA). Panel admin
+  (`salma-admin`, `be83009`): Feedback → "Mejora Salma" con vistas Casos / Mensajes y "Clasificar pendientes".
+  **Worker `2223fc07-614d-4823-8d9d-773a888ee9e2`.** Probado de punta a punta con un 👎 "PRUEBA de Claude"
+  (descartarlo en el panel). Siguiente: errores automáticos (navegador + Worker) → diagnóstico → Paco valida.
   **Fase 3:** avisar al que reportó cuando se arregla, "Mejorado gracias a vosotros", insignia de tester.
 
 - **Borrar mi cuenta (26 sept 2026) — DESPLEGADO, pendiente de probar con una cuenta real.**
