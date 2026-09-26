@@ -1322,7 +1322,7 @@ async function deleteUserCompletely(env, uid) {
     // paso va en su propio try/catch — un fallo puntual no aborta el resto, y todo
     // queda contado en el log para poder revisar a mano si algo no se borró.
     const errors = [];
-    const counts = { subcollections: 0, public_guides: 0, shared_routes: 0, whatsapp_sessions: 0, r2_files: 0 };
+    const counts = { subcollections: 0, public_guides: 0, shared_routes: 0, whatsapp_sessions: 0, r2_files: 0, copias_anonimizadas: 0 };
     const SUBCOLLECTIONS = ['maps', 'fotos', 'albumes', 'notas', 'pins', 'map_pins', 'travel_docs', 'paises', 'flight_watches'];
     const slugs = [], mapIds = [];
     for (const col of SUBCOLLECTIONS) {
@@ -1351,6 +1351,10 @@ async function deleteUserCompletely(env, uid) {
         }
       } catch (e) { errors.push('public_guides/' + slug + ': ' + e.message); }
     }
+    // Copias que OTROS usuarios guardaron de sus rutas (Explorar → Guardar): se quedan en la
+    // cuenta de quien las guardó (son suyas), pero sin el nombre ni el uid del autor borrado.
+    try { counts.copias_anonimizadas = await anonymizeSavedCopies(env, uid); }
+    catch (e) { errors.push('copias de otros: ' + e.message); }
     for (const mapId of mapIds) {
       try {
         if (await firestoreAdminGet(env, 'shared_routes/' + mapId)) {
@@ -1411,6 +1415,58 @@ async function deleteUserCompletely(env, uid) {
       }
     } catch (e) { errors.push('Authentication: ' + e.message); }
   return { deleted: true, counts, errors: errors.length ? errors : undefined };
+}
+
+// Quita el autor de las copias de sus rutas que otros usuarios guardaron (26 sept 2026,
+// al borrar una cuenta — RGPD). Esas copias viven en users/{otro}/maps/{id} con
+// saved_from: { slug, uid, autor }. Se dejan en la cuenta del otro, pero con
+// autor "Un viajero" y sin uid. Devuelve cuántas se han cambiado.
+// Búsqueda: primero en todas las cuentas a la vez (collection group); si Firestore no
+// tiene ese índice creado (FAILED_PRECONDITION), cuenta por cuenta — con los usuarios
+// de ahora son pocas lecturas; si crecen mucho, crear el índice de grupo de colección
+// "maps · saved_from.uid" en la consola de Firebase y ya irá por el camino rápido.
+async function anonymizeSavedCopies(env, uid) {
+  const token = await getServiceAccountToken(env);
+  const H = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+  const where = { fieldFilter: { field: { fieldPath: 'saved_from.uid' }, op: 'EQUAL', value: { stringValue: uid } } };
+  const found = [];   // { path, fields }
+  const collect = rows => (rows || []).filter(r => r.document).forEach(r => found.push({
+    path: r.document.name.split('/documents/')[1], fields: r.document.fields || {},
+  }));
+  let r = await fetch(`${FIRESTORE_BASE}:runQuery`, {
+    method: 'POST', headers: H, signal: AbortSignal.timeout(15000),
+    body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'maps', allDescendants: true }], where, limit: 2000 } }),
+  });
+  if (r.ok) {
+    collect(await r.json());
+  } else {
+    // Sin índice de grupo: recorrer las cuentas (paginado de 300 en 300)
+    let pageToken = '';
+    do {
+      const lr = await fetch(`${FIRESTORE_BASE}/users?pageSize=300&mask.fieldPaths=createdAt${pageToken ? '&pageToken=' + encodeURIComponent(pageToken) : ''}`, { headers: H, signal: AbortSignal.timeout(15000) });
+      if (!lr.ok) throw new Error('listar users → ' + lr.status);
+      const lj = await lr.json();
+      for (const d of (lj.documents || [])) {
+        const other = d.name.split('/').pop();
+        if (other === uid) continue;
+        const qr = await fetch(`${FIRESTORE_BASE}/users/${encodeURIComponent(other)}:runQuery`, {
+          method: 'POST', headers: H, signal: AbortSignal.timeout(10000),
+          body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'maps' }], where, limit: 500 } }),
+        });
+        if (qr.ok) collect(await qr.json());
+      }
+      pageToken = lj.nextPageToken || '';
+    } while (pageToken);
+  }
+  let n = 0;
+  for (const c of found) {
+    const sf = (c.fields.saved_from && c.fields.saved_from.mapValue && c.fields.saved_from.mapValue.fields) || {};
+    const fields = Object.assign({}, sf, { uid: { stringValue: '' }, autor: { stringValue: 'Un viajero' } });
+    const safePath = c.path.split('/').map(encodeURIComponent).join('/');
+    await firestoreAdminPatch(env, safePath, { saved_from: { mapValue: { fields } } });
+    n++;
+  }
+  return n;
 }
 
 async function firestoreAdminListSubcollection(env, parentPath, collectionId) {
