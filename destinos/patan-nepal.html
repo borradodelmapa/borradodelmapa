@@ -36,21 +36,11 @@
   const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
   if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   </script>
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/destinos.css">
-  <!-- GA4 solo tras consentimiento (P1-6) -->
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}function loadGA4(){if(document.getElementById("ga4-script"))return;var s=document.createElement("script");s.id="ga4-script";s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ";document.head.appendChild(s);gtag("js",new Date());gtag("config","G-B2YWQKPTZZ");}if(localStorage.getItem("cookie_consent")==="all")loadGA4();</script>
+  <link rel="stylesheet" href="/styles.css?v=144">
+  <link rel="stylesheet" href="/destinos.css?v=2">
+  <script src="/country-utils.js"></script>
 </head>
 <body class="destino-page">
-
-  <!-- HEADER -->
-  <header class="app-header">
-    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
-    <div class="app-header-actions" id="header-actions">
-      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
-      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
-    </div>
-  </header>
 
   <!-- NAV BREADCRUMB -->
   <nav class="destino-nav-bar">
@@ -59,12 +49,29 @@
     <a href="/destinos/nepal.html" class="destino-nav-link">Nepal</a>
   </nav>
 
+  <!-- RELOJ — hora real del destino, gratis (Intl, sin llamar a ninguna API).
+       Mismo lenguaje visual que el reloj del index de la app (.chat-empty/.ce-sky-date). -->
+  <div class="chat-empty destino-clock-wrap">
+    <div class="ce-top"><a class="ce-brand" href="/">✦ BORRADO<span>DEL</span>MAPA</a></div>
+    <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
+    <div class="ce-sky-date" id="destino-clock">Nepal</div>
+  </div>
+  <script>
+  (function() {
+    var el = document.getElementById('destino-clock');
+    if (!el || typeof countryTimeString !== 'function') return;
+    function tick() { el.textContent = countryTimeString('NP'); }
+    tick();
+    setInterval(tick, 30000);
+  })();
+  </script>
+
   <!-- HERO -->
   <section class="destino-hero">
     <div class="destino-hero-nav">
       <a href="/destinos/langtang-nepal.html" class="destino-arrow destino-arrow-prev" title="Valle de Langtang">‹</a>
       <div class="destino-hero-center">
-        <span class="destino-badge">Histórico</span>
+        <span class="destino-badge">🏛️ Histórico</span>
         <h1 class="destino-title">Viajar a Patan (Lalitpur)</h1>
         <p class="destino-subtitle">Valle de Kathmandú, Lalitpur · Nepal</p>
       </div>
@@ -75,13 +82,15 @@
   <!-- CONTENT -->
   <main class="destino-content">
 
+    
+
     <!-- Descripción -->
     <p class="destino-desc">La más artística de las ciudades del valle, conocida como 'la ciudad de los artesanos'. Su Durbar Square tiene la mayor concentración de templos newar por metro cuadrado de Nepal. El Museo de Patan, instalado en el antiguo palacio real, es el mejor museo de arte budista e hindú del país.</p>
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
       <div class="destino-fact">
-        <span class="destino-fact-icon"></span>
+        <span class="destino-fact-icon">💰</span>
         <span class="destino-fact-label">PRESUPUESTO DIARIO</span>
         <span class="destino-fact-value">18-54€</span>
       </div>
@@ -105,7 +114,7 @@
     
     <!-- ITINERARIO COMPLETO -->
     <div class="destino-itinerary-static">
-  <h2 class="destino-h2">Itinerario completo</h2>
+  <h2 class="destino-h2">🗺️ Itinerario completo</h2>
   <details class="destino-acc-item">
     <summary class="destino-acc-header">Día 1 — Patan de punta a punta <span class="destino-day-stops">7 paradas</span></summary>
     <div class="destino-acc-body">
@@ -120,7 +129,7 @@
       <div class="destino-stop">
         <h4 class="destino-stop-name">Kumbheshwor Temple(Patan)</h4>
         <p class="destino-stop-desc">El único templo de cinco pisos que se conserva en Patan, dedicado a Shiva. Los patios interiores están llenos de estatuas antiguas y es uno de los pocos templos que los no hindúes pueden recorrer libremente por fuera.</p>
-        <span class="destino-stop-meta"> 1 km</span>
+        <span class="destino-stop-meta">📍 1 km</span>
       </div>
       <div class="destino-stop">
         <h4 class="destino-stop-name">Golden Temple Patan</h4>
@@ -129,7 +138,7 @@
       <div class="destino-stop">
         <h4 class="destino-stop-name">Mahabuddha Temple</h4>
         <p class="destino-stop-desc">El templo de los mil Budas: cubierto de terracota con la imagen de Buda repetida en cada centímetro de su superficie. Está metido en un patio estrecho del barrio artesano y hay que buscarlo a propósito, que es parte del encanto.</p>
-        <span class="destino-stop-meta"> 1 km</span>
+        <span class="destino-stop-meta">📍 1 km</span>
       </div>
       <div class="destino-stop">
         <h4 class="destino-stop-name">Rudra Varna Mahavihar , Oku Bahal</h4>
@@ -164,15 +173,15 @@
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
-        <summary class="destino-acc-header">Cómo llegar</summary>
+        <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Kathmandú: taxi 20-30 min, 4-7 EUR. Micro o bus local desde Ratna Park: 30-40 min, menos de 1 EUR.</p>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Patan (Lalitpur)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Dónde dormir</summary>
+        <summary class="destino-acc-header">🛏️ Dónde dormir</summary>
         <div class="destino-acc-body">
           <div class="destino-dormir-grid">
             <div class="destino-dormir-card">
@@ -188,12 +197,12 @@
               <p>Hyatt Regency o Dwarika's en Kathmandú a 20 min: 80-200 EUR/noche</p>
             </div>
           </div>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Patan (Lalitpur)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Qué hacer</summary>
+        <summary class="destino-acc-header">🎯 Qué hacer</summary>
         <div class="destino-acc-body">
           <ul class="destino-list">
           <li>Visitar el Museo de Patan en el Palacio Real de Durbar Square (entrada ~5 EUR, uno de los mejores del país)</li>
@@ -201,33 +210,33 @@
           <li>Explorar los patios (bahals) tradicionales newar escondidos en callejones, empezando por Hiranya Varna Mahavihar</li>
           <li>Comprar artesanía en bronce y thangkas directamente a artesanos en los talleres de Mangal Bazaar</li>
           </ul>
-          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Patan (Lalitpur)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
+          <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Dónde comer</summary>
+        <summary class="destino-acc-header">🍽️ Dónde comer</summary>
         <div class="destino-acc-body">
           <p>Más tranquilo que Kathmandú para comer bien. Newari food en restaurantes locales alrededor de Durbar Square: 3-6 EUR. Prueba el choila (carne especiada) y el bara (torta de lentejas).</p>
         </div>
       </details>
 
       <details class="destino-acc-item destino-highlight">
-        <summary class="destino-acc-header">Consejo local</summary>
+        <summary class="destino-acc-header">💡 Consejo local</summary>
         <div class="destino-acc-body">
           <p>La entrada a Patan Durbar Square está incluida con el ticket de Bhaktapur si vas el mismo día. Guarda el ticket de Bhaktapur para ahorrarte los ~10 EUR de entrada.</p>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Plan B si llueve</summary>
+        <summary class="destino-acc-header">🌧️ Plan B si llueve</summary>
         <div class="destino-acc-body">
           <p>El Museo de Patan cubre perfectamente una mañana lluviosa; tiene iluminación interior excelente y explicaciones en inglés muy completas.</p>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">Preguntas frecuentes</summary>
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
         <div class="destino-acc-body">
           
         <div class="destino-faq-item">
@@ -260,28 +269,19 @@
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
     </div>
 
-    <!-- SALMA INLINE CHAT -->
-    <section class="destino-salma-section">
+    <!-- SALMA — solo saludo como gancho, sin chat interactivo anónimo: para
+         seguir hablando con ella hace falta entrar (gratis), como en el resto
+         de la app. Nada de esto llama al Worker. -->
+    <a class="destino-salma-section" href="/?go=chat">
       <div class="destino-salma-header">
         <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
         <span class="destino-salma-title">Pregúntale a Salma sobre Patan (Lalitpur)</span>
       </div>
-      <div class="salma-chat-body" id="salma-chat-body">
+      <div class="salma-chat-body">
         <div class="salma-chat-bubble">¡Ey! Estás viendo Patan (Lalitpur). ¿En qué te ayudo?</div>
-        <div class="salma-chat-chips" id="salma-chat-chips">
-          <button class="salma-chip" data-msg="Consejos para viajar a Patan (Lalitpur)">Consejos Patan (Lalitpur)</button>
-          <button class="salma-chip" data-msg="Qué hacer en Patan (Lalitpur)">Qué hacer</button>
-          <button class="salma-chip" data-msg="Presupuesto para viajar a Patan (Lalitpur)">Presupuesto</button>
-          <button class="salma-chip" data-msg="Buscar vuelos a Patan (Lalitpur)">Vuelos</button>
-          <button class="salma-chip" data-msg="Hoteles en Patan (Lalitpur)">Hoteles</button>
-        </div>
       </div>
-      <div class="salma-chat-input-bar">
-        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Patan (Lalitpur)?|ruta por Nepal|¿dónde comer en Patan (Lalitpur)?|Patan (Lalitpur) en 1 días|presupuesto Nepal|¿es seguro viajar a Patan (Lalitpur)?|mejor época para Nepal">
-        <button class="salma-mic app-mic" id="salma-mic" type="button" aria-label="Hablar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="1" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
-        <button class="salma-chat-send" id="salma-chat-send">›</button>
-      </div>
-    </section>
+      <div class="destino-salma-cta">Seguir hablando con Salma <span>→</span></div>
+    </a>
 
   </main>
 
@@ -297,9 +297,32 @@
 
   <script>
   window.DESTINO = {"nombre":"Patan (Lalitpur)","pais":"Nepal","id":"patan","code":"np"};
-  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
   <script src="/destinos/destinos.js"></script>
-<style>.sbb{position:fixed;bottom:0;left:0;right:0;z-index:900;display:flex;justify-content:space-around;align-items:flex-start;background:rgba(12,10,6,.95);backdrop-filter:blur(12px);border-top:1px solid rgba(244,239,230,.08);padding:6px 0 env(safe-area-inset-bottom,6px);min-height:56px}.sbb a{display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(244,239,230,.4);font-size:10px;font-family:'SF Mono','Fira Code',monospace;letter-spacing:.05em;padding:4px 16px;text-decoration:none;transition:color .2s}.sbb a:hover{color:rgba(244,239,230,.7)}.sbb svg{stroke:currentColor}</style><nav class="sbb"><a href="/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a><a href="/?go=chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Salma</span></a><a href="/?go=rutas"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg><span>Mis Viajes</span></a><a href="/?go=profile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a></nav>
+
+  
+  <nav class="app-bottom-bar">
+    <a class="bottom-tab" href="/?go=ayuda">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Ayuda</span>
+    </a>
+    <a class="bottom-tab" href="/?go=explorar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>
+      <span>Explorar</span>
+    </a>
+    <div class="bottom-tab-fab-spacer" aria-hidden="true"></div>
+    <a class="bottom-tab" href="/?go=rutas">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
+      <span>Mis Viajes</span>
+    </a>
+    <a class="bottom-tab" href="/?go=profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Perfil</span>
+    </a>
+  </nav>
+  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Salma" title="Salma">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>
+  </a>
 </body>
 </html>

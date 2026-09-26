@@ -22,10 +22,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/destinos.css">
-  <!-- GA4 solo tras consentimiento (P1-6) -->
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}function loadGA4(){if(document.getElementById("ga4-script"))return;var s=document.createElement("script");s.id="ga4-script";s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ";document.head.appendChild(s);gtag("js",new Date());gtag("config","G-B2YWQKPTZZ");}if(localStorage.getItem("cookie_consent")==="all")loadGA4();</script>
+  <link rel="stylesheet" href="/styles.css?v=144">
+  <link rel="stylesheet" href="/destinos.css?v=2">
+  <script src="/country-utils.js"></script>
   
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -37,18 +36,25 @@
 </head>
 <body class="destino-page">
 
-  <header class="app-header">
-    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
-    <div class="app-header-actions" id="header-actions">
-      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
-      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
-    </div>
-  </header>
-
   <!-- NAV -->
   <nav class="destino-nav-bar">
     <a href="/destinos/" class="destino-nav-link">Destinos</a>
   </nav>
+
+  <div class="chat-empty destino-clock-wrap">
+    <div class="ce-top"><a class="ce-brand" href="/">✦ BORRADO<span>DEL</span>MAPA</a></div>
+    <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
+    <div class="ce-sky-date" id="destino-clock">Chad</div>
+  </div>
+  <script>
+  (function() {
+    var el = document.getElementById('destino-clock');
+    if (!el || typeof countryTimeString !== 'function') return;
+    function tick() { el.textContent = countryTimeString('TD'); }
+    tick();
+    setInterval(tick, 30000);
+  })();
+  </script>
 
   <section class="destino-hero">
     <h1 class="destino-title">Viajar a Chad</h1>
@@ -59,7 +65,7 @@
     <div class="destino-country-grid">
       
       <a href="/destinos/ndjamena-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Ciudad</div>
+        <div class="destino-country-card-badge">🏛️ Ciudad</div>
         <h3 class="destino-country-card-title">N'Djamena</h3>
         <p class="destino-country-card-desc">Capital y única ciudad con infraestructura turística mínima del país. Punto de entrada obligatorio para la mayoría de vi...</p>
         <div class="destino-country-card-meta">
@@ -68,7 +74,7 @@
         </div>
       </a>
       <a href="/destinos/lago-chad-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Naturaleza</div>
+        <div class="destino-country-card-badge">🌿 Naturaleza</div>
         <h3 class="destino-country-card-title">Lago Chad</h3>
         <p class="destino-country-card-desc">Uno de los lagos más grandes de África, aunque ha perdido más del 90% de su superficie desde los años 60 debido al cambi...</p>
         <div class="destino-country-card-meta">
@@ -77,7 +83,7 @@
         </div>
       </a>
       <a href="/destinos/tibesti-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Montaña</div>
+        <div class="destino-country-card-badge">⛰️ Montaña</div>
         <h3 class="destino-country-card-title">Macizo del Tibesti</h3>
         <p class="destino-country-card-desc">El techo del Sáhara: cordillera volcánica con el pico Emi Koussi (3.415 m), el punto más alto de África norte y el mayor...</p>
         <div class="destino-country-card-meta">
@@ -95,7 +101,7 @@
         </div>
       </a>
       <a href="/destinos/ennedi-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Naturaleza</div>
+        <div class="destino-country-card-badge">🌿 Naturaleza</div>
         <h3 class="destino-country-card-title">Macizo del Ennedi</h3>
         <p class="destino-country-card-desc">Patrimonio Mundial de la UNESCO desde 2016. Formaciones de arenisca rojiza esculpidas por millones de años de erosión, c...</p>
         <div class="destino-country-card-meta">
@@ -104,7 +110,7 @@
         </div>
       </a>
       <a href="/destinos/abeche-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Histórico</div>
+        <div class="destino-country-card-badge">🏛️ Histórico</div>
         <h3 class="destino-country-card-title">Abéché</h3>
         <p class="destino-country-card-desc">Antigua capital del Sultanato de Ouaddaï, uno de los reinos islámicos más poderosos de África central entre los siglos X...</p>
         <div class="destino-country-card-meta">
@@ -113,7 +119,7 @@
         </div>
       </a>
       <a href="/destinos/zakouma-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Naturaleza</div>
+        <div class="destino-country-card-badge">🌿 Naturaleza</div>
         <h3 class="destino-country-card-title">Parque Nacional de Zakouma</h3>
         <p class="destino-country-card-desc">Uno de los últimos refugios de fauna salvaje en África central. Después de décadas de furtivismo que casi exterminó los ...</p>
         <div class="destino-country-card-meta">
@@ -122,7 +128,7 @@
         </div>
       </a>
       <a href="/destinos/sarh-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Ciudad</div>
+        <div class="destino-country-card-badge">🏛️ Ciudad</div>
         <h3 class="destino-country-card-title">Sarh</h3>
         <p class="destino-country-card-desc">Segunda ciudad del sur del país, a orillas del río Chari. Ambiente más relajado y verde que la capital, con influencia d...</p>
         <div class="destino-country-card-meta">
@@ -131,7 +137,7 @@
         </div>
       </a>
       <a href="/destinos/moundou-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Ciudad</div>
+        <div class="destino-country-card-badge">🏛️ Ciudad</div>
         <h3 class="destino-country-card-title">Moundou</h3>
         <p class="destino-country-card-desc">Ciudad más poblada del sur del Chad y capital económica de la región algodonera. Conocida por la cervecería La Gala, la ...</p>
         <div class="destino-country-card-meta">
@@ -140,7 +146,7 @@
         </div>
       </a>
       <a href="/destinos/guera-mongo-chad.html" class="destino-country-card">
-        <div class="destino-country-card-badge">Montaña</div>
+        <div class="destino-country-card-badge">⛰️ Montaña</div>
         <h3 class="destino-country-card-title">Macizo del Guéra y Mongo</h3>
         <p class="destino-country-card-desc">El Macizo de Guéra es la única zona montañosa del Chad central, con colinas de granito redondeado que emergen abruptamen...</p>
         <div class="destino-country-card-meta">
@@ -156,26 +162,17 @@
       <div class="destino-community-grid" id="destino-community-grid"></div>
     </section>
 
-    <!-- SALMA INLINE -->
-    <section class="destino-salma-section">
+    <!-- SALMA — solo saludo como gancho (ver mismo criterio en buildHTML) -->
+    <a class="destino-salma-section" href="/?go=chat">
       <div class="destino-salma-header">
         <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
         <span class="destino-salma-title">Planifica tu viaje a Chad</span>
       </div>
-      <div class="salma-chat-body" id="salma-chat-body">
+      <div class="salma-chat-body">
         <div class="salma-chat-bubble">¡Ey! ¿Quieres viajar a Chad? Pregúntame lo que quieras.</div>
-        <div class="salma-chat-chips" id="salma-chat-chips">
-          <button class="salma-chip" data-msg="Qué ver en Chad">Qué ver</button>
-          <button class="salma-chip" data-msg="Presupuesto para Chad">Presupuesto</button>
-          <button class="salma-chip" data-msg="Vuelos a Chad">Vuelos</button>
-        </div>
       </div>
-      <div class="salma-chat-input-bar">
-        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="ruta por Chad|presupuesto Chad|mejor época Chad|¿es seguro Chad?">
-        <button class="salma-mic app-mic" id="salma-mic" type="button" aria-label="Hablar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="1" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
-        <button class="salma-chat-send" id="salma-chat-send">›</button>
-      </div>
-    </section>
+      <div class="destino-salma-cta">Seguir hablando con Salma <span>→</span></div>
+    </a>
   </main>
 
   <footer class="destino-footer">
@@ -187,12 +184,33 @@
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
 
+  
+  <nav class="app-bottom-bar">
+    <a class="bottom-tab" href="/?go=ayuda">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Ayuda</span>
+    </a>
+    <a class="bottom-tab" href="/?go=explorar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>
+      <span>Explorar</span>
+    </a>
+    <div class="bottom-tab-fab-spacer" aria-hidden="true"></div>
+    <a class="bottom-tab" href="/?go=rutas">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
+      <span>Mis Viajes</span>
+    </a>
+    <a class="bottom-tab" href="/?go=profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Perfil</span>
+    </a>
+  </nav>
+  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Salma" title="Salma">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>
+  </a>
   <script>
   window.DESTINO = {"nombre":"Chad","pais":"Chad","id":"td","code":"td"};
-  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
-  <script src="/guide-renderer.js"></script>
   <script src="/destinos/destinos.js"></script>
-<style>.sbb{position:fixed;bottom:0;left:0;right:0;z-index:900;display:flex;justify-content:space-around;align-items:flex-start;background:rgba(12,10,6,.95);backdrop-filter:blur(12px);border-top:1px solid rgba(244,239,230,.08);padding:6px 0 env(safe-area-inset-bottom,6px);min-height:56px}.sbb a{display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(244,239,230,.4);font-size:10px;font-family:'SF Mono','Fira Code',monospace;letter-spacing:.05em;padding:4px 16px;text-decoration:none;transition:color .2s}.sbb a:hover{color:rgba(244,239,230,.7)}.sbb svg{stroke:currentColor}</style><nav class="sbb"><a href="/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a><a href="/?go=chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Salma</span></a><a href="/?go=rutas"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg><span>Mis Viajes</span></a><a href="/?go=profile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a></nav>
 </body>
 </html>
