@@ -966,6 +966,18 @@ El Worker tiene `scheduled()` en `salma-worker.js` con 2 disparos automáticos, 
 
 ## Pendiente / Problemas conocidos
 
+> **🗂️ DESDE EL 26 SEPT 2026 LA LISTA VIVA DE PENDIENTES ES "CASOS"** (panel admin → Feedback → Mejora Salma
+> → Casos). Ahí están los fallos de usuarios, los errores 🤖 automáticos y TODOS los pendientes de abajo
+> pasados a casos (tipo "tarea"/"idea", origen "pendiente"). **Lo nuevo se apunta como caso, no aquí**:
+> `node scripts/casos.cjs crear <fichero.json>`. Lo de abajo queda como detalle técnico de referencia.
+> Cómo trabajar un caso (Paso A): `node scripts/casos.cjs lista` → `ver <id>` → diagnosticar y preparar el
+> arreglo en la copia (worktree + localhost:8090) → `diagnostico <id> <json>` (causa, archivos, riesgo,
+> coste, propuesta, prueba, rama) + `estado <id> propuesta` → enseñárselo a Paco en el chat → con su OK
+> subir con el protocolo → `estado <id> comprobando` (los fallos pasan solos a arreglado a las 48 h sin
+> avisos nuevos; si vuelven se reabren y avisan; las tareas las cierra Paco). Paco pide un caso con el
+> botón "🤖 Pedir a Claude" (copia "Mira el caso <id>: …"). La llave `api/cases-token.txt` (secreto
+> `CASES_TOKEN`) SOLO sirve para casos — nunca usar ni pedir `ADMIN_TOKEN` para esto.
+
 > **Este es el único archivo de pendientes del proyecto — no crear otro.** Recortado el
 > 25 sept 2026 (a petición de Paco: "RECORTA CLAUDE.MD") — el historial de sesiones,
 > bugs ya confirmados en pantalla y las investigaciones puntuales viven ahora en
@@ -1414,6 +1426,10 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   🤖 en el panel con "Detalle técnico". Un caso arreglado que vuelve se REABRE solo y avisa. Dos casos de prueba
   "PRUEBA … de Claude" → descartarlos. **Siguiente (a estudiar con Paco):** diagnóstico automático de cada caso
   por una sesión de Claude Code que prepara el arreglo en rama aparte → Paco solo valida (Aprobar/Rechazar).
+  **Paso A — SUBIDO 26 sept, Worker `1b5508a8-4daa-4f96-bfe1-80d2fcd43702`, panel `salma-admin`:** diagnóstico
+  dentro del caso, estados `propuesta`/`comprobando`, tipo `tarea`, `scripts/casos.cjs`, llave `CASES_TOKEN`
+  (solo casos). Los 31 pendientes de este archivo pasados a casos. Los 🤖 no entran en la agrupación por IA;
+  `/health` (503 a propósito) fuera de errores automáticos.
   **Fase 3:** avisar al que reportó cuando se arregla, "Mejorado gracias a vosotros", insignia de tester.
 
 - **Borrar mi cuenta (26 sept 2026) — DESPLEGADO, pendiente de probar con una cuenta real.**
