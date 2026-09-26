@@ -104,7 +104,15 @@
           return '<div class="pm-meter-row"><span class="pm-meter-name">' + esc(r[0]) + '</span>' +
             '<span class="pm-bar' + (pct >= 100 ? ' is-full' : '') + '"><i style="width:' + pct + '%"></i></span>' +
             '<span class="pm-meter-val">' + r[1] + '/' + r[2] + '</span></div>';
-        }).join('') + '</div>';
+        }).join('') +
+          // Guías extra (caso p-mui1yhp9ls1): las da recargar siendo ya Premium; se gastan tras el cupo del mes.
+          (usage.plan === 'premium' && usage.bonus_guides > 0
+            ? '<div class="pm-meter-row"><span class="pm-meter-name">Guías extra</span><span></span><span class="pm-meter-val">+' + usage.bonus_guides + '</span></div>'
+            : '') +
+          '</div>' +
+          (usage.plan === 'premium' && usage.bonus_per_payment
+            ? '<div class="pm-status-sub">Si recargas ahora: más meses y <b>' + usage.bonus_per_payment + ' guías extra</b> para cuando acabes las del mes.</div>'
+            : '');
       } else if (opts.loadUsage && !usageFailed) {
         meters = '<div class="pm-meters is-loading"><span class="pm-skel"></span><span class="pm-skel"></span><span class="pm-skel"></span></div>';
       }

@@ -13,10 +13,10 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null && request.auth.uid == userId
                     && !request.resource.data.keys().hasAny(
-                         ['premium_until', 'isPremium', 'coins_saldo', 'rutas_gratis_usadas']);
+                         ['premium_until', 'isPremium', 'coins_saldo', 'rutas_gratis_usadas', 'premium_bonus_guides']);
       allow update: if request.auth != null && request.auth.uid == userId
                     && !request.resource.data.diff(resource.data).affectedKeys().hasAny(
-                         ['premium_until', 'isPremium', 'coins_saldo', 'rutas_gratis_usadas']);
+                         ['premium_until', 'isPremium', 'coins_saldo', 'rutas_gratis_usadas', 'premium_bonus_guides']);
       allow delete: if request.auth != null && request.auth.uid == userId;
 
       match /{subcollection}/{docId} {
