@@ -119,6 +119,19 @@ const mapaItinerario = {
       }
     }
 
+    // Mejora Salma (26 sept 2026): ¿te sirve esta ruta? 👍/👎 al final — con 👎, motivo
+    // (lugar que no existe, mal ordenada...) y la ruta y sus paradas van con el aviso.
+    if (window.__dbg && typeof window.__dbg.rateBar === 'function') {
+      const rateWrap = document.createElement('div');
+      rateWrap.className = 'itin-rate';
+      rateWrap.appendChild(window.__dbg.rateBar('ruta', () => ({
+        route_id: String((typeof salma !== 'undefined' && salma.currentRouteId) || routeData.slug || routeData.id || ''),
+        route_title: String(routeData.title || routeData.name || ''),
+        stops: _allStops.map((st, k) => (k + 1) + '. ' + (st.name || st.headline || '') + (st.day ? ' (día ' + st.day + ')' : '')).join(' · '),
+      }), '¿Te sirve esta ruta?'));
+      this._container.appendChild(rateWrap);
+    }
+
     // Botón volver
     document.getElementById('itin-back-btn')?.addEventListener('click', () => {
       document.dispatchEvent(new CustomEvent('itin:close'));

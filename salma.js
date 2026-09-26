@@ -1576,6 +1576,7 @@ const salma = {
             // reintento, mismo patrón que el resto de fallos de "montar el mapa".
             if (typeof window._teardownItinView === 'function') window._teardownItinView();
             this._addSalmaBubble('La ruta se generó pero algo ha fallado al montar el mapa. Dale a "Reintentar" y lo vuelvo a montar.');
+            this._addReport('Fallo al montar el mapa');
             const _area = this._getChatArea();
             if (_area) {
               const _rw = document.createElement('div');
@@ -1713,6 +1714,7 @@ const salma = {
         // No dejar spinner colgado: avisar y ofrecer reintento.
         this._removeLoading();
         this._addSalmaBubble('Uf, se me ha atascado el mapa a mitad. El texto de arriba es la ruta que tenía pensada — dame a "Reintentar" y te la monto en condiciones.');
+        this._addReport('Mapa atascado a mitad');
         const _area = this._getChatArea();
         if (_area) {
           const _rw = document.createElement('div');
@@ -1733,6 +1735,7 @@ const salma = {
         // mismo source_text (no regenera nada, no duplica).
         this._removeLoading();
         this._addSalmaBubble(data.reply || 'No me ha salido montar el mapa. Dale otra vez y lo reintento.');
+        this._addReport('No salió el mapa (Crear ruta con mapa)');
         const _area = this._getChatArea();
         if (_area) {
           const _rw = document.createElement('div');
@@ -1833,6 +1836,7 @@ const salma = {
       this._removeStreamBubble();
       const errMsg = (e && e.message) ? e.message : String(e);
       this._addSalmaBubble('Uf, sin conexión o me he aturrullado. Vuelve a intentarlo.');
+      this._addReport('Sin conexión / error al responder');
     } finally {
       this._streaming = false;
       $send.disabled = false;
@@ -3206,6 +3210,7 @@ const salma = {
       <div class="msg-body-salma">${formatMessage(text)}</div>`;
     // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
     this._addMsgActions(div, text);
+    this._addRateBar(div, text);
     area.appendChild(div);
     this._scrollToBottom(true);
     // Enriquecer con fotos si es respuesta PLAN
@@ -3722,6 +3727,37 @@ const salma = {
 
   // ═══ FIN "QUIERO IR A..." renderers ═══
 
+  // Mejora Salma (26 sept 2026): 👍/👎 debajo de cada respuesta de Salma (salvo las
+  // muy cortas). Con 👎 salen motivos rápidos; se envía la pregunta y la respuesta
+  // para saber exactamente qué falló. Ver debug-panel.js (window.__dbg.rateBar).
+  _addRateBar(bubbleEl, rawText) {
+    if (!bubbleEl || !window.__dbg || typeof window.__dbg.rateBar !== 'function') return;
+    if (bubbleEl.querySelector('.mj-rate') || bubbleEl.dataset.noRate) return;
+    const text = String(rawText || '').trim();
+    if (text.length < 60) return;
+    const getCtx = () => {
+      let q = '';
+      let prev = bubbleEl.previousElementSibling;
+      while (prev && !prev.classList.contains('msg-user')) prev = prev.previousElementSibling;
+      if (prev) q = (prev.textContent || '').trim();
+      return { question: q, answer: text };
+    };
+    bubbleEl.appendChild(window.__dbg.rateBar('chat', getCtx));
+  },
+
+  // "¿Nos avisas?" cuando algo falla: en la última burbuja de Salma (o en un elemento
+  // dado), en lugar del 👍/👎. what = qué ha fallado, para el panel.
+  _addReport(what, targetEl) {
+    if (!window.__dbg || typeof window.__dbg.reportButton !== 'function') return;
+    const area = this._getChatArea();
+    const el = targetEl || (area && [...area.querySelectorAll('.msg-salma')].pop());
+    if (!el || el.querySelector('.mj-report')) return;
+    el.dataset.noRate = '1';
+    el.querySelector('.mj-rate')?.remove();
+    const q = this._lastMsg || '';
+    el.appendChild(window.__dbg.reportButton(what, () => ({ question: String(q).slice(0, 1000) })));
+  },
+
   // Barra de acciones en burbujas largas de Salma: Copiar, Compartir, Escuchar, Guardar nota
   _addMsgActions(bubbleEl, rawText) {
     if (!bubbleEl || !rawText) return;
@@ -3983,6 +4019,7 @@ const salma = {
       const rawText = bodyEl?.dataset.raw || bodyEl?.textContent || '';
       // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
       this._addMsgActions(el, rawText);
+      this._addRateBar(el, rawText);
     }
     const txt = document.getElementById('salma-stream-text');
     if (txt) txt.removeAttribute('id');
@@ -4009,6 +4046,7 @@ const salma = {
         }
         // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
         this._addMsgActions(el, rawText);
+        this._addRateBar(el, rawText);
         // Enriquecer con fotos si es respuesta PLAN
         const bodyEl = txt || el.querySelector('.msg-body-salma');
         if (bodyEl && this._isPlanBubble(bodyEl)) {
@@ -4317,6 +4355,10 @@ const salma = {
         btn.textContent = '↩ Reintentar';
         btn.addEventListener('click', () => this._cancelAndRetry());
         body.appendChild(btn);
+        if (window.__dbg && typeof window.__dbg.reportButton === 'function') {
+          const _q = this._lastMsg || '';
+          body.appendChild(window.__dbg.reportButton('Salma tarda más de 18 s', () => ({ question: String(_q).slice(0, 1000) })));
+        }
         this._scrollToBottom(false);
       }, 18000);
     }

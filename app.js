@@ -64,15 +64,25 @@ function showState(state) {
       _area.insertAdjacentHTML('beforeend', `
         <div class="ayuda-actions">
           <button class="login-needed-btn" id="ayuda-ask">Pregúntale a Salma <span>→</span></button>
-          <button class="ayuda-fb" id="ayuda-fb">¿Algo no va o tienes una idea? Cuéntanoslo</button>
         </div>`);
       document.getElementById('ayuda-ask').addEventListener('click', () => {
         showState('chat');
         setTimeout(() => { const i = document.getElementById('salma-input') || $input; if (i) i.focus(); }, 150);
       });
-      document.getElementById('ayuda-fb').addEventListener('click', () => {
-        if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
-      });
+      // Mejora Salma (26 sept 2026): arriba del todo, no al final — todo el mundo es tester.
+      _area.insertAdjacentHTML('afterbegin', `
+        <div class="mejora-card">
+          <div class="mejora-card-t">Mejora Salma</div>
+          <p>Salma está creciendo y tú nos ayudas a mejorarla. Cuéntanos qué falla o qué se te ocurre: lo leemos todo. Si es un fallo y lo confirmamos, te regalamos <b>1 mes de Premium</b>.</p>
+          <div class="mejora-card-kinds">
+            <button type="button" data-k="panel_fallo"><span>🐞</span>Algo no va</button>
+            <button type="button" data-k="panel_idea"><span>💡</span>Tengo una idea</button>
+            <button type="button" data-k="panel_encanta"><span>❤️</span>Me ha encantado</button>
+          </div>
+        </div>`);
+      _area.querySelectorAll('.mejora-card-kinds button').forEach(b => b.addEventListener('click', () => {
+        if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open({ kind: b.dataset.k });
+      }));
     }
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
@@ -179,6 +189,25 @@ function updateHeader() {
   updateBottomBar();
 }
 
+// Botón fijo "Mejora Salma" arriba a la derecha (26 sept 2026) — abre el formulario de
+// debug-panel.js. Solo en las pantallas principales; en el chat con conversación se
+// aparta a la izquierda de "Nueva" (#chat-fresh, ver styles.css).
+function _ensureMejoraBtn() {
+  let b = document.getElementById('mejora-btn');
+  if (!b) {
+    b = document.createElement('button');
+    b.id = 'mejora-btn';
+    b.type = 'button';
+    b.innerHTML = '<span aria-hidden="true">✦</span> Mejora Salma';
+    b.addEventListener('click', () => {
+      if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
+    });
+    document.body.appendChild(b);
+  }
+  // En Ayuda no: ahí ya está la tarjeta grande de Mejora Salma
+  b.style.display = ['chat', 'rutas', 'profile'].includes(currentState) ? '' : 'none';
+}
+
 // ⚠️ CLAUDE.md protocolo §9: si tocas este menú (pestañas, iconos, el "+"), replica
 // el mismo cambio en scripts/build-destinos.js (constante BOTTOM_NAV) y regenera al
 // menos un país de prueba — las 1.793 páginas de /destinos/ usan una copia estática
@@ -232,6 +261,7 @@ function updateBottomBar() {
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
+  _ensureMejoraBtn();
 
   // FAB "+" real, FUERA de la barra (position:fixed, sibling de #app-bottom-bar) —
   // .bottom-tab-fab-spacer de arriba solo reserva el hueco en el flex. Si estuviera

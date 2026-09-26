@@ -1387,6 +1387,21 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 
 ### 🟡 Importante
 
+- **Mejora Salma — Fase 1 (26 sept 2026) — SUBIDA, pendiente de confirmar en pantalla.** "Todo el mundo es
+  tester" (Paco). Botón fijo "✦ Mejora Salma" arriba (chat, Explorar/Mis viajes, Perfil) + tarjeta arriba en
+  Ayuda (🐞 Algo no va · 💡 Tengo una idea · ❤️ Me ha encantado); 👍/👎 bajo cada respuesta de Salma
+  (`salma.js:_addRateBar`) y al final de cada ruta (`mapa-itinerario.js`, `.itin-rate`); "⚑ ¿Nos avisas?"
+  en los fallos (`_addReport`: Reintentar a 18 s, mapa que no se monta, sin conexión); "idea:" por WhatsApp.
+  Todo en `debug-panel.js` (`window.__dbg.open/rateBar/reportButton/send`) → `POST /beta-feedback`, que ahora
+  acepta **sin cuenta** (30/h por IP, KV `fbrate:*`) y guarda `kind`/`reason`/`context`; los 👍 van a
+  `feedback_ratings`, lo demás a `beta_feedback` (pestaña Feedback del panel). Avisos a Paco: email en todo
+  menos 👍/automáticos, WhatsApp solo formulario. **Premium por fallo confirmado: a mano** (panel admin →
+  Añadir Premium; solo con cuenta). Sin APIs de pago. **Worker `3fd56511-002a-4a8b-bafc-3bbd2a04cd01`**,
+  `app.js?v=180`, `salma.js?v=113`, `mapa-itinerario.js?v=81`, `debug-panel.js?v=17`, `styles.css?v=150`.
+  **Siguiente (Fase 2):** clasificación automática (GPT-4o-mini/Haiku ~0,001 €/mensaje — avisar §8),
+  agrupar repetidos, aviso inmediato solo de lo urgente + resumen semanal, estados en el panel.
+  **Fase 3:** avisar al que reportó cuando se arregla, "Mejorado gracias a vosotros", insignia de tester.
+
 - **Borrar mi cuenta (26 sept 2026) — DESPLEGADO, pendiente de probar con una cuenta real.**
   Perfil → CUENTA → "Borrar mi cuenta" (escribir BORRAR) → Worker `POST /account/delete`
   (uid SIEMPRE del token, nunca del cuerpo) → `deleteUserCompletely()`, el MISMO borrado del
