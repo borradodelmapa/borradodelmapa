@@ -193,6 +193,10 @@ obligatorio.
   `build-destinos.js` — sin excepción, sin esperar a que Paco lo note en una captura.
 - **Ojo (26 sept 2026):** el menú de abajo vive en TRES sitios, no dos — también en
   `404.html` (`addBottomBar()`, página pública de guías). Tocar los tres a la vez.
+- **Y un cuarto (26 sept 2026):** blog (`blog/*.html`) y `legal.html` llevan copia de
+  `BOTTOM_NAV` y de la cabecera, con su estilo común en `paginas.css` (va después de
+  `styles.css`). Al tocar el menú, tocar también esas 14 páginas; al subir `styles.css`,
+  subir su `?v=` también en ellas.
 
 ### 10. POLÍTICA DE ACCESO: "MIRAR SÍ, USAR CON CUENTA" — IGUAL EN TODA LA WEB
 
