@@ -892,10 +892,11 @@ const PLAN_LIMITS = {
   premium: { guidesPerMonth: 4, editsPerMonth: 40, chatPerDay: 100 }, // PROVISIONAL
 };
 // Guías extra (caso p-mui1yhp9ls1, 26 sept 2026, opción A de Paco): quien YA es Premium y vuelve a
-// pagar recibe estas guías de más, que se gastan solo cuando ha agotado el cupo del mes y no caducan.
+// pagar recibe estas guías de más (según el plan que compra), que se gastan solo cuando ha agotado el cupo del mes y no caducan.
 // Viven en users/<uid>.premium_bonus_guides (Firestore: lo escribe solo el Worker; las reglas impiden
 // que el cliente lo toque). Antes, pagar otra vez solo sumaba meses: pagaba y seguía bloqueado.
-const PREMIUM_BONUS_GUIDES_PER_PAYMENT = 4;
+// 26 sept 2026 (Paco, opción B): 1 viaje → +1; planes largos → +4. Plan desconocido → +1 (lo prudente).
+const PREMIUM_BONUS_GUIDES_BY_PLAN = { '1viaje': 1, trimestral: 4, semestral: 4, anual: 4 };
 // Claude Sonnet 4.6, USD por millón de tokens — solo ESTIMACIÓN para medir coste, no es la factura.
 const CLAUDE_USD_PER_MTOK = { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 };
 
@@ -940,7 +941,7 @@ async function usageGate(env, authUser, kind) {
       if (used >= cap) {
         if (isGuide && (authUser.bonus_guides || 0) > 0) return { ok: true };
         return { ok: false, limit: kind, message: isGuide
-          ? 'Has llegado al límite de guías de este mes (' + cap + '). Se renueva el día 1, o recarga desde Perfil → Mi plan y te sumo ' + PREMIUM_BONUS_GUIDES_PER_PAYMENT + ' guías extra.'
+          ? 'Has llegado al límite de guías de este mes (' + cap + '). Se renueva el día 1, o recarga desde Perfil → Mi plan y te sumo guías extra.'
           : 'Has llegado al límite de cambios en guías de este mes (' + cap + '). Se renueva el día 1.' };
       }
       return { ok: true };
@@ -11614,7 +11615,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         until.setMonth(until.getMonth() + months);
         const untilIso = until.toISOString();
         const nowIso = new Date(now).toISOString();
-        // Ya era Premium al pagar → además de los meses, guías extra (ver PREMIUM_BONUS_GUIDES_PER_PAYMENT).
+        // Ya era Premium al pagar → además de los meses, guías extra (ver PREMIUM_BONUS_GUIDES_BY_PLAN).
         // Van en el MISMO patch que premium_until: cuando la app ve el pago confirmado, las guías ya están.
         const wasPremium = !!curStr && new Date(curStr).getTime() > now;
         const curBonus = parseInt((userDoc && userDoc.fields && userDoc.fields.premium_bonus_guides && userDoc.fields.premium_bonus_guides.integerValue) || '0', 10) || 0;
@@ -11624,7 +11625,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           premium_last_plan:  { stringValue: meta.plan || '' },
           premium_updated_at: { timestampValue: nowIso },
         };
-        if (wasPremium) userPatch.premium_bonus_guides = { integerValue: String(curBonus + PREMIUM_BONUS_GUIDES_PER_PAYMENT) };
+        if (wasPremium) userPatch.premium_bonus_guides = { integerValue: String(curBonus + (PREMIUM_BONUS_GUIDES_BY_PLAN[meta.plan] || 1)) };
 
         await firestoreAdminPatch(env, 'users/' + uid, userPatch);
 
@@ -11950,7 +11951,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           prices: PREMIUM_PLANS,
           today_msgs: (month.days && month.days[usageToday()]) || 0,
           bonus_guides: authUser.bonus_guides || 0,
-          bonus_per_payment: PREMIUM_BONUS_GUIDES_PER_PAYMENT,
+          bonus_by_plan: PREMIUM_BONUS_GUIDES_BY_PLAN,
           month, total,
         }), { headers: FW_CORS });
       } catch (e) {

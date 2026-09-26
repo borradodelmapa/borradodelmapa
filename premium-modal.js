@@ -110,8 +110,9 @@
             ? '<div class="pm-meter-row"><span class="pm-meter-name">Guías extra</span><span></span><span class="pm-meter-val">+' + usage.bonus_guides + '</span></div>'
             : '') +
           '</div>' +
-          (usage.plan === 'premium' && usage.bonus_per_payment
-            ? '<div class="pm-status-sub">Si recargas ahora: más meses y <b>' + usage.bonus_per_payment + ' guías extra</b> para cuando acabes las del mes.</div>'
+          (usage.plan === 'premium' && usage.bonus_by_plan
+            ? '<div class="pm-status-sub">Si recargas ahora: más meses y <b>guías extra</b> para cuando acabes las del mes (' +
+                (usage.bonus_by_plan['1viaje'] || 1) + ' con 1 viaje, ' + (usage.bonus_by_plan.anual || 4) + ' con los demás).</div>'
             : '');
       } else if (opts.loadUsage && !usageFailed) {
         meters = '<div class="pm-meters is-loading"><span class="pm-skel"></span><span class="pm-skel"></span><span class="pm-skel"></span></div>';
