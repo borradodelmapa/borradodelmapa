@@ -5096,7 +5096,16 @@ window.openWhatsAppLinkModal = openWhatsAppLinkModal;
 async function _verificarPagoPremium() {
   if (!currentUser) return;
   showToast('Verificando tu pago…');
-  const baselineMs = currentUser.premium_until ? new Date(currentUser.premium_until).getTime() : 0;
+  // Caso p-mui1yhp9ls1 (26 sept 2026): si el pago viene de chocar con un límite, comparar con la fecha
+  // guardada ANTES de ir a Stripe. La cargada al volver ya suele traer la nueva (el webhook llega antes
+  // que la página) → nunca veía el cambio, no retomaba la guía y decía "se activa en unos minutos".
+  let _puAntes;
+  try {
+    const _pend = JSON.parse(sessionStorage.getItem('bdm_pending_retry') || 'null');
+    if (_pend && 'pu' in _pend) _puAntes = _pend.pu;
+  } catch (_) {}
+  if (_puAntes === undefined) _puAntes = currentUser.premium_until;
+  const baselineMs = _puAntes ? new Date(_puAntes).getTime() : 0;
   const nowMs = Date.now();
 
   for (let i = 0; i < 8; i++) {

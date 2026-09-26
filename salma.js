@@ -1356,8 +1356,11 @@ const salma = {
   _offerSeePlans() {
     const area = this._getChatArea();
     try {
+      // pu: la fecha de Premium ANTES de pagar (caso p-mui1yhp9ls1). _verificarPagoPremium compara con
+      // esta y no con la que carga al volver de Stripe: el webhook suele llegar antes que la página.
       sessionStorage.setItem('bdm_pending_retry', JSON.stringify({
-        msg: this._lastMsg || '', extra: this._lastExtra || {}, at: Date.now()
+        msg: this._lastMsg || '', extra: this._lastExtra || {}, at: Date.now(),
+        pu: (window.currentUser && window.currentUser.premium_until) || null
       }));
     } catch (_) {}
     if (!area || typeof window.openCoinsModal !== 'function') return;
