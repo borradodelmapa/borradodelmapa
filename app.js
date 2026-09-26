@@ -30,6 +30,12 @@ setTimeout(hideSplash, 4000);
 
 // Estado global
 let currentUser = null;
+// Se cumple la primera vez que onAuthStateChanged deja currentUser listo (con sesión o
+// sin ella). Hasta entonces currentUser === null NO significa "sin sesión": la app aún
+// está reconociendo al usuario (bug real, 26 sept 2026: el botón de WhatsApp mandaba a
+// la pantalla de entrada a quien ya había entrado con Google si lo tocaba al cargar).
+let _authReadyResolve;
+const _authReady = new Promise((r) => { _authReadyResolve = r; });
 let currentState = 'chat'; // 'chat' | 'viajes' | 'profile' (welcome deprecado — ya no se usa)
 let currentUserSOSConfig = null;
 
@@ -4479,6 +4485,7 @@ auth.onAuthStateChanged(async (user) => {
       waPhone: userData.phone || userData.whatsapp_phone || '',
     };
     _refreshSalmaWaChip();
+    _authReadyResolve();
 
     currentUserSOSConfig = userData.sos_config || {
       contacts: [{ name: '', phone: '' }, { name: '', phone: '' }, { name: '', phone: '' }],
@@ -4599,6 +4606,7 @@ auth.onAuthStateChanged(async (user) => {
     // No hay sesión → mostrar gate obligatorio
     currentUser = null;
     _refreshSalmaWaChip();
+    _authReadyResolve();
     // Sin sesión no hay guía activa que enseñar: quitar la que se hubiera quedado en este
     // navegador (sesiones cerradas con versiones anteriores a app.js v=186, que no la
     // borraban al salir) y repintar la portada si ya la enseñaba. La de la cuenta sigue
@@ -5181,6 +5189,8 @@ async function _salmaWaCheckLinked() {
   return false;
 }
 async function _openSalmaWhatsApp() {
+  // Recién abierta la web puede que aún no se sepa si hay sesión: esperar (máx. 6 s).
+  if (!currentUser) await Promise.race([_authReady, new Promise((r) => setTimeout(r, 6000))]);
   if (!currentUser) { openModal(); return; }
   if (!currentUser.waPhone) await _salmaWaCheckLinked();
   if (!currentUser.waPhone) { _showSalmaWaLinkPrompt(); return; }
