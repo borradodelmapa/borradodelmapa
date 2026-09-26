@@ -4,15 +4,30 @@
     {
       "name": "Frontend (servidor estático)",
       "runtimeExecutable": "node",
-      "runtimeArgs": [".claude/serve.js"],
+      "runtimeArgs": [
+        ".claude/serve.js"
+      ],
       "port": 8080,
       "autoPort": true
     },
     {
       "name": "Salma Worker (wrangler dev)",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["wrangler", "dev", "--port", "8787"],
+      "runtimeArgs": [
+        "wrangler",
+        "dev",
+        "--port",
+        "8787"
+      ],
       "port": 8787
+    },
+    {
+      "name": "Propuesta UX (copia ux-preview)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/serve-preview.js"
+      ],
+      "port": 8090
     }
   ]
 }
