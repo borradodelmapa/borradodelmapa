@@ -1562,7 +1562,6 @@ ${openGroups.slice(0, 40).map(g => `${g.id} | ${g.zona} | ${g.titulo} | ${g.coun
 // Clasifica un mensaje de beta_feedback, lo mete en un caso y avisa si toca.
 // fb: { kind, reason, note, page, reporter }  (reporter = uid, contacto o email — para la Fase 3)
 async function classifyFeedback(env, docId, fb) {
-  const nowIso = new Date().toISOString();
   let c, fixedGroupId = null;
   if (fb.kind === 'up') return null;
   if (fb.kind === 'auto_error') {
@@ -1575,52 +1574,120 @@ async function classifyFeedback(env, docId, fb) {
     if (!c) return null;
   }
 
-  // Caso: existente o nuevo
   const gid = fixedGroupId || c.grupo_id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
-  const existing = await firestoreAdminGet(env, 'feedback_groups/' + gid);
-  const g = existing ? _fsDoc(existing) : null;
-  const reopen = g && (g.estado === 'arreglado' || g.estado === 'descartado');   // solo pasa con los automáticos (id fijo)
-  const since = Date.now() - 24 * 3600 * 1000;
-  const recent = ((g && g.recent) || []).filter(t => Date.parse(t) > since).concat(nowIso).slice(-30);
-  const gravRank = x => FB_GRAV.indexOf(x);
-  const grav = g && gravRank(g.gravedad) >= 0 && gravRank(g.gravedad) < gravRank(c.gravedad) ? g.gravedad : c.gravedad;
-  const reporters = Array.from(new Set(((g && g.reporters) || []).concat(fb.reporter ? [fb.reporter] : []))).slice(-100);
-  const fields = {
-    titulo: _fS(g ? g.titulo : c.titulo_grupo),
-    tipo: _fS(g ? g.tipo : c.tipo),
-    zona: _fS(g ? g.zona : c.zona),
-    gravedad: _fS(grav),
-    estado: _fS(!g || reopen ? 'nuevo' : g.estado),
-    count: _fI(((g && g.count) || 0) + 1),
-    first_at: { timestampValue: (g && g.first_at) || nowIso },
-    last_at: { timestampValue: nowIso },
-    items: _fA(((g && g.items) || []).concat(docId).slice(-50)),
-    reporters: _fA(reporters),
-    recent: _fA(recent),
-    ejemplo: _fS(String(fb.note || c.resumen || '').slice(0, 400)),
-    alerted_at: _fS((g && g.alerted_at) || ''),
-  };
-  if (reopen) fields.reabierto_at = _fS(nowIso);
-  await firestoreAdminPatch(env, 'feedback_groups/' + gid, fields);
+  await fbUpsertGroup(env, gid, {
+    titulo: c.titulo_grupo, tipo: c.tipo, zona: c.zona, gravedad: c.gravedad, origen: fb.kind === 'auto_error' ? 'boton' : 'usuario',
+    ejemplo: String(fb.note || c.resumen || ''), docId, reporter: fb.reporter,
+  });
   await firestoreAdminPatch(env, 'beta_feedback/' + docId, {
     ai_tipo: _fS(c.tipo), ai_zona: _fS(c.zona), ai_gravedad: _fS(c.gravedad), ai_resumen: _fS(c.resumen), group_id: _fS(gid),
   });
+  console.log('[MEJORA] ' + docId + ' → ' + c.tipo + '/' + c.zona + '/' + c.gravedad + ' caso ' + gid);
+  return { group_id: gid, ...c };
+}
 
-  // Aviso inmediato: urgente, o 3+ avisos del mismo caso en 24 h (como mucho 1 aviso por caso y día)
+// Crea o actualiza un CASO y avisa a Paco si toca (urgente, o 3+ avisos en 24 h; máx 1 aviso por
+// caso y día). Si el caso estaba arreglado/descartado y vuelve a llegar algo, se REABRE (estado
+// nuevo + reabierto_at) — así un arreglo que no funcionó se ve solo.
+// o: { titulo, tipo, zona, gravedad, origen ('usuario'|'boton'|'navegador'|'worker'), ejemplo, detalle?, docId?, reporter?, veces? }
+async function fbUpsertGroup(env, gid, o) {
+  const nowIso = new Date().toISOString();
+  const existing = await firestoreAdminGet(env, 'feedback_groups/' + gid);
+  const g = existing ? _fsDoc(existing) : null;
+  const reopen = g && (g.estado === 'arreglado' || g.estado === 'descartado');
+  const veces = Math.max(1, o.veces || 1);
+  const since = Date.now() - 24 * 3600 * 1000;
+  const recent = ((g && g.recent) || []).filter(t => Date.parse(t) > since).concat(Array(Math.min(veces, 10)).fill(nowIso)).slice(-30);
+  const gravRank = x => FB_GRAV.indexOf(x);
+  const grav = g && gravRank(g.gravedad) >= 0 && gravRank(g.gravedad) < gravRank(o.gravedad) ? g.gravedad : o.gravedad;
+  const reporters = Array.from(new Set(((g && g.reporters) || []).concat(o.reporter ? [o.reporter] : []))).slice(-100);
+  const fields = {
+    titulo: _fS(g ? g.titulo : o.titulo),
+    tipo: _fS(g ? g.tipo : o.tipo),
+    zona: _fS(g ? g.zona : o.zona),
+    gravedad: _fS(grav),
+    origen: _fS((g && g.origen) || o.origen || 'usuario'),
+    estado: _fS(!g || reopen ? 'nuevo' : g.estado),
+    count: _fI(((g && g.count) || 0) + veces),
+    first_at: { timestampValue: (g && g.first_at) || nowIso },
+    last_at: { timestampValue: nowIso },
+    items: _fA(((g && g.items) || []).concat(o.docId ? [o.docId] : []).slice(-50)),
+    reporters: _fA(reporters),
+    recent: _fA(recent),
+    ejemplo: _fS(String(o.ejemplo || '').slice(0, 600)),
+    alerted_at: _fS((g && g.alerted_at) || ''),
+  };
+  if (o.detalle) fields.detalle = _fS(String(o.detalle).slice(0, 6000));
+  if (reopen) fields.reabierto_at = _fS(nowIso);
+  await firestoreAdminPatch(env, 'feedback_groups/' + gid, fields);
+
   const lastAlert = Date.parse((g && g.alerted_at) || '') || 0;
-  const spike = recent.length >= 3;
-  if ((c.gravedad === 'urgente' || spike) && Date.now() - lastAlert > 24 * 3600 * 1000) {
-    const titulo = g ? g.titulo : c.titulo_grupo;
-    const txt = (c.gravedad === 'urgente' ? '🚨 Mejora Salma — URGENTE' : `📈 Mejora Salma — ${recent.length} avisos en 24 h`) +
-      `\n${titulo}\nZona: ${c.zona} · ${((g && g.count) || 0) + 1} avisos en total\n\nÚltimo: ${String(fb.note || c.resumen).slice(0, 600)}\n\nPanel → Feedback → Casos: https://admin.borradodelmapa.com`;
+  if ((o.gravedad === 'urgente' || recent.length >= 3) && Date.now() - lastAlert > 24 * 3600 * 1000) {
+    const titulo = g ? g.titulo : o.titulo;
+    const total = ((g && g.count) || 0) + veces;
+    const txt = (o.gravedad === 'urgente' ? '🚨 Mejora Salma — URGENTE' : `📈 Mejora Salma — ${recent.length} avisos en 24 h`) +
+      (reopen ? ' (REABIERTO: estaba marcado como arreglado)' : '') +
+      `\n${titulo}\nZona: ${fields.zona.stringValue} · ${total} avisos en total${o.origen === 'navegador' || o.origen === 'worker' ? ' · 🤖 error automático' : ''}\n\nÚltimo: ${String(o.ejemplo || '').slice(0, 600)}\n\nPanel → Feedback → Casos: https://admin.borradodelmapa.com`;
     await firestoreAdminPatch(env, 'feedback_groups/' + gid, { alerted_at: _fS(nowIso) });
     if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
       try { await sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, txt.slice(0, 1500)); } catch (_) {}
     }
     if (env.RESEND_API_KEY && env.PACO_EMAIL_TO) await sendFeedbackEmail(env, env.PACO_EMAIL_TO, txt.split('\n')[0] + ' — ' + titulo, txt);
   }
-  console.log('[MEJORA] ' + docId + ' → ' + c.tipo + '/' + c.zona + '/' + c.gravedad + ' caso ' + gid + (g ? '' : ' (nuevo)'));
-  return { group_id: gid, ...c };
+  return gid;
+}
+
+// ═══ ERRORES AUTOMÁTICOS (26 sept 2026) — "que se recojan solos, sin que nadie pulse nada" ═══
+// Del navegador (POST /client-error, debug-panel.js) y del propio Worker (respuestas 5xx,
+// excepciones, la IA del chat que no responde, mapas que no se montan). Se agrupan por HUELLA
+// (mismo error en el mismo sitio) en un caso de id fijo "err-<huella>", SIN IA → coste 0
+// (solo Firestore). Para no escribir 200 veces si algo se cae en cadena, dentro de la misma
+// instancia se juntan los repetidos de 30 s en una sola escritura.
+const _autoErrSeen = new Map();   // huella → { last, pending }
+function _fpHash(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+function _normErr(msg) {
+  return String(msg || '').replace(/https?:\/\/\S+/g, 'URL').replace(/[0-9a-f]{8,}/gi, 'ID').replace(/\d+/g, 'N').replace(/\s+/g, ' ').trim().slice(0, 160);
+}
+function _zonaDeFichero(file) {
+  const f = String(file || '').split('/').pop().split('?')[0];
+  if (/^salma\.js/.test(f)) return 'chat';
+  if (/^(mapa-|map-modal)/.test(f)) return 'mapa';
+  if (/^(guide-renderer|bitacora)/.test(f)) return 'rutas';
+  if (/^notas/.test(f)) return 'notas';
+  if (/^(docs-viajero|flight-watches|premium-modal)/.test(f)) return 'perfil';
+  return 'web';
+}
+function _zonaDePath(path) {
+  if (path === '/') return 'chat';
+  if (/^\/(photo|place-details|directions|nearby|roads|staticmap|enrich)/.test(path)) return 'rutas';
+  if (/^\/whatsapp|^\/wa-/.test(path)) return 'whatsapp';
+  if (/stripe|payment|premium/.test(path)) return 'pagos';
+  if (/^\/explorar/.test(path)) return 'explorar';
+  if (/^\/sos/.test(path)) return 'sos';
+  return 'web';
+}
+// e: { origen: 'navegador'|'worker', huella, titulo, zona, gravedad?, ejemplo, detalle, reporter? }
+async function recordAutoError(env, e) {
+  try {
+    const fp = _fpHash(e.huella);
+    const now = Date.now();
+    const seen = _autoErrSeen.get(fp);
+    if (seen && now - seen.last < 30000) { seen.pending++; return; }
+    const veces = 1 + (seen ? seen.pending : 0);
+    _autoErrSeen.set(fp, { last: now, pending: 0 });
+    if (_autoErrSeen.size > 500) _autoErrSeen.clear();
+    await fbUpsertGroup(env, 'err-' + fp, {
+      titulo: e.titulo, tipo: 'fallo', zona: e.zona || 'web', gravedad: e.gravedad || 'media', origen: e.origen,
+      ejemplo: e.ejemplo, detalle: e.detalle, reporter: e.reporter, veces,
+    });
+    console.log('[AUTO-ERROR] ' + e.origen + ' err-' + fp + ' ×' + veces + ' ' + String(e.titulo).slice(0, 100));
+  } catch (err) {
+    console.error('[AUTO-ERROR] no se pudo guardar: ' + err.message);
+  }
 }
 
 // Clasifica lo que se quedó sin clasificar (mensajes de antes de la Fase 2, o si la IA falló).
@@ -8331,7 +8398,42 @@ async function sendFeedbackEmail(env, to, subject, text) {
 }
 
 export default {
+  // Envoltorio (26 sept 2026, errores automáticos): toda petición pasa por aquí. Si el Worker
+  // responde 5xx o salta una excepción, se apunta como caso automático (sin IA) y, en vez del
+  // error 1101 de Cloudflare, se responde un JSON con CORS que la web sí sabe leer.
   async fetch(request, env, ctx) {
+    let res;
+    try {
+      res = await this._fetch(request, env, ctx);
+    } catch (e) {
+      const path = new URL(request.url).pathname;
+      ctx.waitUntil(recordAutoError(env, {
+        origen: 'worker', huella: 'wx|' + path + '|' + _normErr(e && e.message),
+        titulo: 'Excepción en el Worker (' + path + '): ' + String(e && e.message).slice(0, 80),
+        zona: _zonaDePath(path), gravedad: 'alta',
+        ejemplo: request.method + ' ' + path + ' → ' + String(e && e.message).slice(0, 300),
+        detalle: String((e && e.stack) || e).slice(0, 4000),
+      }));
+      return new Response(JSON.stringify({ error: 'worker_exception' }), { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+    }
+    try {
+      if (res && res.status >= 500 && request.method !== 'OPTIONS') {
+        const path = new URL(request.url).pathname;
+        let detail = '';
+        if ((res.headers.get('Content-Type') || '').includes('application/json')) { try { detail = (await res.clone().text()).slice(0, 400); } catch (_) {} }
+        ctx.waitUntil(recordAutoError(env, {
+          origen: 'worker', huella: 'w5|' + path + '|' + res.status + '|' + _normErr(detail).slice(0, 60),
+          titulo: 'El Worker falla en ' + path + ' (' + res.status + ')',
+          zona: _zonaDePath(path), gravedad: 'media',
+          ejemplo: request.method + ' ' + path + ' → ' + res.status + (detail ? '\n' + detail : ''),
+          detalle: request.method + ' ' + path + ' → ' + res.status + '\n' + detail,
+        }));
+      }
+    } catch (_) {}
+    return res;
+  },
+
+  async _fetch(request, env, ctx) {
     _gateEnv = env; // guardián de gasto en Google (ver TOPE DE GASTO PROPIO)
     // CORS
     if (request.method === 'OPTIONS') {
@@ -9140,6 +9242,40 @@ export default {
       }
     }
 
+    // ─── POST /client-error — errores de JavaScript del navegador de cualquier usuario ───
+    // (debug-panel.js los manda solos: máx 5 por visita, sin repetir). Sin sesión, sin IA.
+    // Límite 60/hora por IP para que nadie pueda llenarlo.
+    if (request.method === 'POST' && url.pathname === '/client-error') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      let b; try { b = await request.json(); } catch (_) { return new Response('{}', { status: 400, headers: corsH }); }
+      if (env.SALMA_KB) {
+        const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const rk = 'cerate:' + ip + ':' + new Date().toISOString().slice(0, 13);
+        const n = parseInt((await env.SALMA_KB.get(rk)) || '0', 10) || 0;
+        if (n >= 60) return new Response('{"ok":false}', { status: 429, headers: corsH });
+        ctx.waitUntil(env.SALMA_KB.put(rk, String(n + 1), { expirationTtl: 3700 }));
+      }
+      const msg = String(b.message || '').slice(0, 500);
+      const file = String(b.source || '').split('/').pop().split('?')[0].slice(0, 80);
+      if (!msg) return new Response('{"ok":false}', { status: 400, headers: corsH });
+      const zona = _zonaDeFichero(file);
+      ctx.waitUntil(recordAutoError(env, {
+        origen: 'navegador',
+        huella: 'js|' + file + '|' + _normErr(msg),
+        titulo: 'Error en la web' + (file ? ' (' + file + ')' : '') + ': ' + msg.slice(0, 80),
+        zona,
+        ejemplo: msg + (file ? '\n' + file + ':' + (b.line || '?') + ':' + (b.col || '?') : '') + '\nPantalla: ' + String(b.page || '').slice(0, 150),
+        detalle: [
+          'Mensaje: ' + msg, 'Fichero: ' + String(b.source || '').slice(0, 200) + ':' + (b.line || '?') + ':' + (b.col || '?'),
+          'Pantalla: ' + String(b.page || '').slice(0, 200), 'Versiones: ' + String(b.front_versions || '').slice(0, 600),
+          'Worker: ' + String(b.worker_version || ''), 'Navegador: ' + String(b.ua || '').slice(0, 250),
+          '', '— pila —', String(b.stack || '').slice(0, 2500), '', '— últimos logs —', String(b.logs || '').slice(-2500),
+        ].join('\n'),
+        reporter: String(b.uid || '').slice(0, 40),
+      }));
+      return new Response('{"ok":true}', { headers: corsH });
+    }
+
     // ─── Mejora Salma Fase 2: CASOS (feedback_groups) para el panel (solo admin) ───
     // GET  /admin/feedback-groups            → todos los casos, del más reciente al más viejo
     // POST /admin/feedback-group {id, estado?, nota?}  → cambiar estado / apuntar nota de Paco
@@ -9153,6 +9289,7 @@ export default {
             id: g.id, titulo: g.titulo, tipo: g.tipo, zona: g.zona, gravedad: g.gravedad, estado: g.estado,
             count: g.count || 0, first_at: g.first_at, last_at: g.last_at, items: g.items || [],
             reporters: (g.reporters || []).length, ejemplo: g.ejemplo || '', nota: g.nota_paco || '', reabierto_at: g.reabierto_at || '',
+            origen: g.origen || 'usuario', detalle: g.detalle || '',
           }));
           return new Response(JSON.stringify({ groups }), { headers: corsH });
         }
@@ -12759,6 +12896,7 @@ INSTRUCCIONES:
 
         if (_mapStageFailed) {
           if (_convertFailReason) console.log(`[T2-FAIL] ${_convertFailReason}`);
+          ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'map-stage|' + _normErr(_convertFailReason || 'sin motivo').slice(0, 60), titulo: 'Crear ruta con mapa no se montó: ' + String(_convertFailReason || 'sin motivo').slice(0, 70), zona: 'rutas', gravedad: 'alta', ejemplo: 'Tiempo 2 falló: ' + String(_convertFailReason || 'sin motivo'), detalle: String(_convertFailReason || '') }));
           _flushUsage(); // los tokens ya se gastaron aunque falle: se miden, pero NO consumen guía
           const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
@@ -12790,10 +12928,12 @@ INSTRUCCIONES:
                 }),
               });
             } catch (e) {
+              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
             if (!apiRes.ok) {
+              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -12846,10 +12986,12 @@ INSTRUCCIONES:
                 }),
               });
             } catch (e) {
+              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
             if (!apiRes.ok) {
+              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }

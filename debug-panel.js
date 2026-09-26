@@ -50,12 +50,51 @@
       (e.message || 'Error') +
       (e.filename ? ' @ ' + e.filename + ':' + e.lineno + ':' + e.colno : '')
     ]);
+    autoReport(e.message, e.filename, e.lineno, e.colno, e.error && e.error.stack);
   });
 
   window.addEventListener('unhandledrejection', (e) => {
     const r = e.reason;
     push('error', ['UnhandledRejection: ' + (r && (r.stack || r.message || r) || 'unknown')]);
+    const stack = (r && r.stack) || '';
+    const m = /\((https?:[^)\s]+):(\d+):(\d+)\)/.exec(stack) || /(https?:\S+):(\d+):(\d+)/.exec(stack);
+    autoReport('Promesa rechazada: ' + ((r && (r.message || r)) || 'unknown'), m ? m[1] : '', m ? m[2] : '', m ? m[3] : '', stack);
   });
+
+  // ═══ ERRORES AUTOMÁTICOS (26 sept 2026) ═══
+  // Cualquier error de JavaScript de la web se manda solo a POST /client-error (sin que el
+  // usuario pulse nada) → caso automático en el panel (Mejora Salma → Casos), agrupado por
+  // huella. Solo errores de nuestros ficheros; fuera ruido conocido (extensiones del navegador,
+  // cortes de red, "Script error." sin datos...). Máx. 5 por visita y sin repetir el mismo.
+  const AUTO_IGNORE = /Script error\.?$|ResizeObserver loop|extension:\/\/|Failed to fetch|NetworkError|Load failed|network error|AbortError|aborted|cancelled|popup-closed|popup_closed|Non-Error promise rejection|QuotaExceeded|The user denied|Permission denied|NotAllowedError/i;
+  const autoSent = new Set();
+  let autoCount = 0;
+  function autoReport(message, source, line, col, stack) {
+    try {
+      message = String(message || '').slice(0, 500);
+      if (!message || AUTO_IGNORE.test(message)) return;
+      const src = String(source || '');
+      const ours = !src || src.indexOf(location.origin) === 0 || /borradodelmapa/.test(src);
+      if (!ours && !(stack && String(stack).indexOf(location.origin) >= 0)) return;
+      const key = src.split('?')[0] + '|' + message.slice(0, 120);
+      if (autoSent.has(key) || autoCount >= 5) return;
+      autoSent.add(key); autoCount++;
+      if (!window.SALMA_API || !navigator.onLine) return;
+      const user = window.firebase && firebase.auth && firebase.auth().currentUser;
+      // Un poco de margen para que entren en los logs las líneas de justo después
+      setTimeout(() => {
+        fetch(window.SALMA_API + '/client-error', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+          body: JSON.stringify({
+            message, source: src.slice(0, 300), line: line || '', col: col || '', stack: String(stack || '').slice(0, 2500),
+            page: location.pathname + location.search, front_versions: frontVersions().join(' '),
+            worker_version: (workerVer && workerVer.version_short) || '', ua: navigator.userAgent,
+            uid: (user && user.uid) || '', logs: logs.slice(-40).map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n').slice(-3000),
+          }),
+        }).catch(() => {});
+      }, 1500);
+    } catch (_) {}
+  }
 
   // ═══ MARCADOR DE VERSIÓN ═══
   // Para que en la captura ya se vea qué versión del frontend y del Worker
