@@ -1384,6 +1384,9 @@ async function deleteUserCompletely(env, uid) {
     }
     if (env.SALMA_KB) {
       try {
+        // Caché del índice de Explorar (2 h): sin esto, las rutas de la cuenta borrada
+        // seguían saliendo en Explorar hasta que caducara (26 sept 2026).
+        await env.SALMA_KB.delete(EXPLORAR_KEY);
         await env.SALMA_KB.delete(usageTotalKey(uid));
         await env.SALMA_KB.delete('fw:' + uid);
         await env.SALMA_KB.delete('fw_alerts:' + uid);
