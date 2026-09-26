@@ -986,6 +986,11 @@ El Worker tiene `scheduled()` en `salma-worker.js` con 2 disparos automáticos, 
 > Paco qué hay y por dónde seguir · al trabajar un caso `coger` · AL SUBIR A PRODUCCIÓN `version "qué se subió"
 > <ids>` (registro de subidas, colección `deploys`) · AL TERMINAR dejar cada caso al día (`estado`/`comentar`).
 > Lo nuevo del proyecto (idea, tarea, riesgo, decisión) → caso con su área (`crear`), nunca una lista aquí.
+> **Modelo recomendado ("Hacer con", 26 sept 2026):** cada caso lleva `modelo` sonnet|opus (`casos.cjs modelo
+> <id> <m> "por qué"`), visible en el panel y en lo que copia "Pedir a Claude". Sonnet = mecánico o ya decidido;
+> Opus = diagnosticar causa desconocida, diseñar, prompt de Salma, seguridad, pagos, riesgo de romper producción.
+> Ponerlo SIEMPRE al crear o diagnosticar un caso. Si Paco abre una sesión con el modelo "caro" para un caso
+> marcado Sonnet (o al revés en uno delicado), decírselo al empezar.
 
 > **Este es el único archivo de pendientes del proyecto — no crear otro.** Recortado el
 > 25 sept 2026 (a petición de Paco: "RECORTA CLAUDE.MD") — el historial de sesiones,
