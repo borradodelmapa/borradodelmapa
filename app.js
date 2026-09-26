@@ -3814,6 +3814,8 @@ function openModal() {
   const screen = document.getElementById('auth-screen');
   if (!screen) return;
   screen.classList.add('active');
+  // Código de "Entrar con WhatsApp" pedido ya (solo móvil), para abrir WhatsApp al instante.
+  if (typeof window._waPrepLogin === 'function') { try { window._waPrepLogin(); } catch (_) {} }
   // La 1ª vez (al llegar) el botón es "Echar un vistazo sin cuenta"; si la portada se
   // abre desde dentro (un corte de registro, una ruta abierta detrás) es "Volver sin entrar".
   const _vb = document.getElementById('btn-vistazo-sin-login');
@@ -3967,20 +3969,55 @@ async function _setupWhatsAppStartButton() {
     _waDigits = (data.whatsapp_number || '').replace(/[^\d]/g, '');
     if (!_waDigits) return;
     btn.classList.remove('hidden');
-    btn.addEventListener('click', async (e) => {
+    // Móvil (26 sept 2026, Paco: la 1ª vez se abrió WhatsApp Web en vez de la app): el
+    // navegador solo pasa un enlace a la app de WhatsApp si se abre JUSTO en el toque.
+    // Antes se esperaba al Worker (/wa-qr-start) y después se abría — si tardaba, el
+    // "permiso" del toque caducaba y se quedaba en la web. Ahora el código se pide al
+    // abrirse la pantalla de entrada en el móvil (y, de respaldo, al EMPEZAR el toque:
+    // pointerdown/touchstart) — el Worker tarda más que un toque — y al soltar ya está:
+    // se abre sin esperar. Si aún no ha llegado, el botón pasa a "Abrir WhatsApp →" y el 2º toque (un toque
+    // nuevo, con su permiso) lo abre. Nunca se abre WhatsApp después de un await.
+    const isDesktop = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const _waHello = () => 'https://wa.me/' + _waDigits + '?text=' + encodeURIComponent('Hola Salma');
+    let _waPrep = null;   // { ts, url, promise } — código pedido por adelantado
+    const _prep = () => {
+      if (_waPrep && Date.now() - _waPrep.ts < 8 * 60 * 1000) return _waPrep;   // el código dura 10 min
+      const o = { ts: Date.now(), url: null, data: null };
+      // Sin conexión para pedir el código: al menos WhatsApp con el saludo de siempre
+      // (no se podrá auto-entrar, pero no bloquea) — igual que antes.
+      o.promise = _waLoginStart(false).then(d => { o.data = d; o.url = _waLoginBuildUrl(d); }).catch(() => { o.url = _waHello(); });
+      _waPrep = o;
+      return o;
+    };
+    const _labelNode = [...btn.childNodes].reverse().find(n => n.nodeType === 3 && n.textContent.trim());
+    const _labelOrig = _labelNode ? _labelNode.textContent : '';
+    const _setLabel = (t) => { if (_labelNode) _labelNode.textContent = t; };
+    const _early = () => { if (!isDesktop()) _prep(); };
+    // Lo llama openModal() al enseñar la pantalla de entrada (y aquí mismo si ya estaba
+    // abierta cuando llegó el número de WhatsApp).
+    window._waPrepLogin = _early;
+    const _scr = document.getElementById('auth-screen');
+    if (_scr && _scr.classList.contains('active')) _early();
+    btn.addEventListener('pointerdown', _early, { passive: true });
+    btn.addEventListener('touchstart', _early, { passive: true });
+    btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-      if (isDesktop) { _openWaQrLogin(); return; }
-      // Móvil: generar el código YA (antes de salir a WhatsApp) y guardarlo para
-      // recuperarlo al volver a esta pestaña.
-      try {
-        const d = await _waLoginStart();
-        location.href = _waLoginBuildUrl(d);
-      } catch (err) {
-        // sin conexión para pedir el código: al menos abre WhatsApp con el saludo de
-        // siempre, mejor que no hacer nada — no se podrá auto-entrar, pero no bloquea.
-        location.href = 'https://wa.me/' + _waDigits + '?text=' + encodeURIComponent('Hola Salma');
+      if (isDesktop()) { _openWaQrLogin(); return; }
+      const o = _prep();
+      if (o.url) {
+        _waPrep = null;          // un código por intento
+        if (o.data) _waLoginSavePending(o.data);   // para entrar sola al volver de WhatsApp
+        _setLabel(_labelOrig);
+        location.href = o.url;   // síncrono, dentro del toque
+        return;
       }
+      if (btn.dataset.waWaiting) return;
+      btn.dataset.waWaiting = '1';
+      _setLabel(' Preparando…');
+      o.promise.then(() => {
+        delete btn.dataset.waWaiting;
+        _setLabel(' Abrir WhatsApp →');
+      });
     });
   } catch (e) {
     // sin número no se muestra el botón — no bloquea el resto del login
@@ -3999,14 +4036,19 @@ function _loadQrLib() {
 
 // Pide un código nuevo al Worker y lo guarda en localStorage — lo usan tanto el QR del
 // ordenador como el redirect directo del móvil.
-async function _waLoginStart() {
+async function _waLoginStart(save = true) {
   const r = await fetch(window.SALMA_API + '/wa-qr-start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
   const d = await r.json();
   if (!r.ok || !d.code) throw new Error('wa-qr-start');
+  if (save) _waLoginSavePending(d);
+  return d;
+}
+// Solo cuando de verdad se sale a WhatsApp con ese código: si se guardara al pedirlo por
+// adelantado, _waLoginResume sondearía códigos que nadie ha usado.
+function _waLoginSavePending(d) {
   try {
     localStorage.setItem(WA_LOGIN_PENDING_KEY, JSON.stringify({ code: d.code, secret: d.secret, ts: Date.now() }));
   } catch (e) { /* localStorage bloqueado: sigue funcionando el QR/redirect, solo no se podrá reanudar al volver */ }
-  return d;
 }
 
 function _waLoginBuildUrl(d) {
@@ -4310,22 +4352,25 @@ async function _pullActiveRouteFromAccount() {
     const uid = currentUser.uid;
     const userDoc = await db.collection('users').doc(uid).get();
     const activeId = userDoc.exists ? userDoc.data().active_route_id : null;
-    if (!activeId) return;
+    if (!activeId) { console.log('[Salma] Guía activa: la cuenta no tiene ninguna apuntada'); return; }
     const mapDoc = await db.collection('users').doc(uid).collection('maps').doc(activeId).get();
-    if (!mapDoc.exists || !currentUser || currentUser.uid !== uid) return;
+    if (!mapDoc.exists) { console.log('[Salma] Guía activa: ' + activeId + ' ya no existe en la cuenta'); return; }
+    if (!currentUser || currentUser.uid !== uid) return;
     const d = mapDoc.data();
     let routeData = null;
     try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch (_) {}
-    if (!routeData || localStorage.getItem('bdm_live_active_route')) return;
+    if (!routeData) { console.log('[Salma] Guía activa: ' + activeId + ' sin datos de ruta'); return; }
+    if (localStorage.getItem('bdm_live_active_route')) return;
     localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData));
     localStorage.setItem('bdm_live_active_route_id', activeId);
+    console.log('[Salma] Guía activa recuperada de la cuenta: ' + (routeData.title || activeId));
     // Repintar la portada solo si está a la vista y vacía (no pisar una conversación).
     const area = document.getElementById('chat-area');
     if (currentState === 'chat' && area && !area.querySelector('.msg')) {
       area.innerHTML = '';
       _renderChatEmpty();
     }
-  } catch (_) {}
+  } catch (e) { console.warn('[Salma] Guía activa: no se pudo leer de la cuenta', e && e.message); }
 }
 
 function authErrorMsg(e) {
