@@ -1513,7 +1513,7 @@ async function anonymizeSavedCopies(env, uid) {
 // (medido: ~500-1.500 tokens de entrada según los casos abiertos + ~55 de salida ≈
 // 0,0001-0,0003 $). Los avisos automáticos y los 👍 NO llaman a la IA. 1.000 mensajes/mes ≈ 0,10-0,30 €. El resumen diario no usa IA.
 // propuesta = Claude dejó diagnóstico + arreglo preparado esperando el OK de Paco (Paso A, 26 sept 2026)
-// comprobando = subido; si en 48 h no vuelve a fallar pasa solo a arreglado (cron), si vuelve se reabre
+// comprobando = subido; lo cierra Paco al probarlo; un fallo sin avisos en 14 días se cierra solo (cron), si vuelve se reabre
 const FB_ESTADOS = ['nuevo', 'visto', 'en_marcha', 'propuesta', 'comprobando', 'arreglado', 'descartado'];
 const FB_ZONAS = ['rutas', 'chat', 'mapa', 'whatsapp', 'pagos', 'login', 'explorar', 'perfil', 'notas', 'sos', 'web', 'otro'];
 // tarea = pendiente interno (probar, decidir, construir) — los pendientes de CLAUDE.md pasados a casos
@@ -1754,17 +1754,19 @@ async function fbClassifyPending(env, max = 25) {
   return { pendientes: pending.length, clasificados: ok, fallidos: fail, quedan: Math.max(0, rows.filter(r => !r.ai_tipo).length - ok) };
 }
 
-// Casos "comprobando" (subido el arreglo) que llevan 48 h sin avisos nuevos → "arreglado" solos.
+// Casos "comprobando" (subido el arreglo): los cierra Paco al probarlos (Hoy → Probar → "✓ Funciona").
+// Red de seguridad: un FALLO que lleva 14 días sin avisos nuevos y sin probar → "arreglado" solo, con la
+// marca "sin probar". Antes eran 48 h: Paco no siempre tiene tiempo de probar tan rápido (26 sept 2026).
 // Si hubo avisos nuevos, fbUpsertGroup ya los habrá reabierto antes (estado nuevo).
 async function fbAutoConfirm(env) {
   const groups = await fbGroups(env, { limit: 300 });
-  const limit = Date.now() - 48 * 3600 * 1000;
+  const limit = Date.now() - 14 * 86400 * 1000;
   for (const g of groups) {
     if (g.estado !== 'comprobando' || g.tipo === 'tarea') continue;   // las tareas las cierra Paco al probarlas
     const since = Date.parse(g.estado_at || '') || 0;
     if (since && since < limit && (Date.parse(g.last_at || '') || 0) <= since) {
-      await firestoreAdminPatch(env, 'feedback_groups/' + g.id, { estado: _fS('arreglado'), estado_at: _fS(new Date().toISOString()), confirmado_auto: _fS('48 h sin avisos nuevos') });
-      console.log('[MEJORA] caso ' + g.id + ' confirmado arreglado (48 h sin avisos)');
+      await firestoreAdminPatch(env, 'feedback_groups/' + g.id, { estado: _fS('arreglado'), estado_at: _fS(new Date().toISOString()), confirmado_auto: _fS('14 días sin avisos nuevos, sin probar') });
+      console.log('[MEJORA] caso ' + g.id + ' cerrado solo (14 días sin avisos, sin probar)');
     }
   }
 }
@@ -9458,13 +9460,15 @@ export default {
           const estado = FB_ESTADOS.includes(b.estado) ? b.estado : 'visto';
           const id = 'p-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
           const nowIso = new Date().toISOString();
+          // items = mensajes de los que sale el caso (panel → Mensajes → "Convertir en tarea")
+          const items = (Array.isArray(b.items) ? b.items : []).map(String).filter(x => /^[A-Za-z0-9_-]{4,80}$/.test(x)).slice(0, 20);
           await firestoreAdminPatch(env, 'feedback_groups/' + id, {
             titulo: _fS(titulo.slice(0, 120)), tipo: _fS(tipo), zona: _fS(zona), gravedad: _fS(gravedad), estado: _fS(estado),
-            origen: _fS(String(b.origen || 'pendiente').slice(0, 20)), count: _fI(0),
+            origen: _fS(String(b.origen || 'pendiente').slice(0, 20)), count: _fI(items.length),
             area: _fS(FB_AREAS.includes(b.area) ? b.area : fbAreaDefault(tipo, zona)), decision: _fS(String(b.decision || '').slice(0, 400)),
             modelo: _fS(['sonnet', 'opus'].includes(b.modelo) ? b.modelo : ''), modelo_por: _fS(String(b.modelo_por || '').slice(0, 200)),
             first_at: { timestampValue: nowIso }, last_at: { timestampValue: nowIso }, estado_at: _fS(nowIso),
-            items: _fA([]), reporters: _fA([]), recent: _fA([]),
+            items: _fA(items), reporters: _fA([]), recent: _fA([]),
             ejemplo: _fS(String(b.ejemplo || '').slice(0, 1500)), nota_paco: _fS(String(b.nota || '').slice(0, 2000)), alerted_at: _fS(''),
           });
           return new Response(JSON.stringify({ ok: true, id }), { headers: corsH });

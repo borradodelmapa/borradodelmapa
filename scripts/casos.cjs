@@ -28,7 +28,7 @@
 // Al crear o diagnosticar un caso, poner siempre su `modelo`.
 // Flujo de un caso (ver CLAUDE.md, "Mejora Salma"): `hoy` → `coger` → leer → diagnosticar → preparar el
 // arreglo en la copia (worktree) → `diagnostico` + `estado propuesta` (suelta el candado) → enseñar a
-// Paco → con su OK subir → `version "…" <id>` + `estado comprobando` (a las 48 h sin avisos pasa solo a
+// Paco → con su OK subir → `version "…" <id>` + `estado comprobando` (lo cierra Paco al probarlo; un fallo sin avisos en 14 días pasa solo a
 // arreglado; si vuelve, se reabre). Al terminar la sesión: `comentar` en lo que quede a medias.
 const fs = require('fs');
 const path = require('path');
@@ -105,7 +105,7 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
     const sec = (t, l) => { console.log(`\n${t} (${l.length})`); l.forEach(g => console.log(linea(g) + (g.decision ? '\n      ❓ ' + g.decision : ''))); };
     sec('✅ ESPERA EL OK DE PACO', open.filter(g => g.estado === 'propuesta'));
     sec('🧭 DECISIONES DE PACO', open.filter(g => g.decision));
-    sec('📱 PACO TIENE QUE PROBAR', open.filter(g => g.estado === 'comprobando' && g.tipo === 'tarea'));
+    sec('📱 PACO TIENE QUE PROBAR', open.filter(g => g.estado === 'comprobando'));
     sec('🚨 URGENTE', open.filter(g => g.gravedad === 'urgente'));
     sec('🔧 EN MARCHA', open.filter(g => g.estado === 'en_marcha').map(g => Object.assign({}, g, { titulo: g.titulo + (g.lock ? '  🔒 ' + g.lock.sesion + ' ' + fecha(g.lock.at) : '') })));
     const semana = Date.now() - 7 * 86400000;

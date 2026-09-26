@@ -11,8 +11,8 @@
 > Cómo trabajar un caso (Paso A): `node scripts/casos.cjs lista` → `ver <id>` → diagnosticar y preparar el
 > arreglo en la copia (worktree + localhost:8090) → `diagnostico <id> <json>` (causa, archivos, riesgo,
 > coste, propuesta, prueba, rama) + `estado <id> propuesta` → enseñárselo a Paco en el chat → con su OK
-> subir con el protocolo → `estado <id> comprobando` (los fallos pasan solos a arreglado a las 48 h sin
-> avisos nuevos; si vuelven se reabren y avisan; las tareas las cierra Paco). Paco pide un caso con el
+> subir con el protocolo → `estado <id> comprobando` (lo cierra Paco al probarlo; si vuelve a
+> fallar se reabre y avisa; un fallo sin avisos en 14 días se cierra solo "sin probar" — antes 48 h). Paco pide un caso con el
 > botón "🤖 Pedir a Claude" (copia "Mira el caso <id>: …"). La llave `api/cases-token.txt` (secreto
 > `CASES_TOKEN`) SOLO sirve para casos — nunca usar ni pedir `ADMIN_TOKEN` para esto.
 >

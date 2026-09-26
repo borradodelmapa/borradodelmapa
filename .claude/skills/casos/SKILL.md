@@ -17,8 +17,8 @@ antiguos (tipo "tarea"/"idea", origen "pendiente"). **Lo nuevo se apunta como ca
 3. Diagnosticar y preparar el arreglo en la copia (worktree + localhost:8090) → `diagnostico <id> <json>`
    (`{causa, archivos, riesgo, coste, propuesta, prueba, rama}`) + `estado <id> propuesta` (suelta el candado) →
    enseñárselo a Paco en el chat.
-4. Con su OK, subir con el protocolo (skill `desplegar`) → `estado <id> comprobando` (los fallos pasan solos a
-   arreglado a las 48 h sin avisos nuevos; si vuelven se reabren; las tareas las cierra Paco).
+4. Con su OK, subir con el protocolo (skill `desplegar`) → `estado <id> comprobando` (lo cierra Paco al
+   probarlo en Hoy → Probar; si vuelve a fallar se reabre; un fallo sin avisos en 14 días se cierra solo "sin probar").
 5. AL SUBIR A PRODUCCIÓN: `version "qué se subió" <ids>` (registro en la colección `deploys`).
 6. AL TERMINAR: cada caso al día (`estado` / `comentar <id> "texto"`, `soltar <id>`).
 
