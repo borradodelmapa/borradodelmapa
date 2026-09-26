@@ -1383,6 +1383,15 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 
 ### 🟡 Importante
 
+- **Borrar mi cuenta (26 sept 2026) — DESPLEGADO, pendiente de probar con una cuenta real.**
+  Perfil → CUENTA → "Borrar mi cuenta" (escribir BORRAR) → Worker `POST /account/delete`
+  (uid SIEMPRE del token, nunca del cuerpo) → `deleteUserCompletely()`, el MISMO borrado del
+  panel admin (extraído tal cual de `/admin/user-action`, que ahora lo llama también → volver
+  a probar el borrado del panel). Registro en KV `accountdelete:*` (1 año). Sin APIs de pago.
+  **Worker Version ID: `839c4995-811b-4aec-aac6-458035861103`** · `app.js?v=178`. Requisito
+  RGPD + Google Play. Prueba: cuenta de prueba → guardar una ruta → borrarla → comprobar en el
+  panel admin que no queda nada.
+
 - **Revisión UX (heurísticas de Nielsen), 26 sept 2026 — SUBIDA a producción, bloques 1-3
   CONFIRMADOS EN PANTALLA por Paco.** Solo frontend, sin Worker ni APIs de pago. Commits
   `a57c2f10` (portada que explica Salma + "Echar un vistazo sin cuenta"; chat sin sesión
