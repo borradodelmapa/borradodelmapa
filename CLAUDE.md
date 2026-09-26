@@ -1389,8 +1389,14 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   panel admin (extraído tal cual de `/admin/user-action`, que ahora lo llama también → volver
   a probar el borrado del panel). Registro en KV `accountdelete:*` (1 año). Sin APIs de pago.
   **Worker Version ID: `4a01f76d-f1d2-4ea0-b0ac-7167e85da1c2`** (limpia también la caché de Explorar y quita el autor —"Un viajero", sin uid— de las copias que otros guardaron de sus rutas: `anonymizeSavedCopies`) · `app.js?v=178`. Requisito
-  RGPD + Google Play. Prueba: cuenta de prueba → guardar una ruta → borrarla → comprobar en el
-  panel admin que no queda nada.
+  RGPD + Google Play.
+  **PENDIENTE DE PROBAR (Paco, 26 sept: "no puedo probarlo ahora"), con dos cuentas de prueba A y B:**
+  1) A guarda una ruta con "Compartir mis rutas" activado · 2) B la guarda desde Explorar (en Mis
+  viajes de B sale "de <nombre de A>") · 3) A se borra desde Perfil (escribir BORRAR) → se cierra la
+  sesión · 4) B sigue teniendo la copia pero pone "de Un viajero" · 5) la ruta de A ya no sale en
+  Explorar ni A en el panel admin · 6) borrar otra cuenta de prueba DESDE EL PANEL admin (su código
+  se movió a `deleteUserCompletely`). Si algo falla: `npx wrangler tail salma-api --format pretty`
+  y buscar `[BORRAR-CUENTA]` (trae contadores y errores de cada paso).
 
 - **Revisión UX (heurísticas de Nielsen), 26 sept 2026 — SUBIDA a producción, bloques 1-3
   CONFIRMADOS EN PANTALLA por Paco.** Solo frontend, sin Worker ni APIs de pago. Commits
