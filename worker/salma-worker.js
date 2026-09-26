@@ -755,6 +755,13 @@ async function verifyAuthAndGetUser(authHeader) {
 const ADMIN_PANEL_EMAILS = ['admin@borradodelmapa.com'];
 const FIREBASE_WEB_API_KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA'; // clave web pública de Firebase (la misma de index.html), no es un secreto
 
+// Panel admin O llave de casos (CASES_TOKEN, solo sesiones de Claude Code — ver Paso A)
+async function isCasesRequest(request, env) {
+  const tok = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
+  if (env.CASES_TOKEN && tok && tok.length >= 32 && tok === env.CASES_TOKEN) return true;
+  return isAdminRequest(request, env);
+}
+
 async function isAdminRequest(request, env) {
   const tok = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
   if (!tok) return false;
@@ -1481,9 +1488,12 @@ async function anonymizeSavedCopies(env, uid) {
 // ⚠️ COSTE (§8, avisado a Paco): GPT-4o-mini, 1 llamada por mensaje escrito o 👎
 // (medido: ~500-1.500 tokens de entrada según los casos abiertos + ~55 de salida ≈
 // 0,0001-0,0003 $). Los avisos automáticos y los 👍 NO llaman a la IA. 1.000 mensajes/mes ≈ 0,10-0,30 €. El resumen diario no usa IA.
-const FB_ESTADOS = ['nuevo', 'visto', 'en_marcha', 'arreglado', 'descartado'];
+// propuesta = Claude dejó diagnóstico + arreglo preparado esperando el OK de Paco (Paso A, 26 sept 2026)
+// comprobando = subido; si en 48 h no vuelve a fallar pasa solo a arreglado (cron), si vuelve se reabre
+const FB_ESTADOS = ['nuevo', 'visto', 'en_marcha', 'propuesta', 'comprobando', 'arreglado', 'descartado'];
 const FB_ZONAS = ['rutas', 'chat', 'mapa', 'whatsapp', 'pagos', 'login', 'explorar', 'perfil', 'notas', 'sos', 'web', 'otro'];
-const FB_TIPOS = ['fallo', 'dato_erroneo', 'idea', 'queja', 'elogio', 'otro'];
+// tarea = pendiente interno (probar, decidir, construir) — los pendientes de CLAUDE.md pasados a casos
+const FB_TIPOS = ['fallo', 'dato_erroneo', 'idea', 'queja', 'elogio', 'tarea', 'otro'];
 const FB_GRAV = ['urgente', 'alta', 'media', 'baja'];
 const FB_AUTO_ZONA = {
   'Fallo al montar el mapa': 'rutas', 'Mapa atascado a mitad': 'rutas', 'No salió el mapa (Crear ruta con mapa)': 'rutas',
@@ -1594,7 +1604,7 @@ async function fbUpsertGroup(env, gid, o) {
   const nowIso = new Date().toISOString();
   const existing = await firestoreAdminGet(env, 'feedback_groups/' + gid);
   const g = existing ? _fsDoc(existing) : null;
-  const reopen = g && (g.estado === 'arreglado' || g.estado === 'descartado');
+  const reopen = g && (g.estado === 'arreglado' || g.estado === 'descartado' || g.estado === 'comprobando');
   const veces = Math.max(1, o.veces || 1);
   const since = Date.now() - 24 * 3600 * 1000;
   const recent = ((g && g.recent) || []).filter(t => Date.parse(t) > since).concat(Array(Math.min(veces, 10)).fill(nowIso)).slice(-30);
@@ -1622,11 +1632,11 @@ async function fbUpsertGroup(env, gid, o) {
   await firestoreAdminPatch(env, 'feedback_groups/' + gid, fields);
 
   const lastAlert = Date.parse((g && g.alerted_at) || '') || 0;
-  if ((o.gravedad === 'urgente' || recent.length >= 3) && Date.now() - lastAlert > 24 * 3600 * 1000) {
+  if ((o.gravedad === 'urgente' || recent.length >= 3 || (reopen && g.estado !== 'descartado')) && Date.now() - lastAlert > 24 * 3600 * 1000) {
     const titulo = g ? g.titulo : o.titulo;
     const total = ((g && g.count) || 0) + veces;
     const txt = (o.gravedad === 'urgente' ? '🚨 Mejora Salma — URGENTE' : `📈 Mejora Salma — ${recent.length} avisos en 24 h`) +
-      (reopen ? ' (REABIERTO: estaba marcado como arreglado)' : '') +
+      (reopen ? ' (REABIERTO: estaba ' + (g.estado === 'comprobando' ? 'subido y comprobándose — el arreglo no ha funcionado' : 'marcado como ' + g.estado) + ')' : '') +
       `\n${titulo}\nZona: ${fields.zona.stringValue} · ${total} avisos en total${o.origen === 'navegador' || o.origen === 'worker' ? ' · 🤖 error automático' : ''}\n\nÚltimo: ${String(o.ejemplo || '').slice(0, 600)}\n\nPanel → Feedback → Casos: https://admin.borradodelmapa.com`;
     await firestoreAdminPatch(env, 'feedback_groups/' + gid, { alerted_at: _fS(nowIso) });
     if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
@@ -1707,6 +1717,21 @@ async function fbClassifyPending(env, max = 25) {
   return { pendientes: pending.length, clasificados: ok, fallidos: fail, quedan: Math.max(0, rows.filter(r => !r.ai_tipo).length - ok) };
 }
 
+// Casos "comprobando" (subido el arreglo) que llevan 48 h sin avisos nuevos → "arreglado" solos.
+// Si hubo avisos nuevos, fbUpsertGroup ya los habrá reabierto antes (estado nuevo).
+async function fbAutoConfirm(env) {
+  const groups = await fbGroups(env, { limit: 300 });
+  const limit = Date.now() - 48 * 3600 * 1000;
+  for (const g of groups) {
+    if (g.estado !== 'comprobando') continue;
+    const since = Date.parse(g.estado_at || '') || 0;
+    if (since && since < limit && (Date.parse(g.last_at || '') || 0) <= since) {
+      await firestoreAdminPatch(env, 'feedback_groups/' + g.id, { estado: _fS('arreglado'), estado_at: _fS(new Date().toISOString()), confirmado_auto: _fS('48 h sin avisos nuevos') });
+      console.log('[MEJORA] caso ' + g.id + ' confirmado arreglado (48 h sin avisos)');
+    }
+  }
+}
+
 // Resumen diario por email (cron 6:00 UTC). Solo si hay algo nuevo. Sin IA.
 async function feedbackDigest(env) {
   if (!env.RESEND_API_KEY || !env.PACO_EMAIL_TO || !env.SALMA_KB) return;
@@ -1740,6 +1765,7 @@ async function feedbackDigest(env) {
     ideas.length ? '\n💡 IDEAS\n' + ideas.slice(0, 10).map(line).join('\n') : '',
     gustos.length ? '\n❤️ LO QUE GUSTA\n' + gustos.slice(0, 5).map(line).join('\n') : '',
     sinClasificar ? `\nSin clasificar: ${sinClasificar} (botón "Clasificar pendientes" del panel)` : '',
+    groups.filter(g => g.estado === 'propuesta').length ? `\n✅ ESPERAN TU OK: ${groups.filter(g => g.estado === 'propuesta').length} propuesta(s) de arreglo — ${groups.filter(g => g.estado === 'propuesta').map(g => g.titulo).slice(0, 5).join(' · ')}` : '',
     '\nPanel → Feedback → Casos: https://admin.borradodelmapa.com',
   ].filter(Boolean).join('\n');
   await sendFeedbackEmail(env, env.PACO_EMAIL_TO, `🧪 Resumen Mejora Salma — ${items.length} nuevos${urg.length ? ' · 🚨 ' + urg.length + ' urgente' : ''}`, text);
@@ -9280,16 +9306,25 @@ export default {
     // GET  /admin/feedback-groups            → todos los casos, del más reciente al más viejo
     // POST /admin/feedback-group {id, estado?, nota?}  → cambiar estado / apuntar nota de Paco
     // POST /admin/feedback-classify-pending  → clasificar lo que quedó sin clasificar (IA, máx 25)
-    if (url.pathname === '/admin/feedback-groups' || url.pathname === '/admin/feedback-group' || url.pathname === '/admin/feedback-classify-pending') {
+    // Paso A (26 sept 2026): además del panel (admin), las sesiones de Claude Code entran con
+    // CASES_TOKEN — una llave que SOLO sirve para estos endpoints de casos y para leer
+    // /admin/feedback (nunca borrar usuarios, dar Premium, etc.). Copia local: api/cases-token.txt
+    // (gitignored). Uso: scripts/casos.cjs.
+    // POST /admin/feedback-group-create {titulo, tipo, zona, gravedad, ejemplo, nota, estado?} → caso a mano
+    //   (los pendientes de CLAUDE.md pasados a casos).
+    // POST /admin/feedback-group {id, diagnostico: {causa, archivos, riesgo, coste, propuesta, prueba}} → Claude
+    //   deja el diagnóstico en el caso (y lo pasa a "propuesta" si se manda estado).
+    if (url.pathname === '/admin/feedback-groups' || url.pathname === '/admin/feedback-group' || url.pathname === '/admin/feedback-classify-pending' || url.pathname === '/admin/feedback-group-create') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
-      if (!(await isAdminRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       try {
         if (request.method === 'GET' && url.pathname === '/admin/feedback-groups') {
           const groups = (await fbGroups(env, { limit: 300 })).map(g => ({
             id: g.id, titulo: g.titulo, tipo: g.tipo, zona: g.zona, gravedad: g.gravedad, estado: g.estado,
             count: g.count || 0, first_at: g.first_at, last_at: g.last_at, items: g.items || [],
             reporters: (g.reporters || []).length, ejemplo: g.ejemplo || '', nota: g.nota_paco || '', reabierto_at: g.reabierto_at || '',
-            origen: g.origen || 'usuario', detalle: g.detalle || '',
+            origen: g.origen || 'usuario', detalle: g.detalle || '', estado_at: g.estado_at || '',
+            diagnostico: g.diagnostico || null, diagnostico_at: g.diagnostico_at || '',
           }));
           return new Response(JSON.stringify({ groups }), { headers: corsH });
         }
@@ -9302,10 +9337,43 @@ export default {
             if (!FB_ESTADOS.includes(b.estado)) return new Response(JSON.stringify({ error: 'estado no válido' }), { status: 400, headers: corsH });
             upd.estado = _fS(b.estado); upd.estado_at = _fS(new Date().toISOString());
           }
-          if (b.nota !== undefined) upd.nota_paco = _fS(String(b.nota).slice(0, 1000));
+          if (b.nota !== undefined) upd.nota_paco = _fS(String(b.nota).slice(0, 2000));
+          if (b.diagnostico && typeof b.diagnostico === 'object') {
+            const dg = {};
+            for (const k of ['causa', 'archivos', 'riesgo', 'coste', 'propuesta', 'prueba', 'rama']) {
+              if (b.diagnostico[k] !== undefined) dg[k] = _fS(String(b.diagnostico[k]).slice(0, 4000));
+            }
+            upd.diagnostico = { mapValue: { fields: dg } };
+            upd.diagnostico_at = _fS(new Date().toISOString());
+          }
+          for (const k of ['titulo', 'gravedad', 'zona', 'tipo']) {
+            if (b[k] === undefined) continue;
+            const ok = k === 'titulo' ? String(b[k]).trim().length > 2 : (k === 'gravedad' ? FB_GRAV : k === 'zona' ? FB_ZONAS : FB_TIPOS).includes(b[k]);
+            if (!ok) return new Response(JSON.stringify({ error: k + ' no válido' }), { status: 400, headers: corsH });
+            upd[k] = _fS(String(b[k]).slice(0, 120));
+          }
           if (!Object.keys(upd).length) return new Response(JSON.stringify({ error: 'nada que cambiar' }), { status: 400, headers: corsH });
           await firestoreAdminPatch(env, 'feedback_groups/' + id, upd);
           return new Response(JSON.stringify({ ok: true }), { headers: corsH });
+        }
+        if (request.method === 'POST' && url.pathname === '/admin/feedback-group-create') {
+          const b = await request.json().catch(() => ({}));
+          const titulo = String(b.titulo || '').trim();
+          if (titulo.length < 3) return new Response(JSON.stringify({ error: 'falta el título' }), { status: 400, headers: corsH });
+          const tipo = FB_TIPOS.includes(b.tipo) ? b.tipo : 'tarea';
+          const zona = FB_ZONAS.includes(b.zona) ? b.zona : 'otro';
+          const gravedad = FB_GRAV.includes(b.gravedad) ? b.gravedad : 'baja';
+          const estado = FB_ESTADOS.includes(b.estado) ? b.estado : 'visto';
+          const id = 'p-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+          const nowIso = new Date().toISOString();
+          await firestoreAdminPatch(env, 'feedback_groups/' + id, {
+            titulo: _fS(titulo.slice(0, 120)), tipo: _fS(tipo), zona: _fS(zona), gravedad: _fS(gravedad), estado: _fS(estado),
+            origen: _fS(String(b.origen || 'pendiente').slice(0, 20)), count: _fI(0),
+            first_at: { timestampValue: nowIso }, last_at: { timestampValue: nowIso }, estado_at: _fS(nowIso),
+            items: _fA([]), reporters: _fA([]), recent: _fA([]),
+            ejemplo: _fS(String(b.ejemplo || '').slice(0, 1500)), nota_paco: _fS(String(b.nota || '').slice(0, 2000)), alerted_at: _fS(''),
+          });
+          return new Response(JSON.stringify({ ok: true, id }), { headers: corsH });
         }
         if (request.method === 'POST' && url.pathname === '/admin/feedback-classify-pending') {
           return new Response(JSON.stringify(await fbClassifyPending(env, 25)), { headers: corsH });
@@ -9321,7 +9389,7 @@ export default {
     // Los logs se recortan a los últimos 6.000 caracteres para no mandar megas al panel. "seen" se cambia con feedback-seen.
     if (request.method === 'GET' && url.pathname === '/admin/feedback') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
-      if (!(await isAdminRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       try {
         const token = await getServiceAccountToken(env);
         const r = await fetch(`${FIRESTORE_BASE}:runQuery`, {
@@ -14040,6 +14108,7 @@ REGLAS:
     // 6:00 UTC DIARIO → Resumen Mejora Salma (email a Paco, sin IA salvo mensajes sin
     // clasificar) + monitoreo de vuelos
     if (hour === 6) {
+      try { await fbAutoConfirm(env); } catch (e) { console.error('[MEJORA] auto-confirmar: ' + e.message); }
       try { await feedbackDigest(env); } catch (e) { console.error('[MEJORA] resumen diario: ' + e.message); }
       await this._cronFlightWatches(env);
       return;
