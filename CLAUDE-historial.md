@@ -3857,3 +3857,5 @@ Primeras dos de las 5 tareas dictadas por Paco el 26 sept (más arriba, "Notas d
   Perfil → apagar el interruptor → sus rutas desaparecen de Explorar.
 
 **Cierre (25 sept 2026):** confirmado en pantalla por Paco — "OK SALEN TODAS" (mapas en todas las tarjetas, países sin repetir, tarjetas de país visuales).
+
+- **Blog y legal con el diseño de la app (26 sept 2026) — CONFIRMADO EN PANTALLA por Paco.** Cabecera, menú de abajo y pie comunes (`paginas.css`), textos legales al día (planes reales, WhatsApp, borrar cuenta, terceros, Explorar, SOS ≠ 112), 5 enlaces rotos de "Sigue leyendo" arreglados. Commits `fef6e90f` + `f9b12665`. Siguen pendientes los datos de titular/NIF/dirección/email (decisión autónomo/SL).
