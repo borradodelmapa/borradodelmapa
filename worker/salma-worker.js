@@ -1469,6 +1469,216 @@ async function anonymizeSavedCopies(env, uid) {
   return n;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// MEJORA SALMA — FASE 2 (26 sept 2026): clasificar, agrupar en casos, avisar, resumen
+// ═══════════════════════════════════════════════════════════════
+// Cada mensaje de beta_feedback (formulario, 👎, WhatsApp "fallo:/idea:", avisos
+// automáticos) se clasifica al llegar (tipo, zona, gravedad, resumen) y se mete en un
+// CASO (feedback_groups): "14 personas dicen que no cargan las fotos" es un caso, no
+// 14 mensajes. Paco trabaja con casos: nuevo → visto → en marcha → arreglado/descartado.
+// Avisos inmediatos SOLO si es urgente o si un caso suma 3 avisos en 24 h; el resto va
+// al resumen diario por email (cron de las 6:00 UTC).
+// ⚠️ COSTE (§8, avisado a Paco): GPT-4o-mini, 1 llamada por mensaje escrito o 👎
+// (medido: ~500-1.500 tokens de entrada según los casos abiertos + ~55 de salida ≈
+// 0,0001-0,0003 $). Los avisos automáticos y los 👍 NO llaman a la IA. 1.000 mensajes/mes ≈ 0,10-0,30 €. El resumen diario no usa IA.
+const FB_ESTADOS = ['nuevo', 'visto', 'en_marcha', 'arreglado', 'descartado'];
+const FB_ZONAS = ['rutas', 'chat', 'mapa', 'whatsapp', 'pagos', 'login', 'explorar', 'perfil', 'notas', 'sos', 'web', 'otro'];
+const FB_TIPOS = ['fallo', 'dato_erroneo', 'idea', 'queja', 'elogio', 'otro'];
+const FB_GRAV = ['urgente', 'alta', 'media', 'baja'];
+const FB_AUTO_ZONA = {
+  'Fallo al montar el mapa': 'rutas', 'Mapa atascado a mitad': 'rutas', 'No salió el mapa (Crear ruta con mapa)': 'rutas',
+  'Sin conexión / error al responder': 'chat', 'Salma tarda más de 18 s': 'chat',
+};
+
+function _fsv(f) {
+  if (!f) return null;
+  if ('stringValue' in f) return f.stringValue;
+  if ('integerValue' in f) return Number(f.integerValue);
+  if ('doubleValue' in f) return f.doubleValue;
+  if ('booleanValue' in f) return f.booleanValue;
+  if ('timestampValue' in f) return f.timestampValue;
+  if ('nullValue' in f) return null;
+  if ('arrayValue' in f) return (f.arrayValue.values || []).map(_fsv);
+  if ('mapValue' in f) { const o = {}; for (const [k, v] of Object.entries(f.mapValue.fields || {})) o[k] = _fsv(v); return o; }
+  return null;
+}
+function _fsDoc(doc) {
+  const o = { id: doc.name.split('/').pop() };
+  for (const [k, v] of Object.entries(doc.fields || {})) o[k] = _fsv(v);
+  return o;
+}
+async function _fsRunQuery(env, structuredQuery) {
+  const token = await getServiceAccountToken(env);
+  const r = await fetch(`${FIRESTORE_BASE}:runQuery`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ structuredQuery }), signal: AbortSignal.timeout(15000),
+  });
+  if (!r.ok) throw new Error('runQuery → ' + r.status + ' ' + (await r.text()).slice(0, 200));
+  return (await r.json()).filter(x => x.document).map(x => _fsDoc(x.document));
+}
+const _fS = v => ({ stringValue: String(v ?? '') });
+const _fI = n => ({ integerValue: String(Math.round(Number(n) || 0)) });
+const _fA = arr => ({ arrayValue: { values: (arr || []).map(x => _fS(x)) } });
+
+async function fbGroups(env, { openOnly = false, limit = 200 } = {}) {
+  const rows = await _fsRunQuery(env, { from: [{ collectionId: 'feedback_groups' }], orderBy: [{ field: { fieldPath: 'last_at' }, direction: 'DESCENDING' }], limit: 300 });
+  return (openOnly ? rows.filter(g => g.estado !== 'arreglado' && g.estado !== 'descartado') : rows).slice(0, limit);
+}
+
+// Clasifica con GPT-4o-mini. Devuelve { tipo, zona, gravedad, resumen, grupo_id, titulo_grupo } o null.
+async function fbClassifyAI(env, fb, openGroups) {
+  if (!env.OPENAI_API_KEY) return null;
+  const KL = { panel: 'mensaje', panel_fallo: 'Algo no va', panel_idea: 'Tengo una idea', panel_encanta: 'Me ha encantado', down: '👎 No me sirve' };
+  const system = `Clasificas opiniones de usuarios de Borrado del Mapa: app de viajes con una asistente IA, Salma (rutas con mapa y paradas, chat, WhatsApp, Explorar rutas de otros viajeros, perfil, notas, SOS, pagos Premium). Responde SOLO con un JSON:
+{"tipo":"...","zona":"...","gravedad":"...","resumen":"...","grupo_id":"... o null","titulo_grupo":"..."}
+- tipo: fallo (algo no funciona) | dato_erroneo (Salma dio un dato falso o un lugar que no existe) | idea (propuesta) | queja (funciona pero molesta: lenta, larga, confusa) | elogio | otro
+- zona: ${FB_ZONAS.join(' | ')}
+- gravedad: urgente (no se puede entrar, la app no carga, se pierden datos, o CUALQUIER problema con un pago o con Premium tras pagar) | alta (falla algo principal: rutas, chat, mapa, WhatsApp) | media (molesta pero se puede seguir; un dato o lugar erróneo suelto) | baja (detalles, ideas, elogios)
+- resumen: una frase de máx. 90 caracteres, en español, de qué pasa (sin nombres de personas)
+- grupo_id: el id de un CASO ABIERTO de la lista SOLO si describe EXACTAMENTE el mismo problema concreto (mismo síntoma) o la misma idea. Que sea de la misma zona NO basta: "un lugar que no existe" y "fotos que no cargan" son casos distintos. Ante la duda, null
+- titulo_grupo: si grupo_id es null, título corto y genérico para un caso nuevo (máx. 70 caracteres)`;
+  const user = `Lo que marcó el usuario: ${KL[fb.kind] || fb.kind}${fb.reason ? ' · motivo: ' + fb.reason : ''}
+Pantalla: ${String(fb.page || '').slice(0, 120)}
+Texto:
+${String(fb.note || '').slice(0, 1800)}
+
+CASOS ABIERTOS (id | zona | título | avisos):
+${openGroups.slice(0, 40).map(g => `${g.id} | ${g.zona} | ${g.titulo} | ${g.count}`).join('\n') || '(ninguno)'}`;
+  const out = await callOpenAI(env.OPENAI_API_KEY, { model: 'gpt-4o-mini', max_tokens: 300, temperature: 0, system, messages: [{ role: 'user', content: user }] });
+  if (!out || out.error || !out.text) { console.error('[MEJORA] clasificación falló', out && out.status); return null; }
+  let j;
+  try { j = JSON.parse((out.text.match(/\{[\s\S]*\}/) || [''])[0]); } catch (_) { return null; }
+  const pick = (v, list, def) => list.includes(v) ? v : def;
+  return {
+    tipo: pick(j.tipo, FB_TIPOS, 'otro'),
+    zona: pick(j.zona, FB_ZONAS, 'otro'),
+    gravedad: pick(j.gravedad, FB_GRAV, 'media'),
+    resumen: String(j.resumen || '').slice(0, 140),
+    grupo_id: (j.grupo_id && openGroups.some(g => g.id === j.grupo_id)) ? j.grupo_id : null,
+    titulo_grupo: String(j.titulo_grupo || j.resumen || 'Sin título').slice(0, 90),
+  };
+}
+
+// Clasifica un mensaje de beta_feedback, lo mete en un caso y avisa si toca.
+// fb: { kind, reason, note, page, reporter }  (reporter = uid, contacto o email — para la Fase 3)
+async function classifyFeedback(env, docId, fb) {
+  const nowIso = new Date().toISOString();
+  let c, fixedGroupId = null;
+  if (fb.kind === 'up') return null;
+  if (fb.kind === 'auto_error') {
+    const reason = String(fb.reason || 'Aviso automático');
+    c = { tipo: 'fallo', zona: FB_AUTO_ZONA[reason] || 'otro', gravedad: 'media', resumen: reason, grupo_id: null, titulo_grupo: 'Aviso automático: ' + reason };
+    fixedGroupId = 'auto-' + reason.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+  } else {
+    const open = await fbGroups(env, { openOnly: true, limit: 40 });
+    c = await fbClassifyAI(env, fb, open);
+    if (!c) return null;
+  }
+
+  // Caso: existente o nuevo
+  const gid = fixedGroupId || c.grupo_id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+  const existing = await firestoreAdminGet(env, 'feedback_groups/' + gid);
+  const g = existing ? _fsDoc(existing) : null;
+  const reopen = g && (g.estado === 'arreglado' || g.estado === 'descartado');   // solo pasa con los automáticos (id fijo)
+  const since = Date.now() - 24 * 3600 * 1000;
+  const recent = ((g && g.recent) || []).filter(t => Date.parse(t) > since).concat(nowIso).slice(-30);
+  const gravRank = x => FB_GRAV.indexOf(x);
+  const grav = g && gravRank(g.gravedad) >= 0 && gravRank(g.gravedad) < gravRank(c.gravedad) ? g.gravedad : c.gravedad;
+  const reporters = Array.from(new Set(((g && g.reporters) || []).concat(fb.reporter ? [fb.reporter] : []))).slice(-100);
+  const fields = {
+    titulo: _fS(g ? g.titulo : c.titulo_grupo),
+    tipo: _fS(g ? g.tipo : c.tipo),
+    zona: _fS(g ? g.zona : c.zona),
+    gravedad: _fS(grav),
+    estado: _fS(!g || reopen ? 'nuevo' : g.estado),
+    count: _fI(((g && g.count) || 0) + 1),
+    first_at: { timestampValue: (g && g.first_at) || nowIso },
+    last_at: { timestampValue: nowIso },
+    items: _fA(((g && g.items) || []).concat(docId).slice(-50)),
+    reporters: _fA(reporters),
+    recent: _fA(recent),
+    ejemplo: _fS(String(fb.note || c.resumen || '').slice(0, 400)),
+    alerted_at: _fS((g && g.alerted_at) || ''),
+  };
+  if (reopen) fields.reabierto_at = _fS(nowIso);
+  await firestoreAdminPatch(env, 'feedback_groups/' + gid, fields);
+  await firestoreAdminPatch(env, 'beta_feedback/' + docId, {
+    ai_tipo: _fS(c.tipo), ai_zona: _fS(c.zona), ai_gravedad: _fS(c.gravedad), ai_resumen: _fS(c.resumen), group_id: _fS(gid),
+  });
+
+  // Aviso inmediato: urgente, o 3+ avisos del mismo caso en 24 h (como mucho 1 aviso por caso y día)
+  const lastAlert = Date.parse((g && g.alerted_at) || '') || 0;
+  const spike = recent.length >= 3;
+  if ((c.gravedad === 'urgente' || spike) && Date.now() - lastAlert > 24 * 3600 * 1000) {
+    const titulo = g ? g.titulo : c.titulo_grupo;
+    const txt = (c.gravedad === 'urgente' ? '🚨 Mejora Salma — URGENTE' : `📈 Mejora Salma — ${recent.length} avisos en 24 h`) +
+      `\n${titulo}\nZona: ${c.zona} · ${((g && g.count) || 0) + 1} avisos en total\n\nÚltimo: ${String(fb.note || c.resumen).slice(0, 600)}\n\nPanel → Feedback → Casos: https://admin.borradodelmapa.com`;
+    await firestoreAdminPatch(env, 'feedback_groups/' + gid, { alerted_at: _fS(nowIso) });
+    if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
+      try { await sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, txt.slice(0, 1500)); } catch (_) {}
+    }
+    if (env.RESEND_API_KEY && env.PACO_EMAIL_TO) await sendFeedbackEmail(env, env.PACO_EMAIL_TO, txt.split('\n')[0] + ' — ' + titulo, txt);
+  }
+  console.log('[MEJORA] ' + docId + ' → ' + c.tipo + '/' + c.zona + '/' + c.gravedad + ' caso ' + gid + (g ? '' : ' (nuevo)'));
+  return { group_id: gid, ...c };
+}
+
+// Clasifica lo que se quedó sin clasificar (mensajes de antes de la Fase 2, o si la IA falló).
+async function fbClassifyPending(env, max = 25) {
+  const rows = await _fsRunQuery(env, { from: [{ collectionId: 'beta_feedback' }], orderBy: [{ field: { fieldPath: 'timestamp' }, direction: 'DESCENDING' }], limit: 300 });
+  const pending = rows.filter(r => !r.ai_tipo).reverse().slice(0, max);   // los más viejos primero
+  let ok = 0, fail = 0;
+  for (const r of pending) {
+    try {
+      const res = await classifyFeedback(env, r.id, {
+        kind: r.kind || 'panel', reason: r.reason || '', note: r.note || '', page: r.page || '',
+        reporter: r.user_id || r.contact || r.email || '',
+      });
+      res ? ok++ : fail++;
+    } catch (e) { fail++; console.error('[MEJORA] pendiente ' + r.id + ': ' + e.message); }
+  }
+  return { pendientes: pending.length, clasificados: ok, fallidos: fail, quedan: Math.max(0, rows.filter(r => !r.ai_tipo).length - ok) };
+}
+
+// Resumen diario por email (cron 6:00 UTC). Solo si hay algo nuevo. Sin IA.
+async function feedbackDigest(env) {
+  if (!env.RESEND_API_KEY || !env.PACO_EMAIL_TO || !env.SALMA_KB) return;
+  const last = (await env.SALMA_KB.get('fbdigest:last')) || new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const nowIso = new Date().toISOString();
+  const tsFilter = coll => ({ from: [{ collectionId: coll }], where: { fieldFilter: { field: { fieldPath: 'timestamp' }, op: 'GREATER_THAN', value: { timestampValue: last } } }, orderBy: [{ field: { fieldPath: 'timestamp' }, direction: 'ASCENDING' }], limit: 1000 });
+  // Clasifica antes lo que se hubiera quedado colgado, para que el resumen salga completo
+  try { await fbClassifyPending(env, 20); } catch (_) {}
+  const items = await _fsRunQuery(env, tsFilter('beta_feedback'));
+  const ups = (await _fsRunQuery(env, tsFilter('feedback_ratings'))).length;
+  if (!items.length && !ups) { await env.SALMA_KB.put('fbdigest:last', nowIso); return; }
+
+  const by = k => items.filter(i => (i.kind || 'panel') === k).length;
+  const downs = by('down');
+  const groups = await fbGroups(env, { limit: 300 });
+  const touched = groups.filter(g => g.last_at && g.last_at > last && g.estado !== 'descartado');
+  const nuevosEn = g => items.filter(i => i.group_id === g.id).length;
+  const line = g => `- ${g.titulo} [${g.zona} · ${g.gravedad}] — ${nuevosEn(g)} nuevo(s), ${g.count} en total · ${g.estado.replace('_', ' ')}`;
+  const urg = touched.filter(g => g.gravedad === 'urgente');
+  const fallos = touched.filter(g => g.gravedad !== 'urgente' && ['fallo', 'dato_erroneo', 'queja'].includes(g.tipo)).sort((a, b) => nuevosEn(b) - nuevosEn(a) || b.count - a.count);
+  const ideas = touched.filter(g => g.tipo === 'idea');
+  const gustos = touched.filter(g => g.tipo === 'elogio');
+  const sinClasificar = items.filter(i => !i.ai_tipo).length;
+  const text = [
+    `Resumen Mejora Salma — desde ${last.slice(0, 16).replace('T', ' ')} UTC`,
+    '',
+    `Nuevos: ${items.length} (🐞 ${by('panel_fallo') + by('panel')} · 💡 ${by('panel_idea')} · ❤️ ${by('panel_encanta')} · 👎 ${downs} · ⚠️ automáticos ${by('auto_error')}) · 👍 ${ups}`,
+    (ups + downs) ? `Valoraciones: ${Math.round(100 * ups / (ups + downs))} % positivas (👍 ${ups} / 👎 ${downs})` : '',
+    urg.length ? '\n🚨 URGENTE\n' + urg.map(line).join('\n') : '',
+    fallos.length ? '\n🐞 CASOS CON MOVIMIENTO (más avisos primero)\n' + fallos.slice(0, 15).map(line).join('\n') : '',
+    ideas.length ? '\n💡 IDEAS\n' + ideas.slice(0, 10).map(line).join('\n') : '',
+    gustos.length ? '\n❤️ LO QUE GUSTA\n' + gustos.slice(0, 5).map(line).join('\n') : '',
+    sinClasificar ? `\nSin clasificar: ${sinClasificar} (botón "Clasificar pendientes" del panel)` : '',
+    '\nPanel → Feedback → Casos: https://admin.borradodelmapa.com',
+  ].filter(Boolean).join('\n');
+  await sendFeedbackEmail(env, env.PACO_EMAIL_TO, `🧪 Resumen Mejora Salma — ${items.length} nuevos${urg.length ? ' · 🚨 ' + urg.length + ' urgente' : ''}`, text);
+  await env.SALMA_KB.put('fbdigest:last', nowIso);
+}
+
 async function firestoreAdminListSubcollection(env, parentPath, collectionId) {
   const token = await getServiceAccountToken(env);
   const res = await fetch(`${FIRESTORE_BASE}/${parentPath}:runQuery`, {
@@ -4120,6 +4330,11 @@ async function waSaveFallo(env, ctx, uid, from, profileName, note, history, kind
     timestamp: { timestampValue: nowIso },
     seen: { booleanValue: false },
   });
+  ctx.waitUntil(classifyFeedback(env, docId, {
+    kind: kind === 'idea' ? 'panel_idea' : 'panel_fallo', reason: '', page: 'WhatsApp',
+    note: (kind === 'idea' ? '💡 Idea: ' : '🐞 Fallo: ') + note + (logsText ? '\n\nÚltimos mensajes:\n' + logsText.slice(-1200) : ''),
+    reporter: uid || String(from || ''),
+  }).catch(e => console.error('[MEJORA] clasificar WA ' + docId + ': ' + e.message)));
   if (env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
     const who = profileName || String(from || '').replace(/^whatsapp:/, '');
     ctx.waitUntil(sendFeedbackEmail(env, env.PACO_EMAIL_TO, `${kind === 'idea' ? '💡 Idea' : '🐞 Fallo'} por WhatsApp — ${who}`,
@@ -8925,6 +9140,45 @@ export default {
       }
     }
 
+    // ─── Mejora Salma Fase 2: CASOS (feedback_groups) para el panel (solo admin) ───
+    // GET  /admin/feedback-groups            → todos los casos, del más reciente al más viejo
+    // POST /admin/feedback-group {id, estado?, nota?}  → cambiar estado / apuntar nota de Paco
+    // POST /admin/feedback-classify-pending  → clasificar lo que quedó sin clasificar (IA, máx 25)
+    if (url.pathname === '/admin/feedback-groups' || url.pathname === '/admin/feedback-group' || url.pathname === '/admin/feedback-classify-pending') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        if (request.method === 'GET' && url.pathname === '/admin/feedback-groups') {
+          const groups = (await fbGroups(env, { limit: 300 })).map(g => ({
+            id: g.id, titulo: g.titulo, tipo: g.tipo, zona: g.zona, gravedad: g.gravedad, estado: g.estado,
+            count: g.count || 0, first_at: g.first_at, last_at: g.last_at, items: g.items || [],
+            reporters: (g.reporters || []).length, ejemplo: g.ejemplo || '', nota: g.nota_paco || '', reabierto_at: g.reabierto_at || '',
+          }));
+          return new Response(JSON.stringify({ groups }), { headers: corsH });
+        }
+        if (request.method === 'POST' && url.pathname === '/admin/feedback-group') {
+          const b = await request.json().catch(() => ({}));
+          const id = String(b.id || '');
+          if (!/^[a-z0-9-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+          const upd = {};
+          if (b.estado !== undefined) {
+            if (!FB_ESTADOS.includes(b.estado)) return new Response(JSON.stringify({ error: 'estado no válido' }), { status: 400, headers: corsH });
+            upd.estado = _fS(b.estado); upd.estado_at = _fS(new Date().toISOString());
+          }
+          if (b.nota !== undefined) upd.nota_paco = _fS(String(b.nota).slice(0, 1000));
+          if (!Object.keys(upd).length) return new Response(JSON.stringify({ error: 'nada que cambiar' }), { status: 400, headers: corsH });
+          await firestoreAdminPatch(env, 'feedback_groups/' + id, upd);
+          return new Response(JSON.stringify({ ok: true }), { headers: corsH });
+        }
+        if (request.method === 'POST' && url.pathname === '/admin/feedback-classify-pending') {
+          return new Response(JSON.stringify(await fbClassifyPending(env, 25)), { headers: corsH });
+        }
+        return new Response(JSON.stringify({ error: 'Método no válido' }), { status: 405, headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── GET /admin/feedback y POST /admin/feedback-seen — feedback de testers para el panel (solo admin) ───
     // Lee la colección beta_feedback (la escribe /beta-feedback) con la cuenta de servicio: las 100 últimas, de más nueva a más vieja.
     // Los logs se recortan a los últimos 6.000 caracteres para no mandar megas al panel. "seen" se cambia con feedback-seen.
@@ -8950,6 +9204,7 @@ export default {
             page: v(f.page), url: v(f.url), worker_version: v(f.worker_version), front_versions: v(f.front_versions), user_agent: v(f.user_agent),
             screenshot_url: v(f.screenshot_url), seen: v(f.seen) === true, logs_len: logs.length, logs: logs.slice(-6000),
             kind: v(f.kind) || 'panel', reason: v(f.reason), contact: v(f.contact),
+            ai_tipo: v(f.ai_tipo), ai_zona: v(f.ai_zona), ai_gravedad: v(f.ai_gravedad), ai_resumen: v(f.ai_resumen), group_id: v(f.group_id),
           });
         }
         return new Response(JSON.stringify({ items, unseen: items.filter(i => !i.seen).length }), { headers: corsH });
@@ -10495,12 +10750,15 @@ export default {
       const lastLines = logsText.split('\n').slice(-15).join('\n');
       const shotLine = screenshotUrl ? `\n📎 Captura: ${screenshotUrl}\n` : '';
       const isPanel = kind.startsWith('panel');
-      // WhatsApp a Paco solo con lo escrito a mano en el formulario (los 👎 van por email)
-      if (isPanel && env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
-        const waText = `🧪 Mejora Salma\n${who}\n${String(body.page || '')}\n\n"${fullNote}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
-        ctx.waitUntil(sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, waText));
-      }
-      if (kind !== 'auto_error' && env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
+      // Fase 2: clasificar y meter en un caso (GPT-4o-mini salvo avisos automáticos) — en
+      // segundo plano, no retrasa la respuesta. Avisos: WhatsApp solo si es urgente o se
+      // repite (classifyFeedback); email por mensaje solo con lo escrito a mano en el
+      // formulario; los 👎 y los automáticos van al resumen diario.
+      ctx.waitUntil(classifyFeedback(env, docId, {
+        kind, reason, note: fullNote, page: String(body.page || ''),
+        reporter: user ? user.uid : (contact || String(body.email || '')),
+      }).catch(e => console.error('[MEJORA] clasificar ' + docId + ': ' + e.message)));
+      if (isPanel && env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
         const emailSubject = `🧪 Mejora Salma — ${head || 'feedback'} — ${who}`;
         const emailBody = `${who}\n${String(body.page || '')}\n\n${fullNote}\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 5000);
         ctx.waitUntil(sendFeedbackEmail(env, env.PACO_EMAIL_TO, emailSubject, emailBody));
@@ -13637,8 +13895,10 @@ REGLAS:
 
     const hour = new Date(event.scheduledTime).getUTCHours();
 
-    // 6:00 UTC DIARIO → Monitoreo vuelos
+    // 6:00 UTC DIARIO → Resumen Mejora Salma (email a Paco, sin IA salvo mensajes sin
+    // clasificar) + monitoreo de vuelos
     if (hour === 6) {
+      try { await feedbackDigest(env); } catch (e) { console.error('[MEJORA] resumen diario: ' + e.message); }
       await this._cronFlightWatches(env);
       return;
     }
