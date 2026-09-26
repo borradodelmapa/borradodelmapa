@@ -43,7 +43,7 @@ async function call(p, body) {
     body: body ? JSON.stringify(body) : undefined,
   });
   const d = await res.json().catch(() => ({}));
-  if (!res.ok) { console.error('Error ' + res.status + ': ' + (d.error || JSON.stringify(d))); process.exit(1); }
+  if (!res.ok) throw new Error('Error ' + res.status + ': ' + (d.error || JSON.stringify(d)));
   return d;
 }
 const GRAV = { urgente: 0, alta: 1, media: 2, baja: 3 };
@@ -63,7 +63,7 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
   } else if (cmd === 'ver') {
     const { groups } = await call('/admin/feedback-groups');
     const g = groups.find(x => x.id === a1);
-    if (!g) { console.error('No existe el caso ' + a1); process.exit(1); }
+    if (!g) throw new Error('No existe el caso ' + a1);
     console.log(`CASO ${g.id} — ${g.titulo}\n${g.tipo} · ${g.zona} · ${g.gravedad} · estado ${g.estado} (${fecha(g.estado_at)}) · origen ${g.origen}`);
     console.log(`${g.count} avisos · ${g.reporters} personas · primero ${fecha(g.first_at)} · último ${fecha(g.last_at)}${g.reabierto_at ? ' · REABIERTO ' + fecha(g.reabierto_at) : ''}`);
     if (g.nota) console.log('\nNOTA:\n' + g.nota);
@@ -116,7 +116,7 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
     const g = groups.find(x => x.id === a1);
     if (g && g.lock && Date.now() - Date.parse(g.lock.at) < 12 * 3600000) {
       console.error(`⚠️ El caso ya lo tiene cogido "${g.lock.sesion}" desde ${fecha(g.lock.at)}. PARAR y preguntar a Paco (CLAUDE.md §1).`);
-      process.exit(2);
+      process.exitCode = 2; return;
     }
     await call('/admin/feedback-group', { id: a1, estado: 'en_marcha', lock: a2 || ('Claude Code ' + new Date().toISOString().slice(0, 16)) });
     console.log(a1 + ' cogido (en marcha, con candado)');
@@ -144,4 +144,4 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
   } else {
     console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 30).map(l => l.replace(/^\/\/ ?/, '')).join('\n'));
   }
-})();
+})().catch(e => { console.error(e.message); process.exitCode = 1; });
