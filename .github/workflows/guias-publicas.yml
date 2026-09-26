@@ -1,0 +1,36 @@
+name: Guías públicas (páginas fijas)
+
+# Regenera <slug>.html de cada guía pública con scripts/build-guias.js (título, foto y
+# descripción reales para WhatsApp/redes; noindex). Una vez al día de madrugada y con
+# botón manual ("Run workflow"). Solo hace commit si alguna guía ha cambiado.
+# No llama a APIs de pago: lee public_guides de Firestore (lectura pública).
+on:
+  schedule:
+    - cron: '15 4 * * *'   # 04:15 UTC, cuando nadie está trabajando en el repo
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: guias-publicas
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/build-guias.js
+      - name: Commit si hay cambios
+        run: |
+          git add -A -- '*.html' guias-publicas.json
+          if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
+          git config user.name "guias-bot"
+          git config user.email "guias-bot@users.noreply.github.com"
+          git commit -m "Guías públicas: regenerar páginas fijas (automático)"
+          git pull --rebase origin main
+          git push origin HEAD:main
