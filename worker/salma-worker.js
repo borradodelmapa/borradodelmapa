@@ -755,6 +755,12 @@ async function verifyAuthAndGetUser(authHeader) {
 const ADMIN_PANEL_EMAILS = ['admin@borradodelmapa.com'];
 const FIREBASE_WEB_API_KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA'; // clave web pública de Firebase (la misma de index.html), no es un secreto
 
+// 'claude' si entra con la llave de casos; si no, 'paco' (panel admin)
+function casesWho(request, env) {
+  const tok = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
+  return env.CASES_TOKEN && tok === env.CASES_TOKEN ? 'claude' : 'paco';
+}
+
 // Panel admin O llave de casos (CASES_TOKEN, solo sesiones de Claude Code — ver Paso A)
 async function isCasesRequest(request, env) {
   const tok = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
@@ -1495,6 +1501,16 @@ const FB_ZONAS = ['rutas', 'chat', 'mapa', 'whatsapp', 'pagos', 'login', 'explor
 // tarea = pendiente interno (probar, decidir, construir) — los pendientes de CLAUDE.md pasados a casos
 const FB_TIPOS = ['fallo', 'dato_erroneo', 'idea', 'queja', 'elogio', 'tarea', 'otro'];
 const FB_GRAV = ['urgente', 'alta', 'media', 'baja'];
+// Áreas del proyecto (pantalla "Hoy" del panel, 26 sept 2026) — cada caso pertenece a una
+const FB_AREAS = ['fallos', 'salma', 'ux', 'dev', 'seguridad', 'costes', 'negocio', 'legal'];
+// Área por defecto de un caso nuevo, si nadie la dice
+function fbAreaDefault(tipo, zona) {
+  if (tipo === 'dato_erroneo' || (tipo === 'queja' && zona === 'chat')) return 'salma';
+  if (tipo === 'fallo' || tipo === 'queja') return 'fallos';
+  if (tipo === 'idea' || tipo === 'elogio') return 'ux';
+  if (zona === 'pagos') return 'negocio';
+  return 'dev';
+}
 const FB_AUTO_ZONA = {
   'Fallo al montar el mapa': 'rutas', 'Mapa atascado a mitad': 'rutas', 'No salió el mapa (Crear ruta con mapa)': 'rutas',
   'Sin conexión / error al responder': 'chat', 'Salma tarda más de 18 s': 'chat',
@@ -1619,6 +1635,7 @@ async function fbUpsertGroup(env, gid, o) {
     zona: _fS(g ? g.zona : o.zona),
     gravedad: _fS(grav),
     origen: _fS((g && g.origen) || o.origen || 'usuario'),
+    area: _fS((g && g.area) || o.area || fbAreaDefault(g ? g.tipo : o.tipo, g ? g.zona : o.zona)),
     estado: _fS(!g || reopen ? 'nuevo' : g.estado),
     count: _fI(((g && g.count) || 0) + veces),
     first_at: { timestampValue: (g && g.first_at) || nowIso },
@@ -9318,6 +9335,35 @@ export default {
     //   (los pendientes de CLAUDE.md pasados a casos).
     // POST /admin/feedback-group {id, diagnostico: {causa, archivos, riesgo, coste, propuesta, prueba}} → Claude
     //   deja el diagnóstico en el caso (y lo pasa a "propuesta" si se manda estado).
+    // ─── Registro de versiones (26 sept 2026): cada subida a producción queda apuntada — qué se subió,
+    // Worker y commit, y qué casos arregla. Lo escribe la sesión que sube (scripts/casos.cjs version);
+    // lo pinta "Hoy → Qué ha pasado" y la vista Versiones del panel. Colección deploys.
+    if (url.pathname === '/admin/deploys' || url.pathname === '/admin/deploy-log') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        if (request.method === 'GET' && url.pathname === '/admin/deploys') {
+          const rows = await _fsRunQuery(env, { from: [{ collectionId: 'deploys' }], orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: 60 });
+          return new Response(JSON.stringify({ deploys: rows }), { headers: corsH });
+        }
+        if (request.method === 'POST' && url.pathname === '/admin/deploy-log') {
+          const b = await request.json().catch(() => ({}));
+          const texto = String(b.texto || '').trim();
+          if (texto.length < 3) return new Response(JSON.stringify({ error: 'falta el texto' }), { status: 400, headers: corsH });
+          const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+          await firestoreAdminPatch(env, 'deploys/' + id, {
+            texto: _fS(texto.slice(0, 300)), worker: _fS(String(b.worker || '').slice(0, 60)), commit: _fS(String(b.commit || '').slice(0, 20)),
+            front: _fS(String(b.front || '').slice(0, 300)), casos: _fA((Array.isArray(b.casos) ? b.casos : []).map(String).slice(0, 20)),
+            quien: _fS(casesWho(request, env)), at: { timestampValue: new Date().toISOString() },
+          });
+          return new Response(JSON.stringify({ ok: true, id }), { headers: corsH });
+        }
+        return new Response(JSON.stringify({ error: 'Método no válido' }), { status: 405, headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     if (url.pathname === '/admin/feedback-groups' || url.pathname === '/admin/feedback-group' || url.pathname === '/admin/feedback-classify-pending' || url.pathname === '/admin/feedback-group-create') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
       if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
@@ -9329,6 +9375,8 @@ export default {
             reporters: (g.reporters || []).length, ejemplo: g.ejemplo || '', nota: g.nota_paco || '', reabierto_at: g.reabierto_at || '',
             origen: g.origen || 'usuario', detalle: g.detalle || '', estado_at: g.estado_at || '',
             diagnostico: g.diagnostico || null, diagnostico_at: g.diagnostico_at || '',
+            area: g.area || fbAreaDefault(g.tipo, g.zona), decision: g.decision || '', comentarios: g.comentarios || [],
+            lock: g.lock || null, confirmado_auto: g.confirmado_auto || '',
           }));
           return new Response(JSON.stringify({ groups }), { headers: corsH });
         }
@@ -9340,6 +9388,8 @@ export default {
           if (b.estado !== undefined) {
             if (!FB_ESTADOS.includes(b.estado)) return new Response(JSON.stringify({ error: 'estado no válido' }), { status: 400, headers: corsH });
             upd.estado = _fS(b.estado); upd.estado_at = _fS(new Date().toISOString());
+            // Si el caso sale de 'en marcha' (propuesta, subido, cerrado…) se suelta el candado de sesión
+            if (b.estado !== 'en_marcha' && b.lock === undefined) upd.lock = { nullValue: null };
           }
           if (b.nota !== undefined) upd.nota_paco = _fS(String(b.nota).slice(0, 2000));
           if (b.diagnostico && typeof b.diagnostico === 'object') {
@@ -9350,9 +9400,22 @@ export default {
             upd.diagnostico = { mapValue: { fields: dg } };
             upd.diagnostico_at = _fS(new Date().toISOString());
           }
-          for (const k of ['titulo', 'gravedad', 'zona', 'tipo']) {
+          if (b.decision !== undefined) upd.decision = _fS(String(b.decision).slice(0, 400));
+          // Candado de sesión (CLAUDE.md §1): una sesión de Claude coge el caso → ninguna otra lo toca. '' lo suelta.
+          if (b.lock !== undefined) {
+            upd.lock = b.lock ? { mapValue: { fields: { sesion: _fS(String(b.lock).slice(0, 80)), at: _fS(new Date().toISOString()) } } } : { nullValue: null };
+          }
+          // Comentario: se añade al hilo del caso, firmado por quien llama (Paco / Claude)
+          if (b.comentario !== undefined && String(b.comentario).trim()) {
+            const cur = await firestoreAdminGet(env, 'feedback_groups/' + id);
+            if (!cur) return new Response(JSON.stringify({ error: 'no existe el caso' }), { status: 404, headers: corsH });
+            const prev = ((_fsDoc(cur).comentarios) || []).slice(-49);
+            const nuevo = { de: casesWho(request, env), texto: String(b.comentario).trim().slice(0, 2000), at: new Date().toISOString() };
+            upd.comentarios = { arrayValue: { values: prev.concat(nuevo).map(c => ({ mapValue: { fields: { de: _fS(c.de), texto: _fS(c.texto), at: _fS(c.at) } } })) } };
+          }
+          for (const k of ['titulo', 'gravedad', 'zona', 'tipo', 'area']) {
             if (b[k] === undefined) continue;
-            const ok = k === 'titulo' ? String(b[k]).trim().length > 2 : (k === 'gravedad' ? FB_GRAV : k === 'zona' ? FB_ZONAS : FB_TIPOS).includes(b[k]);
+            const ok = k === 'titulo' ? String(b[k]).trim().length > 2 : (k === 'gravedad' ? FB_GRAV : k === 'zona' ? FB_ZONAS : k === 'area' ? FB_AREAS : FB_TIPOS).includes(b[k]);
             if (!ok) return new Response(JSON.stringify({ error: k + ' no válido' }), { status: 400, headers: corsH });
             upd[k] = _fS(String(b[k]).slice(0, 120));
           }
@@ -9373,6 +9436,7 @@ export default {
           await firestoreAdminPatch(env, 'feedback_groups/' + id, {
             titulo: _fS(titulo.slice(0, 120)), tipo: _fS(tipo), zona: _fS(zona), gravedad: _fS(gravedad), estado: _fS(estado),
             origen: _fS(String(b.origen || 'pendiente').slice(0, 20)), count: _fI(0),
+            area: _fS(FB_AREAS.includes(b.area) ? b.area : fbAreaDefault(tipo, zona)), decision: _fS(String(b.decision || '').slice(0, 400)),
             first_at: { timestampValue: nowIso }, last_at: { timestampValue: nowIso }, estado_at: _fS(nowIso),
             items: _fA([]), reporters: _fA([]), recent: _fA([]),
             ejemplo: _fS(String(b.ejemplo || '').slice(0, 1500)), nota_paco: _fS(String(b.nota || '').slice(0, 2000)), alerted_at: _fS(''),

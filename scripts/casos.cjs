@@ -11,11 +11,19 @@
 //   node scripts/casos.cjs diagnostico <id> <fichero.json>   guarda {causa, archivos, riesgo, coste, propuesta, prueba, rama}
 //   node scripts/casos.cjs estado <id> <estado>              nuevo|visto|en_marcha|propuesta|comprobando|arreglado|descartado
 //   node scripts/casos.cjs nota <id> "texto"                 nota del caso (la ve Paco en el panel)
-//   node scripts/casos.cjs crear <fichero.json>              caso a mano (objeto o lista): {titulo, tipo, zona, gravedad, ejemplo, nota, estado}
+//   node scripts/casos.cjs crear <fichero.json>              caso a mano (objeto o lista): {titulo, tipo, zona, area, gravedad, ejemplo, nota, estado, decision}
+//   node scripts/casos.cjs hoy                               AL EMPEZAR UNA SESIÓN: lo que espera a Paco, urgente, en marcha, comentarios de Paco
+//   node scripts/casos.cjs comentar <id> "texto"             comentario en el hilo del caso (firmado "Claude")
+//   node scripts/casos.cjs coger <id> ["sesión"]             candado: esta sesión trabaja el caso (§1) + estado en_marcha
+//   node scripts/casos.cjs soltar <id>                       quita el candado
+//   node scripts/casos.cjs area <id> <area>                  fallos|salma|ux|dev|seguridad|costes|negocio|legal
+//   node scripts/casos.cjs decision <id> "pregunta"          lo convierte en decisión de Paco ("" la quita)
+//   node scripts/casos.cjs version "qué se subió" [ids...]   apunta una subida a producción (Worker + commit solos)
 //
-// Flujo de un caso (ver CLAUDE.md, "Mejora Salma"): leer → diagnosticar → preparar el arreglo en la
-// copia (worktree) → `diagnostico` + `estado propuesta` → enseñar a Paco → con su OK subir →
-// `estado comprobando` (a las 48 h sin avisos pasa solo a arreglado; si vuelve, se reabre).
+// Flujo de un caso (ver CLAUDE.md, "Mejora Salma"): `hoy` → `coger` → leer → diagnosticar → preparar el
+// arreglo en la copia (worktree) → `diagnostico` + `estado propuesta` (suelta el candado) → enseñar a
+// Paco → con su OK subir → `version "…" <id>` + `estado comprobando` (a las 48 h sin avisos pasa solo a
+// arreglado; si vuelve, se reabre). Al terminar la sesión: `comentar` en lo que quede a medias.
 const fs = require('fs');
 const path = require('path');
 
@@ -84,7 +92,56 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
       const r = await call('/admin/feedback-group-create', c);
       console.log(r.id + '  ' + c.titulo);
     }
+  } else if (cmd === 'hoy') {
+    const { groups } = await call('/admin/feedback-groups');
+    const open = groups.filter(g => !['arreglado', 'descartado'].includes(g.estado));
+    const linea = g => `  ${g.id.padEnd(16)} [${g.area}] ${g.titulo}`;
+    const sec = (t, l) => { console.log(`\n${t} (${l.length})`); l.forEach(g => console.log(linea(g) + (g.decision ? '\n      ❓ ' + g.decision : ''))); };
+    sec('✅ ESPERA EL OK DE PACO', open.filter(g => g.estado === 'propuesta'));
+    sec('🧭 DECISIONES DE PACO', open.filter(g => g.decision));
+    sec('📱 PACO TIENE QUE PROBAR', open.filter(g => g.estado === 'comprobando' && g.tipo === 'tarea'));
+    sec('🚨 URGENTE', open.filter(g => g.gravedad === 'urgente'));
+    sec('🔧 EN MARCHA', open.filter(g => g.estado === 'en_marcha').map(g => Object.assign({}, g, { titulo: g.titulo + (g.lock ? '  🔒 ' + g.lock.sesion + ' ' + fecha(g.lock.at) : '') })));
+    const semana = Date.now() - 7 * 86400000;
+    const coms = [];
+    for (const g of groups) for (const c of (g.comentarios || [])) if (c.de === 'paco' && Date.parse(c.at) > semana) coms.push({ g, c });
+    console.log(`\n💬 COMENTARIOS DE PACO (7 días) (${coms.length})`);
+    coms.sort((a, b) => b.c.at.localeCompare(a.c.at)).forEach(({ g, c }) => console.log(`  ${fecha(c.at)} ${g.id} [${g.titulo.slice(0, 50)}]\n      "${c.texto}"`));
+    console.log(`\n${open.length} casos abiertos. Detalle: node scripts/casos.cjs ver <id>`);
+  } else if (cmd === 'comentar') {
+    await call('/admin/feedback-group', { id: a1, comentario: a2 || '' });
+    console.log('Comentario añadido a ' + a1);
+  } else if (cmd === 'coger') {
+    const { groups } = await call('/admin/feedback-groups');
+    const g = groups.find(x => x.id === a1);
+    if (g && g.lock && Date.now() - Date.parse(g.lock.at) < 12 * 3600000) {
+      console.error(`⚠️ El caso ya lo tiene cogido "${g.lock.sesion}" desde ${fecha(g.lock.at)}. PARAR y preguntar a Paco (CLAUDE.md §1).`);
+      process.exit(2);
+    }
+    await call('/admin/feedback-group', { id: a1, estado: 'en_marcha', lock: a2 || ('Claude Code ' + new Date().toISOString().slice(0, 16)) });
+    console.log(a1 + ' cogido (en marcha, con candado)');
+  } else if (cmd === 'soltar') {
+    await call('/admin/feedback-group', { id: a1, lock: '' });
+    console.log('Candado quitado de ' + a1);
+  } else if (cmd === 'area') {
+    await call('/admin/feedback-group', { id: a1, area: a2 });
+    console.log(a1 + ' → área ' + a2);
+  } else if (cmd === 'decision') {
+    await call('/admin/feedback-group', { id: a1, decision: a2 || '' });
+    console.log(a2 ? 'Decisión apuntada en ' + a1 : 'Decisión quitada de ' + a1);
+  } else if (cmd === 'version') {
+    const { execSync } = require('child_process');
+    let commit = '', worker = '', front = '';
+    try { commit = execSync('git rev-parse --short HEAD', { cwd: path.join(__dirname, '..') }).toString().trim(); } catch (_) {}
+    try { worker = (await (await fetch(API + '/version')).json()).version_short || ''; } catch (_) {}
+    try {
+      const idx = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      front = (idx.match(/(app|salma|mapa-itinerario|debug-panel)\.js\?v=\d+|styles\.css\?v=\d+/g) || []).join(' ');
+    } catch (_) {}
+    const casos = process.argv.slice(4);
+    await call('/admin/deploy-log', { texto: a1, commit, worker, front, casos });
+    console.log(`Subida apuntada: "${a1}" · commit ${commit} · Worker ${worker}${casos.length ? ' · casos ' + casos.join(' ') : ''}`);
   } else {
-    console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 18).map(l => l.replace(/^\/\/ ?/, '')).join('\n'));
+    console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 30).map(l => l.replace(/^\/\/ ?/, '')).join('\n'));
   }
 })();
