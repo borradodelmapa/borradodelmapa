@@ -4549,6 +4549,20 @@ auth.onAuthStateChanged(async (user) => {
   } else {
     // No hay sesión → mostrar gate obligatorio
     currentUser = null;
+    // Sin sesión no hay guía activa que enseñar: quitar la que se hubiera quedado en este
+    // navegador (sesiones cerradas con versiones anteriores a app.js v=186, que no la
+    // borraban al salir) y repintar la portada si ya la enseñaba. La de la cuenta sigue
+    // en Firestore y vuelve al entrar (_pullActiveRouteFromAccount).
+    try {
+      if (localStorage.getItem('bdm_live_active_route')) {
+        localStorage.removeItem('bdm_live_active_route');
+        localStorage.removeItem('bdm_live_active_route_id');
+        _activeRouteData = null;
+        _activeRouteDocId = null;
+        const _ca = document.getElementById('chat-area');
+        if (_ca && _ca.querySelector('.chat-empty') && !_ca.querySelector('.msg')) { _ca.innerHTML = ''; _renderChatEmpty(); }
+      }
+    } catch (_) {}
     updateHeader();
     hideSplash();
     // Desde el menú de /destinos/: Explorar y Ayuda se pueden ver sin cuenta, sin
