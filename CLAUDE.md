@@ -1379,9 +1379,15 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   solo enlaza static + blog (fuera `sitemap-destinos.xml` y el sitemap del Worker muerto
   `paco-defoto`). Portada, blog y legal siguen indexables. Para lanzar destinos: volver
   `DESTINOS_ROBOTS` a `index,follow,max-snippet:-1`, regenerar y devolver el sitemap —
-  mejor por tandas, los mejores primero. **Siguiente SEO, sin prisa:** guías públicas
-  responden 404 (se sirven desde `404.html`) → Google no las indexa; portada sin H1 ni
-  enlaces fijos a Destinos/Blog;
+  mejor por tandas, los mejores primero. **Guías públicas — HECHO 26 sept (`0d579a0c`):**
+  `scripts/build-guias.js` crea `<slug>.html` en la raíz por cada guía de `public_guides`
+  (misma URL, código 200, título/descripción/foto reales para WhatsApp y redes, `noindex`),
+  borra las despublicadas (lista en `guias-publicas.json`); lo lanza a diario la Action
+  `guias-publicas.yml` (04:15 UTC + botón manual, commit solo si hay cambios). Se añadió
+  `og-image.jpg` (faltaba: la portada compartida salía sin imagen). **Al lanzar:** indexar
+  SOLO las buenas (criterio a decidir con Paco, p. ej. ≥5 paradas + descripción + foto +
+  listed) cambiando `GUIAS_ROBOTS` por guía en el script. **Siguiente SEO, sin prisa:**
+  portada sin H1 ni enlaces fijos a Destinos/Blog;
   (3) Italia, Portugal, Japón, Marruecos y México no tienen página de destino porque faltan
   sus JSON en `worker/kv/output-nivel2` (163 de 193) — generarlos cuesta Claude Sonnet
   (céntimos); (4) con sesión iniciada solo se simuló el aviso de WhatsApp.
