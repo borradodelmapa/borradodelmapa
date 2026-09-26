@@ -4286,7 +4286,46 @@ function logout() {
   auth.signOut();
   currentUser = null;
   if (typeof salma !== 'undefined') salma.reset();
+  // La guía activa se quita SOLO de este navegador (26 sept 2026): antes se quedaba en
+  // localStorage y, sin cuenta, la portada seguía enseñando "¿Cómo va el viaje?" con la
+  // guía del que salió — y al tocarla se abría entera, saltándose el corte de §10.
+  // En la cuenta (users/{uid}.active_route_id) sigue: al volver a entrar se recupera
+  // con _pullActiveRouteFromAccount().
+  try { localStorage.removeItem('bdm_live_active_route'); } catch (_) {}
+  try { localStorage.removeItem('bdm_live_active_route_id'); } catch (_) {}
+  _activeRouteData = null;
+  _activeRouteDocId = null;
+  if (window._itinViewOpen && typeof window._teardownItinView === 'function') window._teardownItinView();
+  if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();   // portada vacía, sin la guía
   // onAuthStateChanged se encarga de mostrar el gate
+}
+
+// Al entrar: si este navegador no tiene guía activa (se borró al salir, o es otro
+// dispositivo), traerla de la cuenta para la tarjeta de la portada — sin tocar el mapa
+// ni volver a escribir en Firestore. Solo lecturas de Firestore (2 como mucho).
+async function _pullActiveRouteFromAccount() {
+  try {
+    if (!currentUser || typeof db === 'undefined') return;
+    if (localStorage.getItem('bdm_live_active_route')) return;
+    const uid = currentUser.uid;
+    const userDoc = await db.collection('users').doc(uid).get();
+    const activeId = userDoc.exists ? userDoc.data().active_route_id : null;
+    if (!activeId) return;
+    const mapDoc = await db.collection('users').doc(uid).collection('maps').doc(activeId).get();
+    if (!mapDoc.exists || !currentUser || currentUser.uid !== uid) return;
+    const d = mapDoc.data();
+    let routeData = null;
+    try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch (_) {}
+    if (!routeData || localStorage.getItem('bdm_live_active_route')) return;
+    localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData));
+    localStorage.setItem('bdm_live_active_route_id', activeId);
+    // Repintar la portada solo si está a la vista y vacía (no pisar una conversación).
+    const area = document.getElementById('chat-area');
+    if (currentState === 'chat' && area && !area.querySelector('.msg')) {
+      area.innerHTML = '';
+      _renderChatEmpty();
+    }
+  } catch (_) {}
 }
 
 function authErrorMsg(e) {
@@ -4501,6 +4540,7 @@ auth.onAuthStateChanged(async (user) => {
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
     }
+    _pullActiveRouteFromAccount();
 
     // Flight alerts — avisar en chat si hay bajadas de precio (async, no bloquea)
     if (typeof flightWatches !== 'undefined') {
