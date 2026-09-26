@@ -8,7 +8,7 @@
 // Uso:
 //   node scripts/casos.cjs lista [abiertos|todos|<estado>]   casos, urgentes primero
 //   node scripts/casos.cjs ver <id>                          caso completo + sus mensajes
-//   node scripts/casos.cjs diagnostico <id> <fichero.json>   guarda {causa, archivos, riesgo, coste, propuesta, prueba, rama}
+//   node scripts/casos.cjs diagnostico <id> <fichero.json>   guarda {causa, archivos, riesgo, coste, propuesta, prueba, rama, enlace} (enlace = URL https para "▶ Abrir para probar")
 //   node scripts/casos.cjs estado <id> <estado>              nuevo|visto|en_marcha|propuesta|comprobando|arreglado|descartado
 //   node scripts/casos.cjs nota <id> "texto"                 nota del caso (la ve Paco en el panel)
 //   node scripts/casos.cjs crear <fichero.json>              caso a mano (objeto o lista): {titulo, tipo, zona, area, gravedad, ejemplo, nota, estado, decision}

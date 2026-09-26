@@ -951,6 +951,8 @@ async function usageGate(env, authUser, kind) {
     const cap = isGuide ? PLAN_LIMITS.free.guides : PLAN_LIMITS.free.edits;
     const used = (isGuide ? total.guides : total.edits) || 0;
     if (used >= cap) {
+      // Guías regaladas (p. ej. "gracias por avisar de un fallo", 26 sept 2026) valen también sin Premium
+      if (isGuide && (authUser.bonus_guides || 0) > 0) return { ok: true };
       return { ok: false, limit: kind, message: isGuide
         ? 'Ya has usado tu guía gratuita. Con Premium puedes crear más: Perfil → Mi plan.'
         : 'Ya has usado los ' + cap + ' cambios gratuitos de tu guía. Con Premium puedes seguir editándola: Perfil → Mi plan.' };
@@ -1000,6 +1002,14 @@ async function usageRecord(env, authUser, delta) {
       total.guides = (total.guides || 0) + (delta.guides || 0);
       total.edits  = (total.edits  || 0) + (delta.edits  || 0);
       await usageWrite(env, tk, total);
+      // Sin Premium y por encima de su guía gratuita → sale de una guía regalada (usageGate la dejó pasar por eso)
+      if (delta.guides && !authUser.premium_active && total.guides > PLAN_LIMITS.free.guides && (authUser.bonus_guides || 0) > 0) {
+        const left = Math.max(0, authUser.bonus_guides - delta.guides);
+        try {
+          await firestoreAdminPatch(env, 'users/' + uid, { premium_bonus_guides: { integerValue: String(left) } });
+          authUser.bonus_guides = left;
+        } catch (e) { console.warn('[usage] no se pudo descontar guía regalada', uid, e.message); }
+      }
     }
   } catch (_) {}
 }
@@ -1809,6 +1819,44 @@ async function feedbackDigest(env) {
   ].filter(Boolean).join('\n');
   await sendFeedbackEmail(env, env.PACO_EMAIL_TO, `🧪 Resumen Mejora Salma — ${items.length} nuevos${urg.length ? ' · 🚨 ' + urg.length + ' urgente' : ''}`, text);
   await env.SALMA_KB.put('fbdigest:last', nowIso);
+}
+
+// Resumen SEMANAL (lunes, mismo cron de las 6:00 UTC, sin IA): qué se cerró, qué se cerró solo sin
+// probar, a quién se le dieron las gracias, qué lleva más de 14 días parado y qué te toca. Email a Paco.
+async function feedbackWeekly(env) {
+  if (!env.RESEND_API_KEY || !env.PACO_EMAIL_TO || !env.SALMA_KB) return;
+  const now = new Date();
+  if (now.getUTCDay() !== 1) return;
+  const hoy = now.toISOString().slice(0, 10);
+  if ((await env.SALMA_KB.get('fbweekly:last')) === hoy) return;
+  const semana = Date.now() - 7 * 86400000, quince = Date.now() - 14 * 86400000;
+  const groups = await fbGroups(env, { limit: 300 });
+  const t = iso => Date.parse(iso || '') || 0;
+  const open = groups.filter(g => g.estado !== 'arreglado' && g.estado !== 'descartado');
+  const cerrados = groups.filter(g => g.estado === 'arreglado' && t(g.estado_at) > semana);
+  const sinProbar = cerrados.filter(g => g.confirmado_auto);
+  const gracias = groups.filter(g => t(g.gracias_at) > semana);
+  const parados = open.filter(g => g.tipo !== 'idea' && t(g.estado_at || g.first_at) && t(g.estado_at || g.first_at) < quince)
+    .sort((a, b) => t(a.estado_at || a.first_at) - t(b.estado_at || b.first_at));
+  const aprobar = open.filter(g => g.estado === 'propuesta').length;
+  const probar = open.filter(g => g.estado === 'comprobando').length;
+  const decidir = open.filter(g => g.decision && g.estado !== 'propuesta').length;
+  let subidas = 0;
+  try { subidas = (await _fsRunQuery(env, { from: [{ collectionId: 'deploys' }], orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: 60 })).filter(d => t(d.at) > semana).length; } catch (_) {}
+  const dias = g => Math.round((Date.now() - t(g.estado_at || g.first_at)) / 86400000);
+  const text = [
+    `Resumen SEMANAL Mejora Salma — semana hasta el ${hoy}`,
+    '',
+    `🚀 Subidas a producción: ${subidas} · ✅ Cerrados: ${cerrados.length} · 📂 Abiertos: ${open.length}`,
+    `📥 Te toca: ${aprobar} por aprobar · ${probar} por probar · ${decidir} decisiones`,
+    cerrados.length ? '\n✅ CERRADOS ESTA SEMANA\n' + cerrados.map(g => '- ' + g.titulo + (g.confirmado_auto ? '  (solo, sin probar)' : '')).join('\n') : '',
+    sinProbar.length ? `\n⚠️ ${sinProbar.length} se cerraron solos SIN PROBAR (14 días sin avisos). Si quieres, pruébalos.` : '',
+    gracias.length ? '\n🎁 GRACIAS DADAS\n' + gracias.map(g => '- ' + g.titulo + ' (' + (g.gracias_uids || []).length + ' personas en total)').join('\n') : '',
+    parados.length ? `\n🐢 PARADOS MÁS DE 14 DÍAS (${parados.length})\n` + parados.slice(0, 12).map(g => `- ${g.titulo} — ${dias(g)} días · ${String(g.estado).replace('_', ' ')}`).join('\n') + (parados.length > 12 ? `\n  …y ${parados.length - 12} más` : '') : '',
+    '\nPanel → Hoy: https://admin.borradodelmapa.com',
+  ].filter(Boolean).join('\n');
+  await sendFeedbackEmail(env, env.PACO_EMAIL_TO, `📅 Semana Mejora Salma — ${cerrados.length} cerrados · ${aprobar + probar + decidir} te esperan`, text);
+  await env.SALMA_KB.put('fbweekly:last', hoy, { expirationTtl: 8 * 86400 });
 }
 
 async function firestoreAdminListSubcollection(env, parentPath, collectionId) {
@@ -8463,6 +8511,101 @@ async function sendFeedbackEmail(env, to, subject, text) {
   }
 }
 
+// ─── "Gracias + 1 guía gratis" a quien avisó de un fallo ya arreglado (26 sept 2026) ───
+// Panel admin → caso → "🎁 Dar las gracias". A cada persona CON CUENTA que avisó (mensajes del caso):
+// +1 guía regalada (users.premium_bonus_guides, vale con y sin Premium — ver usageGate) y un aviso por
+// el primer canal que funcione: WhatsApp (solo si nos escribió en las últimas 23 h: fuera de esa ventana
+// WhatsApp exige plantillas aprobadas, pendiente del número propio F5.5) → email (Resend; necesita el
+// dominio verificado en Resend y RESEND_FROM, si no solo llega al correo del dueño de la cuenta) → aviso
+// al entrar en la app (users.aviso_gracias, lo pinta app.js una vez). Nunca regala dos veces a la misma
+// persona por el mismo caso (feedback_groups.gracias_uids).
+// ⚠️ COSTE (§8, avisado a Paco): WhatsApp ~0,005 $ de Twilio por mensaje (+ tarifa de Meta desde el 1 oct);
+// email gratis dentro del plan de Resend; cada guía regalada que se use ≈ una ruta (0,05-0,20 €).
+async function sendUserEmail(env, to, subject, text) {
+  if (!env.RESEND_API_KEY || !to) return false;
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: env.RESEND_FROM || 'Borrado del Mapa <onboarding@resend.dev>', to: [to], subject, text }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) console.error('[GRACIAS] email a ' + to + ' falló:', (await res.text().catch(() => '')).slice(0, 200));
+    return res.ok;
+  } catch (e) { console.error('[GRACIAS] email: ' + e.message); return false; }
+}
+
+// ¿Nos escribió por WhatsApp hace menos de 23 h? (leer la lista de mensajes de Twilio no cuesta nada)
+async function waInsideWindow(env, from) {
+  try {
+    const q = new URLSearchParams({ From: from, To: env.TWILIO_WHATSAPP_FROM, PageSize: '1' });
+    const r = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json?` + q, {
+      headers: { 'Authorization': 'Basic ' + btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`) },
+      signal: AbortSignal.timeout(6000),
+    });
+    if (!r.ok) return false;
+    const m = ((await r.json()).messages || [])[0];
+    const t = m ? Date.parse(m.date_sent || m.date_created) : 0;
+    return !!t && Date.now() - t < 23 * 3600 * 1000;
+  } catch (e) { return false; }
+}
+
+async function feedbackThanks(env, gid, textoBase) {
+  const gdoc = await firestoreAdminGet(env, 'feedback_groups/' + gid);
+  if (!gdoc) throw new Error('no existe el caso');
+  const g = _fsDoc(gdoc);
+  const ya = new Set(g.gracias_uids || []);
+  const res = { personas: 0, whatsapp: 0, email: 0, app: 0, ya_tenian: 0, sin_cuenta: 0, detalle: [] };
+  const uids = new Map();   // uid → email del mensaje (respaldo)
+  for (const itemId of (g.items || [])) {
+    const it = await firestoreAdminGet(env, 'beta_feedback/' + encodeURIComponent(itemId)).catch(() => null);
+    const f = it ? _fsDoc(it) : null;
+    if (!f || !f.user_id) { res.sin_cuenta++; continue; }
+    if (!uids.has(f.user_id)) uids.set(f.user_id, f.email || '');
+  }
+  const nuevos = [];
+  for (const [uid, emailMsg] of uids) {
+    if (ya.has(uid)) { res.ya_tenian++; continue; }
+    const udoc = await firestoreAdminGet(env, 'users/' + uid).catch(() => null);
+    if (!udoc) { res.sin_cuenta++; continue; }
+    const u = _fsDoc(udoc);
+    const nombre = String(u.name || '').split(' ')[0] || 'viajero';
+    const texto = String(textoBase || '').replace(/\{nombre\}/g, nombre).slice(0, 1500);
+    await firestoreAdminPatch(env, 'users/' + uid, { premium_bonus_guides: _fI((parseInt(u.premium_bonus_guides, 10) || 0) + 1) });
+    let canal = '';
+    // 1) WhatsApp, si tiene el número vinculado y está dentro de la ventana de 24 h
+    try {
+      const wa = await firestoreAdminQueryByField(env, 'whatsapp_sessions', 'uid', uid, 3);
+      for (const name of wa) {
+        const from = decodeURIComponent(name.split('/').pop());
+        if (!/^whatsapp:\+\d{6,16}$/.test(from)) continue;
+        if (!(await waInsideWindow(env, from))) continue;
+        const r = await sendWhatsAppMessage(env, from, texto);
+        if (r && r.ok) { canal = 'whatsapp'; break; }
+      }
+    } catch (e) { console.error('[GRACIAS] WhatsApp ' + uid + ': ' + e.message); }
+    // 2) Email
+    if (!canal && await sendUserEmail(env, u.email || emailMsg, '🎁 Gracias por avisarnos — tienes 1 guía gratis', texto)) canal = 'email';
+    // 3) Aviso al entrar en la app (siempre queda guardado; la app lo enseña solo si no llegó por otro canal)
+    await firestoreAdminPatch(env, 'users/' + uid, { aviso_gracias: { mapValue: { fields: {
+      texto: _fS(texto), caso: _fS(gid), at: _fS(new Date().toISOString()), visto: { booleanValue: !!canal }, canal: _fS(canal || 'app'),
+    } } } });
+    if (!canal) canal = 'app';
+    res[canal]++; res.personas++; nuevos.push(uid);
+    res.detalle.push(nombre + ' → ' + canal);
+    console.log('[GRACIAS] caso ' + gid + ' · ' + uid + ' → ' + canal);
+  }
+  if (nuevos.length) {
+    const prev = (g.comentarios || []).slice(-49);
+    const com = { de: 'paco', texto: '🎁 Gracias + 1 guía gratis a ' + res.personas + (res.personas === 1 ? ' persona' : ' personas') + ' (' + res.detalle.join(', ') + ').', at: new Date().toISOString() };
+    await firestoreAdminPatch(env, 'feedback_groups/' + gid, {
+      gracias_uids: _fA([...ya, ...nuevos]), gracias_at: _fS(new Date().toISOString()),
+      comentarios: { arrayValue: { values: prev.concat(com).map(c => ({ mapValue: { fields: { de: _fS(c.de), texto: _fS(c.texto), at: _fS(c.at) } } })) } },
+    });
+  }
+  return res;
+}
+
 export default {
   // Envoltorio (26 sept 2026, errores automáticos): toda petición pasa por aquí. Si el Worker
   // responde 5xx o salta una excepción, se apunta como caso automático (sin IA) y, en vez del
@@ -9385,6 +9528,23 @@ export default {
       }
     }
 
+    // POST /admin/feedback-thanks {id, texto} → gracias + 1 guía gratis a quien avisó (ver feedbackThanks).
+    // SOLO el panel admin (Paco): la llave de casos de Claude no puede regalar guías.
+    if (request.method === 'POST' && url.pathname === '/admin/feedback-thanks') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isAdminRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        const b = await request.json().catch(() => ({}));
+        const id = String(b.id || '');
+        if (!/^[a-z0-9-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+        const texto = String(b.texto || '').trim();
+        if (texto.length < 10) return new Response(JSON.stringify({ error: 'falta el texto del mensaje' }), { status: 400, headers: corsH });
+        return new Response(JSON.stringify(await feedbackThanks(env, id, texto)), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     if (url.pathname === '/admin/feedback-groups' || url.pathname === '/admin/feedback-group' || url.pathname === '/admin/feedback-classify-pending' || url.pathname === '/admin/feedback-group-create') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
       if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
@@ -9398,6 +9558,7 @@ export default {
             diagnostico: g.diagnostico || null, diagnostico_at: g.diagnostico_at || '',
             area: g.area || fbAreaDefault(g.tipo, g.zona), decision: g.decision || '', comentarios: g.comentarios || [],
             lock: g.lock || null, confirmado_auto: g.confirmado_auto || '', modelo: g.modelo || '', modelo_por: g.modelo_por || '',
+            gracias_at: g.gracias_at || '', gracias_n: (g.gracias_uids || []).length,
           }));
           return new Response(JSON.stringify({ groups }), { headers: corsH });
         }
@@ -9415,7 +9576,7 @@ export default {
           if (b.nota !== undefined) upd.nota_paco = _fS(String(b.nota).slice(0, 2000));
           if (b.diagnostico && typeof b.diagnostico === 'object') {
             const dg = {};
-            for (const k of ['causa', 'archivos', 'riesgo', 'coste', 'propuesta', 'prueba', 'rama']) {
+            for (const k of ['causa', 'archivos', 'riesgo', 'coste', 'propuesta', 'prueba', 'rama', 'enlace']) {
               if (b.diagnostico[k] !== undefined) dg[k] = _fS(String(b.diagnostico[k]).slice(0, 4000));
             }
             upd.diagnostico = { mapValue: { fields: dg } };
@@ -10613,7 +10774,7 @@ export default {
               await waSaveFallo(env, ctx, linkedUid, from, profileName, waFallo.note, hist, waFallo.kind);
               await sendWhatsAppMessage(env, from, waFallo.kind === 'idea'
                 ? '💡 ¡Apuntada! Gracias por la idea — las leemos todas.'
-                : 'Apuntado, gracias — se lo paso al equipo con lo último que hemos hablado. Si es un fallo y lo confirmamos, te regalamos *1 mes de Premium*. Si quieres empezar de cero, escribe *reinicia*.');
+                : 'Apuntado, gracias — se lo paso al equipo con lo último que hemos hablado. Si es un fallo y lo confirmamos, te regalamos *1 guía gratis*. Si quieres empezar de cero, escribe *reinicia*.');
             } catch (e) {
               console.error('[WhatsApp] Error guardando fallo:', e.message);
               await sendWhatsAppMessage(env, from, 'No he podido apuntar el fallo ahora mismo — prueba en un rato.');
@@ -14217,6 +14378,7 @@ REGLAS:
     if (hour === 6) {
       try { await fbAutoConfirm(env); } catch (e) { console.error('[MEJORA] auto-confirmar: ' + e.message); }
       try { await feedbackDigest(env); } catch (e) { console.error('[MEJORA] resumen diario: ' + e.message); }
+      try { await feedbackWeekly(env); } catch (e) { console.error('[MEJORA] resumen semanal: ' + e.message); }
       await this._cronFlightWatches(env);
       return;
     }

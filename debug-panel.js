@@ -252,7 +252,7 @@
     return res.json().catch(() => ({}));
   }
 
-  const PREMIUM_LINE = 'Si es un fallo y lo confirmamos, te regalamos <b>1 mes de Premium</b>.';
+  const PREMIUM_LINE = 'Si es un fallo y lo confirmamos, te regalamos <b>1 guía gratis</b>.';
   const KIND_OPTS = [
     { k: 'panel_fallo', icon: '🐞', label: 'Algo no va', ph: '¿Qué ha pasado? Cuanto más concreto, mejor: qué hiciste, qué esperabas y qué salió.' },
     { k: 'panel_idea', icon: '💡', label: 'Tengo una idea', ph: '¿Qué te gustaría que hiciera Salma, o qué cambiarías?' },
@@ -420,7 +420,7 @@
           ? '✓ ¡Gracias! Nos alegra un montón.'
           : kind === 'panel_idea'
             ? '✓ ¡Apuntada! Gracias por la idea, las leemos todas.'
-            : '✓ Recibido, gracias. Lo miramos.' + (loggedIn ? ' Si lo confirmamos, te llevas 1 mes de Premium.' : ' Si quieres el mes de Premium cuando lo confirmemos, créate una cuenta gratis.');
+            : '✓ Recibido, gracias. Lo miramos.' + (loggedIn ? ' Si lo confirmamos, te regalamos 1 guía gratis.' : ' Si quieres la guía gratis cuando lo arreglemos, créate una cuenta gratis.');
         noteEl.value = '';
         shotRemove.click();
         overlay.querySelectorAll('.mj-kind').forEach(b => b.classList.remove('on'));

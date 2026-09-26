@@ -73,7 +73,7 @@ function showState(state) {
       _area.insertAdjacentHTML('afterbegin', `
         <div class="mejora-card">
           <div class="mejora-card-t">Mejora Salma</div>
-          <p>Salma está creciendo y tú nos ayudas a mejorarla. Cuéntanos qué falla o qué se te ocurre: lo leemos todo. Si es un fallo y lo confirmamos, te regalamos <b>1 mes de Premium</b>.</p>
+          <p>Salma está creciendo y tú nos ayudas a mejorarla. Cuéntanos qué falla o qué se te ocurre: lo leemos todo. Si es un fallo y lo confirmamos, te regalamos <b>1 guía gratis</b>.</p>
           <div class="mejora-card-kinds">
             <button type="button" data-k="panel_fallo"><span>🐞</span>Algo no va</button>
             <button type="button" data-k="panel_idea"><span>💡</span>Tengo una idea</button>
@@ -4356,6 +4356,7 @@ auth.onAuthStateChanged(async (user) => {
     _restoreCopilotState();
 
     updateHeader();
+    _showAvisoGracias(user.uid, userData.aviso_gracias);
 
     // Restaurar ruta pendiente
     if (!window._salmaLastRoute) {
@@ -7115,6 +7116,29 @@ window.closeShareSheet = closeShareSheet;
 window.shareAsImage = shareAsImage;
 
 // ═══ UTILIDADES ═══
+
+// "Gracias + 1 guía gratis" (26 sept 2026): el Worker lo deja en users.aviso_gracias cuando Paco da las
+// gracias desde el panel y no se pudo avisar por WhatsApp ni por email. Se enseña una vez y se marca visto.
+function _showAvisoGracias(uid, aviso) {
+  if (!aviso || aviso.visto || !aviso.texto) return;
+  const box = document.createElement('div');
+  box.setAttribute('role', 'dialog');
+  box.style.cssText = 'position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px';
+  const card = document.createElement('div');
+  card.style.cssText = 'background:#fff;color:#111;max-width:420px;width:100%;padding:22px;border-top:6px solid #F4630B;font-size:16px;line-height:1.45';
+  const h = document.createElement('div');
+  h.style.cssText = "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;margin-bottom:8px";
+  h.textContent = '🎁 ¡Gracias!';
+  const p = document.createElement('p');
+  p.style.cssText = 'white-space:pre-line;margin:0 0 16px';
+  p.textContent = aviso.texto;
+  const ok = document.createElement('button');
+  ok.style.cssText = 'background:#F4630B;color:#fff;border:0;padding:12px 18px;font-weight:700;font-size:16px;width:100%;cursor:pointer';
+  ok.textContent = '¡Genial!';
+  ok.onclick = () => box.remove();
+  card.append(h, p, ok); box.appendChild(card); document.body.appendChild(box);
+  db.collection('users').doc(uid).update({ 'aviso_gracias.visto': true }).catch(e => console.warn('aviso_gracias:', e));
+}
 
 function showToast(msg) {
   $toast.textContent = msg;

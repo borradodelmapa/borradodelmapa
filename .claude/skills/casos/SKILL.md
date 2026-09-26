@@ -15,11 +15,14 @@ antiguos (tipo "tarea"/"idea", origen "pendiente"). **Lo nuevo se apunta como ca
    "Te toca a ti" = propuestas + decisiones + tareas subidas por probar.
 2. Trabajar un caso: `lista` → `ver <id>` → `coger <id>` (candado §1 + en_marcha).
 3. Diagnosticar y preparar el arreglo en la copia (worktree + localhost:8090) → `diagnostico <id> <json>`
-   (`{causa, archivos, riesgo, coste, propuesta, prueba, rama}`) + `estado <id> propuesta` (suelta el candado) →
+   (`{causa, archivos, riesgo, coste, propuesta, prueba, rama, enlace}`;
+   `enlace` = URL https directa a la pantalla que Paco tiene que mirar: sale como "▶ Abrir para probar") + `estado <id> propuesta` (suelta el candado) →
    enseñárselo a Paco en el chat.
 4. Con su OK, subir con el protocolo (skill `desplegar`) → `estado <id> comprobando` (lo cierra Paco al
    probarlo en Hoy → Probar; si vuelve a fallar se reabre; un fallo sin avisos en 14 días se cierra solo "sin probar").
 5. AL SUBIR A PRODUCCIÓN: `version "qué se subió" <ids>` (registro en la colección `deploys`).
+5b. Fallo de usuario arreglado y probado → Paco pulsa "🎁 Dar las gracias" en el panel (WhatsApp → email → aviso en
+   la app, +1 guía gratis). Claude NO puede hacerlo (la llave de casos no regala guías): recordárselo.
 6. AL TERMINAR: cada caso al día (`estado` / `comentar <id> "texto"`, `soltar <id>`).
 
 **Modelo recomendado ("Hacer con"):** cada caso lleva `modelo` sonnet|opus (`casos.cjs modelo <id> <m> "por qué"`).
