@@ -4307,7 +4307,9 @@ auth.onAuthStateChanged(async (user) => {
     }
     const pagoParam = new URLSearchParams(window.location.search).get('pago');
     const goParam = new URLSearchParams(window.location.search).get('go');
-    const guiaParam = _validSlug(new URLSearchParams(window.location.search).get('guia'));
+    // ?guia= (botón del corte de registro) y ?ruta= (enlace a una guía pública, ver 404.html)
+    const guiaParam = _validSlug(new URLSearchParams(window.location.search).get('guia'))
+      || _validSlug(new URLSearchParams(window.location.search).get('ruta'));
     let _reopenSlug = null;
     try { _reopenSlug = _validSlug(localStorage.getItem('bdm_reopen_guia')); } catch (_) {}
     if (window._pendingShareId) {
@@ -4383,6 +4385,15 @@ auth.onAuthStateChanged(async (user) => {
     // ?guia=<slug> (botón "Ver la ruta completa" de la página pública): sin cuenta se ve el
     // avance del día 1 dentro de la app, con el corte para registrarse (CLAUDE.md §10).
     const _guiaAnon = _validSlug(new URLSearchParams(window.location.search).get('guia'));
+    // ?ruta=<slug> (enlace a una guía pública / compartida): sin cuenta, el avance del día 1
+    // en la vista de ruta de la app, con su corte para registrarse — sin portada delante.
+    const _rutaAnon = _validSlug(new URLSearchParams(window.location.search).get('ruta'));
+    if (_rutaAnon && !_guiaAnon) {
+      history.replaceState(null, '', '/');
+      showState('chat');
+      _openPublicGuide(_rutaAnon);
+      return;
+    }
     if (_guiaAnon) {
       // Viene de pulsar "Ver la ruta completa" en la página pública: ya pidió verla
       // entera → registro directo, con el avance detrás ("Volver sin entrar" lo enseña)

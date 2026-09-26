@@ -176,13 +176,23 @@ function escapeHTML(str) {
     document.getElementById('og-desc').content = desc;
     if (data.cover_image) document.getElementById('og-image').content = data.cover_image;
 
-    // Renderizar
-    const content = document.getElementById('public-content');
-    document.getElementById('public-loading').remove();
-
     const hasNotes = data.notes && Object.keys(data.notes).length > 0;
     const hasPhotos = data.photos && data.photos.length > 0;
     const isDiario = hasNotes || hasPhotos;
+
+    // UN SOLO DISEÑO DE RUTA (Paco, 26 sept 2026: "lo que veo es el modelo viejo"): las
+    // personas pasan a la app, que la abre en la vista de itinerario actual — avance del
+    // día 1 sin cuenta, entera con cuenta (CLAUDE.md §10). Esta página se queda solo para
+    // quien no ejecuta JS (WhatsApp, redes, Google leen su cabecera). Los diarios (notas +
+    // fotos del viaje) se siguen pintando aquí: la app no tiene vista pública de diario.
+    if (!isDiario) {
+      location.replace('/?ruta=' + encodeURIComponent(slug));
+      return;
+    }
+
+    // Renderizar
+    const content = document.getElementById('public-content');
+    document.getElementById('public-loading').remove();
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';
