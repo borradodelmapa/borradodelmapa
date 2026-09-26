@@ -1579,7 +1579,9 @@ async function classifyFeedback(env, docId, fb) {
     c = { tipo: 'fallo', zona: FB_AUTO_ZONA[reason] || 'otro', gravedad: 'media', resumen: reason, grupo_id: null, titulo_grupo: 'Aviso automático: ' + reason };
     fixedGroupId = 'auto-' + reason.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
   } else {
-    const open = await fbGroups(env, { openOnly: true, limit: 40 });
+    // Los casos 🤖 automáticos (errores del navegador/Worker) se agrupan solo por su huella:
+    // no se ofrecen a la IA para no mezclar un mensaje de usuario con un error técnico.
+    const open = (await fbGroups(env, { openOnly: true, limit: 80 })).filter(g => g.origen !== 'navegador' && g.origen !== 'worker').slice(0, 40);
     c = await fbClassifyAI(env, fb, open);
     if (!c) return null;
   }
@@ -1723,7 +1725,7 @@ async function fbAutoConfirm(env) {
   const groups = await fbGroups(env, { limit: 300 });
   const limit = Date.now() - 48 * 3600 * 1000;
   for (const g of groups) {
-    if (g.estado !== 'comprobando') continue;
+    if (g.estado !== 'comprobando' || g.tipo === 'tarea') continue;   // las tareas las cierra Paco al probarlas
     const since = Date.parse(g.estado_at || '') || 0;
     if (since && since < limit && (Date.parse(g.last_at || '') || 0) <= since) {
       await firestoreAdminPatch(env, 'feedback_groups/' + g.id, { estado: _fS('arreglado'), estado_at: _fS(new Date().toISOString()), confirmado_auto: _fS('48 h sin avisos nuevos') });
@@ -8443,8 +8445,10 @@ export default {
       return new Response(JSON.stringify({ error: 'worker_exception' }), { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
     }
     try {
-      if (res && res.status >= 500 && request.method !== 'OPTIONS') {
-        const path = new URL(request.url).pathname;
+      const _p5 = new URL(request.url).pathname;
+      // /health responde 503 a propósito cuando un servicio va mal (lo pinta el panel): no es un error de la app
+      if (res && res.status >= 500 && request.method !== 'OPTIONS' && _p5 !== '/health') {
+        const path = _p5;
         let detail = '';
         if ((res.headers.get('Content-Type') || '').includes('application/json')) { try { detail = (await res.clone().text()).slice(0, 400); } catch (_) {} }
         ctx.waitUntil(recordAutoError(env, {
