@@ -1,0 +1,160 @@
+/* ═══════════════════════════════════════════════════════════════════
+   paginas.css — páginas de lectura fuera de la app: blog y legal
+   (26 sept 2026). Va DESPUÉS de styles.css, del que toma colores,
+   tipografías, menú de abajo (.app-bottom-bar) y botón de Salma
+   (.bottom-tab-fab). Aquí solo lo propio de una página de texto.
+   ⚠️ El menú de abajo de estas páginas es copia de BOTTOM_NAV
+   (scripts/build-destinos.js) — ver CLAUDE.md §9.
+   ═══════════════════════════════════════════════════════════════════ */
+
+html, body { background:var(--bg-base); }
+body.pg {
+  margin:0; font-family:var(--font-body); color:var(--text-primary);
+  line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.pg-main a { color:var(--accent); }
+
+/* Cabecera — misma marca que la app y la página pública de guías */
+.pg-header {
+  padding:16px 20px; display:flex; align-items:center; gap:12px;
+  border-bottom:1px solid var(--border);
+}
+.pg-header .ce-brand {
+  font-family:var(--font-cond); font-weight:800; font-size:19px; letter-spacing:.04em;
+  color:var(--accent); text-decoration:none;
+}
+.pg-header .ce-brand span { color:var(--text-muted); }
+.pg-header-sec {
+  margin-left:auto; font-family:var(--font-cond); font-weight:700; font-size:14px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); text-decoration:none;
+}
+.pg .pg-header-sec { color:var(--text-muted); }
+.pg .pg-header-sec:hover { color:var(--text-primary); }
+
+/* Cuerpo: ancho de lectura, hueco abajo para el menú y el botón de Salma */
+.pg-main { max-width:720px; margin:0 auto; padding:28px 16px 32px; }
+
+.pg h1 {
+  font-family:var(--font-cond); font-weight:800; font-size:36px; line-height:1.05;
+  letter-spacing:.005em; color:var(--text-primary); margin:0 0 10px;
+}
+.pg h2 {
+  font-family:var(--font-cond); font-weight:700; font-size:24px; line-height:1.15;
+  color:var(--text-primary); margin:36px 0 12px; padding-left:12px;
+  border-left:3px solid var(--accent);
+}
+.pg h3 { font-family:var(--font-body); font-weight:700; font-size:17px; color:var(--text-primary); margin:22px 0 8px; }
+.pg p, .pg li { font-size:16px; color:var(--text-secondary); }
+.pg p { margin:0 0 14px; }
+.pg ul, .pg ol { margin:0 0 16px; padding-left:22px; }
+.pg li { margin-bottom:6px; }
+.pg strong { color:var(--text-primary); }
+
+/* Rótulo pequeño (fecha, "última actualización") */
+.pg-meta, .blog-date, .legal-updated {
+  font-family:var(--font-cond); font-weight:700; font-size:13px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--text-muted); margin:0 0 20px;
+}
+
+/* Pie: enlaces a todo lo que no es la app */
+.pg-footer {
+  max-width:720px; margin:0 auto; padding:24px 16px 150px;
+  border-top:1px solid var(--border);
+  display:flex; flex-wrap:wrap; gap:8px 18px; font-size:14px;
+}
+.pg .pg-footer a { color:var(--text-muted); text-decoration:none; }
+.pg .pg-footer a:hover { color:var(--text-primary); }
+
+/* Botón principal (Pregúntale a Salma) */
+.pg-btn {
+  display:inline-block; background:var(--accent); color:var(--text-on-accent) !important;
+  font-family:var(--font-cond); font-weight:800; font-size:18px; letter-spacing:.04em;
+  text-transform:uppercase; text-decoration:none; padding:13px 22px;
+}
+.pg-btn:hover { background:var(--dorado2); }
+
+/* ─── BLOG ─── */
+.blog-subtitle { font-size:18px !important; color:var(--text-primary) !important; line-height:1.55; margin-bottom:24px !important; }
+
+.bloque-sin-salma, .bloque-con-salma, .info-box {
+  background:var(--bg-row); padding:16px 18px; margin:24px 0; border-left:3px solid var(--border);
+}
+.bloque-con-salma { border-left-color:var(--accent); }
+.bloque-sin-salma p, .bloque-con-salma p, .info-box p { margin-bottom:8px; }
+.bloque-sin-salma p:last-child, .bloque-con-salma p:last-child, .info-box p:last-child { margin-bottom:0; }
+.bloque-label {
+  display:flex; align-items:center; gap:8px; margin-bottom:8px;
+  font-family:var(--font-cond); font-weight:800; font-size:14px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--text-muted);
+}
+.bloque-con-salma .bloque-label { color:var(--accent); }
+.salma-avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; }
+
+.checklist { list-style:none; padding-left:0; }
+.checklist li { padding-left:28px; position:relative; }
+.checklist li::before { content:'✓'; position:absolute; left:4px; color:var(--accent); font-weight:700; }
+.checklist.nocklist li::before { content:'✕'; color:var(--text-muted); }
+
+.presupuesto-table { width:100%; border-collapse:collapse; margin:16px 0 24px; font-size:15px; }
+.presupuesto-table th, .presupuesto-table td { padding:10px 8px; border-bottom:1px solid var(--border); text-align:left; color:var(--text-secondary); }
+.presupuesto-table th { font-family:var(--font-cond); font-size:14px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+
+.blog-cta { background:var(--bg-row); padding:22px 18px; margin:36px 0; border-top:3px solid var(--accent); }
+.blog-cta p, .blog-cta-text { color:var(--text-primary) !important; font-size:17px !important; margin-bottom:14px !important; }
+
+.blog-related { margin:32px 0 0; }
+.blog-related-title {
+  font-family:var(--font-cond); font-weight:800; font-size:14px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;
+}
+.blog-related a {
+  display:block; padding:12px 0; border-bottom:1px solid var(--border-subtle);
+  color:var(--text-primary); text-decoration:none; font-size:16px;
+}
+.blog-related a::after { content:' →'; color:var(--accent); }
+
+/* Índice del blog */
+.blog-intro { font-size:17px !important; margin-bottom:24px !important; }
+.articles { display:flex; flex-direction:column; }
+.article-card {
+  display:block; text-decoration:none; padding:18px 0; border-bottom:1px solid var(--border);
+}
+.pg .article-card h2 { margin:0 0 6px; padding:0; border:0; font-size:22px; }
+.article-card p { margin:0 0 6px; font-size:15px; }
+.article-card .meta {
+  font-family:var(--font-cond); font-weight:700; font-size:13px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--text-muted);
+}
+.article-card:hover h2 { color:var(--accent); }
+
+/* ─── LEGAL ─── */
+.legal-tabs {
+  position:sticky; top:0; z-index:50; background:var(--bg-base);
+  border-bottom:1px solid var(--border); display:flex; overflow-x:auto; scrollbar-width:none;
+}
+.legal-tabs::-webkit-scrollbar { display:none; }
+.pg .legal-tabs a {
+  flex:1 0 auto; text-align:center; padding:13px 14px; white-space:nowrap;
+  font-family:var(--font-cond); font-weight:700; font-size:15px; letter-spacing:.05em;
+  text-transform:uppercase; color:var(--text-muted); text-decoration:none;
+  border-bottom:3px solid transparent;
+}
+.pg .legal-tabs a.on { color:var(--text-primary); border-bottom-color:var(--accent); }
+.legal-section { scroll-margin-top:60px; padding-bottom:28px; margin-bottom:28px; border-bottom:1px solid var(--border); }
+.legal-section:last-child { border-bottom:0; }
+.legal-placeholder {
+  background:var(--bg-row); padding:12px 14px; margin:0 0 14px;
+  color:var(--text-muted); font-size:14px; border-left:3px solid var(--border);
+}
+.legal-steps { counter-reset:paso; list-style:none; padding-left:0 !important; }
+.legal-steps li { counter-increment:paso; padding-left:32px; position:relative; }
+.legal-steps li::before {
+  content:counter(paso); position:absolute; left:0; top:1px; width:22px; height:22px;
+  background:var(--accent); color:var(--text-on-accent); font-family:var(--font-cond);
+  font-weight:800; font-size:14px; text-align:center; line-height:22px;
+}
+
+@media (max-width:480px) {
+  .pg h1 { font-size:30px; }
+  .pg h2 { font-size:22px; }
+}
