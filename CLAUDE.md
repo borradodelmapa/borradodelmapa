@@ -977,6 +977,15 @@ El Worker tiene `scheduled()` en `salma-worker.js` con 2 disparos automáticos, 
 > avisos nuevos; si vuelven se reabren y avisan; las tareas las cierra Paco). Paco pide un caso con el
 > botón "🤖 Pedir a Claude" (copia "Mira el caso <id>: …"). La llave `api/cases-token.txt` (secreto
 > `CASES_TOKEN`) SOLO sirve para casos — nunca usar ni pedir `ADMIN_TOKEN` para esto.
+>
+> **PANTALLA "HOY" (26 sept 2026) — inicio del panel admin, para TODO el proyecto.** Cada caso tiene **área**
+> (fallos · salma · ux · dev · seguridad · costes · negocio · legal), puede ser una **decisión** de Paco (campo
+> `decision` = la pregunta), tiene **hilo de comentarios** (Paco escribe en el panel; Claude con `comentar`) y
+> **candado de sesión** (`coger`/`soltar`, §1). "Te toca a ti" = propuestas + decisiones + tareas subidas por probar.
+> **Rutina de cada sesión:** AL EMPEZAR `node scripts/casos.cjs hoy` (y leer los comentarios de Paco) → decir a
+> Paco qué hay y por dónde seguir · al trabajar un caso `coger` · AL SUBIR A PRODUCCIÓN `version "qué se subió"
+> <ids>` (registro de subidas, colección `deploys`) · AL TERMINAR dejar cada caso al día (`estado`/`comentar`).
+> Lo nuevo del proyecto (idea, tarea, riesgo, decisión) → caso con su área (`crear`), nunca una lista aquí.
 
 > **Este es el único archivo de pendientes del proyecto — no crear otro.** Recortado el
 > 25 sept 2026 (a petición de Paco: "RECORTA CLAUDE.MD") — el historial de sesiones,
