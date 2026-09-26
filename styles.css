@@ -7145,3 +7145,5 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .itin-locked-body{padding:14px 14px 16px;text-align:center;}
 .itin-locked-body .irg-count{font-size:19px;}
 .itin-locked-body .irg-text{font-size:14px;margin:6px 0 12px;}
+/* Perfil: con qué cuenta se ha entrado (26 sept 2026) */
+.prof-hero-via{font-family:var(--font-body);font-size:13px;color:#C4C7C9;margin:4px 0 2px;text-align:center;word-break:break-all;}

@@ -1709,6 +1709,15 @@ async function renderProfile() {
     ? `<div class="prof-avatar prof-avatar-has-img" id="prof-avatar-btn"><img src="${currentUser.avatarURL}" alt="Avatar"><div class="prof-avatar-edit-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div></div>`
     : `<div class="prof-avatar" id="prof-avatar-btn">${escapeHTML(initial)}<div class="prof-avatar-edit-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div></div>`;
 
+  // Orden del Perfil (Paco, 26 sept 2026): fuera "Cuaderno de Viaje" (duplicaba Mis Viajes:
+  // las mismas rutas agrupadas por país) y las filas ocultas (Notas, Galería, ¿Qué puedo
+  // hacer?) con sus separadores; "Mi plan" pasa a CUENTA; se ve con qué cuenta se ha
+  // entrado; SOS aquí solo configura contactos (el envío está en el acceso SOS del inicio).
+  const _waPhone = currentUser.phone || '';
+  const _viaLine = currentUser.email
+    ? 'Entraste con Google · ' + escapeHTML(currentUser.email)
+    : (_waPhone ? 'Entraste con WhatsApp · ' + escapeHTML(_waPhone) : '');
+
   $content.innerHTML = `
     <div class="profile-area prof-v2 fade-in">
       <input type="file" id="prof-avatar-input" accept="image/*" style="display:none">
@@ -1719,6 +1728,7 @@ async function renderProfile() {
         <div class="prof-hero-glow"></div>
         ${avatarHtml}
         <div class="prof-hero-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
+        ${_viaLine ? `<div class="prof-hero-via">${_viaLine}</div>` : ''}
         <div class="prof-stats-strip">
           <div class="prof-stat-card" id="prof-stat-plan">
             <div class="prof-stat-number">${planNum}</div>
@@ -1732,41 +1742,14 @@ async function renderProfile() {
         </div>
       </div>
 
-      <!-- Card 1: Tu Viaje -->
+      <!-- Tu viaje -->
       <div class="prof-group">
         <div class="prof-group-title">TU VIAJE</div>
         <div class="prof-card">
-          <div class="prof-row" id="prof-plan">
-            <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
-            <span class="prof-row-label">Mi plan</span>
-            <span class="prof-coins-badge">${planBadge}</span>
-            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-          <div class="prof-row-sep"></div>
           <div class="prof-row prof-row-highlight" id="prof-perfil-ia">
             <span class="prof-row-icon prof-row-icon-accent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2a4.5 4.5 0 0 0-4.5 4.5v.34A3.5 3.5 0 0 0 3 10v1a3.5 3.5 0 0 0 1.35 2.76A4.5 4.5 0 0 0 9 18.5V21"/><path d="M14.5 2a4.5 4.5 0 0 1 4.5 4.5v.34A3.5 3.5 0 0 1 21 10v1a3.5 3.5 0 0 1-1.35 2.76A4.5 4.5 0 0 1 15 18.5V21"/><path d="M9 21h6"/></svg></span>
             <span class="prof-row-label">Lo que Salma sabe de ti</span>
             <span class="prof-row-badge">${(currentUser.perfil_ia?.facts || []).length} DATOS</span>
-          </div>
-          <div class="prof-row-sep"></div>
-          <div class="prof-row" id="prof-notas" hidden>
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
-            <span class="prof-row-label">Mis Notas</span>
-            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-          <div class="prof-row-sep"></div>
-          <!-- Galería oculta de la UI (pendiente C, doc 8 sep). No se borra: reactivar quitando hidden. -->
-          <div class="prof-row" id="prof-galeria" hidden>
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
-            <span class="prof-row-label">Galería</span>
-            <button class="prof-row-info-btn" id="prof-galeria-info" onclick="event.stopPropagation()">i</button>
-            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-          <div class="prof-row-sep" data-sep-for="prof-galeria"></div>
-          <div class="prof-row" id="prof-bitacora">
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></span>
-            <span class="prof-row-label">Cuaderno de Viaje</span>
-            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-docs">
@@ -1777,26 +1760,32 @@ async function renderProfile() {
         </div>
       </div>
 
-      <!-- Card 2: Seguridad -->
+      <!-- Seguridad: aquí solo se configuran los contactos -->
       <div class="prof-group">
         <div class="prof-group-title">SEGURIDAD</div>
         <div class="prof-card ${sosConfigured ? 'prof-card-sos-on' : 'prof-card-sos-off'}">
           <div class="prof-row prof-row-sos" id="prof-sos">
             <span class="prof-row-icon prof-row-icon-sos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-            <span class="prof-row-label">SOS Emergencia</span>
+            <span class="prof-row-label">Contactos SOS<span class="prof-row-hint">A quién avisamos si pulsas SOS</span></span>
             <span class="prof-sos-badge">${sosConfigured
               ? '<span class="prof-sos-on">configurado</span>'
               : '<span class="prof-sos-off">sin configurar</span>'}</span>
-            <button class="prof-row-info-btn prof-sos-edit-btn" id="prof-sos-edit" onclick="event.stopPropagation()" title="Editar contactos">✏️</button>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
         </div>
       </div>
 
-      <!-- Card 3: Cuenta -->
+      <!-- Cuenta -->
       <div class="prof-group">
         <div class="prof-group-title">CUENTA</div>
         <div class="prof-card">
+          <div class="prof-row" id="prof-plan">
+            <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
+            <span class="prof-row-label">Mi plan</span>
+            <span class="prof-coins-badge">${planBadge}</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
           <div class="prof-row prof-row-switch" id="prof-share-routes">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
             <span class="prof-row-label">Compartir mis rutas<span class="prof-row-hint">Otros viajeros las ven en Explorar, con tu nombre de pila</span></span>
@@ -1805,21 +1794,15 @@ async function renderProfile() {
           <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-whatsapp">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
-            <span class="prof-row-label">Vincular WhatsApp</span>
+            ${_waPhone
+              ? `<span class="prof-row-label">WhatsApp vinculado<span class="prof-row-hint">${escapeHTML(_waPhone)} · toca para hablar con Salma</span></span>`
+              : '<span class="prof-row-label">Vincular WhatsApp<span class="prof-row-hint">Tus rutas y notas de WhatsApp, también aquí</span></span>'}
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-logout">
             <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
             <span class="prof-row-label">Cerrar sesión</span>
-            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-          <div class="prof-row-sep"></div>
-          <div class="prof-row-sep" data-sep-for="prof-help"></div>
-          <!-- "¿Qué puedo hacer?" oculto de la UI (pendiente C, doc 8 sep). No se borra: reactivar quitando hidden. -->
-          <div class="prof-row" id="prof-help" hidden>
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-            <span class="prof-row-label">¿Qué puedo hacer?</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
         </div>
@@ -1872,14 +1855,14 @@ async function renderProfile() {
     avatarCamera.addEventListener('change', (e) => handleAvatarFile(e.target.files[0]));
   }
   document.getElementById('prof-perfil-ia').addEventListener('click', () => showState('perfil-ia'));
-  document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
   document.getElementById('prof-plan').addEventListener('click', openCoinsModal);
-  document.getElementById('prof-notas').addEventListener('click', () => showState('notas'));
-  document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
   document.getElementById('prof-docs').addEventListener('click', () => {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
   });
-  document.getElementById('prof-whatsapp').addEventListener('click', () => openWhatsAppLinkModal());
+  document.getElementById('prof-whatsapp').addEventListener('click', () => {
+    // Cuenta creada desde WhatsApp → abre la conversación; si no, vincular
+    if (currentUser.phone) _openSalmaWhatsApp(); else openWhatsAppLinkModal();
+  });
   document.getElementById('prof-share-toggle').addEventListener('change', async (e) => {
     const on = e.target.checked;
     e.target.disabled = true;
@@ -1896,16 +1879,8 @@ async function renderProfile() {
   document.getElementById('prof-galeria-info')?.addEventListener('click', () => {
     showInfoPopup('Aquí puedes organizar las fotos de todos tus viajes. Crear galerías nuevas. Y hacer videos para compartir con tus amigos en redes sociales o como quieras.');
   });
-  document.getElementById('prof-help').addEventListener('click', () => renderSalmaCan());
-  document.getElementById('prof-sos').addEventListener('click', () => {
-    const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone && c.phone.trim());
-    if (contacts.length === 0) {
-      renderSOSConfig();
-    } else {
-      showSOSConfirm();
-    }
-  });
-  document.getElementById('prof-sos-edit').addEventListener('click', () => renderSOSConfig());
+  // Aquí solo se configuran los contactos (antes, con contactos puestos, abría el ENVÍO del SOS)
+  document.getElementById('prof-sos').addEventListener('click', () => renderSOSConfig());
   document.getElementById('prof-logout').addEventListener('click', () => {
     if (confirm('¿Cerrar sesión?')) logout();
   });
