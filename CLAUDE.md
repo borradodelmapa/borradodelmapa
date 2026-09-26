@@ -1374,9 +1374,14 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
   `sitemap-destinos.xml` (la selección de 301) — restaurarlo con `git checkout` si no se
   quiere cambiar.
   **Pendiente:** (1) confirmar en pantalla el último paso (Explorar sin sesión dentro de la
-  app, página pública de guía con menú nuevo, destinos regenerados); (2) **noindex —
-  decisión de Paco:** creía que la portada y destinos estaban en noindex, pero NO lo están
-  (`index,follow` en el meta, sin cabecera X-Robots-Tag; comprobado 26 sept en la web real);
+  app, página pública de guía con menú nuevo, destinos regenerados); (2) **SEO — HECHO 26 sept (Paco: "no quiero problemas con google"):** las 1.793 páginas de
+  destinos pasan a `noindex,follow` (`DESTINOS_ROBOTS` en `build-destinos.js`) y `sitemap.xml` ya
+  solo enlaza static + blog (fuera `sitemap-destinos.xml` y el sitemap del Worker muerto
+  `paco-defoto`). Portada, blog y legal siguen indexables. Para lanzar destinos: volver
+  `DESTINOS_ROBOTS` a `index,follow,max-snippet:-1`, regenerar y devolver el sitemap —
+  mejor por tandas, los mejores primero. **Siguiente SEO, sin prisa:** guías públicas
+  responden 404 (se sirven desde `404.html`) → Google no las indexa; portada sin H1 ni
+  enlaces fijos a Destinos/Blog;
   (3) Italia, Portugal, Japón, Marruecos y México no tienen página de destino porque faltan
   sus JSON en `worker/kv/output-nivel2` (163 de 193) — generarlos cuesta Claude Sonnet
   (céntimos); (4) con sesión iniciada solo se simuló el aviso de WhatsApp.

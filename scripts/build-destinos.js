@@ -77,6 +77,12 @@ const DESTINOS_CSS_V = 2;
 // y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
 // número que styles.css?v= en index.html — subirlo a la vez.
 const APP_CSS_V = 144;
+// NOINDEX a propósito (Paco, 26 sept 2026): 1.793 páginas con la misma plantilla y texto
+// generado se arriesgan a que Google las trate como contenido en serie. Siguen visibles
+// para quien entra, pero Google no las indexa (follow: sí sigue los enlaces). También
+// se sacó sitemap-destinos.xml de sitemap.xml. Para lanzarlas: volver a
+// 'index,follow,max-snippet:-1', regenerar y devolver sitemap-destinos.xml a sitemap.xml.
+const DESTINOS_ROBOTS = 'noindex,follow';
 
 // Logo — mismo wordmark y clases que el index de la app (app.js:_renderChatEmpty,
 // ".ce-top .ce-brand"), como enlace estático a "/" (ahí no hay JS de estado que
@@ -327,7 +333,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
   <title>${escapeHTML(pageTitle)}</title>
   <meta name="description" content="${escapeHTML(metaDesc)}">
   <meta name="theme-color" content="#050505">
-  <meta name="robots" content="index,follow,max-snippet:-1">
+  <meta name="robots" content="${DESTINOS_ROBOTS}">
   <link rel="canonical" href="${canonical}">
 
   <meta property="og:type" content="article">
@@ -640,7 +646,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   <title>${escapeHTML(pageTitle)}</title>
   <meta name="description" content="${escapeHTML(metaDesc)}">
   <meta name="theme-color" content="#050505">
-  <meta name="robots" content="index,follow,max-snippet:-1">
+  <meta name="robots" content="${DESTINOS_ROBOTS}">
   <link rel="canonical" href="${canonical}">
 
   <meta property="og:type" content="article">
@@ -770,7 +776,7 @@ function buildIndexHTML(countriesByContinent) {
   <title>${escapeHTML(pageTitle)}</title>
   <meta name="description" content="${escapeHTML(metaDesc)}">
   <meta name="theme-color" content="#050505">
-  <meta name="robots" content="index,follow,max-snippet:-1">
+  <meta name="robots" content="${DESTINOS_ROBOTS}">
   <link rel="canonical" href="${DOMAIN}/destinos/">
 
   <meta property="og:type" content="website">
