@@ -1259,6 +1259,21 @@ async function _waCreateAccount(env, from, profileName) {
   return uid;
 }
 
+// Deja anotado en users/{uid} el número de WhatsApp vinculado (Paco, 26 sept 2026: "debería
+// quedarse anotado en su usuario que tiene las dos opciones"). Hasta ahora solo vivía en
+// whatsapp_sessions/{numero}, que la app no lee — por eso la web no sabía si una cuenta de
+// Google ya lo tenía vinculado. Solo Firestore, sin APIs de pago. Nunca rompe el flujo.
+async function _markUserWhatsApp(env, uid, from) {
+  const phone = _normalizePhoneE164(String(from || '').replace(/^whatsapp:/, ''));
+  if (!uid || !phone) return;
+  try {
+    await firestoreAdminPatch(env, 'users/' + uid, {
+      whatsapp_phone: { stringValue: phone },
+      whatsapp_linked_at: { timestampValue: new Date().toISOString() },
+    });
+  } catch (e) { console.error('[WA-MARCA] users/' + uid + ':', e.message); }
+}
+
 // Enlace de un solo uso que entra YA logueado, para cuando el Worker menciona la web
 // dentro de un mensaje de WhatsApp a un uid que ya conoce (25 sept 2026, F5.4 —
 // "sigamos pensando" de Paco: quien ya escribe desde un número identificado no debería
@@ -10608,8 +10623,10 @@ export default {
                   linked_at: { timestampValue: new Date().toISOString() },
                   profile_name: { stringValue: String(profileName || '') },
                 });
+                await _markUserWhatsApp(env, codeUid, from);
                 await sendWhatsAppMessage(env, from, `¡Listo${profileName ? ', ' + profileName : ''}! Ya tienes tu WhatsApp vinculado a tu cuenta de Borrado del Mapa — a partir de ahora hablas conmigo aquí igual que en la app. ¿En qué te ayudo?`);
               } else if (linkedUid === codeUid) {
+                await _markUserWhatsApp(env, codeUid, from);
                 await sendWhatsAppMessage(env, from, 'Ese número ya estaba vinculado a esa misma cuenta — no hace falta nada más. ¿En qué te ayudo?');
               } else if (String(linkedUid).startsWith('wa_')) {
                 // El número tenía la cuenta que se crea sola por WhatsApp y ahora el usuario,
@@ -10624,6 +10641,7 @@ export default {
                   profile_name: { stringValue: String(profileName || '') },
                   merged_from: { stringValue: String(linkedUid) },
                 });
+                await _markUserWhatsApp(env, codeUid, from);
                 console.log('[WA-UNIR]', from, linkedUid, '→', codeUid, JSON.stringify(copied));
                 const traidas = (copied.notas || copied.maps)
                   ? ` He pasado a tu cuenta ${copied.notas} nota${copied.notas === 1 ? '' : 's'} y ${copied.maps} ruta${copied.maps === 1 ? '' : 's'} que tenías guardadas por aquí.`
@@ -11014,6 +11032,31 @@ export default {
         // wa.me directo (mínima fricción: abre WhatsApp con el código ya escrito).
         const waNumber = (env.TWILIO_WHATSAPP_FROM || '').replace(/^whatsapp:/, '').trim();
         return new Response(JSON.stringify({ code, whatsapp_number: waNumber }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /whatsapp-status (26 sept 2026) ───
+    // ¿Tiene esta cuenta un WhatsApp vinculado? Lo pregunta la app al tocar "Salma también
+    // en tu WhatsApp" SOLO si su ficha aún no lo tiene anotado (cuentas vinculadas antes de
+    // existir users/{uid}.whatsapp_phone, o que acaban de vincular con la app abierta). Si
+    // lo encuentra en whatsapp_sessions, lo deja anotado para no volver a preguntar.
+    // Solo Firestore (una consulta + a lo sumo una escritura), sin APIs de pago.
+    if (request.method === 'POST' && url.pathname === '/whatsapp-status') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const user = await verifyAuthAndGetUser(request.headers.get('Authorization'));
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
+      }
+      try {
+        const docs = await firestoreAdminQueryByField(env, 'whatsapp_sessions', 'uid', user.uid, 1);
+        if (!docs.length) return new Response(JSON.stringify({ linked: false }), { headers: corsH });
+        const from = decodeURIComponent(docs[0].split('/').pop());
+        const phone = _normalizePhoneE164(from.replace(/^whatsapp:/, ''));
+        if (!phone) return new Response(JSON.stringify({ linked: false }), { headers: corsH });
+        await _markUserWhatsApp(env, user.uid, from);
+        return new Response(JSON.stringify({ linked: true, phone }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }

@@ -455,7 +455,7 @@ function _renderChatEmpty() {
   const chipsRight = _pick(['alojamiento', 'sos']);
   const chipsMore = _pick(['narrador', 'consultas', 'notas', 'alertas', 'moneda', 'traductor']);
   // Salma en WhatsApp — fila propia a todo lo ancho, no es un acceso más: es otro canal.
-  const _ceWaRow = `<button class="chat-empty-chip ce-wa-chip" data-action="whatsapp"><svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>Salma también en tu WhatsApp</button>`;
+  const _ceWaRow = `<button class="chat-empty-chip ce-wa-chip" data-action="whatsapp"><svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg><span class="ce-wa-label">${_salmaWaChipLabel()}</span></button>`;
   const renderChip = c => {
     const narratorOn = c.action === 'explorar' && typeof salma !== 'undefined' && salma._narratorActive;
     const cameraBadge = narratorOn ? '<span class="chip-camera-badge" data-camera-badge="1" title="Identifica lo que ves al momento por foto">📷</span>' : '';
@@ -1789,10 +1789,10 @@ async function renderProfile() {
   // las mismas rutas agrupadas por país) y las filas ocultas (Notas, Galería, ¿Qué puedo
   // hacer?) con sus separadores; "Mi plan" pasa a CUENTA; se ve con qué cuenta se ha
   // entrado; SOS aquí solo configura contactos (el envío está en el acceso SOS del inicio).
-  const _waPhone = currentUser.phone || '';
+  const _waPhone = currentUser.waPhone || '';
   const _viaLine = currentUser.email
     ? 'Entraste con Google · ' + escapeHTML(currentUser.email)
-    : (_waPhone ? 'Entraste con WhatsApp · ' + escapeHTML(_waPhone) : '');
+    : (currentUser.phone ? 'Entraste con WhatsApp · ' + escapeHTML(currentUser.phone) : '');
 
   $content.innerHTML = `
     <div class="profile-area prof-v2 fade-in">
@@ -1942,8 +1942,8 @@ async function renderProfile() {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
   });
   document.getElementById('prof-whatsapp').addEventListener('click', () => {
-    // Cuenta creada desde WhatsApp → abre la conversación; si no, vincular
-    if (currentUser.phone) _openSalmaWhatsApp(); else openWhatsAppLinkModal();
+    // Con WhatsApp (creada desde WhatsApp o ya vinculada) → abre la conversación; si no, vincular
+    _openSalmaWhatsApp();
   });
   document.getElementById('prof-share-toggle').addEventListener('change', async (e) => {
     const on = e.target.checked;
@@ -4474,7 +4474,11 @@ auth.onAuthStateChanged(async (user) => {
       copilot_data: userData.copilot_data || {},
       share_routes: userData.share_routes !== false, // "Compartir mis rutas" — activado por defecto
       phone: userData.phone || '', // solo lo tienen las cuentas creadas desde WhatsApp
+      // WhatsApp de la cuenta: creada desde WhatsApp (phone) o vinculada después
+      // (whatsapp_phone, lo anota el Worker al vincular — 26 sept 2026).
+      waPhone: userData.phone || userData.whatsapp_phone || '',
     };
+    _refreshSalmaWaChip();
 
     currentUserSOSConfig = userData.sos_config || {
       contacts: [{ name: '', phone: '' }, { name: '', phone: '' }, { name: '', phone: '' }],
@@ -4594,6 +4598,7 @@ auth.onAuthStateChanged(async (user) => {
   } else {
     // No hay sesión → mostrar gate obligatorio
     currentUser = null;
+    _refreshSalmaWaChip();
     // Sin sesión no hay guía activa que enseñar: quitar la que se hubiera quedado en este
     // navegador (sesiones cerradas con versiones anteriores a app.js v=186, que no la
     // borraban al salir) y repintar la portada si ya la enseñaba. La de la cuenta sigue
@@ -5138,11 +5143,20 @@ function openCoinsModal() {
 
 window.openCoinsModal = openCoinsModal;
 
-// ═══ "SALMA TAMBIÉN EN TU WHATSAPP" (propuesta UX 26 sept 2026) ═══
-// Sin sesión → portada (ahí está "Entrar con WhatsApp"). Cuenta creada desde WhatsApp
-// (tiene phone) → abre la conversación directa. Cuenta de Google → la web no sabe si ya
-// vinculó el número (eso vive en whatsapp_sessions, no en users/), así que se pregunta:
-// abrir WhatsApp sin vincular crearía una cuenta aparte con rutas y notas separadas.
+// ═══ "SALMA TAMBIÉN EN TU WHATSAPP" (propuesta UX 26 sept 2026, rehecho el mismo día) ═══
+// Sin sesión → portada (ahí está "Entrar con WhatsApp"). Con WhatsApp en la cuenta (creada
+// desde WhatsApp → `phone`; vinculada después → `whatsapp_phone`, lo anota el Worker) → el
+// botón dice "Sigue con Salma en WhatsApp" y abre la conversación directa. Sin él → ventana
+// con UN solo botón, "Vincular mi WhatsApp" (antes había también "Ya lo tengo vinculado",
+// que abría WhatsApp sin comprobar nada — Paco: "no debería"). Si la ficha aún no lo tiene
+// anotado (vinculado antes de existir el campo, o con la app abierta), se pregunta una vez
+// al Worker (/whatsapp-status), que además lo deja anotado.
+function _salmaWaChipLabel() {
+  return (currentUser && currentUser.waPhone) ? 'Sigue con Salma en WhatsApp' : 'Salma también en tu WhatsApp';
+}
+function _refreshSalmaWaChip() {
+  document.querySelectorAll('.ce-wa-chip .ce-wa-label').forEach(el => { el.textContent = _salmaWaChipLabel(); });
+}
 async function _salmaWaDigits() {
   if (_waDigits) return _waDigits;
   try {
@@ -5151,11 +5165,33 @@ async function _salmaWaDigits() {
   } catch (_) {}
   return _waDigits;
 }
+async function _salmaWaCheckLinked() {
+  try {
+    const authUser = auth.currentUser;
+    if (!authUser) return false;
+    const idToken = await authUser.getIdToken();
+    const r = await fetch(window.SALMA_API + '/whatsapp-status', { method: 'POST', headers: { 'Authorization': 'Bearer ' + idToken } });
+    const data = await r.json();
+    if (data && data.linked && data.phone && currentUser) {
+      currentUser.waPhone = data.phone;
+      _refreshSalmaWaChip();
+      return true;
+    }
+  } catch (_) {}
+  return false;
+}
 async function _openSalmaWhatsApp() {
   if (!currentUser) { openModal(); return; }
+  if (!currentUser.waPhone) await _salmaWaCheckLinked();
+  if (!currentUser.waPhone) { _showSalmaWaLinkPrompt(); return; }
   const digits = await _salmaWaDigits();
-  const waUrl = digits ? 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Hola Salma') : null;
-  if (currentUser.phone && waUrl) { window.open(waUrl, '_blank'); return; }
+  if (!digits) { if (typeof showToast === 'function') showToast('No se pudo abrir WhatsApp, prueba otra vez'); return; }
+  const waUrl = 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Hola Salma');
+  // Tras un await el navegador del móvil puede bloquear la pestaña nueva → misma pestaña.
+  const w = window.open(waUrl, '_blank');
+  if (!w) window.location.href = waUrl;
+}
+function _showSalmaWaLinkPrompt() {
   let overlay = document.getElementById('narrator-confirm-overlay');
   if (!overlay) {
     overlay = document.createElement('div');
@@ -5169,16 +5205,11 @@ async function _openSalmaWhatsApp() {
       <h2 class="narrator-confirm-title">Salma en tu WhatsApp</h2>
       <p class="narrator-confirm-text">Escríbele como a una amiga: rutas, vuelos, hoteles, sitios cerca, notas de voz y fotos. Vincúlalo una vez y tus rutas y notas de WhatsApp aparecen también aquí.</p>
       <div class="narrator-confirm-btns">
-        <button class="narrator-confirm-cancel" id="salma-wa-open"${waUrl ? '' : ' disabled'}>Ya lo tengo vinculado</button>
         <button class="narrator-confirm-go" id="salma-wa-link">Vincular mi WhatsApp</button>
       </div>
     </div>`;
   overlay.style.display = 'flex';
   overlay.onclick = (e) => { if (e.target === overlay) overlay.style.display = 'none'; };
-  document.getElementById('salma-wa-open').addEventListener('click', () => {
-    overlay.style.display = 'none';
-    if (waUrl) window.open(waUrl, '_blank');
-  });
   document.getElementById('salma-wa-link').addEventListener('click', () => {
     overlay.style.display = 'none';
     openWhatsAppLinkModal();
