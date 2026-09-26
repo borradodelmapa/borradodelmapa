@@ -1354,6 +1354,33 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
 
 ### 🟡 Importante
 
+- **Revisión UX (heurísticas de Nielsen), 26 sept 2026 — SUBIDA a producción, bloques 1-3
+  CONFIRMADOS EN PANTALLA por Paco.** Solo frontend, sin Worker ni APIs de pago. Commits
+  `a57c2f10` (portada que explica Salma + "Echar un vistazo sin cuenta"; chat sin sesión
+  pide entrar ANTES de enviar y guarda la pregunta; inicio con 4 accesos; Ayuda = "¿Qué
+  puedo hacer?" + feedback, detalles técnicos plegados) → `d28215f3` + `8e82e5eb`
+  (legibilidad: mínimo 12px, mayúsculas solo en rótulos cortos, 7→3 tipografías) →
+  `bb1464b4` (menú `Ayuda · Explorar · [Salma] · Mis viajes · Perfil`, "Nueva" en el chat
+  con aviso de conversación sin guardar, sin tutorial de 3 pantallas, WhatsApp como canal
+  en portada/inicio/Ayuda, 6 ejemplos con etiqueta) → `aef0f9b6` (Explorar sin sesión abre
+  la ruta DENTRO de la app; `404.html` —página pública de guías— con el menú y la cabecera
+  actuales, antes copia de marzo) → `ab090c5e` (1.781 páginas de destinos regeneradas:
+  seguían con la plantilla antigua, cabecera rota y chat apuntando al dominio muerto
+  `paco-defoto`). Vigente: `app.js?v=173`, `salma.js?v=112`, `styles.css?v=144`.
+  **§9 ampliado:** el menú de abajo vive ahora en TRES sitios — `app.js:updateBottomBar()`,
+  `BOTTOM_NAV` de `scripts/build-destinos.js` y `addBottomBar()` de `404.html`. Las páginas
+  de destinos cargan `styles.css?v=${APP_CSS_V}` (antes sin `?v=`): subir `APP_CSS_V` a la
+  vez que el `?v=` de `index.html`. Ojo: `build-destinos.js` sin `--country` reescribe
+  `sitemap-destinos.xml` (la selección de 301) — restaurarlo con `git checkout` si no se
+  quiere cambiar.
+  **Pendiente:** (1) confirmar en pantalla el último paso (Explorar sin sesión dentro de la
+  app, página pública de guía con menú nuevo, destinos regenerados); (2) **noindex —
+  decisión de Paco:** creía que la portada y destinos estaban en noindex, pero NO lo están
+  (`index,follow` en el meta, sin cabecera X-Robots-Tag; comprobado 26 sept en la web real);
+  (3) Italia, Portugal, Japón, Marruecos y México no tienen página de destino porque faltan
+  sus JSON en `worker/kv/output-nivel2` (163 de 193) — generarlos cuesta Claude Sonnet
+  (céntimos); (4) con sesión iniciada solo se simuló el aviso de WhatsApp.
+
 - **Explorar — rutas de otros viajeros (25 sept 2026) — CONFIRMADO EN PANTALLA por Paco**
   (pestañas, países sin repetir, tarjetas visuales, "salen todas" con mapa). Worker vigente
   `92b8a1c6-515b-4353-832f-15e3dde730f5`, `app.js?v=169`, `styles.css?v=140`. **Solo queda
