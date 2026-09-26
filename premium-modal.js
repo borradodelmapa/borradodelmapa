@@ -105,9 +105,10 @@
             '<span class="pm-bar' + (pct >= 100 ? ' is-full' : '') + '"><i style="width:' + pct + '%"></i></span>' +
             '<span class="pm-meter-val">' + r[1] + '/' + r[2] + '</span></div>';
         }).join('') +
-          // Guías extra (caso p-mui1yhp9ls1): las da recargar siendo ya Premium; se gastan tras el cupo del mes.
-          (usage.plan === 'premium' && usage.bonus_guides > 0
-            ? '<div class="pm-meter-row"><span class="pm-meter-name">Guías extra</span><span></span><span class="pm-meter-val">+' + usage.bonus_guides + '</span></div>'
+          // Guías extra: recargar siendo ya Premium (caso p-mui1yhp9ls1) o regalo por avisar de un fallo (26 sept
+          // 2026, valen también sin Premium). Se gastan cuando se acaba el cupo normal.
+          (usage.bonus_guides > 0
+            ? '<div class="pm-meter-row"><span class="pm-meter-name">🎁 Guías extra</span><span></span><span class="pm-meter-val">+' + usage.bonus_guides + '</span></div>'
             : '') +
           '</div>' +
           (usage.plan === 'premium' && usage.bonus_by_plan

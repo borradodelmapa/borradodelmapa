@@ -8586,9 +8586,9 @@ async function feedbackThanks(env, gid, textoBase) {
     } catch (e) { console.error('[GRACIAS] WhatsApp ' + uid + ': ' + e.message); }
     // 2) Email
     if (!canal && await sendUserEmail(env, u.email || emailMsg, '🎁 Gracias por avisarnos — tienes 1 guía gratis', texto)) canal = 'email';
-    // 3) Aviso al entrar en la app (siempre queda guardado; la app lo enseña solo si no llegó por otro canal)
+    // 3) Aviso al entrar en la app: SIEMPRE, aunque ya le llegara por WhatsApp o email (Paco, 26 sept 2026: que lo vea al entrar)
     await firestoreAdminPatch(env, 'users/' + uid, { aviso_gracias: { mapValue: { fields: {
-      texto: _fS(texto), caso: _fS(gid), at: _fS(new Date().toISOString()), visto: { booleanValue: !!canal }, canal: _fS(canal || 'app'),
+      texto: _fS(texto), caso: _fS(gid), at: _fS(new Date().toISOString()), visto: { booleanValue: false }, canal: _fS(canal || 'app'),
     } } } });
     if (!canal) canal = 'app';
     res[canal]++; res.personas++; nuevos.push(uid);
