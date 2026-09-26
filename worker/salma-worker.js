@@ -3945,7 +3945,7 @@ function waHelpText(profileName) {
     `📷 *Fotos* — mándame un monumento, un plato o un cartel y te digo qué es\n` +
     `🎙️ *Notas de voz* — háblame si no te apetece escribir\n` +
     `📖 *Historia* — de monumentos, pueblos y países\n\n` +
-    `Si me lío, escribe *reinicia* y empezamos de cero. Si algo falla, escribe *fallo:* y lo que ha pasado. ` +
+    `Si me lío, escribe *reinicia* y empezamos de cero. Si algo falla, escribe *fallo:* y lo que ha pasado; si se te ocurre una mejora, *idea:* y tu idea. ` +
     `Para ver esto otra vez, escribe *ayuda*.`;
 }
 
@@ -3953,10 +3953,16 @@ function isWaHelpCommand(message) {
   return /^(ayuda|menu|help|que puedes hacer\??|que sabes hacer\??|opciones)$/.test(_nmNorm(message).replace(/[¿?¡!.]/g, '').trim());
 }
 
-// "fallo: no me encuentra el hotel" / "bug ..." → devuelve el texto de la nota, o null.
+// "fallo: no me encuentra el hotel" / "bug ..." → { kind: 'fallo', note }
+// "idea: que avise de los festivos" / "sugerencia ..." → { kind: 'idea', note } (Mejora Salma, 26 sept 2026)
+// Si no es ninguno de los dos, null.
 function waFalloNote(message) {
-  const m = String(message || '').trim().match(/^(fallo|bug|reportar|reporte)\b\s*[:\-–]?\s*([\s\S]*)$/i);
-  return m ? (m[2].trim() || '(sin descripción)') : null;
+  const t = String(message || '').trim();
+  const m = t.match(/^(fallo|bug|reportar|reporte)\b\s*[:\-–]?\s*([\s\S]*)$/i);
+  if (m) return { kind: 'fallo', note: m[2].trim() || '(sin descripción)' };
+  const i = t.match(/^(idea|sugerencia|propuesta)\b\s*[:\-–]\s*([\s\S]*)$/i);
+  if (i) return { kind: 'idea', note: i[2].trim() || '(sin descripción)' };
+  return null;
 }
 
 function isWaHistoriaCommand(message) {
@@ -3979,6 +3985,7 @@ const WA_TIPS = [
   '🎙️ Si vas con prisa, mándame una nota de voz.',
   '🔄 Si alguna vez me lío, escribe "reinicia" y empezamos de cero.',
   '❓ Escribe "ayuda" y te enseño todo lo que puedo hacer por aquí.',
+  '💡 ¿Se te ocurre cómo mejorarme? Escribe "idea:" y tu idea — las leemos todas.',
 ];
 
 // Un recordatorio cada 5 respuestas normales, rotando. Contador por número en KV (30 días).
@@ -4090,7 +4097,7 @@ async function waTranscribeAudio(env, buf, contentType) {
 
 // "fallo: ..." → beta_feedback (mismo formato que el panel 🐛 de la web, sale en la pestaña
 // Feedback del panel admin) + email a Paco. Sin coste de API.
-async function waSaveFallo(env, ctx, uid, from, profileName, note, history) {
+async function waSaveFallo(env, ctx, uid, from, profileName, note, history, kind = 'fallo') {
   const nowIso = new Date().toISOString();
   const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const logsText = (history || []).slice(-10)
@@ -4098,7 +4105,8 @@ async function waSaveFallo(env, ctx, uid, from, profileName, note, history) {
     .join('\n');
   const str = v => ({ stringValue: String(v || '') });
   await firestoreAdminPatch(env, 'beta_feedback/' + docId, {
-    note: str(note.slice(0, 2000)),
+    note: str(((kind === 'idea' ? '💡 Idea: ' : '🐞 Fallo: ') + note).slice(0, 2000)),
+    kind: str(kind === 'idea' ? 'panel_idea' : 'panel_fallo'),
     user_id: str(uid),
     user_name: str(profileName),
     email: str(''),
@@ -4114,7 +4122,7 @@ async function waSaveFallo(env, ctx, uid, from, profileName, note, history) {
   });
   if (env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
     const who = profileName || String(from || '').replace(/^whatsapp:/, '');
-    ctx.waitUntil(sendFeedbackEmail(env, env.PACO_EMAIL_TO, `🧪 Fallo por WhatsApp — ${who}`,
+    ctx.waitUntil(sendFeedbackEmail(env, env.PACO_EMAIL_TO, `${kind === 'idea' ? '💡 Idea' : '🐞 Fallo'} por WhatsApp — ${who}`,
       `${who}\n\n"${note}"\n\n— últimos mensajes —\n${logsText || '(sin historial)'}`.slice(0, 5000)));
   }
 }
@@ -8941,6 +8949,7 @@ export default {
             id: row.document.name.split('/').pop(), at: v(f.timestamp), note: v(f.note), email: v(f.email), user_name: v(f.user_name), user_id: v(f.user_id),
             page: v(f.page), url: v(f.url), worker_version: v(f.worker_version), front_versions: v(f.front_versions), user_agent: v(f.user_agent),
             screenshot_url: v(f.screenshot_url), seen: v(f.seen) === true, logs_len: logs.length, logs: logs.slice(-6000),
+            kind: v(f.kind) || 'panel', reason: v(f.reason), contact: v(f.contact),
           });
         }
         return new Response(JSON.stringify({ items, unseen: items.filter(i => !i.seen).length }), { headers: corsH });
@@ -10043,8 +10052,10 @@ export default {
             let hist = [];
             try { hist = JSON.parse((await env.SALMA_KB.get('wa_history:' + from)) || '[]'); } catch (_) {}
             try {
-              await waSaveFallo(env, ctx, linkedUid, from, profileName, waFallo, hist);
-              await sendWhatsAppMessage(env, from, 'Apuntado, gracias — se lo paso al equipo con lo último que hemos hablado. Si quieres empezar de cero, escribe *reinicia*.');
+              await waSaveFallo(env, ctx, linkedUid, from, profileName, waFallo.note, hist, waFallo.kind);
+              await sendWhatsAppMessage(env, from, waFallo.kind === 'idea'
+                ? '💡 ¡Apuntada! Gracias por la idea — las leemos todas.'
+                : 'Apuntado, gracias — se lo paso al equipo con lo último que hemos hablado. Si es un fallo y lo confirmamos, te regalamos *1 mes de Premium*. Si quieres empezar de cero, escribe *reinicia*.');
             } catch (e) {
               console.error('[WhatsApp] Error guardando fallo:', e.message);
               await sendWhatsAppMessage(env, from, 'No he podido apuntar el fallo ahora mismo — prueba en un rato.');
@@ -10378,75 +10389,120 @@ export default {
     // user_id coincida con el uid real verificado por Firestore al validar el token,
     // así que un token falso o de otro uid nunca puede colarse aquí). Avisa a Paco por
     // WhatsApp con sendWhatsAppMessage() (reutiliza F5.1) sin bloquear la respuesta.
+    // Mejora Salma (26 sept 2026): acepta también SIN cuenta (Paco: "sin cuenta sí") —
+    // con token se guarda quién es; sin token, límite de 30 envíos/hora por IP (KV) para
+    // que no se pueda llenar de spam. Se escribe con la cuenta de servicio (ya no con el
+    // token del usuario), así da igual si hay sesión.
+    // kind: panel_fallo | panel_idea | panel_encanta | panel (antiguo) | up | down | auto_error
+    //   up          → feedback_ratings (solo cuenta, no llena la pestaña Feedback del panel)
+    //   el resto    → beta_feedback (pestaña Feedback del panel admin, como siempre)
+    // Avisos a Paco: email en todo menos up/auto_error; WhatsApp solo en lo del formulario.
+    // Sin APIs de pago: Firestore + KV + los avisos (Resend/Twilio) que ya existían.
     if (request.method === 'POST' && url.pathname === '/beta-feedback') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-      const authHeader = request.headers.get('Authorization');
-      const user = await verifyAuthAndGetUser(authHeader);
-      if (!user) {
-        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
-      }
-      const idToken = authHeader.slice(7);
+      const user = await verifyAuthAndGetUser(request.headers.get('Authorization'));
 
       let body;
       try { body = await request.json(); } catch (e) {
         return new Response(JSON.stringify({ error: 'invalid_json' }), { status: 400, headers: corsH });
       }
-      const note = String(body.note || '').trim().slice(0, 2000);
-      if (!note) {
+      const KINDS = ['panel', 'panel_fallo', 'panel_idea', 'panel_encanta', 'up', 'down', 'auto_error'];
+      const kind = KINDS.includes(body.kind) ? body.kind : 'panel';
+      const reason = String(body.reason || '').trim().slice(0, 80);
+      const ctxBody = (body.context && typeof body.context === 'object') ? body.context : {};
+      const cx = {
+        where: String(ctxBody.where || '').slice(0, 20),          // chat | ruta | error
+        question: String(ctxBody.question || '').slice(0, 1000),
+        answer: String(ctxBody.answer || '').slice(0, 2500),
+        route_id: String(ctxBody.route_id || '').slice(0, 80),
+        route_title: String(ctxBody.route_title || '').slice(0, 200),
+        stops: String(ctxBody.stops || '').slice(0, 1500),
+      };
+      const KIND_LABEL = { panel: '💬', panel_fallo: '🐞 Algo no va', panel_idea: '💡 Idea', panel_encanta: '❤️ Le encanta',
+        up: '👍', down: '👎', auto_error: '⚠️ Aviso automático' };
+      let note = String(body.note || '').trim().slice(0, 2000);
+      if (!note && kind === 'panel') {
         return new Response(JSON.stringify({ error: 'empty_note' }), { status: 400, headers: corsH });
       }
-      const logsText = String(body.logs_text || '').slice(-20000);
-      const screenshotUrl = String(body.screenshot_url || '').slice(0, 500);
+
+      // Sin cuenta: límite por IP
+      if (!user && env.SALMA_KB) {
+        const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const rk = 'fbrate:' + ip + ':' + new Date().toISOString().slice(0, 13);
+        const n = parseInt((await env.SALMA_KB.get(rk)) || '0', 10) || 0;
+        if (n >= 30) return new Response(JSON.stringify({ error: 'Demasiados envíos seguidos — prueba en un rato.' }), { status: 429, headers: corsH });
+        ctx.waitUntil(env.SALMA_KB.put(rk, String(n + 1), { expirationTtl: 3700 }));
+      }
+
+      const str = v => ({ stringValue: String(v || '') });
       const nowIso = new Date().toISOString();
       const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      const contact = String(body.contact || '').trim().slice(0, 120);
+      const whoName = user ? String(user.name || '') : (contact ? 'Sin cuenta · ' + contact : 'Sin cuenta');
+
+      if (kind === 'up') {
+        try {
+          await firestoreAdminPatch(env, 'feedback_ratings/' + docId, {
+            kind: str('up'), where: str(cx.where), user_id: str(user ? user.uid : ''),
+            route_id: str(cx.route_id), question: str(cx.question.slice(0, 300)), timestamp: { timestampValue: nowIso },
+          });
+        } catch (e) {
+          return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+        }
+        return new Response(JSON.stringify({ ok: true, id: docId }), { status: 200, headers: corsH });
+      }
+
+      // Nota legible para la pestaña Feedback del panel (que solo pinta "note"): tipo +
+      // motivo + dónde + el texto, y el contexto (pregunta/respuesta o ruta) debajo.
+      const whereLabel = cx.where === 'chat' ? 'Chat' : cx.where === 'ruta' ? 'Ruta' : cx.where === 'error' ? 'Error' : '';
+      const head = [KIND_LABEL[kind], whereLabel, reason].filter(Boolean).join(' · ');
+      const ctxLines = [
+        cx.route_title ? 'Ruta: ' + cx.route_title + (cx.route_id ? ' (' + cx.route_id + ')' : '') : '',
+        cx.question ? 'Pregunta: ' + cx.question : '',
+        cx.answer ? 'Respuesta de Salma: ' + cx.answer.slice(0, 1200) : '',
+        cx.stops ? 'Paradas: ' + cx.stops : '',
+      ].filter(Boolean).join('\n');
+      const fullNote = (head + (note ? ' — ' + note : '') + (ctxLines ? '\n\n' + ctxLines : '')).slice(0, 4000);
+
+      const logsText = String(body.logs_text || '').slice(-20000);
+      const screenshotUrl = String(body.screenshot_url || '').slice(0, 500);
       const fields = {
-        note:           { stringValue: note },
-        user_id:        { stringValue: user.uid },
-        user_name:      { stringValue: String(user.name || '') },
-        email:          { stringValue: String(body.email || '') },
-        page:           { stringValue: String(body.page || '').slice(0, 300) },
-        url:            { stringValue: String(body.url || '').slice(0, 500) },
-        worker_version: { stringValue: String(body.worker_version || '') },
-        front_versions: { stringValue: (Array.isArray(body.front_versions) ? body.front_versions.join(' ') : '').slice(0, 1000) },
-        user_agent:     { stringValue: String(body.user_agent || '').slice(0, 300) },
-        logs_text:      { stringValue: logsText },
-        screenshot_url: { stringValue: screenshotUrl },
+        note:           str(fullNote),
+        kind:           str(kind),
+        reason:         str(reason),
+        context:        str(JSON.stringify(cx)),
+        contact:        str(contact),
+        user_id:        str(user ? user.uid : ''),
+        user_name:      str(whoName),
+        email:          str(body.email || ''),
+        page:           str(String(body.page || '').slice(0, 300)),
+        url:            str(String(body.url || '').slice(0, 500)),
+        worker_version: str(body.worker_version || ''),
+        front_versions: str((Array.isArray(body.front_versions) ? body.front_versions.join(' ') : '').slice(0, 1000)),
+        user_agent:     str(String(body.user_agent || '').slice(0, 300)),
+        logs_text:      str(logsText),
+        screenshot_url: str(screenshotUrl),
         timestamp:      { timestampValue: nowIso },
         seen:           { booleanValue: false },
       };
-
       try {
-        const fsRes = await fetch(`${FIRESTORE_BASE}/beta_feedback/${docId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
-          body: JSON.stringify({ fields }),
-          signal: AbortSignal.timeout(8000),
-        });
-        if (!fsRes.ok) {
-          const errText = await fsRes.text().catch(() => '');
-          return new Response(JSON.stringify({ error: 'firestore_write_failed', detail: errText.slice(0, 300) }), { status: 502, headers: corsH });
-        }
+        await firestoreAdminPatch(env, 'beta_feedback/' + docId, fields);
       } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+        return new Response(JSON.stringify({ error: 'firestore_write_failed', detail: e.message.slice(0, 300) }), { status: 502, headers: corsH });
       }
 
-      // Aviso a Paco por WhatsApp — best effort, no bloquea la respuesta al tester.
-      // Los 4 secrets (TWILIO_ACCOUNT_SID/AUTH_TOKEN/WHATSAPP_FROM/PACO_WHATSAPP_TO) ya
-      // están puestos y confirmados en pantalla (19-21 sept 2026). Sin alguno de ellos,
-      // el feedback se guarda igual, solo no avisa.
-      const who = body.email || user.name || user.uid.slice(0, 8);
+      const who = body.email || contact || (user && user.name) || (user ? user.uid.slice(0, 8) : 'sin cuenta');
       const lastLines = logsText.split('\n').slice(-15).join('\n');
       const shotLine = screenshotUrl ? `\n📎 Captura: ${screenshotUrl}\n` : '';
-      if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
-        const waText = `🧪 Feedback tester\n${who}\n${String(body.page || '')}\n\n"${note}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
+      const isPanel = kind.startsWith('panel');
+      // WhatsApp a Paco solo con lo escrito a mano en el formulario (los 👎 van por email)
+      if (isPanel && env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) {
+        const waText = `🧪 Mejora Salma\n${who}\n${String(body.page || '')}\n\n"${fullNote}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 3000);
         ctx.waitUntil(sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, waText));
       }
-      // Aviso a Paco por email (Resend) — 22 sept 2026, añadido porque el aviso de
-      // WhatsApp dejó de fiarse mientras se migra Twilio a producción (ver CLAUDE.md).
-      // Va SIEMPRE, independiente de si el WhatsApp de arriba funciona o no.
-      if (env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
-        const emailSubject = `🧪 Feedback tester — ${who}`;
-        const emailBody = `${who}\n${String(body.page || '')}\n\n"${note}"\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 5000);
+      if (kind !== 'auto_error' && env.RESEND_API_KEY && env.PACO_EMAIL_TO) {
+        const emailSubject = `🧪 Mejora Salma — ${head || 'feedback'} — ${who}`;
+        const emailBody = `${who}\n${String(body.page || '')}\n\n${fullNote}\n${shotLine}\n— últimos logs —\n${lastLines || '(sin logs)'}`.slice(0, 5000);
         ctx.waitUntil(sendFeedbackEmail(env, env.PACO_EMAIL_TO, emailSubject, emailBody));
       }
 
