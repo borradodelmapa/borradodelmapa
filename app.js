@@ -3608,6 +3608,11 @@ function _explorarCard(g) {
 // compartida). Antes, sin sesión saltaba a la página pública (404.html), con el diseño y
 // el menú antiguos (Paco, 26 sept 2026: "es lo antiguo"). public_guides es de lectura
 // abierta, y GUARDAR sin sesión ya pide entrar (guardarGuia).
+// Slug de guía pública válido (mismo formato que genera generateSlug) o null.
+function _validSlug(s) {
+  return (typeof s === 'string' && /^[a-z0-9-]{3,120}$/.test(s)) ? s : null;
+}
+
 async function _openPublicGuide(slug, g) {
   try {
     const doc = await db.collection('public_guides').doc(slug).get();
@@ -3751,6 +3756,14 @@ function openModal() {
   const screen = document.getElementById('auth-screen');
   if (!screen) return;
   screen.classList.add('active');
+  // La 1ª vez (al llegar) el botón es "Echar un vistazo sin cuenta"; si la portada se
+  // abre desde dentro (un corte de registro, una ruta abierta detrás) es "Volver sin entrar".
+  const _vb = document.getElementById('btn-vistazo-sin-login');
+  if (_vb && (window._gateShownOnce || window._itinViewOpen)) {
+    _vb.dataset.inside = '1';
+    _vb.textContent = 'Volver sin entrar';
+  }
+  window._gateShownOnce = true;
   _checkBiometricAvailable();
 }
 
@@ -3777,7 +3790,14 @@ document.getElementById('btn-vistazo-sin-login')?.addEventListener('click', (e) 
   _skipOnboardingFromGate();
   // Si la portada se vuelve a abrir desde dentro (ej. "Entrar gratis"), el botón
   // ya no es "echar un vistazo" sino volver a donde estaba, sin tocar la pantalla.
-  if (e.currentTarget.dataset.inside) { closeModal(); return; }
+  // Con una ruta abierta detrás (avance del día 1) también: solo cerrar, sin ir al inicio.
+  if (e.currentTarget.dataset.inside || window._itinViewOpen) {
+    e.currentTarget.dataset.inside = '1';
+    e.currentTarget.textContent = 'Volver sin entrar';
+    try { localStorage.removeItem('bdm_reopen_guia'); } catch (_) {}
+    closeModal();
+    return;
+  }
   e.currentTarget.dataset.inside = '1';
   e.currentTarget.textContent = 'Volver sin entrar';
   closeModal();
@@ -4287,6 +4307,9 @@ auth.onAuthStateChanged(async (user) => {
     }
     const pagoParam = new URLSearchParams(window.location.search).get('pago');
     const goParam = new URLSearchParams(window.location.search).get('go');
+    const guiaParam = _validSlug(new URLSearchParams(window.location.search).get('guia'));
+    let _reopenSlug = null;
+    try { _reopenSlug = _validSlug(localStorage.getItem('bdm_reopen_guia')); } catch (_) {}
     if (window._pendingShareId) {
       const shareId = window._pendingShareId;
       window._pendingShareId = null;
@@ -4316,6 +4339,21 @@ auth.onAuthStateChanged(async (user) => {
       history.replaceState(null, '', '/');
       showState('profile');
       openCoinsModal();
+    } else if (guiaParam || window._reopenRouteAfterLogin || _reopenSlug) {
+      // Política §10: venía de un avance (día 1) → al entrar, la MISMA ruta, ya entera.
+      // guiaParam = enlace desde la página pública; _reopenSlug sobrevive a recargas
+      // (entrar con WhatsApp en el móvil sale de la pestaña y vuelve).
+      const _r = window._reopenRouteAfterLogin;
+      window._reopenRouteAfterLogin = null;
+      try { localStorage.removeItem('bdm_reopen_guia'); } catch (_) {}
+      if (guiaParam) history.replaceState(null, '', '/');
+      if (typeof salma !== 'undefined') salma._initChat();
+      showState('chat');
+      if (_r && _r.stops && typeof window.openItinerarioView === 'function') {
+        window.openItinerarioView(_r, null, { fromChat: false, saved: false });
+      } else {
+        _openPublicGuide(guiaParam || _reopenSlug);
+      }
     } else if (goParam) {
       history.replaceState(null, '', '/');
       if (goParam === 'explorar') { window._rutasTab = 'explorar'; showState('rutas'); }
@@ -4342,6 +4380,21 @@ auth.onAuthStateChanged(async (user) => {
     // Desde el menú de /destinos/: Explorar y Ayuda se pueden ver sin cuenta, sin
     // pasar por la portada (propuesta UX 26 sept 2026).
     const _goAnon = new URLSearchParams(window.location.search).get('go');
+    // ?guia=<slug> (botón "Ver la ruta completa" de la página pública): sin cuenta se ve el
+    // avance del día 1 dentro de la app, con el corte para registrarse (CLAUDE.md §10).
+    const _guiaAnon = _validSlug(new URLSearchParams(window.location.search).get('guia'));
+    if (_guiaAnon) {
+      // Viene de pulsar "Ver la ruta completa" en la página pública: ya pidió verla
+      // entera → registro directo, con el avance detrás ("Volver sin entrar" lo enseña)
+      // y, al entrar, la ruta completa (bdm_reopen_guia sobrevive a la vuelta de WhatsApp).
+      history.replaceState(null, '', '/');
+      try { localStorage.setItem('bdm_reopen_guia', _guiaAnon); } catch (_) {}
+      showState('chat');
+      _openPublicGuide(_guiaAnon);
+      window._gateShownOnce = true;   // botón "Volver sin entrar" (hay ruta detrás)
+      openModal();
+      return;
+    }
     if (_goAnon === 'explorar' || _goAnon === 'ayuda') {
       history.replaceState(null, '', '/');
       if (_goAnon === 'explorar') window._rutasTab = 'explorar';

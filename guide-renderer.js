@@ -59,8 +59,9 @@ const guideRenderer = {
 
     // Agrupar stops por día
     const days = this._groupByDay(stops);
-    const totalStops = stops.length;
-    const totalDays = Object.keys(days).length;
+    // Avance del día 1 (CLAUDE.md §10, 404.html): la cabecera cuenta la ruta ENTERA
+    const totalStops = (r._previewTotals && r._previewTotals.stops) || stops.length;
+    const totalDays = (r._previewTotals && r._previewTotals.days) || Object.keys(days).length;
 
     // Construir HTML
     const card = document.createElement('div');

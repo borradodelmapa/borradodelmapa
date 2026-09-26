@@ -28,6 +28,8 @@ const mapaItinerario = {
     this._container.innerHTML = '';
 
     const country = routeData.country || routeData.region || '';
+    // Cabecera con la ruta ENTERA aunque sin cuenta se pinte solo el día 1 (CLAUDE.md §10)
+    const _allStops = (routeData && Array.isArray(routeData.stops) && routeData.stops.length) ? routeData.stops : stops;
     // Si la ruta sigue una carretera con nombre (N2…), el enlace a Google Maps se
     // arma con puntos del trazado real, no solo con las paradas → Google no se
     // desvía a la autopista paralela.
@@ -42,7 +44,7 @@ const mapaItinerario = {
     header.innerHTML = `
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
-        <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
+        <div class="itin-meta">${this._totalDays(_allStops)} días · ${_allStops.length} paradas · ${this._esc(country.toUpperCase())}</div>
         ${country ? `<div class="hist-inline-mount" data-place="${this._esc(country)}"></div>` : ''}
       </div>
     `;
@@ -158,11 +160,27 @@ const mapaItinerario = {
   // esto escribe en shared_routes — el que abre el link tiene que registrarse/
   // entrar para verla (app.js lo intercepta con ?compartir=ID al iniciar sesión).
   async _doShare(routeData, id) {
+    if (typeof db === 'undefined' || typeof currentUser === 'undefined' || !currentUser) {
+      if (typeof showToast !== 'undefined') showToast('Inicia sesión para compartir');
+      return;
+    }
+    // Política §10 (26 sept 2026): el enlace es la guía pública (borradodelmapa.com/<slug>)
+    // → tarjeta con foto en WhatsApp + avance del día 1 para quien no tiene cuenta. Si la
+    // ruta aún no tiene guía pública, se usa el enlace de antes (?compartir=, pide cuenta).
+    let slug = routeData && routeData._saved_from && routeData._saved_from.slug;
+    if (!slug) {
+      try {
+        const d = await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get();
+        const m = d.exists ? d.data() : null;
+        if (m && m.published !== false && m.slug) slug = m.slug;
+        else if (m && m.saved_from && m.saved_from.slug) slug = m.saved_from.slug;
+      } catch (_) {}
+    }
+    if (slug) {
+      this._shareLink(routeData, window.location.origin + '/' + slug);
+      return;
+    }
     try {
-      if (typeof db === 'undefined' || typeof currentUser === 'undefined' || !currentUser) {
-        if (typeof showToast !== 'undefined') showToast('Inicia sesión para compartir');
-        return;
-      }
       await db.collection('shared_routes').doc(id).set({
         uid: currentUser.uid,
         owner_name: currentUser.name || 'Un viajero',
@@ -175,7 +193,10 @@ const mapaItinerario = {
       if (typeof showToast !== 'undefined') showToast('No se pudo preparar el link para compartir');
       return;
     }
-    const url = window.location.origin + '/?compartir=' + id;
+    this._shareLink(routeData, window.location.origin + '/?compartir=' + id);
+  },
+
+  _shareLink(routeData, url) {
     const title = routeData.title || routeData.name || 'Mi ruta';
     const text = `Te comparto esta ruta: ${title}`;
     if (navigator.share) {
@@ -653,10 +674,14 @@ const mapaItinerario = {
     document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
     view.style.display = 'block';
 
-    // Inicializar mapa (preview: sin controles, solo botón "Ir al mapa") y cards
-    const stops = routeData.stops;
-    mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: routeData.road_geometry || null });
+    // Política "mirar sí, usar con cuenta" (CLAUDE.md §10): sin sesión, avance = solo el
+    // día 1 (mapa + tarjetas) y un corte con lo que falta y el botón de registrarse.
+    const _anon = typeof currentUser === 'undefined' || !currentUser;
+    const _preview = _anon ? _previewDay1(routeData.stops) : null;
+    const stops = _preview ? _preview.stops : routeData.stops;
+    mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: _preview ? null : (routeData.road_geometry || null) });
     mapaItinerario.init('itin-cards-container', stops, routeData, options);
+    if (_preview) _appendRegisterGate('itin-cards-container', _preview, routeData);
 
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
@@ -682,6 +707,38 @@ const mapaItinerario = {
     // Fuera el monkey-patch de window.showState (causaba un leak: cada
     // apertura/cierre por ✕ apilaba otro wrapper sin restaurarlo).
     if (window.pushModal) window.pushModal('itinerario', _teardownItinView);
+  }
+
+  // Avance del día 1 para quien no tiene cuenta. null si la ruta es de un solo día
+  // (entonces se ve entera: el día 1 ES la ruta).
+  function _previewDay1(allStops) {
+    const day = s => Number(s && s.day) || 1;
+    const days = new Set(allStops.map(day));
+    if (days.size <= 1) return null;
+    const first = Math.min(...days);
+    const stops = allStops.filter(s => day(s) === first);
+    return { stops, restDays: days.size - 1, restStops: allStops.length - stops.length };
+  }
+
+  function _appendRegisterGate(containerId, preview, routeData) {
+    const cont = document.getElementById(containerId);
+    if (!cont) return;
+    const gate = document.createElement('div');
+    gate.className = 'itin-register-gate';
+    const d = preview.restDays, p = preview.restStops;
+    gate.innerHTML = `
+      <div class="irg-count">Te ${d === 1 ? 'queda' : 'quedan'} <b>${d} día${d > 1 ? 's' : ''}</b> y <b>${p} parada${p !== 1 ? 's' : ''}</b></div>
+      <div class="irg-text">Regístrate gratis para ver la ruta completa, guardarla y preguntarle a Salma por ella.</div>
+      <button class="irg-btn" type="button">Ver la ruta completa <span>→</span></button>
+      <div class="irg-note">Con Google o con WhatsApp · en cinco segundos</div>`;
+    gate.querySelector('.irg-btn').addEventListener('click', () => {
+      // Al entrar, app.js reabre esta misma ruta ya entera (onAuthStateChanged).
+      window._reopenRouteAfterLogin = routeData;
+      const _slug = routeData && routeData._saved_from && routeData._saved_from.slug;
+      try { if (_slug) localStorage.setItem('bdm_reopen_guia', _slug); } catch (_) {}
+      if (typeof openModal === 'function') openModal();
+    });
+    cont.appendChild(gate);
   }
 
   // Desmontaje puro de la vista (DOM + mapas). NO toca historial.
@@ -739,7 +796,15 @@ const mapaItinerario = {
     const fab = document.getElementById('itin-chat-fab');
     if (!fab) return;
     fab.style.display = 'flex';
-    fab.onclick = _openItinQuery;
+    fab.onclick = () => {
+      // Preguntarle a Salma exige cuenta (CLAUDE.md §10): al entrar, vuelve a esta ruta.
+      if (typeof currentUser === 'undefined' || !currentUser) {
+        window._reopenRouteAfterLogin = window._itinViewRoute || null;
+        if (typeof openModal === 'function') openModal();
+        return;
+      }
+      _openItinQuery();
+    };
   }
 
   let _itinQueryObserver = null;
