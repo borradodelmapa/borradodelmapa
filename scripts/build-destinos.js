@@ -89,6 +89,8 @@ const LOGO_HTML = `<div class="ce-top"><a class="ce-brand" href="/">✦ BORRADO<
 // Menú inferior — ÚNICA fuente para las 1.793 páginas. Mismas clases CSS que
 // la app real (app-bottom-bar/bottom-tab/bottom-tab-fab, ver styles.css), como
 // enlaces estáticos (sin JS de estado — no hay sesión/salma cargados aquí).
+// ⚠️ Copiado TAMBIÉN en 404.html (addBottomBar, página pública de guías) — si se
+// toca aquí, tocarlo allí igual (26 sept 2026).
 // Cualquier retoque futuro del menú se hace SOLO aquí y se reaplica con
 // `node scripts/build-destinos.js` — nunca a mano en un HTML generado.
 // "Ayuda" apunta a la pantalla "¿Qué puede hacer Salma?" (no al panel de

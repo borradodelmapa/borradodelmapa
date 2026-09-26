@@ -3604,10 +3604,11 @@ function _explorarCard(g) {
   return card;
 }
 
-// Con sesión: se abre dentro de la app (vista itinerario, igual que una ruta compartida).
-// Sin sesión: la página pública de la guía (404.html), que ya funciona sin login.
+// Con y sin sesión: se abre dentro de la app (vista itinerario, igual que una ruta
+// compartida). Antes, sin sesión saltaba a la página pública (404.html), con el diseño y
+// el menú antiguos (Paco, 26 sept 2026: "es lo antiguo"). public_guides es de lectura
+// abierta, y GUARDAR sin sesión ya pide entrar (guardarGuia).
 async function _openPublicGuide(slug, g) {
-  if (!currentUser) { window.location.href = '/' + encodeURIComponent(slug); return; }
   try {
     const doc = await db.collection('public_guides').doc(slug).get();
     if (!doc.exists) { showToast('Esta ruta ya no está disponible'); return; }
