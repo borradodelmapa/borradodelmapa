@@ -3871,3 +3871,9 @@ Retomado lo pausado el 19 sept. **Confirmado por Paco:** ruta de prueba (Toledo 
 - **App:** `_perfilIARefresh()` relee `perfil_ia` de Firestore antes de modificarlo (el Worker también escribe ahí).
 - PRs #18 y #19. Worker `45ec34b3` → **vigente `74f2b860-e296-4051-a0ce-cae33e5bd3bf`**. `app.js?v=201`, `salma.js?v=115`.
 - **Pendiente (siguiente paso):** Salma todavía NO usa `perfil_ia` al contestar (ni web ni WhatsApp) — toca el prompt (skill `prompt-salma`). El interruptor "avisarte sola" tampoco hace nada aún. Vigilar que los datos no se llenen de cosas triviales o repetidas.
+
+## 27 sept 2026 (tarde) — Perfil IA EN USO: Salma usa lo que sabe del viajero
+- **Paso 1, web — DESPLEGADO, falta prueba de Paco:** bloque `BLOQUE_PERFIL_VIAJERO` (texto aprobado por Paco) + `[PERFIL DEL VIAJERO: …]` justo detrás de la parte fija, **cacheado aparte** (2ª marca en `buildCachedSystem`). Máx. 10 datos, sin repetidos, **nunca "trato"** (no debe cambiar su personalidad). Sin lecturas nuevas: sale del documento que ya lee `verifyAuthAndGetUser`. Borrar un dato → deja de llegar al siguiente mensaje. PR #21, Worker **`face6f16-09ec-4515-8557-d9f1d81164c4`** (Action #88; `/version` no comprobable desde la nube). Vuelta atrás: `96cfc1a` (el tag no se pudo subir desde la nube).
+- **Tope 5 €/mes en total** para usar (`perfiluso:budget:YYYY-MM` en KV, gasto ESTIMADO por lo alto: web ×1,5, WhatsApp ×3; fail-closed). Paco: máximo 10 €/mes entre usar (5 €) y aprender (5 €, hoy 3 €).
+- **Paso 2, WhatsApp — preparado en la rama, SIN desplegar** hasta que Paco confirme el paso 1: mismo bloque, datos desde `waGetUserPlan` (ya leía el documento). **Paso 3:** subir `PERFIL_IA_MONTHLY_USD` a 5,4.
+- Casos por crear en `docs/casos-por-crear/2026-09-27-nube.json` (caché del prompt en WhatsApp; control de gastos del Perfil IA en el admin).
