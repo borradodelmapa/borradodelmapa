@@ -1671,6 +1671,9 @@ const salma = {
           }
           // Ruta nueva — indicar que hay que pulsar GUARDAR
           this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
+          // Copia para el Perfil IA: el historial se vacía aquí, ANTES de que el usuario pulse
+          // GUARDAR, y _perfilIAExtract() (app.js) se quedaba sin los mensajes del chat.
+          this._lastRouteHistory = this.history.slice(-12);
           this.history = [];
           this._saveSession();
           this._threadId = null;   // la guía cierra la consulta; la siguiente empieza un hilo nuevo

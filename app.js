@@ -2308,9 +2308,19 @@ async function _perfilIAExtract(ruta) {
   const token = await authUser.getIdToken();
 
   const existingFacts = (perfilIA.facts || []).map(f => ({ categoria: f.categoria, texto: f.texto }));
-  const recentMessages = (typeof salma !== 'undefined' && Array.isArray(salma.history))
-    ? salma.history.slice(-12).map(m => ({ role: m.role, text: m.content }))
-    : [];
+  // Los mensajes que llevaron a esta ruta: salma.js guarda una copia en _lastRouteHistory
+  // porque vacía salma.history al terminar de generarla, antes de que se pulse GUARDAR.
+  // Se usa una sola vez, para que no se cuele en la extracción de otra ruta.
+  let _hist = [];
+  if (typeof salma !== 'undefined') {
+    if (Array.isArray(salma._lastRouteHistory) && salma._lastRouteHistory.length) {
+      _hist = salma._lastRouteHistory;
+      salma._lastRouteHistory = null;
+    } else if (Array.isArray(salma.history)) {
+      _hist = salma.history;
+    }
+  }
+  const recentMessages = _hist.slice(-12).map(m => ({ role: m.role, text: m.content }));
   const guideSummary = {
     nombre: ruta.nombre,
     destino: ruta.destino,
