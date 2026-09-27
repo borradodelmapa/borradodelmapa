@@ -1,0 +1,14 @@
+[
+  {
+    "titulo": "Idea: audioguías de monumentos y ciudades con la voz de Salma (empezar por la Alhambra)",
+    "tipo": "idea",
+    "zona": "otro",
+    "area": "negocio",
+    "gravedad": "baja",
+    "modelo": "opus",
+    "ejemplo": "27 sept 2026, charla con Paco: audioguía de la Alhambra (o cualquier monumento/ciudad) aprovechando historia + voz. Paco: 'lo dejamos para estudiar'. Requisito: que sea la voz VERDADERA de Salma, no una enlatada. ElevenLabs descartado por caro.",
+    "nota": "IDEA: pistas de 1,5-3 min por parada (Alhambra: Puerta de la Justicia, Carlos V, Alcazaba, Nazaríes -Mexuar, Comares, Leones, Partal-, Generalife), cada una con 'cuéntame más' y 'pregúntale a Salma' (chat en directo con el contexto de la parada). Reproductor en la vista de ruta: lista manual (el GPS falla dentro de los Nazaríes), descarga sin conexión, sigue sonando con pantalla bloqueada (Media Session API). GPS automático solo como extra en exteriores/ciudades. VOZ: hoy Salma ya habla con Google Chirp 3 HD 'es-ES-Chirp3-HD-Leda' (salma.js:156, /tts-google); ElevenLabs solo queda en translator.js:154. A estudiar: Gemini TTS (3.8 Flash TTS, sept 2026) con instrucciones de estilo (susurrar, emoción) y voz diseñada con ID fijo = voz propia de Salma. Regla: la misma voz en chat, narrador y guía. Prueba propuesta: 2 pistas de la Alhambra, una con Chirp Leda y otra con Gemini TTS + estilo, y Paco elige. GENERACIÓN: casi instantánea (guion Claude ~30-60 s, audio en paralelo ~1 min, la pista 1 suena a los ~10-15 s). Dos niveles: guías revisadas por Paco para los grandes monumentos; bajo demanda para el resto, guardadas en R2 para que el siguiente usuario no pague. COSTE §8 (a ojo, verificar en la consola de Google): Chirp 3 HD ~30 $/1M caracteres con 1M gratis/mes (una guía ≈ 35.000 caracteres → ~0 €); Gemini 3.8 Flash TTS ~0,81 $/hora de audio, SE DUPLICA el 1 ene 2027; guía nueva bajo demanda ≈ 0,50 $ (≈ 0,90 $ desde 2027), reutilizada ≈ 0 $. Riesgo: abuso → exigir cuenta + límite en usageGate. ACCESO §10: sin cuenta las 2-3 primeras pistas + tarjeta 🔒; guía entera con cuenta (¿o premium? decide Paco). RIESGOS: rigor histórico (guion con fuentes, revisado antes de pagar el audio), textos propios (no copiar la audioguía oficial), avisar de la hora fija de entrada a los Nazaríes.",
+    "estado": "nuevo",
+    "decision": "¿Voz: Chirp 3 HD Leda (la de hoy), Gemini TTS con estilo o una voz diseñada solo para Salma? ¿Guía completa gratis con cuenta o premium?"
+  }
+]
