@@ -20,16 +20,5 @@
     "ejemplo": "27 sept 2026: Paco quiere ver en el panel admin lo que se gasta el Perfil IA, con un máximo de 10 €/mes entre los dos topes.",
     "nota": "Dos contadores en KV SALMA_KB, uno por mes (formato {usd, n, last_at}): 'perfilia:budget:YYYY-MM' = APRENDER (GPT-4o-mini, coste real; tope PERFIL_IA_MONTHLY_USD, hoy 3,24 $ ≈ 3 € → pasar a 5,4 $ ≈ 5 € en el paso 3) y 'perfiluso:budget:YYYY-MM' = USAR (Sonnet, coste ESTIMADO por lo alto; tope PERFIL_USO_MONTHLY_USD = 5,4 $ ≈ 5 €). Mostrar en el admin: gastado / tope de cada uno, nº de veces (n) y última vez. Hace falta un endpoint de solo lectura en el Worker (protegido como los del panel) y la tarjeta en el repo Admin-borradodelmapa.",
     "estado": "nuevo"
-  },
-  {
-    "titulo": "Perfil IA en uso: Salma lo aplica poco y mal (perro ignorado, moto dada por segura)",
-    "tipo": "tarea",
-    "zona": "chat",
-    "area": "salma",
-    "gravedad": "media",
-    "modelo": "opus",
-    "ejemplo": "27 sept 2026, cuenta de Paco (perfil: perro, camper, moto, gastronomía e historia). '¿Qué sabes de mí?' lo lista todo bien. Pero '1 día en Cuenca/Sevilla' ignora el perro, y tras el último arreglo solo añadió 'Aparca la moto en el Paseo de Pereda…' como si supiera seguro que va en moto.",
-    "nota": "Hecho hoy (PR #21-#25, Worker vigente ab932af7): BLOQUE_PERFIL_VIAJERO + datos detrás de la parte fija (cacheado), línea en BLOQUE_FORMATO_PLAN, y la instrucción [MODO RECOMENDACIONES] ya no impone 'en pareja' si hay perfil (esa era la causa principal). Queda: 1) con varias opciones (moto/camper) debe condicionar ('si vas en moto…'), no afirmar; 2) el perro sigue sin notarse. Antes de pedir más pruebas a Paco, probar uno mismo con el prompt real (varios mensajes de la batería) y enseñarle solo el resultado bueno. WhatsApp (paso 2, commit 000e39d) y subir el tope de aprender a 5 € (paso 3) esperan a que esto funcione.",
-    "estado": "nuevo"
   }
 ]
