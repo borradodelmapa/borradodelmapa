@@ -9784,7 +9784,10 @@ export default {
       // — clave nueva dedicada solo a esto, 18 sept. Fallback a la vieja por si
       // GOOGLE_STATIC_MAPS_KEY no está puesta todavía (mismo comportamiento de
       // antes, no rompe nada mientras se despliega).
-      const apiKey = url.searchParams.get('key') || env.GOOGLE_STATIC_MAPS_KEY || env.GOOGLE_PLACES_KEY;
+      // 27 sept 2026: la clave ya NO se acepta por la URL (?key=) — la postal de la foto
+      // mandaba la del navegador y cualquiera podía usar este proxy con la clave que quisiera.
+      // Solo las del Worker (secrets).
+      const apiKey = env.GOOGLE_STATIC_MAPS_KEY || env.GOOGLE_PLACES_KEY;
       if (!lat || !lng || !apiKey) {
         return new Response('Missing params', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
       }
