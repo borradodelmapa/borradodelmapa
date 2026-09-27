@@ -2367,7 +2367,7 @@ async function _perfilIAExtract(ruta) {
     return;
   }
   const { facts, capped } = await res.json();
-  if (capped) { console.log('[PerfilIA] tope alcanzado (10 al día o 1 €/mes en total), no se extrae'); return; }
+  if (capped) { console.log('[PerfilIA] tope alcanzado (10 al día o 3 €/mes en total), no se extrae'); return; }
   console.log('[PerfilIA] facts recibidos:', facts);
   if (!Array.isArray(facts) || !facts.length) { console.log('[PerfilIA] sin datos nuevos que aportar'); return; }
 

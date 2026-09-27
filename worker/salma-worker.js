@@ -1017,16 +1017,16 @@ async function usageRecord(env, authUser, delta) {
 // ═══════════════════════════════════════════════════════════════
 // PERFIL IA — "Lo que Salma sabe de ti": aprender de TODO lo que se habla con Salma (27 sept 2026)
 // ═══════════════════════════════════════════════════════════════
-// Decidido con Paco: además de al guardar una ruta (/perfil-ia-extract), se extrae cada 6 mensajes
+// Decidido con Paco: además de al guardar una ruta (/perfil-ia-extract), se extrae cada 2 mensajes
 // del usuario en el chat de la web, en el popup de consulta de una guía y en WhatsApp (el contador
 // es el de mensajes del día de usageRecord, compartido por los tres). GPT-4o-mini en segundo plano.
-// Topes (§8): 10 extracciones por usuario y día + 1 €/mes EN TOTAL para todos los usuarios juntos
+// Topes (§8): 10 extracciones por usuario y día + 3 €/mes EN TOTAL para todos los usuarios juntos
 // (coste REAL de los tokens que devuelve OpenAI, sumado en KV). Al llegar al tope se deja de
 // aprender hasta el mes siguiente; el chat sigue igual. FAIL-CLOSED: si KV falla, no se aprende.
 // La cuenta del mes puede pasarse unos céntimos si coinciden varias a la vez (KV no es atómico).
-const PERFIL_IA_EVERY_N_MSGS = 6;
+const PERFIL_IA_EVERY_N_MSGS = 2;                               // 27 sept 2026 (Paco): 6 → 2
 const PERFIL_IA_MAX_PER_DAY = 10;
-const PERFIL_IA_MONTHLY_USD = 1.08;                              // ≈ 1 €
+const PERFIL_IA_MONTHLY_USD = 3.24;                              // ≈ 3 € (27 sept 2026, Paco: 1 € → 3 €)
 const GPT4O_MINI_USD_PER_MTOK = { in: 0.15, out: 0.60 };
 const PERFIL_IA_CATEGORIAS = ['estilo', 'restricciones', 'patrones', 'trato'];
 
@@ -11136,7 +11136,7 @@ export default {
               await env.SALMA_KB.put(waHistKey, JSON.stringify(updatedHistory), { expirationTtl: 21600 });
             } catch (e) { console.error('[WhatsApp] Error guardando historial:', e.message); }
           }
-          // Perfil IA: mismo aprendizaje que la web, cada 6 mensajes del día (contador compartido).
+          // Perfil IA: mismo aprendizaje que la web, cada 2 mensajes del día (contador compartido).
           // Ya estamos en segundo plano y la respuesta está enviada: esperar aquí no retrasa nada.
           if (typeof chatGate.today === 'number' && (chatGate.today + 1) % PERFIL_IA_EVERY_N_MSGS === 0) {
             await perfilIALearnFromChat(env, linkedUid,
@@ -11635,7 +11635,7 @@ export default {
         return new Response(JSON.stringify({ facts: [] }), { headers: corsH });
       }
       // 27 sept 2026: cuenta en los mismos topes que el aprendizaje desde el chat
-      // (10/usuario/día y 1 €/mes en total) — ver perfilIACanSpend().
+      // (10/usuario/día y 3 €/mes en total) — ver perfilIACanSpend().
       if (!(await perfilIACanSpend(env, authUser.uid))) {
         return new Response(JSON.stringify({ facts: [], capped: true }), { headers: corsH });
       }
@@ -12665,7 +12665,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       });
     }
     if (_usageKind === 'chat') ctx.waitUntil(usageRecord(env, authUser, { msgs: 1 }));
-    // Perfil IA: cada 6 mensajes de chat del día (web + popup de guía + WhatsApp) aprende del
+    // Perfil IA: cada 2 mensajes de chat del día (web + popup de guía + WhatsApp) aprende del
     // usuario en segundo plano — ver perfilIALearnFromChat(). No frena ni cambia la respuesta.
     if (_usageKind === 'chat' && typeof _usageGate.today === 'number' && typeof message === 'string' && message.trim() &&
         (_usageGate.today + 1) % PERFIL_IA_EVERY_N_MSGS === 0) {
