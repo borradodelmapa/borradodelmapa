@@ -27,7 +27,8 @@
         m: msg
       });
       if (logs.length > MAX) logs.shift();
-      // Badge rojo en la pestaña "Ayuda" del menú de abajo si hay error
+      // Badge rojo en la pestaña "Ayuda" del menú de abajo si hay error (pestaña quitada
+      // el 27 sept 2026: sin #tab-tester no hace nada)
       if (kind === 'error') {
         const btn = document.getElementById('tab-tester');
         if (btn) btn.classList.add('dbg-has-error');
@@ -278,7 +279,7 @@
       <button id="dbg-close" aria-label="Cerrar">✕</button>
       <div id="dbg-body">
         <div id="dbg-fb">
-          <h2 class="mj-title">Mejora Salma</h2>
+          <h2 class="mj-title">Ayuda Salma</h2>
           <p class="mj-sub">Salma está creciendo y tú nos ayudas a mejorarla. Lo leemos todo. ${PREMIUM_LINE}</p>
           <div class="mj-kinds">
             ${KIND_OPTS.map(o => `<button type="button" class="mj-kind" data-k="${o.k}"><span>${o.icon}</span>${o.label}</button>`).join('')}
@@ -296,9 +297,14 @@
           <div id="dbg-fb-status"></div>
           <details id="dbg-ver-wrap"><summary>Detalles técnicos</summary><div id="dbg-ver"></div>
             <button id="dbg-fb-copy" type="button">📋 Copiar detalles</button></details>
+          <div id="dbg-salma-can" class="salma-can-area" style="padding:0;margin:0;max-width:none"></div>
         </div>
       </div>`;
     document.body.appendChild(overlay);
+    // "¿Qué puedo hacer?" debajo de Detalles técnicos (Paco, 27 sept 2026) — misma lista
+    // que la pantalla Ayuda (salmaCanHTML en app.js)
+    const canEl = overlay.querySelector('#dbg-salma-can');
+    if (canEl && typeof window.salmaCanHTML === 'function') canEl.innerHTML = window.salmaCanHTML();
     renderVersion();
     loadWorkerVersion().then(renderVersion);
     startVerRefresh();
