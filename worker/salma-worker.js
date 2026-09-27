@@ -1047,13 +1047,13 @@ async function usageRecord(env, authUser, delta) {
 // Decidido con Paco: además de al guardar una ruta (/perfil-ia-extract), se extrae cada 2 mensajes
 // del usuario en el chat de la web, en el popup de consulta de una guía y en WhatsApp (el contador
 // es el de mensajes del día de usageRecord, compartido por los tres). GPT-4o-mini en segundo plano.
-// Topes (§8): 10 extracciones por usuario y día + 3 €/mes EN TOTAL para todos los usuarios juntos
+// Topes (§8): 10 extracciones por usuario y día + 5 €/mes EN TOTAL para todos los usuarios juntos
 // (coste REAL de los tokens que devuelve OpenAI, sumado en KV). Al llegar al tope se deja de
 // aprender hasta el mes siguiente; el chat sigue igual. FAIL-CLOSED: si KV falla, no se aprende.
 // La cuenta del mes puede pasarse unos céntimos si coinciden varias a la vez (KV no es atómico).
 const PERFIL_IA_EVERY_N_MSGS = 2;                               // 27 sept 2026 (Paco): 6 → 2
 const PERFIL_IA_MAX_PER_DAY = 10;
-const PERFIL_IA_MONTHLY_USD = 3.24;                              // ≈ 3 € (27 sept 2026, Paco: 1 € → 3 €)
+const PERFIL_IA_MONTHLY_USD = 5.4;                               // ≈ 5 € (27 sept 2026, Paco: 1 € → 3 € → 5 €; 5 aprender + 5 usar = máx. 10 €/mes)
 const GPT4O_MINI_USD_PER_MTOK = { in: 0.15, out: 0.60 };
 const PERFIL_IA_CATEGORIAS = ['estilo', 'restricciones', 'patrones', 'trato'];
 
@@ -1178,8 +1178,8 @@ async function perfilIALearnFromChat(env, uid, messages) {
 // "trato" (no debe cambiar su personalidad), cacheado aparte (buildCachedSystem) y con tope de
 // 5 €/mes EN TOTAL. El documento del usuario ya se lee en cada mensaje (verifyAuthAndGetUser):
 // no hay lecturas de Firestore nuevas. Si borra un dato en su perfil, deja de llegar al siguiente
-// mensaje. El gasto se ESTIMA por lo alto (cada mensaje como si no acertase la caché, ×1,5 por las
-// vueltas de herramientas): el tope salta antes de gastar de verdad 5 €. FAIL-CLOSED: si KV falla,
+// mensaje. El gasto se ESTIMA por lo alto (web: cada mensaje como si no acertase la caché, ×1,5 por las
+// vueltas de herramientas; WhatsApp, sin caché: ×3): el tope salta antes de gastar de verdad 5 €. FAIL-CLOSED: si KV falla,
 // Salma contesta como antes, sin perfil.
 const PERFIL_USO_MONTHLY_USD = 5.4;                              // ≈ 5 € (27 sept 2026, Paco)
 const PERFIL_USO_MAX_FACTS = 10;
@@ -1209,7 +1209,7 @@ function perfilUsoFacts(perfilIA) {
 
 // Texto que se añade detrás de la parte fija del prompt ('' si no hay datos o no queda presupuesto).
 // Apunta el gasto estimado en KV antes de devolverlo.
-async function perfilUsoCtx(env, facts, extraChars = 0) {
+async function perfilUsoCtx(env, facts, extraChars = 0, factor = 1.5) {
   try {
     if (!Array.isArray(facts) || !facts.length || !env.SALMA_KB) return '';
     const text = '\n\n' + BLOQUE_PERFIL_VIAJERO + '\n[PERFIL DEL VIAJERO:\n'
@@ -1217,7 +1217,7 @@ async function perfilUsoCtx(env, facts, extraChars = 0) {
     const bk = _perfilUsoBudgetKey();
     const b = JSON.parse((await env.SALMA_KB.get(bk)) || '{}');
     if ((b.usd || 0) >= PERFIL_USO_MONTHLY_USD) { console.log('[PerfilUso] tope del mes alcanzado:', (b.usd || 0).toFixed(4), '$'); return ''; }
-    const usd = ((text.length + extraChars) / 3) * SONNET_USD_PER_MTOK_IN * 1.5 / 1e6;
+    const usd = ((text.length + extraChars) / 3) * SONNET_USD_PER_MTOK_IN * factor / 1e6;
     b.usd = Math.round(((b.usd || 0) + usd) * 1e6) / 1e6;
     b.n = (b.n || 0) + 1;
     b.last_at = new Date().toISOString();
@@ -4276,7 +4276,8 @@ async function waGetUserPlan(env, uid) {
     const premiumUntilStr = fields.premium_until?.timestampValue || null;
     const premiumUntilMs = premiumUntilStr ? new Date(premiumUntilStr).getTime() : 0;
     return { uid, premium_until: premiumUntilStr, premium_active: premiumUntilMs > Date.now(),
-             bonus_guides: parseInt(fields.premium_bonus_guides?.integerValue || '0', 10) || 0 };
+             bonus_guides: parseInt(fields.premium_bonus_guides?.integerValue || '0', 10) || 0,
+             perfil_facts: perfilUsoFacts(_parseFirestoreValue(fields.perfil_ia)) };
   } catch (_) {
     return { uid, premium_until: null, premium_active: false, bonus_guides: 0 };
   }
@@ -11177,8 +11178,16 @@ export default {
           const waUserContent = waImageBlock
             ? [waImageBlock, { type: 'text', text: body || '¿Qué es esto?' }]
             : waUserText;
+          // Perfil IA en uso (27 sept 2026, paso 2): el mismo bloque que la web, y en destino/ruta/días también
+          // la nota pegada al mensaje (lo que funcionó en la web). Aquí no hay caché y hay hasta 3 vueltas de
+          // herramientas a precio completo → el gasto se estima ×3 (ver perfilUsoCtx).
+          const waFacts = waPlanChat.perfil_facts || [];
+          const waRecoNote = (waFacts.length && typeof waUserContent === 'string' && (isRouteRequest(body || '', []) || isDaysDestination(body || '')))
+            ? perfilRecoNote(waFacts) : '';
+          const waPerfilCtx = await perfilUsoCtx(env, waFacts, waRecoNote.length, 3);
+          const waUserFinal = (waPerfilCtx && waRecoNote) ? waUserContent + '\n\n' + waRecoNote : waUserContent;
           const { text: chatReplyText, usedTools, usage: waUsage, allFlightSearchesFailed } = await waCallClaudeWithTools(
-            env, WHATSAPP_SYSTEM_CHAT + waLocationCtx, [...waHistory, { role: 'user', content: waUserContent }], waCoords, linkedUid
+            env, WHATSAPP_SYSTEM_CHAT + waPerfilCtx + waLocationCtx, [...waHistory, { role: 'user', content: waUserFinal }], waCoords, linkedUid
           );
           await usageRecord(env, waPlanChat, { msgs: 1, ...(waUsage || {}) });
           // HISTORIA_LUGAR: la web lo convierte en un botón; aquí, en una oferta ("escribe historia").
