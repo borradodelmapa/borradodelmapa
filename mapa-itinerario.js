@@ -54,16 +54,20 @@ const mapaItinerario = {
       if (countryMount) historiaModule.renderCompactInto(countryMount, { place: country });
     }
 
-    // Barra de acciones flotante — se añade al body para escapar del stacking context
+    // Barra de acciones flotante — se añade al body para escapar del stacking context.
+    // Rediseño 27 sept 2026 (con Paco): una sola fila arriba a la derecha, frente a la ✕:
+    // [Guardar] · Editar ruta · Compartir · Google Maps. "Editar ruta" sustituye al lápiz
+    // flotante (#itin-chat-fab) que chocaba con el botón central SALMA del menú.
     {
       const existingBar = document.body.querySelector('.itin-action-bar');
       if (existingBar) existingBar.remove();
       const actionBar = document.createElement('div');
       actionBar.className = 'itin-action-bar';
       actionBar.innerHTML = `
-        ${mapsUrl ? `<a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" style="flex-shrink:0;margin-right:5px"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>Google Maps</a>` : ''}
-        ${options.saved ? '' : '<button class="itin-btn itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
-        <button class="itin-btn itin-btn-share" id="itin-share-btn" title="Compartir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        ${options.saved ? '' : '<button class="itin-btn itin-btn-pill itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
+        <button class="itin-btn itin-btn-pill itin-btn-edit" id="itin-edit-btn" title="Cambiar esta ruta con Salma"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span class="itin-btn-txt">Editar ruta</span></button>
+        <button class="itin-btn itin-btn-icon itin-btn-share" id="itin-share-btn" title="Compartir" aria-label="Compartir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        ${mapsUrl ? `<a class="itin-btn itin-btn-icon itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps" aria-label="Abrir en Google Maps"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></a>` : ''}
       `;
       document.body.appendChild(actionBar);
     }
@@ -140,6 +144,11 @@ const mapaItinerario = {
     // Botón guardar
     document.getElementById('itin-save-btn')?.addEventListener('click', () => {
       if (typeof salma !== 'undefined') salma.guardar();
+    });
+
+    // Botón editar → popup "Editando «…»" (lo escucha la vista de itinerario, abajo)
+    document.getElementById('itin-edit-btn')?.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('itin:edit'));
     });
 
     // Botón compartir
@@ -736,9 +745,6 @@ const mapaItinerario = {
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
 
-    // FAB de chat sobre la guía (abre el popup de consulta)
-    _setupItinChatFab();
-
     // Botón "Ir al mapa" → cierra itinerario + abre mapa live con la ruta cargada + pins
     const _onOpenLiveMap = () => {
       document.removeEventListener('itin:open-live-map', _onOpenLiveMap);
@@ -805,9 +811,6 @@ const mapaItinerario = {
     document.querySelector('.app-header')?.style.removeProperty('display');
     const bottomBar = document.getElementById('app-bottom-bar');
     if (bottomBar) bottomBar.style.display = '';
-
-    const fab = document.getElementById('itin-chat-fab');
-    if (fab) fab.style.display = 'none';
   }
   window._teardownItinView = _teardownItinView;
 
@@ -828,26 +831,20 @@ const mapaItinerario = {
   }
   window._refreshItinInPlace = _refreshItinInPlace;
 
-  // ── FAB "hablar con Salma" sobre la guía → popup de consulta ──
-  // v2 (18 sept): Paco pidió el mismo patrón visual que el modal del Narrador
-  // (overlay oscuro + tarjeta pequeña) en vez de tapar/traslucir la pantalla
-  // entera con el chat completo — la v1 arrastraba conversación vieja sin
-  // relación y el banner del tiempo, confuso. Aquí es un cuadro de texto +
-  // respuesta de Salma autocontenido; la guía se ve detrás, atenuada.
-  function _setupItinChatFab() {
-    const fab = document.getElementById('itin-chat-fab');
-    if (!fab) return;
-    fab.style.display = 'flex';
-    fab.onclick = () => {
-      // Preguntarle a Salma exige cuenta (CLAUDE.md §10): al entrar, vuelve a esta ruta.
-      if (typeof currentUser === 'undefined' || !currentUser) {
-        window._reopenRouteAfterLogin = window._itinViewRoute || null;
-        if (typeof openModal === 'function') openModal();
-        return;
-      }
-      _openItinQuery();
-    };
-  }
+  // ── "Editar ruta" (barra de arriba de la guía, o el lápiz del mapa en vivo) → popup de consulta ──
+  // v2 (18 sept): mismo patrón visual que el modal del Narrador (overlay oscuro + tarjeta
+  // pequeña); la guía se ve detrás, atenuada. 27 sept 2026: antes lo abría un lápiz
+  // flotante (#itin-chat-fab); ahora el botón "Editar ruta" lanza el evento 'itin:edit'.
+  document.addEventListener('itin:edit', () => {
+    if (!window._itinViewOpen) return;
+    // Cambiar la guía con Salma exige cuenta (CLAUDE.md §10): al entrar, vuelve a esta ruta.
+    if (typeof currentUser === 'undefined' || !currentUser) {
+      window._reopenRouteAfterLogin = window._itinViewRoute || null;
+      if (typeof openModal === 'function') openModal();
+      return;
+    }
+    _openItinQuery();
+  });
 
   let _itinQueryObserver = null;
 

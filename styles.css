@@ -3980,39 +3980,6 @@ body {
   backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
 }
-/* Botones centrar y tipo mapa movidos al diario-picker */
-#live-map-routes-btn {
-  position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--crema);
-  border: 1px solid rgba(244,99,11,0.35);
-  border-radius:0;
-  padding: 8px 18px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  white-space: nowrap;
-}
-#live-map-clear-route {
-  position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 52px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 970;
-  background: rgba(232,112,64,0.9);
-  color: #fff;
-  border: none;
-  border-radius:0;
-  padding: 6px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
 #live-map-nearest-chip {
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
@@ -4293,27 +4260,6 @@ body {
   overflow-y: auto;
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.lmrs-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px 12px;
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--crema);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  position: sticky;
-  top: 0;
-  background: var(--negro);
-}
-.lmrs-header button {
-  background: none;
-  border: none;
-  color: var(--crema);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px 8px;
-}
 .lmrs-item {
   display: flex;
   flex-direction: column;
@@ -4534,23 +4480,8 @@ body {
   letter-spacing: .04em; text-transform: uppercase;
 }
 /* Accion principal: Ir aqui */
-.dpick-primary {
-  background: rgba(244,99,11,0.15);
-  border-color: var(--dorado, #F4630B);
-}
-.dpick-primary .dpick-svg { stroke: var(--dorado, #F4630B); }
-.dpick-primary .dpick-label { color: var(--dorado, #F4630B); }
-.dpick-primary:active { background: rgba(244,99,11,0.28); }
 /* Guardar */
-.dpick-save { border-color: rgba(92,184,93,0.35); }
-.dpick-save .dpick-svg { stroke: #5CB85C; }
-.dpick-save .dpick-label { color: rgba(92,184,93,0.8); }
-.dpick-save:active { background: rgba(92,184,93,0.12); }
 /* I'M FINE */
-.dpick-imfine { border-color: rgba(92,184,93,.45); background:rgba(92,184,93,.1); }
-.dpick-imfine .dpick-svg { stroke: #5CB85C; }
-.dpick-imfine .dpick-label { color: rgba(92,184,93,.85); }
-.dpick-imfine:active { background: rgba(92,184,93,.2); }
 .dpick-imfine-menu {
   position:absolute; bottom:calc(100% + 6px); left:14px;
   background:rgba(10,10,15,.95); border:1.5px solid rgba(92,184,93,.3);
@@ -4566,12 +4497,6 @@ body {
 }
 .dpick-imfine-opt:hover,.dpick-imfine-opt:active { background:rgba(92,184,93,.12); }
 /* SOS */
-.dpick-sos { border-color: rgba(220,53,69,.5); background:rgba(220,53,69,.12); }
-.dpick-sos:active { background: rgba(220,53,69,.25); transform:scale(0.93); }
-.dpick-sos-text {
-  font-size:16px; font-weight:900; color:#DC3545;
-  letter-spacing:.08em; line-height:1;
-}
 .dpick-loc {
   font-size: 11px;
   color: rgba(244,239,230,0.5);
@@ -4597,33 +4522,8 @@ body {
 }
 .dpick-close:active { border-color: rgba(244,239,230,0.3); }
 /* Separador visual dentro del picker */
-.dpick-sep {
-  width:85%; height:1px;
-  background:rgba(244,239,230,.08);
-  margin:2px auto;
-}
 /* Fila controles mapa — mismo tamaño que acciones */
-.dpick-ctrl-row { gap:14px; }
 /* Buscador dentro del diario-picker */
-.dpick-search-row {
-  display:flex; align-items:center; gap:8px; width:100%;
-  background:rgba(244,239,230,.04);
-  border:1.5px solid rgba(244,99,11,.2);
-  border-radius:0; padding:8px 12px;
-}
-.dpick-search-input {
-  flex:1; background:none; border:none; outline:none;
-  color:rgba(244,239,230,.9); font-family:var(--font-body);
-  font-size:13px; line-height:1.4; height:28px;
-}
-.dpick-search-input::placeholder { color:rgba(244,239,230,.3); }
-.dpick-search-mic {
-  width:30px; height:30px; border-radius:50%; border:none;
-  background:rgba(244,239,230,.04); color:rgba(244,239,230,.5); cursor:pointer;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  transition:color .15s, background .15s;
-}
-.dpick-search-mic:active { color:var(--dorado); background:rgba(244,99,11,.1); }
 
 .itin-view {
   position: fixed;
@@ -4733,33 +4633,6 @@ body {
    chat (volver a la guía) NO puede quedarse en ese mismo sitio — se comería
    el botón de enviar del input bar — así que se mueve arriba-izquierda,
    lejos también de #chat-fresh (arriba-derecha). ── */
-.itin-chat-fab {
-  position: fixed;
-  right: 16px;
-  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  z-index: 1000;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--dorado); border: none;
-  color: var(--negro); font-size: 22px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,.45);
-  transition: transform .2s, box-shadow .2s;
-  animation: itin-chat-fab-pulse 2.2s ease-in-out infinite;
-}
-@keyframes itin-chat-fab-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
-.itin-chat-fab:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,.5); }
-.itin-chat-fab:active { transform: scale(.93); }
-.itin-chat-fab--back {
-  right: auto; left: 12px;
-  bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 10px);
-  z-index: 1200;
-  width: 40px; height: 40px; font-size: 17px;
-  background: rgba(8,7,4,.9); color: var(--dorado);
-  border: 1.5px solid var(--linea-fuerte);
-  box-shadow: none;
-  animation: none;
-}
 .itin-chat-hint {
   margin: 60px 24px 0;
   padding: 16px;
@@ -7193,3 +7066,177 @@ body:has(#app-content.app-content--chat #chat-area .msg) #mejora-btn{right:calc(
 .mejora-card-kinds button:active{border-color:var(--accent);}
 .itin-rate{margin:18px 16px 28px;padding:14px 16px;background:var(--bg-row);}
 .itin-rate .mj-rate{margin-top:0;font-size:15px;}
+
+/* ═══ Botones de los mapas — rediseño 27 sept 2026 (maqueta aprobada por Paco) ═══
+   Reglas: SALMA (centro abajo) = chat general · lápiz "Editar" = la ruta que tienes
+   delante · ✕ arriba-izquierda = cerrar. Un solo estilo: fondo negro, borde gris fino,
+   icono blanco; borde naranja solo para Editar/Guardar. Esquinas rectas como el resto
+   de botones de la web (doc 8 sept); redondos solo la ✕ y la brújula. */
+
+/* ── Guía (vista itinerario): ✕ a la izquierda, fila de acciones a la derecha ── */
+.itin-mobile-back {
+  top: 12px; left: 12px;
+  width: 44px; height: 44px;
+  background: var(--negro); border: 1px solid var(--border);
+  color: var(--blanco); font-size: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+.itin-mobile-back:hover, .itin-mobile-back:active { background: var(--gris); }
+.itin-action-bar {
+  top: 12px; left: auto; right: 12px;
+  flex-direction: row; align-items: center; gap: 8px;
+  background: none; padding: 0; border: none;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+@media (min-width: 769px) {
+  /* Escritorio: arriba a la derecha del MAPA (60%), no encima de la columna de tarjetas */
+  .itin-action-bar { right: calc(40% + 12px); }
+}
+.itin-action-bar .itin-btn {
+  height: 44px; box-sizing: border-box;
+  background: var(--negro); border: 1px solid var(--border); color: var(--blanco);
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+  border-radius: 0;
+}
+.itin-action-bar .itin-btn:hover { background: var(--gris); }
+.itin-action-bar .itin-btn-icon { width: 44px; padding: 0; justify-content: center; }
+.itin-action-bar .itin-btn-pill {
+  padding: 0 14px; gap: 7px;
+  border: 1.5px solid var(--dorado); color: var(--dorado);
+  font-family: var(--font-cond); font-weight: 800; font-size: 15px;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.itin-action-bar .itin-btn-save { background: var(--dorado); color: var(--negro); }
+.itin-action-bar .itin-btn-save:hover { background: var(--dorado2); }
+/* Móvil con GUARDAR visible (ruta recién hecha): "Editar" se queda en el lápiz para no tapar la ✕ */
+@media (max-width: 520px) {
+  .itin-action-bar .itin-btn-save + .itin-btn-edit { width: 44px; padding: 0; justify-content: center; }
+  .itin-action-bar .itin-btn-save + .itin-btn-edit .itin-btn-txt { display: none; }
+}
+
+/* ── Pestaña Mapa (mapa en vivo) ── */
+/* El menú de abajo se queda visible: el mapa termina encima de él (igual que .itin-view) */
+#live-map-view { bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+body.live-map-open .app-input-bar,
+body.live-map-open #mejora-btn { display: none !important; }
+
+#live-map-back, #live-map-route-pill, #live-map-edit-route {
+  position: fixed; z-index: 970;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  height: 44px; box-sizing: border-box;
+  background: var(--negro); border: 1px solid var(--border); color: var(--blanco);
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0; backdrop-filter: none;
+}
+#live-map-back { left: 12px; width: 44px; border-radius: 50%; }
+#live-map-route-pill {
+  left: 64px; right: 64px; gap: 8px; padding: 0 12px 0 14px;
+  justify-content: flex-start; text-align: left; border-radius: 0;
+}
+#live-map-route-pill.open { border-color: var(--dorado); }
+#live-map-route-pill.open .lmr-chev { transform: rotate(180deg); }
+.lmr-label { font-family: var(--font-cond); font-weight: 700; font-size: 12px; letter-spacing: .08em; color: rgba(244,239,230,.55); }
+.lmr-name {
+  flex: 1; min-width: 0; font-family: var(--font-cond); font-weight: 800; font-size: 18px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lmr-chev { flex-shrink: 0; transition: transform .15s; }
+#live-map-edit-route { right: 12px; width: 44px; border: 1.5px solid var(--dorado); color: var(--dorado); border-radius: 0; }
+/* Sin lápiz (no hay ruta puesta), el botón de la ruta llega hasta el borde */
+#live-map-view:has(#live-map-edit-route[style*="none"]) #live-map-route-pill,
+#live-map-view:has(#live-map-edit-route[style*="none"]) #live-map-routes-sheet { right: 12px; }
+
+#live-map-tools {
+  position: fixed; z-index: 970; right: 12px;
+  top: calc(env(safe-area-inset-top, 0px) + 68px);
+  display: flex; flex-direction: column;
+  background: var(--negro); border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+#live-map-tools button {
+  width: 46px; height: 46px; padding: 0; cursor: pointer;
+  background: none; border: none; border-bottom: 1px solid var(--border);
+  color: var(--blanco); display: flex; align-items: center; justify-content: center;
+}
+#live-map-tools button:last-child { border-bottom: none; }
+#live-map-tools button:active { background: var(--gris); }
+/* Paneles de tipo de mapa y capas: salen junto a las herramientas */
+#live-map-maptype-panel, #live-map-layers-panel {
+  top: calc(env(safe-area-inset-top, 0px) + 68px); bottom: auto;
+  left: auto; right: 66px; transform: none;
+  background: var(--negro); border: 1px solid var(--border);
+}
+
+/* Desplegable de rutas: baja desde el botón de la ruta, pequeño */
+#live-map-routes-sheet {
+  position: fixed; z-index: 975;
+  top: calc(env(safe-area-inset-top, 0px) + 62px); bottom: auto;
+  left: 64px; right: 64px; max-height: 60vh; overflow-y: auto;
+  flex-direction: column; gap: 2px; padding: 6px;
+  background: var(--negro); border: 1px solid var(--border); border-top: 1px solid var(--border);
+  box-shadow: 0 10px 28px rgba(0,0,0,.5);
+}
+#live-map-routes-list { display: flex; flex-direction: column; gap: 2px; }
+.lmrs-item {
+  flex-direction: row; align-items: center; gap: 10px;
+  min-height: 48px; padding: 6px 10px; border: none; background: none;
+  color: var(--blanco); text-align: left; width: 100%; font: inherit;
+}
+.lmrs-item.active { background: var(--gris); }
+.lmrs-item.active svg { color: var(--dorado); flex-shrink: 0; }
+.lmrs-item-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.lmrs-item-title {
+  font-family: var(--font-cond); font-weight: 800; font-size: 17px; line-height: 1.15; color: var(--blanco);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lmrs-empty { padding: 14px 10px; color: rgba(244,239,230,.5); font-size: 13px; }
+.lmrs-foot { border-top: 1px solid var(--border); margin-top: 4px; padding-top: 4px; display: flex; flex-direction: column; }
+.lmrs-link {
+  display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 10px;
+  background: none; border: none; cursor: pointer; text-align: left;
+  color: var(--dorado); font-family: var(--font-cond); font-weight: 700; font-size: 15px; letter-spacing: .03em;
+}
+.lmrs-clear { color: rgba(244,239,230,.6); }
+.lmrs-link:active { background: var(--gris); }
+
+/* Chip "parada más cercana": encima del menú, sin chocar con el círculo de SALMA */
+#live-map-nearest-chip { bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 34px); }
+
+/* Brújula del mapa en vivo: pequeña, abajo-izquierda, sin ✕ */
+.map-compass--live {
+  top: auto; bottom: 90px; left: 12px; transform: scale(.78); transform-origin: bottom left;
+}
+
+/* Hoja al tocar un punto: solo Foto · Ir aquí · Guardar */
+#diario-picker {
+  left: 0; right: 0; transform: none;
+  bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  padding: 10px 16px 30px;   /* abajo: hueco para el círculo de SALMA que sobresale */
+  background: #131516; border: none; border-top: 1px solid var(--border);
+  backdrop-filter: none; align-items: stretch; gap: 12px;
+  box-shadow: 0 -8px 24px rgba(0,0,0,.4);
+}
+.dpick-head { display: flex; align-items: center; gap: 10px; }
+.dpick-head-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.dpick-title { font-family: var(--font-cond); font-weight: 800; font-size: 20px; line-height: 1.1; color: var(--blanco); }
+.dpick-loc { font-size: 13px; color: rgba(244,239,230,.6); padding: 0; max-width: none; }
+.dpick-close {
+  position: static; flex-shrink: 0; width: 44px; height: 44px;
+  background: var(--negro); border: 1px solid var(--border); color: var(--blanco);
+  backdrop-filter: none;
+}
+#diario-picker .dpick-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+#diario-picker .dpick-btn {
+  width: auto; height: 84px; gap: 8px;
+  background: var(--gris); border: 1px solid var(--border);
+}
+#diario-picker .dpick-btn:active { background: var(--gris2); transform: scale(.97); }
+#diario-picker .dpick-svg { stroke: var(--dorado); }
+#diario-picker .dpick-label {
+  font-family: var(--font-cond); font-weight: 800; font-size: 15px; letter-spacing: .05em; color: var(--blanco);
+}
+.dpick-imfine-menu {
+  position: static; background: var(--negro); border: 1px solid var(--border); backdrop-filter: none;
+}
+.dpick-imfine-opt:hover, .dpick-imfine-opt:active { background: var(--gris); }
