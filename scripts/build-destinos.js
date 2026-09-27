@@ -99,14 +99,13 @@ const LOGO_HTML = `<div class="ce-top"><a class="ce-brand" href="/">✦ BORRADO<
 // toca aquí, tocarlo allí igual (26 sept 2026).
 // Cualquier retoque futuro del menú se hace SOLO aquí y se reaplica con
 // `node scripts/build-destinos.js` — nunca a mano en un HTML generado.
-// "Ayuda" apunta a la pantalla "¿Qué puede hacer Salma?" (no al panel de
-// feedback de testers, que requiere login — no tiene sentido para un
-// visitante anónimo de una página SEO).
+// "Mapa" (27 sept 2026, antes "Ayuda") lleva a la app (/?go=mapa): el mapa en
+// vivo con la ruta seleccionada; sin cuenta, registro y luego el mapa.
 const BOTTOM_NAV = `
   <nav class="app-bottom-bar">
-    <a class="bottom-tab" href="/?go=ayuda">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>Ayuda</span>
+    <a class="bottom-tab" href="/?go=mapa">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      <span>Mapa</span>
     </a>
     <a class="bottom-tab" href="/?go=explorar">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>

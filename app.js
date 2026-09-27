@@ -195,7 +195,8 @@ function updateHeader() {
   updateBottomBar();
 }
 
-// Botón fijo "Mejora Salma" arriba a la derecha (26 sept 2026) — abre el formulario de
+// Botón fijo "Ayuda Salma" arriba a la derecha (26 sept 2026; se llamó "Mejora Salma"
+// hasta el 27 sept) — abre el formulario de
 // debug-panel.js. Solo en las pantallas principales; en el chat con conversación se
 // aparta a la izquierda de "Nueva" (#chat-fresh, ver styles.css).
 function _ensureMejoraBtn() {
@@ -204,7 +205,7 @@ function _ensureMejoraBtn() {
     b = document.createElement('button');
     b.id = 'mejora-btn';
     b.type = 'button';
-    b.innerHTML = '<span aria-hidden="true">✦</span> Mejora Salma';
+    b.innerHTML = '<span aria-hidden="true">✦</span> Ayuda Salma';
     b.addEventListener('click', () => {
       if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
     });
@@ -233,12 +234,13 @@ function updateBottomBar() {
 
   // Barra fija de 4 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md).
   // "Consultas" quitada de aquí el 21 sept 2026 (sigue accesible desde el chip
-  // "Últimas consultas" de la pantalla vacía) — su sitio lo ocupa "Ayuda", que
-  // abre el panel de feedback de testers (debug-panel.js, window.__dbg.open).
+  // "Últimas consultas" de la pantalla vacía). "Ayuda" quitada el 27 sept 2026 (ya
+  // está el botón "Ayuda Salma" de arriba) — su sitio lo ocupa "Mapa": el mapa en
+  // vivo a pantalla completa con la ruta seleccionada (openMapaTab).
   bar.innerHTML = `
-    <button class="bottom-tab bottom-tab-tester ${currentState === 'ayuda' ? 'bottom-tab-active' : ''}" id="tab-tester">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.5-1 1-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>Ayuda</span>
+    <button class="bottom-tab" id="tab-mapa">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      <span>Mapa</span>
     </button>
     <button class="bottom-tab ${isRutas && window._rutasTab === 'explorar' ? 'bottom-tab-active' : ''}" id="tab-explorar">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>
@@ -254,7 +256,7 @@ function updateBottomBar() {
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
     </button>`;
 
-  document.getElementById('tab-tester').addEventListener('click', () => showState('ayuda'));
+  document.getElementById('tab-mapa').addEventListener('click', openMapaTab);
   // Propuesta UX (26 sept 2026): "Salma" pasa al botón central; su hueco lo ocupa
   // Explorar (antes escondido dentro de Mis Viajes). Mis Viajes = solo las tuyas.
   document.getElementById('tab-explorar').addEventListener('click', () => {
@@ -295,6 +297,15 @@ function updateBottomBar() {
     });
     document.body.appendChild(fab);
   }
+}
+
+// Pestaña "Mapa" (27 sept 2026): abre el mapa en vivo a pantalla completa (openLiveMap)
+// con la ruta seleccionada. Si no hay ninguna, abre "Mis Rutas" para elegirla. Sin
+// cuenta → registro y, al entrar, el mapa (CLAUDE.md §10: pins, fotos y rutas guardadas
+// son de la cuenta).
+function openMapaTab() {
+  if (!currentUser) { window._afterLogin = 'mapa'; openModal(); return; }
+  if (typeof openLiveMap === 'function') openLiveMap({ pickIfNoRoute: true });
 }
 
 // Botón "+" central del bottom bar — pura navegación, no crea nada nuevo: lleva
@@ -4580,6 +4591,13 @@ auth.onAuthStateChanged(async (user) => {
       } else {
         _openPublicGuide(guiaParam || _reopenSlug);
       }
+    } else if (goParam === 'mapa' || window._afterLogin === 'mapa') {
+      // Pestaña "Mapa" (app o /?go=mapa desde destinos/blog/guías): chat detrás + mapa
+      if (goParam) history.replaceState(null, '', '/');
+      window._afterLogin = null;
+      if (typeof salma !== 'undefined') salma._initChat();
+      showState('chat');
+      openMapaTab();
     } else if (goParam) {
       history.replaceState(null, '', '/');
       if (goParam === 'explorar') { window._rutasTab = 'explorar'; showState('rutas'); }
@@ -4647,6 +4665,13 @@ auth.onAuthStateChanged(async (user) => {
       showState('chat');
       _openPublicGuide(_guiaAnon);
       window._gateShownOnce = true;   // botón "Volver sin entrar" (hay ruta detrás)
+      openModal();
+      return;
+    }
+    // /?go=mapa sin cuenta: registro y, al entrar, el mapa
+    if (_goAnon === 'mapa') {
+      history.replaceState(null, '', '/');
+      window._afterLogin = 'mapa';
       openModal();
       return;
     }
@@ -5436,7 +5461,8 @@ function _loadCatMarkers(cat) {
       });
       _catMarkers[cat].push(marker);
     });
-    if (pagination && pagination.hasNextPage) pagination.nextPage();
+    // Sin pedir más páginas (27 sept 2026, CLAUDE.md §8): cada página extra es otra
+    // llamada Nearby Search de pago; con 20 sitios por tipo ya se llena la vista.
   }
 
   cfg.types.forEach(type => {
@@ -5542,7 +5568,9 @@ function liveMapAbrirHistoria() {
     });
 }
 
-function openLiveMap() {
+function openLiveMap(opts) {
+  // opts.pickIfNoRoute (pestaña "Mapa"): sin ruta seleccionada, abrir "Mis Rutas"
+  const pickIfNoRoute = !!(opts && opts.pickIfNoRoute);
   const view = document.getElementById('live-map-view');
   const bar = document.getElementById('app-bottom-bar');
   if (!view) return;
@@ -5566,6 +5594,7 @@ function openLiveMap() {
   if (_liveMap) {
     setTimeout(() => google.maps.event.trigger(_liveMap, 'resize'), 100);
     _resumeMapGPS();
+    if (pickIfNoRoute && !_activeRouteData) openRouteSelector();
     return;
   }
 
@@ -5604,7 +5633,7 @@ function openLiveMap() {
       _resumeMapGPS();
 
       // Restaurar ruta activa — primero Firestore (sync entre dispositivos), fallback localStorage
-      _restoreActiveRoute();
+      _restoreActiveRoute().then(ok => { if (!ok && pickIfNoRoute) openRouteSelector(); });
     })
     .catch((e) => {
       console.error('[LiveMap] Error cargando Google Maps:', e);
@@ -6122,7 +6151,7 @@ async function _restoreActiveRoute() {
           const d = mapDoc.data();
           let routeData = null;
           try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch(_){}
-          if (routeData) { selectRouteOnMap(routeData, activeId); return; }
+          if (routeData) { selectRouteOnMap(routeData, activeId); return true; }
         }
         // La ruta ya no existe → limpiar referencia
         await db.collection('users').doc(currentUser.uid).set({ active_route_id: null }, { merge: true }).catch(() => {});
@@ -6133,8 +6162,9 @@ async function _restoreActiveRoute() {
   try {
     const saved = JSON.parse(localStorage.getItem('bdm_live_active_route') || 'null');
     const savedId = localStorage.getItem('bdm_live_active_route_id') || null;
-    if (saved) selectRouteOnMap(saved, savedId);
+    if (saved) { selectRouteOnMap(saved, savedId); return true; }
   } catch(_){}
+  return false;
 }
 
 window.closeLiveMap = closeLiveMap;
