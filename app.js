@@ -54,6 +54,9 @@ function showState(state) {
   if (window._itinViewOpen && typeof window._teardownItinView === 'function') {
     window._teardownItinView();
   }
+  // Pestaña Mapa (27 sept 2026): el menú de abajo se ve con el mapa abierto, así que
+  // tocar otra pestaña o SALMA tiene que cerrar el mapa (si no, quedaría encima).
+  if (document.body.classList.contains('live-map-open')) _hideLiveMap();
   // 'welcome' está deprecado (Fase 5 navegación): el estado por defecto es el chat.
   if (state === 'welcome') state = 'chat';
   currentState = state;
@@ -238,7 +241,7 @@ function updateBottomBar() {
   // está el botón "Ayuda Salma" de arriba) — su sitio lo ocupa "Mapa": el mapa en
   // vivo a pantalla completa con la ruta seleccionada (openMapaTab).
   bar.innerHTML = `
-    <button class="bottom-tab" id="tab-mapa">
+    <button class="bottom-tab ${document.body.classList.contains('live-map-open') ? 'bottom-tab-active' : ''}" id="tab-mapa">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
       <span>Mapa</span>
     </button>
@@ -5583,7 +5586,12 @@ function openLiveMap(opts) {
   if (!view) return;
 
   view.style.display = 'block';
-  if (bar) bar.style.display = 'none';
+  // Rediseño 27 sept 2026: el menú de abajo SE QUEDA (MAPA marcado); el mapa acaba
+  // encima de él (#live-map-view bottom en styles.css). body.live-map-open esconde
+  // lo que se colaba por encima (barra "Escribe a Salma", Ayuda Salma).
+  document.body.classList.add('live-map-open');
+  if (bar) bar.style.display = '';
+  document.getElementById('tab-mapa')?.classList.add('bottom-tab-active');
   // Header eliminado — no hay nada que ocultar
   // Ocultar elementos que se filtran al mapa
   const inputBar = document.querySelector('.app-input-bar');
@@ -5661,9 +5669,8 @@ function _renderLiveCompass(mapEl) {
   localStorage.removeItem('compass_hidden');
 
   const compass = document.createElement('div');
-  compass.className = 'map-compass';
+  compass.className = 'map-compass map-compass--live';
   compass.innerHTML = `
-    <button class="map-compass-close" aria-label="Cerrar brújula">&times;</button>
     <div class="map-compass-ring">
       <div class="map-compass-n">N</div>
       <div class="map-compass-e">E</div>
@@ -5678,16 +5685,6 @@ function _renderLiveCompass(mapEl) {
   mapEl.appendChild(compass);
 
   const ring = compass.querySelector('.map-compass-ring');
-
-  compass.querySelector('.map-compass-close').addEventListener('click', (e) => {
-    e.stopPropagation();
-    compass.remove();
-    if (_liveCompassHandler) {
-      window.removeEventListener('deviceorientation', _liveCompassHandler, true);
-      _liveCompassHandler = null;
-    }
-    localStorage.setItem('compass_hidden', '1');
-  });
 
   // Heading del mapa (rotación 3D)
   if (_liveMap) {
@@ -5775,11 +5772,15 @@ function liveMapCenter() {
   });
 }
 
-function closeLiveMap() {
+// Esconde el mapa en vivo SIN navegar (lo usa showState al tocar otra pestaña).
+function _hideLiveMap() {
   const view = document.getElementById('live-map-view');
   const bar = document.getElementById('app-bottom-bar');
   if (view) view.style.display = 'none';
   if (bar) bar.style.display = '';
+  document.body.classList.remove('live-map-open');
+  document.getElementById('tab-mapa')?.classList.remove('bottom-tab-active');
+  closeRouteSelector();
   // Header eliminado — no hay nada que restaurar
   // Restaurar elementos ocultos
   const inputBar = document.querySelector('.app-input-bar');
@@ -5799,8 +5800,34 @@ function closeLiveMap() {
     _liveMapWatchId = null;
   }
   // El mapa queda vivo en memoria — pins, ruta y capas se preservan
+}
+
+function closeLiveMap() {
+  _hideLiveMap();
   // Volver al chat al cerrar el mapa
   if (currentState !== 'chat') showState('chat');
+}
+
+// Desplegable de rutas (27 sept 2026): baja desde el botón "RUTA ▾" de arriba.
+// Solo las 5 más recientes (la que está puesta, siempre la primera) + "Ver todas"
+// → Mis Viajes, y "Quitar ruta del mapa". Sustituye a "Mis Rutas" + "✕ Ruta".
+const _ROUTES_DROPDOWN_MAX = 5;
+function _routeTitle(rd, fallback) {
+  return (rd && (rd.title || rd.name)) || fallback || 'Mi ruta';
+}
+function _routeMeta(rd, days) {
+  const stops = (rd && Array.isArray(rd.stops)) ? rd.stops.filter(s => s && s.lat && s.lng).length : 0;
+  const d = days || (rd && (rd.days || rd.num_dias)) || '';
+  return (d ? d + ' día' + (d > 1 ? 's' : '') + ' · ' : '') + stops + ' paradas';
+}
+function _lmEsc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function toggleRouteSelector() {
+  const sheet = document.getElementById('live-map-routes-sheet');
+  if (sheet && sheet.style.display !== 'none') closeRouteSelector();
+  else openRouteSelector();
 }
 
 async function openRouteSelector() {
@@ -5808,48 +5835,120 @@ async function openRouteSelector() {
   const sheet = document.getElementById('live-map-routes-sheet');
   const list = document.getElementById('live-map-routes-list');
   if (!sheet || !list) return;
+  closeDiarioPicker();
+  _closeMapPanels();
 
-  list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(244,239,230,.4)">Cargando...</div>';
-  sheet.style.display = 'block';
+  list.innerHTML = '<div class="lmrs-empty">Cargando…</div>';
+  sheet.style.display = 'flex';
+  const pill = document.getElementById('live-map-route-pill');
+  if (pill) { pill.classList.add('open'); pill.setAttribute('aria-expanded', 'true'); }
+
+  const _pick = (routeData, id) => {
+    closeRouteSelector();
+    if (routeData) selectRouteOnMap(routeData, id);
+    else showToast('Esta ruta no tiene datos de mapa');
+  };
+  const _row = (title, meta, active) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'lmrs-item' + (active ? ' active' : '');
+    b.setAttribute('role', 'option');
+    b.setAttribute('aria-selected', active ? 'true' : 'false');
+    b.innerHTML = `<span class="lmrs-item-txt"><span class="lmrs-item-title">${_lmEsc(title)}</span>
+      <span class="lmrs-item-meta">${_lmEsc(meta)}</span></span>` +
+      (active ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '');
+    return b;
+  };
 
   try {
+    // 12 docs bastan para sacar 5 (se saltan borradores); antes se leían 30.
     const snap = await db.collection('users').doc(currentUser.uid).collection('maps')
-      .orderBy('createdAt', 'desc').limit(30).get();
-
-    if (snap.empty) {
-      list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(244,239,230,.4)">No tienes rutas guardadas</div>';
-      return;
-    }
+      .orderBy('createdAt', 'desc').limit(12).get();
+    // El usuario pudo cerrarlo mientras cargaba
+    if (sheet.style.display === 'none') return;
 
     list.innerHTML = '';
+    let shown = 0;
+    // La que está puesta en el mapa, siempre arriba
+    if (_activeRouteData) {
+      const r = _row(_routeTitle(_activeRouteData), _routeMeta(_activeRouteData), true);
+      r.addEventListener('click', closeRouteSelector);
+      list.appendChild(r);
+      shown++;
+    }
+    let more = false;
     snap.forEach(doc => {
       const d = doc.data();
       if (d.estado === 'borrador') return; // ruta guiada a medias — no seleccionable en el mapa
+      if (_activeRouteDocId && doc.id === _activeRouteDocId) return;
+      if (shown >= _ROUTES_DROPDOWN_MAX) { more = true; return; }
       // Las paradas están serializadas en itinerarioIA
       let routeData = null;
       try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch(_) {}
-      const stops = routeData?.stops || [];
-      const validStops = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01);
-      const days = d.num_dias || d.dias || '?';
-      const item = document.createElement('div');
-      item.className = 'lmrs-item';
-      item.innerHTML = `<span class="lmrs-item-title">${d.nombre || 'Mi ruta'}</span>
-        <span class="lmrs-item-meta">${days} día${days > 1 ? 's' : ''} · ${validStops.length} paradas con coords</span>`;
-      item.addEventListener('click', () => {
-        if (routeData) selectRouteOnMap(routeData, doc.id);
-        else showToast('Esta ruta no tiene datos de mapa');
-        closeRouteSelector();
-      });
-      list.appendChild(item);
+      if (routeData && !routeData.title && !routeData.name && d.nombre) routeData.title = d.nombre;
+      const r = _row(d.nombre || _routeTitle(routeData), _routeMeta(routeData, d.num_dias || d.dias), false);
+      r.addEventListener('click', () => _pick(routeData, doc.id));
+      list.appendChild(r);
+      shown++;
     });
+    if (!shown) list.innerHTML = '<div class="lmrs-empty">No tienes rutas guardadas</div>';
+
+    const foot = document.createElement('div');
+    foot.className = 'lmrs-foot';
+    if (shown) {
+      const all = document.createElement('button');
+      all.type = 'button';
+      all.className = 'lmrs-link';
+      all.textContent = more ? 'Ver todas en Mis Viajes' : 'Ir a Mis Viajes';
+      all.addEventListener('click', () => { window._rutasTab = 'mis'; showState('rutas'); });
+      foot.appendChild(all);
+    }
+    if (_activeRouteData) {
+      const clr = document.createElement('button');
+      clr.type = 'button';
+      clr.className = 'lmrs-link lmrs-clear';
+      clr.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Quitar ruta del mapa';
+      clr.addEventListener('click', () => { closeRouteSelector(); clearRouteFromLiveMap(); });
+      foot.appendChild(clr);
+    }
+    if (foot.childNodes.length) list.appendChild(foot);
   } catch(e) {
-    list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(244,239,230,.4)">Error cargando rutas</div>';
+    list.innerHTML = '<div class="lmrs-empty">Error cargando rutas</div>';
   }
 }
 
 function closeRouteSelector() {
-  document.getElementById('live-map-routes-sheet').style.display = 'none';
+  const sheet = document.getElementById('live-map-routes-sheet');
+  if (sheet) sheet.style.display = 'none';
+  const pill = document.getElementById('live-map-route-pill');
+  if (pill) { pill.classList.remove('open'); pill.setAttribute('aria-expanded', 'false'); }
 }
+
+// Botón "RUTA ▾" + lápiz: reflejan la ruta que está puesta en el mapa
+function _updateRoutePill() {
+  const name = document.getElementById('live-map-route-name');
+  if (name) name.textContent = _activeRouteData ? _routeTitle(_activeRouteData) : 'Elegir ruta';
+  const edit = document.getElementById('live-map-edit-route');
+  if (edit) edit.style.display = _activeRouteData ? 'flex' : 'none';
+}
+
+// Lápiz del mapa = editar ESA ruta: abre su guía y el cuadro "Editando «…»" (el mismo
+// del lápiz de la guía). Así "Salma" (centro) queda siempre para el chat general.
+function editActiveRouteFromMap() {
+  if (!_activeRouteData || typeof window.openItinerarioView !== 'function') return;
+  const rd = _activeRouteData, id = _activeRouteDocId;
+  closeLiveMap();
+  try {
+    window.openItinerarioView(rd, id, { saved: !!id, fromChat: false });
+  } catch (e) {
+    console.warn('[Salma] Editar ruta desde el mapa:', e);
+    showToast('No se pudo abrir la ruta');
+    return;
+  }
+  setTimeout(() => document.dispatchEvent(new CustomEvent('itin:edit')), 250);
+}
+window.toggleRouteSelector = toggleRouteSelector;
+window.editActiveRouteFromMap = editActiveRouteFromMap;
 
 let _liveRouteStops = [];
 let _liveInfoWindow = null;
@@ -5987,7 +6086,7 @@ function selectRouteOnMap(routeData, docId) {
   });
 
   _liveMap.fitBounds(bounds, { top: 80, right: 40, bottom: 80, left: 40 });
-  document.getElementById('live-map-clear-route').style.display = 'block';
+  _updateRoutePill();
   _updateNearestChip();
 }
 
@@ -6140,8 +6239,7 @@ function clearRouteFromLiveMap() {
   if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
   if (_liveInfoWindow) { _liveInfoWindow.close(); }
   _liveRouteStops = [];
-  const btn = document.getElementById('live-map-clear-route');
-  if (btn) btn.style.display = 'none';
+  _updateRoutePill();
   const chip = document.getElementById('live-map-nearest-chip');
   if (chip) chip.style.display = 'none';
 }
@@ -6158,6 +6256,7 @@ async function _restoreActiveRoute() {
           const d = mapDoc.data();
           let routeData = null;
           try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch(_){}
+          if (routeData && !routeData.title && !routeData.name && d.nombre) routeData.title = d.nombre;
           if (routeData) { selectRouteOnMap(routeData, activeId); return true; }
         }
         // La ruta ya no existe → limpiar referencia
@@ -6441,11 +6540,8 @@ function _showDiarioPicker() {
   if (picker) picker.style.display = 'block';
   const loc = document.getElementById('dpick-loc');
   if (loc) loc.textContent = _diario.locName || '';
-  // Mostrar botón brújula solo si está oculta
-  const compassBtn = document.getElementById('dpick-compass-btn');
-  if (compassBtn) compassBtn.style.display = localStorage.getItem('compass_hidden') === '1' ? 'flex' : 'none';
-  // Inicializar Autocomplete del buscador (una sola vez)
-  _initDpickSearch();
+  // (27 sept 2026) Sin buscador "Buscar lugar" ni botón brújula: el picker solo lleva
+  // lo que se hace en el punto tocado. _initDpickSearch() se queda por si vuelve.
 }
 function closeDiarioPicker() {
   const picker = document.getElementById('diario-picker');
@@ -7058,6 +7154,8 @@ window.diarioResultSave = diarioResultSave;
 window.diarioCapture = diarioCapture;
 
 function _onMapTap(e) {
+  const _rs = document.getElementById('live-map-routes-sheet');
+  if (_rs && _rs.style.display !== 'none') { closeRouteSelector(); return; }
   _closeMapPanels();
   if (_poiInfoWindow) _poiInfoWindow.close();
   _tapLatLng = e.latLng;
