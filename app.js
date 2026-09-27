@@ -5585,6 +5585,9 @@ function openLiveMap(opts) {
   const bar = document.getElementById('app-bottom-bar');
   if (!view) return;
 
+  // Con una guía abierta (se toca la pestaña MAPA desde ella), cerrarla del todo: si no,
+  // su barra de botones (va en el body, z-index alto) quedaba flotando encima del mapa.
+  if (window._itinViewOpen && typeof window._teardownItinView === 'function') window._teardownItinView();
   view.style.display = 'block';
   // Rediseño 27 sept 2026: el menú de abajo SE QUEDA (MAPA marcado); el mapa acaba
   // encima de él (#live-map-view bottom en styles.css). body.live-map-open esconde
@@ -6540,12 +6543,27 @@ function _showDiarioPicker() {
   if (picker) picker.style.display = 'block';
   const loc = document.getElementById('dpick-loc');
   if (loc) loc.textContent = _diario.locName || '';
+  _placeNearestChip();
   // (27 sept 2026) Sin buscador "Buscar lugar" ni botón brújula: el picker solo lleva
   // lo que se hace en el punto tocado. _initDpickSearch() se queda por si vuelve.
 }
+// El chip "parada más cercana" se coloca justo encima de la hoja de Foto/Ir aquí/Guardar
+// mientras está abierta (antes la hoja lo tapaba) y vuelve a su sitio al cerrarla.
+function _placeNearestChip() {
+  const chip = document.getElementById('live-map-nearest-chip');
+  if (!chip) return;
+  const picker = document.getElementById('diario-picker');
+  if (picker && picker.style.display !== 'none') {
+    chip.style.bottom = Math.round(window.innerHeight - picker.getBoundingClientRect().top + 10) + 'px';
+  } else {
+    chip.style.bottom = '';
+  }
+}
+
 function closeDiarioPicker() {
   const picker = document.getElementById('diario-picker');
   if (picker) picker.style.display = 'none';
+  _placeNearestChip();
   // Cerrar paneles desplegables de tipo mapa y capas
   _closeMapPanels();
 }
@@ -6684,6 +6702,7 @@ window.diarioPickSOS = diarioPickSOS;
 function toggleImFineMenu() {
   const menu = document.getElementById('dpick-imfine-menu');
   if (menu) menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+  _placeNearestChip();
 }
 window.toggleImFineMenu = toggleImFineMenu;
 

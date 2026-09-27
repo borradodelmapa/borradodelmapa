@@ -55,9 +55,10 @@ const mapaItinerario = {
     }
 
     // Barra de acciones flotante — se añade al body para escapar del stacking context.
-    // Rediseño 27 sept 2026 (con Paco): una sola fila arriba a la derecha, frente a la ✕:
-    // [Guardar] · Editar ruta · Compartir · Google Maps. "Editar ruta" sustituye al lápiz
-    // flotante (#itin-chat-fab) que chocaba con el botón central SALMA del menú.
+    // Rediseño 27 sept 2026 (con Paco): columna a la derecha — Compartir · Google Maps y,
+    // debajo y suelto, el lápiz naranja (editar ESTA ruta; mismo sitio que en la pestaña
+    // Mapa). GUARDAR (solo si no está guardada) va arriba junto a la ✕. El lápiz sustituye
+    // al lápiz flotante (#itin-chat-fab) que chocaba con el botón central SALMA.
     {
       const existingBar = document.body.querySelector('.itin-action-bar');
       if (existingBar) existingBar.remove();
@@ -65,9 +66,9 @@ const mapaItinerario = {
       actionBar.className = 'itin-action-bar';
       actionBar.innerHTML = `
         ${options.saved ? '' : '<button class="itin-btn itin-btn-pill itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
-        <button class="itin-btn itin-btn-pill itin-btn-edit" id="itin-edit-btn" title="Cambiar esta ruta con Salma"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span class="itin-btn-txt">Editar ruta</span></button>
         <button class="itin-btn itin-btn-icon itin-btn-share" id="itin-share-btn" title="Compartir" aria-label="Compartir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
         ${mapsUrl ? `<a class="itin-btn itin-btn-icon itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps" aria-label="Abrir en Google Maps"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></a>` : ''}
+        <button class="itin-btn itin-btn-icon itin-btn-edit" id="itin-edit-btn" title="Editar esta ruta con Salma" aria-label="Editar esta ruta"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
       `;
       document.body.appendChild(actionBar);
     }
