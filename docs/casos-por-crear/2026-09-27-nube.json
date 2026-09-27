@@ -9,5 +9,16 @@
     "ejemplo": "27 sept 2026, al preparar el uso del Perfil IA: waCallClaudeWithTools (salma-worker.js ~4694) manda WHATSAPP_SYSTEM_CHAT como texto plano, sin cache_control. La web sí cachea la parte fija con buildCachedSystem (~5762).",
     "nota": "Idea: usar buildCachedSystem(WHATSAPP_SYSTEM_CHAT, system) también en WhatsApp. La parte fija (miles de tokens) pasaría a pagarse al 10% desde el 2º mensaje o vuelta de herramientas dentro de 5 min (la 1ª vez +25%). Abarata TODO WhatsApp, no solo el Perfil IA. Aviso §8 obligatorio antes de tocar. Paco: 'parece barato, recuérdamelo'. Hacerlo DESPUÉS de terminar el Perfil IA en WhatsApp.",
     "estado": "nuevo"
+  },
+  {
+    "titulo": "Admin: control de gastos del Perfil IA (topes 5 € usar + 5 € aprender)",
+    "tipo": "tarea",
+    "zona": "otro",
+    "area": "costes",
+    "gravedad": "media",
+    "modelo": "sonnet",
+    "ejemplo": "27 sept 2026: Paco quiere ver en el panel admin lo que se gasta el Perfil IA, con un máximo de 10 €/mes entre los dos topes.",
+    "nota": "Dos contadores en KV SALMA_KB, uno por mes (formato {usd, n, last_at}): 'perfilia:budget:YYYY-MM' = APRENDER (GPT-4o-mini, coste real; tope PERFIL_IA_MONTHLY_USD, hoy 3,24 $ ≈ 3 € → pasar a 5,4 $ ≈ 5 € en el paso 3) y 'perfiluso:budget:YYYY-MM' = USAR (Sonnet, coste ESTIMADO por lo alto; tope PERFIL_USO_MONTHLY_USD = 5,4 $ ≈ 5 €). Mostrar en el admin: gastado / tope de cada uno, nº de veces (n) y última vez. Hace falta un endpoint de solo lectura en el Worker (protegido como los del panel) y la tarjeta en el repo Admin-borradodelmapa.",
+    "estado": "nuevo"
   }
 ]
