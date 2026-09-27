@@ -5377,22 +5377,23 @@ window.toggleCopilot = toggleCopilot;
 
 // ═══ CONFIGURACIÓN COMPARTIDA DE MAPAS ═══
 
-window._mapConfig = { food: false, medical: false, lodging: false, shopping: false, parks: false, culture: false, transit: false };
+// Capas del mapa en vivo (27 sept 2026, CLAUDE.md §8): son los iconos que Google ya
+// pinta en el mapa, encendidos/apagados con el estilo — 0 € por encender, apagar o mover.
+// Antes cada capa lanzaba 1-4 Nearby Search (~0,032 $ cada una) + Place Details y foto
+// al tocar un sitio. Al tocar un icono se abre la ficha propia de Google (gratis).
+window._mapConfig = { business: false, medical: false, parks: false, culture: false, transit: false };
 
-// PlacesService types por categoría (reales, no estilos)
+// featureType de Google por capa (Google no separa comida/hoteles/tiendas: "business")
 const _catConfig = {
-  food:     { types: ['restaurant', 'cafe', 'bar', 'bakery'],                         color: '#E87040', label: '🍽' },
-  medical:  { types: ['pharmacy', 'hospital', 'doctor'],                              color: '#D9534F', label: '+' },
-  lodging:  { types: ['lodging'],                                                     color: '#5BC0DE', label: 'H' },
-  shopping: { types: ['supermarket', 'grocery_or_supermarket', 'convenience_store'],  color: '#AA66CC', label: 'S' },
-  parks:    { types: ['park'],                                                        color: '#5CB85C', label: 'P' },
-  culture:  { types: ['museum', 'tourist_attraction', 'art_gallery'],                 color: '#F4630B', label: 'A' },
-  transit:  { types: ['transit_station', 'bus_station', 'subway_station'],            color: '#666',    label: 'T' },
+  business: ['poi.business'],
+  medical:  ['poi.medical'],
+  parks:    ['poi.park'],
+  culture:  ['poi.attraction', 'poi.place_of_worship'],
+  transit:  ['transit.station'],
 };
 
 let _poiInfoWindow = null;
 let _placesService = null;
-let _catMarkers = {};
 
 function _buildMapStyle() {
   window._mapStyle = [
@@ -5402,12 +5403,19 @@ function _buildMapStyle() {
   return window._mapStyle;
 }
 
+// Estilo del mapa en vivo = base (todo oculto) + las capas encendidas. Solo el mapa
+// en vivo: el de la guía (mapaRuta) sigue limpio con window._mapStyle.
+function _liveMapStyle() {
+  const style = _buildMapStyle().slice();
+  Object.keys(_catConfig).forEach(cat => {
+    if (!window._mapConfig[cat]) return;
+    _catConfig[cat].forEach(featureType => style.push({ featureType, elementType: 'all', stylers: [{ visibility: 'on' }] }));
+  });
+  return style;
+}
+
 function _applyMapStyle() {
-  const style = _buildMapStyle();
-  if (_liveMap) _liveMap.setOptions({ styles: style });
-  if (typeof mapaRuta !== 'undefined' && mapaRuta._map && mapaRuta._mapType === 'google') {
-    mapaRuta._map.setOptions({ styles: style });
-  }
+  if (_liveMap) _liveMap.setOptions({ styles: _liveMapStyle() });
 }
 
 function _showPoiInfo(place, latLng, placeId) {
@@ -5437,65 +5445,11 @@ function _showPoiInfo(place, latLng, placeId) {
   _poiInfoWindow.open(_liveMap);
 }
 
-function _loadCatMarkers(cat) {
-  if (!_liveMap || !_placesService) return;
-  const cfg = _catConfig[cat];
-  if (!cfg) return;
-  if (!_catMarkers[cat]) _catMarkers[cat] = [];
-  const seenIds = new Set(_catMarkers[cat].map(m => m._placeId).filter(Boolean));
-  const bounds = _liveMap.getBounds();
-
-  function addResults(results, pagination) {
-    if (!results || !results.length) return;
-    results.forEach(place => {
-      if (!place.geometry || !place.place_id) return;
-      if (seenIds.has(place.place_id)) return;
-      seenIds.add(place.place_id);
-      const marker = new google.maps.Marker({
-        map: _liveMap,
-        position: place.geometry.location,
-        icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: cfg.color, fillOpacity: 0.92, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
-        label: { text: cfg.label, color: '#fff', fontSize: '10px', fontWeight: '700' },
-        title: place.name,
-        zIndex: 10,
-      });
-      marker._placeId = place.place_id;
-      marker.addListener('click', () => {
-        _placesService.getDetails(
-          { placeId: place.place_id, fields: ['name', 'photos', 'formatted_address', 'rating', 'url', 'geometry'] },
-          (detail, s) => {
-            if (s !== google.maps.places.PlacesServiceStatus.OK || !detail) return;
-            _showPoiInfo(detail, detail.geometry.location, place.place_id);
-          }
-        );
-      });
-      _catMarkers[cat].push(marker);
-    });
-    // Sin pedir más páginas (27 sept 2026, CLAUDE.md §8): cada página extra es otra
-    // llamada Nearby Search de pago; con 20 sitios por tipo ya se llena la vista.
-  }
-
-  cfg.types.forEach(type => {
-    const req = bounds
-      ? { bounds, type }
-      : { location: _liveMap.getCenter(), radius: 5000, type };
-    _placesService.nearbySearch(req, addResults);
-  });
-}
-
-function _removeCatMarkers(cat) {
-  (_catMarkers[cat] || []).forEach(m => m.setMap(null));
-  _catMarkers[cat] = [];
-}
-
 function toggleMapCat(checkbox) {
   const cat = checkbox.dataset.cat;
+  if (!_catConfig[cat]) return;
   window._mapConfig[cat] = checkbox.checked;
-  if (checkbox.checked) {
-    _loadCatMarkers(cat);
-  } else {
-    _removeCatMarkers(cat);
-  }
+  _applyMapStyle();
 }
 
 function _closeMapPanels() {
@@ -5628,7 +5582,7 @@ function openLiveMap(opts) {
         heading: 0,
         tiltInteractionEnabled: false,
         mapTypeId: 'hybrid',
-        styles: window._mapStyle,
+        styles: _liveMapStyle(),
         disableDefaultUI: true,
         gestureHandling: 'greedy',
       });
@@ -7173,6 +7127,9 @@ window.diarioResultSave = diarioResultSave;
 window.diarioCapture = diarioCapture;
 
 function _onMapTap(e) {
+  // Toque en un icono de Google (capas): ya abre su propia ficha (gratis). No abrir
+  // además nuestra hoja ni pedir Geocoding (de pago) para ese toque.
+  if (e && e.placeId) { closeDiarioPicker(); closeRouteSelector(); return; }
   const _rs = document.getElementById('live-map-routes-sheet');
   if (_rs && _rs.style.display !== 'none') { closeRouteSelector(); return; }
   _closeMapPanels();
