@@ -5909,9 +5909,8 @@ window.editActiveRouteFromMap = editActiveRouteFromMap;
 
 let _liveRouteStops = [];
 let _liveInfoWindow = null;
-// Distancia real de carretera para el chip "parada más cercana" — cacheada, se
-// refresca solo al cambiar de parada más cercana o cada 5 min (nunca en cada GPS tick,
-// dispararía llamadas a Directions API sin necesidad — decisión con Paco, 15 sept).
+// Distancia real de carretera para el chip "parada más cercana" — se pide solo al
+// tocar el chip (27 sept 2026) y vale 5 min para esa parada.
 let _nearestChipRealDist = null; // { stopIndex, text, fetchedAt }
 let _nearestChipFetching = false;
 let _activeRouteData = null;
@@ -6129,8 +6128,7 @@ function _updateNearestChip() {
   if (!nearest) return;
   // Bajo 1km mostramos metros en línea recta directamente (Directions no aporta nada
   // fiable a esa escala peatonal). A partir de 1km, usamos la distancia real de
-  // carretera si ya la tenemos cacheada para ESTA parada; si no, "km recta" de momento
-  // — se corrige sola en cuanto llega la respuesta de _fetchRealNearestDistance.
+  // carretera si ya la tenemos (se pide al tocar el chip) para ESTA parada; si no, "km recta".
   let dist;
   if (minDist < 1) {
     dist = Math.round(minDist * 1000) + ' m';
@@ -6150,22 +6148,24 @@ function _updateNearestChip() {
     _liveMap.panTo({ lat: nearest.stop.lat, lng: nearest.stop.lng });
     _liveMap.setZoom(14);
     _showStopInfo(nearest.stop, nearest.i, _liveRouteMarkers[nearest.i], color);
+    // Distancia real de carretera (Directions, de pago ~0,005 $) SOLO al tocar el chip
+    // (27 sept 2026, CLAUDE.md §8) — antes se pedía sola cada 5 min y en cada cambio de
+    // parada más cercana mientras el mapa estaba abierto. Sin tocar: "km recta" (gratis).
+    // Se reutiliza 5 min para la misma parada.
+    if (minDist >= 1 && !_nearestChipFetching) {
+      const stale = !_nearestChipRealDist || _nearestChipRealDist.stopIndex !== nearest.i ||
+        (Date.now() - _nearestChipRealDist.fetchedAt) >= 5 * 60 * 1000;
+      if (stale) _fetchRealNearestDistance(pos, nearest);
+    }
   };
-
-  // Distancia real de carretera (Directions API) — solo al cambiar de parada más
-  // cercana o cada 5 min, NUNCA en cada tick de GPS (~5s): dispararía coste y rate
-  // limit de Google sin necesidad. Confirmado con Paco, 15 sept.
-  if (minDist >= 1 && !_nearestChipFetching) {
-    const stale = !_nearestChipRealDist || _nearestChipRealDist.stopIndex !== nearest.i ||
-      (Date.now() - _nearestChipRealDist.fetchedAt) >= 5 * 60 * 1000;
-    if (stale) _fetchRealNearestDistance(pos, nearest);
-  }
 }
 
 async function _fetchRealNearestDistance(pos, nearest) {
   _nearestChipFetching = true;
   try {
-    const origin = pos.lat() + ',' + pos.lng();
+    // Origen redondeado (~100 m): el Worker guarda el trazado en KV y así puede volver
+    // a servirlo gratis; con el GPS exacto nunca coincidía y cada llamada era nueva.
+    const origin = pos.lat().toFixed(3) + ',' + pos.lng().toFixed(3);
     const destination = nearest.stop.lat + ',' + nearest.stop.lng;
     const res = await fetch(`${window.SALMA_API}/directions?origin=${origin}&destination=${destination}`);
     if (!res.ok) return;
@@ -6593,6 +6593,7 @@ async function diarioPickSave() {
   if (!currentUser) { showToast('Inicia sesión para guardar'); closeDiarioPicker(); openModal(); return; }
   const lat = _diario.lat, lng = _diario.lng;
   if (!lat && !lng) { showToast('Toca el mapa primero'); return; }
+  await _diarioResolveLocName();
   if (_liveMap) {
     const pinId = 'spin_' + (++_pinIdCounter) + '_' + Date.now();
     const marker = new google.maps.Marker({
@@ -6767,6 +6768,7 @@ let _diarioVideoState = null; // { video, recorder, raf }
 
 // ── Generar story Kodak VÍDEO (mismo flujo que foto) ──
 async function generateDiarioVideoStory() {
+  await _diarioResolveLocName();
   // 1. Cargar mapa estático — EXACTO igual que generateDiarioStory
   const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
   try {
@@ -6861,6 +6863,7 @@ async function generateDiarioVideoStory() {
 // ── Generar story Kodak ──
 async function generateDiarioStory() {
   if (!_diario.photo) return;
+  await _diarioResolveLocName();
 
   // Mapa estático de fondo (via worker proxy para evitar CORS)
   // Pedimos 640x640 y hacemos crop centrado a proporción 9:16 en el canvas
@@ -7158,18 +7161,35 @@ function _onMapTap(e) {
   _diario.lng = _tapLatLng.lng();
   _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
 
-  // Reverse geocode en background
-  if (!window._diarioGeocoder) window._diarioGeocoder = new google.maps.Geocoder();
-  window._diarioGeocoder.geocode({ location: _tapLatLng }, (results, status) => {
-    if (status === 'OK' && results[0]) {
-      const parts = results[0].address_components;
-      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
-      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
-      if (city || country) _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
-    }
-  });
-
+  // Sin Geocoding aquí (27 sept 2026, CLAUDE.md §8): se pagaba en CADA toque y el nombre
+  // no llegaba a verse en la hoja. Se pide solo al Guardar o hacer Foto/Vídeo
+  // (_diarioResolveLocName), una vez por punto.
   _showDiarioPicker();
+}
+
+// Nombre "Ciudad · País" del punto tocado — Geocoding (de pago, ~0,005 $) SOLO cuando
+// hace falta (Guardar, Foto, Vídeo) y una sola vez por punto. Si tarda >4 s o falla,
+// se queda con las coordenadas.
+let _diarioGeo = { key: null, name: '' };
+function _diarioResolveLocName() {
+  const key = _diario.lat.toFixed(5) + ',' + _diario.lng.toFixed(5);
+  if (_diarioGeo.key === key) { _diario.locName = _diarioGeo.name; return Promise.resolve(); }
+  if (!window.google || !google.maps || !google.maps.Geocoder) return Promise.resolve();
+  if (!window._diarioGeocoder) window._diarioGeocoder = new google.maps.Geocoder();
+  return new Promise(resolve => {
+    const t = setTimeout(resolve, 4000);
+    window._diarioGeocoder.geocode({ location: { lat: _diario.lat, lng: _diario.lng } }, (results, status) => {
+      clearTimeout(t);
+      if (status === 'OK' && results[0]) {
+        const parts = results[0].address_components;
+        const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
+        const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
+        if (city || country) _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
+        _diarioGeo = { key, name: _diario.locName };
+      }
+      resolve();
+    });
+  });
 }
 
 function closeTapSheet() {
