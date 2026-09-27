@@ -297,9 +297,14 @@
           <div id="dbg-fb-status"></div>
           <details id="dbg-ver-wrap"><summary>Detalles técnicos</summary><div id="dbg-ver"></div>
             <button id="dbg-fb-copy" type="button">📋 Copiar detalles</button></details>
+          <div id="dbg-salma-can" class="salma-can-area" style="padding:0;margin:0;max-width:none"></div>
         </div>
       </div>`;
     document.body.appendChild(overlay);
+    // "¿Qué puedo hacer?" debajo de Detalles técnicos (Paco, 27 sept 2026) — misma lista
+    // que la pantalla Ayuda (salmaCanHTML en app.js)
+    const canEl = overlay.querySelector('#dbg-salma-can');
+    if (canEl && typeof window.salmaCanHTML === 'function') canEl.innerHTML = window.salmaCanHTML();
     renderVersion();
     loadWorkerVersion().then(renderVersion);
     startVerRefresh();

@@ -1723,7 +1723,9 @@ async function _loadChipsAsync(chipsEl) {
 
 // ═══ PERFIL DE USUARIO ═══
 
-function renderSalmaCan() {
+// Lista "¿Qué puedo hacer?" — la usan la pantalla Ayuda (renderSalmaCan) y el formulario
+// "Ayuda Salma" (debug-panel.js, debajo de "Detalles técnicos", 27 sept 2026).
+function salmaCanHTML() {
   const features = [
     {
       icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
@@ -1767,8 +1769,7 @@ function renderSalmaCan() {
     }
   ];
 
-  $content.innerHTML = `
-    <div class="salma-can-area fade-in">
+  return `
       <div class="salma-can-header">
         <div class="salma-can-title">¿Qué puedo hacer?</div>
         <div class="salma-can-sub">Todo lo que Salma puede hacer por ti</div>
@@ -1783,7 +1784,13 @@ function renderSalmaCan() {
             </div>
           </div>
         `).join('')}
-      </div>
+      </div>`;
+}
+window.salmaCanHTML = salmaCanHTML;
+
+function renderSalmaCan() {
+  $content.innerHTML = `
+    <div class="salma-can-area fade-in">${salmaCanHTML()}
     </div>`;
 }
 
