@@ -3859,3 +3859,15 @@ Primeras dos de las 5 tareas dictadas por Paco el 26 sept (más arriba, "Notas d
 **Cierre (25 sept 2026):** confirmado en pantalla por Paco — "OK SALEN TODAS" (mapas en todas las tarjetas, países sin repetir, tarjetas de país visuales).
 
 - **Blog y legal con el diseño de la app (26 sept 2026) — CONFIRMADO EN PANTALLA por Paco.** Cabecera, menú de abajo y pie comunes (`paginas.css`), textos legales al día (planes reales, WhatsApp, borrar cuenta, terceros, Explorar, SOS ≠ 112), 5 enlaces rotos de "Sigue leyendo" arreglados. Commits `fef6e90f` + `f9b12665`. Siguen pendientes los datos de titular/NIF/dirección/email (decisión autónomo/SL).
+
+---
+
+## 27 sept 2026 — Perfil IA ("Lo que Salma sabe de ti") aprende de todo el chat — CONFIRMADO EN PANTALLA
+
+Retomado lo pausado el 19 sept. **Confirmado por Paco:** ruta de prueba (Toledo con perro) → 2 datos guardados; y tras el cambio de hoy, "ya va escribiendo el tipo de preguntas que le hago".
+- **Fallo encontrado:** `salma.js` vaciaba `salma.history` al terminar de generar una ruta, ANTES de pulsar GUARDAR → `/perfil-ia-extract` recibía siempre 0 mensajes (solo aprendía del título/notas de la ruta). Ahora guarda copia en `salma._lastRouteHistory` (un solo uso).
+- **Nuevo, en el Worker:** `perfilIALearnFromChat()` — cada **2** mensajes de chat del día (contador `usage.days` de `usageRecord`, compartido web + popup de guía + WhatsApp) extrae con GPT-4o-mini hasta 3 datos y los añade a `users/{uid}.perfil_ia` (origen `chat`). `usageGate` devuelve ahora `today`.
+- **Topes (§8, aprobados por Paco):** 10 extracciones/usuario/día + **3 €/mes en total** (coste real de tokens, KV `perfilia:budget:YYYY-MM`; contador diario `perfilia:day:{uid}:{fecha}`). Fail-closed. `/perfil-ia-extract` cuenta en los mismos topes. ~0,0003 $/extracción.
+- **App:** `_perfilIARefresh()` relee `perfil_ia` de Firestore antes de modificarlo (el Worker también escribe ahí).
+- PRs #18 y #19. Worker `45ec34b3` → **vigente `74f2b860-e296-4051-a0ce-cae33e5bd3bf`**. `app.js?v=201`, `salma.js?v=115`.
+- **Pendiente (siguiente paso):** Salma todavía NO usa `perfil_ia` al contestar (ni web ni WhatsApp) — toca el prompt (skill `prompt-salma`). El interruptor "avisarte sola" tampoco hace nada aún. Vigilar que los datos no se llenen de cosas triviales o repetidas.
