@@ -6770,7 +6770,7 @@ let _diarioVideoState = null; // { video, recorder, raf }
 async function generateDiarioVideoStory() {
   await _diarioResolveLocName();
   // 1. Cargar mapa estático — EXACTO igual que generateDiarioStory
-  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2';
   try {
     const mapImg = await new Promise((resolve, reject) => {
       const i = new Image(); i.crossOrigin='anonymous';
@@ -6867,7 +6867,7 @@ async function generateDiarioStory() {
 
   // Mapa estático de fondo (via worker proxy para evitar CORS)
   // Pedimos 640x640 y hacemos crop centrado a proporción 9:16 en el canvas
-  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2';
   try {
     const mapImg = await new Promise((resolve, reject) => {
       const i = new Image(); i.crossOrigin='anonymous';
