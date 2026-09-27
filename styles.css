@@ -4069,6 +4069,9 @@ body {
   transition: opacity .3s;
 }
 .diario-result.on { opacity: 1; pointer-events: auto; }
+/* Con la postal abierta (pantalla completa), el círculo SALMA del menú sobra y tapaba
+   "Descargar" (27 sept 2026, Paco). Se sale con la ✕; al cerrarla vuelve. */
+body:has(#diario-result.on) .bottom-tab-fab { display: none; }
 .diario-result-canvas-wrap {
   flex: 1; display: flex; align-items: center; justify-content: center;
   padding: 20px 20px 0; overflow: hidden;
