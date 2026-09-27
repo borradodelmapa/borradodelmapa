@@ -21,10 +21,14 @@ Paco pone la materia prima (fotos, vídeos, pantalla con Salma, dos líneas de c
 | Salma en uso | ~35 % | Grabación de pantalla: le pides algo a Salma → corte a la foto real del sitio. |
 | Promoción directa | ~15 % | Novedades de la app, "regístrate gratis", enlace a una ruta. |
 
-## Redes
-- **Principales: Instagram + TikTok** (el mismo vídeo vertical vale para las dos).
-- **Gratis de rebote:** el mismo vídeo a YouTube Shorts y Facebook desde Metricool, sin trabajo extra.
-- **Más adelante / opcional:** LinkedIn para la historia de fundador ("construyo una app de viajes solo").
+## Redes: un solo reel para todas (decidido por Paco, 27 sept)
+- Un vídeo vertical **9:16 (1080×1920), 15-60 s**, se publica de una vez desde Metricool en Instagram Reels,
+  TikTok, YouTube Shorts y Facebook Reels (y opcionalmente LinkedIn, Threads, Pinterest).
+- Reglas para que sirva en todas: sin marca de agua de otra app (Instagram baja el alcance de vídeos con el
+  logo de TikTok) · textos en el centro (abajo y a la derecha los tapan los botones) · música sin derechos o
+  voz propia (la música de la biblioteca de cada red no viaja con el vídeo) · subtítulos siempre.
+- Solo cambia el texto de acompañamiento por red (lo escribe Claude).
+- Las fotos también pueden ir en reel (secuencia de fotos con texto) además de en carrusel.
 - Programación: **Metricool** (la cuenta existe, marca `blogId 6868156`, **aún sin redes conectadas**).
 
 ## Formatos fijos (series reconocibles)
