@@ -730,6 +730,11 @@ function _renderChatEmpty() {
             </div>
           </div>
           <button class="ce-rotable-cta" data-ce-rotable-cta>Trazar ruta <span>→</span></button>
+          <!-- El billete (destino, días, "Afinar") también con guía activa (Paco, 27 sept
+               2026): se perdió sin querer al crear este bloque el 26 sept. Va plegado para
+               que la portada siga cabiendo sin scroll; la tarjeta de la guía no se toca. -->
+          <button class="ce-openbillete" data-ce-next-openbillete>O rellena destino y días <span>↓</span></button>
+          <div class="ce-card ce-ticket" id="ce-next-card" hidden>${_ceBilleteHTML(true)}</div>
         </div>`;
 
     area.innerHTML = `
@@ -761,8 +766,9 @@ function _renderChatEmpty() {
         ${_ceChipsRow}
       </div>`;
 
-    const ceCard = area.querySelector('#ce-card');
-    if (ceCard) {
+    // Mismo cableado para el billete de #ce-card y para el de "¿Y el próximo viaje?"
+    // (#ce-next-card, con guía activa): cada uno lee sus propios chips y campos.
+    const _wireCeCard = (ceCard) => {
       ceCard.addEventListener('click', (e) => {
         // Ruta activa → abrir la GUÍA de ese viaje (vista itinerario)
         if (e.target.closest('[data-ce-guide]')) {
@@ -849,7 +855,11 @@ function _renderChatEmpty() {
           return;
         }
       });
-    }
+    };
+    const ceCard = area.querySelector('#ce-card');
+    if (ceCard) _wireCeCard(ceCard);
+    const ceNextCard = area.querySelector('#ce-next-card');
+    if (ceNextCard) _wireCeCard(ceNextCard);
 
     // ── Caja de ejemplo rotable (doc 8 sep) — 4 perfiles en orden fijo ──
     const _wireRotable = () => {
@@ -970,6 +980,20 @@ function _renderChatEmpty() {
         }
         const ob = area.querySelector('[data-ce-openbillete]');
         if (ob) ob.hidden = true;
+        return;
+      }
+      // Con guía activa: desplegar el billete de "¿Y el próximo viaje?" debajo
+      if (e.target.closest('[data-ce-next-openbillete]')) {
+        const card = area.querySelector('#ce-next-card');
+        if (card) {
+          card.hidden = false;
+          const dest = card.querySelector('.ce-tk-dest');
+          (dest || card).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (dest) setTimeout(() => { try { dest.focus(); } catch (_) {} }, 320);
+        }
+        // remove() y no hidden: .ce-openbillete fuerza display:flex y gana a [hidden]
+        const ob = area.querySelector('[data-ce-next-openbillete]');
+        if (ob) ob.remove();
         return;
       }
       if (e.target.closest('[data-ce-back-active]')) {
