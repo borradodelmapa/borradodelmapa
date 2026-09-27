@@ -29,7 +29,7 @@ Paco pone la materia prima (fotos, vídeos, pantalla con Salma, dos líneas de c
   voz propia (la música de la biblioteca de cada red no viaja con el vídeo) · subtítulos siempre.
 - Solo cambia el texto de acompañamiento por red (lo escribe Claude).
 - Las fotos también pueden ir en reel (secuencia de fotos con texto) además de en carrusel.
-- Programación: **Metricool** (la cuenta existe, marca `blogId 6868156`, **aún sin redes conectadas**).
+- Programación: **Metricool** (marca `blogId 6868156`). **Conectadas (27 sept): Instagram y TikTok, ambas @borradodelmapa.** Resto de redes, más adelante.
 
 ## Formatos fijos (series reconocibles)
 1. **"Le pregunto a Salma"** (reel 20-40 s): pantalla del móvil pidiendo una ruta o resolviendo un imprevisto →
