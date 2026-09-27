@@ -1,0 +1,13 @@
+[
+  {
+    "titulo": "WhatsApp: activar la caché del prompt (hoy paga el prompt entero en cada mensaje)",
+    "tipo": "tarea",
+    "zona": "otro",
+    "area": "costes",
+    "gravedad": "media",
+    "modelo": "opus",
+    "ejemplo": "27 sept 2026, al preparar el uso del Perfil IA: waCallClaudeWithTools (salma-worker.js ~4694) manda WHATSAPP_SYSTEM_CHAT como texto plano, sin cache_control. La web sí cachea la parte fija con buildCachedSystem (~5762).",
+    "nota": "Idea: usar buildCachedSystem(WHATSAPP_SYSTEM_CHAT, system) también en WhatsApp. La parte fija (miles de tokens) pasaría a pagarse al 10% desde el 2º mensaje o vuelta de herramientas dentro de 5 min (la 1ª vez +25%). Abarata TODO WhatsApp, no solo el Perfil IA. Aviso §8 obligatorio antes de tocar. Paco: 'parece barato, recuérdamelo'. Hacerlo DESPUÉS de terminar el Perfil IA en WhatsApp.",
+    "estado": "nuevo"
+  }
+]
