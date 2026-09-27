@@ -7084,7 +7084,7 @@ body:has(#app-content.app-content--chat #chat-area .msg) #mejora-btn{right:calc(
 .itin-mobile-back:hover, .itin-mobile-back:active { background: var(--gris); }
 .itin-action-bar {
   top: 12px; left: auto; right: 12px;
-  flex-direction: row; align-items: center; gap: 8px;
+  flex-direction: column; align-items: center; gap: 8px;
   background: none; padding: 0; border: none;
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
@@ -7108,11 +7108,10 @@ body:has(#app-content.app-content--chat #chat-area .msg) #mejora-btn{right:calc(
 }
 .itin-action-bar .itin-btn-save { background: var(--dorado); color: var(--negro); }
 .itin-action-bar .itin-btn-save:hover { background: var(--dorado2); }
-/* Móvil con GUARDAR visible (ruta recién hecha): "Editar" se queda en el lápiz para no tapar la ✕ */
-@media (max-width: 520px) {
-  .itin-action-bar .itin-btn-save + .itin-btn-edit { width: 44px; padding: 0; justify-content: center; }
-  .itin-action-bar .itin-btn-save + .itin-btn-edit .itin-btn-txt { display: none; }
-}
+/* GUARDAR (ruta sin guardar) sale de la columna: arriba, junto a la ✕ */
+.itin-action-bar .itin-btn-save { position: fixed; top: 12px; left: 64px; }
+/* Lápiz = editar ESTA ruta: pequeño, naranja, suelto debajo de la columna */
+.itin-action-bar .itin-btn-edit { margin-top: 6px; border: 1.5px solid var(--dorado); color: var(--dorado); }
 
 /* ── Pestaña Mapa (mapa en vivo) ── */
 /* El menú de abajo se queda visible: el mapa termina encima de él (igual que .itin-view) */
@@ -7131,7 +7130,7 @@ body.live-map-open #mejora-btn { display: none !important; }
 }
 #live-map-back { left: 12px; width: 44px; border-radius: 50%; }
 #live-map-route-pill {
-  left: 64px; right: 64px; gap: 8px; padding: 0 12px 0 14px;
+  left: 64px; right: 12px; gap: 8px; padding: 0 12px 0 14px;
   justify-content: flex-start; text-align: left; border-radius: 0;
 }
 #live-map-route-pill.open { border-color: var(--dorado); }
@@ -7142,10 +7141,12 @@ body.live-map-open #mejora-btn { display: none !important; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .lmr-chev { flex-shrink: 0; transition: transform .15s; }
-#live-map-edit-route { right: 12px; width: 44px; border: 1.5px solid var(--dorado); color: var(--dorado); border-radius: 0; }
-/* Sin lápiz (no hay ruta puesta), el botón de la ruta llega hasta el borde */
-#live-map-view:has(#live-map-edit-route[style*="none"]) #live-map-route-pill,
-#live-map-view:has(#live-map-edit-route[style*="none"]) #live-map-routes-sheet { right: 12px; }
+/* Lápiz = editar la ruta puesta: pequeño, naranja, suelto debajo de las herramientas
+   (68 + 3×46 + bordes + 12 de hueco). Mismo sitio que en la guía. */
+#live-map-edit-route {
+  top: calc(env(safe-area-inset-top, 0px) + 220px); right: 12px;
+  width: 46px; height: 46px; border: 1.5px solid var(--dorado); color: var(--dorado); border-radius: 0;
+}
 
 #live-map-tools {
   position: fixed; z-index: 970; right: 12px;
@@ -7172,7 +7173,7 @@ body.live-map-open #mejora-btn { display: none !important; }
 #live-map-routes-sheet {
   position: fixed; z-index: 975;
   top: calc(env(safe-area-inset-top, 0px) + 62px); bottom: auto;
-  left: 64px; right: 64px; max-height: 60vh; overflow-y: auto;
+  left: 64px; right: 12px; max-height: 60vh; overflow-y: auto;
   flex-direction: column; gap: 2px; padding: 6px;
   background: var(--negro); border: 1px solid var(--border); border-top: 1px solid var(--border);
   box-shadow: 0 10px 28px rgba(0,0,0,.5);
