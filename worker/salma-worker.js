@@ -748,6 +748,7 @@ async function verifyAuthAndGetUser(authHeader) {
       premium_until: premiumUntilStr,
       premium_active: premiumUntilMs > Date.now(),
       bonus_guides: parseInt(fields.premium_bonus_guides?.integerValue || '0', 10) || 0,
+      perfil_facts: perfilUsoFacts(_parseFirestoreValue(fields.perfil_ia)),
     };
   } catch (e) {
     return null;
@@ -1153,6 +1154,59 @@ async function perfilIALearnFromChat(env, uid, messages) {
     await firestoreAdminPatch(env, 'users/' + uid, { perfil_ia: _toFirestoreValue(merged) });
     console.log('[PerfilIA] chat', uid, '→ guardados', newFacts.length, 'datos nuevos');
   } catch (e) { console.warn('[PerfilIA] error aprendiendo del chat:', e.message); }
+}
+
+// ── PERFIL IA EN USO: Salma usa lo que sabe al contestar (27 sept 2026) ──
+// Decidido con Paco: en TODOS los mensajes (no solo "de viaje"), máximo 10 datos, sin la categoría
+// "trato" (no debe cambiar su personalidad), cacheado aparte (buildCachedSystem) y con tope de
+// 5 €/mes EN TOTAL. El documento del usuario ya se lee en cada mensaje (verifyAuthAndGetUser):
+// no hay lecturas de Firestore nuevas. Si borra un dato en su perfil, deja de llegar al siguiente
+// mensaje. El gasto se ESTIMA por lo alto (cada mensaje como si no acertase la caché, ×1,5 por las
+// vueltas de herramientas): el tope salta antes de gastar de verdad 5 €. FAIL-CLOSED: si KV falla,
+// Salma contesta como antes, sin perfil.
+const PERFIL_USO_MONTHLY_USD = 5.4;                              // ≈ 5 € (27 sept 2026, Paco)
+const PERFIL_USO_MAX_FACTS = 10;
+const PERFIL_USO_CATEGORIAS = ['estilo', 'restricciones', 'patrones'];   // 'trato' NUNCA
+const SONNET_USD_PER_MTOK_IN = 3;
+
+function _perfilUsoBudgetKey() { return 'perfiluso:budget:' + new Date().toISOString().slice(0, 7); }
+
+// perfil_ia (ya parseado) → [{categoria, texto}] que se le pasan a Salma. Nunca lanza.
+function perfilUsoFacts(perfilIA) {
+  try {
+    const all = (perfilIA && Array.isArray(perfilIA.facts)) ? perfilIA.facts : [];
+    const seen = new Set();
+    const out = [];
+    for (let i = all.length - 1; i >= 0 && out.length < PERFIL_USO_MAX_FACTS; i--) {   // los más recientes
+      const f = all[i];
+      if (!f || !PERFIL_USO_CATEGORIAS.includes(f.categoria) || typeof f.texto !== 'string') continue;
+      const texto = f.texto.replace(/\s+/g, ' ').trim().slice(0, 140);
+      const k = texto.toLowerCase();
+      if (!texto || seen.has(k)) continue;
+      seen.add(k);
+      out.unshift({ categoria: f.categoria, texto });
+    }
+    return out;
+  } catch (_) { return []; }
+}
+
+// Texto que se añade detrás de la parte fija del prompt ('' si no hay datos o no queda presupuesto).
+// Apunta el gasto estimado en KV antes de devolverlo.
+async function perfilUsoCtx(env, facts) {
+  try {
+    if (!Array.isArray(facts) || !facts.length || !env.SALMA_KB) return '';
+    const text = '\n\n' + BLOQUE_PERFIL_VIAJERO + '\n[PERFIL DEL VIAJERO:\n'
+      + facts.map(f => `- (${f.categoria}) ${f.texto}`).join('\n') + ']';
+    const bk = _perfilUsoBudgetKey();
+    const b = JSON.parse((await env.SALMA_KB.get(bk)) || '{}');
+    if ((b.usd || 0) >= PERFIL_USO_MONTHLY_USD) { console.log('[PerfilUso] tope del mes alcanzado:', (b.usd || 0).toFixed(4), '$'); return ''; }
+    const usd = (text.length / 3) * SONNET_USD_PER_MTOK_IN * 1.5 / 1e6;
+    b.usd = Math.round(((b.usd || 0) + usd) * 1e6) / 1e6;
+    b.n = (b.n || 0) + 1;
+    b.last_at = new Date().toISOString();
+    await env.SALMA_KB.put(bk, JSON.stringify(b), { expirationTtl: 60 * 60 * 24 * 100 });
+    return text;
+  } catch (e) { console.warn('[PerfilUso] sin perfil en este mensaje:', e.message); return ''; }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -5768,10 +5822,17 @@ function salvageIncompleteRouteJson(text) {
 // (la caché cubre también las herramientas, que van antes en el orden del prefijo): si se marcara todo, la fecha,
 // el usuario o las notas harían que nunca acertase y solo se pagaría el 25% extra de guardar. Si algo no
 // cuadra (base vacía o no es prefijo), devuelve el texto tal cual y la llamada sale como siempre.
-function buildCachedSystem(base, full) {
+// perfil (opcional, 27 sept 2026): el bloque del Perfil IA va justo detrás de la base con su propia marca
+// de caché — es fijo para cada usuario, así que se reaprovecha en las vueltas de herramientas y en los
+// mensajes seguidos de la misma conversación.
+function buildCachedSystem(base, full, perfil) {
   if (!base || typeof full !== 'string' || base.length < 4000 || !full.startsWith(base)) return full;
   const blocks = [{ type: 'text', text: base, cache_control: { type: 'ephemeral' } }];
-  const tail = full.slice(base.length);
+  let tail = full.slice(base.length);
+  if (perfil && tail.startsWith(perfil)) {
+    blocks.push({ type: 'text', text: perfil, cache_control: { type: 'ephemeral' } });
+    tail = tail.slice(perfil.length);
+  }
   if (tail.trim()) blocks.push({ type: 'text', text: tail });
   return blocks;
 }
@@ -13053,6 +13114,13 @@ INSTRUCCIONES:
     const dynamicPrompt = SALMA_SYSTEM_BASE;
     let { systemPrompt, systemBase, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute);
 
+    // Perfil IA en uso (27 sept 2026): justo detrás de la parte fija, para cachearlo aparte. Ver perfilUsoCtx().
+    let systemPerfil = '';
+    if (authUser.perfil_facts && authUser.perfil_facts.length && systemBase && systemPrompt.startsWith(systemBase)) {
+      systemPerfil = await perfilUsoCtx(env, authUser.perfil_facts);
+      if (systemPerfil) systemPrompt = systemBase + systemPerfil + systemPrompt.slice(systemBase.length);
+    }
+
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
       const notasCtx = userNotes.map(n => {
@@ -13423,7 +13491,7 @@ INSTRUCCIONES:
                 body: JSON.stringify({
                   model: 'claude-sonnet-4-6',
                   max_tokens: reqMaxTokens,
-                  system: buildCachedSystem(systemBase, systemPrompt),
+                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil),
                   messages: currentMessages,
                   tools: ANTHROPIC_TOOLS,
                   stream: true,
