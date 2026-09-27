@@ -932,7 +932,7 @@ async function usageGate(env, authUser, kind) {
           ? 'Has llegado al límite de mensajes de hoy (' + lim + '). Mañana se renueva.'
           : 'Has llegado a los ' + lim + ' mensajes de hoy del plan gratuito. Mañana se renueva, o pásate a Premium desde Perfil → Mi plan.' };
       }
-      return { ok: true };
+      return { ok: true, today };   // today = mensajes de hoy ANTES de este (lo usa el Perfil IA)
     }
     const isGuide = kind === 'guide';
     if (premium) {
@@ -1012,6 +1012,138 @@ async function usageRecord(env, authUser, delta) {
       }
     }
   } catch (_) {}
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PERFIL IA — "Lo que Salma sabe de ti": aprender de TODO lo que se habla con Salma (27 sept 2026)
+// ═══════════════════════════════════════════════════════════════
+// Decidido con Paco: además de al guardar una ruta (/perfil-ia-extract), se extrae cada 6 mensajes
+// del usuario en el chat de la web, en el popup de consulta de una guía y en WhatsApp (el contador
+// es el de mensajes del día de usageRecord, compartido por los tres). GPT-4o-mini en segundo plano.
+// Topes (§8): 10 extracciones por usuario y día + 1 €/mes EN TOTAL para todos los usuarios juntos
+// (coste REAL de los tokens que devuelve OpenAI, sumado en KV). Al llegar al tope se deja de
+// aprender hasta el mes siguiente; el chat sigue igual. FAIL-CLOSED: si KV falla, no se aprende.
+// La cuenta del mes puede pasarse unos céntimos si coinciden varias a la vez (KV no es atómico).
+const PERFIL_IA_EVERY_N_MSGS = 6;
+const PERFIL_IA_MAX_PER_DAY = 10;
+const PERFIL_IA_MONTHLY_USD = 1.08;                              // ≈ 1 €
+const GPT4O_MINI_USD_PER_MTOK = { in: 0.15, out: 0.60 };
+const PERFIL_IA_CATEGORIAS = ['estilo', 'restricciones', 'patrones', 'trato'];
+
+function _perfilIABudgetKey() { return 'perfilia:budget:' + new Date().toISOString().slice(0, 7); }
+function _perfilIADayKey(uid) { return 'perfilia:day:' + uid + ':' + usageToday(); }
+
+// ¿Queda presupuesto este mes y cupo hoy para este usuario? false si KV falla.
+async function perfilIACanSpend(env, uid) {
+  try {
+    if (!env.SALMA_KB) return false;
+    const [b, d] = await Promise.all([env.SALMA_KB.get(_perfilIABudgetKey()), env.SALMA_KB.get(_perfilIADayKey(uid))]);
+    const usd = b ? (JSON.parse(b).usd || 0) : 0;
+    if (usd >= PERFIL_IA_MONTHLY_USD) { console.log('[PerfilIA] tope del mes alcanzado:', usd.toFixed(4), '$'); return false; }
+    if ((Number(d) || 0) >= PERFIL_IA_MAX_PER_DAY) { console.log('[PerfilIA] tope diario del usuario', uid); return false; }
+    return true;
+  } catch (_) { return false; }
+}
+
+// Apunta una extracción hecha: coste real al mes (global) y +1 al día del usuario.
+async function perfilIARecordSpend(env, uid, usage) {
+  try {
+    if (!env.SALMA_KB) return;
+    const usd = ((usage?.prompt_tokens || 0) * GPT4O_MINI_USD_PER_MTOK.in + (usage?.completion_tokens || 0) * GPT4O_MINI_USD_PER_MTOK.out) / 1e6;
+    const bk = _perfilIABudgetKey();
+    const b = JSON.parse((await env.SALMA_KB.get(bk)) || '{}');
+    b.usd = Math.round(((b.usd || 0) + usd) * 1e6) / 1e6;
+    b.n = (b.n || 0) + 1;
+    b.last_at = new Date().toISOString();
+    const dk = _perfilIADayKey(uid);
+    const d = Number(await env.SALMA_KB.get(dk)) || 0;
+    await Promise.all([
+      env.SALMA_KB.put(bk, JSON.stringify(b), { expirationTtl: 60 * 60 * 24 * 100 }),
+      env.SALMA_KB.put(dk, String(d + 1), { expirationTtl: 60 * 60 * 30 }),
+    ]);
+  } catch (e) { console.warn('[PerfilIA] no se pudo apuntar el gasto:', e.message); }
+}
+
+// Llamada a GPT-4o-mini. guideSummary = ruta recién guardada (o null si viene del chat).
+// Devuelve { facts: [{categoria, texto}], usage } — nunca inventa: [] si no hay nada nuevo.
+async function perfilIAExtractFacts(env, { guideSummary, existingFacts, recentMessages }) {
+  const rutaTxt = guideSummary
+    ? `RUTA QUE ACABA DE GUARDAR:\n${JSON.stringify(guideSummary)}\n\n`
+    : '';
+  const prompt = `Eres un analista que extrae datos breves y reales sobre un viajero, para un perfil de memoria de una app de viajes. No inventes nada — si no hay nada nuevo que aportar, devuelve un array vacío.
+
+DATOS QUE YA TIENE GUARDADOS (no los repitas, no los contradigas sin un motivo claro):
+${JSON.stringify(existingFacts || [])}
+
+${rutaTxt}ÚLTIMOS MENSAJES DEL CHAT CON SALMA:
+${(recentMessages || []).map(m => `${m.role === 'user' ? 'Viajero' : 'Salma'}: ${String(m.text || '').slice(0, 300)}`).join('\n') || '(sin mensajes recientes)'}
+
+Categorías posibles, exactamente estas 4:
+- "estilo": ritmo de viaje, tipo de interés (naturaleza, historia, gastronomía...), presupuesto habitual.
+- "restricciones": con quién viaja, qué evita (coche de alquiler, madrugar...), dietas, mascotas.
+- "patrones": hábitos que se repiten entre rutas (añade siempre un día de descanso, busca parking...).
+- "trato": cómo reacciona a las respuestas de Salma — le sirvió, le pareció borde, pidió que fuera más breve, etc. Solo si el chat lo deja claro, nunca lo supongas.
+
+Saca los datos de lo que dice o hace el VIAJERO; lo que propone Salma no es un dato del viajero si él no lo confirma.
+Devuelve COMO MUCHO 3 datos nuevos o que corrigen uno existente. Cada texto en español, una frase corta y concreta (máximo 100 caracteres), sin repetir la categoría en el texto.
+
+Responde SOLO con JSON válido, sin markdown, sin backticks. Formato exacto: [{"categoria":"estilo","texto":"..."}]`;
+
+  const result = await callOpenAI(env.OPENAI_API_KEY, {
+    model: 'gpt-4o-mini',
+    max_tokens: 400,
+    messages: [{ role: 'user', content: prompt }],
+  });
+  if (result.error) throw new Error('OpenAI ' + (result.status || '') + ' ' + String(result.body || '').slice(0, 150));
+  const cleaned = (result.text || '').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  let parsed;
+  try { parsed = JSON.parse(cleaned); } catch (e) {
+    const match = cleaned.match(/\[[\s\S]*\]/);
+    try { parsed = match ? JSON.parse(match[0]) : []; } catch (_) { parsed = []; }
+  }
+  const facts = (Array.isArray(parsed) ? parsed : [])
+    .filter(f => f && PERFIL_IA_CATEGORIAS.includes(f.categoria) && typeof f.texto === 'string' && f.texto.trim())
+    .slice(0, 3)
+    .map(f => ({ categoria: f.categoria, texto: f.texto.trim().slice(0, 140) }));
+  return { facts, usage: result.usage || null };
+}
+
+// Desde el chat (web, popup de guía o WhatsApp): lee el perfil de Firestore, extrae y añade
+// los datos nuevos. Llamar en segundo plano (ctx.waitUntil). Nunca lanza.
+// messages: [{ role: 'user'|'assistant', content: string }] — los últimos de la conversación.
+async function perfilIALearnFromChat(env, uid, messages) {
+  try {
+    if (!uid || !env.OPENAI_API_KEY) return;
+    const recentMessages = (messages || [])
+      .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
+      .slice(-12)
+      .map(m => ({ role: m.role, text: m.content }));
+    if (!recentMessages.some(m => m.role === 'user')) return;
+    if (!(await perfilIACanSpend(env, uid))) return;
+
+    const userDoc = parseFirestoreDoc(await firestoreAdminGet(env, 'users/' + uid));
+    if (!userDoc) return;
+    const perfilIA = (userDoc.perfil_ia && typeof userDoc.perfil_ia === 'object') ? userDoc.perfil_ia : {};
+    const oldFacts = Array.isArray(perfilIA.facts) ? perfilIA.facts : [];
+
+    const { facts, usage } = await perfilIAExtractFacts(env, {
+      guideSummary: null,
+      existingFacts: oldFacts.slice(-40).map(f => ({ categoria: f.categoria, texto: f.texto })),
+      recentMessages,
+    });
+    await perfilIARecordSpend(env, uid, usage);
+    if (!facts.length) { console.log('[PerfilIA] chat', uid, '→ sin datos nuevos'); return; }
+
+    const now = Date.now();
+    const newFacts = facts.map(f => ({
+      id: 'auto-' + now + '-' + Math.random().toString(36).slice(2, 7),
+      categoria: f.categoria, texto: f.texto, origen: 'chat', fecha: now,
+    }));
+    const merged = { ...perfilIA, facts: [...oldFacts, ...newFacts] };
+    if (merged.proactive === undefined) merged.proactive = true;
+    await firestoreAdminPatch(env, 'users/' + uid, { perfil_ia: _toFirestoreValue(merged) });
+    console.log('[PerfilIA] chat', uid, '→ guardados', newFacts.length, 'datos nuevos');
+  } catch (e) { console.warn('[PerfilIA] error aprendiendo del chat:', e.message); }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -8142,7 +8274,7 @@ async function callOpenAI(apiKey, { model, max_tokens, temperature, system, mess
   const data = await res.json();
   const choice = data.choices?.[0];
   const text = choice?.message?.content || '';
-  return { text, message: choice?.message, finish_reason: choice?.finish_reason };
+  return { text, message: choice?.message, finish_reason: choice?.finish_reason, usage: data.usage || null };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -11004,6 +11136,12 @@ export default {
               await env.SALMA_KB.put(waHistKey, JSON.stringify(updatedHistory), { expirationTtl: 21600 });
             } catch (e) { console.error('[WhatsApp] Error guardando historial:', e.message); }
           }
+          // Perfil IA: mismo aprendizaje que la web, cada 6 mensajes del día (contador compartido).
+          // Ya estamos en segundo plano y la respuesta está enviada: esperar aquí no retrasa nada.
+          if (typeof chatGate.today === 'number' && (chatGate.today + 1) % PERFIL_IA_EVERY_N_MSGS === 0) {
+            await perfilIALearnFromChat(env, linkedUid,
+              [...waHistory, { role: 'user', content: waUserText }, { role: 'assistant', content: baseReply }]);
+          }
         } catch (e) {
           console.error('[WhatsApp] Error generando respuesta:', e.message);
           await sendWhatsAppMessage(env, from, 'Se me ha cruzado un cable — dime otra vez qué necesitas.').catch(() => {});
@@ -11492,52 +11630,19 @@ export default {
       const guideSummary = piBody.guideSummary || {};
       const existingFacts = Array.isArray(piBody.existingFacts) ? piBody.existingFacts.slice(0, 40) : [];
       const recentMessages = Array.isArray(piBody.recentMessages) ? piBody.recentMessages.slice(-12) : [];
-      const CATEGORIAS_VALIDAS = ['estilo', 'restricciones', 'patrones', 'trato'];
 
       if (!guideSummary.nombre && !guideSummary.destino) {
         return new Response(JSON.stringify({ facts: [] }), { headers: corsH });
       }
-
-      const prompt = `Eres un analista que extrae datos breves y reales sobre un viajero, para un perfil de memoria de una app de viajes. No inventes nada — si no hay nada nuevo que aportar, devuelve un array vacío.
-
-DATOS QUE YA TIENE GUARDADOS (no los repitas, no los contradigas sin un motivo claro):
-${JSON.stringify(existingFacts)}
-
-RUTA QUE ACABA DE GUARDAR:
-${JSON.stringify(guideSummary)}
-
-ÚLTIMOS MENSAJES DEL CHAT CON SALMA:
-${recentMessages.map(m => `${m.role === 'user' ? 'Viajero' : 'Salma'}: ${String(m.text || '').slice(0, 300)}`).join('\n') || '(sin mensajes recientes)'}
-
-Categorías posibles, exactamente estas 4:
-- "estilo": ritmo de viaje, tipo de interés (naturaleza, historia, gastronomía...), presupuesto habitual.
-- "restricciones": con quién viaja, qué evita (coche de alquiler, madrugar...), dietas, mascotas.
-- "patrones": hábitos que se repiten entre rutas (añade siempre un día de descanso, busca parking...).
-- "trato": cómo reacciona a las respuestas de Salma — le sirvió, le pareció borde, pidió que fuera más breve, etc. Solo si el chat lo deja claro, nunca lo supongas.
-
-Devuelve COMO MUCHO 3 datos nuevos o que corrigen uno existente. Cada texto en español, una frase corta y concreta (máximo 100 caracteres), sin repetir la categoría en el texto.
-
-Responde SOLO con JSON válido, sin markdown, sin backticks. Formato exacto: [{"categoria":"estilo","texto":"..."}]`;
+      // 27 sept 2026: cuenta en los mismos topes que el aprendizaje desde el chat
+      // (10/usuario/día y 1 €/mes en total) — ver perfilIACanSpend().
+      if (!(await perfilIACanSpend(env, authUser.uid))) {
+        return new Response(JSON.stringify({ facts: [], capped: true }), { headers: corsH });
+      }
 
       try {
-        const result = await callOpenAI(apiKey, {
-          model: 'gpt-4o-mini',
-          max_tokens: 400,
-          messages: [{ role: 'user', content: prompt }],
-        });
-        if (result.error) {
-          return new Response(JSON.stringify({ error: result.error }), { status: 500, headers: corsH });
-        }
-        const cleaned = (result.text || '').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-        let parsed;
-        try { parsed = JSON.parse(cleaned); } catch (e) {
-          const match = cleaned.match(/\[[\s\S]*\]/);
-          parsed = match ? JSON.parse(match[0]) : [];
-        }
-        const facts = (Array.isArray(parsed) ? parsed : [])
-          .filter(f => f && CATEGORIAS_VALIDAS.includes(f.categoria) && typeof f.texto === 'string' && f.texto.trim())
-          .slice(0, 3)
-          .map(f => ({ categoria: f.categoria, texto: f.texto.trim().slice(0, 140) }));
+        const { facts, usage } = await perfilIAExtractFacts(env, { guideSummary, existingFacts, recentMessages });
+        await perfilIARecordSpend(env, authUser.uid, usage);
         return new Response(JSON.stringify({ facts }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -12560,6 +12665,12 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       });
     }
     if (_usageKind === 'chat') ctx.waitUntil(usageRecord(env, authUser, { msgs: 1 }));
+    // Perfil IA: cada 6 mensajes de chat del día (web + popup de guía + WhatsApp) aprende del
+    // usuario en segundo plano — ver perfilIALearnFromChat(). No frena ni cambia la respuesta.
+    if (_usageKind === 'chat' && typeof _usageGate.today === 'number' && typeof message === 'string' && message.trim() &&
+        (_usageGate.today + 1) % PERFIL_IA_EVERY_N_MSGS === 0) {
+      ctx.waitUntil(perfilIALearnFromChat(env, authUser.uid, [...history.slice(-11), { role: 'user', content: message }]));
+    }
     const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0 };  // tokens de Claude de esta petición
     let _usageConsume = null;               // 'guide' | 'edit' cuando la petición entrega el resultado
     let _usageFlushed = false;

@@ -2184,7 +2184,7 @@ const PERFIL_IA_CATEGORIAS = [
   { id: 'trato', title: 'TRATO Y SATISFACCIÓN' }
 ];
 
-function renderPerfilIA() {
+function renderPerfilIA(_skipRefresh) {
   const $c = document.getElementById('app-content');
   const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
   const facts = perfilIA.facts || [];
@@ -2252,6 +2252,27 @@ function renderPerfilIA() {
   document.getElementById('perfil-ia-proactive').addEventListener('change', (e) => {
     _perfilIASetProactive(e.target.checked);
   });
+
+  // Pinta ya con lo que hay en memoria y, si en Firestore hay datos nuevos (aprendidos por el
+  // Worker desde el chat o WhatsApp), vuelve a pintar una vez.
+  if (!_skipRefresh) {
+    const before = JSON.stringify(currentUser.perfil_ia || null);
+    _perfilIARefresh().then(() => {
+      if (currentState === 'perfil-ia' && JSON.stringify(currentUser.perfil_ia || null) !== before) renderPerfilIA(true);
+    });
+  }
+}
+
+// Desde el 27 sept 2026 el Worker también escribe en perfil_ia (aprende del chat y de WhatsApp),
+// así que la copia de currentUser puede estar vieja: se relee de Firestore antes de modificarla,
+// para no pisar lo que el Worker añadió mientras tanto.
+async function _perfilIARefresh() {
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid).get();
+    const fresh = snap.exists ? snap.data().perfil_ia : null;
+    if (fresh) currentUser.perfil_ia = fresh;
+  } catch (e) { console.warn('[PerfilIA] no se pudo releer el perfil:', e.message); }
+  return currentUser.perfil_ia || { facts: [], proactive: true };
 }
 
 async function _perfilIASave(newPerfilIA) {
@@ -2261,11 +2282,11 @@ async function _perfilIASave(newPerfilIA) {
 
 async function _perfilIARemoveFact(factId) {
   if (!currentUser || !factId) return;
-  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+  const perfilIA = await _perfilIARefresh();
   const newPerfilIA = { ...perfilIA, facts: (perfilIA.facts || []).filter(f => f.id !== factId) };
   try {
     await _perfilIASave(newPerfilIA);
-    renderPerfilIA();
+    renderPerfilIA(true);
   } catch (e) {
     showToast('Error al borrar');
   }
@@ -2275,12 +2296,12 @@ async function _perfilIAAddFact() {
   const input = document.getElementById('perfil-ia-add-input');
   const texto = (input?.value || '').trim();
   if (!texto || !currentUser) return;
-  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+  const perfilIA = await _perfilIARefresh();
   const newFact = { id: 'manual-' + Date.now(), categoria: 'estilo', texto, origen: 'manual', fecha: Date.now() };
   const newPerfilIA = { ...perfilIA, facts: [...(perfilIA.facts || []), newFact] };
   try {
     await _perfilIASave(newPerfilIA);
-    renderPerfilIA();
+    renderPerfilIA(true);
   } catch (e) {
     showToast('Error al guardar');
   }
@@ -2288,7 +2309,7 @@ async function _perfilIAAddFact() {
 
 async function _perfilIASetProactive(value) {
   if (!currentUser) return;
-  const perfilIA = currentUser.perfil_ia || { facts: [], proactive: true };
+  const perfilIA = await _perfilIARefresh();
   try {
     await _perfilIASave({ ...perfilIA, proactive: value });
   } catch (e) {
@@ -2308,9 +2329,19 @@ async function _perfilIAExtract(ruta) {
   const token = await authUser.getIdToken();
 
   const existingFacts = (perfilIA.facts || []).map(f => ({ categoria: f.categoria, texto: f.texto }));
-  const recentMessages = (typeof salma !== 'undefined' && Array.isArray(salma.history))
-    ? salma.history.slice(-12).map(m => ({ role: m.role, text: m.content }))
-    : [];
+  // Los mensajes que llevaron a esta ruta: salma.js guarda una copia en _lastRouteHistory
+  // porque vacía salma.history al terminar de generarla, antes de que se pulse GUARDAR.
+  // Se usa una sola vez, para que no se cuele en la extracción de otra ruta.
+  let _hist = [];
+  if (typeof salma !== 'undefined') {
+    if (Array.isArray(salma._lastRouteHistory) && salma._lastRouteHistory.length) {
+      _hist = salma._lastRouteHistory;
+      salma._lastRouteHistory = null;
+    } else if (Array.isArray(salma.history)) {
+      _hist = salma.history;
+    }
+  }
+  const recentMessages = _hist.slice(-12).map(m => ({ role: m.role, text: m.content }));
   const guideSummary = {
     nombre: ruta.nombre,
     destino: ruta.destino,
@@ -2335,7 +2366,8 @@ async function _perfilIAExtract(ruta) {
     console.warn('[PerfilIA] respuesta no OK:', res.status, errText);
     return;
   }
-  const { facts } = await res.json();
+  const { facts, capped } = await res.json();
+  if (capped) { console.log('[PerfilIA] tope alcanzado (10 al día o 1 €/mes en total), no se extrae'); return; }
   console.log('[PerfilIA] facts recibidos:', facts);
   if (!Array.isArray(facts) || !facts.length) { console.log('[PerfilIA] sin datos nuevos que aportar'); return; }
 
@@ -2346,7 +2378,8 @@ async function _perfilIAExtract(ruta) {
     origen: 'auto',
     fecha: Date.now()
   }));
-  await _perfilIASave({ ...perfilIA, facts: [...(perfilIA.facts || []), ...newFacts] });
+  const fresh = await _perfilIARefresh();
+  await _perfilIASave({ ...fresh, facts: [...(fresh.facts || []), ...newFacts] });
   console.log('[PerfilIA] guardados', newFacts.length, 'datos nuevos en Firestore');
 }
 
