@@ -1,0 +1,64 @@
+[
+  {
+    "titulo": "Pasar Stripe de modo test a live (bloquea cualquier campaña: hoy nadie puede pagar)",
+    "tipo": "tarea",
+    "zona": "otro",
+    "area": "negocio",
+    "gravedad": "urgente",
+    "modelo": "opus",
+    "ejemplo": "27 sept 2026, plan de campaña de 500 €: docs/negocio-premium.md dice 'Stripe: Checkout funciona (modo test). PENDIENTE: pasar a live'.",
+    "nota": "Requisito previo a gastar un euro en marketing. Pagos = riesgo en producción → Opus. Cambiar claves live en secrets del Worker (nunca en código), webhook live, probar una compra real de 4,99 € y devolverla. Plan completo: docs/plan-marketing-500.md"
+  },
+  {
+    "titulo": "Quitar noindex de las páginas de destinos/ (SEO gratis)",
+    "tipo": "tarea",
+    "zona": "otro",
+    "area": "negocio",
+    "gravedad": "alta",
+    "modelo": "opus",
+    "ejemplo": "27 sept 2026: las 1.793 páginas de destinos/ llevan noindex (CLAUDE.md, 'El proyecto en 12 líneas').",
+    "nota": "Decisión de Paco: ¿están listas para Google (contenido fino/duplicado puede penalizar)? Si sí: quitar noindex en scripts/build-destinos.js, regenerar, sitemap. Mejor por tandas (p. ej. 20 países) y mirar Search Console. Coste API: ninguno directo, pero más visitas = más registros = más gasto de Claude/Google (ver caso de coste por registro).",
+    "decision": "¿Abrimos destinos/ a Google ya, por tandas, o esperamos?"
+  },
+  {
+    "titulo": "Programa de invitaciones: invita a un amigo → 1 mes premium para los dos",
+    "tipo": "idea",
+    "zona": "otro",
+    "area": "negocio",
+    "gravedad": "alta",
+    "modelo": "opus",
+    "ejemplo": "27 sept 2026, plan de campaña: con 500 € de anuncios el cliente sale a 50-150 €; invitar es el canal casi gratis y encaja con compartir guías por WhatsApp.",
+    "nota": "Diseño: código/enlace por usuario, suma 1 mes a premium_until de ambos cuando el invitado se registra (o cuando paga, para evitar abuso). Toca app.js + Worker + Firestore → confirmar cada paso. Coste: cada mes regalado = gasto de IA de un premium (~0,3-1 €/mes a ojo)."
+  },
+  {
+    "titulo": "Poner el plan Anual (24,99 €) como opción destacada en Mi plan",
+    "tipo": "idea",
+    "zona": "otro",
+    "area": "negocio",
+    "gravedad": "media",
+    "modelo": "sonnet",
+    "ejemplo": "27 sept 2026: para 15.000 € de beneficio hacen falta ~3.000 ventas de 8,99 € pero ~850 del anual.",
+    "nota": "Cambio de presentación en app.js:renderProfile() (orden, etiqueta 'el más elegido', precio/mes). Precios ya en PREMIUM_PLANS. Ojo: el anual da 12 meses de uso de IA por venta; revisar margen con el caso de coste por usuario.",
+    "decision": "¿Destacamos el anual por defecto?"
+  },
+  {
+    "titulo": "Medir coste real de APIs por usuario gratis y por usuario premium",
+    "tipo": "tarea",
+    "zona": "otro",
+    "area": "costes",
+    "gravedad": "alta",
+    "modelo": "opus",
+    "ejemplo": "27 sept 2026: estimación a ojo 0,05-0,30 € por registro gratis y 1-3 € por premium trimestral; sin dato real no se puede saber si la campaña es rentable.",
+    "nota": "Sacar de las facturas de Anthropic/OpenAI/Google del último mes ÷ usuarios activos, o registrar tokens por uid en el Worker. Necesario ANTES de escalar la campaña (1.000 registros = 50-300 € de APIs fuera del presupuesto de marketing)."
+  },
+  {
+    "titulo": "Campaña 500 €: códigos de descuento por influencer y seguimiento de origen (UTM)",
+    "tipo": "tarea",
+    "zona": "otro",
+    "area": "negocio",
+    "gravedad": "media",
+    "modelo": "opus",
+    "ejemplo": "27 sept 2026, plan: 150 € test de anuncios, 200 € microinfluencers, 100 € promocionar posts de 9tri, 50 € reserva. Sin saber de dónde viene cada registro/pago no se puede medir el coste por cliente.",
+    "nota": "Guardar utm_source/código en el usuario al registrarse y en el pago (metadata de Stripe). Cupones en Stripe (live). Plan: docs/plan-marketing-500.md"
+  }
+]
