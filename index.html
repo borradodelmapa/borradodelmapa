@@ -211,10 +211,9 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
   <!-- Capas POI (botón movido al diario-picker) -->
   <div id="live-map-layers-panel" style="display:none">
     <div class="lml-title">Mostrar en el mapa</div>
-    <label class="lml-row"><span>🍽️ Restaurantes</span><input type="checkbox" data-cat="food" onchange="toggleMapCat(this)"></label>
-    <label class="lml-row"><span>💊 Farmacias</span><input type="checkbox" data-cat="medical" onchange="toggleMapCat(this)"></label>
-    <label class="lml-row"><span>🏨 Hoteles</span><input type="checkbox" data-cat="lodging" onchange="toggleMapCat(this)"></label>
-    <label class="lml-row"><span>🛒 Supermercados</span><input type="checkbox" data-cat="shopping" onchange="toggleMapCat(this)"></label>
+    <!-- 27 sept 2026: iconos de Google encendidos con el estilo (gratis); antes Nearby Search de pago -->
+    <label class="lml-row"><span>🍽️ Comer, dormir y tiendas</span><input type="checkbox" data-cat="business" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>💊 Salud</span><input type="checkbox" data-cat="medical" onchange="toggleMapCat(this)"></label>
     <label class="lml-row"><span>🌳 Parques</span><input type="checkbox" data-cat="parks" onchange="toggleMapCat(this)"></label>
     <label class="lml-row"><span>🏛️ Cultura</span><input type="checkbox" data-cat="culture" onchange="toggleMapCat(this)"></label>
     <label class="lml-row"><span>🚇 Transporte</span><input type="checkbox" data-cat="transit" onchange="toggleMapCat(this)"></label>
@@ -460,7 +459,7 @@ window.SALMA_API="https://salma-api.borradodelmapa-api.workers.dev";
 <!-- ═══ APP ═══ -->
 <script src="debug-panel.js?v=21"></script>
 <script src="country-utils.js?v=4"></script>
-<script src="app.js?v=194"></script>
+<script src="app.js?v=195"></script>
 <script src="premium-modal.js?v=3"></script>
 <script src="nav-history.js?v=4"></script>
 <script src="notas.js?v=2"></script>
