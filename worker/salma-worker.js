@@ -2713,7 +2713,7 @@ function mightAskForPlace(message) {
   if (isNearbySearch(message)) return true;
   const hc = isHelpRequest(message);
   if (hc && hc !== 'weather') return true;
-  return /(lleg|llev[ae]|\bvoy\b|\bvamos\b|\bir\s+(?:a|al|hasta|hacia|pa)\b|\bpa\s+(?:la|el|ir)\b|donde\s+(?:esta|estan|queda|quedan|cae|se\s+encuentra|es)|\bdonde\b|ubicaci|\bubi\b|localizaci|direcci|enlace|\blink|\burl\b|maps|mapa|\bruta\s+(?:a|al|hasta|hacia)\b|\bcamino\s+(?:a|al|hacia)\b|como\s+se\s+va|taxi|cerca|por\s+aqui)/.test(m);
+  return /(lleg|llev[ae]|\bvoy\b|\bvamos\b|\bir\s+(?:a|al|hasta|hacia|pa)\b|\bpa\s+(?:la|el|ir)\b|donde\s+(?:esta|estan|queda|quedan|cae|se\s+encuentra|es)|\bdonde\b|ubicaci|\bubi\b|localizaci|direcci|enlace|\blink|\burl\b|maps|mapa|\bruta\s+(?:a|al|hasta|hacia)\b|\bcamino\s+(?:a|al|hacia)\b|como\s+se\s+va|taxi|uber|\bbolt\b|cabify|\bvtc\b|aparc|cerca|por\s+aqui)/.test(m);
 }
 
 async function interpretPlaceRequest(message, ctx, env) {
@@ -2722,13 +2722,14 @@ async function interpretPlaceRequest(message, ctx, env) {
     .map(h => (h && h.role === 'assistant' ? 'Salma' : 'Usuario') + ': ' + String(h && typeof h.content === 'string' ? h.content : '').replace(/\s+/g, ' ').slice(0, 300))
     .filter(l => l.length > 12).join('\n');
   const system = `Lees un mensaje de un viajero a su asistente de viajes y dices si pide ir a un sitio. Responde SOLO con JSON:
-{"quiere_ir":bool,"sitio":string|null,"es_destino":bool,"ciudad":string|null,"cerca_de_mi":bool,"contexto":bool}
-- quiere_ir: true si pide cómo llegar, cómo ir, dónde está, la ubicación, la dirección o el enlace/mapa de un sitio (aunque esté mal escrito o sin artículos: "como llego alhambra", "alhambra como llego", "donde queda el retiro", "pasame la ubi del prado"). Cualquier "¿dónde está X?" o "¿dónde queda X?" sobre un sitio es quiere_ir true. También si pide el enlace de sitios ya nombrados en la conversación ("pásame los enlaces", "¿y cómo llego?"). False si pide recomendaciones, información o planes ("qué ver", "dónde comer en…", "qué hay en…").
+{"quiere_ir":bool,"sitio":string|null,"es_destino":bool,"ciudad":string|null,"cerca_de_mi":bool,"contexto":bool,"medio":string|null}
+- quiere_ir: true si pide cómo llegar, cómo ir, dónde está, la ubicación, la dirección o el enlace/mapa de un sitio (aunque esté mal escrito o sin artículos: "como llego alhambra", "alhambra como llego", "donde queda el retiro", "pasame la ubi del prado", "dónde aparco para ir al Prado", "pídeme un taxi a la Alhambra"). Cualquier "¿dónde está X?" o "¿dónde queda X?" sobre un sitio es quiere_ir true. También si pide el enlace de sitios ya nombrados en la conversación ("pásame los enlaces", "¿y cómo llego?"). False si pide recomendaciones, información o planes ("qué ver", "dónde comer en…", "qué hay en…").
 - sitio: el nombre correcto y completo del sitio CONCRETO al que quiere ir, con su nombre propio, corrigiendo erratas ("alhabra" → "Alhambra"); si lo dice sin nombrarlo ("¿y cómo llego?"), el de la conversación. null si es algo del propio usuario o sin nombre propio ("mi hotel", "el hotel", "mi apartamento", "el coche", "casa", "el restaurante") o si son varios sitios a la vez. Un servicio con ciudad conocida sí vale ("aeropuerto", "estación de tren").
 - es_destino: true SOLO si el sitio es una población o un territorio: ciudad, pueblo, comarca, región, país o isla ("Granada", "Japón", "Mallorca"). Un monumento, museo, parque, mirador, plaza, barrio, mercado, playa, edificio, estación o negocio NUNCA es destino ("Alhambra", "Torre Eiffel", "Parque del Retiro" → false).
 - ciudad: "Ciudad, País" donde está ESE sitio. Sitio conocido: su ciudad real aunque el usuario esté en otra ("Alhambra" → "Granada, España"). Espacio natural: el pueblo más cercano. Si la conversación trata de un destino, los sitios son de ahí salvo que el nombre diga otra cosa. Negocio o servicio corriente sin ciudad en la conversación: la ciudad donde está el usuario. null si no lo sabes con seguridad o hay varios igual de probables. Nunca inventes.
 - cerca_de_mi: true SOLO si NO nombra un sitio concreto y busca opciones alrededor de donde está EL USUARIO AHORA ("farmacia cerca", "dónde comer por aquí", "cajero más cercano"). Si nombra un sitio concreto es false, aunque esté en la ciudad del usuario ("¿dónde está el Museo del Prado?" estando en Madrid → false). Si nombra otra zona ("dónde comer en Triana") es false.
-- contexto: true SOLO si el mensaje trae, además del sitio, algo de esta lista: un medio de transporte (camper, autocaravana, tren, bus, taxi, andando, en coche, en bici…), un origen ("desde Madrid", "desde el hotel"), compañía o accesibilidad (niños, carrito, silla de ruedas, perro, persona mayor), o una pregunta por aparcar, horarios, entradas, precio o cuánto se tarda. Las formas coloquiales o mal escritas ("pa la", "cómo voy", "porfa", "llevame") NO son contexto.`;
+- contexto: true SOLO si el mensaje trae, además del sitio, algo de esta lista: un medio de transporte (camper, autocaravana, tren, bus, taxi, andando, en coche, en bici…), un origen ("desde Madrid", "desde el hotel"), compañía o accesibilidad (niños, carrito, silla de ruedas, perro, persona mayor), o una pregunta por aparcar, horarios, entradas, precio o cuánto se tarda. Las formas coloquiales o mal escritas ("pa la", "cómo voy", "porfa", "llevame") NO son contexto.
+- medio: el medio de transporte SOLO si el mensaje lo nombra con palabras: "taxi" (taxi, Uber, Bolt, Cabify, VTC, transfer), "camper" (camper, autocaravana, furgo, furgoneta camperizada, caravana), "coche" (coche, en mi coche, conduciendo, aparcar), "moto", "andando" (andando, a pie, caminando), "bici", "publico" (bus, autobús, metro, tren, tranvía). Si no nombra ninguno: null, aunque se pueda suponer ("llévame a…", "desde Madrid" → null).`;
   const user = `Ubicación actual del usuario: ${ctx.userLocationName || 'desconocida'}
 Destino del que se habla: ${ctx.destino || 'ninguno'}
 ${hist ? 'Conversación reciente:\n' + hist + '\n' : ''}Mensaje: ${String(message || '').slice(0, 300)}`;
@@ -2740,7 +2741,21 @@ ${hist ? 'Conversación reciente:\n' + hist + '\n' : ''}Mensaje: ${String(messag
     if (!out || out.error || !out.text) { console.warn('[CHAT-ENLACE] intérprete sin respuesta ' + (out ? out.status : 'timeout')); return null; }
     const j = JSON.parse((out.text.match(/\{[\s\S]*\}/) || ['{}'])[0]);
     const str = v => (typeof v === 'string' && v.trim().length >= 2) ? v.trim().slice(0, 80) : null;
-    const r = { quiere_ir: j.quiere_ir === true, sitio: str(j.sitio), es_destino: j.es_destino === true, ciudad: str(j.ciudad), cerca_de_mi: j.cerca_de_mi === true, contexto: j.contexto === true };
+    const r = { quiere_ir: j.quiere_ir === true, sitio: str(j.sitio), es_destino: j.es_destino === true, ciudad: str(j.ciudad), cerca_de_mi: j.cerca_de_mi === true, contexto: j.contexto === true,
+      medio: ['taxi', 'camper', 'coche', 'moto', 'andando', 'bici', 'publico'].includes(j.medio) ? j.medio : null };
+    // Red de seguridad: si la IA no dio el medio pero el mensaje lo nombra, se toma del mensaje (en la prueba, "en bus"
+    // salía null una de cada dos). Preguntar dónde aparcar es ir en coche aunque no lo diga.
+    if (!r.medio && r.quiere_ir) {
+      const mm = String(message || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+      r.medio = /\b(?:taxi|uber|bolt|cabify|vtc|transfer)\b/.test(mm) ? 'taxi'
+        : /camper|autocaravana|\bfurgo|caravana/.test(mm) ? 'camper'
+        : /\bmoto\b/.test(mm) ? 'moto'
+        : /\bcoche\b|aparc|parking|estacion(?:o|ar|amiento)/.test(mm) ? 'coche'
+        : /\bbici/.test(mm) ? 'bici'
+        : /andando|a pie\b|caminando/.test(mm) ? 'andando'
+        : /\bbus\b|autobus|\bmetro\b|\btren\b|tranvia/.test(mm) ? 'publico' : null;
+    }
+    if (r.medio) r.contexto = true; // con medio de transporte contesta Salma (nunca el atajo)
     // Red de seguridad: algo del propio usuario ("mi hotel") no es un sitio que se pueda buscar — en Google hay un
     // hotel llamado "Mi Hotel" y el enlace saldría a ese (visto en la prueba de frases).
     if (r.sitio && /^(?:mi|mis|tu|tus|su|sus|nuestro|nuestra|nuestros|nuestras)\s/i.test(r.sitio)) r.sitio = null;
@@ -2860,8 +2875,10 @@ async function verifyChatPlacesAt(names, anchor, env, days) {
 async function resolveChatPlaces(names, ctx, env, days = 1) {
   const found = new Map();
   ctx.cities = ctx.cities || {};
-  const note = (name, estado, detalle) => {
+  // info: { ciudad, google, place_id, km } → registro de enlaces (ctx.logLink + ctx.origen; ver logChatLink)
+  const note = (name, estado, detalle, info = {}) => {
     console.log(`[CHAT-ENLACE] ${estado} "${name}" ${detalle || ''}`);
+    if (typeof ctx.logLink === 'function' && ctx.origen) ctx.logLink(Object.assign({ origen: ctx.origen, pedido: name, estado }, info));
     if (estado !== 'ok' && Array.isArray(ctx.incidents)) {
       ctx.incidents.push({ place_name: name, reason: 'chat_' + estado, replacement_url: String(detalle || ''), surface: 'chat' });
     }
@@ -2870,12 +2887,13 @@ async function resolveChatPlaces(names, ctx, env, days = 1) {
   const rest = [];
   for (const n of names) {
     const e = findChatPlace(ctx.catalog, n);
-    let ok = null;
+    let ok = null, okKm = null;
     if (e && e.ciudad && typeof e.lat === 'number' && typeof e.lng === 'number' && strictNameMatch(n, e.name)) {
       const a = await chatAnchorFor(e.ciudad, ctx, env);
-      if (a && haversineKm(a.lat, a.lng, e.lat, e.lng) <= (days <= 1 ? 35 : 120)) ok = { place_id: e.place_id, name: e.name, lat: e.lat, lng: e.lng };
+      okKm = a ? haversineKm(a.lat, a.lng, e.lat, e.lng) : null;
+      if (a && okKm <= (days <= 1 ? 35 : 120)) ok = { place_id: e.place_id, name: e.name, lat: e.lat, lng: e.lng };
     }
-    if (ok) { found.set(n, ok); note(n, 'ok', `catálogo de Salma (${e.ciudad}) → ${ok.name} ${ok.place_id}`); }
+    if (ok) { found.set(n, ok); note(n, 'ok', `catálogo de Salma (${e.ciudad}) → ${ok.name} ${ok.place_id}`, { ciudad: e.ciudad, google: ok.name, place_id: ok.place_id, km: okKm }); }
     else rest.push(n);
   }
   if (!rest.length || !env.GOOGLE_PLACES_KEY) return found;
@@ -2897,16 +2915,55 @@ async function resolveChatPlaces(names, ctx, env, days = 1) {
   }
   await Promise.all([...byCity].map(async ([city, ns]) => {
     const anchor = await chatAnchorFor(city, ctx, env);
-    if (!anchor) { ns.forEach(n => note(n, 'ciudad_no_resuelta', city)); return; }
+    if (!anchor) { ns.forEach(n => note(n, 'ciudad_no_resuelta', city, { ciudad: city })); return; }
     let r = new Map();
     try { r = await verifyChatPlacesAt(ns, anchor, env, days); } catch (e) { console.error('[CHAT-ENLACE] verify: ' + e.message); }
     for (const n of ns) {
       const v = r.get(n);
-      if (v) { found.set(n, v); note(n, 'ok', `${city} → ${v.name} ${v.place_id}`); }
-      else note(n, 'no_verificado', city);
+      if (v) { found.set(n, v); note(n, 'ok', `${city} → ${v.name} ${v.place_id}`, { ciudad: city, google: v.name, place_id: v.place_id, km: haversineKm(anchor.lat, anchor.lng, v.lat, v.lng) }); }
+      else note(n, 'no_verificado', city, { ciudad: city });
     }
   }));
   return found;
+}
+
+// ═══ DÓNDE DEJAR EL VEHÍCULO JUNTO AL SITIO (caso p-mul9bn4uc1c, 28 sept 2026) ═══
+// "Cómo llego a la Alhambra en camper" → Salma contestaba de memoria (altura de la camper) sin decir que hay un área
+// de autocaravanas al lado. Ahora, con vehículo propio, se busca en Google junto al sitio YA VERIFICADO (el ancla es
+// el propio sitio, no el GPS) y solo vale lo que cae cerca y es de verdad un área/parking. Una Text Search
+// (~3 cént.) por sitio y vehículo; caché 30 días en KV (nearbycache:aparcar:*), así que repetir no cuesta nada.
+// Camper: vale un área (rv_park/campground) o un parking cuyo nombre diga que admite autocaravanas o vehículos
+// pesados (junto a la Alhambra es "Aparcamiento Vehículos Pesados La Alhambra"; "área de autocaravanas" como
+// búsqueda no lo encontraba). Coche/moto: parkings con nombre propio, sin los de autobuses o autocaravanas.
+const VEHICLE_PARKING = {
+  camper: { query: 'parking autocaravanas', km: 3, tipos: /rv_park|campground/, nombre: /autocaravan|camper|caravan|motorhome|pesados|wohnmobil|camping.?car/i, que: 'área o parking de autocaravanas' },
+  coche: { query: 'parking', km: 1.5, tipos: /\bparking\b/, nombre: /parking|aparcamiento|estacionamiento|garaje|car park/i, fuera: /\bbus\b|autob|autocar|pesados|camper|caravan/i, que: 'parking' },
+  moto: { query: 'parking motos', km: 1.5, tipos: /\bparking\b/, nombre: /parking|aparcamiento|estacionamiento|moto/i, fuera: /\bbus\b|autob|autocar|pesados|camper|caravan/i, que: 'parking' },
+};
+async function findVehicleParking(site, medio, env) {
+  const cfg = VEHICLE_PARKING[medio];
+  if (!cfg || !site || !site.place_id || typeof site.lat !== 'number' || !env.GOOGLE_PLACES_KEY) return [];
+  const kvKey = env.SALMA_KB ? `nearbycache:aparcar:${medio}:${site.place_id}` : null;
+  if (kvKey) { try { const c = await env.SALMA_KB.get(kvKey); if (c) return JSON.parse(c); } catch (_) {} }
+  let out = [];
+  try {
+    const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(cfg.query)}&location=${site.lat},${site.lng}&radius=${Math.round(cfg.km * 1000)}&language=es&key=${env.GOOGLE_PLACES_KEY}`;
+    const data = await (await fetch(url, { signal: AbortSignal.timeout(6000) })).json();
+    out = (data.results || [])
+      .filter(p => p.place_id && p.geometry && p.geometry.location && p.business_status !== 'CLOSED_PERMANENTLY'
+        && (cfg.tipos.test((p.types || []).join(' ')) || cfg.nombre.test(p.name || ''))
+        && !(cfg.fuera && cfg.fuera.test(p.name || ''))
+        && !/^\W*(?:\[p\]\s*)?(?:aparcamiento|parking|estacionamiento)\W*$/i.test(p.name || ''))   // sin nombre propio no se encuentra
+      .map(p => ({ name: p.name, place_id: p.place_id, lat: p.geometry.location.lat, lng: p.geometry.location.lng,
+        address: p.formatted_address || '', rating: p.rating || null,
+        km: Math.round(haversineKm(site.lat, site.lng, p.geometry.location.lat, p.geometry.location.lng) * 10) / 10 }))
+      .filter(p => p.km <= cfg.km)
+      .sort((a, b) => a.km - b.km)
+      .slice(0, 2);
+  } catch (e) { console.warn('[CHAT-APARCAR] ' + e.message); return []; }
+  console.log(`[CHAT-APARCAR] ${medio} junto a "${site.name}": ${out.map(p => p.name + ' ' + p.km + ' km').join(' · ') || 'nada'}`);
+  if (kvKey) env.SALMA_KB.put(kvKey, JSON.stringify(out), { expirationTtl: 2592000 }).catch(() => {});
+  return out;
 }
 
 // Aviso fijo cuando el chat nombra sitios pero no lleva enlaces (decisión de Paco, 28 sept 2026): los enlaces
@@ -8834,6 +8891,30 @@ async function logUrlIncidents(incidents, idToken) {
   }));
 }
 
+// ─── REGISTRO DE ENLACES DEL CHAT (Paco, 28 sept 2026) ───
+// Cada sitio que el chat intenta enlazar queda apuntado en Firestore `chat_links`, haya enlace o no (estado): qué se
+// pidió, en qué ciudad lo buscó, qué sitio de Google salió, a cuántos km del ancla y por qué camino (atajo, negrita,
+// respaldo, transporte, aparcar). Sin uid ni GPS: solo el mensaje (recortado). Escribe el Worker con la cuenta de
+// servicio (no depende de las reglas ni de la sesión del usuario). Se revisa con `node scripts/casos.cjs enlaces`.
+// Coste: una escritura de Firestore por fila (gratis hasta 20.000 al día).
+async function logChatLink(env, row) {
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const f = {
+    at: { timestampValue: new Date().toISOString() },
+    worker: _fS(String(env.CF_VERSION_METADATA?.id || '').slice(0, 40)),
+    origen: _fS(String(row.origen || '').slice(0, 20)),
+    estado: _fS(String(row.estado || '').slice(0, 30)),
+    mensaje: _fS(String(row.mensaje || '').replace(/\s+/g, ' ').slice(0, 200)),
+    pedido: _fS(String(row.pedido || '').slice(0, 120)),
+    ciudad: _fS(String(row.ciudad || '').slice(0, 80)),
+    google: _fS(String(row.google || '').slice(0, 120)),
+    place_id: _fS(String(row.place_id || '').slice(0, 80)),
+    medio: _fS(String(row.medio || '').slice(0, 12)),
+  };
+  if (typeof row.km === 'number' && isFinite(row.km)) f.km = { doubleValue: Math.round(row.km * 10) / 10 };
+  try { await firestoreAdminPatch(env, 'chat_links/' + id, f); } catch (e) { console.warn('[CHAT-ENLACE] registro: ' + e.message); }
+}
+
 // ─── WhatsApp (F5.1 — webhook de eco sobre Twilio Sandbox) ───
 
 // Valida que el POST viene realmente de Twilio, no de cualquiera que descubra la URL
@@ -9924,6 +10005,20 @@ export default {
     // ─── Registro de versiones (26 sept 2026): cada subida a producción queda apuntada — qué se subió,
     // Worker y commit, y qué casos arregla. Lo escribe la sesión que sube (scripts/casos.cjs version);
     // lo pinta "Hoy → Qué ha pasado" y la vista Versiones del panel. Colección deploys.
+    // GET /admin/chat-links?limite=200 → registro de enlaces del chat (logChatLink), del más nuevo al más viejo.
+    // Panel admin o llave de casos (scripts/casos.cjs enlaces). Solo lectura.
+    if (request.method === 'GET' && url.pathname === '/admin/chat-links') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        const limite = Math.min(500, Math.max(1, parseInt(url.searchParams.get('limite') || '200', 10) || 200));
+        const rows = await _fsRunQuery(env, { from: [{ collectionId: 'chat_links' }], orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: limite });
+        return new Response(JSON.stringify({ links: rows }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     if (url.pathname === '/admin/deploys' || url.pathname === '/admin/deploy-log') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
       if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
@@ -12932,6 +13027,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // Las ediciones normales van por operaciones (SALMA_ROUTE_EDIT) y no dependen de ninguna lista de verbos.
     const _editRemovalRe = /\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i;
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
+    // Registro de enlaces del chat (chat_links): cada fila se escribe aparte, sin esperar (ver logChatLink).
+    // _logLink se rellena con el medio del intérprete en cuanto se conoce.
+    let _logMedio = '';
+    const _logLink = (row) => { try { ctx.waitUntil(logChatLink(env, Object.assign({ mensaje: message, medio: _logMedio }, row))); } catch (_) {} };
 
     // ─── LÍMITES DE USO DEL PLAN + MEDICIÓN (modelo Premium, paso 3) ───
     // Se decide ANTES de cualquier llamada de pago (Google ancla, Claude...). El plan sale de
@@ -13024,7 +13123,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       const _dCtx = {
         message, history, userLocation, userLocationName, destino: _chatDestino,
         cityHints: _placeIntent.ciudad ? { [_directTarget]: _placeIntent.ciudad } : null,
-        incidents: _urlIncidents,
+        incidents: _urlIncidents, logLink: _logLink, origen: 'atajo',
       };
       try {
         const _found = await resolveChatPlaces([_directTarget], _dCtx, env);
@@ -13040,10 +13139,20 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       if (_urlIncidents.length && authHeader) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
     }
 
+    // Cómo quiere ir (lo dice el intérprete; caso p-mul9bn4uc1c): taxi → botones de Bolt/Uber; camper/coche/moto →
+    // se busca dónde dejarlo junto al sitio; andando/bici/vehículo propio → sin búsqueda web de "precio app transporte".
+    const _medio = _placeIntent ? _placeIntent.medio : null;
+    _logMedio = _medio || '';
+    const _ownVehicle = ['camper', 'coche', 'moto'].includes(_medio);
+    const _rideWanted = _medio === 'taxi' || (!_placeIntent && /\b(?:taxi|uber|bolt|cabify|vtc)\b/i.test(message));
+    const _braveTransportUseful = !(_ownVehicle || _medio === 'andando' || _medio === 'bici');
+
     // ─── PRE-FETCH TRANSPORTE — arranca Brave INMEDIATAMENTE, en paralelo con geocoding+KV ───
+    // Solo si luego se va a usar (consulta de transporte según isHelpRequest). Antes arrancaba con un regex más ancho
+    // (".*de.*a.*en" casaba con casi cualquier frase) y la búsqueda pagada se tiraba (caso p-mul9bn4uc1c).
     let _braveTransportPromise = null;
     {
-      const _isTransportMsg = /taxi|transfer|ferry|aeropuerto|airport|\btren\b|flixbus|renfe|\bave\s|como.?llegar|como.*ir.*de|de.*a.*en|bus.?(de|desde)|estacion/i.test(message);
+      const _isTransportMsg = isHelpRequest(message) === 'transport' && _braveTransportUseful;
       if (_isTransportMsg && env.BRAVE_SEARCH_KEY) {
         const cleanMsg = message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim();
         _braveTransportPromise = buscarWeb(
@@ -13145,7 +13254,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       // Transporte: búsqueda directa con el mensaje, no necesita helpLocation
       if (helpCategory === 'transport') {
         try {
-          if (env.BRAVE_SEARCH_KEY) {
+          if (env.BRAVE_SEARCH_KEY && _braveTransportUseful) {
             // Usar el prefetch si ya arrancó, si no buscar ahora
             const braveRes = _braveTransportPromise ? await _braveTransportPromise : await buscarWeb(
               { query: `${message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim()} precio app transporte` },
@@ -13198,6 +13307,30 @@ INSTRUCCIONES:
 5. Alternativas u opiniones van AL FINAL, después de resolver.
 6. NO generes enlaces de Google Maps.
 ]`;
+    }
+
+    // ─── VEHÍCULO PROPIO: dónde dejarlo junto al sitio (caso p-mul9bn4uc1c) ───
+    // "Cómo llego a la Alhambra en camper": antes Salma contestaba de memoria. Ahora se verifica el sitio con el
+    // buscador único del chat (resolveChatPlaces, el mismo del enlace: su caché 'chatspot:' hace que luego el enlace
+    // no pague otra vez) y se busca al lado un área/parking (findVehicleParking). Salma recibe el dato verificado y la
+    // app añade debajo el enlace de cómo llegar en coche a ese sitio.
+    let _vehicleParking = null; // { site, medio, spots }
+    let vehicleNote = null;
+    if (_ownVehicle && _placeIntent.quiere_ir && _placeIntent.sitio && !_placeIntent.es_destino && !imageBase64 && env.GOOGLE_PLACES_KEY) {
+      try {
+        const _vs = _placeIntent.sitio;
+        const _vSite = (await resolveChatPlaces([_vs], {
+          message, history, userLocation, userLocationName, destino: _chatDestino, incidents: _urlIncidents,
+          cityHints: _placeIntent.ciudad ? { [_vs]: _placeIntent.ciudad } : null,
+        }, env)).get(_vs);
+        if (_vSite) _vehicleParking = { site: _vSite, medio: _medio, spots: await findVehicleParking(_vSite, _medio, env) };
+      } catch (e) { console.warn('[CHAT-APARCAR] ' + e.message); }
+      if (_vehicleParking) {
+        const _vq = VEHICLE_PARKING[_medio].que, _vn = _vehicleParking.site.name;
+        vehicleNote = _vehicleParking.spots.length
+          ? `[DÓNDE DEJAR EL VEHÍCULO — DATO VERIFICADO EN GOOGLE MAPS. El usuario va en ${_medio} a ${_vn}. Lo más cerca (${_vq}): ${_vehicleParking.spots.map(s => `${s.name} (a ${String(s.km).replace('.', ',')} km de ${_vn}${s.address ? '; ' + s.address : ''})`).join(' · ')}. Empieza por aquí: dile dónde dejarlo con ESTE dato, escribiendo su nombre en negrita tal cual. No nombres otros aparcamientos. No des de memoria normas de acceso, alturas, pesos ni prohibiciones. No digas que te han pasado este dato: cuéntalo tú. No escribas enlaces: la app pone debajo el de cómo llegar.]`
+          : `[DÓNDE DEJAR EL VEHÍCULO: se ha buscado ${_vq} junto a ${_vn} y no hay ninguno verificado en Google Maps. No inventes ni nombres aparcamientos concretos; dile que no tienes uno verificado junto a ${_vn}.]`;
+      }
     }
 
     // ─── EVENT SEARCH (pre-Claude) ───
@@ -13353,6 +13486,7 @@ INSTRUCCIONES:
     }
     // Zona en la que se ha buscado (búsquedas de ayuda con guía abierta): Salma debe decirla siempre.
     if (helpLocationNote) systemPrompt += '\n\n' + helpLocationNote;
+    if (vehicleNote) systemPrompt += '\n\n' + vehicleNote;
 
     if (transportFallbackMsg) {
       // Inyectar en el último mensaje de usuario (más efectivo que en systemPrompt para formato)
@@ -13440,7 +13574,9 @@ INSTRUCCIONES:
         // ── TRANSPORT: buscar destino + emitir botones ANTES de Claude ──
         // Nunca dentro del popup de edición de una guía abierta (editingActiveRoute): ahí el
         // usuario está retocando su ruta, no pidiendo un taxi — ver isHelpRequest/transport arriba.
-        if (helpCategory === 'transport' && userLocation && !editingActiveRoute) {
+        // Solo si quiere taxi/VTC (_rideWanted, lo dice el intérprete): antes salía con cualquier "cómo llegar" y
+        // ofrecía Bolt/Uber a quien iba en su camper (caso p-mul9bn4uc1c).
+        if (_rideWanted && userLocation && !editingActiveRoute) {
           // 1. País del GPS (SIEMPRE GPS, nunca del mensaje)
           const _tcCC = (userCountryCode || frontendCountryCode || '').toLowerCase();
 
@@ -13464,13 +13600,11 @@ INSTRUCCIONES:
             try {
               const _tcFound = await resolveChatPlaces([_tcTarget], {
                 message, history, userLocation, userLocationName, destino: '', incidents: _urlIncidents,
-                cityHints: _placeIntent.ciudad ? { [_tcTarget]: _placeIntent.ciudad } : null,
+                cityHints: _placeIntent.ciudad ? { [_tcTarget]: _placeIntent.ciudad } : null, logLink: _logLink, origen: 'transporte',
               }, env, 3);
               const _v = _tcFound.get(_tcTarget);
-              if (_v) {
-                _tcCoords = { lat: _v.lat, lng: _v.lng, name: _v.name || _tcTarget };
-                _lastBuscarLugarCoords = _tcCoords;
-              }
+              // Solo si el sitio está a distancia de taxi: desde Madrid no se ofrece "Pedir Uber" a la Alhambra.
+              if (_v && haversineKm(userLocation.lat, userLocation.lng, _v.lat, _v.lng) <= 60) _tcCoords = { lat: _v.lat, lng: _v.lng, name: _v.name || _tcTarget };
             } catch (e) { console.warn('[CHAT-ENLACE] transporte: ' + e.message); }
           }
 
@@ -14298,6 +14432,7 @@ REGLAS:
               || (currentRoute && (currentRoute.region || currentRoute.country)) || '',
             catalog: _chatPlaces, replyText: reply, incidents: _urlIncidents, skip: _directTried,
             cityHints: (_linkTarget && _pi.ciudad) ? { [_linkTarget]: _pi.ciudad } : null,
+            logLink: _logLink, origen: 'negrita',
           };
           // "Ruta completa en Google Maps" NUNCA en el chat (Paco, 28 sept 2026): une opciones entre las que se elige
           // una (restaurantes, farmacias…). Las rutas completas son de las guías, que no pasan por aquí.
@@ -14321,6 +14456,7 @@ REGLAS:
             {
               try {
                 // El sitio pedido, por el mismo buscador (sale del catálogo si Salma ya lo buscó).
+                _linkCtx.origen = 'respaldo';
                 const _fbFound = await Promise.race([
                   resolveChatPlaces([_candidateName], _linkCtx, env),
                   new Promise(r => setTimeout(() => r(new Map()), 12000)),
@@ -14335,8 +14471,20 @@ REGLAS:
             }
           }
           // Opción B: los demás sitios que nombra Salma se quedan sin enlace → aviso "pídemelo" (mismas reglas).
-          if (_linkTarget && _hintAllowed && replyNamesPlaces(reply, userName, _linkTarget)) {
+          // Con vehículo propio no: el sitio que nombra de más es el aparcamiento, que lleva su enlace justo debajo.
+          if (_linkTarget && _hintAllowed && !(_vehicleParking && _vehicleParking.spots.length) && replyNamesPlaces(reply, userName, _linkTarget)) {
             reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
+          }
+        }
+
+        // Vehículo propio: enlace de cómo llegar EN COCHE al área/parking verificado (caso p-mul9bn4uc1c). Lo pone la app,
+        // no Salma, con el place_id que devolvió Google: nunca un enlace escrito de memoria.
+        if (!route && !guidedIsReco && _vehicleParking && _vehicleParking.spots.length) {
+          const _ico = { camper: '🚐', coche: '🚗', moto: '🏍️' }[_vehicleParking.medio] || '🅿️';
+          for (const s of _vehicleParking.spots) {
+            reply = reply.trimEnd() + `\n\n${_ico} Cómo llegar a **${s.name}** (a ${String(s.km).replace('.', ',')} km de ${_vehicleParking.site.name}):\n`
+              + `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.name)}&destination_place_id=${s.place_id}&travelmode=driving`;
+            _logLink({ origen: 'aparcar', pedido: _vehicleParking.site.name, estado: 'ok', google: s.name, place_id: s.place_id, km: s.km });
           }
         }
 

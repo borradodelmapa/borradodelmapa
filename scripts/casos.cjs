@@ -20,6 +20,7 @@
 //   node scripts/casos.cjs decision <id> "pregunta"          lo convierte en decisión de Paco ("" la quita)
 //   node scripts/casos.cjs version "qué se subió" [ids...]   apunta una subida a producción (Worker + commit solos)
 //   node scripts/casos.cjs modelo <id> <sonnet|opus> "por qué"   modelo recomendado para trabajar el caso (Paco lo ve en el panel)
+//   node scripts/casos.cjs enlaces [horas=24] [todos]        enlaces que ha dado el chat (sin "todos": solo los que se quedaron sin enlace)
 //
 // Criterio de modelo (26 sept 2026, para ahorrar sin perder calidad): SONNET = trabajo mecánico o ya
 // decidido (mover textos, subir algo aprobado, cambios pequeños y claros, probar, ordenar). OPUS =
@@ -117,6 +118,12 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
     console.log(`\n💬 COMENTARIOS DE PACO (7 días) (${coms.length})`);
     coms.sort((a, b) => b.c.at.localeCompare(a.c.at)).forEach(({ g, c }) => console.log(`  ${fecha(c.at)} ${g.id} [${g.titulo.slice(0, 50)}]\n      "${c.texto}"`));
     console.log(`\n${open.length} casos abiertos. Detalle: node scripts/casos.cjs ver <id>`);
+    try {
+      const { links } = await call('/admin/chat-links?limite=500');
+      const r = links.filter(l => Date.parse(l.at) > Date.now() - 86400000);
+      const mal = r.filter(l => l.estado !== 'ok');
+      console.log(`\n🔗 ENLACES DEL CHAT (24 h): ${r.length - mal.length} dados, ${mal.length} sin enlace → node scripts/casos.cjs enlaces`);
+    } catch (e) { console.log('\n🔗 Enlaces del chat: no se pudieron leer (' + e.message + ')'); }
   } else if (cmd === 'comentar') {
     await call('/admin/feedback-group', { id: a1, comentario: a2 || '' });
     console.log('Comentario añadido a ' + a1);
@@ -141,6 +148,21 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
   } else if (cmd === 'modelo') {
     await call('/admin/feedback-group', { id: a1, modelo: a2 || '', modelo_por: process.argv[5] || '' });
     console.log(a1 + ' → hacer con ' + (a2 || '(sin recomendar)'));
+  } else if (cmd === 'enlaces') {
+    // Registro de enlaces del chat (Firestore chat_links, lo escribe el Worker: logChatLink). Revisar al empezar:
+    // ¿el sitio de Google es el que se pedía? ¿km al ancla razonables? ¿qué se quedó sin enlace y por qué?
+    const horas = parseInt(a1, 10) || 24;
+    const { links } = await call('/admin/chat-links?limite=500');
+    const r = links.filter(l => Date.parse(l.at) > Date.now() - horas * 3600000);
+    const mal = r.filter(l => l.estado !== 'ok');
+    console.log(`Enlaces del chat, últimas ${horas} h: ${r.length - mal.length} dados, ${mal.length} sin enlace\n`);
+    const ver = process.argv.includes('todos') ? r : mal;
+    for (const l of ver) {
+      console.log(`${fecha(l.at)} ${l.estado === 'ok' ? '✅' : '❌ ' + l.estado} [${l.origen}${l.medio ? ' · ' + l.medio : ''}] "${l.pedido}" en ${l.ciudad || '?'}`
+        + (l.google ? ` → ${l.google}${typeof l.km === 'number' ? ' (' + l.km + ' km)' : ''}` : '')
+        + `\n      mensaje: "${l.mensaje}" · Worker ${String(l.worker || '').slice(0, 8)}`);
+    }
+    if (ver !== r) console.log(`\n(todos, también los que sí tuvieron enlace: node scripts/casos.cjs enlaces ${horas} todos)`);
   } else if (cmd === 'version') {
     const { execSync } = require('child_process');
     let commit = '', worker = '', front = '';
