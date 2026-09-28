@@ -2713,7 +2713,7 @@ function mightAskForPlace(message) {
   if (isNearbySearch(message)) return true;
   const hc = isHelpRequest(message);
   if (hc && hc !== 'weather') return true;
-  return /(lleg|llev[ae]|\bvoy\b|\bvamos\b|\bir\s+(?:a|al|hasta|hacia|pa)\b|\bpa\s+(?:la|el|ir)\b|donde\s+(?:esta|estan|queda|quedan|cae|se\s+encuentra|es)|\bdonde\b|ubicaci|\bubi\b|localizaci|direcci|enlace|\blink|\burl\b|maps|mapa|\bruta\s+(?:a|al|hasta|hacia)\b|\bcamino\s+(?:a|al|hacia)\b|como\s+se\s+va|taxi|uber|\bbolt\b|cabify|\bvtc\b|aparc|cerca|por\s+aqui)/.test(m);
+  return /(lleg|yeg|\bcomo\s+(?:ir|voy|vamos|se\s+llega)\b|llev[ae]|\bvoy\b|\bvamos\b|\bir\s+(?:a|al|hasta|hacia|pa)\b|\bpa\s+(?:la|el|ir)\b|donde\s+(?:esta|estan|queda|quedan|cae|se\s+encuentra|es)|\bdonde\b|ubicaci|\bubi\b|localizaci|direcci|enlace|\blink|\burl\b|maps|mapa|\bruta\s+(?:a|al|hasta|hacia)\b|\bcamino\s+(?:a|al|hacia)\b|como\s+se\s+va|taxi|uber|\bbolt\b|cabify|\bvtc\b|aparc|cerca|por\s+aqui)/.test(m);
 }
 
 async function interpretPlaceRequest(message, ctx, env) {
@@ -2722,27 +2722,30 @@ async function interpretPlaceRequest(message, ctx, env) {
     .map(h => (h && h.role === 'assistant' ? 'Salma' : 'Usuario') + ': ' + String(h && typeof h.content === 'string' ? h.content : '').replace(/\s+/g, ' ').slice(0, 300))
     .filter(l => l.length > 12).join('\n');
   const system = `Lees un mensaje de un viajero a su asistente de viajes y dices si pide ir a un sitio. Responde SOLO con JSON:
-{"quiere_ir":bool,"sitio":string|null,"es_destino":bool,"ciudad":string|null,"cerca_de_mi":bool,"contexto":bool,"medio":string|null}
+{"quiere_ir":bool,"sitio":string|null,"es_destino":bool,"ciudad":string|null,"cerca_de_mi":bool,"contexto":bool,"medio":string|null,"alternativa":string|null,"alternativa_ciudad":string|null}
 - quiere_ir: true si pide cómo llegar, cómo ir, dónde está, la ubicación, la dirección o el enlace/mapa de un sitio (aunque esté mal escrito o sin artículos: "como llego alhambra", "alhambra como llego", "donde queda el retiro", "pasame la ubi del prado", "dónde aparco para ir al Prado", "pídeme un taxi a la Alhambra"). Cualquier "¿dónde está X?" o "¿dónde queda X?" sobre un sitio es quiere_ir true. También si pide el enlace de sitios ya nombrados en la conversación ("pásame los enlaces", "¿y cómo llego?"). False si pide recomendaciones, información o planes ("qué ver", "dónde comer en…", "qué hay en…").
 - sitio: el nombre correcto y completo del sitio CONCRETO al que quiere ir, con su nombre propio, corrigiendo erratas ("alhabra" → "Alhambra"); si lo dice sin nombrarlo ("¿y cómo llego?"), el de la conversación. null si es algo del propio usuario o sin nombre propio ("mi hotel", "el hotel", "mi apartamento", "el coche", "casa", "el restaurante") o si son varios sitios a la vez. Un servicio con ciudad conocida sí vale ("aeropuerto", "estación de tren").
 - es_destino: true SOLO si el sitio es una población o un territorio: ciudad, pueblo, comarca, región, país o isla ("Granada", "Japón", "Mallorca"). Un monumento, museo, parque, mirador, plaza, barrio, mercado, playa, edificio, estación o negocio NUNCA es destino ("Alhambra", "Torre Eiffel", "Parque del Retiro" → false).
 - ciudad: "Ciudad, País" donde está ESE sitio. Sitio conocido: su ciudad real aunque el usuario esté en otra ("Alhambra" → "Granada, España"). Espacio natural: el pueblo más cercano. Si la conversación trata de un destino, los sitios son de ahí salvo que el nombre diga otra cosa. Negocio o servicio corriente sin ciudad en la conversación: la ciudad donde está el usuario. null si no lo sabes con seguridad o hay varios igual de probables. Nunca inventes.
 - cerca_de_mi: true SOLO si NO nombra un sitio concreto y busca opciones alrededor de donde está EL USUARIO AHORA ("farmacia cerca", "dónde comer por aquí", "cajero más cercano"). Si nombra un sitio concreto es false, aunque esté en la ciudad del usuario ("¿dónde está el Museo del Prado?" estando en Madrid → false). Si nombra otra zona ("dónde comer en Triana") es false.
-- contexto: true SOLO si el mensaje trae, además del sitio, algo de esta lista: un medio de transporte (camper, autocaravana, tren, bus, taxi, andando, en coche, en bici…), un origen ("desde Madrid", "desde el hotel"), compañía o accesibilidad (niños, carrito, silla de ruedas, perro, persona mayor), o una pregunta por aparcar, horarios, entradas, precio o cuánto se tarda. Las formas coloquiales o mal escritas ("pa la", "cómo voy", "porfa", "llevame") NO son contexto.
-- medio: el medio de transporte SOLO si el mensaje lo nombra con palabras: "taxi" (taxi, Uber, Bolt, Cabify, VTC, transfer), "camper" (camper, autocaravana, furgo, furgoneta camperizada, caravana), "coche" (coche, en mi coche, conduciendo, aparcar), "moto", "andando" (andando, a pie, caminando), "bici", "publico" (bus, autobús, metro, tren, tranvía). Si no nombra ninguno: null, aunque se pueda suponer ("llévame a…", "desde Madrid" → null).`;
+- contexto: true SOLO si el mensaje trae, además del sitio, algo de esta lista: un origen ("desde Madrid", "desde el hotel"), compañía o accesibilidad (niños, carrito, silla de ruedas, perro, persona mayor), o una pregunta por horarios, entradas, precio o cuánto se tarda. El medio de transporte (camper, coche, taxi, andando…) y preguntar dónde aparcar NO son contexto: van en "medio". Las formas coloquiales o mal escritas ("pa la", "cómo voy", "porfa", "llevame") NO son contexto.
+- medio: el medio de transporte SOLO si el mensaje lo nombra con palabras: "taxi" (taxi, Uber, Bolt, Cabify, VTC, transfer), "camper" (camper, autocaravana, furgo, furgoneta camperizada, caravana), "coche" (coche, en mi coche, conduciendo, aparcar), "moto", "andando" (andando, a pie, caminando), "bici", "publico" (bus, autobús, metro, tren, tranvía). Si no nombra ninguno: null, aunque se pueda suponer ("llévame a…", "desde Madrid" → null).
+- alternativa: si el nombre del sitio puede ser una errata de un sitio conocido distinto (sobre todo si es una palabra corriente o no parece un nombre real: "el alambre" → "Alhambra", "la sagrada famila" → "Sagrada Família", "el retiro de madri" → "Parque del Retiro"), ese sitio conocido; alternativa_ciudad: su "Ciudad, País". Si "sitio" ya es el sitio conocido o no hay errata probable: null en los dos.`;
   const user = `Ubicación actual del usuario: ${ctx.userLocationName || 'desconocida'}
 Destino del que se habla: ${ctx.destino || 'ninguno'}
 ${hist ? 'Conversación reciente:\n' + hist + '\n' : ''}Mensaje: ${String(message || '').slice(0, 300)}`;
   try {
     const out = await Promise.race([
-      callOpenAI(env.OPENAI_API_KEY, { model: 'gpt-4o-mini', max_tokens: 150, temperature: 0, system, messages: [{ role: 'user', content: user }] }),
+      callOpenAI(env.OPENAI_API_KEY, { model: 'gpt-4o-mini', max_tokens: 200, temperature: 0, system, messages: [{ role: 'user', content: user }] }),
       new Promise(r => setTimeout(() => r(null), 5000)),
     ]);
     if (!out || out.error || !out.text) { console.warn('[CHAT-ENLACE] intérprete sin respuesta ' + (out ? out.status : 'timeout')); return null; }
     const j = JSON.parse((out.text.match(/\{[\s\S]*\}/) || ['{}'])[0]);
     const str = v => (typeof v === 'string' && v.trim().length >= 2) ? v.trim().slice(0, 80) : null;
     const r = { quiere_ir: j.quiere_ir === true, sitio: str(j.sitio), es_destino: j.es_destino === true, ciudad: str(j.ciudad), cerca_de_mi: j.cerca_de_mi === true, contexto: j.contexto === true,
-      medio: ['taxi', 'camper', 'coche', 'moto', 'andando', 'bici', 'publico'].includes(j.medio) ? j.medio : null };
+      medio: ['taxi', 'camper', 'coche', 'moto', 'andando', 'bici', 'publico'].includes(j.medio) ? j.medio : null,
+      alternativa: str(j.alternativa), alternativa_ciudad: str(j.alternativa_ciudad) };
+    if (r.alternativa && r.sitio && normPlaceName(r.alternativa) === normPlaceName(r.sitio)) { r.alternativa = null; r.alternativa_ciudad = null; }
     // Red de seguridad: si la IA no dio el medio pero el mensaje lo nombra, se toma del mensaje (en la prueba, "en bus"
     // salía null una de cada dos). Preguntar dónde aparcar es ir en coche aunque no lo diga.
     if (!r.medio && r.quiere_ir) {
@@ -2755,7 +2758,6 @@ ${hist ? 'Conversación reciente:\n' + hist + '\n' : ''}Mensaje: ${String(messag
         : /andando|a pie\b|caminando/.test(mm) ? 'andando'
         : /\bbus\b|autobus|\bmetro\b|\btren\b|tranvia/.test(mm) ? 'publico' : null;
     }
-    if (r.medio) r.contexto = true; // con medio de transporte contesta Salma (nunca el atajo)
     // Red de seguridad: algo del propio usuario ("mi hotel") no es un sitio que se pueda buscar — en Google hay un
     // hotel llamado "Mi Hotel" y el enlace saldría a ese (visto en la prueba de frases).
     if (r.sitio && /^(?:mi|mis|tu|tus|su|sus|nuestro|nuestra|nuestros|nuestras)\s/i.test(r.sitio)) r.sitio = null;
@@ -13115,28 +13117,69 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const _chatDestino = (anchorCountry && anchorCountry.locality) || (typeof body.dest_hint === 'string' ? body.dest_hint.trim() : '');
     const _placeIntent = (!imageBase64 && env.GOOGLE_PLACES_KEY && mightAskForPlace(message))
       ? await interpretPlaceRequest(message, { history, userLocationName, destino: _chatDestino }, env) : null;
-    // Atajo: un sitio concreto (no una ciudad o país: eso es un viaje), sin contexto que explicar ni "cerca de mí".
-    const _directTarget = (_placeIntent && _placeIntent.quiere_ir && _placeIntent.sitio && !_placeIntent.es_destino
-      && !_placeIntent.contexto && !_placeIntent.cerca_de_mi && !currentRoute) ? _placeIntent.sitio : null;
-    let _directTried = null; // { name, city } si el atajo lo intentó y no pasó (Salma no repite esa misma búsqueda)
-    if (_directTarget) {
-      const _dCtx = {
-        message, history, userLocation, userLocationName, destino: _chatDestino,
-        cityHints: _placeIntent.ciudad ? { [_directTarget]: _placeIntent.ciudad } : null,
-        incidents: _urlIncidents, logLink: _logLink, origen: 'atajo',
+    // UN SOLO CAMINO para "quiero ir a un sitio" (caso p-mul9bn4uc1c, Paco 28 sept 2026): se comprueba el sitio en
+    // Google (si el nombre no está, se prueba la errata que dice el intérprete: "alambre" → Alhambra). Sin sitio
+    // comprobado NO contesta Salma (se inventaba "no se puede llegar", guías y restaurantes): una pregunta corta.
+    // Con sitio comprobado y nada más que explicar (solo el medio: camper, coche, andando…) contesta la app: enlace
+    // y, con vehículo propio, dónde dejarlo. Taxi, bus/tren o una pregunta extra (entradas, niños, desde Madrid…) →
+    // Salma, con el sitio ya comprobado y la orden de contestar corto y primero lo que se pide.
+    const _goTarget = (_placeIntent && _placeIntent.quiere_ir && _placeIntent.sitio && !_placeIntent.es_destino
+      && !_placeIntent.cerca_de_mi && !currentRoute) ? _placeIntent.sitio : null;
+    const _appAnswers = !!_goTarget && !_placeIntent.contexto && _placeIntent.medio !== 'taxi' && _placeIntent.medio !== 'publico';
+    let _directTried = null;
+    let _goSite = null, _goCorrected = false;
+    _logMedio = (_placeIntent && _placeIntent.medio) || '';
+    if (_goTarget) {
+      const _try = async (name, city) => {
+        const c = { message, history, userLocation, userLocationName, destino: _chatDestino,
+          cityHints: city ? { [name]: city } : null, incidents: _urlIncidents, logLink: _logLink, origen: 'sitio' };
+        return (await resolveChatPlaces([name], c, env)).get(name) || null;
       };
       try {
-        const _found = await resolveChatPlaces([_directTarget], _dCtx, env);
-        const validated = _found.get(_directTarget);
-        if (validated && validated.place_id) {
-          const _nm = validated.name || _directTarget;
-          const _dir = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(_nm)}&destination_place_id=${validated.place_id}`;
-          const reply = `Aquí tienes cómo llegar a **${_nm}**:\n\n${_dir}\n\nSi quieres consejos para ir (dónde aparcar, entradas, mejor hora), pregúntame.`;
-          return new Response(JSON.stringify({ reply, route: null }), { headers: corsChat });
+        _goSite = await _try(_goTarget, _placeIntent.ciudad);
+        if (!_goSite && _placeIntent.alternativa) {
+          _goSite = await _try(_placeIntent.alternativa, _placeIntent.alternativa_ciudad);
+          if (_goSite) {
+            _goCorrected = true;
+            // Lo que viene después (enlaces, botones, aparcamiento) usa ya el nombre corregido
+            _placeIntent.sitio = _placeIntent.alternativa; _placeIntent.ciudad = _placeIntent.alternativa_ciudad;
+          }
         }
-        _directTried = { name: _directTarget, city: (_dCtx.cities && _dCtx.cities[_directTarget]) || '' };
-      } catch (e) { console.warn('[CHAT-ENLACE] atajo: ' + e.message); /* sigue el flujo normal con Salma */ }
+      } catch (e) { console.warn('[CHAT-ENLACE] sitio: ' + e.message); }
       if (_urlIncidents.length && authHeader) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
+      if (!_goSite) {
+        const _alt = _placeIntent.alternativa ? ` ¿Te refieres a **${_placeIntent.alternativa}**?` : '';
+        const reply = `No encuentro «${_goTarget}» en el mapa.${_alt} Si no, dime cómo se escribe o en qué ciudad está y te paso cómo llegar.`;
+        return new Response(JSON.stringify({ reply, route: null }), { headers: corsChat });
+      }
+      if (_appAnswers) {
+        const _md = _placeIntent.medio;
+        const _nm = _goSite.name || _placeIntent.sitio;
+        const _city = String(_placeIntent.ciudad || '').split(',')[0].trim();
+        const _mode = { andando: 'walking', bici: 'bicycling', camper: 'driving', coche: 'driving', moto: 'driving' }[_md];
+        const _dirTo = (n, pid, mode) => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(n)}&destination_place_id=${pid}${mode ? '&travelmode=' + mode : ''}`;
+        let reply = _goCorrected ? `Entiendo que buscas **${_nm}**${_city ? ' (' + _city + ')' : ''}.\n\n` : '';
+        if (['camper', 'coche', 'moto'].includes(_md)) {
+          let spots = [];
+          try { spots = await findVehicleParking(_goSite, _md, env); } catch (_) {}
+          const _veh = { camper: 'la camper', coche: 'el coche', moto: 'la moto' }[_md];
+          const _ico = { camper: '🚐', coche: '🚗', moto: '🏍️' }[_md];
+          if (spots.length) {
+            reply += `${_ico} Para dejar ${_veh}: **${spots[0].name}**, a ${String(spots[0].km).replace('.', ',')} km de ${_nm}.\n${_dirTo(spots[0].name, spots[0].place_id, 'driving')}\n\n`;
+            if (spots[1]) reply += `Otra opción: **${spots[1].name}**, a ${String(spots[1].km).replace('.', ',')} km.\n${_dirTo(spots[1].name, spots[1].place_id, 'driving')}\n\n`;
+            spots.forEach(sp => _logLink({ origen: 'aparcar', pedido: _nm, estado: 'ok', google: sp.name, place_id: sp.place_id, km: sp.km }));
+          } else {
+            reply += `No tengo ${VEHICLE_PARKING[_md].que} comprobado junto a ${_nm}.\n\n`;
+            _logLink({ origen: 'aparcar', pedido: _nm, estado: 'sin_aparcamiento' });
+          }
+          reply += `Y cómo llegar a **${_nm}**:\n${_dirTo(_nm, _goSite.place_id, null)}`;
+        } else {
+          reply += `Cómo llegar a **${_nm}**:\n${_dirTo(_nm, _goSite.place_id, _mode)}`;
+        }
+        reply += `\n\nSi quieres algo más (entradas, horarios, qué ver), pregúntame.`;
+        _logLink({ origen: 'atajo', pedido: _nm, estado: 'ok', google: _nm, place_id: _goSite.place_id, ciudad: _placeIntent.ciudad || '' });
+        return new Response(JSON.stringify({ reply, route: null }), { headers: corsChat });
+      }
     }
 
     // Cómo quiere ir (lo dice el intérprete; caso p-mul9bn4uc1c): taxi → botones de Bolt/Uber; camper/coche/moto →
@@ -13302,7 +13345,7 @@ ${snippets}
 INSTRUCCIONES:
 1. Resuelve lo que pide el usuario PRIMERO. Precio + cómo reservar.
 2. Cada dato que des DEBE venir de las referencias de arriba. Cita la fuente por nombre (ej: "según Hootling", "fuente: TaxiSol").
-3. Cada servicio/empresa que menciones DEBE llevar su URL de las referencias. Formato: nombre + URL en la siguiente línea.
+3. Nombra cada servicio/empresa, pero NO escribas URLs ni enlaces.
 4. NO respondas de memoria. Si no está en las referencias, no lo digas.
 5. Alternativas u opiniones van AL FINAL, después de resolver.
 6. NO generes enlaces de Google Maps.
@@ -13316,14 +13359,9 @@ INSTRUCCIONES:
     // app añade debajo el enlace de cómo llegar en coche a ese sitio.
     let _vehicleParking = null; // { site, medio, spots }
     let vehicleNote = null;
-    if (_ownVehicle && _placeIntent.quiere_ir && _placeIntent.sitio && !_placeIntent.es_destino && !imageBase64 && env.GOOGLE_PLACES_KEY) {
+    if (_ownVehicle && _goSite && !imageBase64 && env.GOOGLE_PLACES_KEY) {
       try {
-        const _vs = _placeIntent.sitio;
-        const _vSite = (await resolveChatPlaces([_vs], {
-          message, history, userLocation, userLocationName, destino: _chatDestino, incidents: _urlIncidents,
-          cityHints: _placeIntent.ciudad ? { [_vs]: _placeIntent.ciudad } : null,
-        }, env)).get(_vs);
-        if (_vSite) _vehicleParking = { site: _vSite, medio: _medio, spots: await findVehicleParking(_vSite, _medio, env) };
+        _vehicleParking = { site: _goSite, medio: _medio, spots: await findVehicleParking(_goSite, _medio, env) };
       } catch (e) { console.warn('[CHAT-APARCAR] ' + e.message); }
       if (_vehicleParking) {
         const _vq = VEHICLE_PARKING[_medio].que, _vn = _vehicleParking.site.name;
@@ -13487,6 +13525,14 @@ INSTRUCCIONES:
     // Zona en la que se ha buscado (búsquedas de ayuda con guía abierta): Salma debe decirla siempre.
     if (helpLocationNote) systemPrompt += '\n\n' + helpLocationNote;
     if (vehicleNote) systemPrompt += '\n\n' + vehicleNote;
+    // Salma contesta sobre un sitio ya comprobado (taxi, bus, o pregunta extra): corto y primero lo pedido.
+    // Va al final del último mensaje del usuario: ahí Salma lo respeta (al final del prompt soltaba igual 5 párrafos).
+    const _goNote = !_goSite ? '' : `[EL USUARIO QUIERE IR A ${_goSite.name || _placeIntent.sitio} (${_placeIntent.ciudad || ''}), sitio comprobado en Google Maps. Contesta PRIMERO y SOLO lo que pregunta, en 2-4 frases cortas, sin introducción, sin fotos. Nada de ofrecer guías, rutas, restaurantes, entradas ni otros sitios que no ha pedido. Nunca digas que no se puede llegar. No escribas enlaces ni direcciones web: la app pone el de cómo llegar.]`;
+    if (_goNote) {
+      const _lm = messages[messages.length - 1];
+      if (_lm && _lm.role === 'user' && typeof _lm.content === 'string') _lm.content += '\n\n' + _goNote;
+      else systemPrompt += '\n\n' + _goNote;
+    }
 
     if (transportFallbackMsg) {
       // Inyectar en el último mensaje de usuario (más efectivo que en systemPrompt para formato)
@@ -14387,7 +14433,6 @@ REGLAS:
         // (donde una URL oficial de reserva SÍ es el resultado que ha pedido). — 7 sept 2026
         const _userWantsLinks =
           /\b(enlace|enlaces|link|links|url|p[aá]gina web|web oficial|fuente|fuentes|referencia|de d[oó]nde (?:lo )?(?:sacas|sale)|d[oó]nde (?:lo )?(?:pone|dice|has visto))\b/i.test(message || '')
-          || helpCategory === 'transport'
           || isHotelRequest(message) || isFlightRequest(message)
           || /\balquil|coche.*alquil|rent.*car\b/i.test(message || '');
 
@@ -14472,7 +14517,7 @@ REGLAS:
           }
           // Opción B: los demás sitios que nombra Salma se quedan sin enlace → aviso "pídemelo" (mismas reglas).
           // Con vehículo propio no: el sitio que nombra de más es el aparcamiento, que lleva su enlace justo debajo.
-          if (_linkTarget && _hintAllowed && !(_vehicleParking && _vehicleParking.spots.length) && replyNamesPlaces(reply, userName, _linkTarget)) {
+          if (_linkTarget && _hintAllowed && !_goSite && replyNamesPlaces(reply, userName, _linkTarget)) {
             reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
           }
         }
@@ -14516,6 +14561,11 @@ REGLAS:
         // Aunque el prompt ya se lo dice, si el modelo cuela una URL igualmente, aquí se quita.
         // Se respeta el markdown de imagen ![...](...) (fotos) y los enlaces de Google Maps
         // verificados que añade el propio sistema.
+        // Blogs, guías y foros: fuera SIEMPRE, aunque haya pedido enlaces (Paco, 28 sept 2026). Se quita la línea entera.
+        if (!route && _userWantsLinks) {
+          const _blogLine = /^[^\n]*https?:\/\/[^\s)]*(?:blog|guia|guide|tripadvisor|wikipedia|wikivoyage|viajer|mochiler|lonelyplanet|minube|foro|forum|reddit)[^\n]*$/gim;
+          reply = reply.replace(_blogLine, '').replace(/\n{3,}/g, '\n\n').trim();
+        }
         if (!route && !_userWantsLinks) {
           const _stripLooseUrls = (s) => {
             if (typeof s !== 'string' || !/https?:\/\//i.test(s)) return s;
