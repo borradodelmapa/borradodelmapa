@@ -8,6 +8,8 @@
 //   node scripts/banco-salma/pasar.cjs --ref v-pre-prompt-X     → con la Salma de ese commit/tag (para el "antes")
 //   node scripts/banco-salma/pasar.cjs --rejuzgar informe.json  → solo el juez otra vez sobre respuestas guardadas (céntimos)
 //   node scripts/banco-salma/pasar.cjs --comparar a.json b.json → qué pasaba antes y ahora falla (y al revés), sin gastar
+//   --veces 3   → cada pregunta 3 veces (Salma no contesta igual dos veces: cuenta cuántas fallan de N)
+//   --temp 0.3  → en la copia, las llamadas a Sonnet con ese "azar" (en producción no llevan: van a 1)
 //
 // Resultados en scripts/banco-salma/resultados/ (no se suben a git).
 const fs = require('fs');
@@ -34,7 +36,7 @@ function comparar(a, b) {
   }
 }
 
-function prepararCopia(ref) {
+function prepararCopia(ref, temp) {
   let src = ref
     ? execSync(`git show ${ref}:worker/salma-worker.js`, { cwd: RAIZ, maxBuffer: 64 * 1024 * 1024 }).toString('utf8')
     : fs.readFileSync(path.join(WORKER, 'salma-worker.js'), 'utf8');
@@ -50,6 +52,11 @@ function prepararCopia(ref) {
     const re = new RegExp(`(async function ${fn}\\([^)]*\\)\\s*\\{)`);
     if (!re.test(src)) { if (obligatorio) throw new Error('no encuentro ' + fn + ' en la copia'); console.warn('aviso: esta versión no tiene ' + fn); continue; }
     src = src.replace(re, `$1 ${linea}`);
+  }
+  if (temp != null) {
+    const n = (src.match(/model: 'claude-sonnet-4-6',/g) || []).length;
+    src = src.replace(/model: 'claude-sonnet-4-6',/g, `model: 'claude-sonnet-4-6', temperature: ${temp},`);
+    console.log(`temperatura ${temp} en ${n} llamadas a Sonnet (solo en la copia)`);
   }
   fs.writeFileSync(path.join(WORKER, '_banco-salma-worker.js'), src);
   fs.copyFileSync(path.join(__dirname, 'entry.js'), path.join(WORKER, '_banco-entry.js'));
@@ -85,7 +92,9 @@ async function main() {
   const nombre = (arg('nombre') || (ref ? ref : 'actual')).replace(/[^\w.-]/g, '_');
   console.log(rejuzgar ? `Banco Salma: solo el juez sobre ${rejuzgar.out.length} respuestas guardadas (céntimos)` : `Banco Salma: ${ids.length} preguntas con ${ref ? 'la versión ' + ref : 'el salma-worker.js de esta carpeta'}. Coste aprox: ${(ids.length * 0.05).toFixed(2)} €`);
 
-  prepararCopia(ref);
+  const temp = arg('temp') != null ? parseFloat(arg('temp')) : null;
+  const veces = Math.max(1, parseInt(arg('veces') || '1', 10));
+  prepararCopia(ref, temp);
   const dev = spawn('npx', ['wrangler', 'dev', '-c', '_banco-wrangler.toml', '--remote', '--port', String(PUERTO)], { cwd: WORKER, shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
   let log = '';
   dev.stdout.on('data', d => { log += d; }); dev.stderr.on('data', d => { log += d; });
@@ -105,9 +114,15 @@ async function main() {
         for (const g of (x.reglas || []).filter(g => !g.cumple)) console.log(`      ✗ ${g.regla} — ${g.por_que}`);
       }
     }
-    for (const id of rejuzgar ? [] : ids) {
+    for (const id of rejuzgar ? [] : ids.flatMap(i => Array(veces).fill(i))) {
       process.stdout.write(`  ${id} … `);
-      const r = await fetch(`http://127.0.0.1:${PUERTO}/?ids=${encodeURIComponent(id)}`).then(r => r.json());
+      // La copia remota a veces se cae ("fetch failed"): se espera a que vuelva y se repite UNA vez
+      const pedir = () => fetch(`http://127.0.0.1:${PUERTO}/?ids=${encodeURIComponent(id)}`).then(r => r.json());
+      let r;
+      try { r = await pedir(); } catch (e) {
+        process.stdout.write(`(se cayó la copia: ${e.message}; reintento) … `);
+        await esperarServidor(120000); r = await pedir();
+      }
       const x = r.out[0] || { id, pasa: null, error: 'no existe en preguntas.json' };
       out.push(x); cortadas.push(...(r.escrituras_cortadas || []));
       console.log(x.pasa === true ? '✅' : x.pasa === false ? '❌' : '⚪ ' + (x.error || ''), `(${Math.round((x.ms || 0) / 1000)} s${x.lento ? " ⏱ más de 18 s" : ""})`);
@@ -117,7 +132,11 @@ async function main() {
     console.error('\nERROR: ' + e.message + '\n--- log de wrangler ---\n' + log.slice(-3000));
   } finally { parar(); }
 
-  const informe = { nombre, ref: ref || null, fecha: new Date().toISOString(), pasan: out.filter(x => x.pasa).length + '/' + out.length, escrituras_cortadas: cortadas, out };
+  if (veces > 1) {
+    console.log('\nPor pregunta (bien de ' + veces + '):');
+    for (const id of ids) { const r = out.filter(x => x.id === id); console.log(`  ${id}: ${r.filter(x => x.pasa).length}/${r.length}`); }
+  }
+  const informe = { nombre, ref: ref || null, temp, veces, fecha: new Date().toISOString(), pasan: out.filter(x => x.pasa).length + '/' + out.length, escrituras_cortadas: cortadas, out };
   fs.mkdirSync(RES, { recursive: true });
   const f = path.join(RES, `${nombre}-${informe.fecha.slice(0, 16).replace(/[:T]/g, '')}.json`);
   fs.writeFileSync(f, JSON.stringify(informe, null, 1));
