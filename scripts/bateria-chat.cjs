@@ -16,9 +16,15 @@ const UBIC = [
   { nombre: 'madrid', geo: { latitude: 40.4168, longitude: -3.7038 } },
   { nombre: 'granada', geo: { latitude: 37.1773, longitude: -3.5986 } },
 ];
+// El bar "Alhambra" de Madrid (el homónimo que salía con el GPS en Madrid): ni su place_id ni sus coordenadas.
+const BAR_MADRID = /ChIJ486E9IAoQg0|40\.4158/;
+const sinBar = r => !r.links.some(l => BAR_MADRID.test(l));
 const PREG = [
-  { id: 'camper', msg: 'cómo llego a la Alhambra en camper', ok: r => r.links.some(l => l.includes(ALHAMBRA)) && r.links.every(l => !/google\.com\/maps/.test(l) || l.includes(ALHAMBRA)), espera: 'enlace a la Alhambra real y ningún otro de Maps' },
-  { id: 'directo', msg: '¿Cómo llego a la Alhambra?', ok: r => r.links.some(l => l.includes(ALHAMBRA)), espera: 'enlace a la Alhambra real' },
+  { id: 'camper', msg: 'cómo llego a la Alhambra en camper', ok: r => sinBar(r) && r.links.some(l => l.includes(ALHAMBRA)) && r.links.every(l => !/google\.com\/maps/.test(l) || l.includes(ALHAMBRA)), espera: 'enlace a la Alhambra real y ningún otro de Maps' },
+  { id: 'directo', msg: '¿Cómo llego a la Alhambra?', ok: r => sinBar(r) && r.links.some(l => l.includes(ALHAMBRA)), espera: 'enlace a la Alhambra real' },
+  // "cómo llegar" entra por los botones de transporte (antes: botón al bar de Madrid con el GPS en Madrid)
+  { id: 'llegar', msg: 'cómo llegar a la Alhambra', ok: r => sinBar(r), espera: 'ningún enlace ni botón al bar Alhambra de Madrid' },
+  { id: 'eiffel', msg: '¿Cómo llego a la Torre Eiffel?', ok: r => sinBar(r) && r.links.some(l => /google\.com\/maps/.test(l) && /Eiffel/i.test(decodeURIComponent(l))), espera: 'enlace a la Torre Eiffel' },
   { id: 'triana', msg: 'dónde comer en Triana', ok: r => /pídemelo/.test(r.text) && !r.links.some(l => /google\.com\/maps/.test(l)), espera: 'frase pídemelo y sin enlaces de Maps' },
 ];
 

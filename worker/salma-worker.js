@@ -2667,32 +2667,6 @@ function isOwnNameNotPlace(name, userName) {
   return !!un && (n === un || n === un.split(' ')[0]);
 }
 
-// Zona de referencia para buscar en Google los nombres en negrita del chat (enlaces y fotos). Forma parte de la
-// clave de caché, así que tiene que ser ESTABLE: antes era el texto entero del mensaje del usuario → cada mensaje
-// distinto era una clave nueva → "Alhambra" se repagaba en cada conversación (estudio 28 sept 2026,
-// docs/estudio-llamadas-google.md). Solo sale del mensaje un nombre de lugar corto; nunca una frase. Sin API.
-function chatPlaceContext(message, currentRoute) {
-  let m = String(message || '').trim();
-  m = m.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
-  m = m.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
-  m = m.replace(/[¿?¡!.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
-  // "cómo llego a la Alhambra en camper" → fuera "en camper": un medio o compañía no es la zona (caso p-mul3hmgfo0l:
-  // buscaba "Alhambra camper" y enlazaba a un negocio "Alhambra Camper"). Misma lista que linkTargetFromMessage.
-  m = m.replace(/\s+(?:en|con)\s+(?:tren|bus|autob[uú]s|coche|avi[oó]n|ferry|barco|taxi|metro|bici|moto|camper|autocaravana|caravana|furgo(?:neta)?|ni[ñn]os|beb[eé]|perro|carrito|silla(?:\s+de\s+ruedas)?)\b.*$/i, '').trim();
-  // "qué ver en Granada", "restaurantes cerca de Triana" → "Granada", "Triana"
-  let loc = null;
-  try { loc = extractHelpLocation(m, null, null); } catch (_) {}
-  if (typeof loc === 'string' && loc.trim().length >= 3 && loc.trim().split(/\s+/).length <= 4) return loc.trim();
-  // Lo mismo escrito en minúsculas, típico del móvil: "que ver en granada" → "granada" (al final del mensaje)
-  const tail = m.match(/\b(?:en|por|cerca\s+de)\s+([a-záéíóúüñ]{3,}(?:\s+[a-záéíóúüñ]+){0,2})$/i);
-  if (tail && !/^(la|el|los|las|un|una|casa|coche|tren|bus|familia|pareja|solitario|verano|invierno|mayo|junio|julio|agosto)\b/i.test(tail[1])) return tail[1];
-  // Mensaje que ES un lugar ("Granada", "3 días en Cádiz" ya recortado, "sierra de cazorla")
-  if (m.length >= 3 && m.length <= 40 && m.split(/\s+/).length <= 3
-      && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|sí|no|venga|genial|perfecto)\b/i.test(m)
-      && !/(?:^|\s)(qu[eé]|c[oó]mo|cu[aá]l|d[oó]nde|cu[aá]ndo|tal|est[aá]s|quiero|puedo|hago|hacer|viajar|ir|me|te|mi|tu|y|en|con|para|por|algo|nada)(?=\s|$)/i.test(m)) return m;
-  return (currentRoute && (currentRoute.region || currentRoute.country)) || '';
-}
-
 // Quita los enlaces de Google Maps que el modelo haya escrito por su cuenta (el prompt se lo prohíbe; si aun así lo
 // hace, pueden estar inventados). Los enlaces verificados los pone el sistema, nunca Claude.
 function stripModelMapsUrls(text) {
@@ -2768,14 +2742,160 @@ function samePlaceName(a, b) {
   return x.includes(y) || y.includes(x);
 }
 
+// ═══ ENLACES DEL CHAT — UN SOLO BUSCADOR, EL MISMO SISTEMA QUE LAS GUÍAS (caso p-mul559lkvkr, 28 sept 2026) ═══
+// Antes había seis caminos que convertían un nombre en un sitio de Google, cada uno con su "zona" adivinada (el GPS
+// del usuario, trozos del mensaje, la caché de otra persona): con el GPS en Madrid, "Alhambra" era un bar de Madrid.
+// Las guías no fallan porque buscan alrededor de un ANCLA (el destino ya resuelto) y descartan lo que cae lejos
+// (verifyAllStops). El chat hace ahora lo mismo:
+//   1. Lo que Salma ya encontró con buscar_lugar (con su ciudad) → se comprueba nombre + distancia a esa ciudad.
+//   2. Lo demás → un localizador barato (gpt-4o-mini) dice en qué ciudad está el sitio que se quiere decir
+//      ("Alhambra" → "Granada, España") → esa ciudad es el ancla → verifyAllStops con nombre obligatorio.
+//   3. Si algo no pasa → NO hay enlace (nunca uno adivinado) y queda registrado en url_validation_incidents.
+// Docs: docs/plan-enlaces-chat.md.
+function chatPlaceKey(name) {
+  return normPlaceName(name).replace(/[^a-z0-9ñç\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+// Catálogo de la respuesta: sitios de buscar_lugar con place_id, coordenadas y la ciudad en que los buscó Salma.
+function addChatPlace(catalog, name, entry) {
+  const k = chatPlaceKey(name);
+  if (!catalog || k.length < 3 || !entry || !entry.place_id || catalog.has(k)) return;
+  catalog.set(k, entry);
+}
+// La negrita es ese sitio del catálogo si es igual, o el principio de su nombre ("Mercado de Triana" de "Mercado de
+// Triana Sevilla"). Nunca al revés: "Parking Alhambra" no es la Alhambra.
+function findChatPlace(catalog, name) {
+  if (!catalog || !catalog.size) return null;
+  const x = chatPlaceKey(name);
+  if (x.length < 3) return null;
+  if (catalog.has(x)) return catalog.get(x);
+  if (x.length < 4) return null;
+  for (const [k, v] of catalog) if (k.startsWith(x + ' ')) return v;
+  return null;
+}
+
+// Localizador: en qué ciudad está cada sitio que se quiere decir. Solo responde la ciudad; quien decide si hay enlace
+// es la comprobación de verifyAllStops (si se equivoca de ciudad, el sitio no pasa y no hay enlace). ~0,01 cént.
+async function chatPlaceCitiesAI(names, ctx, env) {
+  if (!env.OPENAI_API_KEY || !names.length) return {};
+  const hist = (Array.isArray(ctx.history) ? ctx.history : []).slice(-4)
+    .map(h => (h && h.role === 'assistant' ? 'Salma' : 'Usuario') + ': ' + String(h && typeof h.content === 'string' ? h.content : '').replace(/\s+/g, ' ').slice(0, 300))
+    .filter(l => l.length > 12).join('\n');
+  const system = `Localizas sitios para una app de viajes. Te paso nombres de sitios que salen en una conversación y dices en qué CIUDAD o PUEBLO, con su país, está el sitio concreto al que se refiere la conversación. Responde SOLO con JSON: {"lugares":[{"nombre":"<tal cual te lo paso>","ciudad":"<Ciudad, País>" o null}]}
+Reglas:
+- Sitio conocido (monumento, museo, parque, mercado o plaza famosos, estación, aeropuerto con nombre): su ciudad real, aunque el usuario esté en otra. Ej.: "Alhambra" → "Granada, España".
+- Espacio natural o sitio fuera de una ciudad: el pueblo más cercano.
+- Si la conversación trata de un destino concreto, los sitios son de ese destino salvo que el nombre diga otra cosa.
+- Negocio o nombre corriente (bar, restaurante, tienda, farmacia, "el aeropuerto", "la estación") sin ciudad en la conversación: la ciudad donde está el usuario, si se sabe.
+- Si no sabes con seguridad dónde está, o hay varios igual de probables: null. Nunca inventes.`;
+  const user = `Ubicación actual del usuario: ${ctx.userLocationName || 'desconocida'}
+Destino del que se habla: ${ctx.destino || 'ninguno'}
+${hist ? 'Conversación reciente:\n' + hist + '\n' : ''}Mensaje del usuario: ${String(ctx.message || '').slice(0, 400)}
+${ctx.replyText ? 'Respuesta de Salma: ' + String(ctx.replyText).replace(/\s+/g, ' ').slice(0, 1500) + '\n' : ''}Sitios: ${JSON.stringify(names)}`;
+  try {
+    const out = await Promise.race([
+      callOpenAI(env.OPENAI_API_KEY, { model: 'gpt-4o-mini', max_tokens: 400, temperature: 0, system, messages: [{ role: 'user', content: user }] }),
+      new Promise(r => setTimeout(() => r(null), 5000)),
+    ]);
+    if (!out || out.error || !out.text) { console.warn('[CHAT-ENLACE] localizador sin respuesta ' + (out ? out.status : 'timeout')); return {}; }
+    const j = JSON.parse((out.text.match(/\{[\s\S]*\}/) || ['{}'])[0]);
+    const list = Array.isArray(j.lugares) ? j.lugares : [];
+    const res = {};
+    names.forEach((n, i) => {
+      const l = list.find(x => x && x.nombre === n) || list[i];
+      if (l && typeof l.ciudad === 'string' && l.ciudad.trim().length >= 2) res[n] = l.ciudad.trim().slice(0, 80);
+    });
+    return res;
+  } catch (e) { console.warn('[CHAT-ENLACE] localizador: ' + e.message); return {}; }
+}
+
+// Ciudad → ancla, con la MISMA función que usan las guías (resolverPaisDestino, caché permanente en KV).
+// Solo vale un punto (ciudad/pueblo), no una región o un país entero.
+async function chatAnchorFor(city, ctx, env) {
+  let a = null;
+  try { a = await resolverPaisDestino(city, ctx.userLocation || null, env); } catch (_) {}
+  if (!a || !a.pointScope || typeof a.lat !== 'number' || typeof a.lng !== 'number') return null;
+  return { lat: a.lat, lng: a.lng, countryCode: a.countryCode || '', countryName: a.countryName || '', locality: a.locality || String(city).split(',')[0].trim() };
+}
+
+// Los sitios, como paradas de una mini-ruta de un día con su ancla, por verifyAllStops (lo mismo que las guías) con
+// nombre obligatorio, sin rescates blandos y con su propia caché ('chatspot:', no escribe en la de las guías).
+async function verifyChatPlacesAt(names, anchor, env, days) {
+  const stops = names.map(n => ({ name: n, headline: n, _pedido: n }));
+  const route = { stops, country: anchor.countryName, region: anchor.locality, duration_days: days };
+  const out = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, {
+    anchorLat: anchor.lat, anchorLng: anchor.lng, anchorPointScope: true, anchorDays: days,
+    forceCountryCode: anchor.countryCode, forceCountryName: anchor.countryName,
+    requireNameMatch: true, spotPrefix: 'chatspot:',
+  }, env);
+  const maxKm = days <= 1 ? 35 : 120;
+  const res = new Map();
+  for (const s of (out && out.stops) || []) {
+    if (!s._pedido || !s.place_id || s._unverified || s._soft_match || typeof s.lat !== 'number') continue;
+    if (haversineKm(anchor.lat, anchor.lng, s.lat, s.lng) > maxKm) continue;
+    res.set(s._pedido, { place_id: s.place_id, name: s.name || s._pedido, lat: s.lat, lng: s.lng });
+  }
+  return res;
+}
+
+// EL buscador del chat: nombres → Map(nombre → { place_id, name, lat, lng }). Lo que no está es que no hay enlace.
+// ctx: { message, history, userLocation, userLocationName, destino, catalog, replyText, incidents, skip }
+// days: 1 (sitios, 35 km del ancla) · 3 (traslados: aeropuerto, estación… 120 km / 60 por carretera)
+async function resolveChatPlaces(names, ctx, env, days = 1) {
+  const found = new Map();
+  ctx.cities = ctx.cities || {};
+  const note = (name, estado, detalle) => {
+    console.log(`[CHAT-ENLACE] ${estado} "${name}" ${detalle || ''}`);
+    if (estado !== 'ok' && Array.isArray(ctx.incidents)) {
+      ctx.incidents.push({ place_name: name, reason: 'chat_' + estado, replacement_url: String(detalle || ''), surface: 'chat' });
+    }
+  };
+  // 1. Lo que Salma ya buscó (buscar_lugar, con su ciudad): nombre + distancia a esa ciudad. Sin llamadas a Google.
+  const rest = [];
+  for (const n of names) {
+    const e = findChatPlace(ctx.catalog, n);
+    let ok = null;
+    if (e && e.ciudad && typeof e.lat === 'number' && typeof e.lng === 'number' && strictNameMatch(n, e.name)) {
+      const a = await chatAnchorFor(e.ciudad, ctx, env);
+      if (a && haversineKm(a.lat, a.lng, e.lat, e.lng) <= (days <= 1 ? 35 : 120)) ok = { place_id: e.place_id, name: e.name, lat: e.lat, lng: e.lng };
+    }
+    if (ok) { found.set(n, ok); note(n, 'ok', `catálogo de Salma (${e.ciudad}) → ${ok.name} ${ok.place_id}`); }
+    else rest.push(n);
+  }
+  if (!rest.length || !env.GOOGLE_PLACES_KEY) return found;
+  // 2. El localizador dice la ciudad → ancla → verifyAllStops.
+  const cities = await chatPlaceCitiesAI(rest, ctx, env);
+  const byCity = new Map();
+  for (const n of rest) {
+    const c = cities[n];
+    if (!c) { note(n, 'sin_ciudad', 'el localizador no sabe dónde está'); continue; }
+    ctx.cities[n] = c;
+    // Ya se intentó con esta misma ciudad en este mensaje (atajo) y no pasó: no se repite la búsqueda pagada.
+    if (ctx.skip && normPlaceName(ctx.skip.name) === normPlaceName(n) && normPlaceName(ctx.skip.city) === normPlaceName(c)) continue;
+    if (!byCity.has(c)) byCity.set(c, []);
+    byCity.get(c).push(n);
+  }
+  await Promise.all([...byCity].map(async ([city, ns]) => {
+    const anchor = await chatAnchorFor(city, ctx, env);
+    if (!anchor) { ns.forEach(n => note(n, 'ciudad_no_resuelta', city)); return; }
+    let r = new Map();
+    try { r = await verifyChatPlacesAt(ns, anchor, env, days); } catch (e) { console.error('[CHAT-ENLACE] verify: ' + e.message); }
+    for (const n of ns) {
+      const v = r.get(n);
+      if (v) { found.set(n, v); note(n, 'ok', `${city} → ${v.name} ${v.place_id}`); }
+      else note(n, 'no_verificado', city);
+    }
+  }));
+  return found;
+}
+
 // Aviso fijo cuando el chat nombra sitios pero no lleva enlaces (decisión de Paco, 28 sept 2026): los enlaces
 // "Cómo llegar" van siempre en las guías y, en el chat, solo cuando el usuario los pide o busca algo cerca.
 const CHAT_MAPS_HINT = '📍 Si necesitas cómo llegar a alguno de estos sitios, pídemelo y te paso el enlace.';
 
-// ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
-// Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
-// y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
-async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false, env = null, userName = null, onlyTarget = null) {
+// ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → sitio verificado → place_id ═══
+// Claude solo escribe nombres en negrita. El worker resuelve cada uno con resolveChatPlaces (el buscador único del
+// chat) y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
+async function injectVerifiedMapsLinks(reply, placesKey, linkCtx, skipRouteLink = false, env = null, userName = null, onlyTarget = null) {
   if (!placesKey || !reply) return reply;
 
   // Extraer nombres en negrita: **Nombre del Lugar**
@@ -2820,20 +2940,19 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     matches = exact.length ? exact.slice(0, 1)
       : matches.filter(x => samePlaceName(x.name, onlyTarget) && (_tSvc || !_svc.test(normPlaceName(x.name)))).slice(0, 1);
   }
-  if (!matches.length) return reply;
+  // Sin negritas que enlazar: igualmente fuera las URLs de Maps que Claude haya escrito (pueden estar inventadas).
+  if (!matches.length) return stripModelMapsUrls(reply);
 
   // Limitar a 6 negritas máx — evita exceder subrequest limit de Cloudflare y colgar el flujo.
-  // Cada negrita dispara hasta 3 fetches a Places (21 fetches = riesgo de timeout/ratelimit).
   if (matches.length > 6) matches = matches.slice(0, 6);
 
-  // Validar cada negrita con getValidatedPlace (strictNameMatch + tipos + región/país).
-  // Regla única: si no pasa validación → no se inyecta link.
-  const regionCtx = region || '';
-  const results = await Promise.all(matches.map(async ({ bold, name }) => {
-    const v = await getValidatedPlace(name, placesKey, regionCtx, countryCode, null, env);
-    if (v) return { bold, name, placeId: v.place_id, googleName: v.name, lat: v.lat, lng: v.lng };
-    return { bold, name, placeId: null };
-  }));
+  // Cada negrita por EL buscador del chat (resolveChatPlaces: catálogo de Salma o ciudad + verifyAllStops).
+  // Regla única: si no pasa la comprobación → no se inyecta link.
+  const found = await resolveChatPlaces(matches.map(x => x.name), linkCtx || {}, env);
+  const results = matches.map(({ bold, name }) => {
+    const v = found.get(name);
+    return v ? { bold, name, placeId: v.place_id, googleName: v.name, lat: v.lat, lng: v.lng } : { bold, name, placeId: null };
+  });
 
   // Limpiar PRIMERO cualquier URL de Maps que Claude haya puesto por su cuenta
   let enriched = stripModelMapsUrls(reply);
@@ -6468,22 +6587,33 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   // KV — el mismo sitio verificado en OTRA ruta (otro usuario, u otra vez el mismo)
   // también se reutiliza, no solo dentro de la misma edición. Clave por país + nombre
   // normalizado (evita mezclar homónimos de países distintos). 30 días de TTL.
-  const _verifiedKvKey = (stop) => {
+  // opts.spotPrefix (enlaces del chat, caso p-mul559lkvkr): escribe en SU caché ('chatspot:') y lee primero la suya
+  // y luego la de las guías. Sin la opción (las guías), todo igual que siempre: solo 'verifiedspot:'.
+  const _spotPrefix = opts.spotPrefix || 'verifiedspot:';
+  const _spotReadPrefixes = _spotPrefix === 'verifiedspot:' ? ['verifiedspot:'] : [_spotPrefix, 'verifiedspot:'];
+  const _verifiedKvKey = (stop, prefix = _spotPrefix) => {
     const key = _norm(stop.name || stop.headline || '');
     if (!key) return null;
-    return 'verifiedspot:' + (countryCode || country || '??').toLowerCase() + ':' + key;
+    return prefix + (countryCode || country || '??').toLowerCase() + ':' + key;
   };
   if (env?.SALMA_KB) {
     const pending = route.stops.map((s, i) => (!reuse[i] && _verifiedKvKey(s)) ? i : -1).filter(i => i >= 0);
     if (pending.length) {
-      const kvResults = await Promise.all(pending.map(i =>
-        env.SALMA_KB.get(_verifiedKvKey(route.stops[i])).catch(() => null)
-      ));
+      const kvResults = await Promise.all(pending.map(async i => {
+        for (const p of _spotReadPrefixes) {
+          const raw = await env.SALMA_KB.get(_verifiedKvKey(route.stops[i], p)).catch(() => null);
+          if (raw) return raw;
+        }
+        return null;
+      }));
       pending.forEach((i, j) => {
         if (!kvResults[j]) return;
         try {
           const cached = JSON.parse(kvResults[j]);
           if (!cached?.place_id) return;
+          // opts.requireNameMatch (chat): la ficha guardada tiene que llevar coordenadas y el mismo nombre.
+          if (opts.requireNameMatch && (typeof cached.lat !== 'number' || typeof cached.lng !== 'number'
+            || !strictNameMatch(route.stops[i].name || route.stops[i].headline || '', cached.name || ''))) return;
           // GUARDA DE HOMÓNIMOS — la clave es país + nombre, y ahora la entrada es PERMANENTE: "Iglesia de
           // San Pedro" de un pueblo no puede reutilizarse en otro. Si la entrada cae lejos de donde se pide
           // (ancla de la ruta o coords que dio el modelo), se ignora y se verifica contra Google como una parada nueva.
@@ -6530,7 +6660,8 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       const distAnchor = haversineKm(anchorLat, anchorLng, pLat, pLng);
       if (distAnchor > MAX_ANCHOR_KM) return { valid: false, reason: 'fuera_del_radio_ancla', distKm: distAnchor };
       if (nameOk) return { valid: true, distKm: distAnchor };
-      if (addrOk) return { valid: true, distKm: distAnchor };
+      // opts.requireNameMatch (chat): un enlace va al sitio que se nombró, no a otro de la zona con distinto nombre.
+      if (addrOk && !opts.requireNameMatch) return { valid: true, distKm: distAnchor };
       return { valid: false, reason: 'name_mismatch', distKm: distAnchor };
     }
     let distKm = Infinity;
@@ -6613,6 +6744,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     if (bestCandidates[i]) return;
     const stopType = (stop.type || '') + ' ' + (stop.name || '') + ' ' + (stop.headline || '');
     if (SOFT_SKIP.test(stopType)) return;
+    if (opts.requireNameMatch) return; // chat: sin rescate blando (nombre que no coincide = no es seguro)
     for (const result of [attempt1[i], a2[i], a3[i]]) {
       const c = result?.candidates?.[0];
       if (!c?.geometry?.location) continue;
@@ -6954,99 +7086,6 @@ function shouldLookupPhoto(name) {
   const first = n.split(/\s+/)[0].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zñ]/g, '');
   if (_DISH_WORDS.has(first)) return false; // plato
   return true;
-}
-
-// acceptFar (28 sept 2026): el GPS solo da PREFERENCIA a lo cercano, no exige <10 km. Para "¿cómo llego a la
-// Alhambra?" desde Asturias: sin esto la Alhambra se descartaba por estar lejos y no había enlace. Por defecto false
-// (comportamiento de siempre). La caché sigue exigiendo <10 km con GPS, así una cadena ("El Corte Inglés") guardada
-// en otra ciudad no se le da a quien tiene una cerca.
-async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords, env, acceptFar = false) {
-  if (!placesKey || !query || query.length < 3) return null;
-  // CATÁLOGO: si ya se resolvió este nombre (país + región + nombre), CERO llamadas a Google.
-  // Con coords de sesgo se exige que la ficha guardada caiga a <10 km (misma regla que la validación);
-  // un "no encontrado" guardado solo se cree cuando no hay sesgo (con sesgo el fallo pudo ser por distancia).
-  const _hasBias = !!(biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01);
-  const _vpKey = 'vp:' + (countryCode || '??').toLowerCase() + ':' + _nmNorm(region) + ':' + _nmNorm(query);
-  const _hit = await nameCacheGet(env, _vpKey);
-  if (_hit) {
-    if (_hit.miss) { if (!_hasBias) return null; }
-    else if (_hit.place_id && typeof _hit.lat === 'number' && typeof _hit.lng === 'number') {
-      if (!_hasBias || haversineKm(biasCoords.lat, biasCoords.lng, _hit.lat, _hit.lng) < 10) return _hit;
-    }
-  }
-  let _errored = false; // Google no llegó a contestar bien en algún intento → no guardar "no encontrado"
-  const FIELDS = 'place_id,name,geometry,formatted_address,photos,business_status,types';
-  const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
-  const q = region ? `${query}, ${region}` : query;
-
-  async function tryFindPlace(radiusM) {
-    const bias = (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01)
-      ? `&locationbias=circle:${radiusM}@${biasCoords.lat},${biasCoords.lng}` : '';
-    try {
-      const r = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(q)}&inputtype=textquery${bias}${countryFilter}&fields=${FIELDS}&language=es&key=${placesKey}`,
-        { signal: AbortSignal.timeout(3500) }
-      );
-      const d = await r.json();
-      if (d?.status && d.status !== 'OK' && d.status !== 'ZERO_RESULTS') _errored = true;
-      return d?.candidates?.[0] || null;
-    } catch (_) { _errored = true; return null; }
-  }
-
-  async function tryTextSearch() {
-    try {
-      const r = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${countryFilter}&language=es&key=${placesKey}`,
-        { signal: AbortSignal.timeout(3500) }
-      );
-      const d = await r.json();
-      if (d?.status && d.status !== 'OK' && d.status !== 'ZERO_RESULTS') _errored = true;
-      return d?.results?.[0] || null;
-    } catch (_) { _errored = true; return null; }
-  }
-
-  function isValid(cand) {
-    if (!cand?.geometry?.location || !cand.place_id) return false;
-    if (cand.business_status === 'CLOSED_PERMANENTLY') return false;
-    if (!strictNameMatch(query, cand.name || '')) return false;
-    // Filtrar por tipos: si es un barrio/calle/zona administrativa Y no es también un POI → descartar.
-    const types = Array.isArray(cand.types) ? cand.types : [];
-    const hasBad = types.some(t => BAD_PLACE_TYPES.has(t));
-    const hasGood = types.some(t => GOOD_PLACE_TYPES.has(t));
-    if (hasBad && !hasGood) return false;
-    // Con biasCoords (rutas): exigir distancia <10km al punto sugerido.
-    if (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01) {
-      if (acceptFar) return true;
-      const distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
-      return distKm < 10;
-    }
-    // Sin biasCoords (chat): confiamos en strictNameMatch + types.
-    // El components=country:XX del fetch ya filtra por país en el fetch.
-    return true;
-  }
-
-  // 3 intentos: bias 5km → bias 15km → text search libre (con country filter)
-  let c = await tryFindPlace(5000);
-  // Con acceptFar el sesgo solo ordena: repetir con 15 km devolvería lo mismo → llamada pagada para nada.
-  if (!isValid(c) && !acceptFar) c = await tryFindPlace(15000);
-  if (!isValid(c)) c = await tryTextSearch();
-  if (!isValid(c)) {
-    if (!_hasBias && !_errored) await nameCachePut(env, _vpKey, { miss: 1 }, 2592000);
-    return null;
-  }
-
-  const photoRef = c.photos?.[0]?.photo_reference || '';
-  const _result = {
-    place_id: c.place_id,
-    name: c.name,
-    lat: c.geometry.location.lat,
-    lng: c.geometry.location.lng,
-    url: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.name || '') + '&query_place_id=' + c.place_id,
-    photo_ref: photoRef,
-    formatted_address: c.formatted_address || ''
-  };
-  await nameCachePut(env, _vpKey, _result);
-  return _result;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -12936,27 +12975,42 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
+    // Reverse geocoding: convertir coordenadas → nombre de ciudad + país (Nominatim/OSM, gratis)
+    // (antes del atajo de enlaces: el localizador de sitios necesita saber en qué ciudad está el usuario)
+    let userLocationName = null;
+    let userCountryCode = null; // ISO 2 letras del país donde está el usuario (por GPS)
+    if (userLocation && userLocation.lat && userLocation.lng) {
+      const geoResult = await reverseGeocodeLocation(env, userLocation.lat, userLocation.lng);
+      userLocationName = geoResult.name;
+      userCountryCode = geoResult.cc;
+    }
+
     // ─── BYPASS: "cómo llego a X / dónde está X / enlace de X" → enlace directo, sin Claude ───
     // (Paco, 28 sept 2026) Respuesta corta con el enlace lo primero; si quiere consejos (aparcar, entradas), pregunta.
-    // El GPS da preferencia a lo cercano pero NO exige <10 km (antes la Alhambra desde Asturias no daba enlace).
-    // Si no se encuentra con seguridad, no se corta: sigue el flujo normal con Salma.
+    // El sitio sale del buscador único del chat (resolveChatPlaces): el localizador dice la ciudad ("Alhambra" →
+    // Granada) y verifyAllStops comprueba que el sitio está allí. Nunca el GPS como zona de búsqueda (con el GPS en
+    // Madrid, "Alhambra" era un bar de Madrid). Si no pasa, no se corta: sigue el flujo normal con Salma.
     const _directTarget = (!currentRoute && !imageBase64 && message && message.length <= 200 && !isNearbySearch(message) && env.GOOGLE_PLACES_KEY)
       ? directLinkTarget(message) : null;
+    let _directTried = null; // { name, city } si el atajo lo intentó y no pasó (Salma no repite esa misma búsqueda)
     if (_directTarget) {
+      const _dCtx = {
+        message, history, userLocation, userLocationName,
+        destino: (anchorCountry && anchorCountry.locality) || (typeof body.dest_hint === 'string' ? body.dest_hint.trim() : ''),
+        incidents: _urlIncidents,
+      };
       try {
-        const bias = userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null;
-        const _ccBy = (frontendCountryCode || '').toLowerCase();
-        let validated = await getValidatedPlace(_directTarget, env.GOOGLE_PLACES_KEY, '', _ccBy, bias, env, true);
-        // Fuera del país del usuario ("Torre Eiffel" desde España): segunda búsqueda sin filtro de país.
-        // Sin GPS en esta segunda: lejos de casa el sesgo no aporta, y así un "no encontrado" queda guardado 30 días.
-        if (!validated && _ccBy) validated = await getValidatedPlace(_directTarget, env.GOOGLE_PLACES_KEY, '', '', null, env, true);
+        const _found = await resolveChatPlaces([_directTarget], _dCtx, env);
+        const validated = _found.get(_directTarget);
         if (validated && validated.place_id) {
           const _nm = validated.name || _directTarget;
           const _dir = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(_nm)}&destination_place_id=${validated.place_id}`;
           const reply = `Aquí tienes cómo llegar a **${_nm}**:\n\n${_dir}\n\nSi quieres consejos para ir (dónde aparcar, entradas, mejor hora), pregúntame.`;
           return new Response(JSON.stringify({ reply, route: null }), { headers: corsChat });
         }
-      } catch (_) { /* sigue el flujo normal con Salma */ }
+        _directTried = { name: _directTarget, city: (_dCtx.cities && _dCtx.cities[_directTarget]) || '' };
+      } catch (e) { console.warn('[CHAT-ENLACE] atajo: ' + e.message); /* sigue el flujo normal con Salma */ }
+      if (_urlIncidents.length && authHeader) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
     }
 
     // ─── PRE-FETCH TRANSPORTE — arranca Brave INMEDIATAMENTE, en paralelo con geocoding+KV ───
@@ -12970,15 +13024,6 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           env.BRAVE_SEARCH_KEY
         ).catch(() => null);
       }
-    }
-
-    // Reverse geocoding: convertir coordenadas → nombre de ciudad + país (Nominatim/OSM, gratis)
-    let userLocationName = null;
-    let userCountryCode = null; // ISO 2 letras del país donde está el usuario (por GPS)
-    if (userLocation && userLocation.lat && userLocation.lng) {
-      const geoResult = await reverseGeocodeLocation(env, userLocation.lat, userLocation.lng);
-      userLocationName = geoResult.name;
-      userCountryCode = geoResult.cc;
     }
 
     if (!message.trim() && !imageBase64) {
@@ -13385,21 +13430,24 @@ INSTRUCCIONES:
           const _tcDest = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
             .replace(/\b(un\s+)?taxi\b/i, '').replace(/\b(al?|para|hacia|hasta|ir\s+a|de)\b/gi, '').replace(/\s+/g, ' ').trim();
 
-          // 4. Buscar coords del destino con Google Places
+          // 4. Coords del destino con el buscador único del chat (resolveChatPlaces, caso p-mul559lkvkr). Antes: el
+          //    mensaje recortado se buscaba en 50 km alrededor del GPS sin comprobar el nombre → "cómo llegar a la
+          //    Alhambra" desde Madrid daba el botón a un bar de Madrid. El sitio: "¿Cómo llegar a la Alhambra?" →
+          //    "Alhambra"; si no, lo que queda del mensaje ("taxi al aeropuerto" → "aeropuerto"). Radio de traslado.
           let _tcCoords = null;
-          if (env.GOOGLE_PLACES_KEY && _tcDest.length > 3 && !/^(necesito|pedir|taxi|transporte|un)$/i.test(_tcDest)) {
+          const _tcTarget = linkTargetFromMessage(message)
+            || _tcDest.replace(/^c[oó]mo\s+(?:llegar|llego|ir|voy)\s*/i, '').replace(/^(?:el|la|los|las)\s+/i, '').trim();
+          // "mi hotel", "el apartamento", "casa": no dicen CUÁL → no se busca (cogería uno cualquiera con ese nombre).
+          const _tcGeneric = /^(?:mi|mis|tu|nuestro|nuestra)?\s*(?:hotel|hostal|apartamento|alojamiento|casa|coche|parking|aparcamiento|centro|playa)s?$/i.test(_tcTarget);
+          if (env.GOOGLE_PLACES_KEY && _tcTarget.length > 3 && !_tcGeneric && !/^(necesito|pedir|taxi|transporte|un)$/i.test(_tcTarget)) {
             try {
-              const _pr = await fetch(
-                `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(_tcDest)}&location=${userLocation.lat},${userLocation.lng}&radius=50000&language=es&key=${env.GOOGLE_PLACES_KEY}`,
-                { signal: AbortSignal.timeout(4000) }
-              );
-              const _pd = await _pr.json();
-              if (_pd.results?.[0]?.geometry?.location) {
-                const _p = _pd.results[0];
-                _tcCoords = { lat: _p.geometry.location.lat, lng: _p.geometry.location.lng, name: _p.name || _tcDest };
+              const _tcFound = await resolveChatPlaces([_tcTarget], { message, history, userLocation, userLocationName, destino: '', incidents: _urlIncidents }, env, 3);
+              const _v = _tcFound.get(_tcTarget);
+              if (_v) {
+                _tcCoords = { lat: _v.lat, lng: _v.lng, name: _v.name || _tcTarget };
                 _lastBuscarLugarCoords = _tcCoords;
               }
-            } catch (_) {}
+            } catch (e) { console.warn('[CHAT-ENLACE] transporte: ' + e.message); }
           }
 
           // 5. Construir y emitir botones
@@ -13519,6 +13567,7 @@ INSTRUCCIONES:
         let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web). Desde el 28 sept 2026 NO se muestran (Paco)
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
+        const _chatPlaces = new Map(); // catálogo de la respuesta: sitios de buscar_lugar (place_id, coords, ciudad) → enlaces del chat
         // Repara ![Name](...) roto o corrupto de Claude usando la URL real que ya devolvió
         // el tool_result (nunca la que Claude haya podido teclear mal). Antes solo se
         // detectaba el caso "nunca cierra con )" (URL truncada); un ![Name](url con un
@@ -13782,6 +13831,15 @@ INSTRUCCIONES:
                 if (_pfKey && toolResult.fotos[0] && toolResult.fotos[0].url) {
                   _placePhotosByName.set(_pfKey, toolResult.fotos[0].url);
                   if (_pfKeyAsked && _pfKeyAsked !== _pfKey) _placePhotosByName.set(_pfKeyAsked, toolResult.fotos[0].url);
+                }
+              }
+              // Catálogo de la respuesta (caso p-mul559lkvkr): cada sitio que devuelve buscar_lugar, con su place_id
+              // (va dentro de google_maps), coords y la ciudad en que lo buscó Salma. Los enlaces del chat salen de aquí
+              // tras comprobar nombre y distancia a esa ciudad (resolveChatPlaces), sin volver a buscarlos en Google.
+              if ((block.name === 'buscar_lugar' || block.name === 'buscar_restaurante') && Array.isArray(toolResult.lugares) && block.input?.ciudad) {
+                for (const l of toolResult.lugares) {
+                  const _pid = (String(l.google_maps || '').match(/[?&]query_place_id=([^&]+)/) || [])[1];
+                  if (_pid && l.nombre) addChatPlace(_chatPlaces, l.nombre, { name: l.nombre, place_id: decodeURIComponent(_pid), lat: l.lat, lng: l.lng, ciudad: String(block.input.ciudad) });
                 }
               }
               // Capturar la web oficial de cada lugar (buscar_lugar devuelve el campo como
@@ -14204,26 +14262,30 @@ REGLAS:
           if (_hintAllowed && replyNamesPlaces(reply, userName)) reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
         }
         if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && _chatWantsMapLinks) {
-          // Zona estable para la búsqueda (y su caché): destino ya resuelto → pista del front → cuestionario
-          // guiado → lugar corto sacado del mensaje → ciudad del GPS. Nunca el texto entero del mensaje.
+          // Contexto para el buscador único del chat (resolveChatPlaces): lo que Salma ya buscó (catálogo), el destino del
+          // que se habla, dónde está el usuario y la propia respuesta. Con eso el localizador dice la ciudad de cada
+          // sitio y verifyAllStops comprueba que está allí. Nunca una zona adivinada de trozos del mensaje ni el GPS
+          // como zona de búsqueda (caso p-mul559lkvkr).
           const _dhReg = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
-          let _msgZone = chatPlaceContext(message, currentRoute);
-          // "cómo llego a la Alhambra" → la zona sacada del mensaje es el propio sitio: no sirve de zona.
-          if (_msgZone && _linkTarget && normPlaceName(_msgZone).includes(normPlaceName(_linkTarget))) _msgZone = '';
-          const _region = (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
-            : _dhReg ? _dhReg
-            : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
-            : (_msgZone || userLocationName || '');
-          const _cc = countryCode || userCountryCode || '';
+          const _linkCtx = {
+            message, history, userLocation, userLocationName,
+            destino: (anchorCountry && anchorCountry.locality) || _dhReg || (guidedRoute && guidedRoute.destino ? String(guidedRoute.destino) : '')
+              || (currentRoute && (currentRoute.region || currentRoute.country)) || '',
+            catalog: _chatPlaces, replyText: reply, incidents: _urlIncidents, skip: _directTried,
+          };
           // "Ruta completa en Google Maps" NUNCA en el chat (Paco, 28 sept 2026): une opciones entre las que se elige
           // una (restaurantes, farmacias…). Las rutas completas son de las guías, que no pasan por aquí.
           const _skipRouteLink = true;
-          // ─── Inject primero: links en negritas (con límite 6 + timeout 8s) ───
+          // ─── Inject primero: links en negritas (con límite 6 + timeout 12s) ───
           try {
-            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink, env, userName, _linkTarget);
-            const _timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('inject_timeout')), 8000));
+            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _linkCtx, _skipRouteLink, env, userName, _linkTarget);
+            const _timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('inject_timeout')), 12000));
             reply = await Promise.race([_injectPromise, _timeoutPromise]);
-          } catch (_) {}
+          } catch (e) {
+            // Sin enlaces verificados: al menos fuera las URLs de Maps que haya escrito Claude (pueden estar inventadas)
+            console.warn('[CHAT-ENLACE] negritas sin enlace: ' + (e && e.message));
+            reply = stripModelMapsUrls(reply);
+          }
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
 
           // ─── Fallback: si no hay link Maps en el reply, intentar con petición explícita ───
@@ -14247,21 +14309,18 @@ REGLAS:
             // tu personalidad?" → 3 llamadas a Google sin sentido y sin caché con GPS). Estudio 28 sept 2026.
             if (_usable && (_isExplicitLinkRequest || _linkTarget)) {
               try {
-                const validated = await getValidatedPlace(
-                  _candidateName,
-                  env.GOOGLE_PLACES_KEY,
-                  '',
-                  _cc,
-                  userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null,
-                  env,
-                  true
-                );
+                // El sitio pedido, por el mismo buscador (sale del catálogo si Salma ya lo buscó).
+                const _fbFound = await Promise.race([
+                  resolveChatPlaces([_candidateName], _linkCtx, env),
+                  new Promise(r => setTimeout(() => r(new Map()), 12000)),
+                ]);
+                const validated = _fbFound.get(_candidateName);
                 if (validated) {
-                  reply = reply.trimEnd() + `\n\n${validated.url}`;
+                  reply = reply.trimEnd() + `\n\n${mapsPlaceFichaUrl(validated.name, validated.place_id)}`;
                 } else {
                   reply = reply.trimEnd() + `\n\nNo he encontrado ese sitio en Google Maps con seguridad.`;
                 }
-              } catch (_) {}
+              } catch (e) { console.warn('[CHAT-ENLACE] respaldo: ' + e.message); }
             }
           }
           // Opción B: los demás sitios que nombra Salma se quedan sin enlace → aviso "pídemelo" (mismas reglas).
@@ -14628,8 +14687,17 @@ REGLAS:
         // correr si algo de ahí arriba lanzó esta excepción — reparar aquí también antes de
         // mandar allText en crudo, si no, el markdown de foto roto de Claude (ver
         // _repairBrokenPhotoMarkdown) se le enseña al usuario tal cual, con la URL larguísima.
+        // Antes esto era silencioso: una variable inexistente dejó el chat sin enlaces y nadie lo vio (caso
+        // p-mul3hmgfo0l). Ahora deja log y un caso 🤖 automático.
+        const _ppMsg = String((e && e.message) || e || 'sin mensaje');
+        console.error('[CHAT-POSTPROCESADO] ' + _ppMsg + (e && e.stack ? '\n' + e.stack : ''));
+        try {
+          ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat-postprocesado|' + _normErr(_ppMsg).slice(0, 60), titulo: 'Chat: falló el post-procesado, salió el texto en crudo (' + _ppMsg.slice(0, 70) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Mensaje: ' + String(message || '').slice(0, 120), detalle: String((e && e.stack) || _ppMsg).slice(0, 1500) }));
+        } catch (_) {}
         let _fallbackReply = allText;
         try { _fallbackReply = _repairBrokenPhotoMarkdown(allText); } catch (_) {}
+        // Nunca un enlace de Maps sin verificar: si el post-procesado no llegó a limpiarlos, se quitan aquí.
+        try { _fallbackReply = stripModelMapsUrls(_fallbackReply); } catch (_) {}
         try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _fallbackReply || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
       } finally {
         await writer.close();
