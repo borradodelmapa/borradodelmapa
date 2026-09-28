@@ -10265,6 +10265,7 @@ export default {
             id: g.id, titulo: g.titulo, tipo: g.tipo, zona: g.zona, gravedad: g.gravedad, estado: g.estado,
             count: g.count || 0, first_at: g.first_at, last_at: g.last_at, items: g.items || [],
             reporters: (g.reporters || []).length, ejemplo: g.ejemplo || '', nota: g.nota_paco || '', reabierto_at: g.reabierto_at || '',
+            revisor_ejemplos: g.revisor_ejemplos || [],
             origen: g.origen || 'usuario', detalle: g.detalle || '', estado_at: g.estado_at || '',
             diagnostico: g.diagnostico || null, diagnostico_at: g.diagnostico_at || '',
             area: g.area || fbAreaDefault(g.tipo, g.zona), decision: g.decision || '', comentarios: g.comentarios || [],
