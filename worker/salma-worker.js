@@ -2658,8 +2658,18 @@ function formatDayHeaders(text, numDays) {
 // ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
 // Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
 // y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
-async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false, env = null) {
+async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false, env = null, userName = null) {
   if (!placesKey || !reply) return reply;
+
+  // Nombres propios que NO son lugares: la propia Salma, la marca y el nombre del usuario.
+  // Caso real 28 sept 2026: "¿cómo te llamas, de dónde eres?" → "Me llamo **Salma**" → Google Places
+  // encontró un negocio llamado "Salma" y se inyectó "🗺️ Cómo llegar" a una empresa ajena.
+  const _normName = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+  const notPlaceNames = new Set(['salma', 'borrado del mapa', 'borradodelmapa', 'borradodelmapa.com']);
+  if (userName) {
+    const _un = _normName(userName);
+    if (_un) { notPlaceNames.add(_un); notPlaceNames.add(_un.split(' ')[0]); }
+  }
 
   // Extraer nombres en negrita: **Nombre del Lugar**
   // Excluir patrones que NO son lugares: **Día N**, **8€**, **2h30**, **Dónde comer**
@@ -2683,6 +2693,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     const nameLower = name.toLowerCase();
     // Filtrar: mín 3 chars, no es patrón de skip, no duplicado
     if (name.length < 3 || skipPatterns.test(name) || seen.has(nameLower)) continue;
+    if (notPlaceNames.has(_normName(name))) continue;
     // Filtrar valores numéricos/precios sueltos
     if (/^\d+[\s.,]?\d*\s*[€$£¥kmh]?$/i.test(name)) continue;
     // Filtrar negritas que no parecen nombre propio (precios, puntuaciones, "la noche", etc.)
@@ -14084,7 +14095,7 @@ REGLAS:
           const _skipRouteLink = isHotelRequest(message);
           // ─── Inject primero: links en negritas (con límite 6 + timeout 8s) ───
           try {
-            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink, env);
+            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink, env, userName);
             const _timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('inject_timeout')), 8000));
             reply = await Promise.race([_injectPromise, _timeoutPromise]);
           } catch (_) {}
