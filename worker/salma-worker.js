@@ -2700,36 +2700,53 @@ function replyNamesPlaces(reply, userName, exceptName = null) {
   return false;
 }
 
-// Sitio concreto por el que pregunta el usuario al pedir un enlace: "¿Cómo llego a la Alhambra?" → "Alhambra",
-// "dame el enlace del Mercado Central" → "Mercado Central". null si no nombra uno. Sin API.
-function linkTargetFromMessage(message) {
-  let m = String(message || '').replace(/[¿?¡!.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
-  const r = m.match(/(?:c[oó]mo\s+(?:llego|llegar|voy|ir|puedo\s+(?:llegar|ir))\s+(?:a|al|hasta|hacia)|d[oó]nde\s+(?:est[aá]n?|queda[n]?)|(?:enlace|link|url|ubicaci[oó]n|direcci[oó]n|maps)\s+(?:de|del|a|al|para))\s+(.+)$/i);
-  if (!r) return null;
-  let t = r[1].replace(/^(?:el|la|los|las)\s+/i, '').replace(/\s+(?:por\s+favor|porfa|gracias|desde\s+aqu[ií]|desde\s+donde\s+estoy)\s*$/i, '').trim();
-  // "Alhambra en camper", "Alhambra desde Madrid", "Alhambra con niños" → "Alhambra"
-  // (solo medios, compañía u origen: "Plaza de España en Sevilla" se queda entero, "en Sevilla" es parte del sitio)
-  t = t.replace(/\s+(?:(?:en|con)\s+(?:tren|bus|autob[uú]s|coche|avi[oó]n|ferry|barco|taxi|metro|bici|moto|camper|autocaravana|caravana|furgo(?:neta)?|ni[ñn]os|beb[eé]|perro|carrito|silla(?:\s+de\s+ruedas)?)|desde|andando|a\s+pie)\b.*$/i, '').trim();
-  return (t.length >= 3 && t.length <= 60) ? t : null;
+// ═══ INTÉRPRETE DE "QUIERO IR A UN SITIO" (caso p-mul559lkvkr, 28 sept 2026) ═══
+// Antes había seis plantillas de frases (linkTargetFromMessage, directLinkTarget, _explicitMapAsk, el respaldo, el
+// destino de los botones de transporte…) y cada una entendía el mensaje a su manera: "cómo llego a la Alhambra" daba
+// el enlace y "cómo llego alhambra" (sin "a la", como se escribe en el móvil) se iba a Salma con una respuesta larga.
+// Ahora lo lee UNA vez gpt-4o-mini (~0,01 cént.) y todas las decisiones de enlaces salen de su respuesta.
+// Solo se le pregunta si el mensaje suena a eso (filtro amplio y barato: si sobra, cuesta 0,01 cént.; si falta, el
+// mensaje va a Salma como siempre).
+function mightAskForPlace(message) {
+  const m = String(message || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  if (!m.trim() || m.length > 300) return false;
+  if (isNearbySearch(message)) return true;
+  const hc = isHelpRequest(message);
+  if (hc && hc !== 'weather') return true;
+  return /(lleg|llev[ae]|\bvoy\b|\bvamos\b|\bir\s+(?:a|al|hasta|hacia|pa)\b|\bpa\s+(?:la|el|ir)\b|donde\s+(?:esta|estan|queda|quedan|cae|se\s+encuentra|es)|\bdonde\b|ubicaci|\bubi\b|localizaci|direcci|enlace|\blink|\burl\b|maps|mapa|\bruta\s+(?:a|al|hasta|hacia)\b|\bcamino\s+(?:a|al|hacia)\b|como\s+se\s+va|taxi|cerca|por\s+aqui)/.test(m);
 }
-// Atajo "cómo llego a X / dónde está X / enlace de X" → respuesta directa con el enlace, sin Claude (Paco, 28 sept
-// 2026). Devuelve el sitio o null si el mensaje no es SOLO esa petición: si trae contexto ("con mi madre en silla de
-// ruedas…"), un origen ("desde Madrid"), un medio ("en tren", "en camper") o un sitio genérico ("al aeropuerto",
-// "a mi hotel"), va a Salma, que sabe responder a eso.
-function directLinkTarget(message) {
-  const m = String(message || '').replace(/[¿?¡!.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
-  if (!m || m.length > 120) return null;
-  const t = linkTargetFromMessage(m);
-  if (!t) return null;
-  const idx = m.toLowerCase().lastIndexOf(t.toLowerCase());
-  const before = idx > 0 ? m.slice(0, idx).trim() : '';
-  // Lo que va antes del sitio: el disparador ("cómo llego a la", "dame el enlace del") y como mucho un saludo corto.
-  if (before.split(/\s+/).filter(Boolean).length > 7) return null;
-  if (t.split(/\s+/).length > 6) return null;
-  if (/\bdesde\b(?!\s+(?:aqu[ií]|donde\s+estoy))/i.test(m)) return null;
-  if (/\b(?:en|con)\s+(?:tren|bus|autob[uú]s|coche|avi[oó]n|ferry|barco|taxi|metro|bici|moto|camper|autocaravana|caravana|furgo(?:neta)?|ni[ñn]os|carrito|silla)\b/i.test(m)) return null;
-  if (/^(?:mi|mis|tu|el|la|los|las)?\s*(?:aeropuerto|estaci[oó]n(?:\s+de\s+(?:tren|autobuses|bus))?|hotel|hostal|apartamento|alojamiento|playa|centro|puerto|parking|aparcamiento|casa|camping|farmacia|hospital|ba[ñn]o|aseo|coche)s?$/i.test(t)) return null;
-  return t;
+
+async function interpretPlaceRequest(message, ctx, env) {
+  if (!env.OPENAI_API_KEY) return null;
+  const hist = (Array.isArray(ctx.history) ? ctx.history : []).slice(-4)
+    .map(h => (h && h.role === 'assistant' ? 'Salma' : 'Usuario') + ': ' + String(h && typeof h.content === 'string' ? h.content : '').replace(/\s+/g, ' ').slice(0, 300))
+    .filter(l => l.length > 12).join('\n');
+  const system = `Lees un mensaje de un viajero a su asistente de viajes y dices si pide ir a un sitio. Responde SOLO con JSON:
+{"quiere_ir":bool,"sitio":string|null,"es_destino":bool,"ciudad":string|null,"cerca_de_mi":bool,"contexto":bool}
+- quiere_ir: true si pide cómo llegar, cómo ir, dónde está, la ubicación, la dirección o el enlace/mapa de un sitio (aunque esté mal escrito o sin artículos: "como llego alhambra", "alhambra como llego", "donde queda el retiro", "pasame la ubi del prado"). Cualquier "¿dónde está X?" o "¿dónde queda X?" sobre un sitio es quiere_ir true. También si pide el enlace de sitios ya nombrados en la conversación ("pásame los enlaces", "¿y cómo llego?"). False si pide recomendaciones, información o planes ("qué ver", "dónde comer en…", "qué hay en…").
+- sitio: el nombre correcto y completo del sitio CONCRETO al que quiere ir, con su nombre propio, corrigiendo erratas ("alhabra" → "Alhambra"); si lo dice sin nombrarlo ("¿y cómo llego?"), el de la conversación. null si es algo del propio usuario o sin nombre propio ("mi hotel", "el hotel", "mi apartamento", "el coche", "casa", "el restaurante") o si son varios sitios a la vez. Un servicio con ciudad conocida sí vale ("aeropuerto", "estación de tren").
+- es_destino: true SOLO si el sitio es una población o un territorio: ciudad, pueblo, comarca, región, país o isla ("Granada", "Japón", "Mallorca"). Un monumento, museo, parque, mirador, plaza, barrio, mercado, playa, edificio, estación o negocio NUNCA es destino ("Alhambra", "Torre Eiffel", "Parque del Retiro" → false).
+- ciudad: "Ciudad, País" donde está ESE sitio. Sitio conocido: su ciudad real aunque el usuario esté en otra ("Alhambra" → "Granada, España"). Espacio natural: el pueblo más cercano. Si la conversación trata de un destino, los sitios son de ahí salvo que el nombre diga otra cosa. Negocio o servicio corriente sin ciudad en la conversación: la ciudad donde está el usuario. null si no lo sabes con seguridad o hay varios igual de probables. Nunca inventes.
+- cerca_de_mi: true SOLO si NO nombra un sitio concreto y busca opciones alrededor de donde está EL USUARIO AHORA ("farmacia cerca", "dónde comer por aquí", "cajero más cercano"). Si nombra un sitio concreto es false, aunque esté en la ciudad del usuario ("¿dónde está el Museo del Prado?" estando en Madrid → false). Si nombra otra zona ("dónde comer en Triana") es false.
+- contexto: true SOLO si el mensaje trae, además del sitio, algo de esta lista: un medio de transporte (camper, autocaravana, tren, bus, taxi, andando, en coche, en bici…), un origen ("desde Madrid", "desde el hotel"), compañía o accesibilidad (niños, carrito, silla de ruedas, perro, persona mayor), o una pregunta por aparcar, horarios, entradas, precio o cuánto se tarda. Las formas coloquiales o mal escritas ("pa la", "cómo voy", "porfa", "llevame") NO son contexto.`;
+  const user = `Ubicación actual del usuario: ${ctx.userLocationName || 'desconocida'}
+Destino del que se habla: ${ctx.destino || 'ninguno'}
+${hist ? 'Conversación reciente:\n' + hist + '\n' : ''}Mensaje: ${String(message || '').slice(0, 300)}`;
+  try {
+    const out = await Promise.race([
+      callOpenAI(env.OPENAI_API_KEY, { model: 'gpt-4o-mini', max_tokens: 150, temperature: 0, system, messages: [{ role: 'user', content: user }] }),
+      new Promise(r => setTimeout(() => r(null), 5000)),
+    ]);
+    if (!out || out.error || !out.text) { console.warn('[CHAT-ENLACE] intérprete sin respuesta ' + (out ? out.status : 'timeout')); return null; }
+    const j = JSON.parse((out.text.match(/\{[\s\S]*\}/) || ['{}'])[0]);
+    const str = v => (typeof v === 'string' && v.trim().length >= 2) ? v.trim().slice(0, 80) : null;
+    const r = { quiere_ir: j.quiere_ir === true, sitio: str(j.sitio), es_destino: j.es_destino === true, ciudad: str(j.ciudad), cerca_de_mi: j.cerca_de_mi === true, contexto: j.contexto === true };
+    // Red de seguridad: algo del propio usuario ("mi hotel") no es un sitio que se pueda buscar — en Google hay un
+    // hotel llamado "Mi Hotel" y el enlace saldría a ese (visto en la prueba de frases).
+    if (r.sitio && /^(?:mi|mis|tu|tus|su|sus|nuestro|nuestra|nuestros|nuestras)\s/i.test(r.sitio)) r.sitio = null;
+    console.log('[CHAT-ENLACE] intérprete ' + JSON.stringify(r));
+    return r;
+  } catch (e) { console.warn('[CHAT-ENLACE] intérprete: ' + e.message); return null; }
 }
 
 function normPlaceName(t) {
@@ -2862,8 +2879,12 @@ async function resolveChatPlaces(names, ctx, env, days = 1) {
     else rest.push(n);
   }
   if (!rest.length || !env.GOOGLE_PLACES_KEY) return found;
-  // 2. El localizador dice la ciudad → ancla → verifyAllStops.
-  const cities = await chatPlaceCitiesAI(rest, ctx, env);
+  // 2. El localizador dice la ciudad → ancla → verifyAllStops. Si el intérprete ya la dio (ctx.cityHints), no se
+  //    vuelve a preguntar.
+  const hints = ctx.cityHints || {};
+  const toAsk = rest.filter(n => !hints[n]);
+  const cities = Object.assign({}, toAsk.length ? await chatPlaceCitiesAI(toAsk, ctx, env) : {});
+  for (const n of rest) if (hints[n]) cities[n] = hints[n];
   const byCity = new Map();
   for (const n of rest) {
     const c = cities[n];
@@ -12990,13 +13011,19 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // El sitio sale del buscador único del chat (resolveChatPlaces): el localizador dice la ciudad ("Alhambra" →
     // Granada) y verifyAllStops comprueba que el sitio está allí. Nunca el GPS como zona de búsqueda (con el GPS en
     // Madrid, "Alhambra" era un bar de Madrid). Si no pasa, no se corta: sigue el flujo normal con Salma.
-    const _directTarget = (!currentRoute && !imageBase64 && message && message.length <= 200 && !isNearbySearch(message) && env.GOOGLE_PLACES_KEY)
-      ? directLinkTarget(message) : null;
+    // QUÉ se pide lo decide el intérprete (interpretPlaceRequest), una sola vez para todo el mensaje: el atajo, los
+    // botones de transporte y los enlaces de la respuesta de Salma leen este mismo _placeIntent.
+    const _chatDestino = (anchorCountry && anchorCountry.locality) || (typeof body.dest_hint === 'string' ? body.dest_hint.trim() : '');
+    const _placeIntent = (!imageBase64 && env.GOOGLE_PLACES_KEY && mightAskForPlace(message))
+      ? await interpretPlaceRequest(message, { history, userLocationName, destino: _chatDestino }, env) : null;
+    // Atajo: un sitio concreto (no una ciudad o país: eso es un viaje), sin contexto que explicar ni "cerca de mí".
+    const _directTarget = (_placeIntent && _placeIntent.quiere_ir && _placeIntent.sitio && !_placeIntent.es_destino
+      && !_placeIntent.contexto && !_placeIntent.cerca_de_mi && !currentRoute) ? _placeIntent.sitio : null;
     let _directTried = null; // { name, city } si el atajo lo intentó y no pasó (Salma no repite esa misma búsqueda)
     if (_directTarget) {
       const _dCtx = {
-        message, history, userLocation, userLocationName,
-        destino: (anchorCountry && anchorCountry.locality) || (typeof body.dest_hint === 'string' ? body.dest_hint.trim() : ''),
+        message, history, userLocation, userLocationName, destino: _chatDestino,
+        cityHints: _placeIntent.ciudad ? { [_directTarget]: _placeIntent.ciudad } : null,
         incidents: _urlIncidents,
       };
       try {
@@ -13426,22 +13453,19 @@ INSTRUCCIONES:
             } catch (_) {}
           }
 
-          // 3. Extraer destino del mensaje
-          const _tcDest = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
-            .replace(/\b(un\s+)?taxi\b/i, '').replace(/\b(al?|para|hacia|hasta|ir\s+a|de)\b/gi, '').replace(/\s+/g, ' ').trim();
-
-          // 4. Coords del destino con el buscador único del chat (resolveChatPlaces, caso p-mul559lkvkr). Antes: el
-          //    mensaje recortado se buscaba en 50 km alrededor del GPS sin comprobar el nombre → "cómo llegar a la
-          //    Alhambra" desde Madrid daba el botón a un bar de Madrid. El sitio: "¿Cómo llegar a la Alhambra?" →
-          //    "Alhambra"; si no, lo que queda del mensaje ("taxi al aeropuerto" → "aeropuerto"). Radio de traslado.
+          // 3-4. Destino = el sitio que dice el intérprete (_placeIntent, el mismo para todo el mensaje) y sus coords
+          //    con el buscador único del chat (resolveChatPlaces, caso p-mul559lkvkr). Antes: el mensaje recortado se
+          //    buscaba en 50 km alrededor del GPS sin comprobar el nombre → "cómo llegar a la Alhambra" desde Madrid
+          //    daba el botón a un bar de Madrid. Sin sitio concreto ("mi hotel", o un viaje a otra ciudad) → sin botón
+          //    de Maps: contesta Salma. Radio de traslado (3: aeropuertos, estaciones).
           let _tcCoords = null;
-          const _tcTarget = linkTargetFromMessage(message)
-            || _tcDest.replace(/^c[oó]mo\s+(?:llegar|llego|ir|voy)\s*/i, '').replace(/^(?:el|la|los|las)\s+/i, '').trim();
-          // "mi hotel", "el apartamento", "casa": no dicen CUÁL → no se busca (cogería uno cualquiera con ese nombre).
-          const _tcGeneric = /^(?:mi|mis|tu|nuestro|nuestra)?\s*(?:hotel|hostal|apartamento|alojamiento|casa|coche|parking|aparcamiento|centro|playa)s?$/i.test(_tcTarget);
-          if (env.GOOGLE_PLACES_KEY && _tcTarget.length > 3 && !_tcGeneric && !/^(necesito|pedir|taxi|transporte|un)$/i.test(_tcTarget)) {
+          const _tcTarget = (_placeIntent && _placeIntent.sitio && !_placeIntent.es_destino) ? _placeIntent.sitio : '';
+          if (env.GOOGLE_PLACES_KEY && _tcTarget) {
             try {
-              const _tcFound = await resolveChatPlaces([_tcTarget], { message, history, userLocation, userLocationName, destino: '', incidents: _urlIncidents }, env, 3);
+              const _tcFound = await resolveChatPlaces([_tcTarget], {
+                message, history, userLocation, userLocationName, destino: '', incidents: _urlIncidents,
+                cityHints: _placeIntent.ciudad ? { [_tcTarget]: _placeIntent.ciudad } : null,
+              }, env, 3);
               const _v = _tcFound.get(_tcTarget);
               if (_v) {
                 _tcCoords = { lat: _v.lat, lng: _v.lng, name: _v.name || _tcTarget };
@@ -14245,13 +14269,14 @@ REGLAS:
         // ciudad) y de gasto en Google. Solo si el usuario PIDE un enlace / cómo llegar / dónde está, o si
         // busca algo cerca o una ayuda (farmacia, comer por aquí, taller…), donde quiere ir ya. Las guías
         // llevan siempre sus enlaces (verifyAllStops, no pasa por aquí).
-        // Sin \b al final: en JS no detecta el límite detrás de letras con tilde ("está", "ubicación").
-        const _explicitMapAsk = /(?<![\wáéíóúñ])(enlace|enlaces|link|links|url|maps|google\s*maps|c[oó]mo\s+(?:llegar|llego|voy|ir)|d[oó]nde\s+(?:est[aá]n?|queda[n]?)|ubicaci[oó]n|direcci[oó]n)(?![\wáéíóúñ])/i.test(message || '');
-        const _nearbyOrHelp = isNearbySearch(message) || (!!helpCategory && helpCategory !== 'weather');
-        const _chatWantsMapLinks = _explicitMapAsk || _nearbyOrHelp;
-        // Opción B (Paco, 28 sept 2026): si pide cómo llegar a UN sitio concreto, Salma contesta igual de completa
-        // pero el enlace va solo a ese sitio. En "cerca de mí" / ayudas, enlace a todas las opciones.
-        const _linkTarget = (_explicitMapAsk && !_nearbyOrHelp) ? linkTargetFromMessage(message) : null;
+        // Qué se pide lo dice el intérprete (_placeIntent, calculado una vez antes del atajo; caso p-mul559lkvkr):
+        //  - quiere ir a un sitio concreto → enlace solo a ese sitio (opción B, Paco 28 sept 2026)
+        //  - pide los enlaces sin un sitio concreto ("pásame los enlaces") o busca algo cerca → todas las opciones
+        //  - quiere ir a una ciudad/país (un viaje, "cómo llego a Granada desde Madrid") → sin enlaces
+        // Sin intérprete (el mensaje no hablaba de ir a ningún sitio, o la IA no contestó) → sin enlaces.
+        const _pi = _placeIntent || {};
+        const _chatWantsMapLinks = !!((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi);
+        const _linkTarget = (_pi.quiere_ir && _pi.sitio && !_pi.es_destino && !_pi.cerca_de_mi) ? _pi.sitio : null;
         // Aviso "pídemelo": solo si quedan sitios sin enlace y solo la primera vez en la conversación. (Ya no depende
         // de las webs de buscar_lugar: desde el 28 sept no se muestran.)
         const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
@@ -14272,6 +14297,7 @@ REGLAS:
             destino: (anchorCountry && anchorCountry.locality) || _dhReg || (guidedRoute && guidedRoute.destino ? String(guidedRoute.destino) : '')
               || (currentRoute && (currentRoute.region || currentRoute.country)) || '',
             catalog: _chatPlaces, replyText: reply, incidents: _urlIncidents, skip: _directTried,
+            cityHints: (_linkTarget && _pi.ciudad) ? { [_linkTarget]: _pi.ciudad } : null,
           };
           // "Ruta completa en Google Maps" NUNCA en el chat (Paco, 28 sept 2026): une opciones entre las que se elige
           // una (restaurantes, farmacias…). Las rutas completas son de las guías, que no pasan por aquí.
@@ -14288,26 +14314,11 @@ REGLAS:
           }
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
 
-          // ─── Fallback: si no hay link Maps en el reply, intentar con petición explícita ───
+          // ─── Fallback: pidió ir a un sitio concreto y Salma no lo puso en negrita → enlace al sitio pedido ───
           const _hasMapsLink = /google\.com\/maps\/(dir|place)/i.test(reply);
-          if (!_hasMapsLink && message && message.length > 3 && message.length < 200) {
-            const _msgClean = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
-            const _isExplicitLinkRequest = /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(_msgClean) && !isNearbySearch(_msgClean);
-
-            let _candidateName = _msgClean
-              .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
-              .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
-              .replace(/^\s*(enlace|link|url|maps|google\s*maps|ubicaci[oó]n|direcci[oó]n)\s+(de|del|a|al|para)\s+/i, '')
-              .replace(/^\s*(puto|puta|pinche|coñ?o|carajo|joder)\s+/i, '')
-              .replace(/\b(por favor|porfa|gracias)\b/gi, '')
-              .trim();
-
-            // Si ya sabemos qué sitio pidió ("¿Cómo llego a la Alhambra?" → "Alhambra"), se busca ese.
-            if (_linkTarget) _candidateName = _linkTarget;
-            const _usable = _candidateName.length >= 3 && _candidateName.length <= 100 && _candidateName.split(/\s+/).length <= 12;
-            // Solo si el usuario PIDE un enlace. Antes se buscaba el mensaje entero de casi cualquier respuesta ("¿cuál es
-            // tu personalidad?" → 3 llamadas a Google sin sentido y sin caché con GPS). Estudio 28 sept 2026.
-            if (_usable && (_isExplicitLinkRequest || _linkTarget)) {
+          if (!_hasMapsLink && _linkTarget) {
+            const _candidateName = _linkTarget;
+            {
               try {
                 // El sitio pedido, por el mismo buscador (sale del catálogo si Salma ya lo buscó).
                 const _fbFound = await Promise.race([
