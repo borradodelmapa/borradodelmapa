@@ -28,6 +28,14 @@
         ".claude/serve-preview.js"
       ],
       "port": 8090
+    },
+    {
+      "name": "Panel admin (copia local)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/serve-admin.js"
+      ],
+      "port": 8091
     }
   ]
 }
