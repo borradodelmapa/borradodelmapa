@@ -2676,6 +2676,9 @@ function chatPlaceContext(message, currentRoute) {
   m = m.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
   m = m.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
   m = m.replace(/[¿?¡!.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
+  // "cómo llego a la Alhambra en camper" → fuera "en camper": un medio o compañía no es la zona (caso p-mul3hmgfo0l:
+  // buscaba "Alhambra camper" y enlazaba a un negocio "Alhambra Camper"). Misma lista que linkTargetFromMessage.
+  m = m.replace(/\s+(?:en|con)\s+(?:tren|bus|autob[uú]s|coche|avi[oó]n|ferry|barco|taxi|metro|bici|moto|camper|autocaravana|caravana|furgo(?:neta)?|ni[ñn]os|beb[eé]|perro|carrito|silla(?:\s+de\s+ruedas)?)\b.*$/i, '').trim();
   // "qué ver en Granada", "restaurantes cerca de Triana" → "Granada", "Triana"
   let loc = null;
   try { loc = extractHelpLocation(m, null, null); } catch (_) {}
@@ -14194,7 +14197,8 @@ REGLAS:
         // Aviso "pídemelo": solo si quedan sitios sin enlace y solo la primera vez en la conversación. (Ya no depende
         // de las webs de buscar_lugar: desde el 28 sept no se muestran.)
         const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
-        const _hintAllowed = !_hintAlready;
+        // Hoteles y vuelos ya llevan sus enlaces de reserva: sin aviso (caso p-mul3hn54t3p).
+        const _hintAllowed = !_hintAlready && !isHotelRequest(message) && !isFlightRequest(message);
         if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && !_chatWantsMapLinks) {
           reply = stripModelMapsUrls(reply).replace(/\n{3,}/g, '\n\n').trim();
           if (_hintAllowed && replyNamesPlaces(reply, userName)) reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
@@ -14203,10 +14207,13 @@ REGLAS:
           // Zona estable para la búsqueda (y su caché): destino ya resuelto → pista del front → cuestionario
           // guiado → lugar corto sacado del mensaje → ciudad del GPS. Nunca el texto entero del mensaje.
           const _dhReg = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
+          let _msgZone = chatPlaceContext(message, currentRoute);
+          // "cómo llego a la Alhambra" → la zona sacada del mensaje es el propio sitio: no sirve de zona.
+          if (_msgZone && _linkTarget && normPlaceName(_msgZone).includes(normPlaceName(_linkTarget))) _msgZone = '';
           const _region = (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
             : _dhReg ? _dhReg
             : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
-            : (chatPlaceContext(message, currentRoute) || userLocationName || location || '');
+            : (_msgZone || userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           // "Ruta completa en Google Maps" NUNCA en el chat (Paco, 28 sept 2026): une opciones entre las que se elige
           // una (restaurantes, farmacias…). Las rutas completas son de las guías, que no pasan por aquí.
