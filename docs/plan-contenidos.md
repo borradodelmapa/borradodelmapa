@@ -96,7 +96,7 @@ Paco pone la materia prima (fotos, vídeos, pantalla con Salma, dos líneas de c
 - Decidido: Instagram + TikTok (conectadas en Metricool), un reel para todas. Primer tema: **N222 / N2 en moto** (público motero).
 - Pendiente de Paco: cambiar la zona horaria de la marca en Metricool (está en Lisboa → Madrid).
 - Siguiente paso: Paco pasa las fotos/vídeos **desde el ordenador**. Lo más fácil: copiarlas del móvil a una
-  carpeta del portátil (fuera del repo, p. ej. `C:\Users\User\Pictures\borrado-contenido`) y abrir una sesión de
+  carpeta del portátil (fuera del repo, ya creada: `C:\Users\User\Desktop\borrado contenido`) y abrir una sesión de
   Claude Code en el portátil: lee la carpeta directamente, sin subir nada. Alternativa: carpeta de Drive con enlace.
 - Claude entonces: leer EXIF (fecha, GPS), clasificar por país/región/día con geocodificación **offline gratuita**
   (nada de Google Maps, §8), reconstruir la ruta, elegir las mejores y preparar 2 semanas de publicaciones.
