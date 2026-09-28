@@ -2431,7 +2431,7 @@ const salma = {
   _threadId: null,
 
   _chatCol() {
-    return (window.db && window.currentUser) ? db.collection('users').doc(window.currentUser.uid).collection('chats') : null;
+    return (typeof db !== 'undefined' && window.currentUser) ? db.collection('users').doc(window.currentUser.uid).collection('chats') : null;
   },
 
   _persistThread() {
@@ -2521,7 +2521,7 @@ const salma = {
     if (!$c) return;
     $c.innerHTML = `<div class="cons-area fade-in"><div class="cons-loading">Cargando…</div></div>`;
     this.listThreads().then(threads => {
-      const guest = !(window.db && window.currentUser);
+      const guest = !(typeof db !== 'undefined' && window.currentUser);
       $c.innerHTML = `
         <div class="cons-area fade-in">
           <div class="cons-header">
