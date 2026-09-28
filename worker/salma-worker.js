@@ -2707,7 +2707,7 @@ function stripModelMapsUrls(text) {
 }
 
 // ¿La respuesta nombra algún sitio en negrita? (mismo criterio que injectVerifiedMapsLinks, sin llamar a Google)
-function replyNamesPlaces(reply, userName) {
+function replyNamesPlaces(reply, userName, exceptName = null) {
   const skip = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
   const cap = /^[A-ZÁÉÍÓÚÑÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÇ]/;
   const re = /\*\*([^*]+)\*\*/g;
@@ -2715,11 +2715,31 @@ function replyNamesPlaces(reply, userName) {
   while ((m = re.exec(String(reply || ''))) !== null) {
     const name = m[1].trim();
     if (name.length < 3 || skip.test(name) || isOwnNameNotPlace(name, userName)) continue;
+    if (exceptName && samePlaceName(name, exceptName)) continue;
     const words = name.split(/\s+/);
     const caps = words.filter(w => cap.test(w)).length;
     if (words.length === 1 ? (caps === 1 && name.length >= 4) : caps >= 2) return true;
   }
   return false;
+}
+
+// Sitio concreto por el que pregunta el usuario al pedir un enlace: "¿Cómo llego a la Alhambra?" → "Alhambra",
+// "dame el enlace del Mercado Central" → "Mercado Central". null si no nombra uno. Sin API.
+function linkTargetFromMessage(message) {
+  let m = String(message || '').replace(/[¿?¡!.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const r = m.match(/(?:c[oó]mo\s+(?:llego|llegar|voy|ir|puedo\s+(?:llegar|ir))\s+(?:a|al|hasta|hacia)|d[oó]nde\s+(?:est[aá]n?|queda[n]?)|(?:enlace|link|url|ubicaci[oó]n|direcci[oó]n|maps)\s+(?:de|del|a|al|para))\s+(.+)$/i);
+  if (!r) return null;
+  let t = r[1].replace(/^(?:el|la|los|las)\s+/i, '').replace(/\s+(?:por\s+favor|porfa|gracias|desde\s+aqu[ií]|desde\s+donde\s+estoy)\s*$/i, '').trim();
+  return (t.length >= 3 && t.length <= 60) ? t : null;
+}
+function normPlaceName(t) {
+  return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/^(?:el|la|los|las)\s+/, '').replace(/\s+/g, ' ').trim();
+}
+function samePlaceName(a, b) {
+  const x = normPlaceName(a), y = normPlaceName(b);
+  if (x.length < 4 || y.length < 4) return x === y && x.length > 0;
+  return x.includes(y) || y.includes(x);
 }
 
 // Aviso fijo cuando el chat nombra sitios pero no lleva enlaces (decisión de Paco, 28 sept 2026): los enlaces
@@ -2729,7 +2749,7 @@ const CHAT_MAPS_HINT = '📍 Si necesitas cómo llegar a alguno de estos sitios,
 // ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
 // Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
 // y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
-async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false, env = null, userName = null) {
+async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false, env = null, userName = null, onlyTarget = null) {
   if (!placesKey || !reply) return reply;
 
   // Extraer nombres en negrita: **Nombre del Lugar**
@@ -2761,6 +2781,18 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     if (!looksLikeProperName(name)) continue;
     seen.add(nameLower);
     matches.push({ bold: m[0], name });
+  }
+  // Pidió cómo llegar a UN sitio concreto → enlace solo a ese (decisión de Paco, 28 sept 2026, opción B).
+  // Primero la negrita idéntica ("Alhambra"); si no hay, la primera parecida ("Conjunto de la Alhambra").
+  // Nunca varias: "Parking Alhambra" también contiene "Alhambra" y no es lo que pidió.
+  if (onlyTarget) {
+    const exact = matches.filter(x => normPlaceName(x.name) === normPlaceName(onlyTarget));
+    // Un servicio que lleva el nombre del sitio ("Parking Alhambra", "Hotel Alhambra Palace") no es el sitio pedido,
+    // salvo que el usuario lo nombrara así. Si no queda ninguna, el respaldo de abajo busca el sitio pedido tal cual.
+    const _svc = /^(?:parking|aparcamiento|area|hotel|hostal|apartamentos?|restaurante|bar|cafeteria|taberna|tienda|parada|estacion|autobus|bus|taxi|mirador de)\b/;
+    const _tSvc = _svc.test(normPlaceName(onlyTarget));
+    matches = exact.length ? exact.slice(0, 1)
+      : matches.filter(x => samePlaceName(x.name, onlyTarget) && (_tSvc || !_svc.test(normPlaceName(x.name)))).slice(0, 1);
   }
   if (!matches.length) return reply;
 
@@ -14137,16 +14169,20 @@ REGLAS:
         // ciudad) y de gasto en Google. Solo si el usuario PIDE un enlace / cómo llegar / dónde está, o si
         // busca algo cerca o una ayuda (farmacia, comer por aquí, taller…), donde quiere ir ya. Las guías
         // llevan siempre sus enlaces (verifyAllStops, no pasa por aquí).
-        const _chatWantsMapLinks =
-          // Sin \b al final: en JS no detecta el límite detrás de letras con tilde ("está", "ubicación").
-          /(?<![\wáéíóúñ])(enlace|enlaces|link|links|url|maps|google\s*maps|c[oó]mo\s+(?:llegar|llego|voy|ir)|d[oó]nde\s+(?:est[aá]n?|queda[n]?)|ubicaci[oó]n|direcci[oó]n)(?![\wáéíóúñ])/i.test(message || '')
-          || isNearbySearch(message)
-          || (!!helpCategory && helpCategory !== 'weather');
+        // Sin \b al final: en JS no detecta el límite detrás de letras con tilde ("está", "ubicación").
+        const _explicitMapAsk = /(?<![\wáéíóúñ])(enlace|enlaces|link|links|url|maps|google\s*maps|c[oó]mo\s+(?:llegar|llego|voy|ir)|d[oó]nde\s+(?:est[aá]n?|queda[n]?)|ubicaci[oó]n|direcci[oó]n)(?![\wáéíóúñ])/i.test(message || '');
+        const _nearbyOrHelp = isNearbySearch(message) || (!!helpCategory && helpCategory !== 'weather');
+        const _chatWantsMapLinks = _explicitMapAsk || _nearbyOrHelp;
+        // Opción B (Paco, 28 sept 2026): si pide cómo llegar a UN sitio concreto, Salma contesta igual de completa
+        // pero el enlace va solo a ese sitio. En "cerca de mí" / ayudas, enlace a todas las opciones.
+        const _linkTarget = (_explicitMapAsk && !_nearbyOrHelp) ? linkTargetFromMessage(message) : null;
+        // Aviso "pídemelo": solo si quedan sitios sin enlace, solo la primera vez en la conversación, y nunca si la
+        // respuesta ya lleva las webs de los sitios (buscar_lugar) — con enlaces a la vista el aviso confunde.
+        const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
+        const _hintAllowed = !_hintAlready && _lugarWebUrls.length === 0;
         if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && !_chatWantsMapLinks) {
           reply = stripModelMapsUrls(reply).replace(/\n{3,}/g, '\n\n').trim();
-          // Aviso "pídemelo": solo si nombra sitios y solo la primera vez en la conversación.
-          const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
-          if (!_hintAlready && replyNamesPlaces(reply, userName)) reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
+          if (_hintAllowed && replyNamesPlaces(reply, userName)) reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
         }
         if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && _chatWantsMapLinks) {
           // Zona estable para la búsqueda (y su caché): destino ya resuelto → pista del front → cuestionario
@@ -14157,10 +14193,12 @@ REGLAS:
             : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
             : (chatPlaceContext(message, currentRoute) || userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
-          const _skipRouteLink = isHotelRequest(message);
+          // "Ruta completa en Google Maps" NUNCA en el chat (Paco, 28 sept 2026): une opciones entre las que se elige
+          // una (restaurantes, farmacias…). Las rutas completas son de las guías, que no pasan por aquí.
+          const _skipRouteLink = true;
           // ─── Inject primero: links en negritas (con límite 6 + timeout 8s) ───
           try {
-            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink, env, userName);
+            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink, env, userName, _linkTarget);
             const _timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('inject_timeout')), 8000));
             reply = await Promise.race([_injectPromise, _timeoutPromise]);
           } catch (_) {}
@@ -14180,10 +14218,12 @@ REGLAS:
               .replace(/\b(por favor|porfa|gracias)\b/gi, '')
               .trim();
 
+            // Si ya sabemos qué sitio pidió ("¿Cómo llego a la Alhambra?" → "Alhambra"), se busca ese.
+            if (_linkTarget) _candidateName = _linkTarget;
             const _usable = _candidateName.length >= 3 && _candidateName.length <= 100 && _candidateName.split(/\s+/).length <= 12;
             // Solo si el usuario PIDE un enlace. Antes se buscaba el mensaje entero de casi cualquier respuesta ("¿cuál es
             // tu personalidad?" → 3 llamadas a Google sin sentido y sin caché con GPS). Estudio 28 sept 2026.
-            if (_usable && _isExplicitLinkRequest) {
+            if (_usable && (_isExplicitLinkRequest || _linkTarget)) {
               try {
                 const validated = await getValidatedPlace(
                   _candidateName,
@@ -14195,11 +14235,15 @@ REGLAS:
                 );
                 if (validated) {
                   reply = reply.trimEnd() + `\n\n${validated.url}`;
-                } else if (_isExplicitLinkRequest) {
+                } else {
                   reply = reply.trimEnd() + `\n\nNo he encontrado ese sitio en Google Maps con seguridad.`;
                 }
               } catch (_) {}
             }
+          }
+          // Opción B: los demás sitios que nombra Salma se quedan sin enlace → aviso "pídemelo" (mismas reglas).
+          if (_linkTarget && _hintAllowed && replyNamesPlaces(reply, userName, _linkTarget)) {
+            reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
           }
         }
 
