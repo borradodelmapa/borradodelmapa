@@ -14213,7 +14213,7 @@ REGLAS:
           const _region = (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
             : _dhReg ? _dhReg
             : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
-            : (_msgZone || userLocationName || location || '');
+            : (_msgZone || userLocationName || '');
           const _cc = countryCode || userCountryCode || '';
           // "Ruta completa en Google Maps" NUNCA en el chat (Paco, 28 sept 2026): une opciones entre las que se elige
           // una (restaurantes, farmacias…). Las rutas completas son de las guías, que no pasan por aquí.
