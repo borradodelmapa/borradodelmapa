@@ -55,3 +55,19 @@ gasta el tope de 8 €/día y deja la app sin Google hasta el día siguiente. El
 cd worker ; npx wrangler kv key get --binding SALMA_KB "gspend:d:2026-09-27" -c wrangler.toml --remote
 ```
 Devuelve `{ eur, n: { find, text, details, photo, ... } }` del día: si `find` y `text` dominan, son los puntos 1-3.
+
+## Decisión de Paco (28 sept 2026) — entrega 1, programada en la rama `claude/salma-personality-response-26ta9q`
+- **Chat sin enlaces "Cómo llegar" por defecto.** Solo si el usuario los pide (enlace, cómo llegar/llego, dónde
+  está/queda, ubicación, dirección) o si es búsqueda "cerca de mí" / ayuda (farmacia, comer por aquí, taller, taxi).
+  Motivo: era la mayor fuente de enlaces equivocados y de gasto. Las guías no cambian: llevan siempre sus enlaces.
+- Cuando el chat nombra sitios sin enlace, el Worker añade una sola vez por conversación el texto fijo
+  "📍 Si necesitas cómo llegar a alguno de estos sitios, pídemelo y te paso el enlace." (sin tocar el prompt).
+- Los enlaces de Maps que escriba Claude por su cuenta se siguen limpiando siempre.
+- Búsqueda del mensaje entero (#1): solo con petición explícita. Zona estable para la caché (#2/#3).
+  "Salma", la marca y el nombre del usuario nunca se buscan.
+
+## Hallazgo: las fotos del post-procesado del chat no llegan al usuario
+El bloque "POST-PROCESADO FOTOS" (~14200) inserta las fotos en `allText`, pero `reply` (lo que se envía en el
+evento `done`) se calcula antes (~13825) y no se vuelve a leer de `allText`. Resultado: se paga la búsqueda en
+Google (1 find por negrita la primera vez, luego caché) y la foto solo aparecería si la respuesta falla. Pendiente de
+decisión de Paco: conectarlas a la respuesta o quitar el bloque.

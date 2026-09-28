@@ -2690,6 +2690,42 @@ function chatPlaceContext(message, currentRoute) {
   return (currentRoute && (currentRoute.region || currentRoute.country)) || '';
 }
 
+// Quita los enlaces de Google Maps que el modelo haya escrito por su cuenta (el prompt se lo prohíbe; si aun así lo
+// hace, pueden estar inventados). Los enlaces verificados los pone el sistema, nunca Claude.
+function stripModelMapsUrls(text) {
+  let t = String(text || '');
+  // Quitar duplicaciones bold+link de Claude: [**Name**](URL) → **Name**
+  t = t.replace(/\[\*\*([^\]*]+)\*\*\]\([^)]+\)/g, '**$1**');
+  // **Name** [Name](URL) → **Name** (con o sin espacio)
+  t = t.replace(/\*\*([^*]+)\*\*\s*\[([^\]]+)\]\([^)]+\)/g, '**$1**');
+  // URLs sueltas de Maps inventadas por Claude
+  // Lookbehind `(?<!\]\()` protege URLs dentro de markdown de imagen ![alt](URL) y enlaces [texto](URL)
+  t = t.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
+  t = t.replace(/(?<!\]\()\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
+  t = t.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
+  return t;
+}
+
+// ¿La respuesta nombra algún sitio en negrita? (mismo criterio que injectVerifiedMapsLinks, sin llamar a Google)
+function replyNamesPlaces(reply, userName) {
+  const skip = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
+  const cap = /^[A-ZÁÉÍÓÚÑÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÇ]/;
+  const re = /\*\*([^*]+)\*\*/g;
+  let m;
+  while ((m = re.exec(String(reply || ''))) !== null) {
+    const name = m[1].trim();
+    if (name.length < 3 || skip.test(name) || isOwnNameNotPlace(name, userName)) continue;
+    const words = name.split(/\s+/);
+    const caps = words.filter(w => cap.test(w)).length;
+    if (words.length === 1 ? (caps === 1 && name.length >= 4) : caps >= 2) return true;
+  }
+  return false;
+}
+
+// Aviso fijo cuando el chat nombra sitios pero no lleva enlaces (decisión de Paco, 28 sept 2026): los enlaces
+// "Cómo llegar" van siempre en las guías y, en el chat, solo cuando el usuario los pide o busca algo cerca.
+const CHAT_MAPS_HINT = '📍 Si necesitas cómo llegar a alguno de estos sitios, pídemelo y te paso el enlace.';
+
 // ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
 // Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
 // y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
@@ -2742,16 +2778,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   }));
 
   // Limpiar PRIMERO cualquier URL de Maps que Claude haya puesto por su cuenta
-  let enriched = reply;
-  // Quitar duplicaciones bold+link de Claude: [**Name**](URL) → **Name**
-  enriched = enriched.replace(/\[\*\*([^\]*]+)\*\*\]\([^)]+\)/g, '**$1**');
-  // **Name** [Name](URL) → **Name** (con o sin espacio)
-  enriched = enriched.replace(/\*\*([^*]+)\*\*\s*\[([^\]]+)\]\([^)]+\)/g, '**$1**');
-  // URLs sueltas de Maps inventadas por Claude
-  // Lookbehind `(?<!\]\()` protege URLs dentro de markdown de imagen ![alt](URL) y enlaces [texto](URL)
-  enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
-  enriched = enriched.replace(/(?<!\]\()\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
-  enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
+  let enriched = stripModelMapsUrls(reply);
 
   // Inyectar "🗺️ Cómo llegar" al lado de cada negrita validada.
   // Formato oficial de Google: dir/?api=1 con destination + destination_place_id.
@@ -14105,7 +14132,23 @@ REGLAS:
         // conjetura; si el nombre casa con algún sitio real, se inyectaba un enlace autoritativo
         // a un lugar que podía no ser el de la foto. El flujo de "guardar en el mapa" usa
         // SALMA_ACTION:MAP_PIN, no estos enlaces, así que no se rompe.
-        if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY) {
+        // Decisión de Paco (28 sept 2026, docs/estudio-llamadas-google.md): en el chat NO se ponen enlaces
+        // "Cómo llegar" a cada negrita — era la mayor fuente de enlaces equivocados (negocios homónimos, otra
+        // ciudad) y de gasto en Google. Solo si el usuario PIDE un enlace / cómo llegar / dónde está, o si
+        // busca algo cerca o una ayuda (farmacia, comer por aquí, taller…), donde quiere ir ya. Las guías
+        // llevan siempre sus enlaces (verifyAllStops, no pasa por aquí).
+        const _chatWantsMapLinks =
+          // Sin \b al final: en JS no detecta el límite detrás de letras con tilde ("está", "ubicación").
+          /(?<![\wáéíóúñ])(enlace|enlaces|link|links|url|maps|google\s*maps|c[oó]mo\s+(?:llegar|llego|voy|ir)|d[oó]nde\s+(?:est[aá]n?|queda[n]?)|ubicaci[oó]n|direcci[oó]n)(?![\wáéíóúñ])/i.test(message || '')
+          || isNearbySearch(message)
+          || (!!helpCategory && helpCategory !== 'weather');
+        if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && !_chatWantsMapLinks) {
+          reply = stripModelMapsUrls(reply).replace(/\n{3,}/g, '\n\n').trim();
+          // Aviso "pídemelo": solo si nombra sitios y solo la primera vez en la conversación.
+          const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
+          if (!_hintAlready && replyNamesPlaces(reply, userName)) reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
+        }
+        if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && _chatWantsMapLinks) {
           // Zona estable para la búsqueda (y su caché): destino ya resuelto → pista del front → cuestionario
           // guiado → lugar corto sacado del mensaje → ciudad del GPS. Nunca el texto entero del mensaje.
           const _dhReg = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
