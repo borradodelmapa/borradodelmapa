@@ -2732,6 +2732,26 @@ function linkTargetFromMessage(message) {
   let t = r[1].replace(/^(?:el|la|los|las)\s+/i, '').replace(/\s+(?:por\s+favor|porfa|gracias|desde\s+aqu[ií]|desde\s+donde\s+estoy)\s*$/i, '').trim();
   return (t.length >= 3 && t.length <= 60) ? t : null;
 }
+// Atajo "cómo llego a X / dónde está X / enlace de X" → respuesta directa con el enlace, sin Claude (Paco, 28 sept
+// 2026). Devuelve el sitio o null si el mensaje no es SOLO esa petición: si trae contexto ("con mi madre en silla de
+// ruedas…"), un origen ("desde Madrid"), un medio ("en tren", "en camper") o un sitio genérico ("al aeropuerto",
+// "a mi hotel"), va a Salma, que sabe responder a eso.
+function directLinkTarget(message) {
+  const m = String(message || '').replace(/[¿?¡!.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!m || m.length > 120) return null;
+  const t = linkTargetFromMessage(m);
+  if (!t) return null;
+  const idx = m.toLowerCase().lastIndexOf(t.toLowerCase());
+  const before = idx > 0 ? m.slice(0, idx).trim() : '';
+  // Lo que va antes del sitio: el disparador ("cómo llego a la", "dame el enlace del") y como mucho un saludo corto.
+  if (before.split(/\s+/).filter(Boolean).length > 7) return null;
+  if (t.split(/\s+/).length > 6) return null;
+  if (/\bdesde\b(?!\s+(?:aqu[ií]|donde\s+estoy))/i.test(m)) return null;
+  if (/\b(?:en|con)\s+(?:tren|bus|autob[uú]s|coche|avi[oó]n|ferry|barco|taxi|metro|bici|moto|camper|autocaravana|caravana|furgo(?:neta)?|ni[ñn]os|carrito|silla)\b/i.test(m)) return null;
+  if (/^(?:mi|mis|tu|el|la|los|las)?\s*(?:aeropuerto|estaci[oó]n(?:\s+de\s+(?:tren|autobuses|bus))?|hotel|hostal|apartamento|alojamiento|playa|centro|puerto|parking|aparcamiento|casa|camping|farmacia|hospital|ba[ñn]o|aseo|coche)s?$/i.test(t)) return null;
+  return t;
+}
+
 function normPlaceName(t) {
   return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/^(?:el|la|los|las)\s+/, '').replace(/\s+/g, ' ').trim();
@@ -6930,7 +6950,11 @@ function shouldLookupPhoto(name) {
   return true;
 }
 
-async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords, env) {
+// acceptFar (28 sept 2026): el GPS solo da PREFERENCIA a lo cercano, no exige <10 km. Para "¿cómo llego a la
+// Alhambra?" desde Asturias: sin esto la Alhambra se descartaba por estar lejos y no había enlace. Por defecto false
+// (comportamiento de siempre). La caché sigue exigiendo <10 km con GPS, así una cadena ("El Corte Inglés") guardada
+// en otra ciudad no se le da a quien tiene una cerca.
+async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords, env, acceptFar = false) {
   if (!placesKey || !query || query.length < 3) return null;
   // CATÁLOGO: si ya se resolvió este nombre (país + región + nombre), CERO llamadas a Google.
   // Con coords de sesgo se exige que la ficha guardada caiga a <10 km (misma regla que la validación);
@@ -6986,6 +7010,7 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
     if (hasBad && !hasGood) return false;
     // Con biasCoords (rutas): exigir distancia <10km al punto sugerido.
     if (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01) {
+      if (acceptFar) return true;
       const distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
       return distKm < 10;
     }
@@ -6996,7 +7021,8 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
 
   // 3 intentos: bias 5km → bias 15km → text search libre (con country filter)
   let c = await tryFindPlace(5000);
-  if (!isValid(c)) c = await tryFindPlace(15000);
+  // Con acceptFar el sesgo solo ordena: repetir con 15 km devolvería lo mismo → llamada pagada para nada.
+  if (!isValid(c) && !acceptFar) c = await tryFindPlace(15000);
   if (!isValid(c)) c = await tryTextSearch();
   if (!isValid(c)) {
     if (!_hasBias && !_errored) await nameCachePut(env, _vpKey, { miss: 1 }, 2592000);
@@ -12904,41 +12930,27 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
-    // ─── BYPASS: petición explícita de enlace Google Maps ───
-    // Si el usuario pide un link (enlace/link/maps/cómo llegar/dónde está/ubicación/dirección),
-    // respondemos DIRECTO con getValidatedPlace. Sin Claude, sin tools, sin tokens.
-    // Resultado: link validado con place_id O frase fija. Siempre <1s, siempre seguro.
-    if (!currentRoute && !imageBase64 && message && message.length <= 200 &&
-        /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(message) &&
-        !isNearbySearch(message) &&
-        env.GOOGLE_PLACES_KEY) {
-      const _cleanMsg = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
-      const candidateName = _cleanMsg
-        .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
-        .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
-        // Quita "enlace/link/maps/..." incluso si no va seguido de "de/del"
-        .replace(/^\s*(enlace|link|url|google\s*maps|maps|ubicaci[oó]n|direcci[oó]n)\s+(de\s+|del\s+|a\s+|al\s+|para\s+)?/i, '')
-        // Quita "el/la" si quedó después de quitar "enlace"
-        .replace(/^\s*(el|la|los|las)\s+/i, '')
-        .replace(/^\s*(puto|puta|pinche|coñ?o|carajo|joder)\s+/i, '')
-        .replace(/\b(por favor|porfa|gracias)\b/gi, '')
-        .trim();
-
-      if (candidateName.length >= 3 && candidateName.length <= 100) {
-        try {
-          const bias = userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null;
-          const validated = await getValidatedPlace(candidateName, env.GOOGLE_PLACES_KEY, '', frontendCountryCode || '', bias, env);
-          const reply = validated
-            ? validated.url
-            : 'No he encontrado ese sitio en Google Maps con seguridad.';
-          return new Response(
-            JSON.stringify({ reply, route: null }),
-            { headers: corsChat }
-          );
-        } catch (_) {
-          // Si getValidatedPlace falla, caemos al flujo normal con Claude
+    // ─── BYPASS: "cómo llego a X / dónde está X / enlace de X" → enlace directo, sin Claude ───
+    // (Paco, 28 sept 2026) Respuesta corta con el enlace lo primero; si quiere consejos (aparcar, entradas), pregunta.
+    // El GPS da preferencia a lo cercano pero NO exige <10 km (antes la Alhambra desde Asturias no daba enlace).
+    // Si no se encuentra con seguridad, no se corta: sigue el flujo normal con Salma.
+    const _directTarget = (!currentRoute && !imageBase64 && message && message.length <= 200 && !isNearbySearch(message) && env.GOOGLE_PLACES_KEY)
+      ? directLinkTarget(message) : null;
+    if (_directTarget) {
+      try {
+        const bias = userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null;
+        const _ccBy = (frontendCountryCode || '').toLowerCase();
+        let validated = await getValidatedPlace(_directTarget, env.GOOGLE_PLACES_KEY, '', _ccBy, bias, env, true);
+        // Fuera del país del usuario ("Torre Eiffel" desde España): segunda búsqueda sin filtro de país.
+        // Sin GPS en esta segunda: lejos de casa el sesgo no aporta, y así un "no encontrado" queda guardado 30 días.
+        if (!validated && _ccBy) validated = await getValidatedPlace(_directTarget, env.GOOGLE_PLACES_KEY, '', '', null, env, true);
+        if (validated && validated.place_id) {
+          const _nm = validated.name || _directTarget;
+          const _dir = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(_nm)}&destination_place_id=${validated.place_id}`;
+          const reply = `Aquí tienes cómo llegar a **${_nm}**:\n\n${_dir}\n\nSi quieres consejos para ir (dónde aparcar, entradas, mejor hora), pregúntame.`;
+          return new Response(JSON.stringify({ reply, route: null }), { headers: corsChat });
         }
-      }
+      } catch (_) { /* sigue el flujo normal con Salma */ }
     }
 
     // ─── PRE-FETCH TRANSPORTE — arranca Brave INMEDIATAMENTE, en paralelo con geocoding+KV ───
@@ -14231,7 +14243,8 @@ REGLAS:
                   '',
                   _cc,
                   userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null,
-                  env
+                  env,
+                  true
                 );
                 if (validated) {
                   reply = reply.trimEnd() + `\n\n${validated.url}`;
