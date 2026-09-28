@@ -2730,6 +2730,9 @@ function linkTargetFromMessage(message) {
   const r = m.match(/(?:c[oó]mo\s+(?:llego|llegar|voy|ir|puedo\s+(?:llegar|ir))\s+(?:a|al|hasta|hacia)|d[oó]nde\s+(?:est[aá]n?|queda[n]?)|(?:enlace|link|url|ubicaci[oó]n|direcci[oó]n|maps)\s+(?:de|del|a|al|para))\s+(.+)$/i);
   if (!r) return null;
   let t = r[1].replace(/^(?:el|la|los|las)\s+/i, '').replace(/\s+(?:por\s+favor|porfa|gracias|desde\s+aqu[ií]|desde\s+donde\s+estoy)\s*$/i, '').trim();
+  // "Alhambra en camper", "Alhambra desde Madrid", "Alhambra con niños" → "Alhambra"
+  // (solo medios, compañía u origen: "Plaza de España en Sevilla" se queda entero, "en Sevilla" es parte del sitio)
+  t = t.replace(/\s+(?:(?:en|con)\s+(?:tren|bus|autob[uú]s|coche|avi[oó]n|ferry|barco|taxi|metro|bici|moto|camper|autocaravana|caravana|furgo(?:neta)?|ni[ñn]os|beb[eé]|perro|carrito|silla(?:\s+de\s+ruedas)?)|desde|andando|a\s+pie)\b.*$/i, '').trim();
   return (t.length >= 3 && t.length <= 60) ? t : null;
 }
 // Atajo "cómo llego a X / dónde está X / enlace de X" → respuesta directa con el enlace, sin Claude (Paco, 28 sept
@@ -13510,7 +13513,7 @@ INSTRUCCIONES:
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
         let _toolUrls = []; // URLs de buscar_web para inyectar si Claude no las pone (solo si el usuario pide enlaces)
-        let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web) — se muestran siempre, como el teléfono
+        let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web). Desde el 28 sept 2026 NO se muestran (Paco)
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         // Repara ![Name](...) roto o corrupto de Claude usando la URL real que ya devolvió
@@ -14188,10 +14191,10 @@ REGLAS:
         // Opción B (Paco, 28 sept 2026): si pide cómo llegar a UN sitio concreto, Salma contesta igual de completa
         // pero el enlace va solo a ese sitio. En "cerca de mí" / ayudas, enlace a todas las opciones.
         const _linkTarget = (_explicitMapAsk && !_nearbyOrHelp) ? linkTargetFromMessage(message) : null;
-        // Aviso "pídemelo": solo si quedan sitios sin enlace, solo la primera vez en la conversación, y nunca si la
-        // respuesta ya lleva las webs de los sitios (buscar_lugar) — con enlaces a la vista el aviso confunde.
+        // Aviso "pídemelo": solo si quedan sitios sin enlace y solo la primera vez en la conversación. (Ya no depende
+        // de las webs de buscar_lugar: desde el 28 sept no se muestran.)
         const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
-        const _hintAllowed = !_hintAlready && _lugarWebUrls.length === 0;
+        const _hintAllowed = !_hintAlready;
         if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && !_chatWantsMapLinks) {
           reply = stripModelMapsUrls(reply).replace(/\n{3,}/g, '\n\n').trim();
           if (_hintAllowed && replyNamesPlaces(reply, userName)) reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
@@ -14523,92 +14526,17 @@ REGLAS:
           await cacheGeneratedRoute(env, ctx, route, _days3);
         }
 
-        // ── Catch-all: Claude a veces escribe la web como texto plano en su propia
-        // línea (p.ej. "campinglagomar.es" suelto) a pesar de que el prompt se lo
-        // prohíbe expresamente — pasa cuando reutiliza un lugar que ya conocía de
-        // antes en la conversación, sin volver a llamar a buscar_lugar. Detectamos
-        // esa línea (solo caracteres de dominio, un punto, TLD alfabético al final)
-        // y la convertimos en enlace real en vez de dejarla sin subrayar.
+        // ── Webs externas: FUERA (Paco, 28 sept 2026 — "no quiero enlaces a webs externas, despistan") ──
+        // Antes se añadía al final "🔗 Nombre — web" (Facebook, TripAdvisor…) de cada sitio de buscar_lugar, y
+        // estaba duplicado. Los teléfonos y los "Cómo llegar" siguen. Los enlaces de RESERVA (hotel, vuelo,
+        // transporte, alquiler) no pasan por aquí y se quedan: son básicos.
+        // Catch-all: Claude a veces escribe una web como texto plano en su propia línea ("campinglagomar.es").
+        // Si el usuario pidió enlaces/reservas (_userWantsLinks) se convierte en enlace, como antes; si no, se quita.
         if (!route) {
           reply = reply.replace(
             /^[ \t]*([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,24})[ \t]*$/gim,
-            (_m, domain) => `🔗 https://${domain}`
-          );
-        }
-
-        // ── Inyectar la web oficial de cada lugar recomendado (buscar_lugar) ──
-        // A diferencia de buscar_web, esto SIEMPRE se muestra si Google Places la tiene —
-        // es un dato del propio sitio (como el teléfono), no un enlace externo a un blog/guía.
-        // OJO: va DESPUÉS de la "RED DE SEGURIDAD" (arriba) que borra cualquier línea con URL
-        // cuando !_userWantsLinks — si se pone antes, esa limpieza se come esta línea igual
-        // que se comía cualquier otra (bug real: se probó y desapareció).
-        if (!route && _lugarWebUrls.length > 0) {
-          const missingWebs = _lugarWebUrls
-            .filter(u => {
-              if (!u.url || reply.includes(u.url)) return false;
-              // Comparar también por dominio (no solo URL exacta) — si el catch-all
-              // de arriba ya convirtió el nombre suelto en enlace, no duplicar.
-              try {
-                const host = new URL(u.url).hostname.replace(/^www\./, '');
-                if (host && reply.includes(host)) return false;
-              } catch (_) {}
-              return true;
-            })
-            .slice(0, 3);
-          if (missingWebs.length > 0) {
-            let webBlock = '\n';
-            for (const u of missingWebs) {
-              // 🔗 (no 🌐): el frontend solo trata como URL de confianza (sin filtrar por
-              // dominio) las líneas que empiezan por 🔗 — ver sanitizeUrls() en app.js
-              webBlock += `\n🔗 ${(u.titulo || '').slice(0, 60)} — ${u.url}`;
-            }
-            reply += webBlock;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: webBlock })}\n\n`)); } catch (_) {}
-          }
-        }
-
-        // ── Catch-all: Claude a veces escribe la web como texto plano en su propia
-        // línea (p.ej. "campinglagomar.es" suelto) a pesar de que el prompt se lo
-        // prohíbe expresamente — pasa cuando reutiliza un lugar que ya conocía de
-        // antes en la conversación, sin volver a llamar a buscar_lugar. Detectamos
-        // esa línea (solo caracteres de dominio, un punto, TLD alfabético al final)
-        // y la convertimos en enlace real en vez de dejarla sin subrayar.
-        if (!route) {
-          reply = reply.replace(
-            /^[ \t]*([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,24})[ \t]*$/gim,
-            (_m, domain) => `🔗 https://${domain}`
-          );
-        }
-
-        // ── Inyectar la web oficial de cada lugar recomendado (buscar_lugar) ──
-        // A diferencia de buscar_web, esto SIEMPRE se muestra si Google Places la tiene —
-        // es un dato del propio sitio (como el teléfono), no un enlace externo a un blog/guía.
-        // OJO: va DESPUÉS de la "RED DE SEGURIDAD" (arriba) que borra cualquier línea con URL
-        // cuando !_userWantsLinks — si se pone antes, esa limpieza se come esta línea igual
-        // que se comía cualquier otra (bug real: se probó y desapareció).
-        if (!route && _lugarWebUrls.length > 0) {
-          const missingWebs = _lugarWebUrls
-            .filter(u => {
-              if (!u.url || reply.includes(u.url)) return false;
-              // Comparar también por dominio (no solo URL exacta) — si el catch-all
-              // de arriba ya convirtió el nombre suelto en enlace, no duplicar.
-              try {
-                const host = new URL(u.url).hostname.replace(/^www\./, '');
-                if (host && reply.includes(host)) return false;
-              } catch (_) {}
-              return true;
-            })
-            .slice(0, 3);
-          if (missingWebs.length > 0) {
-            let webBlock = '\n';
-            for (const u of missingWebs) {
-              // 🔗 (no 🌐): el frontend solo trata como URL de confianza (sin filtrar por
-              // dominio) las líneas que empiezan por 🔗 — ver sanitizeUrls() en app.js
-              webBlock += `\n🔗 ${(u.titulo || '').slice(0, 60)} — ${u.url}`;
-            }
-            reply += webBlock;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: webBlock })}\n\n`)); } catch (_) {}
-          }
+            (_m, domain) => _userWantsLinks ? `🔗 https://${domain}` : ''
+          ).replace(/\n{3,}/g, '\n\n').trim();
         }
 
         // ── D: respuesta normal (sin ruta) cortada por max_tokens a media frase ──
