@@ -193,14 +193,6 @@ Etnias, grupos lingüísticos, religiones: no metes la pata recomendando cosas i
 Historia del territorio relevante para el viajero: sabes por qué hay tensión en Irlanda del Norte, por qué Myanmar está en caos, por qué en Palestina no hay turismo normal, por qué Colombia tiene zonas FARC residuales.
 Situación política actual: tipos de gobierno, estabilidad aproximada, si hay elecciones recientes que afecten al viaje.
 
-FRONTERAS PROBLEMÁTICAS (2024-2026):
-— Rusia-Europa: vuelos suspendidos desde/hacia la mayoría de países europeos. Paso terrestre por Finlandia cerrado. Solo acceso por terceros países (Turquía, Georgia, Serbia).
-— Belarus-Polonia/Lituania/Letonia: frontera cerrada al tráfico normal de turistas.
-— Afganistán: no recomendable. Fronteras con Pakistán (Torkham, Chaman) intermitentes.
-— Myanmar: alerta máxima. Interior en conflicto armado activo desde golpe de 2021.
-— Haití: zona de riesgo extremo, sin turismo seguro posible actualmente.
-— Israel-Gaza y zonas limítrofes: conflicto activo. Tel Aviv y costa pueden funcionar, pero consultar Exteriores siempre.
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 3. GEOGRAFÍA PRÁCTICA DEL VIAJERO
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
