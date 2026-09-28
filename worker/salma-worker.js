@@ -14222,64 +14222,10 @@ REGLAS:
           }
         }
 
-        // ── POST-PROCESADO FOTOS: buscar fotos e inyectar junto a cada lugar en negrita ──
-        if (!route && env.GOOGLE_PLACES_KEY) {
-          try {
-            // Destino para sesgar las fotos. Prioridad: localidad del ancla ya resuelta →
-            // dest_hint limpio del front → destino del cuestionario guiado → lugar corto sacado
-            // del mensaje (chatPlaceContext) → nombre de ciudad del GPS. El chip mandaba
-            // "Recomiéndame un plan de N días por X" → caía al GPS (Portugal) → fotos sin
-            // resultados; con el ancla/dest_hint eso ya no pasa. Nunca el texto entero del
-            // mensaje: es parte de la clave de caché de la foto (estudio 28 sept 2026).
-            const _dh = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
-            const _photoLocHint =
-              (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
-              : _dh ? _dh
-              : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
-              : (chatPlaceContext(message, currentRoute) || userLocationName || '');
-
-            const boldNames = [];
-            const boldRegex = /\*\*([^*]{3,50})\*\*/g;
-            let bm;
-            while ((bm = boldRegex.exec(allText)) !== null) {
-              const name = bm[1].trim();
-              if (/^\d|^€|^USD|^Día\s|^Tip:|^Nota:|^Precio|^Gratis|^Abierto|^Cerrado/i.test(name)) continue;
-              // No es un lugar: es la llamada a la acción del cierre ("Crear ruta con mapa").
-              if (/\b(crear ruta con mapa|crear ruta|ruta con mapa|generar (?:la )?ruta|hazme una gu[ií]a|dale a|pulsa)\b/i.test(name)) continue;
-              // Rechazar 1 palabra solo si es corta (Día, Tip, Ojo…). Acepta Alhambra, Louvre, Coliseo…
-              if (name.split(/\s+/).length === 1 && name.length < 5) continue;
-              // Titulares y platos no piden foto (ver shouldLookupPhoto): ahorra consultas y evita fotos absurdas.
-              if (!shouldLookupPhoto(name)) continue;
-              // "Salma", la marca o el nombre del usuario no son sitios: nunca foto de un negocio homónimo.
-              if (isOwnNameNotPlace(name, userName)) continue;
-              if (!boldNames.includes(name)) boldNames.push(name);
-            }
-            if (boldNames.length > 0) {
-              const photoPromises = boldNames.slice(0, 8).map(name => {
-                const query = _photoLocHint ? `${name}, ${_photoLocHint}` : name;
-                return buscarFotoLugar({ lugar: query }, env.GOOGLE_PLACES_KEY, env).catch(() => null);
-              });
-              const photoResults = await Promise.all(photoPromises);
-              // Inyectar cada foto justo después de su nombre en negrita
-              for (let pi = 0; pi < photoResults.length; pi++) {
-                const pr = photoResults[pi];
-                if (pr?.fotos?.length && pr.fotos[0]?.markdown && !allText.includes(pr.fotos[0].url)) {
-                  const name = boldNames[pi];
-                  const marker = `**${name}**`;
-                  const idx = allText.indexOf(marker);
-                  if (idx !== -1) {
-                    // Insertar foto después del párrafo que contiene el nombre
-                    const afterMarker = idx + marker.length;
-                    const nextNewline = allText.indexOf('\n', afterMarker);
-                    const insertPos = nextNewline !== -1 ? nextNewline : allText.length;
-                    const photoMd = '\n' + pr.fotos[0].markdown;
-                    allText = allText.slice(0, insertPos) + photoMd + allText.slice(insertPos);
-                  }
-                }
-              }
-            }
-          } catch (_) {}
-        }
+        // (28 sept 2026) Aquí había un "POST-PROCESADO FOTOS": buscaba en Google una foto por cada negrita, pero la
+        // insertaba en `allText` DESPUÉS de haber calculado `reply`, así que nunca llegaba al usuario y se pagaba igual.
+        // Quitado por decisión de Paco (docs/estudio-llamadas-google.md). Las fotos del chat siguen llegando por la
+        // herramienta buscar_foto de Salma.
 
         // ── RED DE SEGURIDAD: fuera URLs de blogs/webs/artículos si el usuario no las ha pedido ──
         // Aunque el prompt ya se lo dice, si el modelo cuela una URL igualmente, aquí se quita.

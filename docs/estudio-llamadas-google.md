@@ -69,5 +69,5 @@ Devuelve `{ eur, n: { find, text, details, photo, ... } }` del día: si `find` y
 ## Hallazgo: las fotos del post-procesado del chat no llegan al usuario
 El bloque "POST-PROCESADO FOTOS" (~14200) inserta las fotos en `allText`, pero `reply` (lo que se envía en el
 evento `done`) se calcula antes (~13825) y no se vuelve a leer de `allText`. Resultado: se paga la búsqueda en
-Google (1 find por negrita la primera vez, luego caché) y la foto solo aparecería si la respuesta falla. Pendiente de
-decisión de Paco: conectarlas a la respuesta o quitar el bloque.
+Google (1 find por negrita la primera vez, luego caché) y la foto solo aparecería si la respuesta falla.
+**Decisión de Paco (opción A): bloque quitado.** Las fotos del chat siguen llegando por la herramienta buscar_foto.
