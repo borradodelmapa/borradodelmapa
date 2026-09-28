@@ -39,3 +39,5 @@ Thumbs.db
 
 # Prueba del buscador de enlaces del chat (scripts/prueba-buscador-enlaces)
 worker/_prueba-*
+worker/_banco-*
+scripts/banco-salma/resultados/

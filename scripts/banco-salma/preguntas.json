@@ -1,0 +1,325 @@
+{
+  "_nota": "Banco de preguntas fijas de Salma (caso p-mulj7j4n4mz). Se pasan antes y después de cada cambio del prompt. 'debe' y 'no_debe' los revisa un juez (gpt-4o-mini). Reglas para TODAS: ver 'siempre'.",
+  "siempre": {
+    "no_debe": [
+      "poner URLs de blogs o webs de terceros que no se han pedido (los enlaces de Google Maps y de reservas de la app SÍ valen)",
+      "decir 'sé que', 'recuerdo que' o 'según tu perfil'",
+      "inventar datos concretos que no puede saber (teléfonos, horarios, notas y tiempo que vienen de Google o de la app son datos REALES y valen; precios aproximados con ~ valen)"
+    ]
+  },
+  "preguntas": [
+    {
+      "id": "hola",
+      "mensaje": "Hola",
+      "debe": [
+        "contestar corto y ofrecer ayuda"
+      ],
+      "no_debe": [
+        "generar una ruta"
+      ]
+    },
+    {
+      "id": "ronda-3dias",
+      "mensaje": "3 días en Ronda",
+      "debe": [
+        "generar la ruta sin preguntar antes",
+        "entre 4 y 7 paradas por día, sitios concretos"
+      ],
+      "no_debe": [
+        "preguntar con quién va o qué le gusta antes de generar"
+      ]
+    },
+    {
+      "id": "destino-vago",
+      "mensaje": "quiero ir al sur de España",
+      "debe": [
+        "dar 1-2 datos concretos y preguntar cuántos días o qué zona"
+      ],
+      "no_debe": [
+        "generar una ruta completa"
+      ]
+    },
+    {
+      "id": "perro-ronda",
+      "perfil": [
+        "viaja con su perro"
+      ],
+      "mensaje": "3 días en Ronda",
+      "debe": [
+        "tener en cuenta el perro (aire libre, terrazas)",
+        "avisar de sitios donde el perro no puede entrar"
+      ],
+      "no_debe": [
+        "afirmar que un hotel o restaurante concreto admite perros sin haberlo comprobado"
+      ]
+    },
+    {
+      "id": "perro-dormir",
+      "perfil": [
+        "viaja con su perro"
+      ],
+      "mensaje": "¿dónde duermo en Cádiz?",
+      "debe": [
+        "sugerir que confirme que admiten perros"
+      ],
+      "no_debe": [
+        "afirmar que un alojamiento concreto admite perros sin haberlo comprobado"
+      ]
+    },
+    {
+      "id": "pareja-sevilla",
+      "perfil": [
+        "viaja en pareja"
+      ],
+      "mensaje": "2 días en Sevilla",
+      "debe": [
+        "generar la ruta pensando en una pareja"
+      ],
+      "no_debe": [
+        "preguntar con quién va",
+        "tratarle como si viajara solo"
+      ]
+    },
+    {
+      "id": "solo-manda-conversacion",
+      "perfil": [
+        "viaja en pareja"
+      ],
+      "mensaje": "esta vez voy solo, 2 días en Lisboa",
+      "debe": [
+        "hacer la ruta para alguien que viaja solo"
+      ],
+      "no_debe": [
+        "planear para pareja"
+      ]
+    },
+    {
+      "id": "moto-y-camper",
+      "perfil": [
+        "tiene moto",
+        "tiene camper"
+      ],
+      "mensaje": "2 días por Asturias",
+      "debe": [
+        "condicionar ('si vas en moto…', 'si vas en camper…') o elegir sin dar por hecho el vehículo"
+      ],
+      "no_debe": [
+        "preguntar qué vehículo lleva antes de contestar"
+      ]
+    },
+    {
+      "id": "alambre-errata",
+      "mensaje": "como llego a la alambra",
+      "gps": "Granada",
+      "debe": [
+        "entender que es la Alhambra y dar cómo llegar"
+      ],
+      "no_debe": [
+        "preguntar qué es 'la alambra'",
+        "mandarle a otro sitio"
+      ]
+    },
+    {
+      "id": "farmacia-cerca",
+      "mensaje": "farmacia cerca de mí",
+      "gps": "Madrid",
+      "debe": [
+        "dar farmacias reales cerca del GPS"
+      ],
+      "no_debe": [
+        "dar farmacias de otra ciudad"
+      ]
+    },
+    {
+      "id": "tiempo-hoy",
+      "mensaje": "¿qué tiempo hace hoy?",
+      "gps": "Madrid",
+      "debe": [
+        "dar el tiempo de hoy en Madrid con datos reales"
+      ],
+      "no_debe": [
+        "inventar el tiempo o decir que no puede saberlo"
+      ]
+    },
+    {
+      "id": "visado-vietnam",
+      "mensaje": "¿necesito visado para Vietnam?",
+      "debe": [
+        "responder para españoles o preguntar/adaptar a su nacionalidad",
+        "remitir a fuente oficial (Exteriores/embajada) para confirmar"
+      ],
+      "no_debe": [
+        "enlazar blogs"
+      ]
+    },
+    {
+      "id": "visado-argentino",
+      "mensaje": "soy argentino, ¿necesito visado para Vietnam?",
+      "debe": [
+        "responder para un argentino"
+      ],
+      "no_debe": [
+        "responder con la norma para españoles"
+      ]
+    },
+    {
+      "id": "rusia",
+      "mensaje": "¿puedo ir a Rusia desde España?",
+      "debe": [
+        "dar info útil (visado, cómo llegar) y remitir a Exteriores para el riesgo"
+      ],
+      "no_debe": [
+        "negarse a ayudar",
+        "dar una lista fija de fronteras problemáticas"
+      ]
+    },
+    {
+      "id": "ferry-samui",
+      "mensaje": "ferry de Koh Samui a Bangkok",
+      "debe": [
+        "explicar que no hay ferry directo y cómo se hace (ferry + bus/tren, o avión)"
+      ],
+      "no_debe": [
+        "inventar un ferry directo u horarios exactos"
+      ]
+    },
+    {
+      "id": "robo-pasaporte",
+      "mensaje": "me han robado el pasaporte en Bangkok",
+      "debe": [
+        "pasos concretos: denuncia en policía, embajada de España, documento de viaje"
+      ],
+      "no_debe": [
+        "respuesta larga antes de lo urgente"
+      ]
+    },
+    {
+      "id": "restaurante-inventado",
+      "mensaje": "¿qué pido en el restaurante Casa Pepe de Zamora?",
+      "debe": [
+        "decir que no conoce ese sitio concreto o dar consejo general de Zamora"
+      ],
+      "no_debe": [
+        "inventar la carta o platos de ese restaurante"
+      ]
+    },
+    {
+      "id": "guia-estepona",
+      "boton": "guia",
+      "mensaje": "1 día en Estepona",
+      "debe": [
+        "plan del día con sitios concretos de Estepona",
+        "qué comer y un consejo práctico"
+      ],
+      "no_debe": [
+        "preguntar antes de dar el plan"
+      ]
+    },
+    {
+      "id": "edicion-playa",
+      "ruta_abierta": "estepona-1-dia",
+      "mensaje": "quiero ir también a la playa",
+      "debe": [
+        "añadir una playa a la ruta abierta (SALMA_ROUTE_EDIT)"
+      ],
+      "no_debe": [
+        "rehacer la ruta entera",
+        "crear una ruta nueva"
+      ]
+    },
+    {
+      "id": "foto-monumento",
+      "foto": "alhambra.jpg",
+      "mensaje": "¿qué es esto?",
+      "debe": [
+        "reconocer el monumento y dar 2-3 datos"
+      ],
+      "no_debe": [
+        "inventar si no lo reconoce"
+      ]
+    },
+    {
+      "id": "camping-moto",
+      "caso": "rev-no_se_puede_llegar",
+      "mensaje": "Voy en moto necesito camping q este abierto primeros de octubre y enlazar desde ahí a la traspireinaca dime solo un camping para el primer dia",
+      "gps": "Ribadedeva",
+      "debe": [
+        "dar UN camping concreto cerca del inicio de la Transpirenaica"
+      ],
+      "no_debe": [
+        "decir que no encuentra \"camping\" en el mapa",
+        "dar varios campings cuando pidió uno"
+      ]
+    },
+    {
+      "id": "camping-has-buscado",
+      "caso": "rev-chapa",
+      "historial": [
+        {
+          "role": "user",
+          "content": "Voy en moto necesito camping q este abierto primeros de octubre y enlazar desde ahí a la traspireinaca dime solo un camping para el primer dia"
+        },
+        {
+          "role": "assistant",
+          "content": "No encuentro «camping» en el mapa. Si no, dime cómo se escribe o en qué ciudad está y te paso cómo llegar."
+        }
+      ],
+      "mensaje": "No encuentras camping en el país Vasco francés? Has buscado?",
+      "gps": "Ribadedeva",
+      "debe": [
+        "dar un camping concreto en el País Vasco francés",
+        "respuesta corta"
+      ],
+      "no_debe": [
+        "respuesta larga con rollo cuando se pedía un solo camping"
+      ]
+    },
+    {
+      "id": "rusia-atajo",
+      "caso": "p-mulj9wv0q51",
+      "mensaje": "quiero ir a Rusia España",
+      "gps": "Madrid",
+      "debe": [
+        "tratar Rusia como país de destino"
+      ],
+      "no_debe": [
+        "dar un enlace o sitio que se llame \"Casa Rusia\" o cualquier local de Madrid"
+      ]
+    },
+    {
+      "id": "alhambra-camper",
+      "caso": "mul14dsvot54",
+      "mensaje": "cómo llego a la Alhambra en camper",
+      "gps": "Madrid",
+      "debe": [
+        "dar el enlace de cómo llegar a la Alhambra de Granada",
+        "decir dónde dejar la camper cerca"
+      ],
+      "no_debe": [
+        "mandarle a un sitio de Madrid"
+      ]
+    },
+    {
+      "id": "comer-triana",
+      "caso": "mul14dsvot54",
+      "mensaje": "dónde comer en Triana",
+      "debe": [
+        "sitios concretos en Triana (Sevilla)"
+      ],
+      "no_debe": [
+        "sitios fuera de Triana/Sevilla"
+      ]
+    },
+    {
+      "id": "hotel-granada",
+      "caso": "mul14dsvot54",
+      "mensaje": "búscame hotel en Granada",
+      "debe": [
+        "hoteles concretos en Granada con precio o enlace de reserva"
+      ],
+      "no_debe": [
+        "hoteles de otra ciudad"
+      ]
+    }
+  ]
+}
