@@ -1924,23 +1924,17 @@ const salma = {
 
               // DONE — final
               if (evt.done) {
-                // Si evt.reply tiene contenido añadido post-streaming (enlaces verificados,
-                // rutas completas, etc.), actualizar el bubble con el reply final antes de cerrar
+                // evt.reply es la versión final corregida por el Worker (enlaces verificados,
+                // frase "📍 … pídemelo", webs quitadas…) y la que se guarda en el historial:
+                // si difiere del texto en directo, se muestra siempre.
                 if (textEl && evt.reply && fullText.trim() && evt.reply.trim() !== fullText.trim()) {
-                  const replyHasExtras = /google\.com\/maps/i.test(evt.reply) && !/google\.com\/maps/i.test(fullText);
-                  const replyLonger = evt.reply.length > fullText.length + 20;
-                  // El worker quita URLs de blogs/webs no pedidas → el reply final es más corto:
-                  // re-renderizar para que no queden a la vista las que se hayan colado en streaming.
-                  const replyStrippedUrls = /https?:\/\//i.test(fullText) && !/https?:\/\//i.test(evt.reply);
-                  if (replyHasExtras || replyLonger || replyStrippedUrls) {
-                    let display = evt.reply;
-                    const markerPos = display.indexOf('SALMA_ROUTE');
-                    if (markerPos !== -1) display = display.substring(0, markerPos);
-                    display = display.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n?FOTO_TAG:\s*\w*/gi, '').replace(/\n{3,}/g, '\n\n');
-                    textEl.innerHTML = formatMessage(display.trim());
-                    textEl.dataset.raw = evt.reply.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n?FOTO_TAG:\s*\w*/gi, '').trim();
-                    this._scrollToBottom();
-                  }
+                  let display = evt.reply;
+                  const markerPos = display.indexOf('SALMA_ROUTE');
+                  if (markerPos !== -1) display = display.substring(0, markerPos);
+                  display = display.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n?FOTO_TAG:\s*\w*/gi, '').replace(/\n{3,}/g, '\n\n');
+                  textEl.innerHTML = formatMessage(display.trim());
+                  textEl.dataset.raw = evt.reply.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n?HISTORIA_LUGAR:\s*[^\n]*/gi, '').replace(/\n?FOTO_TAG:\s*\w*/gi, '').trim();
+                  this._scrollToBottom();
                 }
                 this._removeStreamBubble();
                 this._removeLoading();
