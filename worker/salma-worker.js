@@ -1872,7 +1872,8 @@ async function classifyFeedback(env, docId, fb) {
 // Crea o actualiza un CASO y avisa a Paco si toca (urgente, o 3+ avisos en 24 h; máx 1 aviso por
 // caso y día). Si el caso estaba arreglado/descartado y vuelve a llegar algo, se REABRE (estado
 // nuevo + reabierto_at) — así un arreglo que no funcionó se ve solo.
-// o: { titulo, tipo, zona, gravedad, origen ('usuario'|'boton'|'navegador'|'worker'), ejemplo, detalle?, docId?, reporter?, veces? }
+// o: { titulo, tipo, zona, gravedad, origen ('usuario'|'boton'|'navegador'|'worker'|'revisor'), ejemplo, detalle?, docId?, reporter?, veces?,
+//      revisor? (fragmento del revisor de conversaciones), silencioso? (sin WhatsApp/email: ya sale en el resumen diario) }
 async function fbUpsertGroup(env, gid, o) {
   const nowIso = new Date().toISOString();
   const existing = await firestoreAdminGet(env, 'feedback_groups/' + gid);
@@ -1898,15 +1899,17 @@ async function fbUpsertGroup(env, gid, o) {
     items: _fA(((g && g.items) || []).concat(o.docId ? [o.docId] : []).slice(-50)),
     reporters: _fA(reporters),
     recent: _fA(recent),
-    ejemplo: _fS(String(o.ejemplo || '').slice(0, 600)),
+    ejemplo: _fS(String((o.revisor && g && g.ejemplo) || o.ejemplo || '').slice(0, 600)),
     alerted_at: _fS((g && g.alerted_at) || ''),
   };
+  // Revisor de conversaciones: sus ejemplos van aparte (revisor_ejemplos) para no pisar el del usuario
+  if (o.revisor) fields.revisor_ejemplos = _fA(((g && g.revisor_ejemplos) || []).concat([String(o.revisor).slice(0, 700)]).slice(-10));
   if (o.detalle) fields.detalle = _fS(String(o.detalle).slice(0, 6000));
   if (reopen) fields.reabierto_at = _fS(nowIso);
   await firestoreAdminPatch(env, 'feedback_groups/' + gid, fields);
 
   const lastAlert = Date.parse((g && g.alerted_at) || '') || 0;
-  if ((o.gravedad === 'urgente' || recent.length >= 3 || (reopen && g.estado !== 'descartado')) && Date.now() - lastAlert > 24 * 3600 * 1000) {
+  if (!o.silencioso && (o.gravedad === 'urgente' || recent.length >= 3 || (reopen && g.estado !== 'descartado')) && Date.now() - lastAlert > 24 * 3600 * 1000) {
     const titulo = g ? g.titulo : o.titulo;
     const total = ((g && g.count) || 0) + veces;
     const txt = (o.gravedad === 'urgente' ? '🚨 Mejora Salma — URGENTE' : `📈 Mejora Salma — ${recent.length} avisos en 24 h`) +
@@ -1989,6 +1992,164 @@ async function fbClassifyPending(env, max = 25) {
     } catch (e) { fail++; console.error('[MEJORA] pendiente ' + r.id + ': ' + e.message); }
   }
   return { pendientes: pending.length, clasificados: ok, fallidos: fail, quedan: Math.max(0, rows.filter(r => !r.ai_tipo).length - ok) };
+}
+
+// ═══ REVISOR DE CONVERSACIONES (caso p-mulc92f6l52, 28 sept 2026) ═══
+// Paco: que las respuestas MALAS de Salma que no rompen nada técnico (sin enlace cuando lo pedía, inventado,
+// chapa, no contesta primero lo pedido, ofrece lo que no venía a cuento, "no se puede llegar"…) se apunten
+// solas como casos 🤖. Lee lo que ya se guarda (users/{uid}/chats: lo que vio el usuario, enlaces incluidos),
+// solo los turnos nuevos desde la última revisión (KV rev:v:*). gpt-4o-mini puntúa cada respuesta; cada fallo
+// se junta con un caso abierto si es el mismo problema, y si no va a un caso fijo por tipo (rev-<tipo>).
+// En el caso solo queda un fragmento (pregunta + recorte de la respuesta), sin uid y sin emails/teléfonos.
+// Coste: ~0,06-0,1 cént./conversación; tope REV_MAX_CONV al día (máx. ~0,15 €/día). Cron diario 6:00 solo si
+// KV revisor:activo = '1'. Modo prueba (GET /admin/revisor): lee y puntúa, no escribe nada.
+const REV_MAX_CONV = 150;
+const REV_TIPOS = {
+  sin_enlace: 'No pone enlace cuando se pedía',
+  inventado: 'Dato inventado o dudoso',
+  chapa: 'Respuesta larga cuando se pedía algo simple',
+  no_contesta_primero: 'No contesta primero lo que se pidió',
+  fuera_de_lugar: 'Ofrece cosas que no venían a cuento',
+  no_se_puede_llegar: 'Dice que no se puede / no sabe, sin motivo',
+  otro: 'Otra respuesta mala',
+};
+const _revClean = t => String(t || '')
+  .replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '')
+  .replace(/SALMA_ROUTE[\s\S]*$/, ' [mapa de ruta]')
+  .replace(/\n?(HISTORIA_LUGAR|FOTO_TAG):[^\n]*/gi, '')
+  .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[email]')
+  .replace(/\+?\d[\d\s-]{7,}\d/g, '[tel]')
+  .trim();
+const _revCut = (t, n) => t.length <= n ? t : t.slice(0, Math.round(n * 0.8)) + ' […] ' + t.slice(-Math.round(n * 0.2));
+
+// Conversaciones con actividad desde `desde` (ms): [{ path, turns, msgCount, updatedAt }]
+async function revListChats(env, desde, max) {
+  const token = await getServiceAccountToken(env);
+  const H = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+  const run = async sq => {
+    const r = await fetch(`${FIRESTORE_BASE}:runQuery`, { method: 'POST', headers: H, body: JSON.stringify({ structuredQuery: sq }), signal: AbortSignal.timeout(20000) });
+    if (!r.ok) throw new Error('runQuery chats → ' + r.status);
+    return (await r.json()).filter(x => x.document).map(x => ({ path: x.document.name.split('/documents/')[1], d: _fsDoc(x.document) }))
+      .filter(x => /^users\/[^/]+\/chats\/[^/]+$/.test(x.path));
+  };
+  let rows;
+  try {
+    rows = await run({ from: [{ collectionId: 'chats', allDescendants: true }], where: { fieldFilter: { field: { fieldPath: 'updatedAt' }, op: 'GREATER_THAN_OR_EQUAL', value: { integerValue: String(desde) } } }, orderBy: [{ field: { fieldPath: 'updatedAt' }, direction: 'DESCENDING' }], limit: max });
+  } catch (_) {
+    // Sin índice de grupo en chats.updatedAt: pedir solo la fecha de todas y luego leer las del día
+    const all = await run({ from: [{ collectionId: 'chats', allDescendants: true }], select: { fields: [{ fieldPath: 'updatedAt' }] }, limit: 5000 });
+    const recent = all.filter(x => (x.d.updatedAt || 0) >= desde).sort((a, b) => b.d.updatedAt - a.d.updatedAt).slice(0, max);
+    rows = [];
+    for (const x of recent) { const doc = await firestoreAdminGet(env, x.path).catch(() => null); if (doc) rows.push({ path: x.path, d: _fsDoc(doc) }); }
+  }
+  return rows.map(x => ({ path: x.path, turns: Array.isArray(x.d.turns) ? x.d.turns : [], msgCount: x.d.msgCount || 0, updatedAt: x.d.updatedAt || 0 }));
+}
+
+// Puntúa los turnos nuevos de una conversación. Devuelve { fallos: [{ tipo, gravedad, motivo, fragmento }], usage }
+async function revScoreChat(env, conv, yaRevisados) {
+  const turns = conv.turns.filter(t => t && (t.role === 'user' || t.role === 'assistant') && typeof t.content === 'string');
+  const nuevos = Math.max(0, (conv.msgCount || turns.length) - (yaRevisados || 0));
+  if (!nuevos) return { fallos: [], usage: null };
+  let start = Math.max(0, turns.length - Math.min(nuevos, 16));   // como mucho las 8 últimas preguntas/respuestas
+  const ctxStart = Math.max(0, start - 2);                         // 1 pregunta/respuesta de antes, de contexto
+  const lines = [], idx = {};
+  let n = 0;
+  for (let i = ctxStart; i < turns.length; i++) {
+    const t = turns[i], txt = _revClean(t.content);
+    if (t.role === 'user') lines.push(`VIAJERO: ${_revCut(txt, 400)}`);
+    else if (i < start) lines.push(`SALMA (contexto, ya revisada): ${_revCut(txt, 400)}`);
+    else { n++; idx[n] = i; lines.push(`[R${n}] SALMA (${txt.length} caracteres): ${_revCut(txt, 1500)}`); }
+  }
+  if (!n) return { fallos: [], usage: null };
+  const system = `Revisas respuestas de Salma, la compañera de viaje con IA de Borrado del Mapa (chat de una app de viajes: rutas con mapa, cómo llegar a sitios, consejos en ruta). Buscas SOLO respuestas claramente malas para el viajero. Responde SOLO con JSON:
+{"fallos":[{"r":1,"tipo":"...","gravedad":"alta|media|baja","motivo":"una frase de máx. 120 caracteres"}]}
+Tipos:
+- sin_enlace: pidió cómo llegar / dónde está un sitio concreto / un enlace, y la respuesta no trae ningún enlace (ni [texto](url) ni url)
+- inventado: da un dato concreto que parece inventado o falso (horario, precio, sitio que no existe, lugar en otro país), o se contradice
+- chapa: preguntó algo simple o corto y la respuesta es larga (más de ~700 caracteres) o suelta listas que no pidió
+- no_contesta_primero: la primera frase no responde a lo que preguntó (rodeos, saludo, contexto antes)
+- fuera_de_lugar: ofrece crear guías, restaurantes, hoteles u otras cosas que no venían a cuento
+- no_se_puede_llegar: dice que no se puede llegar, que no puede ayudar o que no sabe, ante una petición normal
+- otro: otro fallo claro (idioma equivocado, ignora lo dicho antes, repite, pregunta algo innecesario)
+Reglas: revisa solo las marcadas [R#]. Si la respuesta es aceptable, no la apuntes. Si dudas, NO la apuntes. "[mapa de ruta]" es una ruta generada: no es chapa. Sin fallos → {"fallos":[]}.`;
+  const out = await callOpenAI(env.OPENAI_API_KEY, { model: 'gpt-4o-mini', max_tokens: 400, temperature: 0, system, messages: [{ role: 'user', content: lines.join('\n\n') }] });
+  if (!out || out.error || !out.text) throw new Error('gpt-4o-mini ' + (out && out.status));
+  let j;
+  try { j = JSON.parse((out.text.match(/\{[\s\S]*\}/) || [''])[0]); } catch (_) { j = { fallos: [] }; }
+  const fallos = [];
+  for (const f of (Array.isArray(j.fallos) ? j.fallos : []).slice(0, 8)) {
+    const i = idx[f.r];
+    if (i === undefined) continue;
+    let u = i - 1; while (u >= 0 && turns[u].role !== 'user') u--;
+    const preg = u >= 0 ? _revCut(_revClean(turns[u].content), 250) : '';
+    fallos.push({
+      tipo: REV_TIPOS[f.tipo] ? f.tipo : 'otro',
+      gravedad: ['alta', 'media', 'baja'].includes(f.gravedad) ? f.gravedad : 'media',
+      motivo: String(f.motivo || '').slice(0, 160),
+      fragmento: `Viajero: ${preg}\nSalma: ${_revCut(_revClean(turns[i].content), 350)}`,
+    });
+  }
+  return { fallos, usage: out.usage };
+}
+
+// ¿Es este fallo EXACTAMENTE el mismo problema que un caso abierto? → id o null (gpt-4o-mini, llamada corta)
+async function revMatchGroup(env, fallo, groups) {
+  if (!groups.length) return null;
+  const out = await callOpenAI(env.OPENAI_API_KEY, {
+    model: 'gpt-4o-mini', max_tokens: 40, temperature: 0,
+    system: 'Dices si un fallo detectado en una respuesta de Salma (asistente de viajes) es EXACTAMENTE el mismo problema concreto que uno de los casos abiertos. Misma zona o parecido NO basta. Responde SOLO {"id":"<id>"} o {"id":null}. Ante la duda, null.',
+    messages: [{ role: 'user', content: `FALLO: ${REV_TIPOS[fallo.tipo]} — ${fallo.motivo}\n${fallo.fragmento}\n\nCASOS ABIERTOS (id | título):\n${groups.map(g => g.id + ' | ' + g.titulo).join('\n')}` }],
+  });
+  let id = null;
+  try { id = JSON.parse((String(out && out.text || '').match(/\{[\s\S]*\}/) || ['{}'])[0]).id || null; } catch (_) {}
+  return { id: groups.some(g => g.id === id) ? id : null, usage: out && out.usage };
+}
+
+// prueba=true: no escribe nada (ni casos ni KV) — devuelve lo que habría apuntado.
+async function reviewConversations(env, { prueba = true, dias = 1, max = REV_MAX_CONV } = {}) {
+  const t0 = Date.now();
+  const desde = Date.now() - Math.min(7, Math.max(0.05, dias)) * 86400 * 1000;
+  const convs = await revListChats(env, desde, Math.min(REV_MAX_CONV, max));
+  let tokIn = 0, tokOut = 0, revisadas = 0, sinNuevos = 0, errores = 0;
+  const addU = u => { if (u) { tokIn += u.prompt_tokens || 0; tokOut += u.completion_tokens || 0; } };
+  const hallazgos = [];
+  // Casos abiertos con los que se puede juntar: los de usuarios, botón, pendientes y del propio revisor
+  const open = (await fbGroups(env, { openOnly: true, limit: 120 }))
+    .filter(g => g.origen !== 'navegador' && g.origen !== 'worker' && !/^rev-/.test(g.id) && g.tipo !== 'elogio')
+    .filter(g => ['chat', 'rutas', 'whatsapp', 'otro'].includes(g.zona)).slice(0, 40);
+  const work = async conv => {
+    const key = 'rev:v:' + _fpHash(conv.path);
+    const visto = prueba ? 0 : parseInt(await env.SALMA_KB.get(key) || '0', 10) || 0;
+    if (!prueba && visto >= conv.msgCount) { sinNuevos++; return; }
+    try {
+      const r = await revScoreChat(env, conv, visto);
+      addU(r.usage); revisadas++;
+      for (const f of r.fallos) {
+        const m = await revMatchGroup(env, f, open).catch(() => null);
+        if (m) addU(m.usage);
+        const gid = (m && m.id) || ('rev-' + f.tipo);
+        hallazgos.push(Object.assign({ caso: gid, junto_a: m && m.id ? (open.find(g => g.id === m.id) || {}).titulo : null }, f));
+      }
+      if (!prueba) await env.SALMA_KB.put(key, String(conv.msgCount), { expirationTtl: 60 * 86400 });
+    } catch (e) { errores++; console.error('[REVISOR] ' + e.message); }
+  };
+  for (let i = 0; i < convs.length; i += 6) await Promise.all(convs.slice(i, i + 6).map(work));
+
+  if (!prueba) {
+    for (const h of hallazgos) {
+      const texto = `${h.fragmento}\n→ ${REV_TIPOS[h.tipo]}: ${h.motivo}`;
+      try {
+        await fbUpsertGroup(env, h.caso, {
+          titulo: '🤖 Salma: ' + REV_TIPOS[h.tipo], tipo: h.tipo === 'inventado' ? 'dato_erroneo' : 'queja', zona: 'chat',
+          gravedad: h.gravedad, origen: 'revisor', area: 'salma', ejemplo: texto, revisor: texto, silencioso: true,
+        });
+      } catch (e) { errores++; console.error('[REVISOR] caso ' + h.caso + ': ' + e.message); }
+    }
+  }
+  const usd = (tokIn * GPT4O_MINI_USD_PER_MTOK.in + tokOut * GPT4O_MINI_USD_PER_MTOK.out) / 1e6;
+  const res = { prueba, conversaciones: convs.length, revisadas, sin_nuevos: sinNuevos, errores, fallos: hallazgos.length, tokens_in: tokIn, tokens_out: tokOut, coste_usd: Math.round(usd * 10000) / 10000, segundos: Math.round((Date.now() - t0) / 1000), hallazgos };
+  console.log(`[REVISOR] ${prueba ? 'PRUEBA ' : ''}${convs.length} conv · ${revisadas} revisadas · ${hallazgos.length} fallos · ${errores} errores · $${res.coste_usd}`);
+  return res;
 }
 
 // Casos "comprobando" (subido el arreglo): los cierra Paco al probarlos (Hoy → Probar → "✓ Funciona").
@@ -10022,6 +10183,36 @@ export default {
       }
     }
 
+    // /admin/revisor — revisor de conversaciones (caso p-mulc92f6l52). Panel admin o llave de casos.
+    //   GET  ?dias=1&max=150  → MODO PRUEBA: lee y puntúa, NO escribe nada (cuesta la IA: ~0,1 cént./conversación)
+    //   GET  ?estado=1        → ¿está activo el cron diario? (sin IA)
+    //   POST {activo:true|false} → enciende/apaga el cron diario · POST {ahora:true} → pasada real ya (escribe casos)
+    if (url.pathname === '/admin/revisor') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        if (request.method === 'GET' && url.searchParams.get('estado')) {
+          return new Response(JSON.stringify({ activo: (await env.SALMA_KB.get('revisor:activo')) === '1' }), { headers: corsH });
+        }
+        if (request.method === 'GET') {
+          const dias = parseFloat(url.searchParams.get('dias') || '1') || 1;
+          const max = parseInt(url.searchParams.get('max') || String(REV_MAX_CONV), 10) || REV_MAX_CONV;
+          return new Response(JSON.stringify(await reviewConversations(env, { prueba: true, dias, max })), { headers: corsH });
+        }
+        if (request.method === 'POST') {
+          const b = await request.json().catch(() => ({}));
+          if (typeof b.activo === 'boolean') {
+            await env.SALMA_KB.put('revisor:activo', b.activo ? '1' : '0');
+            return new Response(JSON.stringify({ activo: b.activo }), { headers: corsH });
+          }
+          if (b.ahora) { const r = await reviewConversations(env, { prueba: false, dias: 1 }); delete r.hallazgos; return new Response(JSON.stringify(r), { headers: corsH }); }
+        }
+        return new Response(JSON.stringify({ error: 'Petición no válida' }), { status: 400, headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     if (url.pathname === '/admin/deploys' || url.pathname === '/admin/deploy-log') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
       if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
@@ -14931,6 +15122,8 @@ REGLAS:
     // 6:00 UTC DIARIO → Resumen Mejora Salma (email a Paco, sin IA salvo mensajes sin
     // clasificar) + monitoreo de vuelos
     if (hour === 6) {
+      // Revisor de conversaciones (caso p-mulc92f6l52): antes del resumen, para que salga en él. Solo si está encendido.
+      try { if (env.OPENAI_API_KEY && (await env.SALMA_KB.get('revisor:activo')) === '1') await reviewConversations(env, { prueba: false, dias: 1 }); } catch (e) { console.error('[REVISOR] cron: ' + e.message); }
       try { await fbAutoConfirm(env); } catch (e) { console.error('[MEJORA] auto-confirmar: ' + e.message); }
       try { await feedbackDigest(env); } catch (e) { console.error('[MEJORA] resumen diario: ' + e.message); }
       try { await feedbackWeekly(env); } catch (e) { console.error('[MEJORA] resumen semanal: ' + e.message); }

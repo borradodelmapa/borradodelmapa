@@ -21,6 +21,7 @@
 //   node scripts/casos.cjs version "qué se subió" [ids...]   apunta una subida a producción (Worker + commit solos)
 //   node scripts/casos.cjs modelo <id> <sonnet|opus> "por qué"   modelo recomendado para trabajar el caso (Paco lo ve en el panel)
 //   node scripts/casos.cjs enlaces [horas=24] [todos]        enlaces que ha dado el chat (sin "todos": solo los que se quedaron sin enlace)
+//   node scripts/casos.cjs revisor [días=1 | estado | on | off]   revisor de conversaciones: prueba (no escribe) / encender el diario
 //
 // Criterio de modelo (26 sept 2026, para ahorrar sin perder calidad): SONNET = trabajo mecánico o ya
 // decidido (mover textos, subir algo aprobado, cambios pequeños y claros, probar, ordenar). OPUS =
@@ -163,6 +164,17 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
         + `\n      mensaje: "${l.mensaje}" · Worker ${String(l.worker || '').slice(0, 8)}`);
     }
     if (ver !== r) console.log(`\n(todos, también los que sí tuvieron enlace: node scripts/casos.cjs enlaces ${horas} todos)`);
+  } else if (cmd === 'revisor') {
+    // Revisor de conversaciones (caso p-mulc92f6l52). Sin argumento: MODO PRUEBA de las últimas 24 h (no escribe
+    // nada; cuesta la IA, ~0,1 cént./conversación). `revisor 3` = 3 días. `revisor estado` / `revisor on|off`.
+    if (a1 === 'estado') { console.log((await call('/admin/revisor?estado=1')).activo ? 'Revisor diario: ENCENDIDO' : 'Revisor diario: apagado'); return; }
+    if (a1 === 'on' || a1 === 'off') { await call('/admin/revisor', { activo: a1 === 'on' }); console.log('Revisor diario: ' + (a1 === 'on' ? 'ENCENDIDO' : 'apagado')); return; }
+    const dias = parseFloat(a1) || 1;
+    const r = await call('/admin/revisor?dias=' + dias);
+    console.log(`MODO PRUEBA (no se ha escrito nada) · ${dias} día(s): ${r.conversaciones} conversaciones, ${r.revisadas} revisadas, ${r.fallos} fallos, ${r.errores} errores · ${r.tokens_in}+${r.tokens_out} tokens · $${r.coste_usd} · ${r.segundos} s\n`);
+    for (const h of r.hallazgos) {
+      console.log(`[${h.gravedad}] ${h.tipo} → ${h.junto_a ? 'se juntaría con: ' + h.junto_a + ' (' + h.caso + ')' : 'caso ' + h.caso}\n   ${h.motivo}\n   ${h.fragmento.replace(/\n/g, '\n   ')}\n`);
+    }
   } else if (cmd === 'version') {
     const { execSync } = require('child_process');
     let commit = '', worker = '', front = '';
