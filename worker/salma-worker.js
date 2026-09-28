@@ -2746,12 +2746,13 @@ ${hist ? 'Conversación reciente:\n' + hist + '\n' : ''}Mensaje: ${String(messag
       medio: ['taxi', 'camper', 'coche', 'moto', 'andando', 'bici', 'publico'].includes(j.medio) ? j.medio : null,
       alternativa: str(j.alternativa), alternativa_ciudad: str(j.alternativa_ciudad) };
     if (r.alternativa && r.sitio && normPlaceName(r.alternativa) === normPlaceName(r.sitio)) { r.alternativa = null; r.alternativa_ciudad = null; }
-    // Red de seguridad: si la IA no dio el medio pero el mensaje lo nombra, se toma del mensaje (en la prueba, "en bus"
-    // salía null una de cada dos). Preguntar dónde aparcar es ir en coche aunque no lo diga.
-    if (!r.medio && r.quiere_ir) {
+    // El medio sale SOLO del mensaje actual (Paco, 28 sept 2026): la IA lo arrastraba de la conversación ("como yego a
+    // la sagrada famila" tras hablar de camper → camper). Se lee de las palabras del mensaje, no de la IA.
+    // Preguntar dónde aparcar es ir en coche aunque no lo diga.
+    {
       const mm = String(message || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
       r.medio = /\b(?:taxi|uber|bolt|cabify|vtc|transfer)\b/.test(mm) ? 'taxi'
-        : /camper|autocaravana|\bfurgo|caravana/.test(mm) ? 'camper'
+        : /camper|auto\s*caravana|\bfurgo|caravana/.test(mm) ? 'camper'
         : /\bmoto\b/.test(mm) ? 'moto'
         : /\bcoche\b|aparc|parking|estacion(?:o|ar|amiento)/.test(mm) ? 'coche'
         : /\bbici/.test(mm) ? 'bici'
