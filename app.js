@@ -8152,12 +8152,17 @@ function formatMessage(str) {
   let html = escapeHTML(raw);
   // URLs sueltas → enlaces clicables (onclick fuerza apertura externa en PWA)
   html = html.replace(/([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s<]+)/g, function(_, url) {
-    // Si la URL termina en ')' sin '(' balanceado dentro, ese ')' pertenece al texto (ej. "(URL)") — quitarlo
+    // Si la URL termina en ')' sin '(' balanceado dentro, ese ')' pertenece al texto (ej. "(URL)") — quitarlo.
+    // Igual con la puntuación final: "(URL), así que…" → la URL no se lleva el "),".
     var trailing = '';
-    while (url.length > 0 && url.charAt(url.length - 1) === ')') {
-      var opens = (url.match(/\(/g) || []).length;
-      var closes = (url.match(/\)/g) || []).length;
-      if (closes > opens) { trailing = ')' + trailing; url = url.slice(0, -1); } else break;
+    while (url.length > 0) {
+      var last = url.charAt(url.length - 1);
+      if (last === ')') {
+        var opens = (url.match(/\(/g) || []).length;
+        var closes = (url.match(/\)/g) || []).length;
+        if (closes <= opens) break;
+      } else if ('.,;:!?'.indexOf(last) === -1) break;
+      trailing = last + trailing; url = url.slice(0, -1);
     }
     var label = url;
     var isRouteMaps = false;
