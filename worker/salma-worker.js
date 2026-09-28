@@ -2655,21 +2655,46 @@ function formatDayHeaders(text, numDays) {
   return final;
 }
 
+// Nombres propios que NO son lugares: la propia Salma, la marca y el nombre del usuario. No se buscan en Google
+// (ni enlace ni foto). Caso real 28 sept 2026: "¿cómo te llamas, de dónde eres?" → "Me llamo **Salma**" → Google
+// Places encontró un negocio llamado "Salma" y se inyectó "🗺️ Cómo llegar" a una empresa ajena.
+function isOwnNameNotPlace(name, userName) {
+  const norm = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+  const n = norm(name);
+  if (!n) return false;
+  if (n === 'salma' || n === 'borrado del mapa' || n === 'borradodelmapa' || n === 'borradodelmapa.com') return true;
+  const un = norm(userName);
+  return !!un && (n === un || n === un.split(' ')[0]);
+}
+
+// Zona de referencia para buscar en Google los nombres en negrita del chat (enlaces y fotos). Forma parte de la
+// clave de caché, así que tiene que ser ESTABLE: antes era el texto entero del mensaje del usuario → cada mensaje
+// distinto era una clave nueva → "Alhambra" se repagaba en cada conversación (estudio 28 sept 2026,
+// docs/estudio-llamadas-google.md). Solo sale del mensaje un nombre de lugar corto; nunca una frase. Sin API.
+function chatPlaceContext(message, currentRoute) {
+  let m = String(message || '').trim();
+  m = m.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
+  m = m.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
+  m = m.replace(/[¿?¡!.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
+  // "qué ver en Granada", "restaurantes cerca de Triana" → "Granada", "Triana"
+  let loc = null;
+  try { loc = extractHelpLocation(m, null, null); } catch (_) {}
+  if (typeof loc === 'string' && loc.trim().length >= 3 && loc.trim().split(/\s+/).length <= 4) return loc.trim();
+  // Lo mismo escrito en minúsculas, típico del móvil: "que ver en granada" → "granada" (al final del mensaje)
+  const tail = m.match(/\b(?:en|por|cerca\s+de)\s+([a-záéíóúüñ]{3,}(?:\s+[a-záéíóúüñ]+){0,2})$/i);
+  if (tail && !/^(la|el|los|las|un|una|casa|coche|tren|bus|familia|pareja|solitario|verano|invierno|mayo|junio|julio|agosto)\b/i.test(tail[1])) return tail[1];
+  // Mensaje que ES un lugar ("Granada", "3 días en Cádiz" ya recortado, "sierra de cazorla")
+  if (m.length >= 3 && m.length <= 40 && m.split(/\s+/).length <= 3
+      && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|sí|no|venga|genial|perfecto)\b/i.test(m)
+      && !/(?:^|\s)(qu[eé]|c[oó]mo|cu[aá]l|d[oó]nde|cu[aá]ndo|tal|est[aá]s|quiero|puedo|hago|hacer|viajar|ir|me|te|mi|tu|y|en|con|para|por|algo|nada)(?=\s|$)/i.test(m)) return m;
+  return (currentRoute && (currentRoute.region || currentRoute.country)) || '';
+}
+
 // ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
 // Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
 // y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
 async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false, env = null, userName = null) {
   if (!placesKey || !reply) return reply;
-
-  // Nombres propios que NO son lugares: la propia Salma, la marca y el nombre del usuario.
-  // Caso real 28 sept 2026: "¿cómo te llamas, de dónde eres?" → "Me llamo **Salma**" → Google Places
-  // encontró un negocio llamado "Salma" y se inyectó "🗺️ Cómo llegar" a una empresa ajena.
-  const _normName = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
-  const notPlaceNames = new Set(['salma', 'borrado del mapa', 'borradodelmapa', 'borradodelmapa.com']);
-  if (userName) {
-    const _un = _normName(userName);
-    if (_un) { notPlaceNames.add(_un); notPlaceNames.add(_un.split(' ')[0]); }
-  }
 
   // Extraer nombres en negrita: **Nombre del Lugar**
   // Excluir patrones que NO son lugares: **Día N**, **8€**, **2h30**, **Dónde comer**
@@ -2693,7 +2718,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     const nameLower = name.toLowerCase();
     // Filtrar: mín 3 chars, no es patrón de skip, no duplicado
     if (name.length < 3 || skipPatterns.test(name) || seen.has(nameLower)) continue;
-    if (notPlaceNames.has(_normName(name))) continue;
+    if (isOwnNameNotPlace(name, userName)) continue;
     // Filtrar valores numéricos/precios sueltos
     if (/^\d+[\s.,]?\d*\s*[€$£¥kmh]?$/i.test(name)) continue;
     // Filtrar negritas que no parecen nombre propio (precios, puntuaciones, "la noche", etc.)
@@ -14081,16 +14106,13 @@ REGLAS:
         // a un lugar que podía no ser el de la foto. El flujo de "guardar en el mapa" usa
         // SALMA_ACTION:MAP_PIN, no estos enlaces, así que no se rompe.
         if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY) {
-          // Extraer destino del mensaje del usuario (prioritario sobre GPS)
-          let _msgDest = (message || '').trim();
-          _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
-          _msgDest = _msgDest.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
-          _msgDest = _msgDest.replace(/[¿?¡!.,;:]+/g, '').trim();
-          // Solo usar el mensaje como región si parece destino (no saludo/pregunta corta)
-          const _isValidDest = _msgDest.length >= 3 && _msgDest.length <= 60
-            && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_msgDest)
-            && _msgDest.split(/\s+/).length <= 8;
-          const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
+          // Zona estable para la búsqueda (y su caché): destino ya resuelto → pista del front → cuestionario
+          // guiado → lugar corto sacado del mensaje → ciudad del GPS. Nunca el texto entero del mensaje.
+          const _dhReg = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
+          const _region = (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
+            : _dhReg ? _dhReg
+            : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
+            : (chatPlaceContext(message, currentRoute) || userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           const _skipRouteLink = isHotelRequest(message);
           // ─── Inject primero: links en negritas (con límite 6 + timeout 8s) ───
@@ -14116,7 +14138,9 @@ REGLAS:
               .trim();
 
             const _usable = _candidateName.length >= 3 && _candidateName.length <= 100 && _candidateName.split(/\s+/).length <= 12;
-            if (_usable && (_isExplicitLinkRequest || _candidateName.split(/\s+/).length >= 2)) {
+            // Solo si el usuario PIDE un enlace. Antes se buscaba el mensaje entero de casi cualquier respuesta ("¿cuál es
+            // tu personalidad?" → 3 llamadas a Google sin sentido y sin caché con GPS). Estudio 28 sept 2026.
+            if (_usable && _isExplicitLinkRequest) {
               try {
                 const validated = await getValidatedPlace(
                   _candidateName,
@@ -14159,24 +14183,17 @@ REGLAS:
         if (!route && env.GOOGLE_PLACES_KEY) {
           try {
             // Destino para sesgar las fotos. Prioridad: localidad del ancla ya resuelta →
-            // dest_hint limpio del front → destino del cuestionario guiado → recorte del
-            // mensaje → nombre de ciudad del GPS. El chip mandaba "Recomiéndame un plan de N
-            // días por X" (no empieza por número) → el recorte fallaba → caía al GPS (Portugal)
-            // → fotos sin resultados. Con el ancla/dest_hint eso ya no pasa.
-            let _photoRegion = (message || '').trim();
-            _photoRegion = _photoRegion.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
-            _photoRegion = _photoRegion.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
-            _photoRegion = _photoRegion.replace(/[¿?¡!.,;:]+/g, '').trim();
-            const _photoValidDest = _photoRegion.length >= 3 && _photoRegion.length <= 60
-              && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_photoRegion)
-              && _photoRegion.split(/\s+/).length <= 8;
+            // dest_hint limpio del front → destino del cuestionario guiado → lugar corto sacado
+            // del mensaje (chatPlaceContext) → nombre de ciudad del GPS. El chip mandaba
+            // "Recomiéndame un plan de N días por X" → caía al GPS (Portugal) → fotos sin
+            // resultados; con el ancla/dest_hint eso ya no pasa. Nunca el texto entero del
+            // mensaje: es parte de la clave de caché de la foto (estudio 28 sept 2026).
             const _dh = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
             const _photoLocHint =
               (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
               : _dh ? _dh
               : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
-              : _photoValidDest ? _photoRegion
-              : (userLocationName || '');
+              : (chatPlaceContext(message, currentRoute) || userLocationName || '');
 
             const boldNames = [];
             const boldRegex = /\*\*([^*]{3,50})\*\*/g;
@@ -14190,6 +14207,8 @@ REGLAS:
               if (name.split(/\s+/).length === 1 && name.length < 5) continue;
               // Titulares y platos no piden foto (ver shouldLookupPhoto): ahorra consultas y evita fotos absurdas.
               if (!shouldLookupPhoto(name)) continue;
+              // "Salma", la marca o el nombre del usuario no son sitios: nunca foto de un negocio homónimo.
+              if (isOwnNameNotPlace(name, userName)) continue;
               if (!boldNames.includes(name)) boldNames.push(name);
             }
             if (boldNames.length > 0) {
