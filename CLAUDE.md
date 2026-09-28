@@ -109,6 +109,17 @@ Decidida con Paco el 26 sept 2026 ("queremos gente que se registre"). Cambiarla 
 - **Enlace para compartir = su guía pública** (`borradodelmapa.com/<slug>`, páginas fijas de `scripts/build-guias.js`).
 - Lo que exige cuenta **no se enseña como si funcionara** a quien no la tiene.
 
+### 11. BANCO DE PRUEBAS DE SALMA — ANTES DE SUBIR NADA DEL CHAT (28 sept 2026, caso p-mulj7j4n4mz)
+Paco: "quiero de una vez por todas no hacer un cambio que joda otra cosa". `scripts/banco-salma/` (uso en la cabecera
+de `pasar.cjs`): copia local de Salma que no ve nadie ni escribe nada + juez gpt-4o. ~0,05 € por pregunta.
+- **Cambio del chat / Worker de Salma:** la pregunta del caso + las del mismo tema, **antes y después**
+  (`--ref <tag>` para el antes, `--comparar a.json b.json`). Un 🔴 EMPEORA = no se sube.
+- **Cambio del prompt:** las 26 (~1-1,5 €). **Siempre decir antes cuántas preguntas y cuánto cuesta (§8).**
+- **Cada fallo nuevo del chat** (👎, 🤖, Paco): su frase exacta entra en `preguntas.json`, y la nota del caso empieza
+  `🧪 PREGUNTA: «frase» ✅ CORRECTO: … ❌ INCORRECTO: … ——— resto` (el panel lo enseña en la fila).
+- Que pase el banco no cierra un caso: pasa a "comprobando" y Paco lo prueba en su app (§2). Un ❌ suelto no prueba
+  nada (Salma no contesta igual dos veces): repetir antes de concluir. Mirar la respuesta real antes de fiarse del juez.
+
 ---
 ## Normas de desarrollo (texto completo: `docs/normas-desarrollo.md`)
 - **Autonomía (11 sept):** bajo riesgo (docs, `CLAUDE.md`, git, subir lo ya hablado y probado en la conversación)

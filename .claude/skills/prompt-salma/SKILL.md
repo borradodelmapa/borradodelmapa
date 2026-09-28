@@ -21,7 +21,8 @@ liarme." En abril y el 5 sept se encadenaron cambios sin verificar y no se sabí
   cualquier cambio, comprobar en runtime que `BLOQUE_ACCION` y los 3 prompts de la web no cambian salvo lo pedido.
 - Orden de menos a más delicado; si algo sale raro, revertir SOLO ese cambio con un commit nuevo.
 - **Coste (§8):** cada cambio deja fría la caché una vez (~0,01 € por despliegue) — avisar.
-- Batería de prueba acordada: visado Vietnam, ferry Koh Samui→Bangkok, farmacia cerca mía, 3 días en Ronda,
-  guía Estepona 1 día (botón), edición con guía abierta ("quiero ir también a la playa"), foto de monumento, tiempo hoy.
+- **Banco de pruebas (desde 28 sept, CLAUDE.md §11):** antes de subir un cambio del prompt, las 26 preguntas de
+  `scripts/banco-salma/` con la versión de antes (`--ref <tag>`) y con la nueva; `--comparar`. Un 🔴 = no se sube.
+  ~1-1,5 € por pasada: decírselo a Paco antes. Después, igualmente UN mensaje de prueba de Paco en su app.
 - Estado del saneado (estudio del 21 sept, A-G): ver `CLAUDE-historial.md` (buscar "SANEAR EL PROMPT"). Los 5
   cambios pequeños (E, D, F, C, B) ya están hechos; A y Geografía, solo si Paco lo pide.
