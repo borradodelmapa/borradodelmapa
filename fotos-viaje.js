@@ -118,13 +118,23 @@ const fotosViaje = (() => {
   }
 
   /* ── Fotos en el mapa de la guía (29 sept 2026): con la pestaña FOTOS, las que tienen ubicación
-     salen como miniaturas en el mapa de arriba; al tocarlas se abre la foto.
+     salen como miniaturas en el mapa de arriba.
+     AGRUPADAS (Paco: "que no salgan exageradamente juntas"): las que en pantalla quedarían a menos
+     de un dedo (GROUP_PX) se juntan en una miniatura con el número; al acercar el mapa se separan.
+     Tocar un grupo acerca el mapa a esas fotos; si ya no se separan (mismo sitio), abre la primera.
      💶 0 €: el mapa ya está cargado; los marcadores no se cobran. ── */
-  let _pm = [], _pmGen = 0;
-  function _clearPhotoMarkers() {
-    _pmGen++; // corta cualquier pintado a medias
+  const GROUP_PX = 46;
+  let _pm = [], _pmGen = 0, _pmOff = null, _pmZoom = null, _pmList = null;
+  const _thumbCache = new Map(); // url → miniatura (dataURL) | null
+  function _removeMarkers() {
     _pm.forEach(m => { try { if (m.setMap) m.setMap(null); else if (m.remove) m.remove(); } catch (_) {} });
     _pm = [];
+  }
+  function _clearPhotoMarkers() {
+    _pmGen++; // corta cualquier pintado a medias
+    _removeMarkers();
+    if (_pmOff) { try { _pmOff(); } catch (_) {} _pmOff = null; }
+    _pmZoom = null; _pmList = null;
   }
   // Miniatura cuadrada con marco naranja (si la imagen deja leerse; si no, la foto tal cual)
   function _thumbIcon(url) {
@@ -143,30 +153,110 @@ const fotosViaje = (() => {
       im.src = url;
     });
   }
+  async function _thumbFor(url) { if (!_thumbCache.has(url)) _thumbCache.set(url, await _thumbIcon(url)); return _thumbCache.get(url); }
+  // Miniatura de grupo: la foto + el número en un recuadro naranja arriba a la derecha
+  const _groupCache = new Map();
+  function _groupIcon(base, n) {
+    const key = base + '|' + n; if (_groupCache.has(key)) return Promise.resolve(_groupCache.get(key));
+    return new Promise(res => {
+      const im = new Image(); im.decoding = 'async';
+      im.onload = () => {
+        let out = base;
+        try {
+          const S = 88, c = document.createElement('canvas'); c.width = c.height = S; const g = c.getContext('2d');
+          g.drawImage(im, 0, 0, S, S);
+          const t = n > 99 ? '99+' : String(n);
+          g.font = '800 30px "Barlow Condensed", "Arial Narrow", sans-serif';
+          const w = Math.max(32, g.measureText(t).width + 14);
+          g.fillStyle = '#F4630B'; g.fillRect(S - w, 0, w, 34);
+          g.fillStyle = '#0D0F10'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, S - w / 2, 18);
+          out = c.toDataURL('image/jpeg', .85);
+        } catch (_) {}
+        _groupCache.set(key, out); res(out);
+      };
+      im.onerror = () => res(base);
+      im.src = base;
+    });
+  }
+
   async function _photoMarkers() {
     _clearPhotoMarkers();
     const gen = _pmGen;
     const s = _st; if (!s || s.tab !== 'fotos' || !s.photos || typeof mapaRuta === 'undefined' || !mapaRuta._map) return;
     const ok = p => p.lat != null && isFinite(+p.lat) && isFinite(+p.lng) && Math.abs(+p.lat) > .01;
-    const list = s.photos.map((p, i) => ({ p, i })).filter(x => ok(x.p)).slice(0, 150);
+    const list = s.photos.map((p, i) => ({ p, i, lat: +p.lat, lng: +p.lng })).filter(x => ok(x.p)).slice(0, 300);
     if (!list.length) return;
+    // Miniaturas (se guardan: al volver a la pestaña o al acercar no se recalculan)
+    let next = 0;
+    const lane = async () => { while (next < list.length && gen === _pmGen) { const x = list[next++]; x.icon = await _thumbFor(x.p.url); } };
+    await Promise.all([lane(), lane(), lane(), lane(), lane(), lane()]); // 6 a la vez
+    if (gen !== _pmGen || _st !== s || s.tab !== 'fotos') return; // se cambió de pestaña o se volvió a pintar
+    _pmList = list.filter(x => x.icon);
+    const map = mapaRuta._map;
+    if (mapaRuta._mapType === 'google' && window.google && google.maps) {
+      const l = map.addListener('idle', () => { if (map.getZoom() !== _pmZoom) _renderGroups(gen); });
+      _pmOff = () => google.maps.event.removeListener(l);
+    } else if (map.on) {
+      const f = () => _renderGroups(gen);
+      map.on('zoomend', f); _pmOff = () => map.off('zoomend', f);
+    }
+    _renderGroups(gen);
+  }
+
+  // Posición en píxeles del "mundo" al zoom actual (sirve para medir distancias en pantalla)
+  function _px(map, isG, lat, lng) {
+    if (isG) {
+      const proj = map.getProjection(); if (!proj) return null;
+      const w = proj.fromLatLngToPoint(new google.maps.LatLng(lat, lng)), k = Math.pow(2, map.getZoom());
+      return { x: w.x * k, y: w.y * k };
+    }
+    const p = map.project([lat, lng], map.getZoom()); return { x: p.x, y: p.y };
+  }
+
+  async function _renderGroups(gen) {
+    if (gen !== _pmGen || !_pmList || typeof mapaRuta === 'undefined' || !mapaRuta._map) return;
     const map = mapaRuta._map, isG = mapaRuta._mapType === 'google' && window.google && google.maps;
-    const my = s;
-    for (const { p, i } of list) {
-      const icon = await _thumbIcon(p.url);
-      if (gen !== _pmGen || _st !== my || my.tab !== 'fotos') return; // se cambió de pestaña o se volvió a pintar
-      if (!icon) continue;
-      const pos = { lat: +p.lat, lng: +p.lng };
+    const zoom = map.getZoom(); if (zoom == null) return;
+    // Agrupar: cada foto va al primer grupo cuyo centro quede a menos de GROUP_PX; si no, abre uno nuevo
+    const groups = [];
+    for (const x of _pmList) {
+      const q = _px(map, isG, x.lat, x.lng); if (!q) return; // mapa aún sin proyección: lo hará el 'idle'
+      let g = null;
+      for (const G of groups) { if (Math.abs(G.x - q.x) < GROUP_PX && Math.abs(G.y - q.y) < GROUP_PX) { g = G; break; } }
+      if (g) { g.items.push(x); const n = g.items.length; g.x += (q.x - g.x) / n; g.y += (q.y - g.y) / n; g.lat += (x.lat - g.lat) / n; g.lng += (x.lng - g.lng) / n; }
+      else groups.push({ x: q.x, y: q.y, lat: x.lat, lng: x.lng, items: [x] });
+    }
+    const icons = await Promise.all(groups.map(G => G.items.length > 1 ? _groupIcon(G.items[0].icon, G.items.length) : G.items[0].icon));
+    if (gen !== _pmGen) return;
+    _removeMarkers();
+    _pmZoom = zoom;
+    groups.forEach((G, k) => {
+      const n = G.items.length, pos = { lat: G.lat, lng: G.lng };
+      const tap = () => _groupTap(G);
       let m;
       if (isG) {
-        m = new google.maps.Marker({ map, position: pos, zIndex: 900, title: 'Ver foto', icon: { url: icon, scaledSize: new google.maps.Size(40, 40), anchor: new google.maps.Point(20, 20) } });
-        m.addListener('click', () => _openViewer(i));
+        m = new google.maps.Marker({ map, position: pos, zIndex: 900 + n, title: n > 1 ? `${n} fotos` : 'Ver foto', icon: { url: icons[k], scaledSize: new google.maps.Size(42, 42), anchor: new google.maps.Point(21, 21) } });
+        m.addListener('click', tap);
       } else if (typeof L !== 'undefined' && map.addLayer) {
-        m = L.marker([pos.lat, pos.lng], { icon: L.divIcon({ className: 'fv-map-thumb', html: `<img src="${esc(icon)}" alt="">`, iconSize: [40, 40], iconAnchor: [20, 20] }), zIndexOffset: 900 }).addTo(map);
-        m.on('click', () => _openViewer(i));
+        m = L.marker([pos.lat, pos.lng], { icon: L.divIcon({ className: 'fv-map-thumb', html: `<img src="${esc(icons[k])}" alt="">`, iconSize: [42, 42], iconAnchor: [21, 21] }), zIndexOffset: 900 + n }).addTo(map);
+        m.on('click', tap);
       }
       if (m) _pm.push(m);
-    }
+    });
+  }
+
+  // Tocar un grupo: acercar el mapa hasta que se separen; si ya están en el mismo sitio, abrir la primera
+  function _groupTap(G) {
+    const first = G.items[0].i;
+    if (G.items.length === 1) { _openViewer(first); return; }
+    const map = mapaRuta._map, isG = mapaRuta._mapType === 'google' && window.google && google.maps;
+    let a = 90, b = 180, c = -90, d = -180;
+    G.items.forEach(x => { a = Math.min(a, x.lat); b = Math.min(b, x.lng); c = Math.max(c, x.lat); d = Math.max(d, x.lng); });
+    const spreadKm = _hav({ lat: a, lng: b }, { lat: c, lng: d });
+    const maxZoom = 18;
+    if (spreadKm < .03 || map.getZoom() >= maxZoom) { _openViewer(first); return; }
+    if (isG) map.fitBounds(new google.maps.LatLngBounds({ lat: a, lng: b }, { lat: c, lng: d }), 30);
+    else map.fitBounds([[a, b], [c, d]], { padding: [30, 30], maxZoom });
   }
 
   function _onMarker() { if (_st && _st.tab !== 'ruta') _show('ruta'); }
