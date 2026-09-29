@@ -95,3 +95,21 @@ demanda (buscar proveedores con API y precios). Precios y acceso: decisión de P
   mira la foto (≈0,002–0,005 €/foto, avisar §8). A largo plazo, app Android (TWA) con ese permiso (25 $ una vez).
 - Compartir desde la Galería a la PWA (29 sept): la app dice "No se encontraron fotos para añadir" → la función de
   compartir está rota (fallo aparte, caso en casos-por-crear). No sirve para probar el GPS todavía.
+
+## Decisión de Paco (29 sept 2026)
+"Lo normal es subir las fotos de una vez al final del viaje" → descartado depender de que la app apunte la ubicación
+durante el viaje.
+- **B (ya):** solo web, sin GPS. Días y orden exactos por fecha/hora; el sitio lo pone Salma mirando las fotos
+  (≈0,003 €/foto, Premium) y pregunta lo dudoso ("¿estas 6 son de Góis?"). Precisión a nivel de pueblo.
+- **A (más adelante, "tenemos que hacerlo pero de momento no puedo"):** app Android en Play Store (web dentro de
+  Capacitor/TWA + selector con ACCESS_MEDIA_LOCATION) para tener el GPS exacto. 25 $ una vez.
+- Pendiente de probar cuando Paco tenga ordenador: viaje-fotos.html desde el portátil (y un iPhone si hay).
+
+### Plan de B por pasos (cada uno se prueba antes del siguiente)
+1. viaje-fotos.html funciona SIN GPS: agrupa por días y horas, vídeo "Película" y álbum por días (0 €).
+2. Títulos y textos editables (a mano primero).
+3. Música: biblioteca libre de derechos + subir pista propia, cortes al ritmo (0 € si la licencia es gratuita).
+4. Voz propia con teleprompter (0 €).
+5. Salma: endpoint en el Worker que mira las fotos y propone sitio, título, textos y guion (coste §8, deploy).
+6. Voz de Salma (ElevenLabs, coste §8).
+7. PDF descargable del álbum y, después, libro impreso.
