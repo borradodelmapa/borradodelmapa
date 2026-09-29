@@ -99,6 +99,10 @@ function showState(state) {
     loadUserGuides();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
+  } else if (state === 'tu-mundo') {
+    if (typeof tuMundo !== 'undefined') tuMundo.render();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'viajes' || state === 'profile') {
     renderProfile();
     if (inputBar) inputBar.style.display = 'none';
@@ -232,7 +236,7 @@ function updateBottomBar() {
   }
 
   const isChat = currentState === 'chat';
-  const isRutas = currentState === 'rutas';
+  const isRutas = currentState === 'rutas' || currentState === 'tu-mundo';
   const isProfile = ['profile', 'bitacora', 'diario', 'documentos', 'notas', 'galeria', 'vuelos'].includes(currentState);
 
   // Barra fija de 4 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md).
@@ -3456,11 +3460,15 @@ async function loadUserGuides() {
         <div class="viaje-card-new-icon">🎬</div>
         <div class="viaje-card-new-txt">VÍDEO Y ÁLBUM · BETA</div>
       </a>
-      <a class="viaje-card viaje-card-new" href="/tu-mundo.html" style="text-decoration:none;color:inherit" title="Beta: tus países, kilómetros y récords de viajero">
-        <div class="viaje-card-new-icon">🌍</div>
-        <div class="viaje-card-new-txt">TU MUNDO · BETA</div>
-      </a>
     </div>`;
+
+  // Tu mundo (29 sept 2026, caso 14 paso 1): franja de cifras arriba de las guías —
+  // antes era la tarjeta "TU MUNDO · BETA" que llevaba a la página suelta tu-mundo.html.
+  if (typeof tuMundo !== 'undefined') {
+    const _tmStrip = document.createElement('div');
+    const _vh = $content.querySelector('.viajes-header');
+    if (_vh) { _vh.after(_tmStrip); tuMundo.strip(_tmStrip); }
+  }
 
   _wireRutasTabs();
   document.getElementById('btn-new-guide').addEventListener('click', () => {

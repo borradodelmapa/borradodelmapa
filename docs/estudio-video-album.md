@@ -290,3 +290,17 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
 Todo lo de esta sesión está en `docs/casos-por-crear/2026-09-29-nube.json` como casos "En estudio", numerados:
 00 resumen de lo hecho · 01 probar con fotos reales · 02–03 fallos · 04–20 pendientes por prioridad.
 Crearlos (desde el portátil, con la llave de casos): `node scripts/casos.cjs crear docs/casos-por-crear/2026-09-29-nube.json`
+
+## INTEGRACIÓN EN LA APP (caso 14) — plan de 4 pasos acordado con Paco (29 sept 2026, sesión de diseño UX)
+1. Tu mundo dentro de la app · 2. Pestaña Fotos en cada guía propia (todas las fotos del viaje juntas, en la nube) ·
+3. Vídeo (un botón, aparece solo al subir fotos) y Álbum dentro de la guía · 4. Quitar Galería vieja, Cuaderno, vídeo
+viejo y tarjetas beta (se conserva "tocar el mapa → foto en ese punto"). Iconos de línea como el menú, sin emojis en botones.
+
+### Paso 1 (29 sept 2026, subido): Tu mundo dentro de la app
+- `tu-mundo.js` + `tu-mundo.css` (estado `tu-mundo` de showState, con menú de abajo; "Mis Viajes" activo).
+- Franja arriba de Mis Viajes (países · % · km · banderas) que abre la pantalla; sustituye a la tarjeta "TU MUNDO · BETA".
+  Lee un resumen guardado en el móvil (`bdm_tumundo_sum`) y lo recalcula como mucho cada 12 h.
+- Mismo cálculo que tu-mundo.html; fuera el texto de beta. Tocar un viaje abre su guía. No cuenta guías en borrador.
+- 💶 0 €. Lecturas de Firestore: las mismas que la beta (maps ≤200, fotos ≤800, pins ≤800) al abrir Tu mundo o al
+  recalcular la franja (≤ 1 vez cada 12 h). Mapa del mundo (`vendor/countries-50m.json`, 756 KB) solo al calcular.
+- tu-mundo.html sigue existiendo sin enlace; en el paso 4 redirigirá a la app.
