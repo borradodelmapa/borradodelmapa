@@ -217,3 +217,27 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
 - Se recuerda la última plantilla elegida en el móvil.
 - Pendiente (proyecto): miniatura animada de cada plantilla en el selector; más tipos de escena (mapa claro, collage
   de 4, texto largo de Salma); música por plantilla.
+
+### Tanda miniaturas y velocidad (29 sept 2026, subida)
+- Miniatura animada de cada plantilla en el selector (primeros segundos con TUS fotos; se pausa mientras genera).
+- Calidad: **Rápida 720p** (por defecto, 6 Mbps) o **Alta 1080p** (12 Mbps). En prueba de escritorio 720p ≈25–30 % más
+  rápida; en móvil debería ser más (menos píxeles que dibujar y codificar).
+- Quitadas las sombras con shadowBlur en cada fotograma (fotos, polaroid, vehículo) → sombra barata de 4 rectángulos.
+- Paco: "va muy lentísimo" en su móvil. Si sigue lento con 720p: medir fotogramas/s en su móvil, bajar a 24 fps,
+  pre-escalar fotos al tamaño de salida, y a medio plazo generar en la nube (proyecto punto 1).
+
+## Más utilidades de Polarsteps y Travel Animator que nos sirven (29 sept 2026)
+| Suya | Qué es | Para Borrado del Mapa | Esfuerzo / coste |
+|---|---|---|---|
+| Polarsteps **estadísticas de viajero** | Países con banderas, % del mundo visitado, km totales, punto más lejano de casa, días sin viajar | Pantalla "Tu mundo" en el perfil con todas las guías y fotos; se comparte como tarjeta | Medio · 0 € |
+| Polarsteps **Play mode 3D** | Reproducir el viaje de principio a fin en el mapa | Ya lo tenemos en 2D (Reel/Ruta); 3D = proveedor de relieve | Alto · coste de mapas |
+| Polarsteps **perfil de altura** | Desnivel acumulado, perfil del tramo | En rutas de montaña/moto: "subiste 3.200 m"; se saca de la geometría de la ruta con un servicio de altitudes | Medio · API de elevación (gratis o céntimos) |
+| Polarsteps **medios de transporte por tramo** | Cada tramo con su icono (coche, avión, barco…) | Vehículo distinto por tramo en el Reel (avión para vuelos, barco para ferris) | Bajo · 0 € |
+| Polarsteps **Travel Buddies** (hasta 10) | Varios suben fotos al mismo viaje | Viaje compartido: los amigos suben sus fotos y sale un solo vídeo/álbum | Alto · 0 € (Firestore) |
+| Polarsteps **seguidores / ubicación en vivo con privacidad** | La familia sigue el viaje; ruta visible solo hasta la última parada | Ya tenemos compartir ubicación; añadir "seguir el viaje" con fotos | Medio |
+| Polarsteps **Plus 29,99 €/año** con −20 % en libros | Modelo de negocio | Referencia para Premium: libro con descuento | Decisión de Paco |
+| Travel Animator **arcos de vuelo** | Los vuelos dibujan una curva (círculo máximo), no una recta | Tramos de avión en curva en el Reel/Ruta | Bajo · 0 € |
+| Travel Animator **globo 3D** que gira | Intro con la Tierra girando hasta el país | Intro "globo" para viajes largos/internacionales | Medio · 0 € (dibujado propio) |
+| Travel Animator **importar GPX** | Animar la ruta exacta grabada en Strava/Garmin | Moteros y senderistas: subir el GPX y la moto va por su traza real | Bajo-medio · 0 € |
+| Travel Animator **fondos croma / intros** | Vídeo del mapa sobre verde para montarlo en CapCut | Exportar "solo mapa" para creadores | Bajo · 0 € |
+| Travel Animator **logo propio / sin marca de agua en Pro** | Monetización | Marca de agua en gratis, sin ella en Premium | Bajo · decisión de Paco |
