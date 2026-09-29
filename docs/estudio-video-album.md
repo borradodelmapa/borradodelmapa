@@ -73,3 +73,13 @@ demanda (buscar proveedores con API y precios). Precios y acceso: decisión de P
 2. Si llega: lote mezclado (Portugal + algunas de España) → probar que las separa bien.
 3. Muestra v2 (artifact, sin tocar la app): filtrado de intrusas, textos editables, vehículo por la ruta, música con
    cortes al ritmo, grabar voz con teleprompter.
+
+## Prueba con fotos reales de Paco (29 sept 2026) — hallazgo importante
+- 8 fotos del HONOR (ABR-NX1) subidas al chat de Claude, como archivo y desde la galería: **todas llegan con el
+  bloque GPS a ceros** (fecha y modelo intactos). También la de Picos de Europa del 24 sept, de cuando la cámara ya
+  guardaba ubicación (otra foto del 27 sept sí muestra coordenadas en Detalles) → la subida al chat borra el GPS.
+- **Riesgo para el producto:** en Android, el selector de fotos moderno (Photo Picker) puede quitar la ubicación
+  a las webs si no se elige por "Archivos/Explorar". Hay que probar en el móvil de Paco los TRES caminos de entrada:
+  `<input type=file>` desde Galería, desde Archivos, y compartir a la app (share-inbox). Si se pierde el GPS, plan B:
+  colocar por fecha/hora sobre la ruta guardada (0 €) o que Salma reconozca el sitio (≈0,002–0,005 €/foto, avisar §8).
+- La foto del 2 sept queda sola a 7 días del resto → por fecha ya se aparta como "otro viaje".
