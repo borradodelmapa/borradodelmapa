@@ -285,3 +285,8 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
   de casa con botón de ubicación, viaje más largo, más km, más fotos, país favorito); viajes por años; tarjeta story
   1080×1920 para compartir.
 - 💶 0 €: lecturas de Firestore mínimas (maps ≤200, fotos ≤800, pins ≤800 por visita) y cálculo en el móvil.
+
+## ÍNDICE PARA EL ADMIN (29 sept 2026)
+Todo lo de esta sesión está en `docs/casos-por-crear/2026-09-29-nube.json` como casos "En estudio", numerados:
+00 resumen de lo hecho · 01 probar con fotos reales · 02–03 fallos · 04–20 pendientes por prioridad.
+Crearlos (desde el portátil, con la llave de casos): `node scripts/casos.cjs crear docs/casos-por-crear/2026-09-29-nube.json`
