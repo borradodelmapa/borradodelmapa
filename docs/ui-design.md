@@ -1,57 +1,71 @@
 # Design system y UI actual
 
-> Movido tal cual desde CLAUDE.md el 26 sept 2026 (caso p-mui3grg5ei9, dieta de CLAUDE.md). Texto original sin reescribir.
+> Reescrito el 29 sept 2026 (sesión de diseño UX, caso 14) a partir de `styles.css` y del código real: la versión
+> anterior describía el diseño viejo (dorado #f0b429, Bebas Neue, radio 14 px) que ya no existe.
+> Versión anterior: `git show v-29sept-antes-tu-mundo-app:docs/ui-design.md`.
 
-## Design System (styles.css)
+## Design System (styles.css, `:root`)
 
-### Variables CSS (`:root`)
+Rediseño "viajero real" (doc 8 sept 2026): **un solo acento naranja, todo lo demás en grises, radio 0 en todo.**
+Referencia: Lonely Planet × Gaia GPS × extracto de reserva. Contraste alto para leer a pleno sol.
+
+### Tokens nuevos (usar estos en código nuevo)
 ```css
---negro: #060503;
---dorado: #f0b429;
---dorado2: #ffc947;
---crema: #f5f0e8;
---blanco: #fff;
---gris: #141209;
---gris2: #1e190f;
---linea: rgba(240,180,41,.22);
---linea-fuerte: rgba(240,180,41,.45);
---rojo: #ef4444;
---verde: #4ade80;
-
---font-display: 'Bebas Neue';
---font-body: 'Inter';
---font-tight: 'Inter Tight';
---font-mono: 'JetBrains Mono';
-
---radius: 14px;
---radius-sm: 10px;
---radius-pill: 999px;
+--bg-base: #0D0F10;        /* fondo de pantalla */
+--bg-row: #17191B;         /* fondo de fila/bloque/tarjeta */
+--bg-row-alt: #131516;     /* fila alterna */
+--border: #2B2E30;         /* bordes y divisores */
+--border-subtle: #1C1E20;  /* divisores entre filas de una lista */
+--accent: #F4630B;         /* ÚNICO acento: CTA, cifras, icono activo, pestaña activa */
+--text-primary: #ECEBE8;
+--text-secondary: #C4C7C9;
+--text-muted: #7E8285;
+--text-on-accent: #0D0F10; /* texto sobre naranja */
+--font-cond: 'Barlow Condensed'; /* titulares, cifras, botones, marca — en MAYÚSCULAS */
+--font-body: 'Inter';            /* texto corrido */
 ```
+### Tokens viejos (siguen existiendo, ya APUNTAN al sistema nuevo)
+`--negro` #0D0F10 · `--dorado` #F4630B (¡es el naranja!) · `--crema` #ECEBE8 · `--gris` #17191B ·
+`--font-display`/`--font-tight`/`--font-mono` = Barlow Condensed · `--radius*` = 0. No usarlos en código nuevo.
 
-### Estructura visual
-- `.app-header` — fijo top 56px, glass (`backdrop-filter:blur(12px)`)
-- `.app-content` — `padding-top:56px; padding-bottom:80px`
-- `.app-input-bar` — fijo bottom 56px, glass, z-index 1100
-- `.chat-bg-layer` — fondo mapa con overlay oscuro
-- Bottom bar — 4 tabs con iconos SVG inline
+### Reglas de estilo (acordadas con Paco)
+- **Botones:** Barlow Condensed 700, mayúsculas, `letter-spacing:.05–.08em`, alto mínimo 44 px. Principal = fondo
+  naranja + texto `--text-on-accent`; secundario = transparente con borde `--border`.
+- **Iconos:** de línea (SVG, `stroke-width:2`, `currentColor`), como los del menú de abajo. **Cero emojis en
+  botones** (29 sept 2026). Las banderas de país sí (son contenido).
+- **Títulos de pantalla:** Barlow 800 grande en mayúsculas, con la palabra clave en naranja (`TU <span>MUNDO</span>`).
+- **Tarjetas/filas:** fondo `--bg-row`, borde `--border`; las que llevan a algo, con borde izquierdo naranja de 3 px
+  y flecha `→` naranja a la derecha (franja de Tu mundo, "Tu vídeo ya está montado").
+- **Pestañas:** texto Barlow mayúsculas en `--text-muted`; la activa en `--text-primary` con raya naranja de 3 px abajo.
+- Marca: `✦ BORRADO<span>DEL</span>MAPA` (DEL en naranja).
+- Cada pantalla nueva: sin estilos propios sueltos; si necesita CSS, su propio fichero con `?v=` en index.html
+  (`tu-mundo.css`, `fotos-viaje.css`) usando estos tokens.
 
----
-
-
-## UI actual
-
-- **Welcome**: "Viaja con alguien que sabe lo que hace", input con placeholder rotativo, chips (rutas guardadas o featured), recordatorios de notas
-- **Chat**: avatar Salma inline (20px) + nombre, texto a ancho completo, cámara, voz, retry 18s
-- **Bottom bar**: Ayuda (abre el panel de feedback de testers, con latido, 21 sept 2026), Chat, Rutas (requiere login), Perfil (Entrar si no logueado). Nota: esta lista llevaba tiempo desactualizada (mencionaba "Home" en vez de la pestaña real "Consultas", que existió hasta el 21 sept) — corregido en este barrido contra `app.js:updateBottomBar()`.
-- **Perfil**: avatar subible (R2), stats (plan Gratis/Premium, total viajes)
-  - TU VIAJE: Mis Notas, Galería, Cuaderno de Viaje, Documentos del Viajero
-  - SEGURIDAD: SOS Emergencia (configurable, SMS Twilio + WhatsApp, cola offline)
-  - CUENTA: Mi plan (Premium), ¿Qué puedo hacer?
-- **Mapa live**: Google Maps fullscreen, GPS, brújula, capas POI (restaurantes/farmacias/hoteles/súpers/parques/cultura/tránsito), tipos de mapa, diario Kodak, pins, compartir
-- **Vista itinerario**: fullscreen con tarjetas de paradas + mapa de ruta + turn-by-turn + enrichment Places
-- **Copiloto**: tarjeta info práctica del país activada por geoloc (emergencias, frases, apps, salud, conectividad)
-- **Footer legal**: Destinos (dorado), Blog, Aviso legal, Privacidad, Cookies, Términos
+### Estructura fija
+- **Menú de abajo** (`app.js:updateBottomBar()`, 56 px): `Mapa · Explorar · (SALMA, botón central redondo) ·
+  Mis Viajes · Perfil/Entrar`. ⚠️ CLAUDE.md §9: vive también en `build-destinos.js`, `404.html`, blog y legal.
+- Botón fijo arriba a la derecha **"✦ Ayuda Salma"** (formulario de fallos/ideas) en chat, Mis Viajes y Perfil.
+- `.app-content` con `padding-bottom:80px`; `.app-input-bar` (cuadro de texto) solo en el chat.
 
 ---
 
+## Mapa de pantallas (29 sept 2026)
 
+| Pantalla | Cómo se llega | Qué tiene |
+|---|---|---|
+| **Portada / chat** (`chat`) | Botón central SALMA | Reloj y tiempo, eslogan "Sin mapa, con rumbo", ejemplos rotando, "Trazar ruta" + billete (destino, días, "Afinar"). Con ruta activa, su tarjeta. Accesos: Cerca mía, Vuelos, Alojamiento, SOS, fila de WhatsApp; "Más opciones": Narrador, Últimas consultas, Mis notas, Alertas vuelos, Moneda, Traductor |
+| **Mapa en vivo** | Pestaña Mapa (con cuenta) | Ruta activa, GPS, brújula, capas, tocar el mapa → **foto en ese punto** (va a la pestaña FOTOS de la ruta activa), SOS, 📚 Historia del lugar |
+| **Vista de guía** (`#itin-view`) | Cualquier guía | Mapa arriba + pestañas **RUTA · FOTOS · VÍDEO · ÁLBUM** (las tres últimas solo en guías propias). Botones flotantes: Guardar, Compartir, Google Maps, GPX, Editar con Salma |
+| → RUTA | | Tarjetas de paradas por día (carrusel en móvil), cerca de, info práctica, consejos, 👍/👎 |
+| → FOTOS | | Todas las fotos del viaje por día; "Añadir fotos" (varias, a la nube); aviso de fotos que no parecen del viaje; visor. En móvil el mapa baja a 24vh |
+| → VÍDEO / ÁLBUM | | Motor `viaje-fotos.html` en modo app (iframe): vídeo ya montado, "Crear el vídeo" (MP4), "Cambiar estilo"; álbum maquetado. El mapa se pliega. Aviso flotante "Vídeo 47 %" si sales |
+| **Explorar** | Pestaña | Rutas de otros viajeros |
+| **Mis Viajes** (`rutas`) | Pestaña (con cuenta) | Franja **Tu mundo** · fila **Fotos sin viaje** (si hay) · "+ Nueva guía" · guías (agrupadas por país si >5) · rutas guardadas |
+| **Tu mundo** (`tu-mundo`) | Franja de Mis Viajes | Países y % del mundo, km, mapamundi, banderas, récords (casa = ciudad escrita), viajes por años, tarjeta para compartir |
+| **Fotos sin viaje** (`fotos-sin-viaje`) | Fila de Mis Viajes | Fotos sin guía por días; elegir y "Pasar a un viaje" o quitar |
+| **Perfil** | Pestaña | Plan · Viajes · Lo que Salma sabe de ti · Documentos del viajero · Contactos SOS · Mi plan · Compartir mis rutas · WhatsApp · cerrar sesión / borrar cuenta · legal |
+| Notas, Alertas de vuelos, Consultas | "Más opciones" de la portada | — |
+
+Quitado el 29 sept 2026: Galería, Cuaderno de viaje (bitácora/diario), vídeo viejo en la app, páginas beta sueltas
+(`viaje-fotos.html` sin `?embed` → `/?go=rutas`; `tu-mundo.html` → `/?go=tu-mundo`).
+Orden general pendiente (papel de cada pestaña, Notas/Alertas, entradas al formulario de fallos): caso p-mumybbb6xcg.

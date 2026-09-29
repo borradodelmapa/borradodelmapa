@@ -1,6 +1,7 @@
 # Inventario de features implementadas
 
 > Movido tal cual desde CLAUDE.md el 26 sept 2026 (caso p-mui3grg5ei9, dieta de CLAUDE.md). Texto original sin reescribir.
+> 29 sept 2026: puestas al día las secciones de fotos, vídeo, álbum, Tu mundo y GPX (lo demás sin revisar).
 
 ## Features implementadas — Inventario completo
 
@@ -42,21 +43,33 @@
 - [x] Selector de ruta guardada sobre mapa live
 - [x] Parada más cercana (chip dinámico por GPS)
 
-### Diario y galería
-- [x] Captura de ubicación + foto → postal Kodak (canvas 1080x1920)
-- [x] Subida de fotos a R2
-- [x] Galería con álbumes
-- [x] Compartir via WhatsApp / Web Share API / descargar
-- [x] Pins permanentes en el mapa
-- [x] Bitácora agrupada por país
-- [x] Timeline de días con notas y fotos por parada
-- [x] Compartir redes: imagen post (1080×1350), story (1080×1920), carrusel
+### Fotos del viaje (29 sept 2026 — sustituye a Galería y Cuaderno; detalle en `docs/estudio-video-album.md`)
+- [x] Tocar el mapa en vivo → foto en ese punto (postal Kodak 1080x1920, pin permanente, va a la ruta activa)
+- [x] Compartir la postal: WhatsApp / Web Share API / descargar; post 1080×1350, story 1080×1920
+- [x] Pestaña FOTOS en cada guía propia (`fotos-viaje.js`): todas las fotos del viaje juntas, por día
+- [x] Subir varias de golpe a la nube (R2, 1600 px, una a una), fecha y GPS del EXIF, sin duplicar
+- [x] Fotos intrusas: avisa al subir y en las ya subidas (lejos de la ruta o de otra fecha) → Fotos sin viaje
+- [x] "Fotos sin viaje" en Mis Viajes: elegir y pasar a un viaje, o quitar
+- [x] Visor a pantalla completa (deslizar, "Ver sitio", quitar)
+- [ ] ~~Galería con álbumes~~ y ~~Bitácora/Cuaderno~~: quitados de la app el 29 sept 2026 (los datos siguen en Firestore)
 
-### Vídeo
-- [x] Generador de vídeo Canvas (540x960, 30fps)
-- [x] Estilo documental (título + mapa animado + fotos Ken Burns + cierre)
-- [x] Estilo historia (fotos a pantalla completa)
-- [x] Mapa animado con ruta y paradas
+### Vídeo y álbum (29 sept 2026 — motor `viaje-fotos.html` en modo app, pestañas VÍDEO/ÁLBUM de la guía)
+- [x] Vídeo ya montado al abrir; MP4 H.264 fotograma a fotograma (WebCodecs), 720p/1080p, vertical/horizontal
+- [x] 6 plantillas (`viaje-plantillas.js`): Reel, Aventura, Ruta, Película, Postal, Minimal, con miniatura animada
+- [x] Reel: vehículo por el mapa real (OSM), transporte por tramo automático, arcos de vuelo, km, banderas
+- [x] Importar traza GPX (fotos sin GPS a su sitio por la hora, moto por la carretera real) — solo página suelta, pendiente en la app
+- [x] Aviso flotante mientras se crea y al terminar, aunque salgas de la guía
+- [x] Álbum maquetado por días (vista en pantalla); PDF e impreso pendientes
+- [x] Fotos guardadas en el móvil (Cache Storage) para no volver a descargarlas
+- [ ] Vídeo del CHAT (herramienta de Salma) sigue con el motor viejo `video-player.js` → caso p-mun22yc1wkg
+- [ ] Música, voz, textos de Salma: casos 04, 06, 12 del 29 sept
+
+### Tu mundo (29 sept 2026, `tu-mundo.js`)
+- [x] Franja en Mis Viajes (países · % del mundo · km) y pantalla completa
+- [x] Mapamundi, banderas, récords (casa = ciudad escrita, vía Nominatim), viajes por años, tarjeta story para compartir
+
+### GPX
+- [x] Descargar GPX de la guía (paradas + ruta + trazado real) para OsmAnd/Calimoto/Garmin
 
 ### Notas
 - [x] CRUD completo en Firestore
