@@ -1144,7 +1144,12 @@ function _ceSkyInfoCountryFor(sel) {
   if (sel.mode === 'country') return sel.code;
   if (sel.mode === 'city') return sel.countryCode || null;
   if (sel.mode === 'here') {
-    try { return (typeof salma !== 'undefined' && salma._copilotCountry) ? String(salma._copilotCountry).toUpperCase() : null; } catch (_) { return null; }
+    try { if (typeof salma !== 'undefined' && salma._copilotCountry) return String(salma._copilotCountry).toUpperCase(); } catch (_) {}
+    // Sin país del copiloto (en web el reverse-geocoding de Nominatim puede fallar
+    // o tardar más que los repasos de 3s/8s — Paco, 29 sept 2026: en el móvil salía
+    // "Info práctica del país" y en la web no), usar el país que ya trae /weather.
+    const wx = window._ceSkyWxCache && window._ceSkyWxCache.here;
+    return (wx && wx.data && wx.data.country) ? String(wx.data.country).toUpperCase() : null;
   }
   return null;
 }
@@ -1263,6 +1268,13 @@ function _ceSkyPaintWeather(data) {
   const fcToggle = document.getElementById('ce-sky-fc-toggle');
   const sel = _ceSkyReadSel();
   if (loc) loc.textContent = _ceSkyLocLabel(sel, data);
+  // Si la tarjeta de info del país aún no salió (p. ej. sin país del copiloto),
+  // pedirla en cuanto el tiempo trae el país. Solo KV, sin APIs de pago.
+  if (data && data.country) {
+    const info = document.getElementById('ce-sky-info');
+    const cc = _ceSkyInfoCountryFor(sel);
+    if (info && !info.innerHTML && cc) _ceSkyInfoRefresh(cc);
+  }
   if (!data) {
     if (temp) temp.textContent = '…';
     if (desc) desc.textContent = '';

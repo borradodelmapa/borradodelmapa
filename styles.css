@@ -3793,6 +3793,8 @@ body {
   border-top:1px solid rgba(244,239,230,.05);
 }
 .chat-reminder-item:first-of-type { border-top:none; }
+.chat-reminder-item, .chat-reminders-more { cursor:pointer; }
+.chat-reminder-item:hover .chat-reminder-text, .chat-reminder-item:active .chat-reminder-text { color:var(--dorado); }
 .chat-reminder-text {
   font-size:13px; color:rgba(244,239,230,.75); line-height:1.4;
   flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
@@ -6542,7 +6544,7 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
 
 /* ── chips = etiquetas de embarque · dos columnas alineadas ── */
 .chat-empty .chat-empty-chips{
-  display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;align-items:start;
   padding:1px 1px 4px;max-width:none;margin:16px 0 0;overflow:visible;
 }
 .chat-empty .ce-chip-row{display:flex;flex-direction:column;gap:7px;}
@@ -6588,7 +6590,7 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
 .chat-empty .ce-more-toggle:hover{color:var(--ce-amber);}
 .chat-empty .ce-more-toggle-ic{transition:transform .15s;}
 .chat-empty .ce-more-chips{
-  display:grid;grid-template-columns:1fr 1fr;gap:7px;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;
   max-height:0;overflow:hidden;opacity:0;margin-top:0;
   transition:max-height .2s ease,opacity .15s ease,margin-top .2s ease;
 }
@@ -6970,6 +6972,10 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 /* Inicio */
 .ce-rotable-hint{font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ce-ink2);}
 .chat-empty .chat-empty-chip{font-family:var(--font-body);font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;padding:11px 12px;gap:8px;}
+/* Móvil estrecho (Paco, 29 sept 2026): "Últimas consultas"/"Alertas vuelos" no
+   cabían en media pantalla y la columna derecha se salía cortada. Columnas fijas
+   a la mitad (minmax(0,1fr) arriba) y, si el texto no cabe, parte en dos líneas. */
+.chat-empty .chat-empty-chip{min-width:0;white-space:normal;line-height:1.2;}
 .chat-empty .chat-empty-chip .chip-icon{width:16px;height:16px;}
 .chat-empty .ce-more-toggle{font-family:var(--font-body);font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;}
 .ce-openbillete{font-family:var(--font-body);}

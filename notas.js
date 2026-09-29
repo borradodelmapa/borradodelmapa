@@ -282,6 +282,7 @@ window.notasManager = (() => {
   // ── RENDER: Vista completa "Mis Notas" ──
 
   let _currentFilter = 'todas';
+  let _pendingEditId = null;
 
   async function renderNotasView() {
     const $content = document.getElementById('app-content');
@@ -350,6 +351,18 @@ window.notasManager = (() => {
       </div>`;
 
     _initNotasListeners($content, notas);
+
+    // Llegada desde el banner de recordatorios del chat: abrir directamente la
+    // edición de esa nota (Paco, 29 sept 2026: "si no, por pereza se quedan ahí
+    // toda la vida").
+    if (_pendingEditId) {
+      const nota = notas.find(n => n.id === _pendingEditId);
+      _pendingEditId = null;
+      if (nota) {
+        _renderEditForm('notas-form-area', nota);
+        document.getElementById('notas-form-area')?.scrollIntoView({ block: 'start' });
+      }
+    }
   }
 
   function _renderNotaCard(n) {
@@ -548,14 +561,26 @@ window.notasManager = (() => {
           <button class="chat-reminders-close" aria-label="Cerrar">&times;</button>
         </div>
         ${shown.map(n => `
-          <div class="chat-reminder-item">
+          <div class="chat-reminder-item" data-id="${n.id}" role="button" tabindex="0" aria-label="Editar recordatorio">
             <span class="chat-reminder-text">${_escHtml(n.texto)}</span>
             ${_dateBadge(n.fechaRecordatorio)}
           </div>
         `).join('')}
-        ${pending.length > 3 ? `<div class="chat-reminders-more">${pending.length - 3} más</div>` : ''}`;
+        ${pending.length > 3 ? `<div class="chat-reminders-more" role="button" tabindex="0">${pending.length - 3} más</div>` : ''}`;
 
       chatArea.prepend(banner);
+
+      // Tocar un recordatorio → Mis Notas con su edición abierta; "N más" → la lista
+      const _openNotas = (id) => {
+        _currentFilter = 'recordatorios';
+        _pendingEditId = id || null;
+        if (typeof showState === 'function') showState('notas');
+      };
+      banner.querySelectorAll('.chat-reminder-item').forEach(item => {
+        item.addEventListener('click', () => _openNotas(item.dataset.id));
+        item.addEventListener('keydown', (e) => { if (e.key === 'Enter') _openNotas(item.dataset.id); });
+      });
+      banner.querySelector('.chat-reminders-more')?.addEventListener('click', () => _openNotas(null));
 
       banner.querySelector('.chat-reminders-close').addEventListener('click', () => {
         banner.style.opacity = '0';
