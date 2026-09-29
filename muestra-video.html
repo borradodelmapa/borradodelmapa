@@ -87,14 +87,14 @@ function prepRoute(){const c=R.coords;cum=[0];for(let i=1;i<c.length;i++)cum.pus
 function posAt(km){km=clamp(km,0,R.total);let lo=0,hi=cum.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(cum[m]<=km)lo=m;else hi=m;}
   const f=cum[hi]===cum[lo]?0:(km-cum[lo])/(cum[hi]-cum[lo]);const a=R.coords[lo],b=R.coords[hi];return[lerp(a[0],b[0],f),lerp(a[1],b[1],f)];}
 function bearingOf(a,b){const r=Math.PI/180,y=Math.sin((b[0]-a[0])*r)*Math.cos(b[1]*r),x=Math.cos(a[1]*r)*Math.sin(b[1]*r)-Math.sin(a[1]*r)*Math.cos(b[1]*r)*Math.cos((b[0]-a[0])*r);return Math.atan2(y,x)/r;}
-const headingAt=(km,back=.15,ahead=.35)=>bearingOf(posAt(km-back),posAt(km+ahead));     // rumbo de la moto (curvas cerradas)
+const headingAt=(km,back=.3,ahead=.6)=>bearingOf(posAt(km-back),posAt(km+ahead));       // rumbo de la moto
 const camHeadingAt=km=>bearingOf(posAt(km-1),posAt(km+2.5));                             // rumbo de la cámara (suave)
 function angLerp(a,b,t){const d=((b-a+540)%360)-180;return a+d*t;}
 // zoom para ver 'km' kilómetros de ancho en la pantalla (360 px CSS)
 const zoomForKm=(km,lat)=>Math.log2(40075*Math.cos(lat*Math.PI/180)*360/(512*km));
 
 /* ── guion ── */
-const Z_NEAR_KM=.9,PITCH=64;
+const Z_NEAR_KM=1.1,PITCH=55; // v3: el mapa no gira (norte arriba); solo la moto gira
 function buildTimeline(){
   const segs=[];let t=0;const add=s=>{s.t0=t;t+=s.dur;segs.push(s);};
   add({k:'intro',dur:2.8});add({k:'bajar',dur:2.6});
@@ -110,14 +110,14 @@ let overview=null;
 function camAt(t){
   const s=TL.segs.find(x=>t<x.t0+x.dur)||TL.segs[TL.segs.length-1],lt=clamp((t-s.t0)/s.dur,0,1);
   const zN=km=>zoomForKm(Z_NEAR_KM,posAt(km)[1]);
-  if(s.k==='intro')return{c:overview.center,z:overview.zoom,b:0,p:10*eout(lt),km:0,veh:false,s,lt};
-  if(s.k==='bajar'){const e=ease(lt),c=posAt(0);return{c:[lerp(overview.center[0],c[0],e),lerp(overview.center[1],c[1],e)],z:lerp(overview.zoom,zN(0),e),b:angLerp(0,camHeadingAt(0),e),p:lerp(10,PITCH,e),km:0,veh:e>.55,s,lt};}
-  if(s.k==='parada'){const c=posAt(s.p.km);return{c,z:zN(s.p.km)+.15*eout(Math.min(1,lt*3)),b:camHeadingAt(s.p.km),p:PITCH,km:s.p.km,veh:true,s,lt};}
+  if(s.k==='intro')return{c:overview.center,z:overview.zoom,b:0,p:0,km:0,veh:false,s,lt};
+  if(s.k==='bajar'){const e=ease(lt),c=posAt(0);return{c:[lerp(overview.center[0],c[0],e),lerp(overview.center[1],c[1],e)],z:lerp(overview.zoom,zN(0),e),b:0,p:lerp(0,PITCH,e),km:0,veh:e>.55,s,lt};}
+  if(s.k==='parada'){const c=posAt(s.p.km);return{c,z:zN(s.p.km),b:0,p:PITCH,km:s.p.km,veh:true,s,lt};}
   if(s.k==='tramo'){const e=smooth(lt),km=lerp(s.a,s.b,e),len=Math.abs(s.b-s.a),c=posAt(km);
-    // dron: pegado a la moto al salir y al llegar; en tramos largos sube a mitad para ver hacia dónde va
-    const hump=Math.sin(Math.PI*lt),zFar=zoomForKm(clamp(len*.28,Z_NEAR_KM,40),c[1]),z=lerp(zN(km),Math.min(zN(km),zFar),hump);
-    return{c,z,b:camHeadingAt(km),p:lerp(PITCH,52,hump),km,veh:true,s,lt};}
-  const e=ease(Math.min(1,lt*1.3)),c=posAt(R.total);return{c:[lerp(c[0],overview.center[0],e),lerp(c[1],overview.center[1],e)],z:lerp(zN(R.total),overview.zoom,e),b:angLerp(camHeadingAt(R.total),0,e),p:lerp(PITCH,10,e),km:R.total,veh:e<.35,s,lt};
+    // solo en tramos largos la cámara sube un poco a mitad de camino, y muy suave (sin tirones)
+    const hump=len>15?smooth(Math.sin(Math.PI*lt)):0,zFar=zoomForKm(clamp(len*.2,Z_NEAR_KM,25),c[1]),z=lerp(zN(km),Math.min(zN(km),zFar),hump);
+    return{c,z,b:0,p:PITCH,km,veh:true,s,lt};}
+  const e=ease(Math.min(1,lt*1.3)),c=posAt(R.total);return{c:[lerp(c[0],overview.center[0],e),lerp(c[1],overview.center[1],e)],z:lerp(zN(R.total),overview.zoom,e),b:0,p:lerp(PITCH,0,e),km:R.total,veh:e<.35,s,lt};
 }
 
 /* ── MOTO 3D hecha en código (sin modelos de terceros): moto naranja de la marca con piloto ── */
@@ -175,11 +175,19 @@ function bubble(x,y,img,r){ // burbuja clavada: foto redonda, borde blanco y pic
   g.fillStyle='#fff';g.beginPath();g.moveTo(x-r*.35,y-r*1.75+r*.85);g.lineTo(x,y);g.lineTo(x+r*.35,y-r*1.75+r*.85);g.closePath();g.fill();
   g.beginPath();g.arc(x,y-r*1.75,r*1.13,0,7);g.fill();g.restore();roundImg(img,x,y-r*1.75,r);
 }
-function card(img,cx,cy,w,sc,rot,alpha){ // tarjeta grande con marco blanco (tipo polaroid)
-  if(sc<=.01)return;const h=w*1.12,pad=w*.045;g.save();g.globalAlpha*=alpha;g.translate(cx,cy);g.rotate(rot);g.scale(sc,sc);
+function card(img,cx,cy,w,sc,rot,alpha,stop){ // polaroid: foto + franja blanca con el logo de la marca y el pueblo y el día
+  if(sc<=.01)return;const h=w*1.2,pad=w*.045;g.save();g.globalAlpha*=alpha;g.translate(cx,cy);g.rotate(rot);g.scale(sc,sc);
   g.fillStyle='rgba(0,0,0,.35)';g.fillRect(-w/2+10,-h/2+14,w,h);g.fillStyle='#fff';g.fillRect(-w/2,-h/2,w,h);
   const iw=w-pad*2,ih=w-pad*2;g.save();g.beginPath();g.rect(-w/2+pad,-h/2+pad,iw,ih);g.clip();const k=Math.max(iw/img.width,ih/img.height);
-  g.drawImage(img,-w/2+pad+(iw-img.width*k)/2,-h/2+pad+(ih-img.height*k)/2,img.width*k,img.height*k);g.restore();g.restore();
+  g.drawImage(img,-w/2+pad+(iw-img.width*k)/2,-h/2+pad+(ih-img.height*k)/2,img.width*k,img.height*k);g.restore();
+  if(w>200){ // franja de abajo (solo cuando la tarjeta es grande)
+    const yb=-h/2+pad+ih+(h-pad-ih)/2,fs=w*.056;g.textBaseline='middle';
+    g.font=`800 ${fs}px "Barlow Condensed","Arial Narrow",sans-serif`;let x=-w/2+pad;
+    [['✦ BORRADO','#F4630B'],['DEL','#8E9194'],['MAPA','#F4630B']].forEach(([t,c])=>{g.fillStyle=c;g.fillText(t,x,yb);x+=g.measureText(t).width;});
+    if(stop){g.font=`700 ${w*.034}px "Barlow Condensed","Arial Narrow",sans-serif`;g.fillStyle='#5b5f63';g.textAlign='right';
+      g.fillText(`${stop.nombre.toUpperCase()} · DÍA ${stop.dia}`,w/2-pad,yb);g.textAlign='left';}
+  }
+  g.restore();
 }
 function chip(txt,x,y,size,align,dark){g.save();g.font=`800 ${size}px "Barlow Condensed","Arial Narrow",sans-serif`;const w=g.measureText(txt).width+size*.8,h=size*1.25;
   const x0=align==='center'?x-w/2:align==='right'?x-w:x;g.fillStyle=dark?'rgba(13,15,16,.88)':'#F4630B';g.fillRect(x0,y,w,h);g.fillStyle=dark?'#ECEBE8':'#0D0F10';g.textBaseline='middle';g.fillText(txt,x0+size*.4,y+h/2+1);g.restore();}
@@ -187,13 +195,16 @@ function drawOverlay(cam,t){
   g.clearRect(0,0,W,H);
   const P=ll=>{const q=map.project(ll);return[q.x*PR,q.y*PR];};
   // burbujas de lo ya visitado (grandes: 56 px de radio)
-  R.paradas.forEach((p,i)=>{if(p.km>cam.km+1e-6||(cam.s.k==='parada'&&cam.s.i===i))return;const ph=PH[i]&&PH[i][0];if(!ph)return;const[x,y]=P([p.lng,p.lat]);if(y<-50||y>H+200)return;bubble(x,y,ph,56);});
+  R.paradas.forEach((p,i)=>{if(p.km>cam.km+1e-6||(cam.s.k==='parada'&&cam.s.i===i))return;const ph=PH[i]&&PH[i][PH[i].length-1];if(!ph)return;const[x,y]=P([p.lng,p.lat]);if(y<-50||y>H+200)return;bubble(x,y,ph,56);});
   // en la parada: cada foto sale en grande (tarjeta casi a lo ancho), se ve y se encoge a su burbuja
-  if(cam.s.k==='parada'){const s=cam.s,ph=PH[s.i]||[],lt=cam.lt*s.dur,[px,py]=P([s.p.lng,s.p.lat]);
-    let shown=0;ph.forEach((im,k)=>{const a=.35+k*1.05,b=a+1.05,tt=(lt-a)/(b-a);if(lt<a)return;
-      if(tt<1){const inn=eback(clamp(tt/.28,0,1)),out=smooth(clamp((tt-.72)/.28,0,1));const cx=lerp(W/2,px,out),cy=lerp(H*.42,py-100,out),w=lerp(W*.8,112,out);
-        card(im,cx,cy,w,inn,lerp((k%2?1:-1)*.035,0,out),1);}else shown++;});
-    if(ph[0]&&(shown>0||lt>ph.length*1.05+.3))bubble(px,py,ph[0],56);}
+  if(cam.s.k==='parada'){const s=cam.s,ph=PH[s.i]||[],lt=cam.lt*s.dur,[px,py]=P([s.p.lng,s.p.lat]),n=ph.length;
+    ph.forEach((im,k)=>{const a=.35+k*1.05,b=a+1.05,tt=(lt-a)/(b-a);if(lt<a||tt>=1)return;const last=k===n-1;
+      const inn=eback(clamp(tt/.28,0,1)),out=smooth(clamp((tt-.72)/.28,0,1)),rot=(k%2?1:-1)*.035;
+      if(last){ // la última vuela a su sitio del mapa y se convierte en la burbuja
+        card(im,lerp(W/2,px,out),lerp(H*.42,py-100,out),lerp(W*.8,112,out),inn,lerp(rot,0,out),1,s.p);}
+      else{ // las demás salen hacia un lado, sin tocar el mapa
+        card(im,W/2-out*W*.9*(k%2?-1:1),H*.42,W*.8,inn,rot,1-out*.4,s.p);}});
+    if(ph[0]&&lt>.35+n*1.05)bubble(px,py,ph[n-1]||ph[0],56);}
   // rótulos
   if(cam.s.k==='intro'||cam.s.k==='bajar'){const a=cam.s.k==='intro'?eout(clamp(cam.lt*2,0,1)):1-eout(cam.lt);g.save();g.globalAlpha=a;
     const gr=g.createLinearGradient(0,H*.55,0,H);gr.addColorStop(0,'rgba(13,15,16,0)');gr.addColorStop(1,'rgba(13,15,16,.85)');g.fillStyle=gr;g.fillRect(0,H*.55,W,H*.45);
@@ -211,11 +222,13 @@ function drawOverlay(cam,t){
 /* ── aplicar un instante ── */
 let lastB=null;
 function frameAt(t,reset){
-  const cam=camAt(t);let b=cam.b;if(!reset&&lastB!=null)b=angLerp(lastB,b,.12);lastB=b; // giro de cámara suave
+  const cam=camAt(t);const b=cam.b;lastB=b;
   map.jumpTo({center:cam.c,zoom:cam.z,bearing:b,pitch:cam.p});
   const done=[];for(let i=0;i<R.coords.length&&cum[i]<=cam.km;i++)done.push(R.coords[i]);done.push(posAt(cam.km));
   map.getSource('hecha').setData({type:'Feature',geometry:{type:'LineString',coordinates:done.length>1?done:[done[0],done[0]]}});
-  moto.visible=cam.veh;moto.pos=cam.c;moto.heading=headingAt(cam.km);
+  // giro de la moto suavizado en el tiempo: como mucho sigue el 22 % del cambio por fotograma
+  const th=headingAt(cam.km);moto.heading=(reset||moto._h==null)?th:angLerp(moto._h,th,.22);moto._h=moto.heading;
+  moto.visible=cam.veh;moto.pos=cam.c;
   return cam;
 }
 const waitVisible=()=>document.hidden?new Promise(r=>{$('#note').textContent='En pausa: vuelve a esta pantalla para seguir';
@@ -280,7 +293,7 @@ const loadImg=u=>new Promise(r=>{const i=new Image();i.crossOrigin='anonymous';i
     const steps=Math.ceil(TL.total/.6);
     for(let k=0;k<=steps;k++){frameAt(Math.min(TL.total,k*.6),k===0);await waitIdle();$('#note').textContent=`Preparando el mapa ${Math.round(k/steps*100)} %`;$('#pbar').style.width=(k/steps*100)+'%';}
     T=0;const c0=frameAt(0,true);await waitIdle();drawOverlay(c0,0);$('#pbar').style.width='0%';
-    $('#play').disabled=false;$('#mp4').disabled=false;$('#note').textContent='Muestra v2 con tu ruta de Cantabria (261 km): relieve 3D, moto 3D, fotos de ejemplo.';
+    $('#play').disabled=false;$('#mp4').disabled=false;$('#note').textContent='Muestra v3 con tu ruta de Cantabria (261 km): mapa quieto, moto fluida, fotos de ejemplo.';
   });
   map.on('error',e=>{console.warn(e&&e.error);});
 })();
