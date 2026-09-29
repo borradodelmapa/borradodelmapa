@@ -57,7 +57,7 @@
 - [x] Vídeo ya montado al abrir; MP4 H.264 fotograma a fotograma (WebCodecs), 720p/1080p, vertical/horizontal
 - [x] 6 plantillas (`viaje-plantillas.js`): Reel, Aventura, Ruta, Película, Postal, Minimal, con miniatura animada
 - [x] Reel: vehículo por el mapa real (OSM), transporte por tramo automático, arcos de vuelo, km, banderas
-- [x] Importar traza GPX (fotos sin GPS a su sitio por la hora, moto por la carretera real) — solo página suelta, pendiente en la app
+- [x] Importar traza GPX (fotos sin GPS a su sitio por la hora, moto por la carretera real) — en VÍDEO › Cambiar estilo, una por guía
 - [x] Aviso flotante mientras se crea y al terminar, aunque salgas de la guía
 - [x] Álbum maquetado por días (vista en pantalla); PDF e impreso pendientes
 - [x] Fotos guardadas en el móvil (Cache Storage) para no volver a descargarlas
