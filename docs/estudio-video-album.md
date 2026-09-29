@@ -263,3 +263,14 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
 - PROYECTO: mapas sin internet dentro de nuestra app = otro proyecto (OSM no permite descargas masivas; opciones:
   Protomaps/PMTiles en R2 o proveedor con licencia offline; coste de almacenamiento, avisar §8).
 - Siguiente: importar GPX para el vídeo (la moto por tu traza real).
+
+### Importar traza GPX (29 sept 2026, subido) — Paco: "si"
+- Botón **📍 Traza GPX** junto a los de fotos. Lee `<trkpt>` (o `<rtept>`) con sus horas; se guarda en el móvil.
+- **Fotos sin GPS → a su sitio por la hora**, cruzándola con la traza. Ajuste de hora automático (−3 h…+3 h en medias
+  horas): gana el que mejor acierta las fotos con GPS o, si no hay, el que mete más fotos dentro de la traza (EXIF va
+  en hora del móvil y el GPX en hora universal). Orden de prioridad: GPS de la foto > traza > guía.
+- **Reel por la carretera real**: cada tramo sigue la traza entre sus dos paradas (si ambas están a <~2 km de ella);
+  km reales; la lista de tramos marca "(traza)". El mapa interactivo dibuja la traza completa.
+- **Nombres de sitio** para paradas sin nombre ("Parada N"): Nominatim (OpenStreetMap), gratis, 1 consulta/s,
+  guardadas en el móvil ('geo'). Sin red se reintenta más tarde.
+- Probado con una traza inventada Chaves→Faro (521 puntos, 9–10 sept) y 5 fotos reales sin GPS: las 5 colocadas, 494 km.

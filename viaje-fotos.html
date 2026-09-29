@@ -215,8 +215,10 @@ h1 em{font-style:normal;color:var(--gold)}
       <div class="picks">
         <label class="btn pickwrap">📷 Desde la Galería<input type="file" class="fileIn" data-src="Galería" accept="image/*" multiple></label>
         <label class="btn ghost pickwrap">📁 Desde Archivos<input type="file" class="fileIn" data-src="Archivos" accept="*/*" multiple></label>
+        <label class="btn ghost pickwrap">📍 Traza GPX<input type="file" id="gpxIn" accept=".gpx,application/gpx+xml,application/xml,text/xml,*/*"></label>
       </div>
       <div class="status" id="status" role="status"></div>
+      <div class="note" id="trackNote" hidden></div>
       <p id="srcNote">Ejemplo: Loop de Ha Giang y norte de Vietnam, 14 fotos dibujadas por ordenador. Con fotos reales la diferencia de nitidez se nota más.</p>
       <div class="stats" id="stats"></div>
       <button class="btn ghost" id="resetBtn" type="button" hidden>Empezar otro viaje</button>
@@ -397,7 +399,7 @@ function range(a,b){
   if(a.getMonth()===b.getMonth()&&a.getFullYear()===y)return a.getDate()===b.getDate()?`${a.getDate()} de ${fMonth.format(a)} de ${y}`:`${a.getDate()} – ${b.getDate()} de ${fMonth.format(b)} de ${y}`;
   return `${a.getDate()} de ${fMonth.format(a)} – ${b.getDate()} de ${fMonth.format(b)} de ${y}`;
 }
-function estTxt(p){return p.byGuide?'según tu guía':'ubicación estimada';}
+function estTxt(p){return p.byTrack?'según tu traza GPX':p.byGuide?'según tu guía':'ubicación estimada';}
 function coords(lat,lng){const f=v=>Math.abs(v).toFixed(2).replace('.',',');return `${f(lat)}° ${lat>=0?'N':'S'} · ${f(lng)}° ${lng>=0?'E':'O'}`;}
 const midnight=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
 const hm=d=>d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
@@ -926,7 +928,12 @@ function legMode(a,b,base){
 // Arco de vuelo: curva cuadrática que se abomba hacia arriba del mapa (como Travel Animator).
 function legCtrl(a,b,mode){if(mode!=='avion')return null;const dx=b.mx-a.mx,dy=b.my-a.my,L=Math.hypot(dx,dy);let px=-dy/L,py=dx/L;if(py>0){px=-px;py=-py;}
   return{mx:(a.mx+b.mx)/2+px*L*.22,my:(a.my+b.my)/2+py*L*.22};}
-function legPoint(a,b,c,e){if(!c)return{mx:lerp(a.mx,b.mx,e),my:lerp(a.my,b.my,e),ang:Math.atan2(b.my-a.my,b.mx-a.mx)};
+// Tramo por la traza GPX: g={pts:[{mx,my,km}], len}; se recorre por distancia.
+function legPoint(a,b,c,e,g){
+  if(g){const target=g.pts[0].km+e*g.len;let lo=0,hi=g.pts.length-1;while(hi-lo>1){const mid=(lo+hi)>>1;if(g.pts[mid].km<=target)lo=mid;else hi=mid;}
+    const p=g.pts[lo],q=g.pts[hi],f=q.km===p.km?0:(target-p.km)/(q.km-p.km);const ahead=g.pts[Math.min(g.pts.length-1,hi+3)],back=g.pts[Math.max(0,lo-3)];
+    return{mx:lerp(p.mx,q.mx,f),my:lerp(p.my,q.my,f),ang:Math.atan2(ahead.my-back.my,ahead.mx-back.mx)};}
+  if(!c)return{mx:lerp(a.mx,b.mx,e),my:lerp(a.my,b.my,e),ang:Math.atan2(b.my-a.my,b.mx-a.mx)};
   const q=1-e,mx=q*q*a.mx+2*q*e*c.mx+e*e*b.mx,my=q*q*a.my+2*q*e*c.my+e*e*b.my;
   const tx=2*q*(c.mx-a.mx)+2*e*(b.mx-c.mx),ty=2*q*(c.my-a.my)+2*e*(b.my-c.my);return{mx,my,ang:Math.atan2(ty,tx)};}
 // Dibuja los tramos hasta 'upto' (índice de parada con decimales). Vuelos en discontinua y curva; barco en punteado.
@@ -935,8 +942,9 @@ function drawLegs(ctx,W,H,v,TL,upto,u,o={}){
   ctx.save();ctx.lineJoin=ctx.lineCap='round';
   for(let i=1;i<RS.length;i++){
     if(i-1>=upto)break;const f=Math.min(1,upto-(i-1));const a=RS[i-1],b=RS[i],c=TL.ctrl[i],mode=TL.modes[i];
-    const pa=proj(v,W,H,a),steps=c?24:1;ctx.beginPath();ctx.moveTo(pa[0],pa[1]);
-    for(let k=1;k<=steps;k++){const p=legPoint(a,b,c,f*k/steps);const q=proj(v,W,H,p);ctx.lineTo(q[0],q[1]);}
+    const g=TL.geom&&TL.geom[i];const pa=proj(v,W,H,g?g.pts[0]:a);ctx.beginPath();ctx.moveTo(pa[0],pa[1]);
+    if(g){const lim=g.pts[0].km+f*g.len;for(const p of g.pts){if(p.km>lim)break;const q=proj(v,W,H,p);ctx.lineTo(q[0],q[1]);}const e2=legPoint(a,b,c,f,g),q2=proj(v,W,H,e2);ctx.lineTo(q2[0],q2[1]);}
+    else{const steps=c?24:1;for(let k=1;k<=steps;k++){const p=legPoint(a,b,c,f*k/steps);const q=proj(v,W,H,p);ctx.lineTo(q[0],q[1]);}}
     const dash=mode==='avion'?[18*u,14*u]:mode==='barco'?[4*u,12*u]:[];
     if(o.ghost){ctx.setLineDash(dash.length?dash:[14*u,12*u]);ctx.strokeStyle='rgba(236,235,232,.5)';ctx.lineWidth=4*u;ctx.stroke();continue;}
     ctx.setLineDash([]);ctx.strokeStyle=`rgba(${LOOK.rgb},.22)`;ctx.lineWidth=20*u;if(!dash.length)ctx.stroke();
@@ -949,7 +957,7 @@ function renderLegList(TL){
   if(!TL||!TL.RS||TL.RS.length<2){box.innerHTML='';return;}
   const RS=TL.RS;let h='<div class="hint">Cada tramo con su transporte (lo pongo solo; cámbialo si quieres):</div>';
   for(let i=1;i<RS.length;i++){const a=RS[i-1],b=RS[i],k=legKey(a,b);
-    h+=`<div class="lg"><span>${i}. ${esc0(labelOf(a))} → ${esc0(labelOf(b))} · ${nf(hav(a,b))} km</span><select data-k="${esc0(k)}" aria-label="Transporte del tramo ${i}">${Object.entries(MODES).map(([m,l])=>`<option value="${m}"${TL.modes[i]===m?' selected':''}>${l}</option>`).join('')}</select></div>`;}
+    h+=`<div class="lg"><span>${i}. ${esc0(labelOf(a))} → ${esc0(labelOf(b))} · ${nf(TL.geom&&TL.geom[i]?TL.geom[i].len:hav(a,b))} km${TL.geom&&TL.geom[i]?' (traza)':''}</span><select data-k="${esc0(k)}" aria-label="Transporte del tramo ${i}">${Object.entries(MODES).map(([m,l])=>`<option value="${m}"${TL.modes[i]===m?' selected':''}>${l}</option>`).join('')}</select></div>`;}
   box.innerHTML=h;
   box.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{LEGOVR[sel.dataset.k]=sel.value;rebuildVideo();});
 }
@@ -962,11 +970,14 @@ function reelStops(M){
 }
 function buildReel(M,TL){
   const{W,H,u}=TL,ms=maxS(W,H),vert=W<H;const RS=reelStops(M);TL.RS=RS;TL.vehicle=vehicle;
-  const cum=[0];for(let i=1;i<RS.length;i++)cum.push(cum[i-1]+hav(RS[i-1],RS[i]));TL.cum=cum;TL.kmTotal=cum[cum.length-1];
-  TL.modes=RS.map((s,i)=>i?(LEGOVR[legKey(RS[i-1],s)]||legMode(RS[i-1],s,vehicle)):null);TL.ctrl=RS.map((s,i)=>i?legCtrl(RS[i-1],s,TL.modes[i]):null);
+  // Con traza GPX, cada tramo sigue la traza real entre sus dos paradas (y los km son los de verdad)
+  TL.geom=RS.map((s,i)=>{if(!i||!TRACK)return null;const A=nearestTrackIdx(RS[i-1]),B=nearestTrackIdx(s);
+    const tol=0.02/360;if(A.d>tol||B.d>tol||B.i<=A.i+1)return null;const pts=TRACK.pts.slice(A.i,B.i+1);return{pts,len:pts[pts.length-1].km-pts[0].km};});
+  const cum=[0];for(let i=1;i<RS.length;i++)cum.push(cum[i-1]+(TL.geom[i]?TL.geom[i].len:hav(RS[i-1],RS[i])));TL.cum=cum;TL.kmTotal=cum[cum.length-1];
+  TL.modes=RS.map((s,i)=>i?(LEGOVR[legKey(RS[i-1],s)]||(TL.geom[i]?(vehicle==='avion'?'moto':vehicle):legMode(RS[i-1],s,vehicle))):null);TL.ctrl=RS.map((s,i)=>i&&!TL.geom[i]?legCtrl(RS[i-1],s,TL.modes[i]):null);
   const all=fitBox(RS,[W*.14,H*.24,W*.86,H*.78],W,H,ms*.22);
   const fin=fitBox(RS,vert?[W*.12,H*.13,W*.88,H*.55]:[W*.06,H*.12,W*.48,H*.88],W,H,ms*.22);
-  const legS=i=>i===0?clamp(all.s*3,all.s,ms*.28):clamp(fitBox([RS[i-1],RS[i]],[W*.2,H*.28,W*.8,H*.68],W,H,ms*.28).s,all.s*1.15,ms*.28);
+  const legS=i=>i===0?clamp(all.s*3,all.s,ms*.28):clamp(fitBox(TL.geom[i]?TL.geom[i].pts.filter((_,k,a)=>k%Math.max(1,Math.floor(a.length/40))===0).concat([RS[i-1],RS[i]]):[RS[i-1],RS[i]],[W*.2,H*.28,W*.8,H*.68],W,H,ms*.28).s,all.s*1.15,ms*.28);
   TL.countries=[...new Set(RS.map(s=>s.country).filter(Boolean))];TL.flags=TL.countries.map(c=>FLAG[c]||'').join(' ');
   const hero=M.photos.find(p=>p.land)||M.photos[0];TL.hero=hero;TL.hero2=[...M.photos].reverse().find(p=>p.land)||M.photos[M.photos.length-1];
   let t=0;const add=sg=>{sg.start=t;t+=sg.dur;TL.segs.push(sg);return sg;};
@@ -976,7 +987,7 @@ function buildReel(M,TL){
   RS.forEach((st,i)=>{
     if(i>0){const a=RS[i-1],b=st,s0=legS(i),dur=clamp(1.9+Math.log10(1+cum[i]-cum[i-1])*.55,2,3.4)*(R.tramo||1);
       const mode=TL.modes[i],c=TL.ctrl[i],hump=mode==='avion'?.4:.22;
-      add({type:'drive',dur,i,a,b,mode,c,view:lt=>{const e=ease(clamp(lt/(dur*.86),0,1));const s=s0*(1-hump*Math.sin(Math.PI*e));const p=legPoint(a,b,c,e);return{x:p.mx,y:p.my+H*.06/s,s,e,ang:p.ang,px:p};}});}
+      add({type:'drive',dur,i,a,b,mode,c,view:lt=>{const e=ease(clamp(lt/(dur*.86),0,1));const s=s0*(1-hump*Math.sin(Math.PI*e));const p=legPoint(a,b,c,e,TL.geom[i]);return{x:p.mx,y:p.my+H*.06/s,s,e,ang:p.ang,px:p};}});}
     const ph=[...st.photos].sort((p,q)=>(q.land?1:0)-(p.land?1:0)).slice(0,per).sort((p,q)=>p.date-q.date);
     ph.forEach((p,j)=>add({type:'flash',dur:R.foto||1.15,photo:p,stop:st,cut:j>0,kb:kbFor(n++)}));
   });
@@ -998,7 +1009,7 @@ Object.assign(SCENES,{
     const v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);
     drawLegs(ctx,W,H,v,TL,RS.length-1,u,{ghost:true});
     drawPins(ctx,W,H,v,RS,PAL.dark,u,{});drawLabels(ctx,W,H,v,RS,RS.length-1,u,0);
-    const[x,y]=proj(v,W,H,RS[0]);const st0=RS[1]?legPoint(RS[0],RS[1],TL.ctrl[1],0):{ang:0};drawVehicle(ctx,x,y,st0.ang,u,TL.modes[1]||TL.vehicle,lt);
+    const[x,y]=proj(v,W,H,RS[0]);const st0=RS[1]?legPoint(RS[0],RS[1],TL.ctrl[1],0,TL.geom[1]):{ang:0};drawVehicle(ctx,x,y,st0.ang,u,TL.modes[1]||TL.vehicle,lt);
     const a=eout(clamp(lt/.5,0,1));const top=(W<H?150:80)*u;
     if(TL.countries.length)hudChip(ctx,W/2,top,`${TL.flags}  ${TL.countries.join(' · ').toUpperCase()}`,u,{size:44,align:'center',alpha:a});
     hudChip(ctx,W/2,top+86*u,`SALIDA · ${labelOf(RS[0]).toUpperCase()}`,u,{size:28,align:'center',dark:true,alpha:eout(clamp((lt-.5)/.5,0,1))});
@@ -1024,7 +1035,7 @@ Object.assign(SCENES,{
   finale(ctx,W,H,sg,lt,TL,u){
     const p=clamp(lt/sg.dur,0,1),M=TL.M,vert=W<H,v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);
     drawLegs(ctx,W,H,v,TL,RS.length-1,u);drawPins(ctx,W,H,v,RS,PAL.dark,u,{});drawLabels(ctx,W,H,v,RS,RS.length-1,u,-1);
-    const[x,y]=proj(v,W,H,RS[RS.length-1]);const lm=TL.modes[RS.length-1]||TL.vehicle,le=RS.length>1?legPoint(RS[RS.length-2],RS[RS.length-1],TL.ctrl[RS.length-1],1).ang:0;drawVehicle(ctx,x,y,le,u,lm,lt);
+    const[x,y]=proj(v,W,H,RS[RS.length-1]);const lm=TL.modes[RS.length-1]||TL.vehicle,le=RS.length>1?legPoint(RS[RS.length-2],RS[RS.length-1],TL.ctrl[RS.length-1],.999,TL.geom[RS.length-1]).ang:0;drawVehicle(ctx,x,y,le,u,lm,lt);
     const k=eout(clamp((p-.1)/.45,0,1)),a=eout(clamp(p/.3,0,1));
     const stats=[[TL.kmTotal,'KM'],[M.days,M.days===1?'DÍA':'DÍAS'],[RS.length,'PARADAS'],[M.photos.length,'FOTOS']];
     ctx.save();ctx.globalAlpha*=a;ctx.fillStyle='rgba(13,15,16,.94)';if(vert)ctx.fillRect(0,H*.6,W,H*.4);else ctx.fillRect(W*.6,0,W*.4,H);ctx.restore();
@@ -1066,7 +1077,7 @@ let QUAL=720;segCtl('#qSeg',v=>{QUAL=+v;resetVideoOut();});
 
 /* miniaturas animadas de las plantillas: los primeros segundos de cada una con TUS fotos */
 const TH={tls:new Map(),t:.6,last:0,buf:document.createElement('canvas')};TH.buf.width=108;TH.buf.height=192;
-function thumbTL(id){const key=[M&&M.photos.length,M&&M.noMap,GUIDE&&GUIDE.id,vehicle,JSON.stringify(LEGOVR)].join('|');let x=TH.tls.get(id);
+function thumbTL(id){const key=[M&&M.photos.length,M&&M.noMap,GUIDE&&GUIDE.id,vehicle,JSON.stringify(LEGOVR),TRACK&&TRACK.km].join('|');let x=TH.tls.get(id);
   if(!x||x.M!==M||x.key!==key){x={M,key,TL:buildTimeline(M,id,'v')};TH.tls.set(id,x);}return x.TL;}
 function thumbLoop(now){
   requestAnimationFrame(thumbLoop);
@@ -1181,7 +1192,8 @@ function mapFit(){
   LM.invalidateSize();
   if(LLayer)LLayer.remove();LLayer=L.layerGroup().addTo(LM);
   const pts=M.stops.map(s=>[s.lat,s.lng]);
-  if(pts.length>1)L.polyline(pts,{color:'#F4630B',weight:4,opacity:.9}).addTo(LLayer);
+  if(TRACK)L.polyline(TRACK.pts.map(p=>[p.lat,p.lng]),{color:'#F4630B',weight:4,opacity:.9}).addTo(LLayer);
+  else if(pts.length>1)L.polyline(pts,{color:'#F4630B',weight:4,opacity:.9}).addTo(LLayer);
   M.stops.forEach((s,i)=>{
     const icon=L.divIcon({className:'',iconSize:[48,48],iconAnchor:[24,24],html:`<div class="phpin" style="background-image:url(${s.photos[0].pinUrl})"><b>${i+1}</b></div>`});
     L.marker([s.lat,s.lng],{icon,title:s.name}).addTo(LLayer).on('click',()=>openLB(M.photos.indexOf(s.photos[0])));
@@ -1274,19 +1286,90 @@ function placeByGuide(list,stops){
   return n;
 }
 
+/* ───────── traza GPX (Strava, Calimoto, Wikiloc, Garmin…) ───────── */
+let TRACK=null; // {name, pts:[{lat,lng,t,mx,my,km}], km, hasTime}
+function parseGpx(text){
+  const doc=new DOMParser().parseFromString(text,'application/xml');if(doc.querySelector('parsererror'))throw new Error('El archivo no es un GPX válido');
+  let nodes=[...doc.getElementsByTagName('trkpt')];if(!nodes.length)nodes=[...doc.getElementsByTagName('rtept')];if(!nodes.length)throw new Error('El GPX no trae ninguna traza');
+  let pts=nodes.map(n=>{const tt=n.getElementsByTagName('time')[0];const t=tt?Date.parse(tt.textContent):NaN;return{lat:+n.getAttribute('lat'),lng:+n.getAttribute('lon'),t:isFinite(t)?t:null};}).filter(p=>isFinite(p.lat)&&isFinite(p.lng));
+  if(pts.length>4000){const k=Math.ceil(pts.length/4000);pts=pts.filter((_,i)=>i%k===0||i===pts.length-1);}
+  let km=0;pts.forEach((p,i)=>{if(i)km+=hav(pts[i-1],p);p.km=km;[p.mx,p.my]=merc(p.lng,p.lat);});
+  const nm=doc.getElementsByTagName('name')[0];
+  return{name:nm?nm.textContent.trim():'',pts,km,hasTime:pts.filter(p=>p.t!=null).length>pts.length*.5};
+}
+function trackAt(t){ // posición en la traza a una hora (ms); null si queda fuera
+  const P=TRACK.pts.filter(p=>p.t!=null);if(!P.length)return null;
+  if(t<P[0].t-45*60e3||t>P[P.length-1].t+45*60e3)return null;
+  let lo=0,hi=P.length-1;while(hi-lo>1){const mid=(lo+hi)>>1;if(P[mid].t<=t)lo=mid;else hi=mid;}
+  const a=P[lo],b=P[hi];const f=b.t===a.t?0:clamp((t-a.t)/(b.t-a.t),0,1);return{lat:lerp(a.lat,b.lat,f),lng:lerp(a.lng,b.lng,f)};
+}
+// La hora de la foto (la del móvil, sin zona) y la del GPX (universal) pueden no cuadrar: pruebo desfases de -3 h a +3 h
+// y me quedo con el que mejor acierta las fotos que sí traen GPS; si no hay ninguna, el que mete más fotos dentro de la traza.
+function bestOffset(list){
+  const withG=list.filter(p=>p.gLat!=null),T=TRACK.pts.filter(p=>p.t!=null);if(!T.length)return 0;
+  let best=0,bestScore=-Infinity;
+  for(let h=-3;h<=3;h+=.5){const off=h*3600e3;let sc=0;
+    if(withG.length){withG.forEach(p=>{const q=trackAt(+p.date+off);sc+=q?-Math.min(50,hav(q,{lat:p.gLat,lng:p.gLng})):-60;});}
+    else list.forEach(p=>{const t=+p.date+off;if(t>=T[0].t&&t<=T[T.length-1].t)sc+=1;});
+    sc-=Math.abs(h)*.01;if(sc>bestScore){bestScore=sc;best=off;}}
+  return best;
+}
+function placeByTrack(list){
+  if(!TRACK||!TRACK.hasTime)return 0;const off=bestOffset(list);TRACK.offset=off;let n=0;
+  list.forEach(p=>{if(p.lat!=null)return;const q=trackAt(+p.date+off);if(q){p.lat=q.lat;p.lng=q.lng;p.byTrack=true;p.est=true;n++;}});
+  return n;
+}
+function trackKmFor(m){if(!TRACK||!m.stops.length)return 0;const a=nearestTrackIdx(m.stops[0]).i,b=nearestTrackIdx(m.stops[m.stops.length-1]).i;return Math.abs(TRACK.pts[Math.max(a,b)].km-TRACK.pts[Math.min(a,b)].km);}
+function nearestTrackIdx(p){let bi=0,bd=Infinity;TRACK.pts.forEach((q,i)=>{const d=(q.mx-p.mx)**2+(q.my-p.my)**2;if(d<bd){bd=d;bi=i;}});return{i:bi,d:Math.sqrt(bd)};}
+$('#gpxIn').addEventListener('change',async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;const tn=$('#trackNote');
+  try{TRACK=parseGpx(await f.text());tn.hidden=false;
+    tn.textContent=`Traza «${TRACK.name||f.name}»: ${nf(TRACK.km)} km${TRACK.hasTime?'':' (sin horas: la uso para el recorrido, no para colocar fotos)'}.`;
+    saveTrack();await applyPool();
+  }catch(err){tn.hidden=false;tn.className='note warn';tn.textContent='No se pudo leer la traza: '+(err.message||err);}
+});
+async function saveTrack(){try{await IDB.set('track',TRACK?{name:TRACK.name,pts:TRACK.pts.map(p=>[p.lat,p.lng,p.t])}:null);}catch(_){}}
+async function restoreTrack(){try{const t=await IDB.get('track');if(!t||!t.pts)return;let km=0;const pts=t.pts.map(([lat,lng,tt],i,a)=>{const p={lat,lng,t:tt};return p;});
+  pts.forEach((p,i)=>{if(i)km+=hav(pts[i-1],p);p.km=km;[p.mx,p.my]=merc(p.lng,p.lat);});
+  TRACK={name:t.name,pts,km,hasTime:pts.filter(p=>p.t!=null).length>pts.length*.5};$('#trackNote').hidden=false;$('#trackNote').textContent=`Traza «${TRACK.name||'GPX'}»: ${nf(km)} km.`;}catch(_){}}
+
+/* nombres de sitio: Nominatim (OpenStreetMap, gratis). Una consulta por parada sin nombre, 1 por segundo como pide
+   su política de uso, y guardadas en el móvil para no repetirlas. */
+const GEO={};let geoBusy=false;
+async function nameStops(m){
+  if(!m||m.noMap||geoBusy)return;
+  try{Object.assign(GEO,(await IDB.get('geo'))||{});}catch(_){}
+  const todo=m.stops.filter(s=>/^Parada \d/.test(s.name||'')&&s.lat!=null);if(!todo.length)return;
+  geoBusy=true;let changed=0;
+  for(const s of todo){
+    const k=s.lat.toFixed(3)+','+s.lng.toFixed(3);
+    if(GEO[k]===undefined){
+      try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=12&accept-language=es&lat=${s.lat.toFixed(5)}&lon=${s.lng.toFixed(5)}`);
+        if(r.ok){const j=await r.json();const a=(j&&j.address)||{};GEO[k]=a.village||a.town||a.city||a.municipality||a.hamlet||a.county||null;}}catch(_){/* sin red: se reintenta otro día */}
+      await new Promise(r=>setTimeout(r,1100));
+    }
+    if(GEO[k]&&M===m){s.name=GEO[k];s.photos.forEach(p=>p.place=GEO[k]);changed++;}
+  }
+  geoBusy=false;try{await IDB.set('geo',GEO);}catch(_){}
+  if(changed&&M===m&&!encoding){renderStats();mapFit();rebuildVideo();await buildAlbum();}
+}
+
 async function applyPool(msgExtra){
   const note=$('#srcNote');
   if(!POOL.length){SAMPLE_ON=true;$('#resetBtn').hidden=true;note.className='note';note.textContent='Ejemplo: Loop de Ha Giang y norte de Vietnam, fotos dibujadas por ordenador.';await useModel(await loadSample());return;}
-  POOL.forEach(p=>{p.lat=p.gLat;p.lng=p.gLng;p.est=false;p.byGuide=false;p.place=null;delete p.stop;});
+  POOL.forEach(p=>{p.lat=p.gLat;p.lng=p.gLng;p.est=false;p.byGuide=false;p.byTrack=false;p.place=null;delete p.stop;});
   const{main,aside}=splitTrips(POOL);
   main.sort((a,b)=>a.date-b.date);
+  const byTrack=placeByTrack(main);
   let placed=0;if(GUIDE&&GUIDE.stops)placed=placeByGuide(main,GUIDE.stops);
   const meta=GUIDE?{title:(GUIDE.title||'').toUpperCase()||undefined}:{};
   const m=buildModel(main.slice(),meta);
+  if(TRACK&&!m.noMap)m.km=Math.max(m.km,trackKmFor(m));
   if(M&&SAMPLE_ON)M.photos.forEach(p=>{try{URL.revokeObjectURL(p.url);}catch(_){}});
   SAMPLE_ON=false;$('#resetBtn').hidden=false;
   const bits=[`Tu viaje: ${main.length} fotos.`];
   if(aside.length)bits.push(`He apartado ${aside.length} de otras fechas (${[...new Set(aside.map(p=>short(p.date)))].join(', ')}): no parecen de este viaje.`);
+  if(byTrack)bits.push(`${byTrack} colocadas en su sitio con tu traza GPX${TRACK.offset?` (ajuste de hora: ${TRACK.offset>0?'+':''}${TRACK.offset/3600e3} h)`:''}.`);
   if(placed)bits.push(`${placed} sin GPS colocadas en las paradas de tu guía.`);
   else if(m.noMap)bits.push('No traen ubicación (Android la quita desde la web): van ordenadas por días. Elige tu guía para ponerlas en el mapa.');
   else if(m.est)bits.push(`${m.est} sin GPS, colocadas entre la anterior y la siguiente.`);
@@ -1295,6 +1378,7 @@ async function applyPool(msgExtra){
   note.className='note';note.textContent=bits.join(' ');
   await useModel(m);
   saveTrip();
+  nameStops(m);
 }
 
 document.querySelectorAll('.fileIn').forEach(inp=>inp.addEventListener('change',async e=>{
@@ -1317,7 +1401,7 @@ document.querySelectorAll('.fileIn').forEach(inp=>inp.addEventListener('change',
 
 $('#resetBtn').onclick=async()=>{
   if(!confirm('¿Quitar las fotos de este viaje de la página? (No se borra nada de tu galería ni de tus guías.)'))return;
-  POOL=[];GUIDE=null;$('#guideSel').value='';$('#guideNote').textContent='';$('#appPhotosBtn').hidden=true;$('#saveGuideBtn').hidden=true;$('#diag').hidden=true;
+  POOL=[];GUIDE=null;TRACK=null;saveTrack();$('#trackNote').hidden=true;$('#guideSel').value='';$('#guideNote').textContent='';$('#appPhotosBtn').hidden=true;$('#saveGuideBtn').hidden=true;$('#diag').hidden=true;
   try{await IDB.del('trip');}catch(_){}
   await applyPool();
 };
@@ -1455,6 +1539,7 @@ let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>
   initWorld();
   try{await Promise.all(['800 40px "Barlow Condensed"','700 40px "Barlow Condensed"','600 20px Inter','500 20px Inter','italic 400 30px Newsreader'].map(f=>document.fonts.load(f)));}catch(_){}
   initAccount();
+  await restoreTrack();
   if(await restoreTrip()){await applyPool('Recuperado de este móvil.');}
   else await useModel(await loadSample());
 })();
