@@ -1350,8 +1350,9 @@ $('#gpxIn').addEventListener('change',async e=>{
     saveTrack();await applyPool();
   }catch(err){tn.hidden=false;tn.className='note warn';tn.textContent='No se pudo leer la traza: '+(err.message||err);}
 });
-async function saveTrack(){try{await IDB.set('track',TRACK?{name:TRACK.name,pts:TRACK.pts.map(p=>[p.lat,p.lng,p.t])}:null);}catch(_){}}
-async function restoreTrack(){try{const t=await IDB.get('track');if(!t||!t.pts)return;let km=0;const pts=t.pts.map(([lat,lng,tt],i,a)=>{const p={lat,lng,t:tt};return p;});
+const TRACK_KEY=()=>window.EMB?'track-'+window.EMB_GUIA:'track'; // modo app: una traza por guía
+async function saveTrack(){try{await IDB.set(TRACK_KEY(),TRACK?{name:TRACK.name,pts:TRACK.pts.map(p=>[p.lat,p.lng,p.t])}:null);}catch(_){}}
+async function restoreTrack(){try{const t=await IDB.get(TRACK_KEY());if(!t||!t.pts)return;let km=0;const pts=t.pts.map(([lat,lng,tt],i,a)=>{const p={lat,lng,t:tt};return p;});
   pts.forEach((p,i)=>{if(i)km+=hav(pts[i-1],p);p.km=km;[p.mx,p.my]=merc(p.lng,p.lat);});
   TRACK={name:t.name,pts,km,hasTime:pts.filter(p=>p.t!=null).length>pts.length*.5};$('#trackNote').hidden=false;$('#trackNote').textContent=`Traza «${TRACK.name||'GPX'}»: ${nf(km)} km.`;}catch(_){}}
 
@@ -1578,6 +1579,14 @@ function embSetup(){
   const t=document.createElement('button');t.type='button';t.className='emb-toggle';t.innerHTML='<span>Cambiar estilo</span><span>▾</span>';
   t.onclick=()=>{const o=ctr.classList.toggle('emb-open');t.lastChild.textContent=o?'▴':'▾';};
   r.after(t);
+  // Traza GPX (moteros/senderistas): la moto va por tu traza real y las fotos sin GPS se colocan por la hora
+  const gf=document.createElement('div');gf.className='field emb-opt';
+  gf.innerHTML='<span>Tu traza GPX (opcional)</span><div class="note">De Strava, Wikiloc, Calimoto, Garmin… El vehículo irá por tu recorrido real y las fotos sin ubicación se colocan por la hora.</div>';
+  const gl=document.querySelector('#gpxIn').parentElement;gl.firstChild.textContent='Importar traza GPX';const tnote=$('#trackNote');gf.appendChild(gl);gf.appendChild(tnote);
+  const gx=document.createElement('button');gx.type='button';gx.className='btn ghost';gx.id='gpxOff';gx.textContent='Quitar la traza';gx.hidden=true;gf.appendChild(gx);
+  gx.onclick=async()=>{TRACK=null;await saveTrack();tnote.hidden=true;gx.hidden=true;if(POOL.length)await applyPool();};
+  new MutationObserver(()=>{gx.hidden=!TRACK;}).observe(tnote,{attributes:true,childList:true,characterData:true,subtree:true});
+  ctr.appendChild(gf);
   window.addEventListener('message',e=>{
     if(e.origin!==location.origin||!e.data||e.data.type!=='bdm-host')return;
     if(e.data.tab){embTab=e.data.tab;if(POOL.length)showTab(embTab);}
@@ -1620,6 +1629,7 @@ async function embLoad(){
         const lat=x.lat!=null&&isFinite(x.lat)&&Math.abs(x.lat)>.01?+x.lat:null,lng=lat!=null?+x.lng:null;
         const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob});next.push(p);}catch(e){console.warn('[viaje-fotos] foto',e);}}
     busy.hidden=true;embCacheTrim();
+    if(!TRACK)await restoreTrack();
     POOL=next;
     if(!POOL.length){embEmpty('No se pudieron traer las fotos. Revisa la conexión y vuelve a entrar.');return;}
     await applyPool();
