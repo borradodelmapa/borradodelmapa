@@ -30,6 +30,7 @@ else location.replace('/?go=rutas');</script>
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+.stage-load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(13,15,16,.72);color:#ECEBE8;font:700 18px/1.2 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;text-align:center;padding:12px}
 #vehSeg button{display:inline-flex;align-items:center;gap:6px}
 #vehSeg button svg{flex:none}
 /* modo app: solo el vídeo o el álbum de la guía */
@@ -888,7 +889,7 @@ const tkey=(z,x,y)=>z+'/'+x+'/'+y;
 // móvil ('bdm-tiles'): la segunda vez el mapa sale al instante y sin gastar datos.
 const isBmp=t=>typeof ImageBitmap!=='undefined'&&t instanceof ImageBitmap;
 async function tintTile(bm){const c=document.createElement('canvas');c.width=bm.width;c.height=bm.height;const g=c.getContext('2d');g.drawImage(bm,0,0);
-  g.globalCompositeOperation='saturation';g.fillStyle='rgba(128,128,128,.7)';g.fillRect(0,0,c.width,c.height);g.globalCompositeOperation='source-over';g.fillStyle='rgba(13,15,16,.40)';g.fillRect(0,0,c.width,c.height);
+  // 30 sept 2026: colores naturales (antes se desaturaba y oscurecía: de lejos parecía una foto de satélite)
   if(bm.close)bm.close();return createImageBitmap(c);}
 async function fetchTile(z,x,y){const url=TILE_URL(z,x,y);let r=null,cache=null;
   try{cache=await caches.open('bdm-tiles');r=await cache.match(url);}catch(_){}
@@ -923,7 +924,8 @@ function rr(ctx,x,y,w,h,r,fill){ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x
 // Vehículo visto desde arriba, apuntando a +x; se gira con el rumbo del tramo.
 function drawVehicle(ctx,x,y,ang,u,kind,t,lift=1){
   ctx.save();ctx.translate(x,y);
-  const K=1.6;const pr=(t*1.3)%1;ctx.beginPath();ctx.arc(0,0,(26+pr*34)*u*K,0,7);ctx.strokeStyle=`rgba(${LOOK.rgb},${(1-pr)*.75})`;ctx.lineWidth=3*u;ctx.stroke();
+  const K=2.5;const pr=(t*1.3)%1;
+  ctx.save();ctx.translate(6*u,9*u);ctx.beginPath();ctx.ellipse(0,0,30*u*K,13*u*K,ang,0,7);ctx.fillStyle='rgba(0,0,0,.28)';ctx.fill();ctx.restore(); // sombractx.beginPath();ctx.arc(0,0,(26+pr*34)*u*K,0,7);ctx.strokeStyle=`rgba(${LOOK.rgb},${(1-pr)*.75})`;ctx.lineWidth=3*u;ctx.stroke();
   ctx.beginPath();ctx.arc(0,0,24*u*K,0,7);ctx.fillStyle='rgba(13,15,16,.55)';ctx.fill();
   ctx.rotate(ang);
   const S=u*1.35*K*lift;ctx.scale(S,S);const O=LOOK.acento,D='#15181a',C='#ECEBE8';
@@ -1062,6 +1064,9 @@ function buildReel(M,TL){
   const fitPts=GT&&GT.fromGuide?RS.concat(GT.pts.filter((_,k,a)=>k%Math.max(1,Math.floor(a.length/80))===0)):RS;
   const all=fitBox(fitPts,[W*.14,H*.24,W*.86,H*.78],W,H,ms*.22);
   const fin=fitBox(fitPts,vert?[W*.12,H*.13,W*.88,H*.55]:[W*.06,H*.12,W*.48,H*.88],W,H,ms*.22);
+  // Escala para ver 'km' kilómetros de ancho alrededor de un punto (1 unidad del mapa = 40.075 km·cos(lat))
+  const sKm=(p,km)=>W*40075*Math.cos(clamp(p.lat||0,-80,80)*Math.PI/180)/km;
+  const CLOSE_KM=12;
   const legS=i=>i===0?clamp(all.s*3,all.s,ms*.28):clamp(fitBox(TL.geom[i]?TL.geom[i].pts.filter((_,k,a)=>k%Math.max(1,Math.floor(a.length/40))===0).concat([RS[i-1],RS[i]]):[RS[i-1],RS[i]],[W*.2,H*.28,W*.8,H*.68],W,H,ms*1.8).s,all.s*1.15,ms*1.8);
   TL.countries=[...new Set(RS.map(s=>s.country).filter(Boolean))];TL.flags=TL.countries.map(c=>FLAG[c]||'').join(' ');
   const hero=M.photos.find(p=>p.land)||M.photos[0];TL.hero=hero;TL.hero2=[...M.photos].reverse().find(p=>p.land)||M.photos[M.photos.length-1];
@@ -1073,13 +1078,18 @@ function buildReel(M,TL){
   const allP=RS.flatMap(s=>s.photos||[]),half=Math.floor(allP.length/2),pick=a=>a.find(p=>p.land)||a[0];
   const stars=new Set([pick(allP.slice(0,Math.max(1,half))),allP.length>2?pick(allP.slice(half)):null].filter(Boolean));
   RS.forEach((st,i)=>{
-    if(i>0){const a=RS[i-1],b=st,s0=legS(i),dur=clamp(1.9+Math.log10(1+cum[i]-cum[i-1])*.55,2,3.4)*(R.tramo||1);
-      const mode=TL.modes[i],c=TL.ctrl[i],hump=mode==='avion'?.4:.22;
-      add({type:'drive',dur,i,a,b,mode,c,view:lt=>{const e=ease(clamp(lt/(dur*.86),0,1));const s=s0*(1-hump*Math.sin(Math.PI*e));const p=legPoint(a,b,c,e,TL.geom[i]);return{x:p.mx,y:p.my+H*.06/s,s,e,ang:p.ang,px:p};}});}
+    if(i>0){const a=RS[i-1],b=st,legKm=cum[i]-cum[i-1],dur=clamp(1.9+Math.log10(1+legKm)*.55,2,3.4)*(R.tramo||1);
+      const mode=TL.modes[i],c=TL.ctrl[i];
+      // Pegada al vehículo (30 sept 2026, Paco: "tiene que estar muchísimo más cerca"): empieza y acaba a ~12 km de ancho;
+      // si el tramo es largo, a mitad se aleja lo justo para que se vea hacia dónde va (máx. la mitad del tramo)
+      const sA0=sKm(a,CLOSE_KM),sB0=sKm(b,CLOSE_KM),sMid=Math.min(sA0,sKm(a,Math.max(CLOSE_KM,legKm*(mode==='avion'?.9:.45))));
+      add({type:'drive',dur,i,a,b,mode,c,view:lt=>{const e=ease(clamp(lt/(dur*.86),0,1));const hump=Math.sin(Math.PI*e);
+        const sEnd=sA0+(sB0-sA0)*e,s=Math.exp(Math.log(sEnd)+(Math.log(sMid)-Math.log(sEnd))*hump);
+        const p=legPoint(a,b,c,e,TL.geom[i]);return{x:p.mx,y:p.my+H*.06/s,s,e,ang:p.ang,px:p};}});}
     // Llegada: la cámara se queda en la parada y salen sus fotos en burbujas (antes: cada foto cortaba a pantalla completa)
-    const sA=Math.min(ms*3,(i===0?clamp(all.s*3,all.s,ms*1.8):legS(i))*1.5),nb=Math.min(3,st.photos.length);
-    const sFrom=i===0?all.s*1.02:legS(i); // donde acabó la cámara: se acerca suave, sin salto
-    add({type:'arrive',dur:1.25+.35*nb,i,stop:st,view:lt=>{const s2=sFrom+(sA-sFrom)*ease(clamp(lt/.6,0,1));return{x:st.mx,y:st.my+H*.06/s2,s:s2};}});
+    const sA=sKm(st,CLOSE_KM),nb=Math.min(3,st.photos.length);
+    const sFrom=i===0?all.s*1.02:sA; // donde acabó la cámara: sin salto
+    add({type:'arrive',dur:(i===0?1.8:1.25)+.35*nb,i,stop:st,view:lt=>{const s2=Math.exp(Math.log(sFrom)+(Math.log(sA)-Math.log(sFrom))*ease(clamp(lt/(i===0?1.2:.6),0,1)));return{x:st.mx,y:st.my+H*.06/s2,s:s2};}});
     // Pantalla completa solo para las fotos destacadas del viaje
     [...st.photos].filter(p=>stars.has(p)).forEach((p,j)=>add({type:'flash',dur:(R.foto||1.15)*1.25,photo:p,stop:st,cut:j>0,kb:kbFor(n++)}));
   });
@@ -1175,7 +1185,15 @@ function syncStyleButtons(){
   $('#tplNote').textContent=nm&&tpl.secuencia!=='capitulos'?`Tus fotos no tienen ubicación: «${tpl.nombre}» sale sin mapa (por días). Elige tu guía para ver el mapa.`:'';
   document.querySelectorAll('#styleSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v===style)));
 }
-function rebuildVideo(){syncStyleButtons();setPlaying(false);resetVideoOut();TL=buildTimeline(M,style,fmt);renderLegList(TL.style==='reel'?TL:null);T=Math.min(3,TL.total);sizePreview();drawPreview();$('#encOut').hidden=true;$('#encSpec').innerHTML='';$('#encNote').textContent='';drawCompare();}
+let prevTilesFor=null;
+async function previewTiles(){
+  const tl=TL;if(!tl||tl.style!=='reel'||prevTilesFor===tl)return;
+  const st=$('#stage');let ov=$('#stageLoad');if(!ov){ov=document.createElement('div');ov.id='stageLoad';ov.className='stage-load';st.style.position='relative';st.appendChild(ov);}
+  ov.hidden=false;ov.textContent='Preparando el mapa…';$('#playBtn').disabled=true;
+  try{await prefetchTiles(tl,(d,t)=>{if(TL===tl)ov.textContent='Preparando el mapa '+Math.round(d/t*100)+' %';});}catch(_){}
+  if(TL!==tl)return;prevTilesFor=tl;ov.hidden=true;$('#playBtn').disabled=false;drawPreview();
+}
+function rebuildVideo(){syncStyleButtons();setPlaying(false);resetVideoOut();TL=buildTimeline(M,style,fmt);renderLegList(TL.style==='reel'?TL:null);T=Math.min(3,TL.total);sizePreview();drawPreview();previewTiles();$('#encOut').hidden=true;$('#encSpec').innerHTML='';$('#encNote').textContent='';drawCompare();}
 $('#playBtn').onclick=()=>setPlaying(!playing);
 $('#scrub').oninput=e=>{setPlaying(false);T=e.target.value/1000*TL.total;drawPreview();};
 function segCtl(id,cb){const box=$(id);box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset.v);});}
