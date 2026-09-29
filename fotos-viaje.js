@@ -43,17 +43,25 @@ const fotosViaje = (() => {
     tabs.hidden = true; // hasta confirmar que la guía es tuya
     tabs.innerHTML = `
       <button type="button" class="fv-tab" role="tab" data-tab="ruta" aria-selected="true">Ruta</button>
-      <button type="button" class="fv-tab" role="tab" data-tab="fotos" aria-selected="false">Fotos <span class="fv-count" id="fv-count"></span></button>`;
+      <button type="button" class="fv-tab" role="tab" data-tab="fotos" aria-selected="false">Fotos <span class="fv-count" id="fv-count"></span></button>
+      <button type="button" class="fv-tab" role="tab" data-tab="vid" aria-selected="false">Vídeo</button>
+      <button type="button" class="fv-tab" role="tab" data-tab="alb" aria-selected="false">Álbum</button>`;
 
     const fotos = document.createElement('div');
     fotos.className = 'fv-pane fv-pane-fotos';
     fotos.hidden = true;
 
+    // VÍDEO y ÁLBUM: hueco donde se coloca encima el visor del motor (viaje-fotos.html en modo app)
+    const media = document.createElement('div');
+    media.className = 'fv-pane fv-pane-media';
+    media.hidden = true;
+
     container.appendChild(tabs);
     container.appendChild(ruta);
     container.appendChild(fotos);
+    container.appendChild(media);
 
-    _st = { container, tabs, ruta, fotos, docId, routeData, photos: null, tab: 'ruta', busy: false, uid: u.uid };
+    _st = { container, tabs, ruta, fotos, media, docId, routeData, photos: null, tab: 'ruta', busy: false, uid: u.uid };
     tabs.addEventListener('click', e => { const b = e.target.closest('.fv-tab'); if (b) _show(b.dataset.tab); });
     // Tocar una parada en el mapa lleva a su tarjeta: volver a RUTA para que se vea
     document.addEventListener('itin:marker-click', _onMarker);
@@ -64,6 +72,9 @@ const fotosViaje = (() => {
       if (!own) { unmount(true); return; }
       tabs.hidden = false;
       _load().catch(() => {});
+      // Venimos del aviso "Tu vídeo está listo": abrir directamente su pestaña
+      if (window._fvOpenTab && window._fvOpenTab.guia === docId) { const t = window._fvOpenTab.tab; window._fvOpenTab = null; _show(t); }
+      _pillPaint();
     });
   }
 
@@ -81,11 +92,21 @@ const fotosViaje = (() => {
     const s = _st; _st = null;
     document.removeEventListener('itin:marker-click', _onMarker);
     _mapSmall(false);
+    _mapNone(false);
     if (keepRuta && s.ruta && s.container.isConnected) {
       while (s.ruta.firstChild) s.container.insertBefore(s.ruta.firstChild, s.tabs);
-      s.tabs.remove(); s.ruta.remove(); s.fotos.remove();
+      s.tabs.remove(); s.ruta.remove(); s.fotos.remove(); s.media.remove();
     }
+    if (s.container) s.container.classList.remove('fv-media-on');
     _closeViewer();
+    _mediaDetach();
+  }
+
+  function _mapNone(on) {
+    const v = document.getElementById('itin-view'); if (!v) return;
+    if (v.classList.contains('fv-map-none') === on) return;
+    v.classList.toggle('fv-map-none', on);
+    setTimeout(() => { try { if (typeof mapaRuta !== 'undefined' && mapaRuta.invalidateSize) mapaRuta.invalidateSize(); } catch (_) {} }, 260);
   }
 
   function _mapSmall(on) {
@@ -103,13 +124,118 @@ const fotosViaje = (() => {
     _st.tabs.querySelectorAll('.fv-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
     _st.ruta.hidden = tab !== 'ruta';
     _st.fotos.hidden = tab !== 'fotos';
-    // En el móvil, con FOTOS el mapa se encoge para dejar sitio a las fotos
-    _mapSmall(tab !== 'ruta');
+    const isMedia = tab === 'vid' || tab === 'alb';
+    _st.media.hidden = !isMedia;
+    _st.container.classList.toggle('fv-media-on', isMedia);
+    // En el móvil, con FOTOS el mapa se encoge; con VÍDEO y ÁLBUM se quita (necesitan la pantalla)
+    _mapSmall(tab === 'fotos');
+    _mapNone(isMedia);
     if (tab === 'fotos') {
       if (!_st.photos) _st.fotos.innerHTML = '<p class="fv-note fv-pad">Cargando tus fotos…</p>';
       else _paint();
     }
+    if (isMedia) _mediaShow(tab); else _mediaHide();
     try { _st.container.scrollTop = 0; } catch (_) {}
+  }
+
+  /* ── VÍDEO y ÁLBUM ──
+     El motor es viaje-fotos.html en modo app (?embed=1&guia=<id>), dentro de un iframe que vive
+     en el <body> (fijo, colocado encima del hueco .fv-pane-media). Así se puede salir de la
+     guía mientras se crea el vídeo sin cortarlo (mover un iframe en el DOM lo recarga). */
+  const MED = { frame: null, holder: null, guia: null, encoding: false, hasVideo: false, pill: '', done: false, ro: null };
+
+  // v=: subirlo al cambiar viaje-fotos.html (si no, el móvil puede usar una copia vieja)
+  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=3&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
+
+  function _mediaShow(tab) {
+    const s = _st; if (!s) return;
+    // Otro viaje creando su vídeo: no se corta
+    if (MED.frame && MED.guia !== s.docId && MED.encoding) {
+      s.media.innerHTML = `<div class="fv-empty fv-pad"><b>Se está creando otro vídeo</b><p>${esc(MED.pill || '')}</p><p class="fv-note">Cuando termine podrás hacer el de este viaje.</p></div>`;
+      return;
+    }
+    s.media.innerHTML = '';
+    if (!MED.frame || MED.guia !== s.docId) {
+      if (MED.frame) _mediaDestroy();
+      MED.holder = document.createElement('div');
+      MED.holder.className = 'fv-media-holder';
+      MED.frame = document.createElement('iframe');
+      MED.frame.className = 'fv-media-frame';
+      MED.frame.title = 'Vídeo y álbum del viaje';
+      MED.frame.setAttribute('allow', 'fullscreen; web-share; screen-wake-lock');
+      MED.frame.src = _mediaURL(s.docId, tab);
+      MED.holder.appendChild(MED.frame);
+      document.body.appendChild(MED.holder);
+      MED.guia = s.docId; MED.encoding = false; MED.hasVideo = false; MED.pill = ''; MED.done = false;
+    } else {
+      _post({ tab });
+      if (s._mediaStale) { s._mediaStale = false; _post({ reload: true }); }
+    }
+    MED.holder.classList.add('on');
+    if (tab === 'vid') MED.done = false; // ya lo ha visto: el aviso "listo" no vuelve a salir
+    _place();
+    if (MED.ro) MED.ro.disconnect();
+    MED.ro = new ResizeObserver(_place); MED.ro.observe(s.media);
+    window.addEventListener('resize', _place);
+    setTimeout(_place, 320); // después de que el mapa termine de plegarse
+    _pillPaint();
+  }
+  function _place() {
+    const s = _st; if (!s || !MED.holder || s.media.hidden) return;
+    const r = s.media.getBoundingClientRect();
+    Object.assign(MED.holder.style, { top: r.top + 'px', left: r.left + 'px', width: r.width + 'px', height: r.height + 'px' });
+  }
+  function _mediaHide() {
+    if (MED.holder) MED.holder.classList.remove('on');
+    if (MED.ro) { MED.ro.disconnect(); MED.ro = null; }
+    window.removeEventListener('resize', _place);
+    _pillPaint();
+  }
+  // Al cerrar la guía: si no se está creando un vídeo (ni hay uno listo sin ver), se libera
+  // la memoria del motor (hasta 60 fotos en HD); si no, sigue en segundo plano.
+  function _mediaDetach() {
+    _mediaHide();
+    if (MED.frame && !MED.encoding && !(MED.hasVideo && MED.done)) _mediaDestroy();
+  }
+  function _mediaDestroy() {
+    if (MED.holder) MED.holder.remove();
+    MED.frame = null; MED.holder = null; MED.guia = null; MED.encoding = false; MED.hasVideo = false; MED.pill = ''; MED.done = false;
+    _pillPaint();
+  }
+  function _post(o) {
+    try { if (MED.frame && MED.frame.contentWindow) MED.frame.contentWindow.postMessage(Object.assign({ type: 'bdm-host' }, o), location.origin); } catch (_) {}
+  }
+  window.addEventListener('message', e => {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'bdm-vf') return;
+    if (!MED.frame || e.source !== MED.frame.contentWindow) return;
+    const d = e.data;
+    MED.encoding = !!d.encoding; MED.hasVideo = !!d.hasVideo;
+    if ('pill' in d) { MED.pill = d.pill || ''; MED.done = !!d.done; }
+    _pillPaint();
+  });
+
+  // Aviso flotante: cómo va el vídeo cuando no se está mirando la pestaña VÍDEO de ese viaje
+  function _pillPaint() {
+    let p = document.getElementById('fv-gen-pill');
+    const viewing = !!(_st && _st.tab === 'vid' && MED.guia === _st.docId && MED.holder && MED.holder.classList.contains('on'));
+    const show = !!(MED.frame && MED.pill && !viewing && (MED.encoding || MED.done));
+    if (!show) { if (p) p.hidden = true; return; }
+    if (!p) {
+      p = document.createElement('button');
+      p.id = 'fv-gen-pill'; p.type = 'button'; p.className = 'fv-gen-pill';
+      p.addEventListener('click', _pillGo);
+      document.body.appendChild(p);
+    }
+    p.hidden = false;
+    p.classList.toggle('done', MED.done);
+    p.textContent = MED.done ? 'Tu vídeo está listo · Verlo' : MED.pill;
+  }
+  function _pillGo() {
+    const guia = MED.guia; if (!guia) return;
+    if (_st && _st.docId === guia) { _show('vid'); return; }
+    // Abrir la guía de ese vídeo y su pestaña VÍDEO
+    window._fvOpenTab = { guia, tab: 'vid' };
+    if (typeof salma !== 'undefined' && salma.cargarGuia) salma.cargarGuia(guia);
   }
 
   /* ── cargar todas las fotos del viaje ── */
@@ -190,7 +316,15 @@ const fotosViaje = (() => {
       }).join('');
       body = `<div class="fv-days fv-pad">${body}</div>`;
     }
-    s.fotos.innerHTML = head + body;
+    const ready = s._justUploaded && P.length >= 2 ? `
+      <button type="button" class="fv-ready fv-pad" id="fv-ready">
+        <span class="fv-ready-play" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"/></svg></span>
+        <span><b>Tu vídeo ya está montado</b><span>Con tus ${P.length} fotos, listo para ver y compartir</span></span>
+        <span class="fv-ready-go" aria-hidden="true">→</span>
+      </button>` : '';
+    s.fotos.innerHTML = head + ready + body;
+    const rb = s.fotos.querySelector('#fv-ready');
+    if (rb) rb.addEventListener('click', () => { s._justUploaded = false; _show('vid'); });
     s.fotos.querySelector('#fv-add').addEventListener('click', () => { if (!s.busy) s.fotos.querySelector('#fv-input').click(); });
     s.fotos.querySelector('#fv-input').addEventListener('change', e => { const files = [...(e.target.files || [])]; e.target.value = ''; if (files.length) _upload(files); });
     s.fotos.querySelectorAll('.fv-th').forEach(b => b.addEventListener('click', () => _openViewer(+b.dataset.i)));
@@ -273,7 +407,13 @@ const fotosViaje = (() => {
     _count();
     // Tu mundo: que la franja de Mis Viajes se recalcule con las fotos nuevas
     try { localStorage.removeItem('bdm_tumundo_sum'); } catch (_) {}
-    s._prog = ''; _paint();
+    s._prog = '';
+    // El vídeo se monta solo con las fotos nuevas: aviso para ir a verlo (Paco: "aparece al subir fotos")
+    if (ok) {
+      s._justUploaded = true;
+      if (MED.frame && MED.guia === s.docId && !MED.encoding) _post({ reload: true }); else s._mediaStale = true;
+    }
+    _paint();
     const msg = [ok ? `${ok} ${ok === 1 ? 'foto guardada' : 'fotos guardadas'}` : '', dup ? `${dup} ya estaban` : '', fail ? `${fail} no se pudieron subir: vuelve a intentarlo` : ''].filter(Boolean).join(' · ');
     if (msg && typeof showToast === 'function') showToast(msg);
   }

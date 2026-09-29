@@ -318,3 +318,22 @@ viejo y tarjetas beta (se conserva "tocar el mapa → foto en ese punto"). Icono
   El botón atrás del móvil cierra el visor.
 - En el móvil, con FOTOS el mapa baja a 24vh y se ocultan los botones flotantes del mapa.
 - 💶 Solo almacenamiento R2 (~0,01–0,02 €/mes por 1.000 fotos). Sin APIs de pago.
+
+### Paso 3 (29 sept 2026, subido): VÍDEO y ÁLBUM dentro de la guía
+- Pestañas `RUTA · FOTOS · VÍDEO · ÁLBUM`. El motor NO se ha reescrito: VÍDEO/ÁLBUM cargan `viaje-fotos.html` en
+  **modo app** (`?embed=1&v=N&guia=<id>&tab=vid|alb`) dentro de un iframe.
+- Modo app (viaje-fotos.html, `window.EMB`): sin cabecera/beta, sin subir fotos, sin selector de guía, sin tabla de
+  pruebas, sin mapa interactivo, sin bloques de "nitidez"/"falta música"/"pronto PDF". Las fotos salen solas de la guía
+  (`fotos` con routeId + `pins` con routeId + `maps.photos`; máx. 60 repartidas por el viaje). No toca el viaje guardado
+  en el móvil de la página suelta (saveTrip desactivado). Un botón "Crear el vídeo"; plantilla/vehículo/calidad/formato
+  detrás de "Cambiar estilo". Sin emojis en botones de vehículo y tramos (también en la página suelta).
+- El iframe vive en el `<body>` (`.fv-media-holder`, fijo, colocado encima del hueco de la pestaña): mover un iframe en
+  el DOM lo recarga, así que no se mueve. Al cerrar la guía: si se está creando un vídeo (o hay uno listo sin ver),
+  sigue vivo y sale el aviso flotante `.fv-gen-pill` ("Vídeo 47 %" → "Tu vídeo está listo · Verlo", que reabre la guía
+  en VÍDEO); si no, se destruye (libera la memoria de hasta 60 fotos HD).
+- Mensajes iframe → app (`postMessage`, mismo origen): `{type:'bdm-vf', encoding, hasVideo, pill, done, ready, n}`.
+  App → iframe: `{type:'bdm-host', tab, reload}`.
+- Al subir fotos en FOTOS: tarjeta "Tu vídeo ya está montado · Ver" y el motor recarga las fotos.
+- En el móvil, con VÍDEO/ÁLBUM el mapa se pliega del todo.
+- Al cambiar viaje-fotos.html: subir `v=` en `_mediaURL()` de fotos-viaje.js (y el `?v=` de fotos-viaje.js).
+- 💶 0 €: todo se crea en el móvil (mapa de teselas OSM gratis, ver aviso de volumen más arriba).

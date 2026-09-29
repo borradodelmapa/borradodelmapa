@@ -93,3 +93,42 @@
   .itin-view.fv-map-small .itin-map-col { flex:0 0 24vh; height:24vh; }
   .itin-view.fv-map-small ~ .itin-action-bar, body:has(.itin-view.fv-map-small) .itin-action-bar { display:none; }
 }
+
+/* ── VÍDEO y ÁLBUM (caso 14 paso 3): el motor va en un iframe fijo colocado encima del hueco ── */
+.fv-media-on { display:flex !important; flex-direction:column; overflow:hidden !important; }
+.fv-media-on .fv-tabs { flex:none; }
+.fv-pane-media { flex:1; min-height:0; }
+.fv-media-holder { position:fixed; z-index:950; visibility:hidden; pointer-events:none; background:var(--bg-base); }
+.fv-media-holder.on { visibility:visible; pointer-events:auto; }
+.fv-media-frame { width:100%; height:100%; border:0; display:block; background:var(--bg-base); }
+@media (max-width:768px) {
+  .itin-view.fv-map-none .itin-map-col { flex:0 0 0; height:0; overflow:hidden; }
+  body:has(.itin-view.fv-map-none) .itin-action-bar { display:none; }
+  /* Sin mapa, la ✕ de cerrar va sobre las pestañas: dejarle sitio */
+  .itin-view.fv-map-none .fv-tabs { padding-left:64px; }
+}
+@media (max-width:380px) { .fv-tab { font-size:14px; padding:0 6px; letter-spacing:.05em; } }
+
+/* Aviso flotante: cómo va el vídeo mientras usas la app */
+.fv-gen-pill {
+  position:fixed; left:50%; transform:translateX(-50%); z-index:1300;
+  bottom:calc(56px + 16px + env(safe-area-inset-bottom, 0px));
+  appearance:none; border:1px solid var(--accent); cursor:pointer; min-height:44px; padding:0 18px;
+  background:var(--bg-base); color:var(--text-primary);
+  font:700 15px/1 var(--font-cond); letter-spacing:.06em; text-transform:uppercase;
+  box-shadow:0 4px 16px rgba(0,0,0,.45); white-space:nowrap;
+}
+.fv-gen-pill.done { background:var(--accent); color:var(--text-on-accent); }
+.fv-gen-pill[hidden] { display:none; }
+
+/* "Tu vídeo ya está montado" tras subir fotos */
+.fv-ready {
+  appearance:none; cursor:pointer; text-align:left; font:inherit; color:inherit;
+  display:flex; align-items:center; gap:12px; width:calc(100% - 32px); margin:10px 16px 0;
+  background:var(--bg-row); border:1px solid var(--border); border-left:3px solid var(--accent); padding:12px 14px;
+}
+.fv-ready > span:nth-child(2) { display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+.fv-ready b { font:700 17px/1.1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; color:var(--text-primary); }
+.fv-ready span span { font-size:13px; color:var(--text-muted); }
+.fv-ready-play { width:36px; height:36px; flex:none; display:flex; align-items:center; justify-content:center; background:var(--accent); color:var(--text-on-accent); }
+.fv-ready-go { color:var(--accent); font:700 20px/1 var(--font-cond); }

@@ -6,6 +6,10 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Tu viaje en mapa, vídeo y álbum — Borrado del Mapa</title>
 <link rel="icon" href="/favicon.ico">
+<script>/* Modo app (29 sept 2026, caso 14 paso 3): dentro de la guía de la app, en un iframe.
+   ?embed=1&guia=<id>: sin cabecera ni textos de prueba; las fotos salen de la pestaña FOTOS de esa guía. */
+window.EMB=new URLSearchParams(location.search).get('embed')==='1';window.EMB_GUIA=new URLSearchParams(location.search).get('guia')||'';
+if(window.EMB)document.documentElement.classList.add('emb');</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +28,19 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+/* modo app: solo el vídeo o el álbum de la guía */
+.emb .brand,.emb .hero,.emb .diag,.emb .tabs,.emb #p-map,.emb .why,.emb #cmpField,.emb .alb-note,.emb .render>div:first-child,.emb #genPill{display:none!important}
+.emb body{background:#0D0F10}
+.emb .wrap{padding-block:12px 40px;gap:14px}
+.emb .panel h2{display:none}
+.emb .vgrid{grid-template-columns:1fr;gap:14px}
+.emb .btn{font:700 17px/1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.emb .stage.v{width:min(380px,100%,calc(52vh * 9 / 16))}
+.emb .controls .field.emb-opt{display:none}
+.emb .controls.emb-open .field.emb-opt{display:flex}
+.emb-toggle{appearance:none;background:none;border:1px solid var(--line);color:var(--cream);font:700 15px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;min-height:44px;padding:0 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.emb-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:40px 16px;color:var(--muted)}
+.emb-empty b{font:700 22px/1.1 var(--display);text-transform:uppercase;color:var(--cream)}
 body{background:var(--ink);color:var(--cream);font-family:var(--body);font-size:15px;line-height:1.5}
 .wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:18px 64px;display:flex;flex-direction:column;gap:22px}
 .brand{font-family:var(--display);font-weight:800;letter-spacing:.06em;font-size:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -259,6 +276,7 @@ h1 em{font-style:normal;color:var(--gold)}
     </div>
   </section>
 
+  <div class="emb-empty" id="embEmpty" hidden><b>Aún no hay fotos</b><span>Sube las fotos del viaje en la pestaña Fotos y aquí se monta el vídeo y el álbum.</span></div>
   <section class="panel" id="p-vid" role="tabpanel" aria-labelledby="t-vid" hidden>
     <h2>Vídeo del viaje</h2>
     <div class="vgrid">
@@ -277,11 +295,11 @@ h1 em{font-style:normal;color:var(--gold)}
         </div>
         <div class="field" id="vehField"><span>Vehículo</span>
           <div class="seg" id="vehSeg">
-            <button type="button" data-v="moto" aria-pressed="true">🏍️ Moto</button>
-            <button type="button" data-v="coche" aria-pressed="false">🚗 Coche</button>
-            <button type="button" data-v="furgo" aria-pressed="false">🚐 Autocaravana</button>
-            <button type="button" data-v="avion" aria-pressed="false">✈️ Avión</button>
-            <button type="button" data-v="pie" aria-pressed="false">🥾 A pie</button>
+            <button type="button" data-v="moto" aria-pressed="true">Moto</button>
+            <button type="button" data-v="coche" aria-pressed="false">Coche</button>
+            <button type="button" data-v="furgo" aria-pressed="false">Autocaravana</button>
+            <button type="button" data-v="avion" aria-pressed="false">Avión</button>
+            <button type="button" data-v="pie" aria-pressed="false">A pie</button>
           </div>
           <div class="legs" id="legList"></div>
         </div>
@@ -308,7 +326,7 @@ h1 em{font-style:normal;color:var(--gold)}
         </div>
       </div>
     </div>
-    <div class="field"><span>Nitidez: mismo fotograma, trozo a tamaño real</span>
+    <div class="field" id="cmpField"><span>Nitidez: mismo fotograma, trozo a tamaño real</span>
       <div class="compare">
         <figure><canvas id="cmpOld" width="420" height="420"></canvas><figcaption><b>Sistema actual</b>La foto se guarda a 1024 px y se amplía ×2,5 para llenar el vídeo</figcaption></figure>
         <figure><canvas id="cmpNew" width="420" height="420"></canvas><figcaption><b>Propuesta</b>Copia HD de la foto y dibujada sin ampliar</figcaption></figure>
@@ -324,7 +342,7 @@ h1 em{font-style:normal;color:var(--gold)}
 
   <section class="panel" id="p-alb" role="tabpanel" aria-labelledby="t-alb" hidden>
     <h2>Álbum maquetado</h2>
-    <p class="note">Páginas A4 apaisadas, fotos en HD, maquetadas solas por días según la orientación de cada foto. Pronto: descargar en PDF y pedirlo impreso.</p>
+    <p class="note alb-note">Páginas A4 apaisadas, fotos en HD, maquetadas solas por días según la orientación de cada foto. Pronto: descargar en PDF y pedirlo impreso.</p>
     <div class="album" id="album"></div>
   </section>
 </div>
@@ -913,7 +931,7 @@ function drawLabels(ctx,W,H,v,pts,upto,u,active){
 }
 // Medio de transporte de cada tramo: vuelos para lo largo o lo que cruza mucho mar, barco para mar corto, y el
 // vehículo elegido para el resto. El usuario puede cambiar cualquiera (LEGOVR).
-const LEGOVR={};const MODES={moto:'🏍️ Moto',coche:'🚗 Coche',furgo:'🚐 Autocaravana',avion:'✈️ Avión',barco:'⛴️ Barco',pie:'🥾 A pie'};
+const LEGOVR={};const MODES={moto:'Moto',coche:'Coche',furgo:'Autocaravana',avion:'Avión',barco:'Barco',pie:'A pie'};
 const legKey=(a,b)=>`${(a.name||'')}@${a.lat.toFixed(3)},${a.lng.toFixed(3)}>${(b.name||'')}@${b.lat.toFixed(3)},${b.lng.toFixed(3)}`;
 function legMode(a,b,base){
   const d=hav(a,b);let sea=0;const N=14;
@@ -1093,7 +1111,8 @@ requestAnimationFrame(thumbLoop);
 
 /* codificar MP4 */
 const DOC_TITLE=document.title;
-function pill(t,done){const p=$('#genPill');p.textContent=t;p.hidden=false;p.classList.toggle('done',!!done);}
+function pill(t,done){const p=$('#genPill');p.textContent=t;p.hidden=false;p.classList.toggle('done',!!done);embPost({pill:t.replace(/^[^A-Za-z0-9ÁÉÍÓÚáéíóú✓]+/,'').trim(),done:!!done});}
+function embPost(o){if(!window.EMB||window.parent===window)return;try{window.parent.postMessage(Object.assign({type:'bdm-vf',guia:window.EMB_GUIA,encoding:typeof encoding!=='undefined'&&encoding,hasVideo:typeof lastVideo!=='undefined'&&!!lastVideo},o),location.origin);}catch(_){}}
 $('#genPill').onclick=()=>{showTab('vid');$('#vidActs').hidden||$('#vidActs').scrollIntoView({behavior:'smooth',block:'center'});if($('#genPill').classList.contains('done'))$('#genPill').hidden=true;};
 function askNotify(){try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}catch(_){}}
 async function notifyDone(){
@@ -1102,12 +1121,12 @@ async function notifyDone(){
   try{if(!('Notification' in window)||Notification.permission!=='granted')return;const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
     const o={body:'Tu vídeo del viaje está listo. Toca para verlo.',icon:'/icon-192.png',tag:'bdm-video'};if(reg)reg.showNotification('Borrado del Mapa',o);else new Notification('Borrado del Mapa',o);}catch(_){}
 }
-let lastVideo=null,encoding=false;
+let lastVideo=null,encoding=false;const ENC_LABEL=window.EMB?'Crear el vídeo':'Generar MP4';
 function resetVideoOut(){
   if(encoding)return;
   const v=$('#encOut');if(v.src){URL.revokeObjectURL(v.src);v.removeAttribute('src');}
   lastVideo=null;v.hidden=true;$('#vidActs').hidden=true;$('#encBar').hidden=true;
-  const b=$('#encBtn');b.disabled=false;b.textContent='Generar MP4';
+  const b=$('#encBtn');b.disabled=false;b.textContent=ENC_LABEL;
 }
 function slug(t){return (t||'mi-viaje').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'mi-viaje';}
 $('#shBtn').onclick=async()=>{
@@ -1128,6 +1147,7 @@ async function pickCodec(W,H,br=12e6){
   return null;
 }
 $('#encBtn').onclick=async()=>{
+  if(encoding)return;embPost({encoding:true,pill:'Preparando el vídeo…',done:false}); // la app no lo corta si sales de la guía al momento
   setPlaying(false);const TL0=TL;const btn=$('#encBtn'),note=$('#encNote'),bar=$('#encBar');
   const KQ=Math.min(1,QUAL/Math.min(TL0.W,TL0.H)),EW=Math.round(TL0.W*KQ/2)*2,EH=Math.round(TL0.H*KQ/2)*2;
   const pick=await pickCodec(EW,EH,QUAL>=1080?12e6:6e6);
@@ -1159,7 +1179,7 @@ $('#encBtn').onclick=async()=>{
     note.textContent=`Listo en ${((performance.now()-t0)/1000).toFixed(0)} s. Descárgalo o compártelo. Si cambias el estilo, el formato o las fotos, se podrá generar otro.`;
     $('#encSpec').innerHTML=[`MP4 · ${pick.mux==='avc'?'H.264':'VP9'}`,`${EW}×${EH}`,`${FPS} fps`,`${frames} fotogramas`,`${mmss(TL0.total)}`,`${(blob.size/1048576).toFixed(1).replace('.',',')} MB`].map(s=>`<span>${s}</span>`).join('');
   }catch(e){note.className='note warn';note.textContent='No se pudo generar el vídeo en este navegador: '+(e&&e.message||e);reportErr(e);$('#genPill').hidden=true;}
-  finally{document.title=DOC_TITLE;try{enc.close();}catch(_){}encoding=false;try{wake&&wake.release();}catch(_){}btn.disabled=!!lastVideo;btn.textContent=lastVideo?'Vídeo listo ✓':'Generar MP4';}
+  finally{document.title=DOC_TITLE;try{enc.close();}catch(_){}encoding=false;try{wake&&wake.release();}catch(_){}btn.disabled=!!lastVideo;btn.textContent=lastVideo?'Vídeo listo ✓':ENC_LABEL;if(!lastVideo)embPost({pill:null});}
 };
 
 /* comparación de nitidez */
@@ -1261,7 +1281,7 @@ function renderDiag(rows){
 /* errores visibles */
 const ERRS=[];
 function reportErr(e){const m=(e&&(e.stack||e.message))||String(e);ERRS.push(new Date().toISOString().slice(11,19)+' '+m);$('#errTxt').textContent='Algo ha fallado: '+String((e&&e.message)||e).slice(0,120);$('#errBar').hidden=false;}
-window.addEventListener('error',e=>reportErr(e.error||e.message));
+window.addEventListener('error',e=>{if(/ResizeObserver loop/.test(e.message||''))return;/* aviso inofensivo del navegador */reportErr(e.error||e.message);});
 window.addEventListener('unhandledrejection',e=>reportErr(e.reason));
 $('#errX').onclick=()=>{$('#errBar').hidden=true;};
 $('#errCopy').onclick=async()=>{const t=`viaje-fotos.html · ${navigator.userAgent}\n`+ERRS.join('\n');try{await navigator.clipboard.writeText(t);$('#errTxt').textContent='Copiado. Pégalo en el chat con Claude.';}catch(_){prompt('Copia esto:',t);}};
@@ -1412,7 +1432,7 @@ const IDB={db:null,
   async tx(mode,fn){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('kv',mode);const q=fn(t.objectStore('kv'));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error);});},
   get(k){return this.tx('readonly',s=>s.get(k));},set(k,v){return this.tx('readwrite',s=>s.put(v,k));},del(k){return this.tx('readwrite',s=>s.delete(k));}};
 let saveT=null;
-function saveTrip(){clearTimeout(saveT);saveT=setTimeout(async()=>{
+function saveTrip(){if(window.EMB)return;clearTimeout(saveT);saveT=setTimeout(async()=>{
   try{
     const photos=[];
     for(const p of POOL){if(!p.blob)p.blob=await toBlob(p.hd,.9);photos.push({name:p.name,date:+p.date,gLat:p.gLat,gLng:p.gLng,src:p.src,remote:p.remote||null,savedId:p.savedId||null,blob:p.blob});}
@@ -1441,6 +1461,7 @@ function initAccount(){
   FDB=firebase.firestore();
   firebase.auth().onAuthStateChanged(async u=>{
     USER=u;
+    if(window.EMB){if(u)embLoad();else embEmpty('Entra con tu cuenta para ver el vídeo.');return;}
     if(!u){sel.innerHTML='<option value="">Sin cuenta</option>';sel.disabled=true;gn.innerHTML='<a href="/" style="color:var(--gold)">Entra con tu cuenta en la app</a> y vuelve aquí para asociar las fotos a tus guías.';return;}
     try{
       const snap=await FDB.collection('users').doc(u.uid).collection('maps').orderBy('createdAt','desc').limit(50).get();
@@ -1530,7 +1551,7 @@ $('#saveGuideBtn').onclick=async()=>{
 };
 
 function showTab(id){['map','vid','alb'].forEach(k=>{const on=k===id;$('#t-'+k).setAttribute('aria-selected',String(on));$('#p-'+k).hidden=!on;});
-  if(id==='map')mapFit();if(id==='vid'){setPlaying(false);sizePreview();drawPreview();}}
+  if(id==='map'&&M)mapFit();if(id==='vid'&&TL){setPlaying(false);sizePreview();drawPreview();}}
 document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)showTab(b.id.slice(2));});
 let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(!$('#p-map').hidden)mapFit();if(!$('#p-vid').hidden&&TL){sizePreview();drawPreview();}},150);});
 
@@ -1538,11 +1559,63 @@ let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>
   WORLD_TOPO=await (await fetch('/vendor/countries-50m.json')).json();
   initWorld();
   try{await Promise.all(['800 40px "Barlow Condensed"','700 40px "Barlow Condensed"','600 20px Inter','500 20px Inter','italic 400 30px Newsreader'].map(f=>document.fonts.load(f)));}catch(_){}
+  if(window.EMB){embSetup();initAccount();return;}
   initAccount();
   await restoreTrack();
   if(await restoreTrip()){await applyPool('Recuperado de este móvil.');}
   else await useModel(await loadSample());
 })();
+
+/* ───────── modo app: fotos de la guía (pestaña FOTOS) ───────── */
+function embSetup(){
+  $('#encBtn').textContent=ENC_LABEL;
+  const ctr=document.querySelector('#p-vid .controls');
+  // Un botón: la vista previa ya sale montada; el estilo, detrás de "Cambiar estilo"
+  ctr.querySelectorAll(':scope > .field').forEach(f=>f.classList.add('emb-opt'));
+  const r=ctr.querySelector('.render');ctr.prepend(r);
+  const t=document.createElement('button');t.type='button';t.className='emb-toggle';t.innerHTML='<span>Cambiar estilo</span><span>▾</span>';
+  t.onclick=()=>{const o=ctr.classList.toggle('emb-open');t.lastChild.textContent=o?'▴':'▾';};
+  r.after(t);
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin||!e.data||e.data.type!=='bdm-host')return;
+    if(e.data.tab){embTab=e.data.tab;if(POOL.length)showTab(embTab);}
+    if(e.data.reload&&!encoding)embLoad();
+  });
+  embTab=new URLSearchParams(location.search).get('tab')==='alb'?'alb':'vid';showTab(embTab);
+}
+function embEmpty(msg){const b=$('#embEmpty');if(msg)b.lastElementChild.textContent=msg;b.hidden=false;$('#p-vid').hidden=true;$('#p-alb').hidden=true;$('#busy').hidden=true;embPost({ready:true,n:0});}
+let embBusy=false,embTab='vid';
+async function embLoad(){
+  if(embBusy)return;embBusy=true;
+  try{
+    await selectGuide(window.EMB_GUIA,true);
+    const uid=USER.uid,U=FDB.collection('users').doc(uid),c=[],seen=new Set();
+    const add=(url,lat,lng,date,fid)=>{if(!url||seen.has(url))return;seen.add(url);c.push({url,lat,lng,date,fid});};
+    const f=await U.collection('fotos').where('routeId','==',window.EMB_GUIA).get();
+    f.forEach(d=>{const x=d.data();if(x.type==='video'||x.tag==='documento')return;add(x.url,x.lat,x.lng,toDate(x.takenAt||x.createdAt),d.id);});
+    try{const q=await U.collection('pins').where('routeId','==',window.EMB_GUIA).get();q.forEach(d=>{const x=d.data();add(x.photoUrl,x.lat,x.lng,toDate(x.createdAt));});}catch(_){}
+    ((GUIDE&&GUIDE.routePhotos)||[]).forEach(x=>{const u=typeof x==='string'?x:x&&(x.url||x.photoUrl);add(u,x&&x.lat,x&&x.lng,toDate(x&&(x.takenAt||x.uploadedAt||x.createdAt)));});
+    if(!c.length){POOL=[];embEmpty('Sube las fotos del viaje en la pestaña Fotos y aquí se monta el vídeo y el álbum.');return;}
+    $('#embEmpty').hidden=true;
+    c.sort((a,b)=>(a.date||0)-(b.date||0));
+    // Máximo MAXP: si hay más, repartidas por todo el viaje
+    let pick=c;if(c.length>MAXP){pick=[];for(let i=0;i<MAXP;i++)pick.push(c[Math.floor(i*c.length/MAXP)]);}
+    const have=new Map(POOL.map(p=>[p.remote,p]));const next=[];
+    const busy=$('#busy');busy.hidden=false;$('#busyT').textContent='PREPARANDO TU VIAJE';
+    for(let i=0;i<pick.length;i++){const x=pick[i];$('#busyN').textContent='Foto '+(i+1)+' de '+pick.length;$('#busyBar').style.width=((i+1)/pick.length*100)+'%';
+      if(have.has(x.url)){next.push(have.get(x.url));continue;}
+      try{const r=await fetch(x.url,{mode:'cors'});if(!r.ok)throw new Error(r.status);const blob=await r.blob();const bmp=await createImageBitmap(blob);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
+        const lat=x.lat!=null&&isFinite(x.lat)&&Math.abs(x.lat)>.01?+x.lat:null,lng=lat!=null?+x.lng:null;
+        const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob});next.push(p);}catch(e){console.warn('[viaje-fotos] foto',e);}}
+    busy.hidden=true;
+    POOL=next;
+    if(!POOL.length){embEmpty('No se pudieron traer las fotos. Revisa la conexión y vuelve a entrar.');return;}
+    await applyPool();
+    showTab(embTab);
+    embPost({ready:true,n:POOL.length});
+  }catch(e){reportErr(e);embEmpty('No se pudieron cargar las fotos de esta guía.');}
+  finally{embBusy=false;}
+}
 </script>
 </body>
 </html>
