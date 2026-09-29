@@ -1,0 +1,9 @@
+Recursos del mapa del vídeo (30 sept 2026) — todos alojados en nuestro servidor, ninguno se carga de fuera.
+- maplibre-gl 5.24.0 (maplibre-gl.js/.css) — BSD-3-Clause (LICENSE-maplibre.txt)
+- pmtiles 4.5.0 (pmtiles.js) — BSD-3-Clause
+- @protomaps/basemaps 5.7.2 (basemaps.js) — BSD-3-Clause
+- mp4-muxer (mp4-muxer.js) — MIT
+- fonts/ (Noto Sans Regular/Medium/Italic, glifos Latin) — SIL Open Font License (github.com/protomaps/basemaps-assets)
+- sprites/ (light) — MIT, derivados de tangrams/icons (github.com/protomaps/basemaps-assets)
+- Datos del mapa: © OpenStreetMap (ODbL), extracto Protomaps Basemap build 20260929, en R2 salma-photos/mapas/.
+  Atribución obligatoria "© OpenStreetMap" en el vídeo.

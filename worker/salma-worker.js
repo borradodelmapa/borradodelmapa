@@ -9311,7 +9311,8 @@ export default {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          // Range / If-Match: el mapa propio (/mapas/*.pmtiles) se lee por trozos
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization, Range, If-Match',
         },
       });
     }
@@ -9415,6 +9416,34 @@ export default {
     }
 
     // ─── ENDPOINT /photo/* (servir fotos desde R2) ───
+    // ═══ /mapas/<nombre>.pmtiles — MAPA PROPIO (Protomaps, datos OSM) desde R2 (30 sept 2026) ═══
+    // El vídeo lee el mapa vectorial por trozos (peticiones Range) con MapLibre + pmtiles. Solo lectura, solo .pmtiles
+    // de la carpeta mapas/. 💶 R2: sin coste de salida; lecturas dentro del plan gratis (10 M/mes).
+    if ((request.method === 'GET' || request.method === 'HEAD') && /^\/mapas\/[a-z0-9-]+\.pmtiles$/.test(url.pathname)) {
+      const key = url.pathname.slice(1);
+      const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Expose-Headers': 'Content-Range, Content-Length, ETag, Accept-Ranges' };
+      const rh = request.headers.get('Range');
+      let range;
+      const m = rh && /^bytes=(\d+)-(\d*)$/.exec(rh);
+      if (m) { const off = +m[1]; range = m[2] ? { offset: off, length: +m[2] - off + 1 } : { offset: off }; }
+      const obj = request.method === 'HEAD' ? await env.SALMA_PHOTOS.head(key) : await env.SALMA_PHOTOS.get(key, range ? { range } : {});
+      if (!obj) return new Response('No existe', { status: 404, headers: cors });
+      const h = new Headers(cors);
+      h.set('Content-Type', 'application/octet-stream');
+      h.set('Accept-Ranges', 'bytes');
+      h.set('Cache-Control', 'public, max-age=86400');
+      if (obj.httpEtag) h.set('ETag', obj.httpEtag);
+      if (request.method === 'HEAD') { h.set('Content-Length', String(obj.size)); return new Response(null, { headers: h }); }
+      if (range) {
+        const end = range.length ? range.offset + range.length - 1 : obj.size - 1;
+        h.set('Content-Range', `bytes ${range.offset}-${end}/${obj.size}`);
+        h.set('Content-Length', String(end - range.offset + 1));
+        return new Response(obj.body, { status: 206, headers: h });
+      }
+      h.set('Content-Length', String(obj.size));
+      return new Response(obj.body, { headers: h });
+    }
+
     if (request.method === 'GET' && url.pathname.startsWith('/photo/')) {
       if (!env.SALMA_PHOTOS) {
         return new Response('R2 not configured', { status: 500 });
