@@ -154,3 +154,16 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
   cierre con cifras y marca.
 - Pendiente de decisión de Paco: siguiente paso (reel con moto o álbum nivel Polarsteps), marca de agua en gratis,
   descuento Premium en el libro.
+
+### Paso "reel de la moto" (29 sept 2026, subido) — Paco: "Adelante con el reel de la moto"
+- Estilo nuevo **Reel** (por defecto cuando hay ubicación o guía), ≈45 s: gancho (mejor foto + título + fechas +
+  bandera + km) → recorrido completo sobre mapa real con bandera y "SALIDA · X" → por cada tramo el vehículo avanza
+  con la cámara siguiéndolo, etiqueta "DÍA N · SITIO", contador de km y bandera → 1–4 fotos por parada en cortes secos
+  de 1,15 s → cierre con ruta completa, cifras y marca. Máx. 8 paradas (si hay más, una por día).
+- Vehículo a elegir (dibujado, visto desde arriba, gira con el rumbo): moto, coche, autocaravana, avión, a pie.
+- Mapa del reel: teselas de **OpenStreetMap** (gratis, las mismas que usa la app), desaturadas y oscurecidas; se
+  descargan antes de generar el MP4 ("Descargando el mapa: N de M"). Si alguna falla, sale el mapa básico de respaldo.
+- 💶 0 €. OJO: la política de uso de tile.openstreetmap.org no admite mucho volumen; si esto se usa mucho, pasar a
+  MapTiler/Stadia (plan gratuito limitado, luego de pago) → avisar a Paco con cifras antes.
+- Límites: los tramos van en línea recta entre paradas (no por la carretera real todavía); los km son en línea recta
+  (menos que los reales). Siguiente mejora: trazado por carretera con ROAD_GEOM de la guía.
