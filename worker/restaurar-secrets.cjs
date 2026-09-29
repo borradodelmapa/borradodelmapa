@@ -35,6 +35,7 @@ const MAPA = [
   ['rapid api.txt',               'RAPIDAPI_KEY',        'hoteles y coches'],
   ['salma voice.txt',             'ELEVENLABS_API_KEY',  'voz de Salma'],
   ['SAMA VOZ.txt',                'GOOGLE_TTS_KEY',      'REVISAR: puede no ser esta'],
+  ['geoapify.txt',                'GEOAPIFY_KEY',        'carretera entre paradas para el video (/road-path)'],
 ];
 
 // Saca la credencial del fichero: el token mas largo sin espacios de al menos 20

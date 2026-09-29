@@ -10845,6 +10845,70 @@ export default {
     }
 
     // ─── ENDPOINT /directions (polyline para mini-mapas) ───
+    // ═══ /road-path — CARRETERA ENTRE PARADAS PARA EL VÍDEO (29 sept 2026, Paco: "no depender de nadie") ═══
+    // Geoapify (datos OpenStreetMap: se pueden GUARDAR y usar sobre cualquier mapa; las rutas de Google no se
+    // pueden pintar en mapas que no son de Google). Se pregunta UNA vez por lista de paradas y se guarda en KV
+    // para siempre ('roadpath:*'); después sale de ahí gratis. 💶 Plan gratis: 3.000 créditos/día, uso comercial
+    // permitido; 1 crédito por tramo + 1 por cada 500 km. TOPE: 2.500 créditos/día ('roadpathcnt:<fecha>'): al
+    // llegar, responde 429 y el vídeo va en línea recta (nunca se pasa al plan de pago sin querer).
+    // Atribución obligatoria "© OpenStreetMap · Geoapify" (la pone el vídeo). Secret: GEOAPIFY_KEY.
+    if (request.method === 'GET' && url.pathname === '/road-path') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const key = env.GEOAPIFY_KEY;
+      const mode = ['drive', 'motorcycle', 'walk', 'bicycle'].includes(url.searchParams.get('mode')) ? url.searchParams.get('mode') : 'drive';
+      const pts = String(url.searchParams.get('pts') || '').split('|').map(s => s.split(',').map(Number))
+        .filter(p => p.length === 2 && isFinite(p[0]) && isFinite(p[1]) && Math.abs(p[0]) <= 90 && Math.abs(p[1]) <= 180 && !(p[0] === 0 && p[1] === 0));
+      if (pts.length < 2 || pts.length > 80) return new Response(JSON.stringify({ error: 'pts: entre 2 y 80 puntos' }), { status: 400, headers: corsH });
+      if (!key || !env.SALMA_KB) return new Response(JSON.stringify({ error: 'no configurado' }), { status: 503, headers: corsH });
+      const norm = pts.map(p => p[0].toFixed(4) + ',' + p[1].toFixed(4));
+      const kvKey = 'roadpath:' + (await _sha256Hex(mode + '|' + norm.join('|'))).slice(0, 40);
+      try {
+        const c = await env.SALMA_KB.get(kvKey);
+        if (c) return new Response(c, { headers: { ...corsH, 'Cache-Control': 'public, max-age=86400', 'X-Catalog': 'hit' } });
+      } catch (_) {}
+      // Tope diario de créditos
+      const day = new Date().toISOString().slice(0, 10), cntKey = 'roadpathcnt:' + day;
+      let used = 0; try { used = parseInt(await env.SALMA_KB.get(cntKey) || '0', 10) || 0; } catch (_) {}
+      if (used >= 2500) return new Response(JSON.stringify({ error: 'cupo diario' }), { status: 429, headers: corsH });
+      try {
+        // Por tandas de 40 paradas (la API no publica un máximo); cada tanda empieza donde acabó la anterior
+        const out = []; let credits = 0, meters = 0;
+        for (let i = 0; i < norm.length - 1; i += 39) {
+          const chunk = norm.slice(i, i + 40);
+          const r = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${encodeURIComponent(chunk.join('|'))}&mode=${mode}&apiKey=${key}`);
+          credits += chunk.length - 1;
+          if (!r.ok) throw new Error('geoapify ' + r.status);
+          const j = await r.json();
+          const f = j && j.features && j.features[0];
+          if (!f || !f.geometry) throw new Error('sin ruta');
+          meters += (f.properties && f.properties.distance) || 0;
+          const lines = f.geometry.type === 'LineString' ? [f.geometry.coordinates] : (f.geometry.coordinates || []);
+          lines.forEach(line => line.forEach(c => out.push([+c[1].toFixed(5), +c[0].toFixed(5)])));
+        }
+        credits += Math.floor(meters / 500000);
+        // Simplificar: un punto cada ~60 m como mínimo (basta para el vídeo y cabe de sobra en KV)
+        const simp = []; let last = null;
+        for (const p of out) {
+          if (!last || Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) > 0.0006) { simp.push(p); last = p; }
+        }
+        if (out.length && simp[simp.length - 1] !== out[out.length - 1]) simp.push(out[out.length - 1]);
+        const body = JSON.stringify({ ok: true, mode, coords: simp, length_km: Math.round(meters / 100) / 10, source: 'geoapify-osm' });
+        ctx.waitUntil(Promise.all([
+          env.SALMA_KB.put(kvKey, body),
+          env.SALMA_KB.put(cntKey, String(used + credits), { expirationTtl: 3 * 86400 }),
+        ]));
+        return new Response(body, { headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' } });
+      } catch (e) {
+        // Sin carretera posible (islas, mar…) o fallo: se recuerda 7 días para no volver a gastar
+        const body = JSON.stringify({ ok: false, error: String(e && e.message || e).slice(0, 100) });
+        ctx.waitUntil(Promise.all([
+          env.SALMA_KB.put(kvKey, body, { expirationTtl: 7 * 86400 }),
+          env.SALMA_KB.put(cntKey, String(used + Math.max(1, pts.length - 1)), { expirationTtl: 3 * 86400 }),
+        ]));
+        return new Response(body, { status: 200, headers: corsH });
+      }
+    }
+
     if (request.method === 'GET' && url.pathname === '/directions') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
       const placesKey = env.GOOGLE_PLACES_KEY;

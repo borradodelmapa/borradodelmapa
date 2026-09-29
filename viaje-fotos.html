@@ -323,6 +323,7 @@ h1 em{font-style:normal;color:var(--gold)}
           <div class="bar" id="encBar" hidden><i></i></div>
           <div class="note" id="encNote"></div>
           <video id="encOut" controls playsinline hidden></video>
+          <div class="note" id="roadAttr" hidden style="font-size:11px">Recorrido: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:inherit">OpenStreetMap</a> · <a href="https://www.geoapify.com/" target="_blank" rel="noopener" style="color:inherit">Powered by Geoapify</a></div>
           <div class="vidacts" id="vidActs" hidden><a class="btn" id="dlBtn" href="#" download="mi-viaje.mp4">⬇ Descargar MP4</a><button class="btn ghost" id="shBtn" type="button">Compartir</button></div>
           <div class="spec" id="encSpec"></div>
         </div>
@@ -1612,6 +1613,22 @@ function embSetup(){
 }
 function embEmpty(msg){const b=$('#embEmpty');if(msg)b.lastElementChild.textContent=msg;b.hidden=false;$('#p-vid').hidden=true;$('#p-alb').hidden=true;$('#busy').hidden=true;embPost({ready:true,n:0});}
 let embBusy=false,embTab='vid';
+/* Carretera entre paradas para guías sin carretera propia (29 sept 2026): /road-path del Worker (Geoapify, datos
+   OpenStreetMap). El Worker la guarda para siempre; aquí además en el móvil ('road-<guía>'). Sin respuesta → línea recta. */
+async function embRoad(){
+  if(!GUIDE||GUIDE.road)return;
+  const st=(GUIDE.stops||[]).filter(p=>isFinite(p.lat)&&isFinite(p.lng)&&Math.abs(p.lat)>.01);
+  if(st.length<2)return;
+  const pts=st.slice(0,80).map(p=>p.lat.toFixed(5)+','+p.lng.toFixed(5)).join('|');
+  const k='road-'+GUIDE.id+'-'+pts.length;
+  let j=null;try{j=await IDB.get(k);}catch(_){}
+  if(!j){
+    try{const api=window.SALMA_API||'https://salma-api.borradodelmapa-api.workers.dev';
+      const r=await fetch(api+'/road-path?mode=drive&pts='+encodeURIComponent(pts));if(!r.ok)return;j=await r.json();
+      if(j&&j.ok)try{await IDB.set(k,j);}catch(_){}}catch(_){return;}
+  }
+  if(j&&j.ok&&Array.isArray(j.coords)&&j.coords.length>1){GUIDE.road=j.coords;GUIDE.roadName='';GUIDE.roadSrc='geoapify';GUIDE._rt=null;const a=$('#roadAttr');if(a)a.hidden=false;}
+}
 /* Fotos de la guía guardadas en el móvil (Cache Storage 'bdm-fotos'): abrir Vídeo o Álbum otra vez no gasta datos.
    Las fotos subidas no cambian nunca (cada una tiene su propia dirección en R2). Máx. EMB_CACHE_MAX fotos: se van las más antiguas. */
 const EMB_CACHE_MAX=400;let embCacheAdds=0;
@@ -1646,6 +1663,7 @@ async function embLoad(){
         const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob});next.push(p);}catch(e){console.warn('[viaje-fotos] foto',e);}}
     busy.hidden=true;embCacheTrim();
     if(!TRACK)await restoreTrack();
+    await embRoad();
     POOL=next;
     if(!POOL.length){embEmpty('No se pudieron traer las fotos. Revisa la conexión y vuelve a entrar.');return;}
     await applyPool();
