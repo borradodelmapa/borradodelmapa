@@ -30,7 +30,15 @@ else location.replace('/?go=rutas');</script>
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+#vehSeg button{display:inline-flex;align-items:center;gap:6px}
+#vehSeg button svg{flex:none}
 /* modo app: solo el vídeo o el álbum de la guía */
+.emb #encOut,.emb #encSpec,.emb #vidActs{display:none!important}
+.emb-res{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
+.emb-res video{flex:1;min-height:0;width:100%;background:#000;object-fit:contain}
+.emb-res-bar{display:flex;gap:8px;padding:10px 12px;background:#0D0F10;border-top:1px solid var(--line)}
+.emb-res-bar .btn{flex:1;min-height:46px;font:700 16px/1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.emb-res-x{position:absolute;top:10px;right:10px;width:44px;height:44px;background:#0D0F10;border:1px solid var(--line);color:#ECEBE8;font-size:18px;cursor:pointer}
 .emb .brand,.emb .hero,.emb .diag,.emb .tabs,.emb #p-map,.emb .why,.emb #cmpField,.emb .alb-note,.emb .render>div:first-child,.emb #genPill{display:none!important}
 .emb body{background:#0D0F10}
 .emb .wrap{padding-block:12px 40px;gap:14px}
@@ -278,7 +286,7 @@ h1 em{font-style:normal;color:var(--gold)}
     </div>
   </section>
 
-  <div class="emb-empty" id="embEmpty" hidden><b>Aún no hay fotos</b><span>Sube las fotos del viaje en la pestaña Fotos y aquí se monta el vídeo y el álbum.</span></div>
+  <div class="emb-empty" id="embEmpty" hidden><b>Aún no hay fotos</b><span>Sube las fotos del viaje y aquí se monta el vídeo y el álbum.</span><label class="btn pickwrap" id="embUp">Subir fotos<input type="file" accept="image/*" multiple></label></div>
   <section class="panel" id="p-vid" role="tabpanel" aria-labelledby="t-vid" hidden>
     <h2>Vídeo del viaje</h2>
     <div class="vgrid">
@@ -297,11 +305,14 @@ h1 em{font-style:normal;color:var(--gold)}
         </div>
         <div class="field" id="vehField"><span>Vehículo</span>
           <div class="seg" id="vehSeg">
-            <button type="button" data-v="moto" aria-pressed="true">Moto</button>
-            <button type="button" data-v="coche" aria-pressed="false">Coche</button>
-            <button type="button" data-v="furgo" aria-pressed="false">Autocaravana</button>
-            <button type="button" data-v="avion" aria-pressed="false">Avión</button>
-            <button type="button" data-v="pie" aria-pressed="false">A pie</button>
+            <button type="button" data-v="moto" aria-pressed="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17h6l3-6h-4l-2-3H8"/><path d="M14.5 11 12 17"/></svg>Moto</button>
+            <button type="button" data-v="coche" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-5h14l2 5v5h-2"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M3 12h18"/></svg>Coche</button>
+            <button type="button" data-v="furgo" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="14" height="11"/><path d="M16 9h3l3 4v4h-6"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>Autocaravana</button>
+            <button type="button" data-v="tren" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="0"/><path d="M5 11h14"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="m8 21 2-4m6 4-2-4"/></svg>Tren</button>
+            <button type="button" data-v="barco" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/><path d="M4 16 3 11h18l-2 5"/><path d="M12 11V4h4l2 4"/></svg>Ferry</button>
+            <button type="button" data-v="bici" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17" r="3.5"/><circle cx="18.5" cy="17" r="3.5"/><path d="M5.5 17 9 9h6l3.5 8"/><path d="M9 9 12 17h-6.5M14 6h2"/></svg>Bici</button>
+            <button type="button" data-v="avion" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 21 13 13l6-1a2 2 0 0 0 0-4l-6 .5L10.5 1h-2l1 7.5L4 9 2.5 7H1l1 4-1 4h1.5L4 13l5.5.5-1 7.5z"/></svg>Avión</button>
+            <button type="button" data-v="pie" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4" r="2"/><path d="m9 22 2-7-3-3 2-5 4 3 3 1"/><path d="m11 15 3 2v5"/></svg>A pie</button>
           </div>
           <div class="legs" id="legList"></div>
         </div>
@@ -919,6 +930,8 @@ function drawVehicle(ctx,x,y,ang,u,kind,t,lift=1){
   else if(kind==='furgo'){rr(ctx,-28,-12,56,24,5,C);rr(ctx,16,-10,9,20,3,D);ctx.fillStyle=O;ctx.fillRect(-28,-2,44,4);rr(ctx,-20,-8,10,6,2,D);}
   else if(kind==='avion'){ctx.fillStyle=C;ctx.beginPath();ctx.ellipse(0,0,24,4.5,0,0,7);ctx.fill();ctx.beginPath();ctx.moveTo(5,0);ctx.lineTo(-6,-23);ctx.lineTo(-11,-23);ctx.lineTo(-4,0);ctx.lineTo(-11,23);ctx.lineTo(-6,23);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(-18,0);ctx.lineTo(-24,-9);ctx.lineTo(-27,-9);ctx.lineTo(-23,0);ctx.lineTo(-27,9);ctx.lineTo(-24,9);ctx.closePath();ctx.fill();ctx.fillStyle=O;ctx.beginPath();ctx.ellipse(16,0,5,2.6,0,0,7);ctx.fill();}
   else if(kind==='barco'){ctx.fillStyle=C;ctx.beginPath();ctx.moveTo(26,0);ctx.quadraticCurveTo(14,-12,-22,-11);ctx.lineTo(-22,11);ctx.quadraticCurveTo(14,12,26,0);ctx.fill();rr(ctx,-14,-7,20,14,3,O);rr(ctx,-6,-4,6,8,2,D);}
+  else if(kind==='tren'){rr(ctx,-2,-8,30,16,6,O);rr(ctx,6,-6,14,12,2,D);rr(ctx,-32,-8,27,16,3,C);ctx.fillStyle=O;ctx.fillRect(-32,-2,27,4);rr(ctx,-60,-8,25,16,3,C);ctx.fillStyle=O;ctx.fillRect(-60,-2,25,4);}
+  else if(kind==='bici'){ctx.strokeStyle=D;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-16,0);ctx.lineTo(16,0);ctx.stroke();rr(ctx,-20,-2.5,10,5,2.5,C);rr(ctx,10,-2.5,10,5,2.5,C);ctx.beginPath();ctx.arc(-2,0,7,0,7);ctx.fillStyle=O;ctx.fill();rr(ctx,11,-9,3,18,1.5,C);}
   else{ctx.beginPath();ctx.arc(0,0,11,0,7);ctx.fillStyle=O;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=C;ctx.stroke();ctx.beginPath();ctx.moveTo(5,0);ctx.lineTo(-3,-5.5);ctx.lineTo(-3,5.5);ctx.closePath();ctx.fillStyle=C;ctx.fill();}
   ctx.restore();
 }
@@ -934,7 +947,7 @@ function drawLabels(ctx,W,H,v,pts,upto,u,active){
 }
 // Medio de transporte de cada tramo: vuelos para lo largo o lo que cruza mucho mar, barco para mar corto, y el
 // vehículo elegido para el resto. El usuario puede cambiar cualquiera (LEGOVR).
-const LEGOVR={};const MODES={moto:'Moto',coche:'Coche',furgo:'Autocaravana',avion:'Avión',barco:'Barco',pie:'A pie'};
+const LEGOVR={};const MODES={moto:'Moto',coche:'Coche',furgo:'Autocaravana',tren:'Tren',barco:'Ferry',bici:'Bici',avion:'Avión',pie:'A pie'};
 const legKey=(a,b)=>`${(a.name||'')}@${a.lat.toFixed(3)},${a.lng.toFixed(3)}>${(b.name||'')}@${b.lat.toFixed(3)},${b.lng.toFixed(3)}`;
 function legMode(a,b,base){
   const d=hav(a,b);let sea=0;const N=14;
@@ -944,6 +957,7 @@ function legMode(a,b,base){
   if(d>700)return'avion';
   if(seaFrac>.35)return d>350?'avion':'barco';
   if(base==='pie'&&d>40)return'coche';
+  if(base==='bici'&&d>120)return'coche';
   return base;
 }
 // Arco de vuelo: curva cuadrática que se abomba hacia arriba del mapa (como Travel Animator).
@@ -1117,6 +1131,7 @@ function thumbTL(id){const key=[M&&M.photos.length,M&&M.noMap,GUIDE&&GUIDE.id,ve
 function thumbLoop(now){
   requestAnimationFrame(thumbLoop);
   if(!M||encoding||$('#p-vid').hidden||document.hidden||now-TH.last<125)return;
+  if(window.EMB&&!document.querySelector('#p-vid .controls.emb-open'))return; // cerrado: no se dibujan (iban lentas)
   const dt=Math.min(.25,(now-TH.last)/1000);TH.last=now;TH.t+=dt;
   const keepLook=LOOK;
   document.querySelectorAll('#styleSeg canvas.tth').forEach(c=>{
@@ -1169,7 +1184,7 @@ $('#encBtn').onclick=async()=>{
   const KQ=Math.min(1,QUAL/Math.min(TL0.W,TL0.H)),EW=Math.round(TL0.W*KQ/2)*2,EH=Math.round(TL0.H*KQ/2)*2;
   const pick=await pickCodec(EW,EH,QUAL>=1080?12e6:6e6);
   if(!pick){note.className='note warn';note.textContent='Este navegador no permite crear MP4 aquí (pasa en iPhone con iOS antiguo y en algunos navegadores). Prueba con Chrome en el móvil o en el ordenador.';return;}
-  if(lastVideo){$('#vidActs').scrollIntoView({behavior:'smooth',block:'center'});return;}
+  if(lastVideo){if(window.EMB)embShowResult();else $('#vidActs').scrollIntoView({behavior:'smooth',block:'center'});return;}
   btn.disabled=true;btn.textContent='Generando…';encoding=true;bar.hidden=false;note.className='note';const t0=performance.now();
   let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
   askNotify();pill(`🗺️ Preparando el mapa…`);
@@ -1191,7 +1206,7 @@ $('#encBtn').onclick=async()=>{
     await enc.flush();muxer.finalize();
     const blob=new Blob([muxer.target.buffer],{type:'video/mp4'});
     lastVideo=blob;const v=$('#encOut');if(v.src)URL.revokeObjectURL(v.src);v.src=URL.createObjectURL(blob);v.hidden=false;
-    const dl=$('#dlBtn');dl.href=v.src;dl.download=`${slug(TL0.M.title)}-${TL0.W<TL0.H?'vertical':'horizontal'}.mp4`;$('#vidActs').hidden=false;pill('✓ Vídeo listo · verlo',true);notifyDone();
+    const dl=$('#dlBtn');dl.href=v.src;dl.download=`${slug(TL0.M.title)}-${TL0.W<TL0.H?'vertical':'horizontal'}.mp4`;$('#vidActs').hidden=false;pill('✓ Vídeo listo · verlo',true);notifyDone();if(window.EMB)embShowResult();
     bar.firstElementChild.style.width='100%';
     note.textContent=`Listo en ${((performance.now()-t0)/1000).toFixed(0)} s. Descárgalo o compártelo. Si cambias el estilo, el formato o las fotos, se podrá generar otro.`;
     $('#encSpec').innerHTML=[`MP4 · ${pick.mux==='avc'?'H.264':'VP9'}`,`${EW}×${EH}`,`${FPS} fps`,`${frames} fotogramas`,`${mmss(TL0.total)}`,`${(blob.size/1048576).toFixed(1).replace('.',',')} MB`].map(s=>`<span>${s}</span>`).join('');
@@ -1615,6 +1630,8 @@ function embSetup(){
   gx.onclick=async()=>{TRACK=null;await saveTrack();tnote.hidden=true;gx.hidden=true;if(POOL.length)await applyPool();};
   new MutationObserver(()=>{gx.hidden=!TRACK;}).observe(tnote,{attributes:true,childList:true,characterData:true,subtree:true});
   ctr.appendChild(gf);
+  // "Subir fotos" sin fotos: los archivos van a la app, que los sube como en la pestaña FOTOS
+  $('#embUp').querySelector('input').addEventListener('change',e=>{const f=[...(e.target.files||[])];e.target.value='';if(f.length)embPost({upload:f});});
   window.addEventListener('message',e=>{
     if(e.origin!==location.origin||!e.data||e.data.type!=='bdm-host')return;
     if(e.data.tab){embTab=e.data.tab;if(POOL.length)showTab(embTab);}
@@ -1622,7 +1639,17 @@ function embSetup(){
   });
   embTab=new URLSearchParams(location.search).get('tab')==='alb'?'alb':'vid';showTab(embTab);
 }
-function embEmpty(msg){const b=$('#embEmpty');if(msg)b.lastElementChild.textContent=msg;b.hidden=false;$('#p-vid').hidden=true;$('#p-alb').hidden=true;$('#busy').hidden=true;embPost({ready:true,n:0});}
+function embShowResult(){
+  if(!lastVideo)return;setPlaying(false);
+  let o=$('#embRes');if(o)o.remove();
+  o=document.createElement('div');o.id='embRes';o.className='emb-res';
+  const url=$('#dlBtn').href,name=$('#dlBtn').download;
+  o.innerHTML='<video controls playsinline autoplay src="'+url+'"></video><button type="button" class="emb-res-x" aria-label="Cerrar">✕</button><div class="emb-res-bar"><button type="button" class="btn" id="embResSh">Compartir</button><a class="btn ghost" id="embResDl" href="'+url+'" download="'+name+'">Descargar</a></div>';
+  document.body.appendChild(o);
+  o.querySelector('.emb-res-x').onclick=()=>{const v=o.querySelector('video');try{v.pause();}catch(_){}o.remove();};
+  $('#embResSh').onclick=()=>$('#shBtn').click();
+}
+function embEmpty(msg){const b=$('#embEmpty');if(msg)b.querySelector('span').textContent=msg;b.hidden=false;$('#p-vid').hidden=true;$('#p-alb').hidden=true;$('#busy').hidden=true;embPost({ready:true,n:0});}
 let embBusy=false,embTab='vid';
 /* Carretera entre paradas para guías sin carretera propia (29 sept 2026): /road-path del Worker (Geoapify, datos
    OpenStreetMap). El Worker la guarda para siempre; aquí además en el móvil ('road-<guía>'). Sin respuesta → línea recta. */
@@ -1660,7 +1687,7 @@ async function embLoad(){
     f.forEach(d=>{const x=d.data();if(x.type==='video'||x.tag==='documento')return;add(x.url,x.lat,x.lng,toDate(x.takenAt||x.createdAt),d.id);});
     try{const q=await U.collection('pins').where('routeId','==',window.EMB_GUIA).get();q.forEach(d=>{const x=d.data();add(x.photoUrl,x.lat,x.lng,toDate(x.createdAt));});}catch(_){}
     ((GUIDE&&GUIDE.routePhotos)||[]).forEach(x=>{const u=typeof x==='string'?x:x&&(x.url||x.photoUrl);add(u,x&&x.lat,x&&x.lng,toDate(x&&(x.takenAt||x.uploadedAt||x.createdAt)));});
-    if(!c.length){POOL=[];embEmpty('Sube las fotos del viaje en la pestaña Fotos y aquí se monta el vídeo y el álbum.');return;}
+    if(!c.length){POOL=[];embEmpty('Sube las fotos del viaje y aquí se monta el vídeo y el álbum.');return;}
     $('#embEmpty').hidden=true;
     c.sort((a,b)=>(a.date||0)-(b.date||0));
     // Máximo MAXP: si hay más, repartidas por todo el viaje

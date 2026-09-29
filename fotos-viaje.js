@@ -289,7 +289,7 @@ const fotosViaje = (() => {
   const MED = { frame: null, holder: null, guia: null, encoding: false, hasVideo: false, pill: '', done: false, ro: null };
 
   // v=: subirlo al cambiar viaje-fotos.html (si no, el móvil puede usar una copia vieja)
-  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=9&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
+  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=10&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
 
   function _mediaShow(tab) {
     const s = _st; if (!s) return;
@@ -353,6 +353,12 @@ const fotosViaje = (() => {
     if (e.origin !== location.origin || !e.data || e.data.type !== 'bdm-vf') return;
     if (!MED.frame || e.source !== MED.frame.contentWindow) return;
     const d = e.data;
+    // "Subir fotos" desde VÍDEO/ÁLBUM vacíos: se suben como en FOTOS (misma revisión de fotos intrusas)
+    if (Array.isArray(d.upload) && d.upload.length && _st && _st.docId === MED.guia) {
+      _show('fotos');
+      _upload(d.upload);
+      return;
+    }
     MED.encoding = !!d.encoding; MED.hasVideo = !!d.hasVideo;
     if ('pill' in d) { MED.pill = d.pill || ''; MED.done = !!d.done; }
     _pillPaint();
