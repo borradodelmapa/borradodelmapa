@@ -189,6 +189,8 @@ h1 em{font-style:normal;color:var(--gold)}
 .phpin{width:48px;height:48px;border-radius:50%;border:3px solid var(--gold);background:#111 center/cover no-repeat;box-shadow:0 4px 12px rgba(0,0,0,.5);position:relative}
 .phpin b{position:absolute;top:-8px;right:-8px;background:#0D0F10;color:#f5f0e8;border-radius:999px;font:700 11px/1 var(--body);padding:4px 6px;border:1px solid var(--gold)}
 #vehSeg button{min-width:0;flex:1 1 30%;text-align:center}
+.genpill{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:65;background:var(--gold);color:#0D0F10;border:0;padding:12px 16px;font:700 14px/1 var(--body);box-shadow:0 8px 24px rgba(0,0,0,.5);cursor:pointer}
+.genpill.done{background:#ECEBE8}
 </style>
 </head>
 <body>
@@ -282,7 +284,7 @@ h1 em{font-style:normal;color:var(--gold)}
           </div>
         </div>
         <div class="render">
-          <div><b>Generar el MP4 de verdad</b><div class="note">Se crea fotograma a fotograma, sin perder ninguno, en H.264 a 1080p. Tarda más o menos lo que dura el vídeo. Para guardarlo: menú ⋮ del vídeo → Descargar.</div></div>
+          <div><b>Generar el MP4 de verdad</b><div class="note">Se crea fotograma a fotograma en H.264 a 1080p. Mientras tanto puedes mirar el Mapa o el Álbum: un aviso abajo te dice cómo va y te avisa al terminar. No cierres esta página.</div></div>
           <button class="btn" id="encBtn" type="button">Generar MP4</button>
           <div class="bar" id="encBar" hidden><i></i></div>
           <div class="note" id="encNote"></div>
@@ -318,6 +320,7 @@ h1 em{font-style:normal;color:var(--gold)}
   <div class="cap"><b id="lbT"></b><span id="lbS"></span><a id="lbMap" href="#" target="_blank" rel="noopener">Ver en Google Maps ↗</a></div>
   <div class="nav"><button class="btn ghost" id="lbPrev" type="button">‹ Anterior</button><button class="btn ghost" id="lbClose" type="button">Cerrar</button><button class="btn ghost" id="lbNext" type="button">Siguiente ›</button></div>
 </div>
+<button class="genpill" id="genPill" type="button" hidden></button>
 <div class="errbar" id="errBar" hidden><span id="errTxt">Algo ha fallado.</span><button class="btn ghost" id="errCopy" type="button">Copiar detalles</button><button class="btn ghost" id="errX" type="button" aria-label="Cerrar">✕</button></div>
 <div class="busy" id="busy" hidden><b id="busyT">LEYENDO FOTOS</b><div class="bar"><i id="busyBar"></i></div><div class="note" id="busyN"></div></div>
 
@@ -491,21 +494,25 @@ async function decode(file){
 async function loadFiles(files,src){
   const busy=$('#busy');busy.hidden=false;$('#busyT').textContent='LEYENDO FOTOS';
   const out=[],rows=[];let skipped=0;const list=files.slice(0,Math.max(0,MAXP-POOL.length)||MAXP);
-  for(let i=0;i<list.length;i++){const f=list[i];
-    $('#busyN').textContent=`Foto ${i+1} de ${list.length}`;$('#busyBar').style.width=((i+1)/list.length*100)+'%';
+  let doneN=0,next=0;const res=new Array(list.length);
+  const one=async i=>{const f=list[i];
     let gps=null,meta=null;
     try{gps=await exifr.gps(f);}catch(_){}
     try{meta=await exifr.parse(f,{tiff:true,exif:true,gps:false,interop:false,ifd1:false,xmp:false,icc:false,iptc:false,jfif:false,ihdr:false});}catch(_){}
     const lat=gps&&isFinite(gps.latitude)&&!(gps.latitude===0&&gps.longitude===0)?gps.latitude:null;
     const lng=lat!=null?gps.longitude:null;
     let date=(meta&&(meta.DateTimeOriginal||meta.CreateDate||meta.ModifyDate))||null;if(date&&!(date instanceof Date))date=new Date(date);
-    const row={name:f.name,src,lat,lng,date,country:lat!=null&&WORLD?esName(countryAt(lat,lng)):null,ok:false,thumb:null};rows.push(row);
+    const row={name:f.name,src,lat,lng,date,country:lat!=null&&WORLD?esName(countryAt(lat,lng)):null,ok:false,thumb:null};rows[i]=row;
     try{
       const img=await decode(f);const hd=resizeTo(img,1800);if(img.close)img.close();
       const p=await finishPhoto({lat,lng,date:date||new Date(f.lastModified||Date.now()),name:f.name},hd);
-      row.ok=true;row.thumb=p.pinUrl;out.push(p);
+      row.ok=true;row.thumb=p.pinUrl;res[i]=p;
     }catch(e){skipped++;}
-  }
+    doneN++;$('#busyN').textContent=`Foto ${doneN} de ${list.length}`;$('#busyBar').style.width=(doneN/list.length*100)+'%';
+  };
+  const lane=async()=>{while(next<list.length)await one(next++);};
+  await Promise.all([lane(),lane(),lane()]);
+  res.forEach(p=>p&&out.push(p));
   busy.hidden=true;
   return{out,skipped,extra:Math.max(0,files.length-40),rows};
 }
@@ -786,27 +793,35 @@ function renderFrame(ctx,buf,t,TL,k){
 const TILES=new Map();
 const TILE_URL=(z,x,y)=>`https://tile.openstreetmap.org/${z}/${x}/${y}.png`;
 const tkey=(z,x,y)=>z+'/'+x+'/'+y;
+// Cada tesela se tiñe (gris oscuro de la marca) UNA vez al llegar, no en cada fotograma, y se guarda en la caché del
+// móvil ('bdm-tiles'): la segunda vez el mapa sale al instante y sin gastar datos.
+const isBmp=t=>typeof ImageBitmap!=='undefined'&&t instanceof ImageBitmap;
+async function tintTile(bm){const c=document.createElement('canvas');c.width=bm.width;c.height=bm.height;const g=c.getContext('2d');g.drawImage(bm,0,0);
+  g.globalCompositeOperation='saturation';g.fillStyle='rgba(128,128,128,.7)';g.fillRect(0,0,c.width,c.height);g.globalCompositeOperation='source-over';g.fillStyle='rgba(13,15,16,.40)';g.fillRect(0,0,c.width,c.height);
+  if(bm.close)bm.close();return createImageBitmap(c);}
+async function fetchTile(z,x,y){const url=TILE_URL(z,x,y);let r=null,cache=null;
+  try{cache=await caches.open('bdm-tiles');r=await cache.match(url);}catch(_){}
+  if(!r){r=await fetch(url,{mode:'cors'});if(!r.ok)throw new Error(r.status);if(cache)try{await cache.put(url,r.clone());}catch(_){}}
+  return tintTile(await createImageBitmap(await r.blob()));}
 function getTile(z,x,y){const n=1<<z;x=((x%n)+n)%n;if(y<0||y>=n)return null;const k=tkey(z,x,y);const t=TILES.get(k);
-  if(t===undefined){TILES.set(k,'loading');fetch(TILE_URL(z,x,y),{mode:'cors'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.blob();}).then(b=>createImageBitmap(b)).then(bm=>{TILES.set(k,bm);onTile();}).catch(()=>TILES.set(k,'fail'));return null;}
-  return (typeof ImageBitmap!=='undefined'&&t instanceof ImageBitmap)?t:null;}
+  if(t===undefined){TILES.set(k,'loading');fetchTile(z,x,y).then(bm=>{TILES.set(k,bm);onTile();}).catch(()=>TILES.set(k,'fail'));return null;}
+  return isBmp(t)?t:null;}
 let tileT=null;function onTile(){if(playing||encoding)return;clearTimeout(tileT);tileT=setTimeout(()=>{if(TL&&TL.style==='reel'&&!$('#p-vid').hidden)drawPreview();},150);}
 function tilesFor(v,W,H){const z=clamp(Math.round(Math.log2(v.s/256)),2,15),n=1<<z,ts=v.s/n;
   const x0=Math.floor((v.x-W/2/v.s)*n),x1=Math.floor((v.x+W/2/v.s)*n),y0=Math.floor((v.y-H/2/v.s)*n),y1=Math.floor((v.y+H/2/v.s)*n);
   const out=[];for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++)out.push([z,x,y]);return{z,n,ts,out};}
 function drawTiles(ctx,W,H,v,u){
-  drawBase(ctx,W,H,v,PAL.dark,u); // fondo mientras llegan las teselas
-  const{n,ts,out}=tilesFor(v,W,H);
-  for(const[z,x,y]of out){const img=getTile(z,x,y);if(!img)continue;ctx.drawImage(img,W/2+(x/n-v.x)*v.s,H/2+(y/n-v.y)*v.s,ts+.7,ts+.7);}
-  ctx.save();ctx.globalCompositeOperation='saturation';ctx.fillStyle='rgba(128,128,128,.7)';ctx.fillRect(0,0,W,H);ctx.restore();
-  ctx.fillStyle='rgba(13,15,16,.40)';ctx.fillRect(0,0,W,H);
+  const{n,ts,out}=tilesFor(v,W,H);const imgs=out.map(([z,x,y])=>getTile(z,x,y));
+  if(imgs.some(i=>!i))drawBase(ctx,W,H,v,PAL.dark,u); // solo si falta alguna tesela (el mapa vectorial cuesta mucho por fotograma)
+  out.forEach(([z,x,y],i)=>{const img=imgs[i];if(img)ctx.drawImage(img,W/2+(x/n-v.x)*v.s,H/2+(y/n-v.y)*v.s,ts+.7,ts+.7);});
 }
 async function prefetchTiles(TL,onp){
   const need=new Map();
   for(let t=0;t<TL.total;t+=1/8){const v=TL.viewAt(t);if(!v)continue;for(const[z,x,y]of tilesFor(v,TL.W,TL.H).out){const n=1<<z,xx=((x%n)+n)%n;if(y<0||y>=n)continue;need.set(tkey(z,xx,y),[z,xx,y]);}}
-  const list=[...need.values()].filter(([z,x,y])=>{const t=TILES.get(tkey(z,x,y));return !(typeof ImageBitmap!=='undefined'&&t instanceof ImageBitmap);});
+  const list=[...need.values()].filter(([z,x,y])=>!isBmp(TILES.get(tkey(z,x,y))));
   const total=list.length;let done=0;
-  const w=async()=>{while(list.length){const[z,x,y]=list.shift();const k=tkey(z,x,y);try{const r=await fetch(TILE_URL(z,x,y),{mode:'cors'});if(!r.ok)throw 0;TILES.set(k,await createImageBitmap(await r.blob()));}catch(_){TILES.set(k,'fail');}done++;onp&&onp(done,total);}};
-  await Promise.all([w(),w(),w(),w()]);
+  const w=async()=>{while(list.length){const[z,x,y]=list.shift();const k=tkey(z,x,y);try{TILES.set(k,await fetchTile(z,x,y));}catch(_){TILES.set(k,'fail');}done++;onp&&onp(done,total);}};
+  await Promise.all([w(),w(),w(),w(),w(),w()]);
   return total;
 }
 const FLAG={España:'🇪🇸',Portugal:'🇵🇹',Francia:'🇫🇷',Italia:'🇮🇹',Vietnam:'🇻🇳',Nepal:'🇳🇵',Marruecos:'🇲🇦',Tailandia:'🇹🇭',Alemania:'🇩🇪','Reino Unido':'🇬🇧',Grecia:'🇬🇷',México:'🇲🇽',Perú:'🇵🇪',Japón:'🇯🇵',Camboya:'🇰🇭',Laos:'🇱🇦',Indonesia:'🇮🇩',India:'🇮🇳',Andorra:'🇦🇩',Suiza:'🇨🇭',Austria:'🇦🇹',Croacia:'🇭🇷',Turquía:'🇹🇷',Egipto:'🇪🇬',Argentina:'🇦🇷',Chile:'🇨🇱',Colombia:'🇨🇴',Cuba:'🇨🇺','Estados Unidos':'🇺🇸',Canadá:'🇨🇦',Islandia:'🇮🇸',Noruega:'🇳🇴',Irlanda:'🇮🇪','Países Bajos':'🇳🇱',Bélgica:'🇧🇪',China:'🇨🇳',Malasia:'🇲🇾',Filipinas:'🇵🇭','Sri Lanka':'🇱🇰',Brasil:'🇧🇷',Bolivia:'🇧🇴',Ecuador:'🇪🇨',Túnez:'🇹🇳',Albania:'🇦🇱',Montenegro:'🇲🇪',Eslovenia:'🇸🇮',Polonia:'🇵🇱',Chequia:'🇨🇿',Hungría:'🇭🇺',Rumanía:'🇷🇴',Bulgaria:'🇧🇬',Suecia:'🇸🇪',Finlandia:'🇫🇮',Dinamarca:'🇩🇰',Jordania:'🇯🇴',Australia:'🇦🇺','Nueva Zelanda':'🇳🇿'};
@@ -944,6 +959,16 @@ segCtl('#fmtSeg',v=>{fmt=v;rebuildVideo();});
 segCtl('#vehSeg',v=>{vehicle=v;rebuildVideo();});
 
 /* codificar MP4 */
+const DOC_TITLE=document.title;
+function pill(t,done){const p=$('#genPill');p.textContent=t;p.hidden=false;p.classList.toggle('done',!!done);}
+$('#genPill').onclick=()=>{showTab('vid');$('#vidActs').hidden||$('#vidActs').scrollIntoView({behavior:'smooth',block:'center'});if($('#genPill').classList.contains('done'))$('#genPill').hidden=true;};
+function askNotify(){try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}catch(_){}}
+async function notifyDone(){
+  try{navigator.vibrate&&navigator.vibrate([120,60,120]);}catch(_){}
+  if(!document.hidden)return;
+  try{if(!('Notification' in window)||Notification.permission!=='granted')return;const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+    const o={body:'Tu vídeo del viaje está listo. Toca para verlo.',icon:'/icon-192.png',tag:'bdm-video'};if(reg)reg.showNotification('Borrado del Mapa',o);else new Notification('Borrado del Mapa',o);}catch(_){}
+}
 let lastVideo=null,encoding=false;
 function resetVideoOut(){
   if(encoding)return;
@@ -970,36 +995,37 @@ async function pickCodec(W,H){
   return null;
 }
 $('#encBtn').onclick=async()=>{
-  setPlaying(false);const btn=$('#encBtn'),note=$('#encNote'),bar=$('#encBar');
-  const pick=await pickCodec(TL.W,TL.H);
+  setPlaying(false);const TL0=TL;const btn=$('#encBtn'),note=$('#encNote'),bar=$('#encBar');
+  const pick=await pickCodec(TL0.W,TL0.H);
   if(!pick){note.className='note warn';note.textContent='Este navegador no permite crear MP4 aquí (pasa en iPhone con iOS antiguo y en algunos navegadores). Prueba con Chrome en el móvil o en el ordenador.';return;}
   if(lastVideo){$('#vidActs').scrollIntoView({behavior:'smooth',block:'center'});return;}
   btn.disabled=true;btn.textContent='Generando…';encoding=true;bar.hidden=false;note.className='note';const t0=performance.now();
   let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
-  if(TL.style==='reel'){note.textContent='Preparando el mapa…';const nt=await prefetchTiles(TL,(d,tot)=>{bar.firstElementChild.style.width=(d/tot*100)+'%';note.textContent=`Descargando el mapa: ${d} de ${tot}`;});bar.firstElementChild.style.width='0%';}
-  const c=document.createElement('canvas');c.width=TL.W;c.height=TL.H;const b=document.createElement('canvas');b.width=TL.W;b.height=TL.H;const ctx=c.getContext('2d');
-  const muxer=new Mp4Muxer.Muxer({target:new Mp4Muxer.ArrayBufferTarget(),video:{codec:pick.mux,width:TL.W,height:TL.H},fastStart:'in-memory'});
+  askNotify();pill(`🗺️ Preparando el mapa…`);
+  if(TL0.style==='reel'){note.textContent='Preparando el mapa…';await prefetchTiles(TL0,(d,tot)=>{bar.firstElementChild.style.width=(d/tot*100)+'%';note.textContent=`Descargando el mapa: ${d} de ${tot}`;pill(`🗺️ Mapa ${Math.round(d/tot*100)} %`);});bar.firstElementChild.style.width='0%';}
+  const c=document.createElement('canvas');c.width=TL0.W;c.height=TL0.H;const b=document.createElement('canvas');b.width=TL0.W;b.height=TL0.H;const ctx=c.getContext('2d');
+  const muxer=new Mp4Muxer.Muxer({target:new Mp4Muxer.ArrayBufferTarget(),video:{codec:pick.mux,width:TL0.W,height:TL0.H},fastStart:'in-memory'});
   let err=null;const enc=new VideoEncoder({output:(ch,meta)=>muxer.addVideoChunk(ch,meta),error:e=>{err=e;}});
   enc.configure(pick.cfg);
-  const frames=Math.ceil(TL.total*FPS);
+  const frames=Math.ceil(TL0.total*FPS);
   try{
     for(let f=0;f<frames;f++){
       if(err)throw err;
-      renderFrame(ctx,b,f/FPS,TL,1);
+      renderFrame(ctx,b,f/FPS,TL0,1);
       const vf=new VideoFrame(c,{timestamp:Math.round(f*1e6/FPS),duration:Math.round(1e6/FPS)});
       enc.encode(vf,{keyFrame:f%(FPS*2)===0});vf.close();
       while(enc.encodeQueueSize>6)await new Promise(r=>setTimeout(r,4));
-      if(f%3===0){bar.firstElementChild.style.width=(f/frames*100)+'%';note.textContent=`Fotograma ${f} de ${frames}`;await new Promise(r=>setTimeout(r,0));}
+      if(f%3===0){const pc=Math.round(f/frames*100);bar.firstElementChild.style.width=pc+'%';note.textContent=`Fotograma ${f} de ${frames}`;pill(`🎬 Vídeo ${pc} %`);document.title=`(${pc} %) Generando vídeo`;await new Promise(r=>setTimeout(r,0));}
     }
     await enc.flush();muxer.finalize();
     const blob=new Blob([muxer.target.buffer],{type:'video/mp4'});
     lastVideo=blob;const v=$('#encOut');if(v.src)URL.revokeObjectURL(v.src);v.src=URL.createObjectURL(blob);v.hidden=false;
-    const dl=$('#dlBtn');dl.href=v.src;dl.download=`${slug(M.title)}-${fmt==='v'?'vertical':'horizontal'}.mp4`;$('#vidActs').hidden=false;
+    const dl=$('#dlBtn');dl.href=v.src;dl.download=`${slug(TL0.M.title)}-${TL0.W<TL0.H?'vertical':'horizontal'}.mp4`;$('#vidActs').hidden=false;pill('✓ Vídeo listo · verlo',true);notifyDone();
     bar.firstElementChild.style.width='100%';
     note.textContent=`Listo en ${((performance.now()-t0)/1000).toFixed(0)} s. Descárgalo o compártelo. Si cambias el estilo, el formato o las fotos, se podrá generar otro.`;
-    $('#encSpec').innerHTML=[`MP4 · ${pick.mux==='avc'?'H.264':'VP9'}`,`${TL.W}×${TL.H}`,`${FPS} fps`,`${frames} fotogramas`,`${mmss(TL.total)}`,`${(blob.size/1048576).toFixed(1).replace('.',',')} MB`].map(s=>`<span>${s}</span>`).join('');
-  }catch(e){note.className='note warn';note.textContent='No se pudo generar el vídeo en este navegador: '+(e&&e.message||e);reportErr(e);}
-  finally{try{enc.close();}catch(_){}encoding=false;try{wake&&wake.release();}catch(_){}btn.disabled=!!lastVideo;btn.textContent=lastVideo?'Vídeo listo ✓':'Generar MP4';}
+    $('#encSpec').innerHTML=[`MP4 · ${pick.mux==='avc'?'H.264':'VP9'}`,`${TL0.W}×${TL0.H}`,`${FPS} fps`,`${frames} fotogramas`,`${mmss(TL0.total)}`,`${(blob.size/1048576).toFixed(1).replace('.',',')} MB`].map(s=>`<span>${s}</span>`).join('');
+  }catch(e){note.className='note warn';note.textContent='No se pudo generar el vídeo en este navegador: '+(e&&e.message||e);reportErr(e);$('#genPill').hidden=true;}
+  finally{document.title=DOC_TITLE;try{enc.close();}catch(_){}encoding=false;try{wake&&wake.release();}catch(_){}btn.disabled=!!lastVideo;btn.textContent=lastVideo?'Vídeo listo ✓':'Generar MP4';}
 };
 
 /* comparación de nitidez */

@@ -20,5 +20,38 @@
     "ejemplo": "29 sept 2026, Paco (HONOR, Android, app instalada): Galería → foto del mojón N2 → Compartir → Borrado del Mapa → pantalla 'AÑADIENDO AL MAPA — No se encontraron fotos para añadir.' y no aparece nada en el mapa.",
     "nota": "El mensaje sale de share-inbox.js:~692 cuando la caché 'share-inbox' está vacía tras la redirección ?share=ready. O el service worker (sw.js handleShareTarget) recibe 0 ficheros en formData.getAll('photos'), o la caché no persiste entre el SW y la página. Mirar el ?share=ready&count=N real y si el SW activo es la versión actual. OJO: aunque llegue la foto, Android 10+ probablemente pone el GPS a ceros también aquí (ver docs/estudio-video-album.md).",
     "estado": "nuevo"
+  },
+  {
+    "zona": "otro",
+    "gravedad": "media",
+    "estado": "visto",
+    "titulo": "Vídeo del viaje: generar en la nube (irse a tomar un café y seguir navegando)",
+    "tipo": "idea",
+    "area": "ux",
+    "modelo": "opus",
+    "ejemplo": "29 sept 2026, Paco: 'Tenemos que ver cómo cargar en segundo plano, que se puedan ir a tomar un café y seguir navegando… vas de viaje'.",
+    "nota": "Proyecto punto 1 en docs/estudio-video-album.md. Hoy la generación va en el móvil y se corta si se sale de la página. Propuesta: fotos a R2 + render en Cloudflare Browser Rendering o Containers + aviso. Coste céntimos/vídeo, avisar §8, toca el Worker."
+  },
+  {
+    "zona": "otro",
+    "gravedad": "media",
+    "estado": "visto",
+    "titulo": "Vídeo del viaje: sistema de plantillas para ir sumando variedad",
+    "tipo": "idea",
+    "area": "ux",
+    "modelo": "opus",
+    "ejemplo": "29 sept 2026, Paco: 'Tenemos que ver la manera de incluir plantillas de forma fácil para que poco a poco tengamos bastante variedad'.",
+    "nota": "Proyecto punto 2 en docs/estudio-video-album.md: plantilla = datos (escenas, ritmo, colores, efectos) sobre las piezas SCENES del motor de viaje-fotos.html. Primer paso: pasar Reel/Ruta/Película a ese formato."
+  },
+  {
+    "zona": "otro",
+    "gravedad": "media",
+    "estado": "nuevo",
+    "titulo": "Worker /upload-gallery-photo: dos subidas en el mismo milisegundo se pisan en R2",
+    "tipo": "fallo",
+    "area": "fallos",
+    "modelo": "sonnet",
+    "ejemplo": "Visto al revisar el código el 29 sept 2026 (no reportado por usuarios).",
+    "nota": "salma-worker.js ~9372: key = photos/{uid}/gallery/{Date.now()}.jpg. Galería o share-inbox subiendo en paralelo pueden sobrescribir una foto con otra. Arreglo: añadir sufijo aleatorio a la key. Toca el Worker (deploy)."
   }
 ]

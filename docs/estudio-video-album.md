@@ -167,3 +167,39 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
   MapTiler/Stadia (plan gratuito limitado, luego de pago) → avisar a Paco con cifras antes.
 - Límites: los tramos van en línea recta entre paradas (no por la carretera real todavía); los km son en línea recta
   (menos que los reales). Siguiente mejora: trazado por carretera con ROAD_GEOM de la guía.
+
+### Tanda "rapidez y segundo plano" (29 sept 2026, subida)
+- Mapa del reel: cada tesela se tiñe UNA vez al llegar (antes, filtro a pantalla completa en cada fotograma) y el mapa
+  vectorial de respaldo solo se dibuja si falta alguna tesela → fotogramas mucho más ligeros. Teselas guardadas en la
+  caché del móvil ('bdm-tiles'): la 2.ª vez sale al instante y sin gastar datos. 6 descargas a la vez.
+- Fotos: se leen 3 a la vez.
+- Mientras genera: se puede usar Mapa y Álbum; aviso flotante abajo ("🎬 Vídeo 45 %"), porcentaje en el título de la
+  pestaña, vibración y notificación al terminar (si se da permiso y la página está en segundo plano).
+- El vídeo en curso ya no se ve afectado si cambias estilo, formato o fotos mientras genera.
+- LÍMITE: salir de la página (o que Android congele la pestaña) corta la generación. "Irse a tomar un café" de verdad
+  = generar en la nube (ver proyecto, punto 1).
+
+## PROYECTO: lo que queda, en orden propuesto (29 sept 2026)
+1. **Generar en la nube (segundo plano de verdad).** Se suben las fotos (ya existe "Guardar en la guía" → R2), el
+   servidor monta el MP4 con el mismo motor en un navegador sin pantalla y avisa (notificación / WhatsApp / email).
+   Opciones: Cloudflare Browser Rendering (≈0,09 $/hora de navegador, 10 h/mes gratis; un reel ≈1–2 min → <0,005 €)
+   o Cloudflare Containers. 💶 céntimos por vídeo; decisión y cifra exacta antes de hacerlo (§8). Toca el Worker.
+2. **Sistema de plantillas** (para tener variedad poco a poco sin tocar el motor):
+   - Una plantilla = un objeto de datos en `plantillas/<id>.js`: `{id, nombre, necesitaMapa, formatos, colores,
+     fuentes, escenas:[{tipo:'gancho'|'mapa'|'tramo'|'fotos'|'capitulo'|'cierre', dur, opciones}], ritmo:{fotoSeg,
+     corte:'seco'|'fundido'}, efectos:{grano, bandas, viñeta}, texto:{mayusculas, tamaños}}`.
+   - El motor ya tiene las escenas como piezas (`SCENES`): la plantilla solo elige cuáles, en qué orden y con qué
+     estilo. Hoy "Reel", "Ruta" y "Película" están escritas a mano en `buildReel`/`buildTimeline` → pasarlas a este
+     formato será el primer paso.
+   - Selector de plantillas con miniatura animada (primeros 3 s) en la pestaña Vídeo.
+   - Ideas de plantillas: Postal (marcos blancos tipo polaroid sobre papel), Documental (texto largo de Salma),
+     Nocturna (neón), Aventura (cortes muy rápidos), Minimal (blanco y tipografía grande), Clásica (Ken Burns lento).
+3. **Carretera real**: la moto por el trazado de la guía (ROAD_GEOM en KV / directions ya guardadas) y km reales.
+4. **Música**: biblioteca por estados de ánimo (licencia apta para uso dentro de la app), cortes al ritmo, pista propia.
+5. **Salma**: título, textos por parada y guion (≈0,01–0,03 €/viaje); mirar fotos sin GPS (≈0,003 €/foto); voz
+   ElevenLabs (≈0,10–0,20 €/vídeo); tu voz con teleprompter (0 €).
+6. **Álbum nivel Polarsteps** + PDF descargable; después, imprenta bajo demanda (negocio).
+7. **Integrar en la app** (no página aparte): generar mientras se navega por la app.
+8. **App Android (Play Store)** para tener el GPS de las fotos (25 $ una vez).
+9. Proveedor de mapas con volumen (MapTiler/Stadia) si el uso crece.
+10. Fallo del Worker: /upload-gallery-photo nombra con Date.now() → subidas simultáneas se pisan.
