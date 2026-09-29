@@ -203,3 +203,17 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
 8. **App Android (Play Store)** para tener el GPS de las fotos (25 $ una vez).
 9. Proveedor de mapas con volumen (MapTiler/Stadia) si el uso crece.
 10. Fallo del Worker: /upload-gallery-photo nombra con Date.now() → subidas simultáneas se pisan.
+
+### Sistema de plantillas (29 sept 2026, subido) — Paco: "Adelante con las plantillas"
+- Las plantillas viven en **`viaje-plantillas.js`** (una ficha de datos cada una; instrucciones arriba del archivo).
+  **Añadir una = copiar una ficha, cambiar id/nombre/desc y valores. No se toca el motor.** Subir `?v=` del script en
+  viaje-fotos.html al cambiarlo.
+- La ficha elige: secuencia (`reel` · `ruta` · `capitulos`), secuencia sin mapa, ritmo (segundos por foto, corte seco o
+  fundido, máx. fotos, duración de tramos), look (colores, marco de foto `blur|negro|polaroid|blanco`, rótulo
+  `chip|serif|grande|polaroid|minimal|ninguno`, tipografía de títulos, fondo claro/oscuro, grano, viñeta, bandas de cine).
+- 6 de salida: **Reel**, **Aventura** (0,72 s por foto, rótulos enormes), **Ruta**, **Película**, **Postal** (polaroid
+  sobre papel, títulos en cursiva) y **Minimal** (blanco). El motor lee el aspecto de la ficha (variable LOOK).
+- Sin ubicación, cualquier plantilla sale en capítulos por días con su propio aspecto (aviso en pantalla).
+- Se recuerda la última plantilla elegida en el móvil.
+- Pendiente (proyecto): miniatura animada de cada plantilla en el selector; más tipos de escena (mapa claro, collage
+  de 4, texto largo de Salma); música por plantilla.
