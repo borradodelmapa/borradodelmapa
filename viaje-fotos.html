@@ -169,6 +169,14 @@ h1 em{font-style:normal;color:var(--gold)}
 .picks{display:flex;gap:8px;flex-wrap:wrap}
 .picks .btn{flex:1;min-width:150px}
 .status{font-size:13px;color:var(--gold);min-height:1em}
+.daysview{display:flex;flex-direction:column;gap:18px}
+.daysview .dnote{font-size:13px;color:var(--gold);background:var(--gold-soft);border:1px solid rgba(240,180,41,.3);border-radius:12px;padding:10px 12px}
+.daysview h3{margin:0 0 8px;font:700 22px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase}
+.daysview h3 span{color:var(--muted);font:400 14px/1.2 var(--body);text-transform:none;letter-spacing:0;margin-left:8px}
+.daysview .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px}
+.daysview button{appearance:none;border:0;padding:0;background:#111;border-radius:8px;overflow:hidden;position:relative;aspect-ratio:1;cursor:pointer}
+.daysview button img{width:100%;height:100%;object-fit:cover;display:block}
+.daysview button span{position:absolute;left:4px;bottom:4px;font:600 11px/1 var(--body);background:rgba(6,5,3,.75);color:#f5f0e8;padding:3px 5px;border-radius:5px}
 .leaflet-container{background:#0c1216;font-family:var(--body)}
 .phpin{width:48px;height:48px;border-radius:50%;border:3px solid var(--gold);background:#111 center/cover no-repeat;box-shadow:0 4px 12px rgba(0,0,0,.5);position:relative}
 .phpin b{position:absolute;top:-8px;right:-8px;background:#060503;color:#f5f0e8;border-radius:999px;font:700 11px/1 var(--body);padding:4px 6px;border:1px solid var(--gold)}
@@ -212,6 +220,7 @@ h1 em{font-style:normal;color:var(--gold)}
     <div class="mapbox" id="mapbox">
       <div id="lmap" style="position:absolute;inset:0"></div>
     </div>
+    <div id="daysView" class="daysview" hidden></div>
     <div class="why">
       <div><b>Cada foto en su sitio</b>Se lee el GPS y la fecha de la foto. Si una foto no tiene GPS, se coloca entre la anterior y la siguiente.</div>
       <div><b>Paradas y días automáticos</b>Las fotos hechas cerca y seguidas forman una parada. La fecha decide el día.</div>
@@ -339,6 +348,15 @@ function range(a,b){
 }
 function coords(lat,lng){const f=v=>Math.abs(v).toFixed(2).replace('.',',');return `${f(lat)}° ${lat>=0?'N':'S'} · ${f(lng)}° ${lng>=0?'E':'O'}`;}
 const midnight=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+const hm=d=>d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+function partOfDay(d){const h=d.getHours();return h<12?'Por la mañana':h<15?'A mediodía':h<21?'Por la tarde':'Por la noche';}
+// Separa por fecha las fotos que no son del viaje: un hueco de más de 2 días parte en viajes distintos y se queda el más grande.
+function splitTrips(list){
+  const l=list.slice().sort((a,b)=>a.date-b.date);const trips=[];let cur=[];
+  l.forEach((p,i)=>{if(i&&p.date-l[i-1].date>2*864e5){trips.push(cur);cur=[];}cur.push(p);});if(cur.length)trips.push(cur);
+  const main=trips.reduce((a,b)=>b.length>a.length?b:a,trips[0]||[]);
+  return{main,aside:trips.filter(t=>t!==main).flat()};
+}
 
 /* ───────── fotos de ejemplo (dibujadas) ───────── */
 function paint(kind,seed,w,h){
@@ -460,7 +478,7 @@ async function loadFiles(files,src){
 function buildModel(list,meta={}){
   list.sort((a,b)=>a.date-b.date);
   const withG=list.filter(p=>p.lat!=null);
-  if(!withG.length)return{error:'nogps'};
+  if(!withG.length)return buildModelNoGps(list,meta);
   let est=0;
   list.forEach(p=>{if(p.lat!=null)return;let prev=null,next=null;for(const q of withG){if(q.date<=p.date)prev=q;else{next=q;break;}}
     const a=prev||next,b=next||prev;const f=(a===b||+b.date===+a.date)?0:(p.date-a.date)/(b.date-a.date);
@@ -480,6 +498,23 @@ function buildModel(list,meta={}){
     title:meta.title||(countries.join(' · ')||'MI VIAJE').toUpperCase(),
     subtitle:meta.subtitle||(stops.length>1?`De ${stops[0].name} a ${stops[stops.length-1].name}`:''),
     d0:list[0].date,d1:list[list.length-1].date};
+}
+
+// Sin GPS (Android lo quita a las webs): días exactos por la fecha y "momentos" del día por los huecos de más de 2 h.
+function buildModelNoGps(list,meta){
+  const d0=midnight(list[0].date);
+  list.forEach(p=>{p.lat=p.lng=null;p.est=false;p.day=Math.round((midnight(p.date)-d0)/864e5)+1;});
+  const stops=[];
+  for(const p of list){const s=stops[stops.length-1];
+    if(s&&p.day===s.day&&p.date-s.last<2*3600e3){s.photos.push(p);s.last=p.date;}
+    else stops.push({lat:null,lng:null,day:p.day,date:p.date,last:p.date,photos:[p],name:partOfDay(p.date)});}
+  stops.forEach((s,i)=>{s.idx=i;s.country=null;s.photos.forEach(p=>p.stop=s);});
+  const days=list[list.length-1].day,a=list[0].date,b=list[list.length-1].date;
+  const sameMonth=a.getMonth()===b.getMonth()&&a.getFullYear()===b.getFullYear();
+  return{photos:list,stops,km:0,days,countries:[],est:0,noMap:true,
+    title:meta.title||(sameMonth?'VIAJE DE '+fMonth.format(a).toUpperCase():'MI VIAJE'),
+    subtitle:meta.subtitle||`${days} ${days===1?'día':'días'} · ${list.length} fotos`,
+    d0:a,d1:b};
 }
 
 /* ───────── dibujo de mapa ───────── */
@@ -557,14 +592,13 @@ function caption(ctx,W,H,u,stop,date,alpha,est){
   const m=72*u,rise=(1-alpha)*24*u;
   txt(ctx,`DÍA ${stop.day}`,m,H-258*u+rise,{size:34*u,weight:700,color:'#f0b429',ls:6*u,alpha});
   txt(ctx,stop.name.toUpperCase(),m,H-150*u+rise,{size:112*u,weight:800,maxW:W-2*m,alpha});
-  txt(ctx,`${short(date)} · ${coords(stop.lat,stop.lng)}${est?' · ubicación estimada':''}`,m,H-92*u+rise,{family:'body',weight:500,size:27*u,color:'rgba(245,240,232,.72)',alpha});
+  txt(ctx,stop.lat==null?`${short(date)} · ${hm(date)}`:`${short(date)} · ${coords(stop.lat,stop.lng)}${est?' · ubicación estimada':''}`,m,H-92*u+rise,{family:'body',weight:500,size:27*u,color:'rgba(245,240,232,.72)',alpha});
 }
 function kbFor(n){const r=rng(n*97+13);const inw=n%2===0;const px=r()*1.4-.7,py=r()*.8-.4;return{z0:inw?1.02:1.13,z1:inw?1.13:1.02,px0:px,px1:-px*.5,py0:py,py1:-py*.5,dir:n%2?1:-1};}
 function photoLayer(ctx,W,H,u,ph,p,kb,film){
   const A=W/H,a=ph.w/ph.h;
   if(Math.abs(Math.log(a/A))<.45){drawCover(ctx,ph.hd,0,0,W,H,lerp(kb.z0,kb.z1,p),lerp(kb.px0,kb.px1,p),lerp(kb.py0,kb.py1,p));return null;}
-  if(film){ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);}
-  else{drawCover(ctx,ph.tiny,0,0,W,H,1.15);ctx.fillStyle='rgba(6,5,3,.42)';ctx.fillRect(0,0,W,H);}
+  drawCover(ctx,ph.tiny,0,0,W,H,1.15);ctx.fillStyle=film?'rgba(0,0,0,.62)':'rgba(6,5,3,.42)';ctx.fillRect(0,0,W,H);
   let fw,fh;if(a>A){fw=film?W:W*.9;fh=fw/a;}else{fh=film?H:H*.84;fw=fh*a;}
   const fx=(W-fw)/2,fy=(H-fh)/2-(!film&&W<H?H*.06:0);
   if(!film){ctx.save();ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=50*u;ctx.shadowOffsetY=18*u;ctx.fillStyle='#000';ctx.fillRect(fx,fy,fw,fh);ctx.restore();}
@@ -615,10 +649,10 @@ const SCENES={
   chapter(ctx,W,H,sg,lt,TL,u){
     const p=lt/sg.dur,st=sg.stop;ctx.fillStyle='#050403';ctx.fillRect(0,0,W,H);
     const a=Math.min(eout(clamp(p/.3,0,1)),1-clamp((p-.8)/.2,0,1));
-    const dayStops=TL.stops.filter(s=>s.day===st.day).map(s=>s.name);
+    const dayStops=st.lat==null?[fLong.format(st.date)]:TL.stops.filter(s=>s.day===st.day).map(s=>s.name);
     txt(ctx,`DÍA ${st.day}`,W/2,H/2-70*u,{size:40*u,weight:700,ls:12*u,align:'center',color:'#f0b429',alpha:a});
     txt(ctx,[...new Set(dayStops)].join(' · ').toUpperCase(),W/2,H/2+40*u,{size:118*u,weight:700,ls:4*u,align:'center',maxW:W-140*u,alpha:a});
-    txt(ctx,fLong.format(st.date),W/2,H/2+120*u,{family:'serif',italic:true,weight:400,size:44*u,align:'center',alpha:a*.9,color:'#d9cfbd'});
+    txt(ctx,st.lat==null?`${TL.M.photos.filter(p=>p.day===st.day).length} fotos`:fLong.format(st.date),W/2,H/2+120*u,{family:'serif',italic:true,weight:400,size:44*u,align:'center',alpha:a*.9,color:'#d9cfbd'});
   },
   photo(ctx,W,H,sg,lt,TL,u){
     const p=clamp(lt/(sg.dur+XF),0,1),film=TL.style==='pelicula';
@@ -644,7 +678,7 @@ const SCENES={
     if(TL.style==='pelicula'){
       const last=TL.hero2;drawCover(ctx,last.hd,0,0,W,H,lerp(1.1,1.02,p),0,0);ctx.fillStyle='rgba(6,5,3,.72)';ctx.fillRect(0,0,W,H);
       const a=eout(clamp(p/.35,0,1));
-      txt(ctx,`${nf(M.days)} ${M.days===1?'día':'días'}, ${M.stops.length} paradas, ${nf(M.km*k)} km`,W/2,H/2,{family:'serif',italic:true,weight:400,size:54*u,align:'center',maxW:W-120*u,alpha:a});
+      txt(ctx,M.noMap?`${nf(M.days)} ${M.days===1?'día':'días'}, ${M.photos.length} fotos`:`${nf(M.days)} ${M.days===1?'día':'días'}, ${M.stops.length} paradas, ${nf(M.km*k)} km`,W/2,H/2,{family:'serif',italic:true,weight:400,size:54*u,align:'center',maxW:W-120*u,alpha:a});
       wordmark(ctx,W/2,H/2+120*u,40*u,'center',a);
       return;
     }
@@ -668,8 +702,8 @@ function buildTimeline(M,style,fmt){
   const[W,H]=fmt==='v'?[1080,1920]:[1920,1080];const u=Math.min(W,H)/1080;
   const TL={W,H,u,style,M,stops:M.stops,segs:[]};
   const ms=maxS(W,H);
-  TL.overview=fitBox(M.stops,W<H?[90*u,H*.47,W-90*u,H-130*u]:[W*.5,110*u,W-110*u,H-110*u],W,H,ms*.3);
-  TL.outroView=fitBox(M.stops,W<H?[90*u,130*u,W-90*u,H*.56]:[110*u,110*u,W*.5,H-110*u],W,H,ms*.3);
+  if(!M.noMap){TL.overview=fitBox(M.stops,W<H?[90*u,H*.47,W-90*u,H-130*u]:[W*.5,110*u,W-110*u,H-110*u],W,H,ms*.3);
+  TL.outroView=fitBox(M.stops,W<H?[90*u,130*u,W-90*u,H*.56]:[110*u,110*u,W*.5,H-110*u],W,H,ms*.3);}
   const cap=style==='ruta'?24:20,N=M.photos.length;
   const keep=new Set(N<=cap?M.photos:Array.from({length:cap},(_,i)=>M.photos[Math.round(i*(N-1)/(cap-1))]));
   TL.hero=M.photos.find(p=>p.land)||M.photos[0];TL.hero2=[...M.photos].reverse().find(p=>p.land)||M.photos[N-1];
@@ -723,7 +757,13 @@ function mmss(s){s=Math.max(0,s);return `${Math.floor(s/60)}:${String(Math.floor
 function drawPreview(){renderFrame(vc.getContext('2d'),vbuf,T,TL,vc._k);$('#scrub').value=Math.round(T/TL.total*1000);$('#vtime').textContent=`${mmss(T)} / ${mmss(TL.total)}`;}
 function tick(now){if(!playing)return;T+=Math.min(.1,(now-last)/1000);last=now;if(T>=TL.total){T=TL.total;setPlaying(false);}drawPreview();if(playing)requestAnimationFrame(tick);}
 function setPlaying(on){playing=on;$('#playBtn').textContent=on?'❚❚':'▶';$('#playBtn').setAttribute('aria-label',on?'Pausa':'Reproducir');if(on){if(T>=TL.total-.05)T=0;last=performance.now();requestAnimationFrame(tick);}}
-function rebuildVideo(){setPlaying(false);TL=buildTimeline(M,style,fmt);T=Math.min(3,TL.total);sizePreview();drawPreview();$('#encOut').hidden=true;$('#encSpec').innerHTML='';$('#encNote').textContent='';drawCompare();}
+function syncStyleButtons(){
+  const rb=document.querySelector('#styleSeg button[data-v="ruta"]');
+  if(M&&M.noMap&&style==='ruta')style='pelicula';
+  rb.disabled=!!(M&&M.noMap);rb.title=rb.disabled?'Necesita fotos con ubicación':'';rb.style.opacity=rb.disabled?.45:1;
+  document.querySelectorAll('#styleSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v===style)));
+}
+function rebuildVideo(){syncStyleButtons();setPlaying(false);TL=buildTimeline(M,style,fmt);T=Math.min(3,TL.total);sizePreview();drawPreview();$('#encOut').hidden=true;$('#encSpec').innerHTML='';$('#encNote').textContent='';drawCompare();}
 $('#playBtn').onclick=()=>setPlaying(!playing);
 $('#scrub').oninput=e=>{setPlaying(false);T=e.target.value/1000*TL.total;drawPreview();};
 function segCtl(id,cb){const box=$(id);box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset.v);});}
@@ -783,8 +823,16 @@ async function drawCompare(){
 
 /* mapa interactivo (Leaflet + OpenStreetMap, gratis, igual que el resto de la app) */
 let LM=null,LLayer=null;
+function renderDays(){
+  const byDay=new Map();M.photos.forEach(p=>{if(!byDay.has(p.day))byDay.set(p.day,[]);byDay.get(p.day).push(p);});
+  $('#daysView').innerHTML=`<div class="dnote">Tus fotos no traen ubicación: Android la quita cuando se eligen desde una web. Las he ordenado por días y horas. En un paso siguiente, Salma pondrá el sitio de cada una.</div>`+
+    [...byDay].map(([d,ps])=>`<section><h3>Día ${d}<span>${esc(fLong.format(ps[0].date))}</span></h3><div class="strip">${ps.map(p=>`<button type="button" data-i="${M.photos.indexOf(p)}"><img src="${p.pinUrl}" alt=""><span>${hm(p.date)}</span></button>`).join('')}</div></section>`).join('');
+  $('#daysView').querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>openLB(+b.dataset.i));
+}
 function mapFit(){
   if(!M)return;
+  const nm=!!M.noMap;$('#mapbox').hidden=nm;$('#daysView').hidden=!nm;$('#p-map h2').textContent=nm?'Tu viaje, día a día':'Mapa interactivo';
+  if(nm){renderDays();return;}
   if(!LM){LM=L.map('lmap',{zoomControl:true,attributionControl:true});
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(LM);}
   LM.invalidateSize();
@@ -802,7 +850,7 @@ function drawMap(){}
 /* visor */
 let lbI=0;
 function openLB(i){lbI=(i+M.photos.length)%M.photos.length;const p=M.photos[lbI];$('#lbImg').src=p.url;$('#lbImg').alt=p.stop.name;$('#lbT').textContent=p.stop.name;
-  $('#lbS').textContent=`Día ${p.day} · ${fLong.format(p.date)} · ${coords(p.lat,p.lng)}${p.est?' · ubicación estimada':''}`;$('#lbMap').href=`https://www.google.com/maps/search/?api=1&query=${p.lat.toFixed(6)},${p.lng.toFixed(6)}`;$('#lbMap').textContent=p.est?'Ver en Google Maps (posición estimada) ↗':'Ver en Google Maps ↗';$('#lb').hidden=false;$('#lbClose').focus();}
+  $('#lbS').textContent=p.lat==null?`Día ${p.day} · ${fLong.format(p.date)} · ${hm(p.date)}`:`Día ${p.day} · ${fLong.format(p.date)} · ${coords(p.lat,p.lng)}${p.est?' · ubicación estimada':''}`;$('#lbMap').hidden=p.lat==null;if(p.lat==null){$('#lb').hidden=false;$('#lbClose').focus();return;}$('#lbMap').href=`https://www.google.com/maps/search/?api=1&query=${p.lat.toFixed(6)},${p.lng.toFixed(6)}`;$('#lbMap').textContent=p.est?'Ver en Google Maps (posición estimada) ↗':'Ver en Google Maps ↗';$('#lb').hidden=false;$('#lbClose').focus();}
 $('#lbClose').onclick=()=>{$('#lb').hidden=true;};$('#lbPrev').onclick=()=>openLB(lbI-1);$('#lbNext').onclick=()=>openLB(lbI+1);
 document.addEventListener('keydown',e=>{if($('#lb').hidden)return;if(e.key==='Escape')$('#lb').hidden=true;if(e.key==='ArrowRight')openLB(lbI+1);if(e.key==='ArrowLeft')openLB(lbI-1);});
 
@@ -817,34 +865,35 @@ async function mapImage(w,h,numbers,pad=70){
 let albumUrls=[];
 async function buildAlbum(){
   albumUrls.forEach(u=>URL.revokeObjectURL(u));
-  const bigMap=await mapImage(1600,1560,true,110),mini=await mapImage(900,634,false,60);albumUrls=[bigMap,mini];
+  const nm=!!M.noMap;const bigMap=nm?null:await mapImage(1600,1560,true,110),mini=nm?null:await mapImage(900,634,false,60);albumUrls=nm?[]:[bigMap,mini];
+  const where=p=>p.lat==null?hm(p.date):coords(p.lat,p.lng);
   const pages=[];const cap=(p)=>`<p class="pgcap"><b>${esc(p.stop.name)} · Día ${p.day}</b>${esc(fLong.format(p.date))}${p.est?' · ubicación estimada':''}</p>`;
   const img=p=>`<img src="${p.url}" alt="${esc(p.stop.name)}">`;
   const cover=M.photos.find(p=>p.land)||M.photos[0];
-  pages.push({label:'Portada',html:`<section class="pg p-cover"><div>${img(cover)}</div><div class="side"><p class="eyebrow">Borrado del Mapa · Álbum de viaje</p><h3 style="font-size:${Math.min(7.6,30/(Math.max(...M.title.split(' ').map(w=>w.length))*.55)).toFixed(2)}cqw">${esc(M.title)}</h3>${M.subtitle?`<p class="sub">${esc(M.subtitle)}</p>`:''}<p class="dates">${esc(range(M.d0,M.d1))}</p><div class="mini"><img src="${mini}" alt="Mapa del recorrido"></div></div></section>`});
-  pages.push({label:'Mapa del viaje',html:`<section class="pg p-map"><div><img src="${bigMap}" alt="Mapa con las paradas numeradas"></div><div class="list"><p class="eyebrow">El recorrido</p><h4>${nf(M.km)} km<br>${M.days} ${M.days===1?'día':'días'}</h4><ol>${M.stops.slice(0,14).map((s,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><div>${esc(s.name)}<span>Día ${s.day} · ${short(s.date)} · ${s.photos.length} ${s.photos.length===1?'foto':'fotos'}</span></div></li>`).join('')}</ol></div></section>`});
+  pages.push({label:'Portada',html:`<section class="pg p-cover"><div>${img(cover)}</div><div class="side"><p class="eyebrow">Borrado del Mapa · Álbum de viaje</p><h3 style="font-size:${Math.min(7.6,30/(Math.max(...M.title.split(' ').map(w=>w.length))*.55)).toFixed(2)}cqw">${esc(M.title)}</h3>${M.subtitle?`<p class="sub">${esc(M.subtitle)}</p>`:''}<p class="dates">${esc(range(M.d0,M.d1))}</p>${mini?`<div class="mini"><img src="${mini}" alt="Mapa del recorrido"></div>`:''}</div></section>`});
+  if(!nm)pages.push({label:'Mapa del viaje',html:`<section class="pg p-map"><div><img src="${bigMap}" alt="Mapa con las paradas numeradas"></div><div class="list"><p class="eyebrow">El recorrido</p><h4>${nf(M.km)} km<br>${M.days} ${M.days===1?'día':'días'}</h4><ol>${M.stops.slice(0,14).map((s,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><div>${esc(s.name)}<span>Día ${s.day} · ${short(s.date)} · ${s.photos.length} ${s.photos.length===1?'foto':'fotos'}</span></div></li>`).join('')}</ol></div></section>`});
   const byDay=new Map();M.photos.forEach(p=>{if(!byDay.has(p.day))byDay.set(p.day,[]);byDay.get(p.day).push(p);});
   let alt=0;
   for(const[day,ps]of byDay){
     const opener=ps.find(p=>p!==cover)||ps[0];const places=[...new Set(ps.map(p=>p.stop.name))];
-    pages.push({label:`Día ${day}`,html:`<section class="pg p-day"><div class="side"><p class="num"><small>DÍA</small>${String(day).padStart(2,'0')}</p><p class="when">${esc(fLong.format(ps[0].date))}</p><p class="places">${places.map(esc).join(' · ')}</p><p class="coords">${esc(coords(ps[0].lat,ps[0].lng))}<br>${ps.length} ${ps.length===1?'foto':'fotos'}</p></div><figure>${img(opener)}</figure></section>`});
+    pages.push({label:`Día ${day}`,html:`<section class="pg p-day"><div class="side"><p class="num"><small>DÍA</small>${String(day).padStart(2,'0')}</p><p class="when">${esc(fLong.format(ps[0].date))}</p>${nm?'':`<p class="places">${places.map(esc).join(' · ')}</p>`}<p class="coords">${esc(ps[0].lat==null?(ps.length>1?`De ${hm(ps[0].date)} a ${hm(ps[ps.length-1].date)}`:hm(ps[0].date)):coords(ps[0].lat,ps[0].lng))}<br>${ps.length} ${ps.length===1?'foto':'fotos'}</p></div><figure>${img(opener)}</figure></section>`});
     const rest=ps.filter(p=>p!==opener&&p!==cover);
     while(rest.length){
       const a=rest[0],b=rest[1],c=rest[2];
       if(c&&alt%2===1){rest.splice(0,3);alt++;pages.push({label:`Día ${day}`,html:`<section class="pg p-trio">${[a,b,c].map(p=>`<figure><div>${img(p)}</div>${cap(p)}</figure>`).join('')}</section>`});continue;}
       if(!a.land&&b&&!b.land){rest.splice(0,2);alt++;pages.push({label:`Día ${day}`,html:`<section class="pg p-pair">${[a,b].map(p=>`<figure><div>${img(p)}</div>${cap(p)}</figure>`).join('')}</section>`});continue;}
       rest.shift();alt++;
-      if(a.land)pages.push({label:`Día ${day}`,html:`<section class="pg p-full"><figure>${img(a)}</figure><div class="strip">${cap(a)}<p class="pgcap">${esc(coords(a.lat,a.lng))}</p></div></section>`});
-      else pages.push({label:`Día ${day}`,html:`<section class="pg p-port"><div class="words"><p class="eyebrow">Día ${a.day}</p><h5>${esc(a.stop.name)}</h5><p class="pgcap">${esc(fLong.format(a.date))}<br>${esc(coords(a.lat,a.lng))}</p></div><figure><div>${img(a)}</div></figure></section>`});
+      if(a.land)pages.push({label:`Día ${day}`,html:`<section class="pg p-full"><figure>${img(a)}</figure><div class="strip">${cap(a)}<p class="pgcap">${esc(where(a))}</p></div></section>`});
+      else pages.push({label:`Día ${day}`,html:`<section class="pg p-port"><div class="words"><p class="eyebrow">Día ${a.day}</p><h5>${esc(a.stop.name)}</h5><p class="pgcap">${esc(fLong.format(a.date))}<br>${esc(where(a))}</p></div><figure><div>${img(a)}</div></figure></section>`});
     }
   }
-  pages.push({label:'Contraportada',html:`<section class="pg p-back"><div class="nums"><div><b>${nf(M.km)}</b><span>km</span></div><div><b>${M.days}</b><span>${M.days===1?'día':'días'}</span></div><div><b>${M.photos.length}</b><span>fotos</span></div></div><p>${esc(M.subtitle||M.title)}</p><div class="mark">BORRADO <b>DEL</b> MAPA</div></section>`});
+  pages.push({label:'Contraportada',html:`<section class="pg p-back"><div class="nums">${nm?'':`<div><b>${nf(M.km)}</b><span>km</span></div>`}<div><b>${M.days}</b><span>${M.days===1?'día':'días'}</span></div><div><b>${M.photos.length}</b><span>fotos</span></div></div><p>${esc(M.subtitle||M.title)}</p><div class="mark">BORRADO <b>DEL</b> MAPA</div></section>`});
   $('#album').innerHTML=pages.map((p,i)=>`<p class="pglabel">Página ${i+1} de ${pages.length} · ${esc(p.label)}</p>`+p.html.replace(/<\/section>$/,i>0&&i<pages.length-1?`<span class="folio ${i%2?'r':'l'}">${i+1}</span></section>`:'</section>')).join('');
 }
 
 /* estadísticas y carga */
 function renderStats(){
-  const s=[[M.photos.length,'fotos'],[M.stops.length,'paradas'],[M.days,M.days===1?'día':'días'],[nf(M.km),'km']];
+  const s=M.noMap?[[M.photos.length,'fotos'],[M.days,M.days===1?'día':'días'],[M.stops.length,'momentos']]:[[M.photos.length,'fotos'],[M.stops.length,'paradas'],[M.days,M.days===1?'día':'días'],[nf(M.km),'km']];
   $('#stats').innerHTML=s.map(([n,l])=>`<div><b>${n}</b><span>${l}</span></div>`).join('');
 }
 async function useModel(m){M=m;renderStats();mapFit();rebuildVideo();await buildAlbum();}
@@ -865,10 +914,13 @@ document.querySelectorAll('.fileIn').forEach(inp=>inp.addEventListener('change',
     renderDiag(rows);
     const note=$('#srcNote');
     if(!out.length){note.className='note warn';note.textContent='No se pudo abrir ninguna foto para mostrarla (mira la tabla: si trae GPS, el problema es solo el formato).';st.textContent='';return;}
-    const m=buildModel(out.slice());
-    if(m.error){note.className='note warn';note.textContent='Ninguna de estas fotos trae ubicación GPS. Mira la tabla: prueba a elegirlas "Desde Archivos".';st.textContent='';return;}
+    const{main,aside}=splitTrips(out);
+    const m=buildModel(main.slice());
     if(M&&M.photos[0]&&M.photos[0].url)M.photos.forEach(p=>URL.revokeObjectURL(p.url));
-    const bits=[`Tus fotos: ${out.length}.`];if(m.est)bits.push(`${m.est} sin GPS, colocadas entre la anterior y la siguiente.`);if(skipped)bits.push(`${skipped} no se pudieron abrir.`);if(extra)bits.push('Solo se usan las 40 primeras.');
+    const bits=[`Tus fotos: ${main.length}.`];
+    if(aside.length)bits.push(`He apartado ${aside.length} de otras fechas (${[...new Set(aside.map(p=>short(p.date)))].join(', ')}): no parecen de este viaje.`);
+    if(m.noMap)bits.push('No traen ubicación (Android la quita desde la web): van ordenadas por días.');
+    if(m.est)bits.push(`${m.est} sin GPS, colocadas entre la anterior y la siguiente.`);if(skipped)bits.push(`${skipped} no se pudieron abrir.`);if(extra)bits.push('Solo se usan las 40 primeras.');
     note.className='note';note.textContent=bits.join(' ');
     st.textContent='';
     await useModel(m);

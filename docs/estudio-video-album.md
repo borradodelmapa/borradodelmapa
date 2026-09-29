@@ -106,7 +106,7 @@ durante el viaje.
 - Pendiente de probar cuando Paco tenga ordenador: viaje-fotos.html desde el portátil (y un iPhone si hay).
 
 ### Plan de B por pasos (cada uno se prueba antes del siguiente)
-1. viaje-fotos.html funciona SIN GPS: agrupa por días y horas, vídeo "Película" y álbum por días (0 €).
+1. ✅ (29 sept, subido) viaje-fotos.html funciona SIN GPS: agrupa por días y "momentos" (huecos de 2 h), aparta fotos de otras fechas (huecos de más de 2 días), vista "día a día", vídeo "Película" y álbum por días (0 €).
 2. Títulos y textos editables (a mano primero).
 3. Música: biblioteca libre de derechos + subir pista propia, cortes al ritmo (0 € si la licencia es gratuita).
 4. Voz propia con teleprompter (0 €).
