@@ -10,6 +10,7 @@ Todos en Cloudflare Worker secrets (`wrangler secret put`).
 |--------|----------|-----|
 | `ANTHROPIC_API_KEY` | Claude Sonnet | Chat principal + visión |
 | `OPENAI_API_KEY` | GPT-4o-mini | Enrich, bloques, narrador, admin |
+| `GEOAPIFY_KEY` | Geoapify (rutas, datos OSM) | `/road-path`: carretera del vídeo. Plan gratis 3.000 créditos/día, uso comercial OK, atribución obligatoria. Copia: `api/geoapify.txt` (29 sept 2026) |
 | `GOOGLE_PLACES_KEY` | Google Places/Maps/Directions | Verify, búsquedas, fotos, directions |
 | `BRAVE_SEARCH_KEY` | Brave Search | buscar_web tool + transporte |
 | `DUFFEL_ACCESS_TOKEN` | Duffel | buscar_vuelos |

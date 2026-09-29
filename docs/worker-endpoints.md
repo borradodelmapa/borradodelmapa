@@ -17,6 +17,7 @@
 | POST | `/upload-doc` | Subir documento/avatar a R2 (max 10MB) |
 | POST | `/delete-doc` | Borrar documento de R2 |
 | GET | `/doc/*` | Servir documento desde R2 |
+| GET | `/road-path` | Carretera entre paradas para el vídeo (Geoapify, datos OSM). `?mode=drive&pts=lat,lng|lat,lng…` (2–80). Guardada para siempre en KV `roadpath:*` (fallos 7 días); tope 2.500 créditos/día en `roadpathcnt:<fecha>` → 429. Secret `GEOAPIFY_KEY` (29 sept 2026) |
 | GET | `/place-details` | Google Place Details por `place_id` (nombre, rating, horarios, foto) |
 | GET | `/directions` | Google Directions API proxy (polyline, legs, optional steps) |
 | GET | `/practical-info` | KV lookup `dest:{cc}:practical` por country code |
