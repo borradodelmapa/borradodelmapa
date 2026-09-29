@@ -304,3 +304,17 @@ viejo y tarjetas beta (se conserva "tocar el mapa → foto en ese punto"). Icono
 - 💶 0 €. Lecturas de Firestore: las mismas que la beta (maps ≤200, fotos ≤800, pins ≤800) al abrir Tu mundo o al
   recalcular la franja (≤ 1 vez cada 12 h). Mapa del mundo (`vendor/countries-50m.json`, 756 KB) solo al calcular.
 - tu-mundo.html sigue existiendo sin enlace; en el paso 4 redirigirá a la app.
+
+### Paso 2 (29 sept 2026, subido): pestaña FOTOS en cada guía propia
+- `fotos-viaje.js` + `fotos-viaje.css`; se monta desde `mapa-itinerario.js` (v85) tras `mapaItinerario.init()`.
+- Pestañas `RUTA · FOTOS (n)` arriba de la columna de tarjetas. Solo guías propias guardadas (docId + saved, y el doc
+  de maps sin `saved_from`, 1 lectura); nunca en el avance sin cuenta ni en guías de Explorar.
+- FOTOS reúne: `fotos` con routeId (subidas aquí, "tocar el mapa → foto", chat, viaje-fotos), `pins` con foto y routeId
+  (si su url no está ya) y `maps.photos` (cuaderno viejo). Rejilla por día ("Día N · fecha" desde la primera foto).
+- "Añadir fotos": varias de golpe, EXIF (fecha+GPS, exifr cargado al vuelo), 1600 px, SUBIDA UNA A UNA a
+  /upload-gallery-photo (evita el choque de Date.now(), caso 03), doc en `fotos` {routeId, takenAt, lat, lng,
+  source:'guia', origName}. No duplica (nombre+fecha). Pantalla encendida mientras sube.
+- Visor a pantalla completa: deslizar, ‹ ›, "Ver sitio" en Google Maps si hay GPS, quitar foto (solo docs de `fotos`).
+  El botón atrás del móvil cierra el visor.
+- En el móvil, con FOTOS el mapa baja a 24vh y se ocultan los botones flotantes del mapa.
+- 💶 Solo almacenamiento R2 (~0,01–0,02 €/mes por 1.000 fotos). Sin APIs de pago.

@@ -794,6 +794,8 @@ ${trk}
     const stops = _preview ? _preview.stops : routeData.stops;
     mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: _preview ? null : (routeData.road_geometry || null) });
     mapaItinerario.init('itin-cards-container', stops, routeData, _preview ? Object.assign({}, options, { _preview }) : options);
+    // Pestañas RUTA · FOTOS en guías propias (fotos-viaje.js, caso 14 paso 2)
+    if (typeof fotosViaje !== 'undefined' && !_preview) fotosViaje.mount(document.getElementById('itin-cards-container'), docId, routeData, options);
 
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
@@ -852,6 +854,7 @@ ${trk}
 
     try { mapaRuta.destroy(); } catch (_) {}
     try { mapaItinerario.destroy(); } catch (_) {}
+    try { if (typeof fotosViaje !== 'undefined') fotosViaje.unmount(); } catch (_) {}
 
     document.body.querySelectorAll('.itin-action-bar').forEach(el => el.remove());
 
@@ -880,6 +883,7 @@ ${trk}
     try { mapaItinerario.destroy(); } catch (_) {}
     mapaRuta.init('itin-map-container', routeData.stops, { preview: true, roadGeometry: routeData.road_geometry || null });
     mapaItinerario.init('itin-cards-container', routeData.stops, routeData, window._itinViewOptions || {});
+    if (typeof fotosViaje !== 'undefined') fotosViaje.mount(document.getElementById('itin-cards-container'), window._itinViewDocId, routeData, window._itinViewOptions || {});
     setTimeout(() => mapaRuta.invalidateSize(), 200);
   }
   window._refreshItinInPlace = _refreshItinInPlace;
