@@ -1099,12 +1099,15 @@ let M=null,TL=null,style='reel',fmt='v',T=0,playing=false,last=0;
 const vc=$('#vc'),vbuf=document.createElement('canvas');
 function sizePreview(){
   const st=$('#stage');st.className='stage '+fmt;
-  const cssW=st.clientWidth||380,dpr=Math.min(2,window.devicePixelRatio||1);
-  const k=Math.min(1,cssW*dpr/TL.W);vc.width=Math.round(TL.W*k);vc.height=Math.round(TL.H*k);vbuf.width=vc.width;vbuf.height=vc.height;vc._k=k;
+  // Vista previa ligera: como mucho ~1,5 píxeles por punto de pantalla y 540 de ancho (el MP4 sale a su resolución)
+  const cssW=st.clientWidth||380,dpr=Math.min(1.5,window.devicePixelRatio||1);
+  const k=Math.min(1,cssW*dpr/TL.W,540/Math.min(TL.W,TL.H));vc.width=Math.round(TL.W*k);vc.height=Math.round(TL.H*k);vbuf.width=vc.width;vbuf.height=vc.height;vc._k=k;
 }
 function mmss(s){s=Math.max(0,s);return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;}
 function drawPreview(){renderFrame(vc.getContext('2d'),vbuf,T,TL,vc._k);$('#scrub').value=Math.round(T/TL.total*1000);$('#vtime').textContent=`${mmss(T)} / ${mmss(TL.total)}`;}
-function tick(now){if(!playing)return;T+=Math.min(.1,(now-last)/1000);last=now;if(T>=TL.total){T=TL.total;setPlaying(false);}drawPreview();if(playing)requestAnimationFrame(tick);}
+// Tiempo real: si el móvil no llega a dibujar todos los fotogramas, se saltan (antes avanzaba como mucho 0,1 s por
+// fotograma → en un móvil lento se veía a cámara lenta, 'infumable', Paco 30 sept 2026).
+function tick(now){if(!playing)return;T+=Math.min(.5,(now-last)/1000);last=now;if(T>=TL.total){T=TL.total;setPlaying(false);}drawPreview();if(playing)requestAnimationFrame(tick);}
 function setPlaying(on){playing=on;$('#playBtn').textContent=on?'❚❚':'▶';$('#playBtn').setAttribute('aria-label',on?'Pausa':'Reproducir');if(on){if(T>=TL.total-.05)T=0;last=performance.now();requestAnimationFrame(tick);}}
 $('#styleSeg').innerHTML=PLANT.map(p=>`<button type="button" data-v="${p.id}" aria-pressed="false"><canvas class="tth" data-t="${p.id}" width="108" height="192" aria-hidden="true"></canvas><span><b>${esc0(p.nombre)}</b><small>${esc0(p.desc)}</small></span></button>`).join('');
 function esc0(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
