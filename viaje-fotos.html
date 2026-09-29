@@ -191,8 +191,9 @@ h1 em{font-style:normal;color:var(--gold)}
 #vehSeg button{min-width:0;flex:1 1 30%;text-align:center}
 .genpill{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:65;background:var(--gold);color:#0D0F10;border:0;padding:12px 16px;font:700 14px/1 var(--body);box-shadow:0 8px 24px rgba(0,0,0,.5);cursor:pointer}
 .genpill.done{background:#ECEBE8}
-.tplgrid button i{display:inline-block;width:14px;height:14px;margin-right:6px;vertical-align:-2px;border:3px solid}
-.tplgrid button{min-width:140px;flex:1 1 45%}
+.tplgrid button{min-width:150px;flex:1 1 45%;display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center}
+.tplgrid .tth{width:54px;height:96px;background:#000;display:block}
+.tplgrid button b{display:block;font-weight:700}
 </style>
 </head>
 <body>
@@ -274,6 +275,12 @@ h1 em{font-style:normal;color:var(--gold)}
             <button type="button" data-v="furgo" aria-pressed="false">🚐 Autocaravana</button>
             <button type="button" data-v="avion" aria-pressed="false">✈️ Avión</button>
             <button type="button" data-v="pie" aria-pressed="false">🥾 A pie</button>
+          </div>
+        </div>
+        <div class="field"><span>Calidad</span>
+          <div class="seg" id="qSeg">
+            <button type="button" data-v="720" aria-pressed="true">Rápida · 720p<small>Más del doble de rápida. Perfecta para el móvil y WhatsApp</small></button>
+            <button type="button" data-v="1080" aria-pressed="false">Alta · 1080p<small>Para verla en la tele u ordenador</small></button>
           </div>
         </div>
         <div class="field"><span>Formato</span>
@@ -624,6 +631,8 @@ function wordmark(ctx,x,y,size,align,alpha,dark){
 
 /* ───────── escenas del vídeo ───────── */
 // LOOK = aspecto de la plantilla activa (colores, marco, rótulos, efectos). Lo pone renderFrame.
+// Sombra suave barata: 4 rectángulos translúcidos (shadowBlur por fotograma es carísimo en el móvil).
+function softShadow(ctx,x,y,w,h,u,rgb){for(let k=1;k<=4;k++){const d=k*7*u;ctx.fillStyle=`rgba(${rgb},.08)`;ctx.fillRect(x-d*.5,y+d*.7,w+d,h+d*.3);}}
 const hex2rgb=h=>{h=String(h).replace('#','');return[0,2,4].map(k=>parseInt(h.substr(k,2),16)).join(',');};
 const PLANT=(window.PLANTILLAS||[]).map(p=>Object.assign({},p,{look:Object.assign({},p.look,{rgb:hex2rgb(p.look.acento),fondoRGB:hex2rgb(p.look.fondo)})}));
 const tplById=id=>PLANT.find(p=>p.id===id)||PLANT[0];
@@ -671,7 +680,7 @@ function photoLayer(ctx,W,H,u,ph,p,kb){
       const maxW=W*(W<H?.8:.5),maxH=H*(W<H?.52:.66);let pw=maxW,phh=pw/a;if(phh>maxH){phh=maxH;pw=phh*a;}
       const pad=pw*.045,bottom=Math.max(pw*.2,90*u),fw=pw+pad*2,fh=phh+pad+bottom;
       const cx=W/2,cy=H*(W<H?.46:.5),ang=(kb.dir||1)*(1.6-1.1*p)*Math.PI/180;
-      ctx.save();ctx.translate(cx,cy);ctx.rotate(ang);ctx.shadowColor='rgba(40,28,15,.35)';ctx.shadowBlur=40*u;ctx.shadowOffsetY=16*u;ctx.fillStyle='#FFFFFF';ctx.fillRect(-fw/2,-fh/2,fw,fh);ctx.shadowColor='transparent';
+      ctx.save();ctx.translate(cx,cy);ctx.rotate(ang);softShadow(ctx,-fw/2,-fh/2,fw,fh,u,'40,28,15');ctx.fillStyle='#FFFFFF';ctx.fillRect(-fw/2,-fh/2,fw,fh);
       drawCover(ctx,ph.hd,-fw/2+pad,-fh/2+pad,pw,phh,lerp(1.02,1.07,p),lerp(-.4,.4,p)*(kb.dir||1),0);ctx.restore();
       return{x:cx-fw/2,y:cy-fh/2,w:fw,h:fh-bottom-pad,cx,cy:cy-fh/2+pad+phh/2,ang,pad,bottom:bottom+pad};
     }
@@ -684,7 +693,7 @@ function photoLayer(ctx,W,H,u,ph,p,kb){
   drawCover(ctx,ph.tiny,0,0,W,H,1.15);ctx.fillStyle=film?'rgba(0,0,0,.62)':`rgba(${LOOK.fondoRGB},.42)`;ctx.fillRect(0,0,W,H);
   let fw,fh;if(a>A){fw=film?W:W*.9;fh=fw/a;}else{fh=film?H:H*.84;fw=fh*a;}
   const fx=(W-fw)/2,fy=(H-fh)/2-(!film&&W<H?H*.06:0);
-  if(!film){ctx.save();ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=50*u;ctx.shadowOffsetY=18*u;ctx.fillStyle='#000';ctx.fillRect(fx,fy,fw,fh);ctx.restore();}
+  if(!film)softShadow(ctx,fx,fy,fw,fh,u,'0,0,0');
   drawCover(ctx,ph.hd,fx,fy,fw,fh,lerp(1,1.06,p),lerp(-.6,.6,p)*kb.dir,0);
   return{x:fx,y:fy,w:fw,h:fh};
 }
@@ -874,7 +883,7 @@ function drawVehicle(ctx,x,y,ang,u,kind,t){
   ctx.save();ctx.translate(x,y);
   const K=1.6;const pr=(t*1.3)%1;ctx.beginPath();ctx.arc(0,0,(26+pr*34)*u*K,0,7);ctx.strokeStyle=`rgba(${LOOK.rgb},${(1-pr)*.75})`;ctx.lineWidth=3*u;ctx.stroke();
   ctx.beginPath();ctx.arc(0,0,24*u*K,0,7);ctx.fillStyle='rgba(13,15,16,.55)';ctx.fill();
-  ctx.rotate(ang);ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=10*u;ctx.shadowOffsetY=4*u;
+  ctx.rotate(ang);
   const S=u*1.35*K;ctx.scale(S,S);const O=LOOK.acento,D='#15181a',C='#ECEBE8';
   if(kind==='moto'){rr(ctx,-21,-3,42,6,3,D);rr(ctx,-14,-6.5,27,13,6,O);rr(ctx,13,-11,3.5,22,1.7,C);ctx.beginPath();ctx.arc(-5,0,6,0,7);ctx.fillStyle=D;ctx.fill();ctx.beginPath();ctx.arc(-5,0,2.4,0,7);ctx.fillStyle=O;ctx.fill();}
   else if(kind==='coche'){rr(ctx,-22,-11,44,22,6,O);rr(ctx,5,-9,8,18,3,D);rr(ctx,-17,-8,7,16,3,D);rr(ctx,-7,-8.5,10,17,2,'#ff8a47');}
@@ -985,7 +994,7 @@ function mmss(s){s=Math.max(0,s);return `${Math.floor(s/60)}:${String(Math.floor
 function drawPreview(){renderFrame(vc.getContext('2d'),vbuf,T,TL,vc._k);$('#scrub').value=Math.round(T/TL.total*1000);$('#vtime').textContent=`${mmss(T)} / ${mmss(TL.total)}`;}
 function tick(now){if(!playing)return;T+=Math.min(.1,(now-last)/1000);last=now;if(T>=TL.total){T=TL.total;setPlaying(false);}drawPreview();if(playing)requestAnimationFrame(tick);}
 function setPlaying(on){playing=on;$('#playBtn').textContent=on?'❚❚':'▶';$('#playBtn').setAttribute('aria-label',on?'Pausa':'Reproducir');if(on){if(T>=TL.total-.05)T=0;last=performance.now();requestAnimationFrame(tick);}}
-$('#styleSeg').innerHTML=PLANT.map(p=>`<button type="button" data-v="${p.id}" aria-pressed="false"><i style="background:${p.look.fondo};border-color:${p.look.acento}"></i>${esc0(p.nombre)}<small>${esc0(p.desc)}</small></button>`).join('');
+$('#styleSeg').innerHTML=PLANT.map(p=>`<button type="button" data-v="${p.id}" aria-pressed="false"><canvas class="tth" data-t="${p.id}" width="108" height="192" aria-hidden="true"></canvas><span><b>${esc0(p.nombre)}</b><small>${esc0(p.desc)}</small></span></button>`).join('');
 function esc0(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 try{const sv=localStorage.getItem('bdm-plantilla');if(sv&&PLANT.some(p=>p.id===sv))style=sv;}catch(_){}
 function syncStyleButtons(){
@@ -1001,6 +1010,23 @@ function segCtl(id,cb){const box=$(id);box.addEventListener('click',e=>{const b=
 segCtl('#styleSeg',v=>{style=v;try{localStorage.setItem('bdm-plantilla',v);}catch(_){}rebuildVideo();});
 segCtl('#fmtSeg',v=>{fmt=v;rebuildVideo();});
 segCtl('#vehSeg',v=>{vehicle=v;rebuildVideo();});
+let QUAL=720;segCtl('#qSeg',v=>{QUAL=+v;resetVideoOut();});
+
+/* miniaturas animadas de las plantillas: los primeros segundos de cada una con TUS fotos */
+const TH={tls:new Map(),t:.6,last:0,buf:document.createElement('canvas')};TH.buf.width=108;TH.buf.height=192;
+function thumbTL(id){const key=[M&&M.photos.length,M&&M.noMap,GUIDE&&GUIDE.id,vehicle].join('|');let x=TH.tls.get(id);
+  if(!x||x.M!==M||x.key!==key){x={M,key,TL:buildTimeline(M,id,'v')};TH.tls.set(id,x);}return x.TL;}
+function thumbLoop(now){
+  requestAnimationFrame(thumbLoop);
+  if(!M||encoding||$('#p-vid').hidden||document.hidden||now-TH.last<125)return;
+  const dt=Math.min(.25,(now-TH.last)/1000);TH.last=now;TH.t+=dt;
+  const keepLook=LOOK;
+  document.querySelectorAll('#styleSeg canvas.tth').forEach(c=>{
+    try{const tl=thumbTL(c.dataset.t),span=Math.max(1,Math.min(7,tl.total-.8)),t=.6+(TH.t%span);renderFrame(c.getContext('2d'),TH.buf,t,tl,c.width/tl.W);}catch(e){}
+  });
+  LOOK=keepLook;
+}
+requestAnimationFrame(thumbLoop);
 
 /* codificar MP4 */
 const DOC_TITLE=document.title;
@@ -1030,32 +1056,33 @@ $('#shBtn').onclick=async()=>{
   }catch(e){if(e&&e.name!=='AbortError')$('#encNote').textContent='No se pudo compartir: '+(e.message||e);}
 };
 window.addEventListener('beforeunload',e=>{if(encoding){e.preventDefault();e.returnValue='';}});
-async function pickCodec(W,H){
+async function pickCodec(W,H,br=12e6){
   if(typeof VideoEncoder==='undefined')return null;
   for(const[codec,mux]of[['avc1.640033','avc'],['avc1.4d0033','avc'],['avc1.42e033','avc'],['vp09.00.41.08','vp9']]){
-    const cfg={codec,width:W,height:H,bitrate:12e6,framerate:FPS};if(mux==='avc')cfg.avc={format:'avc'};
+    const cfg={codec,width:W,height:H,bitrate:br,framerate:FPS};if(mux==='avc')cfg.avc={format:'avc'};
     try{const r=await VideoEncoder.isConfigSupported(cfg);if(r.supported)return{cfg,mux};}catch(_){}
   }
   return null;
 }
 $('#encBtn').onclick=async()=>{
   setPlaying(false);const TL0=TL;const btn=$('#encBtn'),note=$('#encNote'),bar=$('#encBar');
-  const pick=await pickCodec(TL0.W,TL0.H);
+  const KQ=Math.min(1,QUAL/Math.min(TL0.W,TL0.H)),EW=Math.round(TL0.W*KQ/2)*2,EH=Math.round(TL0.H*KQ/2)*2;
+  const pick=await pickCodec(EW,EH,QUAL>=1080?12e6:6e6);
   if(!pick){note.className='note warn';note.textContent='Este navegador no permite crear MP4 aquí (pasa en iPhone con iOS antiguo y en algunos navegadores). Prueba con Chrome en el móvil o en el ordenador.';return;}
   if(lastVideo){$('#vidActs').scrollIntoView({behavior:'smooth',block:'center'});return;}
   btn.disabled=true;btn.textContent='Generando…';encoding=true;bar.hidden=false;note.className='note';const t0=performance.now();
   let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
   askNotify();pill(`🗺️ Preparando el mapa…`);
   if(TL0.style==='reel'){note.textContent='Preparando el mapa…';await prefetchTiles(TL0,(d,tot)=>{bar.firstElementChild.style.width=(d/tot*100)+'%';note.textContent=`Descargando el mapa: ${d} de ${tot}`;pill(`🗺️ Mapa ${Math.round(d/tot*100)} %`);});bar.firstElementChild.style.width='0%';}
-  const c=document.createElement('canvas');c.width=TL0.W;c.height=TL0.H;const b=document.createElement('canvas');b.width=TL0.W;b.height=TL0.H;const ctx=c.getContext('2d');
-  const muxer=new Mp4Muxer.Muxer({target:new Mp4Muxer.ArrayBufferTarget(),video:{codec:pick.mux,width:TL0.W,height:TL0.H},fastStart:'in-memory'});
+  const c=document.createElement('canvas');c.width=EW;c.height=EH;const b=document.createElement('canvas');b.width=EW;b.height=EH;const ctx=c.getContext('2d');
+  const muxer=new Mp4Muxer.Muxer({target:new Mp4Muxer.ArrayBufferTarget(),video:{codec:pick.mux,width:EW,height:EH},fastStart:'in-memory'});
   let err=null;const enc=new VideoEncoder({output:(ch,meta)=>muxer.addVideoChunk(ch,meta),error:e=>{err=e;}});
   enc.configure(pick.cfg);
   const frames=Math.ceil(TL0.total*FPS);
   try{
     for(let f=0;f<frames;f++){
       if(err)throw err;
-      renderFrame(ctx,b,f/FPS,TL0,1);
+      renderFrame(ctx,b,f/FPS,TL0,KQ);
       const vf=new VideoFrame(c,{timestamp:Math.round(f*1e6/FPS),duration:Math.round(1e6/FPS)});
       enc.encode(vf,{keyFrame:f%(FPS*2)===0});vf.close();
       while(enc.encodeQueueSize>6)await new Promise(r=>setTimeout(r,4));
@@ -1067,7 +1094,7 @@ $('#encBtn').onclick=async()=>{
     const dl=$('#dlBtn');dl.href=v.src;dl.download=`${slug(TL0.M.title)}-${TL0.W<TL0.H?'vertical':'horizontal'}.mp4`;$('#vidActs').hidden=false;pill('✓ Vídeo listo · verlo',true);notifyDone();
     bar.firstElementChild.style.width='100%';
     note.textContent=`Listo en ${((performance.now()-t0)/1000).toFixed(0)} s. Descárgalo o compártelo. Si cambias el estilo, el formato o las fotos, se podrá generar otro.`;
-    $('#encSpec').innerHTML=[`MP4 · ${pick.mux==='avc'?'H.264':'VP9'}`,`${TL0.W}×${TL0.H}`,`${FPS} fps`,`${frames} fotogramas`,`${mmss(TL0.total)}`,`${(blob.size/1048576).toFixed(1).replace('.',',')} MB`].map(s=>`<span>${s}</span>`).join('');
+    $('#encSpec').innerHTML=[`MP4 · ${pick.mux==='avc'?'H.264':'VP9'}`,`${EW}×${EH}`,`${FPS} fps`,`${frames} fotogramas`,`${mmss(TL0.total)}`,`${(blob.size/1048576).toFixed(1).replace('.',',')} MB`].map(s=>`<span>${s}</span>`).join('');
   }catch(e){note.className='note warn';note.textContent='No se pudo generar el vídeo en este navegador: '+(e&&e.message||e);reportErr(e);$('#genPill').hidden=true;}
   finally{document.title=DOC_TITLE;try{enc.close();}catch(_){}encoding=false;try{wake&&wake.release();}catch(_){}btn.disabled=!!lastVideo;btn.textContent=lastVideo?'Vídeo listo ✓':'Generar MP4';}
 };
