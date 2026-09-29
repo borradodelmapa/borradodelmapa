@@ -9444,6 +9444,29 @@ export default {
       return new Response(obj.body, { headers: h });
     }
 
+    // ═══ /terreno/<paquete>/<z>/<x>/<y>.png — RELIEVE PROPIO para el vídeo (30 sept 2026) ═══
+    // Alturas "terrarium" (AWS Terrain Tiles, datos abiertos) empaquetadas en R2: mapas/<paquete>.bin + índice .json.
+    // Montañas en 3D y sombreado en MapLibre. 💶 R2, dentro del plan gratis.
+    {
+      const tm = request.method === 'GET' && /^\/terreno\/([a-z0-9-]+)\/(\d+)\/(\d+)\/(\d+)\.png$/.exec(url.pathname);
+      if (tm) {
+        const cors = { 'Access-Control-Allow-Origin': '*' };
+        const pack = tm[1];
+        globalThis.__terrIdx = globalThis.__terrIdx || {};
+        let idx = globalThis.__terrIdx[pack];
+        if (!idx) {
+          const o = await env.SALMA_PHOTOS.get('mapas/' + pack + '.json');
+          if (!o) return new Response('No existe', { status: 404, headers: cors });
+          idx = globalThis.__terrIdx[pack] = (await o.json()).tiles || {};
+        }
+        const e = idx[tm[2] + '/' + tm[3] + '/' + tm[4]];
+        if (!e) return new Response(null, { status: 204, headers: cors }); // fuera de la zona: sin relieve
+        const obj = await env.SALMA_PHOTOS.get('mapas/' + pack + '.bin', { range: { offset: e[0], length: e[1] } });
+        if (!obj) return new Response('No existe', { status: 404, headers: cors });
+        return new Response(obj.body, { headers: { ...cors, 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=2592000' } });
+      }
+    }
+
     if (request.method === 'GET' && url.pathname.startsWith('/photo/')) {
       if (!env.SALMA_PHOTOS) {
         return new Response('R2 not configured', { status: 500 });

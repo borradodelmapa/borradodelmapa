@@ -7,3 +7,6 @@ Recursos del mapa del vídeo (30 sept 2026) — todos alojados en nuestro servid
 - sprites/ (light) — MIT, derivados de tangrams/icons (github.com/protomaps/basemaps-assets)
 - Datos del mapa: © OpenStreetMap (ODbL), extracto Protomaps Basemap build 20260929, en R2 salma-photos/mapas/.
   Atribución obligatoria "© OpenStreetMap" en el vídeo.
+- three.js 0.186.1 (three/three.module.js + three.core.js) — MIT (three/LICENSE-three.txt). La moto 3D está hecha en código por nosotros.
+- Relieve: AWS Terrain Tiles (terrarium, datos abiertos: SRTM, GMTED, ETOPO1, EU-DEM…), recorte Cantabria-Asturias z0-12
+  empaquetado en R2 salma-photos/mapas/terreno-cantabria-asturias.bin/.json, servido por el Worker /terreno/…

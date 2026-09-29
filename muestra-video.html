@@ -8,14 +8,14 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/vendor/mapa/maplibre-gl.css">
 <style>
-/* Muestra del motor de vídeo NUEVO (30 sept 2026): mapa vectorial propio (Protomaps en nuestro R2) pintado con
-   MapLibre en la tarjeta gráfica, cámara que sigue la carretera, vehículo grande y fotos en burbujas.
-   Todo alojado en nuestro servidor (vendor/mapa). Página suelta para que Paco la juzgue; no enlazada. */
-:root{--ink:#0D0F10;--panel:#17191B;--line:#2B2E30;--cream:#ECEBE8;--muted:#9A9EA1;--gold:#F4630B;color-scheme:dark}
+/* Muestra del motor de vídeo NUEVO (v2, 30 sept 2026): mapa vectorial propio (Protomaps) + RELIEVE 3D propio
+   (terreno en R2), cámara de dron pegada a la moto, MOTO 3D hecha en código (three.js) y fotos en tarjetas grandes.
+   Todo alojado en nuestro servidor (vendor/mapa) y en nuestra nube (R2). Página suelta, no enlazada. */
+:root{--ink:#0D0F10;--line:#2B2E30;--cream:#ECEBE8;--muted:#9A9EA1;--gold:#F4630B;color-scheme:dark}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html,body{margin:0;background:var(--ink);color:var(--cream);font:15px/1.4 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
 .wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px 12px 24px}
-.stage{position:relative;width:360px;height:640px;transform-origin:top center;background:#000;overflow:hidden}
+.stage{position:relative;width:360px;height:640px;transform-origin:top center;background:#9fd3f0;overflow:hidden}
 #map,#ov{position:absolute;inset:0;width:360px;height:640px}
 #ov{pointer-events:none}
 .bar{display:flex;gap:10px;align-items:center;width:min(360px,100%)}
@@ -28,7 +28,7 @@ html,body{margin:0;background:var(--ink);color:var(--cream);font:15px/1.4 Inter,
 .res{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
 .res video{flex:1;min-height:0;width:100%;object-fit:contain;background:#000}
 .res .row{display:flex;gap:8px;padding:10px 12px;background:var(--ink)}
-.res .row .btn{flex:1}
+.res .row .btn{flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none}
 .res .x{position:absolute;top:10px;right:10px;width:44px;height:44px;background:var(--ink);border:1px solid var(--line);color:var(--cream);font-size:18px;cursor:pointer}
 </style>
 </head>
@@ -44,158 +44,203 @@ html,body{margin:0;background:var(--ink);color:var(--cream);font:15px/1.4 Inter,
 <script src="/vendor/mapa/pmtiles.js"></script>
 <script src="/vendor/mapa/basemaps.js"></script>
 <script src="/vendor/mapa/mp4-muxer.js"></script>
-<script>
-'use strict';
+<script type="module">
+import * as THREE from '/vendor/mapa/three/three.module.js';
 const $=s=>document.querySelector(s);
 const API='https://salma-api.borradodelmapa-api.workers.dev';
-const W=720,H=1280,PR=2,FPS=30;         // el vídeo sale a 720×1280; la vista previa es exactamente lo mismo
+const W=720,H=1280,PR=2,FPS=30;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
-const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,eout=t=>1-Math.pow(1-t,3);
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,eout=t=>1-Math.pow(1-t,3),smooth=t=>t*t*(3-2*t);
 const eback=t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
 const hav=(a,b)=>{const r=Math.PI/180,dl=(b[1]-a[1])*r,dg=(b[0]-a[0])*r;const x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dg/2)**2;return 12742*Math.asin(Math.sqrt(x));};
 
-/* ── estilo del mapa: el claro de Protomaps con colores de postal ── */
+/* ── estilo: postal con colores vivos + relieve sombreado + montañas en 3D ── */
 const flavor=Object.assign({},basemaps.namedFlavor('light'),{
-  background:'#efe9dc',earth:'#f2ede1',water:'#7ec8ee',
-  park_a:'#cde7b4',park_b:'#b4dc93',wood_a:'#c8e4ad',wood_b:'#a6d488',scrub_a:'#d6e8c2',scrub_b:'#bfe0a4',
-  sand:'#f1e7c9',beach:'#f4e6bd',
-  highway:'#ffd27a',highway_casing_early:'#e8b456',highway_casing_late:'#e8b456',
-  major:'#fff1c2',major_casing_early:'#e3cf99',major_casing_late:'#e3cf99',
-  minor_a:'#ffffff',minor_b:'#ffffff',minor_casing:'#ddd6c6',link:'#fff1c2',
-  city_label:'#2a2622',city_label_halo:'#ffffff',subplace_label:'#5b554d',subplace_label_halo:'#ffffff',
-  roads_label_major:'#6b645b',roads_label_minor:'#7d766c',ocean_label:'#3f7fb3',
-  buildings:'#e2dbcc',boundaries:'#b9a98f'});
+  background:'#e9f2dc',earth:'#eef3df',water:'#5fb8ea',
+  park_a:'#b9e39a',park_b:'#8fd46a',wood_a:'#a9dc86',wood_b:'#7ec85a',scrub_a:'#c7e8a8',scrub_b:'#a4da7c',
+  sand:'#f5e6b8',beach:'#f7e3a6',glacier:'#ffffff',
+  highway:'#ffc94d',highway_casing_early:'#e0a12c',highway_casing_late:'#e0a12c',
+  major:'#ffe7a3',major_casing_early:'#dcbc6d',major_casing_late:'#dcbc6d',
+  minor_a:'#ffffff',minor_b:'#ffffff',minor_casing:'#d3ccb8',link:'#ffe7a3',
+  city_label:'#1f1b17',city_label_halo:'#ffffff',subplace_label:'#3f3a33',subplace_label_halo:'#ffffff',
+  roads_label_major:'#5e574e',roads_label_minor:'#6d665c',ocean_label:'#1f6aa6',
+  buildings:'#e5dccb',boundaries:'#b19f7e'});
 const protocol=new pmtiles.Protocol();maplibregl.addProtocol('pmtiles',protocol.tile);
+const layers=basemaps.layers('protomaps',flavor,{lang:'es'});
+// sombreado del relieve justo encima del suelo (antes del agua y las carreteras)
+const iWater=layers.findIndex(l=>l.id==='water');
+layers.splice(iWater<0?2:iWater,0,{id:'relieve',type:'hillshade',source:'dem',paint:{'hillshade-exaggeration':.55,'hillshade-shadow-color':'#4b5a3a','hillshade-highlight-color':'#ffffff','hillshade-accent-color':'#6e7f52'}});
 const style={version:8,
   glyphs:location.origin+'/vendor/mapa/fonts/{fontstack}/{range}.pbf',
   sprite:location.origin+'/vendor/mapa/sprites/light',
-  sources:{protomaps:{type:'vector',url:'pmtiles://'+API+'/mapas/cantabria-asturias.pmtiles',attribution:'© OpenStreetMap'}},
-  layers:basemaps.layers('protomaps',flavor,{lang:'es'})};
+  sources:{
+    protomaps:{type:'vector',url:'pmtiles://'+API+'/mapas/cantabria-asturias.pmtiles',attribution:'© OpenStreetMap'},
+    dem:{type:'raster-dem',tiles:[API+'/terreno/terreno-cantabria-asturias/{z}/{x}/{y}.png'],encoding:'terrarium',tileSize:256,maxzoom:12}},
+  sky:{'sky-color':'#8fcdf2','horizon-color':'#dcefff','fog-color':'#eaf4ff','sky-horizon-blend':.6,'horizon-fog-blend':.7,'fog-ground-blend':.85},
+  terrain:{source:'dem',exaggeration:1.35},
+  layers};
 
-let R=null,map=null,ov=$('#ov'),g=ov.getContext('2d');
-let cum=[],PH=[],TL=null;
+let R=null,map=null,ov=$('#ov'),g=ov.getContext('2d'),cum=[],PH=[],TL=null;
 
-/* ── recorrido: km acumulados y rumbo suavizado a lo largo de la carretera ── */
-function prepRoute(){
-  const c=R.coords;cum=[0];for(let i=1;i<c.length;i++)cum.push(cum[i-1]+hav(c[i-1],c[i]));
-  R.total=cum[cum.length-1];R.paradas.forEach(p=>p.km=cum[p.i]);
-}
+/* ── recorrido ── */
+function prepRoute(){const c=R.coords;cum=[0];for(let i=1;i<c.length;i++)cum.push(cum[i-1]+hav(c[i-1],c[i]));R.total=cum[cum.length-1];R.paradas.forEach(p=>p.km=cum[p.i]);}
 function posAt(km){km=clamp(km,0,R.total);let lo=0,hi=cum.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(cum[m]<=km)lo=m;else hi=m;}
   const f=cum[hi]===cum[lo]?0:(km-cum[lo])/(cum[hi]-cum[lo]);const a=R.coords[lo],b=R.coords[hi];return[lerp(a[0],b[0],f),lerp(a[1],b[1],f)];}
-function headingAt(km){ // rumbo mirando 1,5 km por delante y 0,5 por detrás (suave en curvas)
-  const a=posAt(km-.5),b=posAt(km+1.5);const y=Math.sin((b[0]-a[0])*Math.PI/180)*Math.cos(b[1]*Math.PI/180),
-    x=Math.cos(a[1]*Math.PI/180)*Math.sin(b[1]*Math.PI/180)-Math.sin(a[1]*Math.PI/180)*Math.cos(b[1]*Math.PI/180)*Math.cos((b[0]-a[0])*Math.PI/180);
-  return Math.atan2(y,x)*180/Math.PI;}
-function angLerp(a,b,t){let d=((b-a+540)%360)-180;return a+d*t;}
+function bearingOf(a,b){const r=Math.PI/180,y=Math.sin((b[0]-a[0])*r)*Math.cos(b[1]*r),x=Math.cos(a[1]*r)*Math.sin(b[1]*r)-Math.sin(a[1]*r)*Math.cos(b[1]*r)*Math.cos((b[0]-a[0])*r);return Math.atan2(y,x)/r;}
+const headingAt=(km,back=.15,ahead=.35)=>bearingOf(posAt(km-back),posAt(km+ahead));     // rumbo de la moto (curvas cerradas)
+const camHeadingAt=km=>bearingOf(posAt(km-1),posAt(km+2.5));                             // rumbo de la cámara (suave)
+function angLerp(a,b,t){const d=((b-a+540)%360)-180;return a+d*t;}
+// zoom para ver 'km' kilómetros de ancho en la pantalla (360 px CSS)
+const zoomForKm=(km,lat)=>Math.log2(40075*Math.cos(lat*Math.PI/180)*360/(512*km));
 
-/* ── guion: vista general → bajada al inicio → (parada: fotos) → tramo … → cierre ── */
+/* ── guion ── */
+const Z_NEAR_KM=.9,PITCH=64;
 function buildTimeline(){
   const segs=[];let t=0;const add=s=>{s.t0=t;t+=s.dur;segs.push(s);};
-  add({k:'intro',dur:2.6});add({k:'bajar',dur:2.2});
+  add({k:'intro',dur:2.8});add({k:'bajar',dur:2.6});
   R.paradas.forEach((p,i)=>{
-    add({k:'parada',dur:2.4,p,i});
+    const n=(PH[i]||[]).length;add({k:'parada',dur:1.2+n*1.05,p,i,n});
     const q=R.paradas[i+1];if(!q)return;const km=q.km-p.km;
-    add({k:'tramo',dur:clamp(3+Math.sqrt(Math.abs(km))*.45,3.2,8),a:p.km,b:q.km,i});
+    add({k:'tramo',dur:clamp(4+Math.sqrt(Math.abs(km))*.75,5,11),a:p.km,b:q.km,i});
   });
-  add({k:'cierre',dur:3.6});
+  add({k:'cierre',dur:4});
   return{segs,total:t};
 }
-const Z_NEAR=13.1,PITCH=58;
-let overview=null,smoothB=null;
+let overview=null;
 function camAt(t){
   const s=TL.segs.find(x=>t<x.t0+x.dur)||TL.segs[TL.segs.length-1],lt=clamp((t-s.t0)/s.dur,0,1);
-  const p0=R.paradas[0];
-  if(s.k==='intro')return{c:overview.center,z:overview.zoom,b:0,p:0,km:0,veh:false,s,lt};
-  if(s.k==='bajar'){const e=ease(lt);const c=posAt(0);return{c:[lerp(overview.center[0],c[0],e),lerp(overview.center[1],c[1],e)],z:lerp(overview.zoom,Z_NEAR,e),b:lerp(0,headingAt(0),e),p:lerp(0,PITCH,e),km:0,veh:e>.7,s,lt};}
-  if(s.k==='parada'){const c=posAt(s.p.km);return{c,z:Z_NEAR+.25*eout(Math.min(1,lt*2)),b:headingAt(s.p.km),p:PITCH,km:s.p.km,veh:true,s,lt};}
-  if(s.k==='tramo'){const e=ease(lt),km=lerp(s.a,s.b,e),len=Math.abs(s.b-s.a);
-    // tramos largos: a mitad de camino la cámara sube un poco para ver hacia dónde va
-    const up=len>25?Math.min(1.6,Math.log2(len/25)+.6):0,z=Z_NEAR+.25*(1-Math.sin(Math.PI*e))-up*Math.sin(Math.PI*e);
-    return{c:posAt(km),z,b:headingAt(km),p:PITCH,km,veh:true,s,lt};}
-  // cierre
-  const e=ease(Math.min(1,lt*1.4)),c=posAt(R.total);return{c:[lerp(c[0],overview.center[0],e),lerp(c[1],overview.center[1],e)],z:lerp(Z_NEAR,overview.zoom,e),b:lerp(headingAt(R.total),0,e),p:lerp(PITCH,0,e),km:R.total,veh:e<.4,s,lt};
+  const zN=km=>zoomForKm(Z_NEAR_KM,posAt(km)[1]);
+  if(s.k==='intro')return{c:overview.center,z:overview.zoom,b:0,p:10*eout(lt),km:0,veh:false,s,lt};
+  if(s.k==='bajar'){const e=ease(lt),c=posAt(0);return{c:[lerp(overview.center[0],c[0],e),lerp(overview.center[1],c[1],e)],z:lerp(overview.zoom,zN(0),e),b:angLerp(0,camHeadingAt(0),e),p:lerp(10,PITCH,e),km:0,veh:e>.55,s,lt};}
+  if(s.k==='parada'){const c=posAt(s.p.km);return{c,z:zN(s.p.km)+.15*eout(Math.min(1,lt*3)),b:camHeadingAt(s.p.km),p:PITCH,km:s.p.km,veh:true,s,lt};}
+  if(s.k==='tramo'){const e=smooth(lt),km=lerp(s.a,s.b,e),len=Math.abs(s.b-s.a),c=posAt(km);
+    // dron: pegado a la moto al salir y al llegar; en tramos largos sube a mitad para ver hacia dónde va
+    const hump=Math.sin(Math.PI*lt),zFar=zoomForKm(clamp(len*.28,Z_NEAR_KM,40),c[1]),z=lerp(zN(km),Math.min(zN(km),zFar),hump);
+    return{c,z,b:camHeadingAt(km),p:lerp(PITCH,52,hump),km,veh:true,s,lt};}
+  const e=ease(Math.min(1,lt*1.3)),c=posAt(R.total);return{c:[lerp(c[0],overview.center[0],e),lerp(c[1],overview.center[1],e)],z:lerp(zN(R.total),overview.zoom,e),b:angLerp(camHeadingAt(R.total),0,e),p:lerp(PITCH,10,e),km:R.total,veh:e<.35,s,lt};
 }
 
-/* ── pintar un instante: cámara del mapa + ruta recorrida + capa de encima (vehículo, burbujas, rótulos) ── */
-function applyCam(cam,prevB){
-  let b=cam.b;if(prevB!=null)b=angLerp(prevB,b,.18); // giro suave, sin saltos
-  map.jumpTo({center:cam.c,zoom:cam.z,bearing:b,pitch:cam.p});
-  const done=[];for(let i=0;i<R.coords.length&&cum[i]<=cam.km;i++)done.push(R.coords[i]);done.push(posAt(cam.km));
-  map.getSource('hecha').setData({type:'Feature',geometry:{type:'LineString',coordinates:done.length>1?done:[done[0],done[0]]}});
-  return b;
+/* ── MOTO 3D hecha en código (sin modelos de terceros): moto naranja de la marca con piloto ── */
+function buildMoto(){
+  const grp=new THREE.Group(),m=(c,r=.5,mt=.1)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:mt});
+  const orange=m(0xF4630B,.45,.15),black=m(0x16181a,.6),chrome=m(0xcfd3d6,.25,.8),skin=m(0xe0b48f,.7),jacket=m(0x23262a,.7),helmet=m(0xffffff,.3,.1);
+  const add=(geo,mat,x,y,z,rx=0,ry=0,rz=0)=>{const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);o.rotation.set(rx,ry,rz);o.castShadow=true;grp.add(o);return o;};
+  // ruedas (eje X = lateral, Z = hacia delante, Y = arriba)
+  const wheel=new THREE.TorusGeometry(.34,.11,12,28);add(wheel,black,0,.45,.72,0,Math.PI/2,0);add(wheel,black,0,.45,-.72,0,Math.PI/2,0);
+  const rim=new THREE.CylinderGeometry(.2,.2,.08,18);add(rim,chrome,0,.45,.72,0,0,Math.PI/2);add(rim,chrome,0,.45,-.72,0,0,Math.PI/2);
+  add(new THREE.BoxGeometry(.28,.34,1.05),black,0,.62,0);                       // motor / chasis
+  add(new THREE.BoxGeometry(.42,.3,.62),orange,0,.98,.22,-.12,0,0);              // depósito
+  add(new THREE.BoxGeometry(.34,.14,.7),black,0,.95,-.36);                       // asiento
+  add(new THREE.BoxGeometry(.3,.22,.5),orange,0,.86,-.72,.18,0,0);               // colín
+  add(new THREE.CylinderGeometry(.045,.045,.95,10),chrome,0,.95,.62,.45,0,0);    // horquilla
+  add(new THREE.CylinderGeometry(.035,.035,.78,10),black,0,1.33,.48,0,0,Math.PI/2); // manillar
+  add(new THREE.BoxGeometry(.32,.22,.12),orange,0,1.18,.72,-.35,0,0);            // cúpula
+  add(new THREE.CylinderGeometry(.06,.07,.55,10),chrome,.2,.55,-.45,Math.PI/2,0,0); // escape
+  // piloto
+  add(new THREE.BoxGeometry(.46,.62,.32),jacket,0,1.42,-.16,.35,0,0);            // torso inclinado
+  add(new THREE.SphereGeometry(.2,18,14),helmet,0,1.86,.02);                     // casco
+  add(new THREE.BoxGeometry(.3,.1,.08),black,0,1.86,.19);                        // visera
+  const arm=new THREE.CylinderGeometry(.07,.07,.55,8);add(arm,jacket,.2,1.46,.2,1.1,0,0);add(arm,jacket,-.2,1.46,.2,1.1,0,0);
+  const leg=new THREE.CylinderGeometry(.09,.08,.6,8);add(leg,jacket,.22,.95,-.1,1.2,0,0);add(leg,jacket,-.22,.95,-.1,1.2,0,0);
+  add(new THREE.BoxGeometry(.12,.1,.12),skin,.2,1.36,.46);add(new THREE.BoxGeometry(.12,.1,.12),skin,-.2,1.36,.46); // guantes
+  // sombra en el suelo
+  const sh=new THREE.Mesh(new THREE.CircleGeometry(1,32),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.28,depthWrite:false}));
+  sh.rotation.x=-Math.PI/2;sh.scale.set(.55,1.25,1);sh.position.y=.02;grp.add(sh);
+  return grp;
 }
-function bubble(x,y,img,r,sc,tail){
-  if(sc<=.01||!img)return;g.save();g.translate(x,y);g.scale(sc,sc);
-  g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.arc(r*.06,r*.1,r*1.12,0,7);g.fill();
-  g.fillStyle='#fff';if(tail){g.beginPath();g.moveTo(-r*.32,r*.85);g.lineTo(tail[0]/sc,tail[1]/sc);g.lineTo(r*.32,r*.85);g.closePath();g.fill();}
-  g.beginPath();g.arc(0,0,r*1.12,0,7);g.fill();g.save();g.beginPath();g.arc(0,0,r,0,7);g.clip();
-  const k=Math.max(2*r/img.width,2*r/img.height);g.drawImage(img,-img.width*k/2,-img.height*k/2,img.width*k,img.height*k);g.restore();g.restore();
+const moto={pos:[0,0],heading:0,visible:false};
+const motoLayer={id:'moto3d',type:'custom',renderingMode:'3d',
+  onAdd(map,gl){this.map=map;this.camera=new THREE.Camera();this.scene=new THREE.Scene();
+    this.scene.add(new THREE.HemisphereLight(0xffffff,0x6b7a55,1.6));const sun=new THREE.DirectionalLight(0xffffff,2.2);sun.position.set(-3,8,4);this.scene.add(sun);
+    this.obj=buildMoto();this.scene.add(this.obj);
+    this.renderer=new THREE.WebGLRenderer({canvas:map.getCanvas(),context:gl,antialias:true});this.renderer.autoClear=false;},
+  render(gl,args){
+    if(!moto.visible)return;
+    const mm=args&&args.defaultProjectionData?args.defaultProjectionData.mainMatrix:args;
+    const elev=(this.map.queryTerrainElevation&&this.map.queryTerrainElevation(moto.pos))||0;
+    const mc=maplibregl.MercatorCoordinate.fromLngLat(moto.pos,elev);
+    // tamaño "de dibujo": la moto mide siempre ~85 px de largo en pantalla, sea cual sea el zoom (como Travel Animator)
+    const mpp=40075016*Math.cos(moto.pos[1]*Math.PI/180)/(512*Math.pow(2,this.map.getZoom()));
+    const s=mc.meterInMercatorCoordinateUnits()*(85*mpp/2.1);
+    const l=new THREE.Matrix4().makeTranslation(mc.x,mc.y,mc.z).scale(new THREE.Vector3(s,-s,s))
+      .multiply(new THREE.Matrix4().makeRotationX(Math.PI/2)).multiply(new THREE.Matrix4().makeRotationY(-moto.heading*Math.PI/180+Math.PI));
+    this.camera.projectionMatrix=new THREE.Matrix4().fromArray(mm).multiply(l);
+    this.renderer.resetState();this.renderer.render(this.scene,this.camera);
+  }};
+
+/* ── capa de encima: fotos en tarjetas grandes → burbujas, rótulos ── */
+function roundImg(img,x,y,r){g.save();g.beginPath();g.arc(x,y,r,0,7);g.clip();const k=Math.max(2*r/img.width,2*r/img.height);g.drawImage(img,x-img.width*k/2,y-img.height*k/2,img.width*k,img.height*k);g.restore();}
+function bubble(x,y,img,r){ // burbuja clavada: foto redonda, borde blanco y pico hacia su sitio
+  g.save();g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.arc(x+3,y-r*1.75+5,r*1.13,0,7);g.fill();
+  g.fillStyle='#fff';g.beginPath();g.moveTo(x-r*.35,y-r*1.75+r*.85);g.lineTo(x,y);g.lineTo(x+r*.35,y-r*1.75+r*.85);g.closePath();g.fill();
+  g.beginPath();g.arc(x,y-r*1.75,r*1.13,0,7);g.fill();g.restore();roundImg(img,x,y-r*1.75,r);
+}
+function card(img,cx,cy,w,sc,rot,alpha){ // tarjeta grande con marco blanco (tipo polaroid)
+  if(sc<=.01)return;const h=w*1.12,pad=w*.045;g.save();g.globalAlpha*=alpha;g.translate(cx,cy);g.rotate(rot);g.scale(sc,sc);
+  g.fillStyle='rgba(0,0,0,.35)';g.fillRect(-w/2+10,-h/2+14,w,h);g.fillStyle='#fff';g.fillRect(-w/2,-h/2,w,h);
+  const iw=w-pad*2,ih=w-pad*2;g.save();g.beginPath();g.rect(-w/2+pad,-h/2+pad,iw,ih);g.clip();const k=Math.max(iw/img.width,ih/img.height);
+  g.drawImage(img,-w/2+pad+(iw-img.width*k)/2,-h/2+pad+(ih-img.height*k)/2,img.width*k,img.height*k);g.restore();g.restore();
 }
 function chip(txt,x,y,size,align,dark){g.save();g.font=`800 ${size}px "Barlow Condensed","Arial Narrow",sans-serif`;const w=g.measureText(txt).width+size*.8,h=size*1.25;
   const x0=align==='center'?x-w/2:align==='right'?x-w:x;g.fillStyle=dark?'rgba(13,15,16,.88)':'#F4630B';g.fillRect(x0,y,w,h);g.fillStyle=dark?'#ECEBE8':'#0D0F10';g.textBaseline='middle';g.fillText(txt,x0+size*.4,y+h/2+1);g.restore();}
-function vehicle(x,y,t){
-  // Vehículo grande y claro: disco blanco con borde naranja, sombra en el suelo y moto de perfil (siempre legible)
-  g.save();g.translate(x,y);
-  const pr=(t*1.1)%1;g.beginPath();g.arc(0,0,58+pr*50,0,7);g.strokeStyle=`rgba(244,99,11,${(1-pr)*.7})`;g.lineWidth=5;g.stroke();
-  g.fillStyle='rgba(0,0,0,.28)';g.beginPath();g.ellipse(8,52,50,14,0,0,7);g.fill();
-  g.fillStyle='#fff';g.beginPath();g.arc(0,0,52,0,7);g.fill();g.lineWidth=7;g.strokeStyle='#F4630B';g.stroke();
-  g.strokeStyle='#15181a';g.fillStyle='#15181a';g.lineWidth=5;g.lineCap='round';g.lineJoin='round';
-  g.beginPath();g.arc(-22,12,13,0,7);g.stroke();g.beginPath();g.arc(24,12,13,0,7);g.stroke();
-  g.beginPath();g.moveTo(-22,12);g.lineTo(-6,-4);g.lineTo(14,-4);g.lineTo(24,12);g.stroke();
-  g.beginPath();g.moveTo(10,-4);g.lineTo(16,-20);g.lineTo(24,-20);g.stroke();
-  g.fillStyle='#F4630B';g.beginPath();g.moveTo(-10,-6);g.lineTo(12,-6);g.lineTo(8,-16);g.lineTo(-6,-16);g.closePath();g.fill();
-  g.fillStyle='#15181a';g.beginPath();g.arc(-2,-26,7,0,7);g.fill();
-  g.restore();
-}
 function drawOverlay(cam,t){
   g.clearRect(0,0,W,H);
   const P=ll=>{const q=map.project(ll);return[q.x*PR,q.y*PR];};
-  // burbujas de las paradas ya visitadas (pequeñas)
-  R.paradas.forEach((p,i)=>{if(p.km>cam.km+1e-6||(cam.s.k==='parada'&&cam.s.i===i))return;const ph=PH[i]&&PH[i][0];if(!ph)return;const[x,y]=P([p.lng,p.lat]);bubble(x,y-58,ph,34,1,[0,58]);});
-  // en la parada: sus fotos salen en fila
-  if(cam.s.k==='parada'){const i=cam.s.i,ph=PH[i]||[],n=ph.length,r=n===1?120:92,[x,y]=P([cam.s.p.lng,cam.s.p.lat]),mid=(n-1)/2;
-    ph.forEach((im,k)=>{const tt=clamp((cam.lt*cam.s.dur-.15-k*.25)/.5,0,1);if(tt<=0)return;const cx=clamp(x+(k-mid)*r*2.35,r*1.25,W-r*1.25),cy=y-r*2.4;
-      bubble(cx,cy,im,r,eback(tt),Math.abs(k-mid)<.6?[x-cx,y-cy-70]:null);});}
-  if(cam.veh){const[x,y]=P(cam.c);vehicle(x,y-10,t);}
+  // burbujas de lo ya visitado (grandes: 56 px de radio)
+  R.paradas.forEach((p,i)=>{if(p.km>cam.km+1e-6||(cam.s.k==='parada'&&cam.s.i===i))return;const ph=PH[i]&&PH[i][0];if(!ph)return;const[x,y]=P([p.lng,p.lat]);if(y<-50||y>H+200)return;bubble(x,y,ph,56);});
+  // en la parada: cada foto sale en grande (tarjeta casi a lo ancho), se ve y se encoge a su burbuja
+  if(cam.s.k==='parada'){const s=cam.s,ph=PH[s.i]||[],lt=cam.lt*s.dur,[px,py]=P([s.p.lng,s.p.lat]);
+    let shown=0;ph.forEach((im,k)=>{const a=.35+k*1.05,b=a+1.05,tt=(lt-a)/(b-a);if(lt<a)return;
+      if(tt<1){const inn=eback(clamp(tt/.28,0,1)),out=smooth(clamp((tt-.72)/.28,0,1));const cx=lerp(W/2,px,out),cy=lerp(H*.42,py-100,out),w=lerp(W*.8,112,out);
+        card(im,cx,cy,w,inn,lerp((k%2?1:-1)*.035,0,out),1);}else shown++;});
+    if(ph[0]&&(shown>0||lt>ph.length*1.05+.3))bubble(px,py,ph[0],56);}
   // rótulos
   if(cam.s.k==='intro'||cam.s.k==='bajar'){const a=cam.s.k==='intro'?eout(clamp(cam.lt*2,0,1)):1-eout(cam.lt);g.save();g.globalAlpha=a;
-    g.fillStyle='rgba(13,15,16,.55)';g.fillRect(0,H*.62,W,H*.38);
-    g.fillStyle='#fff';g.font='800 118px "Barlow Condensed","Arial Narrow",sans-serif';g.fillText(R.titulo.toUpperCase(),48,H*.76);
-    chip(`${Math.round(R.total)} KM · ${R.paradas.length} PARADAS`,50,H*.8,40);g.restore();}
+    const gr=g.createLinearGradient(0,H*.55,0,H);gr.addColorStop(0,'rgba(13,15,16,0)');gr.addColorStop(1,'rgba(13,15,16,.85)');g.fillStyle=gr;g.fillRect(0,H*.55,W,H*.45);
+    g.fillStyle='#fff';g.font='800 124px "Barlow Condensed","Arial Narrow",sans-serif';g.fillText(R.titulo.toUpperCase(),48,H*.82);
+    chip(`${Math.round(R.total)} KM · ${R.paradas.length} PARADAS`,52,H*.855,40);g.restore();}
   if(cam.s.k==='parada'||cam.s.k==='tramo'){const p=cam.s.k==='parada'?cam.s.p:R.paradas[cam.s.i+1];
-    chip(`DÍA ${p.dia} · ${p.nombre.toUpperCase()}`,44,90,46);chip(`${Math.round(cam.km)} KM`,W-44,H-200,54,'right',true);}
+    chip(`DÍA ${p.dia} · ${p.nombre.toUpperCase()}`,44,86,48);chip(`${Math.round(cam.km)} KM`,W-44,H-190,56,'right',true);}
   if(cam.s.k==='cierre'){const a=eout(clamp((cam.lt-.3)/.4,0,1));g.save();g.globalAlpha=a;g.fillStyle='rgba(13,15,16,.9)';g.fillRect(0,H*.66,W,H*.34);
     g.fillStyle='#F4630B';g.font='800 140px "Barlow Condensed",sans-serif';g.fillText(String(Math.round(R.total)),48,H*.8);
     g.fillStyle='#C4C7C9';g.font='600 30px Inter,sans-serif';g.fillText('KM POR CARRETERA',54,H*.84);
     g.fillStyle='#ECEBE8';g.font='800 44px "Barlow Condensed",sans-serif';g.fillText('✦ BORRADO DEL MAPA',48,H*.93);g.restore();}
-  g.save();g.font='600 20px Inter,sans-serif';g.fillStyle='rgba(13,15,16,.6)';g.fillText('© OpenStreetMap',16,H-16);g.restore(); // atribución obligatoria
+  g.save();g.font='600 18px Inter,sans-serif';g.fillStyle='rgba(13,15,16,.65)';g.fillText('© OpenStreetMap · Relieve: AWS Terrain Tiles',16,H-14);g.restore();
 }
 
-/* ── vista previa en tiempo real (es el mismo dibujo que el MP4) ── */
-let playing=false,T=0,last=0,lastB=null;
-function frameAt(t){const cam=camAt(t);lastB=applyCam(cam,t===0?null:lastB);return cam;}
+/* ── aplicar un instante ── */
+let lastB=null;
+function frameAt(t,reset){
+  const cam=camAt(t);let b=cam.b;if(!reset&&lastB!=null)b=angLerp(lastB,b,.12);lastB=b; // giro de cámara suave
+  map.jumpTo({center:cam.c,zoom:cam.z,bearing:b,pitch:cam.p});
+  const done=[];for(let i=0;i<R.coords.length&&cum[i]<=cam.km;i++)done.push(R.coords[i]);done.push(posAt(cam.km));
+  map.getSource('hecha').setData({type:'Feature',geometry:{type:'LineString',coordinates:done.length>1?done:[done[0],done[0]]}});
+  moto.visible=cam.veh;moto.pos=cam.c;moto.heading=headingAt(cam.km);
+  return cam;
+}
+const waitVisible=()=>document.hidden?new Promise(r=>{$('#note').textContent='En pausa: vuelve a esta pantalla para seguir';
+  const f=()=>{if(!document.hidden){document.removeEventListener('visibilitychange',f);r();}};document.addEventListener('visibilitychange',f);}):Promise.resolve();
+const waitIdle=async()=>{await waitVisible();await new Promise(r=>{let done=false;const ok=()=>{if(!done){done=true;r();}};setTimeout(ok,4000);
+  if(map.loaded()&&map.areTilesLoaded()){map.once('render',ok);map.triggerRepaint();}else map.once('idle',ok);});};
+
+/* ── vista previa ── */
+let playing=false,T=0,last=0;
 function tick(now){if(!playing)return;T+=Math.min(.25,(now-last)/1000);last=now;if(T>=TL.total){T=TL.total;playing=false;$('#play').textContent='▶';}
   const cam=frameAt(T);map.once('render',()=>drawOverlay(cam,T));map.triggerRepaint();$('#pbar').style.width=(T/TL.total*100)+'%';if(playing)requestAnimationFrame(tick);}
 $('#play').onclick=()=>{playing=!playing;$('#play').textContent=playing?'❚❚':'▶';if(playing){if(T>=TL.total-.05){T=0;lastB=null;}last=performance.now();requestAnimationFrame(tick);}};
 
-/* ── MP4: fotograma a fotograma, esperando a que el mapa esté pintado entero ── */
-// Espera a que el mapa esté pintado entero. Si la pantalla no está a la vista (el móvil deja de pintar), se pausa
-// hasta que vuelva; y nunca más de 4 s por fotograma (no se queda colgado).
-const waitVisible=()=>document.hidden?new Promise(r=>{$('#note').textContent='En pausa: vuelve a esta pantalla para seguir creando el vídeo';
-  const f=()=>{if(!document.hidden){document.removeEventListener('visibilitychange',f);r();}};document.addEventListener('visibilitychange',f);}):Promise.resolve();
-const waitIdle=async()=>{await waitVisible();await new Promise(r=>{let done=false;const ok=()=>{if(!done){done=true;r();}};setTimeout(ok,4000);
-  if(map.loaded()&&map.areTilesLoaded()){map.once('render',ok);map.triggerRepaint();}else map.once('idle',ok);});};
+/* ── MP4 ── */
 $('#mp4').onclick=async()=>{
   playing=false;$('#play').textContent='▶';$('#mp4').disabled=true;$('#play').disabled=true;
   if(typeof VideoEncoder==='undefined'){$('#note').textContent='Este navegador no puede crear MP4. Prueba con Chrome.';return;}
-  const cfg={codec:'avc1.4d0028',width:W,height:H,bitrate:8e6,framerate:FPS,avc:{format:'avc'}};
-  const sup=await VideoEncoder.isConfigSupported(cfg);if(!sup.supported){cfg.codec='avc1.42e028';}
+  const cfg={codec:'avc1.4d0028',width:W,height:H,bitrate:9e6,framerate:FPS,avc:{format:'avc'}};
+  try{if(!(await VideoEncoder.isConfigSupported(cfg)).supported)cfg.codec='avc1.42e028';}catch(_){}
   const mux=new Mp4Muxer.Muxer({target:new Mp4Muxer.ArrayBufferTarget(),video:{codec:'avc',width:W,height:H},fastStart:'in-memory'});
   let err=null;const enc=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>err=e});enc.configure(cfg);
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d');
   const N=Math.ceil(TL.total*FPS),t0=performance.now();lastB=null;
   let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
-  for(let f=0;f<N;f++){if(err)break;const t=f/FPS;const cam=frameAt(t);await waitIdle();drawOverlay(cam,t);
+  for(let f=0;f<N;f++){if(err)break;const t=f/FPS;const cam=frameAt(t,f===0);await waitIdle();drawOverlay(cam,t);
     cx.drawImage(map.getCanvas(),0,0,W,H);cx.drawImage(ov,0,0);
     const vf=new VideoFrame(cv,{timestamp:Math.round(f*1e6/FPS),duration:Math.round(1e6/FPS)});enc.encode(vf,{keyFrame:f%60===0});vf.close();
     while(enc.encodeQueueSize>4)await new Promise(r=>setTimeout(r,2));
@@ -204,32 +249,38 @@ $('#mp4').onclick=async()=>{
   if(err){$('#note').textContent='No se pudo crear: '+(err.message||err);$('#mp4').disabled=false;$('#play').disabled=false;return;}
   mux.finalize();const blob=new Blob([mux.target.buffer],{type:'video/mp4'}),url=URL.createObjectURL(blob);
   $('#note').textContent=`Listo en ${Math.round((performance.now()-t0)/1000)} s · ${(blob.size/1048576).toFixed(1)} MB`;
-  const o=document.createElement('div');o.className='res';o.innerHTML=`<video controls playsinline autoplay src="${url}"></video><button class="x" type="button" aria-label="Cerrar">✕</button><div class="row"><button class="btn" type="button" id="sh">Compartir</button><a class="btn ghost" href="${url}" download="muestra-cantabria.mp4" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Descargar</a></div>`;
+  const o=document.createElement('div');o.className='res';o.innerHTML=`<video controls playsinline autoplay src="${url}"></video><button class="x" type="button" aria-label="Cerrar">✕</button><div class="row"><button class="btn" type="button" id="sh">Compartir</button><a class="btn ghost" href="${url}" download="muestra-cantabria.mp4">Descargar</a></div>`;
   document.body.appendChild(o);o.querySelector('.x').onclick=()=>o.remove();
   o.querySelector('#sh').onclick=async()=>{const file=new File([blob],'muestra-cantabria.mp4',{type:'video/mp4'});try{if(navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({files:[file]});}catch(_){}};
   $('#mp4').disabled=false;$('#play').disabled=false;
 };
 
-/* ── arranque ── */
+window.__muestra={TL:()=>TL,camAt,frameAt,drawOverlay,waitIdle}; // para revisar fotogramas concretos
+/* ── arranque: mapa, ruta y precarga de todo el recorrido (la vista previa no se para a cargar) ── */
 function fit(){const st=$('#stage'),k=Math.min(1,(innerWidth-24)/360,(innerHeight-190)/640);st.style.transform=`scale(${k})`;st.style.marginBottom=`${(k-1)*640}px`;}
 addEventListener('resize',fit);fit();
-function loadImg(u){return new Promise(r=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u;});}
+const loadImg=u=>new Promise(r=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u;});
 (async()=>{
   try{await Promise.all(['800 40px "Barlow Condensed"','600 20px Inter'].map(f=>document.fonts.load(f)));}catch(_){}
-  R=await (await fetch('/muestra-video/ruta-cantabria.json')).json();prepRoute();TL=buildTimeline();
-  // fotos de ejemplo (en la app serán las del viaje)
-  PH=await Promise.all(R.paradas.map((p,i)=>Promise.all([0,1,2].slice(0,i%2?3:2).map(k=>loadImg(`https://picsum.photos/seed/cant${i}${k}/480/480`)))));
+  R=await (await fetch('/muestra-video/ruta-cantabria.json')).json();prepRoute();
+  PH=(await Promise.all(R.paradas.map((p,i)=>Promise.all([0,1,2].slice(0,i%2?3:2).map(k=>loadImg(`https://picsum.photos/seed/cant${i}${k}/720/720`)))))).map(x=>x.filter(Boolean));
+  TL=buildTimeline();
   let a=[180,90,-180,-90];R.coords.forEach(([x,y])=>{a=[Math.min(a[0],x),Math.min(a[1],y),Math.max(a[2],x),Math.max(a[3],y)];});
   map=new maplibregl.Map({container:'map',style,center:[(a[0]+a[2])/2,(a[1]+a[3])/2],zoom:8,interactive:false,attributionControl:false,
-    canvasContextAttributes:{preserveDrawingBuffer:true,antialias:true},pixelRatio:PR,fadeDuration:0,maxPitch:70});
-  map.on('load',()=>{
-    const cam=map.cameraForBounds([[a[0],a[1]],[a[2],a[3]]],{padding:{top:140,bottom:320,left:40,right:40}});overview={center:cam.center.toArray?cam.center.toArray():[cam.center.lng,cam.center.lat],zoom:cam.zoom};
+    canvasContextAttributes:{preserveDrawingBuffer:true,antialias:true},pixelRatio:PR,fadeDuration:0,maxPitch:75});
+  map.on('load',async()=>{
+    const cam=map.cameraForBounds([[a[0],a[1]],[a[2],a[3]]],{padding:{top:150,bottom:330,left:40,right:40}});overview={center:[cam.center.lng,cam.center.lat],zoom:cam.zoom};
     map.addSource('toda',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:R.coords}}});
     map.addSource('hecha',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:[R.coords[0],R.coords[0]]}}});
-    map.addLayer({id:'toda',type:'line',source:'toda',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#F4630B','line-opacity':.35,'line-width':4,'line-dasharray':[1,1.6]}});
-    map.addLayer({id:'hecha-borde',type:'line',source:'hecha',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':11}});
-    map.addLayer({id:'hecha',type:'line',source:'hecha',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#F4630B','line-width':6.5}});
-    const cam0=frameAt(0);map.once('idle',()=>{drawOverlay(cam0,0);$('#play').disabled=false;$('#mp4').disabled=false;$('#note').textContent='Muestra con tu ruta de Cantabria (261 km). Mapa propio, fotos de ejemplo.';});
+    map.addLayer({id:'toda',type:'line',source:'toda',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-opacity':.85,'line-width':['interpolate',['linear'],['zoom'],8,2,14,5],'line-dasharray':[1.2,1.4]}});
+    map.addLayer({id:'hecha-borde',type:'line',source:'hecha',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],8,6,14,14]}});
+    map.addLayer({id:'hecha',type:'line',source:'hecha',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#F4630B','line-width':['interpolate',['linear'],['zoom'],8,3.5,14,8]}});
+    map.addLayer(motoLayer);
+    // precarga: se recorre el guion una vez para tener todo el mapa y el relieve listos
+    const steps=Math.ceil(TL.total/.6);
+    for(let k=0;k<=steps;k++){frameAt(Math.min(TL.total,k*.6),k===0);await waitIdle();$('#note').textContent=`Preparando el mapa ${Math.round(k/steps*100)} %`;$('#pbar').style.width=(k/steps*100)+'%';}
+    T=0;const c0=frameAt(0,true);await waitIdle();drawOverlay(c0,0);$('#pbar').style.width='0%';
+    $('#play').disabled=false;$('#mp4').disabled=false;$('#note').textContent='Muestra v2 con tu ruta de Cantabria (261 km): relieve 3D, moto 3D, fotos de ejemplo.';
   });
   map.on('error',e=>{console.warn(e&&e.error);});
 })();
