@@ -9,5 +9,16 @@
     "ejemplo": "29 sept 2026, Paco: subir fotos por lotes que se coloquen solas en el mapa, vídeo del viaje y álbum bonito. 'Muy fácil de usar': la IA lo hace todo (título, textos, narración) y el usuario edita o Salma le ayuda. Narración de Salma escrita y hablada, o voz propia. Música libre de derechos (viaje, épica, romántica) o pista propia. 'No perder de vista los álbumes, ahí hay dinero.'",
     "nota": "SOLO ESTUDIO. Todo en docs/estudio-video-album.md: las 5 causas de la mala calidad del vídeo actual, las muestras (artifacts), el estudio de mercado (Polarsteps, Travel Animator…), la propuesta en 3 pasos y los costes §8. Siguiente paso: Paco manda fotos de la N2 de Portugal como archivo para probar el GPS y el filtrado; después, muestra v2 sin tocar la app.",
     "estado": "visto"
+  },
+  {
+    "titulo": "Compartir fotos desde la Galería a la app: dice 'No se encontraron fotos para añadir'",
+    "tipo": "fallo",
+    "zona": "otro",
+    "area": "fallos",
+    "gravedad": "media",
+    "modelo": "opus",
+    "ejemplo": "29 sept 2026, Paco (HONOR, Android, app instalada): Galería → foto del mojón N2 → Compartir → Borrado del Mapa → pantalla 'AÑADIENDO AL MAPA — No se encontraron fotos para añadir.' y no aparece nada en el mapa.",
+    "nota": "El mensaje sale de share-inbox.js:~692 cuando la caché 'share-inbox' está vacía tras la redirección ?share=ready. O el service worker (sw.js handleShareTarget) recibe 0 ficheros en formData.getAll('photos'), o la caché no persiste entre el SW y la página. Mirar el ?share=ready&count=N real y si el SW activo es la versión actual. OJO: aunque llegue la foto, Android 10+ probablemente pone el GPS a ceros también aquí (ver docs/estudio-video-album.md).",
+    "estado": "nuevo"
   }
 ]

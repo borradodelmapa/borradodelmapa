@@ -93,3 +93,5 @@ demanda (buscar proveedores con API y precios). Precios y acceso: decisión de P
 - Pendiente de probar: compartir desde la Galería a la PWA (share-inbox.js), subir desde el portátil, iPhone/Safari.
 - Propuesta: GPS cuando venga → si no, colocar por fecha/hora sobre la ruta del viaje (0 €) → si no hay ruta, Salma
   mira la foto (≈0,002–0,005 €/foto, avisar §8). A largo plazo, app Android (TWA) con ese permiso (25 $ una vez).
+- Compartir desde la Galería a la PWA (29 sept): la app dice "No se encontraron fotos para añadir" → la función de
+  compartir está rota (fallo aparte, caso en casos-por-crear). No sirve para probar el GPS todavía.
