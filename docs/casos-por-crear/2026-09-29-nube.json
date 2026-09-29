@@ -1,0 +1,13 @@
+[
+  {
+    "titulo": "Vídeo del viaje y álbum desde las fotos (estilo Travel Animator + Polarsteps)",
+    "tipo": "idea",
+    "zona": "otro",
+    "area": "ux",
+    "gravedad": "media",
+    "modelo": "opus",
+    "ejemplo": "29 sept 2026, Paco: subir fotos por lotes que se coloquen solas en el mapa, vídeo del viaje y álbum bonito. 'Muy fácil de usar': la IA lo hace todo (título, textos, narración) y el usuario edita o Salma le ayuda. Narración de Salma escrita y hablada, o voz propia. Música libre de derechos (viaje, épica, romántica) o pista propia. 'No perder de vista los álbumes, ahí hay dinero.'",
+    "nota": "SOLO ESTUDIO. Todo en docs/estudio-video-album.md: las 5 causas de la mala calidad del vídeo actual, las muestras (artifacts), el estudio de mercado (Polarsteps, Travel Animator…), la propuesta en 3 pasos y los costes §8. Siguiente paso: Paco manda fotos de la N2 de Portugal como archivo para probar el GPS y el filtrado; después, muestra v2 sin tocar la app.",
+    "estado": "visto"
+  }
+]
