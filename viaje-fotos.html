@@ -958,6 +958,14 @@ function legPoint(a,b,c,e,g){
   const q=1-e,mx=q*q*a.mx+2*q*e*c.mx+e*e*b.mx,my=q*q*a.my+2*q*e*c.my+e*e*b.my;
   const tx=2*q*(c.mx-a.mx)+2*e*(b.mx-c.mx),ty=2*q*(c.my-a.my)+2*e*(b.my-c.my);return{mx,my,ang:Math.atan2(ty,tx)};}
 // Dibuja los tramos hasta 'upto' (índice de parada con decimales). Vuelos en discontinua y curva; barco en punteado.
+// Ruta entera de la guía de fondo (aunque las fotos solo cubran una parte). Solo con la carretera de la guía.
+function drawGuideRoad(ctx,W,H,v,u){
+  const GT=geoTrack();if(!GT||!GT.fromGuide)return;
+  const step=Math.max(1,Math.floor(GT.pts.length/1500));
+  ctx.save();ctx.lineJoin=ctx.lineCap='round';ctx.beginPath();
+  for(let i=0;i<GT.pts.length;i+=step){const q=proj(v,W,H,GT.pts[i]);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);}
+  ctx.strokeStyle='rgba(236,235,232,.35)';ctx.lineWidth=5*u;ctx.stroke();ctx.restore();
+}
 function drawLegs(ctx,W,H,v,TL,upto,u,o={}){
   const RS=TL.RS;if(RS.length<2||upto<=0)return;
   ctx.save();ctx.lineJoin=ctx.lineCap='round';
@@ -994,13 +1002,16 @@ function buildReel(M,TL){
   // Con traza GPX, cada tramo sigue la traza real entre sus dos paradas (y los km son los de verdad)
   const GT=geoTrack();
   TL.geom=RS.map((s,i)=>{if(!i||!GT)return null;const A=nearestTrackIdx(RS[i-1],GT),B=nearestTrackIdx(s,GT);
-    // margen hasta la traza: ~2 km con GPX propia; ~8 km con la carretera de la guía (las paradas son pueblos, a veces apartados)
-    const tol=(GT.fromGuide?0.08:0.02)/360;if(A.d>tol||B.d>tol||Math.abs(B.i-A.i)<=1)return null;
+    // Margen hasta la traza en KM REALES (30 sept 2026: antes se medía en unidades del mapa y hacia el norte/sur se
+    // quedaba en <5 km → tramos en línea recta). GPX propia: 3 km. Carretera de la guía: 25 km (fotos algo apartadas).
+    const tolKm=GT.fromGuide?25:3;if(hav(RS[i-1],GT.pts[A.i])>tolKm||hav(s,GT.pts[B.i])>tolKm||Math.abs(B.i-A.i)<=1)return null;
     const pts=B.i>A.i?GT.pts.slice(A.i,B.i+1):GT.pts.slice(B.i,A.i+1).reverse();return{pts,len:Math.abs(pts[pts.length-1].km-pts[0].km)};});
   const cum=[0];for(let i=1;i<RS.length;i++)cum.push(cum[i-1]+(TL.geom[i]?TL.geom[i].len:hav(RS[i-1],RS[i])));TL.cum=cum;TL.kmTotal=cum[cum.length-1];
   TL.modes=RS.map((s,i)=>i?(LEGOVR[legKey(RS[i-1],s)]||(TL.geom[i]?(vehicle==='avion'?'moto':vehicle):legMode(RS[i-1],s,vehicle))):null);TL.ctrl=RS.map((s,i)=>i&&!TL.geom[i]?legCtrl(RS[i-1],s,TL.modes[i]):null);
-  const all=fitBox(RS,[W*.14,H*.24,W*.86,H*.78],W,H,ms*.22);
-  const fin=fitBox(RS,vert?[W*.12,H*.13,W*.88,H*.55]:[W*.06,H*.12,W*.48,H*.88],W,H,ms*.22);
+  // Encuadre de la vista general y del cierre: la ruta entera de la guía si la hay, no solo las fotos
+  const fitPts=GT&&GT.fromGuide?RS.concat(GT.pts.filter((_,k,a)=>k%Math.max(1,Math.floor(a.length/80))===0)):RS;
+  const all=fitBox(fitPts,[W*.14,H*.24,W*.86,H*.78],W,H,ms*.22);
+  const fin=fitBox(fitPts,vert?[W*.12,H*.13,W*.88,H*.55]:[W*.06,H*.12,W*.48,H*.88],W,H,ms*.22);
   const legS=i=>i===0?clamp(all.s*3,all.s,ms*.28):clamp(fitBox(TL.geom[i]?TL.geom[i].pts.filter((_,k,a)=>k%Math.max(1,Math.floor(a.length/40))===0).concat([RS[i-1],RS[i]]):[RS[i-1],RS[i]],[W*.2,H*.28,W*.8,H*.68],W,H,ms*.28).s,all.s*1.15,ms*.28);
   TL.countries=[...new Set(RS.map(s=>s.country).filter(Boolean))];TL.flags=TL.countries.map(c=>FLAG[c]||'').join(' ');
   const hero=M.photos.find(p=>p.land)||M.photos[0];TL.hero=hero;TL.hero2=[...M.photos].reverse().find(p=>p.land)||M.photos[M.photos.length-1];
@@ -1030,7 +1041,7 @@ Object.assign(SCENES,{
     const b=eout(clamp((lt-.6)/.5,0,1));hudChip(ctx,m,H-205*u,`${TL.flags?TL.flags+'  ':''}${nf(TL.kmTotal)} KM · ${M.days} ${M.days===1?'DÍA':'DÍAS'}`,u,{size:34,alpha:b});
   },
   overview(ctx,W,H,sg,lt,TL,u){
-    const v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);
+    const v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);drawGuideRoad(ctx,W,H,v,u);
     drawLegs(ctx,W,H,v,TL,RS.length-1,u,{ghost:true});
     drawPins(ctx,W,H,v,RS,PAL.dark,u,{});drawLabels(ctx,W,H,v,RS,RS.length-1,u,0);
     const[x,y]=proj(v,W,H,RS[0]);const st0=RS[1]?legPoint(RS[0],RS[1],TL.ctrl[1],0,TL.geom[1]):{ang:0};drawVehicle(ctx,x,y,st0.ang,u,TL.modes[1]||TL.vehicle,lt);
@@ -1039,7 +1050,7 @@ Object.assign(SCENES,{
     hudChip(ctx,W/2,top+86*u,`SALIDA · ${labelOf(RS[0]).toUpperCase()}`,u,{size:28,align:'center',dark:true,alpha:eout(clamp((lt-.5)/.5,0,1))});
   },
   drive(ctx,W,H,sg,lt,TL,u){
-    const v=sg.view(lt),RS=TL.RS,e=v.e;drawTiles(ctx,W,H,v,u);
+    const v=sg.view(lt),RS=TL.RS,e=v.e;drawTiles(ctx,W,H,v,u);drawGuideRoad(ctx,W,H,v,u);
     ctx.save();ctx.globalAlpha*=.8;drawLegs(ctx,W,H,v,TL,RS.length-1,u,{ghost:true});ctx.restore();
     const up=sg.i-1+e;drawLegs(ctx,W,H,v,TL,up,u);drawPins(ctx,W,H,v,RS,PAL.dark,u,{upto:e>.98?sg.i:sg.i-1,active:e>.98?sg.i:-1,t:lt});drawLabels(ctx,W,H,v,RS,e>.9?sg.i:sg.i-1,u,sg.i);
     const[x,y]=proj(v,W,H,v.px);const lift=sg.mode==='avion'?1+.45*Math.sin(Math.PI*e):1;drawVehicle(ctx,x,y,v.ang,u,sg.mode,lt,lift);TL.lastAng=v.ang;TL.lastMode=sg.mode;
@@ -1057,7 +1068,7 @@ Object.assign(SCENES,{
     txt(ctx,labelOf(sg.stop).toUpperCase(),m,H-(W<H?150:90)*u,{size:(W<H?88:76)*u,weight:800,maxW:W-2*m});
   },
   finale(ctx,W,H,sg,lt,TL,u){
-    const p=clamp(lt/sg.dur,0,1),M=TL.M,vert=W<H,v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);
+    const p=clamp(lt/sg.dur,0,1),M=TL.M,vert=W<H,v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);drawGuideRoad(ctx,W,H,v,u);
     drawLegs(ctx,W,H,v,TL,RS.length-1,u);drawPins(ctx,W,H,v,RS,PAL.dark,u,{});drawLabels(ctx,W,H,v,RS,RS.length-1,u,-1);
     const[x,y]=proj(v,W,H,RS[RS.length-1]);const lm=TL.modes[RS.length-1]||TL.vehicle,le=RS.length>1?legPoint(RS[RS.length-2],RS[RS.length-1],TL.ctrl[RS.length-1],.999,TL.geom[RS.length-1]).ang:0;drawVehicle(ctx,x,y,le,u,lm,lt);
     const k=eout(clamp((p-.1)/.45,0,1)),a=eout(clamp(p/.3,0,1));
