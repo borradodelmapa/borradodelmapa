@@ -137,3 +137,20 @@ durante el viaje.
 - Memoria: 60 fotos a 1800 px en un móvil modesto puede ir justo; si hay cierres, bajar a 1600 px o a 40 fotos.
 - El navegador puede borrar IndexedDB si falta espacio: lo guardado en la guía (R2) es lo único seguro.
 - Las fotos traídas de la app necesitan CORS del Worker (/photo/ ya da Access-Control-Allow-Origin: *).
+
+## Estudio a fondo: Polarsteps y Travel Animator (29 sept 2026)
+Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la sesión).
+- **Polarsteps Trip Reels:** un botón; máx. 60 s (editado, hasta 3:15); elige fotos por equilibrio y orientación;
+  desde el verano de 2026, vuelos sobre el terreno real; se comparte o descarga.
+- **Polarsteps Travel Book:** A4 apaisado 29,7×21, semimate, tapa dura o lay-flat; 36–150 € (mín. 24 págs), envío
+  gratis, −20 % con suscripción. Portada con 4 posiciones de título + año automático. Primera página de cada parada con
+  posición, lugar, minimapa y datos del día (lo que más gusta). 1–6 fotos/página (4 apaisadas o 2 verticales). Color del
+  tema, textos on/off, arrastrar fotos. Quejas: pocos diseños de página, "regenerar la vista previa", trayectos inventados.
+- **Travel Animator:** paradas a mano o enlace de Google Maps; 300+ vehículos 3D, 30+ mapas (globo 3D, satélite,
+  relieve); etiquetas, banderas, km; HD con marca de agua gratis; Pro 5,99 $/mes, 44,99 $/año, 39,99 $ de por vida.
+  Débil: todo manual.
+- **Nuestro hueco:** automatía de Polarsteps + mapa de Travel Animator + Salma (escribe y narra) + la ruta ya existe.
+- Guion de reel propuesto (≈45 s): gancho 0–3 s → mapa entero con vehículo y bandera → paradas con fotos al ritmo →
+  cierre con cifras y marca.
+- Pendiente de decisión de Paco: siguiente paso (reel con moto o álbum nivel Polarsteps), marca de agua en gratis,
+  descuento Premium en el libro.
