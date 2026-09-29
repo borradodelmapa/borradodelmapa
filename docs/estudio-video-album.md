@@ -241,3 +241,14 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
 | Travel Animator **importar GPX** | Animar la ruta exacta grabada en Strava/Garmin | Moteros y senderistas: subir el GPX y la moto va por su traza real | Bajo-medio · 0 € |
 | Travel Animator **fondos croma / intros** | Vídeo del mapa sobre verde para montarlo en CapCut | Exportar "solo mapa" para creadores | Bajo · 0 € |
 | Travel Animator **logo propio / sin marca de agua en Pro** | Monetización | Marca de agua en gratis, sin ella en Premium | Bajo · decisión de Paco |
+
+### Vehículo por tramo y arcos de vuelo (29 sept 2026, subido) — Paco: "Adelante"
+- Cada tramo del Reel tiene su transporte, puesto solo (`legMode`): **avión** si el tramo pasa de 700 km o cruza mucho
+  mar (>35 % de puntos fuera de tierra) y es largo; **barco** si cruza mar y es corto (<350 km); si eliges "A pie", los
+  tramos de más de 40 km van en coche; el resto, el vehículo elegido.
+- Lista "Cada tramo con su transporte" bajo el selector de vehículo: se puede cambiar cualquiera (moto, coche,
+  autocaravana, avión, barco, a pie).
+- Vuelos en **arco curvo** (curva cuadrática abombada hacia arriba), línea discontinua; la cámara se aleja más y el
+  avión "sube" (se agranda) a mitad del vuelo. Barco con línea punteada y dibujo propio. El contador de km lleva el
+  icono del tramo.
+- Probado con Madrid → Lisboa → Funchal → Porto Santo → Oporto: moto, avión, barco, avión (detectado solo).

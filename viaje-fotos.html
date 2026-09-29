@@ -194,6 +194,11 @@ h1 em{font-style:normal;color:var(--gold)}
 .tplgrid button{min-width:150px;flex:1 1 45%;display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center}
 .tplgrid .tth{width:54px;height:96px;background:#000;display:block}
 .tplgrid button b{display:block;font-weight:700}
+.legs{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.legs .lg{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;font-size:13px;background:var(--panel);border:1px solid var(--line);padding:6px 8px}
+.legs .lg span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legs select{background:var(--panel-2);color:var(--cream);border:1px solid var(--line);padding:6px;font:500 13px/1 var(--body)}
+.legs .hint{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -276,6 +281,7 @@ h1 em{font-style:normal;color:var(--gold)}
             <button type="button" data-v="avion" aria-pressed="false">✈️ Avión</button>
             <button type="button" data-v="pie" aria-pressed="false">🥾 A pie</button>
           </div>
+          <div class="legs" id="legList"></div>
         </div>
         <div class="field"><span>Calidad</span>
           <div class="seg" id="qSeg">
@@ -879,16 +885,17 @@ const FLAG={España:'🇪🇸',Portugal:'🇵🇹',Francia:'🇫🇷',Italia:'�
 let vehicle='moto';
 function rr(ctx,x,y,w,h,r,fill){ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);else ctx.rect(x,y,w,h);ctx.fillStyle=fill;ctx.fill();}
 // Vehículo visto desde arriba, apuntando a +x; se gira con el rumbo del tramo.
-function drawVehicle(ctx,x,y,ang,u,kind,t){
+function drawVehicle(ctx,x,y,ang,u,kind,t,lift=1){
   ctx.save();ctx.translate(x,y);
   const K=1.6;const pr=(t*1.3)%1;ctx.beginPath();ctx.arc(0,0,(26+pr*34)*u*K,0,7);ctx.strokeStyle=`rgba(${LOOK.rgb},${(1-pr)*.75})`;ctx.lineWidth=3*u;ctx.stroke();
   ctx.beginPath();ctx.arc(0,0,24*u*K,0,7);ctx.fillStyle='rgba(13,15,16,.55)';ctx.fill();
   ctx.rotate(ang);
-  const S=u*1.35*K;ctx.scale(S,S);const O=LOOK.acento,D='#15181a',C='#ECEBE8';
+  const S=u*1.35*K*lift;ctx.scale(S,S);const O=LOOK.acento,D='#15181a',C='#ECEBE8';
   if(kind==='moto'){rr(ctx,-21,-3,42,6,3,D);rr(ctx,-14,-6.5,27,13,6,O);rr(ctx,13,-11,3.5,22,1.7,C);ctx.beginPath();ctx.arc(-5,0,6,0,7);ctx.fillStyle=D;ctx.fill();ctx.beginPath();ctx.arc(-5,0,2.4,0,7);ctx.fillStyle=O;ctx.fill();}
   else if(kind==='coche'){rr(ctx,-22,-11,44,22,6,O);rr(ctx,5,-9,8,18,3,D);rr(ctx,-17,-8,7,16,3,D);rr(ctx,-7,-8.5,10,17,2,'#ff8a47');}
   else if(kind==='furgo'){rr(ctx,-28,-12,56,24,5,C);rr(ctx,16,-10,9,20,3,D);ctx.fillStyle=O;ctx.fillRect(-28,-2,44,4);rr(ctx,-20,-8,10,6,2,D);}
   else if(kind==='avion'){ctx.fillStyle=C;ctx.beginPath();ctx.ellipse(0,0,24,4.5,0,0,7);ctx.fill();ctx.beginPath();ctx.moveTo(5,0);ctx.lineTo(-6,-23);ctx.lineTo(-11,-23);ctx.lineTo(-4,0);ctx.lineTo(-11,23);ctx.lineTo(-6,23);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(-18,0);ctx.lineTo(-24,-9);ctx.lineTo(-27,-9);ctx.lineTo(-23,0);ctx.lineTo(-27,9);ctx.lineTo(-24,9);ctx.closePath();ctx.fill();ctx.fillStyle=O;ctx.beginPath();ctx.ellipse(16,0,5,2.6,0,0,7);ctx.fill();}
+  else if(kind==='barco'){ctx.fillStyle=C;ctx.beginPath();ctx.moveTo(26,0);ctx.quadraticCurveTo(14,-12,-22,-11);ctx.lineTo(-22,11);ctx.quadraticCurveTo(14,12,26,0);ctx.fill();rr(ctx,-14,-7,20,14,3,O);rr(ctx,-6,-4,6,8,2,D);}
   else{ctx.beginPath();ctx.arc(0,0,11,0,7);ctx.fillStyle=O;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=C;ctx.stroke();ctx.beginPath();ctx.moveTo(5,0);ctx.lineTo(-3,-5.5);ctx.lineTo(-3,5.5);ctx.closePath();ctx.fillStyle=C;ctx.fill();}
   ctx.restore();
 }
@@ -902,6 +909,50 @@ function drawLabels(ctx,W,H,v,pts,upto,u,active){
     ctx.lineWidth=7*u;ctx.strokeStyle='rgba(13,15,16,.9)';ctx.strokeText(t,x+18*u,y);ctx.fillStyle=i===active?LOOK.acento:'#ECEBE8';ctx.fillText(t,x+18*u,y);});
   ctx.restore();
 }
+// Medio de transporte de cada tramo: vuelos para lo largo o lo que cruza mucho mar, barco para mar corto, y el
+// vehículo elegido para el resto. El usuario puede cambiar cualquiera (LEGOVR).
+const LEGOVR={};const MODES={moto:'🏍️ Moto',coche:'🚗 Coche',furgo:'🚐 Autocaravana',avion:'✈️ Avión',barco:'⛴️ Barco',pie:'🥾 A pie'};
+const legKey=(a,b)=>`${(a.name||'')}@${a.lat.toFixed(3)},${a.lng.toFixed(3)}>${(b.name||'')}@${b.lat.toFixed(3)},${b.lng.toFixed(3)}`;
+function legMode(a,b,base){
+  const d=hav(a,b);let sea=0;const N=14;
+  for(let k=1;k<N;k++){const f=k/N;if(!countryAt(lerp(a.lat,b.lat,f),lerp(a.lng,b.lng,f)))sea++;}
+  const seaFrac=sea/(N-1);
+  if(base==='avion')return'avion';
+  if(d>700)return'avion';
+  if(seaFrac>.35)return d>350?'avion':'barco';
+  if(base==='pie'&&d>40)return'coche';
+  return base;
+}
+// Arco de vuelo: curva cuadrática que se abomba hacia arriba del mapa (como Travel Animator).
+function legCtrl(a,b,mode){if(mode!=='avion')return null;const dx=b.mx-a.mx,dy=b.my-a.my,L=Math.hypot(dx,dy);let px=-dy/L,py=dx/L;if(py>0){px=-px;py=-py;}
+  return{mx:(a.mx+b.mx)/2+px*L*.22,my:(a.my+b.my)/2+py*L*.22};}
+function legPoint(a,b,c,e){if(!c)return{mx:lerp(a.mx,b.mx,e),my:lerp(a.my,b.my,e),ang:Math.atan2(b.my-a.my,b.mx-a.mx)};
+  const q=1-e,mx=q*q*a.mx+2*q*e*c.mx+e*e*b.mx,my=q*q*a.my+2*q*e*c.my+e*e*b.my;
+  const tx=2*q*(c.mx-a.mx)+2*e*(b.mx-c.mx),ty=2*q*(c.my-a.my)+2*e*(b.my-c.my);return{mx,my,ang:Math.atan2(ty,tx)};}
+// Dibuja los tramos hasta 'upto' (índice de parada con decimales). Vuelos en discontinua y curva; barco en punteado.
+function drawLegs(ctx,W,H,v,TL,upto,u,o={}){
+  const RS=TL.RS;if(RS.length<2||upto<=0)return;
+  ctx.save();ctx.lineJoin=ctx.lineCap='round';
+  for(let i=1;i<RS.length;i++){
+    if(i-1>=upto)break;const f=Math.min(1,upto-(i-1));const a=RS[i-1],b=RS[i],c=TL.ctrl[i],mode=TL.modes[i];
+    const pa=proj(v,W,H,a),steps=c?24:1;ctx.beginPath();ctx.moveTo(pa[0],pa[1]);
+    for(let k=1;k<=steps;k++){const p=legPoint(a,b,c,f*k/steps);const q=proj(v,W,H,p);ctx.lineTo(q[0],q[1]);}
+    const dash=mode==='avion'?[18*u,14*u]:mode==='barco'?[4*u,12*u]:[];
+    if(o.ghost){ctx.setLineDash(dash.length?dash:[14*u,12*u]);ctx.strokeStyle='rgba(236,235,232,.5)';ctx.lineWidth=4*u;ctx.stroke();continue;}
+    ctx.setLineDash([]);ctx.strokeStyle=`rgba(${LOOK.rgb},.22)`;ctx.lineWidth=20*u;if(!dash.length)ctx.stroke();
+    ctx.setLineDash(dash);ctx.strokeStyle=LOOK.acento;ctx.lineWidth=(dash.length?7:6)*u;ctx.stroke();
+  }
+  ctx.restore();
+}
+function renderLegList(TL){
+  const box=$('#legList');if(!box)return;
+  if(!TL||!TL.RS||TL.RS.length<2){box.innerHTML='';return;}
+  const RS=TL.RS;let h='<div class="hint">Cada tramo con su transporte (lo pongo solo; cámbialo si quieres):</div>';
+  for(let i=1;i<RS.length;i++){const a=RS[i-1],b=RS[i],k=legKey(a,b);
+    h+=`<div class="lg"><span>${i}. ${esc0(labelOf(a))} → ${esc0(labelOf(b))} · ${nf(hav(a,b))} km</span><select data-k="${esc0(k)}" aria-label="Transporte del tramo ${i}">${Object.entries(MODES).map(([m,l])=>`<option value="${m}"${TL.modes[i]===m?' selected':''}>${l}</option>`).join('')}</select></div>`;}
+  box.innerHTML=h;
+  box.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{LEGOVR[sel.dataset.k]=sel.value;rebuildVideo();});
+}
 function reelStops(M){
   let st=M.stops.filter(s=>s.lat!=null);
   if(st.length>8){const byDay=new Map();st.forEach(s=>{if(!byDay.has(s.day))byDay.set(s.day,[]);byDay.get(s.day).push(s);});
@@ -912,6 +963,7 @@ function reelStops(M){
 function buildReel(M,TL){
   const{W,H,u}=TL,ms=maxS(W,H),vert=W<H;const RS=reelStops(M);TL.RS=RS;TL.vehicle=vehicle;
   const cum=[0];for(let i=1;i<RS.length;i++)cum.push(cum[i-1]+hav(RS[i-1],RS[i]));TL.cum=cum;TL.kmTotal=cum[cum.length-1];
+  TL.modes=RS.map((s,i)=>i?(LEGOVR[legKey(RS[i-1],s)]||legMode(RS[i-1],s,vehicle)):null);TL.ctrl=RS.map((s,i)=>i?legCtrl(RS[i-1],s,TL.modes[i]):null);
   const all=fitBox(RS,[W*.14,H*.24,W*.86,H*.78],W,H,ms*.22);
   const fin=fitBox(RS,vert?[W*.12,H*.13,W*.88,H*.55]:[W*.06,H*.12,W*.48,H*.88],W,H,ms*.22);
   const legS=i=>i===0?clamp(all.s*3,all.s,ms*.28):clamp(fitBox([RS[i-1],RS[i]],[W*.2,H*.28,W*.8,H*.68],W,H,ms*.28).s,all.s*1.15,ms*.28);
@@ -923,8 +975,8 @@ function buildReel(M,TL){
   const R=TL.tpl.ritmo||{},budget=R.maxFotos||20,per=clamp(Math.round(budget/Math.max(1,RS.length)),1,6);let n=0;
   RS.forEach((st,i)=>{
     if(i>0){const a=RS[i-1],b=st,s0=legS(i),dur=clamp(1.9+Math.log10(1+cum[i]-cum[i-1])*.55,2,3.4)*(R.tramo||1);
-      const ang=Math.atan2(b.my-a.my,b.mx-a.mx);
-      add({type:'drive',dur,i,a,b,ang,view:lt=>{const e=ease(clamp(lt/(dur*.86),0,1));const s=s0*(1-.22*Math.sin(Math.PI*e));return{x:lerp(a.mx,b.mx,e),y:lerp(a.my,b.my,e)+H*.06/s,s,e};}});}
+      const mode=TL.modes[i],c=TL.ctrl[i],hump=mode==='avion'?.4:.22;
+      add({type:'drive',dur,i,a,b,mode,c,view:lt=>{const e=ease(clamp(lt/(dur*.86),0,1));const s=s0*(1-hump*Math.sin(Math.PI*e));const p=legPoint(a,b,c,e);return{x:p.mx,y:p.my+H*.06/s,s,e,ang:p.ang,px:p};}});}
     const ph=[...st.photos].sort((p,q)=>(q.land?1:0)-(p.land?1:0)).slice(0,per).sort((p,q)=>p.date-q.date);
     ph.forEach((p,j)=>add({type:'flash',dur:R.foto||1.15,photo:p,stop:st,cut:j>0,kb:kbFor(n++)}));
   });
@@ -944,22 +996,22 @@ Object.assign(SCENES,{
   },
   overview(ctx,W,H,sg,lt,TL,u){
     const v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);
-    ctx.save();ctx.setLineDash([14*u,12*u]);ctx.globalAlpha*=.55;drawRoute(ctx,W,H,v,RS,RS.length-1,{route:'#ECEBE8',glow:'rgba(0,0,0,0)'},u);ctx.restore();
+    drawLegs(ctx,W,H,v,TL,RS.length-1,u,{ghost:true});
     drawPins(ctx,W,H,v,RS,PAL.dark,u,{});drawLabels(ctx,W,H,v,RS,RS.length-1,u,0);
-    const[x,y]=proj(v,W,H,RS[0]);drawVehicle(ctx,x,y,RS[1]?Math.atan2(RS[1].my-RS[0].my,RS[1].mx-RS[0].mx):0,u,TL.vehicle,lt);
+    const[x,y]=proj(v,W,H,RS[0]);const st0=RS[1]?legPoint(RS[0],RS[1],TL.ctrl[1],0):{ang:0};drawVehicle(ctx,x,y,st0.ang,u,TL.modes[1]||TL.vehicle,lt);
     const a=eout(clamp(lt/.5,0,1));const top=(W<H?150:80)*u;
     if(TL.countries.length)hudChip(ctx,W/2,top,`${TL.flags}  ${TL.countries.join(' · ').toUpperCase()}`,u,{size:44,align:'center',alpha:a});
     hudChip(ctx,W/2,top+86*u,`SALIDA · ${labelOf(RS[0]).toUpperCase()}`,u,{size:28,align:'center',dark:true,alpha:eout(clamp((lt-.5)/.5,0,1))});
   },
   drive(ctx,W,H,sg,lt,TL,u){
     const v=sg.view(lt),RS=TL.RS,e=v.e;drawTiles(ctx,W,H,v,u);
-    ctx.save();ctx.setLineDash([14*u,12*u]);ctx.globalAlpha*=.4;drawRoute(ctx,W,H,v,RS,RS.length-1,{route:'#ECEBE8',glow:'rgba(0,0,0,0)'},u);ctx.restore();
-    const up=sg.i-1+e;drawRoute(ctx,W,H,v,RS,up,PAL.dark,u);drawPins(ctx,W,H,v,RS,PAL.dark,u,{upto:e>.98?sg.i:sg.i-1,active:e>.98?sg.i:-1,t:lt});drawLabels(ctx,W,H,v,RS,e>.9?sg.i:sg.i-1,u,sg.i);
-    const px={mx:lerp(sg.a.mx,sg.b.mx,e),my:lerp(sg.a.my,sg.b.my,e)};const[x,y]=proj(v,W,H,px);drawVehicle(ctx,x,y,sg.ang,u,TL.vehicle,lt);TL.lastAng=sg.ang;
+    ctx.save();ctx.globalAlpha*=.8;drawLegs(ctx,W,H,v,TL,RS.length-1,u,{ghost:true});ctx.restore();
+    const up=sg.i-1+e;drawLegs(ctx,W,H,v,TL,up,u);drawPins(ctx,W,H,v,RS,PAL.dark,u,{upto:e>.98?sg.i:sg.i-1,active:e>.98?sg.i:-1,t:lt});drawLabels(ctx,W,H,v,RS,e>.9?sg.i:sg.i-1,u,sg.i);
+    const[x,y]=proj(v,W,H,v.px);const lift=sg.mode==='avion'?1+.45*Math.sin(Math.PI*e):1;drawVehicle(ctx,x,y,v.ang,u,sg.mode,lt,lift);TL.lastAng=v.ang;TL.lastMode=sg.mode;
     const top=(W<H?150:70)*u,m=60*u;
     hudChip(ctx,m,top,`DÍA ${sg.b.day} · ${labelOf(sg.b).toUpperCase()}`,u,{size:40});
     const km=lerp(TL.cum[sg.i-1],TL.cum[sg.i],e);
-    hudChip(ctx,W-m,H-(W<H?250:140)*u,`${nf(km)} KM`,u,{size:60,align:'right',dark:true});
+    hudChip(ctx,W-m,H-(W<H?250:140)*u,`${(MODES[sg.mode]||'').split(' ')[0]} ${nf(km)} KM`,u,{size:60,align:'right',dark:true});
     if(sg.b.country&&FLAG[sg.b.country])hudChip(ctx,W-m,top,FLAG[sg.b.country],u,{size:40,align:'right',dark:true});
   },
   flash(ctx,W,H,sg,lt,TL,u){
@@ -971,8 +1023,8 @@ Object.assign(SCENES,{
   },
   finale(ctx,W,H,sg,lt,TL,u){
     const p=clamp(lt/sg.dur,0,1),M=TL.M,vert=W<H,v=sg.view(lt),RS=TL.RS;drawTiles(ctx,W,H,v,u);
-    drawRoute(ctx,W,H,v,RS,RS.length-1,PAL.dark,u);drawPins(ctx,W,H,v,RS,PAL.dark,u,{});drawLabels(ctx,W,H,v,RS,RS.length-1,u,-1);
-    const[x,y]=proj(v,W,H,RS[RS.length-1]);drawVehicle(ctx,x,y,TL.lastAng||0,u,TL.vehicle,lt);
+    drawLegs(ctx,W,H,v,TL,RS.length-1,u);drawPins(ctx,W,H,v,RS,PAL.dark,u,{});drawLabels(ctx,W,H,v,RS,RS.length-1,u,-1);
+    const[x,y]=proj(v,W,H,RS[RS.length-1]);const lm=TL.modes[RS.length-1]||TL.vehicle,le=RS.length>1?legPoint(RS[RS.length-2],RS[RS.length-1],TL.ctrl[RS.length-1],1).ang:0;drawVehicle(ctx,x,y,le,u,lm,lt);
     const k=eout(clamp((p-.1)/.45,0,1)),a=eout(clamp(p/.3,0,1));
     const stats=[[TL.kmTotal,'KM'],[M.days,M.days===1?'DÍA':'DÍAS'],[RS.length,'PARADAS'],[M.photos.length,'FOTOS']];
     ctx.save();ctx.globalAlpha*=a;ctx.fillStyle='rgba(13,15,16,.94)';if(vert)ctx.fillRect(0,H*.6,W,H*.4);else ctx.fillRect(W*.6,0,W*.4,H);ctx.restore();
@@ -1003,7 +1055,7 @@ function syncStyleButtons(){
   $('#tplNote').textContent=nm&&tpl.secuencia!=='capitulos'?`Tus fotos no tienen ubicación: «${tpl.nombre}» sale sin mapa (por días). Elige tu guía para ver el mapa.`:'';
   document.querySelectorAll('#styleSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v===style)));
 }
-function rebuildVideo(){syncStyleButtons();setPlaying(false);resetVideoOut();TL=buildTimeline(M,style,fmt);T=Math.min(3,TL.total);sizePreview();drawPreview();$('#encOut').hidden=true;$('#encSpec').innerHTML='';$('#encNote').textContent='';drawCompare();}
+function rebuildVideo(){syncStyleButtons();setPlaying(false);resetVideoOut();TL=buildTimeline(M,style,fmt);renderLegList(TL.style==='reel'?TL:null);T=Math.min(3,TL.total);sizePreview();drawPreview();$('#encOut').hidden=true;$('#encSpec').innerHTML='';$('#encNote').textContent='';drawCompare();}
 $('#playBtn').onclick=()=>setPlaying(!playing);
 $('#scrub').oninput=e=>{setPlaying(false);T=e.target.value/1000*TL.total;drawPreview();};
 function segCtl(id,cb){const box=$(id);box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset.v);});}
@@ -1014,7 +1066,7 @@ let QUAL=720;segCtl('#qSeg',v=>{QUAL=+v;resetVideoOut();});
 
 /* miniaturas animadas de las plantillas: los primeros segundos de cada una con TUS fotos */
 const TH={tls:new Map(),t:.6,last:0,buf:document.createElement('canvas')};TH.buf.width=108;TH.buf.height=192;
-function thumbTL(id){const key=[M&&M.photos.length,M&&M.noMap,GUIDE&&GUIDE.id,vehicle].join('|');let x=TH.tls.get(id);
+function thumbTL(id){const key=[M&&M.photos.length,M&&M.noMap,GUIDE&&GUIDE.id,vehicle,JSON.stringify(LEGOVR)].join('|');let x=TH.tls.get(id);
   if(!x||x.M!==M||x.key!==key){x={M,key,TL:buildTimeline(M,id,'v')};TH.tls.set(id,x);}return x.TL;}
 function thumbLoop(now){
   requestAnimationFrame(thumbLoop);
