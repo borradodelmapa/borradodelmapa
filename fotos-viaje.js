@@ -145,7 +145,7 @@ const fotosViaje = (() => {
   const MED = { frame: null, holder: null, guia: null, encoding: false, hasVideo: false, pill: '', done: false, ro: null };
 
   // v=: subirlo al cambiar viaje-fotos.html (si no, el móvil puede usar una copia vieja)
-  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=3&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
+  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=4&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
 
   function _mediaShow(tab) {
     const s = _st; if (!s) return;
@@ -471,6 +471,156 @@ const fotosViaje = (() => {
     if (!fromHistory && window.popModal) window.popModal('fotos-viaje');
   }
 
-  return { mount, unmount };
+  /* ═══ FOTOS SIN VIAJE (caso 14 paso 4) ═══
+     Fotos de la cuenta que no están en ninguna guía (routeId null): las de la Galería vieja,
+     las del chat sin ruta abierta, las compartidas desde el móvil sin elegir ruta…
+     Se eligen y se pasan a un viaje (o se quitan). Sustituye a la Galería. */
+  let _stray = null; // { uid, list } — caché de la sesión
+  async function _loadStray(force) {
+    const u = window.currentUser; if (!u) return [];
+    if (!force && _stray && _stray.uid === u.uid) return _stray.list;
+    const q = await firebase.firestore().collection('users').doc(u.uid).collection('fotos').where('routeId', '==', null).limit(500).get();
+    const list = [];
+    q.docs.forEach(d => {
+      const x = d.data(); if (!x.url || x.type === 'video' || x.tag === 'documento' || x.tag === 'cartel') return;
+      list.push({ id: d.id, url: x.url, date: toDate(x.takenAt || x.createdAt), lat: x.lat, lng: x.lng, place: x.caption || '' });
+    });
+    list.sort((a, b) => (a.date || 0) - (b.date || 0));
+    _stray = { uid: u.uid, list };
+    return list;
+  }
+
+  // Fila en Mis Viajes (solo si hay alguna)
+  function strayStrip(el) {
+    if (!el || !window.currentUser) return;
+    el.hidden = true;
+    _loadStray().then(list => {
+      if (!list.length || !el.isConnected) return;
+      el.className = 'fv-stray-strip';
+      el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0');
+      el.innerHTML = `<span class="fv-stray-ic">${IC_CAM}</span><span class="fv-stray-txt"><b>Fotos sin viaje</b><span>${list.length} ${list.length === 1 ? 'foto que no está' : 'fotos que no están'} en ningún viaje</span></span><span class="fv-stray-go" aria-hidden="true">→</span>`;
+      el.hidden = false;
+      const go = () => showState('fotos-sin-viaje');
+      el.addEventListener('click', go);
+      el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    }).catch(() => {});
+  }
+
+  let _sel = new Set();
+  async function renderStray() {
+    const $c = document.getElementById('app-content');
+    if (!window.currentUser) { window._afterLogin = 'fotos-sin-viaje'; if (typeof openModal === 'function') openModal(); return; }
+    _sel = new Set();
+    $c.innerHTML = `
+      <div class="fv-stray fade-in" id="fv-stray">
+        <button class="tm-back" type="button" id="fv-stray-back">‹ Mis Viajes</button>
+        <h2 class="fv-stray-title">Fotos <span>sin viaje</span></h2>
+        <p class="fv-stray-lede" id="fv-stray-lede">Cargando…</p>
+        <div id="fv-stray-body"></div>
+      </div>
+      <div class="fv-stray-bar" id="fv-stray-bar" hidden>
+        <span id="fv-stray-n"></span>
+        <button type="button" class="fv-stray-del" id="fv-stray-del" aria-label="Quitar las fotos elegidas">${IC_TRASH}</button>
+        <button type="button" class="fv-stray-move" id="fv-stray-move">Pasar a un viaje</button>
+      </div>`;
+    document.getElementById('fv-stray-back').addEventListener('click', () => { window._rutasTab = 'mis'; showState('rutas'); });
+    let list;
+    try { list = await _loadStray(true); } catch (_) { document.getElementById('fv-stray-lede').textContent = 'No se pudieron cargar. Revisa la conexión y vuelve a entrar.'; return; }
+    if (!document.getElementById('fv-stray')) return;
+    _strayPaint(list);
+    document.getElementById('fv-stray-move').addEventListener('click', () => _strayPickTrip());
+    document.getElementById('fv-stray-del').addEventListener('click', () => _strayDelete());
+  }
+
+  function _strayPaint(list) {
+    const lede = document.getElementById('fv-stray-lede'), body = document.getElementById('fv-stray-body'); if (!body) return;
+    if (!list.length) {
+      lede.textContent = 'Todas tus fotos están en algún viaje.';
+      body.innerHTML = '';
+      _strayBar();
+      return;
+    }
+    lede.textContent = `${list.length} ${list.length === 1 ? 'foto' : 'fotos'}. Toca las que sean del mismo viaje (o el día entero) y pásalas a su guía.`;
+    const groups = new Map();
+    list.forEach((p, i) => { const k = _dayKey(p.date); if (!groups.has(k)) groups.set(k, { d: p.date, items: [] }); groups.get(k).items.push(i); });
+    body.innerHTML = `<div class="fv-days">${[...groups.values()].map(g => `
+      <section class="fv-day"><button type="button" class="fv-day-h fv-day-pick" data-items="${g.items.join(',')}">${g.d ? esc(_dayLabel(g.d)) + ` <span>· ${g.d.getFullYear()}</span>` : 'Sin fecha'}<em>${g.items.length}</em></button>
+      <div class="fv-grid">${g.items.map(i => `<button type="button" class="fv-th fv-pick${_sel.has(list[i].id) ? ' on' : ''}" data-id="${esc(list[i].id)}" aria-pressed="${_sel.has(list[i].id)}"><img src="${esc(list[i].url)}" alt="" loading="lazy" decoding="async"><i aria-hidden="true"></i></button>`).join('')}</div></section>`).join('')}</div>`;
+    body.querySelectorAll('.fv-pick').forEach(b => b.addEventListener('click', () => {
+      const id = b.dataset.id; if (_sel.has(id)) _sel.delete(id); else _sel.add(id);
+      b.classList.toggle('on', _sel.has(id)); b.setAttribute('aria-pressed', String(_sel.has(id))); _strayBar();
+    }));
+    body.querySelectorAll('.fv-day-pick').forEach(h => h.addEventListener('click', () => {
+      const ids = h.dataset.items.split(',').map(i => list[+i].id);
+      const all = ids.every(id => _sel.has(id));
+      ids.forEach(id => all ? _sel.delete(id) : _sel.add(id));
+      _strayPaint(list);
+    }));
+    _strayBar();
+  }
+  function _strayBar() {
+    const bar = document.getElementById('fv-stray-bar'); if (!bar) return;
+    bar.hidden = !_sel.size;
+    document.getElementById('fv-stray-n').textContent = `${_sel.size} ${_sel.size === 1 ? 'elegida' : 'elegidas'}`;
+  }
+
+  async function _strayPickTrip() {
+    if (!_sel.size) return;
+    const uid = window.currentUser.uid;
+    const sheet = document.createElement('div');
+    sheet.className = 'fv-sheet';
+    sheet.innerHTML = `<div class="fv-sheet-box" role="dialog" aria-label="Elige el viaje"><div class="fv-sheet-head"><b>¿A qué viaje?</b><button type="button" class="fv-sheet-x" aria-label="Cerrar">✕</button></div><div class="fv-sheet-list"><p class="fv-note fv-pad">Cargando tus guías…</p></div></div>`;
+    document.body.appendChild(sheet);
+    const close = (fromHistory) => { sheet.remove(); if (!fromHistory && window.popModal) window.popModal('fv-sheet'); };
+    if (window.pushModal) window.pushModal('fv-sheet', () => close(true));
+    sheet.querySelector('.fv-sheet-x').onclick = () => close();
+    sheet.addEventListener('click', e => { if (e.target === sheet) close(); });
+    try {
+      const snap = await firebase.firestore().collection('users').doc(uid).collection('maps').orderBy('createdAt', 'desc').limit(100).get();
+      const guides = [];
+      snap.forEach(d => { const x = d.data(); if (x.estado === 'borrador' || x.saved_from) return; let t = x.nombre; if (!t) { try { t = JSON.parse(x.itinerarioIA || '{}').title; } catch (_) {} } guides.push({ id: d.id, t: t || 'Guía sin nombre', dias: x.dias || x.num_dias || '', dest: x.destino || '' }); });
+      const box = sheet.querySelector('.fv-sheet-list');
+      if (!guides.length) { box.innerHTML = '<p class="fv-note fv-pad">Aún no tienes guías. Crea una con Salma y vuelve aquí.</p>'; return; }
+      box.innerHTML = guides.map(g => `<button type="button" class="fv-sheet-item" data-id="${esc(g.id)}"><b>${esc(g.t)}</b><span>${[g.dias ? g.dias + ' días' : '', esc(g.dest)].filter(Boolean).join(' · ')}</span></button>`).join('');
+      box.querySelectorAll('.fv-sheet-item').forEach(b => b.addEventListener('click', async () => {
+        const gid = b.dataset.id, name = b.querySelector('b').textContent;
+        box.querySelectorAll('button').forEach(x => x.disabled = true);
+        try {
+          const ids = [..._sel], db = firebase.firestore();
+          for (let i = 0; i < ids.length; i += 400) {
+            const batch = db.batch();
+            ids.slice(i, i + 400).forEach(id => batch.update(db.collection('users').doc(uid).collection('fotos').doc(id), { routeId: gid }));
+            await batch.commit();
+          }
+          close();
+          _stray.list = _stray.list.filter(p => !_sel.has(p.id));
+          try { localStorage.removeItem('bdm_tumundo_sum'); } catch (_) {}
+          if (typeof showToast === 'function') showToast(`${ids.length} ${ids.length === 1 ? 'foto pasada' : 'fotos pasadas'} a «${name}»`);
+          _sel = new Set(); _strayPaint(_stray.list);
+        } catch (_) {
+          box.querySelectorAll('button').forEach(x => x.disabled = false);
+          if (typeof showToast === 'function') showToast('No se pudieron pasar. Prueba otra vez.');
+        }
+      }));
+    } catch (_) { sheet.querySelector('.fv-sheet-list').innerHTML = '<p class="fv-note fv-pad">No se pudieron cargar tus guías.</p>'; }
+  }
+
+  async function _strayDelete() {
+    if (!_sel.size) return;
+    if (!confirm(`¿Quitar ${_sel.size} ${_sel.size === 1 ? 'foto' : 'fotos'} de tu cuenta?`)) return;
+    const uid = window.currentUser.uid, ids = [..._sel], db = firebase.firestore();
+    try {
+      for (let i = 0; i < ids.length; i += 400) {
+        const batch = db.batch();
+        ids.slice(i, i + 400).forEach(id => batch.delete(db.collection('users').doc(uid).collection('fotos').doc(id)));
+        await batch.commit();
+      }
+      _stray.list = _stray.list.filter(p => !_sel.has(p.id));
+      try { localStorage.removeItem('bdm_tumundo_sum'); } catch (_) {}
+      _sel = new Set(); _strayPaint(_stray.list);
+    } catch (_) { if (typeof showToast === 'function') showToast('No se pudieron quitar. Prueba otra vez.'); }
+  }
+
+  return { mount, unmount, strayStrip, renderStray };
 })();
 window.fotosViaje = fotosViaje;

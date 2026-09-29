@@ -13,8 +13,8 @@
   }
 
   // Estados principales que merecen entrada en el historial
-  // 'diario' no está — es sub-vista de bitácora, su back lo gestiona itin:close
-  const PUSH_STATES = ['chat', 'rutas', 'profile', 'bitacora', 'notas', 'documentos', 'galeria', 'vuelos', 'tu-mundo'];
+  // Galería y bitácora/diario quitadas el 29 sept 2026 (showState las manda a Mis Viajes)
+  const PUSH_STATES = ['chat', 'rutas', 'profile', 'notas', 'documentos', 'vuelos', 'tu-mundo', 'fotos-sin-viaje'];
 
   // Guardar referencia ANTES de sobreescribir
   const _orig = showState;

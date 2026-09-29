@@ -9,7 +9,9 @@
 <script>/* Modo app (29 sept 2026, caso 14 paso 3): dentro de la guía de la app, en un iframe.
    ?embed=1&guia=<id>: sin cabecera ni textos de prueba; las fotos salen de la pestaña FOTOS de esa guía. */
 window.EMB=new URLSearchParams(location.search).get('embed')==='1';window.EMB_GUIA=new URLSearchParams(location.search).get('guia')||'';
-if(window.EMB)document.documentElement.classList.add('emb');</script>
+if(window.EMB)document.documentElement.classList.add('emb');
+/* Página suelta retirada (29 sept 2026, caso 14 paso 4): el vídeo y el álbum viven dentro de cada guía de la app */
+else location.replace('/?go=rutas');</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

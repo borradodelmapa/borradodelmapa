@@ -337,3 +337,18 @@ viejo y tarjetas beta (se conserva "tocar el mapa → foto en ese punto"). Icono
 - En el móvil, con VÍDEO/ÁLBUM el mapa se pliega del todo.
 - Al cambiar viaje-fotos.html: subir `v=` en `_mediaURL()` de fotos-viaje.js (y el `?v=` de fotos-viaje.js).
 - 💶 0 €: todo se crea en el móvil (mapa de teselas OSM gratis, ver aviso de volumen más arriba).
+
+### Paso 4 (29 sept 2026, subido): limpieza
+- FUERA de la app (app.js v206): Galería (renderGaleria, álbumes, subir a galería, acciones de foto), Cuaderno de viaje
+  (renderBitacora + bitacora-renderer), vídeo viejo (_showVideoModal, videoFromPins, 🎬 de tarjetas), chip 'galeria',
+  _loadProfileGuides/_createGuideCard (muerto), tarjeta "VÍDEO Y ÁLBUM · BETA". showState('galeria'|'bitacora'|'diario')
+  → Mis Viajes. index.html ya no carga video-assembly.js ni bitacora-renderer.js.
+- SE QUEDAN los ficheros video-assembly.js y bitacora-renderer.js: los cargan ~50 páginas públicas (<slug>.html, 404.html)
+  y sw.js los precachea (cache.addAll fallaría si no existen). Quitar cuando se regeneren guías/sw.
+- SE QUEDA video-player.js: lo usa el CHAT (salma.js, herramienta de vídeo de Salma, `video_params`). Cambiarlo al
+  motor nuevo = tocar Salma → caso aparte.
+- NUEVO "Fotos sin viaje" (fotos-viaje.js `strayStrip`/`renderStray`, estado `fotos-sin-viaje`): fila en Mis Viajes
+  (solo si hay) → rejilla por días, elegir fotos o el día entero, "Pasar a un viaje" (hoja con tus guías propias) o
+  quitar. Lee `fotos` con routeId == null (máx. 500; docs viejos sin el campo no salen). Caché de la sesión.
+- viaje-fotos.html sin ?embed → /?go=rutas. tu-mundo.html → /?go=tu-mundo.
+- No se ha borrado ningún dato. Los álbumes viejos (users/{uid}/albumes) quedan en Firestore sin pantalla.
