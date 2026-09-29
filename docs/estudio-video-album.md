@@ -252,3 +252,14 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
   avión "sube" (se agranda) a mitad del vuelo. Barco con línea punteada y dibujo propio. El contador de km lleva el
   icono del tramo.
 - Probado con Madrid → Lisboa → Funchal → Porto Santo → Oporto: moto, avión, barco, avión (detectado solo).
+
+### Exportar la guía a GPX (29 sept 2026, subido) — Paco: "Sí, adelante con exportar GPX"
+- Botón **GPX** en la barra de acciones de la vista de itinerario (mapa-itinerario.js v84), junto a Compartir y Google
+  Maps. Solo con la ruta entera (con cuenta; en el avance sin cuenta no sale, §10).
+- El archivo lleva: cada parada como waypoint ("Día 2 · 3. Góis" + descripción), una `<rte>` con las paradas en orden
+  (OsmAnd/Calimoto/Garmin la recalculan por carretera) y, si la guía sigue una carretera con nombre, su trazado real
+  (`road_geometry.coords`) como `<trk>`. Se genera en el móvil: 0 €.
+- Uso: abrirlo con OsmAnd, Organic Maps, Calimoto o Garmin, que tienen mapas sin internet.
+- PROYECTO: mapas sin internet dentro de nuestra app = otro proyecto (OSM no permite descargas masivas; opciones:
+  Protomaps/PMTiles en R2 o proveedor con licencia offline; coste de almacenamiento, avisar §8).
+- Siguiente: importar GPX para el vídeo (la moto por tu traza real).

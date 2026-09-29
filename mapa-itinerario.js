@@ -28,6 +28,7 @@ const mapaItinerario = {
     this._container.innerHTML = '';
 
     const country = routeData.country || routeData.region || '';
+    const _isPreview = !!(options && options._preview);
     // Cabecera con la ruta ENTERA aunque sin cuenta se pinte solo el día 1 (CLAUDE.md §10)
     const _allStops = (routeData && Array.isArray(routeData.stops) && routeData.stops.length) ? routeData.stops : stops;
     // Si la ruta sigue una carretera con nombre (N2…), el enlace a Google Maps se
@@ -68,6 +69,7 @@ const mapaItinerario = {
         ${options.saved ? '' : '<button class="itin-btn itin-btn-pill itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
         <button class="itin-btn itin-btn-icon itin-btn-share" id="itin-share-btn" title="Compartir" aria-label="Compartir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
         ${mapsUrl ? `<a class="itin-btn itin-btn-icon itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps" aria-label="Abrir en Google Maps"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></a>` : ''}
+        ${_isPreview ? '' : '<button class="itin-btn itin-btn-icon itin-btn-gpx" id="itin-gpx-btn" title="Descargar GPX: la ruta y sus paradas para usarla sin internet en OsmAnd, Organic Maps, Calimoto o Garmin" aria-label="Descargar GPX de la ruta" style="font:800 12px/1 var(--font-cond,sans-serif);letter-spacing:.04em">GPX</button>'}
         <button class="itin-btn itin-btn-icon itin-btn-edit" id="itin-edit-btn" title="Editar esta ruta con Salma" aria-label="Editar esta ruta"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
       `;
       document.body.appendChild(actionBar);
@@ -157,6 +159,11 @@ const mapaItinerario = {
       this._handleShare(routeData);
     });
 
+    // Botón GPX (29 sept 2026): la ruta entera + paradas para apps de navegación con mapas sin internet
+    document.getElementById('itin-gpx-btn')?.addEventListener('click', () => {
+      this._exportGpx(routeData, _allStops);
+    });
+
     // Escuchar clicks en marcadores del mapa
     document.addEventListener('itin:marker-click', (e) => {
       this.highlightCard(e.detail.index);
@@ -164,6 +171,51 @@ const mapaItinerario = {
 
     // Enriquecer con Places API en paralelo
     this._enrichAll(stops);
+  },
+
+  // ═══ GPX ═══
+  // Paradas como waypoints (con día y nombre), una ruta <rte> con las paradas en orden (las apps de navegación la
+  // recalculan por carretera) y, si la guía sigue una carretera con nombre (N2…), su trazado real como <trk>.
+  _buildGpx(routeData, stops) {
+    const x = (t) => String(t == null ? '' : t).replace(/[<>&"']/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }[c]));
+    const ok = (s) => s && isFinite(+s.lat) && isFinite(+s.lng) && Math.abs(+s.lat) > 0.01;
+    const pts = (stops || []).filter(ok);
+    const title = routeData.title || routeData.name || 'Ruta Borrado del Mapa';
+    const ll = (s) => `lat="${(+s.lat).toFixed(6)}" lon="${(+s.lng).toFixed(6)}"`;
+    const nm = (s, i) => `${s.day ? 'Día ' + s.day + ' · ' : ''}${i + 1}. ${s.name || s.headline || 'Parada'}`;
+    const wpts = pts.map((s, i) => `<wpt ${ll(s)}><name>${x(nm(s, i))}</name>${(s.headline || s.narrative) ? `<desc>${x(s.headline || s.narrative)}</desc>` : ''}<type>${x(s.type || 'parada')}</type></wpt>`).join('\n');
+    const rte = pts.length > 1 ? `<rte><name>${x(title)}</name>\n${pts.map((s, i) => `<rtept ${ll(s)}><name>${x(nm(s, i))}</name></rtept>`).join('\n')}\n</rte>` : '';
+    const rg = routeData.road_geometry;
+    const trk = (rg && Array.isArray(rg.coords) && rg.coords.length > 1)
+      ? `<trk><name>${x(title + (rg.ref ? ' · ' + rg.ref : ''))}</name><trkseg>${rg.coords.map((c) => `<trkpt lat="${(+c[0]).toFixed(6)}" lon="${(+c[1]).toFixed(6)}"/>`).join('')}</trkseg></trk>` : '';
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Borrado del Mapa · borradodelmapa.com" xmlns="http://www.topografix.com/GPX/1/1">
+<metadata><name>${x(title)}</name><desc>Ruta creada con Salma en borradodelmapa.com</desc><link href="https://borradodelmapa.com"><text>Borrado del Mapa</text></link><time>${new Date().toISOString()}</time></metadata>
+${wpts}
+${rte}
+${trk}
+</gpx>`;
+  },
+
+  _exportGpx(routeData, stops) {
+    if (typeof currentUser !== 'undefined' && !currentUser) {
+      if (typeof showToast !== 'undefined') showToast('Inicia sesión para descargar el GPX');
+      return;
+    }
+    try {
+      const gpx = this._buildGpx(routeData, stops);
+      const slug = String(routeData.title || routeData.name || 'ruta').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'ruta';
+      const blob = new Blob([gpx], { type: 'application/gpx+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = slug + '.gpx';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      if (typeof showToast !== 'undefined') showToast('GPX descargado. Ábrelo con OsmAnd, Organic Maps, Calimoto o Garmin para usar la ruta sin internet');
+    } catch (e) {
+      console.warn('[GPX]', e);
+      if (typeof showToast !== 'undefined') showToast('No se pudo crear el GPX');
+    }
   },
 
   // ═══ COMPARTIR ═══
