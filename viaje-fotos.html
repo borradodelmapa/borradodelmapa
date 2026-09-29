@@ -1523,7 +1523,7 @@ $('#appPhotosBtn').onclick=async()=>{
   const btn=$('#appPhotosBtn');btn.disabled=true;const busy=$('#busy');busy.hidden=false;$('#busyT').textContent='TRAYENDO TUS FOTOS';
   const got=[];let fail=0;
   for(let i=0;i<APP_CANDIDATES.length;i++){const x=APP_CANDIDATES[i];$('#busyN').textContent=`Foto ${i+1} de ${APP_CANDIDATES.length}`;$('#busyBar').style.width=((i+1)/APP_CANDIDATES.length*100)+'%';
-    try{const r=await fetch(x.url,{mode:'cors'});if(!r.ok)throw new Error(r.status);const blob=await r.blob();const bmp=await createImageBitmap(blob);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
+    try{const blob=await embBlob(x.url);const bmp=await createImageBitmap(blob);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
       const lat=isFinite(x.lat)&&Math.abs(x.lat)>.01?+x.lat:null,lng=lat!=null?+x.lng:null;
       const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob});got.push(p);}catch(e){fail++;}}
   busy.hidden=true;btn.disabled=false;
@@ -1587,6 +1587,16 @@ function embSetup(){
 }
 function embEmpty(msg){const b=$('#embEmpty');if(msg)b.lastElementChild.textContent=msg;b.hidden=false;$('#p-vid').hidden=true;$('#p-alb').hidden=true;$('#busy').hidden=true;embPost({ready:true,n:0});}
 let embBusy=false,embTab='vid';
+/* Fotos de la guía guardadas en el móvil (Cache Storage 'bdm-fotos'): abrir Vídeo o Álbum otra vez no gasta datos.
+   Las fotos subidas no cambian nunca (cada una tiene su propia dirección en R2). Máx. EMB_CACHE_MAX fotos: se van las más antiguas. */
+const EMB_CACHE_MAX=400;let embCacheAdds=0;
+async function embBlob(url){
+  let c=null;try{c=await caches.open('bdm-fotos');const hit=await c.match(url);if(hit)return await hit.blob();}catch(_){}
+  const r=await fetch(url,{mode:'cors'});if(!r.ok)throw new Error(r.status);
+  if(c){try{await c.put(url,r.clone());embCacheAdds++;}catch(_){}}
+  return await r.blob();
+}
+async function embCacheTrim(){if(!embCacheAdds)return;embCacheAdds=0;try{const c=await caches.open('bdm-fotos');const k=await c.keys();for(let i=0;i<k.length-EMB_CACHE_MAX;i++)await c.delete(k[i]);}catch(_){}}
 async function embLoad(){
   if(embBusy)return;embBusy=true;
   try{
@@ -1606,10 +1616,10 @@ async function embLoad(){
     const busy=$('#busy');busy.hidden=false;$('#busyT').textContent='PREPARANDO TU VIAJE';
     for(let i=0;i<pick.length;i++){const x=pick[i];$('#busyN').textContent='Foto '+(i+1)+' de '+pick.length;$('#busyBar').style.width=((i+1)/pick.length*100)+'%';
       if(have.has(x.url)){next.push(have.get(x.url));continue;}
-      try{const r=await fetch(x.url,{mode:'cors'});if(!r.ok)throw new Error(r.status);const blob=await r.blob();const bmp=await createImageBitmap(blob);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
+      try{const blob=await embBlob(x.url);const bmp=await createImageBitmap(blob);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
         const lat=x.lat!=null&&isFinite(x.lat)&&Math.abs(x.lat)>.01?+x.lat:null,lng=lat!=null?+x.lng:null;
         const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob});next.push(p);}catch(e){console.warn('[viaje-fotos] foto',e);}}
-    busy.hidden=true;
+    busy.hidden=true;embCacheTrim();
     POOL=next;
     if(!POOL.length){embEmpty('No se pudieron traer las fotos. Revisa la conexión y vuelve a entrar.');return;}
     await applyPool();
