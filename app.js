@@ -3456,6 +3456,10 @@ async function loadUserGuides() {
         <div class="viaje-card-new-icon">🎬</div>
         <div class="viaje-card-new-txt">VÍDEO Y ÁLBUM · BETA</div>
       </a>
+      <a class="viaje-card viaje-card-new" href="/tu-mundo.html" style="text-decoration:none;color:inherit" title="Beta: tus países, kilómetros y récords de viajero">
+        <div class="viaje-card-new-icon">🌍</div>
+        <div class="viaje-card-new-txt">TU MUNDO · BETA</div>
+      </a>
     </div>`;
 
   _wireRutasTabs();

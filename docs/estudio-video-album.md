@@ -274,3 +274,14 @@ Página: ver artifact "Polarsteps y Travel Animator" (enlace en el chat de la se
 - **Nombres de sitio** para paradas sin nombre ("Parada N"): Nominatim (OpenStreetMap), gratis, 1 consulta/s,
   guardadas en el móvil ('geo'). Sin red se reintenta más tarde.
 - Probado con una traza inventada Chaves→Faro (521 puntos, 9–10 sept) y 5 fotos reales sin GPS: las 5 colocadas, 494 km.
+
+### Tu mundo (29 sept 2026, subido) — Paco: "si hazlo como dices"
+- Página `tu-mundo.html` (noindex, con cuenta) + tarjeta "🌍 TU MUNDO · BETA" en Mis Viajes (app.js v204).
+- Cuenta como **viajada** una guía con fotos (maps.photos, fotos con routeId o pins con foto y routeId). Fotos y pins
+  con ubicación suman su país aunque no haya guía. Guías sin fotos → "Tus próximos destinos".
+- Muestra: países y % del mundo (sobre 195), km (trazado real si la guía lo tiene, si no en línea recta), días, viajes,
+  fotos; mapamundi (visitados naranja, planeados marrón; solo se pinta la parte del país cerca de donde estuviste);
+  banderas y nombres en español (tabla ISO numérica→2 letras + Intl.DisplayNames); récords (norte, sur, más lejano
+  de casa con botón de ubicación, viaje más largo, más km, más fotos, país favorito); viajes por años; tarjeta story
+  1080×1920 para compartir.
+- 💶 0 €: lecturas de Firestore mínimas (maps ≤200, fotos ≤800, pins ≤800 por visita) y cálculo en el móvil.
