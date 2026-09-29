@@ -3452,6 +3452,10 @@ async function loadUserGuides() {
         <div class="viaje-card-new-icon">+</div>
         <div class="viaje-card-new-txt">NUEVA GUÍA</div>
       </div>
+      <a class="viaje-card viaje-card-new" href="/viaje-fotos.html" style="text-decoration:none;color:inherit" title="Beta: tus fotos en mapa, vídeo y álbum">
+        <div class="viaje-card-new-icon">🎬</div>
+        <div class="viaje-card-new-txt">VÍDEO Y ÁLBUM · BETA</div>
+      </a>
     </div>`;
 
   _wireRutasTabs();

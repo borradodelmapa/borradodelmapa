@@ -113,3 +113,27 @@ durante el viaje.
 5. Salma: endpoint en el Worker que mira las fotos y propone sitio, título, textos y guion (coste §8, deploy).
 6. Voz de Salma (ElevenLabs, coste §8).
 7. PDF descargable del álbum y, después, libro impreso.
+
+### Tanda 2 (29 sept 2026, subida) — lo que pidió Paco tras probar el paso 1
+- Vídeo: botones "Descargar MP4" y "Compartir" (Web Share con archivo); no se regenera si no cambia nada; pantalla
+  encendida (Wake Lock) y aviso si se cierra la página mientras genera.
+- Estilo de la web: naranja #F4630B, radio 0, Barlow/Inter, marca "✦ BORRADODELMAPA".
+- El viaje se guarda en el móvil (IndexedDB 'bdm-viaje-fotos'): al volver, sigue ahí; las fotos se van AÑADIENDO
+  (sin duplicar por nombre+fecha); máx. 60; botón "Empezar otro viaje".
+- Cuenta (Firebase, misma sesión que la app): selector de guías (users/{uid}/maps). Al elegir guía, las fotos SIN GPS
+  se colocan en las paradas de ese día de la guía (día N fotos = día N guía, repartidas por hora) → mapa, nombres y
+  estilo Ruta. "Guardar las fotos en la guía": sube a R2 por /upload-gallery-photo (1600 px, UNA A UNA) y crea
+  users/{uid}/fotos {routeId, source:'viaje-fotos', origName, takenAt}; no duplica.
+- Avisa de fotos que ya hiciste con la app (pins/map_pins con foto y fotos de la galería en las fechas del viaje, y
+  las de la guía) y deja añadirlas.
+- Barra de error visible con "Copiar detalles".
+- App: tarjeta temporal "🎬 VÍDEO Y ÁLBUM · BETA" en Mis Viajes junto a "+ NUEVA GUÍA" (app.js v203). No toca menú ni
+  cabecera (§9).
+
+### Riesgos vistos por adelantado (para no repetir fallos)
+- **Worker /upload-gallery-photo usa `Date.now()` como nombre en R2**: dos subidas en el mismo milisegundo se pisan.
+  Aquí se sube una a una; share-inbox o la Galería con subidas en paralelo podrían perder fotos → revisar (caso).
+- Guía y fotos desalineadas (el viaje empezó un día antes que el "Día 1" de la guía) → hará falta un ajuste de días.
+- Memoria: 60 fotos a 1800 px en un móvil modesto puede ir justo; si hay cierres, bajar a 1600 px o a 40 fotos.
+- El navegador puede borrar IndexedDB si falta espacio: lo guardado en la guía (R2) es lo único seguro.
+- Las fotos traídas de la app necesitan CORS del Worker (/photo/ ya da Access-Control-Allow-Origin: *).
