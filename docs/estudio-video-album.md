@@ -83,3 +83,13 @@ demanda (buscar proveedores con API y precios). Precios y acceso: decisión de P
   `<input type=file>` desde Galería, desde Archivos, y compartir a la app (share-inbox). Si se pierde el GPS, plan B:
   colocar por fecha/hora sobre la ruta guardada (0 €) o que Salma reconozca el sitio (≈0,002–0,005 €/foto, avisar §8).
 - La foto del 2 sept queda sola a 7 días del resto → por fecha ya se aparta como "otro viaje".
+
+## Página beta publicada y hallazgo de Android (29 sept 2026)
+- `borradodelmapa.com/viaje-fotos.html` (noindex, sin enlazar, sin APIs de pago; mapa Leaflet+OSM; tabla "Lo que he
+  leído de tus fotos"). Datos del mapa en `vendor/countries-50m.json`.
+- **Chrome en Android entrega las fotos con el GPS a ceros**, eligiendo desde Galería Y desde Archivos (probado por
+  Paco con su HONOR). La fecha sí llega. Causa: Android 10+ redacta la ubicación a las apps sin el permiso
+  ACCESS_MEDIA_LOCATION (Chrome no lo tiene). Afecta a cualquier web.
+- Pendiente de probar: compartir desde la Galería a la PWA (share-inbox.js), subir desde el portátil, iPhone/Safari.
+- Propuesta: GPS cuando venga → si no, colocar por fecha/hora sobre la ruta del viaje (0 €) → si no hay ruta, Salma
+  mira la foto (≈0,002–0,005 €/foto, avisar §8). A largo plazo, app Android (TWA) con ese permiso (25 $ una vez).
