@@ -219,7 +219,7 @@ const tuMundo = (() => {
   function _wireHome(S) {
     const form = _q('#tm-home-form'); if (!form) return;
     const msg = _q('#tm-home-msg'), inp = _q('#tm-home-in'), gps = _q('#tm-home-gps');
-    const save = h => { try { localStorage.setItem('bdm-casa', JSON.stringify(h)); } catch (_) {} renderRecords(S); };
+    const save = h => { try { localStorage.setItem('bdm-casa', JSON.stringify(h)); } catch (_) {} _paint(S); };
     form.onsubmit = async e => {
       e.preventDefault();
       const q = inp.value.trim(); if (!q) { inp.focus(); return; }
@@ -228,7 +228,8 @@ const tuMundo = (() => {
         const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q=' + encodeURIComponent(q));
         const j = await r.json();
         if (!j || !j[0]) { msg.textContent = 'No encuentro ese sitio. Prueba con la ciudad y el país.'; return; }
-        const name = String(j[0].display_name || q).split(',')[0].trim();
+        // El nombre del propio sitio (San Pedro Alcántara), no el del municipio (Marbella)
+        const name = String(j[0].name || String(j[0].display_name || q).split(',')[0]).trim();
         save({ lat: +j[0].lat, lng: +j[0].lon, name });
       } catch (_) { msg.textContent = 'No se pudo buscar. Revisa la conexión.'; }
     };
@@ -238,9 +239,16 @@ const tuMundo = (() => {
       let done = false;
       // El navegador puede no contestar nunca (permiso sin responder): no dejarlo colgado
       const guard = setTimeout(() => { if (!done) { done = true; msg.textContent = 'No me llega tu ubicación. Revisa el permiso de ubicación o escribe tu ciudad.'; } }, 15000);
-      navigator.geolocation.getCurrentPosition(p => {
+      navigator.geolocation.getCurrentPosition(async p => {
         if (done) return; done = true; clearTimeout(guard);
-        save({ lat: p.coords.latitude, lng: p.coords.longitude, name: '' });
+        const lat = p.coords.latitude, lng = p.coords.longitude;
+        // Nombre del pueblo (Nominatim, gratis): pueblo/villa antes que ciudad o municipio
+        let name = '';
+        try {
+          const a = (await (await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=14&accept-language=es&lat=${lat}&lon=${lng}`)).json()).address || {};
+          name = a.village || a.town || a.city || a.municipality || '';
+        } catch (_) {}
+        save({ lat, lng, name });
       }, err => {
         if (done) return; done = true; clearTimeout(guard);
         msg.textContent = err && err.code === 1 ? 'No has dado permiso de ubicación. Escribe tu ciudad.' : 'No pude saber dónde estás. Escribe tu ciudad.';
@@ -265,6 +273,7 @@ const tuMundo = (() => {
     const nP = S.seen.size, pct = nP / TOTAL_PAISES * 100;
     g.fillStyle = '#ECEBE8'; g.font = '800 150px "Barlow Condensed",sans-serif'; g.fillText('MI MUNDO', 80, 260);
     g.fillStyle = '#F4630B'; g.font = '800 44px "Barlow Condensed",sans-serif'; g.fillText('BORRADO DEL MAPA', 84, 330);
+    const home = getHome(); if (home && home.name) { g.fillStyle = '#C4C7C9'; g.font = '700 40px "Barlow Condensed",sans-serif'; g.fillText('DESDE ' + home.name.toUpperCase(), 84, 392); }
     const st = [[nP, nP === 1 ? 'PAÍS' : 'PAÍSES'], [pctTxt(pct) + '%', 'DEL MUNDO'], [nf(S.km), 'KM'], [nf(S.days), 'DÍAS']];
     st.forEach(([b, l], i) => { const x = 80 + (i % 2) * 470, y = 1120 + Math.floor(i / 2) * 250; g.fillStyle = '#F4630B'; g.font = '800 150px "Barlow Condensed",sans-serif'; g.fillText(String(b), x, y + 130); g.fillStyle = '#C4C7C9'; g.font = '600 30px Inter,sans-serif'; g.fillText(l, x + 6, y + 180); });
     const flags = [...S.seen.values()].map(e => flagOf(e.f.a2)).join(' '); g.font = '64px "Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif';
@@ -275,8 +284,9 @@ const tuMundo = (() => {
 
   function _paint(S) {
     const nP = S.seen.size, pct = nP / TOTAL_PAISES * 100;
+    const home = getHome();
     _q('#tm-lede').textContent = nP
-      ? `Has pisado ${nP} ${nP === 1 ? 'país' : 'países'}: el ${pctTxt(pct)} % del mundo. Y lo que te queda.`
+      ? `${home && home.name ? `Desde ${home.name} has` : 'Has'} pisado ${nP} ${nP === 1 ? 'país' : 'países'}: el ${pctTxt(pct)} % del mundo. Y lo que te queda.`
       : 'Todavía no hay fotos tuyas en ninguna guía. Sube fotos a tus viajes y tu mapa se irá pintando.';
     _q('#tm-big').innerHTML = [[nP, nP === 1 ? 'país' : 'países'], [pctTxt(pct) + ' %', 'del mundo'], [nf(S.km), 'km'], [nf(S.days), 'días de viaje'], [S.visited.length, S.visited.length === 1 ? 'viaje' : 'viajes'], [nf(S.nFotos), 'fotos']]
       .map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
