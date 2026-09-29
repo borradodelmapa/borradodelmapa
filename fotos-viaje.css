@@ -202,3 +202,6 @@
   font:700 15px/1 var(--font-cond); letter-spacing:.05em; text-transform:uppercase;
 }
 .fv-review-btns .fv-add { align-self:stretch; }
+
+/* Miniaturas de fotos en el mapa de la guía (solo si el mapa cae a Leaflet; en Google van como icono) */
+.fv-map-thumb img { width:40px; height:40px; object-fit:cover; border:3px solid var(--accent); display:block; box-sizing:border-box; }

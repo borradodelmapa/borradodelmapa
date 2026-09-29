@@ -91,6 +91,7 @@ const fotosViaje = (() => {
     if (!_st) return;
     const s = _st; _st = null;
     document.removeEventListener('itin:marker-click', _onMarker);
+    _clearPhotoMarkers();
     _mapSmall(false);
     _mapNone(false);
     if (keepRuta && s.ruta && s.container.isConnected) {
@@ -116,6 +117,58 @@ const fotosViaje = (() => {
     setTimeout(() => { try { if (typeof mapaRuta !== 'undefined' && mapaRuta.invalidateSize) mapaRuta.invalidateSize(); } catch (_) {} }, 260);
   }
 
+  /* ── Fotos en el mapa de la guía (29 sept 2026): con la pestaña FOTOS, las que tienen ubicación
+     salen como miniaturas en el mapa de arriba; al tocarlas se abre la foto.
+     💶 0 €: el mapa ya está cargado; los marcadores no se cobran. ── */
+  let _pm = [], _pmGen = 0;
+  function _clearPhotoMarkers() {
+    _pmGen++; // corta cualquier pintado a medias
+    _pm.forEach(m => { try { if (m.setMap) m.setMap(null); else if (m.remove) m.remove(); } catch (_) {} });
+    _pm = [];
+  }
+  // Miniatura cuadrada con marco naranja (si la imagen deja leerse; si no, la foto tal cual)
+  function _thumbIcon(url) {
+    return new Promise(res => {
+      const im = new Image(); im.crossOrigin = 'anonymous'; im.decoding = 'async';
+      im.onload = () => {
+        try {
+          const S = 88, c = document.createElement('canvas'); c.width = c.height = S; const g = c.getContext('2d');
+          g.fillStyle = '#F4630B'; g.fillRect(0, 0, S, S);
+          const k = Math.max((S - 8) / im.width, (S - 8) / im.height), w = im.width * k, h = im.height * k;
+          g.save(); g.beginPath(); g.rect(4, 4, S - 8, S - 8); g.clip(); g.drawImage(im, (S - w) / 2, (S - h) / 2, w, h); g.restore();
+          res(c.toDataURL('image/jpeg', .8));
+        } catch (_) { res(url); }
+      };
+      im.onerror = () => res(null);
+      im.src = url;
+    });
+  }
+  async function _photoMarkers() {
+    _clearPhotoMarkers();
+    const gen = _pmGen;
+    const s = _st; if (!s || s.tab !== 'fotos' || !s.photos || typeof mapaRuta === 'undefined' || !mapaRuta._map) return;
+    const ok = p => p.lat != null && isFinite(+p.lat) && isFinite(+p.lng) && Math.abs(+p.lat) > .01;
+    const list = s.photos.map((p, i) => ({ p, i })).filter(x => ok(x.p)).slice(0, 150);
+    if (!list.length) return;
+    const map = mapaRuta._map, isG = mapaRuta._mapType === 'google' && window.google && google.maps;
+    const my = s;
+    for (const { p, i } of list) {
+      const icon = await _thumbIcon(p.url);
+      if (gen !== _pmGen || _st !== my || my.tab !== 'fotos') return; // se cambió de pestaña o se volvió a pintar
+      if (!icon) continue;
+      const pos = { lat: +p.lat, lng: +p.lng };
+      let m;
+      if (isG) {
+        m = new google.maps.Marker({ map, position: pos, zIndex: 900, title: 'Ver foto', icon: { url: icon, scaledSize: new google.maps.Size(40, 40), anchor: new google.maps.Point(20, 20) } });
+        m.addListener('click', () => _openViewer(i));
+      } else if (typeof L !== 'undefined' && map.addLayer) {
+        m = L.marker([pos.lat, pos.lng], { icon: L.divIcon({ className: 'fv-map-thumb', html: `<img src="${esc(icon)}" alt="">`, iconSize: [40, 40], iconAnchor: [20, 20] }), zIndexOffset: 900 }).addTo(map);
+        m.on('click', () => _openViewer(i));
+      }
+      if (m) _pm.push(m);
+    }
+  }
+
   function _onMarker() { if (_st && _st.tab !== 'ruta') _show('ruta'); }
 
   function _show(tab) {
@@ -135,6 +188,7 @@ const fotosViaje = (() => {
       else _paint();
     }
     if (isMedia) _mediaShow(tab); else _mediaHide();
+    if (tab === 'fotos') _photoMarkers(); else _clearPhotoMarkers();
     try { _st.container.scrollTop = 0; } catch (_) {}
   }
 
@@ -333,7 +387,7 @@ const fotosViaje = (() => {
     s.fotos.querySelector('#fv-input').addEventListener('change', e => { const files = [...(e.target.files || [])]; e.target.value = ''; if (files.length) _upload(files); });
     s.fotos.querySelectorAll('.fv-th').forEach(b => b.addEventListener('click', () => _openViewer(+b.dataset.i)));
     if (s.busy) _progress(s._prog || '', s._progPct || 0);
-    else _checkExisting();
+    else { _checkExisting(); if (s.tab === 'fotos') _photoMarkers(); }
   }
 
   /* ── subir ── */
