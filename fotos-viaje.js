@@ -304,11 +304,15 @@ const fotosViaje = (() => {
       // Agrupar por día natural; "Día N" cuenta desde la primera foto con fecha
       const groups = new Map();
       P.forEach((p, i) => { const k = _dayKey(p.date); if (!groups.has(k)) groups.set(k, { d: p.date, items: [] }); groups.get(k).items.push(i); });
-      const first = P.find(p => p.date);
-      const d0 = first ? new Date(first.date.getFullYear(), first.date.getMonth(), first.date.getDate()) : null;
+      // 'Día 1' = primer día del grupo principal de fechas (una foto suelta de otro año no cuenta)
+      const mr = _mainRange(P.filter(p => p.date).map(p => +p.date));
+      const first = mr ? new Date(mr.a) : (P.find(p => p.date) || {}).date;
+      const d0 = first ? new Date(first.getFullYear(), first.getMonth(), first.getDate()) : null;
       body = [...groups.values()].map(g => {
         let lbl = 'Sin fecha';
-        if (g.d && d0) {
+        if (g.d && d0 && mr && (+g.d < mr.a - GAP || +g.d > mr.b + GAP)) {
+          lbl = esc(_dayLabel(g.d)) + ' <span>· ' + g.d.getFullYear() + '</span>';
+        } else if (g.d && d0) {
           const n = Math.round((new Date(g.d.getFullYear(), g.d.getMonth(), g.d.getDate()) - d0) / 864e5) + 1;
           lbl = `Día ${n} <span>· ${esc(_dayLabel(g.d))}</span>`;
         }
@@ -329,6 +333,7 @@ const fotosViaje = (() => {
     s.fotos.querySelector('#fv-input').addEventListener('change', e => { const files = [...(e.target.files || [])]; e.target.value = ''; if (files.length) _upload(files); });
     s.fotos.querySelectorAll('.fv-th').forEach(b => b.addEventListener('click', () => _openViewer(+b.dataset.i)));
     if (s.busy) _progress(s._prog || '', s._progPct || 0);
+    else _checkExisting();
   }
 
   /* ── subir ── */
@@ -346,7 +351,7 @@ const fotosViaje = (() => {
       try { const g = await exifr.gps(f); if (g && isFinite(g.latitude) && !(g.latitude === 0 && g.longitude === 0)) { lat = g.latitude; lng = g.longitude; } } catch (_) {}
       try { const m = await exifr.parse(f, { tiff: true, exif: true, gps: false, interop: false, ifd1: false, xmp: false, icc: false, iptc: false, jfif: false, ihdr: false }); date = m && (m.DateTimeOriginal || m.CreateDate || m.ModifyDate) || null; if (date && !(date instanceof Date)) date = new Date(date); if (date && isNaN(date)) date = null; } catch (_) {}
     }
-    return { lat, lng, date: date || new Date(f.lastModified || Date.now()) };
+    return { lat, lng, date: date || new Date(f.lastModified || Date.now()), hasDate: !!date };
   }
   async function _toJpeg(f) {
     let img;
@@ -369,39 +374,161 @@ const fotosViaje = (() => {
     const add = s.fotos.querySelector('#fv-add'); if (add) add.disabled = !!s.busy;
   }
 
+  /* ── fotos intrusas (29 sept 2026, caso p-mun0e1qy0f3) ──
+     "Que no entre una foto de Nepal en una guía de Asturias". Sin IA, 0 €:
+     - con GPS: lejos de TODAS las paradas de la guía → no es de este viaje;
+     - sin GPS pero con fecha real (EXIF): separada más de 2 días del grupo principal de fechas del viaje.
+     Nunca se aparta nada sola: se pregunta. */
+  const GAP = 2 * 864e5;
+  // Grupo principal de fechas: el tramo sin huecos de más de 2 días con más fotos (null si no hay uno claro)
+  function _mainRange(dates) {
+    const ds = dates.filter(Boolean).slice().sort((a, b) => a - b);
+    if (ds.length < 3) return null;
+    let best = null, st = 0;
+    for (let i = 1; i <= ds.length; i++) {
+      if (i === ds.length || ds[i] - ds[i - 1] > GAP) { const n = i - st; if (!best || n > best.n) best = { n, a: ds[st], b: ds[i - 1] }; st = i; }
+    }
+    return best && best.n >= ds.length * .5 ? best : null;
+  }
+  function _stopsOf(s) {
+    return ((s.routeData && s.routeData.stops) || []).map(p => ({ lat: +p.lat, lng: +p.lng })).filter(p => isFinite(p.lat) && isFinite(p.lng) && Math.abs(p.lat) > .01);
+  }
+  // La ruta como línea: carretera real de la guía si la tiene (road_geometry), si no las paradas en orden
+  function _lineOf(s) {
+    const rg = s.routeData && s.routeData.road_geometry;
+    if (rg && Array.isArray(rg.coords) && rg.coords.length > 1) return rg.coords.map(c => ({ lat: +c[0], lng: +c[1] }));
+    return _stopsOf(s);
+  }
+  // Distancia (km) de p a la línea: al tramo más cercano (proyección plana local, suficiente para esto)
+  function _kmTo(line, p) {
+    if (line.length === 1) return _hav(line[0], p);
+    let m = Infinity; const k = Math.cos(p.lat * Math.PI / 180);
+    for (let i = 1; i < line.length; i++) {
+      const a = line[i - 1], b = line[i];
+      const ax = (a.lng - p.lng) * k, ay = a.lat - p.lat, bx = (b.lng - p.lng) * k, by = b.lat - p.lat;
+      const dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy;
+      const t = L ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / L)) : 0;
+      const q = { lat: p.lat + ay + t * dy, lng: p.lng + (ax + t * dx) / (k || 1) };
+      const d = _hav(q, p); if (d < m) m = d;
+    }
+    return m;
+  }
+  function _hav(a, b) { const r = Math.PI / 180, dl = (b.lat - a.lat) * r, dg = (b.lng - a.lng) * r; const x = Math.sin(dl / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dg / 2) ** 2; return 12742 * Math.asin(Math.sqrt(x)); }
+  // items: [{lat, lng, date, hasDate}] → [{i, why}] de los que no parecen del viaje
+  function _suspects(s, items, refDates) {
+    const stops = _stopsOf(s);
+    let span = 0; for (let i = 0; i < stops.length; i++) for (let j = i + 1; j < stops.length; j++) span = Math.max(span, _hav(stops[i], stops[j]));
+    const line = _lineOf(s);
+    const farKm = Math.max(60, span * .15);
+    // Grupo principal de fechas: el tramo sin huecos de más de 2 días con más fotos
+    const ds = [...refDates, ...items.filter(x => x.hasDate && x.date).map(x => +x.date)].filter(Boolean).sort((a, b) => a - b);
+    const best = _mainRange(ds);
+    const out = [];
+    items.forEach((x, i) => {
+      const hasGps = x.lat != null && isFinite(x.lat) && Math.abs(x.lat) > .01;
+      if (hasGps && stops.length) {
+        const km = _kmTo(line, { lat: +x.lat, lng: +x.lng });
+        if (km > farKm) out.push({ i, why: `A ${Math.round(km).toLocaleString('es-ES')} km de la ruta` });
+        return; // con GPS cerca de la ruta: es del viaje
+      }
+      if (best && x.hasDate && x.date && (+x.date < best.a - GAP || +x.date > best.b + GAP)) {
+        out.push({ i, why: `De otra fecha (${_dayLabel(x.date)} ${x.date.getFullYear()})` });
+      }
+    });
+    return out;
+  }
+
+  // Panel "Estas N no parecen de este viaje": thumbs marcados (= apartar) que se pueden desmarcar
+  function _review(title, sub, list, btns) {
+    const s = _st; if (!s) return;
+    const box = document.createElement('div');
+    box.className = 'fv-review fv-pad';
+    box.innerHTML = `<b class="fv-review-t">${esc(title)}</b><p>${esc(sub)}</p>
+      <div class="fv-review-grid">${list.map((x, k) => `<button type="button" class="fv-th fv-pick on" data-k="${k}" aria-pressed="true"><img src="${esc(x.thumb)}" alt="" decoding="async"><i aria-hidden="true"></i><span class="fv-review-why">${esc(x.why)}</span></button>`).join('')}</div>
+      <div class="fv-review-btns">${btns.map((b, k) => `<button type="button" class="${b.main ? 'fv-add' : 'fv-review-alt'}" data-b="${k}">${esc(b.label)}</button>`).join('')}</div>`;
+    const old = s.fotos.querySelector('.fv-review'); if (old) old.remove();
+    const head = s.fotos.querySelector('.fv-head');
+    if (head) head.after(box); else s.fotos.prepend(box);
+    box.querySelectorAll('.fv-pick').forEach(t => t.addEventListener('click', () => { t.classList.toggle('on'); t.setAttribute('aria-pressed', String(t.classList.contains('on'))); }));
+    box.querySelectorAll('[data-b]').forEach(el => el.addEventListener('click', () => {
+      const marked = new Set([...box.querySelectorAll('.fv-pick.on')].map(t => +t.dataset.k));
+      box.remove();
+      btns[+el.dataset.b].fn(marked);
+    }));
+    try { box.scrollIntoView({ block: 'start', behavior: 'smooth' }); } catch (_) {}
+  }
+
   async function _upload(files) {
+    const s = _st; if (!s || s.busy) return;
+    s.busy = true;
+    // 1) Leer fecha y GPS de todas antes de subir nada
+    const items = [];
+    for (let i = 0; i < files.length; i++) {
+      if (_st !== s) return;
+      _progress(`Revisando ${i + 1} de ${files.length}…`, i / files.length);
+      const meta = await _readMeta(files[i]);
+      items.push(Object.assign({ f: files[i] }, meta));
+    }
+    s.busy = false; s._prog = ''; _progress('', 0);
+    if (_st !== s) return;
+    // 2) ¿Alguna no parece de este viaje?
+    const ref = (s.photos || []).filter(p => p.date && p.kind !== 'legacy').map(p => +p.date);
+    const sus = _suspects(s, items, ref);
+    if (!sus.length) return _uploadItems(items.map(x => Object.assign(x, { route: s.docId })));
+    const title = s.routeData && (s.routeData.title || s.routeData.name) || 'este viaje';
+    const list = sus.map(x => ({ thumb: URL.createObjectURL(items[x.i].f), why: x.why, i: x.i }));
+    const nOk = items.length - sus.length;
+    _review(`${sus.length === 1 ? 'Esta foto no parece' : `Estas ${sus.length} fotos no parecen`} de este viaje`,
+      `Ni el sitio ni la fecha cuadran con «${title}». Las marcadas van a Fotos sin viaje; desmarca las que sí sean de aquí.`,
+      list, [
+        { label: nOk ? `Subir y apartar las marcadas` : 'Guardarlas en Fotos sin viaje', main: true, fn: marked => {
+          const out = new Set([...marked].map(k => list[k].i));
+          list.forEach(x => URL.revokeObjectURL(x.thumb));
+          _uploadItems(items.map((x, i) => Object.assign(x, { route: out.has(i) ? null : s.docId })));
+        } },
+        { label: 'Son de este viaje: subirlas todas', fn: () => {
+          list.forEach(x => URL.revokeObjectURL(x.thumb));
+          _uploadItems(items.map(x => Object.assign(x, { route: s.docId })));
+        } },
+        { label: 'Cancelar', fn: () => { list.forEach(x => URL.revokeObjectURL(x.thumb)); } },
+      ]);
+  }
+
+  async function _uploadItems(items) {
     const s = _st; if (!s || s.busy) return;
     s.busy = true;
     const api = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
     const U = firebase.firestore().collection('users').doc(s.uid);
     const existing = new Set((s.photos || []).filter(p => p.origName).map(p => p.origName + '|' + p.takenAt));
-    let ok = 0, dup = 0, fail = 0;
+    let ok = 0, dup = 0, fail = 0, aside = 0;
     // Pantalla encendida mientras sube (si el móvil lo permite)
     let lock = null; try { lock = await navigator.wakeLock.request('screen'); } catch (_) {}
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       if (_st !== s) break; // se cerró la guía
-      const f = files[i];
-      _progress(`Subiendo ${i + 1} de ${files.length}…`, i / files.length);
+      const x = items[i], f = x.f;
+      _progress(`Subiendo ${i + 1} de ${items.length}…`, i / items.length);
       try {
-        const meta = await _readMeta(f);
-        const takenAt = meta.date.toISOString();
-        if (existing.has(f.name + '|' + takenAt)) { dup++; continue; }
+        const takenAt = x.date.toISOString();
+        if (x.route && existing.has(f.name + '|' + takenAt)) { dup++; continue; }
         const blob = await _toJpeg(f);
         const fd = new FormData(); fd.append('photo', blob, 'viaje.jpg'); fd.append('uid', s.uid);
         const r = await fetch(api + '/upload-gallery-photo', { method: 'POST', body: fd });
         if (!r.ok) throw new Error('subida ' + r.status);
         const { key, url } = await r.json();
         const ref = await U.collection('fotos').add({
-          key, url, tag: 'viaje', caption: '', albumId: null, routeId: s.docId,
-          lat: meta.lat, lng: meta.lng, source: 'guia', origName: f.name, takenAt, createdAt: takenAt,
+          key, url, tag: 'viaje', caption: '', albumId: null, routeId: x.route,
+          lat: x.lat, lng: x.lng, source: 'guia', origName: f.name, takenAt, createdAt: takenAt,
         });
-        existing.add(f.name + '|' + takenAt);
-        s.photos.push({ id: ref.id, kind: 'foto', url, date: meta.date, lat: meta.lat, lng: meta.lng, place: '', origName: f.name, takenAt });
-        ok++;
+        if (x.route) {
+          existing.add(f.name + '|' + takenAt);
+          s.photos.push({ id: ref.id, kind: 'foto', url, date: x.date, lat: x.lat, lng: x.lng, place: '', origName: f.name, takenAt });
+          ok++;
+        } else aside++;
       } catch (e) { fail++; console.warn('[fotos-viaje] subida', e); }
     }
     try { if (lock) lock.release(); } catch (_) {}
     s.busy = false;
+    if (aside) _stray = null; // "Fotos sin viaje" tiene fotos nuevas
     if (_st !== s) return;
     s.photos.sort((a, b) => (a.date || 0) - (b.date || 0));
     _count();
@@ -414,8 +541,53 @@ const fotosViaje = (() => {
       if (MED.frame && MED.guia === s.docId && !MED.encoding) _post({ reload: true }); else s._mediaStale = true;
     }
     _paint();
-    const msg = [ok ? `${ok} ${ok === 1 ? 'foto guardada' : 'fotos guardadas'}` : '', dup ? `${dup} ya estaban` : '', fail ? `${fail} no se pudieron subir: vuelve a intentarlo` : ''].filter(Boolean).join(' · ');
+    const msg = [ok ? `${ok} ${ok === 1 ? 'foto guardada' : 'fotos guardadas'}` : '', aside ? `${aside} en Fotos sin viaje` : '', dup ? `${dup} ya estaban` : '', fail ? `${fail} no se pudieron subir: vuelve a intentarlo` : ''].filter(Boolean).join(' · ');
     if (msg && typeof showToast === 'function') showToast(msg);
+  }
+
+  // Las que YA están en la guía y no parecen de ella (p. ej. subidas antes de existir esta revisión)
+  function _okKey(s) { return 'fv-ok-' + s.docId; }
+  function _okSet(s) { try { return new Set(JSON.parse(localStorage.getItem(_okKey(s)) || '[]')); } catch (_) { return new Set(); } }
+  function _checkExisting() {
+    const s = _st; if (!s || !s.photos || s.busy) return;
+    const okd = _okSet(s);
+    const P = s.photos.filter(p => p.kind !== 'legacy' && !okd.has(p.id));
+    // Las fechas sin EXIF no se conocen: se juzga por fecha solo si hay grupo claro (lo decide _suspects)
+    const items = P.map(p => ({ lat: p.lat, lng: p.lng, date: p.date, hasDate: !!p.date }));
+    const ref = [];
+    const sus = _suspects(s, items, ref);
+    const bar = s.fotos.querySelector('#fv-intrusas');
+    if (!sus.length) { if (bar) bar.remove(); return; }
+    if (bar) return;
+    const head = s.fotos.querySelector('.fv-head'); if (!head) return;
+    head.insertAdjacentHTML('afterend', `<button type="button" class="fv-intrusas fv-pad" id="fv-intrusas"><b>${sus.length === 1 ? '1 foto no parece' : `${sus.length} fotos no parecen`} de este viaje</b><span>Revisar</span></button>`);
+    s.fotos.querySelector('#fv-intrusas').addEventListener('click', () => {
+      s.fotos.querySelector('#fv-intrusas').remove();
+      const list = sus.map(x => ({ thumb: P[x.i].url, why: x.why, p: P[x.i] }));
+      _review(`${sus.length === 1 ? 'Esta foto no parece' : `Estas ${sus.length} fotos no parecen`} de este viaje`,
+        'Las marcadas salen de la guía y pasan a Fotos sin viaje (no se borran). Desmarca las que sí sean de aquí.',
+        list, [
+          { label: 'Sacar las marcadas del viaje', main: true, fn: async marked => {
+            const db = firebase.firestore(), U = db.collection('users').doc(s.uid), batch = db.batch();
+            const out = list.filter((_, k) => marked.has(k)).map(x => x.p);
+            const keep = list.filter((_, k) => !marked.has(k)).map(x => x.p.id);
+            out.forEach(p => batch.update(U.collection(p.kind === 'pin' ? 'pins' : 'fotos').doc(p.id), { routeId: null }));
+            try {
+              if (out.length) await batch.commit();
+              if (keep.length) { const o = _okSet(s); keep.forEach(id => o.add(id)); try { localStorage.setItem(_okKey(s), JSON.stringify([...o])); } catch (_) {} }
+              const ids = new Set(out.map(p => p.id));
+              s.photos = s.photos.filter(p => !ids.has(p.id));
+              _stray = null; try { localStorage.removeItem('bdm_tumundo_sum'); } catch (_) {}
+              _count(); _paint();
+              if (MED.frame && MED.guia === s.docId && !MED.encoding) _post({ reload: true }); else s._mediaStale = true;
+              if (out.length && typeof showToast === 'function') showToast(`${out.length} ${out.length === 1 ? 'foto pasada' : 'fotos pasadas'} a Fotos sin viaje`);
+            } catch (_) { if (typeof showToast === 'function') showToast('No se pudieron sacar. Prueba otra vez.'); _paint(); }
+          } },
+          { label: 'Son de este viaje', fn: () => {
+            const o = _okSet(s); list.forEach(x => o.add(x.p.id)); try { localStorage.setItem(_okKey(s), JSON.stringify([...o])); } catch (_) {}
+          } },
+        ]);
+    });
   }
 
   /* ── ver en grande ── */

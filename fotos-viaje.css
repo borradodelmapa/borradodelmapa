@@ -178,3 +178,27 @@
 .fv-sheet-item:disabled { opacity:.5; }
 .fv-sheet-item b { font:700 18px/1.1 var(--font-cond); text-transform:uppercase; color:var(--text-primary); }
 .fv-sheet-item span { font-size:13px; color:var(--text-muted); }
+
+/* ── Fotos intrusas: "no parecen de este viaje" ── */
+.fv-intrusas {
+  appearance:none; cursor:pointer; font:inherit; text-align:left;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  width:calc(100% - 32px); margin:10px 16px 0; padding:12px 14px !important; min-height:48px;
+  background:var(--bg-row); border:1px solid var(--accent); color:var(--text-primary);
+}
+.fv-intrusas b { font:700 16px/1.1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; }
+.fv-intrusas span { color:var(--accent); font:700 14px/1 var(--font-cond); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+.fv-review { margin-top:12px; padding-top:14px; padding-bottom:14px; background:var(--bg-row); border-top:3px solid var(--accent); border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:10px; }
+.fv-review-t { font:800 20px/1.1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; color:var(--text-primary); }
+.fv-review p { margin:0; font-size:14px; line-height:1.45; color:var(--text-secondary); }
+.fv-review-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px; }
+.fv-review-why {
+  position:absolute; left:0; right:0; bottom:0; padding:4px 5px; background:rgba(13,15,16,.82);
+  font:600 11px/1.2 var(--font-body); color:var(--text-primary); text-align:left;
+}
+.fv-review-btns { display:flex; flex-direction:column; gap:8px; }
+.fv-review-alt {
+  appearance:none; cursor:pointer; min-height:44px; background:none; border:1px solid var(--border); color:var(--text-primary);
+  font:700 15px/1 var(--font-cond); letter-spacing:.05em; text-transform:uppercase;
+}
+.fv-review-btns .fv-add { align-self:stretch; }
