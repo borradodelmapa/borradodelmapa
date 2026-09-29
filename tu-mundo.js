@@ -187,7 +187,7 @@ const tuMundo = (() => {
   function renderRecords(S) {
     const R = [], home = getHome();
     if (S.places.length) {
-      if (home) { const far = S.places.reduce((a, p) => hav(home, p) > hav(home, a) ? p : a, S.places[0]); R.push(['El punto más lejano de casa', placeName(far), `a ${nf(hav(home, far))} km${far.trip ? ' · ' + far.trip : ''}`]); }
+      if (home) { const far = S.places.reduce((a, p) => hav(home, p) > hav(home, a) ? p : a, S.places[0]); R.push(['El punto más lejano de casa', placeName(far), `a ${nf(hav(home, far))} km de ${home.name || 'casa'}${far.trip ? ' · ' + far.trip : ''}`, 'home']); }
       const N = S.places.reduce((a, p) => p.lat > a.lat ? p : a), Su = S.places.reduce((a, p) => p.lat < a.lat ? p : a);
       R.push(['Lo más al norte', placeName(N), `${N.lat.toFixed(2).replace('.', ',')}° ${N.lat >= 0 ? 'N' : 'S'}${N.trip ? ' · ' + N.trip : ''}`]);
       R.push(['Lo más al sur', placeName(Su), `${Math.abs(Su.lat).toFixed(2).replace('.', ',')}° ${Su.lat >= 0 ? 'N' : 'S'}${Su.trip ? ' · ' + Su.trip : ''}`]);
@@ -199,11 +199,52 @@ const tuMundo = (() => {
     }
     const top = [...S.seen.values()].sort((a, b) => b.src.size - a.src.size)[0];
     if (top && top.src.size > 1) R.push(['Tu país favorito', `${flagOf(top.f.a2)} ${esName(top.f.a2, top.f.en)}`, `${top.src.size} viajes o recuerdos`]);
-    _q('#tm-recs').innerHTML = R.map(([k, v, s]) => `<div class="tm-rec"><span class="tm-k">${esc(k)}</span><span class="tm-v">${esc(v)}</span><span class="tm-s">${esc(s)}</span></div>`).join('') +
-      (home ? '' : `<div class="tm-rec"><span class="tm-k">El punto más lejano de casa</span><span class="tm-s">Dime dónde está tu casa y lo calculo.</span><button class="tm-btn tm-btn--ghost" id="tm-home" type="button">${IC_PIN} Mi casa es donde estoy ahora</button></div>`);
-    const hb = _q('#tm-home'); if (hb) hb.onclick = () => {
-      if (!navigator.geolocation) { hb.textContent = 'Este navegador no da la ubicación'; return; }
-      hb.textContent = 'Buscando…'; navigator.geolocation.getCurrentPosition(p => { try { localStorage.setItem('bdm-casa', JSON.stringify({ lat: p.coords.latitude, lng: p.coords.longitude })); } catch (_) {} renderRecords(S); }, () => { hb.textContent = 'No pude saber dónde estás'; }, { timeout: 12000 });
+    const HOME_FORM = `<form class="tm-home" id="tm-home-form" autocomplete="off">
+        <input class="tm-home-in" id="tm-home-in" type="text" placeholder="Tu ciudad o pueblo" aria-label="Tu ciudad o pueblo" enterkeyhint="search">
+        <button class="tm-btn" type="submit">Guardar</button>
+      </form>
+      <button class="tm-link" id="tm-home-gps" type="button">${IC_PIN} Usar mi ubicación actual</button>
+      <span class="tm-s tm-home-msg" id="tm-home-msg"></span>`;
+    _q('#tm-recs').innerHTML = R.map(([k, v, s, h]) => `<div class="tm-rec"><span class="tm-k">${esc(k)}</span><span class="tm-v">${esc(v)}</span><span class="tm-s">${esc(s)}</span>${h ? '<button class="tm-link" id="tm-home-change" type="button">Cambiar mi casa</button>' : ''}</div>`).join('') +
+      (home ? '' : `<div class="tm-rec"><span class="tm-k">El punto más lejano de casa</span><span class="tm-s">¿Dónde está tu casa? Escribe tu ciudad y lo calculo.</span>${HOME_FORM}</div>`);
+    const ch = _q('#tm-home-change');
+    if (ch) ch.onclick = () => { const box = ch.parentElement; ch.remove(); box.insertAdjacentHTML('beforeend', HOME_FORM); _wireHome(S); _q('#tm-home-in').focus(); };
+    _wireHome(S);
+  }
+
+  // Casa: se escribe la ciudad (búsqueda en OpenStreetMap/Nominatim, gratis) o se usa la ubicación.
+  // 29 sept 2026: antes solo había "Mi casa es donde estoy ahora", que se quedaba en "Buscando…" si
+  // el navegador no contestaba (permiso sin responder, ubicación del ordenador apagada) y que de
+  // viaje guardaba como casa el sitio donde estabas.
+  function _wireHome(S) {
+    const form = _q('#tm-home-form'); if (!form) return;
+    const msg = _q('#tm-home-msg'), inp = _q('#tm-home-in'), gps = _q('#tm-home-gps');
+    const save = h => { try { localStorage.setItem('bdm-casa', JSON.stringify(h)); } catch (_) {} renderRecords(S); };
+    form.onsubmit = async e => {
+      e.preventDefault();
+      const q = inp.value.trim(); if (!q) { inp.focus(); return; }
+      msg.textContent = 'Buscando…';
+      try {
+        const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q=' + encodeURIComponent(q));
+        const j = await r.json();
+        if (!j || !j[0]) { msg.textContent = 'No encuentro ese sitio. Prueba con la ciudad y el país.'; return; }
+        const name = String(j[0].display_name || q).split(',')[0].trim();
+        save({ lat: +j[0].lat, lng: +j[0].lon, name });
+      } catch (_) { msg.textContent = 'No se pudo buscar. Revisa la conexión.'; }
+    };
+    gps.onclick = () => {
+      if (!navigator.geolocation) { msg.textContent = 'Este navegador no da la ubicación: escribe tu ciudad.'; return; }
+      msg.textContent = 'Buscando tu ubicación…';
+      let done = false;
+      // El navegador puede no contestar nunca (permiso sin responder): no dejarlo colgado
+      const guard = setTimeout(() => { if (!done) { done = true; msg.textContent = 'No me llega tu ubicación. Revisa el permiso de ubicación o escribe tu ciudad.'; } }, 15000);
+      navigator.geolocation.getCurrentPosition(p => {
+        if (done) return; done = true; clearTimeout(guard);
+        save({ lat: p.coords.latitude, lng: p.coords.longitude, name: '' });
+      }, err => {
+        if (done) return; done = true; clearTimeout(guard);
+        msg.textContent = err && err.code === 1 ? 'No has dado permiso de ubicación. Escribe tu ciudad.' : 'No pude saber dónde estás. Escribe tu ciudad.';
+      }, { timeout: 12000, maximumAge: 600000 });
     };
   }
   function renderTimeline(S) {
