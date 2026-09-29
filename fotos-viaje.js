@@ -289,7 +289,7 @@ const fotosViaje = (() => {
   const MED = { frame: null, holder: null, guia: null, encoding: false, hasVideo: false, pill: '', done: false, ro: null };
 
   // v=: subirlo al cambiar viaje-fotos.html (si no, el móvil puede usar una copia vieja)
-  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=6&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
+  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=7&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
 
   function _mediaShow(tab) {
     const s = _st; if (!s) return;

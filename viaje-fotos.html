@@ -977,7 +977,7 @@ function renderLegList(TL){
   if(!TL||!TL.RS||TL.RS.length<2){box.innerHTML='';return;}
   const RS=TL.RS;let h='<div class="hint">Cada tramo con su transporte (lo pongo solo; cámbialo si quieres):</div>';
   for(let i=1;i<RS.length;i++){const a=RS[i-1],b=RS[i],k=legKey(a,b);
-    h+=`<div class="lg"><span>${i}. ${esc0(labelOf(a))} → ${esc0(labelOf(b))} · ${nf(TL.geom&&TL.geom[i]?TL.geom[i].len:hav(a,b))} km${TL.geom&&TL.geom[i]?' (traza)':''}</span><select data-k="${esc0(k)}" aria-label="Transporte del tramo ${i}">${Object.entries(MODES).map(([m,l])=>`<option value="${m}"${TL.modes[i]===m?' selected':''}>${l}</option>`).join('')}</select></div>`;}
+    h+=`<div class="lg"><span>${i}. ${esc0(labelOf(a))} → ${esc0(labelOf(b))} · ${nf(TL.geom&&TL.geom[i]?TL.geom[i].len:hav(a,b))} km${TL.geom&&TL.geom[i]?(geoTrack()&&geoTrack().fromGuide?' (por carretera)':' (traza)'):''}</span><select data-k="${esc0(k)}" aria-label="Transporte del tramo ${i}">${Object.entries(MODES).map(([m,l])=>`<option value="${m}"${TL.modes[i]===m?' selected':''}>${l}</option>`).join('')}</select></div>`;}
   box.innerHTML=h;
   box.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{LEGOVR[sel.dataset.k]=sel.value;rebuildVideo();});
 }
@@ -991,8 +991,11 @@ function reelStops(M){
 function buildReel(M,TL){
   const{W,H,u}=TL,ms=maxS(W,H),vert=W<H;const RS=reelStops(M);TL.RS=RS;TL.vehicle=vehicle;
   // Con traza GPX, cada tramo sigue la traza real entre sus dos paradas (y los km son los de verdad)
-  TL.geom=RS.map((s,i)=>{if(!i||!TRACK)return null;const A=nearestTrackIdx(RS[i-1]),B=nearestTrackIdx(s);
-    const tol=0.02/360;if(A.d>tol||B.d>tol||B.i<=A.i+1)return null;const pts=TRACK.pts.slice(A.i,B.i+1);return{pts,len:pts[pts.length-1].km-pts[0].km};});
+  const GT=geoTrack();
+  TL.geom=RS.map((s,i)=>{if(!i||!GT)return null;const A=nearestTrackIdx(RS[i-1],GT),B=nearestTrackIdx(s,GT);
+    // margen hasta la traza: ~2 km con GPX propia; ~8 km con la carretera de la guía (las paradas son pueblos, a veces apartados)
+    const tol=(GT.fromGuide?0.08:0.02)/360;if(A.d>tol||B.d>tol||Math.abs(B.i-A.i)<=1)return null;
+    const pts=B.i>A.i?GT.pts.slice(A.i,B.i+1):GT.pts.slice(B.i,A.i+1).reverse();return{pts,len:Math.abs(pts[pts.length-1].km-pts[0].km)};});
   const cum=[0];for(let i=1;i<RS.length;i++)cum.push(cum[i-1]+(TL.geom[i]?TL.geom[i].len:hav(RS[i-1],RS[i])));TL.cum=cum;TL.kmTotal=cum[cum.length-1];
   TL.modes=RS.map((s,i)=>i?(LEGOVR[legKey(RS[i-1],s)]||(TL.geom[i]?(vehicle==='avion'?'moto':vehicle):legMode(RS[i-1],s,vehicle))):null);TL.ctrl=RS.map((s,i)=>i&&!TL.geom[i]?legCtrl(RS[i-1],s,TL.modes[i]):null);
   const all=fitBox(RS,[W*.14,H*.24,W*.86,H*.78],W,H,ms*.22);
@@ -1214,7 +1217,7 @@ function mapFit(){
   LM.invalidateSize();
   if(LLayer)LLayer.remove();LLayer=L.layerGroup().addTo(LM);
   const pts=M.stops.map(s=>[s.lat,s.lng]);
-  if(TRACK)L.polyline(TRACK.pts.map(p=>[p.lat,p.lng]),{color:'#F4630B',weight:4,opacity:.9}).addTo(LLayer);
+  if(geoTrack())L.polyline(geoTrack().pts.map(p=>[p.lat,p.lng]),{color:'#F4630B',weight:4,opacity:.9}).addTo(LLayer);
   else if(pts.length>1)L.polyline(pts,{color:'#F4630B',weight:4,opacity:.9}).addTo(LLayer);
   M.stops.forEach((s,i)=>{
     const icon=L.divIcon({className:'',iconSize:[48,48],iconAnchor:[24,24],html:`<div class="phpin" style="background-image:url(${s.photos[0].pinUrl})"><b>${i+1}</b></div>`});
@@ -1341,8 +1344,20 @@ function placeByTrack(list){
   list.forEach(p=>{if(p.lat!=null)return;const q=trackAt(+p.date+off);if(q){p.lat=q.lat;p.lng=q.lng;p.byTrack=true;p.est=true;n++;}});
   return n;
 }
-function trackKmFor(m){if(!TRACK||!m.stops.length)return 0;const a=nearestTrackIdx(m.stops[0]).i,b=nearestTrackIdx(m.stops[m.stops.length-1]).i;return Math.abs(TRACK.pts[Math.max(a,b)].km-TRACK.pts[Math.min(a,b)].km);}
-function nearestTrackIdx(p){let bi=0,bd=Infinity;TRACK.pts.forEach((q,i)=>{const d=(q.mx-p.mx)**2+(q.my-p.my)**2;if(d<bd){bd=d;bi=i;}});return{i:bi,d:Math.sqrt(bd)};}
+/* Recorrido del vídeo: la traza GPX del usuario o, si no hay, la carretera real de la guía (road_geometry, caso 07:
+   'la moto por la carretera de la guía sin necesidad de GPX'). La de la guía no tiene horas: sirve para el
+   recorrido y los km, no para colocar fotos. */
+function geoTrack(){
+  if(TRACK)return TRACK;
+  if(!GUIDE||!GUIDE.road)return null;
+  if(GUIDE._rt)return GUIDE._rt;
+  let km=0;const pts=GUIDE.road.map(c=>({lat:+c[0],lng:+c[1],t:null})).filter(p=>isFinite(p.lat)&&isFinite(p.lng));
+  pts.forEach((p,i)=>{if(i)km+=hav(pts[i-1],p);p.km=km;[p.mx,p.my]=merc(p.lng,p.lat);});
+  GUIDE._rt=pts.length>1?{name:GUIDE.roadName||'carretera de la guía',pts,km,hasTime:false,fromGuide:true}:null;
+  return GUIDE._rt;
+}
+function trackKmFor(m,T=geoTrack()){if(!T||!m.stops.length)return 0;const a=nearestTrackIdx(m.stops[0],T).i,b=nearestTrackIdx(m.stops[m.stops.length-1],T).i;return Math.abs(T.pts[Math.max(a,b)].km-T.pts[Math.min(a,b)].km);}
+function nearestTrackIdx(p,T=TRACK){let bi=0,bd=Infinity;T.pts.forEach((q,i)=>{const d=(q.mx-p.mx)**2+(q.my-p.my)**2;if(d<bd){bd=d;bi=i;}});return{i:bi,d:Math.sqrt(bd)};}
 $('#gpxIn').addEventListener('change',async e=>{
   const f=e.target.files[0];e.target.value='';if(!f)return;const tn=$('#trackNote');
   try{TRACK=parseGpx(await f.text());tn.hidden=false;
@@ -1387,7 +1402,7 @@ async function applyPool(msgExtra){
   let placed=0;if(GUIDE&&GUIDE.stops)placed=placeByGuide(main,GUIDE.stops);
   const meta=GUIDE?{title:(GUIDE.title||'').toUpperCase()||undefined}:{};
   const m=buildModel(main.slice(),meta);
-  if(TRACK&&!m.noMap)m.km=Math.max(m.km,trackKmFor(m));
+  if(geoTrack()&&!m.noMap)m.km=Math.max(m.km,trackKmFor(m));
   if(M&&SAMPLE_ON)M.photos.forEach(p=>{try{URL.revokeObjectURL(p.url);}catch(_){}});
   SAMPLE_ON=false;$('#resetBtn').hidden=false;
   const bits=[`Tu viaje: ${main.length} fotos.`];
@@ -1485,7 +1500,8 @@ async function selectGuide(id,quiet){
     const d=await FDB.collection('users').doc(USER.uid).collection('maps').doc(id).get();const x=d.data()||{};
     let r={};try{r=JSON.parse(x.itinerarioIA||'{}');}catch(_){}
     const stops=(r.stops||[]).map(s=>({name:s.name||s.nombre||'',lat:+s.lat,lng:+s.lng,day:s.day||null}));
-    GUIDE={id,title:x.nombre||r.title||'',stops,routePhotos:x.photos||[]};
+    const rg=r.road_geometry||x.road_geometry||null;
+    GUIDE={id,title:x.nombre||r.title||'',stops,routePhotos:x.photos||[],road:(rg&&Array.isArray(rg.coords)&&rg.coords.length>1)?rg.coords:null,roadName:(rg&&rg.name)||''};
     const nGood=stops.filter(s=>isFinite(s.lat)&&Math.abs(s.lat)>.01).length;
     gn.textContent=`${GUIDE.title||'Guía'}: ${nGood} paradas${stops.some(s=>s.day)?' repartidas por días':''}.`;
     if(!quiet||POOL.length)await applyPool();
