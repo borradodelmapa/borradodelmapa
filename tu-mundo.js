@@ -66,7 +66,7 @@ const tuMundo = (() => {
     const guides = maps.docs.map(d => {
       const x = d.data(); let r = {}; try { r = JSON.parse(x.itinerarioIA || '{}'); } catch (_) {}
       const stops = (r.stops || []).map(s => ({ name: s.name || '', lat: +s.lat, lng: +s.lng, day: s.day })).filter(ok);
-      return { id: d.id, title: x.nombre || r.title || 'Guía', days: +(x.dias || x.num_dias || 0) || Math.max(0, ...stops.map(s => +s.day || 0)), stops, cover: x.map_thumbnail_url || r.map_thumbnail_url || x.cover_image || '', photos: x.photos || [], createdAt: toDate(x.createdAt), rg: r.road_geometry || x.road_geometry || null, borrador: x.estado === 'borrador', raw: x };
+      return { id: d.id, title: x.nombre || r.title || 'Guía', days: +(x.dias || x.num_dias || 0) || Math.max(0, ...stops.map(s => +s.day || 0)), stops, cover: x.map_thumbnail_url || r.map_thumbnail_url || x.cover_image || '', photos: x.photos || [], createdAt: toDate(x.createdAt), rg: r.road_geometry || x.road_geometry || null, borrador: x.estado === 'borrador', hecho: !!x.viaje_hecho, raw: x };
     }).filter(g => !g.borrador);
     const photos = fotos.docs.map(d => ({ id: d.id, ...d.data() }));
     const allPins = [...pins.docs, ...mpins.docs].map(d => d.data());
@@ -80,7 +80,8 @@ const tuMundo = (() => {
       const ph = (g.photos || []).concat(byRoute[g.id] || []); g.nPhotos = ph.length;
       const dates = ph.map(p => toDate(p.takenAt || p.uploadedAt || p.createdAt)).filter(d => d && !isNaN(d)); g.date = dates.length ? new Date(Math.min(...dates)) : g.createdAt;
       if (!g.cover) { const c = ph.find(p => p.url || p.photoUrl); if (c) g.cover = c.url || c.photoUrl; }
-      (ph.length ? visited : planned).push(g);
+      // Cuenta como viaje hecho si tiene fotos o si el usuario lo marcó ("Ya hice este viaje")
+      (ph.length || g.hecho ? visited : planned).push(g);
     });
     const seen = new Map(), plan = new Map();
     const mark = (m, f, src, pt) => { if (!f) return; const e = m.get(f.id) || { f, n: 0, src: new Set(), pts: [] }; e.n++; e.src.add(src); if (pt) e.pts.push(pt); m.set(f.id, e); };
@@ -113,13 +114,13 @@ const tuMundo = (() => {
     try { const s = JSON.parse(localStorage.getItem(SUM_KEY) || 'null'); return s && s.uid === uid ? s : null; } catch (_) { return null; }
   }
 
-  let _cache = null; // { uid, S }
+  let _cache = null; // { uid, D, S }
   async function _getStats(force) {
     const u = window.currentUser; if (!u) throw new Error('Sin sesión');
     if (!force && _cache && _cache.uid === u.uid) return _cache.S;
     const [D] = await Promise.all([loadUser(u.uid), loadWorld()]);
     const S = compute(D);
-    _cache = { uid: u.uid, S };
+    _cache = { uid: u.uid, D, S };
     _saveSummary(u.uid, S);
     return S;
   }
@@ -195,7 +196,7 @@ const tuMundo = (() => {
     if (S.visited.length) {
       const lg = S.visited.reduce((a, g) => (g.days || 0) > (a.days || 0) ? g : a); if (lg.days) R.push(['El viaje más largo', lg.title, `${lg.days} días`]);
       const km = S.visited.reduce((a, g) => g.km > a.km ? g : a); if (km.km > 1) R.push(['El de más kilómetros', km.title, `${nf(km.km)} km`]);
-      const ph = S.visited.reduce((a, g) => g.nPhotos > a.nPhotos ? g : a); R.push(['El de más fotos', ph.title, `${ph.nPhotos} ${ph.nPhotos === 1 ? 'foto' : 'fotos'}`]);
+      const ph = S.visited.reduce((a, g) => g.nPhotos > a.nPhotos ? g : a); if (ph.nPhotos) R.push(['El de más fotos', ph.title, `${ph.nPhotos} ${ph.nPhotos === 1 ? 'foto' : 'fotos'}`]);
     }
     const top = [...S.seen.values()].sort((a, b) => b.src.size - a.src.size)[0];
     if (top && top.src.size > 1) R.push(['Tu país favorito', `${flagOf(top.f.a2)} ${esName(top.f.a2, top.f.en)}`, `${top.src.size} viajes o recuerdos`]);
@@ -258,15 +259,45 @@ const tuMundo = (() => {
   function renderTimeline(S) {
     const by = new Map(); [...S.visited].sort((a, b) => (b.date || 0) - (a.date || 0)).forEach(g => { const y = g.date ? g.date.getFullYear() : '—'; if (!by.has(y)) by.set(y, []); by.get(y).push(g); });
     _q('#tm-timeline').innerHTML = [...by].map(([y, gs]) => `<div class="tm-year"><h3>${y}</h3><div class="tm-trips">${gs.map(g => `<button type="button" class="tm-trip" data-id="${esc(g.id)}"><div class="tm-ph" style="${g.cover ? `background-image:url('${esc(g.cover)}')` : ''}"></div><div class="tm-tx"><b>${esc(g.title)}</b><span>${g.countries.map(f => flagOf(f.a2)).join(' ')} ${g.days ? g.days + ' días · ' : ''}${nf(g.km)} km · ${g.nPhotos} ${g.nPhotos === 1 ? 'foto' : 'fotos'}</span></div></button>`).join('')}</div></div>`).join('') || '<p class="tm-note">Aún no hay viajes con fotos.</p>';
-    // Solo cuentan las guías con fotos (la prueba de que fuiste): decirlo para que no parezca que faltan
+    // Solo cuentan las guías con fotos o marcadas como hechas: decirlo para que no parezca que faltan
     const nPl = S.planned.length;
     _q('#tm-trips-note').textContent = nPl
-      ? `Aquí salen los viajes con fotos. Tienes ${nPl} ${nPl === 1 ? 'guía más' : 'guías más'} sin fotos: sube fotos a las que ya hiciste para que cuenten.`
+      ? `Aquí salen los viajes con fotos o que marques como hechos. Tienes ${nPl} ${nPl === 1 ? 'guía más' : 'guías más'} sin fotos: marca abajo las que ya hiciste.`
       : '';
+    renderPending(S);
     // Tocar un viaje → abre su guía (la misma función que usan las tarjetas de Mis Viajes)
     document.querySelectorAll('#tm-screen .tm-trip').forEach(b => b.addEventListener('click', () => {
       const g = S.visited.find(v => v.id === b.dataset.id);
       if (g && typeof salma !== 'undefined' && salma.cargarGuia) salma.cargarGuia(g.id, g.raw);
+    }));
+  }
+
+  /* Guías sin fotos: botón "Ya hice este viaje" (guarda viaje_hecho en la guía; 0 €, una escritura
+     de Firestore). Se recalcula en el móvil con los datos ya cargados, sin volver a leerlos. */
+  function renderPending(S) {
+    const sec = _q('#tm-pend-sec'); if (!sec) return;
+    const list = S.visited.filter(g => g.hecho && !g.nPhotos).concat(S.planned)
+      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    sec.hidden = !list.length;
+    _q('#tm-pend-n').textContent = list.length;
+    _q('#tm-pend').innerHTML = list.map(g => `<div class="tm-pend-row">
+        <span class="tm-pend-t"><b>${esc(g.title)}</b><span>${(g.countries || []).map(f => flagOf(f.a2)).join(' ')} ${g.days ? g.days + ' días' : ''}</span></span>
+        <button type="button" class="tm-chk" data-id="${esc(g.id)}" aria-pressed="${g.hecho ? 'true' : 'false'}">${g.hecho ? '✓ Hecho' : 'Ya lo hice'}</button>
+      </div>`).join('');
+    document.querySelectorAll('#tm-screen .tm-chk').forEach(b => b.addEventListener('click', async () => {
+      const u = window.currentUser; if (!u || !_cache) return;
+      const g = _cache.D.guides.find(x => x.id === b.dataset.id); if (!g) return;
+      const val = !g.hecho;
+      b.disabled = true;
+      try {
+        await firebase.firestore().collection('users').doc(u.uid).collection('maps').doc(g.id).update({ viaje_hecho: val });
+        g.hecho = val; g.raw.viaje_hecho = val;
+        const S2 = compute(_cache.D); _cache.S = S2; _saveSummary(u.uid, S2);
+        _paint(S2);
+        const d = _q('#tm-pend-sec'); if (d) d.open = true; // que no se cierre la lista al marcar
+      } catch (e) {
+        b.disabled = false; b.textContent = 'No se pudo guardar';
+      }
     }));
   }
 
@@ -338,7 +369,8 @@ const tuMundo = (() => {
             <p class="tm-note" id="tm-share-note"></p>
             <div class="tm-card" id="tm-card" hidden><img id="tm-card-img" alt="Tarjeta de tu mundo"></div>
           </section>
-          <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div></section>
+          <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div>
+            <details class="tm-pend-sec" id="tm-pend-sec" hidden><summary>Tus guías sin fotos (<span id="tm-pend-n"></span>)</summary><div class="tm-pend" id="tm-pend"></div></details></section>
           <section id="tm-next-sec" hidden><h3 class="tm-h">Tus próximos destinos</h3><div class="tm-next" id="tm-next"></div></section>
         </div>
       </div>`;
