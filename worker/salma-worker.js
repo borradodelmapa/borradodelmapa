@@ -375,7 +375,7 @@ buscar_hotel → hotel, hostal, apartamento, dónde dormir
 buscar_coche → alquiler de coche, moto, scooter
 buscar_lugar → CUALQUIER lugar físico: restaurante, bar, café, dónde comer/cenar, gimnasio, farmacia, museo, spa, cajero, cambio de divisa, clínica, supermercado, tienda… Para comida pasa tipo_places: "restaurant". Para el resto omite tipo_places.
 buscar_vuelos → vuelo, billete de avión
-buscar_foto → cuando recomiendes un lugar concreto con nombre propio. 1-3 fotos por respuesta, cada una de un sitio que marcas con [[ ]], pedida con ese mismo nombre + la ciudad; nunca de una ruta, región o varios sitios juntos. No usar cuando generes ruta (la ruta tiene sus propias fotos).
+buscar_foto → cuando recomiendes un lugar concreto con nombre propio. 1-3 fotos por respuesta. No usar cuando generes ruta (la ruta tiene sus propias fotos).
 buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener la URL real de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca. USO DE LAS URLs: úsalas para darte el dato, pero NO las pegues en tu respuesta. Cuenta el dato con tus palabras y ya está. Pega una URL SOLO si (a) el usuario pide explícitamente el enlace, la fuente o "de dónde lo sacas", o (b) es la web OFICIAL de reserva de un transporte que el usuario ha pedido reservar (ferry/bus/tren). NUNCA pegues blogs, artículos ni guías de viaje.
 
 RESTAURANTES: si el sistema ya te proporciona resultados en el contexto, preséntalos directamente. Si no, usa buscar_lugar con tipo_places: "restaurant". Nunca respondas con texto inventado cuando pidan dónde comer.
@@ -2558,7 +2558,7 @@ const SALMA_TOOLS = [
       properties: {
         lugar: {
           type: "string",
-          description: "Nombre exacto de UN lugar concreto (el mismo que marcas con [[ ]] en el texto) + ciudad/país. Nunca una ruta, región o dos sitios juntos. Ejemplos: 'Plaza Durbar Kathmandu', 'Templo Swayambhunath Nepal', 'Halong Bay Vietnam', 'Alhambra Granada España'"
+          description: "Nombre del lugar concreto + ciudad/país. Ejemplos: 'Plaza Durbar Kathmandu', 'Templo Swayambhunath Nepal', 'Halong Bay Vietnam', 'Alhambra Granada España'"
         }
       },
       required: ["lugar"]
@@ -5933,7 +5933,6 @@ Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero con 
 PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar guías ni planes de pago.
 QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con el nombre entre [[ ]], por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado o un [PERFIL DEL VIAJERO] en el contexto (compañía, mascotas, vehículo, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos (si chocan, manda el cuestionario); solo para lo que no esté en ninguno de los dos, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
 Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Si NO se indica número de días: para una ciudad o pueblo, haz 1 día. Pero si es una RUTA/ROAD TRIP explícita por una costa, comarca o varios pueblos (el usuario dice "ruta", "road trip", "de sur a norte", "recorrido", o nombra varios sitios lejos entre sí) — **NUNCA lo metas en 1 solo día por defecto**: calcula tú cuántos días son razonables a ritmo de carretera normal (aprox. 100-150km con paradas por día, motos y coches turísticos más despacio que autovía) y repártelo en esos días, de punta a punta en orden geográfico, sin saltar de un extremo a otro y volver. Dilo explícito: "Esto da para N días" al principio. Breve: 2-3 frases por sitio.
-FOTOS: empieza a escribir el plan directamente, sin buscar fotos antes. Como mucho 2 fotos en todo el plan, con buscar_foto, cada una de UN sitio que hayas marcado con [[ ]], pedida con ese mismo nombre + la ciudad (ej. "Puente Nuevo Ronda"). Nunca de una ruta, una región, un tema ni de dos sitios juntos.
 RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si es ruta/road trip por varios sitios, aplica el reparto de arriba en su lugar):
 - 1-2 días → TODO dentro de esa localidad y su entorno inmediato (máx ~30 min en coche). NADA de rutas comarcales, pueblos blancos ni excursiones lejanas salvo que el usuario pida expresamente "ruta"/"road trip"/varios pueblos. Ej.: "Estepona 1 día" = casco antiguo, Orquidario, paseo marítimo, playa — NO Ronda ni Grazalema.
 - 3-4 días → la ciudad da de sobra; como MUCHO 1 excursión de medio día a algo a <45 min, y dícelo claro ("excursión opcional a X"). El resto, dentro.
@@ -5978,7 +5977,7 @@ Ejemplo: [[Puente Nuevo]] — 42 años de obras (1751-1793), cámara interior qu
 
 Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
-FOTOS: empieza a escribir el plan directamente, sin buscar fotos antes. Como mucho 2 fotos en todo el plan, con buscar_foto, cada una de UN sitio que hayas marcado con [[ ]], pedida con ese mismo nombre + la ciudad. Nunca de una ruta, una región ni de dos sitios juntos.]`;
+NO llames a buscar_foto — las fotos se cargan automáticamente en el frontend.]`;
   } else {
     userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
 
