@@ -9824,8 +9824,34 @@ export default {
       let range;
       const m = rh && /^bytes=(\d+)-(\d*)$/.exec(rh);
       if (m) { const off = +m[1]; range = m[2] ? { offset: off, length: +m[2] - off + 1 } : { offset: off }; }
-      const obj = request.method === 'HEAD' ? await env.SALMA_PHOTOS.head(key) : await env.SALMA_PHOTOS.get(key, range ? { range } : {});
-      if (!obj) return new Response('No existe', { status: 404, headers: cors });
+      let obj = request.method === 'HEAD' ? await env.SALMA_PHOTOS.head(key) : await env.SALMA_PHOTOS.get(key, range ? { range } : {});
+      if (!obj) {
+        // Archivos grandes (España+Portugal, 3,4 GB) subidos EN TROZOS: mapas/<nombre>.pmtiles.parts.json
+        // {size, partSize, parts} + mapas/<nombre>.pmtiles.part<N>. Se juntan aquí los trozos que pida el rango.
+        globalThis.__mapParts = globalThis.__mapParts || {};
+        let man = globalThis.__mapParts[key];
+        if (!man) {
+          const mo = await env.SALMA_PHOTOS.get(key + '.parts.json');
+          if (!mo) return new Response('No existe', { status: 404, headers: cors });
+          man = globalThis.__mapParts[key] = await mo.json();
+        }
+        const h0 = new Headers(cors);
+        h0.set('Content-Type', 'application/octet-stream'); h0.set('Accept-Ranges', 'bytes'); h0.set('Cache-Control', 'public, max-age=86400');
+        if (request.method === 'HEAD') { h0.set('Content-Length', String(man.size)); return new Response(null, { headers: h0 }); }
+        const off = range ? range.offset : 0, end = Math.min(man.size - 1, range && range.length ? range.offset + range.length - 1 : man.size - 1);
+        if (!range && man.size > 50e6) return new Response('Pide el archivo por rangos', { status: 416, headers: cors });
+        const chunks = [];
+        for (let p = Math.floor(off / man.partSize); p * man.partSize <= end; p++) {
+          const ps = p * man.partSize, a = Math.max(off, ps) - ps, b = Math.min(end, ps + man.partSize - 1) - ps;
+          const po = await env.SALMA_PHOTOS.get(key + '.part' + p, { range: { offset: a, length: b - a + 1 } });
+          if (!po) return new Response('Falta un trozo', { status: 500, headers: cors });
+          chunks.push(new Uint8Array(await po.arrayBuffer()));
+        }
+        const out = new Uint8Array(chunks.reduce((n, c) => n + c.length, 0)); let o = 0; chunks.forEach(c => { out.set(c, o); o += c.length; });
+        h0.set('Content-Length', String(out.length));
+        if (range) { h0.set('Content-Range', `bytes ${off}-${end}/${man.size}`); return new Response(out, { status: 206, headers: h0 }); }
+        return new Response(out, { headers: h0 });
+      }
       const h = new Headers(cors);
       h.set('Content-Type', 'application/octet-stream');
       h.set('Accept-Ranges', 'bytes');
@@ -9859,7 +9885,10 @@ export default {
         }
         const e = idx[tm[2] + '/' + tm[3] + '/' + tm[4]];
         if (!e) return new Response(null, { status: 204, headers: cors }); // fuera de la zona: sin relieve
-        const obj = await env.SALMA_PHOTOS.get('mapas/' + pack + '.bin', { range: { offset: e[0], length: e[1] } });
+        // Índice [offset, largo] → un solo .bin; [parte, offset, largo] → mapas/<paquete>-<parte>.bin (paquetes grandes en trozos)
+        const obj = e.length === 3
+          ? await env.SALMA_PHOTOS.get('mapas/' + pack + '-' + e[0] + '.bin', { range: { offset: e[1], length: e[2] } })
+          : await env.SALMA_PHOTOS.get('mapas/' + pack + '.bin', { range: { offset: e[0], length: e[1] } });
         if (!obj) return new Response('No existe', { status: 404, headers: cors });
         return new Response(obj.body, { headers: { ...cors, 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=2592000' } });
       }
