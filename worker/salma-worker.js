@@ -10338,7 +10338,7 @@ export default {
       try {
         const b = await request.json().catch(() => ({}));
         const id = String(b.id || '');
-        if (!/^[a-z0-9-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+        if (!/^[a-z0-9_-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
         const texto = String(b.texto || '').trim();
         if (texto.length < 10) return new Response(JSON.stringify({ error: 'falta el texto del mensaje' }), { status: 400, headers: corsH });
         return new Response(JSON.stringify(await feedbackThanks(env, id, texto)), { headers: corsH });
@@ -10368,7 +10368,7 @@ export default {
         if (request.method === 'POST' && url.pathname === '/admin/feedback-group') {
           const b = await request.json().catch(() => ({}));
           const id = String(b.id || '');
-          if (!/^[a-z0-9-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+          if (!/^[a-z0-9_-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
           const upd = {};
           if (b.estado !== undefined) {
             if (!FB_ESTADOS.includes(b.estado)) return new Response(JSON.stringify({ error: 'estado no válido' }), { status: 400, headers: corsH });
