@@ -258,6 +258,11 @@ const tuMundo = (() => {
   function renderTimeline(S) {
     const by = new Map(); [...S.visited].sort((a, b) => (b.date || 0) - (a.date || 0)).forEach(g => { const y = g.date ? g.date.getFullYear() : '—'; if (!by.has(y)) by.set(y, []); by.get(y).push(g); });
     _q('#tm-timeline').innerHTML = [...by].map(([y, gs]) => `<div class="tm-year"><h3>${y}</h3><div class="tm-trips">${gs.map(g => `<button type="button" class="tm-trip" data-id="${esc(g.id)}"><div class="tm-ph" style="${g.cover ? `background-image:url('${esc(g.cover)}')` : ''}"></div><div class="tm-tx"><b>${esc(g.title)}</b><span>${g.countries.map(f => flagOf(f.a2)).join(' ')} ${g.days ? g.days + ' días · ' : ''}${nf(g.km)} km · ${g.nPhotos} ${g.nPhotos === 1 ? 'foto' : 'fotos'}</span></div></button>`).join('')}</div></div>`).join('') || '<p class="tm-note">Aún no hay viajes con fotos.</p>';
+    // Solo cuentan las guías con fotos (la prueba de que fuiste): decirlo para que no parezca que faltan
+    const nPl = S.planned.length;
+    _q('#tm-trips-note').textContent = nPl
+      ? `Aquí salen los viajes con fotos. Tienes ${nPl} ${nPl === 1 ? 'guía más' : 'guías más'} sin fotos: sube fotos a las que ya hiciste para que cuenten.`
+      : '';
     // Tocar un viaje → abre su guía (la misma función que usan las tarjetas de Mis Viajes)
     document.querySelectorAll('#tm-screen .tm-trip').forEach(b => b.addEventListener('click', () => {
       const g = S.visited.find(v => v.id === b.dataset.id);
@@ -333,7 +338,7 @@ const tuMundo = (() => {
             <p class="tm-note" id="tm-share-note"></p>
             <div class="tm-card" id="tm-card" hidden><img id="tm-card-img" alt="Tarjeta de tu mundo"></div>
           </section>
-          <section><h3 class="tm-h">Tus viajes</h3><div class="tm-timeline" id="tm-timeline"></div></section>
+          <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div></section>
           <section id="tm-next-sec" hidden><h3 class="tm-h">Tus próximos destinos</h3><div class="tm-next" id="tm-next"></div></section>
         </div>
       </div>`;
