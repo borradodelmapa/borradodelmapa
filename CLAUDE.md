@@ -111,7 +111,9 @@ Decidida con Paco el 26 sept 2026 ("queremos gente que se registre"). Cambiarla 
 
 ### 11. BANCO DE PRUEBAS DE SALMA — ANTES DE SUBIR NADA DEL CHAT (28 sept 2026, caso p-mulj7j4n4mz)
 Paco: "quiero de una vez por todas no hacer un cambio que joda otra cosa". `scripts/banco-salma/` (uso en la cabecera
-de `pasar.cjs`): copia local de Salma que no ve nadie ni escribe nada + juez gpt-4o. ~0,05 € por pregunta.
+de `pasar.cjs`): copia local de Salma que no ve nadie ni escribe nada + juez gpt-4o. Coste REAL medido en cada informe
+(30 sept: "farmacia cerca" = 0,33 €, 2/3 Google). **Arreglo de CÓDIGO → `--reproducir <cinta>`: 0 €**, mismas
+respuestas de Claude/Google grabadas (`--grabar`); si cambió lo que recibe la IA, avisa "⚠ NECESITA EN VIVO" y solo esas se pagan.
 - **Cambio del chat / Worker de Salma:** la pregunta del caso + las del mismo tema, **antes y después**
   (`--ref <tag>` para el antes, `--comparar a.json b.json`). Un 🔴 EMPEORA = no se sube.
 - **Cambio del prompt:** las 26 (~1-1,5 €). **Siempre decir antes cuántas preguntas y cuánto cuesta (§8).**
