@@ -1669,8 +1669,18 @@ const salma = {
           if (data.route.nearby_note) {
             try { this._addSalmaBubble(data.route.nearby_note); } catch (_) {}
           }
-          // Ruta nueva — indicar que hay que pulsar GUARDAR
-          this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
+          // Ruta nueva. Con sesión se GUARDA SOLA (Paco, 30 sept 2026: "si le da a Crear ruta con mapa, entiendo
+          // que la quiere guardar… la gente puede cerrar sin guardar"), y así salen ya las pestañas Fotos · Vídeo ·
+          // Álbum. Sin sesión, como antes: el botón GUARDAR pide registrarse.
+          if (window.currentUser) {
+            this.currentRouteId = null;
+            this.guardar().then(() => {
+              if (this.currentRouteId) this._addSalmaBubble('Guardada en Mis Viajes. Cuando quieras otra ruta, dime destino y días.');
+              else this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
+            });
+          } else {
+            this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
+          }
           // Copia para el Perfil IA: el historial se vacía aquí, ANTES de que el usuario pulse
           // GUARDAR, y _perfilIAExtract() (app.js) se quedaba sin los mensajes del chat.
           this._lastRouteHistory = this.history.slice(-12);
@@ -2342,6 +2352,13 @@ const salma = {
       showToast('No hay ruta para guardar');
       return;
     }
+    // Ya se está guardando (guardado automático al crearla + alguien pulsa GUARDAR a la vez): no duplicar
+    if (this._guardando) return this._guardando;
+    this._guardando = this._guardarAhora().finally(() => { this._guardando = null; });
+    return this._guardando;
+  },
+
+  async _guardarAhora() {
     const id = await guardarGuia(this.currentRoute);
     if (id) {
       this.currentRouteId = id;
