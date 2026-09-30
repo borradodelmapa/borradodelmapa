@@ -2739,6 +2739,11 @@ function formatDayHeaders(text, numDays) {
   // Normalizar Unicode (í puede venir como i + combining accent en SSE streaming)
   text = text.normalize('NFC');
 
+  // Si Salma ya ha escrito los días ("**Día 1 — …**", "### Día 1", "Día 1:"), no se toca: antes se añadía otro
+  // "**Día 1**" encima y salían repetidos en el chat (visto en los planes de Ronda, 30 sept 2026).
+  const _yaTieneDias = (text.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9\n]{0,8}D[IÍií]A\s+\d{1,2}\b/gim) || []).length;
+  if (_yaTieneDias >= 2) return text;
+
   // Paso 1: intentar detectar "El primer/segundo/tercer día" y reemplazar
   const ordMap = {
     primer: 1, primero: 1, primera: 1, segundo: 2, segunda: 2,
@@ -5186,7 +5191,7 @@ async function waMaybeReferral(env, from) {
 function waExtractHistoriaLugar(text) {
   if (!text) return { text, place: null };
   const m = text.match(/^\s*HISTORIA_LUGAR\s*:\s*(.+)$/im);
-  return { text: m ? text.replace(m[0], '').trim() : text, place: m ? m[1].trim().slice(0, 120) : null };
+  return { text: m ? text.replace(m[0], '').trim() : text, place: m ? quitarMarcas(m[1]).trim().slice(0, 120) : null };
 }
 
 // Versión corta de la historia, pensada para caber en UN solo mensaje (Paco, 25 sept 2026: "tres
@@ -6471,7 +6476,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     if (!linea) continue;
     // Día como título al principio de un párrafo (Transpirenaica, 30 sept): "**Día 1 — Hondarribia → Jaca (~252 km).**
     // Antes de alejarte de la costa, para en [[…]]…" → abre el día y el resto del párrafo se lee como contenido.
-    const diaPar = linea.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9]*\*\*\s*D[IÍií]A\s+(\d{1,2})\b([^*]*)\*\*\s*(.+)$/i);
+    const diaPar = linea.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9]*\*\*\s*D[IÍií]AS?\s+(\d{1,2})\b([^*]*)\*\*\s*(.+)$/i);
     if (diaPar) {
       const n = parseInt(diaPar[1], 10);
       if (n !== day) { day = n; dayTitle = ''; }
@@ -6486,7 +6491,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     // Cabecera de día en cualquiera de las formas en que la escribe Salma: "**Día 1 — Título**", "**Día 1** — Título",
     // "### Día 1: Título", "🏍️ **DÍA 1 · Título (180 km)**", "Día 1 — Título". Línea corta y sin sitios marcados.
     const dia = !tieneMarcasSitio(linea) && linea.length <= 140
-      && linea.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9]*D[IÍií]A\s+(\d{1,2})\b(.*)$/i);
+      && linea.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9]*D[IÍií]AS?\s+(\d{1,2})\b(.*)$/i);
     if (dia) {
       const n = parseInt(dia[1], 10);
       if (n !== day) { day = n; dayTitle = ''; }
@@ -6528,13 +6533,20 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     console.log(`[LECTOR] ✗ no encuentro los días (líneas con "día": ${JSON.stringify(cab)})`);
     return null;
   }
+  // Días seguidos 1, 2, 3… en el orden del plan ("Días 3 y 4" o un día que Salma salta no dejan huecos)
+  const _orden = [...new Set(stops.map(s => s.day))];
+  stops.forEach(s => { s.day = _orden.indexOf(s.day) + 1; });
   const nDias = Math.max(...stops.map(s => s.day));
   // Plan limpio = todos los días pedidos aparecen y cada uno trae al menos 2 sitios marcados.
-  if (dias && nDias !== dias) { console.log(`[LECTOR] ✗ ${nDias} días leídos, se pidieron ${dias}`); return null; }
+  // Los días son los del plan que ha leído el usuario: en rutas por carretera Salma calcula cuántos hacen falta
+  // ("esto da para 6 días") aunque en el cuestionario pusiera 5. La reescritura de Sonnet también copiaba los del plan.
+  if (dias && nDias !== dias) console.log(`[LECTOR] ${nDias} días en el plan (se pidieron ${dias}): se usan los del plan`);
+  // Plan limpio = ningún día sin sitios y, de media, al menos 2 por día. Un día con un solo sitio vale ("Día 5 —
+  // llegada a Cadaqués"): antes tiraba el plan entero a la reescritura lenta.
   for (let d = 1; d <= nDias; d++) {
-    const n = stops.filter(s => s.day === d).length;
-    if (n < 2) { console.log(`[LECTOR] ✗ día ${d} con ${n} sitio(s) marcado(s)`); return null; }
+    if (!stops.some(s => s.day === d)) { console.log(`[LECTOR] ✗ el día ${d} no trae sitios marcados`); return null; }
   }
+  if (stops.length < nDias * 2) { console.log(`[LECTOR] ✗ pocos sitios marcados: ${stops.length} para ${nDias} días`); return null; }
   const dest = String(destino || region || '').trim();
   return {
     title: dest ? `${dest} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Ruta de ${nDias} ${nDias === 1 ? 'día' : 'días'}`,
@@ -6556,8 +6568,8 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
 async function coordsForMarkedStops(stops, env, { countryName = '', region = '', usageAcc = null } = {}) {
   if (!Array.isArray(stops) || !stops.length || !env.ANTHROPIC_API_KEY) return null;
   const lista = stops.map((s, i) => `${i + 1}. ${s.name} (día ${s.day})`).join('\n');
-  const sys = 'Devuelves coordenadas reales de lugares. Solo JSON, sin texto ni backticks: {"pais":"País principal del viaje, en español","c":[[lat,lng],...]} con UN par por lugar, en el MISMO orden de la lista. Si un lugar no lo sabes con seguridad, pon [0,0].';
-  const user = `Viaje${region ? ' por ' + region : ''}${countryName ? ' (' + countryName + ')' : ''}. Los lugares van en orden de ruta, así que cada uno está cerca del anterior y del siguiente.\n\n${lista}`;
+  const sys = 'Devuelves coordenadas reales de lugares. Solo JSON, sin texto ni backticks: {"pais":"País principal del viaje, en español","zona":"Zona o región del viaje, 1-3 palabras (ej. Pirineos, Algarve, Costa Brava)","titulo":"Título corto de la guía, máx. 50 caracteres, bien escrito (ej. Transpirenaica en moto: Hondarribia → Cadaqués)","c":[[lat,lng],...]} con UN par por lugar, en el MISMO orden de la lista. Si un lugar no lo sabes con seguridad, pon [0,0].';
+  const user = `Viaje${region ? ' "' + region + '"' : ''}${countryName ? ' (' + countryName + ')' : ''}, ${new Set(stops.map(s => s.day)).size} días. Los lugares van en orden de ruta, así que cada uno está cerca del anterior y del siguiente.\n\n${lista}`;
   try {
     const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
@@ -6573,6 +6585,8 @@ async function coordsForMarkedStops(stops, env, { countryName = '', region = '',
     if (!Array.isArray(j.c) || j.c.length !== stops.length) { console.log(`[LECTOR] coordenadas: ${j.c?.length || 0} para ${stops.length} sitios`); return null; }
     const c = j.c.map(p => (Array.isArray(p) && isFinite(+p[0]) && isFinite(+p[1])) ? [+p[0], +p[1]] : [0, 0]);
     c.pais = typeof j.pais === 'string' ? j.pais.trim().slice(0, 40) : '';
+    c.zona = typeof j.zona === 'string' ? j.zona.trim().slice(0, 40) : '';
+    c.titulo = typeof j.titulo === 'string' ? j.titulo.trim().slice(0, 70) : '';
     return c;
   } catch (e) {
     console.log('[LECTOR] coordenadas: ' + (e.name === 'TimeoutError' ? 'timeout' : e.message));
@@ -7005,7 +7019,8 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   // opening_hours/editorial_summary NO se leen nunca del candidato de Find Place (solo
   // del Place Details posterior, más abajo) — pedirlos aquí recargaba Contact/Atmosphere
   // Data en TODAS las búsquedas de TODAS las paradas sin que ese dato se usara nunca.
-  const FIELDS = 'place_id,photos,geometry,name,formatted_address,business_status';
+  // types: dato básico (mismo precio que los demás) — lo usa validateCandidate para no aceptar un bar por un barrio
+  const FIELDS = 'place_id,photos,geometry,name,formatted_address,business_status,types';
 
   // ── REUSO DE PARADAS SIN CAMBIOS (edición/regeneración) ──
   // Cada edición de ruta volvía a verificar TODAS las paradas contra Google, cambiaran
@@ -7097,6 +7112,18 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     } catch (_) { return null; }
   }
 
+  // ¿Google ha cambiado un sitio (barrio, plaza, monumento) por un NEGOCIO con otro nombre? Si la parada ya es de
+  // comer/dormir ("Bar El Lechuguita", tipo restaurante), no cuenta como cambio.
+  const _BIZ_TYPES = new Set(['bar', 'restaurant', 'cafe', 'food', 'meal_takeaway', 'meal_delivery', 'night_club', 'store',
+    'clothing_store', 'shoe_store', 'jewelry_store', 'liquor_store', 'supermarket', 'grocery_or_supermarket', 'shopping_mall',
+    'lodging', 'bakery', 'book_store', 'car_rental', 'travel_agency', 'real_estate_agency', 'gym', 'spa', 'beauty_salon']);
+  function _isBusinessSwap(candidate, stop) {
+    const types = Array.isArray(candidate && candidate.types) ? candidate.types : [];
+    if (!types.some(t => _BIZ_TYPES.has(t))) return false;
+    const st = `${stop.type || ''} ${stop.name || ''} ${stop.headline || ''}`;
+    return !/restaurante|restaurant|comer|bar\b|taberna|mes[oó]n|asador|caf[eé]|hotel|hostal|alojamiento|camping|bodega|tienda|mercado/i.test(st);
+  }
+
   function validateCandidate(candidate, stop) {
     if (!candidate?.geometry?.location) return { valid: false, reason: 'no_geometry' };
     const pLat = candidate.geometry.location.lat, pLng = candidate.geometry.location.lng;
@@ -7109,6 +7136,9 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       const distAnchor = haversineKm(anchorLat, anchorLng, pLat, pLng);
       if (distAnchor > MAX_ANCHOR_KM) return { valid: false, reason: 'fuera_del_radio_ancla', distKm: distAnchor };
       if (nameOk) return { valid: true, distKm: distAnchor };
+      // Nombre distinto pero en la ciudad: vale SOLO si Google no ha dado un negocio (bar, restaurante, tienda,
+      // alojamiento) para algo que no lo es. Ronda, 30 sept 2026: "Barrio de San Francisco" → "Bodega San Francisco".
+      if (addrOk && !opts.requireNameMatch && _isBusinessSwap(candidate, stop)) return { valid: false, reason: 'negocio_con_otro_nombre', distKm: distAnchor };
       // opts.requireNameMatch (chat): un enlace va al sitio que se nombró, no a otro de la zona con distinto nombre.
       if (addrOk && !opts.requireNameMatch) return { valid: true, distKm: distAnchor };
       return { valid: false, reason: 'name_mismatch', distKm: distAnchor };
@@ -7117,7 +7147,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
     if (nameOk && (addrOk || distKm < 3)) return { valid: true, distKm };
     if (nameOk && distKm < 10) return { valid: true, distKm };
-    if (distKm < 1 && addrOk) return { valid: true, distKm };
+    if (distKm < 1 && addrOk && !_isBusinessSwap(candidate, stop)) return { valid: true, distKm };
     if (!nameOk) return { valid: false, reason: 'name_mismatch', distKm };
     return { valid: false, reason: 'too_far', distKm };
   }
@@ -8782,6 +8812,8 @@ function extractSalmaActions(text) {
   const cleanText = text.replace(/SALMA_ACTION:\s*(\{[^\n]{1,500}\})/g, (match, jsonStr) => {
     try {
       const action = JSON.parse(jsonStr);
+      // Sin corchetes de sitios marcados en lo que se guarda (notas, pines del mapa…): "Visitar Alhambra"
+      if (action && typeof action === 'object') for (const k of Object.keys(action)) if (typeof action[k] === 'string') action[k] = quitarMarcas(action[k]);
       if (action && action.type) actions.push(action);
     } catch (_) {}
     return '';
@@ -14472,7 +14504,9 @@ INSTRUCCIONES:
               // Ciudad o pueblo (ancla de punto): Google busca cada sitio alrededor del destino, sin coordenadas.
               // Ruta por carretera o región: se piden SOLO las coordenadas (coordsForMarkedStops).
               const _ciudad = !!(anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number');
-              const _dest = (guidedRoute && guidedRoute.destino) || (anchorCountry && anchorCountry.locality) || '';
+              // Ciudad: el nombre que da Google ("Ronda"), no lo que tecleó el usuario ("ronda con mi pareja").
+              const _destRaw = (_ciudad && anchorCountry.locality) || (guidedRoute && guidedRoute.destino) || (anchorCountry && anchorCountry.locality) || '';
+              const _dest = String(_destRaw).trim().replace(/^./, ch => ch.toUpperCase());
               _fastPathRoute = routeFromMarkedText(sourceText, {
                 destino: _dest,
                 dias: (guidedRoute && parseInt(guidedRoute.duracion_dias, 10)) || extractDaysFromMessage(message || '') || 0,
@@ -14485,7 +14519,11 @@ INSTRUCCIONES:
                 const _c = await coordsForMarkedStops(_fastPathRoute.stops, env, { countryName: _fastPathRoute.country, region: _dest, usageAcc: _reqUsage });
                 if (_c) {
                   _fastPathRoute.stops.forEach((s, i) => { s.lat = _c[i][0]; s.lng = _c[i][1]; });
-                  if (!_fastPathRoute.country && _c.pais) { _fastPathRoute.country = _c.pais; _fastPathRoute.region = _c.pais; }
+                  if (!_fastPathRoute.country && _c.pais) _fastPathRoute.country = _c.pais;
+                  // Zona corta ("Pirineos") para la portada, Mis Viajes y la búsqueda en Google; título bien escrito
+                  // (el del cuestionario llevaba lo que tecleó el usuario: "…saliendo de ondarrubia…").
+                  _fastPathRoute.region = _c.zona || _fastPathRoute.country || _fastPathRoute.region;
+                  if (_c.titulo) { _fastPathRoute.title = _c.titulo; _fastPathRoute.name = _c.titulo; }
                 } else _fastPathRoute = null;
               }
               if (_fastPathRoute) console.log(`[LECTOR] ✓ ${_fastPathRoute.stops.length} paradas, ${_fastPathRoute.duration_days} días, ${Date.now() - _tConv} ms — sin reescritura${_ciudad ? '' : ' (con coordenadas)'}`);
@@ -14786,7 +14824,7 @@ INSTRUCCIONES:
         {
           const histMatch = allText.match(/\n?HISTORIA_LUGAR:\s*(.+)/i);
           if (histMatch) {
-            historiaLugar = histMatch[1].trim();
+            historiaLugar = quitarMarcas(histMatch[1]).trim();
             allText = allText.replace(/\n?HISTORIA_LUGAR:\s*.+/i, '').trim();
           }
         }
