@@ -6467,8 +6467,22 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   const seen = new Set();
   let day = 0, dayTitle = '', intro = '';
   for (const raw of String(text).split(/\r?\n/)) {
-    const linea = raw.trim();
+    let linea = raw.trim();
     if (!linea) continue;
+    // Día como título al principio de un párrafo (Transpirenaica, 30 sept): "**Día 1 — Hondarribia → Jaca (~252 km).**
+    // Antes de alejarte de la costa, para en [[…]]…" → abre el día y el resto del párrafo se lee como contenido.
+    const diaPar = linea.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9]*\*\*\s*D[IÍií]A\s+(\d{1,2})\b([^*]*)\*\*\s*(.+)$/i);
+    if (diaPar) {
+      const n = parseInt(diaPar[1], 10);
+      if (n !== day) { day = n; dayTitle = ''; }
+      const t = diaPar[2].replace(/^[\s—–:·|.-]+/, '').replace(/[\s:.*]+$/, '').trim();
+      if (t) dayTitle = t;
+      linea = diaPar[3].replace(/^[\s—–:·|.-]+/, '').trim();
+      if (!tieneMarcasSitio(linea)) {
+        if (!dayTitle && linea.length <= 100) dayTitle = linea.replace(/\*\*/g, '').replace(/[\s:.]+$/, ''); // "**Día 1** — Tramo 1"
+        continue;
+      }
+    }
     // Cabecera de día en cualquiera de las formas en que la escribe Salma: "**Día 1 — Título**", "**Día 1** — Título",
     // "### Día 1: Título", "🏍️ **DÍA 1 · Título (180 km)**", "Día 1 — Título". Línea corta y sin sitios marcados.
     const dia = !tieneMarcasSitio(linea) && linea.length <= 140
