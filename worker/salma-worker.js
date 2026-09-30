@@ -3170,7 +3170,8 @@ async function resolveChatPlaces(names, ctx, env, days = 1) {
     if (ok) { found.set(n, ok); note(n, 'ok', `catálogo de Salma (${e.ciudad}) → ${ok.name} ${ok.place_id}`, { ciudad: e.ciudad, google: ok.name, place_id: ok.place_id, km: okKm }); }
     else rest.push(n);
   }
-  if (!rest.length || !env.GOOGLE_PLACES_KEY) return found;
+  // catalogOnly: enlaces solo de lo que Salma ya buscó (respuesta de buscar_lugar sin pedir enlaces), sin búsquedas nuevas.
+  if (!rest.length || !env.GOOGLE_PLACES_KEY || ctx.catalogOnly) return found;
   // 2. El localizador dice la ciudad → ancla → verifyAllStops. Si el intérprete ya la dio (ctx.cityHints), no se
   //    vuelve a preguntar.
   const hints = ctx.cityHints || {};
@@ -14497,6 +14498,8 @@ INSTRUCCIONES:
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
         let _toolUrls = []; // URLs de buscar_web para inyectar si Claude no las pone (solo si el usuario pide enlaces)
+        // ¿Pide la web / un enlace? Solo entonces Salma recibe la web de cada sitio de buscar_lugar y se muestra como enlace.
+        const _quiereWeb = /\b(web|webs|p[aá]gina|enlace|enlaces|link|links|url|sitio web|website)\b/i.test(message || '');
         let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web). Desde el 28 sept 2026 NO se muestran (Paco)
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
@@ -14836,6 +14839,8 @@ INSTRUCCIONES:
               if (block.name === 'buscar_lugar' && toolResult.lugares) {
                 for (const l of toolResult.lugares) {
                   if (l.web) _lugarWebUrls.push({ titulo: l.nombre || l.name, url: l.web });
+                  // Sin pedir la web, Salma no la recibe: si no, la escribía como texto muerto ("Web: gipuzkoa.eus/…", 30 sept 2026)
+                  if (!_quiereWeb) delete l.web;
                 }
                 // Capturar coords del primer resultado para deep links de transporte
                 const _firstLugar = toolResult.lugares[0];
@@ -15218,7 +15223,8 @@ REGLAS:
         const _userWantsLinks =
           /\b(enlace|enlaces|link|links|url|p[aá]gina web|web oficial|fuente|fuentes|referencia|de d[oó]nde (?:lo )?(?:sacas|sale)|d[oó]nde (?:lo )?(?:pone|dice|has visto))\b/i.test(message || '')
           || isHotelRequest(message) || isFlightRequest(message)
-          || /\balquil|coche.*alquil|rent.*car\b/i.test(message || '');
+          || /\balquil|coche.*alquil|rent.*car\b/i.test(message || '')
+          || _quiereWeb;
 
         // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
         // PIEZA A — en el Tiempo 1 (recomendaciones) NO se inyectan: ni "Cómo llegar" por
@@ -15238,7 +15244,10 @@ REGLAS:
         //  - quiere ir a una ciudad/país (un viaje, "cómo llego a Granada desde Madrid") → sin enlaces
         // Sin intérprete (el mensaje no hablaba de ir a ningún sitio, o la IA no contestó) → sin enlaces.
         const _pi = _placeIntent || {};
-        const _chatWantsMapLinks = !!((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi);
+        // Salma buscó sitios en Google (buscar_lugar): "Cómo llegar" a esos sitios siempre, con el place_id de la búsqueda
+        // (catalogOnly: nada de búsquedas nuevas). Paco, 30 sept 2026: pedía un albergue y no había cómo llegar.
+        const _soloCatalogo = !((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi) && _chatPlaces.size > 0;
+        const _chatWantsMapLinks = !!((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi) || _soloCatalogo;
         const _linkTarget = (_pi.quiere_ir && _pi.sitio && !_pi.es_destino && !_pi.cerca_de_mi) ? _pi.sitio : null;
         // Aviso "pídemelo": solo si quedan sitios sin enlace y solo la primera vez en la conversación. (Ya no depende
         // de las webs de buscar_lugar: desde el 28 sept no se muestran.)
@@ -15261,7 +15270,7 @@ REGLAS:
               || (currentRoute && (currentRoute.region || currentRoute.country)) || '',
             catalog: _chatPlaces, replyText: reply, incidents: _urlIncidents, skip: _directTried,
             cityHints: (_linkTarget && _pi.ciudad) ? { [_linkTarget]: _pi.ciudad } : null,
-            logLink: _logLink, origen: 'negrita',
+            logLink: _logLink, origen: 'negrita', catalogOnly: _soloCatalogo,
           };
           // "Ruta completa en Google Maps" NUNCA en el chat (Paco, 28 sept 2026): une opciones entre las que se elige
           // una (restaurantes, farmacias…). Las rutas completas son de las guías, que no pasan por aquí.
@@ -15595,9 +15604,11 @@ REGLAS:
         // Catch-all: Claude a veces escribe una web como texto plano en su propia línea ("campinglagomar.es").
         // Si el usuario pidió enlaces/reservas (_userWantsLinks) se convierte en enlace, como antes; si no, se quita.
         if (!route) {
+          // También con etiqueta y ruta: "Web: gipuzkoa.eus/es/web/…" (30 sept 2026), y con la etiqueta en su propia línea.
+          reply = reply.replace(/^([ \t]*(?:\*\*)?(?:web|p[aá]gina web|sitio web)(?:\*\*)?[ \t]*:(?:\*\*)?)[ \t]*\n(?=[ \t]*[a-z0-9])/gim, '$1 ');
           reply = reply.replace(
-            /^[ \t]*([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,24})[ \t]*$/gim,
-            (_m, domain) => _userWantsLinks ? `🔗 https://${domain}` : ''
+            /^[ \t]*(?:[-*•][ \t]*)?(?:\*\*)?(?:🔗[ \t]*)?(?:web(?:[ \t]+oficial)?|p[aá]gina(?:[ \t]+web)?|sitio[ \t]+web)?(?:\*\*)?[ \t]*:?[ \t]*(?:\*\*)?[ \t]*([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,24}(?:\/[^\s]*)?)[ \t]*$/gim,
+            (_m, domain) => (_userWantsLinks || _quiereWeb) ? `🔗 https://${domain}` : ''
           ).replace(/\n{3,}/g, '\n\n').trim();
         }
 
