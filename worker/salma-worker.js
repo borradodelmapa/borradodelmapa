@@ -5823,6 +5823,7 @@ ${guidedIsReco
 · Si pide UNA parada, añade UNA (la mejor) y di cuál es. NUNCA repitas paradas que no cambian: el sistema las conserva tal cual.
 · Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (las paradas que no cambian, literales).${(editingActiveRoute && !isHelpRequest(message) && !isNearbySearch(message))
   ? `
+· Si el usuario solo PREGUNTA algo (no pide cambiar la ruta), contesta primero y en corto justo lo que pregunta: 2-4 frases, sin plan por días ni listas largas, y como mucho UNA foto (la del sitio que respondes).
 · Si el usuario solo PREGUNTA o pide ideas (no pide cambiar la ruta) y tu respuesta propone algo CONCRETO que tendría sentido añadir (una parada, un sitio), o su petición es tan vaga que prefieres que elija entre 2-3 opciones, NO emitas JSON: termina la respuesta con SALMA_OFFER_ADD_TO_ROUTE en su propia línea. Si es solo información, no lo escribas.`
   : ''}
 Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero con SALMA_ROUTE_JSON.]`}`;
@@ -6434,7 +6435,9 @@ REGLAS:
     const fallbackData = await fallbackRes.json();
     if (opts.usageAcc && fallbackData.usage) { opts.usageAcc.tin += fallbackData.usage.input_tokens || 0; opts.usageAcc.tout += fallbackData.usage.output_tokens || 0; }
     const parsed = parseModelRouteJson(fallbackData.content?.[0]?.text || '');
-    if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
+    // Mínimo de paradas: 2 para una ruta nueva; 1 para "Añadir a la guía" (opts.minStops), donde lo normal es
+    // añadir UN sitio (30 sept 2026: "añade la estación de tren" fallaba siempre con "JSON sin paradas suficientes (1)").
+    if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= (opts.minStops || 2)) {
       const route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
       route._fallback = true;
       console.log(`[FAST-PATH] ✓ intento ${attempt}: ${route.stops.length} paradas`);
@@ -8387,7 +8390,7 @@ function getToolProgressMsg(toolName, input) {
   }
 }
 
-async function executeToolCall(toolName, toolInput, env, userCoords) {
+async function executeToolCall(toolName, toolInput, env, userCoords, toolCtx = {}) {
   switch (toolName) {
     case 'buscar_vuelos':
       return await buscarVuelosDuffel(toolInput, env.DUFFEL_ACCESS_TOKEN);
@@ -8399,7 +8402,7 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
     case 'buscar_lugar':
       return await buscarLugar(toolInput, env.GOOGLE_PLACES_KEY, userCoords, env);
     case 'buscar_foto':
-      return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY, env);
+      return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY, env, { zone: toolCtx.photoZone || null });
     case 'buscar_web':
       return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY);
     case 'generar_video':
@@ -8411,9 +8414,45 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
   }
 }
 
+// ═══ FOTO DE UN LUGAR: ¿el resultado de Google es de verdad el sitio pedido? (30 sept 2026) ═══
+// Antes la foto del chat era "lo primero que devuelva Google con ese texto", sin zona ni comprobación, y se guardaba
+// para siempre: "estación de tren abandonada…" → foto de un hotel. Ahora vale solo si (1) el nombre coincide con las
+// mismas reglas que las paradas de las guías (strictNameMatch), (2) no es un alojamiento cuando no se ha pedido uno y
+// (3) cae dentro de la zona de la conversación (la guía abierta), si se conoce. Si no pasa → sin foto.
+const _PHOTO_LODGING_ASKED = /hotel|hostal|hostel|parador|albergue|alojamiento|apartament|casa rural|camping|posada|resort|pensi[oó]n|refugio|b&b|motel|glamping/i;
+function photoPlaceOk(asked, cand, zone) {
+  if (!cand || !cand.name) return { ok: false, why: 'sin_resultado' };
+  // Salma pide la foto con el nombre + ciudad + país ("Alhambra Granada España") y Google contesta solo con el nombre
+  // ("La Alhambra"): vale también si TODAS las palabras con peso del nombre de Google están en lo pedido.
+  // "Hotel La Estación" para "estación abandonada de X" no pasa: "hotel" no estaba en lo pedido.
+  const askedN = normalizeForMatch(asked);
+  const gWords = normalizeForMatch(cand.name).split(/\s+/).filter(w => w.length > 3);
+  const gInAsked = gWords.length > 0 && gWords.every(w => new RegExp('\\b' + w + '\\b').test(askedN));
+  if (!gInAsked && !strictNameMatch(asked, cand.name)) return { ok: false, why: 'nombre_distinto' };
+  const types = Array.isArray(cand.types) ? cand.types : [];
+  if (types.includes('lodging') && !_PHOTO_LODGING_ASKED.test(asked)) return { ok: false, why: 'alojamiento_no_pedido' };
+  const loc = cand.geometry && cand.geometry.location;
+  if (zone && loc && typeof loc.lat === 'number' && haversineKm(zone.lat, zone.lng, loc.lat, loc.lng) > zone.km) return { ok: false, why: 'fuera_de_zona' };
+  return { ok: true };
+}
+
+// Zona de la conversación para las fotos: la guía abierta (centro de sus paradas + su extensión + margen).
+function photoZoneFromRoute(route) {
+  const pts = (route && Array.isArray(route.stops) ? route.stops : [])
+    .filter(s => typeof s.lat === 'number' && typeof s.lng === 'number' && isValidCoord(s.lat, s.lng));
+  if (!pts.length) return null;
+  const lat = pts.reduce((a, s) => a + s.lat, 0) / pts.length;
+  const lng = pts.reduce((a, s) => a + s.lng, 0) / pts.length;
+  const spread = Math.max(0, ...pts.map(s => haversineKm(lat, lng, s.lat, s.lng)));
+  return { lat, lng, km: Math.min(400, spread + 40) };
+}
+
 // ═══ BUSCAR FOTO — Google Places Photos ═══
-async function buscarFotoLugar(input, placesKey, env) {
+// ctx.zone (opcional): { lat, lng, km } — zona de la conversación (photoZoneFromRoute).
+async function buscarFotoLugar(input, placesKey, env, ctx = {}) {
   if (!placesKey || !input.lugar) return { error: 'Falta lugar o API key' };
+  const zone = ctx.zone || null;
+  const _noFoto = (why) => { console.log(`[FOTO] ✗ "${input.lugar}" sin foto (${why})`); return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar }; };
 
   try {
     // CATÁLOGO "nombre → lugar + fotos" (23 sept 2026): la primera vez se pregunta a Google y se guarda el lugar
@@ -8421,34 +8460,42 @@ async function buscarFotoLugar(input, placesKey, env) {
     // identificadores: Google da un photo_reference distinto en cada respuesta, y como la imagen se guarda en R2
     // por hash del identificador, con identificadores nuevos cada vez la foto se repagaba en cada respuesta.
     // Con el identificador fijo, la imagen ya guardada en R2 se reutiliza siempre (0 llamadas a Google).
-    const _phKey = 'ph:' + _nmNorm(input.lugar);
+    // 30 sept 2026: prefijo nuevo 'ph2:' — las entradas viejas 'ph:' se guardaron SIN comprobar nada (de ahí el hotel
+    // y el edificio de ventanas) y ya no se leen. Solo se guarda lo que pasa photoPlaceOk, con sus coordenadas.
+    const _phKey = 'ph2:' + _nmNorm(input.lugar);
+    const _missKey = 'ph2miss:' + _nmNorm(input.lugar) + (zone ? ':' + zone.lat.toFixed(1) + ':' + zone.lng.toFixed(1) : '');
     const _phHit = await nameCacheGet(env, _phKey);
     let place = null;
-    if (_phHit) {
-      if (_phHit.miss) return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
-      if (Array.isArray(_phHit.refs) && _phHit.refs.length) {
-        place = { name: _phHit.name, formatted_address: _phHit.address, photos: _phHit.refs.map(r => ({ photo_reference: r })) };
-      }
+    if (_phHit && Array.isArray(_phHit.refs) && _phHit.refs.length) {
+      // Guarda de homónimos: la entrada guardada tiene que caer en la zona de esta conversación.
+      const far = zone && typeof _phHit.lat === 'number' && haversineKm(zone.lat, zone.lng, _phHit.lat, _phHit.lng) > zone.km;
+      if (!far) place = { name: _phHit.name, formatted_address: _phHit.address, photos: _phHit.refs.map(r => ({ photo_reference: r })) };
     }
+    if (!place && await nameCacheGet(env, _missKey)) return _noFoto('ya buscado, no había');
 
     if (!place) {
-      // 1. Buscar el lugar en Google Places (place_id es dato básico: no cambia el coste de la búsqueda)
+      // 1. Buscar el lugar en Google Places, sesgado a la zona de la conversación si se conoce.
+      //    geometry y types son datos básicos: no cambian el coste de la búsqueda.
+      const bias = zone ? `&locationbias=circle:${Math.round(Math.min(zone.km, 50) * 1000)}@${zone.lat},${zone.lng}` : '';
       const searchRes = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(input.lugar)}&inputtype=textquery&fields=place_id,name,photos,formatted_address&key=${placesKey}`
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(input.lugar)}&inputtype=textquery${bias}&fields=place_id,name,photos,formatted_address,geometry,types&language=es&key=${placesKey}`
       );
       const searchData = await searchRes.json();
+      const googleAnswered = searchData?.status === 'OK' || searchData?.status === 'ZERO_RESULTS';
 
       const cand = searchData?.candidates?.[0];
-      if (!cand || !cand.photos || !cand.photos.length) {
-        // "No encontrado" solo se guarda si Google llegó a contestar (no por un error de cuota o de red)
-        if (searchData?.status === 'OK' || searchData?.status === 'ZERO_RESULTS') await nameCachePut(env, _phKey, { miss: 1 }, 2592000);
-        return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
+      const check = photoPlaceOk(input.lugar, cand, zone);
+      if (!cand || !cand.photos || !cand.photos.length || !check.ok) {
+        // "No hay foto buena" 30 días, solo si Google llegó a contestar (no por un error de cuota o de red)
+        if (googleAnswered) await nameCachePut(env, _missKey, { miss: 1 }, 2592000);
+        return _noFoto(check.ok ? 'sin fotos en Google' : `${check.why} → "${cand?.name || ''}"`);
       }
       place = cand;
       await nameCachePut(env, _phKey, {
         place_id: cand.place_id || '',
         name: cand.name || '',
         address: cand.formatted_address || '',
+        lat: cand.geometry?.location?.lat, lng: cand.geometry?.location?.lng,
         refs: cand.photos.slice(0, 3).map(p => p.photo_reference).filter(Boolean),
       });
     }
@@ -10291,7 +10338,7 @@ export default {
       try {
         const b = await request.json().catch(() => ({}));
         const id = String(b.id || '');
-        if (!/^[a-z0-9-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+        if (!/^[a-z0-9_-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
         const texto = String(b.texto || '').trim();
         if (texto.length < 10) return new Response(JSON.stringify({ error: 'falta el texto del mensaje' }), { status: 400, headers: corsH });
         return new Response(JSON.stringify(await feedbackThanks(env, id, texto)), { headers: corsH });
@@ -10321,7 +10368,7 @@ export default {
         if (request.method === 'POST' && url.pathname === '/admin/feedback-group') {
           const b = await request.json().catch(() => ({}));
           const id = String(b.id || '');
-          if (!/^[a-z0-9-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+          if (!/^[a-z0-9_-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
           const upd = {};
           if (b.estado !== undefined) {
             if (!FB_ESTADOS.includes(b.estado)) return new Response(JSON.stringify({ error: 'estado no válido' }), { status: 400, headers: corsH });
@@ -10745,10 +10792,16 @@ export default {
 
           if (!photo && !_skipFind) {
             const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
-            const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
+            const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry,name,types&key=${placesKey}`);
             const findData = await findRes.json();
             const candidate = findData.candidates?.[0];
             let freshRef = candidate?.photos?.[0]?.photo_reference || null;
+            // 30 sept 2026: mismas comprobaciones que las fotos del chat — nombre que coincide y no un hotel si no se
+            // pidió (name y types son datos básicos: no cambian el coste). La distancia se mira justo debajo.
+            if (freshRef && !photoPlaceOk(name, candidate, null).ok) {
+              console.log(`[FOTO] ✗ /photo "${name}" → "${candidate?.name || ''}" (${photoPlaceOk(name, candidate, null).why})`);
+              freshRef = null;
+            }
             if (_missKey && !freshRef && (findData?.status === 'OK' || findData?.status === 'ZERO_RESULTS')) {
               try { await env.SALMA_KB.put(_missKey, '1', { expirationTtl: 2592000 }); } catch (_) {}
             }
@@ -13315,14 +13368,17 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // edición: va por el Tiempo 1 igual que si no hubiera nada cargado.
     const _looksLikeEdit = /\b(quita|quíta|elimina|borra|a[ñn]ade|agrega|mete|cambia|sustituye|reempla|mueve|pon(?:le|me)?|swap|m[aá]s d[ií]as|menos d[ií]as|en vez de|en lugar de|otra parada|esa parada|la parada)\b/i.test(message || '');
     const _editingRoute = _looksLikeEdit && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
-    const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 &&
-      (isRouteRequest(message, history) || isDaysDestination(message));
-    const guidedIsReco = _guidedStageReco || _tiempo1Chat;
     // Popup de "consulta" sobre una guía ya abierta (mapa-itinerario.js) — el frontend
     // ya SABE que hay una ruta activa en edición, no hace falta adivinarlo por verbos
-    // como _looksLikeEdit. Solo cambia el CIERRE del Tiempo 1 ("Añadir a la guía" en
-    // vez de "Crear ruta con mapa") — sigue preguntando antes de tocar nada.
+    // como _looksLikeEdit.
     const editingActiveRoute = body.editing_active_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
+    // 30 sept 2026: una PREGUNTA desde el popup de la guía ya no entra en el Tiempo 1 (plan día por día con 3-5
+    // sitios por día) solo por llevar la palabra "ruta": "¿hay una estación abandonada cerca de algún punto de la
+    // ruta?" salía como una chapa por días. Ahí se contesta en modo conversación, breve, y si propone algo añadible
+    // Salma lo marca con SALMA_OFFER_ADD_TO_ROUTE → mismo botón "Añadir a la guía" (ver buildMessages).
+    const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 && !editingActiveRoute &&
+      (isRouteRequest(message, history) || isDaysDestination(message));
+    const guidedIsReco = _guidedStageReco || _tiempo1Chat;
     // Botón "➕ Añadir a la guía" pulsado: fusionar los stops nuevos en currentRoute
     // en vez de generar una ruta nueva desde cero (ver más abajo, tras convertProseToRouteJson).
     const mergeIntoRoute = body.merge_into_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
@@ -14072,6 +14128,9 @@ INSTRUCCIONES:
         let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web). Desde el 28 sept 2026 NO se muestran (Paco)
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
+        // Zona de la conversación para buscar_foto (30 sept 2026): la guía abierta; si no hay, el destino ya resuelto.
+        const _photoZone = photoZoneFromRoute(currentRoute)
+          || ((anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number') ? { lat: anchorCountry.lat, lng: anchorCountry.lng, km: 120 } : null);
         const _chatPlaces = new Map(); // catálogo de la respuesta: sitios de buscar_lugar (place_id, coords, ciudad) → enlaces del chat
         // Repara ![Name](...) roto o corrupto de Claude usando la URL real que ya devolvió
         // el tool_result (nunca la que Claude haya podido teclear mal). Antes solo se
@@ -14148,8 +14207,9 @@ INSTRUCCIONES:
             writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)).catch(() => {});
           }, 3000);
           try {
-            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry, usageAcc: _reqUsage });
-            if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
+            const _minStops = mergeIntoRoute ? 1 : 2; // añadir a la guía: basta con un sitio
+            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry, usageAcc: _reqUsage, minStops: _minStops });
+            if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < _minStops)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
             // Solo consume guía/cambio si la conversión ha salido bien (un fallo no gasta el cupo)
             if (_fastPathRoute && _usageKind !== 'chat') _usageConsume = _usageKind;
           } catch (e) {
@@ -14309,7 +14369,7 @@ INSTRUCCIONES:
           // Ejecutar todas en paralelo con Promise.all
           const toolResults = await Promise.all(
             toolUseBlocks.map(async block => {
-              const toolResult = await executeToolCall(block.name, block.input, env, userLocation);
+              const toolResult = await executeToolCall(block.name, block.input, env, userLocation, { photoZone: _photoZone });
               // Capturar enlace de vuelos para inyectar si GPT no lo incluye
               if (block.name === 'buscar_vuelos' && toolResult.enlace_reserva) {
                 lastFlightBookingUrl = toolResult.enlace_reserva;

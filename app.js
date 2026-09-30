@@ -3960,7 +3960,7 @@ function sendMessage() {
   }
 
   function startListening(micBtn) {
-    const row = micBtn.closest('.input-row');
+    const row = micBtn.closest('.input-row, .itin-query-inputrow');
     const inputEl = row ? (row.querySelector('textarea') || row.querySelector('input[type="text"]')) : null;
     if (!inputEl) return;
 

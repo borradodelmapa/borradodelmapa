@@ -9,6 +9,10 @@
 //   node scripts/banco-salma/pasar.cjs --rejuzgar informe.json  → solo el juez otra vez sobre respuestas guardadas (céntimos)
 //   node scripts/banco-salma/pasar.cjs --comparar a.json b.json → qué pasaba antes y ahora falla (y al revés), sin gastar
 //   --veces 3   → cada pregunta 3 veces (Salma no contesta igual dos veces: cuenta cuántas fallan de N)
+//   --grabar                → en vivo, y guarda la CINTA (lo que contestaron Claude, Google, OpenAI y el KV) en grabaciones/
+//   --reproducir cinta.json → el código de esta carpeta con las respuestas de la cinta: 0 € (juez solo si cambia la
+//                             respuesta, céntimos). Para arreglos de CÓDIGO. Si cambió lo que se manda a la IA (prompt),
+//                             esa pregunta sale "⚠ NECESITA EN VIVO" y solo esa se paga.
 //   --temp 0.3  → en la copia, las llamadas a Sonnet con ese "azar" (en producción no llevan: van a 1)
 //
 // Resultados en scripts/banco-salma/resultados/ (no se suben a git).
@@ -90,7 +94,12 @@ async function main() {
   const banco = JSON.parse(fs.readFileSync(path.join(__dirname, 'preguntas.json'), 'utf8'));
   const ids = arg('ids') ? arg('ids').split(',') : banco.preguntas.map(p => p.id);
   const nombre = (arg('nombre') || (ref ? ref : 'actual')).replace(/[^\w.-]/g, '_');
-  console.log(rejuzgar ? `Banco Salma: solo el juez sobre ${rejuzgar.out.length} respuestas guardadas (céntimos)` : `Banco Salma: ${ids.length} preguntas con ${ref ? 'la versión ' + ref : 'el salma-worker.js de esta carpeta'}. Coste aprox: ${(ids.length * 0.05).toFixed(2)} €`);
+  const grabar = process.argv.includes('--grabar');
+  const cinta = arg('reproducir') ? JSON.parse(fs.readFileSync(arg('reproducir'), 'utf8')) : null;
+  const modo = cinta ? 'reproducir' : grabar ? 'grabar' : 'vivo';
+  const grabacion = { nombre, ref: ref || null, fecha: new Date().toISOString(), preguntas: {} };
+  if (cinta) console.log(`Banco Salma: REPRODUCIR ${ids.length} preguntas con la cinta "${cinta.nombre}" (${cinta.fecha.slice(0, 10)}). Coste: 0 €, salvo el juez si cambia la respuesta (céntimos)`);
+  else console.log(rejuzgar ?`Banco Salma: solo el juez sobre ${rejuzgar.out.length} respuestas guardadas (céntimos)` : `Banco Salma: ${ids.length} preguntas con ${ref ? 'la versión ' + ref : 'el salma-worker.js de esta carpeta'} EN VIVO (se paga; medido 30 sept: 0,20-0,33 € por pregunta que busca sitios). El gasto real sale al final`);
 
   const temp = arg('temp') != null ? parseFloat(arg('temp')) : null;
   const veces = Math.max(1, parseInt(arg('veces') || '1', 10));
@@ -117,15 +126,31 @@ async function main() {
     for (const id of rejuzgar ? [] : ids.flatMap(i => Array(veces).fill(i))) {
       process.stdout.write(`  ${id} … `);
       // La copia remota a veces se cae ("fetch failed"): se espera a que vuelva y se repite UNA vez
-      const pedir = () => fetch(`http://127.0.0.1:${PUERTO}/?ids=${encodeURIComponent(id)}`).then(r => r.json());
+      const cuerpo = { ids: [id], modo, cintas: cinta && cinta.preguntas[id] ? { [id]: cinta.preguntas[id] } : {} };
+      const pedir = () => fetch(`http://127.0.0.1:${PUERTO}/`, { method: 'POST', body: JSON.stringify(cuerpo) }).then(r => r.json());
       let r;
       try { r = await pedir(); } catch (e) {
         process.stdout.write(`(se cayó la copia: ${e.message}; reintento) … `);
         await esperarServidor(120000); r = await pedir();
       }
       const x = r.out[0] || { id, pasa: null, error: 'no existe en preguntas.json' };
+      if (x.cinta) { grabacion.preguntas[id] = x.cinta; delete x.cinta; }
       out.push(x); cortadas.push(...(r.escrituras_cortadas || []));
-      console.log(x.pasa === true ? '✅' : x.pasa === false ? '❌' : '⚪ ' + (x.error || ''), `(${Math.round((x.ms || 0) / 1000)} s${x.lento ? " ⏱ más de 18 s" : ""})`);
+      const g = x.gasto || {};
+      const eur = g.total != null ? ` · ${g.total.toFixed(3)} € (Claude ${(g.claude || 0).toFixed(3)} · Google ${(g.google || 0).toFixed(3)} · juez ${(g.juez || 0).toFixed(3)})` : '';
+      let marca = '';
+      if (x.reproduccion) {
+        const antes = cinta.preguntas[id] && cinta.preguntas[id].veredicto;
+        const R = x.reproduccion;
+        marca = (R.misma_respuesta ? ' · misma respuesta que la cinta' : ' · respuesta distinta')
+          + (x.necesita_vivo ? ' · ⚠ NECESITA EN VIVO (cambió lo que se manda a la IA)' : '')
+          + (R.faltan ? ` · ${R.faltan} llamadas nuevas sin grabar` : '')
+          + (antes && antes.pasa === true && x.pasa === false ? ' 🔴 EMPEORA' : antes && antes.pasa === false && x.pasa === true ? ' 🟢 MEJORA' : '');
+      }
+      console.log(x.pasa === true ? '✅' : x.pasa === false ? '❌' : '⚪ ' + (x.error || ''), `(${Math.round((x.ms || 0) / 1000)} s${x.lento ? " ⏱ más de 18 s" : ""})${eur}${marca}`);
+      for (const c of (x.llamadas || []).filter(c => c.dif)) {
+        console.log(`      ⚠ ${c.tipo} distinta:\n        cinta: …${c.dif.antes.replace(/\s+/g, ' ')}…\n        ahora: …${c.dif.ahora.replace(/\s+/g, ' ')}…`);
+      }
       for (const g of (x.reglas || []).filter(g => !g.cumple)) console.log(`      ✗ ${g.regla} — ${g.por_que}`);
     }
   } catch (e) {
@@ -136,7 +161,18 @@ async function main() {
     console.log('\nPor pregunta (bien de ' + veces + '):');
     for (const id of ids) { const r = out.filter(x => x.id === id); console.log(`  ${id}: ${r.filter(x => x.pasa).length}/${r.length}`); }
   }
-  const informe = { nombre, ref: ref || null, temp, veces, fecha: new Date().toISOString(), pasan: out.filter(x => x.pasa).length + '/' + out.length, escrituras_cortadas: cortadas, out };
+  const total = out.reduce((a, x) => a + ((x.gasto && x.gasto.total) || 0), 0);
+  const vivo = out.filter(x => x.necesita_vivo).map(x => x.id);
+  if (grabar && Object.keys(grabacion.preguntas).length) {
+    const dir = path.join(__dirname, 'grabaciones');
+    fs.mkdirSync(dir, { recursive: true });
+    const fg = path.join(dir, `${nombre}-${grabacion.fecha.slice(0, 16).replace(/[:T]/g, '')}.json`);
+    fs.writeFileSync(fg, JSON.stringify(grabacion));
+    console.log(`Cinta guardada: ${path.relative(RAIZ, fg)} (${(fs.statSync(fg).size / 1e6).toFixed(1)} MB)`);
+  }
+  if (cinta) console.log(vivo.length ? '\n⚠ Necesitan pasarse EN VIVO (cambió lo que recibe la IA): --ids ' + vivo.join(',') : '\nNinguna pregunta necesita ir en vivo: el cambio no toca lo que recibe la IA.');
+  console.log(`\nGasto medido: ${total.toFixed(3)} € (${out.length} respuestas, ${out.length ? (total / out.length).toFixed(3) : 0} € de media)`);
+  const informe = { nombre, modo, cinta: cinta ? cinta.nombre : null, gasto_total: total, necesitan_vivo: vivo, ref: ref || null, temp, veces, fecha: new Date().toISOString(), pasan: out.filter(x => x.pasa).length + '/' + out.length, escrituras_cortadas: cortadas, out };
   fs.mkdirSync(RES, { recursive: true });
   const f = path.join(RES, `${nombre}-${informe.fecha.slice(0, 16).replace(/[:T]/g, '')}.json`);
   fs.writeFileSync(f, JSON.stringify(informe, null, 1));
