@@ -5823,6 +5823,7 @@ ${guidedIsReco
 · Si pide UNA parada, añade UNA (la mejor) y di cuál es. NUNCA repitas paradas que no cambian: el sistema las conserva tal cual.
 · Solo si el cambio exige reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (las paradas que no cambian, literales).${(editingActiveRoute && !isHelpRequest(message) && !isNearbySearch(message))
   ? `
+· Si el usuario solo PREGUNTA algo (no pide cambiar la ruta), contesta primero y en corto justo lo que pregunta: 2-4 frases, sin plan por días ni listas largas, y como mucho UNA foto (la del sitio que respondes).
 · Si el usuario solo PREGUNTA o pide ideas (no pide cambiar la ruta) y tu respuesta propone algo CONCRETO que tendría sentido añadir (una parada, un sitio), o su petición es tan vaga que prefieres que elija entre 2-3 opciones, NO emitas JSON: termina la respuesta con SALMA_OFFER_ADD_TO_ROUTE en su propia línea. Si es solo información, no lo escribas.`
   : ''}
 Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero con SALMA_ROUTE_JSON.]`}`;
