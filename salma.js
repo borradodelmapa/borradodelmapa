@@ -3213,11 +3213,9 @@ const salma = {
     this._addRateBar(div, text);
     area.appendChild(div);
     this._scrollToBottom(true);
-    // Enriquecer con fotos si es respuesta PLAN
-    const bodyEl = div.querySelector('.msg-body-salma');
-    if (bodyEl && this._isPlanBubble(bodyEl)) {
-      this._enrichPlanPhotos(bodyEl);
-    }
+    // (30 sept 2026) Aquí la app buscaba sola una foto en Google por cada negrita de las respuestas con 'Día N', solo por
+    // el nombre y sin comprobar nada: salían fotos de otros sitios (un hotel, un edificio cualquiera) y se pagaban. Quitado
+    // por decisión de Paco: las fotos del chat llegan solo por la herramienta buscar_foto de Salma, que sí comprueba.
     // Auto-speak si la voz está activada
     if (this._voiceOn) {
       setTimeout(() => this.salmaSpeak(text), 50);
@@ -4047,87 +4045,8 @@ const salma = {
         // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
         this._addMsgActions(el, rawText);
         this._addRateBar(el, rawText);
-        // Enriquecer con fotos si es respuesta PLAN
-        const bodyEl = txt || el.querySelector('.msg-body-salma');
-        if (bodyEl && this._isPlanBubble(bodyEl)) {
-          this._enrichPlanPhotos(bodyEl);
-        }
+        // (30 sept 2026) Quitadas las fotos automáticas por negrita (ver el comentario igual más arriba).
       }
-    }
-  },
-
-  // ═══ PLAN PHOTOS — Enriquecer respuestas PLAN con fotos inline ═══
-  _isPlanBubble(bodyEl) {
-    return /D[ií]a\s+\d/.test(bodyEl.textContent);
-  },
-
-  _extractPlanStops(bodyEl) {
-    const stops = [];
-    const html = bodyEl.innerHTML;
-    // Buscar <strong>Nombre</strong> que NO sean headers de día
-    const re = /<strong>(?!D[ií]a\s+\d)((?:(?!<\/strong>).)+)<\/strong>/gi;
-    let m;
-    while ((m = re.exec(html)) !== null) {
-      const name = m[1].replace(/<[^>]*>/g, '').trim();
-      // Excluir texto en negrita que NO es un lugar: el CTA de cierre "Crear ruta con mapa"
-      // y variantes. Antes se colaba una foto random delante de esa frase (7 sept 2026).
-      if (name.length < 3 || /salma|gu[ií]a|d[oó]nde comer|crear ruta|ruta con mapa|si te encaja|aqu[ií] abajo/i.test(name)) continue;
-      // Buscar URL Maps cercana para extraer query con ciudad
-      const afterStr = html.slice(m.index, m.index + 500);
-      const mapsMatch = afterStr.match(/maps\/search\/([^"&<]+)/);
-      const searchQuery = mapsMatch
-        ? decodeURIComponent(mapsMatch[1].replace(/\+/g, ' '))
-        : name;
-      // Skip si ya hay <img> justo antes (dedup con buscar_foto)
-      const beforeStr = html.slice(Math.max(0, m.index - 200), m.index);
-      if (/<img\s[^>]*>[\s<br>]*$/i.test(beforeStr)) continue;
-      stops.push({ name, searchQuery });
-    }
-    return stops;
-  },
-
-  async _enrichPlanPhotos(bodyEl) {
-    if (!window.SALMA_API) return;
-    const stops = this._extractPlanStops(bodyEl);
-    if (!stops.length) return;
-    const API = window.SALMA_API;
-
-    // Encontrar elementos <strong> de paradas para inyectar placeholders
-    const strongEls = Array.from(bodyEl.querySelectorAll('strong'));
-    const placeholderMap = new Map();
-    for (const s of stops) {
-      const matchEl = strongEls.find(el => el.textContent.trim() === s.name);
-      if (!matchEl) continue;
-      // Insertar placeholder shimmer antes del <strong>
-      const ph = document.createElement('div');
-      ph.className = 'plan-photo-placeholder';
-      matchEl.parentElement.insertBefore(ph, matchEl);
-      placeholderMap.set(s.name, ph);
-    }
-
-    // Fetch fotos en paralelo
-    const results = await Promise.allSettled(
-      stops.map(s =>
-        fetch(`${API}/photo?name=${encodeURIComponent(s.searchQuery)}&json=1`)
-          .then(r => r.ok ? r.json() : null)
-          .then(data => ({ name: s.name, url: data?.url || null }))
-          .catch(() => ({ name: s.name, url: null }))
-      )
-    );
-
-    // Reemplazar placeholders con imágenes reales
-    for (const r of results) {
-      if (r.status !== 'fulfilled') continue;
-      const { name, url } = r.value;
-      const ph = placeholderMap.get(name);
-      if (!ph) continue;
-      if (!url) { ph.remove(); continue; }
-      const img = document.createElement('img');
-      img.alt = name;
-      img.className = 'plan-stop-photo';
-      img.onload = () => ph.replaceWith(img);
-      img.onerror = () => ph.remove();
-      img.src = url;
     }
   },
 
