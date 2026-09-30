@@ -1,0 +1,117 @@
+name: Mapas del vídeo
+
+# Disparo manual únicamente (botón "Run workflow", también desde el móvil).
+# Descarga el mapa de España+Portugal+Baleares+Canarias (extracto de Protomaps, datos © OpenStreetMap)
+# y, si se marca, el relieve (AWS Terrain Tiles), y los sube a R2 (salma-photos/mapas/) en trozos de 280 MiB,
+# que es como los sirve el Worker (/mapas/es-pt.pmtiles y /terreno/terreno-es-pt/...).
+# Nace el 30 sept 2026: la descarga desde el portátil (con datos del móvil) se cortó al 99 % y dejó el mapa roto.
+# Aquí todo pasa en los servidores de GitHub: no gasta la conexión de Paco.
+# Coste: 0 € de APIs de pago. Usa minutos gratis de GitHub Actions (~30-60 min) y ~6 GB de almacenamiento R2.
+# Usa el mismo secret que "Deploy Worker" (CLOUDFLARE_API_TOKEN); no toca secrets ni el Worker.
+on:
+  workflow_dispatch:
+    inputs:
+      mapa:
+        description: 'Descargar y subir el mapa (3,4 GB)'
+        type: boolean
+        default: true
+      relieve:
+        description: 'Descargar y subir el relieve (2,5 GB)'
+        type: boolean
+        default: true
+      build:
+        description: 'Versión de Protomaps (AAAAMMDD) — vacío = la última'
+        required: false
+        default: ''
+
+jobs:
+  mapas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      PARTE: 293601280   # 280 MiB: wrangler sube como mucho ~300 MB por archivo
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comprobar que la llave puede escribir en R2
+        working-directory: worker
+        run: |
+          echo "prueba $(date -u)" > /tmp/prueba.txt
+          if ! npx wrangler r2 object put "salma-photos/mapas/_prueba-acceso.txt" --file /tmp/prueba.txt --content-type text/plain --remote -c wrangler.toml; then
+            echo "::error::La llave CLOUDFLARE_API_TOKEN no puede escribir en R2. Hay que darle permiso 'Workers R2 Storage: Edit' en Cloudflare."
+            exit 1
+          fi
+
+      - name: Instalar pmtiles
+        if: ${{ inputs.mapa }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download --repo protomaps/go-pmtiles --pattern '*Linux_x86_64.tar.gz' --dir /tmp/pm
+          tar -xzf /tmp/pm/*.tar.gz -C /tmp/pm
+          /tmp/pm/pmtiles version || true
+
+      - name: Extraer el mapa (con reintentos)
+        if: ${{ inputs.mapa }}
+        run: |
+          B="${{ inputs.build }}"
+          if [ -z "$B" ]; then B=$(curl -s https://build-metadata.protomaps.dev/builds.json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>console.log(JSON.parse(s).slice(-1)[0].key.replace('.pmtiles','')))"); fi
+          echo "Versión de Protomaps: $B"
+          for i in 1 2 3; do
+            rm -f /tmp/es-pt.pmtiles
+            if /tmp/pm/pmtiles extract "https://build.protomaps.com/$B.pmtiles" /tmp/es-pt.pmtiles --region=scripts/mapas/es-pt.geojson --download-threads=8; then break; fi
+            echo "Intento $i fallido, espero 60 s"; sleep 60
+          done
+          /tmp/pm/pmtiles show /tmp/es-pt.pmtiles | head -20   # falla si el archivo está roto
+          ls -la /tmp/es-pt.pmtiles
+
+      - name: Subir el mapa a R2 en trozos
+        if: ${{ inputs.mapa }}
+        working-directory: worker
+        run: |
+          F=/tmp/es-pt.pmtiles; SIZE=$(stat -c %s $F); N=$(( (SIZE + PARTE - 1) / PARTE ))
+          echo "Tamaño $SIZE → $N trozos"
+          for p in $(seq 0 $((N-1))); do
+            dd if=$F of=/tmp/parte bs=1M iflag=skip_bytes,count_bytes skip=$((p*PARTE)) count=$PARTE status=none
+            ok=0; for a in 1 2 3 4 5; do
+              if npx wrangler r2 object put "salma-photos/mapas/es-pt.pmtiles.part$p" --file /tmp/parte --content-type application/octet-stream --remote -c wrangler.toml > /dev/null; then ok=1; break; fi
+              sleep 20
+            done
+            [ $ok = 1 ] || { echo "::error::No se pudo subir el trozo $p"; exit 1; }
+            echo "trozo $p subido"
+          done
+          # el manifiesto va el ÚLTIMO: hasta aquí el Worker sigue sin ver el mapa nuevo a medias
+          echo "{\"size\":$SIZE,\"partSize\":$PARTE,\"parts\":$N}" > /tmp/es-pt.pmtiles.parts.json
+          npx wrangler r2 object put "salma-photos/mapas/es-pt.pmtiles.parts.json" --file /tmp/es-pt.pmtiles.parts.json --content-type application/json --remote -c wrangler.toml
+          cat /tmp/es-pt.pmtiles.parts.json
+
+      - name: Descargar el relieve
+        if: ${{ inputs.relieve }}
+        run: |
+          mkdir -p /tmp/relieve && cp scripts/mapas/terreno-es-pt.cjs /tmp/relieve/ && cd /tmp/relieve
+          node terreno-es-pt.cjs | tee log.txt
+          FALLOS=$(tail -1 log.txt | sed -n 's/.*fallos \([0-9]*\).*/\1/p')
+          [ "${FALLOS:-0}" -le 50 ] || { echo "::error::Demasiados trozos de relieve fallidos ($FALLOS)"; exit 1; }
+          ls -la
+
+      - name: Subir el relieve a R2
+        if: ${{ inputs.relieve }}
+        working-directory: worker
+        run: |
+          for f in /tmp/relieve/terreno-es-pt-*.bin; do
+            ok=0; for a in 1 2 3 4 5; do
+              if npx wrangler r2 object put "salma-photos/mapas/$(basename $f)" --file $f --content-type application/octet-stream --remote -c wrangler.toml > /dev/null; then ok=1; break; fi
+              sleep 20
+            done
+            [ $ok = 1 ] || { echo "::error::No se pudo subir $f"; exit 1; }
+            echo "$(basename $f) subido"
+          done
+          # el índice va el ÚLTIMO
+          npx wrangler r2 object put "salma-photos/mapas/terreno-es-pt.json" --file /tmp/relieve/terreno-es-pt.json --content-type application/json --remote -c wrangler.toml
+
+      - name: Comprobar que el Worker sirve el mapa
+        if: ${{ inputs.mapa }}
+        run: |
+          curl -s -r 0-6 https://salma-api.borradodelmapa-api.workers.dev/mapas/es-pt.pmtiles | head -c 7; echo
+          curl -s -r 0-6 https://salma-api.borradodelmapa-api.workers.dev/mapas/es-pt.pmtiles | head -c 7 | grep -q PMTiles && echo "OK: el mapa empieza por PMTiles" || { echo "::error::El Worker no devuelve un PMTiles válido"; exit 1; }
