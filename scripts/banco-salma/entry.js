@@ -166,6 +166,12 @@ const RUTAS = {
     { name: 'Orquidario de Estepona', day: 1, lat: 36.4281, lng: -5.1470, type: 'jardín' },
     { name: 'Puerto de Estepona', day: 1, lat: 36.4182, lng: -5.1571, type: 'puerto' },
   ] },
+  'transpirenaica-moto': { title: 'Transpirenaica en moto: Hondarribia → Cadaqués', country: 'España', region: 'Pirineos', stops: [
+    { name: 'Hondarribia', day: 1, lat: 43.3626, lng: -1.7913, type: 'pueblo' },
+    { name: 'Roncesvalles', day: 2, lat: 43.0092, lng: -1.3197, type: 'pueblo' },
+    { name: 'Jaca', day: 3, lat: 42.5700, lng: -0.5490, type: 'ciudad' },
+    { name: 'Cadaqués', day: 5, lat: 42.2887, lng: 3.2779, type: 'pueblo' },
+  ] },
 };
 
 function cuerpo(p) {

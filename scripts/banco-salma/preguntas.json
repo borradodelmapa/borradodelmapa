@@ -353,6 +353,35 @@
       "no_debe": [
         "hoteles de otra ciudad"
       ]
+    },
+    {
+      "id": "camping-primera-parada",
+      "caso": "30sept-camping-hondarribia",
+      "ruta_abierta": "transpirenaica-moto",
+      "mensaje": "Quiero el camping más barato en la primera parada",
+      "debe": [
+        "dar campings concretos en o junto a Hondarribia (p. ej. Camping Jaizkibel o Camping Faro de Higer), buscados en Google Maps",
+        "enlace de cómo llegar a los campings que nombra"
+      ],
+      "no_debe": [
+        "decir que en Hondarribia no hay camping",
+        "ofrecer hoteles, casas rurales o resultados de Booking en lugar de campings",
+        "poner la web del camping sin haberla pedido"
+      ]
+    },
+    {
+      "id": "albergue-primera-parada",
+      "caso": "30sept-camping-hondarribia",
+      "ruta_abierta": "transpirenaica-moto",
+      "mensaje": "Quiero el albergue más barato en la primera parada",
+      "debe": [
+        "dar un albergue concreto en Hondarribia",
+        "enlace de cómo llegar al albergue"
+      ],
+      "no_debe": [
+        "poner la web del albergue sin haberla pedido (ni como texto 'Web: dominio')",
+        "ofrecer hoteles de Booking en lugar de albergues"
+      ]
     }
   ]
 }
