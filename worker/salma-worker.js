@@ -372,6 +372,7 @@ Si el usuario dice "desde donde estoy", "cerca de mí" o "aquí" pero no hay [UB
 SERVICIOS — HERRAMIENTAS
 
 buscar_hotel → hotel, hostal, apartamento, dónde dormir
+buscar_lugar → camping, área de autocaravanas o albergue: SIEMPRE buscar_lugar con query "camping", "área autocaravanas" o "albergue" (nunca buscar_hotel: Booking casi no los tiene)
 buscar_coche → alquiler de coche, moto, scooter
 buscar_lugar → CUALQUIER lugar físico: restaurante, bar, café, dónde comer/cenar, gimnasio, farmacia, museo, spa, cajero, cambio de divisa, clínica, supermercado, tienda… Para comida pasa tipo_places: "restaurant". Para el resto omite tipo_places.
 buscar_vuelos → vuelo, billete de avión
