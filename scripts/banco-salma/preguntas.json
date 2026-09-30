@@ -204,6 +204,17 @@
       ]
     },
     {
+      "id": "guia-transpirenaica-moto",
+      "boton": "guia",
+      "mensaje": "5 días en Transpirenaica en moto de Hondarribia a Cadaqués",
+      "debe": [
+        "plan de 5 días por carretera de oeste a este con sitios concretos"
+      ],
+      "no_debe": [
+        "preguntar antes de dar el plan"
+      ]
+    },
+    {
       "id": "guia-ronda-3dias",
       "boton": "guia",
       "mensaje": "3 días en Ronda",

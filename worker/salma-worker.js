@@ -6456,7 +6456,7 @@ function parseModelRouteJson(raw) {
 // Nombres que son sitios de comer aunque no vayan en la línea de "Dónde comer"
 const _LECTOR_COMER_RE = /^(?:bar|restaurante|rest\.|mes[oó]n|taberna|asador|tasca|venta|cafeter[ií]a|caf[eé]|churrer[ií]a|marisquer[ií]a|cervecer[ií]a|pizzer[ií]a|bistr[oó]|braser[ií]a|casa de comidas|gastrobar|freidur[ií]a|helader[ií]a|pasteler[ií]a)\b/i;
 function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '' } = {}) {
-  if (!tieneMarcasSitio(text)) return null;
+  if (!tieneMarcasSitio(text)) { console.log(`[LECTOR] ✗ el plan no trae sitios marcados [[ ]] (${String(text || '').length} letras)`); return null; }
   const limpiar = (s) => marcasANegrita(String(s || ''), '')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')              // fotos
     .replace(/\[([^\]]+)\]\(https?:[^)]+\)/g, '$1')      // enlaces markdown
@@ -6469,11 +6469,15 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   for (const raw of String(text).split(/\r?\n/)) {
     const linea = raw.trim();
     if (!linea) continue;
-    const dia = linea.match(/^\*\*\s*D[ií]a\s+(\d{1,2})\b\s*[—–:-]?\s*([^*]*)\*\*\s*:?\s*$/i);
+    // Cabecera de día en cualquiera de las formas en que la escribe Salma: "**Día 1 — Título**", "**Día 1** — Título",
+    // "### Día 1: Título", "🏍️ **DÍA 1 · Título (180 km)**", "Día 1 — Título". Línea corta y sin sitios marcados.
+    const dia = !tieneMarcasSitio(linea) && linea.length <= 140
+      && linea.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9]*D[IÍií]A\s+(\d{1,2})\b(.*)$/i);
     if (dia) {
       const n = parseInt(dia[1], 10);
       if (n !== day) { day = n; dayTitle = ''; }
-      if (dia[2] && dia[2].trim()) dayTitle = dia[2].trim();
+      const t = dia[2].replace(/\*\*/g, '').replace(/^[\s—–:·|.-]+/, '').replace(/[\s:*]+$/, '').trim();
+      if (t) dayTitle = t;
       continue;
     }
     if (!day) { if (!tieneMarcasSitio(linea) && !intro) intro = limpiar(linea); continue; }
@@ -6505,7 +6509,11 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
       });
     });
   }
-  if (!stops.length) return null;
+  if (!stops.length) {
+    const cab = String(text).split(/\r?\n/).filter(l => /d[ií]a\s*\d/i.test(l)).slice(0, 2).map(l => l.trim().slice(0, 60));
+    console.log(`[LECTOR] ✗ no encuentro los días (líneas con "día": ${JSON.stringify(cab)})`);
+    return null;
+  }
   const nDias = Math.max(...stops.map(s => s.day));
   // Plan limpio = todos los días pedidos aparecen y cada uno trae al menos 2 sitios marcados.
   if (dias && nDias !== dias) { console.log(`[LECTOR] ✗ ${nDias} días leídos, se pidieron ${dias}`); return null; }
@@ -14443,7 +14451,7 @@ INSTRUCCIONES:
             // LECTOR (caso p-munnkksyhs3): destino de una ciudad o pueblo + plan con sitios marcados [[ ]] →
             // la guía sale del propio plan, sin que Sonnet lo reescriba. Si no se lee limpio → como siempre.
             const _tConv = Date.now();
-            if (!mergeIntoRoute && env.GOOGLE_PLACES_KEY && tieneMarcasSitio(sourceText)) {
+            if (!mergeIntoRoute && env.GOOGLE_PLACES_KEY) {
               // Ciudad o pueblo (ancla de punto): Google busca cada sitio alrededor del destino, sin coordenadas.
               // Ruta por carretera o región: se piden SOLO las coordenadas (coordsForMarkedStops).
               const _ciudad = !!(anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number');
