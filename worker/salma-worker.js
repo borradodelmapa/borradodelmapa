@@ -13722,7 +13722,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // QUÉ se pide lo decide el intérprete (interpretPlaceRequest), una sola vez para todo el mensaje: el atajo, los
     // botones de transporte y los enlaces de la respuesta de Salma leen este mismo _placeIntent.
     const _chatDestino = (anchorCountry && anchorCountry.locality) || (typeof body.dest_hint === 'string' ? body.dest_hint.trim() : '');
-    const _placeIntent = (!imageBase64 && env.GOOGLE_PLACES_KEY && mightAskForPlace(message))
+    // Nunca en un plan de viaje (recomendaciones) ni al pulsar "Crear ruta con mapa": ahí no se quiere "ir a un sitio".
+    // El intérprete es una IA pequeña que no contesta igual dos veces: a las 9:25 del 30 sept tomó "Ruta Transpirenaica
+    // en moto…" por un sitio, no lo encontró en Google y cortó con "No encuentro…" sin montar la guía (Paco).
+    const _placeIntent = (!imageBase64 && env.GOOGLE_PLACES_KEY && !guidedMapStage && !guidedIsReco && mightAskForPlace(message))
       ? await interpretPlaceRequest(message, { history, userLocationName, destino: _chatDestino }, env) : null;
     // UN SOLO CAMINO para "quiero ir a un sitio" (caso p-mul9bn4uc1c, Paco 28 sept 2026): se comprueba el sitio en
     // Google (si el nombre no está, se prueba la errata que dice el intérprete: "alambre" → Alhambra). Sin sitio
