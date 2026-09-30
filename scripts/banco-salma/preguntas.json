@@ -204,6 +204,17 @@
       ]
     },
     {
+      "id": "guia-ronda-3dias",
+      "boton": "guia",
+      "mensaje": "3 días en Ronda",
+      "debe": [
+        "plan de 3 días con sitios concretos de Ronda"
+      ],
+      "no_debe": [
+        "preguntar antes de dar el plan"
+      ]
+    },
+    {
       "id": "guia-estepona",
       "boton": "guia",
       "mensaje": "1 día en Estepona",
