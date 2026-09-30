@@ -2350,6 +2350,16 @@ const salma = {
       if (btn) btn.remove();
       const itinBtn = document.getElementById('itin-save-btn');
       if (itinBtn) itinBtn.remove();
+      // Pestañas RUTA · FOTOS · VÍDEO desde el primer momento (Paco, 30 sept 2026: "no sale hasta que vuelves a
+      // entrar"): solo se montan en una guía guardada, y la recién creada se abre sin guardar. Al guardarla,
+      // se montan en la guía que está abierta, igual que al volver a entrar desde Mis Viajes.
+      if (window._itinViewOpen) {
+        window._itinViewDocId = id;
+        window._itinViewOptions = Object.assign({}, window._itinViewOptions || {}, { saved: true });
+        try {
+          if (typeof fotosViaje !== 'undefined') fotosViaje.mount(document.getElementById('itin-cards-container'), id, this.currentRoute, window._itinViewOptions);
+        } catch (e) { console.warn('[Salma] Pestañas de fotos tras guardar:', e); }
+      }
       showToast('Guía guardada en Mis Viajes');
     }
     // Si id es null → el modal de registro se ha abierto (guardarGuia lo maneja)
