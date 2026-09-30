@@ -220,6 +220,7 @@ h1 em{font-style:normal;color:var(--gold)}
 .alb-res-box b{font:800 26px/1.05 var(--display);text-transform:uppercase;color:var(--cream)}
 .alb-res-box span{color:var(--muted);font-size:14px}
 .alb-res-row{display:flex;gap:10px}
+.alb-res-note{margin:0;color:var(--cream);font-size:15px;line-height:1.45}
 /* lightbox */
 .lb{position:fixed;inset:0;background:rgba(13,15,16,.94);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
 .lb img{max-width:100%;max-height:72vh;object-fit:contain;border-radius:0}
@@ -1486,7 +1487,7 @@ async function buildAlbum(){
   }
 }
 const LOCK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-function albPdfBtn(){const b=$('#albPdf');if(!b||albBusy)return;b.disabled=false;b.innerHTML=PREMIUM?'Descargar PDF':LOCK+' Descargar PDF · Premium';}
+function albPdfBtn(){const b=$('#albPdf');if(!b||albBusy)return;b.disabled=false;b.innerHTML=PREMIUM?'Descargar álbum':LOCK+' Descargar álbum · Premium';}
 function albMsg(t){const m=$('#albMsg');if(m){m.textContent=t||'';m.hidden=!t;}}
 function albBar(low,inc){
   const bar=$('#albBar');const openLow=!!(bar.querySelector('.albtray.low')||{}).open;
@@ -1495,7 +1496,7 @@ function albBar(low,inc){
   const rmP=M.photos.filter(p=>ALB.removed.includes(pKey(p)));
   bar.innerHTML=`<div class="albacts"><button type="button" class="btn" id="albPdf"></button><button type="button" class="btn ghost" id="albEd">${albEdit?'Listo':'Editar'}</button></div><p class="albmsg" id="albMsg" hidden></p>`+
     (albEdit?`<div class="albedit"><div class="albcov"><span>Portada</span><div>${COVERS.map(([id,n])=>`<button type="button" data-cst="${id}" class="${(ALB.coverStyle||'sangre')===id?'on':''}">${n}</button>`).join('')}</div></div><p class="note">Toca cualquier texto de las páginas para cambiarlo; si lo dejas vacío, no sale. En cada foto: «Portada» la pone en la portada y «Quitar» la saca del álbum (sigue en tu guía).</p>${Object.keys(ALB.texts).length?'<button type="button" class="btn ghost" id="albReset">Volver a los textos originales</button>':''}${rmP.length?`<details class="albtray" open><summary>Quitadas del álbum (${rmP.length})</summary><div class="albthumbs">${rmP.map(p=>th(p,`<button type="button" data-back="${idx(p)}">Recuperar</button>`)).join('')}</div></details>`:''}</div>`:'')+
-    (low.length?`<details class="albtray low"${openLow?' open':''}><summary>${low.length===1?'1 foto no entra':low.length+' fotos no entran'} por baja calidad · Ver</summary><p class="note">Son demasiado pequeñas: en el PDF se verían borrosas. Si alguna te importa, inclúyela igualmente.</p><div class="albthumbs">${low.map(p=>{const on=inc.has(pKey(p));return th(p,`<button type="button" data-inc="${idx(p)}">${on?'Apartar':'Incluir igualmente'}</button>`,on);}).join('')}</div></details>`:'');
+    (low.length?`<details class="albtray low"${openLow?' open':''}><summary>${low.length===1?'1 foto no entra':low.length+' fotos no entran'} por baja calidad · Ver</summary><p class="note">Son demasiado pequeñas: impresas se verían borrosas. Si alguna te importa, inclúyela igualmente.</p><div class="albthumbs">${low.map(p=>{const on=inc.has(pKey(p));return th(p,`<button type="button" data-inc="${idx(p)}">${on?'Apartar':'Incluir igualmente'}</button>`,on);}).join('')}</div></details>`:'');
   albPdfBtn();
 }
 async function albPremium(){
@@ -1510,7 +1511,7 @@ $('#p-alb').addEventListener('click',async e=>{
     albMsg('');
     if(!await albPremium()){albPdfBtn();
       try{if(window.parent!==window&&typeof window.parent.openCoinsModal==='function'){window.parent.openCoinsModal();return;}}catch(_){}
-      albMsg('El PDF del álbum es para usuarios Premium. Hazte Premium desde tu perfil.');return;}
+      albMsg('Descargar el álbum es para usuarios Premium. Hazte Premium desde tu perfil.');return;}
     albPdfBtn();return albPdf();
   }
   if(t.id==='albEd'){albEdit=!albEdit;await buildAlbum();return;}
@@ -1602,7 +1603,7 @@ async function albPdf(){
     try{await document.fonts.ready;}catch(_){}
     const sps=[...$('#album').querySelectorAll('.spread')],out=[];
     for(let i=0;i<sps.length;i++){
-      btn.textContent=`Creando PDF · ${i+1} de ${sps.length}`;
+      btn.textContent=`Creando tu álbum · ${i+1} de ${sps.length}`;
       const c=sps[i].cloneNode(true),np=c.querySelectorAll('.pg').length;
       c.style.width=(np*800)+'px';c.style.maxWidth='none';c.style.boxShadow='none';host.appendChild(c);
       await Promise.all([...c.querySelectorAll('img')].map(im=>im.decode().catch(()=>{})));
@@ -1614,13 +1615,13 @@ async function albPdf(){
     if(albPdfUrl)URL.revokeObjectURL(albPdfUrl);albPdfUrl=URL.createObjectURL(pdf);
     const nPg=$('#album').querySelectorAll('.pg').length;
     let o=$('#albRes');if(o)o.remove();o=document.createElement('div');o.id='albRes';o.className='alb-res';
-    o.innerHTML=`<div class="alb-res-box"><b>Tu álbum en PDF está listo</b><span>${nPg} páginas de 21×21 cm · ${(pdf.size/1048576).toFixed(1).replace('.',',')} MB</span><div class="alb-res-row"><button type="button" class="btn" id="albSh">Compartir</button><a class="btn ghost" href="${albPdfUrl}" download="${esc(name)}">Descargar</a></div><button type="button" class="btn ghost" id="albX">Cerrar</button></div>`;
+    o.innerHTML=`<div class="alb-res-box"><b>Tu álbum está listo</b><span>${nPg} páginas de 21×21 cm · ${(pdf.size/1048576).toFixed(1).replace('.',',')} MB</span><p class="alb-res-note">Puedes llevarlo a imprimir donde quieras o compartirlo con quien quieras.</p><div class="alb-res-row"><button type="button" class="btn" id="albSh">Compartir</button><a class="btn ghost" href="${albPdfUrl}" download="${esc(name)}">Descargar</a></div><button type="button" class="btn ghost" id="albX">Cerrar</button></div>`;
     document.body.appendChild(o);
     const f=new File([pdf],name,{type:'application/pdf'}),sh=$('#albSh');
     if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.hidden=true;
     sh.onclick=async()=>{try{await navigator.share({files:[f],title});}catch(_){}};
     $('#albX').onclick=()=>o.remove();
-  }catch(e){reportErr(e);albMsg('No se pudo crear el PDF. Vuelve a intentarlo.');}
+  }catch(e){reportErr(e);albMsg('No se pudo crear el álbum. Vuelve a intentarlo.');}
   finally{host.remove();try{wake&&wake.release();}catch(_){}albBusy=false;albPdfBtn();}
 }
 
