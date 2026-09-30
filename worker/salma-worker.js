@@ -2853,9 +2853,14 @@ function sitiosMarcados(t) {
   }
   return out;
 }
-// [[X]] → **X** (web) o *X* (WhatsApp)
+// [[X]] → **X** (web) o *X* (WhatsApp). Marcas mal cerradas ("[[Puente de Isabel II**", visto en el banco el
+// 30 sept) también salen en negrita, y cualquier corchete doble suelto se quita: el usuario nunca ve "[[" ni "]]".
 function marcasANegrita(t, star = '**') {
-  return typeof t === 'string' ? t.replace(_MARCA_SITIO_RE, (_, n) => star + n.trim() + star) : t;
+  if (typeof t !== 'string') return t;
+  return t.replace(_MARCA_SITIO_RE, (_, n) => star + n.trim() + star)
+    .replace(/\[\[([^\[\]*\n]{2,80}?)\*\*/g, (_, n) => star + n.trim() + star)
+    .replace(/\*\*([^\[\]*\n]{2,80}?)\]\]/g, (_, n) => star + n.trim() + star)
+    .replace(/\[\[|\]\]/g, '');
 }
 // [[X]] → X (nombres de paradas, lo que se manda a una herramienta)
 function quitarMarcas(t) {
