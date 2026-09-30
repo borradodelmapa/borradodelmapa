@@ -66,7 +66,7 @@ const tuMundo = (() => {
     const guides = maps.docs.map(d => {
       const x = d.data(); let r = {}; try { r = JSON.parse(x.itinerarioIA || '{}'); } catch (_) {}
       const stops = (r.stops || []).map(s => ({ name: s.name || '', lat: +s.lat, lng: +s.lng, day: s.day })).filter(ok);
-      return { id: d.id, title: x.nombre || r.title || 'Guía', days: +(x.dias || x.num_dias || 0) || Math.max(0, ...stops.map(s => +s.day || 0)), stops, cover: x.cover_image || '', photos: x.photos || [], createdAt: toDate(x.createdAt), rg: r.road_geometry || x.road_geometry || null, borrador: x.estado === 'borrador', raw: x };
+      return { id: d.id, title: x.nombre || r.title || 'Guía', days: +(x.dias || x.num_dias || 0) || Math.max(0, ...stops.map(s => +s.day || 0)), stops, cover: x.map_thumbnail_url || r.map_thumbnail_url || x.cover_image || '', photos: x.photos || [], createdAt: toDate(x.createdAt), rg: r.road_geometry || x.road_geometry || null, borrador: x.estado === 'borrador', raw: x };
     }).filter(g => !g.borrador);
     const photos = fotos.docs.map(d => ({ id: d.id, ...d.data() }));
     const allPins = [...pins.docs, ...mpins.docs].map(d => d.data());
