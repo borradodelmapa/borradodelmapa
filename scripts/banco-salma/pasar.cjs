@@ -99,7 +99,7 @@ async function main() {
   const modo = cinta ? 'reproducir' : grabar ? 'grabar' : 'vivo';
   const grabacion = { nombre, ref: ref || null, fecha: new Date().toISOString(), preguntas: {} };
   if (cinta) console.log(`Banco Salma: REPRODUCIR ${ids.length} preguntas con la cinta "${cinta.nombre}" (${cinta.fecha.slice(0, 10)}). Coste: 0 €, salvo el juez si cambia la respuesta (céntimos)`);
-  else console.log(rejuzgar ?`Banco Salma: solo el juez sobre ${rejuzgar.out.length} respuestas guardadas (céntimos)` : `Banco Salma: ${ids.length} preguntas con ${ref ? 'la versión ' + ref : 'el salma-worker.js de esta carpeta'}. Coste aprox: ${(ids.length * 0.05).toFixed(2)} €`);
+  else console.log(rejuzgar ?`Banco Salma: solo el juez sobre ${rejuzgar.out.length} respuestas guardadas (céntimos)` : `Banco Salma: ${ids.length} preguntas con ${ref ? 'la versión ' + ref : 'el salma-worker.js de esta carpeta'} EN VIVO (se paga; medido 30 sept: 0,20-0,33 € por pregunta que busca sitios). El gasto real sale al final`);
 
   const temp = arg('temp') != null ? parseFloat(arg('temp')) : null;
   const veces = Math.max(1, parseInt(arg('veces') || '1', 10));
