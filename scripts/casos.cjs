@@ -21,6 +21,7 @@
 //   node scripts/casos.cjs version "qué se subió" [ids...]   apunta una subida a producción (Worker + commit solos)
 //   node scripts/casos.cjs modelo <id> <sonnet|opus> "por qué"   modelo recomendado para trabajar el caso (Paco lo ve en el panel)
 //   node scripts/casos.cjs enlaces [horas=24] [todos]        enlaces que ha dado el chat (sin "todos": solo los que se quedaron sin enlace)
+//   node scripts/casos.cjs guias [n=10]                      últimas guías creadas: camino (lector/Sonnet/fallo), motivo, tiempos, paradas
 //   node scripts/casos.cjs revisor [días=1 | estado | on | off]   revisor de conversaciones: prueba (no escribe) / encender el diario
 //
 // Criterio de modelo (26 sept 2026, para ahorrar sin perder calidad): SONNET = trabajo mecánico o ya
@@ -164,6 +165,19 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
         + `\n      mensaje: "${l.mensaje}" · Worker ${String(l.worker || '').slice(0, 8)}`);
     }
     if (ver !== r) console.log(`\n(todos, también los que sí tuvieron enlace: node scripts/casos.cjs enlaces ${horas} todos)`);
+  } else if (cmd === 'guias') {
+    // Cada "Crear ruta con mapa" (Firestore guide_timings, lo escribe el Worker: logGuideTiming, 30 sept 2026):
+    // por qué camino salió (lector / lector+coords / sonnet / fallo), por qué no la cogió el lector y cuánto tardó.
+    const n = parseInt(a1, 10) || 10;
+    const { guias } = await call('/admin/guide-timings?limite=' + n);
+    const s = (ms) => (Number(ms) / 1000).toFixed(1) + ' s';
+    const icono = { lector: '⚡', 'lector+coords': '⚡', sonnet: '🐢', fallo: '❌' };
+    console.log(`Últimas ${guias.length} guías creadas (⚡ lector · 🐢 reescritura con Sonnet · ❌ fallo)\n`);
+    for (const g of guias) {
+      console.log(`${fecha(g.at)} ${icono[g.camino] || '?'} ${g.camino || '?'} · total ${s(g.ms_total)} (guía ${s(g.ms_guia)} + Google ${s(g.ms_google)}) · ${g.paradas} paradas, ${g.dias} días`
+        + `${Number(g.descartadas) ? ', ' + g.descartadas + ' descartadas' : ''}${Number(g.cerca) ? ', ' + g.cerca + ' cerca' : ''}`
+        + `\n      "${g.titulo || g.destino}"${g.motivo ? ' · motivo: ' + g.motivo : ''} · Worker ${String(g.worker || '').slice(0, 8)}`);
+    }
   } else if (cmd === 'revisor') {
     // Revisor de conversaciones (caso p-mulc92f6l52). Sin argumento: MODO PRUEBA de las últimas 24 h (no escribe
     // nada; cuesta la IA, ~0,1 cént./conversación). `revisor 3` = 3 días. `revisor estado` / `revisor on|off`.

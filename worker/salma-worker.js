@@ -6505,8 +6505,12 @@ function parseModelRouteJson(raw) {
 // Devuelve null si el plan no se lee limpio → se hace como siempre (convertProseToRouteJson).
 // Nombres que son sitios de comer aunque no vayan en la línea de "Dónde comer"
 const _LECTOR_COMER_RE = /^(?:bar|restaurante|rest\.|mes[oó]n|taberna|asador|tasca|venta|cafeter[ií]a|caf[eé]|churrer[ií]a|marisquer[ií]a|cervecer[ií]a|pizzer[ií]a|bistr[oó]|braser[ií]a|casa de comidas|gastrobar|freidur[ií]a|helader[ií]a|pasteler[ií]a)\b/i;
+// Motivo por el que el lector no cogió el último plan (lo guarda logGuideTiming); '' si lo cogió.
+let _lectorMotivo = '';
+function _lectorNo(motivo) { _lectorMotivo = motivo; console.log('[LECTOR] ✗ ' + motivo); return null; }
 function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '' } = {}) {
-  if (!tieneMarcasSitio(text)) { console.log(`[LECTOR] ✗ el plan no trae sitios marcados [[ ]] (${String(text || '').length} letras)`); return null; }
+  _lectorMotivo = '';
+  if (!tieneMarcasSitio(text)) return _lectorNo(`el plan no trae sitios marcados [[ ]] (${String(text || '').length} letras)`);
   const limpiar = (s) => marcasANegrita(String(s || ''), '')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')              // fotos
     .replace(/\[([^\]]+)\]\(https?:[^)]+\)/g, '$1')      // enlaces markdown
@@ -6575,23 +6579,21 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   }
   if (!stops.length) {
     const cab = String(text).split(/\r?\n/).filter(l => /d[ií]a\s*\d/i.test(l)).slice(0, 2).map(l => l.trim().slice(0, 60));
-    console.log(`[LECTOR] ✗ no encuentro los días (líneas con "día": ${JSON.stringify(cab)})`);
-    return null;
+    return _lectorNo(`no encuentro los días (líneas con "día": ${JSON.stringify(cab)})`);
   }
   // Días seguidos 1, 2, 3… en el orden del plan ("Días 3 y 4" o un día que Salma salta no dejan huecos)
   const _orden = [...new Set(stops.map(s => s.day))];
   stops.forEach(s => { s.day = _orden.indexOf(s.day) + 1; });
   const nDias = Math.max(...stops.map(s => s.day));
-  // Plan limpio = todos los días pedidos aparecen y cada uno trae al menos 2 sitios marcados.
   // Los días son los del plan que ha leído el usuario: en rutas por carretera Salma calcula cuántos hacen falta
   // ("esto da para 6 días") aunque en el cuestionario pusiera 5. La reescritura de Sonnet también copiaba los del plan.
   if (dias && nDias !== dias) console.log(`[LECTOR] ${nDias} días en el plan (se pidieron ${dias}): se usan los del plan`);
   // Plan limpio = ningún día sin sitios y, de media, al menos 2 por día. Un día con un solo sitio vale ("Día 5 —
   // llegada a Cadaqués"): antes tiraba el plan entero a la reescritura lenta.
   for (let d = 1; d <= nDias; d++) {
-    if (!stops.some(s => s.day === d)) { console.log(`[LECTOR] ✗ el día ${d} no trae sitios marcados`); return null; }
+    if (!stops.some(s => s.day === d)) return _lectorNo(`el día ${d} no trae sitios marcados`);
   }
-  if (stops.length < nDias * 2) { console.log(`[LECTOR] ✗ pocos sitios marcados: ${stops.length} para ${nDias} días`); return null; }
+  if (stops.length < nDias * 2) return _lectorNo(`pocos sitios marcados: ${stops.length} para ${nDias} días`);
   const dest = String(destino || region || '').trim();
   return {
     title: dest ? `${dest} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Ruta de ${nDias} ${nDias === 1 ? 'día' : 'días'}`,
@@ -9426,6 +9428,26 @@ async function logUrlIncidents(incidents, idToken) {
 // respaldo, transporte, aparcar). Sin uid ni GPS: solo el mensaje (recortado). Escribe el Worker con la cuenta de
 // servicio (no depende de las reglas ni de la sesión del usuario). Se revisa con `node scripts/casos.cjs enlaces`.
 // Coste: una escritura de Firestore por fila (gratis hasta 20.000 al día).
+// ─── Registro de cada "Crear ruta con mapa" (30 sept 2026, Paco: "así podremos ir chequeando más rápido") ───
+// Colección guide_timings: por qué camino salió la guía (lector / lector+coords / sonnet / fallo), por qué no la cogió
+// el lector, cuánto tardó cada parte y cuántas paradas. Sin datos personales. Lo lee scripts/casos.cjs guias.
+async function logGuideTiming(env, row) {
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const n = (v) => ({ integerValue: String(Math.max(0, Math.round(Number(v) || 0))) });
+  const f = {
+    at: { timestampValue: new Date().toISOString() },
+    worker: _fS(String(env.CF_VERSION_METADATA?.id || '').slice(0, 40)),
+    canal: _fS(String(row.canal || 'web').slice(0, 12)),
+    camino: _fS(String(row.camino || '').slice(0, 20)),
+    motivo: _fS(String(row.motivo || '').slice(0, 200)),
+    destino: _fS(String(row.destino || '').slice(0, 100)),
+    titulo: _fS(String(row.titulo || '').slice(0, 100)),
+    dias: n(row.dias), paradas: n(row.paradas), descartadas: n(row.descartadas), cerca: n(row.cerca),
+    ms_guia: n(row.ms_guia), ms_google: n(row.ms_google), ms_total: n(row.ms_total),
+  };
+  try { await firestoreAdminPatch(env, 'guide_timings/' + id, f); } catch (e) { console.warn('[T2-REGISTRO] ' + e.message); }
+}
+
 async function logChatLink(env, row) {
   const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const f = {
@@ -10589,6 +10611,19 @@ export default {
     // lo pinta "Hoy → Qué ha pasado" y la vista Versiones del panel. Colección deploys.
     // GET /admin/chat-links?limite=200 → registro de enlaces del chat (logChatLink), del más nuevo al más viejo.
     // Panel admin o llave de casos (scripts/casos.cjs enlaces). Solo lectura.
+    // GET /admin/guide-timings?limite=30 → cada "Crear ruta con mapa" (logGuideTiming): camino, motivo, tiempos,
+    // paradas. Panel admin o llave de casos (scripts/casos.cjs guias). Solo lectura.
+    if (request.method === 'GET' && url.pathname === '/admin/guide-timings') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        const limite = Math.min(200, Math.max(1, parseInt(url.searchParams.get('limite') || '30', 10) || 30));
+        const rows = await _fsRunQuery(env, { from: [{ collectionId: 'guide_timings' }], orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: limite });
+        return new Response(JSON.stringify({ guias: rows }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
     if (request.method === 'GET' && url.pathname === '/admin/chat-links') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
       if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
@@ -14530,12 +14565,15 @@ INSTRUCCIONES:
         // anterior directamente. Si falla o no hay sourceText, cae al flujo normal sin cambios.
         let _fastPathRoute = null;
         let _mapStageFailed = false;
+        let _t2log = null; // registro de este "Crear ruta con mapa" (logGuideTiming → casos.cjs guias)
         // "Añadir a la guía" (mergeIntoRoute): el texto a convertir es solo la propuesta
         // nueva (a veces un único día), no un plan multi-día completo — el mínimo de 400
         // caracteres pensado para "Crear ruta con mapa" la rechazaría sin motivo real.
         // convertProseToRouteJson ya se niega por su cuenta si hay menos de 100.
         const _sourceTextMinLen = mergeIntoRoute ? 100 : 400;
-        if (sourceText && sourceText.length > _sourceTextMinLen && isRouteRequest(message, history)) {
+        // Con el botón (guidedMapStage) siempre: pulsarlo ya es pedir la guía. Antes, si el mensaje de partida no sonaba
+        // a ruta ("Asturias", "ruta en moto por los Pirineos"), se saltaba este camino y se generaba todo otra vez.
+        if (sourceText && sourceText.length > _sourceTextMinLen && (guidedMapStage || isRouteRequest(message, history))) {
           // Antes se mandaba un chunk de texto ("Montando tu ruta con mapa...") que
           // el front convertía en burbuja y mataba el spinner → 15s de silencio.
           // Ahora: {generating} (spinner persistente "Generando tu ruta…") + keepalive
@@ -14551,6 +14589,8 @@ INSTRUCCIONES:
             // LECTOR (caso p-munnkksyhs3): destino de una ciudad o pueblo + plan con sitios marcados [[ ]] →
             // la guía sale del propio plan, sin que Sonnet lo reescriba. Si no se lee limpio → como siempre.
             const _tConv = Date.now();
+            _t2log = { inicio: _tConv, canal: 'web', destino: (guidedRoute && guidedRoute.destino) || (anchorCountry && anchorCountry.locality) || String(message || '').slice(0, 100), camino: '', motivo: '' };
+            if (mergeIntoRoute) _t2log.motivo = 'añadir a la guía (siempre Sonnet)';
             if (!mergeIntoRoute && env.GOOGLE_PLACES_KEY) {
               // Ciudad o pueblo (ancla de punto): Google busca cada sitio alrededor del destino, sin coordenadas.
               // Ruta por carretera o región: se piden SOLO las coordenadas (coordsForMarkedStops).
@@ -14575,14 +14615,18 @@ INSTRUCCIONES:
                   // (el del cuestionario llevaba lo que tecleó el usuario: "…saliendo de ondarrubia…").
                   _fastPathRoute.region = _c.zona || _fastPathRoute.country || _fastPathRoute.region;
                   if (_c.titulo) { _fastPathRoute.title = _c.titulo; _fastPathRoute.name = _c.titulo; }
-                } else _fastPathRoute = null;
+                } else { _fastPathRoute = null; _lectorMotivo = 'no salieron las coordenadas'; }
               }
               if (_fastPathRoute) console.log(`[LECTOR] ✓ ${_fastPathRoute.stops.length} paradas, ${_fastPathRoute.duration_days} días, ${Date.now() - _tConv} ms — sin reescritura${_ciudad ? '' : ' (con coordenadas)'}`);
+              if (_fastPathRoute) _t2log.camino = _ciudad ? 'lector' : 'lector+coords';
+              else _t2log.motivo = _lectorMotivo || 'el lector no cogió el plan';
             }
             if (!_fastPathRoute) {
               _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry, usageAcc: _reqUsage, minStops: _minStops });
               console.log(`[T2-TIEMPO] reescritura con Sonnet: ${Math.round((Date.now() - _tConv) / 1000)} s`);
+              _t2log.camino = _fastPathRoute ? 'sonnet' : 'fallo';
             }
+            _t2log.ms_guia = Date.now() - _tConv;
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < _minStops)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
             // Solo consume guía/cambio si la conversión ha salido bien (un fallo no gasta el cupo)
             if (_fastPathRoute && _usageKind !== 'chat') _usageConsume = _usageKind;
@@ -14599,6 +14643,7 @@ INSTRUCCIONES:
 
         if (_mapStageFailed) {
           if (_convertFailReason) console.log(`[T2-FAIL] ${_convertFailReason}`);
+          if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, camino: 'fallo', motivo: [_t2log.motivo, _convertFailReason].filter(Boolean).join(' · '), ms_total: Date.now() - _t2log.inicio }));
           ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'map-stage|' + _normErr(_convertFailReason || 'sin motivo').slice(0, 60), titulo: 'Crear ruta con mapa no se montó: ' + String(_convertFailReason || 'sin motivo').slice(0, 70), zona: 'rutas', gravedad: 'alta', ejemplo: 'Tiempo 2 falló: ' + String(_convertFailReason || 'sin motivo'), detalle: String(_convertFailReason || '') }));
           _flushUsage(); // los tokens ya se gastaron aunque falle: se miden, pero NO consumen guía
           const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
@@ -15413,6 +15458,7 @@ REGLAS:
               const _tVer = Date.now();
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts, env);
               if (_fastPathRoute) console.log(`[T2-TIEMPO] comprobación de Google: ${Math.round((Date.now() - _tVer) / 1000)} s (${route.stops?.length || 0} paradas${route._lector ? ', lector' : ''})`);
+              if (_t2log) _t2log.ms_google = Date.now() - _tVer;
               if (verified) route = verified;
               // Edición por operaciones: SOLO entra lo nuevo que Google confirma con place_id (una parada
               // "sin verificar" con las coordenadas de la IA podría dar un "Cómo llegar" erróneo). La
@@ -15601,6 +15647,9 @@ REGLAS:
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
         if (_replyMarcas) doneEvt.reply_marcas = _replyMarcas;
+        if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, titulo: route?.title || '', dias: route?.duration_days || 0,
+          paradas: route?.stops?.length || 0, descartadas: route?.discarded_stops?.length || 0, cerca: route?.nearby_stops?.length || 0,
+          ms_total: Date.now() - _t2log.inicio }));
         if (_opsApplied && route) doneEvt.ops_edit = true;
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
         // PIEZA A — FLUJO ÚNICO: si esto fue Tiempo 1 (recomendaciones sin mapa), decirle al

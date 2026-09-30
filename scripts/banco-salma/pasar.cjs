@@ -51,6 +51,7 @@ function prepararCopia(ref, temp) {
     ['recordAutoError', 'if (globalThis.__BANCO_USER) return;', false],
     ['logChatLink', 'if (globalThis.__BANCO_USER) return;', false],
     ['logUrlIncidents', 'if (globalThis.__BANCO_USER) return;', false],
+    ['logGuideTiming', 'if (globalThis.__BANCO_USER) return;', false],
   ];
   for (const [fn, linea, obligatorio] of parches) {
     const re = new RegExp(`(async function ${fn}\\([^)]*\\)\\s*\\{)`);
