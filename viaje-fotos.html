@@ -15,7 +15,7 @@ else location.replace('/?go=rutas');</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <style>
 /* Layout: herramienta de una columna con pestañas (Mapa · Vídeo · Álbum) sobre la marca oscura de Borrado del Mapa; el álbum usa papel crema */
 :root{
@@ -121,56 +121,75 @@ h1 em{font-style:normal;color:var(--gold)}
 .compare canvas{width:100%;aspect-ratio:1;border-radius:0;border:1px solid var(--line);display:block;background:#000}
 .compare figcaption{font-size:12px;color:var(--muted)}
 .compare figcaption b{color:var(--cream);display:block;font-size:13px}
-/* álbum */
-.album{display:flex;flex-direction:column;gap:26px;align-items:center}
-.pg{container-type:inline-size;width:100%;max-width:920px;aspect-ratio:297/210;background:var(--paper);color:var(--paper-ink);position:relative;overflow:hidden;border-radius:0;box-shadow:0 18px 40px rgba(0,0,0,.5),0 2px 0 rgba(255,255,255,.05) inset}
+/* álbum: fotolibro cuadrado 21×21 en doble página (30 sept 2026, caso 05). Todo en cqw: sale igual a cualquier tamaño */
+.album{display:flex;flex-direction:column;gap:22px;align-items:center}
+.spread{display:flex;align-items:flex-start;width:100%;max-width:1000px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.spread.one{max-width:500px}
+.spread.one .pg{width:100%}
+.spread:not(.one)::after{content:'';position:absolute;top:0;bottom:0;left:50%;width:5%;transform:translateX(-50%);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.16) 50%,rgba(0,0,0,0));pointer-events:none;z-index:3}
+.pg{container-type:inline-size;flex:none;width:50%;min-width:0;aspect-ratio:1/1;background:#fbfaf7;color:#1c1813;position:relative;overflow:hidden}
 .pg img{display:block;width:100%;height:100%;object-fit:cover}
-.pg .folio{position:absolute;bottom:2.2cqw;font:500 1.15cqw/1 var(--body);letter-spacing:.12em;color:var(--paper-muted)}
-.pg .folio.l{left:3cqw}.pg .folio.r{right:3cqw}
-.pg .eyebrow{font:600 1.2cqw/1.2 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-gold);margin:0}
-.pgcap{font:italic 400 1.55cqw/1.35 var(--serif);color:var(--paper-muted);margin:0}
-.pgcap b{font:600 1.05cqw/1 var(--body);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink);display:block;margin-bottom:.6cqw}
-.p-cover{display:grid;grid-template-columns:61% 1fr}
-.p-cover .side{padding:4.2cqw 3.6cqw 3.6cqw;display:flex;flex-direction:column;gap:1.4cqw;min-width:0}
-.p-cover h3{font:800 7.6cqw/.86 var(--display);margin:.4cqw 0 0;text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
-.p-cover .sub{font:italic 400 2cqw/1.25 var(--serif);margin:0}
-.p-cover .dates{font:600 1.2cqw/1.3 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--paper-muted);margin:0}
-.p-cover .mini{margin-top:auto;aspect-ratio:1.42;border-radius:0;overflow:hidden;border:1px solid rgba(28,24,19,.15)}
-.p-map{display:grid;grid-template-columns:66% 1fr}
-.p-map .list{padding:4cqw 3.2cqw;display:flex;flex-direction:column;gap:1.8cqw;min-width:0}
-.p-map h4{font:800 3.6cqw/.9 var(--display);margin:0;text-transform:uppercase}
-.p-map ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.05cqw}
-.p-map li{display:grid;grid-template-columns:3.2cqw 1fr;gap:.8cqw;font:500 1.35cqw/1.25 var(--body);font-variant-numeric:tabular-nums}
-.p-map li b{font:800 1.9cqw/1 var(--display);color:var(--paper-gold)}
-.p-map li span{display:block;color:var(--paper-muted);font-size:1.1cqw}
-.p-day{display:grid;grid-template-columns:40% 1fr}
-.p-day .side{padding:4cqw 3.4cqw;display:flex;flex-direction:column;gap:1.2cqw;min-width:0}
-.p-day .num{font:800 21cqw/.78 var(--display);color:var(--paper-ink);letter-spacing:-.02em;margin:0}
-.p-day .num small{font-size:3cqw;letter-spacing:.14em;display:block;color:var(--paper-gold);margin-bottom:1.2cqw}
-.p-day .when{font:italic 400 2.2cqw/1.2 var(--serif);margin:0}
-.p-day .places{font:700 1.8cqw/1.2 var(--display);letter-spacing:.06em;text-transform:uppercase;margin:0}
-.p-day .coords{margin-top:auto;font:500 1.1cqw/1.4 var(--body);color:var(--paper-muted);letter-spacing:.06em;font-variant-numeric:tabular-nums}
-.p-day figure{margin:2.6cqw 2.6cqw 2.6cqw 0}
-.p-full figure{margin:0;position:absolute;inset:0}
-.p-full .strip{position:absolute;left:0;right:0;bottom:0;padding:1.6cqw 3cqw 2cqw;background:var(--paper);display:flex;justify-content:space-between;align-items:baseline;gap:2cqw}
-.p-full figure{bottom:7.2cqw}
-.p-pair{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw;padding:3cqw 3cqw 6.4cqw}
-.p-pair figure,.p-trio figure,.p-port figure{margin:0;display:flex;flex-direction:column;gap:1cqw;min-height:0;min-width:0}
-.p-pair figure>div,.p-trio figure>div,.p-port figure>div{flex:1;min-height:0}
-.p-trio{display:grid;grid-template-columns:1.9fr 1fr;grid-template-rows:1fr 1fr;gap:1.4cqw;padding:3cqw 3cqw 6.4cqw}
+.pg figure{margin:0}
+.pg .folio{position:absolute;bottom:3.4cqw;font:500 1.7cqw/1 var(--body);letter-spacing:.12em;color:#8a8175}
+.pg .folio.l{left:4.5cqw}.pg .folio.r{right:4.5cqw}
+.shade{position:absolute;left:0;right:0;pointer-events:none}
+.shade.t{top:0;height:48%;background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,0))}
+.shade.b{bottom:0;height:34%;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.45))}
+.cap{font:italic 400 2.5cqw/1.3 var(--serif);color:#6f665a;margin:0}
+.cap.w{position:absolute;left:5cqw;right:5cqw;bottom:4.5cqw;color:#fff;text-shadow:0 .2cqw 1.2cqw rgba(0,0,0,.5)}
+/* portadas */
+.c-sangre figure,.p-full figure,.p-mapa figure{position:absolute;inset:0}
+.c-sangre .ct{position:absolute;left:7cqw;right:7cqw;top:7cqw;color:#fff;text-shadow:0 .3cqw 2cqw rgba(0,0,0,.45);display:flex;flex-direction:column;gap:2cqw}
+.c-sangre h3{font:800 11cqw/.9 var(--display);text-transform:uppercase;margin:0;letter-spacing:.01em}
+.c-sangre p{font:600 2.6cqw/1.2 var(--body);letter-spacing:.16em;text-transform:uppercase;margin:0}
+.c-franja figure{position:absolute;left:0;right:0;top:0;bottom:24%}
+.c-franja .band{position:absolute;left:0;right:0;bottom:0;height:24%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4cqw;text-align:center;padding:0 6cqw}
+.c-franja h3{font:400 8.5cqw/1 var(--serif);font-style:normal;margin:0}
+.c-franja p{font:600 2cqw/1.2 var(--body);letter-spacing:.18em;text-transform:uppercase;color:#8a8175;margin:0}
+.c-marco{background:#fff}
+.c-marco figure{position:absolute;left:12%;right:12%;top:10%;bottom:28%}
+.c-marco .ct{position:absolute;left:8cqw;right:8cqw;bottom:8cqw;text-align:center;display:flex;flex-direction:column;gap:1.4cqw}
+.c-marco h3{font:600 5.4cqw/1.05 var(--serif);font-style:normal;text-transform:uppercase;letter-spacing:.06em;margin:0}
+.c-marco p{font:600 1.9cqw/1.2 var(--body);letter-spacing:.18em;text-transform:uppercase;color:#8a8175;margin:0}
+/* interiores */
+.p-lista{padding:9cqw 8cqw;display:flex;flex-direction:column;gap:3cqw}
+.eyebrow{font:600 2cqw/1.2 var(--body);letter-spacing:.2em;text-transform:uppercase;color:#C2500A;margin:0}
+.p-lista h4{font:800 7cqw/.92 var(--display);text-transform:uppercase;margin:0}
+.p-lista ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5cqw}
+.p-lista li{display:grid;grid-template-columns:5cqw 1fr;gap:1.4cqw;font:500 2.3cqw/1.2 var(--body)}
+.p-lista li>b{font:800 2.8cqw/1 var(--display);color:#C2500A}
+.p-lista li small{display:block;color:#8a8175;font-size:1.8cqw;margin-top:.3cqw}
+.p-dia .tx{position:absolute;left:8cqw;right:8cqw;top:8cqw;display:flex;flex-direction:column;gap:1.2cqw}
+.p-dia .lbl{font:800 3.4cqw/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:#C2500A;margin:0}
+.p-dia .num{font:800 22cqw/.8 var(--display);letter-spacing:-.02em;margin:0}
+.p-dia .when{font:italic 400 3.2cqw/1.2 var(--serif);margin:0}
+.p-dia .places{font:700 2.4cqw/1.25 var(--display);letter-spacing:.08em;text-transform:uppercase;margin:0}
+.p-dia figure{position:absolute;left:8cqw;right:8cqw;top:50%;bottom:9cqw}
+.p-uno figure{position:absolute;left:14cqw;right:14cqw;top:8cqw;bottom:15cqw}
+.p-uno .cap{position:absolute;left:14cqw;right:14cqw;bottom:8cqw}
+.p-par{display:grid;grid-template-columns:1fr 1fr;gap:3cqw;padding:9cqw 7cqw 13cqw}
+.p-par figure,.p-trio figure{display:flex;flex-direction:column;gap:1.6cqw;min-height:0;min-width:0}
+.p-par figure>div,.p-trio figure>div{flex:1;min-height:0}
+.p-trio{display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:1fr 1fr;gap:2.4cqw;padding:6cqw 6cqw 12cqw}
 .p-trio figure:first-child{grid-row:1/3}
-.p-trio .pgcap{font-size:1.25cqw}
-.p-port{display:grid;grid-template-columns:1fr 44%;gap:3cqw;padding:3cqw 3cqw 6.4cqw 5cqw;align-items:stretch}
-.p-port .words{display:flex;flex-direction:column;justify-content:flex-end;gap:1.2cqw;padding-bottom:1cqw;min-width:0}
-.p-port .words h5{font:800 5.4cqw/.9 var(--display);margin:0;text-transform:uppercase;overflow-wrap:anywhere}
-.p-back{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.4cqw;text-align:center;background:#1c1813;color:var(--paper)}
-.p-back .nums{display:flex;gap:4.5cqw;font-variant-numeric:tabular-nums}
-.p-back .nums b{display:block;font:800 7cqw/.9 var(--display);color:#F4630B}
-.p-back .nums span{font:600 1.15cqw/1 var(--body);letter-spacing:.16em;text-transform:uppercase}
-.p-back .mark{font:800 2.6cqw/1 var(--display);letter-spacing:.08em}
+.p-trio .cap{font-size:2cqw}
+.p-cuatro{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2cqw;padding:6cqw 6cqw 11cqw}
+.p-cuatro figure{min-height:0;min-width:0}
+.p-nota{display:flex;align-items:center;justify-content:center;padding:12cqw;text-align:center}
+.p-nota p{font:italic 400 4cqw/1.3 var(--serif);color:#6f665a;margin:0}
+.p-back{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw;text-align:center;background:#1c1813;color:#f3ede2;padding:8cqw}
+.p-back .nums{display:flex;gap:6cqw;flex-wrap:wrap;justify-content:center}
+.p-back .nums b{display:block;font:800 11cqw/.9 var(--display);color:#F4630B}
+.p-back .nums span{font:600 1.9cqw/1 var(--body);letter-spacing:.16em;text-transform:uppercase}
+.p-back p{font:italic 400 2.8cqw/1.3 var(--serif);margin:0;color:#d8cfbf}
+.p-back .mark{position:absolute;left:0;right:0;bottom:8cqw;font:800 3.6cqw/1 var(--display);letter-spacing:.08em}
 .p-back .mark b{color:#F4630B}
-.p-back p{font:italic 400 1.7cqw/1.3 var(--serif);margin:0;color:#d8cfbf}
-.pglabel{font-size:12px;color:var(--muted);align-self:flex-start;max-width:920px;width:100%;margin:0 auto -18px}
+/* textos: vacío = oculto; en Editar se ven con borde y se tocan para escribir */
+.pg [data-t]:empty{display:none}
+.alb-edit .pg [data-t]{outline:1px dashed rgba(244,99,11,.7);outline-offset:.4cqw;cursor:text;min-width:2em}
+.alb-edit .pg [data-t]:empty{display:inline-block;min-height:1em}
+.alb-edit .pg [data-t]:focus{outline:2px solid #F4630B;background:rgba(244,99,11,.08)}
+.pglabel{font-size:12px;color:var(--muted);max-width:1000px;width:100%;margin:0 auto -14px;text-align:center}
 /* álbum V1: barra (PDF · Editar), fotos pequeñas apartadas, edición y resultado */
 .albbar{width:100%;max-width:920px;margin:0 auto 14px;display:flex;flex-direction:column;gap:12px}
 .albacts{display:flex;gap:10px;flex-wrap:wrap}
@@ -190,7 +209,9 @@ h1 em{font-style:normal;color:var(--gold)}
 .albedit label{display:flex;flex-direction:column;gap:6px;font:600 13px/1.2 var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .albedit input{background:var(--panel-2);color:var(--cream);border:1px solid var(--line);padding:10px;font:600 16px/1.2 var(--body);width:100%;text-transform:none;letter-spacing:0}
 .albedit .note{margin:0}
-.alb-ctl{position:absolute;right:6px;top:6px;display:flex;gap:6px;z-index:2}
+.albcov{display:flex;flex-direction:column;gap:6px}.albcov>span{font:600 13px/1.2 var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.albcov>div{display:flex;gap:6px;flex-wrap:wrap}
+.albcov button{flex:1;appearance:none;border:1px solid var(--line);background:none;color:var(--cream);font:700 14px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;min-height:42px;cursor:pointer}.albcov button.on{background:var(--gold);color:#0D0F10;border-color:var(--gold)}
+.alb-ctl{position:absolute;right:6px;top:6px;display:flex;gap:6px;z-index:4}
 .alb-ctl button{appearance:none;border:0;background:rgba(13,15,16,.85);color:#f5f0e8;font:700 13px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:9px 11px;cursor:pointer;min-height:34px}
 .alb-ctl button.on{background:var(--gold);color:#0D0F10;cursor:default}
 .alb-none{color:var(--muted);text-align:center}
@@ -1377,74 +1398,104 @@ async function mapImage(w,h,numbers,pad=70){
   return URL.createObjectURL(await toBlob(c,.9));
 }
 /* Álbum V1 (30 sept 2026, caso 05 — decisiones de Paco en docs/estudio-video-album.md):
+   · Fotolibro CUADRADO 21×21 en doble página (portada y contraportada solas). Tres portadas: foto entera con el
+     título encima, foto con franja blanca, foto enmarcada con el nombre debajo.
    · Fotos pequeñas (lado largo guardado < LOWQ_PX) apartadas con aviso; "Incluir igualmente" las mete.
-   · Editar: título, foto de portada y quitar fotos (solo del álbum: siguen en la guía). Se recuerda en el móvil
-     (IndexedDB 'alb-<guía>').
+   · Editar: TODOS los textos (se tocan sobre la página; vacío = oculto) menos el logo de la contraportada, portada,
+     estilo de portada y quitar fotos (solo del álbum: siguen en la guía). Se recuerda en el móvil (IndexedDB 'alb-<guía>').
    · PDF descargable, solo Premium (premium_until del usuario; sin Premium el botón abre el plan de la app).
-     Cada página se copia del álbum en pantalla a un lienzo (mismo diseño, fotos HD) y se junta en un PDF A4
-     apaisado escrito aquí mismo, sin librerías. Todo en el móvil: 0 €. Marca solo en la contraportada. */
+     Cada doble página se copia a un lienzo (mismo diseño, fotos HD) y se junta en un PDF escrito aquí mismo,
+     sin librerías. Todo en el móvil: 0 €. */
 const LOWQ_PX=1000; // las fotos viejas de la app se guardaban a 1024 px: entran
 const pKey=p=>p.remote||p.name+'|'+(+p.date);
 const isLow=p=>p.srcPx!=null&&p.srcPx<LOWQ_PX;
-let ALB=null,ALB_KEY=null,albEdit=false,albBusy=false,albPdfUrl=null,PREMIUM=null,AP=[],albMaps={m:null,big:null,mini:null};
+const COVERS=[['sangre','Foto entera'],['franja','Franja blanca'],['marco','Enmarcada']];
+let ALB=null,ALB_KEY=null,albEdit=false,albBusy=false,albPdfUrl=null,PREMIUM=null,AP=[],albMaps={m:null,big:null};
 async function albState(){
   const k='alb-'+(window.EMB_GUIA||'suelta');
-  if(ALB_KEY!==k){ALB_KEY=k;let a=null;try{a=await IDB.get(k);}catch(_){}ALB=Object.assign({title:'',cover:null,removed:[],incl:[]},a||{});}
+  if(ALB_KEY!==k){ALB_KEY=k;let a=null;try{a=await IDB.get(k);}catch(_){}
+    ALB=Object.assign({cover:null,coverStyle:'sangre',removed:[],incl:[],texts:{}},a||{});
+    if(ALB.title){ALB.texts['cover.title']=ALB.title;delete ALB.title;}}
   return ALB;
 }
 function albSave(){IDB.set(ALB_KEY,ALB).catch(()=>{});}
+// Texto editable: lo escrito por el usuario (aunque sea vacío = oculto) o el automático
+function AT(id,def,tag='span',cls=''){const v=ALB.texts[id];return `<${tag}${cls?` class="${cls}"`:''} data-t="${esc(id)}">${esc(v!=null?v:def)}</${tag}>`;}
+const tv=(id,def)=>ALB.texts[id]!=null?ALB.texts[id]:def;
 async function buildAlbum(){
   const A=await albState();const rm=new Set(A.removed),inc=new Set(A.incl);
   const low=M.photos.filter(isLow);
   AP=M.photos.filter(p=>!rm.has(pKey(p))&&(!isLow(p)||inc.has(pKey(p))));const inAP=new Set(AP);
   const nm=!!M.noMap;
-  if(albMaps.m!==M){const m=M;[albMaps.big,albMaps.mini].forEach(u=>u&&URL.revokeObjectURL(u));
-    const big=nm?null:await mapImage(1600,1560,true,110),mn=nm?null:await mapImage(900,634,false,60);albMaps={m,big,mini:mn};}
-  const bigMap=albMaps.big,mini=albMaps.mini;
+  if(albMaps.m!==M){const m=M;if(albMaps.big)URL.revokeObjectURL(albMaps.big);albMaps={m,big:nm?null:await mapImage(1600,1600,true,120)};}
   albBar(low,inc);
   if(!AP.length){$('#album').innerHTML='<p class="alb-none">No queda ninguna foto en el álbum. Recupéralas en «Editar».</p>';return;}
-  const title=A.title||M.title;
-  const where=p=>p.lat==null?hm(p.date):coords(p.lat,p.lng);
-  const pages=[];const cap=(p)=>`<p class="pgcap"><b>${esc(p.stop.name)} · Día ${p.day}</b>${esc(fLong.format(p.date))}${p.est?' · '+estTxt(p):''}</p>`;
-  const img=p=>`<img src="${p.url}" alt="${esc(p.stop.name)}" data-k="${AP.indexOf(p)}">`;
+  const pad=n=>String(n).padStart(2,'0');
+  const stopName=s=>tv('stop.'+s.idx,s.name);
+  const img=p=>`<img src="${p.url}" alt="" data-k="${AP.indexOf(p)}">`;
+  const cap=(p,cls='cap')=>AT('cap.'+pKey(p),`${stopName(p.stop)} · Día ${p.day}`,'p',cls);
   const cover=AP.find(p=>pKey(p)===A.cover)||AP.find(p=>p.land)||AP[0];
-  pages.push({label:'Portada',html:`<section class="pg p-cover"><div>${img(cover)}</div><div class="side"><p class="eyebrow">Álbum de viaje</p><h3 style="font-size:${Math.min(7.6,30/(Math.max(...title.split(' ').map(w=>w.length))*.55)).toFixed(2)}cqw">${esc(title)}</h3>${M.subtitle?`<p class="sub">${esc(M.subtitle)}</p>`:''}<p class="dates">${esc(range(M.d0,M.d1))}</p>${mini?`<div class="mini"><img src="${mini}" alt="Mapa del recorrido"></div>`:''}</div></section>`});
-  const nIn=s=>s.photos.filter(p=>inAP.has(p)).length;
-  if(!nm)pages.push({label:'Mapa del viaje',html:`<section class="pg p-map"><div><img src="${bigMap}" alt="Mapa con las paradas numeradas"></div><div class="list"><p class="eyebrow">El recorrido</p><h4>${nf(M.km)} km<br>${M.days} ${M.days===1?'día':'días'}</h4><ol>${M.stops.slice(0,14).map((s,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><div>${esc(s.name)}<span>Día ${s.day} · ${short(s.date)} · ${nIn(s)} ${nIn(s)===1?'foto':'fotos'}</span></div></li>`).join('')}</ol></div></section>`});
+  const title=tv('cover.title',M.title),dates=range(M.d0,M.d1);
+  const fit=(max,room)=>Math.min(max,room/(Math.max(3,...String(title).split(/\s+/).map(w=>w.length))*.55)).toFixed(2);
+  const pages=[];
+  // portada
+  const cs=COVERS.some(c=>c[0]===A.coverStyle)?A.coverStyle:'sangre';
+  if(cs==='franja')pages.push({label:'Portada',html:`<section class="pg c-franja"><figure>${img(cover)}</figure><div class="band">${AT('cover.title',M.title,'h3')}${AT('cover.sub',dates,'p')}</div></section>`});
+  else if(cs==='marco')pages.push({label:'Portada',html:`<section class="pg c-marco"><figure>${img(cover)}</figure><div class="ct">${AT('cover.title',M.title,'h3')}${AT('cover.sub',dates,'p')}</div></section>`});
+  else pages.push({label:'Portada',html:`<section class="pg c-sangre"><figure>${img(cover)}</figure><div class="shade t"></div><div class="ct"><h3 style="font-size:${fit(11,86)}cqw">${AT('cover.title',M.title)}</h3>${AT('cover.sub',dates,'p')}</div></section>`});
+  // el recorrido: mapa a toda página + lista de paradas
+  if(!nm){
+    pages.push({label:'Mapa',full:true,html:`<section class="pg p-mapa"><figure><img src="${albMaps.big}" alt="Mapa con las paradas numeradas"></figure></section>`});
+    pages.push({label:'El recorrido',html:`<section class="pg p-lista">${AT('map.eyebrow','El recorrido','p','eyebrow')}<h4>${AT('map.km',nf(M.km)+' km')}<br>${AT('map.days',M.days+' '+(M.days===1?'día':'días'))}</h4><ol>${M.stops.slice(0,14).map(s=>`<li><b>${pad(s.idx+1)}</b><div>${AT('stop.'+s.idx,s.name)}<small>${AT('stop.'+s.idx+'.d',`Día ${s.day} · ${short(s.date)}`)}</small></div></li>`).join('')}</ol></section>`});
+  }
+  // por días: apertura con su primera foto y después las fotos maquetadas por orientación
   const byDay=new Map();AP.forEach(p=>{if(!byDay.has(p.day))byDay.set(p.day,[]);byDay.get(p.day).push(p);});
   let alt=0;
   for(const[day,ps]of byDay){
-    const opener=ps.find(p=>p!==cover)||ps[0];const places=[...new Set(ps.map(p=>p.stop.name))];
-    pages.push({label:`Día ${day}`,html:`<section class="pg p-day"><div class="side"><p class="num"><small>DÍA</small>${String(day).padStart(2,'0')}</p><p class="when">${esc(fLong.format(ps[0].date))}</p>${nm?'':`<p class="places">${places.map(esc).join(' · ')}</p>`}<p class="coords">${esc(ps[0].lat==null?(ps.length>1?`De ${hm(ps[0].date)} a ${hm(ps[ps.length-1].date)}`:hm(ps[0].date)):coords(ps[0].lat,ps[0].lng))}<br>${ps.length} ${ps.length===1?'foto':'fotos'}</p></div><figure>${img(opener)}</figure></section>`});
+    const opener=ps.find(p=>p!==cover)||ps[0];const places=[...new Set(ps.map(p=>stopName(p.stop)))];
+    pages.push({label:`Día ${day}`,html:`<section class="pg p-dia"><div class="tx">${AT('day.'+day+'.lbl','Día','p','lbl')}<p class="num">${AT('day.'+day+'.num',pad(day))}</p>${AT('day.'+day+'.when',fLong.format(ps[0].date),'p','when')}${AT('day.'+day+'.places',places.join(' · '),'p','places')}</div><figure>${img(opener)}</figure></section>`});
     const rest=ps.filter(p=>p!==opener&&p!==cover);
     while(rest.length){
-      const a=rest[0],b=rest[1],c=rest[2];
-      if(c&&alt%2===1){rest.splice(0,3);alt++;pages.push({label:`Día ${day}`,html:`<section class="pg p-trio">${[a,b,c].map(p=>`<figure><div>${img(p)}</div>${cap(p)}</figure>`).join('')}</section>`});continue;}
-      if(!a.land&&b&&!b.land){rest.splice(0,2);alt++;pages.push({label:`Día ${day}`,html:`<section class="pg p-pair">${[a,b].map(p=>`<figure><div>${img(p)}</div>${cap(p)}</figure>`).join('')}</section>`});continue;}
-      rest.shift();alt++;
-      if(a.land)pages.push({label:`Día ${day}`,html:`<section class="pg p-full"><figure>${img(a)}</figure><div class="strip">${cap(a)}<p class="pgcap">${esc(where(a))}</p></div></section>`});
-      else pages.push({label:`Día ${day}`,html:`<section class="pg p-port"><div class="words"><p class="eyebrow">Día ${a.day}</p><h5>${esc(a.stop.name)}</h5><p class="pgcap">${esc(fLong.format(a.date))}<br>${esc(where(a))}</p></div><figure><div>${img(a)}</div></figure></section>`});
+      const[a,b,c,d]=rest;
+      if(d&&alt%3===2){rest.splice(0,4);pages.push({label:`Día ${day}`,html:`<section class="pg p-cuatro">${[a,b,c,d].map(p=>`<figure>${img(p)}</figure>`).join('')}</section>`});}
+      else if(!a.land&&b&&!b.land){rest.splice(0,2);pages.push({label:`Día ${day}`,html:`<section class="pg p-par">${[a,b].map(p=>`<figure><div>${img(p)}</div>${cap(p)}</figure>`).join('')}</section>`});}
+      else if(c&&alt%3===1){rest.splice(0,3);pages.push({label:`Día ${day}`,html:`<section class="pg p-trio">${[a,b,c].map(p=>`<figure><div>${img(p)}</div>${cap(p)}</figure>`).join('')}</section>`});}
+      else if(a.land){rest.shift();pages.push({label:`Día ${day}`,full:true,html:`<section class="pg p-full"><figure>${img(a)}</figure><div class="shade b"></div>${cap(a,'cap w')}</section>`});}
+      else{rest.shift();pages.push({label:`Día ${day}`,html:`<section class="pg p-uno"><figure>${img(a)}</figure>${cap(a)}</section>`});}
+      alt++;
     }
   }
-  pages.push({label:'Contraportada',html:`<section class="pg p-back"><div class="nums">${nm?'':`<div><b>${nf(M.km)}</b><span>km</span></div>`}<div><b>${M.days}</b><span>${M.days===1?'día':'días'}</span></div><div><b>${AP.length}</b><span>fotos</span></div></div><p>${esc(M.subtitle||title)}</p><div class="mark">BORRADO <b>DEL</b> MAPA</div></section>`});
-  $('#album').innerHTML=pages.map((p,i)=>`<p class="pglabel">Página ${i+1} de ${pages.length} · ${esc(p.label)}</p>`+p.html.replace(/<\/section>$/,i>0&&i<pages.length-1?`<span class="folio ${i%2?'r':'l'}">${i+1}</span></section>`:'</section>')).join('');
-  if(albEdit)$('#album').querySelectorAll('img[data-k]').forEach(im=>{
-    const k=+im.dataset.k,box=im.parentElement;if(getComputedStyle(box).position==='static')box.style.position='relative';
-    const d=document.createElement('div');d.className='alb-ctl';
-    d.innerHTML=AP[k]===cover?'<button type="button" class="on" disabled>En portada</button>':`<button type="button" data-cov="${k}">Portada</button><button type="button" data-rm="${k}">Quitar</button>`;
-    box.appendChild(d);});
+  // dobles páginas completas: si el interior es impar, una página final de texto
+  if(pages.length%2===0)pages.push({label:'Final',html:`<section class="pg p-nota">${AT('end.txt','Hasta el próximo viaje','p')}</section>`});
+  pages.push({label:'Contraportada',html:`<section class="pg p-back"><div class="nums">${nm?'':`<div>${AT('back.km',nf(M.km),'b')}${AT('back.kmL','km')}</div>`}<div>${AT('back.days',String(M.days),'b')}${AT('back.daysL',M.days===1?'día':'días')}</div><div>${AT('back.ph',String(AP.length),'b')}${AT('back.phL','fotos')}</div></div>${AT('back.txt',M.subtitle||title,'p')}<div class="mark">BORRADO <b>DEL</b> MAPA</div></section>`});
+  const N=pages.length;
+  const pgHtml=(p,i)=>i>0&&i<N-1&&!p.full?p.html.replace(/<\/section>$/,`<span class="folio ${i%2?'l':'r'}">${i+1}</span></section>`):p.html;
+  // Editar: página a página (más grandes para tocar los textos). Ver: dobles páginas como un libro abierto.
+  let out='';
+  if(albEdit)out=pages.map((p,i)=>`<p class="pglabel">Página ${i+1} de ${N} · ${esc(p.label)}</p><div class="spread one">${pgHtml(p,i)}</div>`).join('');
+  else for(let i=0;i<N;){const g=i===0||i===N-1?[i]:[i,i+1];
+    out+=`<p class="pglabel">${g.length===1?esc(pages[i].label):`Páginas ${i+1}–${i+2} · ${esc(pages[i].label)}${pages[i+1].label!==pages[i].label?' · '+esc(pages[i+1].label):''}`}</p><div class="spread${g.length===1?' one':''}">${g.map(j=>pgHtml(pages[j],j)).join('')}</div>`;i+=g.length;}
+  const al=$('#album');al.innerHTML=out;al.classList.toggle('alb-edit',albEdit);
+  if(albEdit){
+    al.querySelectorAll('[data-t]').forEach(e=>{try{e.contentEditable='plaintext-only';}catch(_){e.contentEditable='true';}e.spellcheck=false;});
+    al.querySelectorAll('img[data-k]').forEach(im=>{
+      const k=+im.dataset.k,box=im.parentElement;if(getComputedStyle(box).position==='static')box.style.position='relative';
+      const d=document.createElement('div');d.className='alb-ctl';
+      d.innerHTML=AP[k]===cover?'<button type="button" class="on" disabled>En portada</button>':`<button type="button" data-cov="${k}">Portada</button><button type="button" data-rm="${k}">Quitar</button>`;
+      box.appendChild(d);});
+  }
 }
 const LOCK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
 function albPdfBtn(){const b=$('#albPdf');if(!b||albBusy)return;b.disabled=false;b.innerHTML=PREMIUM?'Descargar PDF':LOCK+' Descargar PDF · Premium';}
 function albMsg(t){const m=$('#albMsg');if(m){m.textContent=t||'';m.hidden=!t;}}
 function albBar(low,inc){
-  const bar=$('#albBar');const openLow=!!(bar.querySelector('.albtray')||{}).open;
+  const bar=$('#albBar');const openLow=!!(bar.querySelector('.albtray.low')||{}).open;
   const th=(p,btn,on)=>`<figure class="${on?'on':''}"><img src="${p.pinUrl}" alt="">${btn}</figure>`;
   const idx=p=>M.photos.indexOf(p);
   const rmP=M.photos.filter(p=>ALB.removed.includes(pKey(p)));
   bar.innerHTML=`<div class="albacts"><button type="button" class="btn" id="albPdf"></button><button type="button" class="btn ghost" id="albEd">${albEdit?'Listo':'Editar'}</button></div><p class="albmsg" id="albMsg" hidden></p>`+
-    (albEdit?`<div class="albedit"><label>Título del álbum<input id="albTitle" maxlength="60" value="${esc(ALB.title||M.title)}" enterkeyhint="done"></label><p class="note">Toca «Portada» en una foto para ponerla en la portada, o «Quitar» para sacarla del álbum. Las fotos siguen en tu guía.</p>${rmP.length?`<details class="albtray" open><summary>Quitadas del álbum (${rmP.length})</summary><div class="albthumbs">${rmP.map(p=>th(p,`<button type="button" data-back="${idx(p)}">Recuperar</button>`)).join('')}</div></details>`:''}</div>`:'')+
-    (low.length?`<details class="albtray"${openLow?' open':''}><summary>${low.length===1?'1 foto no entra':low.length+' fotos no entran'} por baja calidad · Ver</summary><p class="note">Son demasiado pequeñas: en el PDF se verían borrosas. Si alguna te importa, inclúyela igualmente.</p><div class="albthumbs">${low.map(p=>{const on=inc.has(pKey(p));return th(p,`<button type="button" data-inc="${idx(p)}">${on?'Apartar':'Incluir igualmente'}</button>`,on);}).join('')}</div></details>`:'');
+    (albEdit?`<div class="albedit"><div class="albcov"><span>Portada</span><div>${COVERS.map(([id,n])=>`<button type="button" data-cst="${id}" class="${(ALB.coverStyle||'sangre')===id?'on':''}">${n}</button>`).join('')}</div></div><p class="note">Toca cualquier texto de las páginas para cambiarlo; si lo dejas vacío, no sale. En cada foto: «Portada» la pone en la portada y «Quitar» la saca del álbum (sigue en tu guía).</p>${Object.keys(ALB.texts).length?'<button type="button" class="btn ghost" id="albReset">Volver a los textos originales</button>':''}${rmP.length?`<details class="albtray" open><summary>Quitadas del álbum (${rmP.length})</summary><div class="albthumbs">${rmP.map(p=>th(p,`<button type="button" data-back="${idx(p)}">Recuperar</button>`)).join('')}</div></details>`:''}</div>`:'')+
+    (low.length?`<details class="albtray low"${openLow?' open':''}><summary>${low.length===1?'1 foto no entra':low.length+' fotos no entran'} por baja calidad · Ver</summary><p class="note">Son demasiado pequeñas: en el PDF se verían borrosas. Si alguna te importa, inclúyela igualmente.</p><div class="albthumbs">${low.map(p=>{const on=inc.has(pKey(p));return th(p,`<button type="button" data-inc="${idx(p)}">${on?'Apartar':'Incluir igualmente'}</button>`,on);}).join('')}</div></details>`:'');
   albPdfBtn();
 }
 async function albPremium(){
@@ -1462,28 +1513,31 @@ $('#p-alb').addEventListener('click',async e=>{
       albMsg('El PDF del álbum es para usuarios Premium. Hazte Premium desde tu perfil.');return;}
     albPdfBtn();return albPdf();
   }
-  if(t.id==='albEd'){albEdit=!albEdit;return buildAlbum();}
+  if(t.id==='albEd'){albEdit=!albEdit;await buildAlbum();return;}
+  if(t.id==='albReset'){if(!confirm('¿Volver a los textos originales? Se pierden los que has escrito.'))return;A.texts={};albSave();await buildAlbum();return;}
   const k=t.dataset;
-  if(k.cov!=null){A.cover=pKey(AP[+k.cov]);}
+  if(k.cst){A.coverStyle=k.cst;}
+  else if(k.cov!=null){A.cover=pKey(AP[+k.cov]);}
   else if(k.rm!=null){const key=pKey(AP[+k.rm]);if(!A.removed.includes(key))A.removed.push(key);if(A.cover===key)A.cover=null;}
   else if(k.back!=null){const key=pKey(M.photos[+k.back]);A.removed=A.removed.filter(x=>x!==key);}
   else if(k.inc!=null){const key=pKey(M.photos[+k.inc]);A.incl=A.incl.includes(key)?A.incl.filter(x=>x!==key):A.incl.concat(key);}
   else return;
   albSave();await buildAlbum();
 });
-$('#p-alb').addEventListener('change',async e=>{
-  if(e.target.id!=='albTitle')return;const v=e.target.value.trim().toUpperCase();
-  ALB.title=v&&v!==M.title?v:'';albSave();await buildAlbum();
-});
-/* PDF: cada página del álbum se maqueta a 1400 px fuera de la pantalla (el diseño va en cqw: sale igual a cualquier
-   ancho) y se copia a un lienzo leyendo las cajas del navegador: fondos, bordes, fotos (la HD, no la de pantalla)
-   y cada letra en su sitio exacto. */
+// Textos: se guardan mientras se escribe (sin redibujar, para no perder el cursor). Intro = terminar.
+let albTT=null;
+$('#album').addEventListener('input',e=>{const el=e.target.closest&&e.target.closest('[data-t]');if(!el||!ALB)return;
+  ALB.texts[el.dataset.t]=el.textContent.replace(/\s+/g,' ').trim();clearTimeout(albTT);albTT=setTimeout(albSave,400);});
+$('#album').addEventListener('keydown',e=>{const el=e.target.closest&&e.target.closest('[data-t]');if(el&&e.key==='Enter'){e.preventDefault();el.blur();}});
+/* PDF: cada doble página se maqueta fuera de la pantalla (el diseño va en cqw: sale igual a cualquier ancho) y se
+   copia a un lienzo leyendo las cajas del navegador: fondos, degradados de sombra, bordes, fotos (la HD, no la de
+   pantalla) y cada letra en su sitio exacto. */
 function pageCanvas(root,W){
   const R=root.getBoundingClientRect(),s=W/R.width,H=Math.round(R.height*s);
   const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.imageSmoothingQuality='high';
   const vis=col=>col&&col!=='transparent'&&!/,\s*0\)$/.test(col);
   const box=r=>[(r.left-R.left)*s,(r.top-R.top)*s,r.width*s,r.height*s];
-  g.fillStyle=getComputedStyle(root).backgroundColor;g.fillRect(0,0,W,H);
+  g.fillStyle='#fff';g.fillRect(0,0,W,H);
   const rng=document.createRange();
   const tw=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:x=>x.nodeType===1&&getComputedStyle(x).display==='none'?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
   let n;
@@ -1492,15 +1546,20 @@ function pageCanvas(root,W){
       const t=n.data;if(!/\S/.test(t))continue;const cs=getComputedStyle(n.parentElement);if(cs.visibility==='hidden')continue;
       const fs=parseFloat(cs.fontSize)*s;g.font=`${cs.fontStyle} ${cs.fontWeight} ${fs}px ${cs.fontFamily}`;g.fillStyle=cs.color;g.textBaseline='alphabetic';
       const mm=g.measureText('H'),asc=mm.fontBoundingBoxAscent!=null?mm.fontBoundingBoxAscent:fs*.8,desc=mm.fontBoundingBoxDescent!=null?mm.fontBoundingBoxDescent:fs*.2;
+      const shadow=cs.textShadow&&cs.textShadow!=='none';
+      if(shadow){g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=fs*.18;g.shadowOffsetY=fs*.03;}
       const up=cs.textTransform==='uppercase';let i=0;
       for(const ch of t){const L=ch.length;
         if(/\S/.test(ch)){rng.setStart(n,i);rng.setEnd(n,i+L);const r=rng.getClientRects()[0];
           if(r&&r.width){const[x,y,,h]=box(r);g.fillText(up?ch.toUpperCase():ch,x,y+(h-(asc+desc))/2+asc);}}
         i+=L;}
+      if(shadow){g.shadowColor='transparent';g.shadowBlur=0;g.shadowOffsetY=0;}
       continue;
     }
     const r=n.getBoundingClientRect();if(!r.width||!r.height)continue;
     const cs=getComputedStyle(n),[x,y,w,h]=box(r);
+    if(n.classList.contains('shade')){const top=n.classList.contains('t'),gr=g.createLinearGradient(0,y,0,y+h);
+      gr.addColorStop(0,top?'rgba(0,0,0,.42)':'rgba(0,0,0,0)');gr.addColorStop(1,top?'rgba(0,0,0,0)':'rgba(0,0,0,.45)');g.fillStyle=gr;g.fillRect(x,y,w,h);continue;}
     if(vis(cs.backgroundColor)){g.fillStyle=cs.backgroundColor;g.fillRect(x,y,w,h);}
     for(const sd of['Top','Right','Bottom','Left']){const bw=parseFloat(cs['border'+sd+'Width'])*s;
       if(bw>0&&cs['border'+sd+'Style']!=='none'&&vis(cs['border'+sd+'Color'])){g.fillStyle=cs['border'+sd+'Color'];
@@ -1513,17 +1572,18 @@ function pageCanvas(root,W){
   }
   return c;
 }
+// PDF mínimo: una imagen JPEG por hoja. Hoja de 21 cm de alto (595,28 pt); el ancho sale de la imagen (portada 21, doble 42)
 function makePdf(pages,title){
   const enc=new TextEncoder(),parts=[],offs=[];let len=0;
   const put=x=>{const b=typeof x==='string'?enc.encode(x):x;parts.push(b);len+=b.length;};
   const obj=(n,body)=>{offs[n]=len;put(`${n} 0 obj\n`);body();put('\nendobj\n');};
-  const PW=841.89,PH=595.28,N=pages.length;
+  const PH=595.28,N=pages.length;
   let tt='FEFF';for(let i=0;i<title.length;i++)tt+=title.charCodeAt(i).toString(16).padStart(4,'0').toUpperCase();
   put('%PDF-1.4\n%âãÏÓ\n');
-  obj(1,()=>put('<< /Type /Catalog /Pages 2 0 R >>'));
+  obj(1,()=>put('<< /Type /Catalog /Pages 2 0 R /PageLayout /SinglePage >>'));
   obj(2,()=>put(`<< /Type /Pages /Kids [${pages.map((_,i)=>`${4+i*3} 0 R`).join(' ')}] /Count ${N} >>`));
   obj(3,()=>put(`<< /Title <${tt}> /Producer (Borrado del Mapa) >>`));
-  pages.forEach((p,i)=>{const o=4+i*3,cs=`q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
+  pages.forEach((p,i)=>{const o=4+i*3,PW=(PH*p.w/p.h).toFixed(2),cs=`q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
     obj(o,()=>put(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${o+2} 0 R >> >> /Contents ${o+1} 0 R >>`));
     obj(o+1,()=>put(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`));
     obj(o+2,()=>{put(`<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.bytes.length} >>\nstream\n`);put(p.bytes);put('\nendstream');});
@@ -1533,25 +1593,28 @@ function makePdf(pages,title){
   put(x+`trailer\n<< /Size ${sz} /Root 1 0 R /Info 3 0 R >>\nstartxref\n${xo}\n%%EOF\n`);
   return new Blob(parts,{type:'application/pdf'});
 }
+const PDF_PX=1500; // píxeles por página de 21 cm (≈180 ppp)
 async function albPdf(){
+  if(albEdit){albEdit=false;await buildAlbum();}
   albBusy=true;const btn=$('#albPdf');btn.disabled=true;let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
-  const host=document.createElement('div');host.style.cssText='position:fixed;left:-30000px;top:0;width:1400px;pointer-events:none';document.body.appendChild(host);
+  const host=document.createElement('div');host.style.cssText='position:fixed;left:-30000px;top:0;pointer-events:none';document.body.appendChild(host);
   try{
     try{await document.fonts.ready;}catch(_){}
-    const pgs=[...$('#album').querySelectorAll('.pg')],out=[];
-    for(let i=0;i<pgs.length;i++){
-      btn.textContent=`Creando PDF · página ${i+1} de ${pgs.length}`;
-      const c=pgs[i].cloneNode(true);c.querySelectorAll('.alb-ctl').forEach(e=>e.remove());
-      c.style.width='1400px';c.style.maxWidth='none';c.style.boxShadow='none';host.appendChild(c);
+    const sps=[...$('#album').querySelectorAll('.spread')],out=[];
+    for(let i=0;i<sps.length;i++){
+      btn.textContent=`Creando PDF · ${i+1} de ${sps.length}`;
+      const c=sps[i].cloneNode(true),np=c.querySelectorAll('.pg').length;
+      c.style.width=(np*800)+'px';c.style.maxWidth='none';c.style.boxShadow='none';host.appendChild(c);
       await Promise.all([...c.querySelectorAll('img')].map(im=>im.decode().catch(()=>{})));
-      const cv=pageCanvas(c,2400);c.remove();
+      const cv=pageCanvas(c,np*PDF_PX);c.remove();
       const b=await toBlob(cv,.9);out.push({bytes:new Uint8Array(await b.arrayBuffer()),w:cv.width,h:cv.height});cv.width=cv.height=0;
       await new Promise(r=>setTimeout(r,0));
     }
-    const title=ALB.title||M.title,pdf=makePdf(out,title),name=`album-${slug(title)}.pdf`;
+    const title=String(tv('cover.title',M.title)||'Mi viaje'),pdf=makePdf(out,title),name=`album-${slug(title)}.pdf`;
     if(albPdfUrl)URL.revokeObjectURL(albPdfUrl);albPdfUrl=URL.createObjectURL(pdf);
+    const nPg=$('#album').querySelectorAll('.pg').length;
     let o=$('#albRes');if(o)o.remove();o=document.createElement('div');o.id='albRes';o.className='alb-res';
-    o.innerHTML=`<div class="alb-res-box"><b>Tu álbum en PDF está listo</b><span>${out.length} páginas · ${(pdf.size/1048576).toFixed(1).replace('.',',')} MB</span><div class="alb-res-row"><button type="button" class="btn" id="albSh">Compartir</button><a class="btn ghost" href="${albPdfUrl}" download="${esc(name)}">Descargar</a></div><button type="button" class="btn ghost" id="albX">Cerrar</button></div>`;
+    o.innerHTML=`<div class="alb-res-box"><b>Tu álbum en PDF está listo</b><span>${nPg} páginas de 21×21 cm · ${(pdf.size/1048576).toFixed(1).replace('.',',')} MB</span><div class="alb-res-row"><button type="button" class="btn" id="albSh">Compartir</button><a class="btn ghost" href="${albPdfUrl}" download="${esc(name)}">Descargar</a></div><button type="button" class="btn ghost" id="albX">Cerrar</button></div>`;
     document.body.appendChild(o);
     const f=new File([pdf],name,{type:'application/pdf'}),sh=$('#albSh');
     if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.hidden=true;
