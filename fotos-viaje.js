@@ -295,7 +295,7 @@ const fotosViaje = (() => {
   function _engineFor(guia, tab) { return tab === 'vid' && !OLD_ENGINE.has(guia) ? 'nuevo' : 'viejo'; }
   function _mediaURL(guia, tab, engine) {
     return engine === 'nuevo' ? `/video.html?v=2&guia=${encodeURIComponent(guia)}`
-      : `/viaje-fotos.html?embed=1&v=13&guia=${encodeURIComponent(guia)}&tab=${tab}`;
+      : `/viaje-fotos.html?embed=1&v=14&guia=${encodeURIComponent(guia)}&tab=${tab}`;
   }
 
   function _mediaShow(tab) {
