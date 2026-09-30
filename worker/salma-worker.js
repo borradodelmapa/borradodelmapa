@@ -6453,6 +6453,8 @@ function parseModelRouteJson(raw) {
 // verifyAllStops busca cada sitio alrededor del ancla e ignora las coordenadas de la IA; lo que Google no
 // confirma se descarta (lat/lng 0 = sin coordenadas usables, nunca se queda en el centro).
 // Devuelve null si el plan no se lee limpio → se hace como siempre (convertProseToRouteJson).
+// Nombres que son sitios de comer aunque no vayan en la línea de "Dónde comer"
+const _LECTOR_COMER_RE = /^(?:bar|restaurante|rest\.|mes[oó]n|taberna|asador|tasca|venta|cafeter[ií]a|caf[eé]|churrer[ií]a|marisquer[ií]a|cervecer[ií]a|pizzer[ií]a|bistr[oó]|braser[ií]a|casa de comidas|gastrobar|freidur[ií]a|helader[ií]a|pasteler[ií]a)\b/i;
 function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '' } = {}) {
   if (!tieneMarcasSitio(text)) return null;
   const limpiar = (s) => marcasANegrita(String(s || ''), '')
@@ -6489,12 +6491,16 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     [...linea.matchAll(_MARCA_SITIO_RE)].map(m => m[1].trim()).forEach((nombre, i) => {
       const key = nombre.toLowerCase();
       if (seen.has(key)) return; // el mismo sitio dos veces → una parada (la primera vez que sale)
+      // COMER (Paco, 30 sept: "muchísimas paradas son restaurantes, es una guía pobre"): como mucho UN sitio de
+      // comer por día — el primero que nombra Salma. Los demás siguen en el texto del chat, no como parada.
+      const esComer = comer || _LECTOR_COMER_RE.test(nombre);
+      if (esComer && stops.some(s => s.day === day && s.type === 'restaurante')) return;
       seen.add(key);
       const trozo = limpiar(String(partes[i + 1] || '').replace(/^\s*[—–:,-]\s*/, ''));
       const narrative = (i > 0 && trozo.length >= 40) ? trozo : lineaNarr;
       stops.push({
         name: nombre, headline: nombre, narrative: narrative.slice(0, 700), day_title: dayTitle,
-        type: comer ? 'restaurante' : 'lugar', con_historia: !comer, day,
+        type: esComer ? 'restaurante' : 'lugar', con_historia: !esComer, day,
         lat: 0, lng: 0, km_from_previous: 0, estimated_hours: 0,
       });
     });
@@ -6961,6 +6967,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   const _prevCountryOk = _prevStops.length > 0 &&
     (!opts.previousCountry || !country || opts.previousCountry.toLowerCase() === country.toLowerCase());
   const reuse = new Array(route.stops.length).fill(null);
+  const _nameMatched = new Set(); // paradas cuyo nombre coincide con el sitio de Google (para el dedup por place_id)
   const _norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
   if (_prevCountryOk) {
     const prevByName = new Map();
@@ -7215,6 +7222,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       if (!stop.description && prev.description) stop.description = prev.description;
       if (prev.name && strictNameMatch(stop.name || stop.headline || '', prev.name)) {
         stop.name = prev.name; stop.headline = prev.name;
+        _nameMatched.add(stop);
       }
       validatedStops.push(stop);
       console.log(`[VERIFY] ↺ REUTILIZADA "${stop.name}" (sin llamada a Google, ya verificada antes)`);
@@ -7266,6 +7274,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
 
     if (googleName && strictNameMatch(stop.name || stop.headline || '', googleName)) {
       stop.name = googleName; stop.headline = googleName;
+      _nameMatched.add(stop);
     }
 
     const addr = detail?.formatted_address || candidate.formatted_address || '';
@@ -7370,6 +7379,21 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     });
     if (inArea.length >= 2) finalStops = inArea;    // no vaciar la ruta si el filtro se pasa de listo
     else nearbyStops = [];                          // revertir: mejor road trip que ruta vacía
+  }
+
+  // ── DEDUP POR place_id — dos paradas que Google ha llevado al MISMO sitio (30 sept 2026, Ronda: "Ciudad Árabe"
+  //    acabó en la ficha de los "Baños Árabes", que ya era parada → salía dos veces). Se queda una: la que se llama
+  //    como el sitio de Google; si ninguna, la primera. ──
+  {
+    const _keepByPid = new Map();
+    finalStops.forEach(s => {
+      if (!s.place_id) return;
+      const prev = _keepByPid.get(s.place_id);
+      if (!prev || (!_nameMatched.has(prev) && _nameMatched.has(s))) _keepByPid.set(s.place_id, s);
+    });
+    const _before = finalStops.length;
+    finalStops = finalStops.filter(s => !s.place_id || _keepByPid.get(s.place_id) === s);
+    if (finalStops.length < _before) console.log(`[VERIFY] ⚠ DEDUP place_id: ${_before - finalStops.length} parada(s) repetida(s) fuera`);
   }
 
   // ── DEDUP POR CERCANÍA — mismo sitio con dos place_id distintos ──
