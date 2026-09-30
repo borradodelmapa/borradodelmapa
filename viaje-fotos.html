@@ -171,6 +171,34 @@ h1 em{font-style:normal;color:var(--gold)}
 .p-back .mark b{color:#F4630B}
 .p-back p{font:italic 400 1.7cqw/1.3 var(--serif);margin:0;color:#d8cfbf}
 .pglabel{font-size:12px;color:var(--muted);align-self:flex-start;max-width:920px;width:100%;margin:0 auto -18px}
+/* álbum V1: barra (PDF · Editar), fotos pequeñas apartadas, edición y resultado */
+.albbar{width:100%;max-width:920px;margin:0 auto 14px;display:flex;flex-direction:column;gap:12px}
+.albacts{display:flex;gap:10px;flex-wrap:wrap}
+.albacts .btn,.alb-res-row .btn{flex:1;min-height:46px;font:700 16px/1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.albacts #albPdf{flex:2}
+.albacts .btn:disabled{opacity:.7;cursor:default}
+.albmsg{margin:0;font-size:14px;color:var(--gold)}
+.albtray{border:1px solid var(--line);padding:10px 12px}
+.albtray summary{cursor:pointer;font:600 14px/1.3 var(--body);color:var(--cream)}
+.albtray .note{margin:8px 0 0}
+.albthumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.albthumbs figure{margin:0;width:96px;display:flex;flex-direction:column;gap:4px}
+.albthumbs img{width:96px;height:96px;object-fit:cover;display:block}
+.albthumbs figure.on img{outline:3px solid var(--gold);outline-offset:-3px}
+.albthumbs button{appearance:none;border:1px solid var(--line);background:none;color:var(--cream);font:600 12px/1.2 var(--body);padding:6px 4px;cursor:pointer;min-height:34px}
+.albedit{display:flex;flex-direction:column;gap:10px;border:1px solid var(--line);padding:12px}
+.albedit label{display:flex;flex-direction:column;gap:6px;font:600 13px/1.2 var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.albedit input{background:var(--panel-2);color:var(--cream);border:1px solid var(--line);padding:10px;font:600 16px/1.2 var(--body);width:100%;text-transform:none;letter-spacing:0}
+.albedit .note{margin:0}
+.alb-ctl{position:absolute;right:6px;top:6px;display:flex;gap:6px;z-index:2}
+.alb-ctl button{appearance:none;border:0;background:rgba(13,15,16,.85);color:#f5f0e8;font:700 13px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:9px 11px;cursor:pointer;min-height:34px}
+.alb-ctl button.on{background:var(--gold);color:#0D0F10;cursor:default}
+.alb-none{color:var(--muted);text-align:center}
+.alb-res{position:fixed;inset:0;z-index:70;background:rgba(13,15,16,.92);display:flex;align-items:center;justify-content:center;padding:16px}
+.alb-res-box{background:var(--panel);border:1px solid var(--line);padding:20px;width:min(420px,100%);display:flex;flex-direction:column;gap:12px}
+.alb-res-box b{font:800 26px/1.05 var(--display);text-transform:uppercase;color:var(--cream)}
+.alb-res-box span{color:var(--muted);font-size:14px}
+.alb-res-row{display:flex;gap:10px}
 /* lightbox */
 .lb{position:fixed;inset:0;background:rgba(13,15,16,.94);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
 .lb img{max-width:100%;max-height:72vh;object-fit:contain;border-radius:0}
@@ -357,7 +385,8 @@ h1 em{font-style:normal;color:var(--gold)}
 
   <section class="panel" id="p-alb" role="tabpanel" aria-labelledby="t-alb" hidden>
     <h2>Álbum maquetado</h2>
-    <p class="note alb-note">Páginas A4 apaisadas, fotos en HD, maquetadas solas por días según la orientación de cada foto. Pronto: descargar en PDF y pedirlo impreso.</p>
+    <p class="note alb-note">Páginas A4 apaisadas, fotos en HD, maquetadas solas por días según la orientación de cada foto.</p>
+    <div class="albbar" id="albBar"></div>
     <div class="album" id="album"></div>
   </section>
 </div>
@@ -552,8 +581,8 @@ async function loadFiles(files,src){
     let date=(meta&&(meta.DateTimeOriginal||meta.CreateDate||meta.ModifyDate))||null;if(date&&!(date instanceof Date))date=new Date(date);
     const row={name:f.name,src,lat,lng,date,country:lat!=null&&WORLD?esName(countryAt(lat,lng)):null,ok:false,thumb:null};rows[i]=row;
     try{
-      const img=await decode(f);const hd=resizeTo(img,1800);if(img.close)img.close();
-      const p=await finishPhoto({lat,lng,date:date||new Date(f.lastModified||Date.now()),name:f.name},hd);
+      const img=await decode(f);const px=Math.max(img.width,img.height);const hd=resizeTo(img,1800);if(img.close)img.close();
+      const p=await finishPhoto({lat,lng,date:date||new Date(f.lastModified||Date.now()),name:f.name,srcPx:px},hd);
       row.ok=true;row.thumb=p.pinUrl;res[i]=p;
     }catch(e){skipped++;}
     doneN++;$('#busyN').textContent=`Foto ${doneN} de ${list.length}`;$('#busyBar').style.width=(doneN/list.length*100)+'%';
@@ -1347,17 +1376,42 @@ async function mapImage(w,h,numbers,pad=70){
   drawBase(g,w,h,v,PAL.paper,u*1.2);drawRoute(g,w,h,v,M.stops,M.stops.length-1,PAL.paper,u*1.3);drawPins(g,w,h,v,M.stops,PAL.paper,u*2,{numbers});
   return URL.createObjectURL(await toBlob(c,.9));
 }
-let albumUrls=[];
+/* Álbum V1 (30 sept 2026, caso 05 — decisiones de Paco en docs/estudio-video-album.md):
+   · Fotos pequeñas (lado largo guardado < LOWQ_PX) apartadas con aviso; "Incluir igualmente" las mete.
+   · Editar: título, foto de portada y quitar fotos (solo del álbum: siguen en la guía). Se recuerda en el móvil
+     (IndexedDB 'alb-<guía>').
+   · PDF descargable, solo Premium (premium_until del usuario; sin Premium el botón abre el plan de la app).
+     Cada página se copia del álbum en pantalla a un lienzo (mismo diseño, fotos HD) y se junta en un PDF A4
+     apaisado escrito aquí mismo, sin librerías. Todo en el móvil: 0 €. Marca solo en la contraportada. */
+const LOWQ_PX=1000; // las fotos viejas de la app se guardaban a 1024 px: entran
+const pKey=p=>p.remote||p.name+'|'+(+p.date);
+const isLow=p=>p.srcPx!=null&&p.srcPx<LOWQ_PX;
+let ALB=null,ALB_KEY=null,albEdit=false,albBusy=false,albPdfUrl=null,PREMIUM=null,AP=[],albMaps={m:null,big:null,mini:null};
+async function albState(){
+  const k='alb-'+(window.EMB_GUIA||'suelta');
+  if(ALB_KEY!==k){ALB_KEY=k;let a=null;try{a=await IDB.get(k);}catch(_){}ALB=Object.assign({title:'',cover:null,removed:[],incl:[]},a||{});}
+  return ALB;
+}
+function albSave(){IDB.set(ALB_KEY,ALB).catch(()=>{});}
 async function buildAlbum(){
-  albumUrls.forEach(u=>URL.revokeObjectURL(u));
-  const nm=!!M.noMap;const bigMap=nm?null:await mapImage(1600,1560,true,110),mini=nm?null:await mapImage(900,634,false,60);albumUrls=nm?[]:[bigMap,mini];
+  const A=await albState();const rm=new Set(A.removed),inc=new Set(A.incl);
+  const low=M.photos.filter(isLow);
+  AP=M.photos.filter(p=>!rm.has(pKey(p))&&(!isLow(p)||inc.has(pKey(p))));const inAP=new Set(AP);
+  const nm=!!M.noMap;
+  if(albMaps.m!==M){const m=M;[albMaps.big,albMaps.mini].forEach(u=>u&&URL.revokeObjectURL(u));
+    const big=nm?null:await mapImage(1600,1560,true,110),mn=nm?null:await mapImage(900,634,false,60);albMaps={m,big,mini:mn};}
+  const bigMap=albMaps.big,mini=albMaps.mini;
+  albBar(low,inc);
+  if(!AP.length){$('#album').innerHTML='<p class="alb-none">No queda ninguna foto en el álbum. Recupéralas en «Editar».</p>';return;}
+  const title=A.title||M.title;
   const where=p=>p.lat==null?hm(p.date):coords(p.lat,p.lng);
   const pages=[];const cap=(p)=>`<p class="pgcap"><b>${esc(p.stop.name)} · Día ${p.day}</b>${esc(fLong.format(p.date))}${p.est?' · '+estTxt(p):''}</p>`;
-  const img=p=>`<img src="${p.url}" alt="${esc(p.stop.name)}">`;
-  const cover=M.photos.find(p=>p.land)||M.photos[0];
-  pages.push({label:'Portada',html:`<section class="pg p-cover"><div>${img(cover)}</div><div class="side"><p class="eyebrow">Borrado del Mapa · Álbum de viaje</p><h3 style="font-size:${Math.min(7.6,30/(Math.max(...M.title.split(' ').map(w=>w.length))*.55)).toFixed(2)}cqw">${esc(M.title)}</h3>${M.subtitle?`<p class="sub">${esc(M.subtitle)}</p>`:''}<p class="dates">${esc(range(M.d0,M.d1))}</p>${mini?`<div class="mini"><img src="${mini}" alt="Mapa del recorrido"></div>`:''}</div></section>`});
-  if(!nm)pages.push({label:'Mapa del viaje',html:`<section class="pg p-map"><div><img src="${bigMap}" alt="Mapa con las paradas numeradas"></div><div class="list"><p class="eyebrow">El recorrido</p><h4>${nf(M.km)} km<br>${M.days} ${M.days===1?'día':'días'}</h4><ol>${M.stops.slice(0,14).map((s,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><div>${esc(s.name)}<span>Día ${s.day} · ${short(s.date)} · ${s.photos.length} ${s.photos.length===1?'foto':'fotos'}</span></div></li>`).join('')}</ol></div></section>`});
-  const byDay=new Map();M.photos.forEach(p=>{if(!byDay.has(p.day))byDay.set(p.day,[]);byDay.get(p.day).push(p);});
+  const img=p=>`<img src="${p.url}" alt="${esc(p.stop.name)}" data-k="${AP.indexOf(p)}">`;
+  const cover=AP.find(p=>pKey(p)===A.cover)||AP.find(p=>p.land)||AP[0];
+  pages.push({label:'Portada',html:`<section class="pg p-cover"><div>${img(cover)}</div><div class="side"><p class="eyebrow">Álbum de viaje</p><h3 style="font-size:${Math.min(7.6,30/(Math.max(...title.split(' ').map(w=>w.length))*.55)).toFixed(2)}cqw">${esc(title)}</h3>${M.subtitle?`<p class="sub">${esc(M.subtitle)}</p>`:''}<p class="dates">${esc(range(M.d0,M.d1))}</p>${mini?`<div class="mini"><img src="${mini}" alt="Mapa del recorrido"></div>`:''}</div></section>`});
+  const nIn=s=>s.photos.filter(p=>inAP.has(p)).length;
+  if(!nm)pages.push({label:'Mapa del viaje',html:`<section class="pg p-map"><div><img src="${bigMap}" alt="Mapa con las paradas numeradas"></div><div class="list"><p class="eyebrow">El recorrido</p><h4>${nf(M.km)} km<br>${M.days} ${M.days===1?'día':'días'}</h4><ol>${M.stops.slice(0,14).map((s,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><div>${esc(s.name)}<span>Día ${s.day} · ${short(s.date)} · ${nIn(s)} ${nIn(s)===1?'foto':'fotos'}</span></div></li>`).join('')}</ol></div></section>`});
+  const byDay=new Map();AP.forEach(p=>{if(!byDay.has(p.day))byDay.set(p.day,[]);byDay.get(p.day).push(p);});
   let alt=0;
   for(const[day,ps]of byDay){
     const opener=ps.find(p=>p!==cover)||ps[0];const places=[...new Set(ps.map(p=>p.stop.name))];
@@ -1372,8 +1426,139 @@ async function buildAlbum(){
       else pages.push({label:`Día ${day}`,html:`<section class="pg p-port"><div class="words"><p class="eyebrow">Día ${a.day}</p><h5>${esc(a.stop.name)}</h5><p class="pgcap">${esc(fLong.format(a.date))}<br>${esc(where(a))}</p></div><figure><div>${img(a)}</div></figure></section>`});
     }
   }
-  pages.push({label:'Contraportada',html:`<section class="pg p-back"><div class="nums">${nm?'':`<div><b>${nf(M.km)}</b><span>km</span></div>`}<div><b>${M.days}</b><span>${M.days===1?'día':'días'}</span></div><div><b>${M.photos.length}</b><span>fotos</span></div></div><p>${esc(M.subtitle||M.title)}</p><div class="mark">BORRADO <b>DEL</b> MAPA</div></section>`});
+  pages.push({label:'Contraportada',html:`<section class="pg p-back"><div class="nums">${nm?'':`<div><b>${nf(M.km)}</b><span>km</span></div>`}<div><b>${M.days}</b><span>${M.days===1?'día':'días'}</span></div><div><b>${AP.length}</b><span>fotos</span></div></div><p>${esc(M.subtitle||title)}</p><div class="mark">BORRADO <b>DEL</b> MAPA</div></section>`});
   $('#album').innerHTML=pages.map((p,i)=>`<p class="pglabel">Página ${i+1} de ${pages.length} · ${esc(p.label)}</p>`+p.html.replace(/<\/section>$/,i>0&&i<pages.length-1?`<span class="folio ${i%2?'r':'l'}">${i+1}</span></section>`:'</section>')).join('');
+  if(albEdit)$('#album').querySelectorAll('img[data-k]').forEach(im=>{
+    const k=+im.dataset.k,box=im.parentElement;if(getComputedStyle(box).position==='static')box.style.position='relative';
+    const d=document.createElement('div');d.className='alb-ctl';
+    d.innerHTML=AP[k]===cover?'<button type="button" class="on" disabled>En portada</button>':`<button type="button" data-cov="${k}">Portada</button><button type="button" data-rm="${k}">Quitar</button>`;
+    box.appendChild(d);});
+}
+const LOCK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+function albPdfBtn(){const b=$('#albPdf');if(!b||albBusy)return;b.disabled=false;b.innerHTML=PREMIUM?'Descargar PDF':LOCK+' Descargar PDF · Premium';}
+function albMsg(t){const m=$('#albMsg');if(m){m.textContent=t||'';m.hidden=!t;}}
+function albBar(low,inc){
+  const bar=$('#albBar');const openLow=!!(bar.querySelector('.albtray')||{}).open;
+  const th=(p,btn,on)=>`<figure class="${on?'on':''}"><img src="${p.pinUrl}" alt="">${btn}</figure>`;
+  const idx=p=>M.photos.indexOf(p);
+  const rmP=M.photos.filter(p=>ALB.removed.includes(pKey(p)));
+  bar.innerHTML=`<div class="albacts"><button type="button" class="btn" id="albPdf"></button><button type="button" class="btn ghost" id="albEd">${albEdit?'Listo':'Editar'}</button></div><p class="albmsg" id="albMsg" hidden></p>`+
+    (albEdit?`<div class="albedit"><label>Título del álbum<input id="albTitle" maxlength="60" value="${esc(ALB.title||M.title)}" enterkeyhint="done"></label><p class="note">Toca «Portada» en una foto para ponerla en la portada, o «Quitar» para sacarla del álbum. Las fotos siguen en tu guía.</p>${rmP.length?`<details class="albtray" open><summary>Quitadas del álbum (${rmP.length})</summary><div class="albthumbs">${rmP.map(p=>th(p,`<button type="button" data-back="${idx(p)}">Recuperar</button>`)).join('')}</div></details>`:''}</div>`:'')+
+    (low.length?`<details class="albtray"${openLow?' open':''}><summary>${low.length===1?'1 foto no entra':low.length+' fotos no entran'} por baja calidad · Ver</summary><p class="note">Son demasiado pequeñas: en el PDF se verían borrosas. Si alguna te importa, inclúyela igualmente.</p><div class="albthumbs">${low.map(p=>{const on=inc.has(pKey(p));return th(p,`<button type="button" data-inc="${idx(p)}">${on?'Apartar':'Incluir igualmente'}</button>`,on);}).join('')}</div></details>`:'');
+  albPdfBtn();
+}
+async function albPremium(){
+  if(!USER||!FDB)return false;
+  try{const d=await FDB.collection('users').doc(USER.uid).get();const pu=d.exists?d.data().premium_until:null;
+    const ms=pu?(pu.toDate?pu.toDate().getTime():new Date(pu).getTime()):0;PREMIUM=ms>Date.now();}catch(e){console.warn('[album] premium',e);}
+  return !!PREMIUM;
+}
+$('#p-alb').addEventListener('click',async e=>{
+  const t=e.target.closest('button');if(!t||albBusy)return;const A=ALB;
+  if(t.id==='albPdf'){
+    albMsg('');
+    if(!await albPremium()){albPdfBtn();
+      try{if(window.parent!==window&&typeof window.parent.openCoinsModal==='function'){window.parent.openCoinsModal();return;}}catch(_){}
+      albMsg('El PDF del álbum es para usuarios Premium. Hazte Premium desde tu perfil.');return;}
+    albPdfBtn();return albPdf();
+  }
+  if(t.id==='albEd'){albEdit=!albEdit;return buildAlbum();}
+  const k=t.dataset;
+  if(k.cov!=null){A.cover=pKey(AP[+k.cov]);}
+  else if(k.rm!=null){const key=pKey(AP[+k.rm]);if(!A.removed.includes(key))A.removed.push(key);if(A.cover===key)A.cover=null;}
+  else if(k.back!=null){const key=pKey(M.photos[+k.back]);A.removed=A.removed.filter(x=>x!==key);}
+  else if(k.inc!=null){const key=pKey(M.photos[+k.inc]);A.incl=A.incl.includes(key)?A.incl.filter(x=>x!==key):A.incl.concat(key);}
+  else return;
+  albSave();await buildAlbum();
+});
+$('#p-alb').addEventListener('change',async e=>{
+  if(e.target.id!=='albTitle')return;const v=e.target.value.trim().toUpperCase();
+  ALB.title=v&&v!==M.title?v:'';albSave();await buildAlbum();
+});
+/* PDF: cada página del álbum se maqueta a 1400 px fuera de la pantalla (el diseño va en cqw: sale igual a cualquier
+   ancho) y se copia a un lienzo leyendo las cajas del navegador: fondos, bordes, fotos (la HD, no la de pantalla)
+   y cada letra en su sitio exacto. */
+function pageCanvas(root,W){
+  const R=root.getBoundingClientRect(),s=W/R.width,H=Math.round(R.height*s);
+  const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.imageSmoothingQuality='high';
+  const vis=col=>col&&col!=='transparent'&&!/,\s*0\)$/.test(col);
+  const box=r=>[(r.left-R.left)*s,(r.top-R.top)*s,r.width*s,r.height*s];
+  g.fillStyle=getComputedStyle(root).backgroundColor;g.fillRect(0,0,W,H);
+  const rng=document.createRange();
+  const tw=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:x=>x.nodeType===1&&getComputedStyle(x).display==='none'?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  let n;
+  while((n=tw.nextNode())){
+    if(n.nodeType===3){
+      const t=n.data;if(!/\S/.test(t))continue;const cs=getComputedStyle(n.parentElement);if(cs.visibility==='hidden')continue;
+      const fs=parseFloat(cs.fontSize)*s;g.font=`${cs.fontStyle} ${cs.fontWeight} ${fs}px ${cs.fontFamily}`;g.fillStyle=cs.color;g.textBaseline='alphabetic';
+      const mm=g.measureText('H'),asc=mm.fontBoundingBoxAscent!=null?mm.fontBoundingBoxAscent:fs*.8,desc=mm.fontBoundingBoxDescent!=null?mm.fontBoundingBoxDescent:fs*.2;
+      const up=cs.textTransform==='uppercase';let i=0;
+      for(const ch of t){const L=ch.length;
+        if(/\S/.test(ch)){rng.setStart(n,i);rng.setEnd(n,i+L);const r=rng.getClientRects()[0];
+          if(r&&r.width){const[x,y,,h]=box(r);g.fillText(up?ch.toUpperCase():ch,x,y+(h-(asc+desc))/2+asc);}}
+        i+=L;}
+      continue;
+    }
+    const r=n.getBoundingClientRect();if(!r.width||!r.height)continue;
+    const cs=getComputedStyle(n),[x,y,w,h]=box(r);
+    if(vis(cs.backgroundColor)){g.fillStyle=cs.backgroundColor;g.fillRect(x,y,w,h);}
+    for(const sd of['Top','Right','Bottom','Left']){const bw=parseFloat(cs['border'+sd+'Width'])*s;
+      if(bw>0&&cs['border'+sd+'Style']!=='none'&&vis(cs['border'+sd+'Color'])){g.fillStyle=cs['border'+sd+'Color'];
+        if(sd==='Top')g.fillRect(x,y,w,bw);else if(sd==='Bottom')g.fillRect(x,y+h-bw,w,bw);else if(sd==='Left')g.fillRect(x,y,bw,h);else g.fillRect(x+w-bw,y,bw,h);}}
+    if(n.tagName==='IMG'){
+      const p=n.dataset.k!=null?AP[+n.dataset.k]:null,src=p&&p.hd?p.hd:n;
+      const sw=src.naturalWidth||src.width,sh=src.naturalHeight||src.height;if(!sw||!sh)continue;
+      const k=Math.max(w/sw,h/sh);g.save();g.beginPath();g.rect(x,y,w,h);g.clip();g.drawImage(src,x+(w-sw*k)/2,y+(h-sh*k)/2,sw*k,sh*k);g.restore();
+    }
+  }
+  return c;
+}
+function makePdf(pages,title){
+  const enc=new TextEncoder(),parts=[],offs=[];let len=0;
+  const put=x=>{const b=typeof x==='string'?enc.encode(x):x;parts.push(b);len+=b.length;};
+  const obj=(n,body)=>{offs[n]=len;put(`${n} 0 obj\n`);body();put('\nendobj\n');};
+  const PW=841.89,PH=595.28,N=pages.length;
+  let tt='FEFF';for(let i=0;i<title.length;i++)tt+=title.charCodeAt(i).toString(16).padStart(4,'0').toUpperCase();
+  put('%PDF-1.4\n%âãÏÓ\n');
+  obj(1,()=>put('<< /Type /Catalog /Pages 2 0 R >>'));
+  obj(2,()=>put(`<< /Type /Pages /Kids [${pages.map((_,i)=>`${4+i*3} 0 R`).join(' ')}] /Count ${N} >>`));
+  obj(3,()=>put(`<< /Title <${tt}> /Producer (Borrado del Mapa) >>`));
+  pages.forEach((p,i)=>{const o=4+i*3,cs=`q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
+    obj(o,()=>put(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${o+2} 0 R >> >> /Contents ${o+1} 0 R >>`));
+    obj(o+1,()=>put(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`));
+    obj(o+2,()=>{put(`<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.bytes.length} >>\nstream\n`);put(p.bytes);put('\nendstream');});
+  });
+  const xo=len,sz=4+N*3;let x=`xref\n0 ${sz}\n0000000000 65535 f \n`;
+  for(let i=1;i<sz;i++)x+=String(offs[i]).padStart(10,'0')+' 00000 n \n';
+  put(x+`trailer\n<< /Size ${sz} /Root 1 0 R /Info 3 0 R >>\nstartxref\n${xo}\n%%EOF\n`);
+  return new Blob(parts,{type:'application/pdf'});
+}
+async function albPdf(){
+  albBusy=true;const btn=$('#albPdf');btn.disabled=true;let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
+  const host=document.createElement('div');host.style.cssText='position:fixed;left:-30000px;top:0;width:1400px;pointer-events:none';document.body.appendChild(host);
+  try{
+    try{await document.fonts.ready;}catch(_){}
+    const pgs=[...$('#album').querySelectorAll('.pg')],out=[];
+    for(let i=0;i<pgs.length;i++){
+      btn.textContent=`Creando PDF · página ${i+1} de ${pgs.length}`;
+      const c=pgs[i].cloneNode(true);c.querySelectorAll('.alb-ctl').forEach(e=>e.remove());
+      c.style.width='1400px';c.style.maxWidth='none';c.style.boxShadow='none';host.appendChild(c);
+      await Promise.all([...c.querySelectorAll('img')].map(im=>im.decode().catch(()=>{})));
+      const cv=pageCanvas(c,2400);c.remove();
+      const b=await toBlob(cv,.9);out.push({bytes:new Uint8Array(await b.arrayBuffer()),w:cv.width,h:cv.height});cv.width=cv.height=0;
+      await new Promise(r=>setTimeout(r,0));
+    }
+    const title=ALB.title||M.title,pdf=makePdf(out,title),name=`album-${slug(title)}.pdf`;
+    if(albPdfUrl)URL.revokeObjectURL(albPdfUrl);albPdfUrl=URL.createObjectURL(pdf);
+    let o=$('#albRes');if(o)o.remove();o=document.createElement('div');o.id='albRes';o.className='alb-res';
+    o.innerHTML=`<div class="alb-res-box"><b>Tu álbum en PDF está listo</b><span>${out.length} páginas · ${(pdf.size/1048576).toFixed(1).replace('.',',')} MB</span><div class="alb-res-row"><button type="button" class="btn" id="albSh">Compartir</button><a class="btn ghost" href="${albPdfUrl}" download="${esc(name)}">Descargar</a></div><button type="button" class="btn ghost" id="albX">Cerrar</button></div>`;
+    document.body.appendChild(o);
+    const f=new File([pdf],name,{type:'application/pdf'}),sh=$('#albSh');
+    if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.hidden=true;
+    sh.onclick=async()=>{try{await navigator.share({files:[f],title});}catch(_){}};
+    $('#albX').onclick=()=>o.remove();
+  }catch(e){reportErr(e);albMsg('No se pudo crear el PDF. Vuelve a intentarlo.');}
+  finally{host.remove();try{wake&&wake.release();}catch(_){}albBusy=false;albPdfBtn();}
 }
 
 /* estadísticas y carga */
@@ -1645,9 +1830,9 @@ $('#appPhotosBtn').onclick=async()=>{
   const btn=$('#appPhotosBtn');btn.disabled=true;const busy=$('#busy');busy.hidden=false;$('#busyT').textContent='TRAYENDO TUS FOTOS';
   const got=[];let fail=0;
   for(let i=0;i<APP_CANDIDATES.length;i++){const x=APP_CANDIDATES[i];$('#busyN').textContent=`Foto ${i+1} de ${APP_CANDIDATES.length}`;$('#busyBar').style.width=((i+1)/APP_CANDIDATES.length*100)+'%';
-    try{const blob=await embBlob(x.url);const bmp=await createImageBitmap(blob);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
+    try{const blob=await embBlob(x.url);const bmp=await createImageBitmap(blob);const px=Math.max(bmp.width,bmp.height);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
       const lat=isFinite(x.lat)&&Math.abs(x.lat)>.01?+x.lat:null,lng=lat!=null?+x.lng:null;
-      const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob});got.push(p);}catch(e){fail++;}}
+      const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob,srcPx:px});got.push(p);}catch(e){fail++;}}
   busy.hidden=true;btn.disabled=false;
   const added=addToPool(got);await applyPool(`Añadidas ${added} de la app.${fail?` ${fail} no se pudieron traer.`:''}`);checkAppPhotos();
 };
@@ -1774,9 +1959,9 @@ async function embLoad(){
     const busy=$('#busy');busy.hidden=false;$('#busyT').textContent='PREPARANDO TU VIAJE';
     for(let i=0;i<pick.length;i++){const x=pick[i];$('#busyN').textContent='Foto '+(i+1)+' de '+pick.length;$('#busyBar').style.width=((i+1)/pick.length*100)+'%';
       if(have.has(x.url)){next.push(have.get(x.url));continue;}
-      try{const blob=await embBlob(x.url);const bmp=await createImageBitmap(blob);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
+      try{const blob=await embBlob(x.url);const bmp=await createImageBitmap(blob);const px=Math.max(bmp.width,bmp.height);const hd=resizeTo(bmp,1800);if(bmp.close)bmp.close();
         const lat=x.lat!=null&&isFinite(x.lat)&&Math.abs(x.lat)>.01?+x.lat:null,lng=lat!=null?+x.lng:null;
-        const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob});next.push(p);}catch(e){console.warn('[viaje-fotos] foto',e);}}
+        const p=await finishPhoto({lat,lng,date:x.date||new Date(),name:'app-'+(x.fid||i)},hd);Object.assign(p,{gLat:lat,gLng:lng,src:'App',remote:x.url,savedId:x.fid||null,blob,srcPx:px});next.push(p);}catch(e){console.warn('[viaje-fotos] foto',e);}}
     busy.hidden=true;embCacheTrim();
     if(!TRACK)await restoreTrack();
     await embRoad();
@@ -1785,6 +1970,7 @@ async function embLoad(){
     await applyPool();
     showTab(embTab);
     embPost({ready:true,n:POOL.length});
+    albPremium().then(albPdfBtn);
   }catch(e){reportErr(e);embEmpty('No se pudieron cargar las fotos de esta guía.');}
   finally{embBusy=false;}
 }
