@@ -1674,7 +1674,8 @@ const salma = {
           // Álbum. Sin sesión, como antes: el botón GUARDAR pide registrarse.
           if (window.currentUser) {
             this.currentRouteId = null;
-            this.guardar().then(() => {
+            // Solo en Mis Viajes: no sale en Explorar hasta que la comparta ("guardar = para mí; compartir = para todos")
+            this.guardar({ publicar: false }).then(() => {
               if (this.currentRouteId) this._addSalmaBubble('Guardada en Mis Viajes. Cuando quieras otra ruta, dime destino y días.');
               else this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
             });
@@ -2347,19 +2348,20 @@ const salma = {
   },
 
   // ═══ GUARDAR ═══
-  async guardar() {
+  // opts.publicar === false → solo Mis Viajes, sin Explorar (guardado automático; se publica al compartir)
+  async guardar(opts = {}) {
     if (!this.currentRoute) {
       showToast('No hay ruta para guardar');
       return;
     }
     // Ya se está guardando (guardado automático al crearla + alguien pulsa GUARDAR a la vez): no duplicar
     if (this._guardando) return this._guardando;
-    this._guardando = this._guardarAhora().finally(() => { this._guardando = null; });
+    this._guardando = this._guardarAhora(opts).finally(() => { this._guardando = null; });
     return this._guardando;
   },
 
-  async _guardarAhora() {
-    const id = await guardarGuia(this.currentRoute);
+  async _guardarAhora(opts = {}) {
+    const id = await guardarGuia(this.currentRoute, opts);
     if (id) {
       this.currentRouteId = id;
       // Quitar botón guardar (guide-card o itinerario)

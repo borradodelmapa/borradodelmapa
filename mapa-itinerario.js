@@ -252,6 +252,8 @@ ${trk}
         const m = d.exists ? d.data() : null;
         if (m && m.published !== false && m.slug) slug = m.slug;
         else if (m && m.saved_from && m.saved_from.slug) slug = m.saved_from.slug;
+        // Guía propia guardada sola al crearla (aún no pública): se publica ahora, al compartirla
+        else if (m && typeof window.publicarGuiaGuardada === 'function') slug = await window.publicarGuiaGuardada(id);
       } catch (_) {}
     }
     if (slug) {

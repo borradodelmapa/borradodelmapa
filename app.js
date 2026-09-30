@@ -3589,7 +3589,10 @@ auth.onAuthStateChanged(async (user) => {
 
 // ═══ GUARDAR GUÍA ═══
 
-async function guardarGuia(routeData) {
+// opts.publicar === false: se guarda SOLO en Mis Viajes, sin guía pública ni Explorar (guardado automático al crear
+// la ruta, Paco 30 sept 2026: "guardar = para mí; compartir = para todos"). Se publica al compartirla
+// (publicarGuiaGuardada). Sin opts: como siempre (GUARDAR a mano publica).
+async function guardarGuia(routeData, opts = {}) {
   if (!currentUser) {
     // Registro lazy — guardar ruta y pedir login
     window._salmaLastRoute = routeData;
@@ -3598,10 +3601,10 @@ async function guardarGuia(routeData) {
     openModal();
     return null;
   }
-  return await guardarGuiaDirecto(routeData);
+  return await guardarGuiaDirecto(routeData, opts);
 }
 
-async function guardarGuiaDirecto(routeData) {
+async function guardarGuiaDirecto(routeData, opts = {}) {
   if (routeData && routeData._saved_from) return guardarRutaDeOtro(routeData);
   try {
     const r = routeData;
@@ -3657,9 +3660,11 @@ async function guardarGuiaDirecto(routeData) {
     // ponérselo a 0 o inflar su saldo desde la consola. El conteo pasa al Worker (paso 3 del
     // plan de pagos: gates server-side). Hasta entonces no se contabiliza nada aquí.
 
-    // Publicar guía pública (no esperar)
-    const slug = generateSlug(r.title || r.name || 'mi-ruta');
-    publishGuide(docRef.id, ruta, slug, r).catch(() => {});
+    // Publicar guía pública (no esperar) — salvo en el guardado automático, que se publica al compartir
+    if (opts.publicar !== false) {
+      const slug = generateSlug(r.title || r.name || 'mi-ruta');
+      publishGuide(docRef.id, ruta, slug, r).catch(() => {});
+    }
 
     // PIEZA A — Enrich (Pasada 2) eliminado: era una 2ª llamada de IA por ruta.
 
@@ -3764,10 +3769,33 @@ async function publishGuide(docId, rutaData, slug, routeData) {
     // Guardar slug en la guía del usuario
     await db.collection('users').doc(currentUser.uid)
       .collection('maps').doc(docId).update({ slug: slug, published: true });
+    return true;
   } catch (e) {
     console.warn('Error publicando guía:', e);
+    return false;
   }
 }
+
+// Una guía propia guardada que aún no es pública (se guardó sola al crearla) se publica al compartirla:
+// el enlace de compartir es su guía pública (CLAUDE.md §10). Devuelve el slug, o null si no se pudo.
+async function publicarGuiaGuardada(docId) {
+  if (!currentUser || !docId) return null;
+  try {
+    const d = await db.collection('users').doc(currentUser.uid).collection('maps').doc(docId).get();
+    if (!d.exists) return null;
+    const m = d.data();
+    if (m.saved_from) return null;                       // ruta de otro viajero: no se publica a tu nombre
+    if (m.slug && m.published !== false) return m.slug;  // ya era pública
+    let r = null;
+    try { r = JSON.parse(m.itinerarioIA || 'null'); } catch (_) {}
+    const slug = generateSlug(m.nombre || 'mi-ruta');
+    return (await publishGuide(docId, m, slug, r)) ? slug : null;
+  } catch (e) {
+    console.warn('Error publicando al compartir:', e);
+    return null;
+  }
+}
+window.publicarGuiaGuardada = publicarGuiaGuardada;
 
 // ═══ ENRIQUECIMIENTO (Pasada 2) — ELIMINADO en PIEZA A ═══
 // Era una 2ª llamada de IA (GPT-4o-mini) por ruta para rellenar context/food/sleep/eat.
