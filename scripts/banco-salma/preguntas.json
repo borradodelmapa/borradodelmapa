@@ -204,6 +204,17 @@
       ]
     },
     {
+      "id": "chat-ruta-sin-dias",
+      "mensaje": "Ruta Transpirenaica en moto saliendo de ondarrubia y llegada en cadaques",
+      "debe": [
+        "plan por días de la ruta, de Hondarribia a Cadaqués, con sitios concretos"
+      ],
+      "no_debe": [
+        "preguntar antes de dar el plan",
+        "decir que no encuentra la ruta en el mapa"
+      ]
+    },
+    {
       "id": "guia-transpirenaica-moto",
       "boton": "guia",
       "mensaje": "5 días en Transpirenaica en moto de Hondarribia a Cadaqués",

@@ -2695,6 +2695,15 @@ function isRouteRequest(message, history) {
   if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
   // "un solo día" / "solo un día" / "sólo un día" — variantes habituales para pedir ruta de un día
   if (/\b(un\s+solo|solo\s+un|s[óo]lo\s+un)\s+d[ií]a\b/i.test(message)) return true;
+  // Ruta por carretera SIN número de días (Paco, 30 sept 2026: "Ruta Transpirenaica en moto saliendo de ondarrubia y
+  // llegada en cadaques" iba como charla — plan sin días y guía por el camino lento). El mensaje EMPIEZA pidiendo una
+  // ruta y dice por dónde o en qué. Fuera: preguntas ("¿hay una gasolinera en la ruta?") y navegación ("ruta más
+  // rápida a Valencia", eso es cómo llegar).
+  const _m = String(message || '');
+  if (!/[?¿]/.test(_m)
+    && /^\s*(?:(?:hazme|haz|quiero|quisiera|me\s+gustar[ií]a(?:\s+hacer)?|planea(?:me)?|prep[aá]rame|m[oó]ntame|dame|busca(?:me)?|organ[ií]zame)\s+(?:una?\s+)?)?(?:ruta|road\s*trip|roadtrip|recorrido)\b/i.test(_m)
+    && /\b(moto|coche|camper|autocaravana|furgo\w*|bici\w*|a\s+pie|andando|por|desde|hasta|saliendo|salida|llegada|llegando|recorriendo|de\s+\S+.*\s+a\s+\S+)\b/i.test(_m)
+    && !/\b(m[aá]s\s+r[aá]pida|m[aá]s\s+corta|cu[aá]nto\s+(tardo|se\s+tarda|hay)|c[oó]mo\s+llego|atasco|tr[aá]fico|peaje)\b/i.test(_m)) return true;
   return false;
 }
 
