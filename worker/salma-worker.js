@@ -6528,6 +6528,36 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   };
 }
 
+// RUTAS POR CARRETERA / REGIÓN (sin un centro): el lector saca las paradas, pero Google necesita las coordenadas de
+// cada sitio para comprobarlo. Se le piden SOLO las coordenadas a Sonnet (una lista corta, ~20 tokens por sitio) en vez
+// de reescribir el plan entero (Pirineos, 30 sept 2026: la reescritura tardó 84 s). null si falla → como siempre.
+async function coordsForMarkedStops(stops, env, { countryName = '', region = '', usageAcc = null } = {}) {
+  if (!Array.isArray(stops) || !stops.length || !env.ANTHROPIC_API_KEY) return null;
+  const lista = stops.map((s, i) => `${i + 1}. ${s.name} (día ${s.day})`).join('\n');
+  const sys = 'Devuelves coordenadas reales de lugares. Solo JSON, sin texto ni backticks: {"pais":"País principal del viaje, en español","c":[[lat,lng],...]} con UN par por lugar, en el MISMO orden de la lista. Si un lugar no lo sabes con seguridad, pon [0,0].';
+  const user = `Viaje${region ? ' por ' + region : ''}${countryName ? ' (' + countryName + ')' : ''}. Los lugares van en orden de ruta, así que cada uno está cerca del anterior y del siguiente.\n\n${lista}`;
+  try {
+    const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1500, system: sys, messages: [{ role: 'user', content: user }] }),
+      signal: AbortSignal.timeout(45000),
+    });
+    if (!res.ok) { console.log(`[LECTOR] coordenadas: HTTP ${res.status}`); return null; }
+    const data = await res.json();
+    if (usageAcc && data.usage) { usageAcc.tin += data.usage.input_tokens || 0; usageAcc.tout += data.usage.output_tokens || 0; }
+    const txt = String(data.content?.[0]?.text || '');
+    const j = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
+    if (!Array.isArray(j.c) || j.c.length !== stops.length) { console.log(`[LECTOR] coordenadas: ${j.c?.length || 0} para ${stops.length} sitios`); return null; }
+    const c = j.c.map(p => (Array.isArray(p) && isFinite(+p[0]) && isFinite(+p[1])) ? [+p[0], +p[1]] : [0, 0]);
+    c.pais = typeof j.pais === 'string' ? j.pais.trim().slice(0, 40) : '';
+    return c;
+  } catch (e) {
+    console.log('[LECTOR] coordenadas: ' + (e.name === 'TimeoutError' ? 'timeout' : e.message));
+    return null;
+  }
+}
+
 async function convertProseToRouteJson(text, env, opts = {}) {
   if (!text || typeof text !== 'string' || text.length < 100) return null;
   const guided = opts.guided || null;
@@ -14328,7 +14358,10 @@ INSTRUCCIONES:
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         const _fotoNombres = new Map(); // url de foto de buscar_foto → [nombre de Google, nombre pedido] (filtro de sitios marcados)
         // Zona de la conversación para buscar_foto (30 sept 2026): la guía abierta; si no hay, el destino ya resuelto.
-        const _photoZone = photoZoneFromRoute(currentRoute)
+        // La guía abierta SOLO si se está editando (editingActiveRoute): la app manda siempre la última guía en
+        // current_route, y un viaje nuevo (Pirineos) salía sin fotos por "fuera de zona" de la guía de antes (Ronda),
+        // pagando las búsquedas igual (Paco, 30 sept 2026).
+        const _photoZone = (editingActiveRoute ? photoZoneFromRoute(currentRoute) : null)
           || ((anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number') ? { lat: anchorCountry.lat, lng: anchorCountry.lng, km: 120 } : null);
         const _chatPlaces = new Map(); // catálogo de la respuesta: sitios de buscar_lugar (place_id, coords, ciudad) → enlaces del chat
         // Repara ![Name](...) roto o corrupto de Claude usando la URL real que ya devolvió
@@ -14410,14 +14443,27 @@ INSTRUCCIONES:
             // LECTOR (caso p-munnkksyhs3): destino de una ciudad o pueblo + plan con sitios marcados [[ ]] →
             // la guía sale del propio plan, sin que Sonnet lo reescriba. Si no se lee limpio → como siempre.
             const _tConv = Date.now();
-            if (!mergeIntoRoute && env.GOOGLE_PLACES_KEY && anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number') {
+            if (!mergeIntoRoute && env.GOOGLE_PLACES_KEY && tieneMarcasSitio(sourceText)) {
+              // Ciudad o pueblo (ancla de punto): Google busca cada sitio alrededor del destino, sin coordenadas.
+              // Ruta por carretera o región: se piden SOLO las coordenadas (coordsForMarkedStops).
+              const _ciudad = !!(anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number');
+              const _dest = (guidedRoute && guidedRoute.destino) || (anchorCountry && anchorCountry.locality) || '';
               _fastPathRoute = routeFromMarkedText(sourceText, {
-                destino: (guidedRoute && guidedRoute.destino) || anchorCountry.locality || '',
+                destino: _dest,
                 dias: (guidedRoute && parseInt(guidedRoute.duracion_dias, 10)) || extractDaysFromMessage(message || '') || 0,
-                countryName: anchorCountry.countryName || '',
-                region: anchorCountry.locality || '',
+                countryName: (anchorCountry && anchorCountry.countryName) || '',
+                // Ruta por carretera: la región es el país. verifyAllStops busca "Sitio, <región>" y un destino largo
+                // ("Pirineos de Hondarribia a Cadaqués") confundiría a Google; las coordenadas hacen el resto.
+                region: _ciudad ? (anchorCountry.locality || '') : ((anchorCountry && anchorCountry.countryName) || ''),
               });
-              if (_fastPathRoute) console.log(`[LECTOR] ✓ ${_fastPathRoute.stops.length} paradas, ${_fastPathRoute.duration_days} días, ${Date.now() - _tConv} ms — sin reescritura`);
+              if (_fastPathRoute && !_ciudad) {
+                const _c = await coordsForMarkedStops(_fastPathRoute.stops, env, { countryName: _fastPathRoute.country, region: _dest, usageAcc: _reqUsage });
+                if (_c) {
+                  _fastPathRoute.stops.forEach((s, i) => { s.lat = _c[i][0]; s.lng = _c[i][1]; });
+                  if (!_fastPathRoute.country && _c.pais) { _fastPathRoute.country = _c.pais; _fastPathRoute.region = _c.pais; }
+                } else _fastPathRoute = null;
+              }
+              if (_fastPathRoute) console.log(`[LECTOR] ✓ ${_fastPathRoute.stops.length} paradas, ${_fastPathRoute.duration_days} días, ${Date.now() - _tConv} ms — sin reescritura${_ciudad ? '' : ' (con coordenadas)'}`);
             }
             if (!_fastPathRoute) {
               _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry, usageAcc: _reqUsage, minStops: _minStops });

@@ -1552,7 +1552,12 @@ const salma = {
 
       // Si hay ruta, renderizar guide-card.
       if (data.route && data.route.stops) {
-        const isEdit = this.currentRouteId && this.currentRoute;
+        // Solo es EDICIÓN si se está editando la guía desde su popup (_chatAreaOverride). Antes bastaba con que
+        // quedara abierta o recordada una guía anterior (currentRouteId de la última guía): una ruta NUEVA se
+        // trataba como edición de aquella — no se guardaba, se abría con el número de la otra (sus fotos en la
+        // pestaña Fotos) y pedía "¿la guardo igualmente?" sobre la guía vieja (Paco, 30 sept 2026, Pirineos).
+        const isEdit = !!(this._chatAreaOverride && this.currentRouteId && this.currentRoute);
+        if (!isEdit) this.currentRouteId = null;
         const prevStops = this.currentRoute?.stops || [];
         const prevStopsCount = prevStops.length;
         this.currentRoute = data.route;
