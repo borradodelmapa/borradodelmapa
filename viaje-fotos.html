@@ -1398,6 +1398,62 @@ async function mapImage(w,h,numbers,pad=70){
   drawBase(g,w,h,v,PAL.paper,u*1.2);drawRoute(g,w,h,v,M.stops,M.stops.length-1,PAL.paper,u*1.3);drawPins(g,w,h,v,M.stops,PAL.paper,u*2,{numbers});
   return URL.createObjectURL(await toBlob(c,.9));
 }
+/* Mapa del álbum con el MAPA PROPIO (30 sept 2026): el mismo del vídeo nuevo (video.html) — Protomaps + relieve,
+   alojados en R2 y servidos por el Worker (/mapas, /terreno). Solo España y Portugal (misma zona que el vídeo);
+   fuera de ella, o si algo falla o tarda, el mapa dibujado de siempre (mapImage). Las librerías se cargan solo aquí.
+   💶 Cada álbum nuevo pide unos pocos trozos de mapa y relieve al Worker (se hace una vez por viaje y visita). */
+const MAPA_ZONAS=[{id:'es-pt',boxes:[[-9.6,35.9,4.45,43.95],[-18.3,27.55,-13.3,29.5]]}];
+const mapaZona=pts=>MAPA_ZONAS.find(z=>pts.every(p=>z.boxes.some(b=>p[0]>=b[0]&&p[0]<=b[2]&&p[1]>=b[1]&&p[1]<=b[3])));
+let mapaLibs=null;
+const loadScript=src=>new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('no carga '+src));document.head.appendChild(s);});
+function mapaLibsLoad(){
+  return mapaLibs||(mapaLibs=(async()=>{
+    if(!document.querySelector('link[href$="maplibre-gl.css"]')){const l=document.createElement('link');l.rel='stylesheet';l.href='/vendor/mapa/maplibre-gl.css';document.head.appendChild(l);}
+    await loadScript('/vendor/mapa/maplibre-gl.js');await loadScript('/vendor/mapa/pmtiles.js');await loadScript('/vendor/mapa/basemaps.js');
+    const p=new pmtiles.Protocol();maplibregl.addProtocol('pmtiles',p.tile);
+  })().catch(e=>{mapaLibs=null;throw e;}));
+}
+// Colores del estilo "Viaje" del vídeo (video.html, BASE_CLARO)
+const MAPA_F={background:'#e9f2dc',earth:'#eef3df',water:'#5fb8ea',park_a:'#b9e39a',park_b:'#8fd46a',wood_a:'#a9dc86',wood_b:'#7ec85a',scrub_a:'#c7e8a8',scrub_b:'#a4da7c',
+  sand:'#f5e6b8',beach:'#f7e3a6',glacier:'#ffffff',highway:'#ffc94d',highway_casing_early:'#e0a12c',highway_casing_late:'#e0a12c',
+  major:'#ffe7a3',major_casing_early:'#dcbc6d',major_casing_late:'#dcbc6d',minor_a:'#ffffff',minor_b:'#ffffff',minor_casing:'#d3ccb8',link:'#ffe7a3',
+  city_label:'#1f1b17',city_label_halo:'#ffffff',subplace_label:'#3f3a33',subplace_label_halo:'#ffffff',roads_label_major:'#5e574e',roads_label_minor:'#6d665c',
+  ocean_label:'#1f6aa6',buildings:'#e5dccb',boundaries:'#b19f7e'};
+async function mapImageNew(W,H){
+  const pts=M.stops.map(s=>[s.lng,s.lat]);const zona=mapaZona(pts);if(!zona||pts.length<1)return null;
+  await mapaLibsLoad();
+  const API=window.SALMA_API||'https://salma-api.borradodelmapa-api.workers.dev';
+  const layers=basemaps.layers('protomaps',Object.assign({},basemaps.namedFlavor('light'),MAPA_F),{lang:'es'});
+  const iw=layers.findIndex(l=>l.id==='water');
+  layers.splice(iw<0?2:iw,0,{id:'relieve',type:'hillshade',source:'dem',paint:{'hillshade-exaggeration':.55,'hillshade-shadow-color':'#4b5a3a','hillshade-highlight-color':'#ffffff','hillshade-accent-color':'#6e7f52'}});
+  // Recorrido: la carretera de la guía si la hay; si no, recto entre paradas
+  const road=GUIDE&&Array.isArray(GUIDE.road)&&GUIDE.road.length>1?GUIDE.road.map(c=>[+c[1],+c[0]]).filter(c=>isFinite(c[0])&&isFinite(c[1])):null;
+  const line=road&&road.length>1?road:pts;
+  layers.push({id:'ruta-borde',type:'line',source:'ruta',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#ffffff','line-width':W/160}});
+  layers.push({id:'ruta',type:'line',source:'ruta',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#F4630B','line-width':W/300}});
+  const style={version:8,glyphs:location.origin+'/vendor/mapa/fonts/{fontstack}/{range}.pbf',sprite:location.origin+'/vendor/mapa/sprites/light',
+    sources:{protomaps:{type:'vector',url:'pmtiles://'+API+'/mapas/'+zona.id+'.pmtiles'},
+      dem:{type:'raster-dem',tiles:[API+'/terreno/terreno-'+zona.id+'/{z}/{x}/{y}.png'],encoding:'terrarium',tileSize:256,maxzoom:12},
+      ruta:{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:line}}}},layers};
+  let a=Infinity,b=Infinity,c=-Infinity,d=-Infinity;line.concat(pts).forEach(([x,y])=>{a=Math.min(a,x);b=Math.min(b,y);c=Math.max(c,x);d=Math.max(d,y);});
+  const box=document.createElement('div');box.style.cssText=`position:fixed;left:-99999px;top:0;width:${W}px;height:${H}px`;document.body.appendChild(box);
+  let map=null;
+  try{
+    map=new maplibregl.Map({container:box,style,bounds:[[a,b],[c,d]],fitBoundsOptions:{padding:Math.round(W*.12),maxZoom:12},interactive:false,attributionControl:false,
+      pixelRatio:1,fadeDuration:0,preserveDrawingBuffer:true,canvasContextAttributes:{preserveDrawingBuffer:true,antialias:true}});
+    await new Promise((res,rej)=>{const t=setTimeout(()=>rej(new Error('mapa: tarda demasiado')),25000);map.once('idle',()=>{clearTimeout(t);res();});});
+    const cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+    g.drawImage(map.getCanvas(),0,0,W,H);
+    // Paradas numeradas, como en el mapa dibujado
+    const r=W/85;
+    M.stops.forEach((s,i)=>{const p=map.project([s.lng,s.lat]);
+      g.beginPath();g.arc(p.x,p.y,r,0,7);g.fillStyle='#1c1813';g.fill();g.lineWidth=r*.28;g.strokeStyle='#ffffff';g.stroke();
+      g.fillStyle='#ffffff';g.font=`800 ${r*1.2}px "Barlow Condensed",sans-serif`;g.textAlign='center';g.textBaseline='middle';g.fillText(String(i+1),p.x,p.y+r*.06);});
+    // Atribución obligatoria de OpenStreetMap
+    g.font=`500 ${W/110}px Inter,sans-serif`;g.textAlign='right';g.textBaseline='bottom';g.fillStyle='rgba(28,24,19,.75)';g.fillText('© OpenStreetMap',W-W/60,H-W/60);
+    return URL.createObjectURL(await toBlob(cv,.9));
+  }finally{try{map&&map.remove();}catch(_){}box.remove();}
+}
 /* Álbum V1 (30 sept 2026, caso 05 — decisiones de Paco en docs/estudio-video-album.md):
    · Fotolibro CUADRADO 21×21 en doble página (portada y contraportada solas). Tres portadas: foto entera con el
      título encima, foto con franja blanca, foto enmarcada con el nombre debajo.
@@ -1428,7 +1484,10 @@ async function buildAlbum(){
   const low=M.photos.filter(isLow);
   AP=M.photos.filter(p=>!rm.has(pKey(p))&&(!isLow(p)||inc.has(pKey(p))));const inAP=new Set(AP);
   const nm=!!M.noMap;
-  if(albMaps.m!==M){const m=M;if(albMaps.big)URL.revokeObjectURL(albMaps.big);albMaps={m,big:nm?null:await mapImage(1600,1600,true,120)};}
+  if(albMaps.m!==M){const m=M;if(albMaps.big)URL.revokeObjectURL(albMaps.big);albMaps={m,big:nm?null:await mapImage(1600,1600,true,120),pending:null};
+    // Mapa propio (España y Portugal): se pone en cuanto está listo, sin hacer esperar al álbum
+    if(!nm)albMaps.pending=mapImageNew(1600,1600).then(u=>{if(!u)return;if(albMaps.m!==m){URL.revokeObjectURL(u);return;}const old=albMaps.big;albMaps.big=u;
+      document.querySelectorAll('#album img[data-mapa]').forEach(i=>i.src=u);if(old)URL.revokeObjectURL(old);}).catch(e=>console.warn('[album] mapa propio',e)).finally(()=>{if(albMaps.m===m)albMaps.pending=null;});}
   albBar(low,inc);
   if(!AP.length){$('#album').innerHTML='<p class="alb-none">No queda ninguna foto en el álbum. Recupéralas en «Editar».</p>';return;}
   const pad=n=>String(n).padStart(2,'0');
@@ -1446,7 +1505,7 @@ async function buildAlbum(){
   else pages.push({label:'Portada',html:`<section class="pg c-sangre"><figure>${img(cover)}</figure><div class="shade t"></div><div class="ct"><h3 style="font-size:${fit(11,86)}cqw">${AT('cover.title',M.title)}</h3>${AT('cover.sub',dates,'p')}</div></section>`});
   // el recorrido: mapa a toda página + lista de paradas
   if(!nm){
-    pages.push({label:'Mapa',full:true,html:`<section class="pg p-mapa"><figure><img src="${albMaps.big}" alt="Mapa con las paradas numeradas"></figure></section>`});
+    pages.push({label:'Mapa',full:true,html:`<section class="pg p-mapa"><figure><img src="${albMaps.big}" alt="Mapa con las paradas numeradas" data-mapa></figure></section>`});
     pages.push({label:'El recorrido',html:`<section class="pg p-lista">${AT('map.eyebrow','El recorrido','p','eyebrow')}<h4>${AT('map.km',nf(M.km)+' km')}<br>${AT('map.days',M.days+' '+(M.days===1?'día':'días'))}</h4><ol>${M.stops.slice(0,14).map(s=>`<li><b>${pad(s.idx+1)}</b><div>${AT('stop.'+s.idx,s.name)}<small>${AT('stop.'+s.idx+'.d',`Día ${s.day} · ${short(s.date)}`)}</small></div></li>`).join('')}</ol></section>`});
   }
   // por días: apertura con su primera foto y después las fotos maquetadas por orientación
@@ -1597,6 +1656,7 @@ function makePdf(pages,title){
 const PDF_PX=1500; // píxeles por página de 21 cm (≈180 ppp)
 async function albPdf(){
   if(albEdit){albEdit=false;await buildAlbum();}
+  if(albMaps.pending){const b=$('#albPdf');b.disabled=true;b.textContent='Preparando el mapa…';try{await albMaps.pending;}catch(_){}}
   albBusy=true;const btn=$('#albPdf');btn.disabled=true;let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
   const host=document.createElement('div');host.style.cssText='position:fixed;left:-30000px;top:0;pointer-events:none';document.body.appendChild(host);
   try{
