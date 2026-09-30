@@ -286,20 +286,28 @@ const fotosViaje = (() => {
      El motor es viaje-fotos.html en modo app (?embed=1&guia=<id>), dentro de un iframe que vive
      en el <body> (fijo, colocado encima del hueco .fv-pane-media). Así se puede salir de la
      guía mientras se crea el vídeo sin cortarlo (mover un iframe en el DOM lo recarga). */
-  const MED = { frame: null, holder: null, guia: null, encoding: false, hasVideo: false, pill: '', done: false, ro: null };
+  const MED = { frame: null, holder: null, guia: null, engine: null, encoding: false, hasVideo: false, pill: '', done: false, ro: null };
+  // Guías fuera de la zona del motor nuevo (avisa 'unsupported'): su VÍDEO vuelve al motor anterior
+  const OLD_ENGINE = new Set();
 
   // v=: subirlo al cambiar viaje-fotos.html (si no, el móvil puede usar una copia vieja)
-  function _mediaURL(guia, tab) { return `/viaje-fotos.html?embed=1&v=13&guia=${encodeURIComponent(guia)}&tab=${tab}`; }
+  // VÍDEO: motor nuevo (video.html: mapa propio + relieve 3D + vehículo 3D, 30 sept 2026); ÁLBUM y guías fuera de zona: el anterior
+  function _engineFor(guia, tab) { return tab === 'vid' && !OLD_ENGINE.has(guia) ? 'nuevo' : 'viejo'; }
+  function _mediaURL(guia, tab, engine) {
+    return engine === 'nuevo' ? `/video.html?v=2&guia=${encodeURIComponent(guia)}`
+      : `/viaje-fotos.html?embed=1&v=13&guia=${encodeURIComponent(guia)}&tab=${tab}`;
+  }
 
   function _mediaShow(tab) {
     const s = _st; if (!s) return;
     // Otro viaje creando su vídeo: no se corta
-    if (MED.frame && MED.guia !== s.docId && MED.encoding) {
+    const engine = _engineFor(s.docId, tab);
+    if (MED.frame && (MED.guia !== s.docId || MED.engine !== engine) && MED.encoding) {
       s.media.innerHTML = `<div class="fv-empty fv-pad"><b>Se está creando otro vídeo</b><p>${esc(MED.pill || '')}</p><p class="fv-note">Cuando termine podrás hacer el de este viaje.</p></div>`;
       return;
     }
     s.media.innerHTML = '';
-    if (!MED.frame || MED.guia !== s.docId) {
+    if (!MED.frame || MED.guia !== s.docId || MED.engine !== engine) {
       if (MED.frame) _mediaDestroy();
       MED.holder = document.createElement('div');
       MED.holder.className = 'fv-media-holder';
@@ -307,10 +315,10 @@ const fotosViaje = (() => {
       MED.frame.className = 'fv-media-frame';
       MED.frame.title = 'Vídeo y álbum del viaje';
       MED.frame.setAttribute('allow', 'fullscreen; web-share; screen-wake-lock');
-      MED.frame.src = _mediaURL(s.docId, tab);
+      MED.frame.src = _mediaURL(s.docId, tab, engine);
       MED.holder.appendChild(MED.frame);
       document.body.appendChild(MED.holder);
-      MED.guia = s.docId; MED.encoding = false; MED.hasVideo = false; MED.pill = ''; MED.done = false;
+      MED.guia = s.docId; MED.engine = engine; MED.encoding = false; MED.hasVideo = false; MED.pill = ''; MED.done = false;
     } else {
       _post({ tab });
       if (s._mediaStale) { s._mediaStale = false; _post({ reload: true }); }
@@ -343,7 +351,7 @@ const fotosViaje = (() => {
   }
   function _mediaDestroy() {
     if (MED.holder) MED.holder.remove();
-    MED.frame = null; MED.holder = null; MED.guia = null; MED.encoding = false; MED.hasVideo = false; MED.pill = ''; MED.done = false;
+    MED.frame = null; MED.holder = null; MED.guia = null; MED.engine = null; MED.encoding = false; MED.hasVideo = false; MED.pill = ''; MED.done = false;
     _pillPaint();
   }
   function _post(o) {
@@ -353,6 +361,14 @@ const fotosViaje = (() => {
     if (e.origin !== location.origin || !e.data || e.data.type !== 'bdm-vf') return;
     if (!MED.frame || e.source !== MED.frame.contentWindow) return;
     const d = e.data;
+    // Guía fuera de la zona del motor nuevo: vuelve al anterior sin que el usuario note nada
+    if (d.unsupported && MED.guia) {
+      OLD_ENGINE.add(MED.guia);
+      const t = _st && _st.docId === MED.guia ? _st.tab : null;
+      _mediaDestroy();
+      if (t === 'vid' || t === 'alb') _mediaShow(t);
+      return;
+    }
     // "Subir fotos" desde VÍDEO/ÁLBUM vacíos: se suben como en FOTOS (misma revisión de fotos intrusas)
     if (Array.isArray(d.upload) && d.upload.length && _st && _st.docId === MED.guia) {
       _show('fotos');
@@ -843,6 +859,7 @@ const fotosViaje = (() => {
       <div class="fv-stray-bar" id="fv-stray-bar" hidden>
         <span id="fv-stray-n"></span>
         <button type="button" class="fv-stray-del" id="fv-stray-del" aria-label="Quitar las fotos elegidas">${IC_TRASH}</button>
+        <button type="button" class="fv-stray-vid" id="fv-stray-vid">Crear vídeo</button>
         <button type="button" class="fv-stray-move" id="fv-stray-move">Pasar a un viaje</button>
       </div>`;
     document.getElementById('fv-stray-back').addEventListener('click', () => { window._rutasTab = 'mis'; showState('rutas'); });
@@ -852,6 +869,7 @@ const fotosViaje = (() => {
     _strayPaint(list);
     document.getElementById('fv-stray-move').addEventListener('click', () => _strayPickTrip());
     document.getElementById('fv-stray-del').addEventListener('click', () => _strayDelete());
+    document.getElementById('fv-stray-vid').addEventListener('click', () => _strayVideo());
   }
 
   function _strayPaint(list) {
@@ -925,6 +943,28 @@ const fotosViaje = (() => {
         }
       }));
     } catch (_) { sheet.querySelector('.fv-sheet-list').innerHTML = '<p class="fv-note fv-pad">No se pudieron cargar tus guías.</p>'; }
+  }
+
+  // Vídeo sin guía (30 sept 2026): el editor de vídeo (video.html?singuia) con las fotos elegidas; las paradas
+  // salen de dónde se hizo cada foto. Los ids van por sessionStorage (misma pestaña, mismo origen).
+  function _strayVideo() {
+    if (!_sel.size) return;
+    try { sessionStorage.setItem('bdm_video_fotos', JSON.stringify([..._sel])); } catch (_) {}
+    const ov = document.createElement('div');
+    ov.className = 'fv-vidsg';
+    ov.innerHTML = '<div class="fv-vidsg-h"><button type="button" class="tm-back">‹ Fotos sin viaje</button></div><iframe src="/video.html?v=2&singuia=1" title="Vídeo de tus fotos"></iframe>';
+    document.body.appendChild(ov);
+    const fr = ov.querySelector('iframe');
+    let enc = false;
+    const onMsg = e => { if (e.origin === location.origin && e.data && e.data.type === 'bdm-vf' && e.source === fr.contentWindow) enc = !!e.data.encoding; };
+    addEventListener('message', onMsg);
+    const close = (fromHistory) => {
+      if (enc && !fromHistory && !confirm('Se está creando el vídeo. ¿Salir y perderlo?')) return;
+      removeEventListener('message', onMsg); ov.remove();
+      if (!fromHistory && window.popModal) window.popModal('fv-vidsg');
+    };
+    if (window.pushModal) window.pushModal('fv-vidsg', () => close(true));
+    ov.querySelector('.tm-back').onclick = () => close();
   }
 
   async function _strayDelete() {

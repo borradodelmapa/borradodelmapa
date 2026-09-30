@@ -164,7 +164,13 @@
 .fv-stray-bar[hidden] { display:none; }
 .fv-stray-bar > span { flex:1; font:700 16px/1 var(--font-cond); text-transform:uppercase; letter-spacing:.04em; color:var(--text-primary); }
 .fv-stray-del { width:44px; height:44px; background:none; border:1px solid var(--border); color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.fv-stray-vid { min-height:44px; padding:0 12px; background:none; border:1px solid var(--accent); color:var(--accent); cursor:pointer; font:700 16px/1 var(--font-cond); letter-spacing:.05em; text-transform:uppercase; }
 .fv-stray-move { min-height:44px; padding:0 16px; border:0; cursor:pointer; background:var(--accent); color:var(--text-on-accent); font:700 16px/1 var(--font-cond); letter-spacing:.05em; text-transform:uppercase; }
+
+/* Vídeo sin guía: el editor de vídeo a pantalla completa con las fotos elegidas */
+.fv-vidsg { position:fixed; inset:0; z-index:1200; background:var(--bg-base); display:flex; flex-direction:column; }
+.fv-vidsg-h { padding:8px 12px; border-bottom:1px solid var(--border); }
+.fv-vidsg iframe { flex:1; width:100%; border:0; }
 
 /* Hoja "¿A qué viaje?" */
 .fv-sheet { position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.6); display:flex; align-items:flex-end; justify-content:center; }

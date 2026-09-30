@@ -7,6 +7,7 @@ Recursos del mapa del vídeo (30 sept 2026) — todos alojados en nuestro servid
 - sprites/ (light) — MIT, derivados de tangrams/icons (github.com/protomaps/basemaps-assets)
 - Datos del mapa: © OpenStreetMap (ODbL), extracto Protomaps Basemap build 20260929, en R2 salma-photos/mapas/.
   Atribución obligatoria "© OpenStreetMap" en el vídeo.
-- three.js 0.186.1 (three/three.module.js + three.core.js) — MIT (three/LICENSE-three.txt). La moto 3D está hecha en código por nosotros.
+- three.js 0.186.1 (three/three.module.js + three.core.js + addons/: GLTFLoader, BufferGeometryUtils, SkeletonUtils con el import cambiado a '../../three.module.js') — MIT (three/LICENSE-three.txt).
+- Vehículos 3D de Quaternius (quaternius.com, vía poly.pizza) — CC0 1.0 (dominio público): vehiculos/suv, deportivo, tren-alta-velocidad, tren-locomotora, barco, velero, caballo, caballo-blanco, llama (.glb). El resto de vehículos está hecho en código por nosotros (video-vehiculos.js).
 - Relieve: AWS Terrain Tiles (terrarium, datos abiertos: SRTM, GMTED, ETOPO1, EU-DEM…), recorte Cantabria-Asturias z0-12
   empaquetado en R2 salma-photos/mapas/terreno-cantabria-asturias.bin/.json, servido por el Worker /terreno/…

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Vídeo del viaje — Borrado del Mapa</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/vendor/mapa/maplibre-gl.css">
+<style>
+/* EDITOR DE VÍDEO dentro de la app (30 sept 2026, caso p-munccqyuwbt). Se abre en la pestaña VÍDEO de cada guía
+   (iframe: /video.html?guia=<id>&v=N, lo monta fotos-viaje.js). Motor: el de muestra-video.html v3 ("muy bien", Paco):
+   mapa vectorial propio (Protomaps en R2) + relieve 3D propio + vehículo 3D + polaroid con logo. Todo alojado por
+   nosotros (vendor/mapa). Editor según el boceto aprobado por Paco: destino (red social) → formato/duración/calidad,
+   estilo, vehículo con imagen, música, paradas editables, y en "Opciones avanzadas" GPX, transporte por tramo,
+   duración y calidad. Zona cubierta: España, Portugal, Baleares y Canarias; fuera, 'unsupported' → motor anterior.
+   En local: ?mapas=local sirve mapa y relieve desde .mapas/ (.claude/serve.js), sin gastar datos. */
+:root{--ink:#0D0F10;--panel:#17191B;--line:#2B2E30;--cream:#ECEBE8;--muted:#9A9EA1;--soft:#C4C7C9;--gold:#F4630B;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0;background:var(--ink);color:var(--cream);font:15px/1.4 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit;color:inherit}
+.bc{font-family:"Barlow Condensed","Arial Narrow",sans-serif}
+.wrap{display:flex;flex-direction:column;gap:16px;padding:14px 16px 40px;max-width:560px;margin:0 auto}
+.lbl{font:700 13px/1 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.1em;color:#7E8285;text-transform:uppercase;margin:0 0 8px}
+.btn{appearance:none;border:0;cursor:pointer;min-height:46px;padding:0 16px;background:var(--gold);color:#0D0F10;font:800 17px/1 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn.ghost{background:none;color:var(--cream);border:1px solid var(--line);font-weight:700;font-size:15px}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.big{min-height:52px;font-size:18px}
+/* cabecera: vista previa + datos */
+.top{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.pv{position:relative;flex-shrink:0;background:#9fd3f0;overflow:hidden;border:1px solid var(--line)}
+.info{flex:1;min-width:170px;display:flex;flex-direction:column;gap:10px}
+.info h1{margin:0;font:800 24px/1.05 "Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase}
+.info p{margin:0;font-size:12px;color:var(--soft)}
+.stage{position:absolute;left:0;top:0;transform-origin:top left;background:#9fd3f0;overflow:hidden}
+#map,#ov{position:absolute;left:0;top:0}
+#ov{pointer-events:none}
+/* elecciones */
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.opt{appearance:none;text-align:left;background:var(--panel);border:1px solid var(--line);padding:8px 10px;min-height:54px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.opt b{font:700 15px/1.1 "Barlow Condensed","Arial Narrow",sans-serif}
+.opt small{font-size:11px;color:var(--soft)}
+.opt[aria-pressed="true"]{border-color:var(--gold)}
+.row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.sty{appearance:none;width:80px;flex-shrink:0;background:none;border:1px solid var(--line);padding:4px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.sty i{display:block;height:64px}
+.sty b{font:700 13px/1 "Barlow Condensed",sans-serif;text-align:left}
+.sty[aria-pressed="true"]{border-color:var(--gold)}
+.pick{appearance:none;display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);padding:8px 12px;min-height:58px;text-align:left;cursor:pointer;width:100%}
+.pick img,.pick .ic{width:52px;height:40px;object-fit:contain;background:#cfdcb8;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+.pick .tx{flex:1;min-width:0}.pick .tx b{display:block;font:700 16px/1.15 "Barlow Condensed",sans-serif}.pick .tx small{font-size:11px;color:var(--soft)}
+.pick .ar{color:var(--gold);font:800 20px "Barlow Condensed",sans-serif}
+.note{font-size:13px;color:var(--muted);text-align:center;margin:0}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:40px 16px;color:var(--muted);max-width:340px;margin:0 auto}
+.empty b{font:700 22px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--cream)}
+.file{position:relative;overflow:hidden}.file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+/* hojas que suben desde abajo */
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:flex-end}
+.sheet>div{background:var(--ink);border-top:3px solid var(--gold);max-height:92vh;overflow-y:auto;display:flex;flex-direction:column}
+.sh-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--ink);z-index:1}
+.sh-h b{font:800 22px/1 "Barlow Condensed",sans-serif;text-transform:uppercase}
+.x{appearance:none;width:44px;height:44px;background:none;border:1px solid var(--line);color:var(--cream);font-size:18px;cursor:pointer}
+.sh-b{padding:12px 16px 20px;display:flex;flex-direction:column;gap:14px}
+.sh-b p{margin:0;font-size:13px;color:var(--soft)}
+.vg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.vg button{appearance:none;background:var(--panel);border:1px solid var(--line);padding:5px;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-height:96px}
+.vg button[aria-pressed="true"]{border-color:var(--gold)}
+.vg img,.vg .ph{width:100%;aspect-ratio:16/11;background:#cfdcb8;display:block;object-fit:contain}
+.vg b{font:700 14px/1.1 "Barlow Condensed",sans-serif;text-align:center}
+.seg{display:flex;border:1px solid var(--line)}
+.seg button{flex:1;appearance:none;background:none;border:0;color:var(--muted);min-height:44px;cursor:pointer;font:700 15px/1 "Barlow Condensed",sans-serif;padding:0 4px}
+.seg button[aria-pressed="true"]{color:var(--cream);box-shadow:inset 0 -3px 0 var(--gold)}
+.add{display:flex;gap:6px}.add input{flex:1;min-width:0;min-height:46px;background:var(--ink);border:1px solid var(--gold);padding:0 10px;font-size:15px}
+.stop{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #1C1E20}
+.stop.off{opacity:.45}
+.stop img,.stop .ph{width:46px;height:46px;object-fit:cover;background:var(--line);flex-shrink:0}
+.stop .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.stop input{background:none;border:0;border-bottom:1px solid transparent;font:700 17px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;padding:0;min-width:0;width:100%}
+.stop input:focus{outline:none;border-bottom-color:var(--gold)}
+.stop small{font-size:12px;color:var(--muted)}.stop small.nw{color:var(--gold)}
+.stop .mv{display:flex;flex-direction:column}
+.ib{appearance:none;width:40px;height:40px;background:none;border:1px solid var(--line);color:var(--soft);cursor:pointer;font-size:15px}
+.mv .ib{height:22px;font-size:11px}
+.leg{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);padding:6px 10px}
+.leg span{flex:1;font-size:13px}
+.leg select{background:var(--ink);border:1px solid var(--line);min-height:40px;padding:0 6px;font:700 14px "Barlow Condensed",sans-serif}
+.mus{display:flex;flex-direction:column;gap:6px}
+.mus label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);padding:10px;cursor:pointer}
+.mus label:has(input:checked){border-color:var(--gold)}
+.mus input[type=radio]{accent-color:var(--gold);width:20px;height:20px;margin:0;flex-shrink:0}
+.mus b{display:block;font:700 16px/1.1 "Barlow Condensed",sans-serif}.mus small{font-size:12px;color:var(--soft)}
+/* pantalla completa: ver el vídeo */
+.full{position:fixed;inset:0;z-index:30;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.full .pv{border:0}
+.fbar{display:flex;gap:10px;align-items:center;width:min(360px,92vw)}
+.play{width:46px;padding:0;font-size:18px}
+.prog{flex:1;height:4px;background:var(--line)}.prog i{display:block;height:100%;width:0;background:var(--gold)}
+.full .x{position:absolute;top:10px;right:10px;background:var(--ink)}
+.res{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
+.res video{flex:1;min-height:0;width:100%;object-fit:contain;background:#000}
+.res .rw{display:flex;gap:8px;padding:10px 12px;background:var(--ink)}
+.res .rw .btn{flex:1}
+.res .x{position:absolute;top:10px;right:10px;background:var(--ink)}
+</style>
+</head>
+<body>
+<div class="empty" id="empty" hidden><b>Aún no hay fotos</b><span id="emptyTxt">Sube las fotos del viaje y aquí se monta el vídeo.</span><label class="btn file">Subir fotos<input type="file" id="upIn" accept="image/*" multiple></label></div>
+
+<div class="wrap" id="main" hidden>
+  <div class="top">
+    <div class="pv" id="pv"><div class="stage" id="stage"><div id="map"></div><canvas id="ov"></canvas></div></div>
+    <div class="info">
+      <h1 id="titulo">Mi viaje</h1>
+      <p id="resumen"></p>
+      <button class="btn ghost" id="ver" type="button" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="7 4 20 12 7 20 7 4"/></svg>Ver</button>
+      <button class="btn ghost" id="bParadas" type="button">Editar paradas</button>
+    </div>
+  </div>
+
+  <div><p class="lbl">¿Dónde lo vas a compartir?</p><div class="g2" id="dest"></div></div>
+  <div><p class="lbl">Estilo</p><div class="row" id="estilos"></div></div>
+  <button class="pick" id="bVeh" type="button"><img id="vehImg" alt=""><span class="tx"><b id="vehTxt">Vehículo: Moto</b><small>Cambia solo en los tramos de avión o barco</small></span><span class="ar" aria-hidden="true">▾</span></button>
+  <button class="pick" id="bMus" type="button"><span class="ic" aria-hidden="true">♪</span><span class="tx"><b id="musTxt">Música: sin música</b><small id="musSub">Recomendado para Reels y TikTok: pones la canción allí</small></span><span class="ar" aria-hidden="true">▾</span></button>
+  <button class="pick" id="bFirma" type="button"><span class="ic bc" aria-hidden="true" style="font-weight:800;color:var(--gold)">Aa</span><span class="tx"><b id="firmaTxt">Firma de las fotos: logo</b><small id="firmaSub">✦ BORRADO DEL MAPA en cada polaroid</small></span><span class="ar" aria-hidden="true">▾</span></button>
+  <button class="btn big" id="mp4" type="button" disabled>Crear el vídeo</button>
+  <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
+  <p class="note" id="note">Preparando tu viaje…</p>
+</div>
+
+<!-- vehículo -->
+<div class="sheet" id="shVeh" hidden><div>
+  <div class="sh-h"><b>¿Cómo viajaste?</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
+  <div class="sh-b" id="vehList"></div>
+</div></div>
+<!-- firma de las polaroids -->
+<div class="sheet" id="shFirma" hidden><div>
+  <div class="sh-h"><b>Firma de las fotos</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
+  <div class="sh-b">
+    <p>Lo que sale abajo en cada polaroid, junto al pueblo y el día.</p>
+    <div class="mus" id="firmaList">
+      <label><input type="radio" name="firma" value="logo" checked><span><b>Logo de Borrado del Mapa</b><small>✦ BORRADO DEL MAPA</small></span></label>
+      <label><input type="radio" name="firma" value="texto"><span><b>Tu texto</b><small>Tu @instagram, tu nombre o lo que quieras, en grande.</small></span></label>
+    </div>
+    <div class="add" id="firmaBox" hidden><input id="firmaIn" type="text" maxlength="24" placeholder="@tuinstagram" aria-label="Texto de la firma" autocomplete="off"></div>
+    <canvas id="firmaPv" width="600" height="130" style="width:100%;max-width:360px;background:#fff" aria-label="Así queda"></canvas>
+    <button class="btn big" type="button" data-close>Listo</button>
+  </div>
+</div></div>
+<!-- música -->
+<div class="sheet" id="shMus" hidden><div>
+  <div class="sh-h"><b>Música</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
+  <div class="sh-b">
+    <div class="mus" id="musList">
+      <label><input type="radio" name="mus" value="ninguna" checked><span><b>Sin música</b><small>Lo mejor para Reels y TikTok: allí le pones la canción de moda (tienen los derechos y da más alcance).</small></span></label>
+      <label id="musCasaL"><input type="radio" name="mus" value="casa"><span><b>Música de la casa</b><small id="musCasaTxt">Pistas libres de derechos elegidas por nosotros.</small></span></label>
+      <label><input type="radio" name="mus" value="propia"><span><b>Tu música</b><small id="musPropTxt">Elige una canción del móvil. Si tiene derechos de autor, la red social puede silenciar el vídeo.</small></span></label>
+    </div>
+    <select id="musCasa" hidden></select>
+    <label class="btn ghost file" id="musFileL" hidden>Elegir canción<input type="file" id="musFile" accept="audio/*"></label>
+    <audio id="musAudio" preload="auto" hidden></audio>
+  </div>
+</div></div>
+<!-- paradas -->
+<div class="sheet" id="shPar" hidden><div>
+  <div class="sh-h"><b>Paradas del vídeo</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
+  <div class="sh-b">
+    <p>Salen de tus fotos: donde las hiciste. Si paraste fuera de la guía, esa parada aparece aquí igualmente. Toca el nombre para cambiarlo.</p>
+    <div id="parList"></div>
+    <div class="add"><input id="parNew" type="text" maxlength="40" placeholder="Escribe un pueblo o lugar…" aria-label="Nombre de la parada nueva"><button class="btn ghost" id="parAdd" type="button">Añadir</button></div>
+    <p style="font-size:12px;color:#7E8285">La parada escrita sale con su nombre entre la de antes y la de después. Muévela con ▲▼.</p>
+    <button class="btn big" type="button" data-close>Listo</button>
+  </div>
+</div></div>
+<!-- avanzadas -->
+<div class="sheet" id="shAdv" hidden><div>
+  <div class="sh-h"><b>Opciones avanzadas</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
+  <div class="sh-b">
+    <div><p class="lbl">Tu traza GPX</p><p>De Wikiloc, Calimoto, Garmin, Strava… El vehículo irá por tu recorrido exacto, aunque te salieras de la guía.</p></div>
+    <div style="display:flex;gap:6px"><label class="btn ghost file" style="flex:1">Importar traza GPX<input type="file" id="gpxIn" accept=".gpx,application/gpx+xml,application/xml,text/xml"></label><button class="btn ghost" id="gpxX" type="button" hidden>Quitar</button></div>
+    <p id="gpxTxt" hidden></p>
+    <div><p class="lbl">Transporte de cada tramo</p><p>Lo pone la app sola (avión si cruzas el mar lejos, barco si es corto). Cámbialo solo si no acierta.</p></div>
+    <div id="legList" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div><p class="lbl">Duración</p><div class="seg" id="durSeg"><button type="button" data-d="15">15 s</button><button type="button" data-d="auto">Automática</button><button type="button" data-d="60">60 s</button><button type="button" data-d="larga">Larga</button></div></div>
+    <div><p class="lbl">Calidad</p><div class="seg" id="calSeg"><button type="button" data-c="auto">Según destino</button><button type="button" data-c="720">Rápida 720p</button><button type="button" data-c="1080">Alta 1080p</button></div>
+      <p style="margin-top:6px;font-size:12px;color:#7E8285">Alta tarda más o menos el doble en crearse.</p></div>
+  </div>
+</div></div>
+<!-- ver a pantalla completa -->
+<div class="full" id="full" hidden>
+  <div id="fullSlot"></div>
+  <div class="fbar"><button class="btn play" id="play" type="button" aria-label="Reproducir">▶</button><div class="prog"><i id="pbar"></i></div></div>
+  <p class="note" id="fnote"></p>
+  <button class="x" type="button" id="fullX" aria-label="Cerrar">✕</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="/vendor/mapa/maplibre-gl.js"></script>
+<script src="/vendor/mapa/pmtiles.js"></script>
+<script src="/vendor/mapa/basemaps.js"></script>
+<script src="/vendor/mapa/mp4-muxer.js"></script>
+<script type="module">
+import * as THREE from '/vendor/mapa/three/three.module.js';
+import { CATALOGO, GRUPOS, porId, crear, miniatura } from '/video-vehiculos.js?v=5';
+const $=s=>document.querySelector(s);
+const Q=new URLSearchParams(location.search),GUIA=Q.get('guia')||'';
+const API=window.SALMA_API||'https://salma-api.borradodelmapa-api.workers.dev';
+const LOCAL=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+const MAPAS=LOCAL&&Q.get('mapas')!=='api'?location.origin:API;   // en local, mapa y relieve desde .mapas/ (sin gastar datos)
+// en local, el mapa de España+Portugal de .mapas/ está roto (descarga cortada al 99 %): de momento, el de Cantabria-Asturias
+const MAPA_LOCAL=Q.get('mapa')||'cantabria-asturias';
+const FPS=30;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,eout=t=>1-Math.pow(1-t,3),smooth=t=>t*t*(3-2*t);
+const eback=t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
+const hav=(a,b)=>{const r=Math.PI/180,dl=(b[1]-a[1])*r,dg=(b[0]-a[0])*r;const x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dg/2)**2;return 12742*Math.asin(Math.sqrt(x));};
+const toDate=v=>v&&v.toDate?v.toDate():v?new Date(v):null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ── lo que elige el usuario ── */
+// Destinos: formato, duración recomendada y calidad. (Límites actuales: Reels/Shorts hasta 3 min, historias por tramos
+// de 60 s, TikTok hasta 10 min; aquí van duraciones que funcionan bien, no los máximos.)
+const DEST={
+  reels:{n:'Reels · TikTok · Shorts',s:'Vertical · 30–45 s · 1080p',ar:'9:16',min:30,max:45,cal:1080,fotos:2},
+  historia:{n:'Historia · WhatsApp',s:'Vertical · 15–30 s · ligero',ar:'9:16',min:15,max:30,cal:720,fotos:1},
+  post:{n:'Publicación Instagram',s:'4:5 · 30–60 s · 1080p',ar:'4:5',min:30,max:60,cal:1080,fotos:3},
+  youtube:{n:'YouTube · tele',s:'Horizontal · 1–3 min · 1080p',ar:'16:9',min:60,max:180,cal:1080,fotos:3}};
+const CSS_SIZE={'9:16':[360,640],'4:5':[360,450],'16:9':[640,360]};
+const S={firma:'',dest:'reels',estilo:'viaje',veh:'moto',mus:'ninguna',musCasa:'',dur:'auto',cal:'auto',tramos:{},gpx:null,gpxNombre:''};
+// Música de la casa: pistas CC0 que elija Paco (se guardan en vendor/mapa/musica/). Vacío = "próximamente".
+const CASA=[];
+try{S.firma=localStorage.getItem('bdm_video_firma')||'';}catch(_){}
+
+/* ── comunicación con la app (mismos mensajes que el motor anterior: aviso flotante, subir fotos) ── */
+let encoding=false,lastVideo=null;
+function post(o){if(window.parent===window)return;try{window.parent.postMessage(Object.assign({type:'bdm-vf',guia:GUIA,encoding,hasVideo:!!lastVideo},o),location.origin);}catch(_){}}
+addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='bdm-host')return;if(e.data.reload&&!encoding)location.reload();});
+$('#upIn').addEventListener('change',e=>{const f=[...(e.target.files||[])];e.target.value='';if(f.length)post({upload:f});});
+
+/* ── zonas con mapa propio ── */
+const ZONAS=[{id:'es-pt',boxes:[[-9.6,35.9,4.45,43.95],[-18.3,27.55,-13.3,29.5]]}];
+const inBox=(p,b)=>p[0]>=b[0]&&p[0]<=b[2]&&p[1]>=b[1]&&p[1]<=b[3];
+const zonaDe=pts=>ZONAS.find(z=>pts.every(p=>z.boxes.some(b=>inBox(p,b))));
+
+/* ── estilos del mapa ── */
+const BASE_CLARO={background:'#e9f2dc',earth:'#eef3df',water:'#5fb8ea',park_a:'#b9e39a',park_b:'#8fd46a',wood_a:'#a9dc86',wood_b:'#7ec85a',scrub_a:'#c7e8a8',scrub_b:'#a4da7c',
+  sand:'#f5e6b8',beach:'#f7e3a6',glacier:'#ffffff',highway:'#ffc94d',highway_casing_early:'#e0a12c',highway_casing_late:'#e0a12c',
+  major:'#ffe7a3',major_casing_early:'#dcbc6d',major_casing_late:'#dcbc6d',minor_a:'#ffffff',minor_b:'#ffffff',minor_casing:'#d3ccb8',link:'#ffe7a3',
+  city_label:'#1f1b17',city_label_halo:'#ffffff',subplace_label:'#3f3a33',subplace_label_halo:'#ffffff',roads_label_major:'#5e574e',roads_label_minor:'#6d665c',
+  ocean_label:'#1f6aa6',buildings:'#e5dccb',boundaries:'#b19f7e'};
+const ESTILOS={
+  viaje:{n:'Viaje',base:'light',sw:['#b9e39a','#5fb8ea','#ffc94d'],f:BASE_CLARO,hs:.55,ex:1.35,sky:['#8fcdf2','#dcefff','#eaf4ff'],ruta:'#F4630B',fondo:'#9fd3f0'},
+  aventura:{n:'Aventura',base:'light',sw:['#86b064','#3f97c9','#e8a33c'],hs:.9,ex:1.9,sky:['#7fb6d8','#d6e6ee','#e2ecf0'],ruta:'#F4630B',fondo:'#7fb6d8',
+    f:Object.assign({},BASE_CLARO,{background:'#dfe3c6',earth:'#e6e2c4',water:'#3f97c9',park_a:'#a3c883',park_b:'#86b064',wood_a:'#8fba6c',wood_b:'#6c9c4c',scrub_a:'#c2cf98',scrub_b:'#a8bd7c',highway:'#e8a33c',major:'#f5d58f'})},
+  postal:{n:'Postal',base:'light',sw:['#e8dcbc','#9cc7c9','#d9a55c'],hs:.45,ex:1.3,sky:['#e9dcc0','#f4ead6','#f6eedd'],ruta:'#c0392b',fondo:'#e9dcc0',
+    f:Object.assign({},BASE_CLARO,{background:'#f1e7d0',earth:'#efe3c8',water:'#9cc7c9',park_a:'#d7dcae',park_b:'#c5cf98',wood_a:'#c9d19c',wood_b:'#b3c083',scrub_a:'#dfdcb4',scrub_b:'#cfcf9f',
+      sand:'#efdcae',beach:'#f0dcaa',highway:'#d9a55c',highway_casing_early:'#b98a45',highway_casing_late:'#b98a45',major:'#ecd29c',minor_a:'#fbf5e6',minor_b:'#fbf5e6',
+      city_label:'#4a3b2a',subplace_label:'#5d4c38',ocean_label:'#4d7f86',buildings:'#e3d3b3',boundaries:'#a8906a'})},
+  noche:{n:'Noche',base:'dark',sw:['#1c2226','#1b3a52','#F4630B'],hs:.5,ex:1.35,sky:['#0b1420','#1a2533','#141c26'],ruta:'#F4630B',fondo:'#0b1420',
+    f:{highway:'#F4630B',highway_casing_early:'#7a3406',highway_casing_late:'#7a3406',major:'#8a5a33',water:'#16324a',city_label:'#f2efe8',city_label_halo:'#0D0F10'}}};
+const protocol=new pmtiles.Protocol();maplibregl.addProtocol('pmtiles',protocol.tile);
+function styleFor(zona,est){
+  const E=ESTILOS[est],flavor=Object.assign({},basemaps.namedFlavor(E.base),E.f);
+  const layers=basemaps.layers('protomaps',flavor,{lang:'es'});const iw=layers.findIndex(l=>l.id==='water');
+  const dark=E.base==='dark';
+  layers.splice(iw<0?2:iw,0,{id:'relieve',type:'hillshade',source:'dem',paint:{'hillshade-exaggeration':E.hs,'hillshade-shadow-color':dark?'#000000':'#4b5a3a','hillshade-highlight-color':dark?'#3a4550':'#ffffff','hillshade-accent-color':dark?'#10161c':'#6e7f52'}});
+  return{version:8,glyphs:location.origin+'/vendor/mapa/fonts/{fontstack}/{range}.pbf',sprite:location.origin+'/vendor/mapa/sprites/light',
+    sources:{protomaps:{type:'vector',url:'pmtiles://'+MAPAS+'/mapas/'+(MAPAS===location.origin?MAPA_LOCAL:zona)+'.pmtiles',attribution:'© OpenStreetMap'},
+      dem:{type:'raster-dem',tiles:[MAPAS+'/terreno/terreno-'+zona+'/{z}/{x}/{y}.png'],encoding:'terrarium',tileSize:256,maxzoom:12}},
+    sky:{'sky-color':E.sky[0],'horizon-color':E.sky[1],'fog-color':E.sky[2],'sky-horizon-blend':.6,'horizon-fog-blend':.7,'fog-ground-blend':.85},
+    terrain:{source:'dem',exaggeration:E.ex},layers};
+}
+
+/* ── datos del viaje: guía, carretera y fotos ── */
+let D=null;            // lo cargado: {zona,titulo,stops,road,roadSrc}
+let R=null,PH=[],LEGS=[],cum=[],TL=null,map=null,overview=null;
+async function blobOf(url){let c=null;try{c=await caches.open('bdm-fotos');const h=await c.match(url);if(h)return await h.blob();}catch(_){}
+  const r=await fetch(url,{mode:'cors'});if(!r.ok)throw new Error(r.status);if(c)try{await c.put(url,r.clone());}catch(_){}return await r.blob();}
+const IMG={};
+function imgOf(url){return IMG[url]||(IMG[url]=blobOf(url).then(b=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(b);})).catch(()=>null));}
+const midnight=t=>new Date(t.getFullYear(),t.getMonth(),t.getDate());
+async function loadTrip(uid){
+  const db=firebase.firestore(),U=db.collection('users').doc(uid);
+  const d=await U.collection('maps').doc(GUIA).get();const x=d.data()||{};let r={};try{r=JSON.parse(x.itinerarioIA||'{}');}catch(_){}
+  const stops=(r.stops||[]).map((s,k)=>({id:'g'+k,nombre:s.name||s.nombre||'Parada',lat:+s.lat,lng:+s.lng,dia:+s.day||null})).filter(s=>isFinite(s.lat)&&isFinite(s.lng)&&Math.abs(s.lat)>.01);
+  if(stops.length<2)return{error:'Esta guía no tiene paradas suficientes para el vídeo.'};
+  if(!zonaDe(stops.map(s=>[s.lng,s.lat])))return{unsupported:true};
+  // fotos del viaje (las mismas que la pestaña FOTOS)
+  const fotos=[],seen=new Set();const add=(url,lat,lng,date,place)=>{if(!url||seen.has(url))return;seen.add(url);fotos.push({url,lat:lat!=null&&isFinite(+lat)&&Math.abs(+lat)>.01?+lat:null,lng:+lng,date,place:place||''});};
+  (await U.collection('fotos').where('routeId','==',GUIA).get()).forEach(q=>{const f=q.data();if(f.type==='video'||f.tag==='documento')return;add(f.url,f.lat,f.lng,toDate(f.takenAt||f.createdAt),f.caption);});
+  try{(await U.collection('pins').where('routeId','==',GUIA).get()).forEach(q=>{const f=q.data();add(f.photoUrl,f.lat,f.lng,toDate(f.createdAt),f.locName||f.label);});}catch(_){}
+  (x.photos||[]).forEach(p=>{const u=typeof p==='string'?p:p&&(p.url||p.photoUrl);add(u,p&&p.lat,p&&p.lng,toDate(p&&(p.takenAt||p.uploadedAt||p.createdAt)));});
+  if(!fotos.length)return{empty:true};
+  // carretera: la de la guía o /road-path (guardada para siempre en el servidor); si no hay, se irá en recto
+  let road=null,roadSrc='recta';const rg=r.road_geometry||x.road_geometry;
+  if(rg&&Array.isArray(rg.coords)&&rg.coords.length>1){road=rg.coords.map(c=>[+c[1],+c[0]]);roadSrc='guia';}
+  else{try{const pts=stops.slice(0,80).map(s=>s.lat.toFixed(5)+','+s.lng.toFixed(5)).join('|');const j=await (await fetch(API+'/road-path?mode=drive&pts='+encodeURIComponent(pts))).json();
+    if(j&&j.ok&&j.coords&&j.coords.length>1){road=j.coords.map(c=>[+c[1],+c[0]]);roadSrc='geoapify';}}catch(_){}}
+  return{zona:'es-pt',titulo:x.nombre||r.title||'Mi viaje',stops,fotos,road,roadSrc};
+}
+// VÍDEO SIN GUÍA (Paco, 30 sept 2026): las fotos elegidas en Mis Viajes → Fotos sin viaje (ids en sessionStorage).
+// Las paradas salen de dónde se hizo cada foto: fotos seguidas a menos de 15 km = misma parada.
+async function loadSinGuia(uid){
+  let ids=[];try{ids=JSON.parse(sessionStorage.getItem('bdm_video_fotos')||'[]');}catch(_){}
+  if(!ids.length)return{error:'Elige primero las fotos en Mis Viajes → Fotos sin viaje.'};
+  const U=firebase.firestore().collection('users').doc(uid);
+  const docs=await Promise.all(ids.slice(0,300).map(id=>U.collection('fotos').doc(id).get().catch(()=>null)));
+  const fotos=[];docs.forEach(d=>{if(!d||!d.exists)return;const f=d.data();if(!f.url)return;
+    fotos.push({url:f.url,lat:f.lat!=null&&isFinite(+f.lat)&&Math.abs(+f.lat)>.01?+f.lat:null,lng:+f.lng,date:toDate(f.takenAt||f.createdAt),place:f.caption||''});});
+  return armarSinGuia(fotos);
+}
+async function armarSinGuia(fotos){
+  fotos.sort((a,b)=>(a.date||0)-(b.date||0));const geo=fotos.filter(f=>f.lat!=null);
+  if(!geo.length)return{error:'Esas fotos no dicen dónde se hicieron (no tienen ubicación), y sin eso no sabemos por dónde pasaste.'};
+  if(!zonaDe(geo.map(f=>[f.lng,f.lat])))return{error:'De momento el vídeo sin guía solo funciona con fotos de España y Portugal.'};
+  const d0=geo.find(f=>f.date)?.date,stops=[];
+  geo.forEach(f=>{let s=stops[stops.length-1];
+    if(!s||hav([s.lng,s.lat],[f.lng,f.lat])>15){s={id:'f'+stops.length,nombre:f.place||'',lat:f.lat,lng:f.lng,dia:f.date&&d0?Math.round((midnight(f.date)-midnight(d0))/864e5)+1:null};stops.push(s);}
+    else if(!s.nombre&&f.place)s.nombre=f.place;});
+  stops.forEach((s,k)=>{if(!s.nombre)s.nombre='Parada '+(k+1);});
+  let road=null,roadSrc='recta';
+  if(stops.length>1){try{const pts=stops.slice(0,80).map(s=>s.lat.toFixed(5)+','+s.lng.toFixed(5)).join('|');const j=await (await fetch(API+'/road-path?mode=drive&pts='+encodeURIComponent(pts))).json();
+    if(j&&j.ok&&j.coords&&j.coords.length>1){road=j.coords.map(c=>[+c[1],+c[0]]);roadSrc='geoapify';}}catch(_){}}
+  const mes=d0?d0.toLocaleDateString('es-ES',{month:'long',year:'numeric'}):'';
+  return{zona:'es-pt',titulo:'Mi viaje'+(mes?' · '+mes:''),stops,fotos,road,roadSrc,sinGuia:true};
+}
+// Reparte las fotos entre paradas. Las que están lejos (>60 km) de toda parada de la guía crean paradas nuevas
+// ("paraste fuera de la guía"), agrupadas si están a menos de 20 km entre sí.
+function repartir(T){
+  const stops=T.stops.map(s=>Object.assign({},s,{fotos:[]}));const fotos=T.fotos.slice().sort((a,b)=>(a.date||0)-(b.date||0));
+  const d0=fotos.find(f=>f.date)?.date,diaDe=f=>f.date&&d0?Math.round((midnight(f.date)-midnight(d0))/864e5)+1:null;
+  const hasDays=stops.some(s=>s.dia),porDia={},extra=[];
+  fotos.forEach((f,i)=>{let st=null;
+    if(f.lat!=null){let bd=Infinity;stops.forEach(s=>{const dd=hav([s.lng,s.lat],[f.lng,f.lat]);if(dd<bd){bd=dd;st=s;}});
+      if(bd>60){let ex=extra.find(e=>hav([e.lng,e.lat],[f.lng,f.lat])<20);
+        if(!ex){ex={id:'x'+extra.length,nombre:f.place||'Parada extra',lat:f.lat,lng:f.lng,dia:diaDe(f),fotos:[],extra:true,t:f.date||0};extra.push(ex);}
+        else if(ex.nombre==='Parada extra'&&f.place)ex.nombre=f.place;
+        ex.fotos.push(f);return;}}
+    if(!st&&hasDays){const day=diaDe(f);const c=day&&stops.filter(s=>s.dia===day);if(c&&c.length){porDia[day]=(porDia[day]||0)+1;st=c[(porDia[day]-1)%c.length];}}
+    if(!st)st=stops[Math.min(stops.length-1,Math.floor(i*stops.length/fotos.length))];
+    st.fotos.push(f);});
+  // las nuevas se colocan en su día (detrás de la última parada de la guía de ese día o anterior)
+  const all=stops.slice();extra.forEach(e=>{let k=-1;if(e.dia)all.forEach((s,j)=>{if(!s.extra&&s.dia&&s.dia<=e.dia)k=j;});else{
+      let bd=Infinity;all.forEach((s,j)=>{const dd=hav([s.lng,s.lat],[e.lng,e.lat]);if(dd<bd){bd=dd;k=j;}});}
+    all.splice(k+1,0,e);});
+  all.forEach((s,j)=>{s.on=s.fotos.length>0;if(!s.dia)s.dia=null;});
+  // como mucho 8 paradas encendidas al empezar (repartidas por el viaje); el resto se pueden encender a mano
+  const on=all.filter(s=>s.on);if(on.length>8){const keep=new Set(Array.from({length:8},(_,i)=>on[Math.round(i*(on.length-1)/7)]));on.forEach(s=>s.on=keep.has(s));}
+  return all;
+}
+let PARADAS=[];
+
+/* ── montar el recorrido con las paradas elegidas ── */
+const nearIdx=(road,p)=>{let bi=0,bd=Infinity;for(let i=0;i<road.length;i++){const c=road[i],dd=(c[0]-p[0])**2+(c[1]-p[1])**2;if(dd<bd){bd=dd;bi=i;}}return bi;};
+function recta(a,b,n){const o=[];for(let k=0;k<=n;k++)o.push([lerp(a[0],b[0],k/n),lerp(a[1],b[1],k/n)]);return o;}
+function modoDe(id){const v=porId(id);return v.aire?'aire':v.agua?'agua':'tierra';}
+// sin carretera entre dos paradas: avión si una está en Canarias y la otra no; barco si una está en Baleares y la otra no;
+// si no, se va en recto con el vehículo elegido (p. ej. una parada fuera de la guía)
+const ISLAS={canarias:[-18.3,27.55,-13.3,29.5],baleares:[1.1,38.6,4.4,40.1]};
+function autoMar(A,B,km){const en=b=>inBox(A,b)!==inBox(B,b);if(en(ISLAS.canarias))return 'avion';if(en(ISLAS.baleares))return km>250?'avion':'ferry';return S.veh;}
+function situar(act,road){ // paradas sin sitio (escritas a mano): repartidas por el camino entre la de antes y la de después
+  const out=act.map(p=>p.lat!=null?p:Object.assign({},p));
+  out.forEach((p,j)=>{if(p.lat!=null)return;let a=j-1;while(a>=0&&act[a].lat==null)a--;let b=j+1;while(b<act.length&&act[b].lat==null)b++;
+    let pos;if(a<0&&b>=act.length)pos=[D.stops[0].lng,D.stops[0].lat];else if(a<0)pos=[act[b].lng,act[b].lat];else if(b>=act.length)pos=[act[a].lng,act[a].lat];
+    else{const A=[act[a].lng,act[a].lat],B=[act[b].lng,act[b].lat],f=(j-a)/(b-a);pos=[lerp(A[0],B[0],f),lerp(A[1],B[1],f)];
+      if(road&&road.length>1){const ia=nearIdx(road,A),ib=nearIdx(road,B);if(ia!==ib&&hav(road[ia],A)<15&&hav(road[ib],B)<15)pos=road[Math.round(ia+(ib-ia)*f)];}}
+    p.lng=pos[0];p.lat=pos[1];if(!p.dia)p.dia=(a>=0&&act[a].dia)||(b<act.length&&act[b].dia)||null;});
+  return out;
+}
+function compose(){
+  const road=S.gpx||D.road;const act=situar(PARADAS.filter(p=>p.on),road);const coords=[],par=[];LEGS=[];
+  act.forEach((p,j)=>{
+    if(j===0){coords.push([p.lng,p.lat]);par.push({p,i:0});return;}
+    const a=act[j-1],A=[a.lng,a.lat],B=[p.lng,p.lat],km=hav(A,B);
+    let seg=null,roadOk=false;
+    if(road&&road.length>1){const ia=nearIdx(road,A),ib=nearIdx(road,B);
+      if(ia!==ib&&hav(road[ia],A)<15&&hav(road[ib],B)<15){seg=ia<ib?road.slice(ia,ib+1):road.slice(ib,ia+1).reverse();
+        let salto=0;for(let k=1;k<seg.length;k++)salto=Math.max(salto,hav(seg[k-1],seg[k]));roadOk=salto<50;}}   // un salto de >50 km sin puntos = mar
+    const auto=roadOk?S.veh:autoMar(A,B,km);
+    const veh=S.tramos[j-1]||auto,modo=modoDe(veh);
+    if(modo!=='tierra'||!roadOk)seg=[A,...recta(A,B,Math.max(2,Math.round(km/2))).slice(1,-1),B];else seg=[A,...seg,B];
+    seg.slice(1).forEach(c=>coords.push(c));par.push({p,i:coords.length-1});
+    LEGS.push({j:j-1,a,b:p,km,veh,auto,modo,roadOk});});
+  const fmax=DEST[S.dest].fotos;
+  R={titulo:D.titulo,coords,paradas:par.map(({p,i},k)=>({i,id:p.id,nombre:p.nombre,dia:p.dia||k+1,lng:p.lng,lat:p.lat,fotos:p.fotos.slice(0,fmax)}))};
+  if(coords.length<2)coords.push(coords[0]);
+}
+async function loadPhotos(){PH=await Promise.all(R.paradas.map(p=>Promise.all(p.fotos.map(f=>imgOf(f.url))).then(a=>a.filter(Boolean))));}
+
+/* ── recorrido y guion ── */
+function prepRoute(){const c=R.coords;cum=[0];for(let i=1;i<c.length;i++)cum.push(cum[i-1]+hav(c[i-1],c[i]));R.total=cum[cum.length-1];R.paradas.forEach(p=>p.km=cum[Math.min(p.i,cum.length-1)]);
+  LEGS.forEach((l,k)=>{l.k0=R.paradas[k].km;l.k1=R.paradas[k+1].km;});}
+function posAt(km){km=clamp(km,0,R.total);let lo=0,hi=cum.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(cum[m]<=km)lo=m;else hi=m;}
+  const f=cum[hi]===cum[lo]?0:(km-cum[lo])/(cum[hi]-cum[lo]);const a=R.coords[lo],b=R.coords[hi];return[lerp(a[0],b[0],f),lerp(a[1],b[1],f)];}
+function bearingOf(a,b){const r=Math.PI/180,y=Math.sin((b[0]-a[0])*r)*Math.cos(b[1]*r),x=Math.cos(a[1]*r)*Math.sin(b[1]*r)-Math.sin(a[1]*r)*Math.cos(b[1]*r)*Math.cos((b[0]-a[0])*r);return Math.atan2(y,x)/r;}
+const headingAt=km=>bearingOf(posAt(km-.3),posAt(km+.6));
+function angLerp(a,b,t){const d=((b-a+540)%360)-180;return a+d*t;}
+const zoomForKm=(km,lat)=>Math.log2(40075*Math.cos(lat*Math.PI/180)*360/(512*km));
+const Z_NEAR_KM=1.1,PITCH=55;
+function objetivo(t0){const d=DEST[S.dest];if(S.dur==='15')return 15;if(S.dur==='60')return 60;if(S.dur==='larga')return Math.min(180,Math.max(d.max,t0*1.4));return clamp(t0,d.min,d.max);}
+function buildTimeline(){
+  const segs=[];let t=0;const add=s=>{s.t0=t;t+=s.dur;segs.push(s);};
+  add({k:'intro',dur:2.8});add({k:'bajar',dur:2.6});
+  R.paradas.forEach((p,i)=>{const n=(PH[i]||[]).length;add({k:'parada',dur:1.2+n*1.05,p,i,n});
+    const q=R.paradas[i+1];if(!q)return;const km=q.km-p.km;if(km<.05)return;const L=LEGS[i];add({k:'tramo',dur:clamp(4+Math.sqrt(Math.abs(km))*.75,4,11),a:p.km,b:q.km,i,L});});
+  add({k:'cierre',dur:4});
+  // para llegar a la duración elegida: las fotos se aceleran poco (se tienen que ver) y los viajes entre paradas, lo que haga falta
+  const obj=objetivo(t),fijo=segs.filter(s=>s.k==='parada').reduce((a,s)=>a+s.dur,0),resto=t-fijo;
+  const kp=clamp(obj/t,.75,1.5),kr=clamp((obj-fijo*kp)/resto,.3,2.5);
+  t=0;segs.forEach(s=>{s.sc=s.k==='parada'?kp:kr;s.dur*=s.sc;s.t0=t;t+=s.dur;});
+  return{segs,total:t};
+}
+function camAt(t){
+  const s=TL.segs.find(x=>t<x.t0+x.dur)||TL.segs[TL.segs.length-1],lt=clamp((t-s.t0)/s.dur,0,1);
+  const zN=km=>zoomForKm(Z_NEAR_KM,posAt(km)[1]);
+  if(s.k==='intro')return{c:overview.center,z:overview.zoom,b:0,p:0,km:0,veh:false,s,lt};
+  if(s.k==='bajar'){const e=ease(lt),c=posAt(0);return{c:[lerp(overview.center[0],c[0],e),lerp(overview.center[1],c[1],e)],z:lerp(overview.zoom,zN(0),e),b:0,p:lerp(0,PITCH,e),km:0,veh:e>.55,s,lt};}
+  if(s.k==='parada'){const c=posAt(s.p.km);return{c,z:zN(s.p.km),b:0,p:PITCH,km:s.p.km,veh:true,s,lt};}
+  if(s.k==='tramo'){const e=smooth(lt),km=lerp(s.a,s.b,e),len=Math.abs(s.b-s.a),c=posAt(km),vuelo=s.L&&s.L.modo!=='tierra';
+    const hump=len>15?smooth(Math.sin(Math.PI*lt)):0,zFar=zoomForKm(vuelo?clamp(len*.7,Z_NEAR_KM,1500):clamp(len*.2,Z_NEAR_KM,25),c[1]),z=lerp(zN(km),Math.min(zN(km),zFar),hump);
+    return{c,z,b:0,p:PITCH,km,veh:true,s,lt,alt:s.L&&s.L.modo==='aire'?Math.sin(Math.PI*lt):0};}
+  const e=ease(Math.min(1,lt*1.3)),c=posAt(R.total);return{c:[lerp(c[0],overview.center[0],e),lerp(c[1],overview.center[1],e)],z:lerp(zN(R.total),overview.zoom,e),b:0,p:lerp(PITCH,0,e),km:R.total,veh:e<.35,s,lt};
+}
+
+/* ── vehículo 3D (catálogo en video-vehiculos.js) ── */
+// tamaño en pantalla (px de la vista de 360 de ancho): los grandes un poco más grandes
+const PX={bus:115,autocaravana:110,tren:140,'tren-clasico':120,avion:130,avioneta:105,ferry:140,senderista:60,bici:70,kayak:80,caballo:80,'caballo-blanco':80,llama:75,camello:85,elefante:95};
+const veh={pos:[0,0],heading:0,visible:false,kind:'moto',alt:0,t:0,moving:false};
+const MODELOS={},MIXERS={};
+async function asegurarModelo(id){if(MODELOS[id]||!vehLayer.scene)return;MODELOS[id]='cargando';
+  try{const o=await crear(id);o.visible=false;vehLayer.scene.add(o);MODELOS[id]=o;
+    const clips=o.userData.clips||[];if(clips.length){const mx=new THREE.AnimationMixer(o),pick=re=>clips.find(c=>re.test(c.name));
+      MIXERS[id]={mx,walk:mx.clipAction(pick(/gallop|run/i)||pick(/walk/i)||clips[0]),idle:mx.clipAction(pick(/idle|eat/i)||clips[0])};}
+    map&&map.triggerRepaint();}catch(e){console.warn('vehículo',id,e);delete MODELOS[id];}}
+const vehLayer={id:'veh3d',type:'custom',renderingMode:'3d',
+  onAdd(m,gl){this.map=m;this.camera=new THREE.Camera();this.scene=new THREE.Scene();
+    this.scene.add(new THREE.HemisphereLight(0xffffff,0x6b7a55,1.6));const sun=new THREE.DirectionalLight(0xffffff,2.2);sun.position.set(-3,8,4);this.scene.add(sun);
+    for(const k in MODELOS)if(MODELOS[k]&&MODELOS[k].isObject3D)this.scene.add(MODELOS[k]);
+    this.renderer=new THREE.WebGLRenderer({canvas:m.getCanvas(),context:gl,antialias:true});this.renderer.autoClear=false;
+    usados().forEach(asegurarModelo);},
+  render(gl,args){
+    if(!veh.visible)return;const mdl=MODELOS[veh.kind];if(!mdl||!mdl.isObject3D){asegurarModelo(veh.kind);return;}
+    for(const k in MODELOS)if(MODELOS[k]&&MODELOS[k].isObject3D)MODELOS[k].visible=k===veh.kind;
+    const A=MIXERS[veh.kind];if(A){A.walk.play();A.idle.play();A.walk.weight=veh.moving?1:0;A.idle.weight=veh.moving?0:1;A.mx.setTime(veh.t);}   // animación según el tiempo del vídeo (igual en vista previa y MP4)
+    const mm=args&&args.defaultProjectionData?args.defaultProjectionData.mainMatrix:args;
+    const mpp=40075016*Math.cos(veh.pos[1]*Math.PI/180)/(512*Math.pow(2,this.map.getZoom()));
+    const elev=((this.map.queryTerrainElevation&&this.map.queryTerrainElevation(veh.pos))||0)+veh.alt*70*mpp;   // el avión sube ~70 px
+    const mc=maplibregl.MercatorCoordinate.fromLngLat(veh.pos,elev);
+    const s=mc.meterInMercatorCoordinateUnits()*((PX[veh.kind]||90)*mpp/mdl.userData.len);
+    const l=new THREE.Matrix4().makeTranslation(mc.x,mc.y,mc.z).scale(new THREE.Vector3(s,-s,s)).multiply(new THREE.Matrix4().makeRotationX(Math.PI/2)).multiply(new THREE.Matrix4().makeRotationY(-veh.heading*Math.PI/180+Math.PI));
+    this.camera.projectionMatrix=new THREE.Matrix4().fromArray(mm).multiply(l);this.renderer.resetState();this.renderer.render(this.scene,this.camera);
+  }};
+const usados=()=>[...new Set([S.veh,...LEGS.map(l=>l.veh)])];
+function vehEn(cam){ // en los tramos, el de ese tramo; en las paradas, el principal (salvo que sea de aire o agua)
+  if(cam.s.k==='tramo'&&cam.s.L)return cam.s.L.veh;return S.veh;}
+
+/* ── capa de encima (textos, polaroids, burbujas) ── */
+let W=720,H=1280,PR=2,U=1,CW=360,CH=640;
+const ov=$('#ov');let g=ov.getContext('2d');
+function fitFont(txt,weight,size,maxW,fam='"Barlow Condensed","Arial Narrow",sans-serif'){let s=size;g.font=`${weight} ${s}px ${fam}`;const w=g.measureText(txt).width;if(w>maxW){s=Math.max(size*.45,size*maxW/w);g.font=`${weight} ${s}px ${fam}`;}return s;}
+function roundImg(img,x,y,r){g.save();g.beginPath();g.arc(x,y,r,0,7);g.clip();const k=Math.max(2*r/img.width,2*r/img.height);g.drawImage(img,x-img.width*k/2,y-img.height*k/2,img.width*k,img.height*k);g.restore();}
+function bubble(x,y,img,r){g.save();g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.arc(x+3*U,y-r*1.75+5*U,r*1.13,0,7);g.fill();
+  g.fillStyle='#fff';g.beginPath();g.moveTo(x-r*.35,y-r*1.75+r*.85);g.lineTo(x,y);g.lineTo(x+r*.35,y-r*1.75+r*.85);g.closePath();g.fill();g.beginPath();g.arc(x,y-r*1.75,r*1.13,0,7);g.fill();g.restore();roundImg(img,x,y-r*1.75,r);}
+function card(img,cx,cy,w,sc,rot,alpha,stop){
+  if(sc<=.01)return;const h=w*1.2,pad=w*.045;g.save();g.globalAlpha*=alpha;g.translate(cx,cy);g.rotate(rot);g.scale(sc,sc);
+  g.fillStyle='rgba(0,0,0,.35)';g.fillRect(-w/2+10*U,-h/2+14*U,w,h);g.fillStyle='#fff';g.fillRect(-w/2,-h/2,w,h);
+  const iw=w-pad*2,ih=w-pad*2;g.save();g.beginPath();g.rect(-w/2+pad,-h/2+pad,iw,ih);g.clip();const k=Math.max(iw/img.width,ih/img.height);
+  g.drawImage(img,-w/2+pad+(iw-img.width*k)/2,-h/2+pad+(ih-img.height*k)/2,img.width*k,img.height*k);g.restore();
+  if(w>200*U){const yb=-h/2+pad+ih+(h-pad-ih)/2;g.textBaseline='middle';let x=-w/2+pad;
+    if(S.firma){fitFont(S.firma,800,w*.078,iw*.62);g.fillStyle='#1f1b17';g.fillText(S.firma,x,yb+w*.004);x+=g.measureText(S.firma).width;}   // firma del usuario, en grande
+    else{g.font=`800 ${w*.056}px "Barlow Condensed","Arial Narrow",sans-serif`;[['✦ BORRADO','#F4630B'],['DEL','#8E9194'],['MAPA','#F4630B']].forEach(([t,c])=>{g.fillStyle=c;g.fillText(t,x,yb);x+=g.measureText(t).width;});}
+    if(stop){const t=`${stop.nombre.toUpperCase()} · DÍA ${stop.dia}`,room=w/2-pad-(x+w*.04);fitFont(t,700,w*.034,room);g.fillStyle='#5b5f63';g.textAlign='right';g.fillText(t,w/2-pad,yb);g.textAlign='left';}}
+  g.restore();
+}
+function chip(txt,x,y,size,align,dark,maxW=W-88*U){g.save();const s=fitFont(txt,800,size,maxW-size*.8);const w=g.measureText(txt).width+s*.8,h=s*1.25;
+  const x0=align==='center'?x-w/2:align==='right'?x-w:x;g.fillStyle=dark?'rgba(13,15,16,.88)':'#F4630B';g.fillRect(x0,y,w,h);g.fillStyle=dark?'#ECEBE8':'#0D0F10';g.textBaseline='middle';g.fillText(txt,x0+s*.4,y+h/2+1);g.restore();}
+const ATRIB=()=>'© OpenStreetMap · Relieve: AWS Terrain Tiles'+(!S.gpx&&D.roadSrc==='geoapify'?' · Ruta: Geoapify':'');
+function drawOverlay(cam,t){
+  g.clearRect(0,0,W,H);const P=ll=>{const q=map.project(ll);return[q.x*PR,q.y*PR];};
+  const cw=Math.min(W*.8,H*.58),cy=H*(W>H?.47:.42),br=56*U;
+  R.paradas.forEach((p,i)=>{if(p.km>cam.km+1e-6||(cam.s.k==='parada'&&cam.s.i===i))return;const ph=PH[i]&&PH[i][PH[i].length-1];if(!ph)return;const[x,y]=P([p.lng,p.lat]);if(y<-50*U||y>H+200*U)return;bubble(x,y,ph,br);});
+  if(cam.s.k==='parada'){const s=cam.s,ph=PH[s.i]||[],lt=cam.lt*s.dur/s.sc,[px,py]=P([s.p.lng,s.p.lat]),n=ph.length;
+    ph.forEach((im,k)=>{const a=.35+k*1.05,b=a+1.05,tt=(lt-a)/(b-a);if(lt<a||tt>=1)return;const last=k===n-1,inn=eback(clamp(tt/.28,0,1)),out=smooth(clamp((tt-.72)/.28,0,1)),rot=(k%2?1:-1)*.035;
+      if(last)card(im,lerp(W/2,px,out),lerp(cy,py-100*U,out),lerp(cw,112*U,out),inn,lerp(rot,0,out),1,s.p);
+      else card(im,W/2-out*W*.9*(k%2?-1:1),cy,cw,inn,rot,1-out*.4,s.p);});
+    if(ph.length&&lt>.35+n*1.05)bubble(px,py,ph[n-1],br);}
+  if(cam.s.k==='intro'||cam.s.k==='bajar'){const a=cam.s.k==='intro'?eout(clamp(cam.lt*2,0,1)):1-eout(cam.lt);g.save();g.globalAlpha=a;
+    const gr=g.createLinearGradient(0,H*.55,0,H);gr.addColorStop(0,'rgba(13,15,16,0)');gr.addColorStop(1,'rgba(13,15,16,.85)');g.fillStyle=gr;g.fillRect(0,H*.55,W,H*.45);
+    const T0=R.titulo.toUpperCase();fitFont(T0,800,124*U,W-96*U);g.fillStyle='#fff';g.fillText(T0,48*U,H*.82);
+    chip(`${Math.round(R.total)} KM · ${R.paradas.length} ${R.paradas.length===1?'PARADA':'PARADAS'}`,52*U,H*.855,40*U);g.restore();}
+  if(cam.s.k==='parada'||cam.s.k==='tramo'){const p=cam.s.k==='parada'?cam.s.p:R.paradas[cam.s.i+1];
+    chip(`DÍA ${p.dia} · ${p.nombre.toUpperCase()}`,44*U,86*U,48*U);chip(`${Math.round(cam.km)} KM`,W-44*U,H-190*U,56*U,'right',true);}
+  if(cam.s.k==='cierre'){const a=eout(clamp((cam.lt-.3)/.4,0,1));g.save();g.globalAlpha=a;g.fillStyle='rgba(13,15,16,.9)';g.fillRect(0,H*.66,W,H*.34);
+    g.fillStyle='#F4630B';g.font=`800 ${140*U}px "Barlow Condensed",sans-serif`;g.fillText(String(Math.round(R.total)),48*U,H*.8);
+    const soloRecta=LEGS.length&&LEGS.every(l=>!l.roadOk);g.fillStyle='#C4C7C9';g.font=`600 ${30*U}px Inter,sans-serif`;g.fillText(soloRecta?'KM':'KM DE VIAJE',54*U,H*.84);
+    g.font=`800 ${44*U}px "Barlow Condensed",sans-serif`;let x=48*U;[['✦ BORRADO','#F4630B'],['DEL','#8E9194'],['MAPA','#F4630B']].forEach(([tx,c])=>{g.fillStyle=c;g.fillText(tx,x,H*.93);x+=g.measureText(tx).width;});g.restore();}
+  g.save();g.font=`600 ${18*U}px Inter,sans-serif`;g.fillStyle=S.estilo==='noche'?'rgba(236,235,232,.6)':'rgba(13,15,16,.65)';g.fillText(ATRIB(),16*U,H-14*U);g.restore();
+}
+
+/* ── un instante del vídeo ── */
+function frameAt(t,reset){
+  const cam=camAt(t);map.jumpTo({center:cam.c,zoom:cam.z,bearing:cam.b,pitch:cam.p});
+  const done=[];for(let i=0;i<R.coords.length&&cum[i]<=cam.km;i++)done.push(R.coords[i]);done.push(posAt(cam.km));
+  const src=map.getSource('hecha');if(src)src.setData({type:'Feature',geometry:{type:'LineString',coordinates:done.length>1?done:[done[0],done[0]]}});
+  const th=headingAt(cam.km);veh.heading=(reset||veh._h==null)?th:angLerp(veh._h,th,.22);veh._h=veh.heading;veh.visible=cam.veh;veh.pos=cam.c;
+  veh.kind=vehEn(cam);veh.alt=cam.alt||0;veh.t=t;veh.moving=cam.s.k==='tramo';
+  return cam;
+}
+const waitVisible=()=>document.hidden?new Promise(r=>{$('#note').textContent='En pausa: vuelve a esta pantalla para seguir';
+  const f=()=>{if(!document.hidden){document.removeEventListener('visibilitychange',f);r();}};document.addEventListener('visibilitychange',f);}):Promise.resolve();
+const waitIdle=async()=>{await waitVisible();await new Promise(r=>{let done=false;const ok=()=>{if(!done){done=true;r();}};setTimeout(ok,4000);
+  if(map.loaded()&&map.areTilesLoaded()){map.once('render',ok);map.triggerRepaint();}else map.once('idle',ok);});};
+function pintar(t,reset){const cam=frameAt(t,reset);map.once('render',()=>drawOverlay(cam,t));map.triggerRepaint();return cam;}
+
+/* ── formato: tamaño del lienzo y de la vista previa ── */
+function calidad(){return S.cal==='auto'?DEST[S.dest].cal:+S.cal;}
+function aplicarFormato(){
+  const ar=DEST[S.dest].ar,[cw,ch]=CSS_SIZE[ar],q=calidad();
+  CW=cw;CH=ch;const base=Math.min(cw,ch);PR=(q===1080?1080:720)/base;W=Math.round(cw*PR);H=Math.round(ch*PR);U=Math.min(W,H)/720;
+  const st=$('#stage');st.style.width=cw+'px';st.style.height=ch+'px';
+  ['#map','#ov'].forEach(s=>{$(s).style.width=cw+'px';$(s).style.height=ch+'px';});ov.width=W;ov.height=H;
+  encajar();
+  if(map){map.setPixelRatio(PR);map.resize();}
+}
+function encajar(){ // la vista previa pequeña (o grande si está en pantalla completa)
+  const full=!$('#full').hidden,pv=$('#pv');
+  let bw,bh;if(full){const k=Math.min((innerWidth-16)/CW,(innerHeight-110)/CH);bw=CW*k;bh=CH*k;}
+  else if(CW>CH){bw=Math.min(innerWidth-32,528);bh=bw*CH/CW;}   // horizontal: a lo ancho, encima de los datos
+  else{bh=266;bw=bh*CW/CH;}
+  pv.style.width=bw+'px';pv.style.height=bh+'px';$('#stage').style.transform=`scale(${bw/CW})`;
+}
+addEventListener('resize',encajar);
+
+/* ── rehacer todo tras un cambio ── */
+let dirty=true,rehaciendo=null;
+async function rehacer(){
+  lastVideo=null;$('#mp4').textContent='Crear el vídeo';dirty=true;
+  compose();await loadPhotos();prepRoute();TL=buildTimeline();
+  let a=[180,90,-180,-90];R.coords.forEach(([x,y])=>{a=[Math.min(a[0],x),Math.min(a[1],y),Math.max(a[2],x),Math.max(a[3],y)];});
+  if(a[2]-a[0]<.02){a[0]-=.02;a[2]+=.02;}if(a[3]-a[1]<.02){a[1]-=.02;a[3]+=.02;}
+  const pad=W>H?{top:60,bottom:120,left:80,right:80}:{top:CH*.23,bottom:CH*.5,left:40,right:40};
+  const cam=map.cameraForBounds([[a[0],a[1]],[a[2],a[3]]],{padding:pad});overview={center:[cam.center.lng,cam.center.lat],zoom:Math.min(cam.zoom,13)};
+  const toda=map.getSource('toda');if(toda)toda.setData({type:'Feature',geometry:{type:'LineString',coordinates:R.coords}});
+  usados().forEach(asegurarModelo);
+  T=0;pintar(0,true);resumen();
+}
+function cambio(){if(encoding)return;rehaciendo=(rehaciendo||Promise.resolve()).then(rehacer).catch(e=>console.warn(e));}
+function resumen(){const n=R.paradas.length,km=Math.round(R.total);
+  $('#resumen').textContent=`${n} ${n===1?'parada':'paradas'} con fotos · ${km} km · ${Math.round(TL.total)} s`;
+  $('#note').textContent='';}
+
+/* ── mapa ── */
+function capasRuta(){
+  const E=ESTILOS[S.estilo];
+  map.addSource('toda',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:R?R.coords:[[0,0],[0,0]]}}});
+  map.addSource('hecha',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:R?[R.coords[0],R.coords[0]]:[[0,0],[0,0]]}}});
+  map.addLayer({id:'toda',type:'line',source:'toda',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':S.estilo==='noche'?'#ECEBE8':'#ffffff','line-opacity':.85,'line-width':['interpolate',['linear'],['zoom'],8,2,14,5],'line-dasharray':[1.2,1.4]}});
+  map.addLayer({id:'hecha-borde',type:'line',source:'hecha',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':S.estilo==='noche'?'#0D0F10':'#ffffff','line-width':['interpolate',['linear'],['zoom'],8,6,14,14]}});
+  map.addLayer({id:'hecha',type:'line',source:'hecha',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':E.ruta,'line-width':['interpolate',['linear'],['zoom'],8,3.5,14,8]}});
+  map.addLayer(vehLayer);
+}
+function crearMapa(){
+  return new Promise(res=>{
+    const c=D.stops[0];
+    map=new maplibregl.Map({container:'map',style:styleFor(D.zona,S.estilo),center:[c.lng,c.lat],zoom:8,interactive:false,attributionControl:false,
+      canvasContextAttributes:{preserveDrawingBuffer:true,antialias:true},pixelRatio:PR,fadeDuration:0,maxPitch:75});
+    map.on('error',e=>console.warn(e&&e.error));
+    map.once('load',()=>{capasRuta();res();});});
+}
+async function cambiarEstilo(){
+  $('#stage').style.background=ESTILOS[S.estilo].fondo;dirty=true;lastVideo=null;$('#mp4').textContent='Crear el vídeo';
+  for(const k in MODELOS)delete MODELOS[k];for(const k in MIXERS)delete MIXERS[k];   // la escena 3D se crea de nuevo con el estilo
+  await new Promise(r=>{map.once('style.load',()=>{capasRuta();r();});map.setStyle(styleFor(D.zona,S.estilo),{diff:false});});
+  pintar(T,true);
+}
+
+/* ── ver a pantalla completa ── */
+let playing=false,T=0,last=0;
+const mus=$('#musAudio');
+function musicaSync(){if(S.mus==='ninguna'||!mus.src)return;if(playing){try{mus.currentTime=musStart+T;mus.volume=1;mus.play().catch(()=>{});}catch(_){}}else mus.pause();}
+function tick(now){if(!playing)return;T+=Math.min(.25,(now-last)/1000);last=now;if(T>=TL.total){T=TL.total;playing=false;$('#play').textContent='▶';mus.pause();}
+  pintar(T);$('#pbar').style.width=(T/TL.total*100)+'%';if(playing)requestAnimationFrame(tick);}
+async function precargar(){ // recorre el vídeo una vez para que la vista previa no se pare a cargar el mapa
+  if(!dirty)return;const steps=Math.ceil(TL.total/.6);$('#play').disabled=true;
+  for(let k=0;k<=steps;k++){if($('#full').hidden)return;frameAt(Math.min(TL.total,k*.6),k===0);await waitIdle();$('#fnote').textContent=`Preparando el mapa ${Math.round(k/steps*100)} %`;$('#pbar').style.width=(k/steps*100)+'%';}
+  dirty=false;$('#play').disabled=false;$('#fnote').textContent='';$('#pbar').style.width='0%';T=0;pintar(0,true);
+}
+$('#ver').onclick=async()=>{$('#full').hidden=false;$('#fullSlot').appendChild($('#pv'));encajar();await precargar();if(!$('#full').hidden&&!dirty){playing=true;$('#play').textContent='❚❚';last=performance.now();musicaSync();requestAnimationFrame(tick);}};
+$('#play').onclick=()=>{playing=!playing;$('#play').textContent=playing?'❚❚':'▶';if(playing){if(T>=TL.total-.05)T=0;last=performance.now();requestAnimationFrame(tick);}musicaSync();};
+$('#fullX').onclick=()=>{playing=false;mus.pause();$('#play').textContent='▶';$('#full').hidden=true;$('.top').prepend($('#pv'));encajar();};
+
+/* ── elecciones ── */
+function pintarDestinos(){$('#dest').innerHTML=Object.entries(DEST).map(([k,d])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${k===S.dest}"><b>${d.n}</b><small>${d.s}</small></button>`).join('');}
+$('#dest').onclick=e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.dest)return;S.dest=b.dataset.k;pintarDestinos();aplicarFormato();cambio();};
+function pintarEstilos(){$('#estilos').innerHTML=Object.entries(ESTILOS).map(([k,e])=>`<button type="button" class="sty" data-k="${k}" aria-pressed="${k===S.estilo}"><i style="background:linear-gradient(135deg,${e.sw[0]} 0 55%,${e.sw[1]} 55% 78%,${e.sw[2]} 78%)"></i><b>${e.n}</b></button>`).join('');}
+$('#estilos').onclick=async e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.estilo)return;S.estilo=b.dataset.k;pintarEstilos();$('#note').textContent='Cambiando el estilo…';await cambiarEstilo();$('#note').textContent='';};
+// hojas
+const abrir=id=>{$(id).hidden=false;},cerrar=el=>{el.closest('.sheet').hidden=true;};
+document.querySelectorAll('.sheet').forEach(sh=>sh.addEventListener('click',e=>{if(e.target===sh||e.target.closest('[data-close]'))sh.hidden=true;}));
+// vehículo
+const MINI={};
+async function mini(id){return MINI[id]||(MINI[id]=miniatura(id).catch(()=>''));}
+async function pintarVehiculo(){const v=porId(S.veh);$('#vehTxt').textContent='Vehículo: '+v.n;$('#vehImg').src=await mini(v.id);}
+$('#bVeh').onclick=async()=>{abrir('#shVeh');const L=$('#vehList');
+  L.innerHTML=Object.entries(GRUPOS).map(([gk,gn])=>`<div><p class="lbl">${gn}</p><div class="vg">${CATALOGO.filter(v=>v.g===gk).map(v=>`<button type="button" data-v="${v.id}" aria-pressed="${v.id===S.veh}"><img alt="" data-m="${v.id}"><b>${v.n}</b></button>`).join('')}</div></div>`).join('');
+  for(const im of L.querySelectorAll('img[data-m]'))im.src=await mini(im.dataset.m);};
+$('#vehList').onclick=e=>{const b=e.target.closest('button[data-v]');if(!b||encoding)return;S.veh=b.dataset.v;cerrar(b);pintarVehiculo();cambio();};
+// música
+let musBuf=null,musStart=0;
+function pintarMusica(){const t={ninguna:['Música: sin música','Recomendado para Reels y TikTok: pones la canción allí'],casa:['Música: '+(S.musCasa?(CASA.find(c=>c.id===S.musCasa)||{}).n:'de la casa'),'Libre de derechos (dominio público)'],
+  propia:['Música: '+(S.musNombre||'tu canción'),'Si tiene derechos, la red social puede silenciar el vídeo']}[S.mus];$('#musTxt').textContent=t[0];$('#musSub').textContent=t[1];
+  $('#musCasa').hidden=S.mus!=='casa'||!CASA.length;$('#musFileL').hidden=S.mus!=='propia';}
+if(!CASA.length){$('#musCasaTxt').textContent='Próximamente: estamos eligiendo las pistas.';$('#musCasaL').querySelector('input').disabled=true;$('#musCasaL').style.opacity=.5;}
+else $('#musCasa').innerHTML=CASA.map(c=>`<option value="${c.id}">${esc(c.n)} · ${esc(c.estilo)}</option>`).join('');
+async function cargarMusica(url){musBuf=null;mus.src=url;try{const ab=await (await fetch(url)).arrayBuffer();musBuf=await new AudioContext().decodeAudioData(ab);}catch(e){console.warn('música',e);}}
+$('#musList').onchange=e=>{S.mus=e.target.value;lastVideo=null;if(S.mus==='ninguna'){mus.pause();musBuf=null;}if(S.mus==='casa'&&CASA.length){S.musCasa=S.musCasa||CASA[0].id;$('#musCasa').value=S.musCasa;cargarMusica(CASA.find(c=>c.id===S.musCasa).url);}pintarMusica();};
+$('#musCasa').onchange=e=>{S.musCasa=e.target.value;lastVideo=null;cargarMusica(CASA.find(c=>c.id===S.musCasa).url);pintarMusica();};
+$('#musFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;S.musNombre=f.name.replace(/\.[^.]+$/,'');lastVideo=null;await cargarMusica(URL.createObjectURL(f));pintarMusica();};
+$('#bMus').onclick=()=>abrir('#shMus');
+// firma de las polaroids
+function pintarFirma(){$('#firmaTxt').textContent='Firma de las fotos: '+(S.firma?'tu texto':'logo');$('#firmaSub').textContent=S.firma||'✦ BORRADO DEL MAPA en cada polaroid';
+  $('#firmaBox').hidden=!S.firma&&!$('#firmaList input[value="texto"]').checked;
+  // muestra: la franja de abajo de una polaroid
+  const c=$('#firmaPv'),x=c.getContext('2d'),w=600;x.clearRect(0,0,w,130);x.fillStyle='#fff';x.fillRect(0,0,w,130);x.fillStyle='#cfdcb8';x.fillRect(27,0,w-54,40);
+  const og=g;g=x;const Ug=U;try{U=1;const pad=w*.045,iw=w-pad*2,yb=85;x.textBaseline='middle';let px=pad;
+    if(S.firma){fitFont(S.firma,800,w*.078,iw*.62);x.fillStyle='#1f1b17';x.fillText(S.firma,px,yb+w*.004);px+=x.measureText(S.firma).width;}
+    else{x.font=`800 ${w*.056}px "Barlow Condensed",sans-serif`;[['✦ BORRADO','#F4630B'],['DEL','#8E9194'],['MAPA','#F4630B']].forEach(([t,cl])=>{x.fillStyle=cl;x.fillText(t,px,yb);px+=x.measureText(t).width;});}
+    const t='SAN PEDRO ALCÁNTARA · DÍA 1';fitFont(t,700,w*.034,w/2-pad-(px-w/2+w*.04));x.fillStyle='#5b5f63';x.textAlign='right';x.fillText(t,w-pad,yb);x.textAlign='left';}finally{g=og;U=Ug;}}
+function guardarFirma(){try{localStorage.setItem('bdm_video_firma',S.firma);}catch(_){}lastVideo=null;$('#mp4').textContent='Crear el vídeo';}
+$('#bFirma').onclick=()=>{$('#firmaList input[value="'+(S.firma?'texto':'logo')+'"]').checked=true;$('#firmaIn').value=S.firma;pintarFirma();abrir('#shFirma');};
+$('#firmaList').onchange=e=>{if(e.target.value==='logo'){S.firma='';guardarFirma();}else{S.firma=$('#firmaIn').value.trim();$('#firmaIn').focus();}pintarFirma();};
+$('#firmaIn').oninput=e=>{S.firma=e.target.value.trim();guardarFirma();pintarFirma();};
+// paradas
+function pintarParadas(){const L=$('#parList');L.innerHTML=PARADAS.map((p,k)=>{const n=p.fotos.length;
+  const info=p.manual?'Escrita por ti · sale solo su nombre':`Día ${p.dia||'?'} · ${n} ${n===1?'foto':'fotos'} · `+(p.extra?'<span class="nw">NUEVA: paraste aquí (fuera de la guía)</span>':n?(D.sinGuia?'de tus fotos':'de la guía'):'sin fotos: solo su nombre');
+  return `<div class="stop${p.on?'':' off'}" data-k="${k}"><div class="mv"><button class="ib" type="button" data-a="up" aria-label="Subir"${k?'':' disabled'}>▲</button><button class="ib" type="button" data-a="down" aria-label="Bajar"${k<PARADAS.length-1?'':' disabled'}>▼</button></div>
+    ${n?`<img alt="" data-u="${esc(p.fotos[0].url)}">`:'<span class="ph"></span>'}<div class="tx"><input value="${esc(p.nombre)}" aria-label="Nombre de la parada" maxlength="40"><small${p.extra?' class="nw"':''}>${info}</small></div>
+    <button class="ib" type="button" data-a="on" aria-label="${p.on?'Quitar del vídeo':'Añadir al vídeo'}">${p.on?'✕':'+'}</button></div>`;}).join('');
+  L.querySelectorAll('img[data-u]').forEach(async im=>{const i=await imgOf(im.dataset.u);if(i)im.src=i.src;});}
+$('#bParadas').onclick=()=>{pintarParadas();abrir('#shPar');};
+$('#parList').onclick=e=>{const b=e.target.closest('button[data-a]');if(!b)return;const k=+b.closest('.stop').dataset.k,a=b.dataset.a;
+  if(a==='on'){if(PARADAS[k].on&&PARADAS.filter(p=>p.on).length<=1)return;if(PARADAS[k].manual)PARADAS.splice(k,1);else PARADAS[k].on=!PARADAS[k].on;}
+  else{const j=a==='up'?k-1:k+1;[PARADAS[k],PARADAS[j]]=[PARADAS[j],PARADAS[k]];}
+  pintarParadas();parCambio=true;};
+$('#parList').oninput=e=>{const k=+e.target.closest('.stop').dataset.k;PARADAS[k].nombre=e.target.value.trim()||PARADAS[k].nombre;parCambio=true;};
+let parCambio=false;
+$('#parAdd').onclick=()=>{const n=$('#parNew').value.trim();if(!n)return;$('#parNew').value='';
+  // entra delante de la última parada encendida (entre la penúltima y la última); luego se mueve con ▲▼
+  let k=PARADAS.length;for(let i=PARADAS.length-1;i>=0;i--)if(PARADAS[i].on){k=i;break;}
+  PARADAS.splice(k,0,{id:'u'+Date.now(),nombre:n,lat:null,lng:null,dia:null,fotos:[],on:true,manual:true});pintarParadas();parCambio=true;};
+$('#parNew').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#parAdd').click();}};
+new MutationObserver(()=>{if($('#shPar').hidden&&parCambio){parCambio=false;S.tramos={};cambio();}}).observe($('#shPar'),{attributes:true,attributeFilter:['hidden']});
+// avanzadas
+function pintarAvanzadas(){
+  $('#durSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.d===S.dur)));
+  $('#calSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.c===S.cal)));
+  $('#gpxX').hidden=!S.gpx;$('#gpxTxt').hidden=!S.gpx;if(S.gpx)$('#gpxTxt').textContent=`Usando tu traza: ${S.gpxNombre} (${S.gpx.length} puntos)`;
+  const opts=CATALOGO.map(v=>`<option value="${v.id}">${esc(v.n)}</option>`).join('');
+  $('#legList').innerHTML=LEGS.map((l,k)=>`<div class="leg"><span>${k+1}. ${esc(l.a.nombre)} → ${esc(l.b.nombre)} · ${Math.round(l.km)} km</span><select data-j="${l.j}" aria-label="Transporte del tramo ${k+1}">${opts}</select></div>`).join('')||'<p>Hacen falta dos paradas.</p>';
+  $('#legList').querySelectorAll('select').forEach(s=>{s.value=LEGS.find(l=>l.j===+s.dataset.j).veh;});
+}
+$('#bAdv').onclick=()=>{pintarAvanzadas();abrir('#shAdv');};
+$('#legList').onchange=e=>{const j=+e.target.dataset.j,l=LEGS.find(x=>x.j===j);if(e.target.value===l.auto)delete S.tramos[j];else S.tramos[j]=e.target.value;cambio();};
+$('#durSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.dur=b.dataset.d;pintarAvanzadas();cambio();};
+$('#calSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.cal=b.dataset.c;pintarAvanzadas();aplicarFormato();cambio();};
+function leerGPX(txt){const doc=new DOMParser().parseFromString(txt,'application/xml');let pts=[...doc.querySelectorAll('trkpt,rtept')].map(n=>[+n.getAttribute('lon'),+n.getAttribute('lat')]).filter(p=>isFinite(p[0])&&isFinite(p[1]));
+  if(pts.length>6000){const k=Math.ceil(pts.length/6000);pts=pts.filter((_,i)=>i%k===0);}return pts;}
+$('#gpxIn').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;const pts=leerGPX(await f.text());
+  if(pts.length<2){$('#gpxTxt').hidden=false;$('#gpxTxt').textContent='Ese archivo no tiene una traza que se pueda leer.';return;}
+  if(!zonaDe(pts.filter((_,i)=>i%50===0))){$('#gpxTxt').hidden=false;$('#gpxTxt').textContent='La traza sale de la zona con mapa (España y Portugal).';return;}
+  S.gpx=pts;S.gpxNombre=f.name;S.tramos={};await (cambio(),rehaciendo);pintarAvanzadas();};
+$('#gpxX').onclick=async()=>{S.gpx=null;S.gpxNombre='';S.tramos={};await (cambio(),rehaciendo);pintarAvanzadas();};
+
+/* ── MP4 ── */
+function showResult(blob){
+  const url=URL.createObjectURL(blob),name=(R.titulo||'mi-viaje').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.mp4';
+  const o=document.createElement('div');o.className='res';o.innerHTML=`<video controls playsinline autoplay src="${url}"></video><button class="x" type="button" aria-label="Cerrar">✕</button><div class="rw"><button class="btn" type="button" id="sh">Compartir</button><a class="btn ghost" href="${url}" download="${name}">Descargar</a></div>`;
+  document.body.appendChild(o);o.querySelector('.x').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();};
+  o.querySelector('#sh').onclick=async()=>{const file=new File([blob],name,{type:'video/mp4'});try{if(navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({files:[file],title:R.titulo});else $('#note').textContent='Este navegador no deja compartir el vídeo: usa Descargar.';}catch(_){}};
+}
+// la música, ya recortada a lo que dura el vídeo, con entrada y salida suaves
+async function audioPista(dur,sr=48000){
+  if(S.mus==='ninguna'||!musBuf)return null;const n=Math.ceil(dur*sr),oc=new OfflineAudioContext(2,n,sr);
+  const src=oc.createBufferSource();src.buffer=musBuf;src.loop=musBuf.duration<dur;const gn=oc.createGain();src.connect(gn).connect(oc.destination);
+  gn.gain.setValueAtTime(0,0);gn.gain.linearRampToValueAtTime(1,.4);gn.gain.setValueAtTime(1,Math.max(.5,dur-2.2));gn.gain.linearRampToValueAtTime(0,dur);
+  src.start(0,musStart);return await oc.startRendering();
+}
+$('#mp4').onclick=async()=>{
+  if(lastVideo){showResult(lastVideo);return;}
+  playing=false;$('#play').textContent='▶';mus.pause();
+  if(typeof VideoEncoder==='undefined'){$('#note').textContent='Este navegador no puede crear el vídeo. Prueba con Chrome.';return;}
+  encoding=true;post({pill:'Preparando el vídeo…',done:false});['#mp4','#ver','#bParadas','#bAdv','#bVeh','#bMus'].forEach(s=>$(s).disabled=true);
+  const q=calidad(),cfg={codec:q===1080?'avc1.640028':'avc1.4d0028',width:W,height:H,bitrate:S.dest==='historia'?4e6:q===1080?16e6:9e6,framerate:FPS,avc:{format:'avc'}};
+  try{if(!(await VideoEncoder.isConfigSupported(cfg)).supported)cfg.codec='avc1.42e028';}catch(_){}
+  // sonido: AAC si el navegador sabe; si no, el vídeo sale sin música y se avisa
+  let pista=null,aCfg=null,sinSonido=false;
+  if(S.mus!=='ninguna'&&musBuf){aCfg={codec:'mp4a.40.2',sampleRate:48000,numberOfChannels:2,bitrate:160000};
+    try{if(typeof AudioEncoder==='undefined'||!(await AudioEncoder.isConfigSupported(aCfg)).supported)aCfg=null;}catch(_){aCfg=null;}
+    if(aCfg)pista=await audioPista(TL.total);else sinSonido=true;}
+  const mux=new Mp4Muxer.Muxer({target:new Mp4Muxer.ArrayBufferTarget(),video:{codec:'avc',width:W,height:H},audio:pista?{codec:'aac',numberOfChannels:2,sampleRate:48000}:undefined,fastStart:'in-memory',firstTimestampBehavior:'offset'});
+  let err=null;
+  if(pista){const aenc=new AudioEncoder({output:(c,m)=>mux.addAudioChunk(c,m),error:e=>err=e});aenc.configure(aCfg);
+    const L=pista.getChannelData(0),Rr=pista.getChannelData(1),F=1024;
+    for(let i=0;i<pista.length;i+=F){const n=Math.min(F,pista.length-i),buf=new Float32Array(n*2);buf.set(L.subarray(i,i+n),0);buf.set(Rr.subarray(i,i+n),n);
+      const ad=new AudioData({format:'f32-planar',sampleRate:48000,numberOfFrames:n,numberOfChannels:2,timestamp:Math.round(i/48000*1e6),data:buf});aenc.encode(ad);ad.close();}
+    try{await aenc.flush();}catch(e){err=e;}}
+  const enc=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>err=e});enc.configure(cfg);
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d');const N=Math.ceil(TL.total*FPS),t0=performance.now();
+  let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
+  for(let f=0;f<N;f++){if(err)break;const t=f/FPS;const cam=frameAt(t,f===0);await waitIdle();drawOverlay(cam,t);
+    cx.drawImage(map.getCanvas(),0,0,W,H);cx.drawImage(ov,0,0);
+    const vf=new VideoFrame(cv,{timestamp:Math.round(f*1e6/FPS),duration:Math.round(1e6/FPS)});enc.encode(vf,{keyFrame:f%60===0});vf.close();
+    while(enc.encodeQueueSize>4)await new Promise(r=>setTimeout(r,2));
+    if(f%5===0){const pc=Math.round(f/N*100);$('#note').textContent=`Creando el vídeo: ${pc} %`;post({pill:`Vídeo ${pc} %`,done:false});}}
+  try{await enc.flush();}catch(e){err=e;}try{wake&&wake.release();}catch(_){}
+  encoding=false;['#mp4','#ver','#bParadas','#bAdv','#bVeh','#bMus'].forEach(s=>$(s).disabled=false);
+  if(err){console.warn(err);$('#note').textContent='No se pudo crear el vídeo. Prueba otra vez.';post({pill:null});return;}
+  mux.finalize();lastVideo=new Blob([mux.target.buffer],{type:'video/mp4'});$('#mp4').textContent='Ver el vídeo';
+  $('#note').textContent=`Listo en ${Math.round((performance.now()-t0)/1000)} s`+(sinSonido?' · este navegador no deja meter la música: sale sin sonido':'');post({pill:'✓ Vídeo listo · verlo',done:true});
+  try{navigator.vibrate&&navigator.vibrate([120,60,120]);}catch(_){}
+  pintar(T,true);showResult(lastVideo);
+};
+
+/* ── arranque ── */
+function fail(msg){$('#main').hidden=true;$('#empty').hidden=false;$('#emptyTxt').textContent=msg;post({ready:true,n:0});}
+firebase.initializeApp({apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"});
+// en local, ?prueba carga un viaje de prueba (.mapas/mock-video.js, no se sube)
+if(LOCAL&&Q.has('prueba'))addEventListener('load',()=>{const sc=document.createElement('script');sc.src='/.mapas/mock-video.js';document.head.appendChild(sc);});
+else firebase.auth().onAuthStateChanged(async u=>{
+  if(!u){fail('Entra con tu cuenta para ver el vídeo.');return;}
+  let T0;try{T0=Q.has('singuia')?await loadSinGuia(u.uid):await loadTrip(u.uid);}catch(e){console.warn(e);fail('No se pudo cargar el viaje. Revisa la conexión y vuelve a entrar.');return;}
+  if(T0.unsupported){post({unsupported:true});return;}   // la app vuelve al motor anterior
+  if(T0.error){fail(T0.error);return;}
+  if(T0.empty){fail('Sube las fotos del viaje y aquí se monta el vídeo.');return;}
+  start(T0);
+});
+// Montar el editor con los datos del viaje (separado para poder probarlo con datos de prueba: window.__video, ?prueba)
+async function start(T0){
+  D=T0;PARADAS=repartir(D);
+  $('#empty').hidden=true;$('#main').hidden=false;$('#titulo').textContent=D.titulo;
+  pintarDestinos();pintarEstilos();pintarMusica();pintarVehiculo();pintarFirma();aplicarFormato();$('#stage').style.background=ESTILOS[S.estilo].fondo;
+  try{await Promise.all([`800 40px "Barlow Condensed"`,`700 20px "Barlow Condensed"`,`600 20px Inter`].map(f=>document.fonts.load(f)));}catch(_){}
+  await crearMapa();await rehacer();
+  await waitIdle();pintar(0,true);
+  $('#ver').disabled=false;$('#mp4').disabled=false;
+  post({ready:true,n:PH.reduce((s,a)=>s+a.length,0)});
+}
+window.__video={start,armarSinGuia,S,PARADAS:()=>PARADAS,LEGS:()=>LEGS,TL:()=>TL,R:()=>R,frameAt:(t,r)=>frameAt(t,r),drawOverlay:(c,t)=>drawOverlay(c,t),camAt:t=>camAt(t),waitIdle:()=>waitIdle(),cambio:()=>(cambio(),rehaciendo)};
+</script>
+</body>
+</html>
