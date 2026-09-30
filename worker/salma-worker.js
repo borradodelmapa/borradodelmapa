@@ -253,8 +253,10 @@ REGLAS DE COMPORTAMIENTO
 // ═══════════════════════════════════════════════════════════════
 const BLOQUE_FORMATO = `FORMATO VISUAL PERMITIDO:
 — Saltos de línea para separar bloques de información
-— **Negritas** para datos clave: precios, teléfonos, nombres, fechas
+— **Negritas** para datos clave: precios, teléfonos, fechas. Los sitios, entre [[ ]] (ver SITIOS)
 — Prosa fluida entre datos
+
+SITIOS: cada sitio real que nombres (monumento, barrio, plaza, mirador, playa, pueblo, restaurante, bar, hotel, camping, parking, estación) va entre dobles corchetes con su nombre exacto de Google Maps: [[Puente Nuevo]], [[Casa del Rey Moro]]. Un sitio por corchete, nunca dos juntos: "[[El Burgo]] o [[Montejaque]]", no "[[El Burgo o Montejaque]]". Lo que no es un sitio (precios, horas, teléfonos, fechas, títulos de día, "Consejo práctico", nombres de empresas como Renfe o Lomprayah) NO va entre corchetes: sigue en **negrita**. Los corchetes son solo para el texto: nunca dentro de SALMA_ROUTE_JSON ni en lo que pides a una herramienta. El sistema enseña los corchetes como negrita y les pone el enlace y la foto verificados.
 
 FORMATO PROHIBIDO:
 — Listas con bullets (•), guiones como viñetas, o listas numeradas (1. 2. 3.). NUNCA. Escribe en prosa. Esto aplica también para transporte, opciones de bus, taxi o cualquier otro tema.
@@ -268,7 +270,7 @@ Cuando generes ruta: en el chat van SOLO 2-3 frases presentando el viaje (qué z
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
-EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con nombre en negrita. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
+EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con el nombre entre [[ ]]. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
@@ -383,7 +385,7 @@ CÓMO PRESENTAR RESULTADOS:
 — Coches: nombre, precio total y por día, plazas, transmisión, proveedor, punto de recogida.
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork si lo hay.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
-— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay. NO escribas tú la web del sitio (ni el dominio suelto) — si Google Places la tiene, el sistema la añade automáticamente al final como enlace real.
+— Lugares (buscar_lugar): nombre entre [[ ]], tipo, dirección corta, rating si lo hay, teléfono si lo hay. NO escribas tú la web del sitio (ni el dominio suelto) — si Google Places la tiene, el sistema la añade automáticamente al final como enlace real.
 — Búsqueda web (buscar_web): responde SOLO con el dato, con tus palabras. NO listes fuentes ni pegues URLs de blogs/artículos/guías. Solo pon un enlace si el usuario lo pide explícitamente ("dame el enlace", "la fuente", "de dónde lo sacas") o si es la web oficial de reserva de un transporte que ha pedido reservar.
 — Cuando SÍ toque poner un enlace: cada uno en su propia línea, sin markdown, sin corchetes. Solo la URL.
 — URLs permitidas: SOLO las que devuelve una herramienta (buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, y buscar_web solo en los dos casos de arriba). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
@@ -654,18 +656,18 @@ Tu respuesta DEBE empezar con un título de día y seguir esta estructura EXACTA
 
 **Día 1 — [título]**
 
-**[Lugar]** — [dato histórico o cultural, 1-2 frases]. [Tiempo]. [Precio si hay].
+[[Lugar]] — [dato histórico o cultural, 1-2 frases]. [Tiempo]. [Precio si hay].
 
-**[Lugar 2]** — [dato]. [Tiempo].
+[[Lugar 2]] — [dato]. [Tiempo].
 
-Dónde comer: **[Restaurante]** — [plato y precio].
+Dónde comer: [[Restaurante]] — [plato y precio].
 
 **Día 2 — [título]**
 [misma estructura]
 
 Si no sigues este formato, tu respuesta es INCORRECTA. Empieza SIEMPRE con "**Día 1 —".
 
-NUNCA pongas enlaces de Google Maps — el sistema los genera automáticamente con la ubicación exacta verificada. Tú solo pon el nombre del lugar en negrita.
+NUNCA pongas enlaces de Google Maps — el sistema los genera automáticamente con la ubicación exacta verificada. Tú solo pon el nombre del lugar entre [[ ]].
 
 Si hay [PERFIL DEL VIAJERO], el formato es el mismo pero lo que eliges se adapta a él: con perro, lugares, restaurantes y alojamiento que admiten perros (puedes añadir "admite perros" al final de la línea, y avisa en media frase si un sitio clave no los deja entrar); con camper o moto, dónde aparcar. Sin decir que lo sabes.
 
@@ -5919,7 +5921,7 @@ Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero con 
     // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
     userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
 PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar guías ni planes de pago.
-QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado o un [PERFIL DEL VIAJERO] en el contexto (compañía, mascotas, vehículo, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos (si chocan, manda el cuestionario); solo para lo que no esté en ninguno de los dos, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
+QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con el nombre entre [[ ]], por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado o un [PERFIL DEL VIAJERO] en el contexto (compañía, mascotas, vehículo, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos (si chocan, manda el cuestionario); solo para lo que no esté en ninguno de los dos, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
 Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Si NO se indica número de días: para una ciudad o pueblo, haz 1 día. Pero si es una RUTA/ROAD TRIP explícita por una costa, comarca o varios pueblos (el usuario dice "ruta", "road trip", "de sur a norte", "recorrido", o nombra varios sitios lejos entre sí) — **NUNCA lo metas en 1 solo día por defecto**: calcula tú cuántos días son razonables a ritmo de carretera normal (aprox. 100-150km con paradas por día, motos y coches turísticos más despacio que autovía) y repártelo en esos días, de punta a punta en orden geográfico, sin saltar de un extremo a otro y volver. Dilo explícito: "Esto da para N días" al principio. Breve: 2-3 frases por sitio.
 RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si es ruta/road trip por varios sitios, aplica el reparto de arriba en su lugar):
 - 1-2 días → TODO dentro de esa localidad y su entorno inmediato (máx ~30 min en coche). NADA de rutas comarcales, pueblos blancos ni excursiones lejanas salvo que el usuario pida expresamente "ruta"/"road trip"/varios pueblos. Ej.: "Estepona 1 día" = casco antiguo, Orquidario, paseo marítimo, playa — NO Ronda ni Grazalema.
@@ -5958,10 +5960,10 @@ DÍAS: si el usuario no especificó número de días (solo puso el destino), gen
 
 BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + precio + tiempo. Sin prosa. Sin rodeos.
 
-FORMATO DE CADA PARADA: nombre en negrita + descripción breve. SIN enlaces — el sistema los añade automáticamente.
-Ejemplo: **Puente Nuevo** — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis.
+FORMATO DE CADA PARADA: nombre entre [[ ]] + descripción breve. SIN enlaces — el sistema los añade automáticamente.
+Ejemplo: [[Puente Nuevo]] — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis.
 
-4-5 paradas por día. Cada día termina con dónde comer (nombre en negrita + plato + precio).
+4-5 paradas por día. Cada día termina con dónde comer (nombre entre [[ ]] + plato + precio).
 
 Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
@@ -5981,7 +5983,7 @@ QUÉ HACER:
 — Responde con información RICA del destino: historia, cultura, contexto, qué ver, qué comer, clima, transporte, seguridad, datos prácticos.
 — Mete datos históricos y culturales siempre que sea relevante — por qué un lugar es como es, quién lo construyó, qué pasó ahí.
 — Todo en PROSA fluida, como si lo contaras en un bar. Sin secciones, sin títulos, sin listas.
-— Cada lugar concreto que menciones (monumento, plaza, restaurante, mirador) va con nombre en negrita. El sistema añade automáticamente los enlaces verificados de Google Maps — tú NUNCA pongas enlaces de Maps.
+— Cada lugar concreto que menciones (monumento, plaza, restaurante, mirador) va con el nombre entre [[ ]]. El sistema añade automáticamente los enlaces verificados de Google Maps — tú NUNCA pongas enlaces de Maps.
 — Si mencionas un lugar concreto con nombre propio, usa buscar_foto para mostrar 1-3 fotos.
 — Si mencionas transporte entre ciudades (ferry, bus, tren), usa buscar_web para obtener URLs reales de reserva. NUNCA inventes URLs de 12go, skyscanner, rome2rio ni ninguna otra.
 — Si el contexto incluye datos del KV (país, transporte, destino), ÚSALOS. No los ignores.
@@ -6015,7 +6017,7 @@ QUÉ HACER:
       return parts.join(' — ');
     }).join('\n');
 
-    userContent += `\n\n[RESULTADOS DE BÚSQUEDA REAL — Google Places:\n${formatted}\nSÉ BREVE Y DIRECTA. USA FORMATO VISUAL: pon cada resultado en su propia línea con **nombre en negrita** seguido del teléfono. Separa con saltos de línea. PRIMERO los datos, DESPUÉS tu consejo en 1-2 frases. Ejemplo de formato:\n\n**Nombre del sitio** — +66 77 425 123\nDirección, rating\n\n**Otro sitio** — +66 77 960 456\nDirección, rating\n\nConsejo breve.\n\nDi "llama antes para confirmar" porque horarios pueden cambiar. Si no hay teléfono, dilo. NUNCA inventes datos.]`;
+    userContent += `\n\n[RESULTADOS DE BÚSQUEDA REAL — Google Places:\n${formatted}\nSÉ BREVE Y DIRECTA. USA FORMATO VISUAL: pon cada resultado en su propia línea con el nombre entre [[ ]] seguido del teléfono. Separa con saltos de línea. PRIMERO los datos, DESPUÉS tu consejo en 1-2 frases. Ejemplo de formato:\n\n[[Nombre del sitio]] — +66 77 425 123\nDirección, rating\n\n[[Otro sitio]] —+66 77 960 456\nDirección, rating\n\nConsejo breve.\n\nDi "llama antes para confirmar" porque horarios pueden cambiar. Si no hay teléfono, dilo. NUNCA inventes datos.]`;
   }
 
   // Inyectar datos del tiempo
@@ -13890,7 +13892,7 @@ INSTRUCCIONES:
       if (_vehicleParking) {
         const _vq = VEHICLE_PARKING[_medio].que, _vn = _vehicleParking.site.name;
         vehicleNote = _vehicleParking.spots.length
-          ? `[DÓNDE DEJAR EL VEHÍCULO — DATO VERIFICADO EN GOOGLE MAPS. El usuario va en ${_medio} a ${_vn}. Lo más cerca (${_vq}): ${_vehicleParking.spots.map(s => `${s.name} (a ${String(s.km).replace('.', ',')} km de ${_vn}${s.address ? '; ' + s.address : ''})`).join(' · ')}. Empieza por aquí: dile dónde dejarlo con ESTE dato, escribiendo su nombre en negrita tal cual. No nombres otros aparcamientos. No des de memoria normas de acceso, alturas, pesos ni prohibiciones. No digas que te han pasado este dato: cuéntalo tú. No escribas enlaces: la app pone debajo el de cómo llegar.]`
+          ? `[DÓNDE DEJAR EL VEHÍCULO — DATO VERIFICADO EN GOOGLE MAPS. El usuario va en ${_medio} a ${_vn}. Lo más cerca (${_vq}): ${_vehicleParking.spots.map(s => `${s.name} (a ${String(s.km).replace('.', ',')} km de ${_vn}${s.address ? '; ' + s.address : ''})`).join(' · ')}. Empieza por aquí: dile dónde dejarlo con ESTE dato, escribiendo su nombre entre [[ ]] tal cual. No nombres otros aparcamientos. No des de memoria normas de acceso, alturas, pesos ni prohibiciones. No digas que te han pasado este dato: cuéntalo tú. No escribas enlaces: la app pone debajo el de cómo llegar.]`
           : `[DÓNDE DEJAR EL VEHÍCULO: se ha buscado ${_vq} junto a ${_vn} y no hay ninguno verificado en Google Maps. No inventes ni nombres aparcamientos concretos; dile que no tienes uno verificado junto a ${_vn}.]`;
       }
     }
