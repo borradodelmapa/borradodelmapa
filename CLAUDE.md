@@ -181,6 +181,7 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
 | Pendientes antiguos (crítico/importante/deuda) y sus detalles técnicos | `docs/pendientes-criticos-e-importantes.md` |
 | Normas de desarrollo, autonomía, coste (texto completo) | `docs/normas-desarrollo.md` |
 | Restaurar frontend/Worker/KV/Firebase; comandos útiles | `docs/restauracion-y-comandos.md` |
+| "Crear ruta con mapa" tarda ~2 min — plan GUÍA INSTANTÁNEA (anotado, sin empezar) | `docs/guia-instantanea.md` |
 | Historial de sesiones, bugs confirmados | `CLAUDE-historial.md` (grande: leer solo el trozo necesario) |
 | Comunidad de viajeros, pasarela premium, prompt de Salma (ideas/notas) | `docs/idea-comunidad-viajeros.md`, `docs/pasarela-premium.md`, `docs/salma-prompt.txt` |
 
