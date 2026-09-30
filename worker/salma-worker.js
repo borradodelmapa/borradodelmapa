@@ -2906,6 +2906,42 @@ function filtrarFotosNoMarcadas(reply, fotoNombres) {
   return quitadas ? out.replace(/\n{3,}/g, '\n\n').trim() : reply;
 }
 
+// FOTOS DEL PLAN (caso p-munr9lawdi5, 30 sept 2026): en los planes por días Salma escribe sin herramientas
+// (_planSinHerramientas) y aquí se añaden como mucho `max` fotos: el primer sitio marcado de cada día (no los de
+// comer), debajo de su línea, con el control de siempre de buscar_foto (nombre, no hotel, zona). Lo que no pasa,
+// sin foto. Nunca retrasa más de 6 s. Coste: ~0,02 € por foto la 1ª vez; el mismo sitio después, 0 € (caché ph2:).
+async function fotosDeSitiosMarcados(reply, { env, zone = null, ciudad = '', max = 2, fotoNombres = null } = {}) {
+  if (!tieneMarcasSitio(reply) || !env || !env.GOOGLE_PLACES_KEY || /!\[[^\]]*\]\(/.test(reply)) return reply;
+  const lines = reply.split('\n');
+  const hayDias = lines.some(l => /^[^A-Za-zÁÉÍÓÚáéíóú0-9]{0,8}D[IÍií]AS?\s+\d/i.test(l));
+  const elegidos = [];
+  let libre = !hayDias; // sin días: los primeros sitios marcados
+  lines.forEach((l, i) => {
+    if (/^[^A-Za-zÁÉÍÓÚáéíóú0-9]{0,8}D[IÍií]AS?\s+\d/i.test(l)) libre = true;
+    if (!libre || elegidos.length >= max || /d[oó]nde (comer|cenar)/i.test(l)) return;
+    const m = l.match(/\[\[([^\[\]\n]{2,80})\]\]/);
+    if (!m || _LECTOR_COMER_RE.test(m[1].trim())) return;
+    elegidos.push({ i, name: m[1].trim() });
+    if (hayDias) libre = false; // uno por día
+  });
+  if (!elegidos.length) return reply;
+  const res = await Promise.race([
+    Promise.all(elegidos.map(e => buscarFotoLugar({ lugar: (e.name + ' ' + ciudad).trim() }, env.GOOGLE_PLACES_KEY, env, { zone }).catch(() => null))),
+    new Promise(r => setTimeout(() => r(null), 6000)),
+  ]);
+  if (!res) { console.log('[FOTO-PLAN] sin fotos: Google tardó más de 6 s'); return reply; }
+  let puestas = 0;
+  for (let k = elegidos.length - 1; k >= 0; k--) {
+    const r = res[k], f = r && Array.isArray(r.fotos) && r.fotos[0];
+    if (!f || !f.url) continue;
+    if (fotoNombres) fotoNombres.set(f.url, [r.lugar || '', elegidos[k].name]);
+    lines.splice(elegidos[k].i + 1, 0, '', `![${elegidos[k].name.replace(/[\[\]()]/g, '')}](${f.url})`);
+    puestas++;
+  }
+  console.log(`[FOTO-PLAN] ${puestas} de ${elegidos.length} foto(s): ${elegidos.map(e => e.name).join(' · ')}`);
+  return lines.join('\n');
+}
+
 // ¿La respuesta nombra algún sitio en negrita? (mismo criterio que injectVerifiedMapsLinks, sin llamar a Google)
 function replyNamesPlaces(reply, userName, exceptName = null) {
   // Con sitios marcados [[ ]], esos son los sitios (las negritas son precios, consejos…)
@@ -13661,6 +13697,12 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 && !editingActiveRoute &&
       (isRouteRequest(message, history) || isDaysDestination(message));
     const guidedIsReco = _guidedStageReco || _tiempo1Chat;
+    // Plan por días sin vuelos ni hoteles: Salma escribe SIN herramientas (tool_choice none; la caché del prompt no se
+    // pierde). Antes buscaba fotos ANTES de escribir ("Ruta Transpirenaica moto…", rechazadas y cobradas) y a los 18 s
+    // salía "Reintentar", que cancelaba la petición (Paco, 30 sept 9:19). Las fotos las pone luego el Worker
+    // (fotosDeSitiosMarcados), de sitios marcados y sin retrasar el texto.
+    const _planSinHerramientas = guidedIsReco && !isHotelRequest(message) && !isFlightRequest(message)
+      && !/\b(alquil|coche de alquiler|rent a car|ferry|tren|autob[uú]s|bus)\b/i.test(message || '');
     // Botón "➕ Añadir a la guía" pulsado: fusionar los stops nuevos en currentRoute
     // en vez de generar una ruta nueva desde cero (ver más abajo, tras convertProseToRouteJson).
     const mergeIntoRoute = body.merge_into_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
@@ -14576,6 +14618,7 @@ INSTRUCCIONES:
                   system: buildCachedSystem(systemBase, systemPrompt, systemPerfil),
                   messages: currentMessages,
                   tools: ANTHROPIC_TOOLS,
+                  ...(_planSinHerramientas ? { tool_choice: { type: 'none' } } : {}),
                   stream: true,
                 }),
               });
@@ -15534,6 +15577,12 @@ REGLAS:
         // ── Sitios marcados [[ ]]: fuera las fotos que no son de un sitio marcado; el usuario ve negritas.
         //    reply_marcas (con corchetes) es lo que la app devuelve al pulsar "Crear ruta con mapa". ──
         let _replyMarcas = null;
+        if (_planSinHerramientas && !route && tieneMarcasSitio(reply)) {
+          try {
+            reply = await fotosDeSitiosMarcados(reply, { env, zone: _photoZone, fotoNombres: _fotoNombres,
+              ciudad: (anchorCountry && anchorCountry.pointScope && anchorCountry.locality) || '' });
+          } catch (e) { console.log('[FOTO-PLAN] ' + (e && e.message)); }
+        }
         if (tieneMarcasSitio(reply)) {
           reply = filtrarFotosNoMarcadas(reply, _fotoNombres);
           _replyMarcas = reply;
