@@ -1710,7 +1710,7 @@ const salma = {
         this._addSalmaBubble('Ahí tienes las recomendaciones 👆. Cuando lo veas claro, te lo monto como guía con mapa para guardarla y seguirla paso a paso.');
         this._offerCrearRutaConMapa({
           baseMsg: this._pendingGuidedBaseMsg,
-          sourceText: data.reply || '',
+          sourceText: data.reply_marcas || data.reply || '',
           guidedRoute: this._pendingGuidedRoute,
         });
         this._pendingGuidedRoute = null;
@@ -1775,7 +1775,7 @@ const salma = {
         this._removeLoading();
         this._offerCrearRutaConMapa({
           baseMsg: data.map_base_msg || this._lastMsg || msg,
-          sourceText: data.reply || '',
+          sourceText: data.reply_marcas || data.reply || '',
         });
       } else if (data.offer_add_to_route) {
         // Editando la ruta activa desde el popup de consulta: mismo flujo de arriba
@@ -1785,7 +1785,7 @@ const salma = {
         this._removeLoading();
         this._offerAddToRoute({
           baseMsg: data.map_base_msg || this._lastMsg || msg,
-          sourceText: data.reply || '',
+          sourceText: data.reply_marcas || data.reply || '',
         });
       } else if (this._pendingMapSourceText && !this._chatAreaOverride && data.reply) {
         // Respuesta normal (ninguna de las ramas de arriba aplicó) mientras el botón "Crear
@@ -1793,7 +1793,9 @@ const salma = {
         // bajo el último mensaje — así "el primer día quiero ver X" o "duermo en camping"
         // no se pierden al pulsar el botón más tarde (22 sept 2026). El propio mensaje ya se
         // ve en pantalla por el streaming en vivo; aquí solo se actualiza el texto pendiente.
-        this._pendingMapSourceText = (this._pendingMapSourceText + '\n\n' + data.reply).trim();
+        // Texto de varios mensajes: sin marcas [[ ]], para que la guía la monte la reescritura de siempre (que
+        // entiende "el primer día quiero ver X") y no el lector, que solo sirve para un plan de un solo mensaje.
+        this._pendingMapSourceText = (this._pendingMapSourceText.replace(/\[\[([^\[\]\n]{2,80})\]\]/g, '**$1**') + '\n\n' + data.reply).trim();
         this._offerCrearRutaConMapa({
           baseMsg: this._pendingMapBaseMsg,
           sourceText: this._pendingMapSourceText,
@@ -1971,6 +1973,9 @@ const salma = {
                 resolved = true;
                 resolve({
                   reply: evt.reply || fullText,
+                  // Mismo texto con los sitios marcados [[ ]] (no se enseña): es lo que se devuelve al pulsar
+                  // "Crear ruta con mapa" para que el Worker monte la guía sin reescribir el plan.
+                  reply_marcas: evt.reply_marcas || null,
                   route: evt.route || null,
                   video_params: evt.video_params || null,
                   _hadDraft: draftSent,

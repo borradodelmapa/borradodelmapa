@@ -2836,8 +2836,68 @@ function stripModelMapsUrls(text) {
   return t;
 }
 
+// ═══ SITIOS MARCADOS [[Nombre]] (30 sept 2026, casos p-munnkksyhs3 y p-munminjw1oy) ═══
+// Salma marca cada sitio real con [[Nombre]]; el resto de negritas (precios, consejos, títulos) no son sitios.
+// De esas marcas salen los enlaces del chat, qué fotos se enseñan y las paradas de "Crear ruta con mapa".
+// El usuario NUNCA ve los corchetes: en directo, en el mensaje final y en WhatsApp salen como negrita.
+// Si una respuesta no trae marcas (prompt de antes, o Salma se olvida), todo funciona como antes, por negritas.
+const _MARCA_SITIO_RE = /\[\[([^\[\]\n]{2,80})\]\]/g;
+function tieneMarcasSitio(t) { return typeof t === 'string' && /\[\[[^\[\]\n]{2,80}\]\]/.test(t); }
+function sitiosMarcados(t) {
+  const out = [], seen = new Set();
+  for (const m of String(t || '').matchAll(_MARCA_SITIO_RE)) {
+    const n = m[1].trim();
+    if (n.length >= 2 && !seen.has(n.toLowerCase())) { seen.add(n.toLowerCase()); out.push(n); }
+  }
+  return out;
+}
+// [[X]] → **X** (web) o *X* (WhatsApp)
+function marcasANegrita(t, star = '**') {
+  return typeof t === 'string' ? t.replace(_MARCA_SITIO_RE, (_, n) => star + n.trim() + star) : t;
+}
+// [[X]] → X (nombres de paradas, lo que se manda a una herramienta)
+function quitarMarcas(t) {
+  return typeof t === 'string' ? t.replace(_MARCA_SITIO_RE, (_, n) => n.trim()).replace(/\[\[|\]\]/g, '') : t;
+}
+// Conversor para el texto en directo: se guarda el trozo final que pueda ser una marca a medias ("[[Puen")
+// hasta que llegue el cierre, para que el usuario no vea nunca un corchete.
+function streamMarcas() {
+  let pend = '';
+  return {
+    push(chunk) {
+      let s = pend + (chunk || '');
+      pend = '';
+      const i = s.lastIndexOf('[[');
+      if (i >= 0 && s.indexOf(']]', i) === -1 && s.length - i <= 84 && !s.slice(i).includes('\n')) { pend = s.slice(i); s = s.slice(0, i); }
+      else if (s.endsWith('[') && !s.endsWith('![')) { pend = '['; s = s.slice(0, -1); }
+      return marcasANegrita(s);
+    },
+    flush() { const s = pend; pend = ''; return marcasANegrita(s); },
+  };
+}
+// FOTOS (caso p-munminjw1oy): con marcas, una foto de buscar_foto solo se enseña si es de un sitio marcado.
+// fotoNombres: url de la foto → nombres con los que se pidió / los que dio Google. Las fotos que no vienen de
+// buscar_foto (hoteles de buscar_hotel, etc.) no se tocan. Sin marcas en la respuesta, no se quita nada.
+function filtrarFotosNoMarcadas(reply, fotoNombres) {
+  if (!tieneMarcasSitio(reply) || !fotoNombres || !fotoNombres.size) return reply;
+  const sitios = sitiosMarcados(reply);
+  const esMarcado = (n) => !!n && sitios.some(s => samePlaceName(s, n) || normalizeForMatch(s) === normalizeForMatch(n));
+  let quitadas = 0;
+  const out = reply.replace(/!\[([^\]]*)\]\((\S+?)\)/g, (m, alt, url) => {
+    const nombres = fotoNombres.get(url);
+    if (!nombres) return m; // no es de buscar_foto
+    if (esMarcado(alt) || nombres.some(esMarcado)) return m;
+    quitadas++;
+    return '';
+  });
+  if (quitadas) console.log(`[FOTO-MARCAS] ${quitadas} foto(s) fuera: no son de un sitio marcado`);
+  return quitadas ? out.replace(/\n{3,}/g, '\n\n').trim() : reply;
+}
+
 // ¿La respuesta nombra algún sitio en negrita? (mismo criterio que injectVerifiedMapsLinks, sin llamar a Google)
 function replyNamesPlaces(reply, userName, exceptName = null) {
+  // Con sitios marcados [[ ]], esos son los sitios (las negritas son precios, consejos…)
+  if (tieneMarcasSitio(reply)) return sitiosMarcados(reply).some(n => !isOwnNameNotPlace(n, userName) && !(exceptName && samePlaceName(n, exceptName)));
   const skip = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
   const cap = /^[A-ZÁÉÍÓÚÑÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÇ]/;
   const re = /\*\*([^*]+)\*\*/g;
@@ -3149,7 +3209,16 @@ async function injectVerifiedMapsLinks(reply, placesKey, linkCtx, skipRouteLink 
   let matches = [];
   const seen = new Set();
   let m;
-  while ((m = boldRegex.exec(reply)) !== null) {
+  // Sitios marcados [[ ]]: son la lista de sitios (lo demás en negrita no se busca en Google).
+  if (tieneMarcasSitio(reply)) {
+    for (const mm of reply.matchAll(_MARCA_SITIO_RE)) {
+      const name = mm[1].trim();
+      if (name.length < 3 || seen.has(name.toLowerCase()) || isOwnNameNotPlace(name, userName)) continue;
+      seen.add(name.toLowerCase());
+      matches.push({ bold: mm[0], name });
+    }
+  }
+  while (!tieneMarcasSitio(reply) && (m = boldRegex.exec(reply)) !== null) {
     const name = m[1].trim();
     const nameLower = name.toLowerCase();
     // Filtrar: mín 3 chars, no es patrón de skip, no duplicado
@@ -6042,15 +6111,16 @@ function extractRouteFromReply(text) {
     const route = JSON.parse(jsonStr);
     if (route && Array.isArray(route.stops) && route.stops.length > 0) {
       route.stops = route.stops.map(s => ({
-        name: s.name || s.headline || '',
-        headline: s.headline || s.name || '',
-        narrative: s.narrative || s.description || '',
+        // quitarMarcas: si el plan de origen traía [[Sitio]], la guía nunca lleva corchetes
+        name: quitarMarcas(s.name || s.headline || ''),
+        headline: quitarMarcas(s.headline || s.name || ''),
+        narrative: marcasANegrita(s.narrative || s.description || '', ''),
         context: s.context || '',
         food_nearby: s.food_nearby || '',
         local_secret: s.local_secret || '',
         alternative: s.alternative || '',
         practical: s.practical || '',
-        day_title: s.day_title || '',
+        day_title: quitarMarcas(s.day_title || ''),
         links: Array.isArray(s.links) ? s.links : [],
         type: s.type || 'lugar',
         con_historia: s.con_historia !== false,
@@ -6369,6 +6439,82 @@ function parseModelRouteJson(raw) {
   return null;
 }
 
+// ═══ LECTOR DE SITIOS MARCADOS — "Crear ruta con mapa" sin reescribir el plan (30 sept 2026, caso p-munnkksyhs3) ═══
+// Medido con "3 días en Ronda": la reescritura de Sonnet (convertProseToRouteJson) tardó 58,6 s; leer las marcas, 1 ms.
+// Lee el plan que Salma ya escribió: **Día N — Título** abre el día; cada [[Sitio]] es una parada de ese día y su
+// texto es el de su línea. Sin coordenadas: SOLO para destinos de una ciudad o pueblo (ancla de punto), donde
+// verifyAllStops busca cada sitio alrededor del ancla e ignora las coordenadas de la IA; lo que Google no
+// confirma se descarta (lat/lng 0 = sin coordenadas usables, nunca se queda en el centro).
+// Devuelve null si el plan no se lee limpio → se hace como siempre (convertProseToRouteJson).
+function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '' } = {}) {
+  if (!tieneMarcasSitio(text)) return null;
+  const limpiar = (s) => marcasANegrita(String(s || ''), '')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')              // fotos
+    .replace(/\[([^\]]+)\]\(https?:[^)]+\)/g, '$1')      // enlaces markdown
+    .replace(/\(?https?:\/\/\S+\)?/g, '')               // URLs sueltas
+    .replace(/\*\*/g, '').replace(/(^|\s)\*(\S)/g, '$1$2').replace(/(\S)\*(\s|$)/g, '$1$2')
+    .replace(/\s+/g, ' ').trim();
+  const stops = [];
+  const seen = new Set();
+  let day = 0, dayTitle = '', intro = '';
+  for (const raw of String(text).split(/\r?\n/)) {
+    const linea = raw.trim();
+    if (!linea) continue;
+    const dia = linea.match(/^\*\*\s*D[ií]a\s+(\d{1,2})\b\s*[—–:-]?\s*([^*]*)\*\*\s*:?\s*$/i);
+    if (dia) {
+      const n = parseInt(dia[1], 10);
+      if (n !== day) { day = n; dayTitle = ''; }
+      if (dia[2] && dia[2].trim()) dayTitle = dia[2].trim();
+      continue;
+    }
+    if (!day) { if (!tieneMarcasSitio(linea) && !intro) intro = limpiar(linea); continue; }
+    const sitios = sitiosMarcados(linea);
+    if (!sitios.length) continue;
+    const comer = /^(?:\*\*)?\s*d[oó]nde (comer|cenar|tomar)/i.test(linea);
+    // Texto de la parada: el primer sitio de la línea se lleva la línea entera; los siguientes, el trozo que va
+    // detrás de su marca hasta la siguiente, si dice algo (≥40 letras); si no ("[[El Burgo]] o [[Montejaque]] — …"),
+    // también la línea entera.
+    // Fuera "Dónde comer:" y los nombres del principio ("[[El Burgo]] o [[Montejaque]] — "): el texto es lo que sigue.
+    const lineaNarr = limpiar(linea
+      .replace(/^(?:\*\*)?\s*d[oó]nde (?:comer|cenar|tomar)[^:]*:\s*(?:\*\*)?\s*/i, '')
+      .replace(/^\s*(?:\[\[[^\[\]\n]+\]\]\s*(?:,|\by\b|\bo\b|\be\b)?\s*)+[—–:-]?\s*/i, ''));
+    const partes = linea.split(/\[\[[^\[\]\n]{2,80}\]\]/); // partes[i+1] = lo que va detrás del sitio i
+    [...linea.matchAll(_MARCA_SITIO_RE)].map(m => m[1].trim()).forEach((nombre, i) => {
+      const key = nombre.toLowerCase();
+      if (seen.has(key)) return; // el mismo sitio dos veces → una parada (la primera vez que sale)
+      seen.add(key);
+      const trozo = limpiar(String(partes[i + 1] || '').replace(/^\s*[—–:,-]\s*/, ''));
+      const narrative = (i > 0 && trozo.length >= 40) ? trozo : lineaNarr;
+      stops.push({
+        name: nombre, headline: nombre, narrative: narrative.slice(0, 700), day_title: dayTitle,
+        type: comer ? 'restaurante' : 'lugar', con_historia: !comer, day,
+        lat: 0, lng: 0, km_from_previous: 0, estimated_hours: 0,
+      });
+    });
+  }
+  if (!stops.length) return null;
+  const nDias = Math.max(...stops.map(s => s.day));
+  // Plan limpio = todos los días pedidos aparecen y cada uno trae al menos 2 sitios marcados.
+  if (dias && nDias !== dias) { console.log(`[LECTOR] ✗ ${nDias} días leídos, se pidieron ${dias}`); return null; }
+  for (let d = 1; d <= nDias; d++) {
+    const n = stops.filter(s => s.day === d).length;
+    if (n < 2) { console.log(`[LECTOR] ✗ día ${d} con ${n} sitio(s) marcado(s)`); return null; }
+  }
+  const dest = String(destino || region || '').trim();
+  return {
+    title: dest ? `${dest} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Ruta de ${nDias} ${nDias === 1 ? 'día' : 'días'}`,
+    name: dest || '',
+    country: countryName || '',
+    region: region || dest,
+    duration_days: nDias,
+    summary: intro.slice(0, 300),
+    stops,
+    tips: [], tags: [], budget_level: 'medio', suggestions: [], maps_links: [],
+    pre_departure: null, practical_info: null,
+    _lector: true,
+  };
+}
+
 async function convertProseToRouteJson(text, env, opts = {}) {
   if (!text || typeof text !== 'string' || text.length < 100) return null;
   const guided = opts.guided || null;
@@ -6619,7 +6765,7 @@ async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, 
           draft_block: block.block,
           total_blocks: totalBlocks,
           route_partial: genResult.route,
-          reply: genResult.reply
+          reply: marcasANegrita(genResult.reply)
         })}\n\n`));
       } catch (_) {}
 
@@ -8391,6 +8537,10 @@ function getToolProgressMsg(toolName, input) {
 }
 
 async function executeToolCall(toolName, toolInput, env, userCoords, toolCtx = {}) {
+  // Si Salma copia un sitio marcado tal cual ("[[Puente Nuevo]]") en una herramienta, va sin corchetes
+  if (toolInput && typeof toolInput === 'object') {
+    for (const k of Object.keys(toolInput)) if (typeof toolInput[k] === 'string') toolInput[k] = quitarMarcas(toolInput[k]);
+  }
   switch (toolName) {
     case 'buscar_vuelos':
       return await buscarVuelosDuffel(toolInput, env.DUFFEL_ACCESS_TOKEN);
@@ -8826,6 +8976,7 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
   let stopReason = null;
   let routeSignalSent = false;
   let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
+  const _mk = streamMarcas(); // [[Sitio]] → **Sitio** en lo que ve el usuario (fullText se queda con las marcas)
   // Track tool calls being built
   const toolCallsInProgress = {}; // indexed by tool call index
 
@@ -8862,11 +9013,12 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
             if (!routeSignalSent) {
               const markerIdx = fullText.indexOf('SALMA_ROUTE');
               if (markerIdx === -1) {
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
+                const _vis = _mk.push(chunk);
+                if (_vis) await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _vis })}\n\n`));
               } else {
                 // El marcador empieza dentro de este trozo: mandar la prosa que
                 // venga pegada delante (no descartar el trozo entero) y avisar aparte.
-                const prosePart = markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '';
+                const prosePart = _mk.push(markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '') + _mk.flush();
                 if (prosePart) await writer.write(encoder.encode(`data: ${JSON.stringify({ t: prosePart })}\n\n`));
                 routeSignalSent = true;
                 await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
@@ -8896,6 +9048,12 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
         }
       } catch (e) { /* ignorar JSON mal formado */ }
     }
+  }
+
+  // Lo que quedara guardado por si era una marca a medias
+  if (forwardText && writer && !routeSignalSent) {
+    const _rest = _mk.flush();
+    if (_rest) { try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _rest })}\n\n`)); } catch (_) {} }
   }
 
   // Build contentBlocks in Anthropic-compatible format for downstream code
@@ -8932,6 +9090,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
   let stopReason = null;
   let routeSignalSent = false;
   let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
+  const _mk = streamMarcas(); // [[Sitio]] → **Sitio** en lo que ve el usuario (fullText se queda con las marcas)
   let usageIn = 0, usageOut = 0; // tokens de esta llamada (medición de coste, paso 3)
   let cacheW = 0, cacheR = 0;    // de esos, guardados en / leídos de la caché de prompt
   const blocksInProgress = {};
@@ -8961,11 +9120,12 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
               if (!routeSignalSent) {
                 const markerIdx = fullText.indexOf('SALMA_ROUTE');
                 if (markerIdx === -1) {
-                  try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`)); } catch (_) {}
+                  const _vis = _mk.push(chunk);
+                  if (_vis) { try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _vis })}\n\n`)); } catch (_) {} }
                 } else {
                   // El marcador empieza dentro de este trozo: mandar la prosa que
                   // venga pegada delante (no descartar el trozo entero) y avisar aparte.
-                  const prosePart = markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '';
+                  const prosePart = _mk.push(markerIdx > prevLen ? chunk.slice(0, markerIdx - prevLen) : '') + _mk.flush();
                   if (prosePart) { try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: prosePart })}\n\n`)); } catch (_) {} }
                   routeSignalSent = true;
                   try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
@@ -8992,6 +9152,12 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
         }
       } catch (e) {}
     }
+  }
+
+  // Lo que quedara guardado por si era una marca a medias
+  if (forwardText && writer && !routeSignalSent) {
+    const _rest = _mk.flush();
+    if (_rest) { try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _rest })}\n\n`)); } catch (_) {} }
   }
 
   for (const idx of Object.keys(blocksInProgress).sort((a, b) => +a - +b)) {
@@ -9165,7 +9331,8 @@ function splitWaMessage(text, max = 1500) {
 }
 
 async function sendWhatsAppMessage(env, to, text) {
-  const chunks = splitWaMessage(text);
+  // Sitios marcados [[X]] → *X* (negrita de WhatsApp). El historial guardado conserva las marcas.
+  const chunks = splitWaMessage(marcasANegrita(text, '*'));
   let res;
   for (const chunk of chunks) res = await _sendWhatsAppChunk(env, to, chunk);
   return res;
@@ -14128,6 +14295,7 @@ INSTRUCCIONES:
         let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web). Desde el 28 sept 2026 NO se muestran (Paco)
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
+        const _fotoNombres = new Map(); // url de foto de buscar_foto → [nombre de Google, nombre pedido] (filtro de sitios marcados)
         // Zona de la conversación para buscar_foto (30 sept 2026): la guía abierta; si no hay, el destino ya resuelto.
         const _photoZone = photoZoneFromRoute(currentRoute)
           || ((anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number') ? { lat: anchorCountry.lat, lng: anchorCountry.lng, km: 120 } : null);
@@ -14208,7 +14376,22 @@ INSTRUCCIONES:
           }, 3000);
           try {
             const _minStops = mergeIntoRoute ? 1 : 2; // añadir a la guía: basta con un sitio
-            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry, usageAcc: _reqUsage, minStops: _minStops });
+            // LECTOR (caso p-munnkksyhs3): destino de una ciudad o pueblo + plan con sitios marcados [[ ]] →
+            // la guía sale del propio plan, sin que Sonnet lo reescriba. Si no se lee limpio → como siempre.
+            const _tConv = Date.now();
+            if (!mergeIntoRoute && env.GOOGLE_PLACES_KEY && anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number') {
+              _fastPathRoute = routeFromMarkedText(sourceText, {
+                destino: (guidedRoute && guidedRoute.destino) || anchorCountry.locality || '',
+                dias: (guidedRoute && parseInt(guidedRoute.duracion_dias, 10)) || extractDaysFromMessage(message || '') || 0,
+                countryName: anchorCountry.countryName || '',
+                region: anchorCountry.locality || '',
+              });
+              if (_fastPathRoute) console.log(`[LECTOR] ✓ ${_fastPathRoute.stops.length} paradas, ${_fastPathRoute.duration_days} días, ${Date.now() - _tConv} ms — sin reescritura`);
+            }
+            if (!_fastPathRoute) {
+              _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry, usageAcc: _reqUsage, minStops: _minStops });
+              console.log(`[T2-TIEMPO] reescritura con Sonnet: ${Math.round((Date.now() - _tConv) / 1000)} s`);
+            }
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < _minStops)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
             // Solo consume guía/cambio si la conversión ha salido bien (un fallo no gasta el cupo)
             if (_fastPathRoute && _usageKind !== 'chat') _usageConsume = _usageKind;
@@ -14393,6 +14576,8 @@ INSTRUCCIONES:
               if (block.name === 'buscar_foto' && Array.isArray(toolResult.fotos) && toolResult.fotos.length > 0) {
                 const _pfKey = (toolResult.lugar || '').toLowerCase().trim();
                 const _pfKeyAsked = (block.input?.lugar || '').toLowerCase().trim();
+                // Para el filtro de fotos por sitios marcados: de qué sitio es cada foto
+                for (const f of toolResult.fotos) if (f && f.url) _fotoNombres.set(f.url, [toolResult.lugar || '', block.input?.lugar || ''].filter(Boolean));
                 if (_pfKey && toolResult.fotos[0] && toolResult.fotos[0].url) {
                   _placePhotosByName.set(_pfKey, toolResult.fotos[0].url);
                   if (_pfKeyAsked && _pfKeyAsked !== _pfKey) _placePhotosByName.set(_pfKeyAsked, toolResult.fotos[0].url);
@@ -14995,7 +15180,7 @@ REGLAS:
           // En el Tiempo 2 guiado (o con ancla) las coords vienen SIN verificar por
           // definición → NO se manda borrador, se manda la ruta una sola vez ya verificada.
           if (!guidedMapStage && !anchorCountry && !_opsApplied) {
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply: marcasANegrita(reply), route })}\n\n`)); } catch (_) {}
           } else {
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
           }
@@ -15033,7 +15218,9 @@ REGLAS:
                 _vOpts.previousStops = currentRoute.stops;
                 _vOpts.previousCountry = currentRoute.country || '';
               }
+              const _tVer = Date.now();
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts, env);
+              if (_fastPathRoute) console.log(`[T2-TIEMPO] comprobación de Google: ${Math.round((Date.now() - _tVer) / 1000)} s (${route.stops?.length || 0} paradas${route._lector ? ', lector' : ''})`);
               if (verified) route = verified;
               // Edición por operaciones: SOLO entra lo nuevo que Google confirma con place_id (una parada
               // "sin verificar" con las coordenadas de la IA podría dar un "Cómo llegar" erróneo). La
@@ -15204,8 +15391,18 @@ REGLAS:
         if (route && !_usageConsume) _usageConsume = (_usageKind === 'edit' || _opsApplied) ? 'edit' : 'guide';
         _flushUsage();
 
+        // ── Sitios marcados [[ ]]: fuera las fotos que no son de un sitio marcado; el usuario ve negritas.
+        //    reply_marcas (con corchetes) es lo que la app devuelve al pulsar "Crear ruta con mapa". ──
+        let _replyMarcas = null;
+        if (tieneMarcasSitio(reply)) {
+          reply = filtrarFotosNoMarcadas(reply, _fotoNombres);
+          _replyMarcas = reply;
+          reply = marcasANegrita(reply);
+        }
+
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
+        if (_replyMarcas) doneEvt.reply_marcas = _replyMarcas;
         if (_opsApplied && route) doneEvt.ops_edit = true;
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
         // PIEZA A — FLUJO ÚNICO: si esto fue Tiempo 1 (recomendaciones sin mapa), decirle al
@@ -15268,6 +15465,7 @@ REGLAS:
         try { _fallbackReply = _repairBrokenPhotoMarkdown(allText); } catch (_) {}
         // Nunca un enlace de Maps sin verificar: si el post-procesado no llegó a limpiarlos, se quitan aquí.
         try { _fallbackReply = stripModelMapsUrls(_fallbackReply); } catch (_) {}
+        try { _fallbackReply = marcasANegrita(_fallbackReply); } catch (_) {}
         try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _fallbackReply || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
       } finally {
         await writer.close();
