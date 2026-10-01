@@ -46,12 +46,13 @@ function token() {
     'C:/Users/User/Desktop/salma/api/cases-token.txt',
   ];
   for (const c of cands) { try { const t = fs.readFileSync(c, 'utf8').trim(); if (t) return t; } catch (_) {} }
-  console.error('Falta la llave de casos: api/cases-token.txt (o la variable de entorno CASES_TOKEN)'); process.exit(1);
+  return null; // en la nube la cabecera Authorization la pone el entorno
 }
 async function call(p, body) {
+  const t = token();
   const res = await fetch(API + p, {
     method: body ? 'POST' : 'GET',
-    headers: Object.assign({ Authorization: 'Bearer ' + token() }, body ? { 'Content-Type': 'application/json' } : {}),
+    headers: Object.assign(t ? { Authorization: 'Bearer ' + t } : {}, body ? { 'Content-Type': 'application/json' } : {}),
     body: body ? JSON.stringify(body) : undefined,
   });
   const d = await res.json().catch(() => ({}));
