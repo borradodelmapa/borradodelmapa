@@ -112,6 +112,14 @@ button,input,select{font:inherit;color:inherit}
 </style>
 </head>
 <body>
+<!-- mientras carga, o si algo falla al arrancar, se dice en pantalla (antes: pantalla negra sin más) -->
+<p class="note" id="boot" style="padding:40px 20px">Cargando tu viaje…</p>
+<script>
+(function(){function m(t){var b=document.getElementById('boot');if(!b||b.hidden)return;b.style.color='#F4630B';b.textContent='No se pudo abrir el vídeo: '+t+' — haz una captura de esto.';}
+addEventListener('error',function(e){m((e.message||'error')+(e.filename?' ('+e.filename.split('/').pop()+':'+e.lineno+')':''));});
+addEventListener('unhandledrejection',function(e){m(String(e.reason&&e.reason.message||e.reason));});
+setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.textContent.indexOf('No se pudo')<0)b.textContent='Sigue cargando… si no avanza, revisa la conexión, cierra y vuelve a entrar.';},25000);})();
+</script>
 <div class="empty" id="empty" hidden><b>Aún no hay fotos</b><span id="emptyTxt">Sube las fotos del viaje y aquí se monta el vídeo.</span><label class="btn file">Subir fotos<input type="file" id="upIn" accept="image/*" multiple></label></div>
 
 <div class="wrap" id="main" hidden>
@@ -768,7 +776,7 @@ $('#mp4').onclick=async()=>{
 };
 
 /* ── arranque ── */
-function fail(msg){$('#main').hidden=true;$('#empty').hidden=false;$('#emptyTxt').textContent=msg;post({ready:true,n:0});}
+function fail(msg){$('#boot').hidden=true;$('#main').hidden=true;$('#empty').hidden=false;$('#emptyTxt').textContent=msg;post({ready:true,n:0});}
 firebase.initializeApp({apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"});
 // en local, ?prueba carga un viaje de prueba (.mapas/mock-video.js, no se sube)
 if(LOCAL&&Q.has('prueba'))addEventListener('load',()=>{const sc=document.createElement('script');sc.src='/.mapas/mock-video.js';document.head.appendChild(sc);});
@@ -782,7 +790,7 @@ else firebase.auth().onAuthStateChanged(async u=>{
 });
 // Montar el editor con los datos del viaje (separado para poder probarlo con datos de prueba: window.__video, ?prueba)
 async function start(T0){
-  D=T0;PARADAS=repartir(D);
+  $('#boot').hidden=true;D=T0;PARADAS=repartir(D);
   $('#empty').hidden=true;$('#main').hidden=false;$('#titulo').textContent=D.titulo;
   pintarDestinos();pintarEstilos();pintarMusica();pintarVehiculo();pintarFirma();aplicarFormato();$('#stage').style.background=ESTILOS[S.estilo].fondo;
   try{await Promise.all([`800 40px "Barlow Condensed"`,`700 20px "Barlow Condensed"`,`600 20px Inter`].map(f=>document.fonts.load(f)));}catch(_){}
