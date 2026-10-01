@@ -115,10 +115,16 @@ const tuMundo = (() => {
   }
 
   let _cache = null; // { uid, D, S }
+  // datos del usuario, una carga por sesión (la comparten Tu mundo y las tarjetas de Mis Viajes)
+  let _udP = null, _udUid = null;
+  function _userData(uid, force) {
+    if (force || !_udP || _udUid !== uid) { _udUid = uid; _udP = loadUser(uid).catch(e => { _udP = null; throw e; }); }
+    return _udP;
+  }
   async function _getStats(force) {
     const u = window.currentUser; if (!u) throw new Error('Sin sesión');
     if (!force && _cache && _cache.uid === u.uid) return _cache.S;
-    const [D] = await Promise.all([loadUser(u.uid), loadWorld()]);
+    const [D] = await Promise.all([_userData(u.uid, force), loadWorld()]);
     const S = compute(D);
     _cache = { uid: u.uid, D, S };
     _saveSummary(u.uid, S);
@@ -155,6 +161,68 @@ const tuMundo = (() => {
     if (!sum || Date.now() - sum.t > SUM_TTL) {
       _getStats(true).then(() => { if (el.isConnected) el.innerHTML = _stripHTML(_readSummary(u.uid)); }).catch(() => {});
     }
+    _watchCards();
+  }
+
+  /* ── estado en cada tarjeta de Mis Viajes (1 oct 2026, Paco) ──
+     "📷 36 fotos" / "Sin fotos" · "🎬 Vídeo hecho" (si se creó en este móvil) · "✓ En tu mundo" o botón "Añadir a mi mundo"
+     (el mismo viaje_hecho de "Ya lo hice"). Se añade a las tarjetas cuando aparecen, sin tocar app.js.
+     💶 0 €: usa los datos de Tu mundo (una carga por sesión, con límite) y una escritura al marcar. */
+  async function _videosHechos() {
+    try {
+      const db = await new Promise((res, rej) => { const r = indexedDB.open('bdm-videos', 1); r.onupgradeneeded = () => r.result.createObjectStore('v'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+      return await new Promise(res => { const q = db.transaction('v').objectStore('v').getAllKeys(); q.onsuccess = () => res(new Set(q.result || [])); q.onerror = () => res(new Set()); });
+    } catch (_) { return new Set(); }
+  }
+  let _cardsObs = null;
+  function _watchCards() {
+    const grid = document.getElementById('viajes-grid'); if (!grid) return;
+    if (_cardsObs) _cardsObs.disconnect();
+    let t = null;
+    _cardsObs = new MutationObserver(() => { clearTimeout(t); t = setTimeout(() => _decorateCards(grid), 150); });
+    _cardsObs.observe(grid, { childList: true, subtree: true });
+    _decorateCards(grid);
+  }
+  async function _decorateCards(grid) {
+    if (!grid.isConnected || !window.currentUser) return;
+    const cards = [...grid.querySelectorAll('.viaje-card')].filter(c => !c.querySelector('.viaje-card-st') && c.querySelector('.viaje-card-delete[data-doc-id]'));
+    if (!cards.length) return;
+    // sin el mapa del mundo: contar fotos solo necesita los datos del usuario
+    let D; try { D = await _userData(window.currentUser.uid); } catch (_) { return; }
+    const byRoute = {}; D.photos.forEach(p => { if (p.routeId) byRoute[p.routeId] = (byRoute[p.routeId] || 0) + 1; });
+    D.pins.forEach(p => { if (p.routeId && p.photoUrl) byRoute[p.routeId] = (byRoute[p.routeId] || 0) + 1; });
+    D.guides.forEach(g => { g.nPhotos = (g.photos || []).length + (byRoute[g.id] || 0); });
+    const vids = await _videosHechos();
+    const byId = new Map(D.guides.map(g => [g.id, g]));
+    cards.forEach(c => {
+      if (c.querySelector('.viaje-card-st')) return;
+      const id = c.querySelector('.viaje-card-delete').dataset.docId, g = byId.get(id), body = c.querySelector('.viaje-card-body');
+      if (!g || !body) return;
+      const st = document.createElement('div'); st.className = 'viaje-card-st';
+      _paintCardSt(st, g, vids.has(id));
+      body.appendChild(st);
+    });
+  }
+  function _paintCardSt(st, g, vid) {
+    const n = g.nPhotos || 0, enMundo = !!(n || g.hecho);
+    st.innerHTML = `<span class="vcs ${n ? 'vcs-on' : ''}">${n ? `📷 ${n} ${n === 1 ? 'foto' : 'fotos'}` : 'Sin fotos'}</span>`
+      + (vid ? '<span class="vcs vcs-on">🎬 Vídeo hecho</span>' : '')
+      + (enMundo ? '<span class="vcs vcs-ok">✓ En tu mundo</span>' : '<button type="button" class="vcs vcs-add">+ Añadir a mi mundo</button>');
+    const b = st.querySelector('.vcs-add');
+    if (b) b.addEventListener('click', async e => {
+      e.stopPropagation(); e.preventDefault();
+      const u = window.currentUser; if (!u) return;
+      b.disabled = true; b.textContent = 'Guardando…';
+      try {
+        await firebase.firestore().collection('users').doc(u.uid).collection('maps').doc(g.id).update({ viaje_hecho: true });
+        g.hecho = true; if (g.raw) g.raw.viaje_hecho = true;
+        _paintCardSt(st, g, vid);
+        // el resumen de Tu mundo (países, km) necesita el mapa del mundo: se recalcula en segundo plano
+        _getStats(false).then(() => { if (_cache) { const S2 = compute(_cache.D); _cache.S = S2; _saveSummary(u.uid, S2); }
+          const strip = document.querySelector('.tm-strip'); if (strip) strip.innerHTML = _stripHTML(_readSummary(u.uid)); }).catch(() => {});
+        if (typeof showToast === 'function') showToast('Añadido a tu vuelta al mundo ✓');
+      } catch (_) { b.disabled = false; b.textContent = 'No se pudo · otra vez'; }
+    });
   }
 
   /* ── mapa del mundo ── */
