@@ -484,6 +484,21 @@ if ('serviceWorker' in navigator) {
 }
 if (typeof salma !== 'undefined') { salma.initGeolocation(); salma.initVoices(); salma.initVoiceToggle(); }
 
+// Pantalla siempre encendida mientras la app está abierta y a la vista (Paco, 1 oct 2026: "que no se cierre, como Google Maps").
+// El móvil la suelta al salir de la app o bloquearla a mano; al volver se pide otra vez. Navegadores sin Wake Lock: no pasa nada.
+(function () {
+  if (!('wakeLock' in navigator)) return;
+  let lock = null;
+  async function pedir() {
+    if (lock || document.visibilityState !== 'visible') return;
+    try { lock = await navigator.wakeLock.request('screen'); lock.addEventListener('release', () => { lock = null; }); } catch (_) {}
+  }
+  document.addEventListener('visibilitychange', pedir);
+  // iPhone y algunos Android solo lo conceden tras un toque
+  ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, pedir, { passive: true }));
+  pedir();
+})();
+
 // Cookie consent
 (function() {
   const consent = localStorage.getItem('cookie_consent');
