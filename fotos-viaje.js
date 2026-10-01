@@ -382,20 +382,32 @@ const fotosViaje = (() => {
   });
 
   // Aviso flotante: cómo va el vídeo cuando no se está mirando la pestaña VÍDEO de ese viaje
+  // Aviso de cómo va el vídeo cuando no se está mirando: etiqueta pequeña sobre "Mis Viajes" en el menú de abajo
+  // (1 oct 2026, Paco: la pastilla flotante tapaba la caja de escribir). "10 %" mientras se crea, "✓" al acabar.
+  let _badgeTimer = null;
   function _pillPaint() {
-    let p = document.getElementById('fv-gen-pill');
+    const old = document.getElementById('fv-gen-pill'); if (old) old.remove();
     const viewing = !!(_st && _st.tab === 'vid' && MED.guia === _st.docId && MED.holder && MED.holder.classList.contains('on'));
     const show = !!(MED.frame && MED.pill && !viewing && (MED.encoding || MED.done));
-    if (!show) { if (p) p.hidden = true; return; }
-    if (!p) {
-      p = document.createElement('button');
-      p.id = 'fv-gen-pill'; p.type = 'button'; p.className = 'fv-gen-pill';
-      p.addEventListener('click', _pillGo);
-      document.body.appendChild(p);
+    if (!show) {
+      document.querySelectorAll('.fv-gen-badge').forEach(b => b.remove());
+      if (_badgeTimer) { clearInterval(_badgeTimer); _badgeTimer = null; }
+      return;
     }
-    p.hidden = false;
-    p.classList.toggle('done', MED.done);
-    p.textContent = MED.done ? 'Tu vídeo está listo · Verlo' : MED.pill;
+    const tab = document.getElementById('tab-rutas'); if (!tab) return;
+    let b = tab.querySelector('.fv-gen-badge');
+    if (!b) {
+      b = document.createElement('i');
+      b.className = 'fv-gen-badge'; b.setAttribute('role', 'button');
+      b.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); _pillGo(); });
+      tab.appendChild(b);
+    }
+    const m = /(\d+)\s*%/.exec(MED.pill || '');
+    b.textContent = MED.done ? '✓' : (m ? m[1] + '%' : '…');
+    b.classList.toggle('done', MED.done);
+    b.setAttribute('aria-label', MED.done ? 'Tu vídeo está listo: verlo' : 'Creando el vídeo ' + (m ? m[1] + ' %' : ''));
+    // el menú de abajo se vuelve a pintar al cambiar de pantalla: la etiqueta se repone sola
+    if (!_badgeTimer) _badgeTimer = setInterval(_pillPaint, 1500);
   }
   function _pillGo() {
     const guia = MED.guia; if (!guia) return;

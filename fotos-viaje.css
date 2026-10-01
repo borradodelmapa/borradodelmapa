@@ -120,6 +120,15 @@
 }
 .fv-gen-pill.done { background:var(--accent); color:var(--text-on-accent); }
 .fv-gen-pill[hidden] { display:none; }
+.fv-gen-badge {
+  position:absolute; top:-2px; left:calc(50% + 13px); z-index:2; font-style:normal; cursor:pointer;
+  min-width:34px; height:20px; padding:0 5px; display:flex; align-items:center; justify-content:center;
+  background:var(--bg-base); color:var(--accent); border:1.5px solid var(--accent);
+  font:700 12px/1 var(--font-cond); letter-spacing:.02em; pointer-events:auto;
+}
+.fv-gen-badge::before { content:''; position:absolute; inset:-10px -8px; } /* más fácil de tocar */
+.fv-gen-badge.done { background:var(--accent); color:var(--text-on-accent); min-width:22px; animation:fvBadge 1.4s ease-in-out infinite; }
+@keyframes fvBadge { 50% { transform:scale(1.18); } }
 
 /* "Tu vídeo ya está montado" tras subir fotos */
 .fv-ready {
