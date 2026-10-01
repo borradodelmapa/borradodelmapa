@@ -4072,6 +4072,7 @@ function openCoinsModal() {
 
   const handle = window.PremiumModal.open({
     premiumUntilMs,
+    sinPago: !!window.BDM_TWA, // app de Google Play: sin precios ni pago (ver index.html, BDM_TWA)
     // Uso del usuario + topes de cada plan + precios: los cuenta y decide el Worker
     loadUsage: async () => {
       const u = firebase.auth().currentUser;

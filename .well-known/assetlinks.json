@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.borradodelmapa.app",
+      "sha256_cert_fingerprints": [
+        "2F:05:50:3C:C1:5E:D2:31:B3:A2:B0:80:F1:ED:96:08:51:17:11:70:CA:2E:ED:85:BD:E7:F0:7E:CC:41:F3:21"
+      ]
+    }
+  }
+]

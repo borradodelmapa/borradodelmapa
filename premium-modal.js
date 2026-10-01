@@ -41,6 +41,9 @@
     var isPremium = premiumUntilMs > Date.now();
     var usage = null;
     var usageFailed = false;
+    // App de Google Play (TWA): Google no deja cobrar con Stripe dentro de la app → solo se enseña el plan y el uso,
+    // sin precios ni botón de pagar (Premium se contrata en la web). 1 oct 2026.
+    var sinPago = !!opts.sinPago;
 
     var overlay = document.createElement('div');
     overlay.id = ID;
@@ -53,13 +56,15 @@
         '<button class="pm-close" type="button" aria-label="Cerrar">&times;</button>' +
         '<div class="pm-head">' +
           '<div class="pm-kicker">Pase Premium</div>' +
-          '<div class="pm-title">' + (isPremium ? 'Amplía tu Premium' : 'Hazte Premium') + '</div>' +
-          '<div class="pm-sub">' + (isPremium
+          '<div class="pm-title">' + (sinPago ? 'Tu plan' : isPremium ? 'Amplía tu Premium' : 'Hazte Premium') + '</div>' +
+          '<div class="pm-sub">' + (sinPago
+            ? 'Premium no se puede contratar desde la app de Android.'
+            : isPremium
             ? 'El tiempo nuevo se suma al que ya tienes: no pierdes nada.'
             : 'Más guías verificadas, más cambios y más mensajes con Salma.') + '</div>' +
         '</div>' +
         '<div class="pm-status" data-pm="status"></div>' +
-        '<div class="pm-body" data-pm="body">' +
+        '<div class="pm-body" data-pm="body"' + (sinPago ? ' style="display:none"' : '') + '>' +
           '<div class="pm-plans">' +
             '<div class="pm-label">Elige periodo</div>' +
             '<div class="pm-grid" data-pm="grid" role="radiogroup" aria-label="Periodo"></div>' +
@@ -68,7 +73,7 @@
         '<div class="pm-compare" data-pm="compare"></div>' +
         // El botón de pagar es hijo DIRECTO de la hoja para poder quedarse pegado abajo (sticky):
         // así se puede pagar sin tener que bajar por toda la lista de topes.
-        '<div class="pm-cta" data-pm="cta">' +
+        '<div class="pm-cta" data-pm="cta"' + (sinPago ? ' style="display:none"' : '') + '>' +
           '<button class="pm-pay" type="button" data-pm="pay"></button>' +
           '<div class="pm-fine" data-pm="fine"></div>' +
           '<div class="pm-error" data-pm="error" role="alert"></div>' +
