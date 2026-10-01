@@ -148,10 +148,10 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="pick" id="bVeh" type="button"><img id="vehImg" alt=""><span class="tx"><b id="vehTxt">Vehículo: Moto</b><small>Cambia solo en los tramos de avión o barco</small></span><span class="ar" aria-hidden="true">▾</span></button>
   <button class="pick" id="bMus" type="button"><span class="ic" aria-hidden="true">♪</span><span class="tx"><b id="musTxt">Música: sin música</b><small id="musSub">Recomendado para Reels y TikTok: pones la canción allí</small></span><span class="ar" aria-hidden="true">▾</span></button>
   <button class="pick" id="bFirma" type="button"><span class="ic bc" aria-hidden="true" style="font-weight:800;color:var(--gold)">Aa</span><span class="tx"><b id="firmaTxt">Firma de las fotos: logo</b><small id="firmaSub">✦ BORRADO DEL MAPA en cada polaroid</small></span><span class="ar" aria-hidden="true">▾</span></button>
-  <button class="btn big" id="mp4" type="button" disabled>Crear el vídeo</button>
+  <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v7</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v8</p>
 </div>
 
 <!-- vehículo -->
@@ -262,6 +262,8 @@ try{S.firma=localStorage.getItem('bdm_video_firma')||'';}catch(_){}
 
 /* ── comunicación con la app (mismos mensajes que el motor anterior: aviso flotante, subir fotos) ── */
 let encoding=false,lastVideo=null;
+// el vídeo hecho deja de valer solo si se cambia algo; mientras, Ver / Compartir / Descargar lo usan sin volver a crearlo
+function caduca(){lastVideo=null;const b=document.getElementById('mp4');if(b)b.textContent='Crear y ver el vídeo';}
 function post(o){if(window.parent===window)return;try{window.parent.postMessage(Object.assign({type:'bdm-vf',guia:GUIA,encoding,hasVideo:!!lastVideo},o),location.origin);}catch(_){}}
 addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='bdm-host')return;if(e.data.reload&&!encoding)location.reload();});
 $('#upIn').addEventListener('change',e=>{const f=[...(e.target.files||[])];e.target.value='';if(f.length)post({upload:f});});
@@ -563,7 +565,7 @@ addEventListener('resize',encajar);
 /* ── rehacer todo tras un cambio ── */
 let dirty=true,rehaciendo=null;
 async function rehacer(){
-  lastVideo=null;$('#mp4').textContent='Crear el vídeo';dirty=true;
+  caduca();dirty=true;
   compose();await loadPhotos();prepRoute();TL=buildTimeline();
   let a=[180,90,-180,-90];R.coords.forEach(([x,y])=>{a=[Math.min(a[0],x),Math.min(a[1],y),Math.max(a[2],x),Math.max(a[3],y)];});
   if(a[2]-a[0]<.02){a[0]-=.02;a[2]+=.02;}if(a[3]-a[1]<.02){a[1]-=.02;a[3]+=.02;}
@@ -597,7 +599,7 @@ function crearMapa(){
     map.once('load',()=>{capasRuta();res();});});
 }
 async function cambiarEstilo(){
-  $('#stage').style.background=ESTILOS[S.estilo].fondo;dirty=true;lastVideo=null;$('#mp4').textContent='Crear el vídeo';
+  $('#stage').style.background=ESTILOS[S.estilo].fondo;dirty=true;caduca();
   for(const k in MODELOS)delete MODELOS[k];for(const k in MIXERS)delete MIXERS[k];   // la escena 3D se crea de nuevo con el estilo
   await new Promise(r=>{map.once('style.load',()=>{capasRuta();r();});map.setStyle(styleFor(D.zona,S.estilo),{diff:false});});
   pintar(T,true);
@@ -619,7 +621,9 @@ async function precargar(){ // recorre el vídeo una vez para que la vista previ
 function botonesVista(){const v=lastVideo||(hecho&&hecho.blob);$('#fAccTxt').textContent=v?(lastVideo?'':'Comparte o descarga el último vídeo que creaste.'):'Esto es la vista previa. Al pulsar se crea el vídeo (tarda un poco) y luego eliges compartir o descargar.';$('#fAcc').hidden=false;}
 function accionVista(a){const v=lastVideo||(hecho&&hecho.blob);if(v){if(a==='sh')compartirVideo(v);else guardarVideo(v);return;}$('#fullX').onclick();$('#mp4').click();}
 $('#fSh').onclick=()=>accionVista('sh');$('#fDl').onclick=()=>accionVista('dl');
-$('#ver').onclick=async()=>{$('#full').hidden=false;botonesVista();$('#fullSlot').appendChild($('#pv'));encajar();await precargar();if(!$('#full').hidden&&!dirty){playing=true;$('#play').textContent='❚❚';last=performance.now();musicaSync();requestAnimationFrame(tick);}};
+$('#ver').onclick=()=>$('#mp4').click();
+// vista previa en directo: ya no se usa desde el botón Ver (1 oct: un solo proceso, el vídeo se crea una vez)
+const verVista=async()=>{$('#full').hidden=false;botonesVista();$('#fullSlot').appendChild($('#pv'));encajar();await precargar();if(!$('#full').hidden&&!dirty){playing=true;$('#play').textContent='❚❚';last=performance.now();musicaSync();requestAnimationFrame(tick);}};
 $('#play').onclick=()=>{playing=!playing;$('#play').textContent=playing?'❚❚':'▶';if(playing){if(T>=TL.total-.05)T=0;last=performance.now();requestAnimationFrame(tick);}musicaSync();};
 $('#fullX').onclick=()=>{$('#fAcc').hidden=true;playing=false;mus.pause();$('#play').textContent='▶';$('#full').hidden=true;$('.top').prepend($('#pv'));encajar();};
 
@@ -647,9 +651,9 @@ function pintarMusica(){const t={ninguna:['Música: sin música','Recomendado pa
 if(!CASA.length){$('#musCasaTxt').textContent='Próximamente: estamos eligiendo las pistas.';$('#musCasaL').querySelector('input').disabled=true;$('#musCasaL').style.opacity=.5;}
 else $('#musCasa').innerHTML=CASA.map(c=>`<option value="${c.id}">${esc(c.n)} · ${esc(c.estilo)}</option>`).join('');
 async function cargarMusica(url){musBuf=null;mus.src=url;try{const ab=await (await fetch(url)).arrayBuffer();musBuf=await new AudioContext().decodeAudioData(ab);}catch(e){console.warn('música',e);}}
-$('#musList').onchange=e=>{S.mus=e.target.value;lastVideo=null;if(S.mus==='ninguna'){mus.pause();musBuf=null;}if(S.mus==='casa'&&CASA.length){S.musCasa=S.musCasa||CASA[0].id;$('#musCasa').value=S.musCasa;cargarMusica(CASA.find(c=>c.id===S.musCasa).url);}pintarMusica();};
-$('#musCasa').onchange=e=>{S.musCasa=e.target.value;lastVideo=null;cargarMusica(CASA.find(c=>c.id===S.musCasa).url);pintarMusica();};
-$('#musFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;S.musNombre=f.name.replace(/\.[^.]+$/,'');lastVideo=null;await cargarMusica(URL.createObjectURL(f));pintarMusica();};
+$('#musList').onchange=e=>{S.mus=e.target.value;caduca();if(S.mus==='ninguna'){mus.pause();musBuf=null;}if(S.mus==='casa'&&CASA.length){S.musCasa=S.musCasa||CASA[0].id;$('#musCasa').value=S.musCasa;cargarMusica(CASA.find(c=>c.id===S.musCasa).url);}pintarMusica();};
+$('#musCasa').onchange=e=>{S.musCasa=e.target.value;caduca();cargarMusica(CASA.find(c=>c.id===S.musCasa).url);pintarMusica();};
+$('#musFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;S.musNombre=f.name.replace(/\.[^.]+$/,'');caduca();await cargarMusica(URL.createObjectURL(f));pintarMusica();};
 $('#bMus').onclick=()=>abrir('#shMus');
 // firma de las polaroids
 function pintarFirma(){$('#firmaTxt').textContent='Firma de las fotos: '+(S.firma?'tu texto':'logo');$('#firmaSub').textContent=S.firma||'✦ BORRADO DEL MAPA en cada polaroid';
@@ -660,7 +664,7 @@ function pintarFirma(){$('#firmaTxt').textContent='Firma de las fotos: '+(S.firm
     if(S.firma){fitFont(S.firma,800,w*.078,iw*.62);x.fillStyle='#1f1b17';x.fillText(S.firma,px,yb+w*.004);px+=x.measureText(S.firma).width;}
     else{x.font=`800 ${w*.056}px "Barlow Condensed",sans-serif`;[['✦ BORRADO','#F4630B'],['DEL','#8E9194'],['MAPA','#F4630B']].forEach(([t,cl])=>{x.fillStyle=cl;x.fillText(t,px,yb);px+=x.measureText(t).width;});}
     const t='SAN PEDRO ALCÁNTARA · DÍA 1';fitFont(t,700,w*.034,w/2-pad-(px-w/2+w*.04));x.fillStyle='#5b5f63';x.textAlign='right';x.fillText(t,w-pad,yb);x.textAlign='left';}finally{g=og;U=Ug;}}
-function guardarFirma(){try{localStorage.setItem('bdm_video_firma',S.firma);}catch(_){}lastVideo=null;$('#mp4').textContent='Crear el vídeo';}
+function guardarFirma(){try{localStorage.setItem('bdm_video_firma',S.firma);}catch(_){}caduca();}
 $('#bFirma').onclick=()=>{$('#firmaList input[value="'+(S.firma?'texto':'logo')+'"]').checked=true;$('#firmaIn').value=S.firma;pintarFirma();abrir('#shFirma');};
 $('#firmaList').onchange=e=>{if(e.target.value==='logo'){S.firma='';guardarFirma();}else{S.firma=$('#firmaIn').value.trim();$('#firmaIn').focus();}pintarFirma();};
 $('#firmaIn').oninput=e=>{S.firma=e.target.value.trim();guardarFirma();pintarFirma();};
@@ -721,6 +725,8 @@ function showResult(blob){
   sh.onclick=()=>compartirVideo(blob);
   o.querySelector('[data-a=x]').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 }
+const AJ=['dest','estilo','veh','dur','cal','tramos','gpx','gpxNombre'];
+function ajustes(){const o={};AJ.forEach(k=>o[k]=S[k]);return JSON.parse(JSON.stringify(o));}
 /* el vídeo hecho se guarda en este móvil (IndexedDB, por guía): al volver sale ya hecho. Solo los 3 últimos. 0 € */
 const VKEY=GUIA||(Q.has('singuia')?'_singuia':'');
 let hecho=null,hechoUrl='';
@@ -772,14 +778,14 @@ $('#mp4').onclick=async()=>{
     cx.drawImage(map.getCanvas(),0,0,W,H);cx.drawImage(ov,0,0);
     const vf=new VideoFrame(cv,{timestamp:Math.round(f*1e6/FPS),duration:Math.round(1e6/FPS)});enc.encode(vf,{keyFrame:f%60===0});vf.close();
     while(enc.encodeQueueSize>4)await new Promise(r=>setTimeout(r,2));
-    if(f%5===0){const pc=Math.round(f/N*100);$('#note').textContent=`Creando el vídeo: ${pc} %`;post({pill:`Vídeo ${pc} %`,done:false});}}
+    if(f%5===0){const pc=Math.round(f/N*100);$('#note').textContent=`Creando el vídeo: ${pc} %`;$('#mp4').textContent=`Creando el vídeo · ${pc} %`;post({pill:`Vídeo ${pc} %`,done:false});}}
   try{await enc.flush();}catch(e){err=e;}try{wake&&wake.release();}catch(_){}
   encoding=false;['#mp4','#ver','#bParadas','#bAdv','#bVeh','#bMus'].forEach(s=>$(s).disabled=false);
-  if(err){console.warn(err);$('#note').textContent='No se pudo crear el vídeo. Prueba otra vez.';post({pill:null});return;}
+  if(err){console.warn(err);caduca();$('#note').textContent='No se pudo crear el vídeo. Prueba otra vez.';post({pill:null});return;}
   mux.finalize();lastVideo=new Blob([mux.target.buffer],{type:'video/mp4'});$('#mp4').textContent='Ver el vídeo';
   $('#note').textContent=`Listo en ${Math.round((performance.now()-t0)/1000)} s`+(sinSonido?' · este navegador no deja meter la música: sale sin sonido':'');post({pill:'✓ Vídeo listo · verlo',done:true});
   try{navigator.vibrate&&navigator.vibrate([120,60,120]);}catch(_){}
-  hecho={blob:lastVideo,at:Date.now()};pintarHecho();vGuardar(hecho);
+  hecho={blob:lastVideo,at:Date.now(),S:ajustes()};pintarHecho();vGuardar(hecho);
   pintar(T,true);showResult(lastVideo);
 };
 
@@ -799,13 +805,15 @@ else firebase.auth().onAuthStateChanged(async u=>{
 // Montar el editor con los datos del viaje (separado para poder probarlo con datos de prueba: window.__video, ?prueba)
 async function start(T0){
   $('#boot').hidden=true;D=T0;PARADAS=repartir(D);
+  const guardado=await vLeer();if(guardado&&guardado.blob&&guardado.S)AJ.forEach(k=>{if(k in guardado.S)S[k]=guardado.S[k];});
   $('#empty').hidden=true;$('#main').hidden=false;$('#titulo').textContent=D.titulo;
   pintarDestinos();pintarEstilos();pintarMusica();pintarVehiculo();pintarFirma();aplicarFormato();$('#stage').style.background=ESTILOS[S.estilo].fondo;
   try{await Promise.all([`800 40px "Barlow Condensed"`,`700 20px "Barlow Condensed"`,`600 20px Inter`].map(f=>document.fonts.load(f)));}catch(_){}
   await crearMapa();await rehacer();
   await waitIdle();pintar(0,true);
   $('#ver').disabled=false;$('#mp4').disabled=false;
-  const v=await vLeer();if(v&&v.blob&&!hecho){hecho=v;pintarHecho();$('#mp4').textContent='Crear el vídeo otra vez';}
+  if(guardado&&guardado.blob&&!hecho){hecho=guardado;pintarHecho();
+    if(guardado.S){lastVideo=guardado.blob;$('#mp4').textContent='Ver el vídeo';}}   // con sus ajustes: vale tal cual
   post({ready:true,n:PH.reduce((s,a)=>s+a.length,0)});
 }
 window.__video={start,armarSinGuia,S,PARADAS:()=>PARADAS,LEGS:()=>LEGS,TL:()=>TL,R:()=>R,frameAt:(t,r)=>frameAt(t,r),drawOverlay:(c,t)=>drawOverlay(c,t),camAt:t=>camAt(t),waitIdle:()=>waitIdle(),cambio:()=>(cambio(),rehaciendo)};
