@@ -177,7 +177,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v13</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v14</p>
 </div>
 
 <!-- vehículo -->
@@ -774,12 +774,17 @@ const FILES=new WeakMap();let compartiendo=false;
 function fileDe(blob){let f=FILES.get(blob);if(!f){f=new File([blob],nombreVideo(),{type:'video/mp4'});FILES.set(blob,f);}return f;}
 function puedeCompartir(blob){try{return !!(navigator.canShare&&navigator.canShare({files:[fileDe(blob)]}));}catch(_){return false;}}
 function botonAviso(btn,txt,ms){if(!btn)return;const t0=btn.dataset.t||(btn.dataset.t=btn.textContent);btn.textContent=txt;if(ms)setTimeout(()=>{btn.textContent=t0;},ms);}
+const MAX_SHARE=50*1048576;   // límite de Chrome en Android para compartir archivos desde una web
+function avisoJunto(btn,msg){const box=btn&&btn.closest('.res-box,#hecho,.full');const n=box&&box.querySelector('.res-note,.note');if(n)n.textContent=msg;else $('#note').textContent=msg;}
 async function compartirVideo(blob,btn){
   if(compartiendo)return;
+  if(blob.size>MAX_SHARE){botonAviso(btn,'Muy grande · descargando',3000);guardarVideo(blob);
+    avisoJunto(btn,`Este vídeo pesa ${(blob.size/1048576).toFixed(0)} MB y el móvil no deja compartir desde la web más de 50 MB. Lo tienes en Descargas: compártelo desde la galería. Los vídeos nuevos ya salen más ligeros.`);return;}
   if(!puedeCompartir(blob)){botonAviso(btn,'Usa Descargar',2500);return;}
   compartiendo=true;if(btn)btn.disabled=true;botonAviso(btn,'Abriendo…');
   try{await navigator.share({files:[fileDe(blob)]});botonAviso(btn,'✓ Enviado',2500);}
-  catch(e){botonAviso(btn,e&&e.name==='AbortError'?btn&&btn.dataset.t||'Compartir':'No se pudo · otra vez',e&&e.name==='AbortError'?0:2500);}
+  catch(e){if(e&&e.name==='AbortError')botonAviso(btn,btn&&btn.dataset.t||'Compartir');
+    else{botonAviso(btn,'No se pudo compartir',3000);avisoJunto(btn,'El móvil no dejó compartirlo ('+((e&&(e.name+': '+e.message))||'error')+'). Pulsa Descargar y compártelo desde la galería.');}}
   finally{compartiendo=false;if(btn)btn.disabled=false;}}
 function descargarConAviso(blob,btn){guardarVideo(blob);botonAviso(btn,'✓ Descargado · mira en Descargas',3000);}
 function showResult(blob){
@@ -830,7 +835,10 @@ $('#mp4').onclick=async()=>{
   playing=false;$('#play').textContent='▶';mus.pause();
   if(typeof VideoEncoder==='undefined'){$('#note').textContent='Este navegador no puede crear el vídeo. Prueba con Chrome.';return;}
   encoding=true;post({pill:'Preparando el vídeo…',done:false});['#mp4','#ver','#bParadas','#bAdv','#bVeh','#bMus'].forEach(s=>$(s).disabled=true);
-  const q=calidad(),cfg={codec:q===1080?'avc1.640028':'avc1.4d0028',width:W,height:H,bitrate:S.dest==='historia'?4e6:q===1080?16e6:9e6,framerate:FPS,avc:{format:'avc'}};
+  // Chrome en Android no deja compartir archivos de más de 50 MB: el bitrate se ajusta a la duración para quedar
+  // por debajo (~40 MB, con margen: el codificador no clava el bitrate). Siempre por debajo de 50 MB (Paco, 1 oct): en los vídeos largos baja la calidad antes que pasarse (suelo técnico 1,5 Mbps).
+  const q=calidad(),bBase=S.dest==='historia'?4e6:q===1080?16e6:9e6,bTope=Math.floor(40*8*1048576/Math.max(1,TL.total))-2e5;
+  const cfg={codec:q===1080?'avc1.640028':'avc1.4d0028',width:W,height:H,bitrate:Math.max(15e5,Math.min(bBase,bTope)),framerate:FPS,avc:{format:'avc'}};
   try{if(!(await VideoEncoder.isConfigSupported(cfg)).supported)cfg.codec='avc1.42e028';}catch(_){}
   // sonido: AAC si el navegador sabe; si no, el vídeo sale sin música y se avisa
   let pista=null,aCfg=null,sinSonido=false;
