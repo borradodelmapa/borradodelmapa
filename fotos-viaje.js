@@ -19,6 +19,7 @@ const fotosViaje = (() => {
   const MAX_SIDE = 1600;
   const IC_PLUS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
   const IC_CAM = '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+  const IC_VID = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="15" height="14"/><polygon points="17 9 22 6 22 18 17 15"/></svg>';
   const IC_TRASH = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
   const IC_MAP = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
 
@@ -828,15 +829,17 @@ const fotosViaje = (() => {
     return list;
   }
 
-  // Fila en Mis Viajes (solo si hay alguna)
+  // Fila en Mis Viajes: siempre a la vista (1 oct 2026, Paco: "no veo crear vídeos sin ruta") —
+  // entrada al vídeo sin ruta y a las fotos sueltas
   function strayStrip(el) {
     if (!el || !window.currentUser) return;
     el.hidden = true;
-    _loadStray().then(list => {
-      if (!list.length || !el.isConnected) return;
-      el.className = 'fv-stray-strip';
+    _loadStray().catch(() => []).then(list => {
+      if (!el.isConnected) return;
+      el.className = 'fv-stray-strip fv-stray-strip-vid';
       el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0');
-      el.innerHTML = `<span class="fv-stray-ic">${IC_CAM}</span><span class="fv-stray-txt"><b>Fotos sin viaje</b><span>${list.length} ${list.length === 1 ? 'foto que no está' : 'fotos que no están'} en ningún viaje</span></span><span class="fv-stray-go" aria-hidden="true">→</span>`;
+      const sub = list.length ? `Con tus fotos sueltas · ${list.length} ${list.length === 1 ? 'foto sin viaje' : 'fotos sin viaje'}` : 'Sube fotos de tu móvil y te montamos el vídeo, sin guía';
+      el.innerHTML = `<span class="fv-stray-ic">${IC_VID}</span><span class="fv-stray-txt"><b>Vídeo sin ruta</b><span>${sub}</span></span><span class="fv-stray-go" aria-hidden="true">→</span>`;
       el.hidden = false;
       const go = () => showState('fotos-sin-viaje');
       el.addEventListener('click', go);
@@ -853,6 +856,10 @@ const fotosViaje = (() => {
       <div class="fv-stray fade-in" id="fv-stray">
         <button class="tm-back" type="button" id="fv-stray-back">‹ Mis Viajes</button>
         <h2 class="fv-stray-title">Fotos <span>sin viaje</span></h2>
+        <div class="fv-stray-acts">
+          <button type="button" class="fv-stray-go-vid" id="fv-stray-go-vid">${IC_VID} Crear vídeo sin ruta</button>
+          <label class="fv-stray-up">${IC_CAM} Subir fotos del móvil<input type="file" id="fv-stray-in" accept="image/*" multiple hidden></label>
+        </div>
         <p class="fv-stray-lede" id="fv-stray-lede">Cargando…</p>
         <div id="fv-stray-body"></div>
       </div>
@@ -870,17 +877,54 @@ const fotosViaje = (() => {
     document.getElementById('fv-stray-move').addEventListener('click', () => _strayPickTrip());
     document.getElementById('fv-stray-del').addEventListener('click', () => _strayDelete());
     document.getElementById('fv-stray-vid').addEventListener('click', () => _strayVideo());
+    document.getElementById('fv-stray-go-vid').addEventListener('click', () => {
+      if (!_stray || !_stray.list.length) { document.getElementById('fv-stray-in').click(); return; }
+      if (!_sel.size) _stray.list.forEach(p => _sel.add(p.id));   // sin elegir: entran todas
+      _strayVideo();
+    });
+    document.getElementById('fv-stray-in').addEventListener('change', e => { const f = [...(e.target.files || [])]; e.target.value = ''; if (f.length) _strayUpload(f); });
+  }
+
+  // Subir fotos sueltas (sin guía) para el vídeo sin ruta: misma subida que en FOTOS de una guía, con routeId null
+  let _strayBusy = false;
+  async function _strayUpload(files) {
+    if (_strayBusy || !window.currentUser) return;
+    _strayBusy = true;
+    const uid = window.currentUser.uid, lede = () => document.getElementById('fv-stray-lede');
+    const api = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
+    const U = firebase.firestore().collection('users').doc(uid);
+    const btns = ['fv-stray-go-vid'].map(id => document.getElementById(id)).filter(Boolean); btns.forEach(b => b.disabled = true);
+    const nuevas = []; let fail = 0;
+    for (let i = 0; i < files.length; i++) {
+      const l = lede(); if (l) l.textContent = `Subiendo ${i + 1} de ${files.length}…`;
+      try {
+        const meta = await _readMeta(files[i]), blob = await _toJpeg(files[i]), takenAt = meta.date.toISOString();
+        const fd = new FormData(); fd.append('photo', blob, 'viaje.jpg'); fd.append('uid', uid);
+        const r = await fetch(api + '/upload-gallery-photo', { method: 'POST', body: fd });
+        if (!r.ok) throw new Error('subida ' + r.status);
+        const { key, url } = await r.json();
+        const ref = await U.collection('fotos').add({ key, url, tag: 'viaje', caption: '', albumId: null, routeId: null,
+          lat: meta.lat, lng: meta.lng, source: 'sinviaje', origName: files[i].name, takenAt, createdAt: takenAt });
+        nuevas.push(ref.id);
+      } catch (e) { fail++; console.warn('[fotos-viaje] subida sin viaje', e); }
+    }
+    _strayBusy = false; btns.forEach(b => b.disabled = false);
+    if (!document.getElementById('fv-stray')) return;
+    let list = []; try { list = await _loadStray(true); } catch (_) {}
+    _sel = new Set(nuevas);   // las recién subidas quedan elegidas para el vídeo
+    _strayPaint(list);
+    if (typeof showToast === 'function') showToast(`${nuevas.length} ${nuevas.length === 1 ? 'foto subida' : 'fotos subidas'}${fail ? ` · ${fail} no se pudieron` : ''} · pulsa Crear vídeo`);
   }
 
   function _strayPaint(list) {
     const lede = document.getElementById('fv-stray-lede'), body = document.getElementById('fv-stray-body'); if (!body) return;
     if (!list.length) {
-      lede.textContent = 'Todas tus fotos están en algún viaje.';
+      lede.textContent = 'No tienes fotos sueltas. Sube fotos de tu móvil y te montamos el vídeo con ellas: las paradas salen de dónde hiciste cada foto.';
       body.innerHTML = '';
       _strayBar();
       return;
     }
-    lede.textContent = `${list.length} ${list.length === 1 ? 'foto' : 'fotos'}. Toca las que sean del mismo viaje (o el día entero) y pásalas a su guía.`;
+    lede.textContent = `${list.length} ${list.length === 1 ? 'foto' : 'fotos'}. Para el vídeo, elige las que quieras (o toca un día entero); si no eliges, entran todas. También puedes pasarlas a una guía.`;
     const groups = new Map();
     list.forEach((p, i) => { const k = _dayKey(p.date); if (!groups.has(k)) groups.set(k, { d: p.date, items: [] }); groups.get(k).items.push(i); });
     body.innerHTML = `<div class="fv-days">${[...groups.values()].map(g => `

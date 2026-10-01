@@ -139,6 +139,15 @@
   background:var(--bg-row); border:1px solid var(--border); color:var(--text-primary);
 }
 .fv-stray-strip[hidden] { display:none; }
+/* Vídeo sin ruta (1 oct 2026): la fila destaca en naranja y dentro hay dos botones grandes */
+.fv-stray-strip-vid { border-color:var(--accent); border-left-width:4px; }
+.fv-stray-strip-vid .fv-stray-ic { color:var(--accent); }
+.fv-stray-acts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.fv-stray-go-vid, .fv-stray-up { min-height:52px; display:flex; align-items:center; justify-content:center; gap:8px; padding:0 10px; cursor:pointer; font:700 16px/1.1 var(--font-cond); letter-spacing:.04em; text-transform:uppercase; text-align:center; }
+.fv-stray-go-vid { border:0; background:var(--accent); color:var(--text-on-accent); }
+.fv-stray-go-vid:disabled { opacity:.5; }
+.fv-stray-up { border:1px solid var(--border); background:var(--bg-row); color:var(--text-primary); }
+.fv-stray-up svg { width:22px; height:22px; }
 .fv-stray-strip:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 .fv-stray-ic { color:var(--text-muted); display:flex; flex:none; }
 .fv-stray-ic svg { width:22px; height:22px; }
