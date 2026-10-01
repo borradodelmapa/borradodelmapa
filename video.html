@@ -43,13 +43,19 @@ button,input,select{font:inherit;color:inherit}
 .opt small{font-size:11px;color:var(--soft)}
 .opt[aria-pressed="true"]{border-color:var(--gold)}
 .row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-.sty{appearance:none;width:124px;flex-shrink:0;background:none;border:2px solid var(--line);padding:0;cursor:pointer;display:flex;flex-direction:column;text-align:left;color:var(--cream)}
+.sty{appearance:none;position:relative;width:136px;flex-shrink:0;background:var(--panel);border:3px solid transparent;outline:1px solid var(--line);padding:0;cursor:pointer;display:flex;flex-direction:column;text-align:left;color:var(--cream);opacity:.72;transition:opacity .15s}
 .sty svg{display:block;width:100%;height:auto}
-.sty b{font:800 16px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.03em;padding:7px 8px 2px}
-.sty small{font-size:11px;color:var(--muted);padding:0 8px 8px;line-height:1.25}
+.sty b{font:800 17px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.03em;padding:8px 9px 3px}
+.sty small{font-size:11px;color:var(--muted);padding:0 9px 9px;line-height:1.25}
+.sty[aria-pressed="true"]{border-color:var(--gold);outline-color:var(--gold);opacity:1}
+.sty[aria-pressed="true"]::after{content:"✓";position:absolute;top:6px;right:6px;width:24px;height:24px;background:var(--gold);color:#0D0F10;font:800 15px/24px Inter,sans-serif;text-align:center}
 .sty[aria-pressed="true"]{border-color:var(--gold)}
 .pick{appearance:none;display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);padding:8px 12px;min-height:58px;text-align:left;cursor:pointer;width:100%}
-.pick img,.pick .ic{width:52px;height:40px;object-fit:contain;background:#cfdcb8;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+.pick img,.pick .ic{width:60px;height:60px;object-fit:contain;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.pick .ic svg{width:100%;height:100%;display:block}
+/* cada opción con su color: vehículo cielo, música naranja, firma polaroid */
+#vehImg{background:linear-gradient(180deg,#8fcdf2,#e3f2fc);padding:4px}
+#bVeh{border-left:4px solid #5fb8ea}#bMus{border-left:4px solid var(--gold)}#bFirma{border-left:4px solid var(--cream)}
 .pick .tx{flex:1;min-width:0}.pick .tx b{display:block;font:700 16px/1.15 "Barlow Condensed",sans-serif}.pick .tx small{font-size:11px;color:var(--soft)}
 .pick .ar{color:var(--gold);font:800 20px "Barlow Condensed",sans-serif}
 .note{font-size:13px;color:var(--muted);text-align:center;margin:0}
@@ -147,12 +153,12 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <div><p class="lbl">¿Dónde lo vas a compartir?</p><div class="g2" id="dest"></div></div>
   <div><p class="lbl">Estilo</p><div class="row" id="estilos"></div></div>
   <button class="pick" id="bVeh" type="button"><img id="vehImg" alt=""><span class="tx"><b id="vehTxt">Vehículo: Moto</b><small>Cambia solo en los tramos de avión o barco</small></span><span class="ar" aria-hidden="true">▾</span></button>
-  <button class="pick" id="bMus" type="button"><span class="ic" aria-hidden="true">♪</span><span class="tx"><b id="musTxt">Música: sin música</b><small id="musSub">Recomendado para Reels y TikTok: pones la canción allí</small></span><span class="ar" aria-hidden="true">▾</span></button>
-  <button class="pick" id="bFirma" type="button"><span class="ic bc" aria-hidden="true" style="font-weight:800;color:var(--gold)">Aa</span><span class="tx"><b id="firmaTxt">Firma de las fotos: logo</b><small id="firmaSub">✦ BORRADO DEL MAPA en cada polaroid</small></span><span class="ar" aria-hidden="true">▾</span></button>
+  <button class="pick" id="bMus" type="button"><span class="ic" id="musIc" aria-hidden="true"></span><span class="tx"><b id="musTxt">Música: sin música</b><small id="musSub">Recomendado para Reels y TikTok: pones la canción allí</small></span><span class="ar" aria-hidden="true">▾</span></button>
+  <button class="pick" id="bFirma" type="button"><span class="ic" id="firmaIc" aria-hidden="true"></span><span class="tx"><b id="firmaTxt">Firma de las fotos: logo</b><small id="firmaSub">✦ BORRADO DEL MAPA en cada polaroid</small></span><span class="ar" aria-hidden="true">▾</span></button>
   <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v9</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v10</p>
 </div>
 
 <!-- vehículo -->
@@ -633,18 +639,30 @@ function pintarDestinos(){$('#dest').innerHTML=Object.entries(DEST).map(([k,d])=
 $('#dest').onclick=e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.dest)return;S.dest=b.dataset.k;pintarDestinos();aplicarFormato();cambio();};
 // miniatura de cada estilo: un mapa pequeño con sus colores de verdad (tierra, mar, parque, relieve, carretera, ruta, moto y parada con foto)
 const STY_TXT={viaje:'Colores vivos y claros',aventura:'Monte y relieve marcado',postal:'Tonos suaves, de época',noche:'Mapa oscuro, ruta brillante'};
+const RUTA_D='M-4 76C18 70 30 72 46 60S74 36 86 32';
 function miniEstilo(k){const e=ESTILOS[k],f=e.f||{},dark=e.base==='dark';
-  const land=f.background||(dark?'#1c2226':e.sw[0]),water=f.water||e.sw[1],park=f.park_b||(dark?'#24302a':e.sw[0]),road=f.highway||e.sw[2],cas=f.highway_casing_early||'rgba(0,0,0,.25)',ruta=e.ruta;
-  const sh=dark?'rgba(0,0,0,.45)':'rgba(60,70,40,'+(0.12+e.hs*0.25).toFixed(2)+')',hl=dark?'rgba(255,255,255,.06)':'rgba(255,255,255,.55)';
-  return `<svg viewBox="0 0 124 84" aria-hidden="true"><rect width="124" height="84" fill="${land}"/>
-  <path d="M0 0H70C62 10 50 12 44 22C38 31 24 30 14 40C8 46 4 50 0 52Z" fill="${water}"/>
-  <ellipse cx="96" cy="58" rx="30" ry="16" fill="${sh}"/><ellipse cx="90" cy="52" rx="24" ry="11" fill="${hl}"/>
-  <path d="M74 84C80 72 96 70 106 74C116 78 120 84 124 84Z" fill="${park}"/><path d="M58 30C66 26 76 30 74 38C72 44 62 44 58 40C54 36 54 32 58 30Z" fill="${park}"/>
-  <path d="M-4 74C20 66 34 70 50 58S84 30 128 22" fill="none" stroke="${cas}" stroke-width="6"/><path d="M-4 74C20 66 34 70 50 58S84 30 128 22" fill="none" stroke="${road}" stroke-width="4"/>
-  <path d="M-4 74C20 66 34 70 50 58S70 40 80 36" fill="none" stroke="${ruta}" stroke-width="4.5" stroke-linecap="round"/>
-  <path d="M80 36C92 31 108 25 128 22" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 4" opacity=".9"/>
-  <circle cx="80" cy="36" r="5" fill="${ruta}" stroke="#fff" stroke-width="2"/>
-  <g transform="translate(30 30)"><path d="M0 9L-4 3H4Z" fill="#fff"/><circle r="9" cy="-4" fill="#fff"/><circle r="7" cy="-4" fill="#7fb6d8"/><path d="M-7 -2Q-2 -7 2 -3T7 -3V0A7 7 0 0 1 -7 0Z" fill="#6c9c4c"/></g></svg>`;}
+  const land=f.background||(dark?'#1a2026':e.sw[0]),water=f.water||e.sw[1],park=f.park_b||(dark?'#22302a':e.sw[0]),road=f.highway||e.sw[2],ruta=e.ruta,id='s'+k;
+  const pin=`<g transform="translate(30 30)"><path d="M0 10L-5 3H5Z" fill="#fff"/><circle r="10" cy="-4" fill="#fff"/><circle r="8" cy="-4" fill="#7fb6d8"/><path d="M-8 -1Q-2 -8 3 -3T8 -3V0A8 8 0 0 1 -8 0Z" fill="#5f9a44"/></g>`;
+  const moto=`<circle cx="86" cy="32" r="6" fill="${ruta}" stroke="#fff" stroke-width="2.5"/>`;
+  const resto=`<path d="M86 32C98 28 114 22 140 18" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 4" opacity=".85"/>`;
+  let fondo='',extra='';
+  if(k==='viaje'){fondo=`<rect width="136" height="92" fill="${land}"/><path d="M0 0H78C70 12 56 14 48 24C40 34 26 34 14 44C8 50 4 54 0 56Z" fill="${water}"/>
+    <path d="M0 0H78C70 12 56 14 48 24" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/><circle cx="110" cy="70" r="20" fill="${park}"/><circle cx="70" cy="80" r="12" fill="${f.park_a||park}"/>
+    <path d="M-4 76C18 70 30 72 46 60S80 30 140 18" fill="none" stroke="${road}" stroke-width="4"/><circle cx="118" cy="14" r="8" fill="#ffd54d"/>`;}
+  else if(k==='aventura'){fondo=`<rect width="136" height="92" fill="${land}"/><path d="M0 0H40C34 10 20 16 0 18Z" fill="${water}"/>
+    <path d="M52 92L86 40L104 62L116 48L140 80V92Z" fill="#6f8f4c"/><path d="M86 40L95 54L90 52L84 58L80 50Z" fill="#fff" opacity=".85"/><path d="M86 40L104 62L96 92H70Z" fill="#000" opacity=".18"/>
+    ${[0,1,2,3].map(n=>`<ellipse cx="34" cy="70" rx="${10+n*9}" ry="${6+n*5}" fill="none" stroke="#7a6a3a" stroke-width="1" opacity=".45"/>`).join('')}
+    <path d="M-4 76C18 70 30 72 46 60S80 30 140 18" fill="none" stroke="${road}" stroke-width="4"/>`;}
+  else if(k==='postal'){fondo=`<rect width="136" height="92" fill="#d9c9a3"/><rect x="5" y="5" width="126" height="82" fill="${land}"/><rect x="5" y="5" width="126" height="82" fill="none" stroke="#b9a37a" stroke-width="1" stroke-dasharray="3 2"/>
+    <path d="M5 5H70C62 16 50 18 42 28C34 36 20 36 5 46Z" fill="${water}"/><circle cx="104" cy="66" r="16" fill="${park}" opacity=".8"/>
+    <g transform="translate(108 22) rotate(8)"><rect x="-13" y="-10" width="26" height="20" fill="none" stroke="#c0392b" stroke-width="1.5"/><text x="0" y="4" font-size="8" text-anchor="middle" fill="#c0392b" font-family="Barlow Condensed,sans-serif" font-weight="800">1926</text></g>
+    <path d="M-4 76C18 70 30 72 46 60S80 30 140 18" fill="none" stroke="${road}" stroke-width="3" opacity=".8"/>`;}
+  else{fondo=`<rect width="136" height="92" fill="${land}"/><path d="M0 0H78C70 12 56 14 48 24C40 34 26 34 14 44C8 50 4 54 0 56Z" fill="${water}"/>
+    ${[[100,64],[108,70],[96,74],[114,60],[60,80],[66,84],[120,78]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.6" fill="#ffd27a"/>`).join('')}
+    <circle cx="118" cy="16" r="7" fill="#e8e4d8"/><circle cx="114" cy="13" r="6" fill="${land}"/>
+    <defs><filter id="${id}g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>
+    <path d="${RUTA_D}" fill="none" stroke="${ruta}" stroke-width="9" opacity=".55" filter="url(#${id}g)"/>`;}
+  return `<svg viewBox="0 0 136 92" aria-hidden="true">${fondo}<path d="${RUTA_D}" fill="none" stroke="${ruta}" stroke-width="5" stroke-linecap="round"/>${resto}${moto}${pin}${extra}</svg>`;}
 function pintarEstilos(){$('#estilos').innerHTML=Object.keys(ESTILOS).map(k=>`<button type="button" class="sty" data-k="${k}" aria-pressed="${k===S.estilo}">${miniEstilo(k)}<b>${ESTILOS[k].n}</b><small>${STY_TXT[k]||''}</small></button>`).join('');}
 $('#estilos').onclick=async e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.estilo)return;S.estilo=b.dataset.k;pintarEstilos();$('#note').textContent='Cambiando el estilo…';await cambiarEstilo();$('#note').textContent='';};
 // hojas
@@ -660,7 +678,10 @@ $('#bVeh').onclick=async()=>{abrir('#shVeh');const L=$('#vehList');
 $('#vehList').onclick=e=>{const b=e.target.closest('button[data-v]');if(!b||encoding)return;S.veh=b.dataset.v;cerrar(b);pintarVehiculo();cambio();};
 // música
 let musBuf=null,musStart=0;
-function pintarMusica(){const t={ninguna:['Música: sin música','Recomendado para Reels y TikTok: pones la canción allí'],casa:['Música: '+(S.musCasa?(CASA.find(c=>c.id===S.musCasa)||{}).n:'de la casa'),'Libre de derechos (dominio público)'],
+const IC_MUS={ninguna:`<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#2B2E30"/><path d="M24 40V18l16-4v20" fill="none" stroke="#9A9EA1" stroke-width="3"/><circle cx="20" cy="40" r="5" fill="#9A9EA1"/><circle cx="36" cy="36" r="5" fill="#9A9EA1"/><path d="M12 48L48 12" stroke="#F4630B" stroke-width="3.5"/></svg>`,
+  casa:`<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#F4630B"/><path d="M24 40V18l16-4v20" fill="none" stroke="#0D0F10" stroke-width="3"/><circle cx="20" cy="40" r="5" fill="#0D0F10"/><circle cx="36" cy="36" r="5" fill="#0D0F10"/><path d="M46 22q4 4 0 8M50 18q8 8 0 16" fill="none" stroke="#0D0F10" stroke-width="2.5"/></svg>`,
+  propia:`<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#F4630B"/><path d="M22 38V16l16-4v20" fill="none" stroke="#0D0F10" stroke-width="3"/><circle cx="18" cy="38" r="5" fill="#0D0F10"/><circle cx="34" cy="34" r="5" fill="#0D0F10"/><circle cx="46" cy="44" r="7" fill="#fff"/><path d="M46 40v8M42 44h8" stroke="#0D0F10" stroke-width="2.5"/></svg>`};
+function pintarMusica(){$('#musIc').innerHTML=IC_MUS[S.mus]||IC_MUS.ninguna;const t={ninguna:['Música: sin música','Recomendado para Reels y TikTok: pones la canción allí'],casa:['Música: '+(S.musCasa?(CASA.find(c=>c.id===S.musCasa)||{}).n:'de la casa'),'Libre de derechos (dominio público)'],
   propia:['Música: '+(S.musNombre||'tu canción'),'Si tiene derechos, la red social puede silenciar el vídeo']}[S.mus];$('#musTxt').textContent=t[0];$('#musSub').textContent=t[1];
   $('#musCasa').hidden=S.mus!=='casa'||!CASA.length;$('#musFileL').hidden=S.mus!=='propia';}
 if(!CASA.length){$('#musCasaTxt').textContent='Próximamente: estamos eligiendo las pistas.';$('#musCasaL').querySelector('input').disabled=true;$('#musCasaL').style.opacity=.5;}
@@ -671,7 +692,8 @@ $('#musCasa').onchange=e=>{S.musCasa=e.target.value;caduca();cargarMusica(CASA.f
 $('#musFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;S.musNombre=f.name.replace(/\.[^.]+$/,'');caduca();await cargarMusica(URL.createObjectURL(f));pintarMusica();};
 $('#bMus').onclick=()=>abrir('#shMus');
 // firma de las polaroids
-function pintarFirma(){$('#firmaTxt').textContent='Firma de las fotos: '+(S.firma?'tu texto':'logo');$('#firmaSub').textContent=S.firma||'✦ BORRADO DEL MAPA en cada polaroid';
+function pintarFirma(){const ft=S.firma?esc(S.firma.slice(0,14)):'✦ BORRADO DEL MAPA';
+  $('#firmaIc').innerHTML=`<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#2B2E30"/><g transform="rotate(-6 30 30)"><rect x="9" y="6" width="42" height="48" fill="#fff"/><rect x="13" y="10" width="34" height="30" fill="#7fb6d8"/><path d="M13 32l9-8 7 6 6-5 12 9v6H13Z" fill="#5f9a44"/><text x="30" y="50" font-size="${S.firma?6:4.4}" text-anchor="middle" fill="${S.firma?'#0D0F10':'#F4630B'}" font-family="Barlow Condensed,sans-serif" font-weight="800">${ft}</text></g></svg>`;$('#firmaTxt').textContent='Firma de las fotos: '+(S.firma?'tu texto':'logo');$('#firmaSub').textContent=S.firma||'✦ BORRADO DEL MAPA en cada polaroid';
   $('#firmaBox').hidden=!S.firma&&!$('#firmaList input[value="texto"]').checked;
   // muestra: la franja de abajo de una polaroid
   const c=$('#firmaPv'),x=c.getContext('2d'),w=600;x.clearRect(0,0,w,130);x.fillStyle='#fff';x.fillRect(0,0,w,130);x.fillStyle='#cfdcb8';x.fillRect(27,0,w-54,40);
@@ -788,13 +810,15 @@ $('#mp4').onclick=async()=>{
     try{await aenc.flush();}catch(e){err=e;}}
   const enc=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>err=e});enc.configure(cfg);
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d');const N=Math.ceil(TL.total*FPS),t0=performance.now();
-  let wake=null;try{wake=await navigator.wakeLock.request('screen');}catch(_){}
+  // pantalla encendida mientras se crea (como Google Maps al navegar); si se apaga o sales y vuelves, se pide otra vez
+  let wake=null;const pedirWake=async()=>{if(!encoding||document.hidden)return;try{wake=await navigator.wakeLock.request('screen');}catch(_){}};
+  const alVolver=()=>{if(!document.hidden)pedirWake();};document.addEventListener('visibilitychange',alVolver);await pedirWake();
   for(let f=0;f<N;f++){if(err)break;const t=f/FPS;const cam=frameAt(t,f===0);await waitIdle();drawOverlay(cam,t);
     cx.drawImage(map.getCanvas(),0,0,W,H);cx.drawImage(ov,0,0);
     const vf=new VideoFrame(cv,{timestamp:Math.round(f*1e6/FPS),duration:Math.round(1e6/FPS)});enc.encode(vf,{keyFrame:f%60===0});vf.close();
     while(enc.encodeQueueSize>4)await new Promise(r=>setTimeout(r,2));
     if(f%5===0){const pc=Math.round(f/N*100);$('#note').textContent=`Creando el vídeo: ${pc} %`;$('#mp4').textContent=`Creando el vídeo · ${pc} %`;post({pill:`Vídeo ${pc} %`,done:false});}}
-  try{await enc.flush();}catch(e){err=e;}try{wake&&wake.release();}catch(_){}
+  try{await enc.flush();}catch(e){err=e;}document.removeEventListener('visibilitychange',alVolver);try{wake&&wake.release();}catch(_){}
   encoding=false;['#mp4','#ver','#bParadas','#bAdv','#bVeh','#bMus'].forEach(s=>$(s).disabled=false);
   if(err){console.warn(err);caduca();$('#note').textContent='No se pudo crear el vídeo. Prueba otra vez.';post({pill:null});return;}
   mux.finalize();lastVideo=new Blob([mux.target.buffer],{type:'video/mp4'});$('#mp4').textContent='Ver el vídeo';
