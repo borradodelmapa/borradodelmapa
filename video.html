@@ -158,7 +158,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v11</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v12</p>
 </div>
 
 <!-- vehículo -->
@@ -783,8 +783,9 @@ async function vLeer(){if(!VKEY)return null;try{const db=await vdb();return awai
 async function vGuardar(v){if(!VKEY)return;try{const db=await vdb();
   let idx=[];try{idx=JSON.parse(localStorage.getItem('bdm_videos_idx')||'[]');}catch(_){}
   idx=idx.filter(k=>k!==VKEY);idx.push(VKEY);const fuera=idx.length>3?idx.splice(0,idx.length-3):[];
-  await new Promise((res,rej)=>{const tx=db.transaction('v','readwrite'),st=tx.objectStore('v');st.put(v,VKEY);fuera.forEach(k=>st.delete(k));tx.oncomplete=res;tx.onerror=()=>rej(tx.error);});
-  try{localStorage.setItem('bdm_videos_idx',JSON.stringify(idx));}catch(_){}}catch(e){console.warn('[video] no se pudo guardar en el móvil',e);}}
+  await new Promise((res,rej)=>{const tx=db.transaction('v','readwrite'),st=tx.objectStore('v');st.put(v,VKEY);fuera.forEach(k=>st.delete(k));tx.oncomplete=res;tx.onerror=tx.onabort=()=>rej(tx.error||new Error('abort'));});
+  try{localStorage.setItem('bdm_videos_idx',JSON.stringify(idx));}catch(_){}}catch(e){console.warn('[video] no se pudo guardar en el móvil',e);
+  $('#note').textContent='Ojo: el móvil no tiene sitio para guardar el vídeo aquí. Descárgalo o compártelo ahora; si sales, habrá que crearlo otra vez.';}}
 function pintarHecho(){
   if(!hecho){$('#hecho').hidden=true;return;}
   if(hechoUrl)URL.revokeObjectURL(hechoUrl);hechoUrl=URL.createObjectURL(hecho.blob);$('#hechoV').src=hechoUrl;
@@ -802,6 +803,9 @@ async function audioPista(dur,sr=48000){
 }
 $('#mp4').onclick=async()=>{
   if(lastVideo){showResult(lastVideo);return;}
+  if(encoding)return;   // ya se está creando: no se empieza otro
+  // ya hay uno hecho: crear otro solo si se pide de verdad (tarda minutos)
+  if(hecho&&hecho.blob&&!confirm('Ya tienes un vídeo hecho de este viaje.\n\nAceptar: crear uno nuevo con los cambios (tarda unos minutos).\nCancelar: ver el que ya tienes.')){showResult(hecho.blob);return;}
   playing=false;$('#play').textContent='▶';mus.pause();
   if(typeof VideoEncoder==='undefined'){$('#note').textContent='Este navegador no puede crear el vídeo. Prueba con Chrome.';return;}
   encoding=true;post({pill:'Preparando el vídeo…',done:false});['#mp4','#ver','#bParadas','#bAdv','#bVeh','#bMus'].forEach(s=>$(s).disabled=true);
