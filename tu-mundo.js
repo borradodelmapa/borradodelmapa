@@ -127,10 +127,10 @@ const tuMundo = (() => {
 
   /* ── franja de Mis Viajes ── */
   function _stripHTML(sum) {
-    if (!sum) return `<span class="tm-strip-ic">${IC_GLOBE}</span><span class="tm-strip-txt"><b>Tu mundo</b><span>Tus países, kilómetros y récords</span></span><span class="tm-strip-go">→</span>`;
+    if (!sum) return `<span class="tm-strip-ic">${IC_GLOBE}</span><span class="tm-strip-txt"><b>Tu vuelta al mundo</b><span>Tus países, kilómetros y récords</span></span><span class="tm-strip-go">→</span>`;
     const pct = sum.n / TOTAL_PAISES * 100;
     const flags = (sum.flags || []).slice(0, 8).map(flagOf).join(' ');
-    if (!sum.n) return `<span class="tm-strip-ic">${IC_GLOBE}</span><span class="tm-strip-txt"><b>Tu mundo</b><span>Sube fotos a tus viajes y tu mapa se irá pintando</span></span><span class="tm-strip-go">→</span>`;
+    if (!sum.n) return `<span class="tm-strip-ic">${IC_GLOBE}</span><span class="tm-strip-txt"><b>Tu vuelta al mundo</b><span>Sube fotos a tus viajes y tu mapa se irá pintando</span></span><span class="tm-strip-go">→</span>`;
     return `<span class="tm-strip-ic">${IC_GLOBE}</span>
       <span class="tm-strip-nums">
         <span><b>${sum.n}</b><i>${sum.n === 1 ? 'país' : 'países'}</i></span>
@@ -145,7 +145,7 @@ const tuMundo = (() => {
     el.className = 'tm-strip';
     el.setAttribute('role', 'button');
     el.setAttribute('tabindex', '0');
-    el.setAttribute('aria-label', 'Abrir Tu mundo');
+    el.setAttribute('aria-label', 'Abrir Tu vuelta al mundo');
     const sum = _readSummary(u.uid);
     el.innerHTML = _stripHTML(sum);
     const go = () => showState('tu-mundo');
@@ -307,7 +307,7 @@ const tuMundo = (() => {
     g.fillStyle = '#0D0F10'; g.fillRect(0, 0, 1080, 1920);
     const m = document.createElement('canvas'); m.width = 1080; m.height = 560; drawWorld(m, S, { sea: '#0D0F10' }); g.drawImage(m, 0, 430);
     const nP = S.seen.size, pct = nP / TOTAL_PAISES * 100;
-    g.fillStyle = '#ECEBE8'; g.font = '800 150px "Barlow Condensed",sans-serif'; g.fillText('MI MUNDO', 80, 260);
+    g.fillStyle = '#ECEBE8'; g.font = '800 150px "Barlow Condensed",sans-serif'; { const t = 'MI VUELTA AL MUNDO', w = g.measureText(t).width; if (w > 920) g.font = `800 ${Math.floor(150 * 920 / w)}px "Barlow Condensed",sans-serif`; g.fillText(t, 80, 260); }
     g.fillStyle = '#F4630B'; g.font = '800 44px "Barlow Condensed",sans-serif'; g.fillText('BORRADO DEL MAPA', 84, 330);
     const home = getHome(); if (home && home.name) { g.fillStyle = '#C4C7C9'; g.font = '700 40px "Barlow Condensed",sans-serif'; g.fillText('DESDE ' + home.name.toUpperCase(), 84, 392); }
     const st = [[nP, nP === 1 ? 'PAÍS' : 'PAÍSES'], [pctTxt(pct) + '%', 'DEL MUNDO'], [nf(S.km), 'KM'], [nf(S.days), 'DÍAS']];
@@ -339,7 +339,7 @@ const tuMundo = (() => {
         try { await document.fonts.load('800 40px "Barlow Condensed"'); } catch (_) {}
         const blob = await makeCard(S); const url = URL.createObjectURL(blob); _q('#tm-card-img').src = url; _q('#tm-card').hidden = false;
         const file = new File([blob], 'mi-mundo-borradodelmapa.png', { type: 'image/png' });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Mi mundo', text: 'Mi mapa de viajero en borradodelmapa.com' }); } catch (e) {} }
+        if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Mi vuelta al mundo', text: 'Mi mapa de viajero en borradodelmapa.com' }); } catch (e) {} }
         else { const a = document.createElement('a'); a.href = url; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); _q('#tm-share-note').textContent = 'Tarjeta descargada: compártela desde tu galería.'; }
       } catch (e) { _q('#tm-share-note').textContent = 'No se pudo crear la tarjeta. Prueba otra vez.'; }
       b.disabled = false; b.innerHTML = old;
@@ -353,7 +353,7 @@ const tuMundo = (() => {
       <div class="tm-screen fade-in" id="tm-screen">
         <button class="tm-back" id="tm-back" type="button">‹ Mis Viajes</button>
         <header class="tm-head">
-          <h2 class="tm-title">Tu <span>mundo</span></h2>
+          <h2 class="tm-title">Tu vuelta al <span>mundo</span></h2>
           <p class="tm-lede" id="tm-lede">Cargando tus viajes…</p>
         </header>
         <div id="tm-body" hidden>
@@ -364,10 +364,10 @@ const tuMundo = (() => {
           </section>
           <section><h3 class="tm-h">Tus países</h3><div class="tm-flags" id="tm-flags"></div></section>
           <section><h3 class="tm-h">Tus récords</h3><div class="tm-recs" id="tm-recs"></div></section>
-          <section><h3 class="tm-h">Comparte tu mundo</h3>
+          <section><h3 class="tm-h">Comparte tu vuelta al mundo</h3>
             <button class="tm-btn" id="tm-share" type="button">${IC_SHARE} Crear tarjeta para compartir</button>
             <p class="tm-note" id="tm-share-note"></p>
-            <div class="tm-card" id="tm-card" hidden><img id="tm-card-img" alt="Tarjeta de tu mundo"></div>
+            <div class="tm-card" id="tm-card" hidden><img id="tm-card-img" alt="Tarjeta de tu vuelta al mundo"></div>
           </section>
           <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div>
             <details class="tm-pend-sec" id="tm-pend-sec" hidden><summary>Tus guías sin fotos (<span id="tm-pend-n"></span>)</summary><div class="tm-pend" id="tm-pend"></div></details></section>
