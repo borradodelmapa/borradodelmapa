@@ -99,13 +99,16 @@ button,input,select{font:inherit;color:inherit}
 .full .x{position:absolute;top:10px;right:10px;background:var(--ink)}
 .full .facc{width:min(360px,92vw);display:flex;flex-direction:column;gap:6px}
 .full .facc[hidden],.full .note:empty{display:none}
-.res{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column;justify-content:center;overflow-y:auto;padding:52px 0 env(safe-area-inset-bottom,0px)}
-.res video{flex:0 1 auto;min-height:0;width:100%;max-height:calc(100% - 70px);object-fit:contain;background:#000}
-.rw{display:flex;gap:8px}
+/* vídeo listo: la misma tarjeta que 'Tu álbum está listo' (viaje-fotos.html .alb-res), con el vídeo dentro */
+.res{position:fixed;inset:0;z-index:50;background:rgba(13,15,16,.92);display:flex;align-items:center;justify-content:center;padding:16px 16px 56px;overflow-y:auto}
+.res-box{background:var(--panel);border:1px solid var(--line);padding:16px;width:min(420px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px}
+.res-box b{font:800 26px/1.05 "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--cream)}
+.res-box span{color:var(--muted);font-size:14px}
+.res-box video{width:100%;min-height:0;flex:0 1 auto;max-height:50vh;object-fit:contain;background:#000;display:block}
+.res-note{margin:0;color:var(--cream);font-size:15px;line-height:1.45}
+.rw{display:flex;gap:10px}
 .rw .btn{flex:1}
-.res .rw{padding:10px 12px}
-.res .x{position:absolute;top:10px;right:10px;background:var(--ink)}
-/* el vídeo ya hecho, en la pantalla del editor, con Compartir y Guardar debajo */
+/* el vídeo ya hecho, en la pantalla del editor, con Compartir y Descargar debajo */
 .hecho{display:flex;flex-direction:column;gap:8px;border:1px solid var(--gold);padding:10px;background:var(--panel)}
 .hecho .lbl{margin:0}
 .hecho video{width:100%;max-height:60vh;background:#000;display:block}
@@ -136,7 +139,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <div class="hecho" id="hecho" hidden>
     <p class="lbl" id="hechoTxt">Tu vídeo</p>
     <video id="hechoV" controls playsinline preload="metadata"></video>
-    <div class="rw"><button class="btn" type="button" id="hSh">Compartir</button><button class="btn ghost" type="button" id="hDl">Guardar</button></div>
+    <div class="rw"><button class="btn" type="button" id="hSh">Compartir</button><button class="btn ghost" type="button" id="hDl">Descargar</button></div>
     <p class="note">Se queda guardado en este móvil: no hace falta volver a crearlo. En iPhone, para llevarlo a Fotos: Compartir → Guardar vídeo.</p>
   </div>
 
@@ -213,7 +216,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <div id="fullSlot"></div>
   <div class="fbar"><button class="btn play" id="play" type="button" aria-label="Reproducir">▶</button><div class="prog"><i id="pbar"></i></div></div>
   <p class="note" id="fnote"></p>
-  <div class="facc" id="fAcc" hidden><div class="rw"><button class="btn" type="button" id="fSh">Compartir</button><button class="btn ghost" type="button" id="fDl">Guardar</button></div><p class="note" id="fAccTxt"></p></div>
+  <div class="facc" id="fAcc" hidden><div class="rw"><button class="btn" type="button" id="fSh">Compartir</button><button class="btn ghost" type="button" id="fDl">Descargar</button></div><p class="note" id="fAccTxt"></p></div>
   <button class="x" type="button" id="fullX" aria-label="Cerrar">✕</button>
 </div>
 
@@ -611,7 +614,7 @@ async function precargar(){ // recorre el vídeo una vez para que la vista previ
   dirty=false;$('#play').disabled=false;$('#fnote').textContent='';$('#pbar').style.width='0%';T=0;pintar(0,true);
 }
 // fin de la vista previa: Compartir / Guardar. Con el vídeo ya creado van al archivo; si no, primero se crea
-function finVista(){if($('#full').hidden)return;$('#fAccTxt').textContent=lastVideo?'':'Primero se crea el vídeo (tarda un poco) y luego eliges compartir o guardar.';$('#fAcc').hidden=false;}
+function finVista(){if($('#full').hidden)return;$('#fAccTxt').textContent=lastVideo?'':'Primero se crea el vídeo (tarda un poco) y luego eliges compartir o descargar.';$('#fAcc').hidden=false;}
 function accionVista(a){const v=lastVideo;if(v){if(a==='sh')compartirVideo(v);else guardarVideo(v);return;}$('#fullX').onclick();$('#mp4').click();}
 $('#fSh').onclick=()=>accionVista('sh');$('#fDl').onclick=()=>accionVista('dl');
 $('#ver').onclick=async()=>{$('#full').hidden=false;$('#fullSlot').appendChild($('#pv'));encajar();await precargar();if(!$('#full').hidden&&!dirty){playing=true;$('#play').textContent='❚❚';last=performance.now();musicaSync();requestAnimationFrame(tick);}};
@@ -707,11 +710,14 @@ async function compartirVideo(blob){const file=new File([blob],nombreVideo(),{ty
   try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:(R&&R.titulo)||''});return;}}catch(e){if(e&&e.name==='AbortError')return;}
   guardarVideo(blob);$('#note').textContent='Este navegador no deja compartir el vídeo: se ha descargado para que lo compartas desde tus archivos.';}
 function showResult(blob){
-  const url=URL.createObjectURL(blob);
-  const o=document.createElement('div');o.className='res';o.innerHTML=`<video controls playsinline autoplay src="${url}"></video><div class="rw"><button class="btn" type="button" data-a="sh">Compartir</button><button class="btn ghost" type="button" data-a="dl">Guardar</button></div><button class="x" type="button" aria-label="Cerrar">✕</button>`;
-  document.body.appendChild(o);o.querySelector('.x').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();URL.revokeObjectURL(url);};
-  o.querySelector('[data-a=sh]').onclick=()=>compartirVideo(blob);
-  o.querySelector('[data-a=dl]').onclick=()=>guardarVideo(blob);
+  const url=URL.createObjectURL(blob),mb=(blob.size/1048576).toFixed(1).replace('.',','),seg=TL?Math.round(TL.total):0;
+  let o=$('#vidRes');if(o)o.remove();o=document.createElement('div');o.id='vidRes';o.className='res';
+  o.innerHTML=`<div class="res-box"><b>Tu vídeo está listo</b><span>${seg?seg+' s · ':''}${mb} MB · MP4</span><video controls playsinline autoplay src="${url}"></video><p class="res-note">Súbelo a Instagram, TikTok o WhatsApp, o guárdalo en tu móvil. Se queda guardado aquí: no hace falta volver a crearlo.</p><div class="rw"><button type="button" class="btn" data-a="sh">Compartir</button><a class="btn ghost" href="${url}" download="${nombreVideo()}">Descargar</a></div><button type="button" class="btn ghost" data-a="x">Cerrar</button></div>`;
+  document.body.appendChild(o);
+  const sh=o.querySelector('[data-a=sh]'),f=new File([blob],nombreVideo(),{type:'video/mp4'});
+  if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.hidden=true;   // como el álbum: sin compartir archivos, solo Descargar
+  sh.onclick=()=>compartirVideo(blob);
+  o.querySelector('[data-a=x]').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 }
 /* el vídeo hecho se guarda en este móvil (IndexedDB, por guía): al volver sale ya hecho. Solo los 3 últimos. 0 € */
 const VKEY=GUIA||(Q.has('singuia')?'_singuia':'');
