@@ -1,0 +1,10 @@
+{
+  "titulo": "Mapa del mundo interactivo: tocar un país y pintar provincias (empezar por España y Portugal)",
+  "tipo": "idea",
+  "zona": "Tu vuelta al mundo",
+  "area": "ux",
+  "gravedad": "media",
+  "modelo": "opus",
+  "estado": "nuevo",
+  "nota": "Paco, 1 oct 2026: hacer el mapa del mundo de 'Tu vuelta al mundo' interactivo. Al tocar un país se acerca y enseña sus provincias/regiones, que se van coloreando igual que ahora los países. Empezar por España (52 provincias) y Portugal (20 distritos). ——— Propuesta: se pintan solas las provincias con fotos con ubicación o paradas de guías hechas, y se puede tocar una provincia para marcarla como 'he estado' (guardar en el usuario, p. ej. campo mundo_marcas {ES-11: true}). Contornos de provincias alojados por nosotros (~150 KB, Natural Earth admin-1 o similar), sin servicios de pago: 0 €. El mapa actual (tu-mundo.js drawWorld) es un canvas fijo: hay que poder tocar y ampliar. Resto de países más adelante, país a país (todos a la vez son decenas de MB). Estimación: 1-2 sesiones."
+}
