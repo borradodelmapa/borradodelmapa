@@ -97,11 +97,16 @@ button,input,select{font:inherit;color:inherit}
 .play{width:46px;padding:0;font-size:18px}
 .prog{flex:1;height:4px;background:var(--line)}.prog i{display:block;height:100%;width:0;background:var(--gold)}
 .full .x{position:absolute;top:10px;right:10px;background:var(--ink)}
-.res{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
-.res video{flex:1;min-height:0;width:100%;object-fit:contain;background:#000}
-.res .rw{display:flex;gap:8px;padding:10px 12px;background:var(--ink)}
-.res .rw .btn{flex:1}
+.res{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column;justify-content:center;overflow-y:auto;padding:52px 0 env(safe-area-inset-bottom,0px)}
+.res video{flex:0 1 auto;min-height:0;width:100%;max-height:calc(100% - 70px);object-fit:contain;background:#000}
+.rw{display:flex;gap:8px}
+.rw .btn{flex:1}
+.res .rw{padding:10px 12px}
 .res .x{position:absolute;top:10px;right:10px;background:var(--ink)}
+/* el vídeo ya hecho, en la pantalla del editor, con Compartir y Guardar debajo */
+.hecho{display:flex;flex-direction:column;gap:8px;border:1px solid var(--gold);padding:10px;background:var(--panel)}
+.hecho .lbl{margin:0}
+.hecho video{width:100%;max-height:60vh;background:#000;display:block}
 </style>
 </head>
 <body>
@@ -116,6 +121,13 @@ button,input,select{font:inherit;color:inherit}
       <button class="btn ghost" id="ver" type="button" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="7 4 20 12 7 20 7 4"/></svg>Ver</button>
       <button class="btn ghost" id="bParadas" type="button">Editar paradas</button>
     </div>
+  </div>
+
+  <div class="hecho" id="hecho" hidden>
+    <p class="lbl" id="hechoTxt">Tu vídeo</p>
+    <video id="hechoV" controls playsinline preload="metadata"></video>
+    <div class="rw"><button class="btn" type="button" id="hSh">Compartir</button><button class="btn ghost" type="button" id="hDl">Guardar</button></div>
+    <p class="note">Se queda guardado en este móvil: no hace falta volver a crearlo. En iPhone, para llevarlo a Fotos: Compartir → Guardar vídeo.</p>
   </div>
 
   <div><p class="lbl">¿Dónde lo vas a compartir?</p><div class="g2" id="dest"></div></div>
@@ -674,12 +686,36 @@ $('#gpxIn').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.targe
 $('#gpxX').onclick=async()=>{S.gpx=null;S.gpxNombre='';S.tramos={};await (cambio(),rehaciendo);pintarAvanzadas();};
 
 /* ── MP4 ── */
+function nombreVideo(){return ((R&&R.titulo)||(D&&D.titulo)||'mi-viaje').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.mp4';}
+function guardarVideo(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nombreVideo();document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);}
+async function compartirVideo(blob){const file=new File([blob],nombreVideo(),{type:'video/mp4'});
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:(R&&R.titulo)||''});return;}}catch(e){if(e&&e.name==='AbortError')return;}
+  guardarVideo(blob);$('#note').textContent='Este navegador no deja compartir el vídeo: se ha descargado para que lo compartas desde tus archivos.';}
 function showResult(blob){
-  const url=URL.createObjectURL(blob),name=(R.titulo||'mi-viaje').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.mp4';
-  const o=document.createElement('div');o.className='res';o.innerHTML=`<video controls playsinline autoplay src="${url}"></video><button class="x" type="button" aria-label="Cerrar">✕</button><div class="rw"><button class="btn" type="button" id="sh">Compartir</button><a class="btn ghost" href="${url}" download="${name}">Descargar</a></div>`;
-  document.body.appendChild(o);o.querySelector('.x').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();};
-  o.querySelector('#sh').onclick=async()=>{const file=new File([blob],name,{type:'video/mp4'});try{if(navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({files:[file],title:R.titulo});else $('#note').textContent='Este navegador no deja compartir el vídeo: usa Descargar.';}catch(_){}};
+  const url=URL.createObjectURL(blob);
+  const o=document.createElement('div');o.className='res';o.innerHTML=`<video controls playsinline autoplay src="${url}"></video><div class="rw"><button class="btn" type="button" data-a="sh">Compartir</button><button class="btn ghost" type="button" data-a="dl">Guardar</button></div><button class="x" type="button" aria-label="Cerrar">✕</button>`;
+  document.body.appendChild(o);o.querySelector('.x').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();URL.revokeObjectURL(url);};
+  o.querySelector('[data-a=sh]').onclick=()=>compartirVideo(blob);
+  o.querySelector('[data-a=dl]').onclick=()=>guardarVideo(blob);
 }
+/* el vídeo hecho se guarda en este móvil (IndexedDB, por guía): al volver sale ya hecho. Solo los 3 últimos. 0 € */
+const VKEY=GUIA||(Q.has('singuia')?'_singuia':'');
+let hecho=null,hechoUrl='';
+function vdb(){return new Promise((res,rej)=>{const r=indexedDB.open('bdm-videos',1);r.onupgradeneeded=()=>r.result.createObjectStore('v');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+async function vLeer(){if(!VKEY)return null;try{const db=await vdb();return await new Promise(res=>{const q=db.transaction('v').objectStore('v').get(VKEY);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null);});}catch(_){return null;}}
+async function vGuardar(v){if(!VKEY)return;try{const db=await vdb();
+  let idx=[];try{idx=JSON.parse(localStorage.getItem('bdm_videos_idx')||'[]');}catch(_){}
+  idx=idx.filter(k=>k!==VKEY);idx.push(VKEY);const fuera=idx.length>3?idx.splice(0,idx.length-3):[];
+  await new Promise((res,rej)=>{const tx=db.transaction('v','readwrite'),st=tx.objectStore('v');st.put(v,VKEY);fuera.forEach(k=>st.delete(k));tx.oncomplete=res;tx.onerror=()=>rej(tx.error);});
+  try{localStorage.setItem('bdm_videos_idx',JSON.stringify(idx));}catch(_){}}catch(e){console.warn('[video] no se pudo guardar en el móvil',e);}}
+function pintarHecho(){
+  if(!hecho){$('#hecho').hidden=true;return;}
+  if(hechoUrl)URL.revokeObjectURL(hechoUrl);hechoUrl=URL.createObjectURL(hecho.blob);$('#hechoV').src=hechoUrl;
+  const f=new Date(hecho.at);$('#hechoTxt').textContent='Tu vídeo · hecho el '+f.toLocaleDateString('es-ES',{day:'numeric',month:'short'})+' a las '+f.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+  $('#hecho').hidden=false;
+}
+$('#hSh').onclick=()=>{if(hecho)compartirVideo(hecho.blob);};
+$('#hDl').onclick=()=>{if(hecho)guardarVideo(hecho.blob);};
 // la música, ya recortada a lo que dura el vídeo, con entrada y salida suaves
 async function audioPista(dur,sr=48000){
   if(S.mus==='ninguna'||!musBuf)return null;const n=Math.ceil(dur*sr),oc=new OfflineAudioContext(2,n,sr);
@@ -720,6 +756,7 @@ $('#mp4').onclick=async()=>{
   mux.finalize();lastVideo=new Blob([mux.target.buffer],{type:'video/mp4'});$('#mp4').textContent='Ver el vídeo';
   $('#note').textContent=`Listo en ${Math.round((performance.now()-t0)/1000)} s`+(sinSonido?' · este navegador no deja meter la música: sale sin sonido':'');post({pill:'✓ Vídeo listo · verlo',done:true});
   try{navigator.vibrate&&navigator.vibrate([120,60,120]);}catch(_){}
+  hecho={blob:lastVideo,at:Date.now()};pintarHecho();vGuardar(hecho);
   pintar(T,true);showResult(lastVideo);
 };
 
@@ -745,6 +782,7 @@ async function start(T0){
   await crearMapa();await rehacer();
   await waitIdle();pintar(0,true);
   $('#ver').disabled=false;$('#mp4').disabled=false;
+  const v=await vLeer();if(v&&v.blob&&!hecho){hecho=v;pintarHecho();$('#mp4').textContent='Crear el vídeo otra vez';}
   post({ready:true,n:PH.reduce((s,a)=>s+a.length,0)});
 }
 window.__video={start,armarSinGuia,S,PARADAS:()=>PARADAS,LEGS:()=>LEGS,TL:()=>TL,R:()=>R,frameAt:(t,r)=>frameAt(t,r),drawOverlay:(c,t)=>drawOverlay(c,t),camAt:t=>camAt(t),waitIdle:()=>waitIdle(),cambio:()=>(cambio(),rehaciendo)};
