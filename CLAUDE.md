@@ -109,14 +109,18 @@ Decidida con Paco el 26 sept 2026 ("queremos gente que se registre"). Cambiarla 
 - **Enlace para compartir = su guía pública** (`borradodelmapa.com/<slug>`, páginas fijas de `scripts/build-guias.js`).
 - Lo que exige cuenta **no se enseña como si funcionara** a quien no la tiene.
 
-### 11. BANCO DE PRUEBAS DE SALMA — ANTES DE SUBIR NADA DEL CHAT (28 sept 2026, caso p-mulj7j4n4mz)
+### 11. BANCO DE PRUEBAS DE SALMA — ACONSEJABLE, POR TANDAS (28 sept 2026, caso p-mulj7j4n4mz; tandas desde 1 oct)
+**Desde el 1 oct 2026 ya NO es obligatorio antes de cada subida** (Paco: "yo iré viendo los cambios directamente"):
+Paco prueba cada cambio en su app (§2) y el banco se pasa **por tandas, cuando se junten 5-6 cambios del chat/prompt**,
+con `--ref <tag>` = tag de antes del primer cambio de la tanda. Cada sesión que sube un cambio del chat sin banco
+se lo **recuerda a Paco**: "van N cambios sin pasar el banco" (y al llegar a 5-6, propone pasarlo diciendo coste, §8).
 Paco: "quiero de una vez por todas no hacer un cambio que joda otra cosa". `scripts/banco-salma/` (uso en la cabecera
 de `pasar.cjs`): copia local de Salma que no ve nadie ni escribe nada + juez gpt-4o. Coste REAL medido en cada informe
 (30 sept: "farmacia cerca" = 0,33 €, 2/3 Google). **Arreglo de CÓDIGO → `--reproducir <cinta>`: 0 €**, mismas
 respuestas de Claude/Google grabadas (`--grabar`); si cambió lo que recibe la IA, avisa "⚠ NECESITA EN VIVO" y solo esas se pagan. **No grabar por adelantado:**
 el "antes" de cada arreglo se pasa con `--grabar` (se paga igual) y el "después" con `--reproducir` (céntimos).
 - **Cambio del chat / Worker de Salma:** la pregunta del caso + las del mismo tema, **antes y después**
-  (`--ref <tag>` para el antes, `--comparar a.json b.json`). Un 🔴 EMPEORA = no se sube.
+  (`--ref <tag>` para el antes, `--comparar a.json b.json`). Un 🔴 EMPEORA = se revierte ese cambio.
 - **Cambio del prompt:** las 26 (~1-1,5 €). **Siempre decir antes cuántas preguntas y cuánto cuesta (§8).**
 - **Cada fallo nuevo del chat** (👎, 🤖, Paco): su frase exacta entra en `preguntas.json`, y la nota del caso empieza
   `🧪 PREGUNTA: «frase» ✅ CORRECTO: … ❌ INCORRECTO: … ——— resto` (el panel lo enseña en la fila).
