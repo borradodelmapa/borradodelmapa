@@ -158,7 +158,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v10</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v11</p>
 </div>
 
 <!-- vehículo -->
@@ -626,7 +626,7 @@ async function precargar(){ // recorre el vídeo una vez para que la vista previ
 // fin de la vista previa: Compartir / Guardar. Con el vídeo ya creado van al archivo; si no, primero se crea
 // Compartir / Descargar siempre visibles en la vista previa (Paco, 1 oct: mientras se reproducía no salía nada)
 function botonesVista(){const v=lastVideo||(hecho&&hecho.blob);$('#fAccTxt').textContent=v?(lastVideo?'':'Comparte o descarga el último vídeo que creaste.'):'Esto es la vista previa. Al pulsar se crea el vídeo (tarda un poco) y luego eliges compartir o descargar.';$('#fAcc').hidden=false;}
-function accionVista(a){const v=lastVideo||(hecho&&hecho.blob);if(v){if(a==='sh')compartirVideo(v);else guardarVideo(v);return;}$('#fullX').onclick();$('#mp4').click();}
+function accionVista(a){const v=lastVideo||(hecho&&hecho.blob);if(v){if(a==='sh')compartirVideo(v,$('#fSh'));else descargarConAviso(v,$('#fDl'));return;}$('#fullX').onclick();$('#mp4').click();}
 $('#fSh').onclick=()=>accionVista('sh');$('#fDl').onclick=()=>accionVista('dl');
 $('#ver').onclick=()=>$('#mp4').click();
 // vista previa en directo: ya no se usa desde el botón Ver (1 oct: un solo proceso, el vídeo se crea una vez)
@@ -749,17 +749,28 @@ $('#gpxX').onclick=async()=>{S.gpx=null;S.gpxNombre='';S.tramos={};await (cambio
 /* ── MP4 ── */
 function nombreVideo(){return ((R&&R.titulo)||(D&&D.titulo)||'mi-viaje').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.mp4';}
 function guardarVideo(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nombreVideo();document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);}
-async function compartirVideo(blob){const file=new File([blob],nombreVideo(),{type:'video/mp4'});
-  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:(R&&R.titulo)||''});return;}}catch(e){if(e&&e.name==='AbortError')return;}
-  guardarVideo(blob);$('#note').textContent='Este navegador no deja compartir el vídeo: se ha descargado para que lo compartas desde tus archivos.';}
+// Compartir: abre el menú del móvil (arriba sale el vídeo, debajo WhatsApp, Instagram…). Un toque cada vez:
+// mientras está abierto el botón no hace nada (antes un segundo toque fallaba y se descargaba el vídeo solo).
+const FILES=new WeakMap();let compartiendo=false;
+function fileDe(blob){let f=FILES.get(blob);if(!f){f=new File([blob],nombreVideo(),{type:'video/mp4'});FILES.set(blob,f);}return f;}
+function puedeCompartir(blob){try{return !!(navigator.canShare&&navigator.canShare({files:[fileDe(blob)]}));}catch(_){return false;}}
+function botonAviso(btn,txt,ms){if(!btn)return;const t0=btn.dataset.t||(btn.dataset.t=btn.textContent);btn.textContent=txt;if(ms)setTimeout(()=>{btn.textContent=t0;},ms);}
+async function compartirVideo(blob,btn){
+  if(compartiendo)return;
+  if(!puedeCompartir(blob)){botonAviso(btn,'Usa Descargar',2500);return;}
+  compartiendo=true;if(btn)btn.disabled=true;botonAviso(btn,'Abriendo…');
+  try{await navigator.share({files:[fileDe(blob)]});botonAviso(btn,'✓ Enviado',2500);}
+  catch(e){botonAviso(btn,e&&e.name==='AbortError'?btn&&btn.dataset.t||'Compartir':'No se pudo · otra vez',e&&e.name==='AbortError'?0:2500);}
+  finally{compartiendo=false;if(btn)btn.disabled=false;}}
+function descargarConAviso(blob,btn){guardarVideo(blob);botonAviso(btn,'✓ Descargado · mira en Descargas',3000);}
 function showResult(blob){
   const url=URL.createObjectURL(blob),mb=(blob.size/1048576).toFixed(1).replace('.',','),seg=TL?Math.round(TL.total):0;
   let o=$('#vidRes');if(o)o.remove();o=document.createElement('div');o.id='vidRes';o.className='res';
-  o.innerHTML=`<div class="res-box"><b>Tu vídeo está listo</b><span>${seg?seg+' s · ':''}${mb} MB · MP4</span><video controls playsinline autoplay src="${url}"></video><p class="res-note">Súbelo a Instagram, TikTok o WhatsApp, o guárdalo en tu móvil. Se queda guardado aquí: no hace falta volver a crearlo.</p><div class="rw"><button type="button" class="btn" data-a="sh">Compartir</button><a class="btn ghost" href="${url}" download="${nombreVideo()}">Descargar</a></div><button type="button" class="btn ghost" data-a="x">Cerrar</button></div>`;
+  o.innerHTML=`<div class="res-box"><b>Tu vídeo está listo</b><span>${seg?seg+' s · ':''}${mb} MB · MP4</span><video controls playsinline autoplay src="${url}"></video><p class="res-note">Compartir abre el menú de tu móvil: arriba verás el vídeo y debajo eliges WhatsApp, Instagram, TikTok… Se queda guardado aquí: no hace falta volver a crearlo.</p><div class="rw"><button type="button" class="btn" data-a="sh">Compartir</button><button type="button" class="btn ghost" data-a="dl">Descargar</button></div><button type="button" class="btn ghost" data-a="x">Cerrar</button></div>`;
   document.body.appendChild(o);
-  const sh=o.querySelector('[data-a=sh]'),f=new File([blob],nombreVideo(),{type:'video/mp4'});
-  if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.hidden=true;   // como el álbum: sin compartir archivos, solo Descargar
-  sh.onclick=()=>compartirVideo(blob);
+  const sh=o.querySelector('[data-a=sh]'),dl=o.querySelector('[data-a=dl]');
+  if(!puedeCompartir(blob))sh.hidden=true;   // como el álbum: sin compartir archivos, solo Descargar
+  sh.onclick=()=>compartirVideo(blob,sh);dl.onclick=()=>descargarConAviso(blob,dl);
   o.querySelector('[data-a=x]').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 }
 const AJ=['dest','estilo','veh','dur','cal','tramos','gpx','gpxNombre'];
@@ -780,8 +791,8 @@ function pintarHecho(){
   const f=new Date(hecho.at);$('#hechoTxt').textContent='Tu vídeo · hecho el '+f.toLocaleDateString('es-ES',{day:'numeric',month:'short'})+' a las '+f.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
   $('#hecho').hidden=false;
 }
-$('#hSh').onclick=()=>{if(hecho)compartirVideo(hecho.blob);};
-$('#hDl').onclick=()=>{if(hecho)guardarVideo(hecho.blob);};
+$('#hSh').onclick=()=>{if(hecho)compartirVideo(hecho.blob,$('#hSh'));};
+$('#hDl').onclick=()=>{if(hecho)descargarConAviso(hecho.blob,$('#hDl'));};
 // la música, ya recortada a lo que dura el vídeo, con entrada y salida suaves
 async function audioPista(dur,sr=48000){
   if(S.mus==='ninguna'||!musBuf)return null;const n=Math.ceil(dur*sr),oc=new OfflineAudioContext(2,n,sr);
