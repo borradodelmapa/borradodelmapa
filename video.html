@@ -61,6 +61,16 @@ button,input,select{font:inherit;color:inherit}
 .note{font-size:13px;color:var(--muted);text-align:center;margin:0}
 .empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:40px 16px;color:var(--muted);max-width:340px;margin:0 auto}
 .empty b{font:700 22px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--cream)}
+/* fotos sin ubicación: ¿por dónde pasaste? */
+.lug{display:flex;flex-direction:column;gap:12px;padding:18px 16px 40px;max-width:560px;margin:0 auto}
+.lug h2{margin:0;font:800 30px/1 "Barlow Condensed",sans-serif;text-transform:uppercase}.lug h2 span{color:var(--gold)}
+.lug p{margin:0;color:var(--soft);font-size:15px;line-height:1.45}
+.lug-sug{display:flex;flex-direction:column;border:1px solid var(--line);border-top:0}.lug-sug:empty{display:none}
+.lug-sug button{appearance:none;background:var(--panel);border:0;border-top:1px solid var(--line);color:var(--cream);text-align:left;padding:10px 12px;min-height:46px;cursor:pointer;font-size:15px}
+.lug-sug small{display:block;color:var(--muted);font-size:12px}
+.lug-l{display:flex;flex-direction:column;gap:6px}
+.lug-i{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);padding:6px 8px}
+.lug-i b{flex:1;font:700 17px/1.1 "Barlow Condensed",sans-serif}.lug-i em{font-style:normal;color:var(--gold);font:800 18px "Barlow Condensed",sans-serif;width:22px;text-align:center}
 .file{position:relative;overflow:hidden}.file input{position:absolute;inset:0;opacity:0;cursor:pointer}
 /* hojas que suben desde abajo */
 .sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:flex-end}
@@ -132,6 +142,15 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
 </script>
 <div class="empty" id="empty" hidden><b>Aún no hay fotos</b><span id="emptyTxt">Sube las fotos del viaje y aquí se monta el vídeo.</span><label class="btn file">Subir fotos<input type="file" id="upIn" accept="image/*" multiple></label></div>
 
+<div class="lug" id="lug" hidden>
+  <h2>¿Por dónde <span>pasaste?</span></h2>
+  <p>Tus <b id="lugN"></b> fotos no traen ubicación: el móvil la quita al subirlas desde la web. Escribe los sitios del viaje <b>en orden</b> (de dónde saliste, por dónde pasaste y a dónde llegaste) y repartimos las fotos por su fecha.</p>
+  <div><div class="add"><input id="lugIn" type="text" autocomplete="off" placeholder="Escribe un pueblo o ciudad…" aria-label="Buscar un sitio"></div><div class="lug-sug" id="lugSug"></div></div>
+  <div class="lug-l" id="lugL"></div>
+  <button class="btn big" id="lugOk" type="button" disabled>Montar el vídeo</button>
+  <p class="note" id="lugNote">De momento, sitios de España y Portugal.</p>
+</div>
+
 <div class="wrap" id="main" hidden>
   <div class="top">
     <div class="pv" id="pv"><div class="stage" id="stage"><div id="map"></div><canvas id="ov"></canvas></div></div>
@@ -158,7 +177,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v12</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v13</p>
 </div>
 
 <!-- vehículo -->
@@ -349,7 +368,7 @@ async function loadSinGuia(uid){
 }
 async function armarSinGuia(fotos){
   fotos.sort((a,b)=>(a.date||0)-(b.date||0));const geo=fotos.filter(f=>f.lat!=null);
-  if(!geo.length)return{error:'Esas fotos no dicen dónde se hicieron (no tienen ubicación), y sin eso no sabemos por dónde pasaste.'};
+  if(!geo.length)return{needPlaces:true,fotos};   // sin GPS (el móvil lo quita al subir desde la web): el usuario dice por dónde pasó
   if(!zonaDe(geo.map(f=>[f.lng,f.lat])))return{error:'De momento el vídeo sin guía solo funciona con fotos de España y Portugal.'};
   const d0=geo.find(f=>f.date)?.date,stops=[];
   geo.forEach(f=>{let s=stops[stops.length-1];
@@ -776,7 +795,9 @@ function showResult(blob){
 const AJ=['dest','estilo','veh','dur','cal','tramos','gpx','gpxNombre'];
 function ajustes(){const o={};AJ.forEach(k=>o[k]=S[k]);return JSON.parse(JSON.stringify(o));}
 /* el vídeo hecho se guarda en este móvil (IndexedDB, por guía): al volver sale ya hecho. Solo los 3 últimos. 0 € */
-const VKEY=GUIA||(Q.has('singuia')?'_singuia':'');
+// clave del vídeo guardado: la guía, o (sin guía) las fotos elegidas — otro grupo de fotos es otro vídeo
+const VKEY=GUIA||(Q.has('singuia')?(()=>{let ids=[];try{ids=JSON.parse(sessionStorage.getItem('bdm_video_fotos')||'[]');}catch(_){}
+  let h=0;ids.slice().sort().join(',').split('').forEach(c=>{h=(h*31+c.charCodeAt(0))|0;});return 'sg:'+(h>>>0).toString(36)+':'+ids.length;})():'');
 let hecho=null,hechoUrl='';
 function vdb(){return new Promise((res,rej)=>{const r=indexedDB.open('bdm-videos',1);r.onupgradeneeded=()=>r.result.createObjectStore('v');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
 async function vLeer(){if(!VKEY)return null;try{const db=await vdb();return await new Promise(res=>{const q=db.transaction('v').objectStore('v').get(VKEY);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null);});}catch(_){return null;}}
@@ -852,10 +873,52 @@ else firebase.auth().onAuthStateChanged(async u=>{
   if(!u){fail('Entra con tu cuenta para ver el vídeo.');return;}
   let T0;try{T0=Q.has('singuia')?await loadSinGuia(u.uid):await loadTrip(u.uid);}catch(e){console.warn(e);fail('No se pudo cargar el viaje. Revisa la conexión y vuelve a entrar.');return;}
   if(T0.unsupported){post({unsupported:true});return;}   // la app vuelve al motor anterior
+  if(T0.needPlaces){pedirLugares(T0.fotos);return;}
   if(T0.error){fail(T0.error);return;}
   if(T0.empty){fail('Sube las fotos del viaje y aquí se monta el vídeo.');return;}
   start(T0);
 });
+/* ── fotos sin ubicación (1 oct 2026): el usuario escribe por dónde pasó y las fotos se reparten por fecha ──
+   Buscador: Photon (OpenStreetMap, komoot), público y sin llave: 0 €. Solo España y Portugal (zona del mapa). */
+let LUG=[],lugFotos=null,lugAb=null,lugT=null;
+const LUG_KEY='bdm_video_lugares:'+VKEY;   // los sitios de este grupo de fotos
+function pedirLugares(fotos){
+  lugFotos=fotos;$('#boot').hidden=true;$('#main').hidden=true;$('#empty').hidden=true;$('#lug').hidden=false;$('#lugN').textContent=fotos.length;
+  try{const g=JSON.parse(sessionStorage.getItem(LUG_KEY)||'null');if(Array.isArray(g))LUG=g;}catch(_){}
+  pintarLug();post({ready:true,n:fotos.length});
+}
+function pintarLug(){
+  $('#lugL').innerHTML=LUG.map((l,k)=>`<div class="lug-i" data-k="${k}"><em>${k+1}</em><b>${esc(l.nombre)}</b>
+    <button class="ib" type="button" data-a="up" aria-label="Subir"${k?'':' disabled'}>▲</button><button class="ib" type="button" data-a="down" aria-label="Bajar"${k<LUG.length-1?'':' disabled'}>▼</button><button class="ib" type="button" data-a="x" aria-label="Quitar">✕</button></div>`).join('');
+  $('#lugOk').disabled=LUG.length<2;
+  $('#lugNote').textContent=LUG.length<2?'Añade al menos dos sitios: de dónde saliste y a dónde llegaste. De momento, España y Portugal.':`${lugFotos.length} fotos repartidas por fecha entre ${LUG.length} sitios.`;
+  try{sessionStorage.setItem(LUG_KEY,JSON.stringify(LUG));}catch(_){}
+}
+$('#lugL').onclick=e=>{const b=e.target.closest('button[data-a]');if(!b)return;const k=+b.closest('.lug-i').dataset.k,a=b.dataset.a;
+  if(a==='x')LUG.splice(k,1);else{const j=a==='up'?k-1:k+1;[LUG[k],LUG[j]]=[LUG[j],LUG[k]];}pintarLug();};
+$('#lugIn').oninput=()=>{clearTimeout(lugT);const q=$('#lugIn').value.trim();if(q.length<2){$('#lugSug').innerHTML='';return;}lugT=setTimeout(()=>buscarLugar(q),300);};
+async function buscarLugar(q){
+  try{if(lugAb)lugAb.abort();lugAb=new AbortController();
+    const r=await fetch('https://photon.komoot.io/api/?limit=6&bbox=-18.3,27.5,4.5,44&q='+encodeURIComponent(q),{signal:lugAb.signal});const j=await r.json();
+    const vistos=new Set(),res=[];
+    (j.features||[]).forEach(f=>{const p=f.properties||{},c=f.geometry&&f.geometry.coordinates;if(!c||!p.name)return;
+      const det=[p.city&&p.city!==p.name?p.city:'',p.county||p.state||'',p.country||''].filter(Boolean).join(' · ');const key=p.name+'|'+det;if(vistos.has(key))return;vistos.add(key);
+      if(zonaDe([[+c[0],+c[1]]]))res.push({nombre:p.name,det,lng:+c[0],lat:+c[1]});});
+    $('#lugSug').innerHTML=res.length?res.map((x,k)=>`<button type="button" data-k="${k}">${esc(x.nombre)}<small>${esc(x.det)}</small></button>`).join(''):'<button type="button" disabled>No lo encuentro: prueba con el pueblo o la ciudad más cercana</button>';
+    $('#lugSug').onclick=e=>{const b=e.target.closest('button[data-k]');if(!b)return;const x=res[+b.dataset.k];LUG.push({nombre:x.nombre,lat:x.lat,lng:x.lng});
+      $('#lugIn').value='';$('#lugSug').innerHTML='';pintarLug();$('#lugIn').focus();};
+  }catch(e){if(e&&e.name==='AbortError')return;$('#lugSug').innerHTML='<button type="button" disabled>No se pudo buscar. Revisa la conexión y prueba otra vez.</button>';}
+}
+$('#lugOk').onclick=async()=>{if(LUG.length<2)return;$('#lugOk').disabled=true;$('#lugOk').textContent='Montando…';
+  const stops=LUG.map((l,k)=>({id:'l'+k,nombre:l.nombre,lat:l.lat,lng:l.lng,dia:null}));
+  let road=null,roadSrc='recta';
+  try{const pts=stops.slice(0,80).map(s=>s.lat.toFixed(5)+','+s.lng.toFixed(5)).join('|');const j=await (await fetch(API+'/road-path?mode=drive&pts='+encodeURIComponent(pts))).json();
+    if(j&&j.ok&&j.coords&&j.coords.length>1){road=j.coords.map(c=>[+c[1],+c[0]]);roadSrc='geoapify';}}catch(_){}
+  const d0=lugFotos.map(f=>f.date).filter(Boolean).sort((a,b)=>a-b)[0],mes=d0?d0.toLocaleDateString('es-ES',{month:'long',year:'numeric'}):'';
+  $('#lug').hidden=true;$('#boot').hidden=false;$('#boot').textContent='Montando tu vídeo…';
+  start({zona:'es-pt',titulo:'Mi viaje'+(mes?' · '+mes:''),stops,fotos:lugFotos,road,roadSrc,sinGuia:true});
+};
+
 // Montar el editor con los datos del viaje (separado para poder probarlo con datos de prueba: window.__video, ?prueba)
 async function start(T0){
   $('#boot').hidden=true;D=T0;PARADAS=repartir(D);
@@ -870,7 +933,7 @@ async function start(T0){
     if(guardado.S){lastVideo=guardado.blob;$('#mp4').textContent='Ver el vídeo';}}   // con sus ajustes: vale tal cual
   post({ready:true,n:PH.reduce((s,a)=>s+a.length,0)});
 }
-window.__video={start,armarSinGuia,S,PARADAS:()=>PARADAS,LEGS:()=>LEGS,TL:()=>TL,R:()=>R,frameAt:(t,r)=>frameAt(t,r),drawOverlay:(c,t)=>drawOverlay(c,t),camAt:t=>camAt(t),waitIdle:()=>waitIdle(),cambio:()=>(cambio(),rehaciendo)};
+window.__video={start,armarSinGuia,pedirLugares,S,PARADAS:()=>PARADAS,LEGS:()=>LEGS,TL:()=>TL,R:()=>R,frameAt:(t,r)=>frameAt(t,r),drawOverlay:(c,t)=>drawOverlay(c,t),camAt:t=>camAt(t),waitIdle:()=>waitIdle(),cambio:()=>(cambio(),rehaciendo)};
 </script>
 </body>
 </html>
