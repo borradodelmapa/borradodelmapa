@@ -43,9 +43,10 @@ button,input,select{font:inherit;color:inherit}
 .opt small{font-size:11px;color:var(--soft)}
 .opt[aria-pressed="true"]{border-color:var(--gold)}
 .row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-.sty{appearance:none;width:80px;flex-shrink:0;background:none;border:1px solid var(--line);padding:4px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
-.sty i{display:block;height:64px}
-.sty b{font:700 13px/1 "Barlow Condensed",sans-serif;text-align:left}
+.sty{appearance:none;width:124px;flex-shrink:0;background:none;border:2px solid var(--line);padding:0;cursor:pointer;display:flex;flex-direction:column;text-align:left;color:var(--cream)}
+.sty svg{display:block;width:100%;height:auto}
+.sty b{font:800 16px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.03em;padding:7px 8px 2px}
+.sty small{font-size:11px;color:var(--muted);padding:0 8px 8px;line-height:1.25}
 .sty[aria-pressed="true"]{border-color:var(--gold)}
 .pick{appearance:none;display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);padding:8px 12px;min-height:58px;text-align:left;cursor:pointer;width:100%}
 .pick img,.pick .ic{width:52px;height:40px;object-fit:contain;background:#cfdcb8;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
@@ -151,7 +152,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v8</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v9</p>
 </div>
 
 <!-- vehículo -->
@@ -630,7 +631,21 @@ $('#fullX').onclick=()=>{$('#fAcc').hidden=true;playing=false;mus.pause();$('#pl
 /* ── elecciones ── */
 function pintarDestinos(){$('#dest').innerHTML=Object.entries(DEST).map(([k,d])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${k===S.dest}"><b>${d.n}</b><small>${d.s}</small></button>`).join('');}
 $('#dest').onclick=e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.dest)return;S.dest=b.dataset.k;pintarDestinos();aplicarFormato();cambio();};
-function pintarEstilos(){$('#estilos').innerHTML=Object.entries(ESTILOS).map(([k,e])=>`<button type="button" class="sty" data-k="${k}" aria-pressed="${k===S.estilo}"><i style="background:linear-gradient(135deg,${e.sw[0]} 0 55%,${e.sw[1]} 55% 78%,${e.sw[2]} 78%)"></i><b>${e.n}</b></button>`).join('');}
+// miniatura de cada estilo: un mapa pequeño con sus colores de verdad (tierra, mar, parque, relieve, carretera, ruta, moto y parada con foto)
+const STY_TXT={viaje:'Colores vivos y claros',aventura:'Monte y relieve marcado',postal:'Tonos suaves, de época',noche:'Mapa oscuro, ruta brillante'};
+function miniEstilo(k){const e=ESTILOS[k],f=e.f||{},dark=e.base==='dark';
+  const land=f.background||(dark?'#1c2226':e.sw[0]),water=f.water||e.sw[1],park=f.park_b||(dark?'#24302a':e.sw[0]),road=f.highway||e.sw[2],cas=f.highway_casing_early||'rgba(0,0,0,.25)',ruta=e.ruta;
+  const sh=dark?'rgba(0,0,0,.45)':'rgba(60,70,40,'+(0.12+e.hs*0.25).toFixed(2)+')',hl=dark?'rgba(255,255,255,.06)':'rgba(255,255,255,.55)';
+  return `<svg viewBox="0 0 124 84" aria-hidden="true"><rect width="124" height="84" fill="${land}"/>
+  <path d="M0 0H70C62 10 50 12 44 22C38 31 24 30 14 40C8 46 4 50 0 52Z" fill="${water}"/>
+  <ellipse cx="96" cy="58" rx="30" ry="16" fill="${sh}"/><ellipse cx="90" cy="52" rx="24" ry="11" fill="${hl}"/>
+  <path d="M74 84C80 72 96 70 106 74C116 78 120 84 124 84Z" fill="${park}"/><path d="M58 30C66 26 76 30 74 38C72 44 62 44 58 40C54 36 54 32 58 30Z" fill="${park}"/>
+  <path d="M-4 74C20 66 34 70 50 58S84 30 128 22" fill="none" stroke="${cas}" stroke-width="6"/><path d="M-4 74C20 66 34 70 50 58S84 30 128 22" fill="none" stroke="${road}" stroke-width="4"/>
+  <path d="M-4 74C20 66 34 70 50 58S70 40 80 36" fill="none" stroke="${ruta}" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M80 36C92 31 108 25 128 22" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 4" opacity=".9"/>
+  <circle cx="80" cy="36" r="5" fill="${ruta}" stroke="#fff" stroke-width="2"/>
+  <g transform="translate(30 30)"><path d="M0 9L-4 3H4Z" fill="#fff"/><circle r="9" cy="-4" fill="#fff"/><circle r="7" cy="-4" fill="#7fb6d8"/><path d="M-7 -2Q-2 -7 2 -3T7 -3V0A7 7 0 0 1 -7 0Z" fill="#6c9c4c"/></g></svg>`;}
+function pintarEstilos(){$('#estilos').innerHTML=Object.keys(ESTILOS).map(k=>`<button type="button" class="sty" data-k="${k}" aria-pressed="${k===S.estilo}">${miniEstilo(k)}<b>${ESTILOS[k].n}</b><small>${STY_TXT[k]||''}</small></button>`).join('');}
 $('#estilos').onclick=async e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.estilo)return;S.estilo=b.dataset.k;pintarEstilos();$('#note').textContent='Cambiando el estilo…';await cambiarEstilo();$('#note').textContent='';};
 // hojas
 const abrir=id=>{$(id).hidden=false;},cerrar=el=>{el.closest('.sheet').hidden=true;};

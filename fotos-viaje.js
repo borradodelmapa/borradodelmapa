@@ -294,7 +294,7 @@ const fotosViaje = (() => {
   // VÍDEO: motor nuevo (video.html: mapa propio + relieve 3D + vehículo 3D, 30 sept 2026); ÁLBUM y guías fuera de zona: el anterior
   function _engineFor(guia, tab) { return tab === 'vid' && !OLD_ENGINE.has(guia) ? 'nuevo' : 'viejo'; }
   function _mediaURL(guia, tab, engine) {
-    return engine === 'nuevo' ? `/video.html?v=8&guia=${encodeURIComponent(guia)}`
+    return engine === 'nuevo' ? `/video.html?v=9&guia=${encodeURIComponent(guia)}`
       : `/viaje-fotos.html?embed=1&v=14&guia=${encodeURIComponent(guia)}&tab=${tab}`;
   }
 
@@ -952,7 +952,7 @@ const fotosViaje = (() => {
     try { sessionStorage.setItem('bdm_video_fotos', JSON.stringify([..._sel])); } catch (_) {}
     const ov = document.createElement('div');
     ov.className = 'fv-vidsg';
-    ov.innerHTML = '<div class="fv-vidsg-h"><button type="button" class="tm-back">‹ Fotos sin viaje</button></div><iframe src="/video.html?v=8&singuia=1" title="Vídeo de tus fotos"></iframe>';
+    ov.innerHTML = '<div class="fv-vidsg-h"><button type="button" class="tm-back">‹ Fotos sin viaje</button></div><iframe src="/video.html?v=9&singuia=1" title="Vídeo de tus fotos"></iframe>';
     document.body.appendChild(ov);
     const fr = ov.querySelector('iframe');
     let enc = false;
