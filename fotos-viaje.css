@@ -155,6 +155,8 @@
 .fv-stray-go-vid, .fv-stray-up { min-height:52px; display:flex; align-items:center; justify-content:center; gap:8px; padding:0 10px; cursor:pointer; font:700 16px/1.1 var(--font-cond); letter-spacing:.04em; text-transform:uppercase; text-align:center; }
 .fv-stray-go-vid { border:0; background:var(--accent); color:var(--text-on-accent); }
 .fv-stray-go-vid:disabled { opacity:.5; }
+.fv-stray-acts:has(.fv-stray-up[hidden]) { grid-template-columns:1fr; }
+.fv-stray-up[hidden] { display:none; }
 .fv-stray-up { border:1px solid var(--border); background:var(--bg-row); color:var(--text-primary); }
 .fv-stray-up svg { width:22px; height:22px; }
 .fv-stray-strip:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }

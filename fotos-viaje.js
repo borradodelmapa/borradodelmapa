@@ -869,8 +869,8 @@ const fotosViaje = (() => {
         <button class="tm-back" type="button" id="fv-stray-back">‹ Mis Viajes</button>
         <h2 class="fv-stray-title">Fotos <span>sin viaje</span></h2>
         <div class="fv-stray-acts">
-          <button type="button" class="fv-stray-go-vid" id="fv-stray-go-vid">${IC_VID} Crear vídeo sin ruta</button>
-          <label class="fv-stray-up">${IC_CAM} Subir fotos del móvil<input type="file" id="fv-stray-in" accept="image/*" multiple hidden></label>
+          <button type="button" class="fv-stray-go-vid" id="fv-stray-go-vid">${IC_VID} <span id="fv-stray-go-t">Crear vídeo</span></button>
+          <label class="fv-stray-up" id="fv-stray-up" hidden>${IC_CAM} Añadir más fotos<input type="file" id="fv-stray-in" accept="image/*" multiple hidden></label>
         </div>
         <p class="fv-stray-lede" id="fv-stray-lede">Cargando…</p>
         <div id="fv-stray-body"></div>
@@ -890,15 +890,15 @@ const fotosViaje = (() => {
     document.getElementById('fv-stray-del').addEventListener('click', () => _strayDelete());
     document.getElementById('fv-stray-vid').addEventListener('click', () => _strayVideo());
     document.getElementById('fv-stray-go-vid').addEventListener('click', () => {
-      if (!_stray || !_stray.list.length) { document.getElementById('fv-stray-in').click(); return; }
+      if (!_stray || !_stray.list.length) { _strayAuto = true; document.getElementById('fv-stray-in').click(); return; }
       if (!_sel.size) _stray.list.forEach(p => _sel.add(p.id));   // sin elegir: entran todas
       _strayVideo();
     });
-    document.getElementById('fv-stray-in').addEventListener('change', e => { const f = [...(e.target.files || [])]; e.target.value = ''; if (f.length) _strayUpload(f); });
+    document.getElementById('fv-stray-in').addEventListener('change', e => { const f = [...(e.target.files || [])]; e.target.value = ''; if (f.length) _strayUpload(f); else _strayAuto = false; });
   }
 
   // Subir fotos sueltas (sin guía) para el vídeo sin ruta: misma subida que en FOTOS de una guía, con routeId null
-  let _strayBusy = false;
+  let _strayBusy = false, _strayAuto = false;   // _strayAuto: sin fotos sueltas, al subir se abre el vídeo solo
   async function _strayUpload(files) {
     if (_strayBusy || !window.currentUser) return;
     _strayBusy = true;
@@ -925,11 +925,17 @@ const fotosViaje = (() => {
     let list = []; try { list = await _loadStray(true); } catch (_) {}
     _sel = new Set(nuevas);   // las recién subidas quedan elegidas para el vídeo
     _strayPaint(list);
+    if (_strayAuto && nuevas.length) { _strayAuto = false; _strayVideo(); return; }
+    _strayAuto = false;
     if (typeof showToast === 'function') showToast(`${nuevas.length} ${nuevas.length === 1 ? 'foto subida' : 'fotos subidas'}${fail ? ` · ${fail} no se pudieron` : ''} · pulsa Crear vídeo`);
   }
 
   function _strayPaint(list) {
     const lede = document.getElementById('fv-stray-lede'), body = document.getElementById('fv-stray-body'); if (!body) return;
+    // sin fotos: un solo botón (elegir fotos → se suben → se abre el vídeo); con fotos: crear con ellas o añadir más
+    const up = document.getElementById('fv-stray-up'), gt = document.getElementById('fv-stray-go-t');
+    if (up) up.hidden = !list.length;
+    if (gt) gt.textContent = list.length ? 'Crear el vídeo' : 'Elige fotos y crea el vídeo';
     if (!list.length) {
       lede.textContent = 'No tienes fotos sueltas. Sube fotos de tu móvil y te montamos el vídeo con ellas: las paradas salen de dónde hiciste cada foto.';
       body.innerHTML = '';
