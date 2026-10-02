@@ -344,5 +344,25 @@
     return { total: tot, frame, escenas: esc.length };
   }
 
-  window.POSTS = { PLANTILLAS, CICLO, render, video };
+  /* miniaturas esquemáticas (SVG) de cada plantilla, para elegirla de un vistazo */
+  const MINI = (() => {
+    const foto = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#78b1de"/><path d="M${x} ${y + h * .78}L${x + w * .3} ${y + h * .45}L${x + w * .55} ${y + h * .7}L${x + w * .8} ${y + h * .4}L${x + w} ${y + h * .72}V${y + h}H${x}Z" fill="#4d7357"/>`;
+    const mapa = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#b9e39a"/><path d="M${x} ${y}H${x + w * .45}Q${x + w * .2} ${y + h * .5} ${x} ${y + h * .65}Z" fill="#5fb8ea"/>` +
+      `<path d="M${x + w * .3} ${y + h * .12}C${x + w * .9} ${y + h * .3} ${x + w * .1} ${y + h * .6} ${x + w * .65} ${y + h * .88}" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/>` +
+      `<path d="M${x + w * .3} ${y + h * .12}C${x + w * .9} ${y + h * .3} ${x + w * .1} ${y + h * .6} ${x + w * .65} ${y + h * .88}" fill="none" stroke="#F4630B" stroke-width="2" stroke-linecap="round"/>`;
+    const pol = (cx, cy, r) => `<g transform="translate(${cx} ${cy}) rotate(${r})"><rect x="-17" y="-21" width="34" height="42" fill="#fff"/><g transform="translate(-14.5 -18.5) scale(.24)">${foto(0, 0, 120, 120)}</g></g>`;
+    const filas = (x, y, w, h) => [0, 1, 2, 3].map(i => `<circle cx="${x + 9}" cy="${y + h * (i + .5) / 4}" r="3" fill="#F4630B"/><rect x="${x + 17}" y="${y + h * (i + .5) / 4 - 1.6}" width="${w - 26}" height="3.2" fill="#ECEBE8" opacity=".85"/>`).join('');
+    const sv = c => `<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="120" height="150" fill="#0D0F10"/>${c}</svg>`;
+    return {
+      circulo: sv(foto(0, 0, 120, 150) + `<circle cx="84" cy="108" r="36" fill="#fff"/><clipPath id="mc"><circle cx="84" cy="108" r="32"/></clipPath><g clip-path="url(#mc)">${mapa(52, 76, 64, 64)}</g>`),
+      tarjeta: sv(foto(0, 0, 120, 150) + `<g transform="rotate(-6 84 104)"><rect x="56" y="76" width="56" height="62" fill="#fff"/>${mapa(60, 80, 48, 54)}</g>`),
+      polaroids: sv(mapa(0, 0, 120, 150) + pol(36, 52, -8) + pol(84, 66, 6) + pol(46, 106, -3)),
+      datos: sv(foto(0, 0, 120, 84) + mapa(0, 84, 120, 30) + [0, 1, 2, 3].map(i => `<circle cx="${15 + i * 30}" cy="126" r="4" fill="#F4630B"/><rect x="${6 + i * 30}" y="136" width="18" height="4" fill="#ECEBE8" opacity=".85"/>`).join('')),
+      panel: sv(foto(0, 0, 120, 75) + mapa(0, 75, 65, 75) + filas(65, 75, 55, 75)),
+      apilado: sv(mapa(0, 0, 120, 63) + `<rect y="62" width="120" height="2.5" fill="#F4630B"/>` + foto(0, 64, 120, 86)),
+      mezcla: sv(foto(4, 4, 54, 68) + mapa(62, 4, 54, 68) + foto(4, 78, 34, 68) + mapa(42, 78, 34, 68) + foto(80, 78, 36, 68))
+    };
+  })();
+
+  window.POSTS = { PLANTILLAS, CICLO, MINI, render, video };
 })();

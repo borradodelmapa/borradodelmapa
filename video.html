@@ -172,7 +172,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
 
   <div><p class="lbl">¿Dónde lo vas a compartir?</p><div class="g2" id="dest"></div></div>
   <div><p class="lbl">¿Qué fotos salen?</p><div class="g2" id="fsel"></div></div>
-  <div><p class="lbl">Tipo de vídeo</p><div class="g2" id="vtipo"></div><div class="g2" id="vtpl" style="margin-top:6px" hidden></div><p class="note" id="vtNota" hidden></p></div>
+  <div><p class="lbl">Tipo de vídeo</p><div class="g2" id="vtipo"></div><div class="row" id="vtpl" style="margin-top:6px" hidden></div><p class="note" id="vtNota" hidden></p></div>
   <div><p class="lbl">Estilo</p><div class="row" id="estilos"></div></div>
   <button class="pick" id="bVeh" type="button"><img id="vehImg" alt=""><span class="tx"><b id="vehTxt">Vehículo: Moto</b><small>Cambia solo en los tramos de avión o barco</small></span><span class="ar" aria-hidden="true">▾</span></button>
   <button class="pick" id="bMus" type="button"><span class="ic" id="musIc" aria-hidden="true"></span><span class="tx"><b id="musTxt">Música: sin música</b><small id="musSub">Recomendado para Reels y TikTok: pones la canción allí</small></span><span class="ar" aria-hidden="true">▾</span></button>
@@ -181,14 +181,14 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="btn ghost" id="bPost" type="button" style="justify-content:space-between">Crear imagen para publicar <span aria-hidden="true">▸</span></button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
-  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v14</p>
+  <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v19</p>
 </div>
 
 <!-- imagen para publicar (plantillas de posts-plantillas.js) -->
 <div class="sheet" id="shPost" hidden><div>
   <div class="sh-h"><b>Imagen para publicar</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
   <div class="sh-b">
-    <div><p class="lbl">Plantilla</p><div class="g2" id="postT"></div></div>
+    <div><p class="lbl">Plantilla</p><div class="row" id="postT"></div></div>
     <div><p class="lbl">Formato</p><div class="g2" id="postF"></div></div>
     <img id="postImg" alt="Vista previa de la imagen" style="width:100%;max-width:320px;margin:0 auto;display:block;border:1px solid var(--line);background:var(--panel);aspect-ratio:4/5;object-fit:contain">
     <p class="note" id="postNote"></p>
@@ -269,7 +269,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
 <script src="/vendor/mapa/pmtiles.js"></script>
 <script src="/vendor/mapa/basemaps.js"></script>
 <script src="/vendor/mapa/mp4-muxer.js"></script>
-<script src="/posts-plantillas.js?v=2"></script>
+<script src="/posts-plantillas.js?v=3"></script>
 <script type="module">
 import * as THREE from '/vendor/mapa/three/three.module.js';
 import { CATALOGO, GRUPOS, porId, crear, miniatura } from '/video-vehiculos.js?v=5';
@@ -850,7 +850,7 @@ async function pintarPost(){
   finally{POST.busy=false;if(POST.pend){POST.pend=false;pintarPost();}}
 }
 function pintarPostUI(){
-  $('#postT').innerHTML=POSTS.PLANTILLAS.map(p=>`<button type="button" class="opt" data-t="${p.id}" aria-pressed="${p.id===POST.t}"><b>${p.n}</b><small>${p.s}</small></button>`).join('');
+  $('#postT').innerHTML=POSTS.PLANTILLAS.map(p=>`<button type="button" class="sty" style="width:112px" data-t="${p.id}" aria-pressed="${p.id===POST.t}">${POSTS.MINI[p.id]}<b>${p.n}</b><small>${p.s}</small></button>`).join('');
   $('#postF').innerHTML=[['4:5','Publicación','Instagram · 4:5'],['9:16','Historia','Vertical · 9:16']].map(([k,n,t])=>`<button type="button" class="opt" data-f="${k}" aria-pressed="${k===POST.fmt}"><b>${n}</b><small>${t}</small></button>`).join('');
   $('#postImg').style.aspectRatio=POST.fmt==='9:16'?'9/16':'4/5';
 }
@@ -883,7 +883,7 @@ async function armarPlantillas(){
 function pintarVtipo(){
   $('#vtipo').innerHTML=[['3d','Recorrido 3D','Tu vehículo recorre el mapa'],['plantillas','Con plantillas','Fotos grandes y mapa animado']].map(([k,n,t])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${k===S.vtipo}"><b>${n}</b><small>${t}</small></button>`).join('');
   const on=S.vtipo==='plantillas';$('#vtpl').hidden=!on;
-  $('#vtpl').innerHTML=on?[['mezcla','Mezcla','Las 6, una tras otra'],...POSTS.PLANTILLAS.map(p=>[p.id,p.n,p.s])].map(([k,n,t])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${k===S.vtpl}"><b>${n}</b><small>${t}</small></button>`).join(''):'';
+  $('#vtpl').innerHTML=on?[['mezcla','Mezcla','Las 6, una tras otra'],...POSTS.PLANTILLAS.map(p=>[p.id,p.n,p.s])].map(([k,n,t])=>`<button type="button" class="sty" style="width:112px" data-k="${k}" aria-pressed="${k===S.vtpl}">${POSTS.MINI[k]}<b>${n}</b><small>${t}</small></button>`).join(''):'';
   const nota=$('#vtNota');nota.hidden=!(on&&DEST[S.dest].ar==='16:9');nota.textContent='Las plantillas son para formato vertical: en YouTube sale el recorrido 3D.';
 }
 $('#vtipo').onclick=e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.vtipo)return;S.vtipo=b.dataset.k;pintarVtipo();cambio();};
