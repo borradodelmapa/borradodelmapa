@@ -531,10 +531,34 @@
     return btn;
   }
 
+  // ═══ ⚑ Denunciar contenido (Google Play exige poder denunciar contenido de usuarios/IA) ═══
+  // Va como un 👎 con motivo «Denuncia», por el mismo canal (/beta-feedback): sin cambios en el Worker.
+  function denunciarButton(getContext) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'mj-report mj-denunciar';
+    btn.textContent = '⚑ Denunciar contenido';
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+      let cx = {};
+      try { cx = getContext ? getContext() : {}; } catch (_) {}
+      try {
+        await sendFeedback({ kind: 'down', reason: 'DENUNCIA: contenido inapropiado u ofensivo', context: Object.assign({ where: 'ruta' }, cx) });
+        btn.textContent = '✓ Denuncia enviada, la revisamos';
+      } catch (_) {
+        btn.disabled = false;
+        btn.textContent = '⚑ No se pudo — toca otra vez';
+      }
+    });
+    return btn;
+  }
+
   injectStyles();
 
   // open: formulario "Mejora Salma" (botón de arriba y pantalla Ayuda).
   // rateBar / reportButton: los usan salma.js (chat) y mapa-itinerario.js (rutas).
   window.__dbg = { open: openPanel, logs, version: versionText, worker: loadWorkerVersion,
-    send: sendFeedback, rateBar, reportButton };
+    send: sendFeedback, rateBar, reportButton, denunciarButton };
 })();

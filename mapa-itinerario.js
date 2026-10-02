@@ -136,6 +136,13 @@ const mapaItinerario = {
         route_title: String(routeData.title || routeData.name || ''),
         stops: _allStops.map((st, k) => (k + 1) + '. ' + (st.name || st.headline || '') + (st.day ? ' (día ' + st.day + ')' : '')).join(' · '),
       }), '¿Te sirve esta ruta?'));
+      // Denunciar contenido (Google Play, 2 oct 2026): rutas de otros viajeros y texto de la IA
+      if (typeof window.__dbg.denunciarButton === 'function') {
+        rateWrap.appendChild(window.__dbg.denunciarButton(() => ({
+          route_id: String((typeof salma !== 'undefined' && salma.currentRouteId) || routeData.slug || routeData.id || ''),
+          route_title: String(routeData.title || routeData.name || ''),
+        })));
+      }
       this._container.appendChild(rateWrap);
     }
 
