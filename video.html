@@ -800,7 +800,7 @@ function showResult(blob){
   sh.onclick=()=>compartirVideo(blob,sh);dl.onclick=()=>descargarConAviso(blob,dl);
   o.querySelector('[data-a=x]').onclick=()=>{try{o.querySelector('video').pause();}catch(_){}o.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 }
-const AJ=['dest','estilo','veh','dur','cal','tramos','gpx','gpxNombre'];
+const AJ=['todas','dest','estilo','veh','dur','cal','tramos','gpx','gpxNombre'];
 function ajustes(){const o={};AJ.forEach(k=>o[k]=S[k]);return JSON.parse(JSON.stringify(o));}
 /* el vídeo hecho se guarda en este móvil (IndexedDB, por guía): al volver sale ya hecho. Solo los 3 últimos. 0 € */
 // clave del vídeo guardado: la guía, o (sin guía) las fotos elegidas — otro grupo de fotos es otro vídeo
