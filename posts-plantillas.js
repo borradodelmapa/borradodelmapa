@@ -1,23 +1,42 @@
-/* Plantillas de PUBLICACIÓN (imagen para Instagram / historias) — 2 oct 2026, caso "plantillas de vídeo y posts".
-   Seis composiciones de foto + mapa (familias: foto protagonista, collage, datos). Se pintan en un canvas 2D:
+/* Plantillas de PUBLICACIÓN y de VÍDEO con plantillas — 2 oct 2026.
+   Seis composiciones de foto + mapa (foto protagonista, collage, datos). Se pintan en un canvas 2D:
    no llaman a ninguna API de pago (el mapa sale de nuestros mosaicos, vía ctx.snap).
-   Las animaciones de vídeo de estas mismas plantillas vendrán después; este módulo es solo la imagen fija.
+   La MISMA plantilla sirve para la imagen fija (render) y para el vídeo (video): una escena es la plantilla
+   con una animación de entrada (ruta dibujándose, mapa y fotos que entran, datos que cuentan).
 
-   window.POSTS = { PLANTILLAS:[{id,n,s,fotos}], render(id, ctx) → Promise<canvas> }
-   ctx = { fmt:'4:5'|'9:16', fotos:[Image], titulo, lugar, km, dias, fotosN, firma, atrib,
-           snap(w,h,pad) → Promise<{canvas,pts:[[x,y]…],ini:[x,y],fin:[x,y]}> }     (pts en píxeles del canvas del mapa) */
+   window.POSTS = { PLANTILLAS, CICLO, render(id, ctx), video(opts) }
+   ctx (imagen) = { fmt:'4:5'|'9:16', fotos:[Image], titulo, lugar, km, dias, fotosN, firma, atrib,
+                    snap(w,h,pad) → Promise<{canvas,pts,ini,fin}> }     (pts en píxeles del canvas del mapa)
+   video(opts)  = { W,H, paradas:[{nombre,dia,km,fotos:[Image]}], total, titulo, firma, atrib, fotosN, tpl:'mezcla'|id,
+                    snap, onProgreso(i,n) } → Promise<{total, frame(g,t)}>                                             */
 (function () {
   const FC = '"Barlow Condensed","Arial Narrow",sans-serif', FB = 'Inter,system-ui,sans-serif';
-  const OR = '#F4630B', INK = '#0D0F10', CREAM = '#ECEBE8', SOFT = '#C4C7C9';
+  const OR = '#F4630B', INK = '#0D0F10', CREAM = '#ECEBE8';
 
   const PLANTILLAS = [
-    { id: 'circulo',   n: 'Círculo',   s: 'Tu foto grande y el mapa en un círculo',       fotos: 1 },
+    { id: 'circulo',   n: 'Círculo',   s: 'Tu foto grande y el mapa en un círculo',         fotos: 1 },
     { id: 'tarjeta',   n: 'Tarjeta',   s: 'Foto grande con el mapa como tarjeta inclinada', fotos: 1 },
-    { id: 'polaroids', n: 'Polaroids', s: 'El mapa de fondo y 3 fotos reveladas encima',   fotos: 3 },
-    { id: 'datos',     n: 'Datos',     s: 'Foto, mapa y barra con km, días y paradas',     fotos: 1 },
+    { id: 'polaroids', n: 'Polaroids', s: 'El mapa de fondo y 3 fotos reveladas encima',    fotos: 3 },
+    { id: 'datos',     n: 'Datos',     s: 'Foto, mapa y barra con km, días y paradas',      fotos: 1 },
     { id: 'panel',     n: 'Panel',     s: 'Foto arriba; abajo mapa y los 4 datos',          fotos: 1 },
     { id: 'apilado',   n: 'Apilado',   s: 'Mapa arriba, foto abajo',                        fotos: 1 }
   ];
+  const CICLO = ['circulo', 'datos', 'polaroids', 'tarjeta', 'panel', 'apilado'];   // el orden de la "Mezcla" en el vídeo
+
+  /* ── animación: A.k(a,b) = progreso suave 0→1 entre a y b segundos de la escena (en la imagen fija, siempre 1) ── */
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const easeOut = x => 1 - Math.pow(1 - x, 3);
+  const easeBack = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+  function mkA(p) {
+    const t = p ? p.t : 1e9, d = p ? p.d : 1;
+    return {
+      on: !!p, t,
+      k: (a, b) => p ? easeOut(clamp((t - a) / (b - a), 0, 1)) : 1,
+      back: (a, b) => p ? easeBack(clamp((t - a) / (b - a), 0, 1)) : 1,
+      kb: () => p ? 1 + .09 * clamp(t / d, 0, 1) : 1,
+      pulse: () => p ? .5 + .5 * Math.sin(t * 6) : 0
+    };
+  }
 
   /* ── utilidades de dibujo ── */
   function fit(g, txt, weight, size, maxW, fam) {
@@ -31,6 +50,10 @@
     g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip();
     g.drawImage(img, x - (iw - w) * fx, y - (ih - h) * fy, iw, ih); g.restore();
   }
+  function fotoKB(g, img, x, y, w, h, A) {   // foto con un zoom lento (Ken Burns) dentro de su recuadro
+    const k = A.kb(); g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip();
+    g.translate(x + w / 2, y + h / 2); g.scale(k, k); g.translate(-(x + w / 2), -(y + h / 2)); cover(g, img, x, y, w, h); g.restore();
+  }
   function shade(g, x, y, w, h, fromTop, a) {
     const gr = g.createLinearGradient(0, fromTop ? y : y + h, 0, fromTop ? y + h : y);
     gr.addColorStop(0, `rgba(13,15,16,${a})`); gr.addColorStop(1, 'rgba(13,15,16,0)');
@@ -40,21 +63,27 @@
     g.save(); const s = fit(g, txt, 800, size, 1e4), w = g.measureText(txt).width + s * .9, h = s * 1.3;
     g.fillStyle = dark ? 'rgba(13,15,16,.9)' : OR; g.fillRect(x, y, w, h);
     g.fillStyle = dark ? CREAM : INK; g.textBaseline = 'middle'; g.fillText(txt, x + s * .45, y + h / 2 + 1); g.restore();
-    return { w, h };
   }
   function titulo(g, c, x, y, maxW, size) {
     g.save(); g.fillStyle = '#fff'; g.textBaseline = 'alphabetic';
     g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = size * .18; g.shadowOffsetY = size * .04;
-    fit(g, (c.titulo || 'Mi viaje').toUpperCase(), 800, size, maxW); g.fillText((c.titulo || 'Mi viaje').toUpperCase(), x, y); g.restore();
+    const t = (c.titulo || 'Mi viaje').toUpperCase(); fit(g, t, 800, size, maxW); g.fillText(t, x, y); g.restore();
   }
   function datosChip(c) {
+    if (c.chip) return c.chip;
     const p = [];
     if (c.km >= 1) p.push(`${Math.round(c.km)} KM`);
     if (c.dias >= 1) p.push(c.dias === 1 ? '1 DÍA' : `${c.dias} DÍAS`);
     return p.join(' · ');
   }
-  function firma(g, c, x, y, size, align) {
-    g.save(); g.textBaseline = 'alphabetic'; g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = size * .25;
+  // título + chip que entran deslizando desde la izquierda
+  function cabecera(g, c, A, x, yT, yC, u, size) {
+    const e = A.k(0, .6); g.save(); g.globalAlpha *= e; g.translate(-70 * u * (1 - e), 0);
+    titulo(g, c, x, yT, c.W - x * 2, size); const dc = datosChip(c); if (dc) chip(g, dc, x + 4 * u, yC, 44 * u); g.restore();
+  }
+  function firma(g, c, x, y, size, align, A) {
+    g.save(); if (A) g.globalAlpha *= A.k(.5, 1.1);
+    g.textBaseline = 'alphabetic'; g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = size * .25;
     const partes = c.firma ? [[c.firma, '#fff']] : [['✦ BORRADO', OR], [' DEL ', '#d0d3d5'], ['MAPA', OR]];
     g.font = `800 ${size}px ${FC}`;
     const tot = partes.reduce((a, p) => a + g.measureText(p[0]).width, 0);
@@ -66,7 +95,6 @@
     g.save(); g.font = `600 ${15 * u}px ${FB}`; g.fillStyle = 'rgba(255,255,255,.7)'; g.shadowColor = 'rgba(0,0,0,.6)'; g.shadowBlur = 3 * u;
     g.textAlign = 'right'; g.fillText(c.atrib || '© OpenStreetMap', W - 14 * u, H - 12 * u); g.restore();
   }
-  /* ruta sobre el mapa: borde blanco + línea naranja, salida con chincheta, llegada con anillo */
   function pinShape(g, x, y, s) {
     g.save(); g.fillStyle = OR; g.strokeStyle = '#fff'; g.lineWidth = s * .22; g.lineJoin = 'round';
     g.beginPath(); g.moveTo(x, y);
@@ -74,19 +102,25 @@
     g.bezierCurveTo(x + s * .85, y - s * 2.15, x + s * .95, y - s * .95, x, y);
     g.fill(); g.stroke(); g.fillStyle = '#fff'; g.beginPath(); g.arc(x, y - s * 1.4, s * .36, 0, 7); g.fill(); g.restore();
   }
-  function ruta(g, m, ox, oy, u, lw) {
-    const P = m.pts; if (!P || P.length < 2) return;
+  /* ruta sobre el mapa. Imagen fija: toda entera. Vídeo: la ruta completa tenue y, encima, el tramo hecho hasta
+     esta escena (c.avance0 → c.avance, de 0 a 1) que se va dibujando; la cabeza lleva un punto que late. */
+  function ruta(g, m, ox, oy, u, lw, A, c) {
+    const P = m.pts; if (!P || P.length < 2) return; const n = P.length - 1;
+    const a1 = c.avance == null ? 1 : c.avance, a0 = c.avance0 == null ? a1 : c.avance0;
+    const cur = (a1 >= 1 && a0 >= 1) ? 1 : a0 + (a1 - a0) * A.k(.05, .8);
+    const f = clamp(cur, 0, 1) * n, i = Math.min(n, Math.floor(f)), fr = f - i;
+    const head = i >= n ? P[n] : [P[i][0] + (P[i + 1][0] - P[i][0]) * fr, P[i][1] + (P[i + 1][1] - P[i][1]) * fr];
     g.save(); g.translate(ox, oy); g.lineCap = g.lineJoin = 'round';
-    const trazo = () => { g.beginPath(); P.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.stroke(); };
-    g.strokeStyle = '#fff'; g.lineWidth = (lw || 11) * u; trazo();
-    g.strokeStyle = OR; g.lineWidth = (lw || 11) * u * .58; trazo();
-    const f = m.fin; g.fillStyle = '#fff'; g.beginPath(); g.arc(f[0], f[1], 14 * u, 0, 7); g.fill();
-    g.fillStyle = OR; g.beginPath(); g.arc(f[0], f[1], 8 * u, 0, 7); g.fill();
-    pinShape(g, m.ini[0], m.ini[1], 15 * u); g.restore();
+    const trazo = hasta => { g.beginPath(); for (let k = 0; k <= hasta; k++) k ? g.lineTo(P[k][0], P[k][1]) : g.moveTo(P[k][0], P[k][1]); if (hasta < n) g.lineTo(head[0], head[1]); g.stroke(); };
+    if (a1 < 1) { g.strokeStyle = 'rgba(255,255,255,.7)'; g.lineWidth = (lw || 11) * u * .45; g.setLineDash([10 * u, 12 * u]); trazo(n); g.setLineDash([]); }
+    g.strokeStyle = '#fff'; g.lineWidth = (lw || 11) * u; trazo(i);
+    g.strokeStyle = OR; g.lineWidth = (lw || 11) * u * .58; trazo(i);
+    g.fillStyle = '#fff'; g.beginPath(); g.arc(head[0], head[1], (14 + A.pulse() * 5) * u, 0, 7); g.fill();
+    g.fillStyle = OR; g.beginPath(); g.arc(head[0], head[1], 8 * u, 0, 7); g.fill();
+    pinShape(g, P[0][0], P[0][1], 15 * u); g.restore();
   }
-  function mapa(g, m, x, y, u, lw) { g.drawImage(m.canvas, x, y); ruta(g, m, x, y, u, lw); }
+  function mapa(g, m, x, y, u, lw, A, c) { g.drawImage(m.canvas, x, y); ruta(g, m, x, y, u, lw, A, c); }
 
-  /* iconos de los datos (cuadrícula 24) */
   function icono(g, nom, cx, cy, s, col) {
     g.save(); g.translate(cx - s / 2, cy - s / 2); g.scale(s / 24, s / 24);
     g.strokeStyle = col; g.fillStyle = col; g.lineWidth = 2; g.lineCap = g.lineJoin = 'round'; g.beginPath();
@@ -96,17 +130,16 @@
     else { g.rect(2.5, 6.5, 19, 14); g.stroke(); g.beginPath(); g.moveTo(8, 6.5); g.lineTo(9.5, 3.5); g.lineTo(14.5, 3.5); g.lineTo(16, 6.5); g.stroke(); g.beginPath(); g.arc(12, 13.5, 4, 0, 7); g.stroke(); }
     g.restore();
   }
-  function listaDatos(c) {
+  function listaDatos(c, up) {   // up: 0→1, los números suben contando
     const d = [{ ic: 'pin', v: (c.lugar || c.titulo || 'Viaje').toUpperCase(), l: 'DESTINO' }];
-    if (c.km >= 1) d.push({ ic: 'road', v: `${Math.round(c.km)} KM`, l: 'DE RUTA' });
-    if (c.dias >= 1) d.push({ ic: 'clock', v: c.dias === 1 ? '1 DÍA' : `${c.dias} DÍAS`, l: 'DE VIAJE' });
-    if (c.fotosN >= 1) d.push({ ic: 'cam', v: String(c.fotosN), l: c.fotosN === 1 ? 'FOTO' : 'FOTOS' });
+    if (c.km >= 1) d.push({ ic: 'road', v: `${Math.round(c.km * up)} KM`, l: 'DE RUTA' });
+    if (c.dias >= 1) d.push({ ic: 'clock', v: c.diaTxt || (c.dias === 1 ? '1 DÍA' : `${c.dias} DÍAS`), l: c.diaTxt ? 'DEL VIAJE' : 'DE VIAJE' });
+    if (c.fotosN >= 1) d.push({ ic: 'cam', v: String(Math.round(c.fotosN * up)), l: c.fotosN === 1 ? 'FOTO' : 'FOTOS' });
     return d;
   }
-  function barraDatos(g, c, x, y, w, h, u) {
-    g.fillStyle = INK; g.fillRect(x, y, w, h);
-    g.fillStyle = OR; g.fillRect(x, y, w, 5 * u);
-    const d = listaDatos(c), cw = w / d.length;
+  function barraDatos(g, c, x, y, w, h, u, up) {
+    g.fillStyle = INK; g.fillRect(x, y, w, h); g.fillStyle = OR; g.fillRect(x, y, w, 5 * u);
+    const d = listaDatos(c, up), cw = w / d.length;
     d.forEach((it, i) => {
       const cx = x + cw * (i + .5);
       icono(g, it.ic, cx, y + h * .27, 46 * u, OR);
@@ -115,9 +148,9 @@
       if (i) { g.fillStyle = '#2B2E30'; g.fillRect(x + cw * i, y + h * .15, 2 * u, h * .7); }
     });
   }
-  function panelDatos(g, c, x, y, w, h, u) {
+  function panelDatos(g, c, x, y, w, h, u, up) {
     g.fillStyle = INK; g.fillRect(x, y, w, h);
-    const d = listaDatos(c), rh = h / d.length;
+    const d = listaDatos(c, up), rh = h / d.length;
     d.forEach((it, i) => {
       const cy = y + rh * (i + .5), ix = x + 56 * u;
       icono(g, it.ic, ix, cy, 44 * u, OR);
@@ -147,74 +180,169 @@
   }
   function rrect(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
 
-  /* ── las 6 plantillas ── */
+  /* ── las 6 plantillas: needs(W,H) = los mapas que piden (clave, tamaño, margen) · draw(...) los pinta ── */
   const T = {
-    async circulo(g, c, W, H, u) {
-      cover(g, c.fotos[0], 0, 0, W, H); shade(g, 0, 0, W, H * .42, true, .65); shade(g, 0, H * .62, W, H * .38, false, .5);
-      titulo(g, c, 56 * u, 150 * u, W - 112 * u, 128 * u);
-      const dc = datosChip(c); if (dc) chip(g, dc, 60 * u, 186 * u, 44 * u);
-      const r = W * .27, cx = W - r * .9, cy = H - r * 1.0, m = await c.snap(Math.round(2 * r), Math.round(2 * r), .2);
-      flecha(g, cx - r * .55, cy - r * 1.05, cx - r * 1.5, cy - r * 1.55, u);
-      g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 30 * u; g.fillStyle = '#fff'; g.beginPath(); g.arc(cx, cy, r + 10 * u, 0, 7); g.fill(); g.restore();
-      g.save(); g.beginPath(); g.arc(cx, cy, r, 0, 7); g.clip(); mapa(g, m, cx - r, cy - r, u, 12); g.restore();
-      firma(g, c, 56 * u, H - 44 * u, 40 * u, 'left');
+    circulo: {
+      needs: (W, H) => [{ k: 'c', w: Math.round(W * .54), h: Math.round(W * .54), pad: .2 }],
+      draw(g, c, W, H, u, A, M) {
+        fotoKB(g, c.fotos[0], 0, 0, W, H, A); shade(g, 0, 0, W, H * .42, true, .65); shade(g, 0, H * .62, W, H * .38, false, .5);
+        cabecera(g, c, A, 56 * u, 150 * u, 186 * u, u, 128 * u);
+        const r = W * .27, cx = W - r * .9, cy = H - r * 1.0, m = M.c, pop = A.back(.25, .95);
+        g.save(); g.globalAlpha *= A.k(.9, 1.3); flecha(g, cx - r * .55, cy - r * 1.05, cx - r * 1.5, cy - r * 1.55, u); g.restore();
+        g.save(); g.translate(cx, cy); g.scale(Math.max(pop, .001), Math.max(pop, .001)); g.translate(-cx, -cy);
+        g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 30 * u; g.fillStyle = '#fff'; g.beginPath(); g.arc(cx, cy, r + 10 * u, 0, 7); g.fill(); g.restore();
+        g.save(); g.beginPath(); g.arc(cx, cy, r, 0, 7); g.clip(); mapa(g, m, cx - r, cy - r, u, 12, A, c); g.restore(); g.restore();
+        firma(g, c, 56 * u, H - 44 * u, 40 * u, 'left', A);
+      }
     },
-    async tarjeta(g, c, W, H, u) {
-      cover(g, c.fotos[0], 0, 0, W, H); shade(g, 0, 0, W, H * .4, true, .62); shade(g, 0, H * .6, W, H * .4, false, .5);
-      titulo(g, c, 56 * u, 150 * u, W - 112 * u, 128 * u);
-      const dc = datosChip(c); if (dc) chip(g, dc, 60 * u, 186 * u, 44 * u);
-      const w = W * .5, h = W * .56, b = 14 * u, m = await c.snap(Math.round(w), Math.round(h), .16);
-      g.save(); g.translate(W - w / 2 - 50 * u, H - h / 2 - 150 * u); g.rotate(-.1);
-      g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 30 * u; g.shadowOffsetY = 12 * u; g.fillStyle = '#fff'; rrect(g, -w / 2 - b, -h / 2 - b, w + b * 2, h + b * 2, 22 * u); g.fill(); g.shadowColor = 'transparent';
-      g.beginPath(); rrect(g, -w / 2, -h / 2, w, h, 12 * u); g.clip(); mapa(g, m, -w / 2, -h / 2, u, 10); g.restore();
-      firma(g, c, 56 * u, H - 44 * u, 40 * u, 'left');
+    tarjeta: {
+      needs: (W, H) => [{ k: 'c', w: Math.round(W * .5), h: Math.round(W * .56), pad: .16 }],
+      draw(g, c, W, H, u, A, M) {
+        fotoKB(g, c.fotos[0], 0, 0, W, H, A); shade(g, 0, 0, W, H * .4, true, .62); shade(g, 0, H * .6, W, H * .4, false, .5);
+        cabecera(g, c, A, 56 * u, 150 * u, 186 * u, u, 128 * u);
+        const w = W * .5, h = W * .56, b = 14 * u, m = M.c, e = A.k(.3, 1.1);
+        g.save(); g.translate(W - w / 2 - 50 * u, H - h / 2 - 150 * u + (1 - e) * H * .35); g.rotate(-.1 - (1 - e) * .25); g.globalAlpha *= clamp(e * 1.6, 0, 1);
+        g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 30 * u; g.shadowOffsetY = 12 * u; g.fillStyle = '#fff'; rrect(g, -w / 2 - b, -h / 2 - b, w + b * 2, h + b * 2, 22 * u); g.fill(); g.shadowColor = 'transparent';
+        g.beginPath(); rrect(g, -w / 2, -h / 2, w, h, 12 * u); g.clip(); mapa(g, m, -w / 2, -h / 2, u, 10, A, c); g.restore();
+        firma(g, c, 56 * u, H - 44 * u, 40 * u, 'left', A);
+      }
     },
-    async polaroids(g, c, W, H, u) {
-      const m = await c.snap(W, H, .26); mapa(g, m, 0, 0, u, 12);
-      shade(g, 0, 0, W, H * .26, true, .72); shade(g, 0, H * .84, W, H * .16, false, .55);
-      titulo(g, c, 56 * u, 140 * u, W - 112 * u, 124 * u);
-      const dc = datosChip(c); if (dc) chip(g, dc, 60 * u, 176 * u, 44 * u);
-      const pw = W * .46, F = c.fotos, pos = [[.30, .40, -.13], [.70, .52, .09], [.37, .73, -.04]];
-      F.slice(0, 3).forEach((im, i) => polaroid(g, im, W * pos[i][0], H * pos[i][1], pw, pos[i][2], c, u));
-      firma(g, c, W / 2, H - 38 * u, 40 * u, 'center');
+    polaroids: {
+      needs: (W, H) => [{ k: 'c', w: W, h: H, pad: .26 }],
+      draw(g, c, W, H, u, A, M) {
+        mapa(g, M.c, 0, 0, u, 12, A, c);
+        shade(g, 0, 0, W, H * .26, true, .72); shade(g, 0, H * .84, W, H * .16, false, .55);
+        cabecera(g, c, A, 56 * u, 140 * u, 176 * u, u, 124 * u);
+        const pw = W * .46, pos = [[.30, .40, -.13], [.70, .52, .09], [.37, .73, -.04]];
+        c.fotos.slice(0, 3).forEach((im, i) => {
+          const e = A.back(.35 + i * .4, 1.0 + i * .4), a = clamp((A.on ? (A.t - (.35 + i * .4)) / .25 : 1), 0, 1);
+          g.save(); g.globalAlpha *= a; polaroid(g, im, W * pos[i][0], H * pos[i][1] - (1 - e) * H * .3, pw, pos[i][2] * (1 + (1 - e) * 2.5), c, u); g.restore();
+        });
+        firma(g, c, W / 2, H - 38 * u, 40 * u, 'center', A);
+      }
     },
-    async datos(g, c, W, H, u) {
-      const h1 = Math.round(H * .56), h2 = Math.round(H * .2), h3 = H - h1 - h2;
-      cover(g, c.fotos[0], 0, 0, W, h1); shade(g, 0, 0, W, h1 * .45, true, .62);
-      titulo(g, c, 56 * u, 150 * u, W - 112 * u, 124 * u);
-      const dc = datosChip(c); if (dc) chip(g, dc, 60 * u, 186 * u, 44 * u);
-      const m = await c.snap(W, h2, .2); mapa(g, m, 0, h1, u, 10);
-      barraDatos(g, c, 0, h1 + h2, W, h3, u); firma(g, c, W - 44 * u, 64 * u, 34 * u, 'right');
+    datos: {
+      needs: (W, H) => [{ k: 'c', w: W, h: Math.round(H * .2), pad: .2 }],
+      draw(g, c, W, H, u, A, M) {
+        const h1 = Math.round(H * .56), h2 = Math.round(H * .2), h3 = H - h1 - h2;
+        fotoKB(g, c.fotos[0], 0, 0, W, h1, A); shade(g, 0, 0, W, h1 * .45, true, .62);
+        cabecera(g, c, A, 56 * u, 150 * u, 186 * u, u, 124 * u);
+        g.save(); g.beginPath(); g.rect(0, h1, W * A.k(.2, 1), h2); g.clip(); mapa(g, M.c, 0, h1, u, 10, A, c); g.restore();
+        g.save(); g.translate(0, (1 - A.k(.1, .8)) * h3); barraDatos(g, c, 0, h1 + h2, W, h3, u, A.k(.5, 1.5)); g.restore();
+        firma(g, c, W - 44 * u, 64 * u, 34 * u, 'right', A);
+      }
     },
-    async panel(g, c, W, H, u) {
-      const h1 = Math.round(H * .5), h2 = H - h1, mw = Math.round(W * .54);
-      cover(g, c.fotos[0], 0, 0, W, h1); shade(g, 0, h1 * .45, W, h1 * .55, false, .72); shade(g, 0, 0, W, 170 * u, true, .5);
-      firma(g, c, 56 * u, 74 * u, 36 * u, 'left');
-      titulo(g, c, 56 * u, h1 - 112 * u, W - 112 * u, 124 * u);
-      const dc = datosChip(c); if (dc) chip(g, dc, 60 * u, h1 - 94 * u, 44 * u);
-      const m = await c.snap(mw, h2, .2); mapa(g, m, 0, h1, u, 10);
-      panelDatos(g, c, mw, h1, W - mw, h2, u);
+    panel: {
+      needs: (W, H) => [{ k: 'c', w: Math.round(W * .54), h: H - Math.round(H * .5), pad: .2 }],
+      draw(g, c, W, H, u, A, M) {
+        const h1 = Math.round(H * .5), h2 = H - h1, mw = Math.round(W * .54);
+        fotoKB(g, c.fotos[0], 0, 0, W, h1, A); shade(g, 0, h1 * .45, W, h1 * .55, false, .72); shade(g, 0, 0, W, 170 * u, true, .5);
+        firma(g, c, 56 * u, 74 * u, 36 * u, 'left', A);
+        cabecera(g, c, A, 56 * u, h1 - 112 * u, h1 - 94 * u, u, 124 * u);
+        g.save(); g.translate(-(1 - A.k(.15, .8)) * mw, 0); mapa(g, M.c, 0, h1, u, 10, A, c); g.restore();
+        g.save(); g.translate((1 - A.k(.15, .8)) * (W - mw), 0); panelDatos(g, c, mw, h1, W - mw, h2, u, A.k(.5, 1.5)); g.restore();
+      }
     },
-    async apilado(g, c, W, H, u) {
-      const h1 = Math.round(H * .42), h2 = H - h1;
-      const m = await c.snap(W, h1, .16); mapa(g, m, 0, 0, u, 11);
-      cover(g, c.fotos[0], 0, h1, W, h2);
-      g.fillStyle = OR; g.fillRect(0, h1 - 3 * u, W, 6 * u);
-      shade(g, 0, 0, W, h1 * .42, true, .6); titulo(g, c, 56 * u, 130 * u, W - 112 * u, 118 * u);
-      const dc = datosChip(c); if (dc) chip(g, dc, 60 * u, h1 + 28 * u, 46 * u);
-      shade(g, 0, H - 200 * u, W, 200 * u, false, .55); firma(g, c, 56 * u, H - 44 * u, 40 * u, 'left');
+    apilado: {
+      needs: (W, H) => [{ k: 'c', w: W, h: Math.round(H * .42), pad: .16 }],
+      draw(g, c, W, H, u, A, M) {
+        const h1 = Math.round(H * .42), h2 = H - h1;
+        g.save(); g.translate(0, -(1 - A.k(0, .6)) * h1 * .4); mapa(g, M.c, 0, 0, u, 11, A, c); g.restore();
+        const e = A.k(.1, .8); g.save(); g.beginPath(); g.rect(0, h1 + h2 * (1 - e), W, h2 * e); g.clip(); fotoKB(g, c.fotos[0], 0, h1, W, h2, A); g.restore();
+        g.fillStyle = OR; g.fillRect(0, h1 - 3 * u, W, 6 * u);
+        shade(g, 0, 0, W, h1 * .42, true, .6);
+        const e2 = A.k(0, .6); g.save(); g.globalAlpha *= e2; g.translate(-70 * u * (1 - e2), 0); titulo(g, c, 56 * u, 130 * u, W - 112 * u, 118 * u);
+        const dc = datosChip(c); if (dc) chip(g, dc, 60 * u, h1 + 28 * u, 46 * u); g.restore();
+        shade(g, 0, H - 200 * u, W, 200 * u, false, .55); firma(g, c, 56 * u, H - 44 * u, 40 * u, 'left', A);
+      }
     }
   };
 
-  async function render(id, c) {
-    const fn = T[id]; if (!fn) throw new Error('plantilla desconocida: ' + id);
-    const W = 1080, H = c.fmt === '9:16' ? 1920 : 1350, u = W / 1080;
+  /* tarjeta final del vídeo: km del viaje en grande sobre el mapa con la ruta entera */
+  const CIERRE = {
+    needs: (W, H) => [{ k: 'c', w: W, h: Math.round(H * .5), pad: .16 }],
+    draw(g, c, W, H, u, A, M) {
+      g.fillStyle = INK; g.fillRect(0, 0, W, H);
+      const h1 = Math.round(H * .5); g.save(); g.globalAlpha *= A.k(0, .5); mapa(g, M.c, 0, 0, u, 12, A, Object.assign({}, c, { avance: 1, avance0: 0 })); g.restore();
+      shade(g, 0, h1 * .55, W, h1 * .45, false, .9);
+      const e = A.k(.3, 1.2);
+      g.save(); g.globalAlpha *= e; g.translate(0, (1 - e) * 40 * u);
+      g.fillStyle = OR; g.font = `800 ${240 * u}px ${FC}`; g.textBaseline = 'alphabetic';
+      g.fillText(String(Math.round(c.km * A.k(.3, 1.6))), 56 * u, h1 + 230 * u);
+      g.fillStyle = '#C4C7C9'; g.font = `700 ${46 * u}px ${FC}`; g.fillText('KM DE VIAJE', 62 * u, h1 + 290 * u);
+      titulo(g, c, 56 * u, h1 + 420 * u, W - 112 * u, 100 * u); g.restore();
+      firma(g, c, 56 * u, H - 70 * u, 52 * u, 'left', A);
+    }
+  };
+
+  async function pintarEscena(g, def, c, W, H, A, M) {
+    const u = W / 1080; c.W = W; def.draw(g, c, W, H, u, A, M);
+  }
+  async function cargarFuentes() {
     if (document.fonts && document.fonts.load) { try { await Promise.all([document.fonts.load('800 40px "Barlow Condensed"'), document.fonts.load('700 20px "Barlow Condensed"')]); } catch (_) {} }
+  }
+  async function resolverMapas(def, c, W, H, cache) {
+    const M = {};
+    for (const n of def.needs(W, H)) {
+      const key = `${n.w}x${n.h}x${n.pad}`;
+      M[n.k] = (cache && cache[key]) || (cache ? (cache[key] = await c.snap(n.w, n.h, n.pad)) : await c.snap(n.w, n.h, n.pad));
+    }
+    return M;
+  }
+
+  /* IMAGEN FIJA */
+  async function render(id, c) {
+    const def = T[id]; if (!def) throw new Error('plantilla desconocida: ' + id);
+    const W = 1080, H = c.fmt === '9:16' ? 1920 : 1350;
+    await cargarFuentes();
     const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
     const g = cv.getContext('2d'); g.fillStyle = INK; g.fillRect(0, 0, W, H);
-    await fn(g, c, W, H, u); atrib(g, c, W, H, u);
+    const M = await resolverMapas(def, c, W, H);
+    await pintarEscena(g, def, c, W, H, mkA(null), M);
+    atrib(g, c, W, H, W / 1080);
     return cv;
   }
 
-  window.POSTS = { PLANTILLAS, render };
+  /* VÍDEO con plantillas: una escena por foto (o por 3 con Polaroids), cada una con su plantilla; fundido entre escenas.
+     El mapa de cada plantilla se pide una sola vez (cache) y es el mismo en todas las escenas de esa plantilla. */
+  async function video(o) {
+    const W = o.W, H = o.H, fade = .35, cache = {}, esc = [];
+    await cargarFuentes();
+    const ids = o.tpl && T[o.tpl] ? [o.tpl] : CICLO;
+    let k = 0, av0 = 0, t0 = 0;
+    const total = o.total || 1;
+    (o.paradas || []).forEach(p => {
+      const fs = (p.fotos || []).slice(); let i = 0;
+      while (i < fs.length) {
+        const id = ids[k % ids.length], meta = PLANTILLAS.find(x => x.id === id), n = meta.fotos;
+        const grupo = fs.slice(i, i + n); i += n; k++;
+        const av = clamp((p.km || 0) / total, 0, 1), d = n > 1 ? 4.6 : 3.4;
+        esc.push({ id, def: T[id], t0, d, c: {
+          fotos: grupo, titulo: o.titulo, lugar: p.nombre, km: p.km || 0, dias: p.dia || 0, diaTxt: p.dia ? `DÍA ${p.dia}` : '', fotosN: o.fotosN,
+          chip: `${p.dia ? 'DÍA ' + p.dia + ' · ' : ''}${(p.nombre || '').toUpperCase()}`, firma: o.firma, atrib: o.atrib, avance0: av0, avance: av, snap: o.snap } });
+        t0 += d; av0 = av;
+      }
+    });
+    if (!esc.length) throw new Error('sin fotos para el vídeo');
+    const fin = { id: 'cierre', def: CIERRE, t0, d: 4.2, c: { titulo: o.titulo, km: o.total || 0, firma: o.firma, atrib: o.atrib, snap: o.snap } };
+    esc.push(fin);
+    const tot = t0 + fin.d;
+    for (let i = 0; i < esc.length; i++) { esc[i].M = await resolverMapas(esc[i].def, esc[i].c, W, H, cache); if (o.onProgreso) o.onProgreso(i + 1, esc.length); }
+    const u = W / 1080;
+    function dibujar(g, s, t) { const A = mkA({ t, d: s.d }); s.c.W = W; s.def.draw(g, s.c, W, H, u, A, s.M); }
+    function frame(g, t) {
+      t = clamp(t, 0, tot - .001);
+      let i = esc.findIndex(s => t < s.t0 + s.d); if (i < 0) i = esc.length - 1;
+      const s = esc[i], lt = t - s.t0;
+      g.fillStyle = INK; g.fillRect(0, 0, W, H);
+      if (i > 0 && lt < fade) {
+        const prev = esc[i - 1]; dibujar(g, prev, prev.d);
+        g.save(); g.globalAlpha = lt / fade; dibujar(g, s, lt); g.restore();
+      } else dibujar(g, s, lt);
+      atrib(g, s.c, W, H, u);
+    }
+    return { total: tot, frame, escenas: esc.length };
+  }
+
+  window.POSTS = { PLANTILLAS, CICLO, render, video };
 })();

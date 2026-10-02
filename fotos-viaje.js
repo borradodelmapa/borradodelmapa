@@ -296,7 +296,7 @@ const fotosViaje = (() => {
   // VÍDEO: motor nuevo (video.html: mapa propio + relieve 3D + vehículo 3D, 30 sept 2026); ÁLBUM y guías fuera de zona: el anterior
   function _engineFor(guia, tab) { return (tab === 'vid' || tab === 'post') && !OLD_ENGINE.has(guia) ? 'nuevo' : 'viejo'; }
   function _mediaURL(guia, tab, engine) {
-    return engine === 'nuevo' ? `/video.html?v=17&guia=${encodeURIComponent(guia)}${tab === 'post' ? '&modo=post' : ''}`
+    return engine === 'nuevo' ? `/video.html?v=18&guia=${encodeURIComponent(guia)}${tab === 'post' ? '&modo=post' : ''}`
       : `/viaje-fotos.html?embed=1&v=14&guia=${encodeURIComponent(guia)}&tab=${tab}`;
   }
 
