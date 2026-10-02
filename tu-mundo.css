@@ -118,8 +118,5 @@
 .viaje-card-st { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
 .vcs { display:inline-flex; align-items:center; min-height:28px; padding:0 9px; border:1px solid var(--border); background:transparent; color:var(--text-muted); font:700 13px/1 var(--font-cond); letter-spacing:.04em; text-transform:uppercase; }
 .vcs-on { color:var(--text-primary); }
-.vcs-ok { color:var(--accent); border-color:var(--accent); }
-.vcs-add { appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; min-height:28px; padding:0 10px 0 8px; border:1px solid var(--accent); background:var(--accent); color:var(--text-on-accent); font:700 13px/1 var(--font-cond); letter-spacing:.04em; text-transform:uppercase; }
-.vcs-add svg { width:15px; height:15px; }
-.vcs-add:active { filter:brightness(.9); }
+.vcs-add { appearance:none; cursor:pointer; }
 .vcs-add:disabled { opacity:.6; }
