@@ -889,7 +889,21 @@ function _renderChatEmpty() {
         _ri = (_ri + 1) % _exs.length; _paint();
       };
       const _stopRot = () => { if (_rTimer) { clearInterval(_rTimer); _rTimer = null; } _rStopped = true; };
+      // Altura fija: la caja mide lo que el ejemplo MÁS LARGO, así no salta ni se
+      // ensancha/encoge al rotar (Paco, 2 oct 2026). Se mide una vez y al girar/redimensionar.
+      let _fixH = 0;
+      const _fit = () => {
+        if (!_exEl || !_exEl.isConnected || _editing) return;
+        _exEl.style.minHeight = '';
+        let max = 0;
+        _exs.forEach((x) => { _exEl.textContent = '“' + x.t + '”'; max = Math.max(max, _exEl.offsetHeight); });
+        _fixH = max;
+        _exEl.style.minHeight = max + 'px';
+        _paint();
+      };
       _paint();
+      _fit();
+      window.addEventListener('resize', _fit);
       if (!_rStopped) _rTimer = setInterval(_adv, 6000);
       // Al tocar la caja, se convierte EN SITIO en un campo de texto editable —
       // antes bajaba al input de Salma más abajo (fix del 18 sept). Los ejemplos
@@ -905,6 +919,9 @@ function _renderChatEmpty() {
         ta.rows = 3;
         ta.placeholder = 'Escríbeme la ruta que quieres...';
         ta.addEventListener('click', (e) => e.stopPropagation());
+        // Mismo alto que la caja de ejemplos (no salta al tocar) y crece si el usuario escribe más.
+        if (_fixH) ta.style.minHeight = _fixH + 'px';
+        ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; });
         _exEl.replaceWith(ta);
         ta.focus();
         if (_dots) _dots.hidden = true;
