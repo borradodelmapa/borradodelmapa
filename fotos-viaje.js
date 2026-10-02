@@ -46,6 +46,7 @@ const fotosViaje = (() => {
       <button type="button" class="fv-tab" role="tab" data-tab="ruta" aria-selected="true">Ruta</button>
       <button type="button" class="fv-tab" role="tab" data-tab="fotos" aria-selected="false">Fotos <span class="fv-count" id="fv-count"></span></button>
       <button type="button" class="fv-tab" role="tab" data-tab="vid" aria-selected="false">Vídeo</button>
+      <button type="button" class="fv-tab" role="tab" data-tab="post" aria-selected="false">Post</button>
       <button type="button" class="fv-tab" role="tab" data-tab="alb" aria-selected="false">Álbum</button>`;
 
     const fotos = document.createElement('div');
@@ -268,7 +269,7 @@ const fotosViaje = (() => {
     _st.tabs.querySelectorAll('.fv-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
     _st.ruta.hidden = tab !== 'ruta';
     _st.fotos.hidden = tab !== 'fotos';
-    const isMedia = tab === 'vid' || tab === 'alb';
+    const isMedia = tab === 'vid' || tab === 'post' || tab === 'alb';
     _st.media.hidden = !isMedia;
     _st.container.classList.toggle('fv-media-on', isMedia);
     // En el móvil, con FOTOS el mapa se encoge; con VÍDEO y ÁLBUM se quita (necesitan la pantalla)
@@ -293,9 +294,9 @@ const fotosViaje = (() => {
 
   // v=: subirlo al cambiar viaje-fotos.html (si no, el móvil puede usar una copia vieja)
   // VÍDEO: motor nuevo (video.html: mapa propio + relieve 3D + vehículo 3D, 30 sept 2026); ÁLBUM y guías fuera de zona: el anterior
-  function _engineFor(guia, tab) { return tab === 'vid' && !OLD_ENGINE.has(guia) ? 'nuevo' : 'viejo'; }
+  function _engineFor(guia, tab) { return (tab === 'vid' || tab === 'post') && !OLD_ENGINE.has(guia) ? 'nuevo' : 'viejo'; }
   function _mediaURL(guia, tab, engine) {
-    return engine === 'nuevo' ? `/video.html?v=16&guia=${encodeURIComponent(guia)}`
+    return engine === 'nuevo' ? `/video.html?v=17&guia=${encodeURIComponent(guia)}${tab === 'post' ? '&modo=post' : ''}`
       : `/viaje-fotos.html?embed=1&v=14&guia=${encodeURIComponent(guia)}&tab=${tab}`;
   }
 
@@ -305,6 +306,11 @@ const fotosViaje = (() => {
     const engine = _engineFor(s.docId, tab);
     if (MED.frame && (MED.guia !== s.docId || MED.engine !== engine) && MED.encoding) {
       s.media.innerHTML = `<div class="fv-empty fv-pad"><b>Se está creando otro vídeo</b><p>${esc(MED.pill || '')}</p><p class="fv-note">Cuando termine podrás hacer el de este viaje.</p></div>`;
+      return;
+    }
+    if (tab === 'post' && OLD_ENGINE.has(s.docId)) {
+      if (MED.holder) MED.holder.classList.remove('on');
+      s.media.innerHTML = '<div class="fv-empty fv-pad"><b>Post con mapa</b><p>Las imágenes con mapa, de momento, solo están disponibles para viajes por España y Portugal.</p></div>';
       return;
     }
     s.media.innerHTML = '';
@@ -367,7 +373,7 @@ const fotosViaje = (() => {
       OLD_ENGINE.add(MED.guia);
       const t = _st && _st.docId === MED.guia ? _st.tab : null;
       _mediaDestroy();
-      if (t === 'vid' || t === 'alb') _mediaShow(t);
+      if (t === 'vid' || t === 'post' || t === 'alb') _mediaShow(t);
       return;
     }
     // "Subir fotos" desde VÍDEO/ÁLBUM vacíos: se suben como en FOTOS (misma revisión de fotos intrusas)
@@ -387,7 +393,7 @@ const fotosViaje = (() => {
   let _badgeTimer = null;
   function _pillPaint() {
     const old = document.getElementById('fv-gen-pill'); if (old) old.remove();
-    const viewing = !!(_st && _st.tab === 'vid' && MED.guia === _st.docId && MED.holder && MED.holder.classList.contains('on'));
+    const viewing = !!(_st && (_st.tab === 'vid' || _st.tab === 'post') && MED.guia === _st.docId && MED.holder && MED.holder.classList.contains('on'));
     const show = !!(MED.frame && MED.pill && !viewing && (MED.encoding || MED.done));
     if (!show) {
       document.querySelectorAll('.fv-gen-badge').forEach(b => b.remove());

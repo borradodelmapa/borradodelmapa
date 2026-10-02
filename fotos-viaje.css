@@ -131,7 +131,7 @@
   /* Sin mapa, la ✕ de cerrar va sobre las pestañas: dejarle sitio */
   .itin-view.fv-map-none .fv-tabs { padding-left:64px; }
 }
-@media (max-width:380px) { .fv-tab { font-size:14px; padding:0 6px; letter-spacing:.05em; } }
+@media (max-width:440px) { .fv-tab { font-size:14px; padding:0 3px; letter-spacing:.04em; gap:4px; } }
 
 /* Aviso flotante: cómo va el vídeo mientras usas la app */
 .fv-gen-pill {

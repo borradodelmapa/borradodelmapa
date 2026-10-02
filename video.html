@@ -55,6 +55,7 @@ button,input,select{font:inherit;color:inherit}
 .pick .ic svg{width:100%;height:100%;display:block}
 /* cada opción con su color: vehículo cielo, música naranja, firma polaroid */
 #vehImg{background:linear-gradient(180deg,#8fcdf2,#e3f2fc);padding:4px}
+body.modo-post #shPost{background:var(--ink)}body.modo-post #shPost>div{height:100%;max-height:none;border-top:0}body.modo-post #shPost .x{display:none}
 #bVeh{border-left:4px solid #5fb8ea}#bMus{border-left:4px solid var(--gold)}#bFirma{border-left:4px solid var(--cream)}
 .pick .tx{flex:1;min-width:0}.pick .tx b{display:block;font:700 16px/1.15 "Barlow Condensed",sans-serif}.pick .tx small{font-size:11px;color:var(--soft)}
 .pick .ar{color:var(--gold);font:800 20px "Barlow Condensed",sans-serif}
@@ -305,7 +306,7 @@ let encoding=false,lastVideo=null;
 // el vídeo hecho deja de valer solo si se cambia algo; mientras, Ver / Compartir / Descargar lo usan sin volver a crearlo
 function caduca(){lastVideo=null;const b=document.getElementById('mp4');if(b)b.textContent='Crear y ver el vídeo';}
 function post(o){if(window.parent===window)return;try{window.parent.postMessage(Object.assign({type:'bdm-vf',guia:GUIA,encoding,hasVideo:!!lastVideo},o),location.origin);}catch(_){}}
-addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='bdm-host')return;if(e.data.reload&&!encoding)location.reload();});
+addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='bdm-host')return;if(e.data.reload&&!encoding)location.reload();if(e.data.tab)modoPost(e.data.tab==='post');});
 $('#upIn').addEventListener('change',e=>{const f=[...(e.target.files||[])];e.target.value='';if(f.length)post({upload:f});});
 
 /* ── zonas con mapa propio ── */
@@ -862,6 +863,14 @@ $('#postSh').onclick=async()=>{
   finally{compartiendo=false;btn.disabled=false;}
 };
 $('#bPost').onclick=()=>{if(!R||!D){$('#note').textContent='Espera a que termine de preparar el viaje.';return;}abrir('#shPost');pintarPostUI();pintarPost();};
+// pestaña POST de la guía: el mismo editor, abierto directo en las plantillas y a pantalla completa
+function modoPost(on,intentos=0){
+  document.body.classList.toggle('modo-post',!!on);
+  if(!on){$('#shPost').hidden=true;return;}
+  if(!R||!D){if(intentos<60)setTimeout(()=>modoPost(true,intentos+1),500);return;}
+  if($('#shPost').hidden){abrir('#shPost');pintarPostUI();pintarPost();}
+}
+if(Q.get('modo')==='post')modoPost(true);
 function showResult(blob){
   const url=URL.createObjectURL(blob),mb=(blob.size/1048576).toFixed(1).replace('.',','),seg=TL?Math.round(TL.total):0;
   let o=$('#vidRes');if(o)o.remove();o=document.createElement('div');o.id='vidRes';o.className='res';
