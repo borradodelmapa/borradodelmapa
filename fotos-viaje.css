@@ -46,18 +46,42 @@
 .fv-empty p { margin:0; font-size:14px; line-height:1.45; color:var(--text-secondary); max-width:34ch; }
 .fv-empty .fv-note { color:var(--text-muted); font-size:13px; }
 
-.fv-days { display:flex; flex-direction:column; gap:18px; padding-top:12px; }
+.fv-days { display:flex; flex-direction:column; gap:30px; padding-top:18px; }
 .fv-day-h {
-  margin:0 0 8px; display:flex; align-items:baseline; gap:6px;
-  font:800 20px/1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; color:var(--text-primary);
+  margin:0 0 12px; display:flex; align-items:center; gap:8px;
+  font:800 26px/1 var(--font-cond); text-transform:uppercase; letter-spacing:.02em; color:var(--text-primary);
 }
-.fv-day-h span { font-weight:600; font-size:15px; color:var(--text-muted); }
-.fv-day-h em { font-style:normal; margin-left:auto; font:700 14px/1 var(--font-cond); color:var(--accent); }
-.fv-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px; }
-@media (min-width:769px) { .fv-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
-.fv-th { appearance:none; border:0; padding:0; margin:0; cursor:pointer; aspect-ratio:1; background:var(--bg-row); overflow:hidden; display:block; }
-.fv-th img { width:100%; height:100%; object-fit:cover; display:block; }
+.fv-day-h::before { content:''; width:4px; align-self:stretch; min-height:24px; background:var(--accent); flex:none; margin-right:2px; }
+.fv-day-h span { font-weight:600; font-size:15px; letter-spacing:.06em; color:var(--text-muted); }
+.fv-day-h em {
+  font-style:normal; margin-left:auto; font:700 14px/1 var(--font-cond); letter-spacing:.05em; color:var(--accent);
+  border:1px solid var(--accent); padding:5px 9px; min-width:30px; text-align:center;
+}
+/* Mosaico: 1 foto = grande · 2 = pareja · 3+ = portada y pares */
+.fv-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:6px; }
+.fv-th {
+  appearance:none; border:0; padding:0; margin:0; cursor:pointer; position:relative; overflow:hidden; display:block;
+  grid-column:span 3; aspect-ratio:1; background:var(--bg-row);
+  animation:fvIn .45s ease both;
+}
+.fv-th:only-child { grid-column:span 6; aspect-ratio:4/3; }
+.fv-th:first-child:nth-last-child(n+3) { grid-column:span 6; aspect-ratio:16/10; }
+.fv-th:last-child:nth-child(even):not(:nth-child(2)) { grid-column:span 6; aspect-ratio:16/10; }
+.fv-th img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease; }
+.fv-th::after {
+  content:''; position:absolute; inset:auto 0 0 0; height:38%; pointer-events:none;
+  background:linear-gradient(to top, rgba(0,0,0,.45), transparent); opacity:.8;
+}
+.fv-th:active img { transform:scale(1.06); }
+@media (hover:hover) { .fv-th:hover img { transform:scale(1.05); } }
 .fv-th:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+@keyframes fvIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion:reduce) { .fv-th { animation:none; } .fv-th img { transition:none; } }
+@media (min-width:769px) {
+  .fv-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .fv-th, .fv-th:only-child, .fv-th:last-child:nth-child(even):not(:nth-child(2)) { grid-column:span 1; aspect-ratio:1; }
+  .fv-th:first-child:nth-last-child(n+3) { grid-column:span 2; grid-row:span 2; aspect-ratio:auto; }
+}
 
 /* Visor a pantalla completa */
 .fv-viewer {
@@ -218,6 +242,8 @@
 .fv-review-t { font:800 20px/1.1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; color:var(--text-primary); }
 .fv-review p { margin:0; font-size:14px; line-height:1.45; color:var(--text-secondary); }
 .fv-review-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px; }
+.fv-review-grid .fv-th { grid-column:auto !important; grid-row:auto !important; aspect-ratio:1 !important; animation:none; }
+.fv-review-grid .fv-th::after { display:none; }
 .fv-review-why {
   position:absolute; left:0; right:0; bottom:0; padding:4px 5px; background:rgba(13,15,16,.82);
   font:600 11px/1.2 var(--font-body); color:var(--text-primary); text-align:left;
