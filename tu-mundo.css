@@ -119,11 +119,7 @@
 .vcs { display:inline-flex; align-items:center; min-height:28px; padding:0 9px; border:1px solid var(--border); background:transparent; color:var(--text-muted); font:700 13px/1 var(--font-cond); letter-spacing:.04em; text-transform:uppercase; }
 .vcs-on { color:var(--text-primary); }
 .vcs-ok { color:var(--accent); border-color:var(--accent); }
-.vcs-add { appearance:none; cursor:pointer; flex:1 1 100%; display:flex; align-items:center; gap:10px; min-height:44px; padding:0 6px 0 12px; margin-top:2px;
-  border:1.5px solid var(--accent); background:linear-gradient(90deg, rgba(244,99,11,.18), rgba(244,99,11,.04)); color:var(--accent);
-  font:700 15px/1 var(--font-cond); letter-spacing:.06em; text-transform:uppercase; text-align:left; }
-.vcs-add-t { flex:1; }
-.vcs-add-p { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:var(--accent); color:var(--text-on-accent); font:700 22px/1 var(--font-cond); }
-.vcs-add:active { background:var(--accent); color:var(--text-on-accent); }
-.vcs-add:active .vcs-add-p { background:var(--text-on-accent); color:var(--accent); }
+.vcs-add { appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; min-height:28px; padding:0 10px 0 8px; border:1px solid var(--accent); background:var(--accent); color:var(--text-on-accent); font:700 13px/1 var(--font-cond); letter-spacing:.04em; text-transform:uppercase; }
+.vcs-add svg { width:15px; height:15px; }
+.vcs-add:active { filter:brightness(.9); }
 .vcs-add:disabled { opacity:.6; }

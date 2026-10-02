@@ -207,7 +207,7 @@ const tuMundo = (() => {
     const n = g.nPhotos || 0, enMundo = !!(n || g.hecho);
     st.innerHTML = `<span class="vcs ${n ? 'vcs-on' : ''}">${n ? `📷 ${n} ${n === 1 ? 'foto' : 'fotos'}` : 'Sin fotos'}</span>`
       + (vid ? '<span class="vcs vcs-on">🎬 Vídeo hecho</span>' : '')
-      + (enMundo ? '<span class="vcs vcs-ok">✓ En tu mundo</span>' : '<button type="button" class="vcs-add"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span class="vcs-add-t">Sumar a mi vuelta al mundo</span><span class="vcs-add-p">+</span></button>');
+      + (enMundo ? '<span class="vcs vcs-ok">✓ En tu mundo</span>' : '<button type="button" class="vcs-add"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span class="vcs-add-t">Añadir a mi mundo</span></button>');
     const b = st.querySelector('.vcs-add');
     if (b) b.addEventListener('click', async e => {
       e.stopPropagation(); e.preventDefault();
