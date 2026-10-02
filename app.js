@@ -498,12 +498,11 @@ function _renderChatEmpty() {
   const _ceSkyFcCached = (_ceSkyCachedData && _ceSkyCachedData.forecast) || [];
   const _ceSkyFcHTML = _ceSkyForecastHTML(_ceSkyFcCached);
   let _ceSkyFcOpen = false;
-  try { _ceSkyFcOpen = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
+  // Siempre plegada al abrir la app (Paco, 2 oct 2026): no se recuerda el estado.
   // Bloque de tiempo (tarjeta + previsión + info del país) plegado por defecto,
   // detrás de un botón — la fecha/hora se queda siempre visible fuera del pliegue
   // (petición de Paco, 22 sept 2026, para descargar el index).
   let _ceSkyWxOpen = false;
-  try { _ceSkyWxOpen = localStorage.getItem('bdm_sky_wx_open') === '1'; } catch (_) {}
   let _ceName = '';
   try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
@@ -1298,9 +1297,8 @@ function _ceSkyPaintWeather(data) {
       fc.innerHTML = _ceSkyForecastHTML(forecast);
       // Rellena la previsión pero respeta si está plegada o desplegada (por
       // defecto plegada, a petición de Paco, para no llamar la atención).
-      let open = false;
-      try { open = localStorage.getItem('bdm_sky_fc_open') === '1'; } catch (_) {}
-      fc.hidden = !open;
+      const _fcT = document.getElementById('ce-sky-fc-toggle');
+      fc.hidden = !(_fcT && _fcT.getAttribute('aria-expanded') === 'true');
     }
   }
 }
@@ -1354,7 +1352,6 @@ function _ceSkyToggleWx() {
   if (!el) return;
   const open = !!el.hidden; // estaba oculto → lo vamos a abrir
   el.hidden = !open;
-  try { localStorage.setItem('bdm_sky_wx_open', open ? '1' : '0'); } catch (_) {}
   if (toggle) {
     toggle.textContent = open ? '▴ ocultar' : '▾ tiempo';
     toggle.setAttribute('aria-expanded', String(open));
@@ -1369,7 +1366,6 @@ function _ceSkyToggleForecast() {
   if (!el) return;
   const open = !!el.hidden; // estaba oculta → la vamos a abrir
   el.hidden = !open;
-  try { localStorage.setItem('bdm_sky_fc_open', open ? '1' : '0'); } catch (_) {}
   if (toggle) {
     toggle.textContent = (open ? '▴' : '▾') + ' previsión';
     toggle.setAttribute('aria-expanded', String(open));
