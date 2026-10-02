@@ -115,8 +115,8 @@
 .tm-home-msg:empty { display:none; }
 
 /* Estado en las tarjetas de Mis Viajes (1 oct 2026) */
-.viaje-card-st { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
-.vcs { display:inline-flex; align-items:center; min-height:28px; padding:0 9px; border:1px solid var(--border); background:transparent; color:var(--text-muted); font:700 13px/1 var(--font-cond); letter-spacing:.04em; text-transform:uppercase; }
+.viaje-card-st { display:flex; flex-wrap:nowrap; gap:4px; margin-top:10px; }
+.vcs { display:inline-flex; align-items:center; white-space:nowrap; flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; min-height:28px; padding:0 6px; border:1px solid var(--border); background:transparent; color:var(--text-muted); font:700 12px/1 var(--font-cond); letter-spacing:.02em; text-transform:uppercase; }
 .vcs-on { color:var(--text-primary); }
 .vcs-add { appearance:none; cursor:pointer; }
 .vcs-add:disabled { opacity:.6; }
