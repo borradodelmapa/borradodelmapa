@@ -170,6 +170,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   </div>
 
   <div><p class="lbl">¿Dónde lo vas a compartir?</p><div class="g2" id="dest"></div></div>
+  <div><p class="lbl">¿Qué fotos salen?</p><div class="g2" id="fsel"></div></div>
   <div><p class="lbl">Estilo</p><div class="row" id="estilos"></div></div>
   <button class="pick" id="bVeh" type="button"><img id="vehImg" alt=""><span class="tx"><b id="vehTxt">Vehículo: Moto</b><small>Cambia solo en los tramos de avión o barco</small></span><span class="ar" aria-hidden="true">▾</span></button>
   <button class="pick" id="bMus" type="button"><span class="ic" id="musIc" aria-hidden="true"></span><span class="tx"><b id="musTxt">Música: sin música</b><small id="musSub">Recomendado para Reels y TikTok: pones la canción allí</small></span><span class="ar" aria-hidden="true">▾</span></button>
@@ -281,7 +282,7 @@ const DEST={
   post:{n:'Publicación Instagram',s:'4:5 · 30–60 s · 1080p',ar:'4:5',min:30,max:60,cal:1080,fotos:3},
   youtube:{n:'YouTube · tele',s:'Horizontal · 1–3 min · 1080p',ar:'16:9',min:60,max:180,cal:1080,fotos:3}};
 const CSS_SIZE={'9:16':[360,640],'4:5':[360,450],'16:9':[640,360]};
-const S={firma:'',dest:'reels',estilo:'viaje',veh:'moto',mus:'ninguna',musCasa:'',dur:'auto',cal:'auto',tramos:{},gpx:null,gpxNombre:''};
+const S={todas:true,firma:'',dest:'reels',estilo:'viaje',veh:'moto',mus:'ninguna',musCasa:'',dur:'auto',cal:'auto',tramos:{},gpx:null,gpxNombre:''};
 // Música de la casa: pistas CC0 que elija Paco (se guardan en vendor/mapa/musica/). Vacío = "próximamente".
 const CASA=[];
 try{S.firma=localStorage.getItem('bdm_video_firma')||'';}catch(_){}
@@ -438,7 +439,7 @@ function compose(){
     if(modo!=='tierra'||!roadOk)seg=[A,...recta(A,B,Math.max(2,Math.round(km/2))).slice(1,-1),B];else seg=[A,...seg,B];
     seg.slice(1).forEach(c=>coords.push(c));par.push({p,i:coords.length-1});
     LEGS.push({j:j-1,a,b:p,km,veh,auto,modo,roadOk});});
-  const fmax=DEST[S.dest].fotos;
+  const fmax=S.todas?1e9:DEST[S.dest].fotos;
   R={titulo:D.titulo,coords,paradas:par.map(({p,i},k)=>({i,id:p.id,nombre:p.nombre,dia:p.dia||k+1,lng:p.lng,lat:p.lat,fotos:p.fotos.slice(0,fmax)}))};
   if(coords.length<2)coords.push(coords[0]);
 }
@@ -454,7 +455,7 @@ const headingAt=km=>bearingOf(posAt(km-.3),posAt(km+.6));
 function angLerp(a,b,t){const d=((b-a+540)%360)-180;return a+d*t;}
 const zoomForKm=(km,lat)=>Math.log2(40075*Math.cos(lat*Math.PI/180)*360/(512*km));
 const Z_NEAR_KM=1.1,PITCH=55;
-function objetivo(t0){const d=DEST[S.dest];if(S.dur==='15')return 15;if(S.dur==='60')return 60;if(S.dur==='larga')return Math.min(180,Math.max(d.max,t0*1.4));return clamp(t0,d.min,d.max);}
+function objetivo(t0){const d=DEST[S.dest];if(S.dur==='15')return 15;if(S.dur==='60')return 60;if(S.dur==='larga')return Math.min(180,Math.max(d.max,t0*1.4));return S.todas?Math.min(300,Math.max(d.min,t0)):clamp(t0,d.min,d.max);}
 function buildTimeline(){
   const segs=[];let t=0;const add=s=>{s.t0=t;t+=s.dur;segs.push(s);};
   add({k:'intro',dur:2.8});add({k:'bajar',dur:2.6});
@@ -655,6 +656,8 @@ $('#fullX').onclick=()=>{$('#fAcc').hidden=true;playing=false;mus.pause();$('#pl
 
 /* ── elecciones ── */
 function pintarDestinos(){$('#dest').innerHTML=Object.entries(DEST).map(([k,d])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${k===S.dest}"><b>${d.n}</b><small>${d.s}</small></button>`).join('');}
+function pintarFsel(){$('#fsel').innerHTML=[[true,'Todas mis fotos','Sale cada foto · dura lo que haga falta'],[false,'Las mejores','Pocas por parada · vídeo corto']].map(([v,n,t])=>`<button type="button" class="opt" data-v="${v}" aria-pressed="${v===S.todas}"><b>${n}</b><small>${t}</small></button>`).join('');}
+$('#fsel').onclick=e=>{const b=e.target.closest('button');if(!b||encoding||(b.dataset.v==='true')===S.todas)return;S.todas=b.dataset.v==='true';pintarFsel();cambio();};
 $('#dest').onclick=e=>{const b=e.target.closest('button');if(!b||encoding||b.dataset.k===S.dest)return;S.dest=b.dataset.k;pintarDestinos();aplicarFormato();cambio();};
 // miniatura de cada estilo: un mapa pequeño con sus colores de verdad (tierra, mar, parque, relieve, carretera, ruta, moto y parada con foto)
 const STY_TXT={viaje:'Colores vivos y claros',aventura:'Monte y relieve marcado',postal:'Tonos suaves, de época',noche:'Mapa oscuro, ruta brillante'};
@@ -932,7 +935,7 @@ async function start(T0){
   $('#boot').hidden=true;D=T0;PARADAS=repartir(D);
   const guardado=await vLeer();if(guardado&&guardado.blob&&guardado.S)AJ.forEach(k=>{if(k in guardado.S)S[k]=guardado.S[k];});
   $('#empty').hidden=true;$('#main').hidden=false;$('#titulo').textContent=D.titulo;
-  pintarDestinos();pintarEstilos();pintarMusica();pintarVehiculo();pintarFirma();aplicarFormato();$('#stage').style.background=ESTILOS[S.estilo].fondo;
+  pintarDestinos();pintarFsel();pintarEstilos();pintarMusica();pintarVehiculo();pintarFirma();aplicarFormato();$('#stage').style.background=ESTILOS[S.estilo].fondo;
   try{await Promise.all([`800 40px "Barlow Condensed"`,`700 20px "Barlow Condensed"`,`600 20px Inter`].map(f=>document.fonts.load(f)));}catch(_){}
   await crearMapa();await rehacer();
   await waitIdle();pintar(0,true);
