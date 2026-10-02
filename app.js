@@ -4487,7 +4487,15 @@ function openLiveMap(opts) {
   if (_liveMap) {
     setTimeout(() => google.maps.event.trigger(_liveMap, 'resize'), 100);
     _resumeMapGPS();
-    if (pickIfNoRoute && !_activeRouteData) openRouteSelector();
+    // Si desde la última vez se abrió otra guía (setActiveRoute solo guarda, no toca
+    // el mapa), dibujar la nueva ruta activa en vez de dejar la anterior (3 oct 2026).
+    let _swapped = false;
+    try {
+      const savedId = localStorage.getItem('bdm_live_active_route_id') || null;
+      const saved = JSON.parse(localStorage.getItem('bdm_live_active_route') || 'null');
+      if (saved && savedId && savedId !== _activeRouteDocId) { selectRouteOnMap(saved, savedId); _swapped = true; }
+    } catch (_) {}
+    if (!_swapped && pickIfNoRoute && !_activeRouteData) openRouteSelector();
     return;
   }
 
