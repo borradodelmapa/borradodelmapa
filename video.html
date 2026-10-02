@@ -176,11 +176,23 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
   <button class="pick" id="bMus" type="button"><span class="ic" id="musIc" aria-hidden="true"></span><span class="tx"><b id="musTxt">Música: sin música</b><small id="musSub">Recomendado para Reels y TikTok: pones la canción allí</small></span><span class="ar" aria-hidden="true">▾</span></button>
   <button class="pick" id="bFirma" type="button"><span class="ic" id="firmaIc" aria-hidden="true"></span><span class="tx"><b id="firmaTxt">Firma de las fotos: logo</b><small id="firmaSub">✦ BORRADO DEL MAPA en cada polaroid</small></span><span class="ar" aria-hidden="true">▾</span></button>
   <button class="btn big" id="mp4" type="button" disabled>Crear y ver el vídeo</button>
+  <button class="btn ghost" id="bPost" type="button" style="justify-content:space-between">Crear imagen para publicar <span aria-hidden="true">▸</span></button>
   <button class="btn ghost" id="bAdv" type="button" style="justify-content:space-between">Opciones avanzadas <span aria-hidden="true">▸</span></button>
   <p class="note" id="note">Preparando tu viaje…</p>
   <p class="note" style="opacity:.5;font-size:11px">Editor de vídeo v14</p>
 </div>
 
+<!-- imagen para publicar (plantillas de posts-plantillas.js) -->
+<div class="sheet" id="shPost" hidden><div>
+  <div class="sh-h"><b>Imagen para publicar</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
+  <div class="sh-b">
+    <div><p class="lbl">Plantilla</p><div class="g2" id="postT"></div></div>
+    <div><p class="lbl">Formato</p><div class="g2" id="postF"></div></div>
+    <img id="postImg" alt="Vista previa de la imagen" style="width:100%;max-width:320px;margin:0 auto;display:block;border:1px solid var(--line);background:var(--panel);aspect-ratio:4/5;object-fit:contain">
+    <p class="note" id="postNote"></p>
+    <div class="rw"><button class="btn ghost" type="button" id="postOtra">Otra foto</button><button class="btn" type="button" id="postSh">Compartir</button><button class="btn ghost" type="button" id="postDl">Descargar</button></div>
+  </div>
+</div></div>
 <!-- vehículo -->
 <div class="sheet" id="shVeh" hidden><div>
   <div class="sh-h"><b>¿Cómo viajaste?</b><button class="x" type="button" data-close aria-label="Cerrar">✕</button></div>
@@ -255,6 +267,7 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
 <script src="/vendor/mapa/pmtiles.js"></script>
 <script src="/vendor/mapa/basemaps.js"></script>
 <script src="/vendor/mapa/mp4-muxer.js"></script>
+<script src="/posts-plantillas.js?v=1"></script>
 <script type="module">
 import * as THREE from '/vendor/mapa/three/three.module.js';
 import { CATALOGO, GRUPOS, porId, crear, miniatura } from '/video-vehiculos.js?v=5';
@@ -790,6 +803,65 @@ async function compartirVideo(blob,btn){
     else{botonAviso(btn,'No se pudo compartir',3000);avisoJunto(btn,'El móvil no dejó compartirlo ('+((e&&(e.name+': '+e.message))||'error')+'). Pulsa Descargar y compártelo desde la galería.');}}
   finally{compartiendo=false;if(btn)btn.disabled=false;}}
 function descargarConAviso(blob,btn){guardarVideo(blob);botonAviso(btn,'✓ Descargado · mira en Descargas',3000);}
+/* ── IMAGEN PARA PUBLICAR (2 oct 2026): plantillas fijas de posts-plantillas.js. 0 €: el mapa sale de nuestros mosaicos y todo se pinta en el móvil ── */
+const POST={t:'circulo',fmt:'4:5',off:null,blob:null,busy:false,pend:false};
+async function mapSnap(w,h,pad){
+  const div=document.createElement('div');div.style.cssText=`position:fixed;left:-99999px;top:0;width:${w}px;height:${h}px`;document.body.appendChild(div);
+  let a=[180,90,-180,-90];R.coords.forEach(([x,y])=>{a=[Math.min(a[0],x),Math.min(a[1],y),Math.max(a[2],x),Math.max(a[3],y)];});
+  if(a[2]-a[0]<.02){a[0]-=.02;a[2]+=.02;}if(a[3]-a[1]<.02){a[1]-=.02;a[3]+=.02;}
+  const m=new maplibregl.Map({container:div,style:styleFor(D.zona,S.estilo),bounds:[[a[0],a[1]],[a[2],a[3]]],fitBoundsOptions:{padding:Math.round(Math.min(w,h)*pad),maxZoom:12},
+    interactive:false,attributionControl:false,canvasContextAttributes:{preserveDrawingBuffer:true,antialias:true},pixelRatio:1,fadeDuration:0});
+  try{
+    await new Promise(r=>{const t=setTimeout(r,9000);m.once('idle',()=>{clearTimeout(t);r();});});
+    const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(m.getCanvas(),0,0,w,h);
+    const paso=Math.max(1,Math.floor(R.coords.length/1500)),pts=[];
+    R.coords.forEach((c,i)=>{if(i%paso&&i!==R.coords.length-1)return;const q=m.project(c);pts.push([q.x,q.y]);});
+    return{canvas:cv,pts,ini:pts[0],fin:pts[pts.length-1]};
+  }finally{m.remove();div.remove();}
+}
+async function fotosPost(n){
+  const L=(D.fotos||[]).filter(f=>f&&f.url);if(!L.length)return[];
+  if(POST.off==null)POST.off=Math.floor(Math.random()*L.length);
+  const paso=Math.max(1,Math.floor(L.length/n)),out=[],vistos=new Set(),cand=[];
+  for(let i=0;i<n;i++)cand.push((POST.off+i*paso)%L.length);
+  for(let i=0;i<L.length;i++)cand.push((POST.off+i)%L.length);
+  for(const k of cand){if(out.length>=n)break;if(vistos.has(k))continue;vistos.add(k);const im=await imgOf(L[k].url);if(im)out.push(im);}
+  while(out.length&&out.length<n)out.push(out[out.length-1]);   // pocas fotos: se repite la última
+  return out;
+}
+function nombrePost(){return nombreVideo().replace(/\.mp4$/,'')+'-'+POST.t+'.jpg';}
+async function pintarPost(){
+  if(POST.busy){POST.pend=true;return;}
+  POST.busy=true;POST.blob=null;$('#postNote').textContent='Creando la imagen…';['postSh','postDl','postOtra'].forEach(i=>{$('#'+i).disabled=true;});
+  try{
+    const pl=POSTS.PLANTILLAS.find(x=>x.id===POST.t),fotos=await fotosPost(pl.fotos);
+    if(!fotos.length){$('#postNote').textContent='Para esta imagen hacen falta fotos del viaje. Sube alguna en la pestaña Fotos.';return;}
+    const dias=Math.max(0,...R.paradas.map(p=>+p.dia||0)),ult=R.paradas[R.paradas.length-1];
+    const cv=await POSTS.render(POST.t,{fmt:POST.fmt,fotos,titulo:R.titulo,lugar:ult&&ult.nombre,km:R.total,dias,fotosN:(D.fotos||[]).length,firma:S.firma,atrib:ATRIB(),snap:mapSnap});
+    POST.blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.92));
+    const im=$('#postImg');if(im.dataset.u)URL.revokeObjectURL(im.dataset.u);im.dataset.u=URL.createObjectURL(POST.blob);im.src=im.dataset.u;
+    $('#postNote').textContent='';['postSh','postDl','postOtra'].forEach(i=>{$('#'+i).disabled=false;});
+  }catch(e){console.warn('[post]',e);$('#postNote').textContent='No se pudo crear la imagen. Prueba otra plantilla.';$('#postOtra').disabled=false;}
+  finally{POST.busy=false;if(POST.pend){POST.pend=false;pintarPost();}}
+}
+function pintarPostUI(){
+  $('#postT').innerHTML=POSTS.PLANTILLAS.map(p=>`<button type="button" class="opt" data-t="${p.id}" aria-pressed="${p.id===POST.t}"><b>${p.n}</b><small>${p.s}</small></button>`).join('');
+  $('#postF').innerHTML=[['4:5','Publicación','Instagram · 4:5'],['9:16','Historia','Vertical · 9:16']].map(([k,n,t])=>`<button type="button" class="opt" data-f="${k}" aria-pressed="${k===POST.fmt}"><b>${n}</b><small>${t}</small></button>`).join('');
+  $('#postImg').style.aspectRatio=POST.fmt==='9:16'?'9/16':'4/5';
+}
+$('#postT').onclick=e=>{const b=e.target.closest('button[data-t]');if(!b||b.dataset.t===POST.t)return;POST.t=b.dataset.t;pintarPostUI();pintarPost();};
+$('#postF').onclick=e=>{const b=e.target.closest('button[data-f]');if(!b||b.dataset.f===POST.fmt)return;POST.fmt=b.dataset.f;pintarPostUI();pintarPost();};
+$('#postOtra').onclick=()=>{POST.off=(POST.off||0)+1;pintarPost();};
+$('#postDl').onclick=()=>{if(!POST.blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(POST.blob);a.download=nombrePost();document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);botonAviso($('#postDl'),'✓ Descargado · mira en Descargas',3000);};
+$('#postSh').onclick=async()=>{
+  const btn=$('#postSh');if(!POST.blob||compartiendo)return;const f=new File([POST.blob],nombrePost(),{type:'image/jpeg'});
+  if(!(navigator.canShare&&navigator.canShare({files:[f]}))){botonAviso(btn,'Usa Descargar',2500);return;}
+  compartiendo=true;btn.disabled=true;botonAviso(btn,'Abriendo…');
+  try{await navigator.share({files:[f]});botonAviso(btn,'✓ Enviado',2500);}
+  catch(e){if(e&&e.name==='AbortError')botonAviso(btn,btn.dataset.t||'Compartir');else{botonAviso(btn,'No se pudo compartir',3000);$('#postNote').textContent='El móvil no dejó compartirla. Pulsa Descargar y compártela desde la galería.';}}
+  finally{compartiendo=false;btn.disabled=false;}
+};
+$('#bPost').onclick=()=>{if(!R||!D){$('#note').textContent='Espera a que termine de preparar el viaje.';return;}abrir('#shPost');pintarPostUI();pintarPost();};
 function showResult(blob){
   const url=URL.createObjectURL(blob),mb=(blob.size/1048576).toFixed(1).replace('.',','),seg=TL?Math.round(TL.total):0;
   let o=$('#vidRes');if(o)o.remove();o=document.createElement('div');o.id='vidRes';o.className='res';
