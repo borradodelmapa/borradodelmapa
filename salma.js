@@ -1328,7 +1328,15 @@ const salma = {
       compania: d.compania, presupuesto: d.presupuesto, ritmo: d.ritmo,
       intereses: d.intereses, restricciones: d.restricciones
     };
-    const diasNum = { '3-4': 4, '5-7': 6, '8-14': 11, '+14': 16 }[d.duracion_dias] || 7;
+    // Días: con fechas (Ida y Vuelta) mandan las fechas; si no, el chip. Los chips '1' y '2'
+    // faltaban en la tabla y caían a 7 (fallo del 2 oct 2026).
+    let diasNum = { '1': 1, '2': 2, '3-4': 4, '5-7': 6, '8-14': 11, '+14': 16 }[d.duracion_dias] || 7;
+    if (d.fechas && d.fechas.inicio && d.fechas.fin) {
+      const _n = Math.round((new Date(d.fechas.fin) - new Date(d.fechas.inicio)) / 86400000) + 1;
+      if (_n >= 1 && _n <= 60) diasNum = _n;
+    }
+    // El Worker hace parseInt(duracion_dias): con '5-7' leía 5. Le pasamos el número exacto.
+    guided.duracion_dias = String(diasNum);
 
     // El borrador incremental ya cumplió su función (sobrevivir a un abandono
     // durante las preguntas). A partir de aquí el contexto vive en _pendingGuidedRoute.

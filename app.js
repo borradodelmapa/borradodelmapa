@@ -560,7 +560,7 @@ function _renderChatEmpty() {
       <div class="ce-more">
         <div class="ce-fld">
           <div class="ce-k">Fechas</div>
-          ${_ceChips('fechas', [{ v: '', l: 'A ojo', on: true }, { v: '__fechas__', l: 'Tengo fechas' }], true)}
+          ${_ceChips('fechas', [{ v: '', l: 'Aún sin fechas', on: true }, { v: '__fechas__', l: 'Tengo fechas' }], true)}
           <div class="ce-tk-fechas" hidden>
             <label>Ida <input class="ce-tk-f1" type="date"></label>
             <label>Vuelta <input class="ce-tk-f2" type="date"></label>
