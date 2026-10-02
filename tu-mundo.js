@@ -207,12 +207,12 @@ const tuMundo = (() => {
     const n = g.nPhotos || 0, enMundo = !!(n || g.hecho);
     st.innerHTML = `<span class="vcs ${n ? 'vcs-on' : ''}">${n ? `📷 ${n} ${n === 1 ? 'foto' : 'fotos'}` : 'Sin fotos'}</span>`
       + (vid ? '<span class="vcs vcs-on">🎬 Vídeo hecho</span>' : '')
-      + (enMundo ? '<span class="vcs vcs-ok">✓ En tu mundo</span>' : '<button type="button" class="vcs vcs-add">+ Añadir a mi mundo</button>');
+      + (enMundo ? '<span class="vcs vcs-ok">✓ En tu mundo</span>' : '<button type="button" class="vcs-add"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span class="vcs-add-t">Sumar a mi vuelta al mundo</span><span class="vcs-add-p">+</span></button>');
     const b = st.querySelector('.vcs-add');
     if (b) b.addEventListener('click', async e => {
       e.stopPropagation(); e.preventDefault();
       const u = window.currentUser; if (!u) return;
-      b.disabled = true; b.textContent = 'Guardando…';
+      b.disabled = true; b.innerHTML = '<span class="vcs-add-t">Guardando…</span>';
       try {
         await firebase.firestore().collection('users').doc(u.uid).collection('maps').doc(g.id).update({ viaje_hecho: true });
         g.hecho = true; if (g.raw) g.raw.viaje_hecho = true;
@@ -221,7 +221,7 @@ const tuMundo = (() => {
         _getStats(false).then(() => { if (_cache) { const S2 = compute(_cache.D); _cache.S = S2; _saveSummary(u.uid, S2); }
           const strip = document.querySelector('.tm-strip'); if (strip) strip.innerHTML = _stripHTML(_readSummary(u.uid)); }).catch(() => {});
         if (typeof showToast === 'function') showToast('Añadido a tu vuelta al mundo ✓');
-      } catch (_) { b.disabled = false; b.textContent = 'No se pudo · otra vez'; }
+      } catch (_) { b.disabled = false; b.innerHTML = '<span class="vcs-add-t">No se pudo · otra vez</span>'; }
     });
   }
 
