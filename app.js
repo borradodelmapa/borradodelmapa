@@ -204,7 +204,10 @@ function _ensureMejoraBtn() {
     b = document.createElement('button');
     b.id = 'mejora-btn';
     b.type = 'button';
-    b.innerHTML = '<span aria-hidden="true">✦</span> Ayuda Salma';
+    // Solo símbolo (2 oct 2026, más discreto); el texto queda en title/aria-label
+    b.title = 'Ayuda Salma';
+    b.setAttribute('aria-label', 'Ayuda Salma');
+    b.innerHTML = '<span aria-hidden="true">✦</span>';
     b.addEventListener('click', () => {
       if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
     });
