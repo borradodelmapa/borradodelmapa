@@ -18,7 +18,7 @@
     { key: 'anual',        label: 'Anual',       months: 12, cents: 4999, best: true },
     { key: 'anual_oferta', label: 'Anual',       months: 12, cents: 3999, hidden: true },
   ];
-  var PLAN_NAMES = { free: 'Plan gratuito', prueba: 'Prueba gratuita', guia: 'Guía suelta', trimestral: 'Premium · Trimestral', anual: 'Premium · Anual', anual_oferta: 'Premium · Anual' };
+  var PLAN_NAMES = { free: 'Plan gratuito', guia: 'Guía suelta', trimestral: 'Premium · Trimestral', anual: 'Premium · Anual', anual_oferta: 'Premium · Anual' };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -97,25 +97,24 @@
       var el = $('status');
       var plan = usage && usage.plan ? usage.plan : (isPremium ? 'trimestral' : 'free');
       var premiumNow = usage ? !!usage.is_premium : isPremium;
-      var stateHtml = '<span class="pm-status-val' + (premiumNow && plan !== 'prueba' ? ' is-premium' : '') + '">' + esc(PLAN_NAMES[plan] || 'Plan gratuito') + '</span>';
+      var stateHtml = '<span class="pm-status-val' + (premiumNow ? ' is-premium' : '') + '">' + esc(PLAN_NAMES[plan] || 'Plan gratuito') + '</span>';
       var sub = '';
-      if (plan === 'prueba' && usage && usage.trial_days_left != null) {
-        sub = '<div class="pm-status-sub">Te quedan <b>' + usage.trial_days_left + (usage.trial_days_left === 1 ? ' día' : ' días') + '</b> de prueba · incluye 1 guía</div>';
-      } else if (premiumNow) {
+      if (premiumNow) {
         sub = '<div class="pm-status-sub">Activo hasta el <b>' + esc(fmtDate(premiumUntilMs || (usage && usage.premium_until ? new Date(usage.premium_until).getTime() : 0))) + '</b></div>';
       }
       var meters = '';
       if (usage && usage.limits) {
         var l = usage.limits;
         var rows = [];
-        if (plan === 'free' || plan === 'prueba' || plan === 'guia') rows.push(['Mensajes hoy', usage.today_msgs || 0, l.chatPerDay]);
+        if (plan === 'free' || plan === 'guia') rows.push(['Mensajes hoy', usage.today_msgs || 0, l.chatPerDay]);
+        if (plan === 'free') rows.push(['Guía gratis', (usage.total && usage.total.guides) || 0, 1]);
         meters = rows.length ? '<div class="pm-meters">' + rows.map(function (r) {
           var pct = r[2] ? Math.min(100, Math.round((r[1] / r[2]) * 100)) : 0;
           return '<div class="pm-meter-row"><span class="pm-meter-name">' + esc(r[0]) + '</span>' +
             '<span class="pm-bar' + (pct >= 100 ? ' is-full' : '') + '"><i style="width:' + pct + '%"></i></span>' +
             '<span class="pm-meter-val">' + r[1] + '/' + r[2] + '</span></div>';
         }).join('') +
-          // Guías que le quedan (prueba, guía suelta o regalo por avisar de un fallo)
+          // Guías que le quedan (guía suelta o regalo por avisar de un fallo)
           (usage.bonus_guides > 0
             ? '<div class="pm-meter-row"><span class="pm-meter-name">🎁 Guías disponibles</span><span></span><span class="pm-meter-val">' + usage.bonus_guides + '</span></div>'
             : '') +
@@ -134,7 +133,7 @@
       var stops = (p.maxStops || 50);
       var rows = [
         ['Mensajes con Salma', f.chatPerDay + ' al día', 'Sin límite a la vista'],
-        ['Guías con mapa', 'Prueba o guía suelta', 'Todas (hasta ' + stops + ' paradas)'],
+        ['Guías con mapa', '1 gratis', 'Todas (hasta ' + stops + ' paradas)'],
         ['Cambios en tus guías', 'Pocos', 'Los que necesites'],
         ['Alertas de vuelo', f.alerts, 'hasta ' + p.alerts],
       ];
