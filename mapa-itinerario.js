@@ -520,20 +520,35 @@ ${trk}
   },
 
   // ═══ ENRIQUECER CON PLACES API ═══
+  // Detalles de Google (horario, valoración, mejor foto) SOLO de las paradas que el usuario llega a ver (caso p-murj9qyu6ct,
+  // punto 15, 3 oct 2026): cada /place-details es una llamada de pago la primera vez que se pide un sitio (después, catálogo
+  // gratis). Antes se pedían los de TODAS las paradas al abrir la guía; ahora, al aparecer cada tarjeta en pantalla.
+  // Sin IntersectionObserver (navegadores viejos) se pide todo como siempre.
   _enrichAll(stops) {
-    const promises = stops.map((stop, i) => {
-      if (!stop.place_id) return Promise.resolve(null);
-      return fetch(`${window.SALMA_API}/place-details?place_id=${encodeURIComponent(stop.place_id)}`)
+    const pedir = (stop, i) => {
+      if (!stop.place_id) return;
+      this._enrichDone = this._enrichDone || new Set();
+      const key = stop.place_id + '|' + i;
+      if (this._enrichDone.has(key)) return;
+      this._enrichDone.add(key);
+      fetch(`${window.SALMA_API}/place-details?place_id=${encodeURIComponent(stop.place_id)}`)
         .then(r => r.ok ? r.json() : null)
         .catch(() => null)
-        .then(data => ({ index: i, data }));
-    });
-
-    Promise.all(promises).then(results => {
-      results.forEach(r => {
-        if (!r || !r.data) return;
-        this._applyEnrichment(r.index, r.data);
+        .then(data => { if (data) this._applyEnrichment(i, data); });
+    };
+    if (typeof IntersectionObserver === 'undefined') { stops.forEach((st, i) => pedir(st, i)); return; }
+    if (this._enrichObs) { try { this._enrichObs.disconnect(); } catch (_) {} }
+    this._enrichObs = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const i = parseInt(String(en.target.id).replace('itin-photo-', ''), 10);
+        this._enrichObs.unobserve(en.target);
+        if (!isNaN(i) && stops[i]) pedir(stops[i], i);
       });
+    }, { threshold: 0.4 });
+    stops.forEach((st, i) => {
+      const el = document.getElementById(`itin-photo-${i}`);
+      if (el && st.place_id) this._enrichObs.observe(el);
     });
   },
 

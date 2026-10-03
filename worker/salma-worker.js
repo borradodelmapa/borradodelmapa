@@ -7349,7 +7349,11 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       catHits[i] = true;
     }
   }));
-  const toGoogle = toFetch.filter(i => !catHits[i]);
+  // DETALLES PEREZOSOS (caso p-murj9qyu6ct, punto 15, 3 oct 2026): Place Details (0,025 €/sitio) da horario, valoración y resumen,
+  // que solo hacen falta cuando alguien MIRA la parada. Con opts.lazyDetails se salta aquí (la existencia, la dirección, la
+  // foto y el estado ya vienen de Find Place) y la app los pide a /place-details al ver cada tarjeta. Ya conocidos del catálogo: 0 €.
+  const toGoogle = opts.lazyDetails ? [] : toFetch.filter(i => !catHits[i]);
+  if (opts.lazyDetails && toFetch.length) console.log(`[VERIFY] detalles perezosos: ${toFetch.length - toFetch.filter(i => !catHits[i]).length} del catálogo, ${toFetch.filter(i => !catHits[i]).length} se piden al ver la tarjeta (Place Details ahorrado)`);
   if (toFetch.length) console.log(`[VERIFY] catálogo: ${toFetch.length - toGoogle.length} lugares ya conocidos (0 llamadas), ${toGoogle.length} nuevos → Place Details`);
   const catWrites = [];
   for (let b = 0; b < toGoogle.length; b += BATCH_SIZE) {
@@ -15647,6 +15651,7 @@ REGLAS:
                 anchorLocality: anchorCountry.locality || '',
                 anchorProvince: anchorCountry.province || '',
               } : {};
+              if (env.GOOGLE_LAZY_DETAILS === '1') _vOpts.lazyDetails = true;
               // Edición de una ruta ya guardada (o fusión desde "Añadir a la guía") — pasar
               // las paradas anteriores para que verifyAllStops pueda reutilizar las que no
               // cambiaron sin re-preguntar a Google (las paradas fusionadas ya llevan los
