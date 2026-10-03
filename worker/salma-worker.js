@@ -661,10 +661,10 @@ Tu respuesta DEBE empezar con un título de día y seguir esta estructura EXACTA
 
 [[Lugar 2]] — [dato]. [Tiempo].
 
-Dónde comer: [[Restaurante]] — [plato y precio].
-
 **Día 2 — [título]**
 [misma estructura]
+
+Al final del plan, UNA sola línea de restaurante en todo el viaje: Dónde comer: [[Restaurante]] — [plato y precio]. Si quieres más sitios para comer, pídemelo.
 
 Si no sigues este formato, tu respuesta es INCORRECTA. Empieza SIEMPRE con "**Día 1 —".
 
@@ -5978,7 +5978,7 @@ Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero con 
     // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
     userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
 PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar guías ni planes de pago.
-QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con el nombre entre [[ ]], por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado o un [PERFIL DEL VIAJERO] en el contexto (compañía, mascotas, vehículo, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos (si chocan, manda el cuestionario); solo para lo que no esté en ninguno de los dos, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
+QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con el nombre entre [[ ]], por qué merecen la pena y un consejo práctico. RESTAURANTES: UNO solo en todo el viaje, da igual los días: el que más merezca la pena, con su nombre entre [[ ]], plato y precio, y justo detrás la frase "Si quieres más sitios para comer, pídemelo." Ningún otro restaurante, bar ni sitio de comer entre [[ ]]. Si hay datos del cuestionario guiado o un [PERFIL DEL VIAJERO] en el contexto (compañía, mascotas, vehículo, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos (si chocan, manda el cuestionario); solo para lo que no esté en ninguno de los dos, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
 Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Si NO se indica número de días: para una ciudad o pueblo, haz 1 día. Pero si es una RUTA/ROAD TRIP explícita por una costa, comarca o varios pueblos (el usuario dice "ruta", "road trip", "de sur a norte", "recorrido", o nombra varios sitios lejos entre sí) — **NUNCA lo metas en 1 solo día por defecto**: calcula tú cuántos días son razonables a ritmo de carretera normal (aprox. 100-150km con paradas por día, motos y coches turísticos más despacio que autovía) y repártelo en esos días, de punta a punta en orden geográfico, sin saltar de un extremo a otro y volver. Dilo explícito: "Esto da para N días" al principio. Breve: 2-3 frases por sitio.
 RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si es ruta/road trip por varios sitios, aplica el reparto de arriba en su lugar):
 - 1-2 días → TODO dentro de esa localidad y su entorno inmediato (máx ~30 min en coche). NADA de rutas comarcales, pueblos blancos ni excursiones lejanas salvo que el usuario pida expresamente "ruta"/"road trip"/varios pueblos. Ej.: "Estepona 1 día" = casco antiguo, Orquidario, paseo marítimo, playa — NO Ronda ni Grazalema.
@@ -5993,7 +5993,7 @@ CIERRE EXACTO — termina con esta frase y nada más: "${editingActiveRoute
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de presentación (sin enumerar paradas, sin día a día — eso se mostraría duplicado, porque va en el JSON y el usuario lo ve en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio. Si "tengo tiempo" sin número de días: 8-10 días.
-— MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
+— MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con visitas, paseo y atardecer. Un solo restaurante en toda la ruta.
 — NO escribas enlaces a Google Maps. Los genera el sistema después tras verificar con Google Places.
 — Nombres EXACTOS como en Google Maps, nunca genéricos ("Desierto del Sahara" → "Erg Chebbi, Merzouga").
 — Coordenadas REALES del lugar exacto, en el país correcto.
@@ -6020,7 +6020,7 @@ BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + 
 FORMATO DE CADA PARADA: nombre entre [[ ]] + descripción breve. SIN enlaces — el sistema los añade automáticamente.
 Ejemplo: [[Puente Nuevo]] — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis.
 
-4-5 paradas por día. Cada día termina con dónde comer (nombre entre [[ ]] + plato + precio).
+4-5 paradas por día. UN solo restaurante en todo el plan (nombre entre [[ ]] + plato + precio), seguido de "Si quieres más sitios para comer, pídemelo."
 
 Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
