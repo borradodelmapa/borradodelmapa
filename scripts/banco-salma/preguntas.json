@@ -382,6 +382,51 @@
         "poner la web del albergue sin haberla pedido (ni como texto 'Web: dominio')",
         "ofrecer hoteles de Booking en lugar de albergues"
       ]
+    },
+    {
+      "id": "serrania-pueblos-blancos",
+      "mensaje": "Ruta por la serranía de ronda ruta de los pueblos blancos",
+      "debe": [
+        "propone pueblos blancos de la serranía de Ronda (Grazalema, Zahara de la Sierra, Setenil…) con sitios concretos"
+      ],
+      "no_debe": [
+        "proponer sitios de la costa (Marbella, San Pedro…)",
+        "preguntar antes de dar el plan"
+      ]
+    },
+    {
+      "id": "guia-serrania-pueblos-blancos",
+      "boton": "guia",
+      "mensaje": "Ruta por la serranía de ronda ruta de los pueblos blancos",
+      "debe": [
+        "la guía incluye pueblos fuera de Ronda (Grazalema, Zahara de la Sierra o Setenil) y los sitios que dijo Salma en el chat"
+      ],
+      "no_debe": [
+        "paradas en Marbella o en la costa que Salma no propuso",
+        "la guía se queda solo en la ciudad de Ronda"
+      ]
+    },
+    {
+      "id": "playas-cadiz",
+      "mensaje": "Dime las mejores playas de Cádiz hazme una ruta",
+      "debe": [
+        "propone playas concretas de la costa de Cádiz (Bolonia, Caños de Meca, La Barrosa, La Caleta…)"
+      ],
+      "no_debe": [
+        "preguntar antes de dar el plan"
+      ]
+    },
+    {
+      "id": "guia-playas-cadiz",
+      "boton": "guia",
+      "mensaje": "Dime las mejores playas de Cádiz hazme una ruta",
+      "debe": [
+        "la guía lleva las playas que dijo Salma en el chat, repartidas por días"
+      ],
+      "no_debe": [
+        "tardar más de 20 segundos",
+        "nombres que no son un sitio concreto"
+      ]
     }
   ]
 }
