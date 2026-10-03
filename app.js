@@ -554,7 +554,7 @@ function _renderChatEmpty() {
         <div class="ce-k">Días</div>
         ${_ceChips('duracion_dias', [
           { v: '1', l: '1' }, { v: '2', l: '2' },
-          { v: '3-4', l: '3–4' }, { v: '5-7', l: '5–7', on: true },
+          { v: '3-4', l: '3–4' }, { v: '5-7', l: '5–7' },
           { v: '8-14', l: '8–14' }, { v: '+14', l: '+14' }
         ], true)}
       </div>
@@ -829,6 +829,11 @@ function _renderChatEmpty() {
             if (dest) { dest.classList.add('ce-tk-dest--err'); dest.focus(); setTimeout(() => dest.classList.remove('ce-tk-dest--err'), 1600); }
             return;
           }
+          if (!cv('duracion_dias')) {
+            const dch = ceCard.querySelector('.ce-chips[data-field="duracion_dias"]');
+            if (dch) { dch.style.outline = '2px solid #F4630B'; setTimeout(() => { dch.style.outline = ''; }, 1600); }
+            return;
+          }
           let fechas = null;
           if (cv('fechas') === '__fechas__') {
             const i = ceCard.querySelector('.ce-tk-f1'), f = ceCard.querySelector('.ce-tk-f2');
@@ -839,7 +844,7 @@ function _renderChatEmpty() {
           if (typeof salma !== 'undefined' && salma.emitirBillete) {
             salma.emitirBillete({
               destino,
-              duracion_dias: cv('duracion_dias') || '5-7',
+              duracion_dias: cv('duracion_dias'),
               fechas,
               compania: cv('compania'),
               presupuesto: cv('presupuesto'),
