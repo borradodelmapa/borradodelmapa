@@ -6406,9 +6406,12 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
   padding-bottom:8px;
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
-.ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-amber);cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-ink);cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ce-top .ce-brand:active{opacity:.7;}
-.ce-top .ce-brand span{color:var(--ce-ink3);}
+.ce-top .ce-brand span{color:var(--ce-amber);font-weight:600;margin:0 .22em;}
+/* Logo "pin borrado" (3 oct 2026, caso p-murnivvdysj): chincheta con la punta borrada + ✦.
+   Va en los 4 sitios del §9 (app.js, build-destinos.js, 404.html/guías, blog+legal) con <i class="ce-mark">. */
+.ce-brand .ce-mark{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.24em;margin-right:.2em;background:#F4630B;-webkit-mask:url(/logo-pin.svg) center/contain no-repeat;mask:url(/logo-pin.svg) center/contain no-repeat;}
 
 /* Hora + tiempo + país — barra siempre visible bajo la marca, sin desplegar nada.
    21 sept 2026: fusionada con el detalle que antes solo traía la Weather Banner

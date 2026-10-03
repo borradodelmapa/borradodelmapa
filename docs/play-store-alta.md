@@ -55,5 +55,5 @@ con los imprevistos.
 Cuenta gratuita. La información de Salma es orientativa: compruébala antes de viajar.
 
 ## Imágenes que pedirá Play
-Icono 512 (`play-icono-512.png`, ya hecho) · gráfico de funciones 1024×500 (falta) · ≥2 capturas de móvil (faltan;
+Icono 512 (`play-icono-512.png`, logo nuevo «pin borrado» del 3 oct 2026) · gráfico de funciones 1024×500 (`play-grafico-1024x500.png`, 3 oct 2026) · ≥2 capturas de móvil (faltan;
 hacerlas desde la app real) · capturas de tablet opcionales.

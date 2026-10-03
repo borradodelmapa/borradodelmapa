@@ -740,7 +740,7 @@ function _renderChatEmpty() {
         <!-- ⚠️ CLAUDE.md protocolo §9: logo/eslogan replicados en scripts/build-destinos.js
              (LOGO_HTML) para las 1.793 páginas de /destinos/ — si tocas texto/clases aquí,
              tócalo también ahí. -->
-        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0">✦ BORRADO<span>DEL</span>MAPA</span></div>
+        <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</span></div>
         <div class="ce-sky-date" id="ce-sky-time" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">${escapeHTML(_ceSkyTimeInit)}</div>
         <button class="ce-sky-wx-toggle" id="ce-sky-wx-toggle" data-ce-sky-wx-toggle aria-expanded="${_ceSkyWxOpen ? 'true' : 'false'}">${_ceSkyWxOpen ? '▴ ocultar' : '▾ tiempo'}</button>
         <div class="ce-sky-wx-wrap" id="ce-sky-wx-wrap"${_ceSkyWxOpen ? '' : ' hidden'}>

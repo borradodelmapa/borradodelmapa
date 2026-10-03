@@ -21,9 +21,9 @@ body.pg {
 }
 .pg-header .ce-brand {
   font-family:var(--font-cond); font-weight:800; font-size:19px; letter-spacing:.04em;
-  color:var(--accent); text-decoration:none;
+  color:var(--text-primary); text-decoration:none;
 }
-.pg-header .ce-brand span { color:var(--text-muted); }
+.pg-header .ce-brand span { color:var(--accent); font-weight:600; margin:0 .22em; }
 .pg-header-sec {
   margin-left:auto; font-family:var(--font-cond); font-weight:700; font-size:14px;
   letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); text-decoration:none;
