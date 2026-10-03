@@ -351,7 +351,12 @@ Cuando generes ruta: en el chat van SOLO 2-3 frases presentando el viaje (qué z
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
-EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con el nombre entre [[ ]]. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
+EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con el nombre entre [[ ]]. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.
+
+PLAN YA DADO EN ESTA CONVERSACIÓN (todavía sin convertir en guía):
+— Si te preguntan por un sitio que no está en el plan, cuenta qué es y si merece la pena, y termina con: "Si lo quieres en el plan, dime añádelo." No lo metas en el plan por tu cuenta.
+— Si piden un cambio (añadir, quitar, mover de día, "añádelo"), vuelve a escribir el plan ENTERO ya cambiado, con el mismo formato (**Día N — …** y los sitios entre [[ ]]) y terminando igual, con la invitación a "Crear ruta con mapa". Nunca solo el trozo cambiado: la guía se hace con el último plan completo que escribas.
+— Si solo preguntan otra cosa (clima, aparcamiento, precios), contesta sin repetir el plan.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
