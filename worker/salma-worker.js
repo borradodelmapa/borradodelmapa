@@ -6546,6 +6546,15 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   const stops = [];
   const seen = new Set();
   let day = 0, dayTitle = '', intro = '';
+  // Cabeceras de día escritas con palabras (3 oct 2026, caso p-musbxm408zg: "Pueblos Blancos" cayó a la reescritura
+  // de Sonnet, 100 s, porque no había ni una línea "Día N"): "Primer día", "Día uno", "Jornada 2" → "Día N".
+  // Solo al principio de línea (tras signos/negritas), así que una frase que contenga "segundo día" no cuenta.
+  const _ORD = { primer: 1, primero: 1, segundo: 2, tercer: 3, tercero: 3, cuarto: 4, quinto: 5, sexto: 6, septimo: 7, séptimo: 7, octavo: 8, noveno: 9, decimo: 10, décimo: 10, uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10 };
+  const _PRE = '^([^A-Za-zÁÉÍÓÚáéíóú0-9\\n]*)';
+  text = String(text)
+    .replace(new RegExp(_PRE + '(primer|primero|segundo|tercer|tercero|cuarto|quinto|sexto|s[eé]ptimo|octavo|noveno|d[eé]cimo)\\s+d[ií]a\\b', 'gim'), (m, pre, w) => pre + 'Día ' + _ORD[w.toLowerCase()])
+    .replace(new RegExp(_PRE + 'd[ií]a\\s+(uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\b', 'gim'), (m, pre, w) => pre + 'Día ' + _ORD[w.toLowerCase()])
+    .replace(new RegExp(_PRE + 'jornada\\s+(\\d{1,2})\\b', 'gim'), (m, pre, n) => pre + 'Día ' + n);
   for (const raw of String(text).split(/\r?\n/)) {
     let linea = raw.trim();
     if (!linea) continue;
@@ -6605,7 +6614,9 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   }
   if (!stops.length) {
     const cab = String(text).split(/\r?\n/).filter(l => /d[ií]a\s*\d/i.test(l)).slice(0, 2).map(l => l.trim().slice(0, 60));
-    return _lectorNo(`no encuentro los días (líneas con "día": ${JSON.stringify(cab)})`);
+    // Si no hay ni una línea "Día N", se guardan las primeras líneas cortas para ver cómo escribió Salma los días.
+    const cabs = cab.length ? '' : ' · títulos: ' + JSON.stringify(String(text).split(/\r?\n/).map(l => l.trim()).filter(l => l && l.length <= 80 && !/\[\[/.test(l)).slice(0, 6));
+    return _lectorNo(`no encuentro los días (líneas con "día": ${JSON.stringify(cab)})${cabs}`);
   }
   // Días seguidos 1, 2, 3… en el orden del plan ("Días 3 y 4" o un día que Salma salta no dejan huecos)
   const _orden = [...new Set(stops.map(s => s.day))];
