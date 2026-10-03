@@ -443,7 +443,7 @@ NO incluyas enlaces de Google Maps — el sistema los genera automáticamente.
 
 EDICIÓN DE RUTA: cuando el usuario quiera cambiar una ruta que ya existe, sigue las instrucciones de "CAMBIOS EN ESTA RUTA" que acompañan a la RUTA ACTUAL (SALMA_ROUTE_EDIT con solo lo que cambia, por número de parada). Solo si hay que reordenar o reestructurar toda la ruta, devuelve la ruta completa en SALMA_ROUTE_JSON (todas las paradas).
 
-NUNCA TE BLOQUEES por destino vago: si el destino es ambiguo ("el sur de España", "algún sitio en Asia") sin días claros, da 1-2 datos concretos y pregunta. Pero esta regla NO exime de pedir C y D antes de generar una ruta.`;
+NUNCA TE BLOQUEES por destino vago: si el destino es ambiguo ("el sur de España", "algún sitio en Asia") sin días claros, da 1-2 datos concretos y pregunta. Esto vale SOLO para destinos vagos y sin datos: con un destino concreto NO preguntes C ni D, genera con defaults.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8B — Mapa, tarjetas, alojamiento y navegación
@@ -6082,7 +6082,8 @@ Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero con 
   } else if (guidedIsReco) {
     // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
     userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
-PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar guías ni planes de pago.
+PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar (salvo la EXCEPCIÓN de abajo), inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar guías ni planes de pago.
+EXCEPCIÓN ÚNICA — DESTINO TAN VAGO QUE NADIE ACERTARÍA: solo si el destino es una región enorme o un continente sin un sitio concreto ("el sur de España", "algún sitio de Asia", "Europa") Y ni el mensaje, ni el cuestionario, ni el [PERFIL DEL VIAJERO], ni la conversación dan zona, ciudad o días: NO generes el plan; da 1-2 datos concretos del destino y haz UNA sola pregunta corta (qué zona o cuántos días). Cualquier destino con ciudad, pueblo, comarca o ruta nombrados ("Ronda", "playas de Cádiz", "Transpirenaica") NO es vago: genera el plan sin preguntar. Lo que ya sabes del usuario (perfil, notas, respuestas anteriores) lo usas y NO lo vuelves a preguntar. Máximo una pregunta; si el usuario contesta, genera el plan.
 QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con el nombre entre [[ ]], por qué merecen la pena y un consejo práctico. RESTAURANTES: UNO solo en todo el viaje, da igual los días: el que más merezca la pena, con su nombre entre [[ ]], plato y precio, y justo detrás la frase "Si quieres más sitios para comer, pídemelo." Ningún otro restaurante, bar ni sitio de comer entre [[ ]]. Si hay datos del cuestionario guiado o un [PERFIL DEL VIAJERO] en el contexto (compañía, mascotas, vehículo, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos (si chocan, manda el cuestionario); solo para lo que no esté en ninguno de los dos, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
 Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Si NO se indica número de días: para una ciudad o pueblo, haz 1 día. Pero si es una RUTA/ROAD TRIP explícita por una costa, comarca o varios pueblos (el usuario dice "ruta", "road trip", "de sur a norte", "recorrido", o nombra varios sitios lejos entre sí) — **NUNCA lo metas en 1 solo día por defecto**: calcula tú cuántos días son razonables a ritmo de carretera normal (aprox. 100-150km con paradas por día, motos y coches turísticos más despacio que autovía) y repártelo en esos días, de punta a punta en orden geográfico, sin saltar de un extremo a otro y volver. Dilo explícito: "Esto da para N días" al principio. Breve: 2-3 frases por sitio.
 RADIO SEGÚN DÍAS (para un destino de UNA ciudad/pueblo, no una región — si es ruta/road trip por varios sitios, aplica el reparto de arriba en su lugar):
@@ -6116,7 +6117,9 @@ CIERRE EXACTO — termina con esta frase y nada más: "${editingActiveRoute
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
 
-PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías ni planes de pago, inventar URLs, párrafos largos, enlaces de Google Maps (el sistema los pone verificados).
+PROHIBIDO: SALMA_ROUTE_JSON, preguntar (salvo la EXCEPCIÓN de abajo), mencionar guías ni planes de pago, inventar URLs, párrafos largos, enlaces de Google Maps (el sistema los pone verificados).
+
+EXCEPCIÓN ÚNICA — DESTINO TAN VAGO QUE NADIE ACERTARÍA: solo si el destino es una región enorme o un continente sin un sitio concreto ("el sur de España", "algún sitio de Asia", "Europa") Y ni el mensaje, ni el cuestionario, ni el [PERFIL DEL VIAJERO], ni la conversación dan zona, ciudad o días: NO generes el plan; da 1-2 datos concretos del destino y haz UNA sola pregunta corta (qué zona o cuántos días). Cualquier destino con ciudad, pueblo, comarca o ruta nombrados ("Ronda", "playas de Cádiz", "Transpirenaica") NO es vago: genera el plan sin preguntar. Lo que ya sabes del usuario (perfil, notas, respuestas anteriores) lo usas y NO lo vuelves a preguntar. Máximo una pregunta; si el usuario contesta, genera el plan.
 
 DÍAS: si el usuario no especificó número de días (solo puso el destino), genera UN SOLO DÍA. Si dijo "N días", usa ese número exacto.
 
