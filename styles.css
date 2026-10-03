@@ -6399,7 +6399,7 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
 .chat-empty,.chat-empty *{border-radius:0 !important;}
 
 /* ── Eslogan hero + línea de apoyo (doc 8 sep) ── */
-.ce-hero{padding:12px 0 0;}
+.ce-hero{padding:12px 0 18px;}
 .ce-slogan{margin:0;font-family:var(--ce-sign);font-weight:800;font-size:38px;line-height:.95;letter-spacing:.005em;text-transform:uppercase;color:var(--ce-ink);}
 .ce-slogan span{color:var(--ce-amber);}
 .ce-tagline{margin:14px 0 2px;border-top:1px solid var(--ce-line);padding:11px 0;}
