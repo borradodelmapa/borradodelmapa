@@ -697,20 +697,28 @@ function _renderChatEmpty() {
     // Eslogan hero + línea de apoyo + caja de ejemplo rotable (doc 8 sep).
     // Van SIEMPRE que se muestre el billete: al arrancar sin ruta activa, y también
     // cuando desde el modo compañero se pulsa "Billete nuevo" (ver _ensureHero).
+    // Orden de la portada (3 oct 2026, Paco): primero el FORMULARIO (destino + días, "Afinar
+    // la ruta" plegado) y al final "Pregunta lo imposible" plegado, con una nota que pide
+    // destino y días. Así quien llega no escribe un "quiero ir a Huelva" suelto.
     const _ceHeroHTML = `
         <div class="ce-hero" data-ce-hero><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
-        <div class="ce-tagline" data-ce-hero><p>Pregunta lo <span>imposible</span></p></div>
-        <div class="ce-rotable" id="ce-rotable" data-ce-hero>
-          <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
-          <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
-          <div class="ce-rotable-foot">
-            <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
-            <span class="ce-rotable-hint">Toca para escribir la ruta</span>
-          </div>
-        </div>
-        <button class="ce-rotable-cta" data-ce-hero data-ce-rotable-cta>Trazar ruta <span>→</span></button>
-        <button class="ce-openbillete" data-ce-hero data-ce-openbillete>O rellena destino y días <span>↓</span></button>
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
+    const _ceAskHTML = `
+        <div class="ce-ask" data-ce-hero>
+          <button class="ce-ask-btn" data-ce-openask aria-expanded="false">Pregunta lo <span>imposible</span><i class="ce-ask-arr">▾</i></button>
+          <div class="ce-ask-box" hidden>
+            <p class="ce-ask-note">Para un buen resultado, di siempre <b>a dónde</b> y <b>cuántos días</b> (por ejemplo: «4 días en Huelva en coche, con niños»).</p>
+            <div class="ce-rotable" id="ce-rotable">
+              <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
+              <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
+              <div class="ce-rotable-foot">
+                <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="ce-rotable-hint">Toca para escribir la ruta</span>
+              </div>
+            </div>
+            <button class="ce-rotable-cta" data-ce-rotable-cta>Trazar ruta <span>→</span></button>
+          </div>
+        </div>`;
 
     // Con guía activa: el cuadro de texto de siempre DEBAJO de su tarjeta, para pedir
     // otra ruta o preguntar (Paco, 26 sept 2026). Antes quedaba escondido y quien ya
@@ -759,8 +767,8 @@ function _renderChatEmpty() {
           <div id="ce-sky-info"></div>
         </div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
-        <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
-        ${_ceActive ? _ceNextHTML : ''}
+        <div class="${_initCard.cls}" id="ce-card">${_initCard.html}</div>
+        ${_ceActive ? _ceNextHTML : _ceAskHTML}
         ${_ceChipsRow}
       </div>`;
 
@@ -943,8 +951,11 @@ function _renderChatEmpty() {
     // Inserta eslogan + caja rotable encima del billete si no están, y los cablea.
     const _ensureHero = () => {
       const card = area.querySelector('#ce-card');
-      if (card && !area.querySelector('[data-ce-hero]')) card.insertAdjacentHTML('beforebegin', _ceHeroHTML);
-      if (card) card.hidden = true;
+      if (card && !area.querySelector('[data-ce-hero]')) {
+        card.insertAdjacentHTML('beforebegin', _ceHeroHTML);
+        card.insertAdjacentHTML('afterend', _ceAskHTML);
+      }
+      if (card) card.hidden = false;
       _wireRotable();
     };
     _wireRotable();   // hero (sin guía activa) o el bloque "¿Y el próximo viaje?" (con guía activa)
@@ -980,6 +991,20 @@ function _renderChatEmpty() {
       if (e.target.closest('[data-ce-home]')) {
         if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
         try { window.scrollTo(0, 0); } catch (_) {}
+        return;
+      }
+      // "Pregunta lo imposible" → plegar/desplegar la caja de texto libre
+      const _askBtn = e.target.closest('[data-ce-openask]');
+      if (_askBtn) {
+        const box = area.querySelector('.ce-ask-box');
+        if (box) {
+          box.hidden = !box.hidden;
+          _askBtn.setAttribute('aria-expanded', box.hidden ? 'false' : 'true');
+          const arr = _askBtn.querySelector('.ce-ask-arr');
+          if (arr) arr.textContent = box.hidden ? '▾' : '▴';
+          // la caja mide el ejemplo más largo: hay que medirla ya visible
+          if (!box.hidden) { try { window.dispatchEvent(new Event('resize')); } catch (_) {} }
+        }
         return;
       }
       if (e.target.closest('[data-ce-openbillete]')) {

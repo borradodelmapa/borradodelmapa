@@ -7294,3 +7294,11 @@ body.live-map-open #mejora-btn { display: none !important; }
   position: static; background: var(--negro); border: 1px solid var(--border); backdrop-filter: none;
 }
 .dpick-imfine-opt:hover, .dpick-imfine-opt:active { background: var(--gris); }
+
+/* ── Portada: formulario primero, "Pregunta lo imposible" plegado al final (3 oct 2026) ── */
+.ce-ask{margin:14px 0 0;border-top:1px solid var(--ce-line);}
+.ce-ask-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;background:transparent;border:0;cursor:pointer;padding:11px 0;font-family:var(--ce-sign);font-weight:700;font-size:18px;letter-spacing:.01em;text-transform:uppercase;color:var(--ce-ink);text-align:left;}
+.ce-ask-btn span{color:var(--ce-amber);margin-left:-4px;flex:1;}
+.ce-ask-arr{font-style:normal;color:var(--ce-amber);font-size:14px;}
+.ce-ask-note{margin:2px 0 0;font-family:var(--font-body,'Inter'),sans-serif;font-size:13px;line-height:1.5;color:var(--ce-ink2);}
+.ce-ask-note b{color:var(--ce-amber);font-weight:700;}
