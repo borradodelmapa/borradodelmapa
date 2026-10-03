@@ -6447,16 +6447,40 @@ function salvageIncompleteRouteJson(text) {
 // perfil (opcional, 27 sept 2026): el bloque del Perfil IA va justo detrás de la base con su propia marca
 // de caché — es fijo para cada usuario, así que se reaprovecha en las vueltas de herramientas y en los
 // mensajes seguidos de la misma conversación.
-function buildCachedSystem(base, full, perfil) {
+// ttl1h (caso p-murj9qyu6ct, punto 12, 3 oct 2026): con true la caché dura 1 h en vez de 5 min (escribir cuesta 2x en
+// vez de 1,25x, leer lo mismo). Apagado por defecto: solo se enciende con CACHE_1H="1" tras medir los [CACHE] del log.
+function buildCachedSystem(base, full, perfil, ttl1h) {
   if (!base || typeof full !== 'string' || base.length < 4000 || !full.startsWith(base)) return full;
-  const blocks = [{ type: 'text', text: base, cache_control: { type: 'ephemeral' } }];
+  const cc = ttl1h ? { type: 'ephemeral', ttl: '1h' } : { type: 'ephemeral' };
+  const blocks = [{ type: 'text', text: base, cache_control: cc }];
   let tail = full.slice(base.length);
   if (perfil && tail.startsWith(perfil)) {
-    blocks.push({ type: 'text', text: perfil, cache_control: { type: 'ephemeral' } });
+    blocks.push({ type: 'text', text: perfil, cache_control: cc });
     tail = tail.slice(perfil.length);
   }
   if (tail.trim()) blocks.push({ type: 'text', text: tail });
   return blocks;
+}
+
+// Caché del historial (caso p-murj9qyu6ct, punto 13, 3 oct 2026): marca el ÚLTIMO bloque del ÚLTIMO mensaje como
+// cacheable, así la vuelta siguiente del bucle de herramientas (y el mensaje siguiente de la conversación) lee de
+// caché todo el historial anterior en vez de pagarlo entero. Devuelve una COPIA: currentMessages no se toca, para
+// que las marcas no se acumulen (Anthropic admite 4 como máximo; ya hay 2 en el system). Apagado por defecto
+// (CACHE_HIST="1" lo enciende); si algo no cuadra devuelve los mensajes tal cual.
+function withHistoryCache(msgs) {
+  try {
+    if (!Array.isArray(msgs) || !msgs.length) return msgs;
+    const last = msgs[msgs.length - 1];
+    if (!last || (last.role !== 'user' && last.role !== 'assistant')) return msgs;
+    let blocks = typeof last.content === 'string'
+      ? (last.content.trim() ? [{ type: 'text', text: last.content }] : null)
+      : (Array.isArray(last.content) && last.content.length ? last.content.map(b => ({ ...b })) : null);
+    if (!blocks) return msgs;
+    const lb = blocks[blocks.length - 1];
+    if (!lb || (lb.type === 'text' && !String(lb.text || '').trim())) return msgs;
+    blocks[blocks.length - 1] = { ...lb, cache_control: { type: 'ephemeral' } };
+    return msgs.slice(0, -1).concat([{ ...last, content: blocks }]);
+  } catch (_) { return msgs; }
 }
 
 // ─── Conversión directa de prosa (ruta ya escrita) a JSON estructurado ───
@@ -6522,6 +6546,15 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   const stops = [];
   const seen = new Set();
   let day = 0, dayTitle = '', intro = '';
+  // Cabeceras de día escritas con palabras (3 oct 2026, caso p-musbxm408zg: "Pueblos Blancos" cayó a la reescritura
+  // de Sonnet, 100 s, porque no había ni una línea "Día N"): "Primer día", "Día uno", "Jornada 2" → "Día N".
+  // Solo al principio de línea (tras signos/negritas), así que una frase que contenga "segundo día" no cuenta.
+  const _ORD = { primer: 1, primero: 1, segundo: 2, tercer: 3, tercero: 3, cuarto: 4, quinto: 5, sexto: 6, septimo: 7, séptimo: 7, octavo: 8, noveno: 9, decimo: 10, décimo: 10, uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10 };
+  const _PRE = '^([^A-Za-zÁÉÍÓÚáéíóú0-9\\n]*)';
+  text = String(text)
+    .replace(new RegExp(_PRE + '(primer|primero|segundo|tercer|tercero|cuarto|quinto|sexto|s[eé]ptimo|octavo|noveno|d[eé]cimo)\\s+d[ií]a\\b', 'gim'), (m, pre, w) => pre + 'Día ' + _ORD[w.toLowerCase()])
+    .replace(new RegExp(_PRE + 'd[ií]a\\s+(uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\b', 'gim'), (m, pre, w) => pre + 'Día ' + _ORD[w.toLowerCase()])
+    .replace(new RegExp(_PRE + 'jornada\\s+(\\d{1,2})\\b', 'gim'), (m, pre, n) => pre + 'Día ' + n);
   for (const raw of String(text).split(/\r?\n/)) {
     let linea = raw.trim();
     if (!linea) continue;
@@ -6581,7 +6614,9 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   }
   if (!stops.length) {
     const cab = String(text).split(/\r?\n/).filter(l => /d[ií]a\s*\d/i.test(l)).slice(0, 2).map(l => l.trim().slice(0, 60));
-    return _lectorNo(`no encuentro los días (líneas con "día": ${JSON.stringify(cab)})`);
+    // Si no hay ni una línea "Día N", se guardan las primeras líneas cortas para ver cómo escribió Salma los días.
+    const cabs = cab.length ? '' : ' · títulos: ' + JSON.stringify(String(text).split(/\r?\n/).map(l => l.trim()).filter(l => l && l.length <= 80 && !/\[\[/.test(l)).slice(0, 6));
+    return _lectorNo(`no encuentro los días (líneas con "día": ${JSON.stringify(cab)})${cabs}`);
   }
   // Días seguidos 1, 2, 3… en el orden del plan ("Días 3 y 4" o un día que Salma salta no dejan huecos)
   const _orden = [...new Set(stops.map(s => s.day))];
@@ -14692,23 +14727,31 @@ INSTRUCCIONES:
           if (useAnthropic) {
             // ── Claude Sonnet (texto sin foto) ──
             try {
-              apiRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+              // Red de seguridad de la caché (caso p-murj9qyu6ct): si Anthropic rechazara las marcas nuevas (400…),
+              // se repite UNA vez la llamada de siempre, sin marcas de historial ni TTL de 1 h. El usuario no se entera.
+              const _callClaude = (nuevo) => fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                   'x-api-key': env.ANTHROPIC_API_KEY,
                   'anthropic-version': '2023-06-01',
+                  ...(nuevo && env.CACHE_1H === '1' ? { 'anthropic-beta': 'extended-cache-ttl-2025-04-11' } : {}),
                 },
                 body: JSON.stringify({
                   model: 'claude-sonnet-4-6',
                   max_tokens: reqMaxTokens,
-                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil),
-                  messages: currentMessages,
+                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil, nuevo && env.CACHE_1H === '1'),
+                  messages: nuevo && env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages,
                   tools: ANTHROPIC_TOOLS,
                   ...(_planSinHerramientas ? { tool_choice: { type: 'none' } } : {}),
                   stream: true,
                 }),
               });
+              apiRes = await _callClaude(true);
+              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1')) {
+                console.log('[CACHE] Anthropic rechazó la petición con caché nueva (' + apiRes.status + '): reintento sin ella');
+                apiRes = await _callClaude(false);
+              }
             } catch (e) {
               ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
