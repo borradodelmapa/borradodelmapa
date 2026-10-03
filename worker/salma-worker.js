@@ -9524,6 +9524,10 @@ async function logGuideTiming(env, row) {
     titulo: _fS(String(row.titulo || '').slice(0, 100)),
     dias: n(row.dias), paradas: n(row.paradas), descartadas: n(row.descartadas), cerca: n(row.cerca),
     ms_guia: n(row.ms_guia), ms_google: n(row.ms_google), ms_total: n(row.ms_total),
+    // Qué paradas quedaron / se cayeron (3 oct 2026): para comparar la guía con lo que dijo Salma sin pedir capturas.
+    lista: _fS(String(row.lista || '').slice(0, 900)),
+    desc_lista: _fS(String(row.desc_lista || '').slice(0, 400)),
+    cerca_lista: _fS(String(row.cerca_lista || '').slice(0, 400)),
   };
   try { await firestoreAdminPatch(env, 'guide_timings/' + id, f); } catch (e) { console.warn('[T2-REGISTRO] ' + e.message); }
 }
@@ -15776,6 +15780,9 @@ REGLAS:
         if (_replyMarcas) doneEvt.reply_marcas = _replyMarcas;
         if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, titulo: route?.title || '', dias: route?.duration_days || 0,
           paradas: route?.stops?.length || 0, descartadas: route?.discarded_stops?.length || 0, cerca: route?.nearby_stops?.length || 0,
+          lista: (route?.stops || []).map(x => `${x.day || '?'}:${x.name || x.headline || ''}`).join(' | '),
+          desc_lista: (route?.discarded_stops || []).map(x => `${x.name}(${x.reason || ''})`).join(' | '),
+          cerca_lista: (route?.nearby_stops || []).map(x => x.name || x.headline || '').join(' | '),
           ms_total: Date.now() - _t2log.inicio }));
         if (_opsApplied && route) doneEvt.ops_edit = true;
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
