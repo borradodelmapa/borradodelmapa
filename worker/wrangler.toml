@@ -44,9 +44,8 @@ CLAUDE_MODEL_CHAT = "claude-sonnet-5-5"  # punto 14: modelo del chat. Revertir =
 GOOGLE_LAZY_DETAILS = "1"  # punto 15: Place Details solo al ver la tarjeta. Revertir = "0" y redesplegar
 WA_CACHE = "1"  # WhatsApp: caché de Claude (prompt fijo + historial). Revertir = "0" y redesplegar
 AI_CAP_ON = "1"  # punto 17: tope de gasto propio de Claude (70 €/mes, 15 €/día) y OpenAI (10 €/mes, 2 €/día). Revertir = "0"
-ACCOUNT_BUDGET_ON = "1"  # techo de gasto de Claude por cuenta según plan (free 0,5 · prueba 1,5 · guía 4 · trimestral 8 · anual 20 €/mes). Revertir = "0"
+ACCOUNT_BUDGET_ON = "1"  # techo de gasto de Claude por cuenta según plan (gratis 1 · guía 4 · trimestral 8 · anual 20 €/mes). Revertir = "0"
 OPEN_GATE_ON = "1"  # punto 16: tope diario por IP en endpoints abiertos (fotos/detalles/rutas 300; voz/traductor/narrador… 100). Revertir = "0"
-TRIAL_ON = "1"  # plan nuevo: prueba de 7 días al primer uso (una por cuenta; tope global 10 €/día). Revertir = "0"
 CACHE_1H = "0"     # punto 12: caché del prompt de 1 h en vez de 5 min
 # Remitente de los emails (Resend). Dominio borradodelmapa.com verificado en Resend el 26 sept 2026
 # (DKIM resend._domainkey + CNAME send/rsend en el DNS de Netlify).
