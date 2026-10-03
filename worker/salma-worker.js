@@ -3063,10 +3063,12 @@ function filtrarFotosNoMarcadas(reply, fotoNombres) {
 // (_planSinHerramientas) y aquí se añaden como mucho `max` fotos: el primer sitio marcado de cada día (no los de
 // comer), debajo de su línea, con el control de siempre de buscar_foto (nombre, no hotel, zona). Lo que no pasa,
 // sin foto. Nunca retrasa más de 6 s. Coste: ~0,02 € por foto la 1ª vez; el mismo sitio después, 0 € (caché ph2:).
-async function fotosDeSitiosMarcados(reply, { env, zone = null, ciudad = '', max = 2, fotoNombres = null } = {}) {
+// porSitio (4 oct 2026, chat visual): en vez de uno por día, los primeros `max` sitios marcados (no de comer), cada
+// uno con su foto → el chat los pinta como tarjetas. Coste: igual por foto (~0,02 € la 1ª vez, 0 € desde caché ph2:).
+async function fotosDeSitiosMarcados(reply, { env, zone = null, ciudad = '', max = 2, fotoNombres = null, porSitio = false } = {}) {
   if (!tieneMarcasSitio(reply) || !env || !env.GOOGLE_PLACES_KEY || /!\[[^\]]*\]\(/.test(reply)) return reply;
   const lines = reply.split('\n');
-  const hayDias = lines.some(l => /^[^A-Za-zÁÉÍÓÚáéíóú0-9]{0,8}D[IÍií]AS?\s+\d/i.test(l));
+  const hayDias = !porSitio && lines.some(l => /^[^A-Za-zÁÉÍÓÚáéíóú0-9]{0,8}D[IÍií]AS?\s+\d/i.test(l));
   const elegidos = [];
   let libre = !hayDias; // sin días: los primeros sitios marcados
   lines.forEach((l, i) => {
@@ -16061,7 +16063,7 @@ REGLAS:
         let _replyMarcas = null;
         if (_planSinHerramientas && !route && tieneMarcasSitio(reply)) {
           try {
-            reply = await fotosDeSitiosMarcados(reply, { env, zone: _photoZone, fotoNombres: _fotoNombres,
+            reply = await fotosDeSitiosMarcados(reply, { env, zone: _photoZone, fotoNombres: _fotoNombres, max: 4, porSitio: true,
               ciudad: (anchorCountry && anchorCountry.pointScope && anchorCountry.locality) || '' });
           } catch (e) { console.log('[FOTO-PLAN] ' + (e && e.message)); }
         }

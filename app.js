@@ -7043,7 +7043,11 @@ function formatMessage(str) {
   const images = [];
   raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {
     const idx = images.length;
-    images.push('<img src="' + url + '" alt="' + alt + '" style="width:100%;max-width:280px;border-radius:8px;margin:6px 0;display:block;" loading="lazy">');
+    const _nom = escapeHTML(alt.trim());
+    // Foto con nombre de sitio → tarjeta visual (foto + nombre). Sin nombre → imagen suelta como siempre.
+    images.push(_nom
+      ? '<figure class="chat-place"><img src="' + url + '" alt="' + _nom + '" loading="lazy" onerror="this.closest(\'figure\').style.display=\'none\'"><figcaption>' + _nom + '</figcaption></figure>'
+      : '<img src="' + url + '" alt="" style="width:100%;max-width:280px;border-radius:8px;margin:6px 0;display:block;" loading="lazy">');
     return '%%IMG' + idx + '%%';
   });
   // Extraer enlaces markdown [texto](url) ANTES de sanitizar — son links intencionales de Salma
@@ -7131,6 +7135,9 @@ function formatMessage(str) {
   links.forEach((link, i) => { html = html.replace('%%LINK' + i + '%%', link); });
   // Saltos de línea → <br>
   html = html.replace(/\n/g, '<br>');
+  // Varias tarjetas de sitio seguidas → carrusel horizontal
+  html = html.replace(/(?:<figure class="chat-place">[\s\S]*?<\/figure>(?:<br>)*){2,}/g,
+    (m) => '<div class="chat-places">' + m.replace(/<br>/g, '') + '</div>');
   return html;
 }
 
