@@ -6639,7 +6639,7 @@ const _LECTOR_COMER_RE = /^(?:bar|restaurante|rest\.|mes[oó]n|taberna|asador|ta
 // Motivo por el que el lector no cogió el último plan (lo guarda logGuideTiming); '' si lo cogió.
 let _lectorMotivo = '';
 function _lectorNo(motivo) { _lectorMotivo = motivo; console.log('[LECTOR] ✗ ' + motivo); return null; }
-function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '' } = {}) {
+function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '', _sinDias = false } = {}) {
   _lectorMotivo = '';
   if (!tieneMarcasSitio(text)) return _lectorNo(`el plan no trae sitios marcados [[ ]] (${String(text || '').length} letras)`);
   const limpiar = (s) => marcasANegrita(String(s || ''), '')
@@ -6716,6 +6716,23 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
         lat: 0, lng: 0, km_from_previous: 0, estimated_hours: 0,
       });
     });
+  }
+  // PLAN SIN DÍAS (3 oct 2026, caso p-musfrk4c21l): "las mejores playas de Cádiz" vino como lista de playas de sur a
+  // norte, sin ni una cabecera de día → caía a la reescritura de Sonnet (77 s, nombres que Salma no dijo). Si no hay
+  // ninguna cabecera pero sí sitios marcados, se leen todos como un solo bloque y se reparten EN ORDEN entre los días
+  // pedidos (o ~5 por día). Mismos sitios y textos que el chat, sin llamadas.
+  if (!stops.length && !day && !_sinDias && tieneMarcasSitio(text)) {
+    const r = routeFromMarkedText('Día 1\n' + text, { destino, dias, countryName, region, _sinDias: true });
+    if (!r) return null;
+    const n = r.stops.length;
+    const nDias = Math.max(1, Math.min(dias > 0 ? dias : Math.ceil(n / 5), Math.floor(n / 2) || 1));
+    r.stops.forEach((s, i) => { s.day = Math.floor(i * nDias / n) + 1; s.day_title = ''; });
+    r.duration_days = nDias;
+    const dest = String(destino || region || '').trim();
+    r.title = dest ? `${dest} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Ruta de ${nDias} ${nDias === 1 ? 'día' : 'días'}`;
+    r.summary = intro.slice(0, 300) || r.summary;
+    console.log(`[LECTOR] plan sin días: ${n} sitios repartidos en orden en ${nDias} día(s)`);
+    return r;
   }
   if (!stops.length) {
     const cab = String(text).split(/\r?\n/).filter(l => /d[ií]a\s*\d/i.test(l)).slice(0, 2).map(l => l.trim().slice(0, 60));
