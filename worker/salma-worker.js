@@ -7564,7 +7564,14 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   const useProvince = _durDays >= 3 && !!anchorProvN;
   const _nearRadiusNoAddr = _durDays <= 2 ? 8 : (_durDays <= 4 ? 40 : 70); // solo para paradas SIN dirección
   let nearbyStops = [];
-  if (pointAnchor && (anchorLocN || anchorProvN) && finalStops.length > 3) {
+  // DESTINO DE ZONA (3 oct 2026, caso p-musbxm408zg): "Serranía de Ronda en 3 días" se ancla en Ronda (Málaga), pero la
+  // serranía llega a Cádiz (Grazalema, Zahara, Setenil): este filtro las mandaba a "cerca de" y la guía se quedaba en
+  // la ciudad. Si el destino es una comarca/sierra/valle/costa/ruta de pueblos, abarca varios municipios y provincias:
+  // no se filtra por localidad ni provincia (siguen mandando el radio y la distancia por carretera de arriba).
+  const _esZona = /\b(serran[ií]a|sierra|sierras|comarca|valle|valles|pueblos blancos|parque natural|campi[ñn]a|axarqu[ií]a|alpujarras?|costa|costas|ruta de los)\b/i
+    .test(`${route.name || ''} ${route.region || ''} ${route.title || ''}`);
+  if (_esZona) console.log(`[VERIFY] destino de zona ("${route.name || route.region || route.title}"): sin filtro por localidad/provincia`);
+  if (pointAnchor && !_esZona && (anchorLocN || anchorProvN) && finalStops.length > 3) {
     const inArea = [];
     finalStops.forEach(s => {
       const addrN = _locNorm(s.verified_address);
