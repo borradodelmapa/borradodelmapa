@@ -662,8 +662,8 @@ function _renderChatEmpty() {
         <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>
-      ${_ceWaRow}
-      ${_ceMoreHTML}`;
+      ${_ceMoreHTML}
+      ${_ceWaRow}`;
 
   const _ceFallback = `
     <div class="chat-empty">
@@ -671,8 +671,8 @@ function _renderChatEmpty() {
         <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>
-      ${_ceWaRow}
       ${_ceMoreHTML}
+      ${_ceWaRow}
     </div>`;
 
   // ¿Hay ruta activa? (localStorage — igual criterio que _restoreActiveRoute)
