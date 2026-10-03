@@ -14373,38 +14373,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       );
     }
 
-    // ─── "QUIERO IR A..." — Detección y orquestación paralela (bypass Claude) ───
-    if (isGoToRequest(message) && userLocation) {
-      const goToDestText = extractGoToDestination(message);
-      if (goToDestText) {
-        const goToDest = await resolveGoToDestination(goToDestText, userLocation, userCountryCode || frontendCountryCode, env);
-        if ((goToDest.destLat || goToDest.isCountry) && goToDest.level === 'international') {
-          const goToHeaders = {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
-            'Access-Control-Allow-Origin': '*',
-          };
-          const goToEncoder = new TextEncoder();
-          const { readable: goToReadable, writable: goToWritable } = new TransformStream();
-          const goToWriter = goToWritable.getWriter();
-
-          ctx.waitUntil((async () => {
-            try {
-              await handleGoTo(goToDest, userLocation, userCountryCode || frontendCountryCode, userLocationName, env, goToWriter, goToEncoder, travelDates, userNationality, userName, message);
-            } catch (e) {
-              try {
-                await goToWriter.write(goToEncoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No he podido buscar esa información. Inténtalo de nuevo.', route: null })}\n\n`));
-                await goToWriter.close();
-              } catch (_) {}
-            }
-          })());
-
-          return new Response(goToReadable, { headers: goToHeaders });
-        }
-      }
-    }
-    // Si go_to no detectó destino válido → continúa al flujo normal de Claude
+    // "Quiero ir a X" ya NO tiene camino aparte (3 oct 2026, Paco: «elimina esa forma de contestar»): lo contesta Salma (Claude) como todo lo demás.
 
     const apiKey = env.OPENAI_API_KEY; // fallback legacy (rutas largas)
     // Todo va por Anthropic. Solo bloqueamos si no hay key
