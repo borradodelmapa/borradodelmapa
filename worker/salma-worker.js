@@ -9537,6 +9537,30 @@ async function logGuideTiming(env, row) {
   try { await firestoreAdminPatch(env, 'guide_timings/' + id, f); } catch (e) { console.warn('[T2-REGISTRO] ' + e.message); }
 }
 
+// Gasto de CLAUDE de cada petición del chat (3 oct 2026, caso p-murj9qyu6ct): una fila por mensaje, para poder estudiar
+// cuánto cuesta cada persona y cada pregunta (`casos.cjs gasto`). Solo Claude (fichas medidas, a precio de lista); el
+// gasto de Google se ve en /admin/google-usage. Colección Firestore `chat_costs` (la escribe solo el Worker).
+async function logChatCost(env, row) {
+  try {
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const plainIn = Math.max(0, (row.tin || 0) - (row.cw || 0) - (row.cr || 0));
+    const usd = (plainIn * CLAUDE_USD_PER_MTOK.in + (row.cw || 0) * CLAUDE_USD_PER_MTOK.cacheWrite +
+                 (row.cr || 0) * CLAUDE_USD_PER_MTOK.cacheRead + (row.tout || 0) * CLAUDE_USD_PER_MTOK.out) / 1e6;
+    const f = {
+      at: { timestampValue: new Date().toISOString() },
+      worker: _fS(String(env.CF_VERSION_METADATA?.id || '').slice(0, 40)),
+      uid: _fS(String(row.uid || '').slice(0, 40)),
+      plan: _fS(String(row.plan || '').slice(0, 10)),
+      tipo: _fS(String(row.tipo || 'chat').slice(0, 12)),
+      mensaje: _fS(String(row.mensaje || '').replace(/\s+/g, ' ').slice(0, 160)),
+      tin: _fI(row.tin), tout: _fI(row.tout), cw: _fI(row.cw), cr: _fI(row.cr),
+      usd_micro: _fI(usd * 1e6),          // dólares ×1.000.000 (entero)
+      ms: _fI(row.ms),
+    };
+    await firestoreAdminPatch(env, 'chat_costs/' + id, f);
+  } catch (e) { console.warn('[CHAT-COSTE] ' + e.message); }
+}
+
 async function logChatLink(env, row) {
   const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const f = {
@@ -10738,6 +10762,22 @@ export default {
         const limite = Math.min(200, Math.max(1, parseInt(url.searchParams.get('limite') || '30', 10) || 30));
         const rows = await _fsRunQuery(env, { from: [{ collectionId: 'guide_timings' }], orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: limite });
         return new Response(JSON.stringify({ guias: rows }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+    // GET /admin/chat-costs?horas=24&limite=500 → gasto de Claude por petición del chat (logChatCost). Llave de casos, solo lectura.
+    if (request.method === 'GET' && url.pathname === '/admin/chat-costs') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        const horas = Math.min(24 * 31, Math.max(1, parseFloat(url.searchParams.get('horas') || '24') || 24));
+        const limite = Math.min(2000, Math.max(1, parseInt(url.searchParams.get('limite') || '500', 10) || 500));
+        const desde = new Date(Date.now() - horas * 3600 * 1000).toISOString();
+        const rows = await _fsRunQuery(env, { from: [{ collectionId: 'chat_costs' }],
+          where: { fieldFilter: { field: { fieldPath: 'at' }, op: 'GREATER_THAN_OR_EQUAL', value: { timestampValue: desde } } },
+          orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: limite });
+        return new Response(JSON.stringify({ desde, filas: rows }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
@@ -13899,6 +13939,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       ctx.waitUntil(perfilIALearnFromChat(env, authUser.uid, [...history.slice(-11), { role: 'user', content: message }]));
     }
     const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0 };  // tokens de Claude de esta petición
+    const _chatT0 = Date.now();
     let _usageConsume = null;               // 'guide' | 'edit' cuando la petición entrega el resultado
     let _usageFlushed = false;
     // Apunta el uso de esta petición UNA sola vez (tokens + guía/edición consumida)
@@ -13909,6 +13950,11 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr,
         guides: _usageConsume === 'guide' ? 1 : 0,
         edits: _usageConsume === 'edit' ? 1 : 0,
+      }));
+      if (_reqUsage.tin || _reqUsage.tout) ctx.waitUntil(logChatCost(env, {
+        uid: authUser && authUser.uid, plan: authUser && authUser.premium_active ? 'premium' : 'free',
+        tipo: _usageConsume || 'chat', mensaje: message,
+        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, ms: Date.now() - _chatT0,
       }));
     };
 
