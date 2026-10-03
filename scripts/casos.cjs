@@ -178,6 +178,9 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
       console.log(`${fecha(g.at)} ${icono[g.camino] || '?'} ${g.camino || '?'} · total ${s(g.ms_total)} (guía ${s(g.ms_guia)} + Google ${s(g.ms_google)}) · ${g.paradas} paradas, ${g.dias} días`
         + `${Number(g.descartadas) ? ', ' + g.descartadas + ' descartadas' : ''}${Number(g.cerca) ? ', ' + g.cerca + ' cerca' : ''}`
         + `\n      "${g.titulo || g.destino}"${g.motivo ? ' · motivo: ' + g.motivo : ''} · Worker ${String(g.worker || '').slice(0, 8)}`);
+      if (g.lista) console.log(`      paradas: ${g.lista}`);
+      if (g.desc_lista) console.log(`      descartadas: ${g.desc_lista}`);
+      if (g.cerca_lista) console.log(`      cerca de: ${g.cerca_lista}`);
     }
   } else if (cmd === 'revisor') {
     // Revisor de conversaciones (caso p-mulc92f6l52). Sin argumento: MODO PRUEBA de las últimas 24 h (no escribe

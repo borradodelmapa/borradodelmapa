@@ -7057,6 +7057,7 @@ function addressContainsLocation(formattedAddress, ...locations) {
   return locations.filter(Boolean).map(normalizeForMatch).some(c => c && c.length > 2 && normAddr.includes(c));
 }
 
+function _locNormLite(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
 async function verifyAllStops(route, placesKey, opts = {}, env) {
   if (!route?.stops || !placesKey) return route;
 
@@ -7438,7 +7439,9 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
 
+    const _askedName = stop.name || stop.headline || '';
     if (googleName && strictNameMatch(stop.name || stop.headline || '', googleName)) {
+      stop._asked = _askedName;
       stop.name = googleName; stop.headline = googleName;
       _nameMatched.add(stop);
     }
@@ -7509,6 +7512,46 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       finalStops.push(s);
     });
   }
+
+  // ── PARADA SUELTA DE OTRA LOCALIDAD EN UNA RUTA COMPACTA (3 oct 2026, caso p-musbxm408zg) ──
+  // "Tragabuches" de Ronda → Google dio "Tragabuches Marbella" (otro local, ~30 km en línea, 50 por carretera): mismo
+  // nombre, pasa el radio, la carretera (<60 km) y la provincia. Se descarta (sin llamadas a Google) si en una ruta
+  // compacta (≥70 % de las paradas a ≤30 km de su centro) la parada: (a) queda a >25 km del centro Y el nombre de
+  // Google añade OTRA localidad que no estaba en lo pedido ni es la de la zona ("Marbella"), o (b) queda a >60 km.
+  // "Cueva del Gato - Benaoján" (cerca) o "Castillo de Zahara de la Sierra" (la localidad ya estaba) no se tocan.
+  if (finalStops.length >= 5) {
+    const _pts = finalStops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number' && Math.abs(s.lat) > 0.01);
+    if (_pts.length >= 5) {
+      const _med = a => { const b = [...a].sort((x, y) => x - y); const m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+      const mLat = _med(_pts.map(s => s.lat)), mLng = _med(_pts.map(s => s.lng));
+      const dist = new Map(_pts.map(s => [s, haversineKm(mLat, mLng, s.lat, s.lng)]));
+      if (_pts.filter(s => dist.get(s) <= 30).length / _pts.length >= 0.7) {
+        const _tk = t => new Set(_locNormLite(t).split(' ').filter(w => w.length >= 3));
+        const zonaTk = _tk(`${opts.anchorLocality || ''} ${route.region || ''} ${route.name || ''}`);
+        const otraLocalidad = (s) => {
+          if (!s._asked) return false;
+          const seg = String(s.verified_address || '').split(',').map(x => x.trim()).find(x => /\b\d{5}\b/.test(x));
+          const loc = seg ? seg.replace(/\b\d{5}\b/, '').trim() : '';
+          const locTk = _tk(loc);
+          if (!locTk.size) return false;
+          const nameN = ' ' + _locNormLite(s.name) + ' ';
+          if (!nameN.includes(' ' + _locNormLite(loc) + ' ')) return false;            // la localidad no va en el nombre de Google
+          const askedTk = _tk(s._asked);
+          return ![...locTk].some(w => askedTk.has(w) || zonaTk.has(w));                // ya estaba en lo pedido o es la de la zona
+        };
+        finalStops = finalStops.filter(s => {
+          const d = dist.get(s);
+          if (d != null && (d > 60 || (d > 25 && otraLocalidad(s)))) {
+            discarded.push({ name: s._asked || s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'otra_localidad_lejos_del_resto' });
+            console.log(`[VERIFY] ✗ DESCARTADA (${d.toFixed(0)} km del centro de una ruta compacta, Google dio "${s.name}") pedida "${s._asked || ''}"`);
+            return false;
+          }
+          return true;
+        });
+      }
+    }
+  }
+  validatedStops.forEach(s => { delete s._asked; });
 
   // ── FILTRO POR LOCALIDAD / PROVINCIA (destino de punto, cualquier duración) ──
   // El destino es UNA ciudad ("Córdoba 7 días", "Gaucín 1 día"). El radio no distingue
@@ -9481,6 +9524,10 @@ async function logGuideTiming(env, row) {
     titulo: _fS(String(row.titulo || '').slice(0, 100)),
     dias: n(row.dias), paradas: n(row.paradas), descartadas: n(row.descartadas), cerca: n(row.cerca),
     ms_guia: n(row.ms_guia), ms_google: n(row.ms_google), ms_total: n(row.ms_total),
+    // Qué paradas quedaron / se cayeron (3 oct 2026): para comparar la guía con lo que dijo Salma sin pedir capturas.
+    lista: _fS(String(row.lista || '').slice(0, 900)),
+    desc_lista: _fS(String(row.desc_lista || '').slice(0, 400)),
+    cerca_lista: _fS(String(row.cerca_lista || '').slice(0, 400)),
   };
   try { await firestoreAdminPatch(env, 'guide_timings/' + id, f); } catch (e) { console.warn('[T2-REGISTRO] ' + e.message); }
 }
@@ -15733,6 +15780,9 @@ REGLAS:
         if (_replyMarcas) doneEvt.reply_marcas = _replyMarcas;
         if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, titulo: route?.title || '', dias: route?.duration_days || 0,
           paradas: route?.stops?.length || 0, descartadas: route?.discarded_stops?.length || 0, cerca: route?.nearby_stops?.length || 0,
+          lista: (route?.stops || []).map(x => `${x.day || '?'}:${x.name || x.headline || ''}`).join(' | '),
+          desc_lista: (route?.discarded_stops || []).map(x => `${x.name}(${x.reason || ''})`).join(' | '),
+          cerca_lista: (route?.nearby_stops || []).map(x => x.name || x.headline || '').join(' | '),
           ms_total: Date.now() - _t2log.inicio }));
         if (_opsApplied && route) doneEvt.ops_edit = true;
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
