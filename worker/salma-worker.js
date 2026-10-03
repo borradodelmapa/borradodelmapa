@@ -5490,7 +5490,7 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 600,
-        system: conCache ? buildCachedSystem(WHATSAPP_SYSTEM_CHAT, system, null) : system,
+        system: conCache ? (() => { const sc = buildCachedSystem(WHATSAPP_SYSTEM_CHAT, system, null); return typeof sc === 'string' ? [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }] : sc; })() : system,
         tools: WA_TOOLS,
         messages: conCache ? withHistoryCache(msgs) : msgs,
       }),
