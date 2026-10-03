@@ -727,20 +727,10 @@ function _renderChatEmpty() {
     const _ceNextHTML = `
         <div class="ce-next" data-ce-next>
           <div class="ce-greet ce-greet--next">¿Y el próximo viaje?</div>
-          <div class="ce-rotable" id="ce-rotable">
-            <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
-            <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
-            <div class="ce-rotable-foot">
-              <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
-              <span class="ce-rotable-hint">Toca para escribir la ruta</span>
-            </div>
-          </div>
-          <button class="ce-rotable-cta" data-ce-rotable-cta>Trazar ruta <span>→</span></button>
-          <!-- El billete (destino, días, "Afinar") también con guía activa (Paco, 27 sept
-               2026): se perdió sin querer al crear este bloque el 26 sept. Va plegado para
-               que la portada siga cabiendo sin scroll; la tarjeta de la guía no se toca. -->
-          <button class="ce-openbillete" data-ce-next-openbillete>O rellena destino y días <span>↓</span></button>
-          <div class="ce-card ce-ticket" id="ce-next-card" hidden>${_ceBilleteHTML(true)}</div>
+          <!-- Mismo orden que sin guía activa (3 oct 2026, Paco): primero el billete y
+               al final "Pregunta lo imposible" plegado (ver _ceAskHTML). -->
+          <div class="ce-card ce-ticket" id="ce-next-card">${_ceBilleteHTML(true)}</div>
+          ${_ceAskHTML}
         </div>`;
 
     area.innerHTML = `
