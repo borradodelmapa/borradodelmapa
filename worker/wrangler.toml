@@ -39,7 +39,7 @@ crons = ["0 4 * * 1", "0 6 * * *"]
 
 [vars]
 # Caché de Claude (caso p-murj9qyu6ct): "1" enciende, "0" apaga (vuelve al comportamiento de siempre). Reversible: cambiar y redesplegar.
-CACHE_HIST = "0"   # punto 13: cachear el historial de la conversación
+CACHE_HIST = "1"   # punto 13: cachear el historial de la conversación
 CACHE_1H = "0"     # punto 12: caché del prompt de 1 h en vez de 5 min
 # Remitente de los emails (Resend). Dominio borradodelmapa.com verificado en Resend el 26 sept 2026
 # (DKIM resend._domainkey + CNAME send/rsend en el DNS de Netlify).
