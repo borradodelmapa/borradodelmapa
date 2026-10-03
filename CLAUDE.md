@@ -163,7 +163,7 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
   Claude Sonnet (`claude-sonnet-4-6`), GPT-4o-mini para enrich/bloques/narrador, Google Places (verify, fotos),
   Duffel, Booking (RapidAPI), Brave, ElevenLabs, Twilio (SOS + WhatsApp), Stripe. 15 secrets en Cloudflare.
 - KV `SALMA_KB` (193 países en 3 niveles, spots, cachés) + `ROAD_GEOM`; R2 para fotos/documentos.
-- Premium por suscripción (pago único que suma meses; límites server-side con `usageGate`). Coins eliminados.
+- Planes (desde 3 oct 2026, detalle en `docs/negocio-premium.md`): gratis 5 msg/día · prueba 7 días (1 por cuenta) · guía suelta 9,99 € · trimestral 19,99 € · anual 49,99 € (oferta 39,99 €); pago único que suma meses; límites y presupuesto por cuenta server-side con `usageGate`. Coins eliminados.
 - SEO: 1.793 páginas `destinos/` (`noindex` por ahora), 12 artículos de blog, guías públicas `<slug>.html`.
 - Paneles: admin.borradodelmapa.com (repo aparte `Admin-borradodelmapa`), botón 🐛/"Mejora Salma".
 - Worker: endpoint `https://salma-api.borradodelmapa-api.workers.dev` (POST `/` = chat SSE; es el que usa la app,
