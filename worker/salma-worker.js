@@ -6447,16 +6447,40 @@ function salvageIncompleteRouteJson(text) {
 // perfil (opcional, 27 sept 2026): el bloque del Perfil IA va justo detrás de la base con su propia marca
 // de caché — es fijo para cada usuario, así que se reaprovecha en las vueltas de herramientas y en los
 // mensajes seguidos de la misma conversación.
-function buildCachedSystem(base, full, perfil) {
+// ttl1h (caso p-murj9qyu6ct, punto 12, 3 oct 2026): con true la caché dura 1 h en vez de 5 min (escribir cuesta 2x en
+// vez de 1,25x, leer lo mismo). Apagado por defecto: solo se enciende con CACHE_1H="1" tras medir los [CACHE] del log.
+function buildCachedSystem(base, full, perfil, ttl1h) {
   if (!base || typeof full !== 'string' || base.length < 4000 || !full.startsWith(base)) return full;
-  const blocks = [{ type: 'text', text: base, cache_control: { type: 'ephemeral' } }];
+  const cc = ttl1h ? { type: 'ephemeral', ttl: '1h' } : { type: 'ephemeral' };
+  const blocks = [{ type: 'text', text: base, cache_control: cc }];
   let tail = full.slice(base.length);
   if (perfil && tail.startsWith(perfil)) {
-    blocks.push({ type: 'text', text: perfil, cache_control: { type: 'ephemeral' } });
+    blocks.push({ type: 'text', text: perfil, cache_control: cc });
     tail = tail.slice(perfil.length);
   }
   if (tail.trim()) blocks.push({ type: 'text', text: tail });
   return blocks;
+}
+
+// Caché del historial (caso p-murj9qyu6ct, punto 13, 3 oct 2026): marca el ÚLTIMO bloque del ÚLTIMO mensaje como
+// cacheable, así la vuelta siguiente del bucle de herramientas (y el mensaje siguiente de la conversación) lee de
+// caché todo el historial anterior en vez de pagarlo entero. Devuelve una COPIA: currentMessages no se toca, para
+// que las marcas no se acumulen (Anthropic admite 4 como máximo; ya hay 2 en el system). Apagado por defecto
+// (CACHE_HIST="1" lo enciende); si algo no cuadra devuelve los mensajes tal cual.
+function withHistoryCache(msgs) {
+  try {
+    if (!Array.isArray(msgs) || !msgs.length) return msgs;
+    const last = msgs[msgs.length - 1];
+    if (!last || (last.role !== 'user' && last.role !== 'assistant')) return msgs;
+    let blocks = typeof last.content === 'string'
+      ? (last.content.trim() ? [{ type: 'text', text: last.content }] : null)
+      : (Array.isArray(last.content) && last.content.length ? last.content.map(b => ({ ...b })) : null);
+    if (!blocks) return msgs;
+    const lb = blocks[blocks.length - 1];
+    if (!lb || (lb.type === 'text' && !String(lb.text || '').trim())) return msgs;
+    blocks[blocks.length - 1] = { ...lb, cache_control: { type: 'ephemeral' } };
+    return msgs.slice(0, -1).concat([{ ...last, content: blocks }]);
+  } catch (_) { return msgs; }
 }
 
 // ─── Conversión directa de prosa (ruta ya escrita) a JSON estructurado ───
@@ -14698,12 +14722,13 @@ INSTRUCCIONES:
                   'Content-Type': 'application/json',
                   'x-api-key': env.ANTHROPIC_API_KEY,
                   'anthropic-version': '2023-06-01',
+                  ...(env.CACHE_1H === '1' ? { 'anthropic-beta': 'extended-cache-ttl-2025-04-11' } : {}),
                 },
                 body: JSON.stringify({
                   model: 'claude-sonnet-4-6',
                   max_tokens: reqMaxTokens,
-                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil),
-                  messages: currentMessages,
+                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil, env.CACHE_1H === '1'),
+                  messages: env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages,
                   tools: ANTHROPIC_TOOLS,
                   ...(_planSinHerramientas ? { tool_choice: { type: 'none' } } : {}),
                   stream: true,
