@@ -74,12 +74,93 @@ async function _googleGate(env, sku) {
   } catch (_) { /* fail-open */ }
   return null;
 }
+// ═══ TOPE DE GASTO PROPIO DE CLAUDE Y OPENAI (caso p-murj9qyu6ct, punto 17, 3 oct 2026) ═══
+// Mismo patrón que el de Google: un libro en KV (`aispend:<proveedor>:d:<día>` / `:m:<mes>`, en €) que SUMA lo que gasta cada
+// petición (Claude: desde usageRecord, a precio de lista; OpenAI: desde callOpenAI) y un guardián que, al pasar el tope, corta las
+// llamadas nuevas ("fail-open" si KV falla: protege el dinero, no es un candado del servicio). Topes por defecto (propuesta aprobada
+// por Paco): Claude 70 €/mes y 15 €/día; OpenAI 10 €/mes y 2 €/día. Se cambian SIN desplegar: KV `aicap:config`
+// = {"claude":{"daily_eur":15,"monthly_eur":70},"openai":{"daily_eur":2,"monthly_eur":10}}. Aviso por WhatsApp a Paco al llegar al 80 %
+// del mes y al tocar el tope diario (una vez cada uno). Interruptor: AI_CAP_ON = "1".
+const OPEN_GATE_LIMITS = {
+  '/photo': 600, '/place-details': 300, '/directions': 300,
+  '/tts': 100, '/tts-google': 100, '/translate': 100, '/narrate': 100, '/nearby-pois': 300, '/pin': 100, '/enrich': 100, '/historia-lugar': 100,
+};
+const AI_CAP_DEFAULT = { claude: { daily_eur: 15, monthly_eur: 70 }, openai: { daily_eur: 2, monthly_eur: 10 } };
+const USD_TO_EUR = 0.92;
+let _aicapCache = null;
+async function _aiCaps(env) {
+  const now = Date.now();
+  if (_aicapCache && now - _aicapCache.t < 60000) return _aicapCache.v;
+  let v = AI_CAP_DEFAULT;
+  try {
+    const raw = await env.SALMA_KB.get('aicap:config');
+    if (raw) {
+      const c = JSON.parse(raw); v = {};
+      for (const k of Object.keys(AI_CAP_DEFAULT)) {
+        const x = c[k] || {};
+        v[k] = { daily_eur: Number(x.daily_eur) > 0 ? Number(x.daily_eur) : AI_CAP_DEFAULT[k].daily_eur, monthly_eur: Number(x.monthly_eur) > 0 ? Number(x.monthly_eur) : AI_CAP_DEFAULT[k].monthly_eur };
+      }
+    }
+  } catch (_) {}
+  _aicapCache = { t: now, v };
+  return v;
+}
+async function _aiAlert(env, txt) {
+  try {
+    if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_WHATSAPP_FROM && env.PACO_WHATSAPP_TO) await sendWhatsAppMessage(env, env.PACO_WHATSAPP_TO, txt.slice(0, 1500));
+  } catch (_) {}
+}
+async function aiSpendAdd(env, provider, eur) {
+  if (!env?.SALMA_KB || !(eur > 0)) return;
+  try {
+    const day = new Date().toISOString().slice(0, 10), mon = day.slice(0, 7);
+    const dK = `aispend:${provider}:d:${day}`, mK = `aispend:${provider}:m:${mon}`;
+    const [dRaw, mRaw] = await Promise.all([env.SALMA_KB.get(dK), env.SALMA_KB.get(mK)]);
+    const d = (parseFloat(dRaw) || 0) + eur, m = (parseFloat(mRaw) || 0) + eur;
+    await Promise.all([env.SALMA_KB.put(dK, String(d), { expirationTtl: 40 * 86400 }), env.SALMA_KB.put(mK, String(m), { expirationTtl: 400 * 86400 })]);
+    const cap = (await _aiCaps(env))[provider];
+    if (!cap) return;
+    const flag = async (k, txt) => { try { if (!(await env.SALMA_KB.get(k))) { await env.SALMA_KB.put(k, '1', { expirationTtl: 40 * 86400 }); await _aiAlert(env, txt); } } catch (_) {} };
+    if (m >= cap.monthly_eur * 0.8) await flag(`aialert:${provider}:m80:${mon}`, `⚠️ Salma · gasto de ${provider === 'claude' ? 'Claude' : 'OpenAI'} este mes: ${m.toFixed(2)} € de ${cap.monthly_eur} € (80 %). Tope diario ${cap.daily_eur} €.`);
+    if (d >= cap.daily_eur) await flag(`aialert:${provider}:d:${day}`, `🛑 Salma · tope DIARIO de ${provider === 'claude' ? 'Claude' : 'OpenAI'} alcanzado hoy: ${d.toFixed(2)} € (tope ${cap.daily_eur} €). Las llamadas nuevas se cortan hasta mañana.`);
+  } catch (_) { /* fail-open */ }
+}
+// null si se puede llamar; { reason } si se ha pasado el tope diario o mensual.
+async function aiGate(env, provider) {
+  if (!env?.SALMA_KB || env.AI_CAP_ON !== '1') return null;
+  try {
+    const cap = (await _aiCaps(env))[provider]; if (!cap) return null;
+    const day = new Date().toISOString().slice(0, 10), mon = day.slice(0, 7);
+    const [dRaw, mRaw] = await Promise.all([env.SALMA_KB.get(`aispend:${provider}:d:${day}`), env.SALMA_KB.get(`aispend:${provider}:m:${mon}`)]);
+    const d = parseFloat(dRaw) || 0, m = parseFloat(mRaw) || 0;
+    if (d >= cap.daily_eur) return { reason: 'daily', d, cap: cap.daily_eur };
+    if (m >= cap.monthly_eur) return { reason: 'monthly', m, cap: cap.monthly_eur };
+  } catch (_) {}
+  return null;
+}
+function _aiProviderOf(url) {
+  if (url.startsWith('https://gateway.ai.cloudflare.com/') && url.includes('/anthropic/')) return 'claude';
+  if (url.startsWith('https://api.anthropic.com/')) return 'claude';
+  if (url.startsWith('https://api.openai.com/')) return 'openai';
+  return null;
+}
+
 // `fetch` del módulo: igual que el global, salvo que las llamadas a Google pasan primero por el guardián de gasto.
 const fetch = async (input, init) => {
   const url = typeof input === 'string' ? input : (input?.url || '');
   if (_gateEnv && url.startsWith('https://maps.googleapis.com/')) {
     const denied = await _googleGate(_gateEnv, _googleSku(url));
     if (denied) return denied;
+  }
+  if (_gateEnv && _gateEnv.AI_CAP_ON === '1') {
+    const prov = _aiProviderOf(url);
+    if (prov) {
+      const over = await aiGate(_gateEnv, prov);
+      if (over) {
+        console.log(`[GASTO-IA] TOPE ${over.reason} de ${prov} alcanzado — no se llama (${url.slice(0, 60)})`);
+        return new Response(JSON.stringify({ type: 'error', error: { type: 'spend_cap', message: 'Tope de gasto propio del Worker' } }), { status: 429, headers: { 'Content-Type': 'application/json', 'X-Spend-Cap': '1' } });
+      }
+    }
   }
   return globalThis.fetch(input, init);
 };
@@ -913,6 +994,10 @@ const PLAN_LIMITS = {
   free:    { guides: 1, edits: 2, chatPerDay: 20 },                   // guides/edits: TOTAL de por vida
   premium: { guidesPerMonth: 4, editsPerMonth: 40, chatPerDay: 100 }, // PROVISIONAL
 };
+// TECHO DE GASTO POR CUENTA (caso p-murj9qyu6ct, punto 9, 3 oct 2026): en euros de Claude al mes (precio de lista), invisible para el
+// uso normal (un viajero real gasta una fracción) y que corta al que abusa. Free 3 €/mes, Premium 20 €/mes (≈ lo que deja un anual).
+// Interruptor ACCOUNT_BUDGET_ON = "1". NO es todavía el presupuesto de la prueba de 7 días (esa prueba aún no existe).
+const ACCOUNT_BUDGET_EUR = { free: 3, premium: 20 };
 // Guías extra (caso p-mui1yhp9ls1, 26 sept 2026, opción A de Paco): quien YA es Premium y vuelve a
 // pagar recibe estas guías de más (según el plan que compra), que se gastan solo cuando ha agotado el cupo del mes y no caducan.
 // Viven en users/<uid>.premium_bonus_guides (Firestore: lo escribe solo el Worker; las reglas impiden
@@ -946,6 +1031,12 @@ async function usageGate(env, authUser, kind) {
     const premium = !!authUser.premium_active;
     const month = await usageRead(env, usageMonthKey(authUser.uid));
     if (month === null) return { ok: true };
+    if (env.ACCOUNT_BUDGET_ON === '1' && (month.claude_usd || 0) * USD_TO_EUR >= (premium ? ACCOUNT_BUDGET_EUR.premium : ACCOUNT_BUDGET_EUR.free)) {
+      console.log(`[PRESUPUESTO] ${authUser.uid} ${premium ? 'premium' : 'free'} ha gastado ${((month.claude_usd || 0) * USD_TO_EUR).toFixed(2)} € este mes — cortado`);
+      return { ok: false, limit: 'budget', message: premium
+        ? 'Has usado Salma muchísimo este mes y para evitar abusos tengo que pararte hasta el día 1. Si es un caso especial, escríbenos y lo vemos. 💛'
+        : 'Has llegado al límite de uso del plan gratuito este mes. Con Premium sigues sin preocuparte: Perfil → Mi plan.' };
+    }
     if (kind === 'chat') {
       const lim = premium ? PLAN_LIMITS.premium.chatPerDay : PLAN_LIMITS.free.chatPerDay;
       const today = (month.days && month.days[usageToday()]) || 0;
@@ -1001,6 +1092,7 @@ async function usageRecord(env, authUser, delta) {
     const addUsd = (_plainIn * CLAUDE_USD_PER_MTOK.in + (delta.cw || 0) * CLAUDE_USD_PER_MTOK.cacheWrite +
                     (delta.cr || 0) * CLAUDE_USD_PER_MTOK.cacheRead + (delta.tout || 0) * CLAUDE_USD_PER_MTOK.out) / 1e6;
     month.claude_usd = Math.round(((month.claude_usd || 0) + addUsd) * 10000) / 10000;
+    if (addUsd > 0) await aiSpendAdd(env, 'claude', addUsd * USD_TO_EUR);
     if (delta.msgs) {
       month.days = month.days || {};
       month.days[usageToday()] = (month.days[usageToday()] || 0) + delta.msgs;
@@ -5385,7 +5477,10 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
   // Tokens gastados en el turno (25 sept 2026) — para contar WhatsApp en el plan y en el panel de coste.
   const usage = { tin: 0, tout: 0, cw: 0, cr: 0 };
   for (let i = 0; i < 3; i++) {
-    const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+    // Caché de Claude también en WhatsApp (caso p-mulpej128uh, 3 oct 2026): el prompt fijo (WHATSAPP_SYSTEM_CHAT + herramientas) y el
+    // historial se reutilizan en las vueltas de herramientas del mismo turno y en mensajes seguidos. Interruptor WA_CACHE ("1").
+    // Si Anthropic rechazara las marcas, se repite UNA vez sin ellas.
+    const _waCall = (conCache) => fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -5395,11 +5490,16 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 600,
-        system,
+        system: conCache ? buildCachedSystem(WHATSAPP_SYSTEM_CHAT, system, null) : system,
         tools: WA_TOOLS,
-        messages: msgs,
+        messages: conCache ? withHistoryCache(msgs) : msgs,
       }),
     });
+    let res = await _waCall(env.WA_CACHE === '1');
+    if (!res.ok && env.WA_CACHE === '1') {
+      console.log('[WA-CACHE] Anthropic rechazó la petición con caché (' + res.status + '): reintento sin ella');
+      res = await _waCall(false);
+    }
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
       throw new Error('Anthropic ' + res.status + ': ' + errText);
@@ -9208,6 +9308,12 @@ async function callOpenAI(apiKey, { model, max_tokens, temperature, system, mess
 
   if (!res.ok) return { error: true, status: res.status, body: await res.text().catch(() => '') };
   const data = await res.json();
+  try {
+    if (_gateEnv && data.usage) {
+      const P = /gpt-4o-mini/.test(model || 'gpt-4o-mini') ? { in: 0.15, out: 0.6 } : { in: 2.5, out: 10 };
+      await aiSpendAdd(_gateEnv, 'openai', ((data.usage.prompt_tokens || 0) * P.in + (data.usage.completion_tokens || 0) * P.out) / 1e6 * USD_TO_EUR);
+    }
+  } catch (_) {}
   const choice = data.choices?.[0];
   const text = choice?.message?.content || '';
   return { text, message: choice?.message, finish_reason: choice?.finish_reason, usage: data.usage || null };
@@ -9578,6 +9684,21 @@ async function logChatCost(env, row) {
   } catch (e) { console.warn('[CHAT-COSTE] ' + e.message); }
 }
 
+// Aviso diario de gasto por WhatsApp a Paco (punto 17): lo de AYER en Claude, OpenAI y Google + el mes en curso frente a los topes.
+async function dailySpendReport(env) {
+  if (!env?.SALMA_KB) return;
+  const ayer = new Date(Date.now() - 86400000).toISOString().slice(0, 10), mon = new Date().toISOString().slice(0, 7);
+  const g = async (k) => parseFloat(await env.SALMA_KB.get(k)) || 0;
+  const [cd, cm, od, om, gdRaw, gmRaw] = await Promise.all([
+    g(`aispend:claude:d:${ayer}`), g(`aispend:claude:m:${mon}`), g(`aispend:openai:d:${ayer}`), g(`aispend:openai:m:${mon}`),
+    env.SALMA_KB.get(`gspend:d:${ayer}`), env.SALMA_KB.get(`gspend:m:${mon}`),
+  ]);
+  let gd = 0; try { gd = gdRaw ? (JSON.parse(gdRaw).eur || 0) : 0; } catch (_) {}
+  const gm = parseFloat(gmRaw) || 0, caps = await _aiCaps(env), gc = await _googleCaps(env);
+  const txt = `📊 Salma · gasto de ayer (${ayer}): Claude ${cd.toFixed(2)} € · OpenAI ${od.toFixed(2)} € · Google ${gd.toFixed(2)} € (estimados).\nMes: Claude ${cm.toFixed(2)}/${caps.claude.monthly_eur} € · OpenAI ${om.toFixed(2)}/${caps.openai.monthly_eur} € · Google ${gm.toFixed(2)}/${gc.monthly_eur} €.`;
+  await _aiAlert(env, txt);
+}
+
 async function logChatLink(env, row) {
   const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const f = {
@@ -9798,6 +9919,26 @@ export default {
   async fetch(request, env, ctx) {
     let res;
     try {
+      // CONTROL DE ENDPOINTS ABIERTOS (caso p-murj9qyu6ct, punto 16, 3 oct 2026): estos endpoints llaman a APIs de pago sin cuenta
+      // ni contador. Tope diario por IP (fail-open; KV `ogate:<ruta>:<ip>:<día>`). Es la primera capa: sin tocar la web. Límites
+      // por defecto (aprobados por Paco): fotos/detalles/rutas 300 al día por IP, voz/traductor/narrador/etc. 100. Interruptor OPEN_GATE_ON.
+      if (env.OPEN_GATE_ON === '1' && env.SALMA_KB && request.method !== 'OPTIONS') {
+        const _gp = new URL(request.url).pathname;
+        const _gl = OPEN_GATE_LIMITS[_gp];
+        if (_gl) {
+          try {
+            const ip = request.headers.get('CF-Connecting-IP') || 'sin-ip';
+            const k = `ogate:${_gp}:${ip}:${new Date().toISOString().slice(0, 10)}`;
+            const n = (parseInt(await env.SALMA_KB.get(k), 10) || 0) + 1;
+            if (n > _gl) {
+              console.log(`[PUERTA] ${_gp} desde ${ip}: ${n} > ${_gl} hoy — 429`);
+              return new Response(JSON.stringify({ error: 'rate_limited', detail: 'Demasiadas peticiones hoy desde esta conexión. Vuelve mañana o inicia sesión.' }),
+                { status: 429, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Retry-After': '3600' } });
+            }
+            ctx.waitUntil(env.SALMA_KB.put(k, String(n), { expirationTtl: 2 * 86400 }));
+          } catch (_) { /* fail-open */ }
+        }
+      }
       res = await this._fetch(request, env, ctx);
     } catch (e) {
       const path = new URL(request.url).pathname;
@@ -13948,6 +14089,16 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*', 'X-Salma-Limit': _usageGate.limit }
       });
     }
+    // Tope de gasto propio de Claude alcanzado (punto 17): mensaje amable en vez de "no he podido conectar".
+    {
+      const _capOver = await aiGate(env, 'claude');
+      if (_capOver) {
+        const _capMsg = 'Salma necesita descansar un rato: hoy hemos hablado muchísimo. Vuelve en unas horas y seguimos con tu viaje. 💛';
+        return new Response(`data: ${JSON.stringify({ t: _capMsg })}\n\ndata: ${JSON.stringify({ done: true, reply: _capMsg, route: null, limit_reached: 'ai_cap' })}\n\n`, {
+          headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*', 'X-Salma-Limit': 'ai_cap' }
+        });
+      }
+    }
     if (_usageKind === 'chat') ctx.waitUntil(usageRecord(env, authUser, { msgs: 1 }));
     // Perfil IA: cada 2 mensajes de chat del día (web + popup de guía + WhatsApp) aprende del
     // usuario en segundo plano — ver perfilIALearnFromChat(). No frena ni cambia la respuesta.
@@ -15950,6 +16101,7 @@ REGLAS:
     if (hour === 6) {
       // Revisor de conversaciones (caso p-mulc92f6l52): antes del resumen, para que salga en él. Solo si está encendido.
       try { if (env.OPENAI_API_KEY && (await env.SALMA_KB.get('revisor:activo')) === '1') await reviewConversations(env, { prueba: false, dias: 1 }); } catch (e) { console.error('[REVISOR] cron: ' + e.message); }
+      try { await dailySpendReport(env); } catch (e) { console.error('[GASTO] resumen diario: ' + e.message); }
       try { await fbAutoConfirm(env); } catch (e) { console.error('[MEJORA] auto-confirmar: ' + e.message); }
       try { await feedbackDigest(env); } catch (e) { console.error('[MEJORA] resumen diario: ' + e.message); }
       try { await feedbackWeekly(env); } catch (e) { console.error('[MEJORA] resumen semanal: ' + e.message); }
