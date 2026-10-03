@@ -6518,7 +6518,7 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
 }
 /* Con guía activa: "¿Y el próximo viaje?" + cuadro de texto debajo de la tarjeta (26 sept 2026) */
 .ce-next{margin:22px 0 4px;}
-.ce-greet--next{font-size:19px;margin:0 0 -4px;}
+.ce-greet--next{font-size:19px;margin:6px 0 12px;}
 /* Tarjeta compacta de la ruta activa: una fila que abre la guía (26 sept 2026) */
 .ce-mini{display:flex;align-items:center;gap:12px;padding:10px 12px;cursor:pointer;}
 .ce-mini-thumb{width:64px;height:64px;flex:0 0 64px;object-fit:cover;border:1px solid var(--ce-amber);}
