@@ -1,6 +1,6 @@
 // Service Worker — Cache del shell + network-first para API (P1-7)
 
-const CACHE_NAME = 'salma-v16';
+const CACHE_NAME = 'salma-v17';
 const SHARE_INBOX = 'share-inbox';
 const SHELL_ASSETS = [
   '/',
@@ -133,7 +133,7 @@ self.addEventListener('push', (e) => {
     self.registration.showNotification(data.title || 'Salma', {
       body: data.body,
       icon: '/salma_ai_avatar.png',
-      badge: '/salma_ai_avatar.png',
+      badge: '/badge-96.png',
       tag: data.tag || 'narrator',
       data: data
     })

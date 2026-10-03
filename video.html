@@ -269,13 +269,14 @@ setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden&&b.t
 <script src="/vendor/mapa/pmtiles.js"></script>
 <script src="/vendor/mapa/basemaps.js"></script>
 <script src="/vendor/mapa/mp4-muxer.js"></script>
-<script src="/posts-plantillas.js?v=3"></script>
+<script src="/posts-plantillas.js?v=4"></script>
 <script type="module">
 import * as THREE from '/vendor/mapa/three/three.module.js';
 import { CATALOGO, GRUPOS, porId, crear, miniatura } from '/video-vehiculos.js?v=5';
 const $=s=>document.querySelector(s);
 const Q=new URLSearchParams(location.search),GUIA=Q.get('guia')||'';
 const API=window.SALMA_API||'https://salma-api.borradodelmapa-api.workers.dev';
+const PIN=new Image();PIN.src='/logo-pin-256.png'; // logo «pin borrado» en la firma de las polaroids (3 oct 2026)
 const LOCAL=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 const MAPAS=LOCAL&&Q.get('mapas')!=='api'?location.origin:API;   // en local, mapa y relieve desde .mapas/ (sin gastar datos)
 // en local, el mapa de España+Portugal de .mapas/ está roto (descarga cortada al 99 %): de momento, el de Cantabria-Asturias
@@ -541,7 +542,7 @@ function card(img,cx,cy,w,sc,rot,alpha,stop){
   g.drawImage(img,-w/2+pad+(iw-img.width*k)/2,-h/2+pad+(ih-img.height*k)/2,img.width*k,img.height*k);g.restore();
   if(w>200*U){const yb=-h/2+pad+ih+(h-pad-ih)/2;g.textBaseline='middle';let x=-w/2+pad;
     if(S.firma){fitFont(S.firma,800,w*.078,iw*.62);g.fillStyle='#1f1b17';g.fillText(S.firma,x,yb+w*.004);x+=g.measureText(S.firma).width;}   // firma del usuario, en grande
-    else{g.font=`800 ${w*.056}px "Barlow Condensed","Arial Narrow",sans-serif`;[['✦ BORRADO','#F4630B'],['DEL','#8E9194'],['MAPA','#F4630B']].forEach(([t,c])=>{g.fillStyle=c;g.fillText(t,x,yb);x+=g.measureText(t).width;});}
+    else{g.font=`800 ${w*.056}px "Barlow Condensed","Arial Narrow",sans-serif`;const pin=PIN.complete&&PIN.naturalWidth>0,ps=w*.062;if(pin){g.drawImage(PIN,x,yb-ps/2,ps,ps);x+=ps*1.1;}[[pin?'BORRADO':'✦ BORRADO','#F4630B'],['DEL','#8E9194'],['MAPA','#F4630B']].forEach(([t,c])=>{g.fillStyle=c;g.fillText(t,x,yb);x+=g.measureText(t).width;});}
     if(stop){const t=`${stop.nombre.toUpperCase()} · DÍA ${stop.dia}`,room=w/2-pad-(x+w*.04);fitFont(t,700,w*.034,room);g.fillStyle='#5b5f63';g.textAlign='right';g.fillText(t,w/2-pad,yb);g.textAlign='left';}}
   g.restore();
 }
