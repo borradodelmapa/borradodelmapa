@@ -1906,13 +1906,18 @@ const salma = {
         });
       } else if (this._pendingMapSourceText && !this._chatAreaOverride && data.reply) {
         // Respuesta normal (ninguna de las ramas de arriba aplicó) mientras el botón "Crear
-        // ruta con mapa" sigue sin pulsar: se suma al texto pendiente y se recoloca el botón
-        // bajo el último mensaje — así "el primer día quiero ver X" o "duermo en camping"
-        // no se pierden al pulsar el botón más tarde (22 sept 2026). El propio mensaje ya se
-        // ve en pantalla por el streaming en vivo; aquí solo se actualiza el texto pendiente.
-        // Texto de varios mensajes: sin marcas [[ ]], para que la guía la monte la reescritura de siempre (que
-        // entiende "el primer día quiero ver X") y no el lector, que solo sirve para un plan de un solo mensaje.
-        this._pendingMapSourceText = (this._pendingMapSourceText.replace(/\[\[([^\[\]\n]{2,80})\]\]/g, '**$1**') + '\n\n' + data.reply).trim();
+        // ruta con mapa" sigue sin pulsar: se recoloca el botón bajo el último mensaje. El propio
+        // mensaje ya se ve en pantalla por el streaming en vivo; aquí solo se decide el texto pendiente.
+        // La guía es el ÚLTIMO PLAN COMPLETO que ha escrito Salma (3 oct 2026, caso p-musfrk4c21l): si pides un cambio,
+        // ella reescribe el plan entero (prompt: "PLAN YA DADO EN ESTA CONVERSACIÓN") y ese sustituye al anterior; si
+        // solo preguntas algo, el plan pendiente se queda tal cual, con sus marcas [[ ]]. Antes se juntaban los
+        // mensajes sin marcas y la guía caía a la reescritura lenta (Sonnet, ~1 min, nombres que Salma no dijo).
+        const _rm = data.reply_marcas || '';
+        // Plan = 3+ sitios marcados y el cierre de "Crear ruta con mapa" o 2+ cabeceras de día (una respuesta
+        // suelta sobre un sitio, "¿y Los Barruecos?", no sustituye al plan).
+        const _esPlan = (_rm.match(/\[\[[^\[\]\n]{2,80}\]\]/g) || []).length >= 3 && (/crear ruta con mapa/i.test(_rm)
+          || (_rm.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9\n]*D[IÍií]A\s+\d/gim) || []).length >= 2);
+        if (_esPlan) this._pendingMapSourceText = _rm;
         this._offerCrearRutaConMapa({
           baseMsg: this._pendingMapBaseMsg,
           sourceText: this._pendingMapSourceText,
