@@ -200,6 +200,8 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
     Object.entries(por).sort((x, y) => sum(y[1]) - sum(x[1])).slice(0, 15).forEach(([uid, a]) => {
       console.log(`${uid.slice(0, 10)}…  ${a[0].plan || '?'}  ${a.length} pet.  ${fmt(sum(a))}  (${fmt(sum(a) / a.length)}/pet.)`);
     });
+    const pm = {}; rows.forEach(r => { const m = r.modelo || '(sin dato)'; (pm[m] = pm[m] || []).push(r); });
+    console.log('Por modelo: ' + Object.entries(pm).map(([m, a]) => `${m} ${a.length} pet. ${fmt(sum(a))} (${fmt(sum(a) / a.length)}/pet.)`).join(' · '));
     const errs = rows.filter(r => r.error);
     console.log(`\nErrores: ${errs.length} peticiones con error · gastaron ${fmt(sum(errs))} sin dar respuesta buena`);
     errs.slice(0, 8).forEach(r => console.log(`  ${fecha(r.at)} ${fmt(eur(r))} ${String(r.uid).slice(0, 8)}… ${r.error} · "${r.mensaje}"`));
