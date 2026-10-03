@@ -84,7 +84,7 @@ window._loadGoogleMaps = function() {
   });
 };
 </script>
-<link rel="stylesheet" href="styles.css?v=158">
+<link rel="stylesheet" href="styles.css?v=159">
 <link rel="stylesheet" href="docs-viajero.css?v=3">
 <link rel="stylesheet" href="historia.css?v=3">
 <link rel="stylesheet" href="tu-mundo.css?v=8">
@@ -108,9 +108,12 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 
 <!-- ═══ SPLASH ═══ -->
 <div id="splash">
-  <img class="splash-avatar" src="/salma_ai_avatar.png" alt="Salma">
-  <div class="splash-logo">borrado<span>del</span>mapa</div>
-  <div class="splash-dots"><span></span><span></span><span></span></div>
+  <!-- Pantalla de carga (3 oct 2026, logo «pin borrado»): la chincheta salta de ciudad en ciudad sobre el mapa nocturno -->
+  <div class="splash-map" aria-hidden="true">
+    <div class="splash-pin"><div class="splash-pin-hop"><svg viewBox="0 0 100 100"><defs><mask id="spl-m"><rect width="100" height="100" fill="#fff"/><path d="M50,23 Q52.72,37.28 67,40 Q52.72,42.72 50,57 Q47.28,42.72 33,40 Q47.28,37.28 50,23Z" fill="#000"/><rect x="-10" y="64" width="130" height="5.5" fill="#000" transform="rotate(-22 50 66)"/><rect x="-10" y="77" width="130" height="5.5" fill="#000" transform="rotate(-22 50 79)"/></mask></defs><path d="M50,95 C42,84 18,62 18,40 A32,32 0 1 1 82,40 C82,62 58,84 50,95Z" fill="#F4630B" mask="url(#spl-m)"/></svg></div><i class="splash-pin-ring"></i></div>
+  </div>
+  <div class="splash-logo">BORRADO<span>DEL</span>MAPA</div>
+  <div class="splash-tag">Para una inmensa minoría</div>
 </div>
 
 <!-- ═══ CONTENT ═══ -->

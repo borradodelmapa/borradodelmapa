@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: center;
   gap: 24px;
+  overflow: hidden;
   transition: opacity .4s ease, visibility .4s ease;
 }
 #splash.splash-hidden {
@@ -20,41 +21,79 @@
   visibility: hidden;
   pointer-events: none;
 }
-.splash-avatar {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  object-fit: cover;
-  animation: splash-pulse 2s ease-in-out infinite;
+/* Mapa nocturno con la chincheta del logo saltando entre ciudades (3 oct 2026) */
+.splash-map {
+  position: relative;
+  width: min(135vw, 900px);
+  aspect-ratio: 3 / 2;
+  background: url(/splash-mapa.webp) center / cover no-repeat;
+  opacity: .9;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
+  animation: splash-zoom 8s ease-out both;
+  margin-bottom: -18px;
 }
-@keyframes splash-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: .75; transform: scale(.96); }
+@keyframes splash-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+.splash-pin {
+  position: absolute;
+  width: 56px; height: 56px;
+  margin: -53px 0 0 -28px;            /* la punta de la chincheta cae justo en la ciudad */
+  left: 47.8%; top: 33%;
+  animation: splash-route 6s ease-in-out infinite;
+  filter: drop-shadow(0 4px 10px rgba(244,99,11,.45));
+}
+.splash-pin-hop { width: 100%; height: 100%; animation: splash-hop 1s ease-in-out infinite; }
+.splash-pin-hop svg { display: block; width: 100%; height: 100%; }
+.splash-pin-ring {
+  position: absolute; left: 50%; top: 100%;
+  width: 28px; height: 10px; margin: -4px 0 0 -14px;
+  border: 2px solid #F4630B; border-radius: 50%;
+  animation: splash-ring 1s ease-out infinite;
+}
+/* España → Brasil → Ciudad del Cabo → India → Japón → México → España (cada salto 1 s) */
+@keyframes splash-route {
+  0%, 6%    { left: 47.8%; top: 33%; }
+  16%, 23%  { left: 35%;   top: 66%; }
+  33%, 40%  { left: 54.4%; top: 77%; }
+  50%, 56%  { left: 70%;   top: 46%; }
+  66%, 73%  { left: 87%;   top: 36%; }
+  83%, 90%  { left: 21.5%; top: 46%; }
+  100%      { left: 47.8%; top: 33%; }
+}
+@keyframes splash-hop {
+  0%, 35%, 100% { transform: translateY(0) scale(1, 1); }
+  42%           { transform: translateY(2px) scale(1.08, .9); }
+  65%           { transform: translateY(-22px) scale(.96, 1.05); }
+}
+@keyframes splash-ring {
+  0%, 30%  { transform: scale(.3); opacity: 0; }
+  40%      { opacity: .9; }
+  100%     { transform: scale(2.2); opacity: 0; }
 }
 .splash-logo {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px;
-  letter-spacing: 5px;
-  color: var(--blanco, #ffffff);
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: .06em;
+  color: #ECEBE8;
   text-transform: uppercase;
+  line-height: 1;
+  animation: splash-in .6s ease-out both .1s;
 }
-.splash-logo span { color: #F4630B; }
-.splash-dots {
-  display: flex;
-  gap: 6px;
+.splash-logo span { color: #F4630B; font-weight: 600; margin: 0 .22em; }
+.splash-tag {
+  margin-top: -14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #7E8285;
+  animation: splash-in .6s ease-out both .3s;
 }
-.splash-dots span {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(244,99,11,.5);
-  animation: splash-dot 1.2s ease-in-out infinite;
-}
-.splash-dots span:nth-child(2) { animation-delay: .2s; }
-.splash-dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes splash-dot {
-  0%, 80%, 100% { transform: scale(1); opacity: .5; }
-  40%           { transform: scale(1.4); opacity: 1; }
+@keyframes splash-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .splash-map, .splash-pin, .splash-pin-hop, .splash-pin-ring, .splash-logo, .splash-tag { animation: none; }
 }
 
 :root {

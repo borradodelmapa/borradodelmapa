@@ -12,6 +12,9 @@
 (function () {
   const FC = '"Barlow Condensed","Arial Narrow",sans-serif', FB = 'Inter,system-ui,sans-serif';
   const OR = '#F4630B', INK = '#0D0F10', CREAM = '#ECEBE8';
+  // Logo «pin borrado» (3 oct 2026): PNG del mismo origen (no ensucia el canvas al exportar). Si aún no ha cargado, sale la ✦ de antes.
+  const PIN = new Image(); PIN.src = '/logo-pin-256.png';
+  const pinOk = () => PIN.complete && PIN.naturalWidth > 0;
 
   const PLANTILLAS = [
     { id: 'circulo',   n: 'Círculo',   s: 'Tu foto grande y el mapa en un círculo',         fotos: 1 },
@@ -84,10 +87,12 @@
   function firma(g, c, x, y, size, align, A) {
     g.save(); if (A) g.globalAlpha *= A.k(.5, 1.1);
     g.textBaseline = 'alphabetic'; g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = size * .25;
-    const partes = c.firma ? [[c.firma, '#fff']] : [['✦ BORRADO', OR], [' DEL ', '#d0d3d5'], ['MAPA', OR]];
+    const pin = !c.firma && pinOk(), ps = size * 1.05;
+    const partes = c.firma ? [[c.firma, '#fff']] : [[pin ? 'BORRADO' : '✦ BORRADO', OR], [' DEL ', '#d0d3d5'], ['MAPA', OR]];
     g.font = `800 ${size}px ${FC}`;
-    const tot = partes.reduce((a, p) => a + g.measureText(p[0]).width, 0);
+    const tot = partes.reduce((a, p) => a + g.measureText(p[0]).width, 0) + (pin ? ps * 1.1 : 0);
     let px = align === 'right' ? x - tot : align === 'center' ? x - tot / 2 : x;
+    if (pin) { g.drawImage(PIN, px, y - ps * .88, ps, ps); px += ps * 1.1; }
     partes.forEach(([t, col]) => { g.fillStyle = col; g.fillText(t, px, y); px += g.measureText(t).width; });
     g.restore();
   }
@@ -172,9 +177,11 @@
     g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = 26 * u; g.shadowOffsetY = 10 * u; g.fillStyle = '#fff'; g.fillRect(-w / 2, -h / 2, w, h); g.shadowColor = 'transparent';
     cover(g, img, -w / 2 + pad, -h / 2 + pad, w - pad * 2, w - pad * 2);
     g.translate(0, h / 2 - (h - w) / 2 + pad * .2);
-    const partes = c.firma ? [[c.firma, '#1f1b17']] : [['✦ BORRADO', OR], [' DEL ', '#8E9194'], ['MAPA', OR]];
+    const pin = !c.firma && pinOk(), ps = w * .066;
+    const partes = c.firma ? [[c.firma, '#1f1b17']] : [[pin ? 'BORRADO' : '✦ BORRADO', OR], [' DEL ', '#8E9194'], ['MAPA', OR]];
     g.font = `800 ${w * .06}px ${FC}`; g.textBaseline = 'middle';
-    const tot = partes.reduce((a, p) => a + g.measureText(p[0]).width, 0); let px = -tot / 2;
+    const tot = partes.reduce((a, p) => a + g.measureText(p[0]).width, 0) + (pin ? ps * 1.1 : 0); let px = -tot / 2;
+    if (pin) { g.drawImage(PIN, px, -w * .06 - ps / 2, ps, ps); px += ps * 1.1; }
     partes.forEach(([t, col]) => { g.fillStyle = col; g.fillText(t, px, -w * .06); px += g.measureText(t).width; });
     g.restore();
   }
