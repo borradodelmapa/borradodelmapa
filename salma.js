@@ -3334,7 +3334,7 @@ const salma = {
       <div class="msg-body-salma">Para contestarte necesito que entres — es gratis y tarda cinco segundos.${msg ? ' Tu pregunta te la dejo escrita para cuando vuelvas.' : ''}</div>
       <div class="login-needed-actions">
         <button class="login-needed-btn" type="button">Entrar gratis <span>→</span></button>
-        <div class="login-needed-note">Con Google o con WhatsApp · 1 guía completa gratis y 20 mensajes al día</div>
+        <div class="login-needed-note">Con Google o con WhatsApp · 7 días de Premium gratis, sin tarjeta</div>
       </div>`;
     div.querySelector('.login-needed-btn').addEventListener('click', () => {
       if (typeof openModal === 'function') openModal();

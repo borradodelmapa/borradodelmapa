@@ -356,10 +356,10 @@ completo del desarrollo (F5.0-F5.4) en `CLAUDE-historial.md`.
      1. Bienvenida con todo lo que se puede hacer (`waHelpText`) + comando **`ayuda`** (sin Claude).
      2. Recordatorio rotativo cada 5 respuestas normales (`WA_TIPS`, KV `wa_tipn:{num}`), nunca
         tras una búsqueda ni con otra invitación en el mismo mensaje.
-     3. **WhatsApp usa ya los límites del plan** (20 mensajes/día gratis, 100 Premium, `usageGate`
+     3. **WhatsApp usa ya los límites del plan** (5 mensajes/día gratis, 20 prueba y guía suelta, 100 Premium; plan nuevo del 3 oct 2026, `usageGate`
         'chat') y cuenta tokens en `usage:{uid}:{mes}` (sale en el panel). `wa_daily` sube de 60
         a 120 (solo red de seguridad). Avisos: quedan 5, ≤3, último; al guardar guía, las que
-        quedan (o "era tu guía gratuita" + enlace Premium).
+        quedan (o "era tu última guía" + enlace a los planes).
      4. "reinicia" visible: en bienvenida/ayuda/recordatorios y automático si el mensaje suena
         molesto (`isWaFrustrated`, 1 vez cada 30 min).
      5. "Díselo a tus amigos" (`waMaybeReferral`, 1 vez/semana, tras guardar guía o búsqueda que

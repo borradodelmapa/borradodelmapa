@@ -11,12 +11,14 @@
 (function () {
   'use strict';
 
+  // Planes (3 oct 2026, plan nuevo). anual_oferta no se lista: solo se ofrece al cerrar sin comprar.
   var FALLBACK_PLANS = [
-    { key: '1viaje',     label: '1 viaje',    months: 1,  cents: 499 },
-    { key: 'trimestral', label: 'Trimestral', months: 3,  cents: 899 },
-    { key: 'semestral',  label: 'Semestral',  months: 6,  cents: 1499 },
-    { key: 'anual',      label: 'Anual',      months: 12, cents: 2499, best: true },
+    { key: 'guia',         label: 'Guía suelta', months: 1,  cents: 999 },
+    { key: 'trimestral',   label: 'Trimestral',  months: 3,  cents: 1999 },
+    { key: 'anual',        label: 'Anual',       months: 12, cents: 4999, best: true },
+    { key: 'anual_oferta', label: 'Anual',       months: 12, cents: 3999, hidden: true },
   ];
+  var PLAN_NAMES = { free: 'Plan gratuito', prueba: 'Prueba gratuita', guia: 'Guía suelta', trimestral: 'Premium · Trimestral', anual: 'Premium · Anual', anual_oferta: 'Premium · Anual' };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -37,6 +39,7 @@
 
     var plans = FALLBACK_PLANS.map(function (p) { return Object.assign({}, p); });
     var selected = 'anual';
+    var offerShown = false;
     var premiumUntilMs = opts.premiumUntilMs || 0;
     var isPremium = premiumUntilMs > Date.now();
     var usage = null;
@@ -61,7 +64,7 @@
             ? 'Premium no se puede contratar desde la app de Android.'
             : isPremium
             ? 'El tiempo nuevo se suma al que ya tienes: no pierdes nada.'
-            : 'Más guías verificadas, más cambios y más mensajes con Salma.') + '</div>' +
+            : 'Guías verificadas, cambios en tus rutas y Salma sin que te cuente los mensajes.') + '</div>' +
         '</div>' +
         '<div class="pm-status" data-pm="status"></div>' +
         '<div class="pm-body" data-pm="body"' + (sinPago ? ' style="display:none"' : '') + '>' +
@@ -87,39 +90,36 @@
 
     function selectedPlan() {
       for (var i = 0; i < plans.length; i++) if (plans[i].key === selected) return plans[i];
-      return plans[plans.length - 1];
+      return plans[2];
     }
 
     function renderStatus() {
       var el = $('status');
-      var stateHtml = isPremium
-        ? '<span class="pm-status-val is-premium">Premium</span>'
-        : '<span class="pm-status-val">Plan gratuito</span>';
-      var sub = isPremium
-        ? '<div class="pm-status-sub">Activo hasta el <b>' + esc(fmtDate(premiumUntilMs)) + '</b></div>'
-        : '';
+      var plan = usage && usage.plan ? usage.plan : (isPremium ? 'trimestral' : 'free');
+      var premiumNow = usage ? !!usage.is_premium : isPremium;
+      var stateHtml = '<span class="pm-status-val' + (premiumNow && plan !== 'prueba' ? ' is-premium' : '') + '">' + esc(PLAN_NAMES[plan] || 'Plan gratuito') + '</span>';
+      var sub = '';
+      if (plan === 'prueba' && usage && usage.trial_days_left != null) {
+        sub = '<div class="pm-status-sub">Te quedan <b>' + usage.trial_days_left + (usage.trial_days_left === 1 ? ' día' : ' días') + '</b> de prueba · incluye 1 guía</div>';
+      } else if (premiumNow) {
+        sub = '<div class="pm-status-sub">Activo hasta el <b>' + esc(fmtDate(premiumUntilMs || (usage && usage.premium_until ? new Date(usage.premium_until).getTime() : 0))) + '</b></div>';
+      }
       var meters = '';
       if (usage && usage.limits) {
-        var l = usage.limits, m = usage.month || {}, t = usage.total || {};
-        var rows = usage.plan === 'premium'
-          ? [['Guías este mes', m.guides || 0, l.guidesPerMonth], ['Cambios este mes', m.edits || 0, l.editsPerMonth], ['Mensajes hoy', usage.today_msgs || 0, l.chatPerDay]]
-          : [['Guías', t.guides || 0, l.guides], ['Cambios', t.edits || 0, l.edits], ['Mensajes hoy', usage.today_msgs || 0, l.chatPerDay]];
-        meters = '<div class="pm-meters">' + rows.map(function (r) {
+        var l = usage.limits;
+        var rows = [];
+        if (plan === 'free' || plan === 'prueba' || plan === 'guia') rows.push(['Mensajes hoy', usage.today_msgs || 0, l.chatPerDay]);
+        meters = rows.length ? '<div class="pm-meters">' + rows.map(function (r) {
           var pct = r[2] ? Math.min(100, Math.round((r[1] / r[2]) * 100)) : 0;
           return '<div class="pm-meter-row"><span class="pm-meter-name">' + esc(r[0]) + '</span>' +
             '<span class="pm-bar' + (pct >= 100 ? ' is-full' : '') + '"><i style="width:' + pct + '%"></i></span>' +
             '<span class="pm-meter-val">' + r[1] + '/' + r[2] + '</span></div>';
         }).join('') +
-          // Guías extra: recargar siendo ya Premium (caso p-mui1yhp9ls1) o regalo por avisar de un fallo (26 sept
-          // 2026, valen también sin Premium). Se gastan cuando se acaba el cupo normal.
+          // Guías que le quedan (prueba, guía suelta o regalo por avisar de un fallo)
           (usage.bonus_guides > 0
-            ? '<div class="pm-meter-row"><span class="pm-meter-name">🎁 Guías extra</span><span></span><span class="pm-meter-val">+' + usage.bonus_guides + '</span></div>'
+            ? '<div class="pm-meter-row"><span class="pm-meter-name">🎁 Guías disponibles</span><span></span><span class="pm-meter-val">' + usage.bonus_guides + '</span></div>'
             : '') +
-          '</div>' +
-          (usage.plan === 'premium' && usage.bonus_by_plan
-            ? '<div class="pm-status-sub">Si recargas ahora: más meses y <b>guías extra</b> para cuando acabes las del mes (' +
-                (usage.bonus_by_plan['1viaje'] || 1) + ' con 1 viaje, ' + (usage.bonus_by_plan.anual || 4) + ' con los demás).</div>'
-            : '');
+          '</div>' : (usage.bonus_guides > 0 ? '<div class="pm-status-sub">🎁 Guías disponibles: <b>' + usage.bonus_guides + '</b></div>' : '');
       } else if (opts.loadUsage && !usageFailed) {
         meters = '<div class="pm-meters is-loading"><span class="pm-skel"></span><span class="pm-skel"></span><span class="pm-skel"></span></div>';
       }
@@ -131,10 +131,11 @@
       if (!usage || !usage.plans) { el.style.display = 'none'; return; }
       el.style.display = '';
       var f = usage.plans.free, p = usage.plans.premium;
+      var stops = (p.maxStops || 50);
       var rows = [
-        ['Guías', f.guides + ' en total', p.guidesPerMonth + ' al mes'],
-        ['Cambios en tus guías', f.edits + ' en total', p.editsPerMonth + ' al mes'],
-        ['Mensajes con Salma', f.chatPerDay + ' al día', p.chatPerDay + ' al día'],
+        ['Mensajes con Salma', f.chatPerDay + ' al día', 'Sin límite a la vista'],
+        ['Guías con mapa', 'Prueba o guía suelta', 'Todas (hasta ' + stops + ' paradas)'],
+        ['Cambios en tus guías', 'Pocos', 'Los que necesites'],
         ['Alertas de vuelo', f.alerts, 'hasta ' + p.alerts],
       ];
       el.innerHTML = '<div class="pm-label">Qué incluye</div>' +
@@ -145,24 +146,23 @@
     }
 
     function renderPlans() {
-      var base = plans[0];
-      $('grid').innerHTML = plans.map(function (p) {
-        var perMonth = Math.round(p.cents / p.months);
-        var saving = p.months > 1 && base ? Math.round((1 - perMonth / (base.cents / base.months)) * 100) : 0;
+      var visible = plans.filter(function (p) { return !p.hidden; });
+      $('grid').innerHTML = visible.map(function (p) {
         var sel = p.key === selected;
-        return '<button type="button" class="pm-plan' + (sel ? ' is-selected' : '') + '" role="radio" aria-checked="' + sel + '" data-plan="' + esc(p.key) + '">' +
+        var big = p.key === 'guia' ? '1<small>guía</small>' : p.months + '<small>' + monthsText(p.months) + '</small>';
+        var sub = p.key === 'guia' ? '+ chat 30 días · pago único' : eur(Math.round(p.cents / p.months)) + ' al mes';
+        return '<button type="button" class="pm-plan' + (sel ? ' is-selected' : '') + '" role="radio" aria-checked="' + sel + '" data-plan="' + esc(p.key) + '"' + (p.best ? ' style="grid-column:1 / -1"' : '') + '>' +
           (p.best ? '<span class="pm-badge">Mejor precio</span>' : '') +
-          '<span class="pm-plan-months">' + p.months + '<small>' + monthsText(p.months) + '</small></span>' +
+          '<span class="pm-plan-months">' + big + '</span>' +
           '<span class="pm-plan-name">' + esc(p.label) + '</span>' +
           '<span class="pm-plan-price">' + eur(p.cents) + '</span>' +
-          '<span class="pm-plan-permonth">' + (p.months > 1 ? eur(perMonth) + ' al mes' : 'pago único') +
-            (saving > 0 ? ' <b class="pm-save">−' + saving + '%</b>' : '') + '</span>' +
+          '<span class="pm-plan-permonth">' + esc(sub) + '</span>' +
         '</button>';
       }).join('');
       var sp = selectedPlan();
       $('pay').innerHTML = '<span>Pagar</span><span>' + eur(sp.cents) + '</span>';
-      $('fine').innerHTML = esc(sp.months + ' ' + monthsText(sp.months) + ' de Premium') +
-        ' · pago único, sin renovación · Stripe<br><span class="pm-test">MODO PRUEBA · no se cobrará</span>';
+      $('fine').innerHTML = esc(sp.key === 'guia' ? '1 guía (hasta 50 paradas) y chat durante 30 días' : sp.months + ' ' + monthsText(sp.months) + ' de Premium') +
+        ' · pago único, sin renovación · Stripe' + (usage && usage.modo_prueba ? '<br><span class="pm-test">MODO PRUEBA · no se cobrará</span>' : '');
     }
 
     function applyUsage(d) {
@@ -183,15 +183,51 @@
       document.removeEventListener('keydown', onKey);
       if (typeof opts.onClose === 'function') { try { opts.onClose(); } catch (_) {} }
     }
-    function onKey(e) { if (e.key === 'Escape') close(); }
+    function onKey(e) { if (e.key === 'Escape') requestClose(); }
+
+    // OFERTA DE SALIDA (plan nuevo, 3 oct 2026): quien cierra sin comprar ve UNA vez el anual a precio de oferta. Después se cierra.
+    function offerPlan() {
+      for (var i = 0; i < plans.length; i++) if (plans[i].key === 'anual_oferta') return plans[i];
+      return null;
+    }
+    function requestClose() {
+      var op = offerPlan();
+      if (sinPago || isPremium || offerShown || !op || (usage && usage.is_premium)) { close(); return; }
+      offerShown = true;
+      var sheet = overlay.querySelector('.pm-sheet');
+      var full = null;
+      for (var i = 0; i < plans.length; i++) if (plans[i].key === 'anual') full = plans[i];
+      sheet.querySelectorAll('.pm-head, .pm-status, .pm-body, .pm-compare, .pm-cta').forEach(function (n) { n.style.display = 'none'; });
+      var box = document.createElement('div');
+      box.className = 'pm-head';
+      box.setAttribute('data-pm', 'offer');
+      box.innerHTML =
+        '<div class="pm-kicker">Antes de irte</div>' +
+        '<div class="pm-title">Anual a ' + eur(op.cents) + '</div>' +
+        '<div class="pm-sub">12 meses de Premium' + (full ? ' en vez de ' + eur(full.cents) : '') + ' · pago único, sin renovación. Solo te lo enseño ahora.</div>' +
+        '<div class="pm-cta" style="position:static;margin-top:18px">' +
+          '<button class="pm-pay" type="button" data-pm="offer-pay"><span>Pagar</span><span>' + eur(op.cents) + '</span></button>' +
+          '<button type="button" data-pm="offer-no" style="margin-top:12px;background:none;border:0;color:inherit;opacity:.7;text-decoration:underline;cursor:pointer;font:inherit">No, gracias</button>' +
+          '<div class="pm-error" data-pm="offer-err" role="alert"></div>' +
+        '</div>';
+      sheet.appendChild(box);
+      box.querySelector('[data-pm="offer-no"]').addEventListener('click', close);
+      box.querySelector('[data-pm="offer-pay"]').addEventListener('click', function () {
+        var btn = this, er = box.querySelector('[data-pm="offer-err"]');
+        er.textContent = ''; btn.disabled = true;
+        Promise.resolve().then(function () { return opts.onPay('anual_oferta'); }).catch(function (e) {
+          btn.disabled = false; er.textContent = (e && e.message) || 'Error de conexión. Inténtalo de nuevo.';
+        });
+      });
+    }
 
     // Eventos
     overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) { close(); return; }
+      if (e.target === overlay) { requestClose(); return; }
       var planBtn = e.target.closest && e.target.closest('.pm-plan');
       if (planBtn && overlay.contains(planBtn)) { selected = planBtn.getAttribute('data-plan'); renderPlans(); }
     });
-    overlay.querySelector('.pm-close').addEventListener('click', close);
+    overlay.querySelector('.pm-close').addEventListener('click', requestClose);
     document.addEventListener('keydown', onKey);
 
     $('pay').addEventListener('click', function () {

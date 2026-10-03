@@ -846,6 +846,7 @@ async function verifyAuthAndGetUser(authHeader) {
       premium_until: premiumUntilStr,
       premium_active: premiumUntilMs > Date.now(),
       bonus_guides: parseInt(fields.premium_bonus_guides?.integerValue || '0', 10) || 0,
+      plan_key: await loadPlanKey(null, uid),
       perfil_facts: perfilUsoFacts(_parseFirestoreValue(fields.perfil_ia)),
     };
   } catch (e) {
@@ -995,20 +996,70 @@ function computeOpenNow(periods, utcOffsetMin, nowMs) {
 // Los topes de Premium son PROVISIONALES: se ajustan en el paso 4 con costes reales.
 // 21 sept 2026: editsPerMonth 8 → 40. Los 8 se pusieron cuando editar una guía costaba ~0,3 € (reescribía la
 // ruta entera); con la edición por operaciones (SALMA_ROUTE_EDIT) cuesta céntimos. Revisar con GET /usage.
+// ═══ PLANES Y LÍMITES — modelo nuevo (3 oct 2026, decisión de Paco; sustituye por completo al anterior de 1 viaje/semestral) ═══
+// Un usuario está en UNO de estos planes (planOf): free · prueba · guia · trimestral · anual · anual_oferta.
+//  · free        — gratis para siempre: 5 mensajes al día y lo que no usa IA. Sin guías (salvo una guía regalada, premium_bonus_guides).
+//  · prueba      — 7 días de Premium al registrarse, sin tarjeta, UNA por cuenta (marca: premium_until, que el cliente no puede escribir):
+//                  1 guía de hasta 35 paradas, 20 mensajes/día, tope de 1,5 € de coste y tope global de 10 €/día entre todas las pruebas.
+//  · guia        — guía suelta (9,99 €): 1 guía de hasta 50 paradas + chat 30 días (20/día); tope de 4 € de coste.
+//  · trimestral / anual — Premium sin límites a la vista: SOLO techo antiabuso (100 mensajes/día, 3 guías/día, 50 paradas por guía)
+//                  y tope de coste por cuenta (8 € trimestral, 20 € anual, 16 € la oferta).
+// Guías de "prueba" y "guia": guidesPerMonth 0 + 1 guía en premium_bonus_guides (la consume usageRecord). budgetEur = coste de Claude
+// (€, precio de lista) al MES por cuenta, invisible para el uso normal (interruptor ACCOUNT_BUDGET_ON). El plan lo guarda el Worker en
+// KV `uplan:<uid>` (el cliente puede escribir casi todo su documento de Firestore, así que el plan NUNCA se lee de ahí).
 const PLAN_LIMITS = {
-  free:    { guides: 1, edits: 2, chatPerDay: 20 },                   // guides/edits: TOTAL de por vida
-  premium: { guidesPerMonth: 4, editsPerMonth: 40, chatPerDay: 100 }, // PROVISIONAL
+  free:         { chatPerDay: 5,   guides: 0, edits: 2, maxStops: 35, budgetEur: 0.5 },     // guides/edits: TOTAL de por vida
+  prueba:       { chatPerDay: 20,  guidesPerMonth: 0, editsPerMonth: 5,   maxStops: 35, budgetEur: 1.5 },
+  guia:         { chatPerDay: 20,  guidesPerMonth: 0, editsPerMonth: 10,  maxStops: 50, budgetEur: 4 },
+  trimestral:   { chatPerDay: 100, guidesPerDay: 3, editsPerMonth: 300, maxStops: 50, budgetEur: 8 },
+  anual:        { chatPerDay: 100, guidesPerDay: 3, editsPerMonth: 300, maxStops: 50, budgetEur: 20 },
+  anual_oferta: { chatPerDay: 100, guidesPerDay: 3, editsPerMonth: 300, maxStops: 50, budgetEur: 16 },
 };
-// TECHO DE GASTO POR CUENTA (caso p-murj9qyu6ct, punto 9, 3 oct 2026): en euros de Claude al mes (precio de lista), invisible para el
-// uso normal (un viajero real gasta una fracción) y que corta al que abusa. Free 3 €/mes, Premium 20 €/mes (≈ lo que deja un anual).
-// Interruptor ACCOUNT_BUDGET_ON = "1". NO es todavía el presupuesto de la prueba de 7 días (esa prueba aún no existe).
-const ACCOUNT_BUDGET_EUR = { free: 3, premium: 20 };
-// Guías extra (caso p-mui1yhp9ls1, 26 sept 2026, opción A de Paco): quien YA es Premium y vuelve a
-// pagar recibe estas guías de más (según el plan que compra), que se gastan solo cuando ha agotado el cupo del mes y no caducan.
-// Viven en users/<uid>.premium_bonus_guides (Firestore: lo escribe solo el Worker; las reglas impiden
-// que el cliente lo toque). Antes, pagar otra vez solo sumaba meses: pagaba y seguía bloqueado.
-// 26 sept 2026 (Paco, opción B): 1 viaje → +1; planes largos → +4. Plan desconocido → +1 (lo prudente).
-const PREMIUM_BONUS_GUIDES_BY_PLAN = { '1viaje': 1, trimestral: 4, semestral: 4, anual: 4 };
+const TRIAL_DAYS = 7;
+const TRIAL_DAILY_BUDGET_EUR = 10;   // tope de gasto de Claude de TODAS las pruebas juntas, por día
+// Plan del usuario. Premium antiguo sin dato en KV (pagó antes del plan nuevo) → como trimestral.
+function planOf(authUser) {
+  if (!authUser || !authUser.premium_active) return 'free';
+  return PLAN_LIMITS[authUser.plan_key] ? authUser.plan_key : 'trimestral';
+}
+// Plan por KV (solo lo escribe el Worker: webhook de Stripe y concesión de la prueba).
+async function loadPlanKey(env, uid) {
+  try {
+    const raw = await (env || _gateEnv)?.SALMA_KB?.get('uplan:' + uid);
+    return raw ? (JSON.parse(raw).plan || null) : null;
+  } catch (_) { return null; }
+}
+// Jerarquía para que comprar una guía suelta NO rebaje a quien ya tiene un plan largo.
+const PLAN_TIER = { prueba: 1, guia: 2, trimestral: 3, anual_oferta: 4, anual: 4 };
+// Guías que se suman al comprar (se gastan una a una; ver usageRecord). Solo la guía suelta.
+const PLAN_BONUS_GUIDES = { guia: 1 };
+// Gasto de las pruebas (todas juntas, por día) en € de Claude a precio de lista.
+async function trialSpendToday(env) { try { return parseFloat(await env.SALMA_KB.get('trialspend:' + usageToday())) || 0; } catch (_) { return 0; } }
+async function trialSpendAdd(env, eur) {
+  try { const k = 'trialspend:' + usageToday(); await env.SALMA_KB.put(k, String((parseFloat(await env.SALMA_KB.get(k)) || 0) + eur), { expirationTtl: 3 * 86400 }); } catch (_) {}
+}
+// Prueba de 7 días: se concede UNA vez, a la primera petición de pago de IA de una cuenta que nunca ha tenido Premium ni prueba.
+// La marca es premium_until (protegido en las reglas de Firestore). Interruptor TRIAL_ON = "1". Devuelve true si la concede ahora.
+async function ensureTrial(env, authUser) {
+  try {
+    if (env.TRIAL_ON !== '1' || !authUser || authUser.premium_until || !env.SALMA_KB) return false;
+    if ((await trialSpendToday(env)) >= TRIAL_DAILY_BUDGET_EUR) return false;            // hoy ya se gastó el tope de pruebas
+    const lockK = 'trial:' + authUser.uid;
+    if (await env.SALMA_KB.get(lockK)) return false;                                       // ya concedida (carreras entre peticiones)
+    await env.SALMA_KB.put(lockK, '1', { expirationTtl: 400 * 86400 });
+    const now = Date.now(), until = new Date(now + TRIAL_DAYS * 86400000).toISOString();
+    await firestoreAdminPatch(env, 'users/' + authUser.uid, {
+      premium_until: { timestampValue: until },
+      premium_bonus_guides: { integerValue: String((authUser.bonus_guides || 0) + 1) },
+      premium_updated_at: { timestampValue: new Date(now).toISOString() },
+    });
+    await env.SALMA_KB.put('uplan:' + authUser.uid, JSON.stringify({ plan: 'prueba', since: now }), { expirationTtl: 400 * 86400 });
+    authUser.premium_until = until; authUser.premium_active = true; authUser.plan_key = 'prueba';
+    authUser.bonus_guides = (authUser.bonus_guides || 0) + 1;
+    console.log('[PRUEBA] concedida a ' + authUser.uid + ' hasta ' + until);
+    return true;
+  } catch (e) { console.warn('[PRUEBA] no se pudo conceder: ' + e.message); return false; }
+}
 // Claude Sonnet 4.6, USD por millón de tokens — solo ESTIMACIÓN para medir coste, no es la factura.
 const CLAUDE_USD_PER_MTOK = { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 };
 
@@ -1031,39 +1082,63 @@ async function usageWrite(env, key, obj, ttl) {
 }
 
 // kind: 'chat' | 'guide' | 'edit'. Devuelve { ok: true } o { ok: false, limit, message }.
+// Modelo de planes nuevo (3 oct 2026): ver PLAN_LIMITS / planOf.
 async function usageGate(env, authUser, kind) {
   try {
+    await ensureTrial(env, authUser);                       // concede la prueba de 7 días si toca (muta authUser)
+    const plan = planOf(authUser);
+    const L = PLAN_LIMITS[plan];
     const premium = !!authUser.premium_active;
     const month = await usageRead(env, usageMonthKey(authUser.uid));
     if (month === null) return { ok: true };
-    if (env.ACCOUNT_BUDGET_ON === '1' && (month.claude_usd || 0) * USD_TO_EUR >= (premium ? ACCOUNT_BUDGET_EUR.premium : ACCOUNT_BUDGET_EUR.free)) {
-      console.log(`[PRESUPUESTO] ${authUser.uid} ${premium ? 'premium' : 'free'} ha gastado ${((month.claude_usd || 0) * USD_TO_EUR).toFixed(2)} € este mes — cortado`);
-      return { ok: false, limit: 'budget', message: premium
-        ? 'Has usado Salma muchísimo este mes y para evitar abusos tengo que pararte hasta el día 1. Si es un caso especial, escríbenos y lo vemos. 💛'
-        : 'Has llegado al límite de uso del plan gratuito este mes. Con Premium sigues sin preocuparte: Perfil → Mi plan.' };
+    const verPlanes = 'Elige tu plan en Perfil → Mi plan.';
+    // Todas las pruebas juntas ya gastaron su tope de hoy
+    if (plan === 'prueba' && (await trialSpendToday(env)) >= TRIAL_DAILY_BUDGET_EUR) {
+      return { ok: false, limit: 'prueba_hoy', message: 'Hoy se han acabado las pruebas gratuitas (hay mucha gente probando Salma). Vuelve mañana o ' + verPlanes.toLowerCase() };
+    }
+    // Techo de gasto por cuenta (invisible para el uso normal)
+    if (env.ACCOUNT_BUDGET_ON === '1' && (month.claude_usd || 0) * USD_TO_EUR >= L.budgetEur) {
+      console.log(`[PRESUPUESTO] ${authUser.uid} ${plan} ha gastado ${((month.claude_usd || 0) * USD_TO_EUR).toFixed(2)} € este mes — cortado`);
+      return { ok: false, limit: 'budget', message: plan === 'free'
+        ? 'Has llegado al límite del plan gratuito este mes. ' + verPlanes
+        : plan === 'prueba' ? 'Has gastado tu prueba gratuita. ' + verPlanes
+        : plan === 'guia' ? 'Tu guía suelta ya ha dado todo de sí. Si quieres seguir: ' + verPlanes.toLowerCase()
+        : 'Has usado Salma muchísimo este mes y, para evitar abusos, tengo que pararte hasta el día 1. Si es un caso especial, escríbenos y lo vemos. 💛' };
     }
     if (kind === 'chat') {
-      const lim = premium ? PLAN_LIMITS.premium.chatPerDay : PLAN_LIMITS.free.chatPerDay;
+      const lim = L.chatPerDay;
       const today = (month.days && month.days[usageToday()]) || 0;
       if (today >= lim) {
-        return { ok: false, limit: 'chat', message: premium
-          ? 'Has llegado al límite de mensajes de hoy (' + lim + '). Mañana se renueva.'
-          : 'Has llegado a los ' + lim + ' mensajes de hoy del plan gratuito. Mañana se renueva, o pásate a Premium desde Perfil → Mi plan.' };
+        return { ok: false, limit: 'chat', message: premium && L.guidesPerDay
+          ? 'Hoy hemos hablado muchísimo, ¡y me encanta! Mañana seguimos con tu viaje. 💛'
+          : 'Has llegado a los ' + lim + ' mensajes de hoy. Mañana se renueva. ' + (plan === 'free' ? 'Con Premium hablas todo lo que quieras: ' + verPlanes : '') };
       }
       return { ok: true, today };   // today = mensajes de hoy ANTES de este (lo usa el Perfil IA)
     }
     const isGuide = kind === 'guide';
     if (premium) {
-      const cap = isGuide ? PLAN_LIMITS.premium.guidesPerMonth : PLAN_LIMITS.premium.editsPerMonth;
-      const used = (isGuide ? month.guides : month.edits) || 0;
-      if (used >= cap) {
-        if (isGuide && (authUser.bonus_guides || 0) > 0) return { ok: true };
-        return { ok: false, limit: kind, message: isGuide
-          ? 'Has llegado al límite de guías de este mes (' + cap + '). Se renueva el día 1, o recarga desde Perfil → Mi plan y te sumo guías extra.'
-          : 'Has llegado al límite de cambios en guías de este mes (' + cap + '). Se renueva el día 1.' };
+      if (isGuide) {
+        if (L.guidesPerDay) {   // trimestral / anual: sin tope mensual, solo antiabuso diario
+          const hoy = (month.gdays && month.gdays[usageToday()]) || 0;
+          if (hoy >= L.guidesPerDay) return { ok: false, limit: 'guide', message: 'Hoy has creado ' + L.guidesPerDay + ' guías, que es el máximo diario. Mañana puedes seguir. 💛' };
+          return { ok: true };
+        }
+        // prueba / guia: el cupo mensual es 0 y la guía sale de premium_bonus_guides
+        if ((month.guides || 0) >= (L.guidesPerMonth || 0)) {
+          if ((authUser.bonus_guides || 0) > 0) return { ok: true };
+          return { ok: false, limit: 'guide', message: plan === 'prueba'
+            ? 'Tu prueba incluye 1 guía y ya la has usado. Para más: guía suelta (9,99 €), trimestral o anual. ' + verPlanes
+            : 'Tu guía suelta ya está usada. Otra guía son 9,99 €, o pásate al trimestral o al anual. ' + verPlanes };
+        }
+        return { ok: true };
+      }
+      const used = month.edits || 0;
+      if (used >= L.editsPerMonth) {
+        return { ok: false, limit: 'edit', message: 'Has llegado al límite de cambios en guías de este mes. Se renueva el día 1. ' + (plan === 'prueba' || plan === 'guia' ? verPlanes : '') };
       }
       return { ok: true };
     }
+    // free
     const total = await usageRead(env, usageTotalKey(authUser.uid));
     if (total === null) return { ok: true };
     const cap = isGuide ? PLAN_LIMITS.free.guides : PLAN_LIMITS.free.edits;
@@ -1072,8 +1147,8 @@ async function usageGate(env, authUser, kind) {
       // Guías regaladas (p. ej. "gracias por avisar de un fallo", 26 sept 2026) valen también sin Premium
       if (isGuide && (authUser.bonus_guides || 0) > 0) return { ok: true };
       return { ok: false, limit: kind, message: isGuide
-        ? 'Ya has usado tu guía gratuita. Con Premium puedes crear más: Perfil → Mi plan.'
-        : 'Ya has usado los ' + cap + ' cambios gratuitos de tu guía. Con Premium puedes seguir editándola: Perfil → Mi plan.' };
+        ? 'Para crear guías necesitas Premium: guía suelta (9,99 €), trimestral o anual. ' + verPlanes
+        : 'Para seguir editando tu guía necesitas Premium. ' + verPlanes };
     }
     return { ok: true };
   } catch (_) { return { ok: true }; }
@@ -1104,11 +1179,20 @@ async function usageRecord(env, authUser, delta) {
       const keep = Object.keys(month.days).sort().slice(-35);
       const pruned = {}; keep.forEach(k => { pruned[k] = month.days[k]; }); month.days = pruned;
     }
-    month.plan = authUser.premium_active ? 'premium' : 'free';
+    if (delta.guides) {
+      month.gdays = month.gdays || {};
+      month.gdays[usageToday()] = (month.gdays[usageToday()] || 0) + delta.guides;
+      const keepG = Object.keys(month.gdays).sort().slice(-35);
+      const prunedG = {}; keepG.forEach(k => { prunedG[k] = month.gdays[k]; }); month.gdays = prunedG;
+    }
+    const _plan = planOf(authUser);
+    month.plan = _plan;
+    if (_plan === 'prueba' && addUsd > 0) await trialSpendAdd(env, addUsd * USD_TO_EUR);
     month.last_at = new Date().toISOString();
     await usageWrite(env, mk, month, 60 * 60 * 24 * 100);
-    // Guía por encima del cupo del mes de un Premium → sale de sus guías extra (usageGate la dejó pasar por eso).
-    if (delta.guides && authUser.premium_active && month.guides > PLAN_LIMITS.premium.guidesPerMonth && (authUser.bonus_guides || 0) > 0) {
+    // Guía de "prueba" o "guia" (cupo mensual 0): sale de sus guías (premium_bonus_guides); usageGate la dejó pasar por eso.
+    const _capMes = PLAN_LIMITS[_plan].guidesPerMonth;
+    if (delta.guides && authUser.premium_active && typeof _capMes === 'number' && month.guides > _capMes && (authUser.bonus_guides || 0) > 0) {
       const left = Math.max(0, authUser.bonus_guides - delta.guides);
       try {
         await firestoreAdminPatch(env, 'users/' + uid, { premium_bonus_guides: { integerValue: String(left) } });
@@ -2444,10 +2528,10 @@ async function stripeVerifyWebhook(payload, sigHeader, secret) {
 
 // Planes Premium — pago único que da N meses de acceso. Tabla dura, nunca del cliente.
 const PREMIUM_PLANS = {
-  '1viaje':     { label: '1 viaje',    amount: 499,  months: 1  },
-  'trimestral': { label: 'Trimestral', amount: 899,  months: 3  },
-  'semestral':  { label: 'Semestral',  amount: 1499, months: 6  },
-  'anual':      { label: 'Anual',      amount: 2499, months: 12 },
+  guia:         { label: 'Guía suelta',     amount: 999,  months: 1 },    // 1 guía (≤50 paradas) + chat 30 días
+  trimestral:   { label: 'Trimestral',      amount: 1999, months: 3 },
+  anual:        { label: 'Anual',           amount: 4999, months: 12 },
+  anual_oferta: { label: 'Anual (oferta)',  amount: 3999, months: 12 },   // se ofrece al cerrar sin comprar (premium-modal.js)
 };
 
 /**
@@ -4976,6 +5060,7 @@ async function waGetUserPlan(env, uid) {
     const premiumUntilMs = premiumUntilStr ? new Date(premiumUntilStr).getTime() : 0;
     return { uid, premium_until: premiumUntilStr, premium_active: premiumUntilMs > Date.now(),
              bonus_guides: parseInt(fields.premium_bonus_guides?.integerValue || '0', 10) || 0,
+             plan_key: await loadPlanKey(env, uid),
              perfil_facts: perfilUsoFacts(_parseFirestoreValue(fields.perfil_ia)) };
   } catch (_) {
     return { uid, premium_until: null, premium_active: false, bonus_guides: 0 };
@@ -5055,7 +5140,7 @@ async function waGenerateAndSaveRoute(env, uid, sourceText) {
   if (!sourceText || sourceText.length < 100) return { ok: false, reason: 'sin_contenido' };
   const route = await convertProseToRouteJson(sourceText, env, {});
   if (!route || !route.stops || route.stops.length < 2) return { ok: false, reason: 'convert_failed' };
-  const verified = env.GOOGLE_PLACES_KEY ? await verifyAllStops(route, env.GOOGLE_PLACES_KEY, {}, env) : route;
+  const verified = env.GOOGLE_PLACES_KEY ? await verifyAllStops(route, env.GOOGLE_PLACES_KEY, { maxStops: 50 }, env) : route;
   const finalRoute = verified || route;
 
   const numDias = finalRoute.duration_days ? Number(finalRoute.duration_days)
@@ -7059,7 +7144,7 @@ async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, 
 
       // 3. Verificar este bloque
       try {
-        genResult.route = await verifyAllStops(genResult.route, placesKey, {}, env);
+        genResult.route = await verifyAllStops(genResult.route, placesKey, { maxStops: 50 }, env);
       } catch (_) {
         // Si verify falla, mantener la ruta sin verificar
       }
@@ -7185,6 +7270,9 @@ function addressContainsLocation(formattedAddress, ...locations) {
 function _locNormLite(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
 async function verifyAllStops(route, placesKey, opts = {}, env) {
   if (!route?.stops || !placesKey) return route;
+  // TOPE DE PARADAS POR GUÍA (3 oct 2026, plan nuevo): se recorta ANTES de verificar (así no se paga a Google lo que sobra).
+  const _topeSobran = [];
+  if (opts.maxStops && route.stops.length > opts.maxStops) _topeSobran.push(...route.stops.splice(opts.maxStops));
 
   // ANCLA DE PAÍS — si el destino se resolvió a un país concreto antes de generar,
   // manda ESE país por encima de route.country (que lo escribe el modelo y puede
@@ -7499,6 +7587,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   // Regla única: sin place_id validado por Google Places → la parada NO entra en el JSON final.
   const validatedStops = [];
   const discarded = [];
+  _topeSobran.forEach(st => discarded.push({ name: st.name || st.headline || '(sin nombre)', day: st.day || null, reason: 'tope_paradas_por_guia' }));
   const spotWrites = []; // escrituras del catálogo "nombre → lugar"; se esperan antes de salir (si no, pueden perderse)
 
   route.stops.forEach((stop, i) => {
@@ -12449,14 +12538,15 @@ export default {
             // Aviso de cupo de guías (25 sept 2026, Paco: "que avise cuando se acerque al tope").
             let guideNote = '';
             try {
-              if (waPlan.premium_active) {
-                const mo = (await usageRead(env, usageMonthKey(linkedUid))) || {};
-                const fresh = await waGetUserPlan(env, linkedUid); // guías extra ya descontadas por usageRecord
-                const left = Math.max(0, PLAN_LIMITS.premium.guidesPerMonth - (mo.guides || 0)) + (fresh.bonus_guides || 0);
-                guideNote = left > 0 ? `\n\n⚠️ Te ${left === 1 ? 'queda 1 guía' : 'quedan ' + left + ' guías'} este mes.` : '\n\n⚠️ Era tu última guía de este mes — el día 1 se renueva.';
-              } else {
-                const premiumLink2 = await buildAutoLoginLink(env, linkedUid, 'premium');
-                guideNote = `\n\n⚠️ Esta era tu guía gratuita. Para crear más, pásate a Premium: ${premiumLink2}`;
+              const fresh = await waGetUserPlan(env, linkedUid); // guías extra ya descontadas por usageRecord
+              const _pl = planOf(fresh);
+              if (_pl === 'free' || _pl === 'prueba' || _pl === 'guia') {
+                const left = fresh.bonus_guides || 0;
+                if (left > 0) guideNote = `\n\n⚠️ Te ${left === 1 ? 'queda 1 guía' : 'quedan ' + left + ' guías'}.`;
+                else {
+                  const premiumLink2 = await buildAutoLoginLink(env, linkedUid, 'premium');
+                  guideNote = `\n\n⚠️ Era tu última guía. Para crear más (guía suelta 9,99 €, trimestral o anual): ${premiumLink2}`;
+                }
               }
             } catch (_) {}
             const refLine = await waMaybeReferral(env, from);
@@ -12547,7 +12637,7 @@ export default {
           // (tras una búsqueda que salió bien, 1 vez/semana) > recordatorio cada 5 respuestas.
           let footer = '';
           try {
-            const lim = waPlanChat.premium_active ? PLAN_LIMITS.premium.chatPerDay : PLAN_LIMITS.free.chatPerDay;
+            const lim = PLAN_LIMITS[planOf(waPlanChat)].chatPerDay;
             const mo = (await usageRead(env, usageMonthKey(linkedUid))) || {};
             const left = lim - ((mo.days && mo.days[usageToday()]) || 0);
             if (left <= 0) footer = '⚠️ Era tu último mensaje de hoy — mañana seguimos' + (waPlanChat.premium_active ? '.' : ', o pásate a Premium para tener más.');
@@ -13368,8 +13458,8 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         until.setMonth(until.getMonth() + months);
         const untilIso = until.toISOString();
         const nowIso = new Date(now).toISOString();
-        // Ya era Premium al pagar → además de los meses, guías extra (ver PREMIUM_BONUS_GUIDES_BY_PLAN).
-        // Van en el MISMO patch que premium_until: cuando la app ve el pago confirmado, las guías ya están.
+        // Guía suelta → +1 guía (premium_bonus_guides, se gasta al crearla). Va en el MISMO patch que premium_until: cuando la app ve
+        // el pago confirmado, la guía ya está. Trimestral y anual no suman guías (sin tope mensual).
         const wasPremium = !!curStr && new Date(curStr).getTime() > now;
         const curBonus = parseInt((userDoc && userDoc.fields && userDoc.fields.premium_bonus_guides && userDoc.fields.premium_bonus_guides.integerValue) || '0', 10) || 0;
         const userPatch = {
@@ -13378,7 +13468,14 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           premium_last_plan:  { stringValue: meta.plan || '' },
           premium_updated_at: { timestampValue: nowIso },
         };
-        if (wasPremium) userPatch.premium_bonus_guides = { integerValue: String(curBonus + (PREMIUM_BONUS_GUIDES_BY_PLAN[meta.plan] || 1)) };
+        if (PLAN_BONUS_GUIDES[meta.plan]) userPatch.premium_bonus_guides = { integerValue: String(curBonus + PLAN_BONUS_GUIDES[meta.plan]) };
+        // El plan vigente va a KV (el cliente no lo puede tocar). Comprar una guía suelta NO rebaja un plan más alto que siga activo.
+        try {
+          const prevRaw = await env.SALMA_KB.get('uplan:' + uid);
+          const prev = prevRaw ? (JSON.parse(prevRaw).plan || null) : null;
+          const keepPrev = wasPremium && prev && (PLAN_TIER[prev] || 0) > (PLAN_TIER[meta.plan] || 0);
+          if (!keepPrev) await env.SALMA_KB.put('uplan:' + uid, JSON.stringify({ plan: meta.plan, since: now }), { expirationTtl: 800 * 86400 });
+        } catch (_) {}
 
         await firestoreAdminPatch(env, 'users/' + uid, userPatch);
 
@@ -13691,20 +13788,27 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
         const month = (await usageRead(env, usageMonthKey(authUser.uid))) || {};
         const total = (await usageRead(env, usageTotalKey(authUser.uid))) || {};
+        const _plan = planOf(authUser), _L = PLAN_LIMITS[_plan];
+        const _untilMs = authUser.premium_until ? new Date(authUser.premium_until).getTime() : 0;
+        // El tope de coste por cuenta (budgetEur) es interno: no sale de aquí.
+        const _pub = (L) => ({ chatPerDay: L.chatPerDay, guidesPerDay: L.guidesPerDay || null, maxStops: L.maxStops || null });
         return new Response(JSON.stringify({
-          plan: authUser.premium_active ? 'premium' : 'free',
+          plan: _plan,                                   // free · prueba · guia · trimestral · anual · anual_oferta
+          is_premium: !!authUser.premium_active,
           premium_until: authUser.premium_until || null,
-          limits: authUser.premium_active ? PLAN_LIMITS.premium : PLAN_LIMITS.free,
-          // Los dos planes lado a lado + precios que cobra Stripe: el modal "Hazte Premium" pinta
-          // de aquí, así no hay números escritos a mano en el frontend que puedan descuadrar.
+          trial_days_left: _plan === 'prueba' ? Math.max(0, Math.ceil((_untilMs - Date.now()) / 86400000)) : null,
+          trial_days: TRIAL_DAYS,
+          modo_prueba: /^sk_test_/.test(env.STRIPE_SECRET_KEY || ''),   // true mientras Stripe esté en modo test: la web enseña "no se cobrará"
+          limits: _pub(_L),
+          // Gratis y Premium lado a lado + precios que cobra Stripe: el modal "Hazte Premium" pinta de aquí,
+          // así no hay números escritos a mano en el frontend que puedan descuadrar.
           plans: {
-            free:    { ...PLAN_LIMITS.free,    alerts: FW_FREE_LIMIT },
-            premium: { ...PLAN_LIMITS.premium, alerts: FW_PREMIUM_LIMIT },
+            free:    { ..._pub(PLAN_LIMITS.free),    alerts: FW_FREE_LIMIT },
+            premium: { ..._pub(PLAN_LIMITS.anual),   alerts: FW_PREMIUM_LIMIT },
           },
           prices: PREMIUM_PLANS,
           today_msgs: (month.days && month.days[usageToday()]) || 0,
           bonus_guides: authUser.bonus_guides || 0,
-          bonus_by_plan: PREMIUM_BONUS_GUIDES_BY_PLAN,
           month, total,
         }), { headers: FW_CORS });
       } catch (e) {
@@ -15828,6 +15932,7 @@ REGLAS:
                 anchorProvince: anchorCountry.province || '',
               } : {};
               if (env.GOOGLE_LAZY_DETAILS === '1') _vOpts.lazyDetails = true;
+              _vOpts.maxStops = (PLAN_LIMITS[planOf(authUser)] || PLAN_LIMITS.free).maxStops || 50;   // tope de paradas por guía según plan
               // Edición de una ruta ya guardada (o fusión desde "Añadir a la guía") — pasar
               // las paradas anteriores para que verifyAllStops pueda reutilizar las que no
               // cambiaron sin re-preguntar a Google (las paradas fusionadas ya llevan los

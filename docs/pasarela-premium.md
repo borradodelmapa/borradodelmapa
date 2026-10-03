@@ -17,10 +17,12 @@
 
 | Plan | Precio | Acceso | €/mes efectivo |
 |---|---|---|---|
-| 1 viaje | 4,99 € | 1 mes | 4,99 |
-| Trimestral | 8,99 € | 3 meses | 3,00 |
-| Semestral | 14,99 € | 6 meses | 2,50 |
-| **Anual** (ancla) | **24,99 €** | **12 meses** | **2,08** |
+| Guía suelta | 9,99 € | 1 guía (≤50 paradas) + chat 30 días | — |
+| Trimestral | 19,99 € | 3 meses | 6,66 |
+| **Anual** (ancla) | **49,99 €** | **12 meses** | **4,17** |
+| Anual (oferta de salida) | 39,99 € | 12 meses | 3,33 |
+
+> Plan vigente desde el 3 oct 2026 (sustituye al de 1 viaje / trimestral / semestral / anual a 4,99-24,99 €). Detalle y límites: `docs/negocio-premium.md`.
 
 ### Mecánica del acceso
 
@@ -125,7 +127,7 @@ Al **primer login de cada usuario tras el despliegue de la Fase 3**:
 
 ### 4.2 Endpoint `POST /create-payment` (reescrito)
 
-Entrada: `{ plan: '1viaje'|'trimestral'|'semestral'|'anual' }` + header `Authorization: Bearer <firebase_id_token>`.
+Entrada: `{ plan: 'guia'|'trimestral'|'anual'|'anual_oferta' }` + header `Authorization: Bearer <firebase_id_token>`.
 
 1. `verifyAuthAndGetUser(authHeader)` → si null, 401. **(hoy acepta cualquier `user_id` del body — se elimina).**
 2. Mapear plan → `{ unit_amount, months }`. Tabla dura en el worker, nunca del cliente.
@@ -159,7 +161,7 @@ Contrato **cambia**: antes devolvía `{ client_secret }`, ahora `{ url }`. Únic
 
 - El modal de coins (`openCoinsModal`) se convierte en **modal "Hazte Premium"**:
   - Estado del usuario: "Premium hasta <fecha>" o "Plan gratuito".
-  - 4 tarjetas de plan (1 viaje / trimestral / semestral / anual), anual destacado.
+  - 3 tarjetas de plan (guía suelta / trimestral / anual), anual destacado, y oferta de salida (anual a 39,99 €) al cerrar sin comprar.
   - Botón → `POST /create-payment` con el `idToken` → `window.location.href = url`.
   - Se **elimina**: `initStripeCard`, la publishable key hardcodeada ([app.js:3012]), el `<div id="stripe-card-*">` del HTML del modal, el acordeón "¿Qué puedes hacer con coins?".
 - **Retorno del pago** (al cargar la app, leer `location.search`):
