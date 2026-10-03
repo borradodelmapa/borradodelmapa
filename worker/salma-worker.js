@@ -14716,24 +14716,31 @@ INSTRUCCIONES:
           if (useAnthropic) {
             // ── Claude Sonnet (texto sin foto) ──
             try {
-              apiRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+              // Red de seguridad de la caché (caso p-murj9qyu6ct): si Anthropic rechazara las marcas nuevas (400…),
+              // se repite UNA vez la llamada de siempre, sin marcas de historial ni TTL de 1 h. El usuario no se entera.
+              const _callClaude = (nuevo) => fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                   'x-api-key': env.ANTHROPIC_API_KEY,
                   'anthropic-version': '2023-06-01',
-                  ...(env.CACHE_1H === '1' ? { 'anthropic-beta': 'extended-cache-ttl-2025-04-11' } : {}),
+                  ...(nuevo && env.CACHE_1H === '1' ? { 'anthropic-beta': 'extended-cache-ttl-2025-04-11' } : {}),
                 },
                 body: JSON.stringify({
                   model: 'claude-sonnet-4-6',
                   max_tokens: reqMaxTokens,
-                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil, env.CACHE_1H === '1'),
-                  messages: env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages,
+                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil, nuevo && env.CACHE_1H === '1'),
+                  messages: nuevo && env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages,
                   tools: ANTHROPIC_TOOLS,
                   ...(_planSinHerramientas ? { tool_choice: { type: 'none' } } : {}),
                   stream: true,
                 }),
               });
+              apiRes = await _callClaude(true);
+              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1')) {
+                console.log('[CACHE] Anthropic rechazó la petición con caché nueva (' + apiRes.status + '): reintento sin ella');
+                apiRes = await _callClaude(false);
+              }
             } catch (e) {
               ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
