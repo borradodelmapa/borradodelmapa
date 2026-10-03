@@ -1449,7 +1449,9 @@ const salma = {
   // justo antes de esta respuesta) en sessionStorage — sobrevive al redirect de Stripe Checkout (misma
   // pestaña) — para poder retomarlo solo, sin que Paco tenga que volver a escribir la guía, en cuanto
   // el pago se confirme (ver _resumePendingRetry, llamado desde _verificarPagoPremium en app.js).
-  _offerSeePlans() {
+  _offerSeePlans(limit) {
+    // El tope diario de gasto de Salma (ai_cap) no se arregla con un plan: solo el aviso, sin botón.
+    if (limit === 'ai_cap') return;
     const area = this._getChatArea();
     try {
       // pu: la fecha de Premium ANTES de pagar (caso p-mui1yhp9ls1). _verificarPagoPremium compara con
@@ -1465,15 +1467,21 @@ const salma = {
     wrap.className = 'historia-chat-chip-wrap ver-plan-wrap';
     const caption = document.createElement('div');
     caption.className = 'crear-ruta-caption';
-    caption.textContent = 'Lo que tenías a medias se queda guardado — al recargar, seguimos justo donde lo dejamos.';
+    caption.textContent = 'Lo que tenías a medias se queda guardado: en cuanto elijas plan, seguimos justo donde lo dejamos.';
     wrap.appendChild(caption);
     const btn = document.createElement('button');
     btn.className = 'crear-ruta-btn';
-    btn.innerHTML = '<span>⚡</span> Recargar / Ver mi plan <span class="crb-arrow">→</span>';
+    btn.innerHTML = '<span>⚡</span> Ver los planes <span class="crb-arrow">→</span>';
     btn.addEventListener('click', () => { window.openCoinsModal(); });
     wrap.appendChild(btn);
     area.appendChild(wrap);
     this._scrollToBottom(true);
+    // PANTALLA DE PRECIOS AL GASTAR LA GUÍA GRATIS (plan nuevo, 3 oct 2026): al chocar con el límite de guías se abre sola la
+    // pantalla de planes (una vez por sesión). En el resto de límites queda el botón, sin abrir nada por sorpresa.
+    if (limit === 'guide' && !this._planesAutoAbiertos) {
+      this._planesAutoAbiertos = true;
+      setTimeout(() => { try { window.openCoinsModal(); } catch (_) {} }, 700);
+    }
   },
 
   // Retoma, tras un pago confirmado, lo que se estaba pidiendo cuando saltó el límite del plan
@@ -1926,7 +1934,7 @@ const salma = {
       }
 
       // Límite del plan alcanzado: el texto ya viene en la respuesta; añadir el botón al plan.
-      if (data.limit_reached) this._offerSeePlans();
+      if (data.limit_reached) this._offerSeePlans(data.limit_reached);
 
       // Si hay video_params, renderizar player inline
       if (data.video_params && typeof videoPlayer !== 'undefined') {

@@ -10922,8 +10922,14 @@ export default {
           result = { disabled: action === 'disable' };
         } else if (action === 'reset_free') {
           if (!env.SALMA_KB) throw new Error('KV no disponible');
+          // "Dejar a cero" (3 oct 2026, plan nuevo): cupos de por vida, uso del mes, plan guardado en KV y guías extra/regaladas.
+          // El Premium se quita aparte con "premium_remove". Así la cuenta vuelve a verse como una recién creada.
           await env.SALMA_KB.delete(usageTotalKey(uid));
-          result = { reset: 'cupos gratuitos de por vida (guías y cambios) a cero' };
+          await env.SALMA_KB.delete(usageMonthKey(uid));
+          await env.SALMA_KB.delete('uplan:' + uid);
+          await env.SALMA_KB.delete('trial:' + uid);
+          await firestoreAdminPatch(env, 'users/' + uid, { premium_bonus_guides: _fI(0) });
+          result = { reset: 'cupos gratuitos (guías y cambios), uso del mes, plan guardado y guías extra a cero' };
         } else if (action === 'delete') {
           // Mismo borrado que "Borrar mi cuenta" del Perfil — ver deleteUserCompletely().
           result = await deleteUserCompletely(env, uid);
