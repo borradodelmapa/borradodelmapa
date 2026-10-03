@@ -22,6 +22,7 @@
 //   node scripts/casos.cjs modelo <id> <sonnet|opus> "por qué"   modelo recomendado para trabajar el caso (Paco lo ve en el panel)
 //   node scripts/casos.cjs enlaces [horas=24] [todos]        enlaces que ha dado el chat (sin "todos": solo los que se quedaron sin enlace)
 //   node scripts/casos.cjs guias [n=10]                      últimas guías creadas: camino (lector/Sonnet/fallo), motivo, tiempos, paradas
+//   node scripts/casos.cjs gasto [horas=24] [uid]            gasto de Claude por persona y petición del chat (total, caché, las más caras)
 //   node scripts/casos.cjs revisor [días=1 | estado | on | off]   revisor de conversaciones: prueba (no escribe) / encender el diario
 //
 // Criterio de modelo (26 sept 2026, para ahorrar sin perder calidad): SONNET = trabajo mecánico o ya
@@ -182,6 +183,30 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
       if (g.desc_lista) console.log(`      descartadas: ${g.desc_lista}`);
       if (g.cerca_lista) console.log(`      cerca de: ${g.cerca_lista}`);
     }
+  } else if (cmd === 'gasto') {
+    // Gasto de Claude por petición del chat (Firestore chat_costs, lo escribe el Worker: logChatCost, 3 oct 2026).
+    // node scripts/casos.cjs gasto [horas=24] [uid]   → total, por persona (mayor gasto primero) y las peticiones más caras.
+    const horas = parseFloat(a1) || 24; const uidF = process.argv[4] || '';
+    const { filas } = await call('/admin/chat-costs?horas=' + horas + '&limite=2000');
+    const rows = (filas || []).filter(r => !uidF || r.uid === uidF);
+    const eur = (r) => (Number(r.usd_micro) || 0) / 1e6 * 0.92;   // USD → EUR aprox.
+    const sum = (a) => a.reduce((t, r) => t + eur(r), 0);
+    const por = {};
+    rows.forEach(r => { (por[r.uid] = por[r.uid] || []).push(r); });
+    const fmt = (x) => x.toFixed(3) + ' €';
+    const cache = rows.reduce((t, r) => t + (Number(r.cr) || 0), 0), entrada = rows.reduce((t, r) => t + (Number(r.tin) || 0), 0);
+    console.log(`Últimas ${horas} h · ${rows.length} peticiones · ${Object.keys(por).length} personas · Claude ≈ ${fmt(sum(rows))} (precio de lista; solo Claude, sin Google)`);
+    console.log(`Caché: ${entrada ? Math.round(100 * cache / entrada) : 0} % de las fichas de entrada se leyeron de caché\n`);
+    Object.entries(por).sort((x, y) => sum(y[1]) - sum(x[1])).slice(0, 15).forEach(([uid, a]) => {
+      console.log(`${uid.slice(0, 10)}…  ${a[0].plan || '?'}  ${a.length} pet.  ${fmt(sum(a))}  (${fmt(sum(a) / a.length)}/pet.)`);
+    });
+    const errs = rows.filter(r => r.error);
+    console.log(`\nErrores: ${errs.length} peticiones con error · gastaron ${fmt(sum(errs))} sin dar respuesta buena`);
+    errs.slice(0, 8).forEach(r => console.log(`  ${fecha(r.at)} ${fmt(eur(r))} ${String(r.uid).slice(0, 8)}… ${r.error} · "${r.mensaje}"`));
+    console.log('\nLas 8 peticiones más caras:');
+    rows.sort((x, y) => eur(y) - eur(x)).slice(0, 8).forEach(r => {
+      console.log(`${fecha(r.at)} ${fmt(eur(r))} ${r.tipo} ${Math.round((r.ms || 0) / 1000)}s · ${String(r.uid).slice(0, 8)}… · "${r.mensaje}"`);
+    });
   } else if (cmd === 'revisor') {
     // Revisor de conversaciones (caso p-mulc92f6l52). Sin argumento: MODO PRUEBA de las últimas 24 h (no escribe
     // nada; cuesta la IA, ~0,1 cént./conversación). `revisor 3` = 3 días. `revisor estado` / `revisor on|off`.

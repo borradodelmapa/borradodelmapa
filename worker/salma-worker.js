@@ -7513,42 +7513,40 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     });
   }
 
-  // ── PARADA SUELTA DE OTRA LOCALIDAD EN UNA RUTA COMPACTA (3 oct 2026, caso p-musbxm408zg) ──
-  // "Tragabuches" de Ronda → Google dio "Tragabuches Marbella" (otro local, ~30 km en línea, 50 por carretera): mismo
-  // nombre, pasa el radio, la carretera (<60 km) y la provincia. Se descarta (sin llamadas a Google) si en una ruta
-  // compacta (≥70 % de las paradas a ≤30 km de su centro) la parada: (a) queda a >25 km del centro Y el nombre de
-  // Google añade OTRA localidad que no estaba en lo pedido ni es la de la zona ("Marbella"), o (b) queda a >60 km.
-  // "Cueva del Gato - Benaoján" (cerca) o "Castillo de Zahara de la Sierra" (la localidad ya estaba) no se tocan.
-  if (finalStops.length >= 5) {
+  // ── PARADA DE OTRA LOCALIDAD (3 oct 2026, caso p-musbxm408zg) ──
+  // "Tragabuches" de Ronda → Google dio "Tragabuches Marbella" (otro local de la misma marca, a 36 km): mismo nombre,
+  // pasa el radio (120 km a 3 días), la carretera (<60 km) y la provincia. Señal: Google le pone en el nombre una
+  // LOCALIDAD que no estaba en lo pedido ni es la de la zona (un local suelto de otro pueblo). Se descarta si además
+  // queda a >20 km del ancla (destino de punto) o del centro de las paradas (ruta de zona). Vale para una serranía
+  // grande: no depende de lo "compacta" que sea la ruta. "Cueva del Gato - Benaoján" (cerca) o "Castillo de Zahara de
+  // la Sierra" (la localidad ya estaba en lo pedido) no se tocan. Sin llamadas a Google.
+  if (finalStops.length >= 3) {
     const _pts = finalStops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number' && Math.abs(s.lat) > 0.01);
-    if (_pts.length >= 5) {
+    if (_pts.length >= 3) {
       const _med = a => { const b = [...a].sort((x, y) => x - y); const m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
-      const mLat = _med(_pts.map(s => s.lat)), mLng = _med(_pts.map(s => s.lng));
-      const dist = new Map(_pts.map(s => [s, haversineKm(mLat, mLng, s.lat, s.lng)]));
-      if (_pts.filter(s => dist.get(s) <= 30).length / _pts.length >= 0.7) {
-        const _tk = t => new Set(_locNormLite(t).split(' ').filter(w => w.length >= 3));
-        const zonaTk = _tk(`${opts.anchorLocality || ''} ${route.region || ''} ${route.name || ''}`);
-        const otraLocalidad = (s) => {
-          if (!s._asked) return false;
-          const seg = String(s.verified_address || '').split(',').map(x => x.trim()).find(x => /\b\d{5}\b/.test(x));
-          const loc = seg ? seg.replace(/\b\d{5}\b/, '').trim() : '';
-          const locTk = _tk(loc);
-          if (!locTk.size) return false;
-          const nameN = ' ' + _locNormLite(s.name) + ' ';
-          if (!nameN.includes(' ' + _locNormLite(loc) + ' ')) return false;            // la localidad no va en el nombre de Google
-          const askedTk = _tk(s._asked);
-          return ![...locTk].some(w => askedTk.has(w) || zonaTk.has(w));                // ya estaba en lo pedido o es la de la zona
-        };
-        finalStops = finalStops.filter(s => {
-          const d = dist.get(s);
-          if (d != null && (d > 60 || (d > 25 && otraLocalidad(s)))) {
-            discarded.push({ name: s._asked || s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'otra_localidad_lejos_del_resto' });
-            console.log(`[VERIFY] ✗ DESCARTADA (${d.toFixed(0)} km del centro de una ruta compacta, Google dio "${s.name}") pedida "${s._asked || ''}"`);
-            return false;
-          }
-          return true;
-        });
-      }
+      const refLat = pointAnchor ? anchorLat : _med(_pts.map(s => s.lat));
+      const refLng = pointAnchor ? anchorLng : _med(_pts.map(s => s.lng));
+      const _tk = t => new Set(_locNormLite(t).split(' ').filter(w => w.length >= 3));
+      const zonaTk = _tk(`${opts.anchorLocality || ''} ${route.region || ''} ${route.name || ''}`);
+      const otraLocalidad = (s) => {
+        if (!s._asked) return false;
+        const seg = String(s.verified_address || '').split(',').map(x => x.trim()).find(x => /\b\d{5}\b/.test(x));
+        const loc = seg ? seg.replace(/\b\d{5}\b/, '').trim() : '';
+        const locTk = _tk(loc);
+        if (!locTk.size) return false;
+        const nameN = ' ' + _locNormLite(s.name) + ' ';
+        if (!nameN.includes(' ' + _locNormLite(loc) + ' ')) return false;            // la localidad no va en el nombre de Google
+        const askedTk = _tk(s._asked);
+        return ![...locTk].some(w => askedTk.has(w) || zonaTk.has(w));                // ya estaba en lo pedido o es la de la zona
+      };
+      finalStops = finalStops.filter(s => {
+        if (typeof s.lat !== 'number' || typeof s.lng !== 'number' || !otraLocalidad(s)) return true;
+        const d = haversineKm(refLat, refLng, s.lat, s.lng);
+        if (d <= 20) return true;
+        discarded.push({ name: s._asked || s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'otra_localidad' });
+        console.log(`[VERIFY] ✗ DESCARTADA (otra localidad, ${d.toFixed(0)} km) pedida "${s._asked || ''}", Google dio "${s.name}" (${s.verified_address || ''})`);
+        return false;
+      });
     }
   }
   validatedStops.forEach(s => { delete s._asked; });
@@ -7566,7 +7564,14 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   const useProvince = _durDays >= 3 && !!anchorProvN;
   const _nearRadiusNoAddr = _durDays <= 2 ? 8 : (_durDays <= 4 ? 40 : 70); // solo para paradas SIN dirección
   let nearbyStops = [];
-  if (pointAnchor && (anchorLocN || anchorProvN) && finalStops.length > 3) {
+  // DESTINO DE ZONA (3 oct 2026, caso p-musbxm408zg): "Serranía de Ronda en 3 días" se ancla en Ronda (Málaga), pero la
+  // serranía llega a Cádiz (Grazalema, Zahara, Setenil): este filtro las mandaba a "cerca de" y la guía se quedaba en
+  // la ciudad. Si el destino es una comarca/sierra/valle/costa/ruta de pueblos, abarca varios municipios y provincias:
+  // no se filtra por localidad ni provincia (siguen mandando el radio y la distancia por carretera de arriba).
+  const _esZona = /\b(serran[ií]a|sierra|sierras|comarca|valle|valles|pueblos blancos|parque natural|campi[ñn]a|axarqu[ií]a|alpujarras?|costa|costas|ruta de los)\b/i
+    .test(`${route.name || ''} ${route.region || ''} ${route.title || ''}`);
+  if (_esZona) console.log(`[VERIFY] destino de zona ("${route.name || route.region || route.title}"): sin filtro por localidad/provincia`);
+  if (pointAnchor && !_esZona && (anchorLocN || anchorProvN) && finalStops.length > 3) {
     const inArea = [];
     finalStops.forEach(s => {
       const addrN = _locNorm(s.verified_address);
@@ -9532,6 +9537,31 @@ async function logGuideTiming(env, row) {
   try { await firestoreAdminPatch(env, 'guide_timings/' + id, f); } catch (e) { console.warn('[T2-REGISTRO] ' + e.message); }
 }
 
+// Gasto de CLAUDE de cada petición del chat (3 oct 2026, caso p-murj9qyu6ct): una fila por mensaje, para poder estudiar
+// cuánto cuesta cada persona y cada pregunta (`casos.cjs gasto`). Solo Claude (fichas medidas, a precio de lista); el
+// gasto de Google se ve en /admin/google-usage. Colección Firestore `chat_costs` (la escribe solo el Worker).
+async function logChatCost(env, row) {
+  try {
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const plainIn = Math.max(0, (row.tin || 0) - (row.cw || 0) - (row.cr || 0));
+    const usd = (plainIn * CLAUDE_USD_PER_MTOK.in + (row.cw || 0) * CLAUDE_USD_PER_MTOK.cacheWrite +
+                 (row.cr || 0) * CLAUDE_USD_PER_MTOK.cacheRead + (row.tout || 0) * CLAUDE_USD_PER_MTOK.out) / 1e6;
+    const f = {
+      at: { timestampValue: new Date().toISOString() },
+      worker: _fS(String(env.CF_VERSION_METADATA?.id || '').slice(0, 40)),
+      uid: _fS(String(row.uid || '').slice(0, 40)),
+      plan: _fS(String(row.plan || '').slice(0, 10)),
+      tipo: _fS(String(row.tipo || 'chat').slice(0, 12)),
+      mensaje: _fS(String(row.mensaje || '').replace(/\s+/g, ' ').slice(0, 160)),
+      tin: _fI(row.tin), tout: _fI(row.tout), cw: _fI(row.cw), cr: _fI(row.cr),
+      usd_micro: _fI(usd * 1e6),          // dólares ×1.000.000 (entero)
+      ms: _fI(row.ms),
+      error: _fS(String(row.error || '').slice(0, 140)),
+    };
+    await firestoreAdminPatch(env, 'chat_costs/' + id, f);
+  } catch (e) { console.warn('[CHAT-COSTE] ' + e.message); }
+}
+
 async function logChatLink(env, row) {
   const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const f = {
@@ -10733,6 +10763,22 @@ export default {
         const limite = Math.min(200, Math.max(1, parseInt(url.searchParams.get('limite') || '30', 10) || 30));
         const rows = await _fsRunQuery(env, { from: [{ collectionId: 'guide_timings' }], orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: limite });
         return new Response(JSON.stringify({ guias: rows }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+    // GET /admin/chat-costs?horas=24&limite=500 → gasto de Claude por petición del chat (logChatCost). Llave de casos, solo lectura.
+    if (request.method === 'GET' && url.pathname === '/admin/chat-costs') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+      if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      try {
+        const horas = Math.min(24 * 31, Math.max(1, parseFloat(url.searchParams.get('horas') || '24') || 24));
+        const limite = Math.min(2000, Math.max(1, parseInt(url.searchParams.get('limite') || '500', 10) || 500));
+        const desde = new Date(Date.now() - horas * 3600 * 1000).toISOString();
+        const rows = await _fsRunQuery(env, { from: [{ collectionId: 'chat_costs' }],
+          where: { fieldFilter: { field: { fieldPath: 'at' }, op: 'GREATER_THAN_OR_EQUAL', value: { timestampValue: desde } } },
+          orderBy: [{ field: { fieldPath: 'at' }, direction: 'DESCENDING' }], limit: limite });
+        return new Response(JSON.stringify({ desde, filas: rows }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
@@ -13894,6 +13940,9 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       ctx.waitUntil(perfilIALearnFromChat(env, authUser.uid, [...history.slice(-11), { role: 'user', content: message }]));
     }
     const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0 };  // tokens de Claude de esta petición
+    const _chatT0 = Date.now();
+    let _reqError = '';   // motivo del último error de esta petición (queda en chat_costs.error)
+    const _recErr = (e) => { _reqError = String((e && (e.titulo || e.huella)) || 'error').slice(0, 140); return recordAutoError(env, e); };
     let _usageConsume = null;               // 'guide' | 'edit' cuando la petición entrega el resultado
     let _usageFlushed = false;
     // Apunta el uso de esta petición UNA sola vez (tokens + guía/edición consumida)
@@ -13904,6 +13953,11 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr,
         guides: _usageConsume === 'guide' ? 1 : 0,
         edits: _usageConsume === 'edit' ? 1 : 0,
+      }));
+      if (_reqUsage.tin || _reqUsage.tout || _reqError) ctx.waitUntil(logChatCost(env, {
+        uid: authUser && authUser.uid, plan: authUser && authUser.premium_active ? 'premium' : 'free',
+        tipo: _usageConsume || 'chat', mensaje: message,
+        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, ms: Date.now() - _chatT0, error: _reqError,
       }));
     };
 
@@ -14759,7 +14813,7 @@ INSTRUCCIONES:
         if (_mapStageFailed) {
           if (_convertFailReason) console.log(`[T2-FAIL] ${_convertFailReason}`);
           if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, camino: 'fallo', motivo: [_t2log.motivo, _convertFailReason].filter(Boolean).join(' · '), ms_total: Date.now() - _t2log.inicio }));
-          ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'map-stage|' + _normErr(_convertFailReason || 'sin motivo').slice(0, 60), titulo: 'Crear ruta con mapa no se montó: ' + String(_convertFailReason || 'sin motivo').slice(0, 70), zona: 'rutas', gravedad: 'alta', ejemplo: 'Tiempo 2 falló: ' + String(_convertFailReason || 'sin motivo'), detalle: String(_convertFailReason || '') }));
+          ctx.waitUntil(_recErr({ origen: 'worker', huella: 'map-stage|' + _normErr(_convertFailReason || 'sin motivo').slice(0, 60), titulo: 'Crear ruta con mapa no se montó: ' + String(_convertFailReason || 'sin motivo').slice(0, 70), zona: 'rutas', gravedad: 'alta', ejemplo: 'Tiempo 2 falló: ' + String(_convertFailReason || 'sin motivo'), detalle: String(_convertFailReason || '') }));
           _flushUsage(); // los tokens ya se gastaron aunque falle: se miden, pero NO consumen guía
           const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
@@ -14800,12 +14854,12 @@ INSTRUCCIONES:
                 apiRes = await _callClaude(false);
               }
             } catch (e) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
             if (!apiRes.ok) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -14858,12 +14912,12 @@ INSTRUCCIONES:
                 }),
               });
             } catch (e) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
             if (!apiRes.ok) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -15840,8 +15894,9 @@ REGLAS:
         const _ppMsg = String((e && e.message) || e || 'sin mensaje');
         console.error('[CHAT-POSTPROCESADO] ' + _ppMsg + (e && e.stack ? '\n' + e.stack : ''));
         try {
-          ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat-postprocesado|' + _normErr(_ppMsg).slice(0, 60), titulo: 'Chat: falló el post-procesado, salió el texto en crudo (' + _ppMsg.slice(0, 70) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Mensaje: ' + String(message || '').slice(0, 120), detalle: String((e && e.stack) || _ppMsg).slice(0, 1500) }));
+          ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat-postprocesado|' + _normErr(_ppMsg).slice(0, 60), titulo: 'Chat: falló el post-procesado, salió el texto en crudo (' + _ppMsg.slice(0, 70) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Mensaje: ' + String(message || '').slice(0, 120), detalle: String((e && e.stack) || _ppMsg).slice(0, 1500) }));
         } catch (_) {}
+        try { _flushUsage(); } catch (_) {}
         let _fallbackReply = allText;
         try { _fallbackReply = _repairBrokenPhotoMarkdown(allText); } catch (_) {}
         // Nunca un enlace de Maps sin verificar: si el post-procesado no llegó a limpiarlos, se quitan aquí.
