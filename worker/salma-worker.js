@@ -9556,6 +9556,7 @@ async function logChatCost(env, row) {
       tin: _fI(row.tin), tout: _fI(row.tout), cw: _fI(row.cw), cr: _fI(row.cr),
       usd_micro: _fI(usd * 1e6),          // dólares ×1.000.000 (entero)
       ms: _fI(row.ms),
+      error: _fS(String(row.error || '').slice(0, 140)),
     };
     await firestoreAdminPatch(env, 'chat_costs/' + id, f);
   } catch (e) { console.warn('[CHAT-COSTE] ' + e.message); }
@@ -13940,6 +13941,8 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     }
     const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0 };  // tokens de Claude de esta petición
     const _chatT0 = Date.now();
+    let _reqError = '';   // motivo del último error de esta petición (queda en chat_costs.error)
+    const _recErr = (e) => { _reqError = String((e && (e.titulo || e.huella)) || 'error').slice(0, 140); return recordAutoError(env, e); };
     let _usageConsume = null;               // 'guide' | 'edit' cuando la petición entrega el resultado
     let _usageFlushed = false;
     // Apunta el uso de esta petición UNA sola vez (tokens + guía/edición consumida)
@@ -13951,10 +13954,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         guides: _usageConsume === 'guide' ? 1 : 0,
         edits: _usageConsume === 'edit' ? 1 : 0,
       }));
-      if (_reqUsage.tin || _reqUsage.tout) ctx.waitUntil(logChatCost(env, {
+      if (_reqUsage.tin || _reqUsage.tout || _reqError) ctx.waitUntil(logChatCost(env, {
         uid: authUser && authUser.uid, plan: authUser && authUser.premium_active ? 'premium' : 'free',
         tipo: _usageConsume || 'chat', mensaje: message,
-        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, ms: Date.now() - _chatT0,
+        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, ms: Date.now() - _chatT0, error: _reqError,
       }));
     };
 
@@ -14810,7 +14813,7 @@ INSTRUCCIONES:
         if (_mapStageFailed) {
           if (_convertFailReason) console.log(`[T2-FAIL] ${_convertFailReason}`);
           if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, camino: 'fallo', motivo: [_t2log.motivo, _convertFailReason].filter(Boolean).join(' · '), ms_total: Date.now() - _t2log.inicio }));
-          ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'map-stage|' + _normErr(_convertFailReason || 'sin motivo').slice(0, 60), titulo: 'Crear ruta con mapa no se montó: ' + String(_convertFailReason || 'sin motivo').slice(0, 70), zona: 'rutas', gravedad: 'alta', ejemplo: 'Tiempo 2 falló: ' + String(_convertFailReason || 'sin motivo'), detalle: String(_convertFailReason || '') }));
+          ctx.waitUntil(_recErr({ origen: 'worker', huella: 'map-stage|' + _normErr(_convertFailReason || 'sin motivo').slice(0, 60), titulo: 'Crear ruta con mapa no se montó: ' + String(_convertFailReason || 'sin motivo').slice(0, 70), zona: 'rutas', gravedad: 'alta', ejemplo: 'Tiempo 2 falló: ' + String(_convertFailReason || 'sin motivo'), detalle: String(_convertFailReason || '') }));
           _flushUsage(); // los tokens ya se gastaron aunque falle: se miden, pero NO consumen guía
           const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
@@ -14851,12 +14854,12 @@ INSTRUCCIONES:
                 apiRes = await _callClaude(false);
               }
             } catch (e) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
             if (!apiRes.ok) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -14909,12 +14912,12 @@ INSTRUCCIONES:
                 }),
               });
             } catch (e) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA no respondió (red)|' + (e && e.message), titulo: 'Chat: la IA no respondió (red) (' + (e && e.message) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA no respondió (red): ' + (e && e.message), detalle: 'la IA no respondió (red) — ' + (e && e.message) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
             if (!apiRes.ok) {
-              ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
+              ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat|la IA respondió con error|' + (apiRes.status), titulo: 'Chat: la IA respondió con error (' + (apiRes.status) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Salma contestó "no he podido conectar". la IA respondió con error: ' + (apiRes.status), detalle: 'la IA respondió con error — ' + (apiRes.status) }));
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -15891,8 +15894,9 @@ REGLAS:
         const _ppMsg = String((e && e.message) || e || 'sin mensaje');
         console.error('[CHAT-POSTPROCESADO] ' + _ppMsg + (e && e.stack ? '\n' + e.stack : ''));
         try {
-          ctx.waitUntil(recordAutoError(env, { origen: 'worker', huella: 'chat-postprocesado|' + _normErr(_ppMsg).slice(0, 60), titulo: 'Chat: falló el post-procesado, salió el texto en crudo (' + _ppMsg.slice(0, 70) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Mensaje: ' + String(message || '').slice(0, 120), detalle: String((e && e.stack) || _ppMsg).slice(0, 1500) }));
+          ctx.waitUntil(_recErr({ origen: 'worker', huella: 'chat-postprocesado|' + _normErr(_ppMsg).slice(0, 60), titulo: 'Chat: falló el post-procesado, salió el texto en crudo (' + _ppMsg.slice(0, 70) + ')', zona: 'chat', gravedad: 'alta', ejemplo: 'Mensaje: ' + String(message || '').slice(0, 120), detalle: String((e && e.stack) || _ppMsg).slice(0, 1500) }));
         } catch (_) {}
+        try { _flushUsage(); } catch (_) {}
         let _fallbackReply = allText;
         try { _fallbackReply = _repairBrokenPhotoMarkdown(allText); } catch (_) {}
         // Nunca un enlace de Maps sin verificar: si el post-procesado no llegó a limpiarlos, se quitan aquí.
