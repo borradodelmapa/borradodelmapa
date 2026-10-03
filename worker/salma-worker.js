@@ -9384,6 +9384,11 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
             }
           } else if (evt.delta.type === 'input_json_delta') {
             b.partial_json += evt.delta.partial_json;
+          } else if (evt.delta.type === 'thinking_delta') {
+            // Sonnet 5.5 (y modelos que piensan): el bloque se reenvía TAL CUAL en la vuelta siguiente del bucle de herramientas
+            b.thinking = (b.thinking || '') + (evt.delta.thinking || '');
+          } else if (evt.delta.type === 'signature_delta') {
+            b.signature = (b.signature || '') + (evt.delta.signature || '');
           }
         } else if (evt.type === 'message_start') {
           // Uso de entrada de esta llamada (para medir coste por usuario)
@@ -9415,6 +9420,11 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
       let input = {};
       try { input = JSON.parse(b.partial_json || '{}'); } catch (e) {}
       contentBlocks.push({ type: 'tool_use', id: b.id, name: b.name, input });
+    } else if (b.type === 'thinking' && b.signature) {
+      // Con modelos que piensan (Sonnet 5.5) el bloque vuelve intacto en el historial de la vuelta siguiente
+      contentBlocks.push({ type: 'thinking', thinking: b.thinking || '', signature: b.signature });
+    } else if (b.type === 'redacted_thinking' && b.data) {
+      contentBlocks.push({ type: 'redacted_thinking', data: b.data });
     }
   }
 
@@ -9544,8 +9554,9 @@ async function logChatCost(env, row) {
   try {
     const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     const plainIn = Math.max(0, (row.tin || 0) - (row.cw || 0) - (row.cr || 0));
-    const usd = (plainIn * CLAUDE_USD_PER_MTOK.in + (row.cw || 0) * CLAUDE_USD_PER_MTOK.cacheWrite +
-                 (row.cr || 0) * CLAUDE_USD_PER_MTOK.cacheRead + (row.tout || 0) * CLAUDE_USD_PER_MTOK.out) / 1e6;
+    // Precios USD por millón de fichas (lista): Sonnet 4.6 = 3/15 (escribir caché 3,75, leer 0,3); Sonnet 5.5 = 2/10 (2,5 / 0,2).
+    const P = /sonnet-5/.test(row.modelo || '') ? { in: 2, out: 10, cacheWrite: 2.5, cacheRead: 0.2 } : CLAUDE_USD_PER_MTOK;
+    const usd = (plainIn * P.in + (row.cw || 0) * P.cacheWrite + (row.cr || 0) * P.cacheRead + (row.tout || 0) * P.out) / 1e6;
     const f = {
       at: { timestampValue: new Date().toISOString() },
       worker: _fS(String(env.CF_VERSION_METADATA?.id || '').slice(0, 40)),
@@ -9557,6 +9568,7 @@ async function logChatCost(env, row) {
       usd_micro: _fI(usd * 1e6),          // dólares ×1.000.000 (entero)
       ms: _fI(row.ms),
       error: _fS(String(row.error || '').slice(0, 140)),
+      modelo: _fS(String(row.modelo || '').slice(0, 30)),
     };
     await firestoreAdminPatch(env, 'chat_costs/' + id, f);
   } catch (e) { console.warn('[CHAT-COSTE] ' + e.message); }
@@ -13942,6 +13954,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0 };  // tokens de Claude de esta petición
     const _chatT0 = Date.now();
     let _reqError = '';   // motivo del último error de esta petición (queda en chat_costs.error)
+    let _reqModelo = '';  // modelo de Claude con el que se contestó esta petición (queda en chat_costs.modelo)
     const _recErr = (e) => { _reqError = String((e && (e.titulo || e.huella)) || 'error').slice(0, 140); return recordAutoError(env, e); };
     let _usageConsume = null;               // 'guide' | 'edit' cuando la petición entrega el resultado
     let _usageFlushed = false;
@@ -13957,7 +13970,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       if (_reqUsage.tin || _reqUsage.tout || _reqError) ctx.waitUntil(logChatCost(env, {
         uid: authUser && authUser.uid, plan: authUser && authUser.premium_active ? 'premium' : 'free',
         tipo: _usageConsume || 'chat', mensaje: message,
-        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, ms: Date.now() - _chatT0, error: _reqError,
+        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, ms: Date.now() - _chatT0, error: _reqError, modelo: _reqModelo,
       }));
     };
 
@@ -14830,6 +14843,9 @@ INSTRUCCIONES:
             try {
               // Red de seguridad de la caché (caso p-murj9qyu6ct): si Anthropic rechazara las marcas nuevas (400…),
               // se repite UNA vez la llamada de siempre, sin marcas de historial ni TTL de 1 h. El usuario no se entera.
+              // Modelo del chat (caso p-murj9qyu6ct, punto 14, 3 oct 2026): env.CLAUDE_MODEL_CHAT, por defecto el de siempre.
+              // Sonnet 5.5 (2 $/10 $ por millón, -33 %) piensa por defecto: se manda thinking 'between_tools' (el modo sin pensar).
+              const _modeloNuevo = nuevo => (nuevo && env.CLAUDE_MODEL_CHAT) || 'claude-sonnet-4-6';
               const _callClaude = (nuevo) => fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
                 method: 'POST',
                 headers: {
@@ -14839,7 +14855,8 @@ INSTRUCCIONES:
                   ...(nuevo && env.CACHE_1H === '1' ? { 'anthropic-beta': 'extended-cache-ttl-2025-04-11' } : {}),
                 },
                 body: JSON.stringify({
-                  model: 'claude-sonnet-4-6',
+                  model: (_reqModelo = _modeloNuevo(nuevo)),
+                  ...(/sonnet-5/.test(_reqModelo) ? { thinking: { type: 'between_tools' } } : {}),
                   max_tokens: reqMaxTokens,
                   system: buildCachedSystem(systemBase, systemPrompt, systemPerfil, nuevo && env.CACHE_1H === '1'),
                   messages: nuevo && env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages,
@@ -14849,8 +14866,9 @@ INSTRUCCIONES:
                 }),
               });
               apiRes = await _callClaude(true);
-              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1')) {
-                console.log('[CACHE] Anthropic rechazó la petición con caché nueva (' + apiRes.status + '): reintento sin ella');
+              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1' || _modeloNuevo(true) !== 'claude-sonnet-4-6')) {
+                let _errTxt = ''; try { _errTxt = (await apiRes.clone().text()).slice(0, 300); } catch (_) {}
+                console.log('[CACHE/MODELO] Anthropic rechazó la petición (' + apiRes.status + ', modelo ' + _reqModelo + '): reintento con lo de siempre · ' + _errTxt);
                 apiRes = await _callClaude(false);
               }
             } catch (e) {
