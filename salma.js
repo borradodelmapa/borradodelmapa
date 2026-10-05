@@ -2502,6 +2502,11 @@ const salma = {
     const id = await guardarGuia(this.currentRoute, opts);
     if (id) {
       this.currentRouteId = id;
+      // La guía recién creada pasa a ser la ACTIVA (mapa a pantalla completa, tarjeta de portada).
+      // Antes solo se activaba al reabrir una guardada, y el mapa seguía enseñando la anterior.
+      if (typeof window.setActiveRoute === 'function') {
+        try { window.setActiveRoute(this.currentRoute, id); } catch (_) {}
+      }
       // Quitar botón guardar (guide-card o itinerario)
       const btn = document.getElementById('guide-save-btn');
       if (btn) btn.remove();
