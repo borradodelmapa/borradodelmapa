@@ -481,7 +481,10 @@ function _syncSalmaClose() {
   });
   document.body.appendChild(b);
 }
-window._salmaScreen = (function () { try { return sessionStorage.getItem('bdm_salma_screen') === '1'; } catch (_) { return false; } })();
+// Al abrir o refrescar la web SIEMPRE se empieza en la portada y sin conversación (Paco, 5 oct 2026): se borra lo que
+// guardó la sesión anterior. Las conversaciones siguen en "Últimas consultas". Dentro de la sesión nada cambia.
+window._salmaScreen = false;
+try { sessionStorage.removeItem('bdm_salma_screen'); sessionStorage.removeItem('salma_chat'); } catch (_) {}
 
 // Pantalla de Salma: la abre el botón central del menú (updateBottomBar). Es el estado vacío del
 // chat con otro contenido (imagen + saludo); va dentro de .chat-empty para que salma.js la quite sola
