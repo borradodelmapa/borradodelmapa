@@ -7327,8 +7327,14 @@ body.live-map-open #mejora-btn { display: none !important; }
 .chat-empty .salma-screen-avatar{width:112px;height:112px;object-fit:cover;border-radius:50% !important;border:2px solid var(--ce-amber);margin-bottom:18px;}
 .chat-empty .salma-screen-hi{font-family:var(--ce-sign);font-weight:800;font-size:28px;letter-spacing:.02em;text-transform:uppercase;color:var(--ce-ink);}
 .chat-empty .salma-screen-sub{margin:6px 0 0;font-family:var(--ce-sign);font-weight:700;font-size:18px;text-transform:uppercase;color:var(--ce-amber);}
-.chat-empty .salma-screen-hint{margin:14px 0 0;font-family:var(--font-body,'Inter'),sans-serif;font-size:14px;line-height:1.5;color:var(--ce-ink2);}
 
 /* Portada sin la barra de escribir de abajo (5 oct 2026, Paco): el chat vive en la pantalla de Salma (botón central).
    Mientras la portada esté en el chat-area la barra se oculta; con la pantalla de Salma o con mensajes, se ve. */
 body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-screen)) .app-input-bar{display:none !important;}
+
+/* Botón central: con Salma abierta (saludo o conversación) enseña su cara en vez del icono de chat; tocarlo vuelve a la portada. */
+.bottom-tab-fab .fab-avatar{display:none;width:40px;height:40px;object-fit:cover;border-radius:50%;border:2px solid #0D0F10;box-sizing:border-box;}
+body:has(#app-content.app-content--chat #chat-area > .chat-empty.salma-screen) #tab-newroute .fab-ic,
+body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-ic{display:none;}
+body:has(#app-content.app-content--chat #chat-area > .chat-empty.salma-screen) #tab-newroute .fab-avatar,
+body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-avatar{display:block;}

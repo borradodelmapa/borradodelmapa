@@ -292,13 +292,18 @@ function updateBottomBar() {
     fab.className = 'bottom-tab-fab';
     fab.setAttribute('aria-label', 'Salma');
     fab.title = 'Salma';
-    fab.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>';
+    fab.innerHTML = '<svg class="fab-ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><img class="fab-avatar" src="/salma_ai_avatar.webp" alt="" width="40" height="40"><span class="bottom-tab-fab-label">Salma</span>';
     // Central = Salma: lleva SIEMPRE a la portada (Paco, 26 sept 2026: "no quiero lío
     // de botones"). Con guía activa, la portada enseña su tarjeta arriba y el cuadro de
     // texto debajo. La conversación anterior no se pierde: queda en "Últimas consultas"
     // (cada hilo se guarda aparte; newChat() solo empieza otro). Antes retomaba la última
     // conversación y la portada quedaba escondida detrás de "Nueva".
     fab.addEventListener('click', () => {
+      // Dos funcionamientos (Paco, 5 oct 2026): con Salma ya abierta (saludo o conversación) el botón lleva a la portada;
+      // desde cualquier otro sitio abre la pantalla de Salma. El botón enseña su cara cuando Salma está abierta (CSS).
+      const _chatArea = document.getElementById('chat-area');
+      const _salmaOpen = currentState === 'chat' && !window._itinViewOpen && (window._salmaScreen || (_chatArea && _chatArea.querySelector('.msg')));
+      if (_salmaOpen) { _closeSalmaScreen(); return; }
       _setSalmaScreen(true);   // 5 oct 2026: abre la pantalla de Salma, no la portada
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
@@ -460,6 +465,19 @@ function _setSalmaScreen(on) {
   try { on ? sessionStorage.setItem('bdm_salma_screen', '1') : sessionStorage.removeItem('bdm_salma_screen'); } catch (_) {}
   _syncSalmaClose();
 }
+// Salir de Salma hacia la portada (la ✕ y el botón central cuando Salma ya está abierta). Con conversación se empieza otra
+// vacía (la anterior queda en "Últimas consultas"). Si Salma está respondiendo no se corta: aviso y nos quedamos.
+function _closeSalmaScreen() {
+  if (typeof salma !== 'undefined' && salma._streaming) {
+    if (typeof showToast === 'function') showToast('Salma está respondiendo…');
+    return;
+  }
+  _setSalmaScreen(false);
+  const area = document.getElementById('chat-area');
+  if (typeof salma !== 'undefined' && area && area.querySelector('.msg') && salma.newChat) salma.newChat(true);
+  else if (area) { area.innerHTML = ''; _renderChatEmpty(); }
+  try { window.scrollTo(0, 0); } catch (_) {}
+}
 function _syncSalmaClose() {
   let b = document.getElementById('salma-close');
   const show = !!window._salmaScreen && currentState === 'chat';
@@ -471,14 +489,7 @@ function _syncSalmaClose() {
   b.type = 'button';
   b.setAttribute('aria-label', 'Cerrar Salma');
   b.textContent = '✕';
-  b.addEventListener('click', () => {
-    // Con conversación: se empieza otra (la anterior queda en "Últimas consultas"). Sin ella: solo se repinta la portada.
-    _setSalmaScreen(false);
-    const area = document.getElementById('chat-area');
-    if (typeof salma !== 'undefined' && area && area.querySelector('.msg') && !salma._streaming && salma.newChat) salma.newChat(true);
-    else if (area) { area.innerHTML = ''; _renderChatEmpty(); }
-    try { window.scrollTo(0, 0); } catch (_) {}
-  });
+  b.addEventListener('click', _closeSalmaScreen);
   document.body.appendChild(b);
 }
 // Al abrir o refrescar la web SIEMPRE se empieza en la portada y sin conversación (Paco, 5 oct 2026): se borra lo que
@@ -498,7 +509,6 @@ function _renderSalmaScreen(area) {
       <picture><source srcset="/salma_ai_avatar.webp" type="image/webp"><img class="salma-screen-avatar" src="/salma_ai_avatar.png" alt="Salma" width="112" height="112"></picture>
       <div class="salma-screen-hi">${first ? 'Hola, ' + escapeHTML(first) : 'Hola, viajero'}</div>
       <p class="salma-screen-sub">Dime, ¿qué necesitas?</p>
-      <p class="salma-screen-hint">Escríbeme, háblame o mándame una foto.</p>
     </div>`;
 }
 
