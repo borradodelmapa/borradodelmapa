@@ -454,6 +454,6 @@ const tuMundo = (() => {
     }
   }
 
-  return { render, strip };
+  return { render, strip, loadWorld, countryAt, esName, flagOf };
 })();
 window.tuMundo = tuMundo;

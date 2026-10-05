@@ -1,0 +1,28 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Cronología — prueba</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+body{font-family:system-ui,sans-serif;background:#faf6ee;color:#2b2b2b;margin:0;padding:16px;max-width:640px;margin:auto}
+.cr-cifras{display:flex;gap:8px}.cr-cifras div{flex:1;background:#fff;border-radius:12px;padding:12px;text-align:center}
+.cr-cifras b{display:block;font-size:24px}.cr-cifras span{font-size:12px;color:#777}
+.cr-map{height:260px;border-radius:12px;margin:12px 0}
+ul{list-style:none;padding:0}li{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #e8e0cf;font-size:14px}
+.cr-flag{font-size:20px}.cr-d{width:110px;color:#777}.cr-p{flex:1}.cr-k{color:#c8963e}
+</style></head><body>
+<h2>Mi cronología</h2>
+<p><input type="file" id="f" accept=".json"> <button id="demo">Ver con datos de prueba</button></p>
+<div id="out"></div>
+<script src="tu-mundo.js"></script><script src="cronologia.js"></script>
+<script>
+const out=document.getElementById('out');
+async function go(json){
+  try{
+    await tuMundo.loadWorld();
+    const S=cronologia.summarize(cronologia.parse(json),tuMundo.countryAt,tuMundo.esName);
+    cronologia.render(out,S);
+  }catch(e){out.innerHTML='<p>'+e.message+'</p>'}
+}
+document.getElementById('f').onchange=e=>{const r=new FileReader();r.onload=()=>go(JSON.parse(r.result));r.readAsText(e.target.files[0])};
+document.getElementById('demo').onclick=async()=>go(await (await fetch('cronologia-demo.json')).json());
+</script></body></html>
