@@ -7338,3 +7338,16 @@ body:has(#app-content.app-content--chat #chat-area > .chat-empty.salma-screen) #
 body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-ic{display:none;}
 body:has(#app-content.app-content--chat #chat-area > .chat-empty.salma-screen) #tab-newroute .fab-avatar,
 body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-avatar{display:block;}
+
+/* Botón central de Salma (6 oct 2026, Paco): solo su cara ocupando todo el círculo, sin nombre ni icono de chat.
+   Con Salma abierta (saludo o conversación) es el MISMO botón, con el fondo en verde como "activo": la cara se
+   encoge un poco y deja ver el verde como aro. Solo diseño — la lógica del botón (app.js) no se toca. */
+#tab-newroute{overflow:hidden;background:#0D0F10;transition:transform .15s, background .2s, box-shadow .2s;}
+#tab-newroute:hover{background:#0D0F10;}
+#tab-newroute .fab-ic,
+#tab-newroute .bottom-tab-fab-label{display:none !important;}
+#tab-newroute .fab-avatar{display:block;position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:50%;object-fit:cover;box-sizing:border-box;transition:inset .2s, width .2s, height .2s;}
+body:has(#app-content.app-content--chat #chat-area > .chat-empty.salma-screen) #tab-newroute,
+body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute{background:#22C55E;box-shadow:0 0 0 2px rgba(34,197,94,.35), 0 6px 22px rgba(34,197,94,.45);}
+body:has(#app-content.app-content--chat #chat-area > .chat-empty.salma-screen) #tab-newroute .fab-avatar,
+body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-avatar{inset:5px;width:calc(100% - 10px);height:calc(100% - 10px);}
