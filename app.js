@@ -497,18 +497,76 @@ function _syncSalmaClose() {
 window._salmaScreen = false;
 try { sessionStorage.removeItem('bdm_salma_screen'); sessionStorage.removeItem('salma_chat'); } catch (_) {}
 
+// Saludos de la pantalla de Salma (6 oct 2026, Paco): cambian solos cada vez que se abre. Todo se calcula con el reloj y la
+// fecha del móvil — sin llamadas a APIs, sin coste. {n} = nombre (o "viajero"), {h} = Buenos días/tardes/noches según la hora.
+// Salen unos u otros al azar, sin repetir nunca el último; si toca algo especial (madrugada, lunes, viernes, fin de semana,
+// puente/festivo) esas frases tienen prioridad (6 de cada 10 veces).
+const _SALMA_HI_BASE = [
+  ['Hola, {n}', 'Dime, ¿qué necesitas?'],
+  ['Buenas, {n}', '¿A dónde nos vamos?'],
+  ['¡Ey, {n}!', 'Cuéntame qué se te ha ocurrido'],
+  ['Dime, {n}', '¿Por dónde empezamos?'],
+  ['¿Qué tal, {n}?', '¿Ruta, vuelos o un imprevisto?'],
+  ['Aquí estoy, {n}', 'Suéltame el destino'],
+  ['Hola de nuevo, {n}', '¿Montamos un viaje?'],
+  ['Qué alegría verte, {n}', 'Pregunta lo imposible'],
+  ['Vamos, {n}', 'Sin mapa, con rumbo'],
+  ['Hola, {n}', '¿Qué se nos pierde hoy?'],
+  ['Buenas, {n}', '¿Dónde dormimos esta vez?'],
+  ['Dime, {n}', '¿Qué locura planeamos?'],
+  ['{h}, {n}', 'Dime, ¿qué necesitas?'],
+  ['{h}, {n}', '¿A dónde nos vamos hoy?'],
+  ['{h}, {n}', '¿Qué se cuece?']
+];
+// Festivos nacionales fijos [mes 1-12, día]. Una semana antes empieza el "puente a la vista".
+const _SALMA_FESTIVOS = [[1,1],[1,6],[5,1],[8,15],[10,12],[11,1],[12,6],[12,8],[12,25]];
+function _salmaHiPick(first) {
+  const now = new Date();
+  const hr = now.getHours(), dow = now.getDay();
+  const n = first || 'viajero';
+  const h = hr >= 6 && hr < 14 ? 'Buenos días' : (hr >= 14 && hr < 21 ? 'Buenas tardes' : 'Buenas noches');
+  const special = [];
+  // Puente / festivo: el día mismo, o en los 7 días anteriores
+  const hoy0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let diasFesti = null;
+  for (const [m, d] of _SALMA_FESTIVOS) {
+    for (const yr of [now.getFullYear(), now.getFullYear() + 1]) {
+      const dd = Math.round((new Date(yr, m - 1, d) - hoy0) / 86400000);
+      if (dd >= 0 && dd <= 7 && (diasFesti === null || dd < diasFesti)) diasFesti = dd;
+    }
+  }
+  if (diasFesti === 0) special.push(['¡Hoy es fiesta, {n}!', '¿Qué hacemos con el día?'], ['Feliz fiesta, {n}', '¿A dónde nos escapamos?']);
+  else if (diasFesti !== null) special.push(['¿Puente a la vista, {n}?', '¿A dónde nos escapamos?'], ['Se acerca fiesta, {n}', '¿Planeamos una escapada?']);
+  if (hr < 6) special.push(['¿Sin sueño, {n}?', 'Pues a planear']);
+  if (dow === 1) special.push(['Lunes, {n}', '¿Y si ya vamos planeando la escapada?']);
+  if (dow === 5) special.push(['¡Viernes, {n}!', '¿Escapada de fin de semana?']);
+  if (dow === 6) special.push(['Buen sábado, {n}', '¿Salimos a descubrir algo?']);
+  if (dow === 0) special.push(['Buen domingo, {n}', 'Día perfecto para soñar el próximo viaje']);
+  let last = '';
+  try { last = localStorage.getItem('bdm_salma_hi') || ''; } catch (_) {}
+  const key = (p) => p[0] + '|' + p[1];
+  const fresh = (list) => { const l = list.filter(p => key(p) !== last); return l.length ? l : list; };
+  const spNew = special.filter(p => key(p) !== last);   // si la especial es justo la última que viste, sale una normal
+  const pool = (spNew.length && Math.random() < 0.6) ? spNew : fresh(_SALMA_HI_BASE);
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  try { localStorage.setItem('bdm_salma_hi', key(pick)); } catch (_) {}
+  const fill = (t) => escapeHTML(t.replace('{h}', h).replace('{n}', n));
+  return { hi: fill(pick[0]), sub: fill(pick[1]) };
+}
+
 // Pantalla de Salma: la abre el botón central del menú (updateBottomBar). Es el estado vacío del
-// chat con otro contenido (imagen + saludo); va dentro de .chat-empty para que salma.js la quite sola
+// chat con otro contenido (saludo); va dentro de .chat-empty para que salma.js la quite sola
 // al enviar el primer mensaje. La barra de escribir/voz/foto de abajo es la de siempre. La ✕ vuelve a la portada.
+// Sin foto arriba (6 oct 2026): su cara ya está en el botón central.
 function _renderSalmaScreen(area) {
   let name = '';
   try { name = (currentUser && (currentUser.name || currentUser.displayName || '')) || ''; } catch (_) {}
   const first = String(name).trim().split(/\s+/)[0];
+  const g = _salmaHiPick(first);
   area.innerHTML = `
     <div class="chat-empty salma-screen">
-      <picture><source srcset="/salma_ai_avatar.webp" type="image/webp"><img class="salma-screen-avatar" src="/salma_ai_avatar.png" alt="Salma" width="112" height="112"></picture>
-      <div class="salma-screen-hi">${first ? 'Hola, ' + escapeHTML(first) : 'Hola, viajero'}</div>
-      <p class="salma-screen-sub">Dime, ¿qué necesitas?</p>
+      <div class="salma-screen-hi">${g.hi}</div>
+      <p class="salma-screen-sub">${g.sub}</p>
     </div>`;
 }
 
