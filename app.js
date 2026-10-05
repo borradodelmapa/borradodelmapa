@@ -3907,7 +3907,8 @@ function resetInputButtons() {
   const chatCam = document.getElementById('cam-btn');
   const chatMic = document.getElementById('mic-btn');
   if (chatCam) chatCam.style.display = showSend ? 'none' : '';
-  if (chatMic) chatMic.style.display = showSend ? 'none' : '';
+  // Con foto adjunta y sin texto el micro se queda: así se puede dictar la pregunta sobre la foto (5 oct 2026)
+  if (chatMic) chatMic.style.display = hasText ? 'none' : '';
 }
 window.resetInputButtons = resetInputButtons;
 
