@@ -180,7 +180,7 @@ const salma = {
   // Fallback Web Speech para una frase
   async _ttsSpeakWebSpeech(text) {
     if (!window.speechSynthesis) { console.warn('[Salma] speechSynthesis no disponible'); this._ttsPlaying = false; return; }
-    if (document.hidden) { this._ttsPlaying = false; return; }
+    if (document.hidden || window._micListening) { this._ttsPlaying = false; return; }
     const _ep = this._ttsEpoch;
     await this._waitForVoices();
     if (_ep !== this._ttsEpoch || document.hidden) { this._ttsPlaying = false; return; }
@@ -225,7 +225,7 @@ const salma = {
       this._ttsPlaying = false;
       return;
     }
-    if (document.hidden) { this._ttsStopAll(); return; }   // app en segundo plano: no se habla
+    if (document.hidden || window._micListening) { this._ttsStopAll(); return; }   // app en segundo plano o micro escuchando: no se habla
     this._ttsPlaying = true;
     const _ep = this._ttsEpoch;
     const sentence = this._ttsQueue.shift();
@@ -350,7 +350,7 @@ const salma = {
   // salmaSpeak — ahora con soporte para textos largos via cola
   async salmaSpeak(text) {
     try {
-      if (!this._voiceOn || document.hidden) return;
+      if (!this._voiceOn || document.hidden || window._micListening) return;
       const clean = this._ttsClean(text);
       if (!clean) return;
 
@@ -404,7 +404,7 @@ const salma = {
   async salmaSpeakManual(text) {
     try {
       const clean = this._ttsClean(text);
-      if (!clean || document.hidden) return;
+      if (!clean || document.hidden || window._micListening) return;
       this._ttsStopAll();
       const _ep = this._ttsEpoch;
       this._manualSpeakActive = true;

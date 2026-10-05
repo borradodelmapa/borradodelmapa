@@ -3973,6 +3973,7 @@ function sendMessage() {
 
   function resetMicState() {
     listening = false;
+    window._micListening = false;
     if (activeMicBtn) activeMicBtn.classList.remove('listening');
     if (activeInputEl) {
       activeInputEl.classList.remove('mic-active');
@@ -4001,10 +4002,6 @@ function sendMessage() {
       if (isMapSearch) {
         document.dispatchEvent(new CustomEvent('map:search-submit', { detail: { query: inputEl.value.trim() } }));
         inputEl.value = '';
-      } else if (inputEl.id === 'itin-query-input') {
-        // Popup de consulta sobre una guía (mapa-itinerario.js) — su propio
-        // envío, no el del chat general.
-        if (typeof window._sendItinQuery === 'function') window._sendItinQuery();
       } else if (isWelcome) {
         const msg = inputEl.value.trim();
         if (msg && typeof salma !== 'undefined' && salma.isBusyNotify()) return;   // Salma responde: no vaciar lo dictado
@@ -4017,7 +4014,9 @@ function sendMessage() {
         if (wM) wM.style.display = '';
         if (msg && typeof salma !== 'undefined') salma.send(msg);
       } else {
-        sendMessage();
+        // Chat (barra de abajo) y popup de guías (5 oct 2026, Paco): al parar el micro lo dictado SE QUEDA en la caja,
+        // sin enviarse solo. Así se puede corregir o añadir una foto; se manda con el botón de enviar.
+        _syncInputControls(inputEl.closest('.input-row, .itin-query-inputrow'));
       }
     } else if (!hadResult) {
       if (typeof showToast === 'function') showToast('No he captado nada, pulsa y habla claro');
@@ -4049,6 +4048,8 @@ function sendMessage() {
       inputEl.value = accumulatedText + sep + current;
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
+      // Última palabra que llega justo después de parar: ya no se escucha, se actualizan los botones
+      if (!listening) _syncInputControls(inputEl.closest('.input-row, .itin-query-inputrow'));
     };
 
     rec.onend = () => {
@@ -4097,6 +4098,9 @@ function sendMessage() {
     const inputEl = row ? (row.querySelector('textarea') || row.querySelector('input[type="text"]')) : null;
     if (!inputEl) return;
 
+    // Salma se calla mientras se dicta: si no, el micro oye su voz y la escribe (5 oct 2026, Paco)
+    if (typeof salma !== 'undefined' && salma.salmaSpeakStop) salma.salmaSpeakStop();
+    window._micListening = true;
     activeMicBtn = micBtn;
     activeInputEl = inputEl;
     accumulatedText = '';
