@@ -175,11 +175,12 @@ function showState(state) {
   }
   // Quitar fondo mapa y padding extra si salimos del chat
   if (state !== 'chat') {
-    window._salmaScreen = false;
+    _setSalmaScreen(false);
     const layer = document.getElementById('chat-bg-layer');
     if (layer) layer.remove();
     $content.classList.remove('app-content--chat');
   }
+  _syncSalmaClose();   // ✕ de la pantalla de Salma: solo en el chat y con el modo activo
   // Limpiar barra flotante de guía si quedó huérfana
   const _orphanBar = document.body.querySelector('.itin-action-bar');
   if (_orphanBar) _orphanBar.remove();
@@ -292,7 +293,7 @@ function updateBottomBar() {
     // (cada hilo se guarda aparte; newChat() solo empieza otro). Antes retomaba la última
     // conversación y la portada quedaba escondida detrás de "Nueva".
     fab.addEventListener('click', () => {
-      window._salmaScreen = true;   // 5 oct 2026: abre la pantalla de Salma, no la portada
+      _setSalmaScreen(true);   // 5 oct 2026: abre la pantalla de Salma, no la portada
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
       // Con una respuesta a medias no se corta: solo se lleva al chat.
@@ -325,7 +326,7 @@ function _hasUnsavedChatConversation() {
 }
 
 function _goToFreshBillete() {
-  window._salmaScreen = false;   // "Nueva"/ruta nueva = portada, no la pantalla de Salma
+  _setSalmaScreen(false);   // "Nueva"/ruta nueva = portada, no la pantalla de Salma
   showState('chat');
   if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
   // Sube a la caja de ejemplos de ARRIBA — NO al billete de "Ruta rápida" más
@@ -446,6 +447,36 @@ window.addEventListener('popstate', function (e) {
 
 // ═══ CHAT VACÍO — chips de acceso rápido ═══
 
+// Modo "pantalla de Salma" (botón central). Se recuerda en sessionStorage para que refrescar la web no te saque de ahí.
+// La ✕ es un botón fijo en body (como "Nueva" y "Ayuda"): vale tanto con el saludo vacío como con la conversación.
+function _setSalmaScreen(on) {
+  window._salmaScreen = !!on;
+  try { on ? sessionStorage.setItem('bdm_salma_screen', '1') : sessionStorage.removeItem('bdm_salma_screen'); } catch (_) {}
+  _syncSalmaClose();
+}
+function _syncSalmaClose() {
+  let b = document.getElementById('salma-close');
+  const show = !!window._salmaScreen && currentState === 'chat';
+  if (!show) { if (b) b.remove(); return; }
+  if (b) return;
+  b = document.createElement('button');
+  b.id = 'salma-close';
+  b.className = 'salma-screen-close';
+  b.type = 'button';
+  b.setAttribute('aria-label', 'Cerrar Salma');
+  b.textContent = '✕';
+  b.addEventListener('click', () => {
+    // Con conversación: se empieza otra (la anterior queda en "Últimas consultas"). Sin ella: solo se repinta la portada.
+    _setSalmaScreen(false);
+    const area = document.getElementById('chat-area');
+    if (typeof salma !== 'undefined' && area && area.querySelector('.msg') && !salma._streaming && salma.newChat) salma.newChat(true);
+    else if (area) { area.innerHTML = ''; _renderChatEmpty(); }
+    try { window.scrollTo(0, 0); } catch (_) {}
+  });
+  document.body.appendChild(b);
+}
+window._salmaScreen = (function () { try { return sessionStorage.getItem('bdm_salma_screen') === '1'; } catch (_) { return false; } })();
+
 // Pantalla de Salma: la abre el botón central del menú (updateBottomBar). Es el estado vacío del
 // chat con otro contenido (imagen + saludo); va dentro de .chat-empty para que salma.js la quite sola
 // al enviar el primer mensaje. La barra de escribir/voz/foto de abajo es la de siempre. La ✕ vuelve a la portada.
@@ -455,18 +486,11 @@ function _renderSalmaScreen(area) {
   const first = String(name).trim().split(/\s+/)[0];
   area.innerHTML = `
     <div class="chat-empty salma-screen">
-      <button class="salma-screen-close" data-salma-close aria-label="Cerrar">✕</button>
       <picture><source srcset="/salma_ai_avatar.webp" type="image/webp"><img class="salma-screen-avatar" src="/salma_ai_avatar.png" alt="Salma" width="112" height="112"></picture>
       <div class="salma-screen-hi">${first ? 'Hola, ' + escapeHTML(first) : 'Hola, viajero'}</div>
       <p class="salma-screen-sub">Dime, ¿qué necesitas?</p>
       <p class="salma-screen-hint">Escríbeme, háblame o mándame una foto.</p>
     </div>`;
-  area.querySelector('[data-salma-close]').addEventListener('click', () => {
-    window._salmaScreen = false;
-    area.innerHTML = '';
-    _renderChatEmpty();
-    try { window.scrollTo(0, 0); } catch (_) {}
-  });
 }
 
 function _renderChatEmpty() {
