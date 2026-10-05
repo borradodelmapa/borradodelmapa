@@ -54,7 +54,17 @@ const cronologia = (() => {
   const dayKey = t => new Date(t).toISOString().slice(0, 10);
 
   // Agrupa por día (en UTC: suficiente para una vista de viaje) y por país.
-  function summarize(P, countryAt, nameOf) {
+  function summarize(P, countryAt0, nameOf) {
+    // Los contornos son aproximados: un punto en la costa o en un estrecho (Lisboa, Estambul) puede caer
+    // "en el mar". Si no hay país, se prueba alrededor (~11 y ~28 km) y se queda con el primero que salga.
+    const cache = new Map();
+    const countryAt = !countryAt0 ? null : (lat, lng) => {
+      const k = lat.toFixed(2) + ',' + lng.toFixed(2);
+      if (cache.has(k)) return cache.get(k);
+      let f = countryAt0(lat, lng);
+      for (const r of f ? [] : [0.1, 0.25]) for (let a = 0; a < 8 && !f; a++) f = countryAt0(lat + r * Math.sin(a * Math.PI / 4), lng + r * Math.cos(a * Math.PI / 4));
+      cache.set(k, f); return f;
+    };
     const days = new Map();
     const dayOf = k => days.get(k) || (days.set(k, { date: k, places: [], km: 0 }), days.get(k));
     P.visits.forEach(v => {
