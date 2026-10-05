@@ -296,7 +296,7 @@ function updateBottomBar() {
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
       // Con una respuesta a medias no se corta: solo se lleva al chat.
-      if (typeof salma !== 'undefined' && salma.newChat && !salma._streaming) salma.newChat();
+      if (typeof salma !== 'undefined' && salma.newChat && !salma._streaming) salma.newChat(true);   // true = sin aviso "Nueva conversación" (pantalla de Salma)
       try { window.scrollTo(0, 0); } catch (_) {}
     });
     document.body.appendChild(fab);

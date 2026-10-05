@@ -2516,7 +2516,7 @@ const salma = {
     try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
   },
 
-  newChat() {
+  newChat(silent) {
     this.history = [];
     this._threadId = null;
     this._pendingRouteInfo = null;
@@ -2531,7 +2531,7 @@ const salma = {
     // showCopilotCard() DESACTIVADA 21 sept 2026 — duplicaba la tarjeta de info
     // del país de la barra nueva de hora+tiempo+país (bug real reportado por Paco).
     // if (this._copilotData) this.showCopilotCard();
-    if (typeof showToast === 'function') showToast('Nueva conversación');
+    if (!silent && typeof showToast === 'function') showToast('Nueva conversación');
   },
 
   // ═══ HISTORIAL POR RUTA — popup de "consulta" de mapa-itinerario.js ═══
