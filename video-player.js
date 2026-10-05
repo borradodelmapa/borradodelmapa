@@ -1025,7 +1025,7 @@ const videoPlayer = {
       try {
         const file = new File([result.blob], name, { type: result.mimeType });
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: this._params.titulo || 'Mi viaje' });
+          await navigator.share({ files: [file], title: this._params.titulo || 'Mi viaje', text: window.SHARE_INVITE_FULL });
           return;
         }
       } catch (e) {
@@ -1035,7 +1035,7 @@ const videoPlayer = {
       // Fallback: compartir URL del blob (sin archivo, pero abre el share sheet)
       try {
         const url = URL.createObjectURL(result.blob);
-        await navigator.share({ title: this._params.titulo || 'Mi viaje', text: 'Mi viaje · borradodelmapa.com', url });
+        await navigator.share({ title: this._params.titulo || 'Mi viaje', text: window.SHARE_INVITE_FULL, url });
         URL.revokeObjectURL(url);
         return;
       } catch (e) {

@@ -107,7 +107,7 @@ const mapaRuta = {
       if (!shareUrl) shareUrl = window.location.href;
 
       if (navigator.share) {
-        navigator.share({ title: 'Mi ruta de viaje', text: 'Viaja con alguien que sabe lo que hace', url: shareUrl }).catch(() => {});
+        navigator.share({ title: 'Mi ruta de viaje', text: window.SHARE_INVITE, url: shareUrl }).catch(() => {});
       } else {
         navigator.clipboard?.writeText(shareUrl).then(() => {
           btnShare.title = '¡Copiado!';

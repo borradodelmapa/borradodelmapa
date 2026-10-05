@@ -407,7 +407,7 @@ const tuMundo = (() => {
         try { await document.fonts.load('800 40px "Barlow Condensed"'); } catch (_) {}
         const blob = await makeCard(S); const url = URL.createObjectURL(blob); _q('#tm-card-img').src = url; _q('#tm-card').hidden = false;
         const file = new File([blob], 'mi-mundo-borradodelmapa.png', { type: 'image/png' });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Mi vuelta al mundo', text: 'Mi mapa de viajero en borradodelmapa.com' }); } catch (e) {} }
+        if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Mi vuelta al mundo', text: window.SHARE_INVITE_FULL }); } catch (e) {} }
         else { const a = document.createElement('a'); a.href = url; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); _q('#tm-share-note').textContent = 'Tarjeta descargada: compártela desde tu galería.'; }
       } catch (e) { _q('#tm-share-note').textContent = 'No se pudo crear la tarjeta. Prueba otra vez.'; }
       b.disabled = false; b.innerHTML = old;

@@ -3,6 +3,10 @@
    Renderizado ÚNICO de la tarjeta de guía
    ═══════════════════════════════════════════ */
 
+// Invitación que acompaña a TODO lo que se comparte (vídeo, post, álbum, ruta). Un solo sitio para cambiarla.
+window.SHARE_INVITE = window.SHARE_INVITE || 'Hecho con Borrado del Mapa 🧭 la app de viajes para una inmensa minoría de viajeros. Pruébala gratis:';
+window.SHARE_INVITE_FULL = window.SHARE_INVITE_FULL || (window.SHARE_INVITE + ' https://borradodelmapa.com');
+
 // Asegurar que escapeHTML existe (en destinos no se carga app.js)
 if (typeof escapeHTML === 'undefined') {
   window.escapeHTML = function(str) {
@@ -196,7 +200,7 @@ const guideRenderer = {
               return;
             }
             if (navigator.share) {
-              navigator.share({ title: r.title || 'Mi ruta de viaje', text: 'Mapa en mano, viaje en camino', url: shareUrl }).catch(() => {});
+              navigator.share({ title: r.title || 'Mi ruta de viaje', text: window.SHARE_INVITE, url: shareUrl }).catch(() => {});
             } else {
               navigator.clipboard.writeText(shareUrl).then(() => showToast('Link copiado')).catch(() => {});
             }

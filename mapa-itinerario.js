@@ -285,7 +285,7 @@ ${trk}
 
   _shareLink(routeData, url) {
     const title = routeData.title || routeData.name || 'Mi ruta';
-    const text = `Te comparto esta ruta: ${title}`;
+    const text = `Te comparto esta ruta: ${title}\n${window.SHARE_INVITE}`;
     if (navigator.share) {
       navigator.share({ title, text, url }).catch(() => {});
     } else {

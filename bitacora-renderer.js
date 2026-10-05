@@ -579,7 +579,7 @@ const bitacoraRenderer = {
         } catch (_) {}
         showToast('Enlace copiado');
       } else if (action === 'native' && url) {
-        navigator.share({ title: docData.nombre || 'Mi viaje', url });
+        navigator.share({ title: docData.nombre || 'Mi viaje', text: window.SHARE_INVITE, url });
       } else if (action === 'instagram-post') {
         await this._generateShareImage('post', docData);
       } else if (action === 'instagram-story') {

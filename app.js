@@ -5451,7 +5451,7 @@ async function shareAsImage() {
     const blob = await res.blob();
     const file = new File([blob], 'mapa-salma.jpg', { type: 'image/jpeg' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: 'Mi mapa de viaje — Salma' });
+      await navigator.share({ files: [file], title: 'Mi mapa de viaje — Salma', text: window.SHARE_INVITE_FULL });
       status.textContent = '';
       closeShareSheet();
     } else {
@@ -6116,7 +6116,7 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
 // ── Share / Download ──
 function _diarioMapsLink() { return 'https://www.google.com/maps?q='+_diario.lat+','+_diario.lng; }
 function _diarioShareText() {
-  return 'Estoy muy bien!!! Mira donde estoy!!! 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\n🌍 https://borradodelmapa.com';
+  return 'Estoy muy bien!!! Mira donde estoy!!! 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\n'+window.SHARE_INVITE_FULL;
 }
 
 function _diarioAutoSave() {
