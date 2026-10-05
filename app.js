@@ -3898,17 +3898,28 @@ window.publicarGuiaGuardada = publicarGuiaGuardada;
 
 // ═══ INPUT — textarea auto-resize + enviar ═══
 
-// Reset centralizado de botones cam/mic/send según contenido del input o foto pendiente
-function resetInputButtons() {
-  const hasText = $input.value.trim().length > 0;
+// Botones de la barra de escribir — UNA sola regla para todos los sitios (barra de abajo y popup de edición de guías):
+//   · voz (altavoz): siempre
+//   · cámara: salvo que ya haya una foto adjunta
+//   · micro: salvo que haya texto escrito (con foto sola SÍ: se dicta la pregunta sobre la foto)
+//   · enviar: solo con texto o con foto
+// Antes, en cuanto había texto desaparecían cámara y micro: no se podía añadir una foto a lo dictado.
+function _hasSTT() { return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+function _syncInputControls(row) {
+  if (!row) return;
+  const ta = row.querySelector('textarea, input[type="text"]');
+  const hasText = !!(ta && ta.value.trim().length > 0);
   const hasPhoto = typeof salma !== 'undefined' && !!salma._pendingPhoto;
-  const showSend = hasText || hasPhoto;
-  if ($send) $send.style.display = showSend ? '' : 'none';
-  const chatCam = document.getElementById('cam-btn');
-  const chatMic = document.getElementById('mic-btn');
-  if (chatCam) chatCam.style.display = showSend ? 'none' : '';
-  // Con foto adjunta y sin texto el micro se queda: así se puede dictar la pregunta sobre la foto (5 oct 2026)
-  if (chatMic) chatMic.style.display = hasText ? 'none' : '';
+  const show = (el, on) => { if (el) el.style.display = on ? '' : 'none'; };
+  row.querySelectorAll('.app-cam').forEach(el => show(el, !hasPhoto));
+  row.querySelectorAll('.app-mic').forEach(el => show(el, _hasSTT() && !hasText));
+  row.querySelectorAll('.app-send-arrow, .itin-query-send').forEach(el => show(el, hasText || hasPhoto));
+}
+window._syncInputControls = _syncInputControls;
+
+// Reset centralizado de la barra de abajo (se llama al escribir, adjuntar foto, enviar y al volver al chat)
+function resetInputButtons() {
+  _syncInputControls(document.querySelector('#app-input-bar .input-row'));
 }
 window.resetInputButtons = resetInputButtons;
 
@@ -4125,6 +4136,14 @@ function sendMessage() {
 
     startListening(micBtn);
   }
+
+  // App a segundo plano: se deja de escuchar (sin enviar lo dictado — queda en la caja). Antes el micro seguía abierto.
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden || !listening) return;
+    listening = false;
+    try { if (activeRec) activeRec.stop(); } catch (_) {}
+    resetMicState();
+  });
 
   // Bloquear long-press en el botón de micro (evita menú contextual)
   document.addEventListener('contextmenu', (e) => {

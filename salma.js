@@ -44,23 +44,33 @@ const salma = {
   _ttsStreaming: false,
   _ttsPreloaded: null,
   _ttsPrefetchAbort: null,
+  _ttsEpoch: 0,   // sube en cada _ttsStopAll: un audio que llega tarde de una petición anterior se descarta
 
   // ═══ VOZ DE SALMA — Toggle global + ElevenLabs + fallback Web Speech ═══
   _voiceOn: false,
 
   initVoices() {
+    // Voz solo con la app a la vista (5 oct 2026): al salir de la pestaña/app se corta y no se arranca nada nuevo.
+    // Antes, una respuesta que llegaba con la app en segundo plano se leía sola al rato y seguía sonando.
+    if (!this._bgListeners) {
+      this._bgListeners = true;
+      const _stop = () => { if (document.hidden) this.salmaSpeakStop(); };
+      document.addEventListener('visibilitychange', _stop);
+      window.addEventListener('pagehide', () => this.salmaSpeakStop());
+    }
     if (!window.speechSynthesis) return;
     this._voices = speechSynthesis.getVoices();
     speechSynthesis.onvoiceschanged = () => { this._voices = speechSynthesis.getVoices(); };
   },
 
   initVoiceToggle() {
-    const btn = document.getElementById('voice-toggle');
-    if (!btn) return;
+    const btns = document.querySelectorAll('.app-voice-toggle');
+    if (!btns.length) return;
     // Restaurar estado desde localStorage
     this._voiceOn = localStorage.getItem('salma_voice') === 'true';
     this._updateVoiceToggleUI();
-    btn.addEventListener('click', () => {
+    // Un solo estado para todos los botones de voz (barra de abajo y popup de edición de guías)
+    btns.forEach(btn => btn.addEventListener('click', () => {
       this._voiceOn = !this._voiceOn;
       localStorage.setItem('salma_voice', this._voiceOn ? 'true' : 'false');
       this._updateVoiceToggleUI();
@@ -72,7 +82,7 @@ const salma = {
       } else {
         this.salmaSpeakStop();
       }
-    });
+    }));
   },
 
   // Dispara una utterance ultra-corta para "calentar" el sintetizador tras un gesto
@@ -110,10 +120,10 @@ const salma = {
   },
 
   _updateVoiceToggleUI() {
-    const btn = document.getElementById('voice-toggle');
-    if (!btn) return;
-    btn.classList.toggle('voice-on', this._voiceOn);
-    btn.setAttribute('aria-label', this._voiceOn ? 'Desactivar voz de Salma' : 'Activar voz de Salma');
+    document.querySelectorAll('.app-voice-toggle').forEach(btn => {
+      btn.classList.toggle('voice-on', this._voiceOn);
+      btn.setAttribute('aria-label', this._voiceOn ? 'Desactivar voz de Salma' : 'Activar voz de Salma');
+    });
   },
 
   // Limpiar texto para TTS
@@ -170,7 +180,10 @@ const salma = {
   // Fallback Web Speech para una frase
   async _ttsSpeakWebSpeech(text) {
     if (!window.speechSynthesis) { console.warn('[Salma] speechSynthesis no disponible'); this._ttsPlaying = false; return; }
+    if (document.hidden) { this._ttsPlaying = false; return; }
+    const _ep = this._ttsEpoch;
     await this._waitForVoices();
+    if (_ep !== this._ttsEpoch || document.hidden) { this._ttsPlaying = false; return; }
     const voices = this._voices || [];
     if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(text);
@@ -212,7 +225,9 @@ const salma = {
       this._ttsPlaying = false;
       return;
     }
+    if (document.hidden) { this._ttsStopAll(); return; }   // app en segundo plano: no se habla
     this._ttsPlaying = true;
+    const _ep = this._ttsEpoch;
     const sentence = this._ttsQueue.shift();
 
     // Si ElevenLabs está caído en esta sesión → directo a voz del navegador (sin delay)
@@ -244,7 +259,7 @@ const salma = {
       }
     }
 
-    if (!this._voiceOn && !this._manualSpeakActive) { // voz desactivada durante fetch
+    if ((!this._voiceOn && !this._manualSpeakActive) || _ep !== this._ttsEpoch || document.hidden) { // voz desactivada, parada o app oculta durante el fetch
       if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
       this._ttsPlaying = false;
       return;
@@ -309,6 +324,7 @@ const salma = {
 
   // Parar todo el sistema TTS
   _ttsStopAll() {
+    this._ttsEpoch++;
     this._ttsQueue = [];
     this._ttsBuffer = '';
     this._ttsPlaying = false;
@@ -334,11 +350,12 @@ const salma = {
   // salmaSpeak — ahora con soporte para textos largos via cola
   async salmaSpeak(text) {
     try {
-      if (!this._voiceOn) return;
+      if (!this._voiceOn || document.hidden) return;
       const clean = this._ttsClean(text);
       if (!clean) return;
 
       this._ttsStopAll();
+      const _ep = this._ttsEpoch;
 
       // Textos largos → partir en frases y encolar
       if (clean.length > 1200) {
@@ -351,7 +368,7 @@ const salma = {
       if (!this._elevenLabsDown) {
         try {
           const audio = await this._ttsFetchAudio(clean);
-          if (!this._voiceOn) { if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl); return; }
+          if (!this._voiceOn || _ep !== this._ttsEpoch || document.hidden) { if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl); return; }
           this._currentAudio = audio;
           this._ttsPlaying = true;
           audio.onended = () => {
@@ -387,8 +404,9 @@ const salma = {
   async salmaSpeakManual(text) {
     try {
       const clean = this._ttsClean(text);
-      if (!clean) return;
+      if (!clean || document.hidden) return;
       this._ttsStopAll();
+      const _ep = this._ttsEpoch;
       this._manualSpeakActive = true;
       if (clean.length > 1200) {
         const sentences = this._ttsSplitSentences(clean);
@@ -398,6 +416,7 @@ const salma = {
       if (!this._elevenLabsDown) {
         try {
           const audio = await this._ttsFetchAudio(clean);
+          if (_ep !== this._ttsEpoch || document.hidden) { if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl); return; }
           this._currentAudio = audio;
           this._ttsPlaying = true;
           audio.onended = () => {

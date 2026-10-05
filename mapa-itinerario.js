@@ -928,6 +928,11 @@ ${trk}
   });
 
   let _itinQueryObserver = null;
+  // Cámara / micro / enviar del popup: misma regla que la barra de abajo (_syncInputControls en app.js)
+  function _syncItinControls() {
+    const inp = document.getElementById('itin-query-input');
+    if (typeof window._syncInputControls === 'function' && inp) window._syncInputControls(inp.closest('.itin-query-inputrow'));
+  }
 
   async function _openItinQuery() {
     const overlay = document.getElementById('itin-query-overlay');
@@ -993,7 +998,9 @@ ${trk}
     input.oninput = () => {
       input.style.height = 'auto';
       input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+      _syncItinControls();
     };
+    _syncItinControls();
 
     // Foto: botón cámara + menú hacer foto/galería, misma UX que el chat
     // normal pero con su propia preview (ver _handleItinPhotoSelected).
@@ -1168,10 +1175,12 @@ ${trk}
     if (!msg && !hasPendingPhoto) return;
     if (salma.isBusyNotify()) return;   // Salma responde: se puede seguir escribiendo, no enviar ni vaciar la caja
     if (input) { input.value = ''; input.style.height = 'auto'; }
+    _syncItinControls();
     const hint = answer && answer.querySelector('.itin-chat-hint');
     if (hint) hint.remove();
     _hideItinQueryPhotoPreview();
     salma.send(msg);
+    setTimeout(_syncItinControls, 300);   // salma.send ya soltó la foto adjunta
   }
 
   // ═══ FOTO EN EL POPUP DE CONSULTA — reutiliza _pendingPhoto/_compressImage
@@ -1200,6 +1209,7 @@ ${trk}
       const preview = document.getElementById('itin-query-photo-preview');
       const thumb = document.getElementById('itin-query-photo-thumb');
       if (preview && thumb) { thumb.src = localUrl; preview.style.display = ''; }
+      _syncItinControls();
     } catch (e) {
       console.error('[Salma] Error procesando foto (popup itinerario):', e);
       if (typeof showToast === 'function') showToast('Error al procesar la foto');
@@ -1209,6 +1219,7 @@ ${trk}
   function _hideItinQueryPhotoPreview() {
     const preview = document.getElementById('itin-query-photo-preview');
     if (preview) preview.style.display = 'none';
+    _syncItinControls();
   }
 
   function _clearItinQueryPhoto() {

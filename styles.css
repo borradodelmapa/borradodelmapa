@@ -4765,7 +4765,8 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
   display: flex; gap: 8px; justify-content: flex-end; align-items: center;
 }
 .itin-query-inputrow .app-cam,
-.itin-query-inputrow .app-mic {
+.itin-query-inputrow .app-mic,
+.itin-query-inputrow .app-voice-toggle {
   width: 38px; height: 38px;
 }
 .itin-query-inputrow .cam-menu {
