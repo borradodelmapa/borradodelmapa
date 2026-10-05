@@ -6688,8 +6688,8 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
 .ce-perf::after{right:-16px;}
 .ce-stub{padding:13px;}
 /* billete rápido = modo secundario → CTA en OUTLINE, nunca sólido a la vez que "Trazar ruta" de la caja rotable (doc 8 sep) */
-.ce-emit{width:100%;border:1.5px solid var(--ce-line-hi);cursor:pointer;background:transparent;color:var(--ce-ink);font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;letter-spacing:.06em;font-size:15px;padding:14px;display:flex;align-items:center;justify-content:space-between;}
-.ce-emit:hover{border-color:var(--ce-amber);color:var(--ce-amber);}
+.ce-emit{width:100%;border:0;cursor:pointer;background:var(--ce-amber);color:#0D0F10;font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;letter-spacing:.06em;font-size:15px;padding:14px;display:flex;align-items:center;justify-content:space-between;}
+.ce-emit:hover{background:var(--ce-amber-hi);}
 .ce-emit:active{transform:scale(.99);}
 .ce-stub-hint{text-align:center;font-family:var(--ce-flapf);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ce-ink3);margin-top:9px;}
 

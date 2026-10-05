@@ -504,7 +504,7 @@ function _renderChatEmpty() {
   // (petición de Paco, 22 sept 2026, para descargar el index).
   let _ceSkyWxOpen = false;
   let _ceName = '';
-  try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
+  try { _ceName = (currentUser && (currentUser.name || currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
 
   // Normaliza una ruta real (itinerarioIA parseado) para el tablero
@@ -545,7 +545,7 @@ function _renderChatEmpty() {
       <div class="ce-tk-head">
         <span class="ce-tk-t">Nº ${_tkNum}</span>
       </div>
-      <div class="ce-tk-pax"><span class="ce-k">Pasajero</span><span class="ce-tk-pax-v">${_paxName}</span></div>
+      <div class="ce-tk-pax"><span class="ce-k">Viajero</span><span class="ce-tk-pax-v">${_paxName}</span></div>
       <div class="ce-fld">
         <div class="ce-k">Destino</div>
         <input class="ce-tk-dest" type="text" autocomplete="off" placeholder="¿A dónde?">
@@ -707,7 +707,6 @@ function _renderChatEmpty() {
         <div class="ce-ask" data-ce-hero>
           <button class="ce-ask-btn" data-ce-openask aria-expanded="false">Pregunta lo <span>imposible</span><i class="ce-ask-arr">▾</i></button>
           <div class="ce-ask-box" hidden>
-            <p class="ce-ask-note">Para un buen resultado, di siempre <b>a dónde</b> y <b>cuántos días</b> (por ejemplo: «4 días en Huelva en coche, con niños»).</p>
             <div class="ce-rotable" id="ce-rotable">
               <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
               <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
