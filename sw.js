@@ -1,6 +1,6 @@
 // Service Worker — Cache del shell + network-first para API (P1-7)
 
-const CACHE_NAME = 'salma-v18';
+const CACHE_NAME = 'salma-v19';
 const SHARE_INBOX = 'share-inbox';
 const SHELL_ASSETS = [
   '/',
@@ -95,7 +95,9 @@ self.addEventListener('fetch', (e) => {
   // HTML (navegación) — network-first (siempre carga la versión nueva)
   if (e.request.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html')) {
     e.respondWith(
-      fetch(e.request).then(response => {
+      // cache:'no-cache' = revalidar siempre con el servidor (GitHub Pages deja el HTML ~10 min en la caché del
+      // navegador: sin esto, tras subir un cambio se seguía viendo la versión vieja hasta 10 minutos). 5 oct 2026.
+      fetch(e.request, { cache: 'no-cache' }).then(response => {
         if (response && response.status === 200) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
