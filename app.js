@@ -166,6 +166,12 @@ function showState(state) {
     const handoff = localStorage.getItem('_salmaHandoff');
     if (handoff) {
       localStorage.removeItem('_salmaHandoff');
+      // La portada ya no lleva la barra de escribir: la pregunta guardada va a la pantalla de Salma, que sí.
+      if (!window._salmaScreen) {
+        _setSalmaScreen(true);
+        const _hca = document.getElementById('chat-area');
+        if (_hca && !_hca.querySelector('.msg')) { _hca.innerHTML = ''; _renderChatEmpty(); }
+      }
       setTimeout(() => {
         $input.value = handoff;
         $input.dispatchEvent(new Event('input'));
