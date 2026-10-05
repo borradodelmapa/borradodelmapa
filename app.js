@@ -652,8 +652,8 @@ function _renderChatEmpty() {
   try { _ceMoreOpen = localStorage.getItem('bdm_ce_more_open') === '1'; } catch (_) {}
   const _ceMoreHTML = `
       <button class="ce-more-toggle" id="ce-more-toggle" aria-expanded="${_ceMoreOpen}">
-        <span>Más opciones</span>
-        <span class="ce-more-toggle-ic">${_ceMoreOpen ? '▴' : '▾'}</span>
+        <span class="ce-more-t">Más <span>opciones</span></span>
+        <i class="ce-more-toggle-ic">${_ceMoreOpen ? '▴' : '▾'}</i>
       </button>
       <div class="ce-more-chips${_ceMoreOpen ? ' open' : ''}" id="ce-more-chips">${chipsMore.map(renderChip).join('')}</div>`;
 

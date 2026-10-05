@@ -7030,7 +7030,11 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
    a la mitad (minmax(0,1fr) arriba) y, si el texto no cabe, parte en dos líneas. */
 .chat-empty .chat-empty-chip{min-width:0;white-space:normal;line-height:1.2;}
 .chat-empty .chat-empty-chip .chip-icon{width:16px;height:16px;}
-.chat-empty .ce-more-toggle{font-family:var(--font-body);font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;}
+/* "Más opciones" = mismo diseño que "Pregunta lo imposible" (Paco, 5 oct 2026): blanco "Más", naranja "opciones" */
+.chat-empty .ce-more-toggle{font-family:var(--ce-sign);font-size:18px;font-weight:700;letter-spacing:.01em;text-transform:uppercase;color:var(--ce-ink);margin-top:18px;padding:11px 0 0;}
+.chat-empty .ce-more-toggle:hover{color:var(--ce-ink);}
+.chat-empty .ce-more-t span{color:var(--ce-amber);}
+.chat-empty .ce-more-toggle-ic{font-style:normal;color:var(--ce-amber);font-size:14px;}
 .ce-openbillete{font-family:var(--font-body);}
 .ce-openbillete span{font-size:14px;}
 
