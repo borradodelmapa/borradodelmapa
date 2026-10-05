@@ -7317,3 +7317,13 @@ body.live-map-open #mejora-btn { display: none !important; }
 .ce-ask-arr{font-style:normal;color:var(--ce-amber);font-size:14px;}
 .ce-ask-note{margin:2px 0 0;font-family:var(--font-body,'Inter'),sans-serif;font-size:13px;line-height:1.5;color:var(--ce-ink2);}
 .ce-ask-note b{color:var(--ce-amber);font-weight:700;}
+
+/* ── Pantalla de Salma (botón central del menú, 5 oct 2026) — _renderSalmaScreen en app.js ──
+   La ✕ va a la izquierda: arriba a la derecha ya está el botón ✦ de Ayuda Salma. */
+.chat-empty.salma-screen{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:64px 20px 24px;}
+.chat-empty .salma-screen-close{position:absolute;top:10px;left:12px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:transparent;border:1.5px solid var(--ce-line-hi);color:var(--ce-ink);font-size:18px;cursor:pointer;}
+.chat-empty .salma-screen-close:active{background:var(--ce-amber);border-color:var(--ce-amber);color:#0D0F10;}
+.chat-empty .salma-screen-avatar{width:112px;height:112px;object-fit:cover;border-radius:50% !important;border:2px solid var(--ce-amber);margin-bottom:18px;}
+.chat-empty .salma-screen-hi{font-family:var(--ce-sign);font-weight:800;font-size:28px;letter-spacing:.02em;text-transform:uppercase;color:var(--ce-ink);}
+.chat-empty .salma-screen-sub{margin:6px 0 0;font-family:var(--ce-sign);font-weight:700;font-size:18px;text-transform:uppercase;color:var(--ce-amber);}
+.chat-empty .salma-screen-hint{margin:14px 0 0;font-family:var(--font-body,'Inter'),sans-serif;font-size:14px;line-height:1.5;color:var(--ce-ink2);}

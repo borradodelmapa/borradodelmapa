@@ -175,6 +175,7 @@ function showState(state) {
   }
   // Quitar fondo mapa y padding extra si salimos del chat
   if (state !== 'chat') {
+    window._salmaScreen = false;
     const layer = document.getElementById('chat-bg-layer');
     if (layer) layer.remove();
     $content.classList.remove('app-content--chat');
@@ -291,6 +292,7 @@ function updateBottomBar() {
     // (cada hilo se guarda aparte; newChat() solo empieza otro). Antes retomaba la última
     // conversación y la portada quedaba escondida detrás de "Nueva".
     fab.addEventListener('click', () => {
+      window._salmaScreen = true;   // 5 oct 2026: abre la pantalla de Salma, no la portada
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
       // Con una respuesta a medias no se corta: solo se lleva al chat.
@@ -323,6 +325,7 @@ function _hasUnsavedChatConversation() {
 }
 
 function _goToFreshBillete() {
+  window._salmaScreen = false;   // "Nueva"/ruta nueva = portada, no la pantalla de Salma
   showState('chat');
   if (typeof salma !== 'undefined' && salma.newChat) salma.newChat();
   // Sube a la caja de ejemplos de ARRIBA — NO al billete de "Ruta rápida" más
@@ -443,12 +446,37 @@ window.addEventListener('popstate', function (e) {
 
 // ═══ CHAT VACÍO — chips de acceso rápido ═══
 
+// Pantalla de Salma: la abre el botón central del menú (updateBottomBar). Es el estado vacío del
+// chat con otro contenido (imagen + saludo); va dentro de .chat-empty para que salma.js la quite sola
+// al enviar el primer mensaje. La barra de escribir/voz/foto de abajo es la de siempre. La ✕ vuelve a la portada.
+function _renderSalmaScreen(area) {
+  let name = '';
+  try { name = (currentUser && (currentUser.name || currentUser.displayName || '')) || ''; } catch (_) {}
+  const first = String(name).trim().split(/\s+/)[0];
+  area.innerHTML = `
+    <div class="chat-empty salma-screen">
+      <button class="salma-screen-close" data-salma-close aria-label="Cerrar">✕</button>
+      <picture><source srcset="/salma_ai_avatar.webp" type="image/webp"><img class="salma-screen-avatar" src="/salma_ai_avatar.png" alt="Salma" width="112" height="112"></picture>
+      <div class="salma-screen-hi">${first ? 'Hola, ' + escapeHTML(first) : 'Hola, viajero'}</div>
+      <p class="salma-screen-sub">Dime, ¿qué necesitas?</p>
+      <p class="salma-screen-hint">Escríbeme, háblame o mándame una foto.</p>
+    </div>`;
+  area.querySelector('[data-salma-close]').addEventListener('click', () => {
+    window._salmaScreen = false;
+    area.innerHTML = '';
+    _renderChatEmpty();
+    try { window.scrollTo(0, 0); } catch (_) {}
+  });
+}
+
 function _renderChatEmpty() {
   if (!document.getElementById('chat-area')) {
     $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
   }
   const area = document.getElementById('chat-area');
   if (!area || area.querySelector('.msg')) return;
+  // Pantalla de Salma (botón central, 5 oct 2026): saludo con su imagen en vez de la portada.
+  if (window._salmaScreen) { _renderSalmaScreen(area); return; }
 
   const _ci = (d) => `<svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   // Simplificación 19 sept 2026 (a petición de Paco): solo 6 chips fijos, centrados
