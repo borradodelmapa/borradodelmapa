@@ -7416,3 +7416,16 @@ body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-avat
 .chat-empty .ce-ask-photo[hidden]{display:none;}
 .chat-empty .ce-ask-photo img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
 .chat-empty .ce-ask-photo-x{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border:0;border-radius:50% !important;background:#000;color:#fff;font-size:15px;line-height:1;cursor:pointer;}
+
+/* ── Pastilla "Desliza para SOS" (6 oct 2026): fija encima del menú, solo en la portada ── */
+.sos-pill{display:none;position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 92px);z-index:890;height:44px;border-radius:22px;border:1px solid #5a2a25;background:#1c1210;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;}
+body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-screen)) .sos-pill{display:block;}
+body.live-map-open .sos-pill{display:none !important;}
+/* con la pastilla visible, que el final de la portada no quede tapado */
+body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-screen)) #chat-area{padding-bottom:72px;}
+.sos-pill-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-left:40px;font-family:var(--ce-sign,var(--font-cond));font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#d98a80;pointer-events:none;}
+.sos-pill-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:#7a2a20;opacity:.55;}
+.sos-pill-knob{position:absolute;left:3px;top:3px;width:36px;height:36px;border-radius:50% !important;background:#ff6b5a;color:#1c1210;display:flex;align-items:center;justify-content:center;font-family:var(--ce-sign,var(--font-cond));font-weight:700;font-size:11px;letter-spacing:.04em;cursor:grab;touch-action:none;}
+.sos-pill-knob:focus-visible{outline:2px solid #fff;outline-offset:1px;}
+.sos-pill.done .sos-pill-fill{width:100% !important;opacity:1;}
+.sos-pill.done .sos-pill-label{color:#fff;}

@@ -313,6 +313,57 @@ function updateBottomBar() {
     });
     document.body.appendChild(fab);
   }
+  _ensureSosPill();
+}
+
+// Pastilla "Desliza para SOS" (6 oct 2026, Paco): fija encima del menú, solo en la portada (el CSS la oculta con
+// Salma abierta, en el chat, en la guía y en el mapa). Arrastrar el círculo hasta el final hace LO MISMO que el chip
+// SOS de Atajos: abre la pantalla de confirmación (o la configuración si aún no hay contactos); no envía nada sola.
+// Soltar antes del final = vuelve atrás, para que no se active sin querer en el bolsillo.
+function _ensureSosPill() {
+  if (document.getElementById('sos-pill')) return;
+  const pill = document.createElement('div');
+  pill.id = 'sos-pill';
+  pill.className = 'sos-pill';
+  pill.innerHTML = '<div class="sos-pill-fill"></div><div class="sos-pill-label">Desliza para SOS ▸▸</div><div class="sos-pill-knob" role="slider" tabindex="0" aria-label="Desliza para SOS" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">SOS</div>';
+  document.body.appendChild(pill);
+  const knob = pill.querySelector('.sos-pill-knob');
+  const fill = pill.querySelector('.sos-pill-fill');
+  let x0 = 0, drag = false, max = 0, busy = false;
+  const set = (x) => {
+    knob.style.transform = 'translateX(' + x + 'px)';
+    fill.style.width = (x + 39) + 'px';
+    knob.setAttribute('aria-valuenow', String(max ? Math.round(x / max * 100) : 0));
+  };
+  const reset = () => {
+    knob.style.transition = fill.style.transition = 'transform .2s, width .2s';
+    set(0);
+    setTimeout(() => { knob.style.transition = fill.style.transition = ''; pill.classList.remove('done'); busy = false; }, 260);
+  };
+  const fire = () => {
+    if (busy) return;
+    busy = true;
+    pill.classList.add('done');
+    const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
+    if (sosConfigured) showSOSConfirm(); else renderSOSConfig();
+    setTimeout(reset, 700);
+  };
+  knob.addEventListener('pointerdown', (e) => {
+    if (busy) return;
+    drag = true; x0 = e.clientX; max = pill.clientWidth - 42;
+    try { knob.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  knob.addEventListener('pointermove', (e) => { if (drag) set(Math.max(0, Math.min(max, e.clientX - x0))); });
+  const end = (e) => {
+    if (!drag) return;
+    drag = false;
+    const x = Math.max(0, Math.min(max, e.clientX - x0));
+    if (x >= max * 0.92) { set(max); fire(); } else reset();
+  };
+  knob.addEventListener('pointerup', end);
+  knob.addEventListener('pointercancel', () => { if (drag) { drag = false; reset(); } });
+  // Teclado / lector de pantalla: Enter o espacio equivalen a deslizar hasta el final
+  knob.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); max = pill.clientWidth - 42; set(max); fire(); } });
 }
 
 // Pestaña "Mapa" (27 sept 2026): abre el mapa en vivo a pantalla completa (openLiveMap)
