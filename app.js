@@ -867,8 +867,8 @@ function _renderChatEmpty() {
              (LOGO_HTML) para las 1.793 páginas de /destinos/ — si tocas texto/clases aquí,
              tócalo también ahí. -->
         <div class="ce-top"><span class="ce-brand" data-ce-home role="button" tabindex="0"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</span></div>
-        <div class="ce-sky-date" id="ce-sky-time" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">${escapeHTML(_ceSkyTimeInit)}</div>
-        <button class="ce-sky-wx-toggle" id="ce-sky-wx-toggle" data-ce-sky-wx-toggle aria-expanded="${_ceSkyWxOpen ? 'true' : 'false'}">${_ceSkyWxOpen ? '▴ ocultar' : '▾ tiempo'}</button>
+        <!-- Hora + tiempo + flecha = UN solo botón de texto, sin caja (Paco, 6 oct 2026): abre/cierra el bloque del tiempo. -->
+        <button class="ce-sky-line" id="ce-sky-wx-toggle" data-ce-sky-wx-toggle aria-expanded="${_ceSkyWxOpen ? 'true' : 'false'}" aria-label="Hora y tiempo"><span class="ce-sky-date" id="ce-sky-time">${escapeHTML(_ceSkyTimeInit)}</span><span class="ce-sky-mini" id="ce-sky-mini">${_ceSkyCachedData ? escapeHTML(_ceSkyTempInit) : ''}</span><i class="ce-sky-arr" id="ce-sky-arr">${_ceSkyWxOpen ? '▴' : '▾'}</i></button>
         <div class="ce-sky-wx-wrap" id="ce-sky-wx-wrap"${_ceSkyWxOpen ? '' : ' hidden'}>
           <div class="ce-sky-wx" id="ce-sky-wxcard" data-ce-clock role="button" tabindex="0" title="Cambiar país o ciudad">
             <div class="wx-main">
@@ -1442,7 +1442,9 @@ function _ceSkyPaintWeather(data) {
     const cc = _ceSkyInfoCountryFor(sel);
     if (info && !info.innerHTML && cc) _ceSkyInfoRefresh(cc);
   }
+  const mini = document.getElementById('ce-sky-mini');
   if (!data) {
+    if (mini) mini.textContent = '';
     if (temp) temp.textContent = '…';
     if (desc) desc.textContent = '';
     if (extras) { extras.innerHTML = ''; extras.hidden = true; }
@@ -1452,6 +1454,7 @@ function _ceSkyPaintWeather(data) {
   }
   const icon = (typeof salma !== 'undefined' && salma._wxEmoji) ? salma._wxEmoji(data.icon) : '🌡️';
   if (temp) temp.textContent = `${icon} ${data.temp}°`;
+  if (mini) mini.textContent = `${icon} ${data.temp}°`;
   if (desc) desc.textContent = data.description || '';
   if (extras) { extras.innerHTML = _ceSkyExtrasHTML(data); extras.hidden = false; }
   const forecast = data.forecast || [];
@@ -1518,7 +1521,8 @@ function _ceSkyToggleWx() {
   const open = !!el.hidden; // estaba oculto → lo vamos a abrir
   el.hidden = !open;
   if (toggle) {
-    toggle.textContent = open ? '▴ ocultar' : '▾ tiempo';
+    const arr = document.getElementById('ce-sky-arr');
+    if (arr) arr.textContent = open ? '▴' : '▾';
     toggle.setAttribute('aria-expanded', String(open));
   }
 }
