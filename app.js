@@ -844,7 +844,26 @@ function _renderChatEmpty() {
                 <span class="ce-rotable-hint">Toca para escribir la ruta</span>
               </div>
             </div>
-            <button class="ce-rotable-cta" data-ce-rotable-cta>Trazar ruta <span>→</span></button>
+            <!-- Mismos botones que la barra del chat (altavoz, foto, micro, enviar), con las mismas funciones:
+                 .app-mic/.input-row los cablea el micro global, y la foto va por salma._pendingPhoto. -->
+            <div class="input-row ce-ask-row">
+              <div class="ce-ask-photo" hidden><img alt=""><button type="button" class="ce-ask-photo-x" aria-label="Quitar foto">&times;</button></div>
+              <textarea class="ce-ask-input" id="ce-ask-input" rows="2" placeholder="Ej: Vietnam 10 días en moto" autocomplete="off" aria-label="Pregunta a Salma"></textarea>
+              <div class="ce-ask-cammenu" hidden>
+                <button type="button" data-ce-ask-foto>📸 Hacer foto</button>
+                <button type="button" data-ce-ask-galeria>🖼️ Galería</button>
+              </div>
+              <div class="ce-ask-tools">
+                <button type="button" class="app-voice-toggle ce-ask-ib" aria-label="Activar voz de Salma" title="Voz de Salma">
+                  <svg class="voice-icon-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                  <svg class="voice-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                </button>
+                <span class="ce-ask-sp"></span>
+                <button type="button" class="app-cam ce-ask-ib" aria-label="Enviar foto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
+                <button type="button" class="app-mic ce-ask-ib" aria-label="Hablar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="1" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/></svg></button>
+                <button type="button" class="app-send-arrow ce-ask-ib ce-ask-send" aria-label="Enviar" style="display:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+              </div>
+            </div>
           </div>
         </div>`;
 
@@ -1041,40 +1060,16 @@ function _renderChatEmpty() {
       _fit();
       window.addEventListener('resize', _fit);
       if (!_rStopped) _rTimer = setInterval(_adv, 6000);
-      // Al tocar la caja, se convierte EN SITIO en un campo de texto editable —
-      // antes bajaba al input de Salma más abajo (fix del 18 sept). Los ejemplos
-      // siguen sin mandarse nunca solos: hace falta escribir algo y pulsar
-      // "Trazar ruta" para que se mande (petición de Paco, 22 sept 2026).
+      // Al tocar el ejemplo se para la rotación y el cursor pasa a la caja de escribir de abajo
+      // (6 oct 2026: antes el ejemplo se convertía en un campo; ahora la caja lleva sus botones).
+      // Los ejemplos siguen sin mandarse nunca solos.
       const _startEditing = () => {
-        if (_editing || !_exEl) return;
-        _editing = true;
         _stopRot();
-        const ta = document.createElement('textarea');
-        ta.className = 'ce-rotable-input';
-        ta.id = 'ce-rotable-input';
-        ta.rows = 3;
-        ta.placeholder = 'Escríbeme la ruta que quieres...';
-        ta.addEventListener('click', (e) => e.stopPropagation());
-        // Mismo alto que la caja de ejemplos (no salta al tocar) y crece si el usuario escribe más.
-        if (_fixH) ta.style.minHeight = _fixH + 'px';
-        ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; });
-        _exEl.replaceWith(ta);
-        ta.focus();
-        if (_dots) _dots.hidden = true;
-        const _tg = area.querySelector('#ce-rotable-tag'); if (_tg) _tg.hidden = true;
-        if (_hint) _hint.textContent = 'Pulsa Trazar ruta para mandarla';
+        const ai = area.querySelector('#ce-ask-input');
+        if (ai) { try { ai.focus(); } catch (_) {} }
       };
       _rot.addEventListener('click', _startEditing);
-      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); if (_editing) return; _stopRot(); _adv(); });
-      const _rcta = area.querySelector('[data-ce-rotable-cta]');
-      if (_rcta) _rcta.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const ta = document.getElementById('ce-rotable-input');
-        const text = ta ? ta.value.trim() : '';
-        if (text) { if (typeof salma !== 'undefined' && salma.send) salma.send(text); return; }
-        if (ta) { ta.focus(); return; }
-        _startEditing();
-      });
+      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); _stopRot(); _adv(); });
     };
     // Inserta eslogan + caja rotable encima del billete si no están, y los cablea.
     const _ensureHero = () => {
@@ -1085,8 +1080,95 @@ function _renderChatEmpty() {
       }
       if (card) card.hidden = false;
       _wireRotable();
+      if (typeof _wireAskTools === 'function') _wireAskTools();
     };
     _wireRotable();   // hero (sin guía activa) o el bloque "¿Y el próximo viaje?" (con guía activa)
+
+    // ── Caja de "Pregunta lo imposible": mismos botones y funciones que la barra del chat ──
+    //  · micro: lo cablea el micro global (.app-mic dentro de .input-row); lo dictado se queda en la caja.
+    //  · foto: se usan los inputs de archivo del chat; salma._handlePhotoSelected deja la foto en salma._pendingPhoto.
+    //  · altavoz: es el mismo interruptor global (#voice-toggle), así que el estado se comparte con el chat.
+    //  · enviar: salma.send(texto) manda también la foto pendiente.
+    const _wireAskTools = () => {
+      const row = area.querySelector('.ce-ask-row');
+      if (!row || row._wired) return;
+      row._wired = true;
+      const ta = row.querySelector('.ce-ask-input');
+      const menu = row.querySelector('.ce-ask-cammenu');
+      const pBox = row.querySelector('.ce-ask-photo');
+      const _sync = () => {
+        const p = (typeof salma !== 'undefined') ? salma._pendingPhoto : null;
+        if (pBox) {
+          pBox.hidden = !p;
+          const im = pBox.querySelector('img');
+          if (p && im) im.src = p.localUrl;
+        }
+        if (typeof window._syncInputControls === 'function') window._syncInputControls(row);
+      };
+      const _fit = () => { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 110) + 'px'; };
+      const _send = () => {
+        if (typeof salma === 'undefined') return;
+        const msg = ta.value.trim();
+        if (!msg && !salma._pendingPhoto) return;
+        if (salma.isBusyNotify()) return;   // Salma responde: no vaciar lo escrito
+        ta.value = '';
+        ta.style.height = 'auto';
+        salma.send(msg);
+        _sync();
+      };
+      ta.addEventListener('input', () => { _fit(); _sync(); });
+      ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); _send(); } });
+      row.querySelector('.ce-ask-send').addEventListener('click', _send);
+      row.querySelector('.app-voice-toggle').addEventListener('click', () => {
+        const real = document.getElementById('voice-toggle');
+        if (real) real.click();
+      });
+      row.querySelector('.app-cam').addEventListener('click', (e) => {
+        if (typeof salma !== 'undefined' && salma._streaming) return;
+        e.stopPropagation();
+        if (menu) menu.hidden = !menu.hidden;
+      });
+      row.querySelector('[data-ce-ask-foto]').addEventListener('click', () => {
+        if (menu) menu.hidden = true;
+        const i = document.getElementById('chat-camera-input'); if (i) i.click();
+      });
+      row.querySelector('[data-ce-ask-galeria]').addEventListener('click', () => {
+        if (menu) menu.hidden = true;
+        const i = document.getElementById('chat-photo-input'); if (i) i.click();
+      });
+      row.querySelector('.ce-ask-photo-x').addEventListener('click', () => {
+        if (typeof salma !== 'undefined' && salma._clearPendingPhoto) salma._clearPendingPhoto();
+        _sync();
+      });
+      // La foto se procesa de forma asíncrona (salma.js): se espera a que esté lista y se enseña la miniatura.
+      ['chat-camera-input', 'chat-photo-input'].forEach((id) => {
+        const inp = document.getElementById(id);
+        if (!inp || inp._ceAskHook) return;
+        inp._ceAskHook = true;
+        inp.addEventListener('change', () => {
+          let n = 0;
+          const iv = setInterval(() => {
+            if ((typeof salma !== 'undefined' && salma._pendingPhoto) || ++n > 40) {
+              clearInterval(iv);
+              const r = document.querySelector('.ce-ask-row');
+              if (r && typeof window._syncInputControls === 'function') {
+                const p = salma._pendingPhoto, pb = r.querySelector('.ce-ask-photo');
+                if (pb) { pb.hidden = !p; const im = pb.querySelector('img'); if (p && im) im.src = p.localUrl; }
+                window._syncInputControls(r);
+              }
+            }
+          }, 100);
+        });
+      });
+      const _closeMenu = (e) => {
+        if (!row.isConnected) { document.removeEventListener('click', _closeMenu); return; }
+        if (menu && !menu.hidden && !e.target.closest('.ce-ask-cammenu, .ce-ask-row .app-cam')) menu.hidden = true;
+      };
+      document.addEventListener('click', _closeMenu);
+      _sync();
+      try { if (typeof salma !== 'undefined' && salma._updateVoiceToggleUI) salma._updateVoiceToggleUI(); } catch (_) {}
+    };
+    _wireAskTools();
 
     // Botón "Desliza para trazar ruta rápida" → revela el billete. Y "Volver a la ruta
     // activa" (ambos viven en el bloque hero, fuera de #ce-card, por eso van aquí).
