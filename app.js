@@ -777,29 +777,23 @@ function _renderChatEmpty() {
 
   // "Ruta nueva" quitado (Fase 5): el billete ya es el creador de ruta; ese chip
   // abría el flujo viejo de 8 preguntas y duplicaba la función.
-  let _ceMoreOpen = false;
-  try { _ceMoreOpen = localStorage.getItem('bdm_ce_more_open') === '1'; } catch (_) {}
+  // Portada colapsada (6 oct 2026, Paco): TODOS los accesos viven en un solo desplegable,
+  // "Atajos", siempre cerrado al abrir la app (antes 4 a la vista + "Más opciones").
+  const _ceMoreOpen = false;
+  const chipsAtajos = [...chipsLeft, ...chipsRight, ...chipsMore];
   const _ceMoreHTML = `
       <button class="ce-more-toggle" id="ce-more-toggle" aria-expanded="${_ceMoreOpen}">
-        <span class="ce-more-t">Más <span>opciones</span></span>
+        <span class="ce-more-t"><span>Atajos</span></span>
         <i class="ce-more-toggle-ic">${_ceMoreOpen ? '▴' : '▾'}</i>
       </button>
-      <div class="ce-more-chips${_ceMoreOpen ? ' open' : ''}" id="ce-more-chips">${chipsMore.map(renderChip).join('')}</div>`;
+      <div class="ce-more-chips${_ceMoreOpen ? ' open' : ''}" id="ce-more-chips">${chipsAtajos.map(renderChip).join('')}</div>`;
 
   const _ceChipsRow = `
-      <div class="chat-empty-chips">
-        <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
-        <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
-      </div>
       ${_ceMoreHTML}
       ${_ceWaRow}`;
 
   const _ceFallback = `
     <div class="chat-empty">
-      <div class="chat-empty-chips">
-        <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
-        <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
-      </div>
       ${_ceMoreHTML}
       ${_ceWaRow}
     </div>`;
@@ -854,10 +848,15 @@ function _renderChatEmpty() {
     // en este modo no se pinta (_wireRotable lo cablea igual).
     const _ceNextHTML = `
         <div class="ce-next" data-ce-next>
-          <div class="ce-greet ce-greet--next">¿Y el próximo viaje?</div>
-          <!-- Mismo orden que sin guía activa (3 oct 2026, Paco): primero el billete y
-               al final "Pregunta lo imposible" plegado (ver _ceAskHTML). -->
-          <div class="ce-card ce-ticket" id="ce-next-card">${_ceBilleteHTML(true)}</div>
+          <!-- Portada colapsada (6 oct 2026, Paco): con guía activa solo se ve su tarjeta;
+               "Tu próximo viaje" (el billete entero, con "Afinar") y "Pregunta lo imposible"
+               van plegados, en filas con el mismo diseño. -->
+          <div class="ce-ask ce-trip">
+            <button class="ce-ask-btn" data-ce-opentrip aria-expanded="false">Tu próximo <span>viaje</span><i class="ce-ask-arr">▾</i></button>
+            <div class="ce-trip-box" hidden>
+              <div class="ce-card ce-ticket" id="ce-next-card">${_ceBilleteHTML(true)}</div>
+            </div>
+          </div>
           ${_ceAskHTML}
         </div>`;
 
@@ -1116,6 +1115,18 @@ function _renderChatEmpty() {
         try { window.scrollTo(0, 0); } catch (_) {}
         return;
       }
+      // "Tu próximo viaje" (con guía activa) → plegar/desplegar el billete
+      const _tripBtn = e.target.closest('[data-ce-opentrip]');
+      if (_tripBtn) {
+        const tbox = area.querySelector('.ce-trip-box');
+        if (tbox) {
+          tbox.hidden = !tbox.hidden;
+          _tripBtn.setAttribute('aria-expanded', tbox.hidden ? 'false' : 'true');
+          const tarr = _tripBtn.querySelector('.ce-ask-arr');
+          if (tarr) tarr.textContent = tbox.hidden ? '▾' : '▴';
+        }
+        return;
+      }
       // "Pregunta lo imposible" → plegar/desplegar la caja de texto libre
       const _askBtn = e.target.closest('[data-ce-openask]');
       if (_askBtn) {
@@ -1256,7 +1267,6 @@ function _renderChatEmpty() {
       _moreToggle.setAttribute('aria-expanded', String(open));
       const ic = _moreToggle.querySelector('.ce-more-toggle-ic');
       if (ic) ic.textContent = open ? '▴' : '▾';
-      try { localStorage.setItem('bdm_ce_more_open', open ? '1' : '0'); } catch (_) {}
     });
   }
 
