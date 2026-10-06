@@ -836,19 +836,18 @@ function _renderChatEmpty() {
         <div class="ce-ask" data-ce-hero>
           <button class="ce-ask-btn ce-row-btn" data-ce-openask aria-expanded="false">${_ceIcAsk}<span class="ce-rt">Pregunta lo <span>imposible</span><small>Salma contesta lo que sea</small></span><i class="ce-ask-arr">▾</i></button>
           <div class="ce-ask-box" hidden>
-            <div class="ce-rotable" id="ce-rotable">
+            <!-- Todo dentro del cuadro naranja (Paco, 6 oct 2026): tocarlo = escribir; el micro dicta. Mismos botones que la
+                 barra del chat (altavoz, foto, micro, enviar) y mismas funciones: .app-mic dentro de .input-row lo cablea el
+                 micro global, y la foto va por salma._pendingPhoto. -->
+            <div class="ce-rotable input-row ce-ask-row" id="ce-rotable">
+              <div class="ce-ask-photo" hidden><img alt=""><button type="button" class="ce-ask-photo-x" aria-label="Quitar foto">&times;</button></div>
               <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
               <p class="ce-rotable-ex" id="ce-rotable-ex"></p>
+              <textarea class="ce-ask-input" id="ce-ask-input" rows="3" placeholder="Escribe tu pregunta o toca el micro" autocomplete="off" aria-label="Pregunta a Salma" hidden></textarea>
               <div class="ce-rotable-foot">
                 <div class="ce-rotable-dots" id="ce-rotable-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
-                <span class="ce-rotable-hint">Toca para escribir la ruta</span>
+                <span class="ce-rotable-hint">Toca para escribir o hablar</span>
               </div>
-            </div>
-            <!-- Mismos botones que la barra del chat (altavoz, foto, micro, enviar), con las mismas funciones:
-                 .app-mic/.input-row los cablea el micro global, y la foto va por salma._pendingPhoto. -->
-            <div class="input-row ce-ask-row">
-              <div class="ce-ask-photo" hidden><img alt=""><button type="button" class="ce-ask-photo-x" aria-label="Quitar foto">&times;</button></div>
-              <textarea class="ce-ask-input" id="ce-ask-input" rows="2" placeholder="Ej: Vietnam 10 días en moto" autocomplete="off" aria-label="Pregunta a Salma"></textarea>
               <div class="ce-ask-cammenu" hidden>
                 <button type="button" data-ce-ask-foto>📸 Hacer foto</button>
                 <button type="button" data-ce-ask-galeria>🖼️ Galería</button>
@@ -1060,16 +1059,26 @@ function _renderChatEmpty() {
       _fit();
       window.addEventListener('resize', _fit);
       if (!_rStopped) _rTimer = setInterval(_adv, 6000);
-      // Al tocar el ejemplo se para la rotación y el cursor pasa a la caja de escribir de abajo
-      // (6 oct 2026: antes el ejemplo se convertía en un campo; ahora la caja lleva sus botones).
-      // Los ejemplos siguen sin mandarse nunca solos.
-      const _startEditing = () => {
+      // Al tocar el cuadro se para la rotación y el ejemplo pasa a ser un campo para escribir, en el mismo sitio y con
+      // la misma altura (6 oct 2026). El micro también lo activa, y lo dictado cae en ese campo. Los ejemplos
+      // siguen sin mandarse nunca solos.
+      const _taEl = _rot.querySelector('.ce-ask-input');
+      const _startEditing = (e) => {
+        const t = e && e.target;
+        if (t && t.closest && t.closest('.app-voice-toggle, .ce-ask-send, .ce-ask-photo-x')) return;   // no cambian de modo
         _stopRot();
-        const ai = area.querySelector('#ce-ask-input');
-        if (ai) { try { ai.focus(); } catch (_) {} }
+        if (_editing || !_exEl || !_taEl) return;
+        _editing = true;
+        _exEl.hidden = true;
+        const _tg = area.querySelector('#ce-rotable-tag'); if (_tg) _tg.hidden = true;
+        const _ft = _rot.querySelector('.ce-rotable-foot'); if (_ft) _ft.hidden = true;
+        _taEl.hidden = false;
+        if (_fixH) _taEl.style.minHeight = _fixH + 'px';
+        _taEl.addEventListener('input', () => { _taEl.style.height = 'auto'; _taEl.style.height = Math.max(_fixH || 0, _taEl.scrollHeight) + 'px'; });
+        if (!(t && t.closest && t.closest('.app-mic'))) { try { _taEl.focus(); } catch (_) {} }   // con el micro no se abre el teclado
       };
       _rot.addEventListener('click', _startEditing);
-      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); _stopRot(); _adv(); });
+      if (_dots) _dots.addEventListener('click', (e) => { e.stopPropagation(); if (_editing) return; _stopRot(); _adv(); });
     };
     // Inserta eslogan + caja rotable encima del billete si no están, y los cablea.
     const _ensureHero = () => {
@@ -1091,8 +1100,8 @@ function _renderChatEmpty() {
     //  · enviar: salma.send(texto) manda también la foto pendiente.
     const _wireAskTools = () => {
       const row = area.querySelector('.ce-ask-row');
-      if (!row || row._wired) return;
-      row._wired = true;
+      if (!row || row._askWired) return;
+      row._askWired = true;
       const ta = row.querySelector('.ce-ask-input');
       const menu = row.querySelector('.ce-ask-cammenu');
       const pBox = row.querySelector('.ce-ask-photo');

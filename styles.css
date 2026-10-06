@@ -7394,19 +7394,21 @@ body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-avat
 .chat-empty .chat-empty-chip.ce-wa-chip .ce-wa-label{font-family:inherit;}
 
 /* ── "Pregunta lo imposible": caja con altavoz, foto, micro y enviar (6 oct 2026) ── */
-.chat-empty .ce-ask-row{display:block;position:relative;margin-top:10px;background:var(--bg-base,#0D0F10);border:1px solid var(--border,#2B2E30);border-radius:12px;padding:8px 8px 6px 12px;}
-.chat-empty .ce-ask-input{display:block;width:100%;box-sizing:border-box;min-height:44px;max-height:110px;padding:0;border:0;outline:0;background:transparent;resize:none;color:var(--ce-ink);font-family:var(--font-body,'Inter'),sans-serif;font-size:14px;line-height:1.4;}
+.chat-empty .ce-rotable.ce-ask-row{display:block;position:relative;}
+.chat-empty .ce-rotable-ex[hidden],.chat-empty .ce-rotable-foot[hidden]{display:none;}
+.chat-empty .ce-ask-input{display:block;width:100%;box-sizing:border-box;min-height:44px;margin:0;max-height:110px;padding:0;border:0;outline:0;background:transparent;resize:none;color:var(--ce-ink);font-family:var(--font-body,'Inter'),sans-serif;font-size:14px;line-height:1.4;}
 .chat-empty .ce-ask-input::placeholder{color:var(--ce-ink3);}
 .chat-empty .ce-ask-input.mic-active{border:0 !important;animation:none;color:#ff8d7e;}
-.chat-empty .ce-ask-row:has(.mic-active){border-color:#e53e3e;}
-.chat-empty .ce-ask-tools{display:flex;align-items:center;gap:2px;margin-top:2px;}
+.chat-empty .ce-rotable:has(.mic-active){border-color:#e53e3e;}
+.chat-empty .ce-ask-input[hidden]{display:none;}
+.chat-empty .ce-ask-tools{display:flex;align-items:center;gap:2px;margin-top:8px;padding-top:4px;border-top:1px solid var(--ce-line);}
 .chat-empty .ce-ask-sp{flex:1;}
 .chat-empty .ce-ask-ib{width:38px;height:38px;flex:none;padding:0;border:0 !important;border-radius:50% !important;background:transparent;color:var(--ce-ink2);display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .chat-empty .ce-ask-ib:focus-visible{outline:2px solid var(--ce-amber);}
 .chat-empty .app-voice-toggle.ce-ask-ib.voice-on{color:var(--ce-amber);background:rgba(244,99,11,.12);}
 .chat-empty .app-mic.ce-ask-ib.listening{background:#e53e3e;color:#fff;transform:none;}
 .chat-empty .ce-ask-ib.ce-ask-send{background:var(--ce-amber);color:#0D0F10;}
-.chat-empty .ce-ask-cammenu{position:absolute;right:46px;bottom:48px;z-index:3;background:var(--bg-row,#17191B);border:1px solid var(--border,#2B2E30);border-radius:10px;overflow:hidden;}
+.chat-empty .ce-ask-cammenu{position:absolute;right:46px;bottom:52px;z-index:3;background:var(--bg-row,#17191B);border:1px solid var(--border,#2B2E30);border-radius:10px;overflow:hidden;}
 .chat-empty .ce-ask-cammenu[hidden]{display:none;}
 .chat-empty .ce-ask-cammenu button{display:block;width:100%;padding:10px 14px;border:0;background:transparent;color:var(--ce-ink);font:500 13px var(--font-body,'Inter'),sans-serif;text-align:left;white-space:nowrap;cursor:pointer;}
 .chat-empty .ce-ask-cammenu button+button{border-top:1px solid var(--border,#2B2E30);}
