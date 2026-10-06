@@ -780,13 +780,19 @@ function _renderChatEmpty() {
   // Portada colapsada (6 oct 2026, Paco): TODOS los accesos viven en un solo desplegable,
   // "Atajos", siempre cerrado al abrir la app (antes 4 a la vista + "Más opciones").
   const _ceMoreOpen = false;
+  const _ceRowIc = (d) => `<svg class="ce-row-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const _ceIcRuta = _ceRowIc('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>');
+  const _ceIcAsk = _ceRowIc('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/>');
+  const _ceIcTool = _ceRowIc('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>');
   const chipsAtajos = [...chipsLeft, ...chipsRight, ...chipsMore];
   const _ceMoreHTML = `
-      <button class="ce-more-toggle" id="ce-more-toggle" aria-expanded="${_ceMoreOpen}">
-        <span class="ce-more-t"><span>Atajos</span></span>
-        <i class="ce-more-toggle-ic">${_ceMoreOpen ? '▴' : '▾'}</i>
-      </button>
-      <div class="ce-more-chips${_ceMoreOpen ? ' open' : ''}" id="ce-more-chips">${chipsAtajos.map(renderChip).join('')}</div>`;
+      <div class="ce-ask ce-atajos">
+        <button class="ce-more-toggle ce-row-btn" id="ce-more-toggle" aria-expanded="${_ceMoreOpen}">
+          ${_ceIcTool}<span class="ce-more-t ce-rt"><span>Atajos</span><small>Cerca de mí, vuelos, moneda, notas…</small></span>
+          <i class="ce-more-toggle-ic">${_ceMoreOpen ? '▴' : '▾'}</i>
+        </button>
+        <div class="ce-more-chips${_ceMoreOpen ? ' open' : ''}" id="ce-more-chips">${chipsAtajos.map(renderChip).join('')}</div>
+      </div>`;
 
   const _ceChipsRow = `
       ${_ceMoreHTML}
@@ -816,7 +822,7 @@ function _renderChatEmpty() {
     const _initCard = _ceActive
       ? { cls: 'ce-card ce-active ce-active--mini', html: _ceRouteCompactHTML(_ceActive) }
       : { cls: 'ce-card ce-ticket', html: _ceBilleteHTML() };
-    const _greet = _ceActive ? '¿Cómo va el viaje?' : '¿A dónde vamos?';
+    const _greet = _ceActive ? '¿Cómo va el <em>viaje</em>?' : '¿A dónde vamos?';
     // Eslogan hero + línea de apoyo + caja de ejemplo rotable (doc 8 sep).
     // Van SIEMPRE que se muestre el billete: al arrancar sin ruta activa, y también
     // cuando desde el modo compañero se pulsa "Billete nuevo" (ver _ensureHero).
@@ -828,7 +834,7 @@ function _renderChatEmpty() {
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
     const _ceAskHTML = `
         <div class="ce-ask" data-ce-hero>
-          <button class="ce-ask-btn" data-ce-openask aria-expanded="false">Pregunta lo <span>imposible</span><i class="ce-ask-arr">▾</i></button>
+          <button class="ce-ask-btn ce-row-btn" data-ce-openask aria-expanded="false">${_ceIcAsk}<span class="ce-rt">Pregunta lo <span>imposible</span><small>Salma contesta lo que sea</small></span><i class="ce-ask-arr">▾</i></button>
           <div class="ce-ask-box" hidden>
             <div class="ce-rotable" id="ce-rotable">
               <span class="ce-rotable-tag" id="ce-rotable-tag"></span>
@@ -852,7 +858,7 @@ function _renderChatEmpty() {
                "Tu próximo viaje" (el billete entero, con "Afinar") y "Pregunta lo imposible"
                van plegados, en filas con el mismo diseño. -->
           <div class="ce-ask ce-trip">
-            <button class="ce-ask-btn" data-ce-opentrip aria-expanded="false">Tu próximo <span>viaje</span><i class="ce-ask-arr">▾</i></button>
+            <button class="ce-ask-btn ce-row-btn" data-ce-opentrip aria-expanded="false">${_ceIcRuta}<span class="ce-rt">Tu próximo <span>viaje</span><small>Crea otra guía con Salma</small></span><i class="ce-ask-arr">▾</i></button>
             <div class="ce-trip-box" hidden>
               <div class="ce-card ce-ticket" id="ce-next-card">${_ceBilleteHTML(true)}</div>
             </div>
@@ -1177,7 +1183,7 @@ function _renderChatEmpty() {
           card.hidden = false;
           card.innerHTML = _ceRouteCompactHTML(_ceActive);
           area.querySelectorAll('[data-ce-hero]').forEach(el => el.remove());
-          if (!area.querySelector('.ce-greet')) card.insertAdjacentHTML('beforebegin', '<div class="ce-greet">¿Cómo va el viaje?</div>');
+          if (!area.querySelector('.ce-greet')) card.insertAdjacentHTML('beforebegin', '<div class="ce-greet">¿Cómo va el <em>viaje</em>?</div>');
         }
         return;
       }

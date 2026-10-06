@@ -7366,3 +7366,29 @@ body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-avat
 .ce-trip-box[hidden]{display:none;}
 /* Atajos: caben todos los chips (antes solo 4-6) */
 .chat-empty .ce-more-chips.open{max-height:420px;}
+
+/* ── Portada colapsada: filas como tarjetas con icono (diseño del mockup, 6 oct 2026) ── */
+.chat-empty .ce-ask.ce-trip,.chat-empty .ce-ask.ce-atajos,.chat-empty .ce-next>.ce-ask,.chat-empty .ce-ask{margin:10px 0 0;border:1px solid var(--border,#2B2E30);border-radius:12px;background:var(--bg-row,#17191B);}
+.chat-empty .ce-row-btn{width:100%;display:flex;align-items:center;gap:10px;padding:13px 14px;margin:0;border:0;border-radius:12px;background:transparent;cursor:pointer;text-align:left;color:var(--ce-ink);}
+.chat-empty .ce-row-btn:focus-visible{outline:2px solid var(--ce-amber);outline-offset:2px;}
+.ce-row-ic{flex:none;width:20px;height:20px;color:var(--ce-amber);stroke:var(--ce-amber);}
+.chat-empty .ce-rt{flex:1;min-width:0;display:block;font-family:var(--ce-sign);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--ce-ink);margin:0;}
+.chat-empty .ce-rt span{color:var(--ce-amber);margin:0;flex:none;}
+.chat-empty .ce-rt small{display:block;font-family:var(--font-body,'Inter'),sans-serif;font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--ce-ink3);margin-top:1px;}
+.chat-empty .ce-row-btn .ce-ask-arr,.chat-empty .ce-row-btn .ce-more-toggle-ic{color:var(--ce-ink3);font-size:13px;}
+/* Atajos: el botón ya no lleva borde discontinuo ni margen, y los chips tienen su aire dentro de la tarjeta */
+.chat-empty .ce-atajos .ce-more-toggle{border:0;margin:0;padding:13px 14px;font-size:16px;}
+.chat-empty .ce-atajos .ce-more-chips{margin:0;padding:0 14px;}
+.chat-empty .ce-atajos .ce-more-chips.open{margin-top:0;padding:0 14px 14px;}
+/* Cajas desplegadas dentro de la tarjeta */
+.chat-empty .ce-ask .ce-ask-box,.chat-empty .ce-ask .ce-trip-box{padding:0 14px 14px;}
+.chat-empty .ce-trip-box .ce-card.ce-ticket{border:0;background:transparent;box-shadow:none;}
+/* Tarjeta de la guía: esquinas redondeadas y borde neutro, como el mockup */
+.chat-empty .ce-card.ce-active--mini{border:1px solid var(--border,#2B2E30);border-radius:12px;background:var(--bg-row,#17191B);}
+.chat-empty .ce-mini-thumb{border:0;border-radius:8px;}
+.ce-greet em{font-style:normal;color:var(--ce-amber);}
+/* WhatsApp: botón verde macizo, como el mockup */
+.chat-empty .chat-empty-chip.ce-wa-chip{margin-top:10px;padding:13px 12px;border:0;border-radius:12px;background:#128C4A;color:#fff;font-family:var(--ce-sign);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;justify-content:center;gap:10px;}
+.chat-empty .chat-empty-chip.ce-wa-chip .chip-icon{fill:#fff;stroke:none;width:18px;height:18px;}
+.chat-empty .chat-empty-chip.ce-wa-chip:hover,.chat-empty .chat-empty-chip.ce-wa-chip:active{background:#0f7a40;color:#fff;border:0;}
+.chat-empty .chat-empty-chip.ce-wa-chip .ce-wa-label{font-family:inherit;}
