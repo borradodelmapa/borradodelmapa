@@ -885,7 +885,7 @@ function _renderChatEmpty() {
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
     const _ceAskHTML = `
         <div class="ce-ask" data-ce-hero>
-          <button class="ce-ask-btn ce-row-btn" data-ce-openask aria-expanded="false">${_ceIcAsk}<span class="ce-rt">Pregunta lo <span>imposible</span><small>Resuelve tus dudas y descubre tu destino</small></span><i class="ce-ask-arr">▾</i></button>
+          <button class="ce-ask-btn ce-row-btn" data-ce-openask aria-expanded="false">${_ceIcAsk}<span class="ce-rt">Pregunta lo <span>imposible</span><small>Resuelve tus dudas</small></span><i class="ce-ask-arr">▾</i></button>
           <div class="ce-ask-box" hidden>
             <!-- Todo dentro del cuadro naranja (Paco, 6 oct 2026): tocarlo = escribir; el micro dicta. Mismos botones que la
                  barra del chat (altavoz, foto, micro, enviar) y mismas funciones: .app-mic dentro de .input-row lo cablea el
