@@ -6845,7 +6845,12 @@ async function triggerSOS() {
     if (res.ok) {
       const result = await res.json();
       if (result.sent_count > 0) {
-        showToast(`✅ SMS enviado a ${result.sent_count} contacto${result.sent_count !== 1 ? 's' : ''}`);
+        const overlay = document.getElementById('sos-screen-overlay');
+        if (overlay && overlay.style.display === 'flex') {
+          _renderSOSScreen('success', contacts, freshMsg, result.sent_count);
+        } else {
+          showToast(`✅ SMS enviado a ${result.sent_count} contacto${result.sent_count !== 1 ? 's' : ''}`);
+        }
       }
     }
   } catch (_) { /* SMS no disponible — WhatsApp ya visible */ }
@@ -6881,8 +6886,8 @@ function _renderSOSScreen(mode, contacts, message, sentCount) {
   } else if (mode === 'whatsapp') {
     body = `
       <div class="sos-result sos-result-warn">
-        <div class="sos-result-icon">⚠️</div>
-        <p class="sos-result-text">SMS automático no disponible. Avisa por WhatsApp:</p>
+        <div class="sos-result-icon">⏳</div>
+        <p class="sos-result-text">Avisando también por SMS. Confirma por WhatsApp:</p>
       </div>
       ${waButtons}
       <div class="sos-divider"></div>
