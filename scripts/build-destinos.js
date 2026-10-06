@@ -76,7 +76,7 @@ const DESTINOS_CSS_V = 2;
 // Igual para styles.css (el de la app, que trae el menú de abajo): antes iba SIN ?v=
 // y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
 // número que styles.css?v= en index.html — subirlo a la vez.
-const APP_CSS_V = 171;
+const APP_CSS_V = 173;
 // NOINDEX a propósito (Paco, 26 sept 2026): 1.793 páginas con la misma plantilla y texto
 // generado se arriesgan a que Google las trate como contenido en serie. Siguen visibles
 // para quien entra, pero Google no las indexa (follow: sí sigue los enlaces). También
@@ -121,8 +121,8 @@ const BOTTOM_NAV = `
       <span>Perfil</span>
     </a>
   </nav>
-  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Salma" title="Salma">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>
+  <a class="bottom-tab-fab" id="tab-newroute" href="/?go=chat" aria-label="Salma" title="Salma">
+    <svg class="fab-ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><img class="fab-avatar" src="/salma_ai_avatar.webp" alt="" width="40" height="40"><span class="bottom-tab-fab-label">Salma</span>
   </a>`;
 
 // Firebase SDK block (reusable in all templates)
