@@ -885,7 +885,7 @@ function _renderChatEmpty() {
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
     const _ceAskHTML = `
         <div class="ce-ask" data-ce-hero>
-          <button class="ce-ask-btn ce-row-btn" data-ce-openask aria-expanded="false">${_ceIcAsk}<span class="ce-rt">Pregunta lo <span>imposible</span><small>Salma contesta lo que sea</small></span><i class="ce-ask-arr">▾</i></button>
+          <button class="ce-ask-btn ce-row-btn" data-ce-openask aria-expanded="false">${_ceIcAsk}<span class="ce-rt">Pregunta lo <span>imposible</span><small>Resuelve tus dudas y descubre tu destino</small></span><i class="ce-ask-arr">▾</i></button>
           <div class="ce-ask-box" hidden>
             <!-- Todo dentro del cuadro naranja (Paco, 6 oct 2026): tocarlo = escribir; el micro dicta. Mismos botones que la
                  barra del chat (altavoz, foto, micro, enviar) y mismas funciones: .app-mic dentro de .input-row lo cablea el
@@ -927,7 +927,7 @@ function _renderChatEmpty() {
                "Tu próximo viaje" (el billete entero, con "Afinar") y "Pregunta lo imposible"
                van plegados, en filas con el mismo diseño. -->
           <div class="ce-ask ce-trip">
-            <button class="ce-ask-btn ce-row-btn" data-ce-opentrip aria-expanded="false">${_ceIcRuta}<span class="ce-rt">Tu próximo <span>viaje</span><small>Crea otra guía con Salma</small></span><i class="ce-ask-arr">▾</i></button>
+            <button class="ce-ask-btn ce-row-btn" data-ce-opentrip aria-expanded="false">${_ceIcRuta}<span class="ce-rt">Tu próximo <span>viaje</span><small>Crea otro viaje</small></span><i class="ce-ask-arr">▾</i></button>
             <div class="ce-trip-box" hidden>
               <div class="ce-card ce-ticket" id="ce-next-card">${_ceBilleteHTML(true)}</div>
             </div>
