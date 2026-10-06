@@ -6878,7 +6878,7 @@ function _renderSOSScreen(mode, contacts, message, sentCount) {
     body = `
       <div class="sos-result sos-result-ok">
         <div class="sos-result-icon">✅</div>
-        <p class="sos-result-text">SMS enviado a ${sentCount} contacto${sentCount !== 1 ? 's' : ''}. Confirma también por WhatsApp si puedes:</p>
+        <p class="sos-result-text">Enviado a ${sentCount} contacto${sentCount !== 1 ? 's' : ''}</p>
       </div>
       ${waButtons}
       <div class="sos-divider"></div>
@@ -6887,7 +6887,7 @@ function _renderSOSScreen(mode, contacts, message, sentCount) {
     body = `
       <div class="sos-result sos-result-warn">
         <div class="sos-result-icon">⏳</div>
-        <p class="sos-result-text">Avisando también por SMS. Confirma por WhatsApp:</p>
+        <p class="sos-result-text">Enviando aviso…</p>
       </div>
       ${waButtons}
       <div class="sos-divider"></div>
@@ -6896,7 +6896,7 @@ function _renderSOSScreen(mode, contacts, message, sentCount) {
     body = `
       <div class="sos-result sos-result-warn">
         <div class="sos-result-icon">⏳</div>
-        <p class="sos-result-text">Sin conexión. El aviso se enviará automáticamente cuando recuperes señal.</p>
+        <p class="sos-result-text">Sin conexión — se enviará solo</p>
       </div>
       <div class="sos-divider"></div>
       ${waButtons}
