@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="stylesheet" href="/styles.css?v=159">
+<link rel="stylesheet" href="/styles.css?v=173">
 <link rel="stylesheet" href="/destinos.css?v=2">
 <!-- Google Analytics 4 — solo tras consentimiento de cookies (P1-6) -->
 <script>
@@ -533,8 +533,8 @@ function escapeHTML(str) {
       <span>Perfil</span>
     </a>
   </nav>
-  <a class="bottom-tab-fab" href="/?go=chat" aria-label="Salma" title="Salma">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="bottom-tab-fab-label">Salma</span>
+  <a class="bottom-tab-fab" id="tab-newroute" href="/?go=chat" aria-label="Salma" title="Salma">
+    <svg class="fab-ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><img class="fab-avatar" src="/salma_ai_avatar.webp" alt="" width="40" height="40"><span class="bottom-tab-fab-label">Salma</span>
   </a>`;
     document.body.appendChild(wrap);
   }
