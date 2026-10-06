@@ -7429,3 +7429,7 @@ body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-scre
 .sos-pill-knob:focus-visible{outline:2px solid #fff;outline-offset:1px;}
 .sos-pill.done .sos-pill-fill{width:100% !important;opacity:1;}
 .sos-pill.done .sos-pill-label{color:#fff;}
+
+/* Portada: más aire bajo la hora/tiempo, contenido un poco más abajo y saludo algo mayor (6 oct 2026, Paco) */
+.chat-empty .ce-sky-line{margin-top:16px;}
+.chat-empty .ce-greet{font-size:31px;margin:24px 0 16px;}
