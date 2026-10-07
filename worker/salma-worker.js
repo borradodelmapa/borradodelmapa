@@ -11223,6 +11223,18 @@ export default {
           });
           return new Response(JSON.stringify({ ok: true, id }), { headers: corsH });
         }
+        // Borrar un caso (solo si ya está cerrado: arreglado/descartado). Pedido por Paco 7 oct 2026.
+        if (request.method === 'POST' && url.pathname === '/admin/feedback-group-delete') {
+          const b = await request.json().catch(() => ({}));
+          const id = String(b.id || '');
+          if (!/^[A-Za-z0-9_-]{4,80}$/.test(id)) return new Response(JSON.stringify({ error: 'id no válido' }), { status: 400, headers: corsH });
+          const cur = await firestoreAdminGet(env, 'feedback_groups/' + id);
+          if (!cur) return new Response(JSON.stringify({ error: 'no existe el caso' }), { status: 404, headers: corsH });
+          const est = _fsDoc(cur).estado;
+          if (!['arreglado', 'descartado'].includes(est)) return new Response(JSON.stringify({ error: 'solo se borran casos cerrados (arreglado/descartado); este está en ' + est }), { status: 409, headers: corsH });
+          await firestoreAdminDelete(env, 'feedback_groups/' + id);
+          return new Response(JSON.stringify({ ok: true }), { headers: corsH });
+        }
         if (request.method === 'POST' && url.pathname === '/admin/feedback-classify-pending') {
           return new Response(JSON.stringify(await fbClassifyPending(env, 25)), { headers: corsH });
         }

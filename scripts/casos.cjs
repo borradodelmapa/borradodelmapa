@@ -10,6 +10,7 @@
 //   node scripts/casos.cjs ver <id>                          caso completo + sus mensajes
 //   node scripts/casos.cjs diagnostico <id> <fichero.json>   guarda {causa, archivos, riesgo, coste, propuesta, prueba, rama, enlace} (enlace = URL https para "▶ Abrir para probar")
 //   node scripts/casos.cjs estado <id> <estado>              nuevo|visto|en_marcha|propuesta|comprobando|arreglado|descartado
+//   node scripts/casos.cjs borrar [<id>...]                  borra casos ya cerrados (sin id: lista los borrables)
 //   node scripts/casos.cjs nota <id> "texto"                 nota del caso (la ve Paco en el panel)
 //   node scripts/casos.cjs crear <fichero.json>              caso a mano (objeto o lista): {titulo, tipo, zona, area, gravedad, ejemplo, nota, estado, decision}
 //   node scripts/casos.cjs hoy                               AL EMPEZAR UNA SESIÓN: lo que espera a Paco, urgente, en marcha, comentarios de Paco
@@ -97,6 +98,11 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
   } else if (cmd === 'estado') {
     await call('/admin/feedback-group', { id: a1, estado: a2 });
     console.log(a1 + ' → ' + a2);
+  } else if (cmd === 'borrar') {
+    // Borra casos YA CERRADOS (arreglado/descartado). Sin id: lista los borrables. Varios ids separados por espacio.
+    const ids = process.argv.slice(3);
+    if (!ids.length) { const { groups } = await call('/admin/feedback-groups'); groups.filter(g => ['arreglado', 'descartado'].includes(g.estado)).forEach(g => console.log(g.id.padEnd(16) + g.estado.padEnd(11) + g.titulo)); return; }
+    for (const id of ids) { try { await call('/admin/feedback-group-delete', { id }); console.log(id + ' → borrado'); } catch (e) { console.log(id + ' ✗ ' + e.message); } }
   } else if (cmd === 'nota') {
     await call('/admin/feedback-group', { id: a1, nota: a2 || '' });
     console.log('Nota guardada en ' + a1);
