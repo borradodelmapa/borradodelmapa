@@ -161,7 +161,9 @@
       var sp = selectedPlan();
       $('pay').innerHTML = '<span>Pagar</span><span>' + eur(sp.cents) + '</span>';
       $('fine').innerHTML = esc(sp.key === 'guia' ? '1 guía (hasta 50 paradas) y chat durante 30 días' : sp.months + ' ' + monthsText(sp.months) + ' de Premium') +
-        ' · pago único, sin renovación · Stripe' + (usage && usage.modo_prueba ? '<br><span class="pm-test">MODO PRUEBA · no se cobrará</span>' : '');
+        ' · pago único, sin renovación · ' + (opts.viaPlay ? 'Google Play' : 'Stripe') +
+        // "No se cobrará" es del modo prueba de STRIPE: con Google Play (cobro real) no se enseña nunca
+        (!opts.viaPlay && usage && usage.modo_prueba ? '<br><span class="pm-test">MODO PRUEBA · no se cobrará</span>' : '');
     }
 
     function applyUsage(d) {

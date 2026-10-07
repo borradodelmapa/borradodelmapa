@@ -640,6 +640,7 @@ async function _ceMountUsageChip(area) {
       d = await r.json();
       _ceUsageCache = { t: Date.now(), d };
     }
+    window._bdmPlayOn = !!d.play_billing; // ¿está encendida la compra con Play? (la app de Play enseña precios solo si sí)
     // El producto es "un viaje con Salma" (guía + vuelos + alojamiento + SOS…), no solo la guía (Paco, 7 oct 2026).
     // Arriba a la derecha, súper discreto, en la fila de la marca (.ce-top). Verde = tiene crédito; naranja y
     // clicable (→ planes) = sin crédito o sin mensajes hoy (tope antiabuso). A la vista va la versión CORTA (en la
@@ -675,7 +676,8 @@ async function _ceMountUsageChip(area) {
       if (top) top.appendChild(chip); else host.parentNode.insertBefore(chip, host.nextSibling);
     }
     if (top) { const br = top.querySelector('.ce-brand'); if (br) { br.style.whiteSpace = 'nowrap'; br.style.flex = '0 0 auto'; } } // si no cabe, se encoge el contador, no la marca
-    const clicable = falta && !window.BDM_TWA; // dentro de la app de Google Play aún no hay compra (Play Billing: caso p-muyfc21gt7w)
+    // Dentro de la app de Google Play el enlace a comprar solo existe si Play Billing está encendido (caso p-muyfc21gt7w)
+    const clicable = falta && (!window.BDM_TWA || (!!window._bdmPlayOn && typeof window.getDigitalGoodsService === 'function'));
     const verde = '#3DDC84';
     chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;white-space:nowrap;max-width:46%;min-width:0;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;' +
       (top ? 'margin-left:auto;' : 'margin:8px auto 0;width:fit-content;') +
@@ -4484,27 +4486,75 @@ _setupWhatsAppStartButton();
 // lectura de /usage (precios y topes REALES del Worker) y creación de la sesión de pago.
 // Los precios que se cobran están en PREMIUM_PLANS del Worker — no hay precios escritos aquí.
 
+// Compra con Google Play Billing (solo app de Play, TWA). El ID de producto en Play = la clave del plan (guia, trimestral,
+// anual, anual_oferta). El Worker valida el purchaseToken con Google, acredita y consume (POST /play-verify).
+// Sin probar en un móvil real hasta que existan los productos en Play Console (caso p-muyfc21gt7w).
+async function _playPay(planKey, idToken) {
+  if (typeof window.getDigitalGoodsService !== 'function') throw new Error('Este móvil no permite pagar con Google Play');
+  await window.getDigitalGoodsService('https://play.google.com/billing'); // lanza si Play Billing no está disponible
+  const request = new PaymentRequest(
+    [{ supportedMethods: 'https://play.google.com/billing', data: { sku: planKey } }],
+    { total: { label: 'Total', amount: { currency: 'EUR', value: '0' } } } // el precio real lo pone Google Play
+  );
+  let resp;
+  try { resp = await request.show(); }
+  catch (e) {
+    if (e && (e.name === 'AbortError' || e.name === 'NotAllowedError')) throw new Error('Compra cancelada');
+    throw new Error('No se pudo abrir el pago de Google Play');
+  }
+  const ptoken = resp.details && resp.details.purchaseToken;
+  if (!ptoken) { try { await resp.complete('fail'); } catch (_) {} throw new Error('No se pudo completar la compra'); }
+  let ok = false, msg = '';
+  try {
+    const r = await fetch(window.SALMA_API + '/play-verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify({ sku: planKey, token: ptoken })
+    });
+    const j = await r.json().catch(() => ({}));
+    ok = !!(r.ok && j && j.ok);
+    msg = (j && j.error) || '';
+  } catch (_) { msg = 'Error de conexión al validar la compra'; }
+  try { await resp.complete(ok ? 'success' : 'fail'); } catch (_) {}
+  if (!ok) throw new Error(msg || 'No se pudo validar la compra. Si te han cobrado, escríbeme.');
+  _verificarPagoPremium(); // refresca el estado y avisa «Premium activado»
+}
+
 function openCoinsModal() {
   if (!window.PremiumModal) { showToast('No se pudo abrir el plan. Recarga la página.'); return; }
 
   const premiumUntilMs = currentUser && currentUser.premium_until ? new Date(currentUser.premium_until).getTime() : 0;
 
+  // Play Billing (caso p-muyfc21gt7w): en la app de Google Play (BDM_TWA) la compra va por Play SOLO si el Worker lo
+  // ha encendido (/usage → play_billing) y este móvil soporta la Digital Goods API. Si no, sigue sin precios ni pago.
+  const _viaPlay = !!window.BDM_TWA && !!window._bdmPlayOn && typeof window.getDigitalGoodsService === 'function';
   const handle = window.PremiumModal.open({
     premiumUntilMs,
-    sinPago: !!window.BDM_TWA, // app de Google Play: sin precios ni pago (ver index.html, BDM_TWA)
+    viaPlay: _viaPlay,
+    sinPago: !!window.BDM_TWA && !_viaPlay, // app de Google Play sin Play Billing: sin precios ni pago (ver index.html, BDM_TWA)
     // Uso del usuario + topes de cada plan + precios: los cuenta y decide el Worker
     loadUsage: async () => {
       const u = firebase.auth().currentUser;
       if (!u) return null;
       const t = await u.getIdToken();
       const r = await fetch(window.SALMA_API + '/usage', { headers: { 'Authorization': 'Bearer ' + t } });
-      return r.ok ? await r.json() : null;
+      const j = r.ok ? await r.json() : null;
+      if (j) window._bdmPlayOn = !!j.play_billing;
+      return j;
     },
     // Pagar → crear Checkout Session en el Worker y redirigir a Stripe (misma lógica de siempre)
     onPay: async (planKey) => {
       const authUser = auth.currentUser;
       if (!authUser) throw new Error('Tu sesión ha caducado, vuelve a entrar');
       const idToken = await authUser.getIdToken();
+
+      // App de Google Play: compra con Play Billing (Digital Goods API + Payment Request) y validación en el Worker
+      if (_viaPlay) {
+        try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); } catch (_) {}
+        await _playPay(planKey, idToken);
+        if (handle && handle.close) handle.close();
+        return;
+      }
 
       const res = await fetch(window.SALMA_API + '/create-payment', {
         method: 'POST',

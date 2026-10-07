@@ -1031,6 +1031,30 @@ async function loadPlanKey(env, uid) {
 const PLAN_TIER = { guia: 2, trimestral: 3, anual_oferta: 4, anual: 4 };
 // Guías que se suman al comprar (se gastan una a una; ver usageRecord). Solo la guía suelta.
 const PLAN_BONUS_GUIDES = { guia: 1 };
+
+// ═══ PLAY BILLING (caso p-muyfc21gt7w, 7 oct 2026) ═══
+// Compra dentro de la app de Google Play (TWA): el cliente paga con Play (Digital Goods API) y manda aquí el
+// purchaseToken; el Worker lo valida con la Google Play Developer API y acredita EXACTAMENTE igual que el
+// webhook de Stripe. APAGADO por defecto: solo funciona con la variable PLAY_BILLING_ON = '1' (sin ella
+// /play-verify responde 503 y la app de Play sigue sin precios). Reutiliza la cuenta de servicio de Firebase
+// (FIREBASE_SERVICE_ACCOUNT) con scope androidpublisher: esa cuenta hay que darla de alta en Play Console →
+// Configuración → Acceso a la API. Coste (§8): la API de Play es gratuita; el coste es la comisión de Google.
+const PLAY_PACKAGE = 'com.borradodelmapa.app';
+// Los ID de producto en Play Console son LOS MISMOS que las claves de PREMIUM_PLANS (guia, trimestral, anual,
+// anual_oferta): productos "de un solo pago" consumibles, para poder recomprar. Un solo sitio de verdad: PREMIUM_PLANS.
+async function playApi(env, method, path, body) {
+  const token = await getServiceAccountToken(env, 'https://www.googleapis.com/auth/androidpublisher', '_sa_token_play');
+  const r = await fetch('https://androidpublisher.googleapis.com/androidpublisher/v3/applications/' + PLAY_PACKAGE + path, {
+    method,
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+    signal: AbortSignal.timeout(10000),
+  });
+  const txt = await r.text();
+  let data = null;
+  try { data = txt ? JSON.parse(txt) : null; } catch (_) {}
+  return { ok: r.ok, status: r.status, data };
+}
 // Claude Sonnet 4.6, USD por millón de tokens — solo ESTIMACIÓN para medir coste, no es la factura.
 const CLAUDE_USD_PER_MTOK = { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 };
 
@@ -13478,6 +13502,93 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
+    // ─── POST /play-verify — compra dentro de la app de Google Play (Play Billing). APAGADO salvo PLAY_BILLING_ON='1' ───
+    // Recibe {sku, token} (sku = clave de PREMIUM_PLANS), valida el purchaseToken con la Google Play Developer API,
+    // acredita igual que el webhook de Stripe (suma meses + guía suelta, plan en KV) y CONSUME la compra para poder recomprar.
+    // Idempotente por orderId (processed_payments/play_<orderId>): un token repetido no acredita dos veces.
+    if (request.method === 'POST' && url.pathname === '/play-verify') {
+      const H = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const out = (o, status) => new Response(JSON.stringify(o), { status: status || 200, headers: H });
+      const authUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+      if (!authUser) return out({ error: 'auth_required' }, 401);
+      if (env.PLAY_BILLING_ON !== '1') return out({ error: 'play_billing_off' }, 503);
+      let body;
+      try { body = await request.json(); } catch (e) { return out({ error: 'bad json' }, 400); }
+      const sku = String((body && body.sku) || '');
+      const ptoken = String((body && body.token) || '');
+      const plan = (PREMIUM_PLANS[sku] && sku) || null;
+      if (!plan || ptoken.length < 20) return out({ error: 'Compra no válida' }, 400);
+      const uid = authUser.uid;
+      const months = PREMIUM_PLANS[plan].months;
+      let payId = null;
+      try {
+        // 1) Preguntar a Google por la compra (nunca fiarse del cliente)
+        const got = await playApi(env, 'GET', '/purchases/products/' + encodeURIComponent(sku) + '/tokens/' + encodeURIComponent(ptoken));
+        if (!got.ok || !got.data) {
+          console.log('[PLAY-VERIFY] Google rechaza la compra', got.status, JSON.stringify(got.data || {}).slice(0, 200));
+          return out({ error: 'Google no reconoce esta compra' }, 400);
+        }
+        const p = got.data;
+        if (p.purchaseState !== 0) return out({ error: 'La compra no está completada (pendiente o cancelada)' }, 402);
+        const orderId = String(p.orderId || ('tok_' + ptoken.slice(0, 40)));
+        payId = 'play_' + orderId.replace(/[^A-Za-z0-9._-]/g, '_');
+
+        // 2) Idempotencia
+        const already = await firestoreAdminGet(env, 'processed_payments/' + payId);
+        if (already) {
+          if (p.consumptionState !== 1) { try { await playApi(env, 'POST', '/purchases/products/' + encodeURIComponent(sku) + '/tokens/' + encodeURIComponent(ptoken) + ':consume'); } catch (_) {} }
+          return out({ ok: true, duplicate: true });
+        }
+
+        // 3) Acreditar — MISMA lógica que /stripe-webhook (si cambia allí, cambiar aquí)
+        const userDoc = await firestoreAdminGet(env, 'users/' + uid);
+        const curStr = userDoc && userDoc.fields && userDoc.fields.premium_until && userDoc.fields.premium_until.timestampValue;
+        const now = Date.now();
+        const baseMs = curStr ? Math.max(new Date(curStr).getTime(), now) : now;
+        const until = new Date(baseMs);
+        until.setMonth(until.getMonth() + months);
+        const untilIso = until.toISOString();
+        const nowIso = new Date(now).toISOString();
+        const wasPremium = !!curStr && new Date(curStr).getTime() > now;
+        const curBonus = parseInt((userDoc && userDoc.fields && userDoc.fields.premium_bonus_guides && userDoc.fields.premium_bonus_guides.integerValue) || '0', 10) || 0;
+        const userPatch = {
+          premium_until:      { timestampValue: untilIso },
+          isPremium:          { booleanValue: true },
+          premium_last_plan:  { stringValue: plan },
+          premium_updated_at: { timestampValue: nowIso },
+        };
+        if (PLAN_BONUS_GUIDES[plan]) userPatch.premium_bonus_guides = { integerValue: String(curBonus + PLAN_BONUS_GUIDES[plan]) };
+        try {
+          const prevRaw = await env.SALMA_KB.get('uplan:' + uid);
+          const prev = prevRaw ? (JSON.parse(prevRaw).plan || null) : null;
+          const keepPrev = wasPremium && prev && (PLAN_TIER[prev] || 0) > (PLAN_TIER[plan] || 0);
+          if (!keepPrev) await env.SALMA_KB.put('uplan:' + uid, JSON.stringify({ plan, since: now }), { expirationTtl: 800 * 86400 });
+        } catch (_) {}
+        await firestoreAdminPatch(env, 'users/' + uid, userPatch);
+        await firestoreAdminPatch(env, 'processed_payments/' + payId, {
+          uid:           { stringValue: uid },
+          plan:          { stringValue: plan },
+          months:        { integerValue: String(months) },
+          amount_total:  { integerValue: String(PREMIUM_PLANS[plan].amount || 0) },
+          currency:      { stringValue: 'eur' },
+          via:           { stringValue: 'google_play' },
+          premium_until: { timestampValue: untilIso },
+          created_at:    { timestampValue: nowIso },
+        });
+
+        // 4) Consumir (así se puede volver a comprar). Si falla, el crédito ya está dado: se anota para revisarlo.
+        const cons = await playApi(env, 'POST', '/purchases/products/' + encodeURIComponent(sku) + '/tokens/' + encodeURIComponent(ptoken) + ':consume');
+        if (!cons.ok) {
+          console.log('[PLAY-VERIFY] consumir falló', cons.status, JSON.stringify(cons.data || {}).slice(0, 200));
+          try { await firestoreAdminPatch(env, 'payment_failures/' + payId, { uid: { stringValue: uid }, error: { stringValue: 'consume ' + cons.status }, at: { timestampValue: nowIso } }); } catch (_) {}
+        }
+        return out({ ok: true, plan, premium_until: untilIso });
+      } catch (e) {
+        try { await firestoreAdminPatch(env, 'payment_failures/' + (payId || ('play_err_' + Date.now())), { uid: { stringValue: uid || '' }, error: { stringValue: String((e && e.message) || e).slice(0, 400) }, at: { timestampValue: new Date().toISOString() } }); } catch (_) {}
+        return out({ error: 'No se pudo validar la compra. Si te han cobrado, escríbeme.' }, 500);
+      }
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // ADMIN ENDPOINTS — Panel Super Admin
     // ═══════════════════════════════════════════════════════════════
@@ -13770,6 +13881,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           is_premium: !!authUser.premium_active,
           premium_until: authUser.premium_until || null,
           modo_prueba: /^sk_test_/.test(env.STRIPE_SECRET_KEY || ''),   // true mientras Stripe esté en modo test: la web enseña "no se cobrará"
+          play_billing: env.PLAY_BILLING_ON === '1',                    // la app de Google Play solo enseña la compra si esto es true
           limits: _pub(_L),
           // Gratis y Premium lado a lado + precios que cobra Stripe: el modal "Hazte Premium" pinta de aquí,
           // así no hay números escritos a mano en el frontend que puedan descuadrar.
