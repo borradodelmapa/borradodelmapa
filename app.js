@@ -640,25 +640,27 @@ async function _ceMountUsageChip(area) {
       d = await r.json();
       _ceUsageCache = { t: Date.now(), d };
     }
+    // Lo que se COMPRA y se valora es la GUÍA, no los mensajes (Paco, 7 oct 2026): el contador enseña guías.
+    // Verde = tiene crédito. Naranja sólido y clicable (→ planes) = sin guías, o sin mensajes hoy (tope antiabuso).
     const plan = d.plan || 'free';
-    const lim = d.limits && d.limits.chatPerDay;
-    if (!lim) return;
+    const lim = (d.limits && d.limits.chatPerDay) || 0;
     const hoy = d.today_msgs || 0;
-    const lleno = hoy >= lim;
-    const esPremiumLargo = !!d.is_premium && plan !== 'guia'; // trimestral / anual: siempre visible, también para ellos
-    let guia = '';
-    if (plan === 'free') {
-      const gastadas = (d.total && d.total.guides) || 0;
-      if (d.bonus_guides > 0) guia = d.bonus_guides === 1 ? ' · 1 guía disponible' : ' · ' + d.bonus_guides + ' guías disponibles';
-      else guia = gastadas < 1 ? ' · 1 guía gratis' : ' · guía gratis usada';
-    }
-    let txt;
+    const sinMensajes = lim > 0 && hoy >= lim;
+    const bonus = d.bonus_guides || 0;
+    const esPremiumLargo = !!d.is_premium && plan !== 'guia'; // trimestral / anual
+    const FREE_GUIAS = 1; // plan gratis: 1 guía de por vida (PLAN_LIMITS.free.guides en el Worker)
+    const nGuias = (n) => n + (n === 1 ? ' guía disponible' : ' guías disponibles');
+    let txt, falta = false;
     if (esPremiumLargo) {
-      let hasta = '';
-      try { if (d.premium_until) hasta = new Date(d.premium_until).toLocaleDateString('es', { day: 'numeric', month: 'short' }); } catch (_) {}
-      txt = 'Premium' + (hasta ? ' hasta el ' + hasta : '') + ' · ' + hoy + '/' + lim + ' mensajes hoy';
+      txt = 'Premium · guías incluidas';
+      falta = sinMensajes;
+      if (falta) txt = 'Premium · sin mensajes hoy' + (window.BDM_TWA ? ' · mañana, más' : '');
     } else {
-      txt = lleno ? hoy + '/' + lim + ' mensajes hoy · mañana, más' : hoy + '/' + lim + ' mensajes hoy' + guia;
+      const nombre = plan === 'guia' ? 'Guía suelta' : 'Gratis';
+      const disp = plan === 'guia' ? bonus : Math.max(0, FREE_GUIAS - ((d.total && d.total.guides) || 0)) + bonus;
+      if (sinMensajes) { txt = nombre + ' · sin mensajes hoy' + (window.BDM_TWA ? ' · mañana, más' : ''); falta = true; }
+      else if (disp > 0) txt = nombre + ' · ' + nGuias(disp);
+      else { txt = nombre + ' · 0 guías'; falta = true; }
     }
     const host = area.querySelector('#ce-sky-wx-wrap') || area.querySelector('.ce-top') || area.querySelector('.salma-screen-sub');
     if (!host || !host.parentNode) return;
@@ -667,16 +669,17 @@ async function _ceMountUsageChip(area) {
       chip = document.createElement('button');
       chip.id = 'ce-usage-chip';
       chip.type = 'button';
-      chip.style.cssText = 'display:block;margin:6px auto 0;padding:3px 10px;background:none;border:0;font:500 11.5px/1.3 Inter,sans-serif;color:inherit;opacity:.6;cursor:default;text-align:center;letter-spacing:.01em';
       host.parentNode.insertBefore(chip, host.nextSibling);
     }
-    chip.textContent = txt;
-    chip.style.opacity = lleno ? '.95' : '.6';
-    chip.style.color = lleno ? '#F4630B' : 'inherit';
-    if (lleno && !window.BDM_TWA) {
-      chip.style.cursor = 'pointer';
-      chip.onclick = () => { if (typeof openCoinsModal === 'function') openCoinsModal(); };
-    }
+    const clicable = falta && !window.BDM_TWA; // dentro de la app de Google Play aún no hay compra (Play Billing: caso p-muyfc21gt7w)
+    const verde = '#3DDC84';
+    chip.style.cssText = 'display:flex;width:fit-content;max-width:92%;align-items:center;gap:8px;white-space:nowrap;margin:8px auto 0;padding:6px 13px;border-radius:99px;font:700 12.5px/1.2 Inter,sans-serif;letter-spacing:.01em;text-align:center;' +
+      (falta ? 'background:#F4630B;color:#fff;border:1.5px solid #F4630B;' : 'background:rgba(255,255,255,.03);color:' + verde + ';border:1.5px solid rgba(61,220,132,.4);') +
+      'cursor:' + (clicable ? 'pointer' : 'default');
+    chip.innerHTML = '<i style="width:8px;height:8px;border-radius:50%;background:' + (falta ? '#fff' : verde) + ';display:inline-block"></i><span></span>' +
+      (clicable ? '<span style="margin-left:2px">Conseguir más ›</span>' : '');
+    chip.querySelector('span').textContent = txt;
+    chip.onclick = clicable ? () => { if (typeof openCoinsModal === 'function') openCoinsModal(); } : null;
   } catch (_) { /* sin contador, la portada sigue igual */ }
 }
 
