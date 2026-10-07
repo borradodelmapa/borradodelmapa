@@ -121,6 +121,13 @@
       $('cta').style.display = (sinPago || compact) ? 'none' : '';
       $('more').style.display = compact ? '' : 'none';
       $('servicios').style.display = compact ? '' : 'none';
+      // Compacto: la hoja ocupa casi toda la pantalla (sin gran hueco negro arriba) y el enlace queda abajo
+      var sh = overlay.querySelector('.pm-sheet');
+      sh.style.minHeight = compact ? '88vh' : '';
+      if (compact) { sh.style.minHeight = '88dvh'; sh.style.display = 'flex'; sh.style.flexDirection = 'column'; }
+      else { sh.style.display = ''; sh.style.flexDirection = ''; }
+      $('more').style.marginTop = compact ? 'auto' : '';
+      $('servicios').style.padding = compact ? '18px 20px 8px' : '';
     }
 
     function renderStatus() {
