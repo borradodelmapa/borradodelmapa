@@ -621,6 +621,57 @@ function _renderSalmaScreen(area) {
     </div>`;
 }
 
+// ═══ CONTADOR PEQUEÑO DE USO EN LA PORTADA (7 oct 2026, petición de Paco, caso p-muycxv39pan) ═══
+// «3/5 mensajes hoy · 1 guía gratis». Pequeño, sin pop-ups ni bloqueos. Solo para plan gratis o guía suelta
+// (con Premium trimestral/anual no se enseña nada). Los números los cuenta el Worker (GET /usage, que solo lee
+// el uso del propio usuario: no llama a ninguna API de pago). Si algo falla, no se pinta nada. En la app de
+// Google Play (BDM_TWA) no hay enlace a precios. Cache de 30 s para no pedirlo en cada repintado.
+let _ceUsageCache = null;
+async function _ceMountUsageChip(area) {
+  try {
+    const u = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
+    if (!u || !area) return;
+    let d = (_ceUsageCache && Date.now() - _ceUsageCache.t < 30000) ? _ceUsageCache.d : null;
+    if (!d) {
+      const t = await u.getIdToken();
+      const r = await fetch(window.SALMA_API + '/usage', { headers: { 'Authorization': 'Bearer ' + t } });
+      if (!r.ok) return;
+      d = await r.json();
+      _ceUsageCache = { t: Date.now(), d };
+    }
+    const plan = d.plan || 'free';
+    if (d.is_premium && plan !== 'guia') return;
+    const lim = d.limits && d.limits.chatPerDay;
+    if (!lim) return;
+    const hoy = d.today_msgs || 0;
+    const lleno = hoy >= lim;
+    let guia = '';
+    if (plan === 'free') {
+      const gastadas = (d.total && d.total.guides) || 0;
+      if (d.bonus_guides > 0) guia = d.bonus_guides === 1 ? ' · 1 guía disponible' : ' · ' + d.bonus_guides + ' guías disponibles';
+      else guia = gastadas < 1 ? ' · 1 guía gratis' : ' · guía gratis usada';
+    }
+    const txt = lleno ? hoy + '/' + lim + ' mensajes hoy · mañana, más' : hoy + '/' + lim + ' mensajes hoy' + guia;
+    const host = area.querySelector('#ce-sky-wx-wrap') || area.querySelector('.ce-top');
+    if (!host || !host.parentNode) return;
+    let chip = area.querySelector('#ce-usage-chip');
+    if (!chip) {
+      chip = document.createElement('button');
+      chip.id = 'ce-usage-chip';
+      chip.type = 'button';
+      chip.style.cssText = 'display:block;margin:6px auto 0;padding:3px 10px;background:none;border:0;font:500 11.5px/1.3 Inter,sans-serif;color:inherit;opacity:.6;cursor:default;text-align:center;letter-spacing:.01em';
+      host.parentNode.insertBefore(chip, host.nextSibling);
+    }
+    chip.textContent = txt;
+    chip.style.opacity = lleno ? '.95' : '.6';
+    chip.style.color = lleno ? '#F4630B' : 'inherit';
+    if (lleno && !window.BDM_TWA) {
+      chip.style.cursor = 'pointer';
+      chip.onclick = () => { if (typeof openCoinsModal === 'function') openCoinsModal(); };
+    }
+  } catch (_) { /* sin contador, la portada sigue igual */ }
+}
+
 function _renderChatEmpty() {
   if (!document.getElementById('chat-area')) {
     $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
@@ -1063,6 +1114,7 @@ function _renderChatEmpty() {
     if (ceCard) _wireCeCard(ceCard);
     const ceNextCard = area.querySelector('#ce-next-card');
     if (ceNextCard) _wireCeCard(ceNextCard);
+    _ceMountUsageChip(area); // contador pequeño de uso (7 oct 2026)
 
     // ── Caja de ejemplo rotable (doc 8 sep) — 4 perfiles en orden fijo ──
     const _wireRotable = () => {
