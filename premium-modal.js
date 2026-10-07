@@ -63,6 +63,16 @@
           '<div class="pm-sub" data-pm="sub"></div>' +
         '</div>' +
         '<div class="pm-status" data-pm="status"></div>' +
+        '<div data-pm="servicios" style="display:none;padding:14px 20px 4px">' +
+          '<div class="pm-label" style="margin-bottom:6px">Lo que hago por ti</div>' +
+          '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">🗺️</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Rutas a tu medida</b><br>Las diseño y las ajusto cuando cambian los planes</span></div>' +
+          '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">✈️</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Vuelos</b><br>Te los busco y te aviso si bajan de precio</span></div>' +
+          '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">📍</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Guía en ruta</b><br>Mapa en directo y fotos de cada lugar</span></div>' +
+          '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">🎧</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Narrador</b><br>Te cuento la historia de lo que ves</span></div>' +
+          '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">🆘</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">SOS</b><br>Si hay un imprevisto, te ayudo al momento</span></div>' +
+          '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 10px;margin:4px -10px;border-radius:10px;background:rgba(61,220,132,.10);border:1px solid rgba(61,220,132,.28);"><span style="font-size:20px;line-height:1.2">💬</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">WhatsApp</b><br>Escríbeme desde donde estés, también ahí te respondo</span></div>' +
+          '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">📖</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Tu álbum</b><br>Guardo tus recuerdos de cada viaje</span></div>' +
+        '</div>' +
         // Quien ya paga Premium NO ve precios ni "Pagar" por defecto: solo este enlace discreto (7 oct 2026, Paco)
         '<button type="button" class="pm-more" data-pm="more" style="display:none;width:100%;background:none;border:0;color:inherit;opacity:.6;text-decoration:underline;cursor:pointer;font:inherit;font-size:14px;padding:16px 0 20px;text-align:center">Añadir más tiempo</button>' +
         '<div class="pm-body" data-pm="body"' + (sinPago ? ' style="display:none"' : '') + '>' +
@@ -106,11 +116,12 @@
         ? (opts.viaPlay ? '' : 'Premium no se puede contratar desde la app de Android.')
         : prem
           ? (masAbierto ? 'El tiempo nuevo se suma al que ya tienes: no pierdes nada.'
-             : planKey() === 'guia' ? 'Tu viaje con Salma y 30 días de chat. ¿Quieres más?' : 'Gracias por ser Premium.')
+             : planKey() === 'guia' ? 'Tu viaje con Salma y 30 días de chat. ¿Quieres más?' : 'Qué alegría tenerte a bordo. Aquí sigo para lo que necesites en tu próximo viaje.')
           : 'Guías verificadas, cambios en tus rutas y Salma sin que te cuente los mensajes.';
       $('body').style.display = (sinPago || compact) ? 'none' : '';
       $('cta').style.display = (sinPago || compact) ? 'none' : '';
       $('more').style.display = compact ? '' : 'none';
+      $('servicios').style.display = compact ? '' : 'none';
     }
 
     function renderStatus() {
@@ -142,7 +153,7 @@
       } else if (opts.loadUsage && !usageFailed) {
         meters = '<div class="pm-meters is-loading"><span class="pm-skel"></span><span class="pm-skel"></span><span class="pm-skel"></span></div>';
       }
-      el.innerHTML = '<div class="pm-status-top"><span class="pm-label">Tu plan</span>' + stateHtml + '</div>' + sub + meters;
+      el.innerHTML = '<div class="pm-status-top"><span class="pm-label">' + (premiumNow ? 'Estás en' : 'Tu plan') + '</span>' + stateHtml + '</div>' + sub + meters;
     }
 
     function renderCompare() {
