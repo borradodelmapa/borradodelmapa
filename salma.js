@@ -3516,6 +3516,14 @@ const salma = {
     wrap.appendChild(header);
     const grid = document.createElement('div');
     grid.className = 'salma-result-grid';
+    // «410,78 €» en vez de «410.78 EUR»; si algo falla, se queda como antes.
+    const cur = result.currency || 'EUR';
+    const priceTxt = (p) => {
+      const n = Number(p);
+      if (!isFinite(n)) return p + ' ' + cur;
+      try { return n.toLocaleString('es-ES', { style: 'currency', currency: cur }); }
+      catch (e) { return p + ' ' + cur; }
+    };
     for (const f of result.flights) {
       const dep = f.departure ? new Date(f.departure).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
       const arr = f.arrival ? new Date(f.arrival).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
@@ -3526,12 +3534,20 @@ const salma = {
         <div class="salma-result-card-body">
           <div class="salma-result-card-name">✈ ${f.airlines || 'Aerolínea'}</div>
           <div class="salma-result-card-sub">${dep} → ${arr} · ${f.duration_h ? f.duration_h + 'h' : ''} · ${stops}</div>
-          <div class="salma-result-card-price">${f.price ? f.price + ' ' + (result.currency || 'EUR') : ''}</div>
+          <div class="salma-result-card-price">${f.price ? 'desde ' + priceTxt(f.price) : ''}</div>
           ${f.booking_link ? `<a class="salma-result-card-cta" href="${f.booking_link}" target="_blank" rel="noopener">Reservar</a>` : ''}
         </div>`;
       grid.appendChild(card);
     }
     wrap.appendChild(grid);
+    // Nota de confianza (7 oct 2026, idea de Paco): el precio es el de ESTA búsqueda y puede ajustarse al reservar
+    // (equipaje, tarifa). Con hora, para que se vea que es un dato fresco. Solo texto: no llama a ninguna API.
+    const hora = new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    const nota = document.createElement('div');
+    nota.className = 'salma-results-note';
+    nota.style.cssText = 'font-size:12px;opacity:.65;margin:8px 2px 0;line-height:1.35';
+    nota.textContent = `Buscado hoy a las ${hora} por Salma. El precio final lo ves al reservar.`;
+    wrap.appendChild(nota);
   },
 
   _renderHotelResults(result, wrap) {
