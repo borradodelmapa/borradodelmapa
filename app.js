@@ -2228,7 +2228,6 @@ async function renderProfile() {
   const _puMs = currentUser.premium_until ? new Date(currentUser.premium_until).getTime() : 0;
   const premiumActivo = _puMs > Date.now();
   const planNum = premiumActivo ? 'PREMIUM' : 'GRATIS';
-  const planBadge = premiumActivo ? 'Premium' : 'Gratis';
   const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
   const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
 
@@ -2241,6 +2240,7 @@ async function renderProfile() {
   // hacer?) con sus separadores; "Mi plan" pasa a CUENTA; se ve con qué cuenta se ha
   // entrado; SOS aquí solo configura contactos (el envío está en el acceso SOS del inicio).
   const _waPhone = currentUser.waPhone || '';
+  const _puFecha = premiumActivo ? new Date(_puMs).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
   const _viaLine = currentUser.email
     ? 'Entraste con Google · ' + escapeHTML(currentUser.email)
     : (currentUser.phone ? 'Entraste con WhatsApp · ' + escapeHTML(currentUser.phone) : '');
@@ -2256,85 +2256,83 @@ async function renderProfile() {
         ${avatarHtml}
         <div class="prof-hero-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
         ${_viaLine ? `<div class="prof-hero-via">${_viaLine}</div>` : ''}
-        <div class="prof-stats-strip">
-          <div class="prof-stat-card" id="prof-stat-plan">
-            <div class="prof-stat-number">${planNum}</div>
-            <div class="prof-stat-label">TU PLAN</div>
-          </div>
-          <div class="prof-stat-divider"></div>
-          <div class="prof-stat-card">
-            <div class="prof-stat-number" id="prof-stat-guides">&ndash;</div>
-            <div class="prof-stat-label">VIAJES</div>
-          </div>
+        <div class="prof-hero-trips"><b id="prof-stat-guides">&ndash;</b> viajes</div>
+      </div>
+
+      <!-- 1 · Tu plan -->
+      <div class="prof-plan-card ${premiumActivo ? 'is-premium' : 'is-free'}" id="prof-plan">
+        <div class="prof-plan-top">
+          <span class="prof-plan-kicker">TU PLAN</span>
+          <span class="prof-plan-state">${premiumActivo ? 'Activo' : 'Gratis'}</span>
+        </div>
+        <div class="prof-plan-name">${planNum}</div>
+        <div class="prof-plan-sub">${premiumActivo
+          ? 'Hasta el ' + escapeHTML(_puFecha) + ' · Salma sin límites de uso diario'
+          : '5 mensajes al día y 1 guía. Pasa a Premium para rutas y chat sin tope.'}</div>
+        <div class="prof-plan-cta">${premiumActivo ? 'Gestionar mi plan' : 'Ver planes'}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
 
-      <!-- Tu viaje -->
+      <!-- 2 · Tu viaje: documentos, SOS, compartir rutas, WhatsApp -->
       <div class="prof-group">
         <div class="prof-group-title">TU VIAJE</div>
         <div class="prof-card">
-          <div class="prof-row prof-row-highlight" id="prof-perfil-ia">
-            <span class="prof-row-icon prof-row-icon-accent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2a4.5 4.5 0 0 0-4.5 4.5v.34A3.5 3.5 0 0 0 3 10v1a3.5 3.5 0 0 0 1.35 2.76A4.5 4.5 0 0 0 9 18.5V21"/><path d="M14.5 2a4.5 4.5 0 0 1 4.5 4.5v.34A3.5 3.5 0 0 1 21 10v1a3.5 3.5 0 0 1-1.35 2.76A4.5 4.5 0 0 1 15 18.5V21"/><path d="M9 21h6"/></svg></span>
-            <span class="prof-row-label">Lo que Salma sabe de ti</span>
-            <span class="prof-row-badge">${(currentUser.perfil_ia?.facts || []).length} DATOS</span>
-          </div>
-          <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-docs">
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
-            <span class="prof-row-label">Documentos del Viajero</span>
+            <span class="prof-row-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+            <span class="prof-row-label">Documentos del Viajero<span class="prof-row-hint">Pasaporte, billetes, seguros… siempre a mano</span></span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-        </div>
-      </div>
-
-      <!-- Seguridad: aquí solo se configuran los contactos -->
-      <div class="prof-group">
-        <div class="prof-group-title">SEGURIDAD</div>
-        <div class="prof-card ${sosConfigured ? 'prof-card-sos-on' : 'prof-card-sos-off'}">
-          <div class="prof-row prof-row-sos" id="prof-sos">
-            <span class="prof-row-icon prof-row-icon-sos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <div class="prof-row-sep"></div>
+          <div class="prof-row prof-row-sos ${sosConfigured ? 'prof-sos-ok' : 'prof-sos-pend'}" id="prof-sos">
+            <span class="prof-row-icon prof-row-icon-sos"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
             <span class="prof-row-label">Contactos SOS<span class="prof-row-hint">A quién avisamos si pulsas SOS</span></span>
             <span class="prof-sos-badge">${sosConfigured
               ? '<span class="prof-sos-on">configurado</span>'
               : '<span class="prof-sos-off">sin configurar</span>'}</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-        </div>
-      </div>
-
-      <!-- Cuenta -->
-      <div class="prof-group">
-        <div class="prof-group-title">CUENTA</div>
-        <div class="prof-card">
-          <div class="prof-row" id="prof-plan">
-            <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
-            <span class="prof-row-label">Mi plan</span>
-            <span class="prof-coins-badge">${planBadge}</span>
-            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
           <div class="prof-row-sep"></div>
           <div class="prof-row prof-row-switch" id="prof-share-routes">
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+            <span class="prof-row-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
             <span class="prof-row-label">Compartir mis rutas<span class="prof-row-hint">Otros viajeros las ven en Explorar, con tu nombre de pila</span></span>
             <label class="prof-switch"><input type="checkbox" id="prof-share-toggle" ${currentUser.share_routes !== false ? 'checked' : ''}><span class="prof-switch-track"></span></label>
           </div>
           <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-whatsapp">
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+            <span class="prof-row-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
             ${_waPhone
               ? `<span class="prof-row-label">WhatsApp vinculado<span class="prof-row-hint">${escapeHTML(_waPhone)} · toca para hablar con Salma</span></span>`
               : '<span class="prof-row-label">Vincular WhatsApp<span class="prof-row-hint">Tus rutas y notas de WhatsApp, también aquí</span></span>'}
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div class="prof-row-sep"></div>
+        </div>
+      </div>
+
+      <!-- 3 · Salma -->
+      <div class="prof-group">
+        <div class="prof-group-title">SALMA</div>
+        <div class="prof-card">
+          <div class="prof-row prof-row-highlight" id="prof-perfil-ia">
+            <span class="prof-row-icon prof-row-icon-accent"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2a4.5 4.5 0 0 0-4.5 4.5v.34A3.5 3.5 0 0 0 3 10v1a3.5 3.5 0 0 0 1.35 2.76A4.5 4.5 0 0 0 9 18.5V21"/><path d="M14.5 2a4.5 4.5 0 0 1 4.5 4.5v.34A3.5 3.5 0 0 1 21 10v1a3.5 3.5 0 0 1-1.35 2.76A4.5 4.5 0 0 1 15 18.5V21"/><path d="M9 21h6"/></svg></span>
+            <span class="prof-row-label">Lo que Salma sabe de ti<span class="prof-row-hint">Tus gustos de viaje: míralos y bórralos</span></span>
+            <span class="prof-row-badge">${(currentUser.perfil_ia?.facts || []).length} DATOS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 · Cuenta -->
+      <div class="prof-group">
+        <div class="prof-group-title">CUENTA</div>
+        <div class="prof-card">
           <div class="prof-row" id="prof-logout">
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+            <span class="prof-row-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
             <span class="prof-row-label">Cerrar sesión</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="prof-row-sep"></div>
           <div class="prof-row prof-row-danger" id="prof-delete-account">
-            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>
+            <span class="prof-row-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>
             <span class="prof-row-label">Borrar mi cuenta</span>
             <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
@@ -2415,8 +2413,6 @@ async function renderProfile() {
     if (confirm('¿Cerrar sesión?')) logout();
   });
   document.getElementById('prof-delete-account').addEventListener('click', openDeleteAccountModal);
-  // Stats: click en el plan abre el modal Premium
-  document.getElementById('prof-stat-plan')?.addEventListener('click', openCoinsModal);
   // Stats: cargar conteo de guías async
   db.collection('users').doc(currentUser.uid)
     .collection('maps').get().then(snap => {
