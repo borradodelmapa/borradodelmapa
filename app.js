@@ -3227,10 +3227,7 @@ async function _afterGoogleAuth(user) {
     });
   }
   closeModal();
-  // Ofrecer registrar huella si no la tiene y el dispositivo la soporta
-  if (!localStorage.getItem('bdm_webauthn_cred') && window.PublicKeyCredential) {
-    registerFingerprint(user.email);
-  }
+  // (Huella/llave de acceso eliminada: ya no se ofrece registrarla tras el login.)
 }
 
 async function doGoogleLogin() {
@@ -3513,34 +3510,6 @@ async function doFingerprintLogin() {
   } catch (e) {
     btn.classList.add('error');
     if (e.name !== 'NotAllowedError') console.error('WebAuthn error:', e);
-  }
-}
-
-async function registerFingerprint(email) {
-  if (!window.PublicKeyCredential) return;
-  try {
-    const cred = await navigator.credentials.create({
-      publicKey: {
-        challenge: new Uint8Array(32),
-        rp: { name: 'Borrado del Mapa', id: location.hostname },
-        user: {
-          id: new TextEncoder().encode(email),
-          name: email,
-          displayName: email.split('@')[0]
-        },
-        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-        authenticatorSelection: { userVerification: 'required', residentKey: 'preferred' },
-        timeout: 30000
-      }
-    });
-    if (cred) {
-      localStorage.setItem('bdm_webauthn_cred', JSON.stringify({
-        credentialId: _bufferToBase64(cred.rawId),
-        email
-      }));
-    }
-  } catch (e) {
-    if (e.name !== 'NotAllowedError') console.error('WebAuthn register error:', e);
   }
 }
 
