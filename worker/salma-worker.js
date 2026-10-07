@@ -11133,7 +11133,7 @@ export default {
       }
     }
 
-    if (url.pathname === '/admin/feedback-groups' || url.pathname === '/admin/feedback-group' || url.pathname === '/admin/feedback-classify-pending' || url.pathname === '/admin/feedback-group-create') {
+    if (url.pathname === '/admin/feedback-groups' || url.pathname === '/admin/feedback-group' || url.pathname === '/admin/feedback-classify-pending' || url.pathname === '/admin/feedback-group-create' || url.pathname === '/admin/feedback-group-delete') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
       if (!(await isCasesRequest(request, env))) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       try {
