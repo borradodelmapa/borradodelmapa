@@ -640,45 +640,51 @@ async function _ceMountUsageChip(area) {
       d = await r.json();
       _ceUsageCache = { t: Date.now(), d };
     }
-    // Lo que se COMPRA y se valora es la GUÍA, no los mensajes (Paco, 7 oct 2026): el contador enseña guías.
-    // Verde = tiene crédito. Naranja sólido y clicable (→ planes) = sin guías, o sin mensajes hoy (tope antiabuso).
+    // El producto es "un viaje con Salma" (guía + vuelos + alojamiento + SOS…), no solo la guía (Paco, 7 oct 2026).
+    // Arriba a la derecha, súper discreto, en la fila de la marca (.ce-top). Verde = tiene crédito; naranja y
+    // clicable (→ planes) = sin crédito o sin mensajes hoy (tope antiabuso). A la vista va la versión CORTA (en la
+    // esquina caben ~18 letras); la frase completa va en el título/aria.
     const plan = d.plan || 'free';
     const lim = (d.limits && d.limits.chatPerDay) || 0;
     const hoy = d.today_msgs || 0;
     const sinMensajes = lim > 0 && hoy >= lim;
     const bonus = d.bonus_guides || 0;
     const esPremiumLargo = !!d.is_premium && plan !== 'guia'; // trimestral / anual
-    const FREE_GUIAS = 1; // plan gratis: 1 guía de por vida (PLAN_LIMITS.free.guides en el Worker)
-    const nGuias = (n) => n + (n === 1 ? ' guía disponible' : ' guías disponibles');
-    let txt, falta = false;
-    if (esPremiumLargo) {
-      txt = 'Premium · guías incluidas';
-      falta = sinMensajes;
-      if (falta) txt = 'Premium · sin mensajes hoy' + (window.BDM_TWA ? ' · mañana, más' : '');
+    const FREE_GUIAS = 1; // plan gratis: 1 guía/viaje de prueba de por vida (PLAN_LIMITS.free.guides en el Worker)
+    let corto, largo, falta = false;
+    if (sinMensajes) {
+      corto = 'Salma descansa'; largo = 'Salma descansa hoy' + (window.BDM_TWA ? ' · mañana, más' : ''); falta = true;
+    } else if (esPremiumLargo) {
+      corto = 'Premium'; largo = 'Premium · viajes con Salma incluidos';
+    } else if (plan === 'guia') {
+      if (bonus > 0) { corto = bonus === 1 ? '1 viaje incluido' : bonus + ' viajes incluidos'; largo = (bonus === 1 ? 'Un viaje con Salma' : bonus + ' viajes con Salma') + ' · incluido'; }
+      else { corto = 'Más viajes'; largo = 'Viaje con Salma · Conseguir más'; falta = true; }
     } else {
-      const nombre = plan === 'guia' ? 'Guía suelta' : 'Gratis';
-      const disp = plan === 'guia' ? bonus : Math.max(0, FREE_GUIAS - ((d.total && d.total.guides) || 0)) + bonus;
-      if (sinMensajes) { txt = nombre + ' · sin mensajes hoy' + (window.BDM_TWA ? ' · mañana, más' : ''); falta = true; }
-      else if (disp > 0) txt = nombre + ' · ' + nGuias(disp);
-      else { txt = nombre + ' · 0 guías'; falta = true; }
+      const disp = Math.max(0, FREE_GUIAS - ((d.total && d.total.guides) || 0)) + bonus;
+      if (disp > 0) { corto = disp === 1 ? '1 viaje con Salma' : disp + ' viajes con Salma'; largo = 'Prueba gratis · ' + corto; }
+      else { corto = 'Más viajes'; largo = 'Viaje con Salma · Conseguir más'; falta = true; }
     }
-    const host = area.querySelector('#ce-sky-wx-wrap') || area.querySelector('.ce-top') || area.querySelector('.salma-screen-sub');
+    const top = area.querySelector('.ce-top');
+    const host = top || area.querySelector('.salma-screen-sub');
     if (!host || !host.parentNode) return;
     let chip = area.querySelector('#ce-usage-chip');
     if (!chip) {
       chip = document.createElement('button');
       chip.id = 'ce-usage-chip';
       chip.type = 'button';
-      host.parentNode.insertBefore(chip, host.nextSibling);
+      if (top) top.appendChild(chip); else host.parentNode.insertBefore(chip, host.nextSibling);
     }
+    if (top) { const br = top.querySelector('.ce-brand'); if (br) { br.style.whiteSpace = 'nowrap'; br.style.flex = '0 0 auto'; } } // si no cabe, se encoge el contador, no la marca
     const clicable = falta && !window.BDM_TWA; // dentro de la app de Google Play aún no hay compra (Play Billing: caso p-muyfc21gt7w)
     const verde = '#3DDC84';
-    chip.style.cssText = 'display:flex;width:fit-content;max-width:92%;align-items:center;gap:8px;white-space:nowrap;margin:8px auto 0;padding:6px 13px;border-radius:99px;font:700 12.5px/1.2 Inter,sans-serif;letter-spacing:.01em;text-align:center;' +
-      (falta ? 'background:#F4630B;color:#fff;border:1.5px solid #F4630B;' : 'background:rgba(255,255,255,.03);color:' + verde + ';border:1.5px solid rgba(61,220,132,.4);') +
+    chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;white-space:nowrap;max-width:46%;min-width:0;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;' +
+      (top ? 'margin-left:auto;' : 'margin:8px auto 0;width:fit-content;') +
+      'padding:3px 8px;border-radius:99px;font:700 10.5px/1.2 Inter,sans-serif;letter-spacing:.01em;-webkit-tap-highlight-color:transparent;' +
+      (falta ? 'background:rgba(244,99,11,.14);color:#F4630B;border:1px solid #F4630B;' : 'background:transparent;color:' + verde + ';border:1px solid rgba(61,220,132,.32);opacity:.85;') +
       'cursor:' + (clicable ? 'pointer' : 'default');
-    chip.innerHTML = '<i style="width:8px;height:8px;border-radius:50%;background:' + (falta ? '#fff' : verde) + ';display:inline-block"></i><span></span>' +
-      (clicable ? '<span style="margin-left:2px">Conseguir más ›</span>' : '');
-    chip.querySelector('span').textContent = txt;
+    chip.innerHTML = '<i style="width:6px;height:6px;border-radius:50%;background:' + (falta ? '#F4630B' : verde) + ';display:inline-block;flex:0 0 auto"></i><span></span>' + (clicable ? '<span>›</span>' : '');
+    chip.querySelector('span').textContent = corto;
+    chip.title = largo; chip.setAttribute('aria-label', largo);
     chip.onclick = clicable ? () => { if (typeof openCoinsModal === 'function') openCoinsModal(); } : null;
   } catch (_) { /* sin contador, la portada sigue igual */ }
 }
