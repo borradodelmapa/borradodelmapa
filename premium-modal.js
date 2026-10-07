@@ -58,15 +58,13 @@
       '<div class="pm-sheet">' +
         '<button class="pm-close" type="button" aria-label="Cerrar">&times;</button>' +
         '<div class="pm-head">' +
-          '<div class="pm-kicker">Pase Premium</div>' +
-          '<div class="pm-title">' + (sinPago ? 'Tu plan' : isPremium ? 'Amplía tu Premium' : 'Hazte Premium') + '</div>' +
-          '<div class="pm-sub">' + (sinPago
-            ? 'Premium no se puede contratar desde la app de Android.'
-            : isPremium
-            ? 'El tiempo nuevo se suma al que ya tienes: no pierdes nada.'
-            : 'Guías verificadas, cambios en tus rutas y Salma sin que te cuente los mensajes.') + '</div>' +
+          '<div class="pm-kicker" data-pm="kicker">Pase Premium</div>' +
+          '<div class="pm-title" data-pm="title"></div>' +
+          '<div class="pm-sub" data-pm="sub"></div>' +
         '</div>' +
         '<div class="pm-status" data-pm="status"></div>' +
+        // Quien ya paga Premium NO ve precios ni "Pagar" por defecto: solo este enlace discreto (7 oct 2026, Paco)
+        '<button type="button" class="pm-more" data-pm="more" style="display:none;width:100%;background:none;border:0;color:inherit;opacity:.6;text-decoration:underline;cursor:pointer;font:inherit;font-size:14px;padding:16px 0 20px;text-align:center">Añadir más tiempo</button>' +
         '<div class="pm-body" data-pm="body"' + (sinPago ? ' style="display:none"' : '') + '>' +
           '<div class="pm-plans">' +
             '<div class="pm-label">Elige periodo</div>' +
@@ -82,7 +80,7 @@
           '<div class="pm-error" data-pm="error" role="alert"></div>' +
         '</div>' +
         '<div class="pm-loading" data-pm="loading" style="display:none">' +
-          '<div class="pm-spinner"></div><span>Conectando con Stripe…</span>' +
+          '<div class="pm-spinner"></div><span>' + (opts.viaPlay ? 'Abriendo Google Play…' : 'Conectando con Stripe…') + '</span>' +
         '</div>' +
       '</div>';
 
@@ -91,6 +89,28 @@
     function selectedPlan() {
       for (var i = 0; i < plans.length; i++) if (plans[i].key === selected) return plans[i];
       return plans[2];
+    }
+
+    // ── MODO según el plan (7 oct 2026, Paco: «a quien paga Premium no hay que venderle nada») ──
+    // Gratis → "Hazte Premium" con planes. Premium trimestral/anual → "Tu plan" COMPACTO: estado, uso y un enlace
+    // discreto "Añadir más tiempo" (que despliega los planes). Guía suelta → "Tu plan" con los planes a la vista.
+    var masAbierto = false;
+    function planKey() { return usage && usage.plan ? usage.plan : (isPremium ? 'trimestral' : 'free'); }
+    function premiumNow() { return usage ? !!usage.is_premium : isPremium; }
+    function esCompacto() { return !sinPago && premiumNow() && planKey() !== 'guia' && !masAbierto; }
+    function applyMode() {
+      var prem = premiumNow(), compact = esCompacto();
+      $('kicker').style.display = prem ? 'none' : '';
+      $('title').textContent = sinPago ? 'Tu plan' : prem ? (masAbierto ? 'Añadir más tiempo' : 'Tu plan') : 'Hazte Premium';
+      $('sub').textContent = sinPago
+        ? (opts.viaPlay ? '' : 'Premium no se puede contratar desde la app de Android.')
+        : prem
+          ? (masAbierto ? 'El tiempo nuevo se suma al que ya tienes: no pierdes nada.'
+             : planKey() === 'guia' ? 'Tu viaje con Salma y 30 días de chat. ¿Quieres más?' : 'Gracias por ser Premium.')
+          : 'Guías verificadas, cambios en tus rutas y Salma sin que te cuente los mensajes.';
+      $('body').style.display = (sinPago || compact) ? 'none' : '';
+      $('cta').style.display = (sinPago || compact) ? 'none' : '';
+      $('more').style.display = compact ? '' : 'none';
     }
 
     function renderStatus() {
@@ -127,7 +147,7 @@
 
     function renderCompare() {
       var el = $('compare');
-      if (!usage || !usage.plans) { el.style.display = 'none'; return; }
+      if (!usage || !usage.plans || premiumNow()) { el.style.display = 'none'; return; }
       el.style.display = '';
       var f = usage.plans.free, p = usage.plans.premium;
       var stops = (p.maxStops || 50);
@@ -175,7 +195,7 @@
           if (real && typeof real.amount === 'number' && real.months) { p.cents = real.amount; p.months = real.months; }
         });
       }
-      renderStatus(); renderCompare(); renderPlans();
+      applyMode(); renderStatus(); renderCompare(); renderPlans();
     }
 
     function close() {
@@ -241,7 +261,8 @@
       });
     });
 
-    renderStatus(); renderCompare(); renderPlans();
+    $('more').addEventListener('click', function () { masAbierto = true; applyMode(); renderPlans(); });
+    applyMode(); renderStatus(); renderCompare(); renderPlans();
     document.body.appendChild(overlay);
     if (typeof opts.loadUsage === 'function') {
       Promise.resolve().then(opts.loadUsage).then(applyUsage).catch(function () {
