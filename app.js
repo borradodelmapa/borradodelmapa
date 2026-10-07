@@ -619,6 +619,7 @@ function _renderSalmaScreen(area) {
       <div class="salma-screen-hi">${g.hi}</div>
       <p class="salma-screen-sub">${g.sub}</p>
     </div>`;
+  _ceMountUsageChip(area); // contador de uso también aquí (7 oct 2026)
 }
 
 // ═══ CONTADOR PEQUEÑO DE USO EN LA PORTADA (7 oct 2026, petición de Paco, caso p-muycxv39pan) ═══
@@ -640,19 +641,26 @@ async function _ceMountUsageChip(area) {
       _ceUsageCache = { t: Date.now(), d };
     }
     const plan = d.plan || 'free';
-    if (d.is_premium && plan !== 'guia') return;
     const lim = d.limits && d.limits.chatPerDay;
     if (!lim) return;
     const hoy = d.today_msgs || 0;
     const lleno = hoy >= lim;
+    const esPremiumLargo = !!d.is_premium && plan !== 'guia'; // trimestral / anual: siempre visible, también para ellos
     let guia = '';
     if (plan === 'free') {
       const gastadas = (d.total && d.total.guides) || 0;
       if (d.bonus_guides > 0) guia = d.bonus_guides === 1 ? ' · 1 guía disponible' : ' · ' + d.bonus_guides + ' guías disponibles';
       else guia = gastadas < 1 ? ' · 1 guía gratis' : ' · guía gratis usada';
     }
-    const txt = lleno ? hoy + '/' + lim + ' mensajes hoy · mañana, más' : hoy + '/' + lim + ' mensajes hoy' + guia;
-    const host = area.querySelector('#ce-sky-wx-wrap') || area.querySelector('.ce-top');
+    let txt;
+    if (esPremiumLargo) {
+      let hasta = '';
+      try { if (d.premium_until) hasta = new Date(d.premium_until).toLocaleDateString('es', { day: 'numeric', month: 'short' }); } catch (_) {}
+      txt = 'Premium' + (hasta ? ' hasta el ' + hasta : '') + ' · ' + hoy + '/' + lim + ' mensajes hoy';
+    } else {
+      txt = lleno ? hoy + '/' + lim + ' mensajes hoy · mañana, más' : hoy + '/' + lim + ' mensajes hoy' + guia;
+    }
+    const host = area.querySelector('#ce-sky-wx-wrap') || area.querySelector('.ce-top') || area.querySelector('.salma-screen-sub');
     if (!host || !host.parentNode) return;
     let chip = area.querySelector('#ce-usage-chip');
     if (!chip) {
