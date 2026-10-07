@@ -64,7 +64,6 @@
         '</div>' +
         '<div class="pm-status" data-pm="status"></div>' +
         '<div data-pm="servicios" style="display:none;padding:14px 20px 4px">' +
-          '<div class="pm-label" style="margin-bottom:6px">Lo que hago por ti</div>' +
           '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">🗺️</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Rutas a tu medida</b><br>Las diseño y las ajusto cuando cambian los planes</span></div>' +
           '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">✈️</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Vuelos</b><br>Te los busco y te aviso si bajan de precio</span></div>' +
           '<div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;"><span style="font-size:20px;line-height:1.2">📍</span><span style="font-size:14px;line-height:1.35;color:var(--text-secondary)"><b style="color:var(--crema);font-weight:600">Guía en ruta</b><br>Mapa en directo y fotos de cada lugar</span></div>' +
