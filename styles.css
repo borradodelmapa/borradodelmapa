@@ -30,9 +30,14 @@
   opacity: .9;
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
   mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
-  animation: splash-zoom 8s ease-out both;
+  animation: splash-zoom 8s ease-out both, splash-fade .5s ease-out .55s backwards;
   margin-bottom: -18px;
 }
+/* Entrada: chincheta centrada (igual que la pantalla de arranque del móvil) → se funde con el mapa */
+.splash-intro { position: absolute; left: 50%; top: 50%; width: 112px; height: 112px; margin: -56px 0 0 -56px; animation: splash-intro 1s ease-in-out both; pointer-events: none; }
+.splash-intro svg { display: block; width: 100%; height: 100%; }
+@keyframes splash-intro { 0%, 40% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(.7); } }
+@keyframes splash-fade { from { opacity: 0; } }
 @keyframes splash-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
 .splash-pin {
   position: absolute;
@@ -78,7 +83,7 @@
   color: #ECEBE8;
   text-transform: uppercase;
   line-height: 1;
-  animation: splash-in .6s ease-out both .1s;
+  animation: splash-in .6s ease-out both .6s;
 }
 .splash-logo span { color: #F4630B; font-weight: 600; margin: 0 .22em; }
 .splash-tag {
@@ -89,10 +94,11 @@
   letter-spacing: .22em;
   text-transform: uppercase;
   color: #7E8285;
-  animation: splash-in .6s ease-out both .3s;
+  animation: splash-in .6s ease-out both .8s;
 }
 @keyframes splash-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
+  .splash-intro { display: none; }
   .splash-map, .splash-pin, .splash-pin-hop, .splash-pin-ring, .splash-logo, .splash-tag { animation: none; }
 }
 
