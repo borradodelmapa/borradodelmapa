@@ -2475,6 +2475,94 @@ async function stripeApi(env, path, params) {
   return await res.json();
 }
 
+// GET a la API de Stripe (solo lectura). Devuelve el JSON parseado.
+async function stripeGet(env, path) {
+  const res = await fetch('https://api.stripe.com/v1/' + path, {
+    headers: { 'Authorization': 'Basic ' + btoa(env.STRIPE_SECRET_KEY + ':') },
+    signal: AbortSignal.timeout(10000),
+  });
+  return await res.json();
+}
+
+// Reembolso de Stripe (evento charge.refunded) → quita lo que dio ese pago. 8 oct 2026.
+// Solo REEMBOLSO TOTAL: quita los meses de premium_until (sin bajar de "ahora") y la guía suelta si aún no se gastó.
+// Parcial → no toca nada y lo anota en payment_failures para revisarlo a mano. Idempotente por id de cargo
+// (processed_refunds/<charge>). Si no encuentra el pago o nunca se acreditó, no revoca nada.
+// Lanza si Stripe o Firestore fallan: el webhook responde 500 y Stripe reintenta.
+async function stripeRevokeForRefund(env, charge) {
+  if (!charge || !charge.id) return { skipped: 'sin_cargo' };
+  const chargeId = String(charge.id);
+  const pi = charge.payment_intent;
+  if (!pi) return { skipped: 'sin_payment_intent' };
+  if (charge.refunded !== true) {
+    console.log('[STRIPE-REFUND] reembolso PARCIAL de ' + chargeId + ' — no se toca Premium, revisar a mano');
+    try {
+      await firestoreAdminPatch(env, 'payment_failures/refund_partial_' + chargeId, {
+        error: { stringValue: 'reembolso parcial de ' + chargeId + ' (' + (charge.amount_refunded || 0) + '/' + (charge.amount || 0) + '): revisar a mano' },
+        at:    { timestampValue: new Date().toISOString() },
+      });
+    } catch (_) {}
+    return { skipped: 'parcial' };
+  }
+  if (await firestoreAdminGet(env, 'processed_refunds/' + chargeId)) return { duplicate: true };
+
+  // Del cargo a la sesión de Checkout que lleva uid, plan y meses
+  const list = await stripeGet(env, 'checkout/sessions?limit=1&payment_intent=' + encodeURIComponent(pi));
+  if (list && list.error) throw new Error('Stripe sessions → ' + String(list.error.message || list.error.type || 'error').slice(0, 150));
+  const session = list && list.data && list.data[0];
+  if (!session) return { skipped: 'sin_sesion' };
+  const meta = session.metadata || {};
+  const uid = meta.user_id || session.client_reference_id;
+  const plan = meta.plan || '';
+  const months = parseInt(meta.months || '0', 10);
+  if (!uid || !months) return { skipped: 'sin_uid_meses' };
+  if (!(await firestoreAdminGet(env, 'processed_payments/' + session.id))) return { skipped: 'nunca_acreditado' };
+
+  const userDoc = await firestoreAdminGet(env, 'users/' + uid);
+  const f = (userDoc && userDoc.fields) || {};
+  const curStr = f.premium_until && f.premium_until.timestampValue;
+  const now = Date.now();
+  const nowIso = new Date(now).toISOString();
+  let untilMs = 0;
+  if (curStr) {
+    const d = new Date(curStr);
+    d.setMonth(d.getMonth() - months);   // inverso del crédito (meses de calendario)
+    untilMs = d.getTime();
+  }
+  const expired = untilMs <= now;
+  const untilIso = expired ? nowIso : new Date(untilMs).toISOString();
+  const userPatch = {
+    premium_until:      { timestampValue: untilIso },
+    isPremium:          { booleanValue: !expired },
+    premium_last_plan:  { stringValue: 'reembolso-' + plan },
+    premium_updated_at: { timestampValue: nowIso },
+  };
+  if (PLAN_BONUS_GUIDES[plan]) {
+    const curBonus = parseInt((f.premium_bonus_guides && f.premium_bonus_guides.integerValue) || '0', 10) || 0;
+    userPatch.premium_bonus_guides = { integerValue: String(Math.max(0, curBonus - PLAN_BONUS_GUIDES[plan])) };
+  }
+  // Marca ANTES de tocar al usuario (si Stripe reintenta, no se quita dos veces); si falla el usuario, se retira la marca para poder reintentar.
+  await firestoreAdminPatch(env, 'processed_refunds/' + chargeId, {
+    uid:            { stringValue: uid },
+    plan:           { stringValue: plan },
+    months:         { integerValue: String(months) },
+    session:        { stringValue: session.id },
+    amount_refunded:{ integerValue: String(charge.amount_refunded || 0) },
+    premium_before: { stringValue: curStr || '' },
+    premium_after:  { timestampValue: untilIso },
+    created_at:     { timestampValue: nowIso },
+  });
+  try {
+    await firestoreAdminPatch(env, 'users/' + uid, userPatch);
+  } catch (e) {
+    try { await firestoreAdminDelete(env, 'processed_refunds/' + chargeId); } catch (_) {}
+    throw e;
+  }
+  try { await firestoreAdminPatch(env, 'processed_payments/' + session.id, { refunded_at: { timestampValue: nowIso } }); } catch (_) {}
+  console.log('[STRIPE-REFUND] ' + uid + ' ' + plan + ' −' + months + ' mes(es): ' + (curStr || '—') + ' → ' + untilIso);
+  return { revoked: true, uid, premium_until: untilIso };
+}
+
 function _timingSafeEqualHex(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
   let out = 0;
@@ -13431,6 +13519,23 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       let event;
       try { event = JSON.parse(payload); } catch (e) {
         return new Response(JSON.stringify({ error: 'bad json' }), { status: 400, headers: jsonH });
+      }
+
+      // Reembolso total de un pago → quitar lo que dio (ver stripeRevokeForRefund). Requiere el evento charge.refunded en el webhook de Stripe.
+      if (event.type === 'charge.refunded') {
+        const ch = (event.data && event.data.object) || {};
+        try {
+          const r = await stripeRevokeForRefund(env, ch);
+          return new Response(JSON.stringify({ received: true, refund: r }), { headers: jsonH });
+        } catch (e) {
+          try {
+            await firestoreAdminPatch(env, 'payment_failures/refund_' + (ch.id || Date.now()), {
+              error: { stringValue: 'reembolso: ' + String((e && e.message) || e).slice(0, 380) },
+              at:    { timestampValue: new Date().toISOString() },
+            });
+          } catch (_) {}
+          return new Response(JSON.stringify({ received: true, refund_error: String((e && e.message) || e) }), { status: 500, headers: jsonH });
+        }
       }
 
       // Solo el pago completado de Checkout lleva nuestra metadata en la sesión
