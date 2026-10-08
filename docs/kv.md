@@ -24,6 +24,7 @@
 | `kw:{keyword}` | — | Índice ciudad→código ISO país | Miles |
 | `route:{cc}:{dest}:{days}` | 3 | Rutas pre-generadas con paradas y coords (30 días TTL) | Algunos destinos |
 | `verifiedspot:{país}:{nombre}` | — | Caché de verify Google Places entre rutas de usuarios distintos (30 días TTL) — fix de coste del 15 sept | Dinámico |
+| `twspend:d:{día}` / `twspend:m:{mes}` · `twcap:config` · `twalert:*` | — | Tope de gasto propio de Twilio/WhatsApp (8 oct 2026): € estimados (0,006 €/trozo de mensaje). Topes por defecto 3 €/día y 20 €/mes, editables sin desplegar en `twcap:config` = {"daily_eur":3,"monthly_eur":20}. Interruptor `TWILIO_CAP_ON`. El SOS y el número de Paco nunca se cortan | Dinámico |
 | `placedetails:{place_id}:{fields}` | — | Caché de Place Details (teléfono/web) por lugar (30 días TTL) — fix de coste del 15 sept | Dinámico |
 | `nearbycache:{type}:{lat}:{lng}` | — | Caché Nearby Search por tipo + celda ~1km (7 días TTL) — fix de coste del 15 sept | Dinámico |
 | `explorar:index:v3` | — | Índice de Explorar (rutas de la comunidad), ver `/explorar` | 1 clave |

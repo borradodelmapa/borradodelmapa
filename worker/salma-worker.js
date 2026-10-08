@@ -9961,7 +9961,53 @@ async function sendWhatsAppMessage(env, to, text) {
   return res;
 }
 
+// ═══ TOPE DE GASTO PROPIO EN TWILIO WHATSAPP (8 oct 2026, caso "gasto de WhatsApp") ═══
+// Mismo patrón que el de Google/Claude: contador en KV (`twspend:d:<día>` / `twspend:m:<mes>`, en €) sumado por cada trozo
+// de mensaje que sale por `_sendWhatsAppChunk`. Coste ESTIMADO por trozo (Twilio + Meta, a ojo, a favor de seguridad).
+// Al pasar el tope NO se envía (el usuario no recibe respuesta hasta el día siguiente); el número de Paco nunca se corta
+// (así llegan los avisos). El SOS (otra ruta, más abajo) NO pasa por aquí y nunca se limita. FAIL-OPEN si KV falla.
+// Topes por defecto 3 €/día y 20 €/mes; se cambian SIN desplegar: KV `twcap:config` = {"daily_eur":3,"monthly_eur":20}.
+// Aviso por WhatsApp a Paco al 80 % del mes y al tocar el tope diario (una vez cada uno). Interruptor: TWILIO_CAP_ON = "1".
+const TW_UNIT_EUR = 0.006;
+const TW_CAP_DEFAULT = { daily_eur: 3, monthly_eur: 20 };
+let _twcapCache = null;
+async function _twCaps(env) {
+  const now = Date.now();
+  if (_twcapCache && now - _twcapCache.t < 60000) return _twcapCache.v;
+  let v = TW_CAP_DEFAULT;
+  try {
+    const raw = await env.SALMA_KB.get('twcap:config');
+    if (raw) { const c = JSON.parse(raw); v = { daily_eur: Number(c.daily_eur) > 0 ? Number(c.daily_eur) : v.daily_eur, monthly_eur: Number(c.monthly_eur) > 0 ? Number(c.monthly_eur) : v.monthly_eur }; }
+  } catch (_) {}
+  _twcapCache = { t: now, v };
+  return v;
+}
+// true si hay que CORTAR este envío; si no, suma su coste estimado al contador.
+async function _twilioGate(env, to) {
+  if (env.TWILIO_CAP_ON !== '1' || !env?.SALMA_KB) return false;
+  try {
+    const caps = await _twCaps(env);
+    const day = new Date().toISOString().slice(0, 10), mon = day.slice(0, 7);
+    const dK = 'twspend:d:' + day, mK = 'twspend:m:' + mon;
+    const [dRaw, mRaw] = await Promise.all([env.SALMA_KB.get(dK), env.SALMA_KB.get(mK)]);
+    const d = parseFloat(dRaw) || 0, m = parseFloat(mRaw) || 0;
+    const digits = (s) => String(s || '').replace(/\D/g, '');
+    const isOwner = !!env.PACO_WHATSAPP_TO && digits(to) === digits(env.PACO_WHATSAPP_TO);
+    const flag = async (k, txt) => { try { if (!(await env.SALMA_KB.get(k))) { await env.SALMA_KB.put(k, '1', { expirationTtl: 40 * 86400 }); if (env.PACO_WHATSAPP_TO) await _sendWhatsAppChunk(env, env.PACO_WHATSAPP_TO, txt.slice(0, 1500)); } } catch (_) {} };
+    if (!isOwner && (d + TW_UNIT_EUR > caps.daily_eur || m + TW_UNIT_EUR > caps.monthly_eur)) {
+      console.log(`[GASTO-TWILIO] TOPE alcanzado (día ${d.toFixed(2)}€/${caps.daily_eur}€, mes ${m.toFixed(2)}€/${caps.monthly_eur}€) — no se envía`);
+      await flag(`twalert:cut:${d + TW_UNIT_EUR > caps.daily_eur ? day : mon}`, `🛑 Salma · tope de Twilio/WhatsApp alcanzado: hoy ${d.toFixed(2)} € (tope ${caps.daily_eur} €), mes ${m.toFixed(2)} € (tope ${caps.monthly_eur} €). Los mensajes nuevos no salen hasta mañana. Subirlo: KV twcap:config.`);
+      return true;
+    }
+    const nd = d + TW_UNIT_EUR, nm = m + TW_UNIT_EUR;
+    await Promise.all([env.SALMA_KB.put(dK, String(nd), { expirationTtl: 40 * 86400 }), env.SALMA_KB.put(mK, String(nm), { expirationTtl: 400 * 86400 })]);
+    if (nm >= caps.monthly_eur * 0.8) await flag(`twalert:m80:${mon}`, `⚠️ Salma · gasto de Twilio/WhatsApp este mes: ${nm.toFixed(2)} € de ${caps.monthly_eur} € (80 %). Tope diario ${caps.daily_eur} €.`);
+  } catch (_) { /* fail-open */ }
+  return false;
+}
+
 async function _sendWhatsAppChunk(env, to, text) {
+  if (await _twilioGate(env, to)) return new Response('twilio spend cap', { status: 429, headers: { 'X-Spend-Cap': '1' } });
   const body = new URLSearchParams({ From: env.TWILIO_WHATSAPP_FROM, To: to, Body: text });
   const res = await fetch(
     `https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json`,
