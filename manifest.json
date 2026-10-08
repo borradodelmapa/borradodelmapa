@@ -55,8 +55,9 @@
       "url": "/?action=chat",
       "icons": [
         {
-          "src": "/salma_ai_avatar.webp",
-          "sizes": "96x96"
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     },
@@ -64,7 +65,14 @@
       "name": "Mis Viajes",
       "short_name": "Viajes",
       "description": "Ver tus guías guardadas",
-      "url": "/?action=viajes"
+      "url": "/?action=viajes",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ],
   "share_target": {
