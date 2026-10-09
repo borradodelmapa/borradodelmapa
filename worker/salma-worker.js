@@ -13483,6 +13483,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           'line_items[0][price_data][currency]': 'eur',
           'line_items[0][price_data][unit_amount]': String(PLAN.amount),
           'line_items[0][price_data][product_data][name]': 'Borrado del Mapa Premium — ' + PLAN.label,
+          'custom_text[submit][message]': 'Al pagar aceptas las condiciones de compra (borradodelmapa.com/legal.html#compra): el servicio digital empieza al momento y pierdes el derecho de desistimiento de 14 días. IVA incluido.',
           'metadata[user_id]': authUser.uid,
           'metadata[plan]': planKey,
           'metadata[months]': String(PLAN.months),

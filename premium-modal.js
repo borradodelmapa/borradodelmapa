@@ -198,7 +198,9 @@
       var sp = selectedPlan();
       $('pay').innerHTML = '<span>Pagar</span><span>' + eur(sp.cents) + '</span>';
       $('fine').innerHTML = esc(sp.key === 'guia' ? '1 guía (hasta 50 paradas) y chat durante 30 días' : sp.months + ' ' + monthsText(sp.months) + ' de Premium') +
-        ' · pago único, sin renovación · ' + (opts.viaPlay ? 'Google Play' : 'Stripe') +
+        ' · pago único, sin renovación · IVA incluido · ' + (opts.viaPlay ? 'Google Play' : 'Stripe') +
+        '<br>Al pagar aceptas las <a href="/legal.html#compra" target="_blank" rel="noopener">condiciones de compra</a>: el servicio empieza al momento y pierdes el desistimiento de 14 días.' +
+        ' <a href="mailto:salma@borradodelmapa.com?subject=Problema%20con%20un%20pago" style="color:inherit">¿Problema con un pago?</a>' +
         // "No se cobrará" es del modo prueba de STRIPE: con Google Play (cobro real) no se enseña nunca
         (!opts.viaPlay && usage && usage.modo_prueba ? '<br><span class="pm-test">MODO PRUEBA · no se cobrará</span>' : '');
     }
