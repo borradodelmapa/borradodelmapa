@@ -341,9 +341,22 @@ ${trk}
   },
 
   // Guía a medias de pago (10 oct 2026): con una guía comprada sin gastar → "Desbloquear"; si no → abre los planes (guía suelta 9,99 €).
+  // App de Google Play (TWA): sin Play Billing no hay forma de pagar dentro de la app → nada de precio ni botón (Google no deja
+  // enseñar un precio que remite a otro sitio de pago). Con Play Billing activo (pay.play, de /usage) la compra va por Google Play. 11 oct 2026.
+  _sinPagoEnApp(pay) {
+    return !!window.BDM_TWA && !(pay.bonus > 0) && !(pay.play === true && typeof getDigitalGoodsService === 'function');
+  },
   _paintPayButton(card, pay) {
     const btn = card.querySelector('.irg-btn'), note = card.querySelector('.irg-note');
     if (!btn) return;
+    if (this._sinPagoEnApp(pay)) {
+      const txt = card.querySelector('.irg-text');
+      if (txt) txt.textContent = 'Estás viendo el avance de esta guía: el día 1 completo.';
+      btn.style.display = 'none';
+      if (note) note.textContent = '';
+      return;
+    }
+    btn.style.display = '';
     if (pay.bonus > 0) {
       btn.innerHTML = 'Desbloquear con tu guía <span>→</span>';
       if (note) note.textContent = 'Tienes ' + pay.bonus + ' guía' + (pay.bonus > 1 ? 's' : '') + ' disponible' + (pay.bonus > 1 ? 's' : '') + ' · se gasta una';
@@ -370,6 +383,7 @@ ${trk}
       }
       return;
     }
+    if (this._sinPagoEnApp(pay)) return;
     if (typeof window.openCoinsModal === 'function') window.openCoinsModal();
   },
 
@@ -914,6 +928,7 @@ ${trk}
       if (window._itinViewRoute !== routeData) return;   // ya cerró o cambió de guía
       if (free) { _refreshItinInPlace(routeData, docId); return; }
       pay.bonus = d.bonus_guides || 0;
+      pay.play = !!d.play_billing;
       if (d.prices && d.prices.guia && d.prices.guia.amount) pay.priceCents = d.prices.guia.amount;
       const card = document.querySelector('#itin-cards-container .itin-card-locked');
       if (card) mapaItinerario._paintPayButton(card, pay);
