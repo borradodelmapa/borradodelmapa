@@ -4023,7 +4023,8 @@ async function guardarGuiaDirecto(routeData, opts = {}) {
     // plan de pagos: gates server-side). Hasta entonces no se contabiliza nada aquí.
 
     // Publicar guía pública (no esperar) — salvo en el guardado automático, que se publica al compartir
-    if (opts.publicar !== false) {
+    // Una guía a medias (de pago, 10 oct 2026) no se publica: la página pública la enseñaría entera.
+    if (opts.publicar !== false && !r.locked) {
       const slug = generateSlug(r.title || r.name || 'mi-ruta');
       publishGuide(docRef.id, ruta, slug, r).catch(() => {});
     }

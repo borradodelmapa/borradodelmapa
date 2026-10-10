@@ -70,7 +70,7 @@ const mapaItinerario = {
         <button class="itin-btn itin-btn-icon itin-btn-share" id="itin-share-btn" title="Compartir" aria-label="Compartir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
         ${mapsUrl ? `<a class="itin-btn itin-btn-icon itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps" aria-label="Abrir en Google Maps"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></a>` : ''}
         ${_isPreview ? '' : '<button class="itin-btn itin-btn-icon itin-btn-gpx" id="itin-gpx-btn" title="Descargar GPX: la ruta y sus paradas para usarla sin internet en OsmAnd, Organic Maps, Calimoto o Garmin" aria-label="Descargar GPX de la ruta" style="font:800 12px/1 var(--font-cond,sans-serif);letter-spacing:.04em">GPX</button>'}
-        <button class="itin-btn itin-btn-icon itin-btn-edit" id="itin-edit-btn" title="Editar esta ruta con Salma" aria-label="Editar esta ruta"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+        ${(options && options._preview && options._preview.pay) ? '' : `<button class="itin-btn itin-btn-icon itin-btn-edit" id="itin-edit-btn" title="Editar esta ruta con Salma" aria-label="Editar esta ruta"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>`}
       `;
       document.body.appendChild(actionBar);
     }
@@ -316,10 +316,19 @@ ${trk}
       </div>
       <div class="itin-locked-body">
         <div class="irg-count">${what}</div>
-        <div class="irg-text">Regístrate gratis para ver la ruta completa, guardarla y preguntarle a Salma por ella.</div>
+        ${preview.pay
+          ? `<div class="irg-text">Es tu guía de pago: ya ves el día 1. Desbloquéala para ver todo el viaje, guardarla y preguntarle a Salma por ella.</div>
+        <button class="irg-btn" type="button"></button>
+        <div class="irg-note"></div>`
+          : `<div class="irg-text">Regístrate gratis para ver la ruta completa, guardarla y preguntarle a Salma por ella.</div>
         <button class="irg-btn" type="button">Ver la ruta completa <span>→</span></button>
-        <div class="irg-note">Con Google o con WhatsApp · en cinco segundos</div>
+        <div class="irg-note">Con Google o con WhatsApp · en cinco segundos</div>`}
       </div>`;
+    if (preview.pay) {
+      this._paintPayButton(card, preview.pay);
+      card.addEventListener('click', (e) => { e.stopPropagation(); this._onPayClick(card, preview.pay, routeData); });
+      return card;
+    }
     card.addEventListener('click', (e) => {
       e.stopPropagation();
       // Al entrar, app.js reabre esta misma ruta ya entera (onAuthStateChanged).
@@ -329,6 +338,39 @@ ${trk}
       if (typeof openModal === 'function') openModal();
     });
     return card;
+  },
+
+  // Guía a medias de pago (10 oct 2026): con una guía comprada sin gastar → "Desbloquear"; si no → abre los planes (guía suelta 9,99 €).
+  _paintPayButton(card, pay) {
+    const btn = card.querySelector('.irg-btn'), note = card.querySelector('.irg-note');
+    if (!btn) return;
+    if (pay.bonus > 0) {
+      btn.innerHTML = 'Desbloquear con tu guía <span>→</span>';
+      if (note) note.textContent = 'Tienes ' + pay.bonus + ' guía' + (pay.bonus > 1 ? 's' : '') + ' disponible' + (pay.bonus > 1 ? 's' : '') + ' · se gasta una';
+    } else {
+      const price = ((pay.priceCents || 999) / 100).toFixed(2).replace('.', ',') + ' €';
+      btn.innerHTML = 'Ver la guía entera · ' + price + ' <span>→</span>';
+      if (note) note.textContent = 'Pago único · o todas tus guías con el plan trimestral o anual. Tras pagar, vuelve aquí y pulsa otra vez.';
+    }
+  },
+  async _onPayClick(card, pay, routeData) {
+    if (pay.bonus > 0) {
+      const btn = card.querySelector('.irg-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Desbloqueando…'; }
+      try {
+        const u = firebase.auth().currentUser;
+        const t = await u.getIdToken();
+        const r = await fetch(window.SALMA_API + '/unlock-guide', { method: 'POST', headers: { 'Authorization': 'Bearer ' + t, 'Content-Type': 'application/json' }, body: JSON.stringify({ lock_id: routeData.lock_id }) });
+        if (!r.ok) throw new Error('unlock ' + r.status);
+        try { localStorage.setItem('bdm_unl_' + routeData.lock_id, '1'); } catch (_) {}
+        if (typeof window._refreshItinInPlace === 'function') window._refreshItinInPlace(routeData, window._itinViewDocId);
+      } catch (_) {
+        if (btn) { btn.disabled = false; this._paintPayButton(card, pay); }
+        if (typeof showToast === 'function') showToast('No se pudo desbloquear. Inténtalo otra vez.');
+      }
+      return;
+    }
+    if (typeof window.openCoinsModal === 'function') window.openCoinsModal();
   },
 
   // ═══ CREAR CARD ═══
@@ -814,7 +856,11 @@ ${trk}
     // la primera mitad si la ruta es de un solo día) y una tarjeta bloqueada DENTRO del
     // carrusel, justo donde va el dedo, para registrarse. Consejos/info práctica ocultos.
     const _anon = typeof currentUser === 'undefined' || !currentUser;
-    const _preview = _anon ? _previewStops(routeData.stops) : null;
+    // Guía a medias de pago (10 oct 2026): el Worker marca `locked` en la 2ª guía en adelante del plan gratis. Hasta comprobar
+    // en /usage que el usuario tiene plan largo o la desbloqueó, se enseña el avance (cierra por defecto; se cachea lo ya verificado).
+    const _lockMode = !_anon && !!routeData.locked && !!routeData.lock_id && !_lockCached(routeData);
+    const _preview = (_anon || _lockMode) ? _previewStops(routeData.stops) : null;
+    if (_preview && _lockMode) _preview.pay = { bonus: 0, priceCents: 999 };
     const stops = _preview ? _preview.stops : routeData.stops;
     mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: _preview ? null : (routeData.road_geometry || null) });
     mapaItinerario.init('itin-cards-container', stops, routeData, _preview ? Object.assign({}, options, { _preview }) : options);
@@ -832,7 +878,7 @@ ${trk}
       if (typeof openLiveMap === 'function') openLiveMap();
       // Cargar la ruta en el mapa live (esperar a que el mapa esté listo)
       setTimeout(() => {
-        if (typeof selectRouteOnMap === 'function') selectRouteOnMap(routeData);
+        if (typeof selectRouteOnMap === 'function') selectRouteOnMap(_preview ? Object.assign({}, routeData, { stops }) : routeData);
       }, 400);
     };
     document.addEventListener('itin:open-live-map', _onOpenLiveMap);
@@ -842,6 +888,36 @@ ${trk}
     // Fuera el monkey-patch de window.showState (causaba un leak: cada
     // apertura/cierre por ✕ apilaba otro wrapper sin restaurarlo).
     if (window.pushModal) window.pushModal('itinerario', _teardownItinView);
+    if (_lockMode) _checkLock(routeData, docId, _preview.pay);
+  }
+
+  // ¿Esta guía a medias ya está desbloqueada? Lo verificado se guarda en localStorage (la guía se abre sin parpadeo y sin red).
+  function _lockCached(routeData) {
+    try {
+      if (localStorage.getItem('bdm_unl_' + routeData.lock_id) === '1') return true;
+      return (parseInt(localStorage.getItem('bdm_fullplan_until') || '0', 10) || 0) > Date.now();
+    } catch (_) { return false; }
+  }
+  async function _checkLock(routeData, docId, pay) {
+    try {
+      const u = firebase.auth().currentUser;
+      if (!u) return;
+      const t = await u.getIdToken();
+      const r = await fetch(window.SALMA_API + '/usage', { headers: { 'Authorization': 'Bearer ' + t } });
+      if (!r.ok) return;
+      const d = await r.json();
+      const free = !!d.full_plan || (d.unlocked_guides || []).includes(routeData.lock_id);
+      try {
+        if (d.full_plan && d.premium_until) localStorage.setItem('bdm_fullplan_until', String(new Date(d.premium_until).getTime()));
+        if (free) localStorage.setItem('bdm_unl_' + routeData.lock_id, '1');
+      } catch (_) {}
+      if (window._itinViewRoute !== routeData) return;   // ya cerró o cambió de guía
+      if (free) { _refreshItinInPlace(routeData, docId); return; }
+      pay.bonus = d.bonus_guides || 0;
+      if (d.prices && d.prices.guia && d.prices.guia.amount) pay.priceCents = d.prices.guia.amount;
+      const card = document.querySelector('#itin-cards-container .itin-card-locked');
+      if (card) mapaItinerario._paintPayButton(card, pay);
+    } catch (_) {}
   }
 
   // Avance para quien no tiene cuenta: el día 1 entero; si la ruta es de un solo día,

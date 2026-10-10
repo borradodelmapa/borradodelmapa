@@ -1013,6 +1013,19 @@ const PLAN_LIMITS = {
   anual:        { chatPerDay: 100, guidesPerDay: 3, editsPerMonth: 300, maxStops: 50, budgetEur: 20 },
   anual_oferta: { chatPerDay: 100, guidesPerDay: 3, editsPerMonth: 300, maxStops: 50, budgetEur: 16 },
 };
+// GUÍAS A MEDIAS (10 oct 2026, Paco): sin plan largo, la 1ª guía es entera y las siguientes se pueden crear pero se ven a medias
+// (día 1 + tarjeta bloqueada) hasta pagar 9,99 € ("guía suelta" = desbloquear UNA guía) o contratar trimestral/anual.
+// Freno de coste (§8): como máximo FREE_GUIDES_PER_DAY guías al día por cuenta sin plan largo, además del presupuesto mensual.
+const FREE_GUIDES_PER_DAY = 2;
+const FULL_PLANS = { trimestral: 1, anual: 1, anual_oferta: 1 };   // planes que ven TODAS sus guías enteras
+function hasFullPlan(authUser) { return !!(authUser && authUser.premium_active && FULL_PLANS[planOf(authUser)]); }
+function unlockedKey(uid) { return 'unlocked:' + uid; }
+// ¿Esta guía a medias ya está desbloqueada para el usuario? (plan largo, o su lock_id en KV `unlocked:<uid>`, que solo escribe el Worker)
+async function isGuideUnlocked(env, authUser, lockId) {
+  if (hasFullPlan(authUser)) return true;
+  const set = await usageRead(env, unlockedKey(authUser.uid));
+  return !!(set && Array.isArray(set.ids) && lockId && set.ids.includes(lockId));
+}
 // Plan del usuario. Premium antiguo sin dato en KV (pagó antes del plan nuevo) → como trimestral.
 // Un plan 'prueba' guardado en KV (concedido durante unos minutos el 3 oct 2026, antes de quitar la prueba) vale como guía suelta hasta que caduque.
 function planOf(authUser) {
@@ -1078,8 +1091,9 @@ async function usageWrite(env, key, obj, ttl) {
 
 // kind: 'chat' | 'guide' | 'edit'. Devuelve { ok: true } o { ok: false, limit, message }.
 // Modelo de planes nuevo (3 oct 2026): ver PLAN_LIMITS / planOf.
-async function usageGate(env, authUser, kind) {
+async function usageGate(env, authUser, kind, opts) {
   try {
+    opts = opts || {};
     const plan = planOf(authUser);
     const L = PLAN_LIMITS[plan];
     const premium = !!authUser.premium_active;
@@ -1105,6 +1119,13 @@ async function usageGate(env, authUser, kind) {
       return { ok: true, today };   // today = mensajes de hoy ANTES de este (lo usa el Perfil IA)
     }
     const isGuide = kind === 'guide';
+    // Guía "a medias": permitida (web) si no hay guía entera que gastar, hasta FREE_GUIDES_PER_DAY al día. Devuelve la puerta del gate.
+    const _aMedias = (msgSinCupo) => {
+      if (!opts.allowLocked) return { ok: false, limit: 'guide', message: msgSinCupo };
+      const hoy = (month.gdays && month.gdays[usageToday()]) || 0;
+      if (hoy >= FREE_GUIDES_PER_DAY) return { ok: false, limit: 'guide', message: 'Hoy ya has creado ' + FREE_GUIDES_PER_DAY + ' guías, que es el máximo diario del plan gratis. Mañana puedes crear más, o desbloquea las que ya tienes. 💛' };
+      return { ok: true, locked: true };
+    };
     if (premium) {
       if (isGuide) {
         if (L.guidesPerDay) {   // trimestral / anual: sin tope mensual, solo antiabuso diario
@@ -1115,7 +1136,7 @@ async function usageGate(env, authUser, kind) {
         // guia: el cupo mensual es 0 y la guía sale de premium_bonus_guides
         if ((month.guides || 0) >= (L.guidesPerMonth || 0)) {
           if ((authUser.bonus_guides || 0) > 0) return { ok: true };
-          return { ok: false, limit: 'guide', message: 'Tu guía suelta ya está usada. Otra guía son 9,99 €, o pásate al trimestral o al anual. ' + verPlanes };
+          return _aMedias('Tu guía suelta ya está usada. Otra guía son 9,99 €, o pásate al trimestral o al anual. ' + verPlanes);
         }
         return { ok: true };
       }
@@ -1133,9 +1154,8 @@ async function usageGate(env, authUser, kind) {
     if (used >= cap) {
       // Guías regaladas (p. ej. "gracias por avisar de un fallo", 26 sept 2026) valen también sin Premium
       if (isGuide && (authUser.bonus_guides || 0) > 0) return { ok: true };
-      return { ok: false, limit: kind, message: isGuide
-        ? 'Ya has usado tu guía gratis. Para crear más: guía suelta (9,99 €), trimestral o anual. ' + verPlanes
-        : 'Para seguir editando tu guía necesitas Premium. ' + verPlanes };
+      if (isGuide) return _aMedias('Ya has usado tu guía gratis. Para crear más: guía suelta (9,99 €), trimestral o anual. ' + verPlanes);
+      return { ok: false, limit: kind, message: 'Para seguir editando tu guía necesitas Premium. ' + verPlanes };
     }
     return { ok: true };
   } catch (_) { return { ok: true }; }
@@ -14056,8 +14076,31 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           prices: PREMIUM_PLANS,
           today_msgs: (month.days && month.days[usageToday()]) || 0,
           bonus_guides: authUser.bonus_guides || 0,
+          full_plan: hasFullPlan(authUser),                                          // trimestral/anual: ve todas sus guías enteras
+          unlocked_guides: ((await usageRead(env, unlockedKey(authUser.uid))) || {}).ids || [],
           month, total,
         }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
+    // ─── POST /unlock-guide — gasta una guía comprada (premium_bonus_guides) para abrir ENTERA una guía a medias ───
+    if (request.method === 'POST' && url.pathname === '/unlock-guide') {
+      try {
+        const authUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+        const body = await request.json().catch(() => ({}));
+        const lockId = String(body.lock_id || '').replace(/[^a-z0-9]/gi, '').slice(0, 20);
+        if (!lockId) return new Response(JSON.stringify({ error: 'lock_id_required' }), { status: 400, headers: FW_CORS });
+        if (await isGuideUnlocked(env, authUser, lockId)) return new Response(JSON.stringify({ ok: true, already: true }), { headers: FW_CORS });
+        if ((authUser.bonus_guides || 0) <= 0) return new Response(JSON.stringify({ error: 'no_credit' }), { status: 402, headers: FW_CORS });
+        const set = (await usageRead(env, unlockedKey(authUser.uid))) || {};
+        const ids = Array.isArray(set.ids) ? set.ids : [];
+        ids.push(lockId);
+        await usageWrite(env, unlockedKey(authUser.uid), { ids: ids.slice(-300) });
+        await firestoreAdminPatch(env, 'users/' + authUser.uid, { premium_bonus_guides: { integerValue: String(Math.max(0, authUser.bonus_guides - 1)) } });
+        return new Response(JSON.stringify({ ok: true, bonus_guides: Math.max(0, authUser.bonus_guides - 1) }), { headers: FW_CORS });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
       }
@@ -14458,7 +14501,11 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     //   edit  = "Añadir a la guía" o edición de la ruta abierta → consume 1 cambio si sale bien
     //   chat  = todo lo demás → cuenta 1 mensaje del día
     const _usageKind = (guidedMapStage && !mergeIntoRoute) ? 'guide' : ((mergeIntoRoute || _editingRoute) ? 'edit' : 'chat');
-    const _usageGate = await usageGate(env, authUser, _usageKind);
+    let _usageGate = await usageGate(env, authUser, _usageKind, { allowLocked: true });
+    // Una guía a medias no se edita con Salma hasta desbloquearla (si no, la ruta que devuelve la edición saldría entera y sin candado).
+    if (_usageGate.ok && _usageKind === 'edit' && currentRoute && currentRoute.locked && !(await isGuideUnlocked(env, authUser, currentRoute.lock_id))) {
+      _usageGate = { ok: false, limit: 'locked', message: 'Esta guía está a medias. Desbloquéala para poder cambiarla con Salma. Elige tu plan en Perfil → Mi plan.' };
+    }
     if (!_usageGate.ok) {
       const _blockedSse = `data: ${JSON.stringify({ t: _usageGate.message })}\n\ndata: ${JSON.stringify({ done: true, reply: _usageGate.message, route: null, limit_reached: _usageGate.limit })}\n\n`;
       return new Response(_blockedSse, {
@@ -16332,6 +16379,11 @@ REGLAS:
         // ── Uso (paso 3): si la petición entrega una ruta por un camino no previsto (edición
         // reescrita entera, generación fuera del botón), también consume; luego se apunta todo una vez.
         if (route && !_usageConsume) _usageConsume = (_usageKind === 'edit' || _opsApplied) ? 'edit' : 'guide';
+        // Guía a medias: el Worker la marca (lock_id lo apunta el desbloqueo en KV); la app enseña el día 1 y la tarjeta de pago.
+        if (route && _usageConsume === 'guide' && _usageGate.locked) {
+          route.locked = true;
+          route.lock_id = crypto.randomUUID().replace(/-/g, '').slice(0, 14);
+        }
         _flushUsage();
 
         // ── Sitios marcados [[ ]]: fuera las fotos que no son de un sitio marcado; el usuario ve negritas.

@@ -8,12 +8,23 @@
 
 | Plan | Precio (pago único) | Qué incluye |
 |---|---|---|
-| **Gratis** (para siempre) | 0 € | 5 mensajes al día con Salma + **1 guía** de por vida (hasta 35 paradas) + 2 cambios en ella + todo lo que no usa IA (destinos, blog, Explorar…). |
+| **Gratis** (para siempre) | 0 € | 5 mensajes al día con Salma + **1 guía entera** de por vida (hasta 35 paradas) + 2 cambios en ella + **guías ilimitadas a medias** (máx. 2 al día; se abren con 9,99 €) + todo lo que no usa IA (destinos, blog, Explorar…). |
 | **Guía suelta** | **9,99 €** | 1 guía con mapa de hasta 50 paradas + chat 30 días (20 mensajes/día). |
 | **Trimestral** | **19,99 €** (3 meses) | Premium sin límites a la vista. |
 | **Anual** | **49,99 €** (12 meses) | Premium sin límites a la vista. **Oferta de salida: 39,99 €** (`anual_oferta`, se enseña UNA vez al cerrar el modal sin comprar). |
 
 Premium (trimestral/anual) solo tiene un **techo antiabuso**: 100 mensajes/día, 3 guías/día, 50 paradas por guía, 300 cambios/mes.
+
+## Guías a medias (10 oct 2026, decidido con Paco; pendiente de desplegar y probar)
+Sin plan largo (trimestral/anual): la **1ª guía es entera para siempre**; de la 2ª en adelante se **pueden crear** (máx. **2 guías al día**,
+`FREE_GUIDES_PER_DAY`, además del presupuesto de 1 €/mes) pero **se ven a medias**: día 1 + tarjeta bloqueada con botón de pago.
+- El Worker marca la ruta con `locked: true` + `lock_id` (en `usageGate` → `{ok, locked}`, y al entregar la ruta en el chat). WhatsApp NO usa esto (sigue con el corte de siempre).
+- **Desbloquear UNA guía = guía suelta (9,99 €)**: la compra suma +1 a `premium_bonus_guides` como siempre; en la tarjeta bloqueada, "Desbloquear con tu guía" llama a **POST `/unlock-guide`** `{lock_id}`, que gasta 1 y apunta el `lock_id` en **KV `unlocked:<uid>`** (solo lo escribe el Worker). Sin guía comprada, el botón abre los planes.
+- **Trimestral/anual (`hasFullPlan`)** ven todas sus guías enteras sin gastar nada. `/usage` devuelve `full_plan` y `unlocked_guides`.
+- Cliente: `mapa-itinerario.js` (`openItinerarioView` → modo candado, `_checkLock`, `_createLockedCard` con `preview.pay`). Lo verificado se cachea en localStorage (`bdm_unl_<id>`, `bdm_fullplan_until`).
+- Una guía a medias no se edita con Salma (el Worker rechaza la edición con `limit: 'locked'`) y no se publica como guía pública (`guardarGuiaDirecto`).
+- **Límite conocido (v1):** el candado es de presentación. La ruta entera viaja al móvil y `locked` vive en el documento del usuario; quien sepa tocar su propio documento o la red puede verla. No afecta al coste (la guía ya está pagada al generarla). Cerrarlo del todo = no enviar las paradas del día 2 en adelante hasta pagar (trabajo aparte).
+- Productos de Play/Stripe: NO cambia ninguno (`guia` sigue siendo 9,99 €).
 
 ## Presupuesto de gasto por cuenta (invisible, `ACCOUNT_BUDGET_ON`)
 Coste de Claude (precio de lista) al mes por cuenta: gratis 1 € · guía suelta 4 € · trimestral 8 € · anual 20 € (oferta 16 €).
