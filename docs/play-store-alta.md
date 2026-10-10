@@ -31,7 +31,7 @@
   en Play Console con SOLO «ver información financiera» + «gestionar pedidos», limitada a la app (no dar permisos
   totales). API Android Publisher habilitada en el proyecto de Google Cloud `borradodelmapa-85257`.
 - **Probadores de licencia:** lista «BORRADO DEL MAPA» con `paco.defoto@gmail.com` (Ajustes → Licencia para testing).
-- **Productos únicos (Monetizar con Play → Productos → Productos únicos): ❌ SIN CREAR.** Google devuelve «Se ha
+- **Productos únicos (Monetizar con Play → Productos → Productos únicos): ❌ SIN CREAR (11 oct: sigue igual, códigos 7E2D78D2 y 7AFA309A; mensaje a soporte de Play preparado).** Google devuelve «Se ha
   producido un error inesperado (7E2D78D2)» al guardar (también en incógnito), probablemente retraso tras crear el
   perfil de pagos. Reintentar; si persiste, escribir a soporte de Play con el código. Hay que crear 4 (ID exacto,
   no se puede cambiar ni reutilizar): `guia` 9,99 € · `trimestral` 19,99 € · `anual` 49,99 € · `anual_oferta` 39,99 €
