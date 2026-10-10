@@ -1016,7 +1016,7 @@ const PLAN_LIMITS = {
 // GUÍAS A MEDIAS (10 oct 2026, Paco): sin plan largo, la 1ª guía es entera y las siguientes se pueden crear pero se ven a medias
 // (día 1 + tarjeta bloqueada) hasta pagar 9,99 € ("guía suelta" = desbloquear UNA guía) o contratar trimestral/anual.
 // Freno de coste (§8): como máximo FREE_GUIDES_PER_DAY guías al día por cuenta sin plan largo, además del presupuesto mensual.
-const FREE_GUIDES_PER_DAY = 2;
+const FREE_GUIDES_PER_DAY = 3;
 const FULL_PLANS = { trimestral: 1, anual: 1, anual_oferta: 1 };   // planes que ven TODAS sus guías enteras
 function hasFullPlan(authUser) { return !!(authUser && authUser.premium_active && FULL_PLANS[planOf(authUser)]); }
 function unlockedKey(uid) { return 'unlocked:' + uid; }

@@ -8,7 +8,7 @@
 
 | Plan | Precio (pago único) | Qué incluye |
 |---|---|---|
-| **Gratis** (para siempre) | 0 € | 5 mensajes al día con Salma + **1 guía entera** de por vida (hasta 35 paradas) + 2 cambios en ella + **guías ilimitadas a medias** (máx. 2 al día; se abren con 9,99 €) + todo lo que no usa IA (destinos, blog, Explorar…). |
+| **Gratis** (para siempre) | 0 € | 5 mensajes al día con Salma + **1 guía entera** de por vida (hasta 35 paradas) + 2 cambios en ella + **guías ilimitadas a medias** (máx. 3 al día; se abren con 9,99 €) + todo lo que no usa IA (destinos, blog, Explorar…). |
 | **Guía suelta** | **9,99 €** | 1 guía con mapa de hasta 50 paradas + chat 30 días (20 mensajes/día). |
 | **Trimestral** | **19,99 €** (3 meses) | Premium sin límites a la vista. |
 | **Anual** | **49,99 €** (12 meses) | Premium sin límites a la vista. **Oferta de salida: 39,99 €** (`anual_oferta`, se enseña UNA vez al cerrar el modal sin comprar). |
@@ -16,7 +16,7 @@
 Premium (trimestral/anual) solo tiene un **techo antiabuso**: 100 mensajes/día, 3 guías/día, 50 paradas por guía, 300 cambios/mes.
 
 ## Guías a medias (10 oct 2026, decidido con Paco; pendiente de desplegar y probar)
-Sin plan largo (trimestral/anual): la **1ª guía es entera para siempre**; de la 2ª en adelante se **pueden crear** (máx. **2 guías al día**,
+Sin plan largo (trimestral/anual): la **1ª guía es entera para siempre**; de la 2ª en adelante se **pueden crear** (máx. **3 guías al día**,
 `FREE_GUIDES_PER_DAY`, además del presupuesto de 1 €/mes) pero **se ven a medias**: día 1 + tarjeta bloqueada con botón de pago.
 - El Worker marca la ruta con `locked: true` + `lock_id` (en `usageGate` → `{ok, locked}`, y al entregar la ruta en el chat). WhatsApp NO usa esto (sigue con el corte de siempre).
 - **Desbloquear UNA guía = guía suelta (9,99 €)**: la compra suma +1 a `premium_bonus_guides` como siempre; en la tarjeta bloqueada, "Desbloquear con tu guía" llama a **POST `/unlock-guide`** `{lock_id}`, que gasta 1 y apunta el `lock_id` en **KV `unlocked:<uid>`** (solo lo escribe el Worker). Sin guía comprada, el botón abre los planes.
