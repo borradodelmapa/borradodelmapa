@@ -1198,3 +1198,12 @@ details[open] > .destino-acc-header::after {
   }
 
 }
+
+/* h2 dentro del summary del acordeón: hereda el aspecto del summary (SEO: encabezados reales) */
+.destino-acc-header .destino-acc-h2 { display: inline; margin: 0; padding: 0; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; }
+/* Más destinos en el país */
+.destino-related { margin: 28px 0 8px; }
+.destino-related-title { font-size: 1.1rem; margin: 0 0 10px; }
+.destino-related-list { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.destino-related-list a { display: inline-block; padding: 8px 12px; border: 1px solid currentColor; text-decoration: none; color: inherit; }
+.destino-related-all { font-weight: 700; color: #F4630B; text-decoration: none; }

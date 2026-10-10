@@ -72,7 +72,7 @@ const TYPE_BADGES = {
 // que ya usa el resto de la app (ver CLAUDE.md, checklist de despliegue),
 // para que un visitante real no se quede con el CSS viejo en caché tras un
 // cambio.
-const DESTINOS_CSS_V = 2;
+const DESTINOS_CSS_V = 3;
 // Igual para styles.css (el de la app, que trae el menú de abajo): antes iba SIN ?v=
 // y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
 // número que styles.css?v= en index.html — subirlo a la vez.
@@ -299,14 +299,17 @@ function buildSchemaOrg(dest, countryName, slug, faqs) {
 
 // ── HTML Template ────────────────────────────────────────────
 
-function buildHTML(dest, countryName, countryCode, slug, route, nav) {
+function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const faqs = generateFAQs(dest, countryName);
   const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs);
   const budget = estimateBudget(dest);
   const minPrice = extractMinPrice(dest.donde_dormir?.mochilero);
   const coords = COORDS[`${countryCode}:${dest.id}`] || null;
-  const pageTitle = `Viajar a ${dest.nombre}: presupuesto, qué ver y mejor época · Borradodelmapa`;
-  const metaDesc = `Guía para viajar a ${dest.nombre} (${countryName})${minPrice ? ` desde ${minPrice}€/noche` : ''}. ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Planifica tu ruta con IA.`;
+  // Título único por país (antes había nombres repetidos: Mar Muerto, Trípoli…) y corto
+  // para que Google no lo corte (~60). La marca va en og:site_name, no en el título.
+  const pageTitle = `Viajar a ${dest.nombre} (${countryName}): guía y presupuesto`;
+  const metaFull = `Guía para viajar a ${dest.nombre} (${countryName})${minPrice ? ` desde ${minPrice}€/noche` : ''}. ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Planifica tu ruta con IA.`;
+  const metaDesc = metaFull.length > 158 ? metaFull.slice(0, 155).replace(/s+S*$/, '') + '…' : metaFull;
   const canonical = `${DOMAIN}/destinos/${slug}.html`;
   const security = dest.alerta_seguridad
     ? `<span class="destino-security-warn">⚠️ Precaución</span>`
@@ -471,7 +474,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
-        <summary class="destino-acc-header">✈️ Cómo llegar</summary>
+        <summary class="destino-acc-header"><h2 class="destino-acc-h2">✈️ Cómo llegar</h2></summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.como_llegar)}</p>
           <a class="destino-cta-subtle" href="/?go=chat">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
@@ -479,7 +482,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">🛏️ Dónde dormir</summary>
+        <summary class="destino-acc-header"><h2 class="destino-acc-h2">🛏️ Dónde dormir</h2></summary>
         <div class="destino-acc-body">
           <div class="destino-dormir-grid">
             <div class="destino-dormir-card">
@@ -500,7 +503,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">🎯 Qué hacer</summary>
+        <summary class="destino-acc-header"><h2 class="destino-acc-h2">🎯 Qué hacer</h2></summary>
         <div class="destino-acc-body">
           <ul class="destino-list">
 ${activitiesHTML}
@@ -510,34 +513,43 @@ ${activitiesHTML}
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">🍽️ Dónde comer</summary>
+        <summary class="destino-acc-header"><h2 class="destino-acc-h2">🍽️ Dónde comer</h2></summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.donde_comer)}</p>
         </div>
       </details>
 
       <details class="destino-acc-item destino-highlight">
-        <summary class="destino-acc-header">💡 Consejo local</summary>
+        <summary class="destino-acc-header"><h2 class="destino-acc-h2">💡 Consejo local</h2></summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.consejo_local)}</p>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">🌧️ Plan B si llueve</summary>
+        <summary class="destino-acc-header"><h2 class="destino-acc-h2">🌧️ Plan B si llueve</h2></summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.plan_b_lluvia)}</p>
         </div>
       </details>
 
       <details class="destino-acc-item">
-        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <summary class="destino-acc-header"><h2 class="destino-acc-h2">❓ Preguntas frecuentes</h2></summary>
         <div class="destino-acc-body">
           ${faqsHTML}
         </div>
       </details>
 
     </div>
+
+    <!-- MÁS DESTINOS EN EL PAÍS — enlazado interno -->
+    ${siblings && siblings.length ? `<nav class="destino-related" aria-label="Más destinos en ${escapeHTML(countryName)}">
+      <h2 class="destino-related-title">Más destinos en ${escapeHTML(countryName)}</h2>
+      <ul class="destino-related-list">
+        ${siblings.map(x => `<li><a href="/destinos/${x.slug}.html">${escapeHTML(x.name)}</a></li>`).join('')}
+      </ul>
+      <a class="destino-related-all" href="/destinos/${countrySlug}.html">Ver todos los destinos de ${escapeHTML(countryName)} →</a>
+    </nav>` : ''}
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -879,6 +891,17 @@ ${urls}
 </urlset>`;
 }
 
+// Hasta 6 destinos hermanos del mismo país (los siguientes de la lista, dando la vuelta),
+// para que cada página enlace a otras y ninguna quede casi huérfana.
+function siblingsOf(list, i, countrySlug) {
+  const out = [];
+  for (let k = 1; k < list.length && out.length < 6; k++) {
+    const d = list[(i + k) % list.length];
+    out.push({ slug: `${d.id}-${countrySlug}`, name: d.nombre });
+  }
+  return out;
+}
+
 // ── Main ─────────────────────────────────────────────────────
 
 async function main() {
@@ -936,7 +959,7 @@ async function main() {
         };
         if (!dryRun && !indexOnly && !sitemapOnly) {
           const route = loadRoute(dest.id, countrySlug);
-          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route, nav));
+          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route, nav, siblingsOf(validDests, i, countrySlug), countrySlug));
         }
         allSitemapUrls.push({ url: `${DOMAIN}/destinos/${slug}.html`, priority: 0.8, freq: 'monthly' });
         totalDest++;

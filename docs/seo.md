@@ -22,7 +22,8 @@
 ### 3. Destinos (1793 páginas)
 - `/destinos/` con páginas HTML estáticas por destino
 - Generadas con `scripts/build-destinos.js` desde KV nivel 2
-- 301 en sitemap (estratégicos), resto indexable pero fuera del sitemap
+- **Estado (oct 2026): TODAS en `noindex,follow`** (`DESTINOS_ROBOTS`) y fuera de `sitemap.xml`; `sitemap-destinos.xml` (1.794 URLs) existe pero no está enlazado. Lanzamiento gradual previsto (ver abajo).
+- 10 oct 2026 (fase 2 SEO): título único `Viajar a X (País): guía y presupuesto`, descripción ≤158, `<h2>` reales en las secciones y bloque "Más destinos en <país>" (6 enlaces + país). Mediana 611 palabras; 163 destinos <400 y 163 sin FAQ (países) pendientes de enriquecer.
 - Chips featured en welcome controlados por Paco
 
 ### Pipeline SEO (`scripts/`)
@@ -33,7 +34,7 @@
 
 ### Sitemap
 - `sitemap.xml` → sitemap index en el dominio
-- `sitemap-static.xml` (2 URLs), `sitemap-blog.xml` (13 URLs), `sitemap-destinos.xml` (301 URLs)
+- `sitemap-static.xml` (2 URLs), `sitemap-blog.xml` (13 URLs), `sitemap-destinos.xml` (destinos NO enlazado mientras sean noindex)
 - Worker sirve `sitemap-guides.xml` con guías públicas dinámicas
 - `robots.txt` → apunta a `borradodelmapa.com/sitemap.xml`
 
