@@ -183,6 +183,7 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
 | CSS, design system, pantallas | `docs/ui-design.md` |
 | SEO (guías públicas, blog, destinos, sitemap) | `docs/seo.md` |
 | Premium, límites, precios | `docs/negocio-premium.md` |
+| Google Play: alta, paquete .aab, claves de firma, Play Billing, productos (estado al día) | `docs/play-store-alta.md` |
 | "¿Esto ya existe?" — inventario de features | `docs/features-inventario.md` |
 | WhatsApp (F5.x, login, tools, límites) | `docs/whatsapp-f5.md` + `docs/pendientes-cabecera-y-casos.md` |
 | Pendientes antiguos (crítico/importante/deuda) y sus detalles técnicos | `docs/pendientes-criticos-e-importantes.md` |
