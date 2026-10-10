@@ -1207,3 +1207,8 @@ details[open] > .destino-acc-header::after {
 .destino-related-list { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .destino-related-list a { display: inline-block; padding: 8px 12px; border: 1px solid currentColor; text-decoration: none; color: inherit; }
 .destino-related-all { font-weight: 700; color: #F4630B; text-decoration: none; }
+
+/* Ruta del destino: enlace a la app (mismo diseño de ruta) y días bloqueados (§10) */
+.destino-route-cta { display: flex; flex-direction: column; gap: 4px; margin: 0 0 14px; padding: 16px; background: #F4630B; color: #000; text-decoration: none; }
+.destino-route-cta strong { font-size: 1.15rem; }
+.destino-day-locked { display: block; margin: 8px 0; padding: 14px 16px; border: 1px dashed currentColor; color: inherit; text-decoration: none; opacity: .85; }

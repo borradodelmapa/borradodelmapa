@@ -72,7 +72,7 @@ const TYPE_BADGES = {
 // que ya usa el resto de la app (ver CLAUDE.md, checklist de despliegue),
 // para que un visitante real no se quede con el CSS viejo en caché tras un
 // cambio.
-const DESTINOS_CSS_V = 3;
+const DESTINOS_CSS_V = 4;
 // Igual para styles.css (el de la app, que trae el menú de abajo): antes iba SIN ?v=
 // y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
 // número que styles.css?v= en index.html — subirlo a la vez.
@@ -83,6 +83,11 @@ const APP_CSS_V = 182;
 // se sacó sitemap-destinos.xml de sitemap.xml. Para lanzarlas: volver a
 // 'index,follow,max-snippet:-1', regenerar y devolver sitemap-destinos.xml a sitemap.xml.
 const DESTINOS_ROBOTS = 'noindex,follow';
+// Lanzamiento GRADUAL (Paco, 10 oct 2026: "quiero que se indexen"): solo las páginas de
+// scripts/destinos-indexables.json (slugs, sin .html) salen con index; el resto sigue noindex y
+// fuera del sitemap. Para abrir otra tanda: añadir slugs al JSON, regenerar y subir.
+const INDEXABLES = new Set(JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-indexables.json'), 'utf-8')).slugs);
+const robotsFor = slug => INDEXABLES.has(slug) ? 'index,follow,max-snippet:-1,max-image-preview:large' : DESTINOS_ROBOTS;
 
 // Logo — mismo wordmark y clases que el index de la app (app.js:_renderChatEmpty,
 // ".ce-top .ce-brand"), como enlace estático a "/" (ahí no hay JS de estado que
@@ -176,7 +181,7 @@ function loadRoute(destId, countrySlug) {
 }
 
 // Genera HTML estático del itinerario (indexable por Google)
-function buildStaticItinerary(route) {
+function buildStaticItinerary(route, appSlug) {
   if (!route || !route.stops || route.stops.length === 0) return '';
 
   // Agrupar stops por día
@@ -190,11 +195,18 @@ function buildStaticItinerary(route) {
 
   const days = Object.keys(byDay).sort((a, b) => Number(a) - Number(b));
   let html = '<div class="destino-itinerary-static">\n';
-  html += '  <h2 class="destino-h2">🗺️ Itinerario completo</h2>\n';
+  html += '  <h2 class="destino-h2">🗺️ Itinerario</h2>\n';
+  // Mismo diseño de ruta que la app (CLAUDE.md §10): mapa y fotos se ven en la app.
+  html += `  <a class="destino-route-cta" href="/?ruta=${appSlug}-ruta"><strong>Ver esta ruta con mapa y fotos</strong><span>${days.length} días · ${route.stops.length} paradas · gratis →</span></a>\n`;
 
   for (const dayNum of days) {
     const { stops, day_title } = byDay[dayNum];
-    html += `  <details class="destino-acc-item">\n`;
+    // Sin cuenta se ve el día 1 completo; el resto, bloqueado (§10)
+    if (dayNum !== days[0]) {
+      html += `  <a class="destino-day-locked" href="/?ruta=${appSlug}-ruta">🔒 Día ${dayNum} — ${escapeHTML(day_title)} <span class="destino-day-stops">${stops.length} paradas · con cuenta gratis</span></a>\n`;
+      continue;
+    }
+    html += `  <details class="destino-acc-item" open>\n`;
     html += `    <summary class="destino-acc-header">Día ${dayNum} — ${escapeHTML(day_title)} <span class="destino-day-stops">${stops.length} paradas</span></summary>\n`;
     html += `    <div class="destino-acc-body">\n`;
     for (const stop of stops) {
@@ -336,7 +348,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   <meta name="description" content="${escapeHTML(metaDesc)}">
   <meta name="theme-color" content="#050505">
   <link rel="icon" href="/favicon.ico" sizes="any">
-  <meta name="robots" content="${DESTINOS_ROBOTS}">
+  <meta name="robots" content="${robotsFor(slug)}">
   <link rel="canonical" href="${canonical}">
 
   <meta property="og:type" content="article">
@@ -449,26 +461,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       </div>
     </div>
 
-    ${route ? `
-    <!-- ITINERARIO COMPLETO -->
-    ${buildStaticItinerary(route)}
-
-    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
-    <div id="chat-area"></div>
-    <script>
-    window.__ROUTE_DATA = ${JSON.stringify(route)};
-    </script>
-    <script src="/guide-renderer.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
-        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
-        var staticIt = document.querySelector('.destino-itinerary-static');
-        if (staticIt) staticIt.style.display = 'none';
-      }
-    });
-    </script>
-    ` : ''}
+    ${route ? buildStaticItinerary(route, slug) : ''}
 
     <!-- Más info en acordeón -->
     <div class="destino-accordion">
@@ -659,7 +652,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   <meta name="description" content="${escapeHTML(metaDesc)}">
   <meta name="theme-color" content="#050505">
   <link rel="icon" href="/favicon.ico" sizes="any">
-  <meta name="robots" content="${DESTINOS_ROBOTS}">
+  <meta name="robots" content="${robotsFor(countrySlug)}">
   <link rel="canonical" href="${canonical}">
 
   <meta property="og:type" content="article">
@@ -790,7 +783,7 @@ function buildIndexHTML(countriesByContinent) {
   <meta name="description" content="${escapeHTML(metaDesc)}">
   <meta name="theme-color" content="#050505">
   <link rel="icon" href="/favicon.ico" sizes="any">
-  <meta name="robots" content="${DESTINOS_ROBOTS}">
+  <meta name="robots" content="${robotsFor('index')}">
   <link rel="canonical" href="${DOMAIN}/destinos/">
 
   <meta property="og:type" content="website">
@@ -1001,7 +994,7 @@ async function main() {
   // o cuando se pide explícitamente con --sitemap-only, para que una prueba parcial no
   // lo toque sin querer.
   if (!dryRun && !onlyCountry && !indexOnly && allSitemapUrls.length > 0) {
-    fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls));
+    fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls.filter(u => INDEXABLES.has(u.url.replace(`${DOMAIN}/destinos/`, '').replace(/.html$/, '') || 'index'))));
     console.log(`   🗺️ Sitemap: ${allSitemapUrls.length} URLs`);
   } else if (onlyCountry || indexOnly) {
     console.log(`   🗺️ Sitemap: sin tocar (solo se regenera en una pasada completa)`);

@@ -1,0 +1,17 @@
+{
+ "nota": "Tanda 1 (10 oct 2026): Nepal completo + índice /destinos/. Añadir slugs sin .html; \"index\" = destinos/index.html",
+ "slugs": [
+  "index",
+  "bhaktapur-nepal",
+  "chitwan-nepal",
+  "circuito-annapurna-nepal",
+  "everest-base-camp-nepal",
+  "kathmandu-nepal",
+  "langtang-nepal",
+  "lumbini-nepal",
+  "nepal",
+  "patan-nepal",
+  "pokhara-nepal",
+  "upper-mustang-nepal"
+ ]
+}

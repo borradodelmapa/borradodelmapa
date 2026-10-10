@@ -22,7 +22,7 @@
 ### 3. Destinos (1793 páginas)
 - `/destinos/` con páginas HTML estáticas por destino
 - Generadas con `scripts/build-destinos.js` desde KV nivel 2
-- **Estado (oct 2026): TODAS en `noindex,follow`** (`DESTINOS_ROBOTS`) y fuera de `sitemap.xml`; `sitemap-destinos.xml` (1.794 URLs) existe pero no está enlazado. Lanzamiento gradual previsto (ver abajo).
+- **Estado (10 oct 2026): lanzamiento por tandas** — solo las de `scripts/destinos-indexables.json` (tanda 1: Nepal + índice) salen con `index` y entran en `sitemap-destinos.xml` (ya enlazado en `sitemap.xml`); el resto sigue `noindex,follow`. Plan: `docs/seo-plan-minimo.md`. ANTES: **TODAS en `noindex,follow`** (`DESTINOS_ROBOTS`) y fuera de `sitemap.xml`; `sitemap-destinos.xml` (1.794 URLs) existe pero no está enlazado. Lanzamiento gradual previsto (ver abajo).
 - 10 oct 2026 (fase 2 SEO): título único `Viajar a X (País): guía y presupuesto`, descripción ≤158, `<h2>` reales en las secciones y bloque "Más destinos en <país>" (6 enlaces + país). Mediana 611 palabras; 163 destinos <400 y 163 sin FAQ (países) pendientes de enriquecer.
 - Chips featured en welcome controlados por Paco
 
