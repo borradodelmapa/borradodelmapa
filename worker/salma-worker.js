@@ -10580,6 +10580,35 @@ export default {
       });
     }
 
+    // ─── ENDPOINT GET /admin/guias-publicas (lista para el panel: sin gastar nada, solo lee Firestore) ───
+    if (request.method === 'GET' && url.pathname === '/admin/guias-publicas') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      try {
+        const token = await getServiceAccountToken(env);
+        const res = await fetch(`${FIRESTORE_BASE}/public_guides?pageSize=300`, {
+          headers: { 'Authorization': 'Bearer ' + token },
+          signal: AbortSignal.timeout(15000),
+        });
+        if (!res.ok) throw new Error('Firestore → ' + res.status);
+        const j = await res.json();
+        const sv = (f, k) => (f && f[k] && f[k].stringValue) || '';
+        const guias = (j.documents || []).map(d => {
+          const f = d.fields || {};
+          let stops = [];
+          try { stops = (JSON.parse(sv(f, 'itinerarioIA')).stops) || []; } catch (_) {}
+          const dias = new Set(stops.map(s => s.day || 1)).size;
+          const palabras = stops.reduce((n, s) => n + String(s.narrative || s.description || '').split(/\s+/).filter(Boolean).length, 0);
+          return { slug: d.name.split('/').pop(), nombre: sv(f, 'nombre'), dueno: sv(f, 'owner_name'), dias, paradas: stops.length, palabras, portada: !!sv(f, 'cover_image') };
+        });
+        return new Response(JSON.stringify({ total: guias.length, guias }), { status: 200, headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: String(e.message || e).slice(0, 160) }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /admin/guias-publicas/eliminar (limpieza en bloque de guías públicas) ───
     // 11 oct 2026 (Paco: "una herramienta para eliminarlas en bloque"). SOLO borra documentos
     // `public_guides/{slug}` de los slugs que se le pasan, uno a uno y por nombre exacto: nunca
