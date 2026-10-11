@@ -89,9 +89,12 @@ function routeOf(g) {
 // (vía el proxy /photo del Worker, que la cachea en R2 — solo la 1ª vez puede costar
 // una foto de Google Places); si tampoco, la imagen genérica de la web.
 function imageOf(g, r) {
-  if (g.cover) return g.cover;
-  const st = (r.stops || []).find(s => s.photo_ref);
-  if (st) return `${API}/photo?ref=${encodeURIComponent(st.photo_ref)}`;
+  // Las portadas de Google (lh3.googleusercontent.com) devuelven 403 a WhatsApp/redes: no valen
+  // para og:image. Solo se usa la portada si es nuestra (miniatura del mapa en R2 u otra propia).
+  if (g.cover && !/googleusercontent\.com|googleapis\.com/.test(g.cover)) return g.cover;
+  // Ya no se usa el photo_ref de la primera parada: sus referencias caducan (404 en las guías de Nepal)
+  // y pedirlas al Worker puede gastar Google Places. Sin portada propia → imagen de la marca; en cuanto
+  // la guía recibe la miniatura del mapa como portada (app.js _syncPublicCover), se usa esa.
   return `${DOMAIN}/og-image.jpg`;
 }
 
