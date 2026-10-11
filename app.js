@@ -4123,6 +4123,7 @@ async function publishGuide(docId, rutaData, slug, routeData) {
     // Guardar slug en la guía del usuario
     await db.collection('users').doc(currentUser.uid)
       .collection('maps').doc(docId).update({ slug: slug, published: true });
+    _notifyGuidePublished(slug);
     return true;
   } catch (e) {
     console.warn('Error publicando guía:', e);
@@ -5305,6 +5306,22 @@ async function _syncPublicCover(docId, url, d) {
     if (!m.slug || !m.published || m.cover_image) return;
     await db.collection('public_guides').doc(m.slug).update({ cover_image: url });
     await ref.update({ cover_image: url });
+    _notifyGuidePublished(m.slug);
+  } catch (_) {}
+}
+// Avisa al Worker de que hay una guía pública nueva o con portada nueva: lanza el GitHub Action que genera
+// su página fija (título e imagen reales para WhatsApp/redes) en 1-2 min en vez de a la noche siguiente.
+// Sin coste de APIs de pago. Falla en silencio (si no hay token en el Worker, no pasa nada).
+async function _notifyGuidePublished(slug) {
+  try {
+    const u = auth.currentUser;
+    if (!u || !slug || !window.SALMA_API) return;
+    const t = await u.getIdToken();
+    fetch(window.SALMA_API + '/guide-published', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + t },
+      body: JSON.stringify({ slug: slug })
+    }).catch(() => {});
   } catch (_) {}
 }
 async function _ensureRouteThumbnail(routeData, docId) {
