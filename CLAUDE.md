@@ -106,6 +106,11 @@ Decidida con Paco el 26 sept 2026 ("queremos gente que se registre"). Cambiarla 
   avance se OCULTAN consejos, info práctica y "cerca de". Al entrar se reabre la ruta entera.
 - **Un solo diseño de ruta:** la vista de itinerario de la app; la página pública (`404.html`/`<slug>.html`)
   manda a la app (`/?ruta=<slug>`) y queda solo para WhatsApp/redes/Google. `guide-renderer.js` pendiente de eliminar.
+- **Excepción decidida por Paco el 12 oct 2026: PÁGINAS DE DESTINO (`destinos/*.html`).** Allí la guía se muestra **COMPLETA** (todos
+  los días y paradas, tal cual la hizo la app) con la ficha del destino alrededor, porque es lo que queremos posicionar; el registro
+  se pide para lo que tiene valor de uso (mapa, fotos, guardar, crear más guías) con una tarjeta CTA que lleva a la guía en la app.
+  El avance «día 1 + candado» sigue valiendo para la app (`?ruta=`) y las guías compartidas. SEO en tandas: `scripts/destinos-indexables.json`
+  (solo esas salen `index` y entran en `sitemap-destinos.xml`); plan en `docs/seo-plan-minimo.md`.
 - **Enlace para compartir = su guía pública** (`borradodelmapa.com/<slug>`, páginas fijas de `scripts/build-guias.js`).
 - Lo que exige cuenta **no se enseña como si funcionara** a quien no la tiene.
 
@@ -181,7 +186,7 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
 | Secrets / API keys | `docs/secrets.md` |
 | KV, crons del Worker, scripts de generación | `docs/kv.md` |
 | CSS, design system, pantallas | `docs/ui-design.md` |
-| SEO (guías públicas, blog, destinos, sitemap) | `docs/seo.md` |
+| SEO (guías públicas, blog, destinos, sitemap, plan por tandas) | `docs/seo.md`, `docs/seo-plan-minimo.md`, `docs/seo-destinos-prioritarios.md` |
 | Premium, límites, precios | `docs/negocio-premium.md` |
 | Google Play: alta, paquete .aab, claves de firma, Play Billing, productos (estado al día) | `docs/play-store-alta.md` |
 | "¿Esto ya existe?" — inventario de features | `docs/features-inventario.md` |
