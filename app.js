@@ -2762,7 +2762,7 @@ async function loadUserGuides() {
       // Miniatura de mapa con las paradas: si esta guía todavía no la tiene, generarla
       // ahora (una sola vez, se cachea para siempre) y sustituir la foto genérica en
       // cuanto llegue — mismo endpoint que ya usa la tarjeta de "ruta activa".
-      if (d.map_thumbnail_url && d.slug && d.published && !d.cover_image) _syncPublicCover(doc.id, d.map_thumbnail_url, d);
+      if (d.map_thumbnail_url && d.slug && d.published && !String(d.cover_image || '').includes('/photo/mapthumb/')) _syncPublicCover(doc.id, d.map_thumbnail_url, d);
       if (!d.map_thumbnail_url && d.itinerarioIA) {
         let routeDataThumb = null;
         try { routeDataThumb = JSON.parse(d.itinerarioIA); } catch (_) {}
@@ -5303,7 +5303,9 @@ async function _syncPublicCover(docId, url, d) {
     if (!docId || !url || !currentUser) return;
     const ref = db.collection('users').doc(currentUser.uid).collection('maps').doc(docId);
     const m = d || (await ref.get()).data() || {};
-    if (!m.slug || !m.published || m.cover_image) return;
+    // La portada pública debe ser el mapa propio: sustituye también las fotos antiguas de Google
+    // (URLs lh3 o /photo?ref=), que WhatsApp no puede leer. Si ya es un mapa, no se toca.
+    if (!m.slug || !m.published || String(m.cover_image || '').includes('/photo/mapthumb/')) return;
     await db.collection('public_guides').doc(m.slug).update({ cover_image: url });
     await ref.update({ cover_image: url });
     _notifyGuidePublished(m.slug);
