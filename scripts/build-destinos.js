@@ -182,6 +182,8 @@ function loadRoute(destId, countrySlug) {
 
 // Genera HTML estático del itinerario (indexable por Google)
 function buildStaticItinerary(route, appSlug) {
+  // Guía pública que ya existe para este destino (ej. 'barcelona-en-3-dias-ky61'); si no, la convención <id>-<país>-ruta
+  const linkSlug = route && route._public_slug ? route._public_slug : appSlug + '-ruta';
   if (!route || !route.stops || route.stops.length === 0) return '';
 
   // Agrupar stops por día
@@ -197,13 +199,13 @@ function buildStaticItinerary(route, appSlug) {
   let html = '<div class="destino-itinerary-static">\n';
   html += '  <h2 class="destino-h2">🗺️ Itinerario</h2>\n';
   // Mismo diseño de ruta que la app (CLAUDE.md §10): mapa y fotos se ven en la app.
-  html += `  <a class="destino-route-cta" href="/?ruta=${appSlug}-ruta"><strong>Ver esta ruta con mapa y fotos</strong><span>${days.length} días · ${route.stops.length} paradas · gratis →</span></a>\n`;
+  html += `  <a class="destino-route-cta" href="/?ruta=${linkSlug}"><strong>Ver esta ruta con mapa y fotos</strong><span>${days.length} días · ${route.stops.length} paradas · gratis →</span></a>\n`;
 
   for (const dayNum of days) {
     const { stops, day_title } = byDay[dayNum];
     // Sin cuenta se ve el día 1 completo; el resto, bloqueado (§10)
     if (dayNum !== days[0]) {
-      html += `  <a class="destino-day-locked" href="/?ruta=${appSlug}-ruta">🔒 Día ${dayNum} — ${escapeHTML(day_title)} <span class="destino-day-stops">${stops.length} paradas · con cuenta gratis</span></a>\n`;
+      html += `  <a class="destino-day-locked" href="/?ruta=${linkSlug}">🔒 Día ${dayNum} — ${escapeHTML(day_title)} <span class="destino-day-stops">${stops.length} paradas · con cuenta gratis</span></a>\n`;
       continue;
     }
     html += `  <details class="destino-acc-item" open>\n`;
