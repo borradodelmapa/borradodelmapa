@@ -27,7 +27,7 @@ jobs:
       - run: node scripts/build-guias.js
       - name: Commit si hay cambios
         run: |
-          git add -A -- '*.html' guias-publicas.json
+          git add -A -- '*.html' guias-publicas.json sitemap-guias.xml
           if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
           git config user.name "guias-bot"
           git config user.email "guias-bot@users.noreply.github.com"

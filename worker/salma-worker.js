@@ -11628,6 +11628,58 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /guide-published (11 oct 2026) ───
+    // Al publicar una guía, la app avisa aquí y el Worker lanza el GitHub Action "Guías públicas"
+    // (workflow_dispatch) para que su página fija (<slug>.html, con título e imagen reales para
+    // WhatsApp/redes) esté lista en 1-2 minutos y no a la noche siguiente. Solo el dueño de la guía
+    // puede pedirlo; máximo 1 disparo cada 8 s (el workflow encola el siguiente). Necesita el secret
+    // GITHUB_DISPATCH_TOKEN (PAT fino, solo Actions del repo); sin él responde ok:false y no pasa nada.
+    // Coste en APIs de pago: 0 (GitHub Actions en repo público es gratis).
+    if (request.method === 'POST' && url.pathname === '/guide-published') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const gpUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+      if (!gpUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
+      let gpBody = {};
+      try { gpBody = await request.json(); } catch (_) {}
+      const gpSlug = String(gpBody.slug || '');
+      if (!/^[a-z0-9][a-z0-9-]{2,150}$/.test(gpSlug)) {
+        return new Response(JSON.stringify({ error: 'slug no válido' }), { status: 400, headers: corsH });
+      }
+      if (!env.GITHUB_DISPATCH_TOKEN) {
+        return new Response(JSON.stringify({ ok: false, reason: 'sin_token' }), { status: 200, headers: corsH });
+      }
+      try {
+        const gd = await firestoreAdminGet(env, 'public_guides/' + gpSlug);
+        const gdUid = gd && gd.fields && gd.fields.uid && gd.fields.uid.stringValue;
+        if (!gd || gdUid !== gpUser.uid) {
+          return new Response(JSON.stringify({ error: 'no es tu guía' }), { status: 403, headers: corsH });
+        }
+        if (env.SALMA_KB) {
+          const last = parseInt((await env.SALMA_KB.get('ghdispatch:last')) || '0', 10);
+          if (Date.now() - last < 8000) {
+            return new Response(JSON.stringify({ ok: true, skipped: 'reciente' }), { status: 200, headers: corsH });
+          }
+          await env.SALMA_KB.put('ghdispatch:last', String(Date.now()), { expirationTtl: 60 });
+        }
+        const gh = await fetch('https://api.github.com/repos/borradodelmapa/borradodelmapa/actions/workflows/guias-publicas.yml/dispatches', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + env.GITHUB_DISPATCH_TOKEN,
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'User-Agent': 'salma-api',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ref: 'main' }),
+          signal: AbortSignal.timeout(8000),
+        });
+        console.log('[GUIDE-PUBLISHED]', gpSlug, 'github →', gh.status);
+        return new Response(JSON.stringify({ ok: gh.status === 204, status: gh.status }), { status: 200, headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ ok: false, error: String(e.message || e).slice(0, 120) }), { status: 200, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /route-thumbnail (miniatura de la ruta para la tarjeta de "ruta activa") ───
     // Google Static Maps (de pago) se llama COMO MUCHO una vez por ruta: la
     // clave en R2 es el propio mapId, no un hash de los parámetros — si ya existe,
