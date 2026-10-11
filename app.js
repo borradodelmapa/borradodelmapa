@@ -3980,20 +3980,10 @@ async function guardarGuiaDirecto(routeData, opts = {}) {
     const countryNormalized = countryInfo.code ? countryInfo.name : destino;
 
     // Cover image
+    // 11 oct 2026 (Paco: ahorrar): ya NO se pide foto de portada a Google Places al guardar (búsqueda +
+    // foto de pago, y las URLs lh3 dan 403 a WhatsApp). La portada pública pasa a ser la miniatura del
+    // mapa, que se paga una vez y se guarda en R2: la rellena _syncPublicCover cuando llega la miniatura.
     let coverImageUrl = '';
-    if (destino) {
-      try {
-        const stops = r.stops || [];
-        const first = stops.find(s => s && s.lat && s.lng && Math.abs(s.lat) > 0.01);
-        const url = window.SALMA_API + '/photo?name=' + encodeURIComponent(destino) + '&json=1'
-          + (first ? '&lat=' + first.lat + '&lng=' + first.lng : '');
-        const res = await fetch(url);
-        if (res.ok) {
-          const data = await res.json();
-          coverImageUrl = data.url || '';
-        }
-      } catch (e) {}
-    }
 
     const ruta = {
       nombre: r.title || r.name || 'Mi ruta',
