@@ -136,6 +136,23 @@ function buildPage(tpl, g) {
 async function main() {
   const tpl = fs.readFileSync(TEMPLATE, 'utf8');
   const guides = (await fetchGuides()).filter(g => /^[a-z0-9-]+$/.test(g.slug) && !RESERVED.has(g.slug));
+  // La imagen del enlace (og:image) se sirve desde NUESTRO dominio (12 oct 2026): desde workers.dev
+  // WhatsApp dejaba el recuadro vacío. Se copia a guias-img/<slug>.png una sola vez (si ya existe, no se
+  // vuelve a bajar). Solo miniaturas de mapa propias (R2); nada de Google.
+  if (!DRY) fs.mkdirSync(path.join(ROOT, 'guias-img'), { recursive: true });
+  for (const g of guides) {
+    if (!g.cover || !g.cover.includes('/photo/mapthumb/')) continue;
+    const rel = 'guias-img/' + g.slug + '.png';
+    const file = path.join(ROOT, rel);
+    try {
+      if (!fs.existsSync(file) && !DRY) {
+        const res = await fetch(g.cover);
+        const buf = Buffer.from(await res.arrayBuffer());
+        if (res.ok && buf.length > 2000) fs.writeFileSync(file, buf);
+      }
+      if (fs.existsSync(file) || DRY) g.cover = DOMAIN + '/' + rel;
+    } catch (e) { console.warn('imagen no copiada', g.slug, e.message); }
+  }
   const prev = fs.existsSync(MANIFEST) ? JSON.parse(fs.readFileSync(MANIFEST, 'utf8')) : [];
   const now = new Set(guides.map(g => g.slug));
   let written = 0, same = 0, removed = 0;
