@@ -32,6 +32,15 @@ const FIREBASE_WEB_KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA'; // la públi
 // guías de usuarios. La vista previa de WhatsApp/redes funciona igual con noindex.
 // Para lanzar: 'index,follow,max-snippet:-1' (idealmente solo las buenas, ver isGood()).
 const GUIAS_ROBOTS = 'noindex,follow';
+// 11 oct 2026 (Paco: "a posicionar las guías"): tras la limpieza, SOLO las guías que pasan isGood()
+// salen con index y entran en sitemap-guias.xml; las demás siguen noindex. Se recalcula cada noche.
+const GUIAS_ROBOTS_INDEX = 'index,follow,max-snippet:-1,max-image-preview:large';
+function isGood(g) {
+  const st = (routeOf(g).stops || []);
+  const words = st.reduce((n, s) => n + String(s.narrative || s.description || '').split(/\s+/).filter(Boolean).length, 0);
+  const geo = st.filter(s => s.lat && s.lng).length;
+  return st.length >= 5 && words >= 200 && geo >= st.length * 0.8 && String(g.summary || routeOf(g).summary || '').length >= 60;
+}
 
 const DRY = process.argv.includes('--dry-run');
 // Nombres que nunca pueden ser una guía (ficheros/carpetas reales de la raíz)
@@ -116,7 +125,7 @@ function buildPage(tpl, g) {
     `<meta property="og:url" content="${esc(url)}">\n` +
     `<meta name="twitter:card" content="summary_large_image">\n` +
     `<link rel="canonical" href="${esc(url)}">\n` +
-    `<meta name="robots" content="${GUIAS_ROBOTS}">\n` +
+    `<meta name="robots" content="${isGood(g) ? GUIAS_ROBOTS_INDEX : GUIAS_ROBOTS}">\n` +
     `<!-- Generado por scripts/build-guias.js — no editar a mano -->`);
   return h;
 }
@@ -139,6 +148,12 @@ async function main() {
     const file = path.join(ROOT, slug + '.html');
     if (fs.existsSync(file)) { if (!DRY) fs.unlinkSync(file); removed++; }
   }
+  // Sitemap de las guías buenas (enlazado desde sitemap.xml)
+  const good = guides.filter(isGood);
+  const sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    good.map(g => '  <url><loc>' + DOMAIN + '/' + g.slug + '</loc>' + (g.updatedAt ? '<lastmod>' + String(g.updatedAt).slice(0, 10) + '</lastmod>' : '') + '<changefreq>monthly</changefreq><priority>0.7</priority></url>').join('\n') + '\n</urlset>\n';
+  if (!DRY) fs.writeFileSync(path.join(ROOT, 'sitemap-guias.xml'), sm);
+  console.log('guías buenas (index + sitemap): ' + good.length + ' de ' + guides.length);
   if (!DRY) fs.writeFileSync(MANIFEST, JSON.stringify([...now].sort(), null, 1) + '\n');
   console.log(`${DRY ? '[dry-run] ' : ''}guías: ${guides.length} · escritas: ${written} · sin cambios: ${same} · borradas: ${removed}`);
 }
