@@ -10419,18 +10419,22 @@ export default {
       }
     }
 
-    if (request.method === 'GET' && url.pathname.startsWith('/photo/')) {
+    // HEAD también (11 oct 2026): WhatsApp/Facebook comprueban la imagen de og:image con HEAD y, si
+    // recibían 405, dejaban el recuadro de la vista previa vacío. Solo lee R2; coste de APIs de pago: 0.
+    if ((request.method === 'GET' || request.method === 'HEAD') && url.pathname.startsWith('/photo/')) {
       if (!env.SALMA_PHOTOS) {
         return new Response('R2 not configured', { status: 500 });
       }
       const key = decodeURIComponent(url.pathname.slice(7)); // quitar /photo/
-      const object = await env.SALMA_PHOTOS.get(key);
-      if (!object) return new Response('Not found', { status: 404 });
+      const isHead = request.method === 'HEAD';
+      const object = isHead ? await env.SALMA_PHOTOS.head(key) : await env.SALMA_PHOTOS.get(key);
+      if (!object) return new Response(isHead ? null : 'Not found', { status: 404 });
       const headers = new Headers();
       headers.set('Content-Type', object.httpMetadata?.contentType || 'image/jpeg');
       headers.set('Cache-Control', 'public, max-age=31536000'); // 1 año
       headers.set('Access-Control-Allow-Origin', '*');
-      return new Response(object.body, { headers });
+      if (isHead && object.size != null) headers.set('Content-Length', String(object.size));
+      return new Response(isHead ? null : object.body, { headers });
     }
 
     // ─── ENDPOINT /upload-doc (subir documento a R2) ───
