@@ -1212,3 +1212,28 @@ details[open] > .destino-acc-header::after {
 .destino-route-cta { display: flex; flex-direction: column; gap: 4px; margin: 0 0 14px; padding: 16px; background: #F4630B; color: #000; text-decoration: none; }
 .destino-route-cta strong { font-size: 1.15rem; }
 .destino-day-locked { display: block; margin: 8px 0; padding: 14px 16px; border: 1px dashed currentColor; color: inherit; text-decoration: none; opacity: .85; }
+
+/* Guía completa en la página de destino (12 oct 2026) */
+.destino-guia { margin: 28px 0; }
+.destino-guia-title { font-size: 28px; line-height: 1.05; margin: 0 0 4px; }
+.destino-guia-sub { margin: 0 0 14px; color: rgba(244,239,230,.85); font-size: 14px; }
+.destino-day-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+.destino-day-chips a { padding: 8px 14px; border: 1px solid #F4630B; color: #F4630B; font-weight: 700; text-decoration: none; }
+.destino-day { margin: 0 0 22px; }
+.destino-day-band { margin: 0 0 6px; padding: 10px 14px; background: #F4630B; color: #000; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; }
+.destino-day-band span { font-weight: 900; }
+.destino-guia .destino-stop { position: relative; padding: 14px 0 14px 44px; border-bottom: 1px solid rgba(244,239,230,.12); }
+.destino-stop-num { position: absolute; left: 0; top: 14px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #F4630B; color: #000; font-weight: 800; border-radius: 50%; }
+.destino-guia .destino-stop-name { font-size: 18px; margin: 0 0 4px; }
+.destino-stop-headline { margin: 0 0 4px; font-weight: 700; color: #F4F0E6; font-size: 14px; }
+.destino-guia .destino-stop-desc { font-size: 15px; line-height: 1.6; color: rgba(244,239,230,.88); }
+.destino-guia .destino-stop-meta { display: inline-block; margin-top: 2px; font-size: 12px; color: rgba(244,239,230,.7); }
+.destino-guia .destino-route-cta { margin: 18px 0 0; }
+
+/* CTA con imagen de la guía (12 oct 2026) */
+.destino-route-cta-img { padding: 0; background: #0E0E10; border: 2px solid #F4630B; color: #F4F0E6; overflow: hidden; }
+.destino-cta-img { display: block; width: 100%; height: auto; }
+.destino-cta-body { display: flex; flex-direction: column; gap: 6px; padding: 16px; }
+.destino-cta-body strong { font-size: 1.25rem; line-height: 1.1; }
+.destino-cta-body em { align-self: flex-start; margin-top: 6px; padding: 12px 18px; background: #F4630B; color: #000; font-style: normal; font-weight: 800; }
+.destino-jump { display: inline-block; margin: 6px 0 14px; padding: 10px 16px; border: 1px solid #F4630B; color: #F4630B; font-weight: 700; text-decoration: none; }

@@ -38,7 +38,7 @@
   if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   </script>
   <link rel="stylesheet" href="/styles.css?v=182">
-  <link rel="stylesheet" href="/destinos.css?v=4">
+  <link rel="stylesheet" href="/destinos.css?v=6">
   <script src="/country-utils.js"></script>
 </head>
 <body class="destino-page">
@@ -87,6 +87,7 @@
 
     <!-- Descripción -->
     <p class="destino-desc">El trek al EBC (5.364m) es el más famoso del planeta y ofrece vistas directas al Everest, Lhotse, Nuptse y Ama Dablam. El vuelo de montaña a Lukla es en sí mismo una experiencia. La cultura sherpa y los monasterios de Tengboche y Namche Bazaar añaden una dimensión cultural imprescindible.</p>
+    <a class="destino-jump" href="#guia">Ver la guía de 14 días ↓</a>
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
@@ -112,37 +113,159 @@
       </div>
     </div>
 
-    <div class="destino-itinerary-static">
-  <h2 class="destino-h2">🗺️ Itinerario</h2>
-  <a class="destino-route-cta" href="/?ruta=everest-base-camp-nepal-ruta"><strong>Ver esta ruta con mapa y fotos</strong><span>14 días · 17 paradas · gratis →</span></a>
-  <details class="destino-acc-item" open>
-    <summary class="destino-acc-header">Día 1 — Vuelo a Lukla, inicio del trek <span class="destino-day-stops">2 paradas</span></summary>
-    <div class="destino-acc-body">
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Aeropuerto Tenzing-Hillary</h4>
-        <p class="destino-stop-desc">El vuelo desde Katmandú dura 35 minutos y aterriza en una de las pistas más cortas y empinadas del mundo. A 2.860 metros, el trekking empieza aquí mismo.</p>
-      </div>
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Phakding</h4>
-        <p class="destino-stop-desc">Primera etapa suave de unas 3 horas de caminata siguiendo el río Dudh Koshi. Buena toma de contacto con el paisaje sherpa y los primeros puentes colgantes.</p>
-        <span class="destino-stop-meta">📍 8 km</span>
-      </div>
-    </div>
-  </details>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 2 — Phakding a Namche Bazaar <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 3 — Aclimatación en Namche <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 4 — Namche a Tengboche <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 5 — Tengboche a Dingboche <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 6 — Aclimatación en Dingboche <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 7 — Dingboche a Lobuche <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 8 — Campo Base del Everest <span class="destino-day-stops">2 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 9 — Kala Patthar y regreso a Pheriche <span class="destino-day-stops">2 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 10 — Pheriche a Namche — Bajada <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 11 — Namche a Phakding <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 12 — Phakding a Lukla — Cierre <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 13 — Vuelo Lukla–Katmandú <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=everest-base-camp-nepal-ruta">🔒 Día 14 — Descanso en Katmandú <span class="destino-day-stops">1 paradas · con cuenta gratis</span></a>
-</div>
+    <section class="destino-itinerary-static destino-guia" id="guia">
+  <h2 class="destino-h2 destino-guia-title">Campo Base del Everest — 14 días</h2>
+  <p class="destino-guia-sub">14 días · 17 paradas</p>
+  <nav class="destino-day-chips" aria-label="Días de la guía"><a href="#dia-1">Día 1</a><a href="#dia-2">Día 2</a><a href="#dia-3">Día 3</a><a href="#dia-4">Día 4</a><a href="#dia-5">Día 5</a><a href="#dia-6">Día 6</a><a href="#dia-7">Día 7</a><a href="#dia-8">Día 8</a><a href="#dia-9">Día 9</a><a href="#dia-10">Día 10</a><a href="#dia-11">Día 11</a><a href="#dia-12">Día 12</a><a href="#dia-13">Día 13</a><a href="#dia-14">Día 14</a></nav>
+  <div class="destino-day" id="dia-1">
+    <h3 class="destino-day-band"><span>DÍA 1</span> · Vuelo a Lukla, inicio del trek</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">1</span>
+      <h4 class="destino-stop-name">Aeropuerto Tenzing-Hillary</h4>
+      <p class="destino-stop-desc">El vuelo desde Katmandú dura 35 minutos y aterriza en una de las pistas más cortas y empinadas del mundo. A 2.860 metros, el trekking empieza aquí mismo.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">2</span>
+      <h4 class="destino-stop-name">Phakding</h4>
+      <p class="destino-stop-desc">Primera etapa suave de unas 3 horas de caminata siguiendo el río Dudh Koshi. Buena toma de contacto con el paisaje sherpa y los primeros puentes colgantes.</p>
+      <span class="destino-stop-meta">📍 8 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-2">
+    <h3 class="destino-day-band"><span>DÍA 2</span> · Phakding a Namche Bazaar</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">3</span>
+      <h4 class="destino-stop-name">Namche Bazaar</h4>
+      <p class="destino-stop-desc">El corazón del Khumbu a 3.440 metros. Tiene conexión wifi, cafeterías y hasta una panadería decente. Aquí empieza a notarse la altitud de verdad.</p>
+      <span class="destino-stop-meta">📍 12 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-3">
+    <h3 class="destino-day-band"><span>DÍA 3</span> · Aclimatación en Namche</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">4</span>
+      <h4 class="destino-stop-name">Namche Bazaar</h4>
+      <p class="destino-stop-headline">Namche Bazaar — Día de aclimatación</p>
+      <p class="destino-stop-desc">Día obligatorio de aclimatación. La recomendación es subir al mirador del Hotel Everest View a 3.880m y bajar a dormir en Namche. El cuerpo lo agradece.</p>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-4">
+    <h3 class="destino-day-band"><span>DÍA 4</span> · Namche a Tengboche</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">5</span>
+      <h4 class="destino-stop-name">Tengboche Monastery</h4>
+      <p class="destino-stop-desc">El monasterio budista más importante del Khumbu, a 3.867 metros, con el Ama Dablam de fondo. Si hay ceremonia de tarde, no te la saltes.</p>
+      <span class="destino-stop-meta">📍 14 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-5">
+    <h3 class="destino-day-band"><span>DÍA 5</span> · Tengboche a Dingboche</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">6</span>
+      <h4 class="destino-stop-name">Dingboche</h4>
+      <p class="destino-stop-desc">Pequeño pueblo a 4.410 metros rodeado de muros de piedra y campos de cebada. A partir de aquí el paisaje se vuelve más árido y la respiración más corta.</p>
+      <span class="destino-stop-meta">📍 13 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-6">
+    <h3 class="destino-day-band"><span>DÍA 6</span> · Aclimatación en Dingboche</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">7</span>
+      <h4 class="destino-stop-name">Dingboche</h4>
+      <p class="destino-stop-headline">Dingboche — Día de aclimatación</p>
+      <p class="destino-stop-desc">Segunda aclimatación clave: sube a la cresta sobre el pueblo hasta los 5.000m y vuelve a bajar. No dormir más arriba de donde has comido es la regla de oro en altura.</p>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-7">
+    <h3 class="destino-day-band"><span>DÍA 7</span> · Dingboche a Lobuche</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">8</span>
+      <h4 class="destino-stop-name">Lobuche</h4>
+      <p class="destino-stop-desc">Etapa de transición a 4.940 metros. El paisaje ya es de otro planeta: glaciar Khumbu a la vista y muy poca vegetación. Las noches aquí son frías de verdad.</p>
+      <span class="destino-stop-meta">📍 10 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-8">
+    <h3 class="destino-day-band"><span>DÍA 8</span> · Campo Base del Everest</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">9</span>
+      <h4 class="destino-stop-name">Gorakshep</h4>
+      <p class="destino-stop-desc">El último pueblo antes del campo base, a 5.164 metros. Antiguo lecho glaciar convertido en el punto de avituallamiento final. Las teahouses son básicas pero funcionan.</p>
+      <span class="destino-stop-meta">📍 7 km</span>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">10</span>
+      <h4 class="destino-stop-name">Everest Base Camp</h4>
+      <p class="destino-stop-desc">5.364 metros. El glaciar Khumbu bajo los pies, las tiendas de los alpinistas si es temporada, y el Khumbutse cerrando el horizonte. Para esto has venido.</p>
+      <span class="destino-stop-meta">📍 8 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-9">
+    <h3 class="destino-day-band"><span>DÍA 9</span> · Kala Patthar y regreso a Pheriche</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">11</span>
+      <h4 class="destino-stop-name">Kala Patthar</h4>
+      <p class="destino-stop-desc">5.644 metros, la cima más accesible con las mejores vistas del Everest de todo el trek. Madruga: el amanecer sobre el Everest, Lhotse y Nuptse desde aquí no tiene discusión.</p>
+      <span class="destino-stop-meta">📍 4 km</span>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">12</span>
+      <h4 class="destino-stop-name">Pheriche</h4>
+      <p class="destino-stop-desc">Bajando rápido se nota el alivio de la altitud. Pheriche tiene una clínica de altitud del Himalayan Rescue Association — punto de referencia si alguien del grupo tiene problemas.</p>
+      <span class="destino-stop-meta">📍 18 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-10">
+    <h3 class="destino-day-band"><span>DÍA 10</span> · Pheriche a Namche — Bajada</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">13</span>
+      <h4 class="destino-stop-name">Namche Bazaar</h4>
+      <p class="destino-stop-headline">Namche Bazaar — Regreso</p>
+      <p class="destino-stop-desc">La bajada desde Pheriche a Namche en un día es posible y el cuerpo lo agradece con cada metro menos de altitud. Última noche con las comodidades de la capital sherpa.</p>
+      <span class="destino-stop-meta">📍 22 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-11">
+    <h3 class="destino-day-band"><span>DÍA 11</span> · Namche a Phakding</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">14</span>
+      <h4 class="destino-stop-name">Phakding</h4>
+      <p class="destino-stop-headline">Phakding — De vuelta al valle</p>
+      <p class="destino-stop-desc">Etapa tranquila de regreso, cruzando de nuevo los puentes colgantes sobre el Dudh Koshi. El contraste de vegetación con las zonas altas es llamativo.</p>
+      <span class="destino-stop-meta">📍 8 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-12">
+    <h3 class="destino-day-band"><span>DÍA 12</span> · Phakding a Lukla — Cierre</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">15</span>
+      <h4 class="destino-stop-name">Lukla</h4>
+      <p class="destino-stop-headline">Lukla — Final del trek</p>
+      <p class="destino-stop-desc">Última etapa de trekking de vuelta a Lukla. Tarde libre para celebrar, descansar y preparar el vuelo de vuelta. La cerveza Everest tiene otro sabor después de 12 días a pie.</p>
+      <span class="destino-stop-meta">📍 8 km</span>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-13">
+    <h3 class="destino-day-band"><span>DÍA 13</span> · Vuelo Lukla–Katmandú</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">16</span>
+      <h4 class="destino-stop-name">Lukla</h4>
+      <p class="destino-stop-headline">Lukla — Vuelo de regreso a Katmandú</p>
+      <p class="destino-stop-desc">Los vuelos desde Lukla dependen mucho del tiempo. Ten siempre un día de margen — los retrasos por niebla o viento son habituales. Katmandú espera con una ducha caliente y una cama de verdad.</p>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-14">
+    <h3 class="destino-day-band"><span>DÍA 14</span> · Descanso en Katmandú</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">17</span>
+      <h4 class="destino-stop-name">Thamel, Kathmandu</h4>
+      <p class="destino-stop-headline">Thamel, Katmandú</p>
+      <p class="destino-stop-desc">El barrio de los viajeros en Katmandú, a unos 20 minutos del aeropuerto. Buen punto para recuperarse, comer bien y hacer las últimas compras antes del vuelo internacional.</p>
+      <span class="destino-stop-meta">📍 135 km</span>
+    </article>
+  </div>
+  <a class="destino-route-cta destino-route-cta-img" href="/?ruta=everest-base-camp-nepal-ruta"><span class="destino-cta-body"><strong>Ábrela con mapa y fotos, y guárdala</strong><span>14 días · 17 paradas · gratis con cuenta</span><em>ABRIR LA GUÍA →</em></span></a>
+</section>
 
     <!-- Más info en acordeón -->
     <div class="destino-accordion">
@@ -155,7 +278,7 @@
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🛏️ Dónde dormir</h2></summary>
         <div class="destino-acc-body">
           <div class="destino-dormir-grid">
@@ -176,41 +299,30 @@
         </div>
       </details>
 
-      <details class="destino-acc-item">
-        <summary class="destino-acc-header"><h2 class="destino-acc-h2">🎯 Qué hacer</h2></summary>
-        <div class="destino-acc-body">
-          <ul class="destino-list">
-          <li>Llegar al Campo Base del Everest (5.364m): jornada final desde Gorak Shep, 3-4h ida/vuelta</li>
-          <li>Subir a Kala Patthar (5.545m) al amanecer para las mejores vistas del Everest</li>
-          <li>Visitar el monasterio de Tengboche y asistir a puja matinal</li>
-          <li>Aclimatarse en Namche Bazaar y subir al Everest View Hotel para las vistas (libre)</li>
-          </ul>
-          <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
-        </div>
-      </details>
 
-      <details class="destino-acc-item">
+
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🍽️ Dónde comer</h2></summary>
         <div class="destino-acc-body">
           <p>Las teahouses son la única opción. Dal bhat, noodles, pizza de altitud. Presupuesto comida: 10-20 EUR/día. En Namche hay panaderías y hasta cafeterías con buen espresso.</p>
         </div>
       </details>
 
-      <details class="destino-acc-item destino-highlight">
+      <details class="destino-acc-item destino-highlight" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">💡 Consejo local</h2></summary>
         <div class="destino-acc-body">
           <p>Namche Bazaar tiene cajero automático (puede estar vacío en temporada alta). Saca suficiente dinero allí porque más arriba ya no hay. El MAL de altura no discrimina: sube lento aunque te sientas bien.</p>
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🌧️ Plan B si llueve</h2></summary>
         <div class="destino-acc-body">
           <p>En días de nubes bajas en EBC, visita el museo sherpa de Namche o explora el mercado del sábado en Namche.</p>
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">❓ Preguntas frecuentes</h2></summary>
         <div class="destino-acc-body">
           

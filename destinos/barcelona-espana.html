@@ -38,7 +38,7 @@
   if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   </script>
   <link rel="stylesheet" href="/styles.css?v=182">
-  <link rel="stylesheet" href="/destinos.css?v=4">
+  <link rel="stylesheet" href="/destinos.css?v=6">
   <script src="/country-utils.js"></script>
 </head>
 <body class="destino-page">
@@ -103,6 +103,7 @@
 
     <!-- Descripción -->
     <p class="destino-desc">Capital catalana con arquitectura modernista única, playas urbanas y una escena gastronómica y cultural de primer nivel. Combina el Barrio Gótico medieval con el diseño de Gaudí y un barrio a barrio muy marcado. Punto de entrada frecuente al Mediterráneo español.</p>
+    <a class="destino-jump" href="#guia">Ver la guía de 3 días ↓</a>
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
@@ -128,41 +129,106 @@
       </div>
     </div>
 
-    <div class="destino-itinerary-static">
-  <h2 class="destino-h2">🗺️ Itinerario</h2>
-  <a class="destino-route-cta" href="/?ruta=barcelona-en-3-dias-ky61"><strong>Ver esta ruta con mapa y fotos</strong><span>3 días · 17 paradas · gratis →</span></a>
-  <details class="destino-acc-item" open>
-    <summary class="destino-acc-header">Día 1 — Gótico, Born y mar <span class="destino-day-stops">6 paradas</span></summary>
-    <div class="destino-acc-body">
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Barrio Gótico</h4>
-        <p class="destino-stop-desc">Es la Barcino romana de hace 2.000 años; aún se ven tramos de muralla junto a la catedral. Camínalo por la mañana, antes de que se llene. 2 h. Gratis.</p>
-      </div>
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Catedral de Barcelona</h4>
-        <p class="destino-stop-desc">Gótico catalán del siglo XIV con un claustro con 13 ocas blancas vivas, tradición de siglos. Sube a la azotea por el ascensor para las vistas. 1 h. Unos 9 €.</p>
-      </div>
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Plaça del Rei</h4>
-        <p class="destino-stop-desc">Plaza medieval donde los Reyes Católicos recibieron a Colón a su vuelta de América, según la tradición. Es rápida y tiene mucho ambiente. 20 min. Gratis.</p>
-      </div>
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Museu Picasso de Barcelona</h4>
-        <p class="destino-stop-desc">Cinco palacios medievales del Born con la etapa de juventud de Picasso en Barcelona. Compra la entrada online para saltarte la cola. 1 h 30 min. 12 €.</p>
-      </div>
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Basílica de Santa Maria del Mar</h4>
-        <p class="destino-stop-desc">La iglesia que construyó el propio pueblo en el siglo XIV, sin dinero real. Es gótico puro, más sobrio que la catedral. 30 min. Gratis o unos 5 € con azotea.</p>
-      </div>
-      <div class="destino-stop">
-        <h4 class="destino-stop-name">Parc de la Ciutadella</h4>
-        <p class="destino-stop-desc">Antiguo recinto militar borbónico derribado en el siglo XIX, con la cascada monumental en la que participó un joven Gaudí. Buen sitio para cerrar el día. 1 h. Gratis.</p>
-      </div>
-    </div>
-  </details>
-  <a class="destino-day-locked" href="/?ruta=barcelona-en-3-dias-ky61">🔒 Día 2 — Gaudí y el Eixample <span class="destino-day-stops">5 paradas · con cuenta gratis</span></a>
-  <a class="destino-day-locked" href="/?ruta=barcelona-en-3-dias-ky61">🔒 Día 3 — Montjuïc y Park Güell <span class="destino-day-stops">6 paradas · con cuenta gratis</span></a>
-</div>
+    <section class="destino-itinerary-static destino-guia" id="guia">
+  <h2 class="destino-h2 destino-guia-title">Barcelona en 3 días</h2>
+  <p class="destino-guia-sub">3 días · 17 paradas</p>
+  <nav class="destino-day-chips" aria-label="Días de la guía"><a href="#dia-1">Día 1</a><a href="#dia-2">Día 2</a><a href="#dia-3">Día 3</a></nav>
+  <div class="destino-day" id="dia-1">
+    <h3 class="destino-day-band"><span>DÍA 1</span> · Gótico, Born y mar</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">1</span>
+      <h4 class="destino-stop-name">Barrio Gótico</h4>
+      <p class="destino-stop-desc">Es la Barcino romana de hace 2.000 años; aún se ven tramos de muralla junto a la catedral. Camínalo por la mañana, antes de que se llene. 2 h. Gratis.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">2</span>
+      <h4 class="destino-stop-name">Catedral de Barcelona</h4>
+      <p class="destino-stop-desc">Gótico catalán del siglo XIV con un claustro con 13 ocas blancas vivas, tradición de siglos. Sube a la azotea por el ascensor para las vistas. 1 h. Unos 9 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">3</span>
+      <h4 class="destino-stop-name">Plaça del Rei</h4>
+      <p class="destino-stop-desc">Plaza medieval donde los Reyes Católicos recibieron a Colón a su vuelta de América, según la tradición. Es rápida y tiene mucho ambiente. 20 min. Gratis.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">4</span>
+      <h4 class="destino-stop-name">Museu Picasso de Barcelona</h4>
+      <p class="destino-stop-desc">Cinco palacios medievales del Born con la etapa de juventud de Picasso en Barcelona. Compra la entrada online para saltarte la cola. 1 h 30 min. 12 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">5</span>
+      <h4 class="destino-stop-name">Basílica de Santa Maria del Mar</h4>
+      <p class="destino-stop-desc">La iglesia que construyó el propio pueblo en el siglo XIV, sin dinero real. Es gótico puro, más sobrio que la catedral. 30 min. Gratis o unos 5 € con azotea.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">6</span>
+      <h4 class="destino-stop-name">Parc de la Ciutadella</h4>
+      <p class="destino-stop-desc">Antiguo recinto militar borbónico derribado en el siglo XIX, con la cascada monumental en la que participó un joven Gaudí. Buen sitio para cerrar el día. 1 h. Gratis.</p>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-2">
+    <h3 class="destino-day-band"><span>DÍA 2</span> · Gaudí y el Eixample</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">7</span>
+      <h4 class="destino-stop-name">Basílica de la Sagrada Família</h4>
+      <p class="destino-stop-desc">Gaudí la empezó en 1883 y la obra sigue en marcha; la fachada del Nacimiento es la que él dejó más completa. Reserva online con antelación. 1 h 30 min. 26 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">8</span>
+      <h4 class="destino-stop-name">Hospital de la Santa Creu i Sant Pau</h4>
+      <p class="destino-stop-desc">Modernismo de Domènech i Montaner, Patrimonio Mundial, y mucho menos masificado que la Sagrada Família. Está a 10 min a pie de ella. 1 h 30 min. Unos 17 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">9</span>
+      <h4 class="destino-stop-name">Casa Batlló</h4>
+      <p class="destino-stop-desc">Gaudí rehízo la fachada en 1904 con la idea del dragón de Sant Jordi; el tejado es el lomo. Si no quieres pagar entrada, el exterior se disfruta desde el Passeig de Gràcia. 1 h. 25-29 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">10</span>
+      <h4 class="destino-stop-name">La Pedrera - Casa Milà</h4>
+      <p class="destino-stop-desc">Casa Milà, de piedra ondulada sin una sola línea recta, con chimeneas que parecen guerreros. Ve al atardecer, cuando la azotea se llena de luz. 1 h 15 min. 25-29 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">11</span>
+      <h4 class="destino-stop-name">Passeig de Gràcia</h4>
+      <p class="destino-stop-desc">El bulevar modernista por excelencia, con farolas de Pere Falqués y mosaicos hexagonales en el suelo (diseño de Gaudí). Úsalo para unir las dos casas. 30 min. Gratis.</p>
+    </article>
+  </div>
+  <div class="destino-day" id="dia-3">
+    <h3 class="destino-day-band"><span>DÍA 3</span> · Montjuïc y Park Güell</h3>
+    <article class="destino-stop">
+      <span class="destino-stop-num">12</span>
+      <h4 class="destino-stop-name">Park Güell</h4>
+      <p class="destino-stop-desc">Gaudí lo concibió como una ciudad jardín que fracasó comercialmente y acabó siendo parque público. La zona monumental tiene cupo limitado, así que reserva con semanas. Si no, el mirador de El Carmel da buenas vistas gratis. 1 h 30 min. 10 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">13</span>
+      <h4 class="destino-stop-name">Mirador del Turó del Carmel</h4>
+      <p class="destino-stop-desc">Vista de 360° de toda Barcelona desde los búnkeres de la Guerra Civil. Sube a media tarde para la mejor luz. 40 min. Gratis.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">14</span>
+      <h4 class="destino-stop-name">MNAC</h4>
+      <p class="destino-stop-desc">Instalado en el Palau Nacional de la Exposición de 1929, guarda la mayor colección de románico mural de Europa. Perfecto si llueve. 2 h. 12 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">15</span>
+      <h4 class="destino-stop-name">Castell de Montjuïc</h4>
+      <p class="destino-stop-desc">Fortaleza del siglo XVII que dominó el puerto; en el siglo XX fue prisión política. Las vistas al Mediterráneo son lo mejor del día. 1 h. Unos 5 €.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">16</span>
+      <h4 class="destino-stop-name">Mercado de Santa Caterina</h4>
+      <p class="destino-stop-desc">Mejor opción que La Boqueria si quieres algo local; techo ondulado de mosaico multicolor. Productos de proximidad y menos turistas. 45 min. Gratis entrar.</p>
+    </article>
+    <article class="destino-stop">
+      <span class="destino-stop-num">17</span>
+      <h4 class="destino-stop-name">Cervecería Catalana</h4>
+      <p class="destino-stop-desc">tapas de pie a pie, montaditos de jamón y pulpo a la gallega, unos 25-30 € por persona. Si quieres más sitios para comer, pídemelo.</p>
+    </article>
+  </div>
+  <a class="destino-route-cta destino-route-cta-img" href="/?ruta=barcelona-en-3-dias-ky61"><img class="destino-cta-img" src="/guias-img/barcelona-en-3-dias-ky61.png" alt="Mapa de la guía Barcelona en 3 días" loading="lazy" width="640" height="300"><span class="destino-cta-body"><strong>Ábrela con mapa y fotos, y guárdala</strong><span>3 días · 17 paradas · gratis con cuenta</span><em>ABRIR LA GUÍA →</em></span></a>
+</section>
 
     <!-- Más info en acordeón -->
     <div class="destino-accordion">
@@ -175,7 +241,7 @@
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🛏️ Dónde dormir</h2></summary>
         <div class="destino-acc-body">
           <div class="destino-dormir-grid">
@@ -196,42 +262,30 @@
         </div>
       </details>
 
-      <details class="destino-acc-item">
-        <summary class="destino-acc-header"><h2 class="destino-acc-h2">🎯 Qué hacer</h2></summary>
-        <div class="destino-acc-body">
-          <ul class="destino-list">
-          <li>Sagrada Família (entrada 26 EUR, reservar con antelación)</li>
-          <li>Recorrer el Barrio Gótico y el Born a pie (gratis)</li>
-          <li>Park Güell zona monumental (10 EUR, reserva previa) y zona libre gratuita</li>
-          <li>Mercado de La Boqueria para desayunar temprano antes de las hordas (gratis entrar)</li>
-          <li>Paseo de Gracia: Casa Batlló y Casa Milà/La Pedrera (exterior gratis, interior 25-29 EUR)</li>
-          </ul>
-          <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
-        </div>
-      </details>
 
-      <details class="destino-acc-item">
+
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🍽️ Dónde comer</h2></summary>
         <div class="destino-acc-body">
           <p>Probar pan con tomate, patatas bravas y croquetas. Menú del día en El Raval o Poble Sec, 10-14 EUR. Evitar la Barceloneta para comer (caro y mediocre). Mercado de Santa Caterina más auténtico que La Boqueria.</p>
         </div>
       </details>
 
-      <details class="destino-acc-item destino-highlight">
+      <details class="destino-acc-item destino-highlight" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">💡 Consejo local</h2></summary>
         <div class="destino-acc-body">
           <p>El Park Güell tiene cupo limitado; la zona monumental solo se visita con entrada (reservar online con semanas de antelación en julio-agosto). La zona del mirador de El Carmel da las mejores vistas del parque sin pagar.</p>
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🌧️ Plan B si llueve</h2></summary>
         <div class="destino-acc-body">
           <p>Museu Picasso (12 EUR), MNAC en Montjuïc (12 EUR), o cualquiera de los interiores de Gaudí. El Born tiene decenas de galerías y cafés.</p>
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item" open>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">❓ Preguntas frecuentes</h2></summary>
         <div class="destino-acc-body">
           

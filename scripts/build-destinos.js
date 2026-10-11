@@ -72,7 +72,7 @@ const TYPE_BADGES = {
 // que ya usa el resto de la app (ver CLAUDE.md, checklist de despliegue),
 // para que un visitante real no se quede con el CSS viejo en caché tras un
 // cambio.
-const DESTINOS_CSS_V = 4;
+const DESTINOS_CSS_V = 6;
 // Igual para styles.css (el de la app, que trae el menú de abajo): antes iba SIN ?v=
 // y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
 // número que styles.css?v= en index.html — subirlo a la vez.
@@ -180,50 +180,58 @@ function loadRoute(destId, countrySlug) {
   return null;
 }
 
-// Genera HTML estático del itinerario (indexable por Google)
+// Genera HTML estático de la guía COMPLETA (indexable por Google). Paco, 12 oct 2026: en las páginas de
+// destino la guía se muestra entera, tal como la hizo la app; el registro se pide para el mapa, las fotos,
+// guardar y crear más guías (el botón lleva a la app).
 function buildStaticItinerary(route, appSlug) {
+  if (!route || !route.stops || route.stops.length === 0) return '';
   // Guía pública que ya existe para este destino (ej. 'barcelona-en-3-dias-ky61'); si no, la convención <id>-<país>-ruta
   const linkSlug = route && route._public_slug ? route._public_slug : appSlug + '-ruta';
-  if (!route || !route.stops || route.stops.length === 0) return '';
 
   // Agrupar stops por día
   const byDay = {};
   for (const stop of route.stops) {
     const day = stop.day || 1;
-    if (!byDay[day]) byDay[day] = { stops: [], day_title: stop.day_title || `Día ${day}` };
+    if (!byDay[day]) byDay[day] = { stops: [], day_title: stop.day_title || '' };
     if (stop.day_title) byDay[day].day_title = stop.day_title;
     byDay[day].stops.push(stop);
   }
-
   const days = Object.keys(byDay).sort((a, b) => Number(a) - Number(b));
-  let html = '<div class="destino-itinerary-static">\n';
-  html += '  <h2 class="destino-h2">🗺️ Itinerario</h2>\n';
-  // Mismo diseño de ruta que la app (CLAUDE.md §10): mapa y fotos se ven en la app.
-  html += `  <a class="destino-route-cta" href="/?ruta=${linkSlug}"><strong>Ver esta ruta con mapa y fotos</strong><span>${days.length} días · ${route.stops.length} paradas · gratis →</span></a>\n`;
+  const title = route.title || route.name || 'La guía';
 
-  for (const dayNum of days) {
-    const { stops, day_title } = byDay[dayNum];
-    // Sin cuenta se ve el día 1 completo; el resto, bloqueado (§10)
-    if (dayNum !== days[0]) {
-      html += `  <a class="destino-day-locked" href="/?ruta=${linkSlug}">🔒 Día ${dayNum} — ${escapeHTML(day_title)} <span class="destino-day-stops">${stops.length} paradas · con cuenta gratis</span></a>\n`;
-      continue;
-    }
-    html += `  <details class="destino-acc-item" open>\n`;
-    html += `    <summary class="destino-acc-header">Día ${dayNum} — ${escapeHTML(day_title)} <span class="destino-day-stops">${stops.length} paradas</span></summary>\n`;
-    html += `    <div class="destino-acc-body">\n`;
-    for (const stop of stops) {
-      html += `      <div class="destino-stop">\n`;
-      html += `        <h4 class="destino-stop-name">${escapeHTML(stop.name || '')}</h4>\n`;
-      if (stop.narrative) html += `        <p class="destino-stop-desc">${escapeHTML(stop.narrative)}</p>\n`;
-      if (stop.duration) html += `        <span class="destino-stop-meta">⏱ ${escapeHTML(stop.duration)}</span>\n`;
-      if (stop.km_from_previous) html += `        <span class="destino-stop-meta">📍 ${stop.km_from_previous} km</span>\n`;
-      html += `      </div>\n`;
-    }
-    html += `    </div>\n`;
-    html += `  </details>\n`;
+  let html = '<section class="destino-itinerary-static destino-guia" id="guia">\n';
+  html += `  <h2 class="destino-h2 destino-guia-title">${escapeHTML(title)}</h2>\n`;
+  html += `  <p class="destino-guia-sub">${days.length} ${days.length === 1 ? 'día' : 'días'} · ${route.stops.length} paradas</p>\n`;
+  if (days.length > 1) {
+    html += '  <nav class="destino-day-chips" aria-label="Días de la guía">' +
+      days.map(d => `<a href="#dia-${d}">Día ${d}</a>`).join('') + '</nav>\n';
   }
 
-  html += '</div>';
+  let n = 0;
+  for (const dayNum of days) {
+    const { stops, day_title } = byDay[dayNum];
+    html += `  <div class="destino-day" id="dia-${dayNum}">\n`;
+    html += `    <h3 class="destino-day-band"><span>DÍA ${dayNum}</span>${day_title ? ' · ' + escapeHTML(day_title) : ''}</h3>\n`;
+    for (const stop of stops) {
+      n++;
+      const name = stop.name || '';
+      html += '    <article class="destino-stop">\n';
+      html += `      <span class="destino-stop-num">${n}</span>\n`;
+      html += `      <h4 class="destino-stop-name">${escapeHTML(name)}</h4>\n`;
+      if (stop.headline && stop.headline.trim() && stop.headline.trim() !== name.trim()) html += `      <p class="destino-stop-headline">${escapeHTML(stop.headline)}</p>\n`;
+      if (stop.narrative) html += `      <p class="destino-stop-desc">${escapeHTML(stop.narrative)}</p>\n`;
+      const meta = [];
+      if (stop.duration) meta.push('⏱ ' + escapeHTML(stop.duration));
+      if (stop.km_from_previous) meta.push('📍 ' + stop.km_from_previous + ' km');
+      if (meta.length) html += `      <span class="destino-stop-meta">${meta.join(' · ')}</span>\n`;
+      html += '    </article>\n';
+    }
+    html += '  </div>\n';
+  }
+
+  const ctaImg = fs.existsSync(path.join(ROOT, 'guias-img', linkSlug + '.png')) ? `<img class="destino-cta-img" src="/guias-img/${linkSlug}.png" alt="Mapa de la guía ${escapeHTML(title)}" loading="lazy" width="640" height="300">` : '';
+  html += `  <a class="destino-route-cta destino-route-cta-img" href="/?ruta=${linkSlug}">${ctaImg}<span class="destino-cta-body"><strong>Ábrela con mapa y fotos, y guárdala</strong><span>${days.length} ${days.length === 1 ? 'día' : 'días'} · ${route.stops.length} paradas · gratis con cuenta</span><em>ABRIR LA GUÍA →</em></span></a>\n`;
+  html += '</section>';
   return html;
 }
 
@@ -314,6 +322,7 @@ function buildSchemaOrg(dest, countryName, slug, faqs) {
 // ── HTML Template ────────────────────────────────────────────
 
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
+  const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const faqs = generateFAQs(dest, countryName);
   const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs);
   const budget = estimateBudget(dest);
@@ -438,6 +447,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 
     <!-- Descripción -->
     <p class="destino-desc">${escapeHTML(dest.descripcion)}</p>
+    ${route ? `<a class="destino-jump" href="#guia">Ver la guía de ${route.duration_days || ''} días ↓</a>` : ''}
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
@@ -476,7 +486,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🛏️ Dónde dormir</h2></summary>
         <div class="destino-acc-body">
           <div class="destino-dormir-grid">
@@ -497,7 +507,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
         </div>
       </details>
 
-      <details class="destino-acc-item">
+${route ? '' : `      <details class="destino-acc-item"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🎯 Qué hacer</h2></summary>
         <div class="destino-acc-body">
           <ul class="destino-list">
@@ -505,30 +515,30 @@ ${activitiesHTML}
           </ul>
           <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
-      </details>
+      </details>`}
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🍽️ Dónde comer</h2></summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.donde_comer)}</p>
         </div>
       </details>
 
-      <details class="destino-acc-item destino-highlight">
+      <details class="destino-acc-item destino-highlight"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">💡 Consejo local</h2></summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.consejo_local)}</p>
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🌧️ Plan B si llueve</h2></summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.plan_b_lluvia)}</p>
         </div>
       </details>
 
-      <details class="destino-acc-item">
+      <details class="destino-acc-item"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">❓ Preguntas frecuentes</h2></summary>
         <div class="destino-acc-body">
           ${faqsHTML}
