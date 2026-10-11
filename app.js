@@ -2762,6 +2762,7 @@ async function loadUserGuides() {
       // Miniatura de mapa con las paradas: si esta guía todavía no la tiene, generarla
       // ahora (una sola vez, se cachea para siempre) y sustituir la foto genérica en
       // cuanto llegue — mismo endpoint que ya usa la tarjeta de "ruta activa".
+      if (d.map_thumbnail_url && d.slug && d.published && !d.cover_image) _syncPublicCover(doc.id, d.map_thumbnail_url, d);
       if (!d.map_thumbnail_url && d.itinerarioIA) {
         let routeDataThumb = null;
         try { routeDataThumb = JSON.parse(d.itinerarioIA); } catch (_) {}
@@ -5302,6 +5303,20 @@ window.setActiveRoute = setActiveRoute;
 // Logs con el mismo prefijo "[Salma]" que ya usa el resto de la app — así se ven en
 // el panel 🐛 si algo no llega a pedirse o el Worker no responde lo esperado.
 const _thumbInFlight = new Set();
+// 11 oct 2026 (Paco: "el mapa se paga una vez y se queda"): si la guía está publicada y su
+// portada pública está vacía, se usa la miniatura del mapa (ya pagada y guardada en R2) en vez
+// de pedir una foto a Google Places. 0 llamadas a APIs de pago. `d` = datos de la ruta si ya
+// se tienen (evita una lectura).
+async function _syncPublicCover(docId, url, d) {
+  try {
+    if (!docId || !url || !currentUser) return;
+    const ref = db.collection('users').doc(currentUser.uid).collection('maps').doc(docId);
+    const m = d || (await ref.get()).data() || {};
+    if (!m.slug || !m.published || m.cover_image) return;
+    await db.collection('public_guides').doc(m.slug).update({ cover_image: url });
+    await ref.update({ cover_image: url });
+  } catch (_) {}
+}
 async function _ensureRouteThumbnail(routeData, docId) {
   if (!docId || _thumbInFlight.has(docId)) return;
   if (!currentUser || !window.SALMA_API) {
@@ -5347,6 +5362,7 @@ async function _ensureRouteThumbnail(routeData, docId) {
     routeData.map_thumbnail_url = data.url;
     db.collection('users').doc(currentUser.uid).collection('maps').doc(docId)
       .set({ map_thumbnail_url: data.url }, { merge: true }).catch(() => {});
+    _syncPublicCover(docId, data.url);
     // Solo si esta ruta sigue siendo la activa ahora mismo (pudo cambiar mientras
     // esperábamos la respuesta) — si no, la próxima vez que se abra ya la lee del campo.
     if (localStorage.getItem('bdm_live_active_route_id') === docId) {
