@@ -10580,6 +10580,56 @@ export default {
       });
     }
 
+    // ─── ENDPOINT /admin/guias-publicas/eliminar (limpieza en bloque de guías públicas) ───
+    // 11 oct 2026 (Paco: "una herramienta para eliminarlas en bloque"). SOLO borra documentos
+    // `public_guides/{slug}` de los slugs que se le pasan, uno a uno y por nombre exacto: nunca
+    // por filtro ni comodín. NO toca `users/*/maps` (la ruta guardada del dueño), ni R2, ni KV de
+    // rutas. Por defecto es SIMULACRO (dryRun): solo informa. Para borrar de verdad hay que mandar
+    // `dryRun:false` Y `confirmar:"ELIMINAR"`. Antes de borrar guarda una copia en KV
+    // (`guiaborrada:{slug}`, 90 días) para poder restaurarla. Coste en APIs de pago: 0.
+    if (request.method === 'POST' && url.pathname === '/admin/guias-publicas/eliminar') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!(await isAdminRequest(request, env))) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      let body = {};
+      try { body = await request.json(); } catch (_) {}
+      const slugs = Array.isArray(body.slugs) ? [...new Set(body.slugs.map(s => String(s || '').trim()))] : [];
+      if (!slugs.length || slugs.length > 80) {
+        return new Response(JSON.stringify({ error: 'Manda entre 1 y 80 slugs' }), { status: 400, headers: corsH });
+      }
+      const bad = slugs.filter(s => !/^[a-z0-9][a-z0-9-]{2,150}$/.test(s));
+      if (bad.length) {
+        return new Response(JSON.stringify({ error: 'Slugs no válidos', bad }), { status: 400, headers: corsH });
+      }
+      const real = body.dryRun === false && body.confirmar === 'ELIMINAR';
+      const strVal = (f, k) => (f && f[k] && f[k].stringValue) || '';
+      const out = [];
+      for (const slug of slugs) {
+        const item = { slug };
+        try {
+          const doc = await firestoreAdminGet(env, 'public_guides/' + slug);
+          if (!doc) { item.estado = 'no_existe'; out.push(item); continue; }
+          const f = doc.fields || {};
+          item.nombre = strVal(f, 'nombre');
+          item.dueno = strVal(f, 'owner_name');
+          item.uid = strVal(f, 'uid');
+          if (!real) { item.estado = 'se_borraria'; out.push(item); continue; }
+          if (env.SALMA_KB) {
+            await env.SALMA_KB.put('guiaborrada:' + slug, JSON.stringify(doc), { expirationTtl: 90 * 86400 });
+          }
+          await firestoreAdminDelete(env, 'public_guides/' + slug);
+          item.estado = 'borrada';
+        } catch (e) {
+          item.estado = 'error';
+          item.error = String(e.message || e).slice(0, 160);
+        }
+        out.push(item);
+      }
+      console.log('[GUIAS-ELIMINAR]', real ? 'REAL' : 'simulacro', JSON.stringify(out.map(o => o.slug + ':' + o.estado)));
+      return new Response(JSON.stringify({ modo: real ? 'real' : 'simulacro', total: out.length, resultado: out }, null, 2), { status: 200, headers: corsH });
+    }
+
     // ─── ENDPOINT /health (monitoreo de APIs) ───
     if (request.method === 'GET' && url.pathname === '/health') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
