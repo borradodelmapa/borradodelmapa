@@ -6,6 +6,19 @@
 > **NO se envía a revisión hasta tener testers** (prueba cerrada: 12 testers × 14 días). Caso vivo: **p-mv1gkhyzcfu**.
 > Paco está harto de repetir pasos: **antes de pedirle algo, comprobar aquí si ya está hecho**, una cosa cada vez.
 
+## ⛔ CHECKLIST DE PAQUETE — OBLIGATORIO antes de subir un `.aab` y después de instalarlo (12 oct 2026)
+Paco: «cómo se puede subir cosas sin chequear que está todo correcto… que no vuelva a pasar». El formulario de PWABuilder
+**se reinicia en cada descarga** y ya costó dos días (Package ID `.twa`, Billing y Location delegation sin marcar, clave equivocada).
+**ANTES de pulsar «Download Package»** (revisar con Paco, uno por uno, y que él confirme):
+1. Package ID `com.borradodelmapa.app` · 2. Version code MAYOR que el último subido · 3. Google Play billing MARCADO
+· 4. Location delegation MARCADO · 5. Notification delegation según lo acordado · 6. Signing key «Use mine» con
+`play-upload.jks` (alias `upload`) · 7. Los iconos del manifest son los vigentes (`icon-192/512`, maskable, monochrome).
+**DESPUÉS de subir a Prueba interna e instalar en el móvil de Paco** (con capturas, no de memoria):
+a) Icono del lanzador correcto · b) arranca a pantalla completa (sin barra de URL; un «Chrome» de unos segundos al abrir es normal)
+· c) Ajustes > Apps > Borrado del Mapa > Permisos lista «Ubicación» · d) el tiempo y «cerca de mí» encuentran la ubicación ·
+e) entrar con Google funciona · f) el modal de plan en Android no enseña Stripe · g) `statements:list` de Google enseña la huella de firma de Play.
+Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegado — dime qué ves»).
+
 ## Estado a 10 oct 2026
 - **Cuenta de desarrollador:** personal, ID `8296224504840426202`. App `com.borradodelmapa.app`, ID de app en la
   consola `4972765825170829272` (estado: Borrador, Prueba interna). Enlaces directos:
