@@ -205,6 +205,9 @@ git add <ficheros> ; git commit -m "descripción" ; git push
 cd C:\Users\User\Desktop\salma\worker ; npx wrangler deploy -c wrangler.toml
 npx wrangler tail salma-api --format pretty        # diagnóstico en vivo
 node scripts/casos.cjs hoy                          # rutina de sesión
+node scripts/probar-chat.cjs "pregunta"           # Salma REAL con la cuenta de pruebas claude@borradodelmapa.com
+                                                    # (SALMA_TEST_EMAIL/PASSWORD en el entorno de la nube o api\test-user.txt;
+                                                    # cuesta 1-9 cént./mensaje: decir cuántos antes; --gps lat,lng · --seguir)
 ```
 Verificar que todo funciona: abrir borradodelmapa.com → "Hola" a Salma → login → "3 días en Cádiz" → guardar
 → aparece en Mis Viajes. Restauración completa (frontend/Worker/KV/Firebase): `docs/restauracion-y-comandos.md`.
