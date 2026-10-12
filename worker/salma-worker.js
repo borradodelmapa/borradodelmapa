@@ -4559,22 +4559,51 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
     if (coords && coords.lat && coords.lng) {
       url += `&location=${coords.lat},${coords.lng}&radius=1500`;
     }
-    const res = await fetch(url);
-    searchResults = await res.json();
+    // CACHÉ 24 h (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda de ayuda (mismo texto + zona redondeada a ~1 km)
+    // se paga una vez al día, como el Text Search de buscar_lugar. Sin coordenadas la zona es la ciudad del texto.
+    // Solo se guarda una respuesta real con resultados, y sin "abierto ahora" (aquí no se usa).
+    const hKey = env?.SALMA_KB ? 'nearbycache:help:' + normalizeQuery(searchText + '|' + (coords && coords.lat && coords.lng ? Number(coords.lat).toFixed(2) + ',' + Number(coords.lng).toFixed(2) : '-')).slice(0, 400) : null;
+    if (hKey) { try { const c = await env.SALMA_KB.get(hKey); if (c) searchResults = JSON.parse(c); } catch (_) {} }
+    if (!searchResults) {
+      const res = await fetch(url);
+      searchResults = await res.json();
+      if (hKey && searchResults?.status === 'OK' && searchResults.results?.length) {
+        try {
+          const slim = { status: 'OK', results: searchResults.results.slice(0, 10).map(p => ({ name: p.name, place_id: p.place_id, formatted_address: p.formatted_address, rating: p.rating, geometry: p.geometry })) };
+          await env.SALMA_KB.put(hKey, JSON.stringify(slim), { expirationTtl: 86400 });
+        } catch (_) {}
+      }
+    }
   } catch (e) {
     return null;
   }
 
   if (!searchResults?.results?.length) return null;
 
-  // Top 3 resultados → Place Details en paralelo, SOLO para el teléfono (lo único que
-  // el Text Search de arriba no trae ya gratis). name/address/rating salen del propio
-  // resultado del Text Search — pedirlos otra vez en Details recargaba el mismo dato.
-  // Cacheado 30 días por place_id.
-  const top = searchResults.results.slice(0, 3);
-  const detailPromises = top.map(place => {
-    if (!place.place_id) return Promise.resolve(null);
-    return _getPlaceDetailsCached(env, placesKey, place.place_id, 'formatted_phone_number,international_phone_number');
+  // Teléfono (12 oct 2026, caso p-mulprefz0fz): Place Details (de pago) SOLO del primer resultado, cacheado por sitio.
+  // Los otros dos salen igual (nombre, dirección, nota, Cómo llegar) y con teléfono solo si ese sitio ya se había
+  // pagado antes (caché KV, coste 0). Antes se pagaba el teléfono de los 3 en cada pregunta.
+  const _helpFields = 'formatted_phone_number,international_phone_number';
+  // La MÁS CERCANA primero (Paco, 12 oct 2026): con coordenadas se ordena por distancia real; sin ellas, el orden de Google.
+  let _cands = searchResults.results.slice(0, 10);
+  if (coords && coords.lat && coords.lng) {
+    const _d = (p) => {
+      const l = p?.geometry?.location; if (!l || typeof l.lat !== 'number') return Infinity;
+      const toR = x => x * Math.PI / 180, dLat = toR(l.lat - coords.lat), dLng = toR(l.lng - coords.lng);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toR(coords.lat)) * Math.cos(toR(l.lat)) * Math.sin(dLng / 2) ** 2;
+      return 12742 * Math.asin(Math.sqrt(a));
+    };
+    _cands = _cands.map(p => [p, _d(p)]).sort((a, b) => a[1] - b[1]).map(x => { if (x[1] !== Infinity) x[0] = { ...x[0], _km: x[1] }; return x[0]; });
+  }
+  const top = _cands.slice(0, 3);
+  const detailPromises = top.map(async (place, i) => {
+    if (!place.place_id) return null;
+    if (i === 0) return _getPlaceDetailsCached(env, placesKey, place.place_id, _helpFields);
+    if (!env?.SALMA_KB) return null;
+    for (const f of [_helpFields, _helpFields + ',website']) {
+      try { const c = await env.SALMA_KB.get('placedetails:' + place.place_id + ':' + f); if (c) return JSON.parse(c); } catch (_) {}
+    }
+    return null;
   });
   const details = await Promise.all(detailPromises);
 
@@ -4592,6 +4621,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
         phone: phone || '',
         address: address || '',
         rating: rating ? `${rating}★` : '',
+        dist: typeof place._km === 'number' ? (place._km < 1 ? `a ${Math.round(place._km * 1000 / 50) * 50 || 50} m` : `a ${place._km.toFixed(1).replace('.', ',')} km`) : '',
       });
     }
   });
@@ -6393,6 +6423,7 @@ QUÉ HACER:
       if (r.phone) parts.push(r.phone);
       if (r.address) parts.push(r.address);
       if (r.rating) parts.push(r.rating);
+      if (r.dist) parts.push(r.dist);
       return parts.join(' — ');
     }).join('\n');
 
