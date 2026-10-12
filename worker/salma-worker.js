@@ -15765,6 +15765,10 @@ INSTRUCCIONES:
                 body: JSON.stringify({
                   model: (_reqModelo = _modeloNuevo(nuevo)),
                   ...(/sonnet-5/.test(_reqModelo) ? { thinking: { type: 'between_tools' } } : {}),
+                  // Esfuerzo (12 oct 2026, caso p-mulprefz0fz): solo en la conversación normal (las guías no se tocan).
+                  // Menos esfuerzo = respuestas más escuetas y menos vueltas de herramientas. CHAT_EFFORT="" lo apaga.
+                  ...(nuevo && /sonnet-5/.test(_reqModelo) && /^(low|medium)$/.test(env.CHAT_EFFORT || '') && systemBase === SALMA_SYSTEM_CHAT
+                    ? { output_config: { effort: env.CHAT_EFFORT } } : {}),
                   max_tokens: reqMaxTokens,
                   system: _tm ? _tm.system : buildCachedSystem(systemBase, systemPrompt, systemPerfil, nuevo && env.CACHE_1H === '1'),
                   messages: _tm ? _tm.messages : (nuevo && env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages),
@@ -15774,7 +15778,7 @@ INSTRUCCIONES:
                 }),
               });
               apiRes = await _callClaude(true);
-              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1' || env.CACHE_TAIL === '1' || _modeloNuevo(true) !== 'claude-sonnet-4-6')) {
+              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1' || env.CACHE_TAIL === '1' || !!env.CHAT_EFFORT || _modeloNuevo(true) !== 'claude-sonnet-4-6')) {
                 let _errTxt = ''; try { _errTxt = (await apiRes.clone().text()).slice(0, 300); } catch (_) {}
                 console.log('[CACHE/MODELO] Anthropic rechazó la petición (' + apiRes.status + ', modelo ' + _reqModelo + '): reintento con lo de siempre · ' + _errTxt);
                 apiRes = await _callClaude(false);
