@@ -4317,6 +4317,15 @@ const salma = {
       const old = btn.parentNode && btn.parentNode.querySelector('.geo-why');
       if (old) old.remove();
       btn.insertAdjacentHTML('afterend', '<small class="geo-why" style="display:block;margin-top:8px;opacity:0.7">' + why + ' (código ' + err.code + ')</small>');
+      // Estado del permiso según el navegador/Android (denied = bloqueado, prompt = sin contestar, granted = permitido): para diagnosticar. 12 oct 2026
+      try {
+        if (navigator.permissions && navigator.permissions.query) {
+          navigator.permissions.query({ name: 'geolocation' }).then(r => {
+            const el = btn.parentNode && btn.parentNode.querySelector('.geo-why');
+            if (el) el.textContent += ' [permiso: ' + r.state + ']';
+          }).catch(() => {});
+        }
+      } catch (_) {}
     };
     // 1º ubicación aproximada (red/wifi: rápida, vale dentro de casa); si falla, GPS fino
     navigator.geolocation.getCurrentPosition(
