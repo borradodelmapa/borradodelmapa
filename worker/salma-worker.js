@@ -15256,7 +15256,8 @@ INSTRUCCIONES:
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
       const MAX_TOOL_ITERATIONS = 10;  // Seguridad: máximo 10 tool calls por turno (subido de 5 — rutas con restricción de carretera única necesitan varias búsquedas de buscar_lugar antes de cerrar el JSON)
-      const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
+      // Una pregunta con «N días» (caso rev-no_contesta_primero: «camping … 15 días») NO es una ruta larga: sin esto, al salir del modo viaje caía aquí.
+      const longRoute = !_msgsPregunta.has(message) && isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
         // ── TRANSPORT: buscar destino + emitir botones ANTES de Claude ──
