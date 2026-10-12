@@ -4594,13 +4594,22 @@ async function _coordsCiudadOSM(location, env) {
   return null;
 }
 // Sitios de OpenStreetMap alrededor de un punto (Overpass). Solo los que tienen nombre.
+// Varios servidores Overpass (gratis): si uno no contesta o rechaza la petición, se prueba el siguiente. Cada fallo
+// deja su línea [AYUDA-OSM] en el log (wrangler tail) para saber por qué se acabó en Google.
+const _OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
 async function _buscarOSM(filtro, center, radio) {
   const q = `[out:json][timeout:8];nwr${filtro}(around:${radio},${center.lat},${center.lng});out center tags 40;`;
-  const r = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' },
-    body: 'data=' + encodeURIComponent(q), signal: AbortSignal.timeout(9000) });
-  if (!r.ok) return [];
-  const d = await r.json();
+  let d = null;
+  for (const srv of _OVERPASS) {
+    try {
+      const r = await fetch(srv + '?data=' + encodeURIComponent(q), {
+        headers: { 'Accept': 'application/json', 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' }, signal: AbortSignal.timeout(7000) });
+      if (!r.ok) { console.log('[AYUDA-OSM] ' + srv + ' respondió ' + r.status); continue; }
+      d = await r.json(); break;
+    } catch (e) { console.log('[AYUDA-OSM] ' + srv + ' falló: ' + (e && e.message)); }
+  }
+  if (!d) return [];
+  console.log('[AYUDA-OSM] ' + (d.elements || []).length + ' sitios en ' + radio + ' m');
   return (d.elements || []).map(el => {
     const t = el.tags || {};
     const lat = typeof el.lat === 'number' ? el.lat : el.center?.lat, lng = typeof el.lon === 'number' ? el.lon : el.center?.lon;
@@ -4626,6 +4635,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
   if (_hit && _hit[2]) {
     try {
       const center = _gps || await _coordsCiudadOSM(location, env);
+      if (!center) console.log('[AYUDA-OSM] sin coordenadas para "' + location + '"');
       if (center) {
         lista = await _buscarOSM(_hit[2], center, 2500);
         if (!lista.length) lista = await _buscarOSM(_hit[2], center, 8000);
@@ -4636,6 +4646,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
   }
   // 2) Google — solo si OSM no ha dado nada. Teléfono (Place Details, de pago) SOLO de la más cercana.
   if (!lista.length && placesKey) {
+    console.log('[AYUDA] Google de reserva para "' + (_term || query) + '" en ' + location + (_hit && _hit[2] ? ' (OSM no dio nada)' : ' (no hay equivalente en OSM)'));
     try {
       let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(`${_term || query} ${location}`)}&language=es&key=${placesKey}`;
       if (_gps) url += `&location=${_gps.lat},${_gps.lng}&radius=1500`;
