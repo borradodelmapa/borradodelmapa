@@ -11,8 +11,13 @@ Paco: «cómo se puede subir cosas sin chequear que está todo correcto… que n
 **se reinicia en cada descarga** y ya costó dos días (Package ID `.twa`, Billing y Location delegation sin marcar, clave equivocada).
 **ANTES de pulsar «Download Package»** (revisar con Paco, uno por uno, y que él confirme):
 1. Package ID `com.borradodelmapa.app` · 2. Version code MAYOR que el último subido · 3. Google Play billing MARCADO
-· 4. Location delegation MARCADO · 5. Notification delegation según lo acordado · 6. Signing key «Use mine» con
+· 4. **Location delegation SIN MARCAR** (ver nota de abajo) · 5. Notification delegation según lo acordado · 6. Signing key «Use mine» con
 `play-upload.jks` (alias `upload`) · 7. Los iconos del manifest son los vigentes (`icon-192/512`, maskable, monochrome).
+> **⚠ Location delegation: NO marcar (12 oct 2026).** Con ella, Android bloquea el cuadro de permiso de ubicación
+> («Background activity launch blocked»): el permiso se queda en «prompt», la petición caduca (código 3) y la app nunca
+> sabe dónde está. Fallo conocido y sin arreglar de android-browser-helper (github.com/GoogleChrome/android-browser-helper/issues/499).
+> Sin la casilla, la ubicación la gestiona Chrome con su propio cuadro (comprobado por Paco en Chrome: pide el permiso al entrar).
+> Paquete v3 (code 3) se subió CON la casilla y por eso falla; el v4 (code 4) va SIN ella.
 **DESPUÉS de subir a Prueba interna e instalar en el móvil de Paco** (con capturas, no de memoria):
 a) Icono del lanzador correcto · b) arranca a pantalla completa (sin barra de URL; un «Chrome» de unos segundos al abrir es normal)
 · c) Ajustes > Apps > Borrado del Mapa > Permisos lista «Ubicación» · d) el tiempo y «cerca de mí» encuentran la ubicación ·
@@ -35,7 +40,7 @@ Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegad
   para subir; Google rechaza con «firmado con la clave incorrecta».
 - **Cómo repetir el paquete en PWABuilder (el formulario SE REINICIA cada vez; revisar TODO antes de descargar):**
   Package ID `com.borradodelmapa.app` (vuelve a `.twa`), Version code mayor que el último subido (ahora 2 → usar 3),
-  Google Play billing marcado, Location delegation marcado, Signing key = «Use mine» con `play-upload.jks`, alias
+  Google Play billing marcado, Location delegation SIN MARCAR, Signing key = «Use mine» con `play-upload.jks`, alias
   `upload`. El manifest ya no lleva iconos `.webp` (rompía el generador; arreglado el 9 oct).
 - **Perfil de pagos de Google:** creado (Particular, FRANCISCO GOMEZ DUARTE, ID 7480-9639-4825). IBAN de Unicaja
   añadido; **pendiente** confirmar el ingreso de <0,25 € que Google hace (hasta 3 días hábiles) en Perfil de pagos →
