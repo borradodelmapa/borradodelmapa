@@ -4631,8 +4631,11 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
   if (hKey) { try { const c = await env.SALMA_KB.get(hKey); if (c) return _ordenarAyuda(JSON.parse(c), _gps); } catch (_) {} }
 
   let lista = [];
-  // 1) OpenStreetMap — gratis.
-  if (_hit && _hit[2]) {
+  // 1) OpenStreetMap — APAGADO (12 oct 2026, Paco): desde Cloudflare los 3 servidores Overpass gratuitos fallaban en
+  // cada pregunta (timeouts, 504, 521) y Salma esperaba hasta ~40 s antes de caer a Google. Se deja el código por si
+  // más adelante se cargan los datos de OSM en nuestro propio KV; mientras, va directo a Google.
+  const AYUDA_OSM = false;
+  if (AYUDA_OSM && _hit && _hit[2]) {
     try {
       const center = _gps || await _coordsCiudadOSM(location, env);
       if (!center) console.log('[AYUDA-OSM] sin coordenadas para "' + location + '"');
