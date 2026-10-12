@@ -3521,6 +3521,23 @@ async function findVehicleParking(site, medio, env) {
 
 // Aviso fijo cuando el chat nombra sitios pero no lleva enlaces (decisión de Paco, 28 sept 2026): los enlaces
 // "Cómo llegar" van siempre en las guías y, en el chat, solo cuando el usuario los pide o busca algo cerca.
+// Fotos al final de una respuesta de conversación (12 oct 2026): saca las líneas ![nombre](url) de donde estén y las
+// pone juntas después del texto, antes de las líneas de cierre (🗺️ guía, 📍 cómo llegar). Quita también el aviso
+// "voy a buscarte unas fotos…" del principio, que ya no tiene sentido. Si no hay fotos, devuelve el texto tal cual.
+function fotosAbajo(reply) {
+  try {
+    if (!reply || !/!\[[^\]]*\]\([^)]+\)/.test(reply)) return reply;
+    const lineas = String(reply).split('\n');
+    const fotos = [], resto = [];
+    for (const l of lineas) (/^\s*!\[[^\]]*\]\([^)]+\)\s*$/.test(l) ? fotos : resto).push(l.trim());
+    if (!fotos.length) return reply;
+    let txt = resto.join('\n').replace(/^\s*(?:voy a|d[eé]jame|te)\s+busca(?:r|rte|ndo)?(?:te)?\s+(?:unas?\s+|algunas?\s+)?fotos?[^\n]*\n+/i, '').replace(/\n{3,}/g, '\n\n').trim();
+    const cierre = txt.search(/\n\n(?:🗺️|🗺|📍)/);
+    const bloque = fotos.join('\n');
+    txt = cierre >= 0 ? txt.slice(0, cierre) + '\n\n' + bloque + txt.slice(cierre) : txt + '\n\n' + bloque;
+    return txt;
+  } catch (_) { return reply; }
+}
 const CHAT_MAPS_HINT = '📍 Si necesitas cómo llegar a alguno de estos sitios, pídemelo y te paso el enlace.';
 
 // ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → sitio verificado → place_id ═══
@@ -16740,6 +16757,10 @@ REGLAS:
           _replyMarcas = reply;
           reply = marcasANegrita(reply);
         }
+
+        // Conversación: las fotos van ABAJO del texto, antes de las líneas de cierre 🗺️/📍 (Paco, 12 oct 2026). Salma
+        // las pone donde las pide (arriba, tras "voy a buscarte unas fotos…"); la app re-pinta la burbuja con esta versión.
+        if (!route && !guidedIsReco && systemBase === SALMA_SYSTEM_CHAT) reply = fotosAbajo(reply);
 
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
