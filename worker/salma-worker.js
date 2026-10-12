@@ -3009,14 +3009,12 @@ function isDaysDestination(message) {
   // (La categoría "transport" se deja fuera a propósito: su regex coge "puerto de…", "tren"… que pueden ser un destino.)
   const _helpCat = isHelpRequest(message);
   if (isNearbySearch(message) || (_helpCat && _helpCat !== 'transport')) return false;
-  // Solo destino (1-4 palabras, sin pregunta, sin verbo de acción) → tratar como plan 1 día
-  const clean = message.trim().replace(/^(me apetece|vamos a)\s+/i, '').trim();
-  if (clean.length >= 3 && clean.length <= 40 && clean.split(/\s+/).length <= 4
-    && !/[?¿]/.test(clean)
-    && !/\b(hola|hey|buenas|ey|hi|hello|saludos|busca|hotel|vuelo|restaurante|comer|dormir|tiempo|clima|visa|visado|precio|cuanto|como|donde|cuando|que|quiero|necesito|puedo|taxi|ferry|tren|bus|emergencia|ayuda)\b/i.test(clean)) {
-    return true;
-  }
-  return false;
+  // PLAN SOLO CON SEÑAL CLARA (Paco, 12 oct 2026). Antes, cualquier mensaje corto "sin verbo" era plan de 1 día:
+  // una lista NEGRA de verbos que nunca se acababa ("háblame de Granada", "cómo es Lisboa", "qué tal Oporto" salían
+  // como plan por días, ~9 cént. y sin lo que se pedía). Ahora es al revés: por defecto Salma CONVERSA, y solo es
+  // plan si el mensaje lo pide — días (arriba), semanas/fin de semana o una palabra de plan. "Granada" a secas
+  // también es conversación (Paco eligió la opción b). Rutas y "hazme una guía" van por isRouteRequest.
+  return /\b(fin\s+de\s+semana|finde|(?:h[aá]zme|haz|m[oó]ntame|dame|quiero)\s+(?:una?\s+)?(?:gu[ií]a|ruta)|(?:una|dos|tres|\d{1,2})\s+semanas?|itinerario|escapada|plan\s+(?:de\s+viaje|para|por|de\s+\d)|planif[ií]ca(?:me)?|plan[eé]a(?:me)?|organ[ií]za(?:me)?\s+(?:un|el|mi)\s+viaje|recorrido\s+por)\b/i.test(message);
 }
 
 // Post-procesado: divide el texto en N días con headers **Día N**
