@@ -206,7 +206,8 @@ cd C:\Users\User\Desktop\salma\worker ; npx wrangler deploy -c wrangler.toml
 npx wrangler tail salma-api --format pretty        # diagnóstico en vivo
 node scripts/casos.cjs hoy                          # rutina de sesión
 node scripts/probar-chat.cjs "pregunta"           # Salma REAL con la cuenta de pruebas claude@borradodelmapa.com
-                                                    # (SALMA_TEST_EMAIL/PASSWORD en el entorno de la nube o api\test-user.txt;
+                                                    # (SALMA_TEST_EMAIL/PASSWORD en el entorno de la nube o api\test-user.txt; PREMIUM hasta 11 nov 2026,
+                                                    # Paco la amplía desde el panel; hay otra cuenta de pruebas antigua de Gmail;
                                                     # cuesta 1-9 cént./mensaje: decir cuántos antes; --gps lat,lng · --seguir)
 ```
 Verificar que todo funciona: abrir borradodelmapa.com → "Hola" a Salma → login → "3 días en Cádiz" → guardar
