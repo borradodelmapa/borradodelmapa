@@ -14929,8 +14929,14 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // Con sitio comprobado y nada más que explicar (solo el medio: camper, coche, andando…) contesta la app: enlace
     // y, con vehículo propio, dónde dejarlo. Taxi, bus/tren o una pregunta extra (entradas, niños, desde Madrid…) →
     // Salma, con el sitio ya comprobado y la orden de contestar corto y primero lo que se pide.
+    // Un TRAYECTO entre dos sitios con un medio ("ferry de Koh Tao a Bangkok", "bus de Granada a Sevilla") no es "ir a
+    // un sitio": lo contesta Salma, que tiene las correcciones de rutas imposibles (Bangkok sin puerto…). Antes el
+    // intérprete tomaba la frase entera por un sitio, Google no la encontraba y se cortaba con "No encuentro…"
+    // (caso p-mv5f09ww524, 12 oct 2026; roto desde el atajo del 28 sept).
+    const _esTrayecto = (t) => /\b(ferry|ferri|ferrys|barco|catamar[aá]n|lancha|bus|autob[uú]s|tren|ave|vuelo|vuelos|avi[oó]n)\b/i.test(t || '')
+      && /\bde(?:sde)?\s+\S.*\s(?:a|al|hasta|hacia)\s+\S/i.test(t || '');
     const _goTarget = (_placeIntent && _placeIntent.quiere_ir && _placeIntent.sitio && !_placeIntent.es_destino
-      && !_placeIntent.cerca_de_mi && !currentRoute) ? _placeIntent.sitio : null;
+      && !_placeIntent.cerca_de_mi && !currentRoute && !_esTrayecto(message) && !_esTrayecto(_placeIntent.sitio)) ? _placeIntent.sitio : null;
     const _appAnswers = !!_goTarget && !_placeIntent.contexto && _placeIntent.medio !== 'taxi' && _placeIntent.medio !== 'publico';
     let _directTried = null;
     let _goSite = null, _goCorrected = false;
