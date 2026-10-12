@@ -4555,7 +4555,7 @@ function extractHelpLocation(message, history, currentRoute, deferRoute) {
 // 1) PRIMERO OpenStreetMap (Overpass): gratis, sin límite de pago y se puede guardar sin caducidad (citando la fuente).
 // 2) Si OSM no encuentra nada cerca, Google como antes: búsqueda + teléfono SOLO de la más cercana.
 // Siempre la MÁS CERCANA primero. Búsqueda por LO QUE SE BUSCA, no por la frase ("dime una farmacia", "farmacia cerca"
-// → farmacia), guardada 7 días por zona (~1 km); 1 h si la pregunta es de hoy/ahora/abierta/de guardia.
+// → farmacia), guardada 30 días por zona (~1 km); 1 h si la pregunta es de hoy/ahora/abierta/de guardia.
 const _HELP_TERMS = [
   ['farmacia', /farmacia|pharmacy/, '["amenity"="pharmacy"]'],
   ['hospital urgencias', /hospital|urgencias|emergency room/, '["amenity"="hospital"]'],
@@ -4843,7 +4843,7 @@ async function fetchWeatherBanner(lat, lon, key) {
 
 async function searchEvents(destination, dateFrom, dateTo, serperKey, env) {
   if (!destination || !dateFrom || !serperKey) return null;
-  // CACHÉ 7 días (12 oct 2026, caso p-mulprefz0fz): mismo destino + mismo mes → una búsqueda de Serper, no una por mensaje.
+  // CACHÉ 30 días (12 oct 2026, caso p-mulprefz0fz): mismo destino + mismo mes → una búsqueda de Serper, no una por mensaje.
   let eKey = null;
   try { const _f = new Date(dateFrom); if (!isNaN(_f)) eKey = env?.SALMA_KB ? 'eventcache:' + _cacheKey(destination + '|' + _f.getFullYear() + '-' + (_f.getMonth() + 1)).slice(0, 200) : null; } catch (_) {}
   if (eKey) { try { const c = await env.SALMA_KB.get(eKey); if (c) return JSON.parse(c); } catch (_) {} }
@@ -8586,9 +8586,10 @@ function normalizeQuery(text) {
 
 // Clave de caché (12 oct 2026, caso p-mulprefz0fz): sin mayúsculas, acentos, signos ni espacios dobles, para que
 // "Farmacia Estepona" y "farmacia  estepona?" sean la misma búsqueda guardada. Solo para claves, nunca para la URL.
-// UNA regla de duración para todas las cachés de búsqueda (Paco, 12 oct 2026): 7 días todo; 1 h solo si la
-// pregunta habla de algo que cambia en el día (hoy, ahora, abierto, de guardia, 24 h). Ciudades: para siempre.
-const CACHE_TTL_LARGO = 604800, CACHE_TTL_CORTO = 3600;
+// UNA regla de duración para todas las cachés de búsqueda (Paco, 12 oct 2026): 30 días todo (el máximo que permiten
+// las condiciones de Google); 1 h solo si la pregunta habla de algo que cambia en el día (hoy, ahora, abierto, de
+// guardia, 24 h). Ciudades: para siempre.
+const CACHE_TTL_LARGO = 2592000, CACHE_TTL_CORTO = 3600;
 function _esCambiante(text) {
   return /guardia|abiert|ahora|24 ?h|hoy|esta noche|urgente/.test(String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
 }
@@ -9200,7 +9201,7 @@ async function buscarLugar(input, placesKey, userCoords, env) {
 
 async function buscarWeb(input, braveKey, env) {
   if (!braveKey || !input.query) return { error: 'Falta query o API key' };
-  // CACHÉ 7 días, o 1 h si habla de hoy/ahora (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda web (texto normalizado: sin mayúsculas ni acentos)
+  // CACHÉ 30 días, o 1 h si habla de hoy/ahora (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda web (texto normalizado: sin mayúsculas ni acentos)
   // se paga a Brave una vez. La consulta ya lleva el sitio (Salma escribe "ferry Tarifa Tánger…"), así que
   // otra ciudad = otra clave. Solo se guarda una respuesta real con resultados.
   const wKey = env?.SALMA_KB ? 'webcache:' + _cacheKey(String(input.query)).slice(0, 300) : null;
