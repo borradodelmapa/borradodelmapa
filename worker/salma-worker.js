@@ -9868,6 +9868,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
   const _mk = streamMarcas(); // [[Sitio]] → **Sitio** en lo que ve el usuario (fullText se queda con las marcas)
   let usageIn = 0, usageOut = 0; // tokens de esta llamada (medición de coste, paso 3)
   let cacheW = 0, cacheR = 0;    // de esos, guardados en / leídos de la caché de prompt
+  let cacheW1h = 0;              // de los guardados, los de la caché de 1 h (cuestan 2x en vez de 1,25x)
   const blocksInProgress = {};
 
   while (true) {
@@ -9924,6 +9925,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
           if (u) {
             usageIn += (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0);
             cacheW += u.cache_creation_input_tokens || 0;
+            cacheW1h += (u.cache_creation && u.cache_creation.ephemeral_1h_input_tokens) || 0;
             cacheR += u.cache_read_input_tokens || 0;
           }
         } else if (evt.type === 'message_delta') {
@@ -9956,7 +9958,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
     }
   }
 
-  return { fullText, contentBlocks, stopReason, routeSignalSent, usage: { in: usageIn, out: usageOut, cw: cacheW, cr: cacheR } };
+  return { fullText, contentBlocks, stopReason, routeSignalSent, usage: { in: usageIn, out: usageOut, cw: cacheW, cr: cacheR, cw1h: cacheW1h } };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -10084,7 +10086,10 @@ async function logChatCost(env, row) {
     const plainIn = Math.max(0, (row.tin || 0) - (row.cw || 0) - (row.cr || 0));
     // Precios USD por millón de fichas (lista): Sonnet 4.6 = 3/15 (escribir caché 3,75, leer 0,3); Sonnet 5.5 = 2/10 (2,5 / 0,2).
     const P = /sonnet-5/.test(row.modelo || '') ? { in: 2, out: 10, cacheWrite: 2.5, cacheRead: 0.2 } : CLAUDE_USD_PER_MTOK;
-    const usd = (plainIn * P.in + (row.cw || 0) * P.cacheWrite + (row.cr || 0) * P.cacheRead + (row.tout || 0) * P.out) / 1e6;
+    // Caché de 1 h (12 oct 2026, caso p-mulprefz0fz): esas fichas se guardan a 2x la entrada, no a 1,25x. Antes se
+    // contaban todas a 1,25x y el primer mensaje de cada hora salía más barato en el contador que en la factura.
+    const cw1h = Math.min(row.cw || 0, row.cw1h || 0);
+    const usd = (plainIn * P.in + ((row.cw || 0) - cw1h) * P.cacheWrite + cw1h * P.in * 2 + (row.cr || 0) * P.cacheRead + (row.tout || 0) * P.out) / 1e6;
     const f = {
       at: { timestampValue: new Date().toISOString() },
       worker: _fS(String(env.CF_VERSION_METADATA?.id || '').slice(0, 40)),
@@ -10092,7 +10097,7 @@ async function logChatCost(env, row) {
       plan: _fS(String(row.plan || '').slice(0, 10)),
       tipo: _fS(String(row.tipo || 'chat').slice(0, 12)),
       mensaje: _fS(String(row.mensaje || '').replace(/\s+/g, ' ').slice(0, 160)),
-      tin: _fI(row.tin), tout: _fI(row.tout), cw: _fI(row.cw), cr: _fI(row.cr),
+      tin: _fI(row.tin), tout: _fI(row.tout), cw: _fI(row.cw), cr: _fI(row.cr), cw1h: _fI(row.cw1h || 0),
       usd_micro: _fI(usd * 1e6),          // dólares ×1.000.000 (entero)
       ms: _fI(row.ms),
       error: _fS(String(row.error || '').slice(0, 140)),
@@ -14876,7 +14881,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         (_usageGate.today + 1) % PERFIL_IA_EVERY_N_MSGS === 0) {
       ctx.waitUntil(perfilIALearnFromChat(env, authUser.uid, [...history.slice(-11), { role: 'user', content: message }]));
     }
-    const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0 };  // tokens de Claude de esta petición
+    const _reqUsage = { tin: 0, tout: 0, cw: 0, cr: 0, cw1h: 0 };  // tokens de Claude de esta petición
     const _chatT0 = Date.now();
     let _reqError = '';   // motivo del último error de esta petición (queda en chat_costs.error)
     let _reqModelo = '';  // modelo de Claude con el que se contestó esta petición (queda en chat_costs.modelo)
@@ -14895,7 +14900,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       if (_reqUsage.tin || _reqUsage.tout || _reqError) ctx.waitUntil(logChatCost(env, {
         uid: authUser && authUser.uid, plan: authUser && authUser.premium_active ? 'premium' : 'free',
         tipo: _usageConsume || 'chat', mensaje: message,
-        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, ms: Date.now() - _chatT0, error: _reqError, modelo: _reqModelo,
+        tin: _reqUsage.tin, tout: _reqUsage.tout, cw: _reqUsage.cw, cr: _reqUsage.cr, cw1h: _reqUsage.cw1h, ms: Date.now() - _chatT0, error: _reqError, modelo: _reqModelo,
       }));
     };
 
@@ -15788,7 +15793,7 @@ INSTRUCCIONES:
             result = await readAnthropicStream(apiRes, writer, encoder, decoder, true);
             if (result && result.usage) {
               _reqUsage.tin += result.usage.in || 0; _reqUsage.tout += result.usage.out || 0;
-              _reqUsage.cw += result.usage.cw || 0; _reqUsage.cr += result.usage.cr || 0;
+              _reqUsage.cw += result.usage.cw || 0; _reqUsage.cr += result.usage.cr || 0; _reqUsage.cw1h += result.usage.cw1h || 0;
               console.log(`[CACHE] vuelta ${iteration}: entrada ${result.usage.in || 0} (guardados ${result.usage.cw || 0}, leídos de caché ${result.usage.cr || 0}) salida ${result.usage.out || 0}`);
             }
           } else {
