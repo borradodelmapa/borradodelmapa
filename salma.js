@@ -1054,7 +1054,7 @@ const salma = {
 
     // Si el mensaje requiere ubicación y no la tenemos, mostrar prompt
     if (!this._userLocation && msg) {
-      const needsLocation = /desde donde estoy|desde aqu[ií]|desde ah[ií]|cerca de m[ií]|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me|vuelo.*desde aqu[ií]|vuelo.*desde ah[ií]/i.test(msg);
+      const needsLocation = /desde donde estoy|desde aqu[ií]|desde ah[ií]|cerca\s+(de\s+)?m[ií][ao]?\b|a mi lado|por mi zona|en mi zona|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me|vuelo.*desde aqu[ií]|vuelo.*desde ah[ií]/i.test(msg);
       if (needsLocation) {
         this._addUserBubble(msg);
         this._pendingGeoMessage = msg;  // guardar para reenviar tras GPS
@@ -1069,6 +1069,7 @@ const salma = {
     // NO push a history aquí — se hace en _doSend tras recibir respuesta
 
     // Todo va directo al worker — Salma decide si preguntar
+    this._lastUserMsgForGeo = msg || '';
     this._doSend(msg || '', { photo, route_from_here: !!opts.routeFromHere });
   },
 
@@ -4211,6 +4212,7 @@ const salma = {
       // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
       this._addMsgActions(el, rawText);
       this._addRateBar(el, rawText);
+      this._geoPromptSiFalta(rawText);
     }
     const txt = document.getElementById('salma-stream-text');
     if (txt) txt.removeAttribute('id');
@@ -4238,9 +4240,21 @@ const salma = {
         // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
         this._addMsgActions(el, rawText);
         this._addRateBar(el, rawText);
+        this._geoPromptSiFalta(rawText);
         // (30 sept 2026) Quitadas las fotos automáticas por negrita (ver el comentario igual más arriba).
       }
     }
+  },
+
+  // Si Salma contesta que le falta la ubicación ("pulsa el botón 📍…") y no la tenemos, pintar ese botón siempre, escriba lo que escriba el
+  // usuario (el filtro por frases de send() no cubre todo: "cerca mia", "gimnasios por aquí"…). 12 oct 2026.
+  _geoPromptSiFalta(rawText) {
+    try {
+      if (this._userLocation || !rawText) return;
+      if (!/📍/.test(rawText) || !/ubicaci/i.test(rawText)) return;
+      if (!this._pendingGeoMessage) this._pendingGeoMessage = this._lastUserMsgForGeo || null;
+      this._showGeoPrompt();
+    } catch (_) {}
   },
 
   _showGeoPrompt() {
