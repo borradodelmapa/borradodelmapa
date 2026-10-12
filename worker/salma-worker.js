@@ -3374,7 +3374,8 @@ function chatPlaceKey(name) {
 // Catálogo de la respuesta: sitios de buscar_lugar con place_id, coordenadas y la ciudad en que los buscó Salma.
 function addChatPlace(catalog, name, entry) {
   const k = chatPlaceKey(name);
-  if (!catalog || k.length < 3 || !entry || !entry.place_id || catalog.has(k)) return;
+  if (!catalog || k.length < 3 || !entry || catalog.has(k)) return;
+  if (!entry.place_id && !(typeof entry.lat === 'number' && typeof entry.lng === 'number')) return;
   catalog.set(k, entry);
 }
 // La negrita es ese sitio del catálogo si es igual, o el principio de su nombre ("Mercado de Triana" de "Mercado de
@@ -3623,7 +3624,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, linkCtx, skipRouteLink 
   const found = await resolveChatPlaces(matches.map(x => x.name), linkCtx || {}, env);
   const results = matches.map(({ bold, name }) => {
     const v = found.get(name);
-    return v ? { bold, name, placeId: v.place_id, googleName: v.name, lat: v.lat, lng: v.lng } : { bold, name, placeId: null };
+    return v ? { bold, name, placeId: v.place_id || null, googleName: v.name, lat: v.lat, lng: v.lng } : { bold, name, placeId: null };
   });
 
   // Limpiar PRIMERO cualquier URL de Maps que Claude haya puesto por su cuenta
@@ -3632,10 +3633,13 @@ async function injectVerifiedMapsLinks(reply, placesKey, linkCtx, skipRouteLink 
   // Inyectar "🗺️ Cómo llegar" al lado de cada negrita validada.
   // Formato oficial de Google: dir/?api=1 con destination + destination_place_id.
   // Google usa destination_place_id como fuente de verdad; destination es texto de backup.
-  for (const { bold, name, googleName, placeId } of results) {
-    if (!placeId) continue;
+  for (const { bold, name, googleName, placeId, lat, lng } of results) {
+    // Sin place_id pero con coordenadas (sitio de OpenStreetMap): enlace a sus coordenadas, gratis.
+    const _soloCoords = !placeId && typeof lat === 'number' && typeof lng === 'number';
+    if (!placeId && !_soloCoords) continue;
     const dest = encodeURIComponent(googleName || name);
-    const link = `https://www.google.com/maps/dir/?api=1&destination=${dest}&destination_place_id=${placeId}`;
+    const link = _soloCoords ? `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
+      : `https://www.google.com/maps/dir/?api=1&destination=${dest}&destination_place_id=${placeId}`;
     const boldEscaped = bold.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const withLinkRegex = new RegExp(boldEscaped + '\\s*\\([^)]*google\\.com[^)]*\\)');
     if (withLinkRegex.test(enriched)) continue;
@@ -4547,93 +4551,113 @@ function extractHelpLocation(message, history, currentRoute, deferRoute) {
   return null;
 }
 
-async function searchPlacesForHelp(query, location, placesKey, coords, env) {
-  if (!query || !location || !placesKey) return null;
-
-  // Búsqueda por LO QUE SE BUSCA, no por la frase (12 oct 2026, caso p-mulprefz0fz): "dime una farmacia", "farmacia
-  // cerca" y "hay alguna farmacia por aquí" → "farmacia <ciudad>", misma búsqueda y misma caché. Si la frase pide algo
-  // que cambia con el día ("de guardia", "abierta", "ahora", "24 h") o no casa con ninguna palabra de la lista
-  // (embajada de X, etc.), se busca la frase tal cual, como antes; lo que cambia con el día se guarda solo 1 h.
-  const _qn = String(query).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const _cambiante = _esCambiante(_qn);
-  const _terms = [['farmacia', /farmacia|pharmacy/], ['hospital urgencias', /hospital|urgencias|emergency room/], ['centro de salud', /medico|doctor|clinica|clinic/],
-    ['dentista', /dentista|dentist/], ['veterinario', /veterinari/], ['taller mecanico', /taller|mecanico|mechanic|averia|breakdown|pinch/],
-    ['gasolinera', /gasolinera|gas.?station|petrol/], ['grua', /grua|tow.?truck/], ['comisaria policia', /comisaria|policia|police|denuncia/],
-    ['cajero automatico', /cajero|atm/], ['cambio de divisa', /cambio.?de.?(divisa|moneda)|currency.?exchange/], ['cerrajero', /cerrajero|locksmith/],
-    ['lavanderia', /lavanderia|laundry/], ['optica', /optica|optician/]];
-  const _term = _cambiante ? null : (_terms.find(([, re]) => re.test(_qn)) || [null])[0];
-  const searchText = `${_term || query} ${location}`;
-
-  // Text Search — si tenemos coordenadas, usarlas con radio para resultados cercanos
-  let searchResults;
+// Búsquedas de ayuda (farmacia, hospital, cajero…) — 12 oct 2026, caso p-mulprefz0fz, decidido con Paco:
+// 1) PRIMERO OpenStreetMap (Overpass): gratis, sin límite de pago y se puede guardar sin caducidad (citando la fuente).
+// 2) Si OSM no encuentra nada cerca, Google como antes: búsqueda + teléfono SOLO de la más cercana.
+// Siempre la MÁS CERCANA primero. Búsqueda por LO QUE SE BUSCA, no por la frase ("dime una farmacia", "farmacia cerca"
+// → farmacia), guardada 7 días por zona (~1 km); 1 h si la pregunta es de hoy/ahora/abierta/de guardia.
+const _HELP_TERMS = [
+  ['farmacia', /farmacia|pharmacy/, '["amenity"="pharmacy"]'],
+  ['hospital urgencias', /hospital|urgencias|emergency room/, '["amenity"="hospital"]'],
+  ['centro de salud', /medico|doctor|clinica|clinic|centro de salud|ambulatorio/, '["amenity"~"^(clinic|doctors)$"]'],
+  ['dentista', /dentista|dentist/, '["amenity"="dentist"]'],
+  ['veterinario', /veterinari/, '["amenity"="veterinary"]'],
+  ['taller mecanico', /taller|mecanico|mechanic|averia|breakdown|pinch/, '["shop"="car_repair"]'],
+  ['gasolinera', /gasolinera|gas.?station|petrol/, '["amenity"="fuel"]'],
+  ['grua', /grua|tow.?truck/, null],
+  ['comisaria policia', /comisaria|policia|police|denuncia/, '["amenity"="police"]'],
+  ['cajero automatico', /cajero|atm/, '["amenity"="atm"]'],
+  ['cambio de divisa', /cambio.?de.?(divisa|moneda)|currency.?exchange/, '["amenity"="bureau_de_change"]'],
+  ['cerrajero', /cerrajero|locksmith/, '["shop"="locksmith"]'],
+  ['lavanderia', /lavanderia|laundry/, '["shop"~"^(laundry|dry_cleaning)$"]'],
+  ['optica', /optica|optician/, '["shop"="optician"]'],
+];
+function _kmEntre(a, b) {
+  const toR = x => x * Math.PI / 180, dLat = toR(b.lat - a.lat), dLng = toR(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(toR(a.lat)) * Math.cos(toR(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+}
+function _distTexto(km) {
+  return typeof km !== 'number' || !isFinite(km) ? '' : (km < 1 ? `a ${Math.round(km * 1000 / 50) * 50 || 50} m` : `a ${km.toFixed(1).replace('.', ',')} km`);
+}
+// Centro de una ciudad GRATIS (Nominatim de OpenStreetMap), guardado para siempre: una ciudad no se mueve.
+async function _coordsCiudadOSM(location, env) {
+  const k = env?.SALMA_KB ? 'osmgeo:' + _cacheKey(location).slice(0, 200) : null;
+  if (k) { try { const c = await env.SALMA_KB.get(k); if (c) return JSON.parse(c); } catch (_) {} }
   try {
-    let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchText)}&language=es&key=${placesKey}`;
-    if (coords && coords.lat && coords.lng) {
-      url += `&location=${coords.lat},${coords.lng}&radius=1500`;
-    }
-    // CACHÉ 7 días, o 1 h si cambia con el día (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda de ayuda (zona redondeada a ~1 km)
-    // se paga una vez al día, como el Text Search de buscar_lugar. Sin coordenadas la zona es la ciudad del texto.
-    // Solo se guarda una respuesta real con resultados, y sin "abierto ahora" (aquí no se usa).
-    const hKey = env?.SALMA_KB ? 'nearbycache:help:' + _cacheKey(searchText + '|' + (coords && coords.lat && coords.lng ? Number(coords.lat).toFixed(2) + ',' + Number(coords.lng).toFixed(2) : '-')).slice(0, 400) : null;
-    if (hKey) { try { const c = await env.SALMA_KB.get(hKey); if (c) searchResults = JSON.parse(c); } catch (_) {} }
-    if (!searchResults) {
-      const res = await fetch(url);
-      searchResults = await res.json();
-      if (hKey && searchResults?.status === 'OK' && searchResults.results?.length) {
-        try {
-          const slim = { status: 'OK', results: searchResults.results.slice(0, 10).map(p => ({ name: p.name, place_id: p.place_id, formatted_address: p.formatted_address, rating: p.rating, geometry: p.geometry })) };
-          await env.SALMA_KB.put(hKey, JSON.stringify(slim), { expirationTtl: _cambiante ? CACHE_TTL_CORTO : CACHE_TTL_LARGO });
-        } catch (_) {}
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`, {
+      headers: { 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' }, signal: AbortSignal.timeout(5000) });
+    const d = await r.json();
+    const o = d && d[0] ? { lat: Number(d[0].lat), lng: Number(d[0].lon) } : null;
+    if (o && isFinite(o.lat) && isFinite(o.lng)) { if (k) { try { await env.SALMA_KB.put(k, JSON.stringify(o)); } catch (_) {} } return o; }
+  } catch (_) {}
+  return null;
+}
+// Sitios de OpenStreetMap alrededor de un punto (Overpass). Solo los que tienen nombre.
+async function _buscarOSM(filtro, center, radio) {
+  const q = `[out:json][timeout:8];nwr${filtro}(around:${radio},${center.lat},${center.lng});out center tags 40;`;
+  const r = await fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' },
+    body: 'data=' + encodeURIComponent(q), signal: AbortSignal.timeout(9000) });
+  if (!r.ok) return [];
+  const d = await r.json();
+  return (d.elements || []).map(el => {
+    const t = el.tags || {};
+    const lat = typeof el.lat === 'number' ? el.lat : el.center?.lat, lng = typeof el.lon === 'number' ? el.lon : el.center?.lon;
+    const calle = [t['addr:street'], t['addr:housenumber']].filter(Boolean).join(', ');
+    return { name: t.name || t.brand || '', phone: t.phone || t['contact:phone'] || '', address: [calle, t['addr:city']].filter(Boolean).join(', '),
+      horario: t.opening_hours || '', lat, lng };
+  }).filter(x => x.name && typeof x.lat === 'number' && typeof x.lng === 'number');
+}
+
+async function searchPlacesForHelp(query, location, placesKey, coords, env) {
+  if (!query || !location) return null;
+  const _qn = String(query).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const _cambiante = _esCambiante(_qn);
+  const _hit = _HELP_TERMS.find(([, re]) => re.test(_qn)) || null;
+  const _term = _hit ? _hit[0] : null;
+  const _gps = (coords && typeof coords.lat === 'number' && typeof coords.lng === 'number') ? { lat: coords.lat, lng: coords.lng } : null;
+
+  const hKey = env?.SALMA_KB ? 'nearbycache:help2:' + _cacheKey((_term || query) + ' ' + location + '|' + (_gps ? _gps.lat.toFixed(2) + ',' + _gps.lng.toFixed(2) : '-')).slice(0, 400) : null;
+  if (hKey) { try { const c = await env.SALMA_KB.get(hKey); if (c) return _ordenarAyuda(JSON.parse(c), _gps); } catch (_) {} }
+
+  let lista = [];
+  // 1) OpenStreetMap — gratis.
+  if (_hit && _hit[2]) {
+    try {
+      const center = _gps || await _coordsCiudadOSM(location, env);
+      if (center) {
+        lista = await _buscarOSM(_hit[2], center, 2500);
+        if (!lista.length) lista = await _buscarOSM(_hit[2], center, 8000);
+        lista = lista.map(x => ({ ...x, _km: _kmEntre(center, x) })).sort((a, b) => a._km - b._km).slice(0, 3)
+          .map(({ _km, ...x }) => ({ ...x, rating: '', place_id: null, fuente: 'OpenStreetMap', ciudad: location }));
       }
-    }
-  } catch (e) {
-    return null;
+    } catch (e) { console.log('[AYUDA-OSM] fallo: ' + (e && e.message)); lista = []; }
   }
-
-  if (!searchResults?.results?.length) return null;
-
-  // Teléfono (12 oct 2026, caso p-mulprefz0fz): Place Details (de pago) SOLO del primer resultado (la más cercana),
-  // cacheado por sitio. Paco: "que sea la única que da todo" — los otros dos salen con nombre, dirección, nota,
-  // distancia y Cómo llegar, sin teléfono. Antes se pagaba el teléfono de los 3 en cada pregunta.
-  const _helpFields = 'formatted_phone_number,international_phone_number';
-  // La MÁS CERCANA primero (Paco, 12 oct 2026): con coordenadas se ordena por distancia real; sin ellas, el orden de Google.
-  let _cands = searchResults.results.slice(0, 10);
-  if (coords && coords.lat && coords.lng) {
-    const _d = (p) => {
-      const l = p?.geometry?.location; if (!l || typeof l.lat !== 'number') return Infinity;
-      const toR = x => x * Math.PI / 180, dLat = toR(l.lat - coords.lat), dLng = toR(l.lng - coords.lng);
-      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toR(coords.lat)) * Math.cos(toR(l.lat)) * Math.sin(dLng / 2) ** 2;
-      return 12742 * Math.asin(Math.sqrt(a));
-    };
-    _cands = _cands.map(p => [p, _d(p)]).sort((a, b) => a[1] - b[1]).map(x => { if (x[1] !== Infinity) x[0] = { ...x[0], _km: x[1] }; return x[0]; });
+  // 2) Google — solo si OSM no ha dado nada. Teléfono (Place Details, de pago) SOLO de la más cercana.
+  if (!lista.length && placesKey) {
+    try {
+      let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(`${_term || query} ${location}`)}&language=es&key=${placesKey}`;
+      if (_gps) url += `&location=${_gps.lat},${_gps.lng}&radius=1500`;
+      const data = await (await fetch(url)).json();
+      let cands = (data?.results || []).slice(0, 10).filter(p => p.name && p.geometry?.location);
+      if (_gps) cands = cands.map(p => [p, _kmEntre(_gps, p.geometry.location)]).sort((a, b) => a[1] - b[1]).map(x => x[0]);
+      cands = cands.slice(0, 3);
+      const det = cands[0]?.place_id ? await _getPlaceDetailsCached(env, placesKey, cands[0].place_id, 'formatted_phone_number,international_phone_number') : null;
+      lista = cands.map((p, i) => ({ name: p.name, phone: i === 0 ? (det?.international_phone_number || det?.formatted_phone_number || '') : '',
+        address: p.formatted_address || '', rating: p.rating ? `${p.rating}★` : '', horario: '', lat: p.geometry.location.lat, lng: p.geometry.location.lng,
+        place_id: p.place_id || null, fuente: 'Google Places', ciudad: location }));
+    } catch (e) { return null; }
   }
-  const top = _cands.slice(0, 3);
-  const detailPromises = top.map(async (place, i) => {
-    if (!place.place_id) return null;
-    return i === 0 ? _getPlaceDetailsCached(env, placesKey, place.place_id, _helpFields) : null;
-  });
-  const details = await Promise.all(detailPromises);
-
-  const results = [];
-  top.forEach((place, i) => {
-    const detail = details[i];
-    const name = place.name || '';
-    const phone = detail?.international_phone_number || detail?.formatted_phone_number || '';
-    const address = place.formatted_address || '';
-    const rating = place.rating || null;
-
-    if (name) {
-      results.push({
-        name,
-        phone: phone || '',
-        address: address || '',
-        rating: rating ? `${rating}★` : '',
-        dist: typeof place._km === 'number' ? (place._km < 1 ? `a ${Math.round(place._km * 1000 / 50) * 50 || 50} m` : `a ${place._km.toFixed(1).replace('.', ',')} km`) : '',
-      });
-    }
-  });
-
-  return results.length > 0 ? results : null;
+  if (!lista.length) return null;
+  if (hKey) { try { await env.SALMA_KB.put(hKey, JSON.stringify(lista), { expirationTtl: _cambiante ? CACHE_TTL_CORTO : CACHE_TTL_LARGO }); } catch (_) {} }
+  return _ordenarAyuda(lista, _gps);
+}
+// La más cercana primero y su distancia, respecto a donde está el usuario (si se sabe).
+function _ordenarAyuda(lista, gps) {
+  if (!Array.isArray(lista) || !lista.length) return null;
+  if (!gps) return lista.map(x => ({ ...x, dist: '' }));
+  return lista.map(x => ({ ...x, _km: _kmEntre(gps, x) })).sort((a, b) => a._km - b._km).map(({ _km, ...x }) => ({ ...x, dist: _distTexto(_km) }));
 }
 
 async function fetchWeather(location, openweatherKey) {
@@ -6440,10 +6464,15 @@ QUÉ HACER:
       if (r.address) parts.push(r.address);
       if (r.rating) parts.push(r.rating);
       if (r.dist) parts.push(r.dist);
+      if (r.horario) parts.push('horario: ' + r.horario);
       return parts.join(' — ');
     }).join('\n');
+    // Fuente (12 oct 2026, caso p-mulprefz0fz): OpenStreetMap primero (gratis) y Google si OSM no tiene nada. Los datos de
+    // OSM se pueden usar citando la fuente (licencia ODbL): por eso la línea final «Datos: © OpenStreetMap».
+    const _fuenteAyuda = helpResults[0].fuente || 'Google Places';
+    const _notaFuente = _fuenteAyuda === 'OpenStreetMap' ? ' Termina con una última línea que diga exactamente: Datos: © OpenStreetMap' : '';
 
-    userContent += `\n\n[RESULTADOS DE BÚSQUEDA REAL — Google Places:\n${formatted}\nSÉ BREVE Y DIRECTA. USA FORMATO VISUAL: pon cada resultado en su propia línea con el nombre entre [[ ]] seguido del teléfono. Separa con saltos de línea. PRIMERO los datos, DESPUÉS tu consejo en 1-2 frases. Ejemplo de formato:\n\n[[Nombre del sitio]] — +66 77 425 123\nDirección, rating\n\n[[Otro sitio]] —+66 77 960 456\nDirección, rating\n\nConsejo breve.\n\nDi "llama antes para confirmar" porque horarios pueden cambiar. Si no hay teléfono, dilo. NUNCA inventes datos.]`;
+    userContent += `\n\n[RESULTADOS DE BÚSQUEDA REAL — ${_fuenteAyuda}, ya ordenados del más cercano al más lejano (mantén ese orden):\n${formatted}\nSÉ BREVE Y DIRECTA. USA FORMATO VISUAL: pon cada resultado en su propia línea con el nombre entre [[ ]] seguido del teléfono. Separa con saltos de línea. PRIMERO los datos, DESPUÉS tu consejo en 1-2 frases. Ejemplo de formato:\n\n[[Nombre del sitio]] — +66 77 425 123\nDirección, rating\n\n[[Otro sitio]] —+66 77 960 456\nDirección, rating\n\nConsejo breve.\n\nDi "llama antes para confirmar" porque horarios pueden cambiar. Si no hay teléfono, dilo. NUNCA inventes datos.${_notaFuente}]`;
   }
 
   // Inyectar datos del tiempo
@@ -15540,6 +15569,11 @@ INSTRUCCIONES:
         const _photoZone = (editingActiveRoute ? photoZoneFromRoute(currentRoute) : null)
           || ((anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number') ? { lat: anchorCountry.lat, lng: anchorCountry.lng, km: 120 } : null);
         const _chatPlaces = new Map(); // catálogo de la respuesta: sitios de buscar_lugar (place_id, coords, ciudad) → enlaces del chat
+        // Sitios de la búsqueda de ayuda (farmacia, hospital…) al catálogo, con sus coordenadas: su "Cómo llegar" sale de
+        // ahí, sin volver a buscar cada nombre en Google (antes se pagaba otra vez cada farmacia solo para el enlace).
+        if (Array.isArray(helpResults)) for (const r of helpResults) {
+          if (r && r.name && typeof r.lat === 'number' && typeof r.lng === 'number') addChatPlace(_chatPlaces, r.name, { name: r.name, place_id: r.place_id || null, lat: r.lat, lng: r.lng, ciudad: r.ciudad || '' });
+        }
         // Repara ![Name](...) roto o corrupto de Claude usando la URL real que ya devolvió
         // el tool_result (nunca la que Claude haya podido teclear mal). Antes solo se
         // detectaba el caso "nunca cierra con )" (URL truncada); un ![Name](url con un
@@ -15698,7 +15732,8 @@ INSTRUCCIONES:
               // Sonnet 5.5 (2 $/10 $ por millón, -33 %) piensa por defecto: se manda thinking 'between_tools' (el modo sin pensar).
               const _modeloNuevo = nuevo => (nuevo && env.CLAUDE_MODEL_CHAT) || 'claude-sonnet-4-6';
               // Contexto variable al final (caso p-mulprefz0fz): CACHE_TAIL="1" lo enciende; null = como siempre.
-              const _tailMode = nuevo => (nuevo && env.CACHE_TAIL === '1')
+              // Solo en la conversación normal (SALMA_SYSTEM_CHAT): las guías no se tocan (Paco, 12 oct 2026).
+              const _tailMode = nuevo => (nuevo && env.CACHE_TAIL === '1' && systemBase === SALMA_SYSTEM_CHAT)
                 ? buildTailInUser(systemBase, systemPrompt, systemPerfil, currentMessages, messages.length - 1, env.CACHE_1H === '1') : null;
               const _callClaude = (nuevo, _tm = _tailMode(nuevo)) => fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
                 method: 'POST',
