@@ -2132,6 +2132,7 @@ const salma = {
                   _isBlocks: isBlocksRoute,
                   map_stage_failed: evt.map_stage_failed === true,
                   offer_map_button: evt.offer_map_button === true,
+                  no_map_button: evt.no_map_button === true,   // pregunta con «N días»: el Worker veta el botón (caso rev-no_contesta_primero)
                   offer_add_to_route: evt.offer_add_to_route === true,
                   ops_edit: evt.ops_edit === true,
                   limit_reached: evt.limit_reached || null,
