@@ -4555,7 +4555,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
   // que cambia con el día ("de guardia", "abierta", "ahora", "24 h") o no casa con ninguna palabra de la lista
   // (embajada de X, etc.), se busca la frase tal cual, como antes; lo que cambia con el día se guarda solo 1 h.
   const _qn = String(query).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const _cambiante = /guardia|abiert|ahora|24 ?h|urgente|hoy|esta noche|domingo|festivo/.test(_qn);
+  const _cambiante = _esCambiante(_qn);
   const _terms = [['farmacia', /farmacia|pharmacy/], ['hospital urgencias', /hospital|urgencias|emergency room/], ['centro de salud', /medico|doctor|clinica|clinic/],
     ['dentista', /dentista|dentist/], ['veterinario', /veterinari/], ['taller mecanico', /taller|mecanico|mechanic|averia|breakdown|pinch/],
     ['gasolinera', /gasolinera|gas.?station|petrol/], ['grua', /grua|tow.?truck/], ['comisaria policia', /comisaria|policia|police|denuncia/],
@@ -4571,7 +4571,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
     if (coords && coords.lat && coords.lng) {
       url += `&location=${coords.lat},${coords.lng}&radius=1500`;
     }
-    // CACHÉ 24 h, o 1 h si cambia con el día (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda de ayuda (zona redondeada a ~1 km)
+    // CACHÉ 7 días, o 1 h si cambia con el día (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda de ayuda (zona redondeada a ~1 km)
     // se paga una vez al día, como el Text Search de buscar_lugar. Sin coordenadas la zona es la ciudad del texto.
     // Solo se guarda una respuesta real con resultados, y sin "abierto ahora" (aquí no se usa).
     const hKey = env?.SALMA_KB ? 'nearbycache:help:' + _cacheKey(searchText + '|' + (coords && coords.lat && coords.lng ? Number(coords.lat).toFixed(2) + ',' + Number(coords.lng).toFixed(2) : '-')).slice(0, 400) : null;
@@ -4582,7 +4582,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
       if (hKey && searchResults?.status === 'OK' && searchResults.results?.length) {
         try {
           const slim = { status: 'OK', results: searchResults.results.slice(0, 10).map(p => ({ name: p.name, place_id: p.place_id, formatted_address: p.formatted_address, rating: p.rating, geometry: p.geometry })) };
-          await env.SALMA_KB.put(hKey, JSON.stringify(slim), { expirationTtl: _cambiante ? 3600 : 86400 });
+          await env.SALMA_KB.put(hKey, JSON.stringify(slim), { expirationTtl: _cambiante ? CACHE_TTL_CORTO : CACHE_TTL_LARGO });
         } catch (_) {}
       }
     }
@@ -4819,12 +4819,12 @@ async function fetchWeatherBanner(lat, lon, key) {
 
 async function searchEvents(destination, dateFrom, dateTo, serperKey, env) {
   if (!destination || !dateFrom || !serperKey) return null;
-  // CACHÉ 3 días (12 oct 2026, caso p-mulprefz0fz): mismo destino + mismo mes → una búsqueda de Serper, no una por mensaje.
+  // CACHÉ 7 días (12 oct 2026, caso p-mulprefz0fz): mismo destino + mismo mes → una búsqueda de Serper, no una por mensaje.
   let eKey = null;
   try { const _f = new Date(dateFrom); if (!isNaN(_f)) eKey = env?.SALMA_KB ? 'eventcache:' + _cacheKey(destination + '|' + _f.getFullYear() + '-' + (_f.getMonth() + 1)).slice(0, 200) : null; } catch (_) {}
   if (eKey) { try { const c = await env.SALMA_KB.get(eKey); if (c) return JSON.parse(c); } catch (_) {} }
   const _r = await _searchEventsSinCache(destination, dateFrom, dateTo, serperKey);
-  if (eKey && Array.isArray(_r) && _r.length) { try { await env.SALMA_KB.put(eKey, JSON.stringify(_r), { expirationTtl: 259200 }); } catch (_) {} }
+  if (eKey && Array.isArray(_r) && _r.length) { try { await env.SALMA_KB.put(eKey, JSON.stringify(_r), { expirationTtl: CACHE_TTL_LARGO }); } catch (_) {} }
   return _r;
 }
 async function _searchEventsSinCache(destination, dateFrom, dateTo, serperKey) {
@@ -8557,6 +8557,12 @@ function normalizeQuery(text) {
 
 // Clave de caché (12 oct 2026, caso p-mulprefz0fz): sin mayúsculas, acentos, signos ni espacios dobles, para que
 // "Farmacia Estepona" y "farmacia  estepona?" sean la misma búsqueda guardada. Solo para claves, nunca para la URL.
+// UNA regla de duración para todas las cachés de búsqueda (Paco, 12 oct 2026): 7 días todo; 1 h solo si la
+// pregunta habla de algo que cambia en el día (hoy, ahora, abierto, de guardia, 24 h). Ciudades: para siempre.
+const CACHE_TTL_LARGO = 604800, CACHE_TTL_CORTO = 3600;
+function _esCambiante(text) {
+  return /guardia|abiert|ahora|24 ?h|hoy|esta noche|urgente/.test(String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+}
 function _cacheKey(text) {
   return encodeURIComponent(String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[¿?¡!.,;:"'()]/g, ' ').replace(/\s+/g, ' ').trim());
@@ -9092,7 +9098,7 @@ async function buscarLugar(input, placesKey, userCoords, env) {
       if (tsKey && data?.status === 'OK' && data.results?.length) {
         try {
           const slim = { status: 'OK', results: data.results.slice(0, 5).map(p => ({ name: p.name, place_id: p.place_id, formatted_address: p.formatted_address, rating: p.rating, price_level: p.price_level, geometry: p.geometry && { location: p.geometry.location } })) };
-          await env.SALMA_KB.put(tsKey, JSON.stringify(slim), { expirationTtl: 86400 });
+          await env.SALMA_KB.put(tsKey, JSON.stringify(slim), { expirationTtl: _esCambiante(searchTerms) ? CACHE_TTL_CORTO : CACHE_TTL_LARGO });
         } catch (_) {}
       }
     }
@@ -9165,14 +9171,14 @@ async function buscarLugar(input, placesKey, userCoords, env) {
 
 async function buscarWeb(input, braveKey, env) {
   if (!braveKey || !input.query) return { error: 'Falta query o API key' };
-  // CACHÉ 12 h (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda web (texto normalizado: sin mayúsculas ni acentos)
-  // se paga a Brave una vez cada 12 h. La consulta ya lleva el sitio (Salma escribe "ferry Tarifa Tánger…"), así que
+  // CACHÉ 7 días, o 1 h si habla de hoy/ahora (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda web (texto normalizado: sin mayúsculas ni acentos)
+  // se paga a Brave una vez. La consulta ya lleva el sitio (Salma escribe "ferry Tarifa Tánger…"), así que
   // otra ciudad = otra clave. Solo se guarda una respuesta real con resultados.
   const wKey = env?.SALMA_KB ? 'webcache:' + _cacheKey(String(input.query)).slice(0, 300) : null;
   if (wKey) { try { const c = await env.SALMA_KB.get(wKey); if (c) return JSON.parse(c); } catch (_) {} }
   const _out = await _buscarWebSinCache(input, braveKey);
   if (wKey && _out && Array.isArray(_out.resultados) && _out.resultados.length) {
-    try { await env.SALMA_KB.put(wKey, JSON.stringify(_out), { expirationTtl: 43200 }); } catch (_) {}
+    try { await env.SALMA_KB.put(wKey, JSON.stringify(_out), { expirationTtl: _esCambiante(input.query) ? CACHE_TTL_CORTO : CACHE_TTL_LARGO }); } catch (_) {}
   }
   return _out;
 }
