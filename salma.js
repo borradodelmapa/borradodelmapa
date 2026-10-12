@@ -4322,7 +4322,14 @@ const salma = {
         if (navigator.permissions && navigator.permissions.query) {
           navigator.permissions.query({ name: 'geolocation' }).then(r => {
             const el = btn.parentNode && btn.parentNode.querySelector('.geo-why');
-            if (el) el.textContent += ' [permiso: ' + r.state + ']';
+            if (el) {
+              // Permiso sin contestar y petición caducada = Android no llega a enseñar su cuadro de permiso (app de Android): dar el camino manual
+              if (r.state === 'prompt' && err.code === 3) {
+                el.textContent = 'Android no me ha enseñado el cuadro para dar la ubicación. Actívala a mano: mantén pulsado el icono de la app → Información de la aplicación → Permisos → Ubicación → «Permitir solo mientras se usa la app». Luego vuelve y pulsa el botón. (código ' + err.code + ') [permiso: ' + r.state + ']';
+              } else {
+                el.textContent += ' [permiso: ' + r.state + ']';
+              }
+            }
           }).catch(() => {});
         }
       } catch (_) {}
