@@ -8948,8 +8948,22 @@ async function buscarLugar(input, placesKey, userCoords, env) {
     } else {
       url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es${typeParam}&key=${placesKey}`;
     }
-    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-    const data = await res.json();
+    // CACHÉ 24 h del Text Search (12 oct 2026, ahorro de Google): la misma búsqueda (mismo texto, zona redondeada a ~1 km,
+    // radio y tipo) se paga una vez al día en vez de cada vez. Solo se guarda una respuesta REAL con resultados. De caché
+    // sale sin "abierto ahora" (se queda viejo en horas), así que Salma no afirma si está abierto sin comprobarlo.
+    const tsKey = env?.SALMA_KB ? 'nearbycache:text:' + normalizeQuery(searchTerms + '|' + (biasCoords ? biasCoords.lat.toFixed(2) + ',' + biasCoords.lng.toFixed(2) : '-') + '|' + radius + '|' + typeParam).slice(0, 400) : null;
+    let data = null, fromCache = false;
+    if (tsKey) { try { const c = await env.SALMA_KB.get(tsKey); if (c) { data = JSON.parse(c); fromCache = true; } } catch (_) {} }
+    if (!data) {
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      data = await res.json();
+      if (tsKey && data?.status === 'OK' && data.results?.length) {
+        try {
+          const slim = { status: 'OK', results: data.results.slice(0, 5).map(p => ({ name: p.name, place_id: p.place_id, formatted_address: p.formatted_address, rating: p.rating, price_level: p.price_level, geometry: p.geometry && { location: p.geometry.location } })) };
+          await env.SALMA_KB.put(tsKey, JSON.stringify(slim), { expirationTtl: 86400 });
+        } catch (_) {}
+      }
+    }
 
     if (!data?.results?.length) {
       // Fallback para comida: devolver enlaces TheFork + Google Maps
@@ -8965,16 +8979,13 @@ async function buscarLugar(input, placesKey, userCoords, env) {
     }
 
     const top = data.results.slice(0, 5);
-    // Solo pedimos a Place Details lo que el Text Search de arriba NO trae ya gratis
-    // (teléfono y web). rating/price_level/opening_hours/name/formatted_address vienen
-    // en el propio resultado del Text Search — pedirlos otra vez en Details recargaba
-    // el mismo dato sin necesidad. Cacheado 30 días por place_id (mismo sitio preguntado
-    // por otro usuario, u otra vez por el mismo, sale de KV en vez de pagar de nuevo).
-    const detailPromises = top.map(p => {
-      if (!p.place_id) return Promise.resolve(null);
-      return _getPlaceDetailsCached(env, placesKey, p.place_id, 'formatted_phone_number,international_phone_number,website');
-    });
-    const details = await Promise.all(detailPromises);
+    // Teléfono y web: YA NO se piden a Google Place Details (0,025 € × hasta 5 sitios en cada búsqueda). Solo se leen de la
+    // caché KV permanente si ese sitio ya se había pagado antes (coste 0). Para un sitio concreto, Salma los pide después
+    // con la ficha. rating/price_level/dirección vienen en el propio Text Search.
+    const details = await Promise.all(top.map(async (p) => {
+      if (!p.place_id || !env?.SALMA_KB) return null;
+      try { const c = await env.SALMA_KB.get('placedetails:' + p.place_id + ':formatted_phone_number,international_phone_number,website'); return c ? JSON.parse(c) : null; } catch (_) { return null; }
+    }));
 
     const lugares = top.map((p, i) => {
       const d = details[i];
@@ -8987,7 +8998,7 @@ async function buscarLugar(input, placesKey, userCoords, env) {
         telefono: d?.international_phone_number || d?.formatted_phone_number || '',
         direccion: p.formatted_address || '',
         rating: p.rating ? `${p.rating}★` : '',
-        abierto: p.opening_hours?.open_now != null ? (p.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
+        abierto: !fromCache && p.opening_hours?.open_now != null ? (p.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
         web: d?.website || '',
         google_maps: gmapsLink,
         lat: p.geometry?.location?.lat || null,
@@ -9003,9 +9014,10 @@ async function buscarLugar(input, placesKey, userCoords, env) {
       lugares,
       ciudad,
       query,
-      nota: esComida
+      nota: (esComida
         ? 'Resultados reales de Google Places. Llama antes para confirmar disponibilidad.'
-        : 'Resultados reales de Google Places. Llama antes para confirmar horarios.'
+        : 'Resultados reales de Google Places. Llama antes para confirmar horarios.') +
+        ' Teléfono y web pueden venir vacíos: no es que no tengan, es que no se han consultado; usa el enlace google_maps para verlos. No afirmes si está abierto ahora si no consta en "abierto".'
     };
   } catch (e) {
     return { error: 'Error buscando lugar: ' + e.message };
