@@ -6013,7 +6013,7 @@ function tryKVDirectAnswer(message, country, destination) {
   }
 
   // ── Presupuesto / coste ──
-  if (/presupuesto|budget|cuanto.*cuesta|coste|caro|barato|precio|gastar|dinero.*dia|cost/i.test(m)) {
+  if (/presupuesto|budget|cuanto.*cuesta|\bcostes?\b|\bcaro\b|\bbarato\b|precio|gastar|dinero.*dia|\bcosts?\b/i.test(m)) {  // \b: «costa», «caros» de «Caronte»… no son precio (12 oct 2026)
     return `En ${pais}, tirando a mochilero calcula unos **${c.coste_diario_mochilero}** al día, y viajando más normal, **${c.coste_diario_medio}**.\n\nSe paga en ${c.moneda} (${c.cambio_aprox_eur}). Propinas: ${c.propinas}`;
   }
 
@@ -15259,7 +15259,8 @@ INSTRUCCIONES:
       /hazme\s+una\s+(gu[ií]a|ruta)|mont[ae]me\s+una\s+ruta|cr[eé]a(?:me)?\s+una\s+ruta/i.test(message || '');
 
     // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para rutas/guías ───
-    if (kvCountryData && !skipKV && !_explicitRouteAsk && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
+    // Una petición de ruta o plan nunca se contesta con una ficha del KV ("ruta por la costa de Cádiz" → presupuesto, 12 oct 2026).
+    if (kvCountryData && !skipKV && !_explicitRouteAsk && !isRouteRequest(message, history) && !isDaysDestination(message) && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
       const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
       if (kvDirectReply) {
         return new Response(
