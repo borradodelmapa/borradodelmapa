@@ -4370,7 +4370,7 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     if (tcCC && env.SALMA_KB) promises.transport = env.SALMA_KB.get('transport:' + tcCC).then(r => r ? JSON.parse(r) : null).catch(() => null);
     if (env.BRAVE_SEARCH_KEY) {
       const fromCity = userLocationName?.split(',')[0] || '';
-      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} tren bus transporte` }, env.BRAVE_SEARCH_KEY).catch(() => null);
+      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} tren bus transporte` }, env.BRAVE_SEARCH_KEY, env).catch(() => null);
     }
     // Vuelos domésticos si >300km — IATA dinámico via Duffel
     if (dest.distanceKm > 300 && env.DUFFEL_ACCESS_TOKEN) {
@@ -4439,14 +4439,14 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     // Visa online (Brave)
     if (env.BRAVE_SEARCH_KEY) {
       const nat = userNationality || 'espanol';
-      promises.braveVisa = buscarWeb({ query: `visado ${dest.destName} ${nat} 2026 requisitos entrada` }, env.BRAVE_SEARCH_KEY).catch(() => null);
+      promises.braveVisa = buscarWeb({ query: `visado ${dest.destName} ${nat} 2026 requisitos entrada` }, env.BRAVE_SEARCH_KEY, env).catch(() => null);
     }
     // Weather
     if (env.OPENWEATHER_KEY) promises.weather = fetchWeather(dest.destName, env.OPENWEATHER_KEY).catch(() => null);
     // Rutas terrestres (solo si viable)
     if (isOverlandViable(userCountryCode, dest.destCC) && dest.distanceKm && dest.distanceKm < 5000 && env.BRAVE_SEARCH_KEY) {
       const fromCity = userLocationName?.split(',')[0] || '';
-      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} por tierra tren bus overland` }, env.BRAVE_SEARCH_KEY).catch(() => null);
+      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} por tierra tren bus overland` }, env.BRAVE_SEARCH_KEY, env).catch(() => null);
     }
 
     // Procesar resultados progresivamente
@@ -4550,7 +4550,19 @@ function extractHelpLocation(message, history, currentRoute, deferRoute) {
 async function searchPlacesForHelp(query, location, placesKey, coords, env) {
   if (!query || !location || !placesKey) return null;
 
-  const searchText = `${query} ${location}`;
+  // Búsqueda por LO QUE SE BUSCA, no por la frase (12 oct 2026, caso p-mulprefz0fz): "dime una farmacia", "farmacia
+  // cerca" y "hay alguna farmacia por aquí" → "farmacia <ciudad>", misma búsqueda y misma caché. Si la frase pide algo
+  // que cambia con el día ("de guardia", "abierta", "ahora", "24 h") o no casa con ninguna palabra de la lista
+  // (embajada de X, etc.), se busca la frase tal cual, como antes; lo que cambia con el día se guarda solo 1 h.
+  const _qn = String(query).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const _cambiante = /guardia|abiert|ahora|24 ?h|urgente|hoy|esta noche|domingo|festivo/.test(_qn);
+  const _terms = [['farmacia', /farmacia|pharmacy/], ['hospital urgencias', /hospital|urgencias|emergency room/], ['centro de salud', /medico|doctor|clinica|clinic/],
+    ['dentista', /dentista|dentist/], ['veterinario', /veterinari/], ['taller mecanico', /taller|mecanico|mechanic|averia|breakdown|pinch/],
+    ['gasolinera', /gasolinera|gas.?station|petrol/], ['grua', /grua|tow.?truck/], ['comisaria policia', /comisaria|policia|police|denuncia/],
+    ['cajero automatico', /cajero|atm/], ['cambio de divisa', /cambio.?de.?(divisa|moneda)|currency.?exchange/], ['cerrajero', /cerrajero|locksmith/],
+    ['lavanderia', /lavanderia|laundry/], ['optica', /optica|optician/]];
+  const _term = _cambiante ? null : (_terms.find(([, re]) => re.test(_qn)) || [null])[0];
+  const searchText = `${_term || query} ${location}`;
 
   // Text Search — si tenemos coordenadas, usarlas con radio para resultados cercanos
   let searchResults;
@@ -4559,10 +4571,10 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
     if (coords && coords.lat && coords.lng) {
       url += `&location=${coords.lat},${coords.lng}&radius=1500`;
     }
-    // CACHÉ 24 h (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda de ayuda (mismo texto + zona redondeada a ~1 km)
+    // CACHÉ 24 h, o 1 h si cambia con el día (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda de ayuda (zona redondeada a ~1 km)
     // se paga una vez al día, como el Text Search de buscar_lugar. Sin coordenadas la zona es la ciudad del texto.
     // Solo se guarda una respuesta real con resultados, y sin "abierto ahora" (aquí no se usa).
-    const hKey = env?.SALMA_KB ? 'nearbycache:help:' + normalizeQuery(searchText + '|' + (coords && coords.lat && coords.lng ? Number(coords.lat).toFixed(2) + ',' + Number(coords.lng).toFixed(2) : '-')).slice(0, 400) : null;
+    const hKey = env?.SALMA_KB ? 'nearbycache:help:' + _cacheKey(searchText + '|' + (coords && coords.lat && coords.lng ? Number(coords.lat).toFixed(2) + ',' + Number(coords.lng).toFixed(2) : '-')).slice(0, 400) : null;
     if (hKey) { try { const c = await env.SALMA_KB.get(hKey); if (c) searchResults = JSON.parse(c); } catch (_) {} }
     if (!searchResults) {
       const res = await fetch(url);
@@ -4570,7 +4582,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
       if (hKey && searchResults?.status === 'OK' && searchResults.results?.length) {
         try {
           const slim = { status: 'OK', results: searchResults.results.slice(0, 10).map(p => ({ name: p.name, place_id: p.place_id, formatted_address: p.formatted_address, rating: p.rating, geometry: p.geometry })) };
-          await env.SALMA_KB.put(hKey, JSON.stringify(slim), { expirationTtl: 86400 });
+          await env.SALMA_KB.put(hKey, JSON.stringify(slim), { expirationTtl: _cambiante ? 3600 : 86400 });
         } catch (_) {}
       }
     }
@@ -4805,8 +4817,17 @@ async function fetchWeatherBanner(lat, lon, key) {
 // BÚSQUEDA DE EVENTOS LOCALES (Serper.dev)
 // ═══════════════════════════════════════════════════════════════
 
-async function searchEvents(destination, dateFrom, dateTo, serperKey) {
+async function searchEvents(destination, dateFrom, dateTo, serperKey, env) {
   if (!destination || !dateFrom || !serperKey) return null;
+  // CACHÉ 3 días (12 oct 2026, caso p-mulprefz0fz): mismo destino + mismo mes → una búsqueda de Serper, no una por mensaje.
+  let eKey = null;
+  try { const _f = new Date(dateFrom); if (!isNaN(_f)) eKey = env?.SALMA_KB ? 'eventcache:' + _cacheKey(destination + '|' + _f.getFullYear() + '-' + (_f.getMonth() + 1)).slice(0, 200) : null; } catch (_) {}
+  if (eKey) { try { const c = await env.SALMA_KB.get(eKey); if (c) return JSON.parse(c); } catch (_) {} }
+  const _r = await _searchEventsSinCache(destination, dateFrom, dateTo, serperKey);
+  if (eKey && Array.isArray(_r) && _r.length) { try { await env.SALMA_KB.put(eKey, JSON.stringify(_r), { expirationTtl: 259200 }); } catch (_) {} }
+  return _r;
+}
+async function _searchEventsSinCache(destination, dateFrom, dateTo, serperKey) {
   try {
     const fromDate = new Date(dateFrom);
     const monthNames = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -8534,6 +8555,13 @@ function normalizeQuery(text) {
   return encodeURIComponent(text.trim());
 }
 
+// Clave de caché (12 oct 2026, caso p-mulprefz0fz): sin mayúsculas, acentos, signos ni espacios dobles, para que
+// "Farmacia Estepona" y "farmacia  estepona?" sean la misma búsqueda guardada. Solo para claves, nunca para la URL.
+function _cacheKey(text) {
+  return encodeURIComponent(String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[¿?¡!.,;:"'()]/g, ' ').replace(/\s+/g, ' ').trim());
+}
+
 // Busca hoteles reales en Booking.com via RapidAPI — precios, reviews, enlaces de reserva
 async function buscarHotelesBooking(input, rapidApiKey) {
   const RAPIDAPI_HOST = 'booking-com.p.rapidapi.com';
@@ -8861,16 +8889,21 @@ function generarVideo(input) {
 // Geocodifica una ciudad a coordenadas para sesgar buscar_lugar — cache en memoria del isolate
 // (una ciudad siempre geocodifica igual, no hace falta repetir la llamada entre requests).
 const _ciudadGeocodeCache = {};
-async function geocodeCiudad(ciudad, placesKey) {
+async function geocodeCiudad(ciudad, placesKey, env) {
   if (!ciudad) return null;
   const key = ciudad.trim().toLowerCase();
   if (key in _ciudadGeocodeCache) return _ciudadGeocodeCache[key];
+  // CACHÉ KV PERMANENTE (12 oct 2026, caso p-mulprefz0fz): una ciudad no se mueve. Antes solo en memoria del isolate
+  // (se perdía en cada reciclado/despliegue y se volvía a pagar el Geocoding). Solo se guarda un resultado real.
+  const gKey = env?.SALMA_KB ? 'geocity:geo:' + _cacheKey(key).slice(0, 200) : null;
+  if (gKey) { try { const c = await env.SALMA_KB.get(gKey); if (c) { const r = JSON.parse(c); _ciudadGeocodeCache[key] = r; return r; } } catch (_) {} }
   try {
     const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(ciudad)}&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
     const data = await res.json();
     const loc = data?.results?.[0]?.geometry?.location;
     const result = (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') ? { lat: loc.lat, lng: loc.lng } : null;
     _ciudadGeocodeCache[key] = result;
+    if (gKey && result) { try { await env.SALMA_KB.put(gKey, JSON.stringify(result)); } catch (_) {} }
     return result;
   } catch (e) {
     _ciudadGeocodeCache[key] = null;
@@ -9040,7 +9073,7 @@ async function buscarLugar(input, placesKey, userCoords, env) {
     // debían estar, rompiendo el enlace "cómo llegar" y el trazado de la ruta en el mapa.
     // userCoords solo se usa como último recurso si la ciudad no se pudo geocodificar (p.ej. el
     // modelo mandó "cerca de mí" en vez de una ciudad real) — ahí sí tiene sentido.
-    const ciudadCoords = ciudad ? await geocodeCiudad(ciudad, placesKey) : null;
+    const ciudadCoords = ciudad ? await geocodeCiudad(ciudad, placesKey, env) : null;
     const biasCoords = ciudadCoords || (userCoords && userCoords.lat && userCoords.lng ? userCoords : null);
     if (biasCoords) {
       url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&location=${biasCoords.lat},${biasCoords.lng}&radius=${radius}${typeParam}&key=${placesKey}`;
@@ -9050,7 +9083,7 @@ async function buscarLugar(input, placesKey, userCoords, env) {
     // CACHÉ 24 h del Text Search (12 oct 2026, ahorro de Google): la misma búsqueda (mismo texto, zona redondeada a ~1 km,
     // radio y tipo) se paga una vez al día en vez de cada vez. Solo se guarda una respuesta REAL con resultados. De caché
     // sale sin "abierto ahora" (se queda viejo en horas), así que Salma no afirma si está abierto sin comprobarlo.
-    const tsKey = env?.SALMA_KB ? 'nearbycache:text:' + normalizeQuery(searchTerms + '|' + (biasCoords ? biasCoords.lat.toFixed(2) + ',' + biasCoords.lng.toFixed(2) : '-') + '|' + radius + '|' + typeParam).slice(0, 400) : null;
+    const tsKey = env?.SALMA_KB ? 'nearbycache:text:' + _cacheKey(searchTerms + '|' + (biasCoords ? biasCoords.lat.toFixed(2) + ',' + biasCoords.lng.toFixed(2) : '-') + '|' + radius + '|' + typeParam).slice(0, 400) : null;
     let data = null, fromCache = false;
     if (tsKey) { try { const c = await env.SALMA_KB.get(tsKey); if (c) { data = JSON.parse(c); fromCache = true; } } catch (_) {} }
     if (!data) {
@@ -9130,9 +9163,20 @@ async function buscarLugar(input, placesKey, userCoords, env) {
 // BÚSQUEDA WEB GENERAL (Serper + fetch contenido top URLs)
 // ═══════════════════════════════════════════════════════════════
 
-async function buscarWeb(input, braveKey) {
+async function buscarWeb(input, braveKey, env) {
   if (!braveKey || !input.query) return { error: 'Falta query o API key' };
-
+  // CACHÉ 12 h (12 oct 2026, caso p-mulprefz0fz): la misma búsqueda web (texto normalizado: sin mayúsculas ni acentos)
+  // se paga a Brave una vez cada 12 h. La consulta ya lleva el sitio (Salma escribe "ferry Tarifa Tánger…"), así que
+  // otra ciudad = otra clave. Solo se guarda una respuesta real con resultados.
+  const wKey = env?.SALMA_KB ? 'webcache:' + _cacheKey(String(input.query)).slice(0, 300) : null;
+  if (wKey) { try { const c = await env.SALMA_KB.get(wKey); if (c) return JSON.parse(c); } catch (_) {} }
+  const _out = await _buscarWebSinCache(input, braveKey);
+  if (wKey && _out && Array.isArray(_out.resultados) && _out.resultados.length) {
+    try { await env.SALMA_KB.put(wKey, JSON.stringify(_out), { expirationTtl: 43200 }); } catch (_) {}
+  }
+  return _out;
+}
+async function _buscarWebSinCache(input, braveKey) {
   try {
     // 1. Buscar via Brave Search API
     const params = new URLSearchParams({ q: input.query, count: 5, country: 'ES', search_lang: 'es', ui_lang: 'es-ES' });
@@ -9227,7 +9271,7 @@ async function executeToolCall(toolName, toolInput, env, userCoords, toolCtx = {
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY, env, { zone: toolCtx.photoZone || null });
     case 'buscar_web':
-      return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY);
+      return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY, env);
     case 'generar_video':
       return generarVideo(toolInput);
     case 'guardar_nota':
@@ -14939,7 +14983,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         const cleanMsg = message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim();
         _braveTransportPromise = buscarWeb(
           { query: `${cleanMsg} precio app transporte` },
-          env.BRAVE_SEARCH_KEY
+          env.BRAVE_SEARCH_KEY, env
         ).catch(() => null);
       }
     }
@@ -15009,7 +15053,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
             // Usar el prefetch si ya arrancó, si no buscar ahora
             const braveRes = _braveTransportPromise ? await _braveTransportPromise : await buscarWeb(
               { query: `${message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim()} precio app transporte` },
-              env.BRAVE_SEARCH_KEY
+              env.BRAVE_SEARCH_KEY, env
             ).catch(() => null);
             if (braveRes?.resultados?.length > 0) {
               transportSearchData = { resultados: braveRes.resultados, flightData: null };
@@ -15101,7 +15145,7 @@ INSTRUCCIONES:
         const destination = (anchorCountry && anchorCountry.locality) || (destMatch ? destMatch[1] : null) || (currentRoute ? (currentRoute.name || currentRoute.title) : null);
         console.log('[EVENTOS] destino extraido:', destination);
         if (destination) {
-          eventData = await searchEvents(destination, _eventDates.from, _eventDates.to, env.SERPER_API_KEY);
+          eventData = await searchEvents(destination, _eventDates.from, _eventDates.to, env.SERPER_API_KEY, env);
         }
       } catch (e) { console.log('[EVENTOS] error en el bloque:', e.message); }
     }
@@ -15124,7 +15168,7 @@ INSTRUCCIONES:
       const fcKeys = Object.keys(_fcQueries);
       if (fcKeys.length) {
         try {
-          const fcResults = await Promise.all(fcKeys.map(k => buscarWeb({ query: _fcQueries[k] }, env.BRAVE_SEARCH_KEY).catch(() => null)));
+          const fcResults = await Promise.all(fcKeys.map(k => buscarWeb({ query: _fcQueries[k] }, env.BRAVE_SEARCH_KEY, env).catch(() => null)));
           const fcData = {};
           fcKeys.forEach((k, i) => {
             const r = fcResults[i];
