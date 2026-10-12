@@ -1,0 +1,28 @@
+name: Activar version del Worker
+
+# Disparo manual. Pone al 100 % una versión del Worker YA SUBIDA (la de `npx wrangler versions upload`),
+# llamando directamente a la API de Cloudflare, sin wrangler. Nació el 12 oct 2026: wrangler fallaba con
+# "Received a malformed response from the API" al leer la versión activa (caso p-mulprefz0fz).
+# No sube código ni toca secrets: solo cambia qué versión recibe el tráfico.
+on:
+  workflow_dispatch:
+    inputs:
+      version_id:
+        description: "Version ID completo (el que da wrangler versions upload)"
+        required: true
+
+jobs:
+  activar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poner la versión al 100 %
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          VERSION_ID: ${{ inputs.version_id }}
+        run: |
+          echo "$VERSION_ID" | grep -Eq '^[0-9a-f-]{36}$' || { echo "Version ID no válido"; exit 1; }
+          curl -sS --fail-with-body -X POST \
+            "https://api.cloudflare.com/client/v4/accounts/f0c9caa483309964a6a236f9556993ec/workers/scripts/salma-api/deployments" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"strategy\":\"percentage\",\"versions\":[{\"percentage\":100,\"version_id\":\"$VERSION_ID\"}]}"
