@@ -6805,6 +6805,46 @@ function withHistoryCache(msgs) {
   } catch (_) { return msgs; }
 }
 
+// Contexto variable AL FINAL (caso p-mulprefz0fz, 12 oct 2026). Antes el orden era: parte fija → contexto variable
+// (fecha, ubicación GPS, datos del país, notas, tiempo…) → historial → mensaje nuevo. Como el contexto cambia en cada
+// mensaje (basta que el GPS se mueva), la caché dejaba de coincidir ahí y el historial ENTERO se volvía a pagar a
+// precio de guardar en cada mensaje (medido: 11.000-19.000 fichas reescritas en mensajes seguidos del mismo minuto).
+// Ahora: system = solo parte fija (+ perfil) → historial → mensaje nuevo con el contexto variable delante, mismo texto.
+// Marcas de caché (máx. 4): parte fija, perfil, final del historial anterior (la siguiente petición lo encuentra y lo
+// lee de caché) y último mensaje (vueltas de herramientas, withHistoryCache). userIdx = posición del mensaje nuevo del
+// usuario en currentMessages (fija en todas las vueltas). Si algo no cuadra devuelve null y se llama como siempre.
+function buildTailInUser(base, full, perfil, msgs, userIdx, ttl1h) {
+  try {
+    const head = base + (perfil || '');
+    if (!base || typeof full !== 'string' || base.length < 4000 || !full.startsWith(head)) return null;
+    if (!Array.isArray(msgs) || !(userIdx >= 0) || userIdx >= msgs.length) return null;
+    const u = msgs[userIdx];
+    if (!u || u.role !== 'user') return null;
+    const cc = ttl1h ? { type: 'ephemeral', ttl: '1h' } : { type: 'ephemeral' };
+    const system = [{ type: 'text', text: base, cache_control: cc }];
+    if (perfil) system.push({ type: 'text', text: perfil, cache_control: cc });
+    const out = msgs.slice();
+    const tail = full.slice(head.length).trim();
+    if (tail) {
+      const prev = typeof u.content === 'string' ? [{ type: 'text', text: u.content }] : (Array.isArray(u.content) ? u.content : null);
+      if (!prev) return null;
+      out[userIdx] = { ...u, content: [{ type: 'text', text: tail }, ...prev] };
+    }
+    const h = userIdx > 0 ? out[userIdx - 1] : null;
+    if (h && typeof h.content === 'string' && h.content.trim()) {
+      out[userIdx - 1] = { ...h, content: [{ type: 'text', text: h.content, cache_control: cc }] };
+    } else if (h && Array.isArray(h.content) && h.content.length) {
+      const hb = h.content.map(b => ({ ...b }));
+      const lb = hb[hb.length - 1];
+      if (lb && !(lb.type === 'text' && !String(lb.text || '').trim())) {
+        hb[hb.length - 1] = { ...lb, cache_control: cc };
+        out[userIdx - 1] = { ...h, content: hb };
+      }
+    }
+    return { system, messages: withHistoryCache(out) };
+  } catch (_) { return null; }
+}
+
 // ─── Conversión directa de prosa (ruta ya escrita) a JSON estructurado ───
 // Usada por el fast-path del botón "Generar guía con mapa": en vez de repetir toda
 // la búsqueda desde cero (riesgo real de quedarse sin iteraciones en rutas de varias
@@ -15581,7 +15621,10 @@ INSTRUCCIONES:
               // Modelo del chat (caso p-murj9qyu6ct, punto 14, 3 oct 2026): env.CLAUDE_MODEL_CHAT, por defecto el de siempre.
               // Sonnet 5.5 (2 $/10 $ por millón, -33 %) piensa por defecto: se manda thinking 'between_tools' (el modo sin pensar).
               const _modeloNuevo = nuevo => (nuevo && env.CLAUDE_MODEL_CHAT) || 'claude-sonnet-4-6';
-              const _callClaude = (nuevo) => fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+              // Contexto variable al final (caso p-mulprefz0fz): CACHE_TAIL="1" lo enciende; null = como siempre.
+              const _tailMode = nuevo => (nuevo && env.CACHE_TAIL === '1')
+                ? buildTailInUser(systemBase, systemPrompt, systemPerfil, currentMessages, messages.length - 1, env.CACHE_1H === '1') : null;
+              const _callClaude = (nuevo, _tm = _tailMode(nuevo)) => fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -15593,15 +15636,15 @@ INSTRUCCIONES:
                   model: (_reqModelo = _modeloNuevo(nuevo)),
                   ...(/sonnet-5/.test(_reqModelo) ? { thinking: { type: 'between_tools' } } : {}),
                   max_tokens: reqMaxTokens,
-                  system: buildCachedSystem(systemBase, systemPrompt, systemPerfil, nuevo && env.CACHE_1H === '1'),
-                  messages: nuevo && env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages,
+                  system: _tm ? _tm.system : buildCachedSystem(systemBase, systemPrompt, systemPerfil, nuevo && env.CACHE_1H === '1'),
+                  messages: _tm ? _tm.messages : (nuevo && env.CACHE_HIST === '1' ? withHistoryCache(currentMessages) : currentMessages),
                   tools: ANTHROPIC_TOOLS,
                   ...(_planSinHerramientas ? { tool_choice: { type: 'none' } } : {}),
                   stream: true,
                 }),
               });
               apiRes = await _callClaude(true);
-              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1' || _modeloNuevo(true) !== 'claude-sonnet-4-6')) {
+              if (!apiRes.ok && (env.CACHE_HIST === '1' || env.CACHE_1H === '1' || env.CACHE_TAIL === '1' || _modeloNuevo(true) !== 'claude-sonnet-4-6')) {
                 let _errTxt = ''; try { _errTxt = (await apiRes.clone().text()).slice(0, 300); } catch (_) {}
                 console.log('[CACHE/MODELO] Anthropic rechazó la petición (' + apiRes.status + ', modelo ' + _reqModelo + '): reintento con lo de siempre · ' + _errTxt);
                 apiRes = await _callClaude(false);
