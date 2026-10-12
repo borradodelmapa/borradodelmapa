@@ -17,7 +17,7 @@
   almacén y clave) del 1 oct 2026. Está en el portátil de Paco: `Escritorio\LLAVES PLAY borradodelmapa\` (con
   `play-keystore.txt`, que lleva la contraseña) y copia en `Escritorio\salma\api\` (carpeta ignorada por Git).
   Huella SHA-256 `2F:05:50:3C:C1:5E:D2:31:B3:A2:B0:80:F1:ED:96:08:51:17:11:70:CA:2E:ED:85:BD:E7:F0:7E:CC:41:F3:21`
-  (la misma que hay en `.well-known/assetlinks.json`). **NUNCA** subir claves ni contraseñas al repo ni pegarlas en chats.
+  (clave de SUBIDA; en `.well-known/assetlinks.json` desde el 1 oct). La clave de FIRMA de Play (SHA-256 `CF:8B:E3:68:C2:2B:68:56:AA:5A:E5:4B:91:C8:CF:54:28:D0:74:E3:B0:55:72:61:6F:0A:D1:1A:4C:5F:97:FA`) se añadió al `assetlinks.json` el 12 oct 2026 para que la app de Play se verifique (sin barra de Chrome y con permiso nativo de ubicación). **NUNCA** subir claves ni contraseñas al repo ni pegarlas en chats.
   Existe OTRA clave, `signing.keystore` (huella `78:AF:A2:D6…`, de los zips de PWABuilder del 8 y 10 oct): **NO sirve**
   para subir; Google rechaza con «firmado con la clave incorrecta».
 - **Cómo repetir el paquete en PWABuilder (el formulario SE REINICIA cada vez; revisar TODO antes de descargar):**
