@@ -1054,7 +1054,7 @@ const salma = {
 
     // Si el mensaje requiere ubicación y no la tenemos, mostrar prompt
     if (!this._userLocation && msg) {
-      const needsLocation = /desde donde estoy|desde aqu[ií]|desde ah[ií]|cerca\s+(de\s+)?m[ií][ao]?\b|a mi lado|por mi zona|en mi zona|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me|vuelo.*desde aqu[ií]|vuelo.*desde ah[ií]/i.test(msg);
+      const needsLocation = /desde donde estoy|desde aqu[ií]|desde ah[ií]|cerca\s+(de\s+)?m[ií][ao]?(?![a-záéíóúñ])|a mi lado|por mi zona|en mi zona|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me|vuelo.*desde aqu[ií]|vuelo.*desde ah[ií]/i.test(msg);
       if (needsLocation) {
         this._addUserBubble(msg);
         this._pendingGeoMessage = msg;  // guardar para reenviar tras GPS
