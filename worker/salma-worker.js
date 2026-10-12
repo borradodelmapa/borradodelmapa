@@ -4580,9 +4580,9 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
 
   if (!searchResults?.results?.length) return null;
 
-  // Teléfono (12 oct 2026, caso p-mulprefz0fz): Place Details (de pago) SOLO del primer resultado, cacheado por sitio.
-  // Los otros dos salen igual (nombre, dirección, nota, Cómo llegar) y con teléfono solo si ese sitio ya se había
-  // pagado antes (caché KV, coste 0). Antes se pagaba el teléfono de los 3 en cada pregunta.
+  // Teléfono (12 oct 2026, caso p-mulprefz0fz): Place Details (de pago) SOLO del primer resultado (la más cercana),
+  // cacheado por sitio. Paco: "que sea la única que da todo" — los otros dos salen con nombre, dirección, nota,
+  // distancia y Cómo llegar, sin teléfono. Antes se pagaba el teléfono de los 3 en cada pregunta.
   const _helpFields = 'formatted_phone_number,international_phone_number';
   // La MÁS CERCANA primero (Paco, 12 oct 2026): con coordenadas se ordena por distancia real; sin ellas, el orden de Google.
   let _cands = searchResults.results.slice(0, 10);
@@ -4598,12 +4598,7 @@ async function searchPlacesForHelp(query, location, placesKey, coords, env) {
   const top = _cands.slice(0, 3);
   const detailPromises = top.map(async (place, i) => {
     if (!place.place_id) return null;
-    if (i === 0) return _getPlaceDetailsCached(env, placesKey, place.place_id, _helpFields);
-    if (!env?.SALMA_KB) return null;
-    for (const f of [_helpFields, _helpFields + ',website']) {
-      try { const c = await env.SALMA_KB.get('placedetails:' + place.place_id + ':' + f); if (c) return JSON.parse(c); } catch (_) {}
-    }
-    return null;
+    return i === 0 ? _getPlaceDetailsCached(env, placesKey, place.place_id, _helpFields) : null;
   });
   const details = await Promise.all(detailPromises);
 
