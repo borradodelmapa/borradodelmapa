@@ -438,7 +438,7 @@ const salma = {
   },
 
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
-  initGeolocation() {
+  initGeolocation(lowAcc) {
     if (!navigator.geolocation) return;
     // watchPosition actualiza conforme el GPS mejora la precisión
     // Primero puede dar torre de celda, luego corrige con GPS real
@@ -462,12 +462,18 @@ const salma = {
         }
       },
       (err) => {
-        console.log('[Salma] Ubicación no disponible:', err.code);
+        console.log('[Salma] Ubicación no disponible:', err.code, lowAcc ? '(aprox.)' : '');
         if (err.code === 1) { // PERMISSION_DENIED
           this._geoBlocked = true;
+        } else if (!lowAcc) {
+          // Sin señal de GPS fino (dentro de casa, app de Android): reintentar con ubicación aproximada (red/wifi). 12 oct 2026.
+          try { if (this._geoWatchId) navigator.geolocation.clearWatch(this._geoWatchId); } catch (_) {}
+          this._geoWatchId = null;
+          this.initGeolocation(true);
         }
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+      lowAcc ? { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+             : { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
     );
   },
 
@@ -4261,8 +4267,8 @@ const salma = {
   _showGeoPrompt() {
     const area = this._getChatArea();
     if (!area) return;
-    // Evitar duplicados
-    if (area.querySelector('.msg-geo-prompt')) return;
+    // Si ya había un aviso, quitarlo y poner uno nuevo abajo (antes se quedaba el viejo y la 2ª pregunta no tenía respuesta: "pillada")
+    area.querySelectorAll('.msg-geo-prompt').forEach(n => n.remove());
     const div = document.createElement('div');
     div.className = 'msg msg-salma msg-geo-prompt';
     div.innerHTML = `
@@ -4281,33 +4287,45 @@ const salma = {
   retryGeolocation(btn) {
     if (btn) btn.textContent = 'Activando...';
     this._geoBlocked = false;
+    const _ok = (pos) => {
+      this._userLocation = {
+        lat: Math.round(pos.coords.latitude * 10000) / 10000,
+        lng: Math.round(pos.coords.longitude * 10000) / 10000,
+        accuracy: Math.round(pos.coords.accuracy)
+      };
+      const prompt = document.querySelector('.msg-geo-prompt');
+      if (prompt) prompt.remove();
+      if (!this._copilotCountry) this.initCopilot();
+      // Reenviar el mensaje original automáticamente
+      if (this._pendingGeoMessage) {
+        const pendingMsg = this._pendingGeoMessage;
+        const pendingRFH = this._pendingGeoRouteFromHere;
+        this._pendingGeoMessage = null;
+        this._pendingGeoRouteFromHere = false;
+        setTimeout(() => this.send(pendingMsg, { routeFromHere: pendingRFH }), 400);
+      }
+    };
+    const _fail = (err) => {
+      if (btn) btn.textContent = '📍 Activar ubicación';
+      this._geoBlocked = (err.code === 1);
+      if (!btn) return;
+      const why = err.code === 1
+        ? 'Android no me deja usar tu ubicación. Ve a Ajustes → Apps → Borrado del Mapa → Permisos → Ubicación → Permitir.'
+        : err.code === 2
+          ? 'No consigo señal de ubicación. Comprueba que la ubicación del móvil está activada.'
+          : 'Tarda demasiado en darme tu ubicación. Prueba junto a una ventana o al aire libre.';
+      const old = btn.parentNode && btn.parentNode.querySelector('.geo-why');
+      if (old) old.remove();
+      btn.insertAdjacentHTML('afterend', '<small class="geo-why" style="display:block;margin-top:8px;opacity:0.7">' + why + ' (código ' + err.code + ')</small>');
+    };
+    // 1º ubicación aproximada (red/wifi: rápida, vale dentro de casa); si falla, GPS fino
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        this._userLocation = {
-          lat: Math.round(pos.coords.latitude * 10000) / 10000,
-          lng: Math.round(pos.coords.longitude * 10000) / 10000,
-          accuracy: Math.round(pos.coords.accuracy)
-        };
-        const prompt = document.querySelector('.msg-geo-prompt');
-        if (prompt) prompt.remove();
-        if (!this._copilotCountry) this.initCopilot();
-        // Reenviar el mensaje original automáticamente
-        if (this._pendingGeoMessage) {
-          const pendingMsg = this._pendingGeoMessage;
-          const pendingRFH = this._pendingGeoRouteFromHere;
-          this._pendingGeoMessage = null;
-          this._pendingGeoRouteFromHere = false;
-          setTimeout(() => this.send(pendingMsg, { routeFromHere: pendingRFH }), 400);
-        }
+      _ok,
+      (e1) => {
+        if (e1.code === 1) { _fail(e1); return; }
+        navigator.geolocation.getCurrentPosition(_ok, _fail, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
       },
-      (err) => {
-        if (btn) btn.textContent = '📍 Activar ubicación';
-        this._geoBlocked = (err.code === 1);
-        if (err.code === 1 && btn) {
-          btn.insertAdjacentHTML('afterend', '<br><small style="opacity:0.6">Permiso denegado. Ve a Ajustes del navegador → Ubicación → Permitir.</small>');
-        }
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: false, timeout: 12000, maximumAge: 60000 }
     );
   },
 
