@@ -8979,12 +8979,15 @@ async function buscarLugar(input, placesKey, userCoords, env) {
     }
 
     const top = data.results.slice(0, 5);
-    // Teléfono y web: YA NO se piden a Google Place Details (0,025 € × hasta 5 sitios en cada búsqueda). Solo se leen de la
-    // caché KV permanente si ese sitio ya se había pagado antes (coste 0). Para un sitio concreto, Salma los pide después
-    // con la ficha. rating/price_level/dirección vienen en el propio Text Search.
-    const details = await Promise.all(top.map(async (p) => {
-      if (!p.place_id || !env?.SALMA_KB) return null;
-      try { const c = await env.SALMA_KB.get('placedetails:' + p.place_id + ':formatted_phone_number,international_phone_number,website'); return c ? JSON.parse(c) : null; } catch (_) { return null; }
+    // Teléfono y web (12 oct 2026, ahorro de Google): Place Details (0,025 €) SOLO del primer resultado, cacheado para siempre
+    // por sitio (_getPlaceDetailsCached). Antes eran hasta 5 por búsqueda. Del resto solo se lee la caché KV si ese sitio ya se
+    // había pagado (coste 0). rating/price_level/dirección vienen en el propio Text Search.
+    const _detFields = 'formatted_phone_number,international_phone_number,website';
+    const details = await Promise.all(top.map(async (p, i) => {
+      if (!p.place_id) return null;
+      if (i === 0) return _getPlaceDetailsCached(env, placesKey, p.place_id, _detFields);
+      if (!env?.SALMA_KB) return null;
+      try { const c = await env.SALMA_KB.get('placedetails:' + p.place_id + ':' + _detFields); return c ? JSON.parse(c) : null; } catch (_) { return null; }
     }));
 
     const lugares = top.map((p, i) => {
@@ -9017,7 +9020,7 @@ async function buscarLugar(input, placesKey, userCoords, env) {
       nota: (esComida
         ? 'Resultados reales de Google Places. Llama antes para confirmar disponibilidad.'
         : 'Resultados reales de Google Places. Llama antes para confirmar horarios.') +
-        ' Teléfono y web pueden venir vacíos: no es que no tengan, es que no se han consultado; usa el enlace google_maps para verlos. No afirmes si está abierto ahora si no consta en "abierto".'
+        ' Solo el primer resultado trae teléfono y web; en los demás vacío significa "no consultado", no que no tengan (el enlace google_maps los muestra). No afirmes si está abierto ahora si no consta en "abierto".'
     };
   } catch (e) {
     return { error: 'Error buscando lugar: ' + e.message };
