@@ -1904,7 +1904,7 @@ const salma = {
           _area.appendChild(_rw);
           this._scrollToBottom(true);
         }
-      } else if ((data.offer_map_button || this._isRouteMsg(msg)) && !(this._chatAreaOverride && this.currentRouteId)) {
+      } else if ((data.offer_map_button || (this._isRouteMsg(msg) && !data.no_map_button)) && !(this._chatAreaOverride && this.currentRouteId)) {
         // PIEZA A — FLUJO ÚNICO. Toda petición de ruta/destino (chat libre o worker-detectada)
         // se responde primero con recomendaciones en texto. Aquí ofrecemos el botón para
         // montar la guía con mapa — mismo camino que el chip de 8 preguntas.

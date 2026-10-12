@@ -2963,7 +2963,39 @@ const TRANSPORT_APP_URLS = {
 // UTILIDADES
 // ═══════════════════════════════════════════════════════════════
 
+// ── ¿"N días" es un viaje o una pregunta? (12 oct 2026, caso rev-no_contesta_primero) ──
+// «mírame el camping río Jara lo que cuesta ahora 15 días» entraba como viaje (modo plan sin herramientas) y Claude
+// solo anunciaba «Voy a buscar…». Confirmado con wrangler tail: con «15 días» 1 vuelta/28 tokens, sin «15 días» 3
+// vueltas y contesta. Regla asimétrica: lo claramente guía NO cambia (palabra de guía o forma corta «3 días en Ronda»);
+// solo lo dudoso se pregunta a gpt-4o-mini, y si falla se queda como hasta ahora (viaje).
+const _msgsPregunta = new Set();   // mensajes que el clasificador dijo «pregunta» (clave: el texto; mismo texto, misma decisión)
+const _DIAS_RE = /\b(?:\d{1,2}|un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i;
+const _CUE_GUIA_RE = /\b(?:rutas?|itinerarios?|gu[ií]as?|plan(?:es)?|planea\w*|plane[ao]\w*|h[aá]zme|haz|organ[ií]za\w*|prep[aá]ra\w*|m[oó]ntame|road\s*trip|roadtrip|escapada|viaje|recorrido|qu[eé]\s+(?:ver|hacer)|visitar|recorrer)\b/i;
+function diasAmbiguos(message) {
+  const m = String(message || '').trim();
+  if (!_DIAS_RE.test(m)) return false;
+  if (_CUE_GUIA_RE.test(m)) return false;
+  const palabras = m.replace(/^salma[\s,:]+/i, '').split(/\s+/).filter(Boolean).length;
+  return palabras > 5;   // «3 días en Ronda», «Ronda 3 días»: forma corta de guía, sin preguntar a nadie
+}
+async function clasificarDiasAmbiguos(env, message) {
+  try {
+    const out = await callOpenAI(env.OPENAI_API_KEY, {
+      model: 'gpt-4o-mini', max_tokens: 20, temperature: 0,
+      system: `Clasificas el mensaje de un viajero a una app de viajes. "viaje" = pide planificar u organizar un viaje, una ruta, una guía o un itinerario por días (aunque no use esas palabras). "pregunta" = pregunta o pide un dato concreto (precio, tarifa, horario, si está abierto, disponibilidad, cómo llegar, tiempo…) y los días son solo un dato de esa pregunta (estancia, validez, duración de algo). Ejemplos "viaje": "esta vez voy solo, 2 días en Lisboa", "quiero hacer la Transpirenaica en moto en 5 días", "voy a pasar 4 días en Ciudad Real y quiero ver lo mejor". Ejemplos "pregunta": "mírame el camping X lo que cuesta 15 días", "cuánto cuesta alquilar un coche 5 días en Málaga", "qué tiempo hará los próximos 3 días en Bilbao". Ante la duda: "viaje". Responde SOLO JSON: {"tipo":"viaje"} o {"tipo":"pregunta"}`,
+      messages: [{ role: 'user', content: String(message).slice(0, 400) }],
+    });
+    const j = JSON.parse(((out && out.text) || '').match(/\{[\s\S]*\}/)[0]);
+    if (j.tipo === 'pregunta') {
+      if (_msgsPregunta.size > 500) _msgsPregunta.clear();
+      _msgsPregunta.add(message);
+    }
+    console.log(`[DIAS] «${String(message).slice(0, 60)}» → ${j.tipo === 'pregunta' ? 'pregunta' : 'viaje'}`);
+  } catch (e) { console.log('[DIAS] clasificador falló, se queda como viaje: ' + (e && e.message)); }
+}
+
 function isRouteRequest(message, history) {
+  if (_msgsPregunta.has(message)) return false;
   if (/salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message)) return true;
   // "N días en X" (dígitos) → ruta completa con mapa
   if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
@@ -2998,6 +3030,7 @@ function extractPreferredRoad(message) {
 
 // Detecta "destino + días" sin ser petición de guía → respuesta estructurada por días (no JSON)
 function isDaysDestination(message) {
+  if (_msgsPregunta.has(message)) return false;
   if (isRouteRequest(message)) return false;
   // Con días explícitos (números o palabras: un/dos/tres...)
   if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
@@ -14623,6 +14656,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // sitios por día) solo por llevar la palabra "ruta": "¿hay una estación abandonada cerca de algún punto de la
     // ruta?" salía como una chapa por días. Ahí se contesta en modo conversación, breve, y si propone algo añadible
     // Salma lo marca con SALMA_OFFER_ADD_TO_ROUTE → mismo botón "Añadir a la guía" (ver buildMessages).
+    // «N días» dudoso (sin palabra de guía y no la forma corta «3 días en Ronda»): ¿viaje o pregunta? Solo en chat libre.
+    if (!guidedRoute && !_guidedStageReco && !guidedMapStage && !routeFromHere && !imageBase64 && !editingActiveRoute && diasAmbiguos(message)) {
+      await clasificarDiasAmbiguos(env, message);
+    }
     const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 && !editingActiveRoute &&
       (isRouteRequest(message, history) || isDaysDestination(message));
     const guidedIsReco = _guidedStageReco || _tiempo1Chat;
@@ -14747,7 +14784,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // Madrid, "Alhambra" era un bar de Madrid). Si no pasa, no se corta: sigue el flujo normal con Salma.
     // QUÉ se pide lo decide el intérprete (interpretPlaceRequest), una sola vez para todo el mensaje: el atajo, los
     // botones de transporte y los enlaces de la respuesta de Salma leen este mismo _placeIntent.
-    const _chatDestino = (anchorCountry && anchorCountry.locality) || (typeof body.dest_hint === 'string' ? body.dest_hint.trim() : '');
+    const _chatDestino = (anchorCountry && anchorCountry.locality) || (typeof body.dest_hint === 'string' && !_msgsPregunta.has(message) ? body.dest_hint.trim() : '');
     // Nunca en un plan de viaje (recomendaciones) ni al pulsar "Crear ruta con mapa": ahí no se quiere "ir a un sitio".
     // El intérprete es una IA pequeña que no contesta igual dos veces: a las 9:25 del 30 sept tomó "Ruta Transpirenaica
     // en moto…" por un sitio, no lo encontró en Google y cortó con "No encuentro…" sin montar la guía (Paco).
@@ -16151,7 +16188,7 @@ REGLAS:
           // que se habla, dónde está el usuario y la propia respuesta. Con eso el localizador dice la ciudad de cada
           // sitio y verifyAllStops comprueba que está allí. Nunca una zona adivinada de trozos del mensaje ni el GPS
           // como zona de búsqueda (caso p-mul559lkvkr).
-          const _dhReg = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
+          const _dhReg = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2 && !_msgsPregunta.has(message)) ? body.dest_hint.trim() : '';
           const _linkCtx = {
             message, history, userLocation, userLocationName,
             destino: (anchorCountry && anchorCountry.locality) || _dhReg || (guidedRoute && guidedRoute.destino ? String(guidedRoute.destino) : '')
@@ -16553,6 +16590,7 @@ REGLAS:
 
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
+        if (_msgsPregunta.has(message)) doneEvt.no_map_button = true;   // pregunta con «N días»: la app no pone «Crear ruta con mapa»
         if (_replyMarcas) doneEvt.reply_marcas = _replyMarcas;
         if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, titulo: route?.title || '', dias: route?.duration_days || 0,
           paradas: route?.stops?.length || 0, descartadas: route?.discarded_stops?.length || 0, cerca: route?.nearby_stops?.length || 0,
