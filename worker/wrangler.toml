@@ -50,6 +50,7 @@ OPEN_GATE_ON = "1"  # punto 16: tope diario por IP en endpoints abiertos (fotos/
 CACHE_1H = "1"     # punto 12: caché del prompt de 1 h en vez de 5 min (encendida 12 oct 2026, caso p-mulprefz0fz). Revertir = "0"
 CACHE_TAIL = "1"   # contexto variable (fecha, GPS, datos del país…) al final, junto al mensaje nuevo: el historial se lee de caché (caso p-mulprefz0fz). Revertir = "0"
 CHAT_EFFORT = "medium"   # esfuerzo de Claude en la conversación normal (no guías): respuestas más escuetas. Revertir = "" (caso p-mulprefz0fz)
+PLAY_BILLING_ON = "1"   # compras dentro de la app de Google Play (Play Billing, /play-verify). Encendido 13 oct 2026 con los 4 productos activos. Revertir = "0"
 # Remitente de los emails (Resend). Dominio borradodelmapa.com verificado en Resend el 26 sept 2026
 # (DKIM resend._domainkey + CNAME send/rsend en el DNS de Netlify).
 RESEND_FROM = "Salma · Borrado del Mapa <salma@borradodelmapa.com>"
