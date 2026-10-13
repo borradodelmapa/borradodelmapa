@@ -1933,11 +1933,16 @@ const salma = {
         // pero con el botón "Añadir a la guía" (fusiona en la ruta abierta, no crea
         // una nueva). El CTA ya viene escrito dentro de data.reply (ver
         // editingActiveRoute en el prompt del Worker), no hace falta bubble aparte.
+        // 13 oct 2026 (Paco): solo si Salma propone algún sitio concreto (marcado [[ ]], mismo
+        // regex que tieneMarcasSitio del Worker). «Cerca mía» a 300 km de la ruta respondía
+        // «nada te pilla cerca» y aun así salía el botón — que lanza una guía entera (de pago).
         this._removeLoading();
-        this._offerAddToRoute({
-          baseMsg: data.map_base_msg || this._lastMsg || msg,
-          sourceText: data.reply_marcas || data.reply || '',
-        });
+        if (/\[\[[^\[\]\n]{2,80}\]\]/.test(data.reply_marcas || '')) {
+          this._offerAddToRoute({
+            baseMsg: data.map_base_msg || this._lastMsg || msg,
+            sourceText: data.reply_marcas || data.reply || '',
+          });
+        }
       } else if (this._pendingMapSourceText && !this._chatAreaOverride && data.reply) {
         // Respuesta normal (ninguna de las ramas de arriba aplicó) mientras el botón "Crear
         // ruta con mapa" sigue sin pulsar: se recoloca el botón bajo el último mensaje. El propio
