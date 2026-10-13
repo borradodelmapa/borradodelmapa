@@ -7073,9 +7073,10 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .bottom-tab-fab { flex-direction:column; gap:1px; }
 .bottom-tab-fab svg { width:24px; height:24px; }
 .bottom-tab-fab-label { font-family:var(--font-cond); font-weight:800; font-size:12px; letter-spacing:.04em; text-transform:uppercase; line-height:1; }
-/* "Nueva conversación": el botón que ya existía (#chat-fresh), ahora con texto */
-#chat-fresh{width:auto;padding:0 11px;gap:6px;}
-.chat-fresh-label{font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--crema);}
+/* "Nueva conversación" (#chat-fresh): solo el icono ↻, sin caja ni texto (13 oct 2026, Paco).
+   Sin fondo: la sombra lo mantiene legible cuando el chat pasa por debajo. */
+#chat-fresh{width:34px;padding:0;border:0;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
+  color:var(--accent);filter:drop-shadow(0 1px 3px rgba(0,0,0,.9));}
 /* Acceso "Salma también en tu WhatsApp" — fila propia, verde WhatsApp */
 .chat-empty .chat-empty-chip.ce-wa-chip{margin-top:7px;justify-content:center;color:#25D366;border-color:rgba(37,211,102,.55);background:rgba(37,211,102,.08);}
 .chat-empty .chat-empty-chip.ce-wa-chip .chip-icon{stroke:none;fill:#25D366;}
@@ -7120,16 +7121,15 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 #mejora-btn{
   position:fixed;top:calc(env(safe-area-inset-top) + 10px);right:12px;z-index:880;
   width:32px;height:32px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:rgba(13,15,16,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border:1px solid rgba(236,235,232,.22);color:var(--accent);opacity:.8;cursor:pointer;
-  font-size:15px;line-height:1;
+  background:transparent;border:0;color:var(--accent);opacity:.9;cursor:pointer;
+  font-size:21px;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.9);
   transition:opacity .2s,border-color .2s;
   -webkit-tap-highlight-color:transparent;
 }
-#mejora-btn:hover{opacity:1;border-color:var(--accent);}
+#mejora-btn:hover{opacity:1;}
 #mejora-btn:active{transform:scale(.92);}
-/* En el chat con conversación, "Nueva" (#chat-fresh) ocupa la esquina: se aparta */
-body:has(#app-content.app-content--chat #chat-area .msg) #mejora-btn{right:calc(12px + var(--chat-fresh-w, 90px) + 8px);}
+/* En el chat con conversación, "Nueva" (#chat-fresh, 34px) ocupa la esquina: Ayuda queda justo a su izquierda */
+body:has(#app-content.app-content--chat #chat-area .msg) #mejora-btn{right:calc(12px + 34px + 6px);}
 .mejora-card{margin:20px 0 26px;padding:16px;background:var(--bg-row);border-top:3px solid var(--accent);}
 .mejora-card-t{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1;color:var(--text-primary);margin-bottom:8px;}
 .mejora-card p{margin:0 0 14px;font-size:15px;line-height:1.5;color:var(--text-secondary);}
