@@ -35,6 +35,8 @@ const videoPlayer = {
   MAP_BG: '#080c12',
   MAP_LINE: '#d4a017',
   MAP_DOT: '#ffffff',
+  // Servidor de teselas del mapa. Si el uso crece, cambiar solo esta línea por un proveedor propio/de pago.
+  OSM_TILE_URL: (z, x, y) => `https://tile.openstreetmap.org/${z}/${x}/${y}.png`,
 
   // ═══ INICIALIZACIÓN ═══
   async init(container, photoUrls, params) {
@@ -1075,7 +1077,7 @@ const videoPlayer = {
   },
 
   // ═══════════════════════════════════════════
-  //  ESTILO "VIAJE" — Documental con satélite
+  //  ESTILO "VIAJE" — Documental con mapa OpenStreetMap
   // ═══════════════════════════════════════════
 
   _mapImages: [],      // [overview, stop0, stop1, ...]
@@ -1083,10 +1085,12 @@ const videoPlayer = {
   _rawStops: [],       // stops originales con lat/lng (sin normalizar)
   _FRAMES_PER_STOP: 80, // zoom-in(20) + split(45) + zoom-out(15)
 
-  // Cargar imágenes satélite (overview + per-stop)
+  // Cargar mapas (overview + per-stop) con teselas de OpenStreetMap, sin Google (13 oct 2026).
+  // Cada "imagen" es un canvas montado con teselas; mismo contrato que antes: [0] = overview 1280x1280,
+  // [i+1] = parada i (960x720, la proporción del recuadro del mapa). Las teselas se guardan en la caché del móvil 'bdm-tiles' (la misma que usa
+  // viaje-fotos.html): la segunda vez no se descarga nada.
   async _loadViajeImages(stops) {
-    const apiBase = (typeof window !== 'undefined' && window.SALMA_API) || '';
-    if (!apiBase || stops.length < 2) return false;
+    if (stops.length < 2) return false;
 
     this._rawStops = stops;
 
@@ -1097,32 +1101,106 @@ const videoPlayer = {
     const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
     const zoom = this._calcFitZoom(stops, 640);
 
-    this._mapBounds = { centerLat, centerLng, zoom, imgW: 1280, imgH: 1280 };
+    // Teselas de 256 px a zoom+1 = 1280 px cubren lo mismo que 640 px a zoom (antes: Static Maps scale=2)
+    const tz = Math.min(zoom + 1, 17);
+    this._mapBounds = { centerLat, centerLng, zoom: tz, imgW: 1280, imgH: 1280 };
 
-    // URLs a cargar
-    const urls = [];
-    // Overview
-    urls.push(`${apiBase}/staticmap?lat=${centerLat}&lng=${centerLng}&zoom=${zoom}&size=640x640&maptype=satellite&scale=2`);
-    // Per-stop (zoom más alto, 640x360 → 1280x720)
-    const stopZoom = Math.min(zoom + 4, 15);
-    for (const s of stops) {
-      urls.push(`${apiBase}/staticmap?lat=${s.lat}&lng=${s.lng}&zoom=${stopZoom}&size=640x360&maptype=satellite&scale=2`);
+    const stopTz = Math.min(zoom + 4, 15) + 1;
+    const specs = [{ lat: centerLat, lng: centerLng, z: tz, w: 1280, h: 1280 }];
+    for (const s of stops) specs.push({ lat: s.lat, lng: s.lng, z: stopTz, w: 960, h: 720 });
+
+    // Teselas únicas que hacen falta (las paradas cercanas comparten)
+    const need = new Map();
+    for (const sp of specs) {
+      sp.box = this._osmTileBox(sp);
+      for (let x = sp.box.x0; x <= sp.box.x1; x++) {
+        for (let y = sp.box.y0; y <= sp.box.y1; y++) {
+          const n = 1 << sp.z;
+          if (y < 0 || y >= n) continue;
+          const xx = ((x % n) + n) % n;
+          need.set(sp.z + '/' + xx + '/' + y, [sp.z, xx, y]);
+        }
+      }
     }
+    const list = [...need.values()];
+    const tiles = new Map();
+    const deadline = Date.now() + 30000; // pasado el límite se monta con lo que haya
+    const worker = async () => {
+      while (list.length && Date.now() < deadline) {
+        const [z, x, y] = list.shift();
+        tiles.set(z + '/' + x + '/' + y, await this._fetchOsmTile(z, x, y));
+      }
+    };
+    await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
 
-    // Cargar en paralelo con timeout
-    const timeout = (ms) => new Promise((_, rej) => setTimeout(() => rej('timeout'), ms));
+    this._mapImages = specs.map(sp => this._stitchOsm(sp, tiles));
+    // Con el overview a medias no sirve: que caiga al estilo documental
+    return !!this._mapImages[0] && this._mapImages[0]._ok >= 0.6;
+  },
+
+  _osmWorld(lat, lng, z) {
+    const ws = 256 * Math.pow(2, z);
+    const rad = lat * Math.PI / 180;
+    return {
+      x: (lng + 180) / 360 * ws,
+      y: (1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2 * ws
+    };
+  },
+
+  _osmTileBox(sp) {
+    const c = this._osmWorld(sp.lat, sp.lng, sp.z);
+    sp.ox = c.x - sp.w / 2;
+    sp.oy = c.y - sp.h / 2;
+    return {
+      x0: Math.floor(sp.ox / 256), x1: Math.floor((sp.ox + sp.w) / 256),
+      y0: Math.floor(sp.oy / 256), y1: Math.floor((sp.oy + sp.h) / 256)
+    };
+  },
+
+  async _fetchOsmTile(z, x, y) {
+    const url = this.OSM_TILE_URL(z, x, y);
     try {
-      const results = await Promise.race([
-        Promise.all(urls.map(url => this._loadImage(url))),
-        timeout(12000)
-      ]);
-      this._mapImages = results;
-      // Verificar que al menos el overview cargó
-      return !!this._mapImages[0];
-    } catch (e) {
-      console.warn('[VideoPlayer] Viaje images timeout/error');
-      return false;
+      let cache = null, r = null;
+      try { cache = await caches.open('bdm-tiles'); r = await cache.match(url); } catch (_) {}
+      if (!r) {
+        r = await fetch(url, { mode: 'cors' });
+        if (!r.ok) return null;
+        if (cache) { try { await cache.put(url, r.clone()); } catch (_) {} }
+      }
+      return await createImageBitmap(await r.blob());
+    } catch (_) { return null; }
+  },
+
+  _stitchOsm(sp, tiles) {
+    const c = document.createElement('canvas');
+    c.width = sp.w; c.height = sp.h;
+    const g = c.getContext('2d');
+    g.fillStyle = this.MAP_BG;
+    g.fillRect(0, 0, sp.w, sp.h);
+    const n = 1 << sp.z;
+    let ok = 0, total = 0;
+    for (let x = sp.box.x0; x <= sp.box.x1; x++) {
+      for (let y = sp.box.y0; y <= sp.box.y1; y++) {
+        if (y < 0 || y >= n) continue;
+        total++;
+        const t = tiles.get(sp.z + '/' + (((x % n) + n) % n) + '/' + y);
+        if (!t) continue;
+        ok++;
+        g.drawImage(t, x * 256 - sp.ox, y * 256 - sp.oy, 256.7, 256.7);
+      }
     }
+    c._ok = total ? ok / total : 0;
+    return c;
+  },
+
+  // Crédito obligatorio de OpenStreetMap (arriba a la derecha, sobre el mapa)
+  _drawOsmCredit(ctx, w) {
+    ctx.save();
+    ctx.globalAlpha = 0.75;
+    ctx.font = '8px sans-serif';
+    ctx.textAlign = 'right';
+    this._drawText(ctx, '© OpenStreetMap', w - 6, 12, this.CREAM);
+    ctx.restore();
   },
 
   // Calcular zoom level que encuadre todos los stops en un tile de sizePx
@@ -1193,6 +1271,7 @@ const videoPlayer = {
       const total = this._totalFrames - this._photosEnd;
       this._drawCloseScene(localFrame, total, w, h);
     }
+    if (frame >= this._titleEnd && frame < this._photosEnd) this._drawOsmCredit(ctx, w);
   },
 
   // ═══ OVERVIEW SATÉLITE ═══
