@@ -1072,10 +1072,11 @@ ${trk}
       const _st = document.createElement('strong');
       _st.textContent = _gTitle ? 'Editando «' + _gTitle + '»' : 'Editando esta guía';
       _sub.appendChild(_st);
-      _sub.appendChild(document.createTextNode('Añade, quita, cambia o pregunta sobre esta guía. Para buscar cerca de ti: «Cerca mía» o el chat general.'));
+      _sub.appendChild(document.createTextNode('Añade, quita, cambia o pregunta sobre esta guía. Para buscar cerca de ti, usa el chat general.'));
     }
-    // "Borrar conversación": botón fijo debajo de "Cerca mía" (ver index.html). El Narrador se quitó
-    // de aquí el 13 oct 2026 (Paco): se podía activar a cientos de km de la ruta; sigue en el chat.
+    // "Borrar conversación": botón fijo debajo del cuadro de texto (ver index.html). El Narrador y
+    // «Cerca mía» se quitaron de aquí el 13 oct 2026 (Paco): esta ventana es solo para editar la guía;
+    // lo de «qué tengo cerca» va al chat general.
     const _clrBtn = document.getElementById('itin-query-clear');
     if (_clrBtn) _clrBtn.onclick = _clearItinQueryHistory;
     input.value = '';
@@ -1159,41 +1160,6 @@ ${trk}
       overlay.addEventListener('click', () => { if (camMenu) camMenu.style.display = 'none'; });
     }
 
-    // Accesos rápidos, debajo del cuadro de texto
-    const nearBtn = document.getElementById('itin-query-near');
-    if (nearBtn) {
-      const _nearLabel = nearBtn.textContent;
-      nearBtn.onclick = () => {
-        // Pedir una posición GPS fresca antes de preguntar "qué tengo cerca":
-        // this._userLocation puede llevar rato sin refrescarse (el watch se
-        // para al llegar a <500m de precisión si el Narrador no está activo,
-        // ver salma.js:initGeolocation) — con el usuario en movimiento eso da
-        // una ubicación vieja y una respuesta que no tiene que ver con dónde
-        // está de verdad. Sin coste: getCurrentPosition es una llamada del
-        // propio navegador, no toca ninguna API de pago.
-        if (!navigator.geolocation) { input.value = '¿Qué tengo cerca?'; _sendItinQuery(); return; }
-        nearBtn.disabled = true;
-        nearBtn.textContent = 'Localizando…';
-        const _finish = () => {
-          nearBtn.disabled = false;
-          nearBtn.textContent = _nearLabel;
-          input.value = '¿Qué tengo cerca?';
-          _sendItinQuery();
-        };
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            salma._userLocation = {
-              lat: Math.round(pos.coords.latitude * 10000) / 10000,
-              lng: Math.round(pos.coords.longitude * 10000) / 10000,
-              accuracy: Math.round(pos.coords.accuracy)
-            };
-            _finish();
-          },
-          () => _finish(),
-          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-        );
-      };
-    }
     // Historial de ESTA ruta, si ya se había hablado con ella antes (aunque
     // fuera otro día) — vive en su propio documento, no en sessionStorage.
     if (salma.currentRouteId && window.currentUser && typeof db !== 'undefined') {
