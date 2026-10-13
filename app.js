@@ -852,7 +852,7 @@ function _renderChatEmpty() {
       <div class="ce-perf"></div>
       <div class="ce-stub">
         <button class="ce-emit" data-ce-emit>Trazar ruta <span>→</span></button>
-        <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
+        <div class="ce-stub-hint">Salma monta tu ruta</div>
       </div>`;
 
   // Tablero de RUTA ACTIVA — modo compañero. Abre la GUÍA del viaje + billete nuevo.
