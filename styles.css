@@ -7050,6 +7050,10 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .ce-fld .ce-k,.ce-stat .ce-k{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--ce-ink2);}
 .ce-chip{font-family:var(--font-body);font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;padding:9px 12px;}
 .ce-afinar{font-family:var(--font-body);font-size:14px;letter-spacing:0;text-transform:none;}
+/* "Afinar la ruta" con pinta de BOTÓN (Paco, 13 oct 2026): antes era una fila de texto y no se sabía que se pulsaba. */
+.chat-empty .ce-afinar{width:calc(100% - 26px);margin:12px 13px;padding:13px 14px;border:1px solid var(--ce-line-hi);background:var(--ce-flap);color:var(--ce-ink);font-weight:600;}
+.chat-empty .ce-afinar:hover,.chat-empty .ce-afinar[aria-expanded="true"]{border-color:var(--ce-amber);}
+.chat-empty .ce-afinar-c{color:var(--ce-amber);font-size:13px;font-weight:600;}
 .ce-stub-hint{font-family:var(--font-body);font-size:12px;letter-spacing:0;text-transform:none;color:var(--ce-ink2);}
 
 /* Portada: botones de 3 palabras en minúscula normal */

@@ -807,7 +807,7 @@ function _renderChatEmpty() {
           { v: '8-14', l: '8–14' }, { v: '+14', l: '+14' }
         ], true)}
       </div>
-      <button class="ce-afinar" data-ce-afinar>Afinar la ruta <span class="ce-afinar-c">6 detalles · opcional ▾</span></button>
+      <button class="ce-afinar" data-ce-afinar aria-expanded="false"><span class="ce-afinar-t">＋ Afinar la ruta</span><span class="ce-afinar-c">opcional ▾</span></button>
       <div class="ce-more">
         <div class="ce-fld">
           <div class="ce-k">Fechas</div>
@@ -1070,7 +1070,8 @@ function _renderChatEmpty() {
           const more = ceCard.querySelector('.ce-more');
           const open = more.classList.toggle('open');
           const c = afinar.querySelector('.ce-afinar-c');
-          if (c) c.textContent = open ? 'ocultar ▴' : '6 detalles · opcional ▾';
+          if (c) c.textContent = open ? 'ocultar ▴' : 'opcional ▾';
+          afinar.setAttribute('aria-expanded', open ? 'true' : 'false');
           return;
         }
         // Billete — chips
