@@ -24,6 +24,14 @@ a) Icono del lanzador correcto · b) arranca a pantalla completa (sin barra de U
 e) entrar con Google funciona · f) el modal de plan en Android no enseña Stripe · g) `statements:list` de Google enseña la huella de firma de Play.
 Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegado — dime qué ves»).
 
+## Estado a 13 oct 2026 (manda sobre lo de abajo)
+- **Productos únicos ACTIVOS:** `guia` 9,99 · `trimestral` 19,99 · `anual` 49,99 · `anual_oferta` 39,99 (opciones de compra `<id>-compra`,
+  `anual-oferta-compra`). El «error inesperado» al activar era que **solo España tenía precio**: en el paso 2 hay que usar
+  **«Set prices» → todos los países** (Google convierte) y comprobar que ningún país queda con precio «-».
+- **Cuenta bancaria verificada** (13 oct). **`PLAY_BILLING_ON = "1"`** en `wrangler.toml`, Worker `f2c5afa1`. `/play-verify` llega a Google
+  con la cuenta de servicio (comprobado con token falso → 400 «Invalid Value», no error de permisos).
+- **Pendiente:** compra de prueba de Paco en la app (probador de licencia: no se cobra) y paquete v4 SIN Location delegation.
+
 ## Estado a 10 oct 2026
 - **Cuenta de desarrollador:** personal, ID `8296224504840426202`. App `com.borradodelmapa.app`, ID de app en la
   consola `4972765825170829272` (estado: Borrador, Prueba interna). Enlaces directos:
