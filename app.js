@@ -720,9 +720,8 @@ function _renderChatEmpty() {
     traductor: { label: 'Traductor', icon: _ci('<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z"/>'), msg: null, action: 'traductor' },
   };
   const _pick = keys => keys.map(k => _chipDefs[k]).filter(c => _hasUser || !c.auth);
-  const chipsLeft = _pick(['cerca', 'vuelos']);
-  const chipsRight = _pick(['alojamiento', 'sos']);
-  const chipsMore = _pick(['narrador', 'consultas', 'notas', 'alertas', 'moneda', 'traductor']);
+  // Orden de Atajos pedido por Paco (13 oct 2026).
+  const chipsAtajos = _pick(['consultas', 'notas', 'cerca', 'narrador', 'vuelos', 'alertas', 'alojamiento', 'sos', 'moneda', 'traductor']);
   // Salma en WhatsApp — fila propia a todo lo ancho, no es un acceso más: es otro canal.
   const _ceWaRow = `<button class="chat-empty-chip ce-wa-chip" data-action="whatsapp"><svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg><span class="ce-wa-label">${_salmaWaChipLabel()}</span></button>`;
   const renderChip = c => {
@@ -905,7 +904,6 @@ function _renderChatEmpty() {
   const _ceIcRuta = _ceRowIc('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>');
   const _ceIcAsk = _ceRowIc('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/>');
   const _ceIcTool = _ceRowIc('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>');
-  const chipsAtajos = [...chipsLeft, ...chipsRight, ...chipsMore];
   const _ceMoreHTML = `
       <div class="ce-ask ce-atajos">
         <button class="ce-more-toggle ce-row-btn" id="ce-more-toggle" aria-expanded="${_ceMoreOpen}">
