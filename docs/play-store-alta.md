@@ -28,6 +28,7 @@ Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegad
 - **Productos únicos ACTIVOS:** `guia` 9,99 · `trimestral` 19,99 · `anual` 49,99 · `anual_oferta` 39,99 (opciones de compra `<id>-compra`,
   `anual-oferta-compra`). El «error inesperado» al activar era que **solo España tenía precio**: en el paso 2 hay que usar
   **«Set prices» → todos los países** (Google convierte) y comprobar que ningún país queda con precio «-».
+- **Precio en España SIN IVA** (Play le suma el 21 %): `guia` 8,26 · `trimestral` 16,52 · `anual` 41,31 · `anual_oferta` 33,05 → el cliente paga 9,99 / 19,99 / 49,99 / 39,99 como en la web. El resto de países, como los calculó Google.
 - **Cuenta bancaria verificada** (13 oct). **`PLAY_BILLING_ON = "1"`** en `wrangler.toml`, Worker `f2c5afa1`. `/play-verify` llega a Google
   con la cuenta de servicio (comprobado con token falso → 400 «Invalid Value», no error de permisos).
 - **Pendiente:** compra de prueba de Paco en la app (probador de licencia: no se cobra) y paquete v4 SIN Location delegation.
