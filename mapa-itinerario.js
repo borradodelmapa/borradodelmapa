@@ -73,6 +73,36 @@ const mapaItinerario = {
         ${(options && options._preview && options._preview.pay) ? '' : `<button class="itin-btn itin-btn-icon itin-btn-edit" id="itin-edit-btn" title="Editar esta ruta con Salma" aria-label="Editar esta ruta"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>`}
       `;
       document.body.appendChild(actionBar);
+
+      // Bocadillo junto al lápiz (13 oct 2026, Paco): «para que la gente sepa que es para editar».
+      // Solo con cuenta (§10), como mucho 2 veces y nunca más una vez tocado el lápiz. Se va solo a
+      // los 6 s, con su ✕ o al tocar el lápiz. Vive dentro de la barra: se borra con ella al cerrar.
+      // Estilos en línea a propósito: así no cambia styles.css (y no hay que regenerar destinos).
+      const _editBtn = actionBar.querySelector('#itin-edit-btn');
+      let _tipN = 0;
+      try { _tipN = parseInt(localStorage.getItem('bdm_tip_editar') || '0', 10) || 0; } catch (_) { _tipN = 99; }
+      const _logged = typeof currentUser !== 'undefined' && !!currentUser;
+      if (_editBtn && _logged && !_isPreview && _tipN < 2) {
+        try { localStorage.setItem('bdm_tip_editar', String(_tipN + 1)); } catch (_) {}
+        const tip = document.createElement('div');
+        tip.className = 'itin-edit-tip';
+        tip.setAttribute('role', 'status');
+        tip.style.cssText = 'position:absolute;right:calc(100% + 12px);transform:translateY(-50%);width:max-content;max-width:190px;'
+          + 'background:var(--dorado,#e8742a);color:var(--negro,#111);font-size:13.5px;font-weight:600;line-height:1.3;'
+          + 'padding:9px 30px 9px 12px;box-shadow:0 4px 14px rgba(0,0,0,.45);transition:opacity .3s;';
+        tip.style.top = (_editBtn.offsetTop + _editBtn.offsetHeight / 2) + 'px';
+        tip.innerHTML = '✏️ Toca aquí para cambiar la guía con Salma'
+          + '<span style="position:absolute;right:-7px;top:50%;margin-top:-7px;border:7px solid transparent;border-right:0;border-left-color:var(--dorado,#e8742a)"></span>'
+          + '<button type="button" aria-label="Cerrar" style="position:absolute;top:2px;right:2px;width:24px;height:24px;padding:0;border:0;background:none;color:inherit;font-size:15px;line-height:1;cursor:pointer">✕</button>';
+        const _hideTip = () => { tip.style.opacity = '0'; setTimeout(() => tip.remove(), 300); };
+        tip.querySelector('button').addEventListener('click', (e) => { e.stopPropagation(); _hideTip(); });
+        _editBtn.addEventListener('click', () => {
+          try { localStorage.setItem('bdm_tip_editar', '99'); } catch (_) {}
+          if (tip.isConnected) tip.remove();
+        });
+        actionBar.appendChild(tip);
+        setTimeout(_hideTip, 6000);
+      }
     }
 
     // Contenedor scroll de cards
@@ -1044,7 +1074,8 @@ ${trk}
       _sub.appendChild(_st);
       _sub.appendChild(document.createTextNode('Añade, quita, cambia o pregunta sobre esta guía. Para buscar cerca de ti: «Cerca mía» o el chat general.'));
     }
-    // "Borrar conversación": botón fijo debajo de "Cerca mía" / "Narrador" (ver index.html)
+    // "Borrar conversación": botón fijo debajo de "Cerca mía" (ver index.html). El Narrador se quitó
+    // de aquí el 13 oct 2026 (Paco): se podía activar a cientos de km de la ruta; sigue en el chat.
     const _clrBtn = document.getElementById('itin-query-clear');
     if (_clrBtn) _clrBtn.onclick = _clearItinQueryHistory;
     input.value = '';
@@ -1130,7 +1161,6 @@ ${trk}
 
     // Accesos rápidos, debajo del cuadro de texto
     const nearBtn = document.getElementById('itin-query-near');
-    const narradorBtn = document.getElementById('itin-query-narrador');
     if (nearBtn) {
       const _nearLabel = nearBtn.textContent;
       nearBtn.onclick = () => {
@@ -1164,25 +1194,6 @@ ${trk}
         );
       };
     }
-    if (narradorBtn) {
-      narradorBtn.onclick = (e) => {
-        if (e.target.closest('[data-camera-badge]')) {
-          e.stopPropagation();
-          if (typeof narratorTakePhoto === 'function') narratorTakePhoto();
-          return;
-        }
-        // Mismo camino que el chip Narrador del chat: si ya está activo abre
-        // el menú (olvidar avisos/desactivar), si no el modal de activación.
-        if (salma._narratorActive && typeof showNarratorActiveMenu === 'function') {
-          showNarratorActiveMenu();
-        } else if (typeof showNarratorConfirm === 'function') {
-          showNarratorConfirm();
-        }
-      };
-      // Estado inicial (verde + 📷 si el Narrador ya estaba activo al abrir el popup)
-      if (typeof updateNarratorChipUI === 'function') updateNarratorChipUI();
-    }
-
     // Historial de ESTA ruta, si ya se había hablado con ella antes (aunque
     // fuera otro día) — vive en su propio documento, no en sessionStorage.
     if (salma.currentRouteId && window.currentUser && typeof db !== 'undefined') {
