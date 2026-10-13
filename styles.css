@@ -7130,6 +7130,8 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 #mejora-btn:active{transform:scale(.92);}
 /* En el chat con conversación, "Nueva" (#chat-fresh, 34px) ocupa la esquina: Ayuda queda justo a su izquierda */
 body:has(#app-content.app-content--chat #chat-area .msg) #mejora-btn{right:calc(12px + 34px + 6px);}
+/* En la portada (chat vacío) no sale: allí aún no hay nada que reportar (13 oct 2026, Paco). Desde Perfil → Ayuda Salma siempre se llega */
+body:has(#chat-area .chat-empty):not(:has(#chat-area .msg)) #mejora-btn{display:none !important;}
 .mejora-card{margin:20px 0 26px;padding:16px;background:var(--bg-row);border-top:3px solid var(--accent);}
 .mejora-card-t{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1;color:var(--text-primary);margin-bottom:8px;}
 .mejora-card p{margin:0 0 14px;font-size:15px;line-height:1.5;color:var(--text-secondary);}

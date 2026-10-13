@@ -2316,6 +2316,13 @@ async function renderProfile() {
             <span class="prof-row-label">Lo que Salma sabe de ti<span class="prof-row-hint">Tus gustos de viaje: míralos y bórralos</span></span>
             <span class="prof-row-badge">${(currentUser.perfil_ia?.facts || []).length} DATOS</span>
           </div>
+          <div class="prof-row-sep"></div>
+          <!-- Ayuda Salma (13 oct 2026): el ✦ ya no sale en la portada; desde aquí siempre se llega al formulario -->
+          <div class="prof-row" id="prof-ayuda-salma">
+            <span class="prof-row-icon prof-row-icon-accent" style="font-size:20px;line-height:1">✦</span>
+            <span class="prof-row-label">Ayuda Salma<span class="prof-row-hint">Cuéntanos un fallo o una idea</span></span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
         </div>
       </div>
 
@@ -2387,6 +2394,9 @@ async function renderProfile() {
   document.getElementById('prof-plan').addEventListener('click', openCoinsModal);
   document.getElementById('prof-docs').addEventListener('click', () => {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
+  });
+  document.getElementById('prof-ayuda-salma').addEventListener('click', () => {
+    if (window.__dbg && typeof window.__dbg.open === 'function') window.__dbg.open();
   });
   document.getElementById('prof-whatsapp').addEventListener('click', () => {
     // Con WhatsApp (creada desde WhatsApp o ya vinculada) → abre la conversación; si no, vincular
