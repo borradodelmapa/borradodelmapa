@@ -352,3 +352,17 @@ viejo y tarjetas beta (se conserva "tocar el mapa → foto en ese punto"). Icono
   quitar. Lee `fotos` con routeId == null (máx. 500; docs viejos sin el campo no salen). Caché de la sesión.
 - viaje-fotos.html sin ?embed → /?go=rutas. tu-mundo.html → /?go=tu-mundo.
 - No se ha borrado ningún dato. Los álbumes viejos (users/{uid}/albumes) quedan en Firestore sin pantalla.
+
+## ÁLBUM V1 — decisiones de Paco (30 sept 2026, caso p-mumxdc9ljsy "05")
+Primera versión SENCILLA: **solo PDF descargable, gratis para Premium**. Imprenta aparcada (se estudió un briefing
+externo: CMYK/PDF-X, lomo, múltiplo de 4, sangrado, 150 ppp → todo eso queda para el libro impreso).
+1. Sin Premium: se ve el álbum en pantalla; el botón "Descargar PDF" lleva 🔒 y abre el plan Premium. Al pagar o ser
+   Premium, desbloqueado.
+2. Baja calidad = solo por tamaño (lado largo en px). Sin detectar movidas/oscuras. OJO: las fotos viejas de la app
+   se guardaban a 1024 px → el umbral no debe tirarlas (propuesta: < 1000 px).
+3. Las descartadas se APARTAN con aviso ("N fotos no entran por baja calidad · Ver") y opción "Incluir igualmente".
+4. Editar antes de descargar: título, foto de portada y quitar fotos.
+5. Marca "Borrado del Mapa" solo en la contraportada (no en portada).
+6. Comprobación de Premium solo en la app (sin Worker). 0 € de APIs.
+Pendiente de decidir: ¿mapas del álbum con el mapa nuevo (MapLibre + Protomaps en R2, solo España/Portugal, sesión
+del vídeo) o el dibujado actual (siluetas de países)?
