@@ -933,6 +933,15 @@ ${trk}
     // apertura/cierre por ✕ apilaba otro wrapper sin restaurarlo).
     if (window.pushModal) window.pushModal('itinerario', _teardownItinView);
     if (_lockMode) _checkLock(routeData, docId, _preview.pay);
+
+    // Web de escritorio (≥1100 px, escritorio.css): con cuenta, el chat de la guía queda anclado
+    // a la derecha desde el primer momento. Sin cuenta o con guía a medias de pago no se abre.
+    if (_dockOn() && !_anon && !_lockMode) _openItinQuery();
+  }
+
+  // Pantalla ancha: el chat de la guía va anclado a la derecha en vez de ser un popup (escritorio.css)
+  function _dockOn() {
+    return !!(window.matchMedia && window.matchMedia('(min-width: 1100px)').matches);
   }
 
   // ¿Esta guía a medias ya está desbloqueada? Lo verificado se guarda en localStorage (la guía se abre sin parpadeo y sin red).
@@ -1081,6 +1090,10 @@ ${trk}
     if (_clrBtn) _clrBtn.onclick = _clearItinQueryHistory;
     input.value = '';
     overlay.style.display = 'flex';
+    if (_dockOn()) {
+      document.body.classList.add('itin-dock');
+      setTimeout(() => { try { mapaRuta.invalidateSize(); } catch (_) {} }, 50);
+    }
     setTimeout(() => input.focus(), 50);
 
     // Mientras el popup esté abierto, todo lo que salma.send() renderice
@@ -1204,6 +1217,10 @@ ${trk}
     const camMenu = document.getElementById('itin-query-cam-menu');
     if (overlay) overlay.style.display = 'none';
     if (camMenu) camMenu.style.display = 'none';
+    if (document.body.classList.contains('itin-dock')) {
+      document.body.classList.remove('itin-dock');
+      setTimeout(() => { try { mapaRuta.invalidateSize(); } catch (_) {} }, 50);
+    }
     _clearItinQueryPhoto();
     if (_itinQueryObserver) { _itinQueryObserver.disconnect(); _itinQueryObserver = null; }
     if (typeof salma === 'undefined') return;
