@@ -256,3 +256,22 @@
   body.dk-header .viaje-card-new-icon { font-size: 22px; }
   body.dk-header .viaje-card-new-txt { font-size: 12px; opacity: .8; }
 }
+
+/* ═══ Tu mundo en escritorio (17 oct 2026): aprovecha el ancho. Cifras en una fila, el mapa grande a la izquierda y
+   países y récords a su derecha; compartir y viajes, a todo el ancho. ═══ */
+@media (min-width: 1100px) {
+  body.dk-header .app-content:has(#tm-screen) { width: 100%; max-width: 1280px; }
+  body.dk-header .tm-screen { max-width: none; padding: 12px 28px 32px; }
+  body.dk-header .tm-title { font-size: clamp(64px, 6vw, 96px); }
+  body.dk-header .tm-lede { font-size: 17px; }
+
+  body.dk-header #tm-body {
+    display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 28px 36px; align-items: start;
+  }
+  body.dk-header #tm-body > * { grid-column: 1 / -1; }
+  body.dk-header #tm-body > .tm-mapw { grid-column: 1; grid-row: 2 / span 2; }
+  body.dk-header #tm-body > section:has(#tm-flags) { grid-column: 2; grid-row: 2; }
+  body.dk-header #tm-body > section:has(#tm-recs) { grid-column: 2; grid-row: 3; }
+  body.dk-header .tm-recs { grid-template-columns: 1fr 1fr; }
+  body.dk-header .tm-trips { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
