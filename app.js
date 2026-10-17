@@ -200,9 +200,12 @@ function showState(state) {
 
 function updateHeader() {
   // Header eliminado — solo actualiza bottom bar
+  // Cabecera de escritorio (solo ≥1100 px) PRIMERO y aislada: si el menú de abajo fallara, la cabecera sale igual.
+  try { _dkHeaderSync(); } catch (e) { console.warn('[Salma] Cabecera de escritorio:', e && e.message); }
   updateBottomBar();
-  _dkHeaderSync();   // cabecera de escritorio (solo ≥1100 px)
 }
+// Una vez cargada la página, por si el primer repintado llegó antes de que todo estuviera listo
+window.addEventListener('load', () => setTimeout(() => { try { _dkHeaderSync(); } catch (_) {} }, 0));
 
 // Botón fijo "Ayuda Salma" arriba a la derecha (26 sept 2026; se llamó "Mejora Salma"
 // hasta el 27 sept) — abre el formulario de
