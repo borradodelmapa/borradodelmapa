@@ -186,6 +186,7 @@
   body.dk-header.dk-home .app-content { top: 56px; }
   body.dk-header:not(.dk-home) .app-content { padding-top: 56px; }
   body.dk-header .itin-action-bar { top: 68px; }
+  body.dk-header .itin-action-bar .itin-btn-save { top: 68px; }
   body.dk-header #mejora-btn, body.dk-header #chat-fresh { top: 66px; }
   body.dk-header .salma-screen-close { top: 66px; }
 }
