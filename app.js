@@ -3968,6 +3968,23 @@ auth.onAuthStateChanged(async (user) => {
       showState(_goAnon === 'explorar' ? 'rutas' : 'ayuda');
       return;
     }
+    // Web de escritorio (≥1100 px, 17 oct 2026, Paco): quien llega sin cuenta ve directamente una guía de
+    // ejemplo (avance del día 1 + corte para registrarse, §10) con la invitación a crear cuenta a la derecha
+    // (mapa-itinerario.js), en vez de la pantalla de entrada. Cada visita enseña una al azar; si no carga, la
+    // pantalla de entrada de siempre. Móvil, tablet y app de Android: sin cambios.
+    if (window.matchMedia && window.matchMedia('(min-width: 1100px)').matches) {
+      const _pool = [
+        'n2-en-moto-de-faro-a-chaves-por-la-carretera-mas-larga-de-po-8md7',
+        'suiza-clasica-lucerna-alpes-y-berna-4a13',
+        'barcelona-en-3-dias-ky61',
+        'sevilla-en-3-dias-z359',
+        'ronda-en-3-dias-o1ub',
+      ];
+      showState('chat');
+      _openPublicGuide(_pool[Math.floor(Math.random() * _pool.length)]);
+      setTimeout(() => { if (!window._itinViewOpen && !currentUser) openModal(); }, 6000);
+      return;
+    }
     openModal();
   }
 });

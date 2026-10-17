@@ -29,3 +29,37 @@
   /* Es una columna fija: no se cierra */
   body.itin-dock .itin-query-close { display: none; }
 }
+
+/* Paso 2 (17 oct 2026): quien llega sin cuenta ve una guía de ejemplo y, a la derecha, la invitación a
+   crear cuenta (la pone mapa-itinerario.js: _showVisitorDock). Mismo hueco y ancho que el chat. */
+.itin-visitor-dock { display: none; }
+@media (min-width: 1100px) {
+  .itin-visitor-dock {
+    position: fixed; top: 0; right: 0; bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    width: 400px; z-index: 1300; box-sizing: border-box;
+    display: flex; flex-direction: column;
+    background: var(--negro); border-left: 1px solid var(--linea);
+    color: var(--crema);
+  }
+  .ivd-head { display: flex; align-items: center; gap: 12px; padding: 16px 22px; border-bottom: 1px solid var(--linea); }
+  .ivd-av {
+    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    background: var(--dorado); color: var(--negro); font-family: var(--font-display); font-weight: 800; font-size: 19px;
+  }
+  .ivd-name { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: .03em; }
+  .ivd-body { flex: 1; overflow-y: auto; padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+  .ivd-msg { background: var(--gris); border: 1px solid var(--linea); padding: 14px 16px; font-size: 14px; line-height: 1.5; margin: 0; }
+  .ivd-h { font-family: var(--font-display); font-size: 16px; letter-spacing: .08em; color: rgba(236,235,232,.55); margin: 8px 0 0; }
+  .ivd-chip {
+    text-align: left; background: none; border: 1px solid var(--linea-fuerte); color: var(--crema);
+    padding: 12px 14px; font-size: 14px; font-family: inherit; cursor: pointer;
+  }
+  .ivd-chip:hover { border-color: var(--dorado); color: var(--dorado2); }
+  .ivd-foot { padding: 18px 22px 22px; border-top: 1px solid var(--linea); display: flex; flex-direction: column; gap: 10px; }
+  .ivd-cta {
+    background: var(--dorado); color: var(--negro); border: 0; padding: 14px; cursor: pointer;
+    font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: .02em;
+  }
+  .ivd-cta:hover { background: var(--dorado2); }
+  .ivd-note { margin: 0; text-align: center; font-size: 12px; color: rgba(236,235,232,.55); }
+}

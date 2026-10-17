@@ -937,6 +937,41 @@ ${trk}
     // Web de escritorio (≥1100 px, escritorio.css): con cuenta, el chat de la guía queda anclado
     // a la derecha desde el primer momento. Sin cuenta o con guía a medias de pago no se abre.
     if (_dockOn() && !_anon && !_lockMode) _openItinQuery();
+    // Sin cuenta: en vez del chat, la invitación a crear cuenta (mismo hueco a la derecha)
+    else if (_dockOn() && _anon) _showVisitorDock();
+  }
+
+  // Columna de la derecha para quien no tiene cuenta (escritorio): saluda y lleva al registro.
+  function _showVisitorDock() {
+    if (document.getElementById('itin-visitor-dock')) return;
+    const d = document.createElement('aside');
+    d.id = 'itin-visitor-dock';
+    d.className = 'itin-visitor-dock';
+    d.innerHTML =
+      '<div class="ivd-head"><span class="ivd-av">S</span><span class="ivd-name">SALMA</span></div>' +
+      '<div class="ivd-body">' +
+        '<p class="ivd-msg">Hola, soy Salma. Te diseño la ruta, te guío mientras viajas y te saco de apuros cuando algo sale mal.</p>' +
+        '<p class="ivd-h">PRUEBA CON UNA IDEA</p>' +
+        '<button type="button" class="ivd-chip">3 días en Lisboa en pareja</button>' +
+        '<button type="button" class="ivd-chip">Ruta en moto por Asturias</button>' +
+        '<button type="button" class="ivd-chip">Fin de semana con niños cerca de Madrid</button>' +
+      '</div>' +
+      '<div class="ivd-foot">' +
+        '<button type="button" class="ivd-cta">Crear cuenta gratis y hablar con Salma</button>' +
+        '<p class="ivd-note">Gratis: 5 mensajes al día y 1 guía completa</p>' +
+      '</div>';
+    d.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      if (typeof openModal === 'function') openModal();
+    }));
+    document.body.appendChild(d);
+    document.body.classList.add('itin-dock');
+    setTimeout(() => { try { mapaRuta.invalidateSize(); } catch (_) {} }, 50);
+  }
+  function _hideVisitorDock() {
+    const d = document.getElementById('itin-visitor-dock');
+    if (!d) return;
+    d.remove();
+    document.body.classList.remove('itin-dock');
   }
 
   // Pantalla ancha: el chat de la guía va anclado a la derecha en vez de ser un popup (escritorio.css)
@@ -1005,6 +1040,7 @@ ${trk}
     // Por si se cierra la guía con el popup de consulta abierto (el body no
     // desmonta el overlay de #itin-view, así que hay que cerrarlo aparte).
     if (typeof _closeItinQuery === 'function') _closeItinQuery();
+    _hideVisitorDock();
 
     try { mapaRuta.destroy(); } catch (_) {}
     try { mapaItinerario.destroy(); } catch (_) {}
