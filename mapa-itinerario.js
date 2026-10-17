@@ -942,37 +942,50 @@ ${trk}
     else if (_dockOn() && _anon) _showVisitorDock();
   }
 
-  // Columna de la derecha para quien no tiene cuenta (escritorio): saluda y lleva al registro.
+  // Columna de la derecha para quien no tiene cuenta (escritorio): saluda, deja escribir a dónde quiere ir
+  // (la frase se guarda como _salmaHandoff y, al entrar, aparece escrita en el chat) y lleva al registro.
+  // Siempre visible el botón de crear la suya y el de entrar.
   function _showVisitorDock() {
     if (document.getElementById('itin-visitor-dock')) return;
     const d = document.createElement('aside');
     d.id = 'itin-visitor-dock';
     d.className = 'itin-visitor-dock';
     d.innerHTML =
-      '<div class="ivd-head"><span class="ivd-av">S</span><span class="ivd-name">SALMA</span></div>' +
+      '<div class="ivd-head"><span class="ivd-av">S</span><span class="ivd-name">SALMA</span>' +
+        '<button type="button" class="ivd-login">Ya tengo cuenta · Entrar</button></div>' +
       '<div class="ivd-body">' +
-        '<p class="ivd-msg">Hola, soy Salma. Te diseño la ruta, te guío mientras viajas y te saco de apuros cuando algo sale mal.</p>' +
+        '<p class="ivd-msg">Hola, soy Salma. Esta es una guía de ejemplo. Dime a dónde quieres ir y te hago la tuya.</p>' +
         '<p class="ivd-h">PRUEBA CON UNA IDEA</p>' +
         '<button type="button" class="ivd-chip">3 días en Lisboa en pareja</button>' +
         '<button type="button" class="ivd-chip">Ruta en moto por Asturias</button>' +
         '<button type="button" class="ivd-chip">Fin de semana con niños cerca de Madrid</button>' +
       '</div>' +
       '<div class="ivd-foot">' +
-        '<button type="button" class="ivd-cta">Crear cuenta gratis y hablar con Salma</button>' +
+        '<div class="ivd-row"><textarea class="ivd-input" rows="2" placeholder="¿A dónde quieres ir?" aria-label="¿A dónde quieres ir?"></textarea>' +
+        '<button type="button" class="ivd-send" aria-label="Enviar">➤</button></div>' +
+        '<button type="button" class="ivd-cta">Crea tu ruta gratis</button>' +
         '<p class="ivd-note">Gratis: 5 mensajes al día y 1 guía completa</p>' +
       '</div>';
-    d.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    const input = d.querySelector('.ivd-input');
+    const go = (text) => {
+      const t = String(text || '').trim();
+      if (t) { try { localStorage.setItem('_salmaHandoff', t); } catch (_) {} }
       if (typeof openModal === 'function') openModal();
-    }));
+    };
+    d.querySelectorAll('.ivd-chip').forEach(b => b.addEventListener('click', () => go(b.textContent)));
+    d.querySelector('.ivd-send').addEventListener('click', () => go(input.value));
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); go(input.value); } });
+    d.querySelector('.ivd-cta').addEventListener('click', () => go(input.value));
+    d.querySelector('.ivd-login').addEventListener('click', () => go(input.value));
     document.body.appendChild(d);
-    document.body.classList.add('itin-dock');
+    document.body.classList.add('itin-dock', 'itin-anon');
     setTimeout(() => { try { mapaRuta.invalidateSize(); } catch (_) {} }, 50);
   }
   function _hideVisitorDock() {
     const d = document.getElementById('itin-visitor-dock');
     if (!d) return;
     d.remove();
-    document.body.classList.remove('itin-dock');
+    document.body.classList.remove('itin-dock', 'itin-anon');
   }
 
   // Pantalla ancha: el chat de la guía va anclado a la derecha en vez de ser un popup (escritorio.css)

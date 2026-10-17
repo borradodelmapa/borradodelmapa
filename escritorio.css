@@ -121,3 +121,23 @@
   .dkw-more a:hover { text-decoration: underline; }
   .dk-welcome { scrollbar-width: thin; scrollbar-color: rgba(244,99,11,.55) transparent; }
 }
+
+/* Visitante sin cuenta (17 oct 2026): la columna deja escribir a dónde quiere ir, con «Crea tu ruta gratis» y
+   «Entrar» siempre a la vista; la ✕ de la guía de ejemplo no se enseña (no hay a dónde volver). */
+@media (min-width: 1100px) {
+  body.itin-anon .itin-mobile-back { display: none; }
+  .ivd-login {
+    margin-left: auto; background: none; border: 0; cursor: pointer; font-family: inherit;
+    font-size: 12px; color: rgba(236,235,232,.65); text-decoration: underline;
+  }
+  .ivd-login:hover { color: var(--crema); }
+  .ivd-row { display: flex; gap: 8px; align-items: stretch; }
+  .ivd-input {
+    flex: 1; resize: none; box-sizing: border-box; min-height: 52px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--linea-fuerte); color: var(--crema);
+    padding: 10px 12px; font-family: inherit; font-size: 14px; line-height: 1.4; border-radius: 0;
+  }
+  .ivd-input:focus { outline: none; border-color: var(--dorado); }
+  .ivd-send { width: 46px; border: 0; background: var(--dorado); color: var(--negro); font-size: 16px; cursor: pointer; }
+  .ivd-send:hover { background: var(--dorado2); }
+}
