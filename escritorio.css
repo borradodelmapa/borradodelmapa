@@ -190,3 +190,25 @@
   body.dk-header #mejora-btn, body.dk-header #chat-fresh { top: 66px; }
   body.dk-header .salma-screen-close { top: 66px; }
 }
+
+/* Atajos (menú desplegable) y SOS en la cabecera de escritorio (17 oct 2026) */
+@media (min-width: 1100px) {
+  .dkh-menu-wrap { position: relative; display: flex; align-items: center; }
+  .dkh-menu-wrap .dkh-link { margin-top: 0; height: 56px; }
+  .dkh-menu {
+    position: absolute; top: 56px; right: 0; min-width: 220px; z-index: 860;
+    background: var(--gris); border: 1px solid var(--linea-fuerte); box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    display: flex; flex-direction: column; padding: 6px 0;
+  }
+  .dkh-menu[hidden] { display: none; }
+  .dkh-menu button {
+    text-align: left; background: none; border: 0; color: var(--crema); cursor: pointer;
+    font-family: inherit; font-size: 14px; padding: 11px 18px;
+  }
+  .dkh-menu button:hover { background: rgba(244,99,11,.14); color: var(--dorado2); }
+  .dkh-sos {
+    background: none; border: 1px solid #ff6b5a; color: #ff6b5a; cursor: pointer;
+    font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: .08em; padding: 9px 14px;
+  }
+  .dkh-sos:hover { background: #ff6b5a; color: #1c1210; }
+}

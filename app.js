@@ -639,8 +639,12 @@ function _dkHeaderSync() {
           '<button type="button" class="dkh-link' + act(expOn) + '" data-act="explorar">Explorar</button>' +
           '<button type="button" class="dkh-link' + act(mundoOn) + '" data-act="mundo">Tu mundo</button>' +
         '</nav>' +
-        '<div class="dkh-right"><button type="button" class="dkh-new" data-act="new">+ Nueva ruta</button>' +
-        '<button type="button" class="dkh-avatar" data-act="perfil" aria-label="Perfil" title="Perfil">' + escapeHTML(ini) + '</button></div>'
+        '<div class="dkh-right">' +
+          '<div class="dkh-menu-wrap"><button type="button" class="dkh-link" id="dkh-atajos-btn" data-act="atajos" aria-haspopup="true" aria-expanded="false">Atajos ▾</button>' +
+          '<div class="dkh-menu" id="dkh-atajos" hidden>' + _DK_ATAJOS.map(a => '<button type="button" data-act="at-' + a[0] + '">' + a[1] + '</button>').join('') + '</div></div>' +
+          '<button type="button" class="dkh-sos" data-act="sos" title="Pedir ayuda: avisa a tus contactos de confianza">SOS</button>' +
+          '<button type="button" class="dkh-new" data-act="new">+ Nueva ruta</button>' +
+          '<button type="button" class="dkh-avatar" data-act="perfil" aria-label="Perfil" title="Perfil">' + escapeHTML(ini) + '</button></div>'
       : '<nav class="dkh-nav">' +
           '<button type="button" class="dkh-link' + act(expOn) + '" data-act="explorar">Explorar</button>' +
           '<a class="dkh-link" href="/funciones.html">Qué hace Salma</a>' +
@@ -648,10 +652,50 @@ function _dkHeaderSync() {
         '<div class="dkh-right"><button type="button" class="dkh-login" data-act="login">Entrar</button>' +
         '<button type="button" class="dkh-new" data-act="login">Crear cuenta gratis</button></div>');
 }
+// Atajos del menú desplegable (mismos accesos que los chips de la portada del móvil, orden pedido por Paco el 13 oct)
+const _DK_ATAJOS = [
+  ['consultas', 'Últimas consultas'], ['notas', 'Mis notas'], ['cerca', 'Cerca mía'], ['narrador', 'Narrador'],
+  ['vuelos', 'Vuelos'], ['alertas', 'Alertas de vuelos'], ['alojamiento', 'Alojamiento'],
+  ['moneda', 'Cambio de moneda'], ['traductor', 'Traductor'], ['whatsapp', 'Salma en WhatsApp'],
+];
+function _dkAtajosClose() {
+  const m = document.getElementById('dkh-atajos'), b = document.getElementById('dkh-atajos-btn');
+  if (m) m.hidden = true;
+  if (b) b.setAttribute('aria-expanded', 'false');
+}
+// Lo que se pide por chat se hace en una conversación nueva: con una guía abierta, el chat de la derecha es el de
+// EDITAR esa guía y «Busca alojamiento» no debe acabar cambiándola.
+function _dkAtajoSend(msg, opts) {
+  _dkNewRoute();
+  setTimeout(() => { if (typeof salma !== 'undefined') salma.send(msg, opts); }, 300);
+}
+function _dkAtajo(k) {
+  if (k === 'consultas') showState('consultas');
+  else if (k === 'notas') showState('notas');
+  else if (k === 'vuelos' || k === 'alertas') showState('vuelos');
+  else if (k === 'cerca') _dkAtajoSend('Hazme una ruta desde donde estoy', { routeFromHere: true });
+  else if (k === 'alojamiento') _dkAtajoSend('Busca alojamiento');
+  else if (k === 'narrador') { if (typeof salma !== 'undefined') { if (salma._narratorActive) showNarratorActiveMenu(); else showNarratorConfirm(); } }
+  else if (k === 'moneda') openCurrencyConverter();
+  else if (k === 'traductor') { if (typeof window.openTranslator === 'function') window.openTranslator(); else if (typeof showToast === 'function') showToast('Traductor no disponible'); }
+  else if (k === 'whatsapp') _openSalmaWhatsApp();
+}
+document.addEventListener('click', (e) => { if (!e.target.closest('#dkh-atajos, #dkh-atajos-btn')) _dkAtajosClose(); });
 function _dkHeaderClick(e) {
   const b = e.target.closest('[data-act]');
   if (!b) return;
   const a = b.dataset.act;
+  if (a.indexOf('at-') === 0) { _dkAtajosClose(); _dkAtajo(a.slice(3)); return; }
+  if (a === 'atajos') {
+    const m = document.getElementById('dkh-atajos');
+    if (m) { m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); }
+    return;
+  }
+  if (a === 'sos') {
+    const ok = ((currentUserSOSConfig && currentUserSOSConfig.contacts) || []).filter(c => c.phone && c.phone.trim()).length > 0;
+    if (ok) showSOSConfirm(); else renderSOSConfig();
+    return;
+  }
   if (a === 'home') {
     e.preventDefault();
     if (!currentUser) { if (!window._itinViewOpen) location.href = '/'; return; }
