@@ -212,3 +212,9 @@
   }
   .dkh-sos:hover { background: #ff6b5a; color: #1c1210; }
 }
+
+/* La portada de siempre, más alta que la ventana, quedaba centrada y se cortaba por arriba (el eslogan bajo la
+   cabecera). Con la cabecera puesta, arranca arriba y se baja con la rueda (scroll propio de la columna). */
+@media (min-width: 1100px) {
+  body.dk-header:not(.dk-home) .app-content { align-self: flex-start; height: 100dvh; }
+}

@@ -3858,21 +3858,47 @@ async function _pullActiveRouteFromAccount() {
     } catch (_) {}
   }
 }
+async function _dkLatestSavedGuide(uid) {
+  if (!(window.matchMedia && window.matchMedia('(min-width: 1100px)').matches)) return null;
+  const snap = await db.collection('users').doc(uid).collection('maps').orderBy('createdAt', 'desc').limit(5).get();
+  let found = null;
+  snap.forEach(doc => {
+    if (found) return;
+    const d = doc.data();
+    if (d.source === 'kv-nivel2' || d.estado === 'borrador' || d.saved_from) return;   // ni pre-generadas, ni a medias, ni de otros viajeros
+    let r = null;
+    try { r = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch (_) {}
+    if (r && Array.isArray(r.stops) && r.stops.length) found = { routeData: r, id: doc.id };
+  });
+  return found;
+}
 async function _pullActiveRouteFromAccountInner() {
   try {
     if (!currentUser || typeof db === 'undefined') return;
     if (localStorage.getItem('bdm_live_active_route')) return;
     const uid = currentUser.uid;
     const userDoc = await db.collection('users').doc(uid).get();
-    const activeId = userDoc.exists ? userDoc.data().active_route_id : null;
-    if (!activeId) { console.log('[Salma] Guía activa: la cuenta no tiene ninguna apuntada'); return; }
-    const mapDoc = await db.collection('users').doc(uid).collection('maps').doc(activeId).get();
-    if (!mapDoc.exists) { console.log('[Salma] Guía activa: ' + activeId + ' ya no existe en la cuenta'); return; }
-    if (!currentUser || currentUser.uid !== uid) return;
-    const d = mapDoc.data();
+    let activeId = userDoc.exists ? userDoc.data().active_route_id : null;
     let routeData = null;
-    try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch (_) {}
-    if (!routeData) { console.log('[Salma] Guía activa: ' + activeId + ' sin datos de ruta'); return; }
+    if (activeId) {
+      const mapDoc = await db.collection('users').doc(uid).collection('maps').doc(activeId).get();
+      if (mapDoc.exists) {
+        try { routeData = mapDoc.data().itinerarioIA ? JSON.parse(mapDoc.data().itinerarioIA) : null; } catch (_) {}
+        if (!routeData) console.log('[Salma] Guía activa: ' + activeId + ' sin datos de ruta');
+      } else {
+        console.log('[Salma] Guía activa: ' + activeId + ' ya no existe en la cuenta');
+      }
+    } else {
+      console.log('[Salma] Guía activa: la cuenta no tiene ninguna apuntada');
+    }
+    // Web de escritorio (17 oct 2026): sin guía activa pero con guías guardadas, entra la más reciente
+    // (1 lectura de Firestore; no escribe nada en la cuenta). Móvil y tablet: no se toca.
+    if (!routeData) {
+      const latest = await _dkLatestSavedGuide(uid);
+      if (latest) { routeData = latest.routeData; activeId = latest.id; console.log('[Salma] Guía más reciente de la cuenta: ' + (routeData.title || activeId)); }
+    }
+    if (!routeData) return;
+    if (!currentUser || currentUser.uid !== uid) return;
     if (localStorage.getItem('bdm_live_active_route')) return;
     localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData));
     localStorage.setItem('bdm_live_active_route_id', activeId);
