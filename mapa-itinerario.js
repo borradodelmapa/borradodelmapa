@@ -855,6 +855,7 @@ ${trk}
 
     // Guardar referencia global para que salma.js pueda reabrir la vista
     window._itinViewOpen = true;
+    if (typeof window._dkHomeOff === 'function') window._dkHomeOff();   // bienvenida de escritorio (app.js)
     window._itinViewRoute = routeData;
     window._itinViewDocId = docId;
     window._itinViewOptions = options;

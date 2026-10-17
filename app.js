@@ -181,6 +181,7 @@ function showState(state) {
   }
   // Quitar fondo mapa y padding extra si salimos del chat
   if (state !== 'chat') {
+    _dkHomeOff();
     _setSalmaScreen(false);
     const layer = document.getElementById('chat-bg-layer');
     if (layer) layer.remove();
@@ -605,6 +606,58 @@ function _salmaHiPick(first) {
   return { hi: fill(pick[0]), sub: fill(pick[1]) };
 }
 
+// ═══ WEB DE ESCRITORIO SIN GUÍA ACTIVA (≥1100 px, 17 oct 2026, Paco) ═══
+// Con cuenta y sin guía activa: la izquierda es una bienvenida (#dk-welcome) y la derecha, la pantalla de Salma
+// (el chat de siempre, en una columna de 400 px: escritorio.css, body.dk-home). Móvil, tablet y la app de Android
+// no pasan por aquí. Se espera a saber si la cuenta tiene una guía activa (_activeRoutePulled) para no enseñar
+// esta bienvenida un instante a quien sí la tiene.
+function _dkHomeWanted() {
+  try {
+    return !!(currentUser && window._activeRoutePulled && currentState === 'chat' && !window._itinViewOpen &&
+      window.matchMedia && window.matchMedia('(min-width: 1100px)').matches &&
+      !localStorage.getItem('bdm_live_active_route'));
+  } catch (_) { return false; }
+}
+function _dkHomeOn() {
+  window._salmaScreen = true;   // sin sessionStorage: es solo de esta pantalla
+  document.body.classList.add('dk-home');
+  if (document.getElementById('dk-welcome')) return;
+  let name = '';
+  try { name = (currentUser && (currentUser.name || currentUser.displayName || '')) || ''; } catch (_) {}
+  const first = escapeHTML(String(name).trim().split(/\s+/)[0] || '');
+  const ideas = ['3 días en Lisboa en pareja', 'Ruta en moto por Asturias', 'Fin de semana con niños cerca de Madrid'];
+  const d = document.createElement('section');
+  d.id = 'dk-welcome';
+  d.className = 'dk-welcome';
+  d.innerHTML =
+    '<div class="dkw-inner">' +
+      '<p class="dkw-kicker">BIENVENIDO' + (first ? ', ' + first.toUpperCase() : '') + '</p>' +
+      '<h1 class="dkw-h1">¿A dónde vamos?</h1>' +
+      '<p class="dkw-lead">Cuéntale a Salma en el chat de la derecha a dónde quieres ir. Tu guía aparecerá aquí, con su mapa y sus fotos.</p>' +
+      '<div class="dkw-steps">' +
+        '<div class="dkw-step"><b>1. Cuéntale tu viaje</b><span>Destino, días y con quién.</span></div>' +
+        '<div class="dkw-step"><b>2. Recibe tu guía</b><span>Día a día, con mapa y fotos.</span></div>' +
+        '<div class="dkw-step"><b>3. Cámbiala hablando</b><span>Salma la ajusta al momento.</span></div>' +
+      '</div>' +
+      '<p class="dkw-h">O PRUEBA CON UNA IDEA</p>' +
+      '<div class="dkw-ideas">' + ideas.map(t => '<button type="button" class="dkw-idea">' + escapeHTML(t) + '</button>').join('') + '</div>' +
+      '<p class="dkw-more">¿Ya tienes viajes? Están en <b>Mis viajes</b>. <a href="/funciones.html">Ver cómo funciona →</a></p>' +
+    '</div>';
+  d.querySelectorAll('.dkw-idea').forEach(b => b.addEventListener('click', () => {
+    $input.value = b.textContent;
+    $input.dispatchEvent(new Event('input'));
+    $input.focus();
+  }));
+  document.body.appendChild(d);
+}
+function _dkHomeOff() {
+  document.body.classList.remove('dk-home');
+  const d = document.getElementById('dk-welcome');
+  if (d) d.remove();
+  try { if (window._salmaScreen && !sessionStorage.getItem('bdm_salma_screen')) window._salmaScreen = false; } catch (_) {}
+}
+window._dkHomeOff = _dkHomeOff;
+
 // Pantalla de Salma: la abre el botón central del menú (updateBottomBar). Es el estado vacío del
 // chat con otro contenido (saludo); va dentro de .chat-empty para que salma.js la quite sola
 // al enviar el primer mensaje. La barra de escribir/voz/foto de abajo es la de siempre. La ✕ vuelve a la portada.
@@ -697,6 +750,9 @@ function _renderChatEmpty() {
   }
   const area = document.getElementById('chat-area');
   if (!area || area.querySelector('.msg')) return;
+  // Web de escritorio sin guía activa (17 oct 2026): bienvenida a la izquierda y la pantalla de Salma (el chat) a la derecha.
+  if (_dkHomeWanted()) _dkHomeOn();
+  else if (document.body.classList.contains('dk-home')) _dkHomeOff();
   // Pantalla de Salma (botón central, 5 oct 2026): saludo con su imagen en vez de la portada.
   if (window._salmaScreen) { _renderSalmaScreen(area); return; }
 
@@ -3650,6 +3706,18 @@ function logout() {
 // dispositivo), traerla de la cuenta para la tarjeta de la portada — sin tocar el mapa
 // ni volver a escribir en Firestore. Solo lecturas de Firestore (2 como mucho).
 async function _pullActiveRouteFromAccount() {
+  window._activeRoutePulled = false;
+  try { await _pullActiveRouteFromAccountInner(); }
+  finally {
+    window._activeRoutePulled = true;
+    // Escritorio sin guía activa: ahora que se sabe, pintar la bienvenida (no hace nada en móvil ni con guía)
+    try {
+      const area = document.getElementById('chat-area');
+      if (_dkHomeWanted() && area && !area.querySelector('.msg')) { area.innerHTML = ''; _renderChatEmpty(); }
+    } catch (_) {}
+  }
+}
+async function _pullActiveRouteFromAccountInner() {
   try {
     if (!currentUser || typeof db === 'undefined') return;
     if (localStorage.getItem('bdm_live_active_route')) return;
