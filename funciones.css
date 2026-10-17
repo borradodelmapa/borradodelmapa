@@ -1,0 +1,53 @@
+/* ═══════════════════════════════════════════════════════════════════
+   funciones.css — página «Qué hace Salma» (funciones.html), 17 oct 2026.
+   Va DESPUÉS de styles.css y paginas.css. Móvil primero; en pantalla
+   ancha el cuerpo se abre a 1040 px y las tarjetas pasan a rejilla.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.pg-fn .pg-main { max-width:1040px; padding:40px 20px 24px; }
+.pg-fn .pg-footer { max-width:1040px; padding-left:20px; padding-right:20px; }
+
+.fn-kicker {
+  font-family:var(--font-cond); font-weight:700; font-size:13px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent) !important; margin:0 0 6px !important;
+}
+
+.fn-hero { padding:24px 0 40px; border-bottom:1px solid var(--border); }
+.pg-fn .fn-hero h1 { font-size:48px; text-transform:uppercase; margin:0 0 14px; }
+.fn-lead { font-size:18px !important; line-height:1.6; color:var(--text-primary) !important; max-width:620px; }
+.fn-cta { display:flex; flex-wrap:wrap; gap:12px; margin-top:22px; }
+.fn-btn-sec {
+  display:inline-block; border:1px solid var(--text-muted); color:var(--text-primary) !important;
+  font-family:var(--font-cond); font-weight:800; font-size:18px; letter-spacing:.04em;
+  text-transform:uppercase; text-decoration:none; padding:12px 22px;
+}
+.fn-btn-sec:hover { border-color:var(--text-primary); }
+
+.fn-block { padding:36px 0; border-bottom:1px solid var(--border); }
+.pg-fn .fn-block h2 { border-left:0; padding-left:0; font-size:34px; text-transform:uppercase; margin:0 0 12px; }
+.fn-block p:not(.fn-kicker) { font-size:17px; max-width:640px; }
+
+.fn-more { padding:36px 0 12px; }
+.pg-fn .fn-more h2 { text-transform:uppercase; margin-top:0; }
+.fn-grid { display:grid; grid-template-columns:1fr; gap:12px; }
+.fn-card { border:1px solid var(--border); padding:16px 18px; }
+.pg-fn .fn-card h3 { margin:0 0 6px; font-size:16px; }
+.pg-fn .fn-card p { margin:0; font-size:14px; }
+
+.fn-download { margin:36px 0 0; padding:32px 24px; background:var(--accent); color:var(--text-on-accent); }
+.pg-fn .fn-download h2 {
+  border-left:0; padding-left:0; margin:0 0 10px; font-size:34px; text-transform:uppercase;
+  color:var(--text-on-accent);
+}
+.pg-fn .fn-download p { color:var(--text-on-accent); font-weight:500; max-width:600px; }
+.fn-download .pg-btn { background:var(--bg-base); color:var(--text-primary) !important; }
+
+@media (min-width:700px) {
+  .fn-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width:1000px) {
+  .pg-fn .pg-main { padding-top:56px; }
+  .pg-fn .fn-hero h1 { font-size:84px; line-height:.95; }
+  .fn-grid { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  .fn-download { padding:48px 56px; }
+}
