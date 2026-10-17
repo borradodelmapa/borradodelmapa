@@ -247,3 +247,12 @@
   body.dk-header .viaje-card:hover { border-color: var(--dorado); }
   body.dk-header .expl-country-title { font-size: 34px; }
 }
+
+/* Mis viajes: los países ocupan una fila entera (antes cada país era una columna) y «Nueva guía» es una franja */
+@media (min-width: 1100px) {
+  body.dk-header .viajes-grid .viaje-group { grid-column: 1 / -1; }
+  body.dk-header .viajes-grid .viaje-group-header { margin-top: 12px; }
+  body.dk-header .viajes-grid .viaje-card-new { grid-column: 1 / -1; flex-direction: row; min-height: 64px; gap: 12px; }
+  body.dk-header .viaje-card-new-icon { font-size: 22px; }
+  body.dk-header .viaje-card-new-txt { font-size: 12px; opacity: .8; }
+}
