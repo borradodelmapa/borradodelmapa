@@ -724,6 +724,11 @@ function _dkHeaderClick(e) {
 // "+ Nueva ruta" en escritorio: la bienvenida con el chat vacío (como el botón central de Salma en el móvil).
 // La conversación anterior no se pierde: queda en "Últimas consultas".
 function _dkNewRoute() {
+  if (!_DK_WELCOME_ON) {   // sin bienvenida de escritorio: la portada de siempre; _dkForceNew evita que reabra la guía activa
+    window._dkForceNew = true;
+    goToNewRouteFAB();
+    return;
+  }
   if (typeof salma !== 'undefined' && salma._streaming) { if (typeof showToast === 'function') showToast('Salma está respondiendo…'); return; }
   window._dkForceNew = true;
   if (typeof salma !== 'undefined') salma._initChat();
@@ -742,7 +747,11 @@ try {
 // (el chat de siempre, en una columna de 400 px: escritorio.css, body.dk-home). Móvil, tablet y la app de Android
 // no pasan por aquí. Se espera a saber si la cuenta tiene una guía activa (_activeRoutePulled) para no enseñar
 // esta bienvenida un instante a quien sí la tiene.
+// Apagada el 17 oct 2026 (Paco: «esta opción no la quiero ver»): hasta decidir el recorrido completo, en escritorio
+// quien no tiene guía activa ve la portada de siempre. El código se queda por si se retoma.
+const _DK_WELCOME_ON = false;
 function _dkHomeWanted() {
+  if (!_DK_WELCOME_ON) return false;
   try {
     return !!(currentUser && window._activeRoutePulled && currentState === 'chat' && !window._itinViewOpen &&
       window.matchMedia && window.matchMedia('(min-width: 1100px)').matches &&
@@ -1325,7 +1334,7 @@ function _renderChatEmpty() {
     // Web de escritorio (≥1100 px, escritorio.css, 17 oct 2026): con cuenta y una guía activa, la portada ES esa
     // guía abierta, con el chat de la guía anclado a la derecha (mapa-itinerario.js). Sin guía activa, o en móvil,
     // se queda la portada de siempre.
-    if (_ceActive && currentUser && currentState === 'chat' && !window._salmaScreen && !window._itinViewOpen &&
+    if (_ceActive && currentUser && currentState === 'chat' && !window._salmaScreen && !window._itinViewOpen && !window._dkForceNew &&
         window.matchMedia && window.matchMedia('(min-width: 1100px)').matches &&
         typeof window.openItinerarioView === 'function') {
       try {
