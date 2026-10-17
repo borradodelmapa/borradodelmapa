@@ -1133,7 +1133,7 @@ ${trk}
       const _st = document.createElement('strong');
       _st.textContent = _gTitle ? 'Editando «' + _gTitle + '»' : 'Editando esta guía';
       _sub.appendChild(_st);
-      _sub.appendChild(document.createTextNode('Añade, quita, cambia o pregunta sobre esta guía. Para buscar cerca de ti, usa el chat general.'));
+      _sub.appendChild(document.createTextNode('Añade, quita, cambia o pregunta sobre esta guía. Para buscar cerca de ti, ' + (_dockOn() ? 'usa «Atajos › Cerca mía» arriba.' : 'usa el chat general.')));
     }
     // "Borrar conversación": botón fijo debajo del cuadro de texto (ver index.html). El Narrador y
     // «Cerca mía» se quitaron de aquí el 13 oct 2026 (Paco): esta ventana es solo para editar la guía;
