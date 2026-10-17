@@ -1134,6 +1134,19 @@ function _renderChatEmpty() {
     if (ceNextCard) _wireCeCard(ceNextCard);
     _ceMountUsageChip(area); // contador pequeño de uso (7 oct 2026)
 
+    // Web de escritorio (≥1100 px, escritorio.css, 17 oct 2026): con cuenta y una guía activa, la portada ES esa
+    // guía abierta, con el chat de la guía anclado a la derecha (mapa-itinerario.js). Sin guía activa, o en móvil,
+    // se queda la portada de siempre.
+    if (_ceActive && currentUser && currentState === 'chat' && !window._salmaScreen && !window._itinViewOpen &&
+        window.matchMedia && window.matchMedia('(min-width: 1100px)').matches &&
+        typeof window.openItinerarioView === 'function') {
+      try {
+        const _dRd = JSON.parse(localStorage.getItem('bdm_live_active_route'));
+        const _dId = localStorage.getItem('bdm_live_active_route_id') || null;
+        if (_dRd && _dRd.stops && _dRd.stops.length) window.openItinerarioView(_dRd, _dId, { saved: true, fromChat: false });
+      } catch (_) {}
+    }
+
     // ── Caja de ejemplo rotable (doc 8 sep) — 4 perfiles en orden fijo ──
     const _wireRotable = () => {
       const _rot = area.querySelector('#ce-rotable');
