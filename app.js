@@ -201,6 +201,7 @@ function showState(state) {
 function updateHeader() {
   // Header eliminado — solo actualiza bottom bar
   updateBottomBar();
+  _dkHeaderSync();   // cabecera de escritorio (solo ≥1100 px)
 }
 
 // Botón fijo "Ayuda Salma" arriba a la derecha (26 sept 2026; se llamó "Mejora Salma"
@@ -606,6 +607,89 @@ function _salmaHiPick(first) {
   return { hi: fill(pick[0]), sub: fill(pick[1]) };
 }
 
+// ═══ CABECERA DE ESCRITORIO (≥1100 px, 17 oct 2026, Paco: "el menú lo quiero simple") ═══
+// Barra fina arriba, solo en pantalla ancha. Con cuenta: Mis viajes · Explorar · Tu mundo · + Nueva ruta · avatar.
+// Sin cuenta: Explorar · Qué hace Salma · Entrar · Crear cuenta gratis. El menú de abajo no se toca (§9: lo de
+// /destinos/, el blog y legal es otra tanda). Cada botón hace lo mismo que su equivalente del menú de abajo.
+function _dkHeaderSync() {
+  const wide = !!(window.matchMedia && window.matchMedia('(min-width: 1100px)').matches);
+  let h = document.getElementById('dk-header');
+  if (!wide) { if (h) h.remove(); document.body.classList.remove('dk-header'); return; }
+  if (!h) {
+    h = document.createElement('header');
+    h.id = 'dk-header';
+    h.className = 'dk-header';
+    h.addEventListener('click', _dkHeaderClick);
+    document.body.appendChild(h);
+  }
+  document.body.classList.add('dk-header');
+  const logged = !!currentUser;
+  const onGuide = currentState === 'chat' && !!window._itinViewOpen;
+  const act = (on) => on ? ' dkh-on' : '';
+  const misOn = (currentState === 'rutas' && window._rutasTab !== 'explorar') || (logged && onGuide);
+  const expOn = currentState === 'rutas' && window._rutasTab === 'explorar';
+  const mundoOn = currentState === 'tu-mundo';
+  let ini = '';
+  try { ini = String((currentUser && (currentUser.name || currentUser.displayName || currentUser.email)) || '?').trim().charAt(0).toUpperCase(); } catch (_) {}
+  h.innerHTML =
+    '<a class="ce-brand dkh-brand" href="/" data-act="home"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</a>' +
+    (logged
+      ? '<nav class="dkh-nav">' +
+          '<button type="button" class="dkh-link' + act(misOn) + '" data-act="rutas">Mis viajes</button>' +
+          '<button type="button" class="dkh-link' + act(expOn) + '" data-act="explorar">Explorar</button>' +
+          '<button type="button" class="dkh-link' + act(mundoOn) + '" data-act="mundo">Tu mundo</button>' +
+        '</nav>' +
+        '<div class="dkh-right"><button type="button" class="dkh-new" data-act="new">+ Nueva ruta</button>' +
+        '<button type="button" class="dkh-avatar" data-act="perfil" aria-label="Perfil" title="Perfil">' + escapeHTML(ini) + '</button></div>'
+      : '<nav class="dkh-nav">' +
+          '<button type="button" class="dkh-link' + act(expOn) + '" data-act="explorar">Explorar</button>' +
+          '<a class="dkh-link" href="/funciones.html">Qué hace Salma</a>' +
+        '</nav>' +
+        '<div class="dkh-right"><button type="button" class="dkh-login" data-act="login">Entrar</button>' +
+        '<button type="button" class="dkh-new" data-act="login">Crear cuenta gratis</button></div>');
+}
+function _dkHeaderClick(e) {
+  const b = e.target.closest('[data-act]');
+  if (!b) return;
+  const a = b.dataset.act;
+  if (a === 'home') {
+    e.preventDefault();
+    if (!currentUser) { if (!window._itinViewOpen) location.href = '/'; return; }
+    window._dkForceNew = false;
+    showState('chat');
+  } else if (a === 'rutas') {
+    window._rutasTab = 'mis';
+    if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
+    showState('rutas');
+  } else if (a === 'explorar') {
+    window._rutasTab = 'explorar';
+    showState('rutas');
+  } else if (a === 'mundo') {
+    showState('tu-mundo');
+  } else if (a === 'perfil') {
+    handleAvatarClick();
+  } else if (a === 'login') {
+    openModal();
+  } else if (a === 'new') {
+    _dkNewRoute();
+  }
+}
+// "+ Nueva ruta" en escritorio: la bienvenida con el chat vacío (como el botón central de Salma en el móvil).
+// La conversación anterior no se pierde: queda en "Últimas consultas".
+function _dkNewRoute() {
+  if (typeof salma !== 'undefined' && salma._streaming) { if (typeof showToast === 'function') showToast('Salma está respondiendo…'); return; }
+  window._dkForceNew = true;
+  if (typeof salma !== 'undefined') salma._initChat();
+  showState('chat');
+  if (typeof salma !== 'undefined' && salma.newChat) salma.newChat(true);
+  try { window.scrollTo(0, 0); } catch (_) {}
+}
+window._dkHeaderSync = _dkHeaderSync;
+try {
+  const _dkMq = window.matchMedia('(min-width: 1100px)');
+  (_dkMq.addEventListener ? _dkMq.addEventListener('change', () => _dkHeaderSync()) : _dkMq.addListener(() => _dkHeaderSync()));
+} catch (_) {}
+
 // ═══ WEB DE ESCRITORIO SIN GUÍA ACTIVA (≥1100 px, 17 oct 2026, Paco) ═══
 // Con cuenta y sin guía activa: la izquierda es una bienvenida (#dk-welcome) y la derecha, la pantalla de Salma
 // (el chat de siempre, en una columna de 400 px: escritorio.css, body.dk-home). Móvil, tablet y la app de Android
@@ -615,7 +699,7 @@ function _dkHomeWanted() {
   try {
     return !!(currentUser && window._activeRoutePulled && currentState === 'chat' && !window._itinViewOpen &&
       window.matchMedia && window.matchMedia('(min-width: 1100px)').matches &&
-      !localStorage.getItem('bdm_live_active_route'));
+      (window._dkForceNew || !localStorage.getItem('bdm_live_active_route')));
   } catch (_) { return false; }
 }
 function _dkHomeOn() {
@@ -651,6 +735,7 @@ function _dkHomeOn() {
   document.body.appendChild(d);
 }
 function _dkHomeOff() {
+  window._dkForceNew = false;
   document.body.classList.remove('dk-home');
   const d = document.getElementById('dk-welcome');
   if (d) d.remove();

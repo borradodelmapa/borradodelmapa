@@ -856,6 +856,7 @@ ${trk}
     // Guardar referencia global para que salma.js pueda reabrir la vista
     window._itinViewOpen = true;
     if (typeof window._dkHomeOff === 'function') window._dkHomeOff();   // bienvenida de escritorio (app.js)
+    if (typeof window._dkHeaderSync === 'function') window._dkHeaderSync();   // cabecera de escritorio: «Mis viajes» marcado
     window._itinViewRoute = routeData;
     window._itinViewDocId = docId;
     window._itinViewOptions = options;
@@ -1051,6 +1052,7 @@ ${trk}
   function _teardownItinView() {
     if (!window._itinViewOpen) return;
     window._itinViewOpen = false;
+    if (typeof window._dkHeaderSync === 'function') setTimeout(window._dkHeaderSync, 0);
     // Por si se cierra la guía con el popup de consulta abierto (el body no
     // desmonta el overlay de #itin-view, así que hay que cerrarlo aparte).
     if (typeof _closeItinQuery === 'function') _closeItinQuery();
