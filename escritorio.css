@@ -63,3 +63,18 @@
   .ivd-cta:hover { background: var(--dorado2); }
   .ivd-note { margin: 0; text-align: center; font-size: 12px; color: rgba(236,235,232,.55); }
 }
+
+/* Barras de desplazamiento finas y a juego (17 oct 2026): sin flechas ni el blanco del sistema */
+@media (min-width: 1100px) {
+  .itin-cards-col, .itin-query-answer, .ivd-body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(244,99,11,.55) transparent;
+  }
+  .itin-cards-col::-webkit-scrollbar, .itin-query-answer::-webkit-scrollbar, .ivd-body::-webkit-scrollbar { width: 8px; }
+  .itin-cards-col::-webkit-scrollbar-track, .itin-query-answer::-webkit-scrollbar-track, .ivd-body::-webkit-scrollbar-track { background: transparent; }
+  .itin-cards-col::-webkit-scrollbar-thumb, .itin-query-answer::-webkit-scrollbar-thumb, .ivd-body::-webkit-scrollbar-thumb {
+    background: rgba(244,99,11,.45); border-radius: 0;
+  }
+  .itin-cards-col::-webkit-scrollbar-thumb:hover, .itin-query-answer::-webkit-scrollbar-thumb:hover, .ivd-body::-webkit-scrollbar-thumb:hover { background: var(--dorado); }
+  .itin-cards-col::-webkit-scrollbar-button, .itin-query-answer::-webkit-scrollbar-button, .ivd-body::-webkit-scrollbar-button { display: none; }
+}
