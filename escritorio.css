@@ -148,7 +148,7 @@
 @media (min-width: 1100px) {
   .dk-header {
     display: flex; align-items: center; gap: 36px;
-    position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 850; box-sizing: border-box;
+    position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 1400; box-sizing: border-box;
     padding: 0 24px; background: var(--negro); border-bottom: 1px solid var(--linea);
   }
   .dkh-brand {
@@ -301,4 +301,10 @@
   body.dk-header .hist-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   body.dk-header .fv-stray { width: 100%; max-width: 1180px; margin: 0 auto; box-sizing: border-box; }
   body.dk-header .fv-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+}
+
+/* El desplegable de Atajos salía DEBAJO de la guía y del chat (z-index 900 y 1300): la cabecera va por encima de
+   ellos. El mapa en vivo, que ocupa toda la pantalla, sigue tapándola. */
+@media (min-width: 1100px) {
+  body.live-map-open .dk-header { z-index: 850; }
 }
