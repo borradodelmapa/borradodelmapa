@@ -3,11 +3,17 @@
 // docs/serie-vietnam-cap1.md, -cap2.md y -hilos.md. Dato nuevo = fuente anotada allí primero.
 // El generador es scripts/build-blog-viajes.js (npm: node scripts/build-blog-viajes.js).
 
+const SERIES = {
+  'Tailandia en moto': { sub: 'Chiang Mai, el Triángulo de Oro, la carretera de las 762 curvas y el bucle de Mae Hong Son, en moto. Y un especial de Muay Thai en Ko Samui.' },
+  'Vietnam': { sub: 'De mil años de resistencia a Hồ Chí Minh: cinco capítulos para entender el país antes de recorrerlo.' },
+};
+
 const W = (t, u) => ({ t, u });
 
-module.exports = [
+const caps = [
   {
     slug: 'tailandia-chiang-mai',
+    cifras: [["1296","Año de fundación"],["1,5 km","De foso por lado"],["25 min","El casco, a pie"]],
     destino: ['chiang-mai-tailandia', 'Chiang Mai'],
     serie: 'Tailandia en moto',
     cap: 'Capítulo 1 de 5',
@@ -40,6 +46,7 @@ module.exports = [
   },
   {
     slug: 'tailandia-triangulo-de-oro',
+    cifras: [["3","Países en un río"],["1971","Nace el nombre"],["1997","Empieza el Templo Blanco"]],
     destino: ['chiang-rai-tailandia', 'Chiang Rai'],
     serie: 'Tailandia en moto',
     cap: 'Capítulo 2 de 5',
@@ -74,6 +81,7 @@ module.exports = [
   },
   {
     slug: 'tailandia-carretera-a-pai',
+    cifras: [["762","Curvas hasta Pai"],["100 km","De carretera"],["1.864","Curvas el bucle entero"]],
     destino: ['pai-tailandia', 'Pai'],
     serie: 'Tailandia en moto',
     cap: 'Capítulo 3 de 5',
@@ -107,6 +115,7 @@ module.exports = [
   },
   {
     slug: 'tailandia-ban-rak-thai',
+    cifras: [["1949","Llegan los soldados"],["1996","Traslados forzosos"],["⅓","Desplazado en Kayah (ONG)"]],
     destino: ['tailandia', 'Tailandia'],
     serie: 'Tailandia en moto',
     cap: 'Capítulo 4 de 5',
@@ -140,6 +149,7 @@ module.exports = [
   },
   {
     slug: 'tailandia-doi-inthanon',
+    cifras: [["2.565 m","Doi Inthanon"],["300 THB","Entrada al parque"],["1.864","Curvas del bucle"]],
     destino: ['tailandia', 'Tailandia'],
     serie: 'Tailandia en moto',
     cap: 'Capítulo 5 de 5',
@@ -172,6 +182,7 @@ module.exports = [
   },
   {
     slug: 'tailandia-muay-thai-ko-samui',
+    cifras: [["8","Extremidades"],["1767","Fecha de la leyenda"],["17 mar","Día Nacional"]],
     destino: ['tailandia', 'Tailandia'],
     serie: 'Tailandia en moto',
     cap: 'Especial',
@@ -205,6 +216,7 @@ module.exports = [
   },
   {
     slug: 'vietnam-mil-anos-de-no-rendirse',
+    cifras: [["1.000","Años bajo China"],["938","Bạch Đằng"],["1428","Fuera los Ming"]],
     destino: ['hanoi-vietnam', 'Hanói'],
     serie: 'Vietnam',
     cap: 'Capítulo 1 de 5',
@@ -241,6 +253,7 @@ module.exports = [
   },
   {
     slug: 'vietnam-la-guerra-de-las-fichas-de-domino',
+    cifras: [["7 M+","Toneladas de bombas"],["17","Paralelo de la partición"],["1975","Cae Saigón"]],
     destino: ['phong-nha-vietnam', 'Phong Nha'],
     serie: 'Vietnam',
     cap: 'Capítulo 2 de 5',
@@ -277,6 +290,7 @@ module.exports = [
   },
   {
     slug: 'vietnam-ruta-ho-chi-minh',
+    cifras: [["1959","Nace la ruta"],["200 kg","Por bicicleta"],["1968","Ofensiva del Tet"]],
     destino: ['phong-nha-vietnam', 'Phong Nha'],
     serie: 'Vietnam',
     cap: 'Capítulo 3 de 5',
@@ -306,6 +320,7 @@ module.exports = [
   },
   {
     slug: 'vietnam-como-son-hoy',
+    cifras: [["1986","Đổi Mới"],["×4","Renta por habitante desde 1990"],["20 nov","Día del Maestro"]],
     destino: ['vietnam', 'Vietnam'],
     serie: 'Vietnam',
     cap: 'Capítulo 4 de 5',
@@ -334,6 +349,7 @@ module.exports = [
   },
   {
     slug: 'vietnam-ho-chi-minh',
+    cifras: [["1890","Nace en Nghệ An"],["1945","Declara la independencia"],["1969","Muere"]],
     destino: ['hanoi-vietnam', 'Hanói'],
     serie: 'Vietnam',
     cap: 'Capítulo 5 de 5',
@@ -365,3 +381,5 @@ module.exports = [
     cierre: null,
   },
 ];
+caps.SERIES = SERIES;
+module.exports = caps;
