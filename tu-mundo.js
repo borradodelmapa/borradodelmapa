@@ -248,6 +248,66 @@ const tuMundo = (() => {
     g.fillStyle = 'rgba(236,235,232,.9)'; S.places.forEach(p => { const xx = p.lng < PROJ.x0 ? p.lng + 360 : p.lng; g.beginPath(); g.arc(X(xx), Y(p.lat), Math.max(1.5, W / 700), 0, 7); g.fill(); });
   }
 
+  /* ── mapa de fotos con zoom (caso p-mve4547l7rl, entrega 1) ──
+     Leaflet + OpenStreetMap (0 € de mapas). Círculos con número que se separan al acercar el zoom (agrupado
+     propio por píxeles, sin plugin), línea del recorrido por fechas. Fotos sin GPS: se colocan junto a la
+     foto con ubicación más cercana en fecha (hasta 3 días) y salen marcadas como aproximadas.
+     💶 0 €: usa las fotos ya cargadas (D.photos); no sube nada ni llama a ninguna API de pago. */
+  let _fmap = null;
+  function _photoPoints(D) {
+    const all = D.photos.filter(p => p.url && p.tag !== 'documento' && p.tag !== 'cartel' && p.type !== 'video')
+      .map(p => { const d = toDate(p.takenAt || p.createdAt); return { id: p.id, url: p.url, t: d && !isNaN(d) ? +d : null, lat: +p.lat, lng: +p.lng, has: ok(p), approx: false }; });
+    const withGps = all.filter(p => p.has && p.t != null);
+    const MAXGAP = 3 * 864e5;
+    all.forEach(p => {
+      if (p.has || p.t == null || !withGps.length) return;
+      let best = null, bd = Infinity; withGps.forEach(q => { const d = Math.abs(q.t - p.t); if (d < bd) { bd = d; best = q; } });
+      if (best && bd <= MAXGAP) { p.lat = best.lat; p.lng = best.lng; p.has = true; p.approx = true; }
+    });
+    const pts = all.filter(p => p.has).sort((a, b) => (a.t || 0) - (b.t || 0));
+    return { pts, sinSitio: all.length - pts.length };
+  }
+  function _clusterPts(map, pts, radius) {
+    const cells = new Map(), z = map.getZoom();
+    pts.forEach(p => { const c = map.project([p.lat, p.lng], z), k = Math.floor(c.x / radius) + ':' + Math.floor(c.y / radius); if (!cells.has(k)) cells.set(k, []); cells.get(k).push(p); });
+    return [...cells.values()];
+  }
+  function _drawFotoMap(D) {
+    const box = _q('#tm-fmap'), sec = _q('#tm-fmap-sec'); if (!box || !sec) return;
+    if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
+    const { pts, sinSitio } = _photoPoints(D);
+    sec.hidden = !pts.length;
+    if (!pts.length) return;
+    _q('#tm-fmap-note').textContent = `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${sinSitio ? ` · ${sinSitio} sin ubicación ni fecha` : ''}. Toca un círculo para acercarte.`;
+    if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
+    const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+    const line = L.polyline(pts.map(p => [p.lat, p.lng]), { color: '#F4630B', weight: 2, opacity: .75, dashArray: '2 6' }).addTo(map);
+    const layer = L.layerGroup().addTo(map);
+    const paint = () => {
+      layer.clearLayers();
+      _clusterPts(map, pts, 56).forEach(g => {
+        const lat = g.reduce((a, p) => a + p.lat, 0) / g.length, lng = g.reduce((a, p) => a + p.lng, 0) / g.length;
+        const first = g[0];
+        const html = g.length === 1
+          ? `<span class="tm-pin tm-pin-one${first.approx ? ' tm-pin-approx' : ''}" style="background-image:url('${esc(first.url)}')"></span>`
+          : `<span class="tm-pin" style="background-image:url('${esc(first.url)}')"><b>${g.length}</b></span>`;
+        const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
+        m.on('click', () => {
+          if (g.length === 1 || map.getZoom() >= 17) {
+            const imgs = g.slice(0, 12).map(p => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><img src="${esc(p.url)}" alt="" loading="lazy"></a>`).join('');
+            L.popup({ maxWidth: 260, className: 'tm-pop' }).setLatLng([lat, lng]).setContent(`<div class="tm-pop-g">${imgs}</div>${g.some(p => p.approx) ? '<div class="tm-pop-n">Ubicación aproximada (por la fecha)</div>' : ''}`).openOn(map);
+          } else map.fitBounds(L.latLngBounds(g.map(p => [p.lat, p.lng])), { padding: [60, 60], maxZoom: 18 });
+        });
+      });
+    };
+    map.on('zoomend', paint);
+    map.fitBounds(line.getBounds(), { padding: [40, 40], maxZoom: 14 });
+    paint();
+    const tg = _q('#tm-fmap-route'); if (tg) tg.onchange = () => { if (tg.checked) line.addTo(map); else map.removeLayer(line); };
+    setTimeout(() => { if (_fmap === map) map.invalidateSize(); }, 200);
+  }
+
   /* ── pantalla completa ── */
   function _q(s) { return document.querySelector('#tm-screen ' + s); }
   function placeName(p) { if (p.name) return p.name; if (p.trip) return p.trip; const f = countryAt(p.lat, p.lng); return f ? esName(f.a2, f.en) : '—'; }
@@ -430,6 +490,11 @@ const tuMundo = (() => {
             <canvas id="tm-world" width="1600" height="820"></canvas>
             <div class="tm-legend"><span><i style="background:#F4630B"></i>Has estado</span><span><i style="background:#7a3a14"></i>Planeado, aún no</span></div>
           </section>
+          <section id="tm-fmap-sec" hidden><h3 class="tm-h">Tus fotos en el mapa</h3>
+            <p class="tm-note" id="tm-fmap-note"></p>
+            <div class="tm-fmap" id="tm-fmap"></div>
+            <label class="tm-fmap-opt"><input type="checkbox" id="tm-fmap-route" checked> Ver el recorrido por fechas</label>
+          </section>
           <section><h3 class="tm-h">Tus países</h3><div class="tm-flags" id="tm-flags"></div></section>
           <section><h3 class="tm-h">Tus récords</h3><div class="tm-recs" id="tm-recs"></div></section>
           <section><h3 class="tm-h">Comparte tu vuelta al mundo</h3>
@@ -448,6 +513,7 @@ const tuMundo = (() => {
       if (!document.getElementById('tm-screen')) return; // el usuario ya se fue a otra pantalla
       _q('#tm-body').hidden = false;
       _paint(S);
+      try { _drawFotoMap(_cache.D); } catch (e2) { console.warn('[tu-mundo] mapa de fotos', e2); }
     } catch (e) {
       const l = document.getElementById('tm-lede');
       if (l) l.textContent = 'No se pudieron cargar tus viajes. Revisa la conexión y vuelve a entrar.';
