@@ -67,9 +67,8 @@ const reelViaje = (() => {
   }
 
   /* ── dibujo de un fotograma (en lienzo lógico 1080×1920; k = escala del lienzo real) ── */
-  function draw(cx, k, D, TL, t) {
-    cx.setTransform(k, 0, 0, k, 0, 0);
-    const cam = camAt(D, TL, t), s = sc(cam.z), ox = W / 2 - cam.fx * s, oy = H * cam.yo - cam.fy * s;
+  function paintMap(cx, D, cam, t) {
+    const s = sc(cam.z), ox = W / 2 - cam.fx * s, oy = H * cam.yo - cam.fy * s;
     const X = x => x * s + ox, Y = y => y * s + oy;
     cx.fillStyle = '#0b1216'; cx.fillRect(0, 0, W, H);
     // países
@@ -110,17 +109,24 @@ const reelViaje = (() => {
     const cur = cam.cur >= 0 && cam.cur < n ? (cam.mark || { X: D.stops[cam.cur].X, Y: D.stops[cam.cur].Y }) : null;
     if (cur) { const px = X(cur.X), py = Y(cur.Y), ph = (t * 1.2) % 1; cx.beginPath(); cx.arc(px, py, 16 + 34 * ph, 0, 7); cx.strokeStyle = `rgba(244,99,11,${.7 * (1 - ph)})`; cx.lineWidth = 5; cx.stroke(); cx.beginPath(); cx.arc(px, py, 17, 0, 7); cx.fillStyle = '#F4630B'; cx.fill(); cx.lineWidth = 6; cx.strokeStyle = '#fff'; cx.stroke(); }
 
-    // degradados para leer el texto
+    return { s, X, Y };
+  }
+  function paintShade(cx) {
     let g = cx.createLinearGradient(0, 0, 0, 520); g.addColorStop(0, 'rgba(13,15,16,.92)'); g.addColorStop(1, 'rgba(13,15,16,0)'); cx.fillStyle = g; cx.fillRect(0, 0, W, 520);
     g = cx.createLinearGradient(0, H - 700, 0, H); g.addColorStop(0, 'rgba(13,15,16,0)'); g.addColorStop(1, 'rgba(13,15,16,.9)'); cx.fillStyle = g; cx.fillRect(0, H - 700, W, 700);
-
-    // cabecera
+  }
+  function paintHeader(cx, D, t) {
     cx.textAlign = 'left'; cx.textBaseline = 'alphabetic';
     cx.fillStyle = '#F4630B'; cx.font = `800 46px ${FONT}`; cx.fillText('BORRADO DEL MAPA', 70, 118);
     { const bw = cx.measureText('BORRADO DEL MAPA').width; cx.fillStyle = 'rgba(236,235,232,.6)'; cx.font = `600 34px ${FONT}`; cx.fillText('borradodelmapa.com', 70 + bw + 20, 117); }
     cx.fillStyle = '#ECEBE8'; let fs = 150; cx.font = `800 ${fs}px ${FONT}`; const tt = D.title.toUpperCase(); while (cx.measureText(tt).width > W - 140 && fs > 60) { fs -= 6; cx.font = `800 ${fs}px ${FONT}`; }
     const ti = t < INTRO ? ease(clamp(t / .8, 0, 1)) : 1; cx.globalAlpha = ti; cx.fillText(tt, 70, 118 + 20 + fs * .9); cx.globalAlpha = 1;
     if (D.range) { cx.fillStyle = '#C4C7C9'; cx.font = `600 40px ${FONT}`; cx.fillText(D.range.toUpperCase(), 72, 118 + 20 + fs * .9 + 56); }
+  }
+  function draw(cx, k, D, TL, t) {
+    cx.setTransform(k, 0, 0, k, 0, 0);
+    const cam = camAt(D, TL, t), n = D.stops.length;
+    paintMap(cx, D, cam, t); paintShade(cx); paintHeader(cx, D, t);
 
     // fotos de la parada en curso
     if (cam.cur >= 0 && cam.cur < n && cam.inHold) {
@@ -230,6 +236,54 @@ const reelViaje = (() => {
       busy = false; make.disabled = false; t0 = performance.now();
     };
   }
-  return { open };
+
+  /* ── Tarjeta para compartir: imagen vertical con el mapa, la ruta, 3 polaroids y cifras ── */
+  async function renderCard(o) {
+    const D = prepare(o), n = D.stops.length;
+    const idx = n <= 3 ? [...Array(n).keys()] : [0, Math.floor(n / 2), n - 1];
+    const sel = idx.map(i => ({ st: D.stops[i], ph: D.stops[i].photos && D.stops[i].photos[0] })).filter(x => x.ph);
+    const ims = await Promise.all(sel.map(async x => { try { const r = await fetch(x.ph.url); if (!r.ok) throw 0; return await createImageBitmap(await r.blob(), { resizeWidth: 900, resizeQuality: 'medium' }); } catch (_) { return null; } }));
+    try { await document.fonts.load('800 40px "Barlow Condensed"'); await document.fonts.load('600 40px "Barlow Condensed"'); } catch (_) {}
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const cx = cv.getContext('2d');
+    cx.setTransform(1, 0, 0, 1, 0, 0);
+    const cam = { ...D.all, yo: .36, cur: n, mark: null, prog: 1 };
+    paintMap(cx, D, cam, 0); paintShade(cx); paintHeader(cx, D, 99);
+    // cifras sobre una banda oscura
+    const m = ims.filter(Boolean).length, yBand = m ? 930 : 1500;
+    cx.fillStyle = 'rgba(13,15,16,.82)'; cx.fillRect(0, yBand, W, 150);
+    const stats = [[o.countries || 0, (o.countries || 0) === 1 ? 'PAÍS' : 'PAÍSES'], [o.fotosN || 0, (o.fotosN || 0) === 1 ? 'FOTO' : 'FOTOS'], [n, n === 1 ? 'PARADA' : 'PARADAS']];
+    cx.textAlign = 'center'; stats.forEach(([b, l], i) => { const x = W / 6 + i * W / 3; cx.fillStyle = '#F4630B'; cx.font = `800 92px ${FONT}`; cx.fillText(String(b), x, yBand + 90); cx.fillStyle = '#C4C7C9'; cx.font = `600 34px ${FONT}`; cx.fillText(l, x, yBand + 132); });
+    // polaroids
+    for (let j = 0; j < sel.length; j++) {
+      const im = ims[j]; if (!im) continue; const big = m === 1, cw = big ? 760 : 560, ch = big ? 900 : 680, ix = big ? 0 : [-170, 170, 0][j], rot = big ? -.03 : [-.09, .08, -.02][j];
+      cx.save(); cx.translate(W / 2 + ix, 1500 + (big ? 0 : (j === 2 ? -20 : 10))); cx.rotate(rot);
+      cx.shadowColor = 'rgba(0,0,0,.55)'; cx.shadowBlur = 40; cx.shadowOffsetY = 16; cx.fillStyle = '#f4f1ea'; cx.fillRect(-cw / 2, -ch / 2, cw, ch); cx.shadowColor = 'transparent';
+      const pad = 24, iw = cw - 2 * pad, ih = ch - pad - 140, r = Math.max(iw / im.width, ih / im.height), sw = iw / r, sh = ih / r;
+      cx.drawImage(im, (im.width - sw) / 2, (im.height - sh) / 2, sw, sh, -cw / 2 + pad, -ch / 2 + pad, iw, ih);
+      if (j === sel.length - 1) { cx.fillStyle = '#16181a'; cx.textAlign = 'left'; cx.font = `800 ${big ? 60 : 50}px ${FONT}`; cx.fillText((sel[j].st.place || '').toUpperCase(), -cw / 2 + pad, ch / 2 - 70); cx.fillStyle = '#6b6f73'; cx.font = `600 ${big ? 34 : 30}px ${FONT}`; cx.fillText(sel[j].st.when || '', -cw / 2 + pad, ch / 2 - 26); }
+      cx.restore();
+    }
+    return new Promise(r => cv.toBlob(r, 'image/jpeg', .92));
+  }
+  async function card(o) {
+    if (_ov) close(true);
+    const ov = _ov = document.createElement('div'); ov.className = 'rl-ov'; ov._stop = false;
+    ov.innerHTML = `<div class="rl-head"><button type="button" class="tm-back" id="rl-back">‹ Tu mundo</button></div>
+      <div class="rl-body"><div class="rl-stage"><img id="rl-img" alt="Tarjeta de tu viaje" hidden></div>
+      <p class="rl-note" id="rl-note">Creando la tarjeta…</p>
+      <div class="rl-acts"><button type="button" class="tm-btn" id="rl-share" hidden>Compartir</button><button type="button" class="tm-btn rl-sec" id="rl-dl" hidden>Descargar</button></div></div>`;
+    document.body.appendChild(ov);
+    ov.querySelector('#rl-back').onclick = () => close();
+    if (window.pushModal) window.pushModal('reel-viaje', () => close(true));
+    try {
+      const blob = await renderCard(o); if (ov._stop) return;
+      const file = new File([blob], 'mi-viaje.jpg', { type: 'image/jpeg' }); ov._url = URL.createObjectURL(blob);
+      const im = ov.querySelector('#rl-img'); im.src = ov._url; im.hidden = false; ov.querySelector('#rl-note').textContent = 'Tu tarjeta está lista.';
+      const dl = ov.querySelector('#rl-dl'), sh = ov.querySelector('#rl-share');
+      dl.hidden = false; dl.onclick = () => { const a = document.createElement('a'); a.href = ov._url; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); };
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { sh.hidden = false; sh.onclick = async () => { try { await navigator.share({ files: [file], title: 'Mi viaje', text: MSG }); } catch (_) {} }; }
+    } catch (e) { console.warn('[tarjeta]', e); const nn = ov.querySelector('#rl-note'); if (nn) nn.textContent = 'No se pudo crear la tarjeta. Prueba otra vez.'; }
+  }
+  return { open, card };
 })();
 window.reelViaje = reelViaje;

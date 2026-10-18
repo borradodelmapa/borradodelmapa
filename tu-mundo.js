@@ -259,15 +259,20 @@ const tuMundo = (() => {
   function _photoPoints(D) {
     const all = D.photos.filter(p => p.url && p.tag !== 'documento' && p.tag !== 'cartel' && p.type !== 'video')
       .map(p => { const d = toDate(p.takenAt || p.createdAt); return { id: p.id, url: fixPhoto(p.url), t: d && !isNaN(d) ? +d : null, lat: +p.lat, lng: +p.lng, has: ok(p), approx: false, route: p.routeId || null }; });
+    // Fotos sin GPS: 1.º junto a la foto con GPS más cercana en fecha de SU MISMO viaje (guía), sin límite de días;
+    // 2.º si no tiene viaje o su viaje no tiene GPS, junto a la más cercana en fecha de cualquier viaje, hasta 30 días.
     const withGps = all.filter(p => p.has && p.t != null);
-    const MAXGAP = 3 * 864e5;
+    const MAXGAP = 30 * 864e5;
+    const nearest = (p, arr) => { let best = null, bd = Infinity; arr.forEach(q => { const d = Math.abs(q.t - p.t); if (d < bd) { bd = d; best = q; } }); return { best, bd }; };
     all.forEach(p => {
       if (p.has || p.t == null || !withGps.length) return;
-      let best = null, bd = Infinity; withGps.forEach(q => { const d = Math.abs(q.t - p.t); if (d < bd) { bd = d; best = q; } });
-      if (best && bd <= MAXGAP) { p.lat = best.lat; p.lng = best.lng; p.has = true; p.approx = true; }
+      let q = null;
+      if (p.route) { const same = withGps.filter(x => x.route === p.route); if (same.length) q = nearest(p, same).best; }
+      if (!q) { const r = nearest(p, withGps); if (r.best && r.bd <= MAXGAP) q = r.best; }
+      if (q) { p.lat = q.lat; p.lng = q.lng; p.has = true; p.approx = true; }
     });
-    const pts = all.filter(p => p.has).sort((a, b) => (a.t || 0) - (b.t || 0));
-    return { pts, sinSitio: all.length - pts.length };
+    const pts = all.filter(p => p.has).sort((a, b) => (a.t || 0) - (b.t || 0)), sin = all.filter(p => !p.has).sort((a, b) => (a.t || 0) - (b.t || 0));
+    return { pts, sin, sinSitio: sin.length };
   }
   function _clusterPts(map, pts, radius) {
     const cells = new Map(), z = map.getZoom();
@@ -398,7 +403,7 @@ const tuMundo = (() => {
       return { id: f.id, name: esName(f.a2, f.en), polys: f.polys, on, st };
     });
   }
-  function _openReel(S, pts) {
+  function _openReel(S, pts, card) {
     if (typeof reelViaje === 'undefined') return;
     const fm = { day: 'numeric', month: 'long', year: 'numeric' };
     let base = _stopsOf(pts, 14);
@@ -414,7 +419,8 @@ const tuMundo = (() => {
     const ts = pts.map(p => p.t).filter(Boolean), d0 = ts.length ? new Date(Math.min(...ts)) : null, d1 = ts.length ? new Date(Math.max(...ts)) : null;
     const mes = d => d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
     const range = d0 ? (mes(d0) === mes(d1) ? mes(d0) : mes(d0) + ' – ' + mes(d1)) : '';
-    reelViaje.open({ title: _year ? 'Mi viaje ' + (/-/.test(_year) ? MESES[+_year.split('-')[1]] : _year) : 'Mi viaje', range, stops, feats: _reelFeats(S), fotosN: pts.length });
+    const payload = { title: _year ? 'Mi viaje ' + (/-/.test(_year) ? MESES[+_year.split('-')[1]] : _year) : 'Mi viaje', range, stops, feats: _reelFeats(S), fotosN: pts.length, countries: S.seen.size };
+    if (card) reelViaje.card(payload); else reelViaje.open(payload);
   }
   let _year = null;   // periodo elegido en el selector: año ("2025") o, si todas las fotos son de un año, mes ("2026-4"); null = todos
   const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -422,6 +428,7 @@ const tuMundo = (() => {
     const box = _q('#tm-fmap'); if (!box) return;
     if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
     const PP = _photoPoints(D), sinSitio = PP.sinSitio;
+    const verSin = () => { if (PP.sin.length) _lbOpen(PP.sin, 0); };
     // Selector: años si hay varios; si todas las fotos son del mismo año, meses de ese año
     const yrs = [...new Set(PP.pts.filter(p => p.t).map(p => new Date(p.t).getFullYear()))].sort();
     const byMonth = yrs.length === 1, keyOf = p => { const d = new Date(p.t); return byMonth ? d.getFullYear() + '-' + d.getMonth() : String(d.getFullYear()); };
@@ -437,9 +444,13 @@ const tuMundo = (() => {
     }
     const ios = _q('#tm-ios'); if (ios) ios.hidden = !(/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     _wireUpload();
-    _q('#tm-fmap-note').textContent = pts.length
-      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${_year ? ' en ' + (byMonth ? labelOf(_year) + ' de ' + yrs[0] : _year) : ''}${sinSitio ? ` · ${sinSitio} sin ubicación` : ''}. Toca un círculo para acercarte.`
+    const nt = _q('#tm-fmap-note');
+    const txt = pts.length
+      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${_year ? ' en ' + (byMonth ? labelOf(_year) + ' de ' + yrs[0] : _year) : ''}. Toca un círculo para acercarte.`
       : 'Aún no tienes fotos con ubicación ni fecha. Sube fotos de tu móvil y se pintan aquí.';
+    // las que siguen sin sitio (sin GPS y sin viaje ni fechas cercanas): enlace para verlas
+    nt.innerHTML = esc(txt) + (sinSitio && !_year ? ` <button type="button" class="tm-link" id="tm-sin">Ver las ${sinSitio} sin ubicación</button>` : '');
+    const bs = _q('#tm-sin'); if (bs) bs.onclick = verSin;
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
@@ -520,6 +531,7 @@ const tuMundo = (() => {
       };
     }
     const reelBtn = _q('#tm-reel'); if (reelBtn) { reelBtn.hidden = (stops.length < 2 && pts.length < 2) || typeof reelViaje === 'undefined'; reelBtn.onclick = () => _openReel(S, pts); }
+    const cardBtn = _q('#tm-card-btn'); if (cardBtn) { cardBtn.hidden = !pts.length || typeof reelViaje === 'undefined'; cardBtn.onclick = () => _openReel(S, pts, true); }
     const on = (id, fn) => { const c = _q(id); if (c) c.onchange = () => fn(c.checked); };
     on('#tm-fm-c', v => v ? cv.addTo(map) : map.removeLayer(cv));
     on('#tm-fm-p', v => v ? cp.addTo(map) : map.removeLayer(cp));
@@ -710,6 +722,7 @@ const tuMundo = (() => {
               <p class="tm-note" id="tm-fmap-note"></p>
               <button type="button" class="tm-btn tm-play" id="tm-play" hidden>▶ Reproducir mi viaje</button>
               <button type="button" class="tm-btn tm-play" id="tm-reel" hidden>🎬 Crear Reel</button>
+              <button type="button" class="tm-btn tm-play" id="tm-card-btn" hidden>🖼 Tarjeta</button>
               <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Subir fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
               <p class="tm-note" id="tm-fmap-msg"></p>
               <p class="tm-note tm-ios" id="tm-ios" hidden>En iPhone: al elegir las fotos pulsa «Opciones» (abajo a la izquierda) y activa «Ubicación». Si no, el móvil quita el sitio de las fotos y no salen en el mapa.</p>
