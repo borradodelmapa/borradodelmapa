@@ -116,3 +116,33 @@
   .bd-media { position:sticky; top:20px; margin:0; max-width:none; }
   .bd-head, .bd-body, .bd-next { max-width:660px; }
 }
+
+/* ─── Guías prácticas (blog/*.html): mismo lenguaje visual, solo CSS + un kicker ─── */
+.blog-article { counter-reset:sec; }
+.blog-article .bg-kicker { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin:6px 0 16px; font-family:var(--font-cond); font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); }
+.blog-article .bg-kicker b { background:var(--accent); color:var(--text-on-accent); font-weight:800; letter-spacing:.12em; padding:4px 11px; }
+.pg .blog-article .blog-title { font-size:clamp(36px,8vw,58px); line-height:.98; text-transform:uppercase; margin:0 0 16px; }
+.pg .blog-article .blog-subtitle { font-size:20px !important; line-height:1.5; padding-bottom:22px; margin-bottom:8px !important; border-bottom:1px solid var(--border); }
+.pg .blog-article h2 { counter-increment:sec; border:0; padding:0; margin:40px 0 12px; font-size:30px; line-height:1.05; }
+.pg .blog-article h2::before { content:counter(sec,decimal-leading-zero); display:block; font-weight:800; font-size:14px; letter-spacing:.14em; color:var(--accent); margin-bottom:4px; }
+.blog-article p, .blog-article li { font-size:17px; line-height:1.75; }
+.blog-article ul:not(.checklist) { list-style:none; padding-left:0; }
+.blog-article ul:not(.checklist) li { position:relative; padding-left:22px; }
+.blog-article ul:not(.checklist) li::before { content:''; position:absolute; left:2px; top:.72em; width:8px; height:8px; background:var(--accent); }
+.blog-article ol { counter-reset:ol; list-style:none; padding-left:0; }
+.blog-article ol li { counter-increment:ol; position:relative; padding-left:42px; margin-bottom:12px; }
+.blog-article ol li::before { content:counter(ol); position:absolute; left:0; top:2px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:var(--accent); color:var(--text-on-accent); font-family:var(--font-cond); font-weight:800; font-size:16px; }
+.blog-article .bloque-sin-salma, .blog-article .bloque-con-salma { border:1px solid var(--border); border-left:4px solid var(--border-strong,#3a3d40); padding:18px 20px; margin:30px 0; }
+.blog-article .bloque-con-salma { border-left-color:var(--accent); }
+.blog-article .bloque-label { font-size:15px; margin-bottom:10px; }
+.blog-article .bloque-sin-salma p, .blog-article .bloque-con-salma p { font-size:16px; }
+.blog-article .info-box { border:1px solid var(--border); border-left:4px solid var(--accent); padding:18px 20px; margin:30px 0; background:var(--bg-row); }
+.blog-article .info-box p { color:var(--text-primary); font-size:16px; }
+.blog-article .blog-cta { background:var(--bg-row); border:1px solid var(--border); border-top:4px solid var(--accent); padding:26px 22px; margin:42px 0 30px; }
+.blog-article .blog-cta .blog-cta-text { font-family:var(--font-cond); font-weight:700; font-size:26px !important; line-height:1.15; margin-bottom:16px !important; }
+.blog-article .blog-related-title { font-size:15px; color:var(--accent); }
+.blog-article .blog-related { display:grid; grid-template-columns:1fr; gap:10px; }
+.blog-article .blog-related-title { grid-column:1/-1; margin:0 0 0; }
+.blog-article .blog-related a { background:var(--bg-row); border:1px solid var(--border); padding:14px 16px; font-family:var(--font-cond); font-weight:700; font-size:19px; line-height:1.15; }
+.blog-article .blog-related a:hover { border-color:var(--accent); color:var(--accent); }
+@media (min-width:760px) { .blog-article .blog-related { grid-template-columns:repeat(3,1fr); } }

@@ -16,7 +16,7 @@ const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18';
 const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 187;      // styles.css (= APP_CSS_V de build-destinos.js)
-const BV_CSS_V = 2;     // blog-viajes.css
+const BV_CSS_V = 3;     // blog-viajes.css
 
 const caps = require('./blog-viajes-data.js');
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
