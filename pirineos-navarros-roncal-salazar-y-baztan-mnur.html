@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,22 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Pirineos navarros: Roncal, Salazar y Baztán</h1>
+  <p class="guia-seo-sum">Tres días recorriendo los valles pirenaicos más auténticos de Navarra: el Roncal con sus hayedos y vistas al Pico de Anie, el Salazar con la inmensidad de Irati, y el Baztán con sus casonas señoriales y la cueva de las brujas. Carreteras de montaña, cocina de cuchara y paisajes sin multitudes.</p>
+  <p class="guia-seo-meta">3 días · 10 paradas · Navarra</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Isaba</h3><p>El pueblo más alto y más vivo del Roncal, a 813 metros, con casas de piedra gris apiñadas alrededor de la iglesia de San Cipriano del siglo XVI. Es el mejor punto de partida para orientarse en el valle. Sin entrada, sin horario — simplemente recórrelo a pie en 30 minutos y busca la fuente medieval. Desde aquí tienes acceso directo a la sierra sin rodeos. Cerca: Bar Restaurante Lola — menú del día con alubia roja del Roncal estofada con chorizo y morcilla. Plato de cuchara que pide a gritos el frío de montaña. Menos de 15€ el menú.</p></li>
+  <li><h3>Selva de Oza</h3><p>A 12 km de Isaba, la carretera sube hacia una de las hayas más espectaculares del Pirineo navarro. El bosque de hayedos y abetos llega hasta el límite con Francia y en septiembre el verde empieza a virar al amarillo — estás en el momento exacto. Hay una ruta circular de 8 km sin dificultad técnica que recorre el fondo del valle junto al río Belagua. Gratis, sin guía.</p></li>
+  <li><h3>Mirador de Larra-Belagua</h3><p>A mitad del puerto de Belagua, antes de la frontera francesa, hay un punto desde donde se ven simultáneamente el Pico de Anie (2.504 m) y el valle entero. Es el tipo de panorámica que no está señalizada en todos los mapas turísticos pero que los locales conocen. Para el coche y quédate diez minutos.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Ochagavía · Santuario de Nuestra Señora de Muskilda · Lagunas de Irati · Selva De Irati</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Elizondo · Arizkun y el camino de los alrededores · Zugarramurdi</p>
+  <p class="guia-seo-cta"><a href="/?ruta=pirineos-navarros-roncal-salazar-y-baztan-mnur">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +211,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

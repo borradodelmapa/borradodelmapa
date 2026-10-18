@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,29 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Parques Naturales del País Vasco y Navarra</h1>
+  <p class="guia-seo-sum">Ruta por los grandes parques naturales del norte peninsular, desde el Gorbeia hasta la Selva de Irati, pasando por Urkiola, Aralar y Urbasa-Andía.</p>
+  <p class="guia-seo-meta">5 días · 19 paradas · País Vasco y Navarra</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Senda de la Olla de San Vicente</h3><p>Sendero corto por el río Dobra hasta una poza natural de agua cristalina, uno de esos rincones que no esperas encontrar a cinco minutos del coche. Perfecto para estrenar piernas o cerrar el día antes de montar el campamento.</p></li>
+  <li><h3>Monte Oketa</h3><p>Uno de los puntos de salida clásicos para ascender al Gorbeia (1.482 m), el techo del País Vasco. Desde aquí arranca la ruta de unos 5-6 km con 600 m de desnivel hasta la famosa cruz de hierro de la cima, visible desde medio País Vasco. Sin técnica pero exigente, la ida y vuelta se hace en unas 4-5 horas. En días claros desde la cima se ve el Cantábrico y los Pirineos simultáneamente.</p></li>
+  <li><h3>Zañartu</h3><p>Alternativa de salida para la ascensión al Gorbeia (1.482 m) en el Parque Natural de Gorbeia, 20.000 hectáreas de hayedos, robledales y cumbres entre Álava y Vizcaya. La ruta hasta la cima, donde está la famosa cruz de hierro, tiene unos 5-6 km y 600 m de desnivel — exigente pero sin técnica. Arriba, en días claros, ves el Cantábrico y los Pirineos a la vez. Unas 4-5 horas ida y vuelta.</p></li>
+  <li><h3>Cascada de Gujuli</h3><p>A 15 minutos del pueblo de Murua, una de las cascadas más accesibles del Parque Natural de Gorbeia. No hace falta ni arrancar las botas de senderismo para llegar. Un punto de recompensa sencillo tras el esfuerzo de la ascensión al Gorbeia, perfecto para cerrar la jornada antes de bajar a comer al valle.</p></li>
+  <li><h3>Bodegas Murua</h3><p>Pueblo del valle de Zuia, a 15 minutos de la Cascada de Gujuli y puerta de entrada al Parque Natural de Gorbeia. Baja aquí a comer tras la jornada de senderismo: busca cualquier asador de la zona — chuletón con txakoli, sin más complicaciones. Los precios son sensatos fuera de los núcleos grandes.</p></li>
+  <li><h3>Zuia</h3><p>Valle y municipio alavés al pie del Parque Natural de Gorbeia. Alternativa a Murua para comer tras la jornada: asadores de la zona con chuletón y txakoli a precios sensatos, lejos del ruido de las capitales. Un buen lugar para reponer fuerzas antes del día siguiente.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Santuario de Urkiola · Anboto · Durango</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Igaratza.Trail 5-7 intersección · Santuario San Miguel in Excelsis · Cueva Mendukilo · Ayuntamiento de Lekunberri</p>
+  <h2>Día 4</h2>
+  <p class="guia-seo-names">Nacedero del Urederra Baquedano Información · Mirador de Dos Ríos · Estella</p>
+  <h2>Día 5</h2>
+  <p class="guia-seo-names">Ochagavía · Presa del Embalse de Irabia · Alto de Larrau</p>
+  <p class="guia-seo-cta"><a href="/?ruta=parques-naturales-del-pais-vasco-y-navarra-tqgd">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +218,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

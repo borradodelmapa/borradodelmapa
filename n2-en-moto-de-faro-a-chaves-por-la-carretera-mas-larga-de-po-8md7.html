@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,25 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>N2 en moto: de Faro a Chaves por la carretera más larga de Portugal</h1>
+  <p class="guia-seo-sum">739 km por la N2, la carretera más larga de Portugal, de Faro a Chaves en cuatro etapas reales. Septiembre es el mejor momento: el calor ha bajado, los turistas del Algarve se han ido y el Alentejo huele a corcho recién cortado. Ciudades romanas, castillos templarios, catedrales manuelinas, el punto más alto de Portugal continental y termas romanas al final. Con camping verificado cada noche.</p>
+  <p class="guia-seo-meta">4 días · 14 paradas · Algarve, Alentejo, Serra da Estrela, Trás-os-Montes</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Cidade Velha</h3><p>El casco amurallado que los moros llamaron Ossónoba y los portugueses reconquistaron en 1249. El Arco da Vila del siglo XIX es la entrada principal — neoclásico con una cigüeña encima casi siempre, porque Faro tiene la mayor colonia de cigüeñas urbanas de Europa. Veinte minutos para cruzar las murallas, subir a la catedral y ver la ría desde arriba, y ya puedes arrancar hacia el norte por la N2.</p></li>
+  <li><h3>Arco da Vila</h3><p>Entrada principal del siglo XIX a la Cidade Velha de Faro. Estilo neoclásico con una cigüeña encima casi siempre — Faro tiene la mayor colonia de cigüeñas urbanas de Europa. Forma parte del recorrido de veinte minutos por las murallas que abre el día antes de arrancar la N2 hacia el norte.</p></li>
+  <li><h3>Museu da Escrita do Sudoeste</h3><p>A unos 30 km de Faro, un desvío que casi nadie hace: Almodôvar, donde está el Museu da Escrita do Sudoeste, un alfabeto paleohispánico del siglo V a.C. grabado en piedra que todavía no está completamente descifrado. No son ni diez minutos, pero es de esas paradas que cambian la escala de lo que estás pisando. El Alentejo ya empieza a imponerse con encinas, alcornoques y horizontes que no tienen fin.</p></li>
+  <li><h3>Castillo de Beja</h3><p>Beja fue la Pax Julia romana, cuartel general de Julio César durante sus campañas ibéricas. El Castillo del siglo XIII domina la ciudad desde la colina y desde la torre del homenaje — la más alta de Portugal, 40 metros — se ve media provincia. La Pousada de São Francisco, un convento del siglo XIII reconvertido, tiene el claustro más bonito de la ciudad aunque no te alojes ahí. Para comer: Adega 25 de Abril en el centro, cocina alentejana de toda la vida, migas con carne de cerdo y açorda. Camping Beja en Av. Vasco da Gama, 3.5★, tel. +351 284 311 911. Llama antes en septiembre para confirmar apertura.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Templo romano de Évora · Capela dos Ossos, Évora · Castillo de Portalegre · Sé Catedral de Portalegre</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Jardín del Palacio Episcopal · Castillo de Castelo Branco · Torre (Serra da Estrela)</p>
+  <h2>Día 4</h2>
+  <p class="guia-seo-names">Sé Catedral de Viseu · Museu Nacional Grão Vasco · Puente romano de Aquae Flaviae</p>
+  <p class="guia-seo-cta"><a href="/?ruta=n2-en-moto-de-faro-a-chaves-por-la-carretera-mas-larga-de-po-8md7">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +214,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

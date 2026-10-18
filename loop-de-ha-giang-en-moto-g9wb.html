@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,28 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Loop de Ha Giang en moto</h1>
+  <p class="guia-seo-sum">El bucle clásico del norte de Vietnam: 350 km por la QL4C a través del Geoparque de Dong Van, el Paso de Ma Pi Leng y los mercados tribales H'mong y Dao. Cuatro días compactos sin repetir nada, saliendo y volviendo a Ha Giang ciudad.</p>
+  <p class="guia-seo-meta">4 días · 24 paradas · Ha Giang</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Ha Giang City</h3><p>La puerta de entrada al loop. Recoge la moto aquí — XR150 si tienes experiencia, Easy Rider si no quieres arriesgarte en las bajadas. Revisa frenos y cadena antes de arrancar, no es negociable.</p></li>
+  <li><h3>Nguyen Van Linh Street Market, Ha Giang</h3><p>El desayuno se hace aquí, en los puestos de pho y banh mi de la calle principal. Último avituallamiento decente antes de entrar en montaña — llena el depósito también.</p></li>
+  <li><h3>Cong Troi Gate, Ha Giang</h3><p>El arco de piedra que marca la entrada oficial al territorio de Ha Giang profundo. La mayoría para aquí para la foto — y tiene sentido, porque a partir de este punto la carretera empieza a trepar en serio.</p></li>
+  <li><h3>Fairy Bosom Hills, Quan Ba</h3><p>Dos montañas perfectamente redondeadas en medio de un valle que los locales llaman 'los pechos de hada'. El primer mirador del loop donde paras y ya entiendes de qué va esto. Hay un mirador elevado a la izquierda de la carretera con vistas al valle completo.</p></li>
+  <li><h3>Quan Ba Heaven Gate, Quản Bạ</h3><p>El mirador oficial antes de bajar al valle de Quan Ba. A 1.500 metros, con las Colinas Dobles abajo y la meseta kárstica extendiéndose al norte. Uno de los puntos fotográficos más reconocibles del loop.</p></li>
+  <li><h3>Thang Hen Lake, Quan Ba</h3><p>Un lago de montaña a más de 1.400 metros rodeado de karst. Muy poca gente llega hasta aquí porque hay que desviarse de la QL4C — por eso merece la pena. El silencio es absoluto.</p></li>
+  <li><h3>Yen Minh Town, Ha Giang</h3><p>El pueblo donde se duerme el primer día si sales de Ha Giang a una hora decente. Guesthouses básicos pero limpios por 5-8€. La calle principal tiene algunos restaurantes con comida local — pide el thang co si tienes el estómago preparado.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Sung La Valley, Ha Giang · Lung Cu Flag Tower, Ha Giang · Vuong Palace, Dong Van · Dong Van Old Quarter · Dong Van Karst Plateau Geopark · Dong Van Market</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Ma Pi Leng Pass, Ha Giang · Ma Pi Leng Viewpoint · Nho Que River, Ha Giang · Meo Vac Market · Meo Vac Town · Hmong Village, Meo Vac</p>
+  <h2>Día 4</h2>
+  <p class="guia-seo-names">Du Gia Village, Ha Giang · Tay ethnic village, Du Gia · Minh Long Waterfall, Ha Giang · Tham Lung Cave, Ha Giang · Ha Giang City</p>
+  <p class="guia-seo-cta"><a href="/?ruta=loop-de-ha-giang-en-moto-g9wb">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +217,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,29 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Suiza clásica: Lucerna, Alpes y Berna</h1>
+  <p class="guia-seo-sum">Esto da para 6 días a ritmo tranquilo, con base en dos zonas (Lucerna y Oberland Bernés) para no hacer maletas cada noche. En pareja, presupuesto medio (cuenta unos 200-350 €/día en Suiza), cultura y naturaleza, y con una zona clave: el Interlaken que pides en tus restricciones. Sin fechas fijas, lo</p>
+  <p class="guia-seo-meta">6 días · 19 paradas · Alpes y Mittelland</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Kapellbrücke</h3><p>El puente de madera cubierto más antiguo de Europa (1333), con paneles pintados bajo el tejado. Se recorre en 10 minutos, pero se disfruta mejor al atardecer con la torre octogonal iluminada. Gratis.</p></li>
+  <li><h3>Monumento al león de Lucerna</h3><p>Monumento tallado en la roca en 1821 en memoria de los guardias suizos muertos en las Tullerías. Es corto de visitar (20 minutos) y muy fotogénico a primera hora, sin gente. Gratis.</p></li>
+  <li><h3>Museggmauer</h3><p>Muralla medieval del siglo XIV con varias torres abiertas a subir. Desde lo alto tienes la ciudad y el lago de frente. Cuenta con 45 minutos y sube con calzado cómodo, los escalones son de madera irregular.</p></li>
+  <li><h3>Lago de Lucerna</h3><p>Un paseo en barco de línea cruzando el lago es la forma más relajada de ver las montañas. Está incluido en el Swiss Travel Pass; sin él, los tramos cortos salen a unos 20-30 CHF.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Monte Pilatus · Kriens · Museo Rosengart</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Interlaken Ost · Lago de Brienz · Iseltwald Dorfplatz</p>
+  <h2>Día 4</h2>
+  <p class="guia-seo-names">Valle de Lauterbrunnen · Cataratas Staubbach · Wengen</p>
+  <h2>Día 5</h2>
+  <p class="guia-seo-names">Grindelwald-First - Top of Adventure · Bachalpsee</p>
+  <h2>Día 6</h2>
+  <p class="guia-seo-names">Berna · Torre del Reloj Zytglogge · Restaurant Rosengarten · zum Zähringer</p>
+  <p class="guia-seo-cta"><a href="/?ruta=suiza-clasica-lucerna-alpes-y-berna-4a13">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +218,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

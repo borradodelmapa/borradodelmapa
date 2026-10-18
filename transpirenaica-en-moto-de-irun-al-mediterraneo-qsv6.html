@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,26 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Transpirenaica en moto: de Irún al Mediterráneo</h1>
+  <p class="guia-seo-sum">Cuatro días recorriendo la Transpirenaica en moto, de Irún a Ainsa con final en el Mediterráneo. Puertos de montaña, valles aislados, cañones, pueblos medievales y gastronomía navarro-aragonesa en unos 650-700 km de carretera pirenaica.</p>
+  <p class="guia-seo-meta">4 días · 20 paradas · Pirineos</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Cabo Higuer</h3><p>El punto de partida oficial de la Transpirenaica. Aquí empiezan los que hacen la ruta de mar a mar, con el Cantábrico a los pies antes de meterse hacia el interior. El pueblo amurallado de Hondarribia detrás merece 20 minutos — casco histórico medieval bien conservado, con la ciudadela del siglo XVI. Sin precio.</p></li>
+  <li><h3>Puerto Otsondo</h3><p>Primera montaña del día, a unos 40 km de Irún. Carretera estrecha y bien asfaltada que sube por el valle del Bidasoa entre hayedos. A 602 metros no es un puerto bestia, pero ya te da el tono de lo que viene. Justo al otro lado entras en el valle de Baztán.</p></li>
+  <li><h3>Elizondo</h3><p>Capital del Valle del Baztán, el valle más fotogénico de Navarra, con caseríos vascos, prados verdes imposibles y el río Bidasoa naciendo aquí. Arquitectura tradicional baztanesa, mercado y la mejor quesería local de la comarca. Para el paladar, el queso de Baztán con miel de la zona es lo que hay que llevarse.</p></li>
+  <li><h3>Roncesvalles</h3><p>El paso donde Carlomagno cruzó los Pirineos en el 778 y donde el cuerpo de la Chanson de Roland se escenifica. La Colegiata de Santa María del siglo XIII es uno de los monumentos medievales más importantes del norte peninsular. A 1.057 metros, el ambiente ya es de alta montaña aunque la carretera llegue cómoda. Visita libre, 1 hora máximo.</p></li>
+  <li><h3>Pamplona</h3><p>Duerme en Pamplona — suficiente oferta hotelera, bien centrada para arrancar el día 2. La mañana del día 2 da para dar una vuelta por la muralla medieval y la Plaza del Castillo antes de salir. Una hora y ya. No hace falta más si el objetivo es la carretera.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Puerto de Velate · Ochagavía · Roncal · Puerto de Belagua · Isaba</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Valle de Ansó · Hecho · Somport · Canfranc · Sallent de Gállego · Biescas</p>
+  <h2>Día 4</h2>
+  <p class="guia-seo-names">Parque Nacional de Ordesa y Monte Perdido · Desfiladero de Añisclo · Aínsa · Sierra del Montsec</p>
+  <p class="guia-seo-cta"><a href="/?ruta=transpirenaica-en-moto-de-irun-al-mediterraneo-qsv6">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +215,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

@@ -108,6 +108,35 @@ function describe(g, r) {
   return d.length > 200 ? d.slice(0, 197).replace(/\s+\S*$/, '') + '…' : d;
 }
 
+// Texto de la guía escrito DENTRO de la página (17-18 oct 2026, caso SEO: Search Console las dejaba en «Rastreada:
+// actualmente sin indexar» porque el HTML solo traía ~11 palabras y la guía se pintaba con JS). Respeta CLAUDE.md §10
+// («mirar sí»): el día 1 completo (nombre + descripción de cada parada) y, del resto de días, solo los nombres de las
+// paradas. Son datos que ya son públicos en public_guides. La persona con JS pasa a la app igual que antes.
+function staticBody(g, r) {
+  const stops = (r.stops || []).filter(s => s && s.name);
+  if (!stops.length) return '';
+  const dayOf = s => Number(s.day) || 1;
+  const days = [...new Set(stops.map(dayOf))].sort((a, b) => a - b);
+  const first = days[0];
+  const title = g.nombre || r.title || 'Guía de viaje';
+  const summary = (g.summary || r.summary || '').trim();
+  const text = s => String(s.narrative || s.description || '').trim();
+  let h = `<section class="guia-seo" id="guia-seo">\n<h1>${esc(title)}</h1>\n`;
+  if (summary) h += `<p class="guia-seo-sum">${esc(summary)}</p>\n`;
+  h += `<p class="guia-seo-meta">${days.length} día${days.length > 1 ? 's' : ''} · ${stops.length} paradas${g.destino ? ' · ' + esc(g.destino) : ''}</p>\n`;
+  for (const d of days) {
+    const ds = stops.filter(s => dayOf(s) === d);
+    h += `<h2>Día ${d}</h2>\n`;
+    if (d === first) {
+      h += '<ol>\n' + ds.map(s => `<li><h3>${esc(s.name)}</h3>${text(s) ? `<p>${esc(text(s))}</p>` : ''}</li>`).join('\n') + '\n</ol>\n';
+    } else {
+      h += '<p class="guia-seo-names">' + ds.map(s => esc(s.name)).join(' · ') + '</p>\n';
+    }
+  }
+  h += `<p class="guia-seo-cta"><a href="/?ruta=${encodeURIComponent(g.slug)}">Abrir la ruta completa en Borrado del Mapa</a></p>\n</section>`;
+  return h;
+}
+
 function buildPage(tpl, g) {
   const r = routeOf(g);
   const title = `${g.nombre || r.title || 'Guía de viaje'} · Borradodelmapa`;
@@ -130,6 +159,12 @@ function buildPage(tpl, g) {
     `<link rel="canonical" href="${esc(url)}">\n` +
     `<meta name="robots" content="${isGood(g) ? GUIAS_ROBOTS_INDEX : GUIAS_ROBOTS}">\n` +
     `<!-- Generado por scripts/build-guias.js — no editar a mano -->`);
+  const body = staticBody(g, r);
+  if (body) {
+    rep('<div class="public-loading" id="public-loading">Cargando guía...</div>\n  </div>',
+      '<div class="public-loading" id="public-loading">Cargando guía...</div>\n  </div>\n  ' + body.replace(/\n/g, '\n  '));
+    rep('</head>', '<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>\n</head>');
+  }
   return h;
 }
 

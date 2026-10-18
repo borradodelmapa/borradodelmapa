@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,23 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Pokhara 3 días</h1>
+  <p class="guia-seo-sum">Pokhara en tres días da para el lago Phewa, la salida del sol desde Sarangkot, las cataratas de Davis y una tarde perdida entre barcas y montañas con el Annapurna de fondo.</p>
+  <p class="guia-seo-meta">3 días · 10 paradas · Nepal</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Sarangkot</h3><p>El mirador más accesible para ver el amanecer sobre el Annapurna y el Machhapuchhre. Madrugar duele, pero la luz naranja partiendo el Himalaya lo justifica.</p></li>
+  <li><h3>Phewa</h3><p>El lago más grande de Pokhara, con vistas directas al Machhapuchhre reflejado en el agua. Alquila una barca de remos y cruza al templo de Tal Barahi en la isla.</p></li>
+  <li><h3>Tal Barahi Mandir</h3><p>Templo hindú en una pequeña isla en medio del lago Phewa, solo accesible en barca. Tranquilo por las mañanas, con ambiente de mercado improvisado los festivos.</p></li>
+  <li><h3>Lakeside Pokhara</h3><p>La franja de restaurantes, cafeterías y tiendas de montaña a orillas del Phewa. Sin glamour, pero con buena comida, cerveza Everest a precio razonable y conversaciones de viajero.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Devi's Fall Pokhara · Gupteshwor Mahadev Cave · International Mountain Museum</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Lago Begnas · World Peace Pagoda, Pokhara · Old Pokhara Bazaar</p>
+  <p class="guia-seo-cta"><a href="/?ruta=pokhara-nepal-ruta">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +212,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

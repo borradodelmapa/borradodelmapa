@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,24 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>1 día en Hanói</h1>
+  <p class="guia-seo-sum">Un día completo en Hanói desde el Old Quarter: mercados, templos, historia colonial y de guerra, Ba Dinh y el mausoleo, y vuelta al lago para la noche. Todo a pie y en Grab, menos de 10€ en transporte y entradas.</p>
+  <p class="guia-seo-meta">1 día · 9 paradas · Hanói</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Dong Xuan Market</h3><p>El mercado cubierto más grande del Old Quarter, con tres plantas de vida real: especias, ropa, pescado seco y el caos organizado de una ciudad que lleva siglos funcionando así. A las 7 de la mañana es cuando más mola.</p></li>
+  <li><h3>Templo Ngoc Son</h3><p>En la isla del lago Hoan Kiem, conectado por el puente rojo del siglo XIX. Dentro, la tortuga gigante disecada de más de 200 kg cuya especie se extinguió en este mismo lago en 2016. Una de esas cosas que no se olvidan.</p></li>
+  <li><h3>Hanoi Old Quarter</h3><p>36 calles de los gremios históricos donde muchas siguen vendiendo exactamente lo mismo que hace 500 años. Una hora sin mapa, perdiéndose entre motos, olores y callejones que no aparecen en ninguna guía.</p></li>
+  <li><h3>Bun Cha Ta Hanoi</h3><p>Bun cha sin trampa: cerdo a la brasa, fideos de arroz y hierbas frescas por 1,50€. El plato que come Hanói al mediodía, sin montar un espectáculo para turistas.</p></li>
+  <li><h3>Mausoleo de Ho Chi Minh</h3><p>El cuerpo embalsamado de Bác Hồ lleva aquí desde 1975, aunque él pidió ser incinerado. El partido ignoró su voluntad. Hombros y rodillas cubiertos obligatorio, bolsos se dejan fuera. Abre de 7:30 a 10:30 — confirma horario de tarde antes de ir.</p></li>
+  <li><h3>Pagoda del Pilar Único</h3><p>Construida en 1049 sobre un único pilar de piedra en un estanque de loto, simula un loto emergiendo del agua. Pequeña, gratis, y uno de los iconos arquitectónicos más reconocibles de todo Vietnam.</p></li>
+  <li><h3>Ciudad imperial de Thang Long</h3><p>La ciudadela que gobernó Vietnam durante más de 800 años, desde el siglo XI. Los túneles subterráneos que usó el Ejército Popular durante los bombardeos americanos son lo más impactante. Patrimonio UNESCO desde 2010.</p></li>
+  <li><h3>Turtle Tower</h3><p>La Torre de la Tortuga en el centro del lago Hoan Kiem se ilumina al caer la noche. El paseo alrededor es el más tranquilo de Hanói, y los viernes y sábados las calles se cierran al tráfico y el barrio respira.</p></li>
+  <li><h3>Hương Việt</h3><p>4.8 estrellas en el Old Quarter y sin la trampa turística de los restaurantes del lago. Pho bo, banh cuon o lo que tengan de especial. Menos de 5€ por persona y sales con el estómago agradecido.</p></li>
+  </ol>
+  <p class="guia-seo-cta"><a href="/?ruta=1-dia-en-hanoi-59zg">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +213,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

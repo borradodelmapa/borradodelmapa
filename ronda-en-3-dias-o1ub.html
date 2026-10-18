@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,22 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Ronda en 3 días</h1>
+  <p class="guia-seo-meta">3 días · 14 paradas · Ronda</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Puente Nuevo de Ronda</h3><p>El más joven de los tres puentes pero el que define la ciudad. Lo construyeron entre 1759 y 1793 sobre un tajo de 120 metros de profundidad; la cámara interior, donde durante la Guerra Civil usaron la celda como prisión, hoy es un pequeño museo. Entra: 2€, vale la pena para asomarte al abismo desde dentro. Media hora.</p></li>
+  <li><h3>Tajo de Ronda</h3><p>Baja al mirador del Puente Nuevo y luego sigue el sendero que bordea el tajo hacia el sur. Hay un camino de tierra señalizado que te lleva hasta el fondo del río Guadalevín en unos 40 minutos. Desde abajo la escala del puente es otra cosa completamente distinta.</p></li>
+  <li><h3>Ciudad Árabe de Ronda</h3><p>El barrio de La Ciudad, al sur del Puente Nuevo, es la parte más antigua. Aquí están los baños árabes del siglo XIII —de los mejor conservados de España, entrada 4€— y la Casa del Gigante, palacete nazarí del XIV. El trazado de calles sigue siendo el medieval: callejones, arcos, casas encaladas sin turistas en verano.</p></li>
+  <li><h3>Restaurante Almocabar</h3><p>En la puerta árabe del mismo nombre, dentro de La Ciudad. Cocina rondeña sin pretensiones: rabo de toro estofado, sopa de ajo castellana, berenjenas con miel. Menú del día 12-14€. Si vas en moto, aparca en la Plaza Duquesa de Parcent y bajas andando.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Plaza de Toros de la Real Maestranza de Caballería de Ronda · Alameda del Tajo · Museo Lara · Barrio del Mercadillo · Taberna El Lechuguita</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Casa Mondragón · Iglesia de Santa María la Mayor · Mirador de Aldehuela · Viviendas íberas de Acinipo · Tragatá | Benito Gómez | Restaurante en Ronda</p>
+  <p class="guia-seo-cta"><a href="/?ruta=ronda-en-3-dias-o1ub">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +211,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

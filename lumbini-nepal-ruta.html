@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,23 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Lumbini en 1 día</h1>
+  <p class="guia-seo-sum">Lumbini es el lugar de nacimiento del Buda histórico, declarado Patrimonio de la Humanidad — un sitio de peregrinación con siglos encima que en un día da para verlo bien del tirón.</p>
+  <p class="guia-seo-meta">1 día · 8 paradas · Nepal</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Templo Maya Devi</h3><p>El corazón de Lumbini: aquí está la piedra marcadora que señala el lugar exacto del nacimiento de Buda. Las excavaciones visibles bajo el templo son reales y tienen más de 2.000 años.</p></li>
+  <li><h3>अशोक स्तम्भ Ashoka Pillar</h3><p>A metros del templo, el pilar que el emperador Ashoka mandó erigir en el 249 a.C. tras su visita de peregrinación. La inscripción en pali es legible todavía — no muchos sitios en el mundo tienen eso.</p></li>
+  <li><h3>Lumbini Buddhist Temple</h3><p>El estanque Puskarini donde, según la tradición, Maya Devi se bañó antes de dar a luz. El jardín que lo rodea es tranquilo y perfecto para caminar sin prisa entre ruinas de stupa antiguas.</p></li>
+  <li><h3>World Peace Pagoda , Lumbini</h3><p>La stupa blanca construida por monjes japoneses, visible desde casi todo Lumbini. Vale el paseo hasta allí por las vistas del conjunto sagrado desde arriba y para hacerse una idea del tamaño del recinto.</p></li>
+  <li><h3>Korea Temple</h3><p>Uno de los más elaborados de la Zona Internacional Este. La arquitectura coreana contrasta fuerte con el resto — merece la pena entrar al patio interior.</p></li>
+  <li><h3>Zhong Hua Buddhist Monastery [Chinese Temple]</h3><p>El templo chino es uno de los más grandes de toda la zona internacional y tiene una sala de meditación abierta a visitantes. Dentro hay silencio de verdad, que en Lumbini se agradece.</p></li>
+  <li><h3>Myanmar Golden Temple</h3><p>Estilo pagoda birmana clásico con el tejado dorado que brilla al sol de la tarde. Si llegas aquí sobre las 4pm tienes la luz perfecta y los peregrinos birmanos haciendo ofrenda.</p></li>
+  <li><h3>Lumbini Museum</h3><p>Colección arqueológica con piezas encontradas en las excavaciones del jardín sagrado. Si te interesa el contexto histórico, una hora aquí antes de entrar al jardín tiene más sentido que ir al revés.</p></li>
+  </ol>
+  <p class="guia-seo-cta"><a href="/?ruta=lumbini-nepal-ruta">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +212,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

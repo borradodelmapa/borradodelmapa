@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,22 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Patan Lalitpur en 1 día</h1>
+  <p class="guia-seo-sum">Patan (Lalitpur) es la ciudad nepalí más antigua del Valle de Katmandú y tiene la concentración de templos por metro cuadrado más densa de toda Asia.</p>
+  <p class="guia-seo-meta">1 día · 7 paradas · Nepal</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Patan Darbar Square</h3><p>El corazón medieval de Patan, declarado Patrimonio de la Humanidad. El Palacio Real Newari, el Templo de Krishna Mandir y el Templo Vishwanath están todos aquí en menos de 200 metros. Llega antes de las 9h para evitar aglomeraciones.</p></li>
+  <li><h3>Patan Museum</h3><p>Uno de los mejores museos de arte del sur de Asia, dentro del propio Palacio Real. La colección de bronces y estatuas hindúes y budistas nepalíes del siglo VII al XVIII es excepcional. Entrada alrededor de 500 NPR.</p></li>
+  <li><h3>Kumbheshwor Temple(Patan)</h3><p>El único templo de cinco pisos que se conserva en Patan, dedicado a Shiva. Los patios interiores están llenos de estatuas antiguas y es uno de los pocos templos que los no hindúes pueden recorrer libremente por fuera.</p></li>
+  <li><h3>Golden Temple Patan</h3><p>El Hiranya Varna Mahavihar es un monasterio budista del siglo XII completamente revestido de metal dorado. Solo se puede entrar descalzo y sin cuero. La entrada cuesta unos 100 NPR y merece cada rupia.</p></li>
+  <li><h3>Mahabuddha Temple</h3><p>El templo de los mil Budas: cubierto de terracota con la imagen de Buda repetida en cada centímetro de su superficie. Está metido en un patio estrecho del barrio artesano y hay que buscarlo a propósito, que es parte del encanto.</p></li>
+  <li><h3>Rudra Varna Mahavihar , Oku Bahal</h3><p>El monasterio budista más activo del casco histórico, donde los rituales de la comunidad Newari siguen intactos. Sin entrada, sin turistas, sin señales. Solo hay que empujar la puerta del patio.</p></li>
+  <li><h3>Mangal Bazar</h3><p>El mercado central que rodea Durbar Square, el mejor sitio para ver a los artesanos Newari trabajar el metal en vivo. Los talleres de estatuas de bronce son famosos en todo el valle; los precios aquí son más honestos que en Katmandú.</p></li>
+  </ol>
+  <p class="guia-seo-cta"><a href="/?ruta=patan-nepal-ruta">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +211,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

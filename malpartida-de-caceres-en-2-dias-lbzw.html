@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,19 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Malpartida de Cáceres en 2 días</h1>
+  <p class="guia-seo-sum">Ojo, Paco — Malpartida no da para 7 días. Hay dos Malpartidas conocidas en España: Malpartida de Cáceres (junto al Parque Natural de los Barruecos) y Malpartida de Plasencia. Ninguna de las dos aguanta una semana sin repetir o inventar. Te voy a hacer un plan honesto: 2 días intensos centrados en lo</p>
+  <p class="guia-seo-meta">2 días · 6 paradas · Malpartida de Cáceres</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Monumento Natural Los Barruecos</h3><p>Un paisaje de berrocales graníticos prehistóricos que lleva aquí 300 millones de años. Las rocas no las puso nadie: las modeló la erosión, y el resultado es un laberinto de bolas de granito sobre lagunas donde anida la mayor colonia de cigüeñas blancas de Extremadura. El paseo circular completo son unos 4 km sin desnivel significativo, con miradores naturales sobre las lagunas. Libre y gratuito. Lleva agua.</p></li>
+  <li><h3>Museo Vostell Malpartida</h3><p>Está dentro de los propios Barruecos, en un antiguo lavadero de lanas del siglo XVIII. Wolf Vostell, artista alemán del movimiento Fluxus, eligió este sitio en los años 70 para instalar su colección permanente porque las rocas le parecían tan surrealistas como su propio arte. No se equivocó: un Citroën DS empotrado en hormigón, televisores enterrados en tierra, instalaciones que mezclan violencia, consumo y naturaleza. La sala dedicada al Happening es de las más interesantes. Entrada: 3€. Cierra lunes.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Conjunto Monumental de la Ciudad de Cáceres · Palacio de los Golfines de Abajo (Fundación Tatiana) · Plaza Mayor · Madruelo Gastrobar</p>
+  <p class="guia-seo-cta"><a href="/?ruta=malpartida-de-caceres-en-2-dias-lbzw">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +208,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,22 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Peso da Régua · Medio día en el corazón del Douro</h1>
+  <p class="guia-seo-sum">Peso da Régua es la capital del vino de Oporto y el epicentro del Valle del Duero declarado Patrimonio UNESCO. Este recorrido a pie recorre el alma del pueblo: la estación con sus azulejos históricos, el río, el museo, una bodega real y las terrazas de viñas que lo rodean todo.</p>
+  <p class="guia-seo-meta">1 día · 7 paradas · Alto Douro</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Regua</h3><p>La estación de tren de Régua es uno de los grandes secretos a la vista del Duero: sus andenes están forrados de azulejos del siglo XX que narran escena a escena la vida del río, la vendimia y los rabelos cargados de barricas. Lleva diez minutos recorrer los paneles y ya entiendes todo lo que vas a ver hoy.</p></li>
+  <li><h3>Cais da Régua</h3><p>El muelle es donde el pueblo respira. Desde aquí salían los barcos rabelos cargados de barricas hacia Vila Nova de Gaia — una travesía de días por un río que en invierno podía matar. Hoy el agua está quieta y las terrazas de viñas suben por las laderas de enfrente como escalones verdes hasta el horizonte. Es el mejor sitio para entender la geografía del Duero de un vistazo.</p></li>
+  <li><h3>Museo del Duero</h3><p>El Museu do Douro es el mejor sitio para entender por qué este valle vale lo que vale: la historia del vino de Oporto, la vida de los trabajadores de las quintas, los instrumentos de la vendimia y las relaciones comerciales con los ingleses que durante siglos controlaron el negocio. No es un museo de souvenirs — tiene peso real. Al final hay cata si quieres rematar con una copa.</p></li>
+  <li><h3>Taberna do Zé</h3><p>Cocina transmontana sin adornos: bacalhau à brás, rojões, arroz de pato. La Taberna do Zé es el sitio donde come la gente del pueblo, no los que llegan en crucero por el río. Cuatro mesas, vino de la casa a precio de agua y la sensación de que nada de esto ha cambiado en décadas.</p></li>
+  <li><h3>Vasques de Carvalho, Port Wine</h3><p>Una de las bodegas más antiguas de Régua con visita y cata directamente en el centro del pueblo — sin coger coche ni reservar tour. Entras, preguntas, te explican la diferencia entre un ruby, un tawny y un vintage, y acabas con una copa en la mano delante de las barricas. Precio de cata muy razonable y sin protocolo.</p></li>
+  <li><h3>Vieira de Sousa Porto and Douro Wine - Tasting Room and Visits</h3><p>Si después de Vasques de Carvalho todavía quieres más — y con 4.9 estrellas hay razones para ello — Vieira de Sousa está a unos minutos subiendo por el pueblo y tiene una sala de catas con vistas sobre los viñedos que cierra el día de forma muy digna. El mejor valorado de la zona sin discusión.</p></li>
+  <li><h3>Miradouro da Presegueda</h3><p>El cierre perfecto del día: un mirador sobre el Duero con las terrazas de viñas cayendo en cascada hacia el río y la luz de la tarde tiñéndolo todo de dorado. El Valle del Duero en septiembre tiene una luz particular que los fotógrafos persiguen — aquí es donde la encuentras.</p></li>
+  </ol>
+  <p class="guia-seo-cta"><a href="/?ruta=peso-da-regua-medio-dia-en-el-corazon-del-douro-gqj8">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +211,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';

@@ -111,6 +111,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 </script>
+<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>
 </head>
 <body>
 <div class="public-page">
@@ -120,6 +121,26 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>
   </div>
+  <section class="guia-seo" id="guia-seo">
+  <h1>Sevilla en 3 días</h1>
+  <p class="guia-seo-sum">Tres días para descubrir Sevilla a fondo: desde el corazón monumental del Alcázar y la Catedral hasta los barrios auténticos de Triana y el Alfalfa, pasando por la Sevilla menos fotografiada de Las Setas y el Museo de Bellas Artes. Con consejos de horario, precios reales y dónde comer como un local.</p>
+  <p class="guia-seo-meta">3 días · 19 paradas · Andalucía</p>
+  <h2>Día 1</h2>
+  <ol>
+  <li><h3>Real Alcázar de Sevilla</h3><p>Palacio en uso desde el siglo X, con capas árabes, mudéjares y renacentistas superpuestas. Los jardines solos valen la entrada (14,50€). Llega en el primer turno de la mañana (9:30h) o te comes una cola de media hora. 1,5-2h dentro mínimo.</p></li>
+  <li><h3>Catedral y Giralda</h3><p>La tercera catedral más grande del mundo en superficie, construida encima de la mezquita almohade del siglo XII — la Giralda era su minarete. La tumba de Colón está aquí, aunque Sevilla y Santo Domingo todavía se pelean por si los restos son reales. Entrada 11€, sube a la Giralda por rampas, no escaleras.</p></li>
+  <li><h3>Santa Cruz</h3><p>El antiguo judería medieval de Sevilla, con callejuelas tan estrechas que en verano dan sombra sola. No es trampa turística si lo recorres a las 9 de la mañana antes de que lleguen los grupos. El Callejón del Agua y la Plaza de Doña Elvira son los dos rincones menos masificados.</p></li>
+  <li><h3>Callejón del Agua</h3><p>Uno de los dos rincones menos masificados del Barrio de Santa Cruz. Un pasaje estrecho y sombreado que bordea los muros del Alcázar, con macetas, silencio y una escala completamente humana. Mejor visitarlo temprano por la mañana antes de que lleguen los grupos.</p></li>
+  <li><h3>Plaza de Doña Elvira</h3><p>El otro rincón menos masificado del Barrio de Santa Cruz, junto al Callejón del Agua. Una plazuela íntima con naranjos y bancos de azulejo que conserva el ambiente auténtico de la antigua judería cuando se visita a primera hora de la mañana.</p></li>
+  <li><h3>El Rinconcillo</h3><p>El bar más antiguo de Sevilla, abierto desde 1670. Apuntan la cuenta con tiza en la madera de la barra. Espinacas con garbanzos y croquetas de jamón, 15-20€ por cabeza. Imprescindible para comer en el Día 1.</p></li>
+  <li><h3>Plaza del Salvador</h3><p>Tarde-noche en la Plaza del Salvador con una cerveza. Es donde va la gente de Sevilla, no los turistas. Capacidad de la plaza: varios cientos de personas de pie con copa en mano un jueves cualquiera.</p></li>
+  </ol>
+  <h2>Día 2</h2>
+  <p class="guia-seo-names">Metropol Parasol (Las Setas) · Museo de Bellas Artes de Sevilla · Triana · Mercado de Triana · Calle Betis · Bar Bistec · Entorno del Alfalfa</p>
+  <h2>Día 3</h2>
+  <p class="guia-seo-names">Plaza de España · Parque de María Luisa · Torre del Oro · Puente de Triana · Basílica Menor de Santa María de la Esperanza Macarena</p>
+  <p class="guia-seo-cta"><a href="/?ruta=sevilla-en-3-dias-z359">Abrir la ruta completa en Borrado del Mapa</a></p>
+  </section>
 </div>
 
 <script>
@@ -194,6 +215,7 @@ function escapeHTML(str) {
     // Renderizar
     const content = document.getElementById('public-content');
     document.getElementById('public-loading').remove();
+    document.getElementById('guia-seo')?.remove();   // texto estático para buscadores (build-guias.js): el diario pinta el suyo
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
       const authorName = data.owner_name || 'Viajero';
