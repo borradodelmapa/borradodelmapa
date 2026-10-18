@@ -140,3 +140,14 @@
 .tm-mapbar .tm-fmap-up { margin:0; }
 .tm-mapw .tm-fmap { border:0; }
 .tm-legend label { display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+/* Reproducir mi viaje */
+.tm-mapbar .tm-play { margin:0; }
+.tm-play-card { position:absolute; left:10px; right:10px; bottom:10px; z-index:1000; display:flex; gap:10px; align-items:center; background:rgba(13,15,16,.9); border:1px solid var(--border); padding:8px; color:#ECEBE8; pointer-events:none; }
+.tm-play-card.in { animation:tmPlayIn .45s ease-out; }
+@keyframes tmPlayIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+.tm-play-th { display:flex; gap:4px; }
+.tm-play-th img { width:58px; height:58px; object-fit:cover; display:block; }
+.tm-play-tx { display:flex; flex-direction:column; gap:2px; min-width:0; flex:1; }
+.tm-play-tx b { font:800 20px/1.1 var(--font-cond); letter-spacing:.02em; text-transform:uppercase; }
+.tm-play-tx span { font-size:12px; color:#C4C7C9; }
+.tm-play-tx i { font:700 11px/1 var(--font-body); color:var(--accent); font-style:normal; letter-spacing:.1em; }

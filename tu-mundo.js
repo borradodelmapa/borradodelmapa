@@ -303,6 +303,14 @@ const tuMundo = (() => {
       }
     }
   }
+  // Paradas para "Reproducir mi viaje": fotos seguidas en el tiempo y cerca unas de otras = una parada
+  function _stopsOf(pts) {
+    for (let R = 25; R <= 1600; R *= 2) {
+      const stops = [];
+      pts.forEach(p => { const c = stops[stops.length - 1]; if (c && hav(c.first, p) < R) c.photos.push(p); else stops.push({ first: p, photos: [p] }); });
+      if (stops.length <= 40 || R >= 1600) return stops.map(c => ({ lat: c.photos.reduce((a, p) => a + p.lat, 0) / c.photos.length, lng: c.photos.reduce((a, p) => a + p.lng, 0) / c.photos.length, photos: c.photos, t: c.photos[0].t }));
+    }
+  }
   function _drawMap(S, D) {
     const box = _q('#tm-fmap'); if (!box) return;
     if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
@@ -354,6 +362,43 @@ const tuMundo = (() => {
     map.on('zoomend', paint);
     if (pts.length) map.fitBounds(line.getBounds(), { padding: [40, 40], maxZoom: 14 }); else map.setView([25, 10], 2);
     paint();
+    // ▶ Reproducir mi viaje: la cámara recorre las paradas por fecha, la ruta se va dibujando y salen las fotos de cada una.
+    // 💶 0 €: solo mueve el mapa con las fotos ya cargadas.
+    const playBtn = _q('#tm-play'), stops = pts.length > 1 ? _stopsOf(pts) : [];
+    if (playBtn) {
+      playBtn.hidden = stops.length < 2;
+      let run = 0, trail = null, dot = null, card = null;
+      const sleep = (ms, id) => new Promise(r => setTimeout(r, ms)).then(() => id === run);
+      const fin = () => {
+        run++; [trail, dot, card].forEach(x => { if (x) { if (x.remove) x.remove(); } }); trail = dot = card = null;
+        if (_q('#tm-fm-f') && _q('#tm-fm-f').checked) photos.addTo(map);
+        playBtn.textContent = '▶ Reproducir mi viaje';
+      };
+      playBtn.onclick = async () => {
+        if (trail || card) { fin(); return; }
+        const id = ++run; playBtn.textContent = '■ Parar';
+        map.removeLayer(photos); map.closePopup();
+        trail = L.polyline([], { color: '#F4630B', weight: 3, opacity: .9 }).addTo(map);
+        dot = L.circleMarker([stops[0].lat, stops[0].lng], { radius: 8, color: '#fff', weight: 3, fillColor: '#F4630B', fillOpacity: 1 }).addTo(map);
+        card = document.createElement('div'); card.className = 'tm-play-card'; box.appendChild(card);
+        map.setView([stops[0].lat, stops[0].lng], 4, { animate: false });
+        for (let i = 0; i < stops.length; i++) {
+          const st = stops[i]; if (id !== run) return;
+          trail.addLatLng([st.lat, st.lng]); dot.setLatLng([st.lat, st.lng]);
+          map.flyTo([st.lat, st.lng], st.photos.length > 1 ? 10 : 12, { duration: i ? 1.8 : .8 });
+          if (!(await sleep(i ? 1900 : 900, id))) return;
+          const f = countryAt(st.lat, st.lng), d = st.t ? new Date(st.t) : null;
+          card.innerHTML = `<div class="tm-play-th">${st.photos.slice(0, 4).map(p => `<img src="${esc(p.url)}" alt="">`).join('')}</div><div class="tm-play-tx"><b>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : ''}</b><span>${d ? d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} · ${st.photos.length} ${st.photos.length === 1 ? 'foto' : 'fotos'}</span><i>${i + 1} / ${stops.length}</i></div>`;
+          card.classList.remove('in'); void card.offsetWidth; card.classList.add('in');
+          if (!(await sleep(2600, id))) return;
+        }
+        if (id !== run) return;
+        map.flyToBounds(trail.getBounds(), { padding: [50, 50], duration: 1.6 });
+        card.innerHTML = `<div class="tm-play-tx"><b>Tu viaje completo</b><span>${stops.length} paradas · ${pts.length} fotos</span></div>`;
+        if (!(await sleep(3500, id))) return;
+        fin();
+      };
+    }
     const on = (id, fn) => { const c = _q(id); if (c) c.onchange = () => fn(c.checked); };
     on('#tm-fm-c', v => v ? countries.addTo(map) : map.removeLayer(countries));
     on('#tm-fm-f', v => v ? photos.addTo(map) : map.removeLayer(photos));
@@ -541,6 +586,7 @@ const tuMundo = (() => {
           <section class="tm-mapw">
             <div class="tm-mapbar">
               <p class="tm-note" id="tm-fmap-note"></p>
+              <button type="button" class="tm-btn tm-play" id="tm-play" hidden>▶ Reproducir mi viaje</button>
               <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Subir fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
               <p class="tm-note" id="tm-fmap-msg"></p>
             </div>
