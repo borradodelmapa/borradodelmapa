@@ -290,6 +290,36 @@ const tuMundo = (() => {
       try { const S = await _getStats(true); _paint(S); _drawMap(S, _cache.D); } catch (_) {}
     });
   }
+  // Visor de fotos a pantalla completa (carrusel con flechas, deslizar y botón atrás), mismo diseño que el de las guías
+  let _lb = null;
+  function _lbClose(fromHistory) {
+    if (!_lb) return; document.removeEventListener('keydown', _lb._key); _lb.remove(); _lb = null;
+    if (!fromHistory && window.popModal) window.popModal('tm-visor');
+  }
+  function _lbOpen(list, i) {
+    if (!list || !list[i]) return; _lbClose(true);
+    const v = _lb = document.createElement('div'); v.className = 'fv-viewer'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-label', 'Foto'); v._i = i;
+    document.body.appendChild(v);
+    const go = d => { const n = v._i + d; if (n >= 0 && n < list.length) { v._i = n; paint(); } };
+    const paint = () => {
+      const p = list[v._i], when = p.t ? new Date(p.t).toLocaleString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '', f = countryAt(p.lat, p.lng);
+      v.innerHTML = `<button type="button" class="fv-v-close" aria-label="Cerrar">✕</button>
+        <img class="fv-v-img" src="${esc(p.url)}" alt="">
+        <div class="fv-v-bar">
+          <button type="button" class="fv-v-nav" data-d="-1" ${v._i === 0 ? 'disabled' : ''} aria-label="Anterior">‹</button>
+          <div class="fv-v-info"><b>${esc(when)}</b><span>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : ''}${p.approx ? ' · ubicación aproximada' : ''}</span><em>${v._i + 1} / ${list.length}</em></div>
+          <button type="button" class="fv-v-nav" data-d="1" ${v._i === list.length - 1 ? 'disabled' : ''} aria-label="Siguiente">›</button>
+        </div>`;
+      v.querySelector('.fv-v-close').onclick = () => _lbClose();
+      v.querySelectorAll('.fv-v-nav').forEach(b => b.onclick = () => go(+b.dataset.d));
+    };
+    let x0 = null; v.ontouchstart = e => { x0 = e.touches[0].clientX; };
+    v.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) >= 50) go(dx < 0 ? 1 : -1); };
+    v._key = e => { if (e.key === 'Escape') _lbClose(); else if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1); };
+    document.addEventListener('keydown', v._key);
+    paint();
+    if (window.pushModal) window.pushModal('tm-visor', () => _lbClose(true));
+  }
   // Países pintados sobre el mismo mapa (los de FEATS; solo la parte del país cerca de donde estuviste, como en la tarjeta)
   function _paintCountries(group, S) {
     for (const f of FEATS) {
@@ -317,7 +347,7 @@ const tuMundo = (() => {
     const { pts, sinSitio } = _photoPoints(D);
     _wireUpload();
     _q('#tm-fmap-note').textContent = pts.length
-      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${sinSitio ? ` · ${sinSitio} sin ubicación ni fecha` : ''}. Toca un círculo para acercarte.`
+      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${sinSitio ? ` · ${sinSitio} sin ubicación` : ''}. Toca un círculo para acercarte.`
       : 'Aún no tienes fotos con ubicación ni fecha. Sube fotos de tu móvil y se pintan aquí.';
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
@@ -326,10 +356,10 @@ const tuMundo = (() => {
     const line = L.polyline(pts.map(p => [p.lat, p.lng]), { color: '#F4630B', weight: 2, opacity: .75, dashArray: '2 6' });
     const layer = L.layerGroup();
     const photos = L.layerGroup([line, layer]).addTo(map);
-    const onePin = (p, lat, lng) => {
+    const onePin = (p, lat, lng, grp, idx) => {
       const html = `<span class="tm-pin tm-pin-one${p.approx ? ' tm-pin-approx' : ''}" style="background-image:url('${esc(p.url)}')"></span>`;
       const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
-      m.on('click', () => L.popup({ maxWidth: 260, className: 'tm-pop' }).setLatLng([lat, lng]).setContent(`<div class="tm-pop-g"><a href="${esc(p.url)}" target="_blank" rel="noopener"><img src="${esc(p.url)}" alt=""></a></div>${p.approx ? '<div class="tm-pop-n">Ubicación aproximada (por la fecha)</div>' : ''}`).openOn(map));
+      m.on('click', () => _lbOpen(grp || [p], idx || 0));
     };
     const paint = () => {
       layer.clearLayers();
@@ -342,7 +372,7 @@ const tuMundo = (() => {
           g.forEach((p, i) => {
             const a = -Math.PI / 2 + (2 * Math.PI * i) / g.length, ll = map.unproject(L.point(c.x + r * Math.cos(a), c.y + r * Math.sin(a)), z);
             L.polyline([[lat, lng], ll], { color: '#F4630B', weight: 1, opacity: .6, interactive: false }).addTo(layer);
-            onePin(p, ll.lat, ll.lng);
+            onePin(p, ll.lat, ll.lng, g, i);
           });
           return;
         }
@@ -352,10 +382,8 @@ const tuMundo = (() => {
           : `<span class="tm-pin" style="background-image:url('${esc(first.url)}')"><b>${g.length}</b></span>`;
         const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
         m.on('click', () => {
-          if (g.length === 1 || map.getZoom() >= 17) {
-            const imgs = g.slice(0, 12).map(p => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><img src="${esc(p.url)}" alt="" loading="lazy"></a>`).join('');
-            L.popup({ maxWidth: 260, className: 'tm-pop' }).setLatLng([lat, lng]).setContent(`<div class="tm-pop-g">${imgs}</div>${g.some(p => p.approx) ? '<div class="tm-pop-n">Ubicación aproximada (por la fecha)</div>' : ''}`).openOn(map);
-          } else map.fitBounds(L.latLngBounds(g.map(p => [p.lat, p.lng])), { padding: [60, 60], maxZoom: 18 });
+          if (g.length === 1 || map.getZoom() >= 17) _lbOpen(g, 0);
+          else map.fitBounds(L.latLngBounds(g.map(p => [p.lat, p.lng])), { padding: [60, 60], maxZoom: 18 });
         });
       });
     };
