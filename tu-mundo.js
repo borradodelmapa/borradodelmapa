@@ -401,7 +401,13 @@ const tuMundo = (() => {
   function _openReel(S, pts) {
     if (typeof reelViaje === 'undefined') return;
     const fm = { day: 'numeric', month: 'long', year: 'numeric' };
-    const stops = _stopsOf(pts, 14).map(s => {
+    let base = _stopsOf(pts, 14);
+    // un solo sitio (p. ej. un mes entero en una ciudad): se reparte en varias "paradas" en el mismo punto, de 3 fotos cada una
+    if (base.length === 1 && base[0].photos.length > 1) {
+      const ph = base[0].photos, n = Math.min(ph.length, 15), pick = Array.from({ length: n }, (_, i) => ph[Math.floor(i * ph.length / n)]);
+      base = []; for (let i = 0; i < pick.length; i += 3) { const c = pick.slice(i, i + 3); base.push({ lat: ph[0].lat, lng: ph[0].lng, t: c[0].t, photos: c, same: true }); }
+    }
+    const stops = base.map(s => {
       const f = countryAt(s.lat, s.lng), ph = s.photos, pick = ph.length <= 3 ? ph : [ph[0], ph[Math.floor(ph.length / 2)], ph[ph.length - 1]];
       return { lat: s.lat, lng: s.lng, t: s.t, place: f ? esName(f.a2, f.en) : '', when: s.t ? new Date(s.t).toLocaleDateString('es-ES', fm) : '', photos: pick.map(p => ({ url: p.url })) };
     });
@@ -513,7 +519,7 @@ const tuMundo = (() => {
         fin();
       };
     }
-    const reelBtn = _q('#tm-reel'); if (reelBtn) { reelBtn.hidden = stops.length < 2 || typeof reelViaje === 'undefined'; reelBtn.onclick = () => _openReel(S, pts); }
+    const reelBtn = _q('#tm-reel'); if (reelBtn) { reelBtn.hidden = (stops.length < 2 && pts.length < 2) || typeof reelViaje === 'undefined'; reelBtn.onclick = () => _openReel(S, pts); }
     const on = (id, fn) => { const c = _q(id); if (c) c.onchange = () => fn(c.checked); };
     on('#tm-fm-c', v => v ? cv.addTo(map) : map.removeLayer(cv));
     on('#tm-fm-p', v => v ? cp.addTo(map) : map.removeLayer(cp));
