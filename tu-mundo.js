@@ -291,6 +291,8 @@ const tuMundo = (() => {
     });
   }
   // Visor de fotos a pantalla completa (carrusel con flechas, deslizar y botón atrás), mismo diseño que el de las guías
+  // Imagen de un círculo del mapa: gris que late mientras carga, la foto al llegar, "!" si el enlace falla
+  const PIN_IMG = u => `<img src="${esc(u)}" alt="" decoding="async" onload="this.className='ok';this.parentNode.classList.remove('tm-pin-load')" onerror="var p=this.parentNode;this.remove();p.classList.replace('tm-pin-load','tm-pin-err')">`;
   let _lb = null;
   function _lbClose(fromHistory) {
     if (!_lb) return; document.removeEventListener('keydown', _lb._key); _lb.remove(); _lb = null;
@@ -304,7 +306,7 @@ const tuMundo = (() => {
     const paint = () => {
       const p = list[v._i], when = p.t ? new Date(p.t).toLocaleString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '', f = countryAt(p.lat, p.lng);
       v.innerHTML = `<button type="button" class="fv-v-close" aria-label="Cerrar">✕</button>
-        <img class="fv-v-img" src="${esc(p.url)}" alt="">
+        <img class="fv-v-img" src="${esc(p.url)}" alt="" onerror="this.outerHTML='<div class=&quot;tm-v-err&quot;>Esta foto no se puede cargar.<br>Puede que ya no esté guardada o que el enlace falle.</div>'">
         <div class="fv-v-bar">
           <button type="button" class="fv-v-nav" data-d="-1" ${v._i === 0 ? 'disabled' : ''} aria-label="Anterior">‹</button>
           <div class="fv-v-info"><b>${esc(when)}</b><span>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : ''}${p.approx ? ' · ubicación aproximada' : ''}</span><em>${v._i + 1} / ${list.length}</em></div>
@@ -398,7 +400,7 @@ const tuMundo = (() => {
     const layer = L.layerGroup();
     const photos = L.layerGroup([line, layer]).addTo(map);
     const onePin = (p, lat, lng, grp, idx) => {
-      const html = `<span class="tm-pin tm-pin-one${p.approx ? ' tm-pin-approx' : ''}" style="background-image:url('${esc(p.url)}')"></span>`;
+      const html = `<span class="tm-pin tm-pin-load tm-pin-one${p.approx ? ' tm-pin-approx' : ''}">${PIN_IMG(p.url)}</span>`;
       const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
       m.on('click', () => _lbOpen(grp || [p], idx || 0));
     };
@@ -419,8 +421,8 @@ const tuMundo = (() => {
         }
         const first = g[0];
         const html = g.length === 1
-          ? `<span class="tm-pin tm-pin-one${first.approx ? ' tm-pin-approx' : ''}" style="background-image:url('${esc(first.url)}')"></span>`
-          : `<span class="tm-pin" style="background-image:url('${esc(first.url)}')"><b>${g.length}</b></span>`;
+          ? `<span class="tm-pin tm-pin-load tm-pin-one${first.approx ? ' tm-pin-approx' : ''}">${PIN_IMG(first.url)}</span>`
+          : `<span class="tm-pin tm-pin-load">${PIN_IMG(first.url)}<b>${g.length}</b></span>`;
         const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
         m.on('click', () => {
           if (g.length === 1 || map.getZoom() >= 17) _lbOpen(g, 0);

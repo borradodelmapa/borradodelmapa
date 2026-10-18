@@ -159,3 +159,11 @@
 .tm-sug-th img { width:64px; height:64px; object-fit:cover; display:block; background:#222; }
 .tm-sug-tx b { font:800 18px/1.15 var(--font-cond); text-transform:uppercase; letter-spacing:.02em; }
 .tm-sug-bt { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+/* Círculos del mapa: estados de carga */
+.tm-pin img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; opacity:0; transition:opacity .35s; }
+.tm-pin img.ok { opacity:1; }
+.tm-pin-load { animation:tmPinLoad 1s ease-in-out infinite alternate; }
+@keyframes tmPinLoad { from { background-color:#222; } to { background-color:#555; } }
+.tm-pin-err { background-color:#5a1f1f; }
+.tm-pin-err::before { content:"!"; color:#fff; font:800 20px/1 var(--font-cond); }
+.tm-v-err { flex:1; display:flex; align-items:center; justify-content:center; text-align:center; color:#ECEBE8; padding:24px; font-size:16px; line-height:1.4; }
