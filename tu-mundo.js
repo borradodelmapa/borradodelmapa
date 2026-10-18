@@ -366,7 +366,7 @@ const tuMundo = (() => {
     });
   }
   // Países pintados sobre el mismo mapa (los de FEATS; solo la parte del país cerca de donde estuviste, como en la tarjeta)
-  function _paintCountries(group, S) {
+  function _paintCountries(groups, S) {
     for (const f of FEATS) {
       const e = S.seen.get(f.id) || S.plan.get(f.id), st = S.seen.has(f.id) ? 'v' : S.plan.has(f.id) ? 'p' : ''; if (!st) continue;
       for (const poly of f.polys) {
@@ -374,7 +374,7 @@ const tuMundo = (() => {
           let a = 180, b = 90, c = -180, d = -90; poly[0].forEach(([x, y]) => { if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y; });
           const cen = { lat: (b + d) / 2, lng: (a + c) / 2 }; if (!e.pts.some(p => hav(p, cen) < 2500)) continue;
         }
-        L.polygon(poly.map(r => r.map(([x, y]) => [y, x])), { color: st === 'v' ? '#F4630B' : '#a8541c', weight: 1, fillColor: st === 'v' ? '#F4630B' : '#7a3a14', fillOpacity: st === 'v' ? .38 : .3, interactive: false }).addTo(group);
+        L.polygon(poly.map(r => r.map(([x, y]) => [y, x])), { color: st === 'v' ? '#F4630B' : '#a8541c', weight: 1, fillColor: st === 'v' ? '#F4630B' : '#7a3a14', fillOpacity: st === 'v' ? .38 : .3, interactive: false }).addTo(groups[st]);
       }
     }
   }
@@ -437,7 +437,8 @@ const tuMundo = (() => {
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
-    const countries = L.layerGroup().addTo(map); _paintCountries(countries, S);
+    const cv = L.layerGroup().addTo(map), cp = L.layerGroup().addTo(map); _paintCountries({ v: cv, p: cp }, S);
+    const lp = _q('#tm-fm-pl'); if (lp) lp.hidden = !cp.getLayers().length;
     const line = L.polyline(pts.map(p => [p.lat, p.lng]), { color: '#F4630B', weight: 2, opacity: .75, dashArray: '2 6' });
     const layer = L.layerGroup();
     const photos = L.layerGroup([line, layer]).addTo(map);
@@ -514,7 +515,8 @@ const tuMundo = (() => {
     }
     const reelBtn = _q('#tm-reel'); if (reelBtn) { reelBtn.hidden = stops.length < 2 || typeof reelViaje === 'undefined'; reelBtn.onclick = () => _openReel(S, pts); }
     const on = (id, fn) => { const c = _q(id); if (c) c.onchange = () => fn(c.checked); };
-    on('#tm-fm-c', v => v ? countries.addTo(map) : map.removeLayer(countries));
+    on('#tm-fm-c', v => v ? cv.addTo(map) : map.removeLayer(cv));
+    on('#tm-fm-p', v => v ? cp.addTo(map) : map.removeLayer(cp));
     on('#tm-fm-f', v => v ? photos.addTo(map) : map.removeLayer(photos));
     on('#tm-fmap-route', v => v ? line.addTo(photos) : photos.removeLayer(line));
     setTimeout(() => { if (_fmap === map) map.invalidateSize(); }, 200);
@@ -712,7 +714,7 @@ const tuMundo = (() => {
               <label><input type="checkbox" id="tm-fm-c" checked> <i style="background:#F4630B"></i>Has estado</label>
               <label><input type="checkbox" id="tm-fm-f" checked> Fotos</label>
               <label><input type="checkbox" id="tm-fmap-route" checked> Recorrido por fechas</label>
-              <span><i style="background:#7a3a14"></i>Planeado, aún no</span>
+              <label id="tm-fm-pl"><input type="checkbox" id="tm-fm-p" checked> <i style="background:#7a3a14"></i>Planeado, aún no</label>
             </div>
           </section>
           <section id="tm-sug-sec" hidden><h3 class="tm-h">Fotos que encajan con tus guías</h3>
