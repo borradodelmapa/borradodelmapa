@@ -254,9 +254,11 @@ const tuMundo = (() => {
      foto con ubicación más cercana en fecha (hasta 3 días) y salen marcadas como aproximadas.
      💶 0 €: usa las fotos ya cargadas (D.photos); no sube nada ni llama a ninguna API de pago. */
   let _fmap = null;
+  // Las fotos subidas antes del 16 sept 2026 guardan el enlace del dominio antiguo del Worker (ya no responde): se lee con el actual
+  const fixPhoto = u => String(u || '').replace('salma-api.paco-defoto.workers.dev', 'salma-api.borradodelmapa-api.workers.dev');
   function _photoPoints(D) {
     const all = D.photos.filter(p => p.url && p.tag !== 'documento' && p.tag !== 'cartel' && p.type !== 'video')
-      .map(p => { const d = toDate(p.takenAt || p.createdAt); return { id: p.id, url: p.url, t: d && !isNaN(d) ? +d : null, lat: +p.lat, lng: +p.lng, has: ok(p), approx: false, route: p.routeId || null }; });
+      .map(p => { const d = toDate(p.takenAt || p.createdAt); return { id: p.id, url: fixPhoto(p.url), t: d && !isNaN(d) ? +d : null, lat: +p.lat, lng: +p.lng, has: ok(p), approx: false, route: p.routeId || null }; });
     const withGps = all.filter(p => p.has && p.t != null);
     const MAXGAP = 3 * 864e5;
     all.forEach(p => {
@@ -292,7 +294,7 @@ const tuMundo = (() => {
   }
   // Visor de fotos a pantalla completa (carrusel con flechas, deslizar y botón atrás), mismo diseño que el de las guías
   // Imagen de un círculo del mapa: gris que late mientras carga, la foto al llegar, "!" si el enlace falla
-  const PIN_IMG = u => `<img src="${esc(u)}" alt="" decoding="async" onload="this.className='ok';this.parentNode.classList.remove('tm-pin-load')" onerror="var p=this.parentNode;this.remove();p.classList.replace('tm-pin-load','tm-pin-err')">`;
+  const PIN_IMG = u => `<img src="${esc(u)}" alt="" decoding="async" style="display:none" onload="var p=this.parentNode,q=String.fromCharCode(39);p.style.backgroundImage='url('+q+this.src+q+')';p.classList.remove('tm-pin-load');this.remove()" onerror="var p=this.parentNode;this.remove();p.classList.replace('tm-pin-load','tm-pin-err')">`;
   let _lb = null;
   function _lbClose(fromHistory) {
     if (!_lb) return; document.removeEventListener('keydown', _lb._key); _lb.remove(); _lb = null;
@@ -306,7 +308,7 @@ const tuMundo = (() => {
     const paint = () => {
       const p = list[v._i], when = p.t ? new Date(p.t).toLocaleString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '', f = countryAt(p.lat, p.lng);
       v.innerHTML = `<button type="button" class="fv-v-close" aria-label="Cerrar">✕</button>
-        <img class="fv-v-img" src="${esc(p.url)}" alt="" onerror="this.outerHTML='<div class=&quot;tm-v-err&quot;>Esta foto no se puede cargar.<br>Puede que ya no esté guardada o que el enlace falle.</div>'">
+        <img class="fv-v-img" src="${esc(p.url)}" alt="" onerror="this.outerHTML='<div class=&quot;tm-v-err&quot;>Esta foto no se puede cargar.<br>Puede que ya no esté guardada o que el enlace falle.<br><small>${esc(String(p.url).split('/')[2] || '')}</small></div>'">
         <div class="fv-v-bar">
           <button type="button" class="fv-v-nav" data-d="-1" ${v._i === 0 ? 'disabled' : ''} aria-label="Anterior">‹</button>
           <div class="fv-v-info"><b>${esc(when)}</b><span>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : ''}${p.approx ? ' · ubicación aproximada' : ''}</span><em>${v._i + 1} / ${list.length}</em></div>
