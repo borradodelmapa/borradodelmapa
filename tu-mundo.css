@@ -180,3 +180,9 @@
 .rl-sec { background:transparent; border:1px solid var(--border); color:var(--text-primary); }
 .rl-small { margin:0; color:var(--text-muted); font-size:12px; text-align:center; max-width:420px; }
 .rl-ov [hidden] { display:none !important; }
+/* Selector de años + aviso iPhone */
+.tm-years { display:flex; gap:6px; flex-wrap:wrap; padding:8px 10px; border-bottom:1px solid var(--border); }
+.tm-yr { background:var(--bg-row); border:1px solid var(--border); color:var(--text-primary); padding:6px 14px; font:700 15px/1 var(--font-cond); letter-spacing:.04em; cursor:pointer; }
+.tm-yr.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+.tm-ios { flex-basis:100%; font-size:12px; }
+.tm-mapw [hidden] { display:none !important; }

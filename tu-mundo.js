@@ -408,15 +408,26 @@ const tuMundo = (() => {
     const ts = pts.map(p => p.t).filter(Boolean), d0 = ts.length ? new Date(Math.min(...ts)) : null, d1 = ts.length ? new Date(Math.max(...ts)) : null;
     const mes = d => d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
     const range = d0 ? (mes(d0) === mes(d1) ? mes(d0) : mes(d0) + ' – ' + mes(d1)) : '';
-    reelViaje.open({ title: 'Mi viaje', range, stops, feats: _reelFeats(S), fotosN: pts.length });
+    reelViaje.open({ title: _year ? 'Mi viaje ' + _year : 'Mi viaje', range, stops, feats: _reelFeats(S), fotosN: pts.length });
   }
+  let _year = null;   // año elegido en el selector (null = todos)
   function _drawMap(S, D) {
     const box = _q('#tm-fmap'); if (!box) return;
     if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
-    const { pts, sinSitio } = _photoPoints(D);
+    const PP = _photoPoints(D), sinSitio = PP.sinSitio;
+    const years = [...new Set(PP.pts.filter(p => p.t).map(p => new Date(p.t).getFullYear()))].sort();
+    if (_year && !years.includes(_year)) _year = null;
+    const pts = _year ? PP.pts.filter(p => p.t && new Date(p.t).getFullYear() === _year) : PP.pts;
+    const yb = _q('#tm-years');
+    if (yb) {
+      yb.hidden = years.length < 2;
+      yb.innerHTML = [null, ...years].map(y => `<button type="button" class="tm-yr${y === _year ? ' on' : ''}" data-y="${y || ''}" aria-pressed="${y === _year}">${y || 'Todos'}</button>`).join('');
+      yb.querySelectorAll('.tm-yr').forEach(b => b.onclick = () => { _year = b.dataset.y ? +b.dataset.y : null; _drawMap(S, D); });
+    }
+    const ios = _q('#tm-ios'); if (ios) ios.hidden = !(/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     _wireUpload();
     _q('#tm-fmap-note').textContent = pts.length
-      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${sinSitio ? ` · ${sinSitio} sin ubicación` : ''}. Toca un círculo para acercarte.`
+      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${_year ? ' en ' + _year : ''}${sinSitio ? ` · ${sinSitio} sin ubicación` : ''}. Toca un círculo para acercarte.`
       : 'Aún no tienes fotos con ubicación ni fecha. Sube fotos de tu móvil y se pintan aquí.';
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
@@ -688,7 +699,9 @@ const tuMundo = (() => {
               <button type="button" class="tm-btn tm-play" id="tm-reel" hidden>🎬 Crear Reel</button>
               <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Subir fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
               <p class="tm-note" id="tm-fmap-msg"></p>
+              <p class="tm-note tm-ios" id="tm-ios" hidden>En iPhone: al elegir las fotos pulsa «Opciones» (abajo a la izquierda) y activa «Ubicación». Si no, el móvil quita el sitio de las fotos y no salen en el mapa.</p>
             </div>
+            <div class="tm-years" id="tm-years" hidden></div>
             <div class="tm-fmap" id="tm-fmap"></div>
             <div class="tm-legend">
               <label><input type="checkbox" id="tm-fm-c" checked> <i style="background:#F4630B"></i>Has estado</label>
