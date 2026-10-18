@@ -641,6 +641,7 @@ function _dkHeaderSync() {
           '<button type="button" class="dkh-link' + act(misOn) + '" data-act="rutas">Mis viajes</button>' +
           '<button type="button" class="dkh-link' + act(expOn) + '" data-act="explorar">Explorar</button>' +
           '<button type="button" class="dkh-link' + act(mundoOn) + '" data-act="mundo">Tu mundo</button>' +
+          '<a class="dkh-link" href="/blog/">Blog de viajes</a>' +
         '</nav>' +
         '<div class="dkh-right">' +
           '<div class="dkh-menu-wrap"><button type="button" class="dkh-link" id="dkh-atajos-btn" data-act="atajos" aria-haspopup="true" aria-expanded="false">Atajos ▾</button>' +
@@ -651,6 +652,7 @@ function _dkHeaderSync() {
       : '<nav class="dkh-nav">' +
           '<button type="button" class="dkh-link' + act(expOn) + '" data-act="explorar">Explorar</button>' +
           '<a class="dkh-link" href="/funciones.html">Qué hace Salma</a>' +
+          '<a class="dkh-link" href="/blog/">Blog de viajes</a>' +
         '</nav>' +
         '<div class="dkh-right"><button type="button" class="dkh-login" data-act="login">Entrar</button>' +
         '<button type="button" class="dkh-new" data-act="login">Crear cuenta gratis</button></div>');
