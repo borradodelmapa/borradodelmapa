@@ -287,21 +287,37 @@ const tuMundo = (() => {
       try { localStorage.removeItem(SUM_KEY); } catch (_) {}
       if (!document.getElementById('tm-screen')) return;
       if (msg) msg.textContent = `${r.ok} ${r.ok === 1 ? 'foto subida' : 'fotos subidas'}${r.fail ? ` · ${r.fail} no se pudieron subir` : ''}.`;
-      try { const S = await _getStats(true); _paint(S); _drawFotoMap(_cache.D); } catch (_) {}
+      try { const S = await _getStats(true); _paint(S); _drawMap(S, _cache.D); } catch (_) {}
     });
   }
-  function _drawFotoMap(D) {
-    const box = _q('#tm-fmap'), sec = _q('#tm-fmap-sec'); if (!box || !sec) return;
+  // Países pintados sobre el mismo mapa (los de FEATS; solo la parte del país cerca de donde estuviste, como en la tarjeta)
+  function _paintCountries(group, S) {
+    for (const f of FEATS) {
+      const e = S.seen.get(f.id) || S.plan.get(f.id), st = S.seen.has(f.id) ? 'v' : S.plan.has(f.id) ? 'p' : ''; if (!st) continue;
+      for (const poly of f.polys) {
+        if (e.pts.length && f.polys.length > 1) {
+          let a = 180, b = 90, c = -180, d = -90; poly[0].forEach(([x, y]) => { if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y; });
+          const cen = { lat: (b + d) / 2, lng: (a + c) / 2 }; if (!e.pts.some(p => hav(p, cen) < 2500)) continue;
+        }
+        L.polygon(poly.map(r => r.map(([x, y]) => [y, x])), { color: st === 'v' ? '#F4630B' : '#a8541c', weight: 1, fillColor: st === 'v' ? '#F4630B' : '#7a3a14', fillOpacity: st === 'v' ? .38 : .3, interactive: false }).addTo(group);
+      }
+    }
+  }
+  function _drawMap(S, D) {
+    const box = _q('#tm-fmap'); if (!box) return;
     if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
     const { pts, sinSitio } = _photoPoints(D);
-    box.hidden = !pts.length; _wireUpload();
-    if (!pts.length) { _q('#tm-fmap-note').textContent = 'Aún no tienes fotos con ubicación ni fecha. Sube fotos de tu móvil y se pintan aquí.'; return; }
-    _q('#tm-fmap-note').textContent = `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${sinSitio ? ` · ${sinSitio} sin ubicación ni fecha` : ''}. Toca un círculo para acercarte.`;
+    _wireUpload();
+    _q('#tm-fmap-note').textContent = pts.length
+      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${sinSitio ? ` · ${sinSitio} sin ubicación ni fecha` : ''}. Toca un círculo para acercarte.`
+      : 'Aún no tienes fotos con ubicación ni fecha. Sube fotos de tu móvil y se pintan aquí.';
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
-    const line = L.polyline(pts.map(p => [p.lat, p.lng]), { color: '#F4630B', weight: 2, opacity: .75, dashArray: '2 6' }).addTo(map);
-    const layer = L.layerGroup().addTo(map);
+    const countries = L.layerGroup().addTo(map); _paintCountries(countries, S);
+    const line = L.polyline(pts.map(p => [p.lat, p.lng]), { color: '#F4630B', weight: 2, opacity: .75, dashArray: '2 6' });
+    const layer = L.layerGroup();
+    const photos = L.layerGroup([line, layer]).addTo(map);
     const onePin = (p, lat, lng) => {
       const html = `<span class="tm-pin tm-pin-one${p.approx ? ' tm-pin-approx' : ''}" style="background-image:url('${esc(p.url)}')"></span>`;
       const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
@@ -336,9 +352,12 @@ const tuMundo = (() => {
       });
     };
     map.on('zoomend', paint);
-    map.fitBounds(line.getBounds(), { padding: [40, 40], maxZoom: 14 });
+    if (pts.length) map.fitBounds(line.getBounds(), { padding: [40, 40], maxZoom: 14 }); else map.setView([25, 10], 2);
     paint();
-    const tg = _q('#tm-fmap-route'); if (tg) tg.onchange = () => { if (tg.checked) line.addTo(map); else map.removeLayer(line); };
+    const on = (id, fn) => { const c = _q(id); if (c) c.onchange = () => fn(c.checked); };
+    on('#tm-fm-c', v => v ? countries.addTo(map) : map.removeLayer(countries));
+    on('#tm-fm-f', v => v ? photos.addTo(map) : map.removeLayer(photos));
+    on('#tm-fmap-route', v => v ? line.addTo(photos) : photos.removeLayer(line));
     setTimeout(() => { if (_fmap === map) map.invalidateSize(); }, 200);
   }
 
@@ -488,7 +507,6 @@ const tuMundo = (() => {
       : 'Todavía no hay fotos tuyas en ninguna guía. Sube fotos a tus viajes y tu mapa se irá pintando.';
     _q('#tm-big').innerHTML = [[nP, nP === 1 ? 'país' : 'países'], [pctTxt(pct) + ' %', 'del mundo'], [nf(S.km), 'km'], [nf(S.days), 'días de viaje'], [S.visited.length, S.visited.length === 1 ? 'viaje' : 'viajes'], [nf(S.nFotos), 'fotos']]
       .map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
-    drawWorld(_q('#tm-world'), S);
     const list = [...S.seen.values()].sort((a, b) => b.n - a.n);
     _q('#tm-flags').innerHTML = list.map(e => `<span><b>${flagOf(e.f.a2)}</b>${esc(esName(e.f.a2, e.f.en))}</span>`).join('') || '<span>Aún ninguno</span>';
     renderRecords(S); renderTimeline(S);
@@ -521,15 +539,18 @@ const tuMundo = (() => {
         <div id="tm-body" hidden>
           <section class="tm-big" id="tm-big"></section>
           <section class="tm-mapw">
-            <canvas id="tm-world" width="1600" height="820"></canvas>
-            <div class="tm-legend"><span><i style="background:#F4630B"></i>Has estado</span><span><i style="background:#7a3a14"></i>Planeado, aún no</span></div>
-          </section>
-          <section id="tm-fmap-sec"><h3 class="tm-h">Tus fotos en el mapa</h3>
-            <p class="tm-note" id="tm-fmap-note"></p>
-            <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Subir fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
-            <p class="tm-note" id="tm-fmap-msg"></p>
+            <div class="tm-mapbar">
+              <p class="tm-note" id="tm-fmap-note"></p>
+              <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Subir fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
+              <p class="tm-note" id="tm-fmap-msg"></p>
+            </div>
             <div class="tm-fmap" id="tm-fmap"></div>
-            <label class="tm-fmap-opt"><input type="checkbox" id="tm-fmap-route" checked> Ver el recorrido por fechas</label>
+            <div class="tm-legend">
+              <label><input type="checkbox" id="tm-fm-c" checked> <i style="background:#F4630B"></i>Has estado</label>
+              <label><input type="checkbox" id="tm-fm-f" checked> Fotos</label>
+              <label><input type="checkbox" id="tm-fmap-route" checked> Recorrido por fechas</label>
+              <span><i style="background:#7a3a14"></i>Planeado, aún no</span>
+            </div>
           </section>
           <section><h3 class="tm-h">Tus países</h3><div class="tm-flags" id="tm-flags"></div></section>
           <section><h3 class="tm-h">Tus récords</h3><div class="tm-recs" id="tm-recs"></div></section>
@@ -549,7 +570,7 @@ const tuMundo = (() => {
       if (!document.getElementById('tm-screen')) return; // el usuario ya se fue a otra pantalla
       _q('#tm-body').hidden = false;
       _paint(S);
-      try { _drawFotoMap(_cache.D); } catch (e2) { console.warn('[tu-mundo] mapa de fotos', e2); }
+      try { _drawMap(S, _cache.D); } catch (e2) { console.warn('[tu-mundo] mapa de fotos', e2); }
     } catch (e) {
       const l = document.getElementById('tm-lede');
       if (l) l.textContent = 'No se pudieron cargar tus viajes. Revisa la conexión y vuelve a entrar.';

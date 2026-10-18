@@ -134,3 +134,9 @@
 .tm-pop-n { font-size:11px; color:#666; margin-top:6px; }
 .tm-fmap-up { display:inline-flex; margin:0 0 10px; cursor:pointer; }
 .tm-fmap-up.off { opacity:.5; pointer-events:none; }
+/* Un solo mapa (países + fotos) */
+.tm-mapbar { padding:10px; display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; border-bottom:1px solid var(--border); }
+.tm-mapbar .tm-note { margin:0; flex:1 1 200px; }
+.tm-mapbar .tm-fmap-up { margin:0; }
+.tm-mapw .tm-fmap { border:0; }
+.tm-legend label { display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
