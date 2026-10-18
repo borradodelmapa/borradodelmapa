@@ -379,12 +379,36 @@ const tuMundo = (() => {
     }
   }
   // Paradas para "Reproducir mi viaje": fotos seguidas en el tiempo y cerca unas de otras = una parada
-  function _stopsOf(pts) {
+  function _stopsOf(pts, max = 40) {
     for (let R = 25; R <= 1600; R *= 2) {
       const stops = [];
       pts.forEach(p => { const c = stops[stops.length - 1]; if (c && hav(c.first, p) < R) c.photos.push(p); else stops.push({ first: p, photos: [p] }); });
-      if (stops.length <= 40 || R >= 1600) return stops.map(c => ({ lat: c.photos.reduce((a, p) => a + p.lat, 0) / c.photos.length, lng: c.photos.reduce((a, p) => a + p.lng, 0) / c.photos.length, photos: c.photos, t: c.photos[0].t }));
+      if (stops.length <= max || R >= 1600) return stops.map(c => ({ lat: c.photos.reduce((a, p) => a + p.lat, 0) / c.photos.length, lng: c.photos.reduce((a, p) => a + p.lng, 0) / c.photos.length, photos: c.photos, t: c.photos[0].t }));
     }
+  }
+  // Datos para el Reel: contornos con su estado (visitado / planeado) y qué trozos de cada país pintar
+  function _reelFeats(S) {
+    return FEATS.map(f => {
+      const e = S.seen.get(f.id) || S.plan.get(f.id), st = S.seen.has(f.id) ? 'v' : S.plan.has(f.id) ? 'p' : '';
+      const on = f.polys.map(poly => {
+        if (!st || !e.pts.length || f.polys.length < 2) return true;
+        let a = 180, b = 90, c = -180, d = -90; poly[0].forEach(([x, y]) => { if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y; });
+        const cen = { lat: (b + d) / 2, lng: (a + c) / 2 }; return e.pts.some(p => hav(p, cen) < 2500);
+      });
+      return { id: f.id, name: esName(f.a2, f.en), polys: f.polys, on, st };
+    });
+  }
+  function _openReel(S, pts) {
+    if (typeof reelViaje === 'undefined') return;
+    const fm = { day: 'numeric', month: 'long', year: 'numeric' };
+    const stops = _stopsOf(pts, 14).map(s => {
+      const f = countryAt(s.lat, s.lng), ph = s.photos, pick = ph.length <= 3 ? ph : [ph[0], ph[Math.floor(ph.length / 2)], ph[ph.length - 1]];
+      return { lat: s.lat, lng: s.lng, t: s.t, place: f ? esName(f.a2, f.en) : '', when: s.t ? new Date(s.t).toLocaleDateString('es-ES', fm) : '', photos: pick.map(p => ({ url: p.url })) };
+    });
+    const ts = pts.map(p => p.t).filter(Boolean), d0 = ts.length ? new Date(Math.min(...ts)) : null, d1 = ts.length ? new Date(Math.max(...ts)) : null;
+    const mes = d => d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    const range = d0 ? (mes(d0) === mes(d1) ? mes(d0) : mes(d0) + ' – ' + mes(d1)) : '';
+    reelViaje.open({ title: 'Mi viaje', range, stops, feats: _reelFeats(S), fotosN: pts.length });
   }
   function _drawMap(S, D) {
     const box = _q('#tm-fmap'); if (!box) return;
@@ -472,6 +496,7 @@ const tuMundo = (() => {
         fin();
       };
     }
+    const reelBtn = _q('#tm-reel'); if (reelBtn) { reelBtn.hidden = stops.length < 2 || typeof reelViaje === 'undefined'; reelBtn.onclick = () => _openReel(S, pts); }
     const on = (id, fn) => { const c = _q(id); if (c) c.onchange = () => fn(c.checked); };
     on('#tm-fm-c', v => v ? countries.addTo(map) : map.removeLayer(countries));
     on('#tm-fm-f', v => v ? photos.addTo(map) : map.removeLayer(photos));
@@ -660,6 +685,7 @@ const tuMundo = (() => {
             <div class="tm-mapbar">
               <p class="tm-note" id="tm-fmap-note"></p>
               <button type="button" class="tm-btn tm-play" id="tm-play" hidden>▶ Reproducir mi viaje</button>
+              <button type="button" class="tm-btn tm-play" id="tm-reel" hidden>🎬 Crear Reel</button>
               <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Subir fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
               <p class="tm-note" id="tm-fmap-msg"></p>
             </div>
