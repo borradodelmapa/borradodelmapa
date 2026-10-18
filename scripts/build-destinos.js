@@ -76,7 +76,7 @@ const DESTINOS_CSS_V = 6;
 // Igual para styles.css (el de la app, que trae el menú de abajo): antes iba SIN ?v=
 // y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
 // número que styles.css?v= en index.html — subirlo a la vez.
-const APP_CSS_V = 186;
+const APP_CSS_V = 187;
 // NOINDEX a propósito (Paco, 26 sept 2026): 1.793 páginas con la misma plantilla y texto
 // generado se arriesgan a que Google las trate como contenido en serie. Siguen visibles
 // para quien entra, pero Google no las indexa (follow: sí sigue los enlaces). También
@@ -95,7 +95,7 @@ const robotsFor = slug => INDEXABLES.has(slug) ? 'index,follow,max-snippet:-1,ma
 // Eslogan — mismo texto y clases que el hero del index (app.js:590), debajo
 // del logo a petición de Paco.
 const LOGO_HTML = `<div class="ce-top"><a class="ce-brand" href="/"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</a></div>
-    <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>`;
+    <div class="ce-hero"><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p><a class="ce-blog" href="/blog/">Blog de viajes →</a></div>`;
 
 // Menú inferior — ÚNICA fuente para las 1.793 páginas. Mismas clases CSS que
 // la app real (app-bottom-bar/bottom-tab/bottom-tab-fab, ver styles.css), como

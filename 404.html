@@ -38,6 +38,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
   .public-header .ce-brand { font-family:var(--font-cond); font-weight:800; font-size:19px; letter-spacing:.04em; color:var(--text-primary); text-decoration:none; }
   .public-header .ce-brand span { color:var(--accent); font-weight:600; margin:0 .22em; }
   .public-header a { text-decoration:none; }
+  .public-header .pg-blog-link { margin-left:auto; font-family:var(--font-cond); font-weight:700; font-size:14px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
   .public-logo { font-family:var(--font-display); font-size:18px; color:var(--blanco); letter-spacing:.08em; }
   .public-logo span { color:var(--dorado); }
   .public-content { max-width:700px; margin:0 auto; padding:20px 16px 220px; }
@@ -111,6 +112,7 @@ if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 <div class="public-page">
   <div class="public-header">
     <a class="ce-brand" href="/"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</a>
+    <a class="pg-blog-link" href="/blog/">Blog de viajes</a>
   </div>
   <div class="public-content" id="public-content">
     <div class="public-loading" id="public-loading">Cargando guía...</div>

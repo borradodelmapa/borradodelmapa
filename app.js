@@ -1146,7 +1146,7 @@ function _renderChatEmpty() {
     // la ruta" plegado) y al final "Pregunta lo imposible" plegado, con una nota que pide
     // destino y días. Así quien llega no escribe un "quiero ir a Huelva" suelto.
     const _ceHeroHTML = `
-        <div class="ce-hero" data-ce-hero><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p></div>
+        <div class="ce-hero" data-ce-hero><p class="ce-slogan">Sin mapa,<br><span>con rumbo.</span></p><a class="ce-blog" href="/blog/">Blog de viajes →</a></div>
         ${_ceActive ? '<button class="ce-back-active" data-ce-hero data-ce-back-active>← Volver a la ruta activa</button>' : ''}`;
     const _ceAskHTML = `
         <div class="ce-ask" data-ce-hero>
