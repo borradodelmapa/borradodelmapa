@@ -905,8 +905,8 @@ const fotosViaje = (() => {
 
   // Subir fotos sueltas (sin guía) para el vídeo sin ruta: misma subida que en FOTOS de una guía, con routeId null
   let _strayBusy = false, _strayAuto = false;   // _strayAuto: sin fotos sueltas, al subir se abre el vídeo solo
-  async function _strayUpload(files) {
-    if (_strayBusy || !window.currentUser) return;
+  async function _strayUpload(files, onProg) {   // onProg(i, n): progreso para quien la llame desde fuera (Tu mundo)
+    if (_strayBusy || !window.currentUser) return { ok: 0, fail: files.length };
     _strayBusy = true;
     const uid = window.currentUser.uid, lede = () => document.getElementById('fv-stray-lede');
     const api = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
@@ -915,6 +915,7 @@ const fotosViaje = (() => {
     const nuevas = []; let fail = 0;
     for (let i = 0; i < files.length; i++) {
       const l = lede(); if (l) l.textContent = `Subiendo ${i + 1} de ${files.length}…`;
+      if (onProg) onProg(i + 1, files.length);
       try {
         const meta = await _readMeta(files[i]), blob = await _toJpeg(files[i]), takenAt = meta.date.toISOString();
         const fd = new FormData(); fd.append('photo', blob, 'viaje.jpg'); fd.append('uid', uid);
@@ -927,7 +928,7 @@ const fotosViaje = (() => {
       } catch (e) { fail++; console.warn('[fotos-viaje] subida sin viaje', e); }
     }
     _strayBusy = false; btns.forEach(b => b.disabled = false);
-    if (!document.getElementById('fv-stray')) return;
+    if (!document.getElementById('fv-stray')) { _stray = null; return { ok: nuevas.length, fail }; }   // subida desde Tu mundo: se vuelve a leer al abrir "Fotos sin viaje"
     let list = []; try { list = await _loadStray(true); } catch (_) {}
     _sel = new Set(nuevas);   // las recién subidas quedan elegidas para el vídeo
     _strayPaint(list);
@@ -1051,6 +1052,6 @@ const fotosViaje = (() => {
     } catch (_) { if (typeof showToast === 'function') showToast('No se pudieron quitar. Prueba otra vez.'); }
   }
 
-  return { mount, unmount, strayStrip, renderStray };
+  return { mount, unmount, strayStrip, renderStray, strayUpload: _strayUpload };
 })();
 window.fotosViaje = fotosViaje;

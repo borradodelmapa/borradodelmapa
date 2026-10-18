@@ -132,3 +132,5 @@
 .tm-pop-g { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; max-height:240px; overflow:auto; }
 .tm-pop-g img { width:100%; aspect-ratio:1; object-fit:cover; display:block; }
 .tm-pop-n { font-size:11px; color:#666; margin-top:6px; }
+.tm-fmap-up { display:inline-flex; margin:0 0 10px; cursor:pointer; }
+.tm-fmap-up.off { opacity:.5; pointer-events:none; }

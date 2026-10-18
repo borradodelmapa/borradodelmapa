@@ -272,22 +272,56 @@ const tuMundo = (() => {
     pts.forEach(p => { const c = map.project([p.lat, p.lng], z), k = Math.floor(c.x / radius) + ':' + Math.floor(c.y / radius); if (!cells.has(k)) cells.set(k, []); cells.get(k).push(p); });
     return [...cells.values()];
   }
+  // Subir fotos desde aquí: la misma subida que "Fotos sin viaje" (R2 una a una, fotos sueltas); luego se repinta el mapa
+  let _upBusy = false;
+  function _wireUpload() {
+    const inp = _q('#tm-fmap-in'), msg = _q('#tm-fmap-msg'), lab = _q('#tm-fmap-up');
+    if (!inp || inp._w) return; inp._w = true;
+    if (typeof fotosViaje === 'undefined' || !fotosViaje.strayUpload) { lab.hidden = true; return; }
+    inp.addEventListener('change', async () => {
+      const files = [...(inp.files || [])]; inp.value = ''; if (!files.length || _upBusy) return;
+      _upBusy = true; lab.classList.add('off');
+      let r = { ok: 0, fail: files.length };
+      try { r = await fotosViaje.strayUpload(files, (i, n) => { if (msg) msg.textContent = `Subiendo ${i} de ${n}…`; }); } catch (_) {}
+      _upBusy = false; lab.classList.remove('off');
+      try { localStorage.removeItem(SUM_KEY); } catch (_) {}
+      if (!document.getElementById('tm-screen')) return;
+      if (msg) msg.textContent = `${r.ok} ${r.ok === 1 ? 'foto subida' : 'fotos subidas'}${r.fail ? ` · ${r.fail} no se pudieron subir` : ''}.`;
+      try { const S = await _getStats(true); _paint(S); _drawFotoMap(_cache.D); } catch (_) {}
+    });
+  }
   function _drawFotoMap(D) {
     const box = _q('#tm-fmap'), sec = _q('#tm-fmap-sec'); if (!box || !sec) return;
     if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
     const { pts, sinSitio } = _photoPoints(D);
-    sec.hidden = !pts.length;
-    if (!pts.length) return;
+    box.hidden = !pts.length; _wireUpload();
+    if (!pts.length) { _q('#tm-fmap-note').textContent = 'Aún no tienes fotos con ubicación ni fecha. Sube fotos de tu móvil y se pintan aquí.'; return; }
     _q('#tm-fmap-note').textContent = `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${sinSitio ? ` · ${sinSitio} sin ubicación ni fecha` : ''}. Toca un círculo para acercarte.`;
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
     const line = L.polyline(pts.map(p => [p.lat, p.lng]), { color: '#F4630B', weight: 2, opacity: .75, dashArray: '2 6' }).addTo(map);
     const layer = L.layerGroup().addTo(map);
+    const onePin = (p, lat, lng) => {
+      const html = `<span class="tm-pin tm-pin-one${p.approx ? ' tm-pin-approx' : ''}" style="background-image:url('${esc(p.url)}')"></span>`;
+      const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
+      m.on('click', () => L.popup({ maxWidth: 260, className: 'tm-pop' }).setLatLng([lat, lng]).setContent(`<div class="tm-pop-g"><a href="${esc(p.url)}" target="_blank" rel="noopener"><img src="${esc(p.url)}" alt=""></a></div>${p.approx ? '<div class="tm-pop-n">Ubicación aproximada (por la fecha)</div>' : ''}`).openOn(map));
+    };
     const paint = () => {
       layer.clearLayers();
-      _clusterPts(map, pts, 56).forEach(g => {
+      const z = map.getZoom();
+      _clusterPts(map, pts, z >= 15 ? 30 : z >= 12 ? 44 : 56).forEach(g => {
         const lat = g.reduce((a, p) => a + p.lat, 0) / g.length, lng = g.reduce((a, p) => a + p.lng, 0) / g.length;
+        // muy cerca (zoom ≥ 16) y pocas: en abanico alrededor del punto, cada foto suelta
+        if (z >= 16 && g.length > 1 && g.length <= 14) {
+          const c = map.project([lat, lng], z), r = 34 + g.length * 4;
+          g.forEach((p, i) => {
+            const a = -Math.PI / 2 + (2 * Math.PI * i) / g.length, ll = map.unproject(L.point(c.x + r * Math.cos(a), c.y + r * Math.sin(a)), z);
+            L.polyline([[lat, lng], ll], { color: '#F4630B', weight: 1, opacity: .6, interactive: false }).addTo(layer);
+            onePin(p, ll.lat, ll.lng);
+          });
+          return;
+        }
         const first = g[0];
         const html = g.length === 1
           ? `<span class="tm-pin tm-pin-one${first.approx ? ' tm-pin-approx' : ''}" style="background-image:url('${esc(first.url)}')"></span>`
@@ -490,8 +524,10 @@ const tuMundo = (() => {
             <canvas id="tm-world" width="1600" height="820"></canvas>
             <div class="tm-legend"><span><i style="background:#F4630B"></i>Has estado</span><span><i style="background:#7a3a14"></i>Planeado, aún no</span></div>
           </section>
-          <section id="tm-fmap-sec" hidden><h3 class="tm-h">Tus fotos en el mapa</h3>
+          <section id="tm-fmap-sec"><h3 class="tm-h">Tus fotos en el mapa</h3>
             <p class="tm-note" id="tm-fmap-note"></p>
+            <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Subir fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
+            <p class="tm-note" id="tm-fmap-msg"></p>
             <div class="tm-fmap" id="tm-fmap"></div>
             <label class="tm-fmap-opt"><input type="checkbox" id="tm-fmap-route" checked> Ver el recorrido por fechas</label>
           </section>
