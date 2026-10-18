@@ -151,3 +151,11 @@
 .tm-play-tx b { font:800 20px/1.1 var(--font-cond); letter-spacing:.02em; text-transform:uppercase; }
 .tm-play-tx span { font-size:12px; color:#C4C7C9; }
 .tm-play-tx i { font:700 11px/1 var(--font-body); color:var(--accent); font-style:normal; letter-spacing:.1em; }
+/* Fotos que encajan con una guía (entrega 2) */
+.tm-sug { display:flex; flex-direction:column; gap:10px; }
+.tm-sug-card { background:var(--bg-row); border:1px solid var(--border); padding:10px; display:flex; flex-direction:column; gap:8px; }
+.tm-sug-th { display:flex; gap:4px; overflow-x:auto; }
+.tm-sug-th button { border:0; padding:0; background:none; flex:0 0 auto; cursor:pointer; }
+.tm-sug-th img { width:64px; height:64px; object-fit:cover; display:block; background:#222; }
+.tm-sug-tx b { font:800 18px/1.15 var(--font-cond); text-transform:uppercase; letter-spacing:.02em; }
+.tm-sug-bt { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }

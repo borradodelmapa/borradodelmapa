@@ -256,7 +256,7 @@ const tuMundo = (() => {
   let _fmap = null;
   function _photoPoints(D) {
     const all = D.photos.filter(p => p.url && p.tag !== 'documento' && p.tag !== 'cartel' && p.type !== 'video')
-      .map(p => { const d = toDate(p.takenAt || p.createdAt); return { id: p.id, url: p.url, t: d && !isNaN(d) ? +d : null, lat: +p.lat, lng: +p.lng, has: ok(p), approx: false }; });
+      .map(p => { const d = toDate(p.takenAt || p.createdAt); return { id: p.id, url: p.url, t: d && !isNaN(d) ? +d : null, lat: +p.lat, lng: +p.lng, has: ok(p), approx: false, route: p.routeId || null }; });
     const withGps = all.filter(p => p.has && p.t != null);
     const MAXGAP = 3 * 864e5;
     all.forEach(p => {
@@ -287,7 +287,7 @@ const tuMundo = (() => {
       try { localStorage.removeItem(SUM_KEY); } catch (_) {}
       if (!document.getElementById('tm-screen')) return;
       if (msg) msg.textContent = `${r.ok} ${r.ok === 1 ? 'foto subida' : 'fotos subidas'}${r.fail ? ` · ${r.fail} no se pudieron subir` : ''}.`;
-      try { const S = await _getStats(true); _paint(S); _drawMap(S, _cache.D); } catch (_) {}
+      try { const S = await _getStats(true); _paint(S); _drawMap(S, _cache.D); _renderSuggest(S, _cache.D); } catch (_) {}
     });
   }
   // Visor de fotos a pantalla completa (carrusel con flechas, deslizar y botón atrás), mismo diseño que el de las guías
@@ -319,6 +319,47 @@ const tuMundo = (() => {
     document.addEventListener('keydown', v._key);
     paint();
     if (window.pushModal) window.pushModal('tm-visor', () => _lbClose(true));
+  }
+  /* Asignar fotos sueltas a guías (entrega 2): cada foto suelta con sitio se compara con las paradas de las guías;
+     si hay una a menos de 40 km se SUGIERE ("estas 86 fotos parecen de X") y Paco confirma. Una foto vive en un solo sitio.
+     💶 0 €: comparación en el móvil; al confirmar, una escritura de Firestore por lote (routeId). Sin Claude ni Google. */
+  const SUG_KM = 40;
+  const _sugSkip = new Set();
+  function _suggest(D) {
+    const { pts } = _photoPoints(D), by = new Map(); let sinGuia = 0;
+    pts.filter(p => !p.route).forEach(p => {
+      let best = null, bd = Infinity;
+      D.guides.forEach(g => g.stops.forEach(st => { const d = hav(p, st); if (d < bd) { bd = d; best = g; } }));
+      if (best && bd <= SUG_KM) { if (!by.has(best.id)) by.set(best.id, { g: best, photos: [] }); by.get(best.id).photos.push(p); } else sinGuia++;
+    });
+    return { groups: [...by.values()].filter(x => !_sugSkip.has(x.g.id)).sort((a, b) => b.photos.length - a.photos.length), sinGuia };
+  }
+  function _renderSuggest(S, D) {
+    const sec = _q('#tm-sug-sec'), box = _q('#tm-sug'); if (!sec || !box) return;
+    const { groups, sinGuia } = _suggest(D);
+    sec.hidden = !groups.length; if (!groups.length) return;
+    _q('#tm-sug-note').textContent = `Tus fotos sueltas se parecen a estas guías por el sitio. Confirma las que quieras: una foto vive en un solo sitio. ${sinGuia ? `Otras ${sinGuia} no encajan con ninguna y se quedan sueltas.` : ''}`;
+    box.innerHTML = groups.map(x => `<div class="tm-sug-card" data-g="${esc(x.g.id)}">
+        <div class="tm-sug-th">${x.photos.slice(0, 6).map((p, i) => `<button type="button" data-i="${i}" aria-label="Ver foto"><img src="${esc(p.url)}" alt="" loading="lazy"></button>`).join('')}</div>
+        <div class="tm-sug-tx"><b>${x.photos.length} ${x.photos.length === 1 ? 'foto parece' : 'fotos parecen'} de «${esc(x.g.title)}»</b></div>
+        <div class="tm-sug-bt"><button type="button" class="tm-btn tm-sug-ok">Pasar a esta guía</button><button type="button" class="tm-link tm-sug-no">Ahora no</button></div>
+      </div>`).join('');
+    box.querySelectorAll('.tm-sug-card').forEach(card => {
+      const x = groups.find(y => y.g.id === card.dataset.g);
+      card.querySelectorAll('.tm-sug-th button').forEach(b => b.onclick = () => _lbOpen(x.photos, +b.dataset.i));
+      card.querySelector('.tm-sug-no').onclick = () => { _sugSkip.add(x.g.id); _renderSuggest(S, D); };
+      card.querySelector('.tm-sug-ok').onclick = async e => {
+        const u = window.currentUser; if (!u) return; const bt = e.currentTarget; bt.disabled = true; bt.textContent = 'Pasando…';
+        const ids = x.photos.map(p => p.id), db = firebase.firestore();
+        try {
+          for (let i = 0; i < ids.length; i += 400) { const batch = db.batch(); ids.slice(i, i + 400).forEach(id => batch.update(db.collection('users').doc(u.uid).collection('fotos').doc(id), { routeId: x.g.id })); await batch.commit(); }
+          D.photos.forEach(p => { if (ids.includes(p.id)) p.routeId = x.g.id; });
+          try { localStorage.removeItem(SUM_KEY); } catch (_) {}
+          if (typeof showToast === 'function') showToast(`${ids.length} ${ids.length === 1 ? 'foto pasada' : 'fotos pasadas'} a «${x.g.title}»`);
+          const S2 = compute(D); _cache.S = S2; _saveSummary(u.uid, S2); _paint(S2); _drawMap(S2, D); _renderSuggest(S2, D);
+        } catch (_) { bt.disabled = false; bt.textContent = 'No se pudo · otra vez'; }
+      };
+    });
   }
   // Países pintados sobre el mismo mapa (los de FEATS; solo la parte del país cerca de donde estuviste, como en la tarjeta)
   function _paintCountries(group, S) {
@@ -626,6 +667,8 @@ const tuMundo = (() => {
               <span><i style="background:#7a3a14"></i>Planeado, aún no</span>
             </div>
           </section>
+          <section id="tm-sug-sec" hidden><h3 class="tm-h">Fotos que encajan con tus guías</h3>
+            <p class="tm-note" id="tm-sug-note"></p><div class="tm-sug" id="tm-sug"></div></section>
           <section><h3 class="tm-h">Tus países</h3><div class="tm-flags" id="tm-flags"></div></section>
           <section><h3 class="tm-h">Tus récords</h3><div class="tm-recs" id="tm-recs"></div></section>
           <section><h3 class="tm-h">Comparte tu vuelta al mundo</h3>
@@ -644,7 +687,7 @@ const tuMundo = (() => {
       if (!document.getElementById('tm-screen')) return; // el usuario ya se fue a otra pantalla
       _q('#tm-body').hidden = false;
       _paint(S);
-      try { _drawMap(S, _cache.D); } catch (e2) { console.warn('[tu-mundo] mapa de fotos', e2); }
+      try { _drawMap(S, _cache.D); _renderSuggest(S, _cache.D); } catch (e2) { console.warn('[tu-mundo] mapa de fotos', e2); }
     } catch (e) {
       const l = document.getElementById('tm-lede');
       if (l) l.textContent = 'No se pudieron cargar tus viajes. Revisa la conexión y vuelve a entrar.';
