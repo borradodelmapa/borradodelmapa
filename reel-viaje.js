@@ -17,6 +17,7 @@ const reelViaje = (() => {
   const ease = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
   const backOut = u => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(u - 1, 3) + c1 * Math.pow(u - 1, 2); };
   const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const MSG = 'Creado con la app de viajes borradodelmapa.com · ¡Descárgatela!';
   const FONT = '"Barlow Condensed","Arial Narrow",sans-serif';
   const sc = z => 512 * Math.pow(2, z);   // píxeles por unidad de mundo (0..1) a zoom z, en el lienzo lógico de 1080 px
 
@@ -220,7 +221,7 @@ const reelViaje = (() => {
         note.textContent = `Listo en ${Math.round((performance.now() - tt0) / 1000)} s · ${(blob.size / 1048576).toFixed(1)} MB`;
         const sh = $('#rl-share'), dl = $('#rl-dl');
         dl.hidden = false; dl.onclick = () => { const a = document.createElement('a'); a.href = ov._url; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); };
-        if (navigator.canShare && navigator.canShare({ files: [file] }) && blob.size < 50 * 1048576) { sh.hidden = false; sh.onclick = async () => { try { await navigator.share({ files: [file] }); } catch (_) {} }; }
+        if (navigator.canShare && navigator.canShare({ files: [file] }) && blob.size < 50 * 1048576) { sh.hidden = false; sh.onclick = async () => { try { await navigator.share({ files: [file], title: 'Mi viaje', text: MSG }); } catch (_) {} }; }
         make.textContent = '🎬 Crear otra vez';
         try { navigator.vibrate && navigator.vibrate([120, 60, 120]); } catch (_) {}
       } catch (e) { console.warn('[reel]', e); note.textContent = 'No se pudo crear el vídeo. Prueba otra vez.'; }
