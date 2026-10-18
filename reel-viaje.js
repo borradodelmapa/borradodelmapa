@@ -117,6 +117,7 @@ const reelViaje = (() => {
     // cabecera
     cx.textAlign = 'left'; cx.textBaseline = 'alphabetic';
     cx.fillStyle = '#F4630B'; cx.font = `800 46px ${FONT}`; cx.fillText('BORRADO DEL MAPA', 70, 118);
+    { const bw = cx.measureText('BORRADO DEL MAPA').width; cx.fillStyle = 'rgba(236,235,232,.6)'; cx.font = `600 34px ${FONT}`; cx.fillText('borradodelmapa.com', 70 + bw + 20, 117); }
     cx.fillStyle = '#ECEBE8'; let fs = 150; cx.font = `800 ${fs}px ${FONT}`; const tt = D.title.toUpperCase(); while (cx.measureText(tt).width > W - 140 && fs > 60) { fs -= 6; cx.font = `800 ${fs}px ${FONT}`; }
     const ti = t < INTRO ? ease(clamp(t / .8, 0, 1)) : 1; cx.globalAlpha = ti; cx.fillText(tt, 70, 118 + 20 + fs * .9); cx.globalAlpha = 1;
     if (D.range) { cx.fillStyle = '#C4C7C9'; cx.font = `600 40px ${FONT}`; cx.fillText(D.range.toUpperCase(), 72, 118 + 20 + fs * .9 + 56); }
