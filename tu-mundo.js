@@ -408,26 +408,31 @@ const tuMundo = (() => {
     const ts = pts.map(p => p.t).filter(Boolean), d0 = ts.length ? new Date(Math.min(...ts)) : null, d1 = ts.length ? new Date(Math.max(...ts)) : null;
     const mes = d => d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
     const range = d0 ? (mes(d0) === mes(d1) ? mes(d0) : mes(d0) + ' – ' + mes(d1)) : '';
-    reelViaje.open({ title: _year ? 'Mi viaje ' + _year : 'Mi viaje', range, stops, feats: _reelFeats(S), fotosN: pts.length });
+    reelViaje.open({ title: _year ? 'Mi viaje ' + (/-/.test(_year) ? MESES[+_year.split('-')[1]] : _year) : 'Mi viaje', range, stops, feats: _reelFeats(S), fotosN: pts.length });
   }
-  let _year = null;   // año elegido en el selector (null = todos)
+  let _year = null;   // periodo elegido en el selector: año ("2025") o, si todas las fotos son de un año, mes ("2026-4"); null = todos
+  const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   function _drawMap(S, D) {
     const box = _q('#tm-fmap'); if (!box) return;
     if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
     const PP = _photoPoints(D), sinSitio = PP.sinSitio;
-    const years = [...new Set(PP.pts.filter(p => p.t).map(p => new Date(p.t).getFullYear()))].sort();
-    if (_year && !years.includes(_year)) _year = null;
-    const pts = _year ? PP.pts.filter(p => p.t && new Date(p.t).getFullYear() === _year) : PP.pts;
+    // Selector: años si hay varios; si todas las fotos son del mismo año, meses de ese año
+    const yrs = [...new Set(PP.pts.filter(p => p.t).map(p => new Date(p.t).getFullYear()))].sort();
+    const byMonth = yrs.length === 1, keyOf = p => { const d = new Date(p.t); return byMonth ? d.getFullYear() + '-' + d.getMonth() : String(d.getFullYear()); };
+    const keys = [...new Set(PP.pts.filter(p => p.t).sort((a, b) => a.t - b.t).map(keyOf))];
+    const labelOf = k => byMonth ? MESES[+k.split('-')[1]] : k;
+    if (_year && !keys.includes(_year)) _year = null;
+    const pts = _year ? PP.pts.filter(p => p.t && keyOf(p) === _year) : PP.pts;
     const yb = _q('#tm-years');
     if (yb) {
-      yb.hidden = years.length < 2;
-      yb.innerHTML = [null, ...years].map(y => `<button type="button" class="tm-yr${y === _year ? ' on' : ''}" data-y="${y || ''}" aria-pressed="${y === _year}">${y || 'Todos'}</button>`).join('');
-      yb.querySelectorAll('.tm-yr').forEach(b => b.onclick = () => { _year = b.dataset.y ? +b.dataset.y : null; _drawMap(S, D); });
+      yb.hidden = keys.length < 2;
+      yb.innerHTML = [null, ...keys].map(k => `<button type="button" class="tm-yr${k === _year ? ' on' : ''}" data-y="${k || ''}" aria-pressed="${k === _year}">${k ? labelOf(k) : 'Todos'}</button>`).join('');
+      yb.querySelectorAll('.tm-yr').forEach(b => b.onclick = () => { _year = b.dataset.y || null; _drawMap(S, D); });
     }
     const ios = _q('#tm-ios'); if (ios) ios.hidden = !(/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     _wireUpload();
     _q('#tm-fmap-note').textContent = pts.length
-      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${_year ? ' en ' + _year : ''}${sinSitio ? ` · ${sinSitio} sin ubicación` : ''}. Toca un círculo para acercarte.`
+      ? `${pts.length} ${pts.length === 1 ? 'foto' : 'fotos'} en el mapa${_year ? ' en ' + (byMonth ? labelOf(_year) + ' de ' + yrs[0] : _year) : ''}${sinSitio ? ` · ${sinSitio} sin ubicación` : ''}. Toca un círculo para acercarte.`
       : 'Aún no tienes fotos con ubicación ni fecha. Sube fotos de tu móvil y se pintan aquí.';
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
