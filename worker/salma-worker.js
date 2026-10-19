@@ -1741,7 +1741,7 @@ async function deleteUserCompletely(env, uid) {
     // paso va en su propio try/catch — un fallo puntual no aborta el resto, y todo
     // queda contado en el log para poder revisar a mano si algo no se borró.
     const errors = [];
-    const counts = { subcollections: 0, public_guides: 0, shared_routes: 0, whatsapp_sessions: 0, r2_files: 0, copias_anonimizadas: 0 };
+    const counts = { subcollections: 0, public_worlds: 0, public_guides: 0, shared_routes: 0, whatsapp_sessions: 0, r2_files: 0, copias_anonimizadas: 0 };
     const SUBCOLLECTIONS = ['maps', 'fotos', 'albumes', 'notas', 'pins', 'map_pins', 'travel_docs', 'paises', 'flight_watches'];
     const slugs = [], mapIds = [];
     for (const col of SUBCOLLECTIONS) {
@@ -1770,6 +1770,11 @@ async function deleteUserCompletely(env, uid) {
         }
       } catch (e) { errors.push('public_guides/' + slug + ': ' + e.message); }
     }
+    // Mi mundo público (19 oct 2026): la copia pública de «Tu mundo» cuelga del uid
+    try {
+      const mundos = await firestoreAdminQueryByField(env, 'public_worlds', 'uid', uid, 5);
+      for (const name of mundos) { const sl = name.split('/').pop(); if (await firestoreAdminDelete(env, 'public_worlds/' + sl)) counts.public_worlds++; try { await caches.default.delete(new Request('https://cache.local/mundo/' + sl)); } catch (_) {} }
+    } catch (e) { errors.push('public_worlds: ' + e.message); }
     // Copias que OTROS usuarios guardaron de sus rutas (Explorar → Guardar): se quedan en la
     // cuenta de quien las guardó (son suyas), pero sin el nombre ni el uid del autor borrado.
     try { counts.copias_anonimizadas = await anonymizeSavedCopies(env, uid); }
@@ -2433,6 +2438,127 @@ async function firestoreAdminQueryByField(env, collectionId, fieldPath, stringVa
   if (!res.ok) throw new Error('Firestore runQuery ' + collectionId + ' → ' + res.status);
   const rows = await res.json();
   return (rows || []).filter(r => r.document).map(r => r.document.name);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MI MUNDO PÚBLICO — 19 oct 2026 (caso p-mvea7qqetzp)
+// Copia pública de «Tu mundo» en Firestore public_worlds/{slug}. SOLO el Worker escribe ahí
+// (firestore.rules no tiene ningún `match` para esa colección = ningún navegador puede leer ni
+// escribir; la lectura pública pasa por GET /mundo/datos). El dueño sale del ID token de Firebase
+// validado contra Firebase, nunca del cuerpo de la petición. 💶 Sin APIs de pago.
+// ═══════════════════════════════════════════════════════════════
+const MUNDO_RESERVADAS = new Set(['admin', 'api', 'www', 'app', 'mundo', 'nuevo', 'editar', 'publicar', 'despublicar', 'datos', 'estado', 'null', 'undefined', 'salma', 'borradodelmapa', 'explorar', 'destinos', 'blog', 'legal', 'login', 'registro', 'ayuda', 'soporte', 'test', 'index']);
+const MUNDO_MAX_BODY = 80000;
+const MUNDO_MAX_PUBLICACIONES_HORA = 20;
+function _mundoJson(obj, status, extra) {
+  return new Response(JSON.stringify(obj), { status: status || 200, headers: Object.assign({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }, extra || {}) });
+}
+// texto plano: sin etiquetas ni caracteres de control (la página, además, lo escapa al pintarlo)
+function _mundoTxt(v, max) {
+  return String(v == null ? '' : v).replace(/[\u0000-\u001f\u007f<>"'`&\\]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+function _mundoNum(v, min, max) { const n = Number(v); return isFinite(n) ? Math.min(max, Math.max(min, n)) : 0; }
+function _mundoSlugBase(nombre) {
+  const b = String(nombre || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 20).replace(/-+$/, '');
+  return b.length >= 2 ? b : 'viajero';
+}
+const _mundoSlugOk = s => typeof s === 'string' && /^[a-z0-9](?:[a-z0-9-]{0,30}[a-z0-9])?$/.test(s);
+// slug que ya tiene este uid (si publicó antes)
+async function _mundoSlugDe(env, uid) {
+  const names = await firestoreAdminQueryByField(env, 'public_worlds', 'uid', uid, 5);
+  for (const n of names) { const s = n.split('/').pop(); if (_mundoSlugOk(s)) return s; }
+  return null;
+}
+function _mundoLimpiar(b) {
+  if (!b || typeof b !== 'object') return null;
+  const a2 = arr => [...new Set((Array.isArray(arr) ? arr : []).slice(0, 250).map(x => String(x || '').toUpperCase()).filter(x => /^[A-Z]{2}$/.test(x)))];
+  const paradas = (Array.isArray(b.paradas) ? b.paradas : []).slice(0, 300).map(p => {
+    if (!p) return null;
+    const lat = Number(p.lat), lng = Number(p.lng);
+    if (!isFinite(lat) || !isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+    // ~1 km: la copia pública nunca lleva la coordenada exacta
+    return { lat: Math.round(lat * 100) / 100, lng: Math.round(lng * 100) / 100, name: _mundoTxt(p.name, 60) };
+  }).filter(Boolean);
+  const c = b.cifras || {};
+  return {
+    paises: a2(b.paises), planeados: a2(b.planeados), paradas,
+    cifras: { paises: Math.round(_mundoNum(c.paises, 0, 250)), km: Math.round(_mundoNum(c.km, 0, 2000000)), viajes: Math.round(_mundoNum(c.viajes, 0, 5000)), dias: Math.round(_mundoNum(c.dias, 0, 40000)) },
+  };
+}
+async function handleMundo(request, env, url) {
+  const p = url.pathname;
+  // ── lectura pública: sin cuenta. Caché de 2 min en Cloudflare: muchas visitas ≈ pocas lecturas ──
+  if (request.method === 'GET' && p === '/mundo/datos') {
+    const slug = url.searchParams.get('slug') || '';
+    if (!_mundoSlugOk(slug)) return _mundoJson({ error: 'no encontrado' }, 404);
+    const cache = caches.default, ck = new Request('https://cache.local/mundo/' + slug);
+    const hit = await cache.match(ck); if (hit) return hit;
+    const doc = await firestoreAdminGet(env, 'public_worlds/' + slug);
+    if (!doc) return _mundoJson({ error: 'no encontrado' }, 404, { 'Cache-Control': 'public, max-age=60' });
+    const d = parseFirestoreDoc(doc);
+    // lo público: NUNCA el uid
+    const out = { slug, nombre: d.nombre || '', titulo: d.titulo || '', paises: d.paises || [], planeados: d.planeados || [], paradas: d.paradas || [], cifras: d.cifras || {}, actualizado: d.actualizado || null };
+    const res = _mundoJson(out, 200, { 'Cache-Control': 'public, max-age=120' });
+    try { await cache.put(ck, res.clone()); } catch (_) {}
+    return res;
+  }
+  // ── todo lo demás exige ser el dueño ──
+  const user = await verifyAuthAndGetUser(request.headers.get('Authorization'));
+  if (!user) return _mundoJson({ error: 'Inicia sesión' }, 401);
+  const uid = user.uid;
+  if (request.method === 'GET' && p === '/mundo/estado') {
+    const slug = await _mundoSlugDe(env, uid);
+    return _mundoJson({ publicado: !!slug, slug: slug || null });
+  }
+  if (request.method === 'POST' && p === '/mundo/despublicar') {
+    const slug = await _mundoSlugDe(env, uid);
+    if (slug) {
+      const doc = parseFirestoreDoc(await firestoreAdminGet(env, 'public_worlds/' + slug));
+      if (doc && doc.uid === uid) await firestoreAdminDelete(env, 'public_worlds/' + slug);
+      try { await caches.default.delete(new Request('https://cache.local/mundo/' + slug)); } catch (_) {}
+    }
+    return _mundoJson({ ok: true });
+  }
+  if (request.method === 'POST' && p === '/mundo/publicar') {
+    // límite por cuenta
+    if (env.SALMA_KB) {
+      const k = `mundo_rate:${uid}:${Math.floor(Date.now() / 3600000)}`;
+      try {
+        const n = parseInt(await env.SALMA_KB.get(k) || '0', 10);
+        if (n >= MUNDO_MAX_PUBLICACIONES_HORA) return _mundoJson({ error: 'Demasiadas actualizaciones seguidas. Prueba en un rato.' }, 429);
+        await env.SALMA_KB.put(k, String(n + 1), { expirationTtl: 3700 });
+      } catch (_) {}
+    }
+    const raw = await request.text();
+    if (raw.length > MUNDO_MAX_BODY) return _mundoJson({ error: 'Demasiados datos' }, 413);
+    let body; try { body = JSON.parse(raw); } catch (_) { return _mundoJson({ error: 'Datos no válidos' }, 400); }
+    const datos = _mundoLimpiar(body);
+    if (!datos || (!datos.paises.length && !datos.paradas.length)) return _mundoJson({ error: 'Aún no hay nada que publicar' }, 400);
+    // nombre de pila: el de la cuenta, nunca el que mande el navegador
+    const nombre = _mundoTxt(String(user.name || '').split(/\s+/)[0], 20) || 'Viajero';
+    let slug = await _mundoSlugDe(env, uid);
+    if (!slug) {
+      const base = _mundoSlugBase(nombre);
+      let cand = MUNDO_RESERVADAS.has(base) ? base + '-viajero' : base, libre = false;
+      for (let i = 0; i < 6 && !libre; i++) {
+        if (!(await firestoreAdminGet(env, 'public_worlds/' + cand))) { libre = true; break; }
+        const r = crypto.getRandomValues(new Uint8Array(3));
+        cand = base + '-' + [...r].map(x => (x % 36).toString(36)).join('');
+      }
+      if (!libre) return _mundoJson({ error: 'No se pudo reservar un enlace. Inténtalo de nuevo.' }, 500);
+      slug = cand;
+    } else {
+      // nunca pisar el documento de otro (defensa extra)
+      const ex = parseFirestoreDoc(await firestoreAdminGet(env, 'public_worlds/' + slug));
+      if (ex && ex.uid !== uid) return _mundoJson({ error: 'Enlace no disponible' }, 409);
+    }
+    await firestoreAdminPatch(env, 'public_worlds/' + slug, toFirestoreFields({
+      uid, slug, nombre, titulo: 'El mundo de ' + nombre, ...datos, actualizado: new Date().toISOString(),
+    }).fields);
+    try { await caches.default.delete(new Request('https://cache.local/mundo/' + slug)); } catch (_) {}
+    return _mundoJson({ ok: true, slug, url: 'https://borradodelmapa.com/mundo/' + slug });
+  }
+  return _mundoJson({ error: 'no encontrado' }, 404);
 }
 
 // Borra todos los objetos de R2 bajo un prefijo (ej. photos/{uid}/). Pagina con cursor.
@@ -10759,6 +10885,7 @@ export default {
     // ─── ENDPOINT /version (que version corre de verdad) ───
     // Publico a proposito: el Version ID no es un secreto y hace falta poder
     // consultarlo desde el movil sin token. Lo usa el panel de debug.
+    if (url.pathname.startsWith('/mundo/')) return handleMundo(request, env, url);
     if (request.method === 'GET' && url.pathname === '/version') {
       const meta = env.CF_VERSION_METADATA || {};
       return new Response(JSON.stringify({

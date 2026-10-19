@@ -705,6 +705,58 @@ const tuMundo = (() => {
     };
   }
 
+  /* ── Mi mundo público (19 oct 2026, caso p-mvea7qqetzp) ──
+     Lo que sale en el enlace: países, cifras y puntos del recorrido a ~1 km. Sin fotos (todavía), sin documentos,
+     sin tu casa (nada a menos de 5 km de la casa guardada). El servidor valida que seas tú (token de Firebase). */
+  const API_BASE = () => String(window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev').replace(/\/$/, '');
+  async function _pubFetch(path, method, body) {
+    const u = firebase.auth().currentUser; if (!u) throw new Error('Sin sesión');
+    const t = await u.getIdToken();
+    const r = await fetch(API_BASE() + path, { method, headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || 'Error ' + r.status);
+    return j;
+  }
+  function _pubPayload(S) {
+    const home = getHome(), seen = new Set(), out = [];
+    const paises = [...S.seen.values()].map(e => e.f.a2).filter(Boolean);
+    const planeados = [...S.plan.values()].map(e => e.f.a2).filter(a => a && !paises.includes(a));
+    S.places.forEach(p => {
+      if (home && hav(home, p) < 5) return; // nunca cerca de casa
+      const k = (+p.lat).toFixed(2) + ',' + (+p.lng).toFixed(2); if (seen.has(k)) return; seen.add(k);
+      // solo nombre de paradas de guías; los pies de foto y pins personales no salen
+      out.push({ lat: +p.lat, lng: +p.lng, name: p.trip ? p.name : '' });
+    });
+    return { paises, planeados, paradas: out.slice(0, 300), cifras: { paises: S.seen.size, km: Math.round(S.km), viajes: S.visited.length, dias: S.days } };
+  }
+  async function _wirePublic(S) {
+    const row = _q('#tm-pub-row'), info = _q('#tm-pub-info'), msg = _q('#tm-pub-msg'); if (!row) return;
+    const home = getHome();
+    const paint = est => {
+      const url = est && est.slug ? 'https://borradodelmapa.com/mundo/' + est.slug : '';
+      info.textContent = url
+        ? 'Tu mundo está publicado. Cualquiera con el enlace lo ve, sin cuenta: tus países, tus cifras y los puntos de tu recorrido (a ~1 km, nunca tu casa).'
+        : 'Publica un enlace para que cualquiera vea tu vuelta al mundo sin cuenta: tus países, tus cifras y los puntos de tu recorrido (a ~1 km). Sin fotos' + (home ? ', y nada a menos de 5 km de tu casa.' : '. Consejo: guarda antes tu casa (en Tus récords) y no saldrá nada cerca de ella.');
+      row.innerHTML = url
+        ? `<input class="tm-home-in" id="tm-pub-url" type="text" readonly value="${esc(url)}" aria-label="Tu enlace">
+           <button class="tm-btn" id="tm-pub-copy" type="button">${IC_SHARE} Compartir</button>
+           <button class="tm-btn" id="tm-pub-upd" type="button">Actualizar mi enlace</button>
+           <button class="tm-link" id="tm-pub-off" type="button">Despublicar</button>`
+        : '<button class="tm-btn" id="tm-pub-on" type="button">🌍 Publicar mi mundo</button>';
+      const run = async (fn, okTxt) => { msg.textContent = 'Un momento…'; try { const r = await fn(); msg.textContent = okTxt || ''; return r; } catch (e) { msg.textContent = e.message || 'No se pudo. Prueba otra vez.'; } };
+      const pub = async () => { const r = await run(() => _pubFetch('/mundo/publicar', 'POST', _pubPayload(S)), 'Listo: tu enlace está al día.'); if (r && r.slug) paint({ slug: r.slug }); };
+      const on = _q('#tm-pub-on'); if (on) on.onclick = pub;
+      const upd = _q('#tm-pub-upd'); if (upd) upd.onclick = pub;
+      const off = _q('#tm-pub-off'); if (off) off.onclick = async () => { if (!confirm('¿Despublicar? El enlace dejará de funcionar.')) return; const r = await run(() => _pubFetch('/mundo/despublicar', 'POST'), 'Despublicado: el enlace ya no funciona.'); if (r) paint(null); };
+      const cp = _q('#tm-pub-copy'); if (cp) cp.onclick = async () => {
+        if (navigator.share) { try { await navigator.share({ title: 'Mi vuelta al mundo', text: 'Mi vuelta al mundo en Borrado del Mapa', url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+        try { await navigator.clipboard.writeText(url); msg.textContent = 'Enlace copiado.'; } catch (_) { _q('#tm-pub-url').select(); msg.textContent = 'Cópialo y compártelo.'; }
+      };
+    };
+    paint(null);
+    try { const est = await _pubFetch('/mundo/estado', 'GET'); if (est && est.publicado && document.getElementById('tm-pub')) paint(est); } catch (_) {}
+  }
+
   async function render() {
     const $c = document.getElementById('app-content');
     if (!window.currentUser) { window._afterLogin = 'tu-mundo'; if (typeof openModal === 'function') openModal(); return; }
@@ -745,6 +797,11 @@ const tuMundo = (() => {
             <p class="tm-note" id="tm-share-note"></p>
             <div class="tm-card" id="tm-card" hidden><img id="tm-card-img" alt="Tarjeta de tu vuelta al mundo"></div>
           </section>
+          <section id="tm-pub"><h3 class="tm-h">Tu enlace público</h3>
+            <p class="tm-note" id="tm-pub-info"></p>
+            <div class="tm-pub-row" id="tm-pub-row"></div>
+            <p class="tm-note" id="tm-pub-msg"></p>
+          </section>
           <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div>
             <details class="tm-pend-sec" id="tm-pend-sec" hidden><summary>Tus guías sin fotos (<span id="tm-pend-n"></span>)</summary><div class="tm-pend" id="tm-pend"></div></details></section>
           <section id="tm-next-sec" hidden><h3 class="tm-h">Tus próximos destinos</h3><div class="tm-next" id="tm-next"></div></section>
@@ -756,6 +813,7 @@ const tuMundo = (() => {
       if (!document.getElementById('tm-screen')) return; // el usuario ya se fue a otra pantalla
       _q('#tm-body').hidden = false;
       _paint(S);
+      _wirePublic(S);
       try { _drawMap(S, _cache.D); _renderSuggest(S, _cache.D); } catch (e2) { console.warn('[tu-mundo] mapa de fotos', e2); }
     } catch (e) {
       const l = document.getElementById('tm-lede');
