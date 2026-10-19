@@ -111,10 +111,10 @@ async function elegir({ queries, toks, lat, lng, radio, width, exigirNombre }) {
 }
 
 
-// Guías públicas que no se llaman <destino>-ruta (p. ej. barcelona-en-3-dias-ky61): la app las busca en destinos/img/_guias.json
+// Guías públicas que no se llaman <destino>-ruta (p. ej. barcelona-en-3-dias-ky61): la app las busca en destinos/img/guias-publicas.json
 function registrarGuia(slug, route) {
   if (!route || !route._public_slug) return;
-  const f = path.join(ROOT, 'destinos', 'img', '_guias.json');
+  const f = path.join(ROOT, 'destinos', 'img', 'guias-publicas.json');
   let m = {}; try { m = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (_) {}
   m[route._public_slug] = slug;
   fs.writeFileSync(f, JSON.stringify(m, null, 1));
