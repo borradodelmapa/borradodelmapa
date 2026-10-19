@@ -333,7 +333,7 @@ const tuMundo = (() => {
      si hay una a menos de 40 km se SUGIERE ("estas 86 fotos parecen de X") y Paco confirma. Una foto vive en un solo sitio.
      💶 0 €: comparación en el móvil; al confirmar, una escritura de Firestore por lote (routeId). Sin Claude ni Google. */
   const SUG_KM = 40;
-  const _sugSkip = new Set();
+  const _sugSkip = new Set((() => { try { return JSON.parse(localStorage.getItem('bdm-sug-no') || '[]'); } catch (_) { return []; } })());  // guías cuyas fotos sugeridas el usuario dijo «No lo son»
   function _suggest(D) {
     const { pts } = _photoPoints(D), by = new Map(); let sinGuia = 0;
     pts.filter(p => !p.route).forEach(p => {
@@ -351,12 +351,12 @@ const tuMundo = (() => {
     box.innerHTML = groups.map(x => `<div class="tm-sug-card" data-g="${esc(x.g.id)}">
         <div class="tm-sug-th">${x.photos.slice(0, 6).map((p, i) => `<button type="button" data-i="${i}" aria-label="Ver foto"><img src="${esc(p.url)}" alt="" loading="lazy"></button>`).join('')}</div>
         <div class="tm-sug-tx"><b>${x.photos.length} ${x.photos.length === 1 ? 'foto parece' : 'fotos parecen'} de «${esc(x.g.title)}»</b></div>
-        <div class="tm-sug-bt"><button type="button" class="tm-btn tm-sug-ok">Pasar a esta guía</button><button type="button" class="tm-link tm-sug-no">Ahora no</button></div>
+        <div class="tm-sug-bt"><button type="button" class="tm-btn tm-sug-ok">Pasar a esta guía</button><button type="button" class="tm-link tm-sug-no">No lo son</button></div>
       </div>`).join('');
     box.querySelectorAll('.tm-sug-card').forEach(card => {
       const x = groups.find(y => y.g.id === card.dataset.g);
       card.querySelectorAll('.tm-sug-th button').forEach(b => b.onclick = () => _lbOpen(x.photos, +b.dataset.i));
-      card.querySelector('.tm-sug-no').onclick = () => { _sugSkip.add(x.g.id); _renderSuggest(S, D); };
+      card.querySelector('.tm-sug-no').onclick = () => { _sugSkip.add(x.g.id); try { localStorage.setItem('bdm-sug-no', JSON.stringify([..._sugSkip])); } catch (_) {} _renderSuggest(S, D); };
       card.querySelector('.tm-sug-ok').onclick = async e => {
         const u = window.currentUser; if (!u) return; const bt = e.currentTarget; bt.disabled = true; bt.textContent = 'Pasando…';
         const ids = x.photos.map(p => p.id), db = firebase.firestore();
@@ -798,8 +798,8 @@ const tuMundo = (() => {
       if (!all.length) { box.innerHTML = ''; return; }
       box.innerHTML = '<h4 class="tm-pubph-h">Fotos en tu enlace <span id="tm-pubph-n"></span></h4><p class="tm-note">Ninguna sale si no la eliges. Toca una para ponerla o quitarla (se actualiza solo). No salen documentos ni fotos a menos de 5 km de tu casa.</p><div class="tm-pubph">' +
         all.map(p => { const cerca = home2 && p.has && hav(home2, p) < 5; return `<button type="button" class="tm-pubph-i${_pubSel.has(p.id) ? ' on' : ''}" data-id="${esc(p.id)}" ${cerca ? 'disabled title="Cerca de tu casa"' : ''} aria-pressed="${_pubSel.has(p.id)}"><img src="${esc(p.url)}" alt="" loading="lazy"><i>✓</i></button>`; }).join('') +
-        '</div><button class="tm-link" id="tm-pubph-clear" type="button">Quitar todas las fotos</button>';
-      const cnt = () => { const n = _q('#tm-pubph-n'); if (n) n.textContent = _pubSel.size ? '(' + _pubSel.size + ')' : ''; };
+        '</div><button class="tm-link" id="tm-pubph-clear" type="button" hidden>Quitar fotos seleccionadas</button>';
+      const cnt = () => { const n = _q('#tm-pubph-n'); if (n) n.textContent = _pubSel.size ? '(' + _pubSel.size + ')' : ''; const cl = _q('#tm-pubph-clear'); if (cl) cl.hidden = !_pubSel.size; };
       cnt();
       box.querySelectorAll('.tm-pubph-i').forEach(b => b.onclick = () => {
         const id = b.dataset.id; if (_pubSel.has(id)) _pubSel.delete(id); else if (_pubSel.size >= 60) { msg.textContent = 'Máximo 60 fotos en el enlace.'; return; } else _pubSel.add(id);
