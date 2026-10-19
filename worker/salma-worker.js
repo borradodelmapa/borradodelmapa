@@ -13021,9 +13021,11 @@ export default {
             }
             linkedUid = newUid;
             const welcomeLink = await buildAutoLoginLink(env, newUid);
+            // Primero «guárdame como contacto» + la tarjeta (19 oct 2026, Paco), después la bienvenida.
+            await sendWhatsAppMessage(env, from, 'Guárdame como contacto 👇 así me encuentras siempre que me necesites.').catch(() => {});
+            await _sendWhatsAppContactCard(env, from);
             // Bienvenida con todo lo que se puede hacer por aquí (25 sept 2026, Paco).
             await sendWhatsAppMessage(env, from, `${waHelpText(profileName)}\n\nTe he abierto cuenta gratis con este número. Lo que guardes (rutas, notas) lo ves también en la web, ya con sesión iniciada: ${welcomeLink}`);
-            await _sendWhatsAppContactCard(env, from);
             // Sigue abajo: se responde también a lo que haya escrito, como chat normal.
           }
 
