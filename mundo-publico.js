@@ -41,6 +41,8 @@
       '<div class="mp-map" id="mp-map"></div>' +
       '<div class="mp-leg"><span><i style="background:#F4630B"></i>Ha estado</span>' + (planeados.length ? '<span><i style="background:#7a3a14"></i>Planeado, aún no</span>' : '') + '</div>' +
       (flags ? '<div class="mp-flags">' + flags + '</div>' : '') +
+      ((d.records || []).length ? '<section><h2 class="mp-h">Sus récords</h2><div class="mp-recs">' + d.records.map(r => '<div class="mp-rec"><span class="mp-k">' + esc(r.k) + '</span><b>' + esc(r.v) + '</b><span class="mp-s">' + esc(r.s) + '</span></div>').join('') + '</div></section>' : '') +
+      ((d.viajes || []).length ? '<section><h2 class="mp-h">Sus viajes</h2><div class="mp-trips">' + d.viajes.map(t => '<div class="mp-trip"><b>' + esc(t.title) + '</b><span>' + (t.countries || []).map(flagOf).join(' ') + ' ' + (t.year ? t.year + ' · ' : '') + (t.days ? t.days + ' días · ' : '') + nf(t.km) + ' km' + (t.fotos ? ' · ' + t.fotos + (t.fotos === 1 ? ' foto' : ' fotos') : '') + '</span></div>').join('') + '</div></section>' : '') +
       '<div class="mp-cta"><h2>¿Y tu vuelta al mundo?</h2><p>Crea tu cuenta gratis, planea tu próximo viaje con Salma y pinta tu propio mapa.</p><a class="btn-primary" href="/">Crear mi mundo</a></div>' +
       '</div>';
     if (typeof L === 'undefined') return;
@@ -48,20 +50,26 @@
       if (typeof topojson === 'undefined') await _loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js');
       const topo = await (await fetch('/vendor/countries-50m.json')).json();
       const fc = topojson.feature(topo, topo.objects.countries);
-      const map = L.map('mp-map', { worldCopyJump: true, minZoom: 2, maxZoom: 14 });
+      const map = L.map('mp-map', { worldCopyJump: true, minZoom: 1, maxZoom: 14 });
       map.setView([25, 10], 2); // vista inicial antes de añadir capas (Leaflet la exige)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
       const vis = new Set(paises), pla = new Set(planeados);
+      const grp = L.featureGroup().addTo(map);
       fc.features.forEach(f => {
         if (!f.geometry) return;
         const a2 = ISO[f.id] || (f.properties.name === 'Kosovo' ? 'XK' : ''), v = vis.has(a2), p = !v && pla.has(a2);
         if (!v && !p) return;
-        L.geoJSON(f, { style: { color: v ? '#F4630B' : '#a8541c', weight: 1, fillColor: v ? '#F4630B' : '#7a3a14', fillOpacity: v ? .38 : .3 }, interactive: false }).addTo(map);
+        L.geoJSON(f, { style: { color: v ? '#F4630B' : '#a8541c', weight: 1, fillColor: v ? '#F4630B' : '#7a3a14', fillOpacity: v ? .38 : .3 }, interactive: false }).addTo(grp);
       });
       const pts = (d.paradas || []).filter(p => isFinite(p.lat) && isFinite(p.lng));
       pts.forEach(p => { const m = L.circleMarker([p.lat, p.lng], { radius: 5, color: '#fff', weight: 2, fillColor: '#F4630B', fillOpacity: 1 }).addTo(map); if (p.name) m.bindTooltip(esc(p.name)); });
-      if (pts.length) map.fitBounds(L.latLngBounds(pts.map(p => [p.lat, p.lng])), { padding: [40, 40], maxZoom: 6 }); else map.setView([25, 10], 2);
-      setTimeout(() => map.invalidateSize(), 200);
+      map.invalidateSize();
+      // con puntos: se encuadran ellos (los contornos de países con islas lejanas, como Francia, estirarían demasiado); sin puntos, los países
+      const bb = pts.length ? L.latLngBounds(pts.map(p => [p.lat, p.lng])) : (grp.getLayers().length ? grp.getBounds() : null);
+      // encuadra todos los países pisados (y los puntos) para que el mapa se vea entero, también en móvil
+      if (bb && bb.isValid()) map.fitBounds(bb, { padding: [24, 24], maxZoom: 6 }); else map.setView([25, 10], 2);
+      const refit = () => { map.invalidateSize(); if (bb && bb.isValid()) map.fitBounds(bb, { padding: [24, 24], maxZoom: 6 }); };
+      setTimeout(refit, 250); window.addEventListener('resize', refit);
     } catch (e) { console.warn('[mundo-publico] mapa', e); const m = document.getElementById('mp-map'); if (m) m.innerHTML = '<p style="padding:20px;color:#999">No se pudo cargar el mapa.</p>'; }
   }
   main();

@@ -727,7 +727,23 @@ const tuMundo = (() => {
       // solo nombre de paradas de guías; los pies de foto y pins personales no salen
       out.push({ lat: +p.lat, lng: +p.lng, name: p.trip ? p.name : '' });
     });
-    return { paises, planeados, paradas: out.slice(0, 300), cifras: { paises: S.seen.size, km: Math.round(S.km), viajes: S.visited.length, dias: S.days } };
+    // récords (sin «el más lejano de casa»: delataría dónde vives) y viajes; los hechos solo cerca de casa se omiten
+    const lejos = S.places.filter(p => !(home && hav(home, p) < 5)), pn = p => { const f = countryAt(p.lat, p.lng), pais = f ? esName(f.a2, f.en) : ''; return p.trip && p.name ? p.name + (pais ? ' · ' + pais : '') : pais; }; // pies de foto y pins personales no salen
+    const records = [], dec = (x, ns) => Math.abs(x).toFixed(2).replace('.', ',') + '° ' + ns;
+    if (lejos.length) {
+      const N = lejos.reduce((a, p) => p.lat > a.lat ? p : a), Su = lejos.reduce((a, p) => p.lat < a.lat ? p : a);
+      records.push({ k: 'Lo más al norte', v: pn(N), s: dec(N.lat, N.lat >= 0 ? 'N' : 'S') }, { k: 'Lo más al sur', v: pn(Su), s: dec(Su.lat, Su.lat >= 0 ? 'N' : 'S') });
+    }
+    const vis = S.visited.filter(g => !(home && g.stops.length && g.stops.every(s => hav(home, s) < 5)));
+    if (vis.length) {
+      const lg = vis.reduce((a, g) => (g.days || 0) > (a.days || 0) ? g : a); if (lg.days) records.push({ k: 'El viaje más largo', v: lg.title, s: lg.days + ' días' });
+      const km = vis.reduce((a, g) => g.km > a.km ? g : a); if (km.km > 1) records.push({ k: 'El de más kilómetros', v: km.title, s: nf(km.km) + ' km' });
+      const ph = vis.reduce((a, g) => g.nPhotos > a.nPhotos ? g : a); if (ph.nPhotos) records.push({ k: 'El de más fotos', v: ph.title, s: ph.nPhotos + (ph.nPhotos === 1 ? ' foto' : ' fotos') });
+    }
+    const top = [...S.seen.values()].sort((a, b) => b.src.size - a.src.size)[0];
+    if (top && top.src.size > 1) records.push({ k: 'Su país favorito', v: esName(top.f.a2, top.f.en), s: top.src.size + ' viajes o recuerdos' });
+    const viajes = vis.slice().sort((a, b) => (b.date || 0) - (a.date || 0)).slice(0, 60).map(g => ({ title: g.title, year: g.date ? new Date(g.date).getFullYear() : 0, countries: g.countries.map(f => f.a2).filter(Boolean), days: g.days || 0, km: Math.round(g.km), fotos: g.nPhotos || 0 }));
+    return { paises, planeados, paradas: out.slice(0, 300), records, viajes, cifras: { paises: S.seen.size, km: Math.round(S.km), viajes: S.visited.length, dias: S.days } };
   }
   async function _wirePublic(S) {
     const row = _q('#tm-pub-row'), info = _q('#tm-pub-info'), msg = _q('#tm-pub-msg'); if (!row) return;

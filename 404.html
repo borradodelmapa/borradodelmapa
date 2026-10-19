@@ -110,6 +110,16 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
   .mp-leg { display:flex; gap:16px; font-size:12px; color:var(--text-muted); }
   .mp-leg i { display:inline-block; width:10px; height:10px; margin-right:6px; }
   .mp-flags { display:flex; flex-wrap:wrap; gap:6px; font-size:26px; line-height:1; }
+  .mp-h { font:800 22px/1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; color:var(--text-primary); margin:8px 0 10px; }
+  .mp-recs { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+  .mp-rec { background:var(--bg-row); border:1px solid var(--border); padding:12px; display:flex; flex-direction:column; gap:3px; }
+  .mp-rec b { font:700 20px/1.1 var(--font-cond); color:var(--text-primary); overflow-wrap:anywhere; }
+  .mp-k { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .mp-s { font-size:13px; color:var(--text-muted); }
+  .mp-trips { display:flex; flex-direction:column; gap:8px; }
+  .mp-trip { background:var(--bg-row); border:1px solid var(--border); border-left:3px solid var(--accent); padding:10px 12px; display:flex; flex-direction:column; gap:3px; }
+  .mp-trip b { font:700 18px/1.15 var(--font-cond); color:var(--text-primary); overflow-wrap:anywhere; }
+  .mp-trip span { font-size:13px; color:var(--text-muted); }
   .mp-cta { border:1px solid var(--border); border-left:3px solid var(--accent); padding:18px; background:var(--bg-row); }
   .mp-cta h2 { font:800 24px/1 var(--font-cond); text-transform:uppercase; margin:0 0 8px; color:var(--text-primary); }
   .mp-cta p { color:var(--text-muted); margin:0 0 14px; }
@@ -151,7 +161,7 @@ function escapeHTML(str) {
   const API = window.SALMA_API;
   // Mi mundo público (19 oct 2026): /mundo/<nombre> lo pinta mundo-publico.js, no es una guía
   if (/^\/mundo\//.test(location.pathname)) {
-    const s = document.createElement('script'); s.src = '/mundo-publico.js?v=1'; document.body.appendChild(s);
+    const s = document.createElement('script'); s.src = '/mundo-publico.js?v=2'; document.body.appendChild(s);
     return;
   }
   // .html: páginas fijas de scripts/build-guias.js si se entra como /<slug>.html

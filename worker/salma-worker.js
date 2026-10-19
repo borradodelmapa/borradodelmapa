@@ -2480,7 +2480,14 @@ function _mundoLimpiar(b) {
     return { lat: Math.round(lat * 100) / 100, lng: Math.round(lng * 100) / 100, name: _mundoTxt(p.name, 60) };
   }).filter(Boolean);
   const c = b.cifras || {};
+  // récords («lo más al sur», «el viaje más largo»…) y lista de viajes: solo texto plano y números acotados
+  const records = (Array.isArray(b.records) ? b.records : []).slice(0, 8).map(r => r && { k: _mundoTxt(r.k, 50), v: _mundoTxt(r.v, 80), s: _mundoTxt(r.s, 100) }).filter(r => r && r.k && r.v);
+  const viajes = (Array.isArray(b.viajes) ? b.viajes : []).slice(0, 60).map(t => t && ({
+    title: _mundoTxt(t.title, 80), year: Math.round(_mundoNum(t.year, 0, 2100)), countries: a2(t.countries).slice(0, 8),
+    days: Math.round(_mundoNum(t.days, 0, 1000)), km: Math.round(_mundoNum(t.km, 0, 100000)), fotos: Math.round(_mundoNum(t.fotos, 0, 100000)),
+  })).filter(t => t && t.title);
   return {
+    records, viajes,
     paises: a2(b.paises), planeados: a2(b.planeados), paradas,
     cifras: { paises: Math.round(_mundoNum(c.paises, 0, 250)), km: Math.round(_mundoNum(c.km, 0, 2000000)), viajes: Math.round(_mundoNum(c.viajes, 0, 5000)), dias: Math.round(_mundoNum(c.dias, 0, 40000)) },
   };
@@ -2497,7 +2504,7 @@ async function handleMundo(request, env, url) {
     if (!doc) return _mundoJson({ error: 'no encontrado' }, 404, { 'Cache-Control': 'public, max-age=60' });
     const d = parseFirestoreDoc(doc);
     // lo público: NUNCA el uid
-    const out = { slug, nombre: d.nombre || '', titulo: d.titulo || '', paises: d.paises || [], planeados: d.planeados || [], paradas: d.paradas || [], cifras: d.cifras || {}, actualizado: d.actualizado || null };
+    const out = { slug, nombre: d.nombre || '', titulo: d.titulo || '', paises: d.paises || [], planeados: d.planeados || [], paradas: d.paradas || [], records: d.records || [], viajes: d.viajes || [], cifras: d.cifras || {}, actualizado: d.actualizado || null };
     const res = _mundoJson(out, 200, { 'Cache-Control': 'public, max-age=120' });
     try { await cache.put(ck, res.clone()); } catch (_) {}
     return res;
