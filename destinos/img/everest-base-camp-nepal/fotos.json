@@ -89,6 +89,50 @@
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Thamel_sidestreets_at_night_-_Kathmandu,_Nepal_-_panoramio.jpg",
    "fuente": "Thamel sidestreets at night - Kathmandu, Nepal - panoramio.jpg"
+  },
+  "Phakding": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 345,
+   "alt": "Paisaje cerca de Phakding, Campo Base del Everest",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-03-27_(41777406212).jpg",
+   "fuente": "Nepal 2018-03-27 (41777406212).jpg",
+   "cercana": true
+  },
+  "Tengboche Monastery": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paisaje cerca de Tengboche Monastery, Campo Base del Everest",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-03-28_(40114424510).jpg",
+   "fuente": "Nepal 2018-03-28 (40114424510).jpg",
+   "cercana": true
+  },
+  "Everest Base Camp": {
+   "file": "s10.jpg",
+   "w": 720,
+   "h": 360,
+   "alt": "Paisaje cerca de Everest Base Camp, Campo Base del Everest",
+   "autor": "gallimaps",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mapillary_(gallimaps)_2024-04-30_07H06M26S500_(1016446719814683_at_rRikwTcQ7W9zA8F5x4SpIe_with_Labpano_Pilot_Era).jpg",
+   "fuente": "Mapillary (gallimaps) 2024-04-30 07H06M26S500 (1016446719814683 at rRikwTcQ7W9zA8F5x4SpIe with Labpano Pilot Era).jpg",
+   "cercana": true
+  },
+  "Lukla": {
+   "file": "s15.jpg",
+   "w": 720,
+   "h": 459,
+   "alt": "Paisaje cerca de Lukla, Campo Base del Everest",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-03-26_(41772972271).jpg",
+   "fuente": "Nepal 2018-03-26 (41772972271).jpg",
+   "cercana": true
   }
  }
 }

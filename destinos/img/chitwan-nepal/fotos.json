@@ -19,6 +19,39 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Wild_Elephant_(Ronaldo).jpg",
    "fuente": "Wild Elephant (Ronaldo).jpg"
+  },
+  "Parque Nacional de Chitwan": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 450,
+   "alt": "Paisaje cerca de Parque Nacional de Chitwan, Parque Nacional de Chitwan",
+   "autor": "Sangyam adventurer",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Crowned_Jewel_of_the_Forest.jpg",
+   "fuente": "Crowned Jewel of the Forest.jpg",
+   "cercana": true
+  },
+  "Rapti River, Sauraha": {
+   "file": "s3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Paisaje cerca de Rapti River, Sauraha, Parque Nacional de Chitwan",
+   "autor": "GauravDhital",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:View_of_sunset_at_chitwan_national_park.jpg",
+   "fuente": "View of sunset at chitwan national park.jpg",
+   "cercana": true
+  },
+  "New Sauraha Tharu Cultural House": {
+   "file": "s4.jpg",
+   "w": 720,
+   "h": 479,
+   "alt": "Paisaje cerca de New Sauraha Tharu Cultural House, Parque Nacional de Chitwan",
+   "autor": "Aaditya Rauniyar",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:A_flock_of_cormorants_flying_over_Sauraha_(Tick_mark_formation).jpg",
+   "fuente": "A flock of cormorants flying over Sauraha (Tick mark formation).jpg",
+   "cercana": true
   }
  }
 }

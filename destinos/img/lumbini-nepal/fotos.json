@@ -39,6 +39,61 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lumbini_Myanmar_Golden_Temple.jpg",
    "fuente": "Lumbini Myanmar Golden Temple.jpg"
+  },
+  "Templo Maya Devi": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paisaje cerca de Templo Maya Devi, Lumbini",
+   "autor": "Imsurit",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mayadevi_temple_1.jpg",
+   "fuente": "Mayadevi temple 1.jpg",
+   "cercana": true
+  },
+  "World Peace Pagoda , Lumbini": {
+   "file": "s4.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paisaje cerca de World Peace Pagoda , Lumbini, Lumbini",
+   "autor": "Alexey Komarov",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lumbini,_Nepal_2019-04-09_1.jpg",
+   "fuente": "Lumbini, Nepal 2019-04-09 1.jpg",
+   "cercana": true
+  },
+  "Korea Temple": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paisaje cerca de Korea Temple, Lumbini",
+   "autor": "Shadow Ayush",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Maya_Devi_Temple_and_Ashoka_Pillar,_Lumbini,_Rupandehi,_Nepal.jpg",
+   "fuente": "Maya Devi Temple and Ashoka Pillar, Lumbini, Rupandehi, Nepal.jpg",
+   "cercana": true
+  },
+  "Zhong Hua Buddhist Monastery [Chinese Temple]": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paisaje cerca de Zhong Hua Buddhist Monastery [Chinese Temple], Lumbini",
+   "autor": "Alexey Komarov",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vietnamese_Temple_(Phat_Quoc_Tu)_in_Lumbini,_Nepal_2019-04-09.jpg",
+   "fuente": "Vietnamese Temple (Phat Quoc Tu) in Lumbini, Nepal 2019-04-09.jpg",
+   "cercana": true
+  },
+  "Lumbini Museum": {
+   "file": "s8.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paisaje cerca de Lumbini Museum, Lumbini",
+   "autor": "Alexey Komarov",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Eichhornia_crassipes_in_Lumbini,_Nepal_2.jpg",
+   "fuente": "Eichhornia crassipes in Lumbini, Nepal 2.jpg",
+   "cercana": true
   }
  }
 }

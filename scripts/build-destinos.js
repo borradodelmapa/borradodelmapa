@@ -399,9 +399,11 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   // Título único por país (antes había nombres repetidos: Mar Muerto, Trípoli…) y corto
   // para que Google no lo corte (~60). La marca va en og:site_name, no en el título.
   // Con guía completa el título es lo que la gente busca: «Qué ver en X en N días».
-  const pageTitle = conGuia
+  let pageTitle = conGuia
     ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}: guía y presupuesto`
     : `Viajar a ${dest.nombre} (${countryName}): guía y presupuesto`;
+  // Si el nombre es largo, el título se acorta para que Google no lo corte (máx. ~62)
+  if (pageTitle.length > 62) pageTitle = conGuia ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Viajar a ${dest.nombre}: guía y presupuesto`;
   const metaFull = conGuia
     ? `Qué ver en ${dest.nombre} (${countryName}) en ${nDias} ${nDias === 1 ? 'día' : 'días'}: ${route.stops.length} paradas con fotos y mapa, presupuesto de ${budget} al día${dest.mejor_epoca ? ' y mejor época: ' + dest.mejor_epoca : ''}.`
     : `Guía para viajar a ${dest.nombre} (${countryName})${minPrice ? ` desde ${minPrice}€/noche` : ''}. ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Presupuesto, dónde dormir y qué ver.`;

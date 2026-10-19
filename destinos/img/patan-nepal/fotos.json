@@ -59,6 +59,28 @@
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mangal_Bazaar_-_panoramio.jpg",
    "fuente": "Mangal Bazaar - panoramio.jpg"
+  },
+  "Patan Darbar Square": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paisaje cerca de Patan Darbar Square, Patan (Lalitpur)",
+   "autor": "Sushan116",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:The_throne_of_Patan_Kings.jpg",
+   "fuente": "The throne of Patan Kings.jpg",
+   "cercana": true
+  },
+  "Kumbheshwor Temple(Patan)": {
+   "file": "s3.jpg",
+   "w": 720,
+   "h": 541,
+   "alt": "Paisaje cerca de Kumbheshwor Temple(Patan), Patan (Lalitpur)",
+   "autor": "Janak Bhatta",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kumbheshwar_Temple_(16800).jpg",
+   "fuente": "Kumbheshwar Temple (16800).jpg",
+   "cercana": true
   }
  }
 }

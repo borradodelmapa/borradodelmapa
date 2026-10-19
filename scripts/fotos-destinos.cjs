@@ -176,14 +176,60 @@ async function hacer(slug, rehacer) {
   console.log(`  ${slug}: hero ${out.hero ? 'sí' : 'no'}, ${Object.keys(out.stops).length}/${stops.length} paradas con foto`);
 }
 
+
+
+// Paradas sin foto propia (aldeas de trekking…): una foto del paisaje de alrededor (hasta 4 km), sin exigir el nombre.
+// Se dice en el alt («Paisaje cerca de X»). Nunca repite una foto de la página ni usa retratos.
+const RETRATO = /(portrait|selfie|man|woman|girl|boy|child|children|people|persona|retrato|group|family)/i;
+async function completarPagina(slug) {
+  const dir = path.join(ROOT, 'destinos', 'img', slug);
+  const meta = path.join(dir, 'fotos.json');
+  const out = JSON.parse(fs.readFileSync(meta, 'utf8'));
+  const m = slug.match(/^(.*)-([a-z-]+)$/);
+  let country, destId;
+  for (const c of COUNTRIES) { const cs = norm(c.name).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); if (slug.endsWith('-' + cs)) { country = c; destId = slug.slice(0, -(cs.length + 1)); } }
+  const cs = norm(country.name).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const route = JSON.parse(fs.readFileSync(path.join(ROUTES_DIR, destId + '-' + cs + '.json'), 'utf8'));
+  const dest = (JSON.parse(fs.readFileSync(path.join(KV_DIR, country.code + '.json'), 'utf8')).destinos || []).find(d => d.id === destId);
+  const usadas = new Set(Object.values(out.stops).map(x => x.fuente).concat(out.hero ? [out.hero.url] : []));
+  const urlsUsadas = new Set(Object.values(out.stops).map(x => x.url).concat(out.hero ? [out.hero.url] : []));
+  let n = 0, nuevas = 0;
+  for (const st of route.stops) {
+    n++;
+    if (out.stops[st.name] || typeof st.lat !== 'number') continue;
+    let best = null;
+    try {
+      const files = await cercanas(st.lat, st.lng, 4000);
+      const cands = [];
+      for (let i = 0; i < files.length; i += 25) for (const c of await info(files.slice(i, i + 25), STOP_W)) cands.push(c);
+      for (const c of cands) {
+        if (usadas.has(c.title) || urlsUsadas.has(c.page) || MALAS.test(c.title) || RETRATO.test(c.title + ' ' + c.desc)) continue;
+        const ratio = c.w / c.h; if (ratio < 1.3 || ratio > 2.2 || c.w < 2000) continue;
+        const sc = Math.min(c.w / 3000, 2) + (tokens(st.name).some(t => norm(c.title + c.desc).includes(t)) ? 3 : 0);
+        if (!best || sc > best.sc) best = { sc, c };
+      }
+    } catch (_) {}
+    await sleep(250);
+    if (!best) { console.log('  parada', n, 'sin foto cercana:', st.name); continue; }
+    const c = best.c;
+    await bajar(c, path.join(dir, 's' + n + '.jpg'));
+    usadas.add(c.title); urlsUsadas.add(c.page);
+    out.stops[st.name] = { file: 's' + n + '.jpg', w: c.thumbW, h: c.thumbH, alt: 'Paisaje cerca de ' + st.name + ', ' + dest.nombre, autor: c.autor, licencia: c.licencia, url: c.page, fuente: c.title, cercana: true };
+    nuevas++; console.log('  parada', n, 'paisaje cerca de', st.name, '←', c.title.slice(0, 50));
+  }
+  fs.writeFileSync(meta, JSON.stringify(out, null, 1));
+  console.log('  ' + slug + ': +' + nuevas + ' → ' + Object.keys(out.stops).length + '/' + route.stops.length);
+}
+
 (async () => {
   const args = process.argv.slice(2);
   const rehacer = args.includes('--rehacer');
+  const completar = args.includes('--completar');
   let slugs = args.filter(a => !a.startsWith('--'));
   if (args.includes('--indexables')) {
     const j = JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-indexables.json'), 'utf8'));
     slugs = j.slugs.filter(s => s !== 'index' && fs.existsSync(path.join(ROUTES_DIR, s + '.json')));
   }
   if (!slugs.length) { console.log('Uso: node scripts/fotos-destinos.cjs <slug> | --indexables [--rehacer]'); process.exit(1); }
-  for (const s of slugs) { console.log('▶', s); try { await hacer(s, rehacer); } catch (e) { console.log('  ❌', e.message); } }
+  for (const s of slugs) { console.log('▶', s); try { await (completar ? completarPagina(s) : hacer(s, rehacer)); } catch (e) { console.log('  ❌', e.message); } }
 })();
