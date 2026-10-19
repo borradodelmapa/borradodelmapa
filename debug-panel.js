@@ -465,6 +465,7 @@
     bar.querySelector('[data-v="up"]').addEventListener('click', (e) => {
       e.stopPropagation();
       done('¡Gracias! 🧡');
+      try { if (typeof window.bdmResenaTrasPulgar === 'function') window.bdmResenaTrasPulgar(); } catch (_) {}
       sendFeedback({ kind: 'up', context: ctx() }).catch(() => {});
     });
     bar.querySelector('[data-v="down"]').addEventListener('click', (e) => {

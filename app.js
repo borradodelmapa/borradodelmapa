@@ -4226,38 +4226,69 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-// ═══ MOMENTO TRAS GUARDAR: invitar a compartir (siempre) y pedir reseña (solo app de Play, 1 vez) ═══
+// ═══ MOMENTO TRAS GUARDAR: invitar a compartir (siempre que se guarda una guía) ═══
 // Sin llamadas a APIs de pago. Estilos en línea a propósito (no toca styles.css ni los destinos).
-function _momentoTrasGuardar(docId, r) {
-  if (document.getElementById('bdm-momento')) return;
-  let n = 0, pedida = 0;
-  try { n = (+localStorage.getItem('bdm_guardadas') || 0) + 1; localStorage.setItem('bdm_guardadas', n); pedida = +localStorage.getItem('bdm_resena_ts') || 0; } catch (_) {}
-  // Reseña: solo dentro de la app de Google Play, a partir de la 2ª guía guardada y no más de 1 vez cada 60 días
-  const pedirResena = !!window.BDM_TWA && n >= 2 && (Date.now() - pedida > 60 * 86400000);
+const _BDM_BTN = 'border:0;padding:12px 14px;font-weight:700;font-size:14px;cursor:pointer;margin-right:8px;';
+function _bdmCaja() {
   const box = document.createElement('div');
   box.id = 'bdm-momento';
   box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:90px;z-index:10001;background:#111;color:#fff;border:2px solid #F4630B;padding:16px;font-family:inherit;box-shadow:0 6px 24px rgba(0,0,0,.5)';
-  const btn = 'border:0;padding:12px 14px;font-weight:700;font-size:14px;cursor:pointer;margin-right:8px;';
+  return box;
+}
+function _momentoTrasGuardar(docId, r) {
+  if (document.getElementById('bdm-momento')) return;
+  const box = _bdmCaja();
   const cerrar = () => box.remove();
-  if (pedirResena) {
-    try { localStorage.setItem('bdm_resena_ts', Date.now()); } catch (_) {}
-    box.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:10px">¿Te está gustando Salma?</div>' +
-      '<button id="bdm-si" style="' + btn + 'background:#F4630B;color:#fff">👍 Sí, mucho</button>' +
-      '<button id="bdm-no" style="' + btn + 'background:#333;color:#fff">👎 Se puede mejorar</button>';
-    document.body.appendChild(box);
-    document.getElementById('bdm-si').onclick = () => { cerrar(); window.open('https://play.google.com/store/apps/details?id=com.borradodelmapa.app', '_blank'); };
-    document.getElementById('bdm-no').onclick = () => { cerrar(); showToast('Gracias, cuéntale a Salma qué mejorar'); };
-    return;
-  }
   box.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:4px">¡Guía lista! 🎉</div>' +
     '<div style="font-size:13px;opacity:.85;margin-bottom:12px">¿Se la mandas a tu grupo de viaje?</div>' +
-    '<button id="bdm-comp" style="' + btn + 'background:#F4630B;color:#fff">Compartir</button>' +
-    '<button id="bdm-ahora" style="' + btn + 'background:#333;color:#fff">Ahora no</button>';
+    '<button id="bdm-comp" style="' + _BDM_BTN + 'background:#F4630B;color:#fff">Compartir</button>' +
+    '<button id="bdm-ahora" style="' + _BDM_BTN + 'background:#333;color:#fff">Ahora no</button>';
   document.body.appendChild(box);
   document.getElementById('bdm-ahora').onclick = cerrar;
   document.getElementById('bdm-comp').onclick = () => { cerrar(); mapaItinerario._doShare(r, docId); };
   setTimeout(cerrar, 12000);
 }
+
+// ═══ PEDIR RESEÑA EN GOOGLE PLAY (solo dentro de la app de Play) ═══
+// Momentos (cada uno llama a bdmPedirResena): 2º 👍 en el chat (luego, cada 👍), el usuario da las gracias a Salma.
+// Reglas: nunca si ya pulsó «Valorar»; como mucho 1 vez cada 7 días; sin tope de veces. Sin APIs de pago.
+const BDM_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.borradodelmapa.app';
+function bdmPedirResena(motivo) {
+  try {
+    if (!window.BDM_TWA || document.getElementById('bdm-momento')) return;
+    if (localStorage.getItem('bdm_resena_hecha')) return;
+    if (Date.now() - (+localStorage.getItem('bdm_resena_ts') || 0) < 7 * 86400000) return;
+    localStorage.setItem('bdm_resena_ts', Date.now());
+  } catch (_) { return; }
+  const box = _bdmCaja();
+  const cerrar = () => box.remove();
+  box.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:4px">Me alegra haberte ayudado 🧡</div>' +
+    '<div style="font-size:13px;opacity:.85;margin-bottom:12px">¿Nos dejas 5 estrellas en Google Play? Nos ayuda muchísimo.</div>' +
+    '<button id="bdm-si" style="' + _BDM_BTN + 'background:#F4630B;color:#fff">⭐ Valorar</button>' +
+    '<button id="bdm-ahora" style="' + _BDM_BTN + 'background:#333;color:#fff">Ahora no</button>';
+  document.body.appendChild(box);
+  document.getElementById('bdm-ahora').onclick = cerrar;
+  document.getElementById('bdm-si').onclick = () => {
+    cerrar();
+    try { localStorage.setItem('bdm_resena_hecha', '1'); } catch (_) {}
+    // Mejor esfuerzo: apuntarlo en su cuenta para no volver a pedírselo desde otro móvil
+    try { if (currentUser) db.collection('users').doc(currentUser.uid).set({ resena_play_pulsada: new Date().toISOString() }, { merge: true }).catch(() => {}); } catch (_) {}
+    window.open(BDM_PLAY_URL, '_blank');
+  };
+}
+// 👍 en una respuesta de Salma: la 1ª vez hacen falta 2 (para asegurar que está contento); después, cada uno
+function bdmResenaTrasPulgar() {
+  try {
+    const n = (+localStorage.getItem('bdm_ups') || 0) + 1;
+    localStorage.setItem('bdm_ups', n);
+    const yaPedida = !!localStorage.getItem('bdm_resena_ts');
+    if (n >= (yaPedida ? 1 : 2)) { localStorage.setItem('bdm_ups', 0); setTimeout(() => bdmPedirResena('pulgar'), 1500); }
+  } catch (_) {}
+}
+// Si su cuenta ya la marcó en otro móvil, no se le pide aquí
+try { window.addEventListener('load', () => setTimeout(() => { try { if (currentUser && !localStorage.getItem('bdm_resena_hecha')) db.collection('users').doc(currentUser.uid).get().then(d => { if (d.exists && d.data().resena_play_pulsada) localStorage.setItem('bdm_resena_hecha', '1'); }).catch(() => {}); } catch (_) {} }, 8000)); } catch (_) {}
+window.bdmPedirResena = bdmPedirResena;
+window.bdmResenaTrasPulgar = bdmResenaTrasPulgar;
 
 // ═══ GUARDAR GUÍA ═══
 

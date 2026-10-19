@@ -1009,6 +1009,8 @@ const salma = {
       if (preview) preview.style.display = 'none';
     }
     if (!msg && !photo) return;
+    // Reseña de Play: si da las gracias a Salma, es buen momento (solo app de Play; ver bdmPedirResena en app.js)
+    try { if (window.BDM_TWA && typeof msg === 'string' && /(gracias|genial|perfecto|buen[ií]simo|me encanta|incre[ií]ble|brutal|fant[aá]stic)/i.test(msg)) setTimeout(() => { if (typeof window.bdmPedirResena === 'function') window.bdmPedirResena('gracias'); }, 9000); } catch (_) {}
     if (this._streaming) return;
 
     // Sin sesión: avisar ANTES de mandar nada al Worker (antes el Worker contestaba
