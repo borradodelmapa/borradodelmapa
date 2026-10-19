@@ -19,6 +19,17 @@ let slugs = args.filter(a => !a.startsWith('--'));
 const ind = JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-indexables.json'), 'utf8')).slugs;
 if (!slugs.length) slugs = ind.filter(s => s !== 'index' && fs.existsSync(path.join(ROOT, 'worker', 'kv', 'routes-nivel3', s + '.json')));
 
+// Guía pública tal como la abre la app (public_guides/<slug>, lectura abierta). Devuelve las paradas o null si no existe.
+async function guiaPublica(slug) {
+  try {
+    const r = await fetch(`https://firestore.googleapis.com/v1/projects/borradodelmapa-85257/databases/(default)/documents/public_guides/${encodeURIComponent(slug)}`);
+    if (!r.ok) return null;
+    const j = await r.json();
+    const raw = j.fields && j.fields.itinerarioIA && j.fields.itinerarioIA.stringValue;
+    const it = JSON.parse(raw || '{}');
+    return Array.isArray(it.stops) ? it.stops : [];
+  } catch (_) { return null; }
+}
 const status = async (u, opt) => { try { const r = await fetch(u, Object.assign({ redirect: 'follow' }, opt)); return r.status; } catch (_) { return 0; } };
 const getHTML = async s => LOCAL ? fs.readFileSync(path.join(ROOT, 'destinos', s + '.html'), 'utf8') : (await fetch(`${DOMAIN}/destinos/${s}.html`)).text();
 
@@ -70,6 +81,22 @@ const getHTML = async s => LOCAL ? fs.readFileSync(path.join(ROOT, 'destinos', s
       else {
         const st = await status(`${DOMAIN}/${cta}`);
         if (st !== 200) errs.push(`«Abrir la guía» apunta a /${cta} que da ${st}`);
+        // LA GUÍA EN LA APP (lo que abre «Abrir la guía»): existe, y sus paradas tienen foto libre
+        const gst = await guiaPublica(cta);
+        if (gst === null) errs.push(`la guía pública «${cta}» NO existe en Firestore → «Abrir la guía» no abre nada`);
+        else {
+          if (cta !== slug + '-ruta') {
+            let mp = {}; try { mp = JSON.parse(fs.readFileSync(path.join(ROOT, 'destinos', 'img', 'guias-publicas.json'), 'utf8')); } catch (_) {}
+            if (mp[cta] !== slug) errs.push(`la guía «${cta}» no está en destinos/img/guias-publicas.json (la app no encontrará sus fotos libres)`);
+          }
+          let fj = null; try { fj = JSON.parse(fs.readFileSync(path.join(ROOT, 'destinos', 'img', slug, 'fotos.json'), 'utf8')); } catch (_) {}
+          const claves = fj ? Object.keys(fj.stops || {}) : [];
+          const conWiki = gst.filter(x => claves.includes(x.name)).length;
+          const sinNada = gst.filter(x => !claves.includes(x.name) && !x.photo_ref);
+          if (gst.length && !conWiki) errs.push('ninguna parada de la guía de la app coincide con las fotos libres (¿nombres distintos?)');
+          else if (gst.length && conWiki / gst.length < 0.6) avisos.push(`en la app, solo ${conWiki}/${gst.length} paradas con foto libre (el resto, de Google)`);
+          if (sinNada.length) avisos.push(`en la app, ${sinNada.length}/${gst.length} paradas SIN foto de ningún tipo (saldrán grises): ${sinNada.map(x => x.name).slice(0, 4).join(', ')}`);
+        }
         // paradas de la guía que se verán SIN foto en la app (photo_ref que falta)
         const rf = path.join(ROOT, 'worker', 'kv', 'routes-nivel3', slug + '.json');
         if (fs.existsSync(rf)) {

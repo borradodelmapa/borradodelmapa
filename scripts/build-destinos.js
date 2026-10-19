@@ -1021,6 +1021,9 @@ async function main() {
   // de destino/país ni destinos/index.html. Para cuando el sitemap se queda desfasado
   // (menos países/destinos reales de los que hay) sin querer tocar ningún HTML.
   const sitemapOnly = args.includes('--sitemap-only');
+  // --only a,b : escribe SOLO las páginas de destino con esos slugs (para abrir una tanda sin tocar el resto)
+  const onlyIdx = args.indexOf('--only');
+  const onlySet = onlyIdx >= 0 ? new Set(String(args[onlyIdx + 1] || '').split(',').filter(Boolean)) : null;
 
   const countries = JSON.parse(fs.readFileSync(COUNTRIES_FILE, 'utf-8'));
   const countryMap = {};
@@ -1059,7 +1062,7 @@ async function main() {
           prev: i > 0 ? { slug: `${validDests[i-1].id}-${countrySlug}`, name: validDests[i-1].nombre } : null,
           next: i < validDests.length - 1 ? { slug: `${validDests[i+1].id}-${countrySlug}`, name: validDests[i+1].nombre } : null,
         };
-        if (!dryRun && !indexOnly && !sitemapOnly) {
+        if (!dryRun && !indexOnly && !sitemapOnly && (!onlySet || onlySet.has(slug))) {
           const route = loadRoute(dest.id, countrySlug);
           fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route, nav, siblingsOf(validDests, i, countrySlug), countrySlug));
         }
@@ -1068,7 +1071,7 @@ async function main() {
       }
 
       // ── Nivel 2: página de país ──
-      if (!dryRun && !indexOnly && !sitemapOnly) {
+      if (!dryRun && !indexOnly && !sitemapOnly && !onlySet) {
         fs.writeFileSync(path.join(OUT_DIR, `${countrySlug}.html`), buildCountryHTML(countryName, code, destinos));
       }
       allSitemapUrls.push({ url: `${DOMAIN}/destinos/${countrySlug}.html`, priority: 0.9, freq: 'weekly' });
@@ -1086,7 +1089,7 @@ async function main() {
   }
 
   // ── Nivel 1: página índice ──
-  if (!dryRun && !onlyCountry && !sitemapOnly) {
+  if (!dryRun && !onlyCountry && !sitemapOnly && !onlySet) {
     // Sort countries within each continent
     for (const cont of Object.keys(countriesByContinent)) {
       countriesByContinent[cont].sort((a, b) => a.name.localeCompare(b.name, 'es'));
@@ -1102,10 +1105,10 @@ async function main() {
   // Sitemap — solo se reescribe en una pasada completa (ni --country ni --index-only),
   // o cuando se pide explícitamente con --sitemap-only, para que una prueba parcial no
   // lo toque sin querer.
-  if (!dryRun && !onlyCountry && !indexOnly && allSitemapUrls.length > 0) {
+  if (!dryRun && !onlyCountry && !indexOnly && !onlySet && allSitemapUrls.length > 0) {
     fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls.filter(u => INDEXABLES.has(u.url.replace(`${DOMAIN}/destinos/`, '').replace(/.html$/, '') || 'index'))));
     console.log(`   🗺️ Sitemap: ${allSitemapUrls.length} URLs`);
-  } else if (onlyCountry || indexOnly) {
+  } else if (onlyCountry || indexOnly || onlySet) {
     console.log(`   🗺️ Sitemap: sin tocar (solo se regenera en una pasada completa)`);
   }
 

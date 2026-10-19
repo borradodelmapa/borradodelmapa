@@ -24,12 +24,14 @@ Nepal completo (país + 10 destinos, las únicas con ruta) + el índice `/destin
 Páginas indexadas · impresiones y clics por página · consultas que traen visitas · registros nuevos desde esas URL.
 Regla: si una tanda no se indexa o se hunde en 3-4 semanas, no se abre la siguiente; se mejora el contenido.
 
-## Antes de abrir o dar por buena CUALQUIER tanda (regla desde el 19 oct 2026, tras ver la guía de Everest rota en la app)
-Una página de destino no está terminada cuando se ve bien ella sola: hay que comprobar **todo el recorrido de quien llega**.
-1. `node scripts/fotos-destinos.cjs <slug>` (baja fotos de Wikimedia, 0 €) y, si quedan paradas sin foto, `--completar <slug>` (paisaje cercano). **Mirar las fotos** una a una (hay malas: retratos, mapas, fotos de otro sitio).
-2. `node scripts/build-destinos.js --country <código>` y revertir con `git checkout` las páginas del país que NO son de la tanda (no mezclar).
-3. `node scripts/verificar-destinos.cjs --local` → debe salir todo ✅ (título, descripción, sin «IA», un h1, canonical, JSON-LD, fotos con alt y tamaño, og:image, mapa, enlace «Abrir la guía»).
-4. Subir (protocolo) y repetir `node scripts/verificar-destinos.cjs` contra la web publicada.
-5. **Abrir «Abrir la guía» de cada página en la app** (lo que ve la persona): ¿carga el mapa?, ¿tiene foto cada parada? Opcional `--google` prueba las fotos de Google de la guía (~0,007 $ por foto no cacheada: avisar a Paco, §8).
-6. Paco lo ve en su pantalla (§2).
-Pendiente conocido: las guías de la app usan fotos de Google (`photo_ref`) que a veces ya no responden (404) → icono gris. Arreglo propuesto: que la app use la foto de Wikimedia (`destinos/img/<slug>/fotos.json`) cuando la de Google falla.
+## Cómo se abre una tanda (regla desde el 19 oct 2026) — UN comando, se para si algo falla
+\Hace, en orden y parando al primer fallo: 1) solo entra lo que tiene guía (routes-nivel3); 2) fotos libres de Wikimedia + paisaje cercano;
+3) genera SOLO esas páginas (); 4) : título, descripción, un h1, JSON-LD, fotos con alt/tamaño,
+og:image, mapa, enlace «Abrir la guía», que la guía pública EXISTA en Firestore, que sus paradas encuentren las fotos libres y cuántas saldrían grises;
+5) crea  (hoja de fotos: mirarla 30 s, hay fotos malas que ninguna máquina ve); 6) informe. Coste 0 €, no sube nada.
+Después, a mano y con OK de Paco: revisar la hoja → abrir 2-3 guías en la app (tarjetas y pop-up del mapa) →  (añade a
+destinos-indexables.json + sitemap) → commit+push (protocolo) →  contra la web → Paco lo ve en su pantalla (§2).
+Una página sin guía NO se abre (solo ficha corta); crear la guía cuesta (Google + Anthropic): medir con UNA y avisar a Paco antes (§8).
+Trampas ya vividas: GitHub Pages no sirve ficheros que empiezan por ; las fotos de Google de guías viejas dan 404 y la app reintenta con búsqueda de pago;
+la PWA guarda la versión vieja (Ctrl+F5 / borrar el service worker para probar).
+Pendiente conocido: guías cuyo nombre público no es <destino>-ruta se enlazan en  (lo rellena fotos-destinos.cjs).
