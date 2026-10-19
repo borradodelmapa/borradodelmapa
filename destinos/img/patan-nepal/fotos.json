@@ -1,0 +1,64 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 708,
+  "alt": "Patan (Lalitpur), Nepal",
+  "autor": "Gerd Eichmann",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Patan-Palastplatz-14-Tauben-2013-gje.jpg"
+ },
+ "stops": {
+  "Patan Museum": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Patan Museum, Patan (Lalitpur)",
+   "autor": "Bijay chaurasia",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Patan_Museum-_02.jpg",
+   "fuente": "Patan Museum- 02.jpg"
+  },
+  "Golden Temple Patan": {
+   "file": "s4.jpg",
+   "w": 720,
+   "h": 336,
+   "alt": "Golden Temple Patan, Patan (Lalitpur)",
+   "autor": "Nabin K. Sapkota",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Photowalk_at_Hiranya_Varna_Mahavihar_21.jpg",
+   "fuente": "Photowalk at Hiranya Varna Mahavihar 21.jpg"
+  },
+  "Mahabuddha Temple": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Mahabuddha Temple, Patan (Lalitpur)",
+   "autor": "Sanjib Chaudhary",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Terracotta_Buddhas,_Mahabuddha_Temple.jpg",
+   "fuente": "Terracotta Buddhas, Mahabuddha Temple.jpg"
+  },
+  "Rudra Varna Mahavihar , Oku Bahal": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 479,
+   "alt": "Rudra Varna Mahavihar , Oku Bahal, Patan (Lalitpur)",
+   "autor": "Christopher J. Fynn",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Rudravarna_Mahavihar_(01).jpg",
+   "fuente": "Rudravarna Mahavihar (01).jpg"
+  },
+  "Mangal Bazar": {
+   "file": "s7.jpg",
+   "w": 720,
+   "h": 477,
+   "alt": "Mangal Bazar, Patan (Lalitpur)",
+   "autor": "lienyuan lee",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mangal_Bazaar_-_panoramio.jpg",
+   "fuente": "Mangal Bazaar - panoramio.jpg"
+  }
+ }
+}

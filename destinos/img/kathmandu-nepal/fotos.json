@@ -1,0 +1,114 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 792,
+  "alt": "Kathmandú, Nepal",
+  "autor": "Gerd Eichmann",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Kathmandu-Durbar_Square-06-Mahavishnu-Kuh-Vishnu-Pratapamalla-Jagannath-2007-gje.jpg"
+ },
+ "stops": {
+  "Durbar Square": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Durbar Square, Kathmandú",
+   "autor": "Alexander Shafir",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_Kathmandu_Durbar_Square_Panorama.jpg",
+   "fuente": "Nepal Kathmandu Durbar Square Panorama.jpg"
+  },
+  "Kumari Ghar": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Kumari Ghar, Kathmandú",
+   "autor": "Matt Zimmerman",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kumari_Ghar,_Kathmandu,_Nepal_(23824765334).jpg",
+   "fuente": "Kumari Ghar, Kathmandu, Nepal (23824765334).jpg"
+  },
+  "Kasthamandap": {
+   "file": "s3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Kasthamandap, Kathmandú",
+   "autor": "Chainwit.",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kasthamandap_Kathmandu_(2023).jpg",
+   "fuente": "Kasthamandap Kathmandu (2023).jpg"
+  },
+  "Swayambhunath": {
+   "file": "s4.jpg",
+   "w": 720,
+   "h": 465,
+   "alt": "Swayambhunath, Kathmandú",
+   "autor": "Nabin K. Sapkota",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Swayambhunath_2018.jpg",
+   "fuente": "Swayambhunath 2018.jpg"
+  },
+  "Boudhanath": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Boudhanath, Kathmandú",
+   "autor": "Juan Antonio Segal from Madrid, Spain",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Boudhanath,_Nepal_(23780541996).jpg",
+   "fuente": "Boudhanath, Nepal (23780541996).jpg"
+  },
+  "Pashupatinath Temple": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 450,
+   "alt": "Pashupatinath Temple, Kathmandú",
+   "autor": "Bijay Chaurasia",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pashupatinath_Temple-2020.jpg",
+   "fuente": "Pashupatinath Temple-2020.jpg"
+  },
+  "Thamel Bazar Kathmandu": {
+   "file": "s7.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Thamel Bazar Kathmandu, Kathmandú",
+   "autor": "Alexey Komarov",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Thamel,_Kathmandu_-_panoramio.jpg",
+   "fuente": "Thamel, Kathmandu - panoramio.jpg"
+  },
+  "Patan Darbar Square": {
+   "file": "s8.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Patan Darbar Square, Kathmandú",
+   "autor": "R.M. Calamar",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Durbar_Square_2010.jpg",
+   "fuente": "Durbar Square 2010.jpg"
+  },
+  "Bhaktapur Durbar Square": {
+   "file": "s9.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Bhaktapur Durbar Square, Kathmandú",
+   "autor": "sushan116",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Artwork_at_Bhaktapur_Durbar_Square.jpg",
+   "fuente": "Artwork at Bhaktapur Durbar Square.jpg"
+  },
+  "Nyatapola Temple": {
+   "file": "s10.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Nyatapola Temple, Kathmandú",
+   "autor": "Saurab Mani Rimal",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nyatapole_Temple.jpg",
+   "fuente": "Nyatapole Temple.jpg"
+  }
+ }
+}

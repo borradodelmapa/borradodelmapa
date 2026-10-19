@@ -72,7 +72,7 @@ const TYPE_BADGES = {
 // que ya usa el resto de la app (ver CLAUDE.md, checklist de despliegue),
 // para que un visitante real no se quede con el CSS viejo en caché tras un
 // cambio.
-const DESTINOS_CSS_V = 6;
+const DESTINOS_CSS_V = 7;
 // Igual para styles.css (el de la app, que trae el menú de abajo): antes iba SIN ?v=
 // y un visitante que volviera podía ver el menú nuevo con estilos viejos. Mismo
 // número que styles.css?v= en index.html — subirlo a la vez.
@@ -139,6 +139,12 @@ const FIREBASE_HEAD = `
   if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
   </script>`;
 
+// Variante para páginas con fotos: scripts diferidos (no bloquean el pintado; mejor LCP). El inicio vive en /destinos/firebase-init.js
+const FIREBASE_HEAD_DEFER = `
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+  <script src="/destinos/firebase-init.js" defer></script>`;
+
 const FIREBASE_HEAD_WITH_FIRESTORE = `
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -183,7 +189,20 @@ function loadRoute(destId, countrySlug) {
 // Genera HTML estático de la guía COMPLETA (indexable por Google). Paco, 12 oct 2026: en las páginas de
 // destino la guía se muestra entera, tal como la hizo la app; el registro se pide para el mapa, las fotos,
 // guardar y crear más guías (el botón lleva a la app).
-function buildStaticItinerary(route, appSlug) {
+// Fotos de la página (destinos/img/<slug>/fotos.json, las baja scripts/fotos-destinos.cjs desde Wikimedia
+// Commons con licencia libre). Sin fotos.json la página sale como antes.
+function loadFotos(slug) {
+  try {
+    const f = path.join(OUT_DIR, 'img', slug, 'fotos.json');
+    if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf-8'));
+  } catch (_) {}
+  return null;
+}
+function fotoCredito(f) {
+  return `Foto: <a href="${escapeHTML(f.url)}" target="_blank" rel="noopener nofollow">${escapeHTML(f.autor)}</a> · ${escapeHTML(f.licencia)}`;
+}
+
+function buildStaticItinerary(route, appSlug, fotos) {
   if (!route || !route.stops || route.stops.length === 0) return '';
   // Guía pública que ya existe para este destino (ej. 'barcelona-en-3-dias-ky61'); si no, la convención <id>-<país>-ruta
   const linkSlug = route && route._public_slug ? route._public_slug : appSlug + '-ruta';
@@ -215,8 +234,11 @@ function buildStaticItinerary(route, appSlug) {
     for (const stop of stops) {
       n++;
       const name = stop.name || '';
-      html += '    <article class="destino-stop">\n';
+      const foto = fotos && fotos.stops && fotos.stops[name];
+      html += `    <article class="destino-stop${foto ? ' destino-stop--foto' : ''}">\n`;
       html += `      <span class="destino-stop-num">${n}</span>\n`;
+      if (foto) html += `      <figure class="destino-stop-foto"><img src="/destinos/img/${appSlug}/${foto.file}" alt="${escapeHTML(foto.alt)}" width="${foto.w}" height="${foto.h}" loading="lazy" decoding="async"><figcaption>${fotoCredito(foto)}</figcaption></figure>\n`;
+      html += '      <div class="destino-stop-body">\n';
       html += `      <h4 class="destino-stop-name">${escapeHTML(name)}</h4>\n`;
       if (stop.headline && stop.headline.trim() && stop.headline.trim() !== name.trim()) html += `      <p class="destino-stop-headline">${escapeHTML(stop.headline)}</p>\n`;
       if (stop.narrative) html += `      <p class="destino-stop-desc">${escapeHTML(stop.narrative)}</p>\n`;
@@ -224,13 +246,14 @@ function buildStaticItinerary(route, appSlug) {
       if (stop.duration) meta.push('⏱ ' + escapeHTML(stop.duration));
       if (stop.km_from_previous) meta.push('📍 ' + stop.km_from_previous + ' km');
       if (meta.length) html += `      <span class="destino-stop-meta">${meta.join(' · ')}</span>\n`;
+      html += '      </div>\n';
       html += '    </article>\n';
     }
     html += '  </div>\n';
   }
 
   const ctaImg = fs.existsSync(path.join(ROOT, 'guias-img', linkSlug + '.png')) ? `<img class="destino-cta-img" src="/guias-img/${linkSlug}.png" alt="Mapa de la guía ${escapeHTML(title)}" loading="lazy" width="640" height="300">` : '';
-  html += `  <a class="destino-route-cta destino-route-cta-img" href="/?ruta=${linkSlug}">${ctaImg}<span class="destino-cta-body"><strong>Ábrela con mapa y fotos, y guárdala</strong><span>${days.length} ${days.length === 1 ? 'día' : 'días'} · ${route.stops.length} paradas · gratis con cuenta</span><em>ABRIR LA GUÍA →</em></span></a>\n`;
+  html += `  <a class="destino-route-cta destino-route-cta-img" href="/?ruta=${linkSlug}">${ctaImg}<span class="destino-cta-body"><strong>Ábrela con el mapa interactivo y guárdala</strong><span>${days.length} ${days.length === 1 ? 'día' : 'días'} · ${route.stops.length} paradas · gratis con cuenta</span><em>ABRIR LA GUÍA →</em></span></a>\n`;
   html += '</section>';
   return html;
 }
@@ -292,31 +315,68 @@ function generateFAQs(dest, countryName) {
 
 // ── Schema.org ───────────────────────────────────────────────
 
-function buildSchemaOrg(dest, countryName, slug, faqs) {
+function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
+  const { fotos, route, coords, countrySlug, canonical, pageTitle } = x;
+  const heroUrl = fotos && fotos.hero ? `${DOMAIN}/destinos/img/${slug}/${fotos.hero.file}` : null;
   const tourist = {
-    "@context": "https://schema.org",
     "@type": "TouristDestination",
+    "@id": `${canonical}#destino`,
     "name": dest.nombre,
     "description": dest.descripcion,
+    "url": canonical,
     "touristType": [dest.tipo || "destino"],
     "containedInPlace": {
       "@type": "Country",
       "name": countryName
     }
   };
+  if (heroUrl) tourist.image = heroUrl;
+  if (coords) tourist.geo = { "@type": "GeoCoordinates", "latitude": coords.lat, "longitude": coords.lng };
 
-  const faqSchema = {
-    "@context": "https://schema.org",
+  const crumbs = {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Destinos", "item": `${DOMAIN}/destinos/` },
+      { "@type": "ListItem", "position": 2, "name": countryName, "item": `${DOMAIN}/destinos/${countrySlug}.html` },
+      { "@type": "ListItem", "position": 3, "name": dest.nombre, "item": canonical },
+    ]
+  };
+
+  const graph = [tourist, crumbs];
+
+  // La guía de la página, como viaje con paradas (Google entiende itinerarios)
+  if (route && route.stops && route.stops.length) {
+    graph.push({
+      "@type": "TouristTrip",
+      "name": pageTitle,
+      "description": route.summary || dest.descripcion,
+      "url": canonical,
+      "touristType": [dest.tipo || "destino"],
+      "itinerary": {
+        "@type": "ItemList",
+        "numberOfItems": route.stops.length,
+        "itemListElement": route.stops.map((s, i) => {
+          const foto = fotos && fotos.stops && fotos.stops[s.name];
+          const place = { "@type": "TouristAttraction", "name": s.name };
+          if (s.narrative) place.description = String(s.narrative).slice(0, 300);
+          if (typeof s.lat === 'number' && typeof s.lng === 'number') place.geo = { "@type": "GeoCoordinates", "latitude": s.lat, "longitude": s.lng };
+          if (foto) place.image = `${DOMAIN}/destinos/img/${slug}/${foto.file}`;
+          return { "@type": "ListItem", "position": i + 1, "item": place };
+        })
+      }
+    });
+  }
+
+  graph.push({
     "@type": "FAQPage",
     "mainEntity": faqs.map(f => ({
       "@type": "Question",
       "name": f.q,
       "acceptedAnswer": { "@type": "Answer", "text": f.a }
     }))
-  };
+  });
 
-  return `<script type="application/ld+json">${JSON.stringify(tourist)}</script>\n` +
-         `  <script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
+  return `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>`;
 }
 
 // ── HTML Template ────────────────────────────────────────────
@@ -324,16 +384,33 @@ function buildSchemaOrg(dest, countryName, slug, faqs) {
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const faqs = generateFAQs(dest, countryName);
-  const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs);
   const budget = estimateBudget(dest);
   const minPrice = extractMinPrice(dest.donde_dormir?.mochilero);
-  const coords = COORDS[`${countryCode}:${dest.id}`] || null;
+  let coords = COORDS[`${countryCode}:${dest.id}`] || null;
+  // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
+  if (!coords && route && route.stops) {
+    const pts = route.stops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
+    if (pts.length) coords = { lat: +(pts.reduce((a, s) => a + s.lat, 0) / pts.length).toFixed(5), lng: +(pts.reduce((a, s) => a + s.lng, 0) / pts.length).toFixed(5) };
+  }
+  const fotos = loadFotos(slug);
+  const heroFoto = fotos && fotos.hero ? fotos.hero : null;
+  const nDias = route ? (route.duration_days || new Set(route.stops.map(s => s.day || 1)).size) : 0;
+  const conGuia = !!(route && route.stops && route.stops.length);
   // Título único por país (antes había nombres repetidos: Mar Muerto, Trípoli…) y corto
   // para que Google no lo corte (~60). La marca va en og:site_name, no en el título.
-  const pageTitle = `Viajar a ${dest.nombre} (${countryName}): guía y presupuesto`;
-  const metaFull = `Guía para viajar a ${dest.nombre} (${countryName})${minPrice ? ` desde ${minPrice}€/noche` : ''}. ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Planifica tu ruta con IA.`;
-  const metaDesc = metaFull.length > 158 ? metaFull.slice(0, 155).replace(/s+S*$/, '') + '…' : metaFull;
+  // Con guía completa el título es lo que la gente busca: «Qué ver en X en N días».
+  const pageTitle = conGuia
+    ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}: guía y presupuesto`
+    : `Viajar a ${dest.nombre} (${countryName}): guía y presupuesto`;
+  const metaFull = conGuia
+    ? `Qué ver en ${dest.nombre} (${countryName}) en ${nDias} ${nDias === 1 ? 'día' : 'días'}: ${route.stops.length} paradas con fotos y mapa, presupuesto de ${budget} al día${dest.mejor_epoca ? ' y mejor época: ' + dest.mejor_epoca : ''}.`
+    : `Guía para viajar a ${dest.nombre} (${countryName})${minPrice ? ` desde ${minPrice}€/noche` : ''}. ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Presupuesto, dónde dormir y qué ver.`;
+  const metaDesc = metaFull.length > 158 ? metaFull.slice(0, 155).replace(/\s+\S*$/, '') + '…' : metaFull;
   const canonical = `${DOMAIN}/destinos/${slug}.html`;
+  const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs, { fotos, route, coords, countrySlug, canonical, pageTitle });
+  const heroUrl = heroFoto ? `${DOMAIN}/destinos/img/${slug}/${heroFoto.file}` : null;
+  const linkSlugGuia = route && route._public_slug ? route._public_slug : slug + '-ruta';
+  const h1Text = conGuia ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Viajar a ${dest.nombre}`;
   const security = dest.alerta_seguridad
     ? `<span class="destino-security-warn">⚠️ Precaución</span>`
     : `<span class="destino-security-ok">✅ Seguro</span>`;
@@ -367,12 +444,17 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   <meta property="og:title" content="${escapeHTML(pageTitle)}">
   <meta property="og:description" content="${escapeHTML(metaDesc)}">
   <meta property="og:url" content="${canonical}">
-  <meta property="og:image" content="${DOMAIN}/og-image.jpg">
+  <meta property="og:image" content="${heroUrl || DOMAIN + '/og-image.jpg'}">
+  ${heroFoto ? `<meta property="og:image:width" content="${heroFoto.w}">
+  <meta property="og:image:height" content="${heroFoto.h}">
+  <meta property="og:image:alt" content="${escapeHTML(heroFoto.alt)}">` : ''}
   <meta property="og:locale" content="es_ES">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHTML(pageTitle)}">
   <meta name="twitter:description" content="${escapeHTML(metaDesc)}">
+  ${heroUrl ? `<meta name="twitter:image" content="${heroUrl}">
+  <link rel="preload" as="image" href="/destinos/img/${slug}/${heroFoto.file}" fetchpriority="high">` : ''}
 
   ${schemaOrg}
 
@@ -380,8 +462,8 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   ${(route || coords) ? `<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>` : ''}
-  ${FIREBASE_HEAD}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>` : ''}
+  ${heroFoto ? FIREBASE_HEAD_DEFER : FIREBASE_HEAD}
   <link rel="stylesheet" href="/styles.css?v=${APP_CSS_V}">
   <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
   <script src="/country-utils.js"></script>
@@ -412,27 +494,38 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   </script>
 
   <!-- HERO -->
-  <section class="destino-hero">
+  ${heroFoto ? `<section class="destino-hero destino-hero--foto">
+    <img class="destino-hero-img" src="/destinos/img/${slug}/${heroFoto.file}" alt="${escapeHTML(heroFoto.alt)}" width="${heroFoto.w}" height="${heroFoto.h}" fetchpriority="high" decoding="async">
+    <div class="destino-hero-shade"></div>
+    <div class="destino-hero-inner">
+      <span class="destino-badge">${typeBadge(dest.tipo)}</span>
+      <h1 class="destino-title">${escapeHTML(h1Text)}</h1>
+      <p class="destino-subtitle">${escapeHTML(dest.region || '')} · ${escapeHTML(countryName)}</p>
+      ${conGuia ? `<a class="destino-hero-cta" href="#guia">Ver la guía de ${nDias} ${nDias === 1 ? 'día' : 'días'} ↓</a>` : ''}
+    </div>
+    <p class="destino-hero-credit">${fotoCredito(heroFoto)}</p>
+  </section>` : `<section class="destino-hero">
     <div class="destino-hero-nav">
       ${nav?.prev ? `<a href="/destinos/${nav.prev.slug}.html" class="destino-arrow destino-arrow-prev" title="${escapeHTML(nav.prev.name)}">‹</a>` : '<span class="destino-arrow destino-arrow-disabled">‹</span>'}
       <div class="destino-hero-center">
         <span class="destino-badge">${typeBadge(dest.tipo)}</span>
-        <h1 class="destino-title">Viajar a ${escapeHTML(dest.nombre)}</h1>
+        <h1 class="destino-title">${escapeHTML(h1Text)}</h1>
         <p class="destino-subtitle">${escapeHTML(dest.region || '')} · ${escapeHTML(countryName)}</p>
       </div>
       ${nav?.next ? `<a href="/destinos/${nav.next.slug}.html" class="destino-arrow destino-arrow-next" title="${escapeHTML(nav.next.name)}">›</a>` : '<span class="destino-arrow destino-arrow-disabled">›</span>'}
     </div>
-  </section>
+  </section>`}
 
   <!-- CONTENT -->
-  <main class="destino-content">
+  <main class="destino-content${heroFoto ? ' destino-content--wide' : ''}">
+  ${heroFoto ? '<div class="destino-layout"><aside class="destino-side">' : ''}
 
     ${coords ? `<!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
     <a class="destino-map-link" href="https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}" target="_blank" rel="noopener" title="Abrir en Google Maps">
       <div id="destino-map" class="destino-map"></div>
     </a>
     <script>
-    (function() {
+    window.addEventListener('load', function() {
       if (typeof L === 'undefined') return;
       // Mapa fijo, solo para situarte — sin interacción, para que la rueda del
       // ratón o un dedo sobre el mapa no atrape el scroll de la página.
@@ -442,12 +535,14 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       }).setView([${coords.lat}, ${coords.lng}], 11);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(m);
       L.marker([${coords.lat}, ${coords.lng}]).addTo(m);
-    })();
+    });
     </script>` : ''}
+  ${heroFoto ? `<a class="destino-side-cta" href="/?ruta=${linkSlugGuia}"><strong>Esta guía en tu móvil</strong><span>Con mapa interactivo, para guardarla y llevarla en el viaje. Gratis con cuenta.</span><em>ABRIR LA GUÍA →</em></a>
+  </aside><div class="destino-main">` : ''}
 
     <!-- Descripción -->
     <p class="destino-desc">${escapeHTML(dest.descripcion)}</p>
-    ${route ? `<a class="destino-jump" href="#guia">Ver la guía de ${route.duration_days || ''} días ↓</a>` : ''}
+    ${route && !heroFoto ? `<a class="destino-jump" href="#guia">Ver la guía de ${route.duration_days || ''} días ↓</a>` : ''}
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
@@ -473,7 +568,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       </div>
     </div>
 
-    ${route ? buildStaticItinerary(route, slug) : ''}
+    ${route ? buildStaticItinerary(route, slug, fotos) : ''}
 
     <!-- Más info en acordeón -->
     <div class="destino-accordion">
@@ -574,7 +669,7 @@ ${activitiesHTML}
       </div>
       <div class="destino-salma-cta">Seguir hablando con Salma <span>→</span></div>
     </a>
-
+  ${heroFoto ? '</div></div>' : ''}
   </main>
 
   <!-- FOOTER -->
@@ -591,7 +686,7 @@ ${activitiesHTML}
   window.DESTINO = ${JSON.stringify({ nombre: dest.nombre, pais: countryName, id: dest.id, code: countryCode })};
   window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
-  <script src="/destinos/destinos.js"></script>
+  <script src="/destinos/destinos.js"${heroFoto ? " defer" : ""}></script>
 
   ${BOTTOM_NAV}
 </body>

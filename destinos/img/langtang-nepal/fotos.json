@@ -1,0 +1,24 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Valle de Langtang, Nepal: Parque nacional de Langtang",
+  "autor": "Q-lieb-in",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Starry_night_in_Langtang_National_Park.jpg"
+ },
+ "stops": {
+  "Tserko Ri": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 450,
+   "alt": "Tserko Ri, Valle de Langtang",
+   "autor": "Ummidnp",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tserko_ri.jpg",
+   "fuente": "Tserko ri.jpg"
+  }
+ }
+}

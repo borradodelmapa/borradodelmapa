@@ -1,0 +1,44 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 670,
+  "alt": "Lumbini, Nepal",
+  "autor": "Bibek Raj Pandeya",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:BRP_Lumbini_Mayadevi_temple.jpg"
+ },
+ "stops": {
+  "अशोक स्तम्भ Ashoka Pillar": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "अशोक स्तम्भ Ashoka Pillar, Lumbini",
+   "autor": "Youb Raj Basnet",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Birth_Mark_Place_of_Lors_Buddha.jpg",
+   "fuente": "Birth Mark Place of Lors Buddha.jpg"
+  },
+  "Lumbini Buddhist Temple": {
+   "file": "s3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Lumbini Buddhist Temple, Lumbini",
+   "autor": "Harry Paudyal",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lumbini_Buddhist_pilgrimage_IMG_0678_18.jpg",
+   "fuente": "Lumbini Buddhist pilgrimage IMG 0678 18.jpg"
+  },
+  "Myanmar Golden Temple": {
+   "file": "s7.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Myanmar Golden Temple, Lumbini",
+   "autor": "Raunak Maskay",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lumbini_Myanmar_Golden_Temple.jpg",
+   "fuente": "Lumbini Myanmar Golden Temple.jpg"
+  }
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Parque Nacional de Chitwan, Nepal",
+  "autor": "Sigismund von Dobschütz",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Sauraha-098.JPG"
+ },
+ "stops": {
+  "Elephant Breeding Center": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 541,
+   "alt": "Elephant Breeding Center, Parque Nacional de Chitwan",
+   "autor": "Janak Bhatta",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Wild_Elephant_(Ronaldo).jpg",
+   "fuente": "Wild Elephant (Ronaldo).jpg"
+  }
+ }
+}

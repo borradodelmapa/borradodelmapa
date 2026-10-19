@@ -1,0 +1,44 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Bhaktapur, Nepal",
+  "autor": "Saroj Pandey",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Nyatpola_%26_Bhairav_Temple.jpg"
+ },
+ "stops": {
+  "Bhaktapur Durbar Square": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 477,
+   "alt": "Bhaktapur Durbar Square, Bhaktapur",
+   "autor": "Bikram Pratap Singh",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:View_of_Bhaktapur_Durbar_Square.jpg",
+   "fuente": "View of Bhaktapur Durbar Square.jpg"
+  },
+  "Taumadhi Square (𑐟𑑅𑐩𑐵𑐬𑐷‎, Tamārhi)": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 431,
+   "alt": "Taumadhi Square (𑐟𑑅𑐩𑐵𑐬𑐷‎, Tamārhi), Bhaktapur",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-04-09_(42395654422).jpg",
+   "fuente": "Nepal 2018-04-09 (42395654422).jpg"
+  },
+  "Siddha Pokhari (Ta Pukhu)": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Siddha Pokhari (Ta Pukhu), Bhaktapur",
+   "autor": "Shadow Ayush",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Siddha_Pokhari_(Ta_Pukhu_),_Bhaktapur.jpg",
+   "fuente": "Siddha Pokhari (Ta Pukhu ), Bhaktapur.jpg"
+  }
+ }
+}

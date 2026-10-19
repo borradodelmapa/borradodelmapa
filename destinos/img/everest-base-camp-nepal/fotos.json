@@ -1,0 +1,94 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Campo Base del Everest, Nepal",
+  "autor": "Rdevany",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Mt._Everest_from_Gokyo_Ri_November_5,_2012.jpg"
+ },
+ "stops": {
+  "Aeropuerto Tenzing-Hillary": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Aeropuerto Tenzing-Hillary, Campo Base del Everest",
+   "autor": "Jeremy Broomfield",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lukla_Airport_April_2010.JPG",
+   "fuente": "Lukla Airport April 2010.JPG"
+  },
+  "Namche Bazaar": {
+   "file": "s3.jpg",
+   "w": 720,
+   "h": 419,
+   "alt": "Namche Bazaar, Campo Base del Everest",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-03-27_(40012223170).jpg",
+   "fuente": "Nepal 2018-03-27 (40012223170).jpg"
+  },
+  "Dingboche": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Dingboche, Campo Base del Everest",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-03-29_(40171814610).jpg",
+   "fuente": "Nepal 2018-03-29 (40171814610).jpg"
+  },
+  "Lobuche": {
+   "file": "s8.jpg",
+   "w": 720,
+   "h": 396,
+   "alt": "Lobuche, Campo Base del Everest",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-04-02_(41453148084).jpg",
+   "fuente": "Nepal 2018-04-02 (41453148084).jpg"
+  },
+  "Gorakshep": {
+   "file": "s9.jpg",
+   "w": 720,
+   "h": 405,
+   "alt": "Gorakshep, Campo Base del Everest",
+   "autor": "I Kd",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Walls_Of_Ancient_Ocean_(169950955).jpeg",
+   "fuente": "Walls Of Ancient Ocean (169950955).jpeg"
+  },
+  "Kala Patthar": {
+   "file": "s11.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Kala Patthar, Campo Base del Everest",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kala_Patthar_and_Pumori,_Nepal,_Asia.jpg",
+   "fuente": "Kala Patthar and Pumori, Nepal, Asia.jpg"
+  },
+  "Pheriche": {
+   "file": "s12.jpg",
+   "w": 720,
+   "h": 429,
+   "alt": "Pheriche, Campo Base del Everest",
+   "autor": "Guillaume Baviere from Uppsala, Sweden",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-04-03_(42137670142).jpg",
+   "fuente": "Nepal 2018-04-03 (42137670142).jpg"
+  },
+  "Thamel, Kathmandu": {
+   "file": "s17.jpg",
+   "w": 720,
+   "h": 479,
+   "alt": "Thamel, Kathmandu, Campo Base del Everest",
+   "autor": "Sergey Ashmarin",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Thamel_sidestreets_at_night_-_Kathmandu,_Nepal_-_panoramio.jpg",
+   "fuente": "Thamel sidestreets at night - Kathmandu, Nepal - panoramio.jpg"
+  }
+ }
+}

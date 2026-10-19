@@ -1,0 +1,64 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 712,
+  "alt": "Circuito de Annapurna, Nepal: Manang",
+  "autor": "Solundir",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Manang_Annapurna3_Gangapurna.jpg"
+ },
+ "stops": {
+  "Bagarchhap": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 506,
+   "alt": "Bagarchhap, Circuito de Annapurna",
+   "autor": "Solundir",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bagarchhap.jpg",
+   "fuente": "Bagarchhap.jpg"
+  },
+  "Khicho Ice Lake": {
+   "file": "s9.jpg",
+   "w": 720,
+   "h": 479,
+   "alt": "Khicho Ice Lake, Circuito de Annapurna",
+   "autor": "Kondephy",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ice_Lake_near_Bhraga_below_snow.jpg",
+   "fuente": "Ice Lake near Bhraga below snow.jpg"
+  },
+  "Thorong La": {
+   "file": "s10.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Thorong La, Circuito de Annapurna",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Muktinath_Valley,_View_of_Thorong_La_Pass,_Mountains,_Nepal.jpg",
+   "fuente": "Muktinath Valley, View of Thorong La Pass, Mountains, Nepal.jpg"
+  },
+  "Naya Pul": {
+   "file": "s20.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Naya Pul, Circuito de Annapurna",
+   "autor": "Manuel Velazquez",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:PUENTE_EN_NAYA_PUL_-_panoramio.jpg",
+   "fuente": "PUENTE EN NAYA PUL - panoramio.jpg"
+  },
+  "Pokhara": {
+   "file": "s21.jpg",
+   "w": 720,
+   "h": 479,
+   "alt": "Pokhara, Circuito de Annapurna",
+   "autor": "Rajesh Dhungana",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mankamana_Bhagwati_Temple_Devis_Falls_Pokhara_Nepal_Rajesh_Dhungana_(2).jpg",
+   "fuente": "Mankamana Bhagwati Temple Devis Falls Pokhara Nepal Rajesh Dhungana (2).jpg"
+  }
+ }
+}

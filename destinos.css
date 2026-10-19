@@ -1237,3 +1237,53 @@ details[open] > .destino-acc-header::after {
 .destino-cta-body strong { font-size: 1.25rem; line-height: 1.1; }
 .destino-cta-body em { align-self: flex-start; margin-top: 6px; padding: 12px 18px; background: #F4630B; color: #000; font-style: normal; font-weight: 800; }
 .destino-jump { display: inline-block; margin: 6px 0 14px; padding: 10px 16px; border: 1px solid #F4630B; color: #F4630B; font-weight: 700; text-decoration: none; }
+
+/* ═══ Rediseño con fotos (19 oct 2026) — solo páginas con destinos/img/<slug>/fotos.json ═══ */
+.destino-hero--foto { position: relative; max-width: none; margin: 14px 0 0; padding: 0; text-align: left; min-height: min(74vh, 560px); display: flex; align-items: flex-end; overflow: hidden; background: #000; }
+.destino-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.destino-hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,.15) 0%, rgba(5,5,5,.1) 30%, rgba(5,5,5,.94) 100%); }
+.destino-hero-inner { position: relative; width: 100%; max-width: 1120px; margin: 0 auto; padding: 110px 20px 34px; }
+.destino-hero--foto .destino-badge { background: rgba(0,0,0,.55); border-color: #F4630B; color: #F4630B; margin-bottom: 12px; }
+.destino-hero--foto .destino-title { font-size: clamp(40px, 9.5vw, 88px); line-height: .96; letter-spacing: .5px; margin: 0 0 12px; text-transform: uppercase; color: #fff; text-shadow: 0 2px 28px rgba(0,0,0,.6); }
+.destino-hero--foto .destino-subtitle { color: #F4F0E6; opacity: .92; margin: 0 0 20px; font-size: 12px; }
+.destino-hero-cta { display: inline-block; padding: 14px 22px; background: #F4630B; color: #000; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; text-decoration: none; }
+.destino-hero-credit { position: absolute; right: 10px; bottom: 6px; margin: 0; font-size: 10px; color: rgba(244,240,230,.7); max-width: 60%; text-align: right; }
+.destino-hero-credit a { color: inherit; }
+
+.destino-content--wide { max-width: 1120px; padding: 26px 20px 40px; }
+.destino-layout { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); grid-template-areas: "side" "main"; }
+.destino-main { grid-area: main; min-width: 0; }
+.destino-side { grid-area: side; }
+.destino-side-cta { display: none; }
+.destino-content--wide .destino-desc { font-size: 17px; line-height: 1.75; margin-bottom: 26px; }
+.destino-content--wide .destino-facts { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 30px; }
+.destino-content--wide .destino-fact { border-radius: 0; border: 1px solid rgba(244,240,230,.12); border-left: 3px solid #F4630B; background: #0E0E10; padding: 14px; }
+.destino-content--wide .destino-fact-value { font-size: 16px; }
+.destino-content--wide .destino-guia { margin: 10px 0 30px; }
+.destino-content--wide .destino-guia-title { font-size: clamp(30px, 4.5vw, 44px); text-transform: uppercase; }
+.destino-content--wide .destino-map { height: 200px; }
+
+.destino-guia .destino-stop--foto { padding: 0; margin: 0 0 22px; display: grid; background: #0E0E10; border: 1px solid rgba(244,240,230,.12); }
+.destino-stop--foto .destino-stop-foto { margin: 0; position: relative; }
+.destino-stop--foto .destino-stop-foto img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+.destino-stop--foto .destino-stop-foto figcaption { position: absolute; right: 0; bottom: 0; padding: 3px 8px; background: rgba(0,0,0,.7); font-size: 10px; color: rgba(244,240,230,.85); max-width: 90%; }
+.destino-stop--foto .destino-stop-foto figcaption a { color: inherit; }
+.destino-stop--foto .destino-stop-num { left: 12px; top: 12px; width: 36px; height: 36px; z-index: 2; font-size: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.5); }
+.destino-stop--foto .destino-stop-body { padding: 16px 18px 18px; }
+.destino-stop--foto .destino-stop-name { font-size: 22px; }
+
+@media (min-width: 700px) {
+  .destino-content--wide .destino-facts { grid-template-columns: repeat(4, 1fr); }
+  .destino-guia .destino-stop--foto { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+  .destino-stop--foto .destino-stop-foto img { height: 100%; min-height: 240px; aspect-ratio: auto; }
+  .destino-stop--foto .destino-stop-body { padding: 22px 24px; align-self: center; }
+}
+@media (min-width: 1000px) {
+  .destino-layout { grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "main side"; gap: 48px; }
+  .destino-side { position: sticky; top: 20px; align-self: start; }
+  .destino-content--wide .destino-map { height: 260px; }
+  .destino-side-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding: 18px; background: #0E0E10; border: 2px solid #F4630B; color: #F4F0E6; text-decoration: none; }
+  .destino-side-cta strong { font-size: 20px; line-height: 1.1; }
+  .destino-side-cta span { font-size: 14px; opacity: .85; }
+  .destino-side-cta em { align-self: flex-start; margin-top: 6px; padding: 12px 16px; background: #F4630B; color: #000; font-style: normal; font-weight: 800; }
+}

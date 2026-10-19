@@ -1,0 +1,74 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Pokhara, Nepal",
+  "autor": "Utsab Raj Giri",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Pokhara_Valley.jpg"
+ },
+ "stops": {
+  "Sarangkot": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 383,
+   "alt": "Sarangkot, Pokhara",
+   "autor": "Q-lieb-in",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sunset_flying_above_Himalayas.jpg",
+   "fuente": "Sunset flying above Himalayas.jpg"
+  },
+  "Phewa": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Phewa, Pokhara",
+   "autor": "Jmhullot",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Phewa_lake,_Pokhara.jpg",
+   "fuente": "Phewa lake, Pokhara.jpg"
+  },
+  "Devi's Fall Pokhara": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Devi's Fall Pokhara, Pokhara",
+   "autor": "Shiva Gurung",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Phewa_lake_Pokhara.jpg",
+   "fuente": "Phewa lake Pokhara.jpg"
+  },
+  "Gupteshwor Mahadev Cave": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 481,
+   "alt": "Gupteshwor Mahadev Cave, Pokhara",
+   "autor": "Q-lieb-in",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:In_Gupteshwor_Cave.jpg",
+   "fuente": "In Gupteshwor Cave.jpg"
+  },
+  "International Mountain Museum": {
+   "file": "s7.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "International Mountain Museum, Pokhara",
+   "autor": "en:User:MMuzammils",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:International_Mountain_Museum_(2010),_Pokhara,_Nepal-04.jpg",
+   "fuente": "International Mountain Museum (2010), Pokhara, Nepal-04.jpg"
+  },
+  "Lago Begnas": {
+   "file": "s8.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Lago Begnas, Pokhara",
+   "autor": "Utsab Raj Giri",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Begnas_pokhara.jpg",
+   "fuente": "Begnas pokhara.jpg"
+  }
+ }
+}

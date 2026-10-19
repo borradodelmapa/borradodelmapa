@@ -1,0 +1,154 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 850,
+  "alt": "Barcelona, España",
+  "autor": "Josep Bracons from Barcelona, Catalonia",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Barcelona_(Pla%C3%A7a_de_Sant_Jaume)_City_Hall._Neoclassical_facade._1831-1847._Josep_Mas,_architect_(27664512650).jpg"
+ },
+ "stops": {
+  "Barrio Gótico": {
+   "file": "s1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Barrio Gótico, Barcelona",
+   "autor": "Emilio J. Rodríguez Posada",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Catedral_de_Barcelona_(9248804702).jpg",
+   "fuente": "Catedral de Barcelona (9248804702).jpg"
+  },
+  "Catedral de Barcelona": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Catedral de Barcelona, Barcelona",
+   "autor": "José Luis Filpo Cabana",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Capilla_de_San_Olegario._Catedral_de_Barcelona.jpg",
+   "fuente": "Capilla de San Olegario. Catedral de Barcelona.jpg"
+  },
+  "Plaça del Rei": {
+   "file": "s3.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Plaça del Rei, Barcelona",
+   "autor": "Catalan Art & Architecture Gallery (Josep Bracons) from Barcelona, Catalonia",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Barcelona._Pla%C3%A7a_del_Rei_(14742902172).jpg",
+   "fuente": "Barcelona. Plaça del Rei (14742902172).jpg"
+  },
+  "Basílica de Santa Maria del Mar": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Basílica de Santa Maria del Mar, Barcelona",
+   "autor": "Alexey Komarov",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:In_Bas%C3%ADlica_de_Santa_Maria_del_Mar.jpg",
+   "fuente": "In Basílica de Santa Maria del Mar.jpg"
+  },
+  "Parc de la Ciutadella": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Parc de la Ciutadella, Barcelona",
+   "autor": "Bernard Gagnon",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ciutadella_Park_fountain.jpg",
+   "fuente": "Ciutadella Park fountain.jpg"
+  },
+  "Basílica de la Sagrada Família": {
+   "file": "s7.jpg",
+   "w": 720,
+   "h": 504,
+   "alt": "Basílica de la Sagrada Família, Barcelona",
+   "autor": "Canaan",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:SF_octubre_26.jpg",
+   "fuente": "SF octubre 26.jpg"
+  },
+  "Hospital de la Santa Creu i Sant Pau": {
+   "file": "s8.jpg",
+   "w": 720,
+   "h": 444,
+   "alt": "Hospital de la Santa Creu i Sant Pau, Barcelona",
+   "autor": "Thomas Ledl",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hospital_Sant_Pau,_main_facade.jpg",
+   "fuente": "Hospital Sant Pau, main facade.jpg"
+  },
+  "Casa Batlló": {
+   "file": "s9.jpg",
+   "w": 720,
+   "h": 481,
+   "alt": "Casa Batlló, Barcelona",
+   "autor": "Librospect",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lustre_%C3%A0_la_Casa_Batllo.jpg",
+   "fuente": "Lustre à la Casa Batllo.jpg"
+  },
+  "La Pedrera - Casa Milà": {
+   "file": "s10.jpg",
+   "w": 720,
+   "h": 561,
+   "alt": "La Pedrera - Casa Milà, Barcelona",
+   "autor": "Thomas Ledl",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Casa_Mil%C3%A0,_general_view.jpg",
+   "fuente": "Casa Milà, general view.jpg"
+  },
+  "Passeig de Gràcia": {
+   "file": "s11.jpg",
+   "w": 720,
+   "h": 479,
+   "alt": "Passeig de Gràcia, Barcelona",
+   "autor": "Xavier Badia Castellà",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Passeig_de_Gr%C3%A0cia_2,_detall_de_la_fa%C3%A7ana.jpg",
+   "fuente": "Passeig de Gràcia 2, detall de la façana.jpg"
+  },
+  "Park Güell": {
+   "file": "s12.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Park Güell, Barcelona",
+   "autor": "Canaan",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:G%C3%BCell_BCN_edited.jpg",
+   "fuente": "Güell BCN edited.jpg"
+  },
+  "Mirador del Turó del Carmel": {
+   "file": "s13.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Mirador del Turó del Carmel, Barcelona",
+   "autor": "Barcelonatips",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bunkers_del_Carmel_Barcelona.jpg",
+   "fuente": "Bunkers del Carmel Barcelona.jpg"
+  },
+  "Castell de Montjuïc": {
+   "file": "s15.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Castell de Montjuïc, Barcelona",
+   "autor": ":Puigalder",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Castell_de_Montjuic_-_Fossat_entrada_-_Barcelona_(Catalonia).jpg",
+   "fuente": "Castell de Montjuic - Fossat entrada - Barcelona (Catalonia).jpg"
+  },
+  "Mercado de Santa Caterina": {
+   "file": "s16.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Mercado de Santa Caterina, Barcelona",
+   "autor": "Fred Romero",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Mercat_de_Santa_Caterina.jpg",
+   "fuente": "Barcelona - Mercat de Santa Caterina.jpg"
+  }
+ }
+}

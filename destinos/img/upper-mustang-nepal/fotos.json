@@ -1,0 +1,84 @@
+{
+ "generado": "2026-10-19",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 912,
+  "alt": "Upper Mustang, Nepal: Jomsom",
+  "autor": "Saddam19",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Jomsom_from_View_Tower_(cropped).jpg"
+ },
+ "stops": {
+  "Kagbeni": {
+   "file": "s2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Kagbeni, Upper Mustang",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kagbeni,_Mustang,_Nepal.jpg",
+   "fuente": "Kagbeni, Mustang, Nepal.jpg"
+  },
+  "Chele": {
+   "file": "s3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Chele, Upper Mustang",
+   "autor": "Jmhullot",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kali_Gandaki_from_Chele.jpg",
+   "fuente": "Kali Gandaki from Chele.jpg"
+  },
+  "Ghami": {
+   "file": "s5.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Ghami, Upper Mustang",
+   "autor": "Jean-Marie Hullot from France",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Poplar_grove_and_flat-roofed_houses_in_Ghami_(15267105504).jpg",
+   "fuente": "Poplar grove and flat-roofed houses in Ghami (15267105504).jpg"
+  },
+  "Lo Manthang": {
+   "file": "s6.jpg",
+   "w": 720,
+   "h": 437,
+   "alt": "Lo Manthang, Upper Mustang",
+   "autor": "Gerd Eichmann",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mustang-Lo_Manthang-Koenigspalast-02-2015-gje.jpg",
+   "fuente": "Mustang-Lo Manthang-Koenigspalast-02-2015-gje.jpg"
+  },
+  "Cuevas de Chhoser": {
+   "file": "s7.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Cuevas de Chhoser, Upper Mustang",
+   "autor": "Jmhullot",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chhoser_valley_landscape_around_Jhong_Cave.jpg",
+   "fuente": "Chhoser valley landscape around Jhong Cave.jpg"
+  },
+  "Tsarang": {
+   "file": "s9.jpg",
+   "w": 720,
+   "h": 467,
+   "alt": "Tsarang, Upper Mustang",
+   "autor": "Pratapgrg",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Monastery_of_Tsarang_Mustang.jpg",
+   "fuente": "Monastery of Tsarang Mustang.jpg"
+  },
+  "Tetang": {
+   "file": "s11.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Tetang, Upper Mustang",
+   "autor": "Jean-Marie Hullot from France",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chhusang_cliffs_and_the_Narshing_Khola_river_from_Tetang_(15632296759).jpg",
+   "fuente": "Chhusang cliffs and the Narshing Khola river from Tetang (15632296759).jpg"
+  }
+ }
+}
