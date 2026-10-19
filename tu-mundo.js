@@ -356,7 +356,7 @@ const tuMundo = (() => {
     box.querySelectorAll('.tm-sug-card').forEach(card => {
       const x = groups.find(y => y.g.id === card.dataset.g);
       card.querySelectorAll('.tm-sug-th button').forEach(b => b.onclick = () => _lbOpen(x.photos, +b.dataset.i));
-      card.querySelector('.tm-sug-no').onclick = () => { _sugSkip.add(x.g.id); try { localStorage.setItem('bdm-sug-no', JSON.stringify([..._sugSkip])); } catch (_) {} _renderSuggest(S, D); };
+      card.querySelector('.tm-sug-no').onclick = () => { if (typeof showToast === 'function') showToast('Sugerencia quitada: «' + x.g.title + '»'); _sugSkip.add(x.g.id); try { localStorage.setItem('bdm-sug-no', JSON.stringify([..._sugSkip])); } catch (_) {} _renderSuggest(S, D); };
       card.querySelector('.tm-sug-ok').onclick = async e => {
         const u = window.currentUser; if (!u) return; const bt = e.currentTarget; bt.disabled = true; bt.textContent = 'Pasando…';
         const ids = x.photos.map(p => p.id), db = firebase.firestore();
@@ -805,7 +805,7 @@ const tuMundo = (() => {
         const id = b.dataset.id; if (_pubSel.has(id)) _pubSel.delete(id); else if (_pubSel.size >= 60) { msg.textContent = 'Máximo 60 fotos en el enlace.'; return; } else _pubSel.add(id);
         b.classList.toggle('on', _pubSel.has(id)); b.setAttribute('aria-pressed', _pubSel.has(id)); cnt(); apply();
       });
-      _q('#tm-pubph-clear').onclick = () => { _pubSel.clear(); box.querySelectorAll('.tm-pubph-i.on').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); cnt(); apply(); };
+      _q('#tm-pubph-clear').onclick = () => { const n0 = _pubSel.size; if (typeof showToast === 'function') showToast(n0 + (n0 === 1 ? ' foto quitada del enlace' : ' fotos quitadas del enlace')); _pubSel.clear(); box.querySelectorAll('.tm-pubph-i.on').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); cnt(); apply(); };
     };
     const paint0 = paint;
     paint = est => { published = !!(est && est.slug); paint0(est); };
