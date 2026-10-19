@@ -869,11 +869,13 @@ const mapaRuta = {
 
     // Cerrar el anterior y abrir con placeholder
     if (this._infoWindow) this._infoWindow.close();
-    this._infoWindow = new google.maps.InfoWindow({ content: _buildContent(placeholderHtml), disableAutoPan: false });
+    // Foto libre de Wikimedia (0 €, con crédito): si la parada la tiene, se usa y NO se pide nada a Google
+    const _wikiHtml = (typeof mapaItinerario !== 'undefined' && mapaItinerario.fotoWikiPopupHtml) ? mapaItinerario.fotoWikiPopupHtml(stop, 160, '0') : '';
+    this._infoWindow = new google.maps.InfoWindow({ content: _buildContent(_wikiHtml || placeholderHtml), disableAutoPan: false });
     this._infoWindow.open(this._map, marker);
 
     // Cargar foto real vía worker: photo_ref primero, si falla fallback por nombre+coords
-    if (window.SALMA_API) {
+    if (window.SALMA_API && !_wikiHtml) {
       const _setPhoto = (url) => {
         if (!this._infoWindow) return;
         this._infoWindow.setContent(_buildContent(_photoImgHtml(url)));

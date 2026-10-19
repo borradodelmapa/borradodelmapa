@@ -5802,11 +5802,13 @@ function _showStopInfo(stop, i, marker, color) {
 
   const placeholderHtml = `<div style="width:100%;height:130px;flex-shrink:0;background:linear-gradient(135deg,${color}44,${color}22);border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:28px">${_stopEmoji(stop)}</div>`;
 
-  _liveInfoWindow.setContent(_buildStopContent(placeholderHtml));
+  // Foto libre de Wikimedia (0 €, con crédito): si la parada la tiene, se usa y NO se pide nada a Google
+  const _wikiHtml = (typeof mapaItinerario !== 'undefined' && mapaItinerario.fotoWikiPopupHtml) ? mapaItinerario.fotoWikiPopupHtml(stop, 130, '10px 10px 0 0') : '';
+  _liveInfoWindow.setContent(_buildStopContent(_wikiHtml || placeholderHtml));
   _liveInfoWindow.open(_liveMap, marker);
 
   // Cargar foto real: photo_ref primero, si falla fallback por nombre+coords
-  if (window.SALMA_API) {
+  if (window.SALMA_API && !_wikiHtml) {
     const _setPhoto = (url) => {
       const imgHtml = `<img src="${url}" style="width:100%;height:130px;object-fit:cover;display:block;border-radius:10px 10px 0 0;flex-shrink:0;" onerror="this.style.display='none'">`;
       _liveInfoWindow.setContent(_buildStopContent(imgHtml));

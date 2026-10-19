@@ -561,6 +561,20 @@ ${trk}
       : Promise.resolve(null);
   },
 
+  // Foto libre de una parada (para los pop-up de los mapas, que también la usan en vez de pedirla a Google)
+  fotoWiki(stop) {
+    const fw = this._fotosWiki && this._fotosWiki.stops && stop && this._fotosWiki.stops[stop.name];
+    if (!fw) return null;
+    return { src: `/destinos/img/${this._fotosWiki._slug}/${fw.file}`, alt: fw.alt || stop.name, autor: fw.autor, licencia: fw.licencia, url: fw.url };
+  },
+  // HTML de la foto + crédito para un pop-up (estilos en línea; altura en px)
+  fotoWikiPopupHtml(stop, alto, radio) {
+    const f = this.fotoWiki(stop);
+    if (!f) return '';
+    return `<div style="position:relative;flex-shrink:0"><img src="${this._esc(f.src)}" alt="${this._esc(f.alt)}" style="width:100%;height:${alto}px;object-fit:cover;display:block;border-radius:${radio}" onerror="this.style.display='none'">` +
+      `<span style="position:absolute;left:0;bottom:0;padding:2px 7px;background:rgba(0,0,0,.7);font-size:10px;color:rgba(244,240,230,.85);max-width:92%">Foto: <a href="${this._esc(f.url)}" target="_blank" rel="noopener nofollow" style="color:inherit">${this._esc(f.autor)}</a> · ${this._esc(f.licencia)}</span></div>`;
+  },
+
   // ═══ FOTO INICIAL ═══
   _loadInitialPhoto(stop, index, cardEl, _retryNum) {
     _retryNum = _retryNum || 0;
