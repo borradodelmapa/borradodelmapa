@@ -13060,6 +13060,12 @@ export default {
 
           // Reinicio de conversación bajo petición explícita (26 sept 2026, ver isResetRequest)
           // — borra wa_history y wa_location de este número. Sin llamar a Claude: coste 0.
+          // PRUEBA TEMPORAL (19 oct 2026): "/tarjeta" desde el número de Paco reenvía la tarjeta de contacto. Quitar tras probar.
+          if (/^\/tarjeta\s*$/i.test(String(body || '').trim()) && env.PACO_WHATSAPP_TO
+              && String(from).replace(/\D/g, '') === String(env.PACO_WHATSAPP_TO).replace(/\D/g, '')) {
+            await _sendWhatsAppContactCard(env, from);
+            return;
+          }
           if (isResetRequest(body)) {
             if (env.SALMA_KB) {
               try {
