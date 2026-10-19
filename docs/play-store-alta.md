@@ -31,6 +31,7 @@ Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegad
 - **Precio en España SIN IVA** (Play le suma el 21 %): `guia` 8,26 · `trimestral` 16,52 · `anual` 41,31 · `anual_oferta` 33,05 → el cliente paga 9,99 / 19,99 / 49,99 / 39,99 como en la web. El resto de países, como los calculó Google.
 - **Cuenta bancaria verificada** (13 oct). **`PLAY_BILLING_ON = "1"`** en `wrangler.toml`, Worker `f2c5afa1`. `/play-verify` llega a Google
   con la cuenta de servicio (comprobado con token falso → 400 «Invalid Value», no error de permisos).
+- **Arranque (19 oct):** en el paquete, **Icon URL = `https://borradodelmapa.com/icon-salma-redondo-512.png`** (Salma redonda, fondo transparente): la pantalla de la app al abrir es la misma Salma que enseña Android, y `index.html` (solo con `BDM_TWA`) arranca con esa Salma en vez de la chincheta. Maskable y monochrome siguen siendo `icon-salma-maskable-512.png` e `icon-salma-monochrome-512.png`.
 - **Pendiente:** compra de prueba de Paco en la app (probador de licencia: no se cobra) y paquete v4 SIN Location delegation.
 
 ## Estado a 10 oct 2026
