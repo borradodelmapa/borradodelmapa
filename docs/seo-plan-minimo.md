@@ -25,13 +25,19 @@ Páginas indexadas · impresiones y clics por página · consultas que traen vis
 Regla: si una tanda no se indexa o se hunde en 3-4 semanas, no se abre la siguiente; se mejora el contenido.
 
 ## Cómo se abre una tanda (regla desde el 19 oct 2026) — UN comando, se para si algo falla
-\Hace, en orden y parando al primer fallo: 1) solo entra lo que tiene guía (routes-nivel3); 2) fotos libres de Wikimedia + paisaje cercano;
-3) genera SOLO esas páginas (); 4) : título, descripción, un h1, JSON-LD, fotos con alt/tamaño,
-og:image, mapa, enlace «Abrir la guía», que la guía pública EXISTA en Firestore, que sus paradas encuentren las fotos libres y cuántas saldrían grises;
-5) crea  (hoja de fotos: mirarla 30 s, hay fotos malas que ninguna máquina ve); 6) informe. Coste 0 €, no sube nada.
-Después, a mano y con OK de Paco: revisar la hoja → abrir 2-3 guías en la app (tarjetas y pop-up del mapa) →  (añade a
-destinos-indexables.json + sitemap) → commit+push (protocolo) →  contra la web → Paco lo ve en su pantalla (§2).
-Una página sin guía NO se abre (solo ficha corta); crear la guía cuesta (Google + Anthropic): medir con UNA y avisar a Paco antes (§8).
-Trampas ya vividas: GitHub Pages no sirve ficheros que empiezan por ; las fotos de Google de guías viejas dan 404 y la app reintenta con búsqueda de pago;
-la PWA guarda la versión vieja (Ctrl+F5 / borrar el service worker para probar).
-Pendiente conocido: guías cuyo nombre público no es <destino>-ruta se enlazan en  (lo rellena fotos-destinos.cjs).
+```
+node scripts/abrir-tanda.cjs <slug> [<slug> …]      (o --siguientes 20; tope 30 por tanda)
+```
+Hace, en orden y parando al primer fallo:
+1. Solo entra lo que tiene guía (`worker/kv/routes-nivel3/<slug>.json`).
+2. Fotos libres de Wikimedia + paisaje cercano (`scripts/fotos-destinos.cjs`).
+3. Genera SOLO esas páginas (`build-destinos.js --only`).
+4. `verificar-destinos.cjs`: título, descripción, un h1, JSON-LD, fotos con alt y tamaño, og:image, mapa, enlace «Abrir la guía», que la guía pública EXISTA en Firestore, que sus paradas encuentren las fotos libres y cuántas saldrían grises.
+5. Crea `_revision-tanda.html` (hoja de fotos: mirarla 30 s; hay fotos malas que ninguna máquina ve).
+6. Informe. Coste 0 €. No sube nada.
+
+Después, a mano y con OK de Paco: revisar la hoja → abrir 2-3 guías en la app (tarjetas y pop-up del mapa) → `node scripts/abrir-tanda.cjs --confirmar <slugs>` (añade a `destinos-indexables.json` y regenera el sitemap) → commit + push (protocolo) → `verificar-destinos.cjs` contra la web → Paco lo ve en su pantalla (§2).
+
+- Una página sin guía NO se abre (solo es una ficha corta). Crear su guía cuesta (Google + Anthropic): medir con UNA y avisar a Paco antes (§8).
+- Trampas ya vividas: GitHub Pages no sirve ficheros que empiezan por `_`; las fotos de Google de guías viejas dan 404 y la app reintenta con búsqueda de pago; la PWA guarda la versión vieja (Ctrl+F5, o borrar el service worker para probar).
+- Guías cuyo nombre público no es `<destino>-ruta` se enlazan en `destinos/img/guias-publicas.json` (lo rellena `fotos-destinos.cjs`).
