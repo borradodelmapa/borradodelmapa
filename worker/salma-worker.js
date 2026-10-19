@@ -10376,6 +10376,20 @@ async function _sendWhatsAppChunk(env, to, text) {
   return res;
 }
 
+// Tarjeta de contacto de Salma (19 oct 2026, Paco: que el contacto salga con nombre en vez del número). Se manda UNA vez,
+// al dar de alta a un número nuevo. Pasa por el mismo tope de gasto de Twilio que el resto. Best effort: nunca lanza.
+async function _sendWhatsAppContactCard(env, to) {
+  try {
+    if (await _twilioGate(env, to)) return;
+    const body = new URLSearchParams({ From: env.TWILIO_WHATSAPP_FROM, To: to, MediaUrl: 'https://borradodelmapa.com/salma.vcf' });
+    const res = await fetch(
+      `https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json`,
+      { method: 'POST', headers: { 'Authorization': 'Basic ' + btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`), 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() }
+    );
+    if (!res.ok) console.error('[WA-VCF] error enviando tarjeta de contacto:', await res.text().catch(() => ''));
+  } catch (e) { console.error('[WA-VCF]', e && e.message); }
+}
+
 // Envía un email de aviso vía la API REST de Resend — añadido 22 sept 2026 porque el
 // aviso de feedback de testers por WhatsApp dejó de fiarse mientras se migra Twilio a
 // producción (ver CLAUDE.md, "Salma en WhatsApp"). Best effort: nunca lanza, solo loguea.
@@ -13003,6 +13017,7 @@ export default {
             const welcomeLink = await buildAutoLoginLink(env, newUid);
             // Bienvenida con todo lo que se puede hacer por aquí (25 sept 2026, Paco).
             await sendWhatsAppMessage(env, from, `${waHelpText(profileName)}\n\nTe he abierto cuenta gratis con este número. Lo que guardes (rutas, notas) lo ves también en la web, ya con sesión iniciada: ${welcomeLink}`);
+            await _sendWhatsAppContactCard(env, from);
             // Sigue abajo: se responde también a lo que haya escrito, como chat normal.
           }
 
