@@ -201,3 +201,4 @@
 .tm-pubph-i.on img { opacity:1; }
 .tm-pubph-i.on i { display:flex; }
 .tm-pubph-i:disabled { opacity:.3; cursor:not-allowed; }
+#tm-sug-sec[hidden] { display:none !important; }

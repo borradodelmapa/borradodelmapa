@@ -818,7 +818,7 @@ const tuMundo = (() => {
       const PP = _photoPoints(_cache.D), home2 = getHome();
       const all = [...PP.pts, ...PP.sin].filter(p => p.url).sort((a, b) => (b.t || 0) - (a.t || 0)).slice(0, 150);
       if (!all.length) { box.innerHTML = ''; return; }
-      box.innerHTML = '<h4 class="tm-pubph-h">Fotos en tu enlace <span id="tm-pubph-n"></span></h4><p class="tm-note">Ninguna sale si no la eliges. Toca una para ponerla o quitarla (se actualiza solo). No salen documentos ni fotos a menos de 5 km de tu casa.</p><div class="tm-pubph">' +
+      box.innerHTML = '<h4 class="tm-pubph-h">Fotos en tu vuelta al mundo <span id="tm-pubph-n"></span></h4><p class="tm-note">Ninguna sale si no la eliges. Toca una para ponerla o quitarla (se actualiza solo). No salen documentos ni fotos a menos de 5 km de tu casa.</p><div class="tm-pubph">' +
         all.map(p => { const cerca = home2 && p.has && hav(home2, p) < 5; return `<button type="button" class="tm-pubph-i${_pubSel.has(p.id) ? ' on' : ''}" data-id="${esc(p.id)}" ${cerca ? 'disabled title="Cerca de tu casa"' : ''} aria-pressed="${_pubSel.has(p.id)}"><img src="${esc(p.url)}" alt="" loading="lazy"><i>✓</i></button>`; }).join('') +
         '</div><button class="tm-link" id="tm-pubph-clear" type="button" hidden>Quitar fotos seleccionadas</button>';
       const cnt = () => { const n = _q('#tm-pubph-n'); if (n) n.textContent = _pubSel.size ? '(' + _pubSel.size + ')' : ''; const cl = _q('#tm-pubph-clear'); if (cl) cl.hidden = !_pubSel.size; };
@@ -873,8 +873,6 @@ const tuMundo = (() => {
               <label id="tm-fm-pl"><input type="checkbox" id="tm-fm-p" checked> <i style="background:#7a3a14"></i>Planeado, aún no</label>
             </div>
           </section>
-          <section id="tm-sug-sec" hidden><h3 class="tm-h">Fotos que encajan con tus guías</h3>
-            <p class="tm-note" id="tm-sug-note"></p><div class="tm-sug" id="tm-sug"></div></section>
           <section><h3 class="tm-h">Tus países</h3><div class="tm-flags" id="tm-flags"></div></section>
           <section><h3 class="tm-h">Tus récords</h3><div class="tm-recs" id="tm-recs"></div></section>
           <section><h3 class="tm-h">Comparte tu vuelta al mundo</h3>
@@ -888,6 +886,8 @@ const tuMundo = (() => {
             <p class="tm-note" id="tm-pub-msg"></p>
             <div id="tm-pub-ph"></div>
           </section>
+          <section id="tm-sug-sec" hidden><h3 class="tm-h">Fotos que encajan con tus guías</h3>
+            <p class="tm-note" id="tm-sug-note"></p><div class="tm-sug" id="tm-sug"></div></section>
           <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div>
             <details class="tm-pend-sec" id="tm-pend-sec" hidden><summary>Tus guías sin fotos (<span id="tm-pend-n"></span>)</summary><div class="tm-pend" id="tm-pend"></div></details></section>
           <section id="tm-next-sec" hidden><h3 class="tm-h">Tus próximos destinos</h3><div class="tm-next" id="tm-next"></div></section>
