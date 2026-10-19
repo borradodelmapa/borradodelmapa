@@ -25,6 +25,7 @@
       const r = await fetch(API.replace(/\/$/, '') + '/mundo/datos?slug=' + encodeURIComponent(slug));
       if (!r.ok) return notFound();
       d = await r.json();
+      d.fotos = (Array.isArray(d.fotos) ? d.fotos : []).filter(f => f && typeof f.url === 'string' && f.url.startsWith('https://')).slice(0, 60);
     } catch (_) { $c.innerHTML = '<div class="public-error"><h2>No se pudo cargar</h2><p>Revisa la conexión y vuelve a intentarlo.</p></div>'; return; }
     const c = d.cifras || {}, paises = d.paises || [], planeados = (d.planeados || []).filter(x => !paises.includes(x)), nombre = d.nombre || 'Un viajero';
     const titulo = d.titulo || ('El mundo de ' + nombre);
@@ -41,10 +42,23 @@
       '<div class="mp-map" id="mp-map"></div>' +
       '<div class="mp-leg"><span><i style="background:#F4630B"></i>Ha estado</span>' + (planeados.length ? '<span><i style="background:#7a3a14"></i>Planeado, aún no</span>' : '') + '</div>' +
       (flags ? '<div class="mp-flags">' + flags + '</div>' : '') +
+      ((d.fotos || []).length ? '<section><h2 class="mp-h">Sus fotos</h2><div class="mp-ph">' + d.fotos.map((f, i) => '<button type="button" class="mp-phi" data-i="' + i + '"><img src="' + esc(f.url) + '" alt="" loading="lazy"></button>').join('') + '</div></section>' : '') +
       ((d.records || []).length ? '<section><h2 class="mp-h">Sus récords</h2><div class="mp-recs">' + d.records.map(r => '<div class="mp-rec"><span class="mp-k">' + esc(r.k) + '</span><b>' + esc(r.v) + '</b><span class="mp-s">' + esc(r.s) + '</span></div>').join('') + '</div></section>' : '') +
       ((d.viajes || []).length ? '<section><h2 class="mp-h">Sus viajes</h2><div class="mp-trips">' + d.viajes.map(t => '<div class="mp-trip"><b>' + esc(t.title) + '</b><span>' + (t.countries || []).map(flagOf).join(' ') + ' ' + (t.year ? t.year + ' · ' : '') + (t.days ? t.days + ' días · ' : '') + nf(t.km) + ' km' + (t.fotos ? ' · ' + t.fotos + (t.fotos === 1 ? ' foto' : ' fotos') : '') + '</span></div>').join('') + '</div></section>' : '') +
       '<div class="mp-cta"><h2>¿Y tu vuelta al mundo?</h2><p>Crea tu cuenta gratis, planea tu próximo viaje con Salma y pinta tu propio mapa.</p><a class="btn-primary" href="/">Crear mi mundo</a></div>' +
       '</div>';
+    // visor de fotos a pantalla completa
+    const fotos = d.fotos || [];
+    const abrir = i => {
+      let k = i; const ov = document.createElement('div'); ov.className = 'mp-lb';
+      const draw = () => { ov.innerHTML = '<button type="button" class="mp-lb-x" aria-label="Cerrar">✕</button>' + (fotos.length > 1 ? '<button type="button" class="mp-lb-p" aria-label="Anterior">‹</button><button type="button" class="mp-lb-n" aria-label="Siguiente">›</button>' : '') + '<img src="' + esc(fotos[k].url) + '" alt="">'; };
+      draw(); document.body.appendChild(ov);
+      const cerrar = () => { ov.remove(); document.removeEventListener('keydown', kd); };
+      const kd = e => { if (e.key === 'Escape') cerrar(); else if (e.key === 'ArrowLeft') { k = (k + fotos.length - 1) % fotos.length; draw(); } else if (e.key === 'ArrowRight') { k = (k + 1) % fotos.length; draw(); } };
+      document.addEventListener('keydown', kd);
+      ov.onclick = e => { if (e.target.closest('.mp-lb-x') || e.target === ov) cerrar(); else if (e.target.closest('.mp-lb-p')) { k = (k + fotos.length - 1) % fotos.length; draw(); } else if (e.target.closest('.mp-lb-n')) { k = (k + 1) % fotos.length; draw(); } };
+    };
+    $c.querySelectorAll('.mp-phi').forEach(b => b.onclick = () => abrir(+b.dataset.i));
     if (typeof L === 'undefined') return;
     try {
       if (typeof topojson === 'undefined') await _loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js');

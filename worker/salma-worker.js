@@ -2492,6 +2492,24 @@ function _mundoLimpiar(b) {
     cifras: { paises: Math.round(_mundoNum(c.paises, 0, 250)), km: Math.round(_mundoNum(c.km, 0, 2000000)), viajes: Math.round(_mundoNum(c.viajes, 0, 5000)), dias: Math.round(_mundoNum(c.dias, 0, 40000)) },
   };
 }
+// Una foto elegida: SIEMPRE se lee del propio users/{uid}/fotos/{id} (el navegador solo manda el id y, opcional,
+// la coordenada ya redondeada). Nunca documentos, carteles ni vídeos; la URL debe ser de R2 y de la carpeta del dueño.
+async function _mundoFoto(env, uid, f) {
+  try {
+    if (!f || !/^[A-Za-z0-9]{8,40}$/.test(String(f.id || ''))) return null;
+    const doc = parseFirestoreDoc(await firestoreAdminGet(env, 'users/' + uid + '/fotos/' + f.id));
+    if (!doc || !doc.url || doc.tag === 'documento' || doc.tag === 'cartel' || doc.type === 'video') return null;
+    const u = String(doc.url).replace('salma-api.paco-defoto.workers.dev', 'salma-api.borradodelmapa-api.workers.dev');
+    const m = u.length <= 500 && u.match(/^https:\/\/salma-api\.borradodelmapa-api\.workers\.dev\/photo\/([A-Za-z0-9_.%-]+(?:\/[A-Za-z0-9_.%-]+)*)$/);
+    let key = ''; try { key = m ? decodeURIComponent(m[1]) : ''; } catch (_) {}
+    if (!key || key.includes('..') || !key.startsWith('photos/' + uid + '/') || !/^[A-Za-z0-9_.\/-]+$/.test(key)) return null;
+    const out = { id: String(f.id), url: u };
+    const lat = Number(f.lat), lng = Number(f.lng);
+    if (f.lat != null && f.lng != null && isFinite(lat) && isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) { out.lat = Math.round(lat * 100) / 100; out.lng = Math.round(lng * 100) / 100; }
+    const t = Date.parse(doc.takenAt || doc.createdAt || ''); if (isFinite(t)) out.t = t;
+    return out;
+  } catch (_) { return null; }
+}
 async function handleMundo(request, env, url) {
   const p = url.pathname;
   // ── lectura pública: sin cuenta. Caché de 2 min en Cloudflare: muchas visitas ≈ pocas lecturas ──
@@ -2504,7 +2522,7 @@ async function handleMundo(request, env, url) {
     if (!doc) return _mundoJson({ error: 'no encontrado' }, 404, { 'Cache-Control': 'public, max-age=60' });
     const d = parseFirestoreDoc(doc);
     // lo público: NUNCA el uid
-    const out = { slug, nombre: d.nombre || '', titulo: d.titulo || '', paises: d.paises || [], planeados: d.planeados || [], paradas: d.paradas || [], records: d.records || [], viajes: d.viajes || [], cifras: d.cifras || {}, actualizado: d.actualizado || null };
+    const out = { slug, nombre: d.nombre || '', titulo: d.titulo || '', paises: d.paises || [], planeados: d.planeados || [], paradas: d.paradas || [], fotos: (d.fotos || []).map(f => ({ url: f.url, lat: f.lat, lng: f.lng, t: f.t })), records: d.records || [], viajes: d.viajes || [], cifras: d.cifras || {}, actualizado: d.actualizado || null };
     const res = _mundoJson(out, 200, { 'Cache-Control': 'public, max-age=120' });
     try { await cache.put(ck, res.clone()); } catch (_) {}
     return res;
@@ -2515,7 +2533,9 @@ async function handleMundo(request, env, url) {
   const uid = user.uid;
   if (request.method === 'GET' && p === '/mundo/estado') {
     const slug = await _mundoSlugDe(env, uid);
-    return _mundoJson({ publicado: !!slug, slug: slug || null });
+    let fotos = [];
+    if (slug) { try { const d = parseFirestoreDoc(await firestoreAdminGet(env, 'public_worlds/' + slug)); if (d && d.uid === uid) fotos = (d.fotos || []).map(f => f.id).filter(Boolean); } catch (_) {} }
+    return _mundoJson({ publicado: !!slug, slug: slug || null, fotos });
   }
   if (request.method === 'POST' && p === '/mundo/despublicar') {
     const slug = await _mundoSlugDe(env, uid);
@@ -2541,6 +2561,15 @@ async function handleMundo(request, env, url) {
     let body; try { body = JSON.parse(raw); } catch (_) { return _mundoJson({ error: 'Datos no válidos' }, 400); }
     const datos = _mundoLimpiar(body);
     if (!datos || (!datos.paises.length && !datos.paradas.length)) return _mundoJson({ error: 'Aún no hay nada que publicar' }, 400);
+    // fotos elegidas: solo con «Compartir mis rutas» activo (por defecto lo está)
+    let fotos = [], fotosOmitidas = false;
+    const ids = (Array.isArray(body.fotos) ? body.fotos : []).slice(0, 60);
+    if (ids.length) {
+      const ud = await firestoreAdminGet(env, 'users/' + uid);
+      const compartir = !(ud && ud.fields && ud.fields.share_routes && ud.fields.share_routes.booleanValue === false);
+      if (!compartir) fotosOmitidas = true;
+      else fotos = (await Promise.all(ids.map(f => _mundoFoto(env, uid, f)))).filter(Boolean);
+    }
     // nombre de pila: el de la cuenta, nunca el que mande el navegador
     const nombre = _mundoTxt(String(user.name || '').split(/\s+/)[0], 20) || 'Viajero';
     let slug = await _mundoSlugDe(env, uid);
@@ -2560,10 +2589,10 @@ async function handleMundo(request, env, url) {
       if (ex && ex.uid !== uid) return _mundoJson({ error: 'Enlace no disponible' }, 409);
     }
     await firestoreAdminPatch(env, 'public_worlds/' + slug, toFirestoreFields({
-      uid, slug, nombre, titulo: 'El mundo de ' + nombre, ...datos, actualizado: new Date().toISOString(),
+      uid, slug, nombre, titulo: 'El mundo de ' + nombre, ...datos, fotos, actualizado: new Date().toISOString(),
     }).fields);
     try { await caches.default.delete(new Request('https://cache.local/mundo/' + slug)); } catch (_) {}
-    return _mundoJson({ ok: true, slug, url: 'https://borradodelmapa.com/mundo/' + slug });
+    return _mundoJson({ ok: true, slug, url: 'https://borradodelmapa.com/mundo/' + slug, fotos: fotos.map(f => f.id), fotosOmitidas });
   }
   return _mundoJson({ error: 'no encontrado' }, 404);
 }

@@ -718,6 +718,7 @@ const tuMundo = (() => {
     if (!r.ok) throw new Error(j.error || 'Error ' + r.status);
     return j;
   }
+  let _pubSel = new Set();   // ids de las fotos elegidas para el enlace público
   function _pubPayload(S) {
     const home = getHome(), seen = new Set(), out = [];
     const paises = [...S.seen.values()].map(e => e.f.a2).filter(Boolean);
@@ -744,16 +745,22 @@ const tuMundo = (() => {
     const top = [...S.seen.values()].sort((a, b) => b.src.size - a.src.size)[0];
     if (top && top.src.size > 1) records.push({ k: 'Su país favorito', v: esName(top.f.a2, top.f.en), s: top.src.size + ' viajes o recuerdos' });
     const viajes = vis.slice().sort((a, b) => (b.date || 0) - (a.date || 0)).slice(0, 60).map(g => ({ title: g.title, year: g.date ? new Date(g.date).getFullYear() : 0, countries: g.countries.map(f => f.a2).filter(Boolean), days: g.days || 0, km: Math.round(g.km), fotos: g.nPhotos || 0 }));
-    return { paises, planeados, paradas: out.slice(0, 300), records, viajes, cifras: { paises: S.seen.size, km: Math.round(S.km), viajes: S.visited.length, dias: S.days } };
+    return { paises, planeados, paradas: out.slice(0, 300), records, viajes, fotos: _pubFotos(), cifras: { paises: S.seen.size, km: Math.round(S.km), viajes: S.visited.length, dias: S.days } };
+  }
+  // fotos elegidas: solo el id y, si se sabe, el sitio (el servidor lee la foto de TU cuenta y la redondea); nada cerca de casa
+  function _pubFotos() {
+    if (!_cache || !_pubSel.size) return [];
+    const PP = _photoPoints(_cache.D), home = getHome(), by = new Map([...PP.pts, ...PP.sin].map(p => [p.id, p]));
+    return [..._pubSel].map(id => by.get(id)).filter(p => p && !(home && p.has && hav(home, p) < 5)).slice(0, 60).map(p => p.has ? { id: p.id, lat: p.lat, lng: p.lng } : { id: p.id });
   }
   async function _wirePublic(S) {
     const row = _q('#tm-pub-row'), info = _q('#tm-pub-info'), msg = _q('#tm-pub-msg'); if (!row) return;
     const home = getHome();
-    const paint = est => {
+    let paint = est => {
       const url = est && est.slug ? 'https://borradodelmapa.com/mundo/' + est.slug : '';
       info.textContent = url
-        ? 'Tu mundo está publicado. Cualquiera con el enlace lo ve, sin cuenta: tus países, tus cifras y los puntos de tu recorrido (a ~1 km, nunca tu casa).'
-        : 'Publica un enlace para que cualquiera vea tu vuelta al mundo sin cuenta: tus países, tus cifras y los puntos de tu recorrido (a ~1 km). Sin fotos' + (home ? ', y nada a menos de 5 km de tu casa.' : '. Consejo: guarda antes tu casa (en Tus récords) y no saldrá nada cerca de ella.');
+        ? 'Tu mundo está publicado. Cualquiera con el enlace lo ve, sin cuenta: tus países, tus cifras y los puntos de tu recorrido (a ~1 km, nunca tu casa) y las fotos que elijas.'
+        : 'Publica un enlace para que cualquiera vea tu vuelta al mundo sin cuenta: tus países, tus cifras y los puntos de tu recorrido (a ~1 km). Las fotos las eliges tú, abajo' + (home ? ', y nada a menos de 5 km de tu casa.' : '. Consejo: guarda antes tu casa (en Tus récords) y no saldrá nada cerca de ella.');
       row.innerHTML = url
         ? `<input class="tm-home-in" id="tm-pub-url" type="text" readonly value="${esc(url)}" aria-label="Tu enlace">
            <button class="tm-btn" id="tm-pub-copy" type="button">${IC_SHARE} Compartir</button>
@@ -770,8 +777,40 @@ const tuMundo = (() => {
         try { await navigator.clipboard.writeText(url); msg.textContent = 'Enlace copiado.'; } catch (_) { _q('#tm-pub-url').select(); msg.textContent = 'Cópialo y compártelo.'; }
       };
     };
-    paint(null);
-    try { const est = await _pubFetch('/mundo/estado', 'GET'); if (est && est.publicado && document.getElementById('tm-pub')) paint(est); } catch (_) {}
+    // ── fotos del enlace: toca una para añadirla o quitarla; si el enlace ya está publicado se actualiza solo ──
+    const box = _q('#tm-pub-ph');
+    let timer = null, published = false;
+    const share = !(window.currentUser && window.currentUser.share_routes === false);
+    const apply = () => {
+      if (!published) return;
+      clearTimeout(timer);
+      timer = setTimeout(async () => {
+        msg.textContent = 'Actualizando tu enlace…';
+        try { const r = await _pubFetch('/mundo/publicar', 'POST', _pubPayload(S)); msg.textContent = r.fotosOmitidas ? 'Activa «Compartir mis rutas» en tu Perfil para que salgan fotos.' : 'Enlace al día.'; }
+        catch (e) { msg.textContent = e.message || 'No se pudo actualizar. Prueba otra vez.'; }
+      }, 900);
+    };
+    const drawPh = () => {
+      if (!box) return;
+      if (!share) { box.innerHTML = '<p class="tm-note">Para poner fotos en tu enlace activa «Compartir mis rutas» en tu Perfil.</p>'; return; }
+      const PP = _photoPoints(_cache.D), home2 = getHome();
+      const all = [...PP.pts, ...PP.sin].filter(p => p.url).sort((a, b) => (b.t || 0) - (a.t || 0)).slice(0, 150);
+      if (!all.length) { box.innerHTML = ''; return; }
+      box.innerHTML = '<h4 class="tm-pubph-h">Fotos en tu enlace <span id="tm-pubph-n"></span></h4><p class="tm-note">Ninguna sale si no la eliges. Toca una para ponerla o quitarla (se actualiza solo). No salen documentos ni fotos a menos de 5 km de tu casa.</p><div class="tm-pubph">' +
+        all.map(p => { const cerca = home2 && p.has && hav(home2, p) < 5; return `<button type="button" class="tm-pubph-i${_pubSel.has(p.id) ? ' on' : ''}" data-id="${esc(p.id)}" ${cerca ? 'disabled title="Cerca de tu casa"' : ''} aria-pressed="${_pubSel.has(p.id)}"><img src="${esc(p.url)}" alt="" loading="lazy"><i>✓</i></button>`; }).join('') +
+        '</div><button class="tm-link" id="tm-pubph-clear" type="button">Quitar todas las fotos</button>';
+      const cnt = () => { const n = _q('#tm-pubph-n'); if (n) n.textContent = _pubSel.size ? '(' + _pubSel.size + ')' : ''; };
+      cnt();
+      box.querySelectorAll('.tm-pubph-i').forEach(b => b.onclick = () => {
+        const id = b.dataset.id; if (_pubSel.has(id)) _pubSel.delete(id); else if (_pubSel.size >= 60) { msg.textContent = 'Máximo 60 fotos en el enlace.'; return; } else _pubSel.add(id);
+        b.classList.toggle('on', _pubSel.has(id)); b.setAttribute('aria-pressed', _pubSel.has(id)); cnt(); apply();
+      });
+      _q('#tm-pubph-clear').onclick = () => { _pubSel.clear(); box.querySelectorAll('.tm-pubph-i.on').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); cnt(); apply(); };
+    };
+    const paint0 = paint;
+    paint = est => { published = !!(est && est.slug); paint0(est); };
+    _pubSel = new Set(); paint(null); drawPh();
+    try { const est = await _pubFetch('/mundo/estado', 'GET'); if (est && est.publicado && document.getElementById('tm-pub')) { _pubSel = new Set(est.fotos || []); paint(est); drawPh(); } } catch (_) {}
   }
 
   async function render() {
@@ -818,6 +857,7 @@ const tuMundo = (() => {
             <p class="tm-note" id="tm-pub-info"></p>
             <div class="tm-pub-row" id="tm-pub-row"></div>
             <p class="tm-note" id="tm-pub-msg"></p>
+            <div id="tm-pub-ph"></div>
           </section>
           <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div>
             <details class="tm-pend-sec" id="tm-pend-sec" hidden><summary>Tus guías sin fotos (<span id="tm-pend-n"></span>)</summary><div class="tm-pend" id="tm-pend"></div></details></section>
