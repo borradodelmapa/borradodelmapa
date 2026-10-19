@@ -452,7 +452,7 @@ const tuMundo = (() => {
     nt.innerHTML = esc(txt) + (sinSitio && !_year ? ` <button type="button" class="tm-link" id="tm-sin">Ver las ${sinSitio} sin ubicación</button>` : '');
     const bs = _q('#tm-sin'); if (bs) bs.onclick = verSin;
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
-    const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 2, maxZoom: 18 });
+    const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 1, maxZoom: 18 });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
     const cv = L.layerGroup().addTo(map), cp = L.layerGroup().addTo(map); _paintCountries({ v: cv, p: cp }, S);
     const lp = _q('#tm-fm-pl'); if (lp) lp.hidden = !cp.getLayers().length;
@@ -537,7 +537,8 @@ const tuMundo = (() => {
     on('#tm-fm-p', v => v ? cp.addTo(map) : map.removeLayer(cp));
     on('#tm-fm-f', v => v ? photos.addTo(map) : map.removeLayer(photos));
     on('#tm-fmap-route', v => v ? line.addTo(photos) : photos.removeLayer(line));
-    setTimeout(() => { if (_fmap === map) map.invalidateSize(); }, 200);
+    // el tamaño del contenedor puede cambiar tras pintar (móvil): recalcular y reencuadrar para que se vea el recorrido entero
+    setTimeout(() => { if (_fmap !== map) return; map.invalidateSize(); if (pts.length) map.fitBounds(line.getBounds(), { padding: [40, 40], maxZoom: 14 }); }, 250);
   }
 
   /* ── pantalla completa ── */
