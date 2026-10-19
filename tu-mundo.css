@@ -205,3 +205,15 @@
 .tm-loc { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:8px 12px; background:#0D0F10; }
 .tm-loc .tm-home-in { flex:1 1 180px; min-width:0; }
 .tm-loc-msg { width:100%; }
+
+/* Barra del mapa, maquetada (19 oct 2026): nota arriba, 4 acciones en una fila, meses/años en una sola línea con scroll */
+.tm-mapbar { gap:8px; padding:12px 10px; }
+.tm-mapbar .tm-note { flex:1 1 100%; font-size:13px; line-height:1.4; }
+.tm-mapbar .tm-note .tm-link { font-weight:700; }
+.tm-mapbar .tm-btn { flex:1 1 0; min-width:0; height:42px; padding:0 6px; font-size:15px; letter-spacing:.03em; white-space:nowrap; justify-content:center; background:transparent; color:var(--text-primary); border:1px solid var(--border); }
+.tm-mapbar .tm-btn.tm-play#tm-play { background:var(--accent); border-color:var(--accent); color:#000; flex:1 1 100%; height:46px; font-size:17px; }
+.tm-mapbar .tm-fmap-up { display:inline-flex; align-items:center; margin:0; }
+.tm-mapbar #tm-fmap-msg, .tm-mapbar #tm-ios { flex:1 1 100%; }
+.tm-years { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding:8px 10px; }
+.tm-years::-webkit-scrollbar { display:none; }
+.tm-yr { flex:0 0 auto; padding:7px 14px; font-size:14px; text-transform:capitalize; }
