@@ -333,6 +333,18 @@ const tuMundo = (() => {
      si hay una a menos de 40 km se SUGIERE ("estas 86 fotos parecen de X") y Paco confirma. Una foto vive en un solo sitio.
      💶 0 €: comparación en el móvil; al confirmar, una escritura de Firestore por lote (routeId). Sin Claude ni Google. */
   const SUG_KM = 40;
+  // Borra de la cuenta las fotos SUELTAS indicadas (las que están dentro de una guía no se tocan): desaparecen del mapa,
+  // de Tu vuelta al mundo y, al actualizar el enlace, de la parte pública. Devuelve cuántas se borraron.
+  async function _borrarFotos(ids) {
+    const u = window.currentUser; if (!u || !_cache) return 0;
+    const D = _cache.D, by = new Map(D.photos.map(p => [p.id, p]));
+    const del = ids.filter(id => by.has(id) && !by.get(id).routeId), db = firebase.firestore();
+    for (let i = 0; i < del.length; i += 400) { const b = db.batch(); del.slice(i, i + 400).forEach(id => b.delete(db.collection('users').doc(u.uid).collection('fotos').doc(id))); await b.commit(); }
+    const gone = new Set(del); D.photos = D.photos.filter(p => !gone.has(p.id)); del.forEach(id => _pubSel.delete(id));
+    try { localStorage.removeItem(SUM_KEY); } catch (_) {}
+    const S2 = compute(D); _cache.S = S2; _saveSummary(u.uid, S2); _paint(S2); _drawMap(S2, D); _renderSuggest(S2, D);
+    return del.length;
+  }
   const _sugSkip = new Set((() => { try { return JSON.parse(localStorage.getItem('bdm-sug-no') || '[]'); } catch (_) { return []; } })());  // guías cuyas fotos sugeridas el usuario dijo «No lo son»
   function _suggest(D) {
     const { pts } = _photoPoints(D), by = new Map(); let sinGuia = 0;
@@ -356,7 +368,16 @@ const tuMundo = (() => {
     box.querySelectorAll('.tm-sug-card').forEach(card => {
       const x = groups.find(y => y.g.id === card.dataset.g);
       card.querySelectorAll('.tm-sug-th button').forEach(b => b.onclick = () => _lbOpen(x.photos, +b.dataset.i));
-      card.querySelector('.tm-sug-no').onclick = () => { if (typeof showToast === 'function') showToast('Sugerencia quitada: «' + x.g.title + '»'); _sugSkip.add(x.g.id); try { localStorage.setItem('bdm-sug-no', JSON.stringify([..._sugSkip])); } catch (_) {} _renderSuggest(S, D); };
+      card.querySelector('.tm-sug-no').onclick = async e => {
+        const n = x.photos.length;
+        if (!confirm('¿Borrar ' + (n === 1 ? 'esta foto' : 'estas ' + n + ' fotos') + ' de tu cuenta? Desaparecen de tu mapa, de Tu vuelta al mundo y de tu enlace público. No se puede deshacer. Las guías no se tocan.')) return;
+        const bt = e.currentTarget; bt.disabled = true; bt.textContent = 'Borrando…';
+        try {
+          const k = await _borrarFotos(x.photos.map(p => p.id));
+          if (typeof showToast === 'function') showToast(k + (k === 1 ? ' foto borrada' : ' fotos borradas'));
+          if (window._tmPubRefresh) window._tmPubRefresh();
+        } catch (_) { bt.disabled = false; bt.textContent = 'No se pudo · otra vez'; }
+      };
       card.querySelector('.tm-sug-ok').onclick = async e => {
         const u = window.currentUser; if (!u) return; const bt = e.currentTarget; bt.disabled = true; bt.textContent = 'Pasando…';
         const ids = x.photos.map(p => p.id), db = firebase.firestore();
@@ -768,7 +789,7 @@ const tuMundo = (() => {
            <button class="tm-link" id="tm-pub-off" type="button">Despublicar</button>`
         : '<button class="tm-btn" id="tm-pub-on" type="button">🌍 Publicar mi mundo</button>';
       const run = async (fn, okTxt) => { msg.textContent = 'Un momento…'; try { const r = await fn(); msg.textContent = okTxt || ''; return r; } catch (e) { msg.textContent = e.message || 'No se pudo. Prueba otra vez.'; } };
-      const pub = async () => { const r = await run(() => _pubFetch('/mundo/publicar', 'POST', _pubPayload(S)), 'Listo: tu enlace está al día.'); if (r && r.slug) paint({ slug: r.slug }); };
+      const pub = async () => { const r = await run(() => _pubFetch('/mundo/publicar', 'POST', _pubPayload(_cache.S)), 'Listo: tu enlace está al día.'); if (r && r.slug) paint({ slug: r.slug }); };
       const on = _q('#tm-pub-on'); if (on) on.onclick = pub;
       const upd = _q('#tm-pub-upd'); if (upd) upd.onclick = pub;
       const off = _q('#tm-pub-off'); if (off) off.onclick = async () => { if (!confirm('¿Despublicar? El enlace dejará de funcionar.')) return; const r = await run(() => _pubFetch('/mundo/despublicar', 'POST'), 'Despublicado: el enlace ya no funciona.'); if (r) paint(null); };
@@ -781,15 +802,16 @@ const tuMundo = (() => {
     const box = _q('#tm-pub-ph');
     let timer = null, published = false;
     const share = !(window.currentUser && window.currentUser.share_routes === false);
-    const apply = () => {
+    const apply = now => {
       if (!published) return;
       clearTimeout(timer);
       timer = setTimeout(async () => {
         msg.textContent = 'Actualizando tu enlace…';
-        try { const r = await _pubFetch('/mundo/publicar', 'POST', _pubPayload(S)); msg.textContent = r.fotosOmitidas ? 'Activa «Compartir mis rutas» en tu Perfil para que salgan fotos.' : 'Enlace al día.'; }
+        try { const r = await _pubFetch('/mundo/publicar', 'POST', _pubPayload(_cache.S)); msg.textContent = r.fotosOmitidas ? 'Activa «Compartir mis rutas» en tu Perfil para que salgan fotos.' : 'Enlace al día.'; }
         catch (e) { msg.textContent = e.message || 'No se pudo actualizar. Prueba otra vez.'; }
-      }, 900);
+      }, now ? 0 : 900);
     };
+    window._tmPubRefresh = () => { drawPh(); apply(true); };
     const drawPh = () => {
       if (!box) return;
       if (!share) { box.innerHTML = '<p class="tm-note">Para poner fotos en tu enlace activa «Compartir mis rutas» en tu Perfil.</p>'; return; }
@@ -805,7 +827,14 @@ const tuMundo = (() => {
         const id = b.dataset.id; if (_pubSel.has(id)) _pubSel.delete(id); else if (_pubSel.size >= 60) { msg.textContent = 'Máximo 60 fotos en el enlace.'; return; } else _pubSel.add(id);
         b.classList.toggle('on', _pubSel.has(id)); b.setAttribute('aria-pressed', _pubSel.has(id)); cnt(); apply();
       });
-      _q('#tm-pubph-clear').onclick = () => { const n0 = _pubSel.size; if (typeof showToast === 'function') showToast(n0 + (n0 === 1 ? ' foto quitada del enlace' : ' fotos quitadas del enlace')); _pubSel.clear(); box.querySelectorAll('.tm-pubph-i.on').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); cnt(); apply(); };
+      _q('#tm-pubph-clear').onclick = async () => {
+        const ids = [..._pubSel]; if (!ids.length) return;
+        const loose = new Set(_cache.D.photos.filter(p => !p.routeId).map(p => p.id)), nLoose = ids.filter(i => loose.has(i)).length, enGuia = ids.length - nLoose;
+        if (!confirm('¿Borrar ' + (nLoose === 1 ? 'la foto seleccionada' : nLoose + ' fotos seleccionadas') + ' de tu cuenta? Desaparecen de tu mapa, de Tu vuelta al mundo y de tu enlace público. No se puede deshacer.' + (enGuia ? ' Las ' + enGuia + ' que están dentro de una guía no se borran: solo se quitan del enlace.' : ''))) return;
+        msg.textContent = 'Borrando…';
+        try { const k = await _borrarFotos(ids); _pubSel.clear(); drawPh(); if (typeof showToast === 'function') showToast(k + (k === 1 ? ' foto borrada' : ' fotos borradas')); msg.textContent = ''; apply(true); }
+        catch (e) { msg.textContent = 'No se pudo borrar. Prueba otra vez.'; }
+      };
     };
     const paint0 = paint;
     paint = est => { published = !!(est && est.slug); paint0(est); };
