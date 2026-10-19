@@ -315,7 +315,9 @@ ${trk}
 
   _shareLink(routeData, url) {
     const title = routeData.title || routeData.name || 'Mi ruta';
-    const text = `Te comparto esta ruta: ${title}\n${window.SHARE_INVITE}`;
+    const text = `Te comparto esta ruta: ${title} 🧭\nLa hice con Salma. Ábrela, guárdala gratis y crea la tuya en borradodelmapa.com 👇`;
+    // utm_source=compartir: así se mide cuánta gente llega por enlaces compartidos (bucle viral)
+    url += (url.indexOf('?') < 0 ? '?' : '&') + 'utm_source=compartir';
     if (navigator.share) {
       navigator.share({ title, text, url }).catch(() => {});
     } else {

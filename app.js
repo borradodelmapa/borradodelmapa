@@ -4226,6 +4226,39 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
+// ═══ MOMENTO TRAS GUARDAR: invitar a compartir (siempre) y pedir reseña (solo app de Play, 1 vez) ═══
+// Sin llamadas a APIs de pago. Estilos en línea a propósito (no toca styles.css ni los destinos).
+function _momentoTrasGuardar(docId, r) {
+  if (document.getElementById('bdm-momento')) return;
+  let n = 0, pedida = 0;
+  try { n = (+localStorage.getItem('bdm_guardadas') || 0) + 1; localStorage.setItem('bdm_guardadas', n); pedida = +localStorage.getItem('bdm_resena_ts') || 0; } catch (_) {}
+  // Reseña: solo dentro de la app de Google Play, a partir de la 2ª guía guardada y no más de 1 vez cada 60 días
+  const pedirResena = !!window.BDM_TWA && n >= 2 && (Date.now() - pedida > 60 * 86400000);
+  const box = document.createElement('div');
+  box.id = 'bdm-momento';
+  box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:90px;z-index:10001;background:#111;color:#fff;border:2px solid #F4630B;padding:16px;font-family:inherit;box-shadow:0 6px 24px rgba(0,0,0,.5)';
+  const btn = 'border:0;padding:12px 14px;font-weight:700;font-size:14px;cursor:pointer;margin-right:8px;';
+  const cerrar = () => box.remove();
+  if (pedirResena) {
+    try { localStorage.setItem('bdm_resena_ts', Date.now()); } catch (_) {}
+    box.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:10px">¿Te está gustando Salma?</div>' +
+      '<button id="bdm-si" style="' + btn + 'background:#F4630B;color:#fff">👍 Sí, mucho</button>' +
+      '<button id="bdm-no" style="' + btn + 'background:#333;color:#fff">👎 Se puede mejorar</button>';
+    document.body.appendChild(box);
+    document.getElementById('bdm-si').onclick = () => { cerrar(); window.open('https://play.google.com/store/apps/details?id=com.borradodelmapa.app', '_blank'); };
+    document.getElementById('bdm-no').onclick = () => { cerrar(); showToast('Gracias, cuéntale a Salma qué mejorar'); };
+    return;
+  }
+  box.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:4px">¡Guía lista! 🎉</div>' +
+    '<div style="font-size:13px;opacity:.85;margin-bottom:12px">¿Se la mandas a tu grupo de viaje?</div>' +
+    '<button id="bdm-comp" style="' + btn + 'background:#F4630B;color:#fff">Compartir</button>' +
+    '<button id="bdm-ahora" style="' + btn + 'background:#333;color:#fff">Ahora no</button>';
+  document.body.appendChild(box);
+  document.getElementById('bdm-ahora').onclick = cerrar;
+  document.getElementById('bdm-comp').onclick = () => { cerrar(); mapaItinerario._doShare(r, docId); };
+  setTimeout(cerrar, 12000);
+}
+
 // ═══ GUARDAR GUÍA ═══
 
 // opts.publicar === false: se guarda SOLO en Mis Viajes, sin guía pública ni Explorar (guardado automático al crear
@@ -4278,6 +4311,8 @@ async function guardarGuiaDirecto(routeData, opts = {}) {
 
     const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
     showToast('Guía guardada');
+    // Bucle viral + reseña: tanto al pulsar GUARDAR como en el guardado automático al crear la ruta (algo más tarde, para que vea antes la ruta)
+    setTimeout(() => { try { _momentoTrasGuardar(docRef.id, r); } catch (_) {} }, opts.publicar === false ? 5000 : 1200);
 
     // Guardar copia offline en localStorage (disponible sin conexión)
     try {
