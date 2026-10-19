@@ -110,6 +110,16 @@ async function elegir({ queries, toks, lat, lng, radio, width, exigirNombre }) {
   return best && best.c;
 }
 
+
+// Guías públicas que no se llaman <destino>-ruta (p. ej. barcelona-en-3-dias-ky61): la app las busca en destinos/img/_guias.json
+function registrarGuia(slug, route) {
+  if (!route || !route._public_slug) return;
+  const f = path.join(ROOT, 'destinos', 'img', '_guias.json');
+  let m = {}; try { m = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (_) {}
+  m[route._public_slug] = slug;
+  fs.writeFileSync(f, JSON.stringify(m, null, 1));
+}
+
 async function bajar(c, destino) {
   const r = await fetch(c.thumb, { headers: { 'User-Agent': UA } });
   if (!r.ok) throw new Error('descarga ' + r.status);
@@ -173,6 +183,7 @@ async function hacer(slug, rehacer) {
     }
   }
   fs.writeFileSync(meta, JSON.stringify(out, null, 1));
+  registrarGuia(slug, route);
   console.log(`  ${slug}: hero ${out.hero ? 'sí' : 'no'}, ${Object.keys(out.stops).length}/${stops.length} paradas con foto`);
 }
 
@@ -218,6 +229,7 @@ async function completarPagina(slug) {
     nuevas++; console.log('  parada', n, 'paisaje cerca de', st.name, '←', c.title.slice(0, 50));
   }
   fs.writeFileSync(meta, JSON.stringify(out, null, 1));
+  registrarGuia(slug, route);
   console.log('  ' + slug + ': +' + nuevas + ' → ' + Object.keys(out.stops).length + '/' + route.stops.length);
 }
 

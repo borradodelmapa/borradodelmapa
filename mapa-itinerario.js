@@ -556,8 +556,11 @@ ${trk}
     this._fotosWiki = null; this._fotosWikiHecho = false;
     const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
     const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
+    const traer = s => fetch(`/destinos/img/${s}/fotos.json`).then(r => r.ok ? r.json() : null).then(j => { if (j && j.stops) { j._slug = s; this._fotosWiki = j; } return j; }).catch(() => null);
+    // Guías públicas con otro nombre (p. ej. barcelona-en-3-dias-ky61 → barcelona-espana): destinos/img/_guias.json
+    const porMapa = () => fetch('/destinos/img/_guias.json').then(r => r.ok ? r.json() : null).then(m => (m && m[sf]) ? traer(m[sf]) : null).catch(() => null);
     this._fotosWikiP = /^[a-z0-9-]{3,120}$/.test(slug)
-      ? fetch(`/destinos/img/${slug}/fotos.json`).then(r => r.ok ? r.json() : null).then(j => { if (j && j.stops) { j._slug = slug; this._fotosWiki = j; } return j; }).catch(() => null)
+      ? traer(slug).then(j => j || porMapa())
       : Promise.resolve(null);
   },
 
