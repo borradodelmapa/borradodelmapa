@@ -217,3 +217,16 @@
 .tm-years { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding:8px 10px; }
 .tm-years::-webkit-scrollbar { display:none; }
 .tm-yr { flex:0 0 auto; padding:7px 14px; font-size:14px; text-transform:capitalize; }
+
+/* Panel «Fotos sin ubicación» (miniaturas con selección múltiple) */
+.tm-sinp { position:fixed; inset:0; z-index:3500; background:#0D0F10; display:flex; flex-direction:column; overflow:hidden; }
+.tm-sinp-top { display:flex; align-items:center; justify-content:space-between; padding:14px 14px 6px; }
+.tm-sinp-top b { font:800 22px/1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; color:var(--text-primary); }
+.tm-sinp-x { background:none; border:0; color:var(--text-primary); font-size:22px; width:44px; height:44px; cursor:pointer; }
+.tm-sinp-note { padding:0 14px 6px; }
+.tm-sinp-sel { display:flex; gap:12px; align-items:center; padding:2px 14px 8px; color:var(--text-muted); font-size:13px; }
+.tm-sinp-grid { flex:1; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:4px; padding:0 10px 10px; align-content:start; }
+.tm-sinp-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px calc(10px + env(safe-area-inset-bottom)); background:#15181a; border-top:1px solid var(--border); }
+.tm-sinp-bar .tm-home-in { flex:1 1 100%; }
+.tm-sinp-bar .tm-btn { flex:1 1 0; }
+.tm-sinp-bar #tm-sinp-msg { flex:1 1 100%; }

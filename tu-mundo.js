@@ -287,7 +287,7 @@ const tuMundo = (() => {
       try {
         const S = await _getStats(true); _paint(S); _drawMap(S, _cache.D); _renderSuggest(S, _cache.D);
         // las que no traen GPS (Android e iPhone suelen quitarlo): preguntar dónde se hicieron
-        const sin = _photoPoints(_cache.D).sin; if (r.ok && sin.length) { if (msg) msg.textContent += ' Algunas no traen ubicación: dime dónde se hicieron.'; _lbOpen(sin, 0); }
+        const sin = _photoPoints(_cache.D).sin; if (r.ok && sin.length) { if (msg) msg.textContent += ' Algunas no traen ubicación: dime dónde se hicieron.'; _sinPanel(); }
       } catch (_) {}
     });
   }
@@ -298,6 +298,67 @@ const tuMundo = (() => {
   function _lbClose(fromHistory) {
     if (!_lb) return; document.removeEventListener('keydown', _lb._key); _lb.remove(); _lb = null;
     if (!fromHistory && window.popModal) window.popModal('tm-visor');
+  }
+  /* Panel «Fotos sin ubicación» (19 oct 2026, Paco: con más de 100 es imposible de una en una): miniaturas como en
+     «Fotos en tu vuelta al mundo», selección múltiple y dos acciones: Ubicar las elegidas (un sitio para todas) o Eliminarlas.
+     💶 0 €: el sitio se busca en OpenStreetMap/Nominatim (gratis) y se guarda con una escritura de Firestore por lote. */
+  let _sinEl = null;
+  function _sinClose(fromHistory) {
+    if (!_sinEl) return; _sinEl.remove(); _sinEl = null;
+    if (!fromHistory && window.popModal) window.popModal('tm-sin');
+  }
+  function _sinPanel() {
+    if (!_cache) return;
+    _sinClose(true);
+    const el = _sinEl = document.createElement('div'); el.className = 'tm-sinp'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Fotos sin ubicación');
+    document.body.appendChild(el);
+    const sel = new Set();
+    const draw = () => {
+      const sin = _photoPoints(_cache.D).sin.slice().sort((a, b) => (b.t || 0) - (a.t || 0));
+      if (!sin.length) { _sinClose(); if (typeof showToast === 'function') showToast('Ya no quedan fotos sin ubicación'); return; }
+      [...sel].forEach(id => { if (!sin.some(p => p.id === id)) sel.delete(id); });
+      el.innerHTML = '<div class="tm-sinp-top"><b>Fotos sin ubicación (' + sin.length + ')</b><button type="button" class="tm-sinp-x" aria-label="Cerrar">✕</button></div>' +
+        '<p class="tm-note tm-sinp-note">Tu móvil no guardó dónde se hicieron. Toca las que quieras (o «Todas») y dime el sitio, o elimínalas.</p>' +
+        '<div class="tm-sinp-sel"><button type="button" class="tm-link" id="tm-sinp-all">' + (sel.size === sin.length ? 'Quitar la selección' : 'Seleccionar todas') + '</button><span id="tm-sinp-n"></span></div>' +
+        '<div class="tm-sinp-grid">' + sin.map(p => '<button type="button" class="tm-pubph-i' + (sel.has(p.id) ? ' on' : '') + '" data-id="' + esc(p.id) + '" aria-pressed="' + sel.has(p.id) + '"><img src="' + esc(p.url) + '" alt="" loading="lazy"><i>✓</i></button>').join('') + '</div>' +
+        '<form class="tm-sinp-bar" autocomplete="off"><input class="tm-home-in" type="text" placeholder="¿Dónde se hicieron? Ciudad o lugar" aria-label="Dónde se hicieron" enterkeyhint="search"><button class="tm-btn" type="submit" id="tm-sinp-loc">Ubicar</button><button class="tm-btn tm-btn--ghost" type="button" id="tm-sinp-del">Eliminar</button><span class="tm-s" id="tm-sinp-msg"></span></form>';
+      const upd = () => { const n = sel.size, q = x => el.querySelector(x); q('#tm-sinp-n').textContent = n ? n + (n === 1 ? ' elegida' : ' elegidas') : ''; q('#tm-sinp-loc').disabled = !n; q('#tm-sinp-del').disabled = !n; q('#tm-sinp-loc').textContent = n ? 'Ubicar (' + n + ')' : 'Ubicar'; q('#tm-sinp-del').textContent = n ? 'Eliminar (' + n + ')' : 'Eliminar'; };
+      upd();
+      el.querySelector('.tm-sinp-x').onclick = () => _sinClose();
+      el.querySelector('#tm-sinp-all').onclick = () => { if (sel.size === sin.length) sel.clear(); else sin.forEach(p => sel.add(p.id)); draw(); };
+      el.querySelectorAll('.tm-pubph-i').forEach(b => b.onclick = () => { const id = b.dataset.id; if (sel.has(id)) sel.delete(id); else sel.add(id); b.classList.toggle('on', sel.has(id)); b.setAttribute('aria-pressed', sel.has(id)); const all = el.querySelector('#tm-sinp-all'); if (all) all.textContent = sel.size === sin.length ? 'Quitar la selección' : 'Seleccionar todas'; upd(); });
+      const msg = el.querySelector('#tm-sinp-msg');
+      el.querySelector('.tm-sinp-bar').onsubmit = async e => {
+        e.preventDefault();
+        const q = el.querySelector('.tm-sinp-bar input').value.trim(), ids = [...sel]; if (!ids.length) return;
+        if (!q) { msg.textContent = 'Escribe el sitio (ciudad o lugar).'; return; }
+        msg.textContent = 'Buscando…';
+        try {
+          const j = await (await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q=' + encodeURIComponent(q))).json();
+          if (!j || !j[0]) { msg.textContent = 'No encuentro ese sitio. Prueba con la ciudad y el país.'; return; }
+          const lat = +j[0].lat, lng = +j[0].lon, u = window.currentUser, db = firebase.firestore();
+          for (let k = 0; k < ids.length; k += 400) { const b = db.batch(); ids.slice(k, k + 400).forEach(id => b.update(db.collection('users').doc(u.uid).collection('fotos').doc(id), { lat, lng })); await b.commit(); }
+          const set = new Set(ids); _cache.D.photos.forEach(x => { if (set.has(x.id)) { x.lat = lat; x.lng = lng; } });
+          try { localStorage.removeItem(SUM_KEY); } catch (_) {}
+          sel.clear();
+          const S2 = compute(_cache.D); _cache.S = S2; _saveSummary(u.uid, S2); _paint(S2); _drawMap(S2, _cache.D); _renderSuggest(S2, _cache.D);
+          if (window._tmPubRefresh) window._tmPubRefresh();
+          if (typeof showToast === 'function') showToast(ids.length + (ids.length === 1 ? ' foto ubicada: ' : ' fotos ubicadas: ') + q);
+          draw();
+        } catch (_) { msg.textContent = 'No se pudo ubicar. Prueba otra vez.'; }
+      };
+      el.querySelector('#tm-sinp-del').onclick = async () => {
+        const ids = [...sel]; if (!ids.length) return;
+        const loose = new Set(_cache.D.photos.filter(p => !p.routeId).map(p => p.id)), nL = ids.filter(i => loose.has(i)).length;
+        if (!nL) { msg.textContent = 'Esas fotos están dentro de una guía: no se borran desde aquí.'; return; }
+        if (!confirm('¿Borrar ' + (nL === 1 ? 'la foto seleccionada' : nL + ' fotos seleccionadas') + ' de tu cuenta? Desaparecen de Tu vuelta al mundo y de tu enlace público. No se puede deshacer.' + (ids.length > nL ? ' Las ' + (ids.length - nL) + ' que están dentro de una guía no se borran.' : ''))) return;
+        msg.textContent = 'Borrando…';
+        try { const k = await _borrarFotos(ids); sel.clear(); if (typeof showToast === 'function') showToast(k + (k === 1 ? ' foto borrada' : ' fotos borradas')); if (window._tmPubRefresh) window._tmPubRefresh(); draw(); }
+        catch (_) { msg.textContent = 'No se pudo borrar. Prueba otra vez.'; }
+      };
+    };
+    draw();
+    if (window.pushModal) window.pushModal('tm-sin', () => _sinClose(true));
   }
   function _lbOpen(list, i) {
     if (!list || !list[i]) return; _lbClose(true);
@@ -465,7 +526,7 @@ const tuMundo = (() => {
     const box = _q('#tm-fmap'); if (!box) return;
     if (_fmap) { try { _fmap.remove(); } catch (_) {} _fmap = null; }
     const PP = _photoPoints(D), sinSitio = PP.sinSitio;
-    const verSin = () => { if (PP.sin.length) _lbOpen(PP.sin, 0); };
+    const verSin = () => { if (PP.sin.length) _sinPanel(); };
     // Selector: años si hay varios; si todas las fotos son del mismo año, meses de ese año
     const yrs = [...new Set(PP.pts.filter(p => p.t).map(p => new Date(p.t).getFullYear()))].sort();
     const byMonth = yrs.length === 1, keyOf = p => { const d = new Date(p.t); return byMonth ? d.getFullYear() + '-' + d.getMonth() : String(d.getFullYear()); };
