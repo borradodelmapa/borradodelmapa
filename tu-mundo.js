@@ -259,18 +259,8 @@ const tuMundo = (() => {
   function _photoPoints(D) {
     const all = D.photos.filter(p => p.url && p.tag !== 'documento' && p.tag !== 'cartel' && p.type !== 'video')
       .map(p => { const d = toDate(p.takenAt || p.createdAt); return { id: p.id, url: fixPhoto(p.url), t: d && !isNaN(d) ? +d : null, lat: +p.lat, lng: +p.lng, has: ok(p), approx: false, route: p.routeId || null }; });
-    // Fotos sin GPS: 1.º junto a la foto con GPS más cercana en fecha de SU MISMO viaje (guía), sin límite de días;
-    // 2.º si no tiene viaje o su viaje no tiene GPS, junto a la más cercana en fecha de cualquier viaje, hasta 30 días.
-    const withGps = all.filter(p => p.has && p.t != null);
-    const MAXGAP = 30 * 864e5;
-    const nearest = (p, arr) => { let best = null, bd = Infinity; arr.forEach(q => { const d = Math.abs(q.t - p.t); if (d < bd) { bd = d; best = q; } }); return { best, bd }; };
-    all.forEach(p => {
-      if (p.has || p.t == null || !withGps.length) return;
-      let q = null;
-      if (p.route) { const same = withGps.filter(x => x.route === p.route); if (same.length) q = nearest(p, same).best; }
-      if (!q) { const r = nearest(p, withGps); if (r.best && r.bd <= MAXGAP) q = r.best; }
-      if (q) { p.lat = q.lat; p.lng = q.lng; p.has = true; p.approx = true; }
-    });
+    // Fotos sin GPS: ya NO se colocan solas por fecha (19 oct 2026, Paco: salían en sitios que no eran). Quedan en «sin ubicación»
+    // hasta que el usuario dice dónde se hicieron (botón Ubicar, una o todas).
     const pts = all.filter(p => p.has).sort((a, b) => (a.t || 0) - (b.t || 0)), sin = all.filter(p => !p.has).sort((a, b) => (a.t || 0) - (b.t || 0));
     return { pts, sin, sinSitio: sin.length };
   }
@@ -294,7 +284,11 @@ const tuMundo = (() => {
       try { localStorage.removeItem(SUM_KEY); } catch (_) {}
       if (!document.getElementById('tm-screen')) return;
       if (msg) msg.textContent = `${r.ok} ${r.ok === 1 ? 'foto subida' : 'fotos subidas'}${r.fail ? ` · ${r.fail} no se pudieron subir` : ''}.`;
-      try { const S = await _getStats(true); _paint(S); _drawMap(S, _cache.D); _renderSuggest(S, _cache.D); } catch (_) {}
+      try {
+        const S = await _getStats(true); _paint(S); _drawMap(S, _cache.D); _renderSuggest(S, _cache.D);
+        // las que no traen GPS (Android e iPhone suelen quitarlo): preguntar dónde se hicieron
+        const sin = _photoPoints(_cache.D).sin; if (r.ok && sin.length) { if (msg) msg.textContent += ' Algunas no traen ubicación: dime dónde se hicieron.'; _lbOpen(sin, 0); }
+      } catch (_) {}
     });
   }
   // Visor de fotos a pantalla completa (carrusel con flechas, deslizar y botón atrás), mismo diseño que el de las guías
@@ -319,9 +313,9 @@ const tuMundo = (() => {
           <div class="fv-v-info"><b>${esc(when)}</b><span>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : ''}${p.approx ? ' · ubicación aproximada' : ''}</span><em>${v._i + 1} / ${list.length}</em></div>
           <button type="button" class="fv-v-nav" data-d="1" ${v._i === list.length - 1 ? 'disabled' : ''} aria-label="Siguiente">›</button>
         </div>
-        ${!p.has || p.approx ? `<form class="tm-loc" autocomplete="off"><input class="tm-home-in" type="text" placeholder="¿Dónde se hizo? Ciudad o lugar" aria-label="Dónde se hizo la foto" enterkeyhint="search"><button class="tm-btn" type="submit">Ubicar</button><span class="tm-s tm-loc-msg"></span></form>` : ''}`;
+        ${!p.has ? `<form class="tm-loc" autocomplete="off"><input class="tm-home-in" type="text" placeholder="¿Dónde se hizo? Ciudad o lugar" aria-label="Dónde se hizo la foto" enterkeyhint="search"><button class="tm-btn" type="submit">Ubicar</button>${list.filter(x => !x.has).length > 1 ? `<button class="tm-btn tm-loc-all" type="button">Todas (${list.filter(x => !x.has).length})</button>` : ''}<span class="tm-s tm-loc-msg"></span></form>` : ''}`;
       const lf = v.querySelector('.tm-loc');
-      if (lf) lf.onsubmit = async e => {
+      const ubicar = async (e, todas) => {
         e.preventDefault();
         const q = lf.querySelector('input').value.trim(), msg = lf.querySelector('.tm-loc-msg'); if (!q) return;
         msg.textContent = 'Buscando…';
@@ -330,15 +324,17 @@ const tuMundo = (() => {
           const j = await (await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q=' + encodeURIComponent(q))).json();
           if (!j || !j[0]) { msg.textContent = 'No encuentro ese sitio. Prueba con la ciudad y el país.'; return; }
           const lat = +j[0].lat, lng = +j[0].lon, u = window.currentUser;
-          await firebase.firestore().collection('users').doc(u.uid).collection('fotos').doc(p.id).update({ lat, lng });
-          const ph = _cache.D.photos.find(x => x.id === p.id); if (ph) { ph.lat = lat; ph.lng = lng; }
+          const ids = todas ? list.filter(x => !x.has).map(x => x.id) : [p.id], db = firebase.firestore();
+          for (let k = 0; k < ids.length; k += 400) { const b = db.batch(); ids.slice(k, k + 400).forEach(id => b.update(db.collection('users').doc(u.uid).collection('fotos').doc(id), { lat, lng })); await b.commit(); }
+          const set = new Set(ids); _cache.D.photos.forEach(x => { if (set.has(x.id)) { x.lat = lat; x.lng = lng; } });
           try { localStorage.removeItem(SUM_KEY); } catch (_) {}
           _lbClose(true);
           const S2 = compute(_cache.D); _cache.S = S2; _saveSummary(u.uid, S2); _paint(S2); _drawMap(S2, _cache.D); _renderSuggest(S2, _cache.D);
           if (window._tmPubRefresh) window._tmPubRefresh();
-          if (typeof showToast === 'function') showToast('Foto ubicada: ' + q);
+          if (typeof showToast === 'function') showToast((ids.length === 1 ? 'Foto ubicada: ' : ids.length + ' fotos ubicadas: ') + q);
         } catch (_) { msg.textContent = 'No se pudo ubicar. Prueba otra vez.'; }
       };
+      if (lf) { lf.onsubmit = e => ubicar(e, false); const all = lf.querySelector('.tm-loc-all'); if (all) all.onclick = e => ubicar(e, true); }
       v.querySelector('.fv-v-close').onclick = () => _lbClose();
       v.querySelectorAll('.fv-v-nav').forEach(b => b.onclick = () => go(+b.dataset.d));
     };
