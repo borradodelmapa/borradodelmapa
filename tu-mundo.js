@@ -318,7 +318,27 @@ const tuMundo = (() => {
           <button type="button" class="fv-v-nav" data-d="-1" ${v._i === 0 ? 'disabled' : ''} aria-label="Anterior">‹</button>
           <div class="fv-v-info"><b>${esc(when)}</b><span>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : ''}${p.approx ? ' · ubicación aproximada' : ''}</span><em>${v._i + 1} / ${list.length}</em></div>
           <button type="button" class="fv-v-nav" data-d="1" ${v._i === list.length - 1 ? 'disabled' : ''} aria-label="Siguiente">›</button>
-        </div>`;
+        </div>
+        ${!p.has || p.approx ? `<form class="tm-loc" autocomplete="off"><input class="tm-home-in" type="text" placeholder="¿Dónde se hizo? Ciudad o lugar" aria-label="Dónde se hizo la foto" enterkeyhint="search"><button class="tm-btn" type="submit">Ubicar</button><span class="tm-s tm-loc-msg"></span></form>` : ''}`;
+      const lf = v.querySelector('.tm-loc');
+      if (lf) lf.onsubmit = async e => {
+        e.preventDefault();
+        const q = lf.querySelector('input').value.trim(), msg = lf.querySelector('.tm-loc-msg'); if (!q) return;
+        msg.textContent = 'Buscando…';
+        try {
+          // OpenStreetMap/Nominatim (gratis, sin API de pago)
+          const j = await (await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q=' + encodeURIComponent(q))).json();
+          if (!j || !j[0]) { msg.textContent = 'No encuentro ese sitio. Prueba con la ciudad y el país.'; return; }
+          const lat = +j[0].lat, lng = +j[0].lon, u = window.currentUser;
+          await firebase.firestore().collection('users').doc(u.uid).collection('fotos').doc(p.id).update({ lat, lng });
+          const ph = _cache.D.photos.find(x => x.id === p.id); if (ph) { ph.lat = lat; ph.lng = lng; }
+          try { localStorage.removeItem(SUM_KEY); } catch (_) {}
+          _lbClose(true);
+          const S2 = compute(_cache.D); _cache.S = S2; _saveSummary(u.uid, S2); _paint(S2); _drawMap(S2, _cache.D); _renderSuggest(S2, _cache.D);
+          if (window._tmPubRefresh) window._tmPubRefresh();
+          if (typeof showToast === 'function') showToast('Foto ubicada: ' + q);
+        } catch (_) { msg.textContent = 'No se pudo ubicar. Prueba otra vez.'; }
+      };
       v.querySelector('.fv-v-close').onclick = () => _lbClose();
       v.querySelectorAll('.fv-v-nav').forEach(b => b.onclick = () => go(+b.dataset.d));
     };

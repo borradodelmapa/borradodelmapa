@@ -852,6 +852,8 @@ const fotosViaje = (() => {
   function strayStrip(el) {
     if (!el || !window.currentUser) return;
     el.hidden = true;
+    // 19 oct 2026 (Paco): «Vídeo sin ruta» oculto de momento en Mis Viajes. Para volver a mostrarlo: quitar esta línea.
+    return;
     _loadStray().catch(() => []).then(list => {
       if (!el.isConnected) return;
       el.className = 'fv-stray-strip fv-stray-strip-vid';

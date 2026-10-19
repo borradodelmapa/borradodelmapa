@@ -202,3 +202,6 @@
 .tm-pubph-i.on i { display:flex; }
 .tm-pubph-i:disabled { opacity:.3; cursor:not-allowed; }
 #tm-sug-sec[hidden] { display:none !important; }
+.tm-loc { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:8px 12px; background:#0D0F10; }
+.tm-loc .tm-home-in { flex:1 1 180px; min-width:0; }
+.tm-loc-msg { width:100%; }
