@@ -125,6 +125,13 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
   .mp-trip { background:var(--bg-row); border:1px solid var(--border); border-left:3px solid var(--accent); padding:10px 12px; display:flex; flex-direction:column; gap:3px; }
   .mp-trip b { font:700 18px/1.15 var(--font-cond); color:var(--text-primary); overflow-wrap:anywhere; }
   .mp-trip span { font-size:13px; color:var(--text-muted); }
+  .mp-ph { display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:4px; }
+  .mp-phi { padding:0; border:0; background:#111; aspect-ratio:1; cursor:pointer; }
+  .mp-phi img { width:100%; height:100%; object-fit:cover; display:block; }
+  .mp-lb { position:fixed; inset:0; z-index:5000; background:rgba(0,0,0,.94); display:flex; align-items:center; justify-content:center; }
+  .mp-lb img { max-width:100%; max-height:100%; object-fit:contain; }
+  .mp-lb button { position:absolute; background:rgba(0,0,0,.55); color:#fff; border:0; font:700 28px/1 var(--font-cond); width:48px; height:48px; cursor:pointer; }
+  .mp-lb-x { top:12px; right:12px; } .mp-lb-p { left:8px; top:50%; } .mp-lb-n { right:8px; top:50%; }
   .mp-cta { border:1px solid var(--border); border-left:3px solid var(--accent); padding:18px; background:var(--bg-row); }
   .mp-cta h2 { font:800 24px/1 var(--font-cond); text-transform:uppercase; margin:0 0 8px; color:var(--text-primary); }
   .mp-cta p { color:var(--text-muted); margin:0 0 14px; }
@@ -182,7 +189,7 @@ function escapeHTML(str) {
   const API = window.SALMA_API;
   // Mi mundo público (19 oct 2026): /mundo/<nombre> lo pinta mundo-publico.js, no es una guía
   if (/^\/mundo\//.test(location.pathname)) {
-    const s = document.createElement('script'); s.src = '/mundo-publico.js?v=2'; document.body.appendChild(s);
+    const s = document.createElement('script'); s.src = '/mundo-publico.js?v=3'; document.body.appendChild(s);
     return;
   }
   // .html: páginas fijas de scripts/build-guias.js si se entra como /<slug>.html
