@@ -10390,6 +10390,12 @@ async function _sendWhatsAppContactCard(env, to) {
   } catch (e) { console.error('[WA-VCF]', e && e.message); }
 }
 
+// Respuesta al webhook de Twilio: TwiML vacío = "recibido, no envíes nada tú" (19 oct 2026; antes 'OK' en texto plano).
+// La respuesta real de Salma sale aparte, por sendWhatsAppMessage().
+function _waEmptyTwiml() {
+  return new Response('<?xml version="1.0" encoding="UTF-8"?><Response></Response>', { status: 200, headers: { 'Content-Type': 'text/xml; charset=utf-8' } });
+}
+
 // Envía un email de aviso vía la API REST de Resend — añadido 22 sept 2026 porque el
 // aviso de feedback de testers por WhatsApp dejó de fiarse mientras se migra Twilio a
 // producción (ver CLAUDE.md, "Salma en WhatsApp"). Best effort: nunca lanza, solo loguea.
@@ -12819,12 +12825,12 @@ export default {
             await sendWhatsAppMessage(env, from, 'Vale, ubicación recibida — pero se me ha cruzado un cable respondiendo. Dime otra vez qué necesitas.').catch(() => {});
           }
         })());
-        return new Response('OK', { status: 200 });
+        return _waEmptyTwiml();
       }
 
       if (!body && !mediaUrl) {
         // Sin texto ni adjunto (sticker, reacción...) — nada que responder.
-        return new Response('OK', { status: 200 });
+        return _waEmptyTwiml();
       }
 
       ctx.waitUntil((async () => {
@@ -13060,12 +13066,6 @@ export default {
 
           // Reinicio de conversación bajo petición explícita (26 sept 2026, ver isResetRequest)
           // — borra wa_history y wa_location de este número. Sin llamar a Claude: coste 0.
-          // PRUEBA TEMPORAL (19 oct 2026): "/tarjeta" desde el número de Paco reenvía la tarjeta de contacto. Quitar tras probar.
-          if (/^\/tarjeta\s*$/i.test(String(body || '').trim()) && env.PACO_WHATSAPP_TO
-              && String(from).replace(/\D/g, '') === String(env.PACO_WHATSAPP_TO).replace(/\D/g, '')) {
-            await _sendWhatsAppContactCard(env, from);
-            return;
-          }
           if (isResetRequest(body)) {
             if (env.SALMA_KB) {
               try {
@@ -13328,7 +13328,7 @@ export default {
 
       // Twilio solo necesita un 200 rápido aquí — la respuesta real de Salma se manda
       // aparte, en segundo plano, vía sendWhatsAppMessage().
-      return new Response('OK', { status: 200 });
+      return _waEmptyTwiml();
     }
 
     // ─── ENDPOINT /whatsapp-link-code (F5.4, 24 sept 2026) ───
