@@ -22,6 +22,7 @@ const mapaItinerario = {
     if (!this._container || !stops || !stops.length) return;
 
     this._stops = stops;
+    this._cargarFotosWiki(routeData);
     this._cards = [];
     this._activeIdx = -1;
     this._photoQueue = [];
@@ -546,12 +547,40 @@ ${trk}
     next();
   },
 
+  // ═══ FOTOS DE WIKIMEDIA (0 €) ═══
+  // Las guías que salen de una página de destino (slug «<destino>-ruta») tienen sus fotos libres guardadas en
+  // /destinos/img/<destino>/fotos.json (las baja scripts/fotos-destinos.cjs). Si la parada tiene foto ahí, se usa esa
+  // (con crédito del autor) y NO se pide la foto a Google. Sin foto ahí, todo sigue como siempre (Google).
+  // Google se sigue usando para verificar lugares, «cómo llegar», horarios y valoraciones: eso no se toca.
+  _cargarFotosWiki(routeData) {
+    this._fotosWiki = null; this._fotosWikiHecho = false;
+    const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
+    const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
+    this._fotosWikiP = /^[a-z0-9-]{3,120}$/.test(slug)
+      ? fetch(`/destinos/img/${slug}/fotos.json`).then(r => r.ok ? r.json() : null).then(j => { if (j && j.stops) { j._slug = slug; this._fotosWiki = j; } return j; }).catch(() => null)
+      : Promise.resolve(null);
+  },
+
   // ═══ FOTO INICIAL ═══
   _loadInitialPhoto(stop, index, cardEl, _retryNum) {
     _retryNum = _retryNum || 0;
     // Buscar dentro del card (antes de estar en el DOM) o en el documento si ya está
     const photoDiv = (cardEl && cardEl.querySelector('.itin-card-photo')) || document.getElementById(`itin-photo-${index}`);
     if (!photoDiv) return;
+
+    // Foto libre de Wikimedia, si la hay (primero se espera a saber si esta guía tiene fotos.json)
+    if (!this._fotosWikiHecho && this._fotosWikiP) {
+      this._fotosWikiP.then(() => { this._fotosWikiHecho = true; this._loadInitialPhoto(stop, index, cardEl, _retryNum); });
+      return;
+    }
+    const fw = this._fotosWiki && this._fotosWiki.stops && this._fotosWiki.stops[stop.name];
+    if (fw) {
+      photoDiv.dataset.wiki = '1';
+      if (getComputedStyle(photoDiv).position === 'static') photoDiv.style.position = 'relative';
+      photoDiv.innerHTML = `<img src="/destinos/img/${this._fotosWiki._slug}/${fw.file}" alt="${this._esc(fw.alt || stop.name)}" class="itin-card-img" loading="lazy">` +
+        `<span style="position:absolute;left:0;bottom:0;padding:2px 7px;background:rgba(0,0,0,.7);font-size:10px;color:rgba(244,240,230,.85);max-width:92%">Foto: <a href="${this._esc(fw.url)}" target="_blank" rel="noopener nofollow" style="color:inherit">${this._esc(fw.autor)}</a> · ${this._esc(fw.licencia)}</span>`;
+      return;
+    }
 
     // Sin console.warn en los fallos, esto no dejaba ningún rastro en el panel 🐛 cuando
     // una foto no cargaba — imposible saber si era el endpoint, Google sin foto para ese
@@ -645,7 +674,7 @@ ${trk}
     // Foto mejorada (Places suele dar mejor foto)
     if (data.photo_url) {
       const photoDiv = document.getElementById(`itin-photo-${index}`);
-      if (photoDiv) {
+      if (photoDiv && !photoDiv.dataset.wiki) {
         photoDiv.innerHTML = `<img src="${data.photo_url}" alt="" class="itin-card-img" loading="lazy">`;
       }
     }
