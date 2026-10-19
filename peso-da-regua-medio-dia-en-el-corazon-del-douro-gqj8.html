@@ -10,7 +10,7 @@
 <meta property="og:site_name" content="Borrado del Mapa">
 <meta property="og:title" id="og-title" content="Peso da Régua · Medio día en el corazón del Douro · Borradodelmapa">
 <meta property="og:description" id="og-desc" content="1 día · 7 paradas. Peso da Régua es la capital del vino de Oporto y el epicentro del Valle del Duero declarado Patrimonio UNESCO. Este recorrido a pie recorre el alma del pueblo: la estación con…">
-<meta property="og:image" id="og-image" content="https://borradodelmapa.com/og-image.jpg">
+<meta property="og:image" id="og-image" content="https://borradodelmapa.com/guias-img/peso-da-regua-medio-dia-en-el-corazon-del-douro-gqj8.png">
 <meta property="og:url" content="https://borradodelmapa.com/peso-da-regua-medio-dia-en-el-corazon-del-douro-gqj8">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://borradodelmapa.com/peso-da-regua-medio-dia-en-el-corazon-del-douro-gqj8">
@@ -104,6 +104,31 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
     text-decoration:none; transition:transform .15s; border:none;
   }
   .public-cta-enhanced a:hover { transform:scale(1.03); }
+  /* Mi mundo público (/mundo/<nombre>) — mundo-publico.js */
+  .mp { max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:18px; }
+  .mp-title { font:800 clamp(30px,8vw,46px)/1 var(--font-cond); text-transform:uppercase; letter-spacing:.02em; color:var(--text-primary); margin:6px 0 0; }
+  .mp-sub { color:var(--text-muted); margin:0; }
+  .mp-cifs { display:flex; gap:22px; flex-wrap:wrap; }
+  .mp-cif b { display:block; font:800 34px/1 var(--font-cond); color:var(--accent); font-variant-numeric:tabular-nums; }
+  .mp-cif span { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); }
+  .mp-map { height:min(60vh,460px); background:#1a1c1d; border:1px solid var(--border); }
+  .mp-leg { display:flex; gap:16px; font-size:12px; color:var(--text-muted); }
+  .mp-leg i { display:inline-block; width:10px; height:10px; margin-right:6px; }
+  .mp-flags { display:flex; flex-wrap:wrap; gap:6px; font-size:26px; line-height:1; }
+  .mp-h { font:800 22px/1 var(--font-cond); text-transform:uppercase; letter-spacing:.03em; color:var(--text-primary); margin:8px 0 10px; }
+  .mp-recs { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+  .mp-rec { background:var(--bg-row); border:1px solid var(--border); padding:12px; display:flex; flex-direction:column; gap:3px; }
+  .mp-rec b { font:700 20px/1.1 var(--font-cond); color:var(--text-primary); overflow-wrap:anywhere; }
+  .mp-k { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .mp-s { font-size:13px; color:var(--text-muted); }
+  .mp-trips { display:flex; flex-direction:column; gap:8px; }
+  .mp-trip { background:var(--bg-row); border:1px solid var(--border); border-left:3px solid var(--accent); padding:10px 12px; display:flex; flex-direction:column; gap:3px; }
+  .mp-trip b { font:700 18px/1.15 var(--font-cond); color:var(--text-primary); overflow-wrap:anywhere; }
+  .mp-trip span { font-size:13px; color:var(--text-muted); }
+  .mp-cta { border:1px solid var(--border); border-left:3px solid var(--accent); padding:18px; background:var(--bg-row); }
+  .mp-cta h2 { font:800 24px/1 var(--font-cond); text-transform:uppercase; margin:0 0 8px; color:var(--text-primary); }
+  .mp-cta p { color:var(--text-muted); margin:0 0 14px; }
+  .mp-cta .btn-primary { display:inline-block; background:var(--accent); color:#000; font:800 16px var(--font-cond); letter-spacing:.06em; text-transform:uppercase; padding:12px 22px; text-decoration:none; }
 </style>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -156,6 +181,11 @@ function escapeHTML(str) {
 <script>
 (async function() {
   const API = window.SALMA_API;
+  // Mi mundo público (19 oct 2026): /mundo/<nombre> lo pinta mundo-publico.js, no es una guía
+  if (/^\/mundo\//.test(location.pathname)) {
+    const s = document.createElement('script'); s.src = '/mundo-publico.js?v=2'; document.body.appendChild(s);
+    return;
+  }
   // .html: páginas fijas de scripts/build-guias.js si se entra como /<slug>.html
   const slug = window.location.pathname.replace(/^\//, '').replace(/\/$/, '').replace(/\.html$/, '');
   let guideName = '';
