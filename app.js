@@ -3102,8 +3102,27 @@ function _wireRutasTabs() {
 
 let _explorarData = null, _explorarAt = 0;
 
+// Índice de Explorar (GET /explorar), guardado 5 min en memoria
+async function _explorarIndice() {
+  if (!_explorarData || Date.now() - _explorarAt > 5 * 60 * 1000) {
+    const res = await fetch(window.SALMA_API + '/explorar');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    _explorarData = await res.json();
+    _explorarAt = Date.now();
+  }
+  return _explorarData;
+}
+
 async function renderExplorar(countryIdx) {
   window._rutasTab = 'explorar';
+  // Explorar con mapa del mundo y buscador (explorar-mapa.js, 20 oct 2026). Sin él, la lista de siempre.
+  if (typeof explorarMapa !== 'undefined' && !Number.isInteger(countryIdx)) {
+    return explorarMapa.render($content, {
+      cargar: _explorarIndice,
+      card: _explorarCard,
+      seguir: () => currentState === 'rutas' && window._rutasTab === 'explorar',
+    });
+  }
   $content.innerHTML = `
     <div class="viajes-header fade-in">
       <h2 class="viajes-title">Explorar</h2>
