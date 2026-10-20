@@ -59,7 +59,7 @@ const mapaItinerario = {
     if (typeof historiaModule !== 'undefined') {
       // «Historia de [ciudad]» primero (Paco, 20 oct 2026: en la guía de Sevilla, la historia de Sevilla) y después la del país.
       // Solo sale si Wikipedia tiene artículo de esa ciudad (historia.js lo comprueba); si no, el hueco ni se ve.
-      const ciudad = this._ciudadGuia(_allStops);
+      const ciudad = this._ciudadGuia(_allStops, routeData.region);
       const ciudadMount = header.querySelector('.itin-hist-ciudad');
       if (ciudadMount && ciudad && ciudad.nombre.toLowerCase() !== String(country).toLowerCase()) {
         ciudadMount.dataset.place = ciudad.nombre;
@@ -614,25 +614,34 @@ ${trk}
     extra.forEach(t => { const p = document.createElement('p'); p.textContent = t; tips.appendChild(p); });
   },
   // Ciudad de la guía (20 oct 2026). La guía no guarda la ciudad («region» suele ser la comunidad: Andalucía), pero cada parada
-  // lleva la dirección verificada por Google («Casco Antiguo, 41004 Sevilla, España»). Se toma el trozo antes del país sin
-  // números (código postal) ni siglas (IL, CDMX…); la ciudad es la que más se repite, si es al menos el 40 % de las paradas.
+  // lleva la dirección verificada por Google («Casco Antiguo, 41004 Sevilla, España»). Se toma el trozo con el código postal
+  // (si no hay, el de antes del país), sin números ni siglas; la ciudad es la que más se repite, si es al menos el 40 % de las paradas.
   // Devuelve { nombre, lat, lng } (centro de esas paradas, para distinguir Granada de España y de Nicaragua) o null.
-  _ciudadGuia(stops) {
+  _ciudadGuia(stops, region) {
     const cuenta = new Map(), puntos = new Map();
+    // Trozo de dirección → nombre limpio: sin palabras con números (códigos postales, «MPQJ+6H8») ni siglas («RM», «IL», «CDMX»)
+    const limpio = t => t.split(/\s+/).filter(w => !/\d/.test(w) && !/^[A-Z]{1,4}$/.test(w)).join(' ').trim();
+    const valido = c => c.length >= 2 && /\p{L}/u.test(c) && !/^[^\p{Script=Latin}]+$/u.test(c); // fuera los nombres que no van en letras latinas
     (stops || []).forEach(s => {
       const partes = String((s && s.verified_address) || '').split(',').map(x => x.trim()).filter(Boolean);
-      for (let k = partes.length - 2; k >= 0; k--) {
-        const c = partes[k].split(/\s+/).filter(w => !/\d/.test(w)).join(' ').trim();
-        if (c.length < 2 || /^[A-Z]{1,4}$/.test(c)) continue;
-        cuenta.set(c, (cuenta.get(c) || 0) + 1);
-        if (typeof s.lat === 'number' && typeof s.lng === 'number') { if (!puntos.has(c)) puntos.set(c, []); puntos.get(c).push([s.lat, s.lng]); }
-        break;
-      }
+      if (partes.length < 2) return;
+      // 1º el trozo que lleva el código postal: «29400 Ronda, Málaga, España» → Ronda (no la provincia, Málaga)
+      let c = null;
+      for (let k = partes.length - 2; k >= 0 && !c; k--) { if (/\b\d{4,6}\b/.test(partes[k]) && valido(limpio(partes[k]))) c = limpio(partes[k]); }
+      // 2º, sin código postal: el trozo antes del país («Barrio Gótico, Ciutat Vella, Barcelona, España» → Barcelona)
+      for (let k = partes.length - 2; k >= 0 && !c; k--) { if (valido(limpio(partes[k]))) c = limpio(partes[k]); }
+      if (!c) return;
+      cuenta.set(c, (cuenta.get(c) || 0) + 1);
+      if (typeof s.lat === 'number' && typeof s.lng === 'number') { if (!puntos.has(c)) puntos.set(c, []); puntos.get(c).push([s.lat, s.lng]); }
     });
+    const centro = p => (p && p.length) ? { lat: p.reduce((a, x) => a + x[0], 0) / p.length, lng: p.reduce((a, x) => a + x[1], 0) / p.length } : {};
     const [nombre, n] = [...cuenta].sort((a, b) => b[1] - a[1])[0] || [];
-    if (!nombre || n < Math.max(1, (stops || []).length * 0.4)) return null;
-    const p = puntos.get(nombre) || [];
-    return p.length ? { nombre, lat: p.reduce((a, x) => a + x[0], 0) / p.length, lng: p.reduce((a, x) => a + x[1], 0) / p.length } : { nombre };
+    if (nombre && n >= Math.max(1, (stops || []).length * 0.4)) return { nombre, ...centro(puntos.get(nombre)) };
+    // Sin una ciudad clara (ruta por varios pueblos): la región que guarda la propia guía («Asturias», «Cantabria»), en el centro
+    // de todas las paradas. Si es una lista («Algarve, Alentejo…») o no tiene artículo, historia.js no pinta nada.
+    const reg = String(region || '').trim();
+    if (reg && !/[,·→]|\by\b/.test(reg)) return { nombre: reg, ...centro((stops || []).filter(s => typeof s.lat === 'number').map(s => [s.lat, s.lng])) };
+    return null;
   },
   _lugarHTML(f) {
     const e = s => this._esc(s);

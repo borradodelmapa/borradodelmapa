@@ -659,9 +659,12 @@ const historiaModule = (() => {
       if (r && r.ok) { container.style.display = ''; _pintarBoton(container, opts, r); return; }
       // Si Wikipedia no respondió (saturada), se vuelve a mirar a los 8 s, hasta 2 veces: antes el botón se quedaba oculto
       // para siempre en esa pantalla (le pasó a Paco con el Alcázar justo después de una subida, 20 oct 2026).
+      // «pendiente» = el Worker lo deja para la siguiente vuelta (comprueba como mucho 8 sitios nuevos por petición): cada 3 s,
+      // hasta 10 vueltas. Error de Wikipedia: a los 8 s, hasta 2 veces.
       const intento = opts._intento || 0;
-      if (r && r.error && intento < 2) {
-        setTimeout(() => { if (container._histTurno === turno) renderCompactInto(container, { ...opts, _intento: intento + 1 }); }, 8000);
+      const espera = r && r.pendiente ? (intento < 10 ? 3000 : 0) : (r && r.error && intento < 2 ? 8000 : 0);
+      if (espera) {
+        setTimeout(() => { if (container._histTurno === turno) renderCompactInto(container, { ...opts, _intento: intento + 1 }); }, espera);
       }
     });
   }
@@ -694,7 +697,7 @@ const historiaModule = (() => {
           ${r.foto ? `<div class="hist-inline-thumb" style="background-image:url('${_esc(r.foto.src)}')"></div>${_fotoCreditoHTML(r.foto)}` : ''}
           ${r.resumen ? `<p class="hist-inline-desc">${_esc(r.resumen)}</p>` : ''}
           <div class="hist-inline-timeline">${h ? (h.paradas || []).map(_paradaCompactHTML).join('') : '<p class="hist-inline-desc hist-inline-preparando" style="opacity:.7;font-style:italic">Preparando la historia completa y comprobando cada dato con la fuente…</p>'}</div>
-          ${_fuenteHTML(r.fuente)}
+          ${_fuenteHTML(r.fuente)}${h && h.fuente && (!r.fuente || h.fuente.url !== r.fuente.url) ? _fuenteHTML(h.fuente) : ''}
         </div>`;
       container.querySelector('.hist-inline-toggle--open').addEventListener('click', () => {
         const body = container.querySelector('.hist-inline-body-wrap');
@@ -709,6 +712,8 @@ const historiaModule = (() => {
           const tg = container.querySelector('.hist-inline-toggle--open');
           if (tg) tg.textContent = `📖 ${hist.emoji || ''} ${hist.title}`;
           r.historia = hist; // al cerrar y volver a abrir, ya está
+          // Los hitos pueden venir de otro artículo («Historia de Sevilla») que el resumen («Sevilla»): se cita también
+          if (hist.fuente && (!r.fuente || hist.fuente.url !== r.fuente.url)) tl.insertAdjacentHTML('beforeend', _fuenteHTML(hist.fuente));
         } else {
           tl.innerHTML = ''; // el artículo no tiene historia que contar: se queda el resumen
         }

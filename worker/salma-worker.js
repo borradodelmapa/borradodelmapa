@@ -5550,7 +5550,10 @@ const WIKI_UA = 'BorradoDelMapa/1.0 (https://borradodelmapa.com; salma@borradode
 const HIST_GENERICAS = new Set(['de', 'del', 'la', 'las', 'el', 'los', 'y', 'e', 'en', 'a', 'al', 'the', 'of', 'and', 'parque', 'nacional',
   'national', 'park', 'templo', 'temple', 'iglesia', 'church', 'catedral', 'cathedral', 'museo', 'museum', 'plaza', 'square', 'palacio',
   'palace', 'castillo', 'castle', 'monasterio', 'monastery', 'mezquita', 'mosque', 'basilica', 'santuario', 'ermita', 'convento',
-  'casa', 'house', 'restaurante', 'restaurant', 'bar', 'cafe', 'hotel']);
+  'casa', 'house', 'restaurante', 'restaurant', 'bar', 'cafe', 'hotel',
+  // Nombres que comparten cientos de sitios: no sirven para saber si dos nombres son el mismo lugar. «Santa Iglesia Catedral
+  // Primada de Santa María» (Toledo) casaba con «Santa María la Blanca», una sinagoga (guías reales, 20 oct 2026).
+  'santa', 'santo', 'san', 'sant', 'sao', 'saint', 'maria', 'senora', 'nuestra', 'virgen', 'nossa', 'senhora']);
 // Un restaurante, bar u hotel no tiene historia que contar (Paco, 20 oct 2026): ni se busca.
 const HIST_NEGOCIO = /^\s*(restaurante|restaurant|rte\.?|bar|cafeter[ií]a|caf[eé]|hotel|hostal|hostel|guest ?house|resort|lodge|taberna|tasca|mesón|meson|marisquer[ií]a|pizzer[ií]a|cervecer[ií]a|chiringuito|asador|bodega|pub)\b/i;
 const HIST_SECCIONES_FUERA = /^(referencias|notas|bibliograf[ií]a|enlaces externos|v[eé]ase tambi[eé]n|fuentes|references|notes|bibliography|external links|see also|further reading|sources)$/i;
@@ -5617,7 +5620,11 @@ function _wikiPaginaValida(p, hasCoords, lat, lng, maxKm = 50) {
   return true;
 }
 const _wikiTieneCoords = p => !!(p && p.coordinates && p.coordinates[0]);
-const _wikiPropsBusqueda = { prop: 'coordinates|pageprops|info', ppprop: 'disambiguation', colimit: 'max', redirects: '1' };
+const _wikiPropsBusqueda = { prop: 'coordinates|pageprops|info', coprop: 'type|globe', ppprop: 'disambiguation', colimit: 'max', redirects: '1' };
+// Tipo de sitio que Wikipedia pone en las coordenadas: «city», «adm2nd», «landmark», «isle»… (puede faltar)
+const _wikiTipoCoord = p => String((p && ((p.coordinates && p.coordinates[0] && p.coordinates[0].type) || p.type)) || '').split('(')[0].trim().toLowerCase();
+const WIKI_POBLACION = new Set(['city', 'adm1st', 'adm2nd', 'adm3rd', 'country']);
+const WIKI_GRANDE = new Set(['adm1st', 'adm2nd', 'country', 'isle', 'waterbody', 'mountain', 'river', 'glacier', 'forest']);
 
 // Busca el artículo de cada lugar (lista), con el mínimo de consultas. Orden de preferencia, primero en español y luego en inglés:
 //   a) título exacto (con redirecciones: «Catedral de Sevilla» → su artículo) — TODOS los lugares en una sola consulta;
@@ -5626,6 +5633,25 @@ const _wikiPropsBusqueda = { prop: 'coordinates|pageprops|info', ppprop: 'disamb
 //   c) búsqueda por nombre — una consulta por lugar que aún falte.
 // Siempre tiene que ser un LUGAR (artículo con coordenadas), salvo los «Historia de X»: así nunca cae en una persona.
 // Devuelve, en el mismo orden: { lang, pageid } | null (no hay) | { error: true } (Wikipedia no respondió: no se guarda).
+const HIST_TIPOS = new Map(Object.entries({
+  plaza: 'plaza', placa: 'plaza', praca: 'plaza', square: 'plaza', piazza: 'plaza', platz: 'plaza',
+  iglesia: 'templo', igreja: 'templo', esglesia: 'templo', church: 'templo', catedral: 'templo', cathedral: 'templo', basilica: 'templo',
+  mezquita: 'templo', mosque: 'templo', sinagoga: 'templo', synagogue: 'templo', templo: 'templo', temple: 'templo', ermita: 'templo',
+  capilla: 'templo', capela: 'templo', santuario: 'templo', pagoda: 'templo', wat: 'templo', mandir: 'templo', stupa: 'templo', estupa: 'templo',
+  monasterio: 'templo', mosteiro: 'templo', monastery: 'templo', convento: 'templo', gompa: 'templo', colegiata: 'templo',
+  museo: 'museo', museu: 'museo', museum: 'museo',
+  palacio: 'palacio', palau: 'palacio', palace: 'palacio', alcazar: 'palacio', castillo: 'palacio', castell: 'palacio', castelo: 'palacio', castle: 'palacio', fortaleza: 'palacio', fort: 'palacio',
+  puente: 'puente', pont: 'puente', ponte: 'puente', bridge: 'puente',
+  mercado: 'mercado', mercat: 'mercado', market: 'mercado', bazar: 'mercado', bazaar: 'mercado',
+  parque: 'parque', parc: 'parque', park: 'parque', jardin: 'parque', jardines: 'parque', garden: 'parque', gardens: 'parque',
+  playa: 'playa', praia: 'playa', beach: 'playa',
+  lago: 'agua', lake: 'agua', laguna: 'agua', rio: 'agua', river: 'agua', cascada: 'agua', waterfall: 'agua', catarata: 'agua', cataratas: 'agua', embalse: 'agua',
+  cueva: 'cueva', cuevas: 'cueva', cave: 'cueva', caves: 'cueva', gruta: 'cueva',
+  estacion: 'transporte', station: 'transporte', aeropuerto: 'transporte', airport: 'transporte', puerto: 'transporte',
+  teatro: 'teatro', theatre: 'teatro', theater: 'teatro', hospital: 'hospital', universidad: 'universidad', university: 'universidad',
+  puerta: 'puerta', porta: 'puerta', gate: 'puerta', arco: 'puerta', muralla: 'muralla', muralles: 'muralla', wall: 'muralla', walls: 'muralla',
+  mausoleo: 'tumba', tumba: 'tumba', tomb: 'tumba', mirador: 'mirador', miradouro: 'mirador', viewpoint: 'mirador',
+}));
 async function _wikiBuscarArticulos(lugares) {
   const res = lugares.map(l => (HIST_NEGOCIO.test(l.place) ? null : undefined)); // undefined = aún sin decidir
   const fallo = new Array(lugares.length).fill(false);
@@ -5640,7 +5666,26 @@ async function _wikiBuscarArticulos(lugares) {
   const formas = p => [...new Set([p, mayus(p), mayusPalabras(p)])];
   // Mismo nombre escrito junto o separado / con o sin tildes: «bahía de halong» = «Bahía de Ha-Long», «Hoi An» = «Hội An»
   const compacto = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/\([^)]*\)/g, '').replace(/[^a-z0-9]+/g, '');
-  const coincide = (place, title) => _histCoincide(place, title) || (compacto(title).length >= 4 && compacto(place) === compacto(title));
+  // Si los dos nombres dicen QUÉ son y no coinciden, no es el mismo sitio: «Plaza del Salvador» ≠ «Iglesia del Salvador»
+  //   (prueba con guías reales, 20 oct 2026). Si uno no lo dice («Giralda», «Triana (Sevilla)»), no se descarta por esto.
+  const tiposDe = s2 => new Set(String(s2 || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/[^a-z]+/).filter(w => HIST_TIPOS.has(w)).map(w => HIST_TIPOS.get(w)));
+  const tiposChocan = (place, title) => { const a = tiposDe(place), b = tiposDe(title); return a.size > 0 && b.size > 0 && ![...a].some(t => b.has(t)); };
+  // Una COSA (catedral, mercado, museo, plaza, puerta…) nunca es el pueblo, distrito o provincia donde está: «Sé Catedral de
+  // Portalegre» cogía «Portalegre», «Meo Vac Market» el distrito, «Mae Hong Son Gate» la provincia (guías reales, 20 oct 2026).
+  // Lo decide el tipo que Wikipedia pone en las coordenadas del artículo.
+  const cosaEnPueblo = (place, p) => tiposDe(place).size > 0 && WIKI_POBLACION.has(_wikiTipoCoord(p));
+  // «Tipo + sitio» frente a «sitio» solo (o al revés): son cosas distintas. «Lumbini Museum» ≠ «Lumbini» (el yacimiento);
+  // «Santuario de Urkiola» ≠ «Urkiola» (el puerto); «Lo Manthang» ≠ «Palacio Lo Manthang». Si el nombre junta dos cosas con
+  // «y» («Catedral y Giralda»), el artículo puede ser una de ellas, así que ahí no se aplica.
+  const sinTipo = t => compacto(String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/[^a-z0-9]+/).filter(w => !HIST_TIPOS.has(w) && !['de', 'del', 'la', 'el', 'los', 'las', 'of', 'the'].includes(w)).join(' '));
+  const tipoMasSitio = (place, title) => {
+    if (/\s(y|and|e|i|&)\s/i.test(place)) return false;
+    const tp = tiposDe(place).size > 0, tt = tiposDe(title).size > 0;
+    if (tp === tt) return false;
+    return sinTipo(place) === sinTipo(title) && compacto(place) !== compacto(title);
+  };
+  const coincide = (place, title) => !tiposChocan(place, title) && !tipoMasSitio(place, title)
+    && (_histCoincide(place, title) || (compacto(title).length >= 4 && compacto(place) === compacto(title)));
   // Entre varios candidatos válidos gana el MÁS IMPORTANTE: el que más visitas tiene en Wikipedia (últimos 30 días). Comprobado
   // 20 oct: Santiago de Chile 18.280 frente a la comuna 1.353; la basílica de la Sagrada Familia 19.397 frente al barrio 2.555;
   // el barrio de Santa Cruz 732 frente a su iglesia 203; la Alhambra 14.621 frente a su museo 50. Pero el artículo cuyo nombre es
@@ -5701,7 +5746,10 @@ async function _wikiBuscarArticulos(lugares) {
       for (const t of titulosDe(i)) {
         const p = porTitulo.get(t);
         const esHistoria = /^(historia del?|history of) /i.test((p && p.title) || '');
-        if (_wikiPaginaValida(p, conCoords(l), l.lat, l.lng, 300) && (esHistoria || _wikiTieneCoords(p))) { res[i] = { lang, pageid: p.pageid }; break; }
+        // Hasta 300 km solo si Wikipedia dice que es algo grande (isla, región, lago, montaña); si no, 50 km: «Casa del Rey Moro» en
+        // Ronda cogía la de Sevilla, a 100 km.
+        const km = WIKI_GRANDE.has(_wikiTipoCoord(p)) ? 300 : 50;
+        if (_wikiPaginaValida(p, conCoords(l), l.lat, l.lng, km) && (esHistoria || _wikiTieneCoords(p)) && !cosaEnPueblo(l.place, p)) { res[i] = { lang, pageid: p.pageid }; break; }
       }
     }
     // b) Cerca de la parada (10 km, hasta 500 artículos: en una ciudad grande, con 50 no entraba ni la propia ciudad), con nombre que
@@ -5711,8 +5759,8 @@ async function _wikiBuscarArticulos(lugares) {
       const l = lugares[i];
       if (!conCoords(l)) return;
       try {
-        const d = await _wikiApi(lang, { action: 'query', list: 'geosearch', gscoord: `${l.lat}|${l.lng}`, gsradius: '10000', gslimit: '500' });
-        const c = ((d.query && d.query.geosearch) || []).filter(g => coincide(l.place, g.title));
+        const d = await _wikiApi(lang, { action: 'query', list: 'geosearch', gscoord: `${l.lat}|${l.lng}`, gsradius: '10000', gslimit: '500', gsprop: 'type' });
+        const c = ((d.query && d.query.geosearch) || []).filter(g => coincide(l.place, g.title) && !cosaEnPueblo(l.place, g));
         if (c.length) candB.set(i, c);
       } catch (_) { fallo[i] = true; }
     }));
@@ -5730,7 +5778,7 @@ async function _wikiBuscarArticulos(lugares) {
       const l = lugares[i];
       try {
         const s = await _wikiApi(lang, { action: 'query', generator: 'search', gsrsearch: l.place, gsrlimit: '5', ..._wikiPropsBusqueda });
-        const ps = ((s.query && s.query.pages) || []).filter(x => coincide(l.place, x.title) && _wikiPaginaValida(x, conCoords(l), l.lat, l.lng) && _wikiTieneCoords(x));
+        const ps = ((s.query && s.query.pages) || []).filter(x => coincide(l.place, x.title) && _wikiPaginaValida(x, conCoords(l), l.lat, l.lng) && _wikiTieneCoords(x) && !cosaEnPueblo(l.place, x));
         const v = ps.length > 1 ? await conVisitas(lang, ps.map(x => x.pageid)) : new Map();
         const p = elMejor(ps.map(x => ({ ...x, pageviews: (v.get(x.pageid) || {}).pageviews })), l.place);
         if (p) res[i] = { lang, pageid: p.pageid };
@@ -5776,7 +5824,7 @@ async function _wikiBuscarArticulos(lugares) {
         for (const i of lote) {
           const t = titulo.get(res[i].pageid) || '';
           if (!t || /^(historia d|history of)/i.test(t)) continue;
-          cand.set(i, lang === 'es' ? [`Historia de ${t}`, `Historia del ${t}`, `Historia de la ${t}`] : [`History of ${t}`, `History of the ${t}`]);
+          cand.set(i, lang === 'es' ? [`Historia de ${t}`, `Historia del ${t}`, `Historia de la ${t}`, `Historia de los ${t}`, `Historia de las ${t}`] : [`History of ${t}`, `History of the ${t}`]);
         }
         const todos = [...new Set([...cand.values()].flat())];
         if (!todos.length) continue;
@@ -5786,7 +5834,7 @@ async function _wikiBuscarArticulos(lugares) {
         const norm = new Map((q.normalized || []).map(n => [n.from, n.to]));
         const ok = new Map((q.pages || []).filter(p => p.pageid && !p.missing && !(p.pageprops && 'disambiguation' in p.pageprops)).map(p => [p.title, p.pageid]));
         for (const [i, ts] of cand) {
-          for (const t of ts) { const f = red.get(norm.get(t) || t) || norm.get(t) || t; if (ok.has(f)) { res[i] = { lang, pageid: ok.get(f) }; break; } }
+          for (const t of ts) { const f = red.get(norm.get(t) || t) || norm.get(t) || t; if (ok.has(f)) { res[i] = { lang, pageid: ok.get(f), base: res[i].pageid }; break; } }
         }
       } catch (_) { /* esa tanda se queda con el artículo del sitio */ }
     }
@@ -5880,9 +5928,9 @@ async function _wikiResumenes(lang, pageids) {
 function _histSlug(s) {
   return String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
-// «histart3»: búsqueda corregida el 20 oct por la noche (batería de 60 sitios: un idioma por sitio, gana el más importante,
+// «histart5» (antes 3 y 4): búsqueda corregida el 20 oct por la noche (batería de 60 sitios: un idioma por sitio, gana el más importante,
 // el nombre exacto pesa más, mayúsculas); lo guardado antes se vuelve a mirar
-const _histArtKey = l => `histart3:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
+const _histArtKey = l => `histart5:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
 
 // ¿Qué lugares tienen historia con fuente? Devuelve, en el mismo orden, lo que se enseña al pulsar el botón:
 // { ok:true, articulo, resumen, foto, fuente, historia|null } o { ok:false } (sin botón). Gratis (Wikipedia) y guardado en KV:
@@ -5901,7 +5949,11 @@ async function getHistoriasDisponibles(env, lugares) {
     if (out[i] || !kv) return;
     try { const c = await kv.get(_histArtKey(l), 'json'); if (c) arts[i] = c.none ? null : c; } catch (_) {}
   }));
-  const faltan = L.map((l, i) => i).filter(i => !out[i] && arts[i] === undefined);
+  // Como mucho 6 sitios NUEVOS por petición (con 8 se llegó a 47 consultas en las guías reales, demasiado cerca de 50): cada uno puede costar varias consultas a Wikipedia y Cloudflare limita las consultas
+  // por petición (50 en el plan gratuito). Los demás salen «pendiente» y la web los vuelve a pedir enseguida (ya con caché).
+  const todosFaltan = L.map((l, i) => i).filter(i => !out[i] && arts[i] === undefined);
+  const faltan = todosFaltan.slice(0, 6);
+  todosFaltan.slice(6).forEach(i => { out[i] = { ok: false, error: true, pendiente: true }; });
   if (faltan.length) {
     const encontrados = await _wikiBuscarArticulos(faltan.map(i => L[i]));
     await Promise.all(faltan.map(async (i, j) => {
@@ -5920,16 +5972,21 @@ async function getHistoriasDisponibles(env, lugares) {
     if (!kv) return;
     try { const c = await kv.get(`histres:${clave(a)}`, 'json'); if (c) res.set(clave(a), c); } catch (_) {}
   }));
+  // Si el artículo es «Historia de X», el resumen y la foto salen del artículo del sitio (X): «Sevilla es una ciudad…» y no
+  // «Historia de España es la denominación tanto del periodo…» (captura de Paco, 20 oct 2026). Los hitos, del de historia.
   for (const lang of ['es', 'en']) {
-    const ids = unicos.filter(a => a.lang === lang && !res.has(clave(a))).map(a => a.pageid);
+    const faltanR = unicos.filter(a => a.lang === lang && !res.has(clave(a)));
+    const ids = [...new Set(faltanR.flatMap(a => (a.base ? [a.pageid, a.base] : [a.pageid])))];
     if (!ids.length) continue;
     let leidos;
     try { leidos = await _wikiResumenes(lang, ids); } catch (_) { continue; } // sin respuesta: esos lugares se quedan sin botón esta vez
-    for (const id of ids) {
-      const r = leidos.get(id);
-      if (!r) continue;
-      res.set(`${lang}:${id}`, r);
-      if (kv) { try { await kv.put(`histres:${lang}:${id}`, JSON.stringify(r), { expirationTtl: 30 * 86400 }); } catch (_) {} }
+    for (const a of faltanR) {
+      const H = leidos.get(a.pageid), B = a.base ? leidos.get(a.base) : null;
+      if (!H) continue;
+      const r = (H.corto || !B || B.corto) ? H
+        : { articulo: H.articulo, resumen: B.resumen || H.resumen, foto: B.foto || H.foto, fuente: B.fuente };
+      res.set(clave(a), r);
+      if (kv) { try { await kv.put(`histres:${clave(a)}`, JSON.stringify(r), { expirationTtl: 30 * 86400 }); } catch (_) {} }
     }
   }
   // 3. Hitos ya hechos (si alguien los pidió antes, salen al momento); «sin historia» = sin botón
