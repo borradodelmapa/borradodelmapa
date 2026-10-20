@@ -5580,14 +5580,27 @@ function _histKm(lat1, lng1, lat2, lng2) {
 // Si Wikipedia frena (429) o falla, NO se guarda nada: ese lugar se queda sin botón esta vez y se vuelve a mirar la próxima.
 let _wikiActivas = 0;
 const _wikiEspera = [];
+// Un reintento a los 1,5 s si Wikipedia está saturada (429 o «too busy»): pasa a menudo y es momentáneo
 async function _wikiApi(lang, params) {
+  try { return await _wikiApiUna(lang, params); }
+  catch (e) {
+    if (!/429|busy|ratelimit|maxlag/i.test(e.message)) throw e;
+    await new Promise(r => setTimeout(r, 1500));
+    return _wikiApiUna(lang, params);
+  }
+}
+async function _wikiApiUna(lang, params) {
   if (_wikiActivas >= 3) await new Promise(r => _wikiEspera.push(r));
   _wikiActivas++;
   try {
     const qs = new URLSearchParams({ format: 'json', formatversion: '2', ...params });
     const r = await fetch(`https://${lang}.wikipedia.org/w/api.php?${qs}`, { headers: { 'User-Agent': WIKI_UA }, signal: AbortSignal.timeout(6000) });
     if (!r.ok) throw new Error('Wikipedia ' + r.status);
-    return await r.json();
+    const j = await r.json();
+    // Wikipedia a veces contesta 200 con un error dentro («cirrussearch-too-busy-error»): es un FALLO, no «no hay resultados»
+    // (si no, se cogía un artículo peor en inglés: «Cuenca» → «University of Cuenca»)
+    if (j && j.error) throw new Error('Wikipedia ' + (j.error.code || 'error'));
+    return j;
   } finally {
     _wikiActivas--;
     const sig = _wikiEspera.shift();
@@ -5615,15 +5628,19 @@ const _wikiPropsBusqueda = { prop: 'coordinates|pageprops', ppprop: 'disambiguat
 async function _wikiBuscarArticulos(lugares) {
   const res = lugares.map(l => (HIST_NEGOCIO.test(l.place) ? null : undefined)); // undefined = aún sin decidir
   const fallo = new Array(lugares.length).fill(false);
-  const pendientes = () => res.map((r, i) => (r === undefined ? i : -1)).filter(i => i >= 0);
+  // Pendiente = sin decidir y sin fallos. Si una consulta en español falló, ese lugar NO pasa al inglés (cogería un artículo
+  // peor, p. ej. «Cuenca» → la catedral en vez de la ciudad): sale como error, no se guarda y se vuelve a mirar la próxima vez.
+  const pendientes = () => res.map((r, i) => (r === undefined && !fallo[i] ? i : -1)).filter(i => i >= 0);
   const conCoords = l => typeof l.lat === 'number' && typeof l.lng === 'number';
+  // Wikipedia distingue mayúsculas salvo en la 1ª letra: «Historia de zanzíbar» no existe y «Historia de Zanzíbar» sí
+  const mayus = s => s.charAt(0).toUpperCase() + s.slice(1);
 
   for (const lang of ['es', 'en']) {
     // a) Títulos exactos, todos juntos (de 50 en 50)
     const pend = pendientes();
     const titulosDe = i => {
-      const p = lugares[i].place;
-      return conCoords(lugares[i]) ? [p] : (lang === 'es' ? [`Historia de ${p}`, p] : [`History of ${p}`, p]);
+      const p = lugares[i].place.trim();
+      return conCoords(lugares[i]) ? [p] : (lang === 'es' ? [`Historia de ${mayus(p)}`, p] : [`History of ${mayus(p)}`, p]);
     };
     const todos = [...new Set(pend.flatMap(titulosDe))];
     const porTitulo = new Map();
@@ -5655,7 +5672,13 @@ async function _wikiBuscarArticulos(lugares) {
       if (!conCoords(l)) return;
       try {
         const d = await _wikiApi(lang, { action: 'query', list: 'geosearch', gscoord: `${l.lat}|${l.lng}`, gsradius: '10000', gslimit: '50' });
-        const c = ((d.query && d.query.geosearch) || []).filter(g => _histCoincide(l.place, g.title)).sort((x, y) => x.dist - y.dist)[0];
+        // Gana el que mejor coincide en nombre (menos palabras de más en el título) y, a igualdad, el más cercano:
+        // «Cuenca» → «Cuenca (Ecuador)» antes que «New Cathedral of Cuenca», aunque la catedral esté más cerca
+        // (aquí SÍ cuentan «museo», «iglesia»…: «Santa Cruz» → el barrio «Santa Cruz (Sevilla)», no «Iglesia de Santa Cruz»)
+        const palabras = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\([^)]*\)/g, ' ')
+          .split(/[^a-z0-9]+/).filter(t => t.length >= 3 && !['del', 'las', 'los', 'the', 'and'].includes(t));
+        const sobran = g => palabras(g.title).filter(t => !palabras(l.place).includes(t)).length;
+        const c = ((d.query && d.query.geosearch) || []).filter(g => _histCoincide(l.place, g.title)).sort((x, y) => (sobran(x) - sobran(y)) || (x.dist - y.dist))[0];
         if (c) res[i] = { lang, pageid: c.pageid };
       } catch (_) { fallo[i] = true; }
     }));
