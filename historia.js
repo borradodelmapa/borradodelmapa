@@ -656,7 +656,13 @@ const historiaModule = (() => {
     container.style.display = 'none';
     _disponible(place, opts.lat, opts.lng).then(r => {
       if (container._histTurno !== turno) return; // se repintó mientras tanto
-      if (r && r.ok) { container.style.display = ''; _pintarBoton(container, opts, r); }
+      if (r && r.ok) { container.style.display = ''; _pintarBoton(container, opts, r); return; }
+      // Si Wikipedia no respondió (saturada), se vuelve a mirar a los 8 s, hasta 2 veces: antes el botón se quedaba oculto
+      // para siempre en esa pantalla (le pasó a Paco con el Alcázar justo después de una subida, 20 oct 2026).
+      const intento = opts._intento || 0;
+      if (r && r.error && intento < 2) {
+        setTimeout(() => { if (container._histTurno === turno) renderCompactInto(container, { ...opts, _intento: intento + 1 }); }, 8000);
+      }
     });
   }
 

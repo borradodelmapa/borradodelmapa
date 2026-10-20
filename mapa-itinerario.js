@@ -51,13 +51,22 @@ const mapaItinerario = {
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
         <div class="itin-meta">${this._totalDays(_allStops)} días · ${_allStops.length} paradas · ${this._esc(country.toUpperCase())}</div>
-        ${country ? `<div class="hist-inline-mount" data-place="${this._esc(country)}"></div>` : ''}
+        <div class="hist-inline-mount itin-hist-ciudad"></div>
+        ${country ? `<div class="hist-inline-mount itin-hist-pais" data-place="${this._esc(country)}"></div>` : ''}
       </div>
     `;
     this._container.appendChild(header);
-    if (country && typeof historiaModule !== 'undefined') {
-      const countryMount = header.querySelector('.hist-inline-mount');
-      if (countryMount) historiaModule.renderCompactInto(countryMount, { place: country });
+    if (typeof historiaModule !== 'undefined') {
+      // «Historia de [ciudad]» primero (Paco, 20 oct 2026: en la guía de Sevilla, la historia de Sevilla) y después la del país.
+      // Solo sale si Wikipedia tiene artículo de esa ciudad (historia.js lo comprueba); si no, el hueco ni se ve.
+      const ciudad = this._ciudadGuia(_allStops);
+      const ciudadMount = header.querySelector('.itin-hist-ciudad');
+      if (ciudadMount && ciudad && ciudad.nombre.toLowerCase() !== String(country).toLowerCase()) {
+        ciudadMount.dataset.place = ciudad.nombre;
+        historiaModule.renderCompactInto(ciudadMount, { place: ciudad.nombre, lat: ciudad.lat, lng: ciudad.lng });
+      }
+      const countryMount = header.querySelector('.itin-hist-pais');
+      if (country && countryMount) historiaModule.renderCompactInto(countryMount, { place: country });
     }
 
     // Barra de acciones flotante — se añade al body para escapar del stacking context.
@@ -603,6 +612,27 @@ ${trk}
     const tips = this._container && this._container.querySelector('.guide-tips');
     if (!tips) return;
     extra.forEach(t => { const p = document.createElement('p'); p.textContent = t; tips.appendChild(p); });
+  },
+  // Ciudad de la guía (20 oct 2026). La guía no guarda la ciudad («region» suele ser la comunidad: Andalucía), pero cada parada
+  // lleva la dirección verificada por Google («Casco Antiguo, 41004 Sevilla, España»). Se toma el trozo antes del país sin
+  // números (código postal) ni siglas (IL, CDMX…); la ciudad es la que más se repite, si es al menos el 40 % de las paradas.
+  // Devuelve { nombre, lat, lng } (centro de esas paradas, para distinguir Granada de España y de Nicaragua) o null.
+  _ciudadGuia(stops) {
+    const cuenta = new Map(), puntos = new Map();
+    (stops || []).forEach(s => {
+      const partes = String((s && s.verified_address) || '').split(',').map(x => x.trim()).filter(Boolean);
+      for (let k = partes.length - 2; k >= 0; k--) {
+        const c = partes[k].split(/\s+/).filter(w => !/\d/.test(w)).join(' ').trim();
+        if (c.length < 2 || /^[A-Z]{1,4}$/.test(c)) continue;
+        cuenta.set(c, (cuenta.get(c) || 0) + 1);
+        if (typeof s.lat === 'number' && typeof s.lng === 'number') { if (!puntos.has(c)) puntos.set(c, []); puntos.get(c).push([s.lat, s.lng]); }
+        break;
+      }
+    });
+    const [nombre, n] = [...cuenta].sort((a, b) => b[1] - a[1])[0] || [];
+    if (!nombre || n < Math.max(1, (stops || []).length * 0.4)) return null;
+    const p = puntos.get(nombre) || [];
+    return p.length ? { nombre, lat: p.reduce((a, x) => a + x[0], 0) / p.length, lng: p.reduce((a, x) => a + x[1], 0) / p.length } : { nombre };
   },
   _lugarHTML(f) {
     const e = s => this._esc(s);

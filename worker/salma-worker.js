@@ -5760,20 +5760,22 @@ async function _wikiBuscarArticulos(lugares) {
     } catch (_) { /* se queda en inglés: correcto, solo que en otro idioma */ }
   }
 
-  // e) Sin coordenadas (un país, una región): si hay «Historia de X» de ese artículo, se usa ese (Perú → «Historia del Perú»)
-  const sinCoords = res.map((r, i) => (r && !conCoords(lugares[i]) ? i : -1)).filter(i => i >= 0);
-  if (sinCoords.length) {
-    try {
-      const porLang = { es: [], en: [] };
-      sinCoords.forEach(i => porLang[res[i].lang].push(i));
-      for (const lang of ['es', 'en']) {
-        if (!porLang[lang].length) continue;
-        const d = await _wikiApi(lang, { action: 'query', pageids: porLang[lang].map(i => res[i].pageid).join('|') });
+  // e) Si hay un artículo «Historia de X» del sitio encontrado, se usa ese, que cuenta la historia entera: Perú → «Historia del
+  //    Perú», Sevilla → «Historia de Sevilla». (Antes solo sin coordenadas; Paco, 20 oct: la cabecera de Sevilla tiene que contar Sevilla.)
+  //    En tandas de 50 (Wikipedia rechaza más de 50 de golpe y el paso se saltaba entero sin avisar). Si falla, se queda con el
+  //    artículo del sitio, que también vale.
+  const encontrados = res.map((r, i) => (r ? i : -1)).filter(i => i >= 0);
+  for (const lang of ['es', 'en']) {
+    const lista = encontrados.filter(i => res[i].lang === lang);
+    for (let k = 0; k < lista.length; k += 15) {
+      const lote = lista.slice(k, k + 15);
+      try {
+        const d = await _wikiApi(lang, { action: 'query', pageids: lote.map(i => res[i].pageid).join('|') });
         const titulo = new Map(((d.query && d.query.pages) || []).map(p => [p.pageid, p.title]));
         const cand = new Map();
-        for (const i of porLang[lang]) {
+        for (const i of lote) {
           const t = titulo.get(res[i].pageid) || '';
-          if (/^(historia d|history of)/i.test(t)) continue;
+          if (!t || /^(historia d|history of)/i.test(t)) continue;
           cand.set(i, lang === 'es' ? [`Historia de ${t}`, `Historia del ${t}`, `Historia de la ${t}`] : [`History of ${t}`, `History of the ${t}`]);
         }
         const todos = [...new Set([...cand.values()].flat())];
@@ -5786,8 +5788,8 @@ async function _wikiBuscarArticulos(lugares) {
         for (const [i, ts] of cand) {
           for (const t of ts) { const f = red.get(norm.get(t) || t) || norm.get(t) || t; if (ok.has(f)) { res[i] = { lang, pageid: ok.get(f) }; break; } }
         }
-      }
-    } catch (_) { /* se queda con el artículo del sitio: también vale */ }
+      } catch (_) { /* esa tanda se queda con el artículo del sitio */ }
+    }
   }
   // Sin artículo: «no hay»; pero si alguna consulta de ese lugar falló, no se sabe → error (no se guarda)
   return res.map((r, i) => (r ? r : (fallo[i] ? { error: true } : null)));
@@ -5862,7 +5864,8 @@ async function _wikiResumenes(lang, pageids) {
     for (const p of paginas) {
       if (!p || p.missing) continue;
       // Artículo corto (esbozo): no da para contar una historia
-      if ((p.length || 0) < 3000) { out.set(p.pageid, { corto: true }); continue; }
+      // (1.500: con 3.000 se quedaba fuera el Callejón del Agua de Sevilla, 2.579)
+      if ((p.length || 0) < 1500) { out.set(p.pageid, { corto: true }); continue; }
       const f = p.thumbnail && p.pageimage && fotos.get(String(p.pageimage).replace(/ /g, '_'));
       out.set(p.pageid, {
         articulo: { lang, pageid: p.pageid, titulo: p.title, url: p.fullurl },
