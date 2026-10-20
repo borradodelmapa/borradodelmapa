@@ -83,7 +83,7 @@ async function _googleGate(env, sku) {
 // del mes y al tocar el tope diario (una vez cada uno). Interruptor: AI_CAP_ON = "1".
 const OPEN_GATE_LIMITS = {
   '/photo': 600, '/place-details': 300, '/directions': 300,
-  '/tts': 100, '/tts-google': 100, '/translate': 100, '/narrate': 100, '/nearby-pois': 300, '/pin': 100, '/enrich': 100, '/historia-lugar': 100, '/historia-resumen': 300, '/historia-disponibles': 300,
+  '/tts': 100, '/tts-google': 100, '/translate': 100, '/narrate': 100, '/nearby-pois': 300, '/pin': 100, '/enrich': 100, '/historia-lugar': 100, '/historia-resumen': 300, '/historia-disponibles': 300, '/ficha-destino': 100,
 };
 const AI_CAP_DEFAULT = { claude: { daily_eur: 15, monthly_eur: 70 }, openai: { daily_eur: 2, monthly_eur: 10 } };
 const USD_TO_EUR = 0.92;
@@ -5844,13 +5844,17 @@ async function _wikiBuscarArticulos(lugares) {
 }
 
 // Foto libre de cada archivo (autor y licencia), todas en una consulta. Solo libres (CC, dominio público): nada de «fair use».
+// ¿Es una FOTO del sitio? Fuera banderas, escudos, mapas, logos, firmas y dibujos (.svg): en muchas ciudades la imagen principal
+// del artículo es la bandera (Sevilla, 20 oct 2026), y eso no es una imagen real del lugar.
+const WIKI_NO_FOTO = /(flag|bandera|bandeira|drapeau|escudo|coat[_ ]of[_ ]arms|blas[oó]n|seal[_ ]of|sello|locator|location|localizaci|situaci[oó]n|mapa|map[_ .-]|karte|carte[_ ]|atlas|regna|plano[_ ]|logo|firma|signature|icon|emblem|\.svg$|\.gif$)/i;
+const _esFotoReal = nombre => !!nombre && /\.(jpe?g|png|webp)$/i.test(nombre) && !WIKI_NO_FOTO.test(nombre);
 async function _wikiFotos(lang, archivos) {
   const out = new Map();
   const lista = [...new Set(archivos.filter(Boolean))];
   for (let k = 0; k < lista.length; k += 50) {
     try {
       const d = await _wikiApi(lang, { action: 'query', titles: lista.slice(k, k + 50).map(a => 'File:' + a).join('|'), prop: 'imageinfo',
-        iiprop: 'extmetadata', iiextmetadatafilter: 'Artist|LicenseShortName' });
+        iiprop: 'extmetadata|url', iiurlwidth: '800', iiextmetadatafilter: 'Artist|LicenseShortName' });
       const q = d.query || {};
       const norm = new Map((q.normalized || []).map(n => [n.to, n.from]));
       for (const p of q.pages || []) {
@@ -5861,7 +5865,7 @@ async function _wikiFotos(lang, archivos) {
           .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
           .replace(/\s+/g, ' ').trim();
         const nombre = String(norm.get(p.title) || p.title).replace(/^(File|Archivo):/, '');
-        out.set(nombre.replace(/ /g, '_'), { autor: autor.slice(0, 120) || 'Wikimedia Commons', licencia: lic });
+        out.set(nombre.replace(/ /g, '_'), { autor: autor.slice(0, 120) || 'Wikimedia Commons', licencia: lic, miniatura: p.imageinfo[0].thumburl || '' });
       }
     } catch (_) {}
   }
@@ -5879,7 +5883,7 @@ async function _wikiLeerArticulo(lang, pageid) {
   const texto = partes.filter(x => { const m = x.match(/^==+ ([^=\n]+) ==+/); return !(m && HIST_SECCIONES_FUERA.test(m[1].trim())); }).join('\n').trim();
   const intro = (partes[0] || '').trim();
   let foto = null;
-  if (p.thumbnail && p.pageimage) {
+  if (p.thumbnail && p.pageimage && _esFotoReal(p.pageimage)) {
     const f = (await _wikiFotos(lang, [p.pageimage])).get(String(p.pageimage).replace(/ /g, '_'));
     if (f) foto = { src: p.thumbnail.source, ...f, pagina: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(p.pageimage)}` };
   }
@@ -5894,8 +5898,16 @@ function _wikiSinDudosos(t) {
     .replace(new RegExp('[^.\\n]*' + WIKI_MARCA_DUDOSA + '[^.\\n]*\\.?', 'gi'), ''); // marca dentro de la frase: fuera la frase entera
 }
 // Resumen para enseñar al instante: el principio del artículo, cortado en una frase (máx. ~700 caracteres)
+// Restos de Wikipedia que no son texto: claves de orden («&&&&&01015128.&&&»), espacios invisibles, pronunciaciones
+// («/bərs̺ə'lʲonə/»), nombres en otras escrituras («(en nepalí: काठमाडौँ)») y paréntesis vacíos (prueba de fichas, 20 oct 2026)
+function _wikiLimpio(t) {
+  return String(t || '')
+    .replace(/&{2,}\d*\.?&+0?/g, '').replace(/[\u200B-\u200D\uFEFF\u2060]/g, '')
+    .replace(/\(([^()]*(pronunciad|pronounced|\/[^/]+\/|[^\p{Script=Latin}\p{P}\p{N}\p{Zs}])[^()]*)\)/gu, '')
+    .replace(/\(\s*[;,]?\s*\)/g, '').replace(/\s+([,.;:])/g, '$1').replace(/\s{2,}/g, ' ').trim();
+}
 function _wikiResumen(intro) {
-  const t = String(_wikiSinDudosos(intro)).replace(/\s+/g, ' ').trim();
+  const t = _wikiLimpio(_wikiSinDudosos(intro)).replace(/\s+/g, ' ').trim();
   if (t.length <= 700) return t;
   const corte = t.slice(0, 700), punto = corte.lastIndexOf('. ');
   return punto > 200 ? corte.slice(0, punto + 1) : corte + '…';
@@ -5905,20 +5917,39 @@ async function _wikiResumenes(lang, pageids) {
   const out = new Map();
   for (let k = 0; k < pageids.length; k += 20) {
     const ids = pageids.slice(k, k + 20);
-    const d = await _wikiApi(lang, { action: 'query', pageids: ids.join('|'), prop: 'extracts|pageimages|info', exintro: '1', explaintext: '1',
-      exlimit: 'max', piprop: 'thumbnail|name', pithumbsize: '800', pilimit: 'max', inprop: 'url' });
+    const d = await _wikiApi(lang, { action: 'query', pageids: ids.join('|'), prop: 'extracts|pageimages|info|pageprops', exintro: '1', explaintext: '1',
+      exlimit: 'max', piprop: 'thumbnail|name', pithumbsize: '800', pilimit: 'max', inprop: 'url', ppprop: 'wikibase_item' });
     const paginas = (d.query && d.query.pages) || [];
-    const fotos = await _wikiFotos(lang, paginas.map(p => p.thumbnail && p.pageimage));
+    // Imagen principal que no es una foto (bandera, escudo, mapa): la imagen OFICIAL del sitio en Wikidata (propiedad P18, la que
+    // la comunidad elige para representarlo). No «la primera del artículo»: Wikipedia las da por orden alfabético y salían
+    // grabados antiguos o el retrato de un político (prueba del 20 oct 2026). Si tampoco es una foto real, sin foto.
+    const sinFoto = paginas.filter(p => p && !p.missing && !(p.pageimage && _esFotoReal(p.pageimage)) && p.pageprops && p.pageprops.wikibase_item);
+    const otra = new Map();
+    if (sinFoto.length) {
+      try {
+        const qids = sinFoto.map(p => p.pageprops.wikibase_item);
+        const w = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${qids.join('|')}&props=claims&format=json`, { headers: { 'User-Agent': WIKI_UA }, signal: AbortSignal.timeout(8000) }).then(x => x.json());
+        for (const p of sinFoto) {
+          const c = w.entities && w.entities[p.pageprops.wikibase_item] && w.entities[p.pageprops.wikibase_item].claims && w.entities[p.pageprops.wikibase_item].claims.P18;
+          const a = c && c[0] && c[0].mainsnak && c[0].mainsnak.datavalue && c[0].mainsnak.datavalue.value;
+          if (a && _esFotoReal(a)) otra.set(p.pageid, String(a).replace(/ /g, '_'));
+        }
+      } catch (_) {}
+    }
+    const archivoDe = p => (p.pageimage && _esFotoReal(p.pageimage)) ? p.pageimage : otra.get(p.pageid);
+    const fotos = await _wikiFotos(lang, paginas.map(p => archivoDe(p)));
     for (const p of paginas) {
       if (!p || p.missing) continue;
       // Artículo corto (esbozo): no da para contar una historia
       // (1.500: con 3.000 se quedaba fuera el Callejón del Agua de Sevilla, 2.579)
       if ((p.length || 0) < 1500) { out.set(p.pageid, { corto: true }); continue; }
-      const f = p.thumbnail && p.pageimage && fotos.get(String(p.pageimage).replace(/ /g, '_'));
+      const arch = archivoDe(p);
+      const f = arch && fotos.get(String(arch).replace(/ /g, '_'));
+      const src = f && ((arch === p.pageimage && p.thumbnail && p.thumbnail.source) || f.miniatura);
       out.set(p.pageid, {
         articulo: { lang, pageid: p.pageid, titulo: p.title, url: p.fullurl },
         resumen: _wikiResumen(p.extract),
-        foto: f ? { src: p.thumbnail.source, ...f, pagina: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(p.pageimage)}` } : null,
+        foto: (f && src) ? { src, autor: f.autor, licencia: f.licencia, pagina: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(arch)}` } : null,
         fuente: { nombre: 'Wikipedia', idioma: lang, titulo: p.title, url: p.fullurl, licencia: 'CC BY-SA 4.0' },
       });
     }
@@ -5970,7 +6001,7 @@ async function getHistoriasDisponibles(env, lugares) {
   const unicos = [...new Map(L.map((l, i) => (!out[i] ? [clave(arts[i]), arts[i]] : null)).filter(Boolean)).values()];
   await Promise.all(unicos.map(async a => {
     if (!kv) return;
-    try { const c = await kv.get(`histres:${clave(a)}`, 'json'); if (c) res.set(clave(a), c); } catch (_) {}
+    try { const c = await kv.get(`histres4:${clave(a)}`, 'json'); if (c) res.set(clave(a), c); } catch (_) {}
   }));
   // Si el artículo es «Historia de X», el resumen y la foto salen del artículo del sitio (X): «Sevilla es una ciudad…» y no
   // «Historia de España es la denominación tanto del periodo…» (captura de Paco, 20 oct 2026). Los hitos, del de historia.
@@ -5983,10 +6014,10 @@ async function getHistoriasDisponibles(env, lugares) {
     for (const a of faltanR) {
       const H = leidos.get(a.pageid), B = a.base ? leidos.get(a.base) : null;
       if (!H) continue;
-      const r = (H.corto || !B || B.corto) ? H
-        : { articulo: H.articulo, resumen: B.resumen || H.resumen, foto: B.foto || H.foto, fuente: B.fuente };
+      const r = (H.corto || !B || B.corto) ? { ...H, lugar: H.articulo }
+        : { articulo: H.articulo, resumen: B.resumen || H.resumen, foto: B.foto || H.foto, fuente: B.fuente, lugar: B.articulo };
       res.set(clave(a), r);
-      if (kv) { try { await kv.put(`histres:${clave(a)}`, JSON.stringify(r), { expirationTtl: 30 * 86400 }); } catch (_) {} }
+      if (kv) { try { await kv.put(`histres4:${clave(a)}`, JSON.stringify(r), { expirationTtl: 30 * 86400 }); } catch (_) {} }
     }
   }
   // 3. Hitos ya hechos (si alguien los pidió antes, salen al momento); «sin historia» = sin botón
@@ -6012,6 +6043,146 @@ async function getHistoriaResumen(env, place, lat, lng) {
 async function getHistoriaArticulo(env, place, lat, lng) {
   const r = await getHistoriaResumen(env, place, lat, lng);
   return r.ok ? { lang: r.articulo.lang, pageid: r.articulo.pageid } : null;
+}
+
+// ═══ FICHA DEL DESTINO — SOLO CON FUENTE (20 oct 2026, con Paco) ═══
+// El bloque «SOBRE [destino]» que la guía de Chitwan tiene hecho a mano, generado solo para CUALQUIER guía:
+//   · esencia     → el principio del artículo de Wikipedia del sitio, LITERAL (no se reescribe nada)
+//   · cuándo ir   → apartado «Clima» de Wikipedia (es; si no, en), contado en 2-4 puntos
+//   · cómo llegar → apartado «Llegar» / «Get in» de Wikivoyage, en 2-4 puntos, SIN precios ni horarios
+// Los puntos los escribe Haiku SOLO con ese texto y pasan el mismo control de citas que la historia: cada frase tiene que
+// llevar su cita literal del texto, el código la comprueba y, si no, la frase se borra. Sección sin fuente = no sale.
+// Se guarda por artículo 90 días: el siguiente que pida ese destino la ve al momento. Coste (§8): Wikipedia/Wikivoyage 0 €;
+// Haiku la 1ª vez: hasta 4 llamadas cortas (2 secciones + 2 controles) ≈ 1-2 cént.
+const FICHA_TOOL = {
+  name: 'guardar_puntos',
+  description: 'Entrega los puntos, contados solo con el texto.',
+  input_schema: {
+    type: 'object',
+    properties: { puntos: { type: 'array', items: { type: 'string' }, description: 'Entre 0 y 4 puntos, 1-2 frases cada uno' } },
+    required: ['puntos'],
+  },
+};
+const FICHA_SIN_PRECIOS = /(€|\$|£|¥|₹|฿|₫|\b(eur|euros?|usd|dólares|dolares|dollars?|npr|rupias?|rupees?|baht|dong|kip|yen|yuan|soles|pesos|libras|pounds|chf|francos)\b)/i;
+// Control de citas, el mismo criterio que el de la historia: devuelve, frase a frase, si tiene prueba literal en el texto
+async function _controlCitas(env, frases, texto) {
+  if (!frases.length) return [];
+  const lista = frases.map((f, n) => `[${n + 1}] ${f}`).join('\n');
+  const revision = await _haikuHerramienta(env, `Para CADA frase numerada de abajo, copia en "cita" el fragmento del TEXTO que la respalda: LITERAL, carácter por carácter, en el idioma del texto, una o dos frases como mucho. Si el TEXTO no respalda la frase (o solo una parte de ella), deja "cita" vacía. No respaldes con el texto algo que no dice.
+
+FRASES:
+${lista}
+
+TEXTO:
+${texto.slice(0, 12000)}`, REVISION_TOOL, 3000);
+  const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  const textoN = norm(texto);
+  const cifras = s => (String(s).replace(/(\d)[.,\s](?=\d{3}\b)/g, '$1').match(/\d+/g) || []);
+  const citas = new Map(((revision && revision.citas) || []).map(c => [c.n, c.cita]));
+  return frases.map((f, n) => {
+    const c = norm(citas.get(n + 1));
+    if (c.length < 15 || !textoN.includes(c)) return false;
+    const enCita = new Set(cifras(citas.get(n + 1)));
+    return cifras(f).every(d => enCita.has(d));
+  });
+}
+// Un apartado del artículo (texto plano con «== Título ==»), por el nombre del título; incluye sus subapartados
+function _apartado(extract, re) {
+  const lineas = String(extract || '').split('\n');
+  let dentro = 0, nivel = 0; const out = [];
+  for (const l of lineas) {
+    const m = l.match(/^(=+)\s*([^=]+?)\s*=+\s*$/);
+    if (m) {
+      if (dentro && m[1].length <= nivel) break;
+      if (!dentro && re.test(m[2])) { dentro = 1; nivel = m[1].length; continue; }
+    }
+    if (dentro) out.push(l);
+  }
+  return _wikiSinDudosos(out.join('\n')).replace(/\n{2,}/g, '\n').trim();
+}
+async function _wikiTexto(lang, sitio, params) {
+  const host = sitio === 'voyage' ? `${lang}.wikivoyage.org` : `${lang}.wikipedia.org`;
+  const qs = new URLSearchParams({ format: 'json', formatversion: '2', action: 'query', prop: 'extracts|info|pageprops|langlinks', explaintext: '1',
+    exsectionformat: 'wiki', inprop: 'url', redirects: '1', lllang: lang === 'es' ? 'en' : 'es', ...params });
+  const r = await fetch(`https://${host}/w/api.php?${qs}`, { headers: { 'User-Agent': WIKI_UA }, signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error('Wiki ' + r.status);
+  const j = await r.json();
+  if (j.error) throw new Error('Wiki ' + (j.error.code || 'error'));
+  const p = j.query && j.query.pages && j.query.pages[0];
+  return p && !p.missing ? p : null;
+}
+// Escribe 2-4 puntos con un apartado, y deja solo los que pasan el control
+async function _puntosConFuente(env, texto, que) {
+  if (!texto || texto.length < 200) return [];
+  const t = texto.split(/(?<=[.!?])\s+/).filter(f => !FICHA_SIN_PRECIOS.test(f)).join(' '); // sin frases con precios
+  if (t.length < 150) return [];
+  const p = await _haikuHerramienta(env, `${que}
+
+REGLAS:
+- Usa ÚNICAMENTE lo que dice el texto de abajo. Nada de datos, nombres, cifras ni consejos que no estén escritos ahí, aunque los conozcas.
+- Entre 2 y 4 puntos, de 1-2 frases cada uno, en español aunque el texto esté en otro idioma (traduce con fidelidad).
+- Sin precios, tarifas ni horarios. Sin valoraciones propias («lo mejor», «imprescindible»…).
+- Si el texto no da para nada útil, entrega la lista vacía.
+
+TEXTO:
+${t.slice(0, 8000)}`, FICHA_TOOL, 1200);
+  // Por código: fuera los puntos con precios o con horas («desde las 07:30»), aunque Haiku los ponga
+  const puntos = ((p && p.puntos) || []).map(x => String(x).trim()).filter(x => x.length > 15 && !FICHA_SIN_PRECIOS.test(x) && !/\b\d{1,2}[:.]\d{2}\b/.test(x)).slice(0, 4);
+  if (!puntos.length) return [];
+  const ok = await _controlCitas(env, puntos, t);
+  return puntos.filter((x, i) => ok[i]);
+}
+// Ficha del destino. Devuelve { ok, lugar: { nombre, esencia, esencia_fuente, foto, epoca[], epoca_fuente, llegar[], llegar_fuente } }
+async function getFichaDestino(env, place, lat, lng) {
+  const [r] = await getHistoriasDisponibles(env, [{ place, lat, lng }]);
+  if (!r || r.error) throw new Error('Wikipedia no responde');
+  if (!r.ok) return { ok: false, sin_fuente: true };
+  const base = r.lugar || r.articulo; // el artículo del sitio (no el de «Historia de…»)
+  const kvKey = `ficha3:${base.lang}:${base.pageid}`;
+  if (env.SALMA_KB) { try { const c = await env.SALMA_KB.get(kvKey, 'json'); if (c) return c; } catch (_) {} }
+
+  const lugar = { nombre: String(place).trim(), esencia: r.resumen || '', esencia_fuente: r.fuente ? `Wikipedia (${r.fuente.idioma}), «${r.fuente.titulo}»` : '', foto: r.foto || null };
+  let pedido = 0; // si algo falla por el camino, no se guarda la ficha (se reintenta la próxima vez)
+  // Artículo del sitio con todos sus apartados, y su versión en el otro idioma
+  const art = await _wikiTexto(base.lang, 'pedia', { pageids: String(base.pageid) }).catch(() => { pedido++; return null; });
+  const otroLang = base.lang === 'es' ? 'en' : 'es';
+  const otroTitulo = art && art.langlinks && art.langlinks[0] && art.langlinks[0].title;
+  // CUÁNDO IR: «Clima» del artículo; si no tiene, el del otro idioma
+  let clima = art ? _apartado(art.extract, /^(clima|climate|climatolog)/i) : '', climaDe = art;
+  if (clima.length < 200 && otroTitulo) {
+    const o = await _wikiTexto(otroLang, 'pedia', { titles: otroTitulo }).catch(() => { pedido++; return null; });
+    const c2 = o ? _apartado(o.extract, /^(clima|climate|climatolog)/i) : '';
+    if (c2.length > clima.length) { clima = c2; climaDe = o; }
+  }
+  try {
+    lugar.epoca = await _puntosConFuente(env, clima, `Cuéntale a un viajero CUÁNDO IR a «${lugar.nombre}» según el clima: estaciones, meses de lluvia o de calor, temperaturas. Entrégalo con la herramienta guardar_puntos.`);
+    if (lugar.epoca.length) lugar.epoca_fuente = `Wikipedia (${climaDe.title === (art && art.title) ? base.lang : otroLang}), «${climaDe.title}», apartado Clima`;
+  } catch (_) { pedido++; lugar.epoca = []; }
+  // CÓMO LLEGAR: Wikivoyage, buscando el mismo sitio por su ficha de Wikidata (español; si no, inglés)
+  try {
+    const qid = art && art.pageprops && art.pageprops.wikibase_item;
+    let viaje = null, vLang = null;
+    if (qid) {
+      const w = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${qid}&props=sitelinks&sitefilter=eswikivoyage|enwikivoyage&format=json`, { headers: { 'User-Agent': WIKI_UA }, signal: AbortSignal.timeout(8000) }).then(x => x.json());
+      const sl = (w.entities && w.entities[qid] && w.entities[qid].sitelinks) || {};
+      for (const lg of ['es', 'en']) {
+        const t = sl[`${lg}wikivoyage`] && sl[`${lg}wikivoyage`].title;
+        if (!t) continue;
+        const v = await _wikiTexto(lg, 'voyage', { titles: t });
+        const tx = v ? _apartado(v.extract, /^(llegar|cómo llegar|como llegar|get in)$/i) : '';
+        if (tx.length >= 200) { viaje = { ...v, tx }; vLang = lg; break; }
+      }
+    }
+    lugar.llegar = viaje ? await _puntosConFuente(env, viaje.tx, `Cuéntale a un viajero CÓMO SE LLEGA a «${lugar.nombre}»: en avión, tren, autobús, barco o carretera, y desde dónde. Entrégalo con la herramienta guardar_puntos.`) : [];
+    if (lugar.llegar.length) {
+      const fecha = viaje.touched ? new Date(viaje.touched).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+      lugar.llegar_fuente = `Wikivoyage (${vLang}), «${viaje.title}»${fecha ? ', revisado el ' + fecha : ''}`;
+    }
+  } catch (_) { pedido++; lugar.llegar = []; }
+
+  const ficha = { ok: !!(lugar.esencia || (lugar.epoca && lugar.epoca.length) || (lugar.llegar && lugar.llegar.length)), lugar };
+  if (!pedido && env.SALMA_KB) { try { await env.SALMA_KB.put(kvKey, JSON.stringify(ficha), { expirationTtl: 90 * 86400 }); } catch (_) {} }
+  return ficha;
 }
 
 const HISTORIA_TOOL = {
@@ -15024,6 +15195,24 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         return new Response(JSON.stringify({ error: String(e && e.message || e) }), {
           status: 500, headers: { ...corsH, 'Content-Type': 'application/json' },
         });
+      }
+    }
+
+    // ─── POST /ficha-destino — Bloque «SOBRE [destino]» de cualquier guía, solo con fuente (ver getFichaDestino) ───
+    if (request.method === 'POST' && url.pathname === '/ficha-destino') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      let body;
+      try { body = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'JSON inválido' }), { status: 400, headers: corsH });
+      }
+      const { place, lat, lng } = body || {};
+      if (!place || typeof place !== 'string' || place.trim().length < 2) {
+        return new Response(JSON.stringify({ error: 'Falta el nombre del lugar' }), { status: 400, headers: corsH });
+      }
+      try {
+        return new Response(JSON.stringify(await getFichaDestino(env, place.trim().slice(0, 150), typeof lat === 'number' ? lat : undefined, typeof lng === 'number' ? lng : undefined)), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 502, headers: corsH });
       }
     }
 

@@ -569,16 +569,39 @@ ${trk}
   //   titulos → título propio para paradas que Google dejó con el mismo nombre (por posición, 0 = primera).
   _cargarFicha(routeData) {
     this._ficha = null;
+    const turno = this._fichaTurno = {};
     const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
     const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
-    if (!/^[a-z0-9-]{3,120}$/.test(slug)) return;
+    // Sin ficha hecha a mano (casi todas las guías): la ficha automática, solo con fuente
+    const auto = () => { if (this._fichaTurno === turno) this._cargarFichaAuto(routeData, turno); };
+    if (!/^[a-z0-9-]{3,120}$/.test(slug)) return auto();
     fetch(`/destinos/img/${slug}/ficha.json?v=${this._datosV}`).then(r => r.ok ? r.json() : null).then(j => {
-      if (!j) return;
+      if (!j) return auto();
       this._ficha = j;
       // La foto del lugar (portada) viene de fotos.json; se espera a que esté cargado
       Promise.resolve(this._fotosWikiP).then(() => { this._pintarLugar(); });
       this._aplicarTitulos(); this._ajustarConsejos();
-    }).catch(() => {});
+    }).catch(() => auto());
+  },
+  // Ficha AUTOMÁTICA (20 oct 2026, Paco: «en todas las guías»). Para la ciudad o región de la guía (_ciudadGuia), el Worker
+  // (/ficha-destino) devuelve esencia, cuándo ir y cómo llegar, solo con fuente (Wikipedia / Wikivoyage) y comprobados frase a
+  // frase. Se pinta con el MISMO bloque «SOBRE …» que la ficha hecha a mano de Chitwan. La primera vez que alguien abre un
+  // destino tarda unos segundos (la guía ya se ve entera); después sale al momento. Si no hay fuente, no sale nada.
+  _cargarFichaAuto(routeData, turno) {
+    const c = this._ciudadGuia((routeData && routeData.stops) || [], routeData && routeData.region);
+    if (!c || !c.nombre) return;
+    const api = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
+    const pedir = intento => fetch(`${api}/ficha-destino`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ place: c.nombre, lat: c.lat, lng: c.lng }), signal: AbortSignal.timeout(60000),
+    }).then(r => (r.ok ? r.json() : Promise.reject(new Error('Error ' + r.status)))).then(j => {
+      if (this._fichaTurno !== turno || this._ficha) return; // se abrió otra guía mientras tanto
+      if (j && j.ok && j.lugar) {
+        this._ficha = { lugar: j.lugar, auto: true };
+        Promise.resolve(this._fotosWikiP).then(() => { if (this._fichaTurno === turno) this._pintarLugar(); });
+      }
+    }).catch(() => { if (intento < 2 && this._fichaTurno === turno) setTimeout(() => pedir(intento + 1), 10000); });
+    pedir(0);
   },
   _pintarLugar() {
     const f = this._ficha && this._ficha.lugar;
@@ -589,6 +612,18 @@ ${trk}
     box.id = 'itin-lugar'; box.className = 'itin-lugar';
     box.innerHTML = this._lugarHTML(f);
     header.insertAdjacentElement('afterend', box);
+    const hueco = box.querySelector('[data-foto-parada]');
+    if (hueco) {
+      let vueltas = 0;
+      const poner = () => {
+        const img = this._container && this._container.querySelector('.itin-card-img');
+        if (img && img.src) {
+          hueco.innerHTML = `<img src="${this._esc(img.src)}" alt="${this._esc((f.nombre || ''))}"><span class="itin-lugar-credit">Foto: Google</span>`;
+          hueco.hidden = false;
+        } else if (++vueltas < 30) setTimeout(poner, 500);
+      };
+      poner();
+    }
     const tg = box.querySelector('.itin-ficha-toggle'), full = box.querySelector('.itin-ficha-full');
     if (tg && full) tg.addEventListener('click', e => { e.stopPropagation(); full.hidden = !full.hidden; tg.textContent = full.hidden ? 'Ver ficha completa ▾' : 'Ver menos ▴'; });
   },
@@ -651,6 +686,11 @@ ${trk}
     const h = this._fotosWiki && this._fotosWiki.hero;
     let top = '';
     if (h) top += `<div class="itin-lugar-photo"><img src="/destinos/img/${this._fotosWiki._slug}/${h.file}" alt="${e(h.alt || '')}" loading="lazy"><span class="itin-lugar-credit">Foto: <a href="${e(h.url)}" target="_blank" rel="noopener nofollow">${e(h.autor)}</a> · ${e(h.licencia)}</span></div>`;
+    // Ficha automática: la foto libre del artículo de Wikipedia (Wikimedia Commons), con su autor y licencia
+    else if (f.foto && f.foto.src) top += `<div class="itin-lugar-photo"><img src="${e(f.foto.src)}" alt="${e(f.nombre || '')}"><span class="itin-lugar-credit">Foto: <a href="${e(f.foto.pagina)}" target="_blank" rel="noopener nofollow">${e(f.foto.autor)}</a> · ${e(f.foto.licencia)}</span></div>`;
+    // Sin foto real en Wikimedia (solo había bandera, escudo o mapa): la MISMA foto que ya enseña la 1ª parada de la guía
+    // (Google, ya cargada y guardada: no se pide nada nuevo, coste 0). La pone _pintarLugar cuando esa foto está en pantalla.
+    else if (this._ficha && this._ficha.auto) top += `<div class="itin-lugar-photo" data-foto-parada="1" hidden></div>`;
     top += `<div class="itin-lugar-body"><div class="itin-lugar-kicker">SOBRE ${e((f.nombre || '').toUpperCase())}</div>`;
     if (f.frase) top += `<div class="itin-ficha-frase">«${e(f.frase)}»</div>`;
     if (f.datos && f.datos.length) top += `<div class="itin-ficha-datos">${f.datos.map(d => `<span class="itin-card-hours">${e(d)}</span>`).join('')}</div>`;
