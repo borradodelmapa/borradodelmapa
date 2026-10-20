@@ -520,20 +520,11 @@ const mapaRuta = {
     });
 
     // Legacy markers numerados por día (no requieren Map ID)
-    // Paradas con las mismas coordenadas (p. ej. actividades dentro de un parque): el marcador se desplaza un poco en círculo para que se vean todas.
-    const _grupos = {};
-    valid.forEach((s, i) => { const k = s.lat.toFixed(5) + ',' + s.lng.toFixed(5); (_grupos[k] = _grupos[k] || []).push(i); });
-    const _pos = (stop, i) => {
-      const g = _grupos[stop.lat.toFixed(5) + ',' + stop.lng.toFixed(5)];
-      if (!g || g.length < 2) return { lat: stop.lat, lng: stop.lng };
-      const a = (g.indexOf(i) / g.length) * 2 * Math.PI, r = 0.0012;
-      return { lat: stop.lat + r * Math.sin(a), lng: stop.lng + r * Math.cos(a) / Math.max(0.2, Math.cos(stop.lat * Math.PI / 180)) };
-    };
     this._markers = valid.map((stop, i) => {
       const color = this._dayColors[((stop.day || 1) - 1) % this._dayColors.length];
       const marker = new google.maps.Marker({
         map: this._map,
-        position: _pos(stop, i),
+        position: { lat: stop.lat, lng: stop.lng },
         title: stop.headline || stop.name || `Parada ${i + 1}`,
         label: { text: String(i + 1), color: '#fff', fontSize: '12px', fontWeight: '700' },
         icon: {
