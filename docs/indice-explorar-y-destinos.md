@@ -1,5 +1,8 @@
 # Índice: Explorar y Destinos (20 oct 2026) — caso p-mvfrvjvh200
 
+> **COPIA VIEJA.** El índice que manda es el documento editable de Paco:
+> https://claude.ai/code/artifact/a0982cc6-085c-4d33-8d9f-cac418e0de48 (leerlo con las herramientas de docs).
+
 Son **dos cosas distintas** que comparten **las mismas guías** y **el mismo mapa** (CLAUDE.md §12):
 - **Explorar (app):** aquí el usuario encuentra TODAS las guías: las ~1.700 de Salma y las de los usuarios, con un selector «Todas / De usuarios».
 - **Destinos (`/destinos/`, web):** páginas para que Google nos posicione y traiga usuarios. Van en `noindex` y se abren poco a poco, por tandas. Se estudia aparte.
