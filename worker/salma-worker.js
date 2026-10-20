@@ -5565,7 +5565,10 @@ function _histCoincide(place, title) {
   const a = [...new Set(_histTokens(place))], b = [...new Set(_histTokens(title))];
   if (!a.length || !b.length) return false;
   const comunes = a.filter(t => b.includes(t)).length;
-  return comunes > 0 && comunes / a.length >= 0.6 && comunes / b.length >= 0.5;
+  if (comunes > 0 && comunes / a.length >= 0.6 && comunes / b.length >= 0.5) return true;
+  // También: TODAS las palabras del título están en lo escrito y sobra como mucho una (la ciudad o el país):
+  // «Alhambra de Granada» → «Alhambra», «Giralda Sevilla» → «Giralda». (Prueba de variantes, 20 oct 2026.)
+  return comunes === b.length && a.length - comunes <= 1;
 }
 function _histKm(lat1, lng1, lat2, lng2) {
   const r = Math.PI / 180, dLat = (lat2 - lat1) * r, dLng = (lng2 - lng1) * r;

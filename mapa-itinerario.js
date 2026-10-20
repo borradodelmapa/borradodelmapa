@@ -6,7 +6,7 @@
 const mapaItinerario = {
   // Versión de los ficheros de datos (destinos/img/*/fotos.json, ficha.json, guias-publicas.json). Súbela cada vez que cambien:
   // evita que el navegador (o GitHub Pages, que los guarda 10 min) use una copia vieja que apunte a fotos que ya no existen.
-  _datosV: '20261020f',
+  _datosV: '20261020h',
   _stops: [],
   _cards: [],
   _activeIdx: -1,
@@ -620,7 +620,9 @@ ${trk}
     if (f.historia && f.historia.length) full += tag('hist', '📅 HISTORIA', '<ul class="itin-ficha-list">' + f.historia.map(x => `<li><b>${e(x[0])}</b> ${e(x[1])}</li>`).join('') + '</ul>' + fuente(f.historia_fuente));
     if (f.experiencias && f.experiencias.length) full += tag('exp', '🎒 EXPERIENCIAS', '<ul class="itin-ficha-list">' + f.experiencias.map(x => `<li><b>${e(x[0])}</b> ${e(x[1])}<span class="itin-ficha-meta">${e(x[2] || '')}</span></li>`).join('') + '</ul>');
     if (f.fotografia && f.fotografia.length) full += tag('foto', '📸 FOTOGRAFÍA', lis(f.fotografia));
-    if (f.llegar && f.llegar.length) full += tag('llegar', '🧭 CÓMO LLEGAR', lis(f.llegar));
+    // Cuándo ir y cómo llegar, con su fuente (20 oct 2026: solo lo que dice la fuente, sin precios)
+    if (f.epoca && f.epoca.length) full += tag('weather', '🗓 CUÁNDO IR', lis(f.epoca) + fuente(f.epoca_fuente));
+    if (f.llegar && f.llegar.length) full += tag('llegar', '🧭 CÓMO LLEGAR', lis(f.llegar) + fuente(f.llegar_fuente));
     if (f.dormir && f.dormir.length) full += tag('sleep', '🛏 DÓNDE DORMIR', lis(f.dormir));
     if (f.comer) full += tag('eat', '🍜 DÓNDE COMER', e(f.comer));
     if (f.precios && f.precios.length) full += tag('precio', '💶 PRECIOS', lis(f.precios));
