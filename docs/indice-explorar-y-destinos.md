@@ -9,6 +9,12 @@ Estado de cada punto: ✅ hecho · 🟡 a medias · ⬜ sin empezar · ❓ decid
 ---
 
 ## 0. LAS GUÍAS (base de las dos cosas)
+> ⚠ **Este bloque se trabaja en OTRO chat (20 oct 2026) y ya hay muchas cosas medio hechas. No tocarlo desde aquí.**
+> Los estados de la tabla son de lo que se veía en este portátil el 20 oct y pueden estar viejos. Cuando Paco diga
+> «mira lo que hay hecho»: `git fetch origin main` → `git log origin/main` → leer `docs/traspaso-guias-calidad.md`,
+> `docs/modelo-1700-guias.md` y la copia `C:\Users\User\Desktop\salma-destinos` (rama `caso-destinos-diseno`).
+> Actualizar después esta tabla.
+
 Hoy: **12 guías hechas** (11 de Nepal y Barcelona) de unos 1.630 destinos. Proceso mecanizado en `docs/modelo-1700-guias.md`.
 
 | # | Qué | Estado |
