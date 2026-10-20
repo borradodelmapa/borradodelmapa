@@ -5781,7 +5781,8 @@ async function _wikiResumenes(lang, pageids) {
 function _histSlug(s) {
   return String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
-const _histArtKey = l => `histart:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
+// «histart2»: la búsqueda se corrigió el 20 oct por la noche (Zanzibar, Cuenca, Wikipedia saturada); lo guardado antes se vuelve a mirar
+const _histArtKey = l => `histart2:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
 
 // ¿Qué lugares tienen historia con fuente? Devuelve, en el mismo orden, lo que se enseña al pulsar el botón:
 // { ok:true, articulo, resumen, foto, fuente, historia|null } o { ok:false } (sin botón). Gratis (Wikipedia) y guardado en KV:
