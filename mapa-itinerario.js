@@ -6,7 +6,7 @@
 const mapaItinerario = {
   // Versión de los ficheros de datos (destinos/img/*/fotos.json, ficha.json, guias-publicas.json). Súbela cada vez que cambien:
   // evita que el navegador (o GitHub Pages, que los guarda 10 min) use una copia vieja que apunte a fotos que ya no existen.
-  _datosV: '20261020e',
+  _datosV: '20261020f',
   _stops: [],
   _cards: [],
   _activeIdx: -1,
@@ -583,11 +583,10 @@ ${trk}
     const tg = box.querySelector('.itin-ficha-toggle'), full = box.querySelector('.itin-ficha-full');
     if (tg && full) tg.addEventListener('click', e => { e.stopPropagation(); full.hidden = !full.hidden; tg.textContent = full.hidden ? 'Ver ficha completa ▾' : 'Ver menos ▴'; });
   },
-  // Títulos y puntos del mapa propios de la ficha, aplicados a los datos de la ruta ANTES de pintarla (sin parpadeos).
+  // Títulos propios de la ficha, aplicados a los datos de la ruta ANTES de pintarla (sin parpadeos). NUNCA se tocan coordenadas, place_id ni nada de la verificación de Google.
   _aplicarDatosARuta(routeData, ficha) {
     const st = routeData && routeData.stops; if (!st || !ficha) return;
     Object.keys(ficha.titulos || {}).forEach(i => { if (st[+i]) st[+i].headline = ficha.titulos[i]; });
-    Object.keys(ficha.coords || {}).forEach(i => { const s = st[+i], c = ficha.coords[i]; if (s && Array.isArray(c)) { s.lat = c[0]; s.lng = c[1]; delete s.place_id; } });
   },
   _aplicarTitulos() {
     const t = this._ficha && this._ficha.titulos; if (!t) return;
