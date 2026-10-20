@@ -6,7 +6,7 @@
 const mapaItinerario = {
   // Versión de los ficheros de datos (destinos/img/*/fotos.json, ficha.json, guias-publicas.json). Súbela cada vez que cambien:
   // evita que el navegador (o GitHub Pages, que los guarda 10 min) use una copia vieja que apunte a fotos que ya no existen.
-  _datosV: '20261020d',
+  _datosV: '20261020e',
   _stops: [],
   _cards: [],
   _activeIdx: -1,
@@ -582,6 +582,12 @@ ${trk}
     header.insertAdjacentElement('afterend', box);
     const tg = box.querySelector('.itin-ficha-toggle'), full = box.querySelector('.itin-ficha-full');
     if (tg && full) tg.addEventListener('click', e => { e.stopPropagation(); full.hidden = !full.hidden; tg.textContent = full.hidden ? 'Ver ficha completa ▾' : 'Ver menos ▴'; });
+  },
+  // Títulos y puntos del mapa propios de la ficha, aplicados a los datos de la ruta ANTES de pintarla (sin parpadeos).
+  _aplicarDatosARuta(routeData, ficha) {
+    const st = routeData && routeData.stops; if (!st || !ficha) return;
+    Object.keys(ficha.titulos || {}).forEach(i => { if (st[+i]) st[+i].headline = ficha.titulos[i]; });
+    Object.keys(ficha.coords || {}).forEach(i => { const s = st[+i], c = ficha.coords[i]; if (s && Array.isArray(c)) { s.lat = c[0]; s.lng = c[1]; delete s.place_id; } });
   },
   _aplicarTitulos() {
     const t = this._ficha && this._ficha.titulos; if (!t) return;
@@ -1506,6 +1512,13 @@ ${trk}
     if (window.popModal) window.popModal('itinerario');
   }
 
-  window.openItinerarioView = openItinerarioView;
+  // Si la guía viene de una página de destino con ficha.json, primero se aplican sus títulos y puntos del mapa (máx. 1,5 s de espera).
+  window.openItinerarioView = function (routeData, docId, options) {
+    const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
+    const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
+    if (!/^[a-z0-9-]{3,120}$/.test(slug) || !routeData || !Array.isArray(routeData.stops)) return openItinerarioView(routeData, docId, options);
+    const datos = fetch('/destinos/img/' + slug + '/ficha.json?v=' + mapaItinerario._datosV).then(r => r.ok ? r.json() : null).catch(() => null).then(j => { if (j) mapaItinerario._aplicarDatosARuta(routeData, j); });
+    return Promise.race([datos, new Promise(r => setTimeout(r, 1500))]).then(() => openItinerarioView(routeData, docId, options));
+  };
   document.addEventListener('itin:close', closeItinerarioView);
 })();

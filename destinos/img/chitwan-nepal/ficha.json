@@ -99,5 +99,16 @@
   "consejos_extra": [
    "Los tharu vivían aquí antes del parque: al crearlo fueron desplazados de sus tierras. Pregunta quién gestiona el alojamiento o el espectáculo que contratas. (Fuente: Wikipedia)"
   ]
- }
+ },
+ "coords": {
+  "0": [
+   27.57472,
+   84.49361
+  ],
+  "6": [
+   27.61806,
+   84.43639
+  ]
+ },
+ "coords_fuente": "Sauraha: Wikipedia (en). Bishazari Tal: Wikidata Q4880120. Las paradas 2 y 6 son actividades dentro del parque y no tienen un punto propio: quedan en el centro del parque."
 }
