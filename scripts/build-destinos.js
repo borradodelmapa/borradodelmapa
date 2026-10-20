@@ -263,15 +263,7 @@ function buildStaticItinerary(route, appSlug, fotos) {
 function generateFAQs(dest, countryName) {
   const faqs = [];
 
-  // 1. Cost
-  const budget = estimateBudget(dest);
-  faqs.push({
-    q: `¿Cuánto cuesta viajar a ${dest.nombre} desde España?`,
-    a: `El presupuesto diario en ${dest.nombre} va desde ${budget}, dependiendo del estilo de viaje. ` +
-       `Alojamiento mochilero: ${dest.donde_dormir?.mochilero || 'varía'}. ` +
-       `Rango medio: ${dest.donde_dormir?.medio || 'varía'}. ` +
-       `${dest.como_llegar || ''}`
-  });
+  // 1. (Coste: quitado el 20 oct 2026 — el presupuesto no tenía fuente; ver estimateBudget)
 
   // 2. What to see
   const activities = (dest.que_hacer || []).slice(0, 3).join(', ');
@@ -384,8 +376,6 @@ function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const faqs = generateFAQs(dest, countryName);
-  const budget = estimateBudget(dest);
-  const minPrice = extractMinPrice(dest.donde_dormir?.mochilero);
   let coords = COORDS[`${countryCode}:${dest.id}`] || null;
   // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
   if (!coords && route && route.stops) {
@@ -400,13 +390,13 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   // para que Google no lo corte (~60). La marca va en og:site_name, no en el título.
   // Con guía completa el título es lo que la gente busca: «Qué ver en X en N días».
   let pageTitle = conGuia
-    ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}: guía y presupuesto`
-    : `Viajar a ${dest.nombre} (${countryName}): guía y presupuesto`;
+    ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}: guía con mapa`
+    : `Viajar a ${dest.nombre} (${countryName}): guía`;
   // Si el nombre es largo, el título se acorta para que Google no lo corte (máx. ~62)
-  if (pageTitle.length > 62) pageTitle = conGuia ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Viajar a ${dest.nombre}: guía y presupuesto`;
+  if (pageTitle.length > 62) pageTitle = conGuia ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Viajar a ${dest.nombre}: guía`;
   const metaFull = conGuia
-    ? `Qué ver en ${dest.nombre} (${countryName}) en ${nDias} ${nDias === 1 ? 'día' : 'días'}: ${route.stops.length} paradas con fotos y mapa, presupuesto de ${budget} al día${dest.mejor_epoca ? ' y mejor época: ' + dest.mejor_epoca : ''}.`
-    : `Guía para viajar a ${dest.nombre} (${countryName})${minPrice ? ` desde ${minPrice}€/noche` : ''}. ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Presupuesto, dónde dormir y qué ver.`;
+    ? `Qué ver en ${dest.nombre} (${countryName}) en ${nDias} ${nDias === 1 ? 'día' : 'días'}: ${route.stops.length} paradas con fotos y mapa${dest.mejor_epoca ? ' y mejor época: ' + dest.mejor_epoca : ''}.`
+    : `Guía para viajar a ${dest.nombre} (${countryName}). ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Dónde dormir y qué ver.`;
   const metaDesc = metaFull.length > 158 ? metaFull.slice(0, 155).replace(/\s+\S*$/, '') + '…' : metaFull;
   const canonical = `${DOMAIN}/destinos/${slug}.html`;
   const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs, { fotos, route, coords, countrySlug, canonical, pageTitle });
@@ -548,11 +538,6 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
-      <div class="destino-fact">
-        <span class="destino-fact-icon">💰</span>
-        <span class="destino-fact-label">PRESUPUESTO DIARIO</span>
-        <span class="destino-fact-value">${budget}</span>
-      </div>
       <div class="destino-fact">
         <span class="destino-fact-icon">📅</span>
         <span class="destino-fact-label">DÍAS RECOMENDADOS</span>
@@ -719,13 +704,13 @@ function getContinent(code) {
 function buildCountryHTML(countryName, countryCode, destinos) {
   const countrySlug = slugify(countryName);
   const pageTitle = `Viajar a ${countryName}: ${destinos.length} destinos imprescindibles · Borradodelmapa`;
-  const metaDesc = `Guía para viajar a ${countryName}. Los ${destinos.length} mejores destinos con presupuesto, alojamiento y consejos. Planifica tu ruta con IA.`;
+  // (sin «presupuesto» — no tenía fuente — ni «IA»: en textos públicos nunca se dice «IA», 20 oct 2026)
+  const metaDesc = `Guía para viajar a ${countryName}. Los ${destinos.length} mejores destinos con alojamiento y consejos. Planifica tu ruta con Salma.`;
   const canonical = `${DOMAIN}/destinos/${countrySlug}.html`;
 
   const cardsHTML = destinos.map(dest => {
     const destSlug = `${dest.id}-${countrySlug}`;
     const badge = typeBadge(dest.tipo);
-    const budget = estimateBudget(dest);
     return `
       <a href="/destinos/${destSlug}.html" class="destino-country-card">
         <div class="destino-country-card-badge">${badge}</div>
@@ -733,7 +718,6 @@ function buildCountryHTML(countryName, countryCode, destinos) {
         <p class="destino-country-card-desc">${escapeHTML((dest.descripcion || '').substring(0, 120))}...</p>
         <div class="destino-country-card-meta">
           <span>${dest.dias_recomendados || 3} días</span>
-          <span>${budget}/día</span>
         </div>
       </a>`;
   }).join('');
@@ -855,7 +839,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
 
 function buildIndexHTML(countriesByContinent) {
   const pageTitle = 'Destinos de viaje — Guías por país · Borradodelmapa';
-  const metaDesc = 'Explora más de 190 países con guías de viaje prácticas. Presupuestos, alojamiento, qué hacer y consejos locales. Planifica tu ruta con IA.';
+  const metaDesc = 'Explora más de 190 países con guías de viaje prácticas. Alojamiento, qué hacer y consejos locales. Planifica tu ruta con Salma.';
 
   let continentsHTML = '';
   for (const [continent, countries] of Object.entries(countriesByContinent)) {
