@@ -83,7 +83,7 @@ async function _googleGate(env, sku) {
 // del mes y al tocar el tope diario (una vez cada uno). Interruptor: AI_CAP_ON = "1".
 const OPEN_GATE_LIMITS = {
   '/photo': 600, '/place-details': 300, '/directions': 300,
-  '/tts': 100, '/tts-google': 100, '/translate': 100, '/narrate': 100, '/nearby-pois': 300, '/pin': 100, '/enrich': 100, '/historia-lugar': 100,
+  '/tts': 100, '/tts-google': 100, '/translate': 100, '/narrate': 100, '/nearby-pois': 300, '/pin': 100, '/enrich': 100, '/historia-lugar': 100, '/historia-resumen': 300, '/historia-disponibles': 300,
 };
 const AI_CAP_DEFAULT = { claude: { daily_eur: 15, monthly_eur: 70 }, openai: { daily_eur: 2, monthly_eur: 10 } };
 const USD_TO_EUR = 0.92;
@@ -5534,114 +5534,470 @@ async function waGenerateAndSaveRoute(env, uid, sourceText) {
 // nuevo): ampliar esta lista es lo único que hace falta para que WhatsApp pueda usarlas.
 const WA_TOOLS = SALMA_TOOLS.filter(t => ['buscar_lugar', 'buscar_vuelos', 'buscar_hotel', 'buscar_coche', 'guardar_nota'].includes(t.name));
 
-// Historia de un lugar (Claude Haiku + foto de Google Places, caché KV permanente). Extraída del
-// endpoint /historia-lugar el 25 sept 2026 para usarla también desde WhatsApp — misma lógica,
-// mismo prompt, misma caché. Devuelve { historia, source: "cache"|"claude" } o lanza.
-async function getHistoriaLugar(env, place, lat, lng) {
-  const placeName = place.trim();
-  // Sin tildes: "Córdoba" y "Cordoba" son el mismo lugar y deben compartir entrada (antes "Córdoba" → "c-rdoba").
-  const slug = placeName.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  // Nombres homónimos existen en sitios distintos (ej. "Cementerio de los Ingleses"
-  // en Lisboa y en Camariñas) — si hay coordenadas, se meten en la clave de caché
-  // (bucket ~11km) para que no se pisen entre sí durante los 30 días de TTL.
-  const hasCoords = typeof lat === 'number' && typeof lng === 'number';
-  const geoBucket = hasCoords ? `:${lat.toFixed(1)}:${lng.toFixed(1)}` : '';
-  const kvKey = `historia:${slug}${geoBucket}`;
+// ═══ HISTORIA DE UN LUGAR — SOLO CON FUENTE (20 oct 2026, con Paco) ═══
+// Antes: Claude Haiku escribía la historia de memoria (sin fuente) y se guardaba para siempre. Además la plantilla de
+// ejemplo del prompt se rompió el 25 sept (perdió el cierre «]») y el tope de 1.800 tokens la cortaba → error 500
+// «Expected ',' or ']' after array element».
+// Ahora, en dos tiempos para que nadie espere:
+//   1. /historia-resumen: busca el artículo de Wikipedia de ESE sitio (es, si no en) y devuelve al instante su resumen,
+//      foto libre con autor y licencia, y el enlace. Gratis (Wikipedia), < 1 s.
+//   2. /historia-lugar: Haiku cuenta la historia por hitos SOLO con el texto de ese artículo (herramienta con forma fija,
+//      sin recortar texto a mano). Se guarda por artículo, para siempre: el siguiente que pulse la ve al momento.
+// Sin artículo que encaje → no hay historia (mejor nada que inventado). Google ya no se usa aquí.
+// Coste (§8): Wikipedia 0 €. Haiku solo la 1ª vez por artículo, 2 llamadas (historia + control con citas): medido 20 oct en
+// Chitwan, Alcázar de Sevilla y Doi Suthep = 5-13k tokens de entrada + 2-3k de salida ≈ 1,5-3 cént. Después, caché: 0 €.
+const WIKI_UA = 'BorradoDelMapa/1.0 (https://borradodelmapa.com; salma@borradodelmapa.com)';
+const HIST_GENERICAS = new Set(['de', 'del', 'la', 'las', 'el', 'los', 'y', 'e', 'en', 'a', 'al', 'the', 'of', 'and', 'parque', 'nacional',
+  'national', 'park', 'templo', 'temple', 'iglesia', 'church', 'catedral', 'cathedral', 'museo', 'museum', 'plaza', 'square', 'palacio',
+  'palace', 'castillo', 'castle', 'monasterio', 'monastery', 'mezquita', 'mosque', 'basilica', 'santuario', 'ermita', 'convento',
+  'casa', 'house', 'restaurante', 'restaurant', 'bar', 'cafe', 'hotel']);
+// Un restaurante, bar u hotel no tiene historia que contar (Paco, 20 oct 2026): ni se busca.
+const HIST_NEGOCIO = /^\s*(restaurante|restaurant|rte\.?|bar|cafeter[ií]a|caf[eé]|hotel|hostal|hostel|guest ?house|resort|lodge|taberna|tasca|mesón|meson|marisquer[ií]a|pizzer[ií]a|cervecer[ií]a|chiringuito|asador|bodega|pub)\b/i;
+const HIST_SECCIONES_FUERA = /^(referencias|notas|bibliograf[ií]a|enlaces externos|v[eé]ase tambi[eé]n|fuentes|references|notes|bibliography|external links|see also|further reading|sources)$/i;
 
-  // 1. Cache KV
-  if (env.SALMA_KB) {
+function _histTokens(s) {
+  return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\([^)]*\)/g, ' ')
+    .split(/[^a-z0-9]+/).filter(t => t.length >= 3 && !HIST_GENERICAS.has(t));
+}
+// ¿El título del artículo es ese sitio? Las palabras propias (sin «parque», «templo»…): al menos el 60 % de las del lugar y la mitad de las del título
+// («Mirador de San Nicolás» ya no se lleva la iglesia de al lado). «Restaurante El Faro» no encaja con «Faro de Cabo de Gata»; «Templo de Pashupatinath» sí con «Pashupatinath».
+function _histCoincide(place, title) {
+  const a = [...new Set(_histTokens(place))], b = [...new Set(_histTokens(title))];
+  if (!a.length || !b.length) return false;
+  const comunes = a.filter(t => b.includes(t)).length;
+  return comunes > 0 && comunes / a.length >= 0.6 && comunes / b.length >= 0.5;
+}
+function _histKm(lat1, lng1, lat2, lng2) {
+  const r = Math.PI / 180, dLat = (lat2 - lat1) * r, dLng = (lng2 - lng1) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin(dLng / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+}
+// Límites de Wikipedia (2026, mediawiki.org «Wikimedia APIs/Rate limits»): con User-Agent identificado, 200 consultas/minuto y
+// como mucho 3 a la vez. Por eso: cola de 3, consultas AGRUPADAS (muchos títulos/artículos en una sola) y caché en KV.
+// Si Wikipedia frena (429) o falla, NO se guarda nada: ese lugar se queda sin botón esta vez y se vuelve a mirar la próxima.
+let _wikiActivas = 0;
+const _wikiEspera = [];
+async function _wikiApi(lang, params) {
+  if (_wikiActivas >= 3) await new Promise(r => _wikiEspera.push(r));
+  _wikiActivas++;
+  try {
+    const qs = new URLSearchParams({ format: 'json', formatversion: '2', ...params });
+    const r = await fetch(`https://${lang}.wikipedia.org/w/api.php?${qs}`, { headers: { 'User-Agent': WIKI_UA }, signal: AbortSignal.timeout(6000) });
+    if (!r.ok) throw new Error('Wikipedia ' + r.status);
+    return await r.json();
+  } finally {
+    _wikiActivas--;
+    const sig = _wikiEspera.shift();
+    if (sig) sig();
+  }
+}
+// Página válida: existe, no es desambiguación y (si los dos tienen coordenadas) está a menos de 50 km de la parada.
+function _wikiPaginaValida(p, hasCoords, lat, lng) {
+  if (!p || p.missing || p.invalid || !p.pageid) return false;
+  if (p.pageprops && 'disambiguation' in p.pageprops) return false;
+  const c = p.coordinates && p.coordinates[0];
+  if (hasCoords && c && _histKm(lat, lng, c.lat, c.lon) > 50) return false;
+  return true;
+}
+const _wikiTieneCoords = p => !!(p && p.coordinates && p.coordinates[0]);
+const _wikiPropsBusqueda = { prop: 'coordinates|pageprops', ppprop: 'disambiguation', colimit: 'max', redirects: '1' };
+
+// Busca el artículo de cada lugar (lista), con el mínimo de consultas. Orden de preferencia, primero en español y luego en inglés:
+//   a) título exacto (con redirecciones: «Catedral de Sevilla» → su artículo) — TODOS los lugares en una sola consulta;
+//      sin coordenadas (un país), primero «Historia de X»;
+//   b) artículos a menos de 10 km de la parada cuyo nombre encaje (el más cercano) — una consulta por lugar que falte;
+//   c) búsqueda por nombre — una consulta por lugar que aún falte.
+// Siempre tiene que ser un LUGAR (artículo con coordenadas), salvo los «Historia de X»: así nunca cae en una persona.
+// Devuelve, en el mismo orden: { lang, pageid } | null (no hay) | { error: true } (Wikipedia no respondió: no se guarda).
+async function _wikiBuscarArticulos(lugares) {
+  const res = lugares.map(l => (HIST_NEGOCIO.test(l.place) ? null : undefined)); // undefined = aún sin decidir
+  const fallo = new Array(lugares.length).fill(false);
+  const pendientes = () => res.map((r, i) => (r === undefined ? i : -1)).filter(i => i >= 0);
+  const conCoords = l => typeof l.lat === 'number' && typeof l.lng === 'number';
+
+  for (const lang of ['es', 'en']) {
+    // a) Títulos exactos, todos juntos (de 50 en 50)
+    const pend = pendientes();
+    const titulosDe = i => {
+      const p = lugares[i].place;
+      return conCoords(lugares[i]) ? [p] : (lang === 'es' ? [`Historia de ${p}`, p] : [`History of ${p}`, p]);
+    };
+    const todos = [...new Set(pend.flatMap(titulosDe))];
+    const porTitulo = new Map();
+    for (let k = 0; k < todos.length; k += 50) {
+      try {
+        const d = await _wikiApi(lang, { action: 'query', titles: todos.slice(k, k + 50).join('|'), ..._wikiPropsBusqueda });
+        const q = d.query || {};
+        const paginas = new Map((q.pages || []).map(p => [p.title, p]));
+        const norm = new Map((q.normalized || []).map(n => [n.from, n.to]));
+        const red = new Map((q.redirects || []).map(n => [n.from, n.to]));
+        for (const t of todos.slice(k, k + 50)) {
+          let f = norm.get(t) || t;
+          f = red.get(f) || f;
+          if (paginas.has(f)) porTitulo.set(t, paginas.get(f));
+        }
+      } catch (_) { pend.forEach(i => { fallo[i] = true; }); }
+    }
+    for (const i of pend) {
+      const l = lugares[i];
+      for (const t of titulosDe(i)) {
+        const p = porTitulo.get(t);
+        const esHistoria = /^(historia de|history of) /i.test((p && p.title) || '');
+        if (_wikiPaginaValida(p, conCoords(l), l.lat, l.lng) && (esHistoria || _wikiTieneCoords(p))) { res[i] = { lang, pageid: p.pageid }; break; }
+      }
+    }
+    // b) Cerca de la parada, con nombre que encaje (todas a la vez; la cola deja 3 en marcha)
+    await Promise.all(pendientes().map(async i => {
+      const l = lugares[i];
+      if (!conCoords(l)) return;
+      try {
+        const d = await _wikiApi(lang, { action: 'query', list: 'geosearch', gscoord: `${l.lat}|${l.lng}`, gsradius: '10000', gslimit: '50' });
+        const c = ((d.query && d.query.geosearch) || []).filter(g => _histCoincide(l.place, g.title)).sort((x, y) => x.dist - y.dist)[0];
+        if (c) res[i] = { lang, pageid: c.pageid };
+      } catch (_) { fallo[i] = true; }
+    }));
+    // c) Búsqueda por nombre
+    await Promise.all(pendientes().map(async i => {
+      const l = lugares[i];
+      try {
+        const s = await _wikiApi(lang, { action: 'query', generator: 'search', gsrsearch: l.place, gsrlimit: '5', ..._wikiPropsBusqueda });
+        const ps = ((s.query && s.query.pages) || []).sort((x, y) => (x.index || 0) - (y.index || 0));
+        const p = ps.find(x => _histCoincide(l.place, x.title) && _wikiPaginaValida(x, conCoords(l), l.lat, l.lng) && _wikiTieneCoords(x));
+        if (p) res[i] = { lang, pageid: p.pageid };
+      } catch (_) { fallo[i] = true; }
+    }));
+  }
+  // Sin artículo: «no hay»; pero si alguna consulta de ese lugar falló, no se sabe → error (no se guarda)
+  return res.map((r, i) => (r ? r : (fallo[i] ? { error: true } : null)));
+}
+
+// Foto libre de cada archivo (autor y licencia), todas en una consulta. Solo libres (CC, dominio público): nada de «fair use».
+async function _wikiFotos(lang, archivos) {
+  const out = new Map();
+  const lista = [...new Set(archivos.filter(Boolean))];
+  for (let k = 0; k < lista.length; k += 50) {
     try {
-      const cached = await env.SALMA_KB.get(kvKey);
-      if (cached) {
-        return { historia: JSON.parse(cached), source: 'cache' };
+      const d = await _wikiApi(lang, { action: 'query', titles: lista.slice(k, k + 50).map(a => 'File:' + a).join('|'), prop: 'imageinfo',
+        iiprop: 'extmetadata', iiextmetadatafilter: 'Artist|LicenseShortName' });
+      const q = d.query || {};
+      const norm = new Map((q.normalized || []).map(n => [n.to, n.from]));
+      for (const p of q.pages || []) {
+        const md = (p.imageinfo && p.imageinfo[0] && p.imageinfo[0].extmetadata) || {};
+        const lic = (md.LicenseShortName && md.LicenseShortName.value) || '';
+        if (!/^(cc|public domain|pd|dominio p)/i.test(lic) || /non-free|fair use/i.test(lic)) continue;
+        const autor = String((md.Artist && md.Artist.value) || '').replace(/<[^>]*>/g, '')
+          .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+          .replace(/\s+/g, ' ').trim();
+        const nombre = String(norm.get(p.title) || p.title).replace(/^(File|Archivo):/, '');
+        out.set(nombre.replace(/ /g, '_'), { autor: autor.slice(0, 120) || 'Wikimedia Commons', licencia: lic });
       }
     } catch (_) {}
   }
-
-  // 2. Generar con Claude Haiku
-  const geoHint = hasCoords
-    ? `\n\nUBICACIÓN REAL DEL USUARIO: lat ${lat}, lng ${lng}. Si existe más de un lugar con el nombre o similar a "${placeName}" (nombres homónimos, tipo "Cementerio de los Ingleses" en Lisboa Y en Camariñas), usa el que esté geográficamente cerca de esas coordenadas — NUNCA el más famoso o más documentado si no es el que está cerca. Ante la duda de cuál es el real en esa zona, dilo en la propia "description" en vez de inventar o asumir el homónimo equivocado.`
-    : '';
-  const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra.${geoHint}
-
-Si "${placeName}" es una carretera, corredor o comarca (no un punto concreto): la narrativa de cada parada debe hablar del tramo o zona — qué pueblos atraviesa, por qué es célebre, curiosidades del recorrido — no fuerces datos de fundación de una ciudad puntual. Si es un país, cubre los hitos históricos más relevantes de su historia. Ojo: abreviaturas típicas de Google Maps como "Rte." (restaurante), "Avda."/"Av." (avenida), "C/" (calle), "Pza." (plaza) NO indican una carretera ni un corredor — son solo el nombre de un local o dirección; genera la historia de ESE lugar concreto (el negocio, el edificio, la calle), no de una ruta ni de una persona a la que haga referencia el nombre.
-
-{
-itle": "Nombre: subtítulo histórico",
-escription": "Descripción de 1-2 frases sobre la relevancia histórica del lugar",
-moji": "🏛️",
-ategory": "Europa|Asia|América|África|Oceanía",
-aradas": [
-{
-  "year": 1492,
-  "title": "Título del hito histórico",
-  "subtitle": "Una frase que contextualiza",
-  "content": "Párrafo narrativo de 3-5 frases explicando qué ocurrió, por qué importa y cómo afectó al lugar. Directo, sin paja.",
-  "key_facts": ["Dato clave 1", "Dato clave 2", "Dato clave 3"]
+  return out;
 }
 
+// Texto completo del artículo (para contar los hitos: solo al pulsar, un artículo cada vez), con su foto libre
+async function _wikiLeerArticulo(lang, pageid) {
+  const d = await _wikiApi(lang, { action: 'query', pageids: String(pageid), prop: 'extracts|pageimages|info', explaintext: '1',
+    exsectionformat: 'wiki', piprop: 'thumbnail|name', pithumbsize: '800', inprop: 'url' });
+  const p = d.query && d.query.pages && d.query.pages[0];
+  if (!p || p.missing) return null;
+  // Quitar secciones sin contenido propio (referencias, enlaces…)
+  const partes = String(_wikiSinDudosos(p.extract)).split(/\n(?===+ [^=\n]+ ==+\n?)/);
+  const texto = partes.filter(x => { const m = x.match(/^==+ ([^=\n]+) ==+/); return !(m && HIST_SECCIONES_FUERA.test(m[1].trim())); }).join('\n').trim();
+  const intro = (partes[0] || '').trim();
+  let foto = null;
+  if (p.thumbnail && p.pageimage) {
+    const f = (await _wikiFotos(lang, [p.pageimage])).get(String(p.pageimage).replace(/ /g, '_'));
+    if (f) foto = { src: p.thumbnail.source, ...f, pagina: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(p.pageimage)}` };
+  }
+  return { lang, pageid: p.pageid, titulo: p.title, url: p.fullurl, texto, intro, foto };
 }
+// Frases que la propia Wikipedia marca como sin fuente («[cita requerida]»…): se quitan del texto ANTES de que nadie las use
+// (ni el resumen ni Haiku). Por código, no por instrucción: Haiku las usaba aunque se le dijera que no.
+const WIKI_MARCA_DUDOSA = '\\[(?:cita requerida|cita necesaria|sin fuentes?|verificaci[oó]n requerida|¿?cu[aá]ndo\\??|citation needed|unreliable source\\??|dubious|when\\?|by whom\\?|according to whom\\?|verification needed)\\]';
+function _wikiSinDudosos(t) {
+  return String(t || '')
+    .replace(new RegExp('[^.\\n]*\\.\\s*' + WIKI_MARCA_DUDOSA, 'gi'), '')   // marca justo tras el punto: fuera esa frase
+    .replace(new RegExp('[^.\\n]*' + WIKI_MARCA_DUDOSA + '[^.\\n]*\\.?', 'gi'), ''); // marca dentro de la frase: fuera la frase entera
+}
+// Resumen para enseñar al instante: el principio del artículo, cortado en una frase (máx. ~700 caracteres)
+function _wikiResumen(intro) {
+  const t = String(_wikiSinDudosos(intro)).replace(/\s+/g, ' ').trim();
+  if (t.length <= 700) return t;
+  const corte = t.slice(0, 700), punto = corte.lastIndexOf('. ');
+  return punto > 200 ? corte.slice(0, punto + 1) : corte + '…';
+}
+// Resumen, foto y enlace de varios artículos del mismo idioma, en las mínimas consultas (de 20 en 20, el máximo de Wikipedia)
+async function _wikiResumenes(lang, pageids) {
+  const out = new Map();
+  for (let k = 0; k < pageids.length; k += 20) {
+    const ids = pageids.slice(k, k + 20);
+    const d = await _wikiApi(lang, { action: 'query', pageids: ids.join('|'), prop: 'extracts|pageimages|info', exintro: '1', explaintext: '1',
+      exlimit: 'max', piprop: 'thumbnail|name', pithumbsize: '800', pilimit: 'max', inprop: 'url' });
+    const paginas = (d.query && d.query.pages) || [];
+    const fotos = await _wikiFotos(lang, paginas.map(p => p.thumbnail && p.pageimage));
+    for (const p of paginas) {
+      if (!p || p.missing) continue;
+      // Artículo corto (esbozo): no da para contar una historia
+      if ((p.length || 0) < 3000) { out.set(p.pageid, { corto: true }); continue; }
+      const f = p.thumbnail && p.pageimage && fotos.get(String(p.pageimage).replace(/ /g, '_'));
+      out.set(p.pageid, {
+        articulo: { lang, pageid: p.pageid, titulo: p.title, url: p.fullurl },
+        resumen: _wikiResumen(p.extract),
+        foto: f ? { src: p.thumbnail.source, ...f, pagina: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(p.pageimage)}` } : null,
+        fuente: { nombre: 'Wikipedia', idioma: lang, titulo: p.title, url: p.fullurl, licencia: 'CC BY-SA 4.0' },
+      });
+    }
+  }
+  return out;
+}
+function _histSlug(s) {
+  return String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+const _histArtKey = l => `histart:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
+
+// ¿Qué lugares tienen historia con fuente? Devuelve, en el mismo orden, lo que se enseña al pulsar el botón:
+// { ok:true, articulo, resumen, foto, fuente, historia|null } o { ok:false } (sin botón). Gratis (Wikipedia) y guardado en KV:
+//   lugar → artículo (histart, 90 días; «no hay», 7) · artículo → resumen (histres, 30 días) · artículo → hitos (historia2, siempre).
+async function getHistoriasDisponibles(env, lugares) {
+  const L = lugares.map(l => ({
+    place: String((l && l.place) || '').trim().slice(0, 150),
+    lat: typeof (l && l.lat) === 'number' ? l.lat : undefined,
+    lng: typeof (l && l.lng) === 'number' ? l.lng : undefined,
+  }));
+  const out = L.map(l => (l.place.length < 2 ? { ok: false } : undefined));
+  const kv = env.SALMA_KB;
+  // 1. Lugar → artículo (caché, y lo que falte, a Wikipedia en grupo)
+  const arts = new Array(L.length);
+  await Promise.all(L.map(async (l, i) => {
+    if (out[i] || !kv) return;
+    try { const c = await kv.get(_histArtKey(l), 'json'); if (c) arts[i] = c.none ? null : c; } catch (_) {}
+  }));
+  const faltan = L.map((l, i) => i).filter(i => !out[i] && arts[i] === undefined);
+  if (faltan.length) {
+    const encontrados = await _wikiBuscarArticulos(faltan.map(i => L[i]));
+    await Promise.all(faltan.map(async (i, j) => {
+      const a = encontrados[j];
+      if (a && a.error) { out[i] = { ok: false, error: true }; return; }
+      arts[i] = a;
+      if (kv) { try { await kv.put(_histArtKey(L[i]), JSON.stringify(a || { none: true }), { expirationTtl: (a ? 90 : 7) * 86400 }); } catch (_) {} }
+    }));
+  }
+  L.forEach((l, i) => { if (!out[i] && !arts[i]) out[i] = { ok: false }; });
+  // 2. Artículo → resumen (caché, y lo que falte, a Wikipedia en grupo por idioma)
+  const clave = a => `${a.lang}:${a.pageid}`;
+  const res = new Map();
+  const unicos = [...new Map(L.map((l, i) => (!out[i] ? [clave(arts[i]), arts[i]] : null)).filter(Boolean)).values()];
+  await Promise.all(unicos.map(async a => {
+    if (!kv) return;
+    try { const c = await kv.get(`histres:${clave(a)}`, 'json'); if (c) res.set(clave(a), c); } catch (_) {}
+  }));
+  for (const lang of ['es', 'en']) {
+    const ids = unicos.filter(a => a.lang === lang && !res.has(clave(a))).map(a => a.pageid);
+    if (!ids.length) continue;
+    let leidos;
+    try { leidos = await _wikiResumenes(lang, ids); } catch (_) { continue; } // sin respuesta: esos lugares se quedan sin botón esta vez
+    for (const id of ids) {
+      const r = leidos.get(id);
+      if (!r) continue;
+      res.set(`${lang}:${id}`, r);
+      if (kv) { try { await kv.put(`histres:${lang}:${id}`, JSON.stringify(r), { expirationTtl: 30 * 86400 }); } catch (_) {} }
+    }
+  }
+  // 3. Hitos ya hechos (si alguien los pidió antes, salen al momento); «sin historia» = sin botón
+  const hitos = new Map();
+  await Promise.all(unicos.map(async a => {
+    if (!kv) return;
+    try { const h = await kv.get(`historia2:${clave(a)}`, 'json'); if (h) hitos.set(clave(a), h); } catch (_) {}
+  }));
+  return L.map((l, i) => {
+    if (out[i]) return out[i];
+    const k = clave(arts[i]), r = res.get(k), h = hitos.get(k);
+    if (!r) return { ok: false, error: true };
+    if (r.corto || (h && h.sin_historia)) return { ok: false };
+    return { ok: true, ...r, historia: h || null };
+  });
+}
+// Un solo lugar (botón de la web sin consulta previa, WhatsApp)
+async function getHistoriaResumen(env, place, lat, lng) {
+  const [r] = await getHistoriasDisponibles(env, [{ place, lat, lng }]);
+  if (r.error) throw new Error('Wikipedia no responde');
+  return r.ok ? r : { ok: false, sin_fuente: true };
+}
+async function getHistoriaArticulo(env, place, lat, lng) {
+  const r = await getHistoriaResumen(env, place, lat, lng);
+  return r.ok ? { lang: r.articulo.lang, pageid: r.articulo.pageid } : null;
+}
+
+const HISTORIA_TOOL = {
+  name: 'guardar_historia',
+  description: 'Entrega la historia del lugar contada solo con el texto del artículo.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      title: { type: 'string', description: 'Nombre: subtítulo histórico' },
+      description: { type: 'string', description: '1-2 frases sobre la relevancia histórica del lugar, sacadas del texto' },
+      emoji: { type: 'string', description: 'Un emoji que represente el lugar o su cultura' },
+      category: { type: 'string', enum: ['Europa', 'Asia', 'América', 'África', 'Oceanía'] },
+      paradas: {
+        type: 'array',
+        description: 'Hitos en orden cronológico (entre 2 y 6), solo los que aparecen en el texto',
+        items: {
+          type: 'object',
+          properties: {
+            year: { type: 'integer', description: 'Año, SOLO si aparece en el texto (negativo si es a.C.)' },
+            periodo: { type: 'string', description: 'Si el texto no da un año exacto: el periodo tal como lo dice (p. ej. «Siglo XVIII»)' },
+            title: { type: 'string', description: 'Título del hito' },
+            content: { type: 'string', description: '2-4 frases: qué ocurrió, contado solo con lo que dice el texto, sin conclusiones propias' },
+            key_facts: { type: 'array', items: { type: 'string' }, description: 'Hasta 3 datos clave, todos del texto' },
+          },
+          required: ['title', 'content'],
+        },
+      },
+    },
+    required: ['title', 'description', 'emoji', 'paradas'],
+  },
+};
+
+const REVISION_TOOL = {
+  name: 'citar_pruebas',
+  description: 'Entrega, para cada frase numerada, la cita literal del texto que la respalda (vacía si no la hay).',
+  input_schema: {
+    type: 'object',
+    properties: {
+      citas: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: { n: { type: 'integer' }, cita: { type: 'string', description: 'Fragmento LITERAL del texto, o vacío' } },
+          required: ['n', 'cita'],
+        },
+      },
+    },
+    required: ['citas'],
+  },
+};
+// Llamada a Claude Haiku con respuesta de forma fija (herramienta): la API entrega el objeto ya leído. Lanza si falla o se corta.
+async function _haikuHerramienta(env, prompt, tool, maxTokens) {
+  const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: maxTokens,
+      temperature: 0, // contar lo que dice el texto, no adornar
+      tools: [tool],
+      tool_choice: { type: 'tool', name: tool.name },
+      messages: [{ role: 'user', content: prompt }],
+    }),
+    // Ya no hace esperar a nadie (la web enseña antes el resumen): margen amplio para que no se corte a medias.
+    signal: AbortSignal.timeout(40000),
+  });
+  if (!res.ok) throw new Error('Claude ' + res.status);
+  const data = await res.json();
+  // Si se cortó por largo, NO se usa (se guardaría incompleta para siempre)
+  if (data.stop_reason === 'max_tokens') throw new Error('Respuesta cortada por largo');
+  return (data.content || []).find(b => b.type === 'tool_use' && b.name === tool.name)?.input || null;
+}
+
+// Historia por hitos a partir del artículo. Devuelve { historia, source } o { historia: null, sin_fuente: true }; lanza si falla
+// la llamada. «art» ({lang, pageid}) lo manda la web tras el resumen; si no viene, se busca el artículo por el nombre.
+// La caché va por ARTÍCULO: dos paradas que son el mismo sitio comparten historia, y nadie puede colar la de otro lugar.
+async function getHistoriaLugar(env, place, lat, lng, art) {
+  if (!art) art = await getHistoriaArticulo(env, place, lat, lng);
+  if (!art) return { historia: null, sin_fuente: true };
+  const kvKey = `historia2:${art.lang}:${art.pageid}`;
+  if (env.SALMA_KB) {
+    try {
+      const cached = await env.SALMA_KB.get(kvKey, 'json');
+      if (cached) return cached.sin_historia ? { historia: null, sin_fuente: true } : { historia: cached, source: 'cache' };
+    } catch (_) {}
+  }
+  const a = await _wikiLeerArticulo(art.lang, art.pageid);
+  if (!a || a.texto.length < 600) return { historia: null, sin_fuente: true };
+
+  const prompt = `Eres un historiador. Cuenta la historia de «${a.titulo}» usando ÚNICAMENTE el artículo de Wikipedia de abajo, y entrégala con la herramienta guardar_historia.
 
 REGLAS:
-- Entre 4 y 6 paradas cronológicas cubriendo los momentos más importantes
-- Los años pueden ser negativos (a.C.) si es relevante
-- El emoji debe representar el lugar o su cultura (bandera, monumento, símbolo)
-- Contenido en español, tono cercano y directo
-- Solo devuelve el JSON, sin markdown ni explicaciones`;
+- Solo hechos que estén escritos en el texto. No añadas fechas, nombres, cifras ni sucesos que no aparezcan en él, aunque los conozcas.
+- Cada hito cuenta hechos que el texto une a ESA fecha. No juntes en un hito cosas que el texto cuenta por separado ni le pongas a un hecho el año de otro.
+- "year" solo si el texto da ese año para ese hecho. Si habla de un periodo sin año exacto, deja "year" vacío y pon el periodo en "periodo".
+- Esto vale también para los títulos: sin exageraciones ni adornos que el texto no diga («décadas», «el más grande», «legendario»…). Si el texto dice «diez años», es «diez años».
+- Ni conclusiones ni valoraciones propias («demostrando…», «lo que muestra…», «su importancia…»): solo lo que el texto cuenta.
+- Si una frase del texto lleva la marca [cita requerida], [sin fuentes] o [citation needed], NO uses ese dato: la propia Wikipedia avisa de que no tiene fuente.
+- El título de cada hito no puede decir más que el texto (si dice «su existencia se remonta a», no es «fundación»).
+- Ante la duda sobre un dato, déjalo fuera.
+- Entre 2 y 6 hitos en orden cronológico. Si el texto apenas tiene historia, haz pocos hitos; si no tiene ninguna, entrega "paradas" vacío.
+- En español, aunque el artículo esté en otro idioma (traduce con fidelidad). Tono cercano y directo, sin paja.
 
-  try {
-    // 2a. Claude + Places en paralelo
-    const claudePromise = fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1800,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-      signal: AbortSignal.timeout(20000),
+ARTÍCULO (${a.lang}.wikipedia.org — «${a.titulo}»):
+${a.texto.slice(0, 15000)}`;
+
+  const historia = await _haikuHerramienta(env, prompt, HISTORIA_TOOL, 3000);
+  if (!historia || !historia.title || !Array.isArray(historia.paradas)) throw new Error('Historia incompleta');
+
+  // 2º paso, CONTROL (20 oct 2026): cada frase tiene que llevar su PRUEBA. Se numeran todas las frases (descripción, hitos y datos);
+  // Haiku copia LITERALMENTE del artículo el trozo que respalda cada una, y el CÓDIGO comprueba que ese trozo existe en el artículo
+  // y que los años/cifras de la frase están en él. Sin prueba válida, la frase se borra. (Un control que solo «pregunta si está
+  // bien» dejó pasar una frase inventada en la prueba; este no depende de que Haiku se dé cuenta.) Si el control falla, no se guarda.
+  if (historia.paradas.length >= 2) {
+    const frases = [];
+    const trocear = s => String(s || '').replace(/\s+/g, ' ').trim().split(/(?<=[.!?…])\s+(?=[A-ZÁÉÍÓÚÑ¿¡«"0-9])/).filter(x => x.trim());
+    trocear(historia.description).forEach(t => frases.push({ donde: 'desc', t }));
+    historia.paradas.forEach((p, i) => {
+      trocear(p.content).forEach(t => frases.push({ donde: 'hito', i, t }));
+      (p.key_facts || []).forEach((t, k) => frases.push({ donde: 'dato', i, k, t: String(t).trim() }));
     });
+    const lista = frases.map((f, n) => `[${n + 1}] ${f.t}`).join('\n');
+    const revision = await _haikuHerramienta(env, `Para CADA frase numerada de abajo, copia en "cita" el fragmento del TEXTO (artículo de Wikipedia) que la respalda: LITERAL, carácter por carácter, en el idioma del texto, una o dos frases como mucho. Si el TEXTO no respalda la frase (o solo una parte de ella), deja "cita" vacía. No respaldes con el texto algo que no dice.
 
-    const placesPromise = (async () => {
-      if (!env.GOOGLE_PLACES_KEY) return null;
-      const locBias = (lat && lng) ? `&location=${lat},${lng}&radius=50000` : '';
-      const r = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}&language=es${locBias}&key=${env.GOOGLE_PLACES_KEY}`,
-        { signal: AbortSignal.timeout(5000) }
-      );
-      const d = await r.json();
-      return d.results?.[0]?.photos?.[0]?.photo_reference || null;
-    })().catch(() => null);
+FRASES:
+${lista}
 
-    const [claudeRes, photoRef] = await Promise.all([claudePromise, placesPromise]);
-
-    if (!claudeRes.ok) throw new Error('Claude ' + claudeRes.status);
-
-    const claudeData = await claudeRes.json();
-    const raw = (claudeData.content?.[0]?.text || '').trim();
-
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('Claude no devolvió JSON válido');
-
-    const historia = JSON.parse(jsonMatch[0]);
-    historia.id = slug;
-    if (photoRef) historia.photo_ref = photoRef;
-
-    // 3. Guardar en KV PARA SIEMPRE (antes 30 días): la historia de un lugar no cambia y cada generación cuesta
-    // Claude + una búsqueda de Google. Se espera la escritura (sin await podía perderse). Si alguna historia sale
-    // mal, se purga a mano: `wrangler kv key delete historia:<slug>[:lat:lng]`.
-    if (env.SALMA_KB) {
-      try { await env.SALMA_KB.put(kvKey, JSON.stringify(historia)); } catch (_) {}
-    }
-
-    return { historia, source: 'claude' };
-  } catch (e) {
-    throw e;
+TEXTO:
+${a.texto.slice(0, 15000)}`, REVISION_TOOL, 4000);
+    const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+    const textoN = norm(a.texto);
+    const cifras = s => (String(s).replace(/(\d)[.,\s](?=\d{3}\b)/g, '$1').match(/\d+/g) || []);
+    const citas = new Map(((revision && revision.citas) || []).map(c => [c.n, c.cita]));
+    const vale = (f, n) => {
+      const c = norm(citas.get(n + 1));
+      if (c.length < 15 || !textoN.includes(c)) return false;            // la prueba tiene que estar de verdad en el artículo
+      const enCita = new Set(cifras(citas.get(n + 1)));
+      return cifras(f.t).every(d => enCita.has(d));                       // y sus años/cifras, en la prueba
+    };
+    const ok = frases.map(vale);
+    // Títulos: un título resume, no se puede citar (el control nunca les encuentra cita). Pero si el hito del año X cuenta en su
+    // párrafo algo de OTRO año (una frase con otro año y sin el suyo), el título puede estar mezclándolos («1248 — Conquista y
+    // caída de las bolas», que cayeron en 1356). Entonces se usa el principio de su propio párrafo (ya comprobado). Lo decide el código.
+    const anios = t => (String(t).match(/\b(1\d{3}|20\d{2})\b/g) || []).map(Number);
+    const mezcla = (p, frasesHito) => typeof p.year === 'number' && p.year > 0
+      && frasesHito.some(t => { const a = anios(t); return a.length > 0 && !a.includes(p.year) && a.some(y => Math.abs(y - p.year) >= 5); });
+    const tituloDe = texto => { const t = String(texto || '').split(/[.;:]/)[0].trim(); return t.length <= 70 ? t : t.slice(0, 70).replace(/\s+\S*$/, '') + '…'; };
+    historia.description = frases.filter((f, n) => f.donde === 'desc' && ok[n]).map(f => f.t).join(' ');
+    historia.paradas = historia.paradas.map((p, i) => {
+      const content = frases.filter((f, n) => f.donde === 'hito' && f.i === i && ok[n]).map(f => f.t).join(' ');
+      const frasesHito = frases.filter((f, n) => f.donde === 'hito' && f.i === i && ok[n]).map(f => f.t);
+      return {
+        ...p,
+        title: mezcla(p, frasesHito) ? tituloDe(content) : p.title,
+        content,
+        key_facts: frases.filter((f, n) => f.donde === 'dato' && f.i === i && ok[n]).map(f => f.t),
+      };
+    }).filter(p => p.content.length > 20);
+    historia.revisada = { frases: frases.length, quitadas: ok.filter(x => !x).length };
   }
+  if (historia.paradas.length < 2) {
+    // El artículo no tiene historia que contar: se apunta para no volver a pagar por él
+    if (env.SALMA_KB) { try { await env.SALMA_KB.put(kvKey, JSON.stringify({ sin_historia: true }), { expirationTtl: 30 * 86400 }); } catch (_) {} }
+    return { historia: null, sin_fuente: true };
+  }
+  historia.id = `${a.lang}-${a.pageid}`;
+  historia.fuente = { nombre: 'Wikipedia', idioma: a.lang, titulo: a.titulo, url: a.url, licencia: 'CC BY-SA 4.0' };
+  if (a.foto) { historia.thumbnail = a.foto.src; historia.foto = a.foto; }
+  if (env.SALMA_KB) { try { await env.SALMA_KB.put(kvKey, JSON.stringify(historia)); } catch (_) {} }
+  return { historia, source: 'claude' };
 }
 
 // guardar_nota por WhatsApp (25 sept 2026) — en la web la guarda el navegador
@@ -5792,7 +6148,7 @@ function waFormatHistoriaCorta(h) {
   if (h.description) head.push(h.description);
   let out = head.join('\n') + '\n';
   for (const p of (h.paradas || []).slice(0, 6)) {
-    const y = typeof p.year === 'number' ? (p.year < 0 ? `${-p.year} a.C.` : String(p.year)) : '';
+    const y = typeof p.year === 'number' ? (p.year < 0 ? `${-p.year} a.C.` : String(p.year)) : (p.periodo || '');
     const line = `\n*${y ? y + ' — ' : ''}${p.title || ''}*${p.subtitle ? ': ' + p.subtitle : ''}`;
     if ((out + line + cierre).length > 1500) break;
     out += line;
@@ -5810,10 +6166,11 @@ function waFormatHistoria(h) {
   const lines = [`${h.emoji || '📖'} *${h.title || 'Historia'}*`];
   if (h.description) lines.push(h.description);
   for (const p of (h.paradas || []).slice(0, 6)) {
-    const y = typeof p.year === 'number' ? (p.year < 0 ? `${-p.year} a.C.` : String(p.year)) : '';
+    const y = typeof p.year === 'number' ? (p.year < 0 ? `${-p.year} a.C.` : String(p.year)) : (p.periodo || '');
     lines.push(`\n*${y ? y + ' — ' : ''}${p.title || ''}*\n${p.content || ''}`);
   }
-  return lines.join('\n').slice(0, 3800);
+  const fuente = h.fuente && h.fuente.url ? `\n\nFuente: Wikipedia (${h.fuente.licencia || 'CC BY-SA'}) — ${h.fuente.url}` : '';
+  return lines.join('\n').slice(0, 3800 - fuente.length) + fuente;
 }
 
 // Descarga un adjunto de Twilio (fotos, audios). Twilio exige Basic auth en las URLs de media.
@@ -13132,9 +13489,9 @@ export default {
           }
 
           // "historia" (tras la oferta 📖) o "historia de X" → misma historia que el botón de la web
-          // (getHistoriaLugar: Claude Haiku + foto de Google, caché KV permanente por lugar).
-          // Coste (§8): solo la 1ª vez que alguien pide un lugar (~0,005 € Haiku + 1 búsqueda de
-          // Google ~0,03 €); después sale de caché, gratis.
+          // (getHistoriaLugar: artículo de Wikipedia + Claude Haiku, caché KV permanente por artículo).
+          // Coste (§8): solo la 1ª vez por artículo (~1,5-3 cént. de Haiku, historia + control; Wikipedia gratis, sin Google);
+          // después sale de caché, gratis.
           // "sí"/"más" justo después de la historia corta → versión completa (sale de la caché,
           // sin coste de API). Cualquier otra cosa cancela la oferta.
           let waHistMore = null;
@@ -13144,7 +13501,7 @@ export default {
             if (!waImageBlock && isWaYesMore(body)) {
               try {
                 const { historia } = await getHistoriaLugar(env, waHistMore);
-                await sendWhatsAppMessage(env, from, waFormatHistoria(historia));
+                await sendWhatsAppMessage(env, from, historia ? waFormatHistoria(historia) : `No encuentro historia documentada de ${waHistMore}.`);
               } catch (e) {
                 console.error('[WhatsApp] Error historia completa:', e.message);
                 await sendWhatsAppMessage(env, from, 'Se me ha atascado — pídemela otra vez en un rato.');
@@ -13166,6 +13523,7 @@ export default {
             if (!gateH.ok) { await sendWhatsAppMessage(env, from, gateH.message); return; }
             try {
               const { historia } = await getHistoriaLugar(env, place);
+              if (!historia) { await sendWhatsAppMessage(env, from, `No encuentro historia documentada de ${place} — solo cuento historias que tengan fuente.`); return; }
               await usageRecord(env, planH, { msgs: 1 });
               // Versión corta en UN mensaje + "¿Te explico más?" (Paco, 25 sept 2026).
               const corta = waFormatHistoriaCorta(historia);
@@ -13333,7 +13691,14 @@ export default {
               }
             } catch (_) {}
           }
-          if (!footer && waHx.place && !allFlightSearchesFailed) footer = `📖 ¿Te cuento la historia de ${waHx.place}? Escribe *historia*.`;
+          // Solo se ofrece si hay historia con fuente (20 oct 2026): consulta gratis a Wikipedia (con caché), máx. 4 s para no retrasar la respuesta.
+          if (!footer && waHx.place && !allFlightSearchesFailed) {
+            const hayHistoria = await Promise.race([
+              getHistoriaResumen(env, waHx.place).then(r => !!(r && r.ok)).catch(() => false),
+              new Promise(r => setTimeout(() => r(false), 4000)),
+            ]);
+            if (hayHistoria) footer = `📖 ¿Te cuento la historia de ${waHx.place}? Escribe *historia*.`;
+          }
           if (!footer && usedTools && !allFlightSearchesFailed) footer = await waMaybeReferral(env, from);
           if (!footer && !usedTools && baseReply === rawReply) footer = await waMaybeTip(env, from);
           const reply = footer ? baseReply + '\n\n' + footer : baseReply;
@@ -14478,7 +14843,36 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
-    // ─── POST /historia-lugar — Genera historia de un lugar con Claude Haiku ───
+    // ─── POST /historia-disponibles — De una lista de lugares, cuáles tienen historia con fuente (0 €). La web solo pone el botón en esos ───
+    if (request.method === 'POST' && url.pathname === '/historia-disponibles') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      let body;
+      try { body = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'JSON inválido' }), { status: 400, headers: corsH });
+      }
+      const lugares = Array.isArray(body && body.lugares) ? body.lugares.slice(0, 40) : [];
+      return new Response(JSON.stringify({ resultados: await getHistoriasDisponibles(env, lugares) }), { headers: corsH });
+    }
+
+    // ─── POST /historia-resumen — Artículo de Wikipedia del lugar: resumen, foto libre y enlace, al instante (0 €) ───
+    if (request.method === 'POST' && url.pathname === '/historia-resumen') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      let body;
+      try { body = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'JSON inválido' }), { status: 400, headers: corsH });
+      }
+      const { place, lat, lng } = body;
+      if (!place || typeof place !== 'string' || place.trim().length < 2) {
+        return new Response(JSON.stringify({ error: 'Falta el nombre del lugar' }), { status: 400, headers: corsH });
+      }
+      try {
+        return new Response(JSON.stringify(await getHistoriaResumen(env, place.trim().slice(0, 150), lat, lng)), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 502, headers: corsH });
+      }
+    }
+
+    // ─── POST /historia-lugar — Historia por hitos sacada del artículo de Wikipedia (Claude Haiku, ver getHistoriaLugar) ───
     if (request.method === 'POST' && url.pathname === '/historia-lugar') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
       let body;
@@ -14490,10 +14884,13 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       if (!place || typeof place !== 'string' || place.trim().length < 2) {
         return new Response(JSON.stringify({ error: 'Falta el nombre del lugar' }), { status: 400, headers: corsH });
       }
+      // Artículo ya encontrado por /historia-resumen (se valida la forma; la caché va por artículo)
+      const art = (body.articulo && ['es', 'en'].includes(body.articulo.lang) && Number.isInteger(body.articulo.pageid) && body.articulo.pageid > 0)
+        ? { lang: body.articulo.lang, pageid: body.articulo.pageid } : null;
 
-      // Lógica en getHistoriaLugar() (25 sept 2026) — compartida con WhatsApp.
+      // Lógica en getHistoriaLugar() — compartida con WhatsApp.
       try {
-        return new Response(JSON.stringify(await getHistoriaLugar(env, place, lat, lng)), { headers: corsH });
+        return new Response(JSON.stringify(await getHistoriaLugar(env, place.trim().slice(0, 150), lat, lng, art)), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }

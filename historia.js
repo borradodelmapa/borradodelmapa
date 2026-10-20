@@ -238,25 +238,62 @@ const historiaModule = (() => {
     return '';
   }
 
-  // ─── Buscar lugar en el Worker ────────────────────────────────────────────
+  // Los textos vienen de Wikipedia: siempre escapados antes de pintarlos
+  function _esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
 
-  async function _buscarHistoria(place, lat, lng) {
-    const apiUrl = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
-    const res = await fetch(`${apiUrl}/historia-lugar`, {
+  // Año del hito, o el periodo tal como lo dice la fuente («Siglo XVIII») si no hay año exacto
+  function _anio(p) {
+    if (typeof p.year === 'number') return p.year < 0 ? `${-p.year} a.C.` : String(p.year);
+    return p.periodo || '';
+  }
+
+  function _fuenteHTML(f) {
+    if (!f || !f.url) return '';
+    return `<p class="hist-inline-fuente" style="font-size:12px;opacity:.75;margin:8px 0 0">Fuente: <a href="${_esc(f.url)}" target="_blank" rel="noopener nofollow" style="color:inherit;text-decoration:underline">Wikipedia — ${_esc(f.titulo || '')}</a> · ${_esc(f.licencia || 'CC BY-SA')}</p>`;
+  }
+
+  function _fotoCreditoHTML(foto) {
+    if (!foto) return '';
+    return `<p class="hist-inline-credito" style="font-size:11px;opacity:.65;margin:4px 0 0">Foto: <a href="${_esc(foto.pagina)}" target="_blank" rel="noopener nofollow" style="color:inherit;text-decoration:underline">${_esc(foto.autor)}</a> · ${_esc(foto.licencia)}</p>`;
+  }
+
+  // ─── Buscar lugar en el Worker ────────────────────────────────────────────
+  // Desde el 20 oct 2026 la historia sale SOLO de Wikipedia (ver getHistoriaLugar en el Worker). Dos tiempos:
+  //   _buscarResumen → al instante: artículo, resumen, foto libre (y la historia si ya estaba hecha).
+  //   _buscarHistoria → los hitos contados con ese artículo y comprobados frase a frase (~20-30 s la primera vez; luego, caché). Null si no hay fuente.
+
+  const _API = () => window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
+
+  async function _buscarResumen(place, lat, lng) {
+    const res = await fetch(`${_API()}/historia-resumen`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ place, lat, lng }),
-      signal: AbortSignal.timeout(25000),
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!res.ok) throw new Error('Error ' + res.status);
+    return res.json();
+  }
+
+  async function _buscarHistoria(place, lat, lng, articulo) {
+    const res = await fetch(`${_API()}/historia-lugar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ place, lat, lng, articulo: articulo || undefined }),
+      signal: AbortSignal.timeout(75000), // la 1ª vez: historia + control con citas (~20-30 s); luego, caché
     });
     if (!res.ok) throw new Error('Error ' + res.status);
     const data = await res.json();
-    return data.historia;
+    return data.historia || null;
   }
 
   function _mostrarEstadoBusqueda(msg, isError) {
     const el = document.getElementById('hist-search-status');
     if (!el) return;
     el.textContent = msg;
+    el.style.whiteSpace = 'pre-line';
     el.className = 'hist-search-status' + (isError ? ' hist-search-status--error' : '');
     el.style.display = msg ? '' : 'none';
   }
@@ -270,7 +307,18 @@ const historiaModule = (() => {
     if (gpsBtn) gpsBtn.disabled = true;
 
     try {
-      const historia = await _buscarHistoria(place.trim(), lat, lng);
+      // Primero el resumen (al instante): mientras se preparan los hitos, ya se lee algo cierto
+      const r = await _buscarResumen(place.trim(), lat, lng);
+      if (r && r.ok && !r.historia) {
+        _mostrarEstadoBusqueda((r.resumen || '') + '\n\nPreparando la historia completa…');
+      }
+      const historia = (r && r.ok) ? (r.historia || await _buscarHistoria(place.trim(), lat, lng, r.articulo)) : null;
+      if (!historia) {
+        _mostrarEstadoBusqueda('No encuentro historia documentada de "' + place + '". Solo cuento historias que tengan fuente.', true);
+        if (btn) btn.disabled = false;
+        if (gpsBtn) gpsBtn.disabled = false;
+        return;
+      }
       _renderDetalle(historia);
     } catch (e) {
       _mostrarEstadoBusqueda('No pude generar la historia de "' + place + '". Prueba con otro nombre.', true);
@@ -399,7 +447,7 @@ const historiaModule = (() => {
 
     const timelineItems = historia.paradas.map((p, i) => `
       <button class="hist-tl-item ${i === 0 ? 'hist-tl-item--active' : ''}" data-idx="${i}">
-        <span class="hist-tl-year">${p.year}</span>
+        <span class="hist-tl-year">${_esc(_anio(p))}</span>
         <span class="hist-tl-dot"></span>
       </button>`).join('');
 
@@ -411,10 +459,11 @@ const historiaModule = (() => {
         <div class="hist-detalle-header">
           <div class="hist-detalle-thumb" style="background-image:url('${_thumbUrl(historia)}')"></div>
           <div class="hist-detalle-info">
-            <span class="hist-card-cat">${historia.category}</span>
-            <h1 class="hist-detalle-title">${historia.emoji} ${historia.title}</h1>
-            <p class="hist-detalle-desc">${historia.description}</p>
-            <p class="hist-detalle-meta">📍 ${historia.paradas.length} paradas · ⏱ ${historia.duration_minutes} min</p>
+            ${historia.category ? `<span class="hist-card-cat">${_esc(historia.category)}</span>` : ''}
+            <h1 class="hist-detalle-title">${_esc(historia.emoji || '')} ${_esc(historia.title)}</h1>
+            <p class="hist-detalle-desc">${_esc(historia.description || '')}</p>
+            <p class="hist-detalle-meta">📍 ${historia.paradas.length} paradas${historia.duration_minutes ? ` · ⏱ ${historia.duration_minutes} min` : ''}</p>
+            ${_fuenteHTML(historia.fuente)}${_fotoCreditoHTML(historia.foto)}
           </div>
         </div>
 
@@ -483,7 +532,7 @@ const historiaModule = (() => {
     if (btnNext) btnNext.disabled = idx === historia.paradas.length - 1;
 
     const factsHTML = parada.key_facts && parada.key_facts.length
-      ? `<ul class="hist-facts">${parada.key_facts.map(f => `<li>${f}</li>`).join('')}</ul>`
+      ? `<ul class="hist-facts">${parada.key_facts.map(f => `<li>${_esc(f)}</li>`).join('')}</ul>`
       : '';
 
     const imgSrc = parada.image || _thumbUrl(_currentHistoria);
@@ -495,10 +544,10 @@ const historiaModule = (() => {
       <div class="hist-parada">
         ${imgHTML}
         <div class="hist-parada-body">
-          <div class="hist-parada-year-badge">${parada.year}</div>
-          <h2 class="hist-parada-title">${parada.title}</h2>
-          <p class="hist-parada-subtitle">${parada.subtitle}</p>
-          <p class="hist-parada-content">${parada.content}</p>
+          <div class="hist-parada-year-badge">${_esc(_anio(parada))}</div>
+          <h2 class="hist-parada-title">${_esc(parada.title)}</h2>
+          ${parada.subtitle ? `<p class="hist-parada-subtitle">${_esc(parada.subtitle)}</p>` : ''}
+          <p class="hist-parada-content">${_esc(parada.content)}</p>
           ${factsHTML}
           <button class="hist-tts-btn" id="hist-tts-btn">🔊 Escuchar</button>
         </div>
@@ -540,50 +589,143 @@ const historiaModule = (() => {
 
   function _paradaCompactHTML(p) {
     const factsHTML = p.key_facts && p.key_facts.length
-      ? `<ul class="hist-inline-facts">${p.key_facts.map(f => `<li>${f}</li>`).join('')}</ul>`
+      ? `<ul class="hist-inline-facts">${p.key_facts.map(f => `<li>${_esc(f)}</li>`).join('')}</ul>`
       : '';
     return `
       <div class="hist-inline-parada">
-        <div class="hist-inline-year">${p.year}</div>
+        <div class="hist-inline-year">${_esc(_anio(p))}</div>
         <div class="hist-inline-body">
-          <h4 class="hist-inline-ptitle">${p.title}</h4>
-          ${p.subtitle ? `<p class="hist-inline-psub">${p.subtitle}</p>` : ''}
-          <p class="hist-inline-pcontent">${p.content}</p>
+          <h4 class="hist-inline-ptitle">${_esc(p.title)}</h4>
+          ${p.subtitle ? `<p class="hist-inline-psub">${_esc(p.subtitle)}</p>` : ''}
+          <p class="hist-inline-pcontent">${_esc(p.content)}</p>
           ${factsHTML}
         </div>
       </div>`;
   }
 
+  // ¿Tiene este lugar historia con fuente? (20 oct 2026) Se pregunta al Worker por TODOS los lugares de la guía en un solo paquete
+  // (el Worker agrupa las consultas a Wikipedia, que limita a 200/min). La respuesta trae ya el resumen: al pulsar sale al momento. Se recuerda por lugar
+  // mientras la página está abierta (al repintar la guía no se vuelve a preguntar). Si falla, ese lugar se queda sin botón.
+  const _dispCache = new Map();
+  let _cola = [];
+  let _colaTimer = null;
+
+  function _clave(place, lat, lng) {
+    return `${place}|${lat == null ? '' : lat}|${lng == null ? '' : lng}`;
+  }
+
+  function _disponible(place, lat, lng) {
+    const k = _clave(place, lat, lng);
+    if (_dispCache.has(k)) return _dispCache.get(k);
+    const p = new Promise(res => _cola.push({ place, lat, lng, res }));
+    _dispCache.set(k, p);
+    if (!_colaTimer) _colaTimer = setTimeout(_vaciarCola, 60);
+    return p;
+  }
+
+  function _vaciarCola() {
+    _colaTimer = null;
+    const todos = _cola.splice(0);
+    for (let i = 0; i < todos.length; i += 40) {
+      const lote = todos.slice(i, i + 40);
+      fetch(`${_API()}/historia-disponibles`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lugares: lote.map(x => ({ place: x.place, lat: typeof x.lat === 'number' ? x.lat : undefined, lng: typeof x.lng === 'number' ? x.lng : undefined })) }),
+        signal: AbortSignal.timeout(30000),
+      })
+        .then(r => { if (!r.ok) throw new Error('Error ' + r.status); return r.json(); })
+        .then(d => lote.forEach((x, j) => {
+          const r = (d.resultados || [])[j] || { ok: false };
+          if (r.error) _dispCache.delete(_clave(x.place, x.lat, x.lng)); // fallo puntual: se reintenta al repintar
+          x.res(r);
+        }))
+        .catch(() => lote.forEach(x => { _dispCache.delete(_clave(x.place, x.lat, x.lng)); x.res({ ok: false, error: true }); }));
+    }
+  }
+
+  // Botón «Historia de …» (20 oct 2026). Solo aparece si el lugar tiene artículo de Wikipedia que encaje (si no, el hueco ni se ve).
+  // Al pulsar: el resumen con su foto libre y su fuente, al momento; debajo, «Preparando la historia completa…» y, cuando llegan,
+  // los hitos contados con ese artículo (la siguiente persona los ve al instante).
   function renderCompactInto(container, opts) {
     if (!container || !opts || !opts.place) return;
     const place = opts.place;
+    const turno = {};
+    container._histTurno = turno;
+    container.innerHTML = '';
+    container.style.display = 'none';
+    _disponible(place, opts.lat, opts.lng).then(r => {
+      if (container._histTurno !== turno) return; // se repintó mientras tanto
+      if (r && r.ok) { container.style.display = ''; _pintarBoton(container, opts, r); }
+    });
+  }
 
-    container.innerHTML = `<button class="hist-inline-toggle" type="button">📖 Historia de ${place}</button>`;
+  function _pintarBoton(container, opts, rPrevio) {
+    const place = opts.place;
+    container.innerHTML = `<button class="hist-inline-toggle" type="button">📖 Historia de ${_esc(place)}</button>`;
     const btn = container.querySelector('.hist-inline-toggle');
 
     async function _abrir() {
-      btn.disabled = true;
-      btn.textContent = 'Buscando historia...';
+      let r = rPrevio;
+      if (!r) {
+        btn.disabled = true;
+        btn.textContent = 'Buscando historia...';
+        try {
+          r = await _buscarResumen(place, opts.lat, opts.lng);
+        } catch (e) {
+          btn.disabled = false;
+          btn.textContent = 'No se pudo cargar — reintentar';
+          btn.addEventListener('click', _abrir, { once: true });
+          return;
+        }
+        if (!r || !r.ok) { container.innerHTML = ''; container.style.display = 'none'; return; }
+      }
+      const h = r.historia;
+      const titulo = h ? `${h.emoji || ''} ${h.title}` : (r.articulo && r.articulo.titulo) || place;
+      container.innerHTML = `
+        <button class="hist-inline-toggle hist-inline-toggle--open" type="button">📖 ${_esc(titulo)}</button>
+        <div class="hist-inline-body-wrap">
+          ${r.foto ? `<div class="hist-inline-thumb" style="background-image:url('${_esc(r.foto.src)}')"></div>${_fotoCreditoHTML(r.foto)}` : ''}
+          ${r.resumen ? `<p class="hist-inline-desc">${_esc(r.resumen)}</p>` : ''}
+          <div class="hist-inline-timeline">${h ? (h.paradas || []).map(_paradaCompactHTML).join('') : '<p class="hist-inline-desc hist-inline-preparando" style="opacity:.7;font-style:italic">Preparando la historia completa y comprobando cada dato con la fuente…</p>'}</div>
+          ${_fuenteHTML(r.fuente)}
+        </div>`;
+      container.querySelector('.hist-inline-toggle--open').addEventListener('click', () => {
+        const body = container.querySelector('.hist-inline-body-wrap');
+        if (body) body.hidden = !body.hidden;
+      });
+      if (h) return;
+      // Los hitos se preparan mientras se lee el resumen
+      const tl = container.querySelector('.hist-inline-timeline');
+      const pintarHitos = hist => {
+        if (hist && hist.paradas && hist.paradas.length) {
+          tl.innerHTML = hist.paradas.map(_paradaCompactHTML).join('');
+          const tg = container.querySelector('.hist-inline-toggle--open');
+          if (tg) tg.textContent = `📖 ${hist.emoji || ''} ${hist.title}`;
+          r.historia = hist; // al cerrar y volver a abrir, ya está
+        } else {
+          tl.innerHTML = ''; // el artículo no tiene historia que contar: se queda el resumen
+        }
+      };
       try {
-        const historia = await _buscarHistoria(place, opts.lat, opts.lng);
-        const thumb = _thumbUrl(historia);
-        const paradasHTML = (historia.paradas || []).map(_paradaCompactHTML).join('');
-        container.innerHTML = `
-          <button class="hist-inline-toggle hist-inline-toggle--open" type="button">📖 ${historia.emoji || ''} ${historia.title || place}</button>
-          <div class="hist-inline-body-wrap">
-            ${thumb ? `<div class="hist-inline-thumb" style="background-image:url('${thumb}')"></div>` : ''}
-            ${historia.description ? `<p class="hist-inline-desc">${historia.description}</p>` : ''}
-            <div class="hist-inline-timeline">${paradasHTML}</div>
-          </div>`;
-        container.querySelector('.hist-inline-toggle--open').addEventListener('click', () => {
-          const body = container.querySelector('.hist-inline-body-wrap');
-          if (body) body.hidden = !body.hidden;
-        });
+        pintarHitos(await _buscarHistoria(place, opts.lat, opts.lng, r.articulo));
       } catch (e) {
-        btn.disabled = false;
-        btn.textContent = 'No se pudo cargar — reintentar';
-        btn.addEventListener('click', _abrir, { once: true });
-        return;
+        tl.innerHTML = '';
+        const reint = document.createElement('button');
+        reint.type = 'button';
+        reint.className = 'hist-inline-toggle';
+        reint.textContent = 'Ver la historia completa — reintentar';
+        reint.addEventListener('click', async () => {
+          reint.disabled = true;
+          reint.textContent = 'Preparando la historia completa…';
+          try {
+            pintarHitos(await _buscarHistoria(place, opts.lat, opts.lng, r.articulo));
+          } catch (_) {
+            reint.disabled = false;
+            reint.textContent = 'Ver la historia completa — reintentar';
+          }
+        });
+        tl.appendChild(reint);
       }
     }
 
