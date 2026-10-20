@@ -82,17 +82,6 @@
    "fuente": "View from Bahundanda.jpg",
    "cercana": true
   },
-  "Chamje": {
-   "file": "s3.jpg",
-   "w": 720,
-   "h": 479,
-   "alt": "Paisaje cerca de Chamje, Circuito de Annapurna",
-   "autor": "Kondephy",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ngadi_bazar_North.jpg",
-   "fuente": "Ngadi bazar North.jpg",
-   "cercana": true
-  },
   "Chame": {
    "file": "s6.jpg",
    "w": 720,
@@ -115,28 +104,6 @@
    "fuente": "The Marsyangdi river near Pisang.jpg",
    "cercana": true
   },
-  "Manang": {
-   "file": "s8.jpg",
-   "w": 720,
-   "h": 405,
-   "alt": "Paisaje cerca de Manang, Circuito de Annapurna",
-   "autor": "Deepa999",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Inside_prayer_wheels.jpg",
-   "fuente": "Inside prayer wheels.jpg",
-   "cercana": true
-  },
-  "Muktinath": {
-   "file": "s12.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Muktinath, Circuito de Annapurna",
-   "autor": "Jmhullot",
-   "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Jharkot.jpg",
-   "fuente": "Jharkot.jpg",
-   "cercana": true
-  },
   "Kagbeni": {
    "file": "s13.jpg",
    "w": 720,
@@ -146,28 +113,6 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nilgiri_North_seen_from_Kagbeni.jpg",
    "fuente": "Nilgiri North seen from Kagbeni.jpg",
-   "cercana": true
-  },
-  "Jomsom": {
-   "file": "s15.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Jomsom, Circuito de Annapurna",
-   "autor": "Jean-Marie Hullot (jmhullot on Flickr) https://www.flickr.com/people/jmhullot/",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Folded_Himalayan_Rock_Layers_at_Kali_Gandaki_in_Nepal_2014.jpg",
-   "fuente": "Folded Himalayan Rock Layers at Kali Gandaki in Nepal 2014.jpg",
-   "cercana": true
-  },
-  "Ghasa": {
-   "file": "s16.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Paisaje cerca de Ghasa, Circuito de Annapurna",
-   "autor": "Александр Пушкин",
-   "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Kaligandaki_valley,_mt.Dhaulagiri_-_panoramio.jpg",
-   "fuente": "Kaligandaki valley, mt.Dhaulagiri - panoramio.jpg",
    "cercana": true
   },
   "Tatopani": {
@@ -190,17 +135,6 @@
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ghode_Pani_33200,_Nepal_-_panoramio.jpg",
    "fuente": "Ghode Pani 33200, Nepal - panoramio.jpg",
-   "cercana": true
-  },
-  "Poon Hill": {
-   "file": "s19.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Poon Hill, Circuito de Annapurna",
-   "autor": "Fpoylo",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Mountain_Flight,_Annapurna.jpg",
-   "fuente": "Mountain Flight, Annapurna.jpg",
    "cercana": true
   }
  }

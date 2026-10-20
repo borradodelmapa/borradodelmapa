@@ -234,7 +234,7 @@ function buildStaticItinerary(route, appSlug, fotos) {
     for (const stop of stops) {
       n++;
       const name = stop.name || '';
-      const foto = fotos && fotos.stops && fotos.stops[name];
+      const foto = fotos && ((fotos.porIndice && fotos.porIndice[n - 1]) || (fotos.stops && fotos.stops[name]));
       html += `    <article class="destino-stop${foto ? ' destino-stop--foto' : ''}">\n`;
       html += `      <span class="destino-stop-num">${n}</span>\n`;
       if (foto) html += `      <figure class="destino-stop-foto"><img src="/destinos/img/${appSlug}/${foto.file}" alt="${escapeHTML(foto.alt)}" width="${foto.w}" height="${foto.h}" loading="lazy" decoding="async"><figcaption>${fotoCredito(foto)}</figcaption></figure>\n`;
@@ -356,7 +356,7 @@ function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
         "@type": "ItemList",
         "numberOfItems": route.stops.length,
         "itemListElement": route.stops.map((s, i) => {
-          const foto = fotos && fotos.stops && fotos.stops[s.name];
+          const foto = fotos && ((fotos.porIndice && fotos.porIndice[i]) || (fotos.stops && fotos.stops[s.name]));
           const place = { "@type": "TouristAttraction", "name": s.name };
           if (s.narrative) place.description = String(s.narrative).slice(0, 300);
           if (typeof s.lat === 'number' && typeof s.lng === 'number') place.geo = { "@type": "GeoCoordinates", "latitude": s.lat, "longitude": s.lng };

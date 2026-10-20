@@ -20,28 +20,6 @@
    "url": "https://commons.wikimedia.org/wiki/File:Tserko_ri.jpg",
    "fuente": "Tserko ri.jpg"
   },
-  "Syabrubesi": {
-   "file": "s1.jpg",
-   "w": 720,
-   "h": 481,
-   "alt": "Paisaje cerca de Syabrubesi, Valle de Langtang",
-   "autor": "Sergey Pesterev",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Sunset_in_the_Himalayas.jpg",
-   "fuente": "Sunset in the Himalayas.jpg",
-   "cercana": true
-  },
-  "Lama Hotel": {
-   "file": "s2.jpg",
-   "w": 720,
-   "h": 481,
-   "alt": "Paisaje cerca de Lama Hotel, Valle de Langtang",
-   "autor": "Sheikh Izham from Malaysia",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Sunset_at_Bamboo_Langtang_(26805436911).jpg",
-   "fuente": "Sunset at Bamboo Langtang (26805436911).jpg",
-   "cercana": true
-  },
   "Parque nacional de Langtang": {
    "file": "s3.jpg",
    "w": 720,
@@ -51,17 +29,6 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Yak_in_Langtang_Valley.jpg",
    "fuente": "Yak in Langtang Valley.jpg",
-   "cercana": true
-  },
-  "Kyanjin Gompa": {
-   "file": "s4.jpg",
-   "w": 720,
-   "h": 336,
-   "alt": "Paisaje cerca de Kyanjin Gompa, Valle de Langtang",
-   "autor": "Nabin K. Sapkota",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Langtang_National_Park_2024_(1)_95.jpg",
-   "fuente": "Langtang National Park 2024 (1) 95.jpg",
    "cercana": true
   }
  }

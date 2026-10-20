@@ -5803,7 +5803,7 @@ function _showStopInfo(stop, i, marker, color) {
   const placeholderHtml = `<div style="width:100%;height:130px;flex-shrink:0;background:linear-gradient(135deg,${color}44,${color}22);border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:28px">${_stopEmoji(stop)}</div>`;
 
   // Foto libre de Wikimedia (0 €, con crédito): si la parada la tiene, se usa y NO se pide nada a Google
-  const _wikiHtml = (typeof mapaItinerario !== 'undefined' && mapaItinerario.fotoWikiPopupHtml) ? mapaItinerario.fotoWikiPopupHtml(stop, 130, '10px 10px 0 0') : '';
+  const _wikiHtml = (typeof mapaItinerario !== 'undefined' && mapaItinerario.fotoWikiPopupHtml) ? mapaItinerario.fotoWikiPopupHtml(stop, 130, '10px 10px 0 0', i) : '';
   _liveInfoWindow.setContent(_buildStopContent(_wikiHtml || placeholderHtml));
   _liveInfoWindow.open(_liveMap, marker);
 

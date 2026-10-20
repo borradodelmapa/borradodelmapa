@@ -870,7 +870,7 @@ const mapaRuta = {
     // Cerrar el anterior y abrir con placeholder
     if (this._infoWindow) this._infoWindow.close();
     // Foto libre de Wikimedia (0 €, con crédito): si la parada la tiene, se usa y NO se pide nada a Google
-    const _wikiHtml = (typeof mapaItinerario !== 'undefined' && mapaItinerario.fotoWikiPopupHtml) ? mapaItinerario.fotoWikiPopupHtml(stop, 160, '0') : '';
+    const _wikiHtml = (typeof mapaItinerario !== 'undefined' && mapaItinerario.fotoWikiPopupHtml) ? mapaItinerario.fotoWikiPopupHtml(stop, 160, '0', index) : '';
     this._infoWindow = new google.maps.InfoWindow({ content: _buildContent(_wikiHtml || placeholderHtml), disableAutoPan: false });
     this._infoWindow.open(this._map, marker);
 

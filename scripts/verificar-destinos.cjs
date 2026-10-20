@@ -91,8 +91,11 @@ const getHTML = async s => LOCAL ? fs.readFileSync(path.join(ROOT, 'destinos', s
           }
           let fj = null; try { fj = JSON.parse(fs.readFileSync(path.join(ROOT, 'destinos', 'img', slug, 'fotos.json'), 'utf8')); } catch (_) {}
           const claves = fj ? Object.keys(fj.stops || {}) : [];
-          const conWiki = gst.filter(x => claves.includes(x.name)).length;
-          const sinNada = gst.filter(x => !claves.includes(x.name) && !x.photo_ref);
+          const porIdx = fj && fj.porIndice ? fj.porIndice : {};
+          const tiene = (x, i) => claves.includes(x.name) || !!porIdx[i];
+          const conWiki = gst.filter((x, i) => tiene(x, i)).length;
+          const sinNada = gst.filter((x, i) => !tiene(x, i) && !x.photo_ref);
+          if (fj) { const { coincide } = require('./limpiar-fotos.cjs'); for (const [nm, s2] of Object.entries(fj.stops || {})) if (s2.cercana && !s2.ok_manual && !coincide(nm, s2.fuente)) errs.push('foto de paisaje cercano que no corresponde a la parada «' + nm + '» (' + s2.fuente + ')'); }
           if (gst.length && !conWiki) errs.push('ninguna parada de la guía de la app coincide con las fotos libres (¿nombres distintos?)');
           else if (gst.length && conWiki / gst.length < 0.6) avisos.push(`en la app, solo ${conWiki}/${gst.length} paradas con foto libre (el resto, de Google)`);
           if (sinNada.length) avisos.push(`en la app, ${sinNada.length}/${gst.length} paradas SIN foto de ningún tipo (saldrán grises): ${sinNada.map(x => x.name).slice(0, 4).join(', ')}`);

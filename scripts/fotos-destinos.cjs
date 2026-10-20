@@ -20,6 +20,7 @@ const UA = 'BorradoDelMapaBot/1.0 (https://borradodelmapa.com)';
 const HERO_W = 1280, STOP_W = 720;
 const LICENCIAS_OK = /^(cc[- ]by(-sa)?[- ]|cc0|public domain|pd|attribution|gfdl)/i;
 
+const { coincide } = require('./limpiar-fotos.cjs');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const tokens = s => norm(s).split(/[^a-z0-9]+/).filter(t => t.length > 2 && !['the', 'del', 'las', 'los', 'de', 'la', 'el', 'and', 'por', 'con'].includes(t));
@@ -215,6 +216,7 @@ async function completarPagina(slug) {
       for (let i = 0; i < files.length; i += 25) for (const c of await info(files.slice(i, i + 25), STOP_W)) cands.push(c);
       for (const c of cands) {
         if (usadas.has(c.title) || urlsUsadas.has(c.page) || MALAS.test(c.title) || RETRATO.test(c.title + ' ' + c.desc)) continue;
+        if (!coincide(st.name, c.title)) continue;   // mejor sin foto que una foto de otro sitio
         const ratio = c.w / c.h; if (ratio < 1.3 || ratio > 2.2 || c.w < 2000) continue;
         const sc = Math.min(c.w / 3000, 2) + (tokens(st.name).some(t => norm(c.title + c.desc).includes(t)) ? 3 : 0);
         if (!best || sc > best.sc) best = { sc, c };

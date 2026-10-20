@@ -2,12 +2,12 @@
  "generado": "2026-10-19",
  "hero": {
   "file": "hero.jpg",
-  "w": 1280,
-  "h": 960,
-  "alt": "Parque Nacional de Chitwan, Nepal",
-  "autor": "Sigismund von Dobschütz",
-  "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sauraha-098.JPG"
+  "w": 1000,
+  "h": 667,
+  "alt": "Rinoceronte indio en el Parque Nacional de Chitwan",
+  "autor": "Benjila Dhital",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Rhinoceros_in_Chitwan_National_Park.jpg"
  },
  "stops": {
   "Elephant Breeding Center": {
@@ -19,39 +19,36 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Wild_Elephant_(Ronaldo).jpg",
    "fuente": "Wild Elephant (Ronaldo).jpg"
-  },
-  "Parque Nacional de Chitwan": {
-   "file": "s1.jpg",
-   "w": 720,
-   "h": 450,
-   "alt": "Paisaje cerca de Parque Nacional de Chitwan, Parque Nacional de Chitwan",
-   "autor": "Sangyam adventurer",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Crowned_Jewel_of_the_Forest.jpg",
-   "fuente": "Crowned Jewel of the Forest.jpg",
-   "cercana": true
-  },
-  "Rapti River, Sauraha": {
-   "file": "s3.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Paisaje cerca de Rapti River, Sauraha, Parque Nacional de Chitwan",
-   "autor": "GauravDhital",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:View_of_sunset_at_chitwan_national_park.jpg",
-   "fuente": "View of sunset at chitwan national park.jpg",
-   "cercana": true
-  },
-  "New Sauraha Tharu Cultural House": {
-   "file": "s4.jpg",
-   "w": 720,
-   "h": 479,
-   "alt": "Paisaje cerca de New Sauraha Tharu Cultural House, Parque Nacional de Chitwan",
-   "autor": "Aaditya Rauniyar",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:A_flock_of_cormorants_flying_over_Sauraha_(Tick_mark_formation).jpg",
-   "fuente": "A flock of cormorants flying over Sauraha (Tick mark formation).jpg",
-   "cercana": true
   }
- }
+ },
+ "porIndice": {
+  "0": {
+   "file": "p0.jpg",
+   "w": 1000,
+   "h": 667,
+   "alt": "Rinoceronte indio en el Parque Nacional de Chitwan",
+   "autor": "Benjila Dhital",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Rhinoceros_in_Chitwan_National_Park.jpg"
+  },
+  "1": {
+   "file": "p1.jpg",
+   "w": 1000,
+   "h": 662,
+   "alt": "Safari en jeep en el Parque Nacional de Chitwan",
+   "autor": "Pratap Baniya",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Jeep_Safari_Chitwan.jpg"
+  },
+  "6": {
+   "file": "p6.jpg",
+   "w": 1000,
+   "h": 664,
+   "alt": "Lago Bis Hazari, en Chitwan",
+   "autor": "Nischal Tiwari",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Beeshazar_Lake_in_Chitwan.JPG"
+  }
+ },
+ "nota": "porIndice: foto por posición de la parada en la guía (0 = primera). Sirve cuando varias paradas tienen el mismo nombre. Tiene prioridad sobre stops (por nombre)."
 }

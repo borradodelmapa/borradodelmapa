@@ -4,6 +4,9 @@
    ══════════════════════════════════════════ */
 
 const mapaItinerario = {
+  // Versión de los ficheros de datos (destinos/img/*/fotos.json, ficha.json, guias-publicas.json). Súbela cada vez que cambien:
+  // evita que el navegador (o GitHub Pages, que los guarda 10 min) use una copia vieja que apunte a fotos que ya no existen.
+  _datosV: '20261020b',
   _stops: [],
   _cards: [],
   _activeIdx: -1,
@@ -558,7 +561,7 @@ ${trk}
     const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
     const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
     if (!/^[a-z0-9-]{3,120}$/.test(slug)) return;
-    fetch(`/destinos/img/${slug}/ficha.json`).then(r => r.ok ? r.json() : null).then(j => {
+    fetch(`/destinos/img/${slug}/ficha.json?v=${this._datosV}`).then(r => r.ok ? r.json() : null).then(j => {
       if (!j || !j.paradas) return;
       this._ficha = j.paradas;
       Object.keys(j.paradas).forEach(i => this._pintarFicha(+i));
@@ -602,23 +605,25 @@ ${trk}
     this._fotosWiki = null; this._fotosWikiHecho = false;
     const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
     const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
-    const traer = s => fetch(`/destinos/img/${s}/fotos.json`).then(r => r.ok ? r.json() : null).then(j => { if (j && j.stops) { j._slug = s; this._fotosWiki = j; } return j; }).catch(() => null);
+    const traer = s => fetch(`/destinos/img/${s}/fotos.json?v=${this._datosV}`).then(r => r.ok ? r.json() : null).then(j => { if (j && j.stops) { j._slug = s; this._fotosWiki = j; } return j; }).catch(() => null);
     // Guías públicas con otro nombre (p. ej. barcelona-en-3-dias-ky61 → barcelona-espana): destinos/img/guias-publicas.json
-    const porMapa = () => fetch('/destinos/img/guias-publicas.json').then(r => r.ok ? r.json() : null).then(m => (m && m[sf]) ? traer(m[sf]) : null).catch(() => null);
+    const porMapa = () => fetch('/destinos/img/guias-publicas.json?v=' + this._datosV).then(r => r.ok ? r.json() : null).then(m => (m && m[sf]) ? traer(m[sf]) : null).catch(() => null);
     this._fotosWikiP = /^[a-z0-9-]{3,120}$/.test(slug)
       ? traer(slug).then(j => j || porMapa())
       : Promise.resolve(null);
   },
 
   // Foto libre de una parada (para los pop-up de los mapas, que también la usan en vez de pedirla a Google)
-  fotoWiki(stop) {
-    const fw = this._fotosWiki && this._fotosWiki.stops && stop && this._fotosWiki.stops[stop.name];
+  fotoWiki(stop, index) {
+    const fj = this._fotosWiki;
+    // por posición (si varias paradas se llaman igual) y, si no, por nombre
+    const fw = fj && ((fj.porIndice && index != null && fj.porIndice[index]) || (fj.stops && stop && fj.stops[stop.name]));
     if (!fw) return null;
     return { src: `/destinos/img/${this._fotosWiki._slug}/${fw.file}`, alt: fw.alt || stop.name, autor: fw.autor, licencia: fw.licencia, url: fw.url };
   },
   // HTML de la foto + crédito para un pop-up (estilos en línea; altura en px)
-  fotoWikiPopupHtml(stop, alto, radio) {
-    const f = this.fotoWiki(stop);
+  fotoWikiPopupHtml(stop, alto, radio, index) {
+    const f = this.fotoWiki(stop, index);
     if (!f) return '';
     return `<div style="position:relative;flex-shrink:0"><img src="${this._esc(f.src)}" alt="${this._esc(f.alt)}" style="width:100%;height:${alto}px;object-fit:cover;display:block;border-radius:${radio}" onerror="this.style.display='none'">` +
       `<span style="position:absolute;left:0;bottom:0;padding:2px 7px;background:rgba(0,0,0,.7);font-size:10px;color:rgba(244,240,230,.85);max-width:92%">Foto: <a href="${this._esc(f.url)}" target="_blank" rel="noopener nofollow" style="color:inherit">${this._esc(f.autor)}</a> · ${this._esc(f.licencia)}</span></div>`;
@@ -636,7 +641,8 @@ ${trk}
       this._fotosWikiP.then(() => { this._fotosWikiHecho = true; this._loadInitialPhoto(stop, index, cardEl, _retryNum); });
       return;
     }
-    const fw = this._fotosWiki && this._fotosWiki.stops && this._fotosWiki.stops[stop.name];
+    const _fj = this._fotosWiki;
+    const fw = _fj && ((_fj.porIndice && _fj.porIndice[index]) || (_fj.stops && _fj.stops[stop.name]));
     if (fw) {
       photoDiv.dataset.wiki = '1';
       if (getComputedStyle(photoDiv).position === 'static') photoDiv.style.position = 'relative';

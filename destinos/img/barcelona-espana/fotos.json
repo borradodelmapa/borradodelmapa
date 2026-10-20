@@ -159,18 +159,8 @@
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Museu_Nacional_d%27Art_de_Catalunya_(20676023312).jpg",
    "fuente": "Museu Nacional d'Art de Catalunya (20676023312).jpg",
-   "cercana": true
-  },
-  "Cervecería Catalana": {
-   "file": "s17.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Cervecería Catalana, Barcelona",
-   "autor": "Yeagov",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:A_JOAN_JUNCEDA_(1881_-_1948)_4.JPG",
-   "fuente": "A JOAN JUNCEDA (1881 - 1948) 4.JPG",
-   "cercana": true
+   "cercana": true,
+   "ok_manual": true
   }
  }
 }

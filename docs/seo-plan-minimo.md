@@ -41,3 +41,9 @@ Después, a mano y con OK de Paco: revisar la hoja → abrir 2-3 guías en la ap
 - Una página sin guía NO se abre (solo es una ficha corta). Crear su guía cuesta (Google + Anthropic): medir con UNA y avisar a Paco antes (§8).
 - Trampas ya vividas: GitHub Pages no sirve ficheros que empiezan por `_`; las fotos de Google de guías viejas dan 404 y la app reintenta con búsqueda de pago; la PWA guarda la versión vieja (Ctrl+F5, o borrar el service worker para probar).
 - Guías cuyo nombre público no es `<destino>-ruta` se enlazan en `destinos/img/guias-publicas.json` (lo rellena `fotos-destinos.cjs`).
+
+## Reglas de fotos (20 oct 2026, tras ver un pájaro como foto de «Parque Nacional de Chitwan»)
+- Mejor **sin foto** que una foto de otro sitio. El «paisaje cercano» solo vale si el título del archivo contiene el nombre de la parada (`scripts/limpiar-fotos.cjs`; `fotos-destinos.cjs --completar` y `verificar-destinos.cjs` lo aplican). Excepción documentada: `ok_manual: true` en esa parada.
+- Si varias paradas se llaman igual (en Chitwan, cuatro «Parque Nacional de Chitwan»), la foto va **por posición**: `fotos.json` → `porIndice: {"0": {...}}` (0 = primera parada). Tiene prioridad sobre el nombre. Lo leen las páginas, las tarjetas y los pop-up de la app.
+- Cada vez que cambien `fotos.json`, `ficha.json` o `guias-publicas.json`: subir `_datosV` en `mapa-itinerario.js` (la app los pide con `?v=`). GitHub Pages guarda los ficheros 10 min: una copia vieja que apunte a fotos borradas daría imágenes rotas. Y no borrar del repo las fotos viejas hasta pasados unos días.
+- Para elegir foto de una experiencia, buscar con el nombre de la experiencia («rhinoceros Chitwan», «jeep safari Chitwan»), no solo con el nombre de la parada.

@@ -70,17 +70,6 @@
    "url": "https://commons.wikimedia.org/wiki/File:Begnas_pokhara.jpg",
    "fuente": "Begnas pokhara.jpg"
   },
-  "Tal Barahi Mandir": {
-   "file": "s3.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Tal Barahi Mandir, Pokhara",
-   "autor": "Igor Ovsyannykov igorovsyannykov",
-   "licencia": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:Where_to_Next_(Unsplash).jpg",
-   "fuente": "Where to Next (Unsplash).jpg",
-   "cercana": true
-  },
   "Lakeside Pokhara": {
    "file": "s4.jpg",
    "w": 720,
@@ -101,17 +90,6 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:View_of_pokhara.jpg",
    "fuente": "View of pokhara.jpg",
-   "cercana": true
-  },
-  "Old Pokhara Bazaar": {
-   "file": "s10.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Old Pokhara Bazaar, Pokhara",
-   "autor": "Igor Ovsyannykov igorovsyannykov",
-   "licencia": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:Craft_Workshop_(Unsplash).jpg",
-   "fuente": "Craft Workshop (Unsplash).jpg",
    "cercana": true
   }
  }
