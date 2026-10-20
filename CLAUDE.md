@@ -134,9 +134,10 @@ el "antes" de cada arreglo se pasa con `--grabar` (se paga igual) y el "después
 
 ### 12. UN SOLO MAPA DEL MUNDO PARA TODA LA WEB — Y MIRAR LO QUE YA EXISTE ANTES DE PROPONER (20 oct 2026)
 Paco: **"lo que vale para uno con casi toda seguridad vale para el otro. Así que no me jodáis más."**
-- El mapa del mundo es **una pieza compartida**: «Tu vuelta al mundo» (`tu-mundo.js`), su versión pública
-  (`mundo-publico.js`: Leaflet + OpenStreetMap, países pintados, zoom, 0 €) y el índice del blog (caso p-mvfrvjvh200).
-- **Toda mejora (zoom, provincias, colores, tocar un país…) se hace para todos a la vez**, nunca solo en uno.
+- Son **partes distintas** de la web: **Explorar** = guías (las de destino y las que comparten los usuarios);
+  **Tu vuelta al mundo** (`tu-mundo.js`, pública en `mundo-publico.js`) = viajes de cada usuario. Lo que comparten es el
+  **mapa y sus capacidades** (Leaflet + OpenStreetMap, 0 €: zoom, pintar por países y por provincias, tocar un país…).
+- **Toda mejora de esas capacidades se hace para todos a la vez**, nunca solo en uno. Índice: caso p-mvfrvjvh200.
 - Antes de proponer cualquier pieza nueva (mapa, buscador, tarjeta…), **buscar si ya existe** (grep del repo +
   `docs/features-inventario.md`) y partir de ella. Proponer librerías nuevas sin mirar esto es un fallo.
 
