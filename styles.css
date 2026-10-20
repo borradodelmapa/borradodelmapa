@@ -7527,3 +7527,12 @@ body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-scre
 .itin-ficha-fuente { display: block; font-size: 10px; color: rgba(244,239,230,.45); margin-top: 6px; }
 .itin-ficha-toggle { margin: 2px 0 10px; }
 .itin-ficha-full[hidden] { display: none; }
+
+/* ── Bloque «Sobre …» del lugar, bajo la cabecera de la guía (20 oct 2026) ── */
+.itin-lugar { margin: 0 0 14px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02); }
+.itin-lugar-photo { position: relative; aspect-ratio: 16 / 7; background: #000; overflow: hidden; }
+.itin-lugar-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.itin-lugar-credit { position: absolute; left: 0; bottom: 0; background: rgba(0,0,0,.72); font-size: 10px; padding: 2px 8px; color: rgba(244,239,230,.85); }
+.itin-lugar-credit a { color: inherit; }
+.itin-lugar-body { padding: 12px 14px 4px; }
+.itin-lugar-kicker { font-family: var(--font-cond); font-weight: 700; font-size: 12px; letter-spacing: .1em; color: var(--dorado); margin-bottom: 4px; }

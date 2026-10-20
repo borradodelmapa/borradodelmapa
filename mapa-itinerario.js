@@ -6,7 +6,7 @@
 const mapaItinerario = {
   // Versión de los ficheros de datos (destinos/img/*/fotos.json, ficha.json, guias-publicas.json). Súbela cada vez que cambien:
   // evita que el navegador (o GitHub Pages, que los guarda 10 min) use una copia vieja que apunte a fotos que ya no existen.
-  _datosV: '20261020b',
+  _datosV: '20261020d',
   _stops: [],
   _cards: [],
   _activeIdx: -1,
@@ -456,7 +456,6 @@ ${trk}
         </div>
         ${nota ? `<div class="itin-card-nota${notaLarga ? '' : ' expanded'}">${this._esc(nota)}</div>` : ''}
         ${notaLarga ? `<span class="itin-card-leermas">Leer más</span>` : ''}
-        <div class="itin-ficha" id="itin-ficha-${index}"></div>
         ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
         ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
         ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
@@ -553,47 +552,76 @@ ${trk}
   },
 
   // ═══ FICHA DE LUGAR (estructura nueva) ═══
-  // Información añadida a una parada, con el mismo formato de bloques etiquetados que ya tienen las tarjetas (CONTEXTO, SECRETO LOCAL…).
-  // Sale de destinos/img/<destino>/ficha.json → "paradas": { "<índice de la parada>": {…} }. Sin ese fichero no cambia nada.
-  // Orden: frase y datos → esencia → «Ver ficha completa» (historia, experiencias, fotografía, lo que nadie cuenta, práctico).
+  // Información del LUGAR entero (no de una parada), con el mismo formato de bloques etiquetados que ya tienen las tarjetas
+  // (CONTEXTO, SECRETO LOCAL…). Sale de destinos/img/<destino>/ficha.json. Sin ese fichero no cambia nada.
+  //   lugar   → bloque «Sobre …» bajo la cabecera de la guía: foto, frase, datos, esencia y «Ver ficha completa»
+  //             (historia, experiencias, fotografía, cómo llegar, dormir, comer, precios, si llueve).
+  //   consejos_extra (dentro de lugar) → se suman a «Consejos de Salma» del final, sin duplicarlos en otro sitio.
+  //   titulos → título propio para paradas que Google dejó con el mismo nombre (por posición, 0 = primera).
   _cargarFicha(routeData) {
     this._ficha = null;
     const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
     const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
     if (!/^[a-z0-9-]{3,120}$/.test(slug)) return;
     fetch(`/destinos/img/${slug}/ficha.json?v=${this._datosV}`).then(r => r.ok ? r.json() : null).then(j => {
-      if (!j || !j.paradas) return;
-      this._ficha = j.paradas;
-      Object.keys(j.paradas).forEach(i => this._pintarFicha(+i));
+      if (!j) return;
+      this._ficha = j;
+      // La foto del lugar (portada) viene de fotos.json; se espera a que esté cargado
+      Promise.resolve(this._fotosWikiP).then(() => { this._pintarLugar(); });
+      this._aplicarTitulos(); this._ajustarConsejos();
     }).catch(() => {});
   },
-  _pintarFicha(i) {
-    const mount = document.getElementById(`itin-ficha-${i}`), f = this._ficha && this._ficha[i];
-    if (!mount || !f) return;
-    mount.innerHTML = this._fichaHTML(f);
-    const tg = mount.querySelector('.itin-ficha-toggle'), full = mount.querySelector('.itin-ficha-full');
+  _pintarLugar() {
+    const f = this._ficha && this._ficha.lugar;
+    if (!f || !this._container || document.getElementById('itin-lugar')) return;
+    const header = this._container.querySelector('.itin-header');
+    if (!header) return;
+    const box = document.createElement('div');
+    box.id = 'itin-lugar'; box.className = 'itin-lugar';
+    box.innerHTML = this._lugarHTML(f);
+    header.insertAdjacentElement('afterend', box);
+    const tg = box.querySelector('.itin-ficha-toggle'), full = box.querySelector('.itin-ficha-full');
     if (tg && full) tg.addEventListener('click', e => { e.stopPropagation(); full.hidden = !full.hidden; tg.textContent = full.hidden ? 'Ver ficha completa ▾' : 'Ver menos ▴'; });
   },
-  _fichaHTML(f) {
+  _aplicarTitulos() {
+    const t = this._ficha && this._ficha.titulos; if (!t) return;
+    Object.keys(t).forEach(i => {
+      const card = this._cards && this._cards[+i]; if (!card) return;
+      const n = card.querySelector('.itin-card-name'); if (n) n.textContent = t[i];
+      const sp = card.querySelector('.itin-speak'); const st = this._stops && this._stops[+i];
+      if (sp) sp.dataset.text = t[i] + '. ' + ((st && st.narrative) || '');
+    });
+  },
+  _ajustarConsejos() {
+    const extra = this._ficha && this._ficha.lugar && this._ficha.lugar.consejos_extra; if (!extra || !extra.length) return;
+    // Solo si la guía ya muestra «Consejos de Salma» (con cuenta). Sin cuenta (avance) no se enseñan (§10), así que no se crea.
+    const tips = this._container && this._container.querySelector('.guide-tips');
+    if (!tips) return;
+    extra.forEach(t => { const p = document.createElement('p'); p.textContent = t; tips.appendChild(p); });
+  },
+  _lugarHTML(f) {
     const e = s => this._esc(s);
     const tag = (cls, label, inner) => `<div class="guide-stop-tag tag-${cls}"><span class="guide-stop-tag-label">${label}</span>${inner}</div>`;
     const lis = a => '<ul class="itin-ficha-list">' + a.map(x => `<li>${e(x)}</li>`).join('') + '</ul>';
     const fuente = s => s ? `<span class="itin-ficha-fuente">Fuente: ${e(s)}</span>` : '';
+    const h = this._fotosWiki && this._fotosWiki.hero;
     let top = '';
+    if (h) top += `<div class="itin-lugar-photo"><img src="/destinos/img/${this._fotosWiki._slug}/${h.file}" alt="${e(h.alt || '')}" loading="lazy"><span class="itin-lugar-credit">Foto: <a href="${e(h.url)}" target="_blank" rel="noopener nofollow">${e(h.autor)}</a> · ${e(h.licencia)}</span></div>`;
+    top += `<div class="itin-lugar-body"><div class="itin-lugar-kicker">SOBRE ${e((f.nombre || '').toUpperCase())}</div>`;
     if (f.frase) top += `<div class="itin-ficha-frase">«${e(f.frase)}»</div>`;
     if (f.datos && f.datos.length) top += `<div class="itin-ficha-datos">${f.datos.map(d => `<span class="itin-card-hours">${e(d)}</span>`).join('')}</div>`;
     if (f.esencia) top += tag('esencia', '✨ LA ESENCIA', e(f.esencia) + fuente(f.esencia_fuente));
     let full = '';
-    if (f.historia && f.historia.length) full += tag('hist', '📅 HISTORIA', '<ul class="itin-ficha-list">' + f.historia.map(h => `<li><b>${e(h[0])}</b> ${e(h[1])}</li>`).join('') + '</ul>' + fuente(f.historia_fuente));
+    if (f.historia && f.historia.length) full += tag('hist', '📅 HISTORIA', '<ul class="itin-ficha-list">' + f.historia.map(x => `<li><b>${e(x[0])}</b> ${e(x[1])}</li>`).join('') + '</ul>' + fuente(f.historia_fuente));
     if (f.experiencias && f.experiencias.length) full += tag('exp', '🎒 EXPERIENCIAS', '<ul class="itin-ficha-list">' + f.experiencias.map(x => `<li><b>${e(x[0])}</b> ${e(x[1])}<span class="itin-ficha-meta">${e(x[2] || '')}</span></li>`).join('') + '</ul>');
     if (f.fotografia && f.fotografia.length) full += tag('foto', '📸 FOTOGRAFÍA', lis(f.fotografia));
-    if (f.nadie_cuenta && f.nadie_cuenta.length) full += tag('secret', '⚠️ LO QUE NADIE TE CUENTA', lis(f.nadie_cuenta));
     if (f.llegar && f.llegar.length) full += tag('llegar', '🧭 CÓMO LLEGAR', lis(f.llegar));
     if (f.dormir && f.dormir.length) full += tag('sleep', '🛏 DÓNDE DORMIR', lis(f.dormir));
     if (f.comer) full += tag('eat', '🍜 DÓNDE COMER', e(f.comer));
     if (f.precios && f.precios.length) full += tag('precio', '💶 PRECIOS', lis(f.precios));
     if (f.lluvia) full += tag('weather', '🌧 SI LLUEVE', e(f.lluvia));
-    return top + (full ? `<span class="itin-card-leermas itin-ficha-toggle">Ver ficha completa ▾</span><div class="itin-ficha-full" hidden>${full}</div>` : '');
+    if (full) top += `<span class="itin-card-leermas itin-ficha-toggle">Ver ficha completa ▾</span><div class="itin-ficha-full" hidden>${full}</div>`;
+    return top + '</div>';
   },
 
   // ═══ FOTOS DE WIKIMEDIA (0 €) ═══
