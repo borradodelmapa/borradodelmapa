@@ -5566,9 +5566,9 @@ function _histCoincide(place, title) {
   if (!a.length || !b.length) return false;
   const comunes = a.filter(t => b.includes(t)).length;
   if (comunes > 0 && comunes / a.length >= 0.6 && comunes / b.length >= 0.5) return true;
-  // También: TODAS las palabras del título están en lo escrito y sobra como mucho una (la ciudad o el país):
-  // «Alhambra de Granada» → «Alhambra», «Giralda Sevilla» → «Giralda». (Prueba de variantes, 20 oct 2026.)
-  return comunes === b.length && a.length - comunes <= 1;
+  // También: el título son las PRIMERAS palabras de lo escrito y sobra como mucho una al final (la ciudad o el país):
+  // «Alhambra de Granada» → «Alhambra», «Giralda Sevilla» → «Giralda». Al principio no: «Camino de Santiago» ≠ «Santiago».
+  return comunes === b.length && a.length - comunes <= 1 && b.every((t, k) => a[k] === t);
 }
 function _histKm(lat1, lng1, lat2, lng2) {
   const r = Math.PI / 180, dLat = (lat2 - lat1) * r, dLng = (lng2 - lng1) * r;
@@ -5580,13 +5580,14 @@ function _histKm(lat1, lng1, lat2, lng2) {
 // Si Wikipedia frena (429) o falla, NO se guarda nada: ese lugar se queda sin botón esta vez y se vuelve a mirar la próxima.
 let _wikiActivas = 0;
 const _wikiEspera = [];
-// Un reintento a los 1,5 s si Wikipedia está saturada (429 o «too busy»): pasa a menudo y es momentáneo
+// Hasta dos reintentos (a los 1,5 s y a los 3 s) si Wikipedia está saturada (429 o «too busy»): pasa a menudo y es momentáneo
 async function _wikiApi(lang, params) {
-  try { return await _wikiApiUna(lang, params); }
-  catch (e) {
-    if (!/429|busy|ratelimit|maxlag/i.test(e.message)) throw e;
-    await new Promise(r => setTimeout(r, 1500));
-    return _wikiApiUna(lang, params);
+  for (let intento = 0; ; intento++) {
+    try { return await _wikiApiUna(lang, params); }
+    catch (e) {
+      if (intento >= 2 || !/429|busy|ratelimit|maxlag/i.test(e.message)) throw e;
+      await new Promise(r => setTimeout(r, 1500 * (intento + 1)));
+    }
   }
 }
 async function _wikiApiUna(lang, params) {
@@ -5608,15 +5609,15 @@ async function _wikiApiUna(lang, params) {
   }
 }
 // Página válida: existe, no es desambiguación y (si los dos tienen coordenadas) está a menos de 50 km de la parada.
-function _wikiPaginaValida(p, hasCoords, lat, lng) {
+function _wikiPaginaValida(p, hasCoords, lat, lng, maxKm = 50) {
   if (!p || p.missing || p.invalid || !p.pageid) return false;
   if (p.pageprops && 'disambiguation' in p.pageprops) return false;
   const c = p.coordinates && p.coordinates[0];
-  if (hasCoords && c && _histKm(lat, lng, c.lat, c.lon) > 50) return false;
+  if (hasCoords && c && _histKm(lat, lng, c.lat, c.lon) > maxKm) return false;
   return true;
 }
 const _wikiTieneCoords = p => !!(p && p.coordinates && p.coordinates[0]);
-const _wikiPropsBusqueda = { prop: 'coordinates|pageprops', ppprop: 'disambiguation', colimit: 'max', redirects: '1' };
+const _wikiPropsBusqueda = { prop: 'coordinates|pageprops|info', ppprop: 'disambiguation', colimit: 'max', redirects: '1' };
 
 // Busca el artículo de cada lugar (lista), con el mínimo de consultas. Orden de preferencia, primero en español y luego en inglés:
 //   a) título exacto (con redirecciones: «Catedral de Sevilla» → su artículo) — TODOS los lugares en una sola consulta;
@@ -5632,15 +5633,51 @@ async function _wikiBuscarArticulos(lugares) {
   // peor, p. ej. «Cuenca» → la catedral en vez de la ciudad): sale como error, no se guarda y se vuelve a mirar la próxima vez.
   const pendientes = () => res.map((r, i) => (r === undefined && !fallo[i] ? i : -1)).filter(i => i >= 0);
   const conCoords = l => typeof l.lat === 'number' && typeof l.lng === 'number';
-  // Wikipedia distingue mayúsculas salvo en la 1ª letra: «Historia de zanzíbar» no existe y «Historia de Zanzíbar» sí
+  // Wikipedia distingue mayúsculas salvo en la 1ª letra: «Historia de zanzíbar» no existe y «Historia de Zanzíbar» sí;
+  // «VIETNAM» no existe y «Vietnam» sí. Se prueba tal cual, con la 1ª en mayúscula y con cada palabra en mayúscula.
   const mayus = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const mayusPalabras = s => s.toLowerCase().replace(/(^|[\s\-'(])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
+  const formas = p => [...new Set([p, mayus(p), mayusPalabras(p)])];
+  // Mismo nombre escrito junto o separado / con o sin tildes: «bahía de halong» = «Bahía de Ha-Long», «Hoi An» = «Hội An»
+  const compacto = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/\([^)]*\)/g, '').replace(/[^a-z0-9]+/g, '');
+  const coincide = (place, title) => _histCoincide(place, title) || (compacto(title).length >= 4 && compacto(place) === compacto(title));
+  // Entre varios candidatos válidos gana el MÁS IMPORTANTE: el que más visitas tiene en Wikipedia (últimos 30 días). Comprobado
+  // 20 oct: Santiago de Chile 18.280 frente a la comuna 1.353; la basílica de la Sagrada Familia 19.397 frente al barrio 2.555;
+  // el barrio de Santa Cruz 732 frente a su iglesia 203; la Alhambra 14.621 frente a su museo 50. Pero el artículo cuyo nombre es
+  // EXACTAMENTE lo buscado (sin lo de entre paréntesis) vale el triple: «Córdoba» → «Córdoba (España)», no «Califato de Córdoba».
+  const visitas = p => Object.values((p && p.pageviews) || {}).reduce((a, b) => a + (b || 0), 0);
+  const elMejor = (cands, place) => {
+    const puntos = x => visitas(x) * (compacto(x.title) === compacto(place) ? 3 : 1);
+    return cands.sort((x, y) => (puntos(y) - puntos(x)) || ((y.length || 0) - (x.length || 0)) || ((x.dist || 0) - (y.dist || 0)))[0];
+  };
+  // Visitas de varios artículos: de 10 en 10 y siguiendo «continue» (si se piden muchos, Wikipedia no las da todas de golpe y
+  // a los que se quedaban sin dato se les contaba 0: ganaban «Ateneo de Valencia» o «Biblioteca de Santiago»).
+  const conVisitas = async (lang, ids) => {
+    const out = new Map();
+    for (let k = 0; k < ids.length; k += 10) {
+      let cont = {};
+      for (let vuelta = 0; cont && vuelta < 5; vuelta++) {
+        const d = await _wikiApi(lang, { action: 'query', pageids: ids.slice(k, k + 10).join('|'), prop: 'info|pageprops|pageviews', ppprop: 'disambiguation', pvipdays: '30', ...cont });
+        for (const p of (d.query && d.query.pages) || []) {
+          const prev = out.get(p.pageid) || {};
+          out.set(p.pageid, { ...prev, ...p, pageprops: p.pageprops || prev.pageprops, pageviews: { ...(prev.pageviews || {}), ...(p.pageviews || {}) } });
+        }
+        cont = d.continue || null;
+      }
+    }
+    return out;
+  };
 
   for (const lang of ['es', 'en']) {
-    // a) Títulos exactos, todos juntos (de 50 en 50)
+    // a) Títulos exactos (con redirecciones), todos juntos (de 50 en 50). El nombre exacto pesa más que la distancia: hasta 300 km
+    //    (archipiélagos, parques). Tiene que ser un LUGAR (con coordenadas), salvo «Historia de X»: sin esa regla, «Sagrada Familia»
+    //    caía en el artículo religioso y «mi casa» en uno llamado «Mi Casa» (batería del 20 oct).
     const pend = pendientes();
     const titulosDe = i => {
       const p = lugares[i].place.trim();
-      return conCoords(lugares[i]) ? [p] : (lang === 'es' ? [`Historia de ${mayus(p)}`, p] : [`History of ${mayus(p)}`, p]);
+      if (conCoords(lugares[i])) return formas(p);
+      const h = lang === 'es' ? 'Historia de ' : 'History of ';
+      return [...new Set([...formas(p).map(f => h + mayus(f)), ...formas(p)])];
     };
     const todos = [...new Set(pend.flatMap(titulosDe))];
     const porTitulo = new Map();
@@ -5659,39 +5696,98 @@ async function _wikiBuscarArticulos(lugares) {
       } catch (_) { pend.forEach(i => { fallo[i] = true; }); }
     }
     for (const i of pend) {
+      if (fallo[i]) continue;
       const l = lugares[i];
       for (const t of titulosDe(i)) {
         const p = porTitulo.get(t);
-        const esHistoria = /^(historia de|history of) /i.test((p && p.title) || '');
-        if (_wikiPaginaValida(p, conCoords(l), l.lat, l.lng) && (esHistoria || _wikiTieneCoords(p))) { res[i] = { lang, pageid: p.pageid }; break; }
+        const esHistoria = /^(historia del?|history of) /i.test((p && p.title) || '');
+        if (_wikiPaginaValida(p, conCoords(l), l.lat, l.lng, 300) && (esHistoria || _wikiTieneCoords(p))) { res[i] = { lang, pageid: p.pageid }; break; }
       }
     }
-    // b) Cerca de la parada, con nombre que encaje (todas a la vez; la cola deja 3 en marcha)
+    // b) Cerca de la parada (10 km, hasta 500 artículos: en una ciudad grande, con 50 no entraba ni la propia ciudad), con nombre que
+    //    encaje; gana el más visitado. Una consulta por lugar (la cola deja 3 en marcha) y luego UNA para las visitas de todos los candidatos.
+    const candB = new Map();
     await Promise.all(pendientes().map(async i => {
       const l = lugares[i];
       if (!conCoords(l)) return;
       try {
-        const d = await _wikiApi(lang, { action: 'query', list: 'geosearch', gscoord: `${l.lat}|${l.lng}`, gsradius: '10000', gslimit: '50' });
-        // Gana el que mejor coincide en nombre (menos palabras de más en el título) y, a igualdad, el más cercano:
-        // «Cuenca» → «Cuenca (Ecuador)» antes que «New Cathedral of Cuenca», aunque la catedral esté más cerca
-        // (aquí SÍ cuentan «museo», «iglesia»…: «Santa Cruz» → el barrio «Santa Cruz (Sevilla)», no «Iglesia de Santa Cruz»)
-        const palabras = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\([^)]*\)/g, ' ')
-          .split(/[^a-z0-9]+/).filter(t => t.length >= 3 && !['del', 'las', 'los', 'the', 'and'].includes(t));
-        const sobran = g => palabras(g.title).filter(t => !palabras(l.place).includes(t)).length;
-        const c = ((d.query && d.query.geosearch) || []).filter(g => _histCoincide(l.place, g.title)).sort((x, y) => (sobran(x) - sobran(y)) || (x.dist - y.dist))[0];
-        if (c) res[i] = { lang, pageid: c.pageid };
+        const d = await _wikiApi(lang, { action: 'query', list: 'geosearch', gscoord: `${l.lat}|${l.lng}`, gsradius: '10000', gslimit: '500' });
+        const c = ((d.query && d.query.geosearch) || []).filter(g => coincide(l.place, g.title));
+        if (c.length) candB.set(i, c);
       } catch (_) { fallo[i] = true; }
     }));
-    // c) Búsqueda por nombre
+    const ids = [...new Set([...candB.values()].flat().map(g => g.pageid))];
+    let tam = new Map();
+    if (ids.length) { try { tam = await conVisitas(lang, ids); } catch (_) { for (const [i] of candB) fallo[i] = true; } }
+    const noDesamb = p => p && !(p.pageprops && 'disambiguation' in p.pageprops);
+    for (const [i, c] of candB) {
+      if (fallo[i]) continue;
+      const g = elMejor(c.filter(x => noDesamb(tam.get(x.pageid))).map(x => ({ ...x, length: tam.get(x.pageid).length, pageviews: tam.get(x.pageid).pageviews })), lugares[i].place);
+      if (g) res[i] = { lang, pageid: g.pageid };
+    }
+    // c) Búsqueda por nombre: entre los resultados que encajan, son lugares (coordenadas) y pasan la distancia, el más importante.
     await Promise.all(pendientes().map(async i => {
       const l = lugares[i];
       try {
         const s = await _wikiApi(lang, { action: 'query', generator: 'search', gsrsearch: l.place, gsrlimit: '5', ..._wikiPropsBusqueda });
-        const ps = ((s.query && s.query.pages) || []).sort((x, y) => (x.index || 0) - (y.index || 0));
-        const p = ps.find(x => _histCoincide(l.place, x.title) && _wikiPaginaValida(x, conCoords(l), l.lat, l.lng) && _wikiTieneCoords(x));
+        const ps = ((s.query && s.query.pages) || []).filter(x => coincide(l.place, x.title) && _wikiPaginaValida(x, conCoords(l), l.lat, l.lng) && _wikiTieneCoords(x));
+        const v = ps.length > 1 ? await conVisitas(lang, ps.map(x => x.pageid)) : new Map();
+        const p = elMejor(ps.map(x => ({ ...x, pageviews: (v.get(x.pageid) || {}).pageviews })), l.place);
         if (p) res[i] = { lang, pageid: p.pageid };
       } catch (_) { fallo[i] = true; }
     }));
+  }
+
+  // d) UN artículo por sitio, en español si existe: lo encontrado en inglés se pasa a su versión en español (enlace entre idiomas).
+  //    «Kyoto» y «Kioto» → la misma ficha; «History of Peru» → «Historia del Perú».
+  const enIngles = res.map((r, i) => (r && r.lang === 'en' ? i : -1)).filter(i => i >= 0);
+  for (let k = 0; k < enIngles.length; k += 50) {
+    const lote = enIngles.slice(k, k + 50);
+    try {
+      const d = await _wikiApi('en', { action: 'query', pageids: lote.map(i => res[i].pageid).join('|'), prop: 'langlinks', lllang: 'es', lllimit: 'max' });
+      const esDe = new Map(((d.query && d.query.pages) || []).map(p => [p.pageid, p.langlinks && p.langlinks[0] && p.langlinks[0].title]));
+      const titulosEs = [...new Set(lote.map(i => esDe.get(res[i].pageid)).filter(Boolean))];
+      if (!titulosEs.length) continue;
+      const e = await _wikiApi('es', { action: 'query', titles: titulosEs.join('|'), redirects: '1' });
+      const q = e.query || {};
+      const red = new Map((q.redirects || []).map(n => [n.from, n.to]));
+      const idEs = new Map((q.pages || []).filter(p => p.pageid && !p.missing).map(p => [p.title, p.pageid]));
+      for (const i of lote) {
+        const t = esDe.get(res[i].pageid);
+        const id = t && (idEs.get(red.get(t) || t));
+        if (id) res[i] = { lang: 'es', pageid: id };
+      }
+    } catch (_) { /* se queda en inglés: correcto, solo que en otro idioma */ }
+  }
+
+  // e) Sin coordenadas (un país, una región): si hay «Historia de X» de ese artículo, se usa ese (Perú → «Historia del Perú»)
+  const sinCoords = res.map((r, i) => (r && !conCoords(lugares[i]) ? i : -1)).filter(i => i >= 0);
+  if (sinCoords.length) {
+    try {
+      const porLang = { es: [], en: [] };
+      sinCoords.forEach(i => porLang[res[i].lang].push(i));
+      for (const lang of ['es', 'en']) {
+        if (!porLang[lang].length) continue;
+        const d = await _wikiApi(lang, { action: 'query', pageids: porLang[lang].map(i => res[i].pageid).join('|') });
+        const titulo = new Map(((d.query && d.query.pages) || []).map(p => [p.pageid, p.title]));
+        const cand = new Map();
+        for (const i of porLang[lang]) {
+          const t = titulo.get(res[i].pageid) || '';
+          if (/^(historia d|history of)/i.test(t)) continue;
+          cand.set(i, lang === 'es' ? [`Historia de ${t}`, `Historia del ${t}`, `Historia de la ${t}`] : [`History of ${t}`, `History of the ${t}`]);
+        }
+        const todos = [...new Set([...cand.values()].flat())];
+        if (!todos.length) continue;
+        const h = await _wikiApi(lang, { action: 'query', titles: todos.join('|'), redirects: '1', prop: 'pageprops', ppprop: 'disambiguation' });
+        const q = h.query || {};
+        const red = new Map((q.redirects || []).map(n => [n.from, n.to]));
+        const norm = new Map((q.normalized || []).map(n => [n.from, n.to]));
+        const ok = new Map((q.pages || []).filter(p => p.pageid && !p.missing && !(p.pageprops && 'disambiguation' in p.pageprops)).map(p => [p.title, p.pageid]));
+        for (const [i, ts] of cand) {
+          for (const t of ts) { const f = red.get(norm.get(t) || t) || norm.get(t) || t; if (ok.has(f)) { res[i] = { lang, pageid: ok.get(f) }; break; } }
+        }
+      }
+    } catch (_) { /* se queda con el artículo del sitio: también vale */ }
   }
   // Sin artículo: «no hay»; pero si alguna consulta de ese lugar falló, no se sabe → error (no se guarda)
   return res.map((r, i) => (r ? r : (fallo[i] ? { error: true } : null)));
@@ -5781,8 +5877,9 @@ async function _wikiResumenes(lang, pageids) {
 function _histSlug(s) {
   return String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
-// «histart2»: la búsqueda se corrigió el 20 oct por la noche (Zanzibar, Cuenca, Wikipedia saturada); lo guardado antes se vuelve a mirar
-const _histArtKey = l => `histart2:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
+// «histart3»: búsqueda corregida el 20 oct por la noche (batería de 60 sitios: un idioma por sitio, gana el más importante,
+// el nombre exacto pesa más, mayúsculas); lo guardado antes se vuelve a mirar
+const _histArtKey = l => `histart3:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
 
 // ¿Qué lugares tienen historia con fuente? Devuelve, en el mismo orden, lo que se enseña al pulsar el botón:
 // { ok:true, articulo, resumen, foto, fuente, historia|null } o { ok:false } (sin botón). Gratis (Wikipedia) y guardado en KV:
