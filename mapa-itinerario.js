@@ -23,6 +23,7 @@ const mapaItinerario = {
 
     this._stops = stops;
     this._cargarFotosWiki(routeData);
+    this._cargarFicha(routeData);
     this._cards = [];
     this._activeIdx = -1;
     this._photoQueue = [];
@@ -452,6 +453,7 @@ ${trk}
         </div>
         ${nota ? `<div class="itin-card-nota${notaLarga ? '' : ' expanded'}">${this._esc(nota)}</div>` : ''}
         ${notaLarga ? `<span class="itin-card-leermas">Leer más</span>` : ''}
+        <div class="itin-ficha" id="itin-ficha-${index}"></div>
         ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
         ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
         ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
@@ -545,6 +547,50 @@ ${trk}
       if (i < queue.length) setTimeout(next, 900);
     };
     next();
+  },
+
+  // ═══ FICHA DE LUGAR (estructura nueva) ═══
+  // Información añadida a una parada, con el mismo formato de bloques etiquetados que ya tienen las tarjetas (CONTEXTO, SECRETO LOCAL…).
+  // Sale de destinos/img/<destino>/ficha.json → "paradas": { "<índice de la parada>": {…} }. Sin ese fichero no cambia nada.
+  // Orden: frase y datos → esencia → «Ver ficha completa» (historia, experiencias, fotografía, lo que nadie cuenta, práctico).
+  _cargarFicha(routeData) {
+    this._ficha = null;
+    const sf = routeData && routeData._saved_from && routeData._saved_from.slug;
+    const slug = sf ? String(sf).replace(/-ruta$/, '') : '';
+    if (!/^[a-z0-9-]{3,120}$/.test(slug)) return;
+    fetch(`/destinos/img/${slug}/ficha.json`).then(r => r.ok ? r.json() : null).then(j => {
+      if (!j || !j.paradas) return;
+      this._ficha = j.paradas;
+      Object.keys(j.paradas).forEach(i => this._pintarFicha(+i));
+    }).catch(() => {});
+  },
+  _pintarFicha(i) {
+    const mount = document.getElementById(`itin-ficha-${i}`), f = this._ficha && this._ficha[i];
+    if (!mount || !f) return;
+    mount.innerHTML = this._fichaHTML(f);
+    const tg = mount.querySelector('.itin-ficha-toggle'), full = mount.querySelector('.itin-ficha-full');
+    if (tg && full) tg.addEventListener('click', e => { e.stopPropagation(); full.hidden = !full.hidden; tg.textContent = full.hidden ? 'Ver ficha completa ▾' : 'Ver menos ▴'; });
+  },
+  _fichaHTML(f) {
+    const e = s => this._esc(s);
+    const tag = (cls, label, inner) => `<div class="guide-stop-tag tag-${cls}"><span class="guide-stop-tag-label">${label}</span>${inner}</div>`;
+    const lis = a => '<ul class="itin-ficha-list">' + a.map(x => `<li>${e(x)}</li>`).join('') + '</ul>';
+    const fuente = s => s ? `<span class="itin-ficha-fuente">Fuente: ${e(s)}</span>` : '';
+    let top = '';
+    if (f.frase) top += `<div class="itin-ficha-frase">«${e(f.frase)}»</div>`;
+    if (f.datos && f.datos.length) top += `<div class="itin-ficha-datos">${f.datos.map(d => `<span class="itin-card-hours">${e(d)}</span>`).join('')}</div>`;
+    if (f.esencia) top += tag('esencia', '✨ LA ESENCIA', e(f.esencia) + fuente(f.esencia_fuente));
+    let full = '';
+    if (f.historia && f.historia.length) full += tag('hist', '📅 HISTORIA', '<ul class="itin-ficha-list">' + f.historia.map(h => `<li><b>${e(h[0])}</b> ${e(h[1])}</li>`).join('') + '</ul>' + fuente(f.historia_fuente));
+    if (f.experiencias && f.experiencias.length) full += tag('exp', '🎒 EXPERIENCIAS', '<ul class="itin-ficha-list">' + f.experiencias.map(x => `<li><b>${e(x[0])}</b> ${e(x[1])}<span class="itin-ficha-meta">${e(x[2] || '')}</span></li>`).join('') + '</ul>');
+    if (f.fotografia && f.fotografia.length) full += tag('foto', '📸 FOTOGRAFÍA', lis(f.fotografia));
+    if (f.nadie_cuenta && f.nadie_cuenta.length) full += tag('secret', '⚠️ LO QUE NADIE TE CUENTA', lis(f.nadie_cuenta));
+    if (f.llegar && f.llegar.length) full += tag('llegar', '🧭 CÓMO LLEGAR', lis(f.llegar));
+    if (f.dormir && f.dormir.length) full += tag('sleep', '🛏 DÓNDE DORMIR', lis(f.dormir));
+    if (f.comer) full += tag('eat', '🍜 DÓNDE COMER', e(f.comer));
+    if (f.precios && f.precios.length) full += tag('precio', '💶 PRECIOS', lis(f.precios));
+    if (f.lluvia) full += tag('weather', '🌧 SI LLUEVE', e(f.lluvia));
+    return top + (full ? `<span class="itin-card-leermas itin-ficha-toggle">Ver ficha completa ▾</span><div class="itin-ficha-full" hidden>${full}</div>` : '');
   },
 
   // ═══ FOTOS DE WIKIMEDIA (0 €) ═══

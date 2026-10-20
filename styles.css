@@ -7504,3 +7504,26 @@ body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-scre
 /* Enlace al blog bajo el eslogan (18 oct 2026). Va en app.js (_renderChatEmpty) y build-destinos.js (LOGO_HTML), §9. */
 .ce-blog{display:inline-block;margin-top:10px;font-family:var(--ce-sign);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);text-decoration:none;-webkit-tap-highlight-color:transparent;}
 .ce-blog:active{opacity:.7;}
+
+/* ── Ficha de lugar (estructura nueva, 20 oct 2026): mismos bloques etiquetados que CONTEXTO / SECRETO LOCAL ── */
+.itin-ficha-frase { font-size: 14px; font-style: italic; color: rgba(244,239,230,.85); margin: 2px 0 8px; }
+.itin-ficha-datos { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.tag-esencia { background:rgba(244,99,11,.06); border-left:3px solid var(--dorado); }
+.tag-esencia .guide-stop-tag-label { color:var(--dorado); }
+.tag-hist { background:rgba(100,140,255,.05); border-left:3px solid rgba(100,140,255,.4); }
+.tag-hist .guide-stop-tag-label { color:rgba(100,180,255,.8); }
+.tag-exp { background:rgba(80,200,120,.05); border-left:3px solid rgba(80,200,120,.4); }
+.tag-exp .guide-stop-tag-label { color:rgba(110,220,150,.9); }
+.tag-foto { background:rgba(255,255,255,.04); border-left:3px solid rgba(255,255,255,.3); }
+.tag-foto .guide-stop-tag-label { color:rgba(255,255,255,.8); }
+.tag-llegar { background:rgba(100,200,220,.05); border-left:3px solid rgba(100,200,220,.35); }
+.tag-llegar .guide-stop-tag-label { color:rgba(130,210,230,.85); }
+.tag-precio { background:rgba(255,200,80,.05); border-left:3px solid rgba(255,200,80,.35); }
+.tag-precio .guide-stop-tag-label { color:rgba(255,200,80,.85); }
+.itin-ficha-list { margin: 4px 0 0; padding-left: 16px; }
+.itin-ficha-list li { margin-bottom: 5px; }
+.itin-ficha-list li b { color: rgba(244,239,230,.95); }
+.itin-ficha-meta { display: block; font-size: 11px; color: rgba(244,239,230,.5); }
+.itin-ficha-fuente { display: block; font-size: 10px; color: rgba(244,239,230,.45); margin-top: 6px; }
+.itin-ficha-toggle { margin: 2px 0 10px; }
+.itin-ficha-full[hidden] { display: none; }

@@ -1,0 +1,39 @@
+{
+ "nota": "Ficha de lugar (estructura nueva). Se aplica a la parada cuyo índice indica la clave. Todo dato lleva su origen: Wikipedia (CC BY-SA), Google, o nuestra ficha (por verificar). Lo que no tiene dato no se escribe.",
+ "paradas": {
+  "0": {
+   "frase": "La selva donde Nepal todavía pertenece a los animales",
+   "datos": ["⏱ 2 días", "💰 Entrada 1.500 NPR (≈ 11 €) · por verificar", "📍 Terai · Sauraha", "🗓 octubre-marzo"],
+   "esencia": "Hasta mediados del siglo XX, a Chitwan solo se llegaba a pie y tardando semanas. Era el coto de caza de la élite de Nepal. Cuando en los años sesenta quedaban 95 rinocerontes, el país creó su primer parque nacional. Hoy es patrimonio mundial y uno de los mejores lugares de Asia para ver al rinoceronte indio.",
+   "esencia_fuente": "Wikipedia (en), «Chitwan National Park»",
+   "historia": [
+    ["Siglo XIX", "Coto de caza favorito de la clase dirigente. Campamentos de varios meses."],
+    ["1950", "Más de 2.600 km² de bosque y unos 800 rinocerontes."],
+    ["Años 60", "Con colonos y caza furtiva quedan 95 rinocerontes. Nace la patrulla armada Gaida Gasti."],
+    ["1973", "Se establece el parque (544 km²). En 1977 se amplía a 952,63 km²."],
+    ["1984", "Patrimonio Mundial de la UNESCO."],
+    ["2006", "Pierde la palabra «Royal» al terminar la guerra civil."]
+   ],
+   "historia_fuente": "Wikipedia (en), «Chitwan National Park»",
+   "experiencias": [
+    ["🌅 Safari en jeep al amanecer", "Salida hacia las 6:00, la mejor hora para rinoceronte y aves. Reserva la tarde anterior.", "≈ 3 h · ≈ 15 € + entrada · por verificar"],
+    ["🥾 Safari a pie con guía", "La forma más intensa de moverse por la selva. Guía oficial armado y reserva previa.", "2-3 h · ≈ 15 € · por verificar"],
+    ["🛶 Canoa por el Rapti", "Cocodrilos mugger y gaviales en las orillas, con la luz del atardecer.", "≈ 1 h · 5-8 € la hora · por verificar"],
+    ["💃 Danza tharu", "Espectáculo en los lodges del pueblo. Pregunta quién lo organiza.", "19:00-21:00 (Google) · ≈ 1 h"],
+    ["🐘 Centro de cría de elefantes", "Ejemplares jóvenes de cerca, dentro del parque.", "7-11 h y 16-19 h (Google) · ≈ 30 min"],
+    ["🦆 Lago Bis Hazari", "Humedal con aves acuáticas, cocodrilos y rinocerontes que vienen a beber.", "≈ 1 h · por verificar"]
+   ],
+   "fotografia": ["Mejor hora: amanecer y última hora de la tarde, con la fauna activa. (de la guía de ruta)", "Mejor punto y consejo de cámara: sin dato todavía."],
+   "nadie_cuenta": [
+    "Los tharu vivían aquí antes del parque. Al crearlo fueron desplazados de sus tierras. Pregunta quién gestiona el alojamiento o el espectáculo que contratas. (hecho: Wikipedia)",
+    "Ropa en tonos oscuros o tierra; nada blanco ni brillante.",
+    "Nunca salgas solo al parque, ni a pie: hay tigres y se necesita guía oficial."
+   ],
+   "llegar": ["Desde Kathmandú: autobús turístico 5-6 h, 8-12 €. Vuelo a Bharatpur: 30 min, 80-120 €.", "Desde Pokhara: autobús 4-5 h, 7-10 €.", "(nuestra ficha · precios por verificar)"],
+   "dormir": ["Económico: guesthouses en Sauraha, 6-12 € la noche.", "Experiencia local: lodges con jardín en Sauraha, 20-45 €.", "Especial: jungle lodges con safari incluido, 150-400 €.", "(nuestra ficha · por verificar)"],
+   "comer": "Menús internacionales a 3-7 € en Sauraha. Dal bhat local por 2-3 €. (nuestra ficha · por verificar)",
+   "precios": ["Entrada al parque: la guía dice 1.500 NPR (≈ 11 €) y la ficha antigua ≈ 25 €. Por verificar con la tarifa oficial."],
+   "lluvia": "Museo de Historia Natural de Chitwan o Museo Cultural Tharu, en Sauraha. En monzón (junio-agosto) el parque cierra parcialmente y las pistas se inundan."
+  }
+ }
+}
