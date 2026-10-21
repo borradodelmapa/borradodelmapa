@@ -846,31 +846,39 @@ ${trk}
   // punto 15, 3 oct 2026): cada /place-details es una llamada de pago la primera vez que se pide un sitio (después, catálogo
   // gratis). Antes se pedían los de TODAS las paradas al abrir la guía; ahora, al aparecer cada tarjeta en pantalla.
   // Sin IntersectionObserver (navegadores viejos) se pide todo como siempre.
+  // 21 oct 2026 (Paco: «el horario no lo pulsas si no te hace falta»): ya ni al aparecer la tarjeta. Cada parada lleva un
+  // botón «Horario y valoración» y la ficha se pide SOLO al pulsarlo. Las fichas eran el 31 % del gasto de Google.
   _enrichAll(stops) {
-    const pedir = (stop, i) => {
+    const pedir = (stop, i, btn) => {
       if (!stop.place_id) return;
       this._enrichDone = this._enrichDone || new Set();
       const key = stop.place_id + '|' + i;
       if (this._enrichDone.has(key)) return;
       this._enrichDone.add(key);
+      if (btn) { btn.disabled = true; btn.textContent = 'Cargando…'; }
       fetch(`${window.SALMA_API}/place-details?place_id=${encodeURIComponent(stop.place_id)}`)
         .then(r => r.ok ? r.json() : null)
         .catch(() => null)
-        .then(data => { if (data) this._applyEnrichment(i, data); });
+        .then(data => {
+          if (data) this._applyEnrichment(i, data);
+          const div = document.getElementById(`itin-places-${i}`);
+          if (btn && btn.isConnected) {
+            if (data) btn.remove();
+            else { btn.disabled = false; btn.textContent = 'No se pudo cargar · reintentar'; this._enrichDone.delete(key); }
+          }
+          if (data && div && !div.innerHTML.trim()) div.innerHTML = '<div class="itin-card-hours-detail">Google no tiene horario de este sitio</div>';
+        });
     };
-    if (typeof IntersectionObserver === 'undefined') { stops.forEach((st, i) => pedir(st, i)); return; }
-    if (this._enrichObs) { try { this._enrichObs.disconnect(); } catch (_) {} }
-    this._enrichObs = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (!en.isIntersecting) return;
-        const i = parseInt(String(en.target.id).replace('itin-photo-', ''), 10);
-        this._enrichObs.unobserve(en.target);
-        if (!isNaN(i) && stops[i]) pedir(stops[i], i);
-      });
-    }, { threshold: 0.4 });
     stops.forEach((st, i) => {
-      const el = document.getElementById(`itin-photo-${i}`);
-      if (el && st.place_id) this._enrichObs.observe(el);
+      const div = document.getElementById(`itin-places-${i}`);
+      if (!div || !st.place_id || div.innerHTML.trim()) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'itin-card-horario-btn';
+      btn.textContent = '🕒 Horario y valoración';
+      btn.style.cssText = 'background:none;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.75);font-size:12px;padding:5px 10px;margin:6px 0 2px;cursor:pointer;border-radius:0;font-family:inherit';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); pedir(st, i, btn); });
+      div.appendChild(btn);
     });
   },
 
