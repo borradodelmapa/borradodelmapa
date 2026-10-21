@@ -48,29 +48,63 @@ async function _googleCaps(env) {
   _gcapCache = { t: now, v };
   return v;
 }
+// CONTADOR SIN PÉRDIDAS (21 oct 2026). Antes cada llamada leía el contador de KV, le sumaba la suya y lo escribía: con 40
+// búsquedas a la vez (verifyAllStops) todas leían el MISMO número y el contador subía como si fuera una sola. Resultado:
+// Google contó 888 peticiones en un día y nosotros ~245, y el tope de 9 €/día frenaba tarde. Ahora:
+//  · lo gastado se suma EN MEMORIA al momento (_gPend), así el tope lo ve en la misma petición;
+//  · se escribe en KV en COLA, una escritura cada vez y con todo lo pendiente junto (_gCola), nunca dos a la vez;
+//  · KV se relee como mucho cada 30 s (_gDia) para ver lo que gastan otros aislados.
+let _gPend = null;                 // { day, mon, eur, n } gastado y aún no escrito
+let _gDia = null;                  // { day, eur, mEur, t } última lectura de KV
+let _gCola = Promise.resolve();    // escrituras en orden
+let _gVuelo = 0;                   // € que se están escribiendo ahora mismo (ni en _gPend ni aún en _gDia)
+let _gateCtx = null;               // ctx de la petición en curso (waitUntil para que la escritura termine)
+async function _gEscribir(env, p) {
+  if (!p || !(p.eur > 0)) return;
+  const dKey = 'gspend:d:' + p.day, mKey = 'gspend:m:' + p.mon;
+  const [dRaw, mRaw] = await Promise.all([env.SALMA_KB.get(dKey), env.SALMA_KB.get(mKey)]);
+  const d = dRaw ? JSON.parse(dRaw) : { eur: 0, n: {} };
+  d.eur = (d.eur || 0) + p.eur; d.n = d.n || {};
+  for (const [k, v] of Object.entries(p.n)) d.n[k] = (d.n[k] || 0) + v;
+  const m = (parseFloat(mRaw) || 0) + p.eur;
+  await Promise.all([
+    env.SALMA_KB.put(dKey, JSON.stringify(d), { expirationTtl: 40 * 86400 }),
+    env.SALMA_KB.put(mKey, String(m), { expirationTtl: 400 * 86400 }),
+  ]);
+  if (_gDia && _gDia.day === p.day) _gDia = { day: p.day, eur: d.eur, mEur: m, t: Date.now() };
+}
+function _gEncolar(env) {
+  _gCola = _gCola.then(async () => {
+    const p = _gPend; _gPend = null;
+    const v = (p && p.eur) || 0; _gVuelo += v;
+    try { await _gEscribir(env, p); } finally { _gVuelo -= v; }
+  }).catch(() => {});
+  try { if (_gateCtx) _gateCtx.waitUntil(_gCola); } catch (_) {}
+  return _gCola;
+}
 // Devuelve null si se puede llamar a Google, o la Response "sin cuota" si se ha superado el tope.
 async function _googleGate(env, sku) {
   if (!env?.SALMA_KB) return null;
   try {
     const caps = await _googleCaps(env);
     const day = new Date().toISOString().slice(0, 10), mon = day.slice(0, 7);
-    const dKey = 'gspend:d:' + day, mKey = 'gspend:m:' + mon;
-    const [dRaw, mRaw] = await Promise.all([env.SALMA_KB.get(dKey), env.SALMA_KB.get(mKey)]);
-    const d = dRaw ? JSON.parse(dRaw) : { eur: 0, n: {} };
-    const mEur = parseFloat(mRaw) || 0;
+    if (!_gDia || _gDia.day !== day || Date.now() - _gDia.t > 30000) {
+      const [dRaw, mRaw] = await Promise.all([env.SALMA_KB.get('gspend:d:' + day), env.SALMA_KB.get('gspend:m:' + mon)]);
+      _gDia = { day, eur: (dRaw ? JSON.parse(dRaw).eur : 0) || 0, mEur: parseFloat(mRaw) || 0, t: Date.now() };
+    }
+    if (_gPend && _gPend.day !== day) _gEncolar(env);   // cambio de día: lo pendiente va a su día
+    const pend = ((_gPend && _gPend.day === day) ? _gPend.eur : 0) + _gVuelo;
     const c = GOOGLE_UNIT_EUR[sku] ?? GOOGLE_UNIT_EUR.other;
     // Se corta si esta llamada HARÍA superar el tope (así el gasto estimado no lo rebasa ni en una llamada).
-    if ((d.eur || 0) + c > caps.daily_eur || mEur + c > caps.monthly_eur) {
-      console.log(`[GASTO-GOOGLE] TOPE alcanzado (día ${(d.eur || 0).toFixed(2)}€/${caps.daily_eur}€, mes ${mEur.toFixed(2)}€/${caps.monthly_eur}€) — no se llama a Google (${sku})`);
+    if (_gDia.eur + pend + c > caps.daily_eur || _gDia.mEur + pend + c > caps.monthly_eur) {
+      console.log(`[GASTO-GOOGLE] TOPE alcanzado (día ${(_gDia.eur + pend).toFixed(2)}€/${caps.daily_eur}€, mes ${(_gDia.mEur + pend).toFixed(2)}€/${caps.monthly_eur}€) — no se llama a Google (${sku})`);
       if (sku === 'photo' || sku === 'static') return new Response('spend cap', { status: 429, headers: { 'X-Spend-Cap': '1' } });
       return new Response(JSON.stringify({ status: 'OVER_QUERY_LIMIT', error_message: 'Tope de gasto propio del Worker', candidates: [], results: [], routes: [] }),
         { status: 200, headers: { 'Content-Type': 'application/json', 'X-Spend-Cap': '1' } });
     }
-    d.eur = (d.eur || 0) + c; d.n = d.n || {}; d.n[sku] = (d.n[sku] || 0) + 1;
-    await Promise.all([
-      env.SALMA_KB.put(dKey, JSON.stringify(d), { expirationTtl: 40 * 86400 }),
-      env.SALMA_KB.put(mKey, String(mEur + c), { expirationTtl: 400 * 86400 }),
-    ]);
+    if (!_gPend) _gPend = { day, mon, eur: 0, n: {} };
+    _gPend.eur += c; _gPend.n[sku] = (_gPend.n[sku] || 0) + 1;
+    _gEncolar(env);
   } catch (_) { /* fail-open */ }
   return null;
 }
@@ -11418,6 +11452,7 @@ export default {
 
   async _fetch(request, env, ctx) {
     _gateEnv = env; // guardián de gasto en Google (ver TOPE DE GASTO PROPIO)
+    _gateCtx = ctx;
     // CORS
     if (request.method === 'OPTIONS') {
       return new Response(null, {
@@ -17867,6 +17902,7 @@ REGLAS:
   // ═══════════════════════════════════════════════════════════════
   async scheduled(event, env, ctx) {
     _gateEnv = env; // guardián de gasto en Google (ver TOPE DE GASTO PROPIO)
+    _gateCtx = ctx;
     if (!env.SALMA_KB) return;
 
     const hour = new Date(event.scheduledTime).getUTCHours();
