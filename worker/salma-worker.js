@@ -8017,7 +8017,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     if (!day) { if (!tieneMarcasSitio(linea) && !intro) intro = limpiar(linea); continue; }
     // Presentación escrita DESPUÉS de la cabecera del día 1 y antes de su primer sitio (Camboya, 21 oct 2026: «Esto da para
     // 10 días sin correr: Phnom Penh, Battambang…»): vale de resumen si no hubo presentación antes del día 1.
-    if (day === 1 && !stops.length && !introDia1 && !tieneMarcasSitio(linea)) introDia1 = limpiar(linea);
+    if (day === 1 && !stops.length && !introDia1 && !tieneMarcasSitio(linea) && !/^(?:\*\*)?\s*c[oó]mo llegar/i.test(linea)) introDia1 = limpiar(linea);
     // TRAYECTOS (21 oct 2026): «Cómo llegar: vuelo Hanói-Hué, 1h10…» no es un sitio; se guarda y se pega como «Trayecto:» al
     // texto de la parada siguiente (ver más abajo). Antes estas líneas se perdían.
     const _llegar = linea.match(/^(?:\*\*)?\s*c[oó]mo llegar\s*:?\s*(?:\*\*)?\s*:?\s*(.+)$/i);
@@ -8149,11 +8149,11 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
 // RUTAS POR CARRETERA / REGIÓN (sin un centro): el lector saca las paradas, pero Google necesita las coordenadas de
 // cada sitio para comprobarlo. Se le piden SOLO las coordenadas a Sonnet (una lista corta, ~20 tokens por sitio) en vez
 // de reescribir el plan entero (Pirineos, 30 sept 2026: la reescritura tardó 84 s). null si falla → como siempre.
-async function coordsForMarkedStops(stops, env, { countryName = '', region = '', usageAcc = null } = {}) {
+async function coordsForMarkedStops(stops, env, { countryName = '', region = '', usageAcc = null, dias = 0 } = {}) {
   if (!Array.isArray(stops) || !stops.length || !env.ANTHROPIC_API_KEY) return null;
   const lista = stops.map((s, i) => `${i + 1}. ${s.name} (día ${s.day})`).join('\n');
   const sys = 'Devuelves coordenadas reales de lugares. Solo JSON, sin texto ni backticks: {"pais":"País principal del viaje, en español","zona":"Zona o región del viaje, 1-3 palabras (ej. Pirineos, Algarve, Costa Brava)","titulo":"Título corto de la guía, máx. 50 caracteres, bien escrito (ej. Transpirenaica en moto: Hondarribia → Cadaqués)","c":[[n,lat,lng],...]} con n = el NÚMERO del lugar en la lista, uno por lugar. Si un lugar no lo sabes con seguridad, pon [n,0,0].';
-  const user = `Viaje${region ? ' "' + region + '"' : ''}${countryName ? ' (' + countryName + ')' : ''}, ${new Set(stops.map(s => s.day)).size} días. Los lugares van en orden de ruta, así que cada uno está cerca del anterior y del siguiente.\n\n${lista}`;
+  const user = `Viaje${region ? ' "' + region + '"' : ''}${countryName ? ' (' + countryName + ')' : ''}, ${dias || new Set(stops.map(s => s.day)).size} días. Los lugares van en orden de ruta, así que cada uno está cerca del anterior y del siguiente.\n\n${lista}`;
   try {
     const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
@@ -16620,7 +16620,7 @@ INSTRUCCIONES:
                 region: _ciudad ? (anchorCountry.locality || '') : ((anchorCountry && anchorCountry.countryName) || ''),
               });
               if (_fastPathRoute && !_ciudad) {
-                const _c = await coordsForMarkedStops(_fastPathRoute.stops, env, { countryName: _fastPathRoute.country, region: _dest, usageAcc: _reqUsage });
+                const _c = await coordsForMarkedStops(_fastPathRoute.stops, env, { countryName: _fastPathRoute.country, region: _dest, usageAcc: _reqUsage, dias: _fastPathRoute.duration_days });
                 if (_c) {
                   _fastPathRoute.stops.forEach((s, i) => { s.lat = _c[i][0]; s.lng = _c[i][1]; });
                   if (!_fastPathRoute.country && _c.pais) _fastPathRoute.country = _c.pais;
