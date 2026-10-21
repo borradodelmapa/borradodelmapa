@@ -8543,7 +8543,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     try {
       const data = await (await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${bias}${countryFilter}&language=es&key=${placesKey}`)).json();
       if (data?.results?.[0]) return { candidates: [data.results[0]] };
-      return null;
+      return { candidates: [], status: data?.status || 'ZERO_RESULTS' };   // sin resultados ≠ fallo (null = la llamada falló)
     } catch (_) { return null; }
   }
 
@@ -8605,7 +8605,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   const attempt1 = await Promise.all(route.stops.map((stop, i) => {
     if (reuse[i]) return Promise.resolve(null); // reutilizada — no hace falta preguntarle a Google
     const name = stop.name || stop.headline || '';
-    if (!name || name.length < 3) return Promise.resolve(null);
+    if (!name || name.length < 3) return Promise.resolve({ candidates: [], status: 'SIN_NOMBRE' });
     return findPlace(name, stop.lat, stop.lng, 5000);
   }));
 
@@ -8764,6 +8764,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
 
   // Regla única: sin place_id validado por Google Places → la parada NO entra en el JSON final.
   const validatedStops = [];
+  let googleErrors = 0;   // paradas en las que Google no contestó (sin cuota, denegado, fallo): ver route.google_error
   const discarded = [];
   _topeSobran.forEach(st => discarded.push({ name: st.name || st.headline || '(sin nombre)', day: st.day || null, reason: 'tope_paradas_por_guia' }));
   const spotWrites = []; // escrituras del catálogo "nombre → lugar"; se esperan antes de salir (si no, pueden perderse)
@@ -8798,6 +8799,17 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     if (!bc) {
       const last = a3[i] || a2[i] || attempt1[i];
       const lc = last?.candidates?.[0];
+      // GOOGLE NO CONTESTÓ (21 oct 2026): sin cuota diaria (OVER_QUERY_LIMIT), clave denegada, error o la llamada falló.
+      // NO es «no existe»: antes se confundía y la parada entraba «sin verificar» con coordenadas aproximadas (Basílica
+      // del Santo Niño de Cebú). Ahora cuenta como error de Google y quien crea la guía decide (ver route.google_error).
+      const _st = r => r === null ? 'FALLO' : (r && r.status);
+      const _errG = ['OVER_QUERY_LIMIT', 'REQUEST_DENIED', 'UNKNOWN_ERROR', 'FALLO'];
+      if (!lc?.geometry?.location && [attempt1[i], a2[i], a3[i]].some(r => _errG.includes(_st(r)))) {
+        googleErrors++;
+        discarded.push({ name: stop.name || stop.headline || '(sin nombre)', day: stop.day || null, reason: 'google_error' });
+        console.log(`[VERIFY] ✗ GOOGLE NO CONTESTÓ "${stop.name}" (${[attempt1[i], a2[i], a3[i]].map(_st).filter(Boolean).join('/')})`);
+        return;
+      }
       const reason = !lc?.geometry?.location ? 'no_google_result' : (validateCandidate(lc, stop).reason || 'no_match');
       // "no_google_result" = Google no devolvió NADA para ese nombre — frecuente en faros
       // pequeños/automáticos sin ficha propia en Places. Antes se descartaban siempre,
@@ -9036,6 +9048,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   route.nearby_stops = nearbyStops;
   if (nearbyStops.length && opts.anchorLocality) route.anchor_locality = opts.anchorLocality;
   route.discarded_stops = discarded;
+  if (googleErrors) route.google_error = googleErrors; else delete route.google_error;
   route.maps_links = buildMapsLinksFromStops(finalStops, region);
 
   // Pueblo pequeño: la ruta dentro del casco queda corta y hay escapadas al lado.
@@ -17536,6 +17549,17 @@ REGLAS:
               if (_fastPathRoute) console.log(`[T2-TIEMPO] comprobación de Google: ${Math.round((Date.now() - _tVer) / 1000)} s (${route.stops?.length || 0} paradas${route._lector ? ', lector' : ''})`);
               if (_t2log) _t2log.ms_google = Date.now() - _tVer;
               if (verified) route = verified;
+              // GUÍA NUEVA Y GOOGLE NO CONTESTÓ (sin cuota diaria, denegado, fallo) en alguna parada → no se entrega una guía a
+              // medias ni se gasta el cupo: aviso para reintentar (21 oct 2026, Filipinas con 12 paradas «sin verificar» por cuota).
+              if (_usageKind === 'guide' && route && route.google_error) {
+                console.log(`[T2-FAIL] Google no contestó en ${route.google_error} paradas — guía no entregada`);
+                if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, camino: 'fallo', motivo: `Google no contestó (${route.google_error} paradas: sin cuota o error)`, ms_total: Date.now() - _t2log.inicio }));
+                ctx.waitUntil(_recErr({ origen: 'worker', huella: 'google-sin-respuesta', titulo: 'Google no contestó al crear una guía (¿cuota diaria?)', zona: 'rutas', gravedad: 'alta', ejemplo: `${route.google_error} paradas sin respuesta de Google`, detalle: (route.discarded_stops || []).filter(d => d.reason === 'google_error').map(d => d.name).join(', ').slice(0, 300) }));
+                _usageConsume = null;   // un fallo nuestro no gasta la guía del usuario
+                _flushUsage();
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Ahora mismo no puedo comprobar los sitios en Google y no quiero darte una guía a medias. Inténtalo de nuevo en unos minutos con el mismo botón; tu plan sigue aquí arriba.', route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
+                return;
+              }
               // Edición por operaciones: SOLO entra lo nuevo que Google confirma con place_id (una parada
               // "sin verificar" con las coordenadas de la IA podría dar un "Cómo llegar" erróneo). La
               // sustituida solo sale si su reemplazo se confirmó; si no, se conserva la de antes.
