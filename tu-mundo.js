@@ -563,7 +563,9 @@ const tuMundo = (() => {
       const m = L.marker([lat, lng], { icon: L.divIcon({ className: 'tm-pin-w', html, iconSize: [44, 44], iconAnchor: [22, 22] }) }).addTo(layer);
       m.on('click', () => _lbOpen(grp || [p], idx || 0));
     };
+    let playing = false;   // durante ▶ Reproducir no se repintan las fotos del mapa en cada fotograma
     const paint = () => {
+      if (playing) return;
       layer.clearLayers();
       const z = map.getZoom();
       _clusterPts(map, pts, z >= 15 ? 30 : z >= 12 ? 44 : 56).forEach(g => {
@@ -592,65 +594,82 @@ const tuMundo = (() => {
     map.on('zoomend', paint);
     if (pts.length) map.fitBounds(line.getBounds(), { padding: [40, 40], maxZoom: 14 }); else map.setView([25, 10], 2);
     paint();
-    // ▶ Reproducir mi viaje (rediseño 21 oct 2026, estilo Polarsteps): la cámara viaja despacio de parada en parada, la ruta se
-    // dibuja y abajo sale una tarjeta con la foto GRANDE (pasan las de esa parada), país y fecha. Pausa, anterior/siguiente y barra.
-    // 💶 0 €: solo mueve el mapa con las fotos ya cargadas.
+    // ▶ Reproducir mi viaje (rediseño 21 oct 2026): una sola cámara que viaja con el punto de parada en parada (sin saltos ni
+    // mapa vacío), la ruta se dibuja según avanza (nada más: sin países en rojo ni líneas sueltas) y en cada parada sube una
+    // tarjeta con la foto GRANDE. Pausa, anterior/siguiente y barra de progreso. 💶 0 €: solo mueve el mapa con fotos ya cargadas.
     const playBtn = _q('#tm-play'), stops = pts.length > 1 ? _stopsOf(pts) : [];
     if (playBtn) {
       playBtn.hidden = stops.length < 2;
-      let run = 0, trail = null, dot = null, ghost = null, card = null, cur = 0, paused = false, timers = [];
-      const clr = () => { timers.forEach(t => { clearTimeout(t); clearInterval(t); }); timers = []; };
+      let run = 0, trail = null, dot = null, card = null, top = null, world = null, cur = 0, paused = false, timers = [], raf = 0, snap = 1;
+      const clr = () => { timers.forEach(t => { clearTimeout(t); clearInterval(t); }); timers = []; cancelAnimationFrame(raf); };
       const after = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
+      const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       const fin = () => {
-        run++; clr(); [trail, dot, ghost, card].forEach(x => { if (x && x.remove) x.remove(); }); trail = dot = ghost = card = null;
-        box.classList.remove('tm-playing'); map.invalidateSize();
-        if (_q('#tm-fm-f') && _q('#tm-fm-f').checked) photos.addTo(map);
-        playBtn.textContent = '▶ Reproducir';
+        run++; clr(); playing = false; [trail, dot, card, top, world].forEach(x => { if (x && x.remove) x.remove(); }); trail = dot = card = top = world = null;
+        box.classList.remove('tm-playing'); map.options.zoomSnap = snap; map.invalidateSize();
+        [['#tm-fm-c', cv], ['#tm-fm-p', cp], ['#tm-fm-f', photos]].forEach(([id, lay]) => { const c = _q(id); if (!c || c.checked) lay.addTo(map); });
+        paint(); playBtn.textContent = '▶ Reproducir';
       };
-      // la parada se coloca en la parte alta del mapa: la tarjeta con la foto ocupa la baja
-      const fly = (st, z, dur) => { const c = map.project([st.lat, st.lng], z).add([0, box.clientHeight * 0.2]); map.flyTo(map.unproject(c, z), z, { duration: dur }); };
+      // cámara: la parada se coloca en la parte alta del mapa, la tarjeta con la foto ocupa la baja
+      const look = (lat, lng, z) => { const c = map.project([lat, lng], z).add([0, box.clientHeight * 0.2]); map.setView(map.unproject(c, z), z, { animate: false }); };
+      const zoomOf = st => st.photos.length > 1 ? 10 : 12;
       const paintCard = i => {
         const st = stops[i], f = countryAt(st.lat, st.lng), d = st.t ? new Date(st.t) : null, ph = st.photos.slice(0, 6);
         card.querySelector('.tm-play-ph').innerHTML = ph.map((p, k) => `<img src="${esc(p.url)}" alt=""${k ? '' : ' class="on"'}>`).join('');
         card.querySelector('.tm-play-tx').innerHTML = `<b>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : 'Tu viaje'}</b><span>${d ? d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} · ${st.photos.length} ${st.photos.length === 1 ? 'foto' : 'fotos'}</span><i>${i + 1} / ${stops.length}</i>`;
-        card.querySelector('.tm-play-bar i').style.width = ((i + 1) / stops.length * 100) + '%';
-        card.classList.remove('in'); void card.offsetWidth; card.classList.add('in');
+        top.querySelector('.tm-play-bar i').style.width = ((i + 1) / stops.length * 100) + '%';
+        card.classList.add('up');
         const imgs = [...card.querySelectorAll('.tm-play-ph img')]; let k = 0;
-        if (imgs.length > 1) timers.push(setInterval(() => { imgs[k].classList.remove('on'); k = (k + 1) % imgs.length; imgs[k].classList.add('on'); }, 2400));
-        return Math.max(5500, imgs.length * 2400);
+        if (imgs.length > 1) timers.push(setInterval(() => { imgs[k].classList.remove('on'); k = (k + 1) % imgs.length; imgs[k].classList.add('on'); }, 2600));
+        return Math.max(5500, imgs.length * 2600);
       };
-      const show = i => {
+      const show = (i, from) => {
         if (i < 0) i = 0;
         if (i >= stops.length) { end(); return; }
-        clr(); cur = i; const st = stops[i], id = run;
-        trail.setLatLngs(stops.slice(0, i + 1).map(s => [s.lat, s.lng])); dot.setLatLng([st.lat, st.lng]);
-        card.querySelector('.tm-play-ph').innerHTML = ''; card.querySelector('.tm-play-tx').innerHTML = '';
-        fly(st, st.photos.length > 1 ? 10 : 12, i ? 3.2 : 1.2);
-        after(i ? 3000 : 1000, () => { if (id !== run) return; const dwell = paintCard(i); if (!paused) after(dwell, () => { if (id === run) show(i + 1); }); });
+        clr(); cur = i; const st = stops[i], id = run, zb = zoomOf(st);
+        card.classList.remove('up');
+        const arrive = () => { if (id !== run) return; const dwell = paintCard(i); look(st.lat, st.lng, zb); if (!paused) after(dwell, () => { if (id === run) show(i + 1); }); };
+        const a = from || (i ? stops[i - 1] : null);
+        if (!a || (a.lat === st.lat && a.lng === st.lng)) { trail.setLatLngs(stops.slice(0, i + 1).map(s => [s.lat, s.lng])); dot.setLatLng([st.lat, st.lng]); look(st.lat, st.lng, zb); after(700, arrive); return; }
+        // tramo: el punto y la cámara avanzan juntos; si el tramo es largo la cámara se aleja a mitad de camino y vuelve a acercarse
+        const prev = stops.slice(0, i).map(s => [s.lat, s.lng]), za = Math.round(map.getZoom()), dist = hav(a, st), ms = Math.min(7000, Math.max(3200, 2600 + dist * 1.4));
+        const zFit = map.getBoundsZoom(L.latLngBounds([[a.lat, a.lng], [st.lat, st.lng]]), false, L.point(90, 90)), zLow = Math.max(2, Math.min(zFit - .2, za, zb)), bump = Math.min(za, zb) - zLow, t0 = performance.now();
+        const step = now => {
+          if (id !== run) return;
+          const t = Math.min(1, (now - t0) / ms), e = ease(t), lat = a.lat + (st.lat - a.lat) * e, lng = a.lng + (st.lng - a.lng) * e;
+          dot.setLatLng([lat, lng]); trail.setLatLngs(prev.concat([[lat, lng]]));
+          look(lat, lng, za + (zb - za) * e - bump * Math.sin(Math.PI * t));
+          if (t < 1) raf = requestAnimationFrame(step); else arrive();
+        };
+        raf = requestAnimationFrame(step);
       };
       const end = () => {
         clr(); const id = run;
-        card.querySelector('.tm-play-ph').innerHTML = ''; card.querySelector('.tm-play-bar i').style.width = '100%';
-        card.querySelector('.tm-play-tx').innerHTML = `<b>Tu viaje completo</b><span>${stops.length} paradas · ${pts.length} fotos</span>`;
-        map.flyToBounds(trail.getBounds(), { padding: [50, 50], duration: 2.4 });
+        card.classList.remove('up'); top.querySelector('.tm-play-bar i').style.width = '100%';
+        map.flyToBounds(trail.getBounds(), { padding: [50, 50], duration: 2.6 });
         after(7000, () => { if (id === run) fin(); });
       };
       playBtn.onclick = () => {
         if (card) { fin(); return; }
-        run++; paused = false; playBtn.textContent = '■ Parar';
-        map.removeLayer(photos); map.closePopup();
-        box.classList.add('tm-playing'); map.invalidateSize();
-        ghost = L.polyline(stops.map(s => [s.lat, s.lng]), { color: '#F4630B', weight: 2, opacity: .35, dashArray: '2 6' }).addTo(map);
-        trail = L.polyline([], { color: '#F4630B', weight: 4, opacity: .95 }).addTo(map);
-        dot = L.circleMarker([stops[0].lat, stops[0].lng], { radius: 9, color: '#fff', weight: 3, fillColor: '#F4630B', fillOpacity: 1 }).addTo(map);
+        run++; paused = false; playing = true; playBtn.textContent = '■ Parar';
+        [cv, cp, photos].forEach(lay => map.removeLayer(lay)); map.closePopup();
+        box.classList.add('tm-playing'); snap = map.options.zoomSnap; map.options.zoomSnap = 0; map.invalidateSize();
+        // base de países en vector, por DEBAJO de los mapas: si al volar los mapas aún no han cargado, nunca se ve el fondo vacío
+        if (!map.getPane('tmWorld')) { const pn = map.createPane('tmWorld'); pn.style.zIndex = 150; pn.style.pointerEvents = 'none'; }
+        const rend = L.canvas({ pane: 'tmWorld' });
+        world = L.layerGroup(FEATS.flatMap(f => f.polys.map(poly => L.polygon(poly.map(r => r.map(([x, y]) => [y, x])), { renderer: rend, pane: 'tmWorld', interactive: false, color: '#3a444a', weight: .8, fillColor: '#232b30', fillOpacity: 1 })))).addTo(map);
+        trail = L.polyline([], { color: '#F4630B', weight: 4, opacity: .95, interactive: false }).addTo(map);
+        dot = L.circleMarker([stops[0].lat, stops[0].lng], { radius: 9, color: '#fff', weight: 3, fillColor: '#F4630B', fillOpacity: 1, interactive: false }).addTo(map);
         card = document.createElement('div'); card.className = 'tm-play-card';
-        card.innerHTML = '<div class="tm-play-ph"></div><div class="tm-play-tx"></div><div class="tm-play-bar"><i></i></div><div class="tm-play-ctl"><button type="button" data-a="prev" aria-label="Anterior">⏮</button><button type="button" data-a="pause" aria-label="Pausa">⏸</button><button type="button" data-a="next" aria-label="Siguiente">⏭</button></div>';
-        box.appendChild(card);
-        L.DomEvent.disableClickPropagation(card);
-        card.querySelector('.tm-play-ctl').onclick = e => {
-          const b = e.target.closest('button'); if (!b) return; const act = b.dataset.a, pb = card.querySelector('[data-a=pause]');
-          if (act === 'pause') { paused = !paused; pb.textContent = paused ? '▶' : '⏸'; if (paused) clr(); else show(cur); }
-          else { paused = false; pb.textContent = '⏸'; show(act === 'next' ? cur + 1 : cur - 1); }
+        card.innerHTML = '<div class="tm-play-ph"></div><div class="tm-play-tx"></div>';
+        top = document.createElement('div'); top.className = 'tm-play-top';
+        top.innerHTML = '<div class="tm-play-bar"><i></i></div><div class="tm-play-ctl"><button type="button" data-a="prev" aria-label="Anterior">⏮</button><button type="button" data-a="pause" aria-label="Pausa">⏸</button><button type="button" data-a="next" aria-label="Siguiente">⏭</button></div>';
+        box.appendChild(card); box.appendChild(top);
+        L.DomEvent.disableClickPropagation(card); L.DomEvent.disableClickPropagation(top);
+        top.querySelector('.tm-play-ctl').onclick = e => {
+          const b = e.target.closest('button'); if (!b) return; const act = b.dataset.a, pb = top.querySelector('[data-a=pause]');
+          if (act === 'pause') { paused = !paused; pb.textContent = paused ? '▶' : '⏸'; if (paused) clr(); else show(cur, dot.getLatLng()); }
+          else { paused = false; pb.textContent = '⏸'; show(act === 'next' ? cur + 1 : cur - 1, dot.getLatLng()); }
         };
         map.setView([stops[0].lat, stops[0].lng], 4, { animate: false });
         show(0);
