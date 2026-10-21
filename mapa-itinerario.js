@@ -1656,6 +1656,7 @@ ${trk}
   // la entrada de historial. El botón atrás llega por popModal → _teardownItinView.
   function closeItinerarioView() {
     if (!window._itinViewOpen) return;
+    window._dkForceNew = true;   // escritorio: la portada no reabre la guía que se acaba de cerrar
     _teardownItinView();
     if (window.popModal) window.popModal('itinerario');
   }

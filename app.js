@@ -529,6 +529,7 @@ function _closeSalmaScreen() {
     return;
   }
   _setSalmaScreen(false);
+  window._dkForceNew = true;   // escritorio: la portada no reabre la guía activa
   const area = document.getElementById('chat-area');
   if (typeof salma !== 'undefined' && area && area.querySelector('.msg') && salma.newChat) salma.newChat(true);
   else if (area) { area.innerHTML = ''; _renderChatEmpty(); }
