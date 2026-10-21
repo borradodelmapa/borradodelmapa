@@ -8460,6 +8460,14 @@ function addressContainsLocation(formattedAddress, ...locations) {
   return locations.filter(Boolean).map(normalizeForMatch).some(c => c && c.length > 2 && normAddr.includes(c));
 }
 
+// Autor de una foto de Google Places: html_attributions = ['<a href="https://maps.google.com/maps/contrib/…">Nombre</a>'].
+function _fotoAutor(foto) {
+  const h = foto && Array.isArray(foto.html_attributions) && foto.html_attributions[0];
+  if (!h) return null;
+  const m = String(h).match(/<a[^>]*href="([^"]+)"[^>]*>([^<]+)<\/a>/i);
+  const autor = (m ? m[2] : String(h).replace(/<[^>]+>/g, '')).trim().slice(0, 80);
+  return autor ? { autor, url: m && /^https:\/\//.test(m[1]) ? m[1] : '' } : null;
+}
 function _locNormLite(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
 async function verifyAllStops(route, placesKey, opts = {}, env) {
   if (!route?.stops || !placesKey) return route;
@@ -8838,6 +8846,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       delete stop._soft_match;
       if (prev.verified_address) stop.verified_address = prev.verified_address;
       if (prev.photo_ref) stop.photo_ref = prev.photo_ref;
+      if (prev.photo_attr) stop.photo_attr = prev.photo_attr;
       if (!stop.practical && prev.practical) stop.practical = prev.practical;
       if (!stop.description && prev.description) stop.description = prev.description;
       if (prev.name && strictNameMatch(stop.name || stop.headline || '', prev.name)) {
@@ -8900,8 +8909,12 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     delete stop._verifyReason;
     if (bc.soft) stop._soft_match = true; else delete stop._soft_match;
 
-    const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
+    const _fotoObj = (detail?.photos?.[0]?.photo_reference && detail.photos[0]) || candidate.photos?.[0] || null;
+    const photoRef = _fotoObj?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
+    // Autor de la foto (21 oct 2026): Google exige mostrarlo junto a la foto; viene en la misma respuesta, sin coste.
+    const _aut = _fotoAutor(_fotoObj);
+    if (_aut) stop.photo_attr = _aut; else delete stop.photo_attr;
 
     const _askedName = stop.name || stop.headline || '';
     if (googleName && strictNameMatch(stop.name || stop.headline || '', googleName)) {
@@ -8932,7 +8945,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
           place_id: stop.place_id, lat: stop.lat, lng: stop.lng,
           name: stop.name, verified_address: stop.verified_address || '',
           photo_ref: stop.photo_ref || '', practical: stop.practical || '',
-          description: stop.description || '',
+          description: stop.description || '', ...(stop.photo_attr ? { photo_attr: stop.photo_attr } : {}),
         })).catch(() => {}));
       }
     }
@@ -13014,6 +13027,22 @@ export default {
       const lng = url.searchParams.get('lng') || '';
       const placesKey = env.GOOGLE_PLACES_KEY;
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      // FOTO POR SITIO (21 oct 2026, Paco: «no es lógico pagar otra vez»): la referencia de foto que da Google CAMBIA en cada
+      // búsqueda del mismo sitio (Filipinas: la Basílica del Santo Niño salió 4 veces con 4 referencias → 4 fotos pagadas).
+      // Con el identificador del sitio (pid = place_id, fijo), la foto se guarda en R2 como fotositio/<pid>.jpg y no se vuelve
+      // a pedir a Google NUNCA, venga con la referencia que venga.
+      const pid = /^[A-Za-z0-9_-]{10,300}$/.test(url.searchParams.get('pid') || '') ? url.searchParams.get('pid') : '';
+      const pidKey = pid ? 'fotositio/' + pid + '.jpg' : '';
+      const urlDe = r => 'https://salma-api.borradodelmapa-api.workers.dev/photo?' + (pid ? 'pid=' + encodeURIComponent(pid) + (r ? '&' : '') : '') + (r ? 'ref=' + encodeURIComponent(r) : '');
+      if (pid && env.SALMA_PHOTOS) {
+        try {
+          const g = await env.SALMA_PHOTOS.get(pidKey);
+          if (g) {
+            if (url.searchParams.get('json') === '1') return new Response(JSON.stringify({ url: urlDe('') }), { headers: { ...corsH, 'Cache-Control': 'no-store' } });
+            return new Response(g.body, { headers: { 'Content-Type': g.httpMetadata?.contentType || 'image/jpeg', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=31536000' } });
+          }
+        } catch (_) {}
+      }
 
       if (!placesKey || (!ref && !name)) {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
@@ -13156,6 +13185,13 @@ export default {
 
         if (!photo) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
 
+        // Primera vez que se ve este sitio con su identificador: copia permanente por sitio (ver FOTO POR SITIO).
+        if (pid && env.SALMA_PHOTOS) {
+          if (!(photo.body instanceof ArrayBuffer)) photo.body = await new Response(photo.body).arrayBuffer();
+          const p = env.SALMA_PHOTOS.put(pidKey, photo.body.slice(0), { httpMetadata: { contentType: photo.contentType } }).catch(() => {});
+          if (ctx?.waitUntil) ctx.waitUntil(p);
+        }
+
         if (url.searchParams.get('json') === '1') {
           // Apunta a nuestro propio /photo?ref= (siempre válido, resuelve de R2 o de
           // Google al vuelo) — NUNCA a /photo/<r2Key> directo: ese depende de que el
@@ -13167,7 +13203,7 @@ export default {
           // el fix ya estaba desplegado pero el navegador seguía devolviendo la URL
           // rota de la respuesta cacheada de un rato antes). La foto en sí ya tiene
           // su propio caché fuerte (1 año) en /photo?ref=, esto no necesita el suyo.
-          return new Response(JSON.stringify({ url: `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(resolvedRef)}` }), {
+          return new Response(JSON.stringify({ url: urlDe(resolvedRef) }), {
             headers: { ...corsH, 'Cache-Control': 'no-store' }
           });
         }
