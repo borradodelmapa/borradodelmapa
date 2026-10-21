@@ -52,19 +52,21 @@ function casesToken() {
 
   const t0 = Date.now();
   const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + login.idToken }, body: JSON.stringify(body) });
-  let reply = '', ultimo = null;
+  let reply = '', ultimo = null, marcas = '';
   if ((res.headers.get('content-type') || '').includes('application/json')) {
     ultimo = await res.json(); reply = ultimo.reply || '';
   } else {
     const txt = await res.text();
     for (const linea of txt.split('\n')) {
       if (!linea.startsWith('data: ')) continue;
-      try { const ev = JSON.parse(linea.slice(6)); if (typeof ev.t === "string") reply += ev.t; if (ev.done) { ultimo = ev; if (ev.reply) reply = ev.reply; } } catch (_) {}
+      try { const ev = JSON.parse(linea.slice(6)); if (typeof ev.t === "string") reply += ev.t; if (ev.done) { ultimo = ev; if (ev.reply) reply = ev.reply; if (ev.reply_marcas) marcas = ev.reply_marcas; } } catch (_) {}
     }
   }
   const seg = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`\n── Salma (${seg} s, Worker ${res.headers.get('x-worker-version') || '?'}) ──\n${reply}\n`);
-  console.log(`Caracteres: ${reply.length}${ultimo && ultimo.route ? ' · trae GUÍA' : ''}`);
+  // El plan CON los sitios marcados [[ ]] (lo que la app manda al pulsar «Crear ruta con mapa»): lo usa crear-guia.cjs
+  try { fs.writeFileSync(path.join(path.dirname(HIST), '.probar-chat-marcas.txt'), marcas || ''); } catch (_) {}
+  console.log(`Caracteres: ${reply.length}${marcas ? ' · con marcas: ' + (marcas.match(/\[\[/g) || []).length + ' sitios' : ''}${ultimo && ultimo.route ? ' · trae GUÍA' : ''}`);
   try { fs.mkdirSync(path.dirname(HIST), { recursive: true }); fs.writeFileSync(HIST, JSON.stringify([...history, { role: 'user', content: mensaje }, { role: 'assistant', content: reply }].slice(-20))); } catch (_) {}
 
   // Coste de este mensaje (lo escribe el Worker en chat_costs unos segundos después).
