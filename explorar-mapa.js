@@ -29,13 +29,13 @@ const explorarMapa = (() => {
     s.id = 'exm-css';
     s.textContent = `
 .exm-escena { position: relative; }
-.exm-mapa { background: #101418; transition: height .35s ease; }
-.exm-mapa.leaflet-container { background: #101418; font-family: var(--font-body); }
+.exm-mapa { background: #0b1216; transition: height .35s ease; }
+.exm-mapa.leaflet-container { background: #0b1216; font-family: var(--font-body); }
 .exm .leaflet-bar a, .exm .leaflet-bar a:hover { background: var(--gris); color: var(--crema); border-radius: 0 !important; border-bottom-color: var(--linea); }
 .exm .leaflet-bar { border: 1px solid var(--linea-fuerte) !important; border-radius: 0 !important; box-shadow: none !important; }
 .exm-tt.leaflet-tooltip { background: var(--negro); color: var(--crema); border: 1px solid var(--dorado); border-radius: 0; box-shadow: none; font: 700 14px var(--font-display); letter-spacing: .05em; text-transform: uppercase; padding: 4px 8px; }
 .exm-tt.leaflet-tooltip::before { display: none; }
-.exm-num { background: var(--dorado); color: var(--negro); font: 800 13px/22px var(--font-display); text-align: center; min-width: 22px; height: 22px; padding: 0 5px; border: 2px solid var(--negro); }
+.exm-num { box-sizing: border-box; background: var(--dorado); color: var(--negro); font: 800 14px/24px var(--font-display); text-align: center; width: 28px; height: 28px; padding: 0; border: 2px solid var(--negro); border-radius: 50%; box-shadow: 0 0 0 2px rgba(244,99,11,.45); }
 .exm-num.sel { background: var(--crema); }
 .exm-busca { position: absolute; z-index: 800; top: 12px; left: 12px; right: 52px; max-width: 560px; } /* a la derecha queda el botón flotante de Mejora Salma */
 .exm-busca input { width: 100%; box-sizing: border-box; font: 500 16px var(--font-body); color: var(--crema); background: var(--negro); border: 1px solid var(--linea-fuerte); border-radius: 0; padding: 14px 14px 14px 44px; outline: none; box-shadow: 0 6px 20px rgba(0,0,0,.45); -webkit-appearance: none; }
@@ -100,31 +100,40 @@ const explorarMapa = (() => {
     el.style.height = Math.max(300, window.innerHeight - top - barH) + 'px';
   }
 
+  // El mundo entero a la vista (como en Tu vuelta al mundo), centrado; no se puede alejar más que eso
+  const MUNDO = L.latLngBounds([[-58, -180], [84, 190]]);
   function _verMundo(anim) {
-    const map = st.map, s = map.getSize();
-    if (s.y > s.x * 1.1) { // móvil en vertical: de la Península a Asia a la vista, el resto se arrastra
-      const z = Math.min(2, map.getBoundsZoom(L.latLngBounds([[-50, 44], [74, 46]])));
-      return anim ? map.flyTo([22, 45], z, { duration: .6 }) : map.setView([22, 45], z);
-    }
-    const b = [[-48, -135], [72, 155]];
-    return anim ? map.flyToBounds(b, { duration: .6 }) : map.fitBounds(b);
+    const map = st.map;
+    map.invalidateSize();
+    const z = map.getBoundsZoom(MUNDO, false, L.point(4, 4));
+    map.setMinZoom(z);
+    return anim ? map.flyTo(MUNDO.getCenter(), z, { duration: .6 }) : map.setView(MUNDO.getCenter(), z, { animate: false });
   }
 
   function _pintar() {
     const pp = _porPais();
     for (const cc in st.capas) {
       const n = (pp[cc] || []).length, sel = cc === st.sel;
-      const op = !n ? 1 : n >= 10 ? 1 : n >= 5 ? .78 : n >= 2 ? .58 : .4;
       st.capas[cc].forEach(l => {
-        l.setStyle({ fillColor: n ? '#F4630B' : '#2A2D30', fillOpacity: op, color: sel ? '#ECEBE8' : '#0D0F10', weight: sel ? 2.2 : .6 });
+        l.setStyle({ fillColor: n ? '#F4630B' : '#383B3D', fillOpacity: 1, color: sel ? '#ECEBE8' : '#0b1216', weight: sel ? 2.2 : .6 });
         l.unbindTooltip();
         if (_raton) l.bindTooltip(_nombre(cc) + ' · ' + (n ? plural(n, 'guía', 'guías') : 'sin guías aún'), { className: 'exm-tt', sticky: true, direction: 'top' });
       });
     }
+    _nums(pp);
+  }
+
+  // Números redondos. Si dos caen casi en el mismo punto (España y Portugal con el mundo entero a la vista),
+  // se pinta el de más guías y el otro aparece al acercar; el país sigue naranja y se puede tocar.
+  function _nums(pp) {
+    pp = pp || _porPais();
     st.nums.clearLayers();
-    for (const cc in pp) {
-      if (!st.centros[cc]) continue;
-      const m = L.marker(st.centros[cc], { icon: L.divIcon({ className: '', html: '<div class="exm-num' + (cc === st.sel ? ' sel' : '') + '">' + pp[cc].length + '</div>', iconSize: null, iconAnchor: [13, 13] }), keyboard: false, zIndexOffset: pp[cc].length * 10 });
+    const puestos = [];
+    for (const cc of Object.keys(pp).filter(c => st.centros[c]).sort((a, b) => pp[b].length - pp[a].length)) {
+      const p = st.map.latLngToContainerPoint(st.centros[cc]);
+      if (puestos.some(q => Math.hypot(q.x - p.x, q.y - p.y) < 30)) continue;
+      puestos.push(p);
+      const m = L.marker(st.centros[cc], { icon: L.divIcon({ className: '', html: '<div class="exm-num' + (cc === st.sel ? ' sel' : '') + '">' + pp[cc].length + '</div>', iconSize: null, iconAnchor: [14, 14] }), keyboard: false, zIndexOffset: pp[cc].length * 10 });
       m.on('click', () => _elegir(cc));
       m.addTo(st.nums);
     }
@@ -220,7 +229,7 @@ const explorarMapa = (() => {
         <div class="exm-mapa" id="exm-mapa" role="img" aria-label="Mapa del mundo con el número de guías por país"></div>
         <div class="exm-busca">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-          <input id="exm-q" type="search" autocomplete="off" placeholder="Busca un país, un destino o una guía" aria-label="Buscar">
+          <input id="exm-q" type="search" autocomplete="off" placeholder="Busca país o destino" aria-label="Buscar">
           <div class="exm-sug" id="exm-sug" hidden></div>
         </div>
       </div>
@@ -246,7 +255,8 @@ const explorarMapa = (() => {
     st.guias = _guias(data, destMap || {});
     for (const co of (data.countries || [])) if (co.cc) st.nombres[String(co.cc).toUpperCase()] = co.name;
 
-    const map = st.map = L.map($m, { minZoom: 1, maxZoom: 8, zoomSnap: .5, attributionControl: false, zoomControl: false, maxBounds: [[-75, -200], [85, 200]] });
+    const map = st.map = L.map($m, { minZoom: 0, maxZoom: 8, zoomSnap: 0, attributionControl: false, zoomControl: false, maxBounds: MUNDO });
+    map.on('zoomend', () => { if (st && st.map === map && st.nums) _nums(); });
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     _verMundo(false);
     for (const f of feats) {
