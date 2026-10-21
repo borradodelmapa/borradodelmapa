@@ -6259,6 +6259,119 @@ async function _haikuHerramienta(env, prompt, tool, maxTokens) {
   return (data.content || []).find(b => b.type === 'tool_use' && b.name === tool.name)?.input || null;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// PRECIOS CON FUENTE EN LAS GUÍAS (21 oct 2026, Paco: «la gente quiere saber lo que valen las cosas»)
+// ═══════════════════════════════════════════════════════════════
+// Los precios que Salma escribe en las paradas se comprueban en Google (Brave): se queda el precio que dice una fuente,
+// con la fuente («10 USD (según visitcambodia.co, 2026)»); si la fuente da otra cifra, se pone la suya; si nadie lo dice
+// o la fuente tiene más de 2 años, el precio se quita. La cita tiene que estar LITERAL en el resultado y llevar la cifra.
+// Caché 90 días por país + concepto (`precio1:`): cada precio se paga una vez para todas las guías.
+// Prueba con la guía de Camboya (21 oct): de 12 precios, 6 confirmados, 4 corregidos (Beng Mealea 5→10 USD…), 1 sin fuente.
+// Coste: 1 Haiku para sacar los precios + por precio NUEVO 1 búsqueda de Brave y 1 Haiku (~0,005 € por precio).
+// Devuelve Map(narrativa original → narrativa nueva). Si algo falla, devuelve lo que tenga (nunca rompe la guía).
+const _PRECIO_TTL = 90 * 24 * 3600;
+const _nq = t => String(t || '').replace(/[‘’‛′`´]/g, "'").replace(/[“”«»]/g, '"').replace(/\s+/g, ' ').trim().toLowerCase();
+async function preciosConFuente(stops, pais, env) {
+  const cambios = new Map();
+  if (!env.BRAVE_SEARCH_KEY || !env.ANTHROPIC_API_KEY || !Array.isArray(stops)) return cambios;
+  const paradas = stops.map(s => ({ name: s.name || s.headline || '', narrative: String(s.narrative || '') })).filter(p => /\d/.test(p.narrative));
+  if (!paradas.length) return cambios;
+  const extraer = {
+    name: 'extraer_precios', description: 'Precios que aparecen en los textos',
+    input_schema: { type: 'object', properties: { precios: { type: 'array', items: { type: 'object', properties: {
+      n: { type: 'integer', description: 'número de la parada' },
+      concepto: { type: 'string', description: 'qué se paga, concreto (ej. «entrada al Palacio Real de Phnom Penh»)' },
+      cifra: { type: 'string', description: 'el precio tal cual aparece en el texto, LITERAL (ej. «10 USD», «unos 300-500 PHP»)' },
+      frase: { type: 'string', description: 'la frase ENTERA del texto donde está el precio, LITERAL, de mayúscula a punto (ej. «Las funciones nocturnas cuestan unos 18 USD y cuentan historias camboyanas.»)' },
+      frase_sin_precio: { type: 'string', description: 'esa misma frase QUITANDO solo las palabras del precio y ajustando comas o puntos, sin añadir NI CAMBIAR ninguna otra palabra (ej. «Las funciones nocturnas cuentan historias camboyanas.»); vacío si sin el precio la frase no dice nada' },
+      busqueda: { type: 'string', description: 'búsqueda corta en INGLÉS para encontrar ese precio actual en Google (ej. «Royal Palace Phnom Penh entrance fee»)' },
+    }, required: ['n', 'concepto', 'cifra', 'frase', 'frase_sin_precio', 'busqueda'] } } }, required: ['precios'] },
+  };
+  const confirmar = {
+    name: 'confirmar_precio', description: 'Lo que dicen las fuentes sobre el precio',
+    input_schema: { type: 'object', properties: {
+      estado: { type: 'string', enum: ['confirmado', 'otra_cifra', 'sin_fuente'] },
+      precio: { type: 'string', description: 'el precio como lo da la fuente, corto y en español (ej. «10 USD»); vacío si sin_fuente' },
+      fuente: { type: 'integer', description: 'número del resultado que lo dice (0 si sin_fuente)' },
+      cita: { type: 'string', description: 'fragmento LITERAL del resultado donde aparece el precio (vacío si sin_fuente)' },
+    }, required: ['estado', 'precio', 'fuente', 'cita'] },
+  };
+  let lista = [];
+  try {
+    const ex = await _haikuHerramienta(env, `Viaje por ${pais || 'el destino'}. Saca TODOS los precios (entradas, transporte, comida, alquileres, tours) que aparecen en estos textos, uno por precio. Si no hay, lista vacía.\n\n${paradas.map((p, i) => `${i + 1}. ${p.name}: ${p.narrative}`).join('\n')}`, extraer, 4000);
+    lista = ((ex && ex.precios) || []).filter(p => paradas[p.n - 1] && paradas[p.n - 1].narrative.includes(p.cifra) && /\d/.test(p.cifra));
+  } catch (e) { console.log('[PRECIOS] extraer: ' + e.message); return cambios; }
+  const limite = Date.now() - 2 * 365 * 24 * 3600 * 1000;
+  const anioDe = f => { const t = Date.parse(f || ''); return isFinite(t) ? new Date(t).getFullYear() : null; };
+  const dominio = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (_) { return ''; } };
+  const resolver = async (p) => {
+    const kvKey = `precio1:${_norm2(pais)}:${_norm2(p.concepto)}`.slice(0, 480);
+    try { const c = env.SALMA_KB && await env.SALMA_KB.get(kvKey, 'json'); if (c) return c; } catch (_) {}
+    let res = [];
+    try {
+      const r = await fetch('https://api.search.brave.com/res/v1/web/search?' + new URLSearchParams({ q: p.busqueda, count: 8, extra_snippets: 'true' }),
+        { headers: { 'Accept': 'application/json', 'X-Subscription-Token': env.BRAVE_SEARCH_KEY }, signal: AbortSignal.timeout(8000) });
+      if (!r.ok) return null;   // error de búsqueda: no se decide nada (el precio se queda como estaba, sin guardar)
+      const d = await r.json();
+      const limpio = t => String(t || '').replace(/<[^>]+>/g, '').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+      res = ((d.web && d.web.results) || []).slice(0, 8).map(o => ({ link: o.url, snippet: limpio([o.description, ...(o.extra_snippets || [])].join(' … ')), date: o.page_age || '' }));
+    } catch (_) { return null; }
+    let j = null;
+    if (res.length) {
+      try { j = await _haikuHerramienta(env, `¿Qué cuesta HOY «${p.concepto}» (${pais})? Nuestro texto dice: «${p.cifra}». Mira SOLO estos resultados de Google. «confirmado» si alguno da esa misma cifra (o un rango que la incluye); «otra_cifra» si dan una cifra distinta para ESE MISMO concepto; «sin_fuente» si ninguno da el precio de ese concepto. La cita tiene que ser LITERAL del resultado y contener la cifra.\n\n${res.map((x, i) => `[${i + 1}] ${x.link}${x.date ? ' (' + x.date.slice(0, 10) + ')' : ''}\n${x.snippet}`).join('\n\n')}`, confirmar, 600); } catch (_) { return null; }
+    }
+    const f = j && j.fuente ? res[j.fuente - 1] : null;
+    const citaOk = !!(j && f && j.cita && /\d/.test(j.cita) && _nq(f.snippet).includes(_nq(j.cita)));
+    const reciente = !!(f && (!f.date || Date.parse(f.date) >= limite));
+    // El precio de la fuente, corto y limpio («$5 USD» → «5 USD»); si es una explicación («5 USD + audioguía…»), no vale.
+    const precio = String((j && j.precio) || '').replace(/\$\s*(\d[\d.,]*(?:\s*[-–]\s*\$?\s*\d[\d.,]*)?)\s*(USD|dólares)/i, '$1 $2').replace(/\s+/g, ' ').trim();
+    const precioOk = /^(?:~|≈|unos?\s+|desde\s+)?[$€£¥₱฿₫]?\s?\d[\d.,]*(?:\s*[-–]\s*[$€£¥₱฿₫]?\s?\d[\d.,]*)?\s*(?:[A-Z]{3}|€|\$|£|¥|₱|฿|₫|d[oó]lares|euros|pesos|rupias|bahts?|dongs?|rieles?|soles|dirhams?|yenes)?$/i.test(precio);
+    const out = (j && j.estado !== 'sin_fuente' && citaOk && reciente && precioOk)
+      ? { estado: j.estado, precio, dominio: dominio(f.link), anio: anioDe(f.date), url: f.link }
+      : { estado: 'sin_fuente' };
+    try { if (env.SALMA_KB) await env.SALMA_KB.put(kvKey, JSON.stringify(out), { expirationTtl: _PRECIO_TTL }); } catch (_) {}
+    return out;
+  };
+  // De 4 en 4 (Brave y Claude aguantan; no se nota en el tiempo de la guía, que va a la vez que la verificación de Google)
+  const resultados = new Array(lista.length);
+  for (let i = 0; i < lista.length; i += 4) {
+    const tanda = await Promise.all(lista.slice(i, i + 4).map(resolver));
+    tanda.forEach((r, k) => { resultados[i + k] = r; });
+  }
+  const nuevas = paradas.map(p => p.narrative);
+  lista.forEach((p, i) => {
+    const r = resultados[i];
+    if (!r) return;
+    const k = p.n - 1;
+    let t = nuevas[k];
+    if (r.estado === 'sin_fuente') {
+      // Se cambia la FRASE entera por la misma frase sin el precio. Solo se aceptan QUITAR palabras (las de la frase nueva
+      // tienen que estar en la original y en el mismo orden) y que no quede la cifra; si no cuadra, fuera la frase entera.
+      const pal = s => _nq(s).replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter(Boolean);
+      const soloQuita = (a, b) => { let i = 0; for (const w of pal(b)) { while (i < a.length && a[i] !== w) i++; if (i++ >= a.length) return false; } return true; };
+      // La frase REAL del texto que lleva la cifra (no la que copió Haiku, que a veces no es literal).
+      const frase = (t.split(/(?<=[.!?])\s+/).find(f => f.includes(p.cifra))) || null;
+      const sin = String(p.frase_sin_precio || '').trim();
+      const vale = frase && sin && soloQuita(pal(frase), sin) && !(p.cifra.match(/\d[\d.,]*/g) || []).some(n => sin.includes(n))
+        && pal(frase).length - pal(sin).length <= pal(p.cifra).length + 2;   // solo el precio y su «cuestan unos»/«por»
+      if (vale) t = t.replace(frase, sin);
+      else {
+        // Solo la cifra, con la palabra que la introduce («cervezas a 0,50-1 USD» → «cervezas»; «café por 4-5 USD» → «café»).
+        const esc = p.cifra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        t = t.replace(new RegExp(`(?:\\s+(?:a|por|de|desde|unos?|sobre|cuesta|cuestan|entre|en torno a|alrededor de|aprox\\.?|aproximadamente))*\\s*${esc}`, 'i'), '');
+      }
+      t = t.replace(/\s+([,.;:])/g, '$1').replace(/\(\s*\)/g, '').replace(/\s{2,}/g, ' ').trim();
+    } else {
+      t = t.replace(p.cifra, `${r.precio} según ${r.dominio}${r.anio ? ', ' + r.anio : ''}`);
+    }
+    nuevas[k] = t;
+  });
+  paradas.forEach((p, k) => { if (nuevas[k] !== p.narrative) cambios.set(p.narrative, nuevas[k]); });
+  console.log(`[PRECIOS] ${lista.length} precios: ${resultados.filter(r => r && r.estado === 'confirmado').length} confirmados, ${resultados.filter(r => r && r.estado === 'otra_cifra').length} corregidos, ${resultados.filter(r => r && r.estado === 'sin_fuente').length} quitados, ${resultados.filter(r => !r).length} sin decidir`);
+  return cambios;
+}
+function _norm2(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
+
 // Historia por hitos a partir del artículo. Devuelve { historia, source } o { historia: null, sin_fuente: true }; lanza si falla
 // la llamada. «art» ({lang, pageid}) lo manda la web tras el resumen; si no viene, se busca el artículo por el nombre.
 // La caché va por ARTÍCULO: dos paradas que son el mismo sitio comparten historia, y nadie puede colar la de otro lugar.
@@ -17390,7 +17503,15 @@ REGLAS:
                 _vOpts.previousCountry = currentRoute.country || '';
               }
               const _tVer = Date.now();
+              // PRECIOS CON FUENTE (21 oct 2026): solo al CREAR una guía, a la vez que la verificación de Google (no alarga la
+              // espera). Va por narrativa original → nueva, así no le afecta lo que Google descarte o renombre.
+              const _preciosP = (_usageKind === 'guide' && Array.isArray(route?.stops))
+                ? preciosConFuente(route.stops, route.country || (anchorCountry && anchorCountry.countryName) || '', env).catch(e => { console.log('[PRECIOS] ' + e.message); return new Map(); })
+                : Promise.resolve(new Map());
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts, env);
+              const _precios = await _preciosP;
+              if (_precios.size && verified && Array.isArray(verified.stops)) verified.stops.forEach(s => { if (_precios.has(s.narrative)) s.narrative = _precios.get(s.narrative); });
+              if (_t2log && _precios.size) _t2log.motivo = [_t2log.motivo, `precios: ${_precios.size} paradas cambiadas`].filter(Boolean).join(' · ');
               if (_fastPathRoute) console.log(`[T2-TIEMPO] comprobación de Google: ${Math.round((Date.now() - _tVer) / 1000)} s (${route.stops?.length || 0} paradas${route._lector ? ', lector' : ''})`);
               if (_t2log) _t2log.ms_google = Date.now() - _tVer;
               if (verified) route = verified;
