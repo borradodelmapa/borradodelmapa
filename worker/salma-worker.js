@@ -8376,6 +8376,15 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     return !/restaurante|restaurant|comer|bar\b|taberna|mes[oó]n|asador|caf[eé]|hotel|hostal|alojamiento|camping|bodega|tienda|mercado/i.test(st);
   }
 
+  // ¿El candidato está en el país del viaje? Por la dirección de Google (en español, como el nombre del país) o, si no la
+  // nombra igual («EE. UU.»), a menos de 400 km del ancla. Sin ancla no se comprobaba antes y tampoco ahora: no bloquea.
+  function _enElPais(candidate) {
+    const L = candidate?.geometry?.location;
+    if (country && addressContainsLocation(candidate.formatted_address, country)) return true;
+    if (anchorLat == null || !L) return true;
+    return haversineKm(anchorLat, anchorLng, L.lat, L.lng) <= 400;
+  }
+
   function validateCandidate(candidate, stop) {
     if (!candidate?.geometry?.location) return { valid: false, reason: 'no_geometry' };
     const pLat = candidate.geometry.location.lat, pLng = candidate.geometry.location.lng;
@@ -8397,7 +8406,13 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     }
     let distKm = Infinity;
     if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
-    if (nameOk && (addrOk || distKm < 3)) return { valid: true, distKm };
+    // RUTA POR PAÍS O REGIÓN (21 oct 2026, Filipinas 21 días): que la dirección diga el PAÍS no prueba nada (vale para todo
+    // el país): «Isla Gran Laguna» (El Nido) pasaba como «Pagbilao Grande Island», a 383 km. Con el nombre que coincide, la
+    // dirección solo cuenta si nombra una zona MÁS PEQUEÑA que el país; si no, el sitio tiene que caer a menos de 50 km de
+    // donde lo pone el plan, y en el país.
+    const addrSubOk = addressContainsLocation(candidate.formatted_address, ...[region, route.region].filter(z => z && _norm(z) !== _norm(country)));
+    if (nameOk && (addrSubOk || distKm < 3)) return { valid: true, distKm };
+    if (nameOk && distKm < 50 && _enElPais(candidate)) return { valid: true, distKm };
     if (nameOk && distKm < 10) return { valid: true, distKm };
     if (distKm < 1 && addrOk && !_isBusinessSwap(candidate, stop)) return { valid: true, distKm };
     if (!nameOk) return { valid: false, reason: 'name_mismatch', distKm };
@@ -8487,7 +8502,9 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
       // ANCLA — el rescate blando NO acepta candidatos lejos del ancla: >MAX_ANCHOR_KM si el
       // destino es un punto (ciudad), >400 km en otro caso (mataba el salto España↔Argentina).
-      if (anchorLat != null && haversineKm(anchorLat, anchorLng, cLat, cLng) > (pointAnchor ? MAX_ANCHOR_KM : 400)) continue;
+      // Ruta por país o región (21 oct 2026): ya no se mide desde el CENTRO del país (400 km cortaba los extremos de
+      // Filipinas, Japón, Chile…: Siquijor, Bohol o Sagada); basta con que esté en el país, y el radio de 50 km de abajo.
+      if (pointAnchor ? haversineKm(anchorLat, anchorLng, cLat, cLng) > MAX_ANCHOR_KM : !_enElPais(c)) continue;
       let inRange = false;
       if (pointAnchor) inRange = true; // ya filtrado por radio del ancla arriba
       else if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
