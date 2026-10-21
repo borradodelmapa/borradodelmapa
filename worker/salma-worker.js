@@ -8609,27 +8609,46 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     return findPlace(name, stop.lat, stop.lng, 5000);
   }));
 
+  // REINTENTOS SOLO SI GOOGLE NO DEVOLVIÓ NADA (21 oct 2026). Medido con las respuestas reales de Filipinas y Camboya: 22 de
+  // 22 segundos intentos dieron EXACTAMENTE lo mismo que el primero (en ciudad la consulta es idéntica: el sesgo es el
+  // ancla) y 20 de 22 terceros también; el único distinto fue «Pagbilao Grande Island», un sitio equivocado. Si Google ya
+  // dio un sitio, lo que decide es validateCandidate / el rescate blando con ESE sitio. Ahorro ~0,05 € por parada dudosa.
   const needsA2 = [];
   attempt1.forEach((r, i) => {
     if (reuse[i]) return;
     const c = r?.candidates?.[0];
-    if (!c?.geometry?.location || !validateCandidate(c, route.stops[i]).valid) needsA2.push(i);
+    if (!c?.geometry?.location) needsA2.push(i);
+  });
+  // Guías de CIUDAD: el 3.er intento (búsqueda de texto, otra máquina de Google) sigue como siempre cuando el sitio no valida,
+  // porque ahí no hay datos todavía; se apunta en KV (`reintento3:<día>`) cuántas veces sirve de algo para decidir.
+  if (pointAnchor) attempt1.forEach((r, i) => {
+    if (reuse[i]) return;
+    const c = r?.candidates?.[0];
+    if (c?.geometry?.location && !validateCandidate(c, route.stops[i]).valid) needsA2.push(i);
   });
   const a2 = {};
-  if (needsA2.length > 0) {
-    const results = await Promise.all(needsA2.map(i => findPlace(route.stops[i].name || route.stops[i].headline || '', route.stops[i].lat, route.stops[i].lng, 15000)));
-    needsA2.forEach((idx, j) => { a2[idx] = results[j]; });
+  // 2.º intento (otra Find Place con más radio) solo cuando el 1.º no trajo nada: en ciudad sería la MISMA consulta.
+  const sinNada = needsA2.filter(i => !attempt1[i]?.candidates?.[0]?.geometry?.location);
+  if (sinNada.length > 0) {
+    const results = await Promise.all(sinNada.map(i => findPlace(route.stops[i].name || route.stops[i].headline || '', route.stops[i].lat, route.stops[i].lng, 15000)));
+    sinNada.forEach((idx, j) => { a2[idx] = results[j]; });
   }
 
   const needsA3 = [];
   needsA2.forEach(i => {
-    const c = a2[i]?.candidates?.[0];
+    const c = a2[i]?.candidates?.[0] || attempt1[i]?.candidates?.[0];
     if (!c?.geometry?.location || !validateCandidate(c, route.stops[i]).valid) needsA3.push(i);
   });
   const a3 = {};
   if (needsA3.length > 0) {
     const results = await Promise.all(needsA3.map(i => textSearch(route.stops[i].name || route.stops[i].headline || '')));
     needsA3.forEach((idx, j) => { a3[idx] = results[j]; });
+    // Registro para decidir en ciudad: ¿el 3.er intento trajo un sitio DISTINTO que sí valida?
+    if (pointAnchor && env?.SALMA_KB) {
+      const utiles = needsA3.filter(i => { const c = a3[i]?.candidates?.[0]; const c1 = attempt1[i]?.candidates?.[0]; return c?.geometry?.location && c.place_id !== c1?.place_id && validateCandidate(c, route.stops[i]).valid; });
+      const k = 'reintento3:' + new Date().toISOString().slice(0, 10);
+      try { const v = (await env.SALMA_KB.get(k, 'json')) || { llamadas: 0, utiles: 0, ejemplos: [] }; v.llamadas += needsA3.length; v.utiles += utiles.length; utiles.slice(0, 3).forEach(i => v.ejemplos.length < 30 && v.ejemplos.push(`${route.stops[i].name} → ${a3[i].candidates[0].name}`)); await env.SALMA_KB.put(k, JSON.stringify(v), { expirationTtl: 60 * 86400 }); } catch (_) {}
+    }
   }
 
   const bestCandidates = route.stops.map((stop, i) => {
