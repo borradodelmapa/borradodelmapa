@@ -1099,7 +1099,10 @@ async function usageGate(env, authUser, kind, opts) {
       if (isGuide) {
         if (L.guidesPerDay) {   // trimestral / anual: sin tope mensual, solo antiabuso diario
           const hoy = (month.gdays && month.gdays[usageToday()]) || 0;
-          if (hoy >= L.guidesPerDay) return { ok: false, limit: 'guide', message: 'Hoy has creado ' + L.guidesPerDay + ' guías, que es el máximo diario. Mañana puedes seguir. 💛' };
+          // GUIDES_NO_DAILY_CAP (wrangler.toml, 21 oct 2026, Paco): cuentas SIN el tope diario de guías — la cuenta de pruebas
+          // con la que se producen las guías de Borrado del Mapa. El techo de gasto por cuenta (budgetEur) sigue valiendo.
+          const _sinTope = String(env.GUIDES_NO_DAILY_CAP || '').split(',').map(s => s.trim()).includes(authUser.uid);
+          if (hoy >= L.guidesPerDay && !_sinTope) return { ok: false, limit: 'guide', message: 'Hoy has creado ' + L.guidesPerDay + ' guías, que es el máximo diario. Mañana puedes seguir. 💛' };
           return { ok: true };
         }
         // guia: el cupo mensual es 0 y la guía sale de premium_bonus_guides
