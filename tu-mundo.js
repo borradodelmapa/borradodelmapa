@@ -615,11 +615,11 @@ const tuMundo = (() => {
       const zoomOf = st => st.photos.length > 1 ? 10 : 12;
       const paintCard = i => {
         const st = stops[i], f = countryAt(st.lat, st.lng), d = st.t ? new Date(st.t) : null, ph = st.photos.slice(0, 6);
-        card.querySelector('.tm-play-ph').innerHTML = ph.map((p, k) => `<img src="${esc(p.url)}" alt=""${k ? '' : ' class="on"'}>`).join('');
+        card.querySelector('.tm-play-ph').innerHTML = ph.map((p, k) => `<span class="tm-play-i${k ? '' : ' on'}"><img class="bg" src="${esc(p.url)}" alt=""><img class="fg" src="${esc(p.url)}" alt=""></span>`).join('');
         card.querySelector('.tm-play-tx').innerHTML = `<b>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : 'Tu viaje'}</b><span>${d ? d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} · ${st.photos.length} ${st.photos.length === 1 ? 'foto' : 'fotos'}</span><i>${i + 1} / ${stops.length}</i>`;
         top.querySelector('.tm-play-bar i').style.width = ((i + 1) / stops.length * 100) + '%';
         card.classList.add('up');
-        const imgs = [...card.querySelectorAll('.tm-play-ph img')]; let k = 0;
+        const imgs = [...card.querySelectorAll('.tm-play-i')]; let k = 0;
         if (imgs.length > 1) timers.push(setInterval(() => { imgs[k].classList.remove('on'); k = (k + 1) % imgs.length; imgs[k].classList.add('on'); }, 2600));
         return Math.max(5500, imgs.length * 2600);
       };
