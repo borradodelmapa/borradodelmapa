@@ -124,17 +124,38 @@ const mapaItinerario = {
     scroll.className = 'itin-cards-scroll';
     scroll.id = 'itin-cards-scroll';
 
+    // Días solo de viaje (21 oct 2026, routeFromMarkedText → route.dias_trayecto): sin parada ni pin, pero el día NO
+    // desaparece: su separador y una tarjeta con el trayecto, en su sitio. En el avance sin cuenta no salen (día 1 solo).
+    const viajes = (options && options._preview) ? [] : (Array.isArray(routeData && routeData.dias_trayecto) ? routeData.dias_trayecto : []);
+    const pintarDia = (day, title) => {
+      const daySep = document.createElement('div');
+      daySep.className = 'itin-day-sep';
+      daySep.innerHTML = `<span class="itin-day-num">DÍA ${day}</span><span class="itin-day-title">${this._esc(title || '')}</span>`;
+      scroll.appendChild(daySep);
+    };
+    const pintarViajesHasta = (hasta) => {
+      viajes.filter(v => v && v.day > currentDay && v.day < hasta).forEach(v => {
+        pintarDia(v.day, v.day_title);
+        const c = document.createElement('div');
+        c.className = 'itin-card itin-card-trayecto';
+        c.style.cursor = 'default';
+        c.innerHTML = `<div class="itin-card-photo"><div class="itin-card-photo-placeholder">🧭</div></div>`
+          + `<div class="itin-card-body"><div class="itin-card-name">Día de viaje</div>`
+          + `<div class="itin-card-nota expanded">${this._esc(v.texto || '')}</div></div>`;
+        scroll.appendChild(c);
+        currentDay = v.day;
+      });
+    };
+
     let currentDay = -1;
     stops.forEach((stop, i) => {
       const day = stop.day || 1;
 
-      // Separador de día
+      // Separador de día (antes, los días solo de viaje que van delante)
       if (day !== currentDay) {
+        pintarViajesHasta(day);
         currentDay = day;
-        const daySep = document.createElement('div');
-        daySep.className = 'itin-day-sep';
-        daySep.innerHTML = `<span class="itin-day-num">DÍA ${day}</span><span class="itin-day-title">${this._esc(stop.day_title || '')}</span>`;
-        scroll.appendChild(daySep);
+        pintarDia(day, stop.day_title);
       }
 
       // Card
@@ -142,6 +163,7 @@ const mapaItinerario = {
       scroll.appendChild(card);
       this._cards.push(card);
     });
+    pintarViajesHasta(Infinity);
 
     // Avance sin cuenta (CLAUDE.md §10): tarjeta bloqueada como una parada más
     if (options && options._preview) scroll.appendChild(this._createLockedCard(options._preview, routeData));

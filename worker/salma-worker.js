@@ -7843,6 +7843,11 @@ function parseModelRouteJson(raw) {
 // confirma se descarta (lat/lng 0 = sin coordenadas usables, nunca se queda en el centro).
 // Devuelve null si el plan no se lee limpio → se hace como siempre (convertProseToRouteJson).
 // Nombres que son sitios de comer aunque no vayan en la línea de "Dónde comer"
+// Nombres marcados que son un TRAYECTO o un sitio de paso, no una visita (21 oct 2026, Filipinas): «Vuelo El Nido–Corón»,
+// «Ferry a Tagbilaran», «CORON FERRY», «Noche en Manila», «Aeropuerto de Busuanga», «Terminal de buses de Cubao».
+// Ojo con lo que SÍ es sitio: «Calle del Tren», «Puerto Princesa», «Estación de esquí», «Ferry Building» no casan.
+// «de» NO cuenta («Tren de bambú de Battambang» es una atracción); sí «X a Y», «X desde», «nocturno» o «A–B».
+const _LECTOR_TRAYECTO_RE = /^(?:vuelo|ferry (?:a|desde|entre)|bus (?:a|desde|nocturno)|autob[uú]s|furgoneta|minib[uú]s|minivan|van a|tren (?:a|nocturno|desde)|barco (?:a|desde)|lancha a|traslado|transfer|noche en|aeropuerto|airport|terminal|estaci[oó]n de (?:autobuses|buses|tren|trenes|ferrocarril)|(?:ruta|ferry|bus|tren|barco|vuelo)\s+[^-–—]+[-–—]\s*\S)|(?:\s|^)(?:ferry|airport|aeropuerto|bus terminal)$/i;
 const _LECTOR_COMER_RE = /^(?:bar|restaurante|rest\.|mes[oó]n|taberna|asador|tasca|venta|cafeter[ií]a|caf[eé]|churrer[ií]a|marisquer[ií]a|cervecer[ií]a|pizzer[ií]a|bistr[oó]|braser[ií]a|casa de comidas|gastrobar|freidur[ií]a|helader[ií]a|pasteler[ií]a)\b/i;
 // Motivo por el que el lector no cogió el último plan (lo guarda logGuideTiming); '' si lo cogió.
 let _lectorMotivo = '';
@@ -7900,6 +7905,10 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     // Presentación escrita DESPUÉS de la cabecera del día 1 y antes de su primer sitio (Camboya, 21 oct 2026: «Esto da para
     // 10 días sin correr: Phnom Penh, Battambang…»): vale de resumen si no hubo presentación antes del día 1.
     if (day === 1 && !stops.length && !introDia1 && !tieneMarcasSitio(linea)) introDia1 = limpiar(linea);
+    // TRAYECTOS (21 oct 2026): «Cómo llegar: vuelo Hanói-Hué, 1h10…» no es un sitio; se guarda y se pega como «Trayecto:» al
+    // texto de la parada siguiente (ver más abajo). Antes estas líneas se perdían.
+    const _llegar = linea.match(/^(?:\*\*)?\s*c[oó]mo llegar\s*:?\s*(?:\*\*)?\s*:?\s*(.+)$/i);
+    if (_llegar && !tieneMarcasSitio(linea)) { stops.push({ _soloTrayecto: true, day, day_title: dayTitle, texto: limpiar(_llegar[1]) }); continue; }
     const sitios = sitiosMarcados(linea);
     if (!sitios.length) continue;
     const comer = /^(?:\*\*)?\s*d[oó]nde (comer|cenar|tomar)/i.test(linea);
@@ -7925,8 +7934,36 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
         name: nombre, headline: nombre, narrative: narrative.slice(0, 700), day_title: dayTitle,
         type: esComer ? 'restaurante' : 'lugar', con_historia: !esComer, day,
         lat: 0, lng: 0, km_from_previous: 0, estimated_hours: 0,
+        ...(_LECTOR_TRAYECTO_RE.test(nombre) ? { _trayecto: true } : {}),
       });
     });
+  }
+  // TRAYECTOS → texto de la parada siguiente (21 oct 2026). Un sitio marcado que es un trayecto («[[Vuelo El Nido–Corón]]»,
+  // «[[Aeropuerto de Phu Quoc]]», «[[Noche en Manila]]») tampoco es parada, SALVO que sea lo único de su día (un día
+  // nunca desaparece). Su texto y las líneas «Cómo llegar:» van como «Trayecto: …» detrás del texto de la parada que
+  // viene a continuación (o de la última, si no hay más). Un DÍA SOLO DE VIAJE (sin ningún sitio marcado: «Día 15 — vuelo a
+  // Manila y bus nocturno a Banaue») no se pierde: va en route.dias_trayecto con su título y su texto, y la app lo pinta.
+  const _diasPlan = [...new Set(stops.map(s => s.day))];   // orden del plan, con los días solo de viaje
+  const _diasViaje = {};
+  {
+    const conSitioReal = new Set(stops.filter(s => !s._soloTrayecto && !s._trayecto).map(s => s.day));
+    const finales = [];
+    let pendiente = [];
+    for (const s of stops) {
+      // Día sin ningún sitio de verdad (solo «Cómo llegar» o trayectos marcados): día de viaje, con su texto.
+      if ((s._soloTrayecto || s._trayecto) && !conSitioReal.has(s.day)) {
+        const d = _diasViaje[s.day] || (_diasViaje[s.day] = { day_title: s.day_title || '', textos: [] });
+        const t = s._soloTrayecto ? s.texto : [s.name, s.narrative].filter(Boolean).join(': ');
+        if (t) d.textos.push(t);
+        continue;
+      }
+      if (s._soloTrayecto) { if (s.texto) pendiente.push(s.texto); continue; }
+      if (s._trayecto) { if (s.narrative) pendiente.push(s.narrative); continue; }
+      if (pendiente.length) { s.narrative = (s.narrative + ' Trayecto: ' + pendiente.join(' ')).trim().slice(0, 900); pendiente = []; }
+      finales.push(s);
+    }
+    if (pendiente.length && finales.length) { const u = finales[finales.length - 1]; u.narrative = (u.narrative + ' Trayecto: ' + pendiente.join(' ')).trim().slice(0, 900); }
+    stops.splice(0, stops.length, ...finales);
   }
   // PLAN SIN DÍAS (3 oct 2026, caso p-musfrk4c21l): "las mejores playas de Cádiz" vino como lista de playas de sur a
   // norte, sin ni una cabecera de día → caía a la reescritura de Sonnet (77 s, nombres que Salma no dijo). Si no hay
@@ -7952,18 +7989,22 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     return _lectorNo(`no encuentro los días (líneas con "día": ${JSON.stringify(cab)})${cabs}`);
   }
   // Días seguidos 1, 2, 3… en el orden del plan ("Días 3 y 4" o un día que Salma salta no dejan huecos)
-  const _orden = [...new Set(stops.map(s => s.day))];
+  // Los días solo de viaje cuentan en el orden (no se pierden ni descolocan la numeración).
+  const _orden = _diasPlan.filter(d => stops.some(s => s.day === d) || _diasViaje[d]);
   stops.forEach(s => { s.day = _orden.indexOf(s.day) + 1; });
-  const nDias = Math.max(...stops.map(s => s.day));
+  const diasTrayecto = Object.entries(_diasViaje).map(([d, v]) => ({ day: _orden.indexOf(+d) + 1, day_title: v.day_title, texto: v.textos.join(' ') }))
+    .filter(v => v.day > 0).sort((a, b) => a.day - b.day);
+  const nDias = Math.max(...stops.map(s => s.day), ...diasTrayecto.map(v => v.day));
   // Los días son los del plan que ha leído el usuario: en rutas por carretera Salma calcula cuántos hacen falta
   // ("esto da para 6 días") aunque en el cuestionario pusiera 5. La reescritura de Sonnet también copiaba los del plan.
   if (dias && nDias !== dias) console.log(`[LECTOR] ${nDias} días en el plan (se pidieron ${dias}): se usan los del plan`);
   // Plan limpio = ningún día sin sitios y, de media, al menos 2 por día. Un día con un solo sitio vale ("Día 5 —
   // llegada a Cadaqués"): antes tiraba el plan entero a la reescritura lenta.
   for (let d = 1; d <= nDias; d++) {
-    if (!stops.some(s => s.day === d)) return _lectorNo(`el día ${d} no trae sitios marcados`);
+    if (!stops.some(s => s.day === d) && !diasTrayecto.some(v => v.day === d)) return _lectorNo(`el día ${d} no trae sitios marcados`);
   }
-  if (stops.length < nDias * 2) return _lectorNo(`pocos sitios marcados: ${stops.length} para ${nDias} días`);
+  const _diasConSitio = nDias - diasTrayecto.length;
+  if (stops.length < _diasConSitio * 2) return _lectorNo(`pocos sitios marcados: ${stops.length} para ${_diasConSitio} días`);
   const dest = String(destino || region || '').trim();
   // RESUMEN SIEMPRE (21 oct 2026): sin él la guía pública sale sin descripción y oculta a Google (build-guias.js:isGood).
   // 1) presentación antes del día 1 · 2) la del principio del día 1 · 3) si Salma no escribió ninguna (Filipinas), los
@@ -7971,7 +8012,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   let resumen = intro || introDia1;
   if (!resumen) {
     const titulos = [];
-    for (let d = 1; d <= nDias; d++) { const t = (stops.find(s => s.day === d && s.day_title) || {}).day_title; if (t && !titulos.includes(t)) titulos.push(t); }
+    for (let d = 1; d <= nDias; d++) { const t = (stops.find(s => s.day === d && s.day_title) || diasTrayecto.find(v => v.day === d) || {}).day_title; if (t && !titulos.includes(t)) titulos.push(t); }
     let r = `${nDias} ${nDias === 1 ? 'día' : 'días'}${dest ? ' por ' + dest : ''}, día a día:`;
     let usados = 0;
     for (const t of titulos) { if ((r + ' ' + t).length > 290) break; r += (r.endsWith(':') ? ' ' : ' · ') + t; usados++; }
@@ -7985,6 +8026,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     duration_days: nDias,
     summary: resumen.slice(0, 300),
     stops,
+    ...(diasTrayecto.length ? { dias_trayecto: diasTrayecto } : {}),   // días solo de viaje: [{day, day_title, texto}]
     tips: [], tags: [], budget_level: 'medio', suggestions: [], maps_links: [],
     pre_departure: null, practical_info: null,
     _lector: true,
