@@ -349,9 +349,8 @@ const tuMundo = (() => {
       };
       el.querySelector('#tm-sinp-del').onclick = async () => {
         const ids = [...sel]; if (!ids.length) return;
-        const loose = new Set(_cache.D.photos.filter(p => !p.routeId).map(p => p.id)), nL = ids.filter(i => loose.has(i)).length;
-        if (!nL) { msg.textContent = 'Esas fotos están dentro de una guía: no se borran desde aquí.'; return; }
-        if (!confirm('¿Borrar ' + (nL === 1 ? 'la foto seleccionada' : nL + ' fotos seleccionadas') + ' de tu cuenta? Desaparecen de Tu vuelta al mundo y de tu enlace público. No se puede deshacer.' + (ids.length > nL ? ' Las ' + (ids.length - nL) + ' que están dentro de una guía no se borran.' : ''))) return;
+        const enGuia = ids.filter(i => { const f = _cache.D.photos.find(p => p.id === i); return f && f.routeId; }).length;
+        if (!confirm('¿Borrar ' + (ids.length === 1 ? 'la foto seleccionada' : ids.length + ' fotos seleccionadas') + ' de tu cuenta? Desaparecen de tu mapa, de Tu vuelta al mundo y de tu enlace público. No se puede deshacer.' + (enGuia ? ' ' + (enGuia === 1 ? 'Una está' : 'Las ' + enGuia + ' están') + ' en una guía: también se eliminará de la guía.' : ''))) return;
         msg.textContent = 'Borrando…';
         try { const k = await _borrarFotos(ids); sel.clear(); if (typeof showToast === 'function') showToast(k + (k === 1 ? ' foto borrada' : ' fotos borradas')); if (window._tmPubRefresh) window._tmPubRefresh(); draw(); }
         catch (_) { msg.textContent = 'No se pudo borrar. Prueba otra vez.'; }
@@ -410,12 +409,12 @@ const tuMundo = (() => {
      si hay una a menos de 40 km se SUGIERE ("estas 86 fotos parecen de X") y Paco confirma. Una foto vive en un solo sitio.
      💶 0 €: comparación en el móvil; al confirmar, una escritura de Firestore por lote (routeId). Sin Claude ni Google. */
   const SUG_KM = 40;
-  // Borra de la cuenta las fotos SUELTAS indicadas (las que están dentro de una guía no se tocan): desaparecen del mapa,
+  // Borra de la cuenta las fotos indicadas (sueltas o de una guía: 21 oct 2026, Paco: «se elimina y punto»): desaparecen del mapa,
   // de Tu vuelta al mundo y, al actualizar el enlace, de la parte pública. Devuelve cuántas se borraron.
   async function _borrarFotos(ids) {
     const u = window.currentUser; if (!u || !_cache) return 0;
     const D = _cache.D, by = new Map(D.photos.map(p => [p.id, p]));
-    const del = ids.filter(id => by.has(id) && !by.get(id).routeId), db = firebase.firestore();
+    const del = ids.filter(id => by.has(id)), db = firebase.firestore();
     for (let i = 0; i < del.length; i += 400) { const b = db.batch(); del.slice(i, i + 400).forEach(id => b.delete(db.collection('users').doc(u.uid).collection('fotos').doc(id))); await b.commit(); }
     const gone = new Set(del); D.photos = D.photos.filter(p => !gone.has(p.id)); del.forEach(id => _pubSel.delete(id));
     try { localStorage.removeItem(SUM_KEY); } catch (_) {}
