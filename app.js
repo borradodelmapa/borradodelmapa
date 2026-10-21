@@ -6030,52 +6030,10 @@ window.liveMapFitPins = liveMapFitPins;
 
 // ── Compartir mapa ──
 
-function openShareSheet() {
-  if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
-  document.getElementById('lmsh-status').textContent = '';
-  document.getElementById('live-map-share-sheet').style.display = 'block';
-}
 function closeShareSheet() {
   const el = document.getElementById('live-map-share-sheet');
   if (el) el.style.display = 'none';
 }
-
-async function shareAsImage() {
-  const status = document.getElementById('lmsh-status');
-  if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
-  status.textContent = '⏳ Generando imagen…';
-  const center = _liveMap.getCenter();
-  const zoom = Math.min(_liveMap.getZoom(), 14);
-  const markerColors = { hotel: 'blue', restaurant: 'orange', monument: 'yellow', beach: 'green', park: 'green', other: 'red' };
-  const markersParam = _savedPinsData.map(p => {
-    const col = markerColors[p.place_type] || 'red';
-    return `markers=color:${col}%7C${p.lat},${p.lng}`;
-  }).join('&');
-  const imgUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${center.lat()},${center.lng()}&zoom=${zoom}&size=600x600&maptype=roadmap&${markersParam}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U`;
-  try {
-    const res = await fetch(imgUrl);
-    const blob = await res.blob();
-    const file = new File([blob], 'mapa-salma.jpg', { type: 'image/jpeg' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: 'Mi mapa de viaje — Salma', text: window.SHARE_INVITE_FULL });
-      status.textContent = '';
-      closeShareSheet();
-    } else {
-      // Fallback: descargar
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'mapa-salma.jpg';
-      a.click();
-      status.textContent = '✅ Imagen descargada';
-    }
-  } catch (e) {
-    // Si fetch falla por CORS, abrir en nueva pestaña
-    window.open(imgUrl, '_blank');
-    status.textContent = '';
-    closeShareSheet();
-  }
-}
-
 
 function _showPinInfo(marker) {
   if (!_liveMap) return;
@@ -6169,36 +6127,6 @@ function deletePinById(pinId) {
 
 // ── Diario: estado + picker ──
 const _diario = { photo: null, locName: '', lat: 0, lng: 0, lastBlob: null, mapImg: null };
-
-// Tap mapa o FAB → muestra picker foto/galería
-function diarioCapture() {
-  if (_liveMap) {
-    const c = _liveMap.getCenter();
-    _diario.lat = c.lat(); _diario.lng = c.lng();
-  } else if (window._salmaUserLat) {
-    _diario.lat = window._salmaUserLat; _diario.lng = window._salmaUserLng;
-  }
-  _diarioGeocode();
-  _showDiarioPicker();
-}
-
-function _diarioGeocode() {
-  if (!window.google || !google.maps || !google.maps.Geocoder) {
-    _diario.locName = window._salmaUserCountry || '';
-    return;
-  }
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({ location: { lat: _diario.lat, lng: _diario.lng } }, (results, status) => {
-    if (status === 'OK' && results[0]) {
-      const parts = results[0].address_components;
-      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
-      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
-      _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
-    } else {
-      _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
-    }
-  });
-}
 
 function _showDiarioPicker() {
   const picker = document.getElementById('diario-picker');
@@ -6783,7 +6711,6 @@ window.downloadDiario = downloadDiario;
 window.shareDiarioNative = shareDiarioNative;
 window.closeDiarioResult = closeDiarioResult;
 window.diarioResultSave = diarioResultSave;
-window.diarioCapture = diarioCapture;
 
 function _onMapTap(e) {
   // Toque en un icono de Google (capas): ya abre su propia ficha (gratis). No abrir
@@ -6823,29 +6750,28 @@ function _onMapTap(e) {
   _showDiarioPicker();
 }
 
-// Nombre "Ciudad · País" del punto tocado — Geocoding (de pago, ~0,005 $) SOLO cuando
-// hace falta (Guardar, Foto, Vídeo) y una sola vez por punto. Si tarda >4 s o falla,
-// se queda con las coordenadas.
+// Nombre "Ciudad · País" del punto tocado — OpenStreetMap/Nominatim (gratis; antes Geocoding de Google desde el
+// navegador, fuera del tope de gasto: caso p-mvijaz0s3mj, 22 oct 2026). SOLO cuando hace falta (Guardar, Foto, Vídeo)
+// y una sola vez por punto. Si tarda >4 s o falla, se queda con las coordenadas.
 let _diarioGeo = { key: null, name: '' };
 function _diarioResolveLocName() {
   const key = _diario.lat.toFixed(5) + ',' + _diario.lng.toFixed(5);
   if (_diarioGeo.key === key) { _diario.locName = _diarioGeo.name; return Promise.resolve(); }
-  if (!window.google || !google.maps || !google.maps.Geocoder) return Promise.resolve();
-  if (!window._diarioGeocoder) window._diarioGeocoder = new google.maps.Geocoder();
-  return new Promise(resolve => {
-    const t = setTimeout(resolve, 4000);
-    window._diarioGeocoder.geocode({ location: { lat: _diario.lat, lng: _diario.lng } }, (results, status) => {
-      clearTimeout(t);
-      if (status === 'OK' && results[0]) {
-        const parts = results[0].address_components;
-        const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
-        const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
-        if (city || country) _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  const t = setTimeout(() => { if (ctrl) ctrl.abort(); }, 4000);
+  return fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=10&accept-language=es&lat=${_diario.lat}&lon=${_diario.lng}`, ctrl ? { signal: ctrl.signal } : undefined)
+    .then(r => r.json())
+    .then(j => {
+      const ad = (j && j.address) || {};
+      const city = ad.city || ad.town || ad.village || ad.municipality || ad.county || ad.state || '';
+      const country = ad.country || '';
+      if (city || country) {
+        _diario.locName = city && country ? city + ' · ' + country : (city || country);
         _diarioGeo = { key, name: _diario.locName };
       }
-      resolve();
-    });
-  });
+    })
+    .catch(() => {})
+    .finally(() => clearTimeout(t));
 }
 
 function closeTapSheet() {
@@ -6927,9 +6853,7 @@ window.closeTapSheet = closeTapSheet;
 window.handleTapPhoto = handleTapPhoto;
 window.clearTapPhoto = clearTapPhoto;
 window.deletePinById = deletePinById;
-window.openShareSheet = openShareSheet;
 window.closeShareSheet = closeShareSheet;
-window.shareAsImage = shareAsImage;
 
 // ═══ UTILIDADES ═══
 

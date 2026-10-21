@@ -109,6 +109,29 @@
     });
   }
 
+  // Trazado por carretera pedido al Worker (GET /directions: contador y tope de gasto, y memoria permanente por
+  // ruta — la misma ruta se paga una sola vez). Antes DirectionsService de Google desde el navegador (22 oct 2026,
+  // caso p-mvijaz0s3mj). Coordenadas en el mismo formato que mapa-ruta.js para compartir esa memoria.
+  // onOk(path) al dibujarlo; onFail() si no hay trazado.
+  function _drawRoute(points, onOk, onFail) {
+    const api = window.SALMA_API;
+    const ll = p => `${p.lat},${p.lng}`;
+    const fail = () => { if (onFail) onFail(); };
+    if (!api || points.length < 2) { fail(); return; }
+    let url = `${api}/directions?origin=${ll(points[0])}&destination=${ll(points[points.length - 1])}`;
+    if (points.length > 2) url += `&waypoints=${encodeURIComponent(points.slice(1, -1).map(ll).join('|'))}`;
+    fetch(url)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!_mmMap) return;
+        if (!d || !d.polyline || !google.maps.geometry) { fail(); return; }
+        const path = google.maps.geometry.encoding.decodePath(d.polyline);
+        new google.maps.Polyline({ path, map: _mmMap, strokeColor: '#F4630B', strokeWeight: 5, strokeOpacity: 0.85 });
+        if (onOk) onOk(path);
+      })
+      .catch(fail);
+  }
+
   function _close() {
     const m = document.getElementById('mm');
     if (m) m.remove();
@@ -174,26 +197,21 @@
           icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#4285F4', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 3, scale: 9 },
           zIndex: 998,
         });
-        const ds = new google.maps.DirectionsService();
-        const dr = new google.maps.DirectionsRenderer({
-          map: _mmMap, suppressMarkers: true, preserveViewport: false,
-          polylineOptions: { strokeColor: '#F4630B', strokeWeight: 5, strokeOpacity: 0.85 },
-        });
-        ds.route({ origin: userLoc, destination: loc, travelMode: google.maps.TravelMode.DRIVING }, (r, st) => {
-          console.log('[map-modal] DirectionsService status:', st);
-          if (st === 'OK') {
-            dr.setDirections(r);
-          } else {
-            // Fallback: polyline recta dorada
-            new google.maps.Polyline({
-              path: [userLoc, loc], map: _mmMap,
-              strokeColor: '#F4630B', strokeWeight: 4, strokeOpacity: 0.7,
-              geodesic: true,
-            });
-            const b = new google.maps.LatLngBounds();
-            b.extend(userLoc); b.extend(loc);
-            _mmMap.fitBounds(b, 80);
-          }
+        _drawRoute([userLoc, loc], path => {
+          const b = new google.maps.LatLngBounds();
+          path.forEach(p => b.extend(p));
+          _mmMap.fitBounds(b, 80);
+        }, () => {
+          if (!_mmMap) return;
+          // Fallback: polyline recta dorada
+          new google.maps.Polyline({
+            path: [userLoc, loc], map: _mmMap,
+            strokeColor: '#F4630B', strokeWeight: 4, strokeOpacity: 0.7,
+            geodesic: true,
+          });
+          const b = new google.maps.LatLngBounds();
+          b.extend(userLoc); b.extend(loc);
+          _mmMap.fitBounds(b, 80);
         });
       }
 
@@ -226,22 +244,16 @@
               });
               bounds.extend(pt.loc);
             });
-            // Polyline/directions
-            if (valid.length >= 2) {
-              const origin = userLoc || valid[0].loc;
-              const destination = valid[valid.length - 1].loc;
-              const wpSrc = userLoc ? valid.slice(0, -1) : valid.slice(1, -1);
-              const waypoints = wpSrc.map(p => ({ location: p.loc, stopover: true }));
-              const ds = new google.maps.DirectionsService();
-              const dr = new google.maps.DirectionsRenderer({
-                map: _mmMap, suppressMarkers: true, preserveViewport: true,
-                polylineOptions: { strokeColor: '#F4630B', strokeWeight: 5, strokeOpacity: 0.85 },
+            // Trazado de parada a parada (sin el GPS: así la misma ruta sale de la memoria del Worker y se paga una vez)
+            if (valid.length >= 2) _drawRoute(valid.map(p => p.loc));
+            if (userLoc) {
+              new google.maps.Marker({
+                position: userLoc, map: _mmMap, title: 'Tu ubicación',
+                icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#4285F4', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 3, scale: 9 },
+                zIndex: 998,
               });
-              ds.route({ origin, destination, waypoints, travelMode: google.maps.TravelMode.DRIVING }, (result, status) => {
-                if (status === 'OK') dr.setDirections(result);
-              });
+              bounds.extend(userLoc);
             }
-            if (userLoc) bounds.extend(userLoc);
             _mmMap.fitBounds(bounds, 60);
             const sp = document.getElementById('mm-spinner');
             if (sp) sp.remove();
