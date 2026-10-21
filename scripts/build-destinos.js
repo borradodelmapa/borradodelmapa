@@ -16,6 +16,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+// Sin precios sin fuente en las páginas (Paco, 20 oct 2026): la misma regla que limpió las ya publicadas
+import { sinPreciosObj } from './sin-precios.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -1048,7 +1050,7 @@ async function main() {
         };
         if (!dryRun && !indexOnly && !sitemapOnly && (!onlySet || onlySet.has(slug))) {
           const route = loadRoute(dest.id, countrySlug);
-          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route, nav, siblingsOf(validDests, i, countrySlug), countrySlug));
+          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(sinPreciosObj(dest), countryName, code, slug, sinPreciosObj(route), nav, siblingsOf(validDests, i, countrySlug), countrySlug));
         }
         allSitemapUrls.push({ url: `${DOMAIN}/destinos/${slug}.html`, priority: 0.8, freq: 'monthly' });
         totalDest++;
@@ -1056,7 +1058,7 @@ async function main() {
 
       // ── Nivel 2: página de país ──
       if (!dryRun && !indexOnly && !sitemapOnly && !onlySet) {
-        fs.writeFileSync(path.join(OUT_DIR, `${countrySlug}.html`), buildCountryHTML(countryName, code, destinos));
+        fs.writeFileSync(path.join(OUT_DIR, `${countrySlug}.html`), buildCountryHTML(countryName, code, sinPreciosObj(destinos)));
       }
       allSitemapUrls.push({ url: `${DOMAIN}/destinos/${countrySlug}.html`, priority: 0.9, freq: 'weekly' });
       totalCountry++;
