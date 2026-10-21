@@ -6416,7 +6416,7 @@ async function preciosConFuente(stops, pais, env) {
         const esc = p.cifra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         t = t.replace(new RegExp(`(?:\\s+(?:a|por|de|desde|unos?|sobre|cuesta|cuestan|entre|en torno a|alrededor de|aprox\\.?|aproximadamente))*\\s*${esc}`, 'i'), '');
       }
-      t = t.replace(/\s+([,.;:])/g, '$1').replace(/\(\s*\)/g, '').replace(/\s{2,}/g, ' ').trim();
+      t = t.replace(/\s+([,.;:])/g, '$1').replace(/\(\s*\)/g, '').replace(/([^.])\.\.(?!\.)/g, '$1.').replace(/,\./g, '.').replace(/\s{2,}/g, ' ').trim();
     } else {
       t = t.replace(p.cifra, `${r.precio} según ${r.dominio}${r.anio ? ', ' + r.anio : ''}`);
     }
