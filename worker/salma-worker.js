@@ -7855,7 +7855,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     .replace(/\s+/g, ' ').trim();
   const stops = [];
   const seen = new Set();
-  let day = 0, dayTitle = '', intro = '';
+  let day = 0, dayTitle = '', intro = '', introDia1 = '';
   // Cabeceras de día escritas con palabras (3 oct 2026, caso p-musbxm408zg: "Pueblos Blancos" cayó a la reescritura
   // de Sonnet, 100 s, porque no había ni una línea "Día N"): "Primer día", "Día uno", "Jornada 2" → "Día N".
   // Solo al principio de línea (tras signos/negritas), así que una frase que contenga "segundo día" no cuenta.
@@ -7894,6 +7894,9 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
       continue;
     }
     if (!day) { if (!tieneMarcasSitio(linea) && !intro) intro = limpiar(linea); continue; }
+    // Presentación escrita DESPUÉS de la cabecera del día 1 y antes de su primer sitio (Camboya, 21 oct 2026: «Esto da para
+    // 10 días sin correr: Phnom Penh, Battambang…»): vale de resumen si no hubo presentación antes del día 1.
+    if (day === 1 && !stops.length && !introDia1 && !tieneMarcasSitio(linea)) introDia1 = limpiar(linea);
     const sitios = sitiosMarcados(linea);
     if (!sitios.length) continue;
     const comer = /^(?:\*\*)?\s*d[oó]nde (comer|cenar|tomar)/i.test(linea);
@@ -7959,13 +7962,25 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
   }
   if (stops.length < nDias * 2) return _lectorNo(`pocos sitios marcados: ${stops.length} para ${nDias} días`);
   const dest = String(destino || region || '').trim();
+  // RESUMEN SIEMPRE (21 oct 2026): sin él la guía pública sale sin descripción y oculta a Google (build-guias.js:isGood).
+  // 1) presentación antes del día 1 · 2) la del principio del día 1 · 3) si Salma no escribió ninguna (Filipinas), los
+  // títulos de los días del propio plan, cortados en un título entero. Nada inventado: todo sale del plan.
+  let resumen = intro || introDia1;
+  if (!resumen) {
+    const titulos = [];
+    for (let d = 1; d <= nDias; d++) { const t = (stops.find(s => s.day === d && s.day_title) || {}).day_title; if (t && !titulos.includes(t)) titulos.push(t); }
+    let r = `${nDias} ${nDias === 1 ? 'día' : 'días'}${dest ? ' por ' + dest : ''}, día a día:`;
+    let usados = 0;
+    for (const t of titulos) { if ((r + ' ' + t).length > 290) break; r += (r.endsWith(':') ? ' ' : ' · ') + t; usados++; }
+    if (usados) resumen = r + (usados < titulos.length ? '…' : '.');
+  }
   return {
     title: dest ? `${dest} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Ruta de ${nDias} ${nDias === 1 ? 'día' : 'días'}`,
     name: dest || '',
     country: countryName || '',
     region: region || dest,
     duration_days: nDias,
-    summary: intro.slice(0, 300),
+    summary: resumen.slice(0, 300),
     stops,
     tips: [], tags: [], budget_level: 'medio', suggestions: [], maps_links: [],
     pre_departure: null, practical_info: null,
@@ -8489,7 +8504,11 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   route.stops.forEach((stop, i) => {
     if (bestCandidates[i]) return;
     const stopType = (stop.type || '') + ' ' + (stop.name || '') + ' ' + (stop.headline || '');
-    if (SOFT_SKIP.test(stopType)) return;
+    // MERCADOS (21 oct 2026, Camboya: «Mercado del Cangrejo de Kep» → Google «Kep Crab Market», a 3 km, tirado): un mercado
+    // SÍ se rescata, pero solo si Google devuelve OTRO MERCADO (la palabra en cualquier idioma) a menos de 5 km de donde
+    // lo pone el plan — nunca un restaurante o una tienda de al lado. Restaurantes, hoteles y tiendas siguen sin rescate.
+    const _mercado = _MERCADO_RE.test(stopType);
+    if (SOFT_SKIP.test(stopType) && !_mercado) return;
     if (opts.requireNameMatch) return; // chat: sin rescate blando (nombre que no coincide = no es seguro)
     for (const result of [attempt1[i], a2[i], a3[i]]) {
       const c = result?.candidates?.[0];
@@ -8500,6 +8519,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       const hasGood = cTypes.some(t => GOOD_PLACE_TYPES.has(t));
       if (hasBad && !hasGood) continue;
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
+      if (_mercado && !(_MERCADO_RE.test(c.name || '') && stop.lat && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 5)) continue;
       // ANCLA — el rescate blando NO acepta candidatos lejos del ancla: >MAX_ANCHOR_KM si el
       // destino es un punto (ciudad), >400 km en otro caso (mataba el salto España↔Argentina).
       // Ruta por país o región (21 oct 2026): ya no se mide desde el CENTRO del país (400 km cortaba los extremos de
@@ -8845,6 +8865,9 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
 }
 
 // Tipos de Google Places que NO son POIs concretos (barrios, direcciones, zonas administrativas).
+// «Mercado» en los idiomas en que Google nombra los sitios (es, en, fr, de, it, pt/nl, jemer, malayo/indonesio, tailandés,
+// vietnamita, árabe/turco, persa…). Solo para reconocer que un candidato ES un mercado (rescate de verifyAllStops).
+const _MERCADO_RE = /(?<!\p{L})(mercado|mercat|market|marketplace|march[eé]|markt|mercato|markthal|psar|phsar|pasar|pasaraya|talat|chợ|bazaa?r|souk|suq|zoco|çarşı|carsi|basar|halles?)(?!\p{L})/iu;
 const BAD_PLACE_TYPES = new Set([
   'locality','sublocality','sublocality_level_1','sublocality_level_2','sublocality_level_3',
   'neighborhood','political',
@@ -16435,7 +16458,10 @@ INSTRUCCIONES:
                   if (!_fastPathRoute.country && _c.pais) _fastPathRoute.country = _c.pais;
                   // Zona corta ("Pirineos") para la portada, Mis Viajes y la búsqueda en Google; título bien escrito
                   // (el del cuestionario llevaba lo que tecleó el usuario: "…saliendo de ondarrubia…").
-                  _fastPathRoute.region = _c.zona || _fastPathRoute.country || _fastPathRoute.region;
+                  // «Filipinas completa», «Camboya entera» (21 oct 2026): si la zona es el país con una coletilla, el país a secas.
+                  const _pz = String(_fastPathRoute.country || _c.pais || '').trim();
+                  const _zona = (_pz && _c.zona && _c.zona.toLowerCase().startsWith(_pz.toLowerCase())) ? _pz : _c.zona;
+                  _fastPathRoute.region = _zona || _fastPathRoute.country || _fastPathRoute.region;
                   if (_c.titulo) { _fastPathRoute.title = _c.titulo; _fastPathRoute.name = _c.titulo; }
                 } else { _fastPathRoute = null; _lectorMotivo = 'no salieron las coordenadas'; }
               }

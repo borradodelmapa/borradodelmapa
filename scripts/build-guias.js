@@ -98,10 +98,27 @@ function imageOf(g, r) {
   return `${DOMAIN}/og-image.jpg`;
 }
 
+// Resumen para ENSEÑAR (21 oct 2026): el de la guía o, si no trae (guías anteriores a que el Worker lo rellenara siempre),
+// los títulos de sus días, como hace ya routeFromMarkedText. No cuenta para isGood(): mostrar a Google sigue exigiendo
+// un resumen de verdad.
+function resumenDe(g, r) {
+  const propio = (g.summary || r.summary || '').trim();
+  if (propio) return propio;
+  const stops = (r.stops || []).filter(s => s && s.day_title);
+  const dias = [...new Set(stops.map(s => Number(s.day) || 1))].sort((a, b) => a - b);
+  const titulos = [];
+  for (const d of dias) { const t = String(stops.find(s => (Number(s.day) || 1) === d).day_title).trim(); if (t && !titulos.includes(t)) titulos.push(t); }
+  if (!titulos.length) return '';
+  const n = Math.max(...(r.stops || []).map(s => Number(s.day) || 1), dias.length);
+  let txt = `${n} día${n > 1 ? 's' : ''}${g.destino ? ' por ' + g.destino : ''}, día a día:`, usados = 0;
+  for (const t of titulos) { if ((txt + ' ' + t).length > 290) break; txt += (txt.endsWith(':') ? ' ' : ' · ') + t; usados++; }
+  return usados ? txt + (usados < titulos.length ? '…' : '.') : '';
+}
+
 function describe(g, r) {
   const stops = r.stops || [];
   const days = stops.length ? Math.max(...stops.map(s => s.day || 1)) : (r.duration_days || 0);
-  const base = (g.summary || r.summary || '').trim();
+  const base = resumenDe(g, r);
   const meta = [days ? `${days} día${days > 1 ? 's' : ''}` : '', stops.length ? `${stops.length} paradas` : ''].filter(Boolean).join(' · ');
   let d = base || `Ruta por ${g.destino || r.region || r.country || 'el mundo'} creada con Salma.`;
   if (meta) d = `${meta}. ${d}`;
@@ -119,7 +136,7 @@ function staticBody(g, r) {
   const days = [...new Set(stops.map(dayOf))].sort((a, b) => a - b);
   const first = days[0];
   const title = g.nombre || r.title || 'Guía de viaje';
-  const summary = (g.summary || r.summary || '').trim();
+  const summary = resumenDe(g, r);
   const text = s => String(s.narrative || s.description || '').trim();
   let h = `<section class="guia-seo" id="guia-seo">\n<h1>${esc(title)}</h1>\n`;
   if (summary) h += `<p class="guia-seo-sum">${esc(summary)}</p>\n`;
