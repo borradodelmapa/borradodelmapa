@@ -8172,174 +8172,11 @@ function extractDaysFromMessage(message) {
   return m ? parseInt(m[1]) : null;
 }
 
-function isLongRoute(message) {
-  const days = extractDaysFromMessage(message);
-  return days !== null && days >= 8;
-}
-
-async function planBlocks(systemPrompt, message, days, apiKey) {
-  const planPrompt = `El usuario quiere una ruta de ${days} días. Divide la ruta en bloques de 5-7 días máximo cada uno, según las zonas geográficas naturales del destino.
-
-Responde SOLO con JSON, sin texto antes ni después:
-{"blocks":[{"block":1,"days_start":1,"days_end":5,"region":"nombre de la zona","start":"ciudad de inicio","end":"ciudad final"},{"block":2,...}]}
-
-El último bloque puede tener menos de 5 días. Los bloques deben conectar: el end del bloque N es el start del bloque N+1. Mensaje del usuario: "${message}"`;
-
-  const result = await callOpenAI(apiKey, {
-    model: 'gpt-4o-mini',
-    max_tokens: 500,
-    temperature: 0.3,
-    system: 'Eres un planificador de rutas. Responde SOLO con JSON válido.',
-    messages: [{ role: 'user', content: planPrompt }],
-  });
-
-  if (result.error) return null;
-  const text = result.text || '';
-  try {
-    // Extraer JSON del texto
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return null;
-    const plan = JSON.parse(jsonMatch[0]);
-    if (plan.blocks && Array.isArray(plan.blocks) && plan.blocks.length > 1) {
-      return plan.blocks;
-    }
-  } catch (e) {}
-  return null;
-}
-
-async function generateBlock(block, systemPrompt, message, apiKey, kvData) {
-  const blockPrompt = `${message}
-
-INSTRUCCIÓN ESPECIAL: Genera SOLO los días ${block.days_start} a ${block.days_end} de la ruta.
-Zona: ${block.region}. Empiezas en ${block.start}, terminas en ${block.end}.
-El campo "day" de cada parada debe ser el número real (${block.days_start}, ${block.days_start + 1}, etc.).
-Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de estos días.`;
-
-  const result = await callOpenAI(apiKey, {
-    model: 'gpt-4o-mini',
-    max_tokens: 16000, // un bloque = 5-7 días × 5-7 paradas: 4000 truncaba el JSON (tope gpt-4o-mini: 16384)
-    temperature: 0.7,
-    system: systemPrompt,
-    messages: [{ role: 'user', content: blockPrompt }],
-  });
-
-  if (result.error) return null;
-  const text = result.text || '';
-  let route = extractRouteFromReply(text);
-  if (!route && text.includes('SALMA_ROUTE_JSON')) {
-    const sv = salvageIncompleteRouteJson(text);
-    if (sv) route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + sv);
-  }
-  const reply = replyWithoutRouteBlock(text);
-  return { route, reply, block };
-}
-
-async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, placesKey, writer, encoder, env) {
-  const results = [];
-  const totalBlocks = blocks.length;
-
-  // Pipeline: generar + verificar cada bloque en cuanto termina
-  const promises = blocks.map(async (block) => {
-    try {
-      // 1. Generar bloque (con retry)
-      let genResult = await generateBlock(block, systemPrompt, message, apiKey, null);
-      if (!genResult?.route) {
-        // Retry una vez
-        genResult = await generateBlock(block, systemPrompt, message, apiKey, null);
-        if (!genResult?.route) return null;
-      }
-
-      // 2. Enviar draft inmediato (sin verificar)
-      try {
-        await writer.write(encoder.encode(`data: ${JSON.stringify({
-          draft_block: block.block,
-          total_blocks: totalBlocks,
-          route_partial: genResult.route,
-          reply: marcasANegrita(genResult.reply)
-        })}\n\n`));
-      } catch (_) {}
-
-      // 3. Verificar este bloque
-      try {
-        genResult.route = await verifyAllStops(genResult.route, placesKey, { maxStops: 50 }, env);
-      } catch (_) {
-        // Si verify falla, mantener la ruta sin verificar
-      }
-
-      // 4. Enviar bloque verificado
-      try {
-        await writer.write(encoder.encode(`data: ${JSON.stringify({
-          verified_block: block.block,
-          total_blocks: totalBlocks,
-          route_partial: genResult.route
-        })}\n\n`));
-      } catch (_) {}
-
-      return genResult;
-    } catch (e) {
-      return null;
-    }
-  });
-
-  const settled = await Promise.allSettled(promises);
-  for (const result of settled) {
-    if (result.status === 'fulfilled' && result.value) {
-      results.push(result.value);
-    }
-  }
-
-  results.sort((a, b) => a.block.block - b.block.block);
-  return results;
-}
-
-function mergeBlocks(blockResults, originalMessage) {
-  if (!blockResults || blockResults.length === 0) return null;
-
-  const base = blockResults[0].route;
-  const allStops = [];
-  const allTips = [];
-  const allTags = new Set();
-
-  for (let i = 0; i < blockResults.length; i++) {
-    const br = blockResults[i];
-    if (!br.route?.stops) continue;
-
-    let stops = br.route.stops;
-
-    if (i > 0 && allStops.length > 0) {
-      const lastStopName = (allStops[allStops.length - 1].name || '').toLowerCase().trim();
-      const firstStopName = (stops[0]?.name || '').toLowerCase().trim();
-      if (lastStopName && firstStopName && lastStopName === firstStopName) {
-        stops = stops.slice(1);
-      }
-    }
-
-    allStops.push(...stops);
-    // maps_links no se acumulan: cada bloque ya los tiene generados en verifyAllStops
-    // a partir de paradas validadas. Los regeneramos aquí a nivel ruta completa.
-    if (br.route.tips) allTips.push(...br.route.tips);
-    if (br.route.tags) br.route.tags.forEach(t => allTags.add(t));
-  }
-
-  const maxDay = allStops.reduce((max, s) => Math.max(max, s.day || 0), 0);
-
-  return {
-    title: base.title || '',
-    name: base.name || base.title || '',
-    country: base.country || '',
-    region: base.region || '',
-    duration_days: maxDay,
-    summary: base.summary || '',
-    stops: allStops,
-    maps_links: buildMapsLinksFromStops(allStops, base.region || base.country || ''),
-    tips: [...new Set(allTips)],
-    tags: [...allTags],
-    budget_level: base.budget_level || 'sin_definir',
-    suggestions: base.suggestions || [],
-    pre_departure: base.pre_departure || null,
-    practical_info: base.practical_info || null,
-  };
-}
+// (21 oct 2026) Aquí estaba el sistema de «BLOQUES PARALELOS» para rutas de 8 días o más (abril 2026: isLongRoute, planBlocks,
+// generateBlock, generateAndVerifyPipeline, mergeBlocks). Generaba la ruta entera con gpt-4o-mini SIN el plan de Salma y se
+// colaba delante de «Crear ruta con mapa»: toda guía de ≥8 días salía distinta del plan (Filipinas 21 días → «Ruta por Luzón»).
+// Quitado ENTERO, con Paco: las guías largas van por el mismo camino que las cortas (lector / convertProseToRouteJson + Google).
+// Si hiciera falta verlo: git show 8e5900d38:worker/salma-worker.js
 
 // ═══════════════════════════════════════════════════════════════
 // VERIFICACIÓN DE PARADAS — Google Places (post-generación)
@@ -16368,8 +16205,7 @@ INSTRUCCIONES:
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
       const MAX_TOOL_ITERATIONS = 10;  // Seguridad: máximo 10 tool calls por turno (subido de 5 — rutas con restricción de carretera única necesitan varias búsquedas de buscar_lugar antes de cerrar el JSON)
-      // Una pregunta con «N días» (caso rev-no_contesta_primero: «camping … 15 días») NO es una ruta larga: sin esto, al salir del modo viaje caía aquí.
-      const longRoute = !_msgsPregunta.has(message) && isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
+      // (21 oct 2026) Ya no hay «ruta larga» aparte: ver el comentario de extractDaysFromMessage.
 
       try {
         // ── TRANSPORT: buscar destino + emitir botones ANTES de Claude ──
@@ -16451,71 +16287,6 @@ INSTRUCCIONES:
             try {
               await writer.write(encoder.encode(`data: ${JSON.stringify({ transport_actions: actions, transport_tip: _tip })}\n\n`));
             } catch (_) {}
-          }
-        }
-
-        // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
-        // PIEZA A — NO en el Tiempo 1: este pipeline (gpt-4o-mini, sin grounding) genera
-        // la ruta entera con JSON e ignora guidedIsReco → se saltaba las recomendaciones
-        // y devolvía puntos por toda la región. En 'reco' se usa el camino normal de prosa.
-        if (longRoute && !guidedIsReco) {
-          const days = extractDaysFromMessage(message);
-          try {
-            // 1. Texto intro streameado
-            await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Venga, me pongo con ello. Te la monto en varias partes para que vayas viendo...' })}\n\n`));
-
-            // 2. Planificar bloques (~2s)
-            const blocks = await planBlocks(systemPrompt, message, days, apiKey);
-
-            if (blocks && blocks.length > 1) {
-              await writer.write(encoder.encode(`data: ${JSON.stringify({ plan: blocks, total_blocks: blocks.length })}\n\n`));
-
-              // 3. Generar bloques en paralelo
-              const keepalive = setInterval(async () => {
-                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
-              }, 3000);
-
-              let route = null;
-              try {
-                // Pipeline: cada bloque genera→verifica→emite independientemente
-                const blockResults = await generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, env.GOOGLE_PLACES_KEY, writer, encoder, env);
-
-                if (blockResults.length > 0) {
-                  route = mergeBlocks(blockResults, message);
-                }
-              } finally {
-                clearInterval(keepalive);
-              }
-
-              if (route) {
-                const reply = 'Tu ruta completa está lista.';
-
-                // BLOQUE E — validar enlaces de Maps antes de cachear y entregar
-                try {
-                  const _r = await validarYCorregirLinksMaps(route, { surface: 'ruta_guiada', region: route.region || route.country || '', userId: uid });
-                  route = _r.value;
-                  _urlIncidents.push(..._r.incidents);
-                } catch (_) {}
-
-                // Guardar en KV nivel 3 (máx. 2 keys deterministas, ver cacheGeneratedRoute)
-                await cacheGeneratedRoute(env, ctx, route, days);
-
-                const doneEvtB = { done: true, reply, route };
-                if (photoUploadPromise) {
-                  const pr = await photoUploadPromise;
-                  if (pr) { doneEvtB.photo_url = pr.url; doneEvtB.photo_key = pr.key; }
-                }
-                await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvtB)}\n\n`));
-
-                if (_urlIncidents.length) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
-
-                await writer.close();
-                return; // Sale del flujo — ruta larga completada
-              }
-            }
-            // Si planBlocks falla o devuelve 1 bloque, cae al flujo normal
-          } catch (e) {
-            // Fallback al flujo normal
           }
         }
 
