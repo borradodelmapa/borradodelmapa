@@ -932,14 +932,6 @@ const tuMundo = (() => {
         <div id="tm-body" hidden>
           <section class="tm-big" id="tm-big"></section>
           <section class="tm-mapw">
-            <div class="tm-mapbar">
-              <button type="button" class="tm-btn tm-play" id="tm-play" hidden>▶ Reproducir</button>
-              <button type="button" class="tm-btn tm-play" id="tm-reel" hidden>🎬 Reel</button>
-              <button type="button" class="tm-btn tm-play" id="tm-card-btn" hidden>🖼 Tarjeta</button>
-              <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
-              <p class="tm-note" id="tm-fmap-msg"></p>
-              <p class="tm-note tm-ios" id="tm-ios" hidden>En iPhone: al elegir las fotos pulsa «Opciones» (abajo a la izquierda) y activa «Ubicación». Si no, el móvil quita el sitio de las fotos y no salen en el mapa.</p>
-            </div>
             <div class="tm-fmap" id="tm-fmap"></div>
             <div class="tm-legend">
               <label><input type="checkbox" id="tm-fm-c" checked> <i style="background:#F4630B"></i>Has estado</label>
@@ -948,7 +940,15 @@ const tuMundo = (() => {
               <label id="tm-fm-pl"><input type="checkbox" id="tm-fm-p" checked> <i style="background:#7a3a14"></i>Planeado, aún no</label>
             </div>
             <div class="tm-years" id="tm-years" hidden></div>
-            <p class="tm-note" id="tm-fmap-note"></p>
+            <div class="tm-mapbar">
+              <p class="tm-note" id="tm-fmap-note"></p>
+              <button type="button" class="tm-btn tm-play" id="tm-play" hidden>▶ Reproducir</button>
+              <button type="button" class="tm-btn tm-play" id="tm-reel" hidden>🎬 Reel</button>
+              <button type="button" class="tm-btn tm-play" id="tm-card-btn" hidden>🖼 Tarjeta</button>
+              <label class="tm-btn tm-fmap-up" id="tm-fmap-up">＋ Fotos<input type="file" id="tm-fmap-in" accept="image/*" multiple hidden></label>
+              <p class="tm-note" id="tm-fmap-msg"></p>
+              <p class="tm-note tm-ios" id="tm-ios" hidden>En iPhone: al elegir las fotos pulsa «Opciones» (abajo a la izquierda) y activa «Ubicación». Si no, el móvil quita el sitio de las fotos y no salen en el mapa.</p>
+            </div>
           </section>
           <div id="tm-pub-ph"></div>
           <section><h3 class="tm-h">Tus países</h3><div class="tm-flags" id="tm-flags"></div></section>
