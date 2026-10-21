@@ -16475,7 +16475,9 @@ INSTRUCCIONES:
                   const _pz = String(_fastPathRoute.country || _c.pais || '').trim();
                   const _zona = (_pz && _c.zona && _c.zona.toLowerCase().startsWith(_pz.toLowerCase())) ? _pz : _c.zona;
                   _fastPathRoute.region = _zona || _fastPathRoute.country || _fastPathRoute.region;
-                  if (_c.titulo) { _fastPathRoute.title = _c.titulo; _fastPathRoute.name = _c.titulo; }
+                  // Mismo caso en el título: «Filipinas completa: Manila → Bohol» → «Filipinas: Manila → Bohol».
+                  const _tit = (_pz && _c.titulo) ? _c.titulo.replace(new RegExp('^(' + _pz.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\s+(complet[ao]|enter[ao])\\b', 'i'), '$1') : _c.titulo;
+                  if (_tit) { _fastPathRoute.title = _tit; _fastPathRoute.name = _tit; }
                 } else { _fastPathRoute = null; _lectorMotivo = 'no salieron las coordenadas'; }
               }
               if (_fastPathRoute) console.log(`[LECTOR] ✓ ${_fastPathRoute.stops.length} paradas, ${_fastPathRoute.duration_days} días, ${Date.now() - _tConv} ms — sin reescritura${_ciudad ? '' : ' (con coordenadas)'}`);
