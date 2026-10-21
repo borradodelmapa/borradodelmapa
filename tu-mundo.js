@@ -592,41 +592,68 @@ const tuMundo = (() => {
     map.on('zoomend', paint);
     if (pts.length) map.fitBounds(line.getBounds(), { padding: [40, 40], maxZoom: 14 }); else map.setView([25, 10], 2);
     paint();
-    // ▶ Reproducir mi viaje: la cámara recorre las paradas por fecha, la ruta se va dibujando y salen las fotos de cada una.
+    // ▶ Reproducir mi viaje (rediseño 21 oct 2026, estilo Polarsteps): la cámara viaja despacio de parada en parada, la ruta se
+    // dibuja y abajo sale una tarjeta con la foto GRANDE (pasan las de esa parada), país y fecha. Pausa, anterior/siguiente y barra.
     // 💶 0 €: solo mueve el mapa con las fotos ya cargadas.
     const playBtn = _q('#tm-play'), stops = pts.length > 1 ? _stopsOf(pts) : [];
     if (playBtn) {
       playBtn.hidden = stops.length < 2;
-      let run = 0, trail = null, dot = null, card = null;
-      const sleep = (ms, id) => new Promise(r => setTimeout(r, ms)).then(() => id === run);
+      let run = 0, trail = null, dot = null, ghost = null, card = null, cur = 0, paused = false, timers = [];
+      const clr = () => { timers.forEach(t => { clearTimeout(t); clearInterval(t); }); timers = []; };
+      const after = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
       const fin = () => {
-        run++; [trail, dot, card].forEach(x => { if (x) { if (x.remove) x.remove(); } }); trail = dot = card = null;
+        run++; clr(); [trail, dot, ghost, card].forEach(x => { if (x && x.remove) x.remove(); }); trail = dot = ghost = card = null;
+        box.classList.remove('tm-playing'); map.invalidateSize();
         if (_q('#tm-fm-f') && _q('#tm-fm-f').checked) photos.addTo(map);
         playBtn.textContent = '▶ Reproducir';
       };
-      playBtn.onclick = async () => {
-        if (trail || card) { fin(); return; }
-        const id = ++run; playBtn.textContent = '■ Parar';
+      // la parada se coloca en la parte alta del mapa: la tarjeta con la foto ocupa la baja
+      const fly = (st, z, dur) => { const c = map.project([st.lat, st.lng], z).add([0, box.clientHeight * 0.2]); map.flyTo(map.unproject(c, z), z, { duration: dur }); };
+      const paintCard = i => {
+        const st = stops[i], f = countryAt(st.lat, st.lng), d = st.t ? new Date(st.t) : null, ph = st.photos.slice(0, 6);
+        card.querySelector('.tm-play-ph').innerHTML = ph.map((p, k) => `<img src="${esc(p.url)}" alt=""${k ? '' : ' class="on"'}>`).join('');
+        card.querySelector('.tm-play-tx').innerHTML = `<b>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : 'Tu viaje'}</b><span>${d ? d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} · ${st.photos.length} ${st.photos.length === 1 ? 'foto' : 'fotos'}</span><i>${i + 1} / ${stops.length}</i>`;
+        card.querySelector('.tm-play-bar i').style.width = ((i + 1) / stops.length * 100) + '%';
+        card.classList.remove('in'); void card.offsetWidth; card.classList.add('in');
+        const imgs = [...card.querySelectorAll('.tm-play-ph img')]; let k = 0;
+        if (imgs.length > 1) timers.push(setInterval(() => { imgs[k].classList.remove('on'); k = (k + 1) % imgs.length; imgs[k].classList.add('on'); }, 2400));
+        return Math.max(5500, imgs.length * 2400);
+      };
+      const show = i => {
+        if (i < 0) i = 0;
+        if (i >= stops.length) { end(); return; }
+        clr(); cur = i; const st = stops[i], id = run;
+        trail.setLatLngs(stops.slice(0, i + 1).map(s => [s.lat, s.lng])); dot.setLatLng([st.lat, st.lng]);
+        card.querySelector('.tm-play-ph').innerHTML = ''; card.querySelector('.tm-play-tx').innerHTML = '';
+        fly(st, st.photos.length > 1 ? 10 : 12, i ? 3.2 : 1.2);
+        after(i ? 3000 : 1000, () => { if (id !== run) return; const dwell = paintCard(i); if (!paused) after(dwell, () => { if (id === run) show(i + 1); }); });
+      };
+      const end = () => {
+        clr(); const id = run;
+        card.querySelector('.tm-play-ph').innerHTML = ''; card.querySelector('.tm-play-bar i').style.width = '100%';
+        card.querySelector('.tm-play-tx').innerHTML = `<b>Tu viaje completo</b><span>${stops.length} paradas · ${pts.length} fotos</span>`;
+        map.flyToBounds(trail.getBounds(), { padding: [50, 50], duration: 2.4 });
+        after(7000, () => { if (id === run) fin(); });
+      };
+      playBtn.onclick = () => {
+        if (card) { fin(); return; }
+        run++; paused = false; playBtn.textContent = '■ Parar';
         map.removeLayer(photos); map.closePopup();
-        trail = L.polyline([], { color: '#F4630B', weight: 3, opacity: .9 }).addTo(map);
-        dot = L.circleMarker([stops[0].lat, stops[0].lng], { radius: 8, color: '#fff', weight: 3, fillColor: '#F4630B', fillOpacity: 1 }).addTo(map);
-        card = document.createElement('div'); card.className = 'tm-play-card'; box.appendChild(card);
+        box.classList.add('tm-playing'); map.invalidateSize();
+        ghost = L.polyline(stops.map(s => [s.lat, s.lng]), { color: '#F4630B', weight: 2, opacity: .35, dashArray: '2 6' }).addTo(map);
+        trail = L.polyline([], { color: '#F4630B', weight: 4, opacity: .95 }).addTo(map);
+        dot = L.circleMarker([stops[0].lat, stops[0].lng], { radius: 9, color: '#fff', weight: 3, fillColor: '#F4630B', fillOpacity: 1 }).addTo(map);
+        card = document.createElement('div'); card.className = 'tm-play-card';
+        card.innerHTML = '<div class="tm-play-ph"></div><div class="tm-play-tx"></div><div class="tm-play-bar"><i></i></div><div class="tm-play-ctl"><button type="button" data-a="prev" aria-label="Anterior">⏮</button><button type="button" data-a="pause" aria-label="Pausa">⏸</button><button type="button" data-a="next" aria-label="Siguiente">⏭</button></div>';
+        box.appendChild(card);
+        L.DomEvent.disableClickPropagation(card);
+        card.querySelector('.tm-play-ctl').onclick = e => {
+          const b = e.target.closest('button'); if (!b) return; const act = b.dataset.a, pb = card.querySelector('[data-a=pause]');
+          if (act === 'pause') { paused = !paused; pb.textContent = paused ? '▶' : '⏸'; if (paused) clr(); else show(cur); }
+          else { paused = false; pb.textContent = '⏸'; show(act === 'next' ? cur + 1 : cur - 1); }
+        };
         map.setView([stops[0].lat, stops[0].lng], 4, { animate: false });
-        for (let i = 0; i < stops.length; i++) {
-          const st = stops[i]; if (id !== run) return;
-          trail.addLatLng([st.lat, st.lng]); dot.setLatLng([st.lat, st.lng]);
-          map.flyTo([st.lat, st.lng], st.photos.length > 1 ? 10 : 12, { duration: i ? 1.8 : .8 });
-          if (!(await sleep(i ? 1900 : 900, id))) return;
-          const f = countryAt(st.lat, st.lng), d = st.t ? new Date(st.t) : null;
-          card.innerHTML = `<div class="tm-play-th">${st.photos.slice(0, 4).map(p => `<img src="${esc(p.url)}" alt="">`).join('')}</div><div class="tm-play-tx"><b>${f ? flagOf(f.a2) + ' ' + esc(esName(f.a2, f.en)) : ''}</b><span>${d ? d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} · ${st.photos.length} ${st.photos.length === 1 ? 'foto' : 'fotos'}</span><i>${i + 1} / ${stops.length}</i></div>`;
-          card.classList.remove('in'); void card.offsetWidth; card.classList.add('in');
-          if (!(await sleep(2600, id))) return;
-        }
-        if (id !== run) return;
-        map.flyToBounds(trail.getBounds(), { padding: [50, 50], duration: 1.6 });
-        card.innerHTML = `<div class="tm-play-tx"><b>Tu viaje completo</b><span>${stops.length} paradas · ${pts.length} fotos</span></div>`;
-        if (!(await sleep(3500, id))) return;
-        fin();
+        show(0);
       };
     }
     const reelBtn = _q('#tm-reel'); if (reelBtn) { reelBtn.hidden = (stops.length < 2 && pts.length < 2) || typeof reelViaje === 'undefined'; reelBtn.onclick = () => _openReel(S, pts); }
