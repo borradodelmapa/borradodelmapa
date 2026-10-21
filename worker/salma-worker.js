@@ -5654,6 +5654,9 @@ const HIST_TIPOS = new Map(Object.entries({
   teatro: 'teatro', theatre: 'teatro', theater: 'teatro', hospital: 'hospital', universidad: 'universidad', university: 'universidad',
   puerta: 'puerta', porta: 'puerta', gate: 'puerta', arco: 'puerta', muralla: 'muralla', muralles: 'muralla', wall: 'muralla', walls: 'muralla',
   mausoleo: 'tumba', tumba: 'tumba', tomb: 'tumba', mirador: 'mirador', miradouro: 'mirador', viewpoint: 'mirador',
+  // 21 oct 2026 (fotos/historia equivocadas en guías reales): «SM Mall of Asia» → «Mall of Asia Arena», «Paso de Hai Van» → «Túnel…»
+  mall: 'comercio', shopping: 'comercio', arena: 'estadio', estadio: 'estadio', stadium: 'estadio',
+  paso: 'paso', pass: 'paso', tunel: 'tunel', tunnel: 'tunel',
 }));
 async function _wikiBuscarArticulos(lugares) {
   const res = lugares.map(l => (HIST_NEGOCIO.test(l.place) ? null : undefined)); // undefined = aún sin decidir
@@ -5687,14 +5690,32 @@ async function _wikiBuscarArticulos(lugares) {
     if (tp === tt) return false;
     return sinTipo(place) === sinTipo(title) && compacto(place) !== compacto(title);
   };
-  const coincide = (place, title) => !tiposChocan(place, title) && !tipoMasSitio(place, title)
-    && (_histCoincide(place, title) || (compacto(title).length >= 4 && compacto(place) === compacto(title)));
+  // 21 oct 2026 (guías de Vietnam, Camboya y Filipinas: 5 de 43 artículos eran de OTRO sitio): si solo UNO de los dos dice qué
+  // es, no es el mismo sitio, aunque el resto del nombre sea distinto: «Angkor National Museum» ≠ «Angkor», «Poblacion» ≠
+  // «Makati Poblacion Park». Y con «y» («Angkor Thom y el Bayon») el artículo tiene que ser UNA de las partes, comprobada igual
+  // (antes la «y» quitaba la comprobación: salía «The Royal Palace, Angkor Thom»).
+  // Ojo: al revés NO (la parada no dice qué es y el artículo sí): «Sagrada Familia» → «Templo Expiatorio de la Sagrada Familia».
+  const tipoSoloEnParada = (place, title) => tiposDe(place).size > 0 && tiposDe(title).size === 0;
+  // La parada dice qué es y el artículo añade OTRO tipo: «SM Mall of Asia» (comercio) ≠ «Mall of Asia Arena» (comercio + estadio).
+  const tipoDeMas = (place, title) => { const a = tiposDe(place); return a.size > 0 && [...tiposDe(title)].some(t => !a.has(t)); };
+  // Nombre genérico suelto («Poblacion» = el centro de un pueblo filipino): solo un artículo que se llame exactamente así.
+  const generico = place => /^(poblacion|centro|downtown|centro historico|casco antiguo|casco viejo|old town|ciudad vieja|barrio antiguo|old quarter|chinatown|barrio chino)$/i.test(String(place).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\([^)]*\)/g, '').trim());
+  const coincideUno = (place, title) => !tiposChocan(place, title) && !tipoMasSitio(place, title) && !tipoSoloEnParada(place, title) && !tipoDeMas(place, title)
+    && (generico(place) ? compacto(place) === compacto(title) : (_histCoincide(place, title) || (compacto(title).length >= 4 && compacto(place) === compacto(title))));
+  const coincide = (place, title) => {
+    const partes = String(place).split(/\s(?:y|and|e|i|&)\s/i).map(s => s.replace(/^(el|la|los|las|the)\s+/i, '').trim()).filter(s => s.length >= 3);
+    return partes.length > 1 ? partes.some(p => coincideUno(p, title)) : coincideUno(place, title);
+  };
   // Entre varios candidatos válidos gana el MÁS IMPORTANTE: el que más visitas tiene en Wikipedia (últimos 30 días). Comprobado
   // 20 oct: Santiago de Chile 18.280 frente a la comuna 1.353; la basílica de la Sagrada Familia 19.397 frente al barrio 2.555;
   // el barrio de Santa Cruz 732 frente a su iglesia 203; la Alhambra 14.621 frente a su museo 50. Pero el artículo cuyo nombre es
   // EXACTAMENTE lo buscado (sin lo de entre paréntesis) vale el triple: «Córdoba» → «Córdoba (España)», no «Califato de Córdoba».
   const visitas = p => Object.values((p && p.pageviews) || {}).reduce((a, b) => a + (b || 0), 0);
   const elMejor = (cands, place) => {
+    // Nombre con «y» («Angkor Thom y el Bayon»): si un artículo se llama EXACTAMENTE como una de las partes, gana ese, aunque
+    // otro más visitado también encaje (salía «Angkor», el conjunto entero, que tiene muchas más visitas).
+    const partes = String(place).split(/\s(?:y|and|e|i|&)\s/i).map(s => compacto(s.replace(/^(el|la|los|las|the)\s+/i, ''))).filter(s => s.length >= 3);
+    if (partes.length > 1) { const exactos = cands.filter(x => partes.includes(compacto(x.title))); if (exactos.length) cands = exactos; }
     const puntos = x => visitas(x) * (compacto(x.title) === compacto(place) ? 3 : 1);
     return cands.sort((x, y) => (puntos(y) - puntos(x)) || ((y.length || 0) - (x.length || 0)) || ((x.dist || 0) - (y.dist || 0)))[0];
   };
@@ -5964,7 +5985,8 @@ function _histSlug(s) {
 }
 // «histart5» (antes 3 y 4): búsqueda corregida el 20 oct por la noche (batería de 60 sitios: un idioma por sitio, gana el más importante,
 // el nombre exacto pesa más, mayúsculas); lo guardado antes se vuelve a mirar
-const _histArtKey = l => `histart5:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
+// «histart6» (21 oct 2026): regla de tipos afinada (5 de 43 paradas de Vietnam/Camboya/Filipinas cogían otro sitio).
+const _histArtKey = l => `histart6:${_histSlug(l.place)}${(typeof l.lat === 'number' && typeof l.lng === 'number') ? `:${l.lat.toFixed(1)}:${l.lng.toFixed(1)}` : ''}`;
 
 // ¿Qué lugares tienen historia con fuente? Devuelve, en el mismo orden, lo que se enseña al pulsar el botón:
 // { ok:true, articulo, resumen, foto, fuente, historia|null } o { ok:false } (sin botón). Gratis (Wikipedia) y guardado en KV:
