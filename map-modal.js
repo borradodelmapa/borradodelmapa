@@ -6,8 +6,6 @@
 (function() {
   let _mmMap = null;
   let _mmInfoWindow = null;
-  let _mmSearchBox = null;
-  let _mmSearchMarkers = [];
 
   function _injectCSS() {
     if (document.getElementById('mm-css')) return;
@@ -17,9 +15,6 @@
 #mm { position: fixed; inset: 0; z-index: 10000; background: #060503; }
 #mm-map { position: absolute; inset: 0; }
 #mm-close { position: absolute; top: 14px; right: 14px; width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,0.82); color: #fff; border: none; font-size: 26px; line-height: 1; cursor: pointer; z-index: 12; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.4); }
-#mm-searchbox { position: absolute; top: 14px; left: 14px; z-index: 11; background: #fff; border-radius: 22px; padding: 8px 14px; width: min(340px, calc(100% - 80px)); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-#mm-searchbox input { width: 100%; border: 0; outline: 0; font-size: 14px; font-family: 'Inter', sans-serif; color: #111; background: transparent; }
-#mm-searchbox input::placeholder { color: #999; }
 #mm-open { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #F4630B; color: #060503; border: none; padding: 12px 20px; border-radius: 22px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 12; box-shadow: 0 4px 14px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
 #mm-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #F4630B; font-size: 14px; z-index: 5; font-family: 'Inter', sans-serif; background: rgba(0,0,0,0.7); padding: 10px 16px; border-radius: 8px; }
     `;
@@ -77,67 +72,47 @@
     return { name, placeId, multiStop, multiStopIds };
   }
 
-  // Resuelve un punto de ruta. Prioridad: 1) place_id ya validado por el Worker contra
-  // Google (getDetails — el mismo ID, fiable, sin ambigüedad de nombre) 2) "lat,lng" literal
-  // 3) búsqueda por nombre a ciegas (findPlaceFromQuery, sin sesgo geográfico — falla a
-  // menudo con pueblos/miradores pequeños, es el último recurso). cb(loc, label) — loc es
-  // null si no se pudo resolver de ninguna forma.
-  function _resolvePoint(pointStr, placeId, placesService, cb) {
-    if (placeId) {
-      // 1º el catálogo del Worker (GET /place-details): si el lugar ya está guardado son 0 llamadas a Google; si no, el Worker
-      // lo pide UNA vez y lo guarda para siempre. Solo si eso falla se pregunta a Google desde el navegador, como antes.
-      const api = window.SALMA_API;
-      if (api) {
-        fetch(api + '/place-details?place_id=' + encodeURIComponent(placeId), { cache: 'no-store' })
-          .then(r => r.ok ? r.json() : null)
-          .then(d => {
-            if (d && typeof d.lat === 'number' && typeof d.lng === 'number') cb({ lat: d.lat, lng: d.lng }, d.name || pointStr);
-            else _resolvePointBrowser(pointStr, placeId, placesService, cb);
-          })
-          .catch(() => _resolvePointBrowser(pointStr, placeId, placesService, cb));
-        return;
-      }
-      _resolvePointBrowser(pointStr, placeId, placesService, cb);
-      return;
-    }
-    _resolvePointByNameOrCoords(pointStr, placesService, cb);
-  }
-
-  function _resolvePointBrowser(pointStr, placeId, placesService, cb) {
-    if (placeId) {
-      placesService.getDetails({ placeId, fields: ['geometry', 'name'] }, (r, s) => {
-        if (s === google.maps.places.PlacesServiceStatus.OK && r && r.geometry) {
-          cb(r.geometry.location, r.name || pointStr);
-        } else {
-          _resolvePointByNameOrCoords(pointStr, placesService, cb);
-        }
-      });
-      return;
-    }
-    _resolvePointByNameOrCoords(pointStr, placesService, cb);
-  }
-
-  function _resolvePointByNameOrCoords(pointStr, placesService, cb) {
-    const m = String(pointStr).trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);
+  // Resuelve un punto de ruta SIN pedir nada a Google desde el navegador (21 oct 2026, caso p-mvijaz0s3mj: antes
+  // getDetails/findPlaceFromQuery con la clave pública, fuera del tope de gasto del Worker). Prioridad: 1) "lat,lng"
+  // literal 2) place_id → catálogo del Worker (GET /place-details: 0 llamadas si el lugar ya está; si no, el Worker lo
+  // pide UNA vez, con su contador y tope, y lo guarda) 3) el nombre en OpenStreetMap/Nominatim (gratis).
+  // cb(loc, label) — loc es null si no se pudo resolver de ninguna forma.
+  function _resolvePoint(pointStr, placeId, cb) {
+    const m = String(pointStr).trim().match(/^(-?d+(?:.d+)?),s*(-?d+(?:.d+)?)$/);
     if (m) { cb({ lat: parseFloat(m[1]), lng: parseFloat(m[2]) }, pointStr); return; }
-    placesService.findPlaceFromQuery({ query: pointStr, fields: ['geometry', 'name', 'place_id'] }, (r, s) => {
-      if (s === google.maps.places.PlacesServiceStatus.OK && r && r[0]) {
-        cb(r[0].geometry.location, r[0].name);
-      } else {
-        cb(null, pointStr);
-      }
+    const api = window.SALMA_API;
+    if (placeId && api) {
+      fetch(api + '/place-details?place_id=' + encodeURIComponent(placeId), { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d && typeof d.lat === 'number' && typeof d.lng === 'number') cb({ lat: d.lat, lng: d.lng }, d.name || pointStr);
+          else _resolvePointByName(pointStr, cb);
+        })
+        .catch(() => _resolvePointByName(pointStr, cb));
+      return;
+    }
+    _resolvePointByName(pointStr, cb);
+  }
+
+  // Nominatim pide como mucho una búsqueda por segundo: las de una misma ruta van en fila.
+  let _nomQueue = Promise.resolve();
+  function _resolvePointByName(pointStr, cb) {
+    const q = String(pointStr || '').trim();
+    if (!q) { cb(null, pointStr); return; }
+    _nomQueue = _nomQueue.then(async () => {
+      try {
+        const j = await (await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q=' + encodeURIComponent(q))).json();
+        if (j && j[0]) cb({ lat: +j[0].lat, lng: +j[0].lon }, q);
+        else cb(null, pointStr);
+      } catch (_) { cb(null, pointStr); }
+      await new Promise(r => setTimeout(r, 1000));
     });
   }
 
   function _close() {
     const m = document.getElementById('mm');
     if (m) m.remove();
-    _mmMap = null; _mmInfoWindow = null; _mmSearchBox = null; _mmSearchMarkers = [];
-  }
-
-  function _clearSearchMarkers() {
-    _mmSearchMarkers.forEach(m => m.setMap(null));
-    _mmSearchMarkers = [];
+    _mmMap = null; _mmInfoWindow = null;
   }
 
   function _initMap(dest) {
@@ -170,7 +145,6 @@
       gestureHandling: 'greedy',
     });
     _mmInfoWindow = new google.maps.InfoWindow();
-    const placesService = new google.maps.places.PlacesService(_mmMap);
 
     // Resolver destino y marcarlo
     const markDest = (loc, name) => {
@@ -234,7 +208,7 @@
       const locs = new Array(dest.multiStop.length);
       dest.multiStop.forEach((point, i) => {
         const pointId = dest.multiStopIds && dest.multiStopIds[i];
-        _resolvePoint(point, pointId, placesService, (loc, label) => {
+        _resolvePoint(point, pointId, (loc, label) => {
           if (loc) locs[i] = { loc, name: label };
           if (--pending === 0) {
             const valid = locs.filter(Boolean);
@@ -277,62 +251,14 @@
       return;
     }
 
-    // Destino único — saltarnos getDetails con placeId (a menudo inválido)
-    // Usar findPlaceFromQuery directamente → fallback a Geocoder
+    // Destino único: por el nombre (el place_id suelto de estos enlaces a menudo no vale)
     if (dest.name) {
-      console.log('[map-modal] resolviendo destino:', dest.name);
-      _resolvePoint(dest.name, null, placesService, (loc, label) => {
-        if (loc) {
-          markDest(loc, label);
-        } else {
-          // Fallback Geocoder (nombres que Places no encuentra tal cual)
-          new google.maps.Geocoder().geocode({ address: dest.name }, (res, gst) => {
-            console.log('[map-modal] Geocoder status:', gst);
-            if (gst === 'OK' && res[0]) markDest(res[0].geometry.location, dest.name);
-            else { const sp = document.getElementById('mm-spinner'); if (sp) sp.textContent = 'No se pudo encontrar el lugar'; }
-          });
-        }
+      _resolvePoint(dest.name, null, (loc, label) => {
+        if (loc) markDest(loc, label);
+        else { const sp = document.getElementById('mm-spinner'); if (sp) sp.textContent = 'No se pudo encontrar el lugar'; }
       });
     } else {
       const sp = document.getElementById('mm-spinner'); if (sp) sp.remove();
-    }
-
-    // Search box (Places Autocomplete/Search)
-    const input = document.getElementById('mm-search-input');
-    if (input && google.maps.places.SearchBox) {
-      _mmSearchBox = new google.maps.places.SearchBox(input);
-      _mmMap.addListener('bounds_changed', () => {
-        _mmSearchBox.setBounds(_mmMap.getBounds());
-      });
-      _mmSearchBox.addListener('places_changed', () => {
-        const places = _mmSearchBox.getPlaces();
-        if (!places || places.length === 0) return;
-        _clearSearchMarkers();
-        const bounds = new google.maps.LatLngBounds();
-        places.forEach(p => {
-          if (!p.geometry || !p.geometry.location) return;
-          const mk = new google.maps.Marker({
-            map: _mmMap,
-            position: p.geometry.location,
-            title: p.name,
-            icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#4285F4', fillOpacity: 0.92, strokeColor: '#fff', strokeWeight: 2, scale: 9 },
-          });
-          mk.addListener('click', () => {
-            const content = `
-              <div style="font-family:'Inter',sans-serif;max-width:240px">
-                <div style="font-weight:700;font-size:14px;color:#111">${p.name || ''}</div>
-                ${p.rating ? `<div style="color:#F4630B;font-size:12px">★ ${p.rating}</div>` : ''}
-                ${p.formatted_address ? `<div style="color:#777;font-size:11px;margin-top:4px">${p.formatted_address}</div>` : ''}
-              </div>`;
-            _mmInfoWindow.setContent(content);
-            _mmInfoWindow.open(_mmMap, mk);
-          });
-          _mmSearchMarkers.push(mk);
-          if (p.geometry.viewport) bounds.union(p.geometry.viewport);
-          else bounds.extend(p.geometry.location);
-        });
-        _mmMap.fitBounds(bounds);
-      });
     }
   }
 
@@ -348,9 +274,6 @@
       modal.innerHTML = `
         <div id="mm-map"></div>
         <div id="mm-spinner">Cargando mapa…</div>
-        <div id="mm-searchbox">
-          <input id="mm-search-input" type="text" placeholder="Buscar hoteles, farmacias, restaurantes...">
-        </div>
         <button id="mm-close" aria-label="Cerrar">×</button>
         <button id="mm-open">📍 Abrir en Google Maps</button>
       `;
@@ -360,7 +283,7 @@
       document.getElementById('mm-open').addEventListener('click', () => window.open(url, '_blank'));
 
       const ensureGoogle = () => {
-        if (window.google && google.maps && google.maps.places) return Promise.resolve();
+        if (window.google && google.maps && google.maps.Map) return Promise.resolve();
         if (typeof window._loadGoogleMaps === 'function') return window._loadGoogleMaps();
         return Promise.reject();
       };
@@ -368,7 +291,7 @@
       ensureGoogle()
         .then(() => {
           const wait = (tries = 0) => {
-            if (window.google && google.maps && google.maps.places) {
+            if (window.google && google.maps && google.maps.Map) {
               _initMap(dest);
             } else if (tries < 30) {
               setTimeout(() => wait(tries + 1), 100);

@@ -5102,7 +5102,6 @@ const _catConfig = {
 };
 
 let _poiInfoWindow = null;
-let _placesService = null;
 
 function _buildMapStyle() {
   window._mapStyle = [
@@ -5125,33 +5124,6 @@ function _liveMapStyle() {
 
 function _applyMapStyle() {
   if (_liveMap) _liveMap.setOptions({ styles: _liveMapStyle() });
-}
-
-function _showPoiInfo(place, latLng, placeId) {
-  if (!_poiInfoWindow || !_liveMap) return;
-  const photoHtml = place.photos && place.photos.length
-    ? `<img src="${place.photos[0].getUrl({ maxWidth: 280, maxHeight: 140 })}" style="width:100%;height:130px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
-    : `<div style="width:100%;height:70px;background:#f0f0f0;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:32px">📍</div>`;
-  const stars = place.rating ? `<span style="color:#F5A623;font-size:11px">★ ${place.rating.toFixed(1)}</span>` : '';
-  const mapsUrl = place.url || (placeId ? `https://www.google.com/maps/place/?q=place_id:${placeId}` : '#');
-  const content = `
-    <div style="font-family:'Inter',sans-serif;width:260px;border-radius:10px;overflow:hidden;background:#fff">
-      ${photoHtml}
-      <div style="padding:10px 12px 12px">
-        <div style="font-size:15px;font-weight:700;color:#111;line-height:1.3;margin-bottom:4px">${place.name || ''}</div>
-        ${stars}
-        ${place.formatted_address ? `<div style="font-size:11px;color:#777;margin-top:4px;margin-bottom:10px">${place.formatted_address}</div>` : '<div style="margin-bottom:8px"></div>'}
-        <a href="${mapsUrl}" target="_blank" rel="noopener"
-          style="display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:600;text-decoration:none">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="rgba(255,255,255,.9)"/></svg>
-          Ver en Google Maps
-        </a>
-      </div>
-    </div>`;
-  _poiInfoWindow.setContent(content);
-  _poiInfoWindow.setPosition(latLng || place.geometry?.location);
-  _poiInfoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -10) });
-  _poiInfoWindow.open(_liveMap);
 }
 
 function toggleMapCat(checkbox) {
@@ -5305,7 +5277,6 @@ function openLiveMap(opts) {
       });
 
       _poiInfoWindow = new google.maps.InfoWindow();
-      _placesService = new google.maps.places.PlacesService(_liveMap);
 
       _liveMap.addListener('click', _onMapTap);
       _liveMap.addListener('drag', _closeMapPanels);
@@ -6196,19 +6167,6 @@ function deletePinById(pinId) {
   if (_poiInfoWindow) _poiInfoWindow.close();
 }
 
-const _tapPlaceIcons = {
-  restaurant:'🍽️', cafe:'☕', bar:'🍺', night_club:'🍸',
-  lodging:'🏨', hotel:'🏨',
-  supermarket:'🛒', grocery_or_supermarket:'🛒', convenience_store:'🏪',
-  pharmacy:'💊', hospital:'🏥', doctor:'🩺',
-  museum:'🏛️', art_gallery:'🖼️', tourist_attraction:'📸',
-  park:'🌳', church:'⛪', mosque:'🕌', synagogue:'🕍',
-  atm:'💳', bank:'🏦', gas_station:'⛽',
-  shopping_mall:'🛍️', clothing_store:'👕',
-  transit_station:'🚇', subway_station:'🚇', bus_station:'🚌',
-  airport:'✈️',
-};
-
 // ── Diario: estado + picker ──
 const _diario = { photo: null, locName: '', lat: 0, lng: 0, lastBlob: null, mapImg: null };
 
@@ -6242,8 +6200,6 @@ function _diarioGeocode() {
   });
 }
 
-let _dpickAutocomplete = null;
-
 function _showDiarioPicker() {
   const picker = document.getElementById('diario-picker');
   if (picker) picker.style.display = 'block';
@@ -6251,7 +6207,7 @@ function _showDiarioPicker() {
   if (loc) loc.textContent = _diario.locName || '';
   _placeNearestChip();
   // (27 sept 2026) Sin buscador "Buscar lugar" ni botón brújula: el picker solo lleva
-  // lo que se hace en el punto tocado. _initDpickSearch() se queda por si vuelve.
+  // lo que se hace en el punto tocado.
 }
 // El chip "parada más cercana" se coloca justo encima de la hoja de Foto/Ir aquí/Guardar
 // mientras está abierta (antes la hoja lo tapaba) y vuelve a su sitio al cerrarla.
@@ -6274,58 +6230,6 @@ function closeDiarioPicker() {
   _closeMapPanels();
 }
 
-function _initDpickSearch() {
-  const input = document.getElementById('dpick-search-input');
-  if (!input || _dpickAutocomplete || !window.google || !google.maps.places) return;
-
-  _dpickAutocomplete = new google.maps.places.Autocomplete(input, {
-    fields: ['geometry', 'name', 'formatted_address', 'place_id'],
-  });
-  if (_liveMap) _dpickAutocomplete.bindTo('bounds', _liveMap);
-
-  _dpickAutocomplete.addListener('place_changed', () => {
-    const place = _dpickAutocomplete.getPlace();
-    if (place.geometry && place.geometry.location) {
-      _goToPlace(place.geometry.location.lat(), place.geometry.location.lng(), place.name || place.formatted_address);
-    } else if (place.name) {
-      // El usuario escribió y pulsó Enter sin seleccionar — geocoding manual
-      _geocodeAndGo(place.name);
-    }
-  });
-
-  // Enter sin seleccionar sugerencia — geocoding directo
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const q = input.value.trim();
-      if (q) setTimeout(() => {
-        // Si place_changed no se disparó (sin selección), hacer geocoding
-        if (input.value.trim() === q) _geocodeAndGo(q);
-      }, 300);
-    }
-  });
-}
-
-function _goToPlace(lat, lng, title) {
-  if (!_liveMap || !window.google) return;
-  _liveMap.panTo({ lat, lng });
-  _liveMap.setZoom(16);
-  const input = document.getElementById('dpick-search-input');
-  if (input) input.value = '';
-  // Simular tap en esas coordenadas → mismo pin + picker con FOTO/IR AQUI/GUARDAR
-  const latLng = new google.maps.LatLng(lat, lng);
-  _onMapTap({ latLng });
-}
-
-function _geocodeAndGo(query) {
-  if (!window.google || !google.maps.Geocoder) return;
-  new google.maps.Geocoder().geocode({ address: query }, (results, status) => {
-    if (status === 'OK' && results[0]) {
-      const loc = results[0].geometry.location;
-      _goToPlace(loc.lat(), loc.lng(), results[0].formatted_address);
-    }
-  });
-}
 function diarioPickCamera() {
   closeDiarioPicker();
   const input = document.getElementById('diario-camera-input');
@@ -6973,183 +6877,9 @@ function clearTapPhoto() {
   if (thumb) thumb.src = '';
 }
 
-function _showTapSheet(latLng) {
-  if (!_placesService) return;
-  const sheet = document.getElementById('live-map-tap-sheet');
-  const addrEl = document.getElementById('lmts-address');
-  const coordsEl = document.getElementById('lmts-coords');
-  const photoEl = document.getElementById('lmts-photo');
-  const nearbyEl = document.getElementById('lmts-nearby-list');
-  sheet.style.display = 'flex';
-  addrEl.textContent = 'Buscando dirección…';
-  nearbyEl.innerHTML = '<div style="color:rgba(244,239,230,.4);font-size:12px;padding:10px 0">Buscando lugares cerca…</div>';
-
-  const lat = latLng.lat(), lng = latLng.lng();
-  const latStr = lat.toFixed(5), lngStr = lng.toFixed(5);
-  coordsEl.textContent = `${latStr}, ${lngStr}`;
-
-  // Street View desactivado — falla en muchas zonas
-  photoEl.style.display = 'none';
-
-  // URL que abre Google Maps app nativa en móvil
-  const navUrl = `https://maps.google.com/maps?daddr=${lat},${lng}`;
-  document.getElementById('lmts-dir-btn').onclick = () => window.open(navUrl, '_blank');
-
-  function setSaveAction(name) {
-    document.getElementById('lmts-save-btn').onclick = () => {
-      _placeMapPin({ name, address: `${latStr}, ${lngStr}`, description: '', place_type: 'other', photo: _tapPhotoBase64, lat, lng });
-      if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
-      sheet.style.display = 'none';
-      _tapLatLng = null;
-      clearTapPhoto();
-    };
-  }
-  setSaveAction(`📍 ${latStr}, ${lngStr}`);
-
-  // Geocodificación inversa
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({ location: latLng }, (results, status) => {
-    if (status === 'OK' && results[0]) {
-      addrEl.textContent = results[0].formatted_address;
-      setSaveAction(results[0].formatted_address);
-    } else {
-      addrEl.textContent = `${latStr}, ${lngStr}`;
-      coordsEl.textContent = '';
-    }
-  });
-
-  // Lugares cercanos
-  _placesService.nearbySearch({ location: latLng, radius: 400 }, (results, status) => {
-    nearbyEl.innerHTML = '';
-    if (!results || !results.length) {
-      nearbyEl.innerHTML = '<div style="color:rgba(244,239,230,.4);font-size:12px;padding:10px 0">Sin lugares encontrados</div>';
-      return;
-    }
-    results.slice(0, 15).forEach(place => {
-      const icon = _tapPlaceIcons[place.types?.[0]] || '📍';
-      const rating = place.rating ? `★ ${place.rating.toFixed(1)}` : '';
-      const plLat = place.geometry.location.lat(), plLng = place.geometry.location.lng();
-      const placeNavUrl = `https://maps.google.com/maps?daddr=${plLat},${plLng}`;
-      const row = document.createElement('div');
-      row.className = 'lmts-place-row';
-      row.innerHTML = `
-        <div class="lmts-place-icon">${icon}</div>
-        <div class="lmts-place-info">
-          <div class="lmts-place-name">${place.name}</div>
-          ${rating ? `<div class="lmts-place-meta">${rating}</div>` : ''}
-        </div>
-        <a href="${placeNavUrl}" target="_blank" rel="noopener" class="lmts-place-dir">🗺️ Ir</a>`;
-      row.addEventListener('click', ev => {
-        if (ev.target.closest('a')) return;
-        _placesService.getDetails(
-          { placeId: place.place_id, fields: ['name','photos','formatted_address','rating','url','geometry'] },
-          (detail, s) => {
-            if (s !== google.maps.places.PlacesServiceStatus.OK || !detail) return;
-            _showPoiInfo(detail, detail.geometry.location, place.place_id);
-          }
-        );
-      });
-      nearbyEl.appendChild(row);
-    });
-  });
-}
-
-function openSalmaMapSheet() {
-  const sheet = document.getElementById('live-map-salma-sheet');
-  const status = document.getElementById('salma-map-status');
-  if (sheet) sheet.style.display = 'block';
-  if (status) status.style.display = 'none';
-}
-
 function closeSalmaMapSheet() {
   const el = document.getElementById('live-map-salma-sheet');
   if (el) el.style.display = 'none';
-}
-
-function sendSalmaMapPhoto(fileInput) {
-  const file = fileInput.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const base64 = e.target.result.split(',')[1];
-    await _processSalmaMapRequest(base64);
-  };
-  reader.readAsDataURL(file);
-  fileInput.value = '';
-}
-
-async function _processSalmaMapRequest(imageBase64) {
-  const status = document.getElementById('salma-map-status');
-  status.textContent = '🔍 Identificando...';
-  status.style.display = 'block';
-
-  try {
-    const SALMA_API = window.SALMA_API || 'https://salma-api.borradodelmapa-api.workers.dev';
-    const res = await fetch(SALMA_API + '/pin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image_base64: imageBase64 }),
-    });
-    const data = await res.json();
-
-    if (!data.name || data.name === 'null' || !data.name.trim()) {
-      // No identificado — pinear en GPS actual si disponible
-      const userPos = _liveUserMarker ? _liveUserMarker.getPosition() : null;
-      if (userPos) {
-        const label = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-        _placeMapPin({ name: `📷 ${label}`, address: '', description: '', place_type: 'other', photo: imageBase64, lat: userPos.lat(), lng: userPos.lng() });
-        status.textContent = '📍 Guardado en tu posición actual';
-        setTimeout(() => closeSalmaMapSheet(), 1800);
-      } else {
-        status.textContent = '❌ No he podido identificar el lugar';
-        setTimeout(() => closeSalmaMapSheet(), 2500);
-      }
-      return;
-    }
-
-    await _handleMapPin(data, status, imageBase64);
-  } catch (e) {
-    status.textContent = '❌ Error al procesar la imagen';
-    setTimeout(() => closeSalmaMapSheet(), 2500);
-  }
-}
-
-async function _handleMapPin(action, status, photoBase64 = null) {
-  if (!_placesService) { status.textContent = '❌ Mapa no disponible.'; return; }
-  status.textContent = '📍 Buscando en el mapa...';
-
-  const query = [action.name, action.address].filter(Boolean).join(', ');
-  const userPos = _liveUserMarker ? _liveUserMarker.getPosition() : null;
-  _placesService.findPlaceFromQuery(
-    { query, fields: ['geometry', 'name', 'formatted_address', 'place_id'], ...(userPos ? { locationBias: userPos } : {}) },
-    async (results, placeStatus) => {
-      if (placeStatus !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
-        status.textContent = '❌ No he encontrado ese lugar. Sé más específico.';
-        return;
-      }
-      const place = results[0];
-      const lat = place.geometry.location.lat();
-      const lng = place.geometry.location.lng();
-      const name = place.name || action.name;
-      const address = place.formatted_address || action.address || '';
-
-      _placeMapPin({ name, address, description: action.description, place_type: action.place_type, checkin: action.checkin, checkout: action.checkout, confirmation: action.confirmation, photo: photoBase64, lat, lng });
-
-      if (currentUser && typeof db !== 'undefined') {
-        try {
-          await db.collection('users').doc(currentUser.uid).collection('map_pins').add({
-            name, address, description: action.description || '',
-            place_type: action.place_type || 'other',
-            checkin: action.checkin || null, checkout: action.checkout || null,
-            lat, lng, created_at: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        } catch (_) {}
-      }
-
-      status.textContent = `✅ "${name}" guardado`;
-      setTimeout(() => closeSalmaMapSheet(), 1800);
-    }
-  );
 }
 
 function _placeMapPin({ name, address, description, place_type, checkin, checkout, confirmation, photo, lat, lng }) {
@@ -7192,9 +6922,7 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
   _liveMap.panTo({ lat, lng });
 }
 
-window.openSalmaMapSheet = openSalmaMapSheet;
 window.closeSalmaMapSheet = closeSalmaMapSheet;
-window.sendSalmaMapPhoto = sendSalmaMapPhoto;
 window.closeTapSheet = closeTapSheet;
 window.handleTapPhoto = handleTapPhoto;
 window.clearTapPhoto = clearTapPhoto;

@@ -16,7 +16,6 @@ const mapaRuta = {
   _userMarker: null, // Punto azul de ubicación del usuario
   _infoWindow: null, // InfoWindow activo
   _searchMarker: null, // Marker de búsqueda temporal
-  _autocomplete: null, // Google Places Autocomplete
 
   // Colores por día — rediseño "viajero real" (doc 8 sep): paleta atenuada,
   // día 1 en el acento (#F4630B). Es wayfinding funcional en el mapa, no decoración.
@@ -347,22 +346,9 @@ const mapaRuta = {
     el.appendChild(bar);
 
     const input = document.getElementById('map-search-input');
-    if (!input || !window.google || !google.maps.places) return;
+    if (!input) return;
 
-    // Google Places Autocomplete
-    this._autocomplete = new google.maps.places.Autocomplete(input, {
-      fields: ['geometry', 'name', 'formatted_address', 'place_id'],
-      types: ['establishment', 'geocode'],
-    });
-    this._autocomplete.addListener('place_changed', () => {
-      const place = this._autocomplete.getPlace();
-      if (!place.geometry || !place.geometry.location) return;
-      const pos = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-      this._map.panTo(pos);
-      this._map.setZoom(15);
-      this._addSearchMarker(pos, place.name || place.formatted_address);
-    });
-
+    // Sin autocompletar de Google (21 oct 2026, caso p-mvijaz0s3mj: una petición por tecla con la clave pública).
     // Enter → detectar servicios y enviar a Salma
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -969,7 +955,6 @@ const mapaRuta = {
       try { this._searchMarker.setMap(null); } catch(e) {}
       this._searchMarker = null;
     }
-    this._autocomplete = null;
     if (this._searchSubmitHandler) {
       document.removeEventListener('map:search-submit', this._searchSubmitHandler);
       this._searchSubmitHandler = null;

@@ -302,6 +302,9 @@
       .sl-sub{font-size:12px;color:rgba(245,240,232,.6);line-height:1.5}
       .sl-input{background:#0a0806;color:#f5f0e8;border:1px solid rgba(240,180,41,.25);border-radius:10px;padding:12px;font-size:14px;font-family:inherit;outline:none}
       .sl-input:focus{border-color:rgba(240,180,41,.55)}
+      .sl-row{display:flex;gap:8px;margin:0}
+      .sl-row .sl-input{flex:1;min-width:0}
+      .sl-search{background:transparent;border:1px solid rgba(240,180,41,.55);color:#f0b429;border-radius:10px;padding:0 14px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
       .sl-preview{font-size:13px;color:#f5f0e8;background:#0a0806;border:1px solid rgba(240,180,41,.18);border-radius:10px;padding:10px 12px;min-height:42px;display:flex;align-items:center;gap:8px}
       .sl-preview.empty{color:rgba(245,240,232,.35);font-style:italic}
       .sl-actions{display:flex;gap:8px;margin-top:4px}
@@ -588,25 +591,20 @@
     return { dLat, dLng };
   }
 
-  async function ensureMapsLoaded() {
-    if (window.google && window.google.maps && window.google.maps.places) return true;
-    if (typeof window._loadGoogleMaps === 'function') {
-      try { await window._loadGoogleMaps(); return true; } catch(_) { return false; }
-    }
-    return false;
-  }
-
+  // 💶 0 € (21 oct 2026, caso p-mvijaz0s3mj): el sitio se busca en OpenStreetMap/Nominatim al pulsar Buscar o Enter,
+  // igual que «Fotos sin ubicación» de Tu vuelta al mundo. Antes era el autocompletar de Google: una petición por tecla
+  // con la clave pública, fuera del tope de gasto del Worker.
   async function showLocatePicker(count, onApply) {
-    const ok = await ensureMapsLoaded();
-    if (!ok) { alert('No se pudo cargar Google Maps'); return; }
-
     const overlay = document.createElement('div');
     overlay.className = 'sl-overlay';
     overlay.innerHTML = `
       <div class="sl-box">
         <div class="sl-title">Ubicar ${count} foto${count === 1 ? '' : 's'}</div>
         <div class="sl-sub">Busca un lugar (ciudad, monumento, playa...). Las fotos se colocarán ahí con un pequeño desplazamiento aleatorio para que no queden superpuestas.</div>
-        <input class="sl-input" id="sl-input" placeholder="Ej: Hoi An, Vietnam" autocomplete="off">
+        <form class="sl-row" id="sl-form" autocomplete="off">
+          <input class="sl-input" id="sl-input" placeholder="Ej: Hoi An, Vietnam" autocomplete="off" enterkeyhint="search">
+          <button class="sl-search" type="submit">Buscar</button>
+        </form>
         <div class="sl-preview empty" id="sl-preview">Aún no has elegido un lugar</div>
         <div class="sl-actions">
           <button class="sl-cancel" id="sl-cancel">Cancelar</button>
@@ -622,21 +620,31 @@
 
     let chosen = null;
 
-    const ac = new google.maps.places.Autocomplete(input, {
-      types: ['geocode', 'establishment'],
-      fields: ['geometry', 'name', 'formatted_address']
+    const showPreview = (text, empty) => {
+      preview.textContent = text;
+      preview.classList.toggle('empty', !!empty);
+    };
+    input.addEventListener('input', () => {
+      if (!chosen) return;
+      chosen = null; applyBtn.disabled = true;
+      showPreview('Pulsa Buscar para encontrar el sitio', true);
     });
-    ac.addListener('place_changed', () => {
-      const place = ac.getPlace();
-      if (!place.geometry || !place.geometry.location) return;
-      chosen = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
-        name: place.name || place.formatted_address || input.value
-      };
-      preview.textContent = '📍 ' + chosen.name;
-      preview.classList.remove('empty');
-      applyBtn.disabled = false;
+    overlay.querySelector('#sl-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const q = input.value.trim();
+      if (!q) { showPreview('Escribe el sitio (ciudad o lugar).', true); return; }
+      chosen = null; applyBtn.disabled = true;
+      showPreview('Buscando…', true);
+      try {
+        const j = await (await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q=' + encodeURIComponent(q))).json();
+        if (input.value.trim() !== q) return;
+        if (!j || !j[0]) { showPreview('No encuentro ese sitio. Prueba con la ciudad y el país.', true); return; }
+        chosen = { lat: +j[0].lat, lng: +j[0].lon, name: j[0].display_name || q };
+        showPreview('📍 ' + chosen.name);
+        applyBtn.disabled = false;
+      } catch (_) {
+        showPreview('No he podido buscar ahora. Inténtalo de nuevo.', true);
+      }
     });
 
     cancelBtn.addEventListener('click', () => overlay.remove());

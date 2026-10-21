@@ -78,7 +78,7 @@ window._loadGoogleMaps = function() {
     if (window.google && window.google.maps && window.google.maps.Map) { resolve(); return; }
     window._gmapsReady = resolve;
     const s = document.createElement('script');
-    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&libraries=geometry,marker,places&callback=_gmapsReady';
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&libraries=geometry,marker&callback=_gmapsReady';
     s.onerror = reject;
     document.head.appendChild(s);
   });
@@ -484,7 +484,7 @@ window.SALMA_API="https://salma-api.borradodelmapa-api.workers.dev";
 <!-- ═══ APP ═══ -->
 <script src="debug-panel.js?v=23"></script>
 <script src="country-utils.js?v=4"></script>
-<script src="app.js?v=277"></script>
+<script src="app.js?v=278"></script>
 <script src="premium-modal.js?v=11"></script>
 <script src="nav-history.js?v=6"></script>
 <script src="notas.js?v=3"></script>
@@ -492,11 +492,11 @@ window.SALMA_API="https://salma-api.borradodelmapa-api.workers.dev";
 <script src="salma.js?v=141"></script>
 <script src="video-player.js?v=5"></script>
 <script src="guide-renderer.js?v=57"></script>
-<script src="mapa-ruta.js?v=13"></script>
+<script src="mapa-ruta.js?v=14"></script>
 <script src="mapa-itinerario.js?v=123"></script>
 <script src="docs-viajero.js?v=2"></script>
-<script src="map-modal.js?v=11"></script>
-<script src="share-inbox.js?v=10"></script>
+<script src="map-modal.js?v=12"></script>
+<script src="share-inbox.js?v=11"></script>
 <script src="translator.js?v=15"></script>
 <script src="historia.js?v=5"></script>
 <script src="tu-mundo.js?v=47"></script>
