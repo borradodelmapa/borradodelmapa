@@ -8575,6 +8575,8 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
           const cached = JSON.parse(kvResults[j]);
           if (!cached?.place_id) return;
           // opts.requireNameMatch (chat): la ficha guardada tiene que llevar coordenadas y el mismo nombre.
+          // Un sitio guardado como RESCATE por distancia (cached.soft) no vale para el chat: allí el nombre tiene que coincidir.
+          if (opts.requireNameMatch && cached.soft) return;
           if (opts.requireNameMatch && (typeof cached.lat !== 'number' || typeof cached.lng !== 'number'
             || !strictNameMatch(route.stops[i].name || route.stops[i].headline || '', cached.name || ''))) return;
           // GUARDA DE HOMÓNIMOS — la clave es país + nombre, y ahora la entrada es PERMANENTE: "Iglesia de
@@ -8779,7 +8781,10 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       let inRange = false;
       if (pointAnchor) inRange = true; // ya filtrado por radio del ancla arriba
       else if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
-      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
+      // El centro de las paradas solo cuando el plan NO dice dónde está el sitio (21 oct 2026): si lo dice y Google lo pone
+      // a más de 50 km, no es ese sitio. Antes colaba «Vuelo El Nido–Corón» → una agencia a 117 km cuando el centro salía
+      // de pocas paradas (las demás venían de la caché).
+      else if (!(stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) && hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
       if (inRange) {
         bestCandidates[i] = { candidate: c, soft: true };
         console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)})`);
@@ -8843,7 +8848,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       stop.place_id = prev.place_id;
       delete stop._unverified;
       delete stop._verifyReason;
-      delete stop._soft_match;
+      if (prev.soft) stop._soft_match = true; else delete stop._soft_match;   // mismo resultado que si se buscara otra vez
       if (prev.verified_address) stop.verified_address = prev.verified_address;
       if (prev.photo_ref) stop.photo_ref = prev.photo_ref;
       if (prev.photo_attr) stop.photo_attr = prev.photo_attr;
@@ -8938,16 +8943,20 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     // reutiliza sin volver a pagar Find Place + Details. Solo verificaciones de confianza (nombre
     // coincide de verdad), nunca rescates blandos (bc.soft), para no propagar un match dudoso a otras
     // rutas que ni siquiera lo pidieron. Al leerla hay una guarda de distancia contra homónimos.
-    if (env?.SALMA_KB && !bc.soft) {
-      const kvKey = _verifiedKvKey(stop);
-      if (kvKey) {
-        spotWrites.push(env.SALMA_KB.put(kvKey, JSON.stringify({
-          place_id: stop.place_id, lat: stop.lat, lng: stop.lng,
-          name: stop.name, verified_address: stop.verified_address || '',
-          photo_ref: stop.photo_ref || '', practical: stop.practical || '',
-          description: stop.description || '', ...(stop.photo_attr ? { photo_attr: stop.photo_attr } : {}),
-        })).catch(() => {}));
-      }
+    // 21 oct 2026 (Filipinas: de 107 sitios ya pagados, 32 rescatados se pagaban otra vez y los demás solo se encontraban si
+    // Salma escribía el nombre igual que Google): se guarda con LOS DOS nombres (el que escribió Salma y el de Google) y
+    // también los rescates por distancia, marcados soft (al reutilizarlos salen igual que si se buscaran otra vez; el chat no
+    // los usa). La guarda de distancia al leer (25 km de donde lo pone el plan / radio del ancla) sigue igual.
+    if (env?.SALMA_KB) {
+      const datos = JSON.stringify({
+        place_id: stop.place_id, lat: stop.lat, lng: stop.lng,
+        name: stop.name, verified_address: stop.verified_address || '',
+        photo_ref: stop.photo_ref || '', practical: stop.practical || '',
+        description: stop.description || '', ...(stop.photo_attr ? { photo_attr: stop.photo_attr } : {}),
+        ...(bc.soft ? { soft: true } : {}),
+      });
+      const claves = new Set([_verifiedKvKey({ name: _askedName }), _verifiedKvKey(stop)].filter(Boolean));
+      for (const k of claves) spotWrites.push(env.SALMA_KB.put(k, datos).catch(() => {}));
     }
 
     validatedStops.push(stop);
