@@ -550,7 +550,9 @@ const tuMundo = (() => {
     nt.innerHTML = esc(txt) + (sinSitio && !_year ? ` <button type="button" class="tm-link" id="tm-sin">Ver las ${sinSitio} sin ubicación</button>` : '');
     const bs = _q('#tm-sin'); if (bs) bs.onclick = verSin;
     if (typeof L === 'undefined') { box.innerHTML = '<p class="tm-note">No se pudo cargar el mapa. Revisa la conexión.</p>'; return; }
-    const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 1, maxZoom: 18 });
+    // maxBounds en latitud: sin él se podía arrastrar el mapa fuera del mundo y quedaba vacío. Zoom abajo a la derecha, igual que en Explorar
+    const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 1, maxZoom: 18, zoomControl: false, maxBounds: [[-85, -1000], [85, 1000]], maxBoundsViscosity: 1 });
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
     const cv = L.layerGroup().addTo(map), cp = L.layerGroup().addTo(map); _paintCountries({ v: cv, p: cp }, S);
     const lp = _q('#tm-fm-pl'); if (lp) lp.hidden = !cp.getLayers().length;
@@ -659,6 +661,7 @@ const tuMundo = (() => {
     }
     const top = [...S.seen.values()].sort((a, b) => b.src.size - a.src.size)[0];
     if (top && top.src.size > 1) R.push(['Tu país favorito', `${flagOf(top.f.a2)} ${esName(top.f.a2, top.f.en)}`, `${top.src.size} viajes o recuerdos`]);
+    const pl = [...S.plan.values()]; if (pl.length) R.push(['Tus próximos destinos', pl.map(e => `${flagOf(e.f.a2)} ${esName(e.f.a2, e.f.en)}`).join(' · '), '']);
     const HOME_FORM = `<form class="tm-home" id="tm-home-form" autocomplete="off">
         <input class="tm-home-in" id="tm-home-in" type="text" placeholder="Tu ciudad o pueblo" aria-label="Tu ciudad o pueblo" enterkeyhint="search">
         <button class="tm-btn" type="submit">Guardar</button>
@@ -788,8 +791,6 @@ const tuMundo = (() => {
     const list = [...S.seen.values()].sort((a, b) => b.n - a.n);
     _q('#tm-flags').innerHTML = list.map(e => `<span><b>${flagOf(e.f.a2)}</b>${esc(esName(e.f.a2, e.f.en))}</span>`).join('') || '<span>Aún ninguno</span>';
     renderRecords(S);
-    const pl = [...S.plan.values()]; _q('#tm-next-sec').hidden = !pl.length;
-    _q('#tm-next').innerHTML = pl.map(e => `<span>${flagOf(e.f.a2)} ${esc(esName(e.f.a2, e.f.en))}</span>`).join('');
     const b = _q('#tm-share');
     b.onclick = async () => {
       b.disabled = true; const old = b.innerHTML; b.textContent = 'Creando…';
@@ -965,7 +966,6 @@ const tuMundo = (() => {
           </section>
           <section id="tm-sug-sec" hidden><h3 class="tm-h">Fotos que encajan con tus guías</h3>
             <p class="tm-note" id="tm-sug-note"></p><div class="tm-sug" id="tm-sug"></div></section>
-          <section id="tm-next-sec" hidden><h3 class="tm-h">Tus próximos destinos</h3><div class="tm-next" id="tm-next"></div></section>
         </div>
       </div>`;
     document.getElementById('tm-back').addEventListener('click', () => { window._rutasTab = 'mis'; showState('rutas'); });
