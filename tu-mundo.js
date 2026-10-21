@@ -552,7 +552,7 @@ const tuMundo = (() => {
     // maxBounds en latitud: sin él se podía arrastrar el mapa fuera del mundo y quedaba vacío. Zoom abajo a la derecha, igual que en Explorar
     const map = _fmap = L.map(box, { worldCopyJump: true, minZoom: 1, maxZoom: 18, zoomControl: false, maxBounds: [[-85, -1000], [85, 1000]], maxBoundsViscosity: 1 });
     L.control.zoom({ position: 'bottomright' }).addTo(map);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, keepBuffer: 6, attribution: '© OpenStreetMap' }).addTo(map);
     const cv = L.layerGroup().addTo(map), cp = L.layerGroup().addTo(map); _paintCountries({ v: cv, p: cp }, S);
     const lp = _q('#tm-fm-pl'); if (lp) lp.hidden = !cp.getLayers().length;
     const line = L.polyline(pts.map(p => [p.lat, p.lng]), { color: '#F4630B', weight: 2, opacity: .75, dashArray: '2 6' });
@@ -631,15 +631,20 @@ const tuMundo = (() => {
         const arrive = () => { if (id !== run) return; const dwell = paintCard(i); look(st.lat, st.lng, zb); if (!paused) after(dwell, () => { if (id === run) show(i + 1); }); };
         const a = from || (i ? stops[i - 1] : null);
         if (!a || (a.lat === st.lat && a.lng === st.lng)) { trail.setLatLngs(stops.slice(0, i + 1).map(s => [s.lat, s.lng])); dot.setLatLng([st.lat, st.lng]); look(st.lat, st.lng, zb); after(700, arrive); return; }
-        // tramo: el punto y la cámara avanzan juntos; si el tramo es largo la cámara se aleja a mitad de camino y vuelve a acercarse
-        const prev = stops.slice(0, i).map(s => [s.lat, s.lng]), za = Math.round(map.getZoom()), dist = hav(a, st), ms = Math.min(7000, Math.max(3200, 2600 + dist * 1.4));
-        const zFit = map.getBoundsZoom(L.latLngBounds([[a.lat, a.lng], [st.lat, st.lng]]), false, L.point(90, 90)), zLow = Math.max(2, Math.min(zFit - .2, za, zb)), bump = Math.min(za, zb) - zLow, t0 = performance.now();
+        // tramo en tres tiempos: 1) la cámara se aleja HASTA UN ZOOM ENTERO donde el mapa carga bien, 2) se desliza a zoom fijo
+        // (como al arrastrar: el mapa va cargando y no se vacía) con el punto dibujando la ruta, 3) se acerca a la parada
+        const prev = stops.slice(0, i).map(s => [s.lat, s.lng]), za = map.getZoom(), dist = hav(a, st);
+        const zFit = map.getBoundsZoom(L.latLngBounds([[a.lat, a.lng], [st.lat, st.lng]]), false, L.point(90, 90)), zf = Math.min(za, zb, Math.max(3, Math.floor(zFit)));
+        const m1 = Math.abs(za - zf) * 420, m3 = Math.abs(zb - zf) * 420, m2 = Math.min(5500, Math.max(2200, 1800 + dist * 0.9)), tot = m1 + m2 + m3, t0 = performance.now();
         const step = now => {
           if (id !== run) return;
-          const t = Math.min(1, (now - t0) / ms), e = ease(t), lat = a.lat + (st.lat - a.lat) * e, lng = a.lng + (st.lng - a.lng) * e;
+          const el = Math.min(tot, now - t0); let lat, lng, z;
+          if (el < m1) { lat = a.lat; lng = a.lng; z = za + (zf - za) * ease(el / m1); }
+          else if (el < m1 + m2) { const e = ease((el - m1) / m2); lat = a.lat + (st.lat - a.lat) * e; lng = a.lng + (st.lng - a.lng) * e; z = zf; }
+          else { lat = st.lat; lng = st.lng; z = zf + (zb - zf) * ease((el - m1 - m2) / m3); }
           dot.setLatLng([lat, lng]); trail.setLatLngs(prev.concat([[lat, lng]]));
-          look(lat, lng, za + (zb - za) * e - bump * Math.sin(Math.PI * t));
-          if (t < 1) raf = requestAnimationFrame(step); else arrive();
+          look(lat, lng, z);
+          if (el < tot) raf = requestAnimationFrame(step); else arrive();
         };
         raf = requestAnimationFrame(step);
       };
@@ -657,7 +662,7 @@ const tuMundo = (() => {
         // base de países en vector, por DEBAJO de los mapas: si al volar los mapas aún no han cargado, nunca se ve el fondo vacío
         if (!map.getPane('tmWorld')) { const pn = map.createPane('tmWorld'); pn.style.zIndex = 150; pn.style.pointerEvents = 'none'; }
         const rend = L.canvas({ pane: 'tmWorld' });
-        world = L.layerGroup(FEATS.flatMap(f => f.polys.map(poly => L.polygon(poly.map(r => r.map(([x, y]) => [y, x])), { renderer: rend, pane: 'tmWorld', interactive: false, color: '#3a444a', weight: .8, fillColor: '#232b30', fillOpacity: 1 })))).addTo(map);
+        world = L.layerGroup(FEATS.flatMap(f => f.polys.map(poly => L.polygon(poly.map(r => r.map(([x, y]) => [y, x])), { renderer: rend, pane: 'tmWorld', interactive: false, color: '#c9c3b8', weight: .6, fillColor: '#f2efe9', fillOpacity: 1 })))).addTo(map);
         trail = L.polyline([], { color: '#F4630B', weight: 4, opacity: .95, interactive: false }).addTo(map);
         dot = L.circleMarker([stops[0].lat, stops[0].lng], { radius: 9, color: '#fff', weight: 3, fillColor: '#F4630B', fillOpacity: 1, interactive: false }).addTo(map);
         card = document.createElement('div'); card.className = 'tm-play-card';

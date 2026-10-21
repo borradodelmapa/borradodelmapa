@@ -143,8 +143,8 @@
 /* Reproducir mi viaje */
 .tm-mapbar .tm-play { margin:0; }
 .tm-fmap.tm-playing { height:min(78vh,660px); }
-.tm-fmap.tm-playing { height:min(78vh,660px); background:#0b1216; }
-.tm-fmap.tm-playing { height:min(78vh,660px); background:#0b1216; }
+.tm-fmap.tm-playing { height:min(78vh,660px); background:#aad3df; }
+.tm-fmap.tm-playing { height:min(78vh,660px); background:#aad3df; }
 .tm-play-card { position:absolute; left:0; right:0; bottom:0; z-index:1000; display:flex; flex-direction:column; background:rgba(13,15,16,.95); border-top:1px solid var(--border); color:#ECEBE8; transform:translateY(105%); transition:transform .7s ease; pointer-events:none; }
 .tm-play-card.up { transform:none; }
 .tm-play-ph { position:relative; height:clamp(170px,30vh,300px); background:#0b1216; overflow:hidden; }
