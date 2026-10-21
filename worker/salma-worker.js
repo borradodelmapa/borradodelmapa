@@ -17505,7 +17505,9 @@ REGLAS:
               const _tVer = Date.now();
               // PRECIOS CON FUENTE (21 oct 2026): solo al CREAR una guía, a la vez que la verificación de Google (no alarga la
               // espera). Va por narrativa original → nueva, así no le afecta lo que Google descarte o renombre.
-              const _preciosP = (_usageKind === 'guide' && Array.isArray(route?.stops))
+              // Interruptor PRECIOS_GUIAS (wrangler.toml), apagado el 21 oct 2026: con el límite de peticiones por consulta del Worker,
+              // los ~2 por precio dejaban sin hueco a la verificación de Google (Filipinas: 10 paradas sin verificar).
+              const _preciosP = (env.PRECIOS_GUIAS === '1' && _usageKind === 'guide' && Array.isArray(route?.stops))
                 ? preciosConFuente(route.stops, route.country || (anchorCountry && anchorCountry.countryName) || '', env).catch(e => { console.log('[PRECIOS] ' + e.message); return new Map(); })
                 : Promise.resolve(new Map());
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts, env);

@@ -50,6 +50,7 @@ OPEN_GATE_ON = "1"  # punto 16: tope diario por IP en endpoints abiertos (fotos/
 CACHE_1H = "1"     # punto 12: caché del prompt de 1 h en vez de 5 min (encendida 12 oct 2026, caso p-mulprefz0fz). Revertir = "0"
 CACHE_TAIL = "1"   # contexto variable (fecha, GPS, datos del país…) al final, junto al mensaje nuevo: el historial se lee de caché (caso p-mulprefz0fz). Revertir = "0"
 CHAT_EFFORT = "medium"   # esfuerzo de Claude en la conversación normal (no guías): respuestas más escuetas. Revertir = "" (caso p-mulprefz0fz)
+PRECIOS_GUIAS = "0"   # precios con fuente en las guías (preciosConFuente). "1" enciende. Apagado: gasta el límite de peticiones por consulta y Google se queda sin hueco (21 oct 2026)
 GUIDES_NO_DAILY_CAP = "j94ldKhMTkgT7k3u2CRSG2UxP6X2"   # cuentas sin tope diario de guías: la de pruebas claude@ (producción de guías, 21 oct 2026). Revertir = ""
 PLAY_BILLING_ON = "1"   # compras dentro de la app de Google Play (Play Billing, /play-verify). Encendido 13 oct 2026 con los 4 productos activos. Revertir = "0"
 # Remitente de los emails (Resend). Dominio borradodelmapa.com verificado en Resend el 26 sept 2026
