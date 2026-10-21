@@ -7994,13 +7994,13 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
 async function coordsForMarkedStops(stops, env, { countryName = '', region = '', usageAcc = null } = {}) {
   if (!Array.isArray(stops) || !stops.length || !env.ANTHROPIC_API_KEY) return null;
   const lista = stops.map((s, i) => `${i + 1}. ${s.name} (día ${s.day})`).join('\n');
-  const sys = 'Devuelves coordenadas reales de lugares. Solo JSON, sin texto ni backticks: {"pais":"País principal del viaje, en español","zona":"Zona o región del viaje, 1-3 palabras (ej. Pirineos, Algarve, Costa Brava)","titulo":"Título corto de la guía, máx. 50 caracteres, bien escrito (ej. Transpirenaica en moto: Hondarribia → Cadaqués)","c":[[lat,lng],...]} con UN par por lugar, en el MISMO orden de la lista. Si un lugar no lo sabes con seguridad, pon [0,0].';
+  const sys = 'Devuelves coordenadas reales de lugares. Solo JSON, sin texto ni backticks: {"pais":"País principal del viaje, en español","zona":"Zona o región del viaje, 1-3 palabras (ej. Pirineos, Algarve, Costa Brava)","titulo":"Título corto de la guía, máx. 50 caracteres, bien escrito (ej. Transpirenaica en moto: Hondarribia → Cadaqués)","c":[[n,lat,lng],...]} con n = el NÚMERO del lugar en la lista, uno por lugar. Si un lugar no lo sabes con seguridad, pon [n,0,0].';
   const user = `Viaje${region ? ' "' + region + '"' : ''}${countryName ? ' (' + countryName + ')' : ''}, ${new Set(stops.map(s => s.day)).size} días. Los lugares van en orden de ruta, así que cada uno está cerca del anterior y del siguiente.\n\n${lista}`;
   try {
     const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1500, system: sys, messages: [{ role: 'user', content: user }] }),
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2500, system: sys, messages: [{ role: 'user', content: user }] }),
       signal: AbortSignal.timeout(45000),
     });
     if (!res.ok) { console.log(`[LECTOR] coordenadas: HTTP ${res.status}`); return null; }
@@ -8008,8 +8008,18 @@ async function coordsForMarkedStops(stops, env, { countryName = '', region = '',
     if (usageAcc && data.usage) { usageAcc.tin += data.usage.input_tokens || 0; usageAcc.tout += data.usage.output_tokens || 0; }
     const txt = String(data.content?.[0]?.text || '');
     const j = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
-    if (!Array.isArray(j.c) || j.c.length !== stops.length) { console.log(`[LECTOR] coordenadas: ${j.c?.length || 0} para ${stops.length} sitios`); return null; }
-    const c = j.c.map(p => (Array.isArray(p) && isFinite(+p[0]) && isFinite(+p[1])) ? [+p[0], +p[1]] : [0, 0]);
+    // POR NÚMERO DE SITIO (21 oct 2026, Filipinas 21 días: 53 pares para 52 sitios → se tiraba todo y la guía caía a la
+    // reescritura de Sonnet, 159 s y nombres cambiados). Cada coordenada va a SU sitio; la que falte o sobre no descoloca
+    // las demás, y un sitio sin coordenada se busca igual en Google ([0,0]). Solo se rinde si faltan más de la mitad.
+    if (!Array.isArray(j.c)) { console.log('[LECTOR] coordenadas: sin lista'); return null; }
+    const c = stops.map(() => [0, 0]);
+    let ok = 0;
+    for (const p of j.c) {
+      const n = Array.isArray(p) && p.length === 3 ? parseInt(p[0], 10) : NaN;
+      if (n >= 1 && n <= stops.length && isFinite(+p[1]) && isFinite(+p[2]) && !(c[n - 1][0] || c[n - 1][1])) { c[n - 1] = [+p[1], +p[2]]; if (+p[1] || +p[2]) ok++; }
+    }
+    if (ok < stops.length / 2) { console.log(`[LECTOR] coordenadas: solo ${ok} de ${stops.length} sitios`); return null; }
+    if (ok < stops.length) console.log(`[LECTOR] coordenadas: ${ok} de ${stops.length} (el resto, Google sin coordenada)`);
     c.pais = typeof j.pais === 'string' ? j.pais.trim().slice(0, 40) : '';
     c.zona = typeof j.zona === 'string' ? j.zona.trim().slice(0, 40) : '';
     c.titulo = typeof j.titulo === 'string' ? j.titulo.trim().slice(0, 70) : '';
