@@ -889,7 +889,7 @@ const mapaRuta = {
       };
 
       if (stop.photo_ref) {
-        fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
+        fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}${/^[A-Za-z0-9_-]{10,300}$/.test(stop.place_id || '') ? '&pid=' + encodeURIComponent(stop.place_id) : ''}&json=1`)
           .then(r => r.ok ? r.json() : null)
           .then(data => { if (data?.url) _setPhoto(data.url); else _tryByName(); })
           .catch(() => _tryByName());

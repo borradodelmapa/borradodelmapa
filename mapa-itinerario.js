@@ -372,7 +372,7 @@ ${trk}
     const card = document.createElement('div');
     card.className = 'itin-card itin-card-locked';
     const next = preview.nextStop;
-    const photo = next && next.photo_ref ? `${window.SALMA_API}/photo?ref=${encodeURIComponent(next.photo_ref)}` : '';
+    const photo = next && next.photo_ref ? `${window.SALMA_API}/photo?ref=${encodeURIComponent(next.photo_ref)}${this._pidQS(next)}` : '';
     const d = preview.restDays, p = preview.restStops;
     const what = d > 0
       ? `Te ${d === 1 ? 'queda' : 'quedan'} <b>${d} día${d > 1 ? 's' : ''}</b> y <b>${p} parada${p !== 1 ? 's' : ''}</b>`
@@ -568,18 +568,56 @@ ${trk}
   // tamaño de tanda (4→2) y se espacian más (400ms→900ms) — menos peticiones a la vez
   // en cualquier escenario (rate limiting, Worker bajo carga, red intermedia con poco
   // margen) reduce las probabilidades de fallo sea cual sea la causa exacta.
+  // 21 oct 2026 (fotos de pago): ya no se piden todas al abrir la guía. Cada foto, cuando su tarjeta aparece en pantalla
+  // (Camboya: al abrirla se pedían las 41 de golpe y casi nadie pasa del día 2). Sin IntersectionObserver, tandas como antes.
   _processPhotoQueue() {
     const queue = this._photoQueue || [];
-    const BATCH = 2;
-    let i = 0;
-    const next = () => {
-      const batch = queue.slice(i, i + BATCH);
-      if (!batch.length) return;
-      i += BATCH;
-      batch.forEach(({ stop, index, cardEl }) => this._loadInitialPhoto(stop, index, cardEl));
-      if (i < queue.length) setTimeout(next, 900);
-    };
-    next();
+    this._photoQueue = [];
+    const cargar = ({ stop, index, cardEl }) => this._loadInitialPhoto(stop, index, cardEl);
+    if (this._fotoObs) { try { this._fotoObs.disconnect(); } catch (_) {} }
+    if (typeof IntersectionObserver === 'undefined') {
+      const BATCH = 2;
+      let i = 0;
+      const next = () => {
+        const batch = queue.slice(i, i + BATCH);
+        if (!batch.length) return;
+        i += BATCH;
+        batch.forEach(cargar);
+        if (i < queue.length) setTimeout(next, 900);
+      };
+      next();
+      return;
+    }
+    const pend = new Map();
+    this._fotoObs = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const it = pend.get(en.target);
+        this._fotoObs.unobserve(en.target);
+        pend.delete(en.target);
+        if (it) cargar(it);
+      });
+    }, { rootMargin: '200px' });
+    queue.forEach(it => {
+      if (!it.cardEl || !it.cardEl.isConnected) return cargar(it);
+      pend.set(it.cardEl, it);
+      this._fotoObs.observe(it.cardEl);
+    });
+  },
+
+  // Identificador de Google del sitio para pedir su foto: el Worker la guarda POR SITIO y no la vuelve a pagar nunca.
+  _pidQS(stop) {
+    return stop && /^[A-Za-z0-9_-]{10,300}$/.test(stop.place_id || '') ? `&pid=${encodeURIComponent(stop.place_id)}` : '';
+  },
+
+  // Autor de la foto de Google (lo exigen sus normas). Las guías nuevas lo traen en stop.photo_attr; las antiguas, «Google».
+  _creditoGoogle(stop, photoDiv) {
+    if (photoDiv && getComputedStyle(photoDiv).position === 'static') photoDiv.style.position = 'relative';
+    const a = stop && stop.photo_attr;
+    const quien = a && a.autor
+      ? (a.url ? `<a href="${this._esc(a.url)}" target="_blank" rel="noopener nofollow" style="color:inherit">${this._esc(a.autor)}</a>` : this._esc(a.autor)) + ' · Google'
+      : 'Google';
+    return `<span style="position:absolute;left:0;bottom:0;padding:2px 7px;background:rgba(0,0,0,.7);font-size:10px;color:rgba(244,240,230,.85);max-width:92%">Foto: ${quien}</span>`;
   },
 
   // ═══ FICHA DE LUGAR (estructura nueva) ═══
@@ -810,12 +848,12 @@ ${trk}
       // resuelve, con el nombre puede buscar una foto nueva en vez de rendirse.
       const fallbackQS = (stop.name && stop.lat && stop.lng)
         ? `&name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}` : '';
-      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}${fallbackQS}&json=1`)
+      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}${fallbackQS}${this._pidQS(stop)}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
             console.log(`[FOTO] url recibida para "${stop.name}":`, data.url);
-            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">`;
+            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">` + this._creditoGoogle(stop, photoDiv);
           } else {
             console.warn(`[FOTO] sin url para "${stop.name}" (ref):`, data);
             retry();
@@ -824,12 +862,12 @@ ${trk}
         .catch(e => { console.warn(`[FOTO] fetch falló para "${stop.name}" (ref):`, e); retry(); });
     } else if (stop.name && stop.lat && stop.lng) {
       console.log(`[FOTO] pidiendo (name+coords) para "${stop.name}"${_retryNum ? ` (reintento ${_retryNum})` : ''}`);
-      fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
+      fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name)}&lat=${stop.lat}&lng=${stop.lng}${this._pidQS(stop)}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
             console.log(`[FOTO] url recibida para "${stop.name}":`, data.url);
-            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">`;
+            photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror) para índice ${index}:', this.src)">` + this._creditoGoogle(stop, photoDiv);
           } else {
             console.warn(`[FOTO] sin url para "${stop.name}" (name+coords):`, data);
             retry();
@@ -1031,7 +1069,7 @@ ${trk}
       if (!stop.photo_ref) return;
       const photoDiv = document.getElementById(`itin-photo-${i}`);
       if (!photoDiv || photoDiv.querySelector('img')) return; // ya tiene foto real
-      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
+      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}${this._pidQS(stop)}&json=1`)
         .then(r => r.json())
         .then(data => {
           if (data.url) photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy" onerror="console.warn('[FOTO] la imagen NO cargó (onerror, updateVerified) para índice ${i}:', this.src)">`;
