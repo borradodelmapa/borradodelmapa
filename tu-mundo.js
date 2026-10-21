@@ -787,7 +787,7 @@ const tuMundo = (() => {
       .map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
     const list = [...S.seen.values()].sort((a, b) => b.n - a.n);
     _q('#tm-flags').innerHTML = list.map(e => `<span><b>${flagOf(e.f.a2)}</b>${esc(esName(e.f.a2, e.f.en))}</span>`).join('') || '<span>Aún ninguno</span>';
-    renderRecords(S); renderTimeline(S);
+    renderRecords(S);
     const pl = [...S.plan.values()]; _q('#tm-next-sec').hidden = !pl.length;
     _q('#tm-next').innerHTML = pl.map(e => `<span>${flagOf(e.f.a2)} ${esc(esName(e.f.a2, e.f.en))}</span>`).join('');
     const b = _q('#tm-share');
@@ -933,7 +933,6 @@ const tuMundo = (() => {
           <section class="tm-big" id="tm-big"></section>
           <section class="tm-mapw">
             <div class="tm-mapbar">
-              <p class="tm-note" id="tm-fmap-note"></p>
               <button type="button" class="tm-btn tm-play" id="tm-play" hidden>▶ Reproducir</button>
               <button type="button" class="tm-btn tm-play" id="tm-reel" hidden>🎬 Reel</button>
               <button type="button" class="tm-btn tm-play" id="tm-card-btn" hidden>🖼 Tarjeta</button>
@@ -941,7 +940,6 @@ const tuMundo = (() => {
               <p class="tm-note" id="tm-fmap-msg"></p>
               <p class="tm-note tm-ios" id="tm-ios" hidden>En iPhone: al elegir las fotos pulsa «Opciones» (abajo a la izquierda) y activa «Ubicación». Si no, el móvil quita el sitio de las fotos y no salen en el mapa.</p>
             </div>
-            <div class="tm-years" id="tm-years" hidden></div>
             <div class="tm-fmap" id="tm-fmap"></div>
             <div class="tm-legend">
               <label><input type="checkbox" id="tm-fm-c" checked> <i style="background:#F4630B"></i>Has estado</label>
@@ -949,7 +947,10 @@ const tuMundo = (() => {
               <label><input type="checkbox" id="tm-fmap-route" checked> Recorrido por fechas</label>
               <label id="tm-fm-pl"><input type="checkbox" id="tm-fm-p" checked> <i style="background:#7a3a14"></i>Planeado, aún no</label>
             </div>
+            <div class="tm-years" id="tm-years" hidden></div>
+            <p class="tm-note" id="tm-fmap-note"></p>
           </section>
+          <div id="tm-pub-ph"></div>
           <section><h3 class="tm-h">Tus países</h3><div class="tm-flags" id="tm-flags"></div></section>
           <section><h3 class="tm-h">Tus récords</h3><div class="tm-recs" id="tm-recs"></div></section>
           <section><h3 class="tm-h">Comparte tu vuelta al mundo</h3>
@@ -961,12 +962,9 @@ const tuMundo = (() => {
             <p class="tm-note" id="tm-pub-info"></p>
             <div class="tm-pub-row" id="tm-pub-row"></div>
             <p class="tm-note" id="tm-pub-msg"></p>
-            <div id="tm-pub-ph"></div>
           </section>
           <section id="tm-sug-sec" hidden><h3 class="tm-h">Fotos que encajan con tus guías</h3>
             <p class="tm-note" id="tm-sug-note"></p><div class="tm-sug" id="tm-sug"></div></section>
-          <section><h3 class="tm-h">Tus viajes</h3><p class="tm-note" id="tm-trips-note"></p><div class="tm-timeline" id="tm-timeline"></div>
-            <details class="tm-pend-sec" id="tm-pend-sec" hidden><summary>Tus guías sin fotos (<span id="tm-pend-n"></span>)</summary><div class="tm-pend" id="tm-pend"></div></details></section>
           <section id="tm-next-sec" hidden><h3 class="tm-h">Tus próximos destinos</h3><div class="tm-next" id="tm-next"></div></section>
         </div>
       </div>`;
