@@ -835,7 +835,7 @@ No termines con una pregunta. Ofrece sin interrogación: "Si quieres que te busq
 
 NO INVENTES
 — Ni URLs, ni teléfonos, ni direcciones, ni horarios, ni precios: solo los que te dan las herramientas o los datos del contexto. Un precio aproximado de memoria va con "unos" o "~".
-— Ni lo que el viajero no te ha dicho: cuándo viaja, con quién, su presupuesto. [FECHA ACTUAL] es la fecha de HOY, no la del viaje: sirve para buscar vuelos y hoteles y para el tiempo de estos días, nunca para suponer cuándo va. Si no te ha dicho cuándo viaja, no escribas "como vas en octubre" ni elijas la ruta por esa fecha: si la época importa, di en una frase qué cambia según cuándo vaya (por ejemplo, qué costa conviene en cada época).
+— Ni lo que el viajero no te ha dicho: cuándo viaja, con quién, su presupuesto. [FECHA ACTUAL] es la fecha de HOY, no la del viaje: sirve para buscar vuelos y hoteles y para el tiempo de estos días, nunca para suponer cuándo va. Si no te ha dicho cuándo viaja, no escribas "como vas en octubre" ni elijas la ruta por esa fecha: si la época importa, di en una frase qué cambia según cuándo vaya (por ejemplo, qué costa conviene en cada época). Si te da un mes o una fecha sin año que ya ha pasado este año, es la del año que viene: no le corrijas ni le cambies el mes.
 — Teléfono, dirección o web de un sitio: solo si los pide, si hacen falta para reservar o si es una urgencia (farmacia, hospital, taller).
 — Tu conocimiento tiene fecha de corte: lo que cambia (horarios, precios, eventos, el tiempo de estos días) se comprueba con buscar_web o con los [DATOS DEL TIEMPO REAL] del contexto. Si no aparece: "no he encontrado ese dato".
 — Visados y leyes: según su nacionalidad; si no la sabes y es clave, pregúntala.
@@ -3620,7 +3620,7 @@ async function fotosDeSitiosMarcados(reply, { env, fotoCtx = {}, max = 2, fotoNo
 function replyNamesPlaces(reply, userName, exceptName = null) {
   // Con sitios marcados [[ ]], esos son los sitios (las negritas son precios, consejos…)
   if (tieneMarcasSitio(reply)) return sitiosMarcados(reply).some(n => !isOwnNameNotPlace(n, userName) && !(exceptName && samePlaceName(n, exceptName)));
-  const skip = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
+  const skip = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|ahora\b|hoy\b|ma[ñn]ana\b|pr[oó]ximos\s|esta\s+(?:semana|noche|tarde)|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
   const cap = /^[A-ZÁÉÍÓÚÑÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÇ]/;
   const re = /\*\*([^*]+)\*\*/g;
   let m;
@@ -7564,7 +7564,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
         road_difficulty: s.road_difficulty, estimated_hours: s.estimated_hours
       }));
       userContent += `\n\n[${editingActiveRoute
-        ? 'GUÍA ABIERTA — el viajero está dentro de esta guía'
+        ? 'GUÍA ABIERTA — el viajero está dentro de esta guía (aquí no ofreces hacer otra guía ni dices "dime añádelo": si propones algo nuevo, SALMA_OFFER_ADD_TO_ROUTE)'
         : 'ÚLTIMA GUÍA DEL VIAJERO — solo contexto: tenla en cuenta si la conversación va de ella; si habla de otra cosa, ignórala'}: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas. DATOS EXACTOS de cada parada (JSON): ${JSON.stringify(stopsCompact)}]`;
     }
     if (hasPhoto) {
@@ -7758,10 +7758,7 @@ QUÉ HACER:
 AHORA: ${cur.temp_c}°C (sensación ${cur.feels_like}°C), ${cur.description}, humedad ${cur.humidity}%, viento ${cur.wind_kmph} km/h
 PRÓXIMOS DÍAS:
 ${forecastLines}
-ENLACES para pronóstico actualizado:
-weather.com: ${weatherData.links[0]}
-yr.no: ${weatherData.links[1]}
-SÉ BREVE Y DIRECTA. USA FORMATO VISUAL con saltos de línea y **negritas** para separar datos. Ejemplo:\n\n**Ahora**: 34°C, humedad 75%\n**Próximos días**: 32-36°C, lluvias por la tarde\n\nConsejo práctico + enlaces.\n\nIncluye los enlaces para pronóstico actualizado. Menciona que puede cambiar. NUNCA inventes datos.]`;
+SÉ BREVE Y DIRECTA. USA FORMATO VISUAL con saltos de línea y **negritas** para separar datos. Ejemplo:\n\n**Ahora**: 34°C, humedad 75%\n**Próximos días**: 32-36°C, lluvias por la tarde\n\nConsejo práctico.\n\nMenciona que puede cambiar. NUNCA inventes datos.]`;
   }
 
   // Inyectar eventos locales (búsqueda web)
@@ -16217,15 +16214,15 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       if (isPureGreeting) {
         const nombre = userName ? `, ${userName.split(' ')[0]}` : '';
         const respuestas = [
-          `¡Hola${nombre}! ¿A dónde tiramos hoy?`,
-          `¡Buenas${nombre}! Cuéntame, ¿qué destino te tiene loco?`,
-          `¡Ey${nombre}! El mundo está ahí fuera. ¿Cuál te apetece?`,
-          `¡Hola${nombre}! ¿Ruta nueva, vuelo, hotel… o estás en un lío viajero?`,
+          `¡Hola${nombre}! Dime a dónde tiramos hoy.`,
+          `¡Buenas${nombre}! Cuéntame qué destino te tiene loco.`,
+          `¡Ey${nombre}! El mundo está ahí fuera: dime cuál te apetece.`,
+          `¡Hola${nombre}! Ruta nueva, vuelo, hotel o un lío viajero: tú dirás.`,
           `¡Buenas${nombre}! Dime destino y días y te armo algo que merezca la pena.`,
-          `¡Ey${nombre}! ¿Tienes ya destino o seguimos soñando con el mapa?`,
-          `¡Hola${nombre}! ¿A dónde me llevas esta vez?`,
-          `¡Buenas${nombre}! Aquí estoy. ¿Qué se te ha metido entre ceja y ceja?`,
-          `¡Ey${nombre}! ¿Escapada de fin de semana o te vas al otro lado del mundo?`,
+          `¡Ey${nombre}! Si ya tienes destino, dímelo; si no, lo soñamos con el mapa.`,
+          `¡Hola${nombre}! Dime a dónde me llevas esta vez.`,
+          `¡Buenas${nombre}! Aquí estoy. Cuéntame qué se te ha metido entre ceja y ceja.`,
+          `¡Ey${nombre}! Escapada de fin de semana o al otro lado del mundo: tú dirás.`,
           `¡Hola${nombre}! Dime un sitio y te digo todo lo que necesitas saber.`,
         ];
         const reply = respuestas[Math.floor(Math.random() * respuestas.length)];
@@ -16865,7 +16862,11 @@ INSTRUCCIONES:
     // Subido al mismo tope que las recomendaciones normales (14000): el coste solo sube en
     // los casos que YA se estaban cortando (para una respuesta corta con foto no cambia nada,
     // Claude para sola antes de llegar al tope).
-    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (imageBase64 ? 14000 : (needsTools ? 6000 : 3000)));
+    // Plan por días ya escrito y sin convertir: si pide un cambio, Salma lo reescribe ENTERO (un plan de 20 días son ~6.000
+    // fichas); con el tope de charla (3.000) se cortaba a mitad (22 oct 2026). Solo cuesta lo que de verdad escribe.
+    const _planPendiente = Array.isArray(history) && (() => { const a = [...history].reverse().find(h => h && h.role === 'assistant');
+      const t = a && typeof a.content === 'string' ? a.content : ''; return /crear ruta con mapa/i.test(t) && (t.match(/^\**\s*D[IÍií]A\s+\d/gim) || []).length >= 2; })();
+    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (imageBase64 ? 14000 : (_planPendiente ? 14000 : (needsTools ? 6000 : 3000))));
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -17291,7 +17292,7 @@ INSTRUCCIONES:
           // mvj8dc8qqbl7). Si es corto y sin sitios, no entra en la respuesta final: en directo se ve mientras busca y la app
           // lo sustituye por la respuesta buena al terminar.
           const _txtIter = String(result.fullText || '');
-          const _esAnuncio = result.stopReason === 'tool_use' && _txtIter.trim().length > 0 && _txtIter.trim().length <= 160
+          const _esAnuncio = result.stopReason === 'tool_use' && _txtIter.trim().length > 0 && _txtIter.trim().length <= 300
             && !/\[\[|SALMA_|https?:\/\//.test(_txtIter);
           if (_esAnuncio) console.log(`[ANUNCIO] fuera de la respuesta: "${_txtIter.trim()}"`);
           else allText += result.fullText;
@@ -17517,6 +17518,15 @@ INSTRUCCIONES:
         // emitiera un SALMA_ROUTE_JSON, aquí NO se convierte en ruta. Solo prosa + botón.
         let route = _fastPathRoute || (guidedIsReco ? null : extractRouteFromReply(allText));
         let reply = replyWithoutRouteBlock(allText);
+        // GUÍA ABIERTA (22 oct 2026, caso mvj8dc8qqbl7): dentro de una guía no se ofrece hacer otra guía, y si sale el botón
+        // «Añadir a la guía» sobra el «dime añádelo» (eran dos ofertas a la vez). Se quita aunque el modelo lo escriba.
+        if (editingActiveRoute && reply) {
+          const _r0 = reply;
+          reply = reply.replace(/^[ \t]*🗺️[^\n]*te hago una gu[ií]a de[^\n]*$/gmu, '');
+          if (offerAddMarker) reply = reply.replace(/[^.!\n]*\bdime\s+["«']?a[ñn][aá]delo["»']?[^.!\n]*[.!]?/gi, '');
+          reply = reply.replace(/\n{3,}/g, '\n\n').trim();
+          if (reply !== _r0) console.log('[GUÍA-ABIERTA] cierre de fuera de la guía quitado');
+        }
         if (_fastPathRoute && !reply) reply = _fastPathRoute.title ? `Tu ruta por ${_fastPathRoute.title} está lista.` : 'Tu ruta está lista.';
 
         let _editRejected = false; // edición de guía existente descartada por dejar paradas por el camino (ver RESCATE 1 y comprobación tras RESCATE 2)
@@ -17825,7 +17835,8 @@ REGLAS:
         const _soloHoteles = _hotelsShown.length > 0 && !((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi);
         const _soloCatalogo = !((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi) && _chatPlaces.size > 0 && !_soloHoteles;
         const _chatWantsMapLinks = !!((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi) || _soloCatalogo;
-        const _linkTarget = (_pi.quiere_ir && _pi.sitio && !_pi.es_destino && !_pi.cerca_de_mi) ? _pi.sitio : null;
+        // Mismas excepciones que el atajo de «cómo llegar» (trayectos, «añade X»): ahí no se pidió ir a un sitio.
+        const _linkTarget = (_pi.quiere_ir && _pi.sitio && !_pi.es_destino && !_pi.cerca_de_mi && !_pideAnadir && !_esTrayecto(message) && !_esTrayecto(_pi.sitio)) ? _pi.sitio : null;
         // Aviso "pídemelo": solo si quedan sitios sin enlace y solo la primera vez en la conversación. (Ya no depende
         // de las webs de buscar_lugar: desde el 28 sept no se muestran.)
         const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
