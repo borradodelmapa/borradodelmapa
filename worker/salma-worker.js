@@ -17280,7 +17280,15 @@ INSTRUCCIONES:
             result = await readOpenAIStream(apiRes, writer, encoder, decoder, true);
           }
 
-          allText += result.fullText;
+          // Texto escrito JUSTO ANTES de llamar a una herramienta ("Voy a buscarte sitios en Triana."): es un anuncio, no la
+          // respuesta. Se veía pegado a ella («…en Triana.Lo mejor…») aunque el prompt lo prohíbe (22 oct 2026, caso
+          // mvj8dc8qqbl7). Si es corto y sin sitios, no entra en la respuesta final: en directo se ve mientras busca y la app
+          // lo sustituye por la respuesta buena al terminar.
+          const _txtIter = String(result.fullText || '');
+          const _esAnuncio = result.stopReason === 'tool_use' && _txtIter.trim().length > 0 && _txtIter.trim().length <= 160
+            && !/\[\[|SALMA_|https?:\/\//.test(_txtIter);
+          if (_esAnuncio) console.log(`[ANUNCIO] fuera de la respuesta: "${_txtIter.trim()}"`);
+          else allText += result.fullText;
           lastStopReason = result.stopReason;
 
           // ── Si terminó (no pide herramientas), salir del bucle ──
