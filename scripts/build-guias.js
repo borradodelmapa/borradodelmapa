@@ -73,7 +73,7 @@ async function fetchGuides() {
         slug: d.name.split('/').pop(),
         nombre: val(f.nombre), summary: val(f.summary), destino: val(f.destino),
         cover: val(f.cover_image), owner: val(f.owner_name),
-        itinerario: val(f.itinerarioIA), updatedAt: val(f.updatedAt) || val(f.createdAt),
+        itinerario: val(f.itinerarioIA), updatedAt: val(f.updatedAt) || val(f.createdAt), createdAt: val(f.createdAt) || val(f.updatedAt),
       });
     }
     pageToken = j.nextPageToken || '';
@@ -116,6 +116,9 @@ function resumenDe(g, r) {
 }
 
 function describe(g, r) {
+  // Descripción escrita para la web (Worker, guia_extra.descripcion, 22 oct 2026): sin tono de chat, ~150 caracteres.
+  const ex = r.guia_extra || {};
+  if (ex.descripcion && ex.descripcion.length >= 60) return ex.descripcion.length > 160 ? ex.descripcion.slice(0, 157).replace(/\s+\S*$/, '') + '…' : ex.descripcion;
   const stops = r.stops || [];
   const days = stops.length ? Math.max(...stops.map(s => s.day || 1)) : (r.duration_days || 0);
   const base = resumenDe(g, r);
@@ -126,37 +129,144 @@ function describe(g, r) {
 }
 
 // Texto de la guía escrito DENTRO de la página (17-18 oct 2026, caso SEO: Search Console las dejaba en «Rastreada:
-// actualmente sin indexar» porque el HTML solo traía ~11 palabras y la guía se pintaba con JS). Respeta CLAUDE.md §10
-// («mirar sí»): el día 1 completo (nombre + descripción de cada parada) y, del resto de días, solo los nombres de las
-// paradas. Son datos que ya son públicos en public_guides. La persona con JS pasa a la app igual que antes.
-function staticBody(g, r) {
+// actualmente sin indexar» porque el HTML solo traía ~11 palabras y la guía se pintaba con JS).
+// 22 oct 2026 (Paco): las guías públicas se enseñan COMPLETAS (misma excepción que las páginas de destino, CLAUDE.md §10) y
+// con todo lo que pide Google: intro, resumen rápido, bloques por ciudad (h2), cada parada (h3) con su texto y su foto,
+// «Antes de ir», consejos, preguntas frecuentes, enlaces a los destinos y a otras guías del país, y el botón a la app.
+const YEAR = new Date().getFullYear();
+const slugify = t => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const DESTINOS = (() => { try { return new Set(fs.readdirSync(path.join(ROOT, 'destinos')).filter(f => f.endsWith('.html')).map(f => f.slice(0, -5))); } catch (_) { return new Set(); } })();
+function paisDe(g, r) { return String(r.country || g.destino || '').trim(); }
+// Página de destino de una ciudad (destinos/<ciudad>-<país>.html) o del país (destinos/<país>.html), si existe.
+function destinoUrl(ciudad, pais) {
+  const p = slugify(pais), c = slugify(ciudad);
+  if (c && p && DESTINOS.has(`${c}-${p}`)) return `/destinos/${c}-${p}.html`;
+  if (c && DESTINOS.has(c)) return `/destinos/${c}.html`;
+  return '';
+}
+function fotoParada(s) {
+  if (!s.place_id) return '';
+  const q = ['pid=' + encodeURIComponent(s.place_id)];
+  if (s.photo_ref) q.push('ref=' + encodeURIComponent(s.photo_ref));
+  if (s.name) q.push('name=' + encodeURIComponent(s.name));
+  if (typeof s.lat === 'number' && typeof s.lng === 'number') q.push('lat=' + s.lat, 'lng=' + s.lng);
+  return `${API}/photo?${q.join('&')}`;
+}
+const ANTES = [['mejor_epoca', 'Mejor época'], ['evitar', 'Cuándo evitar'], ['presupuesto', 'Presupuesto diario'], ['visado', 'Visado'],
+  ['vacunas', 'Vacunas'], ['seguro', 'Seguro de viaje'], ['moverse', 'Cómo moverse entre ciudades'], ['llevar', 'Qué llevar'],
+  ['moneda', 'Moneda'], ['enchufes', 'Enchufes'], ['agua', 'Agua'], ['seguridad', 'Seguridad'], ['emergencias', 'Emergencias'], ['propinas', 'Propinas']];
+function staticBody(g, r, relacionadas = []) {
   const stops = (r.stops || []).filter(s => s && s.name);
   if (!stops.length) return '';
+  const ex = r.guia_extra || {};
+  const pais = paisDe(g, r);
   const dayOf = s => Number(s.day) || 1;
   const days = [...new Set(stops.map(dayOf))].sort((a, b) => a - b);
-  const first = days[0];
   const title = g.nombre || r.title || 'Guía de viaje';
-  const summary = resumenDe(g, r);
+  const intro = ex.intro || resumenDe(g, r);
   const text = s => String(s.narrative || s.description || '').trim();
+  const bloques = Array.isArray(ex.bloques) && ex.bloques.length ? ex.bloques : null;
+  const ciudades = bloques ? [...new Set(bloques.map(b => b.ciudad))] : [];
+  const antes = ex.antes_de_ir || {};
   let h = `<section class="guia-seo" id="guia-seo">\n<h1>${esc(title)}</h1>\n`;
-  if (summary) h += `<p class="guia-seo-sum">${esc(summary)}</p>\n`;
-  h += `<p class="guia-seo-meta">${days.length} día${days.length > 1 ? 's' : ''} · ${stops.length} paradas${g.destino ? ' · ' + esc(g.destino) : ''}</p>\n`;
-  for (const d of days) {
-    const ds = stops.filter(s => dayOf(s) === d);
-    h += `<h2>Día ${d}</h2>\n`;
-    if (d === first) {
-      h += '<ol>\n' + ds.map(s => `<li><h3>${esc(s.name)}</h3>${text(s) ? `<p>${esc(text(s))}</p>` : ''}</li>`).join('\n') + '\n</ol>\n';
-    } else {
-      h += '<p class="guia-seo-names">' + ds.map(s => esc(s.name)).join(' · ') + '</p>\n';
+  if (intro) h += `<p class="guia-seo-sum">${esc(intro)}</p>\n`;
+  // Resumen rápido
+  const rapido = [`<strong>${days.length} día${days.length > 1 ? 's' : ''}</strong>`, `<strong>${stops.length} paradas</strong>`];
+  if (ciudades.length) rapido.push(ciudades.map(c => { const u = destinoUrl(c, pais); return u ? `<a href="${u}">${esc(c)}</a>` : esc(c); }).join(' → '));
+  else if (pais) rapido.push(esc(pais));
+  if (antes.presupuesto) rapido.push('Presupuesto: ' + esc(antes.presupuesto));
+  h += `<p class="guia-seo-meta">${rapido.join(' · ')}</p>\n`;
+  // Itinerario: un h2 por bloque de ciudad (o por día si no hay bloques), un h3 por parada con su texto y su foto
+  const tituloDia = d => { const s = stops.find(x => dayOf(x) === d && x.day_title); return s ? String(s.day_title).trim() : ''; };
+  const pintaDia = d => {
+    let o = `<p class="guia-seo-dia"><strong>Día ${d}${tituloDia(d) ? ' — ' + esc(tituloDia(d)) : ''}</strong></p>\n`;
+    const viaje = (Array.isArray(r.dias_trayecto) ? r.dias_trayecto : []).find(v => Number(v.day) === d);
+    if (viaje && viaje.texto) o += `<p>${esc(viaje.texto)}</p>\n`;
+    for (const s of stops.filter(x => dayOf(x) === d)) {
+      o += `<h3>${esc(s.name)}</h3>\n`;
+      const f = fotoParada(s);
+      if (f) o += `<img src="${esc(f)}" alt="${esc(s.name + (pais ? ', ' + pais : ''))}" loading="lazy" decoding="async">\n`;
+      if (text(s)) o += `<p>${esc(text(s))}</p>\n`;
     }
+    return o;
+  };
+  if (bloques) {
+    for (const b of bloques) {
+      const u = destinoUrl(b.ciudad, pais);
+      const rango = b.desde === b.hasta ? `día ${b.desde}` : `días ${b.desde}-${b.hasta}`;
+      h += `<h2>${u ? `<a href="${u}">${esc(b.ciudad)}</a>` : esc(b.ciudad)}, ${rango}</h2>\n`;
+      for (let d = b.desde; d <= b.hasta; d++) if (days.includes(d)) h += pintaDia(d);
+    }
+    // Días que no caen en ningún bloque (sin dirección clara)
+    const cubiertos = new Set(bloques.flatMap(b => Array.from({ length: b.hasta - b.desde + 1 }, (_, i) => b.desde + i)));
+    for (const d of days) if (!cubiertos.has(d)) h += `<h2>Día ${d}</h2>\n` + pintaDia(d);
+  } else {
+    for (const d of days) h += `<h2>Día ${d}${tituloDia(d) ? ' — ' + esc(tituloDia(d)) : ''}</h2>\n` + pintaDia(d).replace(/^<p class="guia-seo-dia">.*\n/, '');
   }
-  h += `<p class="guia-seo-cta"><a href="/?ruta=${encodeURIComponent(g.slug)}">Abrir la ruta completa en Borrado del Mapa</a></p>\n</section>`;
+  // Antes de ir
+  const filas = ANTES.filter(([k]) => antes[k]);
+  if (filas.length) h += `<h2>Antes de ir</h2>\n<dl class="guia-seo-antes">\n` + filas.map(([k, t]) => `<dt>${t}</dt><dd>${esc(antes[k])}</dd>`).join('\n') + '\n</dl>\n';
+  // Consejos
+  const tips = (Array.isArray(r.tips) ? r.tips : []).filter(t => typeof t === 'string' && t.trim());
+  if (tips.length) h += `<h2>Consejos de Salma</h2>\n<ul>\n` + tips.map(t => `<li>${esc(t)}</li>`).join('\n') + '\n</ul>\n';
+  // Preguntas frecuentes
+  const faq = (Array.isArray(ex.faq) ? ex.faq : []).filter(f => f && f.p && f.r);
+  if (faq.length) h += `<h2>Preguntas frecuentes</h2>\n` + faq.map(f => `<h3>${esc(f.p)}</h3>\n<p>${esc(f.r)}</p>`).join('\n') + '\n';
+  // Más guías del país y su página de destino
+  const paisUrl = destinoUrl(pais, '') || (DESTINOS.has(slugify(pais)) ? `/destinos/${slugify(pais)}.html` : '');
+  if (relacionadas.length || paisUrl) {
+    h += `<h2>Más guías${pais ? ' en ' + esc(pais) : ''}</h2>\n<ul>\n`;
+    if (paisUrl) h += `<li><a href="${paisUrl}">${esc(pais)}: qué ver, cuándo ir y cómo moverse</a></li>\n`;
+    h += relacionadas.map(o => `<li><a href="/${esc(o.slug)}">${esc(o.nombre || o.slug)}</a></li>`).join('\n') + '\n</ul>\n';
+  }
+  h += `<p class="guia-seo-cta"><a href="/?ruta=${encodeURIComponent(g.slug)}">Abrir la ruta completa en Borrado del Mapa</a> — con mapa, navegación y Salma para preguntarle lo que quieras.</p>\n</section>`;
   return h;
 }
 
-function buildPage(tpl, g) {
+// Datos estructurados (JSON-LD): TouristTrip con cada parada como TouristAttraction (con coordenadas), migas de pan,
+// preguntas frecuentes y el artículo (autor y editor).
+function jsonLd(g, r, url, img, title, desc) {
+  const stops = (r.stops || []).filter(s => s && s.name);
+  const ex = r.guia_extra || {};
+  const pais = paisDe(g, r);
+  const org = { '@type': 'Organization', name: 'Borrado del Mapa', url: DOMAIN, logo: { '@type': 'ImageObject', url: `${DOMAIN}/og-image.jpg` } };
+  const pub = String(ex.creada || g.createdAt || g.updatedAt || '').slice(0, 10) || undefined;
+  const mod = String(g.updatedAt || ex.creada || '').slice(0, 10) || pub;
+  const out = [{
+    '@context': 'https://schema.org', '@type': 'TouristTrip', name: title, description: desc, url, image: img,
+    ...(pais ? { touristType: 'Viajeros por libre', contentLocation: { '@type': 'Country', name: pais } } : {}),
+    itinerary: { '@type': 'ItemList', numberOfItems: stops.length, itemListElement: stops.map((s, i) => ({
+      '@type': 'ListItem', position: i + 1, item: { '@type': 'TouristAttraction', name: s.name,
+        ...(s.narrative ? { description: String(s.narrative).slice(0, 300) } : {}),
+        ...(typeof s.lat === 'number' && typeof s.lng === 'number' && (s.lat || s.lng) ? { geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng } } : {}),
+        ...(s.verified_address ? { address: s.verified_address } : {}) } })) },
+  }, {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Borrado del Mapa', item: DOMAIN + '/' },
+      ...(pais && DESTINOS.has(slugify(pais)) ? [{ '@type': 'ListItem', position: 2, name: pais, item: `${DOMAIN}/destinos/${slugify(pais)}.html` }] : []),
+      { '@type': 'ListItem', position: pais && DESTINOS.has(slugify(pais)) ? 3 : 2, name: title, item: url },
+    ],
+  }, {
+    '@context': 'https://schema.org', '@type': 'Article', headline: title.slice(0, 110), description: desc, image: img, url,
+    ...(pub ? { datePublished: pub } : {}), ...(mod ? { dateModified: mod } : {}),
+    author: { '@type': 'Organization', name: 'Salma · Borrado del Mapa', url: DOMAIN }, publisher: org, mainEntityOfPage: url,
+  }];
+  const faq = (Array.isArray(ex.faq) ? ex.faq : []).filter(f => f && f.p && f.r);
+  if (faq.length) out.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.p, acceptedAnswer: { '@type': 'Answer', text: f.r } })) });
+  return out.map(o => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`).join('\n');
+}
+
+// Título de la pestaña y de Google: menos de 60 caracteres, con la palabra clave y el año.
+function tituloPagina(g, r) {
+  const ex = r.guia_extra || {};
+  let t = ex.titulo_seo || g.nombre || r.title || 'Guía de viaje';
+  if (!new RegExp('\\b' + YEAR + '\\b').test(t) && (t + ` (${YEAR})`).length <= 60) t += ` (${YEAR})`;
+  return t.length + ' · Borrado del Mapa'.length <= 60 ? t + ' · Borrado del Mapa' : t;
+}
+
+function buildPage(tpl, g, relacionadas = []) {
   const r = routeOf(g);
-  const title = `${g.nombre || r.title || 'Guía de viaje'} · Borradodelmapa`;
+  const title = tituloPagina(g, r);
   const desc = describe(g, r);
   const img = imageOf(g, r);
   const url = `${DOMAIN}/${g.slug}`;
@@ -175,12 +285,15 @@ function buildPage(tpl, g) {
     `<meta name="twitter:card" content="summary_large_image">\n` +
     `<link rel="canonical" href="${esc(url)}">\n` +
     `<meta name="robots" content="${isGood(g) ? GUIAS_ROBOTS_INDEX : GUIAS_ROBOTS}">\n` +
+    (g.createdAt ? `<meta property="article:published_time" content="${esc(String(g.createdAt))}">\n` : '') +
+    (g.updatedAt ? `<meta property="article:modified_time" content="${esc(String(g.updatedAt))}">\n` : '') +
+    jsonLd(g, r, url, img, title.replace(/ · Borrado del Mapa$/, ''), desc) + '\n' +
     `<!-- Generado por scripts/build-guias.js — no editar a mano -->`);
-  const body = staticBody(g, r);
+  const body = staticBody(g, r, relacionadas);
   if (body) {
     rep('<div class="public-loading" id="public-loading">Cargando guía...</div>\n  </div>',
       '<div class="public-loading" id="public-loading">Cargando guía...</div>\n  </div>\n  ' + body.replace(/\n/g, '\n  '));
-    rep('</head>', '<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:0 0 4px}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>\n</head>');
+    rep('</head>', '<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:18px 0 6px}.guia-seo img{display:block;width:100%;max-height:340px;object-fit:cover;border-radius:12px;margin:6px 0 10px;background:#1c1f22}.guia-seo-dia{margin-top:18px!important;color:#ECEBE8!important}.guia-seo dl{display:grid;grid-template-columns:minmax(110px,30%) 1fr;gap:6px 14px}.guia-seo dt{font-weight:700;color:#ECEBE8}.guia-seo dd{margin:0;color:#C4C7C9}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>\n</head>');
   }
   return h;
 }
@@ -210,7 +323,10 @@ async function main() {
   let written = 0, same = 0, removed = 0;
   for (const g of guides) {
     const file = path.join(ROOT, g.slug + '.html');
-    const html = buildPage(tpl, g);
+    // Hasta 6 guías del mismo país (las buenas primero) para «Más guías en …»
+    const pais = slugify(paisDe(g, routeOf(g)));
+    const relacionadas = pais ? guides.filter(o => o.slug !== g.slug && slugify(paisDe(o, routeOf(o))) === pais).sort((a, b) => (isGood(b) ? 1 : 0) - (isGood(a) ? 1 : 0)).slice(0, 6) : [];
+    const html = buildPage(tpl, g, relacionadas);
     if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') === html) { same++; continue; }
     if (!DRY) fs.writeFileSync(file, html);
     written++;
