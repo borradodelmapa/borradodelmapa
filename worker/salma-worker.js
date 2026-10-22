@@ -931,8 +931,8 @@ function capPlanPorDias(enGuiaAbierta) {
 — Sin JSON, sin enlaces, sin preguntas (salvo un destino tan vago que nadie acertaría: una región enorme o un continente sin sitio concreto y sin días ni zona en el mensaje, el perfil o la conversación → 1-2 datos y UNA pregunta corta; cualquier ciudad, pueblo, comarca o ruta nombrada NO es vaga).
 — Formato EXACTO, empezando por el día 1:
 **Día 1 — [título]**
-[[Sitio]] — por qué merece la pena (un dato histórico o cultural) y un consejo práctico. Tiempo. Precio si lo hay.
-(3-5 sitios por día, cada uno en su párrafo con 2-3 frases de verdad: qué es, por qué merece la pena y un consejo práctico; nunca una frase suelta. Ningún día con un solo sitio, salvo un día que sea solo de viaje.)
+[[Sitio]] — qué es y por qué merece la pena; un dato de historia o cultura que explique el sitio; qué hacer allí en concreto; un consejo práctico (a qué hora ir, qué evitar, qué llevar). Tiempo. Precio si lo hay.
+(3-5 sitios por día, cada uno en su párrafo con 4-5 frases con datos: ese texto es la descripción de la parada en la guía, así que tiene que valer por sí solo. Nada de relleno: cada frase lleva un dato. Ningún día con un solo sitio, salvo un día que sea solo de viaje.)
 — TRAYECTOS (vuelo, ferry, bus, furgoneta, tren, noche de paso) no son sitios: van en su propia línea que empieza por "Cómo llegar:", sin corchetes; tampoco van entre corchetes el aeropuerto, el puerto, la estación ni la terminal. Ej.: Cómo llegar: furgoneta de Puerto Princesa a El Nido, 5-6 h; sal temprano.
 — COMER: UN solo restaurante en todo el plan, al final: "Dónde comer: [[Restaurante]] — plato y precio. Si quieres más sitios para comer, pídemelo." Ningún otro sitio de comer entre [[ ]].
 — DÍAS: los que diga. Sin número: ciudad o pueblo → 1 día; ruta o road trip por varios sitios ("ruta", "recorrido", "de sur a norte", varios sitios lejos entre sí) → nunca 1 día por defecto: calcula los razonables (100-150 km con paradas al día; moto y caravana más despacio), de punta a punta en orden geográfico, sin ir y volver, y dilo al principio: "Esto da para N días".
@@ -16941,7 +16941,7 @@ INSTRUCCIONES:
     // fichas); con el tope de charla (3.000) se cortaba a mitad (22 oct 2026). Solo cuesta lo que de verdad escribe.
     const _planPendiente = Array.isArray(history) && (() => { const a = [...history].reverse().find(h => h && h.role === 'assistant');
       const t = a && typeof a.content === 'string' ? a.content : ''; return /crear ruta con mapa/i.test(t) && (t.match(/^\**\s*D[IÍií]A\s+\d/gim) || []).length >= 2; })();
-    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (imageBase64 ? 14000 : (_planPendiente ? 14000 : (needsTools ? 6000 : 3000))));
+    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 24000 : (imageBase64 ? 14000 : (_planPendiente ? 24000 : (needsTools ? 6000 : 3000))));
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
