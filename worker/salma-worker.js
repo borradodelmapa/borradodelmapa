@@ -944,11 +944,13 @@ function capPlanPorDias(enGuiaAbierta) {
 }
 
 // Cambios en una guía (añadir, quitar, sustituir). Solo la mecánica: SALMA_ROUTE_EDIT la aplica el Worker.
-const CAP_CAMBIOS_GUIA = `[CAPACIDAD — CAMBIOS EN LA GUÍA. Solo si pide cambiarla (añadir un sitio o un día, quitar, sustituir, mover; con cualquier frase). Si solo pregunta o pide ideas, no escribas nada de esto: contesta como siempre.
+const CAP_CAMBIOS_GUIA = `[CAPACIDAD — CAMBIOS EN LA GUÍA. Solo si pide cambiarla (añadir un sitio o un día, quitar, sustituir, mover; con cualquier frase). Una pregunta NO es pedir un cambio ("X y alrededores", "¿merece la pena X?", "háblame de X", "¿qué hay cerca?"): aunque X no esté en la guía, no la toques; cuéntalo y, si lo propones, cierra con SALMA_OFFER_ADD_TO_ROUTE para que decida él.
 — NO la reescribas. Responde con 1-2 frases de qué cambias y por qué y, en una línea aparte, SALMA_ROUTE_EDIT seguido de UN JSON en una sola línea:
 {"add":[{parada nueva}],"remove":[n,...],"replace":[{"n":N,"with":{parada nueva}}]}
 · "n" = el número "n" de la parada en la guía de arriba. Para quitar o sustituir, SOLO esos números, nunca nombres. Omite las claves que no uses.
 · Parada nueva = todos sus campos: name (nombre exacto de Google Maps, sin corchetes), headline, narrative (1-2 frases de viajero, sin distancias ni precios), day_title, type, day, lat, lng (reales), km_from_previous, estimated_hours, con_historia. En "add", "day" = el día de la guía donde mejor encaja (o el siguiente al último si pide un día nuevo); en "replace" ocupa el sitio y el día de la que sale. Solo sitios REALES de Google Maps.
+· DÍAS NUEVOS EN MEDIO ("añade 2 días en Krabi"): cada parada nueva con "nuevo_dia_tras": D (el día de la guía tras el que va) y "nuevo_dia": 1, 2… si son varios días; los días siguientes se corren solos. Días nuevos al final: "day" = el siguiente al último.
+· NUNCA quites paradas para moverlas o hacer hueco: "remove" es solo para lo que pide quitar. Si para hacerlo tendrías que quitar algo que no ha pedido, dilo y no lo hagas.
 · Si pide UNA parada, añade UNA (la mejor) y di cuál. Nunca repitas paradas que no cambian: el sistema las conserva.
 · Solo si el cambio obliga a reordenar o reestructurar TODA la guía: la guía completa en SALMA_ROUTE_JSON (las paradas que no cambian, literales).
 · Si pide una guía de OTRO destino, no toques esta: dile en una frase que la pida en el chat de Salma, fuera de esta guía.]`;
@@ -7902,6 +7904,25 @@ function mergeStopsIntoDays(existingStops, newStops, atEnd) {
     const key = norm(raw.name);
     if (!key || known.has(key)) continue;   // ya estaba en la guía (o sin nombre)
     known.add(key);
+    // DÍA NUEVO EN MEDIO (22 oct 2026, caso mvj8dc8qqbl7): "nuevo_dia_tras": D (y "nuevo_dia": 1, 2… si son varios) →
+    // un día nuevo justo después del día D; los siguientes se corren solos. Antes no se podía, y para «añade 2 días en
+    // Krabi» la IA QUITABA las paradas de detrás para volver a ponerlas: la guía de 42 paradas se quedó en 2.
+    const _tras = parseInt(raw.nuevo_dia_tras, 10);
+    if (Number.isInteger(_tras) && _tras >= 0) {
+      const marca = _tras + Math.min(Math.max(parseInt(raw.nuevo_dia, 10) || 1, 1), 9) / 10;   // entre el día D y el D+1
+      let gi2 = nums.indexOf(marca);
+      if (gi2 === -1) {
+        gi2 = nums.findIndex(x => x > marca);
+        if (gi2 === -1) gi2 = nums.length;
+        nums.splice(gi2, 0, marca);
+        groups.splice(gi2, 0, []);
+      }
+      const st2 = Object.assign({}, raw);
+      delete st2.nuevo_dia_tras; delete st2.nuevo_dia;
+      groups[gi2].push(st2);
+      addedCount++;
+      continue;
+    }
     // día destino: índice de grupo (0-based). Un día nº que ya existe → ese; si no → día nuevo al final.
     let gi = nums.indexOf(dayOf(raw));
     if (gi === -1) {
@@ -16409,8 +16430,12 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // (caso p-mv5f09ww524, 12 oct 2026; roto desde el atajo del 28 sept).
     const _esTrayecto = (t) => /\b(ferry|ferri|ferrys|barco|catamar[aá]n|lancha|bus|autob[uú]s|tren|ave|vuelo|vuelos|avi[oó]n)\b/i.test(t || '')
       && /\bde(?:sde)?\s+\S.*\s(?:a|al|hasta|hacia)\s+\S/i.test(t || '');
+    // Pedir AÑADIR, meter o incluir algo (en el plan, la guía o la ruta) nunca es "quiero ir": lo contesta Salma, que sabe
+    // que hay un plan o una guía (22 oct 2026, caso mvj8dc8qqbl7: «¿puedes añadir una isla… Pig Island?» cortaba con
+    // "No encuentro «Pig Island» en el mapa" y el plan no se tocaba).
+    const _pideAnadir = /\b(a[ñn]ad\w*|agr[eé]g\w*|inclu[iy]\w*|mete|meter|metes|m[eé]teme|m[eé]tela|m[eé]telo)\b/i.test(message || '');
     const _goTarget = (_placeIntent && _placeIntent.quiere_ir && _placeIntent.sitio && !_placeIntent.es_destino
-      && !_placeIntent.cerca_de_mi && !currentRoute && !_esTrayecto(message) && !_esTrayecto(_placeIntent.sitio)) ? _placeIntent.sitio : null;
+      && !_placeIntent.cerca_de_mi && !currentRoute && !_pideAnadir && !_esTrayecto(message) && !_esTrayecto(_placeIntent.sitio)) ? _placeIntent.sitio : null;
     const _appAnswers = !!_goTarget && !_placeIntent.contexto && _placeIntent.medio !== 'taxi' && _placeIntent.medio !== 'publico';
     let _directTried = null;
     let _goSite = null, _goCorrected = false;
@@ -17515,7 +17540,12 @@ INSTRUCCIONES:
             const _atEnd = /\b(al final|la [uú]ltima|para terminar|al acabar)\b/i.test(message || '');
             const _r = applyRouteEditOps(currentRoute.stops, _ops, _atEnd);
             const _c = _r.counts;
-            if (!(_c.add + _c.remove + _c.replace) || !_r.stops.length) {
+            // FRENO (22 oct 2026, caso mvj8dc8qqbl7): un cambio que QUITA 3 o más paradas sin que el viajero haya pedido
+            // quitar nada no se aplica (la IA quitaba paradas para «moverlas»: 42 → 2). La guía queda como estaba.
+            if (_c.remove >= 3 && !_editRemovalRe.test(message || '')) {
+              console.log(`[EDIT-OPS] ✗ FRENO: quitaba ${_c.remove} paradas sin pedirlo — no se aplica`);
+              _opsNote = `\n\n_Para hacer ese cambio tenía que quitar ${_c.remove} paradas de tu guía y no me lo has pedido, así que no he tocado nada. Dime qué días quieres añadir o mover y lo hago sin quitar nada._`;
+            } else if (!(_c.add + _c.remove + _c.replace) || !_r.stops.length) {
               console.log(`[EDIT-OPS] ✗ sin cambios (ignoradas ${_r.ignored}) sobre ${currentRoute.stops.length} paradas`);
               _opsNote = _r.ignored
                 ? '\n\n_No he encontrado esas paradas en tu guía, así que no he cambiado nada._'

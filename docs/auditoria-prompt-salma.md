@@ -86,3 +86,18 @@ Antes: tag `v-pre-prompt-20261022`. Banco: 26 preguntas ≈ 1-1,5 € (§8/§11)
 3. **(5)** «No supongas fechas de viaje que el usuario no ha dado» + añadir interior de Tailandia/Khao Sok a los monzones.
 4. **(6+7)** Criterio «solo lo preguntado» en MAPA; aclarar que el formato ✈️ por opción es la excepción a «sin listas».
 5. **(8+9+11)** Limpieza de `BLOQUE_RUTAS`, de la repetición de «NUNCA JSON» y del corte «agosto 2025». Es lo más delicado; solo si pides.
+
+## Encontrado al construir el prompt único (22 oct 2026, tarde)
+- 🔴 **Con una guía guardada, todo el chat cambiaba de Salma.** La app manda siempre la última guía (`current_route`) y
+  `buildMessages` elegía entonces `SALMA_SYSTEM_ROUTE`, no `SALMA_SYSTEM_CHAT`: otro prompt y sin caché barata, sin modo de
+  pensar rápido y sin «fotos abajo» (solo se aplicaban con el de chat).
+- 🔴 **«Añade 2 días en Krabi» con la guía abierta** recibía a la vez «CAMBIOS EN ESTA RUTA — NO la reescribas
+  (SALMA_ROUTE_EDIT)» y «OBLIGATORIO — GENERA RUTA AHORA: DEBE contener SALMA_ROUTE_JSON, 4-6 paradas por día».
+- 🔴 **La fecha de hoy se tomaba como fecha del viaje.** `[FECHA ACTUAL]` va en el contexto y Salma escribía «estás pensando
+  en octubre» y dejaba fuera el golfo de Tailandia. Pasaba también con el prompt de siempre.
+- 🟠 **Reglas de formato dentro de los datos**: los resultados de ayuda cercana y el tiempo real traían su propio formato
+  («**Ahora**: 34°C», teléfono por línea). Ahora son excepciones escritas en el núcleo.
+- Fotos: el comprobador propio de las fotos (400 km del centro de la guía, nombres que exigían palabras iguales) — resuelto
+  con un solo comprobador (CLAUDE.md §13, `scripts/probar-nombres.cjs`).
+
+Solución: **prompt único** (`docs/prompt-unico.md`), detrás de `PROMPT_UNICO` en `wrangler.toml`.
