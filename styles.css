@@ -4634,8 +4634,18 @@ body:has(#diario-result.on) .bottom-tab-fab { display: none; }
     display: flex;
     flex-direction: column;
   }
+  /* Móvil: título y meta fuera, pero «Historia de …» se queda (franja entre el mapa y las tarjetas) */
   .itin-cards-col .itin-header {
+    display: block;
+    padding: 0 12px;
+    border-bottom: 0;
+  }
+  .itin-cards-col .itin-header .itin-title,
+  .itin-cards-col .itin-header .itin-meta {
     display: none;
+  }
+  .itin-cards-col .itin-header .hist-inline-mount:not([style*="display: none"]) {
+    padding-top: 2px;
   }
   .itin-cards-col .itin-cards-scroll {
     display: flex;
