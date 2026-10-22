@@ -16269,12 +16269,6 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // ya SABE que hay una ruta activa en edición, no hace falta adivinarlo por verbos
     // como _looksLikeEdit.
     const editingActiveRoute = body.editing_active_route === true && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
-    // Cambiar una guía que YA existe nunca es «una ciudad» (22 oct 2026, caso mvj8dc8qqbl7): «añade 2 días en Krabi» anclaba
-    // en Krabi como punto y la verificación tiraba todo lo que estaba lejos (42 paradas → 8). Se conserva el país.
-    if (anchorCountry && anchorCountry.pointScope && (editingActiveRoute || _editingRoute)) {
-      console.log(`[ANCLA-PAIS] edición de una guía existente: sin ancla de punto ("${anchorCountry.locality || ''}")`);
-      anchorCountry = { ...anchorCountry, pointScope: false, lat: undefined, lng: undefined };
-    }
     // 30 sept 2026: una PREGUNTA desde el popup de la guía ya no entra en el Tiempo 1 (plan día por día con 3-5
     // sitios por día) solo por llevar la palabra "ruta": "¿hay una estación abandonada cerca de algún punto de la
     // ruta?" salía como una chapa por días. Ahí se contesta en modo conversación, breve, y si propone algo añadible
@@ -18113,23 +18107,10 @@ REGLAS:
                 route.duration_days = _dn.length;
                 route.maps_links = buildMapsLinksFromStops(route.stops, cleanRegionForSearch(route.region || route.country || '') || (route.country || ''));
                 const _netChange = _okIds.size + (_opsCounts ? _opsCounts.remove : 0);
-                // REGLA DE HIERRO (22 oct 2026, caso mvj8dc8qqbl7): una edición NUNCA devuelve menos paradas que las de la
-                // guía menos las que se pidió quitar, pase lo que pase por el camino (ancla mal puesta, verificación, IA…).
-                // Las nuevas confirmadas ya no llevan la marca _new (se quita arriba): viejas = todas − confirmadas. Una sustituida
-                // confirmada sale, así que el mínimo descuenta las quitadas y las sustituidas.
-                const _minimo = currentRoute.stops.length - (_opsCounts ? _opsCounts.remove + _opsCounts.replace : 0);
-                const _viejasQuedan = route.stops.length - _okIds.size;
-                if (_viejasQuedan < _minimo) {
-                  console.log(`[EDIT-OPS] ✗ REGLA DE HIERRO: quedarían ${_viejasQuedan} de las ${currentRoute.stops.length} paradas (mínimo ${_minimo}) — no se aplica`);
-                  ctx.waitUntil(_recErr({ origen: 'worker', huella: 'edicion-pierde-paradas', titulo: 'Edición de guía: iba a perder paradas sin pedirlo (bloqueada)', zona: 'rutas', gravedad: 'alta', ejemplo: `${message} — quedaban ${_viejasQuedan} de ${currentRoute.stops.length}`, detalle: '' }));
-                  route = null; _opsApplied = false; _okIds.clear(); _failedNames.length = 0;
-                }
                 let _vNote = '';
                 if (_failedNames.length) _vNote = `\n\n_No he podido confirmar en Google ${_failedNames.map(n => '"' + n + '"').join(', ')}, así que no ${_failedNames.length > 1 ? 'los' : 'lo'} he añadido._`;
                 console.log(`[EDIT-OPS] verify: ${_okIds.size} nuevas confirmadas, ${_failedNames.length} no confirmadas → ${route.stops.length} paradas`);
-                if (!route) {
-                  _vNote = '\n\n_Al hacer ese cambio se iban a perder paradas de tu guía, así que no he tocado nada. Tu guía sigue igual; dime el cambio de otra forma y lo intento._';
-                } else if (!_netChange || !route.stops.length) {
+                if (!_netChange || !route.stops.length) {
                   route = null; _opsApplied = false;
                   _vNote = (_vNote || '\n\n_No he cambiado nada._') + ' Tu guía sigue igual.';
                 }
