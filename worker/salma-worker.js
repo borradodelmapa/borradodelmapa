@@ -17162,6 +17162,11 @@ INSTRUCCIONES:
 
         // ── Enlaces de hoteles: el de cada hotel nombrado, con fechas, siempre (Claude los omite a veces) ──
         if (_hotelsShown.length) {
+          // El marcador SALMA_OFFER_ADD_TO_ROUTE solo se extrae si está AL FINAL del texto: se aparta antes de añadir
+          // los enlaces y se vuelve a poner detrás (si no, se veía en la burbuja y no salía «Añadir a la guía»).
+          const _offerRe = /\n?SALMA_OFFER_ADD_TO_ROUTE\s*$/i;
+          const _tieneOferta = _offerRe.test(allText);
+          if (_tieneOferta) allText = allText.replace(_offerRe, '').trim();
           const _eh = asegurarEnlacesHoteles(allText, _hotelsShown);
           allText = _eh.texto;
           let _ehAdd = _eh.añadido;
@@ -17173,6 +17178,7 @@ INSTRUCCIONES:
             allText += _ehAdd;
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _ehAdd })}\n\n`)); } catch (_) {}
           }
+          if (_tieneOferta) allText += '\n\nSALMA_OFFER_ADD_TO_ROUTE';
         }
 
         // ── Extraer FOTO_TAG si la hubo ──
