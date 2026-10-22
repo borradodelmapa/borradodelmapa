@@ -113,6 +113,9 @@ Decidida con Paco el 26 sept 2026 ("queremos gente que se registre"). Cambiarla 
   El avance «día 1 + candado» sigue valiendo para la app (`?ruta=`) y las guías compartidas. SEO en tandas: `scripts/destinos-indexables.json`
   (solo esas salen `index` y entran en `sitemap-destinos.xml`); plan en `docs/seo-plan-minimo.md`.
 - **Enlace para compartir = su guía pública** (`borradodelmapa.com/<slug>`, páginas fijas de `scripts/build-guias.js`).
+- **Excepción decidida por Paco el 22 oct 2026: GUÍAS PÚBLICAS (`<slug>.html`), igual que destinos.** Se enseñan COMPLETAS en el HTML
+  (todos los días y paradas con texto y foto, intro, «Antes de ir», consejos, FAQ, JSON-LD, enlaces a destinos y a otras guías del
+  país; datos en `route.guia_extra` que pone el Worker al crear la guía). La app (`?ruta=`) sigue con el avance «día 1 + candado».
 - Lo que exige cuenta **no se enseña como si funcionara** a quien no la tiene.
 
 ### 11. BANCO DE PRUEBAS DE SALMA — ACONSEJABLE, POR TANDAS (28 sept 2026, caso p-mulj7j4n4mz; tandas desde 1 oct)

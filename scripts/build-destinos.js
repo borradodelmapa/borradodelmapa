@@ -35,6 +35,19 @@ const COORDS = fs.existsSync(COORDS_FILE) ? JSON.parse(fs.readFileSync(COORDS_FI
 
 // ── Helpers ──────────────────────────────────────────────────
 
+// Guías públicas buenas por país (las escribe scripts/build-guias.js): cada página de destino enlaza a las de su país.
+const GUIAS_POR_PAIS = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'guias-por-pais.json'), 'utf8')); } catch (_) { return {}; } })();
+function guiasDelPais(countrySlug, countryName) {
+  const l = GUIAS_POR_PAIS[countrySlug] || [];
+  if (!l.length) return '';
+  return `<nav class="destino-related" aria-label="Guías de viaje en ${escapeHTML(countryName)}">
+      <h2 class="destino-related-title">Guías de viaje en ${escapeHTML(countryName)}</h2>
+      <ul class="destino-related-list">
+        ${l.slice(0, 12).map(g => `<li><a href="/${g.slug}">${escapeHTML(g.nombre)}</a></li>`).join('')}
+      </ul>
+    </nav>`;
+}
+
 function slugify(str) {
   return (str || '')
     .toLowerCase()
@@ -631,6 +644,9 @@ ${activitiesHTML}
 
     </div>
 
+    <!-- GUÍAS DEL PAÍS — enlazado interno a las guías públicas -->
+    ${guiasDelPais(countrySlug, countryName)}
+
     <!-- MÁS DESTINOS EN EL PAÍS — enlazado interno -->
     ${siblings && siblings.length ? `<nav class="destino-related" aria-label="Más destinos en ${escapeHTML(countryName)}">
       <h2 class="destino-related-title">Más destinos en ${escapeHTML(countryName)}</h2>
@@ -798,6 +814,8 @@ function buildCountryHTML(countryName, countryCode, destinos) {
     <div class="destino-country-grid">
       ${cardsHTML}
     </div>
+
+    ${guiasDelPais(countrySlug, countryName)}
 
     <!-- RUTAS DE LA COMUNIDAD -->
     <section class="destino-community" id="destino-community" style="display:none">

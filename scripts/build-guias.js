@@ -338,6 +338,15 @@ async function main() {
   }
   // Sitemap de las guías buenas (enlazado desde sitemap.xml)
   const good = guides.filter(isGood);
+  // Índice por país para que las páginas de destino enlacen a sus guías (scripts/build-destinos.js lo lee)
+  const porPais = {};
+  for (const g of good) {
+    const p = slugify(paisDe(g, routeOf(g)));
+    if (!p) continue;
+    const st = routeOf(g).stops || [];
+    (porPais[p] = porPais[p] || []).push({ slug: g.slug, nombre: g.nombre || routeOf(g).title || g.slug, dias: new Set(st.map(s => Number(s.day) || 1)).size });
+  }
+  if (!DRY) fs.writeFileSync(path.join(ROOT, 'guias-por-pais.json'), JSON.stringify(porPais, null, 1) + '\n');
   const sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
     good.map(g => '  <url><loc>' + DOMAIN + '/' + g.slug + '</loc>' + (g.updatedAt ? '<lastmod>' + String(g.updatedAt).slice(0, 10) + '</lastmod>' : '') + '<changefreq>monthly</changefreq><priority>0.7</priority></url>').join('\n') + '\n</urlset>\n';
   if (!DRY) fs.writeFileSync(path.join(ROOT, 'sitemap-guias.xml'), sm);

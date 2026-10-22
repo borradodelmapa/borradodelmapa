@@ -1,0 +1,163 @@
+{
+ "vietnam": [
+  {
+   "slug": "1-dia-en-hanoi-59zg",
+   "nombre": "1 día en Hanói",
+   "dias": 1
+  },
+  {
+   "slug": "loop-de-ha-giang-en-moto-g9wb",
+   "nombre": "Loop de Ha Giang en moto",
+   "dias": 4
+  },
+  {
+   "slug": "vietnam-hanoi-phu-quoc-en-14-dias-q5c4",
+   "nombre": "Vietnam: Hanói → Phu Quoc en 14 días",
+   "dias": 14
+  }
+ ],
+ "espana": [
+  {
+   "slug": "asturias-salvaje-de-ribadeo-a-cabo-penas-en-4-dias-b7zm",
+   "nombre": "Asturias salvaje: de Ribadeo a Cabo Peñas en 4 días",
+   "dias": 4
+  },
+  {
+   "slug": "cantabria-costa-picos-y-bahia-i2lb",
+   "nombre": "Cantabria: costa, Picos y bahía",
+   "dias": 3
+  },
+  {
+   "slug": "cantabria-en-moto-de-asturias-a-la-costa-verde-wmfk",
+   "nombre": "Cantabria en moto: de Asturias a la costa verde",
+   "dias": 3
+  },
+  {
+   "slug": "malpartida-de-caceres-en-2-dias-lbzw",
+   "nombre": "Malpartida de Cáceres en 2 días",
+   "dias": 2
+  },
+  {
+   "slug": "parques-naturales-del-pais-vasco-y-navarra-tqgd",
+   "nombre": "Parques Naturales del País Vasco y Navarra",
+   "dias": 5
+  },
+  {
+   "slug": "pirineos-navarros-roncal-salazar-y-baztan-mnur",
+   "nombre": "Pirineos navarros: Roncal, Salazar y Baztán",
+   "dias": 3
+  },
+  {
+   "slug": "sevilla-en-3-dias-z359",
+   "nombre": "Sevilla en 3 días",
+   "dias": 3
+  },
+  {
+   "slug": "sierra-nevada-en-autocaravana-b05t",
+   "nombre": "Sierra Nevada en Autocaravana",
+   "dias": 3
+  },
+  {
+   "slug": "transpirenaica-en-moto-de-irun-al-mediterraneo-qsv6",
+   "nombre": "Transpirenaica en moto: de Irún al Mediterráneo",
+   "dias": 4
+  }
+ ],
+ "nepal": [
+  {
+   "slug": "bhaktapur-nepal-ruta",
+   "nombre": "Bhaktapur en un día",
+   "dias": 1
+  },
+  {
+   "slug": "chitwan-nepal-ruta",
+   "nombre": "Chitwan Safari 2 días",
+   "dias": 2
+  },
+  {
+   "slug": "circuito-annapurna-nepal-ruta",
+   "nombre": "Circuito de Annapurna 14 Días",
+   "dias": 14
+  },
+  {
+   "slug": "everest-base-camp-nepal-ruta",
+   "nombre": "Campo Base del Everest — 14 días",
+   "dias": 14
+  },
+  {
+   "slug": "kathmandu-nepal-ruta",
+   "nombre": "Kathmandú en 3 días",
+   "dias": 3
+  },
+  {
+   "slug": "langtang-nepal-ruta",
+   "nombre": "Valle de Langtang — 7 días de trekking",
+   "dias": 7
+  },
+  {
+   "slug": "lumbini-nepal-ruta",
+   "nombre": "Lumbini en 1 día",
+   "dias": 1
+  },
+  {
+   "slug": "patan-nepal-ruta",
+   "nombre": "Patan Lalitpur en 1 día",
+   "dias": 1
+  },
+  {
+   "slug": "pokhara-nepal-ruta",
+   "nombre": "Pokhara 3 días",
+   "dias": 3
+  },
+  {
+   "slug": "upper-mustang-nepal-ruta",
+   "nombre": "Upper Mustang 10 días trekking",
+   "dias": 10
+  }
+ ],
+ "filipinas": [
+  {
+   "slug": "filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t",
+   "nombre": "Filipinas en 21 días: Manila, Palawan, Visayas y Cordillera",
+   "dias": 20
+  }
+ ],
+ "tailandia": [
+  {
+   "slug": "mae-hong-son-loop-chiang-mai-doi-inthanon-mdne",
+   "nombre": "Mae Hong Son Loop: Chiang Mai → Doi Inthanon",
+   "dias": 4
+  },
+  {
+   "slug": "tailandia-en-20-dias-bangkok-phi-phi-ydwf",
+   "nombre": "Tailandia en 20 días: Bangkok → Phi Phi",
+   "dias": 19
+  }
+ ],
+ "portugal": [
+  {
+   "slug": "n2-en-moto-de-faro-a-chaves-por-la-carretera-mas-larga-de-po-8md7",
+   "nombre": "N2 en moto: de Faro a Chaves por la carretera más larga de Portugal",
+   "dias": 4
+  },
+  {
+   "slug": "peso-da-regua-medio-dia-en-el-corazon-del-douro-gqj8",
+   "nombre": "Peso da Régua · Medio día en el corazón del Douro",
+   "dias": 1
+  }
+ ],
+ "suiza": [
+  {
+   "slug": "suiza-clasica-lucerna-alpes-y-berna-4a13",
+   "nombre": "Suiza clásica: Lucerna, Alpes y Berna",
+   "dias": 6
+  }
+ ],
+ "laos": [
+  {
+   "slug": "vientiane-pakse-en-moto-ruta-por-laos-uszg",
+   "nombre": "Vientiane → Pakse en moto: ruta por Laos",
+   "dias": 13
+  }
+ ]
+}
