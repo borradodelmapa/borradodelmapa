@@ -3545,18 +3545,30 @@ function quitarMarcas(t) {
 }
 // Conversor para el texto en directo: se guarda el trozo final que pueda ser una marca a medias ("[[Puen")
 // hasta que llegue el cierre, para que el usuario no vea nunca un corchete.
+// 22 oct 2026: tampoco se ven nunca los marcadores internos (SALMA_OFFER_ADD_TO_ROUTE, HISTORIA_LUGAR:, FOTO_TAG:,
+// SALMA_ACTION:): se veían mientras escribía y desaparecían al terminar (captura de Paco). La línea en curso que pueda
+// ser el principio de uno se guarda hasta saberlo; las líneas de marcador completas se quitan.
+const _MARCADORES_INTERNOS = ['SALMA_OFFER_ADD_TO_ROUTE', 'HISTORIA_LUGAR:', 'FOTO_TAG:', 'SALMA_ACTION:'];
+const _MARCADOR_LINEA_RE = /^[ \t]*(?:SALMA_OFFER_ADD_TO_ROUTE|HISTORIA_LUGAR:|FOTO_TAG:|SALMA_ACTION:)[^\n]*(?:\n|$)/gm;
 function streamMarcas() {
   let pend = '';
   return {
     push(chunk) {
       let s = pend + (chunk || '');
       pend = '';
+      // ¿la línea en curso puede ser un marcador interno? Se guarda hasta que llegue el salto de línea o se descarte.
+      const nl = s.lastIndexOf('\n');
+      const linea = s.slice(nl + 1), lt = linea.trimStart();
+      let pendMarca = '';
+      if (lt && _MARCADORES_INTERNOS.some(m => m.startsWith(lt) || lt.startsWith(m))) { pendMarca = linea; s = s.slice(0, nl + 1); }
+      s = s.replace(_MARCADOR_LINEA_RE, '');
       const i = s.lastIndexOf('[[');
       if (i >= 0 && s.indexOf(']]', i) === -1 && s.length - i <= 84 && !s.slice(i).includes('\n')) { pend = s.slice(i); s = s.slice(0, i); }
       else if (s.endsWith('[') && !s.endsWith('![')) { pend = '['; s = s.slice(0, -1); }
+      pend += pendMarca;
       return marcasANegrita(s);
     },
-    flush() { const s = pend; pend = ''; return marcasANegrita(s); },
+    flush() { const s = pend.replace(_MARCADOR_LINEA_RE, ''); pend = ''; return marcasANegrita(s); },
   };
 }
 // FOTOS (caso p-munminjw1oy): con marcas, una foto de buscar_foto solo se enseña si es de un sitio marcado.
@@ -7987,9 +7999,12 @@ function looksLikeOnlyNewStops(newStops, curStops) {
     if (!v.length) return null;
     return { lat: v.reduce((a, s) => a + s.lat, 0) / v.length, lng: v.reduce((a, s) => a + s.lng, 0) / v.length };
   };
-  const a = centroid(newStops), b = centroid(curStops);
-  if (!a || !b) return false;
-  return haversineKm(a.lat, a.lng, b.lat, b.lng) < 150;
+  // Cerca de ALGUNA parada de la guía, no de su centro (22 oct 2026): en una guía de Vientiane a Pakse (600+ km) el centro
+  // queda lejos de todo, y «añade dos días más» en Si Phan Don se tomaba por una guía nueva que borraba la de 25 paradas.
+  const a = centroid(newStops);
+  const cur2 = curStops.filter(s => typeof s.lat === 'number' && isFinite(s.lat) && typeof s.lng === 'number' && isFinite(s.lng));
+  if (!a || !cur2.length) return false;
+  return cur2.some(s => haversineKm(a.lat, a.lng, s.lat, s.lng) < 200);
 }
 
 // ── EDICIÓN POR OPERACIONES (SALMA_ROUTE_EDIT) — la IA no reescribe la guía, solo dice qué cambia ──
@@ -17552,7 +17567,22 @@ INSTRUCCIONES:
             route.stops.length && route.stops.length < currentRoute.stops.length &&
             looksLikeOnlyNewStops(route.stops, currentRoute.stops)) {
           console.log(`[EDIT-OPS] ↪ ruta con ${route.stops.length} paradas (guía: ${currentRoute.stops.length}) tratada como "añadir" — la IA no usó SALMA_ROUTE_EDIT`);
-          _convertedOps = { add: route.stops, remove: [], replace: [] };
+          // Esas paradas traen los días de SU ruta (1, 2…), no los de la guía. Si pidió días («añade dos días más»), van como
+          // días nuevos al final; si no, cada una al día de la parada de la guía que tiene más cerca (22 oct 2026).
+          const _ultimoDia = Math.max(...currentRoute.stops.map(s => parseInt(s.day, 10) || 1));
+          const _pideDias = /\bd[ií]as?\b/i.test(message || '');
+          const _conCoords = currentRoute.stops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
+          const _adds = route.stops.map(st => {
+            const o = Object.assign({}, st);
+            if (_pideDias) o.day = _ultimoDia + (parseInt(st.day, 10) || 1);
+            else if (typeof st.lat === 'number' && typeof st.lng === 'number' && _conCoords.length) {
+              let best = _conCoords[0], bd = Infinity;
+              for (const c of _conCoords) { const d = haversineKm(st.lat, st.lng, c.lat, c.lng); if (d < bd) { bd = d; best = c; } }
+              o.day = parseInt(best.day, 10) || 1;
+            }
+            return o;
+          });
+          _convertedOps = { add: _adds, remove: [], replace: [] };
           route = null;
         }
         if (!route && !guidedIsReco && !mergeIntoRoute && currentRoute && Array.isArray(currentRoute.stops) &&
