@@ -1329,7 +1329,16 @@ async function usageGate(env, authUser, kind, opts) {
           // Una guía comprada (guía suelta, premium_bonus_guides) vale también por encima del tope diario: sin esto, quien tiene
           // trimestral/anual y compra una guía al chocar con el tope pagaba y seguía bloqueado (Paco, 22 oct 2026). La gasta usageRecord.
           if (hoy >= L.guidesPerDay && !_sinTope && (authUser.bonus_guides || 0) > 0) return { ok: true, bonus: true };
-          if (hoy >= L.guidesPerDay && !_sinTope) return { ok: false, limit: 'guide', message: 'Hoy has creado ' + L.guidesPerDay + ' guías, que es el máximo diario. Mañana puedes seguir. 💛' };
+          if (hoy >= L.guidesPerDay && !_sinTope) {
+            // Explicado antes de ofrecer pagar (Paco, 22 oct 2026): es Premium, el tope es antiabuso, cuándo se pone a cero y qué puede hacer.
+            // El contador es por día UTC: se pone a cero a medianoche UTC = 1:00 o 2:00 en España según el horario.
+            let _hora = '2:00';
+            try { _hora = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1)).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour: 'numeric', minute: '2-digit' }); } catch (_) {}
+            const _nombrePlan = (PREMIUM_PLANS[plan] && PREMIUM_PLANS[plan].label.toLowerCase()) || 'premium';
+            return { ok: false, limit: 'guide_daily', message: 'Eres Premium (plan ' + _nombrePlan + ') y tus guías no tienen límite al mes. Para evitar abusos, cada cuenta puede crear como mucho **'
+              + L.guidesPerDay + ' guías al día**, y hoy ya llevas ' + hoy + '. El contador vuelve a cero esta noche a las ' + _hora + ' (hora de España).\n\n'
+              + 'Tu guía queda guardada. Puedes crearla ahora con una **guía extra (9,99 €)**, que se crea nada más pagar, o esperar y darle mañana a «Crear ruta con mapa», que se queda aquí abajo. 💛' };
+          }
           return { ok: true };
         }
         // guia: el cupo mensual es 0 y la guía sale de premium_bonus_guides
@@ -14627,7 +14636,10 @@ export default {
             const gate = await usageGate(env, waPlan, 'guide');
             if (!gate.ok) {
               const premiumLink = await buildAutoLoginLink(env, linkedUid, 'premium');
-              await sendWhatsAppMessage(env, from, `${gate.message} Entra aquí para pasarte a Premium: ${premiumLink}`);
+              // Tope diario de un Premium: ya es Premium, no se le ofrece pasarse; el texto de la web habla del botón de la app
+              await sendWhatsAppMessage(env, from, gate.limit === 'guide_daily'
+                ? `${gate.message.replace(/\*\*/g, '*').replace(/, que se queda aquí abajo/, ' en la web')} Para la guía extra: ${premiumLink}`
+                : `${gate.message} Entra aquí para pasarte a Premium: ${premiumLink}`);
               return;
             }
             let waHistoryForSave = [];

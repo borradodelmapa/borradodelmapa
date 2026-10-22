@@ -1420,6 +1420,8 @@ const salma = {
     btn.innerHTML = '<span>🗺️</span> Crear ruta con mapa <span class="crb-arrow">→</span>';
     btn.addEventListener('click', () => {
       wrap.remove();
+      // Para volver a ponerlo si la guía choca con un límite (el botón nunca desaparece sin guía)
+      this._lastMapBtn = { baseMsg, sourceText: this._pendingMapSourceText || sourceText || '', guidedRoute };
       // Se pulsa: usa el texto acumulado hasta este momento (this._pendingMapSourceText),
       // que puede llevar más de lo que había cuando se pintó el botón la primera vez.
       const _finalSourceText = this._pendingMapSourceText || sourceText || '';
@@ -1491,6 +1493,27 @@ const salma = {
     } catch (_) {}
     if (!area || typeof window.openCoinsModal !== 'function') return;
     area.querySelectorAll('.ver-plan-wrap').forEach(el => el.remove());
+    // Guía bloqueada al pulsar «Crear ruta con mapa»: el botón vuelve a salir debajo (Paco, 22 oct 2026: «el botón tiene que estar»)
+    const _volverBoton = () => {
+      if ((limit === 'guide' || limit === 'guide_daily') && this._lastMapBtn && this._lastExtra && this._lastExtra.guided_stage === 'map') {
+        this._offerCrearRutaConMapa(this._lastMapBtn);
+      }
+    };
+    // Premium en el tope diario de guías (antiabuso): el texto ya lo explica; un botón para crearla YA con una guía extra,
+    // sin la pantalla de los cuatro planes (ofrecerle el trimestral a quien ya lo tiene no tiene sentido).
+    if (limit === 'guide_daily' && typeof window.pagarPlanDirecto === 'function') {
+      const w = document.createElement('div');
+      w.className = 'historia-chat-chip-wrap ver-plan-wrap';
+      const b = document.createElement('button');
+      b.className = 'crear-ruta-btn';
+      b.innerHTML = '<span>⚡</span> Crear esta guía ahora (9,99 €) <span class="crb-arrow">→</span>';
+      b.addEventListener('click', () => { window.pagarPlanDirecto('guia'); });
+      w.appendChild(b);
+      area.appendChild(w);
+      _volverBoton();
+      this._scrollToBottom(true);
+      return;
+    }
     const wrap = document.createElement('div');
     wrap.className = 'historia-chat-chip-wrap ver-plan-wrap';
     const caption = document.createElement('div');
@@ -1503,6 +1526,7 @@ const salma = {
     btn.addEventListener('click', () => { window.openCoinsModal(); });
     wrap.appendChild(btn);
     area.appendChild(wrap);
+    _volverBoton();
     this._scrollToBottom(true);
     // PANTALLA DE PRECIOS AL GASTAR LA GUÍA GRATIS (plan nuevo, 3 oct 2026): al chocar con el límite de guías se abre sola la
     // pantalla de planes (una vez por sesión). En el resto de límites queda el botón, sin abrir nada por sorpresa.

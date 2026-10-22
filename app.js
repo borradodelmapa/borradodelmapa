@@ -4114,7 +4114,14 @@ auth.onAuthStateChanged(async (user) => {
       openCoinsModal();
     } else if (pagoParam === 'ok') {
       history.replaceState(null, '', '/');
-      showState('profile');
+      // Con algo a medias (guía bloqueada por un límite), directo al chat y a esa guía; sin nada pendiente, al Perfil como siempre
+      let _hayPendiente = false;
+      try { _hayPendiente = !!sessionStorage.getItem('bdm_pending_retry'); } catch (_) {}
+      if (_hayPendiente) {
+        window._dkForceNew = true;   // escritorio: que la portada no abra la última guía encima
+        if (typeof salma !== 'undefined') salma._initChat();
+        showState('chat');
+      } else showState('profile');
       _verificarPagoPremium();
     } else if (pagoParam === 'cancel') {
       history.replaceState(null, '', '/');
@@ -4843,6 +4850,31 @@ async function _playPay(planKey, idToken) {
   _verificarPagoPremium(); // refresca el estado y avisa «Premium activado»
 }
 
+// Pago directo de un plan sin pasar por la pantalla de los cuatro planes (22 oct 2026, Paco): «Crear esta guía ahora con una
+// guía extra» tras chocar con el tope diario. Mismo camino que onPay de openCoinsModal. Donde no se puede pagar así (app de
+// Google Play sin Play Billing) abre la pantalla de planes de siempre.
+async function pagarPlanDirecto(planKey) {
+  const _viaPlay = !!window.BDM_TWA && !!window._bdmPlayOn && typeof window.getDigitalGoodsService === 'function';
+  if (window.BDM_TWA && !_viaPlay) { openCoinsModal(); return; }
+  const authUser = auth.currentUser;
+  if (!authUser) { showToast('Tu sesión ha caducado, vuelve a entrar'); return; }
+  try {
+    const idToken = await authUser.getIdToken();
+    try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); } catch (_) {}
+    if (_viaPlay) { await _playPay(planKey, idToken); return; }
+    showToast('Abriendo el pago…');
+    const res = await fetch(window.SALMA_API + '/create-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify({ plan: planKey })
+    });
+    const data = await res.json();
+    if (!data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
+    window.location.href = data.url;
+  } catch (e) { showToast(e.message || 'No se pudo iniciar el pago'); }
+}
+window.pagarPlanDirecto = pagarPlanDirecto;
+
 function openCoinsModal() {
   if (!window.PremiumModal) { showToast('No se pudo abrir el plan. Recarga la página.'); return; }
 
@@ -5075,7 +5107,9 @@ async function _verificarPagoPremium() {
       console.warn('[Premium] Error comprobando pago:', e);
     }
   }
-  showToast('Pago recibido — tu Premium se activa en unos minutos. Si no aparece, escríbeme.');
+  // No se vio el cambio en 16 s: si había una guía a medias, se intenta igual (el Worker decide si el pago ya cuenta)
+  const _retomada = (typeof salma !== 'undefined' && typeof salma._resumePendingRetry === 'function') ? salma._resumePendingRetry() : false;
+  showToast(_retomada ? 'Pago recibido — sigo con lo que tenías a medias.' : 'Pago recibido — tu Premium se activa en unos minutos. Si no aparece, escríbeme.');
 }
 
 // ═══ COPILOTO — toggle con lógica de Coins ═══
