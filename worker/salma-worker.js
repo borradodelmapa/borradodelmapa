@@ -2933,6 +2933,11 @@ const SALMA_TOOLS = [
         presupuesto_max: {
           type: "integer",
           description: "Presupuesto máximo por noche en EUR. Trivago no filtra por precio en el enlace, así que menciónalo en tu respuesta para que el usuario filtre manualmente."
+        },
+        tipo: {
+          type: "string",
+          enum: ["hotel", "cualquiera"],
+          description: "Por defecto 'hotel' (solo hoteles, ordenados por valoración). Usa 'cualquiera' SOLO si el usuario pide hostal, hostel, albergue, cápsulas o lo más barato posible."
         }
       },
       required: ["ciudad", "fecha_entrada", "fecha_salida"]
@@ -9625,6 +9630,49 @@ function _cacheKey(text) {
     .replace(/[¿?¡!.,;:"'()]/g, ' ').replace(/\s+/g, ' ').trim());
 }
 
+// Enlace directo a la ficha del hotel en Booking con las fechas y huéspedes de la búsqueda
+// (h.url de RapidAPI viene sin fechas). Devuelve '' si no hay URL de booking.com.
+function enlaceBookingConFechas(url, entrada, salida, adultos, habitaciones) {
+  if (!url || !/booking\.com/i.test(url)) return '';
+  try {
+    const u = new URL(url);
+    u.search = '';
+    u.hash = '';
+    u.searchParams.set('checkin', entrada);
+    u.searchParams.set('checkout', salida);
+    u.searchParams.set('group_adults', String(adultos));
+    u.searchParams.set('no_rooms', String(habitaciones));
+    u.searchParams.set('group_children', '0');
+    return u.toString();
+  } catch (_) { return url; }
+}
+
+// Red de seguridad del chat: los enlaces de Booking los teclea Claude y a veces los omite (o los deja sin fechas).
+// Reescribe los que ya puso a su versión con fechas y añade, bajo la respuesta, el de cada hotel NOMBRADO sin enlace.
+function asegurarEnlacesHoteles(texto, hoteles) {
+  if (!texto || !Array.isArray(hoteles) || !hoteles.length) return { texto, añadido: '' };
+  const base = (u) => { try { const x = new URL(u); return x.origin + x.pathname; } catch (_) { return u; } };
+  const norm = (s) => normalizeForMatch(s);
+  const textoNorm = norm(texto);
+  let out = texto;
+  const faltan = [];
+  for (const h of hoteles) {
+    if (!h.enlace_reserva) continue;
+    const b = base(h.enlace_reserva);
+    if (out.includes(b)) {
+      // ya lo puso: asegurar que lleva las fechas
+      const re = new RegExp(b.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:\\?[^\\s<>)]*)?', 'g');
+      out = out.replace(re, h.enlace_reserva);
+    } else if (h.nombre && textoNorm.includes(norm(h.nombre))) {
+      faltan.push(h);
+    }
+  }
+  const añadido = faltan.length
+    ? '\n\n' + faltan.map(h => `Reservar ${h.nombre}:\n${h.enlace_reserva}`).join('\n\n')
+    : '';
+  return { texto: out, añadido };
+}
+
 // Busca hoteles reales en Booking.com via RapidAPI — precios, reviews, enlaces de reserva
 async function buscarHotelesBooking(input, rapidApiKey) {
   const RAPIDAPI_HOST = 'booking-com.p.rapidapi.com';
@@ -9634,9 +9682,14 @@ async function buscarHotelesBooking(input, rapidApiKey) {
     'x-rapidapi-key': rapidApiKey
   };
 
-  const adultos = input.adultos || 1;
+  // Por defecto 2 adultos (lo que ya decía la descripción de la herramienta; antes el código usaba 1:
+  // «hotel doble» se buscaba para una persona).
+  const adultos = input.adultos || 2;
   const habitaciones = input.habitaciones || 1;
   const presupuestoMax = input.presupuesto_max || null;
+  // Solo hoteles salvo que pida hostal/hostel/albergue o lo más barato (22 oct 2026: «hotel doble con baño» en
+  // Chiang Mai devolvía 5 hostels de cápsulas porque se ordenaba por precio y se cogían los 5 más baratos).
+  const soloHoteles = input.tipo !== 'cualquiera';
 
   try {
     // Paso 1: Resolver ciudad → dest_id
@@ -9655,25 +9708,35 @@ async function buscarHotelesBooking(input, rapidApiKey) {
     const destType = cityResult.dest_type;
 
     // Paso 2: Buscar hoteles con precios reales
-    const searchParams = new URLSearchParams({
-      dest_id: destId,
-      dest_type: destType,
-      checkin_date: input.fecha_entrada,
-      checkout_date: input.fecha_salida,
-      adults_number: String(adultos),
-      room_number: String(habitaciones),
-      order_by: 'price',
-      filter_by_currency: 'EUR',
-      locale: 'es',
-      units: 'metric',
-      page_number: '0',
-      include_adjacency: 'true'
-    });
-
-    const searchUrl = `https://${RAPIDAPI_HOST}/v1/hotels/search?${searchParams}`;
-    const searchRes = await fetch(searchUrl, { headers, signal: AbortSignal.timeout(10000) });
+    const _buscar = async (conFiltroHotel) => {
+      const searchParams = new URLSearchParams({
+        dest_id: destId,
+        dest_type: destType,
+        checkin_date: input.fecha_entrada,
+        checkout_date: input.fecha_salida,
+        adults_number: String(adultos),
+        room_number: String(habitaciones),
+        // Con presupuesto o pidiendo «lo más barato» → por precio; si no, los mejor valorados
+        order_by: (presupuestoMax || !soloHoteles) ? 'price' : 'review_score',
+        filter_by_currency: 'EUR',
+        locale: 'es',
+        units: 'metric',
+        page_number: '0',
+        include_adjacency: 'true'
+      });
+      if (conFiltroHotel) searchParams.set('categories_filter_ids', 'property_type::204'); // 204 = hotel
+      const r = await fetch(`https://${RAPIDAPI_HOST}/v1/hotels/search?${searchParams}`, { headers, signal: AbortSignal.timeout(10000) });
+      return r;
+    };
+    let searchRes = await _buscar(soloHoteles);
     if (!searchRes.ok) return { error: `Booking API error ${searchRes.status}` };
-    const searchData = await searchRes.json();
+    let searchData = await searchRes.json();
+    // Sin hoteles con ese filtro (destino de pensiones/hostels): se repite UNA vez sin filtro
+    if (soloHoteles && (!searchData.result || !searchData.result.some(h => h && h.hotel_name))) {
+      searchRes = await _buscar(false);
+      if (!searchRes.ok) return { error: `Booking API error ${searchRes.status}` };
+      searchData = await searchRes.json();
+    }
 
     if (!searchData.result || searchData.result.length === 0) {
       return {
@@ -9705,7 +9768,7 @@ async function buscarHotelesBooking(input, rapidApiKey) {
         estrellas: h.class || 0,
         direccion: h.address || '',
         distrito: h.district || h.city || '',
-        enlace_reserva: h.url || '',
+        enlace_reserva: enlaceBookingConFechas(h.url, input.fecha_entrada, input.fecha_salida, adultos, habitaciones),
         foto: h.max_photo_url || h.main_photo_url || ''
       };
     });
@@ -16640,6 +16703,7 @@ INSTRUCCIONES:
         const _quiereWeb = /\b(web|webs|p[aá]gina|enlace|enlaces|link|links|url|sitio web|website)\b/i.test(message || '');
         let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web). Desde el 28 sept 2026 NO se muestran (Paco)
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
+        const _hotelsShown = []; // { nombre, enlace_reserva (con fechas) } de buscar_hotel — para asegurar el enlace de cada hotel nombrado
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         const _fotoNombres = new Map(); // url de foto de buscar_foto → [nombre de Google, nombre pedido] (filtro de sitios marcados)
         // Zona de la conversación para buscar_foto (30 sept 2026): la guía abierta; si no hay, el destino ya resuelto.
@@ -16970,6 +17034,7 @@ INSTRUCCIONES:
               // Capturar fotos y enlaces de hoteles para reparar markdown roto de Claude
               if (block.name === 'buscar_hotel' && Array.isArray(toolResult.hoteles)) {
                 for (const h of toolResult.hoteles) {
+                  if (h.nombre && h.enlace_reserva) _hotelsShown.push({ nombre: h.nombre, enlace_reserva: h.enlace_reserva });
                   if (h.nombre && h.foto) {
                     _hotelPhotosByName.set(h.nombre.toLowerCase().trim(), { foto: h.foto, enlace: h.enlace_reserva || '' });
                   }
@@ -17079,6 +17144,16 @@ INSTRUCCIONES:
           const linkChunk = '\n\nPara reservar:\n' + lastFlightBookingUrl;
           allText += linkChunk;
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: linkChunk })}\n\n`)); } catch (_) {}
+        }
+
+        // ── Enlaces de hoteles: el de cada hotel nombrado, con fechas, siempre (Claude los omite a veces) ──
+        if (_hotelsShown.length) {
+          const _eh = asegurarEnlacesHoteles(allText, _hotelsShown);
+          allText = _eh.texto;
+          if (_eh.añadido) {
+            allText += _eh.añadido;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _eh.añadido })}\n\n`)); } catch (_) {}
+          }
         }
 
         // ── Extraer FOTO_TAG si la hubo ──
