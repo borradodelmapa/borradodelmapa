@@ -16124,6 +16124,17 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         try { anchorCountry = await resolverPaisDestino(_anchorDestino, userLocation, env); } catch (_) {}
         console.log(`[ANCLA-PAIS] src=${_anchorSrc} "${_anchorDestino}" → ${anchorCountry ? anchorCountry.countryName + ' (' + anchorCountry.countryCode + ') pointScope=' + anchorCountry.pointScope + ' ' + anchorCountry.lat + ',' + anchorCountry.lng : 'NULL'}`);
       }
+      // Plan de 8+ días: nunca es «una ciudad» (22 oct 2026, caso mvj8dc8qqbl7). El destino del botón sale de un mensaje suelto
+      // de la conversación («pelea de muay thai en Bangkok»); Google lo resolvía a UN PUNTO y los 20 días de Tailandia se
+      // reducían a 8 paradas de Bangkok (el resto «fuera_del_radio_ancla»). Se conserva el país, se quita el punto.
+      if (anchorCountry && anchorCountry.pointScope && guidedMapStage && sourceText) {
+        let _maxDia = 0;
+        for (const m of sourceText.matchAll(/^[^A-Za-zÁÉÍÓÚáéíóú0-9\n]*D[IÍií]AS?\s+(\d{1,2})\b/gim)) _maxDia = Math.max(_maxDia, parseInt(m[1], 10) || 0);
+        if (_maxDia >= 8) {
+          console.log(`[ANCLA-PAIS] plan de ${_maxDia} días con ancla de punto "${_anchorDestino}" → sin ancla de punto (se queda el país)`);
+          anchorCountry = { ...anchorCountry, pointScope: false, lat: undefined, lng: undefined };
+        }
+      }
     }
 
     // Reverse geocoding: convertir coordenadas → nombre de ciudad + país (Nominatim/OSM, gratis)
@@ -17757,6 +17768,20 @@ REGLAS:
               if (_fastPathRoute) console.log(`[T2-TIEMPO] comprobación de Google: ${Math.round((Date.now() - _tVer) / 1000)} s (${route.stops?.length || 0} paradas${route._lector ? ', lector' : ''})`);
               if (_t2log) _t2log.ms_google = Date.now() - _tVer;
               if (verified) route = verified;
+              // GUÍA NUEVA RECORTADA POR EL RADIO (22 oct 2026, caso mvj8dc8qqbl7): si el ancla de punto dejó fuera más de la mitad
+              // de las paradas, la guía no se guarda en silencio con cuatro sitios de la capital: aviso para repetirla.
+              if (_usageKind === 'guide' && guidedMapStage && !mergeIntoRoute && route && Array.isArray(route.discarded_stops)) {
+                const _fuera = route.discarded_stops.filter(d => d.reason === 'fuera_del_radio_ancla').length;
+                const _quedan = (route.stops || []).length;
+                if (_fuera >= 4 && _fuera > _quedan) {
+                  console.log(`[T2-FAIL] radio del ancla: ${_fuera} paradas fuera, ${_quedan} dentro — guía no entregada`);
+                  if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, camino: 'fallo', motivo: `radio del ancla: ${_fuera} fuera, ${_quedan} dentro`, ms_total: Date.now() - _t2log.inicio }));
+                  _usageConsume = null;
+                  _flushUsage();
+                  try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'La guía me ha salido recortada (solo cabían unos pocos sitios de tu plan) y no quiero dártela así. Dale otra vez al botón y la monto entera; tu plan sigue aquí arriba.', route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
+                  return;
+                }
+              }
               // GUÍA NUEVA Y GOOGLE NO CONTESTÓ (sin cuota diaria, denegado, fallo) en alguna parada → no se entrega una guía a
               // medias ni se gasta el cupo: aviso para reintentar (21 oct 2026, Filipinas con 12 paradas «sin verificar» por cuota).
               if (_usageKind === 'guide' && route && route.google_error) {
