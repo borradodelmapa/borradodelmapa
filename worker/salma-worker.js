@@ -18288,7 +18288,10 @@ REGLAS:
         // ── Sitios marcados [[ ]]: fuera las fotos que no son de un sitio marcado; el usuario ve negritas.
         //    reply_marcas (con corchetes) es lo que la app devuelve al pulsar "Crear ruta con mapa". ──
         let _replyMarcas = null;
-        if (_planSinHerramientas && !route && tieneMarcasSitio(reply)) {
+        // Fotos de TODO plan por días que no traiga fotos (22 oct 2026, Paco: «10 días Laos en moto de alquiler» sin ninguna foto):
+        // con «alquiler», «ferry», «bus»… el plan se escribe con herramientas y antes solo se ponían fotos al plan sin herramientas,
+        // mientras el prompt dice que en un plan las fotos las pone el sistema. fotosDeSitiosMarcados no hace nada si ya hay fotos.
+        if (guidedIsReco && !route && tieneMarcasSitio(reply)) {
           try {
             reply = await fotosDeSitiosMarcados(reply, { env, fotoCtx: _fotoCtx, fotoNombres: _fotoNombres, max: 4, porSitio: true });
           } catch (e) { console.log('[FOTO-PLAN] ' + (e && e.message)); }
