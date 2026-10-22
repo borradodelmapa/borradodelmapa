@@ -8862,9 +8862,11 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   // también se reutiliza, no solo dentro de la misma edición. Clave por país + nombre
   // normalizado (evita mezclar homónimos de países distintos). 30 días de TTL.
   // opts.spotPrefix (enlaces del chat, caso p-mul559lkvkr): escribe en SU caché ('chatspot:') y lee primero la suya
-  // y luego la de las guías. Sin la opción (las guías), todo igual que siempre: solo 'verifiedspot:'.
+  // y luego la de las guías. Las guías leen la suya y DESPUÉS la del chat (22 oct 2026, Paco): un sitio que el chat ya
+  // comprobó para su enlace o su foto no se vuelve a pagar en Google al crear la guía. Es segura: el chat solo guarda
+  // lo que pasó con el nombre exacto (requireNameMatch, sin rescates) y la guarda de homónimos de abajo sigue igual.
   const _spotPrefix = opts.spotPrefix || 'verifiedspot:';
-  const _spotReadPrefixes = _spotPrefix === 'verifiedspot:' ? ['verifiedspot:'] : [_spotPrefix, 'verifiedspot:'];
+  const _spotReadPrefixes = _spotPrefix === 'verifiedspot:' ? ['verifiedspot:', 'chatspot:'] : [_spotPrefix, 'verifiedspot:'];
   const _verifiedKvKey = (stop, prefix = _spotPrefix) => {
     const key = _norm(stop.name || stop.headline || '');
     if (!key) return null;
