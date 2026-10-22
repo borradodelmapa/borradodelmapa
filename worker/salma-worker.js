@@ -3001,7 +3001,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_foto",
-    description: "Busca fotos REALES de lugares usando Google Places Photos. Devuelve hasta 3 fotos distintas del lugar. Incluye las fotos en tu respuesta con formato ![nombre](url). IMPORTANTE: llama a esta herramienta UNA SOLA VEZ con el lugar, no la llames varias veces para el mismo sitio — ya devuelve varias fotos. Para mostrar fotos de DISTINTOS lugares, haz una llamada por lugar.",
+    description: "Busca la foto REAL de un lugar concreto, comprobada en Google (el mismo sitio que su enlace). Devuelve una foto; inclúyela en tu respuesta con formato ![nombre](url). Si devuelve error, ese sitio no lleva foto: no la menciones. Una llamada por lugar.",
     input_schema: {
       type: "object",
       properties: {
@@ -3397,11 +3397,12 @@ function filtrarFotosNoMarcadas(reply, fotoNombres) {
 
 // FOTOS DEL PLAN (caso p-munr9lawdi5, 30 sept 2026): en los planes por días Salma escribe sin herramientas
 // (_planSinHerramientas) y aquí se añaden como mucho `max` fotos: el primer sitio marcado de cada día (no los de
-// comer), debajo de su línea, con el control de siempre de buscar_foto (nombre, no hotel, zona). Lo que no pasa,
-// sin foto. Nunca retrasa más de 6 s. Coste: ~0,02 € por foto la 1ª vez; el mismo sitio después, 0 € (caché ph2:).
+// comer), debajo de su línea. Desde el 22 oct 2026 con fotosVerificadas: el mismo sitio verificado que su enlace (parada
+// de la guía abierta, o resolveChatPlaces → verifyAllStops). Lo que no pasa, sin foto. Nunca retrasa más de 8 s.
+// Coste: el sitio ya verificado (por el enlace o una guía), 0 €; uno nuevo, Find Place (~0,017 €) + la foto (~0,007 €) una vez.
 // porSitio (4 oct 2026, chat visual): en vez de uno por día, los primeros `max` sitios marcados (no de comer), cada
-// uno con su foto → el chat los pinta como tarjetas. Coste: igual por foto (~0,02 € la 1ª vez, 0 € desde caché ph2:).
-async function fotosDeSitiosMarcados(reply, { env, zone = null, ciudad = '', max = 2, fotoNombres = null, porSitio = false } = {}) {
+// uno con su foto → el chat los pinta como tarjetas.
+async function fotosDeSitiosMarcados(reply, { env, fotoCtx = {}, max = 2, fotoNombres = null, porSitio = false } = {}) {
   if (!tieneMarcasSitio(reply) || !env || !env.GOOGLE_PLACES_KEY || /!\[[^\]]*\]\(/.test(reply)) return reply;
   const lines = reply.split('\n');
   const hayDias = !porSitio && lines.some(l => /^[^A-Za-zÁÉÍÓÚáéíóú0-9]{0,8}D[IÍií]AS?\s+\d/i.test(l));
@@ -3417,15 +3418,15 @@ async function fotosDeSitiosMarcados(reply, { env, zone = null, ciudad = '', max
   });
   if (!elegidos.length) return reply;
   const res = await Promise.race([
-    Promise.all(elegidos.map(e => buscarFotoLugar({ lugar: (e.name + ' ' + ciudad).trim() }, env.GOOGLE_PLACES_KEY, env, { zone }).catch(() => null))),
-    new Promise(r => setTimeout(() => r(null), 6000)),
+    fotosVerificadas(elegidos.map(e => e.name), env, fotoCtx).catch(() => new Map()),
+    new Promise(r => setTimeout(() => r(null), 8000)),
   ]);
-  if (!res) { console.log('[FOTO-PLAN] sin fotos: Google tardó más de 6 s'); return reply; }
+  if (!res) { console.log('[FOTO-PLAN] sin fotos: la comprobación tardó más de 8 s'); return reply; }
   let puestas = 0;
   for (let k = elegidos.length - 1; k >= 0; k--) {
-    const r = res[k], f = r && Array.isArray(r.fotos) && r.fotos[0];
+    const f = res.get(elegidos[k].name);
     if (!f || !f.url) continue;
-    if (fotoNombres) fotoNombres.set(f.url, [r.lugar || '', elegidos[k].name]);
+    if (fotoNombres) fotoNombres.set(f.url, [f.nombre || '', elegidos[k].name]);
     lines.splice(elegidos[k].i + 1, 0, '', `![${elegidos[k].name.replace(/[\[\]()]/g, '')}](${f.url})`);
     puestas++;
   }
@@ -3614,18 +3615,22 @@ async function verifyChatPlacesAt(names, anchor, env, days) {
     anchorLat: anchor.lat, anchorLng: anchor.lng, anchorPointScope: true, anchorDays: days,
     forceCountryCode: anchor.countryCode, forceCountryName: anchor.countryName,
     requireNameMatch: true, spotPrefix: 'chatspot:',
+    // Sin Place Details (0,025 €/sitio): el chat solo necesita el sitio y su foto, que ya vienen de Find Place. Lo mismo
+    // que las guías desde el 3 oct (GOOGLE_LAZY_DETAILS). 22 oct 2026: hasta hoy cada sitio nuevo del chat la pagaba sin usarla.
+    lazyDetails: true,
   }, env);
   const maxKm = days <= 1 ? 35 : 120;
   const res = new Map();
   for (const s of (out && out.stops) || []) {
     if (!s._pedido || !s.place_id || s._unverified || s._soft_match || typeof s.lat !== 'number') continue;
     if (haversineKm(anchor.lat, anchor.lng, s.lat, s.lng) > maxKm) continue;
-    res.set(s._pedido, { place_id: s.place_id, name: s.name || s._pedido, lat: s.lat, lng: s.lng });
+    res.set(s._pedido, { place_id: s.place_id, name: s.name || s._pedido, lat: s.lat, lng: s.lng, photo_ref: s.photo_ref || '', photo_attr: s.photo_attr || null });
   }
   return res;
 }
 
-// EL buscador del chat: nombres → Map(nombre → { place_id, name, lat, lng }). Lo que no está es que no hay enlace.
+// EL buscador del chat: nombres → Map(nombre → { place_id, name, lat, lng, photo_ref, photo_attr }). Lo que no está es que
+// no hay enlace ni foto. Lo usan los enlaces y las fotos del chat (fotosVerificadas): un sitio, una comprobación.
 // ctx: { message, history, userLocation, userLocationName, destino, catalog, replyText, incidents, skip }
 // days: 1 (sitios, 35 km del ancla) · 3 (traslados: aeropuerto, estación… 120 km / 60 por carretera)
 async function resolveChatPlaces(names, ctx, env, days = 1) {
@@ -8431,8 +8436,74 @@ function normalizeForMatch(str) {
   return (str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
 }
 
-// Name match estricto: >= 2 palabras significativas en común O >60% overlap
+// ═══ ¿ES EL MISMO SITIO POR EL NOMBRE? — LA ÚNICA comparación de nombres de la app (22 oct 2026, caso mvj8dc8qqbl7) ═══
+// La usan las guías (verifyAllStops), los enlaces y las fotos del chat y /photo. Antes exigía palabras iguales y Google
+// contesta en español aunque Salma pida en inglés (o al revés): «Khao Sok National Park» ≠ «Parque Nacional de Khao Sok»,
+// «Grand Palace» ≠ «Gran Palacio», «Phi Phi Islands» ≠ «Islas Phi Phi» → 13 de 18 sitios corrientes sin foto ni enlace.
+// Ahora las palabras genéricas se traducen a una sola forma (park=parque, island=ko=isla…) y deciden las PROPIAS del
+// sitio (Khao Sok, Phi Phi, Eiffel). Y una oficina, agencia o tour con el nombre del sitio NO es el sitio (Pig Island →
+// «Pig Island Thailand (Koh Madsum) - Koh Samui Office»). Pruebas: scripts/probar-nombres.cjs (0 €).
+const _NOMBRE_SINONIMOS = {
+  park: 'parque', national: 'nacional', lake: 'lago', lakes: 'lago', lagos: 'lago', laguna: 'lago', lagoon: 'lago',
+  island: 'isla', islands: 'isla', islas: 'isla', ko: 'isla', koh: 'isla', isle: 'isla', islet: 'isla', islote: 'isla',
+  cave: 'cueva', caves: 'cueva', cuevas: 'cueva', grotto: 'cueva', gruta: 'cueva',
+  bay: 'bahia', temple: 'templo', templos: 'templo', wat: 'templo', pagoda: 'templo', shrine: 'santuario',
+  palace: 'palacio', grand: 'gran', great: 'gran', grande: 'gran', market: 'mercado', mercat: 'mercado', bazaar: 'mercado', bazar: 'mercado',
+  beach: 'playa', playas: 'playa', hat: 'playa', haad: 'playa', waterfall: 'cascada', waterfalls: 'cascada', falls: 'cascada',
+  cascadas: 'cascada', catarata: 'cascada', cataratas: 'cascada', namtok: 'cascada',
+  museum: 'museo', tower: 'torre', church: 'iglesia', cathedral: 'catedral', bridge: 'puente', square: 'plaza',
+  castle: 'castillo', mount: 'monte', mountain: 'monte', montana: 'monte', river: 'rio', street: 'calle',
+  garden: 'jardin', gardens: 'jardin', jardines: 'jardin', viewpoint: 'mirador', fort: 'fuerte', fortress: 'fuerte',
+  fortaleza: 'fuerte', old: 'antiguo', town: 'ciudad', city: 'ciudad', reserve: 'reserva', sanctuary: 'santuario',
+  basilica: 'basilica', monastery: 'monasterio', ruins: 'ruinas', valley: 'valle', canyon: 'canon', hot: 'termal', springs: 'termal',
+};
+const _NOMBRE_GENERICAS = new Set(['parque', 'nacional', 'lago', 'isla', 'cueva', 'bahia', 'templo', 'santuario', 'palacio',
+  'gran', 'mercado', 'playa', 'cascada', 'museo', 'torre', 'iglesia', 'catedral', 'puente', 'plaza', 'castillo', 'monte',
+  'rio', 'calle', 'jardin', 'mirador', 'fuerte', 'antiguo', 'ciudad', 'reserva', 'basilica', 'monasterio', 'ruinas', 'valle',
+  'canon', 'termal', 'real', 'central', 'nuevo', 'viejo', 'principal', 'norte', 'sur', 'este', 'oeste']);
+const _NOMBRE_VACIAS = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'the', 'of', 'and', 'y', 'en', 'a', 'al', 'di', 'da', 'do',
+  'du', 'le', 'les', 'des', 'der', 'die', 'das', 'von', 'van', 'at', 'in', 'on']);
+// Palabras de un NEGOCIO que vende el sitio, no del sitio. Si Google las trae y lo pedido no, es otra cosa.
+const _NOMBRE_NEGOCIO = /\b(office|oficina|tours?|travel|agency|agencia|booking|reservas?|ticket|tickets|rental|alquiler|excursion(es)?|excursions?|transfer|shop|tienda|store)\b/;
+function _nombreTokens(s) {
+  return normalizeForMatch(String(s || '').replace(/[-–—_/.,()]/g, ' ')).split(/\s+/)
+    .filter(w => w && !_NOMBRE_VACIAS.has(w)).map(w => _NOMBRE_SINONIMOS[w] || w);
+}
+// Mismo sitio por nombre teniendo en cuenta idioma: deciden las palabras propias del sitio.
+function _nombresEquivalentes(pedido, google) {
+  const tp = _nombreTokens(pedido), tg = _nombreTokens(google);
+  if (!tp.length || !tg.length) return false;
+  const propias = t => t.filter(w => !_NOMBRE_GENERICAS.has(w) && w.length >= 3);
+  const pp = propias(tp), pg = propias(tg);
+  const setP = new Set(tp);
+  if (!pg.length) {
+    // Google solo da palabras genéricas («Gran Palacio»): todas tienen que estar en lo pedido, y al menos dos.
+    return tg.length >= 2 && tg.every(w => setP.has(w));
+  }
+  // Las palabras propias de Google, todas en lo pedido, y lo pedido empieza por el sitio (no por la ciudad: «Mercado de
+  // Triana Sevilla» no es «Sevilla»).
+  if (pg.every(w => setP.has(w)) && (!pp.length || tg.includes(pp[0]))) return true;
+  // Dos palabras propias en común («Doi Suthep» ↔ «Wat Phra That Doi Suthep»).
+  const comunes = pp.filter(w => pg.includes(w));
+  return new Set(comunes).size >= 2;
+}
+// El nombre PROPIO con el que empieza lo pedido tiene que estar en lo de Google. Sin esto, dos palabras genéricas iguales
+// bastaban («Parque Nacional de Doñana» = «Parque Nacional de Ordesa», «Isla Gran Laguna» = «Pagbilao Grande Island»,
+// «Mercado de Triana Sevilla» = «Sevilla»): ayer solo lo frenaba la distancia, y solo en las guías.
+function _primeraPropiaEnGoogle(pedido, google) {
+  const pp = _nombreTokens(pedido).filter(w => !_NOMBRE_GENERICAS.has(w) && w.length >= 3);
+  if (!pp.length) return true;
+  const p0 = pp[0];
+  return _nombreTokens(google).some(w => w === p0 || (p0.length >= 4 && w.length >= 4 && (w.includes(p0) || p0.includes(w))));
+}
 function strictNameMatch(originalName, googleName) {
+  const g = normalizeForMatch(googleName), o = normalizeForMatch(originalName);
+  if (_NOMBRE_NEGOCIO.test(g) && !_NOMBRE_NEGOCIO.test(o)) return false;
+  return (_strictNameMatchPalabras(originalName, googleName) && _primeraPropiaEnGoogle(originalName, googleName))
+    || _nombresEquivalentes(originalName, googleName);
+}
+// Comparación de siempre (palabras iguales): se conserva tal cual, la de arriba solo AÑADE los casos de idioma.
+function _strictNameMatchPalabras(originalName, googleName) {
   const normOrig = normalizeForMatch(originalName);
   const normGoogle = normalizeForMatch(googleName);
   if (!normOrig || !normGoogle) return false;
@@ -8579,6 +8650,9 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
         try {
           const cached = JSON.parse(kvResults[j]);
           if (!cached?.place_id) return;
+          // Una oficina/agencia/tour guardada con el nombre del sitio NO es el sitio (Pig Island → «… Koh Samui Office»):
+          // guardadas antes del 22 oct 2026 con la comparación vieja; no se reutilizan, se verifica de nuevo.
+          if (_NOMBRE_NEGOCIO.test(normalizeForMatch(cached.name || '')) && !_NOMBRE_NEGOCIO.test(normalizeForMatch(route.stops[i].name || route.stops[i].headline || ''))) return;
           // opts.requireNameMatch (chat): la ficha guardada tiene que llevar coordenadas y el mismo nombre.
           // Un sitio guardado como RESCATE por distancia (cached.soft) no vale para el chat: allí el nombre tiene que coincidir.
           if (opts.requireNameMatch && cached.soft) return;
@@ -10407,7 +10481,7 @@ async function executeToolCall(toolName, toolInput, env, userCoords, toolCtx = {
     case 'buscar_lugar':
       return await buscarLugar(toolInput, env.GOOGLE_PLACES_KEY, userCoords, env);
     case 'buscar_foto':
-      return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY, env, { zone: toolCtx.photoZone || null });
+      return await buscarFotoLugar(toolInput, env, toolCtx.foto || {});
     case 'buscar_web':
       return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY, env);
     case 'generar_video':
@@ -10419,123 +10493,70 @@ async function executeToolCall(toolName, toolInput, env, userCoords, toolCtx = {
   }
 }
 
-// ═══ FOTO DE UN LUGAR: ¿el resultado de Google es de verdad el sitio pedido? (30 sept 2026) ═══
-// Antes la foto del chat era "lo primero que devuelva Google con ese texto", sin zona ni comprobación, y se guardaba
-// para siempre: "estación de tren abandonada…" → foto de un hotel. Ahora vale solo si (1) el nombre coincide con las
-// mismas reglas que las paradas de las guías (strictNameMatch), (2) no es un alojamiento cuando no se ha pedido uno y
-// (3) cae dentro de la zona de la conversación (la guía abierta), si se conoce. Si no pasa → sin foto.
+// ═══ FOTOS DEL CHAT — del MISMO sitio verificado que el enlace (22 oct 2026, caso mvj8dc8qqbl7) ═══
+// Antes las fotos tenían su propio comprobador (photoPlaceOk) y su propia zona (photoZoneFromRoute: 400 km del CENTRO de la
+// guía abierta). Con una guía de 20 días por Tailandia el centro caía en Bangkok y Khao Sok, las islas, Krabi o Chiang Rai
+// quedaban «fuera de zona»; y el nombre exigía palabras iguales («Khao Sok National Park» ≠ «Parque Nacional de Khao Sok»).
+// Es el mismo fallo que se arregló el 21 oct en las guías (Filipinas), que aquí seguía vivo por ser otra copia. Ahora:
+//   1. Sitio que ya es parada de la guía abierta → la foto de esa parada (verificada y pagada al crear la guía): 0 €.
+//   2. Si no → el buscador único del chat (resolveChatPlaces → verifyAllStops, el de los enlaces y las guías): localiza la
+//      ciudad del sitio y comprueba nombre y distancia. La foto es la de ESE sitio, guardada por place_id para siempre.
+//   3. Lo que no pasa → sin foto. Nunca una adivinada.
+// fotoCtx: { route (guía abierta o null), buscar (contexto de resolveChatPlaces: message, history, destino, catalog…) }
 const _PHOTO_LODGING_ASKED = /hotel|hostal|hostel|parador|albergue|alojamiento|apartament|casa rural|camping|posada|resort|pensi[oó]n|refugio|b&b|motel|glamping/i;
-function photoPlaceOk(asked, cand, zone) {
-  if (!cand || !cand.name) return { ok: false, why: 'sin_resultado' };
-  // Salma pide la foto con el nombre + ciudad + país ("Alhambra Granada España") y Google contesta solo con el nombre
-  // ("La Alhambra"): vale también si TODAS las palabras con peso del nombre de Google están en lo pedido.
-  // "Hotel La Estación" para "estación abandonada de X" no pasa: "hotel" no estaba en lo pedido.
-  const askedN = normalizeForMatch(asked);
-  const gWords = normalizeForMatch(cand.name).split(/\s+/).filter(w => w.length > 3);
-  const gInAsked = gWords.length > 0 && gWords.every(w => new RegExp('\\b' + w + '\\b').test(askedN));
-  if (!gInAsked && !strictNameMatch(asked, cand.name)) return { ok: false, why: 'nombre_distinto' };
-  const types = Array.isArray(cand.types) ? cand.types : [];
-  if (types.includes('lodging') && !_PHOTO_LODGING_ASKED.test(asked)) return { ok: false, why: 'alojamiento_no_pedido' };
-  const loc = cand.geometry && cand.geometry.location;
-  if (zone && loc && typeof loc.lat === 'number' && haversineKm(zone.lat, zone.lng, loc.lat, loc.lng) > zone.km) return { ok: false, why: 'fuera_de_zona' };
-  return { ok: true };
+function _urlFotoSitio({ place_id, photo_ref, name, lat, lng }) {
+  const q = ['pid=' + encodeURIComponent(place_id)];
+  if (photo_ref) q.push('ref=' + encodeURIComponent(photo_ref));
+  // Sin referencia (sitio del catálogo de buscar_lugar): /photo la busca por nombre y coordenadas con la misma comparación.
+  if (!photo_ref && name) q.push('name=' + encodeURIComponent(name));
+  if (!photo_ref && typeof lat === 'number' && typeof lng === 'number') q.push('lat=' + lat, 'lng=' + lng);
+  return 'https://salma-api.borradodelmapa-api.workers.dev/photo?' + q.join('&');
 }
-
-// Zona de la conversación para las fotos: la guía abierta (centro de sus paradas + su extensión + margen).
-function photoZoneFromRoute(route) {
-  const pts = (route && Array.isArray(route.stops) ? route.stops : [])
-    .filter(s => typeof s.lat === 'number' && typeof s.lng === 'number' && isValidCoord(s.lat, s.lng));
-  if (!pts.length) return null;
-  const lat = pts.reduce((a, s) => a + s.lat, 0) / pts.length;
-  const lng = pts.reduce((a, s) => a + s.lng, 0) / pts.length;
-  const spread = Math.max(0, ...pts.map(s => haversineKm(lat, lng, s.lat, s.lng)));
-  return { lat, lng, km: Math.min(400, spread + 40) };
-}
-
-// ═══ BUSCAR FOTO — Google Places Photos ═══
-// ctx.zone (opcional): { lat, lng, km } — zona de la conversación (photoZoneFromRoute).
-async function buscarFotoLugar(input, placesKey, env, ctx = {}) {
-  if (!placesKey || !input.lugar) return { error: 'Falta lugar o API key' };
-  const zone = ctx.zone || null;
-  const _noFoto = (why) => { console.log(`[FOTO] ✗ "${input.lugar}" sin foto (${why})`); return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar }; };
-
-  try {
-    // CATÁLOGO "nombre → lugar + fotos" (23 sept 2026): la primera vez se pregunta a Google y se guarda el lugar
-    // y sus (hasta 3) photo_reference en KV, PARA SIEMPRE. A partir de ahí se devuelven SIEMPRE esos mismos
-    // identificadores: Google da un photo_reference distinto en cada respuesta, y como la imagen se guarda en R2
-    // por hash del identificador, con identificadores nuevos cada vez la foto se repagaba en cada respuesta.
-    // Con el identificador fijo, la imagen ya guardada en R2 se reutiliza siempre (0 llamadas a Google).
-    // 30 sept 2026: prefijo nuevo 'ph2:' — las entradas viejas 'ph:' se guardaron SIN comprobar nada (de ahí el hotel
-    // y el edificio de ventanas) y ya no se leen. Solo se guarda lo que pasa photoPlaceOk, con sus coordenadas.
-    const _phKey = 'ph2:' + _nmNorm(input.lugar);
-    const _missKey = 'ph2miss:' + _nmNorm(input.lugar) + (zone ? ':' + zone.lat.toFixed(1) + ':' + zone.lng.toFixed(1) : '');
-    const _phHit = await nameCacheGet(env, _phKey);
-    let place = null;
-    if (_phHit && Array.isArray(_phHit.refs) && _phHit.refs.length) {
-      // Guarda de homónimos: la entrada guardada tiene que caer en la zona de esta conversación.
-      const far = zone && typeof _phHit.lat === 'number' && haversineKm(zone.lat, zone.lng, _phHit.lat, _phHit.lng) > zone.km;
-      if (!far) place = { name: _phHit.name, formatted_address: _phHit.address, photos: _phHit.refs.map(r => ({ photo_reference: r })) };
-    }
-    if (!place && await nameCacheGet(env, _missKey)) return _noFoto('ya buscado, no había');
-
-    if (!place) {
-      // 1. Buscar el lugar en Google Places, sesgado a la zona de la conversación si se conoce.
-      //    geometry y types son datos básicos: no cambian el coste de la búsqueda.
-      const bias = zone ? `&locationbias=circle:${Math.round(Math.min(zone.km, 50) * 1000)}@${zone.lat},${zone.lng}` : '';
-      const searchRes = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(input.lugar)}&inputtype=textquery${bias}&fields=place_id,name,photos,formatted_address,geometry,types&language=es&key=${placesKey}`
-      );
-      const searchData = await searchRes.json();
-      const googleAnswered = searchData?.status === 'OK' || searchData?.status === 'ZERO_RESULTS';
-
-      const cand = searchData?.candidates?.[0];
-      const check = photoPlaceOk(input.lugar, cand, zone);
-      if (!cand || !cand.photos || !cand.photos.length || !check.ok) {
-        // "No hay foto buena" 30 días, solo si Google llegó a contestar (no por un error de cuota o de red)
-        if (googleAnswered) await nameCachePut(env, _missKey, { miss: 1 }, 2592000);
-        return _noFoto(check.ok ? 'sin fotos en Google' : `${check.why} → "${cand?.name || ''}"`);
-      }
-      place = cand;
-      await nameCachePut(env, _phKey, {
-        place_id: cand.place_id || '',
-        name: cand.name || '',
-        address: cand.formatted_address || '',
-        lat: cand.geometry?.location?.lat, lng: cand.geometry?.location?.lng,
-        refs: cand.photos.slice(0, 3).map(p => p.photo_reference).filter(Boolean),
-      });
-    }
-
-    // 2. Construir URLs PERMANENTES vía el proxy /photo del worker.
-    // Antes usábamos photoRes.url (URL temporal de googleusercontent que caduca en minutos
-    // → imágenes rotas cuando el navegador las pide tarde). Ahora /photo?ref=X es estable y cacheable.
-    const maxPhotos = Math.min(place.photos.length, 3);
-    const fotos = [];
-    const cleanName = (place.name || input.lugar).replace(/[\[\]()]/g, '').trim();
-
-    for (let i = 0; i < maxPhotos; i++) {
-      const photoRef = place.photos[i]?.photo_reference;
-      if (!photoRef) continue;
-      const photoUrl = `https://salma-api.borradodelmapa-api.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
-      fotos.push({
-        url: photoUrl,
-        markdown: `![${cleanName}](${photoUrl})`,
-      });
-    }
-
-    if (fotos.length === 0) {
-      return { error: 'No se pudo obtener foto', lugar: input.lugar };
-    }
-
-    return {
-      lugar: place.name || input.lugar,
-      direccion: place.formatted_address || '',
-      total_fotos: fotos.length,
-      fotos: fotos,
-      foto_markdown: fotos.map(f => f.markdown).join('\n\n'),
-    };
-  } catch (e) {
-    return { error: 'Error buscando foto: ' + e.message, lugar: input.lugar };
+// nombres → Map(nombre → { url, nombre }) con la foto verificada de cada uno.
+async function fotosVerificadas(nombres, env, fotoCtx = {}) {
+  const out = new Map();
+  const pendientes = [];
+  const paradas = (fotoCtx.route && Array.isArray(fotoCtx.route.stops) ? fotoCtx.route.stops : [])
+    .filter(s => s && s.place_id && s.name);
+  for (const n of nombres) {
+    // 1. ¿Es una parada de la guía? (misma comparación de nombres que todo lo demás)
+    const st = paradas.find(s => strictNameMatch(n, s.name) || (s.headline && strictNameMatch(n, s.headline)));
+    if (st) {
+      out.set(n, { nombre: st.name, url: _urlFotoSitio({ place_id: st.place_id, photo_ref: st.photo_ref, name: st.name, lat: st.lat, lng: st.lng }) });
+      console.log(`[FOTO] ✓ "${n}" → parada de la guía "${st.name}" (0 €)`);
+    } else pendientes.push(n);
   }
+  if (!pendientes.length || !env.GOOGLE_PLACES_KEY) return out;
+  // Un alojamiento solo si se pidió uno (la foto de «la estación abandonada» no puede ser el «Hotel La Estación»).
+  let found = new Map();
+  try { found = await resolveChatPlaces(pendientes, Object.assign({ origen: 'foto' }, fotoCtx.buscar || {}), env); }
+  catch (e) { console.warn('[FOTO] buscador: ' + (e && e.message)); }
+  for (const n of pendientes) {
+    const v = found.get(n);
+    if (!v || !v.place_id) { console.log(`[FOTO] ✗ "${n}" sin foto (sitio no verificado)`); continue; }
+    if (/hotel|hostal|resort|hostel|lodging/i.test(v.name || '') && !_PHOTO_LODGING_ASKED.test(n)) { console.log(`[FOTO] ✗ "${n}" → "${v.name}" es un alojamiento no pedido`); continue; }
+    out.set(n, { nombre: v.name || n, url: _urlFotoSitio(v) });
+    console.log(`[FOTO] ✓ "${n}" → "${v.name}" ${v.place_id}`);
+  }
+  return out;
+}
+// Herramienta buscar_foto de Salma: una foto del sitio verificado.
+async function buscarFotoLugar(input, env, fotoCtx = {}) {
+  const lugar = String((input && input.lugar) || '').trim();
+  if (!lugar) return { error: 'Falta lugar' };
+  const r = (await fotosVerificadas([lugar], env, fotoCtx)).get(lugar);
+  if (!r) return { error: 'No he encontrado una foto verificada de: ' + lugar + '. No pongas foto de este sitio.', lugar };
+  const cleanName = String(r.nombre || lugar).replace(/[\[\]()]/g, '').trim();
+  const markdown = `![${cleanName}](${r.url})`;
+  return { lugar: r.nombre || lugar, total_fotos: 1, fotos: [{ url: r.url, markdown }], foto_markdown: markdown };
+}
+// /photo (recargar la foto de una parada por su nombre): ¿el candidato de Google es el sitio? La MISMA comparación de nombres
+// (strictNameMatch) y nada de alojamientos no pedidos. La distancia la mira /photo con las coordenadas de la parada.
+function fotoCandidatoEsElSitio(pedido, cand) {
+  if (!cand || !cand.name) return { ok: false, why: 'sin_resultado' };
+  if (!strictNameMatch(pedido, cand.name)) return { ok: false, why: 'nombre_distinto' };
+  if (Array.isArray(cand.types) && cand.types.includes('lodging') && !_PHOTO_LODGING_ASKED.test(pedido)) return { ok: false, why: 'alojamiento_no_pedido' };
+  return { ok: true };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -13211,7 +13232,7 @@ export default {
           // "No encontrado" guardado (30 días, por nombre y zona): un lugar que Google no tiene con foto no repite la búsqueda
           // en cada apertura. Solo se guarda si Google llegó a contestar (un error de cuota o de red NO cuenta).
           const _missKey = env.SALMA_KB
-            ? 'spotmiss:' + (normalizeSpotKey(name)[0] || '') + ((lat && lng) ? ':' + parseFloat(lat).toFixed(1) + ':' + parseFloat(lng).toFixed(1) : '')
+            ? 'spotmiss2:' + (normalizeSpotKey(name)[0] || '')   // 2: los «no hay foto» de antes del 22 oct 2026 los puso la comparación vieja + ((lat && lng) ? ':' + parseFloat(lat).toFixed(1) + ':' + parseFloat(lng).toFixed(1) : '')
             : null;
           let _skipFind = false;
           if (_missKey) { try { if (await env.SALMA_KB.get(_missKey)) _skipFind = true; } catch (_) {} }
@@ -13224,8 +13245,8 @@ export default {
             let freshRef = candidate?.photos?.[0]?.photo_reference || null;
             // 30 sept 2026: mismas comprobaciones que las fotos del chat — nombre que coincide y no un hotel si no se
             // pidió (name y types son datos básicos: no cambian el coste). La distancia se mira justo debajo.
-            if (freshRef && !photoPlaceOk(name, candidate, null).ok) {
-              console.log(`[FOTO] ✗ /photo "${name}" → "${candidate?.name || ''}" (${photoPlaceOk(name, candidate, null).why})`);
+            if (freshRef && !fotoCandidatoEsElSitio(name, candidate).ok) {
+              console.log(`[FOTO] ✗ /photo "${name}" → "${candidate?.name || ''}" (${fotoCandidatoEsElSitio(name, candidate).why})`);
               freshRef = null;
             }
             if (_missKey && !freshRef && (findData?.status === 'OK' || findData?.status === 'ZERO_RESULTS')) {
@@ -16730,18 +16751,23 @@ INSTRUCCIONES:
         let _hotelsAllUrl = null; // { url, ciudad }: lista completa en Booking con las mismas fechas
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         const _fotoNombres = new Map(); // url de foto de buscar_foto → [nombre de Google, nombre pedido] (filtro de sitios marcados)
-        // Zona de la conversación para buscar_foto (30 sept 2026): la guía abierta; si no hay, el destino ya resuelto.
-        // La guía abierta SOLO si se está editando (editingActiveRoute): la app manda siempre la última guía en
-        // current_route, y un viaje nuevo (Pirineos) salía sin fotos por "fuera de zona" de la guía de antes (Ronda),
-        // pagando las búsquedas igual (Paco, 30 sept 2026).
-        const _photoZone = (editingActiveRoute ? photoZoneFromRoute(currentRoute) : null)
-          || ((anchorCountry && anchorCountry.pointScope && typeof anchorCountry.lat === 'number') ? { lat: anchorCountry.lat, lng: anchorCountry.lng, km: 120 } : null);
         const _chatPlaces = new Map(); // catálogo de la respuesta: sitios de buscar_lugar (place_id, coords, ciudad) → enlaces del chat
         // Sitios de la búsqueda de ayuda (farmacia, hospital…) al catálogo, con sus coordenadas: su "Cómo llegar" sale de
         // ahí, sin volver a buscar cada nombre en Google (antes se pagaba otra vez cada farmacia solo para el enlace).
         if (Array.isArray(helpResults)) for (const r of helpResults) {
           if (r && r.name && typeof r.lat === 'number' && typeof r.lng === 'number') addChatPlace(_chatPlaces, r.name, { name: r.name, place_id: r.place_id || null, lat: r.lat, lng: r.lng, ciudad: r.ciudad || '' });
         }
+        // FOTOS DEL CHAT (22 oct 2026, caso mvj8dc8qqbl7): del MISMO sitio verificado que el enlace (fotosVerificadas). Con la
+        // guía abierta (editingActiveRoute), un sitio que ya es parada usa la foto de la parada. Solo la guía que se está
+        // editando: la app manda siempre la última guía en current_route y un viaje nuevo no tiene nada que ver con ella.
+        const _fotoCtx = {
+          route: editingActiveRoute ? currentRoute : null,
+          buscar: {
+            message, history, userLocation, userLocationName, catalog: _chatPlaces,
+            destino: (anchorCountry && anchorCountry.locality) || (guidedRoute && guidedRoute.destino ? String(guidedRoute.destino) : '')
+              || (editingActiveRoute && currentRoute && (currentRoute.region || currentRoute.country)) || '',
+          },
+        };
         // Repara ![Name](...) roto o corrupto de Claude usando la URL real que ya devolvió
         // el tool_result (nunca la que Claude haya podido teclear mal). Antes solo se
         // detectaba el caso "nunca cierra con )" (URL truncada); un ![Name](url con un
@@ -17050,7 +17076,7 @@ INSTRUCCIONES:
           // Ejecutar todas en paralelo con Promise.all
           const toolResults = await Promise.all(
             toolUseBlocks.map(async block => {
-              const toolResult = await executeToolCall(block.name, block.input, env, userLocation, { photoZone: _photoZone });
+              const toolResult = await executeToolCall(block.name, block.input, env, userLocation, { foto: _fotoCtx });
               // Capturar enlace de vuelos para inyectar si GPT no lo incluye
               if (block.name === 'buscar_vuelos' && toolResult.enlace_reserva) {
                 lastFlightBookingUrl = toolResult.enlace_reserva;
@@ -17974,8 +18000,7 @@ REGLAS:
         let _replyMarcas = null;
         if (_planSinHerramientas && !route && tieneMarcasSitio(reply)) {
           try {
-            reply = await fotosDeSitiosMarcados(reply, { env, zone: _photoZone, fotoNombres: _fotoNombres, max: 4, porSitio: true,
-              ciudad: (anchorCountry && anchorCountry.pointScope && anchorCountry.locality) || '' });
+            reply = await fotosDeSitiosMarcados(reply, { env, fotoCtx: _fotoCtx, fotoNombres: _fotoNombres, max: 4, porSitio: true });
           } catch (e) { console.log('[FOTO-PLAN] ' + (e && e.message)); }
         }
         if (tieneMarcasSitio(reply)) {
