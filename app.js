@@ -4406,10 +4406,13 @@ async function guardarRutaDeOtro(routeData) {
     const src = routeData._saved_from;
     const r = Object.assign({}, routeData);
     delete r._saved_from;
-    if (src.uid && src.uid === currentUser.uid) { showToast('Esta ruta ya es tuya'); return null; }
+    // Ruta propia o ya guardada: no hay nada que guardar. Aviso más largo y se quita GUARDAR para que no
+    // parezca roto (Paco, 22 oct 2026: «a veces guarda a veces no»; el aviso de 2,5 s no se llegaba a leer).
+    const _quitarBtn = () => { document.getElementById('itin-save-btn')?.remove(); };
+    if (src.uid && src.uid === currentUser.uid) { showToast('Esta ruta ya es tuya: la tienes en Mis Viajes', 5000); _quitarBtn(); return null; }
     const dup = await db.collection('users').doc(currentUser.uid).collection('maps')
       .where('saved_from.slug', '==', src.slug).limit(1).get();
-    if (!dup.empty) { showToast('Ya tienes esta ruta guardada'); return dup.docs[0].id; }
+    if (!dup.empty) { showToast('Ya tienes esta ruta guardada en Mis Viajes → Rutas guardadas', 5000); _quitarBtn(); return dup.docs[0].id; }
     const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day || 1))].length : 0);
     const destino = (r.region || r.country || '').toString();
     const now = new Date().toISOString();
@@ -6881,10 +6884,12 @@ function _showAvisoGracias(uid, aviso) {
   db.collection('users').doc(uid).update({ 'aviso_gracias.visto': true }).catch(e => console.warn('aviso_gracias:', e));
 }
 
-function showToast(msg) {
+let _toastTimer = null;
+function showToast(msg, ms) {
   $toast.textContent = msg;
   $toast.classList.add('show');
-  setTimeout(() => $toast.classList.remove('show'), 2500);
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => $toast.classList.remove('show'), ms || 2500);
 }
 
 // ═══ SOS EMERGENCIA v3 (Twilio → WhatsApp → SMS → Queue) ═══

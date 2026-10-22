@@ -2509,8 +2509,11 @@ const salma = {
     }
     // Ya se está guardando (guardado automático al crearla + alguien pulsa GUARDAR a la vez): no duplicar
     if (this._guardando) return this._guardando;
-    this._guardando = this._guardarAhora(opts).finally(() => { this._guardando = null; });
-    return this._guardando;
+    // Si el guardado se cuelga (mala conexión), a los 20 s se libera para que GUARDAR vuelva a responder.
+    const _p = this._guardarAhora(opts).finally(() => { clearTimeout(_t); if (this._guardando === _p) this._guardando = null; });
+    const _t = setTimeout(() => { if (this._guardando === _p) this._guardando = null; }, 20000);
+    this._guardando = _p;
+    return _p;
   },
 
   async _guardarAhora(opts = {}) {
