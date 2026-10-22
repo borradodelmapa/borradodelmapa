@@ -932,7 +932,7 @@ function capPlanPorDias(enGuiaAbierta) {
 — Formato EXACTO, empezando por el día 1:
 **Día 1 — [título]**
 [[Sitio]] — por qué merece la pena (un dato histórico o cultural) y un consejo práctico. Tiempo. Precio si lo hay.
-(3-5 sitios por día, 2-3 frases cada uno, cada sitio en su párrafo.)
+(3-5 sitios por día, cada uno en su párrafo con 2-3 frases de verdad: qué es, por qué merece la pena y un consejo práctico; nunca una frase suelta. Ningún día con un solo sitio, salvo un día que sea solo de viaje.)
 — TRAYECTOS (vuelo, ferry, bus, furgoneta, tren, noche de paso) no son sitios: van en su propia línea que empieza por "Cómo llegar:", sin corchetes; tampoco van entre corchetes el aeropuerto, el puerto, la estación ni la terminal. Ej.: Cómo llegar: furgoneta de Puerto Princesa a El Nido, 5-6 h; sal temprano.
 — COMER: UN solo restaurante en todo el plan, al final: "Dónde comer: [[Restaurante]] — plato y precio. Si quieres más sitios para comer, pídemelo." Ningún otro sitio de comer entre [[ ]].
 — DÍAS: los que diga. Sin número: ciudad o pueblo → 1 día; ruta o road trip por varios sitios ("ruta", "recorrido", "de sur a norte", varios sitios lejos entre sí) → nunca 1 día por defecto: calcula los razonables (100-150 km con paradas al día; moto y caravana más despacio), de punta a punta en orden geográfico, sin ir y volver, y dilo al principio: "Esto da para N días".
@@ -8281,6 +8281,47 @@ const _LECTOR_COMER_RE = /^(?:bar|restaurante|rest\.|mes[oó]n|taberna|asador|ta
 // Motivo por el que el lector no cogió el último plan (lo guarda logGuideTiming); '' si lo cogió.
 let _lectorMotivo = '';
 function _lectorNo(motivo) { _lectorMotivo = motivo; console.log('[LECTOR] ✗ ' + motivo); return null; }
+// RESUMEN que se corta en una frase entera (22 oct 2026, Paco: acababa en «…más lentas de lo que »; es lo que Google enseña
+// como descripción). Último punto antes del tope; si no hay, última palabra con «…».
+function cortarResumen(t, max = 300) {
+  const s = String(t || '').replace(/\s+/g, ' ').trim();
+  if (s.length <= max) return s;
+  const corte = s.slice(0, max);
+  const fin = Math.max(corte.lastIndexOf('. '), corte.lastIndexOf('! '), corte.lastIndexOf('? '), corte.endsWith('.') ? corte.length - 1 : -1);
+  if (fin >= 80) return corte.slice(0, fin + 1).trim();
+  return corte.slice(0, corte.lastIndexOf(' ') > 60 ? corte.lastIndexOf(' ') : max).replace(/[\s,;:—–-]+$/, '') + '…';
+}
+// TÍTULO CON LOS DÍAS (22 oct 2026): lo que más se busca lleva la duración («Laos en 14 días»). Si la IA dio un título sin días
+// («Vientiane → Pakse en moto: ruta por Laos»), queda «Laos en 14 días: Vientiane → Pakse en moto».
+function tituloConDias(titulo, dias, zona) {
+  const t = String(titulo || '').trim();
+  const n = parseInt(dias, 10) || 0;
+  if (!n || /\b\d+\s*d[ií]as?\b/i.test(t)) return t;
+  const z = String(zona || '').trim();
+  const nd = `${n} ${n === 1 ? 'día' : 'días'}`;
+  if (!z) return t ? `${t} (${nd})` : `Ruta de ${nd}`;
+  const zRe = z.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  let resto = t.replace(new RegExp('\\s*[:,–—-]\\s*(?:una\\s+)?ruta\\s+(?:por|en)\\s+' + zRe + '\\s*$', 'i'), '')
+    .replace(new RegExp('^' + zRe + '\\s*[:,–—-]\\s*', 'i'), '').trim();
+  return resto && resto.toLowerCase() !== z.toLowerCase() ? `${z} en ${nd}: ${resto}` : `${z} en ${nd}`;
+}
+// CONSEJOS sacados del propio plan (22 oct 2026: las guías del lector salían con tips vacío). Las frases de consejo que ya
+// escribió Salma («Ojo…», «Lleva…», «Reserva…»), sin repetir y sin inventar nada. 0 €.
+function consejosDelPlan(textos, max = 6) {
+  const out = [], vistos = new Set();
+  const re = /^(?:ojo|consejo|truco|importante|lleva|llévate|reserva|evita|no olvides|cuidado|mejor (?:ir|llegar|salir|madrugar)|ve (?:pronto|temprano)|madruga|sal (?:pronto|temprano))\b/i;
+  for (const t of textos) {
+    for (const f of String(t || '').replace(/\*\*/g, '').split(/(?<=[.!?])\s+/)) {
+      const x = f.replace(/^[\s:—–-]+/, '').trim();
+      if (x.length < 25 || x.length > 240 || !re.test(x)) continue;
+      const k = x.toLowerCase().slice(0, 50);
+      if (vistos.has(k)) continue;
+      vistos.add(k); out.push(x.replace(/^(?:ojo|consejo|truco|importante)\s*[:,.]\s*/i, m => m.charAt(0).toUpperCase() === 'O' && /^ojo/i.test(m) ? 'Ojo: ' : ''));
+      if (out.length >= max) return out;
+    }
+  }
+  return out;
+}
 function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '', _sinDias = false } = {}) {
   _lectorMotivo = '';
   if (!tieneMarcasSitio(text)) return _lectorNo(`el plan no trae sitios marcados [[ ]] (${String(text || '').length} letras)`);
@@ -8407,7 +8448,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     r.duration_days = nDias;
     const dest = String(destino || region || '').trim();
     r.title = dest ? `${dest} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Ruta de ${nDias} ${nDias === 1 ? 'día' : 'días'}`;
-    r.summary = intro.slice(0, 300) || r.summary;
+    r.summary = cortarResumen(intro) || r.summary;
     console.log(`[LECTOR] plan sin días: ${n} sitios repartidos en orden en ${nDias} día(s)`);
     return r;
   }
@@ -8453,10 +8494,11 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     country: countryName || '',
     region: region || dest,
     duration_days: nDias,
-    summary: resumen.slice(0, 300),
+    summary: cortarResumen(resumen),
     stops,
     ...(diasTrayecto.length ? { dias_trayecto: diasTrayecto } : {}),   // días solo de viaje: [{day, day_title, texto}]
-    tips: [], tags: [], budget_level: 'medio', suggestions: [], maps_links: [],
+    tips: consejosDelPlan([...stops.map(s => s.narrative), ...diasTrayecto.map(v => v.texto), intro, introDia1]),
+    tags: [], budget_level: 'medio', suggestions: [], maps_links: [],
     pre_departure: null, practical_info: null,
     _lector: true,
   };
@@ -8996,6 +9038,15 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     if (nameOk && distKm < 10) return { valid: true, distKm };
     if (distKm < 1 && addrOk && !_isBusinessSwap(candidate, stop)) return { valid: true, distKm };
     if (!nameOk) return { valid: false, reason: 'name_mismatch', distKm };
+    // La coordenada que dio la IA puede estar mal (22 oct 2026: la Cueva de Kong Lor, de lo mejor de Laos, descartada por
+    // «demasiado lejos» y su día vacío). Con el nombre bueno, en el país y a menos de 120 km de alguna parada de ese día o
+    // de los de al lado, es ese sitio.
+    if (_enElPais(candidate) && Array.isArray(route.stops)) {
+      const _d = parseInt(stop.day, 10) || 0;
+      const vecina = route.stops.some(o => o !== stop && Math.abs((parseInt(o.day, 10) || 0) - _d) <= 1
+        && typeof o.lat === 'number' && typeof o.lng === 'number' && Math.abs(o.lat) > 0.01 && haversineKm(o.lat, o.lng, pLat, pLng) < 120);
+      if (vecina) { console.log(`[VERIFY] ↺ "${stop.name}" a ${Math.round(distKm)} km de su coordenada pero junto a su día → vale`); return { valid: true, distKm }; }
+    }
     return { valid: false, reason: 'too_far', distKm };
   }
 
@@ -9366,7 +9417,13 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       });
     }
   }
-  validatedStops.forEach(s => { delete s._asked; });
+  // NOMBRE QUE SE ENSEÑA = el que escribió Salma (22 oct 2026, Paco: «Style Motorbikes Vientiane – Helmet and Bike Shop»,
+  // nombres en escritura lao…). Es el que el viajero leyó en el plan; el de Google queda en google_name (place_id, enlace y
+  // foto son los del sitio verificado igual). Las cachés ya se guardaron arriba con los dos nombres.
+  validatedStops.forEach(s => {
+    if (s._asked && s._asked !== s.name && !opts.requireNameMatch) { s.google_name = s.name; s.name = s._asked; s.headline = s._asked; }
+    delete s._asked;
+  });
 
   // ── FILTRO POR LOCALIDAD / PROVINCIA (destino de punto, cualquier duración) ──
   // El destino es UNA ciudad ("Córdoba 7 días", "Gaucín 1 día"). El radio no distingue
@@ -17152,6 +17209,8 @@ INSTRUCCIONES:
                   // Mismo caso en el título: «Filipinas completa: Manila → Bohol» → «Filipinas: Manila → Bohol».
                   const _tit = (_pz && _c.titulo) ? _c.titulo.replace(new RegExp('^(' + _pz.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\s+(complet[ao]|enter[ao])\\b', 'i'), '$1') : _c.titulo;
                   if (_tit) { _fastPathRoute.title = _tit; _fastPathRoute.name = _tit; }
+                  // Siempre con los días (22 oct 2026): «Laos en 14 días: Vientiane → Pakse en moto».
+                  _fastPathRoute.title = _fastPathRoute.name = tituloConDias(_fastPathRoute.title, _fastPathRoute.duration_days, _fastPathRoute.region || _pz);
                 } else { _fastPathRoute = null; _lectorMotivo = 'no salieron las coordenadas'; }
               }
               if (_fastPathRoute) console.log(`[LECTOR] ✓ ${_fastPathRoute.stops.length} paradas, ${_fastPathRoute.duration_days} días, ${Date.now() - _tConv} ms — sin reescritura${_ciudad ? '' : ' (con coordenadas)'}`);
@@ -17164,6 +17223,13 @@ INSTRUCCIONES:
               _t2log.camino = _fastPathRoute ? 'sonnet' : 'fallo';
             }
             _t2log.ms_guia = Date.now() - _tConv;
+            // Título con los días en TODA guía nueva, salga por el lector o por la reescritura (22 oct 2026).
+            if (_fastPathRoute && !mergeIntoRoute && Array.isArray(_fastPathRoute.stops)) {
+              const _dd = _fastPathRoute.duration_days || Math.max(0, ..._fastPathRoute.stops.map(x => parseInt(x.day, 10) || 0));
+              _fastPathRoute.title = tituloConDias(_fastPathRoute.title || _fastPathRoute.name, _dd, _fastPathRoute.region || _fastPathRoute.country);
+              _fastPathRoute.name = _fastPathRoute.name || _fastPathRoute.title;
+              if (_fastPathRoute.summary) _fastPathRoute.summary = cortarResumen(_fastPathRoute.summary);
+            }
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < _minStops)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
             // Solo consume guía/cambio si la conversión ha salido bien (un fallo no gasta el cupo)
             if (_fastPathRoute && _usageKind !== 'chat') _usageConsume = _usageKind;
