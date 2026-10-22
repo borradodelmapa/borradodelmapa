@@ -1326,6 +1326,9 @@ async function usageGate(env, authUser, kind, opts) {
           // GUIDES_NO_DAILY_CAP (wrangler.toml, 21 oct 2026, Paco): cuentas SIN el tope diario de guías — la cuenta de pruebas
           // con la que se producen las guías de Borrado del Mapa. El techo de gasto por cuenta (budgetEur) sigue valiendo.
           const _sinTope = String(env.GUIDES_NO_DAILY_CAP || '').split(',').map(s => s.trim()).includes(authUser.uid);
+          // Una guía comprada (guía suelta, premium_bonus_guides) vale también por encima del tope diario: sin esto, quien tiene
+          // trimestral/anual y compra una guía al chocar con el tope pagaba y seguía bloqueado (Paco, 22 oct 2026). La gasta usageRecord.
+          if (hoy >= L.guidesPerDay && !_sinTope && (authUser.bonus_guides || 0) > 0) return { ok: true, bonus: true };
           if (hoy >= L.guidesPerDay && !_sinTope) return { ok: false, limit: 'guide', message: 'Hoy has creado ' + L.guidesPerDay + ' guías, que es el máximo diario. Mañana puedes seguir. 💛' };
           return { ok: true };
         }
@@ -1394,7 +1397,11 @@ async function usageRecord(env, authUser, delta) {
     await usageWrite(env, mk, month, 60 * 60 * 24 * 100);
     // Guía de "guia" (cupo mensual 0): sale de sus guías (premium_bonus_guides); usageGate la dejó pasar por eso.
     const _capMes = PLAN_LIMITS[_plan].guidesPerMonth;
-    if (delta.guides && authUser.premium_active && typeof _capMes === 'number' && month.guides > _capMes && (authUser.bonus_guides || 0) > 0) {
+    // Trimestral/anual por encima del tope diario: la guía sale de una comprada (usageGate la dejó pasar por eso)
+    const _capDia = PLAN_LIMITS[_plan].guidesPerDay;
+    const _sobreDia = typeof _capDia === 'number' && ((month.gdays && month.gdays[usageToday()]) || 0) > _capDia
+      && !String(env.GUIDES_NO_DAILY_CAP || '').split(',').map(x => x.trim()).includes(uid);
+    if (delta.guides && authUser.premium_active && ((typeof _capMes === 'number' && month.guides > _capMes) || _sobreDia) && (authUser.bonus_guides || 0) > 0) {
       const left = Math.max(0, authUser.bonus_guides - delta.guides);
       try {
         await firestoreAdminPatch(env, 'users/' + uid, { premium_bonus_guides: { integerValue: String(left) } });
