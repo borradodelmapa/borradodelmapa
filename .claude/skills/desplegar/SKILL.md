@@ -14,7 +14,7 @@ Si el cambio toca una API de pago, decírselo a Paco antes (§8).
 2. `git add` + `commit` (español, corto, claro) + `git push`.
 3. Comprobar que la web sirve la versión nueva (GitHub Pages tarda 45 s – varios minutos):
    `curl.exe -s https://borradodelmapa.com/index.html | Select-String '\.js\?v='`
-4. Worker (solo si cambió `worker/`): `cd C:\Users\User\Desktop\salma\worker; npx wrangler deploy -c wrangler.toml`
+4. Worker (solo si cambió `worker/`): **ANTES, `node scripts/probar-worker-humo.mjs` (0 €, segundos) — si sale ❌, NO se despliega** (22 oct 2026: un error de código tumbó el chat de todos 80 s). Después: `cd C:\Users\User\Desktop\salma\worker; npx wrangler deploy -c wrangler.toml`. Y nada más desplegar, un mensaje real (`node scripts/probar-chat.cjs "hola"`).
    — **siempre con `-c`** (el `wrangler.jsonc` de la raíz se coge por error sin él). PowerShell no tiene `&&`: usar `;`.
    **Alternativa desde el móvil (sin terminal), Cloudflare Workers Builds (montado 11 sept 2026):** el Worker
    `salma-api` tiene el repo conectado (dashboard → salma-api → Settings → Builds). Cualquier commit directo a

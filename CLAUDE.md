@@ -48,7 +48,8 @@ Worker perdidas. Las causas fueron de método, no técnicas.
 2. `git add` + `commit` + `push`.
 3. Comprobar que la web sirve la versión nueva (Pages tarda 45 s – varios min):
    `curl.exe -s https://borradodelmapa.com/index.html | Select-String '\.js\?v='`
-4. Desde `worker\`: `npx wrangler deploy -c wrangler.toml` — **siempre con `-c`** (en la raíz hay un
+4. **Antes: `node scripts/probar-worker-humo.mjs`** (0 €; si sale ❌, NO se despliega: el 22 oct un error de código tumbó el chat de todos 80 s).
+   4. Desde `worker\`: `npx wrangler deploy -c wrangler.toml` — **siempre con `-c`** (en la raíz hay un
    `wrangler.jsonc` que se coge por error). PowerShell no tiene `&&`: encadenar con `;`. Alternativa sin
    terminal: Cloudflare Workers Builds (commit a `main` desde github.com, Directorio raíz = `worker`).
 5. `curl.exe -s https://salma-api.borradodelmapa-api.workers.dev/version` → el Version ID debe coincidir con el del
