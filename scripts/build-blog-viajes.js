@@ -20,6 +20,8 @@ const BV_CSS_V = 3;     // blog-viajes.css
 
 const caps = require('./blog-viajes-data.js');
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
+// Rutas completas (guías públicas <slug>.html de la app): enlazadas desde el índice del blog para que Google las encuentre.
+const rutas = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-rutas.json'), 'utf8'));
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const md = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
@@ -195,6 +197,12 @@ const bloqueGuias = guias.map((g) => `      <a class="bv-gcard" href="${g.u}">
         <span class="meta">${g.f}</span>
       </a>`).join('\n');
 
+const bloqueRutas = rutas.map((g) => `      <a class="bv-gcard" href="${g.u}">
+        <h3>${g.t}</h3>
+        <p>${g.d}</p>
+        <span class="meta">${g.f}</span>
+      </a>`).join('\n');
+
 const indice = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -223,6 +231,14 @@ ${CABECERA}
   </div>
 
 ${bloqueSeries}
+
+  <section class="bv-guias" id="rutas">
+    <h2>Rutas completas</h2>
+    <p class="bv-guias-sub">Itinerarios día a día creados con Salma, con mapa y paradas.</p>
+    <div class="bv-grid">
+${bloqueRutas}
+    </div>
+  </section>
 
   <section class="bv-guias" id="guias">
     <h2>Guías prácticas</h2>
