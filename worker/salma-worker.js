@@ -18557,7 +18557,9 @@ REGLAS:
         // Fotos de TODO plan por días que no traiga fotos (22 oct 2026, Paco: «10 días Laos en moto de alquiler» sin ninguna foto):
         // con «alquiler», «ferry», «bus»… el plan se escribe con herramientas y antes solo se ponían fotos al plan sin herramientas,
         // mientras el prompt dice que en un plan las fotos las pone el sistema. fotosDeSitiosMarcados no hace nada si ya hay fotos.
-        if (guidedIsReco && !route && tieneMarcasSitio(reply)) {
+        // Y también con la guía abierta (22 oct 2026, Paco: «echo de menos que se muestren fotos de lo que propone»): si Salma propone
+        // sitios, salen con su foto. Las paradas que ya están en la guía usan la foto de la guía (0 €); las nuevas, el comprobador de siempre.
+        if ((guidedIsReco || editingActiveRoute) && !route && tieneMarcasSitio(reply)) {
           try {
             reply = await fotosDeSitiosMarcados(reply, { env, fotoCtx: _fotoCtx, fotoNombres: _fotoNombres, max: 4, porSitio: true });
           } catch (e) { console.log('[FOTO-PLAN] ' + (e && e.message)); }

@@ -56,6 +56,23 @@ const mapaItinerario = {
       </div>
     `;
     this._container.appendChild(header);
+    // Portada de la guía (Paco, 22 oct 2026: «falta cabecera»): foto de la primera parada que la tenga, con el título, días,
+    // paradas y ciudades encima. Misma foto que su tarjeta (/photo, ya guardada en R2: no suma coste).
+    {
+      const _p = _allStops.find(s => s && s.photo_ref);
+      if (_p) {
+        const ex = routeData.guia_extra || {};
+        const ciudades = Array.isArray(ex.bloques) ? [...new Set(ex.bloques.map(b => b.ciudad).filter(Boolean))] : [];
+        const portada = document.createElement('div');
+        portada.className = 'itin-portada';
+        portada.style.cssText = 'position:relative;margin:0 0 12px;overflow:hidden;background:#1c1f22;min-height:200px';
+        portada.innerHTML = `<img src="${window.SALMA_API}/photo?ref=${encodeURIComponent(_p.photo_ref)}${this._pidQS(_p)}" alt="${this._esc(routeData.title || _p.name)}" style="display:block;width:100%;height:240px;object-fit:cover" onerror="this.style.display='none'">`
+          + `<div style="position:absolute;inset:auto 0 0 0;padding:40px 16px 14px;background:linear-gradient(transparent,rgba(0,0,0,.85))">`
+          + `<div style="font:800 28px/1.05 'Barlow Condensed',sans-serif;text-transform:uppercase;color:#fff">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>`
+          + `<div style="margin-top:6px;font-size:13px;color:#e8e6e1">${this._totalDays(_allStops)} días · ${_allStops.length} paradas${ciudades.length ? ' · ' + this._esc(ciudades.slice(0, 6).join(' → ')) : (country ? ' · ' + this._esc(country) : '')}</div></div>`;
+        this._container.appendChild(portada);
+      }
+    }
     if (typeof historiaModule !== 'undefined') {
       // «Historia de [ciudad]» primero (Paco, 20 oct 2026: en la guía de Sevilla, la historia de Sevilla) y después la del país.
       // Solo sale si Wikipedia tiene artículo de esa ciudad (historia.js lo comprueba); si no, el hueco ni se ve.
