@@ -1697,14 +1697,32 @@ const salma = {
         if (!isEdit) this.currentRouteId = null;
         const prevStops = this.currentRoute?.stops || [];
         const prevStopsCount = prevStops.length;
-        this.currentRoute = data.route;
+        // Comprobación de cordura ANTES de pintar nada (22 oct 2026, Paco): si la "edición" pierde paradas que no se pidió
+        // quitar, NO se toca la guía hasta que el viajero elija. Antes se pintaba y se tomaba como guía actual primero y se
+        // preguntaba después: «Descartar» no tenía nada que deshacer en pantalla y el siguiente cambio partía de la mala.
+        const _normName = (s) => (s || '').toString().trim().toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const _newNames = new Set((data.route.stops || []).map(s => _normName(s.name)));
+        const _keptCount = prevStops.filter(s => _newNames.has(_normName(s.name))).length;
+        const _keptRatio = prevStopsCount > 0 ? (_keptCount / prevStopsCount) : 1;
+        // Además del % conservado: contar paradas PERDIDAS. 12 de 19 = 63% no saltaba y la
+        // guía se guardaba con 7 paradas menos (21 sept 2026). Sin verbo de quitar/cambiar en
+        // el mensaje, perder aunque sea una parada es sospechoso; con él, se tolera hasta 2.
+        const _lostCount = prevStopsCount - _keptCount;
+        const _removalIntent = /\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i.test(msg || '');
+        // Edición exacta por operaciones (SALMA_ROUTE_EDIT, la decide el Worker): lo que falta lo pidió el usuario.
+        const _looksLikeCorruption = isEdit && prevStopsCount >= 3 && !data.ops_edit &&
+          (_keptRatio < 0.5 || (!_removalIntent && _lostCount >= 1) || _lostCount >= 3);
+        if (!_looksLikeCorruption) this.currentRoute = data.route;
         // Mientras el popup de "consulta" sobre una guía está abierto
         // (_chatAreaOverride, ver mapa-itinerario.js), nunca navegar — si es
         // una edición de ESA guía (isEdit true: currentRouteId se sincroniza
         // al abrir el popup), se parchea en el sitio igual que ya hace el
         // chat normal cuando editas una ruta con draft; solo se abre una
         // vista NUEVA si de verdad es una ruta distinta sin relación.
-        if ((!data._hadDraft || data._isBlocks) && !(this._chatAreaOverride && isEdit)) {
+        if (_looksLikeCorruption) {
+          this._removeLoading();   // la guía en pantalla no se toca hasta que elija (abajo)
+        } else if ((!data._hadDraft || data._isBlocks) && !(this._chatAreaOverride && isEdit)) {
           // Ruta nueva o ruta de bloques: abrir vista itinerario
           this._removeLoading();
           try {
@@ -1757,48 +1775,42 @@ const salma = {
         }
 
         if (isEdit) {
-          // Comprobación de cordura: si la "edición" ha cambiado casi todas las paradas
-          // (nombres que ya no aparecen ni uno), probablemente la IA ha reconstruido mal
-          // la ruta en vez de editarla de verdad. No sobrescribir Firestore sin más —
-          // pedir confirmación explícita primero.
-          const _normName = (s) => (s || '').toString().trim().toLowerCase()
-            .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-          const _newNames = new Set((data.route.stops || []).map(s => _normName(s.name)));
-          const _keptCount = prevStops.filter(s => _newNames.has(_normName(s.name))).length;
-          const _keptRatio = prevStopsCount > 0 ? (_keptCount / prevStopsCount) : 1;
-          // Además del % conservado: contar paradas PERDIDAS. 12 de 19 = 63% no saltaba y la
-          // guía se guardaba con 7 paradas menos (21 sept 2026). Sin verbo de quitar/cambiar en
-          // el mensaje, perder aunque sea una parada es sospechoso; con él, se tolera hasta 2.
-          const _lostCount = prevStopsCount - _keptCount;
-          const _removalIntent = /\b(quita|quíta|elimina|borra|sustituye|reempla|cambia|mueve|swap|menos d[ií]as|en vez de|en lugar de)\b/i.test(msg || '');
-          // Edición exacta por operaciones (SALMA_ROUTE_EDIT, la decide el Worker): lo que falta lo pidió el usuario.
-          const _looksLikeCorruption = prevStopsCount >= 3 && !data.ops_edit &&
-            (_keptRatio < 0.5 || (!_removalIntent && _lostCount >= 1) || _lostCount >= 3);
-
           if (_looksLikeCorruption) {
-            this._addSalmaBubble(`Espera — con este cambio tu guía pasaría de ${prevStopsCount} a ${(data.route.stops || []).length} paradas (${_lostCount} de las que tenías desaparecen). Puede que se me haya ido la olla reconstruyendo la ruta. ¿La guardo igualmente, o la descarto y seguimos con la que tenías?`);
+            this._addSalmaBubble(`Ojo: con este cambio tu guía pasaría de ${prevStopsCount} a ${(data.route.stops || []).length} paradas (se perderían ${_lostCount} de las que tienes). No he tocado nada todavía: tu guía sigue como estaba.`);
             const _area = this._getChatArea();
             if (_area) {
               const _rw = document.createElement('div');
-              _rw.className = 'historia-chat-chip-wrap';
-              const _saveBtn = document.createElement('button');
-              _saveBtn.className = 'historia-chat-chip';
-              _saveBtn.textContent = '💾 Guardar así de todos modos';
-              _saveBtn.addEventListener('click', async () => {
-                _rw.remove();
-                await this._commitRouteEdit(data.route);
-                this._addSalmaBubble('Vale, guardada. Dime si quieres más cambios.');
-              });
-              const _discardBtn = document.createElement('button');
-              _discardBtn.className = 'historia-chat-chip';
-              _discardBtn.textContent = '↩️ Descartar, mantener la de antes';
+              _rw.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:6px 16px 14px;';
+              // Botones legibles (22 oct 2026, Paco: «no se leen»): letra normal y grande; la opción segura, destacada.
+              const _btn = (txt, principal) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.textContent = txt;
+                b.style.cssText = 'width:100%;padding:12px 16px;border-radius:10px;font:600 1rem/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;cursor:pointer;text-align:center;'
+                  + (principal ? 'background:#f07a1e;color:#111;border:none;' : 'background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.45);');
+                return b;
+              };
+              const _discardBtn = _btn('Mantener mi guía como estaba', true);
               _discardBtn.addEventListener('click', () => {
                 _rw.remove();
-                this._addSalmaBubble('Descartado — no he tocado tu ruta guardada.');
-                if (typeof this.cargarGuia === 'function') this.cargarGuia(this.currentRouteId);
+                this._addSalmaBubble('Hecho: tu guía sigue igual. Pídeme el cambio de otra forma y lo intento sin quitar nada.');
               });
-              _rw.appendChild(_saveBtn);
+              const _saveBtn = _btn(`Guardar el cambio (quedaría con ${(data.route.stops || []).length} paradas)`, false);
+              _saveBtn.addEventListener('click', async () => {
+                _rw.remove();
+                this.currentRoute = data.route;
+                try {
+                  if (window._itinViewOpen && this._chatAreaOverride && typeof window._refreshItinInPlace === 'function') {
+                    window._refreshItinInPlace(data.route, this.currentRouteId);
+                  } else if (typeof window.openItinerarioView === 'function') {
+                    window.openItinerarioView(data.route, this.currentRouteId, { fromChat: true, saved: true });
+                  }
+                } catch (e) { console.warn('Error pintando la guía cambiada:', e); }
+                await this._commitRouteEdit(data.route);
+                this._addSalmaBubble('Guardada con el cambio. Dime si quieres algo más.');
+              });
               _rw.appendChild(_discardBtn);
+              _rw.appendChild(_saveBtn);
               _area.appendChild(_rw);
               this._scrollToBottom(true);
             }
