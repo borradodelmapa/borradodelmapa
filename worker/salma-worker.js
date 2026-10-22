@@ -17490,7 +17490,10 @@ REGLAS:
         const _pi = _placeIntent || {};
         // Salma buscó sitios en Google (buscar_lugar): "Cómo llegar" a esos sitios siempre, con el place_id de la búsqueda
         // (catalogOnly: nada de búsquedas nuevas). Paco, 30 sept 2026: pedía un albergue y no había cómo llegar.
-        const _soloCatalogo = !((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi) && _chatPlaces.size > 0;
+        // Excepción (22 oct 2026, Paco): si el turno trajo hoteles de buscar_hotel y no pidió ir a ningún sitio, el hotel ya lleva
+        // su enlace de reserva con fechas — el «Cómo llegar» de Maps sobra (salía además si Claude llamaba a buscar_lugar).
+        const _soloHoteles = _hotelsShown.length > 0 && !((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi);
+        const _soloCatalogo = !((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi) && _chatPlaces.size > 0 && !_soloHoteles;
         const _chatWantsMapLinks = !!((_pi.quiere_ir && !_pi.es_destino) || _pi.cerca_de_mi) || _soloCatalogo;
         const _linkTarget = (_pi.quiere_ir && _pi.sitio && !_pi.es_destino && !_pi.cerca_de_mi) ? _pi.sitio : null;
         // Aviso "pídemelo": solo si quedan sitios sin enlace y solo la primera vez en la conversación. (Ya no depende
