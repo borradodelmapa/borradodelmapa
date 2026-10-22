@@ -141,6 +141,16 @@ Paco: **"lo que vale para uno con casi toda seguridad vale para el otro. Así qu
 - Antes de proponer cualquier pieza nueva (mapa, buscador, tarjeta…), **buscar si ya existe** (grep del repo +
   `docs/features-inventario.md`) y partir de ella. Proponer librerías nuevas sin mirar esto es un fallo.
 
+### 13. UN SOLO COMPROBADOR DE SITIOS — NUNCA UNA COPIA (22 oct 2026, caso mvj8dc8qqbl7)
+Paco: **"no tiene sentido arreglar por un lado y dejar otro sin hacer"**. El 21 oct se arregló la zona de 400 km en las
+guías y seguía viva en las fotos del chat porque eran **otra copia**.
+- "¿Este resultado de Google es el sitio?" se decide en UN sitio: **`strictNameMatch`** (nombres, español/inglés) y
+  **`verifyAllStops`** (zona y distancia). Guías, enlaces y fotos del chat, planes y `/photo` pasan por ahí
+  (fotos: `fotosVerificadas` → parada de la guía abierta o `resolveChatPlaces`).
+- Prohibido escribir otro comprobador, otra zona o otra comparación de nombres. Un fallo nuevo se arregla ahí y su caso
+  entra en `scripts/probar-nombres.cjs` (0 €, debe dar todo bien) **antes** de subir.
+- Mismo principio para el prompt: una regla se escribe una vez, no una por modo (auditoría: `docs/auditoria-prompt-salma.md`).
+
 ---
 ## Normas de desarrollo (texto completo: `docs/normas-desarrollo.md`)
 - **Autonomía (11 sept):** bajo riesgo (docs, `CLAUDE.md`, git, subir lo ya hablado y probado en la conversación)
