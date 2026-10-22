@@ -973,7 +973,8 @@ function usaPromptUnico(env, uid) {
   const v = String((env && env.PROMPT_UNICO) || '').trim();
   if (!v) return false;
   if (v === '*') return true;
-  return !!uid && v.split(',').map(x => x.trim()).includes(uid);
+  // «abc123*» = cualquier uid que empiece así (10+ caracteres de un uid aleatorio de Firebase = una sola cuenta).
+  return !!uid && v.split(',').map(x => x.trim()).filter(Boolean).some(x => x === uid || (x.endsWith('*') && x.length >= 9 && uid.startsWith(x.slice(0, -1))));
 }
 
 // ═══════════════════════════════════════════════════════════════
