@@ -180,6 +180,7 @@ const mapaItinerario = {
         (typeof guideRenderer._renderNearby === 'function'
           ? guideRenderer._renderNearby(routeData.nearby_stops || null, country, routeData.anchor_locality || '')
           : ''),
+        (typeof guideRenderer._renderGuiaExtra === 'function' ? guideRenderer._renderGuiaExtra(routeData.guia_extra || null) : ''),
         guideRenderer._renderPreDeparture(routeData.pre_departure || null),
         guideRenderer._renderPracticalInfo(routeData.practical_info || null),
         guideRenderer._renderTips(routeData.tips || null),

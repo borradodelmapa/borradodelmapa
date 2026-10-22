@@ -88,6 +88,7 @@ const guideRenderer = {
       </div>
 
       ${this._renderNearby(r.nearby_stops, country, r.anchor_locality)}
+      ${this._renderGuiaExtra(r.guia_extra)}
       ${this._renderPreDeparture(r.pre_departure)}
       ${this._renderPracticalInfo(r.practical_info)}
       ${this._renderTips(r.tips)}
@@ -505,6 +506,35 @@ const guideRenderer = {
   },
 
   // ═══ RENDER TIPS ═══
+  // ═══ GUÍA COMPLETA (22 oct 2026): introducción, «Antes de ir» y preguntas frecuentes (route.guia_extra) ═══
+  // Lo rellena el Worker al crear la guía: lo que escribió Salma en el plan + los datos verificados del país.
+  _renderGuiaExtra(ex) {
+    if (!ex) return '';
+    let html = '';
+    if (ex.intro) {
+      html += '<div class="guide-section guide-intro"><div class="guide-section-label">SOBRE ESTA RUTA</div>'
+        + '<div class="guide-info-block">' + escapeHTML(ex.intro) + '</div></div>';
+    }
+    const a = ex.antes_de_ir || {};
+    const filas = [
+      ['🗓️ Mejor época', a.mejor_epoca], ['⛔ Evitar', a.evitar], ['💰 Presupuesto', a.presupuesto], ['🛂 Visado', a.visado],
+      ['🩺 Vacunas', a.vacunas], ['🛡️ Seguro', a.seguro], ['🚌 Cómo moverse', a.moverse], ['🎒 Qué llevar', a.llevar],
+      ['💶 Moneda', a.moneda], ['🔌 Enchufes', a.enchufes], ['🚰 Agua', a.agua], ['⚠️ Seguridad', a.seguridad],
+      ['🚨 Emergencias', a.emergencias], ['🤝 Propinas', a.propinas],
+    ].filter(f => f[1]);
+    if (filas.length) {
+      html += '<div class="guide-section guide-antes-de-ir"><div class="guide-section-label">ANTES DE IR</div>'
+        + filas.map(f => '<div class="guide-info-block"><strong>' + f[0] + '</strong><br>' + escapeHTML(f[1]) + '</div>').join('')
+        + '</div>';
+    }
+    if (Array.isArray(ex.faq) && ex.faq.length) {
+      html += '<div class="guide-section guide-faq"><div class="guide-section-label">PREGUNTAS FRECUENTES</div>'
+        + ex.faq.map(f => '<details class="guide-info-block"><summary><strong>' + escapeHTML(f.p) + '</strong></summary><p>' + escapeHTML(f.r) + '</p></details>').join('')
+        + '</div>';
+    }
+    return html;
+  },
+
   _renderTips(tips) {
     if (!tips || !tips.length) return '';
     let html = '<div class="guide-tips"><div class="guide-tips-label">CONSEJOS DE SALMA</div>';

@@ -850,7 +850,7 @@ const NUCLEO_FORMATO = `FORMATO
 — Prosa, como si lo contaras en un bar. Saltos de línea para separar bloques. **Negrita** solo dentro de la frase, para datos clave: **9 €**, **2h30**, **Lomprayah**.
 — SITIOS: cada sitio real que nombras (monumento, barrio, plaza, mirador, playa, pueblo, parque, restaurante, bar, hotel, camping, parking, estación) va entre dobles corchetes con su nombre exacto de Google Maps: [[Puente Nuevo]]. Un sitio por corchete: "[[El Burgo]] o [[Montejaque]]". Lo que no es un sitio (precios, horas, teléfonos, fechas, títulos de día, empresas como Renfe o Lomprayah) no va entre corchetes. Nunca corchetes dentro de un JSON ni en lo que pides a una herramienta. El sistema los enseña como negrita con su enlace y su foto verificados.
 — PROHIBIDO: viñetas (•, guiones), listas numeradas, encabezados (### o una negrita sola en su línea como **Transporte:**), separadores (--- ═══), coordenadas, y frases vacías ("aquí tienes", "claro que sí", "¡genial!", "¡perfecto!").
-— Excepciones, y solo estas: el plan por días lleva su título de cada día (**Día 1 — Título**); los resultados de vuelos, hoteles y coches van una opción por línea (✈️ Opción 1 — 120 € — sale el 3 — 2h10, sin escala); los sitios de una urgencia o ayuda cercana (farmacia, hospital, taller…) uno por línea con su teléfono; el tiempo real, una línea para ahora y otra para los próximos días.`;
+— Excepciones, y solo estas: el plan por días lleva su título de cada día (**Día 1 — Título**) y su bloque **Antes de ir**; los resultados de vuelos, hoteles y coches van una opción por línea (✈️ Opción 1 — 120 € — sale el 3 — 2h10, sin escala); los sitios de una urgencia o ayuda cercana (farmacia, hospital, taller…) uno por línea con su teléfono; el tiempo real, una línea para ahora y otra para los próximos días.`;
 
 // ── Lo que solo existe en la APP ──
 const CANAL_WEB = `ESTÁS EN LA APP DE BORRADO DEL MAPA
@@ -935,6 +935,13 @@ function capPlanPorDias(enGuiaAbierta) {
 (3-5 sitios por día, cada uno en su párrafo con 4-5 frases con datos: ese texto es la descripción de la parada en la guía, así que tiene que valer por sí solo. Nada de relleno: cada frase lleva un dato. Ningún día con un solo sitio, salvo un día que sea solo de viaje.)
 — TRAYECTOS (vuelo, ferry, bus, furgoneta, tren, noche de paso) no son sitios: van en su propia línea que empieza por "Cómo llegar:", sin corchetes; tampoco van entre corchetes el aeropuerto, el puerto, la estación ni la terminal. Ej.: Cómo llegar: furgoneta de Puerto Princesa a El Nido, 5-6 h; sal temprano.
 — COMER: UN solo restaurante en todo el plan, al final: "Dónde comer: [[Restaurante]] — plato y precio. Si quieres más sitios para comer, pídemelo." Ningún otro sitio de comer entre [[ ]].
+— ANTES DE IR: después de «Dónde comer» y antes del cierre, este bloque, una línea cada cosa, con datos concretos de ESTE viaje (lo que no sepas, no lo pongas; sin corchetes):
+**Antes de ir**
+Mejor época: cuál es y qué cambia en las demás, en una frase.
+Presupuesto: cuánto al día, en euros aproximados, para un viaje como este (alojamiento, comida, transporte).
+Seguro: qué conviene y por qué en este viaje.
+Cómo moverse: entre las ciudades del plan, con qué y cuánto se tarda.
+Qué llevar: lo que de verdad hace falta aquí.
 — DÍAS: los que diga. Sin número: ciudad o pueblo → 1 día; ruta o road trip por varios sitios ("ruta", "recorrido", "de sur a norte", varios sitios lejos entre sí) → nunca 1 día por defecto: calcula los razonables (100-150 km con paradas al día; moto y caravana más despacio), de punta a punta en orden geográfico, sin ir y volver, y dilo al principio: "Esto da para N días".
 — RADIO PARA UNA CIUDAD O PUEBLO (no para una ruta): 1-2 días → todo en la localidad y su entorno (≤30 min), nada de comarca salvo que pida ruta; 3-4 días → como mucho 1 excursión de medio día a <45 min, dicha como opcional; 5+ días → como mucho 1-2 excursiones de día a <1 h, el resto barrios, museos, mercados y vida local; nunca dos provincias. Si la ciudad se queda corta, propón menos días o más profundidad, no pueblos lejanos.
 — Si hay cuestionario guiado o [PERFIL DEL VIAJERO] (compañía, mascota, vehículo, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a eso (si chocan, manda el cuestionario); lo que falte, por defecto: en pareja, ritmo equilibrado, presupuesto medio, cultura y sitios emblemáticos.
@@ -8322,6 +8329,131 @@ function consejosDelPlan(textos, max = 6) {
   }
   return out;
 }
+// ═══ GUÍA COMPLETA PARA LEER Y PARA GOOGLE (22 oct 2026, Paco: «han de tener absolutamente todo») ═══
+// Lo que una guía trae además de sus paradas: «Antes de ir» (lo que escribió Salma en el plan + los DATOS VERIFICADOS del
+// país en KV), bloques por ciudad (de las direcciones de Google), y una presentación para la web (intro, FAQ, título y
+// descripción) hecha SOLO con el plan y esos datos. Todo va en route.guia_extra; la app y la página pública lo pintan.
+// Bloque «Antes de ir» del plan: «Mejor época: …», «Presupuesto: …», «Seguro: …», «Cómo moverse: …», «Qué llevar: …».
+function leerAntesDeIr(text) {
+  const L = String(text || '').split(/\r?\n/);
+  const i = L.findIndex(l => !/\[\[/.test(l) && /^[^A-Za-zÁÉÍÓÚáéíóú]*antes de ir\b/i.test(l.trim()));
+  if (i < 0) return null;
+  const claves = [[/^mejor [eé]poca/i, 'mejor_epoca'], [/^presupuesto/i, 'presupuesto'], [/^seguro/i, 'seguro'],
+    [/^c[oó]mo moverse|^moverse|^transporte/i, 'moverse'], [/^qu[eé] llevar|^llevar|^en la mochila/i, 'llevar']];
+  const out = {};
+  for (const raw of L.slice(i + 1, i + 16)) {
+    const l = raw.replace(/\*\*/g, '').replace(/^[\s•·*-]+/, '').trim();
+    if (!l) continue;
+    if (/crear ruta con mapa|a[ñn]adir a la gu[ií]a/i.test(l) || /^[^A-Za-zÁÉÍÓÚáéíóú0-9]*D[IÍií]A\s+\d/i.test(l)) break;
+    const m = l.match(/^([^:]{3,30}):\s*(.+)$/);
+    if (!m) continue;
+    const c = claves.find(([re]) => re.test(m[1].trim()));
+    if (c && !out[c[1]]) out[c[1]] = quitarMarcas(m[2]).replace(/\s+/g, ' ').trim().slice(0, 500);
+  }
+  return Object.keys(out).length ? out : null;
+}
+// Texto de una parada: entero hasta ~1.400 letras y, si hay que cortar, en una frase entera (antes: 700 a lo bruto).
+function cortarTexto(t, max = 1400) { return cortarResumen(t, max); }
+// Ciudad de una parada, de la dirección verificada de Google: el trozo con código postal (sin el número) o el penúltimo.
+function ciudadDeDireccion(addr) {
+  const p = String(addr || '').split(',').map(x => x.trim()).filter(Boolean);
+  if (p.length < 2) return '';
+  const cp = p.slice(0, -1).reverse().find(x => /\b\d{4,6}\b/.test(x));
+  // Sin código postal: el último trozo antes del país que no sea provincia, región o distrito («Pakse, Champasak Province»).
+  const sinAdmin = p.slice(0, -1).filter(x => !/\b(province|provincia|region|regi[oó]n|district|distrito|prefecture|state|estado|county|departamento|governorate)\b/i.test(x));
+  const c = (cp ? cp.replace(/\b\d{4,6}\b/g, '') : (sinAdmin[sinAdmin.length - 1] || p[p.length - 2])).replace(/[^\p{L}\s'’.-]/gu, '').replace(/\s+/g, ' ').trim();
+  return /^[\p{Script=Latin}\s'’.-]{2,40}$/u.test(c) ? c : '';
+}
+// Bloques por ciudad: días seguidos en la misma ciudad → «Bangkok, días 1-3».
+function bloquesPorCiudad(stops) {
+  const porDia = new Map();
+  for (const s of stops || []) {
+    const d = parseInt(s.day, 10) || 1;
+    let c = ciudadDeDireccion(s.verified_address);
+    // «Kong Lor Cave, Khammouane Province, Laos»: el trozo es el propio sitio, no una ciudad.
+    const _n = x => normalizeForMatch(x || '');
+    if (c && [s.name, s.google_name, s.headline].some(x => x && (_n(x).includes(_n(c)) || _n(c).includes(_n(x))))) c = '';
+    if (!porDia.has(d)) porDia.set(d, {});
+    if (c) porDia.get(d)[c] = (porDia.get(d)[c] || 0) + 1;
+  }
+  const bloques = [];
+  for (const d of [...porDia.keys()].sort((a, b) => a - b)) {
+    const cuenta = porDia.get(d);
+    const ciudad = Object.keys(cuenta).sort((a, b) => cuenta[b] - cuenta[a])[0] || '';
+    const ult = bloques[bloques.length - 1];
+    if (ult && ult.ciudad === ciudad && ult.hasta === d - 1) ult.hasta = d;
+    else bloques.push({ ciudad, desde: d, hasta: d });
+  }
+  return bloques.filter(b => b.ciudad);
+}
+// «Antes de ir»: lo del plan manda; lo que falte, de los datos verificados del país (KV dest:<cc>:base). Nada inventado.
+function antesDeIrCompleto(plan, kv) {
+  const a = plan || {}, k = kv || {};
+  const v = x => (x && x !== 'null' && x !== 'undefined') ? String(x).trim() : '';
+  const out = {
+    mejor_epoca: v(a.mejor_epoca) || v(k.mejor_epoca),
+    evitar: v(k.evitar_epoca),
+    presupuesto: v(a.presupuesto) || ((v(k.coste_diario_mochilero) || v(k.coste_diario_medio)) ? [v(k.coste_diario_mochilero) && `mochilero ${v(k.coste_diario_mochilero)} al día`, v(k.coste_diario_medio) && `medio ${v(k.coste_diario_medio)} al día`].filter(Boolean).join(' · ') : ''),
+    visado: v(k.visado_espanoles) ? `Con pasaporte español: ${v(k.visado_espanoles)}` : '',
+    seguro: v(a.seguro),
+    moverse: v(a.moverse),
+    llevar: v(a.llevar),
+    moneda: [v(k.moneda), v(k.cambio_aprox_eur)].filter(Boolean).join(' · '),
+    enchufes: v(k.enchufes), agua: v(k.agua_potable), vacunas: v(k.vacunas), seguridad: v(k.seguridad),
+    emergencias: v(k.emergencias), propinas: v(k.propinas),
+  };
+  for (const key of Object.keys(out)) if (!out[key]) delete out[key];
+  return Object.keys(out).length ? out : null;
+}
+// Presentación para la web: intro 100-150 palabras, FAQ 4-6, título SEO (<60 con año) y descripción (~150), SOLO con el plan
+// y los datos del país. Una llamada a Claude por guía (~0,02-0,03 €). null si falla (la guía sale igual, sin esto).
+async function presentacionGuia(route, planTexto, antes, env, usageAcc = null) {
+  if (!env.ANTHROPIC_API_KEY || !route || !Array.isArray(route.stops) || !route.stops.length) return null;
+  const year = new Date().getFullYear();
+  const dias = route.duration_days || Math.max(...route.stops.map(s => parseInt(s.day, 10) || 1));
+  const zona = route.country || route.region || '';
+  const sys = `Escribes los textos de presentación de una guía de viaje para su página web (Borrado del Mapa, la guía la hizo Salma). Español de España, tuteando, directo y con datos, sin frases vacías ni tono de chat, sin emojis. USA SOLO lo que dice el PLAN y los DATOS DEL PAÍS que te paso: si un dato no está ahí, no lo pongas. Responde SOLO con JSON, sin backticks:
+{"titulo_seo":"máx. 58 caracteres: destino + días + lo más buscado + (${year}). Ej.: «Laos en moto en 14 días: Vientiane → Pakse (${year})»","descripcion":"140-155 caracteres: qué recorre, cuántos días y paradas, y para quién","intro":"100-150 palabras: el recorrido, la mejor época (de los datos), para qué viajero es y el ritmo","faq":[{"p":"pregunta real que busca la gente sobre este viaje","r":"1-3 frases con datos del plan o del país"}]}
+La FAQ: entre 4 y 6 preguntas (cuántos días hacen falta, mejor época, presupuesto, cómo moverse, visado, seguridad, qué no perderse…), solo las que puedas contestar con los datos.`;
+  const paradas = route.stops.map(s => `Día ${s.day}: ${s.name}`).join(' · ').slice(0, 3000);
+  const user = `GUÍA: «${route.title || ''}» · ${dias} días · ${route.stops.length} paradas · ${zona}
+PARADAS: ${paradas}
+ANTES DE IR / DATOS DEL PAÍS: ${JSON.stringify(antes || {}).slice(0, 2500)}
+PLAN (texto de Salma):
+${String(planTexto || route.summary || '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').slice(0, 14000)}`;
+  try {
+    const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2200, system: sys, messages: [{ role: 'user', content: user }] }),
+      signal: AbortSignal.timeout(45000),
+    });
+    if (!res.ok) { console.log(`[GUÍA-EXTRA] presentación: HTTP ${res.status}`); return null; }
+    const data = await res.json();
+    if (usageAcc && data.usage) { usageAcc.tin += data.usage.input_tokens || 0; usageAcc.tout += data.usage.output_tokens || 0; }
+    const txt = String(data.content?.[0]?.text || '');
+    const j = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
+    const str = (x, n) => typeof x === 'string' ? x.replace(/\s+/g, ' ').trim().slice(0, n) : '';
+    const faq = (Array.isArray(j.faq) ? j.faq : []).map(f => ({ p: str(f && f.p, 200), r: str(f && f.r, 700) })).filter(f => f.p && f.r).slice(0, 6);
+    const out = { titulo_seo: str(j.titulo_seo, 70), descripcion: str(j.descripcion, 170), intro: str(j.intro, 1400), faq };
+    console.log(`[GUÍA-EXTRA] presentación: título ${out.titulo_seo.length} car., intro ${out.intro.split(' ').length} palabras, ${faq.length} preguntas`);
+    return out;
+  } catch (e) { console.log('[GUÍA-EXTRA] presentación: ' + (e && e.message)); return null; }
+}
+// Todo junto, al terminar la guía (tras verificar en Google): bloques, «Antes de ir» y la presentación.
+function completarGuia(route, { antesPlan = null, kv = null, presentacion = null } = {}) {
+  if (!route || !Array.isArray(route.stops)) return route;
+  const extra = Object.assign({}, route.guia_extra || {});
+  const bloques = bloquesPorCiudad(route.stops);
+  if (bloques.length) extra.bloques = bloques;
+  const antes = antesDeIrCompleto(antesPlan || route.antes_de_ir, kv);
+  if (antes) extra.antes_de_ir = antes;
+  if (presentacion) Object.assign(extra, presentacion);
+  extra.creada = extra.creada || new Date().toISOString().slice(0, 10);
+  route.guia_extra = extra;
+  delete route.antes_de_ir;
+  return route;
+}
 function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', region = '', _sinDias = false } = {}) {
   _lectorMotivo = '';
   if (!tieneMarcasSitio(text)) return _lectorNo(`el plan no trae sitios marcados [[ ]] (${String(text || '').length} letras)`);
@@ -8401,7 +8533,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
       const trozo = limpiar(String(partes[i + 1] || '').replace(/^\s*[—–:,-]\s*/, ''));
       const narrative = (i > 0 && trozo.length >= 40) ? trozo : lineaNarr;
       stops.push({
-        name: nombre, headline: nombre, narrative: narrative.slice(0, 700), day_title: dayTitle,
+        name: nombre, headline: nombre, narrative: cortarTexto(narrative), day_title: dayTitle,
         type: esComer ? 'restaurante' : 'lugar', con_historia: !esComer, day,
         lat: 0, lng: 0, km_from_previous: 0, estimated_hours: 0,
         ...(_LECTOR_TRAYECTO_RE.test(nombre) ? { _trayecto: true } : {}),
@@ -8429,10 +8561,10 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
       }
       if (s._soloTrayecto) { if (s.texto) pendiente.push(s.texto); continue; }
       if (s._trayecto) { if (s.narrative) pendiente.push(s.narrative); continue; }
-      if (pendiente.length) { s.narrative = (s.narrative + ' Trayecto: ' + pendiente.join(' ')).trim().slice(0, 900); pendiente = []; }
+      if (pendiente.length) { s.narrative = cortarTexto((s.narrative + ' Trayecto: ' + pendiente.join(' ')).trim(), 1800); pendiente = []; }
       finales.push(s);
     }
-    if (pendiente.length && finales.length) { const u = finales[finales.length - 1]; u.narrative = (u.narrative + ' Trayecto: ' + pendiente.join(' ')).trim().slice(0, 900); }
+    if (pendiente.length && finales.length) { const u = finales[finales.length - 1]; u.narrative = cortarTexto((u.narrative + ' Trayecto: ' + pendiente.join(' ')).trim(), 1800); }
     stops.splice(0, stops.length, ...finales);
   }
   // PLAN SIN DÍAS (3 oct 2026, caso p-musfrk4c21l): "las mejores playas de Cádiz" vino como lista de playas de sur a
@@ -8500,6 +8632,7 @@ function routeFromMarkedText(text, { destino = '', dias = 0, countryName = '', r
     tips: consejosDelPlan([...stops.map(s => s.narrative), ...diasTrayecto.map(v => v.texto), intro, introDia1]),
     tags: [], budget_level: 'medio', suggestions: [], maps_links: [],
     pre_departure: null, practical_info: null,
+    ...(leerAntesDeIr(text) ? { antes_de_ir: leerAntesDeIr(text) } : {}),
     _lector: true,
   };
 }
@@ -17153,6 +17286,7 @@ INSTRUCCIONES:
         // el turno a medias sin JSON), convertimos el texto que YA se generó en la respuesta
         // anterior directamente. Si falla o no hay sourceText, cae al flujo normal sin cambios.
         let _fastPathRoute = null;
+        let _presentP = null;   // guía completa (22 oct 2026): datos del país + presentación para la web, en paralelo a Google
         let _mapStageFailed = false;
         let _t2log = null; // registro de este "Crear ruta con mapa" (logGuideTiming → casos.cjs guias)
         // "Añadir a la guía" (mergeIntoRoute): el texto a convertir es solo la propuesta
@@ -17229,6 +17363,16 @@ INSTRUCCIONES:
               _fastPathRoute.title = tituloConDias(_fastPathRoute.title || _fastPathRoute.name, _dd, _fastPathRoute.region || _fastPathRoute.country);
               _fastPathRoute.name = _fastPathRoute.name || _fastPathRoute.title;
               if (_fastPathRoute.summary) _fastPathRoute.summary = cortarResumen(_fastPathRoute.summary);
+              // GUÍA COMPLETA (22 oct 2026): datos verificados del país (KV) + intro/FAQ/título/descripción para la web, mientras
+              // se comprueba en Google (no alarga la espera). Una llamada a Claude por guía (~0,02-0,03 €).
+              const _fpr = _fastPathRoute;
+              _presentP = (async () => {
+                const cc = String((anchorCountry && anchorCountry.countryCode) || countryCode || '').toLowerCase();
+                let kv = kvCountryData || null;
+                if (!kv && cc && env.SALMA_KB) { try { const raw = await env.SALMA_KB.get('dest:' + cc + ':base'); if (raw) kv = JSON.parse(raw); } catch (_) {} }
+                const pres = await presentacionGuia(_fpr, sourceText, antesDeIrCompleto(_fpr.antes_de_ir, kv), env, _reqUsage);
+                return { kv, pres, antesPlan: _fpr.antes_de_ir || null };
+              })().catch(e => { console.log('[GUÍA-EXTRA] ' + (e && e.message)); return null; });
             }
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < _minStops)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
             // Solo consume guía/cambio si la conversión ha salido bien (un fallo no gasta el cupo)
@@ -18182,6 +18326,11 @@ REGLAS:
                   try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'La guía me ha salido recortada (solo cabían unos pocos sitios de tu plan) y no quiero dártela así. Dale otra vez al botón y la monto entera; tu plan sigue aquí arriba.', route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
                   return;
                 }
+              }
+              // GUÍA COMPLETA (22 oct 2026): bloques por ciudad (direcciones ya verificadas), «Antes de ir» y presentación.
+              if (_presentP && route && _usageKind === 'guide' && guidedMapStage && !mergeIntoRoute) {
+                try { const px = await _presentP; completarGuia(route, { antesPlan: px && px.antesPlan, kv: px && px.kv, presentacion: px && px.pres }); }
+                catch (e) { console.log('[GUÍA-EXTRA] ' + (e && e.message)); }
               }
               // GUÍA NUEVA Y GOOGLE NO CONTESTÓ (sin cuota diaria, denegado, fallo) en alguna parada → no se entrega una guía a
               // medias ni se gasta el cupo: aviso para reintentar (21 oct 2026, Filipinas con 12 paradas «sin verificar» por cuota).
