@@ -189,8 +189,10 @@ function showState(state) {
   }
   _syncSalmaClose();   // ✕ de la pantalla de Salma: solo en el chat y con el modo activo
   // Limpiar barra flotante de guía si quedó huérfana
+  // …pero no la de la guía que está abierta en el chat: en escritorio la portada abre la guía activa y justo después se
+  // vuelve a llamar showState('chat'), que se llevaba Compartir/Maps/GPX/lápiz (Paco, 22 oct 2026).
   const _orphanBar = document.body.querySelector('.itin-action-bar');
-  if (_orphanBar) _orphanBar.remove();
+  if (_orphanBar && !(state === 'chat' && window._itinViewOpen)) _orphanBar.remove();
   // FAB mapa DESACTIVADO 7 sept 2026 — popup "Cómo llegar" roto + botones del picker raros.
   // Ver PENDIENTES.md. Reactivar: volver a la línea de abajo comentada.
   const fab = document.getElementById('fab-map');
