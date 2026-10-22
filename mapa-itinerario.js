@@ -168,6 +168,17 @@ const mapaItinerario = {
     // Avance sin cuenta (CLAUDE.md §10): tarjeta bloqueada como una parada más
     if (options && options._preview) scroll.appendChild(this._createLockedCard(options._preview, routeData));
 
+    // Sobre esta ruta, Antes de ir y Preguntas frecuentes (route.guia_extra) van ARRIBA, antes de los días (Paco, 22 oct 2026)
+    if (typeof guideRenderer !== 'undefined' && typeof guideRenderer._renderGuiaExtra === 'function' && !(options && options._preview)) {
+      const exHtml = guideRenderer._renderGuiaExtra(routeData.guia_extra || null);
+      if (exHtml && exHtml.trim()) {
+        const ex = document.createElement('div');
+        ex.className = 'itin-extras itin-extras-top';
+        ex.innerHTML = exHtml;
+        this._container.appendChild(ex);
+      }
+    }
+
     this._container.appendChild(scroll);
 
     // Fotos por tandas, no todas a la vez (ver comentario en _createCard)
@@ -180,7 +191,6 @@ const mapaItinerario = {
         (typeof guideRenderer._renderNearby === 'function'
           ? guideRenderer._renderNearby(routeData.nearby_stops || null, country, routeData.anchor_locality || '')
           : ''),
-        (typeof guideRenderer._renderGuiaExtra === 'function' ? guideRenderer._renderGuiaExtra(routeData.guia_extra || null) : ''),
         guideRenderer._renderPreDeparture(routeData.pre_departure || null),
         guideRenderer._renderPracticalInfo(routeData.practical_info || null),
         guideRenderer._renderTips(routeData.tips || null),

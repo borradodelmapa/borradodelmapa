@@ -169,6 +169,9 @@ function staticBody(g, r, relacionadas = []) {
   const ciudades = bloques ? [...new Set(bloques.map(b => b.ciudad))] : [];
   const antes = ex.antes_de_ir || {};
   let h = `<section class="guia-seo" id="guia-seo">\n<h1>${esc(title)}</h1>\n`;
+  // Portada propia: la foto de la primera parada que la tenga (si no, el mapa de la guía), con el título encima
+  const portada = stops.map(fotoParada).find(Boolean) || (fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png')) ? `/guias-img/${g.slug}.png` : '');
+  if (portada) h += `<img class="guia-seo-portada" src="${esc(portada)}" alt="${esc(title)}" fetchpriority="high" decoding="async">\n`;
   if (intro) h += `<p class="guia-seo-sum">${esc(intro)}</p>\n`;
   // Resumen rápido
   const rapido = [`<strong>${days.length} día${days.length > 1 ? 's' : ''}</strong>`, `<strong>${stops.length} paradas</strong>`];
@@ -176,6 +179,12 @@ function staticBody(g, r, relacionadas = []) {
   else if (pais) rapido.push(esc(pais));
   if (antes.presupuesto) rapido.push('Presupuesto: ' + esc(antes.presupuesto));
   h += `<p class="guia-seo-meta">${rapido.join(' · ')}</p>\n`;
+  // Antes de ir
+  const filas = ANTES.filter(([k]) => antes[k]);
+  if (filas.length) h += `<h2>Antes de ir</h2>\n<dl class="guia-seo-antes">\n` + filas.map(([k, t]) => `<dt>${t}</dt><dd>${esc(antes[k])}</dd>`).join('\n') + '\n</dl>\n';
+  // Preguntas frecuentes
+  const faq = (Array.isArray(ex.faq) ? ex.faq : []).filter(f => f && f.p && f.r);
+  if (faq.length) h += `<h2>Preguntas frecuentes</h2>\n` + faq.map(f => `<h3>${esc(f.p)}</h3>\n<p>${esc(f.r)}</p>`).join('\n') + '\n';
   // Itinerario: un h2 por bloque de ciudad (o por día si no hay bloques), un h3 por parada con su texto y su foto
   const tituloDia = d => { const s = stops.find(x => dayOf(x) === d && x.day_title); return s ? String(s.day_title).trim() : ''; };
   const pintaDia = d => {
@@ -203,15 +212,9 @@ function staticBody(g, r, relacionadas = []) {
   } else {
     for (const d of days) h += `<h2>Día ${d}${tituloDia(d) ? ' — ' + esc(tituloDia(d)) : ''}</h2>\n` + pintaDia(d).replace(/^<p class="guia-seo-dia">.*\n/, '');
   }
-  // Antes de ir
-  const filas = ANTES.filter(([k]) => antes[k]);
-  if (filas.length) h += `<h2>Antes de ir</h2>\n<dl class="guia-seo-antes">\n` + filas.map(([k, t]) => `<dt>${t}</dt><dd>${esc(antes[k])}</dd>`).join('\n') + '\n</dl>\n';
   // Consejos
   const tips = (Array.isArray(r.tips) ? r.tips : []).filter(t => typeof t === 'string' && t.trim());
   if (tips.length) h += `<h2>Consejos de Salma</h2>\n<ul>\n` + tips.map(t => `<li>${esc(t)}</li>`).join('\n') + '\n</ul>\n';
-  // Preguntas frecuentes
-  const faq = (Array.isArray(ex.faq) ? ex.faq : []).filter(f => f && f.p && f.r);
-  if (faq.length) h += `<h2>Preguntas frecuentes</h2>\n` + faq.map(f => `<h3>${esc(f.p)}</h3>\n<p>${esc(f.r)}</p>`).join('\n') + '\n';
   // Más guías del país y su página de destino
   const paisUrl = destinoUrl(pais, '') || (DESTINOS.has(slugify(pais)) ? `/destinos/${slugify(pais)}.html` : '');
   if (relacionadas.length || paisUrl) {
@@ -293,7 +296,7 @@ function buildPage(tpl, g, relacionadas = []) {
   if (body) {
     rep('<div class="public-loading" id="public-loading">Cargando guía...</div>\n  </div>',
       '<div class="public-loading" id="public-loading">Cargando guía...</div>\n  </div>\n  ' + body.replace(/\n/g, '\n  '));
-    rep('</head>', '<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:18px 0 6px}.guia-seo img{display:block;width:100%;max-height:340px;object-fit:cover;border-radius:12px;margin:6px 0 10px;background:#1c1f22}.guia-seo-dia{margin-top:18px!important;color:#ECEBE8!important}.guia-seo dl{display:grid;grid-template-columns:minmax(110px,30%) 1fr;gap:6px 14px}.guia-seo dt{font-weight:700;color:#ECEBE8}.guia-seo dd{margin:0;color:#C4C7C9}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>\n</head>');
+    rep('</head>', '<style>#public-loading{display:none}.guia-seo{max-width:760px;margin:0 auto;padding:8px 16px 120px;color:#ECEBE8;font-family:Inter,sans-serif;line-height:1.6}.guia-seo h1{font:800 40px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 10px}.guia-seo h2{font:700 24px/1.1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:#F4630B;margin:28px 0 10px}.guia-seo h3{font:700 18px/1.2 Inter,sans-serif;margin:18px 0 6px}.guia-seo .guia-seo-portada{max-height:420px;margin:0 0 14px}.guia-seo img{display:block;width:100%;max-height:340px;object-fit:cover;border-radius:12px;margin:6px 0 10px;background:#1c1f22}.guia-seo-dia{margin-top:18px!important;color:#ECEBE8!important}.guia-seo dl{display:grid;grid-template-columns:minmax(110px,30%) 1fr;gap:6px 14px}.guia-seo dt{font-weight:700;color:#ECEBE8}.guia-seo dd{margin:0;color:#C4C7C9}.guia-seo ol{padding-left:20px}.guia-seo li{margin-bottom:14px}.guia-seo p{margin:0 0 8px;color:#C4C7C9}.guia-seo-meta{font-size:13px;color:#7E8285!important}.guia-seo a{color:#F4630B}</style>\n</head>');
   }
   return h;
 }
