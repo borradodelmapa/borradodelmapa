@@ -320,6 +320,9 @@ ${trk}
   // ═══ COMPARTIR ═══
   _handleShare(routeData) {
     const id = typeof salma !== 'undefined' ? salma.currentRouteId : null;
+    // Guía abierta desde su página pública o Explorar (tuya o de otro): ya tiene enlace, se comparte sin guardarla antes.
+    // Antes intentaba guardarla y, si era tuya, salía «Esta ruta ya es tuya» y no compartía (Paco, 22 oct 2026).
+    if (!id && routeData && routeData._saved_from && routeData._saved_from.slug) { this._doShare(routeData, null); return; }
     if (!id) {
       // Guardar primero y luego compartir al terminar
       if (typeof salma !== 'undefined') {
