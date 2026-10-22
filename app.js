@@ -5696,6 +5696,7 @@ async function _notifyGuidePublished(slug) {
     }).catch(() => {});
   } catch (_) {}
 }
+window._notifyGuidePublished = _notifyGuidePublished;
 async function _ensureRouteThumbnail(routeData, docId) {
   if (!docId || _thumbInFlight.has(docId)) return;
   if (!currentUser || !window.SALMA_API) {

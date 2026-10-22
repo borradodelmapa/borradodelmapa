@@ -57,19 +57,17 @@ const mapaItinerario = {
     `;
     this._container.appendChild(header);
     // Portada de la guía (Paco, 22 oct 2026: «falta cabecera»): foto de la primera parada que la tenga, con el título, días,
-    // paradas y ciudades encima. Misma foto que su tarjeta (/photo, ya guardada en R2: no suma coste).
+    // paradas y país encima. Misma foto que su tarjeta (/photo, ya guardada en R2: no suma coste).
     {
       const _p = _allStops.find(s => s && s.photo_ref);
       if (_p) {
-        const ex = routeData.guia_extra || {};
-        const ciudades = Array.isArray(ex.bloques) ? [...new Set(ex.bloques.map(b => b.ciudad).filter(Boolean))] : [];
         const portada = document.createElement('div');
         portada.className = 'itin-portada';
         portada.style.cssText = 'position:relative;margin:0 0 12px;overflow:hidden;background:#1c1f22;min-height:200px';
         portada.innerHTML = `<img src="${window.SALMA_API}/photo?ref=${encodeURIComponent(_p.photo_ref)}${this._pidQS(_p)}" alt="${this._esc(routeData.title || _p.name)}" style="display:block;width:100%;height:240px;object-fit:cover" onerror="this.style.display='none'">`
           + `<div style="position:absolute;inset:auto 0 0 0;padding:40px 16px 14px;background:linear-gradient(transparent,rgba(0,0,0,.85))">`
           + `<div style="font:800 28px/1.05 'Barlow Condensed',sans-serif;text-transform:uppercase;color:#fff">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>`
-          + `<div style="margin-top:6px;font-size:13px;color:#e8e6e1">${this._totalDays(_allStops)} días · ${_allStops.length} paradas${ciudades.length ? ' · ' + this._esc(ciudades.slice(0, 6).join(' → ')) : (country ? ' · ' + this._esc(country) : '')}</div></div>`;
+          + `<div style="margin-top:6px;font-size:13px;color:#e8e6e1">${this._totalDays(_allStops)} días · ${_allStops.length} paradas${country ? ' · ' + this._esc(country) : ''}</div></div>`;
         this._container.appendChild(portada);
       }
     }
@@ -358,7 +356,11 @@ ${trk}
       } catch (_) {}
     }
     if (slug) {
-      this._shareLink(routeData, window.location.origin + '/' + slug);
+      const url = window.location.origin + '/' + slug;
+      // La tarjeta con foto de WhatsApp sale de la página fija <slug>.html, que se genera 1-2 min después de publicar. Si aún no
+      // existe, WhatsApp no pone foto: se espera a que esté y se ofrece el botón para compartir (Paco, 22 oct 2026).
+      if (await this._paginaLista(url)) this._shareLink(routeData, url);
+      else this._esperarPaginaYCompartir(routeData, url, slug);
       return;
     }
     try {
@@ -377,15 +379,53 @@ ${trk}
     this._shareLink(routeData, window.location.origin + '/?compartir=' + id);
   },
 
+  async _paginaLista(url) {
+    try { const r = await fetch(url + '?v=' + Date.now(), { method: 'HEAD', cache: 'no-store' }); return r.ok; } catch (_) { return false; }
+  },
+
+  // Aviso abajo mientras se genera la página; cuando está, botón «Compartir» (el navegador exige un toque para abrir WhatsApp).
+  async _esperarPaginaYCompartir(routeData, url, slug) {
+    try { if (typeof window._notifyGuidePublished === 'function') window._notifyGuidePublished(slug); } catch (_) {}
+    document.querySelectorAll('.share-espera').forEach(el => el.remove());
+    const box = document.createElement('div');
+    box.className = 'share-espera';
+    box.style.cssText = 'position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:10000;width:min(92vw,420px);'
+      + 'background:#16191c;color:#ECEBE8;border:1px solid #F4630B;padding:14px 16px;box-shadow:0 6px 24px rgba(0,0,0,.5);font-size:14px;line-height:1.4';
+    box.innerHTML = '<div>⏳ Preparando la tarjeta con foto para WhatsApp… tarda 1-2 minutos.</div>';
+    const cerrar = document.createElement('button');
+    cerrar.type = 'button'; cerrar.textContent = '✕'; cerrar.setAttribute('aria-label', 'Cerrar');
+    cerrar.style.cssText = 'position:absolute;top:4px;right:6px;background:none;border:0;color:#ECEBE8;font-size:16px;cursor:pointer';
+    cerrar.addEventListener('click', () => box.remove());
+    box.appendChild(cerrar);
+    document.body.appendChild(box);
+    const listo = (ok) => {
+      if (!box.isConnected) return;
+      box.firstChild.textContent = ok ? '✅ Tu guía ya está lista para compartir.' : 'La tarjeta tarda más de lo normal. Puedes compartir ya (quizá sin foto) o esperar un poco.';
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'crear-ruta-btn';
+      b.style.cssText = 'margin-top:10px;width:100%';
+      b.innerHTML = '<span>📤</span> Compartir ahora <span class="crb-arrow">→</span>';
+      b.addEventListener('click', () => { box.remove(); this._shareLink(routeData, url); });
+      box.appendChild(b);
+    };
+    for (let i = 0; i < 24; i++) {   // hasta 4 min
+      await new Promise(r => setTimeout(r, 10000));
+      if (!box.isConnected) return;
+      if (await this._paginaLista(url)) return listo(true);
+    }
+    listo(false);
+  },
+
   _shareLink(routeData, url) {
     const title = routeData.title || routeData.name || 'Mi ruta';
-    const text = `Te comparto esta ruta: ${title} 🧭\nLa hice con Salma. Ábrela, guárdala gratis y crea la tuya en borradodelmapa.com 👇`;
     // utm_source=compartir: así se mide cuánta gente llega por enlaces compartidos (bucle viral)
     url += (url.indexOf('?') < 0 ? '?' : '&') + 'utm_source=compartir';
+    // Texto de Paco (22 oct 2026), con el enlace pegado al final para que WhatsApp lo ponga tal cual
+    const text = `Te comparto esta ruta: ${title} 🧭\nLa hice con borradodelmapa.com guárdala gratis o crea la tuya 👇${url}`;
     if (navigator.share) {
-      navigator.share({ title, text, url }).catch(() => {});
+      navigator.share({ title, text }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(`${text}\n${url}`).then(() => {
+      navigator.clipboard.writeText(text).then(() => {
         if (typeof showToast !== 'undefined') showToast('Link copiado');
       }).catch(() => {
         if (typeof showToast !== 'undefined') showToast('Link: ' + url);

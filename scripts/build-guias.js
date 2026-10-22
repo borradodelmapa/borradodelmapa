@@ -91,6 +91,9 @@ function routeOf(g) {
 function imageOf(g, r) {
   // Las portadas de Google (lh3.googleusercontent.com) devuelven 403 a WhatsApp/redes: no valen
   // para og:image. Solo se usa la portada si es nuestra (miniatura del mapa en R2 u otra propia).
+  // Portada de la guía (foto de su primera parada, copiada a guias-img/<slug>-portada.jpg en main): es la «cabecera» que se
+  // quiere ver al compartir por WhatsApp (Paco, 22 oct 2026). Si no hay, la miniatura del mapa.
+  if (g.portada) return g.portada;
   if (g.cover && !/googleusercontent\.com|googleapis\.com/.test(g.cover)) return g.cover;
   // Ya no se usa el photo_ref de la primera parada: sus referencias caducan (404 en las guías de Nepal)
   // y pedirlas al Worker puede gastar Google Places. Sin portada propia → imagen de la marca; en cuanto
@@ -131,7 +134,7 @@ function describe(g, r) {
 // Texto de la guía escrito DENTRO de la página (17-18 oct 2026, caso SEO: Search Console las dejaba en «Rastreada:
 // actualmente sin indexar» porque el HTML solo traía ~11 palabras y la guía se pintaba con JS).
 // 22 oct 2026 (Paco): las guías públicas se enseñan COMPLETAS (misma excepción que las páginas de destino, CLAUDE.md §10) y
-// con todo lo que pide Google: intro, resumen rápido, bloques por ciudad (h2), cada parada (h3) con su texto y su foto,
+// con todo lo que pide Google: intro, resumen rápido, un h2 por día, cada parada (h3) con su texto y su foto,
 // «Antes de ir», consejos, preguntas frecuentes, enlaces a los destinos y a otras guías del país, y el botón a la app.
 const YEAR = new Date().getFullYear();
 const slugify = t => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -143,6 +146,16 @@ function destinoUrl(ciudad, pais) {
   if (c && p && DESTINOS.has(`${c}-${p}`)) return `/destinos/${c}-${p}.html`;
   if (c && DESTINOS.has(c)) return `/destinos/${c}.html`;
   return '';
+}
+// Página de destino de la ciudad que nombra el título de un día («Paro, el Nido del Tigre» → destinos/paro-butan.html)
+function destinoDeTitulo(t, pais) {
+  for (const trozo of String(t || '').split(/[,:—–(]| - | a | y | de | al /)) {
+    const c = trozo.trim();
+    if (!c || c.split(/\s+/).length > 3) continue;
+    const url = destinoUrl(c, pais);
+    if (url && !url.endsWith('/' + slugify(pais) + '.html')) return { url, nombre: c };
+  }
+  return null;
 }
 function fotoParada(s) {
   if (!s.place_id) return '';
@@ -165,18 +178,16 @@ function staticBody(g, r, relacionadas = []) {
   const title = g.nombre || r.title || 'Guía de viaje';
   const intro = ex.intro || resumenDe(g, r);
   const text = s => String(s.narrative || s.description || '').trim();
-  const bloques = Array.isArray(ex.bloques) && ex.bloques.length ? ex.bloques : null;
-  const ciudades = bloques ? [...new Set(bloques.map(b => b.ciudad))] : [];
+
   const antes = ex.antes_de_ir || {};
   let h = `<section class="guia-seo" id="guia-seo">\n<h1>${esc(title)}</h1>\n`;
   // Portada propia: la foto de la primera parada que la tenga (si no, el mapa de la guía), con el título encima
-  const portada = stops.map(fotoParada).find(Boolean) || (fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png')) ? `/guias-img/${g.slug}.png` : '');
+  const portada = (g.portada ? g.portada.replace(DOMAIN, '') : '') || stops.map(fotoParada).find(Boolean) || (fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png')) ? `/guias-img/${g.slug}.png` : '');
   if (portada) h += `<img class="guia-seo-portada" src="${esc(portada)}" alt="${esc(title)}" fetchpriority="high" decoding="async">\n`;
   if (intro) h += `<p class="guia-seo-sum">${esc(intro)}</p>\n`;
   // Resumen rápido
   const rapido = [`<strong>${days.length} día${days.length > 1 ? 's' : ''}</strong>`, `<strong>${stops.length} paradas</strong>`];
-  if (ciudades.length) rapido.push(ciudades.map(c => { const u = destinoUrl(c, pais); return u ? `<a href="${u}">${esc(c)}</a>` : esc(c); }).join(' → '));
-  else if (pais) rapido.push(esc(pais));
+  if (pais) rapido.push(esc(pais));
   if (antes.presupuesto) rapido.push('Presupuesto: ' + esc(antes.presupuesto));
   h += `<p class="guia-seo-meta">${rapido.join(' · ')}</p>\n`;
   // Antes de ir
@@ -185,7 +196,7 @@ function staticBody(g, r, relacionadas = []) {
   // Preguntas frecuentes
   const faq = (Array.isArray(ex.faq) ? ex.faq : []).filter(f => f && f.p && f.r);
   if (faq.length) h += `<h2>Preguntas frecuentes</h2>\n` + faq.map(f => `<h3>${esc(f.p)}</h3>\n<p>${esc(f.r)}</p>`).join('\n') + '\n';
-  // Itinerario: un h2 por bloque de ciudad (o por día si no hay bloques), un h3 por parada con su texto y su foto
+  // Itinerario: un h3 por parada con su texto y su foto
   const tituloDia = d => { const s = stops.find(x => dayOf(x) === d && x.day_title); return s ? String(s.day_title).trim() : ''; };
   const pintaDia = d => {
     let o = `<p class="guia-seo-dia"><strong>Día ${d}${tituloDia(d) ? ' — ' + esc(tituloDia(d)) : ''}</strong></p>\n`;
@@ -199,18 +210,13 @@ function staticBody(g, r, relacionadas = []) {
     }
     return o;
   };
-  if (bloques) {
-    for (const b of bloques) {
-      const u = destinoUrl(b.ciudad, pais);
-      const rango = b.desde === b.hasta ? `día ${b.desde}` : `días ${b.desde}-${b.hasta}`;
-      h += `<h2>${u ? `<a href="${u}">${esc(b.ciudad)}</a>` : esc(b.ciudad)}, ${rango}</h2>\n`;
-      for (let d = b.desde; d <= b.hasta; d++) if (days.includes(d)) h += pintaDia(d);
-    }
-    // Días que no caen en ningún bloque (sin dirección clara)
-    const cubiertos = new Set(bloques.flatMap(b => Array.from({ length: b.hasta - b.desde + 1 }, (_, i) => b.desde + i)));
-    for (const d of days) if (!cubiertos.has(d)) h += `<h2>Día ${d}</h2>\n` + pintaDia(d);
-  } else {
-    for (const d of days) h += `<h2>Día ${d}${tituloDia(d) ? ' — ' + esc(tituloDia(d)) : ''}</h2>\n` + pintaDia(d).replace(/^<p class="guia-seo-dia">.*\n/, '');
+  // Un h2 por día, en orden, con su título (lleva los sitios: «Paro, el Nido del Tigre») y enlace a la página del destino si existe.
+  // Antes se agrupaba por bloques de ciudad calculados al crear la guía: no seguían las ediciones (días fuera de orden) y en
+  // países con direcciones pobres salían nombres raros («CRGCV»). 22 oct 2026.
+  for (const d of days) {
+    const t = tituloDia(d);
+    const u = destinoDeTitulo(t, pais);
+    h += `<h2>Día ${d}${t ? ' — ' + esc(t) : ''}</h2>\n` + (u ? `<p class="guia-seo-dest"><a href="${u.url}">Guía de ${esc(u.nombre)}: qué ver y cuándo ir</a></p>\n` : '') + pintaDia(d).replace(/^<p class="guia-seo-dia">.*\n/, '');
   }
   // Consejos
   const tips = (Array.isArray(r.tips) ? r.tips : []).filter(t => typeof t === 'string' && t.trim());
@@ -320,6 +326,23 @@ async function main() {
       }
       if (fs.existsSync(file) || DRY) g.cover = DOMAIN + '/' + rel;
     } catch (e) { console.warn('imagen no copiada', g.slug, e.message); }
+  }
+  // Portada: la foto de la primera parada que la tenga, copiada UNA vez a guias-img/<slug>-portada.jpg (nuestro dominio, no caduca).
+  // Sale de /photo del Worker, que la sirve de R2 si la app ya la enseñó (0 €); si no, 1 foto de Google la primera vez (~0,007 $).
+  for (const g of guides) {
+    const rel = 'guias-img/' + g.slug + '-portada.jpg';
+    const file = path.join(ROOT, rel);
+    try {
+      if (!fs.existsSync(file) && !DRY) {
+        const st = (routeOf(g).stops || []).find(x => x && x.place_id && x.photo_ref);
+        if (st) {
+          const res = await fetch(fotoParada(st), { signal: AbortSignal.timeout(20000) });
+          const buf = Buffer.from(await res.arrayBuffer());
+          if (res.ok && /^image\//.test(res.headers.get('content-type') || '') && buf.length > 5000) fs.writeFileSync(file, buf);
+        }
+      }
+      if (fs.existsSync(file)) g.portada = DOMAIN + '/' + rel;
+    } catch (e) { console.warn('portada no copiada', g.slug, e.message); }
   }
   const prev = fs.existsSync(MANIFEST) ? JSON.parse(fs.readFileSync(MANIFEST, 'utf8')) : [];
   const now = new Set(guides.map(g => g.slug));
