@@ -9716,8 +9716,9 @@ async function buscarHotelesBooking(input, rapidApiKey) {
         checkout_date: input.fecha_salida,
         adults_number: String(adultos),
         room_number: String(habitaciones),
-        // Con presupuesto o pidiendo «lo más barato» → por precio; si no, los mejor valorados
-        order_by: (presupuestoMax || !soloHoteles) ? 'price' : 'review_score',
+        // Solo «lo más barato» (hostel/albergue) → por precio. Con presupuesto NO: ordenado por precio devolvía siempre los 5
+        // más baratos (12-14 €) aunque el tope fuera 100 €, y el filtro de presupuesto no actúa si Booking contesta en baht.
+        order_by: soloHoteles ? 'review_score' : 'price',
         filter_by_currency: 'EUR',
         locale: 'es',
         units: 'metric',
@@ -9784,19 +9785,30 @@ async function buscarHotelesBooking(input, rapidApiKey) {
       if (filtrados.length > 0) hoteles = filtrados;
     }
 
-    // Top 5 más baratos
-    hoteles = hoteles.slice(0, 5);
+    // Top 5 (10 si hay presupuesto: Claude descarta los que no encajan y quedan más opciones)
+    hoteles = hoteles.slice(0, presupuestoMax ? 10 : 5);
+
+    // Lista completa en Booking con las mismas fechas (y hoteles / tope de precio): lo que la herramienta no enseña
+    const _nflt = ['ht_id=204'];
+    if (presupuestoMax) _nflt.push(`price=EUR-min-${presupuestoMax}-1`);
+    const _qTodos = new URLSearchParams({
+      ss: input.ciudad, checkin: input.fecha_entrada, checkout: input.fecha_salida,
+      group_adults: String(adultos), no_rooms: String(habitaciones), group_children: '0',
+      lang: 'es', selected_currency: 'EUR', nflt: (soloHoteles ? _nflt : _nflt.slice(1)).join(';')
+    });
+    if (!_qTodos.get('nflt')) _qTodos.delete('nflt');
 
     const result = {
       encontrados: hoteles.length,
       ciudad: input.ciudad,
       noches: noches,
       huespedes: `${adultos} adulto${adultos > 1 ? 's' : ''}, ${habitaciones} habitación${habitaciones > 1 ? 'es' : ''}`,
-      hoteles: hoteles
+      hoteles: hoteles,
+      enlace_todos: `https://www.booking.com/searchresults.es.html?${_qTodos}`
     };
 
     if (presupuestoMax) {
-      result.nota_presupuesto = `El usuario busca hoteles por debajo de ${presupuestoMax} EUR/noche.`;
+      result.nota_presupuesto = `El usuario busca hoteles por debajo de ${presupuestoMax} EUR/noche. Los precios vienen en moneda_original (a veces no EUR): convierte tú y muestra SOLO los que encajan; si encajan pocos, dilo.`;
     }
 
     return result;
@@ -16704,6 +16716,7 @@ INSTRUCCIONES:
         let _lugarWebUrls = []; // Webs oficiales de buscar_lugar (nombre + web). Desde el 28 sept 2026 NO se muestran (Paco)
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         const _hotelsShown = []; // { nombre, enlace_reserva (con fechas) } de buscar_hotel — para asegurar el enlace de cada hotel nombrado
+        let _hotelsAllUrl = null; // { url, ciudad }: lista completa en Booking con las mismas fechas
         let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         const _fotoNombres = new Map(); // url de foto de buscar_foto → [nombre de Google, nombre pedido] (filtro de sitios marcados)
         // Zona de la conversación para buscar_foto (30 sept 2026): la guía abierta; si no hay, el destino ya resuelto.
@@ -17033,6 +17046,7 @@ INSTRUCCIONES:
               }
               // Capturar fotos y enlaces de hoteles para reparar markdown roto de Claude
               if (block.name === 'buscar_hotel' && Array.isArray(toolResult.hoteles)) {
+                if (toolResult.enlace_todos && toolResult.hoteles.length) _hotelsAllUrl = { url: toolResult.enlace_todos, ciudad: toolResult.ciudad || '' };
                 for (const h of toolResult.hoteles) {
                   if (h.nombre && h.enlace_reserva) _hotelsShown.push({ nombre: h.nombre, enlace_reserva: h.enlace_reserva });
                   if (h.nombre && h.foto) {
@@ -17150,9 +17164,14 @@ INSTRUCCIONES:
         if (_hotelsShown.length) {
           const _eh = asegurarEnlacesHoteles(allText, _hotelsShown);
           allText = _eh.texto;
-          if (_eh.añadido) {
-            allText += _eh.añadido;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _eh.añadido })}\n\n`)); } catch (_) {}
+          let _ehAdd = _eh.añadido;
+          // Siempre, al final: la lista completa en Booking con las mismas fechas (la herramienta solo enseña 5-10)
+          if (_hotelsAllUrl && !allText.includes(_hotelsAllUrl.url)) {
+            _ehAdd += `\n\nVer todos los hoteles${_hotelsAllUrl.ciudad ? ' de ' + _hotelsAllUrl.ciudad : ''} en Booking:\n${_hotelsAllUrl.url}`;
+          }
+          if (_ehAdd) {
+            allText += _ehAdd;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _ehAdd })}\n\n`)); } catch (_) {}
           }
         }
 
@@ -17468,7 +17487,10 @@ REGLAS:
           /\b(enlace|enlaces|link|links|url|p[aá]gina web|web oficial|fuente|fuentes|referencia|de d[oó]nde (?:lo )?(?:sacas|sale)|d[oó]nde (?:lo )?(?:pone|dice|has visto))\b/i.test(message || '')
           || isHotelRequest(message) || isFlightRequest(message)
           || /\balquil|coche.*alquil|rent.*car\b/i.test(message || '')
-          || _quiereWeb;
+          || _quiereWeb
+          // 22 oct 2026: «y alguno de hasta 100 €?» no dice «hotel» y _stripLooseUrls borraba TODOS los enlaces de Booking
+          // (la primera petición sí los llevaba, la segunda no). Si el turno trajo hoteles o vuelos, los enlaces de reserva se quedan.
+          || _hotelsShown.length > 0 || !!lastFlightBookingUrl;
 
         // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
         // PIEZA A — en el Tiempo 1 (recomendaciones) NO se inyectan: ni "Cómo llegar" por
@@ -17500,7 +17522,7 @@ REGLAS:
         // de las webs de buscar_lugar: desde el 28 sept no se muestran.)
         const _hintAlready = Array.isArray(history) && history.some(h => typeof h?.content === 'string' && h.content.includes('pídemelo y te paso el enlace'));
         // Hoteles y vuelos ya llevan sus enlaces de reserva: sin aviso (caso p-mul3hn54t3p).
-        const _hintAllowed = !_hintAlready && !isHotelRequest(message) && !isFlightRequest(message);
+        const _hintAllowed = !_hintAlready && !isHotelRequest(message) && !isFlightRequest(message) && _hotelsShown.length === 0;
         if (!route && !guidedIsReco && !imageBase64 && env.GOOGLE_PLACES_KEY && !_chatWantsMapLinks) {
           reply = stripModelMapsUrls(reply).replace(/\n{3,}/g, '\n\n').trim();
           if (_hintAllowed && replyNamesPlaces(reply, userName)) reply = reply.trimEnd() + '\n\n' + CHAT_MAPS_HINT;
