@@ -362,7 +362,7 @@ ${trk}
       const url = window.location.origin + '/' + slug;
       // La tarjeta con foto de WhatsApp sale de la página fija <slug>.html, que se genera 1-2 min después de publicar. Si aún no
       // existe, WhatsApp no pone foto: se espera a que esté y se ofrece el botón para compartir (Paco, 22 oct 2026).
-      if (await this._paginaLista(url)) this._shareLink(routeData, url);
+      if (await this._paginaLista(url, slug)) this._shareLink(routeData, url);
       else this._esperarPaginaYCompartir(routeData, url, slug);
       return;
     }
@@ -382,8 +382,14 @@ ${trk}
     this._shareLink(routeData, window.location.origin + '/?compartir=' + id);
   },
 
-  async _paginaLista(url) {
-    try { const r = await fetch(url + '?v=' + Date.now(), { method: 'HEAD', cache: 'no-store' }); return r.ok; } catch (_) { return false; }
+  // ¿Ya está publicada su página fija? La lista guias-publicas.json se sube en el mismo cambio que las páginas, así que si el
+  // slug está ahí, la página también. Si la lista no responde, se mira la propia página.
+  async _paginaLista(url, slug) {
+    try {
+      const r = await fetch('/guias-publicas.json?v=' + Date.now(), { cache: 'no-store' });
+      if (r.ok) { const l = await r.json(); if (Array.isArray(l)) return l.includes(slug); }
+    } catch (_) {}
+    try { const r = await fetch(url + '.html?v=' + Date.now(), { cache: 'no-store' }); return r.ok; } catch (_) { return false; }
   },
 
   // Aviso abajo mientras se genera la página; cuando está, botón «Compartir» (el navegador exige un toque para abrir WhatsApp).
@@ -395,6 +401,12 @@ ${trk}
     box.style.cssText = 'position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:10000;width:min(92vw,420px);'
       + 'background:#16191c;color:#ECEBE8;border:1px solid #F4630B;padding:14px 16px;box-shadow:0 6px 24px rgba(0,0,0,.5);font-size:14px;line-height:1.4';
     box.innerHTML = '<div>⏳ Preparando la tarjeta con foto para WhatsApp… tarda 1-2 minutos.</div>';
+    // Sin esperar: compartir ya (el enlace funciona igual; solo puede salir sin foto)
+    const ya = document.createElement('button');
+    ya.type = 'button'; ya.textContent = 'Compartir ya, sin esperar a la foto';
+    ya.style.cssText = 'margin-top:8px;background:none;border:0;padding:0;color:#F4630B;text-decoration:underline;cursor:pointer;font-size:13px';
+    ya.addEventListener('click', () => { box.remove(); this._shareLink(routeData, url); });
+    box.appendChild(ya);
     const cerrar = document.createElement('button');
     cerrar.type = 'button'; cerrar.textContent = '✕'; cerrar.setAttribute('aria-label', 'Cerrar');
     cerrar.style.cssText = 'position:absolute;top:4px;right:6px;background:none;border:0;color:#ECEBE8;font-size:16px;cursor:pointer';
@@ -403,6 +415,7 @@ ${trk}
     document.body.appendChild(box);
     const listo = (ok) => {
       if (!box.isConnected) return;
+      ya.remove();
       box.firstChild.textContent = ok ? '✅ Tu guía ya está lista para compartir.' : 'La tarjeta tarda más de lo normal. Puedes compartir ya (quizá sin foto) o esperar un poco.';
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'crear-ruta-btn';
@@ -414,7 +427,7 @@ ${trk}
     for (let i = 0; i < 24; i++) {   // hasta 4 min
       await new Promise(r => setTimeout(r, 10000));
       if (!box.isConnected) return;
-      if (await this._paginaLista(url)) return listo(true);
+      if (await this._paginaLista(url, slug)) return listo(true);
     }
     listo(false);
   },

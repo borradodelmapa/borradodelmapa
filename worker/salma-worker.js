@@ -8429,7 +8429,7 @@ async function presentacionGuia(route, planTexto, antes, env, usageAcc = null) {
   const dias = route.duration_days || Math.max(...route.stops.map(s => parseInt(s.day, 10) || 1));
   const zona = route.country || route.region || '';
   const sys = `Escribes los textos de presentación de una guía de viaje para su página web (Borrado del Mapa, la guía la hizo Salma). Español de España, tuteando, directo y con datos, sin frases vacías ni tono de chat, sin emojis. USA SOLO lo que dice el PLAN y los DATOS DEL PAÍS que te paso: si un dato no está ahí, no lo pongas. Responde SOLO con JSON, sin backticks:
-{"titulo_seo":"máx. 58 caracteres: destino + días + lo más buscado + (${year}). Ej.: «Laos en moto en 14 días: Vientiane → Pakse (${year})»","descripcion":"140-155 caracteres: qué recorre, cuántos días y paradas, y para quién","intro":"100-150 palabras: el recorrido, la mejor época (de los datos), para qué viajero es y el ritmo","faq":[{"p":"pregunta real que busca la gente sobre este viaje","r":"1-3 frases con datos del plan o del país"}]}
+{"titulo_seo":"máx. 58 caracteres: destino + días + lo más buscado + (${year}). Ej.: «Laos en moto en 14 días: Vientiane → Pakse (${year})»","descripcion":"140-155 caracteres: qué recorre, cuántos días y paradas, y para quién","intro":"100-150 palabras: el recorrido, la mejor época (de los datos), para qué viajero es y el ritmo","faq":[{"p":"pregunta real que busca la gente sobre este viaje","r":"1-3 frases con datos del plan o del país"}],"consejos":["4-6 consejos prácticos de viajero para ESTA ruta, 1 frase cada uno, con datos del plan o del país"]}
 La FAQ: entre 4 y 6 preguntas (cuántos días hacen falta, mejor época, presupuesto, cómo moverse, visado, seguridad, qué no perderse…), solo las que puedas contestar con los datos.`;
   const paradas = route.stops.map(s => `Día ${s.day}: ${s.name}`).join(' · ').slice(0, 3000);
   const user = `GUÍA: «${route.title || ''}» · ${dias} días · ${route.stops.length} paradas · ${zona}
@@ -8451,7 +8451,8 @@ ${String(planTexto || route.summary || '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').
     const j = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
     const str = (x, n) => typeof x === 'string' ? x.replace(/\s+/g, ' ').trim().slice(0, n) : '';
     const faq = (Array.isArray(j.faq) ? j.faq : []).map(f => ({ p: str(f && f.p, 200), r: str(f && f.r, 700) })).filter(f => f.p && f.r).slice(0, 6);
-    const out = { titulo_seo: str(j.titulo_seo, 70), descripcion: str(j.descripcion, 170), intro: str(j.intro, 1400), faq };
+    const consejos = (Array.isArray(j.consejos) ? j.consejos : []).map(c => str(c, 300)).filter(Boolean).slice(0, 6);
+    const out = { titulo_seo: str(j.titulo_seo, 70), descripcion: str(j.descripcion, 170), intro: str(j.intro, 1400), faq, consejos };
     console.log(`[GUÍA-EXTRA] presentación: título ${out.titulo_seo.length} car., intro ${out.intro.split(' ').length} palabras, ${faq.length} preguntas`);
     return out;
   } catch (e) { console.log('[GUÍA-EXTRA] presentación: ' + (e && e.message)); return null; }
@@ -8464,7 +8465,12 @@ function completarGuia(route, { antesPlan = null, kv = null, presentacion = null
   if (bloques.length) extra.bloques = bloques;
   const antes = antesDeIrCompleto(antesPlan || route.antes_de_ir, kv);
   if (antes) extra.antes_de_ir = antes;
-  if (presentacion) Object.assign(extra, presentacion);
+  if (presentacion) {
+    const { consejos, ...resto } = presentacion;
+    Object.assign(extra, resto);
+    // Consejos: los del plan mandan (consejosDelPlan); los de la presentación solo si la guía no trae ninguno
+    if ((!Array.isArray(route.tips) || !route.tips.length) && Array.isArray(consejos) && consejos.length) route.tips = consejos;
+  }
   extra.creada = extra.creada || new Date().toISOString().slice(0, 10);
   route.guia_extra = extra;
   delete route.antes_de_ir;
@@ -13483,6 +13489,46 @@ export default {
         return new Response(JSON.stringify({ ok: gh.status === 204, status: gh.status }), { status: 200, headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ ok: false, error: String(e.message || e).slice(0, 120) }), { status: 200, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /guia-extras (23 oct 2026) ───
+    // Completa una guía pública que ya existía con lo que traen las nuevas (route.guia_extra): intro, «Antes de ir» (datos
+    // verificados del país en KV), preguntas frecuentes, título y descripción para Google. Lo escribe en su public_guides, así
+    // lo ven la página fija (build-guias.js) y la app (?ruta=). SOLO las guías de GUIAS_EXTRAS (wrangler.toml: slugs separados
+    // por comas, o "*"), cada una UNA vez (marca en KV), y como mucho 40 al día. Coste: 1 llamada a Claude por guía (~0,02-0,03 €).
+    if (request.method === 'GET' && url.pathname === '/guia-extras') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const slug = String(url.searchParams.get('slug') || '');
+      const out = (o, st = 200) => new Response(JSON.stringify(o), { status: st, headers: corsH });
+      if (!/^[a-z0-9][a-z0-9-]{2,150}$/.test(slug)) return out({ error: 'slug no válido' }, 400);
+      const permitidas = String(env.GUIAS_EXTRAS || '').split(',').map(x => x.trim()).filter(Boolean);
+      if (!permitidas.includes('*') && !permitidas.includes(slug)) return out({ ok: false, reason: 'no_permitida' });
+      if (!env.SALMA_KB) return out({ ok: false, reason: 'sin_kv' });
+      if (await env.SALMA_KB.get('guiaextra:' + slug)) return out({ ok: true, ya: true });
+      const dk = 'guiaextra:dia:' + new Date().toISOString().slice(0, 10);
+      const hoy = parseInt((await env.SALMA_KB.get(dk)) || '0', 10);
+      if (hoy >= 40) return out({ ok: false, reason: 'tope_diario' });
+      try {
+        const doc = await firestoreAdminGet(env, 'public_guides/' + slug);
+        const raw = doc && doc.fields && doc.fields.itinerarioIA && doc.fields.itinerarioIA.stringValue;
+        if (!raw) return out({ ok: false, reason: 'no_existe' }, 404);
+        const route = JSON.parse(raw);
+        if (!Array.isArray(route.stops) || !route.stops.length) return out({ ok: false, reason: 'sin_paradas' });
+        await env.SALMA_KB.put(dk, String(hoy + 1), { expirationTtl: 2 * 86400 });
+        const destino = (doc.fields.destino && doc.fields.destino.stringValue) || '';
+        const cc = String(getCountryCode(route.country || destino) || '').toLowerCase();
+        let kv = null;
+        if (cc) { try { const r = await env.SALMA_KB.get('dest:' + cc + ':base'); if (r) kv = JSON.parse(r); } catch (_) {} }
+        const pres = await presentacionGuia(route, route.summary || '', antesDeIrCompleto(route.antes_de_ir, kv), env);
+        if (!pres) return out({ ok: false, reason: 'presentacion_fallo' });
+        completarGuia(route, { kv, presentacion: pres });
+        await firestoreAdminPatch(env, 'public_guides/' + slug, { itinerarioIA: { stringValue: JSON.stringify(route) } });
+        await env.SALMA_KB.put('guiaextra:' + slug, new Date().toISOString());
+        console.log(`[GUÍA-EXTRA] ${slug} completada (país ${cc || '?'}, ${pres.faq.length} preguntas)`);
+        return out({ ok: true, slug, pais: cc, guia_extra: route.guia_extra });
+      } catch (e) {
+        return out({ ok: false, error: String(e.message || e).slice(0, 160) }, 500);
       }
     }
 
