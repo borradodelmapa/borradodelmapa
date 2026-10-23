@@ -4877,8 +4877,8 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
           await emit('country_info', {
             pais: val.pais, capital: val.capital, moneda: val.moneda, cambio: val.cambio_aprox_eur,
             idioma: val.idioma_oficial, idioma_viajero: val.idioma_viajero, enchufes: val.enchufes,
-            emergencias: val.emergencias, prefijo: val.prefijo_tel, visa_kv: val.visado_espanoles,
-            visa_eu: val.visado_eu, seguridad: val.seguridad, agua: val.agua_potable,
+            emergencias: val.emergencias, prefijo: val.prefijo_tel, visa_kv: (visadoDe(val).texto || 'Compruébalo en Exteriores (exteriores.gob.es)'),
+            visa_eu: '', seguridad: val.seguridad, agua: val.agua_potable,
             mejor_epoca: val.mejor_epoca, evitar_epoca: val.evitar_epoca,
             coste_mochilero: val.coste_diario_mochilero, coste_medio: val.coste_diario_medio
           });
@@ -7275,10 +7275,9 @@ function tryKVDirectAnswer(message, country, destination) {
 
   // ── Visado ──
   if (/visado|visa|pasaporte|documentos?.*entrar|necesito.*para.*entrar|requisitos.*entrada/i.test(m)) {
-    let reply = `Para entrar en ${pais} con pasaporte español: ${c.visado_espanoles}`;
-    if (c.visado_eu && c.visado_eu !== c.visado_espanoles) reply += `\nSi eres de otro país de la UE: ${c.visado_eu}`;
-    reply += `\n\nEsto cambia de un día para otro, así que antes de comprar el vuelo confírmalo en la embajada o el consulado.`;
-    return reply;
+    const vz = visadoDe(c);
+    if (vz.oficial) return `Para entrar en ${pais} con pasaporte español, según la ficha oficial de Exteriores (revisada el ${_fechaEs(vz.fecha)}): ${vz.texto}\n\nCambia a menudo: confírmalo antes de comprar el vuelo aquí → ${vz.url}`;
+    return `El visado de ${pais} no te lo doy de memoria: los requisitos cambian a menudo y no quiero que te quedes en tierra. Míralo en la ficha oficial de recomendaciones de viaje de Exteriores, que es la que vale → ${vz.url}`;
   }
 
   // ── Moneda / dinero ──
@@ -7368,7 +7367,7 @@ function tryKVDirectAnswer(message, country, destination) {
   if (/info|informacion|cuentame|dime.*sobre|que.*saber|datos|basico|practica|practico|general/i.test(m)) {
     let reply = `Venga, lo esencial de ${pais}:\n\n`;
     reply += `Capital ${c.capital}, se habla ${c.idioma_oficial} y se paga en ${c.moneda} (${c.cambio_aprox_eur}).\n`;
-    reply += `Con pasaporte español: ${c.visado_espanoles}\n`;
+    { const vz = visadoDe(c); reply += vz.oficial ? `Visado con pasaporte español (ficha de Exteriores): ${vz.texto}\n` : `El visado, compruébalo en la ficha de Exteriores: ${vz.url}\n`; }
     reply += `Enchufes ${c.enchufes} y emergencias al ${c.emergencias}.\n`;
     reply += `Seguridad: ${c.seguridad}\n\n`;
     reply += `Mejor época para ir: ${c.mejor_epoca}\n\n`;
@@ -7503,7 +7502,9 @@ ${_guidedTail}]`);
     ctx.push(`[DATOS VERIFICADOS DEL PAÍS — usa estos datos, NO inventes:
 País: ${c.pais} | Capital: ${c.capital} | Idioma: ${c.idioma_oficial}
 Moneda: ${c.moneda} (${c.cambio_aprox_eur}) | Huso: ${c.huso_horario}
-Visado españoles: ${c.visado_espanoles} | Visado EU: ${c.visado_eu}
+${(() => { const vz = visadoDe(c); return vz.oficial
+  ? `Visado (pasaporte español, ficha oficial de Exteriores revisada el ${vz.fecha}): ${vz.texto} — fuente: ${vz.url}`
+  : `Visado: SIN DATO COMPROBADO. No afirmes si hace falta visado ni cuántos días: los requisitos cambian. Si sale el tema, di que lo compruebe en la ficha oficial de Exteriores: ${vz.url}`; })()}
 Enchufes: ${c.enchufes} | Agua potable: ${c.agua_potable}
 Emergencias: ${c.emergencias} | Prefijo: ${c.prefijo_tel}
 Mejor época: ${c.mejor_epoca}
@@ -8402,6 +8403,75 @@ function bloquesPorCiudad(stops) {
   }
   return bloques.filter(b => b.ciudad);
 }
+// ── VISADOS (23 oct 2026, Paco: «lo del visado es importante») ──
+// El visado de las fichas de país (dest:<cc>:base → visado_espanoles) lo escribe una IA de memoria y se queda viejo (China:
+// «visado obligatorio» cuando desde 2024 se entra sin visado 30 días). Solo vale como dato el que se ha leído de la ficha oficial
+// de Exteriores (visado_oficial, lo rellena refrescarVisadoOficial). Sin él, nunca se afirma nada: se manda a Exteriores.
+const EXTERIORES_RECOMENDACIONES = 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Recomendaciones-de-viaje.aspx';
+function exterioresFichaUrl(pais) {
+  return 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=' + encodeURIComponent(String(pais || '').trim());
+}
+// { oficial, texto, url, fecha } — texto solo si viene de la ficha oficial
+function visadoDe(c) {
+  const o = c && c.visado_oficial;
+  if (o && o.texto) return { oficial: true, texto: o.texto, url: o.url || EXTERIORES_RECOMENDACIONES, fecha: String(o.revisado || '').slice(0, 10) };
+  return { oficial: false, texto: '', url: EXTERIORES_RECOMENDACIONES, fecha: '' };
+}
+function _fechaEs(iso) {
+  try { return new Date(iso + 'T12:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }); } catch (_) { return iso; }
+}
+// Lee la ficha de recomendaciones de viaje de Exteriores de un país y guarda en su ficha (dest:<cc>:base → visado_oficial) lo
+// que dice del visado para pasaporte español. Si la página no ha cambiado desde la última vez, no se llama a la IA (0 €).
+// Coste: 1 llamada a Haiku (~0,3 cént.) solo cuando la página cambia. Nunca escribe nada que no salga del texto oficial.
+async function refrescarVisadoOficial(env, cc, { maxEdadDias = 25 } = {}) {
+  cc = String(cc || '').toLowerCase();
+  if (!/^[a-z]{2}$/.test(cc) || !env.SALMA_KB) return { ok: false, reason: 'cc' };
+  const raw = await env.SALMA_KB.get('dest:' + cc + ':base');
+  if (!raw) return { ok: false, reason: 'sin_ficha' };
+  const base = JSON.parse(raw);
+  const prev = base.visado_oficial || null;
+  if (prev && prev.revisado && Date.now() - Date.parse(prev.revisado) < maxEdadDias * 86400e3) return { ok: true, ya: true, visado: prev };
+  const url = exterioresFichaUrl(base.pais);
+  const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BorradoDelMapa/1.0; +https://borradodelmapa.com)', 'Accept-Language': 'es-ES,es' }, signal: AbortSignal.timeout(20000) });
+  if (!res.ok) { console.log(`[VISADO] ${cc} Exteriores HTTP ${res.status}`); return { ok: false, reason: 'http_' + res.status }; }
+  const html = await res.text();
+  const ent = { '&nbsp;': ' ', '&aacute;': 'á', '&eacute;': 'é', '&iacute;': 'í', '&oacute;': 'ó', '&uacute;': 'ú', '&ntilde;': 'ñ', '&Aacute;': 'Á', '&Eacute;': 'É', '&Iacute;': 'Í', '&Oacute;': 'Ó', '&Uacute;': 'Ú', '&Ntilde;': 'Ñ', '&uuml;': 'ü', '&quot;': '"', '&amp;': '&', '&#39;': "'", '&ordm;': 'º', '&ordf;': 'ª' };
+  const texto = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-zA-Z#0-9]+;/g, m => ent[m] || ' ').replace(/\s+/g, ' ').trim();
+  const i = texto.search(/visad/i);
+  if (i < 0) { console.log(`[VISADO] ${cc} la ficha no habla de visados (${texto.length} letras)`); return { ok: false, reason: 'sin_visado_en_pagina', letras: texto.length }; }
+  const trozo = texto.slice(Math.max(0, i - 1200), i + 4800);
+  let h = 0; for (let k = 0; k < trozo.length; k++) h = (h * 31 + trozo.charCodeAt(k)) | 0;
+  const huella = String(h);
+  const ahora = new Date().toISOString();
+  if (prev && prev.huella === huella && prev.texto) {
+    base.visado_oficial = Object.assign({}, prev, { revisado: ahora });
+    await env.SALMA_KB.put('dest:' + cc + ':base', JSON.stringify(base));
+    return { ok: true, sin_cambios: true, visado: base.visado_oficial };
+  }
+  if (!env.ANTHROPIC_API_KEY) return { ok: false, reason: 'sin_ia' };
+  const r = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 400, messages: [{ role: 'user', content:
+      `Texto de la ficha oficial de recomendaciones de viaje del Ministerio de Asuntos Exteriores de España sobre ${base.pais}:\n«${trozo}»\n\n`
+      + `Extrae SOLO lo que dice sobre el VISADO para viajar con PASAPORTE ESPAÑOL por turismo: si hace falta o no, cuántos días sin visado, e-visa o visado a la llegada, y requisitos del pasaporte si los da. 1-3 frases en español, sin añadir NADA que no esté en el texto. `
+      + `Si el texto no lo dice claro, pon visado vacío. Responde SOLO JSON: {"visado":"...","fecha_ficha":"fecha de actualización de la ficha si aparece, si no vacío"}` }] }),
+    signal: AbortSignal.timeout(30000),
+  });
+  if (!r.ok) { console.log(`[VISADO] ${cc} IA HTTP ${r.status}`); return { ok: false, reason: 'ia_' + r.status }; }
+  const d = await r.json();
+  const t = String(d.content?.[0]?.text || '');
+  let j = {};
+  try { j = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)); } catch (_) {}
+  const vis = typeof j.visado === 'string' ? j.visado.replace(/\s+/g, ' ').trim().slice(0, 600) : '';
+  if (!vis) { console.log(`[VISADO] ${cc} la IA no encontró el dato en la ficha`); return { ok: false, reason: 'sin_dato' }; }
+  base.visado_oficial = { texto: vis, url, fecha_ficha: String(j.fecha_ficha || '').slice(0, 40), revisado: ahora, huella };
+  await env.SALMA_KB.put('dest:' + cc + ':base', JSON.stringify(base));
+  console.log(`[VISADO] ${cc} ✓ ${vis.slice(0, 120)}`);
+  return { ok: true, visado: base.visado_oficial };
+}
+
 // «Antes de ir»: lo del plan manda; lo que falte, de los datos verificados del país (KV dest:<cc>:base). Nada inventado.
 function antesDeIrCompleto(plan, kv) {
   const a = plan || {}, k = kv || {};
@@ -8410,7 +8480,9 @@ function antesDeIrCompleto(plan, kv) {
     mejor_epoca: v(a.mejor_epoca) || v(k.mejor_epoca),
     evitar: v(k.evitar_epoca),
     presupuesto: v(a.presupuesto) || ((v(k.coste_diario_mochilero) || v(k.coste_diario_medio)) ? [v(k.coste_diario_mochilero) && `mochilero ${v(k.coste_diario_mochilero)} al día`, v(k.coste_diario_medio) && `medio ${v(k.coste_diario_medio)} al día`].filter(Boolean).join(' · ') : ''),
-    visado: v(k.visado_espanoles) ? `Con pasaporte español: ${v(k.visado_espanoles)}` : '',
+    visado: (() => { const vz = visadoDe(k); return vz.oficial
+      ? `Con pasaporte español, según la ficha oficial de Exteriores (revisada el ${_fechaEs(vz.fecha)}): ${vz.texto}`
+      : 'Los requisitos de entrada cambian a menudo: compruébalos antes de viajar en la ficha de recomendaciones de viaje de Exteriores (exteriores.gob.es).'; })(),
     seguro: v(a.seguro),
     moverse: v(a.moverse),
     llevar: v(a.llevar),
@@ -13492,6 +13564,19 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /visado-oficial?cc=cn (23 oct 2026) ───
+    // Lee ya el visado de la ficha oficial de Exteriores de un país (ver refrescarVisadoOficial). Como mucho una lectura por país
+    // cada 7 días (si es más reciente devuelve lo guardado) y la IA solo si la página cambió: coste acotado (~0,3 cént./país).
+    if (request.method === 'GET' && url.pathname === '/visado-oficial') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const r = await refrescarVisadoOficial(env, url.searchParams.get('cc'), { maxEdadDias: 7 });
+        return new Response(JSON.stringify(r), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ ok: false, error: String(e.message || e).slice(0, 160) }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /guia-extras (23 oct 2026) ───
     // Completa una guía pública que ya existía con lo que traen las nuevas (route.guia_extra): intro, «Antes de ir» (datos
     // verificados del país en KV), preguntas frecuentes, título y descripción para Google. Lo escribe en su public_guides, así
@@ -13505,7 +13590,7 @@ export default {
       const permitidas = String(env.GUIAS_EXTRAS || '').split(',').map(x => x.trim()).filter(Boolean);
       if (!permitidas.includes('*') && !permitidas.includes(slug)) return out({ ok: false, reason: 'no_permitida' });
       if (!env.SALMA_KB) return out({ ok: false, reason: 'sin_kv' });
-      if (await env.SALMA_KB.get('guiaextra:' + slug)) return out({ ok: true, ya: true });
+      if (url.searchParams.get('rehacer') !== '1' && await env.SALMA_KB.get('guiaextra:' + slug)) return out({ ok: true, ya: true });
       const dk = 'guiaextra:dia:' + new Date().toISOString().slice(0, 10);
       const hoy = parseInt((await env.SALMA_KB.get(dk)) || '0', 10);
       if (hoy >= 40) return out({ ok: false, reason: 'tope_diario' });
@@ -18728,6 +18813,19 @@ REGLAS:
       return;
     }
 
+    // LUNES → visados de la ficha oficial de Exteriores (refrescarVisadoOficial): hasta 50 países por semana, los que tengan el
+    // dato con más de 25 días; todos los países pasan en ~4 semanas. Solo llama a la IA si la página de Exteriores ha cambiado.
+    try {
+      const idx = JSON.parse((await env.SALMA_KB.get('_index:countries')) || '[]');
+      let hechos = 0;
+      for (const e of idx) {
+        if (hechos >= 50) break;
+        const r = await refrescarVisadoOficial(env, e.code).catch(err => ({ ok: false, reason: err.message }));
+        if (!r.ya) hechos++;
+      }
+      console.log(`[VISADO] cron: ${hechos} países revisados en Exteriores`);
+    } catch (e) { console.error('[VISADO] cron: ' + e.message); }
+
     if (!env.OPENAI_API_KEY) return;
 
 
@@ -18796,6 +18894,7 @@ REGLAS:
           }
 
           const newData = JSON.parse(jsonMatch[0]);
+          if (current && current.visado_oficial) newData.visado_oficial = current.visado_oficial;   // lo oficial no se pisa con lo de memoria
 
           // Validar campos obligatorios antes de sobrescribir
           const requiredFields = ['pais', 'capital', 'moneda', 'idioma_oficial', 'emergencias'];
