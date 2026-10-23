@@ -39,7 +39,9 @@ function isGood(g) {
   const st = (routeOf(g).stops || []);
   const words = st.reduce((n, s) => n + String(s.narrative || s.description || '').split(/\s+/).filter(Boolean).length, 0);
   const geo = st.filter(s => s.lat && s.lng).length;
-  return st.length >= 5 && words >= 200 && geo >= st.length * 0.8 && String(g.summary || routeOf(g).summary || '').length >= 60;
+  // La intro escrita para la web (guia_extra.intro, 23 oct 2026) vale como resumen de verdad
+  const resumen = g.summary || routeOf(g).summary || (routeOf(g).guia_extra || {}).intro || '';
+  return st.length >= 5 && words >= 200 && geo >= st.length * 0.8 && String(resumen).length >= 60;
 }
 
 const DRY = process.argv.includes('--dry-run');
