@@ -52,7 +52,7 @@ CACHE_TAIL = "1"   # contexto variable (fecha, GPS, datos del país…) al final
 CHAT_EFFORT = "medium"   # esfuerzo de Claude en la conversación normal (no guías): respuestas más escuetas. Revertir = "" (caso p-mulprefz0fz)
 PRECIOS_GUIAS = "1"   # precios con fuente en las guías (preciosConFuente). "0" apaga. (21 oct: se apagó creyendo que era la causa de las paradas sin verificar; era la cuota diaria de Google)
 GUIDES_NO_DAILY_CAP = "j94ldKhMTkgT7k3u2CRSG2UxP6X2"   # cuentas sin tope diario de guías: la de pruebas claude@ (producción de guías, 21 oct 2026). Revertir = ""
-GUIAS_EXTRAS = "guilin-en-4-dias-1wva"   # guías públicas viejas que /guia-extras puede completar (intro, antes de ir, FAQ). "*" = todas. 23 oct 2026
+GUIAS_EXTRAS = "guilin-en-4-dias-1wva,butan-en-15-dias-de-paro-a-trashigang-xolc"   # guías públicas viejas que /guia-extras puede completar (intro, antes de ir, FAQ). "*" = todas. 23 oct 2026
 PROMPT_UNICO = "*"   # prompt único (22 oct 2026, caso mvj8dc8qqbl7): "*" = todos; uid = solo esas cuentas (hoy, la de pruebas claude@); "" = el de siempre
 PLAY_BILLING_ON = "1"   # compras dentro de la app de Google Play (Play Billing, /play-verify). Encendido 13 oct 2026 con los 4 productos activos. Revertir = "0"
 # Remitente de los emails (Resend). Dominio borradodelmapa.com verificado en Resend el 26 sept 2026
