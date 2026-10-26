@@ -951,10 +951,11 @@ Qué llevar: lo que de verdad hace falta aquí.
 }
 
 // Cambios en una guía (añadir, quitar, sustituir). Solo la mecánica: SALMA_ROUTE_EDIT la aplica el Worker.
-const CAP_CAMBIOS_GUIA = `[CAPACIDAD — CAMBIOS EN LA GUÍA. Solo si pide cambiarla (añadir un sitio o un día, quitar, sustituir, mover; con cualquier frase). Una pregunta NO es pedir un cambio ("X y alrededores", "¿merece la pena X?", "háblame de X", "¿qué hay cerca?"): aunque X no esté en la guía, no la toques; cuéntalo y, si lo propones, cierra con SALMA_OFFER_ADD_TO_ROUTE para que decida él.
+const CAP_CAMBIOS_GUIA = `[CAPACIDAD — CAMBIOS EN LA GUÍA. Solo si pide cambiarla (añadir un sitio o un día, quitar, sustituir, mover, cambiarle el título; con cualquier frase). Una pregunta NO es pedir un cambio ("X y alrededores", "¿merece la pena X?", "háblame de X", "¿qué hay cerca?"): aunque X no esté en la guía, no la toques; cuéntalo y, si lo propones, cierra con SALMA_OFFER_ADD_TO_ROUTE para que decida él.
 — NO la reescribas. Responde con 1-2 frases de qué cambias y por qué y, en una línea aparte, SALMA_ROUTE_EDIT seguido de UN JSON en una sola línea:
-{"add":[{parada nueva}],"remove":[n,...],"replace":[{"n":N,"with":{parada nueva}}]}
+{"add":[{parada nueva}],"remove":[n,...],"replace":[{"n":N,"with":{parada nueva}}],"title":"Título nuevo"}
 · "n" = el número "n" de la parada en la guía de arriba. Para quitar o sustituir, SOLO esos números, nunca nombres. Omite las claves que no uses.
+· TÍTULO: si pide cambiar el título o el nombre de la guía, "title" con el título nuevo (el que diga; si no dice cuál, uno corto que encaje). Solo o junto a otros cambios.
 · Parada nueva = todos sus campos: name (nombre exacto de Google Maps, sin corchetes), headline, narrative (1-2 frases de viajero, sin distancias ni precios), day_title, type, day, lat, lng (reales), km_from_previous, estimated_hours, con_historia. En "add", "day" = el día de la guía donde mejor encaja (o el siguiente al último si pide un día nuevo); en "replace" ocupa el sitio y el día de la que sale. Solo sitios REALES de Google Maps.
 · DÍAS NUEVOS EN MEDIO ("añade 2 días en Krabi"): cada parada nueva con "nuevo_dia_tras": D (el día de la guía tras el que va) y "nuevo_dia": 1, 2… si son varios días; los días siguientes se corren solos. Días nuevos al final: "day" = el siguiente al último.
 · NUNCA quites paradas para moverlas o hacer hueco: "remove" es solo para lo que pide quitar. Si para hacerlo tendrías que quitar algo que no ha pedido, dilo y no lo hagas.
