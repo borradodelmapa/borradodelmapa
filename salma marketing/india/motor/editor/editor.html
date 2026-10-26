@@ -88,12 +88,30 @@ function pintarGaleria(foco){
   const aqui = fotoActual(D.bloques.find(x => x.id === ctx.bid), ctx.k);
   $('#grid').innerHTML = '<div class="leyenda" style="grid-column:1/-1"><b style="background:#fc0">AMARILLO</b> el de este plano · <b style="background:#3c3">VERDE</b> ya está puesto en otro plano (verás dónde) · sin color: libre</div>' + lista(tab).map(id => `<div class="g ${id===aqui?'aqui':usadas[id]?'usada':''}" data-id="${id}"><img loading="lazy" src="/thumb/${id}"><span>${id}</span>${usadas[id]?`<div class="u">${id===aqui?'este plano':'en '+usadas[id]}</div>`:''}</div>`).join('');
   $('#grid').querySelectorAll('.g[data-id]').forEach(e => e.onclick = async () => {
+    if (/^(V|RW)/.test(e.dataset.id)) return previsualizarVideo(e.dataset.id);
     const b = D.bloques.find(x => x.id === ctx.bid); const arr = ov.shots[b.id] || (ov.shots[b.id] = b.shots.map(s => s.a)); arr[ctx.k] = e.dataset.id;
     if (arr.every((a,i) => a === b.shots[i].a)) delete ov.shots[b.id];
     await guardar(); $('#modal').style.display = 'none'; pintar();
   });
 }
+// Desde la galería: al tocar un vídeo se ve ahí mismo y se elige dónde empieza antes de ponerlo en el plano
+function previsualizarVideo(id){
+  const bid = ctx.bid, k = ctx.k, b = D.bloques.find(x => x.id === bid), v = $('#rvid');
+  $('#rt').textContent = `Vídeo ${id} para «${bid}», plano ${k+1} — pausa donde quieras que EMPIECE`;
+  v.src = '/media/' + id; v.onloadedmetadata = () => { v.currentTime = 0; v.play(); }; $('#rinfo').textContent = '';
+  $('#rpon').textContent = '✔ Usar este vídeo empezando aquí'; $('#rorig').textContent = '← Elegir otro';
+  $('#rpon').onclick = async () => {
+    const t = Math.round(v.currentTime * 10) / 10; v.pause();
+    const arr = ov.shots[bid] || (ov.shots[bid] = b.shots.map(s => s.a)); arr[k] = id;
+    if (arr.every((a,i) => a === b.shots[i].a) && !(t > 0)) delete ov.shots[bid];
+    const ss = ov.ss[bid] || (ov.ss[bid] = b.shots.map(s => s.ss || 0)); ss[k] = t;
+    await guardar(); $('#modal2').style.display = 'none'; $('#modal').style.display = 'none'; pintar();
+  };
+  $('#rorig').onclick = () => { v.pause(); $('#modal2').style.display = 'none'; };
+  $('#modal2').style.display = 'block';
+}
 function abrirRecorte(bid, k){
+  $('#rpon').textContent = '✂ Empezar aquí (donde está el vídeo)'; $('#rorig').textContent = 'Volver al original';
   const b = D.bloques.find(x => x.id === bid), id = fotoActual(b, k), ss0 = ((ov.ss[bid] || [])[k] ?? b.shots[k].ss) || 0;
   $('#rt').textContent = `Recortar «${bid}», plano ${k+1} (${id}) — el vídeo original no se toca`;
   const v = $('#rvid'); v.src = '/media/' + id; v.onloadedmetadata = () => { v.currentTime = ss0; }; $('#rinfo').textContent = 'Empieza en: ' + ss0.toFixed(1) + ' s';
