@@ -26,12 +26,19 @@ const galeria = () => {
   return out;
 };
 
+// Miniaturas SIN bloquear el servidor (antes spawnSync paraba todo mientras se creaban): cola de 4 ffmpeg a la vez, y se precalientan al arrancar
+const enCurso = new Map(); let activos = 0; const espera = [];
+const lanzar = () => { while (activos < 4 && espera.length) { const t = espera.shift(); activos++; t(); } };
 const thumb = id => {
-  const out = `${CACHE}/${id}.jpg`; if (fs.existsSync(out)) return out;
-  const f = resolve(id);
-  const args = isVideo(id) ? ['-v', 'error', '-y', '-ss', '1', '-i', f, '-frames:v', '1', '-vf', 'scale=260:-2', '-q:v', '4', out] : ['-v', 'error', '-y', '-i', f, '-frames:v', '1', '-vf', 'scale=260:-2', '-q:v', '4', out];
-  spawnSync(FF, args); return fs.existsSync(out) ? out : null;
+  const out = `${CACHE}/${id}.jpg`; if (fs.existsSync(out)) return Promise.resolve(out);
+  if (enCurso.has(id)) return enCurso.get(id);
+  const pr = new Promise(ok => espera.push(() => {
+    const f = resolve(id), args = isVideo(id) ? ['-v', 'error', '-y', '-ss', '1', '-i', f, '-frames:v', '1', '-vf', 'scale=260:-2', '-q:v', '4', out] : ['-v', 'error', '-y', '-i', f, '-frames:v', '1', '-vf', 'scale=260:-2', '-q:v', '4', out];
+    const p = spawn(FF, args); const fin = () => { activos--; enCurso.delete(id); ok(fs.existsSync(out) ? out : null); lanzar(); }; p.on('close', fin); p.on('error', fin);
+  }));
+  enCurso.set(id, pr); lanzar(); return pr;
 };
+setTimeout(() => { const g = galeria(); [...g.runway, ...g.sony, ...g.video, ...g.movil].forEach(id => thumb(id).catch(() => {})); }, 1500);
 
 let job = { estado: 'libre', log: '', fin: 0, ini: 0, cambios: [], total: 0 };
 const resumenCambios = () => { const o = leerOv(), base = cargarCfg(), c = [];
@@ -81,7 +88,7 @@ http.createServer((req, res) => {
     if (p.startsWith('/audio-propio/')) { const f = path.basename(decodeURIComponent(p.slice(14))); return file(req, res, __dirname + '/uploads/' + f, 'audio/mpeg'); }
     if (p === '/api/montar' && req.method === 'POST') { montar(); return send(res, 200, { ok: true }); }
     if (p === '/api/estado') { const L = job.log, et = [...L.matchAll(/ETAPA (\d)\/6 ([^\n]*)/g)].pop(), pl = [...L.matchAll(/PLANO (\d+)/g)].pop(); return send(res, 200, { estado: job.estado, log: L.split('\n').filter(x => !/^(PLANO|ETAPA)/.test(x)).join('\n'), fin: job.fin, seg: job.ini ? Math.round(((job.estado === 'montando' ? Date.now() : job.fin) - job.ini) / 1000) : 0, etapa: et ? +et[1] : 0, etapaTxt: et ? et[2] : '', plano: pl ? +pl[1] : 0, total: job.total, cambios: job.cambios, tieneVideo: fs.existsSync(VIDEO()), tieneOriginal: fs.existsSync(ORIG()) }); }
-    if (p.startsWith('/thumb/')) { const id = p.slice(7); if (!/^(S|M|V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return file(req, res, thumb(id), 'image/jpeg'); }
+    if (p.startsWith('/thumb/')) { const id = p.slice(7); if (!/^(S|M|V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return thumb(id).then(f => file(req, res, f, 'image/jpeg')); }
     if (p.startsWith('/audio/')) { const f = decodeURIComponent(p.slice(7)); if (!audioFiles().some(a => a.file === f)) return send(res, 404, 'no', 'text/plain'); return file(req, res, BASE + '/audios-candidatos/' + f, 'audio/mpeg'); }
     if (p === '/video-original') return file(req, res, ORIG(), 'video/mp4');
     if (p === '/video') return file(req, res, VIDEO(), 'video/mp4');
