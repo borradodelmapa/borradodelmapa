@@ -155,6 +155,9 @@ guías y seguía viva en las fotos del chat porque eran **otra copia**.
   entra en `scripts/probar-nombres.cjs` (0 €, debe dar todo bien) **antes** de subir.
 - Mismo principio para el prompt: una regla se escribe una vez, no una por modo (auditoría: `docs/auditoria-prompt-salma.md`).
 
+### 14. VÍDEOS Y SERIES DOCUMENTALES (India, monos, Asia…) — LEER `docs/video-reglas-y-flujo.md` ANTES DE TOCAR NADA (26 oct 2026)
+Paco, tras 2 días de montajes malos: **las reglas están escritas y el motor las comprueba**. Voces definitivas, flujo, reglas de montaje y sonido, cuidados de coste y privacidad, en ese único archivo; el motor está en `salma marketing/india/motor/` (no reescribir otro). No generar voz ni Runway sin decir el coste (§8).
+
 ---
 ## Normas de desarrollo (texto completo: `docs/normas-desarrollo.md`)
 - **Autonomía (11 sept):** bajo riesgo (docs, `CLAUDE.md`, git, subir lo ya hablado y probado en la conversación)
@@ -220,6 +223,7 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
 | "Crear ruta con mapa" tarda ~2 min — plan GUÍA INSTANTÁNEA (anotado, sin empezar) | `docs/guia-instantanea.md` |
 | Historial de sesiones, bugs confirmados | `CLAUDE-historial.md` (grande: leer solo el trozo necesario) |
 | Comunidad de viajeros, pasarela premium, prompt de Salma (ideas/notas) | `docs/idea-comunidad-viajeros.md`, `docs/pasarela-premium.md`, `docs/salma-prompt.txt` |
+| **Vídeos y series documentales (India, monos, Asia): reglas de montaje, voces, flujo, motor** | `docs/video-reglas-y-flujo.md` (+ `docs/india-notas-y-fuentes.md`) |
 
 ## Comandos básicos
 ```
