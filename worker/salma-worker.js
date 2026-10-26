@@ -9608,6 +9608,27 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     });
   }
 
+  // ── PARADA SUELTA LEJOS DEL GRUPO (26 oct 2026, reporte de Tania: guía de Valencia con una parada en Palma) ──
+  // Sin ancla de punto no había tope de distancia al resto: el nombre coincidía, estaba en España y valía. Si el grupo es
+  // compacto (3 de cada 5 paradas a <40 km de su mediana: guía de ciudad) se descarta lo que cae a >100 km. Rutas que
+  // cruzan un país no son compactas y no se tocan. Sin llamadas a Google.
+  if (!pointAnchor && finalStops.length >= 4) {
+    const _p = finalStops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number' && Math.abs(s.lat) > 0.01);
+    if (_p.length >= 4) {
+      const _m = a => { const b = [...a].sort((x, y) => x - y); const k = b.length >> 1; return b.length % 2 ? b[k] : (b[k - 1] + b[k]) / 2; };
+      const cLat = _m(_p.map(s => s.lat)), cLng = _m(_p.map(s => s.lng));
+      const _d = s => haversineKm(cLat, cLng, s.lat, s.lng);
+      if (_p.filter(s => _d(s) <= 40).length >= _p.length * 0.6) {
+        finalStops = finalStops.filter(s => {
+          if (typeof s.lat !== 'number' || typeof s.lng !== 'number' || Math.abs(s.lat) <= 0.01 || _d(s) <= 100) return true;
+          discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'lejos_del_grupo' });
+          console.log(`[VERIFY] ✗ DESCARTADA (suelta, ${_d(s).toFixed(0)} km del grupo) "${s.name}" (${s.lat}, ${s.lng})`);
+          return false;
+        });
+      }
+    }
+  }
+
   // ── PARADA DE OTRA LOCALIDAD (3 oct 2026, caso p-musbxm408zg) ──
   // "Tragabuches" de Ronda → Google dio "Tragabuches Marbella" (otro local de la misma marca, a 36 km): mismo nombre,
   // pasa el radio (120 km a 3 días), la carretera (<60 km) y la provincia. Señal: Google le pone en el nombre una

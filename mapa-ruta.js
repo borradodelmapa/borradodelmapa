@@ -24,12 +24,31 @@ const mapaRuta = {
   // Paradas con coordenada usable: número finito, dentro de rango, no (0,0).
   // Una coord imposible (lat 999, lat/lng cambiados) reventaba fitBounds con "reading 'min'".
   _validStops(stops) {
-    return (stops || []).filter(s => {
+    const ok = (stops || []).filter(s => {
       if (!s) return false;
       const la = +s.lat, ln = +s.lng;
       return isFinite(la) && isFinite(ln) && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
         && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
     });
+    return this._sinAtipicas(ok);
+  },
+
+  // Una parada suelta con coordenada equivocada (guía de Valencia con un punto en Palma) arrastraba la
+  // línea de Directions por ferri hasta Baleares (26 oct 2026). Si el grupo es compacto (3 de cada 5 paradas
+  // a <40 km de su mediana: guía de ciudad) y una parada cae a >100 km, no se pinta ni entra en la línea.
+  // Rutas que cruzan un país (Tailandia, Transpirenaica) no son compactas: no se tocan.
+  _sinAtipicas(stops) {
+    if (stops.length < 4) return stops;
+    const med = a => { const b = a.slice().sort((x, y) => x - y); const m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+    const cLa = med(stops.map(s => +s.lat)), cLn = med(stops.map(s => +s.lng));
+    const km = s => {
+      const r = Math.PI / 180, dLa = (s.lat - cLa) * r, dLn = (s.lng - cLn) * r;
+      const h = Math.sin(dLa / 2) ** 2 + Math.cos(cLa * r) * Math.cos(s.lat * r) * Math.sin(dLn / 2) ** 2;
+      return 12742 * Math.asin(Math.sqrt(h));
+    };
+    const d = stops.map(km);
+    if (d.filter(x => x <= 40).length < stops.length * 0.6) return stops;
+    return stops.filter((s, i) => d[i] <= 100);
   },
 
   // ═══ INIT ═══
