@@ -6,6 +6,7 @@ module.exports = (cfg, ov) => {
   cfg.id += '-editor';
   cfg.blocks.forEach(b => {
     (ov.shots && ov.shots[b.id] || []).forEach((a, k) => { if (a && b.shots[k] && b.shots[k].a !== a) { b.shots[k].a = a; delete b.shots[k].ss; } });
+    (ov.ss && ov.ss[b.id] || []).forEach((v, k) => { if (v != null && b.shots[k] && /^(V|RW)/.test(b.shots[k].a)) b.shots[k].ss = v; });
     if (ov.amb && ov.amb[b.id] && b.amb) b.amb.src = ov.amb[b.id];
     const nt = ov.text && ov.text[b.id];
     if (nt && b.text && nt.trim() && nt !== b.text) {

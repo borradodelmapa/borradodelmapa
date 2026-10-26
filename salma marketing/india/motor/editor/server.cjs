@@ -7,7 +7,7 @@ if (!fs.existsSync(OVR)) fs.writeFileSync(OVR, '{"shots":{},"amb":{},"text":{},"
 fs.mkdirSync(CACHE, { recursive: true });
 const { resolve, RW, vozEnCache } = require('../motor.cjs');
 const aplicar = require('./aplicar.cjs');
-const leerOv = () => ({ shots: {}, amb: {}, text: {}, audio: {}, ...JSON.parse(fs.readFileSync(OVR, 'utf8')) });
+const leerOv = () => ({ shots: {}, amb: {}, text: {}, audio: {}, ss: {}, ...JSON.parse(fs.readFileSync(OVR, 'utf8')) });
 const isVideo = id => /^(RW|V)/.test(id);
 
 // configuración base del capítulo (sin overrides): misma técnica que hoja.cjs
@@ -20,7 +20,7 @@ const audioFiles = () => fs.readdirSync(BASE + '/audios-candidatos').filter(f =>
 
 const galeria = () => {
   const out = { sony: [], movil: [], video: [], runway: Object.keys(RW) };
-  fs.readdirSync(BASE + '/india web').forEach(f => { const x = f.match(/pacogomezduarte-(\d+)\.jpg$/); if (x && +x[1] >= 470 && +x[1] <= 610) out.sony.push('S' + x[1]); });
+  fs.readdirSync(BASE + '/india web').forEach(f => { const x = f.match(/pacogomezduarte-(\d+)\.jpg$/); if (x) out.sony.push('S' + x[1]); });
   out.sony.sort((a, b) => +a.slice(1) - +b.slice(1));
   for (let i = 1; i <= 182; i++) out.movil.push('M' + i);
   for (let i = 1; i <= 75; i++) out.video.push('V' + i);
@@ -43,7 +43,7 @@ setTimeout(() => { const g = galeria(); [...g.runway, ...g.sony, ...g.video, ...
 
 let job = { estado: 'libre', log: '', fin: 0, ini: 0, cambios: [], total: 0 };
 const resumenCambios = () => { const o = leerOv(), base = cargarCfg(), c = [];
-  base.blocks.forEach(b => { (o.shots[b.id] || []).forEach((a, k) => { if (b.shots[k] && a !== b.shots[k].a) c.push(`Escena «${b.id}», plano ${k + 1}: ${b.shots[k].a} → ${a}`); }); if (o.amb[b.id] && o.amb[b.id] !== b.amb) c.push(`Escena «${b.id}»: ambiente ${b.amb} → ${o.amb[b.id]}`); if (o.text[b.id] && o.text[b.id] !== b.text) c.push(`Escena «${b.id}»: texto cambiado (voz nueva)`); if (o.audio[b.id]) c.push(`Escena «${b.id}»: audio propio (${o.audio[b.id]})`); });
+  base.blocks.forEach(b => { (o.shots[b.id] || []).forEach((a, k) => { if (b.shots[k] && a !== b.shots[k].a) c.push(`Escena «${b.id}», plano ${k + 1}: ${b.shots[k].a} → ${a}`); }); if (o.amb[b.id] && o.amb[b.id] !== b.amb) c.push(`Escena «${b.id}»: ambiente ${b.amb} → ${o.amb[b.id]}`); if (o.text[b.id] && o.text[b.id] !== b.text) c.push(`Escena «${b.id}»: texto cambiado (voz nueva)`); (o.ss[b.id] || []).forEach((v, k) => { if (v != null && b.shots[k] && v !== (b.shots[k].ss || 0)) c.push(`Escena «${b.id}», plano ${k + 1}: recortado, empieza en el segundo ${v}`); }); if (o.audio[b.id]) c.push(`Escena «${b.id}»: audio propio (${o.audio[b.id]})`); });
   return { c, planos: base.blocks.reduce((n, b) => n + (b.shots || []).length, 0) }; };
 const montar = () => {
   if (job.estado === 'montando') return;
@@ -51,8 +51,11 @@ const montar = () => {
   const p = spawn(process.execPath, [CAP + '.cjs'], { cwd: HERE, env: { ...process.env, APLICAR_EDITOR: '1', EDITOR_OVR: OVR } });
   const add = d => { job.log = (job.log + d).slice(-6000); };
   p.stdout.on('data', add); p.stderr.on('data', add);
-  p.on('close', c => { job.estado = c === 0 ? 'listo' : 'error'; job.fin = Date.now(); });
+  p.on('close', c => { job.estado = c === 0 ? 'listo' : 'error'; job.fin = Date.now(); if (c === 0) guardarTerminado(); });
 };
+// Cada montaje que acaba bien se copia con nombre claro (capítulo + fecha y hora) a VIDEOS-TERMINADOS: nunca se pisa nada
+const TERM = BASE + '/VIDEOS-TERMINADOS'; fs.mkdirSync(TERM, { recursive: true });
+const guardarTerminado = () => { try { const d = new Date(), z = n => String(n).padStart(2, '0'); const nom = `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}_${cargarCfg().id}.mp4`; fs.copyFileSync(VIDEO(), TERM + '/' + nom); job.copia = nom; } catch (e) { job.log += '\nNo pude copiar a VIDEOS-TERMINADOS: ' + e.message; } };
 const ORIG = () => BASE + '/animatica-cap4/' + cargarCfg().id + '.mp4';
 const VIDEO = () => BASE + '/animatica-cap4/' + cargarCfg().id + '-editor.mp4';
 
@@ -70,9 +73,14 @@ http.createServer((req, res) => {
     if (p === '/') return file(req, res, __dirname + '/editor.html', 'text/html; charset=utf-8');
     if (p === '/api/datos') {
       const cfg = cargarCfg();
-      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
+      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ ss: s.ss || 0, a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
     }
-    if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
+    if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, ss: o.ss || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
+    if (p === '/api/reset' && req.method === 'POST') { const v = __dirname + '/versiones'; fs.mkdirSync(v, { recursive: true }); fs.copyFileSync(OVR, `${v}/${CAP}-${Date.now()}.json`); fs.writeFileSync(OVR, JSON.stringify({ shots: {}, amb: {}, text: {}, audio: {}, ss: {} }, null, 1)); return send(res, 200, leerOv()); }
+    if (p.startsWith('/media/')) { const id = p.slice(7); if (!/^(V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return file(req, res, resolve(id), 'video/mp4'); }
+    if (p === '/api/terminados') return send(res, 200, fs.readdirSync(TERM).filter(f => /\.mp4$/.test(f)).sort().reverse());
+    if (p.startsWith('/terminado/')) return file(req, res, TERM + '/' + path.basename(decodeURIComponent(p.slice(11))), 'video/mp4');
+    if (p === '/inicio') return file(req, res, __dirname + '/inicio.html', 'text/html; charset=utf-8');
     if (p === '/api/estimar') { // qué voces habría que generar ahora (las que ya existen en la caché no cuestan nada)
       const cfg = aplicar(cargarCfg(), leerOv()); let chars = 0; const bloques = [];
       cfg.blocks.forEach(b => { if (b.text && !b.audioPropio && !vozEnCache(b.voz || b.text, cfg.voices[b.who])) { chars += (b.voz || b.text).length; bloques.push(b.id); } });
@@ -88,7 +96,7 @@ http.createServer((req, res) => {
     if (p === '/api/quitar-audio' && req.method === 'POST') { const id = u.searchParams.get('id') || ''; const o = leerOv(); delete o.audio[id]; fs.writeFileSync(OVR, JSON.stringify(o, null, 1)); return send(res, 200, o); }
     if (p.startsWith('/audio-propio/')) { const f = path.basename(decodeURIComponent(p.slice(14))); return file(req, res, __dirname + '/uploads/' + f, 'audio/mpeg'); }
     if (p === '/api/montar' && req.method === 'POST') { montar(); return send(res, 200, { ok: true }); }
-    if (p === '/api/estado') { const L = job.log, et = [...L.matchAll(/ETAPA (\d)\/6 ([^\n]*)/g)].pop(), pl = [...L.matchAll(/PLANO (\d+)/g)].pop(); return send(res, 200, { estado: job.estado, log: L.split('\n').filter(x => !/^(PLANO|ETAPA)/.test(x)).join('\n'), fin: job.fin, seg: job.ini ? Math.round(((job.estado === 'montando' ? Date.now() : job.fin) - job.ini) / 1000) : 0, etapa: et ? +et[1] : 0, etapaTxt: et ? et[2] : '', plano: pl ? +pl[1] : 0, total: job.total, cambios: job.cambios, tieneVideo: fs.existsSync(VIDEO()), tieneOriginal: fs.existsSync(ORIG()) }); }
+    if (p === '/api/estado') { const L = job.log, et = [...L.matchAll(/ETAPA (\d)\/6 ([^\n]*)/g)].pop(), pl = [...L.matchAll(/PLANO (\d+)/g)].pop(); return send(res, 200, { estado: job.estado, log: L.split('\n').filter(x => !/^(PLANO|ETAPA)/.test(x)).join('\n'), fin: job.fin, seg: job.ini ? Math.round(((job.estado === 'montando' ? Date.now() : job.fin) - job.ini) / 1000) : 0, etapa: et ? +et[1] : 0, etapaTxt: et ? et[2] : '', plano: pl ? +pl[1] : 0, total: job.total, cambios: job.cambios, tieneVideo: fs.existsSync(VIDEO()), tieneOriginal: fs.existsSync(ORIG()), copia: job.copia || '' }); }
     if (p.startsWith('/thumb/')) { const id = p.slice(7); if (!/^(S|M|V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return thumb(id).then(f => file(req, res, f, 'image/jpeg')); }
     if (p.startsWith('/audio/')) { const f = decodeURIComponent(p.slice(7)); if (!audioFiles().some(a => a.file === f)) return send(res, 404, 'no', 'text/plain'); return file(req, res, BASE + '/audios-candidatos/' + f, 'audio/mpeg'); }
     if (p === '/video-original') return file(req, res, ORIG(), 'video/mp4');
