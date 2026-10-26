@@ -104,5 +104,5 @@ async function sondear(){
   if (r.tieneVideo && r.estado !== 'montando') { $('#vid').style.display = 'block'; const v = $('#vnuevo'), u = '/video?t=' + (r.fin||0); if (!v.src.endsWith(u)) { v.src = u; } if (r.tieneOriginal && !$('#vold').src) $('#vold').src = '/video-original'; if (r.estado==='listo') P.scrollIntoView({behavior:'smooth'}); }
   if (r.estado === 'montando') setTimeout(sondear, 1500);
 }
-(async () => { D = await (await fetch('/api/datos')).json(); ov = D.overrides; pintar(); sondear(); })();
+(async () => { D = await (await fetch('/api/datos')).json(); document.querySelector('h1').textContent = 'EDITOR · ' + D.titulo; document.title = 'Editor · ' + D.titulo; ov = D.overrides; pintar(); sondear(); })();
 </script></body></html>

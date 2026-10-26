@@ -2,7 +2,8 @@
 // Uso: node editor/server.cjs  →  http://localhost:8095     (el motor reutiliza las voces ya generadas: no gasta ElevenLabs si no cambias texto)
 const http = require('http'), fs = require('fs'), path = require('path'), Module = require('module'), { spawn, spawnSync } = require('child_process');
 const HERE = path.resolve(__dirname, '..'), BASE = path.resolve(HERE, '..'), FF = BASE + '/herramientas/node_modules/ffmpeg-static/ffmpeg.exe';
-const CACHE = __dirname + '/cache', OVR = __dirname + '/overrides.json', PORT = 8095;
+const CACHE = __dirname + '/cache', CAP = process.argv[2] || 'cap4', OVR = __dirname + (CAP === 'cap4' ? '/overrides.json' : '/overrides-' + CAP + '.json'), PORT = CAP === 'cap4' ? 8095 : 8096; // un servidor por capítulo: cap4 → 8095, monos → 8096
+if (!fs.existsSync(OVR)) fs.writeFileSync(OVR, '{"shots":{},"amb":{},"text":{},"audio":{}}');
 fs.mkdirSync(CACHE, { recursive: true });
 const { resolve, RW, vozEnCache } = require('../motor.cjs');
 const aplicar = require('./aplicar.cjs');
@@ -11,7 +12,7 @@ const isVideo = id => /^(RW|V)/.test(id);
 
 // configuración base del capítulo (sin overrides): misma técnica que hoja.cjs
 const cargarCfg = () => {
-  const src = fs.readFileSync(HERE + '/cap4.cjs', 'utf8').replace(/const \{ build \} = require\('\.\/motor\.cjs'\);/, '').replace(/if \(process\.env\.APLICAR_EDITOR[\s\S]*$/, 'module.exports = cfg;');
+  const src = fs.readFileSync(HERE + '/' + CAP + '.cjs', 'utf8').replace(/const \{ build \} = require\('\.\/motor\.cjs'\);/, '').replace(/if \(process\.env\.APLICAR_EDITOR[\s\S]*$/, 'module.exports = cfg;');
   const m = new Module(HERE + '/cfg-virtual.cjs'); m.filename = HERE + '/cfg-virtual.cjs'; m.paths = Module._nodeModulePaths(HERE); m._compile(src, m.filename); return m.exports;
 };
 const AUDIOS = { 'AGUA-1': 'V32', 'AGUA-2': 'V33', 'AGUA-3': 'V34', 'AGUA-4': 'SFX_agua-remos', 'CALLE-1': 'V71', 'CALMA-1': 'V45', 'CALMA-2': 'V43', 'CALMA-3': 'SFX_noche-calma', 'GHAT-1': 'V50' };
@@ -47,13 +48,13 @@ const resumenCambios = () => { const o = leerOv(), base = cargarCfg(), c = [];
 const montar = () => {
   if (job.estado === 'montando') return;
   const rc = resumenCambios(); job = { estado: 'montando', log: '', fin: 0, ini: Date.now(), cambios: rc.c, total: rc.planos };
-  const p = spawn(process.execPath, ['cap4.cjs'], { cwd: HERE, env: { ...process.env, APLICAR_EDITOR: '1' } });
+  const p = spawn(process.execPath, [CAP + '.cjs'], { cwd: HERE, env: { ...process.env, APLICAR_EDITOR: '1', EDITOR_OVR: OVR } });
   const add = d => { job.log = (job.log + d).slice(-6000); };
   p.stdout.on('data', add); p.stderr.on('data', add);
   p.on('close', c => { job.estado = c === 0 ? 'listo' : 'error'; job.fin = Date.now(); });
 };
-const ORIG = () => BASE + '/animatica-cap4/india-cap4-benares-v8.mp4';
-const VIDEO = () => BASE + '/animatica-cap4/india-cap4-benares-v8-editor.mp4';
+const ORIG = () => BASE + '/animatica-cap4/' + cargarCfg().id + '.mp4';
+const VIDEO = () => BASE + '/animatica-cap4/' + cargarCfg().id + '-editor.mp4';
 
 const send = (res, code, body, type = 'application/json') => { res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' }); res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body)); };
 const file = (req, res, f, type) => {
@@ -69,7 +70,7 @@ http.createServer((req, res) => {
     if (p === '/') return file(req, res, __dirname + '/editor.html', 'text/html; charset=utf-8');
     if (p === '/api/datos') {
       const cfg = cargarCfg();
-      return send(res, 200, { id: cfg.id, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
+      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
     }
     if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
     if (p === '/api/estimar') { // qué voces habría que generar ahora (las que ya existen en la caché no cuestan nada)

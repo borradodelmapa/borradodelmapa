@@ -179,7 +179,10 @@ async function build(cfg) {
   const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=60:y=1180:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   const vf = [cnt, rot, numF].filter(Boolean).join(',') + (cnt || rot || numF ? ',' : '') + `subtitles=sub.ass:fontsdir='${FONTD}'`;
   const outFile = `${OUT}/${cfg.id}.mp4`;
-  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-vf', vf, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
+  // icono de Salma arriba a la izquierda, latiendo, hasta la tarjeta final (igual que la serie Asia)
+  const AV = ROOT + '/salma marketing/editor/ep1/avatar.png';
+  const fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=40+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})',${vf}[v]`;
+  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
   console.log('LISTO', outFile, TOTAL.toFixed(1) + ' s', clips.length, 'planos');
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
   return outFile;

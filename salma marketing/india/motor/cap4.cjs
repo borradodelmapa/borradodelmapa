@@ -5,6 +5,7 @@ const { PACO, SALMA } = require('./voces.cjs');
 const MAPA = 'C:/Users/User/Desktop/salma/salma marketing/india/motor/mapa-india-cap4.mp4';
 const AGUA = (db, ss = 0) => ({ src: 'V33', ss, db }); // río real de Rishikesh (vídeo del balcón)
 const cfg = {
+  titulo: 'INDIA CAP. 4 · BENARÉS',
   id: 'india-cap4-benares-v8',
   look: 'portra', counter: 'INDIA 2019',
   voices: { paco: PACO, salma: SALMA },
@@ -37,7 +38,7 @@ const cfg = {
       text: 'Quien muere en Benarés, dice la tradición, se libera de volver a nacer.',
       shots: [{ a: 'S553', sc: 'GP', z: 0.05, ok: 'silencio sobre el humo (guion de dirección)' }] },
     // 4 · LA BARCA
-    { id: 'barca', who: 'paco', scene: true, pause: 0.3, amb: AGUA(-22), rotulo: 'EL GANGES · DESDE LA BARCA',
+    { id: 'barca', who: 'paco', scene: true, pause: 0.3, amb: AGUA(-22),
       text: 'Lo veía todo desde la barca. Es una imagen que retienes por mucho tiempo.',
       shots: [{ a: 'S533', sc: 'GP', z: 0.06, foc: [0.5, 0.45] }, { a: 'S565', sc: 'D', from: 'Es una imagen', z: 0.05 }, { a: 'S529', sc: 'PM', from: 'por mucho tiempo', z: 0.05 }] },
     { id: 'siglos', who: 'salma', sceneEnd: true, pause: 2.4, amb: AGUA(-23, 4),
@@ -55,7 +56,6 @@ const cfg = {
       shots: [{ a: 'S542', sc: 'GP', z: 0.06, ok: 'frase corta' }] },
     { id: 'prohibido', who: 'salma', sceneEnd: true, pause: 0.8, amb: { src: 'V50', ss: 11, db: -35 },
       text: 'Está prohibido desde 1950. Sigue pasando.',
-      cifra: { text: '1950', sub: 'ART. 17 · CONSTITUCIÓN DE LA INDIA', word: '1950', dur: 3 },
       shots: [{ a: 'S552', sc: 'GP', z: 0.05, foc: [0.5, 0.3] }] },
     // 6 · LÁMPARAS
     { id: 'lamparas', who: 'paco', scene: true, sceneEnd: true, pause: 0.5, look: 'vision3', amb: { src: 'V57', ss: 6, db: -20 },
