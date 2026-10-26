@@ -41,3 +41,6 @@ Resumen único para **cualquier sesión que trabaje con vídeos** (India, monos,
 
 ## 7. Dónde está todo (India, cap. 4)
 `salma marketing/india/`: `motor/` (motor.cjs, reglas.cjs, voces.cjs, mapa.cjs, hoja.cjs, cap4.cjs = ejemplo de configuración; `node cap4.cjs` monta) · `banco-benares/` · `hoja-planos/` · `audios-candidatos/` · `videos-2019/` · `fotos-movil-2019/` · `runway-pruebas/` · salida en `animatica-cap4/`. Un capítulo nuevo = un `capN.cjs`. Notas, fuentes y decisiones: `docs/india-notas-y-fuentes.md`; guiones: `docs/india-guiones-grabar.md`, `docs/india-cap4-guion-direccion.md`; estilo: `docs/estilo-visual.md`, `docs/estilo-fotografico.md`. Herramientas y reglas de la serie Asia: `docs/serie-asia-estado.md`.
+
+## 8. Editor local (cap. 4)
+`salma marketing/india/abrir-editor.bat` (o `node motor/editor/server.cjs` y http://localhost:8095): escenas con sus planos, «cambiar» foto desde la galeria, ambiente con escucha, boton Montar y ver. Guarda en `motor/editor/overrides.json`; el montaje sale como `...-v8-editor.mp4` sin tocar el v8. Solo en el portatil, nada sale del PC, 0 euros (no genera voz si no cambia el texto).

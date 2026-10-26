@@ -41,8 +41,19 @@ function normFilter(f) {
 }
 const keyEL = () => (fs.readFileSync(ROOT + '/api/salma voice.txt', 'utf8').match(/sk_[A-Za-z0-9]+/) || [])[0];
 
+const hashVoz = (text, who) => crypto.createHash('md5').update(JSON.stringify([who.id, who.model, who.vs, who.lang || null, text])).digest('hex').slice(0, 14);
+const vozEnCache = (text, who) => { const h = hashVoz(text, who); return fs.existsSync(`${HERE}/voz/${h}.mp3`) && fs.existsSync(`${HERE}/voz/${h}.json`); };
+// Audio grabado por Paco (editor): se recorta el silencio de los extremos y los tiempos por carácter se reparten por la duración (aproximado)
+function vozPropia(file, text, id) {
+  const dir = HERE + '/voz-propia'; fs.mkdirSync(dir, { recursive: true }); const out = `${dir}/${id}.wav`;
+  const sr = 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05';
+  const r = spawnSync(FF, ['-v', 'error', '-y', '-i', file, '-af', `${sr},areverse,${sr},areverse`, '-ar', '44100', out], { encoding: 'utf8' });
+  if (r.status !== 0 || !fs.existsSync(out)) throw new Error('no puedo leer el audio de ' + id + ': ' + (r.stderr || '').slice(0, 200));
+  const d0 = dur(out);
+  const n = text.length; return { mp3: out, al: { st: Array.from({ length: n }, (_, i) => d0 * i / n), en: Array.from({ length: n }, (_, i) => d0 * (i + 1) / n) }, chars: 0 };
+}
 async function voice(text, who) {
-  const h = crypto.createHash('md5').update(JSON.stringify([who.id, who.model, who.vs, who.lang || null, text])).digest('hex').slice(0, 14);
+  const h = hashVoz(text, who);
   const dir = HERE + '/voz'; fs.mkdirSync(dir, { recursive: true });
   const mp3 = `${dir}/${h}.mp3`, js = `${dir}/${h}.json`;
   if (fs.existsSync(mp3) && fs.existsSync(js)) return { mp3, al: JSON.parse(fs.readFileSync(js, 'utf8')), chars: 0 };
@@ -62,7 +73,7 @@ async function build(cfg) {
   let charsNow = 0;
   for (const b of cfg.blocks) {
     if (!b.text) continue;
-    const v = await voice(b.voz || b.text, cfg.voices[b.who]); b.v = v; charsNow += v.chars;
+    const v = b.audioPropio ? vozPropia(b.audioPropio, b.voz || b.text, b.id) : await voice(b.voz || b.text, cfg.voices[b.who]); b.v = v; charsNow += v.chars;
     b.vEnd = v.al.en[v.al.en.length - 1];
   }
   console.log('Caracteres de voz generados ahora:', charsNow);
@@ -167,4 +178,4 @@ async function build(cfg) {
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
   return outFile;
 }
-module.exports = { build, voice };
+module.exports = { build, voice, resolve, RW, vozEnCache };

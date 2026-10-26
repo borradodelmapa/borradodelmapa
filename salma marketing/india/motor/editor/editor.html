@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Editor · Benarés</title>
+<style>
+:root{--bg:#0d0d0d;--card:#161616;--line:#2a2a2a;--or:#F4630B;--az:#4FB3C8;--tx:#eee;--mu:#999}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#000;border-bottom:2px solid var(--or);padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;color:var(--or);margin-right:auto}
+button{background:var(--or);color:#000;border:0;padding:9px 14px;font-weight:700;cursor:pointer;font-size:14px}
+button.sec{background:#2a2a2a;color:var(--tx)}button:disabled{opacity:.5;cursor:wait}
+main{max-width:1100px;margin:0 auto;padding:12px 16px 80px}
+.blq{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--mu);margin:12px 0;padding:10px 12px}
+.blq.paco{border-left-color:var(--or)}.blq.salma{border-left-color:var(--az)}
+.cab{font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase}.paco .cab{color:var(--or)}.salma .cab{color:var(--az)}
+.txt{color:#ddd;margin:4px 0 8px}
+.shots{display:flex;gap:10px;flex-wrap:wrap}
+.shot{width:130px}.shot .im{position:relative;cursor:pointer;aspect-ratio:9/16;background:#000;overflow:hidden;border:2px solid transparent}
+.shot .im:hover{border-color:var(--or)}.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot .id{position:absolute;left:0;top:0;background:#000b;color:var(--or);font-weight:700;font-size:12px;padding:2px 5px}
+.shot .cm{position:absolute;right:0;bottom:0;background:var(--or);color:#000;font-size:11px;font-weight:700;padding:2px 5px}
+.shot small{color:var(--mu);display:block;margin-top:2px;font-size:12px}
+.shot.cambiado .im{border-color:#3c3}
+.amb{margin-top:8px;font-size:13px;color:var(--mu);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select{background:#222;color:var(--tx);border:1px solid #444;padding:5px}
+audio{height:30px}
+#modal{display:none;position:fixed;inset:0;background:#000d;z-index:10;overflow:auto}
+#modal .in{max-width:1000px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px}
+.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}.tabs button{background:#222;color:var(--tx)}.tabs button.on{background:var(--or);color:#000}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.grid .g{position:relative;cursor:pointer;aspect-ratio:9/16;background:#000;overflow:hidden;border:2px solid transparent}
+.grid .g:hover{border-color:var(--or)}.grid img{width:100%;height:100%;object-fit:cover;display:block}
+.grid .g span{position:absolute;left:0;top:0;background:#000b;color:var(--or);font-size:11px;font-weight:700;padding:1px 4px}
+textarea{width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:7px;font:15px/1.4 system-ui,Arial,sans-serif;resize:vertical;min-height:62px}textarea.mod{border-color:#e9c;background:#1a0f18}
+.grid .g.usada{border-color:#3c3}.grid .g.usada span{background:#3c3;color:#000}.grid .g.aqui{border-color:#fc0;box-shadow:0 0 0 2px #fc0}.grid .g.aqui span{background:#fc0;color:#000}
+.grid .g .u{position:absolute;left:0;bottom:0;right:0;background:#000c;color:#9f9;font-size:10px;padding:1px 3px}
+.leyenda{font-size:12px;color:var(--mu);margin:6px 0 10px}.leyenda b{padding:0 5px;color:#000}
+.mini{font-size:12px;color:var(--mu)}.rojo{color:#e9c}
+#estado{font-size:13px;color:var(--mu);max-width:420px;white-space:pre-wrap}
+#vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:70vh;background:#000}
+</style></head><body>
+<header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1><span id="estado"></span>
+<button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button></header>
+<main><div id="vid"><h3>Resultado del último montaje</h3><video controls></video></div><div id="lista">Cargando…</div></main>
+<div id="modal"><div class="in"><div style="display:flex;justify-content:space-between;align-items:center"><b id="mt"></b><button class="sec" id="cerrar">Cerrar</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div></div>
+<script>
+let D, ov = {shots:{},amb:{},text:{},audio:{}}, ctx = null, tab = 'sony';
+const $ = s => document.querySelector(s);
+const fotoActual = (b, k) => (ov.shots[b.id] && ov.shots[b.id][k]) || b.shots[k].a;
+const ambActual = b => ov.amb[b.id] || b.amb;
+async function guardar(){ ov = await (await fetch('/api/guardar',{method:'POST',body:JSON.stringify(ov)})).json(); }
+function pintar(){
+  $('#lista').innerHTML = '';
+  D.bloques.forEach(b => {
+    const d = document.createElement('div'); d.className = 'blq ' + (b.who || '');
+    let h = `<div class="cab">${(b.who||'mapa')} · ${b.id}${b.silencio?' · 🔇 silencio total':''}</div>`;
+    if (b.text) { const t = (ov.text[b.id] ?? b.text); h += `<textarea data-txt="${b.id}" class="${ov.text[b.id] && ov.text[b.id] !== b.text ? 'mod' : ''}">${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea><div class="mini" data-info="${b.id}"></div>`; } else h += '<div class="txt">(mapa y rótulo — no se cambia)</div>';
+    h += '<div class="shots">' + b.shots.map((s,k) => { const a = fotoActual(b,k), camb = a !== s.a; return `<div class="shot ${camb?'cambiado':''}"><div class="im" data-b="${b.id}" data-k="${k}"><img loading="lazy" src="/thumb/${a}"><span class="id">${k+1}·${a}</span>${s.sc?`<span class="cm">${s.sc}</span>`:''}</div><small>${camb?'cambiada (era '+s.a+')':'tocar para cambiar'}</small></div>`; }).join('') + '</div>';
+    if (b.amb) {
+      const cur = ambActual(b);
+      h += `<div class="amb">🔊 Ambiente: <select data-amb="${b.id}">${D.audios.map(a=>`<option value="${a.src}" ${a.src===cur?'selected':''}>${a.nombre}</option>`).join('')}${D.audios.some(a=>a.src===cur)?'':`<option selected>${cur}</option>`}</select><audio controls preload="none" src="/audio/${encodeURIComponent((D.audios.find(a=>a.src===cur)||{}).file||'')}"></audio></div>`;
+    }
+    if (b.text) { const au = ov.audio[b.id]; h += `<div class="amb">🎙 ${au ? `Audio propio: <b>${au}</b> <audio controls preload="none" src="/audio-propio/${encodeURIComponent(au)}"></audio> <button class="sec" data-quitar="${b.id}">Quitar</button>` : `<label class="sec" style="background:#2a2a2a;padding:6px 10px;cursor:pointer;color:#eee">Subir mi audio<input type="file" accept="audio/*" data-sub="${b.id}" hidden></label> <span class="mini">(sustituye a la voz generada)</span>`}</div>`; }
+    d.innerHTML = h; $('#lista').appendChild(d);
+  });
+  document.querySelectorAll('textarea[data-txt]').forEach(e => { const b = D.bloques.find(x=>x.id===e.dataset.txt); const info = () => { const el = document.querySelector(`[data-info="${b.id}"]`); const mod = e.value !== b.text; e.classList.toggle('mod', mod); el.innerHTML = mod ? `<span class="rojo">✏ Texto cambiado (${e.value.length} caracteres) — al montar se genera su voz nueva.</span> <a href="#" data-rev="${b.id}" style="color:#9cf">volver al original</a>` : `${e.value.length} caracteres`; const a = el.querySelector('[data-rev]'); if (a) a.onclick = async ev => { ev.preventDefault(); delete ov.text[b.id]; await guardar(); pintar(); }; }; info(); e.oninput = info; e.onchange = async () => { if (e.value === b.text) delete ov.text[b.id]; else ov.text[b.id] = e.value; await guardar(); pintar(); }; });
+  document.querySelectorAll('input[data-sub]').forEach(e => e.onchange = async () => { const f = e.files[0]; if (!f) return; const ext = (f.name.split('.').pop() || '').toLowerCase(); $('#estado').textContent = 'Subiendo audio…'; const r = await fetch(`/api/subir?id=${e.dataset.sub}&ext=${ext}`, { method: 'POST', body: f }); if (!r.ok) { alert('No vale ese formato (usa mp3, wav, m4a…)'); return; } ov = await r.json(); $('#estado').textContent = ''; pintar(); });
+  document.querySelectorAll('[data-quitar]').forEach(e => e.onclick = async () => { ov = await (await fetch('/api/quitar-audio?id=' + e.dataset.quitar, { method: 'POST' })).json(); pintar(); });
+  document.querySelectorAll('.im').forEach(e => e.onclick = () => abrir(e.dataset.b, +e.dataset.k));
+  document.querySelectorAll('select[data-amb]').forEach(e => e.onchange = async () => { const b = D.bloques.find(x=>x.id===e.dataset.amb); if (e.value === b.amb) delete ov.amb[b.id]; else ov.amb[b.id] = e.value; await guardar(); pintar(); });
+}
+function abrir(bid, k){ ctx = {bid,k}; $('#mt').textContent = `Plano ${k+1} de «${bid}» — elige la foto o clip`; $('#modal').style.display = 'block'; pintarGaleria(); }
+function pintarGaleria(){
+  const T = {sony:'Fotos Sony Benarés',movil:'Fotos móvil',video:'Vídeos',runway:'Runway'};
+  $('#tabs').innerHTML = Object.keys(T).map(t=>`<button class="${t===tab?'on':''}" data-t="${t}">${T[t]}</button>`).join('');
+  $('#tabs').querySelectorAll('button').forEach(e=>e.onclick=()=>{tab=e.dataset.t;pintarGaleria()});
+  const usadas = {}; D.bloques.forEach(b => b.shots.forEach((s,k) => { usadas[fotoActual(b,k)] = (usadas[fotoActual(b,k)] ? usadas[fotoActual(b,k)] + ', ' : '') + b.id + ' ' + (k+1); }));
+  const aqui = fotoActual(D.bloques.find(x=>x.id===ctx.bid), ctx.k);
+  $('#grid').innerHTML = '<div class="leyenda" style="grid-column:1/-1"><b style="background:#fc0">AMARILLO</b> el de este plano · <b style="background:#3c3">VERDE</b> ya está puesto en otro plano (verás dónde) · sin color: libre</div>' + D.galeria[tab].map(id=>`<div class="g ${id===aqui?'aqui':usadas[id]?'usada':''}" data-id="${id}"><img loading="lazy" src="/thumb/${id}"><span>${id}</span>${usadas[id]?`<div class="u">${id===aqui?'este plano':'en '+usadas[id]}</div>`:''}</div>`).join('');
+  $('#grid').querySelectorAll('.g[data-id]').forEach(e=>e.onclick=async()=>{
+    const b = D.bloques.find(x=>x.id===ctx.bid); const arr = ov.shots[b.id] || (ov.shots[b.id] = b.shots.map(s=>s.a)); arr[ctx.k] = e.dataset.id;
+    if (arr.every((a,i)=>a===b.shots[i].a)) delete ov.shots[b.id];
+    await guardar(); $('#modal').style.display='none'; pintar();
+  });
+}
+$('#cerrar').onclick = () => $('#modal').style.display = 'none';
+$('#reset').onclick = async () => { if (!confirm('¿Quitar todos tus cambios y volver al montaje v8?')) return; ov = {shots:{},amb:{},text:{},audio:{}}; await guardar(); pintar(); };
+$('#montar').onclick = async () => { await guardar(); const est = await (await fetch('/api/estimar')).json(); if (est.chars > 0 && !confirm(`Hay ${est.bloques.length} voz/voces nueva(s) por generar (${est.bloques.join(', ')}): ${est.chars} caracteres ≈ ${est.chars} créditos de tu plan de ElevenLabs (unos ${Math.max(1, Math.round(est.chars * 0.022))} céntimos). ¿Montar?`)) return; await fetch('/api/montar',{method:'POST'}); sondear(); };
+async function sondear(){
+  const r = await (await fetch('/api/estado')).json();
+  $('#montar').disabled = r.estado === 'montando';
+  $('#estado').textContent = r.estado === 'montando' ? '⏳ Montando… (unos minutos)\n' + r.log.split('\n').slice(-2).join('\n') : r.estado === 'listo' ? '✅ Montado. Míralo abajo.' : r.estado === 'error' ? '❌ Error:\n' + r.log.slice(-300) : '';
+  if (r.tieneVideo && r.estado !== 'montando') { $('#vid').style.display = 'block'; const v = $('#vid video'); const u = '/video?t=' + (r.fin||0); if (!v.src.endsWith(u)) v.src = u; }
+  if (r.estado === 'montando') setTimeout(sondear, 2000);
+}
+(async () => { D = await (await fetch('/api/datos')).json(); ov = D.overrides; pintar(); sondear(); })();
+</script></body></html>

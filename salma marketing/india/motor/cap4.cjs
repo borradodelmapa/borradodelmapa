@@ -71,4 +71,6 @@ const cfg = {
       shots: [{ a: 'S484', sc: 'GP', z: 0.04, dir: 'out', ok: 'cierre' }] },
   ],
 };
+// EDITOR: si lo lanza editor/server.cjs (APLICAR_EDITOR=1) se aplican las elecciones de editor/overrides.json (fotos por plano, ambiente por bloque)
+if (process.env.APLICAR_EDITOR === '1') require('./editor/aplicar.cjs')(cfg, JSON.parse(require('fs').readFileSync(__dirname + '/editor/overrides.json', 'utf8')));
 build(cfg).catch(e => { console.error('FALLO:', e.message); process.exit(1); });
