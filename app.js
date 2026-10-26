@@ -7289,6 +7289,17 @@ window.addEventListener('online', _checkSOSQueue);
 
 function renderSOSConfig() {
   const $c = document.getElementById('app-content');
+  // Desde la portada (pastilla "Desliza para SOS" o chip de Atajos) venimos del chat: esta pantalla se pinta sin pasar
+  // por showState, así que se quedaba el fondo del mapa y la clase de chat debajo (reporte de testers, 26 oct 2026).
+  // Misma limpieza que hace showState al salir del chat.
+  const _desdeChat = currentState === 'chat';
+  if (_desdeChat) {
+    _dkHomeOff();
+    _setSalmaScreen(false);
+    const _bg = document.getElementById('chat-bg-layer');
+    if (_bg) _bg.remove();
+    $c.classList.remove('app-content--chat');
+  }
   const cfg = currentUserSOSConfig || {
     contacts: [{ name: '', phone: '' }, { name: '', phone: '' }, { name: '', phone: '' }],
     custom_message: ''
@@ -7327,7 +7338,7 @@ function renderSOSConfig() {
 
   document.getElementById('sos-config-back').addEventListener('click', () => {
     document.querySelector('.app-input-bar').style.display = '';
-    showState('profile');
+    showState(_desdeChat ? 'chat' : 'profile');   // vuelve a donde estabas (portada o perfil)
   });
 
   const _getContactsFromForm = () => [0, 1, 2].map(i => ({
