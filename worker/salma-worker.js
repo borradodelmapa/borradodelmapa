@@ -8072,7 +8072,9 @@ function extractRouteEditFromReply(text) {
     const withStops = n !== null && r.with ? normStops([r.with]) : [];
     replace.push({ n, stop: withStops[0] || null });
   });
-  return { add, remove, replace };
+  // "title": título nuevo de la guía (26 oct 2026, Paco: «le pido que cambie el título y dice que no puede»).
+  const title = typeof o.title === 'string' ? o.title.replace(/\s+/g, ' ').replace(/^["«“']+|["»”']+$/g, '').trim().slice(0, 120) : '';
+  return { add, remove, replace, title };
 }
 
 // Aplica las operaciones sobre la guía actual SIN reescribir las paradas existentes.
@@ -17939,6 +17941,8 @@ INSTRUCCIONES:
         let _opsApplied = false;  // ...y de ahí salió una ruta editada
         let _opsCounts = null;
         let _opsNewNames = {};    // _newId → nombre pedido (para avisar si Google no lo confirma)
+        let _newTitle = '';       // "title" de SALMA_ROUTE_EDIT: título nuevo de la guía
+        let _titleOnly = false;   // ...y no cambia ninguna parada (no hace falta pasar por Google)
         // Red de seguridad: con una guía cargada, si la IA ignora el formato de operaciones y devuelve una
         // ruta completa (SALMA_ROUTE_JSON) con MENOS paradas, sin apenas nombres de la guía y en la misma zona,
         // no es una guía reescrita sino "solo lo nuevo" (caso real 21 sept: "quiero ir también a la playa" →
@@ -17972,7 +17976,10 @@ INSTRUCCIONES:
           _opsHandled = true;
           const _ops = _convertedOps || extractRouteEditFromReply(allText);
           let _opsNote = '';
-          if (!_ops || (!_ops.add.length && !_ops.remove.length && !_ops.replace.length)) {
+          // Título nuevo solo si de verdad cambia (el de ahora, tal cual, no cuenta como cambio).
+          if (_ops && _ops.title && _ops.title === String(currentRoute.title || currentRoute.name || '').trim()) _ops.title = '';
+          _newTitle = (_ops && _ops.title) || '';
+          if (!_ops || (!_ops.add.length && !_ops.remove.length && !_ops.replace.length && !_newTitle)) {
             console.log(`[EDIT-OPS] ✗ operaciones ilegibles o vacías (stop_reason: ${lastStopReason || 'n/d'})`);
             _opsNote = '\n\n_No he podido aplicar ese cambio en tu guía (no me ha salido bien). No he tocado nada: prueba a pedírmelo de otra forma._';
           } else {
@@ -17984,6 +17991,16 @@ INSTRUCCIONES:
             if (_c.remove >= 3 && !_editRemovalRe.test(message || '')) {
               console.log(`[EDIT-OPS] ✗ FRENO: quitaba ${_c.remove} paradas sin pedirlo — no se aplica`);
               _opsNote = `\n\n_Para hacer ese cambio tenía que quitar ${_c.remove} paradas de tu guía y no me lo has pedido, así que no he tocado nada. Dime qué días quieres añadir o mover y lo hago sin quitar nada._`;
+            } else if (_newTitle && !(_c.add + _c.remove + _c.replace) && !_r.ignored) {
+              // Solo el título: la guía sale tal cual con el nombre nuevo, sin volver a pasar por Google.
+              route = Object.assign({}, currentRoute, { title: _newTitle });
+              if (currentRoute.name) route.name = _newTitle;
+              route._merged = true;
+              _opsApplied = true;
+              _titleOnly = true;
+              _opsCounts = _c;
+              console.log(`[EDIT-OPS] título: "${currentRoute.title || currentRoute.name || ''}" → "${_newTitle}"`);
+              if (!reply) reply = `Hecho, tu guía ahora se llama «${_newTitle}».`;
             } else if (!(_c.add + _c.remove + _c.replace) || !_r.stops.length) {
               console.log(`[EDIT-OPS] ✗ sin cambios (ignoradas ${_r.ignored}) sobre ${currentRoute.stops.length} paradas`);
               _opsNote = _r.ignored
@@ -17991,6 +18008,7 @@ INSTRUCCIONES:
                 : '\n\n_Eso ya está en tu guía, no he cambiado nada. Dime otra cosa que quieras sumar._';
             } else {
               route = Object.assign({}, currentRoute, { stops: _r.stops, duration_days: _r.days });
+              if (_newTitle) { route.title = _newTitle; if (currentRoute.name) route.name = _newTitle; }
               route._merged = true;
               _opsApplied = true;
               _opsCounts = _c;
@@ -18396,7 +18414,8 @@ REGLAS:
           }
         } catch (_) {}
 
-        if (route) {
+        // Solo cambia el título (_titleOnly): las paradas son las de la guía, ya comprobadas → sin KV ni Google (0 €).
+        if (route && !_titleOnly) {
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
           if (env.SALMA_KB) {
             for (const stop of route.stops) {
@@ -18560,6 +18579,9 @@ REGLAS:
                 console.log(`[EDIT-OPS] verify: ${_okIds.size} nuevas confirmadas, ${_failedNames.length} no confirmadas → ${route.stops.length} paradas`);
                 if (!route) {
                   _vNote = '\n\n_Al hacer ese cambio se iban a perder paradas de tu guía, así que no he tocado nada. Tu guía sigue igual; dime el cambio de otra forma y lo intento._';
+                } else if (_newTitle && route.stops.length && route.stops.length >= _minimo) {
+                  // Las paradas nuevas no se confirmaron pero el título sí se cambia (las de la guía siguen todas).
+                  if (!_netChange && !_vNote) _vNote = '\n\n_He cambiado el título; las paradas siguen como estaban._';
                 } else if (!_netChange || !route.stops.length) {
                   route = null; _opsApplied = false;
                   _vNote = (_vNote || '\n\n_No he cambiado nada._') + ' Tu guía sigue igual.';
