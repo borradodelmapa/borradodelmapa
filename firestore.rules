@@ -89,10 +89,10 @@ service cloud.firestore {
     }
 
     // Contadores del aviso «Instala la app» (instalar-app.js, desde el navegador y sin sesión).
-    // Un documento por día con solo números sumados; nadie puede leerlos desde el cliente (se leen
-    // desde la consola de Firebase o el panel admin (cuenta de servicio)) ni borrarlos. Solo estos campos.
+    // Un documento por día con solo números sumados; solo los lee el admin (panel, pestaña Analytics); nadie los borra. Solo estos campos.
     match /stats_instalacion/{dia} {
-      allow read, delete: if false;
+      allow read: if request.auth != null && request.auth.token.email == 'admin@borradodelmapa.com';
+      allow delete: if false;
       allow create, update: if request.resource.data.keys().hasOnly(
         ['dia', 'vistos', 'cierres', 'clics', 'rechazados', 'instalados', 'abiertos_app']);
     }
