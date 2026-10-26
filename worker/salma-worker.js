@@ -9609,10 +9609,10 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   }
 
   // ── PARADA SUELTA LEJOS DEL GRUPO (26 oct 2026, reporte de Tania: guía de Valencia con una parada en Palma) ──
-  // Sin ancla de punto no había tope de distancia al resto: el nombre coincidía, estaba en España y valía. Si el grupo es
+  // Con ancla de 5+ días el radio llega a 160 km (Ibiza entra desde Valencia) y sin ancla no había tope. Si el grupo es
   // compacto (3 de cada 5 paradas a <40 km de su mediana: guía de ciudad) se descarta lo que cae a >100 km. Rutas que
   // cruzan un país no son compactas y no se tocan. Sin llamadas a Google.
-  if (!pointAnchor && finalStops.length >= 4) {
+  if (finalStops.length >= 4) {
     const _p = finalStops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number' && Math.abs(s.lat) > 0.01);
     if (_p.length >= 4) {
       const _m = a => { const b = [...a].sort((x, y) => x - y); const k = b.length >> 1; return b.length % 2 ? b[k] : (b[k - 1] + b[k]) / 2; };
