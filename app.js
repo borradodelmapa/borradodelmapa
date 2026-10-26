@@ -49,6 +49,7 @@ const $toast = document.getElementById('toast');
 // ═══ NAVEGACIÓN — 3 estados ═══
 
 function showState(state) {
+  if (window.pasoApp) pasoApp('pantalla: ' + state);   // últimos pasos para errores y avisos (debug-panel.js)
   // Navegación Fase 4: si la vista itinerario estaba abierta y el usuario
   // navega (bottom bar), desmontarla primero. Sin tocar historial.
   if (window._itinViewOpen && typeof window._teardownItinView === 'function') {

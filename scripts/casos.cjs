@@ -186,6 +186,8 @@ const fecha = iso => iso ? String(iso).slice(0, 16).replace('T', ' ') : '—';
         + `${Number(g.descartadas) ? ', ' + g.descartadas + ' descartadas' : ''}${Number(g.cerca) ? ', ' + g.cerca + ' cerca' : ''}`
         + `\n      "${g.titulo || g.destino}"${g.motivo ? ' · motivo: ' + g.motivo : ''} · Worker ${String(g.worker || '').slice(0, 8)}`);
       if (g.lista) console.log(`      paradas: ${g.lista}`);
+      // Coordenadas en el mismo orden que la lista (desde el 26 oct 2026; las guías anteriores no las tienen)
+      if (g.coords) console.log(`      coords: ${g.coords}`);
       if (g.desc_lista) console.log(`      descartadas: ${g.desc_lista}`);
       if (g.cerca_lista) console.log(`      cerca de: ${g.cerca_lista}`);
     }

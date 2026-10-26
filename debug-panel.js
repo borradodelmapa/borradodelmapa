@@ -91,11 +91,89 @@
             page: location.pathname + location.search, front_versions: frontVersions().join(' '),
             worker_version: (workerVer && workerVer.version_short) || '', ua: navigator.userAgent,
             uid: (user && user.uid) || '', logs: logs.slice(-40).map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n').slice(-3000),
+            pasos: pasosTexto(),
           }),
         }).catch(() => {});
       }, 1500);
     } catch (_) {}
   }
+
+  // ═══ ÚLTIMOS PASOS (caso p-mvpksy7ruv4, 26 oct 2026) ═══
+  // Los testers solo cuentan por WhatsApp lo que vieron; con esto cada error o aviso trae qué tocó la persona justo antes:
+  // pantallas (pasoApp desde showState) y botones/enlaces pulsados (su etiqueta, nunca lo escrito en un campo ni el texto
+  // de los mensajes del chat). Solo en memoria, últimos 30; viaja únicamente pegado a un error o aviso.
+  const pasos = [];
+  const _sinDatos = t => String(t || '').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[email]').replace(/\+?\d[\d\s-]{7,}\d/g, '[tel]');
+  function pasoApp(texto) {
+    try {
+      const t = _sinDatos(texto).replace(/\s+/g, ' ').trim().slice(0, 60);
+      if (!t) return;
+      pasos.push(new Date().toISOString().slice(11, 19) + ' ' + t);
+      if (pasos.length > 30) pasos.shift();
+    } catch (_) {}
+  }
+  function pasosTexto() { return pasos.join('\n'); }
+  window.pasoApp = pasoApp;
+  document.addEventListener('click', (e) => {
+    try {
+      const el = e.target && e.target.closest && e.target.closest('button,a,[role="button"],[role="slider"],[role="tab"],.chip,summary');
+      if (!el || el.closest('.msg')) return;   // dentro de una burbuja del chat: no apuntar su texto
+      const nombre = el.getAttribute('aria-label') || el.title || el.textContent || el.id || el.className;
+      pasoApp('toca: ' + String(nombre).slice(0, 50) + (el.id ? ' #' + el.id : ''));
+    } catch (_) {}
+  }, true);
+
+  // ═══ AVISOS «ESTO NO CUADRA» (caso p-mvpksy7ruv4) ═══
+  // Fallos que no dan error de JavaScript y por eso no llegaban: window.avisoApp('clave', 'qué pasa', {datos}, 'zona').
+  // Van a POST /client-error con tipo 'aviso' → caso automático agrupado por clave. Máx. 3 por visita, sin repetir clave.
+  const avisosSent = new Set();
+  function avisoApp(clave, mensaje, datos, zona) {
+    try {
+      clave = String(clave || '').slice(0, 60);
+      if (!clave || avisosSent.has(clave) || avisosSent.size >= 3) return;
+      avisosSent.add(clave);
+      push('warn', ['[AVISO] ' + clave + ': ' + mensaje]);
+      if (!window.SALMA_API || !navigator.onLine) return;
+      const user = window.firebase && firebase.auth && firebase.auth().currentUser;
+      let d = '';
+      try { d = typeof datos === 'string' ? datos : JSON.stringify(datos || {}); } catch (_) {}
+      fetch(window.SALMA_API + '/client-error', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+        body: JSON.stringify({
+          tipo: 'aviso', clave, zona: zona || '', message: String(mensaje || clave).slice(0, 300), datos: _sinDatos(d).slice(0, 3000),
+          page: location.pathname + location.search, front_versions: frontVersions().join(' '),
+          worker_version: (workerVer && workerVer.version_short) || '', ua: navigator.userAgent,
+          uid: (user && user.uid) || '', logs: logs.slice(-25).map(l => `[${l.t}] ${l.k.toUpperCase()}: ${l.m}`).join('\n').slice(-2000),
+          pasos: pasosTexto(),
+        }),
+      }).catch(() => {});
+    } catch (_) {}
+  }
+  window.avisoApp = avisoApp;
+
+  // Pantalla tapada por el fondo de la portada: el mapa de fondo (#chat-bg-layer, fijo y sin recibir toques) solo debe estar
+  // con el chat; si se pinta otra pantalla en #app-content sin pasar por showState, se queda encima y el usuario solo ve
+  // el fondo (SOS de Tania, 26 oct 2026). No da error: se comprueba cada vez que cambia el contenido.
+  let _tapadaT = null;
+  function vigilarPantallaTapada() {
+    const c = document.getElementById('app-content');
+    if (!c || !window.MutationObserver) return;
+    new MutationObserver(() => {
+      clearTimeout(_tapadaT);
+      _tapadaT = setTimeout(() => {
+        try {
+          if (!document.getElementById('chat-bg-layer') || c.querySelector('#chat-area') || !c.firstElementChild) return;
+          // La capa es fija con z-index 0: solo tapa lo que no está posicionado (position: static), que se pinta por debajo
+          if (getComputedStyle(c).position !== 'static' || getComputedStyle(c.firstElementChild).position !== 'static') return;
+          const pantalla = (c.firstElementChild.className || c.firstElementChild.id || '?').toString().split(' ')[0];
+          avisoApp('pantalla-tapada-' + pantalla.replace(/[^\w-]/g, '').slice(0, 40),
+            'Pantalla «' + pantalla + '» pintada con el fondo de la portada encima: el usuario solo ve el mapa de fondo', { pantalla }, 'web');
+        } catch (_) {}
+      }, 800);
+    }).observe(c, { childList: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', vigilarPantallaTapada);
+  else vigilarPantallaTapada();
 
   // ═══ MARCADOR DE VERSIÓN ═══
   // Para que en la captura ya se vea qué versión del frontend y del Worker

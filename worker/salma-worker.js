@@ -4337,6 +4337,36 @@ function haversineKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// ¿El trazado de Directions se va lejos de las paradas? (caso p-mvpksy7ruv4, 26 oct 2026). Guía de Valencia con todas las
+// paradas en Valencia: «Puerto de Valencia» cae en el puerto y Google mete la ruta por la línea del ferri hasta Ibiza y
+// Palma. Se mira cada punto del trazado contra la parada más cercana; el margen es el tramo recto más largo entre dos
+// paradas seguidas × 0,75 (mínimo 25 km), así una ruta larga de verdad no salta. Devuelve null si cuadra, o
+// { km, lat, lng } del punto más alejado. Sin llamadas a Google: solo cuentas con el trazado ya recibido.
+function trazadoSeAleja(polyline, puntos) {
+  if (!polyline || !Array.isArray(puntos) || puntos.length < 1) return null;
+  const pts = [];
+  let i = 0, lat = 0, lng = 0;
+  while (i < polyline.length) {
+    for (const k of [0, 1]) {
+      let b, sh = 0, r = 0;
+      do { b = polyline.charCodeAt(i++) - 63; r |= (b & 31) << sh; sh += 5; } while (b >= 32 && i <= polyline.length);
+      const d = r & 1 ? ~(r >> 1) : r >> 1;
+      if (k === 0) lat += d; else lng += d;
+    }
+    pts.push([lat / 1e5, lng / 1e5]);
+  }
+  let tramo = 0;
+  for (let j = 1; j < puntos.length; j++) tramo = Math.max(tramo, haversineKm(puntos[j - 1][0], puntos[j - 1][1], puntos[j][0], puntos[j][1]));
+  const margen = Math.max(25, tramo * 0.75);
+  let peor = null;
+  for (const [a, o] of pts) {
+    let cerca = Infinity;
+    for (const [pa, po] of puntos) cerca = Math.min(cerca, haversineKm(a, o, pa, po));
+    if (cerca > margen && (!peor || cerca > peor.km)) peor = { km: Math.round(cerca), lat: +a.toFixed(3), lng: +o.toFixed(3), margen: Math.round(margen) };
+  }
+  return peor;
+}
+
 // Distancia REAL por carretera (Directions API), no línea recta. En zonas de montaña
 // (p.ej. Ronda↔Costa del Sol por la A-397) la única carretera puede doblar la distancia
 // en línea recta — Ronda→Estepona son 35km en línea recta pero 83km/1h40 conduciendo.
@@ -9597,13 +9627,13 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
     validatedStops.forEach(s => {
       const sKm = straightKm.get(s);
       if (sKm == null || sKm > MAX_ANCHOR_KM) {
-        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'fuera_del_radio_ancla' });
+        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'fuera_del_radio_ancla', lat: s.lat, lng: s.lng, km: sKm == null ? null : Math.round(sKm) });
         console.log(`[VERIFY] ✗ DESCARTADA (radio ancla) "${s.name}" (${s.lat}, ${s.lng})`);
         return;
       }
       const dKm = driveKm.get(s); // undefined = no hizo falta comprobar (≤10km línea recta)
       if (typeof dKm === 'number' && dKm > MAX_ANCHOR_DRIVE_KM) {
-        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'lejos_por_carretera' });
+        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'lejos_por_carretera', lat: s.lat, lng: s.lng, km: Math.round(dKm) });
         console.log(`[VERIFY] ✗ DESCARTADA (${dKm.toFixed(1)}km por carretera > ${MAX_ANCHOR_DRIVE_KM}km) "${s.name}"`);
         return;
       }
@@ -9624,7 +9654,7 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
       if (_p.filter(s => _d(s) <= 40).length >= _p.length * 0.6) {
         finalStops = finalStops.filter(s => {
           if (typeof s.lat !== 'number' || typeof s.lng !== 'number' || Math.abs(s.lat) <= 0.01 || _d(s) <= 100) return true;
-          discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'lejos_del_grupo' });
+          discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'lejos_del_grupo', lat: s.lat, lng: s.lng, km: Math.round(_d(s)) });
           console.log(`[VERIFY] ✗ DESCARTADA (suelta, ${_d(s).toFixed(0)} km del grupo) "${s.name}" (${s.lat}, ${s.lng})`);
           return false;
         });
@@ -11742,6 +11772,9 @@ async function logGuideTiming(env, row) {
     lista: _fS(String(row.lista || '').slice(0, 900)),
     desc_lista: _fS(String(row.desc_lista || '').slice(0, 400)),
     cerca_lista: _fS(String(row.cerca_lista || '').slice(0, 400)),
+    // Coordenadas de cada parada en el orden de la lista (caso p-mvpksy7ruv4, 26 oct 2026): con el fallo de Palma no
+    // había forma de saber dónde cayó cada parada sin el móvil del tester. "lat,lng" con 3 decimales (~100 m).
+    coords: _fS(String(row.coords || '').slice(0, 1500)),
   };
   try { await firestoreAdminPatch(env, 'guide_timings/' + id, f); } catch (e) { console.warn('[T2-REGISTRO] ' + e.message); }
 }
@@ -13126,6 +13159,27 @@ export default {
       const file = String(b.source || '').split('/').pop().split('?')[0].slice(0, 80);
       if (!msg) return new Response('{"ok":false}', { status: 400, headers: corsH });
       const zona = _zonaDeFichero(file);
+      const pasos = String(b.pasos || '').slice(-1500);
+      // AVISOS «ESTO NO CUADRA» (caso p-mvpksy7ruv4, 26 oct 2026): fallos que no dan error de JavaScript (un trazado que se va
+      // a Palma, una pantalla tapada). Misma vía y mismo agrupado; la huella es la clave del aviso, no el texto (lleva datos).
+      if (b.tipo === 'aviso') {
+        const clave = String(b.clave || '').replace(/[^\w-]/g, '').slice(0, 60) || 'sin-clave';
+        ctx.waitUntil(recordAutoError(env, {
+          origen: 'navegador',
+          huella: 'aviso|' + clave,
+          titulo: 'Aviso (no cuadra): ' + msg.slice(0, 90),
+          zona: String(b.zona || zona).replace(/[^\w]/g, '').slice(0, 20) || 'web',
+          ejemplo: msg + '\nPantalla: ' + String(b.page || '').slice(0, 150),
+          detalle: [
+            'Aviso: ' + msg, 'Pantalla: ' + String(b.page || '').slice(0, 200), 'Versiones: ' + String(b.front_versions || '').slice(0, 600),
+            'Worker: ' + String(b.worker_version || ''), 'Navegador: ' + String(b.ua || '').slice(0, 250),
+            '', '— datos —', String(b.datos || '').slice(0, 3000), '', '— últimos pasos —', pasos,
+            '', '— últimos logs —', String(b.logs || '').slice(-2000),
+          ].join('\n'),
+          reporter: String(b.uid || '').slice(0, 40),
+        }));
+        return new Response('{"ok":true}', { headers: corsH });
+      }
       ctx.waitUntil(recordAutoError(env, {
         origen: 'navegador',
         huella: 'js|' + file + '|' + _normErr(msg),
@@ -13136,7 +13190,7 @@ export default {
           'Mensaje: ' + msg, 'Fichero: ' + String(b.source || '').slice(0, 200) + ':' + (b.line || '?') + ':' + (b.col || '?'),
           'Pantalla: ' + String(b.page || '').slice(0, 200), 'Versiones: ' + String(b.front_versions || '').slice(0, 600),
           'Worker: ' + String(b.worker_version || ''), 'Navegador: ' + String(b.ua || '').slice(0, 250),
-          '', '— pila —', String(b.stack || '').slice(0, 2500), '', '— últimos logs —', String(b.logs || '').slice(-2500),
+          '', '— pila —', String(b.stack || '').slice(0, 2500), '', '— últimos pasos —', pasos, '', '— últimos logs —', String(b.logs || '').slice(-2500),
         ].join('\n'),
         reporter: String(b.uid || '').slice(0, 40),
       }));
@@ -14102,10 +14156,32 @@ export default {
         const _dirKey = env.SALMA_KB
           ? 'dir:' + (await _sha256Hex([origin, destination, waypoints, mode, preferRoad, _includeSteps ? 1 : 0].join('|'))).slice(0, 40)
           : null;
+        // Trazado que se va lejos de las paradas (ferri a Baleares, caso p-mvpksy7ruv4): no se manda la línea (la app deja
+        // la provisional recta entre paradas) y se apunta solo como caso automático con los puntos. Vale también para lo
+        // que ya estaba guardado en KV. Las distancias de cada tramo (legs) se mantienen.
+        const _puntosDir = [origin, ...waypoints.split('|'), destination]
+          .map(p => String(p || '').replace(/^via:/, '').split(',').map(Number))
+          .filter(p => p.length === 2 && isFinite(p[0]) && isFinite(p[1]) && Math.abs(p[0]) <= 90);
+        const _revisarTrazado = (payload) => {
+          if (!payload || !payload.polyline || _puntosDir.length < 2) return payload;
+          const lejos = trazadoSeAleja(payload.polyline, _puntosDir);
+          if (!lejos) return payload;
+          ctx.waitUntil(recordAutoError(env, {
+            origen: 'worker', huella: 'trazado-lejos-de-paradas', zona: 'mapa', gravedad: 'media',
+            titulo: 'Trazado del mapa que se va lejos de las paradas (no se pinta)',
+            ejemplo: `Punto del trazado a ${lejos.km} km de la parada más cercana (margen ${lejos.margen} km), en ${lejos.lat},${lejos.lng}`,
+            detalle: `Paradas pedidas a Directions (lat,lng en orden):\n${_puntosDir.map(p => p.join(',')).join('\n')}\n\nPunto más alejado: ${lejos.lat},${lejos.lng} (${lejos.km} km)\nModo: ${mode}${preferRoad ? ' · carretera: ' + preferRoad : ''}`,
+          }));
+          return { ...payload, polyline: '', ...(payload.steps ? { steps: [] } : {}), trazado_descartado: lejos };
+        };
         if (_dirKey) {
           try {
             const _c = await env.SALMA_KB.get(_dirKey);
-            if (_c) return new Response(_c, { headers: { ...corsH, 'Cache-Control': 'public, max-age=86400', 'X-Catalog': 'hit' } });
+            if (_c) {
+              let _out = _c;
+              try { const _p = JSON.parse(_c); const _r = _revisarTrazado(_p); if (_r !== _p) _out = JSON.stringify(_r); } catch (_) {}
+              return new Response(_out, { headers: { ...corsH, 'Cache-Control': 'public, max-age=86400', 'X-Catalog': 'hit' } });
+            }
           } catch (_) {}
         }
         let dirUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&mode=${mode}&key=${placesKey}`;
@@ -14164,8 +14240,9 @@ export default {
           );
         }
 
-        const payload = includeSteps ? { polyline, legs, steps } : { polyline, legs };
+        let payload = includeSteps ? { polyline, legs, steps } : { polyline, legs };
         if (roadCheck) payload.road_check = roadCheck;
+        payload = _revisarTrazado(payload);
         const _payloadJson = JSON.stringify(payload);
         if (_dirKey) { try { await env.SALMA_KB.put(_dirKey, _payloadJson); } catch (_) {} }
         return new Response(_payloadJson, {
@@ -18756,7 +18833,8 @@ REGLAS:
         if (_t2log) ctx.waitUntil(logGuideTiming(env, { ..._t2log, titulo: route?.title || '', dias: route?.duration_days || 0,
           paradas: route?.stops?.length || 0, descartadas: route?.discarded_stops?.length || 0, cerca: route?.nearby_stops?.length || 0,
           lista: (route?.stops || []).map(x => `${x.day || '?'}:${x.name || x.headline || ''}`).join(' | '),
-          desc_lista: (route?.discarded_stops || []).map(x => `${x.name}(${x.reason || ''})`).join(' | '),
+          desc_lista: (route?.discarded_stops || []).map(x => `${x.name}(${x.reason || ''}${typeof x.lat === 'number' ? ` @${x.lat.toFixed(3)},${x.lng.toFixed(3)}` : ''}${x.km != null ? ` ${x.km} km` : ''})`).join(' | '),
+          coords: (route?.stops || []).map(x => typeof x.lat === 'number' && typeof x.lng === 'number' ? `${x.lat.toFixed(3)},${x.lng.toFixed(3)}` : '?').join(';'),
           cerca_lista: (route?.nearby_stops || []).map(x => x.name || x.headline || '').join(' | '),
           ms_total: Date.now() - _t2log.inicio }));
         if (_opsApplied && route) doneEvt.ops_edit = true;

@@ -7,7 +7,7 @@
 //   node scripts/probar-worker-humo.mjs
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const COPIA = path.join(RAIZ, 'worker', '_humo.mjs');   // dentro de worker/ para que funcionen sus import relativos
 const src = fs.readFileSync(path.join(RAIZ, 'worker', 'salma-worker.js'), 'utf8')
@@ -17,7 +17,7 @@ let mal = 0;
 try {
   globalThis.__HUMO_USER = { uid: 'humo', email: 'humo@borradodelmapa.com', plan: 'premium', premium: true };
   globalThis.fetch = async () => new Response(JSON.stringify({ error: 'humo' }), { status: 503, headers: { 'Content-Type': 'application/json' } });
-  const W = (await import(COPIA)).default;
+  const W = (await import(pathToFileURL(COPIA).href)).default;
   const kv = () => { const m = new Map(); return { get: async k => m.get(k) ?? null, put: async (k, v) => { m.set(k, v); }, delete: async k => m.delete(k), list: async () => ({ keys: [], list_complete: true }), getWithMetadata: async k => ({ value: m.get(k) ?? null, metadata: null }) }; };
   const guia = { title: 'Tailandia', country: 'Tailandia', region: 'Tailandia', stops: [
     { name: 'Wat Pho', day: 1, lat: 13.7465, lng: 100.4927, place_id: 'a' }, { name: 'Gran Palacio', day: 1, lat: 13.75, lng: 100.4913, place_id: 'b' },
