@@ -87,5 +87,14 @@ service cloud.firestore {
                     && request.resource.data.uid == request.auth.uid;
       allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
     }
+
+    // Contadores del aviso «Instala la app» (instalar-app.js, desde el navegador y sin sesión).
+    // Un documento por día con solo números sumados; nadie puede leerlos desde el cliente (se leen
+    // desde la consola de Firebase o el panel admin (cuenta de servicio)) ni borrarlos. Solo estos campos.
+    match /stats_instalacion/{dia} {
+      allow read, delete: if false;
+      allow create, update: if request.resource.data.keys().hasOnly(
+        ['dia', 'vistos', 'cierres', 'clics', 'rechazados', 'instalados', 'abiertos_app']);
+    }
   }
 }
