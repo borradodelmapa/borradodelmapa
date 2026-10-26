@@ -33,15 +33,19 @@ const thumb = id => {
   spawnSync(FF, args); return fs.existsSync(out) ? out : null;
 };
 
-let job = { estado: 'libre', log: '', fin: 0 };
+let job = { estado: 'libre', log: '', fin: 0, ini: 0, cambios: [], total: 0 };
+const resumenCambios = () => { const o = leerOv(), base = cargarCfg(), c = [];
+  base.blocks.forEach(b => { (o.shots[b.id] || []).forEach((a, k) => { if (b.shots[k] && a !== b.shots[k].a) c.push(`Escena «${b.id}», plano ${k + 1}: ${b.shots[k].a} → ${a}`); }); if (o.amb[b.id] && o.amb[b.id] !== b.amb) c.push(`Escena «${b.id}»: ambiente ${b.amb} → ${o.amb[b.id]}`); if (o.text[b.id] && o.text[b.id] !== b.text) c.push(`Escena «${b.id}»: texto cambiado (voz nueva)`); if (o.audio[b.id]) c.push(`Escena «${b.id}»: audio propio (${o.audio[b.id]})`); });
+  return { c, planos: base.blocks.reduce((n, b) => n + (b.shots || []).length, 0) }; };
 const montar = () => {
   if (job.estado === 'montando') return;
-  job = { estado: 'montando', log: '', fin: 0 };
+  const rc = resumenCambios(); job = { estado: 'montando', log: '', fin: 0, ini: Date.now(), cambios: rc.c, total: rc.planos };
   const p = spawn(process.execPath, ['cap4.cjs'], { cwd: HERE, env: { ...process.env, APLICAR_EDITOR: '1' } });
-  const add = d => { job.log = (job.log + d).slice(-4000); };
+  const add = d => { job.log = (job.log + d).slice(-6000); };
   p.stdout.on('data', add); p.stderr.on('data', add);
   p.on('close', c => { job.estado = c === 0 ? 'listo' : 'error'; job.fin = Date.now(); });
 };
+const ORIG = () => BASE + '/animatica-cap4/india-cap4-benares-v8.mp4';
 const VIDEO = () => BASE + '/animatica-cap4/india-cap4-benares-v8-editor.mp4';
 
 const send = (res, code, body, type = 'application/json') => { res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' }); res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body)); };
@@ -76,9 +80,10 @@ http.createServer((req, res) => {
     if (p === '/api/quitar-audio' && req.method === 'POST') { const id = u.searchParams.get('id') || ''; const o = leerOv(); delete o.audio[id]; fs.writeFileSync(OVR, JSON.stringify(o, null, 1)); return send(res, 200, o); }
     if (p.startsWith('/audio-propio/')) { const f = path.basename(decodeURIComponent(p.slice(14))); return file(req, res, __dirname + '/uploads/' + f, 'audio/mpeg'); }
     if (p === '/api/montar' && req.method === 'POST') { montar(); return send(res, 200, { ok: true }); }
-    if (p === '/api/estado') return send(res, 200, { estado: job.estado, log: job.log, fin: job.fin, tieneVideo: fs.existsSync(VIDEO()) });
+    if (p === '/api/estado') { const L = job.log, et = [...L.matchAll(/ETAPA (\d)\/6 ([^\n]*)/g)].pop(), pl = [...L.matchAll(/PLANO (\d+)/g)].pop(); return send(res, 200, { estado: job.estado, log: L.split('\n').filter(x => !/^(PLANO|ETAPA)/.test(x)).join('\n'), fin: job.fin, seg: job.ini ? Math.round(((job.estado === 'montando' ? Date.now() : job.fin) - job.ini) / 1000) : 0, etapa: et ? +et[1] : 0, etapaTxt: et ? et[2] : '', plano: pl ? +pl[1] : 0, total: job.total, cambios: job.cambios, tieneVideo: fs.existsSync(VIDEO()), tieneOriginal: fs.existsSync(ORIG()) }); }
     if (p.startsWith('/thumb/')) { const id = p.slice(7); if (!/^(S|M|V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return file(req, res, thumb(id), 'image/jpeg'); }
     if (p.startsWith('/audio/')) { const f = decodeURIComponent(p.slice(7)); if (!audioFiles().some(a => a.file === f)) return send(res, 404, 'no', 'text/plain'); return file(req, res, BASE + '/audios-candidatos/' + f, 'audio/mpeg'); }
+    if (p === '/video-original') return file(req, res, ORIG(), 'video/mp4');
     if (p === '/video') return file(req, res, VIDEO(), 'video/mp4');
     send(res, 404, 'no existe', 'text/plain');
   } catch (e) { send(res, 500, { error: String(e.message || e) }); }

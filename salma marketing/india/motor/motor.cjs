@@ -70,6 +70,7 @@ async function build(cfg) {
   const OUT = BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
   // 1) voces
+  console.log('ETAPA 1/6 Voces (las que ya existen se reutilizan; solo se genera lo nuevo)');
   let charsNow = 0;
   for (const b of cfg.blocks) {
     if (!b.text) continue;
@@ -78,6 +79,7 @@ async function build(cfg) {
   }
   console.log('Caracteres de voz generados ahora:', charsNow);
   // 2) línea de tiempo
+  console.log('ETAPA 2/6 Línea de tiempo');
   let t = 0; const G = cfg.gap || { same: 0.4, change: 0.85 }, LC = cfg.leadChange ?? 0.45;
   const vb = cfg.blocks.filter(x => x.text);
   for (const b of cfg.blocks) {
@@ -88,6 +90,7 @@ async function build(cfg) {
   }
   const cardT = t; const TOTAL = t + (cfg.cardSecs || 4);
   // 3) planos
+  console.log('ETAPA 3/6 Cortando y revelando cada plano (looks Kodak, zooms)');
   const clips = []; let nclip = 0;
   const tow = (b, from) => { const i = b.text.indexOf(from); if (i < 0) throw new Error(`no encuentro «${from}» en el bloque ${b.id}`); const wi = b.text.slice(0, i).split(' ').length - 1; const sp = (b.voz || b.text).split(' '); let p = 0; for (let q = 0; q < wi; q++) p += sp[q].length + 1; return b.v.al.st[Math.min(p, b.v.al.st.length - 1)]; };
   for (const b of cfg.blocks) {
@@ -96,7 +99,7 @@ async function build(cfg) {
     for (let k = 1; k < S.length; k++) if (starts[k] < starts[k - 1] + 0.9) starts[k] = starts[k - 1] + 0.9;
     S.forEach((s, k) => {
       const d = (k + 1 < S.length ? starts[k + 1] : b.D) - starts[k]; const n = ++nclip; const out = `${W}/c${String(n).padStart(2, '0')}.mp4`; const f = resolve(s.a);
-      const frames = Math.round(d * 30); const last = k === S.length - 1;
+      console.log('PLANO ' + n); const frames = Math.round(d * 30); const last = k === S.length - 1;
       const fadeV = (b.scene && k === 0 ? `,fade=t=in:st=0:d=0.3` : '') + (b.sceneEnd && last ? `,fade=t=out:st=${Math.max(0, d - 0.3).toFixed(2)}:d=0.3` : '');
       const lk = LOOKS[s.look || b.look || cfg.look || 'portra']; const norm = isVideo(s.a) ? '' : normFilter(f);
       const tail = `${norm},${lk.tone},noise=alls=${lk.grain}:allf=t+u,vignette=PI/6,format=yuv420p${fadeV}`;
@@ -120,7 +123,8 @@ async function build(cfg) {
   clips.push({ file: card, d: cfg.cardSecs || 4 });
   fs.writeFileSync(`${W}/lista.txt`, clips.map(c => `file '${c.file.replace(/\\/g, '/')}'`).join('\n'));
   run(['-f', 'concat', '-safe', '0', '-i', `${W}/lista.txt`, '-c', 'copy', `${W}/mudo.mp4`]);
-  // 4) subtítulos ASS (palabra iluminada) y cifras
+  // 4) subtítulos
+  console.log('ETAPA 4/6 Subtítulos y cifras'); // ASS (palabra iluminada) y cifras
   const ts = x => { x = Math.max(0, x); const h = Math.floor(x / 3600), m = Math.floor(x % 3600 / 60), s = x % 60; return `${h}:${String(m).padStart(2, '0')}:${s.toFixed(2).padStart(5, '0')}`; };
   let ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Main,Arial,66,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,2,5,60,60,60,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
   const srt = []; const nums = [];
@@ -146,7 +150,8 @@ async function build(cfg) {
   fs.writeFileSync(`${W}/sub.ass`, ass);
   fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-es.srt`, srt.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
   const numF = nums.map(c => { const al = `if(lt(t,${c.t0.toFixed(2)}),0,min(1,(t-${c.t0.toFixed(2)})/0.25))*if(gt(t,${c.t1.toFixed(2)}),max(0,1-(t-${c.t1.toFixed(2)})/0.3),1)`; return `drawtext=fontfile='${IMPACT}':text='${esc(c.text)}':fontsize=${c.size || 230}:fontcolor=white:borderw=10:bordercolor=0xF4630B:x=(w-text_w)/2:y=${c.y || 640}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})',drawtext=fontfile='${ARIALB}':text='${esc(c.sub)}':fontsize=48:fontcolor=white:borderw=5:bordercolor=black:x=(w-text_w)/2:y=${(c.y || 640) + 270}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})'`; }).join(',');
-  // 5) audio: voces + ambiente real por escena con ducking
+  // 5) audio
+  console.log('ETAPA 5/6 Mezcla de audio (voces niveladas + ambiente)'); // audio: voces + ambiente real por escena con ducking
   let fv = '', vin = []; const vparts = [];
   cfg.blocks.forEach(b => { if (b.v) { vin.push('-i', b.v.mp3); vparts.push({ idx: vparts.length, t: b.t0 + b.lead, b }); } });
   const VT = cfg.voiceDb || { paco: -21, salma: -24 };
@@ -167,7 +172,8 @@ async function build(cfg) {
   fs.writeFileSync(`${W}/fb.txt`, fb); run([...bin, '-filter_complex_script', `${W}/fb.txt`, '-map', '[amb]', `${W}/amb.wav`]);
   run(['-i', `${W}/voz.wav`, '-i', `${W}/amb.wav`, '-filter_complex', `[0]asplit[v1][v2];[1][v2]sidechaincompress=threshold=0.03:ratio=${cfg.duckRatio || 4}:attack=20:release=500[bd];[v1][bd]amix=inputs=2:normalize=0:duration=first[m]`, '-map', '[m]', `${W}/mix.wav`]);
   run(['-i', `${W}/mix.wav`, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
-  // 6) composición final
+  // 6) composición
+  console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
   const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-40:y=70:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
   const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=60:y=1180:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');

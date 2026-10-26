@@ -36,11 +36,12 @@ textarea{width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:
 .leyenda{font-size:12px;color:var(--mu);margin:6px 0 10px}.leyenda b{padding:0 5px;color:#000}
 .mini{font-size:12px;color:var(--mu)}.rojo{color:#e9c}
 #estado{font-size:13px;color:var(--mu);max-width:420px;white-space:pre-wrap}
-#vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:70vh;background:#000}
+#vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:60vh;background:#000}#panel{display:none;background:#111;border-bottom:1px solid var(--line);padding:12px 16px}#panel .bar{height:14px;background:#2a2a2a;margin:8px 0}#panel .bar i{display:block;height:100%;background:var(--or);width:0;transition:width .5s}#panel ol{margin:6px 0;padding-left:20px;color:var(--mu)}#panel li.hecho{color:#6c6}#panel li.ahora{color:var(--or);font-weight:700}#panel ul{margin:6px 0;padding-left:18px}#panel pre{white-space:pre-wrap;color:var(--mu);font-size:12px;margin:6px 0}
 </style></head><body>
-<header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1><span id="estado"></span>
+<header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1>
 <button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button></header>
-<main><div id="vid"><h3>Resultado del último montaje</h3><video controls></video></div><div id="lista">Cargando…</div></main>
+<div id="panel"></div>
+<main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="lista">Cargando…</div></main>
 <div id="modal"><div class="in"><div style="display:flex;justify-content:space-between;align-items:center"><b id="mt"></b><button class="sec" id="cerrar">Cerrar</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div></div>
 <script>
 let D, ov = {shots:{},amb:{},text:{},audio:{}}, ctx = null, tab = 'sony';
@@ -85,12 +86,23 @@ function pintarGaleria(){
 $('#cerrar').onclick = () => $('#modal').style.display = 'none';
 $('#reset').onclick = async () => { if (!confirm('¿Quitar todos tus cambios y volver al montaje v8?')) return; ov = {shots:{},amb:{},text:{},audio:{}}; await guardar(); pintar(); };
 $('#montar').onclick = async () => { await guardar(); const est = await (await fetch('/api/estimar')).json(); if (est.chars > 0 && !confirm(`Hay ${est.bloques.length} voz/voces nueva(s) por generar (${est.bloques.join(', ')}): ${est.chars} caracteres ≈ ${est.chars} créditos de tu plan de ElevenLabs (unos ${Math.max(1, Math.round(est.chars * 0.022))} céntimos). ¿Montar?`)) return; await fetch('/api/montar',{method:'POST'}); sondear(); };
+const PASOS = ['Voces','Línea de tiempo','Cortando y revelando planos','Subtítulos y cifras','Mezcla de audio','Montaje final'];
 async function sondear(){
-  const r = await (await fetch('/api/estado')).json();
+  const r = await (await fetch('/api/estado')).json(), P = $('#panel');
   $('#montar').disabled = r.estado === 'montando';
-  $('#estado').textContent = r.estado === 'montando' ? '⏳ Montando… (unos minutos)\n' + r.log.split('\n').slice(-2).join('\n') : r.estado === 'listo' ? '✅ Montado. Míralo abajo.' : r.estado === 'error' ? '❌ Error:\n' + r.log.slice(-300) : '';
-  if (r.tieneVideo && r.estado !== 'montando') { $('#vid').style.display = 'block'; const v = $('#vid video'); const u = '/video?t=' + (r.fin||0); if (!v.src.endsWith(u)) v.src = u; }
-  if (r.estado === 'montando') setTimeout(sondear, 2000);
+  if (r.estado !== 'libre') {
+    const t = Math.floor(r.seg/60) + ' min ' + (r.seg%60) + ' s';
+    const pct = r.estado === 'listo' ? 100 : Math.min(97, Math.round(((r.etapa-1) + (r.etapa===3 && r.total ? r.plano/r.total : 0)) / 6 * 100));
+    const cam = r.cambios.length ? '<ul>' + r.cambios.map(c=>'<li>'+c+'</li>').join('') + '</ul>' : '<div class="mini">Sin cambios: se monta igual que el original.</div>';
+    P.style.display = 'block';
+    P.innerHTML = (r.estado==='montando' ? '<b style="color:var(--or)">⏳ MONTANDO · ' + t + '</b>' : r.estado==='listo' ? '<b style="color:#6c6">✅ MONTADO en ' + t + ' — míralo abajo</b>' : '<b style="color:#e55">❌ ERROR</b>')
+      + '<div class="bar"><i style="width:' + pct + '%"></i></div>'
+      + '<ol>' + PASOS.map((p,i)=>'<li class="'+(r.estado==='listo'||i+1<r.etapa?'hecho':i+1===r.etapa?'ahora':'')+'">'+(r.estado==='listo'||i+1<r.etapa?'✓ ':i+1===r.etapa?'▶ ':'')+p+(i===2&&r.etapa===3&&r.total?' ('+r.plano+' de '+r.total+')':'')+'</li>').join('') + '</ol>'
+      + '<b>Cambios que se aplican en este montaje:</b>' + cam
+      + (r.estado==='error' ? '<pre>'+r.log.slice(-500)+'</pre>' : r.log ? '<pre>'+r.log.split('\n').filter(x=>/aviso|⚠|ℹ|Caracteres/.test(x)).join('\n')+'</pre>' : '');
+  }
+  if (r.tieneVideo && r.estado !== 'montando') { $('#vid').style.display = 'block'; const v = $('#vnuevo'), u = '/video?t=' + (r.fin||0); if (!v.src.endsWith(u)) { v.src = u; } if (r.tieneOriginal && !$('#vold').src) $('#vold').src = '/video-original'; if (r.estado==='listo') P.scrollIntoView({behavior:'smooth'}); }
+  if (r.estado === 'montando') setTimeout(sondear, 1500);
 }
 (async () => { D = await (await fetch('/api/datos')).json(); ov = D.overrides; pintar(); sondear(); })();
 </script></body></html>
