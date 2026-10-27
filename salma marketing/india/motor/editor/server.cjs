@@ -7,7 +7,9 @@ if (!fs.existsSync(OVR)) fs.writeFileSync(OVR, '{"shots":{},"amb":{},"text":{},"
 fs.mkdirSync(CACHE, { recursive: true });
 const { resolve, RW, vozEnCache } = require('../motor.cjs');
 const aplicar = require('./aplicar.cjs');
-const leerOv = () => ({ shots: {}, amb: {}, text: {}, audio: {}, ss: {}, ...JSON.parse(fs.readFileSync(OVR, 'utf8')) });
+const crypto = require('crypto');
+const { generar: generarPortada } = require('../portada.cjs');
+const leerOv = () => ({ shots: {}, amb: {}, text: {}, audio: {}, ss: {}, portada: {}, ...JSON.parse(fs.readFileSync(OVR, 'utf8')) });
 const isVideo = id => /^(RW|V)/.test(id);
 
 // configuración base del capítulo (sin overrides): misma técnica que hoja.cjs
@@ -44,6 +46,7 @@ setTimeout(() => { const g = galeria(); [...g.runway, ...g.sony, ...g.video, ...
 let job = { estado: 'libre', log: '', fin: 0, ini: 0, cambios: [], total: 0 };
 const resumenCambios = () => { const o = leerOv(), base = cargarCfg(), c = [];
   base.blocks.forEach(b => { (o.shots[b.id] || []).forEach((a, k) => { if (b.shots[k] && a !== b.shots[k].a) c.push(`Escena «${b.id}», plano ${k + 1}: ${b.shots[k].a} → ${a}`); }); if (o.amb[b.id] && o.amb[b.id] !== b.amb) c.push(`Escena «${b.id}»: ambiente ${b.amb} → ${o.amb[b.id]}`); if (o.text[b.id] && o.text[b.id] !== b.text) c.push(`Escena «${b.id}»: texto cambiado (voz nueva)`); (o.ss[b.id] || []).forEach((v, k) => { if (v != null && b.shots[k] && v !== (b.shots[k].ss || 0)) c.push(`Escena «${b.id}», plano ${k + 1}: recortado, empieza en el segundo ${v}`); }); if (o.audio[b.id]) c.push(`Escena «${b.id}»: audio propio (${o.audio[b.id]})`); });
+  if (o.portada && Object.keys(o.portada).length) c.push('Portada cambiada (foto, textos o encuadre)');
   return { c, planos: base.blocks.reduce((n, b) => n + (b.shots || []).length, 0) }; };
 const montar = () => {
   if (job.estado === 'montando') return;
@@ -73,14 +76,21 @@ http.createServer((req, res) => {
     if (p === '/') return file(req, res, __dirname + '/editor.html', 'text/html; charset=utf-8');
     if (p === '/api/datos') {
       const cfg = cargarCfg();
-      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ ss: s.ss || 0, a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
+      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, portada: cfg.portada || null, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ ss: s.ss || 0, a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
     }
-    if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, ss: o.ss || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
+    if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, ss: o.ss || {}, portada: o.portada || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
     if (p === '/api/reset' && req.method === 'POST') { const v = __dirname + '/versiones'; fs.mkdirSync(v, { recursive: true }); fs.copyFileSync(OVR, `${v}/${CAP}-${Date.now()}.json`); fs.writeFileSync(OVR, JSON.stringify({ shots: {}, amb: {}, text: {}, audio: {}, ss: {} }, null, 1)); return send(res, 200, leerOv()); }
     if (p.startsWith('/media/')) { const id = p.slice(7); if (!/^(V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return file(req, res, resolve(id), 'video/mp4'); }
     if (p === '/api/terminados') return send(res, 200, fs.readdirSync(TERM).filter(f => /\.mp4$/.test(f)).sort().reverse());
     if (p.startsWith('/terminado/')) return file(req, res, TERM + '/' + path.basename(decodeURIComponent(p.slice(11))), 'video/mp4');
     if (p === '/inicio') return file(req, res, __dirname + '/inicio.html', 'text/html; charset=utf-8');
+    if (p === '/api/portada') { // vista previa de la portada (ffmpeg local, 0 €)
+      const q = u.searchParams, foto = q.get('foto') || '', n = (k, d, lo = 0) => { const v = parseFloat(q.get(k)); return isFinite(v) ? Math.min(1, Math.max(lo, v)) : d; };
+      if (!/^(S|M)[0-9]+$/.test(foto)) return send(res, 400, 'foto', 'text/plain');
+      const o = { src: resolve(foto), foco: [n('x', 0.5), n('y', 0.5), n('h', 0.9, 0.5)], l1: (q.get('l1') || ' ').slice(0, 40), l2: (q.get('l2') || ' ').slice(0, 60), tag: (q.get('tag') || ' ').slice(0, 60), ancho: 540 };
+      o.out = CACHE + '/portada-' + crypto.createHash('md5').update(JSON.stringify([foto, o.foco, o.l1, o.l2, o.tag])).digest('hex').slice(0, 12) + '.png';
+      return (fs.existsSync(o.out) ? Promise.resolve(o.out) : generarPortada(o)).then(f => file(req, res, f, 'image/png')).catch(e => send(res, 500, { error: String(e.message || e) }));
+    }
     if (p === '/api/estimar') { // qué voces habría que generar ahora (las que ya existen en la caché no cuestan nada)
       const cfg = aplicar(cargarCfg(), leerOv()); let chars = 0; const bloques = [];
       cfg.blocks.forEach(b => { if (b.text && !b.audioPropio && !vozEnCache(b.voz || b.text, cfg.voices[b.who])) { chars += (b.voz || b.text).length; bloques.push(b.id); } });

@@ -7,6 +7,7 @@ const cfg = {
   titulo: 'INDIA · REEL LOS MONOS',
   id: 'india-monos-v1',
   look: 'portra', counter: 'INDIA 2019',
+  portada: { foto: 'M75', foco: [0.5, 0.5, 0.9], l1: 'LOS MONOS', l2: 'DE RISHIKESH', tag: 'BORRADO DEL MAPA · INDIA 2019' },
   voices: { paco: PACO },
   cardSecs: 4, duckRatio: 5, gap: { same: 0.4, change: 0.85 }, leadChange: 0.45, voiceDb: { paco: -21 },
   card: { l1: 'MUCHO YOGI, POCO YOGA', l2: 'INDIA 2019', l3: 'Basado en un viaje real', l4: 'EL VIAJE CONTINÚA', l5: 'Benarés, la muerte y las castas' },

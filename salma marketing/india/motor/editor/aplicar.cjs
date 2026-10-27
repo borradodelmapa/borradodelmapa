@@ -4,6 +4,7 @@ const path = require('path');
 const pron = t => t.replace(/ll/g, 'y').replace(/Ll/g, 'Y').replace(/LL/g, 'Y');
 module.exports = (cfg, ov) => {
   cfg.id += '-editor';
+  if (ov.portada && Object.keys(ov.portada).length) cfg.portada = { ...(cfg.portada || {}), ...ov.portada };
   cfg.blocks.forEach(b => {
     (ov.shots && ov.shots[b.id] || []).forEach((a, k) => { if (a && b.shots[k] && b.shots[k].a !== a) { b.shots[k].a = a; delete b.shots[k].ss; } });
     (ov.ss && ov.ss[b.id] || []).forEach((v, k) => { if (v != null && b.shots[k] && /^(V|RW)/.test(b.shots[k].a)) b.shots[k].ss = v; });

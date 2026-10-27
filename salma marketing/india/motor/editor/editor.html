@@ -41,16 +41,17 @@ textarea{width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:
 <header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1>
 <button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button></header>
 <div id="panel"></div>
-<main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="lista">Cargando…</div></main>
+<main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="lista">Cargando…</div></main>
 <div id="modal2" style="display:none;position:fixed;inset:0;background:#000d;z-index:11;overflow:auto"><div style="max-width:520px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="rt"></b><video id="rvid" controls style="width:100%;max-height:68vh;background:#000;margin:8px 0"></video><div id="rinfo" class="mini"></div><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button id="rpon">✂ Empezar aquí (donde está el vídeo)</button><button class="sec" id="rorig">Volver al original</button><button class="sec" id="rcerrar">Cerrar</button></div><div class="mini" style="margin-top:6px">Pausa el vídeo donde quieras que EMPIECE el plano y pulsa «Empezar aquí». Lo que dura lo marca la frase.</div></div></div>
 <div id="modal"><div class="in"><div style="display:flex;justify-content:space-between;align-items:center"><b id="mt"></b><button class="sec" id="cerrar">Cerrar</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div></div>
 <script>
-let D, ov = {shots:{},amb:{},text:{},audio:{},ss:{}}, ctx = null, tab = 'sony';
+let D, ov = {shots:{},amb:{},text:{},audio:{},ss:{},portada:{}}, ctx = null, tab = 'sony';
 const $ = s => document.querySelector(s);
 const fotoActual = (b, k) => (ov.shots[b.id] && ov.shots[b.id][k]) || b.shots[k].a;
 const ambActual = b => ov.amb[b.id] || b.amb;
 async function guardar(){ ov = await (await fetch('/api/guardar',{method:'POST',body:JSON.stringify(ov)})).json(); }
 function pintar(){
+  pintarPortada();
   $('#lista').innerHTML = '';
   D.bloques.forEach(b => {
     const d = document.createElement('div'); d.className = 'blq ' + (b.who || '');
@@ -72,6 +73,24 @@ function pintar(){
   document.querySelectorAll('select[data-amb]').forEach(e => e.onchange = async () => { const b = D.bloques.find(x=>x.id===e.dataset.amb); if (e.value === b.amb) delete ov.amb[b.id]; else ov.amb[b.id] = e.value; await guardar(); pintar(); });
 }
 function abrir(bid, k){ ctx = {bid,k}; $('#mt').textContent = `Plano ${k+1} de «${bid}» — elige la foto o clip`; $('#modal').style.display = 'block'; pintarGaleria(); }
+// ---- PORTADA por defecto: foto + título + frase + rótulo + encuadre, con vista previa (ffmpeg local, 0 €) ----
+function portadaActual(){ return { ...D.portada, ...(ov.portada || {}) }; }
+function urlPortada(p){ const f = p.foco || [0.5, 0.5, 0.9]; return '/api/portada?foto=' + encodeURIComponent(p.foto) + '&x=' + f[0] + '&y=' + f[1] + '&h=' + f[2] + '&l1=' + encodeURIComponent(p.l1 || ' ') + '&l2=' + encodeURIComponent(p.l2 || ' ') + '&tag=' + encodeURIComponent(p.tag || ' '); }
+let tPortada = null;
+function pintarPortada(){
+  const P = $('#portada'); if (!D.portada) { P.innerHTML = ''; return; }
+  const p = portadaActual(), f = p.foco || [0.5, 0.5, 0.9];
+  const campo = (k, et) => `<label class="mini">${et}<input data-pc="${k}" value="${(p[k] || '').replace(/"/g, '&quot;')}" style="width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:7px;margin:2px 0 6px"></label>`;
+  const sl = (i, et, min, max) => `<label class="mini">${et}: <b data-sv="${i}">${f[i]}</b><input type="range" data-ps="${i}" min="${min}" max="${max}" step="0.02" value="${f[i]}" style="width:100%"></label>`;
+  P.innerHTML = `<div class="blq" style="border-left-color:#F4630B"><div class="cab" style="color:var(--or)">🖼 Portada (se pone como primer fotograma del vídeo)</div><div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px"><img id="pimg" style="width:210px;height:373px;background:#000;object-fit:contain"><div style="flex:1;min-width:260px"><button id="pfoto" class="sec" style="margin-bottom:8px">Elegir foto (${p.foto})</button>${campo('l1', 'Título (grande)')}${campo('l2', 'Frase')}${campo('tag', 'Rótulo inferior')}${sl(0, 'Encuadre horizontal', 0, 1)}${sl(1, 'Encuadre vertical', 0, 1)}${sl(2, 'Zoom (menos = más cerca)', 0.5, 1)}<button class="sec" id="prest" style="margin-top:6px">Volver a la portada original</button></div></div></div>`;
+  const ver = () => { $('#pimg').src = urlPortada(portadaActual()); };
+  const cambiar = nuevo => { ov.portada = { ...portadaActual(), ...nuevo }; ver(); clearTimeout(tPortada); tPortada = setTimeout(guardar, 500); };
+  P.querySelectorAll('input[data-pc]').forEach(e => e.oninput = () => cambiar({ [e.dataset.pc]: e.value }));
+  P.querySelectorAll('input[data-ps]').forEach(e => e.oninput = () => { const fo = [...(portadaActual().foco || [0.5, 0.5, 0.9])]; fo[+e.dataset.ps] = +e.value; P.querySelector('[data-sv="' + e.dataset.ps + '"]').textContent = e.value; cambiar({ foco: fo }); });
+  $('#pfoto').onclick = () => { ctx = { portada: true }; $('#mt').textContent = 'Elige la foto de la portada (solo fotos)'; $('#modal').style.display = 'block'; pintarGaleria(portadaActual().foto); };
+  $('#prest').onclick = async () => { ov.portada = {}; await guardar(); pintarPortada(); };
+  ver();
+}
 function pestanas(){
   const T = {}; const grupos = [...new Set(D.galeria.sony.map(id => Math.floor(+id.slice(1) / 100)))];
   grupos.forEach(h => { T['sony' + h] = 'Sony ' + (h * 100) + '-' + (h * 100 + 99); });
@@ -85,9 +104,10 @@ function pintarGaleria(foco){
   $('#tabs').querySelectorAll('button').forEach(e => e.onclick = () => { tab = e.dataset.t; pintarGaleria(); });
   $('#ir').oninput = e => { let n = e.target.value.trim().toUpperCase(); if (/^[0-9]+$/.test(n)) n = 'S' + n; if (/^[SM][0-9]+$/.test(n) && (D.galeria.sony.includes(n) || D.galeria.movil.includes(n))) { pintarGaleria(n); const el = $('#grid').querySelector('[data-id="' + n + '"]'); if (el) { el.scrollIntoView({block:'center'}); el.style.outline = '3px solid #f0f'; } $('#ir').value = n; $('#ir').focus(); } };
   const usadas = {}; D.bloques.forEach(b => b.shots.forEach((s,k) => { const a = fotoActual(b,k); usadas[a] = (usadas[a] ? usadas[a] + ', ' : '') + b.id + ' ' + (k+1); }));
-  const aqui = fotoActual(D.bloques.find(x => x.id === ctx.bid), ctx.k);
+  const aqui = ctx.portada ? portadaActual().foto : fotoActual(D.bloques.find(x => x.id === ctx.bid), ctx.k);
   $('#grid').innerHTML = '<div class="leyenda" style="grid-column:1/-1"><b style="background:#fc0">AMARILLO</b> el de este plano · <b style="background:#3c3">VERDE</b> ya está puesto en otro plano (verás dónde) · sin color: libre</div>' + lista(tab).map(id => `<div class="g ${id===aqui?'aqui':usadas[id]?'usada':''}" data-id="${id}"><img loading="lazy" src="/thumb/${id}"><span>${id}</span>${usadas[id]?`<div class="u">${id===aqui?'este plano':'en '+usadas[id]}</div>`:''}</div>`).join('');
   $('#grid').querySelectorAll('.g[data-id]').forEach(e => e.onclick = async () => {
+    if (ctx.portada) { if (/^(V|RW)/.test(e.dataset.id)) return; ov.portada = { ...portadaActual(), foto: e.dataset.id }; await guardar(); $('#modal').style.display = 'none'; pintarPortada(); return; }
     if (/^(V|RW)/.test(e.dataset.id)) return previsualizarVideo(e.dataset.id);
     const b = D.bloques.find(x => x.id === ctx.bid); const arr = ov.shots[b.id] || (ov.shots[b.id] = b.shots.map(s => s.a)); arr[ctx.k] = e.dataset.id;
     if (arr.every((a,i) => a === b.shots[i].a)) delete ov.shots[b.id];
