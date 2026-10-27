@@ -97,9 +97,13 @@ Paco: **"no quiero ir detrás mirando si se hace o no se hace"** — checklist o
 - **NADA SE QUEDA ATRÁS (Paco, 27 oct 2026: había páginas en 186, 187 y 190 a la vez).** Al subir el `?v=` de `styles.css`
   en `index.html`, en el MISMO commit: `APP_CSS_V` (`build-destinos.js`), `CSS_V` (`build-blog-viajes.js`), `blog/*.html`,
   `blog/viajes/*.html`, `legal.html`, `funciones.html`, `404.html` → `node scripts/build-guias.js` (guías públicas, salen de
-  404) → regenerar destinos. Comprobar antes de subir que sale UN solo número:
-  `grep -rhoE "styles\.css\?v=[0-9]+" --include=*.html --exclude-dir=backups --exclude-dir="salma marketing" . | sort | uniq -c`
+  404) → regenerar destinos (y diarios: `node scripts/build-blog-viajes.js`).
   Regenerar destinos aplica TODO lo pendiente del generador: mirar el diff (sin las líneas de `?v=`) antes de subirlo.
+- **ANTES DE CADA SUBIDA que toque páginas, CSS, `instalar-app.js` o un generador: `node scripts/comprobar-nada-atras.cjs`**
+  (0 €). Tiene que dar ✅. Revisa las 1.859 páginas: un solo `?v=` por pieza, aviso «Instala la app», menú de abajo,
+  favicon, y que los generadores escriban lo mismo que hay publicado. Un cambio que vaya «en toda la web» (como el aviso
+  de instalar) se añade también ahí para que nadie lo pueda olvidar. GitHub lo vuelve a pasar en cada subida
+  (`.github/workflows/nada-atras.yml`): en rojo = algo se ha quedado atrás → arreglarlo antes de seguir.
 - Sin excepción, sin esperar a que Paco lo note en una captura.
 
 ### 10. POLÍTICA DE ACCESO: "MIRAR SÍ, USAR CON CUENTA" — IGUAL EN TODA LA WEB

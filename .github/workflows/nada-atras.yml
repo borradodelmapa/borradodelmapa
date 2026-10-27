@@ -1,0 +1,20 @@
+name: Nada atrás (páginas sincronizadas)
+
+# En cada subida a main comprueba que ninguna página se ha quedado atrás: mismo ?v= de styles.css / destinos.css /
+# paginas.css / instalar-app.js en toda la web, aviso «Instala la app», menú de abajo y favicon en cada página, y
+# los generadores (destinos, diarios del blog) escribiendo lo mismo que ya está publicado. CLAUDE.md §9.
+# 0 €: solo lee archivos. Si falla, GitHub manda un correo y la subida sale en rojo.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/comprobar-nada-atras.cjs
