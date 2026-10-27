@@ -7350,8 +7350,10 @@ body.live-map-open #mejora-btn { display: none !important; }
 .chat-empty .salma-screen-sub{margin:6px 0 0;font-family:var(--ce-sign);font-weight:700;font-size:18px;line-height:1.2;text-wrap:balance;text-transform:uppercase;color:var(--ce-amber);}
 
 /* Portada sin la barra de escribir de abajo (5 oct 2026, Paco): el chat vive en la pantalla de Salma (botón central).
-   Mientras la portada esté en el chat-area la barra se oculta; con la pantalla de Salma o con mensajes, se ve. */
-body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-screen)) .app-input-bar{display:none !important;}
+   Mientras la portada esté en el chat-area la barra se oculta; con la pantalla de Salma o con mensajes, se ve.
+   27 oct 2026: un atajo («Busca alojamiento») deja la portada y pinta los mensajes debajo; sin el :not la barra seguía
+   oculta y no se podía contestar a Salma. (Dos :has separados en body: un :has dentro de otro no es CSS válido.) */
+body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-screen)):not(:has(#chat-area .msg)) .app-input-bar{display:none !important;}
 
 /* Botón central: con Salma abierta (saludo o conversación) enseña su cara en vez del icono de chat; tocarlo vuelve a la portada. */
 .bottom-tab-fab .fab-avatar{display:none;width:40px;height:40px;object-fit:cover;border-radius:50%;border:2px solid #0D0F10;box-sizing:border-box;}

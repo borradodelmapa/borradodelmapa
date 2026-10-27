@@ -94,6 +94,12 @@ Paco: **"no quiero ir detrás mirando si se hace o no se hace"** — checklist o
   después de `styles.css`). Tocarlos a la vez.
 - Si cambia un `?v=` de CSS/JS que cargan también los destinos (`styles.css`, `destinos.css`): subir igual
   `DESTINOS_CSS_V`/`APP_CSS_V` en `build-destinos.js` y el `?v=` de `styles.css` en blog y legal.
+- **NADA SE QUEDA ATRÁS (Paco, 27 oct 2026: había páginas en 186, 187 y 190 a la vez).** Al subir el `?v=` de `styles.css`
+  en `index.html`, en el MISMO commit: `APP_CSS_V` (`build-destinos.js`), `CSS_V` (`build-blog-viajes.js`), `blog/*.html`,
+  `blog/viajes/*.html`, `legal.html`, `funciones.html`, `404.html` → `node scripts/build-guias.js` (guías públicas, salen de
+  404) → regenerar destinos. Comprobar antes de subir que sale UN solo número:
+  `grep -rhoE "styles\.css\?v=[0-9]+" --include=*.html --exclude-dir=backups --exclude-dir="salma marketing" . | sort | uniq -c`
+  Regenerar destinos aplica TODO lo pendiente del generador: mirar el diff (sin las líneas de `?v=`) antes de subirlo.
 - Sin excepción, sin esperar a que Paco lo note en una captura.
 
 ### 10. POLÍTICA DE ACCESO: "MIRAR SÍ, USAR CON CUENTA" — IGUAL EN TODA LA WEB

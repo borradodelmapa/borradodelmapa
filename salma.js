@@ -1948,7 +1948,7 @@ const salma = {
           _area.appendChild(_rw);
           this._scrollToBottom(true);
         }
-      } else if ((data.offer_map_button || (this._isRouteMsg(msg) && !data.no_map_button)) && !(this._chatAreaOverride && this.currentRouteId)) {
+      } else if ((data.offer_map_button || (this._isRouteMsg(msg) && !data.no_map_button)) && !(this._chatAreaOverride && this.currentRouteId) && !this._soloReservas(data)) {
         // PIEZA A — FLUJO ÚNICO. Toda petición de ruta/destino (chat libre o worker-detectada)
         // se responde primero con recomendaciones en texto. Aquí ofrecemos el botón para
         // montar la guía con mapa — mismo camino que el chip de 8 preguntas.
@@ -1981,7 +1981,8 @@ const salma = {
             sourceText: data.reply_marcas || data.reply || '',
           });
         }
-      } else if (this._pendingMapSourceText && !this._chatAreaOverride && data.reply) {
+      } else if (this._pendingMapSourceText && !this._chatAreaOverride && data.reply && !this._soloReservas(data)) {
+        // (Con _soloReservas el botón pendiente se queda donde estaba, bajo su plan; la siguiente respuesta lo vuelve a bajar.)
         // Respuesta normal (ninguna de las ramas de arriba aplicó) mientras el botón "Crear
         // ruta con mapa" sigue sin pulsar: se recoloca el botón bajo el último mensaje. El propio
         // mensaje ya se ve en pantalla por el streaming en vivo; aquí solo se decide el texto pendiente.
@@ -2182,6 +2183,7 @@ const salma = {
                   map_stage_failed: evt.map_stage_failed === true,
                   offer_map_button: evt.offer_map_button === true,
                   no_map_button: evt.no_map_button === true,   // pregunta con «N días»: el Worker veta el botón (caso rev-no_contesta_primero)
+                  con_reservas: (evt.action_results || []).some(r => r && (r.type === 'hotels' || r.type === 'flights')),
                   offer_add_to_route: evt.offer_add_to_route === true,
                   ops_edit: evt.ops_edit === true,
                   limit_reached: evt.limit_reached || null,
@@ -4453,6 +4455,16 @@ const salma = {
   ],
   _isRouteMsg(msg) {
     return /ruta|itinerario|días|dias|semana|viaje a |voy a |me voy a |quiero ir|visitar|recorrer|\d+\s*d[íi]/i.test(msg);
+  },
+
+  // Respuesta de hoteles/vuelos que NO es un plan por días (27 oct 2026, Paco): «búscame hotel en Chiang Mai…» sacaba
+  // «Crear ruta con mapa» debajo de los hoteles. Con plan (cierre de «Crear ruta con mapa» o 2+ «DÍA N», mismo criterio
+  // que _esPlan en _doSend) el botón sale como siempre: «3 días en Chiang Mai y búscame hotel».
+  _soloReservas(data) {
+    if (!data || !data.con_reservas) return false;
+    const t = data.reply_marcas || data.reply || '';
+    const esPlan = /crear ruta con mapa/i.test(t) || (t.match(/^[^A-Za-zÁÉÍÓÚáéíóú0-9\n]*D[IÍií]A\s+\d/gim) || []).length >= 2;
+    return !esPlan;
   },
 
   // PIEZA A — extrae el destino "limpio" de un mensaje de ruta ("3 días Ciudad Real" → "Ciudad Real",

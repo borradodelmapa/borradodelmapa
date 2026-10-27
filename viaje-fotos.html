@@ -1280,7 +1280,7 @@ async function notifyDone(){
   try{navigator.vibrate&&navigator.vibrate([120,60,120]);}catch(_){}
   if(!document.hidden)return;
   try{if(!('Notification' in window)||Notification.permission!=='granted')return;const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
-    const o={body:'Tu vídeo del viaje está listo. Toca para verlo.',icon:'/icon-192.png',tag:'bdm-video'};if(reg)reg.showNotification('Borrado del Mapa',o);else new Notification('Borrado del Mapa',o);}catch(_){}
+    const o={body:'Tu vídeo del viaje está listo. Toca para verlo.',icon:'/icon-salma-192.png',tag:'bdm-video'};if(reg)reg.showNotification('Borrado del Mapa',o);else new Notification('Borrado del Mapa',o);}catch(_){}
 }
 let lastVideo=null,encoding=false;const ENC_LABEL=window.EMB?'Crear el vídeo':'Generar MP4';
 function resetVideoOut(){
