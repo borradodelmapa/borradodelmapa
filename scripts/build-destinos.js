@@ -694,7 +694,7 @@ ${activitiesHTML}
   <script src="/destinos/destinos.js"${heroFoto ? " defer" : ""}></script>
 
   ${BOTTOM_NAV}
-<script src="/instalar-app.js?v=1" defer></script>
+<script src="/instalar-app.js?v=2" defer></script>
 </body>
 </html>`;
 }
@@ -852,7 +852,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
   <script src="/destinos/destinos.js"></script>
-<script src="/instalar-app.js?v=1" defer></script>
+<script src="/instalar-app.js?v=2" defer></script>
 </body>
 </html>`;
 }
@@ -980,7 +980,7 @@ function buildIndexHTML(countriesByContinent) {
   window.SALMA_API = "https://salma-api.borradodelmapa-api.workers.dev";
   </script>
   <script src="/destinos/destinos.js"></script>
-<script src="/instalar-app.js?v=1" defer></script>
+<script src="/instalar-app.js?v=2" defer></script>
 </body>
 </html>`;
 }

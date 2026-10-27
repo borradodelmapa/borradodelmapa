@@ -95,6 +95,8 @@
   function texto(recordatorio) {
     if (plat === 'inapp') return { t: 'Instala la app de Salma', s: 'Ábrela en Chrome o Safari (menú ⋮ → «Abrir en el navegador») y podrás instalarla.', boton: '' };
     if (recordatorio) return { t: 'Descárgate la app', s: 'Y ten siempre a Salma en la mano 🧡', boton: 'Instalar app' };
+    // Ordenador (Paco, 27 oct 2026): «en el móvil» no tenía sentido ahí
+    if (plat === 'escritorio') return { t: 'Instala Salma en tu ordenador', s: 'Gratis: se abre en su propia ventana, como un programa, y tienes tus rutas siempre a mano.', boton: 'Instalar app' };
     return { t: 'Lleva a Salma en el móvil', s: 'Instala la app gratis: se abre al toque, como cualquier otra, y tienes tus rutas siempre a mano.', boton: 'Instalar app' };
   }
 
