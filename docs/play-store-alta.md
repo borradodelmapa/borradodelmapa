@@ -43,7 +43,7 @@ Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegad
 - **Paquete:** `.aab` generado con **PWABuilder** (Google Play billing ON, Location delegation ON), versión 2 (1.0.1.0)
   subido a **Prueba interna** el 10 oct. Es una TWA: la web envuelta (`window.BDM_TWA` en `index.html`).
 - **Firma:** Play App Signing. La **clave de subida** es `play-upload.jks` (alias `upload`, una sola contraseña para
-  almacén y clave) del 1 oct 2026. Está en el portátil de Paco: `Escritorio\LLAVES PLAY borradodelmapa\` (con
+  almacén y clave) del 1 oct 2026. Está en el portátil de Paco: `Escritorio\Google Play\LLAVES PLAY borradodelmapa\` (movida ahí el 27 oct 2026) (con
   `play-keystore.txt`, que lleva la contraseña) y copia en `Escritorio\salma\api\` (carpeta ignorada por Git).
   Huella SHA-256 `2F:05:50:3C:C1:5E:D2:31:B3:A2:B0:80:F1:ED:96:08:51:17:11:70:CA:2E:ED:85:BD:E7:F0:7E:CC:41:F3:21`
   (clave de SUBIDA; en `.well-known/assetlinks.json` desde el 1 oct). La clave de FIRMA de Play (SHA-256 `CF:8B:E3:68:C2:2B:68:56:AA:5A:E5:4B:91:C8:CF:54:28:D0:74:E3:B0:55:72:61:6F:0A:D1:1A:4C:5F:97:FA`) se añadió al `assetlinks.json` el 12 oct 2026 para que la app de Play se verifique (sin barra de Chrome y con permiso nativo de ubicación). **NUNCA** subir claves ni contraseñas al repo ni pegarlas en chats.
