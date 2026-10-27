@@ -7444,6 +7444,10 @@ body:has(#app-content.app-content--chat #chat-area .msg) #tab-newroute .fab-avat
 /* ── Pastilla "Desliza para SOS" (6 oct 2026): fija encima del menú, solo en la portada ── */
 .sos-pill{display:none;position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 92px);z-index:890;height:44px;border-radius:22px;border:1px solid #5a2a25;background:#1c1210;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;}
 body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-screen)) .sos-pill{display:block;}
+/* Solo en la portada EN REPOSO (27 oct 2026, Paco): en cuanto se abre «Tu próximo viaje», «Afinar», «Pregunta lo imposible»
+   o «Atajos», se escribe en un campo de la portada (billete sin guía: el teclado del móvil), o hay mensajes (un atajo ya respondido, con la barra de escribir visible), la pastilla tapaba lo que se estaba
+   usando. Se va y vuelve al plegarlo todo. El SOS sigue en el chip SOS de Atajos (y en la cabecera del ordenador). */
+body:has(#chat-area .msg, #chat-area > .chat-empty:focus-within, [data-ce-opentrip][aria-expanded="true"], [data-ce-afinar][aria-expanded="true"], [data-ce-openask][aria-expanded="true"], #ce-more-toggle[aria-expanded="true"]) .sos-pill{display:none !important;}
 body.live-map-open .sos-pill{display:none !important;}
 /* con la pastilla visible, que el final de la portada no quede tapado */
 body:has(#app-content.app-content--chat #chat-area > .chat-empty:not(.salma-screen)) #chat-area{padding-bottom:72px;}
