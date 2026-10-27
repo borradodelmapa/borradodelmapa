@@ -44,3 +44,10 @@ Resumen único para **cualquier sesión que trabaje con vídeos** (India, monos,
 
 ## 8. Editor local (cap. 4)
 `salma marketing/india/abrir-editor.bat` (o `node motor/editor/server.cjs` y http://localhost:8095): escenas con sus planos, «cambiar» foto desde la galeria, ambiente con escucha, boton Montar y ver. Guarda en `motor/editor/overrides.json`; el montaje sale como `...-v8-editor.mp4` sin tocar el v8. Solo en el portatil, nada sale del PC, 0 euros (no genera voz si no cambia el texto).
+
+## 9. Elementos por defecto de cada vídeo (27 oct 2026, todos automáticos; el editor los muestra colapsados)
+- **Portada** (modelo Tailandia, `motor/portada.cjs`): foto en color + banda naranja inclinada (título negro, frase blanca) + franja negra con «BORRADO DEL MAPA · SERIE n/N». Va como primer fotograma (0,2 s). Se elige foto, textos y encuadre en el panel «Portada» del editor.
+- **Ken Burns** en las fotos: más movimiento en GP que en D (`cfg.kb` = 1,6), entrar/salir alternados; por foto se retoca tipo, fuerza y punto de enfoque en «⚙ Movimiento».
+- **Aviso de seguir** (hacia el segundo 30, 5,5 s): franja naranja diagonal con tira negra, cruza la pantalla; el icono de Salma se cambia por un corazón que late mientras dura y luego vuelve. Texto y segundo en «⚙ Ajustes del vídeo».
+- **Cierre en dos tiempos** (8 s): título de la serie + «Basado en un viaje real»; luego icono de Salma, «CREA TUS RUTAS CONMIGO», «Descarga la app de guías de viaje · Gratis», borradodelmapa.com y «CAPÍTULO SIGUIENTE».
+- **Un solo editor** para todas las series (`motor/editor/`, accesos directos «India - Editores» y «India - Videos terminados»); cada montaje se guarda con fecha en `VIDEOS-TERMINADOS/`.

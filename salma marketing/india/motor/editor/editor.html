@@ -39,7 +39,7 @@ details.mov{margin-top:3px;font-size:12px}details.mov summary{cursor:pointer;col
 #estado{font-size:13px;color:var(--mu);max-width:420px;white-space:pre-wrap}
 #vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:60vh;background:#000}#panel{display:none;background:#111;border-bottom:1px solid var(--line);padding:12px 16px}#panel .bar{height:14px;background:#2a2a2a;margin:8px 0}#panel .bar i{display:block;height:100%;background:var(--or);width:0;transition:width .5s}#panel ol{margin:6px 0;padding-left:20px;color:var(--mu)}#panel li.hecho{color:#6c6}#panel li.ahora{color:var(--or);font-weight:700}#panel ul{margin:6px 0;padding-left:18px}#panel pre{white-space:pre-wrap;color:var(--mu);font-size:12px;margin:6px 0}
 </style></head><body>
-<header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1>
+<header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1><div id="mini" style="display:none;flex:1;min-width:200px;max-width:520px"><div id="minit" style="font-size:13px;font-weight:700;color:var(--or)"></div><div style="height:8px;background:#2a2a2a;margin-top:3px"><i id="minib" style="display:block;height:100%;width:0;background:var(--or);transition:width .5s"></i></div></div>
 <button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button></header>
 <div id="panel"></div>
 <main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="ajustes"></div><div id="lista">Cargando…</div></main>
@@ -194,6 +194,7 @@ const PASOS = ['Voces','Línea de tiempo','Cortando y revelando planos','Subtít
 async function sondear(){
   const r = await (await fetch('/api/estado')).json(), P = $('#panel');
   $('#montar').disabled = r.estado === 'montando';
+  { const pct0 = r.estado === 'listo' ? 100 : Math.min(97, Math.round(((r.etapa-1) + (r.etapa===3 && r.total ? r.plano/r.total : 0)) / 6 * 100)); const m = $('#mini'); m.style.display = r.estado === 'libre' ? 'none' : 'block'; $('#minib').style.width = pct0 + '%'; $('#minit').textContent = r.estado === 'montando' ? '⏳ MONTANDO ' + pct0 + '% · paso ' + r.etapa + '/6' + (r.etapa === 3 && r.total ? ' · plano ' + r.plano + '/' + r.total : '') + ' · ' + Math.floor(r.seg/60) + ':' + String(r.seg%60).padStart(2,'0') : r.estado === 'listo' ? '✅ MONTADO — mira «Compara»' : '❌ ERROR — mira el panel'; }
   if (r.estado !== 'libre') {
     const t = Math.floor(r.seg/60) + ' min ' + (r.seg%60) + ' s';
     const pct = r.estado === 'listo' ? 100 : Math.min(97, Math.round(((r.etapa-1) + (r.etapa===3 && r.total ? r.plano/r.total : 0)) / 6 * 100));
