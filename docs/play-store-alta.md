@@ -24,6 +24,10 @@ a) Icono del lanzador correcto · b) arranca a pantalla completa (sin barra de U
 e) entrar con Google funciona · f) el modal de plan en Android no enseña Stripe · g) `statements:list` de Google enseña la huella de firma de Play.
 Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegado — dime qué ves»).
 
+**Al cambiar el icono/logo de la app (27 oct 2026, se quedó atrás):** el icono de la **ficha de Play Store** es independiente del que lleva el `.aab`.
+Cambiar también: Play Console → Ficha principal de la tienda → «Icono de la aplicación» (PNG 512×512, p. ej. `icon-salma-512.png`) → Guardar →
+**Resumen de publicación → «Enviar cambios a revisión»** (guardado ≠ enviado: mientras no se envíe, la tienda sigue enseñando el icono viejo).
+
 ## Estado a 13 oct 2026 (manda sobre lo de abajo)
 - **Productos únicos ACTIVOS:** `guia` 9,99 · `trimestral` 19,99 · `anual` 49,99 · `anual_oferta` 39,99 (opciones de compra `<id>-compra`,
   `anual-oferta-compra`). El «error inesperado» al activar era que **solo España tenía precio**: en el paso 2 hay que usar
