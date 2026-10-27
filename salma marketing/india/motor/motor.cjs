@@ -189,17 +189,41 @@ async function build(cfg) {
   const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-40:y=70:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
   const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=60:y=1180:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   const SG = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null; let seguirF = '';
-  if (SG) { const t0 = Math.min(SG.seg ?? 30, Math.max(1, cardT - 4)), t1 = t0 + 3.2, al = `alpha='if(lt(t,${t0.toFixed(2)}+0.5),(t-${t0.toFixed(2)})/0.5,if(gt(t,${t1.toFixed(2)}-0.5),(${t1.toFixed(2)}-t)/0.5,1))':enable='between(t,${t0.toFixed(2)},${t1.toFixed(2)})'`;
-    seguirF = `drawtext=expansion=none:fontfile='${FONTD}/seguisym.ttf':text='♥':fontsize=46:fontcolor=0xF4630B:borderw=3:bordercolor=black@0.6:x=60:y=1500:${al},drawtext=expansion=none:fontfile='${ARIALB}':text='${esc(SG.texto || 'Si te está gustando, sígueme')}':fontsize=38:fontcolor=white:borderw=3:bordercolor=black@0.6:x=120:y=1506:${al}`; }
-  const vf = [cnt, rot, numF, seguirF].filter(Boolean).join(',') + (cnt || rot || numF || seguirF ? ',' : '') + `subtitles=sub.ass:fontsdir='${FONTD}'`;
+  // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s
+  let sgIn = [], sgT = null, sgF = '';
+  if (SG) {
+    // Coreografía (u = segundos desde t0): 0-0.5 la franja cruza entrando por la izquierda · 0.3 aparece el corazón naranja detrás y late (varios latidos) ·
+    // 4.6-5.1 la franja sale por la derecha · 5.1-5.5 el corazón revienta (crece y se desvanece)
+    const t0 = Math.min(SG.seg ?? 30, Math.max(1, cardT - 7)); sgT = { a: t0.toFixed(2), b: (t0 + 5.1).toFixed(2), c: (t0 + 5.55).toFixed(2) };
+    const txt = String(SG.texto || 'Si te está gustando, sígueme').toUpperCase(), tam = Math.min(70, Math.floor(900 / (txt.length * 0.5)));
+    const rot5 = 'rotate=-5*PI/180:ow=rotw(-5*PI/180):oh=roth(-5*PI/180):c=none';
+    sgIn = ['-loop', '1', '-i', `${W}/sg-banda.png`, '-loop', '1', '-i', `${W}/sg-corazon.png`];
+    // franja naranja + tira negra debajo (como la portada), texto centrado, todo inclinado
+    const band = `drawbox=x=0:y=130:w=1000:h=48:color=0x0D0D0D:t=fill,drawtext=expansion=none:fontfile='${IMPACT}':text='${esc(txt)}':fontsize=${tam}:fontcolor=black:x=(w-text_w)/2:y=(130-text_h)/2+6,drawtext=expansion=none:fontfile='${ARIALB}':text='BORRADO DEL MAPA':fontsize=28:fontcolor=white:x=(w-text_w)/2:y=140,${rot5}`;
+    const u = `(t-${sgT.a})`, Ub = 5.1;
+    // tamaño del corazón: nace (0-0.3 s), late con latidos secos, y revienta al final
+    const S = `if(lt(${u},0.3),0.3+0.7*${u}/0.3,if(lt(${u},${Ub}),1+0.16*pow(sin(PI*(${u}-0.3)*2.4),8),min(3.2,1+2.2*(${u}-${Ub})/0.35)))`; // tope: sin él el corazón seguiría creciendo y ffmpeg se queda sin memoria
+    const heart = `drawtext=expansion=none:fontfile='${FONTD}/seguisym.ttf':text='♥':fontsize=560:fontcolor=0xF4630B:borderw=9:bordercolor=white:shadowcolor=black@0.5:shadowx=6:shadowy=8:x=(w-text_w)/2:y=(h-text_h)/2-30`;
+    // banda y corazón se dibujan UNA vez en PNG (rápido); en el montaje solo se mueven/escalan
+    run(['-f', 'lavfi', '-i', 'color=c=0xF4630B:s=1000x178,format=rgba', '-vf', band, '-frames:v', '1', `${W}/sg-banda.png`]);
+    run(['-f', 'lavfi', '-i', 'color=c=black@0.0:s=700x700,format=rgba', '-vf', heart, '-frames:v', '1', `${W}/sg-corazon.png`]);
+    sgF = { band: 'format=rgba[sg]', heart: `scale=w='max(2,700*${S})':h=-1:eval=frame,fade=t=in:st=${(t0 + 0.25).toFixed(2)}:d=0.15:alpha=1,fade=t=out:st=${(t0 + 5.3).toFixed(2)}:d=0.25:alpha=1[ht]`,
+      xBand: `if(lt(${u},0.5),-w+((1080-w)/2+w)*(1-pow(1-${u}/0.5,3)),if(lt(${u},4.6),(1080-w)/2,(1080-w)/2+(1080-(1080-w)/2)*pow((${u}-4.6)/0.5,3)))` };
+  }
+  const vf = [cnt, rot, numF].filter(Boolean).join(','), subF = `subtitles=sub.ass:fontsdir='${FONTD}'`; // los subtítulos van ENCIMA de la franja y el corazón
   const outFile = `${OUT}/${cfg.id}.mp4`;
   // icono de Salma arriba a la izquierda, latiendo, hasta la tarjeta final (igual que la serie Asia)
   const AV = ROOT + '/salma marketing/editor/ep1/avatar.png';
   // portada por defecto (modelo Tailandia): se pone encima en los primeros 0,2 s para que sea el fotograma de portada en las redes
   const P = cfg.portada && cfg.portada.foto ? cfg.portada : null; let covIn = [];
   if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng }); covIn = ['-loop', '1', '-i', covPng]; }
-  const fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=40+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})',${vf}` + (P ? `[vv];[vv][3:v]overlay=0:0:enable='lt(t,0.2)'[v]` : '[v]');
-  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
+  let fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=40+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})'${vf ? ',' + vf : ''}[m0]`;
+  let ult = 'm0';
+  if (SG) { const ib = P ? 4 : 3;
+    fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][ht]overlay=x='540-w/2':y='1545-h/2':enable='between(t,${sgT.a},${sgT.c})'[mh];[mh][sg]overlay=x='${sgF.xBand}':y=1450:enable='between(t,${sgT.a},${sgT.b})'[m1]`; ult = 'm1'; }
+  fc += `;[${ult}]${subF}[ms]`; ult = 'ms';
+  fc += P ? `;[${ult}][3:v]overlay=0:0:enable='lt(t,0.2)'[v]` : `;[${ult}]null[v]`;
+  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
   console.log('LISTO', outFile, TOTAL.toFixed(1) + ' s', clips.length, 'planos');
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
   return outFile;
