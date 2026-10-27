@@ -88,10 +88,10 @@ async function build(cfg) {
     if (b.minD && b.D < b.minD) b.D = b.minD;
     t += b.D;
   }
-  const cardT = t; const TOTAL = t + (cfg.cardSecs || 4);
+  const cardT = t; const TOTAL = t + (cfg.cardSecs || 8);
   // 3) planos
   console.log('ETAPA 3/6 Cortando y revelando cada plano (looks Kodak, zooms)');
-  const clips = []; let nclip = 0;
+  const clips = []; let nclip = 0, kbN = 0;
   const tow = (b, from) => { const i = b.text.indexOf(from); if (i < 0) throw new Error(`no encuentro «${from}» en el bloque ${b.id}`); const wi = b.text.slice(0, i).split(' ').length - 1; const sp = (b.voz || b.text).split(' '); let p = 0; for (let q = 0; q < wi; q++) p += sp[q].length + 1; return b.v.al.st[Math.min(p, b.v.al.st.length - 1)]; };
   for (const b of cfg.blocks) {
     if (b.video) { clips.push({ file: b.video, d: b.D, raw: true }); continue; }
@@ -107,7 +107,9 @@ async function build(cfg) {
         const ss = s.ss || 0; const td = dur(f); const pad = td - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td - ss) + 0.2).toFixed(2)}` : '';
         run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
       } else {
-        const z = s.z ?? 0.05, [fx, fy] = s.foc || [0.5, 0.5], cx = s.cx ?? 0.5, inn = (s.dir || 'in') === 'in';
+        // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
+        const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 1.6; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
+        const z = s.zfijo ? s.z : (s.z ?? AUTO[s.sc] ?? 0.05) * KB, [fx, fy] = s.foc || [0.5, 0.5], cx = s.cx ?? 0.5, inn = (s.dir || dirAuto) === 'in';
         const zexpr = inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
         const pre = s.cover ? 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,scale=2160:3840:flags=lanczos' : `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*${cx},0)':0,scale=2160:3840:flags=lanczos`; // más ancha que 9:16 (apaisada o vertical 3:4) → recorta a lo ancho; si no, a lo alto
         run(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
@@ -119,8 +121,17 @@ async function build(cfg) {
   // tarjeta final
   const card = `${W}/card.mp4`;
   const ct = cfg.card;
-  run(['-f', 'lavfi', '-i', `color=c=0x0d0d0d:s=1080x1920:r=30:d=${cfg.cardSecs || 4}`, '-vf', `drawtext=fontfile='${IMPACT}':text='${esc(ct.l1)}':fontsize=96:fontcolor=0xF4630B:x=(w-text_w)/2:y=720,drawtext=fontfile='${IMPACT}':text='${esc(ct.l2)}':fontsize=76:fontcolor=white:x=(w-text_w)/2:y=850,drawtext=fontfile='${ARIALB}':text='${esc(ct.l3)}':fontsize=44:fontcolor=white:x=(w-text_w)/2:y=1050,drawtext=fontfile='${ARIALB}':text='${esc(ct.l4)}':fontsize=46:fontcolor=0xF4630B:x=(w-text_w)/2:y=1200,drawtext=fontfile='${ARIALB}':text='${esc(ct.l5)}':fontsize=42:fontcolor=white:x=(w-text_w)/2:y=1270,fade=t=in:st=0:d=0.4,format=yuv420p`, '-an', '-t', String(cfg.cardSecs || 4), '-c:v', 'libx264', '-crf', '19', card]);
-  clips.push({ file: card, d: cfg.cardSecs || 4 });
+  // Cierre en dos tiempos: 1) título de la serie · 2) invitación a la app (icono de Salma) + capítulo siguiente
+  const CS = cfg.cardSecs || 8, P1 = cfg.cardP1 || 3, AVC = ROOT + '/salma marketing/editor/ep1/avatar.png';
+  const dtx = (txt, font, size, col, y, t0, t1, extra = '') => `drawtext=expansion=none:fontfile='${font}':text='${esc(txt)}':fontsize=${size}:fontcolor=${col}:x=(w-text_w)/2:y=${y}:alpha='if(lt(t,${t0}+0.4),(t-${t0})/0.4,if(gt(t,${t1}-0.4),(${t1}-t)/0.4,1))':enable='between(t,${t0},${t1})'${extra}`;
+  const ctF = `[1:v]scale=360:-1,format=rgba,fade=t=in:st=${P1}:d=0.4:alpha=1[av];[0:v][av]overlay=(W-w)/2:170:eof_action=pass,` + [
+    dtx(ct.l1, IMPACT, 96, '0xF4630B', 720, 0, P1), dtx(ct.l2, IMPACT, 76, 'white', 850, 0, P1), dtx(ct.l3, ARIALB, 44, 'white', 1050, 0, P1),
+    dtx('CREA TUS RUTAS', IMPACT, 104, '0xF4630B', 640, P1, CS), dtx('CONMIGO', IMPACT, 140, '0xF4630B', 770, P1, CS),
+    dtx('Descarga la app de guías de viaje', ARIALB, 54, 'white', 990, P1, CS), dtx('Gratis', ARIALB, 54, 'white', 1065, P1, CS),
+    dtx('borradodelmapa.com', IMPACT, 74, 'white', 1220, P1, CS, ':box=1:boxcolor=0xF4630B:boxborderw=22'),
+    dtx(ct.l4, ARIALB, 46, '0xF4630B', 1560, P1, CS), dtx(ct.l5, ARIALB, 52, 'white', 1655, P1, CS)].join(',') + ',format=yuv420p[vout]';
+  run(['-f', 'lavfi', '-i', `color=c=0x0d0d0d:s=1080x1920:r=30:d=${CS}`, '-loop', '1', '-i', AVC, '-filter_complex', ctF, '-map', '[vout]', '-an', '-t', String(CS), '-c:v', 'libx264', '-crf', '19', '-pix_fmt', 'yuv420p', card]);
+  clips.push({ file: card, d: CS });
   fs.writeFileSync(`${W}/lista.txt`, clips.map(c => `file '${c.file.replace(/\\/g, '/')}'`).join('\n'));
   run(['-f', 'concat', '-safe', '0', '-i', `${W}/lista.txt`, '-c', 'copy', `${W}/mudo.mp4`]);
   // 4) subtítulos
@@ -177,7 +188,10 @@ async function build(cfg) {
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
   const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-40:y=70:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
   const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=60:y=1180:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
-  const vf = [cnt, rot, numF].filter(Boolean).join(',') + (cnt || rot || numF ? ',' : '') + `subtitles=sub.ass:fontsdir='${FONTD}'`;
+  const SG = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null; let seguirF = '';
+  if (SG) { const t0 = Math.min(SG.seg ?? 30, Math.max(1, cardT - 4)), t1 = t0 + 3.2, al = `alpha='if(lt(t,${t0.toFixed(2)}+0.5),(t-${t0.toFixed(2)})/0.5,if(gt(t,${t1.toFixed(2)}-0.5),(${t1.toFixed(2)}-t)/0.5,1))':enable='between(t,${t0.toFixed(2)},${t1.toFixed(2)})'`;
+    seguirF = `drawtext=expansion=none:fontfile='${FONTD}/seguisym.ttf':text='♥':fontsize=46:fontcolor=0xF4630B:borderw=3:bordercolor=black@0.6:x=60:y=1500:${al},drawtext=expansion=none:fontfile='${ARIALB}':text='${esc(SG.texto || 'Si te está gustando, sígueme')}':fontsize=38:fontcolor=white:borderw=3:bordercolor=black@0.6:x=120:y=1506:${al}`; }
+  const vf = [cnt, rot, numF, seguirF].filter(Boolean).join(',') + (cnt || rot || numF || seguirF ? ',' : '') + `subtitles=sub.ass:fontsdir='${FONTD}'`;
   const outFile = `${OUT}/${cfg.id}.mp4`;
   // icono de Salma arriba a la izquierda, latiendo, hasta la tarjeta final (igual que la serie Asia)
   const AV = ROOT + '/salma marketing/editor/ep1/avatar.png';

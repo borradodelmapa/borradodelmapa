@@ -10,7 +10,7 @@ const cfg = {
   look: 'portra', counter: 'INDIA 2019',
   portada: { foto: 'S533', foco: [0.5, 0.5, 0.9], l1: 'BENARÉS', l2: 'ENTRE LA VIDA Y LA MUERTE', tag: 'BORRADO DEL MAPA · INDIA 4/7' },
   voices: { paco: PACO, salma: SALMA },
-  cardSecs: 4, duckRatio: 5, gap: { same: 0.4, change: 0.85 }, leadChange: 0.45, voiceDb: { paco: -21, salma: -25 },
+  cardSecs: 8, kb: 1.6, seguir: { activo: true, seg: 30, texto: 'Si te está gustando, sígueme' }, duckRatio: 5, gap: { same: 0.4, change: 0.85 }, leadChange: 0.45, voiceDb: { paco: -21, salma: -25 },
   card: { l1: 'MUCHO YOGI, POCO YOGA', l2: 'INDIA 2019', l3: 'Basado en un viaje real', l4: 'CAPÍTULO SIGUIENTE', l5: 'Sarnath, el primer discurso de Buda' },
   blocks: [
     // GANCHO

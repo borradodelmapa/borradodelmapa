@@ -4,10 +4,12 @@ const path = require('path');
 const pron = t => t.replace(/ll/g, 'y').replace(/Ll/g, 'Y').replace(/LL/g, 'Y');
 module.exports = (cfg, ov) => {
   cfg.id += '-editor';
+  if (ov.seguir && Object.keys(ov.seguir).length) cfg.seguir = { ...(cfg.seguir || {}), ...ov.seguir };
   if (ov.portada && Object.keys(ov.portada).length) cfg.portada = { ...(cfg.portada || {}), ...ov.portada };
   cfg.blocks.forEach(b => {
     (ov.shots && ov.shots[b.id] || []).forEach((a, k) => { if (a && b.shots[k] && b.shots[k].a !== a) { b.shots[k].a = a; delete b.shots[k].ss; } });
     (ov.ss && ov.ss[b.id] || []).forEach((v, k) => { if (v != null && b.shots[k] && /^(V|RW)/.test(b.shots[k].a)) b.shots[k].ss = v; });
+    (ov.mov && ov.mov[b.id] || []).forEach((m, k) => { const s = b.shots[k]; if (!m || !s || /^(V|RW)/.test(s.a)) return; if (m.dir === 'quieta') { s.dir = 'in'; s.z = 0; s.zfijo = true; } else { if (m.dir) s.dir = m.dir; if (m.z != null) { s.z = m.z; s.zfijo = true; } } if (m.foc) s.foc = m.foc; });
     if (ov.amb && ov.amb[b.id] && b.amb) b.amb.src = ov.amb[b.id];
     const nt = ov.text && ov.text[b.id];
     if (nt && b.text && nt.trim() && nt !== b.text) {

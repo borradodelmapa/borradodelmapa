@@ -9,7 +9,7 @@ const { resolve, RW, vozEnCache } = require('../motor.cjs');
 const aplicar = require('./aplicar.cjs');
 const crypto = require('crypto');
 const { generar: generarPortada } = require('../portada.cjs');
-const leerOv = () => ({ shots: {}, amb: {}, text: {}, audio: {}, ss: {}, portada: {}, ...JSON.parse(fs.readFileSync(OVR, 'utf8')) });
+const leerOv = () => ({ shots: {}, amb: {}, text: {}, audio: {}, ss: {}, portada: {}, mov: {}, seguir: {}, ...JSON.parse(fs.readFileSync(OVR, 'utf8')) });
 const isVideo = id => /^(RW|V)/.test(id);
 
 // configuración base del capítulo (sin overrides): misma técnica que hoja.cjs
@@ -46,6 +46,8 @@ setTimeout(() => { const g = galeria(); [...g.runway, ...g.sony, ...g.video, ...
 let job = { estado: 'libre', log: '', fin: 0, ini: 0, cambios: [], total: 0 };
 const resumenCambios = () => { const o = leerOv(), base = cargarCfg(), c = [];
   base.blocks.forEach(b => { (o.shots[b.id] || []).forEach((a, k) => { if (b.shots[k] && a !== b.shots[k].a) c.push(`Escena «${b.id}», plano ${k + 1}: ${b.shots[k].a} → ${a}`); }); if (o.amb[b.id] && o.amb[b.id] !== b.amb) c.push(`Escena «${b.id}»: ambiente ${b.amb} → ${o.amb[b.id]}`); if (o.text[b.id] && o.text[b.id] !== b.text) c.push(`Escena «${b.id}»: texto cambiado (voz nueva)`); (o.ss[b.id] || []).forEach((v, k) => { if (v != null && b.shots[k] && v !== (b.shots[k].ss || 0)) c.push(`Escena «${b.id}», plano ${k + 1}: recortado, empieza en el segundo ${v}`); }); if (o.audio[b.id]) c.push(`Escena «${b.id}»: audio propio (${o.audio[b.id]})`); });
+  Object.keys(o.mov || {}).forEach(id => c.push(`Escena «${id}»: movimiento de foto retocado`));
+  if (o.seguir && Object.keys(o.seguir).length) c.push('Aviso de seguir retocado');
   if (o.portada && Object.keys(o.portada).length) c.push('Portada cambiada (foto, textos o encuadre)');
   return { c, planos: base.blocks.reduce((n, b) => n + (b.shots || []).length, 0) }; };
 const montar = () => {
@@ -76,14 +78,21 @@ http.createServer((req, res) => {
     if (p === '/') return file(req, res, __dirname + '/editor.html', 'text/html; charset=utf-8');
     if (p === '/api/datos') {
       const cfg = cargarCfg();
-      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, portada: cfg.portada || null, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ ss: s.ss || 0, a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
+      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, portada: cfg.portada || null, seguir: cfg.seguir || null, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ ss: s.ss || 0, cx: s.cx ?? 0.5, foc: s.foc || null, a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
     }
-    if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, ss: o.ss || {}, portada: o.portada || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
+    if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, ss: o.ss || {}, portada: o.portada || {}, mov: o.mov || {}, seguir: o.seguir || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
     if (p === '/api/reset' && req.method === 'POST') { const v = __dirname + '/versiones'; fs.mkdirSync(v, { recursive: true }); fs.copyFileSync(OVR, `${v}/${CAP}-${Date.now()}.json`); fs.writeFileSync(OVR, JSON.stringify({ shots: {}, amb: {}, text: {}, audio: {}, ss: {} }, null, 1)); return send(res, 200, leerOv()); }
     if (p.startsWith('/media/')) { const id = p.slice(7); if (!/^(V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return file(req, res, resolve(id), 'video/mp4'); }
     if (p === '/api/terminados') return send(res, 200, fs.readdirSync(TERM).filter(f => /\.mp4$/.test(f)).sort().reverse());
     if (p.startsWith('/terminado/')) return file(req, res, TERM + '/' + path.basename(decodeURIComponent(p.slice(11))), 'video/mp4');
     if (p === '/inicio') return file(req, res, __dirname + '/inicio.html', 'text/html; charset=utf-8');
+    if (p === '/api/recorte') { // la foto recortada a 9:16 como la verá el zoom (para elegir el punto de enfoque)
+      const id = u.searchParams.get('id') || '', cx = Math.min(1, Math.max(0, parseFloat(u.searchParams.get('cx')) || 0.5));
+      if (!/^(S|M)[0-9]+$/.test(id)) return send(res, 400, 'id', 'text/plain');
+      const out = CACHE + '/rec-' + id + '-' + cx + '.jpg'; if (fs.existsSync(out)) return file(req, res, out, 'image/jpeg');
+      const crop = "crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*" + cx + ",0)':0,scale=360:-2";
+      return new Promise(ok => { const pr = spawn(FF, ['-v', 'error', '-y', '-i', resolve(id), '-vf', crop, '-frames:v', '1', '-q:v', '3', out]); pr.on('close', ok); pr.on('error', ok); }).then(() => file(req, res, out, 'image/jpeg'));
+    }
     if (p === '/api/portada') { // vista previa de la portada (ffmpeg local, 0 €)
       const q = u.searchParams, foto = q.get('foto') || '', n = (k, d, lo = 0) => { const v = parseFloat(q.get(k)); return isFinite(v) ? Math.min(1, Math.max(lo, v)) : d; };
       if (!/^(S|M)[0-9]+$/.test(foto)) return send(res, 400, 'foto', 'text/plain');

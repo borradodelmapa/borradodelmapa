@@ -35,29 +35,31 @@ textarea{width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:
 .grid .g .u{position:absolute;left:0;bottom:0;right:0;background:#000c;color:#9f9;font-size:10px;padding:1px 3px}
 .leyenda{font-size:12px;color:var(--mu);margin:6px 0 10px}.leyenda b{padding:0 5px;color:#000}
 .mini{font-size:12px;color:var(--mu)}.rojo{color:#e9c}
+details.mov{margin-top:3px;font-size:12px}details.mov summary{cursor:pointer;color:var(--mu)}details.mov select{width:100%;background:#222;color:var(--tx);border:1px solid #444;padding:3px}summary.cab{list-style:revert}
 #estado{font-size:13px;color:var(--mu);max-width:420px;white-space:pre-wrap}
 #vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:60vh;background:#000}#panel{display:none;background:#111;border-bottom:1px solid var(--line);padding:12px 16px}#panel .bar{height:14px;background:#2a2a2a;margin:8px 0}#panel .bar i{display:block;height:100%;background:var(--or);width:0;transition:width .5s}#panel ol{margin:6px 0;padding-left:20px;color:var(--mu)}#panel li.hecho{color:#6c6}#panel li.ahora{color:var(--or);font-weight:700}#panel ul{margin:6px 0;padding-left:18px}#panel pre{white-space:pre-wrap;color:var(--mu);font-size:12px;margin:6px 0}
 </style></head><body>
 <header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1>
 <button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button></header>
 <div id="panel"></div>
-<main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="lista">Cargando…</div></main>
+<main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="ajustes"></div><div id="lista">Cargando…</div></main>
+<div id="modal3" style="display:none;position:fixed;inset:0;background:#000d;z-index:12;overflow:auto"><div style="max-width:420px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="ft"></b><div style="position:relative;margin:8px 0;line-height:0"><img id="fimg" style="width:100%;cursor:crosshair"><div id="fmark" style="display:none;position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:3px solid #F4630B;border-radius:50%;box-shadow:0 0 0 2px #000;pointer-events:none"></div></div><div style="display:flex;gap:8px"><button class="sec" id="fauto">Auto (centro)</button><button id="fcerrar">Listo</button></div></div></div>
 <div id="modal2" style="display:none;position:fixed;inset:0;background:#000d;z-index:11;overflow:auto"><div style="max-width:520px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="rt"></b><video id="rvid" controls style="width:100%;max-height:68vh;background:#000;margin:8px 0"></video><div id="rinfo" class="mini"></div><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button id="rpon">✂ Empezar aquí (donde está el vídeo)</button><button class="sec" id="rorig">Volver al original</button><button class="sec" id="rcerrar">Cerrar</button></div><div class="mini" style="margin-top:6px">Pausa el vídeo donde quieras que EMPIECE el plano y pulsa «Empezar aquí». Lo que dura lo marca la frase.</div></div></div>
 <div id="modal"><div class="in"><div style="display:flex;justify-content:space-between;align-items:center"><b id="mt"></b><button class="sec" id="cerrar">Cerrar</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div></div>
 <script>
-let D, ov = {shots:{},amb:{},text:{},audio:{},ss:{},portada:{}}, ctx = null, tab = 'sony';
+let D, ov = {shots:{},amb:{},text:{},audio:{},ss:{},portada:{},mov:{},seguir:{}}, ctx = null, tab = 'sony';
 const $ = s => document.querySelector(s);
 const fotoActual = (b, k) => (ov.shots[b.id] && ov.shots[b.id][k]) || b.shots[k].a;
 const ambActual = b => ov.amb[b.id] || b.amb;
 async function guardar(){ ov = await (await fetch('/api/guardar',{method:'POST',body:JSON.stringify(ov)})).json(); }
 function pintar(){
-  pintarPortada();
+  pintarPortada(); pintarAjustes();
   $('#lista').innerHTML = '';
   D.bloques.forEach(b => {
     const d = document.createElement('div'); d.className = 'blq ' + (b.who || '');
     let h = `<div class="cab">${(b.who||'mapa')} · ${b.id}${b.silencio?' · 🔇 silencio total':''}</div>`;
     if (b.text) { const t = (ov.text[b.id] ?? b.text); h += `<textarea data-txt="${b.id}" class="${ov.text[b.id] && ov.text[b.id] !== b.text ? 'mod' : ''}">${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea><div class="mini" data-info="${b.id}"></div>`; } else h += '<div class="txt">(mapa y rótulo — no se cambia)</div>';
-    h += '<div class="shots">' + b.shots.map((s,k) => { const a = fotoActual(b,k), camb = a !== s.a; return `<div class="shot ${camb?'cambiado':''}"><div class="im" data-b="${b.id}" data-k="${k}"><img loading="lazy" src="/thumb/${a}"><span class="id">${k+1}·${a}</span>${s.sc?`<span class="cm">${s.sc}</span>`:''}</div><small>${camb?'cambiada (era '+s.a+')':'tocar para cambiar'}</small>${/^(V|RW)/.test(a)?`<button class="sec" style="width:100%;margin-top:3px;font-size:12px;padding:5px" data-rec="${b.id}|${k}">✂ ${(ov.ss[b.id]||[])[k]!=null && (ov.ss[b.id]||[])[k] !== (s.ss||0) ? 'desde '+(ov.ss[b.id]||[])[k]+' s' : 'Recortar'}</button>`:''}</div>`; }).join('') + '</div>';
+    h += '<div class="shots">' + b.shots.map((s,k) => { const a = fotoActual(b,k), camb = a !== s.a; return `<div class="shot ${camb?'cambiado':''}"><div class="im" data-b="${b.id}" data-k="${k}"><img loading="lazy" src="/thumb/${a}"><span class="id">${k+1}·${a}</span>${s.sc?`<span class="cm">${s.sc}</span>`:''}</div><small>${camb?'cambiada (era '+s.a+')':'tocar para cambiar'}</small>${/^(V|RW)/.test(a)?`<button class="sec" style="width:100%;margin-top:3px;font-size:12px;padding:5px" data-rec="${b.id}|${k}">✂ ${(ov.ss[b.id]||[])[k]!=null && (ov.ss[b.id]||[])[k] !== (s.ss||0) ? 'desde '+(ov.ss[b.id]||[])[k]+' s' : 'Recortar'}</button>`:''}${movHTML(b, s, k, a)}</div>`; }).join('') + '</div>';
     if (b.amb) {
       const cur = ambActual(b);
       h += `<div class="amb">🔊 Ambiente: <select data-amb="${b.id}">${D.audios.map(a=>`<option value="${a.src}" ${a.src===cur?'selected':''}>${a.nombre}</option>`).join('')}${D.audios.some(a=>a.src===cur)?'':`<option selected>${cur}</option>`}</select><audio controls preload="none" src="/audio/${encodeURIComponent((D.audios.find(a=>a.src===cur)||{}).file||'')}"></audio></div>`;
@@ -68,6 +70,7 @@ function pintar(){
   document.querySelectorAll('textarea[data-txt]').forEach(e => { const b = D.bloques.find(x=>x.id===e.dataset.txt); const info = () => { const el = document.querySelector(`[data-info="${b.id}"]`); const mod = e.value !== b.text; e.classList.toggle('mod', mod); el.innerHTML = mod ? `<span class="rojo">✏ Texto cambiado (${e.value.length} caracteres) — al montar se genera su voz nueva.</span> <a href="#" data-rev="${b.id}" style="color:#9cf">volver al original</a>` : `${e.value.length} caracteres`; const a = el.querySelector('[data-rev]'); if (a) a.onclick = async ev => { ev.preventDefault(); delete ov.text[b.id]; await guardar(); pintar(); }; }; info(); e.oninput = info; e.onchange = async () => { if (e.value === b.text) delete ov.text[b.id]; else ov.text[b.id] = e.value; await guardar(); pintar(); }; });
   document.querySelectorAll('input[data-sub]').forEach(e => e.onchange = async () => { const f = e.files[0]; if (!f) return; const ext = (f.name.split('.').pop() || '').toLowerCase(); $('#estado').textContent = 'Subiendo audio…'; const r = await fetch(`/api/subir?id=${e.dataset.sub}&ext=${ext}`, { method: 'POST', body: f }); if (!r.ok) { alert('No vale ese formato (usa mp3, wav, m4a…)'); return; } ov = await r.json(); $('#estado').textContent = ''; pintar(); });
   document.querySelectorAll('[data-quitar]').forEach(e => e.onclick = async () => { ov = await (await fetch('/api/quitar-audio?id=' + e.dataset.quitar, { method: 'POST' })).json(); pintar(); });
+  cablearMov();
   document.querySelectorAll('[data-rec]').forEach(e => e.onclick = () => { const [bid,k] = e.dataset.rec.split('|'); abrirRecorte(bid, +k); });
   document.querySelectorAll('.im').forEach(e => e.onclick = () => abrir(e.dataset.b, +e.dataset.k));
   document.querySelectorAll('select[data-amb]').forEach(e => e.onchange = async () => { const b = D.bloques.find(x=>x.id===e.dataset.amb); if (e.value === b.amb) delete ov.amb[b.id]; else ov.amb[b.id] = e.value; await guardar(); pintar(); });
@@ -79,10 +82,11 @@ function urlPortada(p){ const f = p.foco || [0.5, 0.5, 0.9]; return '/api/portad
 let tPortada = null;
 function pintarPortada(){
   const P = $('#portada'); if (!D.portada) { P.innerHTML = ''; return; }
+  const abierto = P.querySelector('details') && P.querySelector('details').open;
   const p = portadaActual(), f = p.foco || [0.5, 0.5, 0.9];
   const campo = (k, et) => `<label class="mini">${et}<input data-pc="${k}" value="${(p[k] || '').replace(/"/g, '&quot;')}" style="width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:7px;margin:2px 0 6px"></label>`;
   const sl = (i, et, min, max) => `<label class="mini">${et}: <b data-sv="${i}">${f[i]}</b><input type="range" data-ps="${i}" min="${min}" max="${max}" step="0.02" value="${f[i]}" style="width:100%"></label>`;
-  P.innerHTML = `<div class="blq" style="border-left-color:#F4630B"><div class="cab" style="color:var(--or)">🖼 Portada (se pone como primer fotograma del vídeo)</div><div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px"><img id="pimg" style="width:210px;height:373px;background:#000;object-fit:contain"><div style="flex:1;min-width:260px"><button id="pfoto" class="sec" style="margin-bottom:8px">Elegir foto (${p.foto})</button>${campo('l1', 'Título (grande)')}${campo('l2', 'Frase')}${campo('tag', 'Rótulo inferior')}${sl(0, 'Encuadre horizontal', 0, 1)}${sl(1, 'Encuadre vertical', 0, 1)}${sl(2, 'Zoom (menos = más cerca)', 0.5, 1)}<button class="sec" id="prest" style="margin-top:6px">Volver a la portada original</button></div></div></div>`;
+  P.innerHTML = `<details class="blq" ${abierto ? 'open' : ''} style="border-left-color:#F4630B"><summary class="cab" style="color:var(--or);cursor:pointer">🖼 Portada (primer fotograma del vídeo) — pulsa para abrir</summary><div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px"><img id="pimg" style="width:210px;height:373px;background:#000;object-fit:contain"><div style="flex:1;min-width:260px"><button id="pfoto" class="sec" style="margin-bottom:8px">Elegir foto (${p.foto})</button>${campo('l1', 'Título (grande)')}${campo('l2', 'Frase')}${campo('tag', 'Rótulo inferior')}${sl(0, 'Encuadre horizontal', 0, 1)}${sl(1, 'Encuadre vertical', 0, 1)}${sl(2, 'Zoom (menos = más cerca)', 0.5, 1)}<button class="sec" id="prest" style="margin-top:6px">Volver a la portada original</button></div></div></details>`;
   const ver = () => { $('#pimg').src = urlPortada(portadaActual()); };
   const cambiar = nuevo => { ov.portada = { ...portadaActual(), ...nuevo }; ver(); clearTimeout(tPortada); tPortada = setTimeout(guardar, 500); };
   P.querySelectorAll('input[data-pc]').forEach(e => e.oninput = () => cambiar({ [e.dataset.pc]: e.value }));
@@ -90,6 +94,48 @@ function pintarPortada(){
   $('#pfoto').onclick = () => { ctx = { portada: true }; $('#mt').textContent = 'Elige la foto de la portada (solo fotos)'; $('#modal').style.display = 'block'; pintarGaleria(portadaActual().foto); };
   $('#prest').onclick = async () => { ov.portada = {}; await guardar(); pintarPortada(); };
   ver();
+}
+// ---- Movimiento (Ken Burns) por foto y ajustes del vídeo: todo COLAPSADO; lo automático lo decide el montaje ----
+function movActual(bid, k){ return ((ov.mov || {})[bid] || [])[k] || {}; }
+function movHTML(b, s, k, a){
+  if (/^(V|RW)/.test(a)) return '';
+  const m = movActual(b.id, k), opt = (v, t, cur) => `<option value="${v}" ${String(cur ?? '') === v ? 'selected' : ''}>${t}</option>`;
+  return `<details class="mov"><summary>⚙ Movimiento${(m.dir || m.z != null || m.foc) ? ' ✎' : ''}</summary>
+    <label class="mini">Tipo<select data-mdir="${b.id}|${k}">${opt('', 'Auto', m.dir)}${opt('in', 'Acercar', m.dir)}${opt('out', 'Alejar', m.dir)}${opt('quieta', 'Quieta', m.dir)}</select></label>
+    <label class="mini">Fuerza<select data-mz="${b.id}|${k}">${opt('', 'Auto', m.z)}${opt('0.05', 'Suave', m.z)}${opt('0.09', 'Media', m.z)}${opt('0.15', 'Fuerte', m.z)}</select></label>
+    <button class="sec" style="width:100%;font-size:12px;padding:5px;margin-top:3px" data-menf="${b.id}|${k}">🎯 Punto de enfoque${m.foc ? ' (fijado)' : ''}</button></details>`;
+}
+function guardarMov(bid, k, cambio){
+  const b = D.bloques.find(x => x.id === bid); ov.mov = ov.mov || {}; const arr = ov.mov[bid] || (ov.mov[bid] = b.shots.map(() => null));
+  const nuevo = { ...(arr[k] || {}), ...cambio }; Object.keys(nuevo).forEach(x => { if (nuevo[x] === undefined || nuevo[x] === '' || nuevo[x] === null) delete nuevo[x]; });
+  arr[k] = Object.keys(nuevo).length ? nuevo : null; if (arr.every(x => !x)) delete ov.mov[bid];
+  guardar();
+}
+function cablearMov(){
+  document.querySelectorAll('select[data-mdir]').forEach(e => e.onchange = () => { const [b, k] = e.dataset.mdir.split('|'); guardarMov(b, +k, { dir: e.value }); });
+  document.querySelectorAll('select[data-mz]').forEach(e => e.onchange = () => { const [b, k] = e.dataset.mz.split('|'); guardarMov(b, +k, { z: e.value ? +e.value : null }); });
+  document.querySelectorAll('[data-menf]').forEach(e => e.onclick = () => { const [b, k] = e.dataset.menf.split('|'); abrirEnfoque(b, +k); });
+}
+function abrirEnfoque(bid, k){
+  const b = D.bloques.find(x => x.id === bid), id = fotoActual(b, k), cx = b.shots[k].cx ?? 0.5, m = movActual(bid, k), im = $('#fimg'), mk = $('#fmark');
+  $('#ft').textContent = `Punto de enfoque · «${bid}», plano ${k+1} (${id}) — toca lo que importa: el zoom termina ahí`;
+  im.src = '/api/recorte?id=' + id + '&cx=' + cx; const f = m.foc || b.shots[k].foc;
+  const marca = (x, y) => { mk.style.display = 'block'; mk.style.left = (x * 100) + '%'; mk.style.top = (y * 100) + '%'; };
+  if (f) marca(f[0], f[1]); else mk.style.display = 'none';
+  im.onclick = ev => { const r = im.getBoundingClientRect(), x = Math.round((ev.clientX - r.left) / r.width * 100) / 100, y = Math.round((ev.clientY - r.top) / r.height * 100) / 100; marca(x, y); guardarMov(bid, k, { foc: [x, y] }); pintar(); };
+  $('#fauto').onclick = () => { mk.style.display = 'none'; guardarMov(bid, k, { foc: null }); pintar(); };
+  $('#modal3').style.display = 'block';
+}
+function pintarAjustes(){
+  const P = $('#ajustes'), abierto = P.querySelector('details') && P.querySelector('details').open;
+  const sg = { ...(D.seguir || {}), ...(ov.seguir || {}) };
+  P.innerHTML = `<details class="blq" ${abierto ? 'open' : ''} style="border-left-color:#888"><summary class="cab" style="cursor:pointer">⚙ Ajustes del vídeo (aviso de seguir, cierre) — pulsa para abrir</summary>
+    <label class="mini" style="display:block;margin-top:8px"><input type="checkbox" id="sg-on" ${sg.activo !== false ? 'checked' : ''}> Aviso sutil de «me gusta / seguir» durante el vídeo</label>
+    <label class="mini">Aparece en el segundo <input type="number" id="sg-seg" min="3" max="120" step="1" value="${sg.seg ?? 30}" style="width:70px;background:#0d0d0d;color:#eee;border:1px solid #444;padding:5px"></label>
+    <label class="mini" style="display:block">Texto <input id="sg-txt" value="${(sg.texto || 'Si te está gustando, sígueme').replace(/"/g, '&quot;')}" style="width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:7px"></label>
+    <div class="mini" style="margin-top:6px">El cierre (título de la serie y descarga de la app) y el movimiento de las fotos los pone el montaje solo; el movimiento de cada foto se retoca en su «⚙ Movimiento».</div></details>`;
+  let t = null; const cambia = () => { ov.seguir = { activo: $('#sg-on').checked, seg: +$('#sg-seg').value || 30, texto: $('#sg-txt').value }; clearTimeout(t); t = setTimeout(guardar, 500); };
+  ['#sg-on', '#sg-seg', '#sg-txt'].forEach(s => { $(s).oninput = cambia; $(s).onchange = cambia; });
 }
 function pestanas(){
   const T = {}; const grupos = [...new Set(D.galeria.sony.map(id => Math.floor(+id.slice(1) / 100)))];
@@ -139,6 +185,7 @@ function abrirRecorte(bid, k){
   $('#rorig').onclick = async () => { const arr = ov.ss[bid]; if (arr) { arr[k] = b.shots[k].ss || 0; if (arr.every((x,i) => x === (b.shots[i].ss || 0))) delete ov.ss[bid]; await guardar(); } v.currentTime = b.shots[k].ss || 0; $('#rinfo').textContent = 'Vuelto al original'; pintar(); };
   $('#modal2').style.display = 'block';
 }
+$('#fcerrar').onclick = () => { $('#modal3').style.display = 'none'; };
 $('#rcerrar').onclick = () => { $('#rvid').pause(); $('#modal2').style.display = 'none'; };
 $('#cerrar').onclick = () => $('#modal').style.display = 'none';
 $('#reset').onclick = async () => { const b = $('#reset'); if (b.dataset.seguro !== '1') { b.dataset.seguro = '1'; b.textContent = '¿Seguro? Pulsa otra vez'; setTimeout(() => { b.dataset.seguro = ''; b.textContent = 'Deshacer cambios'; }, 4000); return; } b.dataset.seguro = ''; b.textContent = 'Deshacer cambios'; ov = await (await fetch('/api/reset', {method:'POST'})).json(); pintar(); };
