@@ -34,7 +34,7 @@ Complementa `docs/video-reglas-y-flujo.md` (§5 Texto y voz). Si choca con una o
 ---
 # SERIE INDIA — estructura propuesta (pendiente de OK)
 - **Intro:** resumen de todo el viaje (~90 s) que enseña lo que viene. **Se monta la última**, cuando haya trozos terminados que resumir.
-- **Capítulos (el orden lo decide Paco, según el viaje):** Yoga y los iluminados (Rishikesh) · Hinduismo vs budismo y el norte (Dalai Lama) · Benarés (cap. 4, ya medio hecho) · Bodas concertadas y machismo · Castas · Monos (tono ligero, ya medio hecho).
+- **Orden real del viaje (Paco, 28 oct):** Rishikesh → norte (Dharamsala) → Benarés (cap. 4, ya medio hecho). Capítulos: Yoga y los iluminados (Rishikesh) · Hinduismo vs budismo y el Dalai Lama (Dharamsala) · Benarés · temáticos: bodas concertadas y machismo, castas · Monos (tono ligero, ya medio hecho). Pendiente: qué son los caps. 1-3 para que Benarés siga siendo el 4.
 - Alternar pesado/ligero: los monos de respiro entre castas y bodas.
 - Temas delicados (castas, machismo, bodas): hechos los dice Salma con fuente (varias fuentes; si discrepan, no se dicen); el juicio duro lo dice Paco como opinión; humor hacia Paco o la situación, nunca hacia la gente.
 
@@ -45,4 +45,4 @@ Complementa `docs/video-reglas-y-flujo.md` (§5 Texto y voz). Si choca con una o
 4. **Paco (confesar):** «Me cambiaba de acera si oía hablar mi idioma.» **Salma:** «En un país de mil cuatrocientos millones de personas.» **Paco:** buscaba, ashram por ashram, maestros que no te vieran como un billete de cien rupias.
 5. **Salma:** «¿Y los encontraste?» **Paco (relato real, su contenido):** sí, y no fue difícil. Hay maestros que empiezan, con pocos adeptos pero fieles; se rodean de un aura que los diferencia, más por inercia del sistema que por ser distintos; según avanzas, te encuentras familias que heredan el estatus de súper yogui.
 6. **Salma (dato frío, a verificar):** la palabra es *parampara*, linaje: la enseñanza pasa de maestro a discípulo y a veces de padre a hijo. «O sea, el sistema funciona como una empresa familiar.» **Paco (aceptación):** «Con incienso.»
-- Pendiente de Paco: ¿hizo cursos de fotografía (pulla de Salma)? Hinduismo/budismo: frase propuesta «Buda empezó meditando con maestros hindúes» → va mejor en el capítulo de religiones.
+- Pulla de Salma (Paco trabajó en producción de cine y es autodidacta, sin curso): tras las 200 horas, «Tú trabajaste en producción de cine y aprendiste solo. Cero horas certificadas.» Hinduismo/budismo: frase propuesta «Buda empezó meditando con maestros hindúes» → va mejor en el capítulo de religiones.
