@@ -1,0 +1,48 @@
+# PERSONAJES DEL DÚO PACO + SALMA — dirección de actores (borrador 28 oct 2026, pendiente de OK de Paco)
+Complementa `docs/video-reglas-y-flujo.md` (§5 Texto y voz). Si choca con una orden nueva de Paco, manda Paco.
+**Objetivo (Paco):** que él no tenga que estar de buen humor para hacer los vídeos. El personaje hace el trabajo: Paco dice lo que hay, en bruto; Salma pone la réplica.
+
+## Fórmula
+**Paco da el hecho y la emoción real, sin hacer gracia. El humor sale de la réplica de Salma.**
+> PACO: Se ha jodido la moto. Me cago en su puta madre. — SALMA: Normal. No le has echado gasolina. — PACO: …Ya.
+
+## Paco — el que estuvo (andaluz, viajero)
+- Realista, sin «happy flower»: cinismo controlado → pasotismo realista → aceptación («no me gusta, pero es lo que hay»).
+- Solo tres estados que interpretar: **cabreo · resignación · aceptación**. Toda queja acaba en un «pero» o en encogerse de hombros.
+- El optimismo es una decisión, no ingenuidad: «no era bonito y mereció la pena».
+- Habla del cuerpo (frío, olor, cansancio, colas). Frases cortas, muletillas suyas.
+
+## Salma — la que sabe (andaluza, técnica)
+- Cabeza fría. **Un dato potente por intervención y silencio después.** Humor = precisión seca, sin sonreír.
+- Tiene criterio: corrige a Paco con cariño. Le desespera lo impreciso.
+- Voz con estabilidad 1 (plana): la emoción se dirige con texto y pausas, no con entonación.
+
+## Cinco tipos de réplica de Salma
+1. **Causa obvia** («No le echaste gasolina») · 2. **Dato frío** · 3. **El «te lo dije»** · 4. **Traducción** («tus "diez minutos" fueron cuarenta») · 5. **Respiro** (silencio + ambiente).
+
+## Que el público juegue en su equipo
+- Decir lo feo antes de que el público lo piense. · Plural («nos tocó…»). · El público es el tercer personaje (qué le contarían a un amigo que va a ir).
+- **Línea roja:** el cinismo apunta a la situación, a Paco, a la burocracia, al postureo. **Nunca a la gente local.** Sin humor sexual/étnico/político.
+- **Salma solo se burla de lo que de verdad pasó.** Nada inventado: la causa real la pone Paco.
+
+## Cómo se trabaja (esfuerzo mínimo para Paco)
+1. Paco cuenta lo que pasó, suelto y hablado (un audio basta). 2. Claude monta la escena con sus frases casi tal cual + réplicas de Salma + anotaciones. 3. Paco corrige lo que no suene a él. 4. Datos de Salma con fuente (`docs/india-notas-y-fuentes.md`) ANTES de generar voz. 5. Voz: coste dicho antes (§8 CLAUDE.md), probar una frase.
+
+## Anotación de dirección por línea
+**Intención** (verbo: confesar, desinflar, advertir, picar, rendirse) · **subtexto** · **temperatura** (seco / cálido / cansado).
+
+---
+# SERIE INDIA — estructura propuesta (pendiente de OK)
+- **Intro:** resumen de todo el viaje (~90 s) que enseña lo que viene. **Se monta la última**, cuando haya trozos terminados que resumir.
+- **Capítulos (el orden lo decide Paco, según el viaje):** Yoga y los iluminados (Rishikesh) · Hinduismo vs budismo y el norte (Dalai Lama) · Benarés (cap. 4, ya medio hecho) · Bodas concertadas y machismo · Castas · Monos (tono ligero, ya medio hecho).
+- Alternar pesado/ligero: los monos de respiro entre castas y bodas.
+- Temas delicados (castas, machismo, bodas): hechos los dice Salma con fuente (varias fuentes; si discrepan, no se dicen); el juicio duro lo dice Paco como opinión; humor hacia Paco o la situación, nunca hacia la gente.
+
+## Escena 1 — «Los iluminados» (Rishikesh) — DATOS DE SALMA SIN VERIFICAR
+1. **Gancho (Paco, cabreo):** «Me fui a la India jarto de escuchar a iluminados occidentales hablar de yoga. Los muy taraos, por hacer un curso ya van levitando y viendo puertas interestelares. Que los follen a todos.» (palabrota: decidir en abierto/pitado antes de subir)
+2. **Salma (informar, seca):** yoga clásico = textos de hace más de 2.000 años (Yoga Sutras de Patañjali: respiración, atención, disciplina; fecha discutida II a.C.–IV d.C.). «De puertas interestelares, ni una.» Otra intervención: las posturas de los cursos son casi todas del siglo XX, mezcla con gimnasia europea (Mark Singleton).
+3. **Paco (resignación):** Rishikesh «infectado de europeos haciendo su máster del universo de 200 horas». **Salma:** esas 200 horas son un estándar inventado en EE. UU. en los noventa (verificar).
+4. **Paco (confesar):** «Me cambiaba de acera si oía hablar mi idioma.» **Salma:** «En un país de mil cuatrocientos millones de personas.» **Paco:** buscaba, ashram por ashram, maestros que no te vieran como un billete de cien rupias.
+5. **Salma:** «¿Y los encontraste?» **Paco (relato real, su contenido):** sí, y no fue difícil. Hay maestros que empiezan, con pocos adeptos pero fieles; se rodean de un aura que los diferencia, más por inercia del sistema que por ser distintos; según avanzas, te encuentras familias que heredan el estatus de súper yogui.
+6. **Salma (dato frío, a verificar):** la palabra es *parampara*, linaje: la enseñanza pasa de maestro a discípulo y a veces de padre a hijo. «O sea, el sistema funciona como una empresa familiar.» **Paco (aceptación):** «Con incienso.»
+- Pendiente de Paco: ¿hizo cursos de fotografía (pulla de Salma)? Hinduismo/budismo: frase propuesta «Buda empezó meditando con maestros hindúes» → va mejor en el capítulo de religiones.
