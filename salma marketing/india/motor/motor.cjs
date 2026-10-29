@@ -263,7 +263,7 @@ async function build(cfg) {
   if (P) { const cov = `${W}/portada.png`, tmp = `${OUT}/${cfg.id}-tmp.mp4`;
     fs.copyFileSync(cov, `${OUT}/${cfg.id}-portada.png`);
     run(['-i', outFile, '-i', cov, '-map', '0', '-map', '1', '-c', 'copy', '-disposition:v:1', 'attached_pic', '-movflags', '+faststart', tmp]);
-    fs.renameSync(tmp, outFile); }
+    fs.copyFileSync(tmp, outFile); fs.unlinkSync(tmp); } // copiar encima (no renombrar): Windows no deja renombrar sobre un vídeo que el editor tiene abierto en el reproductor
   console.log('LISTO', outFile, TOTAL.toFixed(1) + ' s', clips.length, 'planos');
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
   return outFile;
