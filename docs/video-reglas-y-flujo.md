@@ -61,3 +61,12 @@ Resumen único para **cualquier sesión que trabaje con vídeos** (India, monos,
 - **Un editor, un puerto por capítulo:** cap4 :8095, monos :8096, cap3 :8097 (`node editor/server.cjs <capN>`; acceso «India - Editores»). Cada montaje se guarda en `VIDEOS-TERMINADOS` y el anterior del mismo capítulo pasa a `ANTIGUOS`. La portada va también como carátula del archivo.
 - **Nunca renombrar sobre un vídeo abierto en el editor** (Windows lo bloquea): se copia encima.
 - **Salma:** solo datos relevantes con fuente (nada de frases de relleno ni cierres poéticos); Paco: sus textos tal cual, sin añadir recuerdos que no ha dicho.
+
+## 11. PUBLICAR: título, descripción, hashtags y subtítulos — SIEMPRE, en todo vídeo nuevo Y en los ya publicados (Paco, 29 oct 2026)
+Regla fija: **ningún vídeo se da por publicado sin su paquete de texto**, y los vídeos que ya estaban publicados se **actualizan** con él (Paco: «tendríamos que actualizarlos todos… se ha de hacer siempre»).
+- **Paquete por vídeo y por red** (listo para pegar; lo prepara Claude y lo aprueba Paco; cuesta 0 €): título con la búsqueda real al principio · descripción (las 2 primeras líneas lo importante + enlace a borradodelmapa.com + los **datos de viaje con fuente** que no van en la voz: visado, fechas, cómo llegar, con «consulta la web oficial» y la fecha) · 3 hashtags (YouTube) / 3-5 (TikTok, Instagram) · subtítulos `.srt` del motor subidos en YouTube · lista de reproducción de la serie · primer comentario fijado con la llamada a la app.
+- **Marca «generado con IA»** en las opciones de la red cuando el vídeo lleve clips de Runway/Kling/Veo o voz sintética (YouTube: «contenido alterado o sintético»; TikTok e Instagram: su etiqueta de IA). No va en pantalla.
+- **Portada** = el PNG `-PORTADA.png` que deja cada montaje.
+- **Vídeos ya publicados:** hacer el inventario (qué hay, en qué red, qué texto lleva), preparar el paquete nuevo, enseñárselo a Paco y **solo con su OK** editarlo (modificar contenido público requiere su permiso explícito, vídeo a vídeo o por tandas). Las programadas en Metricool se pueden editar desde las herramientas de Metricool; las ya publicadas, a mano en YouTube Studio / TikTok / Instagram.
+- Los datos que caducan (precios, fechas, requisitos) se revisan al republicar y llevan fecha.
+- Registro de lo actualizado en `docs/publicaciones-registro.md` (qué vídeo, qué red, qué día, enlace).

@@ -166,7 +166,7 @@ guías y seguía viva en las fotos del chat porque eran **otra copia**.
 - Mismo principio para el prompt: una regla se escribe una vez, no una por modo (auditoría: `docs/auditoria-prompt-salma.md`).
 
 ### 14. VÍDEOS Y SERIES DOCUMENTALES (India, monos, Asia…) — LEER `docs/video-reglas-y-flujo.md` ANTES DE TOCAR NADA (26 oct 2026)
-Paco, tras 2 días de montajes malos: **las reglas están escritas y el motor las comprueba**. Voces definitivas, flujo, reglas de montaje y sonido, cuidados de coste y privacidad, en ese único archivo; el motor está en `salma marketing/india/motor/` (no reescribir otro). No generar voz ni Runway sin decir el coste (§8).
+Paco, tras 2 días de montajes malos: **las reglas están escritas y el motor las comprueba**. Voces definitivas, flujo, reglas de montaje y sonido, cuidados de coste y privacidad, en ese único archivo; el motor está en `salma marketing/india/motor/` (no reescribir otro). No generar voz ni Runway sin decir el coste (§8). **Todo vídeo, nuevo o ya publicado, lleva su título + descripción + hashtags + subtítulos + marca de IA en cada red** (§11 de ese archivo); actualizar los antiguos también, con OK de Paco.
 
 ---
 ## Normas de desarrollo (texto completo: `docs/normas-desarrollo.md`)
