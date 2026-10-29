@@ -78,7 +78,7 @@ http.createServer((req, res) => {
     if (p === '/') return file(req, res, __dirname + '/editor.html', 'text/html; charset=utf-8');
     if (p === '/api/datos') {
       const cfg = cargarCfg();
-      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, portada: cfg.portada || null, seguir: cfg.seguir || null, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ ss: s.ss || 0, cx: s.cx ?? 0.5, foc: s.foc || null, a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
+      return send(res, 200, { id: cfg.id, titulo: cfg.titulo || cfg.id, portada: cfg.portada || null, seguir: cfg.seguir || null, bloques: cfg.blocks.map(b => ({ id: b.id, who: b.who || null, text: b.text || null, video: !!b.video, etiqueta: b.etiqueta || null, silencio: !!b.silencio, look: b.look || null, amb: b.amb ? b.amb.src : null, shots: (b.shots || []).map(s => ({ ss: s.ss || 0, cx: s.cx ?? 0.5, foc: s.foc || null, a: s.a, sc: s.sc || null, look: s.look || null })) })), audios: audioFiles(), galeria: galeria(), overrides: leerOv() });
     }
     if (p === '/api/guardar' && req.method === 'POST') { let b = ''; req.on('data', d => b += d); req.on('end', () => { const o = JSON.parse(b); if (!o || typeof o !== 'object') return send(res, 400, { error: 'mal' }); const ant = leerOv(); fs.writeFileSync(OVR, JSON.stringify({ shots: o.shots || {}, amb: o.amb || {}, text: o.text || {}, ss: o.ss || {}, portada: o.portada || {}, mov: o.mov || {}, seguir: o.seguir || {}, audio: ant.audio }, null, 1)); send(res, 200, leerOv()); }); return; }
     if (p === '/api/reset' && req.method === 'POST') { const v = __dirname + '/versiones'; fs.mkdirSync(v, { recursive: true }); fs.copyFileSync(OVR, `${v}/${CAP}-${Date.now()}.json`); fs.writeFileSync(OVR, JSON.stringify({ shots: {}, amb: {}, text: {}, audio: {}, ss: {} }, null, 1)); return send(res, 200, leerOv()); }
@@ -100,6 +100,7 @@ http.createServer((req, res) => {
       o.out = CACHE + '/portada-' + crypto.createHash('md5').update(JSON.stringify([foto, o.foco, o.l1, o.l2, o.tag])).digest('hex').slice(0, 12) + '.png';
       return (fs.existsSync(o.out) ? Promise.resolve(o.out) : generarPortada(o)).then(f => file(req, res, f, 'image/png')).catch(e => send(res, 500, { error: String(e.message || e) }));
     }
+    if (p.startsWith('/bvideo/')) { const b = cargarCfg().blocks.find(x => x.id === p.slice(8) && x.video); return file(req, res, b && b.video, 'video/mp4'); }
     if (p === '/api/estimar') { // qué voces habría que generar ahora (las que ya existen en la caché no cuestan nada)
       const cfg = aplicar(cargarCfg(), leerOv()); let chars = 0; const bloques = [];
       cfg.blocks.forEach(b => { if (b.text && !b.audioPropio && !vozEnCache(b.voz || b.text, cfg.voices[b.who])) { chars += (b.voz || b.text).length; bloques.push(b.id); } });

@@ -187,6 +187,12 @@ async function build(cfg) {
   fs.writeFileSync(`${W}/fb.txt`, fb); run([...bin, '-filter_complex_script', `${W}/fb.txt`, '-map', '[amb]', `${W}/amb.wav`]);
   run(['-i', `${W}/voz.wav`, '-i', `${W}/amb.wav`, '-filter_complex', `[0]asplit[v1][v2];[1][v2]sidechaincompress=threshold=0.03:ratio=${cfg.duckRatio || 4}:attack=20:release=500[bd];[v1][bd]amix=inputs=2:normalize=0:duration=first[m]`, '-map', '[m]', `${W}/mix.wav`]);
   const golpes = cfg.blocks.filter(b => b.golpe && b._golpeT != null); let mixIn = `${W}/mix.wav`;
+  const conAudio = cfg.blocks.filter(b => b.video && b.audioFile);
+  if (conAudio.length) {
+    const ain = [], af = [];
+    conAudio.forEach((b, i) => { ain.push('-i', b.audioFile); af.push(`[${i + 1}:a]volume=${b.gainAudio ?? 0}dB,adelay=${Math.round(b.t0 * 1000)}:all=1[x${i}]`); });
+    run(['-i', mixIn, ...ain, '-filter_complex', af.join(';') + ';[0:a]' + conAudio.map((_, i) => `[x${i}]`).join('') + `amix=inputs=${conAudio.length + 1}:normalize=0:duration=first[m1]`, '-map', '[m1]', `${W}/mix1.wav`]); mixIn = `${W}/mix1.wav`;
+  }
   if (golpes.length) {
     const gin = [], gf = [];
     golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
