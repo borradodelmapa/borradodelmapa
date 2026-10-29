@@ -69,15 +69,15 @@ async function voice(text, who) {
 
 // INTRO editable: clip (vídeo o clip de IA) recortado a 9:16 + sonidos mezclados (grito, ataque, golpe real…). Se prepara aquí y entra como bloque de vídeo con su audio.
 function prepararIntro(b, W) {
-  const I = b.intro, d = I.dur || 5, f = resolve(I.clip), ss = I.ss || 0, td = dur(f);
-  const pad = td - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td - ss) + 0.2).toFixed(2)}` : '';
+  // Recortar = quitar los mismos segundos de imagen y de sonido: la duración sale del clip (desde ss hasta fin) y cada sonido se desplaza con él.
+  const I = b.intro, f = resolve(I.clip), ss = I.ss || 0, td = dur(f), fin = Math.min(I.fin || td, td), d = Math.max(1, Math.round((fin - ss) * 100) / 100);
   const v = `${W}/intro-video.mp4`;
-  run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)',scale=1080:1920:flags=lanczos,setsar=1,fps=30${pad},format=yuv420p`, '-frames:v', String(Math.round(d * 30)), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', v]);
+  run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)',scale=1080:1920:flags=lanczos,setsar=1,fps=30,format=yuv420p`, '-frames:v', String(Math.round(d * 30)), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', v]);
   b.video = v; b.fixed = d; b.gainAudio = I.gainAudio ?? -5;
   const sn = I.sonidos || [];
   if (sn.length) {
     const a = `${W}/intro-audio.wav`, ins = [], fl = [];
-    sn.forEach((x, i) => { ins.push('-ss', String(x.ss || 0), '-i', resolve(x.src)); fl.push(`[${i}:a]volume=${x.db ?? 0}dB${x.fadeIn ? `,afade=t=in:d=${x.fadeIn}` : ''},adelay=${Math.round((x.at || 0) * 1000)}:all=1[s${i}]`); });
+    sn.forEach((x, i) => { const at = (x.at || 0) - ss, salto = (x.ss || 0) + Math.max(0, -at); ins.push('-ss', String(salto), '-i', resolve(x.src)); fl.push(`[${i}:a]volume=${x.db ?? 0}dB${x.fadeIn ? `,afade=t=in:d=${x.fadeIn}` : ''},adelay=${Math.round(Math.max(0, at) * 1000)}:all=1[s${i}]`); });
     run([...ins, '-filter_complex', fl.join(';') + ';' + sn.map((_, i) => `[s${i}]`).join('') + `amix=inputs=${sn.length}:normalize=0:duration=longest,apad=whole_dur=${d},atrim=0:${d},loudnorm=I=-14:TP=-1.5:LRA=9[m]`, '-map', '[m]', '-ar', '44100', a]);
     b.audioFile = a;
   }
@@ -263,4 +263,4 @@ async function build(cfg) {
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
   return outFile;
 }
-module.exports = { build, voice, resolve, RW, vozEnCache };
+module.exports = { build, voice, resolve, RW, vozEnCache, prepararIntro };

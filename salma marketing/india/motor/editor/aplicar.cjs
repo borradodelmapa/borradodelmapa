@@ -11,7 +11,7 @@ module.exports = (cfg, ov) => {
     (ov.ss && ov.ss[b.id] || []).forEach((v, k) => { if (v != null && b.shots[k] && /^(V|RW)/.test(b.shots[k].a)) b.shots[k].ss = v; });
     (ov.mov && ov.mov[b.id] || []).forEach((m, k) => { const s = b.shots[k]; if (!m || !s || /^(V|RW)/.test(s.a)) return; if (m.dir === 'quieta') { s.dir = 'in'; s.z = 0; s.zfijo = true; } else { if (m.dir) s.dir = m.dir; if (m.z != null) { s.z = m.z; s.zfijo = true; } } if (m.foc) s.foc = m.foc; });
     if (ov.amb && ov.amb[b.id] && b.amb) b.amb.src = ov.amb[b.id];
-    if (ov.intro && b.intro && Object.keys(ov.intro).length) b.intro = { ...b.intro, ...ov.intro };
+    if (ov.intro && b.intro && Object.keys(ov.intro).length) { b.intro = { ...b.intro, ...ov.intro }; delete b.intro.dur; }
     const nt = ov.text && ov.text[b.id];
     if (nt && b.text && nt.trim() && nt !== b.text) {
       b.text = nt.trim(); b.voz = pron(b.text);

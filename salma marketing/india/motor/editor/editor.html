@@ -36,6 +36,7 @@ textarea{width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:
 .leyenda{font-size:12px;color:var(--mu);margin:6px 0 10px}.leyenda b{padding:0 5px;color:#000}
 .mini{font-size:12px;color:var(--mu)}.rojo{color:#e9c}
 details.mov{margin-top:3px;font-size:12px}details.mov summary{cursor:pointer;color:var(--mu)}details.mov select{width:100%;background:#222;color:var(--tx);border:1px solid #444;padding:3px}summary.cab{list-style:revert}
+table.tsnd{border-collapse:collapse;width:100%;font-size:12px}table.tsnd th{color:var(--mu);font-weight:400;text-align:left;padding:2px 6px}table.tsnd td{padding:3px 6px;border-top:1px solid var(--line)}table.tsnd input{width:64px;background:#0d0d0d;color:#eee;border:1px solid #444;padding:4px}table.tsnd select{max-width:200px}
 #estado{font-size:13px;color:var(--mu);max-width:420px;white-space:pre-wrap}
 #vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:60vh;background:#000}#panel{display:none;background:#111;border-bottom:1px solid var(--line);padding:12px 16px}#panel .bar{height:14px;background:#2a2a2a;margin:8px 0}#panel .bar i{display:block;height:100%;background:var(--or);width:0;transition:width .5s}#panel ol{margin:6px 0;padding-left:20px;color:var(--mu)}#panel li.hecho{color:#6c6}#panel li.ahora{color:var(--or);font-weight:700}#panel ul{margin:6px 0;padding-left:18px}#panel pre{white-space:pre-wrap;color:var(--mu);font-size:12px;margin:6px 0}
 </style></head><body>
@@ -44,7 +45,7 @@ details.mov{margin-top:3px;font-size:12px}details.mov summary{cursor:pointer;col
 <div id="panel"></div>
 <main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="ajustes"></div><div id="lista">Cargando…</div></main>
 <div id="modal3" style="display:none;position:fixed;inset:0;background:#000d;z-index:12;overflow:auto"><div style="max-width:420px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="ft"></b><div style="position:relative;margin:8px 0;line-height:0"><img id="fimg" style="width:100%;cursor:crosshair"><div id="fmark" style="display:none;position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:3px solid #F4630B;border-radius:50%;box-shadow:0 0 0 2px #000;pointer-events:none"></div></div><div style="display:flex;gap:8px"><button class="sec" id="fauto">Auto (centro)</button><button id="fcerrar">Listo</button></div></div></div>
-<div id="modal2" style="display:none;position:fixed;inset:0;background:#000d;z-index:11;overflow:auto"><div style="max-width:520px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="rt"></b><video id="rvid" controls style="width:100%;max-height:68vh;background:#000;margin:8px 0"></video><div id="rinfo" class="mini"></div><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button id="rpon">✂ Empezar aquí (donde está el vídeo)</button><button class="sec" id="rorig">Volver al original</button><button class="sec" id="rcerrar">Cerrar</button></div><div class="mini" style="margin-top:6px">Pausa el vídeo donde quieras que EMPIECE el plano y pulsa «Empezar aquí». Lo que dura lo marca la frase.</div></div></div>
+<div id="modal2" style="display:none;position:fixed;inset:0;background:#000d;z-index:11;overflow:auto"><div style="max-width:520px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="rt"></b><video id="rvid" controls style="width:100%;max-height:68vh;background:#000;margin:8px 0"></video><div id="rinfo" class="mini"></div><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button id="rpon">✂ Empezar aquí (donde está el vídeo)</button><button class="sec" id="rorig">Volver al original</button><button class="sec" id="rfin" style="display:none">✂ Terminar aquí</button><button class="sec" id="rcerrar">Cerrar</button></div><div class="mini" style="margin-top:6px">Pausa el vídeo donde quieras que EMPIECE el plano y pulsa «Empezar aquí». Lo que dura lo marca la frase.</div></div></div>
 <div id="modal"><div class="in"><div style="display:flex;justify-content:space-between;align-items:center"><b id="mt"></b><button class="sec" id="cerrar">Cerrar</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div></div>
 <script>
 let D, ov = {shots:{},amb:{},text:{},audio:{},ss:{},portada:{},mov:{},seguir:{}}, ctx = null, tab = 'sony';
@@ -141,31 +142,33 @@ function pintarAjustes(){
 function introActual(b){ return { ...b.intro, ...((ov.intro) || {}) }; }
 function introHTML(b){
   const I = introActual(b), sd = D.sonidosDisp || [];
-  const filas = (I.sonidos || []).map((s, i) => `<div class="irow"><select data-isnd="${i}">${sd.map(x => `<option value="${x.id}" ${x.id === s.src ? 'selected' : ''}>${x.nombre}</option>`).join('')}</select>
-    <label class="mini">empieza en el seg. <input type="number" step="0.1" min="0" max="30" data-iat="${i}" value="${s.at ?? 0}"></label>
-    <label class="mini">volumen dB <input type="number" step="1" min="-30" max="6" data-idb="${i}" value="${s.db ?? 0}"></label>
-    <label class="mini">saltar los primeros (s) <input type="number" step="0.1" min="0" max="20" data-iss="${i}" value="${s.ss ?? 0}"></label>
-    <audio controls preload="none" src="/sfx/${encodeURIComponent((sd.find(x => x.id === s.src) || {}).archivo || '')}" style="height:28px"></audio>
-    <button class="sec" data-iquita="${i}" style="padding:4px 8px">Quitar</button></div>`).join('');
-  const rec = (I.ss || 0) > 0 ? 'desde ' + I.ss + ' s' : 'Recortar';
+  const filas = (I.sonidos || []).map((s, i) => `<tr><td><select data-isnd="${i}">${sd.map(x => `<option value="${x.id}" ${x.id === s.src ? 'selected' : ''}>${x.nombre}</option>`).join('')}</select></td>
+    <td><input type="number" step="0.1" min="0" max="30" data-iat="${i}" value="${s.at ?? 0}"></td>
+    <td><input type="number" step="1" min="-30" max="6" data-idb="${i}" value="${s.db ?? 0}"></td>
+    <td><input type="number" step="0.1" min="0" max="20" data-iss="${i}" value="${s.ss ?? 0}"></td>
+    <td><audio controls preload="none" src="/sfx/${encodeURIComponent((sd.find(x => x.id === s.src) || {}).archivo || '')}" style="height:30px;width:170px"></audio></td>
+    <td><button class="sec" data-iquita="${i}" style="padding:4px 9px" title="Quitar este sonido">✕</button></td></tr>`).join('');
+  const rec = ((I.ss || 0) > 0 || I.fin) ? `desde ${I.ss || 0} s${I.fin ? ' hasta ' + I.fin + ' s' : ''}` : 'Recortar';
   return `<div class="txt">${b.etiqueta || ''}</div>
     <div class="shots"><div class="shot" style="width:150px"><video controls preload="metadata" src="/media/${I.clip}" style="width:150px;background:#000"></video>
       <button class="sec" id="irec" style="width:100%;margin-top:3px;font-size:12px;padding:5px">✂ ${rec}</button>
       <button class="sec" id="iclip" style="width:100%;margin-top:3px;font-size:12px;padding:5px">🎞 Cambiar clip (${I.clip})</button></div></div>
-    <details class="blq-in" style="margin:6px 0"><summary style="cursor:pointer;color:var(--mu);font-size:13px">⚙ Duración y sonidos de la intro (grito, ataque…) — pulsa para abrir</summary>
-      <div class="amb"><label class="mini">dura (s) <input type="number" step="0.1" min="2" max="10" id="idur" value="${I.dur ?? 5}"></label>
-        <label class="mini">volumen general dB <input type="number" step="1" min="-30" max="6" id="igain" value="${I.gainAudio ?? -5}"></label></div>
-      <div class="mini" style="margin:8px 0 2px">Sonidos de la intro (se mezclan en este orden):</div>${filas}
-      <button id="iadd" class="sec" style="margin-top:6px">+ Añadir sonido</button>
+    <div class="mini" style="margin-top:4px">Al recortar el clip, el vídeo y los sonidos se recortan a la vez: los sonidos van pegados a la imagen.</div>
+    <details class="blq-in" style="margin:6px 0"><summary style="cursor:pointer;color:var(--mu);font-size:13px">⚙ Sonidos de la intro (grito, ataque…) — pulsa para abrir</summary>
+      <label class="mini" style="display:block;margin:8px 0">Volumen general (dB) <input type="number" step="1" min="-30" max="6" id="igain" value="${I.gainAudio ?? -5}" style="width:70px"></label>
+      <table class="tsnd"><thead><tr><th>Sonido</th><th>Empieza en el seg. del clip</th><th>Volumen (dB)</th><th>Saltar el principio (s)</th><th>Oír</th><th></th></tr></thead><tbody>${filas}</tbody></table>
+      <button id="iadd" class="sec" style="margin-top:8px">+ Añadir sonido</button>
       <div class="mini" style="margin-top:6px">Un grito o un golpe nuevo con IA se genera aparte (ElevenLabs, ~100 créditos cada uno): dímelo y lo añado a esta lista.</div></details>`;
 }
 function abrirRecorteIntro(bid){
   const b = D.bloques.find(x => x.id === bid), I = introActual(b), v = $('#rvid');
-  $('#rt').textContent = `Recortar la intro (${I.clip}) — el clip original no se toca`;
-  $('#rpon').textContent = '✂ Empezar aquí (donde está el vídeo)'; $('#rorig').textContent = 'Volver al original';
-  v.src = '/media/' + I.clip; v.onloadedmetadata = () => { v.currentTime = I.ss || 0; }; $('#rinfo').textContent = 'Empieza en: ' + (I.ss || 0).toFixed(1) + ' s';
-  $('#rpon').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; ov.intro = { ...introActual(b), ss: t }; await guardar(); $('#rinfo').textContent = '✔ Empieza en ' + t.toFixed(1) + ' s'; pintar(); };
-  $('#rorig').onclick = async () => { ov.intro = { ...introActual(b), ss: (b.intro.ss || 0) }; await guardar(); v.currentTime = b.intro.ss || 0; $('#rinfo').textContent = 'Vuelto al original'; pintar(); };
+  $('#rt').textContent = `Recortar la intro (${I.clip}) — el clip original no se toca; vídeo y sonidos se recortan juntos`;
+  $('#rpon').textContent = '✂ Empezar aquí'; $('#rorig').textContent = 'Quitar el recorte'; $('#rfin').style.display = 'inline-block';
+  v.src = '/media/' + I.clip; v.onloadedmetadata = () => { v.currentTime = I.ss || 0; };
+  const info = () => { const x = introActual(b); $('#rinfo').textContent = 'Empieza en ' + (x.ss || 0).toFixed(1) + ' s' + (x.fin ? ' · termina en ' + x.fin.toFixed(1) + ' s' : ' · termina al final del clip'); }; info();
+  $('#rpon').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; ov.intro = { ...introActual(b), ss: t }; await guardar(); info(); pintar(); };
+  $('#rfin').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; ov.intro = { ...introActual(b), fin: t }; await guardar(); info(); pintar(); };
+  $('#rorig').onclick = async () => { ov.intro = { ...introActual(b), ss: 0, fin: null }; await guardar(); v.currentTime = 0; info(); pintar(); };
   $('#modal2').style.display = 'block';
 }
 function guardarIntro(b, cambio){ ov.intro = { ...introActual(b), ...cambio }; clearTimeout(guardarIntro.t); guardarIntro.t = setTimeout(guardar, 400); }
@@ -173,7 +176,7 @@ function cablearIntro(){
   D.bloques.filter(b => b.intro).forEach(b => {
     const I = () => introActual(b), snd = fn => { const s = [...(I().sonidos || []).map(x => ({ ...x }))]; fn(s); guardarIntro(b, { sonidos: s }); };
     const num = (id, k) => { const e = document.getElementById(id); if (e) e.oninput = () => guardarIntro(b, { [k]: +e.value }); };
-    num('idur', 'dur'); num('igain', 'gainAudio');
+    num('igain', 'gainAudio');
     const br = document.getElementById('irec'); if (br) br.onclick = () => abrirRecorteIntro(b.id);
     const bc = document.getElementById('iclip'); if (bc) bc.onclick = () => { ctx = { intro: b.id }; $('#mt').textContent = 'Elige el clip de la intro (vídeos y Runway)'; $('#modal').style.display = 'block'; tab = 'runway'; pintarGaleria(I().clip); };
     document.querySelectorAll('select[data-isnd]').forEach(e => e.onchange = () => snd(s => { s[+e.dataset.isnd].src = e.value; }));
@@ -209,6 +212,7 @@ function pintarGaleria(foco){
 }
 // Desde la galería: al tocar un vídeo se ve ahí mismo y se elige dónde empieza antes de ponerlo en el plano
 function previsualizarVideo(id){
+  $('#rfin').style.display = 'none';
   if (ctx.intro) { const bi = D.bloques.find(x => x.id === ctx.intro), v = $('#rvid'); $('#rt').textContent = `Clip ${id} para la intro — pausa donde quieras que EMPIECE`; v.src = '/media/' + id; v.onloadedmetadata = () => { v.currentTime = 0; v.play(); }; $('#rinfo').textContent = ''; $('#rpon').textContent = '✔ Usar este clip empezando aquí'; $('#rorig').textContent = '← Elegir otro';
     $('#rpon').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; v.pause(); ov.intro = { ...introActual(bi), clip: id, ss: t }; await guardar(); $('#modal2').style.display = 'none'; $('#modal').style.display = 'none'; pintar(); };
     $('#rorig').onclick = () => { v.pause(); $('#modal2').style.display = 'none'; }; $('#modal2').style.display = 'block'; return; }
@@ -227,6 +231,7 @@ function previsualizarVideo(id){
   $('#modal2').style.display = 'block';
 }
 function abrirRecorte(bid, k){
+  $('#rfin').style.display = 'none';
   $('#rpon').textContent = '✂ Empezar aquí (donde está el vídeo)'; $('#rorig').textContent = 'Volver al original';
   const b = D.bloques.find(x => x.id === bid), id = fotoActual(b, k), ss0 = ((ov.ss[bid] || [])[k] ?? b.shots[k].ss) || 0;
   $('#rt').textContent = `Recortar «${bid}», plano ${k+1} (${id}) — el vídeo original no se toca`;
