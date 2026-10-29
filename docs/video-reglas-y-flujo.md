@@ -1,4 +1,5 @@
 # VÍDEO Y SERIES DOCUMENTALES — reglas, voces y flujo (26 oct 2026)
+> **Desde el 30 oct 2026 la fuente única es `docs/video-checklist.md` (versionada, con IDs). Este archivo queda como detalle; si choca con ella, gana la checklist.**
 Resumen único para **cualquier sesión que trabaje con vídeos** (India, monos, Asia, Muay Thai…). Decidido con Paco; el detalle está en los archivos enlazados. Si algo choca con una orden nueva de Paco, manda Paco y se actualiza este archivo.
 
 ## 1. Voces (no cambiar sin orden de Paco) — `salma marketing/india/motor/voces.cjs`

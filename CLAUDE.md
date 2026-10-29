@@ -165,7 +165,8 @@ guías y seguía viva en las fotos del chat porque eran **otra copia**.
   entra en `scripts/probar-nombres.cjs` (0 €, debe dar todo bien) **antes** de subir.
 - Mismo principio para el prompt: una regla se escribe una vez, no una por modo (auditoría: `docs/auditoria-prompt-salma.md`).
 
-### 14. VÍDEOS Y SERIES DOCUMENTALES (India, monos, Asia…) — LEER `docs/video-reglas-y-flujo.md` ANTES DE TOCAR NADA (26 oct 2026)
+### 14. VÍDEOS, SHORTS Y SERIES DOCUMENTALES — LEER `docs/video-checklist.md` ENTERO ANTES DE TOCAR NADA (26 oct 2026; checklist única desde 30 oct)
+**`docs/video-checklist.md` es la FUENTE ÚNICA y está en construcción (se modifica mucho): mirar su versión y registro de cambios, pasarla punto a punto y, si Paco decide algo nuevo de vídeo, escribirlo ahí en el mismo turno.** Si choca con otro doc de vídeo, gana la checklist. Los demás (`video-reglas-y-flujo.md`, Biblia, narradora) son detalle.
 Paco, tras 2 días de montajes malos: **las reglas están escritas y el motor las comprueba**. Voces definitivas, flujo, reglas de montaje y sonido, cuidados de coste y privacidad, en ese único archivo; el motor está en `salma marketing/india/motor/` (no reescribir otro). No generar voz ni Runway sin decir el coste (§8). **Todo vídeo, nuevo o ya publicado, lleva su título + descripción + hashtags + subtítulos + marca de IA en cada red** (§11 de ese archivo); actualizar los antiguos también, con OK de Paco.
 
 ---
