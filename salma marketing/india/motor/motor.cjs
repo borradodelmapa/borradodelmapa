@@ -16,7 +16,9 @@ const vidsList = fs.readFileSync(path.join(HERE, 'videos-info.csv'), 'utf8').spl
 const mobList = fs.readFileSync(BASE + '/hojas-contacto-movil/indice-movil.csv', 'utf8').split(/\r?\n/).slice(1).filter(Boolean).map(l => l.replace(/"/g, '').split(','));
 const RW = { RW546: 'ghat-incineraciones-546-5s.mp4', RW598: 'ghat-lamparas-598-v2-humo-5s.mp4', RW494: 'ghat-amanecer-494-5s.mp4', RW416: 'ofrenda-rio-416-5s.mp4',
   // clips de monos generados (IA: marcar como tal al publicar): 9001 Kling 3.0 Pro (el elegido para la intro) · 9002 Veo 3.1 Fast · 9003 Gen-4 Turbo frontal · 9004 Gen-4 Turbo ataque 1 · 9005 plátano 10 s
-  RW9001: 'mono-S138-kling3pro-5s.mp4', RW9002: 'mono-S138-veo31fast-4s.mp4', RW9003: 'mono-S138-ataque-frontal-5s.mp4', RW9004: 'mono-S138-ataque-5s.mp4', RW9005: 'monos-platano-v1-10s.mp4' };
+  RW9001: 'mono-S138-kling3pro-5s.mp4', RW9002: 'mono-S138-veo31fast-4s.mp4', RW9003: 'mono-S138-ataque-frontal-5s.mp4', RW9004: 'mono-S138-ataque-5s.mp4', RW9005: 'monos-platano-v1-10s.mp4',
+  // banderas de oración animadas (2 s, Runway Gen-4 Turbo, IA): 9010 foto S275 · 9011 foto S157 · 9012 foto S156
+  RW9010: 'bandera-S275-2s.mp4', RW9011: 'bandera-S157-2s.mp4', RW9012: 'bandera-S156-2s.mp4' };
 // 'S485' foto Sony · 'M87' foto móvil · 'V41' vídeo móvil · 'RW494' clip Runway
 function resolve(id) {
   if (/^SFX_/.test(id)) return HERE + '/sfx/' + id.slice(4) + '.mp3';
@@ -123,8 +125,12 @@ async function build(cfg) {
       const lk = LOOKS[s.look || b.look || cfg.look || 'portra']; const norm = isVideo(s.a) ? '' : normFilter(f);
       const tail = `${norm},${lk.tone},noise=alls=${lk.grain}:allf=t+u,vignette=PI/6,format=yuv420p${fadeV}`;
       if (isVideo(s.a)) {
-        const ss = s.ss || 0; const td = dur(f); const pad = td - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td - ss) + 0.2).toFixed(2)}` : '';
-        run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
+        let loopV = [];
+        let ss = s.ss || 0, fin = f; const td = dur(f);
+        // clip corto generado (Runway) y plano más largo: se repite de ida y vuelta (sin salto ni fotograma congelado)
+        if (/^RW/.test(s.a) && td - ss < d) { const pp = `${W}/pp_${s.a}.mp4`; if (!fs.existsSync(pp)) run(['-ss', String(ss), '-i', f, '-an', '-vf', 'split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '17', pp]); fin = pp; ss = 0; loopV = ['-stream_loop', '-1']; }
+        const td2 = dur(fin); const pad = !loopV.length && td2 - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td2 - ss) + 0.2).toFixed(2)}` : '';
+        run([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
       } else {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
         const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 1.6; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
