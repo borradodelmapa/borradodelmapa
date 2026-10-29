@@ -1,4 +1,4 @@
-# CHECKLIST DE VÍDEO — FUENTE ÚNICA (versión 1 · 30 oct 2026)
+# CHECKLIST DE VÍDEO — FUENTE ÚNICA (versión = fecha-hora de la última fila del registro de cambios, al final)
 
 **Estado: BASE EN CONSTRUCCIÓN. Este texto se modifica mucho hasta que sea sólido.** Manda este archivo: si choca con
 `docs/video-reglas-y-flujo.md`, la Biblia v2.5 (docx), `docs/salma-narradora-reglas.md` o `docs/estilo-visual.md`, **gana este** y se corrige el otro.
@@ -6,13 +6,22 @@ Nació el 30 oct 2026 (Paco: «estoy cansado de ir detrás vuestra recordando lo
 y se leía a trozos. Todo viene **ACTIVADO por defecto**; solo se desactiva algo si Paco lo dice (y se anota aquí con fecha).
 
 ## Cómo se usa (cualquier sesión, cualquier modelo)
-1. **Antes de tocar nada de vídeo/short/reel/capítulo/mapa/voz de vídeo: leer este archivo ENTERO** y mirar la versión y el registro de cambios de abajo
+1. **Antes de tocar nada de vídeo/short/reel/capítulo/mapa/voz de vídeo: leer este archivo ENTERO** y mirar la fecha de la última fila del registro de cambios de abajo
    (`git log -3 --format="%h %cd %s" -- docs/video-checklist.md`; es zona común: `git fetch origin main` antes de editar).
 2. **Pasar los puntos uno a uno** al montar. Al entregar, decir qué puntos están hechos, cuáles no y por qué (nunca «listo»: *«montado — dime qué ves y oyes»*).
 3. **Regla de mantenimiento:** toda decisión nueva de Paco sobre vídeo se escribe AQUÍ en el mismo turno (con fecha, subiendo la versión y una línea en el registro).
    No vale dejarla solo en el chat ni en memoria. Se avisa: «he actualizado el protocolo a vN».
 4. Cada punto lleva un ID estable (F1, N3, M7…) para citarlo y para que el motor (`motor/reglas.cjs`) y esta lista no se desincronicen.
    Columna *Comprobación*: **motor** = lo comprueba el informe de reglas hoy · **motor (pendiente)** = decidido que lo compruebe, sin implementar · **manual** = lo revisa quien monta y Paco.
+
+## Editar esta checklist desde varios chats a la vez (leer antes de tocarla)
+Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin pisar a los demás:
+1. **Edición pequeña y dirigida** (Edit de una línea/fila), nunca reescribir el archivo entero. Si el archivo cambió en disco desde que lo leíste, **vuelve a leerlo** antes de editar.
+2. **Cada cambio = una fila nueva ARRIBA del registro de cambios**, con fecha y hora (`30 oct 2026 · 13:40`), qué sesión/tema y qué IDs toca. No hay números de versión: la versión es la fecha-hora de la fila más reciente (así dos chats no chocan por el «v2»).
+3. **Commit solo de este archivo** (`git add docs/video-checklist.md`; nunca `git add -A`/`.`, porque en la misma carpeta hay trabajo de otras sesiones sin terminar).
+4. **Si el otro chat está en otro clon (móvil, nube, otro worktree):** `git fetch origin main` → `git log --oneline HEAD..origin/main -- docs/video-checklist.md` → editar → commit pequeño → push; si el push se rechaza: fetch, `git rebase origin/main`, y si choca la misma fila **fusionar a mano conservando las dos aportaciones** (§1B de CLAUDE.md). Nunca `push --force`.
+5. **Si una regla nueva choca con otra** (como «cierre íntimo» vs «sin cierres poéticos»), no se borra en silencio: gana la más nueva, se anota en el registro quién gana y por qué.
+6. Los documentos de detalle (narradora, estilo, Biblia) que no estén en git **no cuentan como protocolo** para otras sesiones: lo importante se pasa a esta checklist y el detalle se commitea.
 
 ## A · Flujo de trabajo
 | ID | Regla | Comprobación |
@@ -77,9 +86,10 @@ y se leía a trozos. Todo viene **ACTIVADO por defecto**; solo se desactiva algo
 | P7 | Vídeos ya publicados: inventario + paquete nuevo + **solo con OK de Paco** se editan. Todo se anota en `docs/publicaciones-registro.md` (vídeo, red, día, enlace). | manual |
 
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
-| Versión | Fecha | Qué cambió |
+| Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
-| v1 | 30 oct 2026 | Integra también lo del 29 oct (Runway/clips, paquete de publicación, «sin cierres poéticos»). **Conflicto resuelto:** `salma-narradora-reglas.md` (18 oct) pedía «cierre íntimo» y Paco decidió el 29 oct «solo datos con fuente, sin cierres poéticos» → manda lo más nuevo (N6). Creada fusionando `video-reglas-y-flujo.md`, Biblia v2.5 (§7, §12, §16, §18, §22), `salma-narradora-reglas.md`, `estilo-visual.md` y `serie-asia-estado.md`. Se añade la regla de mantenimiento y los IDs. Nuevo a raíz del piloto de Bután: mapa de vuelo de cabecera, no vender la app en la voz, subtítulos EN aparte, cifras múltiples. |
+| 30 oct 2026 · 13:00 | Bután (Claude) | Añadida la sección «Editar desde varios chats» y cambiado el sistema de versión a fecha-hora para evitar choques entre sesiones. |
+| 30 oct 2026 · 12:30 (v1) | Bután (Claude) | Integra también lo del 29 oct (Runway/clips, paquete de publicación, «sin cierres poéticos»). **Conflicto resuelto:** `salma-narradora-reglas.md` (18 oct) pedía «cierre íntimo» y Paco decidió el 29 oct «solo datos con fuente, sin cierres poéticos» → manda lo más nuevo (N6). Creada fusionando `video-reglas-y-flujo.md`, Biblia v2.5 (§7, §12, §16, §18, §22), `salma-narradora-reglas.md`, `estilo-visual.md` y `serie-asia-estado.md`. Se añade la regla de mantenimiento y los IDs. Nuevo a raíz del piloto de Bután: mapa de vuelo de cabecera, no vender la app en la voz, subtítulos EN aparte, cifras múltiples. |
 
 ## Pendiente de implementar (decidido, no hecho)
 - Aviso automático (hook) que mande leer ESTE archivo cuando el mensaje de Paco hable de vídeo.
