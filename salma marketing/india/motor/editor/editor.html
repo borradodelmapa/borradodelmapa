@@ -239,7 +239,18 @@ $('#fcerrar').onclick = () => { $('#modal3').style.display = 'none'; };
 $('#rcerrar').onclick = () => { $('#rvid').pause(); $('#modal2').style.display = 'none'; };
 $('#cerrar').onclick = () => $('#modal').style.display = 'none';
 $('#reset').onclick = async () => { const b = $('#reset'); if (b.dataset.seguro !== '1') { b.dataset.seguro = '1'; b.textContent = '¿Seguro? Pulsa otra vez'; setTimeout(() => { b.dataset.seguro = ''; b.textContent = 'Deshacer cambios'; }, 4000); return; } b.dataset.seguro = ''; b.textContent = 'Deshacer cambios'; ov = await (await fetch('/api/reset', {method:'POST'})).json(); pintar(); };
-$('#montar').onclick = async () => { await guardar(); const est = await (await fetch('/api/estimar')).json(); if (est.chars > 0 && !confirm(`Hay ${est.bloques.length} voz/voces nueva(s) por generar (${est.bloques.join(', ')}): ${est.chars} caracteres ≈ ${est.chars} créditos de tu plan de ElevenLabs (unos ${Math.max(1, Math.round(est.chars * 0.022))} céntimos). ¿Montar?`)) return; await fetch('/api/montar',{method:'POST'}); sondear(); };
+// Sin ventanas emergentes (el navegador las puede bloquear y el botón parecía muerto): si hay voces nuevas, el aviso del coste sale en la propia página y se confirma pulsando OTRA VEZ.
+let montarArmado = null;
+$('#montar').onclick = async () => {
+  await guardar(); const b = $('#montar'), est = await (await fetch('/api/estimar')).json();
+  if (est.chars > 0 && !montarArmado) {
+    b.textContent = '⚠ Pulsa otra vez para montar'; const m = $('#mini'); m.style.display = 'block'; $('#minib').style.width = '0';
+    $('#minit').textContent = `Voces nuevas: ${est.bloques.join(', ')} → ${est.chars} caracteres ≈ ${est.chars} créditos de ElevenLabs (~${Math.max(1, Math.round(est.chars * 0.022))} céntimos). Pulsa «Montar» otra vez para confirmar.`;
+    montarArmado = setTimeout(() => { montarArmado = null; b.textContent = '▶ Montar'; $('#minit').textContent = ''; }, 12000); return;
+  }
+  clearTimeout(montarArmado); montarArmado = null; b.textContent = '▶ Montar';
+  await fetch('/api/montar', { method: 'POST' }); sondear();
+};
 const PASOS = ['Voces','Línea de tiempo','Cortando y revelando planos','Subtítulos y cifras','Mezcla de audio','Montaje final'];
 async function sondear(){
   const r = await (await fetch('/api/estado')).json(), P = $('#panel');
