@@ -1,0 +1,6 @@
+FOTOS DEL SHORT «EL NIDO DEL TIGRE» (Wikimedia Commons). Poner en la descripción al publicar:
+Fotos: Gerd Eichmann (CC BY-SA 4.0), David Broad (CC BY 3.0) · Wikimedia Commons
+t1,t2,t3,t5,t6,t7,t8 = Gerd Eichmann, Bhutan-Paro-128/114/138/130/136/140/142 Taktshang-Tigernest (CC BY-SA 4.0)
+t4 = Gerd Eichmann, Bhutan-Paro-116 (CC BY-SA 4.0)
+t9 = David Broad, «Approaching the Tiger's Nest from the Paro Valley, Bhutan» (4) (CC BY 3.0)
+t10 = Nabin K. Sapkota (CC BY-SA 4.0) — pájaro, NO usada

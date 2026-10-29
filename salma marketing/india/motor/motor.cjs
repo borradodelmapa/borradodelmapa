@@ -21,6 +21,7 @@ const RW = { RW546: 'ghat-incineraciones-546-5s.mp4', RW598: 'ghat-lamparas-598-
   RW9010: 'bandera-S275-2s.mp4', RW9011: 'bandera-S157-2s.mp4', RW9012: 'bandera-S156-2s.mp4' };
 // 'S485' foto Sony · 'M87' foto móvil · 'V41' vídeo móvil · 'RW494' clip Runway
 function resolve(id) {
+  if (/^FILE:/.test(id)) return id.slice(5); // archivo suelto con ruta completa (series nuevas, p. ej. Bután)
   if (/^SFX_/.test(id)) return HERE + '/sfx/' + id.slice(4) + '.mp3';
   if (/^RW/.test(id)) return BASE + '/runway-pruebas/' + RW[id];
   if (/^S\d+/.test(id)) return photo(id.slice(1));
@@ -28,12 +29,13 @@ function resolve(id) {
   if (/^V\d+/.test(id)) return BASE + '/videos-2019/' + vidsList[+id.slice(1) - 1];
   throw new Error('id desconocido ' + id);
 }
-const isVideo = id => /^(RW|V)/.test(id);
+const isVideo = id => /^(RW|V)/.test(id) || /^FILE:.*\.mp4$/i.test(id);
 const esc = s => String(s).replace(/\\/g, '\\\\').replace(/:/g, '\\:').replace(/'/g, '’');
 const LOOKS = {
   portra: { tone: "curves=all='0/0.025 0.25/0.23 0.5/0.52 0.75/0.79 1/0.975',colorbalance=rs=0.02:gs=-0.005:bs=-0.03:rm=0.025:bm=-0.025:rh=0.045:bh=-0.045,eq=saturation=1.04:contrast=1.02", grain: 6 },
   vision3: { tone: "format=gbrp,split[ka][kb];[kb]lutrgb=r='if(gt(val,215),val,0)':g='if(gt(val,215),val*0.35,0)':b='if(gt(val,215),val*0.12,0)',gblur=sigma=16[kh];[ka][kh]blend=all_mode=screen:all_opacity=0.5,curves=all='0/0.03 0.25/0.21 0.5/0.5 0.78/0.8 1/0.97',colorbalance=rs=-0.015:gs=0.005:bs=0.03:rh=0.05:bh=-0.04,eq=saturation=1.06:contrast=1.04", grain: 9 },
   trix: { tone: "hue=s=0,curves=all='0/0.04 0.3/0.2 0.7/0.82 1/0.985'", grain: 13 },
+  app: { plain: true }, // grabación de pantalla de la app: sin look de película, ni grano ni viñeta
 };
 // Normalización «BDM Film»: lleva cada foto hacia luma ≈105/255 y saturación ≈46 con límites (estilo-fotografico.md)
 function normFilter(f) {
@@ -86,7 +88,7 @@ function prepararIntro(b, W) {
 }
 async function build(cfg) {
   const W = HERE + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
-  const OUT = BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
+  const OUT = cfg.out || BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
   cfg.blocks.forEach(b => { if (b.intro) prepararIntro(b, W); });
   // 1) voces
@@ -123,7 +125,7 @@ async function build(cfg) {
       console.log('PLANO ' + n); const frames = Math.round(d * 30); const last = k === S.length - 1;
       const fadeV = (b.scene && k === 0 ? `,fade=t=in:st=0:d=0.3` : '') + (b.sceneEnd && last ? `,fade=t=out:st=${Math.max(0, d - 0.3).toFixed(2)}:d=0.3` : '');
       const lk = LOOKS[s.look || b.look || cfg.look || 'portra']; const norm = isVideo(s.a) ? '' : normFilter(f);
-      const tail = `${norm},${lk.tone},noise=alls=${lk.grain}:allf=t+u,vignette=PI/6,format=yuv420p${fadeV}`;
+      const tail = lk.plain ? `,format=yuv420p${fadeV}` : `${norm},${lk.tone},noise=alls=${lk.grain}:allf=t+u,vignette=PI/6,format=yuv420p${fadeV}`;
       if (isVideo(s.a)) {
         let loopV = [];
         let ss = s.ss || 0, fin = f; const td = dur(f);
@@ -166,7 +168,7 @@ async function build(cfg) {
   console.log('ETAPA 4/6 Subtítulos y cifras'); // ASS (palabra iluminada) y cifras
   const ts = x => { x = Math.max(0, x); const h = Math.floor(x / 3600), m = Math.floor(x % 3600 / 60), s = x % 60; return `${h}:${String(m).padStart(2, '0')}:${s.toFixed(2).padStart(5, '0')}`; };
   let ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Main,Arial,66,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,2,5,60,60,60,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
-  const srt = []; const nums = [];
+  const srt = []; const srtEn = []; const nums = [];
   for (const b of cfg.blocks) {
     if (!b.text) continue;
     const toks = []; let pos = 0; const shown = b.text.split(' '); (b.voz || b.text).split(' ').forEach((sw, wi) => { const w = shown[wi]; if (w) { const a = pos; toks.push({ w, s: b.v.al.st[Math.min(a, b.v.al.st.length - 1)], e: b.v.al.en[Math.min(a + sw.length - 1, b.v.al.en.length - 1)] }); } pos += sw.length + 1; });
@@ -184,10 +186,13 @@ async function build(cfg) {
       });
       srt.push({ a: t0, e: tEnd, t: ph.ks.map(i => toks[i].w).join(' ') });
     });
-    if (b.cifra) { const k = toks.find(x => x.w.replace(/[^A-Za-z0-9áéíóúñ]/gi, '').toLowerCase() === b.cifra.word.toLowerCase()); const t0 = T(k ? k.s : 0); nums.push({ ...b.cifra, t0, t1: t0 + (b.cifra.dur || 3) }); }
+    [].concat(b.cifra || []).forEach(c0 => { const k = toks.find(x => x.w.replace(/[^A-Za-z0-9áéíóúñ]/gi, '').toLowerCase() === c0.word.toLowerCase()); const t0 = T(k ? k.s : 0); nums.push({ ...c0, t0, t1: t0 + (c0.dur || 3) }); }); // cifra: una o varias por bloque
+    // subtítulos en inglés (pista .srt aparte): b.en = una frase por cada frase española (corte en . ? !)
+    if (b.en) { const sents = []; let cs = []; toks.forEach(k => { cs.push(k); if (/[.?!…]$/.test(k.w)) { sents.push(cs); cs = []; } }); if (cs.length) sents.push(cs); sents.forEach((s, i) => { if (b.en[i]) srtEn.push({ a: T(s[0].s) - 0.05, e: T(s[s.length - 1].e) + 0.12, t: b.en[i] }); }); }
   }
   fs.writeFileSync(`${W}/sub.ass`, ass);
   fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-es.srt`, srt.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
+  if (srtEn.length) fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-en.srt`, srtEn.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
   const numF = nums.map(c => { const al = `if(lt(t,${c.t0.toFixed(2)}),0,min(1,(t-${c.t0.toFixed(2)})/0.25))*if(gt(t,${c.t1.toFixed(2)}),max(0,1-(t-${c.t1.toFixed(2)})/0.3),1)`; return `drawtext=fontfile='${IMPACT}':text='${esc(c.text)}':fontsize=${c.size || 230}:fontcolor=white:borderw=10:bordercolor=0xF4630B:x=(w-text_w)/2:y=${c.y || 640}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})',drawtext=fontfile='${ARIALB}':text='${esc(c.sub)}':fontsize=48:fontcolor=white:borderw=5:bordercolor=black:x=(w-text_w)/2:y=${(c.y || 640) + 270}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})'`; }).join(',');
   // 5) audio
   console.log('ETAPA 5/6 Mezcla de audio (voces niveladas + ambiente)'); // audio: voces + ambiente real por escena con ducking
@@ -206,6 +211,7 @@ async function build(cfg) {
     run(['-i', c.f, '-filter_complex', `[0:a]highpass=f=140,asplit[x][y];[y]areverse[r];[x][r]concat=n=2:v=0:a=1,aloop=loop=-1:size=2147483647,atrim=start=${off.toFixed(2)}:end=${(off + L).toFixed(2)},asetpts=PTS-STARTPTS,volume=${gain.toFixed(1)}dB,afade=t=in:d=0.5,afade=t=out:st=${(L - 0.5).toFixed(2)}:d=0.5,adelay=${Math.round(Math.max(0, b.t0 - 0.3) * 1000)}:all=1[o]`, '-map', '[o]', o2]);
     bedFiles.push(o2);
   });
+  if (!bedFiles.length) { const o = `${W}/bed_mudo.wav`; run(['-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo', '-t', TOTAL.toFixed(2), o]); bedFiles.push(o); } // capítulo sin ambiente: pista muda
   const bin = bedFiles.flatMap(f => ['-i', f]);
   const fb = bedFiles.map((_, i) => `[${i}:a]`).join('') + `amix=inputs=${bedFiles.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)}[amb]`;
   fs.writeFileSync(`${W}/fb.txt`, fb); run([...bin, '-filter_complex_script', `${W}/fb.txt`, '-map', '[amb]', `${W}/amb.wav`]);
