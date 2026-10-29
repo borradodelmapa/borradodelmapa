@@ -147,23 +147,34 @@ function introHTML(b){
     <label class="mini">saltar los primeros (s) <input type="number" step="0.1" min="0" max="20" data-iss="${i}" value="${s.ss ?? 0}"></label>
     <audio controls preload="none" src="/sfx/${encodeURIComponent((sd.find(x => x.id === s.src) || {}).archivo || '')}" style="height:28px"></audio>
     <button class="sec" data-iquita="${i}" style="padding:4px 8px">Quitar</button></div>`).join('');
-  return `<details class="blq-in" style="margin:6px 0"><summary style="cursor:pointer;color:var(--or);font-weight:700">🎬 Editar la intro (clip y sonidos) — pulsa para abrir</summary>
-    <div class="txt" style="margin-top:6px">${b.etiqueta || ''}</div>
-    <video controls preload="metadata" src="/media/${I.clip}" style="height:230px;background:#000"></video>
-    <div class="amb"><button id="iclip" class="sec">🎞 Cambiar clip (${I.clip})</button>
-      <label class="mini">empieza en el seg. <input type="number" step="0.1" min="0" max="60" id="iss" value="${I.ss ?? 0}"></label>
-      <label class="mini">dura (s) <input type="number" step="0.1" min="2" max="10" id="idur" value="${I.dur ?? 5}"></label>
-      <label class="mini">volumen general dB <input type="number" step="1" min="-30" max="6" id="igain" value="${I.gainAudio ?? -5}"></label></div>
-    <div class="mini" style="margin:8px 0 2px">Sonidos de la intro (se mezclan en este orden):</div>${filas}
-    <button id="iadd" class="sec" style="margin-top:6px">+ Añadir sonido</button>
-    <div class="mini" style="margin-top:6px">Un grito o un golpe nuevo con IA se genera aparte (ElevenLabs, ~100 créditos cada uno): dímelo y lo añado a esta lista.</div></details>`;
+  const rec = (I.ss || 0) > 0 ? 'desde ' + I.ss + ' s' : 'Recortar';
+  return `<div class="txt">${b.etiqueta || ''}</div>
+    <div class="shots"><div class="shot" style="width:150px"><video controls preload="metadata" src="/media/${I.clip}" style="width:150px;background:#000"></video>
+      <button class="sec" id="irec" style="width:100%;margin-top:3px;font-size:12px;padding:5px">✂ ${rec}</button>
+      <button class="sec" id="iclip" style="width:100%;margin-top:3px;font-size:12px;padding:5px">🎞 Cambiar clip (${I.clip})</button></div></div>
+    <details class="blq-in" style="margin:6px 0"><summary style="cursor:pointer;color:var(--mu);font-size:13px">⚙ Duración y sonidos de la intro (grito, ataque…) — pulsa para abrir</summary>
+      <div class="amb"><label class="mini">dura (s) <input type="number" step="0.1" min="2" max="10" id="idur" value="${I.dur ?? 5}"></label>
+        <label class="mini">volumen general dB <input type="number" step="1" min="-30" max="6" id="igain" value="${I.gainAudio ?? -5}"></label></div>
+      <div class="mini" style="margin:8px 0 2px">Sonidos de la intro (se mezclan en este orden):</div>${filas}
+      <button id="iadd" class="sec" style="margin-top:6px">+ Añadir sonido</button>
+      <div class="mini" style="margin-top:6px">Un grito o un golpe nuevo con IA se genera aparte (ElevenLabs, ~100 créditos cada uno): dímelo y lo añado a esta lista.</div></details>`;
+}
+function abrirRecorteIntro(bid){
+  const b = D.bloques.find(x => x.id === bid), I = introActual(b), v = $('#rvid');
+  $('#rt').textContent = `Recortar la intro (${I.clip}) — el clip original no se toca`;
+  $('#rpon').textContent = '✂ Empezar aquí (donde está el vídeo)'; $('#rorig').textContent = 'Volver al original';
+  v.src = '/media/' + I.clip; v.onloadedmetadata = () => { v.currentTime = I.ss || 0; }; $('#rinfo').textContent = 'Empieza en: ' + (I.ss || 0).toFixed(1) + ' s';
+  $('#rpon').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; ov.intro = { ...introActual(b), ss: t }; await guardar(); $('#rinfo').textContent = '✔ Empieza en ' + t.toFixed(1) + ' s'; pintar(); };
+  $('#rorig').onclick = async () => { ov.intro = { ...introActual(b), ss: (b.intro.ss || 0) }; await guardar(); v.currentTime = b.intro.ss || 0; $('#rinfo').textContent = 'Vuelto al original'; pintar(); };
+  $('#modal2').style.display = 'block';
 }
 function guardarIntro(b, cambio){ ov.intro = { ...introActual(b), ...cambio }; clearTimeout(guardarIntro.t); guardarIntro.t = setTimeout(guardar, 400); }
 function cablearIntro(){
   D.bloques.filter(b => b.intro).forEach(b => {
     const I = () => introActual(b), snd = fn => { const s = [...(I().sonidos || []).map(x => ({ ...x }))]; fn(s); guardarIntro(b, { sonidos: s }); };
     const num = (id, k) => { const e = document.getElementById(id); if (e) e.oninput = () => guardarIntro(b, { [k]: +e.value }); };
-    num('iss', 'ss'); num('idur', 'dur'); num('igain', 'gainAudio');
+    num('idur', 'dur'); num('igain', 'gainAudio');
+    const br = document.getElementById('irec'); if (br) br.onclick = () => abrirRecorteIntro(b.id);
     const bc = document.getElementById('iclip'); if (bc) bc.onclick = () => { ctx = { intro: b.id }; $('#mt').textContent = 'Elige el clip de la intro (vídeos y Runway)'; $('#modal').style.display = 'block'; tab = 'runway'; pintarGaleria(I().clip); };
     document.querySelectorAll('select[data-isnd]').forEach(e => e.onchange = () => snd(s => { s[+e.dataset.isnd].src = e.value; }));
     document.querySelectorAll('input[data-iat]').forEach(e => e.oninput = () => snd(s => { s[+e.dataset.iat].at = +e.value; }));
