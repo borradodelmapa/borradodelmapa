@@ -32,10 +32,17 @@ Inventario sacado de Metricool el 30 oct 2026. «Texto nuevo» = pendiente de pr
 
 | 30 oct 2026 | Ep.1, Ep.2, 762 curvas (avance), Cap.2, Cap.3, Doi Inthanon (avance), Cap.4, Cap.5 | YouTube | Título nuevo con la búsqueda real al principio, descripción con datos de viaje con fuente y fecha, 3 hashtags (sin #Shorts) | ver tabla de arriba (✅). **Ep.1 y Ep.2 están en PRIVADO en YouTube** (no se ha cambiado su visibilidad) |
 
-Pendiente: TikTok de los 9; las 18 programadas en Metricool (Vietnam, Muay Thai, avances).
+| 30 oct 2026 | Las 9 programadas (Muay Thai, avances Vietnam/café/bún chả, Vietnam 1/5 a 5/5) | YouTube + TikTok (Metricool) | Texto con datos prácticos, fuente y fecha; cada edición cambia el id de Metricool (el uuid se mantiene). 18 de 18 hechas | planner de Metricool |
+
+Pendiente: frase de la exención de visado en Tailandia en las descripciones de YouTube ya guardadas (ver abajo).
+
+## Dato verificado: visado de Tailandia (30 oct 2026)
+La estancia sin visado para españoles baja de 60 a 30 días desde el 15 sept 2026 (Royal Gazette del 31 ago; TAT). Prórroga de 30 días por 1.900 THB a discreción del oficial. TDAC gratis, hasta 3 días antes. Sustituye en las descripciones de YouTube la frase vaga «Los días de estancia sin visado cambiaron en 2026».
 
 ## TikTok (30 oct 2026)
 - Editado y guardado (comprobado en el listado): Cap.5 (7701270482405969174), Cap.4 kayan (7700899488436587798, queda «En revisión»), avance Doi Inthanon (7700280894421994774).
 - Guardado pulsado pero el listado sigue con el texto viejo (posible límite de ediciones de TikTok): Cap.1 (7699028733566422294), Cap.2 (7699399954703322390), Cap.3 (7699770896336145686), avance 762 curvas (7698426327250013462), SIN MAPA Ep.2 (7696431534907084054). Reintentar más tarde.
+- Reintento 30 oct (tarde): texto nuevo con la línea de los 30 días sin visado enviado para Cap.1 (salió «Cambios guardados»), Cap.2, Cap.3 y avance 762 curvas; el listado sigue enseñando el texto viejo, probablemente hasta que TikTok revise la edición. Comprobar mañana. Cap.5, Cap.4 y Doi avance siguen sin la línea del visado. SIN MAPA Ep.2: sin tocar (no tengo sus datos).
+- YouTube: las 7 descripciones de Tailandia ya llevan la frase de los 30 días (guardadas, 30 oct).
 - SIN MAPA Ep.1 (7696060182123613462): guardado pulsado; el vídeo está en «Solo tú» en TikTok; comprobar.
 - Cómo editar: TikTok Studio > Publicaciones > lápiz; o URL /tiktokstudio/upload/post/<id>. Texto en el editor (enfocar con JS), botón «Guardar».
