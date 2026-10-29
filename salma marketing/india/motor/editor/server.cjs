@@ -62,7 +62,7 @@ const montar = () => {
 };
 // Cada montaje que acaba bien se copia con nombre claro (capítulo + fecha y hora) a VIDEOS-TERMINADOS: nunca se pisa nada
 const TERM = BASE + '/VIDEOS-TERMINADOS'; fs.mkdirSync(TERM, { recursive: true });
-const guardarTerminado = () => { try { const d = new Date(), z = n => String(n).padStart(2, '0'); const nom = `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}_${cargarCfg().id}.mp4`; fs.copyFileSync(VIDEO(), TERM + '/' + nom); job.copia = nom; } catch (e) { job.log += '\nNo pude copiar a VIDEOS-TERMINADOS: ' + e.message; } };
+const guardarTerminado = () => { try { const d = new Date(), z = n => String(n).padStart(2, '0'); const nom = `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}_${cargarCfg().id}.mp4`; fs.copyFileSync(VIDEO(), TERM + '/' + nom); job.copia = nom; const png = VIDEO().replace(/-editor.mp4$/, '-editor-portada.png'); if (fs.existsSync(png)) fs.copyFileSync(png, TERM + '/' + nom.replace(/.mp4$/, '-PORTADA.png')); } catch (e) { job.log += '\nNo pude copiar a VIDEOS-TERMINADOS: ' + e.message; } };
 const ORIG = () => BASE + '/animatica-cap4/' + cargarCfg().id + '.mp4';
 const VIDEO = () => BASE + '/animatica-cap4/' + cargarCfg().id + '-editor.mp4';
 
