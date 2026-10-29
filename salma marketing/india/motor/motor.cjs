@@ -14,7 +14,9 @@ const meanDb = f => { const r = spawnSync(FF, ['-hide_banner', '-nostats', '-i',
 const photo = n => `${BASE}/india web/india 2019 @pacogomezduarte-${n}.jpg`;
 const vidsList = fs.readFileSync(path.join(HERE, 'videos-info.csv'), 'utf8').split(/\r?\n/).slice(1).filter(Boolean).map(l => l.split(',')[0].replace(/"/g, ''));
 const mobList = fs.readFileSync(BASE + '/hojas-contacto-movil/indice-movil.csv', 'utf8').split(/\r?\n/).slice(1).filter(Boolean).map(l => l.replace(/"/g, '').split(','));
-const RW = { RW546: 'ghat-incineraciones-546-5s.mp4', RW598: 'ghat-lamparas-598-v2-humo-5s.mp4', RW494: 'ghat-amanecer-494-5s.mp4' };
+const RW = { RW546: 'ghat-incineraciones-546-5s.mp4', RW598: 'ghat-lamparas-598-v2-humo-5s.mp4', RW494: 'ghat-amanecer-494-5s.mp4', RW416: 'ofrenda-rio-416-5s.mp4',
+  // clips de monos generados (IA: marcar como tal al publicar): 9001 Kling 3.0 Pro (el elegido para la intro) · 9002 Veo 3.1 Fast · 9003 Gen-4 Turbo frontal · 9004 Gen-4 Turbo ataque 1 · 9005 plátano 10 s
+  RW9001: 'mono-S138-kling3pro-5s.mp4', RW9002: 'mono-S138-veo31fast-4s.mp4', RW9003: 'mono-S138-ataque-frontal-5s.mp4', RW9004: 'mono-S138-ataque-5s.mp4', RW9005: 'monos-platano-v1-10s.mp4' };
 // 'S485' foto Sony · 'M87' foto móvil · 'V41' vídeo móvil · 'RW494' clip Runway
 function resolve(id) {
   if (/^SFX_/.test(id)) return HERE + '/sfx/' + id.slice(4) + '.mp3';
