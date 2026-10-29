@@ -97,6 +97,7 @@ async function build(cfg) {
     if (b.video) { clips.push({ file: b.video, d: b.D, raw: true }); continue; }
     const S = b.shots; const starts = S.map((s, k) => k === 0 ? 0 : Math.max(0.9, b.lead + tow(b, s.from) - 0.06));
     for (let k = 1; k < S.length; k++) if (starts[k] < starts[k - 1] + 0.9) starts[k] = starts[k - 1] + 0.9;
+    if (b.golpe) { const kg = S.findIndex(x => x.from === b.golpe.en); if (kg >= 0) b._golpeT = b.t0 + starts[kg]; }
     S.forEach((s, k) => {
       const d = (k + 1 < S.length ? starts[k + 1] : b.D) - starts[k]; const n = ++nclip; const out = `${W}/c${String(n).padStart(2, '0')}.mp4`; const f = resolve(s.a);
       console.log('PLANO ' + n); const frames = Math.round(d * 30); const last = k === S.length - 1;
@@ -110,9 +111,12 @@ async function build(cfg) {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
         const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 1.6; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
         const z = s.zfijo ? s.z : (s.z ?? AUTO[s.sc] ?? 0.05) * KB, [fx, fy] = s.foc || [0.5, 0.5], cx = s.cx ?? 0.5, inn = (s.dir || dirAuto) === 'in';
-        const zexpr = inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
+        let zexpr = inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
+        const f0 = Math.max(1, frames - 12); // GOLPE (s.golpe): en los últimos 0,4 s el zoom se dispara hacia el foco y la cámara se sacude
+        if (s.golpe) zexpr += `+${s.golpeZ ?? 0.6}*pow(max(0,on-${f0})/12,3)`;
+        const shake = s.golpe ? `,scale=1160:2064,crop=1080:1920:x='40+36*sin(n*9.1)*gt(n,${f0})':y='72+36*cos(n*11.7)*gt(n,${f0})'` : '';
         const pre = s.cover ? 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,scale=2160:3840:flags=lanczos' : `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*${cx},0)':0,scale=2160:3840:flags=lanczos`; // más ancha que 9:16 (apaisada o vertical 3:4) → recorta a lo ancho; si no, a lo alto
-        run(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
+        run(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${shake}${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
       }
       clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra' });
     });
@@ -182,7 +186,13 @@ async function build(cfg) {
   const fb = bedFiles.map((_, i) => `[${i}:a]`).join('') + `amix=inputs=${bedFiles.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)}[amb]`;
   fs.writeFileSync(`${W}/fb.txt`, fb); run([...bin, '-filter_complex_script', `${W}/fb.txt`, '-map', '[amb]', `${W}/amb.wav`]);
   run(['-i', `${W}/voz.wav`, '-i', `${W}/amb.wav`, '-filter_complex', `[0]asplit[v1][v2];[1][v2]sidechaincompress=threshold=0.03:ratio=${cfg.duckRatio || 4}:attack=20:release=500[bd];[v1][bd]amix=inputs=2:normalize=0:duration=first[m]`, '-map', '[m]', `${W}/mix.wav`]);
-  run(['-i', `${W}/mix.wav`, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
+  const golpes = cfg.blocks.filter(b => b.golpe && b._golpeT != null); let mixIn = `${W}/mix.wav`;
+  if (golpes.length) {
+    const gin = [], gf = [];
+    golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
+    run(['-i', mixIn, ...gin, '-filter_complex', gf.join(';') + ';[0:a]' + golpes.map((_, i) => `[g${i}]`).join('') + `amix=inputs=${golpes.length + 1}:normalize=0:duration=first[m2]`, '-map', '[m2]', `${W}/mix2.wav`]); mixIn = `${W}/mix2.wav`;
+  }
+  run(['-i', mixIn, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
   // 6) composición
   console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
