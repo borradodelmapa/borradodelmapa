@@ -67,10 +67,26 @@ async function voice(text, who) {
   fs.writeFileSync(js, JSON.stringify(al)); return { mp3, al, chars: text.length };
 }
 
+// INTRO editable: clip (vídeo o clip de IA) recortado a 9:16 + sonidos mezclados (grito, ataque, golpe real…). Se prepara aquí y entra como bloque de vídeo con su audio.
+function prepararIntro(b, W) {
+  const I = b.intro, d = I.dur || 5, f = resolve(I.clip), ss = I.ss || 0, td = dur(f);
+  const pad = td - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td - ss) + 0.2).toFixed(2)}` : '';
+  const v = `${W}/intro-video.mp4`;
+  run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)',scale=1080:1920:flags=lanczos,setsar=1,fps=30${pad},format=yuv420p`, '-frames:v', String(Math.round(d * 30)), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', v]);
+  b.video = v; b.fixed = d; b.gainAudio = I.gainAudio ?? -5;
+  const sn = I.sonidos || [];
+  if (sn.length) {
+    const a = `${W}/intro-audio.wav`, ins = [], fl = [];
+    sn.forEach((x, i) => { ins.push('-ss', String(x.ss || 0), '-i', resolve(x.src)); fl.push(`[${i}:a]volume=${x.db ?? 0}dB${x.fadeIn ? `,afade=t=in:d=${x.fadeIn}` : ''},adelay=${Math.round((x.at || 0) * 1000)}:all=1[s${i}]`); });
+    run([...ins, '-filter_complex', fl.join(';') + ';' + sn.map((_, i) => `[s${i}]`).join('') + `amix=inputs=${sn.length}:normalize=0:duration=longest,apad=whole_dur=${d},atrim=0:${d},loudnorm=I=-14:TP=-1.5:LRA=9[m]`, '-map', '[m]', '-ar', '44100', a]);
+    b.audioFile = a;
+  }
+}
 async function build(cfg) {
   const W = HERE + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
   const OUT = BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
+  cfg.blocks.forEach(b => { if (b.intro) prepararIntro(b, W); });
   // 1) voces
   console.log('ETAPA 1/6 Voces (las que ya existen se reutilizan; solo se genera lo nuevo)');
   let charsNow = 0;

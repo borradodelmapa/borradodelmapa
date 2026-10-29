@@ -2,7 +2,6 @@
 // sc = escala del plano (GP/PM/PP/D) · ss = segundo del vídeo donde empieza · amb = ambiente (src, ss, db)
 const { build } = require('./motor.cjs');
 const { PACO } = require('./voces.cjs');
-const INTRO = 'C:/Users/User/Desktop/salma/salma marketing/india/INTRO-mono/intro-video-1080x1920.mp4', INTRO_A = 'C:/Users/User/Desktop/salma/salma marketing/india/INTRO-mono/intro-audio.wav';
 const RIO = (db, ss = 0) => ({ src: 'V33', ss, db }); // río real del balcón
 const cfg = {
   titulo: 'INDIA · REEL LOS MONOS',
@@ -14,7 +13,8 @@ const cfg = {
   card: { l1: 'MUCHO YOGI, POCO YOGA', l2: 'INDIA 2019', l3: 'Basado en un viaje real', l4: 'EL VIAJE CONTINÚA', l5: 'Benarés, la muerte y las castas' },
   blocks: [
     // INTRO: el mono S138 ataca a cámara (Kling 3.0 Pro, imagen generada) con su grito y ataque. Va primero; luego sigue la historia.
-    { id: 'intro', video: INTRO, fixed: 5.03, audioFile: INTRO_A, gainAudio: -5, etiqueta: 'INTRO · el mono ataca a cámara (Kling 3.0 Pro + grito y ataque). Clip fijo de 5 s.' },
+    { id: 'intro', etiqueta: 'INTRO · el mono ataca a cámara (Kling 3.0 Pro, IA) con grito y ataque.',
+      intro: { clip: 'RW9001', ss: 0, dur: 5.03, gainAudio: -5, sonidos: [{ src: 'SFX_mono-grito', ss: 0, at: 0.45, db: -4, fadeIn: 0.15 }, { src: 'SFX_mono-ataque', ss: 0.9, at: 3.7, db: 0 }] } },
     { id: 'gancho', who: 'paco', scene: true, pause: 0.3, amb: RIO(-26),
       text: 'Mi habitación en Rishikesh tenía vistas al río y un balcón estrecho, con un cristal finísimo. Y cada día pasaba por delante una familia de monos.',
       shots: [{ a: 'V31', sc: 'GP', ss: 5 }, { a: 'V29', sc: 'PM', ss: 0, from: 'Y cada día' }] },
