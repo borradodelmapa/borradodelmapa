@@ -7,9 +7,9 @@ Reglas que manda la checklist: un dato por intervención y silencio (N3) · cara
 ---
 ## ESCENA 0 · GANCHO (0-5 s)
 - **Emoción:** asombro. **Debe sentir:** «¿cómo que con más de cien años?».
-- **Imagen (Paco eligió W38, 30 oct):** *Old Woman of Tinglayan, Kalinga – A Memento From The Mambabatok of Buscalan* (2400×3600, vertical; Ranieljosecastaneda, CC BY-SA 4.0). **No es Whang-Od:** es una de las pocas mujeres kalinga tatuadas que quedan en Buscalan (2018). Empuje lento hacia los tatuajes. Es también la **portada** (M11, M15). Sin nombre (P4).
-- **Salma (propuesta para que la imagen no contradiga la voz, N7):** «Quedan muy pocas mujeres con estos tatuajes. Y la que los hace tiene más de cien años.» → corte a Whang-Od (escena 2).
-- *Texto anterior, si Paco prefiere W38 en otra escena:* «Tiene más de cien años. Y sigue tatuando… con una espina.» (necesita una foto de Whang-Od).
+- **Imagen (Paco, 30 oct: «que sea ella la primera foto»):** **W39** *Oldest Mambabatok* (5915×4225; CharMel Creations, CC BY-SA 4.0): Whang-Od tatuando, varilla en mano, cara de perfil. Recorte vertical sobre la cara y la varilla, empuje lento hacia los ojos. Es también la **portada** (M11, M15).
+- **Salma:** «Tiene más de cien años. Y sigue tatuando… con una espina.»
+- *W38 (mujer kalinga tatuada de Buscalan, no es Whang-Od) pasa a la escena 4, sobre «a las mujeres, por belleza».*
 - **Cifra (M9):** «+100» en «cien». **Sonido:** golpecitos secos de la varilla (ver nota de sonido) y viento. **IA:** no.
 - **Remate:** fundido a negro 0,3 s.
 
@@ -32,7 +32,7 @@ Reglas que manda la checklist: un dato por intervención y silencio (N3) · cara
 - **~30 s → aviso «Si te está gustando, sígueme» (M13).**
 
 ## ESCENA 4 · PARA QUÉ ERA (36-50 s) — look Tri-X B/N (historia, M4)
-- **Emoción:** peso de la historia. **Imagen:** foto antigua de guerrero o mujer kalinga tatuados (F-07, B/N, por buscar en Commons) → GP de terrazas en B/N.
+- **Emoción:** peso de la historia. **Imagen:** foto antigua de guerrero kalinga tatuado (F-07, B/N, por buscar en Commons) → **W38** (mujer kalinga tatuada de Buscalan, 2018, Ranieljosecastaneda, CC BY-SA 4.0; sin nombre, P4) sobre «a las mujeres, por belleza» → GP de terrazas en B/N.
 - **Salma (dato 1):** «Antes, el tatuaje se ganaba. A los guerreros, por su valor. A las mujeres, por belleza.»
 - **Salma (dato 2):** «A principios del siglo veinte, la administración estadounidense prohibió la caza de cabezas.»
 - **Rótulo:** «PRINCIPIOS DEL S. XX». **Sonido:** casi silencio, viento. **IA:** no.
