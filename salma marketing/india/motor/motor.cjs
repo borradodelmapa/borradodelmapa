@@ -111,6 +111,7 @@ async function build(cfg) {
     t += b.D;
   }
   const cardT = t; const TOTAL = t + (cfg.cardSecs || 8);
+  const sgInicio = sg => Math.min(sg.seg ?? 20, Math.max(1, cardT - 7)); // aviso de seguir: a los 20 s por defecto (Paco, 30 oct 2026; antes 30)
   // 3) planos
   console.log('ETAPA 3/6 Cortando y revelando cada plano (looks Kodak, zooms)');
   const clips = []; let nclip = 0, kbN = 0;
@@ -228,6 +229,13 @@ async function build(cfg) {
     golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
     run(['-i', mixIn, ...gin, '-filter_complex', gf.join(';') + ';[0:a]' + golpes.map((_, i) => `[g${i}]`).join('') + `amix=inputs=${golpes.length + 1}:normalize=0:duration=first[m2]`, '-map', '[m2]', `${W}/mix2.wav`]); mixIn = `${W}/mix2.wav`;
   }
+  // sonido del aviso de seguir: golpecitos del tatuaje batok, el sonido del canal en todas las series (Paco, 30 oct 2026); cfg.seguir.sonido = false lo quita
+  const SGs = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null;
+  if (SGs && SGs.sonido !== false) {
+    const sd = SGs.sonidoDur ?? 2.1, o = `${W}/sg-sonido.wav`;
+    run(['-i', resolve(SGs.sonido || 'SFX_golpecitos-creados'), '-vn', '-t', String(sd), '-ac', '2', '-ar', '44100', '-af', `volume=${SGs.sonidoDb ?? -12}dB,afade=t=out:st=${(sd - 0.4).toFixed(2)}:d=0.4,adelay=${Math.round(sgInicio(SGs) * 1000)}:all=1`, o]);
+    run(['-i', mixIn, '-i', o, '-filter_complex', '[0:a][1:a]amix=inputs=2:normalize=0:duration=first[m3]', '-map', '[m3]', `${W}/mix3.wav`]); mixIn = `${W}/mix3.wav`;
+  }
   run(['-i', mixIn, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
   // 6) composición
   console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
@@ -240,7 +248,7 @@ async function build(cfg) {
   if (SG) {
     // Coreografía (u = segundos desde t0): 0-0.5 la franja cruza entrando por la izquierda · 0.3 aparece el corazón naranja detrás y late (varios latidos) ·
     // 4.6-5.1 la franja sale por la derecha · 5.1-5.5 el corazón revienta (crece y se desvanece)
-    const t0 = Math.min(SG.seg ?? 30, Math.max(1, cardT - 7)); sgT = { a: t0.toFixed(2), b: (t0 + 5.1).toFixed(2), c: (t0 + 5.55).toFixed(2) };
+    const t0 = sgInicio(SG); sgT = { a: t0.toFixed(2), b: (t0 + 5.1).toFixed(2), c: (t0 + 5.55).toFixed(2) };
     const txt = String(SG.texto || 'Si te está gustando, sígueme').toUpperCase(), tam = Math.min(70, Math.floor(900 / (txt.length * 0.5)));
     const rot5 = 'rotate=-5*PI/180:ow=rotw(-5*PI/180):oh=roth(-5*PI/180):c=none';
     sgIn = ['-loop', '1', '-i', `${W}/sg-banda.png`, '-loop', '1', '-i', `${W}/sg-corazon.png`];
