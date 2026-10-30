@@ -20,8 +20,11 @@ const RW = { RW546: 'ghat-incineraciones-546-5s.mp4', RW598: 'ghat-lamparas-598-
   // banderas de oración animadas (2 s, Runway Gen-4 Turbo, IA): 9010 foto S275 · 9011 foto S157 · 9012 foto S156
   RW9010: 'bandera-S275-2s.mp4', RW9011: 'bandera-S157-2s.mp4', RW9012: 'bandera-S156-2s.mp4' };
 // 'S485' foto Sony · 'M87' foto móvil · 'V41' vídeo móvil · 'RW494' clip Runway
+// 'W05' / 'H01' foto de la carpeta de la serie (cfg.fotosSerie; usa la versión grande «-g» si existe): ids cortos para que el editor las enseñe
+let SERIE = null; const setSerie = d => { SERIE = d || null; };
 function resolve(id) {
   if (/^FILE:/.test(id)) return id.slice(5); // archivo suelto con ruta completa (series nuevas, p. ej. Bután)
+  if (/^[WH]\d+$/.test(id) && SERIE) { const g = `${SERIE}/${id}-g.jpg`; return fs.existsSync(g) ? g : `${SERIE}/${id}.jpg`; }
   if (/^SFX_/.test(id)) return HERE + '/sfx/' + id.slice(4) + '.mp3';
   if (/^RW/.test(id)) return BASE + '/runway-pruebas/' + RW[id];
   if (/^S\d+/.test(id)) return photo(id.slice(1));
@@ -87,6 +90,7 @@ function prepararIntro(b, W) {
   }
 }
 async function build(cfg) {
+  setSerie(cfg.fotosSerie);
   const W = HERE + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
   const OUT = cfg.out || BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
@@ -289,4 +293,4 @@ async function build(cfg) {
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
   return outFile;
 }
-module.exports = { build, voice, resolve, RW, vozEnCache, prepararIntro };
+module.exports = { build, voice, resolve, setSerie, RW, vozEnCache, prepararIntro };

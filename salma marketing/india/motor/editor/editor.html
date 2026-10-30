@@ -190,12 +190,14 @@ function cablearIntro(){
 function pestanas(){
   const T = {}; const grupos = [...new Set(D.galeria.sony.map(id => Math.floor(+id.slice(1) / 100)))];
   grupos.forEach(h => { T['sony' + h] = 'Sony ' + (h * 100) + '-' + (h * 100 + 99); });
-  T.movil = 'Fotos móvil'; T.video = 'Vídeos'; T.runway = 'Runway'; return T;
+  T.movil = 'Fotos móvil'; T.video = 'Vídeos'; T.runway = 'Runway';
+  if (D.galeria.serie && D.galeria.serie.length) return { serie: 'Fotos de la serie', ...T }; // series nuevas (Pueblos…): sus fotos primero
+  return T;
 }
 function lista(t){ return t.startsWith('sony') ? D.galeria.sony.filter(id => Math.floor(+id.slice(1) / 100) === +t.slice(4)) : D.galeria[t]; }
 function pintarGaleria(foco){
   const T = pestanas(); if (!T[tab]) tab = Object.keys(T)[0];
-  if (foco) { const g = foco.startsWith('S') ? 'sony' + Math.floor(+foco.slice(1) / 100) : foco.startsWith('M') ? 'movil' : foco.startsWith('RW') ? 'runway' : 'video'; if (T[g]) tab = g; }
+  if (foco) { const g = /^[WH]\d/.test(foco) ? 'serie' : foco.startsWith('S') ? 'sony' + Math.floor(+foco.slice(1) / 100) : foco.startsWith('M') ? 'movil' : foco.startsWith('RW') ? 'runway' : 'video'; if (T[g]) tab = g; }
   $('#tabs').innerHTML = Object.keys(T).map(t => `<button class="${t===tab?'on':''}" data-t="${t}">${T[t]}</button>`).join('') + '<input id="ir" placeholder="ir al nº (ej. 465)" style="width:150px;margin-left:8px;background:#222;color:#eee;border:1px solid #555;padding:7px">';
   $('#tabs').querySelectorAll('button').forEach(e => e.onclick = () => { tab = e.dataset.t; pintarGaleria(); });
   $('#ir').oninput = e => { let n = e.target.value.trim().toUpperCase(); if (/^[0-9]+$/.test(n)) n = 'S' + n; if (/^[SM][0-9]+$/.test(n) && (D.galeria.sony.includes(n) || D.galeria.movil.includes(n))) { pintarGaleria(n); const el = $('#grid').querySelector('[data-id="' + n + '"]'); if (el) { el.scrollIntoView({block:'center'}); el.style.outline = '3px solid #f0f'; } $('#ir').value = n; $('#ir').focus(); } };

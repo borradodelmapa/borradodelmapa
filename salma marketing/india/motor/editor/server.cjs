@@ -5,7 +5,7 @@ const HERE = path.resolve(__dirname, '..'), BASE = path.resolve(HERE, '..'), FF 
 const CACHE = __dirname + '/cache', CAP = process.argv[2] || 'cap4', OVR = __dirname + (CAP === 'cap4' ? '/overrides.json' : '/overrides-' + CAP + '.json'), PORT = { cap4: 8095, monos: 8096, cap3: 8097 }[CAP] || 8098; // un servidor por capítulo: cap4 → 8095, monos → 8096
 if (!fs.existsSync(OVR)) fs.writeFileSync(OVR, '{"shots":{},"amb":{},"text":{},"audio":{}}');
 fs.mkdirSync(CACHE, { recursive: true });
-const { resolve, RW, vozEnCache } = require('../motor.cjs');
+const { resolve, setSerie, RW, vozEnCache } = require('../motor.cjs');
 const aplicar = require('./aplicar.cjs');
 const crypto = require('crypto');
 const { generar: generarPortada } = require('../portada.cjs');
@@ -23,6 +23,8 @@ const audioFiles = () => fs.readdirSync(BASE + '/audios-candidatos').filter(f =>
 const sonidosDisp = () => { const l = fs.readdirSync(HERE + '/sfx').filter(f => /.mp3$/.test(f)).map(f => ({ id: 'SFX_' + f.replace(/.mp3$/, ''), nombre: f.replace(/.mp3$/, '').replace(/-/g, ' '), archivo: f })); return l.concat([{ id: 'V29', nombre: 'golpe real del cristal (V29, tu vídeo)', archivo: '' }, { id: 'V35', nombre: 'golpe real (V35, tu vídeo)', archivo: '' }]); };
 const galeria = () => {
   const out = { sony: [], movil: [], video: [], runway: Object.keys(RW) };
+  const fs0 = cargarCfg().fotosSerie; setSerie(fs0); // series nuevas (Pueblos…): fotos W05/H01 de su carpeta
+  if (fs0 && fs.existsSync(fs0)) out.serie = fs.readdirSync(fs0).map(f => (f.match(/^([WH]\d+)\.jpg$/) || [])[1]).filter(Boolean).sort((a, b) => a[0] === b[0] ? +a.slice(1) - +b.slice(1) : a < b ? -1 : 1);
   fs.readdirSync(BASE + '/india web').forEach(f => { const x = f.match(/pacogomezduarte-(\d+)\.jpg$/); if (x) out.sony.push('S' + x[1]); });
   out.sony.sort((a, b) => +a.slice(1) - +b.slice(1));
   for (let i = 1; i <= 182; i++) out.movil.push('M' + i);
@@ -42,7 +44,7 @@ const thumb = id => {
   }));
   enCurso.set(id, pr); lanzar(); return pr;
 };
-setTimeout(() => { const g = galeria(); [...g.runway, ...g.sony, ...g.video, ...g.movil].forEach(id => thumb(id).catch(() => {})); }, 1500);
+setTimeout(() => { const g = galeria(); [...(g.serie || []), ...g.runway, ...g.sony, ...g.video, ...g.movil].forEach(id => thumb(id).catch(() => {})); }, 1500);
 
 let job = { estado: 'libre', log: '', fin: 0, ini: 0, cambios: [], total: 0 };
 const resumenCambios = () => { const o = leerOv(), base = cargarCfg(), c = [];
@@ -122,7 +124,7 @@ http.createServer((req, res) => {
     if (p.startsWith('/audio-propio/')) { const f = path.basename(decodeURIComponent(p.slice(14))); return file(req, res, __dirname + '/uploads/' + f, 'audio/mpeg'); }
     if (p === '/api/montar' && req.method === 'POST') { montar(); return send(res, 200, { ok: true }); }
     if (p === '/api/estado') { const L = job.log, et = [...L.matchAll(/ETAPA (\d)\/6 ([^\n]*)/g)].pop(), pl = [...L.matchAll(/PLANO (\d+)/g)].pop(); return send(res, 200, { estado: job.estado, log: L.split('\n').filter(x => !/^(PLANO|ETAPA)/.test(x)).join('\n'), fin: job.fin, seg: job.ini ? Math.round(((job.estado === 'montando' ? Date.now() : job.fin) - job.ini) / 1000) : 0, etapa: et ? +et[1] : 0, etapaTxt: et ? et[2] : '', plano: pl ? +pl[1] : 0, total: job.total, cambios: job.cambios, tieneVideo: fs.existsSync(VIDEO()), tieneOriginal: fs.existsSync(ORIG()), copia: job.copia || '' }); }
-    if (p.startsWith('/thumb/')) { const id = p.slice(7); if (!/^(S|M|V|RW)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return thumb(id).then(f => file(req, res, f, 'image/jpeg')); }
+    if (p.startsWith('/thumb/')) { const id = p.slice(7); if (!/^(S|M|V|RW|W|H)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return thumb(id).then(f => file(req, res, f, 'image/jpeg')); }
     if (p.startsWith('/audio/')) { const f = decodeURIComponent(p.slice(7)); if (!audioFiles().some(a => a.file === f)) return send(res, 404, 'no', 'text/plain'); return file(req, res, BASE + '/audios-candidatos/' + f, 'audio/mpeg'); }
     if (p === '/video-original') return file(req, res, ORIG(), 'video/mp4');
     if (p === '/video') return file(req, res, VIDEO(), 'video/mp4');

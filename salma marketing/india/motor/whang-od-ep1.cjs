@@ -3,12 +3,11 @@
 // las que no son la elegida por Paco (W39, gancho) son PROVISIONALES para que Paco las cambie en el editor.
 // Sonido: viento y pájaros con licencia libre (pueblos/comun/sonidos/creditos.txt) + golpecitos creados; nada se presenta como sonido real de Buscalan (S4).
 // Mapa: mapa-whang-od.cjs (0 €). Clip de la app: pueblos/comun/clip-app.mp4 (capturas de Google Play, M16).
-const fs = require('fs');
 const { build } = require('./motor.cjs');
 const { SALMA } = require('./voces.cjs');
 const P = 'C:/Users/User/Desktop/salma/salma marketing/pueblos';
 const B = P + '/whang-od';
-const f = id => { const g = `${B}/fotos/${id}-g.jpg`; return 'FILE:' + (fs.existsSync(g) ? g : `${B}/fotos/${id}.jpg`); };
+const f = id => id; // W05, H01…: el motor las busca en cfg.fotosSerie (y el editor las enseña en «Fotos de la serie»)
 // ambiente: copias en motor/sfx (el motor arma el nombre del .wav temporal con el id y no admite rutas FILE:)
 const VIENTO = (db, ss = 0) => ({ src: 'SFX_viento-libre', ss, db });
 const PAJAROS = (db, ss = 0) => ({ src: 'SFX_pajaros-libre', ss, db });
@@ -16,7 +15,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db });
 const cfg = {
   titulo: 'WHANG-OD · PUEBLOS BORRADOS DEL MAPA',
   id: 'pueblos-ep1-whang-od-v3',
-  out: B + '/salida',
+  out: B + '/salida', fotosSerie: B + '/fotos',
   look: 'portra', counter: 'PUEBLOS BORRADOS · 1',
   portada: { foto: f('W39'), foco: [0.72, 0.4, 0.85], l1: 'WHANG-OD', l2: 'TATÚA CON MÁS DE 100 AÑOS', tag: 'PUEBLOS BORRADOS DEL MAPA · FILIPINAS' },
   voices: { salma: SALMA },
@@ -86,4 +85,6 @@ const cfg = {
     { id: 'app', video: P + '/comun/clip-app.mp4', fixed: 5.9 },
   ],
 };
+// EDITOR: si lo lanza editor/server.cjs (APLICAR_EDITOR=1) se aplican las elecciones del editor (node editor/server.cjs whang-od-ep1 → http://localhost:8098)
+if (process.env.APLICAR_EDITOR === '1') require('./editor/aplicar.cjs')(cfg, JSON.parse(require('fs').readFileSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-whang-od-ep1.json', 'utf8')));
 build(cfg).catch(e => { console.error('FALLO:', e.message); process.exit(1); });
