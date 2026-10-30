@@ -94,14 +94,14 @@ http.createServer((req, res) => {
     if (p === '/inicio') return file(req, res, __dirname + '/inicio.html', 'text/html; charset=utf-8');
     if (p === '/api/recorte') { // la foto recortada a 9:16 como la verá el zoom (para elegir el punto de enfoque)
       const id = u.searchParams.get('id') || '', cx = Math.min(1, Math.max(0, parseFloat(u.searchParams.get('cx')) || 0.5));
-      if (!/^(S|M)[0-9]+$/.test(id)) return send(res, 400, 'id', 'text/plain');
+      if (!/^(S|M|W|H)[0-9]+$/.test(id)) return send(res, 400, 'id', 'text/plain');
       const out = CACHE + '/rec-' + id + '-' + cx + '.jpg'; if (fs.existsSync(out)) return file(req, res, out, 'image/jpeg');
       const crop = "crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*" + cx + ",0)':0,scale=360:-2";
       return new Promise(ok => { const pr = spawn(FF, ['-v', 'error', '-y', '-i', resolve(id), '-vf', crop, '-frames:v', '1', '-q:v', '3', out]); pr.on('close', ok); pr.on('error', ok); }).then(() => file(req, res, out, 'image/jpeg'));
     }
     if (p === '/api/portada') { // vista previa de la portada (ffmpeg local, 0 €)
       const q = u.searchParams, foto = q.get('foto') || '', n = (k, d, lo = 0) => { const v = parseFloat(q.get(k)); return isFinite(v) ? Math.min(1, Math.max(lo, v)) : d; };
-      if (!/^(S|M)[0-9]+$/.test(foto)) return send(res, 400, 'foto', 'text/plain');
+      if (!/^(S|M|W|H)[0-9]+$/.test(foto)) return send(res, 400, 'foto', 'text/plain');
       const o = { src: resolve(foto), foco: [n('x', 0.5), n('y', 0.5), n('h', 0.9, 0.5)], l1: (q.get('l1') || ' ').slice(0, 40), l2: (q.get('l2') || ' ').slice(0, 60), tag: (q.get('tag') || ' ').slice(0, 60), ancho: 540 };
       o.out = CACHE + '/portada-' + crypto.createHash('md5').update(JSON.stringify([foto, o.foco, o.l1, o.l2, o.tag])).digest('hex').slice(0, 12) + '.png';
       return (fs.existsSync(o.out) ? Promise.resolve(o.out) : generarPortada(o)).then(f => file(req, res, f, 'image/png')).catch(e => send(res, 500, { error: String(e.message || e) }));
