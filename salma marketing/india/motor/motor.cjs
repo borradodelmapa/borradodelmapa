@@ -229,11 +229,12 @@ async function build(cfg) {
     golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
     run(['-i', mixIn, ...gin, '-filter_complex', gf.join(';') + ';[0:a]' + golpes.map((_, i) => `[g${i}]`).join('') + `amix=inputs=${golpes.length + 1}:normalize=0:duration=first[m2]`, '-map', '[m2]', `${W}/mix2.wav`]); mixIn = `${W}/mix2.wav`;
   }
-  // sonido del aviso de seguir: golpecitos del tatuaje batok, el sonido del canal en todas las series (Paco, 30 oct 2026); cfg.seguir.sonido = false lo quita
+  // sonido del aviso de seguir: golpes del tatuaje batok, el sonido del canal en todas las series (Paco, 30 oct 2026); cfg.seguir.sonido = false lo quita
+  // sfx/sigueme-batok.mp3: pieza terminada (2,1 s, un golpe al entrar la franja y uno por latido del corazón), ya nivelada para oírse por encima de la voz
   const SGs = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null;
   if (SGs && SGs.sonido !== false) {
-    const sd = SGs.sonidoDur ?? 2.1, o = `${W}/sg-sonido.wav`;
-    run(['-i', resolve(SGs.sonido || 'SFX_golpecitos-creados'), '-vn', '-t', String(sd), '-ac', '2', '-ar', '44100', '-af', `volume=${SGs.sonidoDb ?? -12}dB,afade=t=out:st=${(sd - 0.4).toFixed(2)}:d=0.4,adelay=${Math.round(sgInicio(SGs) * 1000)}:all=1`, o]);
+    const o = `${W}/sg-sonido.wav`;
+    run(['-i', resolve(SGs.sonido || 'SFX_sigueme-batok'), '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${SGs.sonidoDb ?? 8}dB,adelay=${Math.round(sgInicio(SGs) * 1000)}:all=1`, o]);
     run(['-i', mixIn, '-i', o, '-filter_complex', '[0:a][1:a]amix=inputs=2:normalize=0:duration=first[m3]', '-map', '[m3]', `${W}/mix3.wav`]); mixIn = `${W}/mix3.wav`;
   }
   run(['-i', mixIn, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);

@@ -15,7 +15,7 @@ const PAJAROS = (db, ss = 0) => ({ src: 'SFX_pajaros-libre', ss, db });
 const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db });
 const cfg = {
   titulo: 'WHANG-OD · PUEBLOS BORRADOS DEL MAPA',
-  id: 'pueblos-ep1-whang-od-v2',
+  id: 'pueblos-ep1-whang-od-v3',
   out: B + '/salida',
   look: 'portra', counter: 'PUEBLOS BORRADOS · 1',
   portada: { foto: f('W39'), foco: [0.72, 0.4, 0.85], l1: 'WHANG-OD', l2: 'TATÚA CON MÁS DE 100 AÑOS', tag: 'PUEBLOS BORRADOS DEL MAPA · FILIPINAS' },
