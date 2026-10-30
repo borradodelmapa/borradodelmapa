@@ -39,10 +39,10 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 | ID | Regla | Comprobación |
 |---|---|---|
 | N1 | **Para el oído**: frases cortas, leer el guion en voz alta antes de generar voz. Primera persona solo donde aporte dato o punto de vista con base real (ver N6: nada de relleno). | manual |
-| N2 | **Abrir con una pregunta o imagen concreta.** Gancho en los primeros 5 s, útil desde el fotograma 0. | motor (pendiente) |
+| N2 | **Abrir con una pregunta o imagen concreta.** Gancho en los primeros 5 s, útil desde el fotograma 0. | manual |
 | N3 | El dato **cuelga de una historia**, no de una ficha. **UN dato potente por intervención** y silencio después. | manual |
 | N4 | Salma **no huele, prueba, camina ni toca**. Nada de documentos/hallazgos inventados ni errores fingidos. | manual |
-| N5 | **No vender la app en la voz.** La app va en la tarjeta final, aparte (textos que varían: «hazte tu guía gratis», «tu ruta, gratis»; sin repetir «Salma» en pantalla). | motor (pendiente) |
+| N5 | **No vender la app en la voz.** La app va en la tarjeta final, aparte (textos que varían: «hazte tu guía gratis», «tu ruta, gratis»; sin repetir «Salma» en pantalla). | motor |
 | N6 | **Salma: solo datos relevantes con fuente — nada de frases de relleno ni cierres poéticos** (Paco, 29 oct 2026; PREVALECE sobre «cierre íntimo» de `salma-narradora-reglas.md`, 18 oct). Paco: sus textos tal cual, sin añadirle recuerdos que no ha dicho. El cierre es un dato o la llamada de la tarjeta final, no una moraleja. | manual |
 | N7 | Hablar poco de Paco (1-2 menciones, con variantes). Cada frase sirve a quien quiera viajar. **Cada imagen es de lo que se dice** y nunca lo contradice. | manual |
 | N8 | Voces definitivas (Paco y Salma, `motor/voces.cjs`), no cambiar sin orden de Paco. Pronunciación con el campo `voz` (el subtítulo sigue bien escrito). Nunca «según las guías»: NOSOTROS somos la guía. | manual |
@@ -56,20 +56,20 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 | M3 | **Ninguna foto ni clip repetido** en un vídeo. | motor |
 | M4 | Look Kodak coherente: Portra (día) · Vision3 (noche/interior) · Tri-X B/N (historia/leyenda/recuerdo) + normalización «BDM Film» de cada foto. | motor |
 | M5 | Zoom/empuje lo pone el montaje (ffmpeg); Runway solo movimiento interno, cámara fija, 5 s (coste dicho). | manual |
-| M6 | **Fundidos a negro entre bloques** (`scene`/`sceneEnd`). | motor (pendiente) |
-| M7 | **Mapa de ruta animado** de cabecera (5-8 s) con frontera real y título «BORRADO DEL MAPA · lugar» (`motor/mapa.cjs`, `mapa-butan.cjs`). | motor (pendiente) |
-| M8 | **Contador/rótulo de serie** arriba a la derecha («INDIA 2019», «BUTÁN · DÍA 2») y **rótulos de lugar** breves. | motor (pendiente) |
-| M9 | **Cifras grandes animadas** en el momento de decir cada cifra clave. | motor (pendiente) |
-| M10 | Subtítulos ES con palabra iluminada (grabados) y **EN como pista `.srt` aparte**. | motor (pendiente) |
+| M6 | **Fundidos a negro entre bloques** (`scene`/`sceneEnd`). | motor |
+| M7 | **Mapa de ruta animado** de cabecera (5-8 s) con frontera real y título «BORRADO DEL MAPA · lugar» (`motor/mapa.cjs`, `mapa-butan.cjs`). | motor |
+| M8 | **Contador/rótulo de serie** arriba a la derecha («INDIA 2019», «BUTÁN · DÍA 2») y **rótulos de lugar** breves. | motor |
+| M9 | **Cifras grandes animadas** en el momento de decir cada cifra clave. | motor |
+| M10 | Subtítulos ES con palabra iluminada (grabados) y **EN como pista `.srt` aparte**. | motor |
 | M11 | **Portada** por defecto (0,2 s + PNG aparte y como carátula); la misma portada = miniatura en TODAS las redes; los avances llevan portada PROPIA. | motor |
 | M12 | **Ken Burns** en las fotos (más en GP que en D, alternando entrar/salir). | motor |
-| M13 | **Aviso «Si te está gustando, sígueme»** hacia el segundo 30 (5,5 s, franja naranja + corazón). **Activo por defecto**; nunca desactivarlo sin orden de Paco. | motor (pendiente) |
-| M14 | **Cierre en dos tiempos, 8 s:** título + «Basado en un viaje real» (SOLO si es un viaje real de Paco) → icono de Salma, «CREA TUS RUTAS CONMIGO», «Descarga la app de guías de viaje · Gratis», borradodelmapa.com, siguiente capítulo. | motor (pendiente) |
+| M13 | **Aviso «Si te está gustando, sígueme»** hacia el segundo 30 (5,5 s, franja naranja + corazón). **Activo por defecto**; nunca desactivarlo sin orden de Paco. | motor |
+| M14 | **Cierre en dos tiempos, 8 s:** título + «Basado en un viaje real» (SOLO si es un viaje real de Paco) → icono de Salma, «CREA TUS RUTAS CONMIGO», «Descarga la app de guías de viaje · Gratis», borradodelmapa.com, siguiente capítulo. | motor |
 
 ## D · Sonido
 | ID | Regla | Comprobación |
 |---|---|---|
-| S1 | Capas: voz (manda) > ambiente > detalle > música. Ambiente = sonido REAL de sus vídeos, comprobado (espectro) y con ducking; de noche, silencio total. Un short sin ninguna capa más que la voz es un hueco, no una decisión. | motor (pendiente) |
+| S1 | Capas: voz (manda) > ambiente > detalle > música. Ambiente = sonido REAL de sus vídeos, comprobado (espectro) y con ducking; de noche, silencio total. Un short sin ninguna capa más que la voz es un hueco, no una decisión. | motor |
 | S2 | Voces niveladas (Paco −21 dB, Salma −25), respiro 0,85 s + 0,45 s al cambiar de hablante (0,4 s si es el mismo), mezcla final −14 LUFS. | motor |
 | S3 | Música solo si el capítulo la pide: original sintetizada (`mkmusic.cjs`, 0 €) o con licencia comprobada y anotada. Coste dicho antes (F5). | manual |
 | S4 | El sonido creado no se presenta como «sonido real del destino». Mantras, oraciones y voces reales: no simularlos. | manual |
@@ -88,10 +88,12 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 30 oct 2026 · 14:00 | Bután (Claude) | Hook de aviso automático, comprobación de las piezas en `reglas.cjs` (❌), detector `comprobar-checklist-video.cjs`. N2 pasa a manual. |
 | 30 oct 2026 · 13:00 | Bután (Claude) | Añadida la sección «Editar desde varios chats» y cambiado el sistema de versión a fecha-hora para evitar choques entre sesiones. |
 | 30 oct 2026 · 12:30 (v1) | Bután (Claude) | Integra también lo del 29 oct (Runway/clips, paquete de publicación, «sin cierres poéticos»). **Conflicto resuelto:** `salma-narradora-reglas.md` (18 oct) pedía «cierre íntimo» y Paco decidió el 29 oct «solo datos con fuente, sin cierres poéticos» → manda lo más nuevo (N6). Creada fusionando `video-reglas-y-flujo.md`, Biblia v2.5 (§7, §12, §16, §18, §22), `salma-narradora-reglas.md`, `estilo-visual.md` y `serie-asia-estado.md`. Se añade la regla de mantenimiento y los IDs. Nuevo a raíz del piloto de Bután: mapa de vuelo de cabecera, no vender la app en la voz, subtítulos EN aparte, cifras múltiples. |
 
-## Pendiente de implementar (decidido, no hecho)
-- Aviso automático (hook) que mande leer ESTE archivo cuando el mensaje de Paco hable de vídeo.
-- `motor/reglas.cjs`: comprobar los puntos marcados «motor (pendiente)» y escribir en el informe la versión de esta checklist contra la que se comprobó.
-- Script de 0 € que avise si un ID de esta lista no tiene comprobación ni marca «manual» (que la lista y el motor no se desincronicen).
+## Cómo se mantiene sincronizada (hecho el 30 oct 2026)
+- **Aviso automático:** `scripts/hook-video.cjs` + `.claude/settings.json` (hook UserPromptSubmit): si el mensaje habla de vídeo, la sesión recibe la orden de leer ESTE archivo y su fecha de última actualización.
+- **Motor:** `motor/reglas.cjs` marca ❌ las piezas «motor» que falten y escribe contra qué actualización de esta lista se comprobó. Una pieza se puede descartar a propósito con `cfg.descartes = { M7: "motivo" }` (sale como ℹ).
+- **Detector:** `node scripts/comprobar-checklist-video.cjs` (0 €) falla si un ID de esta lista y el motor no coinciden o si el hook no está activo. Pasarlo antes de subir cambios de vídeo o de la checklist.
+- **Al añadir una regla nueva:** poner su fila aquí con ID, y si es automática, su `chk('ID', …)` en `reglas.cjs`; si no, marcarla «manual».
