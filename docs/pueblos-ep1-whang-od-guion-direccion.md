@@ -7,8 +7,9 @@ Reglas que manda la checklist: un dato por intervención y silencio (N3) · cara
 ---
 ## ESCENA 0 · GANCHO (0-5 s)
 - **Emoción:** asombro. **Debe sentir:** «¿cómo que con más de cien años?».
-- **Imagen:** PP de Whang-Od (F-01 *Oldest Mambabatok*), empuje lento hacia los ojos. Es también la **portada** (M11, M15).
-- **Salma:** «Tiene más de cien años. Y sigue tatuando… con una espina.»
+- **Imagen (Paco eligió W38, 30 oct):** *Old Woman of Tinglayan, Kalinga – A Memento From The Mambabatok of Buscalan* (2400×3600, vertical; Ranieljosecastaneda, CC BY-SA 4.0). **No es Whang-Od:** es una de las pocas mujeres kalinga tatuadas que quedan en Buscalan (2018). Empuje lento hacia los tatuajes. Es también la **portada** (M11, M15). Sin nombre (P4).
+- **Salma (propuesta para que la imagen no contradiga la voz, N7):** «Quedan muy pocas mujeres con estos tatuajes. Y la que los hace tiene más de cien años.» → corte a Whang-Od (escena 2).
+- *Texto anterior, si Paco prefiere W38 en otra escena:* «Tiene más de cien años. Y sigue tatuando… con una espina.» (necesita una foto de Whang-Od).
 - **Cifra (M9):** «+100» en «cien». **Sonido:** golpecitos secos de la varilla (ver nota de sonido) y viento. **IA:** no.
 - **Remate:** fundido a negro 0,3 s.
 
