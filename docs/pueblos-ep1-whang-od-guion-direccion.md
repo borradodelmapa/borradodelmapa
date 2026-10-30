@@ -52,8 +52,10 @@ Reglas que manda la checklist: un dato por intervención y silencio (N3) · cara
 
 ## ESCENA 7 · LO QUE SE PIERDE (75-82 s) — cierre con dato (N6), GP lento
 - **Imagen:** GP de terrazas al atardecer (F-02 u otra) con empuje lento hacia fuera.
-- **Salma:** «Los tatuajes tienen relevo. Los cantos que acompañaban cada tatuaje, no: según la antropóloga Analyn Salvador-Amores, nadie los ha aprendido.»
-- *Qué se cuenta (Paco pidió aclararlo, 30 oct):* las aprendices saben tatuar, pero antes cada tatuaje iba con cantos y rituales que solo sabe Whang-Od y que no les ha enseñado. Eso es lo que se borra.
+- **Salma (dato 1):** «Antes, cada tatuaje iba con un canto. A los turistas ya no se lo canta: es para las mujeres y los guerreros kalinga.»
+- **Salma (dato 2):** «Y esos cantos, avisa la antropóloga Analyn Salvador-Amores, no los ha aprendido nadie.»
+- *Qué se cuenta (Paco pidió aclararlo, 30 oct):* las aprendices saben tatuar, pero los cantos, la adivinación y los rituales que acompañaban cada tatuaje solo los sabe Whang-Od. Eso es lo que se borra.
+- *¿Hay grabaciones de los cantos?* No he encontrado ninguna publicada con licencia. Se sabe que en 2018, al recibir un premio de la NCCA (Comisión Nacional de Cultura), cantó una nana (*uwawi*), cantos de cortejo y de la siembra del arroz. Archivo posible: NCCA. **No se simulan (S4)**: aquí va silencio y viento.
 - **Sonido:** viento solo. **IA:** no.
 
 ## ESCENA 8 · CÓMO IR (82-88 s) — ficha rápida
@@ -82,6 +84,8 @@ Descartadas: *Kids swimming at the falls…* (P4, niños). Hay 134 archivos con 
 - Portada de Vogue Philippines, abril 2023, con 106 años; récord anterior Judi Dench (85, 2020) → [Euronews](https://www.euronews.com/2023/04/10/a-106-year-old-indigenous-filipino-tattoo-artist-becomes-vogues-oldest-ever-cover-model), [PetaPixel](https://petapixel.com/2023/04/03/tattooed-106-year-old-becomes-vogues-oldest-ever-cover-model)
 - Herencia solo por sangre; sin hijos; Grace Palicas (sobrina nieta) y Ilyang/Elyang Wigan (prima de Grace; el nombre se escribe de varias formas → en la voz «una prima de ella»); firma de tres puntos; aviso de Analyn Salvador-Amores sobre cantos y rituales → [Wikipedia](https://en.wikipedia.org/wiki/Whang-od), [Vogue Philippines](https://vogue.ph/lifestyle/inked-in-tradition-the-next-generation-of-mambabatok/)
 - Guerreros/valor, mujeres/belleza y fertilidad (las fuentes discrepan en cuánto pesaba la fertilidad → en la voz solo «belleza»); caza de cabezas prohibida con la administración estadounidense a principios del s. XX → [Vera Files](https://verafiles.org/articles/batok-traditional-tattoos-a-revival-here-and-elsewhere), [CNN, jul 2024](https://abc17news.com/entertainment/cnn-style/2024/07/10/i-got-inked-by-the-worlds-oldest-tattoo-artist/)
+- Ya no canta para turistas: los cantos son para el embellecimiento de las mujeres kalinga y la victoria de los guerreros; en 2018 cantó *uwawi*, cantos de cortejo y del arroz en un acto de la NCCA → [Wikipedia](https://en.wikipedia.org/wiki/Whang-od), [SunStar](https://www.sunstar.com.ph/baguio/local-news/whang-od-hailed-as-kalinga-icon)
+- **Para la descripción (visitar con respeto, P9):** 11 sep 2026, el municipio de Tinglayan pidió respeto tras el caso de un visitante extranjero que insistió en tatuarse una zona íntima: «la cultura kalinga no es un decorado, el patrimonio no es un souvenir» → [Daily Tribune](https://tribune.net.ph/2026/09/11/tinglayan-raises-concern-over-whang-od-intimate-tattoo-incident)
 - Visita: guía local obligatoria (desde 1.000 ₱/día hasta 5 personas, página municipal sin fecha), ~1,5 h a pie, tasa ecocultural (cifras que no cuadran entre fuentes → en la descripción «confírmalo en la oficina de turismo de Tinglayan») → [tinglayan.gov.ph](https://tinglayan.gov.ph/node/38), [Lakwatsero](https://lakwatsero.com/destinations/travel-guide-buscalan-tinglayan)
 
 ## Este vídeo hace tres cosas (Paco, 30 oct 2026)
