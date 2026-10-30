@@ -6,7 +6,7 @@ Línea editorial y reglas: `docs/video-checklist.md` (L1, M15, P2, P4). Título:
 | # | Pueblo / tema | Zona | Estado |
 |---|---|---|---|
 | — | Los kayan | Norte de Tailandia | publicado (26 oct, como Cap.4) |
-| 1 | Whang-Od y el tatuaje *batok* (butbut, Kalinga) | Luzón norte, Filipinas | ficha abajo |
+| 1 | Whang-Od y el tatuaje *batok* (butbut, Kalinga) | Luzón norte, Filipinas | guion de dirección v1: `docs/pueblos-ep1-whang-od-guion-direccion.md` (pendiente de OK) |
 | 2 | Las haenyeo de Jeju | Corea | — |
 | 3 | Los konyak | Nagaland, India | — |
 | 4 | Los moken | Surin, Tailandia/Myanmar | — |
