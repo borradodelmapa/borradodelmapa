@@ -69,6 +69,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 | M11 | **Portada** por defecto (0,2 s + PNG aparte y como carátula); la misma portada = miniatura en TODAS las redes; los avances llevan portada PROPIA. | motor |
 | M12 | **Ken Burns** en las fotos (más en GP que en D, alternando entrar/salir). | motor |
 | M13 | **Aviso «Si te está gustando, sígueme»** hacia el segundo 30 (5,5 s, franja naranja + corazón). **Activo por defecto**; nunca desactivarlo sin orden de Paco. | motor |
+| M15 | **Persona primero** (Paco, 30 oct 2026): en la **portada** y en el **primer fotograma** sale una persona (cara o figura humana, del pueblo o del oficio del que trata el vídeo), no un paisaje. Por qué: el kayan, con caras en portada, es el único vídeo que ha despegado; es una señal (un solo vídeo), así que se revisa cuando haya más datos. **Compatible con P4:** nunca niños en primer plano; foto propia con permiso o con licencia libre y autor (P2); no se pone nombre a nadie salvo figuras públicas (p. ej. Whang-Od). | manual |
 | M14 | **Cierre en dos tiempos, 8 s:** título + «Basado en un viaje real» (SOLO si es un viaje real de Paco) → icono de Salma, «CREA TUS RUTAS CONMIGO», «Descarga la app de guías de viaje · Gratis», borradodelmapa.com, siguiente capítulo. | motor |
 
 ## D · Sonido
@@ -83,7 +84,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 | ID | Regla | Comprobación |
 |---|---|---|
 | P1 | Marcar «contenido generado con IA» en las opciones de cada red al publicar (no va en pantalla). En textos públicos/marketing NUNCA decir «IA». | manual |
-| P2 | Atribuciones de las fotos (Wikimedia, etc.) en la descripción: `ATRIBUCIONES.txt` de la carpeta del vídeo. | manual |
+| P2 | Atribuciones de las fotos (Wikimedia, etc.) en la descripción: `ATRIBUCIONES.txt` de la carpeta del vídeo. **Y además en el primer comentario fijado de cada red** (Paco, 30 oct 2026): «📷 Fotos: <autor> (<licencia>, Wikimedia Commons)…», un autor por foto ajena, ninguno sin nombrar. Si no cabe todo, el comentario dice «autores de todas las fotos en la descripción». | manual |
 | P3 | Mismo vídeo en el blog y en todas las redes; comparar la pestaña Shorts del canal con la fila de la serie antes de dar algo por publicado. | manual |
 | P4 | Privacidad: sin niños en primer plano, sin identificar a nadie por la cara, sin recibos ni datos personales, permisos confirmados por Paco (Lina y equipo). De Google Fotos solo archivos de cámara. | manual |
 | P5 | Antes de dar un vídeo por terminado: **informe de reglas sin ❌** y esta checklist pasada punto a punto. | manual |
@@ -97,6 +98,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 30 oct 2026 · 16:00 | Estrategia de redes / nicho (Claude) | Nueva **M15** «persona primero» en portada y primer fotograma (manual). **P2** ampliada: autores de las fotos también en el primer comentario fijado. Posible choque de M15 con **P4** («sin identificar a nadie por la cara»): no se anula P4, M15 lo respeta (sin niños, fotos con permiso o licencia, sin nombres salvo figuras públicas). |
 | 30 oct 2026 · 15:30 | Estrategia de redes / nicho (Claude) | **L1**: título con el pueblo primero («Los kayan · Pueblos borrados del mapa») y se va directo, sin prueba de 3 semanas (decisiones de Paco). |
 | 30 oct 2026 · 15:00 | Estrategia de redes / nicho (Claude) | Nueva sección 0 · Línea editorial con **L1** (manual): Paco elige el nicho «Culturas que se están borrando del mapa». Sin conflictos con otras reglas. |
 | 30 oct 2026 · 01:20 | Publicación en redes (Claude, chat de textos de YouTube/TikTok/Metricool) | Añadidas P8-P11 (manual): actualizar los ya publicados lo hace Claude, datos prácticos con fuente y fecha, redes activas, comprobar y registrar cada edición. **Conflicto resuelto:** P8 vs P7 («solo con OK de Paco»): gana P8 para el texto. P6 intacta. (Hora = reloj del equipo; las filas de abajo llevan horas posteriores, la fecha manda.) |
