@@ -39,6 +39,9 @@ Pendiente: frase de la exención de visado en Tailandia en las descripciones de 
 ## Dato verificado: visado de Tailandia (30 oct 2026)
 La estancia sin visado para españoles baja de 60 a 30 días desde el 15 sept 2026 (Royal Gazette del 31 ago; TAT). Prórroga de 30 días por 1.900 THB a discreción del oficial. TDAC gratis, hasta 3 días antes. Sustituye en las descripciones de YouTube la frase vaga «Los días de estancia sin visado cambiaron en 2026».
 
+## ⏸ 30 oct 2026 (tarde): Paco decide no tocar más los vídeos publicados
+«Lo que está hecho lo dejamos así». Se cancelan las ediciones de TikTok pendientes (línea del visado, reintentos) y la «Pendiente» de arriba. Lo editado hasta aquí se queda como está. Ver P8 en `docs/video-checklist.md`.
+
 ## TikTok (30 oct 2026)
 - Editado y guardado (comprobado en el listado): Cap.5 (7701270482405969174), Cap.4 kayan (7700899488436587798, queda «En revisión»), avance Doi Inthanon (7700280894421994774).
 - Guardado pulsado pero el listado sigue con el texto viejo (posible límite de ediciones de TikTok): Cap.1 (7699028733566422294), Cap.2 (7699399954703322390), Cap.3 (7699770896336145686), avance 762 curvas (7698426327250013462), SIN MAPA Ep.2 (7696431534907084054). Reintentar más tarde.
