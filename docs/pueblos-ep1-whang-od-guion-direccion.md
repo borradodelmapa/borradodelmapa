@@ -52,11 +52,12 @@ Reglas que manda la checklist: un dato por intervención y silencio (N3) · cara
 
 ## ESCENA 7 · LO QUE SE PIERDE (75-82 s) — cierre con dato (N6), GP lento
 - **Imagen:** GP de terrazas al atardecer (F-02 u otra) con empuje lento hacia fuera.
-- **Salma:** «Los tatuajes siguen. Los cantos y rituales que los acompañaban, advierte la antropóloga Analyn Salvador-Amores, no se han pasado.»
+- **Salma:** «Los tatuajes tienen relevo. Los cantos que acompañaban cada tatuaje, no: según la antropóloga Analyn Salvador-Amores, nadie los ha aprendido.»
+- *Qué se cuenta (Paco pidió aclararlo, 30 oct):* las aprendices saben tatuar, pero antes cada tatuaje iba con cantos y rituales que solo sabe Whang-Od y que no les ha enseñado. Eso es lo que se borra.
 - **Sonido:** viento solo. **IA:** no.
 
 ## ESCENA 8 · CÓMO IR (82-88 s) — ficha rápida
-- **Imagen:** casa de Whang-Od (F-10) / terrazas, con rótulos.
+- **Imagen:** casa de Whang-Od (F-10) / terrazas, con rótulos → **clip común de la app** (M16, Paco 30 oct: la app se enseña en todos los vídeos), sin hablar de la app en la voz (N5).
 - **Salma:** «Se sube con guía local: hora y media a pie desde la carretera.»
 - **Rótulos:** «TINGLAYAN · GUÍA LOCAL OBLIGATORIA · 1,5 H A PIE». Precios y tasas, solo en la descripción (cambian).
 
@@ -82,6 +83,11 @@ Descartadas: *Kids swimming at the falls…* (P4, niños). Hay 134 archivos con 
 - Herencia solo por sangre; sin hijos; Grace Palicas (sobrina nieta) y Ilyang/Elyang Wigan (prima de Grace; el nombre se escribe de varias formas → en la voz «una prima de ella»); firma de tres puntos; aviso de Analyn Salvador-Amores sobre cantos y rituales → [Wikipedia](https://en.wikipedia.org/wiki/Whang-od), [Vogue Philippines](https://vogue.ph/lifestyle/inked-in-tradition-the-next-generation-of-mambabatok/)
 - Guerreros/valor, mujeres/belleza y fertilidad (las fuentes discrepan en cuánto pesaba la fertilidad → en la voz solo «belleza»); caza de cabezas prohibida con la administración estadounidense a principios del s. XX → [Vera Files](https://verafiles.org/articles/batok-traditional-tattoos-a-revival-here-and-elsewhere), [CNN, jul 2024](https://abc17news.com/entertainment/cnn-style/2024/07/10/i-got-inked-by-the-worlds-oldest-tattoo-artist/)
 - Visita: guía local obligatoria (desde 1.000 ₱/día hasta 5 personas, página municipal sin fecha), ~1,5 h a pie, tasa ecocultural (cifras que no cuadran entre fuentes → en la descripción «confírmalo en la oficina de turismo de Tinglayan») → [tinglayan.gov.ph](https://tinglayan.gov.ph/node/38), [Lakwatsero](https://lakwatsero.com/destinations/travel-guide-buscalan-tinglayan)
+
+## Este vídeo hace tres cosas (Paco, 30 oct 2026)
+1. El episodio, con el montaje tal como está anotado (empujes, escalas, fundidos, sígueme a los 30 s…).
+2. **Mejora A — clip común de la app** (M16): un clip corto que sirva para todos los vídeos. Se estrena aquí.
+3. **Mejora B — nuevo «sígueme»** (M13): se rediseña aquí y queda como el de todos los vídeos siguientes.
 
 ## Decisiones que necesito de Paco
 1. **Sonido (S1, S4):** no hay grabaciones tuyas de Buscalan. Propuesta: viento y pájaros de un banco con licencia libre (anotada) + golpecitos de varilla creados, **sin presentarlos como sonido real**. Sin música, o música original del motor (0 €).
