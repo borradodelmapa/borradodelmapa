@@ -23,6 +23,11 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 5. **Si una regla nueva choca con otra** (como «cierre íntimo» vs «sin cierres poéticos»), no se borra en silencio: gana la más nueva, se anota en el registro quién gana y por qué.
 6. Los documentos de detalle (narradora, estilo, Biblia) que no estén en git **no cuentan como protocolo** para otras sesiones: lo importante se pasa a esta checklist y el detalle se commitea.
 
+## 0 · Línea editorial (qué contamos)
+| ID | Regla | Comprobación |
+|---|---|---|
+| L1 | **Nicho elegido por Paco (30 oct 2026): «Culturas que se están borrando del mapa»**: pueblos, oficios, lenguas y lugares que están desapareciendo, contados con datos y fuentes (N6, F4) y con **cómo visitarlos con respeto** (datos prácticos, P9). Es el que mejor encaja con la marca. Por qué: el único vídeo que ha despegado es el de las kayan («mujeres jirafa»: 622 visitas en YouTube ese día, los 6 primeros suscriptores). Enfoque: la historia y el dato detrás de cada pueblo, **nunca «mira qué raros»**; nada de recrear con IA personas de pueblos reales como si fueran reales (P4). Título = lo que la gente busca («Pueblos borrados del mapa · Los kayan»), no «Cap.N/20». La serie de Vietnam ya programada (hasta el 9 nov) no se toca. **Pendiente de decidir con Paco:** prueba de 3 semanas con otros formatos para comparar, y lista de los primeros temas. | manual |
+
 ## A · Flujo de trabajo
 | ID | Regla | Comprobación |
 |---|---|---|
@@ -92,6 +97,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 30 oct 2026 · 15:00 | Estrategia de redes / nicho (Claude) | Nueva sección 0 · Línea editorial con **L1** (manual): Paco elige el nicho «Culturas que se están borrando del mapa». Sin conflictos con otras reglas. |
 | 30 oct 2026 · 01:20 | Publicación en redes (Claude, chat de textos de YouTube/TikTok/Metricool) | Añadidas P8-P11 (manual): actualizar los ya publicados lo hace Claude, datos prácticos con fuente y fecha, redes activas, comprobar y registrar cada edición. **Conflicto resuelto:** P8 vs P7 («solo con OK de Paco»): gana P8 para el texto. P6 intacta. (Hora = reloj del equipo; las filas de abajo llevan horas posteriores, la fecha manda.) |
 | 30 oct 2026 · 14:00 | Bután (Claude) | Hook de aviso automático, comprobación de las piezas en `reglas.cjs` (❌), detector `comprobar-checklist-video.cjs`. N2 pasa a manual. |
 | 30 oct 2026 · 13:00 | Bután (Claude) | Añadida la sección «Editar desde varios chats» y cambiado el sistema de versión a fecha-hora para evitar choques entre sesiones. |
