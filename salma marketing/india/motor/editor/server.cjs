@@ -5,6 +5,7 @@ const HERE = path.resolve(__dirname, '..'), BASE = path.resolve(HERE, '..'), FF 
 const CACHE = __dirname + '/cache', CAP = process.argv[2] || 'cap4', OVR = __dirname + (CAP === 'cap4' ? '/overrides.json' : '/overrides-' + CAP + '.json'), PORT = { cap4: 8095, monos: 8096, cap3: 8097, 'whang-od-ep1': 8098, 'sagada-ep2': 8102 }[CAP] || 8103; // un servidor por capítulo: cap4 → 8095, monos → 8096
 if (!fs.existsSync(OVR)) fs.writeFileSync(OVR, '{"shots":{},"amb":{},"text":{},"audio":{}}');
 fs.mkdirSync(CACHE, { recursive: true });
+const ck = id => /^[WH]\d+$/.test(id) ? CAP + '-' + id : id; // nombre en la caché: las fotos W/H de cada serie llevan su capítulo delante (W05 de Sagada ≠ W05 de Whang-Od)
 const { resolve, setSerie, RW, vozEnCache } = require('../motor.cjs');
 const aplicar = require('./aplicar.cjs');
 const crypto = require('crypto');
@@ -36,7 +37,7 @@ const galeria = () => {
 const enCurso = new Map(); let activos = 0; const espera = [];
 const lanzar = () => { while (activos < 4 && espera.length) { const t = espera.shift(); activos++; t(); } };
 const thumb = id => {
-  const out = `${CACHE}/${id}.jpg`; if (fs.existsSync(out)) return Promise.resolve(out);
+  const out = `${CACHE}/${ck(id)}.jpg`; if (fs.existsSync(out)) return Promise.resolve(out);
   if (enCurso.has(id)) return enCurso.get(id);
   const pr = new Promise(ok => espera.push(() => {
     const f = resolve(id), args = isVideo(id) ? ['-v', 'error', '-y', '-ss', '1', '-i', f, '-frames:v', '1', '-vf', 'scale=260:-2', '-q:v', '4', out] : ['-v', 'error', '-y', '-i', f, '-frames:v', '1', '-vf', 'scale=260:-2', '-q:v', '4', out];
@@ -96,7 +97,7 @@ http.createServer((req, res) => {
     if (p === '/api/recorte') { // la foto recortada a 9:16 como la verá el zoom (para elegir el punto de enfoque)
       const id = u.searchParams.get('id') || '', cx = Math.min(1, Math.max(0, parseFloat(u.searchParams.get('cx')) || 0.5));
       if (!/^(S|M|W|H)[0-9]+$/.test(id)) return send(res, 400, 'id', 'text/plain');
-      const out = CACHE + '/rec-' + id + '-' + cx + '.jpg'; if (fs.existsSync(out)) return file(req, res, out, 'image/jpeg');
+      const out = CACHE + '/rec-' + ck(id) + '-' + cx + '.jpg'; if (fs.existsSync(out)) return file(req, res, out, 'image/jpeg');
       const crop = "crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*" + cx + ",0)':0,scale=360:-2";
       return new Promise(ok => { const pr = spawn(FF, ['-v', 'error', '-y', '-i', resolve(id), '-vf', crop, '-frames:v', '1', '-q:v', '3', out]); pr.on('close', ok); pr.on('error', ok); }).then(() => file(req, res, out, 'image/jpeg'));
     }
@@ -104,7 +105,7 @@ http.createServer((req, res) => {
       const q = u.searchParams, foto = q.get('foto') || '', n = (k, d, lo = 0) => { const v = parseFloat(q.get(k)); return isFinite(v) ? Math.min(1, Math.max(lo, v)) : d; };
       if (!/^(S|M|W|H)[0-9]+$/.test(foto)) return send(res, 400, 'foto', 'text/plain');
       const o = { src: resolve(foto), foco: [n('x', 0.5), n('y', 0.5), n('h', 0.9, 0.5)], l1: (q.get('l1') || ' ').slice(0, 40), l2: (q.get('l2') || ' ').slice(0, 60), tag: (q.get('tag') || ' ').slice(0, 60), ancho: 540 };
-      o.out = CACHE + '/portada-' + crypto.createHash('md5').update(JSON.stringify([foto, o.foco, o.l1, o.l2, o.tag])).digest('hex').slice(0, 12) + '.png';
+      o.out = CACHE + '/portada-' + crypto.createHash('md5').update(JSON.stringify([ck(foto), o.foco, o.l1, o.l2, o.tag])).digest('hex').slice(0, 12) + '.png';
       return (fs.existsSync(o.out) ? Promise.resolve(o.out) : generarPortada(o)).then(f => file(req, res, f, 'image/png')).catch(e => send(res, 500, { error: String(e.message || e) }));
     }
     if (p.startsWith('/sfx/')) { const f = path.basename(decodeURIComponent(p.slice(5))); return file(req, res, HERE + '/sfx/' + f, 'audio/mpeg'); }

@@ -233,6 +233,18 @@ async function build(cfg) {
     golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
     run(['-i', mixIn, ...gin, '-filter_complex', gf.join(';') + ';[0:a]' + golpes.map((_, i) => `[g${i}]`).join('') + `amix=inputs=${golpes.length + 1}:normalize=0:duration=first[m2]`, '-map', '[m2]', `${W}/mix2.wav`]); mixIn = `${W}/mix2.wav`;
   }
+  // sintonía de la serie (cfg.sintonia = { src, db }): el principio suena sobre el mapa y el final (con su golpe de cierre) bajo la tarjeta (Paco, 31 oct 2026)
+  if (cfg.sintonia) {
+    const SN = cfg.sintonia, f = resolve(SN.src), d = dur(f), CS = cfg.cardSecs || 8;
+    const mapa = cfg.blocks.find(b => b.video && b.id === 'mapa') || cfg.blocks.find(b => b.video), partes = [];
+    if (mapa) partes.push({ ss: 0, t: mapa.t0, len: Math.min(d, mapa.D), fin: 0.6 });
+    partes.push({ ss: Math.max(0, d - CS), t: cardT, len: Math.min(d, CS), fin: 0.3 });
+    partes.forEach((p, i) => {
+      const o = `${W}/sintonia_${i}.wav`;
+      run(['-ss', p.ss.toFixed(2), '-t', p.len.toFixed(2), '-i', f, '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${SN.db ?? -8}dB,afade=t=in:d=0.15,afade=t=out:st=${(p.len - p.fin).toFixed(2)}:d=${p.fin},adelay=${Math.round(p.t * 1000)}:all=1`, o]);
+      run(['-i', mixIn, '-i', o, '-filter_complex', '[0:a][1:a]amix=inputs=2:normalize=0:duration=first[ms]', '-map', '[ms]', `${W}/mixs${i}.wav`]); mixIn = `${W}/mixs${i}.wav`;
+    });
+  }
   // sonido del aviso de seguir: golpes del tatuaje batok, el sonido del canal en todas las series (Paco, 30 oct 2026); cfg.seguir.sonido = false lo quita
   // sfx/sigueme-batok.mp3: pieza terminada (2,1 s, un golpe al entrar la franja y uno por latido del corazón), ya nivelada para oírse por encima de la voz
   const SGs = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null;

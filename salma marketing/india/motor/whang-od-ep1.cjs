@@ -14,11 +14,11 @@ const PAJAROS = (db, ss = 0) => ({ src: 'SFX_pajaros-libre', ss, db });
 const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db });
 const cfg = {
   titulo: 'WHANG-OD · PUEBLOS BORRADOS DEL MAPA',
-  id: 'pueblos-ep1-whang-od-v3',
+  id: 'pueblos-ep1-whang-od-v4',
   out: B + '/salida', fotosSerie: B + '/fotos',
   look: 'portra', counter: 'PUEBLOS BORRADOS · 1',
   portada: { foto: f('W39'), foco: [0.72, 0.4, 0.85], l1: 'WHANG-OD', l2: 'TATÚA CON MÁS DE 100 AÑOS', tag: 'PUEBLOS BORRADOS DEL MAPA · FILIPINAS' },
-  voices: { salma: SALMA },
+  voices: { salma: SALMA }, sintonia: { src: 'SFX_sintonia-pueblos', db: -8 }, // sintonía de la serie (Paco, 31 oct 2026)
   cardSecs: 8, kb: 1.6, seguir: { activo: true, texto: 'Si te está gustando, sígueme' }, duckRatio: 5, gap: { same: 0.4, change: 0.85 }, voiceDb: { salma: -25 },
   card: { l1: 'WHANG-OD', l2: 'PUEBLOS BORRADOS DEL MAPA', l3: 'Kalinga · Filipinas', l4: 'PRÓXIMO EPISODIO', l5: 'Los ataúdes colgantes de Sagada' },
   blocks: [

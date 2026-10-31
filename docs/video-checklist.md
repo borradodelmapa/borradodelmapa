@@ -78,7 +78,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 |---|---|---|
 | S1 | Capas: voz (manda) > ambiente > detalle > música. Ambiente = sonido REAL de sus vídeos, comprobado (espectro) y con ducking; de noche, silencio total. Un short sin ninguna capa más que la voz es un hueco, no una decisión. | motor |
 | S2 | Voces niveladas (Paco −21 dB, Salma −25), respiro 0,85 s + 0,45 s al cambiar de hablante (0,4 s si es el mismo), mezcla final −14 LUFS. | motor |
-| S3 | Música solo si el capítulo la pide: original sintetizada (`mkmusic.cjs`, 0 €) o con licencia comprobada y anotada. Coste dicho antes (F5). | manual |
+| S3 | **Serie «Pueblos borrados del mapa»: sintonía propia** (Paco, 31 oct 2026): `motor/sfx/sintonia-pueblos.mp3` (ElevenLabs Music, plan Creator con licencia comercial; estilo cabecera de documental antropológico de los 80, sin imitar ninguna existente). Suena el principio sobre el mapa y el final bajo la tarjeta (`cfg.sintonia = { src: 'SFX_sintonia-pueblos', db: -8 }`); el resto del vídeo sin música. Las otras dos de ElevenLabs se guardan como recursos (`pueblos/comun/sintonia/recursos/`); las de síntesis propia se descartaron («parece de ascensor»). Fuera de esta serie: música solo si el capítulo la pide: original sintetizada (`mkmusic.cjs`, 0 €) o con licencia comprobada y anotada. Coste dicho antes (F5). | manual |
 | S4 | El sonido creado no se presenta como «sonido real del destino». Mantras, oraciones y voces reales: no simularlos. | manual |
 
 ## E · Publicación y cuidados
@@ -99,6 +99,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 31 oct 2026 · 09:00 | Serie «Pueblos borrados del mapa» (Claude) | **S3**: sintonía propia de la serie (ElevenLabs Music, ~540 créditos las tres pruebas) en el mapa y la tarjeta; motor con `cfg.sintonia`. Puesta en Whang-Od v4 y Sagada v2. |
 | 30 oct 2026 · 20:00 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: Paco no oía los golpes (iban a −12 dB bajo la voz). Sonido del sígueme preparado aparte y terminado: `sfx/sigueme-batok.mp3`, sincronizado con los latidos y a +8 dB. Estreno en Whang-Od v3. |
 | 30 oct 2026 · 19:30 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: el sígueme baja a los 20 s por defecto para todos los vídeos de aquí en adelante y lleva ya el sonido de los golpecitos (implementado en `motor.cjs`; se estrena en Whang-Od v2). Los configs antiguos con `seg: 30` explícito no se tocan. |
 | 30 oct 2026 · 19:00 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: el sonido del nuevo sígueme serán los golpecitos del tatuaje *batok*, en todas las series (decisión de Paco). |
