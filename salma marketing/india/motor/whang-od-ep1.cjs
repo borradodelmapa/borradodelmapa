@@ -15,7 +15,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db });
 const cfg = {
   titulo: 'WHANG-OD · PUEBLOS BORRADOS DEL MAPA',
   id: 'pueblos-ep1-whang-od-v4',
-  out: B + '/salida', fotosSerie: B + '/fotos',
+  out: B + '/salida', fotosSerie: B + '/fotos', ultima: B + '/ULTIMA', ultimaNombre: 'Whang-Od · Pueblos borrados del mapa',
   look: 'portra', counter: 'PUEBLOS BORRADOS · 1',
   portada: { foto: f('W39'), foco: [0.72, 0.4, 0.85], l1: 'WHANG-OD', l2: 'TATÚA CON MÁS DE 100 AÑOS', tag: 'PUEBLOS BORRADOS DEL MAPA · FILIPINAS' },
   voices: { salma: SALMA }, sintonia: { src: 'SFX_sintonia-pueblos', db: -8 }, // sintonía de la serie (Paco, 31 oct 2026)
@@ -85,6 +85,6 @@ const cfg = {
     { id: 'app', video: P + '/comun/clip-app.mp4', fixed: 5.9 },
   ],
 };
-// EDITOR: si lo lanza editor/server.cjs (APLICAR_EDITOR=1) se aplican las elecciones del editor (node editor/server.cjs whang-od-ep1 → http://localhost:8098)
-if (process.env.APLICAR_EDITOR === '1') require('./editor/aplicar.cjs')(cfg, JSON.parse(require('fs').readFileSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-whang-od-ep1.json', 'utf8')));
+// EDITOR: node editor/server.cjs whang-od-ep1 (puerto en el plan de la serie). Sus cambios (fotos, portada…) se guardan en editor/overrides-whang-od-ep1.json y se aplican SIEMPRE al montar.
+if (process.env.APLICAR_EDITOR !== 'no' && require('fs').existsSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-whang-od-ep1.json')) require('./editor/aplicar.cjs')(cfg, JSON.parse(require('fs').readFileSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-whang-od-ep1.json', 'utf8'))); // lo cambiado en el editor se aplica SIEMPRE, se monte desde donde se monte
 build(cfg).catch(e => { console.error('FALLO:', e.message); process.exit(1); });

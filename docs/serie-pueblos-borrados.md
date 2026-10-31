@@ -2,12 +2,26 @@
 Línea editorial y reglas: `docs/video-checklist.md` (L1, M15, P2, P4). Título: «<Pueblo> · Pueblos borrados del mapa».
 Ámbito: Asia de Filipinas hacia el norte (Paco viajará por ahí a medio plazo). Cifras **por verificar** (F4) antes de cada guion.
 
+## DÓNDE ESTÁ CADA COSA Y CÓMO SE TRABAJA (ordenado el 31 oct 2026, Paco: «me tienes un follón montado»)
+**La versión buena de cada episodio está SIEMPRE en `salma marketing/pueblos/<episodio>/ULTIMA/`**, con nombre fijo: `<Pueblo> · Pueblos borrados del mapa.mp4` + PORTADA.png + subtítulos ES/EN + informe de reglas + `VERSION.txt` (qué versión es y cuándo se montó). Lo demás no hace falta mirarlo.
+
+| Episodio | Carpeta | Editor (abrir en el navegador) | Config del motor |
+|---|---|---|---|
+| 1 · Whang-Od | `pueblos/whang-od/` | http://localhost:8098 | `india/motor/whang-od-ep1.cjs` |
+| 2 · Sagada | `pueblos/sagada/` | http://localhost:8102 | `india/motor/sagada-ep2.cjs` |
+
+Dentro de cada carpeta de episodio: `ULTIMA/` (la buena) · `salida/versiones-anteriores/` (borradores viejos, no tocar) · `fotos/` (W01…, con `ATRIBUCIONES.txt`) · `hoja-contactos.html` · el mapa `.mp4`.
+Común a la serie: `pueblos/comun/` → `clip-app.mp4`, `sonidos/`, `sintonia/` (la elegida + `recursos/`).
+
+**Una sola fuente de verdad:** lo que Paco cambia en el editor (fotos, portada, encuadres…) se guarda en `india/motor/editor/overrides-<episodio>.json` y **se aplica SIEMPRE al montar**, se monte desde el editor o lo monte Claude. Nadie vuelve a montar «a pelo» sin esos cambios (fue lo que pasó con Whang-Od el 31 oct).
+**Para arrancar un editor:** en Claude, «abre el editor de <episodio>» (configuraciones «Editor de vídeo · …» de `.claude/launch.json`); o a mano `node "salma marketing/india/motor/editor/server.cjs" <episodio>`.
+
 ## Orden propuesto (30 oct 2026, pendiente de OK de Paco)
 | # | Pueblo / tema | Zona | Estado |
 |---|---|---|---|
 | — | Los kayan | Norte de Tailandia | publicado (26 oct, como Cap.4) |
-| 1 | Whang-Od y el tatuaje *batok* (butbut, Kalinga) | Luzón norte, Filipinas | **TERMINADO (Paco, 31 oct: «este vídeo está»)**: v3 con el sígueme a los 20 s y su sonido. Vídeo: `salma marketing/pueblos/whang-od/salida/pueblos-ep1-whang-od-v3.mp4` · config: `india/motor/whang-od-ep1.cjs` · guion: `docs/pueblos-ep1-whang-od-guion-direccion.md`. Pendiente: fotos grandes de Wikimedia (429; faltan 11), paquete de texto (P6) con autores al final del comentario fijado (P2), publicar. Voz ya pagada (~1.070 caracteres): remontar = 0 €. |
-| 2 | **Los ataúdes colgantes de Sagada** (adelantado por Paco el 31 oct, «para continuar con Filipinas») | Luzón norte, Filipinas | guion v1: `docs/pueblos-ep2-sagada-guion-direccion.md` (pendiente de OK) · fotos: `salma marketing/pueblos/sagada/` |
+| 1 | Whang-Od y el tatuaje *batok* (butbut, Kalinga) | Luzón norte, Filipinas | **TERMINADO (Paco, 31 oct: «este vídeo está»)**: con los cambios de Paco en el editor (30 oct), sígueme a los 20 s con su sonido y sintonía. Vídeo: `pueblos/whang-od/ULTIMA/` · config: `india/motor/whang-od-ep1.cjs` · guion: `docs/pueblos-ep1-whang-od-guion-direccion.md`. Pendiente: fotos grandes de Wikimedia (429; faltan 11), paquete de texto (P6) con autores al final del comentario fijado (P2), publicar. Voz ya pagada (~1.070 caracteres): remontar = 0 €. |
+| 2 | **Los ataúdes colgantes de Sagada** (adelantado por Paco el 31 oct, «para continuar con Filipinas») | Luzón norte, Filipinas | borrador montado con sintonía; vídeo: `pueblos/sagada/ULTIMA/` · guion: `docs/pueblos-ep2-sagada-guion-direccion.md` · editor 8102. Pendiente: fotos definitivas de Paco. |
 | 3 | Las haenyeo de Jeju | Corea | — |
 | 3 | Los konyak | Nagaland, India | — |
 | 4 | Los moken | Surin, Tailandia/Myanmar | — |

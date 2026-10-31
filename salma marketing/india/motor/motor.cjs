@@ -303,6 +303,13 @@ async function build(cfg) {
     fs.copyFileSync(tmp, outFile); fs.unlinkSync(tmp); } // copiar encima (no renombrar): Windows no deja renombrar sobre un vídeo que el editor tiene abierto en el reproductor
   console.log('LISTO', outFile, TOTAL.toFixed(1) + ' s', clips.length, 'planos');
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
+  // carpeta ÚLTIMA (cfg.ultima): siempre la versión más reciente con nombre fijo, para no tener que buscar entre v1, v2, -editor… (Paco, 31 oct 2026: «me tienes un follón montado»)
+  if (cfg.ultima) {
+    const U = cfg.ultima, nom = cfg.ultimaNombre || cfg.id; fs.mkdirSync(U, { recursive: true });
+    [['.mp4', '.mp4'], ['-portada.png', ' - PORTADA.png'], ['-subtitulos-es.srt', ' - subtitulos ES.srt'], ['-subtitulos-en.srt', ' - subtitulos EN.srt'], ['-informe-reglas.txt', ' - informe de reglas.txt']].forEach(([a, b]) => {
+      const f = `${OUT}/${cfg.id}${a}`; if (fs.existsSync(f)) try { fs.copyFileSync(f, `${U}/${nom}${b}`); } catch (e) { console.log('No pude copiar a ÚLTIMA (¿lo tienes abierto?):', e.message); } });
+    fs.writeFileSync(`${U}/VERSION.txt`, `${cfg.id} · montado el ${new Date().toLocaleString('es-ES')}\n`);
+  }
   return outFile;
 }
 module.exports = { build, voice, resolve, setSerie, RW, vozEnCache, prepararIntro };

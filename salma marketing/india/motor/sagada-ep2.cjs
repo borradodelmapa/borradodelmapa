@@ -11,7 +11,7 @@ const PAJAROS = (db, ss = 0) => ({ src: 'SFX_pajaros-libre', ss, db });
 const cfg = {
   titulo: 'SAGADA · PUEBLOS BORRADOS DEL MAPA',
   id: 'pueblos-ep2-sagada-v2',
-  out: B + '/salida', fotosSerie: B + '/fotos',
+  out: B + '/salida', fotosSerie: B + '/fotos', ultima: B + '/ULTIMA', ultimaNombre: 'Sagada · Pueblos borrados del mapa',
   look: 'portra', counter: 'PUEBLOS BORRADOS · 2',
   portada: { foto: 'W09', foco: [0.5, 0.45, 0.85], l1: 'SAGADA', l2: 'AQUÍ CUELGAN A LOS MUERTOS', tag: 'PUEBLOS BORRADOS DEL MAPA · FILIPINAS' },
   voices: { salma: SALMA }, sintonia: { src: 'SFX_sintonia-pueblos', db: -8 }, // sintonía de la serie (Paco, 31 oct 2026)
@@ -73,6 +73,6 @@ const cfg = {
     { id: 'app', video: P + '/comun/clip-app.mp4', fixed: 5.9 },
   ],
 };
-// EDITOR: node editor/server.cjs sagada-ep2 → http://localhost:8098 (se aplican las elecciones del editor)
-if (process.env.APLICAR_EDITOR === '1') require('./editor/aplicar.cjs')(cfg, JSON.parse(require('fs').readFileSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-sagada-ep2.json', 'utf8')));
+// EDITOR: node editor/server.cjs sagada-ep2 (puerto en el plan de la serie). Sus cambios (fotos, portada…) se guardan en editor/overrides-sagada-ep2.json y se aplican SIEMPRE al montar.
+if (process.env.APLICAR_EDITOR !== 'no' && require('fs').existsSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-sagada-ep2.json')) require('./editor/aplicar.cjs')(cfg, JSON.parse(require('fs').readFileSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-sagada-ep2.json', 'utf8'))); // lo cambiado en el editor se aplica SIEMPRE, se monte desde donde se monte
 build(cfg).catch(e => { console.error('FALLO:', e.message); process.exit(1); });
