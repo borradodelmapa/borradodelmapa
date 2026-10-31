@@ -2,7 +2,7 @@
 // Uso: node editor/server.cjs  →  http://localhost:8095     (el motor reutiliza las voces ya generadas: no gasta ElevenLabs si no cambias texto)
 const http = require('http'), fs = require('fs'), path = require('path'), Module = require('module'), { spawn, spawnSync } = require('child_process');
 const HERE = path.resolve(__dirname, '..'), BASE = path.resolve(HERE, '..'), FF = BASE + '/herramientas/node_modules/ffmpeg-static/ffmpeg.exe';
-const CACHE = __dirname + '/cache', CAP = process.argv[2] || 'cap4', OVR = __dirname + (CAP === 'cap4' ? '/overrides.json' : '/overrides-' + CAP + '.json'), PORT = { cap4: 8095, monos: 8096, cap3: 8097 }[CAP] || 8098; // un servidor por capítulo: cap4 → 8095, monos → 8096
+const CACHE = __dirname + '/cache', CAP = process.argv[2] || 'cap4', OVR = __dirname + (CAP === 'cap4' ? '/overrides.json' : '/overrides-' + CAP + '.json'), PORT = { cap4: 8095, monos: 8096, cap3: 8097, 'whang-od-ep1': 8098, 'sagada-ep2': 8102 }[CAP] || 8103; // un servidor por capítulo: cap4 → 8095, monos → 8096
 if (!fs.existsSync(OVR)) fs.writeFileSync(OVR, '{"shots":{},"amb":{},"text":{},"audio":{}}');
 fs.mkdirSync(CACHE, { recursive: true });
 const { resolve, setSerie, RW, vozEnCache } = require('../motor.cjs');
