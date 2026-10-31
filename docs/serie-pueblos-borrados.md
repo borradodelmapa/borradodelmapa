@@ -7,12 +7,13 @@ Línea editorial y reglas: `docs/video-checklist.md` (L1, M15, P2, P4). Título:
 |---|---|---|---|
 | — | Los kayan | Norte de Tailandia | publicado (26 oct, como Cap.4) |
 | 1 | Whang-Od y el tatuaje *batok* (butbut, Kalinga) | Luzón norte, Filipinas | **TERMINADO (Paco, 31 oct: «este vídeo está»)**: v3 con el sígueme a los 20 s y su sonido. Vídeo: `salma marketing/pueblos/whang-od/salida/pueblos-ep1-whang-od-v3.mp4` · config: `india/motor/whang-od-ep1.cjs` · guion: `docs/pueblos-ep1-whang-od-guion-direccion.md`. Pendiente: fotos grandes de Wikimedia (429; faltan 11), paquete de texto (P6) con autores al final del comentario fijado (P2), publicar. Voz ya pagada (~1.070 caracteres): remontar = 0 €. |
-| 2 | Las haenyeo de Jeju | Corea | — |
+| 2 | **Los ataúdes colgantes de Sagada** (adelantado por Paco el 31 oct, «para continuar con Filipinas») | Luzón norte, Filipinas | guion v1: `docs/pueblos-ep2-sagada-guion-direccion.md` (pendiente de OK) · fotos: `salma marketing/pueblos/sagada/` |
+| 3 | Las haenyeo de Jeju | Corea | — |
 | 3 | Los konyak | Nagaland, India | — |
 | 4 | Los moken | Surin, Tailandia/Myanmar | — |
 | 5 | Los ainu | Hokkaido, Japón | — |
 | 6 | Los mosuo | Lago Lugu, China | — |
-| 7 | Ataúdes colgantes de Sagada | Luzón norte | — |
+| 7 | ~~Ataúdes colgantes de Sagada~~ → pasa al 2 | | |
 | 8 | Los dukha (pastores de renos) | Khövsgöl, Mongolia | — |
 | 9 | Los sentineleses (capítulo «por qué NO se visita») | Andamán, India | — |
 | 10 | Las ama | Mie, Japón | — |

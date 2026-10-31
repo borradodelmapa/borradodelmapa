@@ -20,7 +20,7 @@ const cfg = {
   portada: { foto: f('W39'), foco: [0.72, 0.4, 0.85], l1: 'WHANG-OD', l2: 'TATÚA CON MÁS DE 100 AÑOS', tag: 'PUEBLOS BORRADOS DEL MAPA · FILIPINAS' },
   voices: { salma: SALMA },
   cardSecs: 8, kb: 1.6, seguir: { activo: true, texto: 'Si te está gustando, sígueme' }, duckRatio: 5, gap: { same: 0.4, change: 0.85 }, voiceDb: { salma: -25 },
-  card: { l1: 'WHANG-OD', l2: 'PUEBLOS BORRADOS DEL MAPA', l3: 'Kalinga · Filipinas', l4: 'PRÓXIMO EPISODIO', l5: 'Las haenyeo de Jeju' },
+  card: { l1: 'WHANG-OD', l2: 'PUEBLOS BORRADOS DEL MAPA', l3: 'Kalinga · Filipinas', l4: 'PRÓXIMO EPISODIO', l5: 'Los ataúdes colgantes de Sagada' },
   blocks: [
     // 0 · GANCHO — foto elegida por Paco (W39)
     { id: 'gancho', who: 'salma', scene: true, sceneEnd: true, minD: 5, pause: 0.5, amb: GOLPES(-30),
