@@ -36,7 +36,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 9. **Entrada de blog** (P12): datos en `scripts/blog-viajes-data.js` (resumen, información ampliada con fuentes, ficha de respeto con fecha, días de la guía o enlace, `creditosDe` para los autores, `realidad`, `fecha`) + vídeo ligero en `salma marketing/ligeras-portada/` + portada en `blog/viajes/img/` → `node scripts/build-blog-viajes.js` → **enseñarla en local** (localhost:8080) ⏸ → `node scripts/comprobar-nada-atras.cjs` en ✅ → commit + push → comprobar que la web la sirve → Paco pide la indexación en Search Console.
 10. **Redes** (P1, P6, P9, P10): paquete de texto por red (título con la búsqueda primero, descripción con datos prácticos con fuente y fecha, enlace a la entrada del blog, hashtags, subtítulos `.srt`, marca de contenido con IA en los ajustes de la red, comentario fijado con la llamada a la app y **los autores de las fotos al final**). ⏸ → programar en Metricool → **comprobar en cada red** (P11) → anotar en `docs/publicaciones-registro.md` (P7).
 11. **Actualizar el plan de la serie** (estado del episodio, enlaces) y, si Paco decidió algo nuevo, esta checklist en el mismo turno.
-**Aún a mano (por automatizar):** el paso 9 lo hace Claude; la idea es que «★ Exportar para publicar» deje también listos el vídeo ligero, la portada del blog y el borrador del paquete de redes.
+**Automatizado (31 oct 2026):** `node scripts/publicar-episodio.cjs <slug>` hace el paso 9 hasta el ⏸ (vídeo ligero, portada, blog generado y comprobado) y prepara el paquete del paso 10 en `ULTIMA/textos-redes.txt` + `.json` (títulos, descripción con datos y enlace al blog, hashtags, comentario fijado con los autores). Con el OK de Paco, Claude sube el blog y programa en Metricool con ese JSON. **Pendiente de decidir:** dónde se aloja el vídeo en calidad máxima para que Metricool lo recoja (URL pública).
 
 ## 0 · Línea editorial (qué contamos)
 | ID | Regla | Comprobación |
@@ -116,6 +116,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 31 oct 2026 · 12:00 | Serie «Pueblos borrados del mapa» (Claude) | Protocolo: pasos 9 y 10 automatizados con `scripts/publicar-episodio.cjs` hasta el OK de Paco. |
 | 31 oct 2026 · 11:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva sección **PROTOCOLO COMPLETO DE UN EPISODIO** (11 pasos de la idea a publicar, con sus paradas para el OK de Paco). No cambia reglas: las ordena. |
 | 31 oct 2026 · 10:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **P12** (manual): un vídeo = una entrada de blog con vídeo, resumen, información ampliada y la guía del país (enseñada o enlazada); sistema completo con el generador existente. |
 | 31 oct 2026 · 10:00 | Serie «Pueblos borrados del mapa» (Claude) | **M4**: anotado que la normalización está rota desde el 26 oct y que Paco no la activa de momento (recordárselo). |
