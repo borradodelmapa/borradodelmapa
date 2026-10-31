@@ -12,6 +12,9 @@ const cfg = {
   cardSecs: 8, kb: 1.6, seguir: { activo: true, seg: 30, texto: 'Si te está gustando, sígueme' }, duckRatio: 5, gap: { same: 0.4, change: 0.85 }, leadChange: 0.45, voiceDb: { paco: -21 },
   card: { l1: 'MUCHO YOGI, POCO YOGA', l2: 'INDIA 2019', l3: 'Basado en un viaje real', l4: 'EL VIAJE CONTINÚA', l5: 'Benarés, la muerte y las castas' },
   blocks: [
+    // INTRO: el mono S138 ataca a cámara (Kling 3.0 Pro, imagen generada) con su grito y ataque. Va primero; luego sigue la historia.
+    { id: 'intro', etiqueta: 'INTRO · el mono ataca a cámara (Kling 3.0 Pro, IA) con grito y ataque.',
+      intro: { clip: 'RW9001', ss: 0, gainAudio: -5, sonidos: [{ src: 'SFX_mono-grito', ss: 0, at: 0.45, db: -4, fadeIn: 0.15 }, { src: 'SFX_mono-ataque', ss: 0.9, at: 3.7, db: 0 }] } },
     { id: 'gancho', who: 'paco', scene: true, pause: 0.3, amb: RIO(-26),
       text: 'Mi habitación en Rishikesh tenía vistas al río y un balcón estrecho, con un cristal finísimo. Y cada día pasaba por delante una familia de monos.',
       shots: [{ a: 'V31', sc: 'GP', ss: 5 }, { a: 'V29', sc: 'PM', ss: 0, from: 'Y cada día' }] },
@@ -21,8 +24,7 @@ const cfg = {
     { id: 'platano', who: 'paco', pause: 0.3, amb: RIO(-30, 5),
       text: 'Un día se me ocurrió dar un golpecito al cristal. Y pelar un plátano delante de sus narices.',
       shots: [{ a: 'V35', sc: 'PM', ss: 0 }, { a: 'V36', sc: 'PP', ss: 3, from: 'Y pelar' }] },
-    { id: 'cara', who: 'paco', pause: 0.4, amb: { src: 'V35', ss: 0, db: -20 },
-      text: 'Uno se quedó mirándome fijo. Le cambió la cara. Y se tiró contra el cristal.',
+    { id: 'cara', who: 'paco', pause: 0.4, amb: { src: 'V35', ss: 0, db: -20 },      text: 'Uno se quedó mirándome fijo. Le cambió la cara. Y se tiró contra el cristal.',
       shots: [{ a: 'V33', sc: 'GP', ss: 0 }, { a: 'V35', sc: 'PM', ss: 1.2, from: 'Y se tiró' }] },
     { id: 'escondi', who: 'paco', pause: 0.8, silencio: true,
       text: 'Me escondí. En mi propia habitación.',

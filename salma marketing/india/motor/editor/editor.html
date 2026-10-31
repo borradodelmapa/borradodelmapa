@@ -36,15 +36,16 @@ textarea{width:100%;background:#0d0d0d;color:#eee;border:1px solid #444;padding:
 .leyenda{font-size:12px;color:var(--mu);margin:6px 0 10px}.leyenda b{padding:0 5px;color:#000}
 .mini{font-size:12px;color:var(--mu)}.rojo{color:#e9c}
 details.mov{margin-top:3px;font-size:12px}details.mov summary{cursor:pointer;color:var(--mu)}details.mov select{width:100%;background:#222;color:var(--tx);border:1px solid #444;padding:3px}summary.cab{list-style:revert}
+table.tsnd{border-collapse:collapse;width:100%;font-size:12px}table.tsnd th{color:var(--mu);font-weight:400;text-align:left;padding:2px 6px}table.tsnd td{padding:3px 6px;border-top:1px solid var(--line)}table.tsnd input{width:64px;background:#0d0d0d;color:#eee;border:1px solid #444;padding:4px}table.tsnd select{max-width:200px}
 #estado{font-size:13px;color:var(--mu);max-width:420px;white-space:pre-wrap}
 #vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:60vh;background:#000}#panel{display:none;background:#111;border-bottom:1px solid var(--line);padding:12px 16px}#panel .bar{height:14px;background:#2a2a2a;margin:8px 0}#panel .bar i{display:block;height:100%;background:var(--or);width:0;transition:width .5s}#panel ol{margin:6px 0;padding-left:20px;color:var(--mu)}#panel li.hecho{color:#6c6}#panel li.ahora{color:var(--or);font-weight:700}#panel ul{margin:6px 0;padding-left:18px}#panel pre{white-space:pre-wrap;color:var(--mu);font-size:12px;margin:6px 0}
 </style></head><body>
 <header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1><div id="mini" style="display:none;flex:1;min-width:200px;max-width:520px"><div id="minit" style="font-size:13px;font-weight:700;color:var(--or)"></div><div style="height:8px;background:#2a2a2a;margin-top:3px"><i id="minib" style="display:block;height:100%;width:0;background:var(--or);transition:width .5s"></i></div></div>
-<button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button></header>
+<button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button><button class="sec" id="publicar" title="La versión final en máxima calidad para subir a redes (tarda más). Queda en la carpeta ÚLTIMA.">★ Exportar para publicar</button></header>
 <div id="panel"></div>
-<main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original (v8)</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="ajustes"></div><div id="lista">Cargando…</div></main>
+<main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="ajustes"></div><div id="lista">Cargando…</div></main>
 <div id="modal3" style="display:none;position:fixed;inset:0;background:#000d;z-index:12;overflow:auto"><div style="max-width:420px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="ft"></b><div style="position:relative;margin:8px 0;line-height:0"><img id="fimg" style="width:100%;cursor:crosshair"><div id="fmark" style="display:none;position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:3px solid #F4630B;border-radius:50%;box-shadow:0 0 0 2px #000;pointer-events:none"></div></div><div style="display:flex;gap:8px"><button class="sec" id="fauto">Auto (centro)</button><button id="fcerrar">Listo</button></div></div></div>
-<div id="modal2" style="display:none;position:fixed;inset:0;background:#000d;z-index:11;overflow:auto"><div style="max-width:520px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="rt"></b><video id="rvid" controls style="width:100%;max-height:68vh;background:#000;margin:8px 0"></video><div id="rinfo" class="mini"></div><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button id="rpon">✂ Empezar aquí (donde está el vídeo)</button><button class="sec" id="rorig">Volver al original</button><button class="sec" id="rcerrar">Cerrar</button></div><div class="mini" style="margin-top:6px">Pausa el vídeo donde quieras que EMPIECE el plano y pulsa «Empezar aquí». Lo que dura lo marca la frase.</div></div></div>
+<div id="modal2" style="display:none;position:fixed;inset:0;background:#000d;z-index:11;overflow:auto"><div style="max-width:520px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="rt"></b><video id="rvid" controls style="width:100%;max-height:68vh;background:#000;margin:8px 0"></video><div id="rinfo" class="mini"></div><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button id="rpon">✂ Empezar aquí (donde está el vídeo)</button><button class="sec" id="rorig">Volver al original</button><button class="sec" id="rfin" style="display:none">✂ Terminar aquí</button><button class="sec" id="rcerrar">Cerrar</button></div><div class="mini" style="margin-top:6px">Pausa el vídeo donde quieras que EMPIECE el plano y pulsa «Empezar aquí». Lo que dura lo marca la frase.</div></div></div>
 <div id="modal"><div class="in"><div style="display:flex;justify-content:space-between;align-items:center"><b id="mt"></b><button class="sec" id="cerrar">Cerrar</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div></div>
 <script>
 let D, ov = {shots:{},amb:{},text:{},audio:{},ss:{},portada:{},mov:{},seguir:{}}, ctx = null, tab = 'sony';
@@ -58,7 +59,7 @@ function pintar(){
   D.bloques.forEach(b => {
     const d = document.createElement('div'); d.className = 'blq ' + (b.who || '');
     let h = `<div class="cab">${(b.who||'mapa')} · ${b.id}${b.silencio?' · 🔇 silencio total':''}</div>`;
-    if (b.text) { const t = (ov.text[b.id] ?? b.text); h += `<textarea data-txt="${b.id}" class="${ov.text[b.id] && ov.text[b.id] !== b.text ? 'mod' : ''}">${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea><div class="mini" data-info="${b.id}"></div>`; } else h += '<div class="txt">(mapa y rótulo — no se cambia)</div>';
+    if (b.text) { const t = (ov.text[b.id] ?? b.text); h += `<textarea data-txt="${b.id}" class="${ov.text[b.id] && ov.text[b.id] !== b.text ? 'mod' : ''}">${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea><div class="mini" data-info="${b.id}"></div>`; } else h += b.intro ? introHTML(b) : b.video ? `<div class="txt">${b.etiqueta || '(vídeo fijo: mapa y rótulo — no se cambia)'}</div><video controls preload="metadata" src="/bvideo/${b.id}" style="height:240px;background:#000"></video>` : '<div class="txt">(sin voz)</div>';
     h += '<div class="shots">' + b.shots.map((s,k) => { const a = fotoActual(b,k), camb = a !== s.a; return `<div class="shot ${camb?'cambiado':''}"><div class="im" data-b="${b.id}" data-k="${k}"><img loading="lazy" src="/thumb/${a}"><span class="id">${k+1}·${a}</span>${s.sc?`<span class="cm">${s.sc}</span>`:''}</div><small>${camb?'cambiada (era '+s.a+')':'tocar para cambiar'}</small>${/^(V|RW)/.test(a)?`<button class="sec" style="width:100%;margin-top:3px;font-size:12px;padding:5px" data-rec="${b.id}|${k}">✂ ${(ov.ss[b.id]||[])[k]!=null && (ov.ss[b.id]||[])[k] !== (s.ss||0) ? 'desde '+(ov.ss[b.id]||[])[k]+' s' : 'Recortar'}</button>`:''}${movHTML(b, s, k, a)}</div>`; }).join('') + '</div>';
     if (b.amb) {
       const cur = ambActual(b);
@@ -70,7 +71,7 @@ function pintar(){
   document.querySelectorAll('textarea[data-txt]').forEach(e => { const b = D.bloques.find(x=>x.id===e.dataset.txt); const info = () => { const el = document.querySelector(`[data-info="${b.id}"]`); const mod = e.value !== b.text; e.classList.toggle('mod', mod); el.innerHTML = mod ? `<span class="rojo">✏ Texto cambiado (${e.value.length} caracteres) — al montar se genera su voz nueva.</span> <a href="#" data-rev="${b.id}" style="color:#9cf">volver al original</a>` : `${e.value.length} caracteres`; const a = el.querySelector('[data-rev]'); if (a) a.onclick = async ev => { ev.preventDefault(); delete ov.text[b.id]; await guardar(); pintar(); }; }; info(); e.oninput = info; e.onchange = async () => { if (e.value === b.text) delete ov.text[b.id]; else ov.text[b.id] = e.value; await guardar(); pintar(); }; });
   document.querySelectorAll('input[data-sub]').forEach(e => e.onchange = async () => { const f = e.files[0]; if (!f) return; const ext = (f.name.split('.').pop() || '').toLowerCase(); $('#estado').textContent = 'Subiendo audio…'; const r = await fetch(`/api/subir?id=${e.dataset.sub}&ext=${ext}`, { method: 'POST', body: f }); if (!r.ok) { alert('No vale ese formato (usa mp3, wav, m4a…)'); return; } ov = await r.json(); $('#estado').textContent = ''; pintar(); });
   document.querySelectorAll('[data-quitar]').forEach(e => e.onclick = async () => { ov = await (await fetch('/api/quitar-audio?id=' + e.dataset.quitar, { method: 'POST' })).json(); pintar(); });
-  cablearMov();
+  cablearMov(); cablearIntro();
   document.querySelectorAll('[data-rec]').forEach(e => e.onclick = () => { const [bid,k] = e.dataset.rec.split('|'); abrirRecorte(bid, +k); });
   document.querySelectorAll('.im').forEach(e => e.onclick = () => abrir(e.dataset.b, +e.dataset.k));
   document.querySelectorAll('select[data-amb]').forEach(e => e.onchange = async () => { const b = D.bloques.find(x=>x.id===e.dataset.amb); if (e.value === b.amb) delete ov.amb[b.id]; else ov.amb[b.id] = e.value; await guardar(); pintar(); });
@@ -137,20 +138,71 @@ function pintarAjustes(){
   let t = null; const cambia = () => { ov.seguir = { activo: $('#sg-on').checked, seg: +$('#sg-seg').value || 30, texto: $('#sg-txt').value }; clearTimeout(t); t = setTimeout(guardar, 500); };
   ['#sg-on', '#sg-seg', '#sg-txt'].forEach(s => { $(s).oninput = cambia; $(s).onchange = cambia; });
 }
+// ---- INTRO editable: clip (galería), dónde empieza, cuánto dura y los sonidos (grito, ataque, golpe real…) con su momento y volumen ----
+function introActual(b){ return { ...b.intro, ...((ov.intro) || {}) }; }
+function introHTML(b){
+  const I = introActual(b), sd = D.sonidosDisp || [];
+  const filas = (I.sonidos || []).map((s, i) => `<tr><td><select data-isnd="${i}">${sd.map(x => `<option value="${x.id}" ${x.id === s.src ? 'selected' : ''}>${x.nombre}</option>`).join('')}</select></td>
+    <td><input type="number" step="0.1" min="0" max="30" data-iat="${i}" value="${s.at ?? 0}"></td>
+    <td><input type="number" step="1" min="-30" max="6" data-idb="${i}" value="${s.db ?? 0}"></td>
+    <td><input type="number" step="0.1" min="0" max="20" data-iss="${i}" value="${s.ss ?? 0}"></td>
+    <td><audio controls preload="none" src="/sfx/${encodeURIComponent((sd.find(x => x.id === s.src) || {}).archivo || '')}" style="height:30px;width:170px"></audio></td>
+    <td><button class="sec" data-iquita="${i}" style="padding:4px 9px" title="Quitar este sonido">✕</button></td></tr>`).join('');
+  const rec = ((I.ss || 0) > 0 || I.fin) ? `desde ${I.ss || 0} s${I.fin ? ' hasta ' + I.fin + ' s' : ''}` : 'Recortar';
+  return `<div class="txt">${b.etiqueta || ''}</div>
+    <div class="shots"><div class="shot" style="width:150px"><video controls preload="metadata" src="/media/${I.clip}" style="width:150px;background:#000"></video>
+      <button class="sec" id="irec" style="width:100%;margin-top:3px;font-size:12px;padding:5px">✂ ${rec}</button>
+      <button class="sec" id="iclip" style="width:100%;margin-top:3px;font-size:12px;padding:5px">🎞 Cambiar clip (${I.clip})</button></div></div>
+    <div class="mini" style="margin-top:4px">Al recortar el clip, el vídeo y los sonidos se recortan a la vez: los sonidos van pegados a la imagen.</div>
+    <details class="blq-in" style="margin:6px 0"><summary style="cursor:pointer;color:var(--mu);font-size:13px">⚙ Sonidos de la intro (grito, ataque…) — pulsa para abrir</summary>
+      <label class="mini" style="display:block;margin:8px 0">Volumen general (dB) <input type="number" step="1" min="-30" max="6" id="igain" value="${I.gainAudio ?? -5}" style="width:70px"></label>
+      <table class="tsnd"><thead><tr><th>Sonido</th><th>Empieza en el seg. del clip</th><th>Volumen (dB)</th><th>Saltar el principio (s)</th><th>Oír</th><th></th></tr></thead><tbody>${filas}</tbody></table>
+      <button id="iadd" class="sec" style="margin-top:8px">+ Añadir sonido</button>
+      <div class="mini" style="margin-top:6px">Un grito o un golpe nuevo con IA se genera aparte (ElevenLabs, ~100 créditos cada uno): dímelo y lo añado a esta lista.</div></details>`;
+}
+function abrirRecorteIntro(bid){
+  const b = D.bloques.find(x => x.id === bid), I = introActual(b), v = $('#rvid');
+  $('#rt').textContent = `Recortar la intro (${I.clip}) — el clip original no se toca; vídeo y sonidos se recortan juntos`;
+  $('#rpon').textContent = '✂ Empezar aquí'; $('#rorig').textContent = 'Quitar el recorte'; $('#rfin').style.display = 'inline-block';
+  v.src = '/media/' + I.clip; v.onloadedmetadata = () => { v.currentTime = I.ss || 0; };
+  const info = () => { const x = introActual(b); $('#rinfo').textContent = 'Empieza en ' + (x.ss || 0).toFixed(1) + ' s' + (x.fin ? ' · termina en ' + x.fin.toFixed(1) + ' s' : ' · termina al final del clip'); }; info();
+  $('#rpon').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; ov.intro = { ...introActual(b), ss: t }; await guardar(); info(); pintar(); };
+  $('#rfin').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; ov.intro = { ...introActual(b), fin: t }; await guardar(); info(); pintar(); };
+  $('#rorig').onclick = async () => { ov.intro = { ...introActual(b), ss: 0, fin: null }; await guardar(); v.currentTime = 0; info(); pintar(); };
+  $('#modal2').style.display = 'block';
+}
+function guardarIntro(b, cambio){ ov.intro = { ...introActual(b), ...cambio }; clearTimeout(guardarIntro.t); guardarIntro.t = setTimeout(guardar, 400); }
+function cablearIntro(){
+  D.bloques.filter(b => b.intro).forEach(b => {
+    const I = () => introActual(b), snd = fn => { const s = [...(I().sonidos || []).map(x => ({ ...x }))]; fn(s); guardarIntro(b, { sonidos: s }); };
+    const num = (id, k) => { const e = document.getElementById(id); if (e) e.oninput = () => guardarIntro(b, { [k]: +e.value }); };
+    num('igain', 'gainAudio');
+    const br = document.getElementById('irec'); if (br) br.onclick = () => abrirRecorteIntro(b.id);
+    const bc = document.getElementById('iclip'); if (bc) bc.onclick = () => { ctx = { intro: b.id }; $('#mt').textContent = 'Elige el clip de la intro (vídeos y Runway)'; $('#modal').style.display = 'block'; tab = 'runway'; pintarGaleria(I().clip); };
+    document.querySelectorAll('select[data-isnd]').forEach(e => e.onchange = () => snd(s => { s[+e.dataset.isnd].src = e.value; }));
+    document.querySelectorAll('input[data-iat]').forEach(e => e.oninput = () => snd(s => { s[+e.dataset.iat].at = +e.value; }));
+    document.querySelectorAll('input[data-idb]').forEach(e => e.oninput = () => snd(s => { s[+e.dataset.idb].db = +e.value; }));
+    document.querySelectorAll('input[data-iss]').forEach(e => e.oninput = () => snd(s => { s[+e.dataset.iss].ss = +e.value; }));
+    document.querySelectorAll('[data-iquita]').forEach(e => e.onclick = () => { snd(s => s.splice(+e.dataset.iquita, 1)); pintar(); });
+    const ba = document.getElementById('iadd'); if (ba) ba.onclick = () => { snd(s => s.push({ src: (D.sonidosDisp[0] || {}).id, at: 0, db: 0, ss: 0 })); pintar(); };
+  });
+}
 function pestanas(){
   const T = {}; const grupos = [...new Set(D.galeria.sony.map(id => Math.floor(+id.slice(1) / 100)))];
   grupos.forEach(h => { T['sony' + h] = 'Sony ' + (h * 100) + '-' + (h * 100 + 99); });
-  T.movil = 'Fotos móvil'; T.video = 'Vídeos'; T.runway = 'Runway'; return T;
+  T.movil = 'Fotos móvil'; T.video = 'Vídeos'; T.runway = 'Runway';
+  if (D.galeria.serie && D.galeria.serie.length) return { serie: 'Fotos de la serie', ...T }; // series nuevas (Pueblos…): sus fotos primero
+  return T;
 }
 function lista(t){ return t.startsWith('sony') ? D.galeria.sony.filter(id => Math.floor(+id.slice(1) / 100) === +t.slice(4)) : D.galeria[t]; }
 function pintarGaleria(foco){
   const T = pestanas(); if (!T[tab]) tab = Object.keys(T)[0];
-  if (foco) { const g = foco.startsWith('S') ? 'sony' + Math.floor(+foco.slice(1) / 100) : foco.startsWith('M') ? 'movil' : foco.startsWith('RW') ? 'runway' : 'video'; if (T[g]) tab = g; }
+  if (foco) { const g = /^[WH]\d/.test(foco) ? 'serie' : foco.startsWith('S') ? 'sony' + Math.floor(+foco.slice(1) / 100) : foco.startsWith('M') ? 'movil' : foco.startsWith('RW') ? 'runway' : 'video'; if (T[g]) tab = g; }
   $('#tabs').innerHTML = Object.keys(T).map(t => `<button class="${t===tab?'on':''}" data-t="${t}">${T[t]}</button>`).join('') + '<input id="ir" placeholder="ir al nº (ej. 465)" style="width:150px;margin-left:8px;background:#222;color:#eee;border:1px solid #555;padding:7px">';
   $('#tabs').querySelectorAll('button').forEach(e => e.onclick = () => { tab = e.dataset.t; pintarGaleria(); });
   $('#ir').oninput = e => { let n = e.target.value.trim().toUpperCase(); if (/^[0-9]+$/.test(n)) n = 'S' + n; if (/^[SM][0-9]+$/.test(n) && (D.galeria.sony.includes(n) || D.galeria.movil.includes(n))) { pintarGaleria(n); const el = $('#grid').querySelector('[data-id="' + n + '"]'); if (el) { el.scrollIntoView({block:'center'}); el.style.outline = '3px solid #f0f'; } $('#ir').value = n; $('#ir').focus(); } };
   const usadas = {}; D.bloques.forEach(b => b.shots.forEach((s,k) => { const a = fotoActual(b,k); usadas[a] = (usadas[a] ? usadas[a] + ', ' : '') + b.id + ' ' + (k+1); }));
-  const aqui = ctx.portada ? portadaActual().foto : fotoActual(D.bloques.find(x => x.id === ctx.bid), ctx.k);
+  const aqui = ctx.portada ? portadaActual().foto : ctx.intro ? introActual(D.bloques.find(x => x.id === ctx.intro)).clip : fotoActual(D.bloques.find(x => x.id === ctx.bid), ctx.k);
   $('#grid').innerHTML = '<div class="leyenda" style="grid-column:1/-1"><b style="background:#fc0">AMARILLO</b> el de este plano · <b style="background:#3c3">VERDE</b> ya está puesto en otro plano (verás dónde) · sin color: libre</div>' + lista(tab).map(id => `<div class="g ${id===aqui?'aqui':usadas[id]?'usada':''}" data-id="${id}"><img loading="lazy" src="/thumb/${id}"><span>${id}</span>${usadas[id]?`<div class="u">${id===aqui?'este plano':'en '+usadas[id]}</div>`:''}</div>`).join('');
   $('#grid').querySelectorAll('.g[data-id]').forEach(e => e.onclick = async () => {
     if (ctx.portada) { if (/^(V|RW)/.test(e.dataset.id)) return; ov.portada = { ...portadaActual(), foto: e.dataset.id }; await guardar(); $('#modal').style.display = 'none'; pintarPortada(); return; }
@@ -162,6 +214,10 @@ function pintarGaleria(foco){
 }
 // Desde la galería: al tocar un vídeo se ve ahí mismo y se elige dónde empieza antes de ponerlo en el plano
 function previsualizarVideo(id){
+  $('#rfin').style.display = 'none';
+  if (ctx.intro) { const bi = D.bloques.find(x => x.id === ctx.intro), v = $('#rvid'); $('#rt').textContent = `Clip ${id} para la intro — pausa donde quieras que EMPIECE`; v.src = '/media/' + id; v.onloadedmetadata = () => { v.currentTime = 0; v.play(); }; $('#rinfo').textContent = ''; $('#rpon').textContent = '✔ Usar este clip empezando aquí'; $('#rorig').textContent = '← Elegir otro';
+    $('#rpon').onclick = async () => { const t = Math.round(v.currentTime * 10) / 10; v.pause(); ov.intro = { ...introActual(bi), clip: id, ss: t }; await guardar(); $('#modal2').style.display = 'none'; $('#modal').style.display = 'none'; pintar(); };
+    $('#rorig').onclick = () => { v.pause(); $('#modal2').style.display = 'none'; }; $('#modal2').style.display = 'block'; return; }
   const bid = ctx.bid, k = ctx.k, b = D.bloques.find(x => x.id === bid), v = $('#rvid');
   $('#rt').textContent = `Vídeo ${id} para «${bid}», plano ${k+1} — pausa donde quieras que EMPIECE`;
   v.src = '/media/' + id; v.onloadedmetadata = () => { v.currentTime = 0; v.play(); }; $('#rinfo').textContent = '';
@@ -177,6 +233,7 @@ function previsualizarVideo(id){
   $('#modal2').style.display = 'block';
 }
 function abrirRecorte(bid, k){
+  $('#rfin').style.display = 'none';
   $('#rpon').textContent = '✂ Empezar aquí (donde está el vídeo)'; $('#rorig').textContent = 'Volver al original';
   const b = D.bloques.find(x => x.id === bid), id = fotoActual(b, k), ss0 = ((ov.ss[bid] || [])[k] ?? b.shots[k].ss) || 0;
   $('#rt').textContent = `Recortar «${bid}», plano ${k+1} (${id}) — el vídeo original no se toca`;
@@ -189,7 +246,23 @@ $('#fcerrar').onclick = () => { $('#modal3').style.display = 'none'; };
 $('#rcerrar').onclick = () => { $('#rvid').pause(); $('#modal2').style.display = 'none'; };
 $('#cerrar').onclick = () => $('#modal').style.display = 'none';
 $('#reset').onclick = async () => { const b = $('#reset'); if (b.dataset.seguro !== '1') { b.dataset.seguro = '1'; b.textContent = '¿Seguro? Pulsa otra vez'; setTimeout(() => { b.dataset.seguro = ''; b.textContent = 'Deshacer cambios'; }, 4000); return; } b.dataset.seguro = ''; b.textContent = 'Deshacer cambios'; ov = await (await fetch('/api/reset', {method:'POST'})).json(); pintar(); };
-$('#montar').onclick = async () => { await guardar(); const est = await (await fetch('/api/estimar')).json(); if (est.chars > 0 && !confirm(`Hay ${est.bloques.length} voz/voces nueva(s) por generar (${est.bloques.join(', ')}): ${est.chars} caracteres ≈ ${est.chars} créditos de tu plan de ElevenLabs (unos ${Math.max(1, Math.round(est.chars * 0.022))} céntimos). ¿Montar?`)) return; await fetch('/api/montar',{method:'POST'}); sondear(); };
+// Sin ventanas emergentes (el navegador las puede bloquear y el botón parecía muerto): si hay voces nuevas, el aviso del coste sale en la propia página y se confirma pulsando OTRA VEZ.
+let montarArmado = null;
+$('#montar').onclick = async () => {
+  await guardar(); const b = $('#montar'), est = await (await fetch('/api/estimar')).json();
+  if (est.chars > 0 && !montarArmado) {
+    b.textContent = '⚠ Pulsa otra vez para montar'; const m = $('#mini'); m.style.display = 'block'; $('#minib').style.width = '0';
+    $('#minit').textContent = `Voces nuevas: ${est.bloques.join(', ')} → ${est.chars} caracteres ≈ ${est.chars} créditos de ElevenLabs (~${Math.max(1, Math.round(est.chars * 0.022))} céntimos). Pulsa «Montar» otra vez para confirmar.`;
+    montarArmado = setTimeout(() => { montarArmado = null; b.textContent = '▶ Montar'; $('#minit').textContent = ''; }, 12000); return;
+  }
+  clearTimeout(montarArmado); montarArmado = null; b.textContent = '▶ Montar';
+  await fetch('/api/montar', { method: 'POST' }); sondear();
+};
+$('#publicar').onclick = async () => { // máxima calidad: solo cuando la versión ya está decidida (las voces nuevas se generan antes con «Montar»)
+  await guardar(); const est = await (await fetch('/api/estimar')).json();
+  if (est.chars > 0) { const m = $('#mini'); m.style.display = 'block'; $('#minit').textContent = 'Hay textos cambiados: pulsa antes «Montar» para generar sus voces y revisar, y luego «Exportar para publicar».'; return; }
+  await fetch('/api/montar?calidad=publicar', { method: 'POST' }); sondear();
+};
 const PASOS = ['Voces','Línea de tiempo','Cortando y revelando planos','Subtítulos y cifras','Mezcla de audio','Montaje final'];
 async function sondear(){
   const r = await (await fetch('/api/estado')).json(), P = $('#panel');

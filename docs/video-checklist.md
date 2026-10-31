@@ -1,0 +1,125 @@
+# CHECKLIST DE VÍDEO — FUENTE ÚNICA (versión = fecha-hora de la última fila del registro de cambios, al final)
+
+**Estado: BASE EN CONSTRUCCIÓN. Este texto se modifica mucho hasta que sea sólido.** Manda este archivo: si choca con
+`docs/video-reglas-y-flujo.md`, la Biblia v2.5 (docx), `docs/salma-narradora-reglas.md` o `docs/estilo-visual.md`, **gana este** y se corrige el otro.
+Nació el 30 oct 2026 (Paco: «estoy cansado de ir detrás vuestra recordando lo que se olvida»): el protocolo estaba repartido en cuatro sitios
+y se leía a trozos. Todo viene **ACTIVADO por defecto**; solo se desactiva algo si Paco lo dice (y se anota aquí con fecha).
+
+## Cómo se usa (cualquier sesión, cualquier modelo)
+1. **Antes de tocar nada de vídeo/short/reel/capítulo/mapa/voz de vídeo: leer este archivo ENTERO** y mirar la fecha de la última fila del registro de cambios de abajo
+   (`git log -3 --format="%h %cd %s" -- docs/video-checklist.md`; es zona común: `git fetch origin main` antes de editar).
+2. **Pasar los puntos uno a uno** al montar. Al entregar, decir qué puntos están hechos, cuáles no y por qué (nunca «listo»: *«montado — dime qué ves y oyes»*).
+3. **Regla de mantenimiento:** toda decisión nueva de Paco sobre vídeo se escribe AQUÍ en el mismo turno (con fecha, subiendo la versión y una línea en el registro).
+   No vale dejarla solo en el chat ni en memoria. Se avisa: «he actualizado el protocolo a vN».
+4. Cada punto lleva un ID estable (F1, N3, M7…) para citarlo y para que el motor (`motor/reglas.cjs`) y esta lista no se desincronicen.
+   Columna *Comprobación*: **motor** = lo comprueba el informe de reglas hoy · **motor (pendiente)** = decidido que lo compruebe, sin implementar · **manual** = lo revisa quien monta y Paco.
+
+## Editar esta checklist desde varios chats a la vez (leer antes de tocarla)
+Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin pisar a los demás:
+1. **Edición pequeña y dirigida** (Edit de una línea/fila), nunca reescribir el archivo entero. Si el archivo cambió en disco desde que lo leíste, **vuelve a leerlo** antes de editar.
+2. **Cada cambio = una fila nueva ARRIBA del registro de cambios**, con fecha y hora (`30 oct 2026 · 13:40`), qué sesión/tema y qué IDs toca. No hay números de versión: la versión es la fecha-hora de la fila más reciente (así dos chats no chocan por el «v2»).
+3. **Commit solo de este archivo** (`git add docs/video-checklist.md`; nunca `git add -A`/`.`, porque en la misma carpeta hay trabajo de otras sesiones sin terminar).
+4. **Si el otro chat está en otro clon (móvil, nube, otro worktree):** `git fetch origin main` → `git log --oneline HEAD..origin/main -- docs/video-checklist.md` → editar → commit pequeño → push; si el push se rechaza: fetch, `git rebase origin/main`, y si choca la misma fila **fusionar a mano conservando las dos aportaciones** (§1B de CLAUDE.md). Nunca `push --force`.
+5. **Si una regla nueva choca con otra** (como «cierre íntimo» vs «sin cierres poéticos»), no se borra en silencio: gana la más nueva, se anota en el registro quién gana y por qué.
+6. Los documentos de detalle (narradora, estilo, Biblia) que no estén en git **no cuentan como protocolo** para otras sesiones: lo importante se pasa a esta checklist y el detalle se commitea.
+
+## 0 · Línea editorial (qué contamos)
+| ID | Regla | Comprobación |
+|---|---|---|
+| L1 | **Nicho elegido por Paco (30 oct 2026): «Culturas que se están borrando del mapa»**: pueblos, oficios, lenguas y lugares que están desapareciendo, contados con datos y fuentes (N6, F4) y con **cómo visitarlos con respeto** (datos prácticos, P9). Es el que mejor encaja con la marca. Por qué: el único vídeo que ha despegado es el de las kayan («mujeres jirafa»: 622 visitas en YouTube ese día, los 6 primeros suscriptores). Enfoque: la historia y el dato detrás de cada pueblo, **nunca «mira qué raros»**; nada de recrear con IA personas de pueblos reales como si fueran reales (P4). **Título: primero el pueblo y después la serie: «Los kayan · Pueblos borrados del mapa»** (Paco, 30 oct 2026), nunca «Cap.N/20». **Se va directo con esta serie, sin prueba de formatos** (Paco, 30 oct 2026). La serie de Vietnam ya programada (hasta el 9 nov) no se toca. **Pendiente:** lista de los primeros temas. | manual |
+
+## A · Flujo de trabajo
+| ID | Regla | Comprobación |
+|---|---|---|
+| F1 | Leer esta checklist entera antes de empezar (punto 1 de arriba). | manual |
+| F2 | El contenido personal lo cuenta Paco (recuerdos hablados); **no se inventa nada que no haya contado**. En shorts de guía, el contenido sale de la guía y de fuentes. | manual |
+| F3 | **Guion de dirección por escena** aprobado por Paco ANTES de generar voz (emoción, imagen concreta, quién habla, sonido dominante, IA sí/no). Plantilla: `docs/india-cap4-guion-direccion.md`. | manual |
+| F4 | **Datos con fuente** registrados en `docs/india-notas-y-fuentes.md` (varias fuentes se dicen; una sola «según algunas fuentes»; si discrepan, no se dicen). | manual |
+| F5 | **Coste dicho antes** (voz ElevenLabs, música, Runway; CLAUDE.md §8). Probar con una frase antes de generar todo. Runway: 1 vídeo a la vez, guardar el id de cada tarea (`runway-pruebas/runway-tareas.log`), prompt tal cual lo pide Paco; modelos y créditos en `video-reglas-y-flujo.md` §10. | manual |
+| F6 | **Paco elige** la foto protagonista de cada escena (banco por temas) y los audios, oyendo candidatos del mismo volumen. Si Claude propone fotos, se las enseña para elegir. | manual |
+| F7 | Monta Claude con el motor (**un solo editor/motor**: no escribir otro) y entrega: vídeo + informe de reglas + hoja de planos (`motor/hoja.cjs`). Se guarda con fecha en `VIDEOS-TERMINADOS/` (el anterior del mismo capítulo pasa a `ANTIGUOS`). Un puerto de editor por capítulo; nunca renombrar sobre un vídeo abierto en el editor (se copia encima). | manual |
+| F8 | Paco corrige por escena/número y se remonta. Nunca «arreglado»: *«montado — dime qué ves y oyes»*. Un cambio, una prueba, una confirmación. | manual |
+| F9 | **NORMA (Paco, 31 oct 2026): las fotos de banco se revisan UNA A UNA antes de enseñárselas a Paco.** Fuera de la galería (a `fotos/descartadas-otro-sitio/` con su nota) todo lo que no sea del sitio o pueblo del episodio: caso real, buscando «batok» (el tatuaje) se colaron 8 fotos del volcán Batok de Java (Indonesia) y una acabó en el vídeo de Filipinas. Tampoco van restos humanos ni fotos de «zoos humanos» o exhibiciones. Avisar no basta: se quitan. | manual |
+
+## B · Narración y texto (Salma narradora)
+| ID | Regla | Comprobación |
+|---|---|---|
+| N1 | **Para el oído**: frases cortas, leer el guion en voz alta antes de generar voz. Primera persona solo donde aporte dato o punto de vista con base real (ver N6: nada de relleno). | manual |
+| N2 | **Abrir con una pregunta o imagen concreta.** Gancho en los primeros 5 s, útil desde el fotograma 0. | manual |
+| N3 | El dato **cuelga de una historia**, no de una ficha. **UN dato potente por intervención** y silencio después. | manual |
+| N4 | Salma **no huele, prueba, camina ni toca**. Nada de documentos/hallazgos inventados ni errores fingidos. | manual |
+| N5 | **No vender la app en la voz.** La app va en la tarjeta final, aparte (textos que varían: «hazte tu guía gratis», «tu ruta, gratis»; sin repetir «Salma» en pantalla). | motor |
+| N6 | **Salma: solo datos relevantes con fuente — nada de frases de relleno ni cierres poéticos** (Paco, 29 oct 2026; PREVALECE sobre «cierre íntimo» de `salma-narradora-reglas.md`, 18 oct). Paco: sus textos tal cual, sin añadirle recuerdos que no ha dicho. El cierre es un dato o la llamada de la tarjeta final, no una moraleja. | manual |
+| N7 | Hablar poco de Paco (1-2 menciones, con variantes). Cada frase sirve a quien quiera viajar. **Cada imagen es de lo que se dice** y nunca lo contradice. | manual |
+| N8 | Voces definitivas (Paco y Salma, `motor/voces.cjs`), no cambiar sin orden de Paco. Pronunciación con el campo `voz` (el subtítulo sigue bien escrito). Nunca «según las guías»: NOSOTROS somos la guía. | manual |
+| N9 | Plantilla de capítulo-reel 60-90 s: gancho → contexto (Salma sitúa) → viaje → descubrimiento (dato clave) → cierre con dato o «continuará», sin moraleja (N6) → tarjeta. Si la historia lo pide, más de 90 s sin problema. | manual |
+
+## C · Montaje e imagen
+| ID | Regla | Comprobación |
+|---|---|---|
+| M1 | Estructura: gancho → **situar (mapa)** → desarrollo alternando escalas → pico (plano largo) → ficha (ritmo rápido) → cierre (GP lento) → tarjeta. | manual |
+| M2 | Escalas GP/PM/PP/D: presentar GP→PM→PP→D y cerrar al revés; no repetir escala seguida; máx. 2 detalles seguidos; duraciones GP 3-4 · PM 2-3 · PP 1,5-2 · D 0,8-1,5 s. | motor |
+| M3 | **Ninguna foto ni clip repetido** en un vídeo. | motor |
+| M4 | Look Kodak coherente: Portra (día) · Vision3 (noche/interior) · Tri-X B/N (historia/leyenda/recuerdo) + normalización «BDM Film» de cada foto. **⚠ La normalización no funciona desde el 26 oct 2026** (fallo de una línea en `normFilter`); visto el antes/después (`pueblos/comun/M4-antes-despues.jpg`), **Paco decide no activarla de momento** (31 oct) y pide que se le recuerde de vez en cuando. El look Kodak sí se aplica. | motor |
+| M5 | Zoom/empuje lo pone el montaje (ffmpeg); Runway solo movimiento interno, cámara fija, 5 s (coste dicho). | manual |
+| M6 | **Fundidos a negro entre bloques** (`scene`/`sceneEnd`). | motor |
+| M7 | **Mapa de ruta animado** de cabecera (5-8 s) con frontera real y título «BORRADO DEL MAPA · lugar» (`motor/mapa.cjs`, `mapa-butan.cjs`). | motor |
+| M8 | **Contador/rótulo de serie** arriba a la derecha («INDIA 2019», «BUTÁN · DÍA 2») y **rótulos de lugar** breves. | motor |
+| M9 | **Cifras grandes animadas** en el momento de decir cada cifra clave. | motor |
+| M10 | Subtítulos ES con palabra iluminada (grabados) y **EN como pista `.srt` aparte**. | motor |
+| M11 | **Portada** por defecto (0,2 s + PNG aparte y como carátula); la misma portada = miniatura en TODAS las redes; los avances llevan portada PROPIA. | motor |
+| M12 | **Ken Burns** en las fotos (más en GP que en D, alternando entrar/salir). | motor |
+| M13 | **Aviso «Si te está gustando, sígueme»** **a los 20 s por defecto** (Paco, 30 oct 2026, para todos de aquí en adelante; antes a los 30; en el motor, `sgInicio`) (5,5 s, franja naranja + corazón), **con el sonido de los golpes del *batok*** — ✅ **TERMINADO (30 oct 2026): pieza aparte `motor/sfx/sigueme-batok.mp3`** (2,1 s: un golpe al entrar la franja y uno por cada latido del corazón; copia en `pueblos/comun/sonidos/`). El motor la mezcla sola a +8 dB para que **se oiga por encima de la voz** (comprobado en la onda de Whang-Od v3); `cfg.seguir.sonidoDb` la ajusta y `cfg.seguir.sonido = false` la quita. **Activo por defecto**; nunca desactivarlo sin orden de Paco. **🔧 En rediseño (Paco, 30 oct 2026: «eso tenemos que mejorarlo»):** el nuevo se hace en el Ep.1 de «Pueblos borrados del mapa» (Whang-Od) y desde entonces es el de todos los vídeos. Ideas de Paco (30 oct, se hablarán más adelante): **un sonido especial que llame la atención** — **decidido (Paco, 30 oct): los golpecitos del tatuaje *batok*** del Ep.1 de Whang-Od (`motor/sfx/golpecitos-creados.mp3`, sonido creado, 0 €; no se presenta como sonido real), **en el sígueme de TODAS las series: es el sonido del canal**, **iconos que la audiencia reconozca** (botón de seguir/suscribirse, campana) y sobre todo **cambiar el texto** usando lo que ya hay. | motor |
+| M16 | **La app se enseña en TODOS los vídeos con un clip común** (Paco, 30 oct 2026): un vídeo corto de la app (grabación real de la pantalla) que vale para todos, sin tener que grabar uno por vídeo (el de Bután, `butan/clip-app-nido.mp4`, era específico). Va antes de la tarjeta final y **sin hablar de la app en la voz** (N5). Se estrena en el Ep.1 de Whang-Od. **Primera versión (la hace Claude, 0 €):** ~6 s con las capturas de la ficha de Google Play (`Desktop/Google Play/imagenes para pla consola/01-inicio, 03-ruta, 04-mapa-en-directo…`), con empuje suave entre ellas. Se cambia por una grabación real de la pantalla cuando Paco la tenga. | manual |
+| M15 | **Persona primero** (Paco, 30 oct 2026): en la **portada** y en el **primer fotograma** sale una persona (cara o figura humana, del pueblo o del oficio del que trata el vídeo), no un paisaje. Por qué: el kayan, con caras en portada, es el único vídeo que ha despegado; es una señal (un solo vídeo), así que se revisa cuando haya más datos. **Compatible con P4** (niños solo con sus condiciones); foto propia con permiso o con licencia libre y autor (P2). **Desde el 30 oct 2026; los vídeos ya publicados no se tocan por esto.** | manual |
+| M14 | **Cierre en dos tiempos, 8 s:** título + «Basado en un viaje real» (SOLO si es un viaje real de Paco) → icono de Salma, «CREA TUS RUTAS CONMIGO», «Descarga la app de guías de viaje · Gratis», borradodelmapa.com, siguiente capítulo. | motor |
+
+## D · Sonido
+| ID | Regla | Comprobación |
+|---|---|---|
+| S1 | Capas: voz (manda) > ambiente > detalle > música. Ambiente = sonido REAL de sus vídeos, comprobado (espectro) y con ducking; de noche, silencio total. Un short sin ninguna capa más que la voz es un hueco, no una decisión. | motor |
+| S2 | Voces niveladas (Paco −21 dB, Salma −25), respiro 0,85 s + 0,45 s al cambiar de hablante (0,4 s si es el mismo), mezcla final −14 LUFS. | motor |
+| S3 | **Serie «Pueblos borrados del mapa»: sintonía propia** (Paco, 31 oct 2026): `motor/sfx/sintonia-pueblos.mp3` (ElevenLabs Music, plan Creator con licencia comercial; estilo cabecera de documental antropológico de los 80, sin imitar ninguna existente). Suena el principio sobre el mapa y el final bajo la tarjeta (`cfg.sintonia = { src: 'SFX_sintonia-pueblos', db: -8 }`); el resto del vídeo sin música. Las otras dos de ElevenLabs se guardan como recursos (`pueblos/comun/sintonia/recursos/`); las de síntesis propia se descartaron («parece de ascensor»). Fuera de esta serie: música solo si el capítulo la pide: original sintetizada (`mkmusic.cjs`, 0 €) o con licencia comprobada y anotada. Coste dicho antes (F5). | manual |
+| S4 | El sonido creado no se presenta como «sonido real del destino». Mantras, oraciones y voces reales: no simularlos. | manual |
+
+## E · Publicación y cuidados
+| ID | Regla | Comprobación |
+|---|---|---|
+| P1 | Marcar «contenido generado con IA» en las opciones de cada red al publicar (no va en pantalla). En textos públicos/marketing NUNCA decir «IA». | manual |
+| P2 | Atribuciones de las fotos (Wikimedia, etc.) en la descripción: `ATRIBUCIONES.txt` de la carpeta del vídeo. **Y además al final del primer comentario fijado de cada red** (Paco, 30 oct 2026: «es de justicia nombrar a los autores»): «📷 Fotos: <autor> (<licencia>, Wikimedia Commons)…», un autor por foto ajena, ninguno sin nombrar. Si no cabe todo, el comentario dice «autores de todas las fotos en la descripción». **Desde el 30 oct 2026; los vídeos ya publicados no se tocan por esto.** | manual |
+| P3 | Mismo vídeo en el blog y en todas las redes; comparar la pestaña Shorts del canal con la fila de la serie antes de dar algo por publicado. | manual |
+| P4 | Privacidad y respeto: sin recibos ni datos personales, permisos confirmados por Paco (Lina y equipo). De Google Fotos solo archivos de cámara. **Niños (Paco, 30 oct 2026): pueden salir a veces, siempre con el máximo respeto:** solo si aportan a la historia; nunca en situación humillante, de pobreza exhibida, desnudos o llorando; sin su nombre y sin decir dónde viven exactamente; nunca en la portada; foto propia con permiso de la familia o con licencia libre. **Nombres de las personas fotografiadas:** se nombra siempre al pueblo; a una persona adulta solo si es figura pública (p. ej. Whang-Od) o si la fuente de la foto da su nombre; a un niño, nunca. (Los **autores** de las fotos se nombran siempre: P2.) | manual |
+| P5 | Antes de dar un vídeo por terminado: **informe de reglas sin ❌** y esta checklist pasada punto a punto. | manual |
+| P6 | **Paquete de texto por vídeo y por red, SIEMPRE** (Paco, 29 oct 2026): título con la búsqueda real al principio · descripción (2 primeras líneas lo importante + borradodelmapa.com + datos de viaje con fuente y fecha) · 3 hashtags (YouTube) / 3-5 (TikTok, Instagram) · subtítulos `.srt` subidos en YouTube · lista de reproducción · primer comentario fijado con la llamada a la app. Lo prepara Claude, lo aprueba Paco. Detalle: `video-reglas-y-flujo.md` §11. | manual |
+| P7 | Vídeos ya publicados: inventario + paquete nuevo + **solo con OK de Paco** se editan. Todo se anota en `docs/publicaciones-registro.md` (vídeo, red, día, enlace). | manual |
+| P8 | **⏸ PARADA desde el 30 oct 2026 (Paco: «lo que está hecho lo dejamos así»): los vídeos ya publicados no se tocan más**, ni el texto; las ediciones de TikTok que quedaban pendientes se cancelan. Lo que sigue es solo para si Paco la reactiva. Los vídeos ya publicados se actualizan TODOS con el paquete de texto (P6) y los hace Claude**, no Paco (Paco, 30 oct 2026: «yo no tengo tiempo para cambiar nada a mano, eso lo haces tú»). Se hace con el acceso que hay (YouTube Studio, TikTok Studio, Metricool para los programados). **No se cambia la visibilidad** (los privados siguen privados). **Choca con P7** («solo con OK de Paco»): gana P8 para el texto; para cualquier otra edición (vídeo, miniatura, visibilidad, borrar) sigue haciendo falta el OK de Paco. | manual |
+| P9 | **Datos prácticos de viaje en toda descripción**: lo que sirve a quien viaja (precios, horarios, cómo llegar, visados, cierres) con **fuente y fecha** («octubre de 2026; confírmalos siempre en fuentes oficiales»). Un dato dudoso o provisional se dice como tal. **Si un dato cambia** (caso: estancia sin visado en Tailandia, 60→30 días desde el 15 sep 2026), se verifica y se corrige en **todas** las publicaciones que lo repitan, no solo en la nueva. | manual |
+| P10 | **Redes activas: solo YouTube (Shorts) y TikTok** (30 oct 2026; Instagram parado). Se programan con Metricool (marca `borradodelmapa`). Al añadir o quitar una red, se anota aquí con fecha. | manual |
+| P11 | **Cada edición de texto se comprueba en la red y se anota**: tras guardar, mirar el listado/página de la red (no dar por hecho porque el botón respondió; TikTok puede dejar la edición «En revisión» y el listado con el texto viejo) y registrarlo en `docs/publicaciones-registro.md` con vídeo, red, día y resultado. En Metricool, un programado editado cambia de id (el uuid se mantiene); un publicado no se edita en Metricool sino en la propia red. | manual |
+
+## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
+| Versión (fecha · hora) | Sesión/tema | Qué cambió |
+|---|---|---|
+| 31 oct 2026 · 10:00 | Serie «Pueblos borrados del mapa» (Claude) | **M4**: anotado que la normalización está rota desde el 26 oct y que Paco no la activa de momento (recordárselo). |
+| 31 oct 2026 · 09:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **F9** (manual): revisar las fotos de banco una a una y sacar de la galería las que no son del sitio (caso volcán Batok de Indonesia en Whang-Od). |
+| 31 oct 2026 · 09:00 | Serie «Pueblos borrados del mapa» (Claude) | **S3**: sintonía propia de la serie (ElevenLabs Music, ~540 créditos las tres pruebas) en el mapa y la tarjeta; motor con `cfg.sintonia`. Puesta en Whang-Od v4 y Sagada v2. |
+| 30 oct 2026 · 20:00 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: Paco no oía los golpes (iban a −12 dB bajo la voz). Sonido del sígueme preparado aparte y terminado: `sfx/sigueme-batok.mp3`, sincronizado con los latidos y a +8 dB. Estreno en Whang-Od v3. |
+| 30 oct 2026 · 19:30 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: el sígueme baja a los 20 s por defecto para todos los vídeos de aquí en adelante y lleva ya el sonido de los golpecitos (implementado en `motor.cjs`; se estrena en Whang-Od v2). Los configs antiguos con `seg: 30` explícito no se tocan. |
+| 30 oct 2026 · 19:00 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: el sonido del nuevo sígueme serán los golpecitos del tatuaje *batok*, en todas las series (decisión de Paco). |
+| 30 oct 2026 · 18:00 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: ideas de Paco para el nuevo sígueme (sonido especial, iconos reconocibles, cambiar el texto; se hablará más adelante). **M16**: primera versión del clip con las capturas de Google Play. |
+| 30 oct 2026 · 17:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **M16** (manual): clip común de la app en todos los vídeos. **M13** en rediseño: el nuevo «sígueme» sale del Ep.1 de Whang-Od. |
+| 30 oct 2026 · 17:00 | Estrategia de redes / nicho (Claude) | **P8 parada**: los publicados se quedan como están (también el texto); pendientes de TikTok cancelados. Gana lo nuevo sobre P8. Foco en la serie «Pueblos borrados del mapa» (L1). |
+| 30 oct 2026 · 16:30 | Estrategia de redes / nicho (Claude) | **P4** reescrita: niños a veces, con máximo respeto y condiciones (sustituye a «sin niños en primer plano» y «sin identificar a nadie por la cara»: gana lo nuevo, decisión de Paco); cuándo se nombra a las personas fotografiadas. **P2**: autores al final del primer comentario fijado. **M15 y P2**: solo desde el 30 oct, los publicados no se tocan. |
+| 30 oct 2026 · 16:00 | Estrategia de redes / nicho (Claude) | Nueva **M15** «persona primero» en portada y primer fotograma (manual). **P2** ampliada: autores de las fotos también en el primer comentario fijado. Posible choque de M15 con **P4** («sin identificar a nadie por la cara»): no se anula P4, M15 lo respeta (sin niños, fotos con permiso o licencia, sin nombres salvo figuras públicas). |
+| 30 oct 2026 · 15:30 | Estrategia de redes / nicho (Claude) | **L1**: título con el pueblo primero («Los kayan · Pueblos borrados del mapa») y se va directo, sin prueba de 3 semanas (decisiones de Paco). |
+| 30 oct 2026 · 15:00 | Estrategia de redes / nicho (Claude) | Nueva sección 0 · Línea editorial con **L1** (manual): Paco elige el nicho «Culturas que se están borrando del mapa». Sin conflictos con otras reglas. |
+| 30 oct 2026 · 01:20 | Publicación en redes (Claude, chat de textos de YouTube/TikTok/Metricool) | Añadidas P8-P11 (manual): actualizar los ya publicados lo hace Claude, datos prácticos con fuente y fecha, redes activas, comprobar y registrar cada edición. **Conflicto resuelto:** P8 vs P7 («solo con OK de Paco»): gana P8 para el texto. P6 intacta. (Hora = reloj del equipo; las filas de abajo llevan horas posteriores, la fecha manda.) |
+| 30 oct 2026 · 14:00 | Bután (Claude) | Hook de aviso automático, comprobación de las piezas en `reglas.cjs` (❌), detector `comprobar-checklist-video.cjs`. N2 pasa a manual. |
+| 30 oct 2026 · 13:00 | Bután (Claude) | Añadida la sección «Editar desde varios chats» y cambiado el sistema de versión a fecha-hora para evitar choques entre sesiones. |
+| 30 oct 2026 · 12:30 (v1) | Bután (Claude) | Integra también lo del 29 oct (Runway/clips, paquete de publicación, «sin cierres poéticos»). **Conflicto resuelto:** `salma-narradora-reglas.md` (18 oct) pedía «cierre íntimo» y Paco decidió el 29 oct «solo datos con fuente, sin cierres poéticos» → manda lo más nuevo (N6). Creada fusionando `video-reglas-y-flujo.md`, Biblia v2.5 (§7, §12, §16, §18, §22), `salma-narradora-reglas.md`, `estilo-visual.md` y `serie-asia-estado.md`. Se añade la regla de mantenimiento y los IDs. Nuevo a raíz del piloto de Bután: mapa de vuelo de cabecera, no vender la app en la voz, subtítulos EN aparte, cifras múltiples. |
+
+## Cómo se mantiene sincronizada (hecho el 30 oct 2026)
+- **Aviso automático:** `scripts/hook-video.cjs` + `.claude/settings.json` (hook UserPromptSubmit): si el mensaje habla de vídeo, la sesión recibe la orden de leer ESTE archivo y su fecha de última actualización.
+- **Motor:** `motor/reglas.cjs` marca ❌ las piezas «motor» que falten y escribe contra qué actualización de esta lista se comprobó. Una pieza se puede descartar a propósito con `cfg.descartes = { M7: "motivo" }` (sale como ℹ).
+- **Detector:** `node scripts/comprobar-checklist-video.cjs` (0 €) falla si un ID de esta lista y el motor no coinciden o si el hook no está activo. Pasarlo antes de subir cambios de vídeo o de la checklist.
+- **Al añadir una regla nueva:** poner su fila aquí con ID, y si es automática, su `chk('ID', …)` en `reglas.cjs`; si no, marcarla «manual».

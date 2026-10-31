@@ -8,15 +8,32 @@ const FF = BASE + '/herramientas/node_modules/ffmpeg-static/ffmpeg.exe';
 const FONTD = 'C\\:/Windows/Fonts', IMPACT = FONTD + '/impact.ttf', ARIALB = FONTD + '/arialbd.ttf';
 const ORANGE_ASS = '&H0B63F4&';
 const run = (a, o = {}) => { const r = spawnSync(FF, ['-v', 'error', '-y', ...a], { encoding: 'utf8', maxBuffer: 1e9, ...o }); if (r.status) { console.error('FFMPEG FALLÓ:\n', a.join(' ').slice(0, 500), '\n', (r.stderr || '').slice(0, 1200)); process.exit(1); } return r; };
+// Caché de planos (Paco, 31 oct 2026: «solo he cambiado una foto, debería ser mil veces más rápido»): cada plano ya revelado se guarda en cache-planos/
+// con una huella de TODO lo que lo define (orden de ffmpeg + archivo de origen con su fecha y tamaño). Al remontar, los planos iguales se copian y solo se rehacen los que cambian.
+const CPL = path.join(__dirname, 'cache-planos');
+const runPlano = (a, out, src) => {
+  let st = ''; try { const x = fs.statSync(src); st = x.size + ':' + x.mtimeMs; } catch (e) { /* sin origen legible: se rehace */ }
+  const key = crypto.createHash('md5').update(JSON.stringify([a.map(v => v === out ? 'OUT' : v), src, st])).digest('hex').slice(0, 20), c = `${CPL}/${key}.mp4`;
+  if (st && fs.existsSync(c)) { fs.copyFileSync(c, out); return 'caché'; }
+  run(a); if (st && fs.existsSync(out)) { fs.mkdirSync(CPL, { recursive: true }); fs.copyFileSync(out, c); } return 'nuevo';
+};
 const info = f => spawnSync(FF, ['-hide_banner', '-i', f], { encoding: 'utf8' }).stderr || '';
 const dur = f => { const m = info(f).match(/Duration: (\d+):(\d+):([\d.]+)/); return m ? +m[1] * 3600 + +m[2] * 60 + +m[3] : 0; };
 const meanDb = f => { const r = spawnSync(FF, ['-hide_banner', '-nostats', '-i', f, '-vn', '-t', '25', '-af', 'volumedetect', '-f', 'null', 'NUL'], { encoding: 'utf8' }); const m = (r.stderr || '').match(/mean_volume: (-?[\d.]+) dB/); return m ? +m[1] : -30; };
 const photo = n => `${BASE}/india web/india 2019 @pacogomezduarte-${n}.jpg`;
 const vidsList = fs.readFileSync(path.join(HERE, 'videos-info.csv'), 'utf8').split(/\r?\n/).slice(1).filter(Boolean).map(l => l.split(',')[0].replace(/"/g, ''));
 const mobList = fs.readFileSync(BASE + '/hojas-contacto-movil/indice-movil.csv', 'utf8').split(/\r?\n/).slice(1).filter(Boolean).map(l => l.replace(/"/g, '').split(','));
-const RW = { RW546: 'ghat-incineraciones-546-5s.mp4', RW598: 'ghat-lamparas-598-v2-humo-5s.mp4', RW494: 'ghat-amanecer-494-5s.mp4' };
+const RW = { RW546: 'ghat-incineraciones-546-5s.mp4', RW598: 'ghat-lamparas-598-v2-humo-5s.mp4', RW494: 'ghat-amanecer-494-5s.mp4', RW416: 'ofrenda-rio-416-5s.mp4',
+  // clips de monos generados (IA: marcar como tal al publicar): 9001 Kling 3.0 Pro (el elegido para la intro) · 9002 Veo 3.1 Fast · 9003 Gen-4 Turbo frontal · 9004 Gen-4 Turbo ataque 1 · 9005 plátano 10 s
+  RW9001: 'mono-S138-kling3pro-5s.mp4', RW9002: 'mono-S138-veo31fast-4s.mp4', RW9003: 'mono-S138-ataque-frontal-5s.mp4', RW9004: 'mono-S138-ataque-5s.mp4', RW9005: 'monos-platano-v1-10s.mp4',
+  // banderas de oración animadas (2 s, Runway Gen-4 Turbo, IA): 9010 foto S275 · 9011 foto S157 · 9012 foto S156
+  RW9010: 'bandera-S275-2s.mp4', RW9011: 'bandera-S157-2s.mp4', RW9012: 'bandera-S156-2s.mp4' };
 // 'S485' foto Sony · 'M87' foto móvil · 'V41' vídeo móvil · 'RW494' clip Runway
+// 'W05' / 'H01' foto de la carpeta de la serie (cfg.fotosSerie; usa la versión grande «-g» si existe): ids cortos para que el editor las enseñe
+let SERIE = null; const setSerie = d => { SERIE = d || null; };
 function resolve(id) {
+  if (/^FILE:/.test(id)) return id.slice(5); // archivo suelto con ruta completa (series nuevas, p. ej. Bután)
+  if (/^[WH]\d+$/.test(id) && SERIE) { const g = `${SERIE}/${id}-g.jpg`; return fs.existsSync(g) ? g : `${SERIE}/${id}.jpg`; }
   if (/^SFX_/.test(id)) return HERE + '/sfx/' + id.slice(4) + '.mp3';
   if (/^RW/.test(id)) return BASE + '/runway-pruebas/' + RW[id];
   if (/^S\d+/.test(id)) return photo(id.slice(1));
@@ -24,12 +41,13 @@ function resolve(id) {
   if (/^V\d+/.test(id)) return BASE + '/videos-2019/' + vidsList[+id.slice(1) - 1];
   throw new Error('id desconocido ' + id);
 }
-const isVideo = id => /^(RW|V)/.test(id);
+const isVideo = id => /^(RW|V)/.test(id) || /^FILE:.*\.mp4$/i.test(id);
 const esc = s => String(s).replace(/\\/g, '\\\\').replace(/:/g, '\\:').replace(/'/g, '’');
 const LOOKS = {
   portra: { tone: "curves=all='0/0.025 0.25/0.23 0.5/0.52 0.75/0.79 1/0.975',colorbalance=rs=0.02:gs=-0.005:bs=-0.03:rm=0.025:bm=-0.025:rh=0.045:bh=-0.045,eq=saturation=1.04:contrast=1.02", grain: 6 },
   vision3: { tone: "format=gbrp,split[ka][kb];[kb]lutrgb=r='if(gt(val,215),val,0)':g='if(gt(val,215),val*0.35,0)':b='if(gt(val,215),val*0.12,0)',gblur=sigma=16[kh];[ka][kh]blend=all_mode=screen:all_opacity=0.5,curves=all='0/0.03 0.25/0.21 0.5/0.5 0.78/0.8 1/0.97',colorbalance=rs=-0.015:gs=0.005:bs=0.03:rh=0.05:bh=-0.04,eq=saturation=1.06:contrast=1.04", grain: 9 },
   trix: { tone: "hue=s=0,curves=all='0/0.04 0.3/0.2 0.7/0.82 1/0.985'", grain: 13 },
+  app: { plain: true }, // grabación de pantalla de la app: sin look de película, ni grano ni viñeta
 };
 // Normalización «BDM Film»: lleva cada foto hacia luma ≈105/255 y saturación ≈46 con límites (estilo-fotografico.md)
 function normFilter(f) {
@@ -65,10 +83,30 @@ async function voice(text, who) {
   fs.writeFileSync(js, JSON.stringify(al)); return { mp3, al, chars: text.length };
 }
 
+// INTRO editable: clip (vídeo o clip de IA) recortado a 9:16 + sonidos mezclados (grito, ataque, golpe real…). Se prepara aquí y entra como bloque de vídeo con su audio.
+function prepararIntro(b, W) {
+  // Recortar = quitar los mismos segundos de imagen y de sonido: la duración sale del clip (desde ss hasta fin) y cada sonido se desplaza con él.
+  const I = b.intro, f = resolve(I.clip), ss = I.ss || 0, td = dur(f), fin = Math.min(I.fin || td, td), d = Math.max(1, Math.round((fin - ss) * 100) / 100);
+  const v = `${W}/intro-video.mp4`;
+  run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)',scale=1080:1920:flags=lanczos,setsar=1,fps=30,format=yuv420p`, '-frames:v', String(Math.round(d * 30)), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', v]);
+  b.video = v; b.fixed = d; b.gainAudio = I.gainAudio ?? -5;
+  const sn = I.sonidos || [];
+  if (sn.length) {
+    const a = `${W}/intro-audio.wav`, ins = [], fl = [];
+    sn.forEach((x, i) => { const at = (x.at || 0) - ss, salto = (x.ss || 0) + Math.max(0, -at); ins.push('-ss', String(salto), '-i', resolve(x.src)); fl.push(`[${i}:a]volume=${x.db ?? 0}dB${x.fadeIn ? `,afade=t=in:d=${x.fadeIn}` : ''},adelay=${Math.round(Math.max(0, at) * 1000)}:all=1[s${i}]`); });
+    run([...ins, '-filter_complex', fl.join(';') + ';' + sn.map((_, i) => `[s${i}]`).join('') + `amix=inputs=${sn.length}:normalize=0:duration=longest,apad=whole_dur=${d},atrim=0:${d},loudnorm=I=-14:TP=-1.5:LRA=9[m]`, '-map', '[m]', '-ar', '44100', a]);
+    b.audioFile = a;
+  }
+}
 async function build(cfg) {
+  setSerie(cfg.fotosSerie);
+  // CALIDAD: «borrador» (por defecto: editor y pruebas, rápido) o «publicar» (máxima calidad para subir a redes: planos casi sin pérdida y montaje final lento). CALIDAD=publicar node <capítulo>.cjs
+  const PUB = (process.env.CALIDAD || cfg.calidad) === 'publicar', Q = PUB ? { plano: ['-preset', 'slow', '-crf', '12'], final: ['-preset', 'slow', '-crf', '16'], audio: '256k' } : { plano: ['-preset', 'veryfast', '-crf', '19'], final: ['-preset', 'veryfast', '-crf', '20'], audio: '192k' };
+  if (PUB) console.log('CALIDAD MÁXIMA (publicar): tarda más');
   const W = HERE + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
-  const OUT = BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
+  const OUT = cfg.out || BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
+  cfg.blocks.forEach(b => { if (b.intro) prepararIntro(b, W); });
   // 1) voces
   console.log('ETAPA 1/6 Voces (las que ya existen se reutilizan; solo se genera lo nuevo)');
   let charsNow = 0;
@@ -89,34 +127,44 @@ async function build(cfg) {
     t += b.D;
   }
   const cardT = t; const TOTAL = t + (cfg.cardSecs || 8);
+  const sgInicio = sg => Math.min(sg.seg ?? 20, Math.max(1, cardT - 7)); // aviso de seguir: a los 20 s por defecto (Paco, 30 oct 2026; antes 30)
   // 3) planos
   console.log('ETAPA 3/6 Cortando y revelando cada plano (looks Kodak, zooms)');
-  const clips = []; let nclip = 0, kbN = 0;
+  const clips = []; let nclip = 0, kbN = 0; const cacheN = { 'caché': 0, nuevo: 0 };
   const tow = (b, from) => { const i = b.text.indexOf(from); if (i < 0) throw new Error(`no encuentro «${from}» en el bloque ${b.id}`); const wi = b.text.slice(0, i).split(' ').length - 1; const sp = (b.voz || b.text).split(' '); let p = 0; for (let q = 0; q < wi; q++) p += sp[q].length + 1; return b.v.al.st[Math.min(p, b.v.al.st.length - 1)]; };
   for (const b of cfg.blocks) {
     if (b.video) { clips.push({ file: b.video, d: b.D, raw: true }); continue; }
     const S = b.shots; const starts = S.map((s, k) => k === 0 ? 0 : Math.max(0.9, b.lead + tow(b, s.from) - 0.06));
     for (let k = 1; k < S.length; k++) if (starts[k] < starts[k - 1] + 0.9) starts[k] = starts[k - 1] + 0.9;
+    if (b.golpe) { const kg = S.findIndex(x => x.from === b.golpe.en); if (kg >= 0) b._golpeT = b.t0 + starts[kg]; }
     S.forEach((s, k) => {
       const d = (k + 1 < S.length ? starts[k + 1] : b.D) - starts[k]; const n = ++nclip; const out = `${W}/c${String(n).padStart(2, '0')}.mp4`; const f = resolve(s.a);
       console.log('PLANO ' + n); const frames = Math.round(d * 30); const last = k === S.length - 1;
       const fadeV = (b.scene && k === 0 ? `,fade=t=in:st=0:d=0.3` : '') + (b.sceneEnd && last ? `,fade=t=out:st=${Math.max(0, d - 0.3).toFixed(2)}:d=0.3` : '');
       const lk = LOOKS[s.look || b.look || cfg.look || 'portra']; const norm = isVideo(s.a) ? '' : normFilter(f);
-      const tail = `${norm},${lk.tone},noise=alls=${lk.grain}:allf=t+u,vignette=PI/6,format=yuv420p${fadeV}`;
+      const tail = lk.plain ? `,format=yuv420p${fadeV}` : `${norm},${lk.tone},noise=alls=${lk.grain}:allf=t+u,vignette=PI/6,format=yuv420p${fadeV}`;
       if (isVideo(s.a)) {
-        const ss = s.ss || 0; const td = dur(f); const pad = td - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td - ss) + 0.2).toFixed(2)}` : '';
-        run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
+        let loopV = [];
+        let ss = s.ss || 0, fin = f; const td = dur(f);
+        // clip corto generado (Runway) y plano más largo: se repite de ida y vuelta (sin salto ni fotograma congelado)
+        if (/^RW/.test(s.a) && td - ss < d) { const pp = `${W}/pp_${s.a}.mp4`; if (!fs.existsSync(pp)) run(['-ss', String(ss), '-i', f, '-an', '-vf', 'split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '17', pp]); fin = pp; ss = 0; loopV = ['-stream_loop', '-1']; }
+        const td2 = dur(fin); const pad = !loopV.length && td2 - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td2 - ss) + 0.2).toFixed(2)}` : '';
+        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       } else {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
         const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 1.6; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
         const z = s.zfijo ? s.z : (s.z ?? AUTO[s.sc] ?? 0.05) * KB, [fx, fy] = s.foc || [0.5, 0.5], cx = s.cx ?? 0.5, inn = (s.dir || dirAuto) === 'in';
-        const zexpr = inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
+        let zexpr = inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
+        const f0 = Math.max(1, frames - 12); // GOLPE (s.golpe): en los últimos 0,4 s el zoom se dispara hacia el foco y la cámara se sacude
+        if (s.golpe) zexpr += `+${s.golpeZ ?? 0.6}*pow(max(0,on-${f0})/12,3)`;
+        const shake = s.golpe ? `,scale=1160:2064,crop=1080:1920:x='40+36*sin(n*9.1)*gt(n,${f0})':y='72+36*cos(n*11.7)*gt(n,${f0})'` : '';
         const pre = s.cover ? 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,scale=2160:3840:flags=lanczos' : `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*${cx},0)':0,scale=2160:3840:flags=lanczos`; // más ancha que 9:16 (apaisada o vertical 3:4) → recorta a lo ancho; si no, a lo alto
-        run(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
+        cacheN[runPlano(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${shake}${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
       clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra' });
     });
   }
+  console.log(`Planos: ${cacheN.nuevo} hechos ahora, ${cacheN['caché']} reutilizados de la caché`);
   reglas(cfg, TOTAL, OUT);
   // tarjeta final
   const card = `${W}/card.mp4`;
@@ -138,7 +186,7 @@ async function build(cfg) {
   console.log('ETAPA 4/6 Subtítulos y cifras'); // ASS (palabra iluminada) y cifras
   const ts = x => { x = Math.max(0, x); const h = Math.floor(x / 3600), m = Math.floor(x % 3600 / 60), s = x % 60; return `${h}:${String(m).padStart(2, '0')}:${s.toFixed(2).padStart(5, '0')}`; };
   let ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Main,Arial,66,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,2,5,60,60,60,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
-  const srt = []; const nums = [];
+  const srt = []; const srtEn = []; const nums = [];
   for (const b of cfg.blocks) {
     if (!b.text) continue;
     const toks = []; let pos = 0; const shown = b.text.split(' '); (b.voz || b.text).split(' ').forEach((sw, wi) => { const w = shown[wi]; if (w) { const a = pos; toks.push({ w, s: b.v.al.st[Math.min(a, b.v.al.st.length - 1)], e: b.v.al.en[Math.min(a + sw.length - 1, b.v.al.en.length - 1)] }); } pos += sw.length + 1; });
@@ -156,10 +204,13 @@ async function build(cfg) {
       });
       srt.push({ a: t0, e: tEnd, t: ph.ks.map(i => toks[i].w).join(' ') });
     });
-    if (b.cifra) { const k = toks.find(x => x.w.replace(/[^A-Za-z0-9áéíóúñ]/gi, '').toLowerCase() === b.cifra.word.toLowerCase()); const t0 = T(k ? k.s : 0); nums.push({ ...b.cifra, t0, t1: t0 + (b.cifra.dur || 3) }); }
+    [].concat(b.cifra || []).forEach(c0 => { const k = toks.find(x => x.w.replace(/[^A-Za-z0-9áéíóúñ]/gi, '').toLowerCase() === c0.word.toLowerCase()); const t0 = T(k ? k.s : 0); nums.push({ ...c0, t0, t1: t0 + (c0.dur || 3) }); }); // cifra: una o varias por bloque
+    // subtítulos en inglés (pista .srt aparte): b.en = una frase por cada frase española (corte en . ? !)
+    if (b.en) { const sents = []; let cs = []; toks.forEach(k => { cs.push(k); if (/[.?!…]$/.test(k.w)) { sents.push(cs); cs = []; } }); if (cs.length) sents.push(cs); sents.forEach((s, i) => { if (b.en[i]) srtEn.push({ a: T(s[0].s) - 0.05, e: T(s[s.length - 1].e) + 0.12, t: b.en[i] }); }); }
   }
   fs.writeFileSync(`${W}/sub.ass`, ass);
   fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-es.srt`, srt.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
+  if (srtEn.length) fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-en.srt`, srtEn.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
   const numF = nums.map(c => { const al = `if(lt(t,${c.t0.toFixed(2)}),0,min(1,(t-${c.t0.toFixed(2)})/0.25))*if(gt(t,${c.t1.toFixed(2)}),max(0,1-(t-${c.t1.toFixed(2)})/0.3),1)`; return `drawtext=fontfile='${IMPACT}':text='${esc(c.text)}':fontsize=${c.size || 230}:fontcolor=white:borderw=10:bordercolor=0xF4630B:x=(w-text_w)/2:y=${c.y || 640}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})',drawtext=fontfile='${ARIALB}':text='${esc(c.sub)}':fontsize=48:fontcolor=white:borderw=5:bordercolor=black:x=(w-text_w)/2:y=${(c.y || 640) + 270}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})'`; }).join(',');
   // 5) audio
   console.log('ETAPA 5/6 Mezcla de audio (voces niveladas + ambiente)'); // audio: voces + ambiente real por escena con ducking
@@ -168,7 +219,7 @@ async function build(cfg) {
   const VT = cfg.voiceDb || { paco: -21, salma: -24 };
   vparts.forEach(p => { const m = meanDb(p.b.v.mp3); p.g = (VT[p.b.who] ?? -22) - m; console.log("nivel voz", p.b.id, p.b.who, m.toFixed(1), "dB -> ganancia", p.g.toFixed(1)); });
   fv = vparts.map(p => `[${p.idx}:a]highpass=f=80,volume=${p.g.toFixed(2)}dB,adelay=${Math.round(p.t * 1000)}:all=1[p${p.idx}]`).join(';') + ';' + vparts.map(p => `[p${p.idx}]`).join('') + `amix=inputs=${vparts.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)},acompressor=threshold=0.12:ratio=3:attack=15:release=200:makeup=2[voz]`;
-  fs.writeFileSync(`${W}/fv.txt`, fv); run([...vin, '-filter_complex_script', `${W}/fv.txt`, '-map', '[voz]', '-ar', '44100', `${W}/voz.wav`]);
+  fs.writeFileSync(`${W}/fv.txt`, fv); run([...vin, '-filter_complex_script', `${W}/fv.txt`, '-map', '[voz]', '-ac', '2', '-ar', '44100', `${W}/voz.wav`]);
   const bedFiles = []; const cache = {};
   cfg.blocks.forEach(b => {
     if (!b.amb) return; const a = b.amb; const f = resolve(a.src); const key = a.src + '|' + (a.ss || 0);
@@ -178,11 +229,44 @@ async function build(cfg) {
     run(['-i', c.f, '-filter_complex', `[0:a]highpass=f=140,asplit[x][y];[y]areverse[r];[x][r]concat=n=2:v=0:a=1,aloop=loop=-1:size=2147483647,atrim=start=${off.toFixed(2)}:end=${(off + L).toFixed(2)},asetpts=PTS-STARTPTS,volume=${gain.toFixed(1)}dB,afade=t=in:d=0.5,afade=t=out:st=${(L - 0.5).toFixed(2)}:d=0.5,adelay=${Math.round(Math.max(0, b.t0 - 0.3) * 1000)}:all=1[o]`, '-map', '[o]', o2]);
     bedFiles.push(o2);
   });
+  if (!bedFiles.length) { const o = `${W}/bed_mudo.wav`; run(['-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo', '-t', TOTAL.toFixed(2), o]); bedFiles.push(o); } // capítulo sin ambiente: pista muda
   const bin = bedFiles.flatMap(f => ['-i', f]);
   const fb = bedFiles.map((_, i) => `[${i}:a]`).join('') + `amix=inputs=${bedFiles.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)}[amb]`;
   fs.writeFileSync(`${W}/fb.txt`, fb); run([...bin, '-filter_complex_script', `${W}/fb.txt`, '-map', '[amb]', `${W}/amb.wav`]);
   run(['-i', `${W}/voz.wav`, '-i', `${W}/amb.wav`, '-filter_complex', `[0]asplit[v1][v2];[1][v2]sidechaincompress=threshold=0.03:ratio=${cfg.duckRatio || 4}:attack=20:release=500[bd];[v1][bd]amix=inputs=2:normalize=0:duration=first[m]`, '-map', '[m]', `${W}/mix.wav`]);
-  run(['-i', `${W}/mix.wav`, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
+  const golpes = cfg.blocks.filter(b => b.golpe && b._golpeT != null); let mixIn = `${W}/mix.wav`;
+  const conAudio = cfg.blocks.filter(b => b.video && b.audioFile);
+  if (conAudio.length) {
+    const ain = [], af = [];
+    conAudio.forEach((b, i) => { ain.push('-i', b.audioFile); af.push(`[${i + 1}:a]volume=${b.gainAudio ?? 0}dB,adelay=${Math.round(b.t0 * 1000)}:all=1[x${i}]`); });
+    run(['-i', mixIn, ...ain, '-filter_complex', af.join(';') + ';[0:a]' + conAudio.map((_, i) => `[x${i}]`).join('') + `amix=inputs=${conAudio.length + 1}:normalize=0:duration=first[m1]`, '-map', '[m1]', `${W}/mix1.wav`]); mixIn = `${W}/mix1.wav`;
+  }
+  if (golpes.length) {
+    const gin = [], gf = [];
+    golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
+    run(['-i', mixIn, ...gin, '-filter_complex', gf.join(';') + ';[0:a]' + golpes.map((_, i) => `[g${i}]`).join('') + `amix=inputs=${golpes.length + 1}:normalize=0:duration=first[m2]`, '-map', '[m2]', `${W}/mix2.wav`]); mixIn = `${W}/mix2.wav`;
+  }
+  // sintonía de la serie (cfg.sintonia = { src, db }): el principio suena sobre el mapa y el final (con su golpe de cierre) bajo la tarjeta (Paco, 31 oct 2026)
+  if (cfg.sintonia) {
+    const SN = cfg.sintonia, f = resolve(SN.src), d = dur(f), CS = cfg.cardSecs || 8;
+    const mapa = cfg.blocks.find(b => b.video && b.id === 'mapa') || cfg.blocks.find(b => b.video), partes = [];
+    if (mapa) partes.push({ ss: 0, t: mapa.t0, len: Math.min(d, mapa.D), fin: 0.6 });
+    partes.push({ ss: Math.max(0, d - CS), t: cardT, len: Math.min(d, CS), fin: 0.3 });
+    partes.forEach((p, i) => {
+      const o = `${W}/sintonia_${i}.wav`;
+      run(['-ss', p.ss.toFixed(2), '-t', p.len.toFixed(2), '-i', f, '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${SN.db ?? -8}dB,afade=t=in:d=0.15,afade=t=out:st=${(p.len - p.fin).toFixed(2)}:d=${p.fin},adelay=${Math.round(p.t * 1000)}:all=1`, o]);
+      run(['-i', mixIn, '-i', o, '-filter_complex', '[0:a][1:a]amix=inputs=2:normalize=0:duration=first[ms]', '-map', '[ms]', `${W}/mixs${i}.wav`]); mixIn = `${W}/mixs${i}.wav`;
+    });
+  }
+  // sonido del aviso de seguir: golpes del tatuaje batok, el sonido del canal en todas las series (Paco, 30 oct 2026); cfg.seguir.sonido = false lo quita
+  // sfx/sigueme-batok.mp3: pieza terminada (2,1 s, un golpe al entrar la franja y uno por latido del corazón), ya nivelada para oírse por encima de la voz
+  const SGs = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null;
+  if (SGs && SGs.sonido !== false) {
+    const o = `${W}/sg-sonido.wav`;
+    run(['-i', resolve(SGs.sonido || 'SFX_sigueme-batok'), '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${SGs.sonidoDb ?? 8}dB,adelay=${Math.round(sgInicio(SGs) * 1000)}:all=1`, o]);
+    run(['-i', mixIn, '-i', o, '-filter_complex', '[0:a][1:a]amix=inputs=2:normalize=0:duration=first[m3]', '-map', '[m3]', `${W}/mix3.wav`]); mixIn = `${W}/mix3.wav`;
+  }
+  run(['-i', mixIn, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
   // 6) composición
   console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
@@ -194,7 +278,7 @@ async function build(cfg) {
   if (SG) {
     // Coreografía (u = segundos desde t0): 0-0.5 la franja cruza entrando por la izquierda · 0.3 aparece el corazón naranja detrás y late (varios latidos) ·
     // 4.6-5.1 la franja sale por la derecha · 5.1-5.5 el corazón revienta (crece y se desvanece)
-    const t0 = Math.min(SG.seg ?? 30, Math.max(1, cardT - 7)); sgT = { a: t0.toFixed(2), b: (t0 + 5.1).toFixed(2), c: (t0 + 5.55).toFixed(2) };
+    const t0 = sgInicio(SG); sgT = { a: t0.toFixed(2), b: (t0 + 5.1).toFixed(2), c: (t0 + 5.55).toFixed(2) };
     const txt = String(SG.texto || 'Si te está gustando, sígueme').toUpperCase(), tam = Math.min(70, Math.floor(900 / (txt.length * 0.5)));
     const rot5 = 'rotate=-5*PI/180:ow=rotw(-5*PI/180):oh=roth(-5*PI/180):c=none';
     sgIn = ['-loop', '1', '-i', `${W}/sg-banda.png`, '-loop', '1', '-i', `${W}/sg-corazon.png`];
@@ -224,9 +308,21 @@ async function build(cfg) {
     fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][hc]overlay=x='125-w/2':y='145-h/2':enable='between(t,${sgT.a},${sgT.b})'[mh];[mh][sg]overlay=x='${sgF.xBand}':y=1450:enable='between(t,${sgT.a},${sgT.b})'[m1]`; ult = 'm1'; }
   fc += `;[${ult}]${subF}[ms]`; ult = 'ms';
   fc += P ? `;[${ult}][3:v]overlay=0:0:enable='lt(t,0.2)'[v]` : `;[${ult}]null[v]`;
-  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
+  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', ...Q.final, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ac', '2', '-b:a', Q.audio, '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
+  // la portada también va como CARÁTULA del archivo (la miniatura del Explorador / del móvil) y suelta en un PNG para subirla a las redes
+  if (P) { const cov = `${W}/portada.png`, tmp = `${OUT}/${cfg.id}-tmp.mp4`;
+    fs.copyFileSync(cov, `${OUT}/${cfg.id}-portada.png`);
+    run(['-i', outFile, '-i', cov, '-map', '0', '-map', '1', '-c', 'copy', '-disposition:v:1', 'attached_pic', '-movflags', '+faststart', tmp]);
+    fs.copyFileSync(tmp, outFile); fs.unlinkSync(tmp); } // copiar encima (no renombrar): Windows no deja renombrar sobre un vídeo que el editor tiene abierto en el reproductor
   console.log('LISTO', outFile, TOTAL.toFixed(1) + ' s', clips.length, 'planos');
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
+  // carpeta ÚLTIMA (cfg.ultima): siempre la versión más reciente con nombre fijo, para no tener que buscar entre v1, v2, -editor… (Paco, 31 oct 2026: «me tienes un follón montado»)
+  if (cfg.ultima) {
+    const U = cfg.ultima, nom = cfg.ultimaNombre || cfg.id; fs.mkdirSync(U, { recursive: true });
+    [['.mp4', '.mp4'], ['-portada.png', ' - PORTADA.png'], ['-subtitulos-es.srt', ' - subtitulos ES.srt'], ['-subtitulos-en.srt', ' - subtitulos EN.srt'], ['-informe-reglas.txt', ' - informe de reglas.txt']].forEach(([a, b]) => {
+      const f = `${OUT}/${cfg.id}${a}`; if (fs.existsSync(f)) try { fs.copyFileSync(f, `${U}/${nom}${b}`); } catch (e) { console.log('No pude copiar a ÚLTIMA (¿lo tienes abierto?):', e.message); } });
+    fs.writeFileSync(`${U}/VERSION.txt`, `${cfg.id} · ${PUB ? 'CALIDAD MÁXIMA (para publicar)' : 'borrador (rápido)'} · montado el ${new Date().toLocaleString('es-ES')}\n`);
+  }
   return outFile;
 }
-module.exports = { build, voice, resolve, RW, vozEnCache };
+module.exports = { build, voice, resolve, setSerie, RW, vozEnCache, prepararIntro };
