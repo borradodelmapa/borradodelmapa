@@ -23,6 +23,21 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 5. **Si una regla nueva choca con otra** (como «cierre íntimo» vs «sin cierres poéticos»), no se borra en silencio: gana la más nueva, se anota en el registro quién gana y por qué.
 6. Los documentos de detalle (narradora, estilo, Biblia) que no estén en git **no cuentan como protocolo** para otras sesiones: lo importante se pasa a esta checklist y el detalle se commitea.
 
+## PROTOCOLO COMPLETO DE UN EPISODIO, DE LA IDEA A PUBLICAR (31 oct 2026; Paco: «quiero saber el protocolo completo»)
+Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera el OK de Paco. Dónde está cada cosa de «Pueblos borrados del mapa»: `docs/serie-pueblos-borrados.md`.
+1. **Tema** del plan de la serie (L1). Título: «<Pueblo> · Pueblos borrados del mapa».
+2. **Investigar con fuentes** (F4). Lo dudoso o contradictorio no va a la voz; se cuenta como tal en el blog o no se cuenta.
+3. **Guion de dirección por escena** (F3, N1-N9, M1) en `docs/pueblos-epN-<tema>-guion-direccion.md`. Si Paco no ha estado, narra solo Salma y sin «viaje real» (F2, M14). ⏸
+4. **Fotos**: búsqueda en Wikimedia Commons, **revisadas una a una** (F9), hoja de contactos con autores (P2). Persona en portada y primer fotograma (M15), niños con respeto (P4). Paco elige o deja que Claude proponga (F6). ⏸
+5. **Coste dicho antes** (F5, §8 de CLAUDE.md) → **una frase de prueba** de voz → ⏸ → resto de la voz.
+6. **Montaje con el motor** (F7): config `india/motor/<episodio>.cjs` con mapa (M7), clip común de la app (M16), sígueme a los 20 s con los golpes del *batok* (M13), sintonía en mapa y tarjeta (S3), ambiente con licencia (S1, S4). **Informe de reglas sin ❌** (P5).
+7. **Paco revisa en su editor** (un puerto por episodio) y corrige; cada «▶ Montar» es un borrador rápido y **sus cambios se aplican siempre** (F8). Nunca «arreglado»: «montado — dime qué ves y oyes». ⏸
+8. **Versión decidida → «★ Exportar para publicar»**: máxima calidad, queda en `pueblos/<episodio>/ULTIMA/` (`VERSION.txt` dice «CALIDAD MÁXIMA»).
+9. **Entrada de blog** (P12): datos en `scripts/blog-viajes-data.js` (resumen, información ampliada con fuentes, ficha de respeto con fecha, días de la guía o enlace, `creditosDe` para los autores, `realidad`, `fecha`) + vídeo ligero en `salma marketing/ligeras-portada/` + portada en `blog/viajes/img/` → `node scripts/build-blog-viajes.js` → **enseñarla en local** (localhost:8080) ⏸ → `node scripts/comprobar-nada-atras.cjs` en ✅ → commit + push → comprobar que la web la sirve → Paco pide la indexación en Search Console.
+10. **Redes** (P1, P6, P9, P10): paquete de texto por red (título con la búsqueda primero, descripción con datos prácticos con fuente y fecha, enlace a la entrada del blog, hashtags, subtítulos `.srt`, marca de contenido con IA en los ajustes de la red, comentario fijado con la llamada a la app y **los autores de las fotos al final**). ⏸ → programar en Metricool → **comprobar en cada red** (P11) → anotar en `docs/publicaciones-registro.md` (P7).
+11. **Actualizar el plan de la serie** (estado del episodio, enlaces) y, si Paco decidió algo nuevo, esta checklist en el mismo turno.
+**Aún a mano (por automatizar):** el paso 9 lo hace Claude; la idea es que «★ Exportar para publicar» deje también listos el vídeo ligero, la portada del blog y el borrador del paquete de redes.
+
 ## 0 · Línea editorial (qué contamos)
 | ID | Regla | Comprobación |
 |---|---|---|
@@ -101,6 +116,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 31 oct 2026 · 11:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva sección **PROTOCOLO COMPLETO DE UN EPISODIO** (11 pasos de la idea a publicar, con sus paradas para el OK de Paco). No cambia reglas: las ordena. |
 | 31 oct 2026 · 10:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **P12** (manual): un vídeo = una entrada de blog con vídeo, resumen, información ampliada y la guía del país (enseñada o enlazada); sistema completo con el generador existente. |
 | 31 oct 2026 · 10:00 | Serie «Pueblos borrados del mapa» (Claude) | **M4**: anotado que la normalización está rota desde el 26 oct y que Paco no la activa de momento (recordárselo). |
 | 31 oct 2026 · 09:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **F9** (manual): revisar las fotos de banco una a una y sacar de la galería las que no son del sitio (caso volcán Batok de Indonesia en Whang-Od). |
