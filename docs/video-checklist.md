@@ -60,7 +60,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 | M1 | Estructura: gancho → **situar (mapa)** → desarrollo alternando escalas → pico (plano largo) → ficha (ritmo rápido) → cierre (GP lento) → tarjeta. | manual |
 | M2 | Escalas GP/PM/PP/D: presentar GP→PM→PP→D y cerrar al revés; no repetir escala seguida; máx. 2 detalles seguidos; duraciones GP 3-4 · PM 2-3 · PP 1,5-2 · D 0,8-1,5 s. | motor |
 | M3 | **Ninguna foto ni clip repetido** en un vídeo. | motor |
-| M4 | Look Kodak coherente: Portra (día) · Vision3 (noche/interior) · Tri-X B/N (historia/leyenda/recuerdo) + normalización «BDM Film» de cada foto. | motor |
+| M4 | Look Kodak coherente: Portra (día) · Vision3 (noche/interior) · Tri-X B/N (historia/leyenda/recuerdo) + normalización «BDM Film» de cada foto. **⚠ La normalización no funciona desde el 26 oct 2026** (fallo de una línea en `normFilter`); visto el antes/después (`pueblos/comun/M4-antes-despues.jpg`), **Paco decide no activarla de momento** (31 oct) y pide que se le recuerde de vez en cuando. El look Kodak sí se aplica. | motor |
 | M5 | Zoom/empuje lo pone el montaje (ffmpeg); Runway solo movimiento interno, cámara fija, 5 s (coste dicho). | manual |
 | M6 | **Fundidos a negro entre bloques** (`scene`/`sceneEnd`). | motor |
 | M7 | **Mapa de ruta animado** de cabecera (5-8 s) con frontera real y título «BORRADO DEL MAPA · lugar» (`motor/mapa.cjs`, `mapa-butan.cjs`). | motor |
@@ -100,6 +100,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 31 oct 2026 · 10:00 | Serie «Pueblos borrados del mapa» (Claude) | **M4**: anotado que la normalización está rota desde el 26 oct y que Paco no la activa de momento (recordárselo). |
 | 31 oct 2026 · 09:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **F9** (manual): revisar las fotos de banco una a una y sacar de la galería las que no son del sitio (caso volcán Batok de Indonesia en Whang-Od). |
 | 31 oct 2026 · 09:00 | Serie «Pueblos borrados del mapa» (Claude) | **S3**: sintonía propia de la serie (ElevenLabs Music, ~540 créditos las tres pruebas) en el mapa y la tarjeta; motor con `cfg.sintonia`. Puesta en Whang-Od v4 y Sagada v2. |
 | 30 oct 2026 · 20:00 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: Paco no oía los golpes (iban a −12 dB bajo la voz). Sonido del sígueme preparado aparte y terminado: `sfx/sigueme-batok.mp3`, sincronizado con los latidos y a +8 dB. Estreno en Whang-Od v3. |
