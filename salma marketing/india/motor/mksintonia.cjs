@@ -1,5 +1,5 @@
 // SINTONÍA de «Pueblos borrados del mapa» — música ORIGINAL por síntesis propia (sin muestras ni terceros, 0 €). Suena en el mapa y en la tarjeta final.
-// Uso: node mksintonia.cjs <A|B|C> <salida.wav> [segundos=9]
+// Uso: node mksintonia.cjs <A|B|C|D|E> <salida.wav> [segundos=9]
 //  A · cuerda pulsada pentatónica sobre un bordón grave (viaje, misterio)
 //  B · láminas de bambú/gong a lo kulintang sobre bordón (Asia, madera, cercano al batok)
 //  C · campana lenta y cuerdas graves (solemne, memoria)
@@ -42,6 +42,13 @@ if (V === 'A') {
   const frase = [[0.5, 3], [0.8, 4], [1.1, 6], [1.7, 5], [2.0, 4], [2.6, 3], [2.9, 1], [3.5, 3], [4.4, 3], [4.7, 4], [5.0, 6], [5.6, 8], [6.2, 7]];
   frase.forEach(([t, i]) => nota(t, P[i], 1.4, 0.15, LAMINA, 4.2, 0.3 + rnd() * 0.4, 0.002));
   [0.5, 2.6, 4.4].forEach(t => nota(t, 33, 3, 0.12, [[1, 1], [1.5, 0.3], [2.1, 0.15]], 1.1, 0.5, 0.01)); // gong grave
+} else if (V === 'D' || V === 'E') {
+  // D · solo la madera del batok (Paco, 31 oct: «la madera del batok sí me gusta»; A-C sonaban «de ascensor»): ritmo de golpes que se anima y se para en seco
+  // E · lo mismo con un tambor grave por debajo, en los tiempos fuertes
+  const golpes = [0.3, 0.72, 1.1, 1.4, 1.95, 2.35, 2.7, 3.0, 3.55, 3.9, 4.2, 4.45, 4.7, 5.15, 5.45, 5.7, 5.9, 6.1];
+  golpes.forEach((t, k) => madera(t, 0.32 + 0.12 * (k % 4 === 0) + 0.12 * (t / 6.5)));
+  if (V === 'E') [0.3, 1.95, 3.55, 5.15].forEach(t => { const i0 = Math.floor(t * SR);
+    for (let k = 0; k < SR * 0.9; k++) { const tt = k / SR, f = 55 + 40 * Math.exp(-18 * tt); add(i0 + k, 0.55 * Math.exp(-4.5 * tt) * Math.sin(2 * Math.PI * f * tt), 0.5); } });
 } else {
   bordon(40, 0.06); bordon(47, 0.04); bordon(52, 0.02);
   [[0.8, 5], [2.6, 4], [4.4, 2], [6.0, 4]].forEach(([t, i]) => nota(t, P[i] + 12, 3.4, 0.11, CAMPANA, 1.0, 0.5, 0.003));
