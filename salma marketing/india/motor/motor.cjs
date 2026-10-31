@@ -321,7 +321,7 @@ async function build(cfg) {
     const U = cfg.ultima, nom = cfg.ultimaNombre || cfg.id; fs.mkdirSync(U, { recursive: true });
     [['.mp4', '.mp4'], ['-portada.png', ' - PORTADA.png'], ['-subtitulos-es.srt', ' - subtitulos ES.srt'], ['-subtitulos-en.srt', ' - subtitulos EN.srt'], ['-informe-reglas.txt', ' - informe de reglas.txt']].forEach(([a, b]) => {
       const f = `${OUT}/${cfg.id}${a}`; if (fs.existsSync(f)) try { fs.copyFileSync(f, `${U}/${nom}${b}`); } catch (e) { console.log('No pude copiar a ÚLTIMA (¿lo tienes abierto?):', e.message); } });
-    fs.writeFileSync(`${U}/VERSION.txt`, `${cfg.id} · montado el ${new Date().toLocaleString('es-ES')}\n`);
+    fs.writeFileSync(`${U}/VERSION.txt`, `${cfg.id} · ${PUB ? 'CALIDAD MÁXIMA (para publicar)' : 'borrador (rápido)'} · montado el ${new Date().toLocaleString('es-ES')}\n`);
   }
   return outFile;
 }

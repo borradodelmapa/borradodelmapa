@@ -41,7 +41,7 @@ table.tsnd{border-collapse:collapse;width:100%;font-size:12px}table.tsnd th{colo
 #vid{margin:14px 0;display:none}#vid video{max-width:100%;max-height:60vh;background:#000}#panel{display:none;background:#111;border-bottom:1px solid var(--line);padding:12px 16px}#panel .bar{height:14px;background:#2a2a2a;margin:8px 0}#panel .bar i{display:block;height:100%;background:var(--or);width:0;transition:width .5s}#panel ol{margin:6px 0;padding-left:20px;color:var(--mu)}#panel li.hecho{color:#6c6}#panel li.ahora{color:var(--or);font-weight:700}#panel ul{margin:6px 0;padding-left:18px}#panel pre{white-space:pre-wrap;color:var(--mu);font-size:12px;margin:6px 0}
 </style></head><body>
 <header><h1>EDITOR · INDIA CAP. 4 · BENARÉS</h1><div id="mini" style="display:none;flex:1;min-width:200px;max-width:520px"><div id="minit" style="font-size:13px;font-weight:700;color:var(--or)"></div><div style="height:8px;background:#2a2a2a;margin-top:3px"><i id="minib" style="display:block;height:100%;width:0;background:var(--or);transition:width .5s"></i></div></div>
-<button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button></header>
+<button class="sec" id="reset">Deshacer cambios</button><button id="montar">▶ Montar</button><button class="sec" id="publicar" title="La versión final en máxima calidad para subir a redes (tarda más). Queda en la carpeta ÚLTIMA.">★ Exportar para publicar</button></header>
 <div id="panel"></div>
 <main><div id="vid"><h3>Compara</h3><div style="display:flex;gap:14px;flex-wrap:wrap"><div><b>Con tus cambios</b><br><video id="vnuevo" controls></video></div><div id="vorig"><b>Original</b><br><video id="vold" controls></video></div></div></div><div id="portada"></div><div id="ajustes"></div><div id="lista">Cargando…</div></main>
 <div id="modal3" style="display:none;position:fixed;inset:0;background:#000d;z-index:12;overflow:auto"><div style="max-width:420px;margin:20px auto;background:#111;border:1px solid var(--or);padding:12px"><b id="ft"></b><div style="position:relative;margin:8px 0;line-height:0"><img id="fimg" style="width:100%;cursor:crosshair"><div id="fmark" style="display:none;position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:3px solid #F4630B;border-radius:50%;box-shadow:0 0 0 2px #000;pointer-events:none"></div></div><div style="display:flex;gap:8px"><button class="sec" id="fauto">Auto (centro)</button><button id="fcerrar">Listo</button></div></div></div>
@@ -257,6 +257,11 @@ $('#montar').onclick = async () => {
   }
   clearTimeout(montarArmado); montarArmado = null; b.textContent = '▶ Montar';
   await fetch('/api/montar', { method: 'POST' }); sondear();
+};
+$('#publicar').onclick = async () => { // máxima calidad: solo cuando la versión ya está decidida (las voces nuevas se generan antes con «Montar»)
+  await guardar(); const est = await (await fetch('/api/estimar')).json();
+  if (est.chars > 0) { const m = $('#mini'); m.style.display = 'block'; $('#minit').textContent = 'Hay textos cambiados: pulsa antes «Montar» para generar sus voces y revisar, y luego «Exportar para publicar».'; return; }
+  await fetch('/api/montar?calidad=publicar', { method: 'POST' }); sondear();
 };
 const PASOS = ['Voces','Línea de tiempo','Cortando y revelando planos','Subtítulos y cifras','Mezcla de audio','Montaje final'];
 async function sondear(){
