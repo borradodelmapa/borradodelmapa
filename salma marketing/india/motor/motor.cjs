@@ -8,6 +8,15 @@ const FF = BASE + '/herramientas/node_modules/ffmpeg-static/ffmpeg.exe';
 const FONTD = 'C\\:/Windows/Fonts', IMPACT = FONTD + '/impact.ttf', ARIALB = FONTD + '/arialbd.ttf';
 const ORANGE_ASS = '&H0B63F4&';
 const run = (a, o = {}) => { const r = spawnSync(FF, ['-v', 'error', '-y', ...a], { encoding: 'utf8', maxBuffer: 1e9, ...o }); if (r.status) { console.error('FFMPEG FALLÓ:\n', a.join(' ').slice(0, 500), '\n', (r.stderr || '').slice(0, 1200)); process.exit(1); } return r; };
+// Caché de planos (Paco, 31 oct 2026: «solo he cambiado una foto, debería ser mil veces más rápido»): cada plano ya revelado se guarda en cache-planos/
+// con una huella de TODO lo que lo define (orden de ffmpeg + archivo de origen con su fecha y tamaño). Al remontar, los planos iguales se copian y solo se rehacen los que cambian.
+const CPL = path.join(__dirname, 'cache-planos');
+const runPlano = (a, out, src) => {
+  let st = ''; try { const x = fs.statSync(src); st = x.size + ':' + x.mtimeMs; } catch (e) { /* sin origen legible: se rehace */ }
+  const key = crypto.createHash('md5').update(JSON.stringify([a.map(v => v === out ? 'OUT' : v), src, st])).digest('hex').slice(0, 20), c = `${CPL}/${key}.mp4`;
+  if (st && fs.existsSync(c)) { fs.copyFileSync(c, out); return 'caché'; }
+  run(a); if (st && fs.existsSync(out)) { fs.mkdirSync(CPL, { recursive: true }); fs.copyFileSync(out, c); } return 'nuevo';
+};
 const info = f => spawnSync(FF, ['-hide_banner', '-i', f], { encoding: 'utf8' }).stderr || '';
 const dur = f => { const m = info(f).match(/Duration: (\d+):(\d+):([\d.]+)/); return m ? +m[1] * 3600 + +m[2] * 60 + +m[3] : 0; };
 const meanDb = f => { const r = spawnSync(FF, ['-hide_banner', '-nostats', '-i', f, '-vn', '-t', '25', '-af', 'volumedetect', '-f', 'null', 'NUL'], { encoding: 'utf8' }); const m = (r.stderr || '').match(/mean_volume: (-?[\d.]+) dB/); return m ? +m[1] : -30; };
@@ -91,6 +100,9 @@ function prepararIntro(b, W) {
 }
 async function build(cfg) {
   setSerie(cfg.fotosSerie);
+  // CALIDAD: «borrador» (por defecto: editor y pruebas, rápido) o «publicar» (máxima calidad para subir a redes: planos casi sin pérdida y montaje final lento). CALIDAD=publicar node <capítulo>.cjs
+  const PUB = (process.env.CALIDAD || cfg.calidad) === 'publicar', Q = PUB ? { plano: ['-preset', 'slow', '-crf', '12'], final: ['-preset', 'slow', '-crf', '16'], audio: '256k' } : { plano: ['-preset', 'veryfast', '-crf', '19'], final: ['-preset', 'veryfast', '-crf', '20'], audio: '192k' };
+  if (PUB) console.log('CALIDAD MÁXIMA (publicar): tarda más');
   const W = HERE + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
   const OUT = cfg.out || BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
@@ -118,7 +130,7 @@ async function build(cfg) {
   const sgInicio = sg => Math.min(sg.seg ?? 20, Math.max(1, cardT - 7)); // aviso de seguir: a los 20 s por defecto (Paco, 30 oct 2026; antes 30)
   // 3) planos
   console.log('ETAPA 3/6 Cortando y revelando cada plano (looks Kodak, zooms)');
-  const clips = []; let nclip = 0, kbN = 0;
+  const clips = []; let nclip = 0, kbN = 0; const cacheN = { 'caché': 0, nuevo: 0 };
   const tow = (b, from) => { const i = b.text.indexOf(from); if (i < 0) throw new Error(`no encuentro «${from}» en el bloque ${b.id}`); const wi = b.text.slice(0, i).split(' ').length - 1; const sp = (b.voz || b.text).split(' '); let p = 0; for (let q = 0; q < wi; q++) p += sp[q].length + 1; return b.v.al.st[Math.min(p, b.v.al.st.length - 1)]; };
   for (const b of cfg.blocks) {
     if (b.video) { clips.push({ file: b.video, d: b.D, raw: true }); continue; }
@@ -137,7 +149,7 @@ async function build(cfg) {
         // clip corto generado (Runway) y plano más largo: se repite de ida y vuelta (sin salto ni fotograma congelado)
         if (/^RW/.test(s.a) && td - ss < d) { const pp = `${W}/pp_${s.a}.mp4`; if (!fs.existsSync(pp)) run(['-ss', String(ss), '-i', f, '-an', '-vf', 'split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '17', pp]); fin = pp; ss = 0; loopV = ['-stream_loop', '-1']; }
         const td2 = dur(fin); const pad = !loopV.length && td2 - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td2 - ss) + 0.2).toFixed(2)}` : '';
-        run([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
+        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       } else {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
         const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 1.6; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
@@ -147,11 +159,12 @@ async function build(cfg) {
         if (s.golpe) zexpr += `+${s.golpeZ ?? 0.6}*pow(max(0,on-${f0})/12,3)`;
         const shake = s.golpe ? `,scale=1160:2064,crop=1080:1920:x='40+36*sin(n*9.1)*gt(n,${f0})':y='72+36*cos(n*11.7)*gt(n,${f0})'` : '';
         const pre = s.cover ? 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,scale=2160:3840:flags=lanczos' : `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*${cx},0)':0,scale=2160:3840:flags=lanczos`; // más ancha que 9:16 (apaisada o vertical 3:4) → recorta a lo ancho; si no, a lo alto
-        run(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${shake}${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', out]);
+        cacheN[runPlano(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${shake}${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
       clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra' });
     });
   }
+  console.log(`Planos: ${cacheN.nuevo} hechos ahora, ${cacheN['caché']} reutilizados de la caché`);
   reglas(cfg, TOTAL, OUT);
   // tarjeta final
   const card = `${W}/card.mp4`;
@@ -206,7 +219,7 @@ async function build(cfg) {
   const VT = cfg.voiceDb || { paco: -21, salma: -24 };
   vparts.forEach(p => { const m = meanDb(p.b.v.mp3); p.g = (VT[p.b.who] ?? -22) - m; console.log("nivel voz", p.b.id, p.b.who, m.toFixed(1), "dB -> ganancia", p.g.toFixed(1)); });
   fv = vparts.map(p => `[${p.idx}:a]highpass=f=80,volume=${p.g.toFixed(2)}dB,adelay=${Math.round(p.t * 1000)}:all=1[p${p.idx}]`).join(';') + ';' + vparts.map(p => `[p${p.idx}]`).join('') + `amix=inputs=${vparts.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)},acompressor=threshold=0.12:ratio=3:attack=15:release=200:makeup=2[voz]`;
-  fs.writeFileSync(`${W}/fv.txt`, fv); run([...vin, '-filter_complex_script', `${W}/fv.txt`, '-map', '[voz]', '-ar', '44100', `${W}/voz.wav`]);
+  fs.writeFileSync(`${W}/fv.txt`, fv); run([...vin, '-filter_complex_script', `${W}/fv.txt`, '-map', '[voz]', '-ac', '2', '-ar', '44100', `${W}/voz.wav`]);
   const bedFiles = []; const cache = {};
   cfg.blocks.forEach(b => {
     if (!b.amb) return; const a = b.amb; const f = resolve(a.src); const key = a.src + '|' + (a.ss || 0);
@@ -295,7 +308,7 @@ async function build(cfg) {
     fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][hc]overlay=x='125-w/2':y='145-h/2':enable='between(t,${sgT.a},${sgT.b})'[mh];[mh][sg]overlay=x='${sgF.xBand}':y=1450:enable='between(t,${sgT.a},${sgT.b})'[m1]`; ult = 'm1'; }
   fc += `;[${ult}]${subF}[ms]`; ult = 'ms';
   fc += P ? `;[${ult}][3:v]overlay=0:0:enable='lt(t,0.2)'[v]` : `;[${ult}]null[v]`;
-  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
+  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', ...Q.final, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ac', '2', '-b:a', Q.audio, '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
   // la portada también va como CARÁTULA del archivo (la miniatura del Explorador / del móvil) y suelta en un PNG para subirla a las redes
   if (P) { const cov = `${W}/portada.png`, tmp = `${OUT}/${cfg.id}-tmp.mp4`;
     fs.copyFileSync(cov, `${OUT}/${cfg.id}-portada.png`);
