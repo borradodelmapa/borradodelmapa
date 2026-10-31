@@ -39,6 +39,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 | F6 | **Paco elige** la foto protagonista de cada escena (banco por temas) y los audios, oyendo candidatos del mismo volumen. Si Claude propone fotos, se las enseña para elegir. | manual |
 | F7 | Monta Claude con el motor (**un solo editor/motor**: no escribir otro) y entrega: vídeo + informe de reglas + hoja de planos (`motor/hoja.cjs`). Se guarda con fecha en `VIDEOS-TERMINADOS/` (el anterior del mismo capítulo pasa a `ANTIGUOS`). Un puerto de editor por capítulo; nunca renombrar sobre un vídeo abierto en el editor (se copia encima). | manual |
 | F8 | Paco corrige por escena/número y se remonta. Nunca «arreglado»: *«montado — dime qué ves y oyes»*. Un cambio, una prueba, una confirmación. | manual |
+| F9 | **NORMA (Paco, 31 oct 2026): las fotos de banco se revisan UNA A UNA antes de enseñárselas a Paco.** Fuera de la galería (a `fotos/descartadas-otro-sitio/` con su nota) todo lo que no sea del sitio o pueblo del episodio: caso real, buscando «batok» (el tatuaje) se colaron 8 fotos del volcán Batok de Java (Indonesia) y una acabó en el vídeo de Filipinas. Tampoco van restos humanos ni fotos de «zoos humanos» o exhibiciones. Avisar no basta: se quitan. | manual |
 
 ## B · Narración y texto (Salma narradora)
 | ID | Regla | Comprobación |
@@ -99,6 +100,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 31 oct 2026 · 09:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **F9** (manual): revisar las fotos de banco una a una y sacar de la galería las que no son del sitio (caso volcán Batok de Indonesia en Whang-Od). |
 | 31 oct 2026 · 09:00 | Serie «Pueblos borrados del mapa» (Claude) | **S3**: sintonía propia de la serie (ElevenLabs Music, ~540 créditos las tres pruebas) en el mapa y la tarjeta; motor con `cfg.sintonia`. Puesta en Whang-Od v4 y Sagada v2. |
 | 30 oct 2026 · 20:00 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: Paco no oía los golpes (iban a −12 dB bajo la voz). Sonido del sígueme preparado aparte y terminado: `sfx/sigueme-batok.mp3`, sincronizado con los latidos y a +8 dB. Estreno en Whang-Od v3. |
 | 30 oct 2026 · 19:30 | Serie «Pueblos borrados del mapa» (Claude) | **M13**: el sígueme baja a los 20 s por defecto para todos los vídeos de aquí en adelante y lleva ya el sonido de los golpecitos (implementado en `motor.cjs`; se estrena en Whang-Od v2). Los configs antiguos con `seg: 30` explícito no se tocan. |
