@@ -13,7 +13,7 @@ const VIDEO_SRC = path.join(ROOT, 'salma marketing', 'ligeras-portada');
 const OUT = path.join(ROOT, 'blog', 'viajes');
 const OUT_VIDEO = path.join(OUT, 'video');
 const SITE = 'https://borradodelmapa.com';
-const FECHA = '2026-10-18';
+const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 194;      // styles.css (= APP_CSS_V de build-destinos.js)
 const BV_CSS_V = 3;     // blog-viajes.css
@@ -112,8 +112,8 @@ function pagina(c) {
   const serieCaps = caps.filter((x) => x.serie === c.serie);
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: c.titulo, description: c.resumen, image: SITE + img, author: { '@type': 'Person', name: 'Salma' },
-      publisher: { '@type': 'Organization', name: 'Borrado del Mapa', url: SITE }, datePublished: FECHA, dateModified: FECHA, mainEntityOfPage: url },
-    { '@context': 'https://schema.org', '@type': 'VideoObject', name: c.titulo, description: c.resumen, uploadDate: FECHA, thumbnailUrl: SITE + img,
+      publisher: { '@type': 'Organization', name: 'Borrado del Mapa', url: SITE }, datePublished: c.fecha || FECHA, dateModified: c.fecha || FECHA, mainEntityOfPage: url },
+    { '@context': 'https://schema.org', '@type': 'VideoObject', name: c.titulo, description: c.resumen, uploadDate: c.fecha || FECHA, thumbnailUrl: SITE + img,
       contentUrl: `${SITE}/blog/viajes/video/${c.slug}.mp4`, duration: c.dur.iso },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Blog de viajes', item: SITE + '/blog/' },
@@ -300,7 +300,7 @@ fs.writeFileSync(path.join(ROOT, 'blog', 'index.html'), indice);
 const smFile = path.join(ROOT, 'sitemap-blog.xml');
 let sm = fs.readFileSync(smFile, 'utf8');
 sm = sm.replace(/\s*<!-- VIAJES:START -->[\s\S]*?<!-- VIAJES:END -->/, '');
-const urls = caps.map((c) => `  <url><loc>${SITE}/blog/viajes/${c.slug}</loc><lastmod>${FECHA}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
+const urls = caps.map((c) => `  <url><loc>${SITE}/blog/viajes/${c.slug}</loc><lastmod>${c.fecha || FECHA}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
 sm = sm.replace('</urlset>', `  <!-- VIAJES:START -->\n${urls}\n  <!-- VIAJES:END -->\n</urlset>`);
 fs.writeFileSync(smFile, sm);
 

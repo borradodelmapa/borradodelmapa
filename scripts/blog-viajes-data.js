@@ -386,6 +386,7 @@ const caps = [
   // Ep.1 Whang-Od · guion y fuentes: docs/pueblos-ep1-whang-od-guion-direccion.md · vídeo: salma marketing/pueblos/whang-od/ULTIMA
   {
     slug: 'filipinas-whang-od-tatuadora-kalinga',
+    fecha: '2026-10-31',
     serie: 'Pueblos borrados del mapa',
     cap: 'Episodio 1',
     pais: 'Filipinas',
@@ -447,6 +448,7 @@ const caps = [
   // Ep.2 Sagada · guion y fuentes: docs/pueblos-ep2-sagada-guion-direccion.md · vídeo: salma marketing/pueblos/sagada/ULTIMA
   {
     slug: 'filipinas-sagada-ataudes-colgantes',
+    fecha: '2026-10-31',
     serie: 'Pueblos borrados del mapa',
     cap: 'Episodio 2',
     pais: 'Filipinas',
