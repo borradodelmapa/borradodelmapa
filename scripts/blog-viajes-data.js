@@ -6,6 +6,7 @@
 const SERIES = {
   'Tailandia en moto': { sub: 'Chiang Mai, el Triángulo de Oro, la carretera de las 762 curvas y el bucle de Mae Hong Son, en moto. Y un especial de Muay Thai en Ko Samui.' },
   'Vietnam': { sub: 'De mil años de resistencia a Hồ Chí Minh: cinco capítulos para entender el país antes de recorrerlo.' },
+  'Pueblos borrados del mapa': { sub: 'Pueblos, oficios y costumbres que están desapareciendo, contados con datos y fuentes. Y cómo visitarlos con respeto.' },
 };
 
 const W = (t, u) => ({ t, u });
@@ -379,6 +380,124 @@ const caps = [
     ],
     nota: 'Las cifras de la reforma agraria y de Nghệ An son estimaciones muy discutidas: damos el rango que citan los historiadores.',
     cierre: null,
+  },
+
+  // ─── Pueblos borrados del mapa (P12 de docs/video-checklist.md: un vídeo = una entrada) ───
+  // Ep.1 Whang-Od · guion y fuentes: docs/pueblos-ep1-whang-od-guion-direccion.md · vídeo: salma marketing/pueblos/whang-od/ULTIMA
+  {
+    slug: 'filipinas-whang-od-tatuadora-kalinga',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Episodio 1',
+    pais: 'Filipinas',
+    titulo: 'Whang-Od: más de cien años tatuando con una espina',
+    resumen: 'En Buscalan, en las montañas de Kalinga, la tatuadora más anciana de Filipinas sigue golpeando la piel con una espina. Su arte tiene relevo; sus cantos, no.',
+    video: 'pueblos-ep1-whang-od.mp4',
+    realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final) y fuentes citadas. No es un viaje de Paco.',
+    destino: ['filipinas', 'Filipinas'],
+    creditosDe: 'salma marketing/pueblos/whang-od',
+    cifras: [['107-109', 'Años (fecha exacta desconocida)'], ['106', 'Años en su portada de Vogue (2023)'], ['3', 'Puntos de su firma']],
+    secciones: [
+      { h: 'Buscalan, en Kalinga', p: [
+        'Buscalan es un pueblo del municipio de **Tinglayan**, en las montañas de la provincia de Kalinga, a unas quince horas de Manila. Allí vive **Apo Whang-Od** (Maria Oggay), del pueblo butbut, considerada la *mambabatok* —tatuadora tradicional kalinga— de más edad.',
+        'Nadie sabe su edad exacta, ni ella: unas fuentes dan como fecha de nacimiento el 17 de febrero de 1917 y otras el 6 de marzo de 1919. Tiene entre 107 y 109 años.' ] },
+      { h: 'Una espina, una varilla y hollín', p: [
+        'La técnica se llama ***batok***: una espina sujeta a una varilla que se golpea con otra vara de bambú, y una tinta de hollín y agua. Golpe a golpe, sin máquinas.',
+        'Hoy hace diseños sencillos: según Wikipedia, entre veinte y treinta tatuajes al día a los visitantes que suben al pueblo.' ] },
+      { h: 'Antes, el tatuaje se ganaba', p: [
+        'Entre los kalinga, el tatuaje de los hombres marcaba el valor del guerrero; el de las mujeres, la belleza (algunas fuentes hablan también de fertilidad, pero no se ponen de acuerdo en cuánto pesaba).',
+        'A principios del siglo XX, la administración estadounidense prohibió la caza de cabezas, y el tatuaje guerrero fue perdiendo su sentido. El de las mujeres siguió más tiempo.' ] },
+      { h: 'La fama', p: [
+        'Un documental de **2009** la hizo conocida fuera de Filipinas, y desde entonces suben visitantes cada día a tatuarse con ella.',
+        'En abril de **2023**, con 106 años, fue portada de **Vogue Philippines**: la persona de más edad en una portada de Vogue. El récord anterior era de Judi Dench, con 85.' ] },
+      { h: 'El relevo y los tres puntos', p: [
+        'El *batok* solo se hereda por sangre, y Whang-Od no tuvo hijos. Lo ha enseñado a su sobrina nieta, **Grace Palicas**, y a una prima de esta (su nombre se escribe de varias formas: Ilyang o Elyang Wigan).',
+        'Su firma son **tres puntos**: ella y sus dos aprendices. «Cuando yo ya no esté, ellas seguirán con la firma de los tres puntos», ha dicho.' ] },
+      { h: 'Lo que se está borrando: los cantos', p: [
+        'Antes, cada tatuaje iba acompañado de cantos, adivinación y ritual. Whang-Od ya no canta para los turistas: esos cantos son para embellecer a las mujeres kalinga y celebrar la victoria de los guerreros.',
+        'En 2018, al recibir un reconocimiento de la Comisión Nacional de Cultura y Artes (NCCA), cantó una nana (*uwawi*), cantos de cortejo y de la siembra del arroz. La antropóloga **Analyn Salvador-Amores** avisa de que esos cantos y rituales no se han pasado a sus aprendices: se pueden ir con ella.' ] },
+    ],
+    guia: {
+      json: 'guias-generadas/filipinas-21-dias-2026-10-22.json',
+      url: '/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t',
+      titulo: 'Kalinga y nuestra guía de Filipinas',
+      intro: 'Nuestra guía **Filipinas en 21 días** sube a la cordillera por Banaue y Sagada, pero no llega a Buscalan. Si quieres incluirlo, pídele a Salma que añada Tinglayan a tu ruta.',
+      dias: [],
+    },
+    ficha: [
+      '**Guía local obligatorio** en Buscalan. La página del municipio da tarifas desde 1.000 ₱ al día para un guía con hasta cinco personas (sin fecha: confírmalo).',
+      'Se llega a Tinglayan desde **Tabuk** (Kalinga) o **Bontoc** (Mountain Province); desde la carretera, **hora y media a pie** hasta el pueblo.',
+      'Hay una **tasa ecocultural**; las cifras que dan las fuentes no coinciden, pregunta en la oficina de turismo de Tinglayan.',
+      '**Respeto:** en septiembre de 2026 el municipio pidió respeto tras el caso de un visitante que insistió en tatuarse una zona íntima: «la cultura kalinga no es un decorado, el patrimonio no es un souvenir». Pide permiso antes de hacer fotos.',
+      'Colas largas: Whang-Od tatúa pocas horas al día; las aprendices atienden a la mayoría de los visitantes.',
+    ],
+    nota: 'Datos de octubre de 2026; tarifas y accesos cambian, confírmalos siempre en la oficina de turismo de Tinglayan.',
+    fuentes: [
+      W('Wikipedia: Whang-od', 'https://en.wikipedia.org/wiki/Whang-od'),
+      W('Euronews, 10 abr 2023: portada de Vogue con 106 años', 'https://www.euronews.com/2023/04/10/a-106-year-old-indigenous-filipino-tattoo-artist-becomes-vogues-oldest-ever-cover-model'),
+      W('Vogue Philippines: la nueva generación de mambabatok', 'https://vogue.ph/lifestyle/inked-in-tradition-the-next-generation-of-mambabatok/'),
+      W('Vera Files: el batok y su resurgir', 'https://verafiles.org/articles/batok-traditional-tattoos-a-revival-here-and-elsewhere'),
+      W('SunStar Baguio: Whang-od, icono de Kalinga (2018)', 'https://www.sunstar.com.ph/baguio/local-news/whang-od-hailed-as-kalinga-icon'),
+      W('Daily Tribune, 11 sep 2026: Tinglayan pide respeto', 'https://tribune.net.ph/2026/09/11/tinglayan-raises-concern-over-whang-od-intimate-tattoo-incident'),
+      W('Municipio de Tinglayan: tarifas de guía', 'https://tinglayan.gov.ph/node/38'),
+      W('Atlas Obscura: Fang-od Oggay', 'https://assets.atlasobscura.com/articles/fang-od-oggay-kalinga-tattoo-philippines'),
+    ],
+    cierre: 'Siguiente episodio: Sagada, el pueblo donde a los muertos se les cuelga.',
+  },
+
+  // Ep.2 Sagada · guion y fuentes: docs/pueblos-ep2-sagada-guion-direccion.md · vídeo: salma marketing/pueblos/sagada/ULTIMA
+  {
+    slug: 'filipinas-sagada-ataudes-colgantes',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Episodio 2',
+    pais: 'Filipinas',
+    titulo: 'Sagada: el pueblo donde a los muertos se les cuelga',
+    resumen: 'En las montañas de Luzón, los ataúdes no se entierran: cuelgan de la roca. Por qué tan alto, quién tiene derecho a ese entierro y por qué cada vez se ven menos.',
+    video: 'pueblos-ep2-sagada.mp4',
+    realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final) y fuentes citadas. No es un viaje de Paco.',
+    destino: ['filipinas', 'Filipinas'],
+    creditosDe: 'salma marketing/pueblos/sagada',
+    cifras: [['1.500 m', 'Altitud de Sagada'], ['~400 km', 'Desde Manila'], ['+10.000', 'Habitantes']],
+    secciones: [
+      { h: 'Un pueblo en la cordillera', p: [
+        'Sagada está en la **Mountain Province**, en la cordillera del norte de Luzón, a unos **1.500 metros** de altura y a unos 400 kilómetros de Manila. Tiene algo más de diez mil habitantes y, según su alcalde, es el pueblo que más turistas recibe del norte de Filipinas.' ] },
+      { h: 'Ataúdes en la pared', p: [
+        'En el **Valle del Eco**, los ataúdes cuelgan de la pared de piedra, sujetos con vigas clavadas a la roca. Muchos llevan el nombre del difunto pintado en un lado.',
+        'Según la tradición, cuanto más arriba, más cerca de los espíritus de los antepasados. Hay quien añade una razón práctica: así quedaban lejos de los animales y de las riadas.' ] },
+      { h: 'El ritual', p: [
+        'Antes, al difunto lo sentaban en una silla de madera, la **sangadil**, atado con ratán, y lo velaban varios días mientras se ahumaba el cuerpo. En el Valle del Eco todavía se ven sillas colgadas junto a los ataúdes.',
+        'Después lo encogían para meterlo en el ataúd, con las piernas hacia el pecho: **se iba del mundo como había llegado**. Por eso hay ataúdes tan cortos, y no son de niños. Los más recientes son más largos, porque las familias ya no quieren romper huesos para encajar el cuerpo.' ] },
+      { h: 'No vale cualquiera', p: [
+        'Este entierro es para ancianos respetados: casados, con nietos y que hayan servido a su comunidad. Muchos tallaban su propio ataúd en un tronco y pintaban su nombre; si ya no tenían fuerzas, lo hacía la familia.' ] },
+      { h: 'Lo más común, las cuevas', p: [
+        'Aunque son la imagen más conocida, colgar los ataúdes nunca fue lo más habitual entre los kankanaey. Lo común era **meterlos o apilarlos dentro de cuevas de caliza**, como en la cueva de **Lumiang**, donde se amontonan a la entrada.' ] },
+      { h: 'Lo que se está borrando', p: [
+        'Cada vez se cuelgan menos ataúdes: hoy la mayoría de las familias elige el cementerio. Las fuentes no se ponen de acuerdo sobre cuándo fue el último entierro en la roca, así que no damos fecha.',
+        'Tampoco repetimos la cifra de «2.000 años» que circula por internet: no hemos encontrado una fuente sólida que la respalde.' ] },
+    ],
+    guia: {
+      json: 'guias-generadas/filipinas-21-dias-2026-10-22.json',
+      url: '/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t',
+      titulo: 'Sagada en nuestra guía de Filipinas',
+      intro: 'Nuestra guía **Filipinas en 21 días** sube a la cordillera: un día en las terrazas de Banaue y dos en Sagada.',
+      dias: [18, 19, 20],
+    },
+    ficha: [
+      '**Registro obligatorio** en la oficina de turismo al llegar; se paga una tasa que incluye el fondo ambiental (entre 50 y 100 ₱ según la fuente).',
+      '**Guía local** para bajar al Valle del Eco; se contrata en la misma oficina.',
+      'Las cuevas de **Lumiang y Sumaguing**, solo hasta la entrada desde julio de 2025 por las lluvias. La cascada **Bomod-ok**, cerrada por *ubaya*, un cierre tradicional del pueblo.',
+      '**Respeto:** no tocar los ataúdes ni subirse a ellos, y fotos solo donde lo permita el guía.',
+      'Llegada: unas 2 horas en jeepney o furgoneta desde Banaue; bus nocturno desde Manila (10-12 h).',
+    ],
+    nota: 'Datos de octubre de 2026; tasas y accesos cambian, confírmalos siempre en la oficina de turismo de Sagada.',
+    fuentes: [
+      W('CNA (Agencia Central de Noticias de Taiwán), 9 mar 2026', 'https://www.cna.com.tw/news/aopl/202603090027.aspx'),
+      W('Rough Guides: The hanging coffins of Sagada', 'https://www.roughguides.com/article/hanging-coffins/'),
+      W('NAFD: Buried in a hanging coffin (sep 2022)', 'https://www.nafd.org.uk/wp-content/uploads/2022/10/Buried-in-a-hanging-coffin-Sept-2022.pdf'),
+      W('Wikipedia: Hanging coffins', 'https://en.wikipedia.org/wiki/Hanging_coffins'),
+      W('Daily Tribune: Sagada reopens key tourist spots (jul 2025)', 'https://tribune.net.ph/2025/07/20/sagada-reopens-key-tourist-spots'),
+      W('PTV: Sagada braces for tourists influx', 'https://ptvnews.ph/sagada-braces-for-tourists-influx-issues-guidelines/'),
+    ],
+    cierre: 'Próximo episodio: las haenyeo de Jeju, las abuelas que bucean sin botella.',
   },
 ];
 caps.SERIES = SERIES;

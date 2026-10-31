@@ -67,8 +67,46 @@ const CABECERA = `<header class="pg-header">
   <a class="pg-header-sec" href="/blog/">Blog de viajes</a>
 </header>`;
 
+// ── Serie «Pueblos borrados del mapa» (P12 de docs/video-checklist.md, 31 oct 2026): un vídeo = una entrada que enseña la guía y nombra a los autores de las fotos ──
+// c.guia = { json, url, titulo, dias: [n…], intro }: enseña los días de la guía pública donde sale el sitio (nombres de las paradas, sin fotos de Google: 0 €) y un botón a la guía completa.
+function guia(c) {
+  if (!c.guia) return '';
+  const g = JSON.parse(fs.readFileSync(path.join(ROOT, c.guia.json), 'utf8'));
+  const dias = (c.guia.dias || []).map((d) => { // sin días (la guía no pasa por el sitio): solo la intro y el botón a la guía
+    const st = g.stops.filter((s) => s.day === d); if (!st.length) return '';
+    return `        <li><strong>Día ${d} · ${esc(st[0].day_title)}</strong>: ${st.map((s) => esc(s.name)).join(' · ')}</li>`;
+  }).filter(Boolean).join('\n');
+  return `    <aside class="bd-ficha bd-guia">
+      <h3>${esc(c.guia.titulo)}</h3>
+      <p>${md(c.guia.intro)}</p>
+${dias ? `      <ul>\n${dias}\n      </ul>\n` : ''}      <p><a class="pg-btn" href="${esc(c.guia.url)}">Ver la guía completa</a></p>
+    </aside>
+`;
+}
+// c.creditosDe = carpeta del episodio: autores de las fotos que salen en el vídeo (el tiempos.json más reciente de salida/ + fotos/ATRIBUCIONES.txt)
+function creditos(c) {
+  if (!c.creditosDe) return '';
+  const dir = path.join(ROOT, c.creditosDe), sal = path.join(dir, 'salida');
+  const t = fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
+  if (!t) throw new Error('No encuentro tiempos.json en ' + sal);
+  const usadas = [...new Set(JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []).filter((x) => /^[WH]\d+$/.test(x)))];
+  const atr = {};
+  fs.readFileSync(path.join(dir, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
+  const li = [...new Set(usadas.filter((id) => atr[id]).map((id) => `        <li><a href="${esc(atr[id].u)}" target="_blank" rel="noopener">${esc(atr[id].autor || 'Autor desconocido')}</a> · ${esc(atr[id].lic)}</li>`))];
+  return `
+    <details class="bd-src">
+      <summary>Fotos: autores y licencias</summary>
+      <p>Fotos de Wikimedia Commons con licencia libre. Gracias a sus autores:</p>
+      <ul>
+${li.join('\n')}
+      </ul>
+    </details>`;
+}
+
 function pagina(c) {
-  const ant = caps[c.n - 1], sig = caps[c.n + 1];
+  // anterior/siguiente: la serie «Pueblos borrados del mapa» no enlaza con diarios de otras series (las antiguas siguen como estaban)
+  const P = 'Pueblos borrados del mapa', vale = (x) => x && (x.serie === c.serie || (c.serie !== P && x.serie !== P));
+  const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
   const url = `${SITE}/blog/viajes/${c.slug}`;
   const img = `/blog/viajes/img/${c.slug}.jpg`;
   const serieCaps = caps.filter((x) => x.serie === c.serie);
@@ -143,20 +181,20 @@ ${CABECERA}
     <div class="bd-media">
       <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
       <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>
-      <p class="bd-ia">Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.</p>
+      <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.')}</p>
     </div>
 
     <article class="bd-body">
 ${pasos}${stats}
 ${secciones}
 
-${ficha}${cierre}
-${fuentes}
+${guia(c)}${ficha}${cierre}
+${fuentes}${creditos(c)}
 
       <div class="bd-salma">
         <img src="/salma_ai_avatar.png" alt="Salma">
         <div>
-          <p><strong>¿Vas a ${esc(c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia')}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis. Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.</p>
+          <p><strong>¿Vas a ${esc(c.pais || (c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia'))}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis. Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.</p>
           <p><a class="pg-btn" href="/?go=chat">Crear mi ruta</a></p>
         </div>
       </div>

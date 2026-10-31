@@ -17,6 +17,8 @@ Común a la serie: `pueblos/comun/` → `clip-app.mp4`, `sonidos/`, `sintonia/` 
 **Rapidez y calidad (31 oct 2026):** el motor guarda cada plano hecho (`india/motor/cache-planos/`) y al remontar solo rehace los que cambian. Por defecto monta en **borrador** (rápido, para el editor). **Para publicar**, la versión final se exporta en máxima calidad: `CALIDAD=publicar node <episodio>.cjs` (planos casi sin pérdida, montaje lento, audio estéreo 256k) → **en el editor, botón «★ Exportar para publicar»**; va a `ULTIMA/` y `VERSION.txt` dice «CALIDAD MÁXIMA».
 **Para arrancar un editor:** en Claude, «abre el editor de <episodio>» (configuraciones «Editor de vídeo · …» de `.claude/launch.json`); o a mano `node "salma marketing/india/motor/editor/server.cjs" <episodio>`.
 
+**Pendiente para más adelante (Paco, 31 oct: «sí me interesa»):** crear con la app una guía «Luzón norte: Sagada, Banaue y Buscalan» para los episodios de la zona y su viaje (coste de API: decirlo antes).
+
 ## Orden propuesto (30 oct 2026, pendiente de OK de Paco)
 | # | Pueblo / tema | Zona | Estado |
 |---|---|---|---|
