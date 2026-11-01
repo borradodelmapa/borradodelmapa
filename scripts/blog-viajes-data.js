@@ -21,12 +21,14 @@ const caps = [
     titulo: 'Chiang Mai: la «ciudad nueva» de 1296',
     resumen: 'Una ciudad cuadrada, un foso y un plan tan ordenado que cuesta perderse. Alguien lo consiguió.',
     video: 'cp-asia-cap1-v5.mp4',
+    fotosDe: { '': 'salma marketing/editor/listas/origen/chiang-mai-todo.lst' },
+    fotos: { portada: '014', galeria: [['028', 'Uno de los templos del casco antiguo.'], ['026', 'Tejados de templo contra el cielo de Chiang Mai.'], ['027', 'Buda dorado en un templo del casco.'], ['039', 'Monjes junto al foso al atardecer.'], ['169', 'La noche, entre puestos y motos.'], ['188', 'La moto del viaje.']] },
     secciones: [
-      { h: 'Una ciudad con plan', p: [
+      { h: 'Una ciudad con plan', foto: ['148', 'El foso sigue marcando el cuadrado del casco antiguo.'], p: [
         'Chiang Mai tiene más de setecientos años de historia. La fundó el rey **Mangrai** en 1296 como capital de su reino, **Lan Na**, y la llamó «Ciudad Nueva». Siete siglos después sigue llamándose así.',
         'La trazó casi cuadrada, con un foso de kilómetro y medio por lado. Las murallas que se ven hoy están muy restauradas, así que no conviene presumir de «originales». Aun así, el trazado se entiende a la primera: una ciudad con plan, en la que hasta alguien con muy poco sentido de la orientación debería poder moverse.',
       ] },
-      { h: 'Y aun así, alguien se perdió', p: [
+      { h: 'Y aun así, alguien se perdió', foto: ['024', 'Calles del casco antiguo: imposible perderse. Casi.'], p: [
         'Para eso está Salma. Basta preguntar por un gimnasio de Muay Thai en el casco antiguo: te dice cómo llegar, cuánto cuesta cada transporte y que el casco se cruza andando en unos veinticinco minutos.',
         'Del idioma, este Paco no sabía ni «hola» y contestaba a todo el mundo en andaluz. Y funcionaba.',
       ] },
@@ -54,15 +56,17 @@ const caps = [
     titulo: 'El Triángulo de Oro, donde se tocan tres países',
     resumen: 'Donde el río Ruak se echa al Mekong y se juntan Tailandia, Laos y Birmania. Y un templo blanco que lleva casi treinta años sin terminarse.',
     video: 'cp-asia-cap2-v5.mp4',
+    fotosDe: { '': 'salma marketing/editor/listas/origen/triangulo-oro.lst' },
+    fotos: { portada: '63', galeria: [['13', 'El Templo Blanco, todavía sin terminar.'], ['47', 'El Buda dorado del Triángulo de Oro.'], ['34', 'La torre del reloj de Chiang Rai.'], ['06', 'Un templo dorado de camino.'], ['46', 'Altar a orillas del Mekong.'], ['65', 'El río, frontera de tres países.']] },
     secciones: [
-      { h: 'Donde se juntan tres países', p: [
+      { h: 'Donde se juntan tres países', foto: ['55', 'El Mekong desde el lado tailandés.'], p: [
         'El Triángulo de Oro es el sitio donde el río **Ruak** desemboca en el **Mekong** y se tocan Tailandia, Laos y Birmania. En el siglo XX fue una de las mayores fuentes de opio del mundo, y el nombre lo popularizó un diplomático estadounidense, Marshall Green, en 1971, después de que lo adoptara la agencia antidrogas de Estados Unidos.',
         'Hoy, del lado tailandés, queda un museo del opio, un Buda dorado y mucha gente haciéndose fotos.',
       ] },
-      { h: 'Antes, Chiang Rai y su templo blanco', p: [
+      { h: 'Antes, Chiang Rai y su templo blanco', foto: ['11', 'Wat Rong Khun, el Templo Blanco.'], p: [
         'De camino está **Wat Rong Khun**, el Templo Blanco. Su artista, Chalermchai Kositpipat, lo lleva construyendo desde 1997 (otras fuentes dicen 1996 o 1999) y todavía no lo ha terminado. Hay a quien le pasa lo mismo con la casa.',
       ] },
-      { h: 'El viajero no cruzó', p: [
+      { h: 'El viajero no cruzó', foto: ['66', 'El viajero, en el lado tailandés.'], p: [
         'Este Paco se quedó mirando Laos desde el lado tailandés, que es una forma muy cara de decir que no tenía visado.',
       ] },
     ],
@@ -89,15 +93,17 @@ const caps = [
     titulo: '762 curvas hasta Pai: la carretera 1095',
     resumen: 'Poco más de cien kilómetros de curvas, un valle pequeño y una calle peatonal llena de farolillos.',
     video: 'cp-asia-cap3-v5b.mp4',
+    fotosDe: { '': 'salma marketing/editor/listas/origen/pai.lst' },
+    fotos: { portada: '55', galeria: [['06', 'Más curvas, entre pinos.'], ['61', 'El valle desde un mirador.'], ['68', 'Farolillos al caer la noche.'], ['63', 'Parada para repostar.'], ['64', 'Atardecer junto a un Buda.'], ['56', 'Casco puesto, y a seguir.']] },
     secciones: [
-      { h: 'La carretera', p: [
+      { h: 'La carretera', foto: ['05', 'Una de las 762 curvas.'], p: [
         'Entre Chiang Mai y Pai hay **762 curvas** (el bucle completo de Mae Hong Son suma 1.864). La carretera 1095 tiene poco más de cien kilómetros y, según algunas fuentes, la abrió el ejército japonés durante la Segunda Guerra Mundial. Es el dato que más se repite y el que menos fuentes tiene, así que lo contamos con esa cautela.',
         'El viajero la hizo en una moto de alquiler que no sabía lo que le esperaba.',
       ] },
-      { h: 'Pai', p: [
+      { h: 'Pai', foto: ['57', 'El cañón de Pai.'], p: [
         'Al final espera un valle pequeño, de unos tres mil vecinos, con herencia shan y tailandesa, y una calle peatonal que por la noche se llena de farolillos. Y el cañón de Pai, para quien quiera ver un precipicio con vistas.',
       ] },
-      { h: 'Elegir ruta', p: [
+      { h: 'Elegir ruta', foto: ['52', 'La moto de alquiler.'], p: [
         'Si dudas cuántos días dedicarle, basta preguntar a Salma: para el **Mae Hong Son Loop** salen cinco días, con mapa, paradas verificadas y consejos para ir en moto.',
       ] },
     ],
@@ -123,11 +129,13 @@ const caps = [
     titulo: 'Ban Rak Thai y los kayan: un pueblo olvidado',
     resumen: 'Un pueblo de té y niebla que fundaron soldados chinos, y a pocos kilómetros otra frontera y otra historia.',
     video: 'cp-asia-cap4-v5.mp4',
+    fotosDe: { 'c': 'salma marketing/editor/listas/origen/ban-rak-thai.lst', 'k': 'salma marketing/editor/listas/origen/kayan-canon-feb7.lst' },
+    fotos: { portada: 'k10', galeria: [['c05', 'El lago de Ban Rak Thai.'], ['k16', 'Niebla de la mañana sobre el lago.'], ['c10', 'La calle principal del pueblo.'], ['c54', 'Casas de una aldea junto a la frontera.'], ['k49', 'Una mujer kayan junto a sus telas.'], ['c55', 'Cartel pidiendo donativos para la aldea.']] },
     secciones: [
-      { h: 'Un pueblo chino en Tailandia', p: [
+      { h: 'Un pueblo chino en Tailandia', foto: ['k18', 'Ban Rak Thai: farolillos rojos sobre el lago.'], p: [
         '**Ban Rak Thai** es un pueblo de té y niebla que fundaron soldados chinos nacionalistas (del Kuomintang) que huían en 1949. Se quedaron a cambio de vigilar la frontera.',
       ] },
-      { h: 'Se dice «kayan»', p: [
+      { h: 'Se dice «kayan»', foto: ['k47', 'Una mujer kayan.'], p: [
         'Si alguna vez has oído «mujeres jirafa», olvídalo: es una forma despectiva de nombrar a un pueblo. Se llaman **kayan**. Rechazan también «padaung». No son una atracción: son un pueblo olvidado.',
         'Huyeron de la guerra en el este de Birmania. Según organizaciones de derechos humanos, desde 1996 el ejército forzó el traslado de aldeas enteras y hasta un tercio de la población del estado de Kayah quedó desplazada. Muchos siguen sin ciudadanía en ningún país.',
         'El viajero cruzó un poco la frontera para verlos. Tú no lo hagas: consulta antes las recomendaciones de viaje de tu país.',
@@ -157,14 +165,16 @@ const caps = [
     titulo: 'Doi Inthanon, el techo de Tailandia',
     resumen: '1.864 curvas después, el bucle de Mae Hong Son se cierra. Y hay una camiseta que lo demuestra.',
     video: 'cp-asia-cap5-v5b.mp4',
+    fotosDe: { '': 'salma marketing/editor/listas/origen/doi-inthanon-a.lst' },
+    fotos: { portada: '41', galeria: [['02', 'La moto, en ruta.'], ['03', 'Valles del bucle de Mae Hong Son.'], ['37', 'Vachirathan, de cerca.'], ['58', 'Elefante en el santuario.'], ['17', 'Atardecer sobre el río.'], ['21', 'Orquídeas junto al río.']] },
     secciones: [
-      { h: 'El último tramo del bucle', p: [
+      { h: 'El último tramo del bucle', foto: ['32', 'La camiseta que lo demuestra: 1.864 curvas.'], p: [
         'En **Khun Yuam**, un museo guarda los restos del ejército japonés que cruzó por aquí hacia Birmania durante la Segunda Guerra Mundial. Allí hubo una base japonesa y el museo se abrió en 1995; la cifra de soldados varía según la fuente, así que no la damos.',
       ] },
-      { h: 'El techo del país', p: [
+      { h: 'El techo del país', foto: ['36', 'La cascada Vachirathan, a los pies del Doi Inthanon.'], p: [
         '**Doi Inthanon** mide 2.565 metros. Lleva el nombre del último rey de Chiang Mai, Inthawichayanon, y sus cenizas descansan en la cumbre. A sus pies cae la cascada Vachirathan.',
       ] },
-      { h: 'Elefantes, pero de los buenos', p: [
+      { h: 'Elefantes, pero de los buenos', foto: ['56', 'En un santuario de elefantes.'], p: [
         'Por el camino hay santuarios de elefantes. Los buenos son los que no permiten montarlos y no montan espectáculos. Eso es lo que hay que buscar.',
       ] },
     ],
@@ -190,12 +200,14 @@ const caps = [
     titulo: 'Muay Thai en Ko Samui: el saludo al maestro',
     resumen: 'Una luchadora alemana, un estadio y un ritual de oración antes de la primera pelea.',
     video: 'cp-muaythai.mp4',
+    fotosDe: { '': 'salma marketing/editor/proyectos/muay-thai/drive.lst' }, fotosBase: 'D:/salma-movil/camara-canon/drive/',
+    fotos: { portada: 'IMG_4212', galeria: [['IMG_4048', 'La oración antes de salir.'], ['IMG_4036', 'Vendaje antes de la pelea.'], ['IMG_4206', 'Entrada al ring.'], ['IMG_4238', 'El Wai Khru, paso a paso.'], ['IMG_4269', 'La pelea.'], ['IMG_4011', 'Ko Samui.']] },
     secciones: [
-      { h: 'Antes de pelear, el Wai Khru', p: [
+      { h: 'Antes de pelear, el Wai Khru', foto: ['IMG_4233', 'Lina, durante el Wai Khru Ram Muay.'], p: [
         'En Ko Samui, en el estadio **Phetch Buncha**, hay una luchadora profesional alemana, Lina. Antes de pelear hace el **Wai Khru Ram Muay**: *wai khru* es «saludo al maestro» y *ram muay* es una danza propia de cada gimnasio.',
         'Es una oración en movimiento. El luchador rodea el ring rezando en cada esquina, se inclina en el centro y honra a sus maestros, a sus padres y a sus antepasados. Lina lo conoce al detalle y lo hace con respeto. Y entonces sí, empieza la pelea.',
       ] },
-      { h: 'De dónde viene el Muay Thai', p: [
+      { h: 'De dónde viene el Muay Thai', foto: ['IMG_4253', 'Puños, codos, rodillas y piernas: las ocho extremidades.'], p: [
         'Nació como arte de guerra, entrenado por los soldados del antiguo Siam. Se peleaba con las manos vendadas con cuerda, sin guantes ni asaltos. Se le llama el «arte de las ocho extremidades» porque usa puños, codos, rodillas y piernas.',
         'La leyenda cuenta que en 1767, tras la caída de Ayutthaya, un prisionero llamado **Nai Khanom Tom** venció a diez luchadores birmanos seguidos y quedó libre. Es una leyenda: los historiadores la consideran probablemente del siglo XX, ligada a la identidad nacional, y cambian el nombre del rey y la cuenta de combates. El 17 de marzo se celebra el Día Nacional del Muay Thai.',
         'Las reglas modernas, con guantes, asaltos y árbitro, llegaron en los años treinta.',
@@ -224,17 +236,19 @@ const caps = [
     titulo: 'Vietnam, mil años de no rendirse',
     resumen: 'Un imperio ocupó el norte de Vietnam mil años y no consiguió borrarlo. Pagodas, estacas de hierro y un río que se repite.',
     video: 'cp-vietnam-cap1-v5.mp4',
+    fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
+    fotos: { portada: '245', galeria: [['237', 'Dentro de un templo de Hanói.'], ['274', 'Cocina en la calle.'], ['259', 'Agua para los arrozales.'], ['266', 'La bandera, en la selva.'], ['260', 'Flor de heliconia.'], ['146', 'El avión del lago: en el siguiente capítulo.']] },
     secciones: [
-      { h: 'Hanói lo guarda en piedra', p: [
+      { h: 'Hanói lo guarda en piedra', foto: ['236', 'La Pagoda del Pilar Único, en Hanói.'], p: [
         'En Hanói, dos edificios cuentan el país mejor que cualquier museo. La **Pagoda del Pilar Único**, de 1049, se levanta sobre una sola columna dentro de un estanque. Y el **Templo de la Literatura**, construido en honor a Confucio, donde en 1076 se abrió la primera universidad del país. Allí lo que valía era el mérito.',
       ] },
-      { h: 'Mil años bajo China', p: [
+      { h: 'Mil años bajo China', foto: ['156', 'El Templo de la Literatura, donde se abrió la primera universidad del país.'], p: [
         'Desde el año 111 antes de Cristo, China gobernó el norte de lo que hoy es Vietnam. En el año 40 se alzaron dos hermanas, las **Trưng**. La rebelión duró tres años, pero la idea ya no se fue.',
       ] },
-      { h: '938: estacas bajo el agua', p: [
+      { h: '938: estacas bajo el agua', foto: ['342', 'Una noria de bambú en el norte.'], p: [
         'En 938, el general **Ngô Quyền** clavó estacas de hierro bajo el río **Bạch Đằng**, esperó a que bajara la marea y la flota enemiga quedó atravesada. Acababan mil años de dominio.',
       ] },
-      { h: 'Y no fue la última vez', p: [
+      { h: 'Y no fue la última vez', foto: ['246', 'El norte de Vietnam, recorrido en moto.'], p: [
         'En 1010 la capital se trasladó a **Thăng Long**, la actual Hanói. Los mongoles invadieron tres veces y tres veces fueron rechazados; en 1288, con la misma trampa de estacas, en el mismo río. En 1428, **Lê Lợi** expulsó a los Ming tras diez años de guerra.',
         'Recorrer ese norte en moto, entre arrozales, es la mejor forma de entenderlo: aquí nadie olvida. Y en un lago de Hanói hay un avión hundido. Cómo llegó hasta allí, en el siguiente capítulo.',
       ] },
@@ -261,19 +275,21 @@ const caps = [
     titulo: 'Vietnam: la guerra de las fichas de dominó',
     resumen: 'Más de siete millones de toneladas de bombas sobre Indochina. Los números ya pesan solos.',
     video: 'cp-vietnam-cap2-v5.mp4',
+    fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
+    fotos: { portada: '146', galeria: [['889', 'Las montañas de Trường Sơn.'], ['859', 'Cueva usada como refugio.'], ['867', 'Dentro de una cueva-refugio.'], ['880', 'La selva desde arriba.'], ['143', 'El lago del B-52.'], ['858', 'Restos de munición.']] },
     secciones: [
-      { h: 'Cuánto pesa una guerra', p: [
+      { h: 'Cuánto pesa una guerra', foto: ['852', 'Proyectiles en un museo de la guerra.'], p: [
         'Más de siete millones de toneladas de bombas cayeron sobre Indochina, más del triple de las que Estados Unidos lanzó en toda la Segunda Guerra Mundial (las estimaciones van de 6,7 a 8 millones). No hace falta adornarlo.',
       ] },
-      { h: 'Un país partido en dos', p: [
+      { h: 'Un país partido en dos', foto: ['870', 'El país en el mapa de un museo.'], p: [
         'En 1954, Vietnam derrotó a Francia en Điện Biên Phủ y el país se partió en dos por el **paralelo 17**, «temporalmente». Se prometieron elecciones para unirlo. Nunca se celebraron.',
         'Washington lo veía así: si Vietnam caía del lado comunista, caería todo el sudeste asiático, como fichas de dominó. Esa fue su razón; la contamos como su posición.',
       ] },
-      { h: 'Del golfo de Tonkín a medio millón de soldados', p: [
+      { h: 'Del golfo de Tonkín a medio millón de soldados', foto: ['866', 'Un cañón antiaéreo en la selva.'], p: [
         'En 1964, un incidente en el golfo de Tonkín, hoy muy discutido, abrió la puerta. En 1965 desembarcaron los primeros marines en Da Nang; en tres años serían más de medio millón.',
         'Llegaron los aviones. **Quảng Trị** se considera la provincia más bombardeada: una décima parte de las municiones no explotó y sigue bajo la tierra. A eso se sumaron más de once millones de galones de Agente Naranja.',
       ] },
-      { h: 'El avión del lago', p: [
+      { h: 'El avión del lago', foto: ['140', 'Los restos del B-52, todavía en el lago de Hanói.'], p: [
         'En diciembre de 1972, doce días de bombardeo sobre Hanói. Uno de los B-52 derribados cayó en un lago de la ciudad. Y allí sigue.',
         'Murieron más de 58.000 estadounidenses y, según las estimaciones, más de un millón de vietnamitas. En 1973, los acuerdos de París. El 30 de abril de 1975 cayó Saigón.',
       ] },
@@ -298,15 +314,17 @@ const caps = [
     titulo: 'La ruta Hồ Chí Minh: vivir bajo tierra',
     resumen: 'Cuando el cielo es del enemigo, se vive bajo tierra. Y se sigue adelante.',
     video: 'cp-vietnam-cap3-v5.mp4',
+    fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
+    fotos: { portada: '881', galeria: [['860', 'Un tramo del sendero.'], ['877', 'La selva de Trường Sơn.'], ['861', 'Bombas sin explotar, expuestas.'], ['865', 'Un cañón antiaéreo.'], ['863', 'Escaleras hacia una cueva.'], ['890', 'Montañas de la ruta.']] },
     secciones: [
-      { h: 'Un sendero que se hizo ruta', p: [
+      { h: 'Un sendero que se hizo ruta', foto: ['812', 'La placa del paso de Da Deo.'], p: [
         'La **ruta Hồ Chí Minh** empezó en 1959 como un sendero por las montañas de **Trường Sơn**. Luego fueron camiones y bicicletas cargadas con más de doscientos kilos. Las cifras vietnamitas hablan de más de un millón de toneladas de material.',
         'Según la placa del paso de Da Deo, la aviación estadounidense la atacó con enorme dureza entre 1965 y 1972. Y una y otra vez, la repararon.',
       ] },
-      { h: 'Un nombre', p: [
+      { h: 'Un nombre', foto: ['875', 'La placa de la cueva de Hang I Ta, kilómetro 18.'], p: [
         'Mujeres, jóvenes voluntarios y obreros la mantuvieron abierta. En la cueva de Hang I Ta, kilómetro 18, la placa recuerda a una enfermera, Nguyen Thi Sang, que murió allí el 20 de junio de 1972. Nos quedamos con su nombre.',
       ] },
-      { h: 'Tet y mil años de práctica', p: [
+      { h: 'Tet y mil años de práctica', foto: ['874', 'Recreación de la vida en una cueva de la ruta.'], p: [
         'En enero de 1968, la ofensiva del Tet golpeó más de cien ciudades del sur. Militarmente fue una derrota, pero cambió la opinión pública de Estados Unidos.',
         'Porque no combatían solo contra un ejército: venían de un pueblo con mil años de práctica en no rendirse. Lo hicieron con China, con los mongoles y aquí. Caminando por esa selva se entiende que no se puede someter a un pueblo que guarda tanta memoria.',
       ] },
@@ -328,15 +346,17 @@ const caps = [
     titulo: 'Vietnam hoy: de la guerra a socios estratégicos',
     resumen: 'Hace cincuenta años se bombardeaban. En 2023 se declararon socios estratégicos integrales.',
     video: 'cp-vietnam-4.mp4',
+    fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
+    fotos: { portada: '023', galeria: [['001', 'Una calle del barrio antiguo.'], ['054', 'Fachadas de Hanói.'], ['055', 'El bún chả, un clásico.'], ['091', 'La calle del tren.'], ['063', 'Fruta en la calle.'], ['164', 'El mausoleo de Hồ Chí Minh.']] },
     secciones: [
-      { h: 'Doi Moi', p: [
+      { h: 'Doi Moi', foto: ['049', 'Hanói hoy: motos hasta donde llega la vista.'], p: [
         'En 1986, con la economía en crisis, Vietnam abrió la puerta a las reformas del **Đổi Mới**. Desde 1990 su renta por habitante se ha multiplicado por más de cuatro. Sigue siendo un país de partido único, con límites a la libertad que señalan las organizaciones de derechos humanos. En 2023, Estados Unidos y Vietnam se declararon socios estratégicos integrales.',
       ] },
-      { h: 'Confucio sigue aquí', p: [
+      { h: 'Confucio sigue aquí', foto: ['035', 'Un calígrafo en Hanói.'], p: [
         'Su herencia sigue viva: el estudio como camino y el respeto al maestro. En las pruebas PISA de 2012, sus estudiantes puntuaron como los de países mucho más ricos. Cada 20 de noviembre es el Día del Maestro y los alumnos les llevan flores.',
         'Es la misma idea que en un ring de Tailandia, el *Wai Khru*, el saludo al maestro. Culturas distintas, el mismo respeto. No decimos que venga de Confucio: señalamos el parecido.',
       ] },
-      { h: 'Mérito y memoria', p: [
+      { h: 'Mérito y memoria', foto: ['041', 'Un lago en el centro de Hanói.'], p: [
         'Un pueblo que ha aprendido, siglo tras siglo, que el mérito y la memoria son lo único que nadie te puede quitar. Las fuentes muestran que se valora la educación y al maestro; no demuestran que hoy sea una meritocracia, y no lo afirmamos.',
       ] },
     ],
@@ -357,19 +377,21 @@ const caps = [
     titulo: 'Hồ Chí Minh: el hombre de los billetes',
     resumen: 'Su cara está en los billetes, en las paredes y en un mausoleo. Una figura con luces y con sombras.',
     video: 'cp-vietnam-5.mp4',
+    fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
+    fotos: { portada: '575', galeria: [['173', 'La Torre de la Bandera de Hanói.'], ['165', 'La guardia del mausoleo.'], ['548', 'Una aldea del norte.'], ['584', 'Búfalos de vuelta a casa.'], ['480', 'Gansos cruzando la calle.'], ['804', 'Campos de té.']] },
     secciones: [
-      { h: 'El regreso', p: [
+      { h: 'El regreso', foto: ['577', 'Las montañas del norte, cerca de la frontera con China.'], p: [
         'Nació en 1890 en Nghệ An y pasó treinta años fuera de su país. En 1941 volvió en secreto a una cueva de **Cao Bằng**, junto a la frontera con China. El 2 de septiembre de 1945, en la plaza Ba Đình de Hanói, leyó la declaración de independencia, que citaba la de Estados Unidos.',
       ] },
-      { h: 'La parte difícil', p: [
+      { h: 'La parte difícil', foto: ['583', 'El campo del norte.'], p: [
         'Su objetivo declarado era la libertad. Pero entre 1953 y 1956, la reforma agraria del Norte clasificó a los campesinos por clases y a muchos se les acusó falsamente de terratenientes. El historiador Edwin Moise calcula unos cinco mil ejecutados; otros autores, muchos más.',
         'En 1956 el propio partido reconoció errores graves y Hồ Chí Minh pidió perdón en público: dijo que no había escuchado ni visto. Ese noviembre, el ejército aplastó una revuelta campesina en Nghệ An, su propia provincia, con entre mil y seis mil víctimas según las estimaciones.',
       ] },
-      { h: 'La frase', p: [
+      { h: 'La frase', foto: ['189', 'Su cara, en todos los billetes.'], p: [
         'En 1966 dijo la frase que todo niño vietnamita aprende: «Nada hay más valioso que la independencia y la libertad». Una meta que conviene recordar. Y medir.',
         'Murió el 2 de septiembre de 1969. Según varios relatos, pidió ser incinerado; sus sucesores lo embalsamaron, y el Estado cuida hoy el culto al «Tío Hồ».',
       ] },
-      { h: 'Por qué funciona el símbolo', p: [
+      { h: 'Por qué funciona el símbolo', foto: ['164', 'El mausoleo de Hồ Chí Minh, en Hanói.'], p: [
         'Mil años de memoria, una ruta bajo las bombas, un pueblo que estudia. Y una idea que no se negocia: no nos vendemos. Esto fue Vietnam, entero y con respeto.',
       ] },
     ],
@@ -397,24 +419,26 @@ const caps = [
     realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final) y fuentes citadas. No es un viaje de Paco.',
     destino: ['filipinas', 'Filipinas'],
     creditosDe: 'salma marketing/pueblos/whang-od',
+    fotos: { portada: 'W39', galeria: [['W27', 'Whang-Od, con la varilla del *batok* en la mano.'], ['W24', 'Enseñando sus diseños a quien llega.'], ['W25', 'Un tatuaje recién hecho: los dibujos de siempre, en piel de visitante.'], ['W43', 'Whang-Od en Buscalan.'], ['W47', 'Las terrazas de arroz de Buscalan.'], ['W65', 'Niebla al amanecer sobre las montañas de Kalinga.']] },
+    cita: { tras: 5, t: 'Cuando yo ya no esté, ellas seguirán con la firma de los tres puntos', de: 'Whang-Od' },
     cifras: [['107-109', 'Años (fecha exacta desconocida)'], ['106', 'Años en su portada de Vogue (2023)'], ['3', 'Puntos de su firma']],
     secciones: [
-      { h: 'Buscalan, en Kalinga', p: [
+      { h: 'Buscalan, en Kalinga', foto: ['W84', 'Buscalan, entre terrazas de arroz en las montañas de Tinglayan.'], p: [
         'Buscalan es un pueblo del municipio de **Tinglayan**, en las montañas de la provincia de Kalinga, a unas quince horas de Manila. Allí vive **Apo Whang-Od** (Maria Oggay), del pueblo butbut, considerada la *mambabatok* —tatuadora tradicional kalinga— de más edad.',
         'Nadie sabe su edad exacta, ni ella: unas fuentes dan como fecha de nacimiento el 17 de febrero de 1917 y otras el 6 de marzo de 1919. Tiene entre 107 y 109 años.' ] },
-      { h: 'Una espina, una varilla y hollín', p: [
+      { h: 'Una espina, una varilla y hollín', foto: ['W11', 'Todo lo que hace falta: la varilla con la espina, el mazo de bambú y el hollín.'], p: [
         'La técnica se llama ***batok***: una espina sujeta a una varilla que se golpea con otra vara de bambú, y una tinta de hollín y agua. Golpe a golpe, sin máquinas.',
         'Hoy hace diseños sencillos: según Wikipedia, entre veinte y treinta tatuajes al día a los visitantes que suben al pueblo.' ] },
-      { h: 'Antes, el tatuaje se ganaba', p: [
+      { h: 'Antes, el tatuaje se ganaba', foto: ['W38', 'Una anciana de Tinglayan con los tatuajes tradicionales de las mujeres kalinga.'], p: [
         'Entre los kalinga, el tatuaje de los hombres marcaba el valor del guerrero; el de las mujeres, la belleza (algunas fuentes hablan también de fertilidad, pero no se ponen de acuerdo en cuánto pesaba).',
         'A principios del siglo XX, la administración estadounidense prohibió la caza de cabezas, y el tatuaje guerrero fue perdiendo su sentido. El de las mujeres siguió más tiempo.' ] },
-      { h: 'La fama', p: [
+      { h: 'La fama', foto: ['W07', 'Cada día suben visitantes a Buscalan para tatuarse.'], p: [
         'Un documental de **2009** la hizo conocida fuera de Filipinas, y desde entonces suben visitantes cada día a tatuarse con ella.',
         'En abril de **2023**, con 106 años, fue portada de **Vogue Philippines**: la persona de más edad en una portada de Vogue. El récord anterior era de Judi Dench, con 85.' ] },
-      { h: 'El relevo y los tres puntos', p: [
+      { h: 'El relevo y los tres puntos', foto: ['W94', 'Grace Palicas, su sobrina nieta y aprendiz, tatuando con el *batok*.'], p: [
         'El *batok* solo se hereda por sangre, y Whang-Od no tuvo hijos. Lo ha enseñado a su sobrina nieta, **Grace Palicas**, y a una prima de esta (su nombre se escribe de varias formas: Ilyang o Elyang Wigan).',
         'Su firma son **tres puntos**: ella y sus dos aprendices. «Cuando yo ya no esté, ellas seguirán con la firma de los tres puntos», ha dicho.' ] },
-      { h: 'Lo que se está borrando: los cantos', p: [
+      { h: 'Lo que se está borrando: los cantos', foto: ['W64', 'Una anciana butbut de Buscalan.'], p: [
         'Antes, cada tatuaje iba acompañado de cantos, adivinación y ritual. Whang-Od ya no canta para los turistas: esos cantos son para embellecer a las mujeres kalinga y celebrar la victoria de los guerreros.',
         'En 2018, al recibir un reconocimiento de la Comisión Nacional de Cultura y Artes (NCCA), cantó una nana (*uwawi*), cantos de cortejo y de la siembra del arroz. La antropóloga **Analyn Salvador-Amores** avisa de que esos cantos y rituales no se han pasado a sus aprendices: se pueden ir con ella.' ] },
     ],
@@ -460,21 +484,23 @@ const caps = [
     realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final) y fuentes citadas. No es un viaje de Paco.',
     destino: ['filipinas', 'Filipinas'],
     creditosDe: 'salma marketing/pueblos/sagada',
+    fotos: { portada: 'W09', galeria: [['W07', 'Ataúdes vistos desde abajo, contra la luz.'], ['W16', 'Una pared entera de ataúdes en el Valle del Eco.'], ['W19', 'Los más antiguos, gastados por la lluvia.'], ['W20', 'Algunos ataúdes se han abierto con los años.'], ['W23', 'Dentro de la cueva de Lumiang.'], ['W22', 'Casas de Sagada junto al Valle del Eco.']] },
+    cita: { tras: 3, t: 'Se iba del mundo como había llegado' },
     cifras: [['1.500 m', 'Altitud de Sagada'], ['~400 km', 'Desde Manila'], ['+10.000', 'Habitantes']],
     secciones: [
-      { h: 'Un pueblo en la cordillera', p: [
+      { h: 'Un pueblo en la cordillera', foto: ['W42', 'Sagada, entre pinos y montañas, a unos 1.500 metros.'], p: [
         'Sagada está en la **Mountain Province**, en la cordillera del norte de Luzón, a unos **1.500 metros** de altura y a unos 400 kilómetros de Manila. Tiene algo más de diez mil habitantes y, según su alcalde, es el pueblo que más turistas recibe del norte de Filipinas.' ] },
-      { h: 'Ataúdes en la pared', p: [
+      { h: 'Ataúdes en la pared', foto: ['W02', 'Ataúdes colgados de la roca en el Valle del Eco.'], p: [
         'En el **Valle del Eco**, los ataúdes cuelgan de la pared de piedra, sujetos con vigas clavadas a la roca. Muchos llevan el nombre del difunto pintado en un lado.',
         'Según la tradición, cuanto más arriba, más cerca de los espíritus de los antepasados. Hay quien añade una razón práctica: así quedaban lejos de los animales y de las riadas.' ] },
-      { h: 'El ritual', p: [
+      { h: 'El ritual', foto: ['W08', 'Sillas de madera junto a los ataúdes, como las que se usaban para velar al difunto.'], p: [
         'Antes, al difunto lo sentaban en una silla de madera, la **sangadil**, atado con ratán, y lo velaban varios días mientras se ahumaba el cuerpo. En el Valle del Eco todavía se ven sillas colgadas junto a los ataúdes.',
         'Después lo encogían para meterlo en el ataúd, con las piernas hacia el pecho: **se iba del mundo como había llegado**. Por eso hay ataúdes tan cortos, y no son de niños. Los más recientes son más largos, porque las familias ya no quieren romper huesos para encajar el cuerpo.' ] },
-      { h: 'No vale cualquiera', p: [
+      { h: 'No vale cualquiera', foto: ['W12', 'Muchos ataúdes llevan pintado el nombre del difunto.'], p: [
         'Este entierro es para ancianos respetados: casados, con nietos y que hayan servido a su comunidad. Muchos tallaban su propio ataúd en un tronco y pintaban su nombre; si ya no tenían fuerzas, lo hacía la familia.' ] },
-      { h: 'Lo más común, las cuevas', p: [
+      { h: 'Lo más común, las cuevas', foto: ['W21', 'Ataúdes amontonados a la entrada de la cueva de Lumiang.'], p: [
         'Aunque son la imagen más conocida, colgar los ataúdes nunca fue lo más habitual entre los kankanaey. Lo común era **meterlos o apilarlos dentro de cuevas de caliza**, como en la cueva de **Lumiang**, donde se amontonan a la entrada.' ] },
-      { h: 'Lo que se está borrando', p: [
+      { h: 'Lo que se está borrando', foto: ['W13', 'Cada vez se cuelgan menos ataúdes en la roca.'], p: [
         'Cada vez se cuelgan menos ataúdes: hoy la mayoría de las familias elige el cementerio. Las fuentes no se ponen de acuerdo sobre cuándo fue el último entierro en la roca, así que no damos fecha.',
         'Tampoco repetimos la cifra de «2.000 años» que circula por internet: no hemos encontrado una fuente sólida que la respalde.' ] },
     ],

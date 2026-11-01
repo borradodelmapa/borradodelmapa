@@ -100,6 +100,34 @@
 .bd-nx b { display:block; font-family:var(--font-cond); font-weight:700; font-size:18px; line-height:1.1; color:var(--text-primary); }
 .bd-nx.der { flex-direction:row-reverse; text-align:right; }
 
+/* ─── Entradas con fotos (serie «Pueblos borrados del mapa», 1 nov 2026): portada a lo ancho, foto por sección, cita y galería ─── */
+.bd-hero { position:relative; margin:0 -16px 26px; min-height:clamp(420px,72vh,620px); display:flex; align-items:flex-end; overflow:hidden; background:#0d0f10; }
+.bd-hero > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; }
+.bd-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(13,15,16,0) 30%,rgba(13,15,16,.55) 60%,rgba(13,15,16,.94) 100%); }
+.bd-hero-txt { position:relative; z-index:1; padding:0 16px 34px; max-width:780px; }
+.pg .bd-hero .bd-title { color:#fff; text-shadow:0 2px 18px rgba(0,0,0,.5); }
+.pg .bd-hero .bd-lead { color:#f2f2f2 !important; margin:0 !important; text-shadow:0 1px 10px rgba(0,0,0,.6); }
+.bd-hero-cred { position:absolute; z-index:1; right:10px; top:10px; font-size:11px; color:rgba(255,255,255,.8); background:rgba(13,15,16,.55); padding:2px 8px; }
+.pg .bd-hero-cred a { color:inherit; }
+.bd-fig { margin:22px 0 22px; }
+.bd-fig img { width:100%; aspect-ratio:3/2; object-fit:cover; display:block; border:1px solid var(--border); }
+.bd-fig figcaption, .bd-gal-grid figcaption { margin-top:8px; font-size:14px; line-height:1.45; color:var(--text-secondary); }
+.bd-fig figcaption span, .bd-gal-grid figcaption span { display:block; margin-top:2px; font-size:12px; color:var(--text-muted); }
+.pg .bd-fig figcaption a, .pg .bd-gal-grid figcaption a { color:var(--text-muted); }
+.bd-cita { margin:40px 0 6px; padding:22px 0 0; border-top:4px solid var(--accent); }
+.pg .bd-cita p { margin:0; font-family:var(--font-cond); font-weight:800; font-size:clamp(28px,5.4vw,40px); line-height:1.08; color:var(--text-primary); text-transform:uppercase; }
+.pg .bd-cita p::before { content:'«'; color:var(--accent); }
+.pg .bd-cita p::after { content:'»'; color:var(--accent); }
+.bd-cita cite { display:block; margin-top:10px; font-style:normal; font-family:var(--font-cond); font-weight:700; font-size:14px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.bd-galeria { margin:44px 0 0; }
+.pg .bd-galeria h2 { margin:0 0 14px; padding:0; border:0; font-size:30px; line-height:1.05; }
+.bd-gal-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px 10px; }
+.bd-gal-grid figure { margin:0; }
+.bd-gal-grid img { width:100%; aspect-ratio:1; object-fit:cover; display:block; border:1px solid var(--border); transition:transform .3s ease; }
+.bd-gal-grid figure > a { display:block; overflow:hidden; }
+.bd-gal-grid a:hover img { transform:scale(1.05); }
+.bd-gal-grid figcaption { font-size:13px; }
+
 @media (min-width:640px) {
   .bv-card { flex-basis:190px; }
   .bv-grid { grid-template-columns:repeat(2,1fr); }
@@ -115,6 +143,10 @@
   .bd-layout { grid-template-columns:340px minmax(0,1fr); grid-template-areas:"media head" "media body" "media next"; grid-template-rows:auto auto 1fr; column-gap:56px; align-items:start; }
   .bd-media { position:sticky; top:20px; margin:0; max-width:none; }
   .bd-head, .bd-body, .bd-next { max-width:660px; }
+  .bd-hero { margin:0 0 40px; }
+  .bd-hero-txt { padding:0 44px 46px; }
+  .bd-layout.con-hero { grid-template-areas:"media body" "media next"; grid-template-rows:auto 1fr; }
+  .bd-gal-grid { grid-template-columns:repeat(3,1fr); }
 }
 
 /* ─── Guías prácticas (blog/*.html): mismo lenguaje visual, solo CSS + un kicker ─── */

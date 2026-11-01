@@ -16,7 +16,7 @@ const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 194;      // styles.css (= APP_CSS_V de build-destinos.js)
-const BV_CSS_V = 3;     // blog-viajes.css
+const BV_CSS_V = 4;     // blog-viajes.css
 
 const caps = require('./blog-viajes-data.js');
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
@@ -83,15 +83,59 @@ ${dias ? `      <ul>\n${dias}\n      </ul>\n` : ''}      <p><a class="pg-btn" hr
     </aside>
 `;
 }
-// c.creditosDe = carpeta del episodio: autores de las fotos que salen en el vídeo (el tiempos.json más reciente de salida/ + fotos/ATRIBUCIONES.txt)
+// Autores y licencias de las fotos del episodio (<creditosDe>/fotos/ATRIBUCIONES.txt)
+function atribuciones(c) {
+  const atr = {};
+  fs.readFileSync(path.join(ROOT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
+  return atr;
+}
+// Fotos de la entrada (c.fotos y s.foto, 1 nov 2026): se copian de <creditosDe>/fotos/ a blog/viajes/img/<slug>/ a 1200 px como mucho (solo la primera vez)
+const FF = path.join(ROOT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe');
+// Diarios con fotos propias (Tailandia, Vietnam): c.fotosDe = { prefijo: lista } con las listas id|ruta de salma marketing (rutas relativas a D:/salma-movil
+// o a c.fotosBase); el id de la foto es prefijo + id de la lista (p. ej. 'k22' = línea 22 de la lista de 'k'). Sin pie de autor: son de Paco.
+function origen(c, id) {
+  if (!c.fotosDe) return path.join(ROOT, c.creditosDe, 'fotos', id + '.jpg');
+  const pre = Object.keys(c.fotosDe).sort((a, b) => b.length - a.length).find((p) => id.startsWith(p));
+  const L = Object.fromEntries(fs.readFileSync(path.join(ROOT, c.fotosDe[pre]), 'utf8').split('\n').filter(Boolean).map((l) => l.trim().split('|')));
+  const rel = L[id.slice(pre.length)];
+  if (!rel) throw new Error('La foto ' + id + ' no está en ' + c.fotosDe[pre]);
+  return /^[A-Z]:/.test(rel) ? rel : (c.fotosBase || 'D:/salma-movil/') + rel;
+}
+function foto(c, id) {
+  const dest = path.join(OUT, 'img', c.slug, id + '.jpg');
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    const r = require('child_process').spawnSync(FF, ['-v', 'error', '-y', '-i', origen(c, id), '-vf', "scale='min(1200,iw)':-2", '-q:v', '4', dest]);
+    if (r.status) throw new Error('No puedo preparar la foto ' + id + ' de ' + c.slug + ': ' + r.stderr);
+  }
+  if (c.fotosDe) return { src: `/blog/viajes/img/${c.slug}/${id}.jpg`, credito: '' };
+  const a = atribuciones(c)[id] || {};
+  return { src: `/blog/viajes/img/${c.slug}/${id}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
+}
+const figura = (c, [id, pie]) => { const f = foto(c, id); return `      <figure class="bd-fig">
+        <img src="${f.src}" alt="${esc(pie)}" loading="lazy">
+        <figcaption>${md(pie)}${f.credito ? ` <span>${f.credito}</span>` : ''}</figcaption>
+      </figure>
+`; };
+function galeria(c) {
+  if (!c.fotos || !c.fotos.galeria) return '';
+  return `    <section class="bd-galeria">
+      <h2>En imágenes</h2>
+      <div class="bd-gal-grid">
+${c.fotos.galeria.map(([id, pie]) => { const f = foto(c, id); return `        <figure><a href="${f.src}" target="_blank"><img src="${f.src}" alt="${esc(pie)}" loading="lazy"></a><figcaption>${md(pie)}${f.credito ? ` <span>${f.credito}</span>` : ''}</figcaption></figure>`; }).join('\n')}
+      </div>
+    </section>
+`;
+}
+// c.creditosDe = carpeta del episodio: autores de las fotos que salen en el vídeo (el tiempos.json más reciente de salida/) y en la entrada
 function creditos(c) {
   if (!c.creditosDe) return '';
   const dir = path.join(ROOT, c.creditosDe), sal = path.join(dir, 'salida');
   const t = fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
   if (!t) throw new Error('No encuentro tiempos.json en ' + sal);
-  const usadas = [...new Set(JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []).filter((x) => /^[WH]\d+$/.test(x)))];
-  const atr = {};
-  fs.readFileSync(path.join(dir, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
+  const enBlog = c.fotos ? [c.fotos.portada, ...c.secciones.filter((s) => s.foto).map((s) => s.foto[0]), ...(c.fotos.galeria || []).map((g) => g[0])] : [];
+  const usadas = [...new Set([...JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []), ...enBlog].filter((x) => /^[WH]\d+$/.test(x)))];
+  const atr = atribuciones(c);
   const li = [...new Set(usadas.filter((id) => atr[id]).map((id) => `        <li><a href="${esc(atr[id].u)}" target="_blank" rel="noopener">${esc(atr[id].autor || 'Autor desconocido')}</a> · ${esc(atr[id].lic)}</li>`))];
   return `
     <details class="bd-src">
@@ -124,11 +168,17 @@ function pagina(c) {
   const pasos = serieCaps.length > 1 ? `    <nav class="bd-steps" aria-label="Capítulos de ${esc(c.serie)}">\n${serieCaps.map((x) =>
     `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Especial' ? 'ES' : x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
   const stats = c.cifras ? `    <div class="bd-stats">\n${c.cifras.map(([n, t]) => `      <div class="bd-stat"><b>${esc(n)}</b><span>${esc(t)}</span></div>`).join('\n')}\n    </div>\n` : '';
+  // s.foto = [id, pie]: foto tras el primer párrafo · c.cita = { tras: nº de sección, t, de }: frase destacada en grande
+  const cita = (i) => c.cita && c.cita.tras === i + 1 ? `\n    <blockquote class="bd-cita"><p>${md(c.cita.t)}</p>${c.cita.de ? `<cite>${esc(c.cita.de)}</cite>` : ''}</blockquote>` : '';
   const secciones = c.secciones.map((s, i) => `    <section class="bd-sec">
       <span class="bd-sec-n">${String(i + 1).padStart(2, '0')}</span>
       <h2>${esc(s.h)}</h2>
-${s.p.map((p) => `      <p>${md(p)}</p>`).join('\n')}
-    </section>`).join('\n\n');
+${s.p.map((p, j) => `      <p>${md(p)}</p>\n${j === 0 && s.foto ? figura(c, s.foto) : ''}`).join('').replace(/\n$/, '')}
+    </section>${cita(i)}`).join('\n\n');
+  const hero = c.fotos ? foto(c, c.fotos.portada) : null;
+  const cabeza = `      <span class="bd-kicker">${esc(c.serie)} · ${esc(c.cap)}</span>
+      <h1 class="bd-title">${esc(c.titulo)}</h1>
+      <p class="bd-lead">${esc(c.resumen)}</p>`;
   const ficha = c.ficha ? `    <aside class="bd-ficha">\n      <h3>Ficha útil</h3>\n      <ul>\n${c.ficha.map((f) => `        <li>${md(f)}</li>`).join('\n')}\n      </ul>\n    </aside>\n` : '';
   const cierre = c.cierre ? `    <p class="bd-cierre">${md(c.cierre)}</p>\n` : '';
   const fuentes = `    <details class="bd-src">
@@ -171,13 +221,17 @@ ${CABECERA}
 
 <main class="bd-main">
   <p class="bd-crumbs"><a href="/blog/">Blog de viajes</a> · <a href="/blog/#${slugSerie(c.serie)}">${esc(c.serie)}</a></p>
-  <div class="bd-layout">
-    <header class="bd-head">
-      <span class="bd-kicker">${esc(c.serie)} · ${esc(c.cap)}</span>
-      <h1 class="bd-title">${esc(c.titulo)}</h1>
-      <p class="bd-lead">${esc(c.resumen)}</p>
+${hero ? `  <header class="bd-hero">
+    <img src="${hero.src}" alt="" fetchpriority="high">
+    <div class="bd-hero-txt">
+${cabeza}
+    </div>
+${hero.credito ? `    <span class="bd-hero-cred">${hero.credito}</span>\n` : ''}  </header>
+` : ''}  <div class="bd-layout${hero ? ' con-hero' : ''}">
+${hero ? '' : `    <header class="bd-head">
+${cabeza}
     </header>
-
+`}
     <div class="bd-media">
       <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
       <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>
@@ -188,7 +242,7 @@ ${CABECERA}
 ${pasos}${stats}
 ${secciones}
 
-${guia(c)}${ficha}${cierre}
+${galeria(c)}${guia(c)}${ficha}${cierre}
 ${fuentes}${creditos(c)}
 
       <div class="bd-salma">
