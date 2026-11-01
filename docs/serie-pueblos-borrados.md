@@ -9,6 +9,7 @@ Línea editorial y reglas: `docs/video-checklist.md` (L1, M15, P2, P4). Título:
 |---|---|---|---|
 | 1 · Whang-Od | `pueblos/whang-od/` | http://localhost:8098 | `india/motor/whang-od-ep1.cjs` |
 | 2 · Sagada | `pueblos/sagada/` | http://localhost:8102 | `india/motor/sagada-ep2.cjs` |
+| 3 · Las haenyeo | `pueblos/haenyeo/` | http://localhost:8104 | `india/motor/haenyeo-ep3.cjs` (mapa: `mapa-jeju.cjs`) |
 
 Dentro de cada carpeta de episodio: `ULTIMA/` (la buena) · `salida/versiones-anteriores/` (borradores viejos, no tocar) · `fotos/` (W01…, con `ATRIBUCIONES.txt`) · `hoja-contactos.html` · el mapa `.mp4`.
 Común a la serie: `pueblos/comun/` → `clip-app.mp4`, `sonidos/`, `sintonia/` (la elegida + `recursos/`).
@@ -27,8 +28,8 @@ Común a la serie: `pueblos/comun/` → `clip-app.mp4`, `sonidos/`, `sintonia/` 
 | — | Los kayan | Norte de Tailandia | publicado (26 oct, como Cap.4) |
 | 1 | Whang-Od y el tatuaje *batok* (butbut, Kalinga) | Luzón norte, Filipinas | **TERMINADO (Paco, 31 oct: «este vídeo está»)**: con los cambios de Paco en el editor (30 oct), sígueme a los 20 s con su sonido y sintonía. Vídeo: `pueblos/whang-od/ULTIMA/` · config: `india/motor/whang-od-ep1.cjs` · guion: `docs/pueblos-ep1-whang-od-guion-direccion.md`. Pendiente: fotos grandes de Wikimedia (429; faltan 11), paquete de texto (P6) con autores al final del comentario fijado (P2), publicar. Voz ya pagada (~1.070 caracteres): remontar = 0 €. |
 | 2 | **Los ataúdes colgantes de Sagada** (adelantado por Paco el 31 oct, «para continuar con Filipinas») | Luzón norte, Filipinas | borrador montado con sintonía; vídeo: `pueblos/sagada/ULTIMA/` · guion: `docs/pueblos-ep2-sagada-guion-direccion.md` · editor 8102. Pendiente: fotos definitivas de Paco. |
-| 3 | Las haenyeo de Jeju | Corea | — |
-| 3 | Los konyak | Nagaland, India | — |
+| 3 | Las haenyeo de Jeju | Corea | guion v1 aprobado (1 nov 2026): `docs/pueblos-ep3-haenyeo-guion-direccion.md` · fotos revisadas (F9): `pueblos/haenyeo/hoja-contactos.html` (109, propuesta por escena; descartes en `fotos/descartadas-otro-sitio/NOTA.txt`) · sonido: olas reales de Jeju (Freesound CC BY), sin *sumbisori* (no hay grabación libre). **Borrador v1 montado (1 nov 2026)**: voz generada (~1.020 caracteres), informe de reglas sin ❌ (1 aviso M2), editor en http://localhost:8104. Pendiente: revisión de Paco en el editor → «★ Exportar para publicar». Herramientas de fotos guardadas en `india/motor/hoja-serie.cjs`, `hoja-regenerar.cjs`, `fotos-grandes.cjs`. |
+| 4 | **Los konyak** (siguiente tras las haenyeo, Paco 1 nov 2026) | Nagaland, India | — |
 | 4 | Los moken | Surin, Tailandia/Myanmar | — |
 | 5 | Los ainu | Hokkaido, Japón | — |
 | 6 | Los mosuo | Lago Lugu, China | — |
