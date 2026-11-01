@@ -648,6 +648,69 @@ const caps = [
     ],
     cierre: 'Próximo episodio: los moken, los nómadas del mar de Andamán.',
   },
+  // Ep.5 Los moken · guion y fuentes: docs/pueblos-ep5-moken-guion-direccion.md · vídeo: salma marketing/pueblos/moken/ULTIMA
+  {
+    slug: 'tailandia-moken-nomadas-del-mar-surin',
+    fecha: '2026-11-01',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Episodio 5',
+    pais: 'Tailandia',
+    redes: { tituloYT: 'Los moken: el pueblo que vivía en el mar · Islas Surin, Tailandia', tituloTT: 'Moken: los nómadas del mar de Tailandia', hashtags: ['#moken', '#tailandia', '#pueblosborradosdelmapa'] },
+    titulo: 'Los moken: los nómadas del mar de Andamán',
+    resumen: 'Durante siglos, los moken vivieron en barcas entre Tailandia y Birmania. En 2004 se salvaron del tsunami porque reconocieron la ola de sus leyendas. Hoy viven en un poblado fijo y el último kabang de Surin se construyó en 2006.',
+    video: 'pueblos-ep5-moken.mp4',
+    realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons, vídeos del tsunami con licencia libre (grabados en Ko Lanta, no en Surin) y sonido de Freesound (autores al final), con fuentes citadas. No es un viaje de Paco.',
+    destino: ['tailandia', 'Tailandia'],
+    creditosDe: 'salma marketing/pueblos/moken',
+    fotos: { portada: 'W4', galeria: [['W25', 'Una anciana moken de Surin.'], ['W27', 'Un poblado moken cerca de Mergui, en Birmania (2004).'], ['W7', 'Una niña moken en Surin.'], ['W22', 'La costa del parque nacional de Surin.'], ['W16', 'El fondo marino de Surin.'], ['W18', 'La bahía de Chong Khad, en Surin.']] },
+    cita: { tras: 3, t: 'La gran ola llevaba mucho tiempo sin comerse a nadie y quería volver a probar', de: 'Saleh Kalathalay, moken de Surin (CBS, 60 Minutes)' },
+    cifras: [['×2', 'Agudeza bajo el agua de sus niños (2003)'], ['2006', 'El último kabang de Surin'], ['15 oct - 15 may', 'Temporada del parque']],
+    secciones: [
+      { h: 'Gente del mar', foto: ['W1', 'El poblado moken de Ao Bon Yai, en Surin (2025).'], p: [
+        'Los **moken** son un pueblo austronesio del **archipiélago de Mergui**, unas 800 islas repartidas entre Birmania y Tailandia, y de las **islas Surin**. También viven en la costa tailandesa del mar de Andamán, de Ranong a Krabi. En Birmania los llaman *salone*; en Tailandia, *chao le*, «gente del mar».',
+        'Tienen su propia lengua, y los intentos de Tailandia y Birmania por asimilarlos han tenido, según Wikipedia, muy poco éxito.' ] },
+      { h: 'Una barca por casa', foto: ['W2', 'Un kabang en la playa de Surin, en 2006.'], p: [
+        'En la estación seca vivían en el ***kabang***, una barca que era a la vez transporte, cocina, dormitorio y casa. Iban en grupos de dos a diez familias, de isla en isla, viviendo de lo que daban el mar y el bosque.',
+        'El último *kabang* de Surin se construyó en **2006**. Desde 2018 hay un intento de recuperar su construcción.' ] },
+      { h: 'Ver bajo el agua', foto: ['W3', 'Niños moken en Surin, en 2006.'], p: [
+        'En 2003, un equipo de la Universidad de Lund publicó en *Current Biology* que los niños moken veían bajo el agua **aproximadamente el doble de bien** que los niños europeos. Al bucear estrechaban la pupila (1,96 mm frente a 2,50) y enfocaban al límite de lo que puede el ojo humano.',
+        'No parece un don genético: un estudio de 2006 consiguió que niños europeos aprendieran a hacer lo mismo con entrenamiento. La propia investigadora, Anna Gislén, dudaba de que la generación actual lo conserve, porque los niños ya pasan mucho menos tiempo en el mar.' ] },
+      { h: 'La ola que se come a la gente', foto: ['W17', 'Marea baja en una playa de Surin.'], p: [
+        'El 26 de diciembre de 2004, antes de que llegara el tsunami, el mar se retiró de golpe. Los moken de Surin reconocieron la señal de sus leyendas, la ***laboon***, «la ola que se come a la gente», y subieron al monte.',
+        'Cuántos murieron no está claro: unas fuentes dicen que ninguno, el *South China Morning Post* habla de uno y un reportaje de *Himal Southasian* pone en duda la versión de «ninguna víctima». Por eso no damos una cifra.',
+        'Las imágenes del tsunami del vídeo no son de Surin: las grabaron Fabio Campo y Alberto Piccinini ese mismo día en Ko Lanta, unos 250 km al sur, en el mismo mar.' ] },
+      { h: 'Lo que se está borrando', foto: ['W5', 'El poblado fijo sobre pilotes, dentro del parque nacional.'], p: [
+        'Tras el tsunami, las autoridades del parque juntaron los dos poblados de Surin en uno, en la bahía de **Ao Bon Yai**. Hoy viven allí de forma fija, dentro del parque nacional, y sus niños pasan cada vez menos tiempo en el mar.',
+        'Cuántos son tampoco está claro: las guías hablan de unas 300 personas en unas 70 casas, una encuesta de la Universidad de Chulalongkorn contó 362 en 2022 y un medio birmano habla de unos 400 en 2026.' ] },
+      { h: 'Sin papeles', foto: ['W24', 'Una niña moken en Surin.'], p: [
+        'En Tailandia, una parte de los moken de Surin sigue sin nacionalidad, por la lengua, el coste de los trámites y lo difícil que es viajar en el monzón. En Birmania, los avances para darles papeles se pararon con el golpe de Estado de 2021.' ] },
+      { h: 'Visitar sin molestar', foto: ['W19', 'La bahía de Chong Khad, en el parque nacional de Surin.'], p: [
+        'Hay quien llama al poblado de Surin «un zoo humano» por las excursiones que pasan por allí. Si vas, ve con calma, compra su artesanía y pregunta antes de hacer fotos: es su casa.' ] },
+    ],
+    ficha: [
+      '**Parque nacional de Mu Ko Surin:** abre del 15 de octubre al 15 de mayo (temporada 2026/27: del 15 oct 2026 al 15 may 2027) y puede cerrar antes por el monzón. Desde el 15 de octubre de 2025 la entrada es electrónica: cómprala antes.',
+      '**Cómo llegar:** en lancha desde Khura Buri o en excursión desde Khao Lak o Phuket; el poblado moken está en Ko Surin Tai.',
+      '**Respeto:** no hay entrada al poblado, pero se agradece que compres su artesanía; sigue al guía del poblado y pide permiso antes de fotografiar a nadie.',
+    ],
+    nota: 'Datos de noviembre de 2026; fechas y entradas del parque cambian, confírmalas con el Departamento de Parques Nacionales de Tailandia antes de ir.',
+    fuentes: [
+      W('Wikipedia: Moken', 'https://en.wikipedia.org/wiki/Moken'),
+      W('Gislén y otros, Current Biology 2003: visión bajo el agua (Universidad de Lund)', 'https://lup.lub.lu.se/search/publication/310971'),
+      W('ScienceAlert: los niños moken y el entrenamiento de 2006', 'https://www.sciencealert.com/these-sea-nomad-children-can-see-underwater-like-dolphins'),
+      W('CBS News, 60 Minutes: los moken y la laboon', 'https://www.cbsnews.com/news/sea-gypsies-saw-signs-in-the-waves/'),
+      W('South China Morning Post: Troubled water', 'https://www.scmp.com/article/502345/troubled-water'),
+      W('Himal Southasian: Riding the wave', 'https://himalmag.com/archives/riding-the-wave'),
+      W('Chulalongkorn (CUSRI), 2022: los moken de Surin y la nacionalidad', 'https://cusri.chula.ac.th/?p=6777'),
+      W('Cheva-Isarakul y Sperfeldt, Citizenship Studies 2023', 'https://researchers.mq.edu.au/en/publications/citizenship-and-statelessness-among-mobile-maritime-populations-t/'),
+      W('Aeon: ¿hay que salvar a los moken de nuestra forma de vida?', 'https://aeon.co/essays/do-thailand-s-sea-gypsies-need-saving-from-our-way-of-life'),
+      W('TAT News, 23 oct 2026: reapertura de los parques del Andamán', 'https://www.tatnews.org/2026/10/the-andaman-opens-its-doors-again/'),
+      W('Vídeo: «2004 TSUNAMI Thailand (Ko Lanta)», Fabio Campo y Alberto Piccinini, CC BY', 'https://www.youtube.com/watch?v=6PrpsB5AuN8'),
+      W('Vídeo: «The 2004 Indonesia Tsunami», simulación de NOAA, CC BY', 'https://www.youtube.com/watch?v=pOcq0S4qNB0'),
+      W('Sonido: «Small Waves at the Beach», ultradust, CC BY 4.0', 'https://freesound.org/people/ultradust/sounds/165126/'),
+      W('Sonido: «Korean island shore at night», rizzin, CC BY 3.0', 'https://freesound.org/people/rizzin/sounds/400791/'),
+    ],
+    cierre: 'Próximo episodio: los ainu, el pueblo indígena del norte de Japón.',
+  },
 ];
 caps.SERIES = SERIES;
 module.exports = caps;

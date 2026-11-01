@@ -55,7 +55,10 @@ const descripcion = `${limpio(c.resumen)}\n\nTodo el episodio, con fuentes y la 
 // Sonidos con licencia que piden nombrar al autor (CC BY…): <carpeta>/sonidos/ATRIBUCIONES.txt, líneas «archivo · título · autor · licencia · url» de Freesound o Wikimedia Commons
 const fSon = path.join(EP, 'sonidos', 'ATRIBUCIONES.txt');
 const sonidos = fs.existsSync(fSon) ? [...new Set(fs.readFileSync(fSon, 'utf8').split('\n').map((l) => l.split(' · ')).filter((p) => p.length >= 5 && /freesound|wikimedia/.test(p[4]) && /^CC/.test(p[3])).map((p) => `${p[2]} (${p[3]}, ${/freesound/.test(p[4]) ? 'Freesound' : 'Wikimedia Commons'})`))] : [];
-const comentario = `🗺️ Crea tu ruta gratis con Salma: borradodelmapa.com\n📖 El episodio ampliado: ${blogUrl}\n📷 Fotos: ${autores.join(' · ')} — Wikimedia Commons.${sonidos.length ? `\n🔊 Sonido: ${sonidos.join(' · ')}.` : ''}`;
+// Vídeos de archivo con licencia libre (F10): <carpeta>/videos/ATRIBUCIONES.txt, líneas «archivos · título · autor · licencia · url» (las demás líneas son notas)
+const fVid = path.join(EP, 'videos', 'ATRIBUCIONES.txt');
+const videos = fs.existsSync(fVid) ? [...new Set(fs.readFileSync(fVid, 'utf8').split('\n').map((l) => l.split(' · ')).filter((p) => p.length >= 5 && /^https?:/.test(p[4].trim()) && /^CC/.test(p[3])).map((p) => `${p[2]} (${p[3].replace(' (YouTube)', '')}, ${/youtube/.test(p[4]) ? 'YouTube' : 'Wikimedia Commons'})`))] : [];
+const comentario = `🗺️ Crea tu ruta gratis con Salma: borradodelmapa.com\n📖 El episodio ampliado: ${blogUrl}\n📷 Fotos: ${autores.join(' · ')} — Wikimedia Commons.${videos.length ? `\n🎥 Vídeo: ${videos.join(' · ')}.` : ''}${sonidos.length ? `\n🔊 Sonido: ${sonidos.join(' · ')}.` : ''}`;
 const paquete = {
   episodio: slug, video: path.relative(ROOT, path.join(U, mp4)), version: ver, blog: blogUrl,
   youtube: { title: (R.tituloYT || c.titulo).slice(0, 100), description: descripcion, tags: tags.map((t) => t.replace('#', '')), type: 'short', madeForKids: false, isAiGeneratedContent: true },

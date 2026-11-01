@@ -55,6 +55,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 | F7 | Monta Claude con el motor (**un solo editor/motor**: no escribir otro) y entrega: vídeo + informe de reglas + hoja de planos (`motor/hoja.cjs`). Se guarda con fecha en `VIDEOS-TERMINADOS/` (el anterior del mismo capítulo pasa a `ANTIGUOS`). Un puerto de editor por capítulo; nunca renombrar sobre un vídeo abierto en el editor (se copia encima). | manual |
 | F8 | Paco corrige por escena/número y se remonta. Nunca «arreglado»: *«montado — dime qué ves y oyes»*. Un cambio, una prueba, una confirmación. | manual |
 | F9 | **NORMA (Paco, 31 oct 2026): las fotos de banco se revisan UNA A UNA antes de enseñárselas a Paco.** Fuera de la galería (a `fotos/descartadas-otro-sitio/` con su nota) todo lo que no sea del sitio o pueblo del episodio: caso real, buscando «batok» (el tatuaje) se colaron 8 fotos del volcán Batok de Java (Indonesia) y una acabó en el vídeo de Filipinas. Tampoco van restos humanos ni fotos de «zoos humanos» o exhibiciones. Avisar no basta: se quitan. | manual |
+| F10 | **Vídeo de archivo ajeno (Paco, 1 nov 2026, caso tsunami de los moken): solo con licencia libre comprobada** (YouTube con filtro «Creative Commons» y `license` = CC BY en yt-dlp, o Wikimedia Commons). Nunca clips de cadenas de noticias ni re-subidas. Se **ve entero** antes de usarlo y se cogen solo planos **sin personas heridas o en peligro**. Rótulo con el **lugar y la fecha reales** si no es el sitio del episodio (p. ej. «KO LANTA · 26 DIC 2004»). Autores en `videos/ATRIBUCIONES.txt` de la carpeta del episodio, en el comentario fijado y en las fuentes del blog (P2). | manual |
 
 ## B · Narración y texto (Salma narradora)
 | ID | Regla | Comprobación |
@@ -116,6 +117,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 1 nov 2026 · 20:30 | Serie «Pueblos borrados del mapa» (Claude) | Nueva **F10** (manual): vídeo de archivo ajeno solo con licencia libre comprobada, visto entero, sin personas heridas y con rótulo de lugar y fecha reales (caso del tsunami en los moken). Sin conflictos. |
 | 1 nov 2026 · 17:30 | Serie «Pueblos borrados del mapa» (Claude) | **P12** y paso 9: maqueta con fotos en todas las entradas del blog (portada a lo ancho, foto por apartado con pie, galería de 6), con fotos solo del vídeo; aplicada a los 13 diarios (Pueblos, Tailandia, Muay Thai, Vietnam). |
 | 1 nov 2026 · 15:10 | Especial Muay Thai (Claude) | **P6** y paso 10: vídeo, descripción (contando lo que se ve) y primer comentario van siempre juntos; el comentario se programa en Metricool con el vídeo y se comprueba al salir. Sin conflictos. |
 | 31 oct 2026 · 12:00 | Serie «Pueblos borrados del mapa» (Claude) | Protocolo: pasos 9 y 10 automatizados con `scripts/publicar-episodio.cjs` hasta el OK de Paco. |
