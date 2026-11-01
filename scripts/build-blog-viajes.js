@@ -188,7 +188,7 @@ ${s.p.map((p, j) => `      <p>${md(p)}</p>\n${j === 0 && s.foto ? figura(c, s.fo
 ${c.fuentes.map((f) => `        <li><a href="${esc(f.u)}" target="_blank" rel="noopener">${esc(f.t)}</a></li>`).join('\n')}
       </ul>
     </details>`;
-  const [dSlug, dNombre] = c.destino;
+  const [dSlug, dNombre] = c.destino || []; // sin página de destino (p. ej. la India no tiene): se quita el «Más sobre…»
   const nx = (x, lado) => x ? `      <a class="bd-nx${lado === 'der' ? ' der' : ''}" href="/blog/viajes/${x.slug}">
         <img src="/blog/viajes/img/${x.slug}.jpg" alt="" loading="lazy">
         <span><small>${lado === 'der' ? 'Siguiente' : 'Anterior'}</small><b>${esc(x.titulo)}</b></span>
@@ -248,7 +248,7 @@ ${fuentes}${creditos(c)}
       <div class="bd-salma">
         <img src="/salma_ai_avatar.png" alt="Salma">
         <div>
-          <p><strong>¿Vas a ${esc(c.pais || (c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia'))}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis. Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.</p>
+          <p><strong>¿Vas a ${esc(c.pais || (c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia'))}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis.${dSlug ? ` Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.` : ""}</p>
           <p><a class="pg-btn" href="/?go=chat">Crear mi ruta</a></p>
         </div>
       </div>

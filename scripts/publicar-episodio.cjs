@@ -52,10 +52,10 @@ const limpio = (s) => String(s).replace(/\*\*/g, '').replace(/\*/g, '');
 const datos = (R.datos || c.ficha.slice(0, 2)).map((f) => '• ' + limpio(f)).join('\n');
 const tags = R.hashtags || ['#' + (c.pais || '').toLowerCase().replace(/\s/g, ''), '#pueblosborradosdelmapa', '#viajes'];
 const descripcion = `${limpio(c.resumen)}\n\nTodo el episodio, con fuentes y la guía para ir: ${blogUrl}\n\nPara viajar:\n${datos}\n(${limpio(c.nota)})\n\n${tags.join(' ')}`;
-// Sonidos con licencia que piden nombrar al autor (CC BY…): <carpeta>/sonidos/ATRIBUCIONES.txt, líneas «archivo · título · autor · licencia · url» de Freesound
+// Sonidos con licencia que piden nombrar al autor (CC BY…): <carpeta>/sonidos/ATRIBUCIONES.txt, líneas «archivo · título · autor · licencia · url» de Freesound o Wikimedia Commons
 const fSon = path.join(EP, 'sonidos', 'ATRIBUCIONES.txt');
-const sonidos = fs.existsSync(fSon) ? [...new Set(fs.readFileSync(fSon, 'utf8').split('\n').map((l) => l.split(' · ')).filter((p) => p.length >= 5 && /freesound/.test(p[4]) && /^CC/.test(p[3])).map((p) => `${p[2]} (${p[3]})`))] : [];
-const comentario = `🗺️ Crea tu ruta gratis con Salma: borradodelmapa.com\n📖 El episodio ampliado: ${blogUrl}\n📷 Fotos: ${autores.join(' · ')} — Wikimedia Commons.${sonidos.length ? `\n🔊 Sonido: ${sonidos.join(' · ')} — Freesound.` : ''}`;
+const sonidos = fs.existsSync(fSon) ? [...new Set(fs.readFileSync(fSon, 'utf8').split('\n').map((l) => l.split(' · ')).filter((p) => p.length >= 5 && /freesound|wikimedia/.test(p[4]) && /^CC/.test(p[3])).map((p) => `${p[2]} (${p[3]}, ${/freesound/.test(p[4]) ? 'Freesound' : 'Wikimedia Commons'})`))] : [];
+const comentario = `🗺️ Crea tu ruta gratis con Salma: borradodelmapa.com\n📖 El episodio ampliado: ${blogUrl}\n📷 Fotos: ${autores.join(' · ')} — Wikimedia Commons.${sonidos.length ? `\n🔊 Sonido: ${sonidos.join(' · ')}.` : ''}`;
 const paquete = {
   episodio: slug, video: path.relative(ROOT, path.join(U, mp4)), version: ver, blog: blogUrl,
   youtube: { title: (R.tituloYT || c.titulo).slice(0, 100), description: descripcion, tags: tags.map((t) => t.replace('#', '')), type: 'short', madeForKids: false, isAiGeneratedContent: true },

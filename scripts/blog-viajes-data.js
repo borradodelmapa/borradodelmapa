@@ -589,6 +589,65 @@ const caps = [
     ],
     cierre: 'Próximo episodio: los konyak de Nagaland, en el noreste de la India.',
   },
+  // Ep.4 Los konyak · guion y fuentes: docs/pueblos-ep4-konyak-guion-direccion.md · vídeo: salma marketing/pueblos/konyak/ULTIMA
+  // Sin destino: no hay página de la India en destinos/ (el generador quita el «Más sobre…»).
+  {
+    slug: 'india-konyak-ultimos-tatuados-nagaland',
+    fecha: '2026-11-01',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Episodio 4',
+    pais: 'India',
+    redes: { tituloYT: 'Los konyak: los últimos guerreros con la cara tatuada · Nagaland, India', tituloTT: 'Konyak: las últimas caras tatuadas de la India', hashtags: ['#nagaland', '#konyak', '#pueblosborradosdelmapa'] },
+    titulo: 'Los konyak: las últimas caras tatuadas de Nagaland',
+    resumen: 'En Nagaland, en la frontera de la India con Birmania, los últimos guerreros konyak con la cara tatuada tienen entre ochenta y noventa y cinco años. Cuando se vayan, se irán las últimas caras que cuentan esa historia.',
+    video: 'pueblos-ep4-konyak.mp4',
+    realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final) y fuentes citadas. El sonido de ambiente es de licencia libre y no está grabado en Nagaland. No es un viaje de Paco.',
+    creditosDe: 'salma marketing/pueblos/konyak',
+    fotos: { portada: 'W90', galeria: [['W90', 'Nyemwang Wanghu, uno de los últimos cazadores de cabezas tatuados.'], ['W52', 'El tatuaje del pecho, en Longwa.'], ['W62', 'La fiesta de Aoleang.'], ['W59', 'Un anciano konyak.'], ['W01', 'Mujeres konyak.'], ['W88', 'El paisaje de Longwa, en la frontera.']] },
+    cita: { tras: 5, t: 'Todo cambió con la modernidad; nuestra cultura se muere', de: 'Bo Wang, 90 años, rey de Hongphoi (AFP, 2023)' },
+    cifras: [['80-95', 'Años de los últimos tatuados'], ['1-6 abril', 'Fiesta de Aoleang'], ['2 países', 'En la casa del jefe de Longwa']],
+    secciones: [
+      { h: 'La tierra de los angh', foto: ['W91', 'Las colinas de Mon, en Nagaland.'], p: [
+        'Los **konyak** son uno de los pueblos naga. La mayoría vive en el distrito de **Mon**, en el estado indio de **Nagaland**, al que llaman «la tierra de los *angh*», sus jefes tradicionales. También hay konyak en Arunachal Pradesh, en Assam y al otro lado de la frontera, en la Zona Naga de Birmania.' ] },
+      { h: 'Caras que se ganaban en combate', foto: ['W51', 'Un anciano tatuado en Longwa.'], p: [
+        'Durante siglos fueron **cazadores de cabezas**. Los tatuajes de la cara y del pecho no eran un adorno: se ganaban en combate y marcaban a un guerrero.',
+        'Las fuentes no lo cuentan igual en el detalle. Según Wikipedia, el tatuaje de la cara se ganaba al cortar la cabeza de un enemigo; según Outlook Traveller, la cara marcaba haber combatido y el tatuaje del cuello, al verdadero cazador de cabezas.' ] },
+      { h: 'El collar de latón', foto: ['W89', 'Colgante konyak de latón con cabezas, en el Museo Nacional de Delhi.'], p: [
+        'Algunos ancianos llevan un collar con **cabecitas de latón**. Se dice que cada una recuerda a un enemigo; lo cuenta una sola fuente (Outlook Traveller), que además avisa de que hoy muchos lo llevan sin haber matado a nadie.' ] },
+      { h: 'Por qué se acabó', foto: ['W14', 'Un cazador de cabezas konyak.'], p: [
+        'Los konyak fueron el **último pueblo naga en hacerse cristiano**. Con los misioneros, la caza de cabezas se convirtió en tabú y dejaron de tatuarse la cara.',
+        'Cuándo terminó exactamente se discute: unas fuentes dicen hace medio siglo, otras hace más de cuatro décadas, otras dan 1960 o 1969. Por eso no damos un año.' ] },
+      { h: 'Longwa, una casa con frontera', foto: ['W87', 'Atardecer desde Longwa, mirando hacia Mon.'], p: [
+        '**Longwa** es la aldea más grande del distrito de Mon y está justo en la frontera con Birmania. La línea pasa por dentro de la casa del *angh*: **una mitad está en la India y la otra en Birmania**. Las fuentes no coinciden en qué habitación cae en cada lado.',
+        'Muchos blogs repiten que los vecinos tienen «doble nacionalidad». No es así: la Constitución india no la permite.' ] },
+      { h: 'Lo que se está borrando', foto: ['W80', 'Un jefe konyak con su collar.'], p: [
+        'Los últimos guerreros tatuados tienen hoy **entre ochenta y noventa y cinco años**. En 2023, la agencia AFP habló con varios de ellos, como Nokkho Konyak, de 90 años.',
+        'La investigadora Phejin Konyak, con el fotógrafo Peter Bos, publicó un libro que retrata a los últimos tatuados antes de que se vayan.' ] },
+      { h: 'La valla', foto: ['W88', 'Las montañas de la frontera, cerca de Longwa.'], p: [
+        'En 2024, el Gobierno indio anunció el fin del régimen de libre movimiento con Birmania y una valla a lo largo de la frontera. Los konyak protestan: partiría en dos aldeas y familias que viven a los dos lados.' ] },
+    ],
+    ficha: [
+      '**Fiesta de Aoleang:** del 1 al 6 de abril, la mayor fiesta de los konyak, en el distrito de Mon.',
+      '**Permiso para extranjeros (PAP):** Nagaland lo volvió a exigir el 17 de diciembre de 2024 (se había levantado en 2021) y el Gobierno del estado pide quitarlo. Confírmalo justo antes de ir.',
+      '**Respeto:** pide permiso antes de fotografiar a nadie; los tatuados son personas, no una atracción.',
+    ],
+    nota: 'Datos de noviembre de 2026; el permiso para extranjeros cambia a menudo, confírmalo con el Gobierno de Nagaland antes de ir.',
+    fuentes: [
+      W('Wikipedia: Konyak Naga', 'https://en.wikipedia.org/wiki/Konyak_Naga'),
+      W('Outlook Traveller: los tatuajes de los konyak', 'https://www.outlooktraveller.com/experiences/heritage/ancestral-memories-tattoos-on-skin'),
+      W('AFP en Kuwait Times, 5 jul 2023: los últimos cazadores de cabezas', 'https://kuwaittimes.com/indias-headhunter-warriors-sever-past-fret-over-future/'),
+      W('Morung Express, mar 2024: los tatuados de Longwa', 'https://morungexpress.com/the-tattooed-headhunters-of-longwa-village'),
+      W('Wikipedia: Lungwa', 'https://en.wikipedia.org/wiki/Lungwa'),
+      W('Outlook Traveller: la casa con un pie en cada país', 'https://www.outlooktraveller.com/experiences/places-of-interest/this-house-in-nagaland-has-one-foot-in-india-and-another-in-myanmar'),
+      W('EastMojo, 5 feb 2025: los konyak contra la valla', 'https://eastmojo.com/premium/2025/02/05/indigenous-rights-now-konyaks-protest-indo-myanmar-fencing/'),
+      W('Morung Express: voces de Longwa contra la valla', 'https://morungexpress.com/voices-from-longwa-why-the-villagers-oppose-the-india-myanmar-border-fence'),
+      W('Morung Express: el PAP vuelve a ser obligatorio', 'https://morungexpress.com/pap-mandatory-for-foreigners-in-nagaland'),
+      W('The Week, 30 nov 2025: Nagaland pide quitar el PAP', 'https://www.theweek.in/wire-updates/national/2025/11/30/cal31-nl-rio-pap.html'),
+      W('Sonido: viento en un pinar, W.carter, CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Wind_in_Swedish_pine_forest_at_25_mps.ogg'),
+      W('Sonido: pájaros en Bourne Woods, Robert EA Harvey, CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Birdsong_Bourne_Woods_2020-04-27_0722.mp3'),
+    ],
+    cierre: 'Próximo episodio: los moken, los nómadas del mar de Andamán.',
+  },
 ];
 caps.SERIES = SERIES;
 module.exports = caps;
