@@ -32,6 +32,7 @@ Almacén R2 **`borrado-videos-redes`** (solo vídeos de redes, aparte de `salma-
 | 3 · Las haenyeo | `pueblos-ep3-haenyeo.mp4` (223 MB) | subido y comprobado entero (1 nov) |
 | 4 · Los konyak | `pueblos-ep4-konyak.mp4` (223 MB) | subido y comprobado entero (1 nov) |
 | 5 · Los moken | `pueblos-ep5-moken.mp4` (194 MB) | subido y comprobado entero (1 nov) |
+| 6 · Los sentineleses | `pueblos-ep6-sentineleses.mp4` (251 MB) | subido y comprobado entero (1 nov) |
 **Ojo (1 nov, sábado noche):** desde la conexión de Paco la URL r2.dev no respondía (workers.dev sí); posible bloqueo de Cloudflare en España en horario de fútbol. Probar la URL otro día antes de programar. **Siguiente paso:** con OK de Paco, días y horas → programar en Metricool (YouTube + TikTok) con `ULTIMA/textos-redes.json` (descripción + primer comentario juntos, P6) → comprobar en cada red → `docs/publicaciones-registro.md`.
 
 ## Orden propuesto (30 oct 2026, pendiente de OK de Paco)
@@ -46,7 +47,7 @@ Almacén R2 **`borrado-videos-redes`** (solo vídeos de redes, aparte de `salma-
 | 6 | Los ainu (siguiente tras los moken, Paco 1 nov 2026) | Hokkaido, Japón | — |
 | 7 | Los mosuo | Lago Lugu, China | — |
 | 8 | Los dukha (pastores de renos) | Khövsgöl, Mongolia | — |
-| 9 | Los sentineleses (capítulo «por qué NO se visita») | Andamán, India | — |
+| 9 | **Los sentineleses** (capítulo «por qué NO se visita»; adelantado por Paco el 1 nov 2026, va como Ep.6) | Andamán, India | guion v1 escrito (1 nov 2026), aprobado por Paco (1 nov 2026), con excepción a M15 (portada con la isla): `docs/pueblos-ep6-sentineleses-guion-direccion.md` · imágenes revisadas (F9): `pueblos/sentineleses/hoja-contactos.html` (15: la isla desde el avión y el satélite, foto de andamaneses c. 1870, Port Blair; descartes en `fotos/descartadas/NOTA.txt`). Imágenes aprobadas por Paco; sin la foto del helicóptero (derechos de la Guardia Costera; Paco: «sin la foto»). Mapa `mapa-sentineleses.cjs`, config `sentineleses-ep6.cjs`, editor http://localhost:8107. **Borrador v1 montado (1 nov 2026)**: 94 s, voz ~1.030 caracteres, informe sin ❌ (6 avisos M2/M3). Exportado en CALIDAD MÁXIMA por Paco (1 nov 2026, sin cambios). Blog preparado en local: `blog/viajes/india-sentineleses-isla-que-no-se-visita.html` y textos en `ULTIMA/textos-redes.txt`. Pendiente: OK para subir el blog, redes. |
 | 10 | Las ama | Mie, Japón | — |
 Reserva: ifugao, bajau, mangyan, tao de Lanyu, nüshu, cormoranes del río Li, cazadores con águila, intha, chin, akha/hmong, apatani, raute, Mustang, brokpa.
 Circuitos para el viaje: Luzón norte (1, 7, ifugao) · Japón y Corea (2, 5, 10) · norte de Tailandia/Laos (4, akha/hmong) · noreste de India y Nepal (3, apatani, raute, Mustang).

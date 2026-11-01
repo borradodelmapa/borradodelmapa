@@ -711,6 +711,66 @@ const caps = [
     ],
     cierre: 'Próximo episodio: los ainu, el pueblo indígena del norte de Japón.',
   },
+  // Ep.6 Los sentineleses (el capítulo «por qué NO se visita») · guion y fuentes: docs/pueblos-ep6-sentineleses-guion-direccion.md · vídeo: salma marketing/pueblos/sentineleses/ULTIMA
+  // Sin destino: no hay página de la India en destinos/. Ninguna imagen de sentineleses (excepción M15, aprobada por Paco).
+  {
+    slug: 'india-sentineleses-isla-que-no-se-visita',
+    fecha: '2026-11-01',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Episodio 6',
+    pais: 'las Andamán',
+    redes: { tituloYT: 'Los sentineleses: la isla que no se visita · Andamán, India', tituloTT: 'Sentinel del Norte: la isla que no se visita', hashtags: ['#sentineleses', '#andaman', '#pueblosborradosdelmapa'] },
+    titulo: 'Los sentineleses: la isla que no se visita',
+    resumen: 'En la isla Sentinel del Norte, en las Andamán, vive un pueblo que no deja entrar a nadie. Nadie sabe cuántos son ni entiende su idioma, y tienen buenas razones para no querer visitas: nuestras enfermedades podrían acabar con ellos.',
+    video: 'pueblos-ep6-sentineleses.mp4',
+    realidad: 'Capítulo documental: lo cuenta Salma con imágenes de la isla vista desde lejos (Wikimedia Commons, autores al final), una foto antigua de otros andamaneses y fuentes citadas. No hay ninguna imagen de sentineleses: está prohibido fotografiarlos y no queremos hacerlo. No es un viaje de Paco.',
+    creditosDe: 'salma marketing/pueblos/sentineleses',
+    fotos: { portada: 'W9', galeria: [['W1', 'La isla por la ventanilla de un avión comercial.'], ['W10', 'Sentinel del Norte desde el satélite (NASA).'], ['W11', 'La isla desde la Estación Espacial Internacional.'], ['W6', 'El arrecife que rodea la isla.'], ['W18', 'Las islas Andamán desde el espacio.'], ['W15', 'Corbyn\'s Cove, una playa de Port Blair.']] },
+    cifras: [['15-500', 'Estimaciones de cuántos son'], ['5.000 → 59', 'Gran andamaneses, del siglo XIX a 2020'], ['0', 'Visitas permitidas']],
+    secciones: [
+      { h: 'Una isla cerrada', foto: ['W10', 'Sentinel del Norte vista desde el satélite.'], p: [
+        'La isla **Sentinel del Norte** mide unos 60 km² y está a unos 64 km al oeste de Port Blair, la capital de las islas **Andamán**, que pertenecen a la India. Sus habitantes, los **sentineleses**, rechazan cualquier contacto con el exterior.',
+        'Su idioma no está descrito ni clasificado: nadie de fuera lo entiende, y no se parece al de los jarawa, sus vecinos más cercanos.' ] },
+      { h: 'Lo que no sabemos', foto: ['W3', 'La playa y el arrecife, desde el aire.'], p: [
+        'Nadie sabe cuántos son. Los recuentos se han hecho siempre desde lejos: 39 en 2001, 15 en 2011. El Anthropological Survey of India calculó entre 100 y 150 en 2016, y las estimaciones van de **15 a 500**.' ] },
+      { h: '1880', foto: ['W13', 'Andamaneses pescando hacia 1870 (no son sentineleses).'], p: [
+        'En 1880, una expedición británica dirigida por Maurice Vidal Portman desembarcó en la isla y se llevó a varios sentineleses a la fuerza. Enfermaron y algunos murieron. Las fuentes no coinciden en cuántos eran.',
+        'Entre 1967 y 1991, el antropólogo indio T. N. Pandit dirigió expediciones para dejarles regalos. El 4 de enero de 1991 hubo el primer contacto pacífico conocido, y la antropóloga Madhumala Chattopadhyay fue la primera mujer en participar. Las visitas se dejaron a mediados de los noventa.' ] },
+      { h: 'Por qué no', foto: ['W2', 'La costa de la isla desde lejos.'], p: [
+        'El mayor peligro para ellos somos nosotros: no tienen defensas contra enfermedades que para nosotros son leves.',
+        'Sus vecinos lo demuestran. Los **gran andamaneses** eran unos 5.000 a principios del siglo XIX; tras el contacto con los británicos llegaron la neumonía (1868), el sarampión (1877) y la gripe (1896). En 1901 quedaban 625, y en 2020, **59**.' ] },
+      { h: 'Las flechas', foto: ['W7', 'La isla con el ala del avión: siempre desde lejos.'], p: [
+        'Después del tsunami de 2004, un helicóptero de la Guardia Costera india fue a ver si estaban bien y le respondieron con flechas. El tsunami levantó el fondo marino un metro y medio y les secó las lagunas donde pescaban.',
+        'En 2006 murieron dos pescadores cuya barca había derivado hasta la isla, y en noviembre de 2018, **John Allen Chau**, un misionero estadounidense de 26 años que desembarcó sin permiso. La India no recuperó su cuerpo.',
+        'Para las puntas de flecha usan el hierro de los barcos que naufragan en su arrecife, como el *Primrose* en 1981.' ] },
+      { h: 'Prohibido acercarse', foto: ['W12', 'Mapa de la isla Sentinel del Norte.'], p: [
+        'La isla está protegida por la ley india y patrullada; está prohibido acercarse y fotografiar a sus habitantes. Las fuentes no coinciden en la distancia exacta (5 km o 3 millas náuticas).',
+        'Aun así, el 29 de marzo de 2025 un youtuber estadounidense, Mykhailo Polyakov, desembarcó para dejarles una lata de refresco y un coco. No vio a nadie y lo detuvieron dos días después.' ] },
+      { h: 'Si vas a las Andamán', foto: ['W15', 'Corbyn\'s Cove, una playa de Port Blair.'], p: [
+        'Las Andamán sí se visitan: Port Blair, la isla de Swaraj Dweep (Havelock) y sus playas. **Sentinel del Norte, solo en el mapa.**',
+        'Evita también los tours que pasan por la carretera de la reserva de los jarawa para «verlos»: Survival International los llama «safaris humanos» y pide no hacerlos.' ] },
+    ],
+    ficha: [
+      '**Sentinel del Norte:** no se visita. Acercarse a la isla es ilegal en la India.',
+      '**Islas Andamán:** se llega en avión a Port Blair desde Chennai, Calcuta o Delhi; desde allí, ferris a Swaraj Dweep (Havelock) y otras islas.',
+      '**Jarawa:** no hagas tours para verlos por la carretera de su reserva.',
+    ],
+    nota: 'Datos de noviembre de 2026; las normas de las Andamán cambian, confírmalas con la Administración de las islas antes de ir.',
+    fuentes: [
+      W('Wikipedia: Sentinelese', 'https://en.wikipedia.org/wiki/Sentinelese'),
+      W('Wikipedia: Great Andamanese', 'https://en.wikipedia.org/wiki/Great_Andamanese_peoples'),
+      W('Down To Earth: las enfermedades de los andamaneses', 'https://www.downtoearth.org.in/news/embracing-disease-20643'),
+      W('ScienceAlert: lo que sabemos de los sentineleses (2018)', 'https://www.sciencealert.com/here-s-what-we-know-about-the-isolated-tribe-that-reportedly-killed-a-26-year-old-american-tourist'),
+      W('NBC News, nov 2018: John Allen Chau', 'https://www.nbcnews.com/news/world/american-killed-isolated-tribe-india-s-north-sentinel-island-police-n938826'),
+      W('CBS News, abr 2025: detenido por llevar una lata a la isla', 'https://www.cbsnews.com/amp/news/us-tourist-remote-tribe-forbidden-north-sentinel-island-india'),
+      W('NBC News, abr 2025: el youtuber sigue detenido', 'https://www.nbcnews.com/news/world/us-youtuber-remains-custody-india-visiting-restricted-island-diet-coke-rcna201838'),
+      W('Survival International: los «safaris humanos» de los jarawa', 'https://www.survivalinternational.org/news/9008'),
+      W('Sonido: «Small Waves at the Beach», ultradust, CC BY 4.0', 'https://freesound.org/people/ultradust/sounds/165126/'),
+      W('Sonido: «Korean island shore at night», rizzin, CC BY 3.0', 'https://freesound.org/people/rizzin/sounds/400791/'),
+      W('Sonido: viento en un pinar, W.carter, CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Wind_in_Swedish_pine_forest_at_25_mps.ogg'),
+    ],
+    cierre: 'Próximo episodio: los ainu, el pueblo indígena del norte de Japón.',
+  },
 ];
 caps.SERIES = SERIES;
 module.exports = caps;
