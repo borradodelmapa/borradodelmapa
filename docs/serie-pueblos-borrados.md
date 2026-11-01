@@ -27,8 +27,8 @@ Común a la serie: `pueblos/comun/` → `clip-app.mp4`, `sonidos/`, `sintonia/` 
 Almacén R2 **`borrado-videos-redes`** (solo vídeos de redes, aparte de `salma-photos`), creado con OK de Paco. URL pública: `https://pub-d037b527b699406687951bebfd7b1efd.r2.dev/<archivo>` (es la que se pasa a Metricool). Cómo subir y comprobar: memoria `reference_r2_videos_redes.md` y paso 10 de `docs/video-checklist.md`. Coste 0 €.
 | Episodio | Archivo en R2 | Estado |
 |---|---|---|
-| 1 · Whang-Od | — | **falta exportar en CALIDAD MÁXIMA** (ULTIMA es la exportación normal del 31 oct): editor 8098 → «★ Exportar para publicar» |
-| 2 · Sagada | — | **falta exportar en CALIDAD MÁXIMA** (ídem): editor 8102 |
+| 1 · Whang-Od | `pueblos-ep1-whang-od.mp4` (277 MB) | exportado en CALIDAD MÁXIMA por Paco y subido y comprobado entero (1 nov) |
+| 2 · Sagada | `pueblos-ep2-sagada.mp4` (200 MB) | exportado en CALIDAD MÁXIMA por Paco y subido y comprobado entero (1 nov) |
 | 3 · Las haenyeo | `pueblos-ep3-haenyeo.mp4` (223 MB) | subido y comprobado entero (1 nov) |
 | 4 · Los konyak | `pueblos-ep4-konyak.mp4` (223 MB) | subido y comprobado entero (1 nov) |
 | 5 · Los moken | `pueblos-ep5-moken.mp4` (194 MB) | subido y comprobado entero (1 nov) |
