@@ -16,7 +16,7 @@ const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 194;      // styles.css (= APP_CSS_V de build-destinos.js)
-const BV_CSS_V = 4;     // blog-viajes.css
+const BV_CSS_V = 5;     // blog-viajes.css
 
 const caps = require('./blog-viajes-data.js');
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
@@ -101,6 +101,17 @@ function origen(c, id) {
   if (!rel) throw new Error('La foto ' + id + ' no está en ' + c.fotosDe[pre]);
   return /^[A-Z]:/.test(rel) ? rel : (c.fotosBase || 'D:/salma-movil/') + rel;
 }
+// Visor de fotos: la galería y las fotos de cada apartado se abren encima de la página y se cierran con ✕, tocando fuera, Escape o el botón atrás del móvil
+// (antes la foto se abría en otra pestaña y en la app instalada no había forma de volver). Sin JS, el enlace de la galería sigue abriendo la foto.
+const VISOR = `<div class="bd-visor" hidden><button class="bd-visor-x" aria-label="Cerrar">✕</button><img alt=""><p></p></div>
+<script>(function(){var v=document.querySelector(".bd-visor");if(!v)return;var im=v.querySelector("img"),pi=v.querySelector("p");
+function cerrar(atras){if(v.hidden)return;v.hidden=true;im.removeAttribute("src");document.body.style.overflow="";if(atras!==false&&history.state&&history.state.visor)history.back();}
+document.addEventListener("click",function(e){var t=e.target.closest(".bd-gal-grid figure > a, .bd-fig img");if(!t)return;e.preventDefault();
+var img=t.tagName==="IMG"?t:t.querySelector("img");im.src=t.getAttribute("href")||img.src;im.alt=img.alt;pi.textContent=img.alt.split("*").join("");
+v.hidden=false;document.body.style.overflow="hidden";history.pushState({visor:1},"");});
+v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
+`;
 function foto(c, id) {
   const dest = path.join(OUT, 'img', c.slug, id + '.jpg');
   if (!fs.existsSync(dest)) {
@@ -259,7 +270,7 @@ ${nav}
     </div>
   </div>
 </main>
-${PIE_Y_MENU}</body>
+${VISOR}${PIE_Y_MENU}</body>
 </html>
 `;
 }

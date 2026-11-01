@@ -80,7 +80,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css?v=194">
 <link rel="stylesheet" href="/paginas.css?v=3">
-<link rel="stylesheet" href="/blog-viajes.css?v=4">
+<link rel="stylesheet" href="/blog-viajes.css?v=5">
 </head>
 <body class="pg">
 
@@ -209,6 +209,14 @@
     </div>
   </div>
 </main>
+<div class="bd-visor" hidden><button class="bd-visor-x" aria-label="Cerrar">✕</button><img alt=""><p></p></div>
+<script>(function(){var v=document.querySelector(".bd-visor");if(!v)return;var im=v.querySelector("img"),pi=v.querySelector("p");
+function cerrar(atras){if(v.hidden)return;v.hidden=true;im.removeAttribute("src");document.body.style.overflow="";if(atras!==false&&history.state&&history.state.visor)history.back();}
+document.addEventListener("click",function(e){var t=e.target.closest(".bd-gal-grid figure > a, .bd-fig img");if(!t)return;e.preventDefault();
+var img=t.tagName==="IMG"?t:t.querySelector("img");im.src=t.getAttribute("href")||img.src;im.alt=img.alt;pi.textContent=img.alt.split("*").join("");
+v.hidden=false;document.body.style.overflow="hidden";history.pushState({visor:1},"");});
+v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
 <footer class="pg-footer">
   <a href="/">Inicio</a>
   <a href="/destinos/">Destinos</a>
