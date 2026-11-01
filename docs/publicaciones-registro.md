@@ -34,6 +34,8 @@ Inventario sacado de Metricool el 30 oct 2026. «Texto nuevo» = pendiente de pr
 
 | 30 oct 2026 | Las 9 programadas (Muay Thai, avances Vietnam/café/bún chả, Vietnam 1/5 a 5/5) | YouTube + TikTok (Metricool) | Texto con datos prácticos, fuente y fecha; cada edición cambia el id de Metricool (el uuid se mantiene). 18 de 18 hechas | planner de Metricool |
 
+| 1 nov 2026 | Especial Muay Thai (sale 2 nov 10:00) | YouTube + TikTok (Metricool) | Descripción que cuenta lo que se ve (Wai Khru de Lina, historia, pelea, Phetchbuncha), hashtags (YT 3 / TikTok 5) y **primer comentario programado** con la llamada a la app y autores de las fotos. Ids nuevos: YouTube 412942482 · TikTok 412942640. **Comprobar el 2 nov que el comentario salió en cada red** (en TikTok no está claro que Metricool lo publique) | planner de Metricool |
+
 Pendiente: frase de la exención de visado en Tailandia en las descripciones de YouTube ya guardadas (ver abajo).
 
 ## Dato verificado: visado de Tailandia (30 oct 2026)
