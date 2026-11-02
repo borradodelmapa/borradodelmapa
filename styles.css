@@ -150,7 +150,10 @@
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
-html { background:var(--negro); scroll-behavior:smooth; }
+html { background:var(--negro); scroll-behavior:smooth;
+  /* iPhone (2 nov 2026): nada puede ensanchar la página de lado. «clip» no crea zona de scroll
+     (no rompe sticky ni el scroll de la ventana); donde no existe, no hace nada. */
+  overflow-x:clip; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 body {
   font-family:var(--font-body);
   color:var(--crema);
@@ -158,6 +161,7 @@ body {
   min-height:100vh;
   min-height:100dvh;
   overflow-x:hidden;
+  overflow-x:clip; /* igual que html: así body no se vuelve zona de scroll propia (sticky sigue funcionando) */
 }
 
 /* ── Header eliminado — espacio liberado ── */
@@ -2304,7 +2308,7 @@ body {
 .cookie-banner {
   position:fixed; bottom:0; left:0; right:0; z-index:9999;
   background:rgba(14,14,14,.97); border-top:1px solid rgba(244,99,11,.2);
-  padding:16px 20px; display:flex; align-items:center; justify-content:center;
+  padding:16px 20px calc(16px + env(safe-area-inset-bottom, 0px)); display:flex; align-items:center; justify-content:center;
   gap:16px; flex-wrap:wrap; backdrop-filter:blur(10px);
 }
 .cookie-banner p {
