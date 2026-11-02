@@ -281,6 +281,9 @@ const explorarMapa = (() => {
       return;
     }
     if (!seguir() || document.getElementById('exm-mapa') !== $m || typeof L === 'undefined') return;
+    // Volver a medir: la primera medida se hace en mitad del cambio de pantalla y, viniendo del chat, el contenedor aún
+    // tiene el hueco de abajo del chat (220 px) → el pie del mapa quedaba recortado (enlace al blog y zoom; Paco, 2 nov 2026)
+    _alto();
     st.guias = _guias(data, destMap || {});
     for (const co of (data.countries || [])) if (co.cc) st.nombres[String(co.cc).toUpperCase()] = co.name;
 
