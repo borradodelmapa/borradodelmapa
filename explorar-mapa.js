@@ -37,7 +37,7 @@ const explorarMapa = (() => {
 .exm-tt.leaflet-tooltip::before { display: none; }
 .exm-num { box-sizing: border-box; background: var(--dorado); color: var(--negro); font: 800 14px/24px var(--font-display); text-align: center; width: 28px; height: 28px; padding: 0; border: 2px solid var(--negro); border-radius: 50%; box-shadow: 0 0 0 2px rgba(244,99,11,.45); }
 .exm-num.sel { background: var(--crema); }
-.exm-busca { position: absolute; z-index: 800; top: 12px; left: 12px; right: 52px; max-width: 560px; } /* a la derecha queda el botón flotante de Mejora Salma */
+.exm-busca { position: absolute; z-index: 800; top: calc(12px + env(safe-area-inset-top, 0px)); left: 12px; right: 52px; max-width: 560px; } /* a la derecha queda el botón flotante de Mejora Salma */
 .exm-busca input { width: 100%; box-sizing: border-box; font: 500 16px var(--font-body); color: var(--crema); background: var(--negro); border: 1px solid var(--linea-fuerte); border-radius: 0; padding: 14px 14px 14px 44px; outline: none; box-shadow: 0 6px 20px rgba(0,0,0,.45); -webkit-appearance: none; }
 .exm-busca input:focus { border-color: var(--dorado); }
 .exm-busca svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--dorado); pointer-events: none; }
