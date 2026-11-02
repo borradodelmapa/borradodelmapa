@@ -872,6 +872,52 @@ const caps = [
     ],
     cierre: 'Próximo episodio: los dukha, los pastores de renos de Mongolia.',
   },
+  // Ep.9 Los dukha · guion y fuentes: docs/pueblos-ep9-dukha-guion-direccion.md · vídeo: salma marketing/pueblos/dukha/ULTIMA
+  // Sin destino: no hay página de Mongolia en destinos/ (el generador quita el «Más sobre…»).
+  {
+    slug: 'mongolia-dukha-pastores-de-renos',
+    fecha: '2026-11-02',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Episodio 9',
+    pais: 'Mongolia',
+    redes: { tituloYT: 'Los dukha: los pastores de renos de Mongolia · Khövsgöl', tituloTT: 'Dukha: el pueblo que vive con renos en Mongolia', hashtags: ['#mongolia', '#dukha', '#pueblosborradosdelmapa'] },
+    titulo: 'Los dukha: los pastores de renos de Mongolia',
+    resumen: 'En la taiga del norte de Mongolia, junto a Siberia, los dukha viven de sus renos: les dan leche, queso y transporte. Quedan unos doscientos, y cada vez más familias bajan de la taiga cuando sus hijos tienen que ir al colegio.',
+    video: 'pueblos-ep9-dukha.mp4',
+    realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final), sonido de bosque con licencia libre y fuentes citadas. No es un viaje de Paco.',
+    creditosDe: 'salma marketing/pueblos/dukha',
+    fotos: { portada: 'W4', galeria: [['W1', 'Montando en reno por la taiga nevada.'], ['W7', 'Una tienda dukha en el bosque.'], ['W12', 'Un reno cargado, en una foto antigua (colección KITLV).'], ['W20', 'Preparando una ceremonia (Taylor Weidman).'], ['W18', 'Un reno blanco en el campamento.'], ['W24', 'Un santuario en el paso de montaña.']] },
+    cifras: [['208', 'Dukha en 2020'], ['1944', 'Se cierra la frontera con Tuva'], ['4-8 h', 'A caballo desde Tsagaannuur']],
+    secciones: [
+      { h: 'Los que tienen renos', foto: ['W22', 'El valle de Darkhad, en la provincia de Khövsgöl.'], p: [
+        'Los **dukha** viven en la taiga del norte de Mongolia, en el municipio de **Tsagaannuur** (provincia de Khövsgöl), junto a la frontera con Siberia. En mongol los llaman *tsaatan*, «los que tienen renos».',
+        'Se reparten entre la Taiga Este y la Taiga Oeste. Su lengua, el dukha, es túrquica y está en peligro; casi todos hablan también mongol.' ] },
+      { h: 'La vida con el reno', foto: ['W2', 'La manada con sus pastores.'], p: [
+        'El reno lo es casi todo: da leche, yogur y queso, se monta y lleva la carga. Viven en tiendas cónicas parecidas a un tipi, que se cubren con lona o con corteza (una grande puede necesitar la de 32 árboles), y se mudan siguiendo los pastos.',
+        'Practican el chamanismo, que estuvo perseguido durante el comunismo (1924-1992).' ] },
+      { h: 'Una frontera en medio', foto: ['W10', 'Una familia ante su tienda, en una foto antigua (colección KITLV).'], p: [
+        'Vienen de **Tuva**, al otro lado de la frontera. En **1944**, cuando la Unión Soviética se anexionó Tuva, la frontera se cerró y muchas familias quedaron separadas. En 1956 Mongolia les dio la nacionalidad y los asentó en Tsagaannuur.' ] },
+      { h: 'Lo que se está borrando', foto: ['W21', 'Una chamana dukha (Taylor Weidman).'], p: [
+        'Eran 303 en el año 2000, 282 en 2010 y **208 en 2020**. Cuando los hijos tienen edad de ir al colegio, muchas familias jóvenes bajan de la taiga al pueblo y ya no vuelven; en el bosque se quedan los abuelos.',
+        'Las cifras de familias y de renos que dan las webs de viajes no coinciden entre sí, así que no damos ninguna.' ] },
+      { h: 'Los renos, también', foto: ['W14', 'Un reno descansando en el campamento.'], p: [
+        'En 1990 un brote de brucelosis diezmó los rebaños, y el cambio climático está reduciendo el liquen del que se alimentan. Desde mediados de los años noventa, el turismo les da un ingreso más.' ] },
+    ],
+    ficha: [
+      '**Cómo llegar:** de Mörön a Tsagaannuur, 9-12 horas en coche por pistas; desde allí, 4-8 horas a caballo según dónde esté el campamento. La Taiga Este es más fácil para una primera visita.',
+      '**Permiso:** hace falta un permiso de zona fronteriza; lo suelen tramitar los organizadores locales de Mörön o Tsagaannuur con los datos del pasaporte. Confírmalo antes de ir.',
+      '**Respeto:** pregunta antes de fotografiar (sobre todo a niños y ceremonias), no vueles drones sin permiso, llévate la basura y no busques «autenticidad» en lo que no tienen: un móvil o un panel solar no les quita nada.',
+    ],
+    nota: 'Datos de noviembre de 2026 (guía de Unusual Nomad actualizada el 3 oct 2026); rutas, permisos y precios cambian, confírmalos antes de ir.',
+    fuentes: [
+      W('Wikipedia: Dukha people', 'https://en.wikipedia.org/wiki/Dukha_people'),
+      W('Global Press Journal: la lucha por mantener el pastoreo de renos', 'https://globalpressjournal.com/asia/mongolia/one-woman-fighting-preserve-mongolias-last-reindeer-herding-culture/'),
+      W('Unusual Nomad (oct 2026): cómo visitar a los tsaatan, permisos y costes', 'https://unusualnomad.com/?p=5772'),
+      W('Sonido: bosque en invierno con viento suave, kyles, CC0', 'https://freesound.org/people/kyles/sounds/637566/'),
+      W('Sonido: pájaros en Bourne Woods, Robert EA Harvey, CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Birdsong_Bourne_Woods_2020-04-27_0722.mp3'),
+    ],
+    cierre: 'Próximo episodio, el último de la temporada: los cazadores con águila de Mongolia.',
+  },
 ];
 caps.SERIES = SERIES;
 module.exports = caps;
