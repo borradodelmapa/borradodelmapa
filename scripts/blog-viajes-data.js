@@ -918,6 +918,55 @@ const caps = [
     ],
     cierre: 'Próximo episodio, el último de la temporada: los cazadores con águila de Mongolia.',
   },
+  // Ep.10 Los cazadores con águila (último de la temporada 1) · guion y fuentes: docs/pueblos-ep10-aguila-guion-direccion.md · vídeo: salma marketing/pueblos/aguila/ULTIMA
+  // Sin destino: no hay página de Mongolia en destinos/. Portada elegida por Paco en el editor: la joven cazadora (W64).
+  {
+    slug: 'mongolia-cazadores-con-aguila-bayan-olgii',
+    fecha: '2026-11-02',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Episodio 10',
+    pais: 'Mongolia',
+    redes: { tituloYT: 'Los cazadores con águila de Mongolia: cazan zorros con un águila real', tituloTT: 'Cazadores con águila: la tradición kazaja de Mongolia', hashtags: ['#mongolia', '#aguilareal', '#pueblosborradosdelmapa'] },
+    titulo: 'Los cazadores con águila de Mongolia',
+    resumen: 'En los montes Altái, en el oeste de Mongolia, los kazajos de Bayan-Ölgii cazan zorros a caballo con águilas reales. Nadie sabe cuántos quedan, y una niña, Aisholpan, abrió la tradición a las chicas.',
+    video: 'pueblos-ep10-aguila.mp4',
+    realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final), sonido con licencia libre y fuentes citadas. No es un viaje de Paco.',
+    creditosDe: 'salma marketing/pueblos/aguila',
+    fotos: { portada: 'W64', galeria: [['W48', 'Un cazador kazajo en el festival.'], ['W7', 'Tres cazadores con sus águilas en lo alto de una roca.'], ['W19', 'Cazadores cruzando el río.'], ['W54', 'Un cazador arrodillado junto a su águila.'], ['W69', 'Un cazador con su águila en Bayan-Ölgii.'], ['W66', 'Una joven cazadora con su águila.']] },
+    cifras: [['¿60 o 250?', 'Cazadores con águila que quedan'], ['13 años', 'Aisholpan, al ganar el festival'], ['Octubre', 'Festival del Águila Dorada']],
+    secciones: [
+      { h: 'Los kazajos del Altái', foto: ['W88', 'El monte Tsambagarav, en los montes Altái.'], p: [
+        'En la provincia de **Bayan-Ölgii**, en el extremo oeste de Mongolia, entre los montes Altái, vive la mayor parte de los unos 121.000 kazajos del país (2020). Hablan kazajo, lo escriben en cirílico y son mayoritariamente musulmanes.',
+        'Sus antepasados llegaron huyendo de la **colectivización** soviética del ganado en Kazajistán, y trajeron consigo una tradición: cazar con águilas.' ] },
+      { h: 'Cazar con un águila real', foto: ['W5', 'El águila vuelve al brazo del cazador.'], p: [
+        'Los *berkutchi* cazan a caballo, con el águila real en el brazo, **zorros rojos, zorros corsac y liebres**. Lo hacen en invierno, cuando el pelo del zorro destaca contra la nieve.',
+        'Suelen usar hembras, que en el águila real son más grandes que los machos. Tras unos años juntos (las fuentes hablan de seis a diez), la devuelven a la montaña para que críe.' ] },
+      { h: '¿Cuántos quedan?', foto: ['W17', 'Una fila de cazadores a caballo por la estepa.'], p: [
+        'Nadie lo sabe con certeza. Wikipedia y los operadores locales hablan de unos **250** en Bayan-Ölgii; otra fuente hablaba de «unos 60» en 2017; al festival acuden entre 60 y 100. Por eso no damos una cifra: la duda es parte de la historia.' ] },
+      { h: 'Aisholpan', foto: ['W64', 'Una joven cazadora con el traje kazajo, dentro de la yurta.'], p: [
+        'En **2014**, Aisholpan Nurgaiv, de trece años, ganó el festival del Águila Dorada frente a decenas de hombres. Fue la primera chica de su familia en doce generaciones en cazar con águila, y su historia se contó en el documental *The Eagle Huntress* (2016).',
+        'Desde entonces, más chicas de la zona entrenan águilas y compiten. Algunas fuentes dan otra edad para Aisholpan (15 años); nos quedamos con la más citada.' ] },
+      { h: 'El festival del Águila Dorada', foto: ['W20', 'Cazadores cruzando el río durante el festival.'], p: [
+        'Lo organiza la Asociación Mongola de Cazadores con Águila cada **primer fin de semana de octubre**, en Shar Nuur, a unos 15 km de Ölgii. En 2026 fue el 3 y 4 de octubre. Hay pruebas de llamada del águila, desfiles con el traje tradicional y juegos a caballo.',
+        'También tiene su debate: parte del festival se ha convertido en espectáculo para turistas. Hay otro más pequeño, en Sagsai.' ] },
+    ],
+    ficha: [
+      '**Festival del Águila Dorada:** primer fin de semana de octubre en Shar Nuur, a 15 km de Ölgii (3-4 oct en 2026). Confirma las fechas cada año.',
+      '**Cómo llegar:** Ölgii suele tener vuelos desde Ulán Bator; también se llega por carretera (varios días). Al festival se va con operadores locales. Confírmalo antes de ir.',
+      '**Respeto:** pide permiso antes de fotografiar a los cazadores y a sus águilas, no te acerques a un águila sin que el cazador lo indique y no pagues por posar con un águila para la foto.',
+    ],
+    nota: 'Datos de noviembre de 2026; fechas del festival, vuelos y precios cambian, confírmalos antes de ir.',
+    fuentes: [
+      W('Wikipedia: Berkutchi', 'https://en.wikipedia.org/wiki/Berkutchi'),
+      W('Wikipedia: Golden Eagle Festival', 'https://en.wikipedia.org/wiki/Golden_Eagle_Festival'),
+      W('Wikipedia: Kazakhs in Mongolia', 'https://en.wikipedia.org/wiki/Kazakhs_in_Mongolia'),
+      W('Tour2Mongolia: el festival del Águila Dorada 2026', 'https://tour2mongolia.com/travel-tips/golden-eagle-festival-of-mongolia-2026-ultimate-guide'),
+      W('Responsible Travel: los cazadores con águila kazajos', 'https://www.responsibletravel.com/holidays/mongolia/travel-guide/kazakh-eagle-hunters'),
+      W('Adelaide Review, 2019: Aisholpan, la cazadora', 'https://adelaidereview.com.au/latest/travel/2019/04/08/eagle-huntress'),
+      W('Sonido: bosque en invierno con viento suave, kyles, CC0', 'https://freesound.org/people/kyles/sounds/637566/'),
+    ],
+    cierre: 'Fin de la temporada 1 de «Pueblos borrados del mapa». Volvemos con más pueblos.',
+  },
 ];
 caps.SERIES = SERIES;
 module.exports = caps;
