@@ -15,7 +15,7 @@ const OUT_VIDEO = path.join(OUT, 'video');
 const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
-const CSS_V = 194;      // styles.css (= APP_CSS_V de build-destinos.js)
+const CSS_V = 195;      // styles.css (= APP_CSS_V de build-destinos.js)
 const BV_CSS_V = 5;     // blog-viajes.css
 
 const caps = require('./blog-viajes-data.js');
