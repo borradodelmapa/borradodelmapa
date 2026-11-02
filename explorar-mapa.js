@@ -225,6 +225,21 @@ const explorarMapa = (() => {
     document.getElementById('exm').addEventListener('click', e => { if (!e.target.closest('.exm-busca')) $s.hidden = true; });
   }
 
+  // Diagnóstico provisional (2 nov 2026): en el móvil de Paco algo tapa el pie del mapa (enlace al blog y zoom).
+  // Escribe en el panel 🐛 qué elemento hay encima. Quitar cuando se sepa.
+  function _diag() {
+    try {
+      const l = document.querySelector('.exm-blog'), m = document.getElementById('exm-mapa'), bar = document.getElementById('app-bottom-bar');
+      if (!l || !m) return;
+      const r = l.getBoundingClientRect(), R = x => x ? Math.round(x.top) + '-' + Math.round(x.bottom) : '?';
+      const quien = e => e ? (e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + (typeof e.className === 'string' && e.className ? '.' + e.className.trim().split(/\s+/).join('.') : '')).slice(0, 80) : 'nada';
+      const enc = document.elementFromPoint(r.left + 30, r.top + r.height / 2);
+      console.log('[Explorar] alto ventana ' + innerHeight + (window.visualViewport ? '/' + Math.round(visualViewport.height) : '') +
+        ' · mapa ' + R(m.getBoundingClientRect()) + ' · enlace ' + R(r) + ' · menú ' + R(bar && bar.getBoundingClientRect()) +
+        ' · encima del enlace: ' + quien(enc) + (enc && enc.parentElement ? ' (dentro de ' + quien(enc.parentElement) + ')' : ''));
+    } catch (_) {}
+  }
+
   // container: donde se pinta · cargar(): promesa con el índice /explorar · card(g): tarjeta de guía (la de app.js)
   // seguir(): false si el usuario ya se fue de Explorar mientras cargaba
   async function render(container, { cargar, card, seguir }) {
@@ -286,6 +301,7 @@ const explorarMapa = (() => {
     st.nums = L.layerGroup().addTo(map);
     _pintar();
     _buscador();
+    setTimeout(_diag, 1500);
   }
 
   return { render };
