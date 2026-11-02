@@ -515,6 +515,72 @@ window.addEventListener('popstate', function (e) {
   }
 });
 
+// ═══ BLOG DENTRO DE LA APP (2 nov 2026, Paco) ═══
+// Los enlaces al blog (/blog/…) de la app no la abandonan: el blog se abre en un visor encima, con el menú de abajo de
+// la app visible. Tocar el menú (o atrás) cierra el visor y la app sigue cargada debajo, sin recargar nada.
+// Las páginas del blog no cambian (siguen igual para Google y para quien llega desde fuera). 💶 0 €: ninguna API.
+function _blogVisorCerrar(conHistorial) {
+  const v = document.getElementById('blog-visor');
+  if (!v) return;
+  v.remove();
+  const st = window._modalStack || [], i = st.findIndex(m => m.name === 'blog');
+  if (i >= 0) {
+    if (conHistorial && i === st.length - 1 && window.popModal) window.popModal('blog');
+    else st.splice(i, 1); // cerrado por el menú: no se toca el historial (showState empuja el suyo)
+  }
+}
+function abrirBlogEnApp(url) {
+  _blogVisorCerrar(false);
+  const bar = document.getElementById('app-bottom-bar');
+  const barH = bar && getComputedStyle(bar).display !== 'none' ? Math.round(bar.getBoundingClientRect().height) : 0;
+  const v = document.createElement('div');
+  v.id = 'blog-visor';
+  // z 1050: por encima del mapa de Explorar (controles de Leaflet en 1000) y por debajo del botón central (1101)
+  v.style.cssText = 'position:fixed;left:0;right:0;top:0;bottom:' + barH + 'px;z-index:1050;background:var(--negro);display:flex;flex-direction:column';
+  v.innerHTML = '<div style="flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 6px) 12px 6px;border-bottom:1px solid var(--linea)">' +
+    '<button type="button" id="blog-visor-volver" style="background:none;border:0;color:var(--dorado);font:700 15px var(--font-display);letter-spacing:.08em;text-transform:uppercase;padding:8px 4px;cursor:pointer">‹ Volver</button>' +
+    '<span style="color:rgba(236,235,232,.6);font:700 13px var(--font-display);letter-spacing:.12em;text-transform:uppercase">Blog de viajes</span></div>' +
+    '<iframe title="Blog de viajes" style="flex:1 1 auto;width:100%;border:0;background:var(--negro)"></iframe>';
+  document.body.appendChild(v);
+  const fr = v.querySelector('iframe');
+  document.getElementById('blog-visor-volver').onclick = () => _blogVisorCerrar(true);
+  fr.addEventListener('load', () => {
+    let d;
+    try { d = fr.contentDocument; } catch (_) { return; }
+    if (!d) return;
+    // Dentro del visor sobran el menú de abajo de la página (ya está el de la app) y sus avisos fijos
+    const s = d.createElement('style');
+    s.textContent = '.app-bottom-bar,#tab-newroute,#bdm-inst,.cookie-banner,#mejora-btn{display:none!important}body{padding-bottom:16px!important}';
+    (d.head || d.documentElement).appendChild(s);
+    d.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a[href]');
+      if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      let u; try { u = new URL(a.getAttribute('href'), d.location.href); } catch (_) { return; }
+      if (u.origin !== location.origin) { e.preventDefault(); window.open(u.href, '_blank', 'noopener'); return; }
+      if (u.pathname !== '/' && u.pathname !== '/index.html') return; // blog, destinos, guías: siguen en el visor
+      // Enlaces a la app (logo, «Pregúntale a Salma», /?go=…): se cierra el visor y se hace lo mismo que el menú
+      e.preventDefault();
+      const go = u.searchParams.get('go');
+      const tab = { mapa: 'tab-mapa', explorar: 'tab-explorar', rutas: 'tab-rutas', profile: 'tab-profile', chat: 'tab-newroute' }[go];
+      const b = tab && document.getElementById(tab);
+      if (b) b.click(); else _blogVisorCerrar(true); // el clic en el menú ya cierra el visor
+    });
+  });
+  fr.src = url;
+  if (window.pushModal) window.pushModal('blog', () => _blogVisorCerrar(false));
+}
+window.abrirBlogEnApp = abrirBlogEnApp;
+document.addEventListener('click', e => {
+  // Menú de abajo o botón central con el visor abierto: se cierra y el botón hace lo suyo
+  if (document.getElementById('blog-visor') && e.target.closest && e.target.closest('#app-bottom-bar, #tab-newroute')) { _blogVisorCerrar(false); return; }
+  const a = e.target.closest && e.target.closest('a[href^="/blog/"]');
+  if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || a.target === '_blank') return;
+  const bar = document.getElementById('app-bottom-bar');
+  if (!bar || getComputedStyle(bar).display === 'none') return; // sin menú de abajo (escritorio): enlace normal
+  e.preventDefault();
+  abrirBlogEnApp(a.getAttribute('href'));
+}, true);
+
 // ═══ CHAT VACÍO — chips de acceso rápido ═══
 
 // Modo "pantalla de Salma" (botón central). Se recuerda en sessionStorage para que refrescar la web no te saque de ahí.
