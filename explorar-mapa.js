@@ -237,6 +237,12 @@ const explorarMapa = (() => {
       console.log('[Explorar] alto ventana ' + innerHeight + (window.visualViewport ? '/' + Math.round(visualViewport.height) : '') +
         ' · mapa ' + R(m.getBoundingClientRect()) + ' · enlace ' + R(r) + ' · menú ' + R(bar && bar.getBoundingClientRect()) +
         ' · encima del enlace: ' + quien(enc) + (enc && enc.parentElement ? ' (dentro de ' + quien(enc.parentElement) + ')' : ''));
+      const c = document.getElementById('app-content'), cs = c && getComputedStyle(c);
+      const capas = (document.elementsFromPoint ? document.elementsFromPoint(r.left + 30, r.top + r.height / 2) : []).slice(0, 6).map(quien).join(' > ');
+      console.log('[Explorar2] capas: ' + capas + ' · body: ' + (document.body.className || '-') + ' · scrollY ' + Math.round(scrollY) +
+        ' · contenido ' + R(c && c.getBoundingClientRect()) + ' scroll ' + (c ? c.scrollTop + '/' + c.clientHeight + '/' + c.scrollHeight : '?') +
+        ' pos ' + (cs ? cs.position + ' ' + cs.overflowY + ' h=' + cs.height + ' maxh=' + cs.maxHeight : '?') +
+        ' · html h ' + document.documentElement.clientHeight + ' body h ' + Math.round(document.body.getBoundingClientRect().height));
     } catch (_) {}
   }
 
