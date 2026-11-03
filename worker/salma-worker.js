@@ -13607,14 +13607,19 @@ export default {
       if (!/^[a-z0-9][a-z0-9-]{2,150}$/.test(gpSlug)) {
         return new Response(JSON.stringify({ error: 'slug no válido' }), { status: 400, headers: corsH });
       }
-      if (!env.GITHUB_DISPATCH_TOKEN) {
-        return new Response(JSON.stringify({ ok: false, reason: 'sin_token' }), { status: 200, headers: corsH });
-      }
       try {
         const gd = await firestoreAdminGet(env, 'public_guides/' + gpSlug);
         const gdUid = gd && gd.fields && gd.fields.uid && gd.fields.uid.stringValue;
         if (!gd || gdUid !== gpUser.uid) {
           return new Response(JSON.stringify({ error: 'no es tu guía' }), { status: 403, headers: corsH });
+        }
+        // Explorar: borrar la caché del índice (2 h) para que la guía nueva salga ya en el mapa.
+        // Antes solo se lanzaba la página fija y la guía tardaba hasta 2 h en salir (3 nov 2026,
+        // guía de Mongolia y9y6). Va antes del freno de 8 s para que ninguna publicación se lo salte.
+        // Coste: 0 € (la próxima visita rehace el índice: 1 consulta a Firestore + OpenStreetMap).
+        if (env.SALMA_KB) { try { await env.SALMA_KB.delete(EXPLORAR_KEY); } catch (_) {} }
+        if (!env.GITHUB_DISPATCH_TOKEN) {
+          return new Response(JSON.stringify({ ok: false, reason: 'sin_token' }), { status: 200, headers: corsH });
         }
         if (env.SALMA_KB) {
           const last = parseInt((await env.SALMA_KB.get('ghdispatch:last')) || '0', 10);
