@@ -40,23 +40,25 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 # BLOQUE 1 · HISTORIA DEL TATUAJE (~8-10 min)
 
 ## ESCENA 1.0 · GANCHO
-- **Imagen:** GP de la piel de Ötzi (imagen científica/museo) → con cada motivo, fogonazo de ~1 s de su bloque: Ötzi · moko maorí · grabado japonés de castigo · tatuaje carcelario ruso · irezumi Yakuza.
+- **Imagen (propuesta de Claude, 3 nov 2026; Paco: «propón tú»):** W2 (cara de la reconstrucción de Ötzi, persona primero M15) con empuje lento mientras dice «Hace 5.300 años…» → en «¿Estás tatuado?», negro 0,5 s → fogonazos de ~1 s con cada motivo: «curarse» W1 · «de qué pueblo» W26 (moko de Te Pehi Kupe) · «castigo» W13 (tatuajes penales japoneses) · «la cárcel» W28 (preso soviético) · «una mafia» W17 (irezumi de Kimbei) → «Tu motivo…» vuelve a W2.
+- **Fotos del gancho y el Bloque 1:** `salma marketing/tatuajes/fotos/` (ATRIBUCIONES.txt; descartes con su motivo en `descartadas-otro-sitio/NOTA.txt`). Hoja: `salma marketing/tatuajes/hoja-bloque1-y-gancho.png`.
+- **No hay foto libre de los tatuajes reales de Ötzi** y además es una momia (F9: sin restos humanos) → se usa la reconstrucción del museo + gráfico del motor (0 €).
 - **Salma (v2, versión A elegida por Paco el 3 nov 2026; antes: «Hoy, alguien usa esa misma aguja para esconder quién es…», descartada por liosa):** «Hace 5.300 años, alguien usó una aguja para intentar curar un dolor de pecho. ¿Estás tatuado? ¿Sabes por qué? A lo largo de la historia, la gente se ha tatuado para curarse, para decir de qué pueblo es, como castigo, para marcar su rango en la cárcel… o para entrar en una mafia. Tu motivo puede estar en esta historia.»
 - **Voz:** campo `voz` con «cinco mil trescientos» (subtítulo «5.300»). ✅ **Prueba de voz aprobada por Paco (3 nov 2026): «suena bien»** — `salma marketing/tatuajes/voz-prueba/escena-1.0-gancho-salma-v2A.mp3` (20 s, 335 caracteres; queda en la caché del motor, no se vuelve a pagar).
 - **Nota (Paco, 3 nov 2026):** el motivo de hoy, «por gusto» (estética, recuerdo), no está en la lista a propósito: **se recoge en el cierre (escena 4.6)**.
 
 ## ESCENA 1.1 · ÖTZI
-- **Imagen:** mapa Alpes (motor de mapa existente) → fotos multiespectrales de los tatuajes de Ötzi.
+- **Imagen (propuesta 3 nov 2026):** mapa Alpes (motor de mapa) → W1 (cuerpo entero, PM) → **gráfico animado** (motor, 0 €): silueta de Ötzi sobre negro donde se van marcando las líneas de tatuaje + cifra grande «61» (M9) → en «uno, en las costillas», se ilumina solo esa marca → «Era medicina» sobre W6 (otra reconstrucción, GP lento). Sustituye a «fotos multiespectrales» (no hay libres; F9).
 - **Salma:** «Ötzi, la momia de los Alpes, murió hace unos 5.300 años con 61 tatuajes mapeados sobre su piel. La mayoría coinciden con puntos de acupuntura. Uno, en las costillas, no está cerca de ninguna articulación: los investigadores creen que buscaba tratar un dolor en el pecho. No era decoración. Era medicina.»
 - **Fuente:** ✅ Smithsonian Magazine.
 
 ## ESCENA 1.2 · LA PALABRA
-- **Imagen:** mapa Alpes → Tahití.
+- **Imagen (propuesta 3 nov 2026):** mapa Alpes → Tahití → W11 (mapa antiguo con la ruta del Endeavour) → W9 (grabado de Sydney Parkinson, dibujante del viaje de Cook, «rostro curiosamente tatuado»), rótulo «SYDNEY PARKINSON · VIAJE DE COOK». Ojo: el grabado dice «Otaheite y las islas vecinas», pero el tatuaje parece un moko maorí → no rotular «Tahití» encima.
 - **Salma:** «La palabra "tattoo" viene del tahitiano y samoano *tatau*. La escribió así, por primera vez en inglés, el capitán Cook en 1769.»
 - **Fuente:** ✅ Etymonline.
 
 ## ESCENA 1.3 · JAPÓN — DE LA MEDICINA AL ESTIGMA
-- **Imagen:** mapa Tahití → Japón → grabados de irezumi.
+- **Imagen (propuesta 3 nov 2026):** mapa Tahití → Japón → «castigo penal» W13 y W14 (láminas de tatuajes penales, una tras otra) → «1868, prohibido» W15 (Beato, h. 1870) → «clandestinidad» W16 y W18 (Stillfried, Ogawa) → «1948» W19 o W20 (Kuniyoshi, como respiro de color) → «Hoy, muchos miembros de la Yakuza…» W17. **W22 y W23 (Sanja Matsuri, personas reales de hoy) NO van aquí:** que sean Yakuza no está comprobado; solo como «irezumi hoy» y sin decir quiénes son.
 - **Salma:** «En Japón, el tatuaje se usó como castigo penal desde el periodo Kofun, en torno al siglo III, y siguió marcando a los condenados durante siglos. Pero en 1868 el gobierno Meiji lo prohibió por completo. Y fue esa prohibición, no el tatuaje en sí, lo que lo empujó a la clandestinidad — y lo unió, para siempre, a la idea de criminalidad. Se legalizó de nuevo en 1948. Hoy, muchos miembros de la Yakuza evitan tatuarse precisamente por el estigma que arrastra desde entonces.»
 - **Fuente:** ⚠ Wikipedia (Irezumi) — corrección aplicada: la prohibición Meiji como causa del estigma, no como dato suelto; se adelanta aquí el dato del Bloque 4 (Yakuza evita tatuarse) como anticipo, sin desarrollarlo todavía.
 - **Rótulo transición:** «BORRADO DEL MAPA · TATUAJES DEL MUNDO» + «Hoy viajamos de isla en isla, y de pueblo en pueblo.»
