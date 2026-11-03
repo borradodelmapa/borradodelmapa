@@ -1,7 +1,7 @@
 // TATUAJES DEL MUNDO · documental HORIZONTAL (16:9), versión de ~10 min (Paco, 3 nov 2026) — se monta por bloques; de momento: BLOQUE 1 (historia).
 // Guion: docs/tatuajes-documental-guion-direccion.md. Fotos: salma marketing/tatuajes/fotos (ATRIBUCIONES.txt). Sonidos: tatuajes/sonidos/ATRIBUCIONES.txt.
 // Narra solo Salma con SALMA_DOC (más viva, solo este documental). Paco no ha estado: sin «Basado en un viaje real».
-// Mapas: mapa-tatuajes.cjs (0 €). Gráfico de Ötzi: grafico-otzi.cjs (0 €; esquema, no la posición real de cada tatuaje).
+// Clips de IA (Runway, Kling 3.0 Pro, 60 créditos cada uno; marcar «contenido con IA» al publicar, P1): tatuajes/runway/. Mapas: mapa-tatuajes.cjs (0 €). Gráfico de Ötzi: grafico-otzi.cjs (0 €; esquema, no la posición real de cada tatuaje).
 // «5.300  »: los dos huecos cuadran las 3 palabras de la voz («cinco mil trescientos») con 1 del subtítulo.
 const { build } = require('./motor.cjs');
 const { SALMA_DOC } = require('./voces.cjs');
@@ -11,7 +11,7 @@ const OLAS = (db, ss = 0) => ({ src: 'SFX_olas-jeju', ss, db });
 const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // sonido creado: no se presenta como real (S4)
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloque1-v1', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-bloque1-v2', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 2', l5: 'Pueblos y su significado' },
@@ -22,9 +22,10 @@ const cfg = {
       text: 'Hace 5.300   años, alguien usó una aguja para intentar curar un dolor de pecho. ¿Estás tatuado? ¿Sabes por qué? A lo largo de la historia, la gente se ha tatuado para curarse, para decir de qué pueblo es, como castigo, para marcar su rango en la cárcel… o para entrar en una mafia. Tu motivo puede estar en esta historia.',
       voz: 'Hace cinco mil trescientos años, alguien usó una aguja para intentar curar un dolor de pecho. ¿Estás tatuado? ¿Sabes por qué? A lo largo de la historia, la gente se ha tatuado para curarse, para decir de qué pueblo es, como castigo, para marcar su rango en la cárcel… o para entrar en una mafia. Tu motivo puede estar en esta historia.',
       en: ['5,300 years ago, someone used a needle to try to cure chest pain.', 'Are you tattooed?', 'Do you know why?', 'Throughout history, people have tattooed themselves to heal, to show which people they belong to, as punishment, to mark their rank in prison…', 'or to join a mafia.', 'Your reason may be in this story.'],
-      cifra: { word: '5300', text: '5.300', sub: 'AÑOS', dur: 2.6 },
+      cifra: { word: '5300', text: '5.300', sub: 'AÑOS', dur: 2.6, y: 560 }, // más abajo: arriba tapaba la cara de Ötzi,
       shots: [
-        { a: 'W2', sc: 'PP', foc: [0.5, 0.3] },
+        { a: 'FILE:' + T + '/runway/otzi-camina-kling-5s.mp4', sc: 'GP', look: 'app' }, // Runway (IA, Kling 3.0 Pro): Ötzi se acerca andando; se corta antes de que el fondo se vuelva gris (~3 s)
+        { a: 'W2', sc: 'PP', foc: [0.5, 0.3], from: 'una aguja' },
         { a: 'W52', sc: 'PM', foc: [0.5, 0.35], from: '¿Estás' },
         { a: 'W74', sc: 'PP', foc: [0.5, 0.35], from: '¿Sabes' },
         { a: 'W29', sc: 'GP', from: 'A lo largo' },
@@ -33,7 +34,7 @@ const cfg = {
         { a: 'W45', sc: 'PP', foc: [0.5, 0.35], from: 'pueblo' },
         { a: 'W13', sc: 'D', from: 'castigo' },
         { a: 'W28', sc: 'PP', foc: [0.5, 0.35], from: 'cárcel' },
-        { a: 'W17', sc: 'PM', from: 'mafia' },
+        { a: 'W20', sc: 'PM', from: 'mafia' },            // W17 pasa al clip final (misma foto): aquí, Kuniyoshi (M3)
         { a: 'W1', sc: 'GP', from: 'Tu motivo' },
       ] },
     // 1.1 · ÖTZI
@@ -77,7 +78,7 @@ const cfg = {
         { a: 'W18', sc: 'PP', from: 'y lo unió' },               // Ogawa
         { a: 'W19', sc: 'GP', from: 'Se legalizó' },             // Kuniyoshi (respiro de color)
         { a: 'W84', sc: 'PM', from: 'Hoy,' },                    // espalda con irezumi de hoy (sin cara: no se dice quién es)
-        { a: 'W20', sc: 'PP', from: 'precisamente' },            // Kuniyoshi
+        { a: 'FILE:' + T + '/runway/kimbei-golpe-kling-5s.mp4', sc: 'PM', from: 'precisamente' }, // Runway (IA, Kling 3.0 Pro): el tatuado de Kimbei se gira y golpea; ÚLTIMO PLANO (Paco)
       ] },
   ],
 };
