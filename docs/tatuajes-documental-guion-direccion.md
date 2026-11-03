@@ -1,4 +1,8 @@
-# «Tatuajes del mundo» — documental largo — GUION DE DIRECCIÓN v1 (3 nov 2026, pendiente de OK de Paco)
+# «Tatuajes del mundo» — documental largo — GUION DE DIRECCIÓN v1 (3 nov 2026)
+
+**Decisión de Paco (3 nov 2026, 12:41): este fichero es la ÚNICA versión del documental a partir de ahora.**
+La versión anterior en Claude Docs (otro chat) queda descartada — no se sincroniza, no se vuelve a tocar.
+Todo el trabajo del documental (guion, correcciones, voz, imagen) se hace en este repo de aquí en adelante.
 
 Documental largo para YouTube (4 bloques), con plan de shorts/derivados aparte (no incluido en este fichero).
 Fuentes y verificación: `docs/tatuajes-documental-fuentes.md` (F4, cerrado tras 3 tandas de investigación).
@@ -145,4 +149,4 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 4. ⏸ **Duración** — se deja para medir al grabar la voz, no se recorta ahora.
 5. ⏸ **Coste (F5):** sigue pendiente — no se genera ni una frase de voz hasta disclosure de coste + prueba de una sola frase.
 
-Pendiente ahora: pasar estas correcciones a la versión del documento de Claude Docs (el guion original de 4 bloques) para que ambas versiones queden iguales, y acordar formato de imagen/clip real para cada escena (museo, archivo libre, animación de mapa). Después, disclosure de coste de ElevenLabs y prueba de una sola frase antes de generar el resto.
+Pendiente ahora: acordar formato de imagen/clip real para cada escena (museo, archivo libre, animación de mapa). Coste de ElevenLabs ya avisado (§8): ~0,30-1,00 $ para toda la narración en pago por uso, o ~0 € marginal si va contra una suscripción ya activa. Siguiente paso: generar la escena 1.0 (gancho) como prueba de una sola frase antes de generar el resto.
