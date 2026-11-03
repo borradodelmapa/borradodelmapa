@@ -40,9 +40,10 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 # BLOQUE 1 · HISTORIA DEL TATUAJE (~8-10 min)
 
 ## ESCENA 1.0 · GANCHO
-- **Imagen:** GP de la piel de Ötzi (imagen científica/museo) → corte a un tatuaje moderno.
-- **Salma:** «Hace 5.300 años, alguien usó una aguja para intentar curar un dolor de pecho. Hoy, alguien usa esa misma aguja para esconder quién es. Esta es la historia de una marca que ha cambiado de sentido mil veces — y, en las mafias de hoy, de la que algunos huyen.»
-- **Nota F4:** plantea ya el hilo del documental (pertenencia → riesgo) sin adelantar el Bloque 4.
+- **Imagen:** GP de la piel de Ötzi (imagen científica/museo) → con cada motivo, fogonazo de ~1 s de su bloque: Ötzi · moko maorí · grabado japonés de castigo · tatuaje carcelario ruso · irezumi Yakuza.
+- **Salma (v2, versión A elegida por Paco el 3 nov 2026; antes: «Hoy, alguien usa esa misma aguja para esconder quién es…», descartada por liosa):** «Hace 5.300 años, alguien usó una aguja para intentar curar un dolor de pecho. ¿Estás tatuado? ¿Sabes por qué? A lo largo de la historia, la gente se ha tatuado para curarse, para decir de qué pueblo es, como castigo, para marcar su rango en la cárcel… o para entrar en una mafia. Tu motivo puede estar en esta historia.»
+- **Voz:** campo `voz` con «cinco mil trescientos» (subtítulo «5.300»). ✅ **Prueba de voz aprobada por Paco (3 nov 2026): «suena bien»** — `salma marketing/tatuajes/voz-prueba/escena-1.0-gancho-salma-v2A.mp3` (20 s, 335 caracteres; queda en la caché del motor, no se vuelve a pagar).
+- **Nota (Paco, 3 nov 2026):** el motivo de hoy, «por gusto» (estética, recuerdo), no está en la lista a propósito: **se recoge en el cierre (escena 4.6)**.
 
 ## ESCENA 1.1 · ÖTZI
 - **Imagen:** mapa Alpes (motor de mapa existente) → fotos multiespectrales de los tatuajes de Ötzi.
@@ -136,6 +137,7 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 ## ESCENA 4.6 · CIERRE — EL GIRO COMÚN
 - **Imagen:** GP lento, plano largo (pico, M1) — montaje rápido de los tatuajes vistos: Ötzi, moko, pe'a, vory, Yakuza.
 - **Salma:** «Yakuza, tríadas, maras: tres mafias distintas, en tres continentes, han llegado a la misma conclusión. El tatuaje que antes probaba pertenencia hoy puede delatarte. La piel sigue contando historias — pero, a veces, el silencio de la piel cuenta más.»
+- **⚠ PENDIENTE (Paco, 3 nov 2026):** recoger aquí la pregunta del gancho (1.0) y el motivo que falta en su lista: hoy casi todo el mundo se tatúa **por gusto**. Reescribir el cierre con eso antes de generar su voz.
 - **Nota N6:** esta frase de cierre es la única con tono reflexivo de todo el documental; se apoya en tres datos verificados (Yakuza, Tríadas, MS-13), no es relleno. Revisar con Paco si se ajusta a N6 o si se prefiere una versión más seca con cifra.
 
 ## TARJETA FINAL
