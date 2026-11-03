@@ -8,16 +8,20 @@ const { SALMA_DOC } = require('./voces.cjs');
 const T = 'C:/Users/User/Desktop/salma/salma marketing/tatuajes';
 const VIENTO = (db, ss = 0) => ({ src: 'SFX_viento-libre', ss, db });
 const OLAS = (db, ss = 0) => ({ src: 'SFX_olas-jeju', ss, db });
+const SELVA = (db, ss = 0) => ({ src: 'SFX_selva-tailandia', ss, db });     // Amada44, CC BY-SA 3.0 (selva del sudeste asiático; no se presenta como de Borneo, S4)
+const BOSQUE = (db, ss = 0) => ({ src: 'SFX_bosque-invierno', ss, db });    // kyles, CC0
+const PAJAROS = (db, ss = 0) => ({ src: 'SFX_pajaros-libre', ss, db });     // Robert EA Harvey, CC BY-SA 4.0
+const AINU = n => 'FILE:C:/Users/User/Desktop/salma/salma marketing/pueblos/ainu/fotos/' + n + '.jpg'; // fotos ya revisadas del episodio de los ainu
 const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // sonido creado: no se presenta como real (S4)
 // sonido del puñetazo del clip de Kimbei (sfx/punetazo-creado.mp3, sintetizado, 0 €): zumbido 0,35 s + impacto. El golpe llega a cámara en el s 4,8 del clip;
 // el motor pone el sonido en (inicio del plano − pico), así que pico = 0,35 − (4,8 − ss del plano) para que el impacto caiga con el puño.
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloque1-v3', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-bloques1-2-v1', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
-  card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 2', l5: 'Pueblos y su significado' },
+  card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 3', l5: 'Tatuajes talegueros' },
   descartes: { M11: 'portada horizontal pendiente (la miniatura de YouTube largo va aparte)', M13: 'sígueme en el documental largo: por decidir con Paco', M3: 'el clip del puñetazo va al final del gancho y al final del bloque a propósito (Paco, 3 nov 2026)' },
   blocks: [
     // 1.0 · GANCHO (igual que tatuajes-gancho.cjs v4, aprobado por Paco)
@@ -81,6 +85,75 @@ const cfg = {
         { a: 'W19', sc: 'GP', from: 'Se legalizó' },             // Kuniyoshi (respiro de color)
         { a: 'W84', sc: 'PM', from: 'Hoy,' },                    // espalda con irezumi de hoy (sin cara: no se dice quién es)
         { a: 'FILE:' + T + '/runway/kimbei-golpe-kling-5s.mp4', sc: 'PM', ss: 0.5, from: 'precisamente' }, // Runway (IA, Kling 3.0 Pro): el tatuado de Kimbei se gira y golpea; ÚLTIMO PLANO (Paco)
+      ] },
+    // ═══ BLOQUE 2 · PUEBLOS Y SU SIGNIFICADO ═══
+    { id: 'mapa-pueblos', video: T + '/mapa-pueblos.mp4', fixed: 5.5, amb: OLAS(-30, 12) },
+    // 2.1 · MAORÍES
+    { id: 'maories', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'NUEVA ZELANDA · MAORÍES', amb: OLAS(-32, 20),
+      text: 'En Nueva Zelanda, el tā moko maorí no se talla con aguja, sino con cincel: cortes profundos en la piel, no simple punción. Por eso deja una cicatriz distinta a la de cualquier otro tatuaje polinesio. Su origen está ligado al luto: las mujeres se cortaban la piel y añadían hollín en memoria de alguien querido. Y a la mitología, al dios Rūaumoko y al mito de Mataora y Niwareka.',
+      voz: 'En Nueva Zelanda, el ta moko maorí no se talla con aguja, sino con cincel: cortes profundos en la piel, no simple punción. Por eso deja una cicatriz distinta a la de cualquier otro tatuaje polinesio. Su origen está ligado al luto: las mujeres se cortaban la piel y añadían hollín en memoria de alguien querido. Y a la mitología, al dios Ruaumoko y al mito de Mataora y Niwareka.',
+      en: ['In New Zealand, Māori tā moko is not made with a needle but with a chisel: deep cuts in the skin, not simple puncturing.', 'That is why it leaves a scar unlike any other Polynesian tattoo.', 'Its origin is tied to mourning: women cut their skin and added soot in memory of a loved one.', 'And to mythology, to the god Rūaumoko and the myth of Mataora and Niwareka.'],
+      shots: [
+        { a: 'W46', sc: 'PP', foc: [0.5, 0.35] },              // Tuterei Karewa
+        { a: 'W27', sc: 'D', look: 'trix', from: 'sino con' }, // uhi, el cincel (dibujo de Robley)
+        { a: 'W43', sc: 'PP', foc: [0.5, 0.4], from: 'cortes' },
+        { a: 'W26', sc: 'D', from: 'Por eso' },                // autorretrato del moko de Te Pehi Kupe (1826)
+        { a: 'W48', sc: 'PM', from: 'Su origen' },             // Aotea, moko kauae
+        { a: 'W49', sc: 'PP', foc: [0.5, 0.35], from: 'las mujeres' },
+        { a: 'W47', sc: 'GP', from: 'Y a la' },                // retrato de Goldie
+      ] },
+    // 2.2 · SAMOA
+    { id: 'samoa', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'SAMOA', amb: GOLPES(-30, 2),
+      text: "En Samoa, el pe'a cubre de la cintura a las rodillas. En teoría se hace en cinco sesiones a lo largo de diez días; en la práctica, por el dolor y la curación, pueden ser semanas. Se golpea un peine de hueso, el ausogi'aso, con una maceta, el sausau. Antes era un requisito para el título de matai, jefe de familia. Ya no lo es — pero muchos lo siguen haciendo igual.",
+      voz: "En Samoa, el pe-a cubre de la cintura a las rodillas. En teoría se hace en cinco sesiones a lo largo de diez días; en la práctica, por el dolor y la curación, pueden ser semanas. Se golpea un peine de hueso, el ausonguiaso, con una maceta, el sausau. Antes era un requisito para el título de matái, jefe de familia. Ya no lo es — pero muchos lo siguen haciendo igual.",
+      en: ["In Samoa, the pe'a covers from the waist to the knees.", 'In theory it takes five sessions over ten days; in practice, because of the pain and healing, it can take weeks.', "A bone comb, the ausogi'aso, is tapped with a mallet, the sausau.", 'It used to be a requirement for the title of matai, head of the family.', 'It no longer is — but many still do it the same way.'],
+      shots: [
+        { a: 'W38', sc: 'GP' },                                // pe'a, espalda
+        { a: 'W88', sc: 'PM', look: 'trix', from: 'En teoría' }, // tatuando, h. 1895 (Thomas Andrew)
+        { a: 'W90', sc: 'PP', from: 'en la práctica' },        // sesión de hoy
+        { a: 'W89', sc: 'D', from: 'Se golpea' },              // peine y maceta
+        { a: 'W93', sc: 'PP', from: 'Antes era' },             // pe'a, detalle
+        { a: 'W91', sc: 'PM', from: 'Ya no' },
+        { a: 'W39', sc: 'PP', from: 'pero muchos' },
+      ] },
+    // 2.3 · IBAN (BORNEO)
+    { id: 'iban', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'SARAWAK · BORNEO', amb: SELVA(-28, 5),
+      text: 'Entre los iban de Borneo, un tatuaje de rana en la garganta se cree que protege de morir decapitado en combate. El primer tatuaje de un hombre, una espiral en el hombro llamada bunga terung, se hace antes de su bejalai, un viaje iniciático, y se cree que le da fuerza para el camino. Los iban creen que los espíritus conceden los tatuajes en sueños — y que un hombre sin tatuajes es casi invisible para los dioses.',
+      voz: 'Entre los iban de Borneo, un tatuaje de rana en la garganta se cree que protege de morir decapitado en combate. El primer tatuaje de un hombre, una espiral en el hombro llamada bunga terung, se hace antes de su beyalai, un viaje iniciático, y se cree que le da fuerza para el camino. Los iban creen que los espíritus conceden los tatuajes en sueños — y que un hombre sin tatuajes es casi invisible para los dioses.',
+      en: ['Among the Iban of Borneo, a frog tattoo on the throat is believed to protect against being beheaded in battle.', "A man's first tattoo, a spiral on the shoulder called bunga terung, is made before his bejalai, a journey of initiation, and is believed to give him strength for the road.", 'The Iban believe spirits grant tattoos in dreams — and that a man without tattoos is almost invisible to the gods.'],
+      shots: [
+        { a: 'W101', sc: 'GP' },                               // casa larga iban
+        { a: 'W100', sc: 'PM', look: 'trix', from: 'un tatuaje' },
+        { a: 'W97', sc: 'PP', look: 'trix', from: 'El primer' }, // espirales en los hombros
+        { a: 'W96', sc: 'D', look: 'app', from: 'bunga' },     // el dibujo del bunga terung
+        { a: 'W95', sc: 'D', from: 'se hace' },                // la flor de berenjena que le da nombre
+        { a: 'W102', sc: 'PM', from: 'y se cree' },
+        { a: 'W70', sc: 'GP', look: 'trix', from: 'Los iban' }, // dayak tatuando (1909)
+      ] },
+    // 2.4 · AINU
+    { id: 'ainu', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'HOKKAIDO · JAPÓN', amb: BOSQUE(-30),
+      text: 'Las mujeres ainu, en el norte de Japón, se tatuaban la boca y los antebrazos. Empezaban entre los diez y los trece años — a veces antes — y terminaban hacia los quince o dieciséis: la señal de que estaban listas para casarse. La colonización japonesa de Hokkaido, entre 1869 y 1904, acabó prohibiéndolo.',
+      en: ['Ainu women, in northern Japan, tattooed their mouths and forearms.', 'They started between ten and thirteen — sometimes earlier — and finished around fifteen or sixteen: the sign that they were ready to marry.', 'The Japanese colonisation of Hokkaido, between 1869 and 1904, ended up banning it.'],
+      cifra: { word: '1869', text: '1869-1904', sub: 'COLONIZACIÓN DE HOKKAIDO', dur: 2.6, y: 560 },
+      shots: [
+        { a: AINU('W4'), sc: 'PP', look: 'trix', foc: [0.5, 0.4] },
+        { a: AINU('W7'), sc: 'PM', look: 'trix', from: 'Empezaban' },
+        { a: AINU('W3'), sc: 'PP', look: 'trix', from: 'a veces' },
+        { a: AINU('W5'), sc: 'PP', look: 'trix', foc: [0.5, 0.35], from: 'la señal' },
+        { a: AINU('W11'), sc: 'GP', look: 'trix', from: 'La colonización' },
+        { a: AINU('W10'), sc: 'PM', look: 'trix', from: 'acabó' },
+      ] },
+    // 2.5 · APATANI
+    { id: 'apatani', who: 'salma', scene: true, sceneEnd: true, pause: 1.2, rotulo: 'VALLE DE ZIRO · INDIA', amb: PAJAROS(-30, 10),
+      text: 'En el valle de Ziro, en India, las mujeres apatani llevaban tatuaje facial y tapones de nariz de madera. No era estética: era protección contra el rapto. Se lo hacían con diez años, otras mujeres mayores. Se prohibió en los años setenta. Hoy, solo las abuelas lo llevan.',
+      en: ['In the Ziro valley, in India, Apatani women wore facial tattoos and wooden nose plugs.', 'It was not about beauty: it was protection against abduction.', 'Older women did it to them at ten.', 'It was banned in the 1970s.', 'Today, only grandmothers wear it.'],
+      shots: [
+        { a: 'W55', sc: 'GP' },                                // en el arrozal
+        { a: 'W54', sc: 'PP', from: 'las mujeres' },
+        { a: 'W51', sc: 'PM', look: 'trix', from: 'No era' },
+        { a: 'W104', sc: 'PP', foc: [0.5, 0.4], from: 'Se lo' },
+        { a: 'W103', sc: 'PM', from: 'Se prohibió' },
+        { a: 'W50', sc: 'PP', look: 'trix', from: 'Hoy,' },
       ] },
   ],
 };

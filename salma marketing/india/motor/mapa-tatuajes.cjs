@@ -16,7 +16,35 @@ const TRAMOS = {
   alpes: { de: null, a: [10.84, 46.78], paises: ['040', '380'], zoom: 5200, punto: 'ÖTZTAL', lado: 'r', l1: 'ALPES · 3.300 a. C.', l2: 'EL TATUADO MÁS ANTIGUO QUE SE CONOCE' },
   'alpes-tahiti': { de: [10.84, 46.78], a: [-149.43, -17.65], paises: ['258'], zoom: 1000, punto: 'TAHITÍ', lado: 'l', l1: 'TAHITÍ · 1769', l2: 'DE AQUÍ VIENE LA PALABRA «TATTOO»' },
   'tahiti-japon': { de: [-149.43, -17.65], a: [139.69, 35.69], paises: ['392'], zoom: 2200, punto: 'EDO (TOKIO)', lado: 'l', l1: 'JAPÓN', l2: 'DEL CASTIGO AL ARTE' },
+  // RUTA (Bloque 2): cámara quieta sobre la región y la ruta se dibuja parada a parada; cada parada = [lon, lat, nombre, lado del rótulo]
+  pueblos: { centro: [150, 8], paises: ['554', '882', '458', '392', '356'], l1: 'PUEBLOS Y SU SIGNIFICADO', l2: 'HOY VIAJAMOS DE ISLA EN ISLA, Y DE PUEBLO EN PUEBLO',
+    ruta: [[174.8, -41.3, 'NUEVA ZELANDA', 'r'], [-171.8, -13.8, 'SAMOA', 'r'], [113.0, 2.5, 'SARAWAK (BORNEO)', 'l'], [142.8, 43.2, 'HOKKAIDO', 'r'], [93.8, 27.5, 'ZIRO (INDIA)', 'l']] },
 };
+function svgRuta(R, t) {
+  const proj = d3.geoOrthographic().rotate([-R.centro[0], -R.centro[1]]).clipAngle(90).precision(0.4).fitExtent([[300, 250], [1620, 850]], { type: 'MultiPoint', coordinates: R.ruta.map(p => [p[0], p[1]]) }); // todas las paradas entre el título y el rótulo
+  const gen = d3.geoPath(proj), fade = clamp(t / 0.4) * clamp((T - t) / 0.4), n = R.ruta.length - 1, paso = 3.6 / n;
+  const land = countries.map(f => `<path d="${gen(f) || ''}" fill="#1c1c1c" stroke="#3a3a3a" stroke-width="0.8" stroke-linejoin="round"/>`).join('');
+  const hi = R.paises.map(id => gen(countries.find(f => String(f.id) === id)) || '').join(' ');
+  let arcs = '', marks = '';
+  R.ruta.forEach((p, i) => {
+    const t0 = 0.5 + i * paso; // la parada i aparece cuando llega el arco
+    if (i < n) { const u = ease(clamp((t - t0) / paso)); if (u > 0) { const it = d3.geoInterpolate(p, R.ruta[i + 1]), pts = []; for (let k = 0; k <= 60; k++) pts.push(it(k / 60 * u));
+      const d = gen({ type: 'LineString', coordinates: pts }); arcs += `<path d="${d}" fill="none" stroke="#F4630B" stroke-opacity="0.28" stroke-width="12" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#F4630B" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="2 11"/>`; } }
+    const a = clamp((t - t0 + 0.1) / 0.3), q = proj([p[0], p[1]]); if (!q || a <= 0) return;
+    const tx = p[3] === 'l' ? q[0] - 24 : q[0] + 24, anc = p[3] === 'l' ? 'end' : 'start';
+    marks += `<circle cx="${q[0]}" cy="${q[1]}" r="14" fill="#0D0D0D" opacity="${a}"/><circle cx="${q[0]}" cy="${q[1]}" r="9" fill="#fff" opacity="${a}"/><circle cx="${q[0]}" cy="${q[1]}" r="4.5" fill="#F4630B" opacity="${a}"/>`;
+    marks += `<text x="${tx}" y="${q[1] - 14}" font-family="Arial" font-weight="700" font-size="34" fill="#fff" stroke="#0D0D0D" stroke-width="7" paint-order="stroke" text-anchor="${anc}" letter-spacing="1" opacity="${a}">${esc(p[2])}</text>`;
+  });
+  const titleA = clamp((t - 0.15) / 0.4), nameA = clamp((t - 3.6) / 0.5);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#0D0D0D"/>
+  <g opacity="${fade.toFixed(3)}"><path d="${gen({ type: 'Sphere' })}" fill="#101010" stroke="#F4630B" stroke-opacity="0.25" stroke-width="2"/>${land}
+   <path d="${hi}" fill="#F4630B" fill-opacity="0.22" stroke="#F4630B" stroke-width="2.5" stroke-linejoin="round"/>${arcs}${marks}
+   <g opacity="${titleA.toFixed(2)}"><text x="960" y="110" font-family="Impact" font-size="84" fill="#F4630B" text-anchor="middle" letter-spacing="3">BORRADO DEL MAPA</text>
+    <text x="960" y="168" font-family="Arial" font-weight="700" font-size="40" fill="#ffffff" text-anchor="middle" letter-spacing="4">TATUAJES DEL MUNDO</text><rect x="860" y="188" width="200" height="5" fill="#F4630B"/></g>
+   <g opacity="${nameA.toFixed(2)}"><rect x="0" y="900" width="${W}" height="180" fill="#0D0D0D" opacity="0.75"/><text x="960" y="975" font-family="Impact" font-size="84" fill="#ffffff" text-anchor="middle" letter-spacing="3">${esc(R.l1)}</text>
+    <text x="960" y="1035" font-family="Arial" font-weight="700" font-size="34" fill="#F4630B" text-anchor="middle" letter-spacing="3">${esc(R.l2)}</text></g>
+  </g></svg>`;
+}
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const ease = u => u * u * (3 - 2 * u), easeIO = u => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
 const lerp = (a, b, u) => a + (b - a) * u;
@@ -71,7 +99,7 @@ function svg(R, t) {
    </g>
   </g></svg>`;
 }
-const render = (R, t) => new Resvg(svg(R, t), { font: { loadSystemFonts: true }, fitTo: { mode: 'width', value: W } }).render().asPng();
+const render = (R, t) => new Resvg((R.ruta ? svgRuta : svg)(R, t), { font: { loadSystemFonts: true }, fitTo: { mode: 'width', value: W } }).render().asPng();
 async function makeMap(R, out) {
   const sp = spawn(FF, ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', out]);
   const done = new Promise(r => sp.on('close', r)); sp.stdin.on('error', () => {});
