@@ -18,7 +18,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloques1-2-v3', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-bloques1-2-v4', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 3', l5: 'Tatuajes talegueros' },
@@ -94,9 +94,9 @@ const cfg = {
       voz: 'En Nueva Zelanda, el ta moko maorí no se talla con aguja, sino con cincel: cortes profundos en la piel, no simple punción. Por eso deja una cicatriz distinta a la de cualquier otro tatuaje polinesio. Su origen está ligado al luto: las mujeres se cortaban la piel y añadían hollín en memoria de alguien querido. Y a la mitología, al dios Ruaumoko y al mito de Mataora y Niwareka.',
       en: ['In New Zealand, Māori tā moko is not made with a needle but with a chisel: deep cuts in the skin, not simple puncturing.', 'That is why it leaves a scar unlike any other Polynesian tattoo.', 'Its origin is tied to mourning: women cut their skin and added soot in memory of a loved one.', 'And to mythology, to the god Rūaumoko and the myth of Mataora and Niwareka.'],
       shots: [
-        { a: 'W46', sc: 'PP', foc: [0.5, 0.35] },              // Tuterei Karewa
+        { a: 'FILE:' + T + '/runway/maori-moko-color-kling-5s.mp4', sc: 'PP', look: 'app', ss: 1.0 }, // Runway (IA, Kling 3.0 Pro): W43 de sepia a color, mira a cámara (Paco: al principio de la escena, 1:51); ss 1 para que en ~4 s se vea la sonrisa final
         { a: 'W27', sc: 'D', look: 'trix', from: 'sino con' }, // uhi, el cincel (dibujo de Robley)
-        { a: 'FILE:' + T + '/runway/maori-moko-color-kling-5s.mp4', sc: 'PP', look: 'app', from: 'cortes' }, // Runway (IA, Kling 3.0 Pro): W43 pasa de sepia a color y mira a cámara con leve sonrisa (Paco, 3 nov 2026); ~5 s hasta «distinta»
+        { a: 'W46', sc: 'PP', foc: [0.5, 0.35], from: 'cortes' }, // Tuterei Karewa (cambiado de sitio con el clip animado, Paco)
         { a: 'W26', sc: 'D', from: 'distinta' },                // autorretrato del moko de Te Pehi Kupe (1826)
         { a: 'W48', sc: 'PM', from: 'Su origen' },             // Aotea, moko kauae
         { a: 'W49', sc: 'PP', foc: [0.5, 0.35], from: 'las mujeres' },
