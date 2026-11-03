@@ -18,7 +18,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloques1-2-v1', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-bloques1-2-v2', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 3', l5: 'Tatuajes talegueros' },
@@ -96,8 +96,8 @@ const cfg = {
       shots: [
         { a: 'W46', sc: 'PP', foc: [0.5, 0.35] },              // Tuterei Karewa
         { a: 'W27', sc: 'D', look: 'trix', from: 'sino con' }, // uhi, el cincel (dibujo de Robley)
-        { a: 'W43', sc: 'PP', foc: [0.5, 0.4], from: 'cortes' },
-        { a: 'W26', sc: 'D', from: 'Por eso' },                // autorretrato del moko de Te Pehi Kupe (1826)
+        { a: 'FILE:' + T + '/runway/maori-moko-color-kling-5s.mp4', sc: 'PP', look: 'app', from: 'cortes' }, // Runway (IA, Kling 3.0 Pro): W43 pasa de sepia a color y mira a cámara con leve sonrisa (Paco, 3 nov 2026); ~5 s hasta «distinta»
+        { a: 'W26', sc: 'D', from: 'distinta' },                // autorretrato del moko de Te Pehi Kupe (1826)
         { a: 'W48', sc: 'PM', from: 'Su origen' },             // Aotea, moko kauae
         { a: 'W49', sc: 'PP', foc: [0.5, 0.35], from: 'las mujeres' },
         { a: 'W47', sc: 'GP', from: 'Y a la' },                // retrato de Goldie
