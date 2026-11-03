@@ -16,6 +16,9 @@ const TRAMOS = {
   alpes: { de: null, a: [10.84, 46.78], paises: ['040', '380'], zoom: 5200, punto: 'ÖTZTAL', lado: 'r', l1: 'ALPES · 3.300 a. C.', l2: 'EL TATUADO MÁS ANTIGUO QUE SE CONOCE' },
   'alpes-tahiti': { de: [10.84, 46.78], a: [-149.43, -17.65], paises: ['258'], zoom: 1000, punto: 'TAHITÍ', lado: 'l', l1: 'TAHITÍ · 1769', l2: 'DE AQUÍ VIENE LA PALABRA «TATTOO»' },
   'tahiti-japon': { de: [-149.43, -17.65], a: [139.69, 35.69], paises: ['392'], zoom: 2200, punto: 'EDO (TOKIO)', lado: 'l', l1: 'JAPÓN', l2: 'DEL CASTIGO AL ARTE' },
+  // BLOQUE 3: de Ziro a Rusia (con el rótulo de transición) y de Rusia a Centroamérica
+  'ziro-rusia': { de: [93.8, 27.5], a: [37.62, 55.75], paises: ['643'], zoom: 900, punto: 'RUSIA', lado: 'r', l1: 'TATUAJES TALEGUEROS', l2: 'HOY NO VIAJAMOS A UN LUGAR, SINO A UN CÓDIGO: EL DE QUIEN ESTÁ DENTRO' },
+  'rusia-honduras': { de: [37.62, 55.75], a: [-87.2, 14.6], paises: ['340', '222'], zoom: 3200, punto: 'HONDURAS · EL SALVADOR', lado: 'r', l1: 'CENTROAMÉRICA', l2: 'LAS MARAS' },
   // RUTA (Bloque 2): cámara quieta sobre la región y la ruta se dibuja parada a parada; cada parada = [lon, lat, nombre, lado del rótulo]
   pueblos: { centro: [150, 8], paises: ['554', '882', '458', '392', '356'], l1: 'PUEBLOS Y SU SIGNIFICADO', l2: 'HOY VIAJAMOS DE ISLA EN ISLA, Y DE PUEBLO EN PUEBLO',
     ruta: [[174.8, -41.3, 'NUEVA ZELANDA', 'r'], [-171.8, -13.8, 'SAMOA', 'r'], [113.0, 2.5, 'SARAWAK (BORNEO)', 'l'], [142.8, 43.2, 'HOKKAIDO', 'r'], [93.8, 27.5, 'ZIRO (INDIA)', 'l']] },
