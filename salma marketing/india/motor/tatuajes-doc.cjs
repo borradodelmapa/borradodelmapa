@@ -21,11 +21,11 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloques1-3-v3', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-completo-v1', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
-  card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 4', l5: 'Mafias del mundo' },
-  descartes: { M11: 'portada horizontal pendiente (la miniatura de YouTube largo va aparte)', M13: 'sígueme en el documental largo: por decidir con Paco', M3: 'el clip del puñetazo va al final del gancho y al final del bloque a propósito (Paco, 3 nov 2026)' },
+  card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'GRACIAS POR VERLO', l5: 'Borrado del Mapa' },
+  descartes: { M11: 'portada horizontal pendiente (la miniatura de YouTube largo va aparte)', M13: 'sígueme en el documental largo: por decidir con Paco', M3: 'el clip del puñetazo va al final del gancho, del bloque 1 y del documental, y el cierre repite tatuajes ya vistos, a propósito (Paco, 3-4 nov 2026)' },
   blocks: [
     // 1.0 · GANCHO (igual que tatuajes-gancho.cjs v4, aprobado por Paco)
     { id: 'gancho', who: 'salma', scene: true, sceneEnd: true, pause: 0.8, amb: GOLPES(-30), golpe: PUNETAZO('Tu motivo', 1.9),
@@ -204,6 +204,81 @@ const cfg = {
         { a: 'W118', sc: 'D', pan: [0.1, 0.4, 0.9, 0.4], z: 0.5, from: 'hoy' },      // «MARA» en la espalda
         { a: 'W128', sc: 'PM', pan: [0.3, 0.75, 0.6, 0.6], z: 0.5, from: 'por la' }, // detenido, torso (sin la cara)
         { a: 'W114', sc: 'D', pan: [0.5, 0.3, 0.5, 0.8], z: 0.4, from: 'y por' },
+      ] },
+    // ═══ BLOQUE 4 · MAFIAS DEL MUNDO ═══
+    { id: 'mapa-mafias', video: T + '/mapa-mafias.mp4', fixed: 5.5, amb: CALLE(-32, 10) },
+    // 4.1 · YAKUZA
+    { id: 'yakuza', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'JAPÓN', amb: GOLPES(-30, 6),
+      text: 'La Yakuza heredó el irezumi integral, el tebori, hecho a mano. Pero el estigma que empezó con la prohibición Meiji de 1868 sigue vivo: balnearios, gimnasios y negocios siguen prohibiendo la entrada a quien lleva tatuajes visibles.',
+      en: ['The Yakuza inherited full-body irezumi, tebori, done by hand.', 'But the stigma that began with the Meiji ban of 1868 is still alive: bathhouses, gyms and businesses still refuse entry to anyone with visible tattoos.'],
+      shots: [
+        { a: 'W151', sc: 'PP', foc: [0.5, 0.35] },                              // Horiyoshi III, maestro tatuador
+        { a: 'W150', sc: 'D', pan: [0.2, 0.4, 0.8, 0.5], z: 0.4, from: 'el tebori,' }, // tebori: tatuaje a mano
+        { a: 'W152', sc: 'PM', from: 'Pero el' },                               // brazo con irezumi de hoy
+        { a: 'W147', sc: 'PP', pan: [0.5, 0.2, 0.5, 0.6], z: 0.3, from: 'balnearios,' }, // cartel de balneario
+        { a: 'W148', sc: 'D', pan: [0.2, 0.5, 0.9, 0.5], z: 0.3, from: 'negocios' },  // «tatuajes y yakuza (暴力団): no se admite la entrada»
+      ] },
+    // 4.2 · COSA NOSTRA Y CAMORRA
+    { id: 'italia', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'SICILIA · NÁPOLES', amb: OLAS(-32, 30),
+      text: 'En Sicilia, la mayoría de los miembros de la Cosa Nostra no llevan tatuajes que los identifiquen como tales — aunque hay excepciones documentadas, como un caso de «mano negra» ligado a la organización. En Nápoles, la Camorra es justo lo contrario: tiene tradición de tatuaje carcelario desde el siglo XIX, para marcar lealtad. Un grupo joven de Ponticelli se ganó el apodo de «los tatuados» por tatuarse el nombre de su jefe.',
+      voz: 'En Sicilia, la mayoría de los miembros de la Cosa Nostra no llevan tatuajes que los identifiquen como tales — aunque hay excepciones documentadas, como un caso de «mano negra» ligado a la organización. En Nápoles, la Camorra es justo lo contrario: tiene tradición de tatuaje carcelario desde el siglo diecinueve, para marcar lealtad. Un grupo joven de Ponticelli se ganó el apodo de «los tatuados» por tatuarse el nombre de su jefe.',
+      en: ['In Sicily, most members of Cosa Nostra wear no tattoos that identify them as such — although there are documented exceptions, such as a "black hand" case linked to the organisation.', 'In Naples, the Camorra is the exact opposite: it has a tradition of prison tattoos since the 19th century, to mark loyalty.', 'A young group from Ponticelli earned the nickname "the tattooed ones" for tattooing their boss\'s name.'],
+      shots: [
+        { a: 'W217', sc: 'GP', pan: [0, 0.6, 1, 0.6], z: 0.15 },               // Corleone (Sicilia)
+        { a: 'W218', sc: 'PM', from: 'aunque' },
+        { a: 'W154', sc: 'GP', from: 'En Nápoles,' },                            // cárcel de Poggioreale
+        { a: 'W153', sc: 'D', look: 'trix', pan: [0.5, 0.05, 0.5, 0.95], z: 0.6, from: 'tiene tradición' }, // camorrista tatuado (dibujo del s. XIX)
+        { a: 'W209', sc: 'PM', from: 'Un grupo' },                               // tatuando
+      ] },
+    // 4.3 · TRÍADAS
+    { id: 'triadas', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'HONG KONG', amb: CALLE(-30, 2),
+      text: 'En las tríadas chinas, los tatuajes de dragón y tigre marcaban antiguamente el rango. Pero, según un criminólogo especializado, hoy el tatuaje ya no forma parte de la iniciación: los grupos lo evitan para no ser detectados. Muchos líderes no llevan ninguno. Un tatuaje de tríada, por sí solo, ya no prueba nada.',
+      en: ['In the Chinese triads, dragon and tiger tattoos once marked rank.', 'But, according to a specialist criminologist, tattoos are no longer part of initiation today: groups avoid them so as not to be detected.', 'Many leaders have none.', 'A triad tattoo, on its own, no longer proves anything.'],
+      shots: [
+        { a: 'W193', sc: 'GP', look: 'trix', pan: [0.5, 0.2, 0.5, 0.8], z: 0.2 }, // ciudad amurallada de Kowloon desde el aire
+        { a: 'W165', sc: 'D', from: 'los tatuajes' },                           // dragón tatuado
+        { a: 'W184', sc: 'PM', from: 'Pero,' },                                  // calle de Kowloon
+        { a: 'W196', sc: 'PP', from: 'los grupos' },                             // callejón
+        { a: 'W197', sc: 'GP', from: 'Muchos' },                                 // Kowloon de noche
+        { a: 'W198', sc: 'PM', pan: [0.2, 0.5, 0.8, 0.5], z: 0.3, from: 'Un tatuaje' },
+      ] },
+    // 4.4 · MÉXICO, SANTA MUERTE
+    { id: 'mexico', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'MÉXICO', amb: CALLE(-30, 12),
+      text: 'En México, la Santa Muerte se tatúa pidiendo protección. Se la ha llamado «la santa narco» — pero una investigación académica de más de diez años de observación dice que esa etiqueta es reduccionista: también la veneran policías, militares y guardias de prisión, pidiendo protección para ellos y sus familias. Hay más de mil grupos y decenas de miles de devotos. Las autoridades mexicanas han destruido miles de altares.',
+      en: ['In Mexico, people tattoo the Santa Muerte asking for protection.', 'She has been called "the narco saint" — but academic research based on more than ten years of observation calls that label reductive: police officers, soldiers and prison guards also worship her, asking protection for themselves and their families.', 'There are more than a thousand groups and tens of thousands of devotees.', 'Mexican authorities have destroyed thousands of altars.'],
+      cifra: { word: 'mil', text: '+1.000', sub: 'GRUPOS', dur: 2.4, y: 560 },
+      shots: [
+        { a: 'W155', sc: 'PP', pan: [0.5, 0.25, 0.5, 0.55], z: 0.4 },          // espalda con la Santa Muerte tatuada
+        { a: 'W160', sc: 'PM', from: 'Se la' },
+        { a: 'W161', sc: 'GP', pan: [0, 0.5, 1, 0.5], z: 0.25, from: 'pero una' }, // templo de la Santa Muerte (Querétaro)
+        { a: 'W158', sc: 'PP', from: 'también' },
+        { a: 'W157', sc: 'PM', from: 'Hay más' },                              // velas
+        { a: 'W156', sc: 'PP', from: 'Las autoridades' },                      // altar
+      ] },
+    // 4.5 · RUSIA HOY
+    { id: 'rusia-hoy', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'RUSIA · FOTOS: LITUANIA, 2010', amb: SALA(-28, 20),
+      text: 'El código de los vory v zakone sobrevivió a la caída de la URSS: hoy la Bratva, la mafia rusa, es la red más amplia, con los vory como una élite que sigue sus reglas — lealtad, silencio, nunca cooperar con la policía. Pero ese código ya se había empezado a resquebrajar desde los años cuarenta, con presos que volvían del Ejército Rojo y sí colaboraban con el Estado.',
+      voz: 'El código de los vori v zakone sobrevivió a la caída de la URSS: hoy la Bratva, la mafia rusa, es la red más amplia, con los vori como una élite que sigue sus reglas — lealtad, silencio, nunca cooperar con la policía. Pero ese código ya se había empezado a resquebrajar desde los años cuarenta, con presos que volvían del Ejército Rojo y sí colaboraban con el Estado.',
+      en: ['The vory v zakone code survived the fall of the USSR: today the Bratva, the Russian mafia, is the widest network, with the vory as an elite that follows its rules — loyalty, silence, never cooperating with the police.', 'But that code had already started to crack in the 1940s, with prisoners returning from the Red Army who did cooperate with the State.'],
+      shots: [
+        { a: 'W145', sc: 'GP', look: 'trix' },                                  // taquillas de la cárcel
+        { a: 'W214', sc: 'PM', from: 'hoy la' },                                // celda
+        { a: 'W215', sc: 'D', pan: [0.5, 0.6, 0.5, 0.95], z: 0.4, from: 'lealtad,' }, // pies tatuados
+        { a: 'W216', sc: 'GP', from: 'Pero ese' },                              // pesas en el patio
+        { a: 'W138', sc: 'PM', pan: [0.2, 0.4, 0.8, 0.6], z: 0.3, from: 'con presos' },
+      ] },
+    // 4.6 · CIERRE (aprobado por Paco el 4 nov 2026) — último plano: el puñetazo del tatuado
+    { id: 'cierre', who: 'salma', scene: true, sceneEnd: true, pause: 1.6, amb: GOLPES(-30, 10), golpe: PUNETAZO('Quizá', 1.5),
+      text: 'Yakuza, tríadas, maras: tres mafias, en tres continentes, han llegado a la misma conclusión. El tatuaje que antes probaba pertenencia hoy puede delatarte. Pero fuera de las cárceles, casi todos nos tatuamos por gusto: por un viaje, por un recuerdo, por alguien a quien no queremos olvidar. Hace cinco mil trescientos años, Ötzi se tatuó para curarse. Quizá nosotros seguimos haciendo lo mismo.',
+      en: ['Yakuza, triads, maras: three mafias, on three continents, have reached the same conclusion.', 'The tattoo that once proved belonging can now give you away.', 'But outside prisons, almost all of us get tattooed because we want to: for a journey, for a memory, for someone we do not want to forget.', 'Five thousand three hundred years ago, Ötzi got tattooed to heal himself.', 'Perhaps we are still doing the same.'],
+      shots: [
+        { a: 'W84', sc: 'PM' },                                                 // irezumi de hoy (ya visto: repaso)
+        { a: 'W39', sc: 'PP', from: 'El tatuaje' },                             // pe'a samoano (ya visto: repaso)
+        { a: 'W208', sc: 'PM', from: 'Pero fuera' },                            // tatuador trabajando
+        { a: 'W210', sc: 'D', pan: [0.3, 0.5, 0.7, 0.5], z: 0.3, from: 'por un recuerdo' },
+        { a: 'W209', sc: 'PP', from: 'por alguien' },
+        { a: 'W2', sc: 'PP', foc: [0.5, 0.3], from: 'Hace cinco' },             // Ötzi
+        { a: 'FILE:' + T + '/runway/kimbei-golpe-kling-5s.mp4', sc: 'PM', ss: 1.5, from: 'Quizá' }, // ÚLTIMO PLANO: el puñetazo (Runway, IA)
       ] },
   ],
 };

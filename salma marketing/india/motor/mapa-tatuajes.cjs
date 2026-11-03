@@ -19,12 +19,15 @@ const TRAMOS = {
   // BLOQUE 3: de Ziro a Rusia (con el rótulo de transición) y de Rusia a Centroamérica
   'ziro-rusia': { de: [93.8, 27.5], a: [37.62, 55.75], paises: ['643'], zoom: 900, punto: 'RUSIA', lado: 'r', l1: 'TATUAJES TALEGUEROS', l2: 'HOY NO VIAJAMOS A UN LUGAR, SINO A UN CÓDIGO: EL DE QUIEN ESTÁ DENTRO' },
   'rusia-honduras': { de: [37.62, 55.75], a: [-87.2, 14.6], paises: ['340', '222'], zoom: 3200, punto: 'HONDURAS · EL SALVADOR', lado: 'r', l1: 'CENTROAMÉRICA', l2: 'LAS MARAS' },
+  // BLOQUE 4: el mundo entero (proyección plana Natural Earth), de oeste a este
+  mafias: { mundo: true, centro: [20, 20], paises: ['484', '380', '156', '643', '392'], l1: 'MAFIAS DEL MUNDO', l2: 'HOY VIAJAMOS AL OTRO LADO DE LA LEY, EN CINCO PAÍSES DISTINTOS',
+    ruta: [[-99.13, 19.43, 'MÉXICO', 'r'], [13.36, 38.12, 'SICILIA', 'l'], [14.27, 40.85, 'NÁPOLES', 'r'], [37.62, 55.75, 'MOSCÚ', 'r'], [114.17, 22.32, 'HONG KONG', 'l'], [139.69, 35.69, 'JAPÓN', 'r']] },
   // RUTA (Bloque 2): cámara quieta sobre la región y la ruta se dibuja parada a parada; cada parada = [lon, lat, nombre, lado del rótulo]
   pueblos: { centro: [150, 8], paises: ['554', '882', '458', '392', '356'], l1: 'PUEBLOS Y SU SIGNIFICADO', l2: 'HOY VIAJAMOS DE ISLA EN ISLA, Y DE PUEBLO EN PUEBLO',
     ruta: [[174.8, -41.3, 'NUEVA ZELANDA', 'r'], [-171.8, -13.8, 'SAMOA', 'r'], [113.0, 2.5, 'SARAWAK (BORNEO)', 'l'], [142.8, 43.2, 'HOKKAIDO', 'r'], [93.8, 27.5, 'ZIRO (INDIA)', 'l']] },
 };
 function svgRuta(R, t) {
-  const proj = d3.geoOrthographic().rotate([-R.centro[0], -R.centro[1]]).clipAngle(90).precision(0.4).fitExtent([[300, 250], [1620, 850]], { type: 'MultiPoint', coordinates: R.ruta.map(p => [p[0], p[1]]) }); // todas las paradas entre el título y el rótulo
+  const proj = (R.mundo ? d3.geoNaturalEarth1().rotate([-R.centro[0], 0]) : d3.geoOrthographic().rotate([-R.centro[0], -R.centro[1]]).clipAngle(90)).precision(0.4).fitExtent([[300, 250], [1620, 850]], { type: 'MultiPoint', coordinates: R.ruta.map(p => [p[0], p[1]]) }); // todas las paradas entre el título y el rótulo
   const gen = d3.geoPath(proj), fade = clamp(t / 0.4) * clamp((T - t) / 0.4), n = R.ruta.length - 1, paso = 3.6 / n;
   const land = countries.map(f => `<path d="${gen(f) || ''}" fill="#1c1c1c" stroke="#3a3a3a" stroke-width="0.8" stroke-linejoin="round"/>`).join('');
   const hi = R.paises.map(id => gen(countries.find(f => String(f.id) === id)) || '').join(' ');
