@@ -21,7 +21,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloques1-3-v2', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-bloques1-3-v3', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 4', l5: 'Mafias del mundo' },
@@ -192,12 +192,12 @@ const cfg = {
       ] },
     // 3.2 · MS-13 — EL GIRO: ABANDONAR LA MARCA (sin caras; nada que dé escaparate a la pandilla)
     { id: 'mapa-maras', video: T + '/mapa-rusia-honduras.mp4', fixed: 5.5, amb: CALLE(-32) },
-    { id: 'maras', who: 'salma', scene: true, sceneEnd: true, pause: 1.2, rotulo: 'HONDURAS', amb: CALLE(-30, 6),
+    { id: 'maras', who: 'salma', scene: true, sceneEnd: true, pause: 1.2, rotulo: 'MS-13 · FOTOS: EL SALVADOR Y EE. UU.', amb: CALLE(-30, 6),
       text: 'En Honduras, según un policía que investiga a las maras, muchos miembros de la MS-13   han dejado de tatuarse símbolos de la pandilla. El mismo tatuaje que antes marcaba pertenencia hoy los hace fáciles de identificar — por la policía, y por bandas rivales.',
       voz: 'En Honduras, según un policía que investiga a las maras, muchos miembros de la eme ese trece han dejado de tatuarse símbolos de la pandilla. El mismo tatuaje que antes marcaba pertenencia hoy los hace fáciles de identificar — por la policía, y por bandas rivales.',
       en: ['In Honduras, according to a police officer who investigates the maras, many MS-13 members have stopped getting gang symbols tattooed.', 'The same tattoo that once marked belonging now makes them easy to identify — by the police, and by rival gangs.'],
       shots: [
-        { a: 'W116', sc: 'GP', pan: [0, 0.5, 1, 0.5], z: 0.2 },                     // pintada de la mara, de lado a lado
+        { a: 'W146', sc: 'GP', z: 1.2, zfijo: true, dir: 'in', foc: [0.5, 0.45] },   // preso con la cara tatuada («MS» en la frente), CECOT, El Salvador, 2025: acercamiento lento a la cara (Paco)
         { a: 'W113', sc: 'PP', pan: [0.2, 0.25, 0.8, 0.45], z: 0.5, from: 'muchos' }, // espalda, sin cara
         { a: 'W129', sc: 'D', pan: [0.2, 0.5, 0.7, 0.6], z: 0.4, from: 'símbolos' },  // hombro «Salvatrucha»
         { a: 'W112', sc: 'PP', pan: [0.5, 0.2, 0.5, 0.8], z: 0.4, from: 'El mismo' },
