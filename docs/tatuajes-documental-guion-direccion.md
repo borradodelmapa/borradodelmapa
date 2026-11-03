@@ -41,6 +41,7 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 
 ## ESCENA 1.0 · GANCHO
 - **Imagen (propuesta de Claude, 3 nov 2026; Paco: «propón tú»):** W2 (cara de la reconstrucción de Ötzi, persona primero M15) con empuje lento mientras dice «Hace 5.300 años…» → en «¿Estás tatuado?», negro 0,5 s → fogonazos de ~1 s con cada motivo: «curarse» W1 · «de qué pueblo» W26 (moko de Te Pehi Kupe) · «castigo» W13 (tatuajes penales japoneses) · «la cárcel» W28 (preso soviético) · «una mafia» W17 (irezumi de Kimbei) → «Tu motivo…» vuelve a W2.
+- ✅ **Paco aprueba la propuesta de fotos del gancho y de las escenas 1.1-1.3 (3 nov 2026: «OK, adelante»).**
 - **Fotos del gancho y el Bloque 1:** `salma marketing/tatuajes/fotos/` (ATRIBUCIONES.txt; descartes con su motivo en `descartadas-otro-sitio/NOTA.txt`). Hoja: `salma marketing/tatuajes/hoja-bloque1-y-gancho.png`.
 - **No hay foto libre de los tatuajes reales de Ötzi** y además es una momia (F9: sin restos humanos) → se usa la reconstrucción del museo + gráfico del motor (0 €).
 - **Salma (v2, versión A elegida por Paco el 3 nov 2026; antes: «Hoy, alguien usa esa misma aguja para esconder quién es…», descartada por liosa):** «Hace 5.300 años, alguien usó una aguja para intentar curar un dolor de pecho. ¿Estás tatuado? ¿Sabes por qué? A lo largo de la historia, la gente se ha tatuado para curarse, para decir de qué pueblo es, como castigo, para marcar su rango en la cárcel… o para entrar en una mafia. Tu motivo puede estar en esta historia.»
