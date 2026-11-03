@@ -118,6 +118,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 3 nov 2026 · 20:30 | Tatuajes documental (Claude) | **Motor en horizontal** (Paco: «sí, adáptalo»): `cfg.formato = '16:9'` para el documental largo de YouTube; sin él, todo sale en vertical igual que antes (comprobado: Whang-Od remontado da el mismo vídeo byte a byte). En 16:9 las fotos más estrechas se ven enteras sobre su fondo difuminado; subtítulos abajo (y=1020), rótulo y=790. **Pendiente de decidir para el formato largo:** sígueme (M13), portada/miniatura (M11), mapa horizontal (M7, `mapa.cjs` sigue en vertical). Sin conflictos. |
 | 3 nov 2026 · 16:30 | Remontar subtítulos (Claude) | **M10**: Paco decide no remontar los ya programados (Vietnam 2-5 y Pueblos 1-10 quedan como están). Gana lo nuevo sobre la frase «los ya programados se remontan». |
 | 3 nov 2026 · 12:15 | Subtítulos tapados en YouTube (Claude) | **M10** corregida: zona segura = nada grabado entre 1.260 y 1.920 px, margen lateral ≥ 100 px; `motor.cjs` ajustado (subtítulos 1.424→1.150, rótulo y=1180→900, contador y=70→140, márgenes 60→100). Probado con un fotograma de prueba, no con un montaje real. |
 | 3 nov 2026 · 08:45 | Calendario de publicación (Claude) | Nueva **P13** (manual): publicar solo de martes a jueves a las 10:00 Madrid (decisión de Paco, con los datos de «mejor hora» de Metricool). 34 posts reajustados en Metricool. |

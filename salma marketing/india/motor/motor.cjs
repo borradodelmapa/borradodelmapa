@@ -1,5 +1,5 @@
 // MOTOR DE MONTAJE · BORRADO DEL MAPA · India (derivado del montador de Asia, adaptado a 2 voces)
-// Entrada: una configuración de capítulo (ver cap4.cjs). Salida: mp4 vertical con voces, subtítulos con palabra iluminada,
+// Entrada: una configuración de capítulo (ver cap4.cjs). Salida: mp4 vertical (o horizontal con cfg.formato = '16:9') con voces, subtítulos con palabra iluminada,
 // cifras, mapa, ambiente real por escena con ducking y nivelación a -14 LUFS. Local salvo la voz (ElevenLabs).
 const fs = require('fs'), path = require('path'), crypto = require('crypto'), { spawnSync } = require('child_process');
 const ROOT = 'C:/Users/User/Desktop/salma', BASE = ROOT + '/salma marketing/india', HERE = __dirname;
@@ -49,6 +49,19 @@ const LOOKS = {
   trix: { tone: "hue=s=0,curves=all='0/0.04 0.3/0.2 0.7/0.82 1/0.985'", grain: 13 },
   app: { plain: true }, // grabación de pantalla de la app: sin look de película, ni grano ni viñeta
 };
+// FORMATO (cfg.formato): '9:16' vertical (por defecto, shorts; sus números son los de siempre) o '16:9' horizontal (documental largo de YouTube, Paco 3 nov 2026).
+// a:b = proporción · sub = subtítulos (letra, borde, caracteres por línea, posición) · card = [tamaño, y] de cada texto de la tarjeta final
+const FORMATOS = {
+  '9:16': { w: 1080, h: 1920, a: 9, b: 16, sub: { letra: 66, borde: 6, ancho: 26, pos: '\\an5\\pos(540,1150)' }, cifra: { y: 640, size: 230, sub: 270 }, counterY: 140, rotY: 900, sgY: 1450,
+    card: { av: [360, 170], l1: [96, 720], l2: [76, 850], l3: [44, 1050], crea: [104, 640], con: [140, 770], desc: [54, 990], grat: [54, 1065], web: [74, 1220], l4: [46, 1560], l5: [52, 1655] } },
+  // horizontal: subtítulos abajo y centrados (crecen hacia arriba), rótulo de lugar encima de ellos; las fotos más estrechas que 16:9 se ven enteras sobre su propio fondo difuminado
+  '16:9': { w: 1920, h: 1080, a: 16, b: 9, sub: { letra: 58, borde: 5, ancho: 42, pos: '\\an2\\pos(960,1020)' }, cifra: { y: 290, size: 200, sub: 230 }, counterY: 60, rotY: 790, sgY: 700,
+    card: { av: [220, 60], l1: [96, 360], l2: [76, 480], l3: [44, 620], crea: [90, 300], con: [120, 400], desc: [46, 560], grat: [46, 620], web: [64, 720], l4: [40, 880], l5: [44, 950] } },
+};
+const formato = cfg => { const F = FORMATOS[cfg.formato || '9:16']; if (!F) throw new Error('formato desconocido ' + cfg.formato + ' (vale 9:16 o 16:9)'); return F; };
+// recorte a la proporción del formato (más ancha → recorta a lo ancho; si no, a lo alto); con 9:16 da la misma orden de ffmpeg de siempre
+const cropF = F => `crop='if(gt(iw*${F.b},ih*${F.a}),ih*${F.a}/${F.b},iw)':'if(gt(iw*${F.b},ih*${F.a}),ih,iw*${F.b}/${F.a})'`;
+const medidas = f => { const m = info(f).match(/Video:.*?(\d{2,5})x(\d{2,5})/); return m ? [+m[1], +m[2]] : [0, 0]; };
 // Normalización «BDM Film»: lleva cada foto hacia luma ≈105/255 y saturación ≈46 con límites (estilo-fotografico.md)
 function normFilter(f) {
   const r = spawnSync(FF, ['-hide_banner', '-v', 'info', '-i', f, '-frames:v', '1', '-vf', 'signalstats,metadata=mode=print', '-f', 'null', '-'], { encoding: 'utf8' });
@@ -84,11 +97,11 @@ async function voice(text, who) {
 }
 
 // INTRO editable: clip (vídeo o clip de IA) recortado a 9:16 + sonidos mezclados (grito, ataque, golpe real…). Se prepara aquí y entra como bloque de vídeo con su audio.
-function prepararIntro(b, W) {
+function prepararIntro(b, W, F = FORMATOS['9:16']) {
   // Recortar = quitar los mismos segundos de imagen y de sonido: la duración sale del clip (desde ss hasta fin) y cada sonido se desplaza con él.
   const I = b.intro, f = resolve(I.clip), ss = I.ss || 0, td = dur(f), fin = Math.min(I.fin || td, td), d = Math.max(1, Math.round((fin - ss) * 100) / 100);
   const v = `${W}/intro-video.mp4`;
-  run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)',scale=1080:1920:flags=lanczos,setsar=1,fps=30,format=yuv420p`, '-frames:v', String(Math.round(d * 30)), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', v]);
+  run(['-ss', String(ss), '-i', f, '-an', '-t', String(d + 0.1), '-vf', `${cropF(F)},scale=${F.w}:${F.h}:flags=lanczos,setsar=1,fps=30,format=yuv420p`, '-frames:v', String(Math.round(d * 30)), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '19', v]);
   b.video = v; b.fixed = d; b.gainAudio = I.gainAudio ?? -5;
   const sn = I.sonidos || [];
   if (sn.length) {
@@ -99,14 +112,14 @@ function prepararIntro(b, W) {
   }
 }
 async function build(cfg) {
-  setSerie(cfg.fotosSerie);
+  setSerie(cfg.fotosSerie); const F = formato(cfg);
   // CALIDAD: «borrador» (por defecto: editor y pruebas, rápido) o «publicar» (máxima calidad para subir a redes: planos casi sin pérdida y montaje final lento). CALIDAD=publicar node <capítulo>.cjs
   const PUB = (process.env.CALIDAD || cfg.calidad) === 'publicar', Q = PUB ? { plano: ['-preset', 'slow', '-crf', '12'], final: ['-preset', 'slow', '-crf', '16'], audio: '256k' } : { plano: ['-preset', 'veryfast', '-crf', '19'], final: ['-preset', 'veryfast', '-crf', '20'], audio: '192k' };
   if (PUB) console.log('CALIDAD MÁXIMA (publicar): tarda más');
   const W = HERE + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
   const OUT = cfg.out || BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
-  cfg.blocks.forEach(b => { if (b.intro) prepararIntro(b, W); });
+  cfg.blocks.forEach(b => { if (b.intro) prepararIntro(b, W, F); });
   // 1) voces
   console.log('ETAPA 1/6 Voces (las que ya existen se reutilizan; solo se genera lo nuevo)');
   let charsNow = 0;
@@ -149,7 +162,7 @@ async function build(cfg) {
         // clip corto generado (Runway) y plano más largo: se repite de ida y vuelta (sin salto ni fotograma congelado)
         if (/^RW/.test(s.a) && td - ss < d) { const pp = `${W}/pp_${s.a}.mp4`; if (!fs.existsSync(pp)) run(['-ss', String(ss), '-i', f, '-an', '-vf', 'split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '17', pp]); fin = pp; ss = 0; loopV = ['-stream_loop', '-1']; }
         const td2 = dur(fin); const pad = !loopV.length && td2 - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td2 - ss) + 0.2).toFixed(2)}` : '';
-        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
+        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h},setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       } else {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
         const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 1.6; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
@@ -157,9 +170,14 @@ async function build(cfg) {
         let zexpr = inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
         const f0 = Math.max(1, frames - 12); // GOLPE (s.golpe): en los últimos 0,4 s el zoom se dispara hacia el foco y la cámara se sacude
         if (s.golpe) zexpr += `+${s.golpeZ ?? 0.6}*pow(max(0,on-${f0})/12,3)`;
-        const shake = s.golpe ? `,scale=1160:2064,crop=1080:1920:x='40+36*sin(n*9.1)*gt(n,${f0})':y='72+36*cos(n*11.7)*gt(n,${f0})'` : '';
-        const pre = s.cover ? 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,scale=2160:3840:flags=lanczos' : `crop='if(gt(iw*16,ih*9),ih*9/16,iw)':'if(gt(iw*16,ih*9),ih,iw*16/9)':'if(gt(iw*16,ih*9),(iw-ih*9/16)*${cx},0)':0,scale=2160:3840:flags=lanczos`; // más ancha que 9:16 (apaisada o vertical 3:4) → recorta a lo ancho; si no, a lo alto
-        cacheN[runPlano(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=1080x1920:fps=30${shake}${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
+        const shake = s.golpe ? `,scale=${F.w + 80}:${F.h + 144},crop=${F.w}:${F.h}:x='40+36*sin(n*9.1)*gt(n,${f0})':y='72+36*cos(n*11.7)*gt(n,${f0})'` : '';
+        const W2 = F.w * 2, H2 = F.h * 2, [iw, ih] = F.a > F.b && !s.cover ? medidas(f) : [0, 0];
+        // horizontal: una foto más estrecha que 16:9 (vertical, 3:4…) se ve ENTERA sobre una copia suya difuminada y oscurecida, en vez de perder la cabeza y los pies al recortar
+        const entera = iw && ih && iw * F.b < ih * F.a * 0.95;
+        const pre = s.cover ? `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h},scale=${W2}:${H2}:flags=lanczos`
+          : entera ? `split[fe][fb];[fb]scale=${W2}:${H2}:force_original_aspect_ratio=increase,crop=${W2}:${H2},boxblur=40:2,eq=brightness=-0.12[fd];[fe]scale=-2:${H2}:flags=lanczos[ff];[fd][ff]overlay=(W-w)/2:0`
+          : `${cropF(F)}:'if(gt(iw*${F.b},ih*${F.a}),(iw-ih*${F.a}/${F.b})*${cx},0)':0,scale=${W2}:${H2}:flags=lanczos`; // más ancha que el formato → recorta a lo ancho; si no, a lo alto
+        cacheN[runPlano(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=${F.w}x${F.h}:fps=30${shake}${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
       clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra' });
     });
@@ -172,20 +190,21 @@ async function build(cfg) {
   // Cierre en dos tiempos: 1) título de la serie · 2) invitación a la app (icono de Salma) + capítulo siguiente
   const CS = cfg.cardSecs || 8, P1 = cfg.cardP1 || 3, AVC = ROOT + '/salma marketing/editor/ep1/avatar.png';
   const dtx = (txt, font, size, col, y, t0, t1, extra = '') => `drawtext=expansion=none:fontfile='${font}':text='${esc(txt)}':fontsize=${size}:fontcolor=${col}:x=(w-text_w)/2:y=${y}:alpha='if(lt(t,${t0}+0.4),(t-${t0})/0.4,if(gt(t,${t1}-0.4),(${t1}-t)/0.4,1))':enable='between(t,${t0},${t1})'${extra}`;
-  const ctF = `[1:v]scale=360:-1,format=rgba,fade=t=in:st=${P1}:d=0.4:alpha=1[av];[0:v][av]overlay=(W-w)/2:170:eof_action=pass,` + [
-    dtx(ct.l1, IMPACT, 96, '0xF4630B', 720, 0, P1), dtx(ct.l2, IMPACT, 76, 'white', 850, 0, P1), dtx(ct.l3, ARIALB, 44, 'white', 1050, 0, P1),
-    dtx('CREA TUS RUTAS', IMPACT, 104, '0xF4630B', 640, P1, CS), dtx('CONMIGO', IMPACT, 140, '0xF4630B', 770, P1, CS),
-    dtx('Descarga la app de guías de viaje', ARIALB, 54, 'white', 990, P1, CS), dtx('Gratis', ARIALB, 54, 'white', 1065, P1, CS),
-    dtx('borradodelmapa.com', IMPACT, 74, 'white', 1220, P1, CS, ':box=1:boxcolor=0xF4630B:boxborderw=22'),
-    dtx(ct.l4, ARIALB, 46, '0xF4630B', 1560, P1, CS), dtx(ct.l5, ARIALB, 52, 'white', 1655, P1, CS)].join(',') + ',format=yuv420p[vout]';
-  run(['-f', 'lavfi', '-i', `color=c=0x0d0d0d:s=1080x1920:r=30:d=${CS}`, '-loop', '1', '-i', AVC, '-filter_complex', ctF, '-map', '[vout]', '-an', '-t', String(CS), '-c:v', 'libx264', '-crf', '19', '-pix_fmt', 'yuv420p', card]);
+  const K = F.card;
+  const ctF = `[1:v]scale=${K.av[0]}:-1,format=rgba,fade=t=in:st=${P1}:d=0.4:alpha=1[av];[0:v][av]overlay=(W-w)/2:${K.av[1]}:eof_action=pass,` + [
+    dtx(ct.l1, IMPACT, K.l1[0], '0xF4630B', K.l1[1], 0, P1), dtx(ct.l2, IMPACT, K.l2[0], 'white', K.l2[1], 0, P1), dtx(ct.l3, ARIALB, K.l3[0], 'white', K.l3[1], 0, P1),
+    dtx('CREA TUS RUTAS', IMPACT, K.crea[0], '0xF4630B', K.crea[1], P1, CS), dtx('CONMIGO', IMPACT, K.con[0], '0xF4630B', K.con[1], P1, CS),
+    dtx('Descarga la app de guías de viaje', ARIALB, K.desc[0], 'white', K.desc[1], P1, CS), dtx('Gratis', ARIALB, K.grat[0], 'white', K.grat[1], P1, CS),
+    dtx('borradodelmapa.com', IMPACT, K.web[0], 'white', K.web[1], P1, CS, ':box=1:boxcolor=0xF4630B:boxborderw=22'),
+    dtx(ct.l4, ARIALB, K.l4[0], '0xF4630B', K.l4[1], P1, CS), dtx(ct.l5, ARIALB, K.l5[0], 'white', K.l5[1], P1, CS)].join(',') + ',format=yuv420p[vout]';
+  run(['-f', 'lavfi', '-i', `color=c=0x0d0d0d:s=${F.w}x${F.h}:r=30:d=${CS}`, '-loop', '1', '-i', AVC, '-filter_complex', ctF, '-map', '[vout]', '-an', '-t', String(CS), '-c:v', 'libx264', '-crf', '19', '-pix_fmt', 'yuv420p', card]);
   clips.push({ file: card, d: CS });
   fs.writeFileSync(`${W}/lista.txt`, clips.map(c => `file '${c.file.replace(/\\/g, '/')}'`).join('\n'));
   run(['-f', 'concat', '-safe', '0', '-i', `${W}/lista.txt`, '-c', 'copy', `${W}/mudo.mp4`]);
   // 4) subtítulos
   console.log('ETAPA 4/6 Subtítulos y cifras'); // ASS (palabra iluminada) y cifras
   const ts = x => { x = Math.max(0, x); const h = Math.floor(x / 3600), m = Math.floor(x % 3600 / 60), s = x % 60; return `${h}:${String(m).padStart(2, '0')}:${s.toFixed(2).padStart(5, '0')}`; };
-  let ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Main,Arial,66,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,2,5,100,100,60,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
+  let ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: ${F.w}\nPlayResY: ${F.h}\nWrapStyle: 2\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Main,Arial,${F.sub.letra},&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,${F.sub.borde},2,5,100,100,60,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
   const srt = []; const srtEn = []; const nums = [];
   for (const b of cfg.blocks) {
     if (!b.text) continue;
@@ -195,12 +214,12 @@ async function build(cfg) {
     const merged = []; phr.forEach(p => { const len = p.map(i => toks[i].w).join(' ').length; if (merged.length && merged[merged.length - 1].len < 14) { merged[merged.length - 1].ks.push(...p); merged[merged.length - 1].len += len + 1; } else merged.push({ ks: [...p], len }); });
     const split = []; merged.forEach(ph => { if (ph.len > 52 && ph.ks.length > 4) { const half = Math.ceil(ph.ks.length / 2); split.push({ ks: ph.ks.slice(0, half) }, { ks: ph.ks.slice(half) }); } else split.push(ph); });
     split.forEach(ph => {
-      const lines = []; let line = [], ll = 0; ph.ks.forEach(i => { const L = toks[i].w.length; if (line.length && ll + 1 + L > 26) { lines.push(line); line = []; ll = 0; } line.push(i); ll += (ll ? 1 : 0) + L; }); if (line.length) lines.push(line);
+      const lines = []; let line = [], ll = 0; ph.ks.forEach(i => { const L = toks[i].w.length; if (line.length && ll + 1 + L > F.sub.ancho) { lines.push(line); line = []; ll = 0; } line.push(i); ll += (ll ? 1 : 0) + L; }); if (line.length) lines.push(line);
       const t0 = T(toks[ph.ks[0]].s) - 0.05, tEnd = T(toks[ph.ks[ph.ks.length - 1]].e) + 0.12;
       ph.ks.forEach((kc, idx) => {
         const a = idx === 0 ? t0 : T(toks[kc].s), e = idx === ph.ks.length - 1 ? tEnd : T(toks[ph.ks[idx + 1]].s);
         const txt = lines.map(ln => ln.map(i => i === kc ? `{\\c${ORANGE_ASS}}${toks[i].w}{\\r}` : toks[i].w).join(' ')).join('\\N');
-        ass += `Dialogue: 0,${ts(a)},${ts(e)},Main,,0,0,0,,{\\an5\\pos(540,1150)}${txt}\n`;
+        ass += `Dialogue: 0,${ts(a)},${ts(e)},Main,,0,0,0,,{${F.sub.pos}}${txt}\n`;
       });
       srt.push({ a: t0, e: tEnd, t: ph.ks.map(i => toks[i].w).join(' ') });
     });
@@ -211,7 +230,7 @@ async function build(cfg) {
   fs.writeFileSync(`${W}/sub.ass`, ass);
   fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-es.srt`, srt.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
   if (srtEn.length) fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-en.srt`, srtEn.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
-  const numF = nums.map(c => { const al = `if(lt(t,${c.t0.toFixed(2)}),0,min(1,(t-${c.t0.toFixed(2)})/0.25))*if(gt(t,${c.t1.toFixed(2)}),max(0,1-(t-${c.t1.toFixed(2)})/0.3),1)`; return `drawtext=fontfile='${IMPACT}':text='${esc(c.text)}':fontsize=${c.size || 230}:fontcolor=white:borderw=10:bordercolor=0xF4630B:x=(w-text_w)/2:y=${c.y || 640}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})',drawtext=fontfile='${ARIALB}':text='${esc(c.sub)}':fontsize=48:fontcolor=white:borderw=5:bordercolor=black:x=(w-text_w)/2:y=${(c.y || 640) + 270}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})'`; }).join(',');
+  const numF = nums.map(c => { const al = `if(lt(t,${c.t0.toFixed(2)}),0,min(1,(t-${c.t0.toFixed(2)})/0.25))*if(gt(t,${c.t1.toFixed(2)}),max(0,1-(t-${c.t1.toFixed(2)})/0.3),1)`; return `drawtext=fontfile='${IMPACT}':text='${esc(c.text)}':fontsize=${c.size || F.cifra.size}:fontcolor=white:borderw=10:bordercolor=0xF4630B:x=(w-text_w)/2:y=${c.y || F.cifra.y}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})',drawtext=fontfile='${ARIALB}':text='${esc(c.sub)}':fontsize=48:fontcolor=white:borderw=5:bordercolor=black:x=(w-text_w)/2:y=${(c.y || F.cifra.y) + F.cifra.sub}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})'`; }).join(',');
   // 5) audio
   console.log('ETAPA 5/6 Mezcla de audio (voces niveladas + ambiente)'); // audio: voces + ambiente real por escena con ducking
   let fv = '', vin = []; const vparts = [];
@@ -270,8 +289,8 @@ async function build(cfg) {
   // 6) composición
   console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
-  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=140:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
-  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=900:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
+  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
+  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   const SG = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null; let seguirF = '';
   // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s
   let sgIn = [], sgT = null, sgF = '';
@@ -293,19 +312,21 @@ async function build(cfg) {
     run(['-f', 'lavfi', '-i', 'color=c=0xF4630B:s=1000x178,format=rgba', '-vf', band, '-frames:v', '1', `${W}/sg-banda.png`]);
     run(['-f', 'lavfi', '-i', 'color=c=black@0.0:s=700x700,format=rgba', '-vf', heart, '-frames:v', '1', `${W}/sg-corazon.png`]);
     sgF = { band: 'format=rgba[sg]', heart: `scale=w='max(2,240*${S})':h=-1:eval=frame[hc]`,
-      xBand: `if(lt(${u},0.5),-w+((1080-w)/2+w)*(1-pow(1-${u}/0.5,3)),if(lt(${u},4.6),(1080-w)/2,(1080-w)/2+(1080-(1080-w)/2)*pow((${u}-4.6)/0.5,3)))` };
+      xBand: `if(lt(${u},0.5),-w+((${F.w}-w)/2+w)*(1-pow(1-${u}/0.5,3)),if(lt(${u},4.6),(${F.w}-w)/2,(${F.w}-w)/2+(${F.w}-(${F.w}-w)/2)*pow((${u}-4.6)/0.5,3)))` };
   }
   const vf = [cnt, rot, numF].filter(Boolean).join(','), subF = `subtitles=sub.ass:fontsdir='${FONTD}'`; // los subtítulos van ENCIMA de la franja y el corazón
   const outFile = `${OUT}/${cfg.id}.mp4`;
   // icono de Salma arriba a la izquierda, latiendo, hasta la tarjeta final (igual que la serie Asia)
   const AV = ROOT + '/salma marketing/editor/ep1/avatar.png';
   // portada por defecto (modelo Tailandia): se pone encima en los primeros 0,2 s para que sea el fotograma de portada en las redes
-  const P = cfg.portada && cfg.portada.foto ? cfg.portada : null; let covIn = [];
+  // la portada (portada.cjs) solo existe en vertical: en horizontal se omite hasta que haya una propia (la miniatura de YouTube largo va aparte)
+  const P = cfg.portada && cfg.portada.foto && F.b > F.a ? cfg.portada : null; let covIn = [];
+  if (cfg.portada && cfg.portada.foto && !P) console.log('AVISO: portada omitida (solo hay portada vertical)');
   if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng }); covIn = ['-loop', '1', '-i', covPng]; }
   let fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=40+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})${SG ? `*not(between(t,${sgT.a},${sgT.b}))` : ''}'${vf ? ',' + vf : ''}[m0]`;
   let ult = 'm0';
   if (SG) { const ib = P ? 4 : 3;
-    fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][hc]overlay=x='125-w/2':y='145-h/2':enable='between(t,${sgT.a},${sgT.b})'[mh];[mh][sg]overlay=x='${sgF.xBand}':y=1450:enable='between(t,${sgT.a},${sgT.b})'[m1]`; ult = 'm1'; }
+    fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][hc]overlay=x='125-w/2':y='145-h/2':enable='between(t,${sgT.a},${sgT.b})'[mh];[mh][sg]overlay=x='${sgF.xBand}':y=${F.sgY}:enable='between(t,${sgT.a},${sgT.b})'[m1]`; ult = 'm1'; }
   fc += `;[${ult}]${subF}[ms]`; ult = 'ms';
   fc += P ? `;[${ult}][3:v]overlay=0:0:enable='lt(t,0.2)'[v]` : `;[${ult}]null[v]`;
   run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', ...Q.final, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ac', '2', '-b:a', Q.audio, '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
