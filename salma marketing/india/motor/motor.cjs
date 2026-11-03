@@ -185,7 +185,7 @@ async function build(cfg) {
   // 4) subtítulos
   console.log('ETAPA 4/6 Subtítulos y cifras'); // ASS (palabra iluminada) y cifras
   const ts = x => { x = Math.max(0, x); const h = Math.floor(x / 3600), m = Math.floor(x % 3600 / 60), s = x % 60; return `${h}:${String(m).padStart(2, '0')}:${s.toFixed(2).padStart(5, '0')}`; };
-  let ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Main,Arial,66,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,2,5,60,60,60,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
+  let ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Main,Arial,66,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,6,2,5,100,100,60,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
   const srt = []; const srtEn = []; const nums = [];
   for (const b of cfg.blocks) {
     if (!b.text) continue;
@@ -200,7 +200,7 @@ async function build(cfg) {
       ph.ks.forEach((kc, idx) => {
         const a = idx === 0 ? t0 : T(toks[kc].s), e = idx === ph.ks.length - 1 ? tEnd : T(toks[ph.ks[idx + 1]].s);
         const txt = lines.map(ln => ln.map(i => i === kc ? `{\\c${ORANGE_ASS}}${toks[i].w}{\\r}` : toks[i].w).join(' ')).join('\\N');
-        ass += `Dialogue: 0,${ts(a)},${ts(e)},Main,,0,0,0,,{\\an5\\pos(540,1424)}${txt}\n`;
+        ass += `Dialogue: 0,${ts(a)},${ts(e)},Main,,0,0,0,,{\\an5\\pos(540,1150)}${txt}\n`;
       });
       srt.push({ a: t0, e: tEnd, t: ph.ks.map(i => toks[i].w).join(' ') });
     });
@@ -270,8 +270,8 @@ async function build(cfg) {
   // 6) composición
   console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
-  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-40:y=70:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
-  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=60:y=1180:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
+  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=140:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
+  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=900:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   const SG = cfg.seguir && cfg.seguir.activo !== false ? cfg.seguir : null; let seguirF = '';
   // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s
   let sgIn = [], sgT = null, sgF = '';
