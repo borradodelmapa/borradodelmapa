@@ -52,3 +52,6 @@ La estancia sin visado para españoles baja de 60 a 30 días desde el 15 sept 20
 - YouTube: las 7 descripciones de Tailandia ya llevan la frase de los 30 días (guardadas, 30 oct).
 - SIN MAPA Ep.1 (7696060182123613462): guardado pulsado; el vídeo está en «Solo tú» en TikTok; comprobar.
 - Cómo editar: TikTok Studio > Publicaciones > lápiz; o URL /tiktokstudio/upload/post/<id>. Texto en el editor (enfocar con JS), botón «Guardar».
+
+## 3 nov 2026 · Calendario reajustado a martes-jueves 10:00 (orden de Paco)
+Metricool (marca `borradodelmapa`, Europe/Madrid), YouTube + TikTok a la vez, 34 posts comprobados con `getScheduledPosts` (0 fuera de mar-jue 10:00; los uuid no cambian, los ids sí). Calendario vigente: mar 3 Vietnam 1 · mié 4 Vietnam 2 · jue 5 Vietnam 3 · mar 10 Vietnam 4 · mié 11 Vietnam 5 · jue 12 Whang-Od · mar 17 Sagada · mié 18 Haenyeo · jue 19 Konyak · mar 24 Moken · mié 25 Sentinel · jue 26 Ainu · mar 1 dic Mosuo · mié 2 dic Dukha · jue 3 dic Cazadores con águila · mar 8 dic Avance café de huevo · mié 9 dic Avance bún chả. Cambios: Vietnam 4 (era vie 6), Vietnam 5 (lun 9), Whang-Od (mar 10 nov→jue 12) y toda la serie Pueblos (se retrasa 1 día a 3 semanas), avances café (mié 4, 19:00) y bún chả (sáb 7, 19:00) → dic. Muay Thai (2 nov, 10:00) ya publicado en YouTube y TikTok.
