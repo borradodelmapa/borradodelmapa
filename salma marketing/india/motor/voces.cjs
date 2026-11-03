@@ -3,5 +3,7 @@
 module.exports = {
   PACO: { id: 'QvZ9BlG7IjYGLz1ERM6t', model: 'eleven_v4', vs: { stability: 0.0, similarity_boost: 1.0, clone_strength: 1.0 } },
   SALMA: { id: 'fzAdMudUtRHNnk5tjJRR', model: 'eleven_v4', lang: 'es', vs: { stability: 1.0, similarity_boost: 1.0 } },
+  // SALMA DOCUMENTAL: la misma voz con entonación más viva (estabilidad 0,3), SOLO para el documental «Tatuajes del mundo» (Paco, 3 nov 2026); las demás series siguen con SALMA.
+  SALMA_DOC: { id: 'fzAdMudUtRHNnk5tjJRR', model: 'eleven_v4', lang: 'es', vs: { stability: 0.3, similarity_boost: 1.0 } },
   // Pronunciación: el clon dice la «ll» como argentino; en el campo `voz` del bloque se escribe «caye», «Yegué» (el subtítulo sigue con ll).
 };

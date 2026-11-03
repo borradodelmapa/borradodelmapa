@@ -24,7 +24,8 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 - **Título:** Tatuajes del mundo.
 - **Duración estimada:** 35-45 min, horizontal (YouTube largo). De aquí salen shorts/derivados en pieza
   separada (no en este fichero — ver `docs/especial-tatuajes-guion-direccion.md`, aparcado).
-- **Narración:** Salma, tono serio/documental clásico, datos con fuente (N6).
+- **Narración:** Salma, tono serio/documental clásico, datos con fuente (N6). **Voz: `SALMA_DOC`** (`motor/voces.cjs`): la misma voz con estabilidad 0,3, más dinámica — Paco la eligió el 3 nov 2026 oyendo el gancho a 1,0 / 0,5 / 0,3. Solo para este documental.
+- **Formato:** horizontal 16:9 (`cfg.formato`). Prueba del gancho: `motor/tatuajes-gancho.cjs` → `salma marketing/tatuajes/salida/`. Más fotos de pueblos tatuados (W29-W79): `salma marketing/tatuajes/hoja-pueblos-tatuados.png`.
 - **Conexión con Borrado del Mapa:** tabla de destinos-ancla por bloque (abajo) + transición «Hoy viajamos
   a…» entre bloques, formato ya usado en la serie («BORRADO DEL MAPA · CAP. X»).
 
