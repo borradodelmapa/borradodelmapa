@@ -78,9 +78,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=194">
+<link rel="stylesheet" href="/styles.css?v=196">
 <link rel="stylesheet" href="/paginas.css?v=3">
-<link rel="stylesheet" href="/blog-viajes.css?v=3">
+<link rel="stylesheet" href="/blog-viajes.css?v=5">
 </head>
 <body class="pg">
 
@@ -91,12 +91,15 @@
 
 <main class="bd-main">
   <p class="bd-crumbs"><a href="/blog/">Blog de viajes</a> · <a href="/blog/#tailandia-en-moto">Tailandia en moto</a></p>
-  <div class="bd-layout">
-    <header class="bd-head">
+  <header class="bd-hero">
+    <img src="/blog/viajes/img/tailandia-doi-inthanon/41.jpg" alt="" fetchpriority="high">
+    <div class="bd-hero-txt">
       <span class="bd-kicker">Tailandia en moto · Capítulo 5 de 5</span>
       <h1 class="bd-title">Doi Inthanon, el techo de Tailandia</h1>
       <p class="bd-lead">1.864 curvas después, el bucle de Mae Hong Son se cierra. Y hay una camiseta que lo demuestra.</p>
-    </header>
+    </div>
+  </header>
+  <div class="bd-layout con-hero">
 
     <div class="bd-media">
       <video class="bd-video" controls playsinline preload="metadata" poster="/blog/viajes/img/tailandia-doi-inthanon.jpg" src="/blog/viajes/video/tailandia-doi-inthanon.mp4"></video>
@@ -123,20 +126,43 @@
       <span class="bd-sec-n">01</span>
       <h2>El último tramo del bucle</h2>
       <p>En <strong>Khun Yuam</strong>, un museo guarda los restos del ejército japonés que cruzó por aquí hacia Birmania durante la Segunda Guerra Mundial. Allí hubo una base japonesa y el museo se abrió en 1995; la cifra de soldados varía según la fuente, así que no la damos.</p>
+      <figure class="bd-fig">
+        <img src="/blog/viajes/img/tailandia-doi-inthanon/32.jpg" alt="La camiseta que lo demuestra: 1.864 curvas." loading="lazy">
+        <figcaption>La camiseta que lo demuestra: 1.864 curvas.</figcaption>
+      </figure>
     </section>
 
     <section class="bd-sec">
       <span class="bd-sec-n">02</span>
       <h2>El techo del país</h2>
       <p><strong>Doi Inthanon</strong> mide 2.565 metros. Lleva el nombre del último rey de Chiang Mai, Inthawichayanon, y sus cenizas descansan en la cumbre. A sus pies cae la cascada Vachirathan.</p>
+      <figure class="bd-fig">
+        <img src="/blog/viajes/img/tailandia-doi-inthanon/36.jpg" alt="La cascada Vachirathan, a los pies del Doi Inthanon." loading="lazy">
+        <figcaption>La cascada Vachirathan, a los pies del Doi Inthanon.</figcaption>
+      </figure>
     </section>
 
     <section class="bd-sec">
       <span class="bd-sec-n">03</span>
       <h2>Elefantes, pero de los buenos</h2>
       <p>Por el camino hay santuarios de elefantes. Los buenos son los que no permiten montarlos y no montan espectáculos. Eso es lo que hay que buscar.</p>
+      <figure class="bd-fig">
+        <img src="/blog/viajes/img/tailandia-doi-inthanon/56.jpg" alt="En un santuario de elefantes." loading="lazy">
+        <figcaption>En un santuario de elefantes.</figcaption>
+      </figure>
     </section>
 
+    <section class="bd-galeria">
+      <h2>En imágenes</h2>
+      <div class="bd-gal-grid">
+        <figure><a href="/blog/viajes/img/tailandia-doi-inthanon/02.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-doi-inthanon/02.jpg" alt="La moto, en ruta." loading="lazy"></a><figcaption>La moto, en ruta.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-doi-inthanon/03.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-doi-inthanon/03.jpg" alt="Valles del bucle de Mae Hong Son." loading="lazy"></a><figcaption>Valles del bucle de Mae Hong Son.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-doi-inthanon/37.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-doi-inthanon/37.jpg" alt="Vachirathan, de cerca." loading="lazy"></a><figcaption>Vachirathan, de cerca.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-doi-inthanon/58.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-doi-inthanon/58.jpg" alt="Elefante en el santuario." loading="lazy"></a><figcaption>Elefante en el santuario.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-doi-inthanon/17.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-doi-inthanon/17.jpg" alt="Atardecer sobre el río." loading="lazy"></a><figcaption>Atardecer sobre el río.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-doi-inthanon/21.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-doi-inthanon/21.jpg" alt="Orquídeas junto al río." loading="lazy"></a><figcaption>Orquídeas junto al río.</figcaption></figure>
+      </div>
+    </section>
     <aside class="bd-ficha">
       <h3>Ficha útil</h3>
       <ul>
@@ -178,6 +204,14 @@
     </div>
   </div>
 </main>
+<div class="bd-visor" hidden><button class="bd-visor-x" aria-label="Cerrar">✕</button><img alt=""><p></p></div>
+<script>(function(){var v=document.querySelector(".bd-visor");if(!v)return;var im=v.querySelector("img"),pi=v.querySelector("p");
+function cerrar(atras){if(v.hidden)return;v.hidden=true;im.removeAttribute("src");document.body.style.overflow="";if(atras!==false&&history.state&&history.state.visor)history.back();}
+document.addEventListener("click",function(e){var t=e.target.closest(".bd-gal-grid figure > a, .bd-fig img");if(!t)return;e.preventDefault();
+var img=t.tagName==="IMG"?t:t.querySelector("img");im.src=t.getAttribute("href")||img.src;im.alt=img.alt;pi.textContent=img.alt.split("*").join("");
+v.hidden=false;document.body.style.overflow="hidden";history.pushState({visor:1},"");});
+v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
 <footer class="pg-footer">
   <a href="/">Inicio</a>
   <a href="/destinos/">Destinos</a>

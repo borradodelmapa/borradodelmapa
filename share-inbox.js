@@ -190,7 +190,7 @@
     if (document.getElementById('share-login-banner')) return;
     const b = document.createElement('div');
     b.id = 'share-login-banner';
-    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:100000;background:#f0b429;color:#060503;padding:10px 16px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.4)';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:100000;background:#f0b429;color:#060503;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.4)';
     b.textContent = 'Inicia sesión y tus fotos se añadirán automáticamente';
     document.body.appendChild(b);
   }

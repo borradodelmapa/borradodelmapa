@@ -78,9 +78,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=194">
+<link rel="stylesheet" href="/styles.css?v=196">
 <link rel="stylesheet" href="/paginas.css?v=3">
-<link rel="stylesheet" href="/blog-viajes.css?v=3">
+<link rel="stylesheet" href="/blog-viajes.css?v=5">
 </head>
 <body class="pg">
 
@@ -91,12 +91,15 @@
 
 <main class="bd-main">
   <p class="bd-crumbs"><a href="/blog/">Blog de viajes</a> · <a href="/blog/#tailandia-en-moto">Tailandia en moto</a></p>
-  <div class="bd-layout">
-    <header class="bd-head">
+  <header class="bd-hero">
+    <img src="/blog/viajes/img/tailandia-chiang-mai/014.jpg" alt="" fetchpriority="high">
+    <div class="bd-hero-txt">
       <span class="bd-kicker">Tailandia en moto · Capítulo 1 de 5</span>
       <h1 class="bd-title">Chiang Mai: la «ciudad nueva» de 1296</h1>
       <p class="bd-lead">Una ciudad cuadrada, un foso y un plan tan ordenado que cuesta perderse. Alguien lo consiguió.</p>
-    </header>
+    </div>
+  </header>
+  <div class="bd-layout con-hero">
 
     <div class="bd-media">
       <video class="bd-video" controls playsinline preload="metadata" poster="/blog/viajes/img/tailandia-chiang-mai.jpg" src="/blog/viajes/video/tailandia-chiang-mai.mp4"></video>
@@ -123,6 +126,10 @@
       <span class="bd-sec-n">01</span>
       <h2>Una ciudad con plan</h2>
       <p>Chiang Mai tiene más de setecientos años de historia. La fundó el rey <strong>Mangrai</strong> en 1296 como capital de su reino, <strong>Lan Na</strong>, y la llamó «Ciudad Nueva». Siete siglos después sigue llamándose así.</p>
+      <figure class="bd-fig">
+        <img src="/blog/viajes/img/tailandia-chiang-mai/148.jpg" alt="El foso sigue marcando el cuadrado del casco antiguo." loading="lazy">
+        <figcaption>El foso sigue marcando el cuadrado del casco antiguo.</figcaption>
+      </figure>
       <p>La trazó casi cuadrada, con un foso de kilómetro y medio por lado. Las murallas que se ven hoy están muy restauradas, así que no conviene presumir de «originales». Aun así, el trazado se entiende a la primera: una ciudad con plan, en la que hasta alguien con muy poco sentido de la orientación debería poder moverse.</p>
     </section>
 
@@ -130,9 +137,24 @@
       <span class="bd-sec-n">02</span>
       <h2>Y aun así, alguien se perdió</h2>
       <p>Para eso está Salma. Basta preguntar por un gimnasio de Muay Thai en el casco antiguo: te dice cómo llegar, cuánto cuesta cada transporte y que el casco se cruza andando en unos veinticinco minutos.</p>
+      <figure class="bd-fig">
+        <img src="/blog/viajes/img/tailandia-chiang-mai/024.jpg" alt="Calles del casco antiguo: imposible perderse. Casi." loading="lazy">
+        <figcaption>Calles del casco antiguo: imposible perderse. Casi.</figcaption>
+      </figure>
       <p>Del idioma, este Paco no sabía ni «hola» y contestaba a todo el mundo en andaluz. Y funcionaba.</p>
     </section>
 
+    <section class="bd-galeria">
+      <h2>En imágenes</h2>
+      <div class="bd-gal-grid">
+        <figure><a href="/blog/viajes/img/tailandia-chiang-mai/028.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-chiang-mai/028.jpg" alt="Uno de los templos del casco antiguo." loading="lazy"></a><figcaption>Uno de los templos del casco antiguo.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-chiang-mai/026.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-chiang-mai/026.jpg" alt="Tejados de templo contra el cielo de Chiang Mai." loading="lazy"></a><figcaption>Tejados de templo contra el cielo de Chiang Mai.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-chiang-mai/027.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-chiang-mai/027.jpg" alt="Buda dorado en un templo del casco." loading="lazy"></a><figcaption>Buda dorado en un templo del casco.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-chiang-mai/039.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-chiang-mai/039.jpg" alt="Monjes junto al foso al atardecer." loading="lazy"></a><figcaption>Monjes junto al foso al atardecer.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-chiang-mai/169.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-chiang-mai/169.jpg" alt="La noche, entre puestos y motos." loading="lazy"></a><figcaption>La noche, entre puestos y motos.</figcaption></figure>
+        <figure><a href="/blog/viajes/img/tailandia-chiang-mai/188.jpg" target="_blank"><img src="/blog/viajes/img/tailandia-chiang-mai/188.jpg" alt="La moto del viaje." loading="lazy"></a><figcaption>La moto del viaje.</figcaption></figure>
+      </div>
+    </section>
     <aside class="bd-ficha">
       <h3>Ficha útil</h3>
       <ul>
@@ -171,6 +193,14 @@
     </div>
   </div>
 </main>
+<div class="bd-visor" hidden><button class="bd-visor-x" aria-label="Cerrar">✕</button><img alt=""><p></p></div>
+<script>(function(){var v=document.querySelector(".bd-visor");if(!v)return;var im=v.querySelector("img"),pi=v.querySelector("p");
+function cerrar(atras){if(v.hidden)return;v.hidden=true;im.removeAttribute("src");document.body.style.overflow="";if(atras!==false&&history.state&&history.state.visor)history.back();}
+document.addEventListener("click",function(e){var t=e.target.closest(".bd-gal-grid figure > a, .bd-fig img");if(!t)return;e.preventDefault();
+var img=t.tagName==="IMG"?t:t.querySelector("img");im.src=t.getAttribute("href")||img.src;im.alt=img.alt;pi.textContent=img.alt.split("*").join("");
+v.hidden=false;document.body.style.overflow="hidden";history.pushState({visor:1},"");});
+v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
 <footer class="pg-footer">
   <a href="/">Inicio</a>
   <a href="/destinos/">Destinos</a>

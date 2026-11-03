@@ -161,7 +161,7 @@
 .docs-modal {
   width:100%; max-width:480px;
   background:var(--gris); border-radius:0;
-  padding:24px 20px 32px; max-height:85vh;
+  padding:24px 20px calc(32px + env(safe-area-inset-bottom, 0px)); max-height:85vh;
   overflow-y:auto; animation:docs-slide-up .25s ease;
 }
 @keyframes docs-fade-in {

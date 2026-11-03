@@ -13,10 +13,10 @@ const VIDEO_SRC = path.join(ROOT, 'salma marketing', 'ligeras-portada');
 const OUT = path.join(ROOT, 'blog', 'viajes');
 const OUT_VIDEO = path.join(OUT, 'video');
 const SITE = 'https://borradodelmapa.com';
-const FECHA = '2026-10-18';
+const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
-const CSS_V = 194;      // styles.css (= APP_CSS_V de build-destinos.js)
-const BV_CSS_V = 3;     // blog-viajes.css
+const CSS_V = 196;      // styles.css (= APP_CSS_V de build-destinos.js)
+const BV_CSS_V = 5;     // blog-viajes.css
 
 const caps = require('./blog-viajes-data.js');
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
@@ -67,15 +67,108 @@ const CABECERA = `<header class="pg-header">
   <a class="pg-header-sec" href="/blog/">Blog de viajes</a>
 </header>`;
 
+// ── Serie «Pueblos borrados del mapa» (P12 de docs/video-checklist.md, 31 oct 2026): un vídeo = una entrada que enseña la guía y nombra a los autores de las fotos ──
+// c.guia = { json, url, titulo, dias: [n…], intro }: enseña los días de la guía pública donde sale el sitio (nombres de las paradas, sin fotos de Google: 0 €) y un botón a la guía completa.
+function guia(c) {
+  if (!c.guia) return '';
+  const g = JSON.parse(fs.readFileSync(path.join(ROOT, c.guia.json), 'utf8'));
+  const dias = (c.guia.dias || []).map((d) => { // sin días (la guía no pasa por el sitio): solo la intro y el botón a la guía
+    const st = g.stops.filter((s) => s.day === d); if (!st.length) return '';
+    return `        <li><strong>Día ${d} · ${esc(st[0].day_title)}</strong>: ${st.map((s) => esc(s.name)).join(' · ')}</li>`;
+  }).filter(Boolean).join('\n');
+  return `    <aside class="bd-ficha bd-guia">
+      <h3>${esc(c.guia.titulo)}</h3>
+      <p>${md(c.guia.intro)}</p>
+${dias ? `      <ul>\n${dias}\n      </ul>\n` : ''}      <p><a class="pg-btn" href="${esc(c.guia.url)}">Ver la guía completa</a></p>
+    </aside>
+`;
+}
+// Autores y licencias de las fotos del episodio (<creditosDe>/fotos/ATRIBUCIONES.txt)
+function atribuciones(c) {
+  const atr = {};
+  fs.readFileSync(path.join(ROOT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
+  return atr;
+}
+// Fotos de la entrada (c.fotos y s.foto, 1 nov 2026): se copian de <creditosDe>/fotos/ a blog/viajes/img/<slug>/ a 1200 px como mucho (solo la primera vez)
+const FF = path.join(ROOT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe');
+// Diarios con fotos propias (Tailandia, Vietnam): c.fotosDe = { prefijo: lista } con las listas id|ruta de salma marketing (rutas relativas a D:/salma-movil
+// o a c.fotosBase); el id de la foto es prefijo + id de la lista (p. ej. 'k22' = línea 22 de la lista de 'k'). Sin pie de autor: son de Paco.
+function origen(c, id) {
+  if (!c.fotosDe) return path.join(ROOT, c.creditosDe, 'fotos', id + '.jpg');
+  const pre = Object.keys(c.fotosDe).sort((a, b) => b.length - a.length).find((p) => id.startsWith(p));
+  const L = Object.fromEntries(fs.readFileSync(path.join(ROOT, c.fotosDe[pre]), 'utf8').split('\n').filter(Boolean).map((l) => l.trim().split('|')));
+  const rel = L[id.slice(pre.length)];
+  if (!rel) throw new Error('La foto ' + id + ' no está en ' + c.fotosDe[pre]);
+  return /^[A-Z]:/.test(rel) ? rel : (c.fotosBase || 'D:/salma-movil/') + rel;
+}
+// Visor de fotos: la galería y las fotos de cada apartado se abren encima de la página y se cierran con ✕, tocando fuera, Escape o el botón atrás del móvil
+// (antes la foto se abría en otra pestaña y en la app instalada no había forma de volver). Sin JS, el enlace de la galería sigue abriendo la foto.
+const VISOR = `<div class="bd-visor" hidden><button class="bd-visor-x" aria-label="Cerrar">✕</button><img alt=""><p></p></div>
+<script>(function(){var v=document.querySelector(".bd-visor");if(!v)return;var im=v.querySelector("img"),pi=v.querySelector("p");
+function cerrar(atras){if(v.hidden)return;v.hidden=true;im.removeAttribute("src");document.body.style.overflow="";if(atras!==false&&history.state&&history.state.visor)history.back();}
+document.addEventListener("click",function(e){var t=e.target.closest(".bd-gal-grid figure > a, .bd-fig img");if(!t)return;e.preventDefault();
+var img=t.tagName==="IMG"?t:t.querySelector("img");im.src=t.getAttribute("href")||img.src;im.alt=img.alt;pi.textContent=img.alt.split("*").join("");
+v.hidden=false;document.body.style.overflow="hidden";history.pushState({visor:1},"");});
+v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
+`;
+function foto(c, id) {
+  const dest = path.join(OUT, 'img', c.slug, id + '.jpg');
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    const r = require('child_process').spawnSync(FF, ['-v', 'error', '-y', '-i', origen(c, id), '-vf', "scale='min(1200,iw)':-2", '-q:v', '4', dest]);
+    if (r.status) throw new Error('No puedo preparar la foto ' + id + ' de ' + c.slug + ': ' + r.stderr);
+  }
+  if (c.fotosDe) return { src: `/blog/viajes/img/${c.slug}/${id}.jpg`, credito: '' };
+  const a = atribuciones(c)[id] || {};
+  return { src: `/blog/viajes/img/${c.slug}/${id}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
+}
+const figura = (c, [id, pie]) => { const f = foto(c, id); return `      <figure class="bd-fig">
+        <img src="${f.src}" alt="${esc(pie)}" loading="lazy">
+        <figcaption>${md(pie)}${f.credito ? ` <span>${f.credito}</span>` : ''}</figcaption>
+      </figure>
+`; };
+function galeria(c) {
+  if (!c.fotos || !c.fotos.galeria) return '';
+  return `    <section class="bd-galeria">
+      <h2>En imágenes</h2>
+      <div class="bd-gal-grid">
+${c.fotos.galeria.map(([id, pie]) => { const f = foto(c, id); return `        <figure><a href="${f.src}" target="_blank"><img src="${f.src}" alt="${esc(pie)}" loading="lazy"></a><figcaption>${md(pie)}${f.credito ? ` <span>${f.credito}</span>` : ''}</figcaption></figure>`; }).join('\n')}
+      </div>
+    </section>
+`;
+}
+// c.creditosDe = carpeta del episodio: autores de las fotos que salen en el vídeo (el tiempos.json más reciente de salida/) y en la entrada
+function creditos(c) {
+  if (!c.creditosDe) return '';
+  const dir = path.join(ROOT, c.creditosDe), sal = path.join(dir, 'salida');
+  const t = fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
+  if (!t) throw new Error('No encuentro tiempos.json en ' + sal);
+  const enBlog = c.fotos ? [c.fotos.portada, ...c.secciones.filter((s) => s.foto).map((s) => s.foto[0]), ...(c.fotos.galeria || []).map((g) => g[0])] : [];
+  const usadas = [...new Set([...JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []), ...enBlog].filter((x) => /^[WH]\d+$/.test(x)))];
+  const atr = atribuciones(c);
+  const li = [...new Set(usadas.filter((id) => atr[id]).map((id) => `        <li><a href="${esc(atr[id].u)}" target="_blank" rel="noopener">${esc(atr[id].autor || 'Autor desconocido')}</a> · ${esc(atr[id].lic)}</li>`))];
+  return `
+    <details class="bd-src">
+      <summary>Fotos: autores y licencias</summary>
+      <p>Fotos de Wikimedia Commons con licencia libre. Gracias a sus autores:</p>
+      <ul>
+${li.join('\n')}
+      </ul>
+    </details>`;
+}
+
 function pagina(c) {
-  const ant = caps[c.n - 1], sig = caps[c.n + 1];
+  // anterior/siguiente: la serie «Pueblos borrados del mapa» no enlaza con diarios de otras series (las antiguas siguen como estaban)
+  const P = 'Pueblos borrados del mapa', vale = (x) => x && (x.serie === c.serie || (c.serie !== P && x.serie !== P));
+  const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
   const url = `${SITE}/blog/viajes/${c.slug}`;
   const img = `/blog/viajes/img/${c.slug}.jpg`;
   const serieCaps = caps.filter((x) => x.serie === c.serie);
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: c.titulo, description: c.resumen, image: SITE + img, author: { '@type': 'Person', name: 'Salma' },
-      publisher: { '@type': 'Organization', name: 'Borrado del Mapa', url: SITE }, datePublished: FECHA, dateModified: FECHA, mainEntityOfPage: url },
-    { '@context': 'https://schema.org', '@type': 'VideoObject', name: c.titulo, description: c.resumen, uploadDate: FECHA, thumbnailUrl: SITE + img,
+      publisher: { '@type': 'Organization', name: 'Borrado del Mapa', url: SITE }, datePublished: c.fecha || FECHA, dateModified: c.fecha || FECHA, mainEntityOfPage: url },
+    { '@context': 'https://schema.org', '@type': 'VideoObject', name: c.titulo, description: c.resumen, uploadDate: c.fecha || FECHA, thumbnailUrl: SITE + img,
       contentUrl: `${SITE}/blog/viajes/video/${c.slug}.mp4`, duration: c.dur.iso },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Blog de viajes', item: SITE + '/blog/' },
@@ -86,11 +179,17 @@ function pagina(c) {
   const pasos = serieCaps.length > 1 ? `    <nav class="bd-steps" aria-label="Capítulos de ${esc(c.serie)}">\n${serieCaps.map((x) =>
     `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Especial' ? 'ES' : x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
   const stats = c.cifras ? `    <div class="bd-stats">\n${c.cifras.map(([n, t]) => `      <div class="bd-stat"><b>${esc(n)}</b><span>${esc(t)}</span></div>`).join('\n')}\n    </div>\n` : '';
+  // s.foto = [id, pie]: foto tras el primer párrafo · c.cita = { tras: nº de sección, t, de }: frase destacada en grande
+  const cita = (i) => c.cita && c.cita.tras === i + 1 ? `\n    <blockquote class="bd-cita"><p>${md(c.cita.t)}</p>${c.cita.de ? `<cite>${esc(c.cita.de)}</cite>` : ''}</blockquote>` : '';
   const secciones = c.secciones.map((s, i) => `    <section class="bd-sec">
       <span class="bd-sec-n">${String(i + 1).padStart(2, '0')}</span>
       <h2>${esc(s.h)}</h2>
-${s.p.map((p) => `      <p>${md(p)}</p>`).join('\n')}
-    </section>`).join('\n\n');
+${s.p.map((p, j) => `      <p>${md(p)}</p>\n${j === 0 && s.foto ? figura(c, s.foto) : ''}`).join('').replace(/\n$/, '')}
+    </section>${cita(i)}`).join('\n\n');
+  const hero = c.fotos ? foto(c, c.fotos.portada) : null;
+  const cabeza = `      <span class="bd-kicker">${esc(c.serie)} · ${esc(c.cap)}</span>
+      <h1 class="bd-title">${esc(c.titulo)}</h1>
+      <p class="bd-lead">${esc(c.resumen)}</p>`;
   const ficha = c.ficha ? `    <aside class="bd-ficha">\n      <h3>Ficha útil</h3>\n      <ul>\n${c.ficha.map((f) => `        <li>${md(f)}</li>`).join('\n')}\n      </ul>\n    </aside>\n` : '';
   const cierre = c.cierre ? `    <p class="bd-cierre">${md(c.cierre)}</p>\n` : '';
   const fuentes = `    <details class="bd-src">
@@ -100,7 +199,7 @@ ${s.p.map((p) => `      <p>${md(p)}</p>`).join('\n')}
 ${c.fuentes.map((f) => `        <li><a href="${esc(f.u)}" target="_blank" rel="noopener">${esc(f.t)}</a></li>`).join('\n')}
       </ul>
     </details>`;
-  const [dSlug, dNombre] = c.destino;
+  const [dSlug, dNombre] = c.destino || []; // sin página de destino (p. ej. la India no tiene): se quita el «Más sobre…»
   const nx = (x, lado) => x ? `      <a class="bd-nx${lado === 'der' ? ' der' : ''}" href="/blog/viajes/${x.slug}">
         <img src="/blog/viajes/img/${x.slug}.jpg" alt="" loading="lazy">
         <span><small>${lado === 'der' ? 'Siguiente' : 'Anterior'}</small><b>${esc(x.titulo)}</b></span>
@@ -133,30 +232,34 @@ ${CABECERA}
 
 <main class="bd-main">
   <p class="bd-crumbs"><a href="/blog/">Blog de viajes</a> · <a href="/blog/#${slugSerie(c.serie)}">${esc(c.serie)}</a></p>
-  <div class="bd-layout">
-    <header class="bd-head">
-      <span class="bd-kicker">${esc(c.serie)} · ${esc(c.cap)}</span>
-      <h1 class="bd-title">${esc(c.titulo)}</h1>
-      <p class="bd-lead">${esc(c.resumen)}</p>
+${hero ? `  <header class="bd-hero">
+    <img src="${hero.src}" alt="" fetchpriority="high">
+    <div class="bd-hero-txt">
+${cabeza}
+    </div>
+${hero.credito ? `    <span class="bd-hero-cred">${hero.credito}</span>\n` : ''}  </header>
+` : ''}  <div class="bd-layout${hero ? ' con-hero' : ''}">
+${hero ? '' : `    <header class="bd-head">
+${cabeza}
     </header>
-
+`}
     <div class="bd-media">
       <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
       <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>
-      <p class="bd-ia">Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.</p>
+      <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.')}</p>
     </div>
 
     <article class="bd-body">
 ${pasos}${stats}
 ${secciones}
 
-${ficha}${cierre}
-${fuentes}
+${galeria(c)}${guia(c)}${ficha}${cierre}
+${fuentes}${creditos(c)}
 
       <div class="bd-salma">
         <img src="/salma_ai_avatar.png" alt="Salma">
         <div>
-          <p><strong>¿Vas a ${esc(c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia')}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis. Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.</p>
+          <p><strong>¿Vas a ${esc(c.pais || (c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia'))}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis.${dSlug ? ` Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.` : ""}</p>
           <p><a class="pg-btn" href="/?go=chat">Crear mi ruta</a></p>
         </div>
       </div>
@@ -167,7 +270,7 @@ ${nav}
     </div>
   </div>
 </main>
-${PIE_Y_MENU}</body>
+${VISOR}${PIE_Y_MENU}</body>
 </html>
 `;
 }
@@ -262,7 +365,7 @@ fs.writeFileSync(path.join(ROOT, 'blog', 'index.html'), indice);
 const smFile = path.join(ROOT, 'sitemap-blog.xml');
 let sm = fs.readFileSync(smFile, 'utf8');
 sm = sm.replace(/\s*<!-- VIAJES:START -->[\s\S]*?<!-- VIAJES:END -->/, '');
-const urls = caps.map((c) => `  <url><loc>${SITE}/blog/viajes/${c.slug}</loc><lastmod>${FECHA}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
+const urls = caps.map((c) => `  <url><loc>${SITE}/blog/viajes/${c.slug}</loc><lastmod>${c.fecha || FECHA}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
 sm = sm.replace('</urlset>', `  <!-- VIAJES:START -->\n${urls}\n  <!-- VIAJES:END -->\n</urlset>`);
 fs.writeFileSync(smFile, sm);
 

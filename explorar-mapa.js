@@ -37,7 +37,7 @@ const explorarMapa = (() => {
 .exm-tt.leaflet-tooltip::before { display: none; }
 .exm-num { box-sizing: border-box; background: var(--dorado); color: var(--negro); font: 800 14px/24px var(--font-display); text-align: center; width: 28px; height: 28px; padding: 0; border: 2px solid var(--negro); border-radius: 50%; box-shadow: 0 0 0 2px rgba(244,99,11,.45); }
 .exm-num.sel { background: var(--crema); }
-.exm-busca { position: absolute; z-index: 800; top: 12px; left: 12px; right: 52px; max-width: 560px; } /* a la derecha queda el botón flotante de Mejora Salma */
+.exm-busca { position: absolute; z-index: 800; top: calc(12px + env(safe-area-inset-top, 0px)); left: 12px; right: 52px; max-width: 560px; } /* a la derecha queda el botón flotante de Mejora Salma */
 .exm-busca input { width: 100%; box-sizing: border-box; font: 500 16px var(--font-body); color: var(--crema); background: var(--negro); border: 1px solid var(--linea-fuerte); border-radius: 0; padding: 14px 14px 14px 44px; outline: none; box-shadow: 0 6px 20px rgba(0,0,0,.45); -webkit-appearance: none; }
 .exm-busca input:focus { border-color: var(--dorado); }
 .exm-busca svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--dorado); pointer-events: none; }
@@ -45,6 +45,12 @@ const explorarMapa = (() => {
 .exm-sug button { display: flex; width: 100%; justify-content: space-between; gap: 10px; align-items: baseline; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--linea); color: var(--crema); font: 500 15px var(--font-body); padding: 12px 14px; cursor: pointer; }
 .exm-sug button:hover, .exm-sug button.on { background: var(--gris); color: var(--dorado2); }
 .exm-sug small { color: rgba(236,235,232,.6); font-size: 12px; white-space: nowrap; }
+.exm-blog { position: absolute; z-index: 800; left: 12px; right: 56px; bottom: 14px; max-width: 420px; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--negro); border: 1px solid var(--linea-fuerte); border-left: 3px solid var(--dorado); color: var(--crema); text-decoration: none; padding: 12px 14px; box-shadow: 0 6px 20px rgba(0,0,0,.45); -webkit-tap-highlight-color: transparent; } /* a la derecha quedan los botones de zoom */
+.exm-blog b { display: block; font: 700 15px var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--dorado); }
+.exm-blog small { display: block; font: 500 13px var(--font-body); color: rgba(236,235,232,.65); margin-top: 3px; }
+.exm-blog span:last-child { font: 700 20px var(--font-display); color: var(--dorado); }
+.exm-blog:active { opacity: .75; }
+.exm.con-pais .exm-blog { display: none; }
 .exm-panel { padding: 14px 16px 24px; }
 .exm-fila { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .exm-volver { font: 700 14px var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--dorado); background: none; border: 0; padding: 6px 0; cursor: pointer; }
@@ -143,6 +149,7 @@ const explorarMapa = (() => {
     const $p = document.getElementById('exm-panel');
     if (!$p) return;
     $p.hidden = !st.sel;
+    const raiz = document.getElementById('exm'); if (raiz) raiz.classList.toggle('con-pais', !!st.sel);
     _alto();
     setTimeout(() => st && st.map && st.map.invalidateSize(), 380);
     if (!st.sel) { $p.innerHTML = ''; return; }
@@ -232,6 +239,7 @@ const explorarMapa = (() => {
           <input id="exm-q" type="search" autocomplete="off" placeholder="Busca país o destino" aria-label="Buscar">
           <div class="exm-sug" id="exm-sug" hidden></div>
         </div>
+        <a class="exm-blog" href="/blog/"><span><b>Blog de viajes</b><small>Historias y consejos para el camino</small></span><span aria-hidden="true">→</span></a>
       </div>
       <div class="exm-panel" id="exm-panel" hidden></div>
     </div>`;
@@ -252,6 +260,9 @@ const explorarMapa = (() => {
       return;
     }
     if (!seguir() || document.getElementById('exm-mapa') !== $m || typeof L === 'undefined') return;
+    // Volver a medir: la primera medida se hace en mitad del cambio de pantalla y, viniendo del chat, el contenedor aún
+    // tiene el hueco de abajo del chat (220 px) → el pie del mapa quedaba recortado (enlace al blog y zoom; Paco, 2 nov 2026)
+    _alto();
     st.guias = _guias(data, destMap || {});
     for (const co of (data.countries || [])) if (co.cc) st.nombres[String(co.cc).toUpperCase()] = co.name;
 
