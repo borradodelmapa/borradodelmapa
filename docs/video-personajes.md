@@ -1,4 +1,6 @@
 # PERSONAJES DEL DÚO PACO + SALMA — dirección de actores (borrador 28 oct 2026, pendiente de OK de Paco)
+> **3 nov 2026 — APARCADO por decisión de Paco: «De momento Paco y Salma se quedan como están».** Este borrador no es protocolo: siguen mandando N6/N7 de `docs/video-checklist.md`. Se retoma solo si Paco lo pide.
+
 > **Nota 31 oct 2026 (al ponerse al día con la checklist):** este borrador **choca con `docs/video-checklist.md`** (gana la checklist hasta que Paco decida): **N6** (Salma solo datos con fuente, sin relleno), **N7** (hablar poco de Paco, 1-2 menciones), **F3** (guion de dirección con formato de `pueblos-ep1-whang-od-guion-direccion.md`) y **L1** (foco en «Pueblos borrados del mapa»). Nada de esto está aprobado todavía ni pasado a la checklist.
 
 Complementa `docs/video-reglas-y-flujo.md` (§5 Texto y voz). Si choca con una orden nueva de Paco, manda Paco.
