@@ -2471,7 +2471,8 @@ Tipos:
 - fuera_de_lugar: ofrece crear guías, restaurantes, hoteles u otras cosas que no venían a cuento
 - no_se_puede_llegar: dice que no se puede llegar, que no puede ayudar o que no sabe, ante una petición normal
 - otro: otro fallo claro (idioma equivocado, ignora lo dicho antes, repite, pregunta algo innecesario)
-Reglas: revisa solo las marcadas [R#]. Si la respuesta es aceptable, no la apuntes. Si dudas, NO la apuntes. "[mapa de ruta]" es una ruta generada: no es chapa. Sin fallos → {"fallos":[]}.`;
+Reglas: revisa solo las marcadas [R#]. Si la respuesta es aceptable, no la apuntes. Si dudas, NO la apuntes. "[mapa de ruta]" es una ruta generada: no es chapa. Sin fallos → {"fallos":[]}.
+Hoy es ${new Date().toISOString().slice(0, 10)}. Las fechas futuras (vuelos o viajes del año que viene) son normales: no son "inventado". Salma busca en tiempo real (vuelos, hoteles, sitios, webs): un precio, horario o dato que sale de esas búsquedas no es inventado.`;
   const out = await callOpenAI(env.OPENAI_API_KEY, { model: 'gpt-4o-mini', max_tokens: 400, temperature: 0, system, messages: [{ role: 'user', content: lines.join('\n\n') }] });
   if (!out || out.error || !out.text) throw new Error('gpt-4o-mini ' + (out && out.status));
   let j;
