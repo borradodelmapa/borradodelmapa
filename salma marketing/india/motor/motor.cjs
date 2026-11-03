@@ -213,9 +213,11 @@ async function build(cfg) {
     const phr = []; let cur = []; toks.forEach((k, i) => { cur.push(i); if (/[,.:;!?…]$/.test(k.w)) { phr.push(cur); cur = []; } }); if (cur.length) phr.push(cur);
     const merged = []; phr.forEach(p => { const len = p.map(i => toks[i].w).join(' ').length; if (merged.length && merged[merged.length - 1].len < 14) { merged[merged.length - 1].ks.push(...p); merged[merged.length - 1].len += len + 1; } else merged.push({ ks: [...p], len }); });
     const split = []; merged.forEach(ph => { if (ph.len > 52 && ph.ks.length > 4) { const half = Math.ceil(ph.ks.length / 2); split.push({ ks: ph.ks.slice(0, half) }, { ks: ph.ks.slice(half) }); } else split.push(ph); });
-    split.forEach(ph => {
+    split.forEach((ph, pi) => {
       const lines = []; let line = [], ll = 0; ph.ks.forEach(i => { const L = toks[i].w.length; if (line.length && ll + 1 + L > F.sub.ancho) { lines.push(line); line = []; ll = 0; } line.push(i); ll += (ll ? 1 : 0) + L; }); if (line.length) lines.push(line);
-      const t0 = T(toks[ph.ks[0]].s) - 0.05, tEnd = T(toks[ph.ks[ph.ks.length - 1]].e) + 0.12;
+      // la frase termina como muy tarde cuando entra la siguiente: antes se veían las dos a la vez ~0,1 s (Paco, 3 nov 2026)
+      const sig = split[pi + 1], tSig = sig ? T(toks[sig.ks[0]].s) - 0.05 : Infinity, ultS = T(toks[ph.ks[ph.ks.length - 1]].s);
+      const t0 = T(toks[ph.ks[0]].s) - 0.05, tEnd = Math.max(ultS + 0.05, Math.min(T(toks[ph.ks[ph.ks.length - 1]].e) + 0.12, tSig));
       ph.ks.forEach((kc, idx) => {
         const a = idx === 0 ? t0 : T(toks[kc].s), e = idx === ph.ks.length - 1 ? tEnd : T(toks[ph.ks[idx + 1]].s);
         const txt = lines.map(ln => ln.map(i => i === kc ? `{\\c${ORANGE_ASS}}${toks[i].w}{\\r}` : toks[i].w).join(' ')).join('\\N');
