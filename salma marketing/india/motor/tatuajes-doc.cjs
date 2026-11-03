@@ -18,7 +18,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloques1-2-v2', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-bloques1-2-v3', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 3', l5: 'Tatuajes talegueros' },
@@ -31,7 +31,7 @@ const cfg = {
       en: ['5,300 years ago, someone used a needle to try to cure chest pain.', 'Are you tattooed?', 'Do you know why?', 'Throughout history, people have tattooed themselves to heal, to show which people they belong to, as punishment, to mark their rank in prison…', 'or to join a mafia.', 'Your reason may be in this story.'],
       cifra: { word: '5300', text: '5.300', sub: 'AÑOS', dur: 2.6, y: 560 }, // más abajo: arriba tapaba la cara de Ötzi,
       shots: [
-        { a: 'FILE:' + T + '/runway/otzi-camina-kling-lento.mp4', sc: 'GP', look: 'app' }, // Runway (IA, Kling 3.0 Pro): Ötzi se acerca andando, a 0,83x para llenar la primera frase (Paco: sin la segunda imagen de Ötzi)
+        { a: 'FILE:' + T + '/runway/otzi-camina-tatuado-lento.mp4', sc: 'GP', look: 'app' }, // Runway (IA, Kling 3.0 Pro): Ötzi, con los tatuajes visibles de frente pintados (costillas y muñeca izq.), se acerca andando, a 0,83x para llenar la primera frase (Paco: sin la segunda imagen de Ötzi)
         { a: 'W52', sc: 'PM', foc: [0.5, 0.35], from: '¿Estás' },
         { a: 'W74', sc: 'PP', foc: [0.5, 0.35], from: '¿Sabes' },
         { a: 'W29', sc: 'GP', from: 'A lo largo' },
