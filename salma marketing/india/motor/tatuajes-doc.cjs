@@ -21,7 +21,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-bloques1-3-v1', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-bloques1-3-v2', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'SIGUE EN EL BLOQUE 4', l5: 'Mafias del mundo' },
@@ -161,25 +161,34 @@ const cfg = {
     // ═══ BLOQUE 3 · TATUAJES TALEGUEROS ═══
     { id: 'mapa-rusia', video: T + '/mapa-ziro-rusia.mp4', fixed: 5.5, amb: SALA(-30) },
     // 3.1 · RUSIA — EL CÓDIGO VORY V ZAKONE (esquemas propios: no hay fotos libres de estos tatuajes)
-    { id: 'vory', who: 'salma', scene: true, pause: 0.8, rotulo: 'RUSIA · CÁRCELES', amb: SALA(-28, 4), golpe: PUERTA('En las'),
+    { id: 'vory', who: 'salma', scene: true, pause: 0.8, rotulo: 'CÓDIGO DE LAS CÁRCELES SOVIÉTICAS · FOTOS: LITUANIA, 2010', amb: SALA(-28, 4), golpe: PUERTA('En las'),
       text: 'En las cárceles rusas, cada tatuaje del código vory v zakone dice algo concreto. Estrellas en los hombros o las rodillas: «no me arrodillo ante nadie» — la de ocho puntas marca rango. Cúpulas de iglesia ortodoxa en el pecho: cada cúpula, una condena; tres cúpulas, preso para siempre. Un ojo en el pecho: «te vigilo». Un gato, a veces con sombrero: el ladrón profesional.',
       voz: 'En las cárceles rusas, cada tatuaje del código vori v zakone dice algo concreto. Estrellas en los hombros o las rodillas: «no me arrodillo ante nadie» — la de ocho puntas marca rango. Cúpulas de iglesia ortodoxa en el pecho: cada cúpula, una condena; tres cúpulas, preso para siempre. Un ojo en el pecho: «te vigilo». Un gato, a veces con sombrero: el ladrón profesional.',
       en: ['In Russian prisons, every tattoo in the vory v zakone code says something specific.', 'Stars on the shoulders or knees: "I kneel before no one" — the eight-pointed one marks rank.', 'Orthodox church domes on the chest: each dome, one sentence; three domes, a prisoner for life.', 'An eye on the chest: "I am watching you."', 'A cat, sometimes wearing a hat: the professional thief.'],
       shots: [
-        { a: 'W109', sc: 'GP', from: 'En las' },               // museo de historia del Gulag (Moscú)
-        { a: 'W106', sc: 'D', look: 'app', from: 'Estrellas' }, // charretera con estrella de 8 puntas (dibujo de tatuaje criminal ruso)
+        // fotos reales: presos de una cárcel de Lituania (antigua URSS), 2010, www.pvz.lt (CC BY-SA); sin caras
+        { a: 'W137', sc: 'GP', look: 'trix', from: 'En las' },                       // patio de la cárcel
+        { a: 'W133', sc: 'PM', pan: [0.5, 0, 0.5, 1], from: 'cada tatuaje' },         // espalda tatuada, de arriba abajo
+        { a: 'W131', sc: 'PP', pan: [0.15, 0.7, 0.85, 0.7], z: 0.5, from: 'Estrellas' }, // pecho, de hombro a hombro
+        { a: 'W139', sc: 'D', pan: [0.2, 0.5, 0.8, 0.5], z: 0.4, from: 'rodillas:' },
+        { a: 'W106', sc: 'D', look: 'app', from: 'la de ocho' },                      // charretera con estrella de 8 puntas (dibujo)
         { a: 'FILE:' + T + '/grafico-vory-cupulas.mp4', sc: 'PM', look: 'app', from: 'Cúpulas' },
+        { a: 'W134', sc: 'PP', pan: [0.5, 0.15, 0.5, 0.85], from: 'cada cúpula' },    // espalda con crucifijo
         { a: 'FILE:' + T + '/grafico-vory-ojo.mp4', sc: 'D', look: 'app', from: 'Un ojo' },
+        { a: 'W130', sc: 'PP', pan: [0.5, 0.25, 0.5, 0.7], z: 0.5, from: '«te' },    // pecho tatuado
         { a: 'FILE:' + T + '/grafico-vory-gato.mp4', sc: 'PM', look: 'app', from: 'Un gato' },
+        { a: 'W141', sc: 'D', pan: [0.15, 0.4, 0.75, 0.55], z: 0.5, from: 'el ladrón' }, // manos tatuadas
       ] },
     { id: 'vory-castigo', who: 'salma', sceneEnd: true, pause: 1.2, amb: SALA(-28, 12),
       text: 'Pero llevar un tatuaje que no te has ganado era, y a veces sigue siendo, peligroso de verdad: en los años cincuenta, bajo la represión de Jrushchov, se castigaba con violación o muerte. Hacia los setenta, al extenderse entre los presos más jóvenes, los líderes dejaron de castigarlo así.',
       en: ["But wearing a tattoo you hadn't earned was, and sometimes still is, truly dangerous: in the 1950s, under Khrushchev's crackdown, it was punished with rape or death.", 'By the 1970s, as tattoos spread among younger prisoners, the leaders stopped punishing it that way.'],
       shots: [
-        { a: 'W127', sc: 'GP', look: 'trix' },                 // barracón y torre de vigilancia, Vorkutá
-        { a: 'W123', sc: 'PM', look: 'trix', from: 'en los años' }, // llegada del tren, Vorkutá
-        { a: 'W126', sc: 'GP', look: 'trix', from: 'Hacia' },  // Vorkutá en invierno
-        { a: 'W110', sc: 'PM', from: 'los líderes' },          // museo del Gulag
+        { a: 'W140', sc: 'PP', pan: [0.5, 0.15, 0.5, 0.75] },                       // espalda tatuada
+        { a: 'W143', sc: 'D', pan: [0.3, 1, 0.7, 0.9], z: 0.6, from: 'peligroso' },   // pecho (sin la cara)
+        { a: 'W127', sc: 'GP', look: 'trix', from: 'en los años' },                  // barracón y torre, Vorkutá
+        { a: 'W123', sc: 'PM', look: 'trix', from: 'se castigaba' },                 // llegada del tren, Vorkutá
+        { a: 'W136', sc: 'PM', from: 'Hacia' },
+        { a: 'W132', sc: 'PP', pan: [0.3, 0.15, 0.7, 0.6], from: 'los líderes' },
       ] },
     // 3.2 · MS-13 — EL GIRO: ABANDONAR LA MARCA (sin caras; nada que dé escaparate a la pandilla)
     { id: 'mapa-maras', video: T + '/mapa-rusia-honduras.mp4', fixed: 5.5, amb: CALLE(-32) },
@@ -188,11 +197,13 @@ const cfg = {
       voz: 'En Honduras, según un policía que investiga a las maras, muchos miembros de la eme ese trece han dejado de tatuarse símbolos de la pandilla. El mismo tatuaje que antes marcaba pertenencia hoy los hace fáciles de identificar — por la policía, y por bandas rivales.',
       en: ['In Honduras, according to a police officer who investigates the maras, many MS-13 members have stopped getting gang symbols tattooed.', 'The same tattoo that once marked belonging now makes them easy to identify — by the police, and by rival gangs.'],
       shots: [
-        { a: 'W116', sc: 'GP' },                               // pintada de la mara en una pared
-        { a: 'W113', sc: 'PM', from: 'muchos' },               // espalda tatuada, sin cara
-        { a: 'W112', sc: 'PP', from: 'El mismo' },
-        { a: 'W118', sc: 'PM', from: 'hoy' },
-        { a: 'W114', sc: 'D', from: 'por la' },
+        { a: 'W116', sc: 'GP', pan: [0, 0.5, 1, 0.5], z: 0.2 },                     // pintada de la mara, de lado a lado
+        { a: 'W113', sc: 'PP', pan: [0.2, 0.25, 0.8, 0.45], z: 0.5, from: 'muchos' }, // espalda, sin cara
+        { a: 'W129', sc: 'D', pan: [0.2, 0.5, 0.7, 0.6], z: 0.4, from: 'símbolos' },  // hombro «Salvatrucha»
+        { a: 'W112', sc: 'PP', pan: [0.5, 0.2, 0.5, 0.8], z: 0.4, from: 'El mismo' },
+        { a: 'W118', sc: 'D', pan: [0.1, 0.4, 0.9, 0.4], z: 0.5, from: 'hoy' },      // «MARA» en la espalda
+        { a: 'W128', sc: 'PM', pan: [0.3, 0.75, 0.6, 0.6], z: 0.5, from: 'por la' }, // detenido, torso (sin la cara)
+        { a: 'W114', sc: 'D', pan: [0.5, 0.3, 0.5, 0.8], z: 0.4, from: 'y por' },
       ] },
   ],
 };

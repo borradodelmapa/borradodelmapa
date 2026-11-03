@@ -177,7 +177,16 @@ async function build(cfg) {
         const pre = s.cover ? `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h},scale=${W2}:${H2}:flags=lanczos`
           : entera ? `split[fe][fb];[fb]scale=${W2}:${H2}:force_original_aspect_ratio=increase,crop=${W2}:${H2},boxblur=40:2,eq=brightness=-0.12[fd];[fe]scale=-2:${H2}:flags=lanczos[ff];[fd][ff]overlay=(W-w)/2:0`
           : `${cropF(F)}:'if(gt(iw*${F.b},ih*${F.a}),(iw-ih*${F.a}/${F.b})*${cx},0)':0,scale=${W2}:${H2}:flags=lanczos`; // más ancha que el formato → recorta a lo ancho; si no, a lo alto
-        cacheN[runPlano(['-i', f, '-vf', `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=${F.w}x${F.h}:fps=30${shake}${tail}`, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
+        // PANEO (s.pan = [fx0, fy0, fx1, fy1], Paco 3 nov 2026): primerísimo plano con una ventana del formato que recorre la foto ENTERA de un punto a otro
+        // (0 = izquierda/arriba, 1 = derecha/abajo), arrancando y frenando suave. s.z = cuánto se acerca (por defecto 0.3: ventana 1/1,3 del máximo). Sin s.pan, la orden es la de siempre.
+        let pin = ['-i', f], vf = `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=${F.w}x${F.h}:fps=30${shake}${tail}`;
+        if (s.pan) {
+          const [a0, b0, a1, b1] = s.pan, Z = 1 + (s.z ?? 0.3), d0 = (frames / 30).toFixed(3), e = `(0.5-0.5*cos(PI*min(t,${d0})/${d0}))`;
+          const ww = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}/2)*2`, wh = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}*${F.b}/${F.a}/2)*2`;
+          pin = ['-loop', '1', '-i', f];
+          vf = `crop=w='${ww}':h='${wh}':x='(iw-ow)*(${a0}+${(a1 - a0).toFixed(3)}*${e})':y='(ih-oh)*(${b0}+${(b1 - b0).toFixed(3)}*${e})',scale=${F.w}:${F.h}:flags=lanczos,setsar=1,fps=30${tail}`;
+        }
+        cacheN[runPlano([...pin, '-vf', vf, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
       clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra' });
     });
