@@ -417,6 +417,19 @@
       ]
     },
     {
+      "id": "web-facebook-pedida",
+      "caso": "p-mw16grx4wye",
+      "mensaje": "la tienda 13 Factories de Cantón tiene web o facebook?",
+      "gps": "Guangzhou",
+      "debe": [
+        "si tiene Facebook o web, poner el enlace en la misma frase donde lo nombra"
+      ],
+      "no_debe": [
+        "decir que tiene web o Facebook y dejar la frase sin enlace",
+        "añadir enlaces de otros sitios que no son el que preguntó"
+      ]
+    },
+    {
       "id": "guia-playas-cadiz",
       "boton": "guia",
       "mensaje": "Dime las mejores playas de Cádiz hazme una ruta",

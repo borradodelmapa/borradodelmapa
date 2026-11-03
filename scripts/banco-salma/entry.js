@@ -156,6 +156,7 @@ const GPS = {
   Granada: { lat: 37.1773, lng: -3.5986, name: 'Granada' },
   Estepona: { lat: 36.4256, lng: -5.1463, name: 'Estepona' },
   Ribadedeva: { lat: 43.3753, lng: -4.5631, name: 'Ribadedeva' },
+  Guangzhou: { lat: 23.1291, lng: 113.2644, name: 'Guangzhou' },
 };
 
 // Ruta mínima abierta para las preguntas de edición

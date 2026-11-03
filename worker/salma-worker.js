@@ -7944,13 +7944,13 @@ function extractRouteFromReply(text) {
   return null;
 }
 
-function replyWithoutRouteBlock(text) {
+function replyWithoutRouteBlock(text, permitidas) {
   if (!text || typeof text !== 'string') return text;
   const idxA = text.indexOf('SALMA_ROUTE_JSON');
   const idxB = text.indexOf('SALMA_ROUTE_EDIT');
   const idx = idxA === -1 ? idxB : (idxB === -1 ? idxA : Math.min(idxA, idxB));
   const clean = idx === -1 ? text.trim() : text.slice(0, idx).trim();
-  return sanitizeInventedUrls(clean);
+  return sanitizeInventedUrls(clean, permitidas);
 }
 
 // ── "Añade una parada" a una guía existente: inserta SOLO las paradas nuevas en la guía ──
@@ -8907,10 +8907,16 @@ function cleanRegionForSearch(raw) {
 
 // Elimina URLs inventadas por Claude que no vienen de herramientas.
 // Solo permite: enlaces de Maps con place_id verificado o búsqueda por nombre, y URLs que el worker inyecta.
-function sanitizeInventedUrls(text) {
+// `permitidas`: URLs que han devuelto las herramientas en este mensaje (buscar_web, buscar_lugar). No son inventadas:
+// antes se borraban y quedaba «Su página de Facebook es:» con la línea vacía (caso p-mw16grx4wye, 4 nov 2026).
+// Si el viajero no pidió enlaces, _stripLooseUrls las quita después igual.
+function sanitizeInventedUrls(text, permitidas) {
   if (!text || typeof text !== 'string') return text;
+  const _sinCola = u => String(u || '').replace(/[.,;:!?)\]*_]+$/, '').replace(/\/$/, '');
+  const _ok = new Set((permitidas || []).filter(Boolean).map(_sinCola));
   const urlRegex = /(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi;
   return text.replace(urlRegex, (url) => {
+    if (_ok.size && _ok.has(_sinCola(url))) return url;
     // BLOQUE E — enlaces de Google Maps: solo place_id o búsqueda por nombre.
     // Coords sueltas, /maps/@, /dir/NombreA/NombreB → los inventa el modelo → fuera.
     if (url.includes('google.com/maps') || url.includes('maps.google.')) {
@@ -18003,7 +18009,7 @@ INSTRUCCIONES:
         // PIEZA A — Tiempo 1 (recomendaciones): aunque el modelo se saltase la orden y
         // emitiera un SALMA_ROUTE_JSON, aquí NO se convierte en ruta. Solo prosa + botón.
         let route = _fastPathRoute || (guidedIsReco ? null : extractRouteFromReply(allText));
-        let reply = replyWithoutRouteBlock(allText);
+        let reply = replyWithoutRouteBlock(allText, [..._toolUrls, ..._lugarWebUrls].map(u => u.url));
         // GUÍA ABIERTA (22 oct 2026, caso mvj8dc8qqbl7): dentro de una guía no se ofrece hacer otra guía, y si sale el botón
         // «Añadir a la guía» sobra el «dime añádelo» (eran dos ofertas a la vez). Se quita aunque el modelo lo escriba.
         if (editingActiveRoute && reply) {
@@ -18435,7 +18441,9 @@ REGLAS:
 
         // ── Inyectar URLs de buscar_web que Claude no incluyó ──
         // Solo si el usuario quiere ver enlaces. Por defecto NO se añade ninguna URL de blogs/webs.
-        if (!route && _toolUrls.length > 0 && _userWantsLinks) {
+        // Si Salma ya puso en su frase el enlace que tocaba, no se pegan al final los demás resultados de la búsqueda
+        // (se colaban otros sitios: «Factories in China», caso p-mw16grx4wye).
+        if (!route && _toolUrls.length > 0 && _userWantsLinks && !_toolUrls.some(u => u.url && reply.includes(u.url.replace(/\/$/, '')))) {
           const missingUrls = _toolUrls
             .filter(u => u.url && !reply.includes(u.url))
             .filter(u => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage|viajero|turismo|mundo|rutas?\b/i.test(u.url))
