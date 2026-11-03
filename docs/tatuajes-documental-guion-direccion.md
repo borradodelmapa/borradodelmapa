@@ -138,11 +138,11 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 «Tatuajes del mundo» → icono de Salma → «CREA TUS RUTAS CONMIGO» → «Descarga la app de guías de viaje · Gratis» → borradodelmapa.com.
 
 ---
-## Decisiones que necesito de Paco
-1. **El hilo nuevo** (pertenencia → riesgo de ser detectado) atraviesa el gancho inicial y el cierre del Bloque 4 — ¿te vale como columna del documental, o lo prefieres más plano, bloque por bloque sin hilo conductor?
-2. **Dos datos se caen del guion** por falta de fuente tras 3 búsquedas: Hells Angels y tatuaje carcelario específicamente español. ¿De acuerdo en dejarlos fuera, o tienes tú una fuente concreta que pueda usar?
-3. **Escena 4.6 (cierre):** es la única frase de tono reflexivo del documental — dime si se queda así o la hago más seca.
-4. **Duración real:** este guion, leído, da más de los 35-45 min estimados si se desarrolla cada escena con tiempo de imagen — ¿lo ajustamos ahora o lo vemos al grabar la voz?
-5. **Coste (F5):** no genero ni una frase de voz de ElevenLabs hasta que me digas que este guion vale — en cuanto lo confirmes, te paso el coste estimado y pruebo primero con una sola frase.
+## Decisiones de Paco (OK 3 nov 2026, 11:45)
+1. ✅ **Hilo conductor** (pertenencia → riesgo de ser detectado) — aprobado, se queda como columna del documental.
+2. ✅ **Hells Angels y tatuaje carcelario español** — aprobado dejarlos fuera del guion.
+3. ✅ **Escena 4.6 (cierre reflexivo)** — aprobada tal cual está escrita.
+4. ⏸ **Duración** — se deja para medir al grabar la voz, no se recorta ahora.
+5. ⏸ **Coste (F5):** sigue pendiente — no se genera ni una frase de voz hasta disclosure de coste + prueba de una sola frase.
 
-Pendiente tras tu OK: pasar correcciones a la versión del documento de Claude Docs (el guion original de 4 bloques) para que ambas versiones queden iguales, y acordar formato de imagen/clip real para cada escena (museo, archivo libre, animación de mapa).
+Pendiente ahora: pasar estas correcciones a la versión del documento de Claude Docs (el guion original de 4 bloques) para que ambas versiones queden iguales, y acordar formato de imagen/clip real para cada escena (museo, archivo libre, animación de mapa). Después, disclosure de coste de ElevenLabs y prueba de una sola frase antes de generar el resto.
