@@ -116,7 +116,7 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 
 ## ESCENA 4.1 · YAKUZA (JAPÓN) — EL ESTIGMA QUE VIENE DE 1868
 - **Imagen:** mapa → Japón → tebori (tatuaje a mano) de archivo.
-- **Salma:** «La Yakuza heredó el irezumi integral, el tebori, hecho a mano. Pero el estigma que empezó con la prohibición Meiji de 1868 sigue vivo: hoy muchos yakuza evitan tatuarse precisamente por ese estigma. Balnearios, gimnasios y negocios siguen prohibiendo la entrada a quien lleva tatuajes visibles.»
+- **Salma (v2, Paco 4 nov 2026: sin repetir la frase de la 1.3):** «La Yakuza heredó el irezumi integral, el tebori, hecho a mano. Pero el estigma que empezó con la prohibición Meiji de 1868 sigue vivo: balnearios, gimnasios y negocios siguen prohibiendo la entrada a quien lleva tatuajes visibles.»
 - **Fuente:** ⚠ Wikipedia (Irezumi).
 
 ## ESCENA 4.2 · COSA NOSTRA VS. CAMORRA — DOS MAFIAS, DOS CULTURAS
@@ -141,8 +141,8 @@ Usar esta idea en el gancho inicial y recogerla en el cierre del Bloque 4.
 
 ## ESCENA 4.6 · CIERRE — EL GIRO COMÚN
 - **Imagen:** GP lento, plano largo (pico, M1) — montaje rápido de los tatuajes vistos: Ötzi, moko, pe'a, vory, Yakuza.
-- **Salma:** «Yakuza, tríadas, maras: tres mafias distintas, en tres continentes, han llegado a la misma conclusión. El tatuaje que antes probaba pertenencia hoy puede delatarte. La piel sigue contando historias — pero, a veces, el silencio de la piel cuenta más.»
-- **⚠ PENDIENTE (Paco, 3 nov 2026):** recoger aquí la pregunta del gancho (1.0) y el motivo que falta en su lista: hoy casi todo el mundo se tatúa **por gusto**. Reescribir el cierre con eso antes de generar su voz.
+- **Salma (v2, aprobada por Paco el 4 nov 2026; recoge el «por gusto» y cierra con Ötzi):** «Yakuza, tríadas, maras: tres mafias, en tres continentes, han llegado a la misma conclusión. El tatuaje que antes probaba pertenencia hoy puede delatarte. Pero fuera de las cárceles, casi todos nos tatuamos por gusto: por un viaje, por un recuerdo, por alguien a quien no queremos olvidar. Hace cinco mil trescientos años, Ötzi se tatuó para curarse. Quizá nosotros seguimos haciendo lo mismo.» Último plano del documental: el puñetazo del tatuado (Runway).
+- ✅ Resuelto el pendiente del «por gusto» (4 nov 2026).
 - **Nota N6:** esta frase de cierre es la única con tono reflexivo de todo el documental; se apoya en tres datos verificados (Yakuza, Tríadas, MS-13), no es relleno. Revisar con Paco si se ajusta a N6 o si se prefiere una versión más seca con cifra.
 
 ## TARJETA FINAL
