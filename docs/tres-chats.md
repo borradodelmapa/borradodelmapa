@@ -25,8 +25,8 @@ Choques típicos: el blog de viajes (P12) es del chat 2 pero `comprobar-nada-atr
 ## Ids de los chats (se rellenan al arrancarlos)
 | Chat | Sesión |
 |---|---|
-| 1 · Guías y SEO | (pendiente) |
-| 2 · Vídeo y redes | (pendiente) |
+| 1 · Guías y SEO | `local_930d6f89-91c1-4b04-967d-997f93692492` (worktree, rama `chat1-guias-seo`) |
+| 2 · Vídeo y redes | `local_cb980318-b3ce-49f5-bb68-1d328d07217f` (carpeta principal) |
 | 3 · Casos y estado de la app | el chat donde se creó este archivo (4 nov 2026) |
 
 ## Reglas que valen para los tres (resumen; manda CLAUDE.md)
