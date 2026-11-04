@@ -24,15 +24,15 @@ Lo que se aprenda aquí se convierte en `docs/paises/PLANTILLA.md` para los dem�
 |---|---|---|---|---|
 | 1 | Expediente · introducción (8 apartados, con fuentes) | 1 | por empezar | 13 nov |
 | 2 | Sección «Conoce Filipinas» en `destinos/filipinas.html` | 1 | — | con la tanda |
-| 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | — | web ≥ 1 semana antes del vídeo |
-| 4 | Vídeo de apertura 16:9, 6-8 min (Salma, sin «viaje real») | 2 | — | por cerrar (jueves de largo) |
-| 5 | 3-4 shorts derivados de la apertura | 2 | — | jueves sin largo |
+| 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | — | **propuesta: web mar 1 dic** (borrador para Paco ~27 nov) |
+| 4 | Vídeo de apertura 16:9, 6-8 min (Salma, sin «viaje real») | 2 | esqueleto: `docs/paises/filipinas-apertura-estructura.md` | **propuesta: jue 10 dic 10:00**, YouTube + TikTok (exportado ~3 dic); avance de 20-30 s el **mar 8 dic** |
+| 5 | 3-4 shorts derivados de la apertura | 2 | — | **propuesta: mar 15 · mié 16 · jue 17 dic** (+ el 4.º, opcional, mar 22 dic) |
 | 6 | Guía «Luzón norte: Sagada, Banaue y Buscalan» | 1 | — | lo antes posible (Whang-Od sale el 12 nov) |
 | 7 | Guías de los destinos con página (El Nido, Cebú, Bohol, Siargao…) | 1 | — | tanda |
 | 8 | Páginas nuevas Banaue y Buscalan + 12 actuales ampliadas | 1 | — | tanda |
-| 9 | Entradas sin vídeo: calendario de fiestas · arnis | 2 | — | por cerrar |
-| 10 | Los ifugao y sus terrazas (Pueblos T2·4, adelantado) | 2 | — | por cerrar |
-| 11 | Largo «La cordillera de Luzón» (opcional, material de los 3 episodios) | 2 | idea | — |
+| 9 | Entradas sin vídeo: calendario de fiestas · arnis | 2 | — | **propuesta: web semana del 1 dic** (con el artículo) |
+| 10 | Los ifugao y sus terrazas (Pueblos T2·4, adelantado) | 2 | — | **propuesta: mié 9 dic 10:00** (blog P12 el 1-2 dic; exportado ~2 dic) |
+| 11 | Largo «La cordillera de Luzón» (opcional, material de los 3 episodios) | 2 | idea | si Paco lo quiere: un jueves de enero |
 | ya | Whang-Od (12 nov) y Sagada (17 nov), con su blog | 2 | programados | — |
 
 ## Coste a ojo (se mide con la primera guía antes de seguir)

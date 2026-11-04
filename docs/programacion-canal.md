@@ -32,17 +32,18 @@ Es decir: **un largo cada dos semanas** y tres piezas por semana en cada red. Mi
 Por qué así: las series dan constancia (dos días seguidos crean hábito), el largo da tiempo de visionado y suscriptores, y los C llevan público de Shorts y TikTok al largo (Shorts → «vídeo relacionado» → largo; TikTok → comentario).
 **Hora:** se mantiene 10:00 también para el largo (P13). Metricool dice que YouTube rinde algo más a las 16:00; si Paco quiere probarlo solo con los largos, sería un cambio de P13 (decisión suya).
 
-## 4 · Calendario propuesto desde el 8 dic (con la temporada 2 de Pueblos ya aprobada)
+## 4 · Calendario propuesto desde el 8 dic — PILOTO FILIPINAS (L2, Paco 4 nov 2026)
+Se trabaja por países (L2): Filipinas sale completa y junta. La web va **al menos una semana antes** que su vídeo. Plan y reparto del país: `docs/paises/filipinas.md`; esqueleto de la apertura: `docs/paises/filipinas-apertura-estructura.md`.
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
-| 8-10 dic | T2·1 Los kalash | T2·2 Los iban | **B · Tatuajes del mundo** (estreno, YouTube + TikTok) |
-| 15-17 dic | T2·3 Mustang | T2·4 Los ifugao | C · Tatuajes (2.º bloque) |
-| 22-24 dic | T2·5 Los mentawai | T2·6 Los tao | jue 24 (Nochebuena): C · Tatuajes (3.º) o hueco libre |
-| 29-31 dic | T2·7 Los hezhen | T2·8 Pescadores con cormorán | jue 31: C · Tatuajes (4.º) o hueco libre |
-| 5-7 ene | T2·9 Mujeres apatani | mié 6 (Reyes): T2·10 El nüshu | **B · largo n.º 2** |
-
-**Opción para no esperar a diciembre con Tatuajes:** P13 permite una pieza al día; si Paco quiere estrenarlo antes, iría un jueves de noviembre y el Pueblos de ese día se desplaza (la cola se corre una plaza). Decisión de Paco.
-Para que esto salga a tiempo: T2 necesita **~2 episodios terminados por semana** desde ya (cada uno: guion ⏸, fotos ⏸, voz ~1.000 caracteres con coste dicho antes ⏸, montaje, editor ⏸, blog, R2, Metricool ⏸).
+| 1-3 dic (web, sin redes) | **Web de Filipinas**: artículo de la introducción (#3), sección de la página del país (#2, chat 1), entradas de fiestas y arnis (#9), blog del ifugao (P12) | — | (cola ya programada: cazadores con águila) |
+| 8-10 dic | Avance de la apertura (D, 20-30 s) | **Los ifugao y sus terrazas** (T2·4, adelantado) | **Vídeo de apertura de Filipinas** (16:9, YouTube + TikTok) |
+| 15-17 dic | C · derivado 1 (geología y volcanes) | C · derivado 2 (el galeón de Manila) | C · derivado 3 (el *baybayin*) |
+| 22-24 dic | C · derivado 4 (lo que se borra, opcional) o T2 | T2 | jue 24 (Nochebuena): hueco libre o C de Tatuajes |
+| 29-31 dic y enero | Siguiente país (lo decide Paco) y el resto de T2, por países | | |
+**Fechas límite hacia atrás** (si el expediente del chat 1 está aprobado ~16 nov): guion de la apertura con su gancho ⏸ ~19 nov · fotos ⏸ ~21 nov · coste de voz ⏸ y voz ~24 nov · montaje y editor de Paco ⏸ hasta ~1 dic · exportar y programar ~3 dic. El ifugao, en paralelo: listo ~2 dic.
+**Tatuajes del mundo** ya no va el 10 dic (lo ocupa la apertura de Filipinas). Opciones para Paco: (a) un jueves de noviembre desplazando la cola una plaza; (b) jue 7 ene; (c) dentro de un bloque de país que lo reaproveche.
+**Whang-Od (12 nov) y Sagada (17 nov)** ya están programados: son de Filipinas y salen antes que el resto del bloque; su blog ya enlaza a la guía del país.
 
 ## 5 · Un largo da para 5-7 piezas (reaprovechamiento)
 1. **Largo completo en YouTube y TikTok** (P6/P10) con capítulos en YouTube (Y6), portada horizontal de M11 y pantalla final (Y13 propuesta). **Comprobar** antes del primer largo que Metricool sube a TikTok un vídeo de esa duración (7:47 en Tatuajes; los siguientes pueden pasar de 10 min).
@@ -64,7 +65,7 @@ Para que esto salga a tiempo: T2 necesita **~2 episodios terminados por semana**
 **Rutina propuesta (0 €):** cada lunes Claude hace un **parte semanal** en `docs/metricas-canal.md`: de cada pieza de la semana, a las 48 h y a los 7 días, % visto vs deslizado, retención a 20 s, duración media, suscriptores y fuente de tráfico. Lo de Metricool lo saca solo; lo de los Studios, leyéndolo en el navegador con la sesión de Paco (**solo lectura**, sin tocar nada) o con una captura de Paco. Con 4-6 semanas de datos se ve qué ganchos y qué títulos funcionan y se ajustan las reglas G e Y.
 
 ## 7 · Primeros temas (lo que L1 tenía pendiente)
-**Shorts de serie:** la temporada 2 de Pueblos ya está aprobada (`docs/serie-pueblos-borrados.md`: kalash, iban, Mustang, ifugao, mentawai, tao, hezhen, cormoranes, apatani, nüshu). Propuesta: dar por cerrado el «pendiente» de L1 con esa lista + la de largos de abajo.
+**Shorts de serie:** la temporada 2 de Pueblos ya está aprobada (`docs/serie-pueblos-borrados.md`: kalash, iban, Mustang, ifugao, mentawai, tao, hezhen, cormoranes, apatani, nüshu). Con L2 (4 nov) los episodios salen **por países**: el ifugao se adelanta con Filipinas y los demás van con el bloque de su país. Propuesta: dar por cerrado el «pendiente» de L1 con esa lista + la de largos de abajo.
 **Documentales largos** (propuesta de orden; ★ = sale en buena parte de material que ya tenemos, más barato):
 | # | Tema | Tipo | Por qué |
 |---|---|---|---|
@@ -80,7 +81,7 @@ Para que esto salga a tiempo: T2 necesita **~2 episodios terminados por semana**
 
 ## 8 · Lo que necesita decidir Paco
 1. ¿Vale el ritmo (2 shorts de serie + 1 jueves de largo o derivado)? ¿Un largo cada 2 o cada 3 semanas?
-2. ¿Tatuajes el jue 10 dic o antes, desplazando la cola?
+2. Fechas del piloto Filipinas (§4) y dónde va Tatuajes (a, b o c).
 3. Orden de los largos 2-8.
 4. Las reglas **Y10-Y16** y G2-G8 propuestas (abajo, en el anexo); entran en la checklist solo con su OK.
 5. Si el **mapa de cabecera pasa después del gancho** (G3): cambia el orden de M1/M7/S3 en los shorts nuevos.
