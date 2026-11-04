@@ -51,7 +51,8 @@ const R = c.redes || {};
 const limpio = (s) => String(s).replace(/\*\*/g, '').replace(/\*/g, '');
 const datos = (R.datos || c.ficha.slice(0, 2)).map((f) => '• ' + limpio(f)).join('\n');
 const tags = R.hashtags || ['#' + (c.pais || '').toLowerCase().replace(/\s/g, ''), '#pueblosborradosdelmapa', '#viajes'];
-const descripcion = `${limpio(c.resumen)}\n\nTodo el episodio, con fuentes y la guía para ir: ${blogUrl}\n\nPara viajar:\n${datos}\n(${limpio(c.nota)})\n\n${tags.join(' ')}`;
+const cap = (R.capitulos || []).length ? 'CAPÍTULOS\n' + R.capitulos.join('\n') + '\n\n' : ''; // Y6: capítulos con minuto (documentales)
+const descripcion = `${limpio(c.resumen)}\n\nTodo el episodio, con fuentes y la guía para ir: ${blogUrl}\n\n${cap}Para viajar:\n${datos}\n(${limpio(c.nota)})\n\n${tags.join(' ')}`;
 // Sonidos con licencia que piden nombrar al autor (CC BY…): <carpeta>/sonidos/ATRIBUCIONES.txt, líneas «archivo · título · autor · licencia · url» de Freesound o Wikimedia Commons
 const fSon = path.join(EP, 'sonidos', 'ATRIBUCIONES.txt');
 const sonidos = fs.existsSync(fSon) ? [...new Set(fs.readFileSync(fSon, 'utf8').split('\n').map((l) => l.split(' · ')).filter((p) => p.length >= 5 && /freesound|wikimedia/.test(p[4]) && /^CC/.test(p[3])).map((p) => `${p[2]} (${p[3]}, ${/freesound/.test(p[4]) ? 'Freesound' : 'Wikimedia Commons'})`))] : [];
@@ -61,11 +62,17 @@ const videos = fs.existsSync(fVid) ? [...new Set(fs.readFileSync(fVid, 'utf8').s
 const comentario = `🗺️ Crea tu ruta gratis con Salma: borradodelmapa.com\n📖 El episodio ampliado: ${blogUrl}\n📷 Fotos: ${autores.join(' · ')} — Wikimedia Commons.${videos.length ? `\n🎥 Vídeo: ${videos.join(' · ')}.` : ''}${sonidos.length ? `\n🔊 Sonido: ${sonidos.join(' · ')}.` : ''}`;
 const paquete = {
   episodio: slug, video: path.relative(ROOT, path.join(U, mp4)), version: ver, blog: blogUrl,
-  youtube: { title: (R.tituloYT || c.titulo).slice(0, 100), description: descripcion, tags: tags.map((t) => t.replace('#', '')), type: 'short', madeForKids: false, isAiGeneratedContent: true },
+  youtube: { title: (R.tituloYT || c.titulo).slice(0, 100), description: descripcion, tags: tags.map((t) => t.replace('#', '')), type: c.formato === 'largo' ? 'video' : 'short', madeForKids: false, isAiGeneratedContent: true },
   tiktok: { text: `${R.tituloTT || c.titulo} 🌏\n${limpio(c.resumen)}\n${tags.join(' ')}`, isAigc: true },
   primerComentario: comentario,
   pendiente: 'Programar en Metricool (YouTube + TikTok) con el OK de Paco; el vídeo necesita una URL pública (ver docs/serie-pueblos-borrados.md).',
 };
+// SEO (checklist Y3, Y6, Y7): avisos; el archivo se copia con un nombre que lleva la palabra clave (R.archivo)
+const tituloYT = paquete.youtube.title;
+if (tituloYT.length > 60) console.log('  ⚠ [Y3] el título de YouTube tiene ' + tituloYT.length + ' caracteres (máximo 60): ' + tituloYT);
+if (c.formato === 'largo' && !(R.capitulos || []).length) console.log('  ⚠ [Y6] documental sin capítulos (redes.capitulos)');
+if (R.archivo) { fs.copyFileSync(path.join(U, mp4), path.join(U, R.archivo)); paquete.video = path.relative(ROOT, path.join(U, R.archivo)); console.log('  [Y7] archivo para subir: ' + R.archivo); }
+else console.log('  ⚠ [Y7] sin nombre de archivo con la palabra clave (redes.archivo)');
 fs.writeFileSync(path.join(U, 'textos-redes.json'), JSON.stringify(paquete, null, 1));
 fs.writeFileSync(path.join(U, 'textos-redes.txt'), `YOUTUBE · título\n${paquete.youtube.title}\n\nYOUTUBE · descripción\n${descripcion}\n\nTIKTOK · texto\n${paquete.tiktok.text}\n\nPRIMER COMENTARIO (fijado)\n${comentario}\n`);
 console.log('  ' + path.relative(ROOT, path.join(U, 'textos-redes.txt')) + ` · ${autores.length} autores en el comentario fijado`);

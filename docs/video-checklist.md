@@ -120,6 +120,15 @@ Las reglas concretas las propone el chat 2 (Vídeo y redes, `docs/tres-chats.md`
 | ID | Regla | Comprobación |
 |---|---|---|
 | Y1 | **Cada vídeo pasa esta sección antes de programarse** (título, descripción, etiquetas, capítulos, miniatura, lista, tarjetas/pantalla final). Hasta que haya reglas aprobadas, vale P6. | manual |
+| Y2 | **Palabra clave investigada** antes de titular: buscador predictivo de YouTube y Google (0 €; vidIQ/Keyword Tool son de pago). Se anota en el guion qué busca la gente. Documental y short. (Paco, 4 nov 2026) | manual |
+| Y3 | **Título**: la búsqueda principal a la izquierda, natural, **≤ 60 caracteres**; no repite el texto de la miniatura. Documental y short. | script (aviso) |
+| Y4 | **Miniatura**: persona o cara expresiva, alto contraste, colores vivos, texto breve que complementa el título; diseño fijo de portada (M11). En shorts, la portada va en los primeros 0,2 s para poder elegirla. | manual |
+| Y5 | **Descripción**: las 2 primeras líneas resumen el vídeo con la palabra clave; después blog, fuentes, aviso de IA y autores (P2). Documental y short (en short, más corta). | manual |
+| Y6 | **Capítulos** con minuto (0:00 …) en la descripción y en la entrada del blog. **Solo documentales** (YouTube no los enseña en Shorts). | script (aviso) |
+| Y7 | **Nombre del archivo** con la palabra clave antes de subirlo (p. ej. `historia-de-los-tatuajes.mp4`). Documental y short. | script |
+| Y8 | **Etiquetas**: solo variantes, sinónimos y errores de escritura (peso bajo). Documental y short. | manual |
+| Y9 | **Blog (SEO web)**: palabra clave en el título y la descripción de la entrada, datos estructurados de vídeo y capítulos (si los hay). Documental y short. | manual |
+**Y2-Y9 valen desde el 4 nov 2026; los vídeos ya publicados o programados no se tocan por esto (igual que M10).**
 
 ## G · Gancho de los primeros 20 s (NUEVA, en construcción — Paco, 4 nov 2026: «trabajar en el gancho primeros 20 segundos»)
 Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde se decide si la gente se queda. Las reglas concretas las propone el chat 2 y entran con el OK de Paco.
@@ -131,6 +140,8 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
 | 4 nov 2026 · 12:00 | Sistema de tres chats (Claude, chat 3) | Nuevas secciones **F · SEO de YouTube (Y1)** y **G · Gancho de 20 s (G1)**, en construcción, por decisión de Paco; las desarrolla el chat 2 con su OK. Sin conflictos (G1 amplía N2, no la contradice). |
+| 4 nov 2026 · 15:30 | Tatuajes documental (Claude) | **Sección F**: nuevas **Y2-Y9** (SEO de YouTube y del blog) aprobadas por Paco a partir de una guía de SEO que trajo; valen para documentales y shorts (Y6 capítulos, solo documentales). `publicar-episodio.cjs` avisa de título > 60, falta de capítulos en documentales y renombra el archivo. Sin conflictos con P6 (lo concreta). |
+| 4 nov 2026 · 15:00 | Tatuajes documental (Claude) | **P6/P10** (Paco): los documentales largos se publican **completos y con las mismas reglas** que los shorts: YouTube + TikTok, mismo vídeo, paquete de texto, entrada de blog (P12), autores (P2). El **primer comentario fijado lleva una descripción elocuente** del vídeo (qué se cuenta y por qué engancha), además de los enlaces. Sin conflictos. |
 | 4 nov 2026 · 14:00 | Tatuajes documental (Claude) | **M11** ampliada (Paco): los documentales horizontales llevan portada con **el mismo diseño que los shorts** (banda naranja inclinada + franja negra, `portada.cjs` → `generarH`), más pequeña (esquina inferior izquierda) para no tapar, foto **muy cerca, sin aire**, y opción `vivo: true` (colores vivos en vez del look apagado). Sin la palabra «Documental». Diseño fijo para los próximos documentales. Vertical sin cambios (Whang-Od idéntico byte a byte). Sin conflictos. |
 | 4 nov 2026 · 10:00 | Tatuajes documental (Claude) | **M13** ampliada (Paco): en vídeos largos, **varios avisos** con el mismo modelo (franja + corazón + batok): `cfg.seguir` puede ser una lista `[{ seg, texto }]`. En «Tatuajes del mundo», tres, al empezar los mapas (sin voz encima): «Si te está gustando, suscríbete», «Hay más documentales: suscríbete», «Dale a me gusta y compártelo». Con un solo aviso todo sale igual que antes (Whang-Od de prueba idéntico byte a byte). Sin conflictos. |
 | 3 nov 2026 · 23:30 | Tatuajes documental (Claude) | **M12** ampliada (Paco: «más primerísimos planos y paneos»): el motor admite `pan: [x0, y0, x1, y1]` por plano (ventana del formato que recorre la foto entera de un punto a otro, arranque y frenada suaves; `z` = cuánto se acerca). Sin `pan`, todo sale igual que antes (los planos sin paneo siguieron saliendo de la caché). Sin conflictos. |
