@@ -115,9 +115,22 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 | P11 | **Cada edición de texto se comprueba en la red y se anota**: tras guardar, mirar el listado/página de la red (no dar por hecho porque el botón respondió; TikTok puede dejar la edición «En revisión» y el listado con el texto viejo) y registrarlo en `docs/publicaciones-registro.md` con vídeo, red, día y resultado. En Metricool, un programado editado cambia de id (el uuid se mantiene); un publicado no se edita en Metricool sino en la propia red. | manual |
 | P13 | **Calendario: publicar SOLO de martes a jueves a las 10:00 (hora de Madrid)** (Paco, 3 nov 2026), una pieza por día (YouTube + TikTok a la vez). Por qué: Metricool da como mejores horas martes-jueves y las 10:00 es pico de TikTok y segundo pico de YouTube (YouTube rinde algo más a las 16:00, pero se mantiene un solo horario). Sin fines de semana ni lunes/viernes. Si hay más piezas que huecos, se desplaza la cola (el orden se mantiene; los avances van al final). El 3 nov se reajustaron los 34 posts programados (ver registro). | manual |
 
+## F · SEO de YouTube (NUEVA, en construcción — Paco, 4 nov 2026: «ir agregando a la checklist SEO para YouTube»)
+Las reglas concretas las propone el chat 2 (Vídeo y redes, `docs/tres-chats.md`) y entran aquí solo con el OK de Paco. Complementa P6 (paquete de texto).
+| ID | Regla | Comprobación |
+|---|---|---|
+| Y1 | **Cada vídeo pasa esta sección antes de programarse** (título, descripción, etiquetas, capítulos, miniatura, lista, tarjetas/pantalla final). Hasta que haya reglas aprobadas, vale P6. | manual |
+
+## G · Gancho de los primeros 20 s (NUEVA, en construcción — Paco, 4 nov 2026: «trabajar en el gancho primeros 20 segundos»)
+Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde se decide si la gente se queda. Las reglas concretas las propone el chat 2 y entran con el OK de Paco.
+| ID | Regla | Comprobación |
+|---|---|---|
+| G1 | **Los 20 primeros segundos se diseñan aparte en el guion de dirección** (F3), antes que el resto, y Paco los aprueba primero. El sígueme (M13) entra a los 20 s: el gancho termina ahí. | manual |
+
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 4 nov 2026 · 12:00 | Sistema de tres chats (Claude, chat 3) | Nuevas secciones **F · SEO de YouTube (Y1)** y **G · Gancho de 20 s (G1)**, en construcción, por decisión de Paco; las desarrolla el chat 2 con su OK. Sin conflictos (G1 amplía N2, no la contradice). |
 | 4 nov 2026 · 10:00 | Tatuajes documental (Claude) | **M13** ampliada (Paco): en vídeos largos, **varios avisos** con el mismo modelo (franja + corazón + batok): `cfg.seguir` puede ser una lista `[{ seg, texto }]`. En «Tatuajes del mundo», tres, al empezar los mapas (sin voz encima): «Si te está gustando, suscríbete», «Hay más documentales: suscríbete», «Dale a me gusta y compártelo». Con un solo aviso todo sale igual que antes (Whang-Od de prueba idéntico byte a byte). Sin conflictos. |
 | 3 nov 2026 · 23:30 | Tatuajes documental (Claude) | **M12** ampliada (Paco: «más primerísimos planos y paneos»): el motor admite `pan: [x0, y0, x1, y1]` por plano (ventana del formato que recorre la foto entera de un punto a otro, arranque y frenada suaves; `z` = cuánto se acerca). Sin `pan`, todo sale igual que antes (los planos sin paneo siguieron saliendo de la caché). Sin conflictos. |
 | 3 nov 2026 · 21:30 | Tatuajes documental (Claude) | **M10**: arreglado en el motor (orden de Paco) que dos frases de subtítulos se vieran a la vez ~0,1 s al cambiar de una a otra; ahora cada frase acaba cuando entra la siguiente. Vale para todas las series desde ahora (Whang-Od de prueba: 18 solapes → 0, imagen idéntica). Los vídeos ya montados no se tocan (M10, 3 nov). Sin conflictos. |
