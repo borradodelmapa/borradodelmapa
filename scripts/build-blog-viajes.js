@@ -148,10 +148,10 @@ ${c.fotos.galeria.map(([id, pie]) => { const f = foto(c, id); return `        <f
 function creditos(c) {
   if (!c.creditosDe) return '';
   const dir = path.join(ROOT, c.creditosDe), sal = path.join(dir, 'salida');
-  const t = fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
-  if (!t) throw new Error('No encuentro tiempos.json en ' + sal);
+  const t = !fs.existsSync(sal) ? null : fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
+  if (!t && c.video) throw new Error('No encuentro tiempos.json en ' + sal); // sin vídeo: solo las fotos de la entrada
   const enBlog = c.fotos ? [c.fotos.portada, ...c.secciones.filter((s) => s.foto).map((s) => s.foto[0]), ...(c.fotos.galeria || []).map((g) => g[0])] : [];
-  const usadas = [...new Set([...JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []), ...enBlog].filter((x) => /^[WH]\d+$/.test(x)))];
+  const usadas = [...new Set([...(t && c.video ? JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []) : []), ...enBlog].filter((x) => /^[WH]\d+$/.test(x)))];
   const atr = atribuciones(c);
   const li = [...new Set(usadas.filter((id) => atr[id]).map((id) => `        <li><a href="${esc(atr[id].u)}" target="_blank" rel="noopener">${esc(atr[id].autor || 'Autor desconocido')}</a> · ${esc(atr[id].lic)}</li>`))];
   return `
