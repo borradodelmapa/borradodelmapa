@@ -18,7 +18,9 @@ const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 196;      // styles.css (= APP_CSS_V de build-destinos.js)
 const BV_CSS_V = 5;     // blog-viajes.css
 
-const caps = require('./blog-viajes-data.js');
+// Entradas con `borrador: true` (contenido producido que aún no se publica, L2) solo salen con BORRADORES=1, para enseñarlas en local (4 nov 2026).
+const capsTodas = require('./blog-viajes-data.js');
+const caps = Object.assign(capsTodas.filter((c) => !c.borrador || process.env.BORRADORES === '1'), { SERIES: capsTodas.SERIES });
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
 // Rutas completas (guías públicas <slug>.html de la app): enlazadas desde el índice del blog para que Google las encuentre.
 const rutas = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-rutas.json'), 'utf8'));
@@ -46,6 +48,10 @@ function duracionMp4(file) {
 
 fs.mkdirSync(OUT_VIDEO, { recursive: true });
 caps.forEach((c, i) => {
+  if (!c.video) { // entrada sin vídeo (artículo de país, guía, fiestas…; 4 nov 2026): solo portada
+    if (!fs.existsSync(path.join(OUT, 'img', c.slug + '.jpg'))) throw new Error('Falta la portada blog/viajes/img/' + c.slug + '.jpg');
+    c.dur = null; c.n = i; return;
+  }
   const src = path.join(VIDEO_SRC, c.video);
   const dst = path.join(OUT_VIDEO, c.slug + '.mp4');
   if (!fs.existsSync(src)) throw new Error('Falta el vídeo ' + src);
@@ -168,13 +174,13 @@ function pagina(c) {
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: c.titulo, description: c.resumen, image: SITE + img, author: { '@type': 'Person', name: 'Salma' },
       publisher: { '@type': 'Organization', name: 'Borrado del Mapa', url: SITE }, datePublished: c.fecha || FECHA, dateModified: c.fecha || FECHA, mainEntityOfPage: url },
-    { '@context': 'https://schema.org', '@type': 'VideoObject', name: c.titulo, description: c.resumen, uploadDate: c.fecha || FECHA, thumbnailUrl: SITE + img,
+    c.dur && { '@context': 'https://schema.org', '@type': 'VideoObject', name: c.titulo, description: c.resumen, uploadDate: c.fecha || FECHA, thumbnailUrl: SITE + img,
       contentUrl: `${SITE}/blog/viajes/video/${c.slug}.mp4`, duration: c.dur.iso },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Blog de viajes', item: SITE + '/blog/' },
       { '@type': 'ListItem', position: 2, name: c.serie, item: SITE + '/blog/#' + slugSerie(c.serie) },
       { '@type': 'ListItem', position: 3, name: c.titulo, item: url } ] },
-  ].map((o) => `<script type="application/ld+json">\n${JSON.stringify(o, null, 1)}\n</script>`).join('\n');
+  ].filter(Boolean).map((o) => `<script type="application/ld+json">\n${JSON.stringify(o, null, 1)}\n</script>`).join('\n');
 
   const pasos = serieCaps.length > 1 ? `    <nav class="bd-steps" aria-label="Capítulos de ${esc(c.serie)}">\n${serieCaps.map((x) =>
     `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Especial' ? 'ES' : x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
@@ -244,8 +250,9 @@ ${cabeza}
     </header>
 `}
     <div class="bd-media">
-      <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
-      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>
+${c.dur ? `      <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
+      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
+      <div class="bd-video-meta"><span>Lectura</span><span>Escribe Salma</span></div>`}
       <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.')}</p>
     </div>
 
@@ -280,9 +287,9 @@ caps.forEach((c) => fs.writeFileSync(path.join(OUT, c.slug + '.html'), pagina(c)
 // ─── Portada del blog ───
 const series = [...new Set(caps.map((c) => c.serie))];
 const rail = (c) => `      <a class="bv-card" href="/blog/viajes/${c.slug}">
-        <div class="bv-poster"><img src="/blog/viajes/img/${c.slug}.jpg" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip">${esc(capCorto(c))}</span><span class="bv-play" aria-hidden="true"></span></div>
+        <div class="bv-poster"><img src="/blog/viajes/img/${c.slug}.jpg" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip">${esc(capCorto(c))}</span>${c.dur ? '<span class="bv-play" aria-hidden="true"></span>' : ''}</div>
         <div class="bv-card-t">${esc(c.titulo)}</div>
-        <div class="bv-card-m">Vídeo ${c.dur.txt}</div>
+        <div class="bv-card-m">${c.dur ? 'Vídeo ' + c.dur.txt : 'Lectura'}</div>
       </a>`;
 const bloqueSeries = series.map((s) => {
   const lista = caps.filter((c) => c.serie === s);
