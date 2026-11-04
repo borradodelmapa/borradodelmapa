@@ -10,5 +10,47 @@
   "url": "https://commons.wikimedia.org/wiki/File:Chocolate_Hills_Carmen_Bohol_2019.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Las Chocolate Hills de Bohol",
+   "pie": "Las Chocolate Hills de Bohol.",
+   "autor": "Ramir Borja derivative work: MrPanyGoff",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chocolate_Hills_-_edit.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 720,
+   "alt": "Un tarsero filipino, el primate diminuto de Bohol",
+   "pie": "Un tarsero filipino, el primate diminuto de Bohol.",
+   "autor": ". Ray in Manila",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Philippine_Tarsier,_Bohol_-_Flickr_-_._Ray_in_Manila.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Alona Beach, en la isla de Panglao",
+   "pie": "Alona Beach, en la isla de Panglao.",
+   "autor": "Jeroen36",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Alona_Beach,_Panglao_-_panoramio.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Crucero por el río Loboc",
+   "pie": "Crucero por el río Loboc.",
+   "autor": "Øyvind Holmstad",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Loboc_river_cruise_Bohol_2017.jpg"
+  }
+ }
 }

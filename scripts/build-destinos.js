@@ -98,7 +98,8 @@ function masDestinos(siblings, countrySlug, countryName, conCss) {
 }
 
 // «Conoce <país>» (L2, 4 nov 2026): resumen del expediente aprobado del país (scripts/paises-intro.json). Sin datos, nada.
-const PAISES_INTRO = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
+const DESTINOS_EXTRA = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-extra.json'), 'utf8')); } catch (_) { return {}; } })();
+const PAISES_INTRO =(() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
 // Maqueta (Paco, 4 nov: «necesita maquetación, imágenes y diseño atractivo»): portada a lo ancho, bloques numerados con foto y pie
 // (foto solo si es de lo que se cuenta; si no, el bloque va sin foto), galería de 6 y tarjetas a los diarios del blog. Fotos ya
 // revisadas de los episodios (F9) con autor (P2), enlazadas desde blog/viajes/img/. El estilo va aquí dentro (CONOCE_CSS) y solo
@@ -576,6 +577,40 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
     ? `<span class="destino-security-warn">⚠️ Precaución</span>`
     : `<span class="destino-security-ok">✅ Seguro</span>`;
 
+  // «Qué hacer» a la vista, con foto (Paco, 4 nov 2026: «más info y más imágenes del destino, bien diseñado»): tarjetas
+  // numeradas; la foto sale de fotos.json → que_hacer[N] (Wikimedia, revisada a ojo, con autor). Sin foto, la tarjeta va sin ella.
+  // Y «Sobre <destino>» (scripts/destinos-extra.json, texto propio con fuentes). Solo en páginas sin guía (con guía manda la guía).
+  const qhFotos = (fotos && fotos.que_hacer) || {};
+  const extra = DESTINOS_EXTRA[slug];
+  const sobreHTML = extra ? `<section class="dq-sobre">
+      <h2>Sobre ${escapeHTML(dest.nombre)}</h2>
+      ${extra.p.map(t => `<p>${escapeHTML(t)}</p>`).join('')}
+      <p class="dq-fuentes">Fuentes: ${(extra.fuentes || []).map(f => `<a href="${escapeHTML(f.u)}" target="_blank" rel="noopener">${escapeHTML(f.t)}</a>`).join(' · ')}</p>
+    </section>` : '';
+  const qhCards = (dest.que_hacer || []).map((a, n) => {
+    const f = qhFotos[n];
+    const [tit, ...resto] = String(a).split(/:\s/);
+    const desc0 = resto.join(': '); const desc = desc0 ? desc0.charAt(0).toUpperCase() + desc0.slice(1) : '';
+    return `<li class="dq-c${f ? '' : ' dq-c--sin'}">${f ? `<figure><img src="/destinos/img/${slug}/${f.file}" alt="${escapeHTML(f.alt)}" loading="lazy" decoding="async" width="${f.w}" height="${f.h}"><figcaption>${escapeHTML(f.pie)} ${fotoCredito(f)}</figcaption></figure>` : ''}<div><span class="dq-n">${String(n + 1).padStart(2, '0')}</span><h3>${escapeHTML(tit)}</h3>${desc ? `<p>${escapeHTML(desc)}</p>` : ''}</div></li>`;
+  }).join('');
+  const DQ_CSS = `<style>
+.dq-sobre{margin:26px 0 8px}.dq-sobre h2,.dq-qh h2{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1;text-transform:uppercase;margin:0 0 12px;color:var(--text-primary)}
+.dq-sobre p{font-size:17px;line-height:1.7;color:var(--text-secondary);margin:0 0 12px}.dq-fuentes{font-size:13px!important;color:var(--text-muted)!important}.dq-fuentes a{color:var(--text-secondary)}
+.dq-qh{margin:26px 0 18px}.dq-list{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+@media(min-width:700px){.dq-list{grid-template-columns:1fr 1fr}}
+.dq-c{border:1px solid var(--border);background:var(--bg-row)}.dq-c figure{margin:0}
+.dq-c img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block}
+.dq-c figcaption{font-size:12px;line-height:1.4;color:var(--text-muted);padding:6px 12px 0}.dq-c figcaption a{color:var(--text-muted)}
+.dq-c>div{padding:10px 14px 14px}.dq-n{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.14em;color:var(--accent)}
+.dq-c h3{font-family:var(--font-cond);font-weight:800;font-size:21px;line-height:1.1;text-transform:uppercase;margin:2px 0 6px;color:var(--text-primary)}
+.dq-c p{font-size:15px;line-height:1.55;color:var(--text-secondary);margin:0}
+.dq-c--sin>div{border-top:3px solid var(--accent)}
+.dq-aviso{border:1px solid var(--accent);background:rgba(244,99,11,.08);padding:10px 12px;font-size:15px;line-height:1.5;color:var(--text-primary);margin:0 0 14px}.dq-aviso a{color:var(--accent)}
+</style>`;
+  const queHacerHTML = qhCards ? `
+    <section class="dq-qh"><h2>Qué hacer en ${escapeHTML(dest.nombre)}</h2>${extra && extra.aviso ? `<p class="dq-aviso">⚠️ ${escapeHTML(extra.aviso.t)} <a href="${escapeHTML(extra.aviso.u)}" target="_blank" rel="noopener">${escapeHTML(extra.aviso.f)}</a></p>` : ''}<ul class="dq-list">${qhCards}</ul>
+      <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a></section>` : '';
+
   const activitiesHTML = (dest.que_hacer || [])
     .map(a => `          <li>${escapeHTML(a)}</li>`)
     .join('\n');
@@ -724,7 +759,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       </div>
     </div>
 
-    ${route ? buildStaticItinerary(route, slug, fotos) : ''}
+    ${route ? buildStaticItinerary(route, slug, fotos) : ((sobreHTML || queHacerHTML) ? DQ_CSS + sobreHTML + queHacerHTML : '')}
 
     <!-- Más info en acordeón -->
     <div class="destino-accordion">
@@ -758,7 +793,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
         </div>
       </details>
 
-${route ? '' : `      <details class="destino-acc-item"${accOpen}>
+${(route || queHacerHTML) ? '' : `      <details class="destino-acc-item"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🎯 Qué hacer</h2></summary>
         <div class="destino-acc-body">
           <ul class="destino-list">

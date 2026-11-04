@@ -9,5 +9,37 @@
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Sabtang_Batanes.jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 405,
+   "alt": "La carretera del norte de la isla de Batan",
+   "pie": "La carretera del norte de la isla de Batan.",
+   "autor": "Jeremy.alinea",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Exploring_the_North_Batan,_Batanes.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 302,
+   "alt": "Una casa de piedra tradicional de Batanes",
+   "pie": "Una casa de piedra tradicional de Batanes.",
+   "autor": "Greenthumb331",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Batanes_Stone_house.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El faro de Naidi, en Basco",
+   "pie": "El faro de Naidi, en Basco.",
+   "autor": "Luceen",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Naidi_Lighthouse.jpg"
+  }
+ }
 }

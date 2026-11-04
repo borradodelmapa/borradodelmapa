@@ -9,5 +9,47 @@
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Cebu_City.jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El templete de la Cruz de Magallanes, en Cebú",
+   "pie": "El templete de la Cruz de Magallanes, en Cebú.",
+   "autor": "Elmer B. Domingo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Magellan%27s_Cross_Cebu_City.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 539,
+   "alt": "El Fuerte San Pedro, en Cebú",
+   "pie": "El Fuerte San Pedro, en Cebú.",
+   "autor": "Philip Nalangan",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:San_Pedro_Fort_Cebu_02.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Un banco de sardinas en Moalboal",
+   "pie": "Un banco de sardinas en Moalboal.",
+   "autor": "Iampjanz",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sardine_run_over_seafloor_in_Moalboal_04.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Las cascadas de Kawasan",
+   "pie": "Las cascadas de Kawasan.",
+   "autor": "Andrewhaimerl",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kawasan_Falls,_Cebu,_Philippines1.jpg"
+  }
+ }
 }
