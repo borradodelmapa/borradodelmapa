@@ -20,13 +20,13 @@ Lo que se aprenda aquí se convierte en `docs/paises/PLANTILLA.md` para los dem�
 5. Chat 2: ifugao (T2·4), shorts derivados, paquetes por red → Metricool ⏸.
 
 ## Piezas
-**Fechas del chat 2 APLAZADAS (Paco, 4 nov 2026, noche: «Tatuajes déjalo para el 10 de diciembre y empezamos Filipinas más tarde, ya veremos»).** Las de abajo son el orden de referencia; se corren en bloque cuando Paco fije el arranque.
+**PRODUCCIÓN YA, PUBLICACIÓN MÁS TARDE (Paco, 4 nov 2026, noche): «vamos a hacerlo todo, solo que se publicará más tarde… quiero saber cuánto tardas en hacerlo todo, para dejar programados más países; esto es una prueba».** Tatuajes sale el jue 10 dic. Las fechas de publicación de abajo son de referencia y se corren en bloque cuando Paco fije el arranque; el tiempo de producción se mide en «Cronómetro del piloto» (abajo).
 | # | Pieza | Chat | Estado | Fecha prevista |
 |---|---|---|---|---|
 | 1 | Expediente · introducción (8 apartados, con fuentes) | 1 | **APROBADO por Paco** (4 nov): `docs/paises/filipinas-expediente.md`, 31 fuentes, ⚠ marcados; plantilla en `PLANTILLA-expediente.md` | 13 nov |
 | 2 | Sección «Conoce Filipinas» en `destinos/filipinas.html` | 1 | — | con la tanda |
-| 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | — | **propuesta: web mar 1 dic** (borrador para Paco ~27 nov) |
-| 4 | Vídeo de apertura 16:9, 6-8 min (Salma, sin «viaje real») | 2 | esqueleto: `docs/paises/filipinas-apertura-estructura.md` | **propuesta: jue 10 dic 10:00**, YouTube + TikTok (exportado ~3 dic); avance de 20-30 s el **mar 8 dic** |
+| 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | **borrador v1** `docs/paises/filipinas-articulo-borrador.md` ⏸ Paco | **propuesta: web mar 1 dic** (borrador para Paco ~27 nov) |
+| 4 | Vídeo de apertura 16:9, 6-8 min (Salma, sin «viaje real») | 2 | esqueleto + **guion de dirección v1** `docs/paises/filipinas-apertura-guion-direccion.md` (3 ganchos) ⏸ Paco | **propuesta: jue 10 dic 10:00**, YouTube + TikTok (exportado ~3 dic); avance de 20-30 s el **mar 8 dic** |
 | 5 | 3-4 shorts derivados de la apertura | 2 | — | **propuesta: mar 15 · mié 16 · jue 17 dic** (+ el 4.º, opcional, mar 22 dic) |
 | 6 | Guía «Luzón norte: Sagada, Banaue y Buscalan» | 1 | — | lo antes posible (Whang-Od sale el 12 nov) |
 | 7 | Guías de los destinos con página (El Nido, Cebú, Bohol, Siargao…) | 1 | — | tanda |
@@ -41,6 +41,11 @@ Guías: 0,5-1,5 € cada una → Luzón norte + 12 destinos ≈ 7-20 € · Voz 
 
 ## Contador de Explorar
 Antes del piloto: **41 guías en 13 países**, Filipinas no está. Al terminar: 41 + guías de Filipinas, 14 países.
+
+## Cronómetro del piloto (chat 2; tiempo de trabajo de Claude y esperas de Paco por separado)
+| Paso | Empieza | Termina | Notas |
+|---|---|---|---|
+| Guion de la apertura (3 ganchos, 8 bloques, ~5.100-5.600 caracteres) + borrador del artículo | 4 nov 19:48 | 4 nov (misma sesión) | 0 €; sale casi entero del expediente aprobado. Espera: OK de Paco |
 
 ## Lo aprendido (para la plantilla)
 - (se rellena durante el piloto)
