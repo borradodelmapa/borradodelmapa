@@ -21,7 +21,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-completo-v5', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-completo-v5', out: T + '/salida', ultima: T + '/ULTIMA', ultimaNombre: 'historia-de-los-tatuajes', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC },
   // TRES avisos de seguir (Paco, 4 nov 2026), el modelo de siempre (franja + corazón + batok), cada uno al empezar un mapa (sin voz encima) y con su texto
