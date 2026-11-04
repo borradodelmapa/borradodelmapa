@@ -20,6 +20,7 @@ Lo que se aprenda aquí se convierte en `docs/paises/PLANTILLA.md` para los dem�
 5. Chat 2: ifugao (T2·4), shorts derivados, paquetes por red → Metricool ⏸.
 
 ## Piezas
+**Fechas del chat 2 APLAZADAS (Paco, 4 nov 2026, noche: «Tatuajes déjalo para el 10 de diciembre y empezamos Filipinas más tarde, ya veremos»).** Las de abajo son el orden de referencia; se corren en bloque cuando Paco fije el arranque.
 | # | Pieza | Chat | Estado | Fecha prevista |
 |---|---|---|---|---|
 | 1 | Expediente · introducción (8 apartados, con fuentes) | 1 | **borrador para Paco** (4 nov): `docs/paises/filipinas-expediente.md`, 31 fuentes, ⚠ marcados; plantilla en `PLANTILLA-expediente.md` | 13 nov |

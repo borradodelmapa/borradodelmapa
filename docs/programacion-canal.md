@@ -89,6 +89,18 @@ Se trabaja por países (L2): Filipinas sale completa y junta. La web va **al men
 4. Las reglas **Y10-Y16** y G2-G8 propuestas (abajo, en el anexo); entran en la checklist solo con su OK.
 5. Si el **mapa de cabecera pasa después del gancho** (G3): cambia el orden de M1/M7/S3 en los shorts nuevos.
 
+## 9 · ¿Cuánto se tarda en hacer los 193 países con web y vídeo? (estimación del chat 2, 4 nov 2026)
+**El cuello de botella es publicar, no producir.** Con P13 hay **3 huecos por semana**. Un país completo con L2 ocupa ~7 huecos (avance + apertura + 3-4 derivados + 1-2 episodios de Pueblos) → **~2,3 semanas por país**.
+| Escenario | Qué lleva cada país | Huecos/semana | 193 países |
+|---|---|---|---|
+| 1 · Todos completos, calendario actual | paquete L2 entero | 3 (mar-jue) | **~8-9 años** |
+| 2 · Todos completos, más huecos | paquete L2 entero | 5 (lun-vie) o 2 al día | ~5 años / ~4,5 años |
+| 3 · **Por niveles** (propuesta) | A ~40 países con mucha búsqueda y cultura: paquete entero (~7 huecos) · B ~80: apertura + 1 short (~2) · C ~70 pequeños e islas: solo web + un vídeo por región (Caribe, Pacífico, Balcanes…; ~12 regiones × 3) | 3 | **~3 años** |
+| 4 · Por niveles + más huecos | igual que el 3 | 5 | **~2 años** |
+**Producir** (con las paradas de Paco, F3-F8): un país completo es ~1 semana de trabajo de los chats; los B y C, mucho menos. Lo que más frena aquí es **el tiempo de Paco revisando** (guion, fotos, voz, editor: 4-5 paradas por vídeo).
+**La web va más rápida que el vídeo** (no gasta huecos de redes): depende del ritmo de guías y páginas del chat 1.
+**Coste a ojo:** voz ~7.000 caracteres por país completo (apertura + episodio); a 2-3 países al mes cabe en unos 100.000 caracteres/mes de ElevenLabs (precio exacto del plan, antes de gastar). Guías: con la medida de Filipinas (7-20 € por 13 guías), unos 5-15 € por país → **~1.000-3.000 €** los 193 (lo afina el chat 1). Fotos, mapas, motor, blog: 0 €.
+
 ---
 ## ANEXO · Reglas propuestas para la checklist (NO están en la checklist hasta el OK de Paco)
 
