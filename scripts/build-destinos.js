@@ -48,6 +48,23 @@ function guiasDelPais(countrySlug, countryName) {
     </nav>`;
 }
 
+// «Conoce <país>» (L2, 4 nov 2026): resumen del expediente aprobado del país (scripts/paises-intro.json). Sin datos, nada.
+const PAISES_INTRO = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
+function conocePais(countrySlug, countryName) {
+  const x = PAISES_INTRO[countrySlug];
+  if (!x || !x.apartados) return '';
+  const enl = (x.enlaces || []).map(e => `<li><a href="${escapeHTML(e.u)}">${escapeHTML(e.t)}</a></li>`).join('');
+  const fue = (x.fuentes || []).map(f => `<a href="${escapeHTML(f.u)}" rel="noopener" target="_blank">${escapeHTML(f.t)}</a>`).join(' · ');
+  return `<section class="destino-section destino-conoce" id="conoce">
+      <h2 class="destino-h2">Conoce ${escapeHTML(countryName)}</h2>
+      <p class="destino-desc">${escapeHTML(x.hilo)}</p>
+      ${x.apartados.map(a => `<h3 class="destino-related-title">${escapeHTML(a.t)}</h3>
+      <p class="destino-desc">${escapeHTML(a.p)}</p>`).join('\n      ')}
+      ${enl ? `<ul class="destino-related-list">${enl}</ul>` : ''}
+      ${fue ? `<p class="destino-desc"><small>Fuentes: ${fue}</small></p>` : ''}
+    </section>`;
+}
+
 function slugify(str) {
   return (str || '')
     .toLowerCase()
@@ -815,6 +832,8 @@ function buildCountryHTML(countryName, countryCode, destinos) {
     <div class="destino-country-grid">
       ${cardsHTML}
     </div>
+
+    ${conocePais(countrySlug, countryName)}
 
     ${guiasDelPais(countrySlug, countryName)}
 
