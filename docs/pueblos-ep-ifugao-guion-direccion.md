@@ -6,9 +6,9 @@ Datos: los del expediente de Filipinas (`docs/paises/filipinas-expediente.md`, a
 Estructura: gancho → situar (mapa) → qué son → cómo funcionan → el debate (pico) → lo que se borra → cierre con dato → cómo ir → app → tarjeta.
 
 ---
-## ESCENA 0 · GANCHO (0-5 s) — Paco elige
+## ESCENA 0 · GANCHO (0-5 s) — ✅ ELEGIDA LA A (Paco, 4 nov 2026); la B se guarda para un derivado (G7 propuesta)
 - **Imagen (M15):** mujer o anciano ifugao trabajando en el arrozal (PM, persona primero) → GP de las terrazas de Batad.
-- **Versión A (recomendada):** «Durante siglos, estas montañas se cultivaron a mano. En noviembre de 2025, un tifón se llevó un trozo en una noche.» [I6][I7]
+- **Versión A ✅ ELEGIDA:** «Durante siglos, estas montañas se cultivaron a mano. En noviembre de 2025, un tifón se llevó un trozo en una noche.» [I6][I7]
 - **Versión B:** «Se dijo que tenían dos mil años. Puede que se construyeran para escapar de los españoles.» [F15][F17]
 - **Texto en pantalla:** A «UN TIFÓN, UNA NOCHE» · B «¿2.000 AÑOS… O 400?»
 - **Sonido:** agua corriendo por los canales (libre, comprobado S1). **IA:** no.
@@ -60,4 +60,4 @@ Estructura: gancho → situar (mapa) → qué son → cómo funcionan → el deb
 - [I7] Al Jazeera, 27 jul 2026, «Climate change presents new threat to Philippines' UNESCO rice terraces» (Fung-wong, nombre internacional de Uwan; corrimientos en 2011, 2023 y 2025; reparación vecinal *bachang*): https://www.aljazeera.com/features/2026/7/27/climate-change-presents-new-threat-to-philippines-unesco-rice-terraces
 
 ## Lo que necesito de Paco (⏸)
-1. Gancho A o B. 2. OK al texto (o correcciones por escena). Después: fotos (F9) ⏸ → coste de voz ⏸ → mapa `mapa-ifugao.cjs` (0 €) → montaje → editor.
+1. ~~Gancho~~ → **A** (Paco, 4 nov). 2. OK al texto (o correcciones por escena). Después: fotos (F9) ⏸ → coste de voz ⏸ → mapa `mapa-ifugao.cjs` (0 €) → montaje → editor.
