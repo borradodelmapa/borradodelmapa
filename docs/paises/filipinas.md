@@ -46,7 +46,7 @@ Antes del piloto: **41 guías en 13 países**, Filipinas no está. Al terminar: 
 | Paso | Empieza | Termina | Notas |
 |---|---|---|---|
 | Guion de la apertura (3 ganchos, 8 bloques, ~5.100-5.600 caracteres) + borrador del artículo | 4 nov 19:48 | 4 nov (misma sesión) | 0 €; sale casi entero del expediente aprobado. Espera: OK de Paco |
-| Guion del ifugao (fuentes nuevas: UNESCO, Acabado, corrimiento de Batad nov 2025) | 4 nov ~19:55 | 4 nov (misma sesión) | 0 €; 4 búsquedas. Espera: OK de Paco |
+| Guion del ifugao (fuentes nuevas: UNESCO, Acabado, corrimiento de Batad nov 2025) | 4 nov 19:52 | 4 nov 19:53 (reloj del equipo) | 0 €; 4 búsquedas. Espera: OK de Paco |
 
 ## Lo aprendido (para la plantilla)
 - (se rellena durante el piloto)
