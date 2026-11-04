@@ -149,6 +149,29 @@
     </div>
 
     <style>
+.dg{margin:34px 0 10px;padding:22px 18px 18px;border:1px solid var(--accent);background:rgba(244,99,11,.06)}
+.dg-head h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
+.dg-head h2 b{color:var(--accent)}
+.dg-head p{font-size:16px;line-height:1.5;color:var(--text-secondary);margin:0 0 16px}
+.dg-grid{display:grid;gap:14px}
+@media(min-width:700px){.dg-grid{grid-template-columns:repeat(2,1fr)}}
+.dg-card{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dg-card:hover{border-color:var(--accent)}
+.dg-card img{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dg-txt{padding:12px 14px 14px}
+.dg-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;margin-bottom:8px}
+.dg-txt strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:22px;line-height:1.1;text-transform:uppercase;margin-bottom:8px}
+.dg-txt em{font-style:normal;font-size:14px;color:var(--accent)}
+.dg-cta{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:17px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:12px 18px}
+</style>
+    <section class="dg" id="guias">
+      <div class="dg-head"><h2>Filipinas tiene <b>dos guías</b></h2>
+      <p>Completas, con mapa, paradas y consejos. ¿Quieres una a tu medida? Dile a Salma cuántos días tienes y qué te gusta.</p></div>
+      <div class="dg-grid"><a class="dg-card" href="/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t"><img src="/guias-img/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t.png" alt="Mapa de la guía Filipinas en 21 días: Manila, Palawan, Visayas y Cordillera con sus paradas" loading="lazy" decoding="async"><div class="dg-txt"><span class="dg-chip">Guía con mapa</span><strong>Filipinas en 21 días: Manila, Palawan, Visayas y Cordillera</strong><em>Ver la guía completa →</em></div></a><a class="dg-card" href="/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk"><img src="/guias-img/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk.png" alt="Mapa de la guía Luzón norte en 4 días: Banaue, Batad, Sagada y Buscalan con sus paradas" loading="lazy" decoding="async"><div class="dg-txt"><span class="dg-chip">Guía con mapa</span><strong>Luzón norte en 4 días: Banaue, Batad, Sagada y Buscalan</strong><em>Ver la guía completa →</em></div></a></div>
+      <a class="dg-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
+    </section>
+
+    <style>
 .dc{margin:40px 0 8px;border-top:1px solid var(--border)}
 .dc-hero{position:relative;margin:0 0 6px;overflow:hidden;background:#000}
 .dc-hero img{width:100%;aspect-ratio:16/9;max-height:520px;object-fit:cover;display:block;opacity:.82}
@@ -194,13 +217,6 @@
       <div class="dc-dia"><h3>Diarios de viaje</h3><div class="dc-dia-grid"><a class="dc-card" href="/blog/viajes/filipinas-whang-od-tatuadora-kalinga"><img src="/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga.jpg" alt="" loading="lazy"><div><span>Diario de viaje</span><strong>Whang-Od: más de cien años tatuando con una espina</strong></div></a><a class="dc-card" href="/blog/viajes/filipinas-sagada-ataudes-colgantes"><img src="/blog/viajes/img/filipinas-sagada-ataudes-colgantes.jpg" alt="" loading="lazy"><div><span>Diario de viaje</span><strong>Sagada: el pueblo donde a los muertos se les cuelga</strong></div></a></div></div>
       <p class="dc-fuentes">Fuentes: <a href="https://whc.unesco.org/en/list/722" rel="noopener" target="_blank">UNESCO</a> · <a href="https://www.pagasa.dost.gov.ph/climate/tropical-cyclone-information" rel="noopener" target="_blank">PAGASA</a> · <a href="https://www.cnrs.fr/en/press/homo-luzonensis-new-human-species-contemporaneous-homo-sapiens-discovered-philippines" rel="noopener" target="_blank">CNRS (Homo luzonensis)</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8596304" rel="noopener" target="_blank">Current Biology (ayta)</a> · <a href="https://digitalscholarship.unlv.edu/anthro_fac_articles/501" rel="noopener" target="_blank">Journal of Field Archaeology (terrazas)</a> · <a href="https://bantayogngmgabayani.org/bayani/macli-ing/" rel="noopener" target="_blank">Bantayog ng mga Bayani</a>. Fotos: Wikimedia Commons, con su autor en cada pie.</p>
     </section>
-
-    <nav class="destino-related" aria-label="Guías de viaje en Filipinas">
-      <h2 class="destino-related-title">Guías de viaje en Filipinas</h2>
-      <ul class="destino-related-list">
-        <li><a href="/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t">Filipinas en 21 días: Manila, Palawan, Visayas y Cordillera</a></li><li><a href="/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk">Luzón norte en 4 días: Banaue, Batad, Sagada y Buscalan</a></li>
-      </ul>
-    </nav>
 
     <!-- RUTAS DE LA COMUNIDAD -->
     <section class="destino-community" id="destino-community" style="display:none">

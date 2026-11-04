@@ -115,6 +115,44 @@ function conocePais(countrySlug, countryName) {
     </section>`;
 }
 
+// Guías del país DESTACADAS en la página del país (Paco, 4 nov 2026: «tiene que destacar más, mínimo como los vídeos; imagen del
+// mapa y sus puntos de cada guía; arriba: este país cuenta con N guías, hazte la tuya personalizada»). Imagen = guias-img/<slug>.png
+// (el mapa con las paradas numeradas que ya genera build-guias.js para WhatsApp; 0 €). Sin imagen, la tarjeta sale sin ella.
+// Las páginas de destino siguen con la lista sencilla (guiasDelPais).
+const NUM_ES = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'];
+function guiasDestacadas(countrySlug, countryName) {
+  const l = GUIAS_POR_PAIS[countrySlug] || [];
+  if (!l.length) return '';
+  const e = escapeHTML;
+  const n = l.length, nTxt = NUM_ES[n] || String(n);
+  const cards = l.slice(0, 12).map(g => {
+    const img = fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png')) ? `<img src="/guias-img/${e(g.slug)}.png" alt="Mapa de la guía ${e(g.nombre)} con sus paradas" loading="lazy" decoding="async">` : '';
+    return `<a class="dg-card" href="/${e(g.slug)}">${img}<div class="dg-txt"><span class="dg-chip">Guía con mapa</span><strong>${e(g.nombre)}</strong><em>Ver la guía completa →</em></div></a>`;
+  }).join('');
+  return `<style>
+.dg{margin:34px 0 10px;padding:22px 18px 18px;border:1px solid var(--accent);background:rgba(244,99,11,.06)}
+.dg-head h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
+.dg-head h2 b{color:var(--accent)}
+.dg-head p{font-size:16px;line-height:1.5;color:var(--text-secondary);margin:0 0 16px}
+.dg-grid{display:grid;gap:14px}
+@media(min-width:700px){.dg-grid{grid-template-columns:repeat(${Math.min(n, 3)},1fr)}}
+.dg-card{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dg-card:hover{border-color:var(--accent)}
+.dg-card img{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dg-txt{padding:12px 14px 14px}
+.dg-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;margin-bottom:8px}
+.dg-txt strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:22px;line-height:1.1;text-transform:uppercase;margin-bottom:8px}
+.dg-txt em{font-style:normal;font-size:14px;color:var(--accent)}
+.dg-cta{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:17px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:12px 18px}
+</style>
+    <section class="dg" id="guias">
+      <div class="dg-head"><h2>${e(countryName)} tiene <b>${nTxt} ${n === 1 ? 'guía' : 'guías'}</b></h2>
+      <p>Completas, con mapa, paradas y consejos. ¿Quieres una a tu medida? Dile a Salma cuántos días tienes y qué te gusta.</p></div>
+      <div class="dg-grid">${cards}</div>
+      <a class="dg-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
+    </section>`;
+}
+
 function slugify(str) {
   return (str || '')
     .toLowerCase()
@@ -890,9 +928,9 @@ function buildCountryHTML(countryName, countryCode, destinos) {
       ${cardsHTML}
     </div>
 
-    ${conocePais(countrySlug, countryName)}
+    ${guiasDestacadas(countrySlug, countryName)}
 
-    ${guiasDelPais(countrySlug, countryName)}
+    ${conocePais(countrySlug, countryName)}
 
     <!-- RUTAS DE LA COMUNIDAD -->
     <section class="destino-community" id="destino-community" style="display:none">
