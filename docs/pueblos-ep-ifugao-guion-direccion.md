@@ -59,5 +59,8 @@ Estructura: gancho → situar (mapa) → qué son → cómo funcionan → el deb
 - [I6] Philstar, 27 jun 2026, «President Marcos urged to save disaster-hit Batad rice terraces» (supertifón Uwan, nov 2025: 2 muertos, canal destruido, >2 ha, ~150 agricultores; reparación ~30 millones de pesos): https://www.philstar.com/music/2026/06/27/2538081/president-marcos-urged-save-disaster-hit-batad-rice-terraces
 - [I7] Al Jazeera, 27 jul 2026, «Climate change presents new threat to Philippines' UNESCO rice terraces» (Fung-wong, nombre internacional de Uwan; corrimientos en 2011, 2023 y 2025; reparación vecinal *bachang*): https://www.aljazeera.com/features/2026/7/27/climate-change-presents-new-threat-to-philippines-unesco-rice-terraces
 
+## Fotos (F9) — revisadas una a una el 4 nov 2026
+`salma marketing/pueblos/ifugao/hoja-contactos.html`: **123 fotos** libres de Wikimedia Commons (172 bajadas; 49 fuera con su motivo en `fotos/descartadas-otro-sitio/NOTA.txt`: otros pueblos, cráneos, niños, retratos coloniales con desnudo, recuerdos turísticos). Propuesta por escena arriba de la hoja (`propuesta.json`); portada W135 o W122. **No hay foto libre del corrimiento de Batad de 2025**: no se rotula ninguna como tal. ⏸ Paco elige o aprueba la propuesta (F6).
+
 ## Lo que necesito de Paco (⏸)
 1. ~~Gancho~~ → **A** (Paco, 4 nov). 2. OK al texto (o correcciones por escena). Después: fotos (F9) ⏸ → coste de voz ⏸ → mapa `mapa-ifugao.cjs` (0 €) → montaje → editor.

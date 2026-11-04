@@ -47,6 +47,7 @@ Antes del piloto: **41 guías en 13 países**, Filipinas no está. Al terminar: 
 |---|---|---|---|
 | Guion de la apertura (3 ganchos, 8 bloques, ~5.100-5.600 caracteres) + borrador del artículo | 4 nov 19:48 | 4 nov (misma sesión) | 0 €; sale casi entero del expediente aprobado. Espera: OK de Paco |
 | Guion del ifugao (fuentes nuevas: UNESCO, Acabado, corrimiento de Batad nov 2025) | 4 nov 19:52 | 4 nov 19:53 (reloj del equipo) | 0 €; 4 búsquedas. Espera: OK de Paco |
+| Fotos del ifugao: 172 bajadas de Wikimedia, revisadas una a una (F9), 123 en la hoja con propuesta por escena | 4 nov 20:00 | 4 nov 20:37 | 0 €; la descarga tarda (Wikimedia limita la velocidad). Espera: Paco elige |
 
 ## Lo aprendido (para la plantilla)
 - (se rellena durante el piloto)
