@@ -21,7 +21,7 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-completo-v2', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-completo-v3', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC },
   // TRES avisos de seguir (Paco, 4 nov 2026), el modelo de siempre (franja + corazón + batok), cada uno al empezar un mapa (sin voz encima) y con su texto
@@ -228,9 +228,11 @@ const cfg = {
       shots: [
         { a: 'W217', sc: 'GP', pan: [0, 0.6, 1, 0.6], z: 0.15 },               // Corleone (Sicilia)
         { a: 'W218', sc: 'PM', from: 'aunque' },
-        { a: 'W154', sc: 'GP', from: 'En Nápoles,' },                            // cárcel de Poggioreale
+        { a: 'W224', sc: 'GP', look: 'trix', pan: [0.2, 0.4, 0.6, 0.35], z: 0.4, from: 'En Nápoles,' }, // juicio a la Camorra, presos en la jaula (Viterbo, 1911)
         { a: 'W153', sc: 'D', look: 'trix', pan: [0.5, 0.05, 0.5, 0.95], z: 0.6, from: 'tiene tradición' }, // camorrista tatuado (dibujo del s. XIX)
-        { a: 'W209', sc: 'PM', from: 'Un grupo' },                               // tatuando
+        { a: 'W219', sc: 'PM', pan: [0.2, 0.5, 0.8, 0.5], z: 0.3, from: 'para marcar' }, // camorristas (grabado, 1858)
+        { a: 'W223', sc: 'PM', look: 'trix', pan: [0.3, 0.5, 0.6, 0.5], z: 0.3, from: 'Un grupo' }, // presos de la Camorra llevados al juicio (1911)
+        { a: 'W209', sc: 'PP', from: 'por tatuarse' },                           // tatuando
       ] },
     // 4.3 · TRÍADAS
     { id: 'triadas', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'HONG KONG', amb: CALLE(-30, 2),
@@ -238,11 +240,13 @@ const cfg = {
       en: ['In the Chinese triads, dragon and tiger tattoos once marked rank.', 'But, according to a specialist criminologist, tattoos are no longer part of initiation today: groups avoid them so as not to be detected.', 'Many leaders have none.', 'A triad tattoo, on its own, no longer proves anything.'],
       shots: [
         { a: 'W193', sc: 'GP', look: 'trix', pan: [0.5, 0.2, 0.5, 0.8], z: 0.2 }, // ciudad amurallada de Kowloon desde el aire
-        { a: 'W165', sc: 'D', from: 'los tatuajes' },                           // dragón tatuado
+        { a: 'W228', sc: 'PP', pan: [0.5, 0.1, 0.5, 0.8], z: 0.4, from: 'los tatuajes' }, // espalda con dragón, Hong Kong
+        { a: 'W226', sc: 'PM', pan: [0.5, 0.2, 0.5, 0.6], z: 0.3, from: 'tigre' },  // espalda tatuada en un mercado de Hong Kong
         { a: 'W184', sc: 'PM', from: 'Pero,' },                                  // calle de Kowloon
+        { a: 'W227', sc: 'PP', pan: [0.2, 0.4, 0.5, 0.5], z: 0.5, from: 'hoy el' }, // brazo con dragón, Hong Kong
         { a: 'W196', sc: 'PP', from: 'los grupos' },                             // callejón
         { a: 'W197', sc: 'GP', from: 'Muchos' },                                 // Kowloon de noche
-        { a: 'W198', sc: 'PM', pan: [0.2, 0.5, 0.8, 0.5], z: 0.3, from: 'Un tatuaje' },
+        { a: 'W165', sc: 'D', pan: [0.3, 0.3, 0.6, 0.7], z: 0.4, from: 'Un tatuaje' }, // dragón tatuado
       ] },
     // 4.4 · MÉXICO, SANTA MUERTE
     { id: 'mexico', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'MÉXICO', amb: CALLE(-30, 12),
@@ -251,11 +255,11 @@ const cfg = {
       cifra: { word: 'mil', text: '+1.000', sub: 'GRUPOS', dur: 2.4, y: 560 },
       shots: [
         { a: 'W155', sc: 'PP', pan: [0.5, 0.25, 0.5, 0.55], z: 0.4 },          // espalda con la Santa Muerte tatuada
-        { a: 'W160', sc: 'PM', from: 'Se la' },
+        { a: 'W229', sc: 'D', pan: [0.5, 0.2, 0.5, 0.8], z: 0.4, from: 'Se la' }, // Santa Muerte tatuada en la pierna
         { a: 'W161', sc: 'GP', pan: [0, 0.5, 1, 0.5], z: 0.25, from: 'pero una' }, // templo de la Santa Muerte (Querétaro)
-        { a: 'W158', sc: 'PP', from: 'también' },
-        { a: 'W157', sc: 'PM', from: 'Hay más' },                              // velas
-        { a: 'W156', sc: 'PP', from: 'Las autoridades' },                      // altar
+        { a: 'W231', sc: 'PP', pan: [0.3, 0.3, 0.6, 0.6], z: 0.4, from: 'también' }, // calavera tatuada
+        { a: 'W157', sc: 'PM', from: 'Hay más' },                                // velas
+        { a: 'W230', sc: 'D', pan: [0.3, 0.5, 0.7, 0.5], z: 0.3, from: 'Las autoridades' }, // calavera tatuada en el pie
       ] },
     // 4.5 · RUSIA HOY
     { id: 'rusia-hoy', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'RUSIA · FOTOS: LITUANIA, 2010', amb: SALA(-28, 20),
@@ -263,23 +267,24 @@ const cfg = {
       voz: 'El código de los vori v zakone sobrevivió a la caída de la URSS: hoy la Bratva, la mafia rusa, es la red más amplia, con los vori como una élite que sigue sus reglas — lealtad, silencio, nunca cooperar con la policía. Pero ese código ya se había empezado a resquebrajar desde los años cuarenta, con presos que volvían del Ejército Rojo y sí colaboraban con el Estado.',
       en: ['The vory v zakone code survived the fall of the USSR: today the Bratva, the Russian mafia, is the widest network, with the vory as an elite that follows its rules — loyalty, silence, never cooperating with the police.', 'But that code had already started to crack in the 1940s, with prisoners returning from the Red Army who did cooperate with the State.'],
       shots: [
-        { a: 'W145', sc: 'GP', look: 'trix' },                                  // taquillas de la cárcel
-        { a: 'W214', sc: 'PM', from: 'hoy la' },                                // celda
+        // fotos: cárcel de Lituania (antigua URSS), 2010, www.pvz.lt; encuadres en el pecho y los hombros, sin caras
+        { a: 'W235', sc: 'PP', pan: [0.5, 0.55, 0.5, 0.62], z: 0.9 },          // estrellas bajo las clavículas
+        { a: 'W236', sc: 'PM', pan: [0.35, 0.97, 0.65, 0.97], z: 1.1, from: 'hoy la' }, // brazos en alto, estrellas en el pecho
+        { a: 'W232', sc: 'PP', pan: [0.5, 0.7, 0.5, 0.85], z: 0.6, from: 'con los' },
         { a: 'W215', sc: 'D', pan: [0.5, 0.6, 0.5, 0.95], z: 0.4, from: 'lealtad,' }, // pies tatuados
-        { a: 'W216', sc: 'GP', from: 'Pero ese' },                              // pesas en el patio
-        { a: 'W138', sc: 'PM', pan: [0.2, 0.4, 0.8, 0.6], z: 0.3, from: 'con presos' },
+        { a: 'W238', sc: 'PP', pan: [0.5, 0.75, 0.5, 0.85], z: 0.9, from: 'Pero ese' },
+        { a: 'W237', sc: 'D', pan: [0.3, 0.72, 0.4, 0.78], z: 0.6, from: 'desde los' }, // calavera en el hombro
+        { a: 'W233', sc: 'PM', pan: [0.25, 0.45, 0.3, 0.6], z: 0.5, from: 'con presos' }, // hombro tatuado
       ] },
     // 4.6 · CIERRE (aprobado por Paco el 4 nov 2026) — último plano: el puñetazo del tatuado
     { id: 'cierre', who: 'salma', scene: true, sceneEnd: true, pause: 1.6, amb: GOLPES(-30, 10), golpe: PUNETAZO('Quizá', 1.5),
       text: 'Yakuza, tríadas, maras: tres mafias, en tres continentes, han llegado a la misma conclusión. El tatuaje que antes probaba pertenencia hoy puede delatarte. Pero fuera de las cárceles, casi todos nos tatuamos por gusto: por un viaje, por un recuerdo, por alguien a quien no queremos olvidar. Hace cinco mil trescientos años, Ötzi se tatuó para curarse. Quizá nosotros seguimos haciendo lo mismo.',
       en: ['Yakuza, triads, maras: three mafias, on three continents, have reached the same conclusion.', 'The tattoo that once proved belonging can now give you away.', 'But outside prisons, almost all of us get tattooed because we want to: for a journey, for a memory, for someone we do not want to forget.', 'Five thousand three hundred years ago, Ötzi got tattooed to heal himself.', 'Perhaps we are still doing the same.'],
       shots: [
-        { a: 'W84', sc: 'PM' },                                                 // irezumi de hoy (ya visto: repaso)
-        { a: 'W39', sc: 'PP', from: 'El tatuaje' },                             // pe'a samoano (ya visto: repaso)
-        { a: 'W208', sc: 'PM', from: 'Pero fuera' },                            // tatuador trabajando
-        { a: 'W210', sc: 'D', pan: [0.3, 0.5, 0.7, 0.5], z: 0.3, from: 'por un recuerdo' },
-        { a: 'W209', sc: 'PP', from: 'por alguien' },
-        { a: 'W2', sc: 'PP', foc: [0.5, 0.3], from: 'Hace cinco' },             // Ötzi
+        { a: 'W84', sc: 'PM', pan: [0.5, 0.15, 0.5, 0.85], z: 0.3 },           // irezumi de hoy (repaso)
+        { a: 'W39', sc: 'PP', pan: [0.5, 0.2, 0.5, 0.8], z: 0.3, from: 'El tatuaje' }, // pe'a samoano (repaso)
+        { a: 'W208', sc: 'PM', pan: [0.3, 0.5, 0.7, 0.5], z: 0.3, from: 'Pero fuera' }, // tatuador trabajando
+        { a: 'FILE:' + T + '/runway/otzi-camina-tatuado-muylento.mp4', sc: 'GP', look: 'app', from: 'por un viaje' }, // Ötzi andando (Runway, IA) desde 7:26 (Paco), en vez de la foto fija
         { a: 'FILE:' + T + '/runway/kimbei-golpe-kling-5s.mp4', sc: 'PM', ss: 1.5, from: 'Quizá' }, // ÚLTIMO PLANO: el puñetazo (Runway, IA)
       ] },
   ],
