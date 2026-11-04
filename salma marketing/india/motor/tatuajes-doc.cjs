@@ -21,11 +21,13 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-completo-v1', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-completo-v2', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
-  voices: { salma: SALMA_DOC }, cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
+  voices: { salma: SALMA_DOC },
+  // TRES avisos de seguir (Paco, 4 nov 2026), el modelo de siempre (franja + corazón + batok), cada uno al empezar un mapa (sin voz encima) y con su texto
+  seguir: [{ seg: 105.90, texto: 'Si te está gustando, suscríbete' }, { seg: 233.21, texto: 'Hay más documentales: suscríbete' }, { seg: 307.44, texto: 'Dale a me gusta y compártelo' }], cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'GRACIAS POR VERLO', l5: 'Borrado del Mapa' },
-  descartes: { M11: 'portada horizontal pendiente (la miniatura de YouTube largo va aparte)', M13: 'sígueme en el documental largo: por decidir con Paco', M3: 'el clip del puñetazo va al final del gancho, del bloque 1 y del documental, y el cierre repite tatuajes ya vistos, a propósito (Paco, 3-4 nov 2026)' },
+  descartes: { M11: 'portada horizontal pendiente (la miniatura de YouTube largo va aparte)', M3: 'el clip del puñetazo va al final del gancho, del bloque 1 y del documental, y el cierre repite tatuajes ya vistos, a propósito (Paco, 3-4 nov 2026)' },
   blocks: [
     // 1.0 · GANCHO (igual que tatuajes-gancho.cjs v4, aprobado por Paco)
     { id: 'gancho', who: 'salma', scene: true, sceneEnd: true, pause: 0.8, amb: GOLPES(-30), golpe: PUNETAZO('Tu motivo', 1.9),
