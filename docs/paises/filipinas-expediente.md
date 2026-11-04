@@ -1,6 +1,6 @@
 # FILIPINAS — expediente de la introducción (pieza #1 de `docs/paises/filipinas.md`)
 
-**Estado: BORRADOR para que Paco lo lea y lo apruebe (4 nov 2026, chat 1). 0 € gastados** (solo búsquedas web gratuitas).
+**Estado: APROBADO por Paco el 4 nov 2026 (chat 1). 0 € gastados** (solo búsquedas web gratuitas). Los ⚠ siguen sin ir a la voz hasta confirmarlos.
 De aquí sale todo (L2 de `docs/video-checklist.md`): la sección «Conoce Filipinas» de `destinos/filipinas.html`, el artículo largo del blog,
 el guion del vídeo de apertura, los shorts derivados y el resumen del «Antes de ir» de cada guía.
 **Cómo se lee:** cada dato lleva su fuente entre corchetes `[F7]` (lista al final, consultadas el 4 nov 2026).
