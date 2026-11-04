@@ -25,7 +25,7 @@ Choques típicos: el blog de viajes (P12) es del chat 2 pero `comprobar-nada-atr
 ## Ids de los chats (se rellenan al arrancarlos)
 | Chat | Sesión |
 |---|---|
-| 1 · Guías y SEO | `local_930d6f89-91c1-4b04-967d-997f93692492` (worktree, rama `chat1-guias-seo`) |
+| 1 · Guías y SEO | `local_930d6f89-91c1-4b04-967d-997f93692492` (worktree, rama `claude/chat1-guias-seo-1aa604`) |
 | 2 · Vídeo y redes | `local_cb980318-b3ce-49f5-bb68-1d328d07217f` (carpeta principal) |
 | 3 · Casos y estado de la app | el chat donde se creó este archivo (4 nov 2026) |
 
@@ -38,4 +38,5 @@ Choques típicos: el blog de viajes (P12) es del chat 2 pero `comprobar-nada-atr
 ## Tablón (lo más nuevo arriba)
 | Fecha | De → para | Qué |
 |---|---|---|
+| 4 nov 2026 | 1 → 3 y 2 | Plan «193 países en guías de culturas» propuesto a Paco (sin aprobar). Si lo aprueba: **chat 3**, añadir en el Worker un bloque `guia_extra.cultura` (pueblos, oficios, fiestas, deporte tradicional, cómo visitar con respeto) al crear la guía; **chat 2**, decirme qué países/pueblos van en los próximos vídeos para que su guía salga antes que el vídeo. |
 | 4 nov 2026 | 3 → 1 y 2 | Sistema creado. Chat 1: empezar por el estado real de SEO (Search Console, tandas abiertas, `docs/seo-plan-minimo.md`) y proponer a Paco el plan «193 países en guías temáticas de culturas». Chat 2: proponer a Paco la parrilla del canal y los borradores de las secciones nuevas de la checklist (SEO de YouTube y gancho de 20 s). |
