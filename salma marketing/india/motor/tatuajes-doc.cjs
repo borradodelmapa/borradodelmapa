@@ -21,12 +21,12 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
   titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
-  id: 'tatuajes-doc-completo-v3', out: T + '/salida', fotosSerie: T + '/fotos',
+  id: 'tatuajes-doc-completo-v4', out: T + '/salida', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
   voices: { salma: SALMA_DOC },
   // TRES avisos de seguir (Paco, 4 nov 2026), el modelo de siempre (franja + corazón + batok), cada uno al empezar un mapa (sin voz encima) y con su texto
   seguir: [{ seg: 105.90, texto: 'Si te está gustando, suscríbete' }, { seg: 233.21, texto: 'Hay más documentales: suscríbete' }, { seg: 307.44, texto: 'Dale a me gusta y compártelo' }], cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
-  card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'Documental', l4: 'GRACIAS POR VERLO', l5: 'Borrado del Mapa' },
+  card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'ÚNETE · SUSCRÍBETE', l4: 'GRACIAS POR VERLO', l5: 'Borrado del Mapa' },
   descartes: { M11: 'portada horizontal pendiente (la miniatura de YouTube largo va aparte)', M3: 'el clip del puñetazo va al final del gancho, del bloque 1 y del documental, y el cierre repite tatuajes ya vistos, a propósito (Paco, 3-4 nov 2026)' },
   blocks: [
     // 1.0 · GANCHO (igual que tatuajes-gancho.cjs v4, aprobado por Paco)
@@ -114,7 +114,7 @@ const cfg = {
       en: ["In Samoa, the pe'a covers from the waist to the knees.", 'In theory it takes five sessions over ten days; in practice, because of the pain and healing, it can take weeks.', "A bone comb, the ausogi'aso, is tapped with a mallet, the sausau.", 'It used to be a requirement for the title of matai, head of the family.', 'It no longer is — but many still do it the same way.'],
       shots: [
         { a: 'W38', sc: 'GP' },                                // pe'a, espalda
-        { a: 'W88', sc: 'PM', look: 'trix', from: 'En teoría' }, // tatuando, h. 1895 (Thomas Andrew)
+        { a: 'FILE:' + T + '/runway/samoa-tatau-kling-5s.mp4', sc: 'PM', look: 'app', ss: 0.8, from: 'En teoría' }, // Runway (IA, Kling 3.0 Pro): tatuando en Samoa, h. 1895 (Thomas Andrew), cobra vida y pasa a color con humo leve (Paco)
         { a: 'W90', sc: 'PP', from: 'en la práctica' },        // sesión de hoy
         { a: 'W89', sc: 'D', from: 'Se golpea' },              // peine y maceta
         { a: 'W93', sc: 'PP', from: 'Antes era' },             // pe'a, detalle
@@ -141,7 +141,7 @@ const cfg = {
       en: ['Ainu women, in northern Japan, tattooed their mouths and forearms.', 'They started between ten and thirteen — sometimes earlier — and finished around fifteen or sixteen: the sign that they were ready to marry.', 'The Japanese colonisation of Hokkaido, between 1869 and 1904, ended up banning it.'],
       cifra: { word: '1869', text: '1869-1904', sub: 'COLONIZACIÓN DE HOKKAIDO', dur: 2.6, y: 560 },
       shots: [
-        { a: AINU('W4'), sc: 'PP', look: 'trix', foc: [0.5, 0.4] },
+        { a: 'FILE:' + T + '/runway/ainu-color-kling-5s.mp4', sc: 'PP', look: 'app' }, // Runway (IA, Kling 3.0 Pro): la mujer ainu (W4, h. 1930) pasa a color, sonríe y se le mueve el pelo (Paco, 4 nov 2026)
         { a: AINU('W7'), sc: 'PM', look: 'trix', from: 'Empezaban' },
         { a: AINU('W3'), sc: 'PP', look: 'trix', from: 'a veces' },
         { a: AINU('W5'), sc: 'PP', look: 'trix', foc: [0.5, 0.35], from: 'la señal' },
@@ -214,8 +214,7 @@ const cfg = {
       text: 'La Yakuza heredó el irezumi integral, el tebori, hecho a mano. Pero el estigma que empezó con la prohibición Meiji de 1868 sigue vivo: balnearios, gimnasios y negocios siguen prohibiendo la entrada a quien lleva tatuajes visibles.',
       en: ['The Yakuza inherited full-body irezumi, tebori, done by hand.', 'But the stigma that began with the Meiji ban of 1868 is still alive: bathhouses, gyms and businesses still refuse entry to anyone with visible tattoos.'],
       shots: [
-        { a: 'W151', sc: 'PP', foc: [0.5, 0.35] },                              // Horiyoshi III, maestro tatuador
-        { a: 'W150', sc: 'D', pan: [0.2, 0.4, 0.8, 0.5], z: 0.4, from: 'el tebori,' }, // tebori: tatuaje a mano
+        { a: 'W150', sc: 'PM', pan: [0.1, 0.4, 0.8, 0.5], z: 0.3 },            // tebori: tatuaje a mano (Horiyoshi III fuera: no aportaba, Paco)
         { a: 'W152', sc: 'PM', from: 'Pero el' },                               // brazo con irezumi de hoy
         { a: 'W147', sc: 'PP', pan: [0.5, 0.2, 0.5, 0.6], z: 0.3, from: 'balnearios,' }, // cartel de balneario
         { a: 'W148', sc: 'D', pan: [0.2, 0.5, 0.9, 0.5], z: 0.3, from: 'negocios' },  // «tatuajes y yakuza (暴力団): no se admite la entrada»
