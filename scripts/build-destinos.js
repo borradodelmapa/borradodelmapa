@@ -50,18 +50,106 @@ function guiasDelPais(countrySlug, countryName) {
 
 // «Conoce <país>» (L2, 4 nov 2026): resumen del expediente aprobado del país (scripts/paises-intro.json). Sin datos, nada.
 const PAISES_INTRO = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
+// Maqueta (Paco, 4 nov: «necesita maquetación, imágenes y diseño atractivo»): portada a lo ancho, bloques numerados con foto y pie
+// (foto solo si es de lo que se cuenta; si no, el bloque va sin foto), galería de 6 y tarjetas a los diarios del blog. Fotos ya
+// revisadas de los episodios (F9) con autor (P2), enlazadas desde blog/viajes/img/. El estilo va aquí dentro (CONOCE_CSS) y solo
+// sale en las páginas de país con expediente: así no hay que subir el ?v= de destinos.css ni regenerar las 1.793 páginas.
+const CONOCE_CSS = `<style>
+.dc{margin:40px 0 8px;border-top:1px solid var(--border)}
+.dc-hero{position:relative;margin:0 0 6px;overflow:hidden;background:#000}
+.dc-hero img{width:100%;aspect-ratio:16/9;max-height:520px;object-fit:cover;display:block;opacity:.82}
+.dc-hero-txt{position:absolute;left:0;right:0;bottom:0;padding:28px 18px 18px;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.dc-kicker{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;margin-bottom:8px}
+.dc-hero h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(34px,7vw,64px);line-height:.95;text-transform:uppercase;margin:0;color:#fff}
+.dc-cap{font-size:12px;line-height:1.4;color:var(--text-muted);margin:6px 0 0}
+.dc-hilo{font-size:clamp(18px,2.4vw,22px);line-height:1.55;color:var(--text-primary);border-left:4px solid var(--accent);padding:4px 0 4px 16px;margin:26px 0 30px;max-width:780px}
+.dc-b{display:grid;gap:18px;margin:0 0 34px;align-items:start}
+.dc-b figure{margin:0}
+.dc-b img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;border:1px solid var(--border)}
+.dc-n{font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.14em;color:var(--accent);display:block;margin-bottom:2px}
+.dc-b h3{font-family:var(--font-cond);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase;margin:0 0 10px;color:var(--text-primary)}
+.dc-b p{font-size:17px;line-height:1.7;color:var(--text-secondary);margin:0}
+.dc-b--sin{max-width:780px}
+@media(min-width:760px){.dc-b--foto{grid-template-columns:1fr 1fr;gap:28px}.dc-b--der figure{order:2}}
+.dc-gal h3,.dc-dia h3{font-family:var(--font-cond);font-weight:800;font-size:22px;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 12px;color:var(--text-primary)}
+.dc-gal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 30px}
+@media(min-width:760px){.dc-gal-grid{grid-template-columns:repeat(3,1fr)}}
+.dc-gal-grid figure{margin:0}
+.dc-gal-grid img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border:1px solid var(--border)}
+.dc-dia-grid{display:grid;gap:12px;margin:0 0 26px}
+@media(min-width:620px){.dc-dia-grid{grid-template-columns:1fr 1fr}}
+.dc-card{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dc-card:hover{border-color:var(--accent)}
+.dc-card img{width:110px;height:110px;object-fit:cover;display:block}
+.dc-card span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.dc-card strong{font-size:16px;line-height:1.3;padding-right:10px;display:block}
+.dc-fuentes{font-size:13px;color:var(--text-muted);line-height:1.6}
+.dc-fuentes a{color:var(--text-secondary)}
+</style>`;
 function conocePais(countrySlug, countryName) {
   const x = PAISES_INTRO[countrySlug];
   if (!x || !x.apartados) return '';
-  const enl = (x.enlaces || []).map(e => `<li><a href="${escapeHTML(e.u)}">${escapeHTML(e.t)}</a></li>`).join('');
-  const fue = (x.fuentes || []).map(f => `<a href="${escapeHTML(f.u)}" rel="noopener" target="_blank">${escapeHTML(f.t)}</a>`).join(' · ');
-  return `<section class="destino-section destino-conoce" id="conoce">
-      <h2 class="destino-h2">Conoce ${escapeHTML(countryName)}</h2>
-      <p class="destino-desc">${escapeHTML(x.hilo)}</p>
-      ${x.apartados.map(a => `<h3 class="destino-related-title">${escapeHTML(a.t)}</h3>
-      <p class="destino-desc">${escapeHTML(a.p)}</p>`).join('\n      ')}
-      ${enl ? `<ul class="destino-related-list">${enl}</ul>` : ''}
-      ${fue ? `<p class="destino-desc"><small>Fuentes: ${fue}</small></p>` : ''}
+  const e = escapeHTML;
+  const cap = f => `<figcaption class="dc-cap">${e(f.pie)}${f.autor ? ` Foto: ${e(f.autor)}` : ''}</figcaption>`;
+  const img = (f, alt) => `<img src="${e(f.src)}" alt="${e(alt || f.pie)}" loading="lazy" decoding="async">`;
+  let nFoto = 0;
+  const bloques = x.apartados.map((a, i) => {
+    const n = String(i + 1).padStart(2, '0');
+    const txt = `<div><span class="dc-n">${n}</span><h3>${e(a.t)}</h3><p>${e(a.p)}</p></div>`;
+    return a.foto
+      ? `<article class="dc-b dc-b--foto${nFoto++ % 2 ? ' dc-b--der' : ''}"><figure>${img(a.foto)}${cap(a.foto)}</figure>${txt}</article>`
+      : `<article class="dc-b dc-b--sin">${txt}</article>`;
+  }).join('\n      ');
+  const gal = (x.galeria || []).length ? `<div class="dc-gal"><h3>En imágenes</h3><div class="dc-gal-grid">${x.galeria.map(f => `<figure>${img(f)}${cap(f)}</figure>`).join('')}</div></div>` : '';
+  const dia = (x.enlaces || []).length ? `<div class="dc-dia"><h3>Diarios de viaje</h3><div class="dc-dia-grid">${x.enlaces.map(l => `<a class="dc-card" href="${e(l.u)}">${l.img ? `<img src="${e(l.img)}" alt="" loading="lazy">` : ''}<div><span>Diario de viaje</span><strong>${e(l.t)}</strong></div></a>`).join('')}</div></div>` : '';
+  const fue = (x.fuentes || []).map(f => `<a href="${e(f.u)}" rel="noopener" target="_blank">${e(f.t)}</a>`).join(' · ');
+  return `${CONOCE_CSS}
+    <section class="dc" id="conoce">
+      <figure class="dc-hero">${x.portada ? img(x.portada, `${countryName}: ${x.portada.pie}`) : ''}<div class="dc-hero-txt"><span class="dc-kicker">Antes de viajar</span><h2>Conoce ${e(countryName)}</h2></div></figure>
+      ${x.portada ? cap(x.portada) : ''}
+      <p class="dc-hilo">${e(x.hilo)}</p>
+      ${bloques}
+      ${gal}
+      ${dia}
+      ${fue ? `<p class="dc-fuentes">Fuentes: ${fue}. Fotos: Wikimedia Commons, con su autor en cada pie.</p>` : ''}
+    </section>`;
+}
+
+// Guías del país DESTACADAS en la página del país (Paco, 4 nov 2026: «tiene que destacar más, mínimo como los vídeos; imagen del
+// mapa y sus puntos de cada guía; arriba: este país cuenta con N guías, hazte la tuya personalizada»). Imagen = guias-img/<slug>.png
+// (el mapa con las paradas numeradas que ya genera build-guias.js para WhatsApp; 0 €). Sin imagen, la tarjeta sale sin ella.
+// Las páginas de destino siguen con la lista sencilla (guiasDelPais).
+const NUM_ES = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'];
+function guiasDestacadas(countrySlug, countryName) {
+  const l = GUIAS_POR_PAIS[countrySlug] || [];
+  if (!l.length) return '';
+  const e = escapeHTML;
+  const n = l.length, nTxt = NUM_ES[n] || String(n);
+  const cards = l.slice(0, 12).map(g => {
+    const img = fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png')) ? `<img src="/guias-img/${e(g.slug)}.png" alt="Mapa de la guía ${e(g.nombre)} con sus paradas" loading="lazy" decoding="async">` : '';
+    return `<a class="dg-card" href="/${e(g.slug)}">${img}<div class="dg-txt"><span class="dg-chip">Guía con mapa</span><strong>${e(g.nombre)}</strong><em>Ver la guía completa →</em></div></a>`;
+  }).join('');
+  return `<style>
+.dg{margin:34px 0 10px;padding:22px 18px 18px;border:1px solid var(--accent);background:rgba(244,99,11,.06)}
+.dg-head h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
+.dg-head h2 b{color:var(--accent)}
+.dg-head p{font-size:16px;line-height:1.5;color:var(--text-secondary);margin:0 0 16px}
+.dg-grid{display:grid;gap:14px}
+@media(min-width:700px){.dg-grid{grid-template-columns:repeat(${Math.min(n, 3)},1fr)}}
+.dg-card{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dg-card:hover{border-color:var(--accent)}
+.dg-card img{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dg-txt{padding:12px 14px 14px}
+.dg-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;margin-bottom:8px}
+.dg-txt strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:22px;line-height:1.1;text-transform:uppercase;margin-bottom:8px}
+.dg-txt em{font-style:normal;font-size:14px;color:var(--accent)}
+.dg-cta{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:17px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:12px 18px}
+</style>
+    <section class="dg" id="guias">
+      <div class="dg-head"><h2>${e(countryName)} tiene <b>${nTxt} ${n === 1 ? 'guía' : 'guías'}</b></h2>
+      <p>Completas, con mapa, paradas y consejos. ¿Quieres una a tu medida? Dile a Salma cuántos días tienes y qué te gusta.</p></div>
+      <div class="dg-grid">${cards}</div>
+      <a class="dg-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
     </section>`;
 }
 
@@ -744,12 +832,18 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   const metaDesc = `Guía para viajar a ${countryName}. Los ${destinos.length} mejores destinos con alojamiento y consejos. Planifica tu ruta con Salma.`;
   const canonical = `${DOMAIN}/destinos/${countrySlug}.html`;
 
+  // Miniatura de cada destino (Paco, 4 nov 2026: «10 destinos ha de llevar también una imagen… miniatura, para no competir
+  // tanto» con «Conoce <país>»): la portada de destinos/img/<slug>/fotos.json, pequeña a la derecha. Sin foto, la tarjeta como antes.
+  let hayMini = false;
   const cardsHTML = destinos.map(dest => {
     const destSlug = `${dest.id}-${countrySlug}`;
     const badge = typeBadge(dest.tipo);
+    const fh = (loadFotos(destSlug) || {}).hero;
+    if (fh) hayMini = true;
+    const mini = fh ? `<img class="dcc-mini" src="/destinos/img/${destSlug}/${fh.file}" alt="${escapeHTML(fh.alt || dest.nombre)}" loading="lazy" decoding="async">` : '';
     return `
-      <a href="/destinos/${destSlug}.html" class="destino-country-card">
-        <div class="destino-country-card-badge">${badge}</div>
+      <a href="/destinos/${destSlug}.html" class="destino-country-card${fh ? ' dcc-con-mini' : ''}">
+        ${mini}<div class="destino-country-card-badge">${badge}</div>
         <h3 class="destino-country-card-title">${escapeHTML(dest.nombre)}</h3>
         <p class="destino-country-card-desc">${escapeHTML((dest.descripcion || '').substring(0, 120))}...</p>
         <div class="destino-country-card-meta">
@@ -829,13 +923,14 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   </section>
 
   <main class="destino-content destino-content-wide">
+    ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}</style>` : ''}
     <div class="destino-country-grid">
       ${cardsHTML}
     </div>
 
-    ${conocePais(countrySlug, countryName)}
+    ${guiasDestacadas(countrySlug, countryName)}
 
-    ${guiasDelPais(countrySlug, countryName)}
+    ${conocePais(countrySlug, countryName)}
 
     <!-- RUTAS DE LA COMUNIDAD -->
     <section class="destino-community" id="destino-community" style="display:none">
