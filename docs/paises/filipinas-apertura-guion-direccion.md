@@ -8,7 +8,7 @@ Estructura: `docs/paises/filipinas-apertura-estructura.md` (8 apartados de L2 = 
 **Hilo:** España gobernó más de 300 años y nunca dominó del todo la Cordillera; por eso siguen vivas las culturas de nuestros episodios. Y una investigación reciente propone que las terrazas fueron la respuesta a esa conquista (debate abierto, nunca verdad cerrada).
 
 ---
-## 0 · GANCHO (G1) — Paco elige una de tres (las otras dos se guardan para los shorts derivados, G7 propuesta)
+## 0 · GANCHO (G1) — ✅ ELEGIDA LA C por Paco (4 nov 2026, noche). A y B se guardan para los shorts derivados (G7 propuesta)
 Primer fotograma = persona (M15). Sin logo, sin saludo, sin mapa delante (G3 propuesta). El título y el mapa entran **después** del gancho.
 
 **Versión A · el hilo (recomendada)** · ~25 s · 330 caracteres
@@ -21,8 +21,8 @@ Primer fotograma = persona (M15). Sin logo, sin saludo, sin mapa delante (G3 pro
 - Salma: «Durante décadas se dijo que estas terrazas tenían dos mil años. Un arqueólogo excavó, dató con carbono catorce… y propuso otra cosa: que se levantaron para resistir a los españoles. Para entender quién tiene razón, hay que conocer el país entero.» [F15][F17][F18]
 - Texto en pantalla: «¿2.000 AÑOS… O 400?»
 
-**Versión C · las cifras** · ~24 s · 320 caracteres
-- Imagen: volcán Mayon (GP) → islas desde el aire → reconstrucción/huesos de *Homo luzonensis* en museo (D) → título.
+**Versión C · las cifras** ✅ ELEGIDA · ~24 s · 320 caracteres
+- Imagen (ajustada a M15, persona en el primer fotograma): **pescador o barquero en su bangka entre islas** (PM, persona primero) con «7.641 ISLAS» → islas desde el aire (GP) → volcán Mayon (GP) → cielo de tifón (PM) → fósiles de *Homo luzonensis* en museo (D) → título. Antes empezaba en el Mayon (paisaje): no cumplía M15.
 - Salma: «Siete mil seiscientas cuarenta y una islas. Más de cinco mil, sin nombre oficial. Ocho o nueve tifones la cruzan cada año, más que a ningún otro país. Y en una de sus cuevas apareció una especie humana que no se ha encontrado en ningún otro lugar del mundo.» [F1][F3][F6]
 - Texto en pantalla: «7.641 ISLAS»
 
@@ -74,7 +74,7 @@ Primer fotograma = persona (M15). Sin logo, sin saludo, sin mapa delante (G3 pro
 ## Recuento
 | Bloque | ~s | ~caracteres |
 |---|---|---|
-| 0 Gancho (A) + título | 28 | 330 |
+| 0 Gancho (C) + título | 27 | 320 |
 | 1-8 | 395 | 4.820 |
 | **Total** | **~7 min** | **~5.150-5.600** (con `voz` de números escritos en letra) |
 Avisos de seguir (M13 en lista): n.º 1 sobre el Mapa D (galeón), n.º 2 sobre el Mapa E (pueblos), n.º 3 opcional al empezar el bloque 7.
@@ -83,10 +83,10 @@ Capítulos (Y6/Y10 propuesta): 0:00 Filipinas antes de viajar · Geografía y vo
 ## Título y miniatura (propuesta, Y2-Y4)
 - Búsquedas candidatas (se comprueban en el autocompletado de YouTube antes de elegir, Y2): «historia de Filipinas», «Filipinas antes de viajar», «terrazas de arroz Filipinas».
 - **Título (≤ 60, Y3):** «Historia de Filipinas: lo que nadie te cuenta antes de viajar» (59) · alternativa: «Filipinas: la montaña que España nunca conquistó» (47).
-- **Miniatura (Y4/M11):** rostro tatuado kalinga muy cerca + «NUNCA LAS CONQUISTARON».
+- **Miniatura (Y4/M11), con el gancho C:** rostro en primer plano (barquero o persona de la Cordillera) + «7.641 ISLAS». Alternativa para Test & Compare (Y11 propuesta): rostro tatuado kalinga + «NUNCA LAS CONQUISTARON».
 
 ## Lo que necesito de Paco (⏸)
-1. **Gancho: A, B o C.**
+1. ~~Gancho~~ → **C** (Paco, 4 nov).
 2. Voz: `SALMA` o `SALMA_DOC`.
 3. OK al texto de los bloques 1-8 (o correcciones por número).
 Después: fotos (F9, hoja de contactos) ⏸ → coste de voz y frase de prueba ⏸ → mapas A-E (0 €) → montaje → editor.
