@@ -333,10 +333,9 @@ async function build(cfg) {
   // icono de Salma arriba a la izquierda, latiendo, hasta la tarjeta final (igual que la serie Asia)
   const AV = ROOT + '/salma marketing/editor/ep1/avatar.png';
   // portada por defecto (modelo Tailandia): se pone encima en los primeros 0,2 s para que sea el fotograma de portada en las redes
-  // la portada (portada.cjs) solo existe en vertical: en horizontal se omite hasta que haya una propia (la miniatura de YouTube largo va aparte)
-  const P = cfg.portada && cfg.portada.foto && F.b > F.a ? cfg.portada : null; let covIn = [];
-  if (cfg.portada && cfg.portada.foto && !P) console.log('AVISO: portada omitida (solo hay portada vertical)');
-  if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng }); covIn = ['-loop', '1', '-i', covPng]; }
+  // en horizontal, la portada sale con el mismo diseño en 16:9 (portada.cjs generarH; P.vivo = colores vivos) — Paco, 4 nov 2026
+  const P = cfg.portada && cfg.portada.foto ? cfg.portada : null; let covIn = [];
+  if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng, ...(F.a > F.b ? { formato: '16:9', vivo: P.vivo } : {}) }); covIn = ['-loop', '1', '-i', covPng]; }
   let fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=40+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})${avisos.map(({ sgT }) => `*not(between(t,${sgT.a},${sgT.b}))`).join('')}'${vf ? ',' + vf : ''}[m0]`;
   let ult = 'm0';
   avisos.forEach(({ sgT, sgF }, i) => { const ib = (P ? 4 : 3) + 2 * i, k = suf(i);

@@ -21,7 +21,25 @@ const LOOK = st => { const dy = clamp((105 - st.y) / 255 * 0.95, -0.10, 0.17), s
 const esc = s => String(s).replace(/'/g, '’');
 const fnt = s => /[^\u0000-ÿ]/.test(s) ? 'segoeuib.ttf' : 'impact.ttf';
 const size = (s, base, maxw, k) => Math.min(base, Math.floor(maxw / (Math.max(1, s.length) * k)));
-async function generar({ src, foco = [0.5, 0.5, 0.9], l1, l2, tag, out, ancho = 1080 }) {
+// HORIZONTAL (formato '16:9', documentales largos de YouTube; Paco, 4 nov 2026: «el mismo diseño para los próximos documentales»): el mismo modelo
+// en 1920x1080 — foto llenando el encuadre con el look BDM Film, banda naranja inclinada abajo a la izquierda (título negro + frase blanca) y franja negra con el rótulo.
+// El foco (fx, fy, fh) dice dónde está la cara: conviene que quede a la derecha, porque la banda tapa la parte baja izquierda.
+// vivo: true = colores vivos (Paco, 4 nov 2026: «colores vivos» en la miniatura) en vez del look BDM Film apagado
+async function generarH({ src, foco = [0.65, 0.4, 0.9], l1, l2, tag, out, ancho = 1920, vivo = false }) {
+  const st = await stat(src), [fx, fy, fh] = foco;
+  const s1 = size(l1, 130, 700, 0.50), s2 = size(l2, 48, 700, fnt(l2) === 'impact.ttf' ? 0.50 : 0.60), s3 = size(tag, 30, 700, 0.43);
+  const T = (txt, fsz, col, x, y, font) => `drawtext=expansion=none:fontfile='${FONTD}/${font}':text='${esc(txt)}':fontsize=${fsz}:fontcolor=${col}:x=${x}:y=${y}`;
+  const base = `[0:v]crop=w='trunc(min(ih*${fh}*16/9,iw)/2)*2':h='trunc(min(ih*${fh}*16/9,iw)*9/16/2)*2':x='max(0,min(iw-out_w,iw*${fx}-out_w/2))':y='max(0,min(ih-out_h,ih*${fy}-out_h/2))',scale=1920:1080:flags=lanczos,${vivo ? "eq=contrast=1.15:saturation=1.7:brightness=0.02,unsharp=5:5:0.6,vignette=PI/6" : LOOK(st)}[bg]`;
+  const hh = s1 * 1.02 + 6 + s2 * 1.05, y1 = Math.max(10, Math.round(10 + (200 - hh) / 2)), y2 = Math.round(y1 + s1 * 1.02 + 6);
+  const rot = 'rotate=-6*PI/180:ow=rotw(-6*PI/180):oh=roth(-6*PI/180):c=none';
+  const fin = ancho < 1920 ? `,scale=${ancho}:-2` : '';
+  await exec(['-i', src, '-f', 'lavfi', '-i', 'color=c=0xF4630B:s=900x210,format=rgba', '-f', 'lavfi', '-i', 'color=c=0x0D0D0D:s=900x60,format=rgba', '-filter_complex',
+    `${base};[1:v]${T(l1, s1, 'black', 140, y1, fnt(l1))},${T(l2, s2, 'white', 140, y2, fnt(l2))},${rot}[b1];[2:v]${T(tag, s3, 'white', 140, 14, 'ARIALNB.TTF')},${rot}[b2];[bg][b1]overlay=x=-90:y=745[v1];[v1][b2]overlay=x=-90:y=953,format=rgb24${fin}`,
+    '-frames:v', '1', out]);
+  return out;
+}
+async function generar({ src, foco = [0.5, 0.5, 0.9], l1, l2, tag, out, ancho = 1080, formato, vivo }) {
+  if (formato === '16:9') return generarH({ src, foco, l1, l2, tag, out, vivo, ...(ancho !== 1080 ? { ancho } : {}) });
   const st = await stat(src), [fx, fy, fh] = foco;
   const s1 = size(l1, 230, 930, 0.50), s2 = size(l2, 108, 930, fnt(l2) === 'impact.ttf' ? 0.50 : 0.60), s3 = size(tag, 60, 930, 0.43);
   const T = (txt, fsz, col, x, y, font) => `drawtext=expansion=none:fontfile='${FONTD}/${font}':text='${esc(txt)}':fontsize=${fsz}:fontcolor=${col}:x=${x}:y=${y}`;
