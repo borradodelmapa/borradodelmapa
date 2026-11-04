@@ -1,6 +1,6 @@
 # PROGRAMACIÓN DEL CANAL — parrilla de YouTube + TikTok (chat 2 · Vídeo y redes)
 
-**Estado: PROPUESTA del 4 nov 2026, pendiente del OK de Paco.** Nada de esto está programado ni montado; nada gasta dinero hasta que Paco lo apruebe (F5, CLAUDE.md §8).
+**Estado: PROPUESTA del 4 nov 2026, pendiente del OK de Paco** (revisada el 4 nov por la tarde con las Y2-Y9 y la P6/P10 que Paco aprobó ese día en la checklist). Nada de esto está programado ni montado; nada gasta dinero hasta que Paco lo apruebe (F5, CLAUDE.md §8).
 Manda `docs/video-checklist.md` (L1, P6, P10, P12, P13). Este archivo es la parrilla: qué sale cada semana y en qué formato.
 
 ## 1 · Lo que ya hay programado (Metricool, leído el 4 nov 2026, solo lectura)
@@ -17,7 +17,7 @@ Todo a las 10:00 Madrid, YouTube + TikTok a la vez. La cola llega hasta el **jue
 | Formato | Qué es | Dónde | Duración |
 |---|---|---|---|
 | **A · Short de serie** | Un episodio de una serie documental en vertical: *Pueblos borrados del mapa* (L1) y, cuando haya viaje real de Paco, series de viaje (Tailandia, Vietnam…) | YouTube Shorts + TikTok | 60-95 s |
-| **B · Documental largo** | 16:9, cultura, deporte tradicional, etnografía. Primero: **Tatuajes del mundo** (7:47, montado por la sesión «documental tatuajes») | Solo YouTube (vídeo normal, con capítulos) | 6-12 min |
+| **B · Documental largo** | 16:9, cultura, deporte tradicional, etnografía. Primero: **Tatuajes del mundo** (7:47, montado por la sesión «documental tatuajes») | **YouTube + TikTok, completo** (P6/P10, Paco 4 nov): mismo vídeo, paquete de texto, blog y autores; en YouTube con capítulos (Y6) | 6-12 min |
 | **C · Short derivado** | Un bloque del largo rehecho en vertical, con su propio gancho de 20 s (G) y enlace «vídeo relacionado» al largo | YouTube Shorts + TikTok | 40-70 s |
 | **D · Avance** | Teaser de una temporada o de un largo | YouTube Shorts + TikTok | 15-30 s |
 
@@ -26,16 +26,16 @@ Todo a las 10:00 Madrid, YouTube + TikTok a la vez. La cola llega hasta el **jue
 |---|---|---|
 | **Martes** | A · short de serie | A · short de serie |
 | **Miércoles** | A · short de serie | A · short de serie |
-| **Jueves** | **B · documental largo** en YouTube + en TikTok su **C** (el mejor bloque en vertical) | **C · short derivado** del último largo |
+| **Jueves** | **B · documental largo**, completo en YouTube y en TikTok | **C · short derivado** del último largo |
 
 Es decir: **un largo cada dos semanas** y tres piezas por semana en cada red. Mientras arranca el formato largo (lleva más trabajo que un short), puede ser **uno cada tres semanas**: el jueves libre se llena con un C del largo anterior (hay 3-4 por largo).
-Por qué así: las series dan constancia (dos días seguidos crean hábito), el largo da tiempo de visionado y suscriptores, y los C llevan público de Shorts al largo (Shorts → «vídeo relacionado» → largo).
+Por qué así: las series dan constancia (dos días seguidos crean hábito), el largo da tiempo de visionado y suscriptores, y los C llevan público de Shorts y TikTok al largo (Shorts → «vídeo relacionado» → largo; TikTok → comentario).
 **Hora:** se mantiene 10:00 también para el largo (P13). Metricool dice que YouTube rinde algo más a las 16:00; si Paco quiere probarlo solo con los largos, sería un cambio de P13 (decisión suya).
 
 ## 4 · Calendario propuesto desde el 8 dic (con la temporada 2 de Pueblos ya aprobada)
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
-| 8-10 dic | T2·1 Los kalash | T2·2 Los iban | **B · Tatuajes del mundo** (estreno) + C en TikTok |
+| 8-10 dic | T2·1 Los kalash | T2·2 Los iban | **B · Tatuajes del mundo** (estreno, YouTube + TikTok) |
 | 15-17 dic | T2·3 Mustang | T2·4 Los ifugao | C · Tatuajes (2.º bloque) |
 | 22-24 dic | T2·5 Los mentawai | T2·6 Los tao | jue 24 (Nochebuena): C · Tatuajes (3.º) o hueco libre |
 | 29-31 dic | T2·7 Los hezhen | T2·8 Pescadores con cormorán | jue 31: C · Tatuajes (4.º) o hueco libre |
@@ -45,7 +45,7 @@ Por qué así: las series dan constancia (dos días seguidos crean hábito), el 
 Para que esto salga a tiempo: T2 necesita **~2 episodios terminados por semana** desde ya (cada uno: guion ⏸, fotos ⏸, voz ~1.000 caracteres con coste dicho antes ⏸, montaje, editor ⏸, blog, R2, Metricool ⏸).
 
 ## 5 · Un largo da para 5-7 piezas (reaprovechamiento)
-1. **Largo en YouTube** con capítulos (Y4), miniatura propia (Y6) y pantalla final (Y8).
+1. **Largo completo en YouTube y TikTok** (P6/P10) con capítulos en YouTube (Y6), portada horizontal de M11 y pantalla final (Y13 propuesta). **Comprobar** antes del primer largo que Metricool sube a TikTok un vídeo de esa duración (7:47 en Tatuajes; los siguientes pueden pasar de 10 min).
 2. **3-4 shorts C** (uno por bloque del largo). Se hacen **desde la config del motor con `cfg.formato` vertical**, no recortando el mp4 horizontal: así los subtítulos caen en la zona segura (M10) y cada uno lleva su gancho de 20 s (G) y el sígueme (M13). Voz ya pagada (se reutiliza el audio del bloque) salvo el gancho nuevo, si hace falta una frase.
 3. **Un avance D** antes del estreno (opcional).
 4. **Entrada de blog (P12)**: una por largo, con el vídeo largo incrustado, los capítulos como índice, la información ampliada con fuentes (ya está en `docs/tatuajes-documental-fuentes.md`) y los C incrustados. Con el generador de siempre (`scripts/build-blog-viajes.js`); hay que comprobar que admite un vídeo 16:9 (es fichero del chat 2).
@@ -82,24 +82,27 @@ Para que esto salga a tiempo: T2 necesita **~2 episodios terminados por semana**
 1. ¿Vale el ritmo (2 shorts de serie + 1 jueves de largo o derivado)? ¿Un largo cada 2 o cada 3 semanas?
 2. ¿Tatuajes el jue 10 dic o antes, desplazando la cola?
 3. Orden de los largos 2-8.
-4. Las reglas Y2-Y10 y G2-G8 propuestas (abajo, en el anexo); entran en la checklist solo con su OK.
+4. Las reglas **Y10-Y16** y G2-G8 propuestas (abajo, en el anexo); entran en la checklist solo con su OK.
 5. Si el **mapa de cabecera pasa después del gancho** (G3): cambia el orden de M1/M7/S3 en los shorts nuevos.
 
 ---
 ## ANEXO · Reglas propuestas para la checklist (NO están en la checklist hasta el OK de Paco)
 
-### F · SEO de YouTube (Y2-Y10)
+### F · SEO de YouTube — lo que falta (Y10-Y16)
+**Ya aprobadas por Paco y en la checklist (4 nov 2026, 15:30):** Y2 palabra clave investigada · Y3 título con la búsqueda a la izquierda, ≤ 60 caracteres · Y4 miniatura · Y5 descripción · Y6 capítulos (solo documentales) · Y7 nombre del archivo · Y8 etiquetas · Y9 SEO del blog. Lo de abajo **no repite** nada de eso: solo añade lo que falta, con IDs libres.
 | ID | Regla propuesta | Comprobación |
 |---|---|---|
-| Y2 | **Título = la búsqueda real, con el pueblo primero** (respeta L1): «<Pueblo>: <lo que la gente busca> · Pueblos borrados del mapa» (p. ej. «Los konyak: los últimos tatuados de la India · Pueblos borrados del mapa»). Lo importante en los **primeros 40 caracteres** (lo que se ve en el móvil); máx. 100. La búsqueda se elige con el **autocompletado de YouTube** en español y en inglés y Google Trends (pestaña «Búsqueda de YouTube»), 0 €. Sin la marca delante, sin mayúsculas enteras, sin prometer lo que el vídeo no da (N6). En largos: «Tatuajes del mundo: …» con la búsqueda principal. | manual |
-| Y3 | **Descripción:** 1.ª línea (~120 caracteres, lo que se ve sin pulsar «más») = la búsqueda dicha con otras palabras + lo que se ve (P6); 2.ª línea = enlace a su entrada del blog (P12); después datos prácticos con fuente y fecha (P9), en largos los capítulos (Y4), fuentes y autores (P2); al final 3 hashtags (serie + país + tema), nunca `#Shorts`. Largos: 200-350 palabras; Shorts: corta. | manual |
-| Y4 | **Capítulos en todos los largos**: primera marca 0:00, al menos 3, cada uno de 10 s o más, títulos con palabras que se buscan («Japón: el tatuaje prohibido de los ainu»), nunca «Parte 1». Los saca el motor de los bloques de la config (`capitulos.txt` junto al vídeo). | motor (pendiente) |
-| Y5 | **Etiquetas: poco peso** (YouTube dice que tienen un papel limitado); 5-10 con el pueblo, sus otras grafías y su nombre en inglés (haenyeo / haenyo / «sea women»), país y serie. Las erratas habituales van aquí, nunca en el título. | manual |
-| Y6 | **Miniatura de los largos:** 1280×720, persona en primer plano (M15), 2-4 palabras grandes que se lean en un móvil y que no repitan el título; misma imagen en el blog. Con **Test & Compare** de YouTube Studio: 2-3 variantes por largo (gana la que más tiempo de visionado da). Shorts: la portada de M11. | manual |
-| Y7 | **Listas de reproducción:** una por temporada de cada serie («Pueblos borrados del mapa · Temporada 2», en orden), una «Documentales» con los largos y una por región (Filipinas, Mongolia…). Cada vídeo en 2 listas mínimo. Si Metricool no la pone, Claude la pone en YouTube Studio tras publicarse. | manual |
-| Y8 | **Pantalla final de los largos** en los últimos 15-20 s (YouTube: 5-20 s, vídeo de 25 s o más, hasta 4 elementos en 16:9): siguiente largo, lista «Documentales» y suscribirse. La tarjeta final del motor (M14) en 16:9 deja ese espacio libre. **Pendiente** de diseñar con lo que quedó abierto el 3 nov (M7, M11, M13 en horizontal). | motor (pendiente) |
-| Y9 | **Short ↔ largo:** cada short derivado (C) lleva «vídeo relacionado» → su largo (YouTube Studio, a mano; no va por la API) y el enlace en el comentario fijado. Cada short de Pueblos que tenga largo relacionado (§7), también. | manual |
-| Y10 | **Español e inglés:** idioma del vídeo = español; en YouTube Studio se añaden **título y descripción traducidos al inglés** y la pista `.srt` EN (M10). El **doblaje automático** de YouTube, desactivado por ahora (cambiaría la voz de Salma); se prueba en un largo solo si Paco lo pide. | manual |
+| Y10 | **Capítulos que YouTube acepte** (concreta Y6): primera marca **0:00**, al menos **3**, cada uno de **10 s o más**, en orden; títulos con palabras que se buscan («Japón: el tatuaje prohibido de los ainu»), nunca «Parte 1». Los saca el motor de los bloques de la config (`capitulos.txt` junto al vídeo) para no escribirlos a mano. | motor (pendiente) |
+| Y11 | **Probar miniaturas** (amplía Y4): en los documentales, 2-3 variantes con **Test & Compare** de YouTube Studio (gana la que más tiempo de visionado da, no solo la que más clics saca); 1280×720. | manual |
+| Y12 | **Listas de reproducción** (P6 solo dice «lista»): una por temporada de cada serie, en orden («Pueblos borrados del mapa · Temporada 2»), una «Documentales» y una por región (Filipinas, Mongolia…); cada vídeo en 2 listas como mínimo. Si Metricool no la pone, Claude la pone en YouTube Studio al publicarse. | manual |
+| Y13 | **Pantalla final en los documentales** (YouTube: últimos 5-20 s, vídeo de 25 s o más, hasta 4 elementos en 16:9): siguiente documental, lista «Documentales» y suscribirse. La tarjeta final del motor en 16:9 (M14) deja libre ese espacio los últimos ~15 s. | motor (pendiente) |
+| Y14 | **Short ↔ documental:** cada short derivado de un documental lleva **«vídeo relacionado»** → el documental (YouTube Studio, a mano: no va por la API de Metricool) y el enlace en el comentario fijado. En TikTok, el enlace va en el comentario. | manual |
+| Y15 | **Español e inglés:** en YouTube Studio, **título y descripción traducidos al inglés** además de la pista `.srt` EN (M10). El **doblaje automático** de YouTube, desactivado (cambiaría la voz de Salma, N8) salvo que Paco quiera probarlo en un documental. | manual |
+| Y16 | **Medir cada pieza a las 48 h y a los 7 días** y anotarlo en `docs/metricas-canal.md`: % «lo vieron» vs «lo deslizaron» (Shorts), retención a los 20 s (a los 30 s en documentales), duración media, CTR de impresiones (documentales), suscriptores y fuente de tráfico. Metricool no da estos datos por vídeo de YouTube: se leen en YouTube Studio y TikTok Studio (solo lectura). Con 4-6 semanas de datos se revisan las reglas G e Y. | manual |
+
+**⚠ Dónde choca algo con lo aprobado (decide Paco):**
+1. **Y3 (≤ 60 caracteres) frente a L1** («<Pueblo> · Pueblos borrados del mapa»): con el nombre de la serie, el título ya gasta ~30 caracteres y no cabe la búsqueda. Ejemplo: «Los konyak: los últimos tatuados de la India · Pueblos borrados del mapa» = 71. Propuesta: en el título, pueblo + búsqueda (≤ 60) y la serie pasa a la descripción, el hashtag y la lista (Y12); o se acepta pasar de 60 solo por el nombre de la serie.
+2. **P13 (una pieza al día, YouTube + TikTok) y los documentales en TikTok:** encaja (el jueves sale el documental en las dos redes). Solo falta comprobar el límite de duración de Metricool para TikTok (ver §5).
 
 ### G · Gancho de los primeros 20 s (G2-G8)
 | ID | Regla propuesta | Comprobación |
