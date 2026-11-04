@@ -205,20 +205,37 @@
     </div>
 
     <!-- GUÍAS DEL PAÍS — enlazado interno a las guías públicas -->
-    <nav class="destino-related" aria-label="Guías de viaje en Filipinas">
-      <h2 class="destino-related-title">Guías de viaje en Filipinas</h2>
-      <ul class="destino-related-list">
-        <li><a href="/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t">Filipinas en 21 días: Manila, Palawan, Visayas y Cordillera</a></li><li><a href="/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk">Luzón norte en 4 días: Banaue, Batad, Sagada y Buscalan</a></li>
-      </ul>
+    <style>
+.dr{margin:30px 0 8px}
+.dr-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+.dr-h h2{font-family:var(--font-cond);font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin:0;color:var(--text-primary)}
+.dr-h a{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-decoration:none;white-space:nowrap}
+.dr-rail{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 12px;margin:0 -2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;list-style:none}
+.dr-rail::-webkit-scrollbar{display:none}
+.dr-rail li{flex:0 0 72%;max-width:300px;scroll-snap-align:start}
+.dr-rail--d li{flex-basis:44%;max-width:220px}
+@media(min-width:760px){.dr-rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}.dr-rail--d{grid-template-columns:repeat(4,1fr)}.dr-rail li,.dr-rail--d li{max-width:none}}
+.dr-c{display:block;height:100%;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dr-c:hover{border-color:var(--accent)}
+.dr-c img,.dr-ph{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dr-rail--d .dr-c img,.dr-rail--d .dr-ph{aspect-ratio:4/3}
+.dr-ph{display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;background:linear-gradient(135deg,#F4630B,#7a2e00);font-family:var(--font-cond);font-weight:800;font-size:20px;line-height:1;text-transform:uppercase;color:#fff}
+.dr-t{padding:10px 12px 12px}
+.dr-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-bottom:6px}
+.dr-t strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:18px;line-height:1.1;text-transform:uppercase}
+.dr-cta{display:inline-block;margin-top:4px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:10px 16px}
+</style>
+    <nav class="dr" aria-label="Guías de viaje en Filipinas">
+      <div class="dr-h"><h2>Guías de Filipinas</h2></div>
+      <ul class="dr-rail"><li><a class="dr-c" href="/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t"><img src="/guias-img/filipinas-en-21-dias-manila-palawan-visayas-y-cordillera-gw2t.png" alt="Mapa de la guía Filipinas en 21 días: Manila, Palawan, Visayas y Cordillera" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Filipinas en 21 días: Manila, Palawan, Visayas y Cordillera</strong></div></a></li><li><a class="dr-c" href="/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk"><img src="/guias-img/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk.png" alt="Mapa de la guía Luzón norte en 4 días: Banaue, Batad, Sagada y Buscalan" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Luzón norte en 4 días: Banaue, Batad, Sagada y Buscalan</strong></div></a></li></ul>
+      <a class="dr-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
     </nav>
 
     <!-- MÁS DESTINOS EN EL PAÍS — enlazado interno -->
-    <nav class="destino-related" aria-label="Más destinos en Filipinas">
-      <h2 class="destino-related-title">Más destinos en Filipinas</h2>
-      <ul class="destino-related-list">
-        <li><a href="/destinos/batanes-filipinas.html">Islas Batanes</a></li><li><a href="/destinos/sagada-filipinas.html">Sagada</a></li><li><a href="/destinos/puerto-princesa-filipinas.html">Puerto Princesa y Río Subterráneo</a></li><li><a href="/destinos/palawan-el-nido-filipinas.html">El Nido, Palawan</a></li><li><a href="/destinos/coron-palawan-filipinas.html">Coron, Palawan</a></li><li><a href="/destinos/bohol-filipinas.html">Bohol</a></li>
-      </ul>
-      <a class="destino-related-all" href="/destinos/filipinas.html">Ver todos los destinos de Filipinas →</a>
+    
+    <nav class="dr" aria-label="Más destinos en Filipinas">
+      <div class="dr-h"><h2>Más destinos en Filipinas</h2><a href="/destinos/filipinas.html">Ver todos →</a></div>
+      <ul class="dr-rail dr-rail--d"><li><a class="dr-c" href="/destinos/batanes-filipinas.html"><img src="/destinos/img/batanes-filipinas/hero.jpg" alt="Islas Batanes, Filipinas" loading="lazy" decoding="async"><div class="dr-t"><strong>Islas Batanes</strong></div></a></li><li><a class="dr-c" href="/destinos/sagada-filipinas.html"><img src="/destinos/img/sagada-filipinas/hero.jpg" alt="Sagada, entre pinos y montañas, Filipinas" loading="lazy" decoding="async"><div class="dr-t"><strong>Sagada</strong></div></a></li><li><a class="dr-c" href="/destinos/puerto-princesa-filipinas.html"><img src="/destinos/img/puerto-princesa-filipinas/hero.jpg" alt="Río subterráneo de Puerto Princesa, Palawan, Filipinas" loading="lazy" decoding="async"><div class="dr-t"><strong>Puerto Princesa y Río Subterráneo</strong></div></a></li><li><a class="dr-c" href="/destinos/palawan-el-nido-filipinas.html"><img src="/destinos/img/palawan-el-nido-filipinas/hero.jpg" alt="El Nido, Palawan, Filipinas" loading="lazy" decoding="async"><div class="dr-t"><strong>El Nido, Palawan</strong></div></a></li><li><a class="dr-c" href="/destinos/coron-palawan-filipinas.html"><img src="/destinos/img/coron-palawan-filipinas/hero.jpg" alt="Coron, Palawan, Filipinas" loading="lazy" decoding="async"><div class="dr-t"><strong>Coron, Palawan</strong></div></a></li><li><a class="dr-c" href="/destinos/bohol-filipinas.html"><img src="/destinos/img/bohol-filipinas/hero.jpg" alt="Chocolate Hills, Bohol, Filipinas" loading="lazy" decoding="async"><div class="dr-t"><strong>Bohol</strong></div></a></li></ul>
     </nav>
 
     <!-- SHARE -->

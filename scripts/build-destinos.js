@@ -37,14 +37,63 @@ const COORDS = fs.existsSync(COORDS_FILE) ? JSON.parse(fs.readFileSync(COORDS_FI
 
 // Guías públicas buenas por país (las escribe scripts/build-guias.js): cada página de destino enlaza a las de su país.
 const GUIAS_POR_PAIS = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'guias-por-pais.json'), 'utf8')); } catch (_) { return {}; } })();
-function guiasDelPais(countrySlug, countryName) {
-  const l = GUIAS_POR_PAIS[countrySlug] || [];
+// Pie de las páginas de destino (Paco, 4 nov 2026: «imágenes, más diseño, que sea atractiva y práctica; actúa como UX»):
+// las guías del país y «Más destinos» pasan de botones de texto a tarjetas con imagen — mapa con paradas para las guías
+// (guias-img/<slug>.png), foto de portada para los destinos (destinos/img/<slug>/fotos.json; sin foto, tarjeta naranja con el
+// nombre). En el móvil, carril que se desliza con el dedo (se ve que hay más); en escritorio, rejilla. Los enlaces siguen
+// siendo <a> normales dentro de <nav> (enlazado interno para Google). El estilo va en la página (RAIL_CSS) hasta que se pase a destinos.css.
+const RAIL_CSS = `<style>
+.dr{margin:30px 0 8px}
+.dr-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+.dr-h h2{font-family:var(--font-cond);font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin:0;color:var(--text-primary)}
+.dr-h a{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-decoration:none;white-space:nowrap}
+.dr-rail{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 12px;margin:0 -2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;list-style:none}
+.dr-rail::-webkit-scrollbar{display:none}
+.dr-rail li{flex:0 0 72%;max-width:300px;scroll-snap-align:start}
+.dr-rail--d li{flex-basis:44%;max-width:220px}
+@media(min-width:760px){.dr-rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}.dr-rail--d{grid-template-columns:repeat(4,1fr)}.dr-rail li,.dr-rail--d li{max-width:none}}
+.dr-c{display:block;height:100%;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dr-c:hover{border-color:var(--accent)}
+.dr-c img,.dr-ph{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dr-rail--d .dr-c img,.dr-rail--d .dr-ph{aspect-ratio:4/3}
+.dr-ph{display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;background:linear-gradient(135deg,#F4630B,#7a2e00);font-family:var(--font-cond);font-weight:800;font-size:20px;line-height:1;text-transform:uppercase;color:#fff}
+.dr-t{padding:10px 12px 12px}
+.dr-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-bottom:6px}
+.dr-t strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:18px;line-height:1.1;text-transform:uppercase}
+.dr-cta{display:inline-block;margin-top:4px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:10px 16px}
+</style>`;
+function guiasDelPais(countrySlug, countryName, destName) {
+  const l = (GUIAS_POR_PAIS[countrySlug] || []).slice();
   if (!l.length) return '';
-  return `<nav class="destino-related" aria-label="Guías de viaje en ${escapeHTML(countryName)}">
-      <h2 class="destino-related-title">Guías de viaje en ${escapeHTML(countryName)}</h2>
-      <ul class="destino-related-list">
-        ${l.slice(0, 12).map(g => `<li><a href="/${g.slug}">${escapeHTML(g.nombre)}</a></li>`).join('')}
-      </ul>
+  const e = escapeHTML;
+  // La guía que pasa por este destino, primero (p. ej. en Sagada, «Luzón norte… Sagada…»)
+  const k = String(destName || '').split(/[,(]/)[0].trim().toLowerCase();
+  if (k) l.sort((a, b) => (b.nombre.toLowerCase().includes(k) ? 1 : 0) - (a.nombre.toLowerCase().includes(k) ? 1 : 0));
+  const items = l.slice(0, 12).map(g => {
+    const img = fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png'))
+      ? `<img src="/guias-img/${e(g.slug)}.png" alt="Mapa de la guía ${e(g.nombre)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(countryName)}</span>`;
+    const pasa = k && g.nombre.toLowerCase().includes(k);
+    return `<li><a class="dr-c" href="/${e(g.slug)}">${img}<div class="dr-t"><span class="dr-chip">${pasa ? 'Pasa por aquí' : 'Guía con mapa'}</span><strong>${e(g.nombre)}</strong></div></a></li>`;
+  }).join('');
+  return `${RAIL_CSS}
+    <nav class="dr" aria-label="Guías de viaje en ${e(countryName)}">
+      <div class="dr-h"><h2>Guías de ${e(countryName)}</h2></div>
+      <ul class="dr-rail">${items}</ul>
+      <a class="dr-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
+    </nav>`;
+}
+function masDestinos(siblings, countrySlug, countryName, conCss) {
+  if (!siblings || !siblings.length) return '';
+  const e = escapeHTML;
+  const items = siblings.map(x => {
+    const h = (loadFotos(x.slug) || {}).hero;
+    const img = h ? `<img src="/destinos/img/${x.slug}/${h.file}" alt="${e(h.alt || x.name)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(x.name)}</span>`;
+    return `<li><a class="dr-c" href="/destinos/${x.slug}.html">${img}<div class="dr-t"><strong>${e(x.name)}</strong></div></a></li>`;
+  }).join('');
+  return `${conCss ? RAIL_CSS : ''}
+    <nav class="dr" aria-label="Más destinos en ${e(countryName)}">
+      <div class="dr-h"><h2>Más destinos en ${e(countryName)}</h2><a href="/destinos/${countrySlug}.html">Ver todos →</a></div>
+      <ul class="dr-rail dr-rail--d">${items}</ul>
     </nav>`;
 }
 
@@ -750,16 +799,10 @@ ${activitiesHTML}
     </div>
 
     <!-- GUÍAS DEL PAÍS — enlazado interno a las guías públicas -->
-    ${guiasDelPais(countrySlug, countryName)}
+    ${guiasDelPais(countrySlug, countryName, dest.nombre)}
 
     <!-- MÁS DESTINOS EN EL PAÍS — enlazado interno -->
-    ${siblings && siblings.length ? `<nav class="destino-related" aria-label="Más destinos en ${escapeHTML(countryName)}">
-      <h2 class="destino-related-title">Más destinos en ${escapeHTML(countryName)}</h2>
-      <ul class="destino-related-list">
-        ${siblings.map(x => `<li><a href="/destinos/${x.slug}.html">${escapeHTML(x.name)}</a></li>`).join('')}
-      </ul>
-      <a class="destino-related-all" href="/destinos/${countrySlug}.html">Ver todos los destinos de ${escapeHTML(countryName)} →</a>
-    </nav>` : ''}
+    ${masDestinos(siblings, countrySlug, countryName, !(GUIAS_POR_PAIS[countrySlug] || []).length)}
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
