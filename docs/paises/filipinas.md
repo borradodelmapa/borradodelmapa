@@ -22,7 +22,7 @@ Lo que se aprenda aquí se convierte en `docs/paises/PLANTILLA.md` para los dem�
 ## Piezas
 | # | Pieza | Chat | Estado | Fecha prevista |
 |---|---|---|---|---|
-| 1 | Expediente · introducción (8 apartados, con fuentes) | 1 | por empezar | 13 nov |
+| 1 | Expediente · introducción (8 apartados, con fuentes) | 1 | **borrador para Paco** (4 nov): `docs/paises/filipinas-expediente.md`, 31 fuentes, ⚠ marcados; plantilla en `PLANTILLA-expediente.md` | 13 nov |
 | 2 | Sección «Conoce Filipinas» en `destinos/filipinas.html` | 1 | — | con la tanda |
 | 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | — | **propuesta: web mar 1 dic** (borrador para Paco ~27 nov) |
 | 4 | Vídeo de apertura 16:9, 6-8 min (Salma, sin «viaje real») | 2 | esqueleto: `docs/paises/filipinas-apertura-estructura.md` | **propuesta: jue 10 dic 10:00**, YouTube + TikTok (exportado ~3 dic); avance de 20-30 s el **mar 8 dic** |
