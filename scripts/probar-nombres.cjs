@@ -8,7 +8,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const src = fs.readFileSync(path.join(__dirname, '..', 'worker', 'salma-worker.js'), 'utf8');
+// Saltos de línea de Windows (CRLF) → LF: sin esto cogerConst no encuentra el final y la prueba se rompe en un clon de Windows.
+const src = fs.readFileSync(path.join(__dirname, '..', 'worker', 'salma-worker.js'), 'utf8').replace(/\r\n/g, '\n');
 function cogerFuncion(nombre) {
   const i = src.indexOf('function ' + nombre + '(');
   if (i < 0) throw new Error('No encuentro la función ' + nombre + ' en salma-worker.js');
@@ -79,4 +80,26 @@ for (const [pedido, google, debe] of CASOS) {
   console.log(`${ok ? '✅' : '❌'} ${debe ? 'PASA ' : 'FALLA'} ${pedido.padEnd(40)} → ${google}${ok ? '' : `   (sale ${sale})`}`);
 }
 console.log(`\n${CASOS.length - mal} de ${CASOS.length} bien${mal ? ` — ${mal} MAL` : ''}`);
-process.exitCode = mal ? 1 : 0;
+
+// ── ¿El destino es UN PUNTO (se ciñe por radio) o una ZONA? (_anclaEsPunto, caso p-mw2gxtxbpmq, 4 nov 2026) ──
+// Tipos reales que devolvió Google (caché geocity:anchor8 del KV). Una zona tomada por punto tira las paradas lejanas.
+const _anclaEsPunto = new Function(cogerFuncion('_anclaEsPunto') + '\nreturn _anclaEsPunto;')();
+const ANCLAS = [
+  ['Luzón norte, Filipinas', 'establishment,natural_feature', false], // el fallo: 9 de 12 paradas fuera
+  ['Banaue, Filipinas', 'locality,political', true],
+  ['Ronda', 'locality,political', true],                                  // sigue sin colar Estepona
+  ['Filipinas', 'country,political', false],
+  ['Andalucía', 'administrative_area_level_1,political', false],
+  ['Ifugao (provincia)', 'administrative_area_level_2,political', false],
+  ['Costa del Sol', 'colloquial_area,political', false],
+  ['Alhambra', 'tourist_attraction,point_of_interest,establishment', true],
+  ['Intramuros', 'sublocality_level_1,sublocality,political', true],
+];
+let malA = 0;
+for (const [dest, types, debe] of ANCLAS) {
+  const sale = _anclaEsPunto(types);
+  if (sale !== debe) malA++;
+  console.log(`${sale === debe ? '✅' : '❌'} ${debe ? 'PUNTO' : 'ZONA '} ${dest.padEnd(26)} [${types}]${sale === debe ? '' : `   (sale ${sale ? 'punto' : 'zona'})`}`);
+}
+console.log(`Anclas: ${ANCLAS.length - malA} de ${ANCLAS.length} bien${malA ? ` — ${malA} MAL` : ''}`);
+process.exitCode = (mal || malA) ? 1 : 0;
