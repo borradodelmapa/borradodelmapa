@@ -585,6 +585,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   const sobreHTML = extra ? `<section class="dq-sobre">
       <h2>Sobre ${escapeHTML(dest.nombre)}</h2>
       ${extra.p.map(t => `<p>${escapeHTML(t)}</p>`).join('')}
+      ${extra.diario ? `<a class="dq-diario" href="${escapeHTML(extra.diario.u)}">${extra.diario.img ? `<img src="${escapeHTML(extra.diario.img)}" alt="" loading="lazy">` : ''}<span><em>Diario de viaje</em><strong>${escapeHTML(extra.diario.t)}</strong></span></a>` : ''}
       <p class="dq-fuentes">Fuentes: ${(extra.fuentes || []).map(f => `<a href="${escapeHTML(f.u)}" target="_blank" rel="noopener">${escapeHTML(f.t)}</a>`).join(' · ')}</p>
     </section>` : '';
   const qhCards = (dest.que_hacer || []).map((a, n) => {
@@ -605,6 +606,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 .dq-c h3{font-family:var(--font-cond);font-weight:800;font-size:21px;line-height:1.1;text-transform:uppercase;margin:2px 0 6px;color:var(--text-primary)}
 .dq-c p{font-size:15px;line-height:1.55;color:var(--text-secondary);margin:0}
 .dq-c--sin>div{border-top:3px solid var(--accent)}
+.dq-diario{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary);margin:4px 0 12px}.dq-diario:hover{border-color:var(--accent)}.dq-diario img{width:96px;height:96px;object-fit:cover;display:block}.dq-diario em{display:block;font-style:normal;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}.dq-diario strong{font-size:16px;line-height:1.3;padding-right:10px;display:block}
 .dq-aviso{border:1px solid var(--accent);background:rgba(244,99,11,.08);padding:10px 12px;font-size:15px;line-height:1.5;color:var(--text-primary);margin:0 0 14px}.dq-aviso a{color:var(--accent)}
 </style>`;
   const queHacerHTML = qhCards ? `
