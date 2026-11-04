@@ -10731,6 +10731,17 @@ async function geocodeCiudad(ciudad, placesKey, env) {
 //   - Si el destino ya trae país ("Córdoba, Argentina"), Geocoding lo resuelve solo.
 //   - Caché KV 30 días. Si algo falla → null → el flujo se comporta como antes.
 const _anchorPaisCache = {};
+// ¿El sitio que devuelve Google es UN PUNTO (ciudad, pueblo, barrio, sitio concreto) al que ceñir la ruta por radio?
+// 4 nov 2026, caso p-mw2gxtxbpmq: «Luzón norte, Filipinas» volvía como [establishment, natural_feature] y se trataba
+// como un punto → 9 de 12 paradas descartadas por estar a >60 km (Sagada, Banaue, Buscalan). Islas, cordilleras, valles,
+// zonas informales, provincias y regiones NO son un punto: sin radio (quedan la comprobación de país y la de «parada suelta»).
+// Probado en scripts/probar-nombres.cjs (0 €).
+function _anclaEsPunto(types) {
+  const t = Array.isArray(types) ? types : String(types || '').split(',');
+  const ZONA = ['country', 'administrative_area_level_1', 'administrative_area_level_2', 'natural_feature', 'colloquial_area', 'archipelago', 'continent'];
+  return !t.some(x => ZONA.includes(String(x).trim()));
+}
+
 async function resolverPaisDestino(destino, userLocation, env) {
   if (!destino || typeof destino !== 'string') return null;
   const placesKey = env.GOOGLE_PLACES_KEY;
@@ -10759,6 +10770,8 @@ async function resolverPaisDestino(destino, userLocation, env) {
       if (cached) {
         const p = JSON.parse(cached);
         if (p && typeof p.pointScope === 'boolean' && typeof p.countryCode === 'string' && p.countryCode) {
+          // Anclas guardadas antes del 4 nov 2026: se corrigen al leer con el tipo que ya dio Google (0 €, sin re-resolver).
+          if (p.pointScope && p._types && !_anclaEsPunto(p._types)) p.pointScope = false;
           _anchorPaisCache[norm] = p; return p;
         }
       }
@@ -10814,8 +10827,7 @@ async function resolverPaisDestino(destino, userLocation, env) {
     }
 
     const types = Array.isArray(cand.types) ? cand.types : [];
-    const isBigAdmin = types.includes('country') || types.includes('administrative_area_level_1');
-    const pointScope = !isBigAdmin && !textIsRegion;
+    const pointScope = _anclaEsPunto(types) && !textIsRegion;
     const chosen = { countryCode, countryName, lat, lng, pointScope, locality, province, _types: types.join(',') };
     console.log(`[ANCLA] destino="${d}" → ${countryName} (${countryCode}) loc="${locality}" prov="${province}" pointScope=${pointScope} ${lat.toFixed(3)},${lng.toFixed(3)} types=[${chosen._types}]`);
     _anchorPaisCache[norm] = chosen;
