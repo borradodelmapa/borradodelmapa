@@ -1,0 +1,45 @@
+# FILIPINAS — paquete de país (piloto de L2)
+
+**Estado: APROBADO EN ALCANCE por Paco el 4 nov 2026. Nada producido ni gastado todavía.** Cada coste se dice antes y espera su OK (CLAUDE.md §8, F5).
+Regla: `docs/video-checklist.md` L2 (se trabaja por países; cada país sale completo y programado y abre con su introducción).
+Este archivo es **el plan y el estado del país**: lo actualiza cada chat en su fila (edición pequeña, commit solo de este archivo).
+Lo que se aprenda aquí se convierte en `docs/paises/PLANTILLA.md` para los demás países.
+
+## Quién hace qué (`docs/tres-chats.md`)
+- **Chat 1 · Guías y SEO:** expediente del país (la introducción incluida), guías, páginas de destino, tanda a Google, contador de Explorar.
+- **Chat 2 · Vídeo y redes:** vídeo de apertura, ifugao, shorts derivados, entradas de blog (P12, también el artículo de la introducción), paquetes de texto y Metricool.
+- **Chat 3 · Casos:** coordina este calendario; si hace falta tocar el Worker (`guia_extra.cultura`), con OK y coste dicho.
+
+## Orden de trabajo (cada paso desbloquea el siguiente)
+1. **Expediente · introducción** (chat 1): texto con fuentes en los 8 apartados de L2. ⏸ Paco lo lee y aprueba. *Es la pieza de la que sale todo.*
+2. En paralelo, con el texto aprobado:
+   - chat 1: sección de la página `destinos/filipinas.html` + guía «Luzón norte: Sagada, Banaue y Buscalan» (coste ⏸);
+   - chat 2: artículo largo del blog + **guion de dirección del vídeo de apertura** (gancho de 20 s en 2-3 versiones, G1) ⏸.
+3. Chat 2: fotos (F9) ⏸ → coste de voz (~5.000-6.500 caracteres) ⏸ → montaje → editor de Paco ⏸.
+4. Chat 1: guías de los destinos + páginas nuevas (Banaue, Buscalan) + ampliar las 12 actuales → hoja de revisión ⏸ → tanda a Google → Explorar sube.
+5. Chat 2: ifugao (T2·4), shorts derivados, paquetes por red → Metricool ⏸.
+
+## Piezas
+| # | Pieza | Chat | Estado | Fecha prevista |
+|---|---|---|---|---|
+| 1 | Expediente · introducción (8 apartados, con fuentes) | 1 | por empezar | 13 nov |
+| 2 | Sección «Conoce Filipinas» en `destinos/filipinas.html` | 1 | — | con la tanda |
+| 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | — | web ≥ 1 semana antes del vídeo |
+| 4 | Vídeo de apertura 16:9, 6-8 min (Salma, sin «viaje real») | 2 | — | por cerrar (jueves de largo) |
+| 5 | 3-4 shorts derivados de la apertura | 2 | — | jueves sin largo |
+| 6 | Guía «Luzón norte: Sagada, Banaue y Buscalan» | 1 | — | lo antes posible (Whang-Od sale el 12 nov) |
+| 7 | Guías de los destinos con página (El Nido, Cebú, Bohol, Siargao…) | 1 | — | tanda |
+| 8 | Páginas nuevas Banaue y Buscalan + 12 actuales ampliadas | 1 | — | tanda |
+| 9 | Entradas sin vídeo: calendario de fiestas · arnis | 2 | — | por cerrar |
+| 10 | Los ifugao y sus terrazas (Pueblos T2·4, adelantado) | 2 | — | por cerrar |
+| 11 | Largo «La cordillera de Luzón» (opcional, material de los 3 episodios) | 2 | idea | — |
+| ya | Whang-Od (12 nov) y Sagada (17 nov), con su blog | 2 | programados | — |
+
+## Coste a ojo (se mide con la primera guía antes de seguir)
+Guías: 0,5-1,5 € cada una → Luzón norte + 12 destinos ≈ 7-20 € · Voz de la apertura ≈ 5.000-6.500 caracteres ElevenLabs · Voz ifugao ≈ 1.000 · Expediente, páginas, blog, montaje: ~0 €.
+
+## Contador de Explorar
+Antes del piloto: **41 guías en 13 países**, Filipinas no está. Al terminar: 41 + guías de Filipinas, 14 países.
+
+## Lo aprendido (para la plantilla)
+- (se rellena durante el piloto)
