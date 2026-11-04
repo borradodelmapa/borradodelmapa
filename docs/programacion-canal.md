@@ -32,7 +32,10 @@ Es decir: **un largo cada dos semanas** y tres piezas por semana en cada red. Mi
 Por qué así: las series dan constancia (dos días seguidos crean hábito), el largo da tiempo de visionado y suscriptores, y los C llevan público de Shorts y TikTok al largo (Shorts → «vídeo relacionado» → largo; TikTok → comentario).
 **Hora:** se mantiene 10:00 también para el largo (P13). Metricool dice que YouTube rinde algo más a las 16:00; si Paco quiere probarlo solo con los largos, sería un cambio de P13 (decisión suya).
 
-## 4 · Calendario propuesto desde el 8 dic — PILOTO FILIPINAS (L2, Paco 4 nov 2026)
+## 4 · Calendario desde el 8 dic
+**DECISIÓN DE PACO (4 nov 2026, noche): «Tatuajes del mundo» sale el jue 10 dic 10:00 (YouTube + TikTok) y Filipinas empieza más tarde («ya veremos»).** Las fechas de Filipinas de abajo quedan **aplazadas**: se corren en bloque cuando Paco ponga la fecha, con el mismo orden (web una semana antes → avance → ifugao → apertura → derivados).
+
+### Bloque Filipinas (aplazado, orden y huecos de referencia)
 Se trabaja por países (L2): Filipinas sale completa y junta. La web va **al menos una semana antes** que su vídeo. Plan y reparto del país: `docs/paises/filipinas.md`; esqueleto de la apertura: `docs/paises/filipinas-apertura-estructura.md`.
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
@@ -42,7 +45,7 @@ Se trabaja por países (L2): Filipinas sale completa y junta. La web va **al men
 | 22-24 dic | C · derivado 4 (lo que se borra, opcional) o T2 | T2 | jue 24 (Nochebuena): hueco libre o C de Tatuajes |
 | 29-31 dic y enero | Siguiente país (lo decide Paco) y el resto de T2, por países | | |
 **Fechas límite hacia atrás** (si el expediente del chat 1 está aprobado ~16 nov): guion de la apertura con su gancho ⏸ ~19 nov · fotos ⏸ ~21 nov · coste de voz ⏸ y voz ~24 nov · montaje y editor de Paco ⏸ hasta ~1 dic · exportar y programar ~3 dic. El ifugao, en paralelo: listo ~2 dic.
-**Tatuajes del mundo** ya no va el 10 dic (lo ocupa la apertura de Filipinas). Opciones para Paco: (a) un jueves de noviembre desplazando la cola una plaza; (b) jue 7 ene; (c) dentro de un bloque de país que lo reaproveche.
+**Tatuajes del mundo: jue 10 dic** (Paco, 4 nov). Sus shorts derivados (C), los jueves siguientes mientras no empiece Filipinas.
 **Whang-Od (12 nov) y Sagada (17 nov)** ya están programados: son de Filipinas y salen antes que el resto del bloque; su blog ya enlaza a la guía del país.
 
 ## 5 · Un largo da para 5-7 piezas (reaprovechamiento)
@@ -81,7 +84,7 @@ Se trabaja por países (L2): Filipinas sale completa y junta. La web va **al men
 
 ## 8 · Lo que necesita decidir Paco
 1. ¿Vale el ritmo (2 shorts de serie + 1 jueves de largo o derivado)? ¿Un largo cada 2 o cada 3 semanas?
-2. Fechas del piloto Filipinas (§4) y dónde va Tatuajes (a, b o c).
+2. ~~Dónde va Tatuajes~~ → jue 10 dic (decidido). Fecha de arranque de Filipinas: pendiente.
 3. Orden de los largos 2-8.
 4. Las reglas **Y10-Y16** y G2-G8 propuestas (abajo, en el anexo); entran en la checklist solo con su OK.
 5. Si el **mapa de cabecera pasa después del gancho** (G3): cambia el orden de M1/M7/S3 en los shorts nuevos.
