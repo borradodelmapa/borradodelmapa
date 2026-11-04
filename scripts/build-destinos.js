@@ -794,12 +794,18 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   const metaDesc = `Guía para viajar a ${countryName}. Los ${destinos.length} mejores destinos con alojamiento y consejos. Planifica tu ruta con Salma.`;
   const canonical = `${DOMAIN}/destinos/${countrySlug}.html`;
 
+  // Miniatura de cada destino (Paco, 4 nov 2026: «10 destinos ha de llevar también una imagen… miniatura, para no competir
+  // tanto» con «Conoce <país>»): la portada de destinos/img/<slug>/fotos.json, pequeña a la derecha. Sin foto, la tarjeta como antes.
+  let hayMini = false;
   const cardsHTML = destinos.map(dest => {
     const destSlug = `${dest.id}-${countrySlug}`;
     const badge = typeBadge(dest.tipo);
+    const fh = (loadFotos(destSlug) || {}).hero;
+    if (fh) hayMini = true;
+    const mini = fh ? `<img class="dcc-mini" src="/destinos/img/${destSlug}/${fh.file}" alt="${escapeHTML(fh.alt || dest.nombre)}" loading="lazy" decoding="async">` : '';
     return `
-      <a href="/destinos/${destSlug}.html" class="destino-country-card">
-        <div class="destino-country-card-badge">${badge}</div>
+      <a href="/destinos/${destSlug}.html" class="destino-country-card${fh ? ' dcc-con-mini' : ''}">
+        ${mini}<div class="destino-country-card-badge">${badge}</div>
         <h3 class="destino-country-card-title">${escapeHTML(dest.nombre)}</h3>
         <p class="destino-country-card-desc">${escapeHTML((dest.descripcion || '').substring(0, 120))}...</p>
         <div class="destino-country-card-meta">
@@ -879,6 +885,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   </section>
 
   <main class="destino-content destino-content-wide">
+    ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}</style>` : ''}
     <div class="destino-country-grid">
       ${cardsHTML}
     </div>
