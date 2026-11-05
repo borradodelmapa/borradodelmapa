@@ -14,7 +14,7 @@ Inicio
          └─ Historias  entradas del blog (una por vídeo)             /blog/viajes/<slug>
 ```
 - **El blog no es un sitio aparte:** es la pestaña «Historias» de cada país. La barra del país (Conoce · Sitios · Guías · Historias) sale arriba en TODAS esas páginas.
-- **Miga de pan, siempre igual, empieza por «Blog de viajes»** (Paco, 5 nov 2026, tarde, con captura; sustituye a «empieza por Destinos»): «Blog de viajes › Destinos › Filipinas» · «Blog de viajes › Destinos › Filipinas › Sitios › Sagada» · «Blog de viajes › Destinos › Filipinas › Historias › Whang-Od». Lo genera la pieza común `scripts/barra-pais.cjs` (chat 1).
+- **Miga de pan, siempre igual, por geografía** (Paco, 5 nov 2026, tarde): «Blog de viajes › Destinos › País › Sitio › Historia». Cada historia cuelga de su SITIO (`destino` de blog-viajes-data.js) o, si es de todo el país, del país: «… › Filipinas › Buscalan › Whang-Od», «… › Vietnam › Vietnam hoy». Sin pasos «Sitios» ni «Historias». Lo generan `scripts/barra-pais.cjs` + build-destinos/build-blog-viajes (chat 1).
 - **Portada del blog (`/blog/`), solo 2 bloques:** «Historias por país» (tarjeta por país → `/destinos/<país>.html#historias`) y «Consejos de viaje» (las guías prácticas generales, `scripts/blog-guias.json`). Las series, «Conoce cada país», las rutas y las guías viven dentro de su país.
 
 ## 2 · Todos los países con la plantilla de Filipinas
