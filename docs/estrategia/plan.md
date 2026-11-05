@@ -14,7 +14,7 @@ Manda: CLAUDE.md, `docs/video-checklist.md` (L1, L2, P13), `docs/sistemas.md`. E
 **Programado en Metricool (ya no se toca):** Pueblos T1, 10 episodios, del 12 nov al 3 dic (Whang-Od 12 nov y Sagada 17 nov son de Filipinas).
 Fechas confirmadas por Vídeo (5 nov): Whang-Od 12 · Sagada 17 · haenyeo 18 · konyak 19 · moken 24 · sentineleses 25 · ainu 26 nov · mosuo 1 · dukha 2 · cazadores con águila 3 dic (`docs/publicaciones-registro.md` aún dice «10-19 nov»: está desfasado).
 **Desde el mar 8 dic no hay nada programado.**
-**Decisión de Paco (5 nov, noche):** los 10 de Pueblos T1 y Vietnam 3/5-5/5 pasan a shorts de menos de 60 s (N10), y salen dos largos 16:9: «Pueblos borrados del mapa · Temporada 1» y «Vietnam en 5 capítulos» (0 €, voz ya pagada). Propuesta de fechas: los shorts recortados en los días que ya tienen; los dos largos el mar 8 y el mié 9 dic (huecos libres), antes de Tatuajes. Filipinas no se mueve.
+**Decisión de Paco (5 nov, noche):** los 10 de Pueblos T1 y Vietnam 3/5-5/5 pasan a shorts de menos de 60 s (N10), y salen dos largos 16:9: «Pueblos borrados del mapa · Temporada 1» y «Vietnam en 5 capítulos» (0 €, voz ya pagada). Fechas: ver «Reprogramación propuesta» en §3.
 
 **Web publicada:**
 - Nepal: país + 10 destinos, todos con guía, abiertos a Google desde el 10 oct (tanda 1).
@@ -49,10 +49,22 @@ Por orden de urgencia. Una cada vez.
 **La regla de siempre (L2):** la web sale al menos una semana antes que el vídeo. Redes: mar, mié y jue a las 10:00 (P13).
 **El cuello de botella no es producir, es el tiempo de Paco revisando** (guion, fotos, voz, editor). Por eso un país cada ~4 semanas, no más.
 
-### Calendario de redes (lo que saldría)
+### Reprogramación propuesta (5 nov, noche; Paco: «Pueblos empieza la semana próxima», mañana se queda, se termina Vietnam)
+Horas: TikTok 10:00 · YouTube 16:00 (`estudio-horas-2026-11-05.md`; cambio de P13, decide Paco). Todos los shorts, de menos de 60 s (N10).
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
-| 8 dic | **Pueblos borrados del mapa · Temporada 1** (largo 16:9, ~15 min) | **Vietnam en 5 capítulos** (largo 16:9) | **Tatuajes del mundo** |
+| 2 nov | — | — | (vie 6) Vietnam 3/5 recortado · se queda |
+| 9 nov | Vietnam 4/5 | Vietnam 5/5 | **Pueblos borrados del mapa · Temporada 1** (largo 16:9, ~15 min) |
+| 16 nov | Whang-Od | Sagada | **Vietnam en 5 capítulos** (largo 16:9) |
+| 23 nov | Haenyeo | Konyak | Moken |
+| 30 nov | Sentineleses | Ainu | Mosuo |
+| 7 dic | Dukha | Cazadores con águila | **Tatuajes del mundo** |
+
+El largo de Pueblos T1 tiene que estar montado y revisado por Paco **antes del mar 10 nov** (revisión final del modo producción).
+
+### Calendario de redes desde diciembre (lo que saldría)
+| Semana | Mar | Mié | Jue |
+|---|---|---|---|
 | 15 dic | Avance de Filipinas | **Los ifugao** | **Apertura de Filipinas** |
 | 22 dic | Derivado Filipinas 1 | Derivado Filipinas 2 | libre (Nochebuena) |
 | 29 dic | Derivado Filipinas 3 | Derivado Filipinas 4 (opcional) | Derivado de Tatuajes |
