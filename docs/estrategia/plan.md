@@ -66,7 +66,7 @@ Por orden de urgencia. Una cada vez.
 | Sistema | Qué | Semana |
 |---|---|---|
 | 🎬 Vídeo | Paco ve y oye apertura e ifugao ⏸ → cambiar la foto del barquero de la apertura (P4: parece menor) → derivados → exportar en calidad máxima → programar en Metricool ⏸ | 9 nov – 11 dic |
-| 🌍 Web | Publicar artículo de la introducción, fiestas, arnis y blog del ifugao ⏸ | mar 1 dic |
+| 🌍 Web | Publicar artículo de la introducción, fiestas, arnis y blog del ifugao (tras la revisión final del lote 1) | mar 8 dic |
 | 🌍 Web | Mirar en Search Console si Google indexa las 14 páginas de Filipinas | 23 nov y 7 dic |
 | 📱 App | Nada (si Web no necesita el Worker) | — |
 | 📈 Estrategia | Cronómetro del piloto → plantilla para el siguiente país | 14 dic |
@@ -104,7 +104,32 @@ Por orden de urgencia. Una cada vez.
 
 ---
 
-## 4 · Cómo se sabrá si funciona
+## 4 · Lotes (modo producción, `docs/sistemas.md`)
+Dos paradas por lote: ⏸ 1 aprobar lote y presupuesto · ⏸ 2 una revisión final con todo terminado. Entre medias no se pregunta.
+
+### LOTE 1 · Filipinas completa — PROPUESTO (espera el «sí» de Paco)
+| Pieza | Sistema |
+|---|---|
+| Apertura 16:9 final (cambiar la foto del barquero, P4) | 🎬 Vídeo |
+| Los ifugao, final | 🎬 Vídeo |
+| Avance de la apertura (20-30 s) | 🎬 Vídeo |
+| 3-4 shorts derivados de la apertura | 🎬 Vídeo |
+| Textos de redes de todo y programación en Metricool (se programa tras la revisión) | 🎬 Vídeo |
+| Artículo de la introducción, entradas de fiestas y arnis, blog del ifugao | 🌍 Web (contenido de Vídeo) |
+| Comprobar que las 14 páginas de Filipinas se indexan (Search Console) | 🌍 Web |
+| Página de revisión con todo enlazado | 🎬 + 🌍 |
+
+- **Revisión final (⏸ 2):** semana del 30 nov.
+- **Publicación:** web mar 8 dic · redes del mar 15 al mié 30 dic (calendario de arriba).
+- **Presupuesto máximo: 0 – 0,50 €** (alguna frase de gancho nueva para los derivados; la voz grande ya está pagada, ~1,6 €).
+- **No entra:** las guías de los 12 destinos (6-18 €): se decide en enero, con datos de Search Console.
+
+### LOTE 2 · Nepal — se presenta cuando el lote 1 esté en revisión
+Expediente, «Conoce Nepal», artículo, apertura, Mustang, avance y derivados. Presupuesto a ojo: 1,5 – 3 € (voz). Revisión final ~28 dic; web 5 ene; redes 12-21 ene.
+
+---
+
+## 5 · Cómo se sabrá si funciona
 Lo mira el informe semanal (`informe-semanal.md`). Señales para cambiar el plan:
 - Si las páginas de Filipinas no se indexan en 3-4 semanas → no se abre Tailandia a Google; Web mejora el contenido (regla de `docs/seo-plan-minimo.md`).
 - Si la apertura de Filipinas retiene menos que los shorts de Pueblos → se replantea el formato de apertura antes de Nepal.
