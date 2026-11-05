@@ -17,7 +17,7 @@ Fechas confirmadas por Vídeo (5 nov): Whang-Od 12 · Sagada 17 · haenyeo 18 ·
 
 **Web publicada:**
 - Nepal: país + 10 destinos, todos con guía, abiertos a Google desde el 10 oct (tanda 1).
-- Filipinas: país + 13 sitios con «Conoce Filipinas», abiertos a Google el 5 nov (tanda 2); guía «Luzón norte en 4 días» publicada; 3 historias en el blog.
+- Filipinas: país + 13 sitios con «Conoce Filipinas», abiertos a Google el 5 nov (tanda 2); guía «Luzón norte en 4 días» publicada. Blog publicado: introducción del país, ifugao, Luzón norte, Whang-Od y Sagada (introducción e ifugao llevan de momento el vídeo en borrador).
 - Blog: 12 artículos + una entrada por cada episodio de Pueblos T1.
 - Explorar: 41 guías en 13 países (4 nov) + Luzón norte. Sin volver a contar.
 
@@ -25,7 +25,7 @@ Fechas confirmadas por Vídeo (5 nov): Whang-Od 12 · Sagada 17 · haenyeo 18 ·
 
 **Hecho pero sin publicar:**
 - «Tatuajes del mundo» (7:47) → sale el jue 10 dic.
-- Filipinas: vídeo de apertura v1 (6:45) e ifugao v1 (122 s) montados → esperan que Paco los vea y oiga. Artículo de la introducción en borrador.
+- Filipinas: vídeo de apertura v1 (6:45) e ifugao v1 (122 s) montados → esperan que Paco los vea y oiga. Su versión borrador ya está puesta en la web.
 
 **No lo sabemos todavía:** registros nuevos en la app por semana, y qué vídeos traen suscriptores. Lo arregla el informe semanal (`informe-semanal.md`).
 
@@ -66,7 +66,7 @@ Por orden de urgencia. Una cada vez.
 | Sistema | Qué | Semana |
 |---|---|---|
 | 🎬 Vídeo | Paco ve y oye apertura e ifugao ⏸ → cambiar la foto del barquero de la apertura (P4: parece menor) → derivados → exportar en calidad máxima → programar en Metricool ⏸ | 9 nov – 11 dic |
-| 🌍 Web | Publicar artículo de la introducción, fiestas, arnis y blog del ifugao (tras la revisión final del lote 1) | mar 8 dic |
+| 🌍 Web | Ya publicado (5 nov). Solo falta: entradas de fiestas y arnis, y cambiar los vídeos borrador por los finales | con la revisión final |
 | 🌍 Web | Mirar en Search Console si Google indexa las 14 páginas de Filipinas | 23 nov y 7 dic |
 | 📱 App | Nada (si Web no necesita el Worker) | — |
 | 📈 Estrategia | Cronómetro del piloto → plantilla para el siguiente país | 14 dic |
@@ -115,12 +115,12 @@ Dos paradas por lote: ⏸ 1 aprobar lote y presupuesto · ⏸ 2 una revisión fi
 | Avance de la apertura (20-30 s) | 🎬 Vídeo |
 | 3-4 shorts derivados de la apertura | 🎬 Vídeo |
 | Textos de redes de todo y programación en Metricool (se programa tras la revisión) | 🎬 Vídeo |
-| Artículo de la introducción, entradas de fiestas y arnis, blog del ifugao | 🌍 Web (contenido de Vídeo) |
+| Entradas de fiestas y arnis; cambiar en la web los vídeos borrador (introducción, ifugao) por los finales | 🌍 Web (contenido de Vídeo) |
 | Comprobar que las 14 páginas de Filipinas se indexan (Search Console) | 🌍 Web |
 | Página de revisión con todo enlazado | 🎬 + 🌍 |
 
 - **Revisión final (⏸ 2):** semana del 30 nov.
-- **Publicación:** web mar 8 dic · redes del mar 15 al mié 30 dic (calendario de arriba).
+- **Publicación:** la web de Filipinas ya está publicada (5 nov); lo que falta sale tras la revisión final · redes del mar 15 al mié 30 dic (calendario de arriba).
 - **Presupuesto máximo: 0 – 0,50 €** (alguna frase de gancho nueva para los derivados; la voz grande ya está pagada, ~1,6 €).
 - **No entra:** las guías de los 12 destinos (6-18 €): se decide en enero, con datos de Search Console.
 
