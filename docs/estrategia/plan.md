@@ -50,7 +50,7 @@ Por orden de urgencia. Una cada vez.
 **El cuello de botella no es producir, es el tiempo de Paco revisando** (guion, fotos, voz, editor). Por eso un país cada ~4 semanas, no más.
 
 ### Reprogramación APROBADA (5 nov, noche; Paco: «Pueblos empieza la semana próxima», mañana se queda, se termina Vietnam)
-**Comprobada en Metricool (6 nov, 00:00):** 26 publicaciones con fecha y hora correctas, en las dos redes. **Faltan tres largos:** Pueblos T1 (jue 12) está en **borrador** porque Metricool guardó solo 631 MB de 2,05 GB; Vietnam en 5 capítulos (jue 19) y Tatuajes (jue 10 dic) aún no están. Paco aún no ha visto los 10 shorts de Pueblos de menos de 60 s. Falta la entrada de blog del largo (P12, Web).
+**Comprobada en Metricool (6 nov, 00:00):** 26 publicaciones con fecha y hora correctas, en las dos redes. **Faltan tres largos:** Pueblos T1 (jue 12) está en **borrador** porque Metricool guardó solo 631 MB de 2,05 GB; Vietnam en 5 capítulos (jue 19) y Tatuajes (jue 10 dic) aún no están. Paco aún no ha visto los 10 shorts de Pueblos de menos de 60 s. Falta la entrada de blog del largo (P12, Web). **Paco (6 nov): el largo de Pueblos se sube directo a YouTube** (lo hace Vídeo; TikTok sin decidir). Vietnam en 5 capítulos sigue sin montar; Tatuajes, exportado (7:47, 1,23 GB), espera a ver cómo se sube.
 Horas (APROBADAS, P13): **TikTok 10:00 · YouTube 15:30** (`estudio-horas-2026-11-05.md`). Todos los shorts, de menos de 60 s (N10).
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
