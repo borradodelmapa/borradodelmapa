@@ -37,10 +37,28 @@
 </head>
 <body class="destino-page">
 
-  <!-- NAV -->
-  <nav class="destino-nav-bar">
-    <a href="/destinos/" class="destino-nav-link">Destinos</a>
-  </nav>
+  <!-- NAV: barra del país (si la tiene) -->
+  <style>
+.pb{position:sticky;top:0;z-index:50;background:#0d0f10;border-bottom:1px solid rgba(255,255,255,.12)}
+.pb-in{max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;overflow-x:auto;scrollbar-width:none}
+.pb-in::-webkit-scrollbar{display:none}
+.pb-pais{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;padding:12px 0}
+.pb-pais b{color:#F4630B}
+.pb-tabs{display:flex;gap:4px}
+.pb-tabs a{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,239,230,.75);text-decoration:none;padding:14px 10px 11px;border-bottom:3px solid transparent;white-space:nowrap}
+.pb-tabs a span{font-size:12px;color:#F4630B;margin-left:3px}
+.pb-tabs a.on{color:#fff;border-bottom-color:#F4630B}
+.pb-crumb{max-width:1100px;margin:0 auto;padding:8px 16px 0;font-size:13px;color:rgba(244,239,230,.6)}
+.pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
+.pb-crumb b{color:#fff;font-weight:600}
+#conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+.destino-clock-wrap{display:none!important}
+.pb-logo{display:flex;align-items:center;flex:0 0 auto;font-size:22px;padding-right:10px;border-right:1px solid rgba(255,255,255,.15);text-decoration:none}
+.pb-logo .ce-mark{display:inline-block;width:1.2em;height:1.2em;margin:0;background:#F4630B;-webkit-mask:url(/logo-pin.svg) center/contain no-repeat;mask:url(/logo-pin.svg) center/contain no-repeat}
+</style>
+<script>try{if(window.top!==window.self)document.documentElement.classList.add('pb-en-app')}catch(e){}</script><style>.pb-en-app .pb-logo{display:none}</style>
+<nav class="pb" aria-label="El Salvador"><div class="pb-in"><a class="pb-logo" href="/" aria-label="Borrado del Mapa: inicio"><i class="ce-mark" aria-hidden="true"></i></a><a class="pb-pais" href="/destinos/el-salvador.html"><b>›</b> El Salvador</a><div class="pb-tabs"><a href="/destinos/el-salvador.html#sitios">Sitios<span>10</span></a></div></div></nav>
+<p class="pb-crumb"><a href="/blog/">Blog de viajes</a> › <a href="/destinos/">Destinos</a> › <b>El Salvador</b></p>
 
   <div class="chat-empty destino-clock-wrap">
     <div class="ce-top"><a class="ce-brand" href="/"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</a></div>
@@ -59,11 +77,13 @@
 
   <section class="destino-hero">
     <h1 class="destino-title">Viajar a El Salvador</h1>
-    <p class="destino-subtitle">10 DESTINOS</p>
+    <p class="destino-subtitle dp-tiene"><a href="#sitios">10 sitios</a></p>
   </section>
+  <style>.dp-tiene a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor}</style>
 
   <main class="destino-content destino-content-wide">
-    <div class="destino-country-grid">
+    
+    <div id="sitios" class="destino-country-grid">
       
       <a href="/destinos/san-salvador-el-salvador.html" class="destino-country-card">
         <div class="destino-country-card-badge">🏛️ Ciudad</div>
@@ -110,7 +130,7 @@
         <h3 class="destino-country-card-title">Parque Nacional Los Volcanes / Volcán Izalco</h3>
         <p class="destino-country-card-desc">El Parque Nacional Los Volcanes agrupa tres conos volcánicos: Santa Ana, Cerro Verde e Izalco, el llamado 'Faro del Pací...</p>
         <div class="destino-country-card-meta">
-          <span>1 días</span>
+          <span>1 día</span>
         </div>
       </a>
       <a href="/destinos/el-zonte-el-salvador.html" class="destino-country-card">
@@ -126,7 +146,7 @@
         <h3 class="destino-country-card-title">Lago de Coatepeque</h3>
         <p class="destino-country-card-desc">Caldera volcánica inundada de 26 km² con aguas termales y color azul intenso. Rodeada de residencias privadas con acceso...</p>
         <div class="destino-country-card-meta">
-          <span>1 días</span>
+          <span>1 día</span>
         </div>
       </a>
       <a href="/destinos/perquin-morazan-el-salvador.html" class="destino-country-card">
@@ -142,10 +162,14 @@
         <h3 class="destino-country-card-title">Tazumal y Chalchuapa</h3>
         <p class="destino-country-card-desc">Tazumal es el sitio arqueológico maya mejor conservado de El Salvador, con una pirámide de 14 escalones que data del año...</p>
         <div class="destino-country-card-meta">
-          <span>1 días</span>
+          <span>1 día</span>
         </div>
       </a>
     </div>
+
+    
+
+    
 
     
 
