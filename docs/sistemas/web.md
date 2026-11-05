@@ -78,7 +78,7 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 | Filipinas: país + 13 sitios (Banaue, Batad, Buscalan nuevos), 2 guías, 5 historias | Publicado con el diseño nuevo · abierto a Google (tanda 2) · indexación pedida para 4 páginas |
 | Vietnam: 10 sitios con foto, barra, «en nuestras historias» | Publicado · falta su expediente y «Conoce» |
 | Blog: portada (Historias por país, Pueblos, Consejos plegados), historias con barra y miga por sitio | Publicado |
-| Los otros 161 países | Con el diseño viejo hasta tener fotos revisadas (hay fotos de portada bajadas a medias en local, sin usar) |
+| Los 163 países (1.795 páginas) | **Mismo diseño y navegación que Vietnam** (5 nov, cd5fa2b64). 100 sitios con portada revisada; el resto sin foto hasta revisarla país a país |
 | Guías públicas con la barra del país | Pendiente |
 | Diseño de la página Destinos | Lo decide Paco más adelante |
 | Search Console | En la cuenta de Paco; datos desde el 11 oct (39 indexadas, 357 impresiones) |
