@@ -9,5 +9,47 @@
   "licencia": "CC BY 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Calle_Crisologo,_Vigan,_Philippines_(50025182191).jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Una kalesa, el carruaje de caballos de Vigan",
+   "pie": "Una kalesa, el carruaje de caballos de Vigan.",
+   "autor": "Riccian (Ian Limpangog)",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kalesa_Vigan.JPG"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 404,
+   "alt": "La plaza Salcedo y la iglesia de Vigan",
+   "pie": "La plaza Salcedo y la iglesia de Vigan.",
+   "autor": "Jesstine Co",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Plaza_Salcedo_Vigan_Church.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 468,
+   "alt": "Un alfarero de burnay, la cerámica de Vigan",
+   "pie": "Un alfarero de burnay, la cerámica de Vigan.",
+   "autor": "Ranieljosecastaneda",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Burnayan_Pottery_making_of_Vigan.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Empanada de Vigan",
+   "pie": "Empanada de Vigan.",
+   "autor": "Jessartcam",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Empanada_de_Vigan.jpg"
+  }
+ }
 }

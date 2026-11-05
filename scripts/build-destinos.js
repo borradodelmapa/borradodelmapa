@@ -37,19 +37,70 @@ const COORDS = fs.existsSync(COORDS_FILE) ? JSON.parse(fs.readFileSync(COORDS_FI
 
 // Guías públicas buenas por país (las escribe scripts/build-guias.js): cada página de destino enlaza a las de su país.
 const GUIAS_POR_PAIS = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'guias-por-pais.json'), 'utf8')); } catch (_) { return {}; } })();
-function guiasDelPais(countrySlug, countryName) {
-  const l = GUIAS_POR_PAIS[countrySlug] || [];
+// Pie de las páginas de destino (Paco, 4 nov 2026: «imágenes, más diseño, que sea atractiva y práctica; actúa como UX»):
+// las guías del país y «Más destinos» pasan de botones de texto a tarjetas con imagen — mapa con paradas para las guías
+// (guias-img/<slug>.png), foto de portada para los destinos (destinos/img/<slug>/fotos.json; sin foto, tarjeta naranja con el
+// nombre). En el móvil, carril que se desliza con el dedo (se ve que hay más); en escritorio, rejilla. Los enlaces siguen
+// siendo <a> normales dentro de <nav> (enlazado interno para Google). El estilo va en la página (RAIL_CSS) hasta que se pase a destinos.css.
+const RAIL_CSS = `<style>
+.dr{margin:30px 0 8px}
+.dr-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+.dr-h h2{font-family:var(--font-cond);font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin:0;color:var(--text-primary)}
+.dr-h a{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-decoration:none;white-space:nowrap}
+.dr-rail{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 12px;margin:0 -2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;list-style:none}
+.dr-rail::-webkit-scrollbar{display:none}
+.dr-rail li{flex:0 0 72%;max-width:300px;scroll-snap-align:start}
+.dr-rail--d li{flex-basis:44%;max-width:220px}
+@media(min-width:760px){.dr-rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}.dr-rail--d{grid-template-columns:repeat(4,1fr)}.dr-rail li,.dr-rail--d li{max-width:none}}
+.dr-c{display:block;height:100%;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dr-c:hover{border-color:var(--accent)}
+.dr-c img,.dr-ph{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dr-rail--d .dr-c img,.dr-rail--d .dr-ph{aspect-ratio:4/3}
+.dr-ph{display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;background:linear-gradient(135deg,#F4630B,#7a2e00);font-family:var(--font-cond);font-weight:800;font-size:20px;line-height:1;text-transform:uppercase;color:#fff}
+.dr-t{padding:10px 12px 12px}
+.dr-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-bottom:6px}
+.dr-t strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:18px;line-height:1.1;text-transform:uppercase}
+.dr-cta{display:inline-block;margin-top:4px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:10px 16px}
+</style>`;
+function guiasDelPais(countrySlug, countryName, destName) {
+  const l = (GUIAS_POR_PAIS[countrySlug] || []).slice();
   if (!l.length) return '';
-  return `<nav class="destino-related" aria-label="Guías de viaje en ${escapeHTML(countryName)}">
-      <h2 class="destino-related-title">Guías de viaje en ${escapeHTML(countryName)}</h2>
-      <ul class="destino-related-list">
-        ${l.slice(0, 12).map(g => `<li><a href="/${g.slug}">${escapeHTML(g.nombre)}</a></li>`).join('')}
-      </ul>
+  const e = escapeHTML;
+  // La guía que pasa por este destino, primero (p. ej. en Sagada, «Luzón norte… Sagada…»)
+  const k = String(destName || '').split(/[,(]/)[0].trim().toLowerCase();
+  if (k) l.sort((a, b) => (b.nombre.toLowerCase().includes(k) ? 1 : 0) - (a.nombre.toLowerCase().includes(k) ? 1 : 0));
+  const items = l.slice(0, 12).map(g => {
+    const img = fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png'))
+      ? `<img src="/guias-img/${e(g.slug)}.png" alt="Mapa de la guía ${e(g.nombre)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(countryName)}</span>`;
+    const pasa = k && g.nombre.toLowerCase().includes(k);
+    return `<li><a class="dr-c" href="/${e(g.slug)}">${img}<div class="dr-t"><span class="dr-chip">${pasa ? 'Pasa por aquí' : 'Guía con mapa'}</span><strong>${e(g.nombre)}</strong></div></a></li>`;
+  }).join('');
+  return `${RAIL_CSS}
+    <nav class="dr" aria-label="Guías de viaje en ${e(countryName)}">
+      <div class="dr-h"><h2>Guías de ${e(countryName)}</h2></div>
+      <ul class="dr-rail">${items}</ul>
+      <a class="dr-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
+    </nav>`;
+}
+function masDestinos(siblings, countrySlug, countryName, conCss) {
+  if (!siblings || !siblings.length) return '';
+  const e = escapeHTML;
+  const items = siblings.map(x => {
+    const h = (loadFotos(x.slug) || {}).hero;
+    const img = h ? `<img src="/destinos/img/${x.slug}/${h.file}" alt="${e(h.alt || x.name)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(x.name)}</span>`;
+    return `<li><a class="dr-c" href="/destinos/${x.slug}.html">${img}<div class="dr-t"><strong>${e(x.name)}</strong></div></a></li>`;
+  }).join('');
+  return `${conCss ? RAIL_CSS : ''}
+    <nav class="dr" aria-label="Más destinos en ${e(countryName)}">
+      <div class="dr-h"><h2>Más destinos en ${e(countryName)}</h2><a href="/destinos/${countrySlug}.html">Ver todos →</a></div>
+      <ul class="dr-rail dr-rail--d">${items}</ul>
     </nav>`;
 }
 
 // «Conoce <país>» (L2, 4 nov 2026): resumen del expediente aprobado del país (scripts/paises-intro.json). Sin datos, nada.
-const PAISES_INTRO = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
+const DESTINOS_NUEVOS = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-nuevos.json'), 'utf8')); } catch (_) { return {}; } })();
+const DESTINOS_EXTRA =(() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-extra.json'), 'utf8')); } catch (_) { return {}; } })();
+const PAISES_INTRO =(() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
 // Maqueta (Paco, 4 nov: «necesita maquetación, imágenes y diseño atractivo»): portada a lo ancho, bloques numerados con foto y pie
 // (foto solo si es de lo que se cuenta; si no, el bloque va sin foto), galería de 6 y tarjetas a los diarios del blog. Fotos ya
 // revisadas de los episodios (F9) con autor (P2), enlazadas desde blog/viajes/img/. El estilo va aquí dentro (CONOCE_CSS) y solo
@@ -496,7 +547,7 @@ function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const faqs = generateFAQs(dest, countryName);
-  let coords = COORDS[`${countryCode}:${dest.id}`] || null;
+  let coords = COORDS[`${countryCode}:${dest.id}`] || (dest.menos_turistico && typeof dest.lat === 'number' ? { lat: dest.lat, lng: dest.lng } : null);
   // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
   if (!coords && route && route.stops) {
     const pts = route.stops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
@@ -526,6 +577,42 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   const security = dest.alerta_seguridad
     ? `<span class="destino-security-warn">⚠️ Precaución</span>`
     : `<span class="destino-security-ok">✅ Seguro</span>`;
+
+  // «Qué hacer» a la vista, con foto (Paco, 4 nov 2026: «más info y más imágenes del destino, bien diseñado»): tarjetas
+  // numeradas; la foto sale de fotos.json → que_hacer[N] (Wikimedia, revisada a ojo, con autor). Sin foto, la tarjeta va sin ella.
+  // Y «Sobre <destino>» (scripts/destinos-extra.json, texto propio con fuentes). Solo en páginas sin guía (con guía manda la guía).
+  const qhFotos = (fotos && fotos.que_hacer) || {};
+  const extra = DESTINOS_EXTRA[slug];
+  const sobreHTML = extra ? `<section class="dq-sobre">
+      <h2>Sobre ${escapeHTML(dest.nombre)}</h2>
+      ${extra.p.map(t => `<p>${escapeHTML(t)}</p>`).join('')}
+      ${extra.diario ? `<a class="dq-diario" href="${escapeHTML(extra.diario.u)}">${extra.diario.img ? `<img src="${escapeHTML(extra.diario.img)}" alt="" loading="lazy">` : ''}<span><em>Diario de viaje</em><strong>${escapeHTML(extra.diario.t)}</strong></span></a>` : ''}
+      <p class="dq-fuentes">Fuentes: ${(extra.fuentes || []).map(f => `<a href="${escapeHTML(f.u)}" target="_blank" rel="noopener">${escapeHTML(f.t)}</a>`).join(' · ')}</p>
+    </section>` : '';
+  const qhCards = (dest.que_hacer || []).map((a, n) => {
+    const f = qhFotos[n];
+    const [tit, ...resto] = String(a).split(/:\s/);
+    const desc0 = resto.join(': '); const desc = desc0 ? desc0.charAt(0).toUpperCase() + desc0.slice(1) : '';
+    return `<li class="dq-c${f ? '' : ' dq-c--sin'}">${f ? `<figure><img src="/destinos/img/${slug}/${f.file}" alt="${escapeHTML(f.alt)}" loading="lazy" decoding="async" width="${f.w}" height="${f.h}"><figcaption>${escapeHTML(f.pie)} ${fotoCredito(f)}</figcaption></figure>` : ''}<div><span class="dq-n">${String(n + 1).padStart(2, '0')}</span><h3>${escapeHTML(tit)}</h3>${desc ? `<p>${escapeHTML(desc)}</p>` : ''}</div></li>`;
+  }).join('');
+  const DQ_CSS = `<style>
+.dq-sobre{margin:26px 0 8px}.dq-sobre h2,.dq-qh h2{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1;text-transform:uppercase;margin:0 0 12px;color:var(--text-primary)}
+.dq-sobre p{font-size:17px;line-height:1.7;color:var(--text-secondary);margin:0 0 12px}.dq-fuentes{font-size:13px!important;color:var(--text-muted)!important}.dq-fuentes a{color:var(--text-secondary)}
+.dq-qh{margin:26px 0 18px}.dq-list{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+@media(min-width:700px){.dq-list{grid-template-columns:1fr 1fr}}
+.dq-c{border:1px solid var(--border);background:var(--bg-row)}.dq-c figure{margin:0}
+.dq-c img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;object-position:50% 30%;display:block}
+.dq-c figcaption{font-size:12px;line-height:1.4;color:var(--text-muted);padding:6px 12px 0}.dq-c figcaption a{color:var(--text-muted)}
+.dq-c>div{padding:10px 14px 14px}.dq-n{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.14em;color:var(--accent)}
+.dq-c h3{font-family:var(--font-cond);font-weight:800;font-size:21px;line-height:1.1;text-transform:uppercase;margin:2px 0 6px;color:var(--text-primary)}
+.dq-c p{font-size:15px;line-height:1.55;color:var(--text-secondary);margin:0}
+.dq-c--sin>div{border-top:3px solid var(--accent)}
+.dq-diario{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary);margin:4px 0 12px}.dq-diario:hover{border-color:var(--accent)}.dq-diario img{width:96px;height:96px;object-fit:cover;display:block}.dq-diario em{display:block;font-style:normal;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}.dq-diario strong{font-size:16px;line-height:1.3;padding-right:10px;display:block}
+.dq-aviso{border:1px solid var(--accent);background:rgba(244,99,11,.08);padding:10px 12px;font-size:15px;line-height:1.5;color:var(--text-primary);margin:0 0 14px}.dq-aviso a{color:var(--accent)}
+</style>`;
+  const queHacerHTML = qhCards ? `
+    <section class="dq-qh"><h2>Qué hacer en ${escapeHTML(dest.nombre)}</h2>${extra && extra.aviso ? `<p class="dq-aviso">⚠️ ${escapeHTML(extra.aviso.t)} <a href="${escapeHTML(extra.aviso.u)}" target="_blank" rel="noopener">${escapeHTML(extra.aviso.f)}</a></p>` : ''}<ul class="dq-list">${qhCards}</ul>
+      <a class="destino-cta-subtle" href="/?go=chat">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a></section>` : '';
 
   const activitiesHTML = (dest.que_hacer || [])
     .map(a => `          <li>${escapeHTML(a)}</li>`)
@@ -675,7 +762,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       </div>
     </div>
 
-    ${route ? buildStaticItinerary(route, slug, fotos) : ''}
+    ${route ? buildStaticItinerary(route, slug, fotos) : ((sobreHTML || queHacerHTML) ? DQ_CSS + sobreHTML + queHacerHTML : '')}
 
     <!-- Más info en acordeón -->
     <div class="destino-accordion">
@@ -709,7 +796,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
         </div>
       </details>
 
-${route ? '' : `      <details class="destino-acc-item"${accOpen}>
+${(route || queHacerHTML) ? '' : `      <details class="destino-acc-item"${accOpen}>
         <summary class="destino-acc-header"><h2 class="destino-acc-h2">🎯 Qué hacer</h2></summary>
         <div class="destino-acc-body">
           <ul class="destino-list">
@@ -750,16 +837,10 @@ ${activitiesHTML}
     </div>
 
     <!-- GUÍAS DEL PAÍS — enlazado interno a las guías públicas -->
-    ${guiasDelPais(countrySlug, countryName)}
+    ${guiasDelPais(countrySlug, countryName, dest.nombre)}
 
     <!-- MÁS DESTINOS EN EL PAÍS — enlazado interno -->
-    ${siblings && siblings.length ? `<nav class="destino-related" aria-label="Más destinos en ${escapeHTML(countryName)}">
-      <h2 class="destino-related-title">Más destinos en ${escapeHTML(countryName)}</h2>
-      <ul class="destino-related-list">
-        ${siblings.map(x => `<li><a href="/destinos/${x.slug}.html">${escapeHTML(x.name)}</a></li>`).join('')}
-      </ul>
-      <a class="destino-related-all" href="/destinos/${countrySlug}.html">Ver todos los destinos de ${escapeHTML(countryName)} →</a>
-    </nav>` : ''}
+    ${masDestinos(siblings, countrySlug, countryName, !(GUIAS_POR_PAIS[countrySlug] || []).length)}
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -835,22 +916,27 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   // Miniatura de cada destino (Paco, 4 nov 2026: «10 destinos ha de llevar también una imagen… miniatura, para no competir
   // tanto» con «Conoce <país>»): la portada de destinos/img/<slug>/fotos.json, pequeña a la derecha. Sin foto, la tarjeta como antes.
   let hayMini = false;
-  const cardsHTML = destinos.map(dest => {
+  const cardDe = (dest) => {
     const destSlug = `${dest.id}-${countrySlug}`;
     const badge = typeBadge(dest.tipo);
     const fh = (loadFotos(destSlug) || {}).hero;
     if (fh) hayMini = true;
     const mini = fh ? `<img class="dcc-mini" src="/destinos/img/${destSlug}/${fh.file}" alt="${escapeHTML(fh.alt || dest.nombre)}" loading="lazy" decoding="async">` : '';
     return `
-      <a href="/destinos/${destSlug}.html" class="destino-country-card${fh ? ' dcc-con-mini' : ''}">
-        ${mini}<div class="destino-country-card-badge">${badge}</div>
+      <a href="/destinos/${destSlug}.html" class="destino-country-card${fh ? ' dcc-con-mini' : ''}${dest.menos_turistico ? ' dcc-menos' : ''}">
+        ${mini}<div class="destino-country-card-badge">${dest.menos_turistico ? '<span class="dcc-chip">Menos turístico</span> ' : ''}${badge}</div>
         <h3 class="destino-country-card-title">${escapeHTML(dest.nombre)}</h3>
         <p class="destino-country-card-desc">${escapeHTML((dest.descripcion || '').substring(0, 120))}...</p>
         <div class="destino-country-card-meta">
-          <span>${dest.dias_recomendados || 3} días</span>
+          <span>${dest.dias_recomendados || 3} ${(dest.dias_recomendados || 3) === 1 ? 'día' : 'días'}</span>
         </div>
       </a>`;
-  }).join('');
+  };
+  // «Lo menos turístico» primero y destacado (Paco, 5 nov 2026), después los clásicos
+  const menos = destinos.filter(x => x.menos_turistico), resto = destinos.filter(x => !x.menos_turistico);
+  const cardsHTML = menos.length
+    ? `</div><h2 class="dcc-h">Lo menos turístico</h2><p class="dcc-sub">Donde siguen vivas las culturas de ${escapeHTML(countryName)}: menos gente y más que entender.</p><div class="destino-country-grid">${menos.map(cardDe).join('')}</div><h2 class="dcc-h">Los clásicos</h2><div class="destino-country-grid">${resto.map(cardDe).join('')}`
+    : destinos.map(cardDe).join('');
 
   const schemaOrg = JSON.stringify({
     "@context": "https://schema.org",
@@ -923,7 +1009,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   </section>
 
   <main class="destino-content destino-content-wide">
-    ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}</style>` : ''}
+    ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>` : ''}
     <div class="destino-country-grid">
       ${cardsHTML}
     </div>
@@ -1171,7 +1257,8 @@ async function main() {
 
     try {
       const data = JSON.parse(fs.readFileSync(path.join(KV_DIR, file), 'utf-8'));
-      const destinos = data.destinos || [];
+      // + destinos añadidos a mano (scripts/destinos-nuevos.json, en git): Banaue, Batad, Buscalan… (5 nov 2026)
+      const destinos = (data.destinos || []).concat(DESTINOS_NUEVOS[code] || []);
       if (destinos.length === 0) continue;
 
       // ── Nivel 3: páginas de destino ──

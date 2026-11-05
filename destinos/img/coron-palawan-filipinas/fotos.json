@@ -9,5 +9,37 @@
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Coron_skyline_Tapyas_(Coron,_Palwan;_03-16-2024).jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "El lago Kayangan, en la isla de Coron",
+   "pie": "El lago Kayangan, en la isla de Coron.",
+   "autor": "Lyndon Aguila",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kayangan_Lake,_Coron_Island.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "La Twin Lagoon, en Coron",
+   "pie": "La Twin Lagoon, en Coron.",
+   "autor": "André Héroux",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Twin_Lagoon,_Coron,_Palawan,_Philippines_-_panoramio.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Siete Pecados, el parque marino de Coron",
+   "pie": "Siete Pecados, el parque marino de Coron.",
+   "autor": "Firth m",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Siete_Pecados.jpg"
+  }
+ }
 }

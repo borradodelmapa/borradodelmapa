@@ -9,5 +9,37 @@
   "licencia": "CC BY 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:El_Nido_Palawan_2.jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "La entrada a la Big Lagoon, en la isla de Miniloc",
+   "pie": "La entrada a la Big Lagoon, en la isla de Miniloc.",
+   "autor": "Tuderna",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Big_lagoon_entrance,_Miniloc_island_-_panoramio.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 448,
+   "alt": "En kayak junto a la isla de Cadlao",
+   "pie": "En kayak junto a la isla de Cadlao.",
+   "autor": "Lancegio2020",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kayaking_in_Cadlao_island_El_Nido,_Palawan.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "La playa del pueblo de El Nido",
+   "pie": "La playa del pueblo de El Nido.",
+   "autor": "Micluna",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:El_Nido_Town_Beach.jpg"
+  }
+ }
 }

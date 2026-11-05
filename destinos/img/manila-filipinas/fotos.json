@@ -10,5 +10,47 @@
   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Fort_Santiago,_Walled_city_of_Intramuros,_Philippines.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Un patio de Intramuros, la ciudad amurallada",
+   "pie": "Un patio de Intramuros, la ciudad amurallada.",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Intramuros,_Patio,_Philippines.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 490,
+   "alt": "El Museo Nacional de Bellas Artes de Filipinas",
+   "pie": "El Museo Nacional de Bellas Artes de Filipinas.",
+   "autor": "PhiliptheNumber1",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Fine_Arts_(Ermita,_Manila)(06-30-2024).jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 542,
+   "alt": "El museo de Chinatown, en Binondo",
+   "pie": "El museo de Chinatown, en Binondo.",
+   "autor": "Ralff Nestor Nacor",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chinatown_Museum,_Binondo,_Manila,_May_2025.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El monumento a José Rizal, en el Parque Rizal",
+   "pie": "El monumento a José Rizal, en el Parque Rizal.",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Rizal_Monument_(Motto_Stella),_Rizal_Park,_Philippines.jpg"
+  }
+ }
 }

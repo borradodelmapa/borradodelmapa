@@ -9,5 +9,27 @@
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Siargao_44.jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El paseo de madera de Cloud 9, el pico de surf de Siargao",
+   "pie": "El paseo de madera de Cloud 9, el pico de surf de Siargao.",
+   "autor": "Spraken eboy2887",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Siargao_Cloud_9.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Bucas Grande, la isla donde está Sohoton Cove",
+   "pie": "Bucas Grande, la isla donde está Sohoton Cove.",
+   "autor": "Michael Angelo Luna",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Middle_Bucas_Grande_in_Dapa,_Siargao.jpg"
+  }
+ }
 }

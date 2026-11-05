@@ -1,0 +1,205 @@
+{
+ "nota": "Bloque «Sobre <destino>» de las páginas de destino (Paco, 4 nov 2026: «más info del destino»). Texto propio, no copiado, con datos de las fuentes enlazadas (consultadas el 4 nov 2026). Clave = slug de la página. Lo lee scripts/build-destinos.js. Sin entrada, la página sale sin el bloque.",
+ "sagada-filipinas": {
+  "p": [
+   "Sagada es un pueblo de unos 10.700 habitantes (censo de 2024) en la Mountain Province, en plena Cordillera de Luzón. Es famoso por sus ataúdes colgados en los acantilados: una forma de enterrar que se sigue usando y que no es para cualquiera; entre otras cosas, hay que haber estado casado y tener nietos.",
+   "En 1904 llegó la misión episcopaliana del reverendo John Staunton, con la iglesia de Santa María la Virgen y su escuela, que siguen en el centro del pueblo."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Sagada",
+    "u": "https://en.wikipedia.org/wiki/Sagada"
+   },
+   {
+    "t": "Iglesia Episcopal de Filipinas",
+    "u": "https://ecphilippines.org/special-dates-in-ecp-church-history/"
+   }
+  ],
+  "aviso": {
+   "t": "Ojo, a julio de 2025: la cueva de Sumaguing solo se visita hasta la entrada por las lluvias, y la cascada Bomod-ok está cerrada por ubaya, un cierre tradicional del pueblo. Pregunta en la oficina de turismo de Sagada antes de ir.",
+   "u": "https://tribune.net.ph/2025/07/20/sagada-reopens-key-tourist-spots",
+   "f": "Daily Tribune, 20 jul 2025"
+  },
+  "diario": {
+   "t": "Sagada: el pueblo donde a los muertos se les cuelga",
+   "u": "/blog/viajes/filipinas-sagada-ataudes-colgantes",
+   "img": "/blog/viajes/img/filipinas-sagada-ataudes-colgantes.jpg"
+  }
+ },
+ "vigan-filipinas": {
+  "p": [
+   "Vigan es la capital de Ilocos Sur, en la costa oeste de Luzón, con unos 54.500 habitantes (censo de 2024). Es Patrimonio de la Humanidad: una de las pocas ciudades coloniales españolas de Filipinas que conserva casi intacto su casco antiguo.",
+   "Sus casas de piedra y madera (bahay na bato) mezclan la arquitectura española con la filipina y la china, y sus calles empedradas, como la Calle Crisólogo, se recorren en kalesa. Aquí nació Elpidio Quirino, sexto presidente del país."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Vigan",
+    "u": "https://en.wikipedia.org/wiki/Vigan"
+   }
+  ]
+ },
+ "batanes-filipinas": {
+  "p": [
+   "Batanes es la provincia más al norte de Filipinas y la más pequeña, en tierra y en habitantes. Está a unos 162 km de Luzón y a unos 190 km de Taiwán, separada de ella por el canal de Bashi. Su capital, Basco, está en la isla de Batan."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Batanes",
+    "u": "https://en.wikipedia.org/wiki/Batanes"
+   }
+  ]
+ },
+ "bohol-filipinas": {
+  "p": [
+   "Bohol es una provincia de las Visayas centrales: una isla grande, la décima del país (4.821 km²), y 75 islas pequeñas alrededor. Su capital es Tagbilaran.",
+   "Lo más famoso son las Chocolate Hills, un mar de colinas de caliza de color marrón. Panglao, al suroeste de Tagbilaran, es uno de los mejores sitios de buceo del país."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Bohol",
+    "u": "https://en.wikipedia.org/wiki/Bohol"
+   }
+  ]
+ },
+ "palawan-el-nido-filipinas": {
+  "p": [
+   "El Nido («el nido», en español) es un municipio del norte de Palawan con unos 51.400 habitantes (censo de 2024). Es un área protegida conocida por sus playas de arena blanca, sus arrecifes y sus acantilados de caliza.",
+   "Es la puerta del archipiélago de Bacuit, el que se recorre en barca en las excursiones de islas."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: El Nido",
+    "u": "https://en.wikipedia.org/wiki/El_Nido,_Palawan"
+   }
+  ]
+ },
+ "coron-palawan-filipinas": {
+  "p": [
+   "Coron es un municipio del norte de Palawan con unos 69.400 habitantes (censo de 2024). La isla de Coron, con sus lagos entre paredes de caliza, está en la lista indicativa de Patrimonio Natural de la UNESCO."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Coron",
+    "u": "https://en.wikipedia.org/wiki/Coron,_Palawan"
+   }
+  ]
+ },
+ "puerto-princesa-filipinas": {
+  "p": [
+   "El río subterráneo de Puerto Princesa está en un parque nacional de la costa oeste de Palawan, a unos 80 km de la ciudad. Es Patrimonio de la Humanidad desde 1999 y fue elegido una de las 7 Maravillas Naturales en 2012.",
+   "Se llega por carretera hasta el pueblo de Sabang, y de allí en barca hasta la boca del río."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Puerto Princesa Subterranean River National Park",
+    "u": "https://en.wikipedia.org/wiki/Puerto_Princesa_Subterranean_River_National_Park"
+   }
+  ]
+ },
+ "siargao-filipinas": {
+  "p": [
+   "Siargao es una isla con forma de lágrima en el mar de Filipinas, de unos 437 km², en la provincia de Surigao del Norte (Mindanao). Su costa está llena de arrecifes y playas de arena blanca.",
+   "Es la capital del surf de Filipinas, y en 2021 los lectores de Condé Nast Traveler la votaron la mejor isla de Asia."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Siargao",
+    "u": "https://en.wikipedia.org/wiki/Siargao"
+   }
+  ]
+ },
+ "cebu-filipinas": {
+  "p": [
+   "Cebú es la gran ciudad de las Visayas: unos 965.000 habitantes (censo de 2024), la sexta del país. Es su principal puerto de barcos de cabotaje: aquí tienen su sede cerca del 80 % de las navieras filipinas.",
+   "Fue el primer asentamiento español del archipiélago: Legazpi lo fundó en 1565, y la Cruz de Magallanes recuerda la llegada de 1521."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Cebu City",
+    "u": "https://en.wikipedia.org/wiki/Cebu_City"
+   },
+   {
+    "t": "Britannica: Philippines, The Spanish period",
+    "u": "https://www.britannica.com/place/Philippines/The-Spanish-period"
+   }
+  ]
+ },
+ "manila-filipinas": {
+  "p": [
+   "Intramuros («dentro de los muros») es la ciudad amurallada de Manila: 0,67 km² rodeados de murallas que en tiempos del Imperio español eran toda la ciudad. Lo de fuera eran los «extramuros», pueblos que se unieron a Manila a principios del siglo XX.",
+   "Desde 1571 fue la sede del gobierno español de Filipinas: el gobernador vivió aquí hasta 1865 y la Real Audiencia funcionó hasta el fin del dominio español, en 1898."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Intramuros",
+    "u": "https://en.wikipedia.org/wiki/Intramuros"
+   }
+  ]
+ },
+ "banaue-filipinas": {
+  "p": [
+   "Banaue es un municipio de la provincia de Ifugao con unos 20.100 habitantes (censo de 2024). Sus terrazas de arroz, a unos 1.500 metros, se construyeron casi a mano y se riegan con agua que baja de los bosques de arriba. En su término están Batad y Bangaan, dos de los grupos de terrazas Patrimonio de la Humanidad.",
+   "Su edad está en debate: la UNESCO habla de un paisaje de dos milenios, y las excavaciones del arqueólogo Stephen Acabado apuntan a que el cultivo en terrazas es más reciente, una respuesta de los pueblos de montaña a la llegada de los españoles. Hoy el peligro es otro: cada vez más jóvenes ifugao dejan el campo y los muros se erosionan."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Banaue",
+    "u": "https://en.wikipedia.org/wiki/Banaue"
+   },
+   {
+    "t": "Wikipedia: Banaue Rice Terraces",
+    "u": "https://en.wikipedia.org/wiki/Banaue_Rice_Terraces"
+   },
+   {
+    "t": "Acabado et al., Journal of Field Archaeology (2019)",
+    "u": "https://digitalscholarship.unlv.edu/anthro_fac_articles/501"
+   }
+  ]
+ },
+ "batad-filipinas": {
+  "p": [
+   "Batad es una aldea de Banaue dentro de las terrazas de arroz de la Cordillera, Patrimonio de la Humanidad desde 1995. Las terrazas estuvieron de 2001 a 2012 en la lista de patrimonio en peligro, por el abandono y la erosión.",
+   "Aquí se siguen cantando los hudhud, más de 200 cantos para la siembra, la cosecha y los funerales, que cantan sobre todo mujeres mayores. La UNESCO avisa de que se quedan sin uso con la cosecha a máquina."
+  ],
+  "fuentes": [
+   {
+    "t": "UNESCO: terrazas de arroz",
+    "u": "https://whc.unesco.org/en/list/722"
+   },
+   {
+    "t": "UNESCO: lista en peligro (2012)",
+    "u": "https://whc.unesco.org/en/news/891"
+   },
+   {
+    "t": "UNESCO: cantos hudhud",
+    "u": "https://ich.unesco.org/en/RL/hudhud-chants-of-the-ifugao-00015"
+   }
+  ]
+ },
+ "buscalan-filipinas": {
+  "p": [
+   "Buscalan es un pueblo del municipio de Tinglayan, en la provincia de Kalinga (unos 13.300 habitantes el municipio, censo de 2024). Es tan conocido por Whang-Od, la tatuadora que con más de cien años sigue siendo el símbolo del batok, que a Tinglayan a veces se le llama Buscalan.",
+   "En 1980, en Bugnay, otro pueblo de Tinglayan, el jefe kalinga Macli-ing Dulag fue asesinado por oponerse a las presas que la dictadura quería hacer en el río Chico; el proyecto se abandonó."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Tinglayan",
+    "u": "https://en.wikipedia.org/wiki/Tinglayan"
+   },
+   {
+    "t": "Bantayog ng mga Bayani: Macli-ing Dulag",
+    "u": "https://bantayogngmgabayani.org/bayani/macli-ing/"
+   }
+  ],
+  "diario": {
+   "t": "Whang-Od: más de cien años tatuando con una espina",
+   "u": "/blog/viajes/filipinas-whang-od-tatuadora-kalinga",
+   "img": "/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga.jpg"
+  },
+  "aviso": {
+   "t": "En septiembre de 2026 el municipio de Tinglayan pidió respeto a los visitantes: la cultura kalinga no es un decorado y el tatuaje no es un souvenir. Pide permiso antes de hacer fotos.",
+   "u": "https://tribune.net.ph/2026/09/11/tinglayan-raises-concern-over-whang-od-intimate-tattoo-incident",
+   "f": "Daily Tribune, 11 sep 2026"
+  }
+ }
+}

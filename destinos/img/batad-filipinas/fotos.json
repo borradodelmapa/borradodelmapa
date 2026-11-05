@@ -1,0 +1,46 @@
+{
+ "generado": "2026-11-05",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 858,
+  "alt": "El anfiteatro de terrazas de Batad",
+  "autor": "Philip Nalangan",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Batad_Rice_Terraces_4.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 512,
+   "alt": "Batad desde el aire",
+   "pie": "Batad desde el aire.",
+   "autor": "Bien02",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Batad_Rice_Terraces_(aerial).jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Siembra en grupo en las terrazas de Batad",
+   "pie": "Siembra en grupo en las terrazas de Batad.",
+   "autor": "BENNY GROSS.1",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Planting_rice_in_Batad%27s_rice_terraces_03.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Un agricultor con su carabao en el arrozal de Batad",
+   "pie": "Un agricultor con su carabao en el arrozal de Batad.",
+   "autor": "Ekaterina Kvelidze",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Traditional_rice_field_cultivation,_Batad,_Banaue.jpg"
+  }
+ }
+}
