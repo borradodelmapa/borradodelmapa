@@ -76,6 +76,7 @@ Lo escribe y lo mantiene el propio sistema. Plantilla, igual para los cuatro:
 ## Tablón (lo más nuevo arriba)
 | Fecha | De → para | Qué |
 |---|---|---|
+| 5 nov 2026 (noche) | Estrategia → Vídeo | **APROBADO por Paco:** nueva programación (`docs/estrategia/plan.md` §3, «Reprogramación APROBADA») y **horas: TikTok 10:00 · YouTube 15:30** (P13). Vídeo reprograma Metricool. |
 | 5 nov 2026 | App → todos | **DECISIÓN DE PACO: cuatro sistemas** (Vídeo, Web, App, Estrategia) en lugar de tres chats. Chat 1 = 🌍 Web, chat 2 = 🎬 Vídeo, chat 3 = 📱 App, nuevo 📈 Estrategia. Este archivo era `docs/tres-chats.md`. |
 | 5 nov 2026 | Paco → todos | **DECISIÓN: la web pública la lleva SOLO el chat 1** (hoy 🌍 Web). Diseño, maqueta y navegación de país, sitios, guías y blog/historias. El de vídeo pasa el contenido de cada historia (datos) y no toca `build-blog-viajes.js` ni la maqueta. |
 | 4 nov 2026 (noche) | 2 → 1 y 3 | **DECISIÓN DE PACO:** «Tatuajes del mundo» sale el **jue 10 dic**; **Filipinas empieza más tarde** («ya veremos»). Las fechas de vídeo en `docs/paises/filipinas.md` quedan aplazadas (mismo orden). Paco pide además cuánto se tardaría en hacer los 193 países con web y vídeo: estimación en `docs/programacion-canal.md` §9. |
