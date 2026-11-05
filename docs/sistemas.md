@@ -40,7 +40,7 @@ Desde que estén listas las tres piezas de abajo («Antes de abrir el primero»)
 |---|---|---|---|
 | 1 | **Datos de la web por país:** un fichero por país en lugar de los comunes (`paises-intro.json`, `destinos-extra.json`, `blog-viajes-data.js`…), que los generadores leen juntos. Así dos países nunca editan el mismo fichero | 🌍 Web | encargado 5 nov |
 | 2 | **El motor de vídeo al alcance de un worktree:** el código del motor y los recursos ligeros en git; lo pesado (fotos, vídeos, voces) se queda en la carpeta principal con ruta fija. Una carpeta y un puerto del editor por país | 🎬 Vídeo | encargado 5 nov |
-| 3 | **`MEJORAS.md`, la plantilla del plan de país y el `/pais` que abre el chat de país** | 📈 Estrategia | encargado 5 nov |
+| 3 | **`MEJORAS.md`, la plantilla del plan de país y el `/pais` que abre el chat de país** | 📈 Estrategia | **hecho** 5 nov: `PLANTILLA-pais.md`, `docs/estrategia/reparto.md`, protocolo «Chat de país» en `docs/sistemas/estrategia.md` |
 
 ## MODO PRODUCCIÓN: se trabaja por lotes y Paco revisa una vez, al final (Paco, 5 nov 2026)
 Paco: «no quiero estar pendiente de dar a aceptar cada segundo. Esto es para publicar mucho contenido de una vez. Solo al final,
