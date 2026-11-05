@@ -1,0 +1,61 @@
+{
+ "nota": "Destinos que se añaden a la lista de un país (la de worker/kv/output-nivel2/<cc>.json no se toca: es la del KV y no está en git). Paco, 5 nov 2026: Banaue, Batad y Buscalan, «lo menos turístico». Texto sacado del expediente aprobado, de la guía Luzón norte y de las fuentes de las entradas del blog; sin precios. menos_turistico = se destacan en la página del país. Lo lee scripts/build-destinos.js. Coordenadas: Wikipedia (Banaue), foto aérea geolocalizada de Commons (Batad), Wikidata (Buscalan).",
+ "ph": [
+  {
+   "id": "banaue", "nombre": "Banaue", "tipo": "montaña", "region": "Ifugao, Cordillera, Luzón", "menos_turistico": true,
+   "descripcion": "Pueblo ifugao de la Cordillera, rodeado de terrazas de arroz a unos 1.500 metros. Es la base para ir a Batad y el mejor sitio para entender la cultura ifugao: sus terrazas, sus cantos hudhud y sus bulul, las figuras de madera que guardan el arroz.",
+   "dias_recomendados": 1,
+   "mejor_epoca": "Evita de julio a octubre, la temporada fuerte de tifones",
+   "como_llegar": "Bus nocturno desde Manila, unas 8-9 horas: salen por la noche y llegan al amanecer. Confirma horarios con la compañía antes de ir, cambian.",
+   "donde_dormir": { "mochilero": "Guesthouses y homestays sencillos en el pueblo.", "medio": "Hoteles pequeños con vistas a las terrazas.", "comfort": "Hay pocos: los hoteles junto al mirador son los mejores." },
+   "que_hacer": [
+    "Mirador de las terrazas de Banaue: llega al amanecer, con niebla y casi nadie",
+    "Museo de Banaue: objetos ifugao, como los bulul, y cómo funciona el riego de las terrazas",
+    "Terrazas de Poitan: más tranquilas que el mirador y todavía cultivadas",
+    "Hablar con los guías del pueblo: conocen cada sendero y cuentan la historia de las terrazas"
+   ],
+   "donde_comer": "Comedores del pueblo y restaurantes de los hoteles, muchos con vistas a las terrazas. Lleva efectivo: fuera de los pueblos grandes no hay cajeros fiables.",
+   "consejo_local": "Las terrazas se están abandonando: muchos jóvenes ifugao dejan el campo por el turismo y, sin cuidado, los muros se erosionan. Contratar guías del pueblo y pagar las tasas locales ayuda a que sigan.",
+   "plan_b_lluvia": "El Museo de Banaue. Y las terrazas con niebla también tienen su encanto, pero ojo con los caminos resbaladizos.",
+   "keywords": ["Banaue", "terrazas de arroz", "Ifugao", "Cordillera", "Filipinas"],
+   "lat": 16.9119, "lng": 121.0614
+  },
+  {
+   "id": "batad", "nombre": "Batad", "tipo": "rural", "region": "Banaue, Ifugao, Cordillera, Luzón", "menos_turistico": true,
+   "descripcion": "Aldea ifugao en un anfiteatro de terrazas de arroz Patrimonio de la Humanidad. No llega carretera hasta dentro: se entra a pie, por senderos de piedra sobre los muros de los arrozales.",
+   "dias_recomendados": 1,
+   "mejor_epoca": "Evita de julio a octubre, la temporada fuerte de tifones: los caminos se vuelven peligrosos",
+   "como_llegar": "Desde Banaue, en jeepney o triciclo hasta el desvío de Batad (Saddle), de 40 a 60 minutos, y de ahí a pie. Hay pocos jeepneys: sal temprano.",
+   "donde_dormir": { "mochilero": "Homestays básicos en la aldea, con cama y comida.", "medio": "Casas de huéspedes con vistas al anfiteatro.", "comfort": "No hay hoteles: para más comodidad, duerme en Banaue." },
+   "que_hacer": [
+    "Bajar al anfiteatro de terrazas: 2-3 horas entre bajada y paseo, por los muros de piedra",
+    "Cascada de Tappiya: de 45 a 60 minutos a pie desde la aldea, con poza para bañarse",
+    "La aldea de Batad: casas ifugao de madera y gente que sigue sembrando a mano",
+    "Ver el trabajo del arrozal: siembra, cosecha y carabaos, según la época"
+   ],
+   "donde_comer": "En los homestays de la aldea: comida casera y sencilla.",
+   "consejo_local": "Calzado con buen agarre: los muros de las terrazas resbalan. Y lleva agua, que la vuelta es cuesta arriba.",
+   "plan_b_lluvia": "Con lluvia, mejor quedarse en Banaue: los senderos sobre los muros se vuelven peligrosos.",
+   "keywords": ["Batad", "terrazas de arroz", "Ifugao", "Banaue", "Patrimonio de la Humanidad"],
+   "lat": 16.9328, "lng": 121.1386
+  },
+  {
+   "id": "buscalan", "nombre": "Buscalan", "tipo": "montaña", "region": "Tinglayan, Kalinga, Cordillera, Luzón", "menos_turistico": true,
+   "descripcion": "Pueblo kalinga de la Cordillera, entre terrazas de arroz. Es el pueblo de Whang-Od, la tatuadora tradicional (mambabatok) más conocida de Filipinas, y de sus aprendices, que mantienen vivo el tatuaje batok.",
+   "dias_recomendados": 1,
+   "mejor_epoca": "Evita de julio a octubre, la temporada fuerte de tifones",
+   "como_llegar": "A Tinglayan desde Tabuk (Kalinga) o Bontoc (Mountain Province); desde la carretera, hora y media a pie hasta el pueblo.",
+   "donde_dormir": { "mochilero": "Homestays de familias del pueblo.", "medio": "Homestays con habitación propia.", "comfort": "No hay hoteles: para más comodidad, duerme en Bontoc." },
+   "que_hacer": [
+    "Conocer el batok: el tatuaje tradicional kalinga, hecho a mano con una espina y hollín",
+    "Terrazas de Buscalan: se recorren a pie con un guía del pueblo",
+    "El pueblo y su gente: pide permiso antes de hacer fotos a nadie"
+   ],
+   "donde_comer": "En los homestays: comida casera de la familia que te acoge.",
+   "consejo_local": "Guía local obligatorio, y hay una tasa ecocultural: pregunta en la oficina de turismo de Tinglayan. En septiembre de 2026 el municipio pidió respeto: el tatuaje no es un souvenir.",
+   "plan_b_lluvia": "Con lluvia fuerte, no subas: el sendero de hora y media tiene escalones empinados.",
+   "keywords": ["Buscalan", "Whang-Od", "batok", "Kalinga", "tatuaje"],
+   "lat": 17.228, "lng": 121.088
+  }
+ ]
+}

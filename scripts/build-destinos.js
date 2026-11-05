@@ -98,7 +98,8 @@ function masDestinos(siblings, countrySlug, countryName, conCss) {
 }
 
 // «Conoce <país>» (L2, 4 nov 2026): resumen del expediente aprobado del país (scripts/paises-intro.json). Sin datos, nada.
-const DESTINOS_EXTRA = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-extra.json'), 'utf8')); } catch (_) { return {}; } })();
+const DESTINOS_NUEVOS = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-nuevos.json'), 'utf8')); } catch (_) { return {}; } })();
+const DESTINOS_EXTRA =(() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-extra.json'), 'utf8')); } catch (_) { return {}; } })();
 const PAISES_INTRO =(() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
 // Maqueta (Paco, 4 nov: «necesita maquetación, imágenes y diseño atractivo»): portada a lo ancho, bloques numerados con foto y pie
 // (foto solo si es de lo que se cuenta; si no, el bloque va sin foto), galería de 6 y tarjetas a los diarios del blog. Fotos ya
@@ -546,7 +547,7 @@ function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const faqs = generateFAQs(dest, countryName);
-  let coords = COORDS[`${countryCode}:${dest.id}`] || null;
+  let coords = COORDS[`${countryCode}:${dest.id}`] || (dest.menos_turistico && typeof dest.lat === 'number' ? { lat: dest.lat, lng: dest.lng } : null);
   // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
   if (!coords && route && route.stops) {
     const pts = route.stops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
@@ -600,7 +601,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 .dq-qh{margin:26px 0 18px}.dq-list{list-style:none;margin:0;padding:0;display:grid;gap:14px}
 @media(min-width:700px){.dq-list{grid-template-columns:1fr 1fr}}
 .dq-c{border:1px solid var(--border);background:var(--bg-row)}.dq-c figure{margin:0}
-.dq-c img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block}
+.dq-c img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;object-position:50% 30%;display:block}
 .dq-c figcaption{font-size:12px;line-height:1.4;color:var(--text-muted);padding:6px 12px 0}.dq-c figcaption a{color:var(--text-muted)}
 .dq-c>div{padding:10px 14px 14px}.dq-n{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.14em;color:var(--accent)}
 .dq-c h3{font-family:var(--font-cond);font-weight:800;font-size:21px;line-height:1.1;text-transform:uppercase;margin:2px 0 6px;color:var(--text-primary)}
@@ -915,22 +916,27 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   // Miniatura de cada destino (Paco, 4 nov 2026: «10 destinos ha de llevar también una imagen… miniatura, para no competir
   // tanto» con «Conoce <país>»): la portada de destinos/img/<slug>/fotos.json, pequeña a la derecha. Sin foto, la tarjeta como antes.
   let hayMini = false;
-  const cardsHTML = destinos.map(dest => {
+  const cardDe = (dest) => {
     const destSlug = `${dest.id}-${countrySlug}`;
     const badge = typeBadge(dest.tipo);
     const fh = (loadFotos(destSlug) || {}).hero;
     if (fh) hayMini = true;
     const mini = fh ? `<img class="dcc-mini" src="/destinos/img/${destSlug}/${fh.file}" alt="${escapeHTML(fh.alt || dest.nombre)}" loading="lazy" decoding="async">` : '';
     return `
-      <a href="/destinos/${destSlug}.html" class="destino-country-card${fh ? ' dcc-con-mini' : ''}">
-        ${mini}<div class="destino-country-card-badge">${badge}</div>
+      <a href="/destinos/${destSlug}.html" class="destino-country-card${fh ? ' dcc-con-mini' : ''}${dest.menos_turistico ? ' dcc-menos' : ''}">
+        ${mini}<div class="destino-country-card-badge">${dest.menos_turistico ? '<span class="dcc-chip">Menos turístico</span> ' : ''}${badge}</div>
         <h3 class="destino-country-card-title">${escapeHTML(dest.nombre)}</h3>
         <p class="destino-country-card-desc">${escapeHTML((dest.descripcion || '').substring(0, 120))}...</p>
         <div class="destino-country-card-meta">
-          <span>${dest.dias_recomendados || 3} días</span>
+          <span>${dest.dias_recomendados || 3} ${(dest.dias_recomendados || 3) === 1 ? 'día' : 'días'}</span>
         </div>
       </a>`;
-  }).join('');
+  };
+  // «Lo menos turístico» primero y destacado (Paco, 5 nov 2026), después los clásicos
+  const menos = destinos.filter(x => x.menos_turistico), resto = destinos.filter(x => !x.menos_turistico);
+  const cardsHTML = menos.length
+    ? `</div><h2 class="dcc-h">Lo menos turístico</h2><p class="dcc-sub">Donde siguen vivas las culturas de ${escapeHTML(countryName)}: menos gente y más que entender.</p><div class="destino-country-grid">${menos.map(cardDe).join('')}</div><h2 class="dcc-h">Los clásicos</h2><div class="destino-country-grid">${resto.map(cardDe).join('')}`
+    : destinos.map(cardDe).join('');
 
   const schemaOrg = JSON.stringify({
     "@context": "https://schema.org",
@@ -1003,7 +1009,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   </section>
 
   <main class="destino-content destino-content-wide">
-    ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}</style>` : ''}
+    ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>` : ''}
     <div class="destino-country-grid">
       ${cardsHTML}
     </div>
@@ -1251,7 +1257,8 @@ async function main() {
 
     try {
       const data = JSON.parse(fs.readFileSync(path.join(KV_DIR, file), 'utf-8'));
-      const destinos = data.destinos || [];
+      // + destinos añadidos a mano (scripts/destinos-nuevos.json, en git): Banaue, Batad, Buscalan… (5 nov 2026)
+      const destinos = (data.destinos || []).concat(DESTINOS_NUEVOS[code] || []);
       if (destinos.length === 0) continue;
 
       // ── Nivel 3: páginas de destino ──

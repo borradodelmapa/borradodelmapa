@@ -1,0 +1,46 @@
+{
+ "generado": "2026-11-05",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 716,
+  "alt": "Buscalan, entre terrazas de arroz en las montañas de Tinglayan",
+  "autor": "Julia Sumangil",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tinglayan-Bugnay_rice_terraces.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 1094,
+   "alt": "Grace Palicas, sobrina nieta y aprendiz de Whang-Od, tatuando con el batok",
+   "pie": "Grace Palicas, sobrina nieta y aprendiz de Whang-Od, tatuando con el batok.",
+   "autor": "Mawg64",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Grace_Palicas_doing_a_facial_tattoo.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Las terrazas de arroz de Buscalan",
+   "pie": "Las terrazas de arroz de Buscalan.",
+   "autor": "Ianpetercapocao",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:BUSCALAN_RICE_TERRACES.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "Una anciana de Tinglayan con los tatuajes tradicionales de las mujeres kalinga",
+   "pie": "Una anciana de Tinglayan con los tatuajes tradicionales de las mujeres kalinga.",
+   "autor": "Ranieljosecastaneda",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Old_Woman_of_Tinglayan,_Kalinga_-_A_Memento_From_The_Mambabatok_of_Buscalan.tif"
+  }
+ }
+}

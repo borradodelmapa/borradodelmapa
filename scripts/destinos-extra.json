@@ -135,5 +135,71 @@
     "u": "https://en.wikipedia.org/wiki/Intramuros"
    }
   ]
+ },
+ "banaue-filipinas": {
+  "p": [
+   "Banaue es un municipio de la provincia de Ifugao con unos 20.100 habitantes (censo de 2024). Sus terrazas de arroz, a unos 1.500 metros, se construyeron casi a mano y se riegan con agua que baja de los bosques de arriba. En su término están Batad y Bangaan, dos de los grupos de terrazas Patrimonio de la Humanidad.",
+   "Su edad está en debate: la UNESCO habla de un paisaje de dos milenios, y las excavaciones del arqueólogo Stephen Acabado apuntan a que el cultivo en terrazas es más reciente, una respuesta de los pueblos de montaña a la llegada de los españoles. Hoy el peligro es otro: cada vez más jóvenes ifugao dejan el campo y los muros se erosionan."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Banaue",
+    "u": "https://en.wikipedia.org/wiki/Banaue"
+   },
+   {
+    "t": "Wikipedia: Banaue Rice Terraces",
+    "u": "https://en.wikipedia.org/wiki/Banaue_Rice_Terraces"
+   },
+   {
+    "t": "Acabado et al., Journal of Field Archaeology (2019)",
+    "u": "https://digitalscholarship.unlv.edu/anthro_fac_articles/501"
+   }
+  ]
+ },
+ "batad-filipinas": {
+  "p": [
+   "Batad es una aldea de Banaue dentro de las terrazas de arroz de la Cordillera, Patrimonio de la Humanidad desde 1995. Las terrazas estuvieron de 2001 a 2012 en la lista de patrimonio en peligro, por el abandono y la erosión.",
+   "Aquí se siguen cantando los hudhud, más de 200 cantos para la siembra, la cosecha y los funerales, que cantan sobre todo mujeres mayores. La UNESCO avisa de que se quedan sin uso con la cosecha a máquina."
+  ],
+  "fuentes": [
+   {
+    "t": "UNESCO: terrazas de arroz",
+    "u": "https://whc.unesco.org/en/list/722"
+   },
+   {
+    "t": "UNESCO: lista en peligro (2012)",
+    "u": "https://whc.unesco.org/en/news/891"
+   },
+   {
+    "t": "UNESCO: cantos hudhud",
+    "u": "https://ich.unesco.org/en/RL/hudhud-chants-of-the-ifugao-00015"
+   }
+  ]
+ },
+ "buscalan-filipinas": {
+  "p": [
+   "Buscalan es un pueblo del municipio de Tinglayan, en la provincia de Kalinga (unos 13.300 habitantes el municipio, censo de 2024). Es tan conocido por Whang-Od, la tatuadora que con más de cien años sigue siendo el símbolo del batok, que a Tinglayan a veces se le llama Buscalan.",
+   "En 1980, en Bugnay, otro pueblo de Tinglayan, el jefe kalinga Macli-ing Dulag fue asesinado por oponerse a las presas que la dictadura quería hacer en el río Chico; el proyecto se abandonó."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Tinglayan",
+    "u": "https://en.wikipedia.org/wiki/Tinglayan"
+   },
+   {
+    "t": "Bantayog ng mga Bayani: Macli-ing Dulag",
+    "u": "https://bantayogngmgabayani.org/bayani/macli-ing/"
+   }
+  ],
+  "diario": {
+   "t": "Whang-Od: más de cien años tatuando con una espina",
+   "u": "/blog/viajes/filipinas-whang-od-tatuadora-kalinga",
+   "img": "/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga.jpg"
+  },
+  "aviso": {
+   "t": "En septiembre de 2026 el municipio de Tinglayan pidió respeto a los visitantes: la cultura kalinga no es un decorado y el tatuaje no es un souvenir. Pide permiso antes de hacer fotos.",
+   "u": "https://tribune.net.ph/2026/09/11/tinglayan-raises-concern-over-whang-od-intimate-tattoo-incident",
+   "f": "Daily Tribune, 11 sep 2026"
+  }
  }
 }
