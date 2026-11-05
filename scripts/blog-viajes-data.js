@@ -983,7 +983,7 @@ const caps = [
     resumen: 'Terrazas cultivadas a mano en la cordillera de Luzón, un debate sobre su edad y un corrimiento en noviembre de 2025. Qué se está perdiendo y cómo visitarlas con respeto.',
     video: 'pueblos-t2-ifugao.mp4',
     realidad: 'Capítulo documental: lo cuenta Salma con fotos de Wikimedia Commons (autores al final) y fuentes citadas. No es un viaje de Paco.',
-    destino: ['filipinas', 'Filipinas'],
+    destino: ['batad-filipinas', 'Batad'],
     creditosDe: 'salma marketing/pueblos/ifugao',
     fotos: { portada: 'W135', galeria: [['W79', 'Batad desde el aire.'], ['W131', 'Siembra en grupo en las terrazas de Batad.'], ['W166', 'Bulul sentado, guardián del arroz (Museo de Arte de Honolulu).'], ['W140', 'Terrazas de Batad en una foto antigua.'], ['W147', 'Un agricultor con su carabao en el arrozal.'], ['W100', 'Muros de piedra de las terrazas.']] },
     cita: { tras: 3, t: 'Un tifón se llevó un trozo en una noche' },
