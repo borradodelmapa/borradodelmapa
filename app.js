@@ -548,9 +548,11 @@ function abrirBlogEnApp(url) {
     let d;
     try { d = fr.contentDocument; } catch (_) { return; }
     if (!d) return;
-    // Dentro del visor sobran el menú de abajo de la página (ya está el de la app) y sus avisos fijos
+    // Dentro del visor sobran el menú de abajo de la página (ya está el de la app), sus avisos fijos y su cabecera con
+    // el logo (ya está la de la app: el logo salía dos veces, captura de Paco del 5 nov 2026): .pg-header en blog y
+    // legal, .destino-clock-wrap (logo, eslogan y reloj) en las páginas de destino.
     const s = d.createElement('style');
-    s.textContent = '.app-bottom-bar,#tab-newroute,#bdm-inst,.cookie-banner,#mejora-btn{display:none!important}body{padding-bottom:16px!important}';
+    s.textContent = '.app-bottom-bar,#tab-newroute,#bdm-inst,.cookie-banner,#mejora-btn,.pg-header,.destino-clock-wrap{display:none!important}body{padding-bottom:16px!important}';
     (d.head || d.documentElement).appendChild(s);
     d.addEventListener('click', e => {
       const a = e.target.closest && e.target.closest('a[href]');
