@@ -15,6 +15,7 @@ Decidir qué se hace, cuándo y por qué: qué país va ahora y cuál después, 
 | Informe semanal | `docs/estrategia/informe-semanal.md` → informes en `docs/estrategia/informes/` |
 | Parrilla del canal y estimación de los 193 países | `docs/programacion-canal.md` (§3 ritmo, §9 estimación) |
 | Cómo se une guía + vídeo + blog + SEO | `docs/metodologia-contenidos.md` |
+| **Protocolo de un país (es de Estrategia: al cerrar cada país, añadir lo aprendido y ajustar costes)** · atajo `/pais <País>` | `docs/paises/PROTOCOLO.md`, `.claude/skills/pais/SKILL.md` |
 | Piloto de país y plantilla | `docs/paises/filipinas.md`, `docs/paises/PLANTILLA-expediente.md`, `docs/paises/PROTOCOLO-pais-web.md` |
 | SEO por tandas | `docs/seo-plan-minimo.md`, `docs/seo-destinos-prioritarios.md` |
 | Qué busca la gente | `docs/estudio-demanda-2026-10-21.md` (+ `.csv`) |
