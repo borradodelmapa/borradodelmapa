@@ -91,5 +91,5 @@ Solo cuando las tres piezas de «Antes de abrir el primero» estén ✅. Antes, 
 | Plan de 3 meses (Filipinas dic, Nepal ene, Tailandia feb) | Propuesta en `docs/estrategia/plan.md` · espera a Paco |
 | Lote 1 · Filipinas | Propuesto en `plan.md` · espera aprobación y presupuesto |
 | Informe semanal | Propuesto · primero el lun 9 nov; falta saber si Paco deja leer los paneles en su Chrome o manda capturas |
-| Chats de país · «Antes de abrir el primero» | 1 · datos de la web por país (🌍 Web): encargado · 2 · motor en un worktree (🎬 Vídeo): encargado · 3 · `MEJORAS.md`, plantilla, `/pais` y este protocolo (📈): **hecho** (5 nov) |
+| Chats de país · «Antes de abrir el primero» | 1 · datos de la web por país (🌍 Web): **hecho** (5 nov, `scripts/paises/<país>/`) · 2 · motor en un worktree (🎬 Vídeo): encargado · 3 · `MEJORAS.md`, plantilla, `/pais` y este protocolo (📈): **hecho** (5 nov) |
 | Reparto de lo compartido | `docs/estrategia/reparto.md` (países, Metricool, tanda de Google, presupuesto, cola de revisiones) |
