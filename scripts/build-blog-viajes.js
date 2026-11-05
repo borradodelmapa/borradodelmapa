@@ -168,7 +168,7 @@ ${li.join('\n')}
 
 function pagina(c) {
   const paisH = paisDeHistoria(c), dp = datosPais(paisH);
-  const barra = dp ? barraPais(paisH, 'historias', [['Blog de viajes', '/blog/'], [paisH, `/destinos/${dp.slug}.html`], ['Historias', `/destinos/${dp.slug}.html#historias`], [c.titulo.split(':')[0]]]) : '';
+  const barra = dp ? barraPais(paisH, 'historias', [['Destinos', '/destinos/'], [paisH, `/destinos/${dp.slug}.html`], ['Historias', `/destinos/${dp.slug}.html#historias`], [c.titulo.split(':')[0]]]) : '';
   // anterior/siguiente: la serie «Pueblos borrados del mapa» no enlaza con diarios de otras series (las antiguas siguen como estaban)
   const P = 'Pueblos borrados del mapa', vale = (x) => x && (x.serie === c.serie || (c.serie !== P && x.serie !== P));
   const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
@@ -241,7 +241,7 @@ ${HEAD_COMUN}
 ${CABECERA}
 ${barra}
 <main class="bd-main">
-${barra ? '' : `  <p class="bd-crumbs"><a href="/blog/">Blog de viajes</a> · <a href="/blog/#${slugSerie(c.serie)}">${esc(c.serie)}</a></p>
+${barra ? '' : `  <p class="bd-crumbs"><a href="/blog/">Historias</a> · ${esc(paisH || c.serie)}</p>
 `}${hero ? `  <header class="bd-hero">
     <img src="${hero.src}" alt="" fetchpriority="high">
     <div class="bd-hero-txt">
@@ -376,18 +376,8 @@ ${CABECERA}
   </div>
 
 ${bloquePaises}
-${bloqueSeries}
-
-  <section class="bv-guias" id="rutas">
-    <h2>Rutas completas</h2>
-    <p class="bv-guias-sub">Itinerarios día a día creados con Salma, con mapa y paradas.</p>
-    <div class="bv-grid">
-${bloqueRutas}
-    </div>
-  </section>
-
   <section class="bv-guias" id="guias">
-    <h2>Guías prácticas</h2>
+    <h2>Consejos de viaje</h2>
     <p class="bv-guias-sub">Problemas reales de viajeros reales. Resueltos por Salma.</p>
     <div class="bv-grid">
 ${bloqueGuias}
