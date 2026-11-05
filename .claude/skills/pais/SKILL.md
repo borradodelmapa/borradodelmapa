@@ -12,7 +12,7 @@ Argumento: el nombre del país (p. ej. «Marruecos»). Si falta, pregunta cuál.
 2. Mira lo que ya existe de ese país, sin gastar: páginas en `destinos/` (`*-<pais>.html`), guías en Explorar
    (`https://salma-api.borradodelmapa-api.workers.dev/explorar`), historias en `blog/viajes/`, vídeos y episodios
    en `docs/serie-*.md` y `docs/programacion-canal.md`, y si Paco ha viajado allí.
-3. Crea `docs/paises/<pais>.md` copiando la forma de `docs/paises/filipinas.md` (piezas, quién, estado, fechas).
+3. Crea `docs/paises/<pais>.md` desde `docs/paises/PLANTILLA-pais.md` (piezas, quién, estado, fechas). Asigna lo compartido en `docs/estrategia/reparto.md` (protocolo «Chat de país» de `docs/sistemas/estrategia.md`).
 4. Escribe el lote en `docs/estrategia/plan.md`: piezas del paquete que tocan (y cuáles no y por qué), fecha de la
    revisión final, fechas de publicación (web ≥ 1 semana antes que su vídeo, huecos libres de Metricool) y
    **presupuesto máximo con rango** (tabla de costes del protocolo).
