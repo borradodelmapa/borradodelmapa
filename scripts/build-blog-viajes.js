@@ -342,6 +342,8 @@ ${lista.map(rail).join('\n')}
     </div>
   </section>`;
 }).join('\n\n');
+// Paco, 5 nov 2026: «¿dónde están los shorts de Pueblos borrados del mapa? ponlo»: su carril en la portada, después de los países
+const bloquePueblos = series.includes('Pueblos borrados del mapa') ? bloqueSeries.split('\n\n').find((b) => b.includes('id="' + slugSerie('Pueblos borrados del mapa') + '"')) || '' : '';
 const bloqueGuias = guias.map((g) => `      <a class="bv-gcard" href="${g.u}">
         <h3>${g.t}</h3>
         <p>${g.d}</p>
@@ -382,13 +384,15 @@ ${CABECERA}
   </div>
 
 ${bloquePaises}
-  <section class="bv-guias" id="guias">
-    <h2>Consejos de viaje</h2>
+${bloquePueblos}
+  <details class="bv-guias bv-guias--plegado" id="guias">
+    <summary><h2>Consejos de viaje</h2><span>${guias.length} guías · ver</span></summary>
     <p class="bv-guias-sub">Problemas reales de viajeros reales. Resueltos por Salma.</p>
     <div class="bv-grid">
 ${bloqueGuias}
     </div>
-  </section>
+  </details>
+  <style>.bv-guias--plegado summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:12px}.bv-guias--plegado summary::-webkit-details-marker{display:none}.bv-guias--plegado summary span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#F4630B;white-space:nowrap}.bv-guias--plegado[open] summary span{opacity:.5}</style>
 
   <div class="bv-cta">
     <p>¿Tu viaje todavía no tiene ruta? Cuéntale a Salma adónde vas.</p>
