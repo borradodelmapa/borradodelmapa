@@ -88,7 +88,7 @@ function masDestinos(siblings, countrySlug, countryName, conCss) {
   const items = siblings.map(x => {
     const h = (loadFotos(x.slug) || {}).hero;
     const img = h ? `<img src="/destinos/img/${x.slug}/${h.file}" alt="${e(h.alt || x.name)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(x.name)}</span>`;
-    return `<li><a class="dr-c" href="/destinos/${x.slug}.html">${img}<div class="dr-t"><strong>${e(x.name)}</strong></div></a></li>`;
+    return `<li><a class="dr-c" href="/destinos/${x.slug}.html">${img}<div class="dr-t">${x.menos ? '<span class="dr-chip">Menos turístico</span>' : ''}<strong>${e(x.name)}</strong></div></a></li>`;
   }).join('');
   return `${conCss ? RAIL_CSS : ''}
     <nav class="dr" aria-label="Más destinos en ${e(countryName)}">
@@ -547,7 +547,7 @@ function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const faqs = generateFAQs(dest, countryName);
-  let coords = COORDS[`${countryCode}:${dest.id}`] || (dest.menos_turistico && typeof dest.lat === 'number' ? { lat: dest.lat, lng: dest.lng } : null);
+  let coords = COORDS[`${countryCode}:${dest.id}`] || (typeof dest.lat === 'number' && typeof dest.lng === 'number' ? { lat: dest.lat, lng: dest.lng } : null);
   // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
   if (!coords && route && route.stops) {
     const pts = route.stops.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
@@ -573,6 +573,17 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs, { fotos, route, coords, countrySlug, canonical, pageTitle });
   const heroUrl = heroFoto ? `${DOMAIN}/destinos/img/${slug}/${heroFoto.file}` : null;
   const linkSlugGuia = route && route._public_slug ? route._public_slug : slug + '-ruta';
+  // Sin guía propia (Paco, 5 nov 2026: «el mapa abre Google Maps; que abra una guía nuestra»): la guía del país que pasa por
+  // este destino (la del nombre que lo contiene) o, si no pasa ninguna, la primera del país. Antes el botón apuntaba a
+  // «<slug>-ruta», que en estas páginas no existe.
+  const guiaPais = (() => {
+    if (route) return null;
+    const l = GUIAS_POR_PAIS[countrySlug] || [];
+    const k = String(dest.nombre || '').split(/[,(]/)[0].trim().toLowerCase();
+    return l.find(g => k && g.nombre.toLowerCase().includes(k)) || l[0] || null;
+  })();
+  const guiaPasa = !!(guiaPais && dest.nombre && guiaPais.nombre.toLowerCase().includes(String(dest.nombre).split(/[,(]/)[0].trim().toLowerCase()));
+  const hrefGuiaApp = route ? `/?ruta=${linkSlugGuia}` : (guiaPais ? `/?ruta=${guiaPais.slug}` : null);
   const h1Text = conGuia ? `Qué ver en ${dest.nombre} en ${nDias} ${nDias === 1 ? 'día' : 'días'}` : `Viajar a ${dest.nombre}`;
   const security = dest.alerta_seguridad
     ? `<span class="destino-security-warn">⚠️ Precaución</span>`
@@ -720,7 +731,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   ${heroFoto ? '<div class="destino-layout"><aside class="destino-side">' : ''}
 
     ${coords ? `<!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
-    <a class="destino-map-link" href="https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}" target="_blank" rel="noopener" title="Abrir en Google Maps">
+    <a class="destino-map-link" ${hrefGuiaApp ? `href="${hrefGuiaApp}" title="Abrir la guía con su mapa"` : `href="https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}" target="_blank" rel="noopener" title="Abrir en Google Maps"`}>
       <div id="destino-map" class="destino-map"></div>
     </a>
     <script>
@@ -736,7 +747,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       L.marker([${coords.lat}, ${coords.lng}]).addTo(m);
     });
     </script>` : ''}
-  ${heroFoto ? `<a class="destino-side-cta" href="/?ruta=${linkSlugGuia}"><strong>Esta guía en tu móvil</strong><span>Con mapa interactivo, para guardarla y llevarla en el viaje. Gratis con cuenta.</span><em>ABRIR LA GUÍA →</em></a>
+  ${heroFoto ? `${hrefGuiaApp ? `<a class="destino-side-cta" href="${hrefGuiaApp}"><strong>${guiaPais ? escapeHTML(guiaPais.nombre) : 'Esta guía en tu móvil'}</strong><span>${guiaPais ? (guiaPasa ? 'La guía que pasa por aquí, con' : `Nuestra guía de ${escapeHTML(countryName)}, con`) : 'Con'} mapa interactivo, para guardarla y llevarla en el viaje. Gratis con cuenta.</span><em>ABRIR LA GUÍA →</em></a>` : `<a class="destino-side-cta" href="/?go=chat"><strong>Tu guía de ${escapeHTML(dest.nombre)}</strong><span>Dile a Salma cuántos días tienes y te la hace con mapa.</span><em>HAZTE LA TUYA →</em></a>`}
   </aside><div class="destino-main">` : ''}
 
     <!-- Descripción -->
@@ -1203,9 +1214,13 @@ ${urls}
 // Hasta 6 destinos hermanos del mismo país (los siguientes de la lista, dando la vuelta),
 // para que cada página enlace a otras y ninguna quede casi huérfana.
 function siblingsOf(list, i, countrySlug) {
-  const out = [];
-  for (let k = 1; k < list.length && out.length < 6; k++) {
+  // Los «menos turísticos» del país salen SIEMPRE primero (Paco, 5 nov 2026); luego los vecinos, hasta 8 en total.
+  const yo = list[i];
+  const out = list.filter(d => d.menos_turistico && d !== yo).map(d => ({ slug: `${d.id}-${countrySlug}`, name: d.nombre, menos: true }));
+  const max = out.length ? 8 : 6;
+  for (let k = 1; k < list.length && out.length < max; k++) {
     const d = list[(i + k) % list.length];
+    if (d.menos_turistico) continue;
     out.push({ slug: `${d.id}-${countrySlug}`, name: d.nombre });
   }
   return out;
