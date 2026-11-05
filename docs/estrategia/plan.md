@@ -12,7 +12,7 @@ Manda: CLAUDE.md, `docs/video-checklist.md` (L1, L2, P13), `docs/sistemas.md`. E
 - Del 31 oct al 11 nov: avances y Vietnam 1/5 a 5/5, Especial Muay Thai (2 nov).
 
 **Programado en Metricool (ya no se toca):** Pueblos T1, 10 episodios, del 12 nov al 3 dic (Whang-Od 12 nov y Sagada 17 nov son de Filipinas).
-⚠ `docs/publicaciones-registro.md` dice «del 10 al 19 nov» y `docs/programacion-canal.md` (leído de Metricool el 4 nov) dice «12 nov → 3 dic». Vídeo lo confirma.
+Fechas confirmadas por Vídeo (5 nov): Whang-Od 12 · Sagada 17 · haenyeo 18 · konyak 19 · moken 24 · sentineleses 25 · ainu 26 nov · mosuo 1 · dukha 2 · cazadores con águila 3 dic (`docs/publicaciones-registro.md` aún dice «10-19 nov»: está desfasado).
 **Desde el mar 8 dic no hay nada programado.**
 
 **Web publicada:**
@@ -65,7 +65,7 @@ Por orden de urgencia. Una cada vez.
 **Por qué:** ya está casi todo hecho. Web publicada y abierta a Google, guía en Explorar, apertura e ifugao montados. Whang-Od y Sagada (nov) ya llevan gente al país.
 | Sistema | Qué | Semana |
 |---|---|---|
-| 🎬 Vídeo | Paco ve y oye apertura e ifugao ⏸ → arreglos → derivados → exportar → programar en Metricool ⏸ | 9 nov – 11 dic |
+| 🎬 Vídeo | Paco ve y oye apertura e ifugao ⏸ → cambiar la foto del barquero de la apertura (P4: parece menor) → derivados → exportar en calidad máxima → programar en Metricool ⏸ | 9 nov – 11 dic |
 | 🌍 Web | Publicar artículo de la introducción, fiestas, arnis y blog del ifugao ⏸ | mar 1 dic |
 | 🌍 Web | Mirar en Search Console si Google indexa las 14 páginas de Filipinas | 23 nov y 7 dic |
 | 📱 App | Nada (si Web no necesita el Worker) | — |
