@@ -46,10 +46,11 @@ Por orden de urgencia. Una cada vez.
 
 ## 3 · Propuesta: tres países en tres meses (9 nov 2026 – 11 feb 2027)
 
-**La regla de siempre (L2):** la web sale al menos una semana antes que el vídeo. Redes: mar, mié y jue a las 10:00 (P13).
+**La regla de siempre (L2):** la web sale al menos una semana antes que el vídeo. Redes: mar, mié y jue; TikTok 10:00, YouTube 15:30 (P13).
 **El cuello de botella no es producir, es el tiempo de Paco revisando** (guion, fotos, voz, editor). Por eso un país cada ~4 semanas, no más.
 
-### Reprogramación propuesta (5 nov, noche; Paco: «Pueblos empieza la semana próxima», mañana se queda, se termina Vietnam)
+### Reprogramación APROBADA (5 nov, noche; Paco: «Pueblos empieza la semana próxima», mañana se queda, se termina Vietnam)
+**Comprobada en Metricool (6 nov, 00:00):** 26 publicaciones con fecha y hora correctas, en las dos redes. **Faltan tres largos:** Pueblos T1 (jue 12) está en **borrador** porque Metricool guardó solo 631 MB de 2,05 GB; Vietnam en 5 capítulos (jue 19) y Tatuajes (jue 10 dic) aún no están. Paco aún no ha visto los 10 shorts de Pueblos de menos de 60 s. Falta la entrada de blog del largo (P12, Web).
 Horas (APROBADAS, P13): **TikTok 10:00 · YouTube 15:30** (`estudio-horas-2026-11-05.md`). Todos los shorts, de menos de 60 s (N10).
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
