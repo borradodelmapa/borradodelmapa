@@ -52,8 +52,11 @@
 .pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
 .pb-crumb b{color:#fff;font-weight:600}
 #conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+.destino-clock-wrap{display:none!important}
+.pb-logo{display:flex;align-items:center;flex:0 0 auto;font-size:22px;padding-right:10px;border-right:1px solid rgba(255,255,255,.15);text-decoration:none}
+.pb-logo .ce-mark{display:inline-block;width:1.2em;height:1.2em;margin:0;background:#F4630B;-webkit-mask:url(/logo-pin.svg) center/contain no-repeat;mask:url(/logo-pin.svg) center/contain no-repeat}
 </style>
-<nav class="pb" aria-label="Vietnam"><div class="pb-in"><a class="pb-pais" href="/destinos/vietnam.html"><b>›</b> Vietnam</a><div class="pb-tabs"><a href="/destinos/vietnam.html#sitios">Sitios<span>10</span></a><a href="/destinos/vietnam.html#guias">Guías<span>3</span></a><a href="/destinos/vietnam.html#historias">Historias<span>5</span></a></div></div></nav>
+<nav class="pb" aria-label="Vietnam"><div class="pb-in"><a class="pb-logo" href="/" aria-label="Borrado del Mapa: inicio"><i class="ce-mark" aria-hidden="true"></i></a><a class="pb-pais" href="/destinos/vietnam.html"><b>›</b> Vietnam</a><div class="pb-tabs"><a href="/destinos/vietnam.html#sitios">Sitios<span>10</span></a><a href="/destinos/vietnam.html#guias">Guías<span>3</span></a><a href="/destinos/vietnam.html#historias">Historias<span>5</span></a></div></div></nav>
 <p class="pb-crumb"><a href="/destinos/">Destinos</a> › <b>Vietnam</b></p>
 
   <div class="chat-empty destino-clock-wrap">
@@ -71,89 +74,94 @@
   })();
   </script>
 
-  <section class="destino-hero">
-    <h1 class="destino-title">Viajar a Vietnam</h1>
-    <p class="destino-subtitle">10 DESTINOS</p>
+  <section class="destino-hero destino-hero--foto">
+    <img class="destino-hero-img" src="/blog/viajes/img/paises/vietnam.jpg" alt="Vietnam" fetchpriority="high" decoding="async">
+    <div class="destino-hero-shade"></div>
+    <div class="destino-hero-inner">
+      <h1 class="destino-title">Viajar a Vietnam</h1>
+      <p class="destino-subtitle dp-tiene"><a href="#sitios">10 sitios</a> · <a href="#guias">3 guías</a> · <a href="#historias">5 historias</a></p>
+    </div>
   </section>
+  <style>.dp-tiene a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor}</style>
 
   <main class="destino-content destino-content-wide">
-    
+    <style>.dcc-con-mini{padding:0!important;overflow:hidden}.dcc-mini{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;margin:0 0 12px}.dcc-con-mini>.destino-country-card-badge,.dcc-con-mini>.destino-country-card-title,.dcc-con-mini>.destino-country-card-desc{padding:0 18px}.dcc-con-mini>.destino-country-card-meta{padding:0 18px 16px}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>
     <div id="sitios" class="destino-country-grid">
       
-      <a href="/destinos/hanoi-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🏛️ Ciudad</div>
+      <a href="/destinos/hanoi-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/hanoi-vietnam/hero.jpg" alt="Hanói, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🏛️ Ciudad</div>
         <h3 class="destino-country-card-title">Hanói</h3>
         <p class="destino-country-card-desc">Capital caótica y adictiva. El casco antiguo (Old Quarter) tiene 36 calles temáticas que llevan siglos vendiendo lo mism...</p>
         <div class="destino-country-card-meta">
           <span>3 días</span>
         </div>
       </a>
-      <a href="/destinos/ha-long-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🌿 Naturaleza</div>
+      <a href="/destinos/ha-long-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/ha-long-vietnam/hero.jpg" alt="Ha Long Bay, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🌿 Naturaleza</div>
         <h3 class="destino-country-card-title">Ha Long Bay</h3>
         <p class="destino-country-card-desc">Más de 1.600 islas de roca caliza sobre agua verde esmeralda. El crucero de 2 días es el clásico, pero Lan Ha Bay (lado ...</p>
         <div class="destino-country-card-meta">
           <span>2 días</span>
         </div>
       </a>
-      <a href="/destinos/sapa-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">⛰️ Montaña</div>
+      <a href="/destinos/sapa-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/sapa-vietnam/hero.jpg" alt="Arrozales en terrazas de Sa Pa, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">⛰️ Montaña</div>
         <h3 class="destino-country-card-title">Sapa</h3>
         <p class="destino-country-card-desc">Terrazas de arroz en laderas vertiginosas y aldeas de minorías étnicas (Hmong, Dao). El trekking aquí es de los mejores ...</p>
         <div class="destino-country-card-meta">
           <span>3 días</span>
         </div>
       </a>
-      <a href="/destinos/ninh-binh-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🌿 Naturaleza</div>
+      <a href="/destinos/ninh-binh-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/ninh-binh-vietnam/hero.jpg" alt="Ninh Binh, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🌿 Naturaleza</div>
         <h3 class="destino-country-card-title">Ninh Binh</h3>
         <p class="destino-country-card-desc">Ha Long Bay terrestre: formaciones kársticas entre arrozales y ríos. Menos turistas que Ha Long, más barato, y lo puedes...</p>
         <div class="destino-country-card-meta">
           <span>2 días</span>
         </div>
       </a>
-      <a href="/destinos/phong-nha-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🌿 Naturaleza</div>
+      <a href="/destinos/phong-nha-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/phong-nha-vietnam/hero.jpg" alt="Phong Nha, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🌿 Naturaleza</div>
         <h3 class="destino-country-card-title">Phong Nha</h3>
         <p class="destino-country-card-desc">Sistema de cuevas más grande del mundo. Son Doong es la cueva más grande del planeta. Pero Paradise Cave y la propia Pho...</p>
         <div class="destino-country-card-meta">
           <span>3 días</span>
         </div>
       </a>
-      <a href="/destinos/hue-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🏛️ Histórico</div>
+      <a href="/destinos/hue-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/hue-vietnam/hero.jpg" alt="Hué, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🏛️ Histórico</div>
         <h3 class="destino-country-card-title">Hué</h3>
         <p class="destino-country-card-desc">Antigua capital imperial. La Ciudadela amurallada, tumbas imperiales a lo largo del Río del Perfume, y la mejor comida d...</p>
         <div class="destino-country-card-meta">
           <span>2 días</span>
         </div>
       </a>
-      <a href="/destinos/hoi-an-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🏛️ Histórico</div>
+      <a href="/destinos/hoi-an-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/hoi-an-vietnam/hero.jpg" alt="Hoi An, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🏛️ Histórico</div>
         <h3 class="destino-country-card-title">Hoi An</h3>
         <p class="destino-country-card-desc">Puerto comercial del siglo XVI perfectamente conservado. Farolillos, casas de madera, sastres que te hacen un traje a me...</p>
         <div class="destino-country-card-meta">
           <span>3 días</span>
         </div>
       </a>
-      <a href="/destinos/ho-chi-minh-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🏛️ Ciudad</div>
+      <a href="/destinos/ho-chi-minh-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/ho-chi-minh-vietnam/hero.jpg" alt="Basílica de Notre-Dame, Ciudad Ho Chi Minh, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🏛️ Ciudad</div>
         <h3 class="destino-country-card-title">Ho Chi Minh (Saigón)</h3>
         <p class="destino-country-card-desc">Motor económico de Vietnam. Más moderna, más caótica y más intensa que Hanói. Vida nocturna en Bui Vien, historia recien...</p>
         <div class="destino-country-card-meta">
           <span>3 días</span>
         </div>
       </a>
-      <a href="/destinos/dalat-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">⛰️ Montaña</div>
+      <a href="/destinos/dalat-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/dalat-vietnam/hero.jpg" alt="Da Lat, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">⛰️ Montaña</div>
         <h3 class="destino-country-card-title">Da Lat</h3>
         <p class="destino-country-card-desc">La ciudad de la eterna primavera a 1.500m de altitud. Clima fresco, plantaciones de café, cascadas, y ambiente de luna d...</p>
         <div class="destino-country-card-meta">
           <span>2 días</span>
         </div>
       </a>
-      <a href="/destinos/phu-quoc-vietnam.html" class="destino-country-card">
-        <div class="destino-country-card-badge">🏝️ Isla</div>
+      <a href="/destinos/phu-quoc-vietnam.html" class="destino-country-card dcc-con-mini">
+        <img class="dcc-mini" src="/destinos/img/phu-quoc-vietnam/hero.jpg" alt="Phu Quoc, Vietnam" loading="lazy" decoding="async"><div class="destino-country-card-badge">🏝️ Isla</div>
         <h3 class="destino-country-card-title">Phu Quoc</h3>
         <p class="destino-country-card-desc">La isla más grande de Vietnam. Playas de arena blanca, snorkel decente, fábricas de salsa de pescado y plantaciones de p...</p>
         <div class="destino-country-card-meta">
@@ -190,11 +198,11 @@
     <style>
 .dh{margin:34px 0 10px}.dh h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
 .dh>p{font-size:16px;color:var(--text-secondary);margin:0 0 14px}
-.dh-grid{display:grid;gap:12px}@media(min-width:620px){.dh-grid{grid-template-columns:1fr 1fr}}@media(min-width:960px){.dh-grid{grid-template-columns:1fr 1fr 1fr}}
+.dh-grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}@media(min-width:620px){.dh-grid{grid-template-columns:repeat(3,1fr)}}@media(min-width:960px){.dh-grid{grid-template-columns:repeat(5,1fr)}}
 .dh-c{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}.dh-c:hover{border-color:var(--accent)}
-.dh-c img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.dh-c div{padding:10px 12px 12px}
+.dh-c img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}.dh-c div{padding:8px 10px 10px}
 .dh-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
-.dh-c strong{display:block;font-size:17px;line-height:1.3}
+.dh-c strong{display:block;font-size:14px;line-height:1.3}
 </style>
     <section class="dh" id="historias"><h2>Historias de Vietnam</h2><p>Lo que cuentan nuestros vídeos, con más información y sus fuentes.</p>
       <div class="dh-grid"><a class="dh-c" href="/blog/viajes/vietnam-mil-anos-de-no-rendirse"><img src="/blog/viajes/img/vietnam-mil-anos-de-no-rendirse.jpg" alt="" loading="lazy" decoding="async"><div><span>Vietnam</span><strong>Vietnam, mil años de no rendirse</strong></div></a><a class="dh-c" href="/blog/viajes/vietnam-la-guerra-de-las-fichas-de-domino"><img src="/blog/viajes/img/vietnam-la-guerra-de-las-fichas-de-domino.jpg" alt="" loading="lazy" decoding="async"><div><span>Vietnam</span><strong>Vietnam: la guerra de las fichas de dominó</strong></div></a><a class="dh-c" href="/blog/viajes/vietnam-ruta-ho-chi-minh"><img src="/blog/viajes/img/vietnam-ruta-ho-chi-minh.jpg" alt="" loading="lazy" decoding="async"><div><span>Vietnam</span><strong>La ruta Hồ Chí Minh: vivir bajo tierra</strong></div></a><a class="dh-c" href="/blog/viajes/vietnam-como-son-hoy"><img src="/blog/viajes/img/vietnam-como-son-hoy.jpg" alt="" loading="lazy" decoding="async"><div><span>Vietnam</span><strong>Vietnam hoy: de la guerra a socios estratégicos</strong></div></a><a class="dh-c" href="/blog/viajes/vietnam-ho-chi-minh"><img src="/blog/viajes/img/vietnam-ho-chi-minh.jpg" alt="" loading="lazy" decoding="async"><div><span>Vietnam</span><strong>Hồ Chí Minh: el hombre de los billetes</strong></div></a></div>

@@ -9,7 +9,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const VIDEO_SRC = path.join(ROOT, 'salma marketing', 'ligeras-portada');
+// En una copia (worktree) sin «salma marketing» completo, las fotos, créditos y vídeos se leen de la carpeta principal
+const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'pueblos')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
+const VIDEO_SRC = path.join(MKT, 'salma marketing', 'ligeras-portada');
 const OUT = path.join(ROOT, 'blog', 'viajes');
 const OUT_VIDEO = path.join(OUT, 'video');
 const SITE = 'https://borradodelmapa.com';
@@ -56,8 +58,9 @@ caps.forEach((c, i) => {
   }
   const src = path.join(VIDEO_SRC, c.video);
   const dst = path.join(OUT_VIDEO, c.slug + '.mp4');
-  if (!fs.existsSync(src)) throw new Error('Falta el vídeo ' + src);
-  if (!fs.existsSync(dst) || fs.statSync(dst).size !== fs.statSync(src).size) fs.copyFileSync(src, dst);
+  // En una copia sin «salma marketing» (worktree), vale el vídeo ya publicado en blog/viajes/video/
+  if (!fs.existsSync(src)) { if (!fs.existsSync(dst)) throw new Error('Falta el vídeo ' + src); }
+  else if (!fs.existsSync(dst) || fs.statSync(dst).size !== fs.statSync(src).size) fs.copyFileSync(src, dst);
   if (!fs.existsSync(path.join(OUT, 'img', c.slug + '.jpg'))) throw new Error('Falta la portada blog/viajes/img/' + c.slug + '.jpg');
   c.dur = duracionMp4(dst);
   c.n = i;
@@ -79,7 +82,7 @@ const CABECERA = `<header class="pg-header">
 // c.guia = { json, url, titulo, dias: [n…], intro }: enseña los días de la guía pública donde sale el sitio (nombres de las paradas, sin fotos de Google: 0 €) y un botón a la guía completa.
 function guia(c) {
   if (!c.guia) return '';
-  const g = JSON.parse(fs.readFileSync(path.join(ROOT, c.guia.json), 'utf8'));
+  const g = JSON.parse(fs.readFileSync(path.join(fs.existsSync(path.join(ROOT, c.guia.json)) ? ROOT : MKT, c.guia.json), 'utf8'));
   const dias = (c.guia.dias || []).map((d) => { // sin días (la guía no pasa por el sitio): solo la intro y el botón a la guía
     const st = g.stops.filter((s) => s.day === d); if (!st.length) return '';
     return `        <li><strong>Día ${d} · ${esc(st[0].day_title)}</strong>: ${st.map((s) => esc(s.name)).join(' · ')}</li>`;
@@ -94,15 +97,15 @@ ${dias ? `      <ul>\n${dias}\n      </ul>\n` : ''}      <p><a class="pg-btn" hr
 // Autores y licencias de las fotos del episodio (<creditosDe>/fotos/ATRIBUCIONES.txt)
 function atribuciones(c) {
   const atr = {};
-  fs.readFileSync(path.join(ROOT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
+  fs.readFileSync(path.join(MKT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
   return atr;
 }
 // Fotos de la entrada (c.fotos y s.foto, 1 nov 2026): se copian de <creditosDe>/fotos/ a blog/viajes/img/<slug>/ a 1200 px como mucho (solo la primera vez)
-const FF = path.join(ROOT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe');
+const FF = path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe');
 // Diarios con fotos propias (Tailandia, Vietnam): c.fotosDe = { prefijo: lista } con las listas id|ruta de salma marketing (rutas relativas a D:/salma-movil
 // o a c.fotosBase); el id de la foto es prefijo + id de la lista (p. ej. 'k22' = línea 22 de la lista de 'k'). Sin pie de autor: son de Paco.
 function origen(c, id) {
-  if (!c.fotosDe) return path.join(ROOT, c.creditosDe, 'fotos', id + '.jpg');
+  if (!c.fotosDe) return path.join(MKT, c.creditosDe, 'fotos', id + '.jpg');
   const pre = Object.keys(c.fotosDe).sort((a, b) => b.length - a.length).find((p) => id.startsWith(p));
   const L = Object.fromEntries(fs.readFileSync(path.join(ROOT, c.fotosDe[pre]), 'utf8').split('\n').filter(Boolean).map((l) => l.trim().split('|')));
   const rel = L[id.slice(pre.length)];
@@ -149,7 +152,7 @@ ${c.fotos.galeria.map(([id, pie]) => { const f = foto(c, id); return `        <f
 // c.creditosDe = carpeta del episodio: autores de las fotos que salen en el vídeo (el tiempos.json más reciente de salida/) y en la entrada
 function creditos(c) {
   if (!c.creditosDe) return '';
-  const dir = path.join(ROOT, c.creditosDe), sal = path.join(dir, 'salida');
+  const dir = path.join(MKT, c.creditosDe), sal = path.join(dir, 'salida');
   const t = !fs.existsSync(sal) ? null : fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
   if (!t && c.video) throw new Error('No encuentro tiempos.json en ' + sal); // sin vídeo: solo las fotos de la entrada
   const enBlog = c.fotos ? [c.fotos.portada, ...c.secciones.filter((s) => s.foto).map((s) => s.foto[0]), ...(c.fotos.galeria || []).map((g) => g[0])] : [];
@@ -238,8 +241,7 @@ ${HEAD_COMUN}
 </head>
 <body class="pg">
 
-${CABECERA}
-${barra}
+${barra || CABECERA}
 <main class="bd-main">
 ${barra ? '' : `  <p class="bd-crumbs"><a href="/blog/">Historias</a> · ${esc(paisH || c.serie)}</p>
 `}${hero ? `  <header class="bd-hero">
@@ -319,7 +321,7 @@ const bloquePaises = paises.length ? `  <style>
   <section class="bv-paises" id="paises">
     <div class="bv-serie-head"><h2>Historias por país</h2><span>${paises.length} países</span></div>
     <div class="bv-paises-grid">
-${paises.map((p) => { const dp = datosPais(p.nombre), url = dp ? `/destinos/${dp.slug}.html#historias` : `/blog/viajes/${p.lista[0].slug}`;
+${paises.map((p) => { const dp = datosPais(p.nombre), url = dp ? `/destinos/${dp.slug}.html` : `/blog/viajes/${p.lista[0].slug}`;
   const src = fotoPais(p); // automático: foto entera (sin recortar) sobre su propio fondo difuminado; nunca corta una cabeza (Paco, 5 nov 2026)
   const fotos = `<div class="bv-pais-img"><i style="background-image:url('${src}')"></i><img src="${src}" alt="${esc(p.nombre)}" loading="lazy"></div>`;
   return `      <a class="bv-pais" href="${url}">${fotos}<div class="bv-pais-t"><b>${esc(p.nombre)}</b><span>${p.lista.length} ${p.lista.length === 1 ? 'historia' : 'historias'}</span></div></a>`; }).join('\n')}

@@ -1,3 +1,5 @@
+// (5 nov 2026, Paco: «el logo, todo el texto molesta»: la barra lleva el logo pequeño y sustituye a la cabecera grande —
+//  logo, «Sin mapa, con rumbo», «Blog de viajes» y reloj— en las páginas que la llevan.)
 // BARRA DEL PAÍS — «un país = una casa» (Paco, 5 nov 2026, tras ver el boceto: «sí, adelante»).
 // Entres por donde entres (página del país, un sitio, una guía o una historia del blog), arriba sale la barra fija del país
 // con sus pestañas — Conoce · Sitios · Guías · Historias — y la miga de pan de dónde estás. UNA sola pieza para toda la web:
@@ -45,6 +47,9 @@ const CSS = `<style>
 .pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
 .pb-crumb b{color:#fff;font-weight:600}
 #conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+.destino-clock-wrap{display:none!important}
+.pb-logo{display:flex;align-items:center;flex:0 0 auto;font-size:22px;padding-right:10px;border-right:1px solid rgba(255,255,255,.15);text-decoration:none}
+.pb-logo .ce-mark{display:inline-block;width:1.2em;height:1.2em;margin:0;background:#F4630B;-webkit-mask:url(/logo-pin.svg) center/contain no-repeat;mask:url(/logo-pin.svg) center/contain no-repeat}
 </style>`;
 
 // on: 'conoce' | 'sitios' | 'guias' | 'historias' | '' · crumb: [[texto, url], …, [texto]] (el último, donde estás)
@@ -57,7 +62,7 @@ function barraPais(paisNombre, on, crumb) {
     p.guias ? tab('guias', 'Guías', p.guias) : '', p.historias ? tab('historias', 'Historias', p.historias) : ''].join('');
   const miga = (crumb || []).map((c, i, a) => i === a.length - 1 || !c[1] ? `<b>${esc(c[0])}</b>` : `<a href="${esc(c[1])}">${esc(c[0])}</a>`).join(' › ');
   return `${CSS}
-<nav class="pb" aria-label="${esc(p.nombre)}"><div class="pb-in"><a class="pb-pais" href="${base}"><b>›</b> ${esc(p.nombre)}</a><div class="pb-tabs">${tabs}</div></div></nav>
+<nav class="pb" aria-label="${esc(p.nombre)}"><div class="pb-in"><a class="pb-logo" href="/" aria-label="Borrado del Mapa: inicio"><i class="ce-mark" aria-hidden="true"></i></a><a class="pb-pais" href="${base}"><b>›</b> ${esc(p.nombre)}</a><div class="pb-tabs">${tabs}</div></div></nav>
 ${miga ? `<p class="pb-crumb">${miga}</p>` : ''}`;
 }
 

@@ -52,8 +52,11 @@
 .pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
 .pb-crumb b{color:#fff;font-weight:600}
 #conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+.destino-clock-wrap{display:none!important}
+.pb-logo{display:flex;align-items:center;flex:0 0 auto;font-size:22px;padding-right:10px;border-right:1px solid rgba(255,255,255,.15);text-decoration:none}
+.pb-logo .ce-mark{display:inline-block;width:1.2em;height:1.2em;margin:0;background:#F4630B;-webkit-mask:url(/logo-pin.svg) center/contain no-repeat;mask:url(/logo-pin.svg) center/contain no-repeat}
 </style>
-<nav class="pb" aria-label="Filipinas"><div class="pb-in"><a class="pb-pais" href="/destinos/filipinas.html"><b>›</b> Filipinas</a><div class="pb-tabs"><a href="/destinos/filipinas.html#conoce">Conoce</a><a href="/destinos/filipinas.html#sitios">Sitios<span>13</span></a><a href="/destinos/filipinas.html#guias">Guías<span>2</span></a><a href="/destinos/filipinas.html#historias">Historias<span>5</span></a></div></div></nav>
+<nav class="pb" aria-label="Filipinas"><div class="pb-in"><a class="pb-logo" href="/" aria-label="Borrado del Mapa: inicio"><i class="ce-mark" aria-hidden="true"></i></a><a class="pb-pais" href="/destinos/filipinas.html"><b>›</b> Filipinas</a><div class="pb-tabs"><a href="/destinos/filipinas.html#conoce">Conoce</a><a href="/destinos/filipinas.html#sitios">Sitios<span>13</span></a><a href="/destinos/filipinas.html#guias">Guías<span>2</span></a><a href="/destinos/filipinas.html#historias">Historias<span>5</span></a></div></div></nav>
 <p class="pb-crumb"><a href="/destinos/">Destinos</a> › <b>Filipinas</b></p>
 
   <div class="chat-empty destino-clock-wrap">
@@ -71,13 +74,18 @@
   })();
   </script>
 
-  <section class="destino-hero">
-    <h1 class="destino-title">Viajar a Filipinas</h1>
-    <p class="destino-subtitle">13 DESTINOS</p>
+  <section class="destino-hero destino-hero--foto">
+    <img class="destino-hero-img" src="/blog/viajes/img/paises/filipinas.jpg" alt="Filipinas" fetchpriority="high" decoding="async">
+    <div class="destino-hero-shade"></div>
+    <div class="destino-hero-inner">
+      <h1 class="destino-title">Viajar a Filipinas</h1>
+      <p class="destino-subtitle dp-tiene"><a href="#sitios">13 sitios</a> · <a href="#guias">2 guías</a> · <a href="#historias">5 historias</a></p>
+    </div>
   </section>
+  <style>.dp-tiene a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor}</style>
 
   <main class="destino-content destino-content-wide">
-    <style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>
+    <style>.dcc-con-mini{padding:0!important;overflow:hidden}.dcc-mini{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;margin:0 0 12px}.dcc-con-mini>.destino-country-card-badge,.dcc-con-mini>.destino-country-card-title,.dcc-con-mini>.destino-country-card-desc{padding:0 18px}.dcc-con-mini>.destino-country-card-meta{padding:0 18px 16px}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>
     <div id="sitios" class="destino-country-grid">
       </div><h2 class="dcc-h">Lo menos turístico</h2><p class="dcc-sub">Donde siguen vivas las culturas de Filipinas: menos gente y más que entender.</p><div class="destino-country-grid">
       <a href="/destinos/banaue-filipinas.html" class="destino-country-card dcc-con-mini dcc-menos">
@@ -258,11 +266,11 @@
     <style>
 .dh{margin:34px 0 10px}.dh h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
 .dh>p{font-size:16px;color:var(--text-secondary);margin:0 0 14px}
-.dh-grid{display:grid;gap:12px}@media(min-width:620px){.dh-grid{grid-template-columns:1fr 1fr}}@media(min-width:960px){.dh-grid{grid-template-columns:1fr 1fr 1fr}}
+.dh-grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}@media(min-width:620px){.dh-grid{grid-template-columns:repeat(3,1fr)}}@media(min-width:960px){.dh-grid{grid-template-columns:repeat(5,1fr)}}
 .dh-c{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}.dh-c:hover{border-color:var(--accent)}
-.dh-c img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.dh-c div{padding:10px 12px 12px}
+.dh-c img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}.dh-c div{padding:8px 10px 10px}
 .dh-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
-.dh-c strong{display:block;font-size:17px;line-height:1.3}
+.dh-c strong{display:block;font-size:14px;line-height:1.3}
 </style>
     <section class="dh" id="historias"><h2>Historias de Filipinas</h2><p>Lo que cuentan nuestros vídeos, con más información y sus fuentes.</p>
       <div class="dh-grid"><a class="dh-c" href="/blog/viajes/filipinas-whang-od-tatuadora-kalinga"><img src="/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga.jpg" alt="" loading="lazy" decoding="async"><div><span>Pueblos borrados del mapa</span><strong>Whang-Od: más de cien años tatuando con una espina</strong></div></a><a class="dh-c" href="/blog/viajes/filipinas-sagada-ataudes-colgantes"><img src="/blog/viajes/img/filipinas-sagada-ataudes-colgantes.jpg" alt="" loading="lazy" decoding="async"><div><span>Pueblos borrados del mapa</span><strong>Sagada: el pueblo donde a los muertos se les cuelga</strong></div></a><a class="dh-c" href="/blog/viajes/filipinas-ifugao-terrazas-de-arroz-batad"><img src="/blog/viajes/img/filipinas-ifugao-terrazas-de-arroz-batad.jpg" alt="" loading="lazy" decoding="async"><div><span>Pueblos borrados del mapa</span><strong>Los ifugao y las terrazas de arroz de Batad</strong></div></a><a class="dh-c" href="/blog/viajes/filipinas-historia-culturas-antes-de-viajar"><img src="/blog/viajes/img/filipinas-historia-culturas-antes-de-viajar.jpg" alt="" loading="lazy" decoding="async"><div><span>Conoce cada país</span><strong>Filipinas: historia, culturas y volcanes antes de viajar</strong></div></a><a class="dh-c" href="/blog/viajes/filipinas-luzon-norte-4-dias-cordillera"><img src="/blog/viajes/img/filipinas-luzon-norte-4-dias-cordillera.jpg" alt="" loading="lazy" decoding="async"><div><span>Guías</span><strong>Luzón norte en 4 días: la Cordillera que España no conquistó</strong></div></a></div>

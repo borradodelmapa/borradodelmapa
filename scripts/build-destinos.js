@@ -215,11 +215,11 @@ function historiasPais(countryName) {
   return `<style>
 .dh{margin:34px 0 10px}.dh h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
 .dh>p{font-size:16px;color:var(--text-secondary);margin:0 0 14px}
-.dh-grid{display:grid;gap:12px}@media(min-width:620px){.dh-grid{grid-template-columns:1fr 1fr}}@media(min-width:960px){.dh-grid{grid-template-columns:1fr 1fr 1fr}}
+.dh-grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}@media(min-width:620px){.dh-grid{grid-template-columns:repeat(3,1fr)}}@media(min-width:960px){.dh-grid{grid-template-columns:repeat(5,1fr)}}
 .dh-c{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}.dh-c:hover{border-color:var(--accent)}
-.dh-c img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.dh-c div{padding:10px 12px 12px}
+.dh-c img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}.dh-c div{padding:8px 10px 10px}
 .dh-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
-.dh-c strong{display:block;font-size:17px;line-height:1.3}
+.dh-c strong{display:block;font-size:14px;line-height:1.3}
 </style>
     <section class="dh" id="historias"><h2>Historias de ${e(countryName)}</h2><p>Lo que cuentan nuestros vídeos, con más información y sus fuentes.</p>
       <div class="dh-grid">${l.map(x => `<a class="dh-c" href="/blog/viajes/${e(x.slug)}"><img src="/blog/viajes/img/${e(x.slug)}.jpg" alt="" loading="lazy" decoding="async"><div><span>${e(x.serie || 'Historia')}</span><strong>${e(x.titulo)}</strong></div></a>`).join('')}</div>
@@ -615,6 +615,22 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   // numeradas; la foto sale de fotos.json → que_hacer[N] (Wikimedia, revisada a ojo, con autor). Sin foto, la tarjeta va sin ella.
   // Y «Sobre <destino>» (scripts/destinos-extra.json, texto propio con fuentes). Solo en páginas sin guía (con guía manda la guía).
   const qhFotos = (fotos && fotos.que_hacer) || {};
+  // «<Sitio> en nuestras historias» (5 nov 2026, Paco: que la ficha y el blog no parezcan dos webs): justo bajo la portada,
+  // la guía que pasa por aquí y las historias del blog de este sitio (las que lo nombran en su destino o su título).
+  const nomK = String(dest.nombre || '').split(/[,(]/)[0].trim().toLowerCase();
+  const histSitio = nomK.length > 2 ? historiasDe(countryName).filter(x => [...(x.destino || []), x.titulo || ''].join(' ').toLowerCase().includes(nomK)) : [];
+  const enHistorias = (histSitio.length || (guiaPais && guiaPasa)) ? `<style>
+.dx{max-width:1100px;margin:22px auto 6px;padding:0 16px}.dx h2{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1;text-transform:uppercase;margin:0 0 12px;color:var(--text-primary)}
+.dx-grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}@media(min-width:760px){.dx-grid{grid-template-columns:repeat(4,1fr)}}
+.dx-c{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}.dx-c:hover{border-color:var(--accent)}
+.dx-c img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}.dx-grid{align-items:start}.dx-c.g{grid-column:span 2}.dx-c.g img{aspect-ratio:2/1}
+.dx-c div{padding:8px 10px 10px}.dx-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
+.dx-c strong{display:block;font-size:14px;line-height:1.3}.dx-c.g{border-color:var(--accent);background:rgba(244,99,11,.07)}
+</style>
+  <section class="dx"><h2>${escapeHTML(dest.nombre)} en nuestras historias</h2><div class="dx-grid">
+    ${guiaPais && guiaPasa ? `<a class="dx-c g" href="${hrefGuiaApp}"><img src="/guias-img/${escapeHTML(guiaPais.slug)}.png" alt="Mapa de la guía ${escapeHTML(guiaPais.nombre)}" loading="lazy"><div><span>Guía · pasa por aquí</span><strong>${escapeHTML(guiaPais.nombre)}</strong></div></a>` : ''}
+    ${histSitio.map(x => `<a class="dx-c" href="/blog/viajes/${escapeHTML(x.slug)}"><img src="/blog/viajes/img/${escapeHTML(x.slug)}.jpg" alt="" loading="lazy"><div><span>Historia en vídeo</span><strong>${escapeHTML(x.titulo)}</strong></div></a>`).join('')}
+  </div></section>` : '';
   const extra = DESTINOS_EXTRA[slug];
   const sobreHTML = extra ? `<section class="dq-sobre">
       <h2>Sobre ${escapeHTML(dest.nombre)}</h2>
@@ -747,6 +763,8 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       ${nav?.next ? `<a href="/destinos/${nav.next.slug}.html" class="destino-arrow destino-arrow-next" title="${escapeHTML(nav.next.name)}">›</a>` : '<span class="destino-arrow destino-arrow-disabled">›</span>'}
     </div>
   </section>`}
+
+  ${enHistorias}
 
   <!-- CONTENT -->
   <main class="destino-content${heroFoto ? ' destino-content--wide' : ''}">
@@ -946,6 +964,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   const metaDesc = `Guía para viajar a ${countryName}. Los ${destinos.length} mejores destinos con alojamiento y consejos. Planifica tu ruta con Salma.`;
   const canonical = `${DOMAIN}/destinos/${countrySlug}.html`;
 
+  // (5 nov 2026, Paco: «maqueta bien»: la foto pasa de miniatura a foto grande arriba de la tarjeta.)
   // Miniatura de cada destino (Paco, 4 nov 2026: «10 destinos ha de llevar también una imagen… miniatura, para no competir
   // tanto» con «Conoce <país>»): la portada de destinos/img/<slug>/fotos.json, pequeña a la derecha. Sin foto, la tarjeta como antes.
   let hayMini = false;
@@ -1036,13 +1055,31 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   })();
   </script>
 
-  <section class="destino-hero">
-    <h1 class="destino-title">Viajar a ${escapeHTML(countryName)}</h1>
-    <p class="destino-subtitle">${destinos.length} DESTINOS</p>
+  ${(() => {
+    // Portada del país con foto (recorrido aprobado por Paco, 5 nov 2026: «País: foto, quién es, qué tiene»).
+    // Foto: la elegida para el país en blog/viajes/img/paises/<slug>.jpg; si no hay, la de su primer sitio con foto.
+    const cs = slugify(countryName);
+    const fp = fs.existsSync(path.join(ROOT, 'blog', 'viajes', 'img', 'paises', cs + '.jpg')) ? `/blog/viajes/img/paises/${cs}.jpg`
+      : (() => { for (const d of destinos) { const h = (loadFotos(`${d.id}-${cs}`) || {}).hero; if (h) return `/destinos/img/${d.id}-${cs}/${h.file}`; } return null; })();
+    const nG = (GUIAS_POR_PAIS[cs] || []).length, nH = historiasDe(countryName).length;
+    const tiene = [`<a href="#sitios">${destinos.length} sitios</a>`, nG ? `<a href="#guias">${nG} ${nG === 1 ? 'guía' : 'guías'}</a>` : '', nH ? `<a href="#historias">${nH} ${nH === 1 ? 'historia' : 'historias'}</a>` : ''].filter(Boolean).join(' · ');
+    return fp ? `<section class="destino-hero destino-hero--foto">
+    <img class="destino-hero-img" src="${fp}" alt="${escapeHTML(countryName)}" fetchpriority="high" decoding="async">
+    <div class="destino-hero-shade"></div>
+    <div class="destino-hero-inner">
+      <h1 class="destino-title">Viajar a ${escapeHTML(countryName)}</h1>
+      <p class="destino-subtitle dp-tiene">${tiene}</p>
+    </div>
   </section>
+  <style>.dp-tiene a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor}</style>` : `<section class="destino-hero">
+    <h1 class="destino-title">Viajar a ${escapeHTML(countryName)}</h1>
+    <p class="destino-subtitle dp-tiene">${tiene}</p>
+  </section>
+  <style>.dp-tiene a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor}</style>`;
+  })()}
 
   <main class="destino-content destino-content-wide">
-    ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>` : ''}
+    ${hayMini ? `<style>.dcc-con-mini{padding:0!important;overflow:hidden}.dcc-mini{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;margin:0 0 12px}.dcc-con-mini>.destino-country-card-badge,.dcc-con-mini>.destino-country-card-title,.dcc-con-mini>.destino-country-card-desc{padding:0 18px}.dcc-con-mini>.destino-country-card-meta{padding:0 18px 16px}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>` : ''}
     <div id="sitios" class="destino-country-grid">
       ${cardsHTML}
     </div>
