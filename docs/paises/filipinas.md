@@ -5,7 +5,7 @@ Regla: `docs/video-checklist.md` L2 (se trabaja por países; cada país sale com
 Este archivo es **el plan y el estado del país**: lo actualiza cada chat en su fila (edición pequeña, commit solo de este archivo).
 Lo que se aprenda aquí se convierte en `docs/paises/PLANTILLA.md` para los demás países.
 
-## Quién hace qué (`docs/tres-chats.md`)
+## Quién hace qué (`docs/sistemas.md`)
 - **Chat 1 · Guías y SEO:** expediente del país (la introducción incluida), guías, páginas de destino, tanda a Google, contador de Explorar.
 - **Chat 2 · Vídeo y redes:** vídeo de apertura, ifugao, shorts derivados, entradas de blog (P12, también el artículo de la introducción), paquetes de texto y Metricool.
 - **Chat 3 · Casos:** coordina este calendario; si hace falta tocar el Worker (`guia_extra.cultura`), con OK y coste dicho.

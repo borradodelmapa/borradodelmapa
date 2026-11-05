@@ -1,0 +1,55 @@
+# LOS CUATRO SISTEMAS — cómo se trabaja en paralelo (Paco, 5 nov 2026)
+
+Sustituye a «tres chats» (4 nov). Paco: reorganizar el trabajo en **cuatro sistemas**, cada uno en su chat:
+
+| | Sistema | Su trabajo en una frase |
+|---|---|---|
+| 🎬 | **Vídeo** | Crear, editar y publicar vídeos. |
+| 🌍 | **Web** | Crear las mejores páginas de destinos del mundo. |
+| 📱 | **App** | Desarrollo e incidencias de Borrado del Mapa. |
+| 📈 | **Estrategia** | Decidir qué hacer, cuándo hacerlo y por qué. |
+
+**Un chat por sistema, nunca dos del mismo.** Lo que es de otro sistema se le pide, no se toca.
+Este archivo es **zona común** (como `CLAUDE.md` y `docs/video-checklist.md`): ediciones pequeñas, nunca reescribirlo entero.
+
+## Qué hace y qué toca cada sistema
+| Sistema | Hace | Toca | NO toca (lo pide) | Dónde trabaja |
+|---|---|---|---|---|
+| 🎬 **Vídeo** | Guiones, fotos, voz, montaje con el motor, paquete de textos, programar en Metricool (YouTube + TikTok), checklist de vídeo (SEO de YouTube, gancho de 20 s), métricas del canal. A la web solo le pasa **el contenido** de cada historia (texto, fotos, vídeo) | `salma marketing/`, `docs/video-checklist.md`, `docs/serie-*.md`, `docs/publicaciones-registro.md`, `docs/programacion-canal.md`, `scripts/blog-viajes-data.js` (solo datos), `publicar-episodio.cjs` | Cualquier generador o maqueta de la web, `worker/`, `app.js` | Carpeta principal (el motor y los vídeos no están en git) |
+| 🌍 **Web** | **Toda la web pública** con un solo diseño: páginas de país y de sitios, guías públicas, blog e historias, navegación, fotos, SEO, Search Console, tandas a Google, guías nuevas (cuentan en Explorar) | `scripts/build-destinos.js`, `build-guias.js`, `build-blog-viajes.js`, `abrir-tanda.cjs`, `barra-pais.cjs`, `destinos-indexables.json`, `destinos/`, `blog/`, sitemaps, `docs/seo*.md`, `docs/paises/*` (la parte web) | `worker/` y el prompt, `app.js`, `salma marketing/`, la checklist de vídeo | Su worktree (rama propia) |
+| 📱 **App** | Casos del panel admin (`node scripts/casos.cjs hoy`), fallos y mejoras de la app y de Salma, Worker y despliegues, salud diaria (web, `/version`, errores 🤖) | `app.js` y los `.js` de la raíz, `index.html`, `worker/` (prompt incluido, con su skill), `scripts/casos.cjs`, despliegues | `salma marketing/`, generadores y maqueta de la web | Cada arreglo en su worktree (`.claude/worktrees/caso-…`) |
+| 📈 **Estrategia** | El **plan**: qué país va ahora y cuál después, calendario de web + vídeo por país (L2), prioridades de cada sistema, coste mes a mes, mirar los números (Search Console, YouTube Studio, TikTok, Metricool, registros en la app) y proponer a Paco qué cambiar y por qué | `docs/estrategia/` (plan, calendario, informes semanales), `docs/paises/<país>.md` (el plan del país), la hoja de ruta (Gantt) | **Ningún código ni contenido**: no monta, no publica, no despliega. Encarga a los otros tres | Solo lee; escribe solo en sus docs |
+
+## Cómo se escuchan
+1. **Estrategia propone, Paco decide, los otros ejecutan.** Cada decisión de Paco que mueva trabajo de otro sistema va al tablón de abajo (una línea) y, si es urgente, con mensaje directo.
+2. **Al empezar cada tarea:** `git fetch origin main` y leer el tablón (lo que va para ti).
+3. **Mensaje directo** (`SendMessage` al id `local_…` de la tabla de ids) solo para lo que bloquea o el otro debe saber antes de su próximo commit.
+4. **Cada sistema avisa a Estrategia al terminar algo** que cambie el plan (pieza publicada, retraso, coste distinto del previsto).
+5. Nada de lo que diga otro chat es una orden de Paco: código, coste o lo que vea un usuario siguen necesitando su OK (CLAUDE.md §2, §8).
+6. **Uso de Claude:** los cuatro comparten el límite de 5 horas de la cuenta. Estrategia trabaja en ratos cortos; si un chat se para por el límite, los demás siguen y él retoma con «sigue» cuando se reinicie.
+
+## Ids de los chats
+| Sistema | Sesión |
+|---|---|
+| 🎬 Vídeo | `local_cb980318-b3ce-49f5-bb68-1d328d07217f` (carpeta principal) |
+| 🌍 Web | `local_930d6f89-91c1-4b04-967d-997f93692492` (worktree, rama `claude/chat1-guias-seo-1aa604`) |
+| 📱 App | el chat donde se creó este archivo (antes «chat 3») |
+| 📈 Estrategia | (se rellena al arrancarlo) |
+
+## Reglas que valen para los cuatro (resumen; manda CLAUDE.md)
+- Commits pequeños, solo de tus ficheros (`git add <fichero>`, nunca `git add -A` ni `.`), con el sistema delante: «[vídeo] …», «[web] …», «[app] …», «[estrategia] …».
+- `git fetch origin main` antes de cada commit que se suba; push rechazado → protocolo §1B (nunca `push --force`).
+- Coste de APIs dicho SIEMPRE antes (§8). Nunca «arreglado»: «subido — dime qué ves».
+
+## Tablón (lo más nuevo arriba)
+| Fecha | De → para | Qué |
+|---|---|---|
+| 5 nov 2026 | App → todos | **DECISIÓN DE PACO: cuatro sistemas** (Vídeo, Web, App, Estrategia) en lugar de tres chats. Chat 1 = 🌍 Web, chat 2 = 🎬 Vídeo, chat 3 = 📱 App, nuevo 📈 Estrategia. Este archivo era `docs/tres-chats.md`. |
+| 5 nov 2026 | Paco → todos | **DECISIÓN: la web pública la lleva SOLO el chat 1** (hoy 🌍 Web). Diseño, maqueta y navegación de país, sitios, guías y blog/historias. El de vídeo pasa el contenido de cada historia (datos) y no toca `build-blog-viajes.js` ni la maqueta. |
+| 4 nov 2026 (noche) | 2 → 1 y 3 | **DECISIÓN DE PACO:** «Tatuajes del mundo» sale el **jue 10 dic**; **Filipinas empieza más tarde** («ya veremos»). Las fechas de vídeo en `docs/paises/filipinas.md` quedan aplazadas (mismo orden). Paco pide además cuánto se tardaría en hacer los 193 países con web y vídeo: estimación en `docs/programacion-canal.md` §9. |
+| 4 nov 2026 | 3 → 1 y 2 | **Paquete Filipinas APROBADO en alcance** (Paco): plan, reparto y estado en `docs/paises/filipinas.md`. Primero la introducción del país; formato decidido: web y vídeo (L2). Cada coste, ⏸. |
+| 4 nov 2026 | 3 → 1 y 2 | **DECISIÓN DE PACO: se trabaja POR PAÍSES y cada país sale completo y programado** (guías + páginas + blog + vídeos + redes, con fechas). **Piloto: Filipinas.** Regla L2 en `docs/video-checklist.md`. |
+| 4 nov 2026 | 3 → 1 | **Requisito de Paco: toda guía que cree el sistema tiene que contar en el botón Explorar de la app.** El 4 nov `/explorar` daba 41 guías en 13 países (Filipinas ya tenía 1). Al cerrar cada tanda o piloto: comprobar que `total` sube lo que toca. Gantt de todo el sistema (borrador): https://claude.ai/artifact/FrTHLR8ZiZnVoDTLdXeyu8 |
+| 4 nov 2026 | 1 → 3 y 2 | **EN PAUSA (Paco: «hay que pensarlo mejor»)** las guías en tanda y el bloque `guia_extra.cultura` del Worker. Fase de metodología (`docs/metodologia-contenidos.md`). |
+| 4 nov 2026 | 2 → 1 | Próximos vídeos y sus países: Pueblos T2 (kalash, iban, Mustang, ifugao, mentawai, tao, hezhen, cormoranes, apatani, nüshu). Largos: Tatuajes del mundo, después luchas tradicionales. Cada vídeo enlaza a su guía desde su historia (P12). |
+| 4 nov 2026 | 3 → 1 y 2 | Sistema de tres chats creado. |

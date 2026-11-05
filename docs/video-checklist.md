@@ -117,7 +117,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 | P13 | **Calendario: publicar SOLO de martes a jueves a las 10:00 (hora de Madrid)** (Paco, 3 nov 2026), una pieza por día (YouTube + TikTok a la vez). Por qué: Metricool da como mejores horas martes-jueves y las 10:00 es pico de TikTok y segundo pico de YouTube (YouTube rinde algo más a las 16:00, pero se mantiene un solo horario). Sin fines de semana ni lunes/viernes. Si hay más piezas que huecos, se desplaza la cola (el orden se mantiene; los avances van al final). El 3 nov se reajustaron los 34 posts programados (ver registro). | manual |
 
 ## F · SEO de YouTube (NUEVA, en construcción — Paco, 4 nov 2026: «ir agregando a la checklist SEO para YouTube»)
-Las reglas concretas las propone el chat 2 (Vídeo y redes, `docs/tres-chats.md`) y entran aquí solo con el OK de Paco. Complementa P6 (paquete de texto).
+Las reglas concretas las propone el chat 2 (Vídeo y redes, `docs/sistemas.md`) y entran aquí solo con el OK de Paco. Complementa P6 (paquete de texto).
 | ID | Regla | Comprobación |
 |---|---|---|
 | Y1 | **Cada vídeo pasa esta sección antes de programarse** (título, descripción, etiquetas, capítulos, miniatura, lista, tarjetas/pantalla final). Hasta que haya reglas aprobadas, vale P6. | manual |

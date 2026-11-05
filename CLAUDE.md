@@ -21,6 +21,8 @@ Worker perdidas. Las causas fueron de método, no técnicas.
 - **1B (desde 13-14 sept): varias sesiones a la vez, cada una con su clon (móvil, portátil, nube).** Un push
   rechazado es rutina de git, no catástrofe: seguir el proceso.
   - Al abrir varias sesiones, decir a cada una qué toca y qué NO.
+  - **Desde el 5 nov 2026 se trabaja en CUATRO SISTEMAS** (🎬 Vídeo · 🌍 Web · 📱 App · 📈 Estrategia), un chat cada uno:
+    qué toca cada uno, ids y tablón en **`docs/sistemas.md`** (leerlo al empezar).
   - `git fetch origin main` antes de cualquier commit que vaya a subirse (la otra pudo subir mientras tanto).
   - Commits pequeños, push frecuente, mensajes claros (dicen de qué sesión/tema viene).
   - Push rechazado → PARAR → `git fetch origin main` → `git log --oneline HEAD..origin/main` → **confirmar
