@@ -326,6 +326,7 @@ ${paises.map((p) => { const dp = datosPais(p.nombre), url = dp ? `/destinos/${dp
   const fotos = `<div class="bv-pais-img"><i style="background-image:url('${src}')"></i><img src="${src}" alt="${esc(p.nombre)}" loading="lazy"></div>`;
   return `      <a class="bv-pais" href="${url}">${fotos}<div class="bv-pais-t"><b>${esc(p.nombre)}</b><span>${p.lista.length} ${p.lista.length === 1 ? 'historia' : 'historias'}</span></div></a>`; }).join('\n')}
     </div>
+    <p style="padding:0 16px;margin:14px 0 0"><a class="pg-btn" href="/destinos/">Todos los países →</a></p>
   </section>
 ` : '';
 const bloqueSeries = series.map((s) => {
