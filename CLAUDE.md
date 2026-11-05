@@ -22,7 +22,9 @@ Worker perdidas. Las causas fueron de método, no técnicas.
   rechazado es rutina de git, no catástrofe: seguir el proceso.
   - Al abrir varias sesiones, decir a cada una qué toca y qué NO.
   - **Desde el 5 nov 2026 se trabaja en CUATRO SISTEMAS** (🎬 Vídeo · 🌍 Web · 📱 App · 📈 Estrategia), un chat cada uno:
-    qué toca cada uno, ids y tablón en **`docs/sistemas.md`** (leerlo al empezar).
+    qué toca cada uno, ids y tablón en **`docs/sistemas.md`** (leerlo al empezar) y el manual de cada uno en `docs/sistemas/`.
+    **Vídeo y Web trabajan en MODO PRODUCCIÓN** (Paco, 5 nov 2026): por lotes, con dos paradas (aprobar el lote y su presupuesto;
+    revisión final antes de publicar), sin pedir OK paso a paso. App sigue con §2.
   - `git fetch origin main` antes de cualquier commit que vaya a subirse (la otra pudo subir mientras tanto).
   - Commits pequeños, push frecuente, mensajes claros (dicen de qué sesión/tema viene).
   - Push rechazado → PARAR → `git fetch origin main` → `git log --oneline HEAD..origin/main` → **confirmar

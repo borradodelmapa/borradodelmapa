@@ -20,6 +20,38 @@ Este archivo es **zona común** (como `CLAUDE.md` y `docs/video-checklist.md`): 
 | 📱 **App** | Casos del panel admin (`node scripts/casos.cjs hoy`), fallos y mejoras de la app y de Salma, Worker y despliegues, salud diaria (web, `/version`, errores 🤖) | `app.js` y los `.js` de la raíz, `index.html`, `worker/` (prompt incluido, con su skill), `scripts/casos.cjs`, despliegues | `salma marketing/`, generadores y maqueta de la web | Cada arreglo en su worktree (`.claude/worktrees/caso-…`) |
 | 📈 **Estrategia** | El **plan**: qué país va ahora y cuál después, calendario de web + vídeo por país (L2), prioridades de cada sistema, coste mes a mes, mirar los números (Search Console, YouTube Studio, TikTok, Metricool, registros en la app) y proponer a Paco qué cambiar y por qué | `docs/estrategia/` (plan, calendario, informes semanales), `docs/paises/<país>.md` (el plan del país), la hoja de ruta (Gantt) | **Ningún código ni contenido**: no monta, no publica, no despliega. Encarga a los otros tres | Solo lee; escribe solo en sus docs |
 
+## MODO PRODUCCIÓN: se trabaja por lotes y Paco revisa una vez, al final (Paco, 5 nov 2026)
+Paco: «no quiero estar pendiente de dar a aceptar cada segundo. Esto es para publicar mucho contenido de una vez. Solo al final,
+antes de publicar, quiero ver previamente el resultado final.»
+- **Vale para 🎬 Vídeo y 🌍 Web** (contenido): guiones, fotos, montajes, páginas, guías, historias, textos de redes.
+  Dentro de un lote aprobado **no se pregunta paso a paso**: se produce todo con los protocolos del manual del sistema y sus comprobadores.
+- **Dos paradas por lote, nada más:**
+  1. **Al empezar:** Estrategia (o el sistema) presenta el lote en pocas líneas: qué piezas, para cuándo y **el presupuesto máximo con rango**
+     (voz, guías, Google…; CLAUDE.md §8). Un «sí» de Paco aprueba el lote y su gasto. Si el gasto real va a pasar del presupuesto, se para y se avisa.
+  2. **Antes de publicar:** **una sola revisión final** con TODO el lote terminado: vídeos montados, páginas en local o en copia, textos de redes.
+     Una página de revisión con enlaces, sin tener que buscar nada. Paco dice «publica» (o qué cambiar) y se publica todo junto.
+- **Nada se publica sin esa revisión final.** Publicar = web en producción, Metricool/redes, guías públicas, tanda a Google.
+- **📱 App sigue con el protocolo de siempre** (CLAUDE.md §2: un cambio, una prueba, OK de Paco), porque toca lo que usan los usuarios.
+- Lo que los comprobadores marcan ❌ se arregla dentro del lote sin preguntar. Lo que es una **decisión** (un dato dudoso que cambia
+  la historia, una foto con niños, un tema delicado) se apunta y se le enseña a Paco en la revisión final, no se para el lote por ello.
+
+## Para que no se pisen
+- **Cada sistema solo escribe en sus ficheros** (tabla de arriba). Lo de otro se pide por el tablón o por mensaje.
+- **Cada uno en su carpeta:** Vídeo en la carpeta principal; Web en su worktree; App un worktree por arreglo; Estrategia solo `docs/estrategia/` y `docs/paises/`.
+- **Ficheros comunes** (`CLAUDE.md`, `docs/sistemas.md`, `docs/video-checklist.md`, `index.html`, `styles.css`): edición pequeña, `git fetch` antes, commit solo de ese fichero.
+- Si dos sistemas necesitan el mismo fichero, **decide Estrategia quién va primero** y el otro espera.
+
+## Manual de cada sistema: «lo que sabe del proyecto»
+Cada sistema tiene **su manual** en `docs/sistemas/<sistema>.md`. Es lo primero que lee al empezar y lo que Paco abre para ver qué sabe.
+Lo escribe y lo mantiene el propio sistema. Plantilla, igual para los cuatro:
+1. **Para qué sirve** (una frase) y **qué NO hace**.
+2. **Lo que sabe del proyecto:** los documentos que manda (con enlace) y las decisiones de Paco vigentes en su terreno.
+3. **Recursos ya creados** que se reutilizan: herramientas, scripts, plantillas, sonidos, fotos, cuentas… y dónde están.
+4. **Protocolos por tipo de trabajo**, cada uno como **lista de tareas** en orden, con su comprobador y marcando las dos paradas del modo producción.
+   (Vídeo: short de serie, documental largo, apertura de país, short derivado. Web: país completo, sitio, guía nueva, historia, tanda a Google.
+   App: caso, despliegue. Estrategia: lote, informe semanal.)
+5. **Estado ahora:** qué hay en marcha y qué falta (tabla corta), al día.
+
 ## Cómo se escuchan
 1. **Estrategia propone, Paco decide, los otros ejecutan.** Cada decisión de Paco que mueva trabajo de otro sistema va al tablón de abajo (una línea) y, si es urgente, con mensaje directo.
 2. **Al empezar cada tarea:** `git fetch origin main` y leer el tablón (lo que va para ti).

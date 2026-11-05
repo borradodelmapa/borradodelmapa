@@ -24,6 +24,7 @@ Es **zona común**, como CLAUDE.md. Cada chat apunta aquí sus mejoras, pero sin
 6. Los documentos de detalle (narradora, estilo, Biblia) que no estén en git **no cuentan como protocolo** para otras sesiones: lo importante se pasa a esta checklist y el detalle se commitea.
 
 ## PROTOCOLO COMPLETO DE UN EPISODIO, DE LA IDEA A PUBLICAR (31 oct 2026; Paco: «quiero saber el protocolo completo»)
+**MODO PRODUCCIÓN (Paco, 5 nov 2026; detalle en `docs/sistemas.md`):** se trabaja por **lotes**. Paco aprueba el lote y su presupuesto al empezar (eso cubre el coste de voz, F5) y revisa **todo el lote terminado una sola vez antes de publicar**. Las ⏸ intermedias de abajo (guion, fotos, editor, blog, paquete de redes) **no paran el trabajo**: lo que había que enseñar en ellas se enseña junto en esa revisión final. Las reglas de la checklist se siguen cumpliendo igual; las dudas que sean decisión de Paco (dato dudoso, niños, tema delicado) se apuntan para la revisión final.
 Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera el OK de Paco. Dónde está cada cosa de «Pueblos borrados del mapa»: `docs/serie-pueblos-borrados.md`.
 1. **Tema** del plan de la serie (L1). Título: «<Pueblo> · Pueblos borrados del mapa».
 2. **Investigar con fuentes** (F4). Lo dudoso o contradictorio no va a la voz; se cuenta como tal en el blog o no se cuenta.
@@ -140,6 +141,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 5 nov 2026 · 13:00 | 📱 App (Claude) | **Modo producción** (decisión de Paco): por lotes, con dos paradas (aprobar el lote y su presupuesto; revisión final de todo antes de publicar). Las ⏸ intermedias del protocolo dejan de parar el trabajo y pasan a la revisión final. **Conflicto resuelto:** F3 (guion aprobado antes de la voz), F6 (Paco elige fotos) y F8 (corrige por escena antes de seguir) quedan dentro de la revisión final del lote: gana lo nuevo. F5 (coste dicho antes) se cumple con el presupuesto del lote. |
 | 5 nov 2026 · 09:00 | Vídeo y redes (Claude, chat 2) | **S3**: la sintonía documental suena también en los vídeos de apertura de país (16:9). **M16**: en 16:9, clip de la app en versión horizontal sin deformar (`clip-app-16x9.mp4`). Decisiones de Paco al ver la apertura de Filipinas. Sin conflictos. |
 | 4 nov 2026 · 19:00 | Sistema de tres chats (Claude, chat 3) | **L2**: formato de la introducción de país decidido por Paco: web y vídeo (página, artículo, vídeo 16:9 de apertura, shorts derivados, resumen en las guías) y estructura fija de 8 apartados. Sin conflictos. |
 | 4 nov 2026 · 18:30 | Sistema de tres chats (Claude, chat 3) | **L2** ampliada: cada país abre con una introducción (geografía/geología, historia, culturas), decisión de Paco; formato por cerrar. Sin conflictos. |
