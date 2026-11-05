@@ -10,7 +10,17 @@ En el chat **📈 Estrategia** escribe:
 > **/pais Marruecos**
 
 (o «haz Marruecos como Filipinas»). Estrategia prepara el lote y te hace **una sola pregunta**: «¿apruebas el lote y hasta X €?».
-Con tu «sí» arrancan Web y Vídeo a la vez, sin preguntarte nada más hasta la revisión final.
+Con tu «sí» **abre el chat del país** («🇲🇦 Marruecos»), que hace todo ese país sin preguntarte nada más hasta la revisión final.
+Puedes tener **2-3 países a la vez** (ver «CHATS DE PAÍS» en `docs/sistemas.md`). Mientras no estén listas las tres piezas de
+«Antes de abrir el primero», el país lo hacen Web y Vídeo como en Filipinas.
+
+## La vida de un chat de país
+1. **Nace** con `/pais` tras el «sí» al lote, en su worktree, con este protocolo y `docs/paises/<pais>.md`.
+2. **Trabaja** solo en los ficheros de su país; usa las herramientas de las fábricas sin cambiarlas.
+3. **Apunta** en `docs/paises/MEJORAS.md`, al momento, lo que falle o se pueda mejorar.
+4. **Pide** a Estrategia lo que es de todos: huecos de Metricool, sitio en la tanda de Google, más presupuesto.
+5. **Revisión final** (⏸2) → «publica» → publica en fila → lista «Terminado».
+6. **Se archiva.** Lo que aprendió queda en `MEJORAS.md` y, cuando Estrategia lo pase, en este protocolo.
 
 ## Qué sale de cada país (el paquete)
 | # | Pieza | Sistema | Detalle en |

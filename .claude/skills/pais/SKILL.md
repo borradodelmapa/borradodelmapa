@@ -18,7 +18,13 @@ Argumento: el nombre del país (p. ej. «Marruecos»). Si falta, pregunta cuál.
    **presupuesto máximo con rango** (tabla de costes del protocolo).
 5. **Parada 1:** a Paco, en pocas líneas, qué sale del país y cuándo, y **una sola pregunta**:
    «¿Apruebas el lote de <País> hasta X €?». No encargues nada antes de su «sí».
-6. Con su «sí»: una línea en el tablón de `docs/sistemas.md` y un mensaje a 🌍 Web y a 🎬 Vídeo con su parte
-   (ids en la tabla de `docs/sistemas.md`). Primero el expediente (Web): Vídeo escribe guiones cuando esté.
+6. Con su «sí»: una línea en el tablón de `docs/sistemas.md`. Luego:
+   - **Si ya están listas las tres piezas** de «Antes de abrir el primero» (`docs/sistemas.md`, sección CHATS DE PAÍS):
+     abre el **chat del país** (start_session, título «<bandera> <País>», worktree propio, contexto fresh) con el brief:
+     el lote aprobado, `docs/paises/PROTOCOLO.md`, `docs/paises/<pais>.md`, sus límites (solo ficheros de su país,
+     no cambia herramientas, mejoras a `MEJORAS.md`, pide a Estrategia lo compartido) y el tope de gasto. Apunta su id
+     en `docs/paises/<pais>.md` y en la tabla de ids de `docs/sistemas.md`.
+   - **Si no:** mensaje a 🌍 Web y a 🎬 Vídeo con su parte, como en Filipinas.
 7. Sigue el lote hasta la **parada 2** (una página de revisión con todo) y, tras el «publica», cierra con la lista
-   «Terminado» del protocolo.
+   «Terminado» del protocolo. Después **archiva el chat del país** y repasa sus líneas de `MEJORAS.md`.
+8. **Como mucho 2-3 países a la vez y escalonados.** Si Paco pide un cuarto, dile cuál va antes y por qué.

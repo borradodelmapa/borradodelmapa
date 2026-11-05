@@ -20,6 +20,28 @@ Este archivo es **zona común** (como `CLAUDE.md` y `docs/video-checklist.md`): 
 | 📱 **App** | Casos del panel admin (`node scripts/casos.cjs hoy`), fallos y mejoras de la app y de Salma, Worker y despliegues, salud diaria (web, `/version`, errores 🤖) | `app.js` y los `.js` de la raíz, `index.html`, `worker/` (prompt incluido, con su skill), `scripts/casos.cjs`, despliegues | `salma marketing/`, generadores y maqueta de la web | Cada arreglo en su worktree (`.claude/worktrees/caso-…`) |
 | 📈 **Estrategia** | El **plan**: qué país va ahora y cuál después, calendario de web + vídeo por país (L2), prioridades de cada sistema, coste mes a mes, mirar los números (Search Console, YouTube Studio, TikTok, Metricool, registros en la app) y proponer a Paco qué cambiar y por qué | `docs/estrategia/` (plan, calendario, informes semanales), `docs/paises/<país>.md` (el plan del país), la hoja de ruta (Gantt) | **Ningún código ni contenido**: no monta, no publica, no despliega. Encarga a los otros tres | Solo lee; escribe solo en sus docs |
 
+## CHATS DE PAÍS: uno por país, temporal (Paco, 5 nov 2026: «me gustaría trabajar en varios países a la vez»)
+Desde que estén listas las tres piezas de abajo («Antes de abrir el primero»), los países ya no los hacen Web y Vídeo:
+- **Chat de país** (p. ej. «🇲🇦 Marruecos»): lo abre 📈 Estrategia con `/pais <País>` tras el «sí» de Paco al lote. Hace **todo ese país**
+  (web y vídeo) con `docs/paises/PROTOCOLO.md`, en **su propio worktree**. **Usa las herramientas pero no las cambia**: si una falla o
+  se puede mejorar, lo apunta en `docs/paises/MEJORAS.md` y se lo pide a la fábrica. Solo escribe en **los ficheros de su país**.
+  Al terminar: lista «Terminado» del protocolo → sus mejoras en `MEJORAS.md` → Estrategia lo **archiva** (no se borra: queda para consultar).
+- **🌍 Web y 🎬 Vídeo pasan a ser las FÁBRICAS:** mantienen y mejoran las herramientas que usan los países (generadores, diseño, `barra-pais`,
+  fotos; motor, editor, mapas, voces, checklist) y aplican las mejoras de `MEJORAS.md`. Vídeo sigue llevando las series que no son de un
+  país (Pueblos T1, Tatuajes…) y Metricool.
+- **📈 Estrategia reparte lo que es de todos:** huecos de Metricool, las 30 páginas por tanda de Google, el presupuesto y la cola de
+  revisiones de Paco. Un chat de país nunca coge eso por su cuenta.
+- **Como mucho 2-3 países a la vez y escalonados** (uno produce, otro en revisión, otro arranca): comparten el límite de uso de Claude
+  y la revisión final de Paco es el cuello de botella.
+- **Publicar es en fila:** cada chat de país hace `git fetch` + rebase justo antes de subir; si dos van a la vez, Estrategia dice quién primero.
+
+### Antes de abrir el primero (si no, dos países chocan)
+| # | Qué | Fábrica | Estado |
+|---|---|---|---|
+| 1 | **Datos de la web por país:** un fichero por país en lugar de los comunes (`paises-intro.json`, `destinos-extra.json`, `blog-viajes-data.js`…), que los generadores leen juntos. Así dos países nunca editan el mismo fichero | 🌍 Web | encargado 5 nov |
+| 2 | **El motor de vídeo al alcance de un worktree:** el código del motor y los recursos ligeros en git; lo pesado (fotos, vídeos, voces) se queda en la carpeta principal con ruta fija. Una carpeta y un puerto del editor por país | 🎬 Vídeo | encargado 5 nov |
+| 3 | **`MEJORAS.md`, la plantilla del plan de país y el `/pais` que abre el chat de país** | 📈 Estrategia | encargado 5 nov |
+
 ## MODO PRODUCCIÓN: se trabaja por lotes y Paco revisa una vez, al final (Paco, 5 nov 2026)
 Paco: «no quiero estar pendiente de dar a aceptar cada segundo. Esto es para publicar mucho contenido de una vez. Solo al final,
 antes de publicar, quiero ver previamente el resultado final.»
@@ -76,6 +98,7 @@ Lo escribe y lo mantiene el propio sistema. Plantilla, igual para los cuatro:
 ## Tablón (lo más nuevo arriba)
 | Fecha | De → para | Qué |
 |---|---|---|
+| 5 nov 2026 (noche) | App → todos | **DECISIÓN DE PACO: CHATS DE PAÍS** (uno por país, temporal; Web y Vídeo pasan a ser fábricas de herramientas). Sección «CHATS DE PAÍS» arriba. Antes de abrir el primero: Web separa los datos por país, Vídeo pone el motor al alcance de un worktree, Estrategia prepara `MEJORAS.md` y el `/pais` que abre el chat. |
 | 5 nov 2026 (noche) | Estrategia → Vídeo | **APROBADO por Paco:** nueva programación (`docs/estrategia/plan.md` §3, «Reprogramación APROBADA») y **horas: TikTok 10:00 · YouTube 15:30** (P13). Vídeo reprograma Metricool. |
 | 5 nov 2026 | App → todos | **DECISIÓN DE PACO: cuatro sistemas** (Vídeo, Web, App, Estrategia) en lugar de tres chats. Chat 1 = 🌍 Web, chat 2 = 🎬 Vídeo, chat 3 = 📱 App, nuevo 📈 Estrategia. Este archivo era `docs/tres-chats.md`. |
 | 5 nov 2026 | Paco → todos | **DECISIÓN: la web pública la lleva SOLO el chat 1** (hoy 🌍 Web). Diseño, maqueta y navegación de país, sitios, guías y blog/historias. El de vídeo pasa el contenido de cada historia (datos) y no toca `build-blog-viajes.js` ni la maqueta. |
