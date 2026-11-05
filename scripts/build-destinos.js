@@ -18,6 +18,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 // Sin precios sin fuente en las páginas (Paco, 20 oct 2026): la misma regla que limpió las ya publicadas
 import { sinPreciosObj } from './sin-precios.mjs';
+// Barra del país (un país = una casa, 5 nov 2026): la misma pieza que usa el blog
+import { createRequire } from 'module';
+const { barraPais, historiasDe } = createRequire(import.meta.url)('./barra-pais.cjs');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -161,7 +164,6 @@ function conocePais(countrySlug, countryName) {
       <p class="dc-hilo">${e(x.hilo)}</p>
       ${bloques}
       ${gal}
-      ${dia}
       ${fue ? `<p class="dc-fuentes">Fuentes: ${fue}. Fotos: Wikimedia Commons, con su autor en cada pie.</p>` : ''}
     </section>`;
 }
@@ -201,6 +203,26 @@ function guiasDestacadas(countrySlug, countryName) {
       <p>Completas, con mapa, paradas y consejos. ¿Quieres una a tu medida? Dile a Salma cuántos días tienes y qué te gusta.</p></div>
       <div class="dg-grid">${cards}</div>
       <a class="dg-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
+    </section>`;
+}
+
+// «Historias de <país>» (5 nov 2026): todas las entradas del blog del país, sacadas solas de scripts/blog-viajes-data.js
+// (sin borradores). Es la pestaña «Historias» de la barra del país.
+function historiasPais(countryName) {
+  const l = historiasDe(countryName);
+  if (!l.length) return '';
+  const e = escapeHTML;
+  return `<style>
+.dh{margin:34px 0 10px}.dh h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
+.dh>p{font-size:16px;color:var(--text-secondary);margin:0 0 14px}
+.dh-grid{display:grid;gap:12px}@media(min-width:620px){.dh-grid{grid-template-columns:1fr 1fr}}@media(min-width:960px){.dh-grid{grid-template-columns:1fr 1fr 1fr}}
+.dh-c{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}.dh-c:hover{border-color:var(--accent)}
+.dh-c img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.dh-c div{padding:10px 12px 12px}
+.dh-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.dh-c strong{display:block;font-size:17px;line-height:1.3}
+</style>
+    <section class="dh" id="historias"><h2>Historias de ${e(countryName)}</h2><p>Lo que cuentan nuestros vídeos, con más información y sus fuentes.</p>
+      <div class="dh-grid">${l.map(x => `<a class="dh-c" href="/blog/viajes/${e(x.slug)}"><img src="/blog/viajes/img/${e(x.slug)}.jpg" alt="" loading="lazy" decoding="async"><div><span>${e(x.serie || 'Historia')}</span><strong>${e(x.titulo)}</strong></div></a>`).join('')}</div>
     </section>`;
 }
 
@@ -680,12 +702,12 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 </head>
 <body class="destino-page">
 
-  <!-- NAV BREADCRUMB -->
-  <nav class="destino-nav-bar">
+  <!-- NAV: barra del país (si el país la tiene) o la miga de siempre -->
+  ${barraPais(countryName, 'sitios', [['Destinos', '/destinos/'], [countryName, `/destinos/${slugify(countryName)}.html`], ['Sitios', `/destinos/${slugify(countryName)}.html#sitios`], [dest.nombre]]) || `<nav class="destino-nav-bar">
     <a href="/destinos/" class="destino-nav-link">Destinos</a>
     <span class="destino-nav-sep">›</span>
     <a href="/destinos/${slugify(countryName)}.html" class="destino-nav-link">${escapeHTML(countryName)}</a>
-  </nav>
+  </nav>`}
 
   <!-- RELOJ — hora real del destino, gratis (Intl, sin llamar a ninguna API).
        Mismo lenguaje visual que el reloj del index de la app (.chat-empty/.ce-sky-date). -->
@@ -995,10 +1017,10 @@ function buildCountryHTML(countryName, countryCode, destinos) {
 </head>
 <body class="destino-page">
 
-  <!-- NAV -->
-  <nav class="destino-nav-bar">
+  <!-- NAV: barra del país (si la tiene) -->
+  ${barraPais(countryName, '', [['Destinos', '/destinos/'], [countryName]]) || `<nav class="destino-nav-bar">
     <a href="/destinos/" class="destino-nav-link">Destinos</a>
-  </nav>
+  </nav>`}
 
   <div class="chat-empty destino-clock-wrap">
     ${LOGO_HTML}
@@ -1021,13 +1043,15 @@ function buildCountryHTML(countryName, countryCode, destinos) {
 
   <main class="destino-content destino-content-wide">
     ${hayMini ? `<style>.dcc-con-mini{position:relative;padding-right:104px}.dcc-mini{position:absolute;top:16px;right:16px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}.dcc-menos{border-color:var(--accent)!important;background:rgba(244,99,11,.07)!important}.dcc-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-right:6px}.dcc-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:26px 0 6px;color:var(--text-primary)}.dcc-sub{font-size:16px;color:var(--text-secondary);margin:0 0 14px}</style>` : ''}
-    <div class="destino-country-grid">
+    <div id="sitios" class="destino-country-grid">
       ${cardsHTML}
     </div>
 
     ${guiasDestacadas(countrySlug, countryName)}
 
     ${conocePais(countrySlug, countryName)}
+
+    ${historiasPais(countryName)}
 
     <!-- RUTAS DE LA COMUNIDAD -->
     <section class="destino-community" id="destino-community" style="display:none">
