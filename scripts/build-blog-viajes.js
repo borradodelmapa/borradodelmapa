@@ -297,26 +297,32 @@ const rail = (c) => `      <a class="bv-card" href="/blog/viajes/${c.slug}">
       </a>`;
 const paises = [];
 caps.forEach((c) => { const p = paisDeHistoria(c); if (!p) return; let e = paises.find((x) => x.nombre === p); if (!e) paises.push(e = { nombre: p, lista: [] }); e.lista.push(c); });
+// Foto de cada país en «Historias por país»: 1) si hay una elegida a mano en blog/viajes/img/paises/<país>.jpg, esa; 2) si no, la foto original
+// de portada (sin banda) de la historia más reciente que la tenga (c.fotos.portada, ya revisada F9/M15); 3) si no, la portada de la historia.
+function fotoPais(p) {
+  const elegida = path.join(OUT, 'img', 'paises', slugify(p.nombre) + '.jpg');
+  if (fs.existsSync(elegida)) return '/blog/viajes/img/paises/' + slugify(p.nombre) + '.jpg';
+  const c = [...p.lista].reverse().find((x) => x.fotos && x.fotos.portada && fs.existsSync(path.join(OUT, 'img', x.slug, x.fotos.portada + '.jpg')));
+  return c ? `/blog/viajes/img/${c.slug}/${c.fotos.portada}.jpg` : `/blog/viajes/img/${p.lista[p.lista.length - 1].slug}.jpg`;
+}
 const bloquePaises = paises.length ? `  <style>
   .bv-paises{margin:22px 0 8px}
-  .bv-paises-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;padding:0 16px}
-  .bv-pais{display:block;text-decoration:none;color:#fff;background:#141617;border:1px solid rgba(255,255,255,.12)}
-  .bv-pais-fotos{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:2px;aspect-ratio:16/10}
-  .bv-pais-fotos img{width:100%;height:100%;object-fit:cover;display:block}
-  .bv-pais-fotos img:first-child{grid-row:1/3}
-  .bv-pais-fotos.n1{grid-template-columns:1fr;grid-template-rows:1fr}
-  .bv-pais-fotos.n2{grid-template-columns:1fr 1fr;grid-template-rows:1fr}
-  .bv-pais-fotos.n1 img:first-child,.bv-pais-fotos.n2 img:first-child{grid-row:auto}
-  .bv-pais-t{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px}
-  .bv-pais-t b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase}
-  .bv-pais-t span{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#F4630B}
+  .bv-paises-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 16px}
+  .bv-pais{display:flex;flex-direction:column;text-decoration:none;color:#fff;background:#141617;border:1px solid rgba(255,255,255,.12)}
+  .bv-pais-img{position:relative;aspect-ratio:1/1;overflow:hidden;background:#0d0f10}
+  .bv-pais-img i{position:absolute;inset:-20px;background-size:cover;background-position:center;filter:blur(18px) brightness(.55)}
+  .bv-pais-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+  .bv-pais-t{display:flex;flex-direction:column;gap:3px;padding:10px 12px 12px}
+  .bv-pais-t b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:.04em;text-transform:uppercase;line-height:1;overflow-wrap:anywhere}
+  .bv-pais-t span{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#F4630B;white-space:nowrap}
   </style>
   <section class="bv-paises" id="paises">
     <div class="bv-serie-head"><h2>Historias por país</h2><span>${paises.length} países</span></div>
     <div class="bv-paises-grid">
 ${paises.map((p) => { const dp = datosPais(p.nombre), url = dp ? `/destinos/${dp.slug}.html#historias` : `/blog/viajes/${p.lista[0].slug}`;
-  const fotos = p.lista.slice(-3).reverse().map((c) => `<img src="/blog/viajes/img/${c.slug}.jpg" alt="" loading="lazy">`).join('');
-  return `      <a class="bv-pais" href="${url}"><div class="bv-pais-fotos n${Math.min(3, p.lista.length)}">${fotos}</div><div class="bv-pais-t"><b>${esc(p.nombre)}</b><span>${p.lista.length} ${p.lista.length === 1 ? 'historia' : 'historias'}</span></div></a>`; }).join('\n')}
+  const src = fotoPais(p); // automático: foto entera (sin recortar) sobre su propio fondo difuminado; nunca corta una cabeza (Paco, 5 nov 2026)
+  const fotos = `<div class="bv-pais-img"><i style="background-image:url('${src}')"></i><img src="${src}" alt="${esc(p.nombre)}" loading="lazy"></div>`;
+  return `      <a class="bv-pais" href="${url}">${fotos}<div class="bv-pais-t"><b>${esc(p.nombre)}</b><span>${p.lista.length} ${p.lista.length === 1 ? 'historia' : 'historias'}</span></div></a>`; }).join('\n')}
     </div>
   </section>
 ` : '';
