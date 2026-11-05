@@ -5,7 +5,7 @@
 // Entres por donde entres (página del país, un sitio, una guía o una historia del blog), arriba sale la barra fija del país
 // con sus pestañas — Conoce · Sitios · Guías · Historias — y la miga de pan de dónde estás. UNA sola pieza para toda la web:
 // la usan scripts/build-destinos.js (país y sitios) y scripts/build-blog-viajes.js (historias). No escribir otra.
-// Las pestañas solo salen si el país tiene eso (Conoce = scripts/paises-intro.json; Guías = guias-por-pais.json;
+// Las pestañas solo salen si el país tiene eso (Conoce = scripts/paises/<país>/intro.json; Guías = guias-por-pais.json;
 // Historias = scripts/blog-viajes-data.js sin borradores). Sin página del país (destinos/<slug>.html), no hay barra.
 const fs = require('fs');
 const path = require('path');
@@ -30,7 +30,7 @@ function datosPais(paisNombre) {
   if (!fs.existsSync(path.join(ROOT, 'destinos', slug + '.html'))) return null;
   const sitios = fs.readdirSync(path.join(ROOT, 'destinos')).filter(f => f.endsWith(`-${slug}.html`)).length;
   const guias = (leer('guias-por-pais.json', {})[slug] || []).length;
-  const conoce = !!(leer('scripts/paises-intro.json', {})[slug]);
+  const conoce = fs.existsSync(path.join(ROOT, 'scripts', 'paises', slug, 'intro.json'));
   return { slug, nombre: paisNombre, sitios, guias, conoce, historias: historiasDe(paisNombre).length };
 }
 

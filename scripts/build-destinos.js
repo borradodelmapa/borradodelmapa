@@ -100,10 +100,12 @@ function masDestinos(siblings, countrySlug, countryName, conCss) {
     </nav>`;
 }
 
-// «Conoce <país>» (L2, 4 nov 2026): resumen del expediente aprobado del país (scripts/paises-intro.json). Sin datos, nada.
-const DESTINOS_NUEVOS = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-nuevos.json'), 'utf8')); } catch (_) { return {}; } })();
-const DESTINOS_EXTRA =(() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'destinos-extra.json'), 'utf8')); } catch (_) { return {}; } })();
-const PAISES_INTRO =(() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'paises-intro.json'), 'utf8')); } catch (_) { return {}; } })();
+// «Conoce <país>» (L2, 4 nov 2026): resumen del expediente aprobado del país (scripts/paises/<país>/intro.json). Sin datos, nada.
+// Datos de cada país en scripts/paises/<país>/ (intro.json, sitios-extra.json, sitios-nuevos.json): ver scripts/datos-pais.cjs.
+const DATOS_PAIS = createRequire(import.meta.url)('./datos-pais.cjs');
+const DESTINOS_NUEVOS = DATOS_PAIS.sitiosNuevos();
+const DESTINOS_EXTRA = DATOS_PAIS.extraSitios();
+const PAISES_INTRO = DATOS_PAIS.introPaises();
 // Maqueta (Paco, 4 nov: «necesita maquetación, imágenes y diseño atractivo»): portada a lo ancho, bloques numerados con foto y pie
 // (foto solo si es de lo que se cuenta; si no, el bloque va sin foto), galería de 6 y tarjetas a los diarios del blog. Fotos ya
 // revisadas de los episodios (F9) con autor (P2), enlazadas desde blog/viajes/img/. El estilo va aquí dentro (CONOCE_CSS) y solo
@@ -613,7 +615,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 
   // «Qué hacer» a la vista, con foto (Paco, 4 nov 2026: «más info y más imágenes del destino, bien diseñado»): tarjetas
   // numeradas; la foto sale de fotos.json → que_hacer[N] (Wikimedia, revisada a ojo, con autor). Sin foto, la tarjeta va sin ella.
-  // Y «Sobre <destino>» (scripts/destinos-extra.json, texto propio con fuentes). Solo en páginas sin guía (con guía manda la guía).
+  // Y «Sobre <destino>» (scripts/paises/<país>/sitios-extra.json, texto propio con fuentes). Solo en páginas sin guía (con guía manda la guía).
   const qhFotos = (fotos && fotos.que_hacer) || {};
   // «<Sitio> en nuestras historias» (5 nov 2026, Paco: que la ficha y el blog no parezcan dos webs): justo bajo la portada,
   // la guía que pasa por aquí y las historias del blog de este sitio (las que lo nombran en su destino o su título).
@@ -1333,7 +1335,7 @@ async function main() {
 
     try {
       const data = JSON.parse(fs.readFileSync(path.join(KV_DIR, file), 'utf-8'));
-      // + destinos añadidos a mano (scripts/destinos-nuevos.json, en git): Banaue, Batad, Buscalan… (5 nov 2026)
+      // + destinos añadidos a mano (scripts/paises/<país>/sitios-nuevos.json, en git): Banaue, Batad, Buscalan… (5 nov 2026)
       const destinos = (data.destinos || []).concat(DESTINOS_NUEVOS[code] || []);
       if (destinos.length === 0) continue;
 

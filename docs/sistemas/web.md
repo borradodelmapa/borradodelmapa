@@ -2,7 +2,7 @@
 
 ## 1 · Para qué sirve
 Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías públicas, blog e historias. Diseño, maqueta, navegación, fotos, textos y SEO.
-**No hace:** vídeos ni redes (🎬; Vídeo solo pasa el contenido de cada historia como datos en `scripts/blog-viajes-data.js`), la app ni el Worker (📱), ni decide qué país va ahora (📈).
+**No hace:** vídeos ni redes (🎬; Vídeo solo pasa el contenido de cada historia como datos en `scripts/paises/<país>/historias.js`), la app ni el Worker (📱), ni decide qué país va ahora (📈).
 **Trabaja en modo producción** (`docs/sistemas.md`): dos paradas por lote, ⏸1 al aprobar el lote y su presupuesto, ⏸2 en la revisión final antes de publicar.
 
 ## 2 · Lo que sabe del proyecto (documentos que mandan)
@@ -29,9 +29,10 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 ## 3 · Recursos ya creados
 | Recurso | Para qué |
 |---|---|
-| `scripts/build-destinos.js` (`--country cc`, `--only`, `--index-only`, `--sitemap-only`) | Páginas de país y sitio. Datos: `worker/kv/output-nivel2/<cc>.json` (KV, fuera de git) + `scripts/destinos-nuevos.json` (sitios añadidos), `scripts/paises-intro.json` («Conoce»), `scripts/destinos-extra.json` («Sobre», avisos, diario) |
+| `scripts/build-destinos.js` (`--country cc`, `--only`, `--index-only`, `--sitemap-only`) | Páginas de país y sitio. Datos: `worker/kv/output-nivel2/<cc>.json` (KV, fuera de git) + `scripts/paises/<país>/sitios-nuevos.json` (sitios añadidos), `scripts/paises/<país>/intro.json` («Conoce»), `scripts/paises/<país>/sitios-extra.json` («Sobre», avisos, diario) |
 | `scripts/barra-pais.cjs` | La barra del país y la miga: **una sola pieza** para destinos e historias; no escribir otra |
-| `scripts/build-blog-viajes.js` + `scripts/blog-viajes-data.js` | Portada del blog e historias (los datos de cada historia los pone 🎬) |
+| `scripts/build-blog-viajes.js` + `scripts/blog-viajes-data.js` (series; junta las historias de cada país) | Portada del blog e historias |
+| **`scripts/paises/<país>/`** + `scripts/datos-pais.cjs` | **Los datos web de cada país, uno por carpeta** (`intro.json`, `sitios-extra.json`, `sitios-nuevos.json`, `historias.js`, `rutas.json`): un chat de país solo escribe en la suya. Detalle en la cabecera de `datos-pais.cjs` |
 | `scripts/build-guias.js` | Páginas fijas de las guías públicas (también lo pasa una Action cada noche) |
 | `scripts/fotos-destinos.cjs <slugs>` | Foto de portada de cada sitio desde Wikimedia (0 €), con `destinos/img/<slug>/fotos.json` |
 | Hoja de contactos con ffmpeg (`salma marketing/india/herramientas/…/ffmpeg.exe`) | Revisar fotos a ojo antes de usarlas |
@@ -46,15 +47,15 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 1. ⏸1 **Lote:** país, piezas (expediente, guías, sitios nuevos, fotos) y presupuesto con rango (guías 0,4-1 € c/u; lo demás 0 €).
 2. Expediente con la plantilla: 8 apartados, cada dato con fuente, ⚠ lo dudoso.
 3. Guías del país (protocolo «Guía nueva»).
-4. «Conoce <país>» en `paises-intro.json` (hilo, 6 bloques, fotos revisadas, fuentes).
-5. Cada sitio (protocolo «Sitio»); sitios que falten, en `destinos-nuevos.json` (los «menos turísticos», destacados).
+4. «Conoce <país>» en `paises/<país>/intro.json` (hilo, 6 bloques, fotos revisadas, fuentes).
+5. Cada sitio (protocolo «Sitio»); sitios que falten, en `paises/<país>/sitios-nuevos.json` (los «menos turísticos», destacados).
 6. `build-destinos.js --country cc` → probar en local (móvil y escritorio, recorrido desde el blog) → `comprobar-nada-atras` ✅.
 7. ⏸2 **Revisión final:** página de revisión con enlaces a todo (país, sitios, guías, historias) → «publica» → push → comprobar que la web lo sirve.
 
 ### Sitio
 1. Foto de portada (`fotos-destinos.cjs`) → revisarla a ojo; si es mala, un archivo concreto de Commons.
 2. Fotos de «Qué hacer»: candidatas por actividad → hoja de contactos → elegir; sin foto si ninguna es del sitio.
-3. «Sobre…» con fuentes, avisos de datos que han cambiado, diario del blog → `destinos-extra.json`.
+3. «Sobre…» con fuentes, avisos de datos que han cambiado, diario del blog → `paises/<país>/sitios-extra.json`.
 4. Regenerar el país → comprobar en local. (Entra en la ⏸2 del lote.)
 
 ### Guía nueva
@@ -63,7 +64,7 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 3. `guardar-guia.cjs` → en la ⏸2, `publicar-guia.cjs <id>` → la página fija sale con la Action; comprobar que cuenta en Explorar.
 
 ### Historia
-1. 🎬 pone los datos en `blog-viajes-data.js` (texto, fotos, vídeo, `destino` = su sitio).
+1. 🎬 pone los datos en `scripts/paises/<país>/historias.js` (con su `orden`) (texto, fotos, vídeo, `destino` = su sitio).
 2. `build-blog-viajes.js` → comprobar en local: barra del país, miga con su sitio, enlace desde el sitio («en nuestras historias») y desde el país.
 3. `comprobar-nada-atras` ✅ → ⏸2 → push.
 

@@ -27,7 +27,7 @@ const { barraPais, paisDeHistoria, datosPais, slugify } = require('./barra-pais.
 const caps = Object.assign(capsTodas.filter((c) => !c.borrador || process.env.BORRADORES === '1'), { SERIES: capsTodas.SERIES });
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
 // Rutas completas (guías públicas <slug>.html de la app): enlazadas desde el índice del blog para que Google las encuentre.
-const rutas = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-rutas.json'), 'utf8'));
+const rutas = require('./datos-pais.cjs').rutasBlog(); // scripts/paises/<país>/rutas.json
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const md = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
