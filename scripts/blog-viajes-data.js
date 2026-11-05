@@ -969,14 +969,13 @@ const caps = [
     ],
     cierre: 'Fin de la temporada 1 de «Pueblos borrados del mapa». Volvemos con más pueblos.',
   },
-  // ─── BLOQUE FILIPINAS (L2, 4 nov 2026, chat 2): BORRADORES — producidos, sin publicar hasta que Paco fije la fecha (salen solo con BORRADORES=1) ───
+  // ─── BLOQUE FILIPINAS (L2, 4 nov 2026, chat 2): publicadas en la web el 5 nov 2026 (Paco: «hay que subirlas»); en YouTube/TikTok, cuando Paco decida ───
   // Los ifugao · guion: docs/pueblos-ep-ifugao-guion-direccion.md · vídeo: salma marketing/pueblos/ifugao/ULTIMA
   {
-    borrador: true,
     slug: 'filipinas-ifugao-terrazas-de-arroz-batad',
-    fecha: '2026-12-01',
+    fecha: '2026-11-05',
     serie: 'Pueblos borrados del mapa',
-    cap: 'Temporada 2',
+    cap: 'Episodio 11',
     pais: 'Filipinas',
     redes: { tituloYT: 'Terrazas de arroz de Batad: los ifugao · Filipinas', tituloTT: 'Ifugao: las terrazas que un tifón partió en una noche', hashtags: ['#filipinas', '#ifugao', '#pueblosborradosdelmapa'], archivo: 'terrazas-de-arroz-batad-ifugao-filipinas.mp4' },
     titulo: 'Los ifugao y las terrazas de arroz de Batad',
@@ -1027,9 +1026,8 @@ const caps = [
   },
   // Filipinas, antes de viajar (pieza #3; texto: docs/paises/filipinas-articulo-borrador.md, del expediente aprobado). Vídeo de apertura: salma marketing/filipinas/apertura/ULTIMA (se añade c.video cuando se publique)
   {
-    borrador: true,
     slug: 'filipinas-historia-culturas-antes-de-viajar',
-    fecha: '2026-12-01',
+    fecha: '2026-11-05',
     serie: 'Antes de viajar',
     cap: 'Filipinas',
     pais: 'Filipinas',
@@ -1108,9 +1106,8 @@ const caps = [
   },
   // Guía «Luzón norte en 4 días» (borrador del chat 1: docs/paises/filipinas-blog-luzon-norte.md; texto solo del expediente aprobado)
   {
-    borrador: true,
     slug: 'filipinas-luzon-norte-4-dias-cordillera',
-    fecha: '2026-12-01',
+    fecha: '2026-11-05',
     serie: 'Guías',
     cap: 'Guía',
     pais: 'Filipinas',
