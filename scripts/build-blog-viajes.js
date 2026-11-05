@@ -171,7 +171,7 @@ ${li.join('\n')}
 
 function pagina(c) {
   const paisH = paisDeHistoria(c), dp = datosPais(paisH);
-  const barra = dp ? barraPais(paisH, 'historias', [['Destinos', '/destinos/'], [paisH, `/destinos/${dp.slug}.html`], ['Historias', `/destinos/${dp.slug}.html#historias`], [c.titulo.split(':')[0]]]) : '';
+  const barra = dp ? barraPais(paisH, 'historias', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [paisH, `/destinos/${dp.slug}.html`], ['Historias', `/destinos/${dp.slug}.html#historias`], [c.titulo.split(':')[0]]]) : '';
   // anterior/siguiente: la serie «Pueblos borrados del mapa» no enlaza con diarios de otras series (las antiguas siguen como estaban)
   const P = 'Pueblos borrados del mapa', vale = (x) => x && (x.serie === c.serie || (c.serie !== P && x.serie !== P));
   const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
