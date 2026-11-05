@@ -1,0 +1,111 @@
+# PLAN — próximos 3 meses por países (📈 Estrategia)
+
+**Estado: PROPUESTA del 5 nov 2026, pendiente del OK de Paco.** Nada encargado, nada gastado.
+Manda: CLAUDE.md, `docs/video-checklist.md` (L1, L2, P13), `docs/sistemas.md`. Este archivo lo actualiza solo Estrategia.
+
+---
+
+## 1 · Dónde estamos hoy (5 nov 2026, solo lo que está de verdad)
+
+**Publicado en redes (YouTube Shorts + TikTok, 10:00):**
+- 9 vídeos hasta el 27 oct: *Sin mapa* ep. 1-2 y la serie de Tailandia (5 capítulos + 2 avances). El de las kayan es el único que despegó (622 visitas, los 6 primeros suscriptores).
+- Del 31 oct al 11 nov: avances y Vietnam 1/5 a 5/5, Especial Muay Thai (2 nov).
+
+**Programado en Metricool (ya no se toca):** Pueblos T1, 10 episodios, del 12 nov al 3 dic (Whang-Od 12 nov y Sagada 17 nov son de Filipinas).
+⚠ `docs/publicaciones-registro.md` dice «del 10 al 19 nov» y `docs/programacion-canal.md` (leído de Metricool el 4 nov) dice «12 nov → 3 dic». Vídeo lo confirma.
+**Desde el mar 8 dic no hay nada programado.**
+
+**Web publicada:**
+- Nepal: país + 10 destinos, todos con guía, abiertos a Google desde el 10 oct (tanda 1).
+- Filipinas: país + 13 sitios con «Conoce Filipinas», abiertos a Google el 5 nov (tanda 2); guía «Luzón norte en 4 días» publicada; 3 historias en el blog.
+- Blog: 12 artículos + una entrada por cada episodio de Pueblos T1.
+- Explorar: 41 guías en 13 países (4 nov) + Luzón norte. Sin volver a contar.
+
+**Google (Search Console, 11 oct – 3 nov):** 39 páginas indexadas · 357 impresiones · 6 clics.
+
+**Hecho pero sin publicar:**
+- «Tatuajes del mundo» (7:47) → sale el jue 10 dic.
+- Filipinas: vídeo de apertura v1 (6:45) e ifugao v1 (122 s) montados → esperan que Paco los vea y oiga. Artículo de la introducción en borrador.
+
+**No lo sabemos todavía:** registros nuevos en la app por semana, y qué vídeos traen suscriptores. Lo arregla el informe semanal (`informe-semanal.md`).
+
+---
+
+## 2 · Decisiones de Paco que siguen abiertas
+Por orden de urgencia. Una cada vez.
+1. **Cuándo salen los vídeos de Filipinas.** Propuesta: del mar 15 al mié 30 dic (abajo).
+2. **Qué países van después.** Propuesta: Nepal (enero) y Tailandia (febrero).
+3. **Episodios de Pueblos T2 sueltos o solo con su país.** Con L2 estricta, los kalash, iban, mentawai, tao, hezhen, cormoranes, apatani y nüshu esperan a su país: algunos, más de un año. Propuesta: mientras no llegue su país, pueden salir sueltos los martes y miércoles vacíos.
+4. **Ritmo de los documentales largos:** uno cada 2 o cada 3 semanas, y si el segundo es «Luchas tradicionales».
+5. **Guías de los 12 destinos de Filipinas** (pieza #7): hacerlas ahora (6-18 €) o esperar a ver qué páginas ve Google. Propuesta: esperar a enero.
+6. Lo que espera en otros documentos: metodología (`docs/metodologia-contenidos.md` §9: expediente por destino, entradas sin vídeo, checklist única), reglas Y10-Y16 y G2-G8 y el título de 60 caracteres (`docs/programacion-canal.md` §8). Siguen en pausa las guías en tanda y el bloque `guia_extra.cultura` del Worker.
+
+---
+
+## 3 · Propuesta: tres países en tres meses (9 nov 2026 – 11 feb 2027)
+
+**La regla de siempre (L2):** la web sale al menos una semana antes que el vídeo. Redes: mar, mié y jue a las 10:00 (P13).
+**El cuello de botella no es producir, es el tiempo de Paco revisando** (guion, fotos, voz, editor). Por eso un país cada ~4 semanas, no más.
+
+### Calendario de redes (lo que saldría)
+| Semana | Mar | Mié | Jue |
+|---|---|---|---|
+| 8 dic | libre (o avance de Tatuajes) | libre | **Tatuajes del mundo** |
+| 15 dic | Avance de Filipinas | **Los ifugao** | **Apertura de Filipinas** |
+| 22 dic | Derivado Filipinas 1 | Derivado Filipinas 2 | libre (Nochebuena) |
+| 29 dic | Derivado Filipinas 3 | Derivado Filipinas 4 (opcional) | Derivado de Tatuajes |
+| 5 ene | T2 suelto (si Paco dice sí, decisión 3) | T2 suelto | Derivado de Tatuajes |
+| 12 ene | Avance de Nepal | **Mustang, el reino prohibido** | **Apertura de Nepal** |
+| 19 ene | Derivado Nepal 1 | Derivado Nepal 2 | Derivado Nepal 3 |
+| 26 ene | T2 suelto | T2 suelto | Derivado de Tatuajes (o largo n.º 2) |
+| 2 feb | Avance de Tailandia | Episodio de Tailandia | **Apertura de Tailandia** |
+| 9 feb | Derivado Tailandia 1 | Derivado Tailandia 2 | Derivado Tailandia 3 |
+
+### 1 · Filipinas (el piloto) — vídeos 15-30 dic
+**Por qué:** ya está casi todo hecho. Web publicada y abierta a Google, guía en Explorar, apertura e ifugao montados. Whang-Od y Sagada (nov) ya llevan gente al país.
+| Sistema | Qué | Semana |
+|---|---|---|
+| 🎬 Vídeo | Paco ve y oye apertura e ifugao ⏸ → arreglos → derivados → exportar → programar en Metricool ⏸ | 9 nov – 11 dic |
+| 🌍 Web | Publicar artículo de la introducción, fiestas, arnis y blog del ifugao ⏸ | mar 1 dic |
+| 🌍 Web | Mirar en Search Console si Google indexa las 14 páginas de Filipinas | 23 nov y 7 dic |
+| 📱 App | Nada (si Web no necesita el Worker) | — |
+| 📈 Estrategia | Cronómetro del piloto → plantilla para el siguiente país | 14 dic |
+
+**Coste a ojo:** 0 – 0,30 € (la voz ya está gastada, ~1,6 €; solo alguna frase de gancho nueva). Si Paco quiere las 12 guías de destinos: +6 – 18 €.
+
+### 2 · Nepal — web 5 ene, vídeos 12-21 ene
+**Por qué:** es el país con más ventaja. Su web lleva en Google desde el 10 oct (el que más datos tendrá), ya tiene 10 guías con ruta y su episodio de T2 está aprobado (Mustang, 463 fotos libres). Solo falta la introducción y los vídeos.
+| Sistema | Qué | Semana |
+|---|---|---|
+| 🌍 Web | Expediente de Nepal (8 apartados, con fuentes) → Paco lo aprueba ⏸ | 16 nov – 4 dic |
+| 🎬 Vídeo | Guion de apertura y de Mustang ⏸ → fotos ⏸ → voz (coste antes) ⏸ → montaje → editor de Paco ⏸ | 7 – 23 dic |
+| 🌍 Web | Sección «Conoce Nepal» + artículo + blog de Mustang ⏸ | publicar mar 5 ene |
+| 🎬 Vídeo | Derivados y programar en Metricool ⏸ | antes del 8 ene |
+| 📱 App | Nada previsto | — |
+
+**Coste a ojo:** 1,5 – 3 € de voz (apertura ~5.500 caracteres + Mustang ~1.400). Guías: 0 € (ya están). Si alguna guía vieja hay que rehacerla: 0,5 – 1,5 € cada una, dicho antes.
+**A preguntar a Paco cuando toque:** si ha estado en Nepal (cambia el cierre «viaje real», M14).
+
+### 3 · Tailandia — web 26 ene, vídeos 2-11 feb
+**Por qué:** es el único país donde Paco ha viajado y tiene material propio (serie de 5 capítulos, Muay Thai). El vídeo de las kayan, el único que despegó, es de aquí. Tiene 11 páginas hechas pero cerradas a Google. Y hay un fallo que arreglar: la guía de Tailandia sale en Google con texto del chat («Tienes razón, Paco…»).
+| Sistema | Qué | Semana |
+|---|---|---|
+| 🌍 Web | Arreglar la descripción de la guía de Tailandia | cuanto antes (nov) |
+| 🌍 Web | Expediente de Tailandia ⏸ | 7 dic – 8 ene |
+| 🌍 Web | Guías de 3-5 destinos principales (Bangkok, Chiang Mai, Chiang Rai, Ayutthaya, Krabi) con coste dicho ⏸ → tanda 3 a Google ⏸ | 11 – 22 ene |
+| 🎬 Vídeo | Proponer el episodio de Pueblos de Tailandia ⏸, apertura con lo vivido por Paco, derivados | 4 – 29 ene |
+| 🌍 Web | Sección «Conoce Tailandia» + artículo ⏸ | publicar mar 26 ene |
+| 📱 App | Nada previsto | — |
+
+**Coste a ojo:** voz 1,5 – 3 € + guías 2,5 – 7,5 € (5 guías a 0,5-1,5 €) → **4 – 10,5 €**.
+
+### Total de los 3 meses
+**~5,5 – 14 €** (sin las guías de Filipinas) · **~11,5 – 32 €** (con ellas). Aparte, lo fijo de cada mes (planes de ElevenLabs y Claude) no cambia, si la voz cabe en el plan; si no cabe, Vídeo lo dice antes.
+
+---
+
+## 4 · Cómo se sabrá si funciona
+Lo mira el informe semanal (`informe-semanal.md`). Señales para cambiar el plan:
+- Si las páginas de Filipinas no se indexan en 3-4 semanas → no se abre Tailandia a Google; Web mejora el contenido (regla de `docs/seo-plan-minimo.md`).
+- Si la apertura de Filipinas retiene menos que los shorts de Pueblos → se replantea el formato de apertura antes de Nepal.
+- Si Paco tarda más de una semana en revisar un país → un país cada 5-6 semanas, no cada 4.
