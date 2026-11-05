@@ -8,6 +8,9 @@ Nepal completo (país + 10 destinos, las únicas con ruta) + el índice `/destin
 `scripts/destinos-indexables.json`; el resto sigue `noindex` y fuera del sitemap. `sitemap.xml` enlaza ya
 `sitemap-destinos.xml` (12 URLs). Cómo abrir otra tanda: añadir slugs al JSON → `node scripts/build-destinos.js` → push.
 
+## Tanda 2 — HECHA (5 nov 2026)
+Filipinas completa: página del país + 13 sitios (con «Conoce», fotos, guías y barra del país), con OK de Paco. Search Console ya en la cuenta de Paco (verificada por Analytics; datos desde el 11 oct): mirar indexación de Filipinas a las 2-4 semanas.
+
 ## Lo que tiene que hacer Paco (10 min, sin esto no vemos nada)
 1. Search Console (search.google.com/search-console) → añadir propiedad de dominio `borradodelmapa.com` → verificar por DNS (Netlify).
 2. Enviar `https://borradodelmapa.com/sitemap.xml`.
