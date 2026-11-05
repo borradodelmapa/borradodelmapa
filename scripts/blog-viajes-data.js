@@ -1033,6 +1033,7 @@ const caps = [
     pais: 'Filipinas',
     titulo: 'Filipinas: historia, culturas y volcanes antes de viajar',
     resumen: '7.641 islas, una especie humana propia y unas montañas que España nunca conquistó. Lo que conviene saber de Filipinas antes de ir.',
+    video: 'filipinas-apertura.mp4', // vídeo de apertura 16:9 (borrador aprobado para la web por Paco, 5 nov 2026; se cambia por la exportación final)
     realidad: 'Lo cuenta Salma con fuentes citadas y fotos de Wikimedia Commons (autores al final). No es un viaje de Paco.',
     destino: ['filipinas', 'Filipinas'],
     creditosDe: 'salma marketing/filipinas/apertura',
