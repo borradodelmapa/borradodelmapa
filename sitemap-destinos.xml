@@ -61,6 +61,76 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://borradodelmapa.com/destinos/palawan-el-nido-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/coron-palawan-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/bohol-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/cebu-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/siargao-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/manila-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/vigan-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/batanes-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/sagada-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/puerto-princesa-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/banaue-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/batad-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/buscalan-filipinas.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://borradodelmapa.com/destinos/filipinas.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://borradodelmapa.com/destinos/</loc>
     <changefreq>weekly</changefreq>
     <priority>1</priority>

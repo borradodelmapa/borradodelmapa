@@ -26,7 +26,8 @@ const ind = JSON.parse(fs.readFileSync(IND_FILE, 'utf8'));
 const run = (cmd, a, opt = {}) => spawnSync(process.execPath, [path.join(__dirname, cmd), ...a], Object.assign({ cwd: ROOT, encoding: 'utf8', stdio: opt.mudo ? 'pipe' : 'inherit' }, opt));
 const parar = m => { console.log('\n⛔ ' + m + '\nNo se continúa. No se ha subido nada.'); process.exit(1); };
 
-let slugs = args.filter(a => /^[a-z0-9-]+$/.test(a) && !/^\d+$/.test(a) && !['--max'].includes(a));
+// (5 nov 2026: «--confirmar» se colaba como slug porque cumple /^[a-z0-9-]+$/; ninguna opción «--…» es un slug)
+let slugs = args.filter(a => /^[a-z0-9-]+$/.test(a) && !a.startsWith('--') && !/^\d+$/.test(a) && a !== val('--max') && a !== val('--siguientes'));
 const sig = val('--siguientes');
 if (sig) {
   const ya = new Set(ind.slugs);

@@ -1,5 +1,5 @@
 {
- "nota": "Tanda 1 (10 oct 2026): Nepal completo + índice /destinos/. Añadir slugs sin .html; \"index\" = destinos/index.html",
+ "nota": "Tanda 1 (10 oct 2026): Nepal completo + índice /destinos/. Añadir slugs sin .html; \"index\" = destinos/index.html · Tanda 2 (5 nov 2026, OK de Paco): Filipinas completa (país + 13 sitios).",
  "slugs": [
   "index",
   "bhaktapur-nepal",
@@ -13,6 +13,20 @@
   "patan-nepal",
   "pokhara-nepal",
   "upper-mustang-nepal",
-  "barcelona-espana"
+  "barcelona-espana",
+  "filipinas",
+  "banaue-filipinas",
+  "batad-filipinas",
+  "buscalan-filipinas",
+  "palawan-el-nido-filipinas",
+  "coron-palawan-filipinas",
+  "bohol-filipinas",
+  "cebu-filipinas",
+  "siargao-filipinas",
+  "manila-filipinas",
+  "vigan-filipinas",
+  "batanes-filipinas",
+  "sagada-filipinas",
+  "puerto-princesa-filipinas"
  ]
 }
