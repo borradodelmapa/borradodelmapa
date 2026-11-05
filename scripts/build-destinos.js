@@ -618,7 +618,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   // «<Sitio> en nuestras historias» (5 nov 2026, Paco: que la ficha y el blog no parezcan dos webs): justo bajo la portada,
   // la guía que pasa por aquí y las historias del blog de este sitio (las que lo nombran en su destino o su título).
   const nomK = String(dest.nombre || '').split(/[,(]/)[0].trim().toLowerCase();
-  const histSitio = nomK.length > 2 ? historiasDe(countryName).filter(x => [...(x.destino || []), x.titulo || ''].join(' ').toLowerCase().includes(nomK)) : [];
+  const histSitio = nomK.length > 2 ? historiasDe(countryName).filter(x => (x.destino && x.destino[0] === slug) || [...(x.destino || []), x.titulo || ''].join(' ').toLowerCase().includes(nomK)) : [];
   const enHistorias = (histSitio.length || (guiaPais && guiaPasa)) ? `<style>
 .dx{max-width:1100px;margin:22px auto 6px;padding:0 16px}.dx h2{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1;text-transform:uppercase;margin:0 0 12px;color:var(--text-primary)}
 .dx-grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}@media(min-width:760px){.dx-grid{grid-template-columns:repeat(4,1fr)}}
@@ -719,7 +719,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 <body class="destino-page">
 
   <!-- NAV: barra del país (si el país la tiene) o la miga de siempre -->
-  ${barraPais(countryName, 'sitios', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [countryName, `/destinos/${slugify(countryName)}.html`], ['Sitios', `/destinos/${slugify(countryName)}.html#sitios`], [dest.nombre]]) || `<nav class="destino-nav-bar">
+  ${barraPais(countryName, 'sitios', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [countryName, `/destinos/${slugify(countryName)}.html`], [dest.nombre]]) || `<nav class="destino-nav-bar">
     <a href="/destinos/" class="destino-nav-link">Destinos</a>
     <span class="destino-nav-sep">›</span>
     <a href="/destinos/${slugify(countryName)}.html" class="destino-nav-link">${escapeHTML(countryName)}</a>

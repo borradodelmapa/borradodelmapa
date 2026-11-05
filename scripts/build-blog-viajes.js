@@ -171,7 +171,10 @@ ${li.join('\n')}
 
 function pagina(c) {
   const paisH = paisDeHistoria(c), dp = datosPais(paisH);
-  const barra = dp ? barraPais(paisH, 'historias', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [paisH, `/destinos/${dp.slug}.html`], ['Historias', `/destinos/${dp.slug}.html#historias`], [c.titulo.split(':')[0]]]) : '';
+  // Cada historia cuelga de su SITIO (c.destino = [slug de la página, nombre]) o, si es de todo el país, del país (Paco, 5 nov 2026:
+  // «información partida sin criterio»): «Blog de viajes › Destinos › Filipinas › Buscalan › Whang-Od».
+  const sitio = c.destino && dp && c.destino[0] !== dp.slug && fs.existsSync(path.join(ROOT, 'destinos', c.destino[0] + '.html')) ? c.destino : null;
+  const barra = dp ? barraPais(paisH, sitio ? 'sitios' : 'historias', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [paisH, `/destinos/${dp.slug}.html`], ...(sitio ? [[sitio[1], `/destinos/${sitio[0]}.html`]] : []), [c.titulo.split(':')[0]]]) : '';
   // anterior/siguiente: la serie «Pueblos borrados del mapa» no enlaza con diarios de otras series (las antiguas siguen como estaban)
   const P = 'Pueblos borrados del mapa', vale = (x) => x && (x.serie === c.serie || (c.serie !== P && x.serie !== P));
   const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
