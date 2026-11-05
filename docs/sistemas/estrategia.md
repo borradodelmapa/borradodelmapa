@@ -55,6 +55,28 @@ Decidir qué se hace, cuándo y por qué: qué país va ahora y cuál después, 
 8. ⏸ **Parada 2:** cuando Vídeo y Web tienen todo terminado, comprobar que existe **una página de revisión** con todos los enlaces y que los comprobadores dan ✅ → avisar a Paco: «el lote está para revisar».
 9. Paco dice «publica» → Vídeo y Web publican → anotar en `plan.md`: coste real, tiempo real, lo aprendido. Estado: «publicado».
 
+### Chat de país: abrir, seguir y cerrar (`/pais <País>`; sección «CHATS DE PAÍS» de `docs/sistemas.md`)
+Solo cuando las tres piezas de «Antes de abrir el primero» estén ✅. Antes, los países los hacen Web y Vídeo como en Filipinas.
+**Abrir**
+1. `/pais <País>` (skill `.claude/skills/pais/SKILL.md`): mirar lo que ya existe del país (0 €) y crear `docs/paises/<pais>.md` desde `docs/paises/PLANTILLA-pais.md`.
+2. ¿Cabe? Como mucho **2-3 países a la vez, escalonados** (uno produce, otro en revisión, otro arranca). Mirar `docs/estrategia/reparto.md`. Si no cabe, decirle a Paco cuál va antes y por qué.
+3. Asignar en `reparto.md` lo que es de todos: **huecos de Metricool**, **sitio en la tanda de Google** (máx. 30 páginas), **tope de gasto** y **turno en la cola de revisiones**.
+4. ⏸ **Parada 1:** «¿Apruebas el lote de <País> hasta X €?».
+5. Con el «sí»: línea en el tablón → `start_session` (título «<bandera> <País>», worktree propio, contexto fresh) con el brief: el lote, `PROTOCOLO.md`, `docs/paises/<pais>.md`, lo asignado en `reparto.md`, el tope y sus límites (solo ficheros de su país, no cambia herramientas, mejoras a `MEJORAS.md`, lo compartido se pide a Estrategia).
+6. Apuntar el id del chat en `docs/paises/<pais>.md`, en `reparto.md` y en la tabla de ids de `docs/sistemas.md`.
+
+**Seguir**
+7. Cada aviso del chat del país (terminado, retraso, gasto) → actualizar `reparto.md`. Si va a pasar del tope: parar y preguntar a Paco.
+8. Lo compartido que pida (más huecos, más páginas, más dinero): decide Estrategia con `reparto.md`; si cambia lo aprobado, pregunta a Paco.
+9. Publicar es en fila: si dos países van a subir a la vez, Estrategia dice quién primero.
+10. Cada lunes, en el informe: estado de cada país y las líneas nuevas de `MEJORAS.md` (pasar cada una a su fábrica).
+
+**Cerrar**
+11. ⏸ **Parada 2:** el chat del país tiene la página de revisión con todo y los comprobadores en ✅ → turno de Paco en la cola → «publica».
+12. Lista «Terminado» de `PROTOCOLO.md` comprobada (Explorar, indexación, Metricool, registro).
+13. Coste y tiempo reales en `plan.md` y en `docs/paises/<pais>.md`; ajustar la tabla de costes de `PROTOCOLO.md`; pasar a `PROTOCOLO.md` lo aprendido de `MEJORAS.md`.
+14. Liberar en `reparto.md` lo asignado → **archivar el chat del país** (no se borra).
+
 ### Informe semanal (lunes, 0 €)
 1. `git fetch origin main`; leer el tablón.
 2. Sacar los números de `informe-semanal.md` (Search Console, YouTube Studio, TikTok Studio, Metricool, Explorar, registros, Analytics), siempre en solo lectura.
@@ -69,3 +91,5 @@ Decidir qué se hace, cuándo y por qué: qué país va ahora y cuál después, 
 | Plan de 3 meses (Filipinas dic, Nepal ene, Tailandia feb) | Propuesta en `docs/estrategia/plan.md` · espera a Paco |
 | Lote 1 · Filipinas | Propuesto en `plan.md` · espera aprobación y presupuesto |
 | Informe semanal | Propuesto · primero el lun 9 nov; falta saber si Paco deja leer los paneles en su Chrome o manda capturas |
+| Chats de país · «Antes de abrir el primero» | 1 · datos de la web por país (🌍 Web): encargado · 2 · motor en un worktree (🎬 Vídeo): encargado · 3 · `MEJORAS.md`, plantilla, `/pais` y este protocolo (📈): **hecho** (5 nov) |
+| Reparto de lo compartido | `docs/estrategia/reparto.md` (países, Metricool, tanda de Google, presupuesto, cola de revisiones) |
