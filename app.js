@@ -533,21 +533,41 @@ function abrirBlogEnApp(url) {
   _blogVisorCerrar(false);
   const bar = document.getElementById('app-bottom-bar');
   const barH = bar && getComputedStyle(bar).display !== 'none' ? Math.round(bar.getBoundingClientRect().height) : 0;
+  // En escritorio la cabecera de la app (56 px, z 1400) tapaba la barra del visor con su «‹ Volver»: el visor empieza debajo
+  const dk = document.getElementById('dk-header');
+  const topH = dk && getComputedStyle(dk).display !== 'none' ? Math.round(dk.getBoundingClientRect().height) : 0;
   const v = document.createElement('div');
   v.id = 'blog-visor';
   // z 1050: por encima del mapa de Explorar (controles de Leaflet en 1000) y por debajo del botón central (1101)
-  v.style.cssText = 'position:fixed;left:0;right:0;top:0;bottom:' + barH + 'px;z-index:1050;background:var(--negro);display:flex;flex-direction:column';
-  v.innerHTML = '<div style="flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 6px) 12px 6px;border-bottom:1px solid var(--linea)">' +
-    '<button type="button" id="blog-visor-volver" style="background:none;border:0;color:var(--dorado);font:700 15px var(--font-display);letter-spacing:.08em;text-transform:uppercase;padding:8px 4px;cursor:pointer">‹ Volver</button>' +
-    '<span style="color:rgba(236,235,232,.6);font:700 13px var(--font-display);letter-spacing:.12em;text-transform:uppercase">Blog de viajes</span></div>' +
+  v.style.cssText = 'position:fixed;left:0;right:0;top:' + topH + 'px;bottom:' + barH + 'px;z-index:1050;background:var(--negro);display:flex;flex-direction:column';
+  v.innerHTML = '<div style="flex:0 0 auto;display:flex;align-items:center;gap:10px;min-width:0;padding:calc(' + (topH ? '0px' : 'env(safe-area-inset-top,0px)') + ' + 6px) 12px 6px;border-bottom:1px solid var(--linea)">' +
+    '<button type="button" id="blog-visor-volver" style="flex:0 0 auto;background:none;border:0;color:var(--dorado);font:700 15px var(--font-display);letter-spacing:.08em;text-transform:uppercase;padding:8px 4px;cursor:pointer">‹ Volver</button>' +
+    '<span id="blog-visor-titulo" style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(236,235,232,.6);font:700 13px var(--font-display);letter-spacing:.12em;text-transform:uppercase"></span></div>' +
     '<iframe title="Blog de viajes" style="flex:1 1 auto;width:100%;border:0;background:var(--negro)"></iframe>';
   document.body.appendChild(v);
   const fr = v.querySelector('iframe');
-  document.getElementById('blog-visor-volver').onclick = () => _blogVisorCerrar(true);
+  // «‹ Volver» (Paco, 5 nov 2026: «le das a volver y va a Explorar»): vuelve a la página anterior DENTRO del visor y solo
+  // cierra el visor en la primera. Pila propia de páginas; se vuelve con location.replace para no añadir historial.
+  const pila = [];
+  let volviendo = false;
+  document.getElementById('blog-visor-volver').onclick = () => {
+    if (pila.length > 1) {
+      pila.pop();
+      volviendo = true;
+      try { fr.contentWindow.location.replace(pila[pila.length - 1]); return; } catch (_) { volviendo = false; }
+    }
+    _blogVisorCerrar(true);
+  };
   fr.addEventListener('load', () => {
     let d;
     try { d = fr.contentDocument; } catch (_) { return; }
     if (!d) return;
+    const href = d.location.href;
+    if (volviendo) volviendo = false;
+    else if (pila[pila.length - 1] !== href) pila.push(href);
+    // Arriba, el título de la página que se está viendo (antes siempre «Blog de viajes»)
+    const tit = document.getElementById('blog-visor-titulo');
+    if (tit) tit.textContent = String(d.title || '').split(/\s[·|—–-]\s/)[0].trim();
     // Dentro del visor sobran el menú de abajo de la página (ya está el de la app), sus avisos fijos y su cabecera con
     // el logo (ya está la de la app: el logo salía dos veces, captura de Paco del 5 nov 2026): .pg-header en blog y
     // legal, .destino-clock-wrap (logo, eslogan y reloj) en las páginas de destino.
@@ -699,20 +719,15 @@ function _dkHeaderSync() {
   }
   document.body.classList.add('dk-header');
   const logged = !!currentUser;
-  const onGuide = currentState === 'chat' && !!window._itinViewOpen;
   const act = (on) => on ? ' dkh-on' : '';
-  const misOn = (currentState === 'rutas' && window._rutasTab !== 'explorar') || (logged && onGuide);
   const expOn = currentState === 'rutas' && window._rutasTab === 'explorar';
-  const mundoOn = currentState === 'tu-mundo';
   let ini = '';
   try { ini = String((currentUser && (currentUser.name || currentUser.displayName || currentUser.email)) || '?').trim().charAt(0).toUpperCase(); } catch (_) {}
   h.innerHTML =
     '<a class="ce-brand dkh-brand" href="/" data-act="home"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</a>' +
     (logged
+      // Mis viajes · Explorar · Tu mundo fuera de esta cabecera (Paco, 5 nov 2026: «ya están abajo en el menú de la app»)
       ? '<nav class="dkh-nav">' +
-          '<button type="button" class="dkh-link' + act(misOn) + '" data-act="rutas">Mis viajes</button>' +
-          '<button type="button" class="dkh-link' + act(expOn) + '" data-act="explorar">Explorar</button>' +
-          '<button type="button" class="dkh-link' + act(mundoOn) + '" data-act="mundo">Tu mundo</button>' +
           '<a class="dkh-link" href="/blog/">Blog de viajes</a>' +
         '</nav>' +
         '<div class="dkh-right">' +
@@ -762,6 +777,9 @@ function _dkHeaderClick(e) {
   const b = e.target.closest('[data-act]');
   if (!b) return;
   const a = b.dataset.act;
+  // Con el blog o un destino abierto en el visor, los botones hacían su trabajo DEBAJO del visor y parecía que no
+  // respondían (Paco, 5 nov 2026: «los botones de arriba no funcionan… los atajos no funcionan»): se cierra primero.
+  if (a !== 'atajos' && document.getElementById('blog-visor')) _blogVisorCerrar(false);
   if (a.indexOf('at-') === 0) { _dkAtajosClose(); _dkAtajo(a.slice(3)); return; }
   if (a === 'atajos') {
     const m = document.getElementById('dkh-atajos');
