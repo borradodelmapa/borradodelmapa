@@ -59,3 +59,14 @@ Metricool (marca `borradodelmapa`, Europe/Madrid), YouTube + TikTok a la vez, 34
 **Retoque 3 nov 2026 (orden de Paco):** el avance del bún chả también sale **hoy mar 3 nov a las 10:00** (ya no el 9 dic). Hoy salen tres piezas a las 10:00: Vietnam 1 y los dos avances (excepción puntual a P13). Dic 8 y 9 quedan libres.
 **Retoque 3 nov 2026 (14:45, orden de Paco):** Vietnam 2/5 pasa de mié 4 a **jue 5 nov 10:00** (YouTube 415288579, TikTok 415289143) para dar tiempo a remontarlo con los subtítulos nuevos (M10). Coincide ese día con Vietnam 3/5 (excepción puntual a P13).
 **3 nov 2026 (tarde, orden de Paco: «lo dejamos como está»):** no se remonta nada. Vietnam 2-5 y los 10 de Pueblos salen con el vídeo ya programado (subtítulos en la posición vieja). Vietnam 2/5 se queda el jue 5 nov 10:00.
+
+## 5 nov 2026 (tarde) · Arreglo de lo publicado hoy (orden de Paco)
+Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P6 no se aplicó a lo programado antes del 1 nov). Paco: «dejar el primero; el segundo, a borrador; el 3/5 recortado a 60 s se publica mañana a las 10h».
+| Qué | Red | Resultado |
+|---|---|---|
+| Vietnam 3/5 «Bajo tierra» (0oaWjEwg5Fo) | YouTube | **Privado** (no borrado; 36 visitas y 1 comentario se conservan) — comprobado en el listado |
+| Vietnam 3/5 (7704610463879007510) | TikTok | **«Solo yo»** — comprobado («Los ajustes de privacidad se han actualizado») |
+| Vietnam 2/5 «La guerra de las fichas de dominó» (vzoHBkrF-1Q) | YouTube | Sigue público · **primer comentario puesto y fijado** (app + enlace al blog); los emojis no entraron al escribirlo |
+| Vietnam 2/5 (7704610925319359766) | TikTok | Sigue público · **primer comentario puesto** (TikTok web no deja fijarlo; es el único) |
+| Vietnam 3/5 **recortado a 58,97 s** (frases 1-2, 5-6 y cierre; portada en el primer fotograma, N10/M11) | YouTube + TikTok | **Programado vie 6 nov 10:00** (excepción a P13 por orden de Paco), con descripción, primer comentario y marca IA en los ajustes; título YouTube «Bajo tierra: cuevas de Phong Nha · Vietnam 3/5» (46 car.). Vídeo en R2 `vietnam-cap3-60s.mp4`. Ids Metricool 418073465 / 418073540 |
+**Comprobar el 6 nov** que sale con portada y comentario en las dos redes (P11).
