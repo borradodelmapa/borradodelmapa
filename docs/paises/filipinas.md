@@ -25,14 +25,14 @@ Lo que se aprenda aquí se convierte en `docs/paises/PLANTILLA.md` para los dem�
 |---|---|---|---|---|
 | 1 | Expediente · introducción (8 apartados, con fuentes) | 1 | **APROBADO por Paco** (4 nov): `docs/paises/filipinas-expediente.md`, 31 fuentes, ⚠ marcados; plantilla en `PLANTILLA-expediente.md` | 13 nov |
 | 2 | Sección «Conoce Filipinas» en `destinos/filipinas.html` | 1 | — | con la tanda |
-| 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | **borrador v1** `docs/paises/filipinas-articulo-borrador.md` ⏸ Paco | **propuesta: web mar 1 dic** (borrador para Paco ~27 nov) |
+| 3 | Artículo «Filipinas: historia, culturas y geología para entender el país antes de viajar» | 2 | **hecho como borrador** en el blog (`scripts/blog-viajes-data.js`, `borrador: true`; se ve en local con BORRADORES=1) ⏸ publicar | **propuesta: web mar 1 dic** (borrador para Paco ~27 nov) |
 | 4 | Vídeo de apertura 16:9, 6-8 min (Salma, sin «viaje real») | 2 | esqueleto + **guion de dirección v1** `docs/paises/filipinas-apertura-guion-direccion.md` (3 ganchos) · **gancho C elegido** (Paco, 4 nov) · falta voz SALMA/SALMA_DOC y OK al texto ⏸ | **propuesta: jue 10 dic 10:00**, YouTube + TikTok (exportado ~3 dic); avance de 20-30 s el **mar 8 dic** |
 | 5 | 3-4 shorts derivados de la apertura | 2 | — | **propuesta: mar 15 · mié 16 · jue 17 dic** (+ el 4.º, opcional, mar 22 dic) |
 | 6 | Guía «Luzón norte: Sagada, Banaue y Buscalan» | 1 | **PUBLICADA** (4 nov, OK de Paco): https://borradodelmapa.com/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk · app: `/?ruta=luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk`. Antes: creada y guardada: «Luzón norte en 4 días: Banaue, Batad, Sagada y Buscalan», 12 paradas verificadas, textos corregidos con el expediente; id `XGAjN4xvxI1nNo5Pno6R` en Mis Viajes de claude@; coste ~0,35-0,45 €. Hubo que crearla con destino «Filipinas» por el caso p-mw2gxtxbpmq. | lo antes posible (Whang-Od sale el 12 nov) |
 | 7 | Guías de los destinos con página (El Nido, Cebú, Bohol, Siargao…) | 1 | — | tanda |
 | 8 | Páginas nuevas Banaue y Buscalan + 12 actuales ampliadas | 1 | — | tanda |
 | 9 | Entradas sin vídeo: calendario de fiestas · arnis | 2 | — | **propuesta: web semana del 1 dic** (con el artículo) |
-| 10 | Los ifugao y sus terrazas (Pueblos T2·4, adelantado) | 2 | **guion v1** `docs/pueblos-ep-ifugao-guion-direccion.md` (2 ganchos) ⏸ Paco | **propuesta: mié 9 dic 10:00** (blog P12 el 1-2 dic; exportado ~2 dic) |
+| 10 | Los ifugao y sus terrazas (Pueblos T2·4, adelantado) | 2 | **montado v1** (borrador, 122 s, informe sin ❌): `salma marketing/pueblos/ifugao/ULTIMA/` · config `india/motor/ifugao-t2.cjs` · blog en borrador · textos de redes en ULTIMA ⏸ Paco ve y oye; luego «★ Exportar» | **propuesta: mié 9 dic 10:00** (blog P12 el 1-2 dic; exportado ~2 dic) |
 | 11 | Largo «La cordillera de Luzón» (opcional, material de los 3 episodios) | 2 | idea | si Paco lo quiere: un jueves de enero |
 | ya | Whang-Od (12 nov) y Sagada (17 nov), con su blog | 2 | programados | — |
 
@@ -48,6 +48,9 @@ Antes del piloto: **41 guías en 13 países**, Filipinas no está. Al terminar: 
 | Guion de la apertura (3 ganchos, 8 bloques, ~5.100-5.600 caracteres) + borrador del artículo | 4 nov 19:48 | 4 nov (misma sesión) | 0 €; sale casi entero del expediente aprobado. Espera: OK de Paco |
 | Guion del ifugao (fuentes nuevas: UNESCO, Acabado, corrimiento de Batad nov 2025) | 4 nov 19:52 | 4 nov 19:53 (reloj del equipo) | 0 €; 4 búsquedas. Espera: OK de Paco |
 | Fotos del ifugao: 172 bajadas de Wikimedia, revisadas una a una (F9), 123 en la hoja con propuesta por escena | 4 nov 20:00 | 4 nov 20:37 | 0 €; la descarga tarda (Wikimedia limita la velocidad). Espera: Paco elige |
+| Ifugao: mapa, config, voz (1.388 caracteres, SALMA), montaje v1, arreglos (M6, fotos, recorte) | 4 nov 20:43 | 4 nov 21:11 | ~0,30 € de voz |
+| Apertura: 388 fotos revisadas (57 propuestas, 46 fuera), 5 mapas 16:9 (placas nuevo), config, voz SALMA_DOC (~5.500 caracteres) | 4 nov 20:50 | montando | ~1,3 € de voz |
+| Blog: generador con entradas sin vídeo y borradores; entradas de ifugao, introducción y guía Luzón norte (borradores) | 4 nov 21:12 | 4 nov 21:23 | 0 € |
 
 ## Lo aprendido (para la plantilla)
 - (se rellena durante el piloto)
