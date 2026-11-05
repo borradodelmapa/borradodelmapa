@@ -19,6 +19,7 @@ Fechas confirmadas por Vídeo (5 nov): Whang-Od 12 · Sagada 17 · haenyeo 18 ·
 - Nepal: país + 10 destinos, todos con guía, abiertos a Google desde el 10 oct (tanda 1).
 - Filipinas: país + 13 sitios con «Conoce Filipinas», abiertos a Google el 5 nov (tanda 2); guía «Luzón norte en 4 días» publicada. Blog publicado: introducción del país, ifugao, Luzón norte, Whang-Od y Sagada (introducción e ifugao llevan de momento el vídeo en borrador).
 - Blog: 12 artículos + una entrada por cada episodio de Pueblos T1.
+- Toda la web de destinos (163 países, 1.795 páginas) tiene desde el 5 nov el mismo diseño y navegación que Vietnam. 100 sitios con portada revisada; el resto, sin foto hasta revisarla.
 - Explorar: 41 guías en 13 países (4 nov) + Luzón norte. Sin volver a contar.
 
 **Google (Search Console, 11 oct – 3 nov):** 39 páginas indexadas · 357 impresiones · 6 clics.
@@ -126,6 +127,11 @@ Dos paradas por lote: ⏸ 1 aprobar lote y presupuesto · ⏸ 2 una revisión fi
 
 ### LOTE 2 · Nepal — se presenta cuando el lote 1 esté en revisión
 Expediente, «Conoce Nepal», artículo, apertura, Mustang, avance y derivados. Presupuesto a ojo: 1,5 – 3 € (voz). Revisión final ~28 dic; web 5 ene; redes 12-21 ene.
+
+---
+
+### Tareas de fondo (sin lote, 0 €)
+- 🌍 Web: revisar las portadas que faltan, país a país (fotos libres de Wikimedia). Primero los países del plan (Nepal, Tailandia), después el resto.
 
 ---
 
