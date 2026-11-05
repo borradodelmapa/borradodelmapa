@@ -1,3 +1,4 @@
+// (5 nov 2026: dentro del visor de la app —iframe— el logo de la barra se esconde: la app ya pone el suyo.)
 // (5 nov 2026, Paco: «el logo, todo el texto molesta»: la barra lleva el logo pequeño y sustituye a la cabecera grande —
 //  logo, «Sin mapa, con rumbo», «Blog de viajes» y reloj— en las páginas que la llevan.)
 // BARRA DEL PAÍS — «un país = una casa» (Paco, 5 nov 2026, tras ver el boceto: «sí, adelante»).
@@ -62,6 +63,7 @@ function barraPais(paisNombre, on, crumb) {
     p.guias ? tab('guias', 'Guías', p.guias) : '', p.historias ? tab('historias', 'Historias', p.historias) : ''].join('');
   const miga = (crumb || []).map((c, i, a) => i === a.length - 1 || !c[1] ? `<b>${esc(c[0])}</b>` : `<a href="${esc(c[1])}">${esc(c[0])}</a>`).join(' › ');
   return `${CSS}
+<script>try{if(window.top!==window.self)document.documentElement.classList.add('pb-en-app')}catch(e){}</script><style>.pb-en-app .pb-logo{display:none}</style>
 <nav class="pb" aria-label="${esc(p.nombre)}"><div class="pb-in"><a class="pb-logo" href="/" aria-label="Borrado del Mapa: inicio"><i class="ce-mark" aria-hidden="true"></i></a><a class="pb-pais" href="${base}"><b>›</b> ${esc(p.nombre)}</a><div class="pb-tabs">${tabs}</div></div></nav>
 ${miga ? `<p class="pb-crumb">${miga}</p>` : ''}`;
 }
