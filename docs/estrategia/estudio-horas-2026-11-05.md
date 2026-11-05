@@ -16,3 +16,5 @@ Hoy publicamos las dos redes a las 10:00 (P13): **bien para TikTok, pero en YouT
 - **YouTube a las 16:00** (shorts y largos). Cambia P13 → decisión de Paco; si dice sí, Vídeo lo escribe en la checklist.
 - Días: mar, mié y jue (los mejores en las dos redes). El viernes también rinde: se puede usar para excepciones (como Vietnam 3/5 del vie 6 nov).
 - Largos: jueves, YouTube 16:00 y TikTok 10:00.
+
+**DECISIÓN DE PACO (5 nov 2026, noche): YouTube a las 15:30, TikTok a las 10:00.** Escrito en P13 de `docs/video-checklist.md`.
