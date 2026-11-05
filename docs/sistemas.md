@@ -34,7 +34,7 @@ Este archivo es **zona común** (como `CLAUDE.md` y `docs/video-checklist.md`): 
 | 🎬 Vídeo | `local_cb980318-b3ce-49f5-bb68-1d328d07217f` (carpeta principal) |
 | 🌍 Web | `local_930d6f89-91c1-4b04-967d-997f93692492` (worktree, rama `claude/chat1-guias-seo-1aa604`) |
 | 📱 App | el chat donde se creó este archivo (antes «chat 3») |
-| 📈 Estrategia | (se rellena al arrancarlo) |
+| 📈 Estrategia | sesión «📈 Estrategia» abierta por App el 5 nov 2026 (worktree `estrategia-60bae2`, rama `claude/estrategia-60bae2`); su id `local_…` sale en la lista de sesiones de App (Estrategia no ve el suyo). Docs: `docs/estrategia/` |
 
 ## Reglas que valen para los cuatro (resumen; manda CLAUDE.md)
 - Commits pequeños, solo de tus ficheros (`git add <fichero>`, nunca `git add -A` ni `.`), con el sistema delante: «[vídeo] …», «[web] …», «[app] …», «[estrategia] …».
