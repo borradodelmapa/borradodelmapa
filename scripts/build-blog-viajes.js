@@ -20,6 +20,8 @@ const BV_CSS_V = 5;     // blog-viajes.css
 
 // Entradas con `borrador: true` (contenido producido que aún no se publica, L2) solo salen con BORRADORES=1, para enseñarlas en local (4 nov 2026).
 const capsTodas = require('./blog-viajes-data.js');
+// «Un país = una casa» (Paco, 5 nov 2026): la barra del país y la miga de pan salen de la pieza común del chat 1, no se escribe otra
+const { barraPais, paisDeHistoria, datosPais, slugify } = require('./barra-pais.cjs');
 const caps = Object.assign(capsTodas.filter((c) => !c.borrador || process.env.BORRADORES === '1'), { SERIES: capsTodas.SERIES });
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
 // Rutas completas (guías públicas <slug>.html de la app): enlazadas desde el índice del blog para que Google las encuentre.
@@ -165,6 +167,8 @@ ${li.join('\n')}
 }
 
 function pagina(c) {
+  const paisH = paisDeHistoria(c), dp = datosPais(paisH);
+  const barra = dp ? barraPais(paisH, 'historias', [[paisH, `/destinos/${dp.slug}.html`], ['Historias', `/destinos/${dp.slug}.html#historias`], [c.titulo.split(':')[0]]]) : '';
   // anterior/siguiente: la serie «Pueblos borrados del mapa» no enlaza con diarios de otras series (las antiguas siguen como estaban)
   const P = 'Pueblos borrados del mapa', vale = (x) => x && (x.serie === c.serie || (c.serie !== P && x.serie !== P));
   const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
@@ -235,10 +239,10 @@ ${HEAD_COMUN}
 <body class="pg">
 
 ${CABECERA}
-
+${barra}
 <main class="bd-main">
-  <p class="bd-crumbs"><a href="/blog/">Blog de viajes</a> · <a href="/blog/#${slugSerie(c.serie)}">${esc(c.serie)}</a></p>
-${hero ? `  <header class="bd-hero">
+${barra ? '' : `  <p class="bd-crumbs"><a href="/blog/">Blog de viajes</a> · <a href="/blog/#${slugSerie(c.serie)}">${esc(c.serie)}</a></p>
+`}${hero ? `  <header class="bd-hero">
     <img src="${hero.src}" alt="" fetchpriority="high">
     <div class="bd-hero-txt">
 ${cabeza}
@@ -291,6 +295,31 @@ const rail = (c) => `      <a class="bv-card" href="/blog/viajes/${c.slug}">
         <div class="bv-card-t">${esc(c.titulo)}</div>
         <div class="bv-card-m">${c.dur ? 'Vídeo ' + c.dur.txt : 'Lectura'}</div>
       </a>`;
+const paises = [];
+caps.forEach((c) => { const p = paisDeHistoria(c); if (!p) return; let e = paises.find((x) => x.nombre === p); if (!e) paises.push(e = { nombre: p, lista: [] }); e.lista.push(c); });
+const bloquePaises = paises.length ? `  <style>
+  .bv-paises{margin:22px 0 8px}
+  .bv-paises-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;padding:0 16px}
+  .bv-pais{display:block;text-decoration:none;color:#fff;background:#141617;border:1px solid rgba(255,255,255,.12)}
+  .bv-pais-fotos{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:2px;aspect-ratio:16/10}
+  .bv-pais-fotos img{width:100%;height:100%;object-fit:cover;display:block}
+  .bv-pais-fotos img:first-child{grid-row:1/3}
+  .bv-pais-fotos.n1{grid-template-columns:1fr;grid-template-rows:1fr}
+  .bv-pais-fotos.n2{grid-template-columns:1fr 1fr;grid-template-rows:1fr}
+  .bv-pais-fotos.n1 img:first-child,.bv-pais-fotos.n2 img:first-child{grid-row:auto}
+  .bv-pais-t{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px}
+  .bv-pais-t b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase}
+  .bv-pais-t span{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#F4630B}
+  </style>
+  <section class="bv-paises" id="paises">
+    <div class="bv-serie-head"><h2>Historias por país</h2><span>${paises.length} países</span></div>
+    <div class="bv-paises-grid">
+${paises.map((p) => { const dp = datosPais(p.nombre), url = dp ? `/destinos/${dp.slug}.html#historias` : `/blog/viajes/${p.lista[0].slug}`;
+  const fotos = p.lista.slice(-3).reverse().map((c) => `<img src="/blog/viajes/img/${c.slug}.jpg" alt="" loading="lazy">`).join('');
+  return `      <a class="bv-pais" href="${url}"><div class="bv-pais-fotos n${Math.min(3, p.lista.length)}">${fotos}</div><div class="bv-pais-t"><b>${esc(p.nombre)}</b><span>${p.lista.length} ${p.lista.length === 1 ? 'historia' : 'historias'}</span></div></a>`; }).join('\n')}
+    </div>
+  </section>
+` : '';
 const bloqueSeries = series.map((s) => {
   const lista = caps.filter((c) => c.serie === s);
   return `  <section class="bv-serie" id="${slugSerie(s)}">
@@ -340,6 +369,7 @@ ${CABECERA}
     <p>Viajes de verdad contados en vídeo, con la historia detrás de cada sitio y los datos contrastados. Y guías para cuando algo sale mal.</p>
   </div>
 
+${bloquePaises}
 ${bloqueSeries}
 
   <section class="bv-guias" id="rutas">
