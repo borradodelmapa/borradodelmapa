@@ -44,12 +44,24 @@
 </head>
 <body class="destino-page">
 
-  <!-- NAV BREADCRUMB -->
-  <nav class="destino-nav-bar">
-    <a href="/destinos/" class="destino-nav-link">Destinos</a>
-    <span class="destino-nav-sep">›</span>
-    <a href="/destinos/nepal.html" class="destino-nav-link">Nepal</a>
-  </nav>
+  <!-- NAV: barra del país (si el país la tiene) o la miga de siempre -->
+  <style>
+.pb{position:sticky;top:0;z-index:50;background:#0d0f10;border-bottom:1px solid rgba(255,255,255,.12)}
+.pb-in{max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;overflow-x:auto;scrollbar-width:none}
+.pb-in::-webkit-scrollbar{display:none}
+.pb-pais{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;padding:12px 0}
+.pb-pais b{color:#F4630B}
+.pb-tabs{display:flex;gap:4px}
+.pb-tabs a{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,239,230,.75);text-decoration:none;padding:14px 10px 11px;border-bottom:3px solid transparent;white-space:nowrap}
+.pb-tabs a span{font-size:12px;color:#F4630B;margin-left:3px}
+.pb-tabs a.on{color:#fff;border-bottom-color:#F4630B}
+.pb-crumb{max-width:1100px;margin:0 auto;padding:8px 16px 0;font-size:13px;color:rgba(244,239,230,.6)}
+.pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
+.pb-crumb b{color:#fff;font-weight:600}
+#conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+</style>
+<nav class="pb" aria-label="Nepal"><div class="pb-in"><a class="pb-pais" href="/destinos/nepal.html"><b>›</b> Nepal</a><div class="pb-tabs"><a href="/destinos/nepal.html#sitios" class="on">Sitios<span>10</span></a><a href="/destinos/nepal.html#guias">Guías<span>10</span></a></div></div></nav>
+<p class="pb-crumb"><a href="/destinos/">Destinos</a> › <a href="/destinos/nepal.html">Nepal</a> › <a href="/destinos/nepal.html#sitios">Sitios</a> › <b>Patan (Lalitpur)</b></p>
 
   <!-- RELOJ — hora real del destino, gratis (Intl, sin llamar a ninguna API).
        Mismo lenguaje visual que el reloj del index de la app (.chat-empty/.ce-sky-date). -->
@@ -86,7 +98,7 @@
   <div class="destino-layout"><aside class="destino-side">
 
     <!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
-    <a class="destino-map-link" href="https://www.google.com/maps/search/?api=1&query=27.67251,85.32576" target="_blank" rel="noopener" title="Abrir en Google Maps">
+    <a class="destino-map-link" href="/?ruta=patan-nepal-ruta" title="Abrir la guía con su mapa">
       <div id="destino-map" class="destino-map"></div>
     </a>
     <script>
@@ -276,20 +288,37 @@
     </div>
 
     <!-- GUÍAS DEL PAÍS — enlazado interno a las guías públicas -->
-    <nav class="destino-related" aria-label="Guías de viaje en Nepal">
-      <h2 class="destino-related-title">Guías de viaje en Nepal</h2>
-      <ul class="destino-related-list">
-        <li><a href="/bhaktapur-nepal-ruta">Bhaktapur en un día</a></li><li><a href="/chitwan-nepal-ruta">Chitwan Safari 2 días</a></li><li><a href="/circuito-annapurna-nepal-ruta">Circuito de Annapurna 14 Días</a></li><li><a href="/everest-base-camp-nepal-ruta">Campo Base del Everest — 14 días</a></li><li><a href="/kathmandu-nepal-ruta">Kathmandú en 3 días</a></li><li><a href="/langtang-nepal-ruta">Valle de Langtang — 7 días de trekking</a></li><li><a href="/lumbini-nepal-ruta">Lumbini en 1 día</a></li><li><a href="/patan-nepal-ruta">Patan Lalitpur en 1 día</a></li><li><a href="/pokhara-nepal-ruta">Pokhara 3 días</a></li><li><a href="/upper-mustang-nepal-ruta">Upper Mustang 10 días trekking</a></li>
-      </ul>
+    <style>
+.dr{margin:30px 0 8px}
+.dr-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+.dr-h h2{font-family:var(--font-cond);font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin:0;color:var(--text-primary)}
+.dr-h a{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-decoration:none;white-space:nowrap}
+.dr-rail{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 12px;margin:0 -2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;list-style:none}
+.dr-rail::-webkit-scrollbar{display:none}
+.dr-rail li{flex:0 0 72%;max-width:300px;scroll-snap-align:start}
+.dr-rail--d li{flex-basis:44%;max-width:220px}
+@media(min-width:760px){.dr-rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}.dr-rail--d{grid-template-columns:repeat(4,1fr)}.dr-rail li,.dr-rail--d li{max-width:none}}
+.dr-c{display:block;height:100%;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dr-c:hover{border-color:var(--accent)}
+.dr-c img,.dr-ph{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dr-rail--d .dr-c img,.dr-rail--d .dr-ph{aspect-ratio:4/3}
+.dr-ph{display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;background:linear-gradient(135deg,#F4630B,#7a2e00);font-family:var(--font-cond);font-weight:800;font-size:20px;line-height:1;text-transform:uppercase;color:#fff}
+.dr-t{padding:10px 12px 12px}
+.dr-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-bottom:6px}
+.dr-t strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:18px;line-height:1.1;text-transform:uppercase}
+.dr-cta{display:inline-block;margin-top:4px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:10px 16px}
+</style>
+    <nav class="dr" aria-label="Guías de viaje en Nepal">
+      <div class="dr-h"><h2>Guías de Nepal</h2></div>
+      <ul class="dr-rail"><li><a class="dr-c" href="/patan-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Pasa por aquí</span><strong>Patan Lalitpur en 1 día</strong></div></a></li><li><a class="dr-c" href="/bhaktapur-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Bhaktapur en un día</strong></div></a></li><li><a class="dr-c" href="/chitwan-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Chitwan Safari 2 días</strong></div></a></li><li><a class="dr-c" href="/circuito-annapurna-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Circuito de Annapurna 14 Días</strong></div></a></li><li><a class="dr-c" href="/everest-base-camp-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Campo Base del Everest — 14 días</strong></div></a></li><li><a class="dr-c" href="/kathmandu-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Kathmandú en 3 días</strong></div></a></li><li><a class="dr-c" href="/langtang-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Valle de Langtang — 7 días de trekking</strong></div></a></li><li><a class="dr-c" href="/lumbini-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Lumbini en 1 día</strong></div></a></li><li><a class="dr-c" href="/pokhara-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Pokhara 3 días</strong></div></a></li><li><a class="dr-c" href="/upper-mustang-nepal-ruta"><span class="dr-ph">Nepal</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Upper Mustang 10 días trekking</strong></div></a></li></ul>
+      <a class="dr-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
     </nav>
 
     <!-- MÁS DESTINOS EN EL PAÍS — enlazado interno -->
-    <nav class="destino-related" aria-label="Más destinos en Nepal">
-      <h2 class="destino-related-title">Más destinos en Nepal</h2>
-      <ul class="destino-related-list">
-        <li><a href="/destinos/kathmandu-nepal.html">Kathmandú</a></li><li><a href="/destinos/pokhara-nepal.html">Pokhara</a></li><li><a href="/destinos/circuito-annapurna-nepal.html">Circuito de Annapurna</a></li><li><a href="/destinos/everest-base-camp-nepal.html">Campo Base del Everest</a></li><li><a href="/destinos/chitwan-nepal.html">Parque Nacional de Chitwan</a></li><li><a href="/destinos/lumbini-nepal.html">Lumbini</a></li>
-      </ul>
-      <a class="destino-related-all" href="/destinos/nepal.html">Ver todos los destinos de Nepal →</a>
+    
+    <nav class="dr" aria-label="Más destinos en Nepal">
+      <div class="dr-h"><h2>Más destinos en Nepal</h2><a href="/destinos/nepal.html">Ver todos →</a></div>
+      <ul class="dr-rail dr-rail--d"><li><a class="dr-c" href="/destinos/kathmandu-nepal.html"><img src="/destinos/img/kathmandu-nepal/hero.jpg" alt="Kathmandú, Nepal" loading="lazy" decoding="async"><div class="dr-t"><strong>Kathmandú</strong></div></a></li><li><a class="dr-c" href="/destinos/pokhara-nepal.html"><img src="/destinos/img/pokhara-nepal/hero.jpg" alt="Pokhara, Nepal" loading="lazy" decoding="async"><div class="dr-t"><strong>Pokhara</strong></div></a></li><li><a class="dr-c" href="/destinos/circuito-annapurna-nepal.html"><img src="/destinos/img/circuito-annapurna-nepal/hero.jpg" alt="Circuito de Annapurna, Nepal: Manang" loading="lazy" decoding="async"><div class="dr-t"><strong>Circuito de Annapurna</strong></div></a></li><li><a class="dr-c" href="/destinos/everest-base-camp-nepal.html"><img src="/destinos/img/everest-base-camp-nepal/hero.jpg" alt="Campo Base del Everest, Nepal" loading="lazy" decoding="async"><div class="dr-t"><strong>Campo Base del Everest</strong></div></a></li><li><a class="dr-c" href="/destinos/chitwan-nepal.html"><img src="/destinos/img/chitwan-nepal/hero.jpg" alt="Rinoceronte indio en el Parque Nacional de Chitwan" loading="lazy" decoding="async"><div class="dr-t"><strong>Parque Nacional de Chitwan</strong></div></a></li><li><a class="dr-c" href="/destinos/lumbini-nepal.html"><img src="/destinos/img/lumbini-nepal/hero.jpg" alt="Lumbini, Nepal" loading="lazy" decoding="async"><div class="dr-t"><strong>Lumbini</strong></div></a></li></ul>
     </nav>
 
     <!-- SHARE -->

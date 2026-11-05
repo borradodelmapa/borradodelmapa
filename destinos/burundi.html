@@ -37,10 +37,24 @@
 </head>
 <body class="destino-page">
 
-  <!-- NAV -->
-  <nav class="destino-nav-bar">
-    <a href="/destinos/" class="destino-nav-link">Destinos</a>
-  </nav>
+  <!-- NAV: barra del país (si la tiene) -->
+  <style>
+.pb{position:sticky;top:0;z-index:50;background:#0d0f10;border-bottom:1px solid rgba(255,255,255,.12)}
+.pb-in{max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;overflow-x:auto;scrollbar-width:none}
+.pb-in::-webkit-scrollbar{display:none}
+.pb-pais{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;padding:12px 0}
+.pb-pais b{color:#F4630B}
+.pb-tabs{display:flex;gap:4px}
+.pb-tabs a{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,239,230,.75);text-decoration:none;padding:14px 10px 11px;border-bottom:3px solid transparent;white-space:nowrap}
+.pb-tabs a span{font-size:12px;color:#F4630B;margin-left:3px}
+.pb-tabs a.on{color:#fff;border-bottom-color:#F4630B}
+.pb-crumb{max-width:1100px;margin:0 auto;padding:8px 16px 0;font-size:13px;color:rgba(244,239,230,.6)}
+.pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
+.pb-crumb b{color:#fff;font-weight:600}
+#conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+</style>
+<nav class="pb" aria-label="Burundi"><div class="pb-in"><a class="pb-pais" href="/destinos/burundi.html"><b>›</b> Burundi</a><div class="pb-tabs"><a href="/destinos/burundi.html#sitios">Sitios<span>10</span></a></div></div></nav>
+<p class="pb-crumb"><a href="/destinos/">Destinos</a> › <b>Burundi</b></p>
 
   <div class="chat-empty destino-clock-wrap">
     <div class="ce-top"><a class="ce-brand" href="/"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</a></div>
@@ -63,7 +77,8 @@
   </section>
 
   <main class="destino-content destino-content-wide">
-    <div class="destino-country-grid">
+    
+    <div id="sitios" class="destino-country-grid">
       
       <a href="/destinos/bujumbura-burundi.html" class="destino-country-card">
         <div class="destino-country-card-badge">🏛️ Ciudad</div>
@@ -110,7 +125,7 @@
         <h3 class="destino-country-card-title">Fuente del Nilo (Source du Nil)</h3>
         <p class="destino-country-card-desc">El punto geográfico considerado la fuente más meridional del Nilo, según expediciones del siglo XIX. Marcado por un monu...</p>
         <div class="destino-country-card-meta">
-          <span>1 días</span>
+          <span>1 día</span>
         </div>
       </a>
       <a href="/destinos/parc-national-ruvubu-burundi.html" class="destino-country-card">
@@ -126,7 +141,7 @@
         <h3 class="destino-country-card-title">Ngozi</h3>
         <p class="destino-country-card-desc">Capital de la provincia del mismo nombre en el norte de Burundi, conocida como la 'ciudad del café'. Zona de producción ...</p>
         <div class="destino-country-card-meta">
-          <span>1 días</span>
+          <span>1 día</span>
         </div>
       </a>
       <a href="/destinos/muramvya-burundi.html" class="destino-country-card">
@@ -134,7 +149,7 @@
         <h3 class="destino-country-card-title">Muramvya</h3>
         <p class="destino-country-card-desc">Antigua capital del reino Mwami de Burundi, con gran peso histórico y cultural para el país. Rodeada de colinas y bosque...</p>
         <div class="destino-country-card-meta">
-          <span>1 días</span>
+          <span>1 día</span>
         </div>
       </a>
       <a href="/destinos/bujumbura-rural-colinas-burundi.html" class="destino-country-card">
@@ -142,10 +157,14 @@
         <h3 class="destino-country-card-title">Colinas y zona rural periurbana de Bujumbura</h3>
         <p class="destino-country-card-desc">El entorno de colinas que rodea la capital ofrece un contraste total con la ciudad: agricultores en terrazas, mercados r...</p>
         <div class="destino-country-card-meta">
-          <span>1 días</span>
+          <span>1 día</span>
         </div>
       </a>
     </div>
+
+    
+
+    
 
     
 

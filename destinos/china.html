@@ -37,10 +37,24 @@
 </head>
 <body class="destino-page">
 
-  <!-- NAV -->
-  <nav class="destino-nav-bar">
-    <a href="/destinos/" class="destino-nav-link">Destinos</a>
-  </nav>
+  <!-- NAV: barra del país (si la tiene) -->
+  <style>
+.pb{position:sticky;top:0;z-index:50;background:#0d0f10;border-bottom:1px solid rgba(255,255,255,.12)}
+.pb-in{max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;overflow-x:auto;scrollbar-width:none}
+.pb-in::-webkit-scrollbar{display:none}
+.pb-pais{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;padding:12px 0}
+.pb-pais b{color:#F4630B}
+.pb-tabs{display:flex;gap:4px}
+.pb-tabs a{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,239,230,.75);text-decoration:none;padding:14px 10px 11px;border-bottom:3px solid transparent;white-space:nowrap}
+.pb-tabs a span{font-size:12px;color:#F4630B;margin-left:3px}
+.pb-tabs a.on{color:#fff;border-bottom-color:#F4630B}
+.pb-crumb{max-width:1100px;margin:0 auto;padding:8px 16px 0;font-size:13px;color:rgba(244,239,230,.6)}
+.pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
+.pb-crumb b{color:#fff;font-weight:600}
+#conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+</style>
+<nav class="pb" aria-label="China"><div class="pb-in"><a class="pb-pais" href="/destinos/china.html"><b>›</b> China</a><div class="pb-tabs"><a href="/destinos/china.html#sitios">Sitios<span>10</span></a><a href="/destinos/china.html#guias">Guías<span>2</span></a><a href="/destinos/china.html#historias">Historias<span>1</span></a></div></div></nav>
+<p class="pb-crumb"><a href="/destinos/">Destinos</a> › <b>China</b></p>
 
   <div class="chat-empty destino-clock-wrap">
     <div class="ce-top"><a class="ce-brand" href="/"><i class="ce-mark" aria-hidden="true"></i>BORRADO<span>DEL</span>MAPA</a></div>
@@ -63,7 +77,8 @@
   </section>
 
   <main class="destino-content destino-content-wide">
-    <div class="destino-country-grid">
+    
+    <div id="sitios" class="destino-country-grid">
       
       <a href="/destinos/beijing-china.html" class="destino-country-card">
         <div class="destino-country-card-badge">🏛️ Ciudad</div>
@@ -147,12 +162,43 @@
       </a>
     </div>
 
-    <nav class="destino-related" aria-label="Guías de viaje en China">
-      <h2 class="destino-related-title">Guías de viaje en China</h2>
-      <ul class="destino-related-list">
-        <li><a href="/guilin-en-4-dias-1wva">Guilin en 4 días</a></li>
-      </ul>
-    </nav>
+    <style>
+.dg{margin:34px 0 10px;padding:22px 18px 18px;border:1px solid var(--accent);background:rgba(244,99,11,.06)}
+.dg-head h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
+.dg-head h2 b{color:var(--accent)}
+.dg-head p{font-size:16px;line-height:1.5;color:var(--text-secondary);margin:0 0 16px}
+.dg-grid{display:grid;gap:14px}
+@media(min-width:700px){.dg-grid{grid-template-columns:repeat(2,1fr)}}
+.dg-card{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dg-card:hover{border-color:var(--accent)}
+.dg-card img{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dg-txt{padding:12px 14px 14px}
+.dg-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;margin-bottom:8px}
+.dg-txt strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:22px;line-height:1.1;text-transform:uppercase;margin-bottom:8px}
+.dg-txt em{font-style:normal;font-size:14px;color:var(--accent)}
+.dg-cta{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:17px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:12px 18px}
+</style>
+    <section class="dg" id="guias">
+      <div class="dg-head"><h2>China tiene <b>dos guías</b></h2>
+      <p>Completas, con mapa, paradas y consejos. ¿Quieres una a tu medida? Dile a Salma cuántos días tienes y qué te gusta.</p></div>
+      <div class="dg-grid"><a class="dg-card" href="/guilin-en-4-dias-1wva"><img src="/guias-img/guilin-en-4-dias-1wva.png" alt="Mapa de la guía Guilin en 4 días con sus paradas" loading="lazy" decoding="async"><div class="dg-txt"><span class="dg-chip">Guía con mapa</span><strong>Guilin en 4 días</strong><em>Ver la guía completa →</em></div></a><a class="dg-card" href="/guilin-en-4-dias-jzyh"><div class="dg-txt"><span class="dg-chip">Guía con mapa</span><strong>Guilin en 4 días</strong><em>Ver la guía completa →</em></div></a></div>
+      <a class="dg-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
+    </section>
+
+    
+
+    <style>
+.dh{margin:34px 0 10px}.dh h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,36px);line-height:1;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary)}
+.dh>p{font-size:16px;color:var(--text-secondary);margin:0 0 14px}
+.dh-grid{display:grid;gap:12px}@media(min-width:620px){.dh-grid{grid-template-columns:1fr 1fr}}@media(min-width:960px){.dh-grid{grid-template-columns:1fr 1fr 1fr}}
+.dh-c{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}.dh-c:hover{border-color:var(--accent)}
+.dh-c img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.dh-c div{padding:10px 12px 12px}
+.dh-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.dh-c strong{display:block;font-size:17px;line-height:1.3}
+</style>
+    <section class="dh" id="historias"><h2>Historias de China</h2><p>Lo que cuentan nuestros vídeos, con más información y sus fuentes.</p>
+      <div class="dh-grid"><a class="dh-c" href="/blog/viajes/china-mosuo-lago-lugu-matrimonio-andante"><img src="/blog/viajes/img/china-mosuo-lago-lugu-matrimonio-andante.jpg" alt="" loading="lazy" decoding="async"><div><span>Pueblos borrados del mapa</span><strong>Los mosuo: donde la casa la lleva una mujer</strong></div></a></div>
+    </section>
 
     <!-- RUTAS DE LA COMUNIDAD -->
     <section class="destino-community" id="destino-community" style="display:none">

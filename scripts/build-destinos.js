@@ -703,7 +703,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 <body class="destino-page">
 
   <!-- NAV: barra del país (si el país la tiene) o la miga de siempre -->
-  ${barraPais(countryName, 'sitios', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [countryName, `/destinos/${slugify(countryName)}.html`], ['Sitios', `/destinos/${slugify(countryName)}.html#sitios`], [dest.nombre]]) || `<nav class="destino-nav-bar">
+  ${barraPais(countryName, 'sitios', [['Destinos', '/destinos/'], [countryName, `/destinos/${slugify(countryName)}.html`], ['Sitios', `/destinos/${slugify(countryName)}.html#sitios`], [dest.nombre]]) || `<nav class="destino-nav-bar">
     <a href="/destinos/" class="destino-nav-link">Destinos</a>
     <span class="destino-nav-sep">›</span>
     <a href="/destinos/${slugify(countryName)}.html" class="destino-nav-link">${escapeHTML(countryName)}</a>
@@ -1018,7 +1018,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
 <body class="destino-page">
 
   <!-- NAV: barra del país (si la tiene) -->
-  ${barraPais(countryName, '', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [countryName]]) || `<nav class="destino-nav-bar">
+  ${barraPais(countryName, '', [['Destinos', '/destinos/'], [countryName]]) || `<nav class="destino-nav-bar">
     <a href="/destinos/" class="destino-nav-link">Destinos</a>
   </nav>`}
 

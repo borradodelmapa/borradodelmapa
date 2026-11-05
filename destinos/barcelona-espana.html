@@ -44,12 +44,24 @@
 </head>
 <body class="destino-page">
 
-  <!-- NAV BREADCRUMB -->
-  <nav class="destino-nav-bar">
-    <a href="/destinos/" class="destino-nav-link">Destinos</a>
-    <span class="destino-nav-sep">›</span>
-    <a href="/destinos/espana.html" class="destino-nav-link">España</a>
-  </nav>
+  <!-- NAV: barra del país (si el país la tiene) o la miga de siempre -->
+  <style>
+.pb{position:sticky;top:0;z-index:50;background:#0d0f10;border-bottom:1px solid rgba(255,255,255,.12)}
+.pb-in{max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;overflow-x:auto;scrollbar-width:none}
+.pb-in::-webkit-scrollbar{display:none}
+.pb-pais{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;padding:12px 0}
+.pb-pais b{color:#F4630B}
+.pb-tabs{display:flex;gap:4px}
+.pb-tabs a{font-family:'Barlow Condensed','Archivo',sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,239,230,.75);text-decoration:none;padding:14px 10px 11px;border-bottom:3px solid transparent;white-space:nowrap}
+.pb-tabs a span{font-size:12px;color:#F4630B;margin-left:3px}
+.pb-tabs a.on{color:#fff;border-bottom-color:#F4630B}
+.pb-crumb{max-width:1100px;margin:0 auto;padding:8px 16px 0;font-size:13px;color:rgba(244,239,230,.6)}
+.pb-crumb a{color:rgba(244,239,230,.85);text-decoration:none}
+.pb-crumb b{color:#fff;font-weight:600}
+#conoce,#sitios,#guias,#historias{scroll-margin-top:64px}
+</style>
+<nav class="pb" aria-label="España"><div class="pb-in"><a class="pb-pais" href="/destinos/espana.html"><b>›</b> España</a><div class="pb-tabs"><a href="/destinos/espana.html#sitios" class="on">Sitios<span>10</span></a><a href="/destinos/espana.html#guias">Guías<span>11</span></a></div></div></nav>
+<p class="pb-crumb"><a href="/destinos/">Destinos</a> › <a href="/destinos/espana.html">España</a> › <a href="/destinos/espana.html#sitios">Sitios</a> › <b>Barcelona</b></p>
 
   <!-- RELOJ — hora real del destino, gratis (Intl, sin llamar a ninguna API).
        Mismo lenguaje visual que el reloj del index de la app (.chat-empty/.ce-sky-date). -->
@@ -86,7 +98,7 @@
   <div class="destino-layout"><aside class="destino-side">
 
     <!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
-    <a class="destino-map-link" href="https://www.google.com/maps/search/?api=1&query=41.3825802,2.177073" target="_blank" rel="noopener" title="Abrir en Google Maps">
+    <a class="destino-map-link" href="/?ruta=barcelona-en-3-dias-ky61" title="Abrir la guía con su mapa">
       <div id="destino-map" class="destino-map"></div>
     </a>
     <script>
@@ -359,20 +371,37 @@
     </div>
 
     <!-- GUÍAS DEL PAÍS — enlazado interno a las guías públicas -->
-    <nav class="destino-related" aria-label="Guías de viaje en España">
-      <h2 class="destino-related-title">Guías de viaje en España</h2>
-      <ul class="destino-related-list">
-        <li><a href="/asturias-salvaje-de-ribadeo-a-cabo-penas-en-4-dias-b7zm">Asturias salvaje: de Ribadeo a Cabo Peñas en 4 días</a></li><li><a href="/cantabria-costa-picos-y-bahia-i2lb">Cantabria: costa, Picos y bahía</a></li><li><a href="/cantabria-en-moto-de-asturias-a-la-costa-verde-wmfk">Cantabria en moto: de Asturias a la costa verde</a></li><li><a href="/logrono-en-3-dias-9qbe">Logroño en 3 días</a></li><li><a href="/malpartida-de-caceres-en-2-dias-lbzw">Malpartida de Cáceres en 2 días</a></li><li><a href="/parques-naturales-del-pais-vasco-y-navarra-tqgd">Parques Naturales del País Vasco y Navarra</a></li><li><a href="/pirineos-navarros-roncal-salazar-y-baztan-mnur">Pirineos navarros: Roncal, Salazar y Baztán</a></li><li><a href="/ruta-por-la-n340-o-lo-que-queda-de-ella-aysx">Ruta por la N340 o lo que queda de ella</a></li><li><a href="/sevilla-en-3-dias-z359">Sevilla en 3 días</a></li><li><a href="/sierra-nevada-en-autocaravana-b05t">Sierra Nevada en Autocaravana</a></li><li><a href="/transpirenaica-en-moto-de-irun-al-mediterraneo-qsv6">Transpirenaica en moto: de Irún al Mediterráneo</a></li>
-      </ul>
+    <style>
+.dr{margin:30px 0 8px}
+.dr-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+.dr-h h2{font-family:var(--font-cond);font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin:0;color:var(--text-primary)}
+.dr-h a{font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-decoration:none;white-space:nowrap}
+.dr-rail{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 12px;margin:0 -2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;list-style:none}
+.dr-rail::-webkit-scrollbar{display:none}
+.dr-rail li{flex:0 0 72%;max-width:300px;scroll-snap-align:start}
+.dr-rail--d li{flex-basis:44%;max-width:220px}
+@media(min-width:760px){.dr-rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}.dr-rail--d{grid-template-columns:repeat(4,1fr)}.dr-rail li,.dr-rail--d li{max-width:none}}
+.dr-c{display:block;height:100%;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dr-c:hover{border-color:var(--accent)}
+.dr-c img,.dr-ph{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;border-bottom:1px solid var(--border)}
+.dr-rail--d .dr-c img,.dr-rail--d .dr-ph{aspect-ratio:4/3}
+.dr-ph{display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;background:linear-gradient(135deg,#F4630B,#7a2e00);font-family:var(--font-cond);font-weight:800;font-size:20px;line-height:1;text-transform:uppercase;color:#fff}
+.dr-t{padding:10px 12px 12px}
+.dr-chip{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;margin-bottom:6px}
+.dr-t strong{display:block;font-family:var(--font-cond);font-weight:800;font-size:18px;line-height:1.1;text-transform:uppercase}
+.dr-cta{display:inline-block;margin-top:4px;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:10px 16px}
+</style>
+    <nav class="dr" aria-label="Guías de viaje en España">
+      <div class="dr-h"><h2>Guías de España</h2></div>
+      <ul class="dr-rail"><li><a class="dr-c" href="/asturias-salvaje-de-ribadeo-a-cabo-penas-en-4-dias-b7zm"><img src="/guias-img/asturias-salvaje-de-ribadeo-a-cabo-penas-en-4-dias-b7zm.png" alt="Mapa de la guía Asturias salvaje: de Ribadeo a Cabo Peñas en 4 días" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Asturias salvaje: de Ribadeo a Cabo Peñas en 4 días</strong></div></a></li><li><a class="dr-c" href="/cantabria-costa-picos-y-bahia-i2lb"><img src="/guias-img/cantabria-costa-picos-y-bahia-i2lb.png" alt="Mapa de la guía Cantabria: costa, Picos y bahía" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Cantabria: costa, Picos y bahía</strong></div></a></li><li><a class="dr-c" href="/cantabria-en-moto-de-asturias-a-la-costa-verde-wmfk"><img src="/guias-img/cantabria-en-moto-de-asturias-a-la-costa-verde-wmfk.png" alt="Mapa de la guía Cantabria en moto: de Asturias a la costa verde" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Cantabria en moto: de Asturias a la costa verde</strong></div></a></li><li><a class="dr-c" href="/logrono-en-3-dias-9qbe"><img src="/guias-img/logrono-en-3-dias-9qbe.png" alt="Mapa de la guía Logroño en 3 días" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Logroño en 3 días</strong></div></a></li><li><a class="dr-c" href="/malpartida-de-caceres-en-2-dias-lbzw"><img src="/guias-img/malpartida-de-caceres-en-2-dias-lbzw.png" alt="Mapa de la guía Malpartida de Cáceres en 2 días" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Malpartida de Cáceres en 2 días</strong></div></a></li><li><a class="dr-c" href="/parques-naturales-del-pais-vasco-y-navarra-tqgd"><img src="/guias-img/parques-naturales-del-pais-vasco-y-navarra-tqgd.png" alt="Mapa de la guía Parques Naturales del País Vasco y Navarra" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Parques Naturales del País Vasco y Navarra</strong></div></a></li><li><a class="dr-c" href="/pirineos-navarros-roncal-salazar-y-baztan-mnur"><img src="/guias-img/pirineos-navarros-roncal-salazar-y-baztan-mnur.png" alt="Mapa de la guía Pirineos navarros: Roncal, Salazar y Baztán" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Pirineos navarros: Roncal, Salazar y Baztán</strong></div></a></li><li><a class="dr-c" href="/ruta-por-la-n340-o-lo-que-queda-de-ella-aysx"><img src="/guias-img/ruta-por-la-n340-o-lo-que-queda-de-ella-aysx.png" alt="Mapa de la guía Ruta por la N340 o lo que queda de ella" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Ruta por la N340 o lo que queda de ella</strong></div></a></li><li><a class="dr-c" href="/sevilla-en-3-dias-z359"><span class="dr-ph">España</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Sevilla en 3 días</strong></div></a></li><li><a class="dr-c" href="/sierra-nevada-en-autocaravana-b05t"><span class="dr-ph">España</span><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Sierra Nevada en Autocaravana</strong></div></a></li><li><a class="dr-c" href="/transpirenaica-en-moto-de-irun-al-mediterraneo-qsv6"><img src="/guias-img/transpirenaica-en-moto-de-irun-al-mediterraneo-qsv6.png" alt="Mapa de la guía Transpirenaica en moto: de Irún al Mediterráneo" loading="lazy" decoding="async"><div class="dr-t"><span class="dr-chip">Guía con mapa</span><strong>Transpirenaica en moto: de Irún al Mediterráneo</strong></div></a></li></ul>
+      <a class="dr-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
     </nav>
 
     <!-- MÁS DESTINOS EN EL PAÍS — enlazado interno -->
-    <nav class="destino-related" aria-label="Más destinos en España">
-      <h2 class="destino-related-title">Más destinos en España</h2>
-      <ul class="destino-related-list">
-        <li><a href="/destinos/madrid-espana.html">Madrid</a></li><li><a href="/destinos/sevilla-espana.html">Sevilla</a></li><li><a href="/destinos/granada-espana.html">Granada</a></li><li><a href="/destinos/san-sebastian-espana.html">San Sebastián</a></li><li><a href="/destinos/mallorca-espana.html">Mallorca</a></li><li><a href="/destinos/toledo-espana.html">Toledo</a></li>
-      </ul>
-      <a class="destino-related-all" href="/destinos/espana.html">Ver todos los destinos de España →</a>
+    
+    <nav class="dr" aria-label="Más destinos en España">
+      <div class="dr-h"><h2>Más destinos en España</h2><a href="/destinos/espana.html">Ver todos →</a></div>
+      <ul class="dr-rail dr-rail--d"><li><a class="dr-c" href="/destinos/madrid-espana.html"><span class="dr-ph">Madrid</span><div class="dr-t"><strong>Madrid</strong></div></a></li><li><a class="dr-c" href="/destinos/sevilla-espana.html"><span class="dr-ph">Sevilla</span><div class="dr-t"><strong>Sevilla</strong></div></a></li><li><a class="dr-c" href="/destinos/granada-espana.html"><span class="dr-ph">Granada</span><div class="dr-t"><strong>Granada</strong></div></a></li><li><a class="dr-c" href="/destinos/san-sebastian-espana.html"><span class="dr-ph">San Sebastián</span><div class="dr-t"><strong>San Sebastián</strong></div></a></li><li><a class="dr-c" href="/destinos/mallorca-espana.html"><span class="dr-ph">Mallorca</span><div class="dr-t"><strong>Mallorca</strong></div></a></li><li><a class="dr-c" href="/destinos/toledo-espana.html"><span class="dr-ph">Toledo</span><div class="dr-t"><strong>Toledo</strong></div></a></li></ul>
     </nav>
 
     <!-- SHARE -->
