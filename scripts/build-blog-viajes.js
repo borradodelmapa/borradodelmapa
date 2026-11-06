@@ -100,11 +100,14 @@ function atribuciones(c) {
   fs.readFileSync(path.join(MKT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
   return atr;
 }
+// Entrada de varios episodios (largo de temporada, 6 nov 2026): c.fotosEpisodios = carpeta de la serie; cada foto es 'episodio/W39' y lleva el autor de SU episodio.
+const atrDe = (c, id) => { const [ep, n] = id.split('/'); return atribuciones({ creditosDe: c.fotosEpisodios + '/' + ep })[n]; };
 // Fotos de la entrada (c.fotos y s.foto, 1 nov 2026): se copian de <creditosDe>/fotos/ a blog/viajes/img/<slug>/ a 1200 px como mucho (solo la primera vez)
 const FF = path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe');
 // Diarios con fotos propias (Tailandia, Vietnam): c.fotosDe = { prefijo: lista } con las listas id|ruta de salma marketing (rutas relativas a D:/salma-movil
 // o a c.fotosBase); el id de la foto es prefijo + id de la lista (p. ej. 'k22' = línea 22 de la lista de 'k'). Sin pie de autor: son de Paco.
 function origen(c, id) {
+  if (c.fotosEpisodios) { const [ep, n] = id.split('/'), d = path.join(MKT, c.fotosEpisodios, ep, 'fotos'), g = path.join(d, n + '-g.jpg'); return fs.existsSync(g) ? g : path.join(d, n + '.jpg'); }
   if (!c.fotosDe) return path.join(MKT, c.creditosDe, 'fotos', id + '.jpg');
   const pre = Object.keys(c.fotosDe).sort((a, b) => b.length - a.length).find((p) => id.startsWith(p));
   const L = Object.fromEntries(fs.readFileSync(path.join(ROOT, c.fotosDe[pre]), 'utf8').split('\n').filter(Boolean).map((l) => l.trim().split('|')));
@@ -124,15 +127,15 @@ v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
 `;
 function foto(c, id) {
-  const dest = path.join(OUT, 'img', c.slug, id + '.jpg');
+  const nom = id.replace('/', '-'), dest = path.join(OUT, 'img', c.slug, nom + '.jpg');
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     const r = require('child_process').spawnSync(FF, ['-v', 'error', '-y', '-i', origen(c, id), '-vf', "scale='min(1200,iw)':-2", '-q:v', '4', dest]);
     if (r.status) throw new Error('No puedo preparar la foto ' + id + ' de ' + c.slug + ': ' + r.stderr);
   }
-  if (c.fotosDe) return { src: `/blog/viajes/img/${c.slug}/${id}.jpg`, credito: '' };
-  const a = atribuciones(c)[id] || {};
-  return { src: `/blog/viajes/img/${c.slug}/${id}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
+  if (c.fotosDe) return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: '' };
+  const a = (c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
+  return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
 }
 const figura = (c, [id, pie]) => { const f = foto(c, id); return `      <figure class="bd-fig">
         <img src="${f.src}" alt="${esc(pie)}" loading="lazy">
@@ -156,9 +159,12 @@ function creditos(c) {
   const t = !fs.existsSync(sal) ? null : fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
   if (!t && c.video) throw new Error('No encuentro tiempos.json en ' + sal); // sin vídeo: solo las fotos de la entrada
   const enBlog = c.fotos ? [c.fotos.portada, ...c.secciones.filter((s) => s.foto).map((s) => s.foto[0]), ...(c.fotos.galeria || []).map((g) => g[0])] : [];
-  const usadas = [...new Set([...(t && c.video ? JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []) : []), ...enBlog].filter((x) => /^[WH]\d+$/.test(x)))];
-  const atr = atribuciones(c);
-  const li = [...new Set(usadas.filter((id) => atr[id]).map((id) => `        <li><a href="${esc(atr[id].u)}" target="_blank" rel="noopener">${esc(atr[id].autor || 'Autor desconocido')}</a> · ${esc(atr[id].lic)}</li>`))];
+  const enVideo = t && c.video ? JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []) : [];
+  const usadas = c.fotosEpisodios
+    ? [...new Set([...enVideo.map((x) => (x.match(/\/([^/]+)\/fotos\/([WH]\d+)(?:-g)?\.jpg$/) || []).slice(1).join('/')), ...enBlog].filter(Boolean))]
+    : [...new Set([...enVideo, ...enBlog].filter((x) => /^[WH]\d+$/.test(x)))];
+  const atr = c.fotosEpisodios ? null : atribuciones(c), de = (id) => (atr ? atr[id] : atrDe(c, id));
+  const li = [...new Set(usadas.filter(de).map((id) => `        <li><a href="${esc(de(id).u)}" target="_blank" rel="noopener">${esc(de(id).autor || 'Autor desconocido')}</a> · ${esc(de(id).lic)}</li>`))];
   return `
     <details class="bd-src">
       <summary>Fotos: autores y licencias</summary>
@@ -168,6 +174,22 @@ ${li.join('\n')}
       </ul>
     </details>`;
 }
+
+// Capítulos (Y6, 6 nov 2026): s.min = minuto de la sección en el vídeo. Salen en un índice, en cada apartado y en los datos para Google (Y9).
+const aSeg = (m) => m.split(':').reduce((a, n) => a * 60 + Number(n), 0);
+const SALTO_VIDEO = `<script>(function(){var v=document.querySelector("video.bd-video");if(!v)return;
+function ir(s){v.currentTime=s;var p=v.play();if(p&&p.catch)p.catch(function(){});v.scrollIntoView({block:"center"});}
+document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]");if(!a)return;e.preventDefault();ir(Number(a.dataset.t));});
+var t=Number(new URLSearchParams(location.search).get("t"));if(t)v.addEventListener("loadedmetadata",function(){v.currentTime=t;},{once:true});})();</script>
+`;
+// Vídeo horizontal (c.formato = '16:9'): a lo ancho encima del texto, no en la columna estrecha de los verticales. Va en la propia página para no cambiar el ?v= de las demás.
+const CSS_16_9 = `<style>
+.bd-layout.h .bd-media{max-width:none}.bd-layout.h .bd-video{aspect-ratio:16/9}
+.pg .bd-cap a,.pg .bd-enlaces a,.pg .bd-ficha a[data-t]{color:var(--accent);text-decoration:none;font-weight:600}.pg .bd-cap a:hover,.pg .bd-enlaces a:hover,.pg .bd-ficha a[data-t]:hover{text-decoration:underline}.pg .bd-ficha a[data-t] strong{color:var(--text-primary)}
+.bd-enlaces{font-size:15px}.bd-enlaces a+a::before{content:" · ";color:var(--text-muted)}
+@media (min-width:960px){.bd-layout.h,.bd-layout.h.con-hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "body" "next";grid-template-rows:auto}
+.bd-layout.h .bd-media{position:static;margin:0 auto 34px;width:100%;max-width:1000px}.bd-layout.h .bd-body,.bd-layout.h .bd-next{max-width:760px;width:100%;margin-left:auto;margin-right:auto}}
+</style>`;
 
 function pagina(c) {
   const paisH = paisDeHistoria(c), dp = datosPais(paisH);
@@ -181,11 +203,13 @@ function pagina(c) {
   const url = `${SITE}/blog/viajes/${c.slug}`;
   const img = `/blog/viajes/img/${c.slug}.jpg`;
   const serieCaps = caps.filter((x) => x.serie === c.serie);
+  const caps16 = c.secciones.filter((s) => s.min);
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: c.titulo, description: c.resumen, image: SITE + img, author: { '@type': 'Person', name: 'Salma' },
       publisher: { '@type': 'Organization', name: 'Borrado del Mapa', url: SITE }, datePublished: c.fecha || FECHA, dateModified: c.fecha || FECHA, mainEntityOfPage: url },
     c.dur && { '@context': 'https://schema.org', '@type': 'VideoObject', name: c.titulo, description: c.resumen, uploadDate: c.fecha || FECHA, thumbnailUrl: SITE + img,
-      contentUrl: `${SITE}/blog/viajes/video/${c.slug}.mp4`, duration: c.dur.iso },
+      contentUrl: `${SITE}/blog/viajes/video/${c.slug}.mp4`, duration: c.dur.iso, ...(c.youtube ? { embedUrl: 'https://www.youtube.com/embed/' + c.youtube } : {}),
+      ...(caps16.length ? { hasPart: caps16.map((s, i) => ({ '@type': 'Clip', name: s.h, startOffset: aSeg(s.min), endOffset: caps16[i + 1] ? aSeg(caps16[i + 1].min) : c.dur.sec, url: `${url}?t=${aSeg(s.min)}` })) } : {}) },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Blog de viajes', item: SITE + '/blog/' },
       { '@type': 'ListItem', position: 2, name: c.serie, item: SITE + '/blog/#' + slugSerie(c.serie) },
@@ -193,15 +217,16 @@ function pagina(c) {
   ].filter(Boolean).map((o) => `<script type="application/ld+json">\n${JSON.stringify(o, null, 1)}\n</script>`).join('\n');
 
   const pasos = serieCaps.length > 1 ? `    <nav class="bd-steps" aria-label="Capítulos de ${esc(c.serie)}">\n${serieCaps.map((x) =>
-    `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Especial' ? 'ES' : x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
+    `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Especial' ? 'ES' : (/^Temporada/.test(x.cap) ? 'T' : '') + x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
   const stats = c.cifras ? `    <div class="bd-stats">\n${c.cifras.map(([n, t]) => `      <div class="bd-stat"><b>${esc(n)}</b><span>${esc(t)}</span></div>`).join('\n')}\n    </div>\n` : '';
   // s.foto = [id, pie]: foto tras el primer párrafo · c.cita = { tras: nº de sección, t, de }: frase destacada en grande
   const cita = (i) => c.cita && c.cita.tras === i + 1 ? `\n    <blockquote class="bd-cita"><p>${md(c.cita.t)}</p>${c.cita.de ? `<cite>${esc(c.cita.de)}</cite>` : ''}</blockquote>` : '';
   const secciones = c.secciones.map((s, i) => `    <section class="bd-sec">
       <span class="bd-sec-n">${String(i + 1).padStart(2, '0')}</span>
       <h2>${esc(s.h)}</h2>
-${s.p.map((p, j) => `      <p>${md(p)}</p>\n${j === 0 && s.foto ? figura(c, s.foto) : ''}`).join('').replace(/\n$/, '')}
+${s.min ? `      <p class="bd-cap"><a href="?t=${aSeg(s.min)}" data-t="${aSeg(s.min)}">▶ Ver en el vídeo · ${s.min}</a></p>\n` : ''}${s.p.map((p, j) => `      <p>${md(p)}</p>\n${j === 0 && s.foto ? figura(c, s.foto) : ''}`).join('').replace(/\n$/, '')}${s.enlaces ? `\n      <p class="bd-enlaces">${s.enlaces.map(([t, u]) => `<a href="${esc(u)}">${esc(t)}</a>`).join('')}</p>` : ''}
     </section>${cita(i)}`).join('\n\n');
+  const indiceCaps = caps16.length ? `    <aside class="bd-ficha">\n      <h3>Capítulos</h3>\n      <ul>\n${caps16.map((s) => `        <li><a href="?t=${aSeg(s.min)}" data-t="${aSeg(s.min)}"><strong>${s.min}</strong> ${esc(s.h)}</a></li>`).join('\n')}\n      </ul>\n    </aside>\n` : '';
   const hero = c.fotos ? foto(c, c.fotos.portada) : null;
   const cabeza = `      <span class="bd-kicker">${esc(c.serie)} · ${esc(c.cap)}</span>
       <h1 class="bd-title">${esc(c.titulo)}</h1>
@@ -240,7 +265,7 @@ ${c.fuentes.map((f) => `        <li><a href="${esc(f.u)}" target="_blank" rel="n
 
 ${ld}
 
-${HEAD_COMUN}
+${HEAD_COMUN}${c.formato === '16:9' ? '\n' + CSS_16_9 : ''}
 </head>
 <body class="pg">
 
@@ -248,25 +273,25 @@ ${barra || CABECERA}
 <main class="bd-main">
 ${barra ? '' : `  <p class="bd-crumbs"><a href="/blog/">Historias</a> · ${esc(paisH || c.serie)}</p>
 `}${hero ? `  <header class="bd-hero">
-    <img src="${hero.src}" alt="" fetchpriority="high">
+    <img src="${hero.src}" alt=""${c.fotos.posicion ? ` style="object-position:${c.fotos.posicion}"` : ''} fetchpriority="high">
     <div class="bd-hero-txt">
 ${cabeza}
     </div>
 ${hero.credito ? `    <span class="bd-hero-cred">${hero.credito}</span>\n` : ''}  </header>
-` : ''}  <div class="bd-layout${hero ? ' con-hero' : ''}">
+` : ''}  <div class="bd-layout${hero ? ' con-hero' : ''}${c.formato === '16:9' ? ' h' : ''}">
 ${hero ? '' : `    <header class="bd-head">
 ${cabeza}
     </header>
 `}
     <div class="bd-media">
 ${c.dur ? `      <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
-      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
+      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>${c.youtube ? `\n      <p class="bd-ia"><a href="https://youtu.be/${esc(c.youtube)}" target="_blank" rel="noopener">Verlo en YouTube</a></p>` : ''}` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
       <div class="bd-video-meta"><span>Lectura</span><span>Escribe Salma</span></div>`}
       <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.')}</p>
     </div>
 
     <article class="bd-body">
-${pasos}${stats}
+${pasos}${stats}${indiceCaps}
 ${secciones}
 
 ${galeria(c)}${guia(c)}${ficha}${cierre}
@@ -286,7 +311,7 @@ ${nav}
     </div>
   </div>
 </main>
-${VISOR}${PIE_Y_MENU}</body>
+${VISOR}${caps16.length ? SALTO_VIDEO : ''}${PIE_Y_MENU}</body>
 </html>
 `;
 }
@@ -301,7 +326,7 @@ const rail = (c) => `      <a class="bv-card" href="/blog/viajes/${c.slug}">
         <div class="bv-card-m">${c.dur ? 'Vídeo ' + c.dur.txt : 'Lectura'}</div>
       </a>`;
 const paises = [];
-caps.forEach((c) => { const p = paisDeHistoria(c); if (!p) return; let e = paises.find((x) => x.nombre === p); if (!e) paises.push(e = { nombre: p, lista: [] }); e.lista.push(c); });
+caps.forEach((c) => { const p = paisDeHistoria(c); if (!p || c.variosPaises) return; let e = paises.find((x) => x.nombre === p); if (!e) paises.push(e = { nombre: p, lista: [] }); e.lista.push(c); });
 // Foto de cada país en «Historias por país»: 1) si hay una elegida a mano en blog/viajes/img/paises/<país>.jpg, esa; 2) si no, la foto original
 // de portada (sin banda) de la historia más reciente que la tenga (c.fotos.portada, ya revisada F9/M15); 3) si no, la portada de la historia.
 function fotoPais(p) {
