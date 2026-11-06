@@ -39,6 +39,7 @@ http.createServer((req, res) => {
   if (p === '/') p = '/index.html';
   if (p.endsWith('/')) p += 'index.html';
   const fp = path.join(root, p);
+  if (p.endsWith('.mp4')) return serveRange(req, res, fp, 'video/mp4'); // como la web: sin esto el vídeo no puede saltar a un minuto
   fs.readFile(fp, (err, data) => {
     if (err) { res.writeHead(404); res.end('Not found'); return; }
     res.writeHead(200, { 'Content-Type': mime[path.extname(fp)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });

@@ -180,12 +180,12 @@ const aSeg = (m) => m.split(':').reduce((a, n) => a * 60 + Number(n), 0);
 const SALTO_VIDEO = `<script>(function(){var v=document.querySelector("video.bd-video");if(!v)return;
 function ir(s){v.currentTime=s;var p=v.play();if(p&&p.catch)p.catch(function(){});v.scrollIntoView({block:"center"});}
 document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]");if(!a)return;e.preventDefault();ir(Number(a.dataset.t));});
-var t=Number(new URLSearchParams(location.search).get("t"));if(t)v.addEventListener("loadedmetadata",function(){v.currentTime=t;},{once:true});})();</script>
+var t=Number(new URLSearchParams(location.search).get("t"));if(t){if(v.readyState>=1)v.currentTime=t;else v.addEventListener("loadedmetadata",function(){v.currentTime=t;},{once:true});}})();</script>
 `;
 // Vídeo horizontal (c.formato = '16:9'): a lo ancho encima del texto, no en la columna estrecha de los verticales. Va en la propia página para no cambiar el ?v= de las demás.
 const CSS_16_9 = `<style>
 .bd-layout.h .bd-media{max-width:none}.bd-layout.h .bd-video{aspect-ratio:16/9}
-.pg .bd-cap a,.pg .bd-enlaces a,.pg .bd-ficha a[data-t]{color:var(--accent);text-decoration:none;font-weight:600}.pg .bd-cap a:hover,.pg .bd-enlaces a:hover,.pg .bd-ficha a[data-t]:hover{text-decoration:underline}.pg .bd-ficha a[data-t] strong{color:var(--text-primary)}
+.pg .bd-cap a,.pg .bd-enlaces a,.pg .bd-ia a,.pg .bd-ficha a[data-t]{color:var(--accent);text-decoration:none;font-weight:600}.pg .bd-cap a:hover,.pg .bd-enlaces a:hover,.pg .bd-ficha a[data-t]:hover{text-decoration:underline}.pg .bd-ficha a[data-t] strong{color:var(--text-primary)}
 .bd-enlaces{font-size:15px}.bd-enlaces a+a::before{content:" · ";color:var(--text-muted)}
 @media (min-width:960px){.bd-layout.h,.bd-layout.h.con-hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "body" "next";grid-template-rows:auto}
 .bd-layout.h .bd-media{position:static;margin:0 auto 34px;width:100%;max-width:1000px}.bd-layout.h .bd-body,.bd-layout.h .bd-next{max-width:760px;width:100%;margin-left:auto;margin-right:auto}}
