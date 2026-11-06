@@ -55,13 +55,13 @@ Horas (APROBADAS, P13): **TikTok 10:00 · YouTube 15:30** (`estudio-horas-2026-1
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
 | 2 nov | — | — | (vie 6) Vietnam 3/5 recortado · se queda |
-| 9 nov | Vietnam 4/5 | Vietnam 5/5 | **Pueblos borrados del mapa · Temporada 1** (largo 16:9, ~15 min) |
-| 16 nov | Whang-Od | Sagada | **Vietnam en 5 capítulos** (largo 16:9) |
+| 9 nov | Vietnam 4/5 | Vietnam 5/5 | **Vietnam en 5 capítulos** (largo 16:9; sin subir, falta carátula y exportación final; TikTok sin decidir) |
+| 16 nov | Whang-Od | Sagada | **Pueblos borrados del mapa · Temporada 1** (largo 16:9, 12:53, solo YouTube) |
 | 23 nov | Haenyeo | Konyak | Moken |
 | 30 nov | Sentineleses | Ainu | Mosuo |
 | 7 dic | Dukha | Cazadores con águila | **Tatuajes del mundo** |
 
-El largo de Pueblos T1 tiene que estar montado y revisado por Paco **antes del mar 10 nov** (revisión final del modo producción).
+**Cambio de Paco (6-7 nov, por Vídeo):** Vietnam pasa al jue 12 y Pueblos T1 al jue 19, porque los shorts de Vietnam terminan el mié 11. Las fechas del párrafo «Comprobada en Metricool» de arriba son las de antes de este cambio. Tatuajes sigue el jue 10 dic.
 
 ### Calendario de redes desde diciembre (lo que saldría)
 | Semana | Mar | Mié | Jue |

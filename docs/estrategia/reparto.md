@@ -31,7 +31,7 @@ Ocupados hasta el jue 10 dic con Vietnam, Pueblos T1 y Tatuajes (`plan.md` §3).
 | ✅ | Entrada de blog del largo de Pueblos | vista por Paco («súbelo», 6 nov); en borrador en main | — |
 | 1 | Lote 1 de Filipinas | semana del 30 nov | antes del 8 dic |
 
-## Por hacer el jue 12 nov, a las 15:30 (cuando el largo de Pueblos ya sea público)
+## Por hacer el jue 19 nov, a las 15:30 (cuando el largo de Pueblos ya sea público; cambiado desde el jue 12)
 1. 🌍 Web publica la entrada de blog (quita `borrador`, 0 €). Hay que avisarla: no sale sola.
 2. 🎬 Vídeo pone el comentario fijado con los autores.
 3. Paco pide la indexación en Search Console.

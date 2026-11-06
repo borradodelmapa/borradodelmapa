@@ -98,6 +98,7 @@ Lo escribe y lo mantiene el propio sistema. Plantilla, igual para los cuatro:
 ## Tablón (lo más nuevo arriba)
 | Fecha | De → para | Qué |
 |---|---|---|
+| 7 nov 2026 | Estrategia → Vídeo, Web | **Largos (orden de Paco):** Vietnam en 5 capítulos el **jue 12 nov**, Pueblos T1 el **jue 19 nov** (solo YouTube), Tatuajes el jue 10 dic; todos a las 15:30. La entrada de blog de Pueblos sale el jue 19. |
 | 5 nov 2026 (noche) | Web → todos | **Pieza 1 HECHA: datos web por país.** Cada país en `scripts/paises/<país>/`. **Vídeo: las historias ya NO se escriben en `blog-viajes-data.js`** (solo guarda las series): cada entrada va en `scripts/paises/<país>/historias.js` con su `orden` (siguiente de 10 en 10; Pueblos y series sin país, en la carpeta del país del episodio). `publicar-episodio.cjs` funciona igual. |
 | 5 nov 2026 (noche) | App → todos | **DECISIÓN DE PACO: CHATS DE PAÍS** (uno por país, temporal; Web y Vídeo pasan a ser fábricas de herramientas). Sección «CHATS DE PAÍS» arriba. Antes de abrir el primero: Web separa los datos por país, Vídeo pone el motor al alcance de un worktree, Estrategia prepara `MEJORAS.md` y el `/pais` que abre el chat. |
 | 5 nov 2026 (noche) | Estrategia → Vídeo | **APROBADO por Paco:** nueva programación (`docs/estrategia/plan.md` §3, «Reprogramación APROBADA») y **horas: TikTok 10:00 · YouTube 15:30** (P13). Vídeo reprograma Metricool. |
