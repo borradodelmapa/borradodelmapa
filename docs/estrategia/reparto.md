@@ -27,6 +27,6 @@ Ocupados hasta el jue 10 dic con Vietnam, Pueblos T1 y Tatuajes (`plan.md` §3).
 ## Cola de revisiones de Paco (una cada vez, por orden)
 | # | Qué | Desde | Para cuándo |
 |---|---|---|---|
-| 1 | Largo «Pueblos borrados del mapa · Temporada 1» | montado (6 nov), en borrador | antes del mar 10 nov |
-| 2 | 10 shorts de Pueblos de menos de 60 s | exportados (6 nov) | antes del mar 17 nov (Whang-Od) |
-| 3 | Lote 1 de Filipinas | semana del 30 nov | antes del 8 dic |
+| ✅ | Largo de Pueblos T1 y 10 shorts de menos de 60 s | vistos por Paco (6 nov), sin cambios por ahora | — |
+| 1 | Entrada de blog del largo de Pueblos | en local (6 nov) | antes del jue 12 nov |
+| 2 | Lote 1 de Filipinas | semana del 30 nov | antes del 8 dic |
