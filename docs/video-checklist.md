@@ -1,4 +1,5 @@
-# CHECKLIST DE VÍDEO — FUENTE ÚNICA (versión = fecha-hora de la última fila del registro de cambios, al final)
+# CHECKLIST D| 6 nov 2026 · 23:00 | 🎬 Vídeo (Claude) | Nueva **S5** (Paco, en prueba): música por trozos en documentales largos con pista elegida por Paco. **Gana sobre S3** («el resto sin música») solo en estos vídeos; Pueblos sigue con S3. |
+E VÍDEO — FUENTE ÚNICA (versión = fecha-hora de la última fila del registro de cambios, al final)
 
 **Estado: BASE EN CONSTRUCCIÓN. Este texto se modifica mucho hasta que sea sólido.** Manda este archivo: si choca con
 `docs/video-reglas-y-flujo.md`, la Biblia v2.5 (docx), `docs/salma-narradora-reglas.md` o `docs/estilo-visual.md`, **gana este** y se corrige el otro.
@@ -101,6 +102,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 | S2 | Voces niveladas (Paco −21 dB, Salma −25), respiro 0,85 s + 0,45 s al cambiar de hablante (0,4 s si es el mismo), mezcla final −14 LUFS. | motor |
 | S3 | **Serie «Pueblos borrados del mapa»: sintonía propia** (Paco, 31 oct 2026): `motor/sfx/sintonia-pueblos.mp3` (ElevenLabs Music, plan Creator con licencia comercial; estilo cabecera de documental antropológico de los 80, sin imitar ninguna existente). Suena el principio sobre el mapa y el final bajo la tarjeta (`cfg.sintonia = { src: 'SFX_sintonia-pueblos', db: -8 }`); el resto del vídeo sin música. **También en los vídeos de apertura de país (16:9)** (Paco, 5 nov 2026, Filipinas: «no hemos puesto la música que creamos de documental»): mismo `cfg.sintonia`, suena sobre el primer mapa y bajo la tarjeta. Las otras dos de ElevenLabs se guardan como recursos (`pueblos/comun/sintonia/recursos/`); las de síntesis propia se descartaron («parece de ascensor»). Fuera de esta serie: música solo si el capítulo la pide: original sintetizada (`mkmusic.cjs`, 0 €) o con licencia comprobada y anotada. Coste dicho antes (F5). | manual |
 | S4 | El sonido creado no se presenta como «sonido real del destino». Mantras, oraciones y voces reales: no simularlos. | manual |
+| S5 | **Música por trozos en documentales largos (Paco, 6 nov 2026; EN PRUEBA en el largo de Vietnam, pendiente de que Paco lo oiga):** la música la elige Paco de oído (Claude no oye: no genera sin referencia suya, F6). Se monta con `cfg.musica` (`motor.cjs`): bajo la voz, solo lo que no lleva melodía; la melodía, unas 4 veces y donde Salma calla; primero se oye el lugar y luego entra la música; sin música en lo más duro (hambruna, ejecuciones, la enfermera). Ambiente real de los vídeos de Paco antes que sonidos de otro país (`sfx/vn-*.mp3`). En estos vídeos sustituye a la sintonía (S3). Licencia de la pista comprobada y anotada antes de publicar. Detalle: `docs/musica-y-sonido.md`. | manual |
 
 ## E · Publicación y cuidados
 | ID | Regla | Comprobación |
