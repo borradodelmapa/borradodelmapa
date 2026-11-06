@@ -26,7 +26,7 @@ module.exports = [
     pais: 'Asia',
     formato: '16:9',
     youtube: '5JP5sYEI9Ig',
-    titulo: 'Pueblos borrados del mapa: diez culturas de Asia que desaparecen',
+    titulo: 'Pueblos que se están borrando del mapa: 10 culturas de Asia',
     resumen: 'Diez pueblos de Asia cuyas culturas se están borrando del mapa: la última gran tatuadora de Filipinas, las buceadoras de Jeju, los últimos konyak con la cara tatuada y los nómadas del mar. Quiénes son, qué están perdiendo y cómo llegar con respeto.',
     video: 'pueblos-t1-largo.mp4',
     realidad: 'Documental: lo cuenta Salma con fotos de Wikimedia Commons, vídeos del tsunami con licencia libre (grabados en Ko Lanta, no en Surin) y sonido con licencia libre (autores al final), con fuentes citadas. No hay ninguna imagen de sentineleses. No es un viaje de Paco.',
