@@ -178,7 +178,7 @@ ${li.join('\n')}
 // Capítulos (Y6, 6 nov 2026): s.min = minuto de la sección en el vídeo. Salen en un índice, en cada apartado y en los datos para Google (Y9).
 const aSeg = (m) => m.split(':').reduce((a, n) => a * 60 + Number(n), 0);
 const SALTO_VIDEO = `<script>(function(){var v=document.querySelector("video.bd-video");if(!v)return;
-function ir(s){v.currentTime=s;var p=v.play();if(p&&p.catch)p.catch(function(){});v.scrollIntoView({block:"center"});}
+function ir(s){v.currentTime=s;var p=v.play();if(p&&p.catch)p.catch(function(){});v.scrollIntoView({behavior:"instant",block:"center"});}
 document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]");if(!a)return;e.preventDefault();ir(Number(a.dataset.t));});
 var t=Number(new URLSearchParams(location.search).get("t"));if(t){if(v.readyState>=1)v.currentTime=t;else v.addEventListener("loadedmetadata",function(){v.currentTime=t;},{once:true});}})();</script>
 `;

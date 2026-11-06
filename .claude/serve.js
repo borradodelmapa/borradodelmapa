@@ -14,6 +14,7 @@ function serveRange(req, res, fp, type) {
     const cors = { 'Access-Control-Allow-Origin': '*', 'Accept-Ranges': 'bytes', 'Content-Type': type };
     if (!m) { res.writeHead(200, { ...cors, 'Content-Length': st.size }); fs.createReadStream(fp).pipe(res); return; }
     const a = +m[1], b = m[2] ? Math.min(+m[2], st.size - 1) : st.size - 1;
+    if (a > b) { res.writeHead(416, { ...cors, 'Content-Range': `bytes */${st.size}` }); res.end(); return; }
     res.writeHead(206, { ...cors, 'Content-Range': `bytes ${a}-${b}/${st.size}`, 'Content-Length': b - a + 1 });
     fs.createReadStream(fp, { start: a, end: b }).pipe(res);
   });

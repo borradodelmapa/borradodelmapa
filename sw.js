@@ -1,6 +1,6 @@
 // Service Worker — Cache del shell + network-first para API (P1-7)
 
-const CACHE_NAME = 'salma-v21';
+const CACHE_NAME = 'salma-v22';
 const SHARE_INBOX = 'share-inbox';
 const SHELL_ASSETS = [
   '/',
@@ -91,6 +91,9 @@ self.addEventListener('fetch', (e) => {
 
   // Firebase/Google — no cachear
   if (url.hostname.includes('googleapis.com') || url.hostname.includes('firebaseapp.com') || url.hostname.includes('gstatic.com')) return;
+
+  // Vídeos — directos a la red: el navegador pide trozos para poder saltar a un minuto; desde la caché no se puede saltar y además ocupan mucho
+  if (url.pathname.endsWith('.mp4')) return;
 
   // HTML (navegación) — network-first (siempre carga la versión nueva)
   if (e.request.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html')) {
