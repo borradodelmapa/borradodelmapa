@@ -14,13 +14,13 @@ const H = (slug) => '/blog/viajes/' + slug;
 const LUZON = '/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk';
 
 module.exports = [
-  // Largo 16:9 de la temporada 1 · montaje y capítulos: salma marketing/pueblos/temporada-1 · YouTube, jue 12 nov 2026 a las 15:30
+  // Largo 16:9 de la temporada 1 · montaje y capítulos: salma marketing/pueblos/temporada-1 · YouTube, jue 19 nov 2026 a las 15:30
   {
     orden: 215,
     slug: 'pueblos-borrados-del-mapa-temporada-1',
     borrador: true,
     variosPaises: true,
-    fecha: '2026-11-12',
+    fecha: '2026-11-19',
     serie: 'Pueblos borrados del mapa',
     cap: 'Temporada 1',
     pais: 'Asia',
