@@ -186,3 +186,12 @@
 .bd-visor img { max-width:100%; max-height:calc(100vh - 140px); object-fit:contain; display:block; }
 .bd-visor p { margin:12px 0 0; max-width:760px; color:#fff; font-size:15px; line-height:1.45; text-align:center; }
 .bd-visor-x { position:absolute; top:10px; right:10px; width:48px; height:48px; border:0; border-radius:0; background:#F4630B; color:#fff; font-size:24px; line-height:1; cursor:pointer; }
+
+/* Suscribirse y compartir (7 nov 2026): debajo de cada vídeo y al final del artículo */
+.bd-acciones { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.bd-acciones-fin { margin:28px 0 0; }
+.pg .bd-suscribirse, .bd-compartir { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 16px; font-family:var(--font-cond); font-weight:800; font-size:15px; letter-spacing:.05em; text-transform:uppercase; text-decoration:none; border-radius:0; cursor:pointer; }
+.pg .bd-suscribirse { background:#CC0000; color:#fff; border:1px solid #CC0000; }
+.pg .bd-suscribirse:hover { background:#A80000; border-color:#A80000; }
+.bd-compartir { background:transparent; color:var(--text-primary); border:1px solid var(--border); }
+.bd-compartir:hover { border-color:var(--text-primary); }

@@ -27,6 +27,7 @@ const paginas = execSync('git ls-files -z -- "*.html"', { cwd: ROOT, maxBuffer: 
   .split('\0').filter(Boolean)
   .filter((f) => !CARPETAS_FUERA.test(f) && !NO_SON_PAGINAS.has(f) && fs.existsSync(path.join(ROOT, f)));
 
+const redes = require('./redes.cjs');
 const fallos = [];
 const versiones = {};   // pieza → { versión → [páginas] }
 const PIEZAS = ['styles.css', 'destinos.css', 'paginas.css', 'instalar-app.js'];
@@ -44,6 +45,10 @@ for (const f of paginas) {
   if (!h.includes('instalar-app.js')) fallos.push(`${f}: no lleva el aviso «Instala la app» (instalar-app.js)`);
   if (f !== 'index.html' && !h.includes('app-bottom-bar')) fallos.push(`${f}: no lleva el menú de abajo (app-bottom-bar)`);
   if (!h.includes('favicon')) fallos.push(`${f}: no lleva el favicon`);
+  // Redes en todos los pies y, debajo de cada vídeo del blog, suscribirse y compartir (Paco, 7 nov 2026)
+  if (/class="(pg-footer|destino-footer)[ "]/.test(h)) for (const u of [redes.YOUTUBE, redes.TIKTOK, redes.INSTAGRAM]) if (!h.includes(u)) fallos.push(`${f}: al pie le falta el enlace a ${u}`);
+  if (f.startsWith('blog/viajes/') && h.includes('<video class="bd-video"') && !h.includes(redes.SUSCRIBIRSE)) fallos.push(`${f}: el vídeo no lleva el botón de suscribirse`);
+  if (f.startsWith('blog/viajes/') && !h.includes('bd-compartir')) fallos.push(`${f}: no lleva el botón de compartir`);
 }
 
 // Cada pieza, UNA sola versión en toda la web

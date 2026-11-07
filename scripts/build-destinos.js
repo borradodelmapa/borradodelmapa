@@ -20,6 +20,7 @@ import { fileURLToPath } from 'url';
 import { sinPreciosObj } from './sin-precios.mjs';
 // Barra del país (un país = una casa, 5 nov 2026): la misma pieza que usa el blog
 import { createRequire } from 'module';
+const { REDES_PIE_DESTINOS } = createRequire(import.meta.url)('./redes.cjs');
 const { barraPais, historiasDe } = createRequire(import.meta.url)('./barra-pais.cjs');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -923,6 +924,7 @@ ${activitiesHTML}
       <a href="/legal.html#privacidad">Privacidad</a>
       <a href="/legal.html#cookies">Cookies</a>
     </div>
+    ${REDES_PIE_DESTINOS}
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
 
@@ -1117,6 +1119,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
       <a href="/legal.html#privacidad">Privacidad</a>
       <a href="/legal.html#cookies">Cookies</a>
     </div>
+    ${REDES_PIE_DESTINOS}
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
 
@@ -1245,6 +1248,7 @@ function buildIndexHTML(countriesByContinent) {
       <a href="/legal.html#privacidad">Privacidad</a>
       <a href="/legal.html#cookies">Cookies</a>
     </div>
+    ${REDES_PIE_DESTINOS}
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
 

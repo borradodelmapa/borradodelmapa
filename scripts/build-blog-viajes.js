@@ -18,7 +18,7 @@ const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 196;      // styles.css (= APP_CSS_V de build-destinos.js)
-const BV_CSS_V = 5;     // blog-viajes.css
+const BV_CSS_V = 6;     // blog-viajes.css
 
 // Entradas con `borrador: true` (contenido producido que aún no se publica, L2) solo salen con BORRADORES=1, para enseñarlas en local (4 nov 2026).
 const capsTodas = require('./blog-viajes-data.js');
@@ -33,6 +33,15 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const md = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
 const slugSerie = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const capCorto = (c) => (/^Cap/.test(c.cap) ? 'Cap. ' + c.cap.match(/\d+/)[0] : c.cap);
+
+// Suscribirse y compartir (Paco, 7 nov 2026): debajo de cada vídeo el botón de YouTube y compartir; al final del artículo, compartir. En el móvil abre el menú del teléfono; en el ordenador copia el enlace.
+const { SUSCRIBIRSE, ICONO_YOUTUBE } = require('./redes.cjs');
+const BOTON_SUSCRIBIRSE = `<a class="bd-suscribirse" href="${SUSCRIBIRSE}" target="_blank" rel="noopener">${ICONO_YOUTUBE}<span>Suscríbete en YouTube</span></a>`;
+const BOTON_COMPARTIR = `<button class="bd-compartir" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg><span>Compartir</span></button>`;
+const COMPARTIR_JS = `<script>document.addEventListener("click",function(e){var b=e.target.closest(".bd-compartir");if(!b)return;var d={title:document.querySelector("h1").textContent,url:location.origin+location.pathname};
+if(navigator.share&&matchMedia("(pointer:coarse)").matches){navigator.share(d).catch(function(){});return;}
+var t=b.querySelector("span"),o=t.dataset.o||t.textContent;t.dataset.o=o;if(navigator.clipboard)navigator.clipboard.writeText(d.url).then(function(){t.textContent="Enlace copiado";setTimeout(function(){t.textContent=o;},2000);});});</script>
+`;
 
 // Pie y menú de abajo: copia de una página de blog existente
 const ref = fs.readFileSync(path.join(ROOT, 'blog', 'perder-el-avion.html'), 'utf8');
@@ -310,7 +319,8 @@ ${cabeza}
 `}
     <div class="bd-media">
 ${c.dur ? `      <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
-      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>${c.youtube ? `\n      <p class="bd-ia"><a href="https://youtu.be/${esc(c.youtube)}" target="_blank" rel="noopener">Verlo en YouTube</a></p>` : ''}` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
+      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>
+      <div class="bd-acciones">${BOTON_SUSCRIBIRSE}${BOTON_COMPARTIR}</div>${c.youtube ? `\n      <p class="bd-ia"><a href="https://youtu.be/${esc(c.youtube)}" target="_blank" rel="noopener">Verlo en YouTube</a></p>` : ''}` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
       <div class="bd-video-meta"><span>Lectura</span><span>Escribe Salma</span></div>`}
       <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.')}</p>
     </div>
@@ -321,6 +331,8 @@ ${secciones}
 
 ${galeria(c)}${guia(c)}${ficha}${cierre}
 ${fuentes}${creditos(c)}
+
+      <div class="bd-acciones bd-acciones-fin">${BOTON_COMPARTIR}</div>
 
       <div class="bd-salma">
         <img src="/salma_ai_avatar.png" alt="Salma">
@@ -336,7 +348,7 @@ ${nav}
     </div>
   </div>
 </main>
-${VISOR}${caps16.length ? SALTO_VIDEO : ''}${PIE_Y_MENU}</body>
+${VISOR}${caps16.length ? SALTO_VIDEO : ''}${COMPARTIR_JS}${PIE_Y_MENU}</body>
 </html>
 `;
 }

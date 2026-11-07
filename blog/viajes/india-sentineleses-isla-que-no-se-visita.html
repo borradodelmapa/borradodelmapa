@@ -80,7 +80,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css?v=196">
 <link rel="stylesheet" href="/paginas.css?v=3">
-<link rel="stylesheet" href="/blog-viajes.css?v=5">
+<link rel="stylesheet" href="/blog-viajes.css?v=6">
 </head>
 <body class="pg">
 
@@ -104,6 +104,7 @@
     <div class="bd-media">
       <video class="bd-video" controls playsinline preload="metadata" poster="/blog/viajes/img/india-sentineleses-isla-que-no-se-visita.jpg" src="/blog/viajes/video/india-sentineleses-isla-que-no-se-visita.mp4"></video>
       <div class="bd-video-meta"><span>Vídeo · 1:34</span><span>Narra Salma</span></div>
+      <div class="bd-acciones"><a class="bd-suscribirse" href="https://www.youtube.com/@Borradodelmapa?sub_confirmation=1" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span>Suscríbete en YouTube</span></a><button class="bd-compartir" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg><span>Compartir</span></button></div>
       <p class="bd-ia">Capítulo documental: lo cuenta Salma con imágenes de la isla vista desde lejos (Wikimedia Commons, autores al final), una foto antigua de otros andamaneses y fuentes citadas. No hay ninguna imagen de sentineleses: está prohibido fotografiarlos y no queremos hacerlo. No es un viaje de Paco.</p>
     </div>
 
@@ -264,6 +265,8 @@
       </ul>
     </details>
 
+      <div class="bd-acciones bd-acciones-fin"><button class="bd-compartir" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg><span>Compartir</span></button></div>
+
       <div class="bd-salma">
         <img src="/salma_ai_avatar.png" alt="Salma">
         <div>
@@ -293,6 +296,9 @@ var img=t.tagName==="IMG"?t:t.querySelector("img");im.src=t.getAttribute("href")
 v.hidden=false;document.body.style.overflow="hidden";history.pushState({visor:1},"");});
 v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
+<script>document.addEventListener("click",function(e){var b=e.target.closest(".bd-compartir");if(!b)return;var d={title:document.querySelector("h1").textContent,url:location.origin+location.pathname};
+if(navigator.share&&matchMedia("(pointer:coarse)").matches){navigator.share(d).catch(function(){});return;}
+var t=b.querySelector("span"),o=t.dataset.o||t.textContent;t.dataset.o=o;if(navigator.clipboard)navigator.clipboard.writeText(d.url).then(function(){t.textContent="Enlace copiado";setTimeout(function(){t.textContent=o;},2000);});});</script>
 <footer class="pg-footer">
   <a href="/">Inicio</a>
   <a href="/destinos/">Destinos</a>
@@ -301,6 +307,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});
   <a href="/legal.html#privacidad">Privacidad</a>
   <a href="/legal.html#cookies">Cookies</a>
   <a href="/legal.html#terminos">Términos</a>
+  <div class="pie-redes" style="flex-basis:100%;display:flex;gap:18px;margin-top:6px"><a href="https://www.youtube.com/@Borradodelmapa" target="_blank" rel="noopener" aria-label="Borrado del Mapa en YouTube" title="YouTube" style="color:rgba(244,239,230,.6);line-height:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a><a href="https://www.tiktok.com/@borradodelmapa" target="_blank" rel="noopener" aria-label="Borrado del Mapa en TikTok" title="TikTok" style="color:rgba(244,239,230,.6);line-height:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a><a href="https://www.instagram.com/borradodelmapa/" target="_blank" rel="noopener" aria-label="Borrado del Mapa en Instagram" title="Instagram" style="color:rgba(244,239,230,.6);line-height:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a></div>
 </footer>
 
 <nav class="app-bottom-bar">
