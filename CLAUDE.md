@@ -230,6 +230,7 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
 | SEO (guías públicas, blog, destinos, sitemap, plan por tandas) | `docs/seo.md`, `docs/seo-plan-minimo.md`, `docs/seo-destinos-prioritarios.md` |
 | Premium, límites, precios | `docs/negocio-premium.md` |
 | Google Play: alta, paquete .aab, claves de firma, Play Billing, productos (estado al día) | `docs/play-store-alta.md` |
+| App Store de Apple (iOS): plan sin Mac, Capacitor + Codemagic (aparcado; caso p-mw6d9yjq4t8) | `docs/app-store-alta.md` |
 | "¿Esto ya existe?" — inventario de features | `docs/features-inventario.md` |
 | WhatsApp (F5.x, login, tools, límites) | `docs/whatsapp-f5.md` + `docs/pendientes-cabecera-y-casos.md` |
 | Pendientes antiguos (crítico/importante/deuda) y sus detalles técnicos | `docs/pendientes-criticos-e-importantes.md` |
