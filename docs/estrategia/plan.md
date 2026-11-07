@@ -55,7 +55,7 @@ Horas (APROBADAS, P13): **TikTok 10:00 · YouTube 15:30** (`estudio-horas-2026-1
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
 | 2 nov | — | — | (vie 6) Vietnam 3/5 recortado · se queda |
-| 9 nov | Vietnam 4/5 | Vietnam 5/5 | **Vietnam en 5 capítulos** (largo 16:9; sin subir, falta carátula y exportación final; TikTok sin decidir) |
+| 9 nov | Vietnam 4/5 | Vietnam 5/5 | **Vietnam en 5 capítulos** (largo 16:9; programado en YouTube, id ZTvmL3EV1J4; TikTok sin decidir) |
 | 16 nov | Whang-Od | Sagada | **Pueblos borrados del mapa · Temporada 1** (largo 16:9, 12:53, solo YouTube) |
 | 23 nov | Haenyeo | Konyak | Moken |
 | 30 nov | Sentineleses | Ainu | Mosuo |
