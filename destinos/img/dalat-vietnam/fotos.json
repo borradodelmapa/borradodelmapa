@@ -9,5 +9,37 @@
   "licencia": "CC BY 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Dalat_market,_Vietnam.jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 500,
+   "h": 366,
+   "alt": "La cascada de Datanla",
+   "pie": "La cascada de Datanla.",
+   "autor": "Du Tran",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Datanla_Waterfall_1.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 500,
+   "h": 376,
+   "alt": "Datanla, donde se hace barranquismo",
+   "pie": "Datanla, donde se hace barranquismo.",
+   "autor": "thalling55",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Datanla_Waterfall_2.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 500,
+   "h": 376,
+   "alt": "El mercado nocturno de Đà Lạt",
+   "pie": "El mercado nocturno de Đà Lạt.",
+   "autor": "The Erica Chang",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dalat_night_market_-_panoramio.jpg"
+  }
+ }
 }

@@ -10,5 +10,47 @@
   "url": "https://commons.wikimedia.org/wiki/File:Paddy_fields_in_L%C3%A0o_Cai,_Sa_Pa,_Vietnam,_20240125_1051_3423.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 500,
+   "h": 376,
+   "alt": "Terrazas del valle de Mường Hoa, en Tả Van",
+   "pie": "Terrazas del valle de Mường Hoa, en Tả Van.",
+   "autor": "Andre Hospers",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ta_Van_Muong_Ha_vallei_(84346).jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "Mar de nubes desde la cima del Fansipan",
+   "pie": "Mar de nubes desde la cima del Fansipan.",
+   "autor": "Vivu Vietnam",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fansipan_summit_spiritual_complex_bare_tree_sea_of_clouds_Sa_Pa_Vietnam.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 500,
+   "h": 332,
+   "alt": "Día de mercado en Bắc Hà",
+   "pie": "Día de mercado en Bắc Hà.",
+   "autor": "Peter Olshevsky",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bac_Ha_market_day,_Vietnam.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 500,
+   "h": 376,
+   "alt": "El valle de Mường Hoa",
+   "pie": "El valle de Mường Hoa.",
+   "autor": "Andre Hospers",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ta_Van_Muong_Ha_vallei_(70294).jpg"
+  }
+ }
 }

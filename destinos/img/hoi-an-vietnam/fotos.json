@@ -9,5 +9,37 @@
   "licencia": "CC BY 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Hoi_An_(I).jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 500,
+   "h": 326,
+   "alt": "Una calle del casco antiguo de Hội An",
+   "pie": "Una calle del casco antiguo de Hội An.",
+   "autor": "Steffen Schmitz",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:H%E1%BB%99i_An,_Ancient_Town,_2020-01_CN-05.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "La playa de An Bàng",
+   "pie": "La playa de An Bàng.",
+   "autor": "Mig Gilbert",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:An_B%C3%A0ng_Beach_(40500401802).jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 500,
+   "h": 282,
+   "alt": "Una sastrería de Hội An",
+   "pie": "Una sastrería de Hội An.",
+   "autor": "Vuong Tri Binh",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ants_Silk_Tailoring_shop_of_Hoi_An_in_2015.jpg"
+  }
+ }
 }

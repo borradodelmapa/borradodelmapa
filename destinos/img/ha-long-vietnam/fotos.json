@@ -3,11 +3,53 @@
  "hero": {
   "file": "hero.jpg",
   "w": 1280,
-  "h": 898,
-  "alt": "Ha Long Bay, Vietnam",
-  "autor": "Taewangkorea",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ha_Long_Bay_in_2019.jpg"
+  "h": 576,
+  "alt": "La bahía de Ha Long, desde el ferri a Cát Bà",
+  "autor": "Borrado del Mapa",
+  "licencia": "",
+  "url": "https://www.instagram.com/borradodelmapa/"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 900,
+   "h": 406,
+   "alt": "Barcos de crucero frente a Cát Bà",
+   "pie": "Barcos de crucero frente a Cát Bà.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 500,
+   "h": 376,
+   "alt": "La bahía de Lan Ha",
+   "pie": "La bahía de Lan Ha.",
+   "autor": "Christophe95",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lan_Ha_Bay_20.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "Interior de la cueva Sung Sot",
+   "pie": "Interior de la cueva Sung Sot.",
+   "autor": "Jakub Hałun",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sung_Sot_Cave,_Ha_Long_Bay,_Vietnam,_20240128_1623_3921.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 900,
+   "h": 406,
+   "alt": "Islas frente a la costa de Cát Bà",
+   "pie": "Islas frente a la costa de Cát Bà.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  }
+ }
 }

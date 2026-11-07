@@ -3,11 +3,53 @@
  "hero": {
   "file": "hero.jpg",
   "w": 1280,
-  "h": 960,
-  "alt": "Ninh Binh, Vietnam",
-  "autor": "Nietianfu",
-  "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Okolice_Ninh_Binh.jpg"
+  "h": 576,
+  "alt": "El valle desde el mirador de la cueva Múa",
+  "autor": "Borrado del Mapa",
+  "licencia": "",
+  "url": "https://www.instagram.com/borradodelmapa/"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 900,
+   "h": 406,
+   "alt": "Karst y agua junto a Tam Cốc",
+   "pie": "Karst y agua junto a Tam Cốc.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "Una barca en Tràng An",
+   "pie": "Una barca en Tràng An.",
+   "autor": "Jakub Hałun",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Trang_An_Landscape_Complex,_Ninh_Binh_Province,_Vietnam,_20240202_1353_5165.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 900,
+   "h": 2000,
+   "alt": "La pagoda del mirador de Múa",
+   "pie": "La pagoda del mirador de Múa.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 900,
+   "h": 2000,
+   "alt": "Campos de loto cerca de Tam Cốc",
+   "pie": "Campos de loto cerca de Tam Cốc.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  }
+ }
 }

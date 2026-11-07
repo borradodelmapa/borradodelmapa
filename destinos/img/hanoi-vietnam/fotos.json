@@ -3,11 +3,63 @@
  "hero": {
   "file": "hero.jpg",
   "w": 1280,
-  "h": 683,
-  "alt": "Hanói, Vietnam",
-  "autor": "Quangnlnhe182394",
-  "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Hanoi_skyline_with_Ba_Vi_Mountain.jpg"
+  "h": 576,
+  "alt": "Los restos del B-52 en el lago Hữu Tiệp",
+  "autor": "Borrado del Mapa",
+  "licencia": "",
+  "url": "https://www.instagram.com/borradodelmapa/"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 900,
+   "h": 2000,
+   "alt": "Una calle del casco antiguo de Hanói",
+   "pie": "Una calle del casco antiguo de Hanói.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 900,
+   "h": 2000,
+   "alt": "La entrada del Templo de la Literatura",
+   "pie": "La entrada del Templo de la Literatura.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 900,
+   "h": 2000,
+   "alt": "Las vías del tren entre las casas de Hanói",
+   "pie": "Las vías del tren entre las casas de Hanói.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 900,
+   "h": 1998,
+   "alt": "Café con huevo en el casco antiguo",
+   "pie": "Café con huevo en el casco antiguo.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 900,
+   "h": 2000,
+   "alt": "El B-52 entre las casas del barrio",
+   "pie": "El B-52 entre las casas del barrio.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  }
+ }
 }

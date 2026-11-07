@@ -21,4 +21,11 @@ const REDES_PIE_PAGINAS = `<div class="pie-redes" style="flex-basis:100%;display
 // Pie de las páginas de destino (.destino-footer): misma fila centrada que sus enlaces
 const REDES_PIE_DESTINOS = `<div class="destino-footer-links pie-redes">${iconos}</div>`;
 
-module.exports = { YOUTUBE, TIKTOK, INSTAGRAM, SUSCRIBIRSE, ICONO_YOUTUBE, REDES_PIE_PAGINAS, REDES_PIE_DESTINOS };
+// Botón «Compartir info» (Paco, 7 nov 2026): una sola pieza para toda la web. En el móvil abre el menú del teléfono; en el ordenador copia el enlace.
+const BOTON_COMPARTIR = `<button class="bd-compartir" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg><span>Compartir info</span></button>`;
+const COMPARTIR_JS = `<script>document.addEventListener("click",function(e){var b=e.target.closest(".bd-compartir");if(!b)return;var d={title:document.querySelector("h1").textContent,url:location.origin+location.pathname};
+if(navigator.share&&matchMedia("(pointer:coarse)").matches){navigator.share(d).catch(function(){});return;}
+var t=b.querySelector("span"),o=t.dataset.o||t.textContent;t.dataset.o=o;if(navigator.clipboard)navigator.clipboard.writeText(d.url).then(function(){t.textContent="Enlace copiado";setTimeout(function(){t.textContent=o;},2000);});});</script>
+`;
+
+module.exports = { BOTON_COMPARTIR, COMPARTIR_JS, YOUTUBE, TIKTOK, INSTAGRAM, SUSCRIBIRSE, ICONO_YOUTUBE, REDES_PIE_PAGINAS, REDES_PIE_DESTINOS };

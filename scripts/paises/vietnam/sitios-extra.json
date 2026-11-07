@@ -1,0 +1,225 @@
+{
+  "ha-long-vietnam": {
+    "p": [
+      "La bahía de Ha Long está en la provincia de Quảng Ninh, al noreste de Vietnam: unas 1.969 islas e islotes, la mayoría de caliza, en unos 1.553 km². Es Patrimonio Mundial de la Unesco desde 1994.",
+      "En 2023 el título se amplió al archipiélago de Cát Bà, que forma el borde sureste de la bahía de Lan Ha. La isla de Cát Bà tiene parque nacional desde 1986 y es el único hogar del langur de Cát Bà, uno de los primates más amenazados del mundo, con unos 68 ejemplares en libertad."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: bahía de Ha Long", "u": "https://en.wikipedia.org/wiki/Ha_Long_Bay" },
+      { "t": "Wikipedia: isla de Cát Bà", "u": "https://en.wikipedia.org/wiki/C%C3%A1t_B%C3%A0_Island" },
+      { "t": "Turismo de Vietnam: cueva Sung Sot", "u": "https://seagames31.vietnamtourism.gov.vn/?p=2540" },
+      { "t": "The Maritime Executive: naufragio de julio de 2025", "u": "https://maritime-executive.com/article/tourist-vessel-capsizes-in-ha-long-bay-killing-at-least-37-people" }
+    ],
+    "seguridad": "Seguro; ojo a las tormentas en barco",
+    "que_hacer": [
+      "Crucero con una noche a bordo: El clásico: duermes en la bahía, con kayak y cueva en la mayoría de los programas. Evita hacerlo en un día desde Hanói: llegas agotado y ves poco.",
+      "Kayak por la bahía de Lan Ha: Al sur de Ha Long, con el mismo paisaje de caliza y menos turismo masivo. Viene incluido en muchos cruceros, o se contrata por libre.",
+      "Cueva Sung Sot: En la isla de Bo Hon, con unos 10.000 m². Los franceses la exploraron en 1901 y la llamaron «Gruta de las Sorpresas». Impresionante, pero masificada.",
+      "Isla de Cát Bà como base: La mayor del archipiélago, con parque nacional. Más independiente que el crucero: duermes en tierra y sales a la bahía de día."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Ha Long?", "a": "Dos días con una noche a bordo es lo mínimo razonable. Los cruceros de un día desde Hanói cansan mucho y dejan ver poco." },
+      { "q": "¿Ha Long o Lan Ha?", "a": "El paisaje de caliza es el mismo. Ha Long es el clásico y tiene más turismo; Lan Ha, al sur y junto a Cát Bà, suele ser menos masiva." },
+      { "q": "¿Dónde se duerme?", "a": "Lo habitual es en el propio crucero. Si prefieres ir por libre, en la isla de Cát Bà duermes en tierra y sales a la bahía de día." },
+      { "q": "¿Es seguro el crucero?", "a": "El mayor riesgo es el mal tiempo. En julio de 2025, una tormenta repentina volcó un barco turístico en la bahía y murieron decenas de personas. Mira la previsión antes de salir, pregunta por los chalecos y acepta los cambios si cancelan por tormenta." },
+      { "q": "¿Cuál es la mejor época?", "a": "De octubre a diciembre suele haber cielos más claros. El verano es caluroso y húmedo, y con mal tiempo los cruceros pueden cancelar: deja margen en tu viaje." }
+    ]
+  },
+  "hanoi-vietnam": {
+    "p": [
+      "Hanói es la capital de Vietnam desde hace siglos: en 1010 la corte se trasladó aquí y la ciudad se llamó Thăng Long. En el Templo de la Literatura se abrió en 1076 la primera universidad del país.",
+      "La guerra también se ve en la calle: en el pequeño lago Hữu Tiệp siguen los restos de un B-52 derribado en diciembre de 1972."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: Templo de la Literatura", "u": "https://en.wikipedia.org/wiki/Temple_of_Literature,_Hanoi" },
+      { "t": "Wikipedia: Edicto del traslado de la capital", "u": "https://en.wikipedia.org/wiki/Edict_on_the_Transfer_of_the_Capital" },
+      { "t": "VTV: Hanói prohíbe los tours a la calle del tren", "u": "https://english.vtv.vn/news/hanoi-bans-tours-on-train-street-20250310095147632.htm" },
+      { "t": "Tuổi Trẻ: los cafés reabren tras la redada", "u": "https://news.tuoitre.vn/hanois-train-street-cafes-resume-operations-days-after-police-sweep-media-103251128170957732.htm" },
+      { "t": "Vietcetera: menos trenes por la calle", "u": "https://vietcetera.com/en/hanoi-cuts-train-services-to-famous-train-street-can-it-remain-a-tourist-magnet" }
+    ],
+    "que_hacer": [
+      "Perderte a pie por el casco antiguo: Sus 36 calles llevan el nombre de lo que se vendía en ellas. Madrugar o salir al atardecer ayuda a esquivar el tráfico de motos.",
+      "Templo de la Literatura: Dedicado a Confucio, con patios, estanque y estelas de piedra. Aquí se abrió en 1076 la primera universidad de Vietnam.",
+      "La calle del tren, con cuidado: Las vías pasan entre las casas, pero no es una atracción oficial. Hanói prohibió los tours en marzo de 2025, ha habido redadas policiales y en 2026 se acordó reducir los trenes. Confirma cómo está antes de ir y no te pongas en la vía.",
+      "Comida de calle por la noche: Lo mejor de Hanói se come en un taburete bajo: bún chả, phở y café con huevo.",
+      "Lago Hữu Tiệp: Un lago de barrio con los restos de un B-52 entre las casas. Se ve desde la calle."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Hanói?", "a": "Tres días dan para el casco antiguo, el Templo de la Literatura, el lago Hoàn Kiếm y la comida de calle, con calma." },
+      { "q": "¿Se puede visitar la calle del tren?", "a": "Depende del momento. Los tours están prohibidos desde marzo de 2025 y la policía ha cerrado el paso más de una vez, aunque los cafés han vuelto a abrir. Pregunta en tu alojamiento ese mismo día y respeta el acceso si está cerrado." },
+      { "q": "¿Cuál es la mejor época?", "a": "De octubre a diciembre, con tiempo seco y fresco." },
+      { "q": "¿Sirve como base para el norte?", "a": "Sí. Desde Hanói salen los transportes a Ha Long, Ninh Bình y Sa Pa." }
+    ]
+  },
+  "ninh-binh-vietnam": {
+    "p": [
+      "El paisaje de Tràng An, en la provincia de Ninh Bình, es Patrimonio Mundial de la Unesco desde 2014, por su valor cultural y natural: montañas de caliza, ríos, lagos y marismas.",
+      "El conjunto incluye Tam Cốc y Bích Động al sur y, al norte, Hoa Lư, la antigua capital de Vietnam."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: paisaje de Tràng An", "u": "https://en.wikipedia.org/wiki/Tr%C3%A0ng_An_Scenic_Landscape_Complex" }
+    ],
+    "que_hacer": [
+      "Barca por Tam Cốc: Remeros que te llevan por el río entre arrozales y cuevas. Es la parte sur del conjunto de Tràng An.",
+      "Barca por Tràng An: Paseo de unas dos horas entre montañas y cuevas, con poca sombra: lleva gorra y crema solar. Embarca a unos 7 km de la ciudad de Ninh Bình.",
+      "Subir a la cueva Múa: Unos 500 escalones hasta un mirador con una pagoda, y una de las mejores vistas del valle.",
+      "Bici por los campos de Tam Cốc: Muchos alojamientos prestan o alquilan bici. Es la forma más tranquila de ver los campos y el karst."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Ninh Bình?", "a": "Dos días permiten hacer una barca, subir a Múa y recorrer los campos sin prisa." },
+      { "q": "¿Tam Cốc o Tràng An?", "a": "Las dos están dentro del mismo conjunto. Tam Cốc se combina fácil con los campos y Múa; el paseo de Tràng An dura unas dos horas y pasa por más cuevas." },
+      { "q": "¿Cuál es la mejor época?", "a": "Mayo y junio para el arroz verde, y septiembre para verlo dorado." },
+      { "q": "¿Se puede ir por libre desde Hanói?", "a": "Sí, en bus o en tren, y una vez allí te mueves en bici o moto." }
+    ]
+  },
+  "phong-nha-vietnam": {
+    "descripcion": "Cuevas enormes y selva en el centro de Vietnam. Son Đoòng, considerada la mayor cueva del mundo, solo se visita en una expedición cara y limitada; Paradise Cave y Phong Nha son mucho más accesibles.",
+    "p": [
+      "El parque nacional Phong Nha-Kẻ Bàng es Patrimonio Mundial de la Unesco desde 2003. La cueva de Phong Nha mide unos 7,7 km, y a su primer tramo se entra en barca por el río Son.",
+      "Paradise Cave la encontró un vecino en 2005; exploradores británicos midieron unos 31 km y desde 2010 tiene una pasarela turística de 1,1 km. Son Đoòng la encontró Hồ Khanh, un vecino de la zona, y la midieron científicos británicos en 2009."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: parque nacional Phong Nha-Kẻ Bàng", "u": "https://en.wikipedia.org/wiki/Phong_Nha-K%E1%BA%BB_B%C3%A0ng_National_Park" }
+    ],
+    "que_hacer": [
+      "Paradise Cave: Unos 31 km de galerías, de los que se recorre una pasarela de 1,1 km entre estalactitas enormes.",
+      "Cueva de Phong Nha en barca: Se entra por el río Son y se visitan unos 1.500 m de sus casi 8 km.",
+      "Dark Cave: Unos 5 km de cueva, río arriba por el Son. Se visita con tirolina, kayak y baño de barro: plan divertido más que contemplativo.",
+      "Moto por el parque: La carretera del parque atraviesa selva y montañas, con paradas junto al río y en los restos de la ruta Hồ Chí Minh."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Phong Nha?", "a": "Tres días permiten ver Paradise Cave, Phong Nha y una tarde en moto por el parque." },
+      { "q": "¿Se puede visitar Son Đoòng?", "a": "Solo en expedición organizada, de varios días, con plazas limitadas y precio muy alto. Si no entra en tu viaje, Paradise Cave es la alternativa." },
+      { "q": "¿Cuál es la mejor época?", "a": "De febrero a agosto suele ser más seco. Entre julio y diciembre cae la mayor parte de la lluvia del año." },
+      { "q": "¿Qué hacer si llueve?", "a": "Las cuevas son el plan B natural. Con mucha lluvia, confirma que la barca de Phong Nha está funcionando." }
+    ]
+  },
+  "hue-vietnam": {
+    "p": [
+      "Huế fue la capital de Vietnam desde 1802, con la dinastía Nguyễn. El conjunto de monumentos de Huế es Patrimonio Mundial de la Unesco desde 1993.",
+      "La ciudadela sufrió mucho en la guerra: en 1968, un mes de combates arrasó la ciudad en la ofensiva del Tet."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: monumentos de Huế", "u": "https://en.wikipedia.org/wiki/Complex_of_Hu%E1%BA%BF_Monuments" },
+      { "t": "Wikipedia: batalla de Huế", "u": "https://en.wikipedia.org/wiki/Battle_of_Hu%E1%BA%BF" }
+    ],
+    "que_hacer": [
+      "Ciudad Imperial: El recinto amurallado de los emperadores Nguyễn, con la Puerta del Mediodía como entrada. Calcula al menos tres horas.",
+      "Tumba de Tự Đức: Una de las tumbas imperiales del conjunto, con pabellones y estanque. Tự Đức reinó de 1847 a 1883.",
+      "Paso de Hải Vân: La carretera de montaña entre Huế y Đà Nẵng, con vistas a la costa cuando no hay niebla.",
+      "Barco por el río del Perfume: Un paseo tranquilo por el río que cruza la ciudad, mejor al atardecer."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Huế?", "a": "Dos días dan para la Ciudad Imperial, una tumba y el río. El paso de Hải Vân suma medio día más." },
+      { "q": "¿Cuál es la mejor época?", "a": "De febrero a abril, con tiempo seco y templado. De octubre a diciembre llueve mucho en el centro de Vietnam." },
+      { "q": "¿Qué hacer si llueve?", "a": "La Ciudad Imperial tiene partes cubiertas, y es buen momento para una clase de cocina." },
+      { "q": "¿Qué se come en Huế?", "a": "El plato de la ciudad es el bún bò Huế, una sopa picante de fideos." }
+    ]
+  },
+  "sapa-vietnam": {
+    "p": [
+      "Sa Pa está en la provincia de Lào Cai, a unos 300 km al noroeste de Hanói. Muy cerca, a unos 9 km, está el Fansipan, la montaña más alta de Vietnam.",
+      "El pueblo es muy turístico; el valle de Mường Hoa, con sus terrazas de arroz y sus aldeas, es la razón para venir."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: Sa Pa", "u": "https://en.wikipedia.org/wiki/Sa_Pa" }
+    ],
+    "que_hacer": [
+      "Trekking con noche en una aldea: Dos días por los valles con guía local, durmiendo en casa de una familia. Mejor con guías de las propias aldeas.",
+      "Subir al Fansipan: La montaña más alta de Vietnam, en teleférico o a pie con guía. Con niebla no se ve casi nada: mira la previsión.",
+      "Mercado de Bắc Hà: Mercado de los domingos, a unas horas de Sa Pa, con vendedores de los pueblos de la zona. Pide permiso antes de fotografiar a nadie.",
+      "Caminar de Sa Pa a Tả Van: Se puede hacer por tu cuenta por el valle de Mường Hoa. Con lluvia el barro complica la bajada."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Sa Pa?", "a": "Tres días: uno para llegar y caminar, y dos para el trekking con noche en una aldea." },
+      { "q": "¿Cuál es la mejor época?", "a": "Septiembre y octubre para el arroz dorado, y de marzo a mayo para verlo verde." },
+      { "q": "¿Cómo se contrata un guía?", "a": "Busca guías de las propias aldeas en vez de agencias del pueblo: el dinero se queda en la comunidad." },
+      { "q": "¿Qué pasa si llueve?", "a": "Los senderos se vuelven de barro. Lleva calzado con buen agarre y acorta la ruta si hace falta." }
+    ]
+  },
+  "hoi-an-vietnam": {
+    "p": [
+      "Hội An fue puerto de comerciantes extranjeros entre los siglos XV y XIX, y su casco antiguo es Patrimonio Mundial de la Unesco desde 1999. Su Puente Japonés, de madera y unos 10 metros, se construyó a principios del XVII.",
+      "Desde 2025, Hội An pertenece administrativamente a la ciudad de Đà Nẵng."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: casco antiguo de Hội An", "u": "https://en.wikipedia.org/wiki/H%E1%BB%99i_An_Old_Town" }
+    ],
+    "que_hacer": [
+      "Casco antiguo: Casas de comerciantes, farolillos y el Puente Japonés. Por la mañana temprano hay menos gente; de noche es cuando más luce.",
+      "Playa de An Bàng: A unos kilómetros en bici del centro, para descansar del calor.",
+      "Hacerte ropa a medida: Los sastres son una seña de la ciudad. Compara antes de encargar y deja tiempo para una segunda prueba.",
+      "Bici a Trà Quế: Un pueblo de huertas a las afueras, con clases de cocina."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Hội An?", "a": "Tres días dan para el casco antiguo, una mañana de playa y la bici a Trà Quế." },
+      { "q": "¿Cuál es la mejor época?", "a": "De febrero a mayo, con tiempo seco y calor agradable. En octubre y noviembre son frecuentes las lluvias y las inundaciones." },
+      { "q": "¿Cuándo son los farolillos?", "a": "Se apagan las luces eléctricas la noche 14 de cada mes lunar. Comprueba la fecha antes de planificar." },
+      { "q": "¿Cómo se llega?", "a": "Por el aeropuerto de Đà Nẵng, a unos 30 minutos por carretera." }
+    ]
+  },
+  "ho-chi-minh-vietnam": {
+    "p": [
+      "Ho Chi Minh, la antigua Saigón, es el motor económico de Vietnam. Dos visitas cuentan su guerra: el Museo de los Vestigios de la Guerra y los túneles de Củ Chi.",
+      "La red de Củ Chi llegó a tener unos 121 km. Hoy se visita en dos puntos: Bến Dược, con parte del sistema original, y Bến Đình, con reconstrucciones y túneles ensanchados para turistas."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: Museo de los Vestigios de la Guerra", "u": "https://en.wikipedia.org/wiki/War_Remnants_Museum" },
+      { "t": "Wikipedia: túneles de Củ Chi", "u": "https://en.wikipedia.org/wiki/C%E1%BB%A7_Chi_tunnels" }
+    ],
+    "que_hacer": [
+      "Museo de los Vestigios de la Guerra: Abierto en 1975, cuenta la guerra con fotos, aviones y carros de combate, y muestra las consecuencias del Agente Naranja. Es duro, y cuenta sobre todo la versión vietnamita.",
+      "Túneles de Củ Chi: Medio día desde la ciudad. Bến Dược conserva parte del sistema original; en Bến Đình hay reconstrucciones y tramos ensanchados.",
+      "Calle Bùi Viện de noche: La calle de bares y puestos de comida, con mucho ruido y mucho ambiente.",
+      "Mercado de Bến Thành: El mercado más conocido del centro. Regatea en las compras y vigila tus cosas."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Ho Chi Minh?", "a": "Tres días dan para el museo, Củ Chi y comer bien por el centro." },
+      { "q": "¿Qué túneles de Củ Chi elegir?", "a": "Bến Dược conserva parte del sistema original. Bến Đình está más cerca de la ciudad, con reconstrucciones y túneles ensanchados para turistas." },
+      { "q": "¿Cuál es la mejor época?", "a": "De diciembre a abril, en temporada seca. De mayo a noviembre llueve a menudo por la tarde." },
+      { "q": "¿Qué hacer si llueve?", "a": "Los chaparrones suelen pasar pronto: es buen momento para un café o para el museo." }
+    ]
+  },
+  "dalat-vietnam": {
+    "p": [
+      "Đà Lạt está a unos 1.500 metros de altitud, en la meseta de Langbiang, con temperaturas medias de 14 a 23 °C. El explorador Alexandre Yersin llegó a la zona en 1893 y la ciudad se fundó oficialmente en 1916.",
+      "Su clima explica el café y las flores, y también la Crazy House, una casa de 1990 con forma de árbol gigante."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: Đà Lạt", "u": "https://en.wikipedia.org/wiki/Da_Lat" }
+    ],
+    "que_hacer": [
+      "Ruta de cascadas en moto: Datanla, Elephant y Pongour se pueden unir en un día por carretera de montaña.",
+      "Visitar fincas de café: Los alrededores de Đà Lạt son zona de café: hay fincas y cafeterías para probarlo.",
+      "Barranquismo en Datanla: Rápel y saltos con empresa especializada. Comprueba el equipo y evita los días de lluvia fuerte.",
+      "Mercado nocturno: Comida de calle en el centro, con el bánh tráng nướng como plato estrella."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Đà Lạt?", "a": "Dos días dan para una ruta de cascadas, café y el mercado nocturno." },
+      { "q": "¿Cuál es la mejor época?", "a": "De noviembre a marzo, con tiempo seco y fresco." },
+      { "q": "¿Hace frío?", "a": "Refresca bastante para Vietnam, sobre todo de noche: las medias van de 14 a 23 °C. Lleva algo de abrigo." },
+      { "q": "¿Qué hacer si llueve?", "a": "Cafeterías, la Crazy House y los invernaderos de flores." }
+    ]
+  },
+  "phu-quoc-vietnam": {
+    "p": [
+      "Phú Quốc es la mayor isla de Vietnam, con 575 km². Pertenece a la provincia de An Giang desde 2025, y su temporada seca va de diciembre a marzo.",
+      "La isla es conocida por su salsa de pescado y su pimienta negra. El sur y el oeste están muy urbanizados; el norte y el este conservan más calma."
+    ],
+    "fuentes": [
+      { "t": "Wikipedia: Phú Quốc", "u": "https://en.wikipedia.org/wiki/Ph%C3%BA_Qu%E1%BB%91c" }
+    ],
+    "que_hacer": [
+      "Snorkel en las islas del sur: Salidas en barco de un día con comida. Mejor en temporada seca, con el mar en calma.",
+      "Playa de Bãi Sao: Arena blanca y agua clara en el sureste de la isla, una de las más bonitas.",
+      "Fábricas de salsa de pescado y pimienta: Las dos cosas por las que se conoce la isla, con visitas a las naves y a las plantaciones.",
+      "Mercado nocturno de Dinh Cậu: Marisco a la parrilla junto al puerto. Pregunta el precio antes de pedir."
+    ],
+    "faqs": [
+      { "q": "¿Cuántos días hacen falta en Phú Quốc?", "a": "Tres días dan para una salida en barco, una playa y una tarde por el norte." },
+      { "q": "¿Cuál es la mejor época?", "a": "De diciembre a marzo, en temporada seca. De abril a noviembre es temporada de lluvias." },
+      { "q": "¿Se necesita visado?", "a": "Los españoles pueden entrar en Vietnam sin visado hasta 45 días. Phú Quốc tiene además su propia exención de hasta 30 días para quien llega directamente: confírmalo en fuentes oficiales antes de ir." },
+      { "q": "¿Qué zona elegir?", "a": "Para más servicios, el oeste y el sur. Para más calma, el norte y el este." }
+    ]
+  }
+}

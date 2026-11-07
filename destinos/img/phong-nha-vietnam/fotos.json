@@ -3,11 +3,43 @@
  "hero": {
   "file": "hero.jpg",
   "w": 1280,
-  "h": 960,
-  "alt": "Phong Nha, Vietnam",
-  "autor": "Genghiskhanviet",
-  "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Phongnhakebang6.jpg"
+  "h": 576,
+  "alt": "El río Son, en Phong Nha",
+  "autor": "Borrado del Mapa",
+  "licencia": "",
+  "url": "https://www.instagram.com/borradodelmapa/"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 900,
+   "h": 406,
+   "alt": "Dentro de Paradise Cave",
+   "pie": "Dentro de Paradise Cave.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "La entrada de la cueva de Phong Nha",
+   "pie": "La entrada de la cueva de Phong Nha.",
+   "autor": "Tycho",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Phong_Nha_cave_entrance.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 900,
+   "h": 406,
+   "alt": "Selva y montañas desde la carretera del parque",
+   "pie": "Selva y montañas desde la carretera del parque.",
+   "autor": "Borrado del Mapa",
+   "licencia": "",
+   "url": "https://www.instagram.com/borradodelmapa/"
+  }
+ }
 }

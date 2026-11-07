@@ -23,6 +23,39 @@ import { createRequire } from 'module';
 const { REDES_PIE_DESTINOS } = createRequire(import.meta.url)('./redes.cjs');
 const { barraPais, historiasDe } = createRequire(import.meta.url)('./barra-pais.cjs');
 const { duracionDe } = createRequire(import.meta.url)('./video-info.cjs');
+const { BOTON_COMPARTIR, COMPARTIR_JS } = createRequire(import.meta.url)('./redes.cjs');
+// Maqueta nueva de destino (Paco, 7 nov 2026), EN PRUEBA: solo estas páginas. Lo útil a la vista, fotos en «Qué hacer», preguntas visibles, iconos de línea sin emojis.
+const REDISENO = new Set(['ha-long', 'hanoi', 'ninh-binh', 'phong-nha', 'hue', 'sapa', 'hoi-an', 'ho-chi-minh', 'dalat', 'phu-quoc'].map((x) => x + '-vietnam'));
+const ic = (cuerpo) => `<svg class="dg-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${cuerpo}</svg>`;
+const IC = {
+  dias: ic('<rect x="3" y="4" width="18" height="18"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'),
+  epoca: ic('<circle cx="12" cy="12" r="4.5"/><line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"/><line x1="4.6" y1="19.4" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.4" y2="4.6"/>'),
+  seguridad: ic('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'),
+  llegar: ic('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'),
+  dormir: ic('<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>'),
+  comer: ic('<path d="M3 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6a2 2 0 0 0 2 2h3zm0 0v7"/>'),
+  consejo: ic('<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.1 14c.2-1 .7-1.7 1.4-2.5A4.7 4.7 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.8 1.2 1.5 1.4 2.5"/>'),
+  lluvia: ic('<path d="M23 12a11 11 0 0 0-22 0z"/><path d="M18 19a3 3 0 0 1-6 0v-7"/>'),
+  preguntas: ic('<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12" y2="17.01"/>'),
+};
+const RD_CSS = `<style>
+.destino-rd .dg-ic{display:block;color:var(--accent);flex:0 0 auto}
+.destino-rd .destino-hero--foto{min-height:min(50vh,400px)}.destino-rd .destino-hero-inner{padding-top:60px;padding-bottom:26px}.destino-rd .destino-hero--foto .destino-title{font-size:clamp(38px,8vw,72px)}
+.destino-rd .destino-content--wide .destino-facts{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:26px}
+.destino-rd .destino-content--wide .destino-fact{display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center;text-align:left;padding:12px 14px}
+.destino-rd .destino-fact-icon{grid-row:1/3;margin:0;font-size:0}.destino-rd .destino-fact-label{margin:0;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.1em;color:var(--text-muted)}.destino-rd .destino-fact-value{margin:0;font-size:16px;font-weight:700;color:var(--text-primary)}.destino-rd .destino-fact-value span{color:inherit;background:none;border:0;padding:0;font:inherit}
+@media(min-width:700px){.destino-rd .destino-content--wide .destino-facts{grid-template-columns:repeat(3,1fr)}}
+.destino-rd .bd-acc{margin:0 0 24px}.dg-fin{margin:30px 0 0;text-align:center}
+.bd-compartir{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;background:var(--accent);color:var(--text-on-accent);border:1px solid var(--accent);border-radius:0;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}.bd-compartir:hover{background:var(--dorado2);border-color:var(--dorado2)}
+.dg-sec-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,34px);line-height:1;text-transform:uppercase;margin:0 0 14px;color:var(--text-primary)}
+.dg-mapa{margin:30px 0}.dg-mapa .destino-map{height:260px}
+.dg-grid{display:grid;gap:12px;margin:0 0 34px}@media(min-width:700px){.dg-grid{grid-template-columns:1fr 1fr}}
+.dg-c{border:1px solid var(--border);background:var(--bg-row);padding:16px}.dg-c h3{display:flex;align-items:center;gap:10px;font-family:var(--font-cond);font-weight:800;font-size:21px;line-height:1.1;text-transform:uppercase;margin:0 0 10px;color:var(--text-primary)}
+.dg-c p{font-size:16px;line-height:1.6;color:var(--text-secondary);margin:0 0 8px}.dg-c p:last-child{margin-bottom:0}.dg-c strong{color:var(--text-primary)}.dg-c--d{border-left:4px solid var(--accent);background:rgba(244,99,11,.08)}.dg-c--a{grid-column:1/-1}
+.dg-niveles{display:grid;gap:8px;margin:0}@media(min-width:700px){.dg-niveles{grid-template-columns:repeat(3,1fr)}}.dg-niveles div{border-top:2px solid var(--accent);padding-top:8px}.dg-niveles dt{font-family:var(--font-cond);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 3px}.dg-niveles dd{margin:0;font-size:16px;line-height:1.5;color:var(--text-secondary)}
+.dg-faq{margin:0 0 34px;padding:22px 18px;border:1px solid var(--accent);background:var(--bg-row)}.dg-faq .dg-sec-h{display:flex;align-items:center;gap:12px}.dg-faq .dg-ic{width:28px;height:28px}
+.dg-q{padding:14px 0;border-top:1px solid var(--border)}.dg-q h3{font-size:18px;line-height:1.3;font-weight:700;margin:0 0 6px;color:var(--text-primary)}.dg-q p{font-size:16px;line-height:1.6;margin:0;color:var(--text-secondary)}
+</style>`;
 const esDoc = (x) => x.formato === '16:9'; // documental horizontal: tarjeta a lo ancho, con la portada entera
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -400,7 +433,8 @@ function loadFotos(slug) {
   return null;
 }
 function fotoCredito(f) {
-  return `Foto: <a href="${escapeHTML(f.url)}" target="_blank" rel="noopener nofollow">${escapeHTML(f.autor)}</a> · ${escapeHTML(f.licencia)}`;
+  // Fotos nuestras: «Borrado del Mapa» enlaza a Instagram, sin licencia (Paco, 7 nov 2026)
+  return `Foto: <a href="${escapeHTML(f.url)}" target="_blank" rel="noopener${f.licencia ? ' nofollow' : ''}">${escapeHTML(f.autor)}</a>${f.licencia ? ` · ${escapeHTML(f.licencia)}` : ''}`;
 }
 
 function buildStaticItinerary(route, appSlug, fotos) {
@@ -572,11 +606,47 @@ function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
   return `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>`;
 }
 
+// ── Maqueta nueva: mapa y ficha a la vista ──────────────────
+function mapaHTML(coords, hrefGuiaApp) {
+  return `<!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
+    <a class="destino-map-link" ${hrefGuiaApp ? `href="${hrefGuiaApp}" title="Abrir la guía con su mapa"` : `href="https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}" target="_blank" rel="noopener" title="Abrir en Google Maps"`}>
+      <div id="destino-map" class="destino-map"></div>
+    </a>
+    <script>
+    window.addEventListener('load', function() {
+      if (typeof L === 'undefined') return;
+      // Mapa fijo, solo para situarte — sin interacción, para que la rueda del
+      // ratón o un dedo sobre el mapa no atrape el scroll de la página.
+      var m = L.map('destino-map', {
+        zoomControl: false, attributionControl: false, scrollWheelZoom: false,
+        dragging: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false
+      }).setView([${coords.lat}, ${coords.lng}], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(m);
+      L.marker([${coords.lat}, ${coords.lng}]).addTo(m);
+    });
+    </script>`;
+}
+function rdFicha(dest, faqs, coords, hrefGuiaApp) {
+  const e = escapeHTML, n = dest.nombre, d = dest.donde_dormir || {};
+  return `${coords ? `<section class="dg-mapa"><h2 class="dg-sec-h">Dónde está</h2>${mapaHTML(coords, hrefGuiaApp)}</section>` : ''}
+    <h2 class="dg-sec-h">Para organizarlo</h2>
+    <div class="dg-grid">
+      <section class="dg-c"><h3>${IC.llegar}Cómo llegar</h3><p>${e(dest.como_llegar)}</p><a class="destino-cta-subtle" href="/?go=chat">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a></section>
+      <section class="dg-c"><h3>${IC.comer}Dónde comer</h3><p>${e(dest.donde_comer)}</p></section>
+      <section class="dg-c dg-c--a"><h3>${IC.dormir}Dónde dormir</h3><dl class="dg-niveles"><div><dt>Mochilero</dt><dd>${e(d.mochilero || '')}</dd></div><div><dt>Rango medio</dt><dd>${e(d.medio || '')}</dd></div><div><dt>Comfort</dt><dd>${e(d.comfort || '')}</dd></div></dl><a class="destino-cta-subtle" href="/?go=chat">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a></section>
+      <section class="dg-c dg-c--d"><h3>${IC.consejo}Consejo local</h3><p>${e(dest.consejo_local)}</p></section>
+      <section class="dg-c"><h3>${IC.lluvia}Plan B si llueve</h3><p>${e(dest.plan_b_lluvia)}</p></section>
+    </div>
+    <section class="dg-faq" id="preguntas"><h2 class="dg-sec-h">${IC.preguntas}Preguntas sobre ${e(n)}</h2>${faqs.map((f) => `<div class="dg-q"><h3>${e(f.q)}</h3><p>${e(f.a)}</p></div>`).join('')}</section>`;
+}
+
 // ── HTML Template ────────────────────────────────────────────
 
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
-  const faqs = generateFAQs(dest, countryName);
+  const rd = REDISENO.has(slug);
+  const extraR = rd ? DESTINOS_EXTRA[slug] : null;
+  const faqs = (extraR && extraR.faqs) || generateFAQs(dest, countryName);
   let coords = COORDS[`${countryCode}:${dest.id}`] || (typeof dest.lat === 'number' && typeof dest.lng === 'number' ? { lat: dest.lat, lng: dest.lng } : null);
   // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
   if (!coords && route && route.stops) {
@@ -646,7 +716,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       ${extra.diario ? `<a class="dq-diario" href="${escapeHTML(extra.diario.u)}">${extra.diario.img ? `<img src="${escapeHTML(extra.diario.img)}" alt="" loading="lazy">` : ''}<span><em>Diario de viaje</em><strong>${escapeHTML(extra.diario.t)}</strong></span></a>` : ''}
       <p class="dq-fuentes">Fuentes: ${(extra.fuentes || []).map(f => `<a href="${escapeHTML(f.u)}" target="_blank" rel="noopener">${escapeHTML(f.t)}</a>`).join(' · ')}</p>
     </section>` : '';
-  const qhCards = (dest.que_hacer || []).map((a, n) => {
+  const qhCards = ((extraR && extraR.que_hacer) || dest.que_hacer || []).map((a, n) => {
     const f = qhFotos[n];
     const [tit, ...resto] = String(a).split(/:\s/);
     const desc0 = resto.join(': '); const desc = desc0 ? desc0.charAt(0).toUpperCase() + desc0.slice(1) : '';
@@ -724,7 +794,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   <link rel="stylesheet" href="/destinos.css?v=${DESTINOS_CSS_V}">
   <script src="/country-utils.js"></script>
 </head>
-<body class="destino-page">
+<body class="destino-page${rd ? ' destino-rd' : ''}">
 
   <!-- NAV: barra del país (si el país la tiene) o la miga de siempre -->
   ${barraPais(countryName, 'sitios', [['Blog de viajes', '/blog/'], ['Destinos', '/destinos/'], [countryName, `/destinos/${slugify(countryName)}.html`], [dest.nombre]]) || `<nav class="destino-nav-bar">
@@ -754,7 +824,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
     <img class="destino-hero-img" src="/destinos/img/${slug}/${heroFoto.file}" alt="${escapeHTML(heroFoto.alt)}" width="${heroFoto.w}" height="${heroFoto.h}" fetchpriority="high" decoding="async">
     <div class="destino-hero-shade"></div>
     <div class="destino-hero-inner">
-      <span class="destino-badge">${typeBadge(dest.tipo)}</span>
+      <span class="destino-badge">${rd ? typeBadge(dest.tipo).replace(/^\S+\s/, '') : typeBadge(dest.tipo)}</span>
       <h1 class="destino-title">${escapeHTML(h1Text)}</h1>
       <p class="destino-subtitle">${escapeHTML(dest.region || '')} · ${escapeHTML(countryName)}</p>
       ${conGuia ? `<a class="destino-hero-cta" href="#guia">Ver la guía de ${nDias} ${nDias === 1 ? 'día' : 'días'} ↓</a>` : ''}
@@ -778,52 +848,37 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   <main class="destino-content${heroFoto ? ' destino-content--wide' : ''}">
   ${heroFoto ? '<div class="destino-layout"><aside class="destino-side">' : ''}
 
-    ${coords ? `<!-- MAPA — centrado en el destino, OpenStreetMap (gratis, sin API key) -->
-    <a class="destino-map-link" ${hrefGuiaApp ? `href="${hrefGuiaApp}" title="Abrir la guía con su mapa"` : `href="https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}" target="_blank" rel="noopener" title="Abrir en Google Maps"`}>
-      <div id="destino-map" class="destino-map"></div>
-    </a>
-    <script>
-    window.addEventListener('load', function() {
-      if (typeof L === 'undefined') return;
-      // Mapa fijo, solo para situarte — sin interacción, para que la rueda del
-      // ratón o un dedo sobre el mapa no atrape el scroll de la página.
-      var m = L.map('destino-map', {
-        zoomControl: false, attributionControl: false, scrollWheelZoom: false,
-        dragging: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false
-      }).setView([${coords.lat}, ${coords.lng}], 11);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(m);
-      L.marker([${coords.lat}, ${coords.lng}]).addTo(m);
-    });
-    </script>` : ''}
+    ${!rd && coords ? mapaHTML(coords, hrefGuiaApp) : ''}
   ${heroFoto ? `${hrefGuiaApp ? `<a class="destino-side-cta" href="${hrefGuiaApp}"><strong>${guiaPais ? escapeHTML(guiaPais.nombre) : 'Esta guía en tu móvil'}</strong><span>${guiaPais ? (guiaPasa ? 'La guía que pasa por aquí, con' : `Nuestra guía de ${escapeHTML(countryName)}, con`) : 'Con'} mapa interactivo, para guardarla y llevarla en el viaje. Gratis con cuenta.</span><em>ABRIR LA GUÍA →</em></a>` : `<a class="destino-side-cta" href="/?go=chat"><strong>Tu guía de ${escapeHTML(dest.nombre)}</strong><span>Dile a Salma cuántos días tienes y te la hace con mapa.</span><em>HAZTE LA TUYA →</em></a>`}
   </aside><div class="destino-main">` : ''}
 
     <!-- Descripción -->
-    <p class="destino-desc">${escapeHTML(dest.descripcion)}</p>
+    <p class="destino-desc">${escapeHTML((extraR && extraR.descripcion) || dest.descripcion)}</p>${rd ? `
+    <div class="bd-acc">${BOTON_COMPARTIR}</div>` : ''}
     ${route && !heroFoto ? `<a class="destino-jump" href="#guia">Ver la guía de ${route.duration_days || ''} días ↓</a>` : ''}
 
     <!-- Datos rápidos -->
     <div class="destino-facts">
       <div class="destino-fact">
-        <span class="destino-fact-icon">📅</span>
+        <span class="destino-fact-icon">${rd ? IC.dias : '📅'}</span>
         <span class="destino-fact-label">DÍAS RECOMENDADOS</span>
         <span class="destino-fact-value">${dest.dias_recomendados || '3-5'}</span>
       </div>
       <div class="destino-fact">
-        <span class="destino-fact-icon">🗓️</span>
+        <span class="destino-fact-icon">${rd ? IC.epoca : '🗓️'}</span>
         <span class="destino-fact-label">MEJOR ÉPOCA</span>
         <span class="destino-fact-value">${escapeHTML(dest.mejor_epoca || 'Todo el año')}</span>
       </div>
       <div class="destino-fact">
-        <span class="destino-fact-icon">🔒</span>
+        <span class="destino-fact-icon">${rd ? IC.seguridad : '🔒'}</span>
         <span class="destino-fact-label">SEGURIDAD</span>
-        <span class="destino-fact-value">${security}</span>
+        <span class="destino-fact-value">${rd ? escapeHTML((extraR && extraR.seguridad) || (dest.alerta_seguridad ? 'Precaución' : 'Seguro')) : security}</span>
       </div>
     </div>
 
     ${route ? buildStaticItinerary(route, slug, fotos) : ((sobreHTML || queHacerHTML) ? DQ_CSS + sobreHTML + queHacerHTML : '')}
 
-    <!-- Más info en acordeón -->
+    ${rd ? rdFicha(dest, faqs, coords, hrefGuiaApp) : `<!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
@@ -893,7 +948,7 @@ ${activitiesHTML}
         </div>
       </details>
 
-    </div>
+    </div>`}
 
     <!-- GUÍAS DEL PAÍS — enlazado interno a las guías públicas -->
     ${guiasDelPais(countrySlug, countryName, dest.nombre)}
@@ -902,9 +957,9 @@ ${activitiesHTML}
     ${masDestinos(siblings, countrySlug, countryName, !(GUIAS_POR_PAIS[countrySlug] || []).length)}
 
     <!-- SHARE -->
-    <div class="destino-share-wrap">
+    ${rd ? `<div class="dg-fin">${BOTON_COMPARTIR}</div>` : `<div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
-    </div>
+    </div>`}
 
     <!-- SALMA — solo saludo como gancho, sin chat interactivo anónimo: para
          seguir hablando con ella hace falta entrar (gratis), como en el resto
@@ -939,7 +994,7 @@ ${activitiesHTML}
   </script>
   <script src="/destinos/destinos.js"${heroFoto ? " defer" : ""}></script>
 
-  ${BOTTOM_NAV}
+  ${rd ? RD_CSS + COMPARTIR_JS + '\n  ' : ''}${BOTTOM_NAV}
 <script src="/instalar-app.js?v=2" defer></script>
 </body>
 </html>`;

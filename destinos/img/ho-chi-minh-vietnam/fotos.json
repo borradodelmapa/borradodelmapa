@@ -10,5 +10,47 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City,_Notre-Dame_Basilica,_2020-01_CN-01.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 500,
+   "h": 372,
+   "alt": "El Museo de los Vestigios de la Guerra",
+   "pie": "El Museo de los Vestigios de la Guerra.",
+   "autor": "Prenn",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:War_Remnants_Museum,_HCMC,_front.JPG"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 500,
+   "h": 376,
+   "alt": "Un sendero en Củ Chi",
+   "pie": "Un sendero en Củ Chi.",
+   "autor": "Alan & Flora Botting",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cu_Chi_Tunnels_33.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "Un puesto de comida en la calle Bùi Viện",
+   "pie": "Un puesto de comida en la calle Bùi Viện.",
+   "autor": "Bahnfrend",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bui_Vien_Street,_Ho_Chi_Minh_City,_at_night,_2023_(02).jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 500,
+   "h": 362,
+   "alt": "El mercado de Bến Thành",
+   "pie": "El mercado de Bến Thành.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ben_Thanh,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_01.JPG"
+  }
+ }
 }

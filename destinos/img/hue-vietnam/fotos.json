@@ -9,5 +9,47 @@
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Th%C3%A0nh_ph%E1%BB%91_Hu%E1%BA%BF_nh%C3%ACn_t%E1%BB%AB_tr%C3%AAn_cao_(2).jpg"
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "La Puerta del Mediodía, en la Ciudad Imperial",
+   "pie": "La Puerta del Mediodía, en la Ciudad Imperial.",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vietnam,_Hue,_Imperial_City_of_Hue,_The_Meridian_Gate_2.jpg"
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "La tumba de Tự Đức",
+   "pie": "La tumba de Tự Đức.",
+   "autor": "CEphoto, Uwe Aranas",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hue_Vietnam_Tomb-of-Emperor-Tu-Duc-05.jpg"
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 500,
+   "h": 334,
+   "alt": "La carretera del paso de Hải Vân",
+   "pie": "La carretera del paso de Hải Vân.",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hai_Van_Pass,_Vietnam,_View_northwards.jpg"
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 500,
+   "h": 376,
+   "alt": "El río del Perfume",
+   "pie": "El río del Perfume.",
+   "autor": "Barrysphere",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Perfume-River-Hue.jpg"
+  }
+ }
 }
