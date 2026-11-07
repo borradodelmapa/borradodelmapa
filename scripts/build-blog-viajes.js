@@ -102,15 +102,26 @@ function atribuciones(c) {
 }
 // Entrada de varios episodios (largo de temporada, 6 nov 2026): c.fotosEpisodios = carpeta de la serie; cada foto es 'episodio/W39' y lleva el autor de SU episodio.
 const atrDe = (c, id) => { const [ep, n] = id.split('/'); return atribuciones({ creditosDe: c.fotosEpisodios + '/' + ep })[n]; };
+// Fotos de Paco y de archivo en la misma entrada (largo de Vietnam, 7 nov 2026): c.fotosArchivo = carpeta con ATRIBUCIONES.txt (id · archivo · licencia · autor · url);
+// esas fotos se escriben 'a/<id>' y llevan autor; las demás salen de c.fotosDe, sin autor. c.autores corrige los nombres que Wikimedia da mal.
+function archivoDe(c) {
+  const atr = {};
+  fs.readFileSync(path.join(MKT, c.fotosArchivo, 'ATRIBUCIONES.txt'), 'utf8').split(/\r?\n/).filter(Boolean).forEach((l) => {
+    const p = l.split(' · '), id = p[0], autor = (c.autores && c.autores[id]) || (/^Unknown author/i.test(p[3] || '') ? '' : (p[3] || '').trim());
+    atr[id] = { autor, lic: p[2] === 'Public domain' ? 'Dominio público' : p[2], u: p[p.length - 1] };
+  });
+  return atr;
+}
 // Fotos de la entrada (c.fotos y s.foto, 1 nov 2026): se copian de <creditosDe>/fotos/ a blog/viajes/img/<slug>/ a 1200 px como mucho (solo la primera vez)
 const FF = path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe');
 // Diarios con fotos propias (Tailandia, Vietnam): c.fotosDe = { prefijo: lista } con las listas id|ruta de salma marketing (rutas relativas a D:/salma-movil
 // o a c.fotosBase); el id de la foto es prefijo + id de la lista (p. ej. 'k22' = línea 22 de la lista de 'k'). Sin pie de autor: son de Paco.
 function origen(c, id) {
+  if (c.fotosArchivo && id.startsWith('a/')) { const b = path.join(MKT, c.fotosArchivo, id.slice(2)); return fs.existsSync(b + '.jpg') ? b + '.jpg' : b + '.png'; }
   if (c.fotosEpisodios) { const [ep, n] = id.split('/'), d = path.join(MKT, c.fotosEpisodios, ep, 'fotos'), g = path.join(d, n + '-g.jpg'); return fs.existsSync(g) ? g : path.join(d, n + '.jpg'); }
   if (!c.fotosDe) return path.join(MKT, c.creditosDe, 'fotos', id + '.jpg');
   const pre = Object.keys(c.fotosDe).sort((a, b) => b.length - a.length).find((p) => id.startsWith(p));
-  const L = Object.fromEntries(fs.readFileSync(path.join(ROOT, c.fotosDe[pre]), 'utf8').split('\n').filter(Boolean).map((l) => l.trim().split('|')));
+  const L = Object.fromEntries(fs.readFileSync(path.join(fs.existsSync(path.join(ROOT, c.fotosDe[pre])) ? ROOT : MKT, c.fotosDe[pre]), 'utf8').split('\n').filter(Boolean).map((l) => l.trim().split('|')));
   const rel = L[id.slice(pre.length)];
   if (!rel) throw new Error('La foto ' + id + ' no está en ' + c.fotosDe[pre]);
   return /^[A-Z]:/.test(rel) ? rel : (c.fotosBase || 'D:/salma-movil/') + rel;
@@ -133,8 +144,8 @@ function foto(c, id) {
     const r = require('child_process').spawnSync(FF, ['-v', 'error', '-y', '-i', origen(c, id), '-vf', "scale='min(1200,iw)':-2", '-q:v', '4', dest]);
     if (r.status) throw new Error('No puedo preparar la foto ' + id + ' de ' + c.slug + ': ' + r.stderr);
   }
-  if (c.fotosDe) return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: '' };
-  const a = (c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
+  if (c.fotosDe && !id.startsWith('a/')) return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: '' };
+  const a = (c.fotosArchivo ? archivoDe(c)[id.slice(2)] : c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
   return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
 }
 const figura = (c, [id, pie]) => { const f = foto(c, id); return `      <figure class="bd-fig">
@@ -154,6 +165,20 @@ ${c.fotos.galeria.map(([id, pie]) => { const f = foto(c, id); return `        <f
 }
 // c.creditosDe = carpeta del episodio: autores de las fotos que salen en el vídeo (el tiempos.json más reciente de salida/) y en la entrada
 function creditos(c) {
+  if (c.fotosArchivo) { // todas las fotos de archivo que salen en el vídeo (tiempos.json) o en la entrada, más lo que no es una foto suelta (c.creditosExtra = [[autor, licencia, url]])
+    const atr = archivoDe(c), enVideo = JSON.parse(fs.readFileSync(path.join(MKT, c.tiempos), 'utf8')).flatMap((b) => b.shots || []).map((x) => (x.match(/\/archivo\/([^/]+)\.(?:jpe?g|png)$/) || [])[1]);
+    const enBlog = [c.fotos.portada, ...c.secciones.filter((s) => s.foto).map((s) => s.foto[0]), ...c.fotos.galeria.map((g) => g[0])].filter((id) => id.startsWith('a/')).map((id) => id.slice(2));
+    const filas = [...new Set([...enVideo, ...enBlog].filter((id) => atr[id]))].map((id) => [atr[id].autor || 'Autor desconocido', atr[id].lic, atr[id].u]).concat(c.creditosExtra || []);
+    return `
+
+    <details class="bd-src">
+      <summary>Fotos y vídeos: autores y licencias</summary>
+      <p>${esc(c.creditosIntro)}</p>
+      <ul>
+${filas.map(([a, l, u]) => `        <li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(a)}</a> · ${esc(l)}</li>`).join('\n')}
+      </ul>
+    </details>`;
+  }
   if (!c.creditosDe) return '';
   const dir = path.join(MKT, c.creditosDe), sal = path.join(dir, 'salida');
   const t = !fs.existsSync(sal) ? null : fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
@@ -217,7 +242,7 @@ function pagina(c) {
   ].filter(Boolean).map((o) => `<script type="application/ld+json">\n${JSON.stringify(o, null, 1)}\n</script>`).join('\n');
 
   const pasos = serieCaps.length > 1 ? `    <nav class="bd-steps" aria-label="Capítulos de ${esc(c.serie)}">\n${serieCaps.map((x) =>
-    `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Especial' ? 'ES' : (/^Temporada/.test(x.cap) ? 'T' : '') + x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
+    `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Documental' ? 'DOC' : x.cap === 'Especial' ? 'ES' : (/^Temporada/.test(x.cap) ? 'T' : '') + x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
   const stats = c.cifras ? `    <div class="bd-stats">\n${c.cifras.map(([n, t]) => `      <div class="bd-stat"><b>${esc(n)}</b><span>${esc(t)}</span></div>`).join('\n')}\n    </div>\n` : '';
   // s.foto = [id, pie]: foto tras el primer párrafo · c.cita = { tras: nº de sección, t, de }: frase destacada en grande
   const cita = (i) => c.cita && c.cita.tras === i + 1 ? `\n    <blockquote class="bd-cita"><p>${md(c.cita.t)}</p>${c.cita.de ? `<cite>${esc(c.cita.de)}</cite>` : ''}</blockquote>` : '';

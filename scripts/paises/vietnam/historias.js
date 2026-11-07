@@ -1,5 +1,6 @@
 // Historias del blog de vietnam (una entrada por objeto). Las junta scripts/blog-viajes-data.js; «orden» = orden en el blog.
 const W = (t, u) => ({ t, u });
+const H = (slug) => '/blog/viajes/' + slug;
 
 module.exports = [
   {
@@ -182,5 +183,110 @@ module.exports = [
     ],
     nota: 'Las cifras de la reforma agraria y de Nghệ An son estimaciones muy discutidas: damos el rango que citan los historiadores.',
     cierre: null,
+  },
+  // Largo 16:9 · montaje: salma marketing/india/motor/vietnam-largo-v2.cjs · minutos: vietnam/largo/capitulos-v2.txt · YouTube, jue 12 nov 2026 a las 15:30 (poner c.youtube cuando sea público)
+  {
+    orden: 115,
+    slug: 'historia-de-vietnam-2000-anos-sin-rendirse',
+    fecha: '2026-11-07',
+    destino: ['vietnam', 'Vietnam'],
+    serie: 'Vietnam',
+    cap: 'Documental',
+    pais: 'Vietnam',
+    formato: '16:9',
+    titulo: 'Historia de Vietnam: 2.000 años sin rendirse',
+    resumen: 'La historia de Vietnam contada en moto, por los lugares donde ocurrió: China, los mongoles, los Ming, Francia, Japón, Estados Unidos y otra vez China. Todos entraron y todos acabaron marchándose.',
+    video: 'vietnam-2000-anos-largo.mp4',
+    realidad: 'Basado en un viaje real: las fotos y vídeos del recorrido son de Paco. La historia va con fotos, grabados y vídeos de archivo con licencia libre; las animaciones y recreaciones llevan rótulo. Autores y fuentes, al final de la página.',
+    fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
+    fotosArchivo: 'salma marketing/vietnam/largo/archivo',
+    tiempos: 'salma marketing/vietnam/largo/salida/vietnam-largo-v2-tiempos.json',
+    autores: { 'hcm-3': 'Tycho', 'hue68-3': 'W. A. Parks, USMC', 'hue68-5': 'J. T. Harlan, USMC', 'hue68-6': 'J. L. Harlan, USMC', 'hue68-1': 'USMC Archives', 'francia-8': 'M. Vuillier, según croquis de J. Locquart', 'guerra-12': 'R. W. Trewyn', 'guerra79-5': 'Adam Jones', 'guerra79-3': 'Viethavvh, Wikipedia en vietnamita', 'bachdang-2': 'Goodmorninghpvn, Wikipedia en vietnamita', 'bachdang-6': 'Autor desconocido, pueblo de Đông Hồ', 'lamson-10': 'Greg Willis', 'lamson-8': 'Rolf Müller', 'hue68-12': 'Gary Todd', 'hue68-15': 'Gary Todd', 'hue68-18': 'Gary Todd', 'francia-23': 'Gobierno de Vietnam', 'dienbien-11': 'Ejército Popular de Vietnam', 'dienbien-8': 'Naciones Unidas', 'guerra-13': 'U.S. Navy', 'guerra-14': 'U.S. Navy', 'linebacker-10': 'Robert LeRoy Knudsen', 'guerra-8': 'U.S. Marine Corps', 'guerra-3': 'U.S. Marine Corps' },
+    creditosIntro: 'Las fotos y los vídeos del viaje son de Paco. El archivo viene de Wikimedia Commons y archive.org, con licencia libre. El clip de las hermanas Trưng y la imagen de portada parten de la ilustración de Phucam1999 y se comparten con la misma licencia. Gracias a sus autores:',
+    creditosExtra: [
+      ['Vídeo de archivo: Fuerza Aérea de EE. UU.', 'Dominio público', 'https://commons.wikimedia.org/wiki/File:The_B52_Vietnam_1968.webm'],
+      ['Vídeo de archivo: Ejército de EE. UU.', 'Dominio público', 'https://archive.org/details/LC-52426'],
+      ['Vídeo de archivo: Armada de EE. UU.', 'Dominio público', 'https://archive.org/details/NPC-35118'],
+      ['Bombardero en vuelo: Fuerza Aérea de EE. UU.', 'Dominio público', 'https://commons.wikimedia.org/wiki/File:B-52D(061127-F-1234S-017).jpg'],
+    ],
+    fotos: { portada: 'a/trung-8', posicion: '50% 22%', galeria: [
+      ['613', 'La costa de Hạ Long, donde desemboca el Bạch Đằng.'],
+      ['036', 'Un calígrafo en el Templo de la Literatura de Hanói.'],
+      ['a/lamson-8', 'El lago Hoàn Kiếm, en Hanói, con la Torre de la Tortuga al fondo.'],
+      ['a/hue68-12', 'La Ciudad Imperial de Huế.'],
+      ['804', 'Plantaciones de té en el norte de Vietnam.'],
+      ['a/hue68-6', 'Marines entrando en la ciudadela de Huế, en 1968.'],
+    ] },
+    cifras: [['2.000', 'Años de historia'], ['11', 'Capítulos'], ['12 min', 'De documental']],
+    secciones: [
+      { h: 'Linebacker: los bombardeos de Navidad', min: '0:00', foto: ['146', 'Los restos del B-52 en el lago Hữu Tiệp, en plena Hanói.'], p: [
+        'En diciembre de 1972 se rompieron las negociaciones de paz de París y Nixon ordenó la **Operación Linebacker II**: once noches sobre Hanói y Hải Phòng, más de veinte mil toneladas de bombas, un hospital destruido y al menos **1.624 civiles muertos**.',
+        'Vietnam respondió con cientos de misiles. Cayeron al menos quince B-52 según Estados Unidos y treinta y cuatro según Vietnam. Uno acabó en el lago Hữu Tiệp y sus restos siguen allí; las fuentes no coinciden en la noche, si la del 18 al 19 o la del 27 de diciembre. Un mes después se firmaron los acuerdos de París, casi iguales a lo pactado en octubre.' ],
+        enlaces: [['La guerra de las fichas de dominó', H('vietnam-la-guerra-de-las-fichas-de-domino')], ['Hanói', '/destinos/hanoi-vietnam.html']] },
+      { h: 'Hanói: mil años bajo China', min: '1:21', foto: ['156', 'El Templo de la Literatura, donde se abrió la primera universidad del país.'], p: [
+        'La dinastía Han conquistó estas tierras en el año 111 antes de Cristo. China gobernó unos mil años, en cuatro etapas y con levantamientos entre medias. En el año 40 se alzaron dos hermanas, **Trưng Trắc y Trưng Nhị**: expulsaron a los gobernadores Han y Trưng Trắc reinó tres años, hasta que llegó el ejército de Ma Yuan. Hoy un distrito de Hanói lleva su nombre.',
+        'Los Tang llamaron a esta tierra Annam, «el sur en calma», y trajeron escuelas confucianas, canales, administración y los caracteres chinos, que fueron la escritura oficial hasta los franceses. En 1076 se abrió en el **Templo de la Literatura** la primera universidad del país. Lo que Vietnam no entregó fue su lengua ni la idea de ser otro pueblo.' ],
+        enlaces: [['Vietnam, mil años de no rendirse', H('vietnam-mil-anos-de-no-rendirse')], ['Hanói', '/destinos/hanoi-vietnam.html'], ['Guía de un día en Hanói', '/1-dia-en-hanoi-59zg']] },
+      { h: 'Hạ Long: la trampa del río Bạch Đằng', min: '2:31', foto: ['a/bachdang-2', 'Campo de estacas en la desembocadura del Bạch Đằng.'], p: [
+        'En el año 938, la flota de los Han del Sur subió por el Bạch Đằng al mando del príncipe Liu Hongcao. El general **Ngô Quyền** había clavado en el lecho del río grandes estacas de madera con punta de hierro, que no se veían con la marea alta. Sus barcas atrajeron a la flota río arriba y esperaron.',
+        'Al bajar la marea, los barcos se ensartaron y el príncipe murió en el agua. Al año siguiente, Ngô Quyền se proclamó rey. Tres siglos y medio después, la misma trampa volvió a funcionar en el mismo río.' ],
+        enlaces: [['Hạ Long', '/destinos/ha-long-vietnam.html']] },
+      { h: 'La frontera: los mongoles', min: '3:23', foto: ['a/mongol-5', 'Estatua de Trần Hưng Đạo en la plaza Mê Linh.'], p: [
+        'Entraron tres veces y las tres tomaron la capital. En 1258 mataron a sus habitantes y se fueron a los pocos días. En 1285 volvió el ejército de Kublai Kan, con su hijo Toghon al frente. El príncipe **Trần Hưng Đạo** se negó a rendirse: Vietnam vació la capital, Toghon entró en un palacio sin nadie y sin arroz, y el ejército invasor acabó expulsado.',
+        'En 1287 volvieron mongoles, yurchen y chinos, hasta 170.000 hombres según las fuentes. En abril de 1288, en retirada, su flota llegó al Bạch Đằng y cayó en las estacas. El almirante Omar quedó prisionero y Toghon huyó por Lạng Sơn, herido de una flecha envenenada. Después de ganar, el rey envió a Kublai una estatua de oro y una disculpa, y siguió pagando tributo: era el precio de que no volviera.' ] },
+      { h: 'Pù Luông: los Ming y Lê Lợi', min: '4:50', foto: ['342', 'Una noria de bambú en el norte de Vietnam.'], p: [
+        'En 1407 la China Ming ocupó el país y quiso cambiarlo por dentro: prohibió los tatuajes y las faldas cortas, impuso su ropa y sus ritos y se llevó a Pekín a más de siete mil artesanos. Una crónica posterior cuenta que ordenó quemar los libros. Según algunas fuentes, un vietnamita capturado, Nguyễn An, acabó entre los constructores de la Ciudad Prohibida.',
+        'En 1418 se levantó en Lam Sơn **Lê Lợi**, un jefe local de la provincia de Thanh Hóa, con Nguyễn Trãi como consejero. Tras diez años de guerra, en 1427 la columna de socorro Ming cayó en el paso de Chi Lăng. Lê Lợi dejó marchar al ejército y devolvió a los prisioneros. La leyenda dice que entregó su espada mágica a una tortuga gigante del lago Hoàn Kiếm. La tortuga es real: una se conserva en el templo del lago.' ],
+        enlaces: [['Hanói', '/destinos/hanoi-vietnam.html']] },
+      { h: 'Huế: Francia y el fin del imperio', min: '6:13', foto: ['a/francia-4', 'El emperador Hàm Nghi.'], p: [
+        'Huế fue la capital de la última dinastía, los Nguyễn, desde 1802. Francia atacó Đà Nẵng en 1858, se quedó con el sur en 1862, hizo protectorado del norte y el centro en 1884 y creó la Indochina francesa en 1887. Pagó la colonia con tres monopolios, **opio, sal y alcohol**: estaba prohibido hacer vino de arroz en casa o recoger sal. También extendió el alfabeto latino, el que Vietnam usa hoy.',
+        'En 1885 el emperador **Hàm Nghi**, de trece años, huyó de Huế y se convirtió en la bandera de la resistencia. Lo capturaron en 1888, lo exiliaron a Argelia y allí murió en 1944. Japón llegó en 1940. Entre 1944 y 1945, una hambruna en el norte mató a alrededor de un millón de personas según el historiador David Marr; otras cifras llegan a dos millones. El 25 de agosto de 1945 abdicó el último emperador, Bảo Đại.' ],
+        enlaces: [['Huế', '/destinos/hue-vietnam.html']] },
+      { h: 'Hồ Chí Minh y Điện Biên Phủ', min: '7:29', foto: ['a/dienbien-11', 'La victoria de Điện Biên Phủ, en 1954.'], p: [
+        '**Hồ Chí Minh** nació en Nghệ An en 1890 y pasó treinta años fuera. En 1941 volvió en secreto a una cueva de Cao Bằng, junto a la frontera, y el 2 de septiembre de 1945 leyó en Hanói la declaración de independencia, que cita la de Estados Unidos. Francia volvió y empezó la guerra. En 1954, el general **Võ Nguyên Giáp** subió artillería pesada a las montañas que rodean Điện Biên Phủ y, tras casi dos meses de asedio, la guarnición se rindió.',
+        'El héroe tiene otra cara. Entre 1953 y 1956, la reforma agraria del Norte acusó falsamente a muchos campesinos. El historiador Edwin Moise calcula unos cinco mil ejecutados; otros autores, muchos más. El propio Hồ Chí Minh pidió perdón en público.' ],
+        enlaces: [['Hồ Chí Minh: el hombre de los billetes', H('vietnam-ho-chi-minh')]] },
+      { h: 'Quảng Trị: la guerra', min: '8:29', foto: ['a/guerra-12', 'Aviones C-123 rociando Agente Naranja sobre la selva.'], p: [
+        'En Ginebra, en 1954, el país se partió en dos por el paralelo 17, en Quảng Trị. Las elecciones prometidas nunca se celebraron. Washington temía que, si caía Vietnam, cayera todo el sudeste asiático como fichas de dominó. Tras el incidente del golfo de Tonkín, en 1964 y hoy muy discutido, los primeros marines llegaron a Đà Nẵng en 1965. En tres años eran más de medio millón.',
+        'Sobre Indochina cayeron **más de siete millones de toneladas de bombas**, más del triple de las que Estados Unidos lanzó en toda la Segunda Guerra Mundial, y más de once millones de galones de Agente Naranja. Quảng Trị se considera la provincia más bombardeada, y una décima parte no explotó y sigue bajo tierra.',
+        'Por la selva pasaba la ruta Hồ Chí Minh, que empezó en 1959 como un sendero y acabó con camiones y bicicletas cargadas con más de doscientos kilos. En Vịnh Mốc, los vecinos excavaron hasta unos treinta metros: unas sesenta familias vivieron allí y nacieron diecisiete niños. En la ofensiva del Tet, en 1968, un mes de combates arrasó Huế y murieron entre 5.800 y 8.000 civiles, más de dos mil ejecutados por las fuerzas norvietnamitas y el Vietcong.' ],
+        enlaces: [['La ruta Hồ Chí Minh', H('vietnam-ruta-ho-chi-minh')], ['La guerra de las fichas de dominó', H('vietnam-la-guerra-de-las-fichas-de-domino')]] },
+      { h: 'Vuelta al lago: el final', min: '10:18', foto: ['140', 'Lo que queda del bombardero, entre las casas de Hanói.'], p: [
+        'En toda la guerra murieron más de 58.000 estadounidenses y, según las estimaciones, más de un millón de vietnamitas. En 1973 llegaron los acuerdos de París y el 30 de abril de 1975 cayó Saigón.' ] },
+      { h: '1979: otra vez China', min: '10:42', foto: ['a/guerra79-5', 'Una fachada de Lạng Sơn con los daños de la guerra de 1979.'], p: [
+        'En febrero de 1979, tras la invasión vietnamita de Camboya, China cruzó la frontera y tomó Lạng Sơn. Se retiró un mes después, destruyendo lo que encontraba. Las cifras de muertos siguen en disputa.' ] },
+      { h: 'Vietnam hoy', min: '11:10', foto: ['056', 'Venta de flores en bicicleta, en Hanói.'], p: [
+        'Hoy son más de 102 millones, con 54 pueblos reconocidos; los kinh son el 85 %. Con las reformas del Đổi Mới, de 1986, la renta por habitante se ha multiplicado por más de cuatro desde 1990. Sigue siendo un país de partido único, con límites a la libertad que señalan las organizaciones de derechos humanos. En 2023, Estados Unidos y Vietnam se declararon socios estratégicos integrales.' ],
+        enlaces: [['Cómo son hoy', H('vietnam-como-son-hoy')], ['Vietnam', '/destinos/vietnam.html'], ['Guía de Vietnam en 14 días', '/vietnam-hanoi-phu-quoc-en-14-dias-q5c4']] },
+    ],
+    ficha: [
+      '**Visado:** los españoles pueden entrar sin visado hasta 45 días, con pasaporte con al menos 6 meses de validez. Exención vigente hasta el 14 de marzo de 2028.',
+      '**Lago Hữu Tiệp (Hanói):** los restos del B-52 se ven desde la calle.',
+      '**Templo de la Literatura (Hanói):** abre de 8:00 a 17:00; algunas fuentes indican última entrada a las 16:30 y cambios en festivos.',
+      'Datos de noviembre de 2026: confírmalos en fuentes oficiales antes de ir.',
+    ],
+    cierre: 'Cada parte tiene además su capítulo corto, con más datos: los enlaces están en cada apartado.',
+    nota: 'Donde las fuentes discrepan (bajas, hambruna, reforma agraria, 1979) damos el rango o decimos que está en disputa.',
+    get fuentes() {
+      const vistas = new Set();
+      return [
+        W('Recomendaciones de viaje a Vietnam (Ministerio de Asuntos Exteriores de España)', 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=vietnam'),
+        W('Operación Linebacker II (Wikipedia)', 'https://en.wikipedia.org/wiki/Operation_Linebacker_II'),
+        W('El B-52 del lago Hữu Tiệp (Aviation Safety Network)', 'https://aviation-safety.net/wikibase/48405'),
+        W('El B-52 del lago Hữu Tiệp (VietnamNet)', 'https://vietnamnet.vn/en/untold-stories-about-wreckage-of-a-b52-bomber-in-hanois-lake-666190.html'),
+        W('Invasiones mongolas de Vietnam (Wikipedia)', 'https://en.wikipedia.org/wiki/Mongol_invasions_of_Vietnam'),
+        W('Levantamiento de Lam Sơn (Wikipedia)', 'https://en.wikipedia.org/wiki/Lam_S%C6%A1n_uprising'),
+        W('Lago Hoàn Kiếm (Wikipedia)', 'https://en.wikipedia.org/wiki/Hoan_Kiem_Lake'),
+        W('Dinastía Nguyễn (Wikipedia)', 'https://en.wikipedia.org/wiki/Nguy%E1%BB%85n_dynasty'),
+        W('Indochina francesa (Wikipedia)', 'https://en.wikipedia.org/wiki/French_Indochina'),
+        W('Hambruna de 1944-1945 (Wikipedia)', 'https://en.wikipedia.org/wiki/Vietnamese_famine_of_1944%E2%80%931945'),
+        W('Batalla de Điện Biên Phủ (Wikipedia)', 'https://en.wikipedia.org/wiki/Battle_of_Dien_Bien_Phu'),
+        W('Batalla de Huế (Wikipedia)', 'https://en.wikipedia.org/wiki/Battle_of_Hu%E1%BA%BF'),
+        W('Túneles de Vịnh Mốc (Wikipedia)', 'https://en.wikipedia.org/wiki/Vinh_Moc_tunnels'),
+        W('Guerra chino-vietnamita (Wikipedia)', 'https://en.wikipedia.org/wiki/Sino-Vietnamese_War'),
+        W('Demografía de Vietnam (Wikipedia)', 'https://en.wikipedia.org/wiki/Demographics_of_Vietnam'),
+        ...module.exports.filter((e) => e.serie === 'Vietnam' && e.cap !== 'Documental').flatMap((e) => e.fuentes),
+      ].filter((f) => !vistas.has(f.u) && vistas.add(f.u));
+    },
   },
 ];

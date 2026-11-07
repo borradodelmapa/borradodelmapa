@@ -6,7 +6,7 @@
 
 const SERIES = {
   'Tailandia en moto': { sub: 'Chiang Mai, el Triángulo de Oro, la carretera de las 762 curvas y el bucle de Mae Hong Son, en moto. Y un especial de Muay Thai en Ko Samui.' },
-  'Vietnam': { sub: 'De mil años de resistencia a Hồ Chí Minh: cinco capítulos para entender el país antes de recorrerlo.' },
+  'Vietnam': { sub: 'De mil años de resistencia a Hồ Chí Minh: cinco capítulos y un documental para entender el país antes de recorrerlo.' },
   'Pueblos borrados del mapa': { sub: 'Pueblos, oficios y costumbres que están desapareciendo, contados con datos y fuentes. Y cómo visitarlos con respeto.' },
   'Conoce cada país': { sub: 'La introducción de cada país: geografía, historia y culturas para entender lo que vas a ver. Con fuentes.' },
   'Guías': { sub: 'Nuestras guías de viaje, día a día, con la historia de cada sitio.' },
