@@ -579,7 +579,11 @@ function abrirBlogEnApp(url) {
       if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey) return;
       let u; try { u = new URL(a.getAttribute('href'), d.location.href); } catch (_) { return; }
       if (u.origin !== location.origin) { e.preventDefault(); window.open(u.href, '_blank', 'noopener'); return; }
-      if (u.pathname !== '/' && u.pathname !== '/index.html') return; // blog, destinos, guías: siguen en el visor
+      // Enlace a una guía (/?ruta=, /?guia= o /<slug>): se cierra el visor y se abre esa guía (Paco, 7 nov 2026: «abre Explorar, no la guía que propone»)
+      const ruta = _validSlug(u.searchParams.get('ruta') || u.searchParams.get('guia'))
+        || (/^\/[a-z0-9-]+$/.test(u.pathname) ? _validSlug(u.pathname.slice(1)) : null);
+      if (ruta) { e.preventDefault(); _blogVisorCerrar(false); _openPublicGuide(ruta); return; }
+      if (u.pathname !== '/' && u.pathname !== '/index.html') return; // blog y destinos: siguen en el visor
       // Enlaces a la app (logo, «Pregúntale a Salma», /?go=…): se cierra el visor y se hace lo mismo que el menú
       e.preventDefault();
       const go = u.searchParams.get('go');
