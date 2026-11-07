@@ -18,7 +18,7 @@ const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 196;      // styles.css (= APP_CSS_V de build-destinos.js)
-const BV_CSS_V = 6;     // blog-viajes.css
+const BV_CSS_V = 7;     // blog-viajes.css
 
 // Entradas con `borrador: true` (contenido producido que aún no se publica, L2) solo salen con BORRADORES=1, para enseñarlas en local (4 nov 2026).
 const capsTodas = require('./blog-viajes-data.js');
@@ -36,7 +36,7 @@ const capCorto = (c) => (/^Cap/.test(c.cap) ? 'Cap. ' + c.cap.match(/\d+/)[0] : 
 
 // Suscribirse y compartir (Paco, 7 nov 2026): debajo de cada vídeo el botón de YouTube y compartir; al final del artículo, compartir. En el móvil abre el menú del teléfono; en el ordenador copia el enlace.
 const { SUSCRIBIRSE, ICONO_YOUTUBE } = require('./redes.cjs');
-const BOTON_SUSCRIBIRSE = `<a class="bd-suscribirse" href="${SUSCRIBIRSE}" target="_blank" rel="noopener">${ICONO_YOUTUBE}<span>Suscríbete en YouTube</span></a>`;
+const BOTON_SUSCRIBIRSE = `<a class="bd-suscribirse" href="${SUSCRIBIRSE}" target="_blank" rel="noopener">${ICONO_YOUTUBE}<span>Suscríbete al canal</span></a>`;
 const BOTON_COMPARTIR = `<button class="bd-compartir" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg><span>Compartir</span></button>`;
 const COMPARTIR_JS = `<script>document.addEventListener("click",function(e){var b=e.target.closest(".bd-compartir");if(!b)return;var d={title:document.querySelector("h1").textContent,url:location.origin+location.pathname};
 if(navigator.share&&matchMedia("(pointer:coarse)").matches){navigator.share(d).catch(function(){});return;}
@@ -48,16 +48,7 @@ const ref = fs.readFileSync(path.join(ROOT, 'blog', 'perder-el-avion.html'), 'ut
 const PIE_Y_MENU = ref.slice(ref.indexOf('<footer class="pg-footer">'), ref.indexOf('</body>'));
 if (!PIE_Y_MENU.includes('app-bottom-bar')) throw new Error('No encuentro el menú de abajo en blog/perder-el-avion.html');
 
-function duracionMp4(file) {
-  const b = fs.readFileSync(file);
-  const i = b.indexOf('mvhd');
-  if (i < 0) return null;
-  const ver = b[i + 4];
-  const scale = ver === 1 ? b.readUInt32BE(i + 24) : b.readUInt32BE(i + 16);
-  const dur = ver === 1 ? Number(b.readBigUInt64BE(i + 28)) : b.readUInt32BE(i + 20);
-  const sec = Math.round(dur / scale);
-  return { sec, iso: `PT${Math.floor(sec / 60)}M${sec % 60}S`, txt: `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}` };
-}
+const { duracionMp4 } = require('./video-info.cjs');
 
 fs.mkdirSync(OUT_VIDEO, { recursive: true });
 caps.forEach((c, i) => {
@@ -216,6 +207,15 @@ function ir(s){v.currentTime=s;var p=v.play();if(p&&p.catch)p.catch(function(){}
 document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]");if(!a)return;e.preventDefault();ir(Number(a.dataset.t));});
 var t=Number(new URLSearchParams(location.search).get("t"));if(t){if(v.readyState>=1)v.currentTime=t;else v.addEventListener("loadedmetadata",function(){v.currentTime=t;},{once:true});}})();</script>
 `;
+// Documental con enlace de YouTube (Paco, 7 nov 2026): se ve la carátula con un play y el reproductor solo se carga al pulsar (página rápida, sin nada de YouTube hasta entonces).
+// Modo sin cookies de YouTube. Poner c.youtube SOLO cuando el vídeo sea público: si es privado, da error. Los capítulos abren el reproductor en su minuto.
+const SALTO_YOUTUBE = `<script>(function(){var f=document.querySelector(".bd-yt");if(!f)return;var id=f.dataset.yt,i=null;
+var ini=Number(new URLSearchParams(location.search).get("t"))||0;
+function pon(s){if(!i){i=document.createElement("iframe");i.className="bd-video bd-yt-if";i.title=f.getAttribute("aria-label");i.allow="autoplay; encrypted-media; fullscreen; picture-in-picture";i.allowFullscreen=true;i.referrerPolicy="strict-origin-when-cross-origin";f.parentNode.replaceChild(i,f);}
+i.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&rel=0&playsinline=1"+(s?"&start="+s:"");i.scrollIntoView({behavior:"instant",block:"center"});}
+f.addEventListener("click",function(e){e.preventDefault();pon(ini);});
+document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]");if(!a)return;e.preventDefault();pon(Number(a.dataset.t));});})();</script>
+`;
 // Vídeo horizontal (c.formato = '16:9'): a lo ancho encima del texto, no en la columna estrecha de los verticales. Va en la propia página para no cambiar el ?v= de las demás.
 const CSS_16_9 = `<style>
 .bd-layout.h .bd-media{max-width:none}.bd-layout.h .bd-video{aspect-ratio:16/9}
@@ -234,6 +234,7 @@ function pagina(c) {
   // anterior/siguiente: la serie «Pueblos borrados del mapa» no enlaza con diarios de otras series (las antiguas siguen como estaban)
   const P = 'Pueblos borrados del mapa', vale = (x) => x && (x.serie === c.serie || (c.serie !== P && x.serie !== P));
   const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
+  const yt = c.formato === '16:9' && c.youtube; // documental público: reproductor de YouTube al pulsar
   const url = `${SITE}/blog/viajes/${c.slug}`;
   const img = `/blog/viajes/img/${c.slug}.jpg`;
   const serieCaps = caps.filter((x) => x.serie === c.serie);
@@ -275,7 +276,7 @@ ${c.fuentes.map((f) => `        <li><a href="${esc(f.u)}" target="_blank" rel="n
       </ul>
     </details>`;
   const [dSlug, dNombre] = c.destino || []; // sin página de destino (p. ej. la India no tiene): se quita el «Más sobre…»
-  const nx = (x, lado) => x ? `      <a class="bd-nx${lado === 'der' ? ' der' : ''}" href="/blog/viajes/${x.slug}">
+  const nx = (x, lado) => x ? `      <a class="bd-nx${lado === 'der' ? ' der' : ''}${x.formato === '16:9' ? ' h' : ''}" href="/blog/viajes/${x.slug}">
         <img src="/blog/viajes/img/${x.slug}.jpg" alt="" loading="lazy">
         <span><small>${lado === 'der' ? 'Siguiente' : 'Anterior'}</small><b>${esc(x.titulo)}</b></span>
       </a>` : '';
@@ -318,7 +319,7 @@ ${cabeza}
     </header>
 `}
     <div class="bd-media">
-${c.dur ? `      <video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>
+${c.dur ? `      ${yt ? `<a class="bd-yt" href="https://youtu.be/${esc(c.youtube)}" data-yt="${esc(c.youtube)}" target="_blank" rel="noopener" aria-label="Reproducir: ${esc(c.titulo)}"><img src="${img}" alt="${esc(c.titulo)}"><span class="bd-yt-play" aria-hidden="true"></span></a>` : `<video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>`}
       <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>
       <div class="bd-acciones">${BOTON_SUSCRIBIRSE}${BOTON_COMPARTIR}</div>${c.youtube ? `\n      <p class="bd-ia"><a href="https://youtu.be/${esc(c.youtube)}" target="_blank" rel="noopener">Verlo en YouTube</a></p>` : ''}` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
       <div class="bd-video-meta"><span>Lectura</span><span>Escribe Salma</span></div>`}
@@ -348,7 +349,7 @@ ${nav}
     </div>
   </div>
 </main>
-${VISOR}${caps16.length ? SALTO_VIDEO : ''}${COMPARTIR_JS}${PIE_Y_MENU}</body>
+${VISOR}${yt ? SALTO_YOUTUBE : caps16.length ? SALTO_VIDEO : ''}${COMPARTIR_JS}${PIE_Y_MENU}</body>
 </html>
 `;
 }
@@ -357,10 +358,10 @@ caps.forEach((c) => fs.writeFileSync(path.join(OUT, c.slug + '.html'), pagina(c)
 
 // ─── Portada del blog ───
 const series = [...new Set(caps.map((c) => c.serie))];
-const rail = (c) => `      <a class="bv-card" href="/blog/viajes/${c.slug}">
-        <div class="bv-poster"><img src="/blog/viajes/img/${c.slug}.jpg" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip">${esc(capCorto(c))}</span>${c.dur ? '<span class="bv-play" aria-hidden="true"></span>' : ''}</div>
+const rail = (c) => `      <a class="bv-card${c.formato === '16:9' ? ' doc' : ''}" href="/blog/viajes/${c.slug}">
+        <div class="bv-poster"><img src="/blog/viajes/img/${c.slug}.jpg" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip">${c.formato === '16:9' ? 'Documental' : esc(capCorto(c))}</span>${c.dur ? `<span class="bv-dur">${c.dur.txt}</span><span class="bv-play" aria-hidden="true"></span>` : ''}</div>
         <div class="bv-card-t">${esc(c.titulo)}</div>
-        <div class="bv-card-m">${c.dur ? 'Vídeo ' + c.dur.txt : 'Lectura'}</div>
+        <div class="bv-card-m">${c.dur ? 'Vídeo' : 'Lectura'}</div>
       </a>`;
 const paises = [];
 caps.forEach((c) => { const p = paisDeHistoria(c); if (!p || c.variosPaises) return; let e = paises.find((x) => x.nombre === p); if (!e) paises.push(e = { nombre: p, lista: [] }); e.lista.push(c); });

@@ -188,6 +188,7 @@ module.exports = [
   {
     orden: 230,
     slug: 'filipinas-historia-culturas-antes-de-viajar',
+    formato: '16:9',
     fecha: '2026-11-05',
     serie: 'Conoce cada país',
     cap: 'Filipinas',

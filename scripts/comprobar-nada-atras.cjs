@@ -47,7 +47,7 @@ for (const f of paginas) {
   if (!h.includes('favicon')) fallos.push(`${f}: no lleva el favicon`);
   // Redes en todos los pies y, debajo de cada vídeo del blog, suscribirse y compartir (Paco, 7 nov 2026)
   if (/class="(pg-footer|destino-footer)[ "]/.test(h)) for (const u of [redes.YOUTUBE, redes.TIKTOK, redes.INSTAGRAM]) if (!h.includes(u)) fallos.push(`${f}: al pie le falta el enlace a ${u}`);
-  if (f.startsWith('blog/viajes/') && h.includes('<video class="bd-video"') && !h.includes(redes.SUSCRIBIRSE)) fallos.push(`${f}: el vídeo no lleva el botón de suscribirse`);
+  if (f.startsWith('blog/viajes/') && (h.includes('<video class="bd-video"') || h.includes('class="bd-yt"')) && !h.includes(redes.SUSCRIBIRSE)) fallos.push(`${f}: el vídeo no lleva el botón de suscribirse`);
   if (f.startsWith('blog/viajes/') && !h.includes('bd-compartir')) fallos.push(`${f}: no lleva el botón de compartir`);
 }
 

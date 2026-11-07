@@ -22,6 +22,8 @@ import { sinPreciosObj } from './sin-precios.mjs';
 import { createRequire } from 'module';
 const { REDES_PIE_DESTINOS } = createRequire(import.meta.url)('./redes.cjs');
 const { barraPais, historiasDe } = createRequire(import.meta.url)('./barra-pais.cjs');
+const { duracionDe } = createRequire(import.meta.url)('./video-info.cjs');
+const esDoc = (x) => x.formato === '16:9'; // documental horizontal: tarjeta a lo ancho, con la portada entera
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -212,7 +214,7 @@ function guiasDestacadas(countrySlug, countryName) {
 // «Historias de <país>» (5 nov 2026): todas las entradas del blog del país, sacadas solas de scripts/blog-viajes-data.js
 // (sin borradores). Es la pestaña «Historias» de la barra del país.
 function historiasPais(countryName) {
-  const l = historiasDe(countryName);
+  const l = historiasDe(countryName).sort((a, b) => esDoc(b) - esDoc(a)); // los documentales, primero
   if (!l.length) return '';
   const e = escapeHTML;
   return `<style>
@@ -223,9 +225,12 @@ function historiasPais(countryName) {
 .dh-c img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}.dh-c div{padding:8px 10px 10px}
 .dh-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
 .dh-c strong{display:block;font-size:14px;line-height:1.3}
+.dh-img{display:block;position:relative;font-style:normal}.dh-dur{position:absolute;right:6px;bottom:6px;background:rgba(13,15,16,.85);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.04em;padding:2px 7px}
+.dh-doc{grid-column:1/-1;border-color:var(--accent);background:rgba(244,99,11,.07)}.dh-doc img{aspect-ratio:16/9}.dh-doc strong{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1.05}.dh-doc div{padding:12px 14px 14px}
+@media(min-width:620px){.dh-doc{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);align-items:center}.dh-doc div{padding:16px 22px}.dh-doc strong{font-size:32px}}
 </style>
     <section class="dh" id="historias"><h2>Historias de ${e(countryName)}</h2><p>Lo que cuentan nuestros vídeos, con más información y sus fuentes.</p>
-      <div class="dh-grid">${l.map(x => `<a class="dh-c" href="/blog/viajes/${e(x.slug)}"><img src="/blog/viajes/img/${e(x.slug)}.jpg" alt="" loading="lazy" decoding="async"><div><span>${e(x.serie || 'Historia')}</span><strong>${e(x.titulo)}</strong></div></a>`).join('')}</div>
+      <div class="dh-grid">${l.map(x => `<a class="dh-c${esDoc(x) ? ' dh-doc' : ''}" href="/blog/viajes/${e(x.slug)}"><i class="dh-img"><img src="/blog/viajes/img/${e(x.slug)}.jpg" alt="" loading="lazy" decoding="async">${duracionDe(x.slug) ? `<b class="dh-dur">${duracionDe(x.slug)}</b>` : ''}</i><div><span>${esDoc(x) ? 'Documental' : e(x.serie || 'Historia')}</span><strong>${e(x.titulo)}</strong></div></a>`).join('')}</div>
     </section>`;
 }
 
@@ -628,11 +633,11 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 .dx-c{display:block;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}.dx-c:hover{border-color:var(--accent)}
 .dx-c img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}.dx-grid{align-items:start}.dx-c.g{grid-column:span 2}.dx-c.g img{aspect-ratio:2/1}
 .dx-c div{padding:8px 10px 10px}.dx-c span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
-.dx-c strong{display:block;font-size:14px;line-height:1.3}.dx-c.g{border-color:var(--accent);background:rgba(244,99,11,.07)}
+.dx-c strong{display:block;font-size:14px;line-height:1.3}.dx-c.g,.dx-c.d{border-color:var(--accent);background:rgba(244,99,11,.07)}.dx-c.d{grid-column:span 2}.dx-c.d img{aspect-ratio:16/9}.dx-i{display:block;position:relative;font-style:normal}.dx-dur{position:absolute;right:6px;bottom:6px;background:rgba(13,15,16,.85);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:14px;letter-spacing:.04em;padding:2px 7px}
 </style>
   <section class="dx"><h2>${escapeHTML(dest.nombre)} en nuestras historias</h2><div class="dx-grid">
     ${guiaPais && guiaPasa ? `<a class="dx-c g" href="${hrefGuiaApp}"><img src="/guias-img/${escapeHTML(guiaPais.slug)}.png" alt="Mapa de la guía ${escapeHTML(guiaPais.nombre)}" loading="lazy"><div><span>Guía · pasa por aquí</span><strong>${escapeHTML(guiaPais.nombre)}</strong></div></a>` : ''}
-    ${histSitio.map(x => `<a class="dx-c" href="/blog/viajes/${escapeHTML(x.slug)}"><img src="/blog/viajes/img/${escapeHTML(x.slug)}.jpg" alt="" loading="lazy"><div><span>Historia en vídeo</span><strong>${escapeHTML(x.titulo)}</strong></div></a>`).join('')}
+    ${histSitio.map(x => `<a class="dx-c${esDoc(x) ? ' d' : ''}" href="/blog/viajes/${escapeHTML(x.slug)}"><i class="dx-i"><img src="/blog/viajes/img/${escapeHTML(x.slug)}.jpg" alt="" loading="lazy">${duracionDe(x.slug) ? `<b class="dx-dur">${duracionDe(x.slug)}</b>` : ''}</i><div><span>${esDoc(x) ? 'Documental' : 'Historia en vídeo'}</span><strong>${escapeHTML(x.titulo)}</strong></div></a>`).join('')}
   </div></section>` : '';
   const extra = DESTINOS_EXTRA[slug];
   const sobreHTML = extra ? `<section class="dq-sobre">

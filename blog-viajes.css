@@ -193,5 +193,18 @@
 .pg .bd-suscribirse, .bd-compartir { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 16px; font-family:var(--font-cond); font-weight:800; font-size:15px; letter-spacing:.05em; text-transform:uppercase; text-decoration:none; border-radius:0; cursor:pointer; }
 .pg .bd-suscribirse { background:#CC0000; color:#fff; border:1px solid #CC0000; }
 .pg .bd-suscribirse:hover { background:#A80000; border-color:#A80000; }
-.bd-compartir { background:transparent; color:var(--text-primary); border:1px solid var(--border); }
-.bd-compartir:hover { border-color:var(--text-primary); }
+.bd-compartir { background:var(--accent); color:var(--text-on-accent); border:1px solid var(--accent); }
+.bd-compartir:hover { background:var(--dorado2); border-color:var(--dorado2); }
+/* Documental con YouTube: carátula y play; el reproductor se carga al pulsar */
+.bd-yt { display:block; position:relative; aspect-ratio:16/9; background:#000; border:1px solid var(--border); overflow:hidden; }
+.bd-yt img { width:100%; height:100%; object-fit:cover; display:block; }
+.bd-yt-play { position:absolute; left:50%; top:50%; width:76px; height:54px; margin:-27px 0 0 -38px; background:#CC0000; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+.bd-yt-play::before { content:''; border-left:22px solid #fff; border-top:13px solid transparent; border-bottom:13px solid transparent; margin-left:4px; }
+.bd-yt:hover .bd-yt-play { background:#A80000; }
+.bd-yt-if { border:0; aspect-ratio:16/9; }
+
+/* Documental (16:9) entero y resaltado; duración en la tarjeta (7 nov 2026) */
+.bv-card.doc { flex-basis:300px; }
+.bv-card.doc .bv-poster { aspect-ratio:16/9; border-color:var(--accent); }
+.bv-dur { position:absolute; left:8px; bottom:8px; background:rgba(13,15,16,.85); color:#fff; font-family:var(--font-cond); font-weight:800; font-size:14px; letter-spacing:.04em; padding:2px 7px; }
+.bd-nx.h img { width:96px; flex-basis:96px; aspect-ratio:16/9; }
