@@ -1,7 +1,4 @@
-# CHECKLIST D| 7 nov 2026 · 10:00 | 🎬 Vídeo (Claude) | **M11**: excepción de Paco para la carátula del largo de Vietnam (las hermanas Trưng, texto enorme). Sin cambiar el diseño fijo de los demás. |
-| 6 nov 2026 · 23:30 | 🎬 Vídeo (Claude) | **S5** corregida por Paco tras oír el primer montaje: la sintonía vuelve a todos los mapas y a la tarjeta, y su música sube para que se oiga. |
-| 6 nov 2026 · 23:00 | 🎬 Vídeo (Claude) | Nueva **S5** (Paco, en prueba): música por trozos en documentales largos con pista elegida por Paco. **Gana sobre S3** («el resto sin música») solo en estos vídeos; Pueblos sigue con S3. |
-E VÍDEO — FUENTE ÚNICA (versión = fecha-hora de la última fila del registro de cambios, al final)
+# CHECKLIST DE VÍDEO — FUENTE ÚNICA (versión = fecha-hora de la última fila del registro de cambios, al final)
 
 **Estado: BASE EN CONSTRUCCIÓN. Este texto se modifica mucho hasta que sea sólido.** Manda este archivo: si choca con
 `docs/video-reglas-y-flujo.md`, la Biblia v2.5 (docx), `docs/salma-narradora-reglas.md` o `docs/estilo-visual.md`, **gana este** y se corrige el otro.
@@ -149,6 +146,9 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
 | 7 nov 2026 · 12:00 | 🌍 Web (Claude) | **P12** (Paco): la entrada de blog se añade a la web en cuanto el vídeo está terminado, tras enseñársela y con su OK; no espera a la fecha de YouTube. **Gana sobre** el encargo de no sacarla antes de que el vídeo sea público; el enlace a YouTube se pone cuando lo sea. |
+| 7 nov 2026 · 10:00 | 🎬 Vídeo (Claude) | **M11**: excepción de Paco para la carátula del largo de Vietnam (las hermanas Trưng, texto enorme). Sin cambiar el diseño fijo de los demás. |
+| 6 nov 2026 · 23:30 | 🎬 Vídeo (Claude) | **S5** corregida por Paco tras oír el primer montaje: la sintonía vuelve a todos los mapas y a la tarjeta, y su música sube para que se oiga. |
+| 6 nov 2026 · 23:00 | 🎬 Vídeo (Claude) | Nueva **S5** (Paco, en prueba): música por trozos en documentales largos con pista elegida por Paco. **Gana sobre S3** («el resto sin música») solo en estos vídeos; Pueblos sigue con S3. |
 | 6 nov 2026 · 14:50 | 🎬 Vídeo (Claude) | Nueva **N11** (Paco): en los largos, pocas fechas en voz y pantalla; se narra. Vídeo de archivo: solo con origen o licencia claros. |
 | 6 nov 2026 · 01:00 | 📈 Estrategia (Claude) | **P14** (Paco): el largo de Pueblos T1 sale solo en YouTube. **Excepción a la fila del 4 nov 15:00** («los documentales largos, YouTube + TikTok»), que sigue valiendo para los demás mientras Paco no diga otra cosa. |
 | 6 nov 2026 · 00:30 | 📈 Estrategia (Claude) | **P14** (Paco): si un archivo es demasiado grande para Metricool, no se baja la calidad: se sube directo a YouTube Studio (caso: largo de Pueblos T1). TikTok y los otros largos, sin decidir. Excepción a «se programa en Metricool» (paso 10 y P10) solo para esos archivos. |
