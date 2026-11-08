@@ -109,6 +109,7 @@ Paco: **"no quiero ir detrás mirando si se hace o no se hace"** — checklist o
   de instalar) se añade también ahí para que nadie lo pueda olvidar. GitHub lo vuelve a pasar en cada subida
   (`.github/workflows/nada-atras.yml`): en rojo = algo se ha quedado atrás → arreglarlo antes de seguir.
 - Sin excepción, sin esperar a que Paco lo note en una captura.
+- **Única excepción (Paco, 8 nov 2026): Web Stories `stories/`** (AMP, sin JS propio → sin menú ni aviso de instalar). Las revisa aparte el mismo comprobador. Ver `docs/web-stories.md`.
 
 ### 10. POLÍTICA DE ACCESO: "MIRAR SÍ, USAR CON CUENTA" — IGUAL EN TODA LA WEB
 Decidida con Paco el 26 sept 2026 ("queremos gente que se registre"). Cambiarla es decisión de Paco, no de una sesión.
@@ -232,6 +233,7 @@ Feedback → Mejora Salma → Casos). **Lo nuevo se apunta como caso, no en este
 | Google Play: alta, paquete .aab, claves de firma, Play Billing, productos (estado al día) | `docs/play-store-alta.md` |
 | App Store de Apple (iOS): plan sin Mac, Capacitor + Codemagic (aparcado; caso p-mw6d9yjq4t8) | `docs/app-store-alta.md` |
 | "¿Esto ya existe?" — inventario de features | `docs/features-inventario.md` |
+| Web Stories (`stories/`, amp-story para Discover) | `docs/web-stories.md` |
 | WhatsApp (F5.x, login, tools, límites) | `docs/whatsapp-f5.md` + `docs/pendientes-cabecera-y-casos.md` |
 | Pendientes antiguos (crítico/importante/deuda) y sus detalles técnicos | `docs/pendientes-criticos-e-importantes.md` |
 | Normas de desarrollo, autonomía, coste (texto completo) | `docs/normas-desarrollo.md` |

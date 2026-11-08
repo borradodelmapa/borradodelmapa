@@ -218,6 +218,19 @@ module.exports = [
       ['a/hue68-6', 'Marines entrando en la ciudadela de Huế, en 1968.'],
     ] },
     cifras: [['2.000', 'Años de historia'], ['11', 'Capítulos'], ['12 min', 'De documental']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'a/trung-8',
+      slides: [
+        { foto: 'a/trung-8', h: 'Vietnam: 2.000 años sin rendirse', t: 'China, los mongoles, Francia, Estados Unidos… Todos entraron y todos acabaron marchándose.', credito: ['Phucam1999', 'CC BY-SA 4.0'] },
+        { foto: '156', h: 'Mil años bajo China', t: 'Los Han llegaron en el 111 a. C. En el año 40, las hermanas Trưng los expulsaron. Vietnam nunca entregó su lengua.' },
+        { foto: 'a/bachdang-2', h: '938: la trampa del río', t: 'Ngô Quyền clavó estacas con punta de hierro en el Bạch Đằng. Al bajar la marea, la flota invasora se ensartó.' },
+        { foto: 'a/mongol-5', h: 'Los mongoles, tres veces', t: 'Las tres tomaron la capital. Trần Hưng Đạo la vació y en 1288 la flota mongola cayó en las mismas estacas.' },
+        { foto: 'a/dienbien-11', h: '1954: Điện Biên Phủ', t: 'Võ Nguyên Giáp subió artillería a las montañas. Tras casi dos meses de asedio, Francia se rindió.' },
+        { foto: '146', h: 'Navidad de 1972', t: 'Once noches de bombas sobre Hanói. Los restos de un B-52 siguen en el lago Hữu Tiệp.' },
+        { foto: '056', h: 'Vietnam hoy', t: 'Más de 102 millones de personas y 54 pueblos reconocidos. La historia entera, con fuentes, en el documental.', salida: 'Ver el documental' },
+      ],
+    },
     secciones: [
       { h: 'Linebacker: los bombardeos de Navidad', min: '0:00', foto: ['146', 'Los restos del B-52 en el lago Hữu Tiệp, en plena Hanói.'], p: [
         'En diciembre de 1972 se rompieron las negociaciones de paz de París y Nixon ordenó la **Operación Linebacker II**: once noches sobre Hanói y Hải Phòng, más de veinte mil toneladas de bombas, un hospital destruido y al menos **1.624 civiles muertos**.',
