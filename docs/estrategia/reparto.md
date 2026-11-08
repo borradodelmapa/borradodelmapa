@@ -28,7 +28,8 @@ Ocupados hasta el jue 10 dic con Vietnam, Pueblos T1 y Tatuajes (`plan.md` §3).
 | # | Qué | Desde | Para cuándo |
 |---|---|---|---|
 | ✅ | 10 shorts de Pueblos de menos de 60 s | vistos por Paco (6 nov), sin cambios por ahora | — |
-| 1 | Largo de Pueblos T1 | Paco dice que aún hay que trabajarlo (7 nov, por Vídeo y Web) | antes del jue 19 nov |
+| ✅ | Largo de Pueblos T1 | editado y sustituido (_SnSzkDIkmw, 8-9 nov) | — |
+| 1 | Textos de los shorts «3 cosas antes de ir» de ainu y sentineleses | exportados (9 nov) | antes del mar 1 dic |
 | ✅ | Entrada de blog del largo de Pueblos | vista por Paco («súbelo», 6 nov); en borrador en main | — |
 | 1 | Lote 1 de Filipinas | semana del 30 nov | antes del 8 dic |
 
