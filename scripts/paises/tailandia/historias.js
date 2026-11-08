@@ -88,6 +88,18 @@ module.exports = [
     video: 'cp-asia-cap3-v5b.mp4',
     fotosDe: { '': 'salma marketing/editor/listas/origen/pai.lst' },
     fotos: { portada: '55', galeria: [['06', 'Más curvas, entre pinos.'], ['61', 'El valle desde un mirador.'], ['68', 'Farolillos al caer la noche.'], ['63', 'Parada para repostar.'], ['64', 'Atardecer junto a un Buda.'], ['56', 'Casco puesto, y a seguir.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '55',
+      slides: [
+        { foto: '55', h: '762 curvas hasta Pai', t: 'La carretera 1095, de Chiang Mai a Pai, en moto.' },
+        { foto: '05', h: 'La carretera 1095', t: 'Poco más de cien kilómetros entre Chiang Mai y Pai. Y 762 curvas.' },
+        { foto: '06', h: '¿La abrieron los japoneses?', t: 'Según algunas fuentes, durante la Segunda Guerra Mundial. Es el dato que más se repite y el que menos fuentes tiene.' },
+        { foto: '61', h: 'Pai', t: 'Un valle pequeño, de unos tres mil vecinos, con herencia shan y tailandesa.' },
+        { foto: '68', h: 'De noche, farolillos', t: 'Una calle peatonal llena de farolillos. Y el cañón de Pai, para ver un precipicio con vistas.' },
+        { foto: '52', h: 'Antes de ir en moto', t: 'Carné español y permiso internacional: sin él, el seguro no te cubre. Se conduce por la izquierda y con casco.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'La carretera', foto: ['05', 'Una de las 762 curvas.'], p: [
         'Entre Chiang Mai y Pai hay **762 curvas** (el bucle completo de Mae Hong Son suma 1.864). La carretera 1095 tiene poco más de cien kilómetros y, según algunas fuentes, la abrió el ejército japonés durante la Segunda Guerra Mundial. Es el dato que más se repite y el que menos fuentes tiene, así que lo contamos con esa cautela.',
