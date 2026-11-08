@@ -27,7 +27,7 @@ const todas = execSync('git ls-files -z -- "*.html"', { cwd: ROOT, maxBuffer: 64
   .split('\0').filter(Boolean)
   .filter((f) => !CARPETAS_FUERA.test(f) && !NO_SON_PAGINAS.has(f) && fs.existsSync(path.join(ROOT, f)));
 // Web Stories (stories/<slug>/index.html, 8 nov 2026): son AMP y AMP no admite JS propio, así que no llevan menú de abajo ni
-// aviso de instalar (excepción del §9 aprobada por Paco). Se revisan aparte, al final, con lo que sí tienen que llevar.
+// aviso de instalar (excepción del §9 aprobada por Paco), ni ga4.js (ver docs/web-stories.md). Se revisan aparte, al final, con lo que sí tienen que llevar.
 const STORY = /^stories\//;
 const paginas = todas.filter((f) => !STORY.test(f));
 const stories = todas.filter((f) => STORY.test(f));
