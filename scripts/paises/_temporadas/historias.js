@@ -40,6 +40,19 @@ module.exports = [
       ['konyak/W62', 'La fiesta de Aoleang de los konyak.'],
     ] },
     cifras: [['10', 'Pueblos'], ['7', 'Países de Asia'], ['13 min', 'De documental']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'whang-od/W27',
+      slides: [
+        { foto: 'whang-od/W27', h: 'Pueblos que se borran del mapa', t: 'Diez pueblos de Asia cuyas culturas se están borrando del mapa. Quiénes son, qué están perdiendo y cómo llegar con respeto.', credito: ['Lee', 'CC BY 2.0'] },
+        { foto: 'haenyeo/W27', h: 'Las buceadoras de Jeju', t: 'Bajan al fondo del mar sin botella con más de setenta años. A finales de 2025 quedaban 2.371, casi la mitad que diez años antes.', credito: ['idobi', 'CC BY-SA 3.0'] },
+        { foto: 'konyak/W90', h: 'Las últimas caras tatuadas', t: 'En Nagaland, los últimos guerreros konyak con la cara tatuada tienen entre ochenta y noventa y cinco años.', credito: ['JyotiPN', 'CC BY-SA 4.0'] },
+        { foto: 'sentineleses/W1', h: 'La isla que no se visita', t: 'Nadie sabe cuántos sentineleses hay: de 15 a 500. Nuestras enfermedades podrían acabar con ellos. Acercarse es ilegal.', credito: ['PJeganathan', 'CC BY-SA 4.0'] },
+        { foto: 'mosuo/W24', h: 'El matrimonio andante', t: 'Junto al lago Lugu, los mosuo viven en la casa de la familia de la madre y, por tradición, no se casan.', credito: ['Rod Waddington', 'CC BY-SA 2.0'] },
+        { foto: 'dukha/W1', h: 'Los pastores de renos', t: 'En la taiga del norte de Mongolia quedan unos doscientos dukha. Cada vez más familias bajan cuando los hijos van al colegio.', credito: ['MN5', 'CC0'] },
+        { foto: 'aguila/W48', h: 'Con respeto', t: 'Y los cazadores con águila del Altái. En cada pueblo, pide permiso antes de fotografiar: son personas, no una atracción.', credito: ['Ceyhun Kavakci', 'CC BY-SA 2.0'], salida: 'Ver el documental' },
+      ],
+    },
     secciones: [
       { h: 'Whang-Od, la última mambabatok · Filipinas', min: '0:00', foto: ['whang-od/W27', 'Whang-Od, con la varilla del *batok* en la mano.'], p: [
         'En **Buscalan**, en las montañas de Kalinga, la tatuadora más anciana de Filipinas sigue golpeando la piel con una espina. Tiene entre 107 y 109 años: nadie conoce la fecha exacta. Su arte tiene relevo en las aprendices del pueblo; sus cantos, no.',

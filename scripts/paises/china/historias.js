@@ -19,6 +19,19 @@ module.exports = [
     creditosDe: 'salma marketing/pueblos/mosuo',
     fotos: { portada: 'W25', galeria: [['W24', 'Una abuela mosuo en la puerta de su casa.'], ['W9', 'Remando en el lago Lugu.'], ['W43', 'Una mujer mosuo con el tocado tradicional.'], ['W13', 'Chicos mosuo.'], ['W60', 'Campesinos mosuo.'], ['W77', 'El lago Lugu desde el monte.']] },
     cifras: [['13 años', 'Ceremonia de mayoría de edad'], ['378', 'Hostales en el lago (2025)'], ['40.000-50.000', 'Mosuo, según la fuente']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W24',
+      slides: [
+        { foto: 'W24', h: 'La casa la lleva una mujer', t: 'Junto al lago Lugu, entre Yunnan y Sichuan, los mosuo viven en la casa de la familia de la madre.', credito: ['Rod Waddington', 'CC BY-SA 2.0'] },
+        { foto: 'W76', h: 'El lago de los mosuo', t: 'Viven en las montañas del suroeste de China. Las fuentes calculan entre 40.000 y 50.000.', credito: ['祝鱼贵', 'CC BY-SA 4.0'] },
+        { foto: 'W43', h: 'La casa de la madre', t: 'Una gran casa de unas veinte personas que dirige una mujer. A los niños los crían su madre y sus tíos maternos.', credito: ['Rod Waddington', 'CC BY-SA 2.0'] },
+        { foto: 'W73', h: 'El matrimonio andante', t: 'El hombre visita de noche a su pareja, si ella quiere, y por la mañana vuelve a casa de su madre.', credito: ['祝鱼贵', 'CC BY-SA 4.0'] },
+        { foto: 'W74', h: 'El turismo lo cambia', t: 'Según China Daily, hoy la mayoría de los mosuo del lago trabaja en el turismo. En 2025 había 378 hostales.', credito: ['祝鱼贵', 'CC BY-SA 4.0'] },
+        { foto: 'W55', h: 'Un pueblo sin casilla', t: 'Para el Gobierno chino no son una etnia propia: en Yunnan los cuenta como naxi, aunque su cultura es distinta.', credito: ['Rod Waddington', 'CC BY-SA 2.0'] },
+        { foto: 'W9', h: 'Visitar con respeto', t: 'Su forma de familia no es un espectáculo. Pregunta antes de fotografiar y no trates el matrimonio andante como una curiosidad.', credito: ['Himangframe', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'El lago de los mosuo', foto: ['W76', 'El lago Lugu, entre Yunnan y Sichuan.'], p: [
         'Los **mosuo** viven en las montañas de Hengduan, en el suroeste de China, entre las provincias de **Yunnan** y **Sichuan**, muchos en torno al **lago Lugu**. Las fuentes calculan entre 40.000 y 50.000.',

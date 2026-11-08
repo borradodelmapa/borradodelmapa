@@ -20,6 +20,18 @@ module.exports = [
     fotos: { portada: 'W90', galeria: [['W90', 'Nyemwang Wanghu, uno de los últimos cazadores de cabezas tatuados.'], ['W52', 'El tatuaje del pecho, en Longwa.'], ['W62', 'La fiesta de Aoleang.'], ['W59', 'Un anciano konyak.'], ['W01', 'Mujeres konyak.'], ['W88', 'El paisaje de Longwa, en la frontera.']] },
     cita: { tras: 5, t: 'Todo cambió con la modernidad; nuestra cultura se muere', de: 'Bo Wang, 90 años, rey de Hongphoi (AFP, 2023)' },
     cifras: [['80-95', 'Años de los últimos tatuados'], ['1-6 abril', 'Fiesta de Aoleang'], ['2 países', 'En la casa del jefe de Longwa']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W90',
+      slides: [
+        { foto: 'W90', h: 'Las últimas caras tatuadas', t: 'En Nagaland, en la frontera de la India con Birmania, quedan los últimos guerreros konyak con la cara tatuada.', credito: ['JyotiPN', 'CC BY-SA 4.0'] },
+        { foto: 'W51', h: 'Se ganaban en combate', t: 'Durante siglos fueron cazadores de cabezas. Los tatuajes de la cara y del pecho marcaban a un guerrero.', credito: ['Avantikac98', 'CC BY-SA 4.0'] },
+        { foto: 'W14', h: 'Por qué se acabó', t: 'Fueron el último pueblo naga en hacerse cristiano y la caza de cabezas se volvió tabú. Cuándo terminó, se discute.', credito: ['JyotiPN', 'CC BY-SA 4.0'] },
+        { foto: 'W87', h: 'Una casa con frontera', t: 'En Longwa, la línea con Birmania pasa por dentro de la casa del jefe: una mitad está en cada país.', credito: ['Rwf-art', 'CC BY-SA 3.0'] },
+        { foto: 'W80', h: 'Lo que se está borrando', t: 'Los últimos tatuados tienen entre ochenta y noventa y cinco años. Cuando se vayan, se irán las últimas caras de esa historia.', credito: ['Rod Waddington', 'CC BY-SA 2.0'] },
+        { foto: 'W62', h: 'Visitar con respeto', t: 'La fiesta de Aoleang es del 1 al 6 de abril, en Mon. Pide permiso antes de fotografiar: son personas, no una atracción.', credito: ['Sujansarkarphotography', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'La tierra de los angh', foto: ['W91', 'Las colinas de Mon, en Nagaland.'], p: [
         'Los **konyak** son uno de los pueblos naga. La mayoría vive en el distrito de **Mon**, en el estado indio de **Nagaland**, al que llaman «la tierra de los *angh*», sus jefes tradicionales. También hay konyak en Arunachal Pradesh, en Assam y al otro lado de la frontera, en la Zona Naga de Birmania.' ] },
@@ -79,6 +91,19 @@ module.exports = [
     creditosDe: 'salma marketing/pueblos/sentineleses',
     fotos: { portada: 'W9', galeria: [['W1', 'La isla por la ventanilla de un avión comercial.'], ['W10', 'Sentinel del Norte desde el satélite (NASA).'], ['W11', 'La isla desde la Estación Espacial Internacional.'], ['W6', 'El arrecife que rodea la isla.'], ['W18', 'Las islas Andamán desde el espacio.'], ['W15', 'Corbyn\'s Cove, una playa de Port Blair.']] },
     cifras: [['15-500', 'Estimaciones de cuántos son'], ['5.000 → 59', 'Gran andamaneses, del siglo XIX a 2020'], ['0', 'Visitas permitidas']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W18',
+      slides: [
+        { foto: 'W18', h: 'La isla que no se visita', t: 'En Sentinel del Norte, en las islas Andamán, vive un pueblo que no deja entrar a nadie.', credito: ['NASA, MODIS / LANCE', 'Public domain'] },
+        { foto: 'W10', h: 'Una isla cerrada', t: 'Mide unos 60 km² y está a unos 64 km de Port Blair. Nadie de fuera entiende su idioma.', credito: ['NASA Earth Observatory (Jesse Allen)', 'Public domain'] },
+        { foto: 'W3', h: 'Nadie sabe cuántos son', t: 'Siempre se les ha contado desde lejos. Las estimaciones van de 15 a 500.', credito: ['PJeganathan', 'CC BY-SA 4.0'] },
+        { foto: 'W2', h: 'Por qué no', t: 'No tienen defensas contra enfermedades que para nosotros son leves. Sus vecinos, los gran andamaneses, pasaron de unos 5.000 a 59.', credito: ['PJeganathan', 'CC BY-SA 4.0'] },
+        { foto: 'W7', h: 'Las flechas', t: 'Rechazan cualquier contacto. Tras el tsunami de 2004, respondieron con flechas a un helicóptero que fue a ver si estaban bien.', credito: ['PJeganathan', 'CC BY-SA 4.0'] },
+        { foto: 'W12', h: 'Prohibido acercarse', t: 'La isla está protegida por la ley india y patrullada. Acercarse y fotografiar a sus habitantes está prohibido.', credito: ['autor desconocido', 'CC BY-SA 2.0'] },
+        { foto: 'W15', h: 'Si vas a las Andamán', t: 'Port Blair y Havelock sí se visitan. Sentinel del Norte, solo en el mapa. Y nada de tours para ver a los jarawa.', credito: ['Yercaud-elango', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'Una isla cerrada', foto: ['W10', 'Sentinel del Norte vista desde el satélite.'], p: [
         'La isla **Sentinel del Norte** mide unos 60 km² y está a unos 64 km al oeste de Port Blair, la capital de las islas **Andamán**, que pertenecen a la India. Sus habitantes, los **sentineleses**, rechazan cualquier contacto con el exterior.',

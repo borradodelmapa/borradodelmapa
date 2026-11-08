@@ -19,6 +19,19 @@ module.exports = [
     creditosDe: 'salma marketing/pueblos/dukha',
     fotos: { portada: 'W4', galeria: [['W1', 'Montando en reno por la taiga nevada.'], ['W7', 'Una tienda dukha en el bosque.'], ['W12', 'Un reno cargado, en una foto antigua (colección KITLV).'], ['W20', 'Preparando una ceremonia (Taylor Weidman).'], ['W18', 'Un reno blanco en el campamento.'], ['W24', 'Un santuario en el paso de montaña.']] },
     cifras: [['208', 'Dukha en 2020'], ['1944', 'Se cierra la frontera con Tuva'], ['4-8 h', 'A caballo desde Tsagaannuur']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W24',
+      slides: [
+        { foto: 'W24', h: 'Los pastores de renos', t: 'En la taiga del norte de Mongolia, junto a Siberia, los dukha viven de sus renos.', credito: ['Yaan', 'CC BY-SA 3.0'] },
+        { foto: 'W1', h: 'El reno lo es casi todo', t: 'Les da leche, yogur y queso, se monta y lleva la carga. Las familias se mudan siguiendo los pastos.', credito: ['MN5', 'CC0'] },
+        { foto: 'W7', h: 'Tiendas en el bosque', t: 'Viven en tiendas cónicas parecidas a un tipi, que se cubren con lona o con corteza.', credito: ['Bernard Gagnon', 'CC0'] },
+        { foto: 'W10', h: 'Una frontera en medio', t: 'Vienen de Tuva. En 1944, cuando la Unión Soviética se la anexionó, la frontera se cerró y muchas familias quedaron separadas.', credito: ['anónimo (colección KITLV)', 'CC BY 4.0'] },
+        { foto: 'W21', h: 'Lo que se está borrando', t: 'Eran 303 en el año 2000 y 208 en 2020. Muchas familias jóvenes bajan al pueblo cuando los hijos van al colegio.', credito: ['Taylor Weidman', 'CC BY-SA 3.0'] },
+        { foto: 'W14', h: 'Los renos, también', t: 'La brucelosis diezmó los rebaños en 1990, y el cambio climático está reduciendo el liquen del que se alimentan.', credito: ['Bernard Gagnon', 'CC0'] },
+        { foto: 'W18', h: 'Visitar con respeto', t: 'Desde Tsagaannuur, 4-8 horas a caballo y con permiso de frontera. Pregunta antes de fotografiar y llévate la basura.', credito: ['Bernard Gagnon', 'CC0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'Los que tienen renos', foto: ['W22', 'El valle de Darkhad, en la provincia de Khövsgöl.'], p: [
         'Los **dukha** viven en la taiga del norte de Mongolia, en el municipio de **Tsagaannuur** (provincia de Khövsgöl), junto a la frontera con Siberia. En mongol los llaman *tsaatan*, «los que tienen renos».',
@@ -66,6 +79,19 @@ module.exports = [
     creditosDe: 'salma marketing/pueblos/aguila',
     fotos: { portada: 'W64', galeria: [['W48', 'Un cazador kazajo en el festival.'], ['W7', 'Tres cazadores con sus águilas en lo alto de una roca.'], ['W19', 'Cazadores cruzando el río.'], ['W54', 'Un cazador arrodillado junto a su águila.'], ['W69', 'Un cazador con su águila en Bayan-Ölgii.'], ['W66', 'Una joven cazadora con su águila.']] },
     cifras: [['¿60 o 250?', 'Cazadores con águila que quedan'], ['13 años', 'Aisholpan, al ganar el festival'], ['Octubre', 'Festival del Águila Dorada']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W64',
+      slides: [
+        { foto: 'W64', h: 'Los cazadores con águila', t: 'En los montes Altái, en el oeste de Mongolia, los kazajos de Bayan-Ölgii cazan zorros a caballo con águilas reales.', credito: ['Bfreeproductions', 'CC BY-SA 4.0'] },
+        { foto: 'W88', h: 'Los kazajos del Altái', t: 'Sus antepasados llegaron huyendo de la colectivización soviética del ganado y trajeron una tradición: cazar con águilas.', credito: ['Altaihunters', 'CC BY-SA 3.0'] },
+        { foto: 'W5', h: 'Cazar con un águila real', t: 'Cazan en invierno, cuando el pelo del zorro destaca contra la nieve. Suelen usar hembras, más grandes que los machos.', credito: ['Gabideen', 'CC BY-SA 4.0'] },
+        { foto: 'W17', h: '¿Cuántos quedan?', t: 'Nadie lo sabe con certeza. Unas fuentes hablan de unos 250 en Bayan-Ölgii; otra, de unos 60 en 2017.', credito: ['Gabideen', 'CC BY-SA 4.0'] },
+        { foto: 'W66', h: 'Las chicas, también', t: 'En 2014, Aisholpan, de trece años, ganó el festival del Águila Dorada frente a decenas de hombres. Hoy más chicas compiten.', credito: ['Bfreeproductions', 'CC BY-SA 4.0'] },
+        { foto: 'W20', h: 'El festival del Águila Dorada', t: 'El primer fin de semana de octubre, en Shar Nuur, a unos 15 km de Ölgii. Parte se ha convertido en espectáculo para turistas.', credito: ['Gabideen', 'CC BY-SA 4.0'] },
+        { foto: 'W54', h: 'Visitar con respeto', t: 'Pide permiso antes de fotografiar a los cazadores y a sus águilas, y no pagues por posar con un águila para la foto.', credito: ['NuclearApples', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'Los kazajos del Altái', foto: ['W88', 'El monte Tsambagarav, en los montes Altái.'], p: [
         'En la provincia de **Bayan-Ölgii**, en el extremo oeste de Mongolia, entre los montes Altái, vive la mayor parte de los unos 121.000 kazajos del país (2020). Hablan kazajo, lo escriben en cirílico y son mayoritariamente musulmanes.',
