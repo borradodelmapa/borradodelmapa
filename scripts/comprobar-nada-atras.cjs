@@ -109,6 +109,12 @@ for (const f of stories) {
   if (fs.existsSync(path.join(ROOT, art)) && !leer(art).includes(`/stories/${slug}/`)) fallos.push(`${art}: no enlaza a su story /stories/${slug}/`);
 }
 
+// Paso obligatorio (Paco, 9 nov 2026; P15 de docs/video-checklist.md): toda entrada publicada del blog con vídeo tiene su story
+for (const c of require('./datos-pais.cjs').historias()) {
+  if (c.video && !c.borrador && fs.existsSync(path.join(ROOT, 'blog', 'viajes', c.slug + '.html')) && !stories.includes(`stories/${c.slug}/index.html`))
+    fallos.push(`blog/viajes/${c.slug}.html: la entrada tiene vídeo y no tiene Web Story (campo story en historias.js → node scripts/build-stories.js)`);
+}
+
 console.log(`Páginas revisadas: ${paginas.length}` + (stories.length ? ` (+ ${stories.length} web stories)` : ''));
 for (const p of PIEZAS) if (unica[p]) console.log(`  ${p}?v=${unica[p]}`);
 if (fallos.length) {

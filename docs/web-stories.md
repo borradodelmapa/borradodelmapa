@@ -21,5 +21,7 @@ Spec: claude.ai/artifact/15qcDFV5oHMUt5CzkCGgzW (8 nov 2026). Enfoque aprobado p
 - **Validar antes de publicar** (desde un ordenador con acceso a `cdn.ampproject.org`; la nube lo tiene bloqueado):
   abrir la story en local con `#development=1` al final de la URL y mirar la consola, o pasar la URL publicada por
   https://search.google.com/test/amp. Después, Inspección de URL en Search Console.
+- **Paso obligatorio (Paco, 9 nov 2026): toda entrada del blog con vídeo lleva su story** (P15 de `docs/video-checklist.md`).
+  `comprobar-nada-atras.cjs` falla si falta.
 - **Pilotos (8 nov 2026):** `tailandia-carretera-a-pai` (viajes) y `historia-de-vietnam-2000-anos-sin-rendirse` (historia).
   Automatizar el troceo guion→slides, solo después de validar estos dos.

@@ -66,7 +66,8 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 ### Historia
 1. 🎬 pone los datos en `scripts/paises/<país>/historias.js` (con su `orden`) (texto, fotos, vídeo, `destino` = su sitio).
 2. `build-blog-viajes.js` → comprobar en local: barra del país, miga con su sitio, enlace desde el sitio («en nuestras historias») y desde el país.
-3. `comprobar-nada-atras` ✅ → ⏸2 → push.
+3. **Web Story** (P15 de la checklist de vídeo, Paco 9 nov 2026): campo `story` en la misma entrada → `build-stories.js` → mirarla en local. Toda historia con vídeo la lleva.
+4. `comprobar-nada-atras` ✅ → ⏸2 → push.
 
 ### Tanda a Google
 1. Solo páginas ya publicadas y revisadas; máx. 30 por tanda.
