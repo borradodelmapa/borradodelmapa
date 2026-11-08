@@ -29,20 +29,6 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="stylesheet" href="/styles.css?v=196">
 <link rel="stylesheet" href="/destinos.css?v=7">
-<!-- Google Analytics 4 — solo tras consentimiento de cookies (P1-6) -->
-<script>
-window.dataLayer=window.dataLayer||[];
-function gtag(){dataLayer.push(arguments);}
-function loadGA4(){
-  if(document.getElementById('ga4-script'))return;
-  var s=document.createElement('script');
-  s.id='ga4-script';s.async=true;
-  s.src='https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ';
-  document.head.appendChild(s);
-  gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');
-}
-if(localStorage.getItem('cookie_consent')==='all') loadGA4();
-</script>
 <style>
   .public-page { min-height:100vh; background:var(--negro); }
   .public-header { padding:16px 20px; display:flex; justify-content:flex-start; align-items:center; border-bottom:1px solid var(--linea); }
@@ -688,5 +674,6 @@ function escapeHTML(str) {
 })();
 </script>
 <script src="/instalar-app.js?v=2" defer></script>
+<script src="/ga4.js?v=1" defer></script>
 </body>
 </html>

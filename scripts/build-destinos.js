@@ -996,6 +996,7 @@ ${activitiesHTML}
 
   ${rd ? RD_CSS + COMPARTIR_JS + '\n  ' : ''}${BOTTOM_NAV}
 <script src="/instalar-app.js?v=2" defer></script>
+<script src="/ga4.js?v=1" defer></script>
 </body>
 </html>`;
 }
@@ -1190,6 +1191,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   </script>
   <script src="/destinos/destinos.js"></script>
 <script src="/instalar-app.js?v=2" defer></script>
+<script src="/ga4.js?v=1" defer></script>
 </body>
 </html>`;
 }
@@ -1319,6 +1321,7 @@ function buildIndexHTML(countriesByContinent) {
   </script>
   <script src="/destinos/destinos.js"></script>
 <script src="/instalar-app.js?v=2" defer></script>
+<script src="/ga4.js?v=1" defer></script>
 </body>
 </html>`;
 }

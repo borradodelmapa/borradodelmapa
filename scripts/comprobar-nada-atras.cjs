@@ -3,7 +3,7 @@
 //   node scripts/comprobar-nada-atras.cjs      → 0 € · lee los archivos del repo · sale con error si algo no cuadra
 //
 // La web tiene piezas que viven en muchas páginas a la vez (CLAUDE.md §9): styles.css, destinos.css, paginas.css,
-// el aviso «Instala la app» (instalar-app.js), el menú de abajo y el favicon. Cada sesión arreglaba lo que veía y el
+// el aviso «Instala la app» (instalar-app.js), Google Analytics (ga4.js), el menú de abajo y el favicon. Cada sesión arreglaba lo que veía y el
 // resto se quedaba atrás (páginas en styles.css 186, 187 y 190 a la vez; aviso de instalar en 0 de 1.793 destinos).
 // Este script lo mira TODO de una vez: cada página pública y las constantes de los generadores.
 // Lo pasa también GitHub en cada subida (.github/workflows/nada-atras.yml): si falla, llega un correo.
@@ -30,7 +30,7 @@ const paginas = execSync('git ls-files -z -- "*.html"', { cwd: ROOT, maxBuffer: 
 const redes = require('./redes.cjs');
 const fallos = [];
 const versiones = {};   // pieza → { versión → [páginas] }
-const PIEZAS = ['styles.css', 'destinos.css', 'paginas.css', 'instalar-app.js'];
+const PIEZAS = ['styles.css', 'destinos.css', 'paginas.css', 'instalar-app.js', 'ga4.js'];
 
 for (const f of paginas) {
   const h = leer(f);
@@ -43,6 +43,9 @@ for (const f of paginas) {
     }
   }
   if (!h.includes('instalar-app.js')) fallos.push(`${f}: no lleva el aviso «Instala la app» (instalar-app.js)`);
+  // Google Analytics: UN solo script con los IDs (ga4.js, Paco 8 nov 2026); ninguna página con su propia copia
+  if (!h.includes('/ga4.js')) fallos.push(`${f}: no lleva Google Analytics (ga4.js)`);
+  if (/googletagmanager\.com\/gtag|gtag\('config'/.test(h)) fallos.push(`${f}: lleva su propia copia de Google Analytics (debe ir solo por ga4.js)`);
   if (f !== 'index.html' && !h.includes('app-bottom-bar')) fallos.push(`${f}: no lleva el menú de abajo (app-bottom-bar)`);
   if (!h.includes('favicon')) fallos.push(`${f}: no lleva el favicon`);
   // Redes en todos los pies y, debajo de cada vídeo del blog, suscribirse y compartir (Paco, 7 nov 2026)
@@ -79,10 +82,10 @@ const comparar = (archivo, nombre, pieza, debe) => {
 comparar('scripts/build-destinos.js', 'APP_CSS_V', 'styles.css', vIndex);
 comparar('scripts/build-destinos.js', 'DESTINOS_CSS_V', 'destinos.css', unica['destinos.css']);
 comparar('scripts/build-blog-viajes.js', 'CSS_V', 'styles.css', vIndex);
-for (const archivo of ['scripts/build-destinos.js']) {
-  const vs = [...leer(archivo).matchAll(/instalar-app\.js\?v=(\d+)/g)].map((m) => m[1]);
-  if (!vs.length) fallos.push(`${archivo}: no pone el aviso «Instala la app» en las páginas que genera`);
-  for (const v of new Set(vs)) if (v !== unica['instalar-app.js']) fallos.push(`${archivo}: escribe instalar-app.js?v=${v} pero las páginas van en ?v=${unica['instalar-app.js']}`);
+for (const archivo of ['scripts/build-destinos.js']) for (const [js, que] of [['instalar-app.js', 'el aviso «Instala la app»'], ['ga4.js', 'Google Analytics']]) {
+  const vs = [...leer(archivo).matchAll(new RegExp(js.replace('.', '\\.') + '\\?v=(\\d+)', 'g'))].map((m) => m[1]);
+  if (!vs.length) fallos.push(`${archivo}: no pone ${que} (${js}) en las páginas que genera`);
+  for (const v of new Set(vs)) if (v !== unica[js]) fallos.push(`${archivo}: escribe ${js}?v=${v} pero las páginas van en ?v=${unica[js]}`);
 }
 
 console.log(`Páginas revisadas: ${paginas.length}`);
