@@ -39,11 +39,11 @@ function tamJpg(f) {
 // así no hay una segunda lista de autores. Si la foto no tiene pie allí (p. ej. la portada), va en la slide: credito: [autor, licencia].
 function creditoDe(c, s) {
   if (s.credito) return { autor: s.credito[0], lic: s.credito[1] };
-  if (!s.foto.startsWith('a/')) return null;   // fotos de Paco: sin pie
+  if (c.fotosDe && !s.foto.startsWith('a/')) return null;   // fotos de Paco (sus listas): sin pie. El resto (Wikimedia) siempre con autor, como en build-blog-viajes.js
   const html = fs.readFileSync(path.join(ROOT, 'blog', 'viajes', c.slug + '.html'), 'utf8');
   const i = html.indexOf(fotoUrl(c, s.foto) + '"');
   const m = i >= 0 && html.slice(i, i + 1500).match(/<span>Foto: <a [^>]*>([^<]*)<\/a> · ([^<]*)<\/span>/);
-  if (!m) throw new Error(`${c.slug}: la foto ${s.foto} es de archivo y no encuentro su autor en el artículo; ponlo en la slide (credito: [autor, licencia])`);
+  if (!m) throw new Error(`${c.slug}: la foto ${s.foto} no es de Paco y no encuentro su autor en el pie del artículo; ponlo en la slide (credito: [autor, licencia])`);
   return { autor: m[1].replace(/&amp;/g, '&'), lic: m[2] };
 }
 

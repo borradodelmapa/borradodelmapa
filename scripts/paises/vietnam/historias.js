@@ -15,6 +15,19 @@ module.exports = [
     video: 'cp-vietnam-cap1-v5.mp4',
     fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
     fotos: { portada: '245', galeria: [['237', 'Dentro de un templo de Hanói.'], ['274', 'Cocina en la calle.'], ['259', 'Agua para los arrozales.'], ['266', 'La bandera, en la selva.'], ['260', 'Flor de heliconia.'], ['146', 'El avión del lago: en el siguiente capítulo.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '266',
+      slides: [
+        { foto: '266', h: 'Mil años de no rendirse', t: 'Un imperio ocupó el norte de Vietnam mil años y no consiguió borrarlo. Pagodas, estacas de hierro y un río.' },
+        { foto: '236', h: 'La Pagoda del Pilar Único', t: 'Es de 1049 y se levanta sobre una sola columna, dentro de un estanque de Hanói.' },
+        { foto: '156', h: 'La primera universidad', t: 'El Templo de la Literatura, en honor a Confucio. En 1076 se abrió allí la primera universidad del país. Valía el mérito.' },
+        { foto: '342', h: '938: fin del dominio', t: 'Ngô Quyền clavó estacas de hierro bajo el río Bạch Đằng y esperó a la marea baja. Acababan mil años de dominio.' },
+        { foto: '237', h: '1010: nace Thăng Long', t: 'La capital se trasladó a Thăng Long, la actual Hanói. Los mongoles invadieron tres veces y tres veces fueron rechazados.' },
+        { foto: '259', h: '1428: fuera los Ming', t: 'En 1428, tras diez años de guerra, Lê Lợi expulsó a los Ming. En el norte, nadie lo olvida.' },
+        { foto: '274', h: 'El norte, en moto', t: 'Recorrerlo en moto es la mejor forma de entenderlo. Y en un lago de Hanói hay un avión hundido: siguiente capítulo.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Hanói lo guarda en piedra', foto: ['236', 'La Pagoda del Pilar Único, en Hanói.'], p: [
         'En Hanói, dos edificios cuentan el país mejor que cualquier museo. La **Pagoda del Pilar Único**, de 1049, se levanta sobre una sola columna dentro de un estanque. Y el **Templo de la Literatura**, construido en honor a Confucio, donde en 1076 se abrió la primera universidad del país. Allí lo que valía era el mérito.',
@@ -55,6 +68,19 @@ module.exports = [
     video: 'cp-vietnam-cap2-v5.mp4',
     fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
     fotos: { portada: '146', galeria: [['889', 'Las montañas de Trường Sơn.'], ['859', 'Cueva usada como refugio.'], ['867', 'Dentro de una cueva-refugio.'], ['880', 'La selva desde arriba.'], ['143', 'El lago del B-52.'], ['858', 'Restos de munición.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '852',
+      slides: [
+        { foto: '852', h: 'La guerra de las fichas de dominó', t: 'Más de siete millones de toneladas de bombas sobre Indochina. Más del triple que EE. UU. en toda la Segunda Guerra Mundial.' },
+        { foto: '870', h: '1954: el paralelo 17', t: 'Tras vencer a Francia en Điện Biên Phủ, el país se partió en dos, «temporalmente». Las elecciones prometidas nunca llegaron.' },
+        { foto: '880', h: 'La teoría del dominó', t: 'Washington creía que si Vietnam caía del lado comunista, caería todo el sudeste asiático, como fichas de dominó.' },
+        { foto: '866', h: 'Medio millón de soldados', t: 'Tras el incidente de Tonkín, hoy muy discutido, en 1965 llegaron los marines a Da Nang. En tres años eran más de medio millón.' },
+        { foto: '858', h: 'Quảng Trị, bajo tierra', t: 'Se considera la provincia más bombardeada. Una décima parte de las municiones no explotó y sigue bajo la tierra.' },
+        { foto: '140', h: 'El avión del lago', t: 'En diciembre de 1972, doce días de bombardeo sobre Hanói. Uno de los B-52 derribados cayó en un lago y allí sigue.' },
+        { foto: '859', h: '1975: cae Saigón', t: 'Más de 58.000 estadounidenses muertos y, según las estimaciones, más de un millón de vietnamitas. Saigón cayó en 1975.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Cuánto pesa una guerra', foto: ['852', 'Proyectiles en un museo de la guerra.'], p: [
         'Más de siete millones de toneladas de bombas cayeron sobre Indochina, más del triple de las que Estados Unidos lanzó en toda la Segunda Guerra Mundial (las estimaciones van de 6,7 a 8 millones). No hace falta adornarlo.',
@@ -95,6 +121,19 @@ module.exports = [
     video: 'cp-vietnam-cap3-v5.mp4',
     fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
     fotos: { portada: '881', galeria: [['860', 'Un tramo del sendero.'], ['877', 'La selva de Trường Sơn.'], ['861', 'Bombas sin explotar, expuestas.'], ['865', 'Un cañón antiaéreo.'], ['863', 'Escaleras hacia una cueva.'], ['890', 'Montañas de la ruta.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '881',
+      slides: [
+        { foto: '881', h: 'Vivir bajo tierra', t: 'Cuando el cielo es del enemigo, se vive bajo tierra. Así fue la ruta Hồ Chí Minh. Y se siguió adelante.' },
+        { foto: '860', h: 'De sendero a ruta', t: 'Empezó en 1959 como un sendero por las montañas de Trường Sơn. Luego llegaron los camiones y las bicicletas.' },
+        { foto: '890', h: 'Bicicletas de 200 kilos', t: 'Iban cargadas con más de doscientos kilos. Las cifras vietnamitas hablan de más de un millón de toneladas de material.' },
+        { foto: '812', h: 'Atacada y reparada', t: 'Según la placa del paso de Da Deo, la aviación estadounidense la atacó con enorme dureza de 1965 a 1972. Y la reparaban.' },
+        { foto: '875', h: 'Un nombre', t: 'En la cueva de Hang I Ta, una placa recuerda a la enfermera Nguyen Thi Sang, que murió allí el 20 de junio de 1972.' },
+        { foto: '874', h: '1968: la ofensiva del Tet', t: 'Golpeó más de cien ciudades del sur. Militarmente fue una derrota, pero cambió la opinión pública de Estados Unidos.' },
+        { foto: '863', h: 'Mil años de práctica', t: 'No combatían solo contra un ejército: venían de un pueblo con mil años de práctica en no rendirse.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Un sendero que se hizo ruta', foto: ['812', 'La placa del paso de Da Deo.'], p: [
         'La **ruta Hồ Chí Minh** empezó en 1959 como un sendero por las montañas de **Trường Sơn**. Luego fueron camiones y bicicletas cargadas con más de doscientos kilos. Las cifras vietnamitas hablan de más de un millón de toneladas de material.',
@@ -128,6 +167,18 @@ module.exports = [
     video: 'cp-vietnam-4.mp4',
     fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
     fotos: { portada: '023', galeria: [['001', 'Una calle del barrio antiguo.'], ['054', 'Fachadas de Hanói.'], ['055', 'El bún chả, un clásico.'], ['091', 'La calle del tren.'], ['063', 'Fruta en la calle.'], ['164', 'El mausoleo de Hồ Chí Minh.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '023',
+      slides: [
+        { foto: '023', h: 'De la guerra a socios', t: 'Hace cincuenta años se bombardeaban. En 2023, Estados Unidos y Vietnam se declararon socios estratégicos integrales.' },
+        { foto: '049', h: '1986: Đổi Mới', t: 'Con la economía en crisis, Vietnam abrió la puerta a las reformas. Desde 1990, su renta por habitante se ha más que cuadruplicado.' },
+        { foto: '001', h: 'Un partido único', t: 'Sigue siendo un país de partido único, con límites a la libertad que señalan las organizaciones de derechos humanos.' },
+        { foto: '035', h: 'Confucio sigue aquí', t: 'El estudio como camino y el respeto al maestro. En PISA 2012, sus alumnos puntuaron como los de países mucho más ricos.' },
+        { foto: '054', h: 'El Día del Maestro', t: 'Cada 20 de noviembre, los alumnos llevan flores a sus maestros. Recuerda al Wai Khru tailandés: el mismo respeto.' },
+        { foto: '041', h: 'Mérito y memoria', t: 'Las fuentes muestran que se valora la educación y al maestro. No demuestran que hoy sea una meritocracia.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Doi Moi', foto: ['049', 'Hanói hoy: motos hasta donde llega la vista.'], p: [
         'En 1986, con la economía en crisis, Vietnam abrió la puerta a las reformas del **Đổi Mới**. Desde 1990 su renta por habitante se ha multiplicado por más de cuatro. Sigue siendo un país de partido único, con límites a la libertad que señalan las organizaciones de derechos humanos. En 2023, Estados Unidos y Vietnam se declararon socios estratégicos integrales.',
@@ -160,6 +211,19 @@ module.exports = [
     video: 'cp-vietnam-5.mp4',
     fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
     fotos: { portada: '575', galeria: [['173', 'La Torre de la Bandera de Hanói.'], ['165', 'La guardia del mausoleo.'], ['548', 'Una aldea del norte.'], ['584', 'Búfalos de vuelta a casa.'], ['480', 'Gansos cruzando la calle.'], ['804', 'Campos de té.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '575',
+      slides: [
+        { foto: '575', h: 'El hombre de los billetes', t: 'Su cara está en los billetes, en las paredes y en un mausoleo. Hồ Chí Minh, una figura con luces y con sombras.' },
+        { foto: '577', h: 'El regreso', t: 'Nació en 1890 en Nghệ An y pasó treinta años fuera. En 1941 volvió en secreto a una cueva de Cao Bằng, junto a China.' },
+        { foto: '173', h: '2 de septiembre de 1945', t: 'En la plaza Ba Đình de Hanói leyó la declaración de independencia. Citaba la de Estados Unidos.' },
+        { foto: '583', h: 'La reforma agraria', t: 'De 1953 a 1956 se acusó falsamente a muchos campesinos de terratenientes. Moise calcula unos 5.000 ejecutados; otros, muchos más.' },
+        { foto: '548', h: 'Pidió perdón', t: 'En 1956 reconoció errores graves en público. Ese noviembre, el ejército aplastó una revuelta campesina en Nghệ An, su provincia.' },
+        { foto: '189', h: 'La frase', t: '«Nada hay más valioso que la independencia y la libertad», dijo en 1966. Una meta que conviene recordar. Y medir.' },
+        { foto: '164', h: 'El culto al «Tío Hồ»', t: 'Murió en 1969. Según varios relatos pidió ser incinerado; lo embalsamaron, y el Estado cuida hoy su culto.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'El regreso', foto: ['577', 'Las montañas del norte, cerca de la frontera con China.'], p: [
         'Nació en 1890 en Nghệ An y pasó treinta años fuera de su país. En 1941 volvió en secreto a una cueva de **Cao Bằng**, junto a la frontera con China. El 2 de septiembre de 1945, en la plaza Ba Đình de Hanói, leyó la declaración de independencia, que citaba la de Estados Unidos.',

@@ -14,6 +14,18 @@ module.exports = [
     video: 'cp-asia-cap1-v5.mp4',
     fotosDe: { '': 'salma marketing/editor/listas/origen/chiang-mai-todo.lst' },
     fotos: { portada: '014', galeria: [['028', 'Uno de los templos del casco antiguo.'], ['026', 'Tejados de templo contra el cielo de Chiang Mai.'], ['027', 'Buda dorado en un templo del casco.'], ['039', 'Monjes junto al foso al atardecer.'], ['169', 'La noche, entre puestos y motos.'], ['188', 'La moto del viaje.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '014',
+      slides: [
+        { foto: '014', h: 'Chiang Mai, la «ciudad nueva»', t: 'Una ciudad cuadrada, un foso y un plan tan ordenado que cuesta perderse. Alguien lo consiguió.' },
+        { foto: '028', h: '1296: la funda Mangrai', t: 'El rey Mangrai la fundó como capital de su reino, Lan Na, y la llamó «Ciudad Nueva». Siete siglos después sigue llamándose así.' },
+        { foto: '148', h: 'Un foso de 1,5 km', t: 'La trazó casi cuadrada, con un foso de kilómetro y medio por lado. Las murallas de hoy están muy restauradas.' },
+        { foto: '024', h: 'Y aun así, alguien se perdió', t: 'Basta preguntar a Salma: te dice cómo llegar y que el casco antiguo se cruza andando en unos veinticinco minutos.' },
+        { foto: '026', h: 'En los templos', t: 'Hombros y rodillas tapados, y a nadie se le toca la cabeza. Y no pites: el claxon trae mal karma.' },
+        { foto: '169', h: 'El songthaew rojo', t: 'La camioneta compartida sale por unos 30 o 40 bahts dentro del casco. Pregunta el precio antes de subir.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Una ciudad con plan', foto: ['148', 'El foso sigue marcando el cuadrado del casco antiguo.'], p: [
         'Chiang Mai tiene más de setecientos años de historia. La fundó el rey **Mangrai** en 1296 como capital de su reino, **Lan Na**, y la llamó «Ciudad Nueva». Siete siglos después sigue llamándose así.',
@@ -50,6 +62,18 @@ module.exports = [
     video: 'cp-asia-cap2-v5.mp4',
     fotosDe: { '': 'salma marketing/editor/listas/origen/triangulo-oro.lst' },
     fotos: { portada: '63', galeria: [['13', 'El Templo Blanco, todavía sin terminar.'], ['47', 'El Buda dorado del Triángulo de Oro.'], ['34', 'La torre del reloj de Chiang Rai.'], ['06', 'Un templo dorado de camino.'], ['46', 'Altar a orillas del Mekong.'], ['65', 'El río, frontera de tres países.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '63',
+      slides: [
+        { foto: '63', h: 'Donde se tocan tres países', t: 'El río Ruak desemboca en el Mekong y se juntan Tailandia, Laos y Birmania.' },
+        { foto: '55', h: 'Un nombre de 1971', t: 'En el siglo XX fue una de las mayores fuentes de opio del mundo. El nombre lo popularizó el diplomático Marshall Green en 1971.' },
+        { foto: '47', h: 'Lo que queda hoy', t: 'Del lado tailandés, un museo del opio, un Buda dorado y mucha gente haciéndose fotos.' },
+        { foto: '11', h: 'El Templo Blanco', t: 'Chalermchai Kositpipat construye Wat Rong Khun desde 1997 (otras fuentes dicen 1996 o 1999). Todavía no lo ha terminado.' },
+        { foto: '66', h: 'El viajero no cruzó', t: 'Se quedó mirando Laos desde el lado tailandés, que es una forma muy cara de decir que no tenía visado.' },
+        { foto: '65', h: 'Antes de ir a la frontera', t: 'El puente de la Amistad no se cruza andando: hay un autobús lanzadera. Y cierra por la noche.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Donde se juntan tres países', foto: ['55', 'El Mekong desde el lado tailandés.'], p: [
         'El Triángulo de Oro es el sitio donde el río **Ruak** desemboca en el **Mekong** y se tocan Tailandia, Laos y Birmania. En el siglo XX fue una de las mayores fuentes de opio del mundo, y el nombre lo popularizó un diplomático estadounidense, Marshall Green, en 1971, después de que lo adoptara la agencia antidrogas de Estados Unidos.',
@@ -137,6 +161,18 @@ module.exports = [
     video: 'cp-asia-cap4-v5.mp4',
     fotosDe: { 'c': 'salma marketing/editor/listas/origen/ban-rak-thai.lst', 'k': 'salma marketing/editor/listas/origen/kayan-canon-feb7.lst' },
     fotos: { portada: 'k10', galeria: [['c05', 'El lago de Ban Rak Thai.'], ['k16', 'Niebla de la mañana sobre el lago.'], ['c10', 'La calle principal del pueblo.'], ['c54', 'Casas de una aldea junto a la frontera.'], ['k49', 'Una mujer kayan junto a sus telas.'], ['c55', 'Cartel pidiendo donativos para la aldea.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'k10',
+      slides: [
+        { foto: 'k10', h: 'Ban Rak Thai y los kayan', t: 'Un pueblo de té y niebla que fundaron soldados chinos. Y a pocos kilómetros, otra frontera y otra historia.' },
+        { foto: 'k18', h: 'Un pueblo chino en Tailandia', t: 'Lo fundaron soldados nacionalistas chinos del Kuomintang que huían en 1949. Se quedaron a cambio de vigilar la frontera.' },
+        { foto: 'k47', h: 'Se dice «kayan»', t: '«Mujeres jirafa» es una forma despectiva de nombrar a un pueblo. Rechazan también «padaung». No son una atracción.' },
+        { foto: 'c54', h: 'Huyeron de la guerra', t: 'Según organizaciones de derechos humanos, desde 1996 el ejército forzó el traslado de aldeas enteras en el este de Birmania.' },
+        { foto: 'c55', h: 'Sin ciudadanía', t: 'Esas organizaciones calculan que hasta un tercio del estado de Kayah quedó desplazado. Muchos siguen sin ciudadanía en ningún país.' },
+        { foto: 'k49', h: 'Si visitas una aldea', t: 'La entrada ronda los 250 bahts y no siempre llega a ellos: pregunta adónde va. Y pide permiso antes de fotografiar.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Un pueblo chino en Tailandia', foto: ['k18', 'Ban Rak Thai: farolillos rojos sobre el lago.'], p: [
         '**Ban Rak Thai** es un pueblo de té y niebla que fundaron soldados chinos nacionalistas (del Kuomintang) que huían en 1949. Se quedaron a cambio de vigilar la frontera.',
@@ -174,6 +210,18 @@ module.exports = [
     video: 'cp-asia-cap5-v5b.mp4',
     fotosDe: { '': 'salma marketing/editor/listas/origen/doi-inthanon-a.lst' },
     fotos: { portada: '41', galeria: [['02', 'La moto, en ruta.'], ['03', 'Valles del bucle de Mae Hong Son.'], ['37', 'Vachirathan, de cerca.'], ['58', 'Elefante en el santuario.'], ['17', 'Atardecer sobre el río.'], ['21', 'Orquídeas junto al río.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: '41',
+      slides: [
+        { foto: '41', h: 'El techo de Tailandia', t: '1.864 curvas después, el bucle de Mae Hong Son se cierra. Y hay una camiseta que lo demuestra.' },
+        { foto: '03', h: 'Khun Yuam y la guerra', t: 'Un museo, abierto en 1995, guarda restos del ejército japonés que cruzó por aquí hacia Birmania en la Segunda Guerra Mundial.' },
+        { foto: '36', h: 'Doi Inthanon, 2.565 metros', t: 'Lleva el nombre de Inthawichayanon, último rey de Chiang Mai, cuyas cenizas descansan en la cumbre. A sus pies, la cascada Vachirathan.' },
+        { foto: '56', h: 'Elefantes, pero de los buenos', t: 'Los buenos santuarios no permiten montarlos ni montan espectáculos. Eso es lo que hay que buscar.' },
+        { foto: '32', h: '1.864 curvas', t: 'La camiseta que lo demuestra: el bucle de Mae Hong Son, cerrado en moto.' },
+        { foto: '02', h: 'Antes de ir', t: 'La entrada al parque cuesta 300 bahts para extranjeros, más 30 por moto. Llena el depósito en Mae Hong Son.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'El último tramo del bucle', foto: ['32', 'La camiseta que lo demuestra: 1.864 curvas.'], p: [
         'En **Khun Yuam**, un museo guarda los restos del ejército japonés que cruzó por aquí hacia Birmania durante la Segunda Guerra Mundial. Allí hubo una base japonesa y el museo se abrió en 1995; la cifra de soldados varía según la fuente, así que no la damos.',
@@ -210,6 +258,18 @@ module.exports = [
     video: 'cp-muaythai.mp4',
     fotosDe: { '': 'salma marketing/editor/proyectos/muay-thai/drive.lst' }, fotosBase: 'D:/salma-movil/camara-canon/drive/',
     fotos: { portada: 'IMG_4212', galeria: [['IMG_4048', 'La oración antes de salir.'], ['IMG_4036', 'Vendaje antes de la pelea.'], ['IMG_4206', 'Entrada al ring.'], ['IMG_4238', 'El Wai Khru, paso a paso.'], ['IMG_4269', 'La pelea.'], ['IMG_4011', 'Ko Samui.']] },
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'IMG_4206',
+      slides: [
+        { foto: 'IMG_4206', h: 'Muay Thai en Ko Samui', t: 'Una luchadora alemana, un estadio y un ritual de oración antes de la primera pelea.' },
+        { foto: 'IMG_4233', h: 'El saludo al maestro', t: 'Antes de pelear, Lina hace el Wai Khru Ram Muay: «saludo al maestro» y una danza propia de cada gimnasio.' },
+        { foto: 'IMG_4238', h: 'Una oración en movimiento', t: 'Rodea el ring rezando en cada esquina, se inclina en el centro y honra a sus maestros, a sus padres y a sus antepasados.' },
+        { foto: 'IMG_4253', h: 'Las ocho extremidades', t: 'Nació como arte de guerra en el antiguo Siam. Usa puños, codos, rodillas y piernas.' },
+        { foto: 'IMG_4269', h: 'La leyenda de 1767', t: 'Cuentan que Nai Khanom Tom venció a diez luchadores birmanos seguidos y quedó libre. Es leyenda, probablemente del siglo XX.' },
+        { foto: 'IMG_4011', h: 'Veladas en Samui', t: 'En Chaweng hay veladas casi cada noche, desde las nueve. Llega pronto y siéntate frente al ring.', salida: 'Leer el capítulo completo' },
+      ],
+    },
     secciones: [
       { h: 'Antes de pelear, el Wai Khru', foto: ['IMG_4233', 'Lina, durante el Wai Khru Ram Muay.'], p: [
         'En Ko Samui, en el estadio **Phetch Buncha**, hay una luchadora profesional alemana, Lina. Antes de pelear hace el **Wai Khru Ram Muay**: *wai khru* es «saludo al maestro» y *ram muay* es una danza propia de cada gimnasio.',
@@ -253,6 +313,19 @@ module.exports = [
     fotos: { portada: 'W4', galeria: [['W25', 'Una anciana moken de Surin.'], ['W27', 'Un poblado moken cerca de Mergui, en Birmania (2004).'], ['W7', 'Una niña moken en Surin.'], ['W22', 'La costa del parque nacional de Surin.'], ['W16', 'El fondo marino de Surin.'], ['W18', 'La bahía de Chong Khad, en Surin.']] },
     cita: { tras: 3, t: 'La gran ola llevaba mucho tiempo sin comerse a nadie y quería volver a probar', de: 'Saleh Kalathalay, moken de Surin (CBS, 60 Minutes)' },
     cifras: [['×2', 'Agudeza bajo el agua de sus niños (2003)'], ['2006', 'El último kabang de Surin'], ['15 oct - 15 may', 'Temporada del parque']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W25',
+      slides: [
+        { foto: 'W25', h: 'Los moken, nómadas del mar', t: 'Durante siglos vivieron en barcas entre Tailandia y Birmania, en el mar de Andamán.', credito: ['Phuket@photographer.net', 'CC BY 2.0'] },
+        { foto: 'W2', h: 'Una barca por casa', t: 'El kabang era transporte, cocina, dormitorio y casa. Iban de isla en isla. El último de Surin se construyó en 2006.', credito: ['Ronnakorn Potisuwan', 'CC BY-SA 3.0'] },
+        { foto: 'W16', h: 'Ver bajo el agua', t: 'En 2003, un estudio vio que sus niños veían bajo el agua aproximadamente el doble de bien que los niños europeos.', credito: ['Kent Wang', 'CC BY-SA 2.0'] },
+        { foto: 'W17', h: 'La ola que se come a la gente', t: 'En 2004 el mar se retiró antes del tsunami. Reconocieron la laboon de sus leyendas y subieron al monte.', credito: ['The Cosmonaut', 'CC BY-SA 2.5 ca'] },
+        { foto: 'W5', h: 'Un poblado fijo', t: 'Tras el tsunami los juntaron en un solo poblado, dentro del parque nacional. Sus niños pasan cada vez menos tiempo en el mar.', credito: ['The Cosmonaut', 'CC BY-SA 2.5 ca'] },
+        { foto: 'W27', h: 'Sin papeles', t: 'Parte de los moken de Surin sigue sin nacionalidad. En Birmania, los avances se pararon con el golpe de Estado de 2021.', credito: ['LawrieM', 'Public domain'] },
+        { foto: 'W19', h: 'Visitar sin molestar', t: 'Si vas, ve con calma, compra su artesanía y pregunta antes de hacer fotos: es su casa.', credito: ['Andromeda8549', 'CC BY-SA 4.0'], salida: 'Ver el documental' },
+      ],
+    },
     secciones: [
       { h: 'Gente del mar', foto: ['W1', 'El poblado moken de Ao Bon Yai, en Surin (2025).'], p: [
         'Los **moken** son un pueblo austronesio del **archipiélago de Mergui**, unas 800 islas repartidas entre Birmania y Tailandia, y de las **islas Surin**. También viven en la costa tailandesa del mar de Andamán, de Ranong a Krabi. En Birmania los llaman *salone*; en Tailandia, *chao le*, «gente del mar».',
