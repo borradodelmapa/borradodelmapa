@@ -21,6 +21,19 @@ module.exports = [
     fotos: { portada: 'W39', galeria: [['W27', 'Whang-Od, con la varilla del *batok* en la mano.'], ['W24', 'Enseñando sus diseños a quien llega.'], ['W25', 'Un tatuaje recién hecho: los dibujos de siempre, en piel de visitante.'], ['W43', 'Whang-Od en Buscalan.'], ['W47', 'Las terrazas de arroz de Buscalan.'], ['W65', 'Niebla al amanecer sobre las montañas de Kalinga.']] },
     cita: { tras: 5, t: 'Cuando yo ya no esté, ellas seguirán con la firma de los tres puntos', de: 'Whang-Od' },
     cifras: [['107-109', 'Años (fecha exacta desconocida)'], ['106', 'Años en su portada de Vogue (2023)'], ['3', 'Puntos de su firma']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W39',
+      slides: [
+        { foto: 'W39', h: 'Más de cien años tatuando', t: 'En Buscalan, en las montañas de Kalinga, Whang-Od sigue tatuando la piel con una espina.', credito: ['CharMel Creations', 'CC BY-SA 4.0'] },
+        { foto: 'W84', h: 'Buscalan, en Kalinga', t: 'Un pueblo de Tinglayan, a unas quince horas de Manila. Nadie sabe su edad exacta: tiene entre 107 y 109 años.', credito: ['Julia Sumangil', 'CC BY 4.0'] },
+        { foto: 'W11', h: 'Una espina y hollín', t: 'La técnica se llama batok: una espina en una varilla que se golpea con bambú, y tinta de hollín y agua.', credito: ['Lee', 'CC BY 2.0'] },
+        { foto: 'W07', h: 'La fama', t: 'Un documental de 2009 la dio a conocer. En 2023, con 106 años, fue portada de Vogue Philippines.', credito: ['Lee', 'CC BY 2.0'] },
+        { foto: 'W94', h: 'La firma de los tres puntos', t: 'Ella y sus dos aprendices: su sobrina nieta, Grace Palicas, y una prima de esta. El batok solo se hereda por sangre.', credito: ['Mawg64', 'CC BY-SA 4.0'] },
+        { foto: 'W64', h: 'Lo que se está borrando', t: 'Cada tatuaje iba con cantos y ritual. Según la antropóloga Analyn Salvador-Amores, esos cantos no han pasado a sus aprendices.', credito: ['Ranieljosecastaneda', 'CC BY-SA 4.0'] },
+        { foto: 'W47', h: 'Visitar con respeto', t: 'Guía local obligatorio y tasa ecocultural. Pide permiso antes de hacer fotos: el patrimonio no es un souvenir.', credito: ['Ianpetercapocao', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'Buscalan, en Kalinga', foto: ['W84', 'Buscalan, entre terrazas de arroz en las montañas de Tinglayan.'], p: [
         'Buscalan es un pueblo del municipio de **Tinglayan**, en las montañas de la provincia de Kalinga, a unas quince horas de Manila. Allí vive **Apo Whang-Od** (Maria Oggay), del pueblo butbut, considerada la *mambabatok* —tatuadora tradicional kalinga— de más edad.',
@@ -86,6 +99,19 @@ module.exports = [
     fotos: { portada: 'W09', galeria: [['W07', 'Ataúdes vistos desde abajo, contra la luz.'], ['W16', 'Una pared entera de ataúdes en el Valle del Eco.'], ['W19', 'Los más antiguos, gastados por la lluvia.'], ['W20', 'Algunos ataúdes se han abierto con los años.'], ['W23', 'Dentro de la cueva de Lumiang.'], ['W22', 'Casas de Sagada junto al Valle del Eco.']] },
     cita: { tras: 3, t: 'Se iba del mundo como había llegado' },
     cifras: [['1.500 m', 'Altitud de Sagada'], ['~400 km', 'Desde Manila'], ['+10.000', 'Habitantes']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W07',
+      slides: [
+        { foto: 'W07', h: 'A los muertos, se les cuelga', t: 'En las montañas de Luzón, en Sagada, los ataúdes no se entierran: cuelgan de la roca.', credito: ['Juliethepearl', 'CC BY-SA 4.0'] },
+        { foto: 'W42', h: 'Sagada', t: 'Un pueblo de la Mountain Province, a unos 1.500 metros de altura y a unos 400 kilómetros de Manila.', credito: ['Patrickroque01', 'CC BY-SA 4.0'] },
+        { foto: 'W02', h: 'El Valle del Eco', t: 'Los ataúdes cuelgan de la pared, sujetos con vigas. Según la tradición, cuanto más arriba, más cerca de los antepasados.', credito: ['Aldrin J. Garces (ag)', 'CC BY-SA 3.0'] },
+        { foto: 'W08', h: 'Como había llegado', t: 'Al difunto lo velaban sentado en una silla de madera. Luego lo metían en el ataúd encogido, con las piernas al pecho.', credito: ['Juliethepearl', 'CC BY-SA 4.0'] },
+        { foto: 'W12', h: 'No vale cualquiera', t: 'Es un entierro para ancianos respetados: casados, con nietos y que hayan servido a su comunidad.', credito: ['Juliethepearl', 'CC BY-SA 4.0'] },
+        { foto: 'W21', h: 'Lo más común, las cuevas', t: 'Entre los kankanaey lo habitual era apilar los ataúdes en cuevas de caliza, como la de Lumiang.', credito: ['Jonald Dimaano', 'CC BY-SA 4.0'] },
+        { foto: 'W13', h: 'Visitar con respeto', t: 'Registro en la oficina de turismo y guía local. No toques los ataúdes y haz fotos solo donde lo permita el guía.', credito: ['A30422160', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'Un pueblo en la cordillera', foto: ['W42', 'Sagada, entre pinos y montañas, a unos 1.500 metros.'], p: [
         'Sagada está en la **Mountain Province**, en la cordillera del norte de Luzón, a unos **1.500 metros** de altura y a unos 400 kilómetros de Manila. Tiene algo más de diez mil habitantes y, según su alcalde, es el pueblo que más turistas recibe del norte de Filipinas.' ] },
@@ -147,6 +173,19 @@ module.exports = [
     fotos: { portada: 'W135', galeria: [['W79', 'Batad desde el aire.'], ['W131', 'Siembra en grupo en las terrazas de Batad.'], ['W166', 'Bulul sentado, guardián del arroz (Museo de Arte de Honolulu).'], ['W140', 'Terrazas de Batad en una foto antigua.'], ['W147', 'Un agricultor con su carabao en el arrozal.'], ['W100', 'Muros de piedra de las terrazas.']] },
     cita: { tras: 3, t: 'Un tifón se llevó un trozo en una noche' },
     cifras: [['1995', 'Patrimonio de la Humanidad'], ['11 años', 'En la lista de peligro'], ['150', 'Agricultores afectados en 2025']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W147',
+      slides: [
+        { foto: 'W147', h: 'Las terrazas de Batad', t: 'Terrazas de arroz cultivadas a mano por los ifugao en la cordillera de Luzón.', credito: ['Ekaterina Kvelidze', 'CC BY-SA 4.0'] },
+        { foto: 'W85', h: 'Patrimonio desde 1995', t: 'La UNESCO inscribió cinco conjuntos de terrazas: Batad, Bangaan, Hungduan, Mayoyao y Nagacadan.', credito: ['Philip Nalangan', 'CC BY-SA 4.0'] },
+        { foto: 'W93', h: 'El bosque de arriba', t: 'Sobre las terrazas está el muyong, el bosque comunal. De ahí baja el agua que las riega.', credito: ['Patrickroque01', 'CC BY-SA 4.0'] },
+        { foto: 'W166', h: 'El bulul', t: 'Una figura tallada en madera de narra que se guardaba en los graneros para proteger el arroz.', credito: ['Hiart', 'CC0'] },
+        { foto: 'W140', h: '¿Dos mil años o cuatrocientos?', t: 'La UNESCO habla de dos milenios. Las excavaciones de Stephen Acabado apuntan a algo más reciente. Es un debate abierto.', credito: ['UW Digital Collections', 'No restrictions'] },
+        { foto: 'W127', h: 'Noviembre de 2025', t: 'Un corrimiento por el supertifón Uwan dejó dos muertos en Batad y unos 150 agricultores afectados.', credito: ['Jophel Botero Ybiosa', 'CC BY-SA 4.0'] },
+        { foto: 'W100', h: 'Visitar con respeto', t: 'No pises los muros ni uses las plantas de arroz como bastón, y paga la tasa que cobra la comunidad.', credito: ['Patrickroque01', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'Terrazas en la cordillera', foto: ['W85', 'El anfiteatro de terrazas de Batad.'], p: [
         'Las terrazas de arroz de la Cordillera son **Patrimonio de la Humanidad desde 1995**. La UNESCO inscribió cinco conjuntos: **Batad, Bangaan, Hungduan, Mayoyao y Nagacadan**. Suben por la montaña a unos 1.500 metros.' ] },
@@ -202,6 +241,19 @@ module.exports = [
     fotos: { portada: 'W75', galeria: [['W35', 'La bahía de El Nido (Palawan).'], ['W168', 'El volcán Mayon.'], ['W187', 'La cueva de Callao (Cagayán).'], ['W268', 'La lámina de cobre de Laguna, del año 900.'], ['W332', 'Un galeón, en un grabado de 1734.'], ['W228', 'Un ayta en su tierra ancestral (Bataan).']] },
     cita: { tras: 4, t: 'En esas montañas la colonia no entró del todo' },
     cifras: [['7.641', 'Islas'], ['24', 'Volcanes activos'], ['~175', 'Lenguas indígenas']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W35',
+      slides: [
+        { foto: 'W35', h: 'Filipinas, antes de viajar', t: '7.641 islas, una especie humana propia y unas montañas que España nunca conquistó.', credito: ['Vyacheslav Argenberg', 'CC BY 4.0'] },
+        { foto: 'W168', h: 'Islas y volcanes', t: 'Solo unas 2.000 islas están habitadas. Todo el país está en el Cinturón de Fuego del Pacífico.', credito: ['Mhlayson', 'CC BY-SA 4.0'] },
+        { foto: 'W187', h: 'Homo luzonensis', t: 'En la cueva de Callao aparecieron restos de una especie humana nueva, de al menos 50.000 años.', credito: ['mkirader', 'CC BY 2.0'] },
+        { foto: 'W268', h: 'Escrito en el año 900', t: 'La lámina de cobre de Laguna, el documento más antiguo del país, perdona una deuda. Está en el Museo Nacional.', credito: ['Gary Todd from Xinzheng, China', 'CC0'] },
+        { foto: 'W332', h: 'La montaña que no se rindió', t: 'Magallanes llegó en 1521, pero España nunca llegó a controlar del todo el interior de la Cordillera.', credito: ['RadraS-Sardar', 'CC BY-SA 4.0'] },
+        { foto: 'W285', h: 'Unas 175 lenguas', t: 'Se hablan unas 175 lenguas indígenas. En la Cordillera conviven ifugao, kalinga, bontoc y kankanaey.', credito: ['Vsemoguchi', 'CC BY-SA 4.0'] },
+        { foto: 'W228', h: 'Visitar con respeto', t: 'Guía local, tasas del municipio y preguntar antes de fotografiar a nadie. Un tatuaje no se regatea.', credito: ['Aytangbataan', 'CC BY-SA 4.0'], salida: 'Ver el documental' },
+      ],
+    },
     secciones: [
       { h: 'Islas, volcanes y tifones', foto: ['W35', 'La bahía de El Nido (Palawan).'], p: [
         'La agencia cartográfica filipina (NAMRIA) cuenta **7.641 islas**; durante décadas la cifra oficial fue 7.107. Solo unas **2.000 están habitadas** y más de 5.000 ni siquiera tienen nombre oficial. Se agrupan en tres: **Luzón**, las **Visayas** y **Mindanao**.',

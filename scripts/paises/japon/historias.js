@@ -19,6 +19,19 @@ module.exports = [
     creditosDe: 'salma marketing/pueblos/ainu',
     fotos: { portada: 'W4', galeria: [['W5', 'Mujer ainu con el tatuaje de la boca (colección Bälz).'], ['W11', 'Mujer de Shiraoi con el traje de fiesta.'], ['W13', 'Una familia ainu ante su casa.'], ['W22', 'Un anciano ainu hacia 1930.'], ['W25', 'Casa ainu de Hokkaido en 1912.'], ['W37', 'El lago Poroto desde el Museo Nacional Ainu.']] },
     cifras: [['1871', 'Prohibición del tatuaje'], ['2', 'Hablantes nativos del ainu (2025)'], ['2019', 'Reconocidos como pueblo indígena']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W5',
+      slides: [
+        { foto: 'W5', h: 'El tatuaje que Japón prohibió', t: 'Las niñas ainu se tatuaban la boca desde pequeñas. En 1871, Japón lo prohibió.', credito: ['anónimo', 'Public domain'] },
+        { foto: 'W12', h: 'El pueblo del norte', t: 'Los ainu son el pueblo indígena de Hokkaido. Antes vivían también en Sajalín, las Kuriles y el norte de Honshu.', credito: ['Museo Nacional de Dinamarca', 'No restrictions'] },
+        { foto: 'W7', h: 'El tatuaje de la boca', t: 'Empezaba entre los 10 y los 13 años. Marcaba el paso a mujer y protegía de los malos espíritus.', credito: ['Tamoto Kenzō', 'Public domain'] },
+        { foto: 'W30', h: 'Antiguos aborígenes', t: 'Así los llamó una ley de 1899. En la práctica les negó la caza, la recolección y su lengua.', credito: ['Sapporo Ward', 'Public domain'] },
+        { foto: 'W10', h: 'Una lengua casi muda', t: 'Al ainu le quedan, como mucho, dos hablantes nativos. Cada vez más gente lo aprende de adulta.', credito: ['autor desconocido', 'Public domain'] },
+        { foto: 'W29', h: 'Reconocidos en 2019', t: 'Fue la primera vez que una ley nacional de Japón los reconocía como pueblo indígena.', credito: ['munechika tanaka', 'CC BY 2.0'] },
+        { foto: 'W39', h: 'Visitar Upopoy', t: 'El Museo Nacional Ainu, en Shiraoi, a una hora de Sapporo. Pregunta antes de fotografiar a nadie en las danzas.', credito: ['掬茶', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'El pueblo del norte', foto: ['W12', 'Un hombre ainu de Shiraoi.'], p: [
         'Los **ainu** son el pueblo indígena de **Hokkaido**, la isla más al norte de Japón. Antes vivían también en Sajalín, en las Kuriles y en el norte de Honshu.',

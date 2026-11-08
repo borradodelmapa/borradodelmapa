@@ -37,7 +37,13 @@ function tamJpg(f) {
 
 // Crédito de una foto de archivo: el mismo que ya lleva en el artículo publicado (pie «Foto: autor · licencia»),
 // así no hay una segunda lista de autores. Si la foto no tiene pie allí (p. ej. la portada), va en la slide: credito: [autor, licencia].
+const LIC_ES = { 'Public domain': 'Dominio público', 'No restrictions': 'Sin restricciones conocidas' };
+const lic = (l) => LIC_ES[l] || l;
 function creditoDe(c, s) {
+  const r = creditoBruto(c, s);
+  return r && { autor: r.autor, lic: lic(r.lic) };
+}
+function creditoBruto(c, s) {
   if (s.credito) return { autor: s.credito[0], lic: s.credito[1] };
   if (c.fotosDe && !s.foto.startsWith('a/')) return null;   // fotos de Paco (sus listas): sin pie. El resto (Wikimedia) siempre con autor, como en build-blog-viajes.js
   const html = fs.readFileSync(path.join(ROOT, 'blog', 'viajes', c.slug + '.html'), 'utf8');

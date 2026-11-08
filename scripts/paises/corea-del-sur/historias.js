@@ -20,6 +20,19 @@ module.exports = [
     fotos: { portada: 'W36', galeria: [['W27', 'Entrando al agua con el flotador y la red.'], ['W12', 'Limpiando lo recogido en la orilla.'], ['H02', 'Haenyeo de Jeju en 1962.'], ['H03', 'De vuelta del mar, en 1958.'], ['W10', 'Trabajo en la orilla, en la playa de Yongmeori.'], ['W03', 'Haenyeo junto al puerto de Seongsan.']] },
     cita: { tras: 4, t: 'Se gana en el mundo de los muertos para gastar en el de los vivos', de: 'Dicho de las haenyeo' },
     cifras: [['2.371', 'Haenyeo a finales de 2025'], ['63 %', 'Con 70 años o más'], ['10-20 m', 'A pulmón']],
+    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    story: {
+      portada: 'W27',
+      slides: [
+        { foto: 'W27', h: 'Las mujeres del mar', t: 'En la isla de Jeju, mujeres de más de setenta años siguen bajando al fondo del mar sin botella.', credito: ['idobi', 'CC BY-SA 3.0'] },
+        { foto: 'W42', h: 'A pulmón', t: 'Bajan hasta unos diez metros, las más expertas hasta veinte, y aguantan de uno a tres minutos.', credito: ['Republic of Korea from Seoul, Republic of Korea', 'CC BY-SA 2.0'] },
+        { foto: 'W24', h: 'El sumbisori', t: 'Al salir sueltan el aire con un silbido largo que les permite volver a bajar enseguida.', credito: ['idobi', 'CC BY-SA 3.0'] },
+        { foto: 'H01', h: '1932', t: 'Bajo la ocupación japonesa, las haenyeo del este de Jeju se levantaron contra la administración colonial.', credito: ['한국정책방송원 (KTV)', 'KOGL Type 1'] },
+        { foto: 'W23', h: 'El otro mundo', t: 'Su dicho: se gana la vida en el mundo de los muertos para gastarla en el de los vivos.', credito: ['idobi', 'CC BY-SA 3.0'] },
+        { foto: 'W01', h: 'Quedan 2.371', t: 'Casi la mitad que en 2015. Dos de cada tres tienen setenta años o más; solo 105, menos de cincuenta.', credito: ['idobi', 'CC BY-SA 3.0'] },
+        { foto: 'W03', h: 'Visitar con respeto', t: 'No entres en sus zonas de pesca ni cojas nada del mar, y pide permiso antes de hacerles fotos.', credito: ['Teemeah', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
     secciones: [
       { h: 'Las mujeres del mar', foto: ['W42', 'En el mar, junto al flotador naranja (*taewak*) que marca dónde bucea cada una.'], p: [
         'Las **haenyeo** («mujeres del mar») bucean a pulmón en la costa de **Jeju**, una isla volcánica al sur de Corea. Sin botella: con traje de neopreno, gafas, aletas, plomos, una herramienta para despegar las conchas y una red atada a un flotador.',
