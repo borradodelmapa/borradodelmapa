@@ -258,7 +258,7 @@ module.exports = [
     cap: 'Documental',
     pais: 'Vietnam',
     formato: '16:9',
-    titulo: 'Historia de Vietnam: 2.000 años sin rendirse',
+    titulo: 'Qué saber antes de ir a Vietnam: 2.000 años sin rendirse',
     resumen: 'La historia de Vietnam contada en moto, por los lugares donde ocurrió: China, los mongoles, los Ming, Francia, Japón, Estados Unidos y otra vez China. Todos entraron y todos acabaron marchándose.',
     video: 'vietnam-2000-anos-largo.mp4',
     realidad: 'Basado en un viaje real: las fotos y vídeos del recorrido son de Paco. La historia va con fotos, grabados y vídeos de archivo con licencia libre; las animaciones y recreaciones llevan rótulo. Autores y fuentes, al final de la página.',
