@@ -185,3 +185,106 @@
 - Style Motorbikes (solo sedes; precios sin confirmar): https://wanderlog.com/place/details/8311324/style-motorbikes-hanoi-helmet-and-bike-shop
 - Historia, Templo de la Literatura y Phong Nha: datos ya verificados del largo de Vietnam (`vietnam/largo/texto-v2.txt`, `scripts/paises/vietnam/historias.js`) y de sus shorts.
 - Ruta: GPS del móvil, `D:\salma-movil\resumen-lugares.md`.
+
+
+---
+
+# GUION v3 · SOLO SALMA (9 nov 2026, chat Vídeo; montado). Sustituye a lo de arriba
+Paco, tras oír el primer montaje: fuera su voz; habla Salma, con información relevante y dinamismo; él puede salir en imagen; se quedan sus datos; se añade la situación actual. Configuración: `salma marketing/india/motor/vietnam-moto.cjs`.
+
+Cuarenta y cinco días en Vietnam. Una moto alquilada en Hanói, todo el norte y abajo hasta Huế.
+Y un problema que casi nadie te cuenta: con carné español, esa moto no se puede conducir legalmente.
+Visado, seguro, dinero, ruta y lo que está cambiando en el país. Y al final, lo que costó de verdad.
+Lo primero, rápido.
+¿Visado? Con pasaporte español, hasta cuarenta y cinco días sin visado, con el pasaporte válido seis meses.
+Más tiempo: visado electrónico, hasta noventa días.
+¿Es seguro? Exteriores lo describe como un país muy seguro, pero recomienda viajar con precaución. El problema son los robos en Hanói, Ciudad Hồ Chí Minh, Sapa y Hội An, y en los autobuses y trenes de noche.
+¿Y la salud? La tarjeta sanitaria europea aquí no vale. Seguro con accidente y evacuación, sí o sí. Agua embotellada, cuidado con el hielo, repelente, y nada de vino de arroz sin etiqueta: puede ser letal.
+¿Vapeador? Prohibidos desde enero de dos mil veinticinco. Usarlo puede costarte unos ochenta euros.
+¿Cuánto cuesta? Viajando sencillo, entre treinta y cincuenta dólares al día. Con algo más de comodidad, de ochenta en adelante.
+¿Cuándo ir? El norte, de octubre a abril, y en invierno hace frío de verdad. El centro, mejor evitar de octubre a diciembre, por los tifones. El sur, de noviembre a abril.
+¿Cuántos días? Con dos semanas cruzas el país deprisa. Con tres, ya lo disfrutas.
+Y ahora lo de la moto. Exteriores lo dice claro: Vietnam no reconoce el permiso internacional expedido en España. Un turista español no puede conducir moto. Te arriesgas a una multa y a que te retiren el pasaporte.
+Y hay algo peor. Muchos seguros de viaje solo cubren el accidente si llevabas un permiso válido. Sin él, el hospital y la evacuación los pagas tú.
+Este viaje lo hizo Paco, con una moto de Style Motorbikes, en Hanói. La alquilan sin problema, y la devolvió en Huế: se puede dejar en otra ciudad. Tienen sede también en Camboya.
+Llevaba carné internacional de España. Allí no vale.
+La moto: una Honda ciento veinticinco trail. Cómoda, suficiente para estas carreteras y muy versátil.
+Y fácil de reparar: hay muchísimos talleres y Honda domina el mercado.
+Unos diecisiete euros al día, con el seguro de la tienda y seguro de viaje aparte. Dejó el pasaporte como aval; la otra opción es una fianza fuerte.
+Ojo con eso: Exteriores recuerda que los extranjeros deben llevar el pasaporte encima, y aconseja recuperarlo siempre.
+No es un consejo: es lo que hay. Decide sabiendo el riesgo.
+Y las multas han subido. Conducir moto con mucho alcohol puede costar diez millones de dong, más de trescientos euros, y casi dos años sin permiso.
+La alternativa legal existe: autobús, tren, y en cada zona contratar moto con conductor.
+Vietnam está de moda. En diez meses de este año entraron diecinueve millones y medio de turistas extranjeros, casi un catorce por ciento más que el año pasado. Sobre todo de China y Corea del Sur. El objetivo: veinticinco millones.
+Más de cien millones de personas, y un solo partido, el Comunista, al frente del país.
+Su líder, Tô Lâm, es desde abril también presidente del país.
+Y la economía va lanzada: un nueve por ciento de crecimiento en nueve meses, con los precios subiendo a un cuatro y medio.
+El mapa también ha cambiado: en dos mil veinticinco, sesenta y tres provincias pasaron a ser treinta y cuatro. Si una guía antigua te da un nombre de provincia, compruébalo.
+Y si vuelas al sur: el nuevo aeropuerto de Long Thành, cerca de Ciudad Hồ Chí Minh, tiene previsto abrir a vuelos comerciales el veinticuatro de diciembre. Mira bien de cuál sales.
+Hanói tiene un problema con el aire. Este año ha vuelto a salir entre las diez ciudades más contaminadas del mundo, y lo peor llega de octubre a abril.
+Por eso están sacando las motos de gasolina del centro, por fases. Primero iba a ser este verano, pero se ha suavizado. Según lo último publicado, desde dos mil veintiocho no entrarán en el primer cinturón las motos particulares que no pasen la norma de emisiones. Si vas, míralo antes.
+Y cada otoño, el centro del país sufre tifones e inundaciones. No es una excepción: pasa casi todos los años.
+Hace un año, el agua entró en la ciudadela imperial de Huế y en el casco antiguo de Hội An.
+Hanói. La base, el Old Quarter: céntrico, y tienes todo a mano.
+Te dirán que se visita a pie. Paco lo hizo y no lo recomienda: hay mucha polución. Mejor un Grab entre un sitio y otro.
+El tráfico: millones de motos. Pasa en todos estos países, pero Hanói se lleva la palma.
+Y aquí la moto es una herramienta de trabajo: desde puesto de comida hasta transporte. A veces es incomprensible verlas tan cargadas.
+China gobernó estas tierras, con interrupciones, unos mil años. Las primeras en levantarse fueron dos hermanas, las Trưng. Hoy un barrio de Hanói lleva su nombre.
+El Templo de la Literatura. Fue la primera universidad del país.
+Abre de ocho a cinco, unos setenta mil dong. Mérito, estudio y respeto al maestro: eso se quedó.
+Y el Hanoi Hilton.
+La prisión de Hỏa Lò. La construyeron los franceses para encerrar a los vietnamitas, y luego los vietnamitas encerraron allí a los pilotos americanos. Cincuenta mil dong, de ocho a cinco.
+Es dura. Paco no aguantó mucho dentro, pero la recomienda: se entiende lo que hicieron aquí los franceses.
+Y gratis, desde la calle: los restos de un B-52 en un lago, en plena ciudad. Cayó en los bombardeos de Navidad de mil novecientos setenta y dos.
+Y en el lago Hoàn Kiếm, la leyenda. Dice que, ganada la guerra contra los Ming, el rey Lê Lợi entregó su espada mágica a una tortuga gigante del lago. Y la tortuga es real: se conserva una en el templo.
+Para comer, el bún chả de Hương Liên, donde cenaron Obama y Bourdain. Y el café de huevo en Giảng.
+Hacia el oeste, Pù Luông y Mai Châu: arrozales y norias de bambú.
+Pù Luông está en Thanh Hóa. De esta provincia salió Lê Lợi, el que echó a los Ming tras diez años de guerra.
+Para dormir, en este viaje se reservó sobre la marcha, entre diez y treinta euros como máximo. La diferencia de calidades es abismal.
+Luego, al norte. Nà Hang, y las montañas hasta Cao Bằng, pegado a China.
+Por estas montañas entraron los mongoles, tres veces. Y en una cueva de Cao Bằng, junto a la frontera, se escondió Hồ Chí Minh cuando volvió en secreto al país.
+Lo más bruto del viaje: la carretera de Hồ Chí Minh y el extremo norte.
+Conducir aquí es un poco como un videojuego: se te va a cruzar todo tipo de animales, domésticos o no.
+Y muchos.
+Si buscas el norte famoso, están Sapa y el loop de Hà Giang. Hay que ir con buen tiempo y conducir muy bien, o ir con conductor.
+Por Bắc Sơn y Hữu Liên se baja a la costa, hasta Hải Phòng.
+Muy cerca desemboca el río Bạch Đằng. En el año novecientos treinta y ocho, Ngô Quyền clavó en el lecho estacas con punta de hierro. Con la marea alta no se veían. La flota china subió, bajó la marea y los barcos se ensartaron. Tres siglos y medio después repitieron el truco, en el mismo río.
+La bahía de Hạ Long es el sitio más famoso del país, y se nota. Mejor un barco que duerma a bordo que una excursión de un día.
+En este viaje, Hạ Long y Cát Bà merecieron mucho la pena.
+Le llaman la Hạ Long de tierra: las mismas montañas de piedra, pero entre arrozales.
+Tràng An, Patrimonio de la Humanidad, se recorre en barca entre cuevas y templos, desde doscientos cincuenta mil dong.
+Muy cerca, Tam Cốc y Hoa Lư, la primera capital del país.
+De ahí, abajo por la ruta Hồ Chí Minh. La misma que se usó para mover soldados y armas durante la guerra.
+Phong Nha: la cueva principal, ciento cincuenta mil dong, se entra en barca. Paradise, doscientos cincuenta mil. La Cueva Oscura, solo con excursión.
+Y hay cuevas impresionantes que solo se visitan con permiso, en expediciones carísimas. Sơn Đoòng, la más grande del mundo: unos tres mil dólares, cuatro días, y las plazas de dos mil veintiséis y dos mil veintisiete ya están vendidas.
+Quảng Trị. En mil novecientos cincuenta y cuatro el país se partió en dos por aquí, por el paralelo diecisiete. Es una de las zonas más bombardeadas de la guerra.
+Aquí están los túneles de Vịnh Mốc: los vecinos excavaron hasta unos treinta metros bajo tierra, y vivieron allí unas sesenta familias.
+Y Huế, final de esta ruta en moto.
+Capital de la última dinastía, los Nguyễn. En la ofensiva del Tet, en mil novecientos sesenta y ocho, un mes de combates arrasó la ciudad.
+De Huế para abajo, esta moto no llegó. Pero esto es lo que hay.
+Hội An, el casco antiguo con farolillos, y Đà Nẵng a un paso.
+Đà Lạt, en la montaña, para escapar del calor.
+Ciudad Hồ Chí Minh, la antigua Saigón, con el Museo de la Guerra y los túneles de Củ Chi.
+El delta del Mekong en barca. Y para terminar en la playa, Phú Quốc.
+Lo prometido: la cuenta real de estos cuarenta y cinco días.
+No hay cuenta exacta. Unos treinta euros al día, y la moto, diecisiete. Dormir, entre diez y treinta, según la calidad. Comer, poquísimo.
+Y ojo: en algunas zonas del norte, comer a veces es complicado.
+La idea: ciento cincuenta kilómetros al día como máximo. Y depende, porque es una paliza.
+Balance: ningún timo, cero caídas, un carburador que limpiar porque se mojó, y un poco de lluvia todos los días.
+Lo que Paco no repetiría: pasar tanto tiempo en Hanói.
+Y lo que haría sin dudar: volver.
+Y acabó donde empezó: los últimos días, otra vez en Hanói, entrenando.
+Todas las rutas de este vídeo están en la descripción, con cada parada en el mapa.
+
+## Fuentes nuevas de la v3 (F4)
+- Turistas, 10 meses de 2026 (19,5 M; +13,8 %; China y Corea): https://vietnamnews.vn/life-style/1803537/international-arrivals-to-viet-nam-reach-19-5-million-in-first-10-months-of-2026.html
+- Tô Lâm, presidente desde el 7 abr 2026: https://vufo.org.vn/Party-General-Secretary-To-Lam-elected-as-State-President-for-20262031-term-09-61361.html?lang=en
+- PIB +9,01 % e IPC +4,52 % en nueve meses: https://vietnamnet.vn/en/vietnam-gdp-grows-9-01-in-nine-months-as-inflation-rises-4-52-2561429.html
+- De 63 a 34 provincias: https://vietnamnews.vn/politics-laws/1719423/na-passes-resolution-to-cut-provinces-and-centrally-run-cities-from-63-to-34.html
+- Long Thành, 24 dic 2026 (previsto; ya se aplazó varias veces; **comprobar antes de publicar**): https://en.vietnamplus.vn/long-thanh-airport-set-to-begin-commercial-operations-on-december-24-post354582.vnp
+- Inundaciones de 2025 en Huế y Hội An: https://www.yahoo.com/news/articles/floods-kill-nine-vietnam-historic-095132454.html
+- Motos en Hanói, por fases desde 2026 y particulares desde 2028 (sin texto oficial de Hanói localizado): https://vietnamnews.vn/society/1783502/ha-noi-to-ban-substandard-petrol-powered-motorcycles-in-inner-city-from-2028.html
+- Multa por alcohol en moto, 8-10 M de dong y 22-24 meses sin permiso (Decreto 168, nivel más alto): https://en.baochinhphu.vn/evolution-of-traffic-fines-in-viet-nam-111260327164223531.htm
+- Permiso, pasaporte y vapeadores (hasta 2 M de dong, unos 80 €): Exteriores, vigentes a 9 nov 2026.
+- Vịnh Mốc (30 m, unas 60 familias): datos ya verificados del largo de Vietnam.
+- «Barrio» en vez de «distrito» de las Trưng: Vietnam suprimió el nivel de distrito el 1 jul 2025.
