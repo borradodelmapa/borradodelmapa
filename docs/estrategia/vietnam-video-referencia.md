@@ -3,6 +3,9 @@
 ## Lo que sabemos del viaje (palabras de Paco)
 45 días, el máximo sin visado para españoles. En moto: desde Hanói, todo el norte y bajada hasta Huế. Moto alquilada en Style Motorbikes, Hanói, y devuelta en Huế (tienen sede también en Camboya y se puede dejar en otro sitio). Alojado en el Old Quarter. Hanói a pie, poco recomendable por la polución. Templo de la Literatura, Hanoi Hilton y muchos más. Lo que falte del país (de Huế al sur) se añade.
 
+## Título y esquema (9 nov, en conversación con Paco)
+Paco confirma 45 días (el móvil solo tiene archivos de 35: del 15 abr al 20 may). Título propuesto: «Viajar a Vietnam: 45 días en moto y todo lo que debes saber». Esquema: gancho (0:20) · preguntas frecuentes (hasta 2:00) · cómo está Vietnam ahora, con prensa y fuente (hasta 4:00) · recorrido de norte a sur con la historia repartida por lugares y las guías (hasta 15:00) · la cuenta real y la ruta gratis. Paco no se grabó a cámara: su voz sobre sus imágenes. La idea «Paco contra Salma» de abajo, de momento no le convence.
+
 ## La idea
 **Paco contra Salma.** Salma da el dato oficial; Paco cuenta lo que pasó. «Salma dice que Hanói se visita a pie. Yo tosí tres días» (ejemplo; la frase real sale de Paco). Es lo que nadie más puede hacer: una guía que discute con quien estuvo allí.
 
