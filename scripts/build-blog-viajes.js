@@ -392,8 +392,10 @@ ${paises.map((p) => { const dp = datosPais(p.nombre), url = dp ? `/destinos/${dp
     <p style="padding:0 16px;margin:14px 0 0"><a class="pg-btn" href="/destinos/">Todos los países →</a></p>
   </section>
 ` : '';
+// Documentales de una serie o país que se enseñan en «Documentales» y no en el carril de su serie (Paco, 9 nov 2026)
+const DOCS_EXTRA = ['pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse'];
 const bloqueSeries = series.map((s) => {
-  const lista = caps.filter((c) => c.serie === s);
+  const lista = caps.filter((c) => c.serie === s && !DOCS_EXTRA.includes(c.slug));
   return `  <section class="bv-serie" id="${slugSerie(s)}">
     <div class="bv-serie-head"><h2>${esc(s)}</h2><span>${lista.length} diarios</span></div>
     <p class="bv-serie-sub">${esc(caps.SERIES[s].sub)}</p>
@@ -405,7 +407,6 @@ ${lista.map(rail).join('\n')}
 // Paco, 5 nov 2026: «¿dónde están los shorts de Pueblos borrados del mapa? ponlo»: su carril en la portada, después de los países
 const bloquePueblos = series.includes('Pueblos borrados del mapa') ? bloqueSeries.split('\n\n').find((b) => b.includes('id="' + slugSerie('Pueblos borrados del mapa') + '"')) || '' : '';
 // Documentales de varios países (no salen en «Historias por país») + los de un país que Paco quiere también aquí (9 nov 2026: Vietnam); siguen en su serie
-const DOCS_EXTRA = ['historia-de-vietnam-2000-anos-sin-rendirse'];
 const docsLista = caps.filter((c) => c.serie === 'Documentales' || DOCS_EXTRA.includes(c.slug));
 const bloqueDocs = docsLista.length ? `  <section class="bv-serie" id="${slugSerie('Documentales')}">
     <div class="bv-serie-head"><h2>Documentales</h2><span>${docsLista.length} ${docsLista.length === 1 ? 'documental' : 'documentales'}</span></div>
