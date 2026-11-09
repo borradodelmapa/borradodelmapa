@@ -356,7 +356,7 @@ caps.forEach((c) => fs.writeFileSync(path.join(OUT, c.slug + '.html'), pagina(c)
 // ─── Portada del blog ───
 const series = [...new Set(caps.map((c) => c.serie))];
 const rail = (c) => `      <a class="bv-card${c.formato === '16:9' ? ' doc' : ''}" href="/blog/viajes/${c.slug}">
-        <div class="bv-poster"><img src="/blog/viajes/img/${c.slug}.jpg" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip">${c.formato === '16:9' ? 'Documental' : esc(capCorto(c))}</span>${c.dur ? `<span class="bv-dur">${c.dur.txt}</span><span class="bv-play" aria-hidden="true"></span>` : ''}</div>
+        <div class="bv-poster"><img src="/blog/viajes/img/${c.slug}.jpg" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip"${c.formato === '16:9' ? ' style="left:auto;right:0"' : ''}>${c.formato === '16:9' ? 'Documental' : esc(capCorto(c))}</span>${c.dur ? `<span class="bv-dur">${c.dur.txt}</span><span class="bv-play" aria-hidden="true"></span>` : ''}</div>
         <div class="bv-card-t">${esc(c.titulo)}</div>
         <div class="bv-card-m">${c.dur ? 'Vídeo' : 'Lectura'}</div>
       </a>`;
