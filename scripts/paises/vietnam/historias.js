@@ -77,7 +77,7 @@ module.exports = [
         { foto: '880', h: 'La teoría del dominó', t: 'Washington creía que si Vietnam caía del lado comunista, caería todo el sudeste asiático, como fichas de dominó.' },
         { foto: '866', h: 'Medio millón de soldados', t: 'Tras el incidente de Tonkín, hoy muy discutido, en 1965 llegaron los marines a Da Nang. En tres años eran más de medio millón.' },
         { foto: '858', h: 'Quảng Trị, bajo tierra', t: 'Se considera la provincia más bombardeada. Una décima parte de las municiones no explotó y sigue bajo la tierra.' },
-        { foto: '140', h: 'El avión del lago', t: 'En diciembre de 1972, doce días de bombardeo sobre Hanói. Uno de los B-52 derribados cayó en un lago y allí sigue.' },
+        { foto: '140', h: 'El avión del lago', t: 'En diciembre de 1972, once noches de bombardeo sobre Hanói. Uno de los B-52 derribados cayó en un lago y allí sigue.' },
         { foto: '859', h: '1975: cae Saigón', t: 'Más de 58.000 estadounidenses muertos y, según las estimaciones, más de un millón de vietnamitas. Saigón cayó en 1975.', salida: 'Leer el capítulo completo' },
       ],
     },
@@ -94,7 +94,7 @@ module.exports = [
         'Llegaron los aviones. **Quảng Trị** se considera la provincia más bombardeada: una décima parte de las municiones no explotó y sigue bajo la tierra. A eso se sumaron más de once millones de galones de Agente Naranja.',
       ] },
       { h: 'El avión del lago', foto: ['140', 'Los restos del B-52, todavía en el lago de Hanói.'], p: [
-        'En diciembre de 1972, doce días de bombardeo sobre Hanói. Uno de los B-52 derribados cayó en un lago de la ciudad. Y allí sigue.',
+        'En diciembre de 1972, once noches de bombardeo sobre Hanói. Uno de los B-52 derribados cayó en un lago de la ciudad. Y allí sigue.',
         'Murieron más de 58.000 estadounidenses y, según las estimaciones, más de un millón de vietnamitas. En 1973, los acuerdos de París. El 30 de abril de 1975 cayó Saigón.',
       ] },
     ],
