@@ -38,3 +38,8 @@ Ocupados hasta el jue 10 dic con Vietnam, Pueblos T1 y Tatuajes (`plan.md` §3).
 2. 🎬 Vídeo pone el comentario fijado con los autores.
 3. Paco pide la indexación en Search Console.
 Si el vídeo cambia antes, 🎬 Vídeo avisa a Web para rehacer el vídeo ligero y el minutaje.
+
+## Por hacer el jue 10 dic, a las 15:30 (largo de Tatuajes, solo YouTube; aprobado por Paco el 9 nov)
+1. 🎬 Vídeo: comentario fijado a las 15:35 (tarea programada, P6) y comprobarlo.
+2. 🌍 Web: poner `youtube` en la entrada `historia-de-los-tatuajes` cuando el vídeo sea público. Hay que avisarla.
+3. Paco pide la indexación en Search Console.
