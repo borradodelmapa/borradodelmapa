@@ -404,7 +404,16 @@ ${lista.map(rail).join('\n')}
 }).join('\n\n');
 // Paco, 5 nov 2026: «¿dónde están los shorts de Pueblos borrados del mapa? ponlo»: su carril en la portada, después de los países
 const bloquePueblos = series.includes('Pueblos borrados del mapa') ? bloqueSeries.split('\n\n').find((b) => b.includes('id="' + slugSerie('Pueblos borrados del mapa') + '"')) || '' : '';
-const bloqueDocs = bloqueSeries.split('\n\n').find((b) => b.includes('id="' + slugSerie('Documentales') + '"')) || ''; // documentales de varios países: no salen en «Historias por país»
+// Documentales de varios países (no salen en «Historias por país») + los de un país que Paco quiere también aquí (9 nov 2026: Vietnam); siguen en su serie
+const DOCS_EXTRA = ['historia-de-vietnam-2000-anos-sin-rendirse'];
+const docsLista = caps.filter((c) => c.serie === 'Documentales' || DOCS_EXTRA.includes(c.slug));
+const bloqueDocs = docsLista.length ? `  <section class="bv-serie" id="${slugSerie('Documentales')}">
+    <div class="bv-serie-head"><h2>Documentales</h2><span>${docsLista.length} ${docsLista.length === 1 ? 'documental' : 'documentales'}</span></div>
+    <p class="bv-serie-sub">${esc(caps.SERIES.Documentales.sub)}</p>
+    <div class="bv-rail">
+${docsLista.map(rail).join('\n')}
+    </div>
+  </section>` : '';
 const bloqueGuias = guias.map((g) => `      <a class="bv-gcard" href="${g.u}">
         <h3>${g.t}</h3>
         <p>${g.d}</p>
