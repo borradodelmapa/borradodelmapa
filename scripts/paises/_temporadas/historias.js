@@ -110,7 +110,7 @@ module.exports = [
     cap: 'Documental',
     salmaPais: 'viajar',
     formato: '16:9',
-    titulo: 'Historia de los tatuajes: de Ötzi a la Yakuza',
+    titulo: 'Tatuajes por el mundo: un viaje desde Ötzi hasta la Yakuza',
     resumen: 'La historia de los tatuajes en 5.300 años: del hombre de hielo de los Alpes a los maoríes, las cárceles rusas, las maras y la Yakuza. Por qué nos tatuamos y por qué las mafias empiezan a esconderlo.',
     video: 'historia-de-los-tatuajes.mp4',
     realidad: 'Documental narrado por Salma con fotos de archivo con licencia libre. Algunas escenas están animadas a partir de fotos antiguas: Ötzi, el retrato maorí, la mujer ainu, los tatuadores samoanos y el tatuado japonés. El resto son fotos reales. Autores y fuentes, al final de la página.',
