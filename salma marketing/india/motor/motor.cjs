@@ -116,7 +116,7 @@ async function build(cfg) {
   // CALIDAD: «borrador» (por defecto: editor y pruebas, rápido) o «publicar» (máxima calidad para subir a redes: planos casi sin pérdida y montaje final lento). CALIDAD=publicar node <capítulo>.cjs
   const PUB = (process.env.CALIDAD || cfg.calidad) === 'publicar', Q = PUB ? { plano: ['-preset', 'slow', '-crf', '12'], final: ['-preset', 'slow', '-crf', '16'], audio: '256k' } : { plano: ['-preset', 'veryfast', '-crf', '19'], final: ['-preset', 'veryfast', '-crf', '20'], audio: '192k' };
   if (PUB) console.log('CALIDAD MÁXIMA (publicar): tarda más');
-  const W = HERE + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
+  const W = (process.env.WORK_BASE || HERE) + '/work_' + cfg.id; fs.rmSync(W, { recursive: true, force: true }); fs.mkdirSync(W, { recursive: true });
   const OUT = cfg.out || BASE + '/animatica-cap4'; fs.mkdirSync(OUT, { recursive: true });
   const LEAD = 0.25;
   cfg.blocks.forEach(b => { if (b.intro) prepararIntro(b, W, F); });
@@ -140,6 +140,7 @@ async function build(cfg) {
     t += b.D;
   }
   const cardT = t; const TOTAL = t + (cfg.cardSecs || 8);
+  [].concat(cfg.seguir || []).forEach(sg => { if (sg && sg.en) { const b = cfg.blocks.find(x => x.id === sg.en); if (!b) throw new Error('aviso de seguir: no existe el bloque ' + sg.en); sg.seg = b.t0 + 0.1; } }); // sg.en = al empezar ese bloque, sin recalcular segundos a mano
   const sgInicio = sg => Math.min(sg.seg ?? 20, Math.max(1, cardT - 7)); // aviso de seguir: a los 20 s por defecto (Paco, 30 oct 2026; antes 30)
   // 3) planos
   console.log('ETAPA 3/6 Cortando y revelando cada plano (looks Kodak, zooms)');
@@ -151,7 +152,7 @@ async function build(cfg) {
     for (let k = 1; k < S.length; k++) if (starts[k] < starts[k - 1] + 0.9) starts[k] = starts[k - 1] + 0.9;
     if (b.golpe) { const kg = S.findIndex(x => x.from === b.golpe.en); if (kg >= 0) b._golpeT = b.t0 + starts[kg]; }
     S.forEach((s, k) => {
-      const d = (k + 1 < S.length ? starts[k + 1] : b.D) - starts[k]; const n = ++nclip; const out = `${W}/c${String(n).padStart(2, '0')}.mp4`; const f = resolve(s.a);
+      const d = (k + 1 < S.length ? starts[k + 1] : b.D) - starts[k]; s._t = b.t0 + starts[k]; s._d = d; const n = ++nclip; const out = `${W}/c${String(n).padStart(2, '0')}.mp4`; const f = resolve(s.a);
       console.log('PLANO ' + n); const frames = Math.round(d * 30); const last = k === S.length - 1;
       const fadeV = (b.scene && k === 0 ? `,fade=t=in:st=0:d=0.3` : '') + (b.sceneEnd && last ? `,fade=t=out:st=${Math.max(0, d - 0.3).toFixed(2)}:d=0.3` : '');
       const lk = LOOKS[s.look || b.look || cfg.look || 'portra']; const norm = isVideo(s.a) ? '' : normFilter(f);
@@ -276,15 +277,37 @@ async function build(cfg) {
     golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
     run(['-i', mixIn, ...gin, '-filter_complex', gf.join(';') + ';[0:a]' + golpes.map((_, i) => `[g${i}]`).join('') + `amix=inputs=${golpes.length + 1}:normalize=0:duration=first[m2]`, '-map', '[m2]', `${W}/mix2.wav`]); mixIn = `${W}/mix2.wav`;
   }
+  // MÚSICA POR TROZOS (cfg.musica = { src, trozos: [{ de, a, ss, db, fi, fo, voz }] }; Paco, 6 nov 2026, docs/musica-y-sonido.md). Sin cfg.musica, nada cambia.
+  // de/a: 'fin' (final del vídeo) o { b: id de bloque, off } (inicio del bloque) · { b, p: 'palabra' } · { b, fin: 1 } (acaba la voz) · { b, finB: 1 } (acaba el bloque).
+  // voz: trozo pensado para ir bajo la voz: se le abre hueco en sus frecuencias. Todo el bus baja solo cuando Salma habla.
+  if (cfg.musica && cfg.musica.trozos.length) {
+    const MU = cfg.musica, fm = resolve(MU.src), dm = dur(fm);
+    const tm = p => { if (p === 'fin') return TOTAL; const b = cfg.blocks.find(x => x.id === p.b); if (!b) throw new Error('música: no existe el bloque ' + p.b); return (p.p ? b.t0 + b.lead + tow(b, p.p) : p.fin ? b.t0 + b.lead + b.vEnd : p.finB ? b.t0 + b.D : b.t0) + (p.off || 0); };
+    const partes = MU.trozos.map((x, i) => {
+      const fx = x.src ? resolve(x.src) : fm, dx = x.src ? dur(fx) : dm, t = tm(x.de), len = tm(x.a) - t, fi = x.fi ?? 1.5, fo = x.fo ?? 1.5, o = `${W}/musica_${i}.wav`;
+      if (len <= 0) throw new Error(`música: el trozo ${i} no dura nada`); if (x.ss + len > dx) throw new Error(`música: el trozo ${i} se sale de la pista (${x.ss}+${len.toFixed(1)} de ${dx.toFixed(1)} s)`);
+      run(['-ss', String(x.ss), '-t', len.toFixed(2), '-i', fx, '-vn', '-ac', '2', '-ar', '44100', '-af', `${x.af ? x.af + ',' : ''}${x.voz ? 'equalizer=f=1800:t=o:w=2:g=-6,' : ''}volume=${x.db}dB,afade=t=in:d=${fi},afade=t=out:st=${Math.max(0, len - fo).toFixed(2)}:d=${fo},adelay=${Math.round(t * 1000)}:all=1`, o]);
+      console.log(`música ${i}: ${t.toFixed(1)} s, ${len.toFixed(1)} s, de la pista ${x.ss} s, ${x.db} dB${x.voz ? ', bajo la voz' : ', sin voz'}`); return o;
+    });
+    const fm2 = partes.map((_, i) => `[${i}:a]`).join('') + `amix=inputs=${partes.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)}[mus]`;
+    fs.writeFileSync(`${W}/fm.txt`, fm2); run([...partes.flatMap(f => ['-i', f]), '-filter_complex_script', `${W}/fm.txt`, '-map', '[mus]', `${W}/musica.wav`]);
+    run(['-i', mixIn, '-i', `${W}/musica.wav`, '-i', `${W}/voz.wav`, '-filter_complex', `[1:a][2:a]sidechaincompress=threshold=0.02:ratio=${MU.ratio ?? 6}:attack=30:release=700[md];[0:a][md]amix=inputs=2:normalize=0:duration=first[mm]`, '-map', '[mm]', `${W}/mixm.wav`]); mixIn = `${W}/mixm.wav`;
+  }
   // sintonía de la serie (cfg.sintonia = { src, db }): el principio suena sobre el mapa y el final (con su golpe de cierre) bajo la tarjeta (Paco, 31 oct 2026)
-  if (cfg.sintonia) {
-    const SN = cfg.sintonia, f = resolve(SN.src), d = dur(f), CS = cfg.cardSecs || 8;
-    const mapa = cfg.blocks.find(b => b.video && b.id === 'mapa') || cfg.blocks.find(b => b.video), partes = [];
-    if (mapa) partes.push({ ss: 0, t: mapa.t0, len: Math.min(d, mapa.D), fin: 0.6 });
-    partes.push({ ss: Math.max(0, d - CS), t: cardT, len: Math.min(d, CS), fin: 0.3 });
+  // TODO MAPA LLEVA SU SINTONÍA, sin depender de la config (Paco, 9 nov 2026): limpia si el mapa es bloque propio; baja y con hueco para la voz si es un plano dentro de un bloque hablado. Solo se quita con cfg.descartes.S3 y su motivo.
+  const SNdesc = cfg.descartes && cfg.descartes.S3, MP = reglas.mapasDe(cfg);
+  if (cfg.sintonia || (cfg.sintonia !== false && !SNdesc && MP.bloques.length + MP.planos.length)) {
+    const SN = cfg.sintonia || { src: 'SFX_sintonia-pueblos', db: -8 }, f = resolve(SN.src), d = dur(f), CS = cfg.cardSecs || 8;
+    const partes = [];
+    // SN.mapas = suena al empezar en TODOS los mapas de capítulo (bloques «…-mapa»), no solo en el primero (Paco, 6 nov 2026, largo de Vietnam)
+    if (!SNdesc) {
+      MP.bloques.forEach(m => partes.push({ ss: 0, t: m.t0, len: Math.min(d, m.D), fin: 0.6 }));
+      MP.planos.forEach(({ s }) => partes.push({ ss: 0, t: s._t, len: Math.min(d, s._d), fin: 0.8, db: SN.dbVoz ?? (SN.db ?? -8) - 12, voz: 1 })); // bajo la voz: unos 10 dB por debajo de Salma
+    }
+    if (cfg.sintonia) partes.push({ ss: Math.max(0, d - CS), t: cardT, len: Math.min(d, CS), fin: 0.3 });
     partes.forEach((p, i) => {
       const o = `${W}/sintonia_${i}.wav`;
-      run(['-ss', p.ss.toFixed(2), '-t', p.len.toFixed(2), '-i', f, '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${SN.db ?? -8}dB,afade=t=in:d=0.15,afade=t=out:st=${(p.len - p.fin).toFixed(2)}:d=${p.fin},adelay=${Math.round(p.t * 1000)}:all=1`, o]);
+      run(['-ss', p.ss.toFixed(2), '-t', p.len.toFixed(2), '-i', f, '-vn', '-ac', '2', '-ar', '44100', '-af', `${p.voz ? 'equalizer=f=1800:t=o:w=2:g=-6,' : ''}volume=${p.db ?? SN.db ?? -8}dB,afade=t=in:d=${p.voz ? 0.5 : 0.15},afade=t=out:st=${(p.len - p.fin).toFixed(2)}:d=${p.fin},adelay=${Math.round(p.t * 1000)}:all=1`, o]);
       run(['-i', mixIn, '-i', o, '-filter_complex', '[0:a][1:a]amix=inputs=2:normalize=0:duration=first[ms]', '-map', '[ms]', `${W}/mixs${i}.wav`]); mixIn = `${W}/mixs${i}.wav`;
     });
   }
@@ -299,11 +322,13 @@ async function build(cfg) {
     run(['-i', mixIn, '-i', o, '-filter_complex', `[0:a][1:a]amix=inputs=2:normalize=0:duration=first[m3]`, '-map', '[m3]', `${W}/mix3${suf(i)}.wav`]); mixIn = `${W}/mix3${suf(i)}.wav`;
   });
   run(['-i', mixIn, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
+  // SOLO_AUDIO=<carpeta>: guarda la mezcla y sus pistas y para, sin exportar vídeo, para oír niveles antes de un render largo (Paco, 6 nov 2026). Sin esa variable, nada cambia.
+  if (process.env.SOLO_AUDIO) { const SA = process.env.SOLO_AUDIO; fs.mkdirSync(SA, { recursive: true }); for (const n of ['voz', 'amb', 'musica', 'final']) if (fs.existsSync(`${W}/${n}.wav`)) fs.copyFileSync(`${W}/${n}.wav`, `${SA}/${n}.wav`); fs.writeFileSync(`${SA}/tiempos.json`, JSON.stringify(cfg.blocks.filter(b => b.id).map(b => ({ id: b.id, t0: b.t0, D: b.D })))); console.log('SOLO_AUDIO: mezcla guardada en ' + SA); process.exit(0); }
   // 6) composición
   console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
   const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
-  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
+  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(cfg.rotuloSegs ? Math.min(b.t0 + 0.4 + cfg.rotuloSegs, b.t0 + b.D - 0.3) : b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s (uno por cada elemento de SGL)
   let sgIn = [];
   const avisos = SGL.map((SG, i) => {
@@ -334,8 +359,9 @@ async function build(cfg) {
   const AV = ROOT + '/salma marketing/editor/ep1/avatar.png';
   // portada por defecto (modelo Tailandia): se pone encima en los primeros 0,2 s para que sea el fotograma de portada en las redes
   // en horizontal, la portada sale con el mismo diseño en 16:9 (portada.cjs generarH; P.vivo = colores vivos) — Paco, 4 nov 2026
-  const P = cfg.portada && cfg.portada.foto ? cfg.portada : null; let covIn = [];
-  if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng, ...(F.a > F.b ? { formato: '16:9', vivo: P.vivo } : {}) }); covIn = ['-loop', '1', '-i', covPng]; }
+  const P = cfg.portada && (cfg.portada.foto || cfg.portada.png) ? cfg.portada : null; let covIn = [];
+  if (P && P.png) { const covPng = `${W}/portada.png`; fs.copyFileSync(P.png, covPng); covIn = ['-loop', '1', '-i', covPng]; } // portada ya hecha, elegida por Paco (P.png); sin ella, todo como siempre
+  else if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng, ...(F.a > F.b ? { formato: '16:9', vivo: P.vivo } : {}) }); covIn = ['-loop', '1', '-i', covPng]; }
   let fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=40+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})${avisos.map(({ sgT }) => `*not(between(t,${sgT.a},${sgT.b}))`).join('')}'${vf ? ',' + vf : ''}[m0]`;
   let ult = 'm0';
   avisos.forEach(({ sgT, sgF }, i) => { const ib = (P ? 4 : 3) + 2 * i, k = suf(i);

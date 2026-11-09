@@ -9,6 +9,13 @@ function versionChecklist() {
     return fila ? fila.split('|')[1].trim() : 'desconocida';
   } catch (e) { return 'no se pudo leer'; }
 }
+// TODO MAPA LLEVA SU SINTONÍA (Paco, 9 nov 2026): qué bloques y planos son mapas. Bloque de vídeo con id «mapa», «…-mapa», «mapa-…» o fichero mapa-*; plano FILE: de un fichero mapa-*.
+const esFicheroMapa = p => /^mapa[-_.]/i.test(String(p || '').split(/[\\/]/).pop());
+function mapasDe(cfg) {
+  const bloques = cfg.blocks.filter(b => b.video && (b.id === 'mapa' || /(-mapa$|^mapa-)/.test(b.id) || esFicheroMapa(b.video)));
+  const planos = cfg.blocks.flatMap(b => (b.shots || []).filter(s => esFicheroMapa(s.a)).map(s => ({ b, s })));
+  return { bloques, planos };
+}
 module.exports = function reglas(cfg, TOTAL, OUT) {
   const L = [], W = t => L.push(t);
   const X = [], I = [], desc = cfg.descartes || {};
@@ -40,12 +47,13 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   chk('M8', !cfg.counter && !todos.some(b => b.rotulo), 'sin contador/rótulo de serie ni rótulos de lugar (cfg.counter, b.rotulo)');
   chk('M9', !todos.some(b => b.cifra), 'sin cifras grandes animadas (b.cifra)');
   chk('M10', voz.some(b => !b.en), 'sin subtítulos EN en: ' + voz.filter(b => !b.en).map(b => b.id).join(', ') + ' (b.en)');
-  chk('M11', !(cfg.portada && cfg.portada.foto), 'sin portada (cfg.portada)');
+  chk('M11', !(cfg.portada && (cfg.portada.foto || cfg.portada.png)), 'sin portada (cfg.portada)');
   chk('M12', cfg.kb === 0, 'Ken Burns apagado (cfg.kb = 0)');
   chk('M13', !(cfg.seguir && cfg.seguir.activo !== false), 'aviso «Si te está gustando, sígueme» desactivado o sin configurar (cfg.seguir)');
   chk('M14', (cfg.cardSecs || 8) < 8 || !cfg.card, 'tarjeta final de menos de 8 s o sin cfg.card');
   chk('N5', voz.some(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)), 'la app se menciona en la voz (va en la tarjeta final): ' + voz.filter(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)).map(b => b.id).join(', '));
   chk('S1', !todos.some(b => b.amb || b.intro) && !cfg.musica, 'solo hay voz: sin ambiente, detalle ni música (cfg.musica / b.amb)');
+  const MP = mapasDe(cfg); chk('S3', MP.bloques.length + MP.planos.length > 0 && cfg.sintonia === false, 'hay un mapa sin su sintonía (solo se quita con cfg.descartes.S3 y un motivo)');
   const VD = cfg.voiceDb || {}; chk('S2', (VD.salma != null && VD.salma !== -25) || (VD.paco != null && VD.paco !== -21), 'nivel de voz distinto del protocolo (Paco −21, Salma −25)');
   const info = [...I]; if (TOTAL > 100) info.push('ℹ duración ' + TOTAL.toFixed(0) + ' s: preferible 60-90 s, pero si la historia lo pide, sin problema (regla de Paco, 26 oct 2026)');
   const looks = {}; sh.forEach(s => { looks[s.look] = (looks[s.look] || 0) + 1; });
@@ -56,3 +64,4 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
     ...X, L.length ? L.length + ' avisos:' : 'Sin avisos.'];
   const txt = head.concat(L, info).join('\n'); fs.writeFileSync(OUT + '/' + cfg.id + '-informe-reglas.txt', txt); console.log(txt); return L.concat(X);
 };
+module.exports.mapasDe = mapasDe;
