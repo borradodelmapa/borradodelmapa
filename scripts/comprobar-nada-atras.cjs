@@ -27,7 +27,7 @@ const todas = execSync('git ls-files -z -- "*.html"', { cwd: ROOT, maxBuffer: 64
   .split('\0').filter(Boolean)
   .filter((f) => !CARPETAS_FUERA.test(f) && !NO_SON_PAGINAS.has(f) && fs.existsSync(path.join(ROOT, f)));
 // Web Stories (stories/<slug>/index.html, 8 nov 2026): son AMP y AMP no admite JS propio, así que no llevan menú de abajo ni
-// aviso de instalar (excepción del §9 aprobada por Paco), ni ga4.js (ver docs/web-stories.md). Se revisan aparte, al final, con lo que sí tienen que llevar.
+// aviso de instalar (excepción del §9 aprobada por Paco), ni ga4.js (miden con amp-analytics + aviso de cookies, ver docs/web-stories.md). Se revisan aparte, al final, con lo que sí tienen que llevar.
 const STORY = /^stories\//;
 const paginas = todas.filter((f) => !STORY.test(f));
 const stories = todas.filter((f) => STORY.test(f));
@@ -104,6 +104,10 @@ for (const f of stories) {
   if (!fs.existsSync(path.join(ROOT, 'stories', slug, 'portada.jpg'))) fallos.push(`${f}: falta stories/${slug}/portada.jpg`);
   if (!h.includes(`<a href="/blog/viajes/${slug}">`)) fallos.push(`${f}: la última slide no lleva al artículo /blog/viajes/${slug}`);
   if (!h.includes('favicon')) fallos.push(`${f}: no lleva el favicon`);
+  // Analytics con los mismos IDs que ga4.js y solo tras aceptar cookies (amp-consent + data-block-on-consent)
+  const gaIds = ((leer('ga4.js').match(/var IDS = \[([^\]]*)\]/) || [])[1] || '').match(/G-[A-Z0-9]+/g) || [];
+  if (!h.includes('<amp-consent') || !h.includes('data-block-on-consent')) fallos.push(`${f}: falta el aviso de cookies de AMP (amp-consent) o la analítica no espera al permiso`);
+  for (const id of gaIds) if (!h.includes(`"${id}"`)) fallos.push(`${f}: la analítica no lleva ${id} (el de ga4.js): node scripts/build-stories.js`);
   if (!smStories.includes(`/stories/${slug}/`)) fallos.push(`${f}: no está en sitemap-stories.xml`);
   const art = `blog/viajes/${slug}.html`;
   if (fs.existsSync(path.join(ROOT, art)) && !leer(art).includes(`/stories/${slug}/`)) fallos.push(`${art}: no enlaza a su story /stories/${slug}/`);

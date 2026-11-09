@@ -4,7 +4,7 @@
 // (scripts/paises/<país>/historias.js): una entrada con `story: { portada, slides: [{ foto, h, t, credito?, salida? }] }`
 // tiene su story. Las fotos son las ya publicadas en blog/viajes/img/<slug>/ (no se copian); solo la portada vertical 3:4
 // se recorta en stories/<slug>/portada.jpg. Los textos se editan en historias.js, nunca en los HTML generados.
-// Las stories NO llevan menú de abajo ni aviso de instalar: AMP no admite JS propio (excepción del §9 aprobada por Paco, 8 nov 2026).
+// Las stories NO llevan menú de abajo, aviso de instalar ni ga4.js: AMP no admite JS propio (GA va con amp-analytics + aviso de cookies) (excepción del §9 aprobada por Paco, 8 nov 2026).
 // El camino de vuelta es la última slide, que lleva al artículo del blog (y el artículo enlaza a la story).
 const fs = require('fs');
 const path = require('path');
@@ -15,6 +15,20 @@ const SITE = 'https://borradodelmapa.com';
 const OUT = path.join(ROOT, 'stories');
 const FECHA = '2026-10-18';    // la de los diarios antiguos sin fecha (= build-blog-viajes.js)
 const LOGO = '/icon-192.png';   // 1:1 y ≥96 px (Google lo pide así)
+// Google Analytics: los MISMOS IDs que ga4.js (la única fuente; si allí se quita uno, aquí también). En AMP no vale ga4.js:
+// se mide con amp-analytics (gtag) y SOLO si la persona acepta el aviso de cookies de la story (amp-consent), como pide legal.html.
+const GA_IDS = JSON.parse((fs.readFileSync(path.join(ROOT, 'ga4.js'), 'utf8').match(/var IDS = (\[[^\]]*\])/) || [])[1].replace(/'/g, '"'));
+if (!GA_IDS || !GA_IDS.length) throw new Error('No encuentro los IDs de Google Analytics (var IDS) en ga4.js');
+const CONSENT = `
+    <amp-consent id="cookies" layout="nodisplay">
+      <script type="application/json">{"consentInstanceId":"bdm-cookies","consentRequired":true,"promptUI":"cookies-aviso"}</script>
+      <amp-story-consent id="cookies-aviso" layout="nodisplay">
+        <script type="application/json">{"title":"Cookies","message":"Usamos cookies analíticas para saber qué historias gustan y mejorarlas. Solo si las aceptas.","vendors":["Google Analytics"],"externalLink":{"title":"Más info","href":"https://borradodelmapa.com/legal.html#cookies"}}</script>
+      </amp-story-consent>
+    </amp-consent>
+    <amp-analytics type="gtag" data-credentials="include" data-block-on-consent>
+      <script type="application/json">${JSON.stringify({ vars: { gtag_id: GA_IDS[0], config: Object.fromEntries(GA_IDS.map((id) => [id, { groups: 'default' }])) } })}</script>
+    </amp-analytics>`;
 const caps = require('./datos-pais.cjs').historias().filter((c) => c.story && !c.borrador);
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -125,6 +139,8 @@ function pagina(c) {
 <link rel="icon" href="/favicon.ico">
 <script async src="https://cdn.ampproject.org/v0.js"></script>
 <script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
+<script async custom-element="amp-consent" src="https://cdn.ampproject.org/v0/amp-consent-0.1.js"></script>
+<script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
 <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
 <style amp-custom>
@@ -134,7 +150,7 @@ ${CSS}
 </head>
 <body>
   <amp-story standalone title="${esc(c.titulo)}" publisher="Borrado del Mapa" publisher-logo-src="${SITE}${LOGO}" poster-portrait-src="${SITE}${poster}">
-${paginas}
+${paginas}${CONSENT}
   </amp-story>
 </body>
 </html>

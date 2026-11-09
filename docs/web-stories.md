@@ -15,9 +15,10 @@ Spec: claude.ai/artifact/15qcDFV5oHMUt5CzkCGgzW (8 nov 2026). Enfoque aprobado p
 - **Excepción del §9 (Paco, 8 nov 2026):** AMP no admite JS propio, así que las stories NO llevan menú de abajo ni aviso de
   instalar. `comprobar-nada-atras.cjs` las revisa aparte: metadatos de `<amp-story>`, portada, botón al artículo, favicon,
   sitemap, y que el artículo enlace a la story.
-- **Sin Google Analytics (de momento):** `ga4.js` no puede ir en AMP y GA4 solo mide con cookies aceptadas (legal.html).
-  En AMP eso exige un aviso propio (`amp-consent` + `amp-analytics type="gtag"`) que no ve lo elegido en la web. Hasta
-  decidirlo con Paco, las visitas de las stories se miran en Search Console (impresiones y clics en Discover/Búsqueda).
+- **Google Analytics (Paco, 9 nov 2026):** `ga4.js` no puede ir en AMP. Cada story lleva su aviso de cookies (`amp-consent`
+  + `amp-story-consent`, «Más info» → legal.html#cookies) y `amp-analytics type="gtag"` con `data-block-on-consent`: mide SOLO
+  si la persona acepta. Los IDs los lee `build-stories.js` de `ga4.js` (una sola fuente). El permiso de AMP no es el de la web:
+  quien ya aceptó en la web vuelve a ver el aviso la primera vez que abre una story (y cada vez si la abre desde la caché de Google).
 - **Validar antes de publicar** (desde un ordenador con acceso a `cdn.ampproject.org`; la nube lo tiene bloqueado):
   abrir la story en local con `#development=1` al final de la URL y mirar la consola, o pasar la URL publicada por
   https://search.google.com/test/amp. Después, Inspección de URL en Search Console.
