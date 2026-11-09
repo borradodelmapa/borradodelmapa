@@ -130,7 +130,7 @@ Las reglas concretas las propone el chat 2 (Vídeo y redes, `docs/sistemas.md`) 
 | Y2 | **Palabra clave investigada** antes de titular: buscador predictivo de YouTube y Google (0 €; vidIQ/Keyword Tool son de pago). Se anota en el guion qué busca la gente. Documental y short. (Paco, 4 nov 2026) | manual |
 | Y3 | **Título**: la búsqueda principal a la izquierda, natural, **≤ 60 caracteres**; no repite el texto de la miniatura. Documental y short. | script (aviso) |
 | Y4 | **Miniatura**: persona o cara expresiva, alto contraste, colores vivos, texto breve que complementa el título; diseño fijo de portada (M11). En shorts, la portada va en los primeros 0,2 s para poder elegirla. | manual |
-| Y5 | **Descripción**: las 2 primeras líneas resumen el vídeo con la palabra clave; después blog, fuentes, aviso de IA y autores (P2). Documental y short (en short, más corta). | manual |
+| Y5 | **Descripción**: las 2 primeras líneas resumen el vídeo con la palabra clave; después blog, fuentes, aviso de IA y autores (P2). Documental y short (en short, más corta). **Largo de Tatuajes (Paco, 9 nov 2026):** el texto no dice «IA» (P1): dice «animadas a partir de fotos antiguas» y se marca en la casilla de contenido con IA de la red. | manual |
 | Y6 | **Capítulos** con minuto (0:00 …) en la descripción y en la entrada del blog. **Solo documentales** (YouTube no los enseña en Shorts). **Todos los vídeos largos llevan una buena descripción con minutaje de cada capítulo (Paco, 6 nov 2026): resumen, capítulos, qué se va a ver en cada uno y enlaces; Claude se la enseña a Paco ANTES de ponerla.** | script (aviso) |
 | Y7 | **Nombre del archivo** con la palabra clave antes de subirlo (p. ej. `historia-de-los-tatuajes.mp4`). Documental y short. | script |
 | Y8 | **Etiquetas**: solo variantes, sinónimos y errores de escritura (peso bajo). Documental y short. | manual |
@@ -146,6 +146,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 9 nov 2026 · 01:45 | 📈 Estrategia (Claude) | **Y5** (Paco): en el largo de Tatuajes, la descripción no dice «IA» y se marca en la casilla de la red. Choque entre Y5 («aviso de IA») y P1: en este vídeo gana P1. |
 | 9 nov 2026 · 01:00 | 🌍 Web (Claude) | **Nueva P15 y paso 9** (Paco): cada entrada de blog con vídeo lleva su Web Story (`stories/<slug>/`), como un paso más antes de publicar. Sin conflictos. |
 | 9 nov 2026 · 00:30 | 🎬 Vídeo (Claude) | **M10**: excepción de Paco: sin pista EN en el largo de Pueblos T1 y en los shorts «3 cosas». El resto, sin cambios. |
 | 8 nov 2026 · 23:30 | 🎬 Vídeo (Claude) | **M15**: excepción decidida por Paco para la portada del short de los sentineleses (arquero recreado). Gana sobre la del 1 nov solo en ese short. |
