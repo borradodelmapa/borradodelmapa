@@ -146,6 +146,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 9 nov 2026 · 05:00 | 📈 Estrategia (Claude) | **M14 y P6** (Paco): tarjeta con `/pueblos` en los vídeos nuevos de Pueblos y «Vídeo relacionado» en los Shorts. Sin conflictos. **P8** sigue: los shorts ya publicados no se tocan. |
 | 9 nov 2026 · 03:40 | 🎬 Vídeo (Claude) | **S3** pasa a «motor»: `reglas.cjs` marca ❌ un mapa sin sintonía y el motor la pone por defecto (limpia en bloque propio, baja bajo la voz en un plano); solo se quita con `descartes.S3`. Sin conflictos. |
 | 9 nov 2026 · 04:30 | 📈 Estrategia (Claude) | **S3** (Paco): todo mapa lleva su sintonía, siempre, también el mapa dentro de otro bloque. Amplía «suena sobre el mapa». «Sin música en el resto» sigue, salvo S5. El motor lo hará por defecto (🎬 Vídeo). |
 | 9 nov 2026 · 04:15 | 📈 Estrategia (Claude) | **S5** (Paco): deja de estar en prueba; método aprobado al oír el borrador de Tatuajes. Sin conflictos. |
