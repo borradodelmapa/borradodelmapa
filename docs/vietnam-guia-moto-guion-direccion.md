@@ -1,4 +1,4 @@
-# VIETNAM · GUION COMPLETO v1 (9 nov 2026, 📈 Estrategia para Paco). BORRADOR, sin aprobar, nada generado
+# VIETNAM · GUION COMPLETO v2 (9 nov 2026). Rellenado por Paco para el primer montaje. La versión viva es el documento «Guion Vietnam»: https://claude.ai/artifact/R1QrgNzNL7Ys3e1bwKkMLx
 
 **Título propuesto:** Viajar a Vietnam: 45 días en moto y todo lo que debes saber
 **Duración:** unos 17 minutos. **Voces:** PACO (sobre sus imágenes, sin salir a cámara) y SALMA (datos). Sin duelo entre ellos.
@@ -40,7 +40,9 @@
 **SALMA:** Y ahora lo de la moto. Exteriores lo dice claro: Vietnam no reconoce el permiso internacional expedido en España. Un turista español no puede conducir moto. Te arriesgas a una multa y a que te retiren el pasaporte.
 **SALMA:** Y hay algo peor. Muchos seguros de viaje solo cubren el accidente si llevabas un permiso válido. Sin él, el hospital y la evacuación los pagas tú.
 **PACO:** Yo la alquilé. Te la alquilan sin problema: la cogí en Style Motorbikes, en Hanói, y la dejé en Huế. Te dejan devolverla en otra ciudad, y tienen sede también en Camboya.
-**PACO:** `[PACO: qué moto, cuánto costó, si te pararon, si llevabas seguro y qué carné]`
+**PACO:** Llevaba carné internacional de España, pero allí no valía. Alquilé una Honda 125 trail. Muy cómoda, suficiente para estas carreteras y muy versátil. Y fácil de reparar: hay muchísimos talleres y Honda domina el mercado. Pagué el seguro en la tienda y llevaba seguro de viaje. Dejé el pasaporte como aval, que no es lo que más te gusta; la otra opción es dejar una fianza fuerte. Unos diecisiete euros al día.
+
+**SALMA:** Ojo con eso: Exteriores recuerda que los extranjeros deben llevar el pasaporte encima, y aconseja recuperarlo siempre.
 **PACO:** No te digo que lo hagas. Te digo lo que hay, para que decidas tú sabiendo el riesgo.
 **SALMA:** La alternativa legal existe: autobús, tren, y en cada zona contratar moto con conductor.
 
@@ -70,32 +72,32 @@
 **PACO:** Empecé en Hanói, alojado en el Old Quarter. Céntrico, y es donde tienes todo a mano.
 **PACO:** Te van a decir que Hanói se visita a pie. Yo lo hice y no te lo recomiendo: hay mucha polución. Coge un Grab entre un sitio y otro.
 **SELLO:** HANÓI A PIE: NO
-**PACO:** `[PACO: una o dos frases: lo primero que te impactó al llegar]`
+**PACO:** El tráfico. Millones de motos. Es muy común en todos estos países, pero Hanói se lleva la palma. Ten en cuenta que aquí la moto es una herramienta de trabajo: sirve desde puesto de comida hasta transporte. A veces es incomprensible verlas tan cargadas. Son unas máquinas.
 **SALMA:** China gobernó estas tierras, con interrupciones, unos mil años. Las primeras en levantarse fueron dos hermanas, las Trưng. Hoy un distrito de Hanói lleva su nombre.
 **PACO:** El Templo de la Literatura. Fue la primera universidad del país.
 **SALMA:** Abre de ocho a cinco, unos setenta mil dong. Mérito, estudio y respeto al maestro: eso se quedó.
 **PACO:** Y el Hanoi Hilton.
 **SALMA:** La prisión de Hỏa Lò. La construyeron los franceses para encerrar a los vietnamitas, y luego los vietnamitas encerraron allí a los pilotos americanos. Cincuenta mil dong, de ocho a cinco.
-**PACO:** `[PACO: qué te dejó la visita, en una frase]`
+**PACO:** Las cárceles no son mi lugar favorito. No aguanto mucho las visitas. Aunque es recomendable, para saber dos cosas: que los franceses se comportaron como cabrones, y que no quiero pisar ninguna más.
 **SALMA:** Y gratis, desde la calle: los restos de un B-52 en un lago, en plena ciudad. Cayó en los bombardeos de Navidad de 1972.
-**PACO:** `[PACO: los otros sitios de Hanói que merecen la pena y dónde entrenabas]`
+**SALMA:** Y en el lago Hoàn Kiếm, la leyenda. Dice que, ganada la guerra contra los Ming, el rey Lê Lợi entregó su espada mágica a una tortuga gigante del lago. Y la tortuga es real: se conserva una en el templo.
 **SALMA:** Para comer, el bún chả de Hương Liên, donde cenaron Obama y Bourdain. Y el café de huevo en Giảng.
 
 ### 4.2 · Pù Luông y Mai Châu (6:50-7:50)
 **Imagen:** arrozales, carretera, casas sobre pilotes. Es de lo que más material hay (28-29 abr).
 
-**PACO:** Salí de Hanói hacia el oeste. Pù Luông y Mai Châu. Aquí es cuando entendí para qué había venido.
+**PACO:** Salí de Hanói hacia el oeste. Pù Luông y Mai Châu.
 **SALMA:** Pù Luông está en Thanh Hóa. De esta provincia salió Lê Lợi, el que echó a los Ming tras diez años de guerra.
-**PACO:** `[PACO: dónde dormiste, cuánto, y qué harías aquí. Si hay un sitio que no te puedas perder]`
+**PACO:** Reservaba sobre la marcha, con un presupuesto de entre diez y treinta euros como máximo. La diferencia de calidades es abismal.
 **SELLO:** VE
 
 ### 4.3 · El norte de verdad: Nà Hang y Cao Bằng (7:50-9:10)
 **Imagen:** puertos de montaña, 1-3 may. Mapa de la frontera con China.
 
-**PACO:** Luego subí. Nà Hang, y las montañas hasta Cao Bằng, pegado a China. Días largos de moto y muy pocos extranjeros.
+**PACO:** Luego subí. Nà Hang, y las montañas hasta Cao Bằng, pegado a China.
 **SALMA:** Por estas montañas entraron los mongoles, tres veces. Y en una cueva de Cao Bằng, junto a la frontera, se escondió Hồ Chí Minh cuando volvió en secreto al país.
 **PACO:** En cada parada me venía lo mismo: la capacidad de lucha de esta gente.
-**PACO:** `[PACO: el tramo más bestia y lo que da miedo de verdad en estas carreteras]`
+**PACO:** La carretera de Hồ Chí Minh es sin duda la más bruta, junto al norte norte. El viaje no tuvo contratiempos. Es un poco conducir por un videojuego: tienes que estar preparado porque se te va a cruzar todo tipo de animales, domésticos o no. Pero muchos.
 **SALMA:** Si buscas el norte famoso, están Sapa y el loop de Hà Giang. Hay que ir con buen tiempo y conducir muy bien, o ir con conductor.
 **GUÍA:** Loop de Ha Giang, 4 días · Sapa
 
@@ -107,22 +109,21 @@
 **PACO:** Bajé por Bắc Sơn y Hữu Liên hasta la costa, a Hải Phòng.
 **SALMA:** Muy cerca desemboca el río Bạch Đằng. En el año 938, Ngô Quyền clavó en el lecho estacas con punta de hierro. Con la marea alta no se veían. La flota china subió, bajó la marea y los barcos se ensartaron. Tres siglos y medio después repitieron el truco, en el mismo río.
 **SALMA:** La bahía de Hạ Long es el sitio más famoso del país, y se nota. Mejor un barco que duerma a bordo que una excursión de un día.
-**PACO:** `[PACO: si fuiste a Hạ Long o Cát Bà, y si merece la pena]`
+**PACO:** Para mí, Hạ Long y Cát Bà merecieron mucho la pena.
 **GUÍA:** Hạ Long
 
 ### 4.5 · Ninh Bình (10:15-11:00)
 **Imagen:** 8-9 may, 120 archivos, karst y barcas.
 
-**PACO:** Ninh Bình. `[PACO: qué visitaste y si te gustó más que Hạ Long]`
-**SALMA:** Le llaman la Hạ Long de tierra: las mismas montañas de piedra, pero entre arrozales.
+**SALMA:** Le llaman la Hạ Long de tierra: las mismas montañas de piedra, pero entre arrozales. Tràng An, Patrimonio de la Humanidad, se recorre en barca entre cuevas y templos, desde doscientos cincuenta mil dong. Muy cerca, Tam Cốc y Hoa Lư, la primera capital del país.
 **GUÍA:** Ninh Bình
 
 ### 4.6 · La ruta Hồ Chí Minh y Phong Nha (11:00-12:15)
 **Imagen:** carretera, cuevas (11-13 may, mucho material).
 
-**PACO:** De ahí, abajo por la ruta Hồ Chí Minh. La misma que usaron para mover soldados y armas durante la guerra. Hoy es una de las carreteras más bonitas que he hecho.
+**PACO:** De ahí, abajo por la ruta Hồ Chí Minh. La misma que usaron para mover soldados y armas durante la guerra.
 **SALMA:** Phong Nha: la cueva principal, ciento cincuenta mil dong, se entra en barca. Paradise, doscientos cincuenta mil. La Cueva Oscura, solo con excursión.
-**PACO:** `[PACO: la cueva que elegirías si solo pudieras ver una]`
+**SALMA:** Y hay cuevas impresionantes que solo se visitan con permiso, en expediciones carísimas. Sơn Đoòng, la más grande del mundo: unos tres mil dólares, cuatro días, y las plazas de 2026 y 2027 ya están vendidas.
 **SELLO:** VE
 **GUÍA:** Phong Nha
 
@@ -147,10 +148,10 @@
 **Imagen:** cifras grandes sobre carretera. Mapa con la ruta entera.
 
 **PACO:** Lo prometido. Cuarenta y cinco días.
-**PACO:** `[PACO: dinero total y por día · moto · dormir · comer · kilómetros]`
-**PACO:** `[PACO: caídas o averías, y dónde te timaron]`
-**PACO:** Lo que no volvería a hacer: `[PACO]`
-**PACO:** Y lo que haría sin dudar: `[PACO]`
+**PACO:** No tengo una cuenta exacta. Unos treinta euros al día, y la moto, diecisiete. Dormir, entre diez y treinta, según la calidad. Comer, poquísimo. Y ojo: en algunas zonas del norte, comer a veces es complicado. La intención eran ciento cincuenta kilómetros al día como máximo, pero depende: es una paliza. Las carreteras, muy bonitas. Los paisajes, impresionantes.
+**PACO:** No me timaron. Cero caídas. Tuve que limpiar el carburador porque se mojó. Me llovió todos los días un poco.
+**PACO:** Lo que no volvería a hacer: pasar tanto tiempo en Hanói.
+**PACO:** Y lo que haría sin dudar: volver.
 
 ---
 
