@@ -466,12 +466,55 @@ ${PIE_Y_MENU}</body>
 `;
 fs.writeFileSync(path.join(ROOT, 'blog', 'index.html'), indice);
 
+// ─── Página de llegada desde los vídeos: borradodelmapa.com/pueblos (Paco, 9 nov 2026) ───
+// En un short no hay enlace que se pueda pulsar: esta dirección se dice en la tarjeta final y se teclea. Se ve sin cuenta (CLAUDE.md §10).
+const paginaPueblos = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pueblos borrados del mapa — Historias y cómo visitarlos con respeto</title>
+<meta name="description" content="Pueblos, oficios y lugares que se están borrando del mapa: mira sus historias en vídeo, con datos y fuentes, y cómo visitarlos con respeto.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pueblos borrados del mapa">
+<meta property="og:description" content="Mira sus historias en vídeo, con datos y fuentes, y cómo visitarlos con respeto.">
+<meta property="og:url" content="${SITE}/pueblos">
+<meta property="og:image" content="${SITE}/og-image.jpg">
+<link rel="canonical" href="${SITE}/pueblos">
+
+${HEAD_COMUN}
+</head>
+<body class="pg">
+
+${CABECERA}
+
+<main class="bv-main">
+  <div class="bv-hero">
+    <p class="bv-kicker">Vídeos · Historia · Cómo ir</p>
+    <h1>Pueblos <span>borrados del mapa</span></h1>
+    <p>Las historias de nuestros vídeos, ampliadas, con sus fuentes y cómo visitar cada sitio con respeto. Míralas sin registrarte.</p>
+  </div>
+
+${bloquePueblos}
+${bloqueDocs}
+  <div class="bv-cta">
+    <p>¿Quieres ir? Cuéntale a Salma adónde vas y te hace la ruta, gratis.</p>
+    <a href="/?go=chat" class="pg-btn">Crea tu ruta gratis</a>
+    <p style="margin-top:14px"><a href="/destinos/" style="color:#F4630B;font-weight:700">Ver guías por país →</a></p>
+  </div>
+</main>
+${PIE_Y_MENU}</body>
+</html>
+`;
+fs.writeFileSync(path.join(ROOT, 'pueblos.html'), paginaPueblos);
+
 // ─── Sitemap: bloque entre comentarios, idempotente ───
 const smFile = path.join(ROOT, 'sitemap-blog.xml');
 let sm = fs.readFileSync(smFile, 'utf8');
 sm = sm.replace(/\s*<!-- VIAJES:START -->[\s\S]*?<!-- VIAJES:END -->/, '');
 const urls = caps.map((c) => `  <url><loc>${SITE}/blog/viajes/${c.slug}</loc><lastmod>${c.fecha || FECHA}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
-sm = sm.replace('</urlset>', `  <!-- VIAJES:START -->\n${urls}\n  <!-- VIAJES:END -->\n</urlset>`);
+const urlPueblos = `  <url><loc>${SITE}/pueblos</loc><lastmod>2026-11-09</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>`;
+sm = sm.replace('</urlset>', `  <!-- VIAJES:START -->\n${urlPueblos}\n${urls}\n  <!-- VIAJES:END -->\n</urlset>`);
 fs.writeFileSync(smFile, sm);
 
 console.log(`✔ ${caps.length} diarios · ${series.length} series · ${guias.length} guías · portada del blog`);
