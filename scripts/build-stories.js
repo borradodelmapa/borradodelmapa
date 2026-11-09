@@ -29,7 +29,7 @@ const CONSENT = `
     <amp-analytics type="gtag" data-credentials="include" data-block-on-consent>
       <script type="application/json">${JSON.stringify({ vars: { gtag_id: GA_IDS[0], config: Object.fromEntries(GA_IDS.map((id) => [id, { groups: 'default' }])) } })}</script>
     </amp-analytics>`;
-const caps = require('./datos-pais.cjs').historias().filter((c) => c.story && !c.borrador);
+const caps = require('./datos-pais.cjs').historias().filter((c) => c.story && (!c.borrador || process.env.BORRADORES === '1'));
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const nom = (id) => id.replace('/', '-');

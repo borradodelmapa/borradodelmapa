@@ -10,6 +10,7 @@ const fuentes = () => {
   const vistas = new Set();
   return EPS.flatMap(([pais, slug]) => require(`../${pais}/historias.js`).find((e) => e.slug === slug).fuentes).filter((f) => !vistas.has(f.u) && vistas.add(f.u));
 };
+const W = (t, u) => ({ t, u });
 const H = (slug) => '/blog/viajes/' + slug;
 const LUZON = '/luzon-norte-en-4-dias-banaue-batad-sagada-y-buscalan-brjk';
 
@@ -98,5 +99,136 @@ module.exports = [
     cierre: 'Cada pueblo tiene su historia completa, con más datos, su ficha útil y sus fuentes.',
     nota: 'Datos de octubre y noviembre de 2026. Permisos, accesos y precios cambian: confírmalos en fuentes oficiales antes de ir. Estas son las fuentes de los diez episodios.',
     get fuentes() { return fuentes(); },
+  },
+  // Largo 16:9 · montaje: india/motor/tatuajes-doc.cjs · minutos: tatuajes/capitulos.txt · fuentes: docs/tatuajes-documental-fuentes.md · YouTube, jue 10 dic 2026 a las 15:30 (poner c.youtube cuando sea público)
+  {
+    orden: 216,
+    slug: 'historia-de-los-tatuajes',
+    variosPaises: true,
+    fecha: '2026-11-09',
+    serie: 'Documentales',
+    cap: 'Documental',
+    salmaPais: 'viajar',
+    formato: '16:9',
+    titulo: 'Historia de los tatuajes: de Ötzi a la Yakuza',
+    resumen: 'La historia de los tatuajes en 5.300 años: del hombre de hielo de los Alpes a los maoríes, las cárceles rusas, las maras y la Yakuza. Por qué nos tatuamos y por qué las mafias empiezan a esconderlo.',
+    video: 'historia-de-los-tatuajes.mp4',
+    realidad: 'Documental narrado por Salma con fotos de archivo con licencia libre. Algunas escenas están animadas a partir de fotos antiguas: Ötzi, el retrato maorí, la mujer ainu, los tatuadores samoanos y el tatuado japonés. El resto son fotos reales. Autores y fuentes, al final de la página.',
+    creditosDe: 'salma marketing/tatuajes',
+    otraSerie: 'salma marketing/pueblos',
+    creditosIds: ['W1', 'W43', 'W85', 'W88', 'ainu/W4'],
+    creditosIntro: 'Fotos de Wikimedia Commons, Flickr y Openverse, y sonidos de ambiente, con licencia libre. Gracias a sus autores:',
+    creditosExtra: [
+      ['Sonido: ultradust', 'CC BY 4.0', 'https://freesound.org/people/ultradust/sounds/165126/'],
+      ['Sonido: W.carter', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Wind_in_Swedish_pine_forest_at_25_mps.ogg'],
+      ['Sonido: Amada44', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Jungle_Sound_Thailand_Phuket.flac'],
+      ['Sonido: kyles', 'CC0', 'https://freesound.org/people/kyles/sounds/637566/'],
+      ['Sonido: Robert EA Harvey', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Birdsong_Bourne_Woods_2020-04-27_0722.mp3'],
+      ['Sonido: Sallyamane', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Caminando_en_madrugada.ogg'],
+    ],
+    fotos: { portada: 'W54', posicion: '50% 30%', galeria: [
+      ['W87', 'Tatuaje japonés fotografiado por Kusakabe Kimbei.'],
+      ['W101', 'Casa comunal iban en el parque nacional de Batang Ai, en Borneo.'],
+      ['W90', 'Tatuaje tradicional en Samoa.'],
+      ['W84', 'Un irezumi de cuerpo entero.'],
+      ['W147', 'Aviso de «sin tatuajes» en un balneario japonés.'],
+      ['W133', 'La espalda tatuada de un preso, en una cárcel de Lituania en 2010.'],
+    ] },
+    cifras: [['5.300', 'Años de historia'], ['17', 'Capítulos'], ['8 min', 'De documental']],
+    story: {
+      portada: 'W20',
+      slides: [
+        { foto: 'W54', h: 'Historia de los tatuajes', t: 'Para curarse, para decir de qué pueblo eres, como castigo o para entrar en una mafia.', credito: ['Bhrigu bayan', 'CC BY-SA 4.0'] },
+        { foto: 'W6', h: 'Ötzi: 61 tatuajes', t: 'Murió en los Alpes hace unos 5.300 años. La mayoría de sus tatuajes coinciden con puntos de acupuntura.' },
+        { foto: 'W14', h: 'Japón: del castigo al estigma', t: 'El tatuaje marcó a condenados durante siglos. En 1868 se prohibió, y esa prohibición lo unió a la delincuencia.' },
+        { foto: 'W46', h: 'El tā moko maorí', t: 'No se hacía con aguja, sino con cincel. Su origen está ligado al luto.' },
+        { foto: 'W131', h: 'El código de las cárceles rusas', t: 'Cada cúpula, una condena. Un tatuaje que no te habías ganado podía costarte la vida.' },
+        { foto: 'W113', h: 'Las maras', t: 'Un informe de 2014 decía que muchos miembros de la MS-13 en Honduras habían dejado de tatuarse: los delataba.' },
+        { foto: 'W208', h: '¿Y tú, por qué te tatúas?', t: 'De Ötzi a la Yakuza, la historia completa y con fuentes.', salida: 'Ver el documental' },
+      ],
+    },
+    secciones: [
+      { h: '¿Por qué te tatúas?', min: '0:00', foto: ['W20', 'Shi Jin, el de los nueve dragones tatuados, en un grabado de Utagawa Kuniyoshi.'], p: [
+        'A lo largo de la historia, la gente se ha tatuado para curarse, para decir de qué pueblo es, como castigo, para marcar su rango en la cárcel o para entrar en una mafia. Este documental sigue esa marca durante 5.300 años, de los Alpes a Nueva Zelanda, Samoa, Borneo, Japón, India, Rusia, Centroamérica, Italia, Hong Kong y México.',
+      ] },
+      { h: 'Ötzi: el tatuaje como medicina', min: '0:21', foto: ['W6', 'Reconstrucción de Ötzi en un museo.'], p: [
+        '**Ötzi**, la momia de los Alpes, murió hace unos 5.300 años con **61 tatuajes** mapeados con imagen multiespectral. La mayoría coinciden con puntos de acupuntura.',
+        'Uno, en las costillas, no está cerca de ninguna articulación: los investigadores creen que podía servir para tratar un dolor en el pecho. Es una teoría, pero apunta a una función médica y no decorativa.',
+      ] },
+      { h: 'De dónde viene la palabra «tattoo»', min: '0:49', foto: ['W9', '«Cabeza de un nativo de Otaheite», dibujo de Sydney Parkinson.'], p: [
+        'Viene del tahitiano y samoano *tatau* (en marquesano, *tatu*). Se registró por primera vez en inglés en 1769, en los escritos del capitán Cook.',
+      ] },
+      { h: 'Japón: del castigo al estigma', min: '1:06', foto: ['W14', 'Marcas penales japonesas, en la enciclopedia Kojiruien.'], p: [
+        'En Japón, el tatuaje se usó como castigo penal desde el periodo Kofun (300-600) y siguió marcando a condenados durante el periodo Edo. El gobierno Meiji lo prohibió al empezar su etapa, en 1868.',
+        'Fue esa prohibición la que lo empujó a la clandestinidad y lo unió a la criminalidad. Se legalizó en 1948, con las fuerzas de ocupación.',
+      ] },
+      { h: 'Maoríes: el tā moko', min: '1:45', foto: ['W46', 'Tuterei Karewa, de los Ngāti Maru, retratado por Arthur James Iles.'], p: [
+        'En Nueva Zelanda, el **tā moko** se talla con cincel: son cortes en la piel y no una simple punción, y por eso deja una cicatriz distinta a la de otros tatuajes polinesios.',
+        'Te Ara, la enciclopedia de Nueva Zelanda, lo liga al luto (las mujeres se cortaban la piel y añadían hollín en memoria de alguien querido) y a la mitología: el dios Rūaumoko y el mito de Mataora y Niwareka.',
+      ] },
+      { h: "Samoa: el pe'a", min: '2:17', foto: ['W89', 'Instrumentos tradicionales del tatuaje en el Pacífico.'], p: [
+        "El **pe'a** cubre de la cintura a las rodillas. En teoría se hace en cinco sesiones a lo largo de unos diez días; en la práctica, por el dolor y la curación, pueden ser semanas. Se golpea un peine de hueso, el *ausogi'aso*, con una maceta, el *sausau*.",
+        "Un pe'a a medias se consideraba vergonzoso. Antes era requisito para el título de *matai*, jefe de familia. Ya no lo es, pero muchos lo siguen haciendo a la manera tradicional.",
+      ], enlaces: [['Samoa', '/destinos/samoa.html']] },
+      { h: 'Borneo: los iban', min: '2:43', foto: ['W100', 'Dos hombres iban, en una foto de la colección del Tropenmuseum.'], p: [
+        'Entre los iban, un tatuaje de rana en la garganta se cree que protege de morir decapitado en combate. El primero de un hombre suele ser el *bunga terung*, una espiral en el hombro, antes de su *bejalai*, un viaje iniciático.',
+        'Creen que los espíritus conceden los tatuajes en sueños, y que un hombre sin tatuajes es casi invisible para los dioses.',
+      ], enlaces: [['Kuching', '/destinos/kuching-malasia.html']] },
+      { h: 'Los ainu de Hokkaido', min: '3:10', foto: ['ainu/W5', 'Mujer ainu con el tatuaje de la boca (colección Bälz).'], p: [
+        'Las mujeres ainu se tatuaban la boca y los antebrazos. Empezaban entre los 10 y los 13 años, a veces antes, y terminaban hacia los 15 o 16: era la señal de que estaban listas para casarse. La colonización japonesa de Hokkaido, entre 1869 y 1904, acabó prohibiéndolo.',
+      ], enlaces: [['Los ainu: el tatuaje prohibido', '/blog/viajes/japon-ainu-hokkaido-tatuaje-prohibido']] },
+      { h: 'Las apatani de India', min: '3:33', foto: ['W55', 'Una mujer apatani trabajando en el campo.'], p: [
+        'En el valle de Ziro, las mujeres apatani llevaban tatuaje facial, el *tippei*, y tapones de nariz de madera. Empezaron como protección contra el rapto, no por estética. Se hacían a los 10 años, a manos de mujeres mayores. Se prohibieron en los años setenta y hoy solo los llevan las mayores.',
+      ] },
+      { h: 'Tatuajes de cárcel en Rusia', min: '3:53', foto: ['W131', 'Preso tatuado en una cárcel de Lituania, en 2010.'], p: [
+        'En las cárceles rusas, cada tatuaje de los *vory v zakone* decía algo concreto. Estrellas en hombros o rodillas: «no me arrodillo ante nadie»; la de ocho puntas marca rango. Cúpulas ortodoxas en el pecho: cada una, una condena; tres, preso para siempre. Un ojo en el pecho: «te vigilo». Un gato: el ladrón profesional.',
+        'Llevar uno sin haberlo ganado era peligroso. En los años cincuenta, bajo la represión de Jrushchov, podía castigarse con violación o muerte. Hacia los setenta, al extenderse entre los presos jóvenes, los líderes dejaron de castigarlo así.',
+      ] },
+      { h: 'Maras: la MS-13', min: '4:44', foto: ['W113', 'Tatuaje de la MS-13, en una foto del servicio de inmigración de EE. UU.'], p: [
+        'Un informe de inteligencia hondureño, publicado por El Heraldo y resumido por InSight Crime en 2014, decía que muchos miembros de la MS-13 en Honduras habían dejado de tatuarse símbolos de la pandilla. El motivo lo dio una fuente policial anónima: les identificaban tanto la policía como las bandas rivales.',
+      ] },
+      { h: 'Yakuza', min: '5:08', foto: ['W150', 'Tebori, el tatuaje japonés hecho a mano.'], p: [
+        'La Yakuza heredó el *irezumi* integral, el *tebori*, hecho a mano. Pero el estigma que nació con la prohibición Meiji sigue vivo: balnearios, gimnasios y negocios prohíben la entrada a quien lleva tatuajes visibles, y muchos miembros evitan tatuarse por eso.',
+      ] },
+      { h: 'Cosa Nostra y Camorra', min: '5:31', foto: ['W153', 'Dibujo de un camorrista tatuado.'], p: [
+        'La mayoría de los miembros de la Cosa Nostra no llevan tatuajes específicos de pertenencia, aunque hay excepciones documentadas, como un caso de «mano negra».',
+        'La Camorra es lo contrario: tiene tradición de tatuaje carcelario desde el siglo XIX, para marcar lealtad. Un grupo joven de Ponticelli se ganó el apodo de «los tatuados» por tatuarse el nombre de su jefe.',
+      ] },
+      { h: 'Tríadas chinas', min: '5:59', foto: ['W226', 'Un dragón tatuado en la espalda, en Hong Kong.'], p: [
+        'Los tatuajes de dragón y tigre marcaban antiguamente el rango en las tríadas. El criminólogo P. Sundramoorthy, de la Universiti Sains Malaysia, explicaba en 2020 que hoy, en las bandas de Malasia, el tatuaje ya no forma parte de la iniciación: lo evitan para no ser detectados. Un tatuaje así, por sí solo, ya no prueba pertenencia.',
+      ] },
+      { h: 'México: la Santa Muerte', min: '6:23', foto: ['W161', 'Interior del Templo de la Santa Muerte, en Querétaro.'], p: [
+        'La Santa Muerte se tatúa pidiendo protección y la llaman «la santa narco». Los investigadores Kate Kingsbury y Andrew Chesnut rechazan esa etiqueta por reduccionista: la presentan como la patrona de los dos bandos de la guerra contra el narco. También la veneran policías, militares y guardias de prisión.',
+        'En marzo de 2009, en Nuevo Laredo, con soldados vigilando, las excavadoras arrasaron más de treinta altares. La versión oficial fue que estaban en terreno público sin permiso; los militares los llamaban narcoaltares.',
+      ] },
+      { h: 'La mafia rusa hoy', min: '7:04', foto: ['W127', 'El campo de Vorkutá, en la Unión Soviética.'], p: [
+        'El código de los *vory v zakone* sobrevivió a la caída de la URSS: la Bratva es la red más amplia, con los *vory* como élite. Pero ya se había empezado a resquebrajar en los años cuarenta, con los presos que volvían del Ejército Rojo y sí colaboraban con el Estado. Las fuentes no aclaran si el sistema de tatuajes sobrevivió igual.',
+      ] },
+      { h: 'Por qué nos tatuamos hoy', min: '7:30', foto: ['W208', 'Un tatuador trabajando.'], p: [
+        'Yakuza, tríadas y maras aparecen en estas fuentes con el mismo patrón: el tatuaje que antes probaba pertenencia puede delatar. Fuera de las cárceles, casi todos nos tatuamos por gusto: por un viaje, por un recuerdo o por alguien a quien no queremos olvidar.',
+      ] },
+    ],
+    cierre: 'Si vas a viajar a alguno de estos lugares, pregunta antes de fotografiar a nadie: un tatuaje puede contar una historia que no te corresponde a ti enseñar.',
+    nota: 'Datos revisados en noviembre de 2026. Donde las fuentes son parciales o discuten, lo decimos: las maras con un informe de 2014, las tríadas solo con el caso de Malasia. Sobre la mafia rusa, no hay confirmación de que el sistema de tatuajes siga igual.',
+    fuentes: [
+      W('Smithsonian Magazine: los 61 tatuajes de Ötzi', 'https://www.smithsonianmag.com/smart-news/61-tattoos-otzi-5300-year-old-iceman-180954035/'),
+      W('Etymonline: tattoo', 'https://www.etymonline.com/word/tattoo'),
+      W('Wikipedia: Irezumi', 'https://en.wikipedia.org/wiki/Irezumi'),
+      W('Te Ara: tā moko', 'https://teara.govt.nz/en/ta-moko-maori-tattooing/page-1'),
+      W('Pitt Rivers Museum: tatuaje samoano', 'https://web.prm.ox.ac.uk/bodyarts/index.php/permanent-body-arts/tattooing/175-samoan-tattooing.html'),
+      W('SAYS: tatuajes tribales de Sarawak', 'https://says.com/my/lifestyle/the-history-behind-sarawak-s-ancient-tribal-tattoos'),
+      W('Wikipedia: pueblo ainu', 'https://en.wikipedia.org/wiki/Ainu_people'),
+      W('Vajiram & Ravi: las apatani', 'https://vajiramandravi.com/current-affairs/who-are-apatani-tribes/'),
+      W('Wikipedia: tatuajes criminales rusos', 'https://en.wikipedia.org/wiki/Russian_criminal_tattoos'),
+      W('InSight Crime: informe sobre las pandillas de Honduras', 'https://insightcrime.org/news/brief/investigation-reveals-social-control-of-honduras-gangs/'),
+      W('JHU Stripe: tatuajes de la mafia siciliana', 'https://stripe.jhu.edu/news/sicilian-mafia-tattoos'),
+      W('Worldcrunch: tatuajes de la mafia italiana', 'https://worldcrunch.com/culture-society/italian-mafia-tattoos-camorra'),
+      W('MCPF / Free Malaysia Today: tríadas en Malasia', 'https://www.mcpfpg.org/triads-no-longer-tattoo-their-initiates-says-expert'),
+      W('Wikipedia: mafia rusa', 'https://en.wikipedia.org/wiki/Russian_mafia'),
+      W('Kingsbury y Chesnut (2020): Not Just a Narcosaint', 'https://link.springer.com/article/10.1007/s41603-020-00095-2'),
+      W('Baylor: resumen sobre la Santa Muerte', 'https://religionwatch.web.baylor.edu/news/story/2020/santa-muerte-folk-saint-both-sides-drug-wars'),
+      W('NPR: los altares de Nuevo Laredo, 2009', 'https://www.npr.org/transcripts/102928118'),
+      W('AP en Sun Journal: Nuevo Laredo, 2009', 'https://www.sunjournal.com/?p=85763'),
+    ],
   },
 ];

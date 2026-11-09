@@ -113,6 +113,7 @@ const FF = path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpe
 // Diarios con fotos propias (Tailandia, Vietnam): c.fotosDe = { prefijo: lista } con las listas id|ruta de salma marketing (rutas relativas a D:/salma-movil
 // o a c.fotosBase); el id de la foto es prefijo + id de la lista (p. ej. 'k22' = línea 22 de la lista de 'k'). Sin pie de autor: son de Paco.
 function origen(c, id) {
+  if (c.otraSerie && id.includes('/')) { const [ep, n] = id.split('/'), d = path.join(MKT, c.otraSerie, ep, 'fotos'), g = path.join(d, n + '-g.jpg'); return fs.existsSync(g) ? g : path.join(d, n + '.jpg'); } // foto de otra serie (c.otraSerie), con su autor
   if (c.fotosArchivo && id.startsWith('a/')) { const b = path.join(MKT, c.fotosArchivo, id.slice(2)); return fs.existsSync(b + '.jpg') ? b + '.jpg' : b + '.png'; }
   if (c.fotosEpisodios) { const [ep, n] = id.split('/'), d = path.join(MKT, c.fotosEpisodios, ep, 'fotos'), g = path.join(d, n + '-g.jpg'); return fs.existsSync(g) ? g : path.join(d, n + '.jpg'); }
   if (!c.fotosDe) return path.join(MKT, c.creditosDe, 'fotos', id + '.jpg');
@@ -141,7 +142,7 @@ function foto(c, id) {
     if (r.status) throw new Error('No puedo preparar la foto ' + id + ' de ' + c.slug + ': ' + r.stderr);
   }
   if (c.fotosDe && !id.startsWith('a/')) return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: '' };
-  const a = (c.fotosArchivo ? archivoDe(c)[id.slice(2)] : c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
+  const a = (c.otraSerie && id.includes('/') ? atrDe({ fotosEpisodios: c.otraSerie }, id) : c.fotosArchivo ? archivoDe(c)[id.slice(2)] : c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
   return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
 }
 const figura = (c, [id, pie]) => { const f = foto(c, id); return `      <figure class="bd-fig">
@@ -183,15 +184,15 @@ ${filas.map(([a, l, u]) => `        <li><a href="${esc(u)}" target="_blank" rel=
   const enVideo = t && c.video ? JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []) : [];
   const usadas = c.fotosEpisodios
     ? [...new Set([...enVideo.map((x) => (x.match(/\/([^/]+)\/fotos\/([WH]\d+)(?:-g)?\.jpg$/) || []).slice(1).join('/')), ...enBlog].filter(Boolean))]
-    : [...new Set([...enVideo, ...enBlog].filter((x) => /^[WH]\d+$/.test(x)))];
-  const atr = c.fotosEpisodios ? null : atribuciones(c), de = (id) => (atr ? atr[id] : atrDe(c, id));
+    : [...new Set([...enVideo.map((x) => (c.otraSerie && (String(x).match(/\/([^/]+)\/fotos\/([WH]\d+)(?:-g)?\.jpg$/) || []).slice(1).join('/')) || x), ...enBlog, ...(c.creditosIds || [])].filter((x) => /^([a-z-]+\/)?[WH]\d+$/.test(x)))];
+  const atr = c.fotosEpisodios ? null : atribuciones(c), de = (id) => (c.otraSerie && id.includes('/') ? atrDe({ fotosEpisodios: c.otraSerie }, id) : atr ? atr[id] : atrDe(c, id));
   const li = [...new Set(usadas.filter(de).map((id) => `        <li><a href="${esc(de(id).u)}" target="_blank" rel="noopener">${esc(de(id).autor || 'Autor desconocido')}</a> · ${esc(de(id).lic)}</li>`))];
   return `
     <details class="bd-src">
       <summary>Fotos: autores y licencias</summary>
-      <p>Fotos de Wikimedia Commons con licencia libre. Gracias a sus autores:</p>
+      <p>${esc(c.creditosIntro || 'Fotos de Wikimedia Commons con licencia libre. Gracias a sus autores:')}</p>
       <ul>
-${li.join('\n')}
+${[...li, ...(c.creditosExtra || []).map(([a, l, u]) => `        <li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(a)}</a> · ${esc(l)}</li>`)].join('\n')}
       </ul>
     </details>`;
 }
@@ -334,7 +335,7 @@ ${fuentes}${creditos(c)}
       <div class="bd-salma">
         <img src="/salma_ai_avatar.png" alt="Salma">
         <div>
-          <p><strong>¿Vas a ${esc(c.pais || (c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia'))}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis.${dSlug ? ` Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.` : ""}</p>
+          <p><strong>¿Vas a ${esc(c.salmaPais || c.pais || (c.serie === 'Vietnam' ? 'Vietnam' : 'Tailandia'))}?</strong> Dile a Salma cuántos días tienes y qué te gustaría ver: te prepara la ruta con mapa, paradas y consejos, gratis.${dSlug ? ` Más sobre <a href="/destinos/${dSlug}.html">${esc(dNombre)}</a>.` : ""}</p>
           <p><a class="pg-btn" href="/?go=chat">Crear mi ruta</a></p>
         </div>
       </div>
@@ -403,6 +404,7 @@ ${lista.map(rail).join('\n')}
 }).join('\n\n');
 // Paco, 5 nov 2026: «¿dónde están los shorts de Pueblos borrados del mapa? ponlo»: su carril en la portada, después de los países
 const bloquePueblos = series.includes('Pueblos borrados del mapa') ? bloqueSeries.split('\n\n').find((b) => b.includes('id="' + slugSerie('Pueblos borrados del mapa') + '"')) || '' : '';
+const bloqueDocs = bloqueSeries.split('\n\n').find((b) => b.includes('id="' + slugSerie('Documentales') + '"')) || ''; // documentales de varios países: no salen en «Historias por país»
 const bloqueGuias = guias.map((g) => `      <a class="bv-gcard" href="${g.u}">
         <h3>${g.t}</h3>
         <p>${g.d}</p>
@@ -444,6 +446,7 @@ ${CABECERA}
 
 ${bloquePaises}
 ${bloquePueblos}
+${bloqueDocs}
   <details class="bv-guias bv-guias--plegado" id="guias">
     <summary><h2>Consejos de viaje</h2><span>${guias.length} guías · ver</span></summary>
     <p class="bv-guias-sub">Problemas reales de viajeros reales. Resueltos por Salma.</p>

@@ -9,6 +9,7 @@ const SERIES = {
   'Vietnam': { sub: 'De mil años de resistencia a Hồ Chí Minh: cinco capítulos y un documental para entender el país antes de recorrerlo.' },
   'Pueblos borrados del mapa': { sub: 'Pueblos, oficios y costumbres que están desapareciendo, contados con datos y fuentes. Y cómo visitarlos con respeto.' },
   'Conoce cada país': { sub: 'La introducción de cada país: geografía, historia y culturas para entender lo que vas a ver. Con fuentes.' },
+  'Documentales': { sub: 'Historias que cruzan países, contadas con datos y fuentes.' },
   'Guías': { sub: 'Nuestras guías de viaje, día a día, con la historia de cada sitio.' },
 };
 
