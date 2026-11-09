@@ -63,6 +63,8 @@ Horas (APROBADAS, P13): **TikTok 10:00 · YouTube 15:30** (`estudio-horas-2026-1
 
 **Cambio de Paco (6-7 nov, por Vídeo):** Vietnam pasa al jue 12 y Pueblos T1 al jue 19, porque los shorts de Vietnam terminan el mié 11. Las fechas del párrafo «Comprobada en Metricool» de arriba son las de antes de este cambio. Tatuajes sigue el jue 10 dic.
 
+**Cambio de Paco (9 nov): recorrido de Vietnam en tres largos, para probar el formato «viajero que ha estado».** Parte 1, el largo de historia retitulado «Qué saber antes de ir a Vietnam…» (jue 12 nov). Parte 2, cómo preparar el viaje, con la ruta en la app (jue 26 nov, por hacer). Parte 3, mi ruta y lo que cambiaría, con la voz y las imágenes de Paco (jue 3 dic, por hacer). Moken pasa al mar 15 dic y mosuo al mié 16 dic. Los números se juzgan el **lun 14 dic**. Filipinas: Paco viaja hacia enero; lote 1 sin aprobar y la apertura se replantea como «antes de ir», con la ruta. Los dos capítulos por hacer siguen en conversación con Paco.
+
 ### Calendario de redes desde diciembre (lo que saldría)
 | Semana | Mar | Mié | Jue |
 |---|---|---|---|
