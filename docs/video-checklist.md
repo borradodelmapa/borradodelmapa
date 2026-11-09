@@ -72,7 +72,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 | N8 | Voces definitivas (Paco y Salma, `motor/voces.cjs`), no cambiar sin orden de Paco. Pronunciación con el campo `voz` (el subtítulo sigue bien escrito). Nunca «según las guías»: NOSOTROS somos la guía. | manual |
 | N9 | Plantilla de capítulo-reel 60-90 s: gancho → contexto (Salma sitúa) → viaje → descubrimiento (dato clave) → cierre con dato o «continuará», sin moraleja (N6) → tarjeta. Si la historia lo pide, más de 90 s sin problema. | manual |
 | N10 | **SHORTS: 60 SEGUNDOS COMO MÁXIMO** (Paco, 5 nov 2026: «si duran más de un minuto no tenemos resultados óptimos en short»; el 5 nov salieron Vietnam 2/5 y 3/5, de casi 2 min, sin visitas). Cuenta todo: gancho, mapa, sígueme, clip de la app y tarjeta. Lo que no cabe va al blog o a un documental largo. **Gana sobre N9** («60-90 s, más si la historia lo pide»). El motor lo marca ❌ (pendiente de añadir a `reglas.cjs`); hasta entonces, se mira la duración antes de programar. | motor (pendiente) |
-| N11 | **Largos: pocas fechas (Paco, 6 nov 2026):** en la voz, solo los años que cierran una guerra o una etapa y, si hace falta, el del gancho; lo demás se narra («casi treinta años después»). En pantalla, lo mínimo y solo lo muy relevante. | manual |
+| N11 | **Largos: pocas fechas (Paco, 6 nov 2026):** en la voz, solo los años que cierran una guerra o una etapa y, si hace falta, el del gancho; lo demás se narra («casi treinta años después»). En pantalla, lo mínimo y solo lo muy relevante. **Largo de Tatuajes (Paco, 9 nov 2026; montado antes de esta regla):** la voz no cambia; salen de pantalla 1769 y 1869-1904. | manual |
 
 ## C · Montaje e imagen
 | ID | Regla | Comprobación |
@@ -146,6 +146,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 9 nov 2026 · 03:00 | 📈 Estrategia (Claude) | **N11** (Paco): en el largo de Tatuajes se mantienen las fechas de la voz y salen dos de pantalla. Solo este vídeo. |
 | 9 nov 2026 · 02:45 | 📈 Estrategia (Claude) | **M3** (Paco): excepción en el largo de Tatuajes; las repeticiones se quedan. Solo este vídeo. |
 | 9 nov 2026 · 02:30 | 📈 Estrategia (Claude) | **M11** (Paco): el largo de Tatuajes también lleva carátula de texto enorme, sin franja. Excepción al diseño fijo de documentales (fila del 4 nov 14:00), solo en este vídeo. |
 | 9 nov 2026 · 02:10 | 📈 Estrategia (Claude) | **F4** (Paco): en la voz, la fuente va con nombre. **M8** (Paco): rótulos del largo de Tatuajes de 4 s. Sin conflictos: lo concretan. |
