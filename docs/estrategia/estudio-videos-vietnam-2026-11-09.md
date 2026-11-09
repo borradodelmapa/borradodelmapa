@@ -27,6 +27,10 @@
 5. **Enlaces en la descripción:** las guías enlazan su visado, seguro o tarjeta, y viven de eso. Es el modelo que buscamos para la app.
 
 ## Qué supone para el recorrido de Vietnam
-- **Parte 1 (historia, jue 12):** no aparece nada parecido entre lo que funciona. Es un riesgo: el título ayuda, pero el contenido sigue siendo historia. Que no sea el vídeo que juzgue el formato.
+- **Parte 1 (historia, jue 12):** CORREGIDO el mismo día. En la primera búsqueda no salió nada parecido, pero sí existe y funciona mucho: «La guerra de Vietnam en 11 minutos», Memorias de Pez, 5,1 M en 6 años, y «La Guerra Fría en 12 minutos», 2,2 M. Historia rápida, con mapas, con promesa de duración en el título.
 - **Parte 2 (preparar el viaje):** guía de 12 a 18 min con índice. Título tipo «Guía de viaje a Vietnam en N días: ruta, presupuesto y consejos». Nuestra ventaja: datos de este año y la ruta hecha en la app.
 - **Parte 3 (la vivencia):** es la que puede crecer. Tiene que ser Paco en el sitio, con opinión y sin guion de folleto.
+
+
+## Material propio de Vietnam (móvil de Paco, D:\salma-movil, por GPS)
+1.190 archivos, 185 de ellos vídeos, del 15 abr al 20 may 2026. Sale la ruta por GPS: Hanói, Pù Luông, Mai Châu, Nà Hang, Cao Bằng, Bắc Sơn, Hải Phòng, Ninh Bình, Quảng Trị. Sin comprobar cuántos vídeos tienen a Paco hablando a cámara.
