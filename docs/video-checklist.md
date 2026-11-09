@@ -79,7 +79,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 |---|---|---|
 | M1 | Estructura: gancho → **situar (mapa)** → desarrollo alternando escalas → pico (plano largo) → ficha (ritmo rápido) → cierre (GP lento) → tarjeta. | manual |
 | M2 | Escalas GP/PM/PP/D: presentar GP→PM→PP→D y cerrar al revés; no repetir escala seguida; máx. 2 detalles seguidos; duraciones GP 3-4 · PM 2-3 · PP 1,5-2 · D 0,8-1,5 s. | motor |
-| M3 | **Ninguna foto ni clip repetido** en un vídeo. | motor |
+| M3 | **Ninguna foto ni clip repetido** en un vídeo. **Excepción (Paco, 9 nov 2026, largo de Tatuajes):** se quedan el clip del puñetazo y las dos fotos del repaso final. | motor |
 | M4 | Look Kodak coherente: Portra (día) · Vision3 (noche/interior) · Tri-X B/N (historia/leyenda/recuerdo) + normalización «BDM Film» de cada foto. **⚠ La normalización no funciona desde el 26 oct 2026** (fallo de una línea en `normFilter`); visto el antes/después (`pueblos/comun/M4-antes-despues.jpg`), **Paco decide no activarla de momento** (31 oct) y pide que se le recuerde de vez en cuando. El look Kodak sí se aplica. | motor |
 | M5 | Zoom/empuje lo pone el montaje (ffmpeg); Runway solo movimiento interno, cámara fija, 5 s (coste dicho). | manual |
 | M6 | **Fundidos a negro entre bloques** (`scene`/`sceneEnd`). | motor |
@@ -146,6 +146,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 9 nov 2026 · 02:45 | 📈 Estrategia (Claude) | **M3** (Paco): excepción en el largo de Tatuajes; las repeticiones se quedan. Solo este vídeo. |
 | 9 nov 2026 · 02:30 | 📈 Estrategia (Claude) | **M11** (Paco): el largo de Tatuajes también lleva carátula de texto enorme, sin franja. Excepción al diseño fijo de documentales (fila del 4 nov 14:00), solo en este vídeo. |
 | 9 nov 2026 · 02:10 | 📈 Estrategia (Claude) | **F4** (Paco): en la voz, la fuente va con nombre. **M8** (Paco): rótulos del largo de Tatuajes de 4 s. Sin conflictos: lo concretan. |
 | 9 nov 2026 · 01:45 | 📈 Estrategia (Claude) | **Y5** (Paco): en el largo de Tatuajes, la descripción no dice «IA» y se marca en la casilla de la red. Choque entre Y5 («aviso de IA») y P1: en este vídeo gana P1. |
