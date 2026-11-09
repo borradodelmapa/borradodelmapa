@@ -48,6 +48,18 @@ Sin leer todavía: Muay Thai, Vietnam 1/5 y 3/5, avances de Vietnam (faltan sus 
 4. **Los dos vídeos más vistos duran 1:34 y 1:43.** El único de menos de 60 s con datos (Vietnam 3/5 recortado) tiene 20 visitas: aún no dice nada a favor ni en contra de N10.
 5. Casi todo el tráfico es del feed (Shorts 94 %, «Para ti» 99 %); la búsqueda apenas trae nada.
 
+6. **Dato de Estrategia (informe del 9 nov):** en TikTok, Vietnam 3/5 recortado a 59 s tiene 733 visitas, casi el triple que cualquier otro. Es el único dato a favor de N10, y es de TikTok.
+
+### Cómo empiezan los vídeos (fotogramas a 0 · 0,5 · 1 · 2 · 3 · 5 · 8 s, sacados de los archivos locales el 9 nov)
+| Vídeo | Qué se ve en los 3 primeros segundos |
+|---|---|
+| Kayan, Chiang Mai, Pai, Vietnam 1/5 (publicados) | **Una sola foto fija de paisaje, sin personas**, con «BORRADO DEL MAPA · CAP. N/20 · lugar» encima. En kayan la misma foto dura más de 5 s. La foto no llena la pantalla vertical (franja oscura abajo; en Pai, arriba y abajo). Subtítulo pequeño. |
+| Whang-Od corto (sin publicar) | Carátula 0,2 s → cara de Whang-Od, **la misma foto 5 s**, cifra «+100» → mapa a los 8 s. Sin nombre de canal ni número de capítulo. |
+| Whang-Od «3 cosas antes de ir» (sale 17 nov) | Carátula 0,2 s → cara animada con la pregunta «¿Vas a tatuarte con la mujer de más de cien años?» → cambio de plano a los 5 s → «1» a los 8 s. |
+
+- La carátula del primer fotograma (M11) dura 0,2 s: a los 0,5 s ya no está. **No parece la causa** de que se vayan en TikTok.
+- Lo medido hasta hoy es del formato antiguo (paisaje + nombre del canal + «Cap. N/20»). Del formato nuevo (persona primero, pregunta al espectador) no hay datos hasta el 17 nov.
+
 ### Sin comprobar (hipótesis)
-- Que la carátula fija del primer fotograma (M11) sea lo que hace deslizar en TikTok: hay que ver el primer segundo de cada vídeo.
+- Que en TikTok se vayan por abrir con una foto fija de paisaje y el nombre del canal: encaja con los datos, pero no está probado hasta comparar con los vídeos nuevos.
 - Por qué Chiang Mai y Vietnam 2/5 casi no se repartieron en YouTube.
