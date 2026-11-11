@@ -33,7 +33,7 @@ Ocupados hasta el jue 10 dic con Vietnam, Pueblos T1 y Tatuajes (`plan.md` §3).
 | ✅ | Entrada de blog del largo de Pueblos | vista por Paco («súbelo», 6 nov); en borrador en main | — |
 | 1 | Lote 1 de Filipinas | semana del 30 nov | antes del 8 dic |
 
-## Por hacer el jue 19 nov, a las 15:30 (cuando el largo de Pueblos ya sea público; cambiado desde el jue 12)
+## Por hacer el jue 19 nov, a las 10:00 (cuando el largo de Pueblos ya sea público; cambiado desde el jue 12)
 1. 🌍 Web publica la entrada de blog (quita `borrador`, 0 €). Hay que avisarla: no sale sola.
 2. 🎬 Vídeo pone el comentario fijado con los autores.
 3. Paco pide la indexación en Search Console.
@@ -43,7 +43,7 @@ Si el vídeo cambia antes, 🎬 Vídeo avisa a Web para rehacer el vídeo ligero
 - 🎬 Vídeo: en cada short de Pueblos ya público, «Vídeo relacionado» → largo de Pueblos T1 (`_SnSzkDIkmw`). Antes no se puede: el largo es privado hasta el 19.
 - Paco: en la app de TikTok, Editar perfil, mirar si sale «Sitio web» (en la web no sale) y poner `borradodelmapa.com/pueblos`.
 
-## Por hacer el mar 24 nov, a las 16:30 (adelantado del 10 dic por Paco; tarea del comentario movida a las 16:35) (largo de Tatuajes, id `0nNCUhMiSdI`, solo YouTube; aprobado por Paco y programado el 9 nov; entrada de blog ya publicada)
-1. 🎬 Vídeo: comentario fijado a las 16:35 (tarea programada, P6) y comprobarlo.
+## Por hacer el mar 24 nov, a las 10:00 (adelantado del 10 dic por Paco; tarea del comentario a las 10:05) (largo de Tatuajes, id `0nNCUhMiSdI`, solo YouTube; aprobado por Paco y programado el 9 nov; entrada de blog ya publicada)
+1. 🎬 Vídeo: comentario fijado a las 10:05 (tarea programada, P6) y comprobarlo.
 2. 🌍 Web: poner `youtube` en la entrada `historia-de-los-tatuajes` cuando el vídeo sea público. Hay que avisarla.
 3. Paco pide la indexación en Search Console.

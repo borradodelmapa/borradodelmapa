@@ -6,18 +6,18 @@ Manda: CLAUDE.md, `docs/video-checklist.md` (L1, L2, P13), `docs/sistemas.md`. E
 ---
 
 ## 0 · LARGOS MARTES Y JUEVES (decisión de Paco, 11 nov 2026). Manda sobre el calendario de abajo
-YouTube, 15:30 (16:30 si ese día hay short). Shorts = avances de un largo. Si un largo no está hecho y aprobado por Paco, el hueco se queda vacío. Se revisa el lun 14 dic.
+Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts = avances de un largo. Si un largo no está hecho y aprobado por Paco, el hueco se queda vacío. Se revisa el lun 14 dic.
 
 | Día | Largo | Estado |
 |---|---|---|
 | jue 12 nov | Qué saber antes de ir a Vietnam: 2.000 años sin rendirse | programado (ZTvmL3EV1J4) |
-| **mar 17 nov** | **Viajar a la India** (crónica por preguntas) | montado 11 nov; falta que Paco lo vea, paquete, blog, EN · 16:30 (hay short) |
+| **mar 17 nov** | **Viajar a la India** (crónica por preguntas) | montado 11 nov; falta que Paco lo vea, paquete, blog, EN |
 | jue 19 nov | Pueblos borrados del mapa T1 | programado (_SnSzkDIkmw) |
-| **mar 24 nov** | **Tatuajes por el mundo** (adelantado del 10 dic, orden de Paco) | programado en Studio 16:30 (0nNCUhMiSdI) |
+| **mar 24 nov** | **Tatuajes por el mundo** (adelantado del 10 dic, orden de Paco) | programado en Studio 10:00 (0nNCUhMiSdI) |
 | **jue 26 nov** | **Filipinas: qué saber antes de ir** (rehacer la apertura v1 en formato preguntas, con la ruta de Luzón norte) | por rehacer |
-| **mar 1 dic** | **Tailandia 1: qué saber antes de ir** (N13, material de Paco) | por hacer · 16:30 (hay short) |
+| **mar 1 dic** | **Tailandia 1: qué saber antes de ir** (N13, material de Paco) | por hacer |
 | **jue 3 dic** | por decidir (Portugal, Bután o Vietnam sur) | — |
-| **mar 8 dic** | **Tailandia 2: el norte en moto** (Chiang Mai, Pai, Mae Hong Son) | por hacer · 16:30 (hay short) |
+| **mar 8 dic** | **Tailandia 2: el norte en moto** (Chiang Mai, Pai, Mae Hong Son) | por hacer |
 | **jue 10 dic** | **Tailandia 3: Koh Samui y el Muay Thai** | por hacer |
 | mar 15 dic · jue 17 dic | por decidir | — |
 | enero | Filipinas durante y al volver (viaje de Paco) | — |
