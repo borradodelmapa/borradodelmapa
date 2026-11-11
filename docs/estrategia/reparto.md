@@ -44,6 +44,6 @@ Si el vídeo cambia antes, 🎬 Vídeo avisa a Web para rehacer el vídeo ligero
 - Paco: en la app de TikTok, Editar perfil, mirar si sale «Sitio web» (en la web no sale) y poner `borradodelmapa.com/pueblos`.
 
 ## Por hacer el mar 24 nov, a las 16:30 (adelantado del 10 dic por Paco; tarea del comentario movida a las 16:35) (largo de Tatuajes, id `0nNCUhMiSdI`, solo YouTube; aprobado por Paco y programado el 9 nov; entrada de blog ya publicada)
-1. 🎬 Vídeo: comentario fijado a las 15:35 (tarea programada, P6) y comprobarlo.
+1. 🎬 Vídeo: comentario fijado a las 16:35 (tarea programada, P6) y comprobarlo.
 2. 🌍 Web: poner `youtube` en la entrada `historia-de-los-tatuajes` cuando el vídeo sea público. Hay que avisarla.
 3. Paco pide la indexación en Search Console.
