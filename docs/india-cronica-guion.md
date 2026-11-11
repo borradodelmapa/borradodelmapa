@@ -25,7 +25,7 @@
 `[RW ghat-amanecer-494: barcas al amanecer]`
 **S:** Estuve veinticinco días en el norte de la India. Esto es lo que nadie te cuenta antes de ir.
 `[TÍTULO: VIAJAR A LA INDIA · UN VIAJE PARA MUCHOS, PERO NO PARA TODOS]`
-*(Mukti Bhawan: varias fuentes; discrepan en los días y el precio → «unas dos semanas», sin precio. Mark Twain fuera: Paco, 11 nov.)*
+*(Mukti Bhawan: varias fuentes; discrepan en los días y el precio → «unas dos semanas», sin precio. Mark Twain fuera de la voz; su frase va repartida en Benarés y su nombre, en los créditos: Paco, 11 nov.)*
 
 ## 1 · EL VIAJE EN UNA FRASE (0:28-0:45)
 `[cortes rápidos: ashram en ruinas · foto de los Beatles de 1968 · banderas de oración · foto de 1959 · lámparas sobre el Ganges]` `[mapa: Rishikesh → Dharamsala → Rishikesh → Benarés]`
@@ -99,7 +99,7 @@
 **S:** Por la mañana, el bullicio se los ha tragado. No queda ni uno. Nunca sabré quiénes eran.
 
 `[amanecer desde la barca: sol sobre el Ganges, barcas de madera, escaleras hasta el agua (M92-M113, Sony 474-511)]`
-**S:** Amanece, y salgo en barca. Sol sobre el río, barcas de madera, escaleras que bajan hasta el agua.
+**S:** Amanece, y salgo en barca. Sol sobre el río, barcas de madera, escaleras que bajan hasta el agua. Una ciudad más vieja que la historia.
 **S:** Para los hindúes, morir aquí libera del ciclo de las reencarnaciones. Por eso hay quien viene a esperar la muerte. Y por eso, en la orilla, el fuego no se apaga.
 
 `[crematorio desde el agua: humo, leña apilada, piras; sin cuerpos (Sony 540-554)]`
@@ -107,7 +107,7 @@
 **S:** Y se ve lo que nadie te cuenta: hasta para arder hay clases. Quien tiene dinero compra más leña, y sándalo. A unos metros, niños jugando. Aquí la muerte es de todos los días.
 
 `[FLASHBACK B/N: los Dom junto a las piras (archivo con licencia); Ambedkar; la Constitución de 1950]`
-**S:** Las piras las encienden los Dom, una comunidad dalit: los que el sistema de castas llamaba intocables. Sin su fuego, dice la tradición, no hay salvación. Y aun así, siguen abajo del todo.
+**S:** Aquí hay costumbres más viejas que la tradición. Las piras las encienden los Dom, una comunidad dalit: los que el sistema de castas llamaba intocables. Sin su fuego, dice la tradición, no hay salvación. Y aun así, siguen abajo del todo.
 **S:** Mil novecientos cincuenta. La India estrena Constitución, y su artículo diecisiete prohíbe la intocabilidad. La redactó un dalit, Ambedkar. Setenta y seis años después, la ley dice una cosa. Y la orilla, otra.
 `[rótulo: ARTÍCULO 17 · CONSTITUCIÓN DE LA INDIA, 1950]`
 `[vuelta al color, la barca]`
@@ -125,7 +125,7 @@
 *(Paco subió al escenario: está en las notas del 24 oct. «Nadie me para» ⚠ confirmar con Paco o quitar. No se nombra al gurú.)*
 
 `[Sarnath: la estupa, monjes sentados (V43-V45, M116-M121, Sony 587-588)]`
-**S:** A diez kilómetros vuelve el silencio. Sarnath. Aquí Buda dio su primer sermón. Monjes sentados frente a una estupa enorme. Hinduismo y budismo, a un paseo de distancia.
+**S:** Benarés, más vieja incluso que la leyenda. Y a diez kilómetros vuelve el silencio. Sarnath. Aquí Buda dio su primer sermón. Monjes sentados frente a una estupa enorme. Hinduismo y budismo, a un paseo de distancia.
 
 `[rótulo: AARTI · DASHASHWAMEDH · AL ANOCHECER · LLEGA 1 H ANTES]`
 **S:** Y una regla para la ciudad: el aarti de la tarde, en Dashashwamedh, se llena. Si quieres ver algo, llega una hora antes.
@@ -161,6 +161,7 @@
 **S:** Un viaje para muchos, pero no para todos. Si te agobia el ruido, la gente o ver la muerte tan de cerca, quizá no es tu viaje. Si quieres entender cómo vive una sexta parte del planeta, empieza por esta orilla.
 *(⚠ «una sexta parte»: India tiene ~1.430 millones de los ~8.100 millones del mundo, ≈17,6 %: correcto)*
 `[clip de la app (M16) · tarjeta (M14) con sintonía]`
+`[CRÉDITOS: «Más vieja que la historia, más vieja que la tradición, más vieja incluso que la leyenda»: Mark Twain, Following the Equator (1897). En la descripción y al final, no en la voz (Paco, 11 nov)]`
 
 ---
 **Pendiente antes de gastar voz:**
