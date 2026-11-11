@@ -366,7 +366,7 @@ module.exports = [
       ].filter((f) => !vistas.has(f.u) && vistas.add(f.u));
     },
   },
-  // Largo 16:9 · CRÓNICA en primera persona (N12) · montaje: salma marketing/india/motor/vietnam-cronica2.cjs · YouTube 7eE5P5vqomo, mié 11 nov 2026 a las 15:30 (poner youtube: '7eE5P5vqomo' cuando sea público)
+  // Largo 16:9 · CRÓNICA en primera persona (N12) · montaje: salma marketing/india/motor/vietnam-cronica2.cjs · YouTube 7eE5P5vqomo, mié 11 nov 2026 a las 15:30 (público desde las 15:49 del 11 nov)
   {
     orden: 117,
     slug: 'vietnam-en-moto-45-dias-carne-que-no-vale',
@@ -379,6 +379,7 @@ module.exports = [
     titulo: 'Guía de viaje a Vietnam: 45 días en moto',
     resumen: 'Crónica de 45 días por el norte de Vietnam en moto: un control de policía, un permiso de conducir que allí no sirve, Hanói, las montañas de la frontera con China, Hạ Long y las cuevas de Phong Nha. Con lo que hay que saber antes de ir y lo que costó.',
     video: 'vietnam-en-moto-cronica.mp4',
+    youtube: '7eE5P5vqomo',
     realidad: 'Basado en un viaje real: las fotos y los vídeos son de Paco, que hizo el recorrido en moto en abril y mayo de 2026. La narración es la crónica de ese viaje, contada en primera persona con la voz de Salma. Las imágenes de archivo llevan su autor al final de la página.',
     fotosDe: { '': 'salma marketing/vietnam/capitulos/vn.lst' },
     fotosArchivo: 'salma marketing/vietnam/largo/archivo',
