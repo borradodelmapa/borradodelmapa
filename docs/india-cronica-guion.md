@@ -40,7 +40,6 @@
 **S:** Regla uno, nada más aterrizar. Si un taxista te dice que tu hotel ha cerrado o que hay disturbios en la ciudad, es mentira. Es la estafa más vieja del aeropuerto: quiere llevarte a otro hotel. Taxi de prepago o de aplicación, y foto a la matrícula.
 **S:** Regla dos: el pasaporte no se lo dejas a nadie. Ni al hotel ni al de las motos. Una fotocopia vale.
 **S:** Y si eres mujer, Exteriores lo dice claro, y yo también: no viajes sola. Nada de rickshaws ni taxis de noche, y nunca des la dirección de tu alojamiento a un desconocido. Emergencias: ciento doce.
-`[cifra: MUJERES · NO VIAJES SOLA · 112]`
 **S:** Pero para entender este país, hay que empezar arriba. Donde el Ganges acaba de salir de la montaña.
 
 ## 3 · RISHIKESH (1:30-4:00)
@@ -167,5 +166,5 @@
 **Pendiente antes de gastar voz:**
 1. Que Paco dé el OK a este texto.
 2. Confirmar o quitar lo marcado ⚠.
-3. Buscar el archivo: Twain y Benarés en el s. XIX, los Beatles en 1968, Lhasa 1959, los Dom y Ambedkar, la Partición y Wagah.
+3. Buscar el archivo: los Beatles en 1968, Lhasa 1959, los Dom y Ambedkar, la Partición y Wagah.
 4. Hoja de contactos del material de Paco por capítulos.
