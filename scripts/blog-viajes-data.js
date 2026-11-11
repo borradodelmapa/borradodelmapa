@@ -7,6 +7,7 @@
 const SERIES = {
   'Tailandia en moto': { sub: 'Chiang Mai, el Triángulo de Oro, la carretera de las 762 curvas y el bucle de Mae Hong Son, en moto. Y un especial de Muay Thai en Ko Samui.' },
   'Vietnam': { sub: 'De mil años de resistencia a Hồ Chí Minh: cinco capítulos y un documental para entender el país antes de recorrerlo.' },
+  'India': { sub: 'Rishikesh, Dharamsala y Benarés: crónica de un viaje por el norte de la India, con lo que conviene saber antes de ir.' },
   'Pueblos borrados del mapa': { sub: 'Pueblos, oficios y costumbres que están desapareciendo, contados con datos y fuentes. Y cómo visitarlos con respeto.' },
   'Conoce cada país': { sub: 'La introducción de cada país: geografía, historia y culturas para entender lo que vas a ver. Con fuentes.' },
   'Documentales': { sub: 'Historias que cruzan países, contadas con datos y fuentes.' },

@@ -148,4 +148,76 @@ module.exports = [
     ],
     cierre: 'Próximo episodio: los ainu, el pueblo indígena del norte de Japón.',
   },
+  // Short vertical · CRÓNICA (N12) · montaje: salma marketing/india/motor/india-3-lugares.cjs · borrador de 74 s (Paco rehará el texto a 60 s para redes)
+  // Sin programar en Metricool: Paco decide la fecha cuando esté el largo de la India. Monos que enseñan los dientes = clips hechos con IA (RW9001, RW9002).
+  {
+    orden: 118,
+    slug: 'india-3-lugares-sagrados-rishikesh-dharamsala-benares',
+    fecha: '2026-11-11',
+    serie: 'India',
+    cap: 'Corto',
+    pais: 'India',
+    titulo: 'India: tres lugares sagrados y un consejo en cada uno',
+    resumen: 'Rishikesh, Dharamsala y Benarés: el yoga junto al Ganges, el Dalái Lama en el exilio y la ciudad donde se despide a los muertos con fuego. Lo que se ve en cada uno y lo que conviene saber antes de ir.',
+    video: 'india-3-lugares-sagrados.mp4',
+    realidad: 'Basado en un viaje real: las fotos y los vídeos son de Paco, que estuvo en Rishikesh, Dharamsala y Benarés en noviembre de 2019. La narración es la crónica de ese viaje, con la voz de Salma. Los primeros planos de los monos enseñando los dientes están hechos con inteligencia artificial a partir de una foto de Paco.',
+    fotosDe: { '': 'salma marketing/india/corto-3-lugares/fotos.lst' },
+    fotos: { portada: '546', galeria: [
+      ['416', 'Una ofrenda en el Ganges.'],
+      ['404', 'Yoga al amanecer en las rocas del río, en Rishikesh.'],
+      ['152', 'El Dalái Lama, en Dharamsala, el 6 de noviembre de 2019.'],
+      ['153', 'Monjes y fieles en las enseñanzas del Dalái Lama.'],
+      ['598', 'Miles de lámparas sobre el río, en Benarés.'],
+      ['588', 'Monjes frente a la estupa de Sarnath.'],
+      ['v36', 'Uno de los monos del balcón, en Rishikesh.'],
+      ['v74', 'Una boda en Benarés.'],
+      ['v56', 'Las lámparas desde la barca, en Benarés.'],
+      ['v46', 'Un monje en Sarnath.'],
+    ] },
+    cifras: [['3', 'Lugares sagrados'], ['25', 'Días por el norte'], ['10 km', 'De Benarés a Sarnath']],
+    cita: { tras: 2, t: 'Más vieja que la historia, más vieja que la tradición, más vieja incluso que la leyenda', de: 'Mark Twain, sobre Benarés («Following the Equator», 1897)' },
+    secciones: [
+      { h: 'Un hotel para morir', foto: ['546', 'El crematorio de Manikarnika, desde el río.'], p: [
+        'En Benarés hay un hotel donde no se viene a dormir. Se viene a morir. Es la **Kashi Labh Mukti Bhawan**: unas pocas habitaciones, un sacerdote, agua del Ganges, y un plazo de unas dos semanas. Si en ese tiempo no llega la muerte, hay que dejar la habitación.',
+        'Para los hindúes, morir en Benarés libera del ciclo de las reencarnaciones. Por eso hay quien viene a esperar el final. Y por eso, en la orilla, el fuego no se apaga.' ] },
+      { h: 'Rishikesh: el Ganges, el yoga y los monos', foto: ['404', 'Yoga al amanecer junto al Ganges.'], p: [
+        'Aquí el Ganges acaba de bajar del Himalaya y todavía corre con fuerza. Al amanecer, en las rocas del río, hay gente haciendo yoga. Viene a buscar calma medio mundo, y hay maestros de toda una vida junto a profesores de curso rápido: antes de pagar, pregunta con quién aprendió quien te enseña.',
+        '**El consejo:** los monos tienen mala leche de verdad. No los molestes, no les enseñes comida y no les des de comer. En la India sigue habiendo rabia: si te muerde un mono o un perro, al médico ese mismo día.' ] },
+      { h: 'Dharamsala: el Dalái Lama en el exilio', foto: ['152', 'El Dalái Lama, en Dharamsala.'], p: [
+        'Ruedas de oración, monjes de granate, banderas al viento. En Dharamsala vive el Dalái Lama desde que huyó del Tíbet en 1959, y aquí tiene su sede el gobierno tibetano en el exilio. En noviembre de 2019 daba enseñanzas en el templo principal, y allí lo vi.',
+        '**El consejo:** sus enseñanzas son gratis, pero hay que inscribirse con el pasaporte en McLeod Ganj, el barrio alto. Mira su calendario oficial antes de ir: las fechas cambian, y su salud también.' ] },
+      { h: 'Benarés: más vieja que la leyenda', foto: ['598', 'Lámparas en los ghats de Benarés.'], p: [
+        'Escaleras de piedra que bajan al río, barcas de madera al amanecer, miles de lámparas por la noche. En las mismas escaleras hay bodas, con música y flores, y a unos metros se queman los muertos. **Manikarnika** es el crematorio más antiguo: ya aparece en una inscripción del siglo V.',
+        '**El consejo:** los crematorios se miran desde la barca, en silencio. Y ni una foto a nadie.' ] },
+      { h: 'Sarnath: diez kilómetros más allá', foto: ['588', 'Monjes ante la estupa de Sarnath.'], p: [
+        'A unos diez kilómetros de Benarés vuelve el silencio. En **Sarnath**, Buda dio su primer sermón. Hoy hay monjes sentados frente a una estupa enorme, la Dhamek. Hinduismo y budismo, a un paseo de distancia: si vas a Benarés, guárdate una mañana para Sarnath.' ] },
+    ],
+    ficha: [
+      '**Rabia:** no te acerques a monos ni a perros; si te muerden, al médico el mismo día.',
+      '**Dalái Lama:** enseñanzas gratis, con inscripción y pasaporte en McLeod Ganj; calendario en dalailama.com.',
+      '**Crematorios de Benarés:** desde la barca, en silencio y sin fotos.',
+      '**Seguridad:** lee las recomendaciones de Exteriores antes de ir; emergencias en la India, 112.',
+    ],
+    fuentes: [
+      W('Recomendaciones de viaje a la India (Ministerio de Asuntos Exteriores de España)', 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=India'),
+      W('Los hoteles de la muerte de Benarés (Al Jazeera)', 'https://www.aljazeera.com/gallery/2013/12/5/hotels-of-death-in-indian-holy-city'),
+      W('Mukti Bhawan, el hotel donde los hindúes van a morir (South China Morning Post)', 'https://www.scmp.com/lifestyle/travel-leisure/article/2186308/welcome-indias-death-hotel-salvation-house-where-hindus-go'),
+      W('Calendario de enseñanzas del Dalái Lama (web oficial)', 'https://www.dalailama.com/schedule'),
+      W('Primer día de enseñanzas en Dharamsala, noviembre de 2019 (web oficial)', 'https://dalailama.com/pictures/first-day-of-teachings-in-dharamsala'),
+      W('Manikarnika Ghat (Wikipedia)', 'https://en.wikipedia.org/wiki/Manikarnika_Ghat'),
+      W('Sarnath (Wikipedia)', 'https://en.wikipedia.org/wiki/Sarnath'),
+      W('Following the Equator, de Mark Twain (Wikipedia)', 'https://en.wikipedia.org/wiki/Following_the_Equator'),
+    ],
+    nota: 'Datos de noviembre de 2026: confírmalos en fuentes oficiales antes de ir.',
+    story: {
+      portada: 'v56',
+      slides: [
+        { foto: 'v56', h: 'India: tres lugares sagrados', t: 'Y un consejo en cada uno. Crónica de un viaje por el norte.' },
+        { foto: 'v36', h: 'Rishikesh', t: 'Yoga al amanecer junto al Ganges. Los monos, ni tocarlos: en la India sigue habiendo rabia.' },
+        { foto: '152', h: 'Dharamsala', t: 'Aquí vive el Dalái Lama. Verlo enseñar es gratis: te inscribes con el pasaporte.' },
+        { foto: 'v74', h: 'Benarés', t: 'Más vieja que la historia. Los crematorios, desde la barca y sin fotos.' },
+        { foto: 'v46', h: 'Sarnath', t: 'A diez kilómetros, donde Buda dio su primer sermón.', salida: 'Ver la crónica' },
+      ],
+    },
+  },
 ];
