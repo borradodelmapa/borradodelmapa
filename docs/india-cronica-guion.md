@@ -15,18 +15,17 @@
 
 ---
 
-## 0 · GANCHO (0:00-0:28)
-`[noche en el ghat, sonido real del vídeo de Paco; fuego en la orilla]`
+## 0 · GANCHO (0:00-0:25) · con los clips de Runway que ya hicimos (`india/runway-pruebas/`, fotos de Paco animadas, cámara fija: M5)
+`[RW ofrenda-rio-416: mujer dejando una ofrenda en el río. Persona en el primer fotograma: M15]`
+**S:** En la India, el mismo río sirve para rezar, para bañarse y para despedir a los muertos.
+`[RW ghat-incineraciones-546: humo, leña y piras en la orilla]`
 **S:** En Benarés hay un hotel donde no se viene a dormir. Se viene a morir. Te dan una habitación y unas dos semanas. Si no te mueres, te vas.
-`[rótulo: MUKTI BHAWAN · BENARÉS]` *(dato con varias fuentes, que discrepan en los días y el precio: queda «unas dos semanas», sin precio)*
-
-`[FLASHBACK: grabado o foto de Benarés del siglo XIX; retrato de Mark Twain]`
-**S:** Mark Twain pasó por aquí en mil ochocientos noventa y siete. Escribió que esta ciudad era más vieja que la historia, más vieja que la tradición, más vieja incluso que la leyenda.
-
-`[barcas al amanecer; la pira desde el agua, sin cuerpos (fotos Sony 474-554)]`
-**S:** Ciento veintidós años después, yo la miraba desde una barca. A un lado, gente bañándose en el río. Al otro, una pira ardiendo.
-
+`[RW ghat-lamparas-598-v2-humo: la orilla de noche, miles de lámparas]`
+**S:** De noche, esa misma orilla se enciende con miles de lámparas.
+`[RW ghat-amanecer-494: barcas al amanecer]`
+**S:** Estuve veinticinco días en el norte de la India. Esto es lo que nadie te cuenta antes de ir.
 `[TÍTULO: VIAJAR A LA INDIA · UN VIAJE PARA MUCHOS, PERO NO PARA TODOS]`
+*(Mukti Bhawan: varias fuentes; discrepan en los días y el precio → «unas dos semanas», sin precio. Mark Twain fuera: Paco, 11 nov.)*
 
 ## 1 · EL VIAJE EN UNA FRASE (0:28-0:45)
 `[cortes rápidos: ashram en ruinas · foto de los Beatles de 1968 · banderas de oración · foto de 1959 · lámparas sobre el Ganges]` `[mapa: Rishikesh → Dharamsala → Rishikesh → Benarés]`
@@ -40,7 +39,8 @@
 `[rótulo: EXTERIORES · SEPTIEMBRE DE 2026]`
 **S:** Regla uno, nada más aterrizar. Si un taxista te dice que tu hotel ha cerrado o que hay disturbios en la ciudad, es mentira. Es la estafa más vieja del aeropuerto: quiere llevarte a otro hotel. Taxi de prepago o de aplicación, y foto a la matrícula.
 **S:** Regla dos: el pasaporte no se lo dejas a nadie. Ni al hotel ni al de las motos. Una fotocopia vale.
-**S:** Y si viajas sola, Exteriores es claro: nada de rickshaws ni taxis de noche, y nunca des la dirección de tu alojamiento a un desconocido. El número de emergencias es el ciento doce.
+**S:** Y si eres mujer, Exteriores lo dice claro, y yo también: no viajes sola. Nada de rickshaws ni taxis de noche, y nunca des la dirección de tu alojamiento a un desconocido. Emergencias: ciento doce.
+`[cifra: MUJERES · NO VIAJES SOLA · 112]`
 **S:** Pero para entender este país, hay que empezar arriba. Donde el Ganges acaba de salir de la montaña.
 
 ## 3 · RISHIKESH (1:30-4:00)
