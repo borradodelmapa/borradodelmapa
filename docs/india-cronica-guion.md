@@ -44,56 +44,66 @@
 **S:** Pero para entender este país, hay que empezar arriba. Donde el Ganges acaba de salir de la montaña.
 
 ## 3 · RISHIKESH (1:30-4:00)
-`[MAPA: Rishikesh]` `[puente colgante con multitud (M1-M19, 4 nov); sadhus; aarti en el río]`
-**S:** Rishikesh. La llaman la capital mundial del yoga. Y aquí la ley es de otro siglo: desde mil novecientos cincuenta y seis no se vende carne ni pescado, y el huevo también se prohibió. En las zonas del río, el alcohol tampoco se sirve.
-*(⚠ la carne y el pescado, con fuente; el huevo, por sentencia del Supremo de 2004; el alcohol, solo con guías y prensa: queda «tampoco se sirve», sin hablar de ley)*
+`[MAPA: Rishikesh]` `[puente colgante abarrotado, monos en la barandilla (M1-M19, 4 nov)]`
+**S:** Un puente colgante sobre el Ganges, y no cabe un alma. Peregrinos, vacas, motos que no deberían pasar por aquí. Y en la barandilla, los monos, vigilando bolsas ajenas.
+**S:** Rishikesh. El río acaba de bajar del Himalaya y aquí todavía corre con fuerza.
+`[sadhus, puestos, templos de la orilla]`
+**S:** Es una ciudad que se toma en serio lo sagrado. Desde mil novecientos cincuenta y seis no se vende carne ni pescado. Ni huevos. Y en las zonas del río, ni una cerveza.
+*(carne y pescado desde 1956; huevo, sentencia del Supremo de 2004; alcohol: costumbre aplicada, no ley clara → «ni una cerveza», sin decir «prohibido por ley»)*
 
-`[FLASHBACK: Beatles en Rishikesh, febrero de 1968 (archivo con licencia, B/N); el ashram de Maharishi]`
-**S:** Febrero de mil novecientos sesenta y ocho. Los Beatles llegan a este ashram a aprender meditación con el Maharishi. Se quedan unas semanas, componen decenas de canciones, y dieciocho acaban en el Álbum Blanco.
-`[ruinas del ashram, fotos Sony 97-111]`
-**S:** Hoy el ashram es una ruina llena de grafitis, abierta al público.
-`[rótulo: BEATLES ASHRAM · ENTRADA EXTRANJEROS ⚠ 1.200 ₹]` *(⚠ precio y horario solo de blogs: confirmar o quitar)*
+`[FLASHBACK B/N: los Beatles en Rishikesh, 1968; el Maharishi]`
+**S:** Pero si medio mundo conoce este nombre es por cuatro chicos de Liverpool. Febrero de mil novecientos sesenta y ocho. Los Beatles suben a un ashram en la colina para aprender a meditar con el Maharishi. Se quedan semanas. Bajan con decenas de canciones. Dieciocho acaban en el Álbum Blanco.
+`[vuelta al color: ruinas del ashram, cúpulas con grafitis (Sony 97-111)]`
+**S:** Hoy aquel ashram es una ruina. Cúpulas de meditación cubiertas de grafitis y la selva entrando por las ventanas. Se puede visitar.
+`[rótulo: BEATLES ASHRAM · ⚠ ENTRADA Y HORARIO]`
 
-`[presente: vídeos de los monos en el balcón, V29-V35 y M72-M78]`
-**S:** Mi habitación daba al río. Un balcón estrecho y un cristal finísimo. Cada día pasaba por delante una familia de monos, tranquilos, casi educados.
-**S:** Un día di un golpecito en el cristal y pelé un plátano delante de uno. Me miró fijo. Le cambió la cara. Y se tiró contra el cristal, intentando abrir la puerta.
-**S:** Me escondí. En mi propia habitación.
+`[presente: monos en el balcón con el río detrás (V29-V35, M72-M78)]`
+**S:** Habitación sobre el Ganges. Entre la cama y el balcón, un cristal fino como una hoja. Cada día, por la barandilla, desfila la misma familia de monos. Llegan. Miran. Se van.
+**S:** Hasta que cometo un error de turista. Golpeo el cristal. Y pelo un plátano. Despacio.
+**S:** El más grande se queda quieto. Me sostiene la mirada. Y embiste: manos contra el cristal, dedos buscando la ranura de la corredera.
+**S:** El cristal aguanta. Yo acabo escondido. En mi propia habitación.
 `[cifra: RABIA · AL MÉDICO EL MISMO DÍA]`
-**S:** No es solo una anécdota. En la India sigue habiendo rabia. A perros y monos, ni te acerques ni les des de comer. Y si te muerden, al médico ese mismo día.
+**S:** Tiene gracia hasta que deja de tenerla. En la India sigue habiendo rabia. A perros y monos, ni te acerques ni les des de comer. Si te muerden, al médico ese mismo día.
 
-`[presente: yoga en las rocas (Sony 402-406), clase con maestro (V38)]`
-**S:** Y el yoga. Hay maestros de verdad y hay cursos exprés. Mira quién enseña antes de pagar.
-*(Paco, 24 oct: «profes de curso que se creen más de lo que son», dicho sin señalar a nadie.)*
+`[amanecer, yoga en las rocas (Sony 402-406); clase con maestro (V38)]`
+**S:** Al amanecer, en las rocas del río, gente haciendo yoga. Aquí viene a buscar calma medio mundo. Y aquí hay maestros de toda una vida, y profesores de curso rápido que se creen gurús. Antes de pagar, pregunta con quién aprendió quien te enseña.
+`[atardecer: aarti en la orilla, fuego y campanas (Sony 383-387, 407-410)]`
+**S:** Y cada tarde, en la orilla, el aarti. Fuego, campanas y cantos. Para el río.
 
 ## 4 · DHARAMSALA (4:00-6:30)
-`[MAPA: Rishikesh → Dharamsala]` `[autobús de noche (V19); montañas; banderas de oración]`
-**S:** Me avisó una amiga desde España: el Dalái Lama iba a dar enseñanzas en Dharamsala. Doce horas de autobús de noche, montaña arriba.
-*(⚠ «doce horas»: Paco dijo «toda la noche y parte del día»; o se deja así o se pone su frase.)*
+`[MAPA: Rishikesh → Dharamsala]` `[autobús de noche (V19)]`
+**S:** Un mensaje desde España: el Dalái Lama da enseñanzas en Dharamsala. Autobús nocturno. Toda la noche y medio día de curvas, montaña arriba.
+`[montañas, banderas de oración, monjes (Sony 144-249, M21-M60)]`
+**S:** Arriba, banderas de oración en cada cable, monjes de granate y el Himalaya detrás. De repente, esto ya no parece la India.
 
-`[FLASHBACK: Lhasa, marzo de 1959 (archivo B/N); el Potala; la huida]`
-**S:** Diecisiete de marzo de mil novecientos cincuenta y nueve. Lhasa está rodeada por el ejército chino. Un joven de veintitrés años se viste de soldado y sale de su palacio entre la multitud. Dos semanas después cruza a la India. No ha vuelto nunca.
+`[FLASHBACK B/N: Lhasa, el Potala, marzo de 1959]`
+**S:** Diecisiete de marzo de mil novecientos cincuenta y nueve. Lhasa. El ejército chino rodea el palacio. Esa noche, un joven de veintitrés años se pone un uniforme de soldado y sale entre la multitud. Es el Dalái Lama.
 `[mapa animado: Lhasa → Himalaya → India]`
-**S:** India le dio asilo. Y aquí, en las montañas, se instaló el gobierno tibetano en el exilio.
+**S:** Catorce días de huida por el Himalaya. El treinta y uno de marzo cruza a la India. No volverá nunca.
+**S:** India le da asilo. Y estas montañas se convierten en la capital de un país que ya no sale en los mapas.
 
-`[presente: templo principal, monjes, ceremonia (Sony 144-374, V6-V18), danza con máscaras (V14-15)]`
-**S:** Dentro, cámaras prohibidas. Yo soy fotógrafo, y la mía no la dejé: tuve que ingeniármelas para acreditarme, en la otra punta de la ciudad.
-**S:** Lo que impresiona no es él. Es la devoción de la gente, el orden, la amabilidad de todos, hasta la del personal de seguridad. Le estreché la mano. Poco más.
-`[foto del Dalái Lama del 6 nov 2019, Sony 145-154]`
+`[vuelta al color: templo principal, ceremonia (Sony 250-374)]`
+**S:** Abajo, la norma: cámaras prohibidas. Para un fotógrafo es como entrar sin ojos. Cruzo la ciudad de punta a punta para acreditarme. Entro casi el último. Dentro hay un solo español más. Y no es fotógrafo.
+`[foto del Dalái Lama, 6 nov 2019 (Sony 145-154)]`
+**S:** Lo que se me queda no es él. Es la devoción. El orden. La amabilidad de todos, hasta la de los de seguridad. Le estrecho la mano. Le digo que, si necesita algo, aquí estamos. Y ya.
+`[ceremonia en el monasterio: cuernos, tambores, danza con máscaras (V6-V18, V14-V15)]`
+**S:** Los días siguientes, en el monasterio, cuernos, tambores y monjes bailando con máscaras. Nadie te explica nada. Tampoco hace falta.
 
-`[presente / hoy: rótulo «JULIO DE 2025»]`
-**S:** En julio de dos mil veinticinco cumplió noventa años. Y anunció que habrá sucesor, y que solo su oficina podrá reconocerlo. China respondió que el sucesor se elegirá en China.
+`[rótulo: JULIO DE 2025]` `[foto de archivo reciente del Dalái Lama]`
+**S:** En julio de dos mil veinticinco cumplió noventa años. Y anunció que habrá sucesor, y que solo su oficina podrá reconocerlo. China respondió que se elegirá en China. La próxima batalla por el Tíbet ya tiene fecha: la de su muerte.
 `[cifra: 90 AÑOS · SUCESOR SOLO DESDE DHARAMSALA]`
-**S:** Si quieres verlo: sus enseñanzas son gratis, pero hay que inscribirse con el pasaporte en McLeod Ganj. Mira su web oficial antes de ir, porque las fechas cambian y su salud también.
-*(⚠ el lugar de inscripción discrepa entre las fuentes: la oficina de seguridad o el patio del templo. En la voz queda «en McLeod Ganj».)*
+**S:** Si quieres verlo: sus enseñanzas son gratis, pero hay que inscribirse con el pasaporte en McLeod Ganj. Mira su web antes de ir. Las fechas cambian, y su salud también.
 
 ## 5 · BENARÉS (6:30-9:30)
 `[MAPA: Rishikesh → Benarés]` `[llegada de noche (M87, 19 nov 22:05; V39-V40 calle con motos)]`
-**S:** Llegué a Benarés de noche. Bajo los puestos cerrados dormía gente entre cartones. Por la mañana, todo era bullicio. Y ellos ya no estaban.
+**S:** Aterrizo en Benarés de noche. Una ciudad entera en silencio. En las escaleras del río y bajo los puestos cerrados, cuerpos tumbados entre cartones. No están muertos. Duermen.
+**S:** Por la mañana, el bullicio se los ha tragado. No queda ni uno.
 
 `[amanecer: barcas, gente bañándose, postes con vasijas (M92-M113)]`
 **S:** Los hindúes creen que morir aquí, junto al Ganges, libera del ciclo de las reencarnaciones. Por eso vienen a morir. Y por eso hay fuego en la orilla de día y de noche.
 `[crematorio desde la barca, sin cuerpos (Sony 540-554)]`
 **S:** Manikarnika es el crematorio más antiguo. Ya aparece en una inscripción del siglo cinco.
+**S:** Desde la barca se ve lo que nadie te cuenta: hasta para arder hay clases. Quien tiene dinero compra más leña, y sándalo. Y a unos metros, niños jugando. Aquí la muerte es de todos los días.
 
 `[FLASHBACK: los Dom; Constitución de 1950; Ambedkar (archivo con licencia)]`
 **S:** Las piras las encienden los Dom, una comunidad dalit, los antiguos intocables. Sin su fuego, dice la tradición, no hay salvación. Y aun así, siguen en lo más bajo.
@@ -105,7 +115,8 @@
 *(⚠ lo de los falsos guías con dinero sale de guías de viaje: comprobarlo o quitar la frase)*
 
 `[presente: noche del 23 nov, miles de lámparas desde la barca (V51-V62, M125-M138)]`
-**S:** La noche del veintitrés, el río se llenó de lámparas. Miles. Desde la barca parecía un concierto. Era un gran ritual de fuego, el Ati Rudra Yaga: sacerdotes recitando el mismo himno a Shiva miles de veces durante días.
+**S:** La noche del veintitrés salgo otra vez en barca. La orilla está cubierta de lámparas. Miles. Música, gente de blanco, humo. Parece un concierto de AC/DC.
+**S:** Es un Ati Rudra Yaga: un ritual de fuego en el que los sacerdotes recitan el mismo himno a Shiva miles de veces, durante días.
 *(los datos del ritual están en `india-notas-y-fuentes.md`; 14.641 recitaciones según varias fuentes: si se dice la cifra, en pantalla)*
 
 `[Sarnath: estupa, monjes (V43-V45, M116-M121, Sony 587-588)]`
