@@ -137,6 +137,7 @@ Las reglas concretas las propone el chat 2 (Vídeo y redes, `docs/sistemas.md`) 
 | Y7 | **Nombre del archivo** con la palabra clave antes de subirlo (p. ej. `historia-de-los-tatuajes.mp4`). Documental y short. | script |
 | Y8 | **Etiquetas**: solo variantes, sinónimos y errores de escritura (peso bajo). Documental y short. | manual |
 | Y9 | **Blog (SEO web)**: palabra clave en el título y la descripción de la entrada, datos estructurados de vídeo y capítulos (si los hay). Documental y short. | manual |
+| Y10 | **Paquete en inglés en todos los vídeos (Paco, 11 nov 2026):** en YouTube Studio → Idiomas, se añaden **título y descripción traducidos al inglés** y la **pista de subtítulos EN** (.srt, M10). Así quien tiene YouTube en inglés lo ve y lo encuentra en inglés; el audio sigue en español. Gratis: la traducción la hace Claude. Se prepara cuando el montaje está aprobado. | manual |
 **Y2-Y9 valen desde el 4 nov 2026; los vídeos ya publicados o programados no se tocan por esto (igual que M10).**
 
 ## G · Gancho de los primeros 20 s (NUEVA, en construcción — Paco, 4 nov 2026: «trabajar en el gancho primeros 20 segundos»)
@@ -148,6 +149,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 11 nov 2026 · 19:00 | 🎬 Vídeo (Claude) | Nueva **Y10** (Paco): paquete en inglés en todos los vídeos (título, descripción y subtítulos EN en YouTube). Sin conflictos: amplía M10. |
 | 11 nov 2026 · 13:55 | Optimización del canal de YouTube (Claude) | Nueva **L3** (Paco): el canal es de historia y viajes, lema «La historia detrás de cada lugar», con Salma como reportera (N12). **Gana sobre L1 solo en la definición del canal** (L1 lo llamaba «nicho elegido»); L1 no se borra y sigue entera para la serie «Pueblos borrados del mapa». Canal de YouTube actualizado ese día: cabecera, descripción, palabras clave, pestaña Inicio y tres listas. |
 | 11 nov 2026 · 12:00 | 🎬 Vídeo (Claude) | **F10** (Paco): se admite vídeo de stock de Pexels y Pixabay, con licencia comprobada clip a clip, autor en ATRIBUCIONES y las condiciones de P4. Sin conflictos: amplía F10. |
 | 10 nov 2026 · 14:15 | Estrategia de vídeos con Salma (Claude) | Nueva **N12** (Paco): Salma es periodista y narradora de crónica en todos los vídeos nuevos. **Gana sobre N4** (primera persona de lo vivido) **y N7** (no se nombra a Paco); N6 y F2 siguen. **Largo de Vietnam en moto:** se publica la versión «crónica» (`vietnam/cronica2/`); la de `vietnam/moto/` queda descartada (Paco; Vídeo avisado). **Excepciones de Paco para el short «5 cosas» y este largo:** sin pista EN (M10) y el short sin entrada de blog (P12), para medir solo el tráfico de YouTube. |
