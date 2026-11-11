@@ -3,6 +3,7 @@
 **Título:** Viajar a la India: un viaje para muchos, pero no para todos (Paco, 11 nov 2026).
 **Formato:** largo de 16:9, unos 12 minutos.
 **Voz:** Salma, como periodista y narradora de crónica (N12). Habla en primera persona del viaje real de Paco (Rishikesh, Dharamsala y Benarés, noviembre de 2019).
+**Orden (Paco, 11 nov 2026):** gancho → las tres dudas más buscadas, de más a menos (¿es seguro?, ¿cuándo ir?, ¿qué papeles y cuánto?) → el viaje → la India de hoy → repaso en pantalla → cierre. «Si no le das a la gente de primera hora lo que busca, se va.»
 **Método de cada capítulo:** presente del viaje → **flashback** de archivo (sepia o B/N, look Tri-X, M4) → **consejo útil** con cifra en pantalla.
 **Imagen:**
 - Lo del viaje, con el material de Paco (fotos Sony, fotos y vídeos del móvil).
@@ -23,16 +24,12 @@
 `[RW ghat-lamparas-598-v2-humo: la orilla de noche, miles de lámparas]`
 **S:** De noche, esa misma orilla se enciende con miles de lámparas.
 `[RW ghat-amanecer-494: barcas al amanecer]`
-**S:** Estuve veinticinco días en el norte de la India. Esto es lo que nadie te cuenta antes de ir.
+**S:** Estuve veinticinco días en el norte de la India. Primero, las tres dudas que todo el mundo tiene antes de ir. Después, el viaje.
 `[TÍTULO: VIAJAR A LA INDIA · UN VIAJE PARA MUCHOS, PERO NO PARA TODOS]`
 *(Mukti Bhawan: varias fuentes; discrepan en los días y el precio → «unas dos semanas», sin precio. Mark Twain fuera de la voz; su frase va repartida en Benarés y su nombre, en los créditos: Paco, 11 nov.)*
 
-## 1 · EL VIAJE EN UNA FRASE (0:28-0:45)
-`[cortes rápidos: ashram en ruinas · foto de los Beatles de 1968 · banderas de oración · foto de 1959 · lámparas sobre el Ganges]` `[mapa: Rishikesh → Dharamsala → Rishikesh → Benarés]`
-**S:** Veinticinco días por el norte. Un ashram en ruinas donde los Beatles escribieron buena parte del Álbum Blanco. Una ciudad donde vive, en el exilio, un hombre que cruzó el Himalaya disfrazado de soldado, con veintitrés años. Y esta orilla.
-*(Sígueme a los 20 s: M13.)*
-
-## 2 · ¿ES SEGURO? (0:40-1:30)
+## 1 · LAS TRES DUDAS MÁS BUSCADAS, DE MÁS A MENOS (0:25-2:00) · capítulos en la descripción para saltar a cada una
+### 1.1 · ¿Es seguro?
 `[stock: llegadas del aeropuerto de Delhi, multitud, cola de taxis]`
 **S:** La pregunta que todo el mundo me hizo antes de ir: ¿es seguro? Respuesta corta: sí, con reglas.
 `[mapa: Cachemira, Manipur y la frontera con Pakistán, en rojo]`
@@ -42,9 +39,25 @@
 **S:** Aterrizas en Delhi y llega el primer examen. Un taxista amable te cuenta que tu hotel ha cerrado. O que hay disturbios en la ciudad. Es mentira. Es la estafa más vieja del aeropuerto, y acaba en otro hotel. Taxi de prepago o de aplicación, y foto a la matrícula.
 **S:** El pasaporte no sale de tu mano. Ni al hotel ni al de las motos: una fotocopia vale.
 **S:** Y si eres mujer, Exteriores lo dice claro, y yo también: no viajes sola. Nada de rickshaws ni taxis de noche, y nunca des la dirección de tu alojamiento a un desconocido. Emergencias: ciento doce.
-**S:** Pero para entender este país, hay que empezar arriba. Donde el Ganges acaba de salir de la montaña.
 
-## 3 · RISHIKESH (1:30-4:00)
+### 1.2 · ¿Cuándo ir?
+`[mapa del norte con el monzón; fotos de Paco de noviembre con cielo limpio]`
+**S:** ¿Cuándo ir? Al norte, de octubre a marzo. Yo fui en noviembre. El monzón, de junio a octubre, corta carreteras y vías. Y en la costa este, los ciclones llegan hasta diciembre.
+`[cifra: NORTE · OCTUBRE-MARZO]`
+
+### 1.3 · ¿Qué papeles y cuánto?
+`[stock: pasaporte, móvil con el visado, agua embotellada, billetes de rupias]`
+**S:** ¿Y los papeles? Visado electrónico de treinta días: unos veinticinco dólares, y solo en la web del Gobierno indio. Las intermediarias cobran cuatro veces más.
+`[cifra: E-VISA · 30 DÍAS · ~25 $]`
+**S:** Seguro con repatriación: la Seguridad Social no te cubre allí. Agua, solo embotellada y sellada. Y la rupia no sale del país: cámbiala o gástala antes de irte.
+
+## 2 · Y AHORA, EL VIAJE (2:00-2:15)
+`[cortes rápidos: ashram en ruinas · foto de los Beatles de 1968 · banderas de oración · foto de 1959 · lámparas sobre el Ganges]` `[mapa: Rishikesh → Dharamsala → Rishikesh → Benarés]`
+**S:** Veinticinco días por el norte. Un ashram en ruinas donde los Beatles escribieron buena parte del Álbum Blanco. Una ciudad donde vive, en el exilio, un hombre que cruzó el Himalaya disfrazado de soldado, con veintitrés años. Y esta orilla.
+*(Sígueme a los 20 s, en el gancho: M13.)*
+**S:** Para entender este país hay que empezar arriba. Donde el Ganges acaba de salir de la montaña.
+
+## 3 · RISHIKESH
 `[MAPA: Rishikesh]` `[puente colgante abarrotado, monos en la barandilla (M1-M19, 4 nov)]`
 **S:** Un puente colgante sobre el Ganges, y no cabe un alma. Peregrinos, vacas, motos que no deberían pasar por aquí. Y en la barandilla, los monos, vigilando bolsas ajenas.
 **S:** Rishikesh. El río acaba de bajar del Himalaya y aquí todavía corre con fuerza.
@@ -71,7 +84,7 @@
 `[atardecer: aarti en la orilla, fuego y campanas (Sony 383-387, 407-410)]`
 **S:** Y cada tarde, en la orilla, el aarti. Fuego, campanas y cantos. Para el río.
 
-## 4 · DHARAMSALA (4:00-6:30)
+## 4 · DHARAMSALA
 `[MAPA: Rishikesh → Dharamsala]` `[autobús de noche (V19)]`
 **S:** Un mensaje desde España: el Dalái Lama da enseñanzas en Dharamsala. Autobús nocturno. Toda la noche y medio día de curvas, montaña arriba.
 `[montañas, banderas de oración, monjes (Sony 144-249, M21-M60)]`
@@ -95,7 +108,7 @@
 `[cifra: 90 AÑOS · SUCESOR SOLO DESDE DHARAMSALA]`
 **S:** Si quieres verlo: sus enseñanzas son gratis, pero hay que inscribirse con el pasaporte en McLeod Ganj. Mira su web antes de ir. Las fechas cambian, y su salud también.
 
-## 5 · BENARÉS (6:30-9:30)
+## 5 · BENARÉS
 `[MAPA: Rishikesh → Benarés]` `[llegada de noche: el ghat (M87, 19 nov 22:05), calle con motos (V39-V40)]`
 **S:** Aterrizo en Benarés de noche. Una ciudad entera en silencio. En las escaleras del río y bajo los puestos cerrados, cuerpos tumbados entre cartones. No están muertos. Duermen.
 **S:** Por la mañana, el bullicio se los ha tragado. No queda ni uno. Nunca sabré quiénes eran.
@@ -131,7 +144,7 @@
 `[rótulo: AARTI · DASHASHWAMEDH · AL ANOCHECER · LLEGA 1 H ANTES]`
 **S:** Y una regla para la ciudad: el aarti de la tarde, en Dashashwamedh, se llena. Si quieres ver algo, llega una hora antes.
 
-## 6 · LA INDIA DE HOY (9:30-10:45)
+## 6 · LA INDIA DE HOY
 `[FLASHBACK B/N: Partición de 1947, trenes de refugiados (archivo con licencia)]`
 **S:** Mil novecientos cuarenta y siete. Los británicos se van y la India nace partida en dos. Trenes llenos en las dos direcciones. Entre doce y veinte millones de personas cruzan la nueva frontera. Mueren cientos de miles.
 `[vuelta al color: frontera de Wagah (archivo); rótulo «CERRADA AL PASO DESDE ABRIL DE 2025»]`
@@ -141,22 +154,15 @@
 `[stock: Delhi en niebla tóxica]` `[cifra: DELHI · AQI 461 · DICIEMBRE 2025]`
 **S:** Y en invierno, Delhi respira uno de los aires más sucios del planeta. Si pasas entre noviembre y enero, mascarilla antipolución. De verdad, no de tela.
 
-## 7 · LO QUE NO PISÉ (10:45-11:10)
+## 7 · LO QUE NO PISÉ
 `[stock / Wikimedia: Delhi antigua, Taj Mahal; rótulo «NO ESTUVE AQUÍ»]`
 **S:** Delhi y Agra se quedaron fuera de este viaje. Si vas al Taj Mahal, mira el calendario: los viernes cierra.
 
-## 8 · LA HERRAMIENTA: LO QUE ME HABRÍA GUSTADO SABER ANTES (11:10-12:10)
-`[cifras grandes una tras otra, con stock y fotos de Paco debajo]`
-**S:** Y ahora, lo que me habría gustado saber antes de ir. Rápido.
-**S:** Visado electrónico de treinta días: unos veinticinco dólares, y solo en la web del Gobierno indio. Las intermediarias cobran cuatro veces más.
-**S:** Seguro con repatriación. La Seguridad Social no te cubre allí.
-**S:** Agua, solo embotellada y sellada.
-**S:** La rupia no sale del país: cámbiala o gástala antes de irte.
-**S:** Tren: hay cupo para extranjeros, y se reserva con meses de antelación.
-**S:** Tu carné de conducir no vale. Contrata conductor.
-**S:** Y cuándo ir: de octubre a marzo. El monzón, de junio a octubre, corta carreteras y vías.
+## 8 · REPASO PARA GUARDAR (12:00-12:20) · casi todo en pantalla
+`[lista que se va completando sobre fotos de Paco: VISADO E-VISA 30 DÍAS · SEGURO CON REPATRIACIÓN · AGUA EMBOTELLADA · RUPIA, NO SALE DEL PAÍS · TREN: CUPO PARA EXTRANJEROS · CARNÉ ESPAÑOL: NO VALE · NORTE: OCTUBRE-MARZO · CACHEMIRA, MANIPUR Y FRONTERA: NO]`
+**S:** Para guardar: todo lo útil, en una pantalla. Y dos cosas más: en tren, hay cupo para extranjeros y se reserva con meses de antelación. Y tu carné de conducir no vale: contrata conductor.
 
-## 9 · CIERRE (12:10-12:40)
+## 9 · CIERRE
 `[vuelta a la orilla de Benarés: lámparas, fuego, la barca]`
 **S:** Un viaje para muchos, pero no para todos. Si te agobian el ruido, la gente o ver la muerte de cerca, quizá no es tu viaje. Si quieres entender cómo vive casi una de cada cinco personas del planeta, empieza por esta orilla.
 `[clip de la app (M16) · tarjeta (M14) con sintonía]`
