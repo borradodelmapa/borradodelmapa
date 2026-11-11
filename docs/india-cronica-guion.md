@@ -32,13 +32,15 @@
 **S:** Veinticinco días por el norte. Un ashram en ruinas donde los Beatles escribieron buena parte del Álbum Blanco. Una ciudad donde vive, en el exilio, un hombre que cruzó el Himalaya disfrazado de soldado, con veintitrés años. Y esta orilla.
 *(Sígueme a los 20 s: M13.)*
 
-## 2 · ¿ES SEGURO? (0:45-1:30)
-`[stock: llegadas del aeropuerto de Delhi, multitud, taxis]` `[cifras en pantalla]`
-**S:** Y la pregunta que todos hacen antes de ir. ¿Es seguro? Sí, con reglas.
-**S:** Hay tres sitios a los que no se va: Cachemira, Manipur y la frontera con Pakistán, cerrada desde el atentado de abril de dos mil veinticinco.
+## 2 · ¿ES SEGURO? (0:40-1:30)
+`[stock: llegadas del aeropuerto de Delhi, multitud, cola de taxis]`
+**S:** La pregunta que todo el mundo me hizo antes de ir: ¿es seguro? Respuesta corta: sí, con reglas.
+`[mapa: Cachemira, Manipur y la frontera con Pakistán, en rojo]`
+**S:** Hay tres sitios a los que no se va. Cachemira. Manipur. Y la frontera con Pakistán, cerrada desde que en abril de dos mil veinticinco un atentado mató a veintiséis personas en Pahalgam.
 `[rótulo: EXTERIORES · SEPTIEMBRE DE 2026]`
-**S:** Regla uno, nada más aterrizar. Si un taxista te dice que tu hotel ha cerrado o que hay disturbios en la ciudad, es mentira. Es la estafa más vieja del aeropuerto: quiere llevarte a otro hotel. Taxi de prepago o de aplicación, y foto a la matrícula.
-**S:** Regla dos: el pasaporte no se lo dejas a nadie. Ni al hotel ni al de las motos. Una fotocopia vale.
+`[stock: taxista en la salida de llegadas; matrícula]`
+**S:** Aterrizas en Delhi y llega el primer examen. Un taxista amable te cuenta que tu hotel ha cerrado. O que hay disturbios en la ciudad. Es mentira. Es la estafa más vieja del aeropuerto, y acaba en otro hotel. Taxi de prepago o de aplicación, y foto a la matrícula.
+**S:** El pasaporte no sale de tu mano. Ni al hotel ni al de las motos: una fotocopia vale.
 **S:** Y si eres mujer, Exteriores lo dice claro, y yo también: no viajes sola. Nada de rickshaws ni taxis de noche, y nunca des la dirección de tu alojamiento a un desconocido. Emergencias: ciento doce.
 **S:** Pero para entender este país, hay que empezar arriba. Donde el Ganges acaba de salir de la montaña.
 
@@ -54,7 +56,7 @@
 **S:** Pero si medio mundo conoce este nombre es por cuatro chicos de Liverpool. Febrero de mil novecientos sesenta y ocho. Los Beatles suben a un ashram en la colina para aprender a meditar con el Maharishi. Se quedan semanas. Bajan con decenas de canciones. Dieciocho acaban en el Álbum Blanco.
 `[vuelta al color: ruinas del ashram, cúpulas con grafitis (Sony 97-111)]`
 **S:** Hoy aquel ashram es una ruina. Cúpulas de meditación cubiertas de grafitis y la selva entrando por las ventanas. Se puede visitar.
-`[rótulo: BEATLES ASHRAM · ⚠ ENTRADA Y HORARIO]`
+`[rótulo: BEATLES ASHRAM · SE VISITA CON ENTRADA]`
 
 `[presente: monos en el balcón con el río detrás (V29-V35, M72-M78)]`
 **S:** Habitación sobre el Ganges. Entre la cama y el balcón, un cristal fino como una hoja. Cada día, por la barandilla, desfila la misma familia de monos. Llegan. Miran. Se van.
@@ -121,8 +123,7 @@
 **S:** La noche del veintitrés salgo otra vez en barca. La orilla está cubierta de lámparas. Miles. Música, humo, gente vestida de blanco. Parece un concierto de AC/DC.
 **S:** Es un Ati Rudra Yaga: un ritual de fuego en el que los sacerdotes recitan el mismo himno a Shiva miles de veces, durante días.
 `[escenario, multitud sentada de blanco (V63-V64, M139-M142); sin caras identificables]`
-**S:** Después, un escenario, miles de personas sentadas y un gurú famoso al micrófono. Me subo a hacerle fotos. Nadie me para.
-*(Paco subió al escenario: está en las notas del 24 oct. «Nadie me para» ⚠ confirmar con Paco o quitar. No se nombra al gurú.)*
+**S:** Después, un escenario, miles de personas sentadas y un gurú famoso al micrófono. Me subo a hacerle fotos.
 
 `[Sarnath: la estupa, monjes sentados (V43-V45, M116-M121, Sony 587-588)]`
 **S:** Benarés, más vieja incluso que la leyenda. Y a diez kilómetros vuelve el silencio. Sarnath. Aquí Buda dio su primer sermón. Monjes sentados frente a una estupa enorme. Hinduismo y budismo, a un paseo de distancia.
@@ -131,35 +132,33 @@
 **S:** Y una regla para la ciudad: el aarti de la tarde, en Dashashwamedh, se llena. Si quieres ver algo, llega una hora antes.
 
 ## 6 · LA INDIA DE HOY (9:30-10:45)
-`[FLASHBACK: Partición de 1947, trenes de refugiados (archivo)]`
-**S:** Mil novecientos cuarenta y siete. La India se independiza partida en dos. Entre doce y veinte millones de personas cruzan la nueva frontera. Mueren cientos de miles.
-`[FRONTERA DE WAGAH: archivo de la ceremonia; rótulo «CERRADA DESDE ABRIL DE 2025»]`
-**S:** Esa frontera, la de Wagah, tenía cada tarde una ceremonia famosa. Desde el atentado de dos mil veinticinco está cerrada. Ese mayo, India y Pakistán se atacaron durante cuatro días, hasta un alto el fuego que todavía es frágil.
+`[FLASHBACK B/N: Partición de 1947, trenes de refugiados (archivo con licencia)]`
+**S:** Mil novecientos cuarenta y siete. Los británicos se van y la India nace partida en dos. Trenes llenos en las dos direcciones. Entre doce y veinte millones de personas cruzan la nueva frontera. Mueren cientos de miles.
+`[vuelta al color: frontera de Wagah (archivo); rótulo «CERRADA AL PASO DESDE ABRIL DE 2025»]`
+**S:** Esa raya sigue siendo una herida. Desde abril de dos mil veinticinco está cerrada al paso. En mayo, India y Pakistán se atacaron durante cuatro días. El alto el fuego aguanta. Frágil.
 `[stock: multitudes, metro de Delhi, obras]`
-**S:** Hoy la India es el país más poblado del mundo, desde dos mil veintitrés. Modi gobierna su tercer mandato, por primera vez con aliados.
-**S:** Y en invierno, Delhi respira uno de los aires más sucios del planeta. Si pasas por allí entre noviembre y enero, mascarilla de verdad.
-`[cifra: DELHI · AQI 461 · DICIEMBRE 2025]`
+**S:** Hoy viven aquí más de mil cuatrocientos millones de personas: desde dos mil veintitrés, el país más poblado del mundo. Modi va por su tercer mandato, el primero en el que necesita aliados para gobernar.
+`[stock: Delhi en niebla tóxica]` `[cifra: DELHI · AQI 461 · DICIEMBRE 2025]`
+**S:** Y en invierno, Delhi respira uno de los aires más sucios del planeta. Si pasas entre noviembre y enero, mascarilla antipolución. De verdad, no de tela.
 
-## 7 · LO QUE NO PISÉ (10:45-11:15)
-`[stock / Wikimedia: Delhi antigua, Taj Mahal, rótulo «NO ESTUVE AQUÍ»]`
-**S:** Delhi y Agra no entraron en este viaje. Si vas, el Taj Mahal cierra los viernes.
-*(⚠ el cierre de los viernes, solo con una fuente: confirmar en la web de la ASI. Precio: dejarlo fuera, porque las fuentes no coinciden)*
+## 7 · LO QUE NO PISÉ (10:45-11:10)
+`[stock / Wikimedia: Delhi antigua, Taj Mahal; rótulo «NO ESTUVE AQUÍ»]`
+**S:** Delhi y Agra se quedaron fuera de este viaje. Si vas al Taj Mahal, mira el calendario: los viernes cierra.
 
-## 8 · LA HERRAMIENTA: TODO LO QUE NECESITAS EN UN MINUTO (11:15-12:15)
-`[cifras grandes una detrás de otra, con stock y fotos de Paco debajo]`
-**S:** Y ahora, lo práctico. Rápido.
-**S:** Visado electrónico de treinta días: unos veinticinco dólares, solo en la web oficial del Gobierno indio. Las intermediarias cobran cuatro veces más. *(⚠ fila de España en la tabla oficial)*
-**S:** Seguro con repatriación: la Seguridad Social no te cubre allí.
+## 8 · LA HERRAMIENTA: LO QUE ME HABRÍA GUSTADO SABER ANTES (11:10-12:10)
+`[cifras grandes una tras otra, con stock y fotos de Paco debajo]`
+**S:** Y ahora, lo que me habría gustado saber antes de ir. Rápido.
+**S:** Visado electrónico de treinta días: unos veinticinco dólares, y solo en la web del Gobierno indio. Las intermediarias cobran cuatro veces más.
+**S:** Seguro con repatriación. La Seguridad Social no te cubre allí.
 **S:** Agua, solo embotellada y sellada.
-**S:** Dinero: la rupia no sale del país. Cámbiala o gástala antes de irte.
+**S:** La rupia no sale del país: cámbiala o gástala antes de irte.
 **S:** Tren: hay cupo para extranjeros, y se reserva con meses de antelación.
-**S:** Conducir: tu carné no vale. Contrata conductor.
-**S:** Y cuándo ir: de octubre a marzo. El monzón, de junio a octubre, corta carreteras.
+**S:** Tu carné de conducir no vale. Contrata conductor.
+**S:** Y cuándo ir: de octubre a marzo. El monzón, de junio a octubre, corta carreteras y vías.
 
-## 9 · CIERRE (12:15-12:40)
-`[vuelta a la orilla de Benarés; lámparas; fuego]`
-**S:** Un viaje para muchos, pero no para todos. Si te agobia el ruido, la gente o ver la muerte tan de cerca, quizá no es tu viaje. Si quieres entender cómo vive una sexta parte del planeta, empieza por esta orilla.
-*(⚠ «una sexta parte»: India tiene ~1.430 millones de los ~8.100 millones del mundo, ≈17,6 %: correcto)*
+## 9 · CIERRE (12:10-12:40)
+`[vuelta a la orilla de Benarés: lámparas, fuego, la barca]`
+**S:** Un viaje para muchos, pero no para todos. Si te agobian el ruido, la gente o ver la muerte de cerca, quizá no es tu viaje. Si quieres entender cómo vive casi una de cada cinco personas del planeta, empieza por esta orilla.
 `[clip de la app (M16) · tarjeta (M14) con sintonía]`
 `[CRÉDITOS: «Más vieja que la historia, más vieja que la tradición, más vieja incluso que la leyenda»: Mark Twain, Following the Equator (1897). En la descripción y al final, no en la voz (Paco, 11 nov)]`
 
