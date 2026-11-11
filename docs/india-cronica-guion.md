@@ -95,36 +95,41 @@
 **S:** Si quieres verlo: sus enseñanzas son gratis, pero hay que inscribirse con el pasaporte en McLeod Ganj. Mira su web antes de ir. Las fechas cambian, y su salud también.
 
 ## 5 · BENARÉS (6:30-9:30)
-`[MAPA: Rishikesh → Benarés]` `[llegada de noche (M87, 19 nov 22:05; V39-V40 calle con motos)]`
+`[MAPA: Rishikesh → Benarés]` `[llegada de noche: el ghat (M87, 19 nov 22:05), calle con motos (V39-V40)]`
 **S:** Aterrizo en Benarés de noche. Una ciudad entera en silencio. En las escaleras del río y bajo los puestos cerrados, cuerpos tumbados entre cartones. No están muertos. Duermen.
-**S:** Por la mañana, el bullicio se los ha tragado. No queda ni uno.
+**S:** Por la mañana, el bullicio se los ha tragado. No queda ni uno. Nunca sabré quiénes eran.
 
-`[amanecer: barcas, gente bañándose, postes con vasijas (M92-M113)]`
-**S:** Los hindúes creen que morir aquí, junto al Ganges, libera del ciclo de las reencarnaciones. Por eso vienen a morir. Y por eso hay fuego en la orilla de día y de noche.
-`[crematorio desde la barca, sin cuerpos (Sony 540-554)]`
-**S:** Manikarnika es el crematorio más antiguo. Ya aparece en una inscripción del siglo cinco.
-**S:** Desde la barca se ve lo que nadie te cuenta: hasta para arder hay clases. Quien tiene dinero compra más leña, y sándalo. Y a unos metros, niños jugando. Aquí la muerte es de todos los días.
+`[amanecer desde la barca: sol sobre el Ganges, barcas de madera, escaleras hasta el agua (M92-M113, Sony 474-511)]`
+**S:** Amanece, y salgo en barca. Sol sobre el río, barcas de madera, escaleras que bajan hasta el agua.
+**S:** Para los hindúes, morir aquí libera del ciclo de las reencarnaciones. Por eso hay quien viene a esperar la muerte. Y por eso, en la orilla, el fuego no se apaga.
 
-`[FLASHBACK: los Dom; Constitución de 1950; Ambedkar (archivo con licencia)]`
-**S:** Las piras las encienden los Dom, una comunidad dalit, los antiguos intocables. Sin su fuego, dice la tradición, no hay salvación. Y aun así, siguen en lo más bajo.
-**S:** La Constitución india prohibió la intocabilidad en mil novecientos cincuenta. La escribió un dalit, Ambedkar. En la práctica, sigue existiendo.
+`[crematorio desde el agua: humo, leña apilada, piras; sin cuerpos (Sony 540-554)]`
+**S:** Manikarnika. El crematorio más antiguo: ya aparece en una inscripción del siglo cinco. Desde el agua se ve el humo, la leña apilada, las piras encendidas.
+**S:** Y se ve lo que nadie te cuenta: hasta para arder hay clases. Quien tiene dinero compra más leña, y sándalo. A unos metros, niños jugando. Aquí la muerte es de todos los días.
+
+`[FLASHBACK B/N: los Dom junto a las piras (archivo con licencia); Ambedkar; la Constitución de 1950]`
+**S:** Las piras las encienden los Dom, una comunidad dalit: los que el sistema de castas llamaba intocables. Sin su fuego, dice la tradición, no hay salvación. Y aun así, siguen abajo del todo.
+**S:** Mil novecientos cincuenta. La India estrena Constitución, y su artículo diecisiete prohíbe la intocabilidad. La redactó un dalit, Ambedkar. Setenta y seis años después, la ley dice una cosa. Y la orilla, otra.
 `[rótulo: ARTÍCULO 17 · CONSTITUCIÓN DE LA INDIA, 1950]`
-
+`[vuelta al color, la barca]`
+**S:** Si vas: los crematorios se miran desde la barca. En silencio. Y ni una foto a nadie.
 `[cifra: CREMATORIOS · SIN FOTOS]`
-**S:** Si vas: los crematorios se miran desde la barca, en silencio. No se fotografía a nadie. Y nadie que te ofrezca «entrar a verlo» por dinero es un guía.
-*(⚠ lo de los falsos guías con dinero sale de guías de viaje: comprobarlo o quitar la frase)*
 
-`[presente: noche del 23 nov, miles de lámparas desde la barca (V51-V62, M125-M138)]`
-**S:** La noche del veintitrés salgo otra vez en barca. La orilla está cubierta de lámparas. Miles. Música, gente de blanco, humo. Parece un concierto de AC/DC.
+`[bodas en los ghats (Sony 512-518; V73-V74)]`
+**S:** Pero Benarés no es solo muerte. Los mismos días, en las mismas escaleras, bodas. Música, flores, familias enteras.
+
+`[noche del 23 nov: miles de lámparas desde la barca (V51-V62, M125-M138)]`
+**S:** La noche del veintitrés salgo otra vez en barca. La orilla está cubierta de lámparas. Miles. Música, humo, gente vestida de blanco. Parece un concierto de AC/DC.
 **S:** Es un Ati Rudra Yaga: un ritual de fuego en el que los sacerdotes recitan el mismo himno a Shiva miles de veces, durante días.
-*(los datos del ritual están en `india-notas-y-fuentes.md`; 14.641 recitaciones según varias fuentes: si se dice la cifra, en pantalla)*
+`[escenario, multitud sentada de blanco (V63-V64, M139-M142); sin caras identificables]`
+**S:** Después, un escenario, miles de personas sentadas y un gurú famoso al micrófono. Me subo a hacerle fotos. Nadie me para.
+*(Paco subió al escenario: está en las notas del 24 oct. «Nadie me para» ⚠ confirmar con Paco o quitar. No se nombra al gurú.)*
 
-`[Sarnath: estupa, monjes (V43-V45, M116-M121, Sony 587-588)]`
-**S:** A diez kilómetros, Sarnath. Aquí Buda dio su primer sermón. Hinduismo y budismo, a media hora en rickshaw.
-*(⚠ «media hora en rickshaw»: comprobar o quitar)*
+`[Sarnath: la estupa, monjes sentados (V43-V45, M116-M121, Sony 587-588)]`
+**S:** A diez kilómetros vuelve el silencio. Sarnath. Aquí Buda dio su primer sermón. Monjes sentados frente a una estupa enorme. Hinduismo y budismo, a un paseo de distancia.
 
-**S:** Y una regla para la ciudad: en el aarti de la tarde, en Dashashwamedh, llega una hora antes si quieres ver algo.
-`[rótulo: AARTI · AL ANOCHECER · LLEGA 1 H ANTES]`
+`[rótulo: AARTI · DASHASHWAMEDH · AL ANOCHECER · LLEGA 1 H ANTES]`
+**S:** Y una regla para la ciudad: el aarti de la tarde, en Dashashwamedh, se llena. Si quieres ver algo, llega una hora antes.
 
 ## 6 · LA INDIA DE HOY (9:30-10:45)
 `[FLASHBACK: Partición de 1947, trenes de refugiados (archivo)]`
