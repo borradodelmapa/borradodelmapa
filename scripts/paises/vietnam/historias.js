@@ -376,7 +376,7 @@ module.exports = [
     cap: 'Documental',
     pais: 'Vietnam',
     formato: '16:9',
-    titulo: '45 días en moto por Vietnam con un carné que no vale',
+    titulo: 'Guía de viaje a Vietnam: 45 días en moto',
     resumen: 'Crónica de 45 días por el norte de Vietnam en moto: un control de policía, un permiso de conducir que allí no sirve, Hanói, las montañas de la frontera con China, Hạ Long y las cuevas de Phong Nha. Con lo que hay que saber antes de ir y lo que costó.',
     video: 'vietnam-en-moto-cronica.mp4',
     realidad: 'Basado en un viaje real: las fotos y los vídeos son de Paco, que hizo el recorrido en moto en abril y mayo de 2026. La narración es la crónica de ese viaje, contada en primera persona con la voz de Salma. Las imágenes de archivo llevan su autor al final de la página.',
@@ -413,7 +413,7 @@ module.exports = [
     story: {
       portada: '180',
       slides: [
-        { foto: '180', h: '45 días en moto por Vietnam', t: 'Con un carné que allí no vale. La crónica del viaje y lo que hay que saber antes de ir.' },
+        { foto: '180', h: 'Guía de viaje a Vietnam', t: '45 días en moto por el norte del país: la crónica del viaje y lo que hay que saber antes de ir.' },
         { foto: '251', h: 'Un control de policía', t: 'Paraban a todas las motos. Me avisaron a tiempo y me desvié por una pista de tierra.' },
         { foto: '200', h: 'El carné que no vale', t: 'Vietnam solo reconoce el permiso del Convenio de Viena de 1968. España expide el de Ginebra de 1949.' },
         { foto: '099', h: 'Hanói', t: 'Millones de motos y una calle donde el tren pasa a un palmo de las mesas.' },

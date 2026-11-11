@@ -393,7 +393,7 @@ ${paises.map((p) => { const dp = datosPais(p.nombre), url = dp ? `/destinos/${dp
   </section>
 ` : '';
 // Documentales de una serie o país que se enseñan en «Documentales» y no en el carril de su serie (Paco, 9 nov 2026)
-const DOCS_EXTRA = ['pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse'];
+const DOCS_EXTRA = ['pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale'];
 const bloqueSeries = series.map((s) => {
   const lista = caps.filter((c) => c.serie === s && !DOCS_EXTRA.includes(c.slug));
   return `  <section class="bv-serie" id="${slugSerie(s)}">
