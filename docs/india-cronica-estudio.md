@@ -166,7 +166,8 @@ En Wikimedia Commons hay archivo histórico.
 
 **La idea en una frase:** *la India no se visita, se aprende. Esto es lo que tienes que saber para no pasarlo mal y para entender lo que vas a ver.*
 
-**Título (buscador primero, Y2-Y3):** «Viajar a la India: lo que tienes que saber» o «Viajar a la India en 2026: guía y ruta de 25 días». Gancho con conflicto (N12).
+**Título elegido por Paco (11 nov 2026):** «Viajar a la India: un viaje para muchos, pero no para todos» (59 caracteres; la búsqueda va primero, Y2-Y3). La carátula complementa sin repetir: «NO ES PARA TODOS». El eje de la crónica pasa a ser **para quién es y para quién no** (seguridad, salud, choque cultural, la muerte a la vista en Benarés).
+**Títulos que se barajaron antes (buscador primero, Y2-Y3):** «Viajar a la India: lo que tienes que saber» o «Viajar a la India en 2026: guía y ruta de 25 días». Gancho con conflicto (N12).
 
 **Tres arranques posibles:**
 - **A (Benarés):** «En Benarés, la gente viene a morir. Y yo llegué de noche, sin saberlo.»
