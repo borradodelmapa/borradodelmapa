@@ -1,4 +1,4 @@
-# TÍTULO, DESCRIPCIÓN Y CARÁTULA: estudio y reglas propuestas (12 nov 2026, 📈 Estrategia). PROPUESTA, espera el OK de Paco
+# TÍTULO, DESCRIPCIÓN Y CARÁTULA: estudio y reglas (12 nov 2026, 📈 Estrategia). APROBADO por Paco: en la checklist como Y11-Y17, y antes que el vídeo
 
 Paco: «tenemos que hacer una estrategia para título, descripción SEO y sobre todo carátula… estudio de los títulos con más visitas… en español y en inglés… montaje fotográfico con IA que destaque y continúe la imagen de la web… quiero unas reglas claras».
 
