@@ -14,9 +14,9 @@ Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts 
 | **mar 17 nov** | **Así es la INDIA: donde se viene a morir** | programado en Studio 10:00 (04Ibzy_MxQQ); blog y EN hechos |
 | jue 19 nov | Pueblos borrados del mapa T1 | programado (_SnSzkDIkmw) |
 | **mar 24 nov** | **Tatuajes por el mundo** (adelantado del 10 dic, orden de Paco) | programado en Studio 10:00 (0nNCUhMiSdI) |
-| **jue 26 nov** | **Filipinas: qué saber antes de ir** (rehacer la apertura v1 en formato preguntas, con la ruta de Luzón norte) | por rehacer |
+| **jue 26 nov** | **Tuvalu se hunde: así se vive en el país que desaparece** (5 min, piloto «lugares aislados», Vídeo 2) | terminado; lo sube Vídeo 2 a Studio 10:00 |
 | **mar 1 dic** | **Tailandia 1: qué saber antes de ir** (N13, material de Paco) | por hacer |
-| **jue 3 dic** | por decidir (Portugal, Bután o Vietnam sur) | — |
+| **jue 3 dic** | **Filipinas: qué saber antes de ir** (rehacer la apertura v1 en formato preguntas, con la ruta de Luzón norte) | por rehacer |
 | **mar 8 dic** | **Tailandia 2: el norte en moto** (Chiang Mai, Pai, Mae Hong Son) | por hacer |
 | **jue 10 dic** | **Tailandia 3: Koh Samui y el Muay Thai** | por hacer |
 | mar 15 dic · jue 17 dic | por decidir | — |
