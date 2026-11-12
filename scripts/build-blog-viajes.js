@@ -249,7 +249,7 @@ function pagina(c) {
   ].filter(Boolean).map((o) => `<script type="application/ld+json">\n${JSON.stringify(o, null, 1)}\n</script>`).join('\n');
 
   const pasos = serieCaps.length > 1 ? `    <nav class="bd-steps" aria-label="Capítulos de ${esc(c.serie)}">\n${serieCaps.map((x) =>
-    `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Documental' ? 'DOC' : x.cap === 'Especial' ? 'ES' : (/^Temporada/.test(x.cap) ? 'T' : '') + x.cap.match(/\d+/)[0]}</a>`).join('\n')}\n    </nav>\n` : '';
+    `      <a href="/blog/viajes/${x.slug}"${x === c ? ' class="on" aria-current="page"' : ''} title="${esc(x.titulo)}">${x.cap === 'Documental' ? 'DOC' : x.cap === 'Especial' ? 'ES' : (/^Temporada/.test(x.cap) ? 'T' : '') + (x.cap.match(/\d+/) || [x.cap[0]])[0]}</a>`).join('\n')}\n    </nav>\n` : '';
   const stats = c.cifras ? `    <div class="bd-stats">\n${c.cifras.map(([n, t]) => `      <div class="bd-stat"><b>${esc(n)}</b><span>${esc(t)}</span></div>`).join('\n')}\n    </div>\n` : '';
   // s.foto = [id, pie]: foto tras el primer párrafo · c.cita = { tras: nº de sección, t, de }: frase destacada en grande
   const cita = (i) => c.cita && c.cita.tras === i + 1 ? `\n    <blockquote class="bd-cita"><p>${md(c.cita.t)}</p>${c.cita.de ? `<cite>${esc(c.cita.de)}</cite>` : ''}</blockquote>` : '';
@@ -400,7 +400,7 @@ ${p.lista.map(rail).join('\n')}
 `).join('')}` : '';
 // Paco, 11 nov 2026: un país sin página de destino (India) decía «3 historias» y su tarjeta abría solo una; ahora lleva a su fila con todas.
 // Documentales de una serie o país que se enseñan en «Documentales» y no en el carril de su serie (Paco, 9 nov 2026)
-const DOCS_EXTRA = ['pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale'];
+const DOCS_EXTRA = ['pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale', 'viajar-a-la-india-donde-se-viene-a-morir'];
 const bloqueSeries = series.map((s) => {
   const lista = caps.filter((c) => c.serie === s && !DOCS_EXTRA.includes(c.slug));
   return `  <section class="bv-serie" id="${slugSerie(s)}">

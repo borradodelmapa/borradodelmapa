@@ -376,7 +376,7 @@ module.exports = [
     cap: 'Documental',
     pais: 'Vietnam',
     formato: '16:9',
-    titulo: 'Guía de viaje a Vietnam: 45 días en moto',
+    titulo: 'Así es VIETNAM: un caos que engancha',
     resumen: 'Crónica de 45 días por el norte de Vietnam en moto: un control de policía, un permiso de conducir que allí no sirve, Hanói, las montañas de la frontera con China, Hạ Long y las cuevas de Phong Nha. Con lo que hay que saber antes de ir y lo que costó.',
     video: 'vietnam-en-moto-cronica.mp4',
     youtube: '7eE5P5vqomo',

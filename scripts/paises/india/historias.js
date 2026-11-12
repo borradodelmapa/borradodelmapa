@@ -220,4 +220,94 @@ module.exports = [
       ],
     },
   },
+  // Largo 16:9 · versión v3 (10 preguntas rápidas + el viaje, N13) · montaje: salma marketing/india/motor/india-v3.cjs · guion: docs/india-guion-v3.md
+  // YouTube 04Ibzy_MxQQ, programado mar 17 nov 2026 a las 10:00 (poner youtube: '04Ibzy_MxQQ' cuando sea público)
+  {
+    orden: 119,
+    slug: 'viajar-a-la-india-donde-se-viene-a-morir',
+    fecha: '2026-11-12',
+    serie: 'India',
+    cap: 'Documental',
+    pais: 'India',
+    formato: '16:9',
+    titulo: 'Así es la INDIA: donde se viene a morir',
+    resumen: 'Las 10 preguntas que todo el mundo hace antes de viajar a la India (seguridad, visado, vacunas, agua, dinero, cómo moverse) y 25 días por el norte: Rishikesh, Dharamsala y Benarés, la ciudad donde se viene a morir.',
+    video: 'viajar-a-la-india-donde-se-viene-a-morir.mp4',
+    realidad: 'Basado en un viaje real: las fotos y los vídeos son de Paco, que estuvo en Rishikesh, Dharamsala y Benarés en noviembre de 2019. La narración es la crónica de ese viaje, con la voz de Salma. Algunas escenas de los monos están animadas a partir de una foto (se indica en el vídeo como RECREACIÓN). Las fotos de archivo (Delhi, la historia del Tíbet y de la Partición) llevan su autor al final de la página.',
+    fotosDe: { '': 'salma marketing/india/cronica/fotos-blog.lst' },
+    creditosIntro: 'Las fotos y los vídeos del viaje son de Paco. Las fotos de archivo vienen de Wikimedia Commons, con licencia libre. Gracias a sus autores:',
+    creditosExtra: [["Foto de archivo: Biswarup Ganguly","CC BY 3.0","https://commons.wikimedia.org/wiki/File:Terminal_3_Interior_-_Indira_Gandhi_International_Airport_-_New_Delhi_2016-08-08Terminal_3_Interior_-_Indira_Gandhi_International_Airport_-_New_Delhi_2016-08-08_9234.JPG"],["Foto de archivo: Raya Sharbain","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Taxi_in_New_Delhi.jpg"],["Foto de archivo: Franzfoto","CC BY-SA 3.0","https://commons.wikimedia.org/wiki/File:Delhi_-_Rad-Taxi.JPG"],["Foto de archivo: Biswarup Ganguly","CC BY 3.0","https://commons.wikimedia.org/wiki/File:Terminal_3_Interior_-_Indira_Gandhi_International_Airport_-_New_Delhi_2016-08-08_9230.JPG"],["Foto de archivo: Biswarup Ganguly","CC BY 3.0","https://commons.wikimedia.org/wiki/File:Terminal_3_Interior_-_Indira_Gandhi_International_Airport_-_New_Delhi_2016-08-08_9237.JPG"],["Foto de archivo: Varun Shiv Kapur from New Delhi, India","CC BY 2.0","https://commons.wikimedia.org/wiki/File:McDonald%27s_in_Chandni_Chowk,_Old_Delhi_(4142476659).jpg"],["Foto de archivo: Monito - Money Transfer Comparison","CC BY 2.0","https://commons.wikimedia.org/wiki/File:Indian_100_and_2000_rupee_notes_(32190943222).jpg"],["Foto de archivo: Ash7876","CC BY 4.0","https://commons.wikimedia.org/wiki/File:Indian_Railways_Train_in_2025.jpg"],["Foto de archivo: UY Scuti","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:An_Indian_Railways_woman_guard.jpg"],["Foto de archivo: Rickard Törnblad","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:View_of_Chandni_Chowk,_Old_Delhi,_India_-_September_2014.jpg"],["Foto de archivo: Sasha India","CC BY-SA 2.0","https://commons.wikimedia.org/wiki/File:Pre-paid_taxi_-_Indira_Gandhi_Airport_New_Delhi_India_2018.jpg"],["Foto de archivo: autor desconocido","Public domain","https://commons.wikimedia.org/wiki/File:The_14th_Dalai_Lama_being_received_at_Palam_by_Indian_dignitaries_in_Nov_1956.jpg"],["Foto de archivo: Larry Sharkey, Los Angeles Times","CC BY 4.0","https://commons.wikimedia.org/wiki/File:Maharishi_Mahesh_Yogi_and_Sam_Yorty.jpg"],["Foto de archivo: Centre Védique Maharishi","CC BY-SA 3.0","https://commons.wikimedia.org/wiki/File:Maharishi_Mahesh_Yogi_with_Nandkishore.jpg"],["Foto de archivo: Ondřej Žváček","CC BY 2.5","https://commons.wikimedia.org/wiki/File:Potala.jpg"],["Foto de archivo: Nabin K. Sapkota","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Potala_Palace,_Lhasa_08.jpg"],["Foto de archivo: autor desconocido","Public domain","https://commons.wikimedia.org/wiki/File:Dalai_Lama_fleeing_Tibet,_March_1959.jpg"],["Foto de archivo: Homai Vyarawalla","Public domain","https://commons.wikimedia.org/wiki/File:14th_Dalai_Lama_of_Tibet_visiting_Delhi,_India_in_1956_(cropped).jpg"],["Foto de archivo: Luca Galuzzi (Lucag)","CC BY-SA 2.5","https://commons.wikimedia.org/wiki/File:Dalai_Lama_1471_Luca_Galuzzi_2007.jpg"],["Foto de archivo: Dennis G. Jarvis","CC BY-SA 2.0","https://commons.wikimedia.org/wiki/File:Manikarnika_Cremation_Ghat,_Varanasi.jpg"],["Foto de archivo: Dudva","CC0","https://commons.wikimedia.org/wiki/File:Manikarnika_Cremation_Ghat,_Varanasi,_10.2025.jpg"],["Foto de archivo: autor desconocido","Public domain","https://commons.wikimedia.org/wiki/File:Dr_B_R_Ambedkar_as_Barrister_in_1922.jpg"],["Foto de archivo: Illumination/ornamentation by Beohar Rammanohar Sinha, calligraphy by Prem Behar","Public domain","https://commons.wikimedia.org/wiki/File:Constitution_of_India.jpg"],["Foto de archivo: Photo Division, Govt. of India","Public domain","https://commons.wikimedia.org/wiki/File:Refugees_at_Kotla_camp.jpg"],["Foto de archivo: Photo Division, Govt. of India","Public domain","https://commons.wikimedia.org/wiki/File:Refugees_taken_to_camps_from_Delhi_Station.jpg"],["Foto de archivo: shankar s.","CC BY 2.0","https://commons.wikimedia.org/wiki/File:Millions_fled_across_the_border_to_the_other_country.jpg"],["Foto de archivo: Eclicks by Bunny","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Attari_-_Wagah_border.jpg"],["Foto de archivo: Schüler1000","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Indian_Wagah_Attari_border_arena_-Wagah_-Punjab_-20190605_172115.jpg"],["Foto de archivo: Chandradhar yadav","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Rajiv_chowk_metro_station_01.jpg"],["Foto de archivo: Rickard Törnblad","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Chandni_Chowk,_Old_Delhi,_India_-_September_2014.jpg"],["Foto de archivo: Sumita Roy Dutta","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Low_visibility_due_to_Smog_at_New_Delhi_Railway_station_31st_Dec_2017_after_9AM_DSCN8829_1.jpg"],["Foto de archivo: Saurabh Kumar","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Smog_as_visible_in_the_Gurgaon_area_near_Delhi_on_Nov_2016.jpg"],["Foto de archivo: Yann; edited by King of Hearts","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Taj_Mahal,_Agra,_India_edit2.jpg"],["Foto de archivo: Dhirad, picture edited by J. A. Knudsen","CC BY-SA 3.0","https://commons.wikimedia.org/wiki/File:Taj_Mahal_in_March_2004.jpg"],["Foto de archivo: McKay Savage from London, UK","CC BY 2.0","https://commons.wikimedia.org/wiki/File:India_-_Chennai_-_Monsoon_-_05_(3058218683).jpg"],["Foto de archivo: Keithbob at English Wikipedia","Public domain","https://commons.wikimedia.org/wiki/File:Maharishi_Mahesh_Yogi_during_a_1979_visit_to_MUM.jpg"],["Foto de archivo: Jan Kranendonk (https://www.jankranendonk.nl)","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Inside_the_Potala_Palace_in_Lhasa,_Tibet.jpg"],["Foto de archivo: Jan Kranendonk (https://www.jankranendonk.nl)","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:View_from_the_Potala_Palace_in_Lhasa,_Tibet.jpg"],["Foto de archivo: Nabin K. Sapkota","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Potala_Palace,_Lhasa_03.jpg"],["Foto de archivo: Homai Vyarawalla","Public domain","https://commons.wikimedia.org/wiki/File:The_Dalai_Lama,_Nehru_and_Zhou_Enlai_in_1956_in_India.jpg"],["Foto de archivo: Muhammad Umair Mirza","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Scene_of_Migrants_Train_for_Pakistan_(Army_Museum,_Lahore).jpg"],["Foto de archivo: Captain AmericanBurger1775","CC0","https://commons.wikimedia.org/wiki/File:Partition_of_India_Collage.jpg"],["Foto de archivo: Guilhem Vellut","CC BY 2.0","https://commons.wikimedia.org/wiki/File:Wagah_border_ceremony2.jpg"]],
+    fotos: { portada: 'caratula', posicion: '50% 50%', galeria: [
+      ['416', 'Una ofrenda en el Ganges, en Rishikesh.'],
+      ['41', 'El puente colgante y los templos de Rishikesh, sobre el Ganges.'],
+      ['94', 'El ashram de los Beatles, hoy en ruinas, en Rishikesh.'],
+      ['152', 'El Dalái Lama, en Dharamsala, el 6 de noviembre de 2019.'],
+      ['474', 'Amanecer en barca, en Benarés.'],
+      ['598', 'Miles de lámparas sobre el río, en Benarés.'],
+    ] },
+    cifras: [['10', 'Preguntas antes de ir'], ['25', 'Días por el norte'], ['11 min', 'De documental']],
+    cita: { tras: 3, t: 'Más vieja que la historia, más vieja que la tradición, más vieja incluso que la leyenda', de: 'Mark Twain, sobre Benarés («Following the Equator», 1897)' },
+    secciones: [
+      { h: 'Un hotel donde se viene a morir', min: '0:00', foto: ['553', 'El crematorio de Manikarnika, en Benarés.'], p: [
+        'En Benarés hay un hotel donde no se viene a dormir: se viene a morir. Te dan una habitación y unas dos semanas; si en ese tiempo no llega la muerte, hay que dejarla. Para los hindúes, morir aquí libera del ciclo de las reencarnaciones. Por eso hay quien viene a esperar el final, y por eso en la orilla el fuego no se apaga.',
+        'Antes del viaje, las diez preguntas que todo el mundo hace antes de ir a la India, respondidas en dos minutos.' ] },
+      { h: '¿Es seguro viajar a la India?', min: '0:31', foto: ['402', 'Rishikesh al amanecer.'], p: [
+        'Sí, con reglas. Exteriores pide viajar con precaución y desaconseja **Cachemira, Manipur y la frontera con Pakistán**.',
+        'Cuidado con los taxistas que te dicen que tu hotel ha cerrado: precio cerrado antes de subir o, mejor, taxi por aplicación. Uber es la más usada para coche; Rapido, la más usada del país (sobre todo en moto y rickshaw).',
+        'Si eres mujer, Exteriores aconseja no viajar sola y no coger rickshaw ni taxi de noche. Emergencias: **112**.' ] },
+      { h: 'Cuándo ir, visado, vacunas y seguro', min: '0:48', foto: ['159', 'Dharamsala en noviembre, con el cielo limpio.'], p: [
+        '**Cuándo:** al norte, de octubre a marzo. El monzón, de junio a octubre, corta carreteras y vías de tren.',
+        '**Visado:** electrónico de turista, 30 días y dos entradas. Desde España, 25 $ de julio a marzo y 10 $ de abril a junio, solo en la web oficial del Gobierno indio. Pasaporte con seis meses de validez y dos páginas en blanco.',
+        '**Vacunas:** ninguna obligatoria desde España; se recomiendan hepatitis A y B, tétanos y fiebre tifoidea.',
+        '**Seguro:** con repatriación. La Seguridad Social no cubre en la India y la sanidad privada se paga por adelantado.' ] },
+      { h: 'Agua, dinero, transporte e internet', min: '1:17', foto: ['484', 'Barcas en el Ganges, en Benarés.'], p: [
+        '**Agua:** solo embotellada y precintada, y nada de hielo en la calle.',
+        '**Dinero:** tarjeta en ciudades y sitios turísticos, efectivo para lo demás. La rupia no sale del país: cámbiala o gástala antes de irte.',
+        '**Moverse:** tren o avión entre ciudades. El tren tiene un cupo para turistas extranjeros que se reserva en la web de los ferrocarriles indios. Para conducir hace falta el permiso internacional; se conduce por la izquierda y Exteriores recomienda ir con conductor.',
+        '**Internet:** SIM local con pasaporte y visado. Enchufes de tipo C, D y M.' ] },
+      { h: 'Rishikesh: los Beatles y los monos', min: '2:29', foto: ['94', 'Una de las cúpulas del ashram de los Beatles.'], p: [
+        'Rishikesh es donde el Ganges acaba de bajar del Himalaya. En 1968 los Beatles subieron a un ashram de la colina para meditar con el Maharishi, y escribieron allí buena parte del Álbum Blanco. Hoy el ashram es una ruina con grafitis, y se visita con entrada.',
+        'Desde la habitación, sobre el río, una familia de monos pasaba cada día por la barandilla. Un plátano pelado delante del cristal bastó para que el más grande se lanzara contra él. **En la India hay rabia:** a perros y monos, ni comida ni caricias; si te muerden, al médico ese mismo día.' ] },
+      { h: 'Dharamsala y el Dalái Lama', min: '4:44', foto: ['152', 'El Dalái Lama, en Dharamsala.'], p: [
+        'Un autobús nocturno, toda la noche y medio día de curvas. Arriba, banderas de oración, monjes de granate y el Himalaya detrás. Aquí vive el Dalái Lama desde que en 1959 huyó del Tíbet cruzando las montañas.',
+        'En julio de 2025 cumplió 90 años y anunció que habrá sucesor, reconocido solo por su oficina. **Sus enseñanzas son gratis**, pero hay que inscribirse con el pasaporte en McLeod Ganj; mira su calendario oficial antes de ir.' ] },
+      { h: 'Benarés: el fuego que no se apaga', min: '6:39', foto: ['540', 'Piras en Manikarnika, desde la barca.'], p: [
+        'De noche, una ciudad entera en silencio. Al amanecer, barca por el río. **Manikarnika** es el crematorio más antiguo: ya aparece en una inscripción del siglo V. Las piras las encienden los Dom, una comunidad dalit; la Constitución de 1950 prohibió la intocabilidad, pero la orilla sigue diciendo otra cosa.',
+        'En las mismas escaleras hay bodas, y la noche del 23 de noviembre la orilla se llenó de miles de lámparas. **Los crematorios se miran desde la barca, en silencio y sin fotos.** Y el aarti de Dashashwamedh se llena: llega una hora antes.' ] },
+      { h: 'La India de hoy', min: '9:36', foto: ['604', 'El Ganges al amanecer.'], p: [
+        'La Partición de 1947 sigue siendo una herida: la frontera de Wagah está cerrada al paso desde abril de 2025. La India es, desde 2023, el país más poblado del mundo. Y si vas a Delhi y Agra, mira el calendario: el Taj Mahal cierra los viernes.' ] },
+    ],
+    ficha: [
+      '**Seguridad:** ni Cachemira, ni Manipur, ni la frontera con Pakistán; taxi de precio cerrado o por app; emergencias, 112.',
+      '**Visado:** e-Visa de turista de 30 días, 25 $ desde España (julio-marzo), solo en la web oficial.',
+      '**Salud:** ninguna vacuna obligatoria; hepatitis A y B, tétanos y tifoidea recomendadas; seguro con repatriación.',
+      '**Agua:** embotellada y precintada.',
+      '**Tren:** cupo para turistas extranjeros, reservado con tiempo.',
+      '**Conducir:** permiso internacional, y mejor con conductor.',
+      '**Benarés:** crematorios desde la barca y sin fotos; el aarti, una hora antes.',
+    ],
+    fuentes: [
+      W('Recomendaciones de viaje a la India (Ministerio de Asuntos Exteriores de España)', 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=India'),
+      W('Tasas oficiales del e-Visa de turista (Gobierno de la India)', 'https://indianvisaonline.gov.in/evisa/images/Etourist_fee_final.pdf'),
+      W('Cupo de turistas extranjeros en los trenes (Trainman)', 'https://www.trainman.in/article/foreign-tourist-quota'),
+      W('Rapido supera a Uber y Ola en usuarios (Ascendants)', 'https://ascendants.in/business-stories/rapido-overtakes-uber-ola-india-ride-hailing-market/'),
+      W('Declaración del Dalái Lama sobre su sucesión, 2 de julio de 2025 (web oficial)', 'https://www.dalailama.com/the-dalai-lama/biography-and-daily-life/reincarnation/statement-affirming-the-continuation-of-the-institution-of-dalai-lama-july-2-2025'),
+      W('Calendario de enseñanzas del Dalái Lama (web oficial)', 'https://www.dalailama.com/schedule'),
+      W('Los hoteles de la muerte de Benarés (Al Jazeera)', 'https://www.aljazeera.com/gallery/2013/12/5/hotels-of-death-in-indian-holy-city'),
+      W('Manikarnika Ghat (Wikipedia)', 'https://en.wikipedia.org/wiki/Manikarnika_Ghat'),
+      W('Following the Equator, de Mark Twain (Wikipedia)', 'https://en.wikipedia.org/wiki/Following_the_Equator'),
+    ],
+    nota: 'Datos de noviembre de 2026: visados, precios y avisos cambian. Confírmalos en fuentes oficiales antes de ir.',
+    story: {
+      portada: '152',
+      slides: [
+        { foto: '545', h: 'Así es la India', t: 'Benarés: aquí se viene a morir. Y antes de ir, las diez preguntas que todo el mundo hace.' },
+        { foto: '402', h: '¿Es seguro?', t: 'Sí, con reglas: ni Cachemira, ni Manipur, ni la frontera con Pakistán. Taxi de precio cerrado o por app.' },
+        { foto: '159', h: 'Visado y vacunas', t: 'e-Visa de 30 días, 25 $ desde España. Ninguna vacuna obligatoria; hepatitis, tétanos y tifoidea, recomendadas.' },
+        { foto: '94', h: 'Rishikesh', t: 'El ashram de los Beatles, en ruinas. Y los monos: en la India hay rabia.' },
+        { foto: '152', h: 'Dharamsala', t: 'Aquí vive el Dalái Lama. Sus enseñanzas son gratis, con inscripción y pasaporte.' },
+        { foto: '598', h: 'Benarés', t: 'Miles de lámparas sobre el río. Los crematorios, desde la barca y sin fotos.', salida: 'Ver el documental' },
+      ],
+    },
+  },
 ];
