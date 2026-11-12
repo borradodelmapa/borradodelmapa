@@ -11,7 +11,7 @@ Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts 
 | Día | Largo | Estado |
 |---|---|---|
 | jue 12 nov | Qué saber antes de ir a Vietnam: 2.000 años sin rendirse | programado (ZTvmL3EV1J4) |
-| **mar 17 nov** | **Viajar a la India** (crónica por preguntas) | montado 11 nov; falta que Paco lo vea, paquete, blog, EN |
+| **mar 17 nov** | **Así es la INDIA: donde se viene a morir** | programado en Studio 10:00 (04Ibzy_MxQQ); blog y EN hechos |
 | jue 19 nov | Pueblos borrados del mapa T1 | programado (_SnSzkDIkmw) |
 | **mar 24 nov** | **Tatuajes por el mundo** (adelantado del 10 dic, orden de Paco) | programado en Studio 10:00 (0nNCUhMiSdI) |
 | **jue 26 nov** | **Filipinas: qué saber antes de ir** (rehacer la apertura v1 en formato preguntas, con la ruta de Luzón norte) | por rehacer |
