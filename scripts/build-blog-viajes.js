@@ -317,7 +317,7 @@ ${cabeza}
 `}
     <div class="bd-media">
 ${c.dur ? `      ${yt ? `<a class="bd-yt" href="https://youtu.be/${esc(c.youtube)}" data-yt="${esc(c.youtube)}" target="_blank" rel="noopener" aria-label="Reproducir: ${esc(c.titulo)}"><img src="${img}" alt="${esc(c.titulo)}"><span class="bd-yt-play" aria-hidden="true"></span></a>` : `<video class="bd-video" controls playsinline preload="metadata" poster="${img}" src="/blog/viajes/video/${c.slug}.mp4"></video>`}
-      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>Narra Salma</span></div>
+      <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>${esc(c.narra || 'Narra Salma')}</span></div>
       <div class="bd-acciones">${BOTON_SUSCRIBIRSE}${BOTON_COMPARTIR}</div>${c.youtube ? `\n      <p class="bd-ia"><a href="https://youtu.be/${esc(c.youtube)}" target="_blank" rel="noopener">Verlo en YouTube</a></p>` : ''}${c.story ? `\n      <p class="bd-ia"><a href="/stories/${c.slug}/">Verlo en formato story</a>, a pantalla completa y deslizando.</p>` : ''}` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
       <div class="bd-video-meta"><span>Lectura</span><span>Escribe Salma</span></div>`}
       <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.')}</p>
