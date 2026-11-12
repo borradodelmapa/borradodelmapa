@@ -45,6 +45,7 @@
  "thumbnailUrl": "https://borradodelmapa.com/blog/viajes/img/historia-de-vietnam-2000-anos-sin-rendirse.jpg",
  "contentUrl": "https://borradodelmapa.com/blog/viajes/video/historia-de-vietnam-2000-anos-sin-rendirse.mp4",
  "duration": "PT12M15S",
+ "embedUrl": "https://www.youtube.com/embed/ZTvmL3EV1J4",
  "hasPart": [
   {
    "@type": "Clip",
@@ -204,9 +205,10 @@
   <div class="bd-layout con-hero h">
 
     <div class="bd-media">
-      <video class="bd-video" controls playsinline preload="metadata" poster="/blog/viajes/img/historia-de-vietnam-2000-anos-sin-rendirse.jpg" src="/blog/viajes/video/historia-de-vietnam-2000-anos-sin-rendirse.mp4"></video>
+      <a class="bd-yt" href="https://youtu.be/ZTvmL3EV1J4" data-yt="ZTvmL3EV1J4" target="_blank" rel="noopener" aria-label="Reproducir: Qué saber antes de ir a Vietnam: 2.000 años sin rendirse"><img src="/blog/viajes/img/historia-de-vietnam-2000-anos-sin-rendirse.jpg" alt="Qué saber antes de ir a Vietnam: 2.000 años sin rendirse"><span class="bd-yt-play" aria-hidden="true"></span></a>
       <div class="bd-video-meta"><span>Vídeo · 12:15</span><span>Narra Salma</span></div>
       <div class="bd-acciones"><a class="bd-suscribirse" href="https://www.youtube.com/@Borradodelmapa?sub_confirmation=1" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span>Suscríbete al canal</span></a><button class="bd-compartir" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg><span>Compartir info</span></button></div>
+      <p class="bd-ia"><a href="https://youtu.be/ZTvmL3EV1J4" target="_blank" rel="noopener">Verlo en YouTube</a></p>
       <p class="bd-ia"><a href="/stories/historia-de-vietnam-2000-anos-sin-rendirse/">Verlo en formato story</a>, a pantalla completa y deslizando.</p>
       <p class="bd-ia">Basado en un viaje real: las fotos y vídeos del recorrido son de Paco. La historia va con fotos, grabados y vídeos de archivo con licencia libre; las animaciones y recreaciones llevan rótulo. Autores y fuentes, al final de la página.</p>
     </div>
@@ -519,10 +521,12 @@ var img=t.tagName==="IMG"?t:t.querySelector("img");im.src=t.getAttribute("href")
 v.hidden=false;document.body.style.overflow="hidden";history.pushState({visor:1},"");});
 v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
-<script>(function(){var v=document.querySelector("video.bd-video");if(!v)return;
-function ir(s){v.currentTime=s;var p=v.play();if(p&&p.catch)p.catch(function(){});v.scrollIntoView({behavior:"instant",block:"center"});}
-document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]");if(!a)return;e.preventDefault();ir(Number(a.dataset.t));});
-var t=Number(new URLSearchParams(location.search).get("t"));if(t){if(v.readyState>=1)v.currentTime=t;else v.addEventListener("loadedmetadata",function(){v.currentTime=t;},{once:true});}})();</script>
+<script>(function(){var f=document.querySelector(".bd-yt");if(!f)return;var id=f.dataset.yt,i=null;
+var ini=Number(new URLSearchParams(location.search).get("t"))||0;
+function pon(s){if(!i){i=document.createElement("iframe");i.className="bd-video bd-yt-if";i.title=f.getAttribute("aria-label");i.allow="autoplay; encrypted-media; fullscreen; picture-in-picture";i.allowFullscreen=true;i.referrerPolicy="strict-origin-when-cross-origin";f.parentNode.replaceChild(i,f);}
+i.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&rel=0&playsinline=1"+(s?"&start="+s:"");i.scrollIntoView({behavior:"instant",block:"center"});}
+f.addEventListener("click",function(e){e.preventDefault();pon(ini);});
+document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]");if(!a)return;e.preventDefault();pon(Number(a.dataset.t));});})();</script>
 <script>document.addEventListener("click",function(e){var b=e.target.closest(".bd-compartir");if(!b)return;var d={title:document.querySelector("h1").textContent,url:location.origin+location.pathname};
 if(navigator.share&&matchMedia("(pointer:coarse)").matches){navigator.share(d).catch(function(){});return;}
 var t=b.querySelector("span"),o=t.dataset.o||t.textContent;t.dataset.o=o;if(navigator.clipboard)navigator.clipboard.writeText(d.url).then(function(){t.textContent="Enlace copiado";setTimeout(function(){t.textContent=o;},2000);});});</script>

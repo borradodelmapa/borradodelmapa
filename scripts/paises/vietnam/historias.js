@@ -252,6 +252,7 @@ module.exports = [
   {
     orden: 115,
     slug: 'historia-de-vietnam-2000-anos-sin-rendirse',
+    youtube: 'ZTvmL3EV1J4', // público desde el 12 nov 2026
     fecha: '2026-11-07',
     destino: ['vietnam', 'Vietnam'],
     serie: 'Vietnam',
