@@ -2,7 +2,7 @@
 
 **v2.1 (Paco, 13 nov):** primera imagen = vuelo de dron (excepción a M15 solo en este vídeo); lo muy práctico primero (qué necesito, cuándo ir, seguridad); «por qué se llama Filipinas» se promete en el gancho y se cuenta al final; texto del gancho en pantalla más sugerente; el idioma de casa es el tagalo (comprobado en el censo).
 
-**Estado: PROPUESTA. ⏸ No se genera voz ni se monta hasta el OK de Paco a los cambios y al texto (F3, G1).**
+**Estado: APROBADO por Paco el 13 nov 2026 («Sí, adelante»): orden, gancho y texto. Pendiente: título y carátula (apartado 3). La voz completa, tras la frase de prueba con coste (F5).**
 Sale para el **mar 15 dic, 10:00, solo YouTube** (plan §0). Rehace la v1 (`filipinas-apertura-guion-direccion.md`, montada el 5 nov, 6:45, nunca publicada).
 Datos: los `[F]` son del expediente aprobado (`filipinas-expediente.md`). Los `[N…]` son **nuevos, buscados hoy**; van a la voz solo si Paco da el OK a la fuente (F4).
 
