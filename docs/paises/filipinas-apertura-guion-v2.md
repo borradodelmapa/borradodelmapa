@@ -56,9 +56,9 @@ Estudio (Y12): `docs/paises/filipinas-apertura-estudio-titulo.md`.
 - **Imagen:** cielo de tifón (foto de la v1) → dron de la playa de El Nido (ZokStar1).
 
 ### 3 · ¿ES SEGURO?
-- **Salma:** «El Ministerio de Exteriores pide extremar la precaución en Mindanao, en el sur, por los grupos armados que operan allí. [N4] Las rutas de este vídeo están en el norte de Luzón, en Palawan y en las Visayas. Antes de ir, mira la página de Exteriores: cambia.»
+- **Salma (texto aprobado por Paco el 13 nov, en el chat de Vídeo):** «El Ministerio de Exteriores pide evitar el centro y el suroeste de Mindanao, en el sur, y las islas de Sulu, por los secuestros y los grupos armados. En las montañas de la Cordillera, en el norte de Luzón, pide precaución. Antes de ir, mira su página: cambia.» [N4]
+- **Pantalla:** «Datos a 13 nov 2026 · confírmalos en exteriores.gob.es».
 - **Imagen:** dron de las Colinas de Chocolate, Bohol (hikangs 4K) → Coron (My Daily Flight).
-- **⚠ Para Paco:** «las rutas de este vídeo están en…» es frase nuestra; la zona de riesgo se copia tal cual de Exteriores el día del montaje.
 
 ### 4 · ¿QUÉ VER? LA RUTA DEL NORTE EN 4 DÍAS
 - **Salma:** «Si vas a la Cordillera, en el norte: Banaue y sus miradores, Batad a pie, Sagada con sus cuevas y sus ataúdes colgantes, y Buscalan, el pueblo de Whang-Od, con guía local obligatorio.» [F28][F29]
@@ -99,7 +99,7 @@ Estudio (Y12): `docs/paises/filipinas-apertura-estudio-titulo.md`.
 | N2 | EE. UU. llevó profesores de inglés y el inglés fue la lengua de la escuela | Global Voices: https://globalvoices.org/2014/12/14/they-dont-speak-spanish-in-the-philippines/ · Real Instituto Elcano: https://www.realinstitutoelcano.org/en/analyses/new-prospects-for-the-spanish-language-in-the-philippines-ari/ | Buscar una fuente oficial filipina antes de montar |
 | N3 | ~30 % del vocabulario tagalo de origen español | Galván-Guijo, director del Instituto Cervantes de Manila (citado en Real Instituto Elcano) | «Cerca de un tercio», nunca «el 30 % exacto» |
 | N5 | El tagalo es la lengua de casa en el 39,9 % de los hogares (10,5 millones), la primera del país; la segunda, el bisaya (16 %) | PSA, censo 2020 (publicado el 7 mar 2023): https://www.psa.gov.ph/statistics/population-and-housing/node/1684041577 | «Cuatro de cada diez casas». El filipino, oficial con el inglés, se basa en el tagalo (Constitución de 1987, art. XIV) |
-| N4 | Exteriores: grupos terroristas con especial incidencia en Mindanao | https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=filipinas | Se relee el día del montaje |
+| N4 | Exteriores (releído el 13 nov por Vídeo): evitar el centro y el suroeste de Mindanao y Basilan, Sulu y Tawi-Tawi; precaución (riesgo medio) en la Cordillera | https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=filipinas | Se relee el día del montaje |
 
 **Sale de la voz respecto a la v1 (va a la descripción y al blog):** escritura de Laguna (año 900), escrituras mangyan, ayta y ADN denisovano, austronesios, Feria de San Luis 1904, misión de Sagada 1904, río Chico y Macli-ing Dulag, ley de 1997.
 
