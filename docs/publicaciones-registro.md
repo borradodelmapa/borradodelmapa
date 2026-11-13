@@ -131,3 +131,5 @@ Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P
 
 
 **13 nov 2026 — un día, un vídeo (Paco; Estrategia):** los 5 shorts que coincidían con un largo en martes pasan al lunes de antes, 10:00, en YouTube y TikTok (10 posts en Metricool): Whang-Od 17→16 nov · haenyeo 24→23 nov · sentineleses 1 dic→30 nov · dukha 8→7 dic · moken 15→14 dic. Los miércoles no cambian.
+
+**13 nov 2026 — carátulas Y18 cambiadas en YouTube Studio (orden de Paco: «SI TODAS LAS NUEVAS»; Vietnam publicados: «Sí, también», solo miniatura):** India (04Ibzy_MxQQ, 17 nov), Pueblos T1 (_SnSzkDIkmw, 19 nov), Tatuajes (0nNCUhMiSdI, 24 nov), Tuvalu (QMWkfY186lk, 26 nov; la de la isla, elegida por Paco), Baler (Zf0nX0EJtrk, 3 dic), Vietnam historia (ZTvmL3EV1J4, público) y Así es Vietnam (7eE5P5vqomo, público). Comprobado en el listado de Contenido tras recargar: las 7 con la miniatura nueva; fechas, horas y visibilidad sin tocar. El primer fotograma de los vídeos ya subidos sigue con la carátula anterior (YouTube no deja cambiar el archivo). Archivos y antes/después: `salma marketing/canal-youtube/caratulas-y18/`.
