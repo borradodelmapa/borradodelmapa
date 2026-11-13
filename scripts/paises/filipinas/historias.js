@@ -373,7 +373,7 @@ module.exports = [
     ],
     cierre: 'Antes de ir, lee la introducción: Filipinas, antes de viajar.',
   },
-  // Largo 16:9 · documental de historia · montaje: india/motor/baler.cjs · guion: filipinas/baler/guion-final.json · investigación: docs/filipinas-baler-investigacion.md · YouTube programado (poner youtube: cuando se publique)
+  // Largo 16:9 · documental de historia · montaje: india/motor/baler.cjs · guion: filipinas/baler/guion-final.json · investigación: docs/filipinas-baler-investigacion.md · YouTube Zf0nX0EJtrk, jue 3 dic 2026 a las 10:00 (poner youtube: 'Zf0nX0EJtrk' cuando sea público)
   {
     orden: 218,
     slug: 'los-ultimos-de-filipinas-el-diario-de-baler',

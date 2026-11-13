@@ -26,7 +26,7 @@ module.exports = [
     pais: 'Asia',
     formato: '16:9',
     caratula: 'pueblos', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
-    // youtube: '_SnSzkDIkmw' SOLO cuando sea público (jue 19 nov 15:30): con youtube puesto la entrada usa ese reproductor y, privado, da error
+    // youtube: '_SnSzkDIkmw' SOLO cuando sea público (jue 19 nov 10:00): con youtube puesto la entrada usa ese reproductor y, privado, da error
     titulo: 'Pueblos que se están borrando del mapa: 10 culturas de Asia',
     resumen: 'Diez pueblos de Asia cuyas culturas se están borrando del mapa: la última gran tatuadora de Filipinas, las buceadoras de Jeju, los últimos konyak con la cara tatuada y los nómadas del mar. Quiénes son, qué están perdiendo y cómo llegar con respeto.',
     video: 'pueblos-t1-largo.mp4',
@@ -101,7 +101,7 @@ module.exports = [
     nota: 'Datos de octubre y noviembre de 2026. Permisos, accesos y precios cambian: confírmalos en fuentes oficiales antes de ir. Estas son las fuentes de los diez episodios.',
     get fuentes() { return fuentes(); },
   },
-  // Largo 16:9 · montaje: india/motor/tatuajes-doc.cjs · minutos: tatuajes/capitulos.txt · fuentes: docs/tatuajes-documental-fuentes.md · YouTube, jue 10 dic 2026 a las 15:30 (poner c.youtube cuando sea público)
+  // Largo 16:9 · montaje: india/motor/tatuajes-doc.cjs · minutos: tatuajes/capitulos.txt · fuentes: docs/tatuajes-documental-fuentes.md · YouTube 0nNCUhMiSdI, mar 24 nov 2026 a las 10:00 (poner youtube: '0nNCUhMiSdI' cuando sea público)
   {
     orden: 216,
     slug: 'historia-de-los-tatuajes',
