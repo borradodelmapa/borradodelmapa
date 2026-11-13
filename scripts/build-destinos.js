@@ -721,7 +721,9 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 .dq-tip-h img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)}
 .dq-tip p{font-size:17px;line-height:1.65;color:var(--text-primary);margin:0 0 10px}.dq-tip p:last-child{margin:0}
 </style>
-    <section class="dq-tip"><h2 class="dq-tip-h"><img src="/salma_ai_avatar.png" alt="Salma" width="56" height="56" loading="lazy">Tip de Salma</h2>${extra.tip.map(t => `<p>${escapeHTML(t)}</p>`).join('')}</section>` : '';
+    <section class="dq-tip"><h2 class="dq-tip-h"><img src="/salma_ai_avatar.png" alt="Salma" width="56" height="56" loading="lazy">Tip de Salma</h2>${extra.tip.map(t => `<p>${escapeHTML(t)}</p>`).join('')}${extra.tip_fuente ? `<p class="dq-fuentes">Fuente: <a href="${escapeHTML(extra.tip_fuente.u)}" target="_blank" rel="noopener">${escapeHTML(extra.tip_fuente.t)}</a></p>` : ''}</section>` : '';
+  // REGLA DE PACO (13 nov 2026): TIP VERIFICADO. Todo "tip" lleva "tip_fuente" {t, u}; sin fuente, el generador se para.
+  if (extra && extra.tip && !extra.tip_fuente) throw new Error(`${slug}: el Tip de Salma no tiene fuente (tip_fuente). Regla: tip verificado o no sale.`);
   const sobreHTML = extra ? `<section class="dq-sobre">
       <h2>Sobre ${escapeHTML(dest.nombre)}</h2>
       ${extra.p.map(t => `<p>${escapeHTML(t)}</p>`).join('')}

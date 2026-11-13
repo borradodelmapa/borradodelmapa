@@ -17,8 +17,8 @@
    }
   ],
   "tip": [
-   "Quédate a dormir. Casi todo el mundo viene en excursión de un día desde Katmandú y se marcha a media tarde.",
-   "A primera hora, en la plaza de la Cerámica están sacando las piezas a secar; al anochecer, las plazas se quedan para la gente de la ciudad. Es cuando Bhaktapur se entiende."
+   "La entrada de Bhaktapur no vale para Patan, ni la de Patan para Bhaktapur: cada ciudad cobra la suya. Si vas a ver las dos el mismo día, cuenta con dos entradas.",
+   "Guarda el tique de Bhaktapur durante la visita, porque lo piden en controles dentro del casco histórico."
   ],
   "ficha": {
    "descripcion": "La mejor conservada de las tres ciudades medievales del Valle de Katmandú, junto con Patan y la propia Katmandú. Su plaza Durbar, la pagoda Nyatapola y los alfareros de la plaza de la Cerámica siguen en una ciudad donde vive gente, no en un museo. Está a unos 13 km de Katmandú.",
@@ -29,7 +29,7 @@
     "comfort": "Hoteles con encanto alrededor de las plazas"
    },
    "donde_comer": "Alrededor de las plazas Durbar y Taumadhi hay restaurantes con dal bhat y cocina newar. No te vayas sin probar el juju dhau, el yogur de leche de búfala que es la especialidad de la ciudad.",
-   "consejo_local": "La entrada al casco histórico se paga en los accesos y es solo para Bhaktapur: no sirve para Patan, que cobra la suya. Guarda el tique, porque lo piden en controles dentro de la ciudad. Si vas a volver otro día, pregunta en la taquilla, con el pasaporte, si te lo amplían.",
+   "consejo_local": "La entrada al casco histórico se paga en los accesos. Si vas a volver otro día, pregunta en la taquilla, con el pasaporte, si te amplían el tique.",
    "plan_b_lluvia": "Los museos están a cubierto: la Galería Nacional de Arte, en la plaza Durbar, y el museo de talla en madera, junto al templo de Dattatreya."
   },
   "faqs": [
@@ -49,7 +49,11 @@
     "q": "¿Quedan daños del terremoto de 2015?",
     "a": "Sí. El terremoto del 25 de abril de 2015 dañó 116 monumentos de la ciudad, 67 de ellos por completo. Muchos están reconstruidos y otros siguen en obras."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "Tarifas de los sitios patrimoniales de Nepal (bhaktapur.com)",
+   "u": "https://www.bhaktapur.com/entry-fees-of-the-heritage-sites-in-nepal/"
+  }
  },
  "patan-nepal": {
   "sobre": true,
@@ -69,8 +73,8 @@
    }
   ],
   "tip": [
-   "Métete en los patios. Detrás de puertas bajas que parecen de casa particular están los bahal, los patios de los antiguos monasterios budistas.",
-   "El del Templo Dorado (Hiranya Varna Mahavihar) es el más conocido, pero hay muchos más repartidos por los callejones. Se entra con respeto, y descalzo donde lo pidan."
+   "Métete en los patios. Patan tiene 18 grandes monasterios budistas, los mahavihara, cada uno alrededor de su patio, además de muchos patios más pequeños rodeados de casas.",
+   "El más conocido es Kwa Bahal, el Templo Dorado. Se entra con respeto, y descalzo donde lo pidan."
   ],
   "ficha": {
    "descripcion": "La ciudad de los artesanos del valle. Su plaza Durbar reúne palacio y templos en muy poco espacio, y el Museo de Patan, en el antiguo palacio real, es la mejor forma de entender el arte hindú y budista de Nepal antes de salir a ver los templos.",
@@ -101,7 +105,11 @@
     "q": "¿Cuál es la mejor época para ir a Patan?",
     "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "Los 18 bahal de Patan (bajracharya.org)",
+   "u": "https://bajracharya.org/18-bahals-of-patan-unveiling-ancient-mahavihars/"
+  }
  },
  "chitwan-nepal": {
   "sobre": true,
@@ -125,8 +133,7 @@
    }
   ],
   "tip": [
-   "Elige las salidas a pie, en canoa o en todoterreno. Los paseos a lomos de elefante se siguen ofreciendo, pero no los necesitas para ver rinocerontes.",
-   "Y sal a primera hora, antes de que apriete el calor: es cuando más se mueven los animales."
+   "No hace falta montar en elefante para ver rinocerontes. El recuento de 2021 contó 694 en el parque, y se sale a buscarlos a pie, en canoa o en todoterreno, siempre con guía."
   ],
   "ficha": {
    "descripcion": "Patrimonio Mundial y uno de los mejores sitios de Asia para ver rinoceronte indio. Es la selva del Terai: llanura, ríos y hierba alta, con tigres, gaviales y cientos de especies de aves. Además de los safaris en todoterreno, se puede salir a pie y en canoa con guía.",
@@ -137,7 +144,7 @@
     "comfort": "Lodges de selva con las salidas incluidas"
    },
    "donde_comer": "En Sauraha hay restaurantes de todo tipo y dal bhat en los locales. Muchos lodges incluyen las comidas.",
-   "consejo_local": "Contrata las salidas con guía autorizado y haz caso de sus normas, sobre todo a pie: los rinocerontes son animales salvajes y cargan. Reserva la salida del amanecer la tarde anterior.",
+   "consejo_local": "Contrata las salidas con guía autorizado y haz caso de sus normas, sobre todo a pie: los rinocerontes son animales salvajes y cargan.",
    "plan_b_lluvia": "Pregunta en Sauraha por el museo de cultura tharu, para entender a la gente de estas llanuras."
   },
   "faqs": [
@@ -157,7 +164,11 @@
     "q": "¿Chitwan es Patrimonio Mundial?",
     "a": "Sí, desde 1984. Fue además el primer parque nacional de Nepal, creado en 1973."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "NTNC: recuento nacional de rinocerontes de 2021",
+   "u": "https://www.ntnc.org.np/news/752-one-horned-rhinos-nepal-determined-national-rhino-count-2021"
+  }
  },
  "pokhara-nepal": {
   "sobre": true,
@@ -177,8 +188,8 @@
    }
   ],
   "tip": [
-   "Madruga para ver las montañas. Las nubes suelen subir a media mañana y tapan los picos; al amanecer están limpios.",
-   "Por eso se sube a Sarangkot de noche. Y por eso conviene mirar al norte antes del desayuno todos los días que estés: puede que sea la única hora en que se dejen ver."
+   "Madruga para ver las montañas. Las guías de la zona coinciden: a media mañana las nubes suelen tapar los picos, incluso en días de sol.",
+   "Por eso se sube a Sarangkot antes de amanecer. Mira la previsión la víspera y sal con tiempo."
   ],
   "ficha": {
    "descripcion": "Segunda ciudad del país y base de los trekkings del Annapurna. El lago Phewa con el Machhapuchhre, la «Cola de Pez», reflejado es una de las imágenes más conocidas de Nepal. El ambiente es mucho más tranquilo que en Katmandú, con la orilla del lago llena de cafés y tiendas de material de montaña.",
@@ -209,7 +220,11 @@
     "q": "¿Cuál es la mejor época para ir a Pokhara?",
     "a": "Octubre y noviembre, y de marzo a mayo. Es una de las zonas más lluviosas de Nepal, sobre todo durante el monzón."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "Nepal Traveller: Sarangkot",
+   "u": "https://nepaltraveller.com/sidetrack/why-sarangkot-should-be-on-every-pokhara-itinerary"
+  }
  },
  "kathmandu-nepal": {
   "sobre": true,
@@ -229,8 +244,8 @@
    }
   ],
   "tip": [
-   "Ve a Boudhanath a primera o a última hora del día. Es cuando los vecinos dan la vuelta a la estupa, la kora, siempre en el sentido de las agujas del reloj.",
-   "Camina con ellos, en esa dirección y a su ritmo. Entiendes más de la ciudad en esas tres vueltas que en una mañana entera en Thamel."
+   "En Boudhanath, da la vuelta a la estupa en el sentido de las agujas del reloj, con la estupa siempre a tu derecha. Es la kora, y así la hacen los peregrinos.",
+   "Las mejores horas son el amanecer y el atardecer, cuando se juntan más peregrinos y se encienden las lámparas de mantequilla."
   ],
   "ficha": {
    "descripcion": "Capital y puerta de entrada al país. Reúne en poco espacio la plaza Durbar, las grandes estupas budistas y el templo hindú de Pashupatinath, y es la base desde la que se organiza cualquier trekking. El tráfico, el incienso y el patrimonio conviven sin separarse: no deja indiferente.",
@@ -261,7 +276,11 @@
     "q": "¿Se nota todavía el terremoto de 2015?",
     "a": "Sí. La plaza Durbar quedó muy dañada y la torre Dharahara se derrumbó. Parte del patrimonio está reconstruido y parte sigue en obras."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "Guía de la estupa de Boudhanath (Koryo Group)",
+   "u": "https://koryogroup.com/blog/boudhanath-stupa-nepal-travel-guide"
+  }
  },
  "lumbini-nepal": {
   "sobre": true,
@@ -281,8 +300,8 @@
    }
   ],
   "tip": [
-   "El recinto es mucho más grande de lo que parece en el mapa: los monasterios están repartidos a lo largo de un canal central, lejos unos de otros.",
-   "Recórrelo en bicicleta o en rickshaw, y deja el Jardín Sagrado para primera hora, antes del calor y de los grupos de peregrinos."
+   "El recinto mide unos cinco kilómetros de largo. Los monasterios están a los dos lados de un canal central: los de tradición theravada al este y los mahayana al oeste.",
+   "Es llano: recórrelo en bicicleta o en rickshaw, y lleva agua."
   ],
   "ficha": {
    "descripcion": "El lugar donde la tradición sitúa el nacimiento de Buda, Patrimonio Mundial desde 1997. El recinto sagrado incluye el templo de Maya Devi, el pilar de Ashoka y monasterios construidos por países budistas de todo el mundo. Es a la vez un lugar de peregrinación vivo y un yacimiento arqueológico.",
@@ -313,13 +332,17 @@
     "q": "¿Nació Buda en Nepal?",
     "a": "La tradición sitúa su nacimiento en Lumbini, hoy Nepal. La fecha más usada es hacia el 563 antes de nuestra era, aunque hay otras cronologías. La inscripción del pilar de Ashoka, del siglo III antes de nuestra era, señala el lugar."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "Junta de Turismo de Nepal: los monasterios de Lumbini",
+   "u": "https://ntb.gov.np/en/sacred-monasteries-of-lumbini:-a-global-monastic-landscape-of-peace"
+  }
  },
  "langtang-nepal": {
   "sobre": true,
   "p": [
    "El Parque Nacional de Langtang se creó en 1976 y fue el primer parque nacional del Himalaya nepalí. Ocupa 1.710 km² al norte de Katmandú, desde bosques por debajo de los 1.000 metros hasta el hielo permanente. Su cima más alta es el Langtang Lirung, de más de 7.200 metros.",
-   "El 25 de abril de 2015, una avalancha provocada por el terremoto sepultó el pueblo de Langtang y mató al menos a 215 personas. El valle se ha reconstruido, y el trekking es hoy su principal fuente de ingresos.",
+   "El 25 de abril de 2015, una avalancha provocada por el terremoto sepultó el pueblo de Langtang y mató al menos a 215 personas. El valle se ha reconstruido y vuelve a recibir caminantes.",
    "En el parque está también el lago sagrado de Gosainkunda, a unos 4.300 metros."
   ],
   "fuentes": [
@@ -329,11 +352,11 @@
    }
   ],
   "tip": [
-   "Sube despacio y quédate dos noches en Kyanjin Gompa, el último pueblo del valle. La primera es para aclimatar; la segunda te regala un día entero para subir a un mirador sin prisa y sin mochila.",
-   "Y duerme y come en las casas de las familias del valle: después de 2015, cada noche que pasas allí es lo que mantiene el pueblo en pie."
+   "Sube despacio. La regla que recogen los CDC para la alta montaña: por encima de 3.000 metros, no subas más de 500 metros al día la altitud a la que duermes, y añade una noche de descanso por cada 1.000 metros ganados.",
+   "Si los síntomas del mal de altura empeoran, hay que bajar."
   ],
   "ficha": {
-   "descripcion": "El valle glaciar más cercano a Katmandú. El terremoto de 2015 lo golpeó de lleno, pero está reconstruido y el trekking es vital para su gente. Las vistas del Langtang Lirung y la cultura tamang son sus puntos fuertes, con mucha menos gente que en el Everest o el Annapurna.",
+   "descripcion": "El valle glaciar más cercano a Katmandú. El terremoto de 2015 lo golpeó de lleno, pero está reconstruido. Las vistas del Langtang Lirung y la cultura tamang son sus puntos fuertes, con mucha menos gente que en el Everest o el Annapurna.",
    "como_llegar": "Por carretera desde Katmandú hasta Syabrubesi, donde empieza el camino. Es un viaje largo y lento: cuenta con el día entero.",
    "donde_dormir": {
     "mochilero": "Albergues de montaña a lo largo del valle",
@@ -361,7 +384,11 @@
     "q": "¿Hace falta guía?",
     "a": "En abril de 2023 Nepal empezó a exigir guía a quien camina por su cuenta. La norma ha tenido cambios desde entonces: confírmala antes de salir en la Junta de Turismo o con una agencia autorizada."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "CDC: viajes a gran altitud y mal de altura",
+   "u": "https://www.cdc.gov/yellow-book/hcp/environmental-hazards-risks/high-altitude-travel-and-altitude-illness.html"
+  }
  },
  "circuito-annapurna-nepal": {
   "sobre": true,
@@ -377,8 +404,8 @@
    }
   ],
   "tip": [
-   "Busca las marcas de los senderos NATT. Son las rutas alternativas que se trazaron para esquivar la pista de coches, y devuelven al circuito el camino que tenía antes de la carretera.",
-   "Cuestan un poco más de tiempo, pero cambian el polvo de los todoterrenos por bosque y pueblos. Pregunta por ellas en cada albergue: no siempre están bien señaladas."
+   "Busca los senderos NATT. Son las rutas alternativas que se trazaron para esquivar la pista de coches, que hoy afecta hasta a tres cuartas partes del recorrido original.",
+   "Pregunta por ellas en los albergues."
   ],
   "ficha": {
    "descripcion": "Uno de los grandes trekkings del mundo: rodea el macizo del Annapurna y cruza el paso de Thorong La, a 5.416 metros. En dos o tres semanas pasa del bosque subtropical al paisaje alpino y al altiplano seco de cultura tibetana. Las carreteras han cambiado el recorrido clásico, pero sigue mereciendo la pena.",
@@ -409,7 +436,11 @@
     "q": "¿Es peligroso?",
     "a": "El riesgo real es la altitud y el tiempo en el paso. En octubre de 2014, una ventisca repentina mató a más de 43 personas. Sube despacio, aclimata y no cruces con mal pronóstico."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "Wikipedia: Circuito del Annapurna",
+   "u": "https://en.wikipedia.org/wiki/Annapurna_Circuit"
+  }
  },
  "everest-base-camp-nepal": {
   "sobre": true,
@@ -425,8 +456,8 @@
    }
   ],
   "tip": [
-   "Deja días de margen al final. Los vuelos de Lukla dependen del tiempo y se cancelan a menudo: no reserves el vuelo de vuelta a casa para el día siguiente de bajar.",
-   "Y sube despacio aunque te encuentres bien. Los días de descanso en Namche y en Dingboche no son tiempo perdido: son lo que hace que llegues."
+   "Deja días de margen al final. Los vuelos de Lukla dependen del tiempo: en junio de 2024 el aeropuerto pasó diez días con los vuelos interrumpidos por la niebla.",
+   "No reserves el vuelo de vuelta a casa para el día siguiente de bajar."
   ],
   "ficha": {
    "descripcion": "El trekking más famoso del planeta: sube hasta los 5.364 metros del campo base sur, con vistas del Everest, el Lhotse, el Nuptse y el Ama Dablam. La cultura sherpa, con los monasterios y los pueblos del Khumbu, es tan importante como las montañas.",
@@ -457,7 +488,11 @@
     "q": "¿Van a mover el campo base?",
     "a": "En junio de 2022 las autoridades de Nepal anunciaron que quieren trasladarlo entre 200 y 400 metros más abajo, porque el glaciar de Khumbu se derrite y pierde espesor."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "The Himalayan Times, junio de 2024",
+   "u": "https://thehimalayantimes.com/nepal/flights-disrupted-at-lukla-for-ten-days-tourists-stressed-out"
+  }
  },
  "upper-mustang-nepal": {
   "sobre": true,
@@ -473,8 +508,8 @@
    }
   ],
   "tip": [
-   "Mustang es el trekking del verano. Cuando el monzón cierra el resto del Himalaya nepalí, aquí apenas llueve, porque las montañas del sur paran las nubes.",
-   "Si puedes elegir fechas, pregunta cuándo cae ese año el festival Tiji de Lo Manthang: es cuando la ciudad se llena de su propia gente."
+   "Mustang es el trekking del verano. Está a la sombra de lluvia del Annapurna y el Dhaulagiri: caen entre 250 y 400 mm al año, así que se camina incluso durante el monzón.",
+   "Si puedes elegir fechas, pregunta cuándo cae ese año el festival Tiji de Lo Manthang."
   ],
   "ficha": {
    "descripcion": "El antiguo reino budista de Lo, cerrado a los extranjeros hasta 1992: desierto de altura, cañones de colores y cuevas excavadas en los acantilados. Su capital, Lo Manthang, sigue dentro de sus murallas. Es una zona restringida, con permiso especial y guía obligatorios, lo que mantiene bajo el número de visitantes.",
@@ -505,6 +540,10 @@
     "q": "¿Desde cuándo se puede visitar?",
     "a": "Desde 1992. Antes era un territorio cerrado a los extranjeros."
    }
-  ]
+  ],
+  "tip_fuente": {
+   "t": "Wikipedia: Alto Mustang",
+   "u": "https://en.wikipedia.org/wiki/Upper_Mustang"
+  }
  }
 }
