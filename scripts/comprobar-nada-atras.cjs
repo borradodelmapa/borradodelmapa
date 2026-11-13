@@ -35,7 +35,7 @@ const stories = todas.filter((f) => STORY.test(f));
 const redes = require('./redes.cjs');
 const fallos = [];
 const versiones = {};   // pieza → { versión → [páginas] }
-const PIEZAS = ['styles.css', 'destinos.css', 'paginas.css', 'instalar-app.js', 'ga4.js'];
+const PIEZAS = ['styles.css', 'destinos.css', 'paginas.css', 'instalar-app.js', 'ga4.js', 'ayuda.css'];
 
 for (const f of paginas) {
   const h = leer(f);

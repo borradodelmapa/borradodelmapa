@@ -9,7 +9,7 @@
 <meta property="og:title" content="He perdido el vuelo: qué hacer y qué derechos tienes">
 <meta property="og:description" content="El avión se ha ido sin ti. Qué hacer en el mostrador, cuándo te recolocan gratis, qué pasa con la vuelta y cuándo paga el seguro. Paso a paso.">
 <meta property="og:url" content="https://borradodelmapa.com/blog/perder-el-avion">
-<meta property="og:image" content="https://borradodelmapa.com/og-image.jpg">
+<meta property="og:image" content="https://borradodelmapa.com/blog/img/ayuda/perder-el-avion.jpg">
 <meta property="og:site_name" content="Borrado del Mapa">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://borradodelmapa.com/blog/perder-el-avion">
@@ -18,6 +18,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Article",
+  "image": "https://borradodelmapa.com/blog/img/ayuda/perder-el-avion.jpg",
   "headline": "He perdido el vuelo: qué hacer ahora y qué derechos tienes",
   "description": "El avión se ha ido sin ti. Qué hacer en el mostrador, cuándo te recolocan gratis, qué pasa con la vuelta y cuándo paga el seguro. Paso a paso.",
   "author": { "@type": "Person", "name": "Salma" },
@@ -76,6 +77,7 @@
 <link rel="stylesheet" href="/styles.css?v=196">
 <link rel="stylesheet" href="/paginas.css?v=3">
 <link rel="stylesheet" href="/blog-viajes.css?v=7">
+<link rel="stylesheet" href="/ayuda.css?v=1">
 </head>
 <body class="pg">
 
@@ -85,14 +87,28 @@
 </header>
 
 <main class="pg-main">
-<article class="blog-article">
-  <div class="bg-kicker"><b>Guía práctica</b><span>Actualizado el 13 nov 2026</span><span>4 min de lectura</span></div>
-  <h1 class="blog-title">He perdido el vuelo: qué hacer ahora y qué derechos tienes</h1>
-  <p class="blog-subtitle">El avión cerró la puerta mientras corrías. O el atasco te traicionó. O el tren llegó tarde. Sea como sea, el avión se fue. Esto es lo que haces.</p>
+<article class="blog-article ay">
+  <header class="bd-hero">
+    <img src="/blog/img/ayuda/perder-el-avion.jpg" alt="Panel de salidas del aeropuerto de Zúrich con los vuelos del día" fetchpriority="high" width="1400" height="1054" style="object-position:center 40%">
+    <div class="bd-hero-txt">
+      <div class="bg-kicker"><b>Guía práctica</b><span>Actualizado el 13 nov 2026</span><span>4 min de lectura</span></div>
+      <h1 class="blog-title">He perdido el vuelo: qué hacer ahora y qué derechos tienes</h1>
+      <p class="blog-subtitle">El avión cerró la puerta mientras corrías. O el atasco te traicionó. O el tren llegó tarde. Sea como sea, el avión se fue. Esto es lo que haces.</p>
+    </div>
+    <span class="bd-hero-cred">Foto: <a href="https://commons.wikimedia.org/wiki/File:Departure_board_in_gates_A_at_Zurich_International_Airport.jpg" target="_blank" rel="noopener">Stimpy</a> · CC BY-SA 4.0</span>
+  </header>
+
+  <nav class="ay-urgente" aria-label="Si acabas de perder el vuelo">
+    <p class="ay-urgente-t">Si acabas de perder el vuelo</p>
+    <a href="#mostrador"><b>1</b><span><strong>Ve al mostrador de la aerolínea</strong>Ya. Las plazas del siguiente vuelo se llenan.</span></a>
+    <a href="#derechos"><b>2</b><span><strong>Mira si te corresponde algo</strong>Depende de por qué lo has perdido.</span></a>
+    <a href="#vuelta"><b>3</b><span><strong>Asegura la vuelta</strong>Que te confirmen por escrito que sigue en pie.</span></a>
+    <a href="#seguro"><b>4</b><span><strong>Llama al seguro antes de comprar</strong>Si la causa no es tuya, puede pagarlo.</span></a>
+  </nav>
 
   <p>Perder un vuelo es una de esas experiencias que parece catastrófica en el momento y que, con la cabeza fría, tiene solución. El problema real no es perder el avión — es perder el tiempo poniéndote nervioso en vez de actuar. Aquí va el protocolo.</p>
 
-  <h2>Lo primero: directo al mostrador de la aerolínea</h2>
+  <h2 id="mostrador">Lo primero: directo al mostrador de la aerolínea</h2>
   <p>Nada de esperar, nada de llorar en la puerta de embarque. Ve directo al mostrador de la aerolínea, no al de facturación general. Allí es donde pueden cambiar tu billete. Y ve rápido — las plazas en el siguiente vuelo se llenan.</p>
 
   <div class="bloque-sin-salma">
@@ -108,8 +124,13 @@
     <p>"He perdido el vuelo IB3210 a Lisboa, salía a las 10:15, llegué tarde por un accidente en la autovía. Tengo seguro de viaje con Mapfre." Salma te dice si tu causa tiene cobertura en el seguro (el accidente de tráfico suele cubrirlo), qué documentación necesitas pedir ahora mismo (informe de tráfico, ticket de taxi), cuáles son los siguientes vuelos disponibles, y qué decirle al agente para intentar que te cambien el billete sin penalización.</p>
   </div>
 
-  <h2>¿Tienes derecho a algo?</h2>
+  <h2 id="derechos">¿Tienes derecho a algo?</h2>
   <p>Depende de por qué has perdido el vuelo:</p>
+  <div class="bd-stats">
+    <div class="bd-stat"><b>3 h</b><span>De retraso en destino: hay compensación</span></div>
+    <div class="bd-stat"><b>2,5 h</b><span>Antes de salir: límite para cambiar en Ryanair</span></div>
+    <div class="bd-stat"><b>2018</b><span>El Supremo declaró abusivo el «no show»</span></div>
+  </div>
   <ul>
     <li><strong>Has llegado tarde por tu cuenta</strong> (un despiste, un atasco, la cola del control): frente a la aerolínea no tienes derechos. No está obligada a cambiarte el billete gratis ni a devolvértelo.</li>
     <li><strong>Has perdido una conexión porque el vuelo anterior llegó tarde o se canceló</strong>, y los dos iban en la misma reserva: la aerolínea tiene que llevarte a tu destino sin coste y darte comida y hotel si hay que esperar.</li>
@@ -140,10 +161,10 @@
     <li><strong>La vuelta no se pierde.</strong> Ryanair indica que cada vuelo es un tramo aparte: aunque hayas perdido la ida, puedes usar la vuelta tal como la reservaste.</li>
   </ul>
 
-  <h2>Si era una aerolínea tradicional: cuidado con la vuelta</h2>
+  <h2 id="vuelta">Si era una aerolínea tradicional: cuidado con la vuelta</h2>
   <p>Muchas aerolíneas tradicionales tienen en sus condiciones la cláusula «no show»: si no usas la ida, te anulan la vuelta y el resto de vuelos del billete. En España, el Tribunal Supremo declaró abusiva esa cláusula de Iberia en 2018 (sentencia 631/2018), pero muchas aerolíneas extranjeras la siguen aplicando.</p>
 
-  <div class="bloque-con-salma">
+  <div class="bloque-con-salma ay-tip" id="tip">
     <div class="bloque-label">
       <img src="/salma_ai_avatar.png" alt="Salma" class="salma-avatar">
       Tip de Salma
@@ -151,7 +172,7 @@
     <p><strong>Si has perdido la ida y tienes la vuelta en el mismo billete, no des la vuelta por segura.</strong> Antes de irte del aeropuerto, dile a la aerolínea que vas a usar la vuelta y pide que te lo confirmen por escrito (un correo o un mensaje en la app sirve). Si llegas a por tu vuelta y te la han anulado, no la compres de nuevo sin más: guarda todo y reclama después, porque en España esa cláusula está declarada abusiva.</p>
   </div>
 
-  <h2>El seguro de viaje y la pérdida de vuelo</h2>
+  <h2 id="seguro">El seguro de viaje y la pérdida de vuelo</h2>
   <p>Muchos seguros de viaje incluyen cobertura de "pérdida de vuelo", pero con condiciones. Casi siempre exigen:</p>
   <ul>
     <li>Causa documentable y ajena a ti (accidente, enfermedad, huelga de transporte público)</li>
