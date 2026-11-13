@@ -30,6 +30,19 @@ const caps = Object.assign(capsTodas.filter((c) => !c.borrador || process.env.BO
 const guias = JSON.parse(fs.readFileSync(path.join(__dirname, 'blog-guias.json'), 'utf8'));
 // Rutas completas (guías públicas <slug>.html de la app): enlazadas desde el índice del blog para que Google las encuentre.
 const rutas = require('./datos-pais.cjs').rutasBlog(); // scripts/paises/<país>/rutas.json
+// TODAS las guías públicas, por país (SEO, 13 nov 2026, caso p-mwfbvzpn4nn): ninguna página indexada las enlazaba todas y
+// 13 de 38 no recibían ni un enlace desde una página indexable. Sale de guias-por-pais.json (lo escribe build-guias.js cada noche).
+const GUIAS_MAPA = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'guias-por-pais.json'), 'utf8')); } catch (_) { return {}; } })();
+const NOMBRE_PAIS_GM = { espana: 'España', butan: 'Bután', panama: 'Panamá', 'corea-del-sur': 'Corea del Sur', japon: 'Japón', mexico: 'México', peru: 'Perú' };
+const nombrePaisGM = (s) => NOMBRE_PAIS_GM[s] || s.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+const nGuiasMapa = Object.values(GUIAS_MAPA).reduce((a, l) => a + l.length, 0);
+const escGM = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const bloqueGuiasMapa = Object.keys(GUIAS_MAPA).sort((a, b) => GUIAS_MAPA[b].length - GUIAS_MAPA[a].length || a.localeCompare(b)).map((p) => `      <div class="bv-gm-p">
+        <h3>${escGM(nombrePaisGM(p))}</h3>
+        <ul>
+${GUIAS_MAPA[p].map((g) => `          <li><a href="/${escGM(g.slug)}">${escGM(g.nombre)}</a>${g.dias ? ` <span>${g.dias} ${g.dias === 1 ? 'día' : 'días'}</span>` : ''}</li>`).join('\n')}
+        </ul>
+      </div>`).join('\n');
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const md = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
@@ -481,7 +494,15 @@ ${bloqueDocs}
 ${bloqueGuias}
     </div>
   </details>
-  <style>.bv-guias--plegado summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:12px}.bv-guias--plegado summary::-webkit-details-marker{display:none}.bv-guias--plegado summary span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#F4630B;white-space:nowrap}.bv-guias--plegado[open] summary span{opacity:.5}</style>
+${nGuiasMapa ? `  <details class="bv-guias bv-guias--plegado" id="guias-con-mapa">
+    <summary><h2>Guías con mapa</h2><span>${nGuiasMapa} guías · ver</span></summary>
+    <p class="bv-guias-sub">Rutas completas día a día, con su mapa y sus paradas. Ordenadas por país.</p>
+    <div class="bv-gm">
+${bloqueGuiasMapa}
+    </div>
+  </details>
+  <style>.bv-gm{display:grid;gap:18px 24px;padding:0 16px}@media(min-width:700px){.bv-gm{grid-template-columns:1fr 1fr}}.pg .bv-gm-p h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 6px;color:var(--text-primary);border-top:3px solid #F4630B;padding-top:8px}.bv-gm-p ul{list-style:none;margin:0;padding:0}.bv-gm-p li{padding:7px 0;border-bottom:1px solid var(--border);font-size:16px;line-height:1.35}.pg .bv-gm-p a{color:var(--text-primary);text-decoration:none}.pg .bv-gm-p a:hover{color:#F4630B}.bv-gm-p li span{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;margin-left:6px}</style>
+` : ''}  <style>.bv-guias--plegado summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:12px}.bv-guias--plegado summary::-webkit-details-marker{display:none}.bv-guias--plegado summary span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#F4630B;white-space:nowrap}.bv-guias--plegado[open] summary span{opacity:.5}</style>
 
   <div class="bv-cta">
     <p>¿Tu viaje todavía no tiene ruta? Cuéntale a Salma adónde vas.</p>
