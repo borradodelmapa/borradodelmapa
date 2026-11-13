@@ -158,6 +158,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 13 nov 2026 · 23:00 | 🌍 Web (Claude), encargo de Estrategia | **Y15** aplicada en la web (Paco: «Sí, súbelas»): campo `caratula` en historias.js (id de `salma marketing/canal-youtube/caratulas-y18/<id>-Y18.jpg`) en los 7 largos; los generadores la ponen como portada de la entrada (carátula entera arriba, título debajo), de las tarjetas y de la Web Story (carátula sobre su fondo desenfocado, 3:4). Cambiar una carátula = cambiar ese JPG y regenerar. Tuvalu lleva en la entrada «La imagen de portada es una ilustración». |
 | 13 nov 2026 · 21:30 | 🎬 Vídeo (Claude), por encargo de Paco vía 📈 Estrategia | Nueva **Y18** (Paco): carátula que destaca (una protagonista, fondo oscuro y desenfocado, más color, 2-3 palabras enormes fuera de la cara, sello arriba a la derecha, prueba a 160 px). Amplía Y14, sin conflictos. |
 | 13 nov 2026 · 20:30 | 📈 Estrategia (Claude) | **M15** (Paco): excepción solo en el largo «Filipinas antes de viajar»: la primera imagen es un vuelo de dron, no una persona. En ese guion (v2.1), lo práctico primero (N13). |
 | 13 nov 2026 · 19:15 | 📈 Estrategia (Claude) | **P13** (Paco): un día, un vídeo. El día de un largo no sale short; los shorts de los martes pasan al lunes de antes a las 10:00 (10 posts movidos en Metricool: 16 y 23 nov, 30 nov, 7 y 14 dic). |

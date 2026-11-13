@@ -205,6 +205,7 @@
 <style>
 .bd-layout.h .bd-media{max-width:none}.bd-layout.h .bd-video{aspect-ratio:16/9}
 .pg .bd-cap a,.pg .bd-enlaces a,.pg .bd-ia a,.pg .bd-ficha a[data-t]{color:var(--accent);text-decoration:none;font-weight:600}.pg .bd-cap a:hover,.pg .bd-enlaces a:hover,.pg .bd-ficha a[data-t]:hover{text-decoration:underline}.pg .bd-ficha a[data-t] strong{color:var(--text-primary)}
+.bd-hero.car{min-height:0;display:block;background:none}.bd-hero.car>img{position:static;display:block;width:100%;height:auto;aspect-ratio:16/9}.bd-hero.car::after{display:none}.bd-hero.car .bd-hero-txt{padding:20px 16px 0}.pg .bd-hero.car .bd-title{color:var(--text-primary);text-shadow:none}.pg .bd-hero.car .bd-lead{color:var(--text-secondary)!important;text-shadow:none}
 .bd-enlaces{font-size:15px}.bd-enlaces a+a::before{content:" · ";color:var(--text-muted)}
 @media (min-width:960px){.bd-layout.h,.bd-layout.h.con-hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "body" "next";grid-template-rows:auto}
 .bd-layout.h .bd-media{position:static;margin:0 auto 34px;width:100%;max-width:1000px}.bd-layout.h .bd-body,.bd-layout.h .bd-next{max-width:760px;width:100%;margin-left:auto;margin-right:auto}}
@@ -218,14 +219,13 @@
 </header>
 <main class="bd-main">
   <p class="bd-crumbs"><a href="/blog/">Historias</a> · Documentales</p>
-  <header class="bd-hero">
-    <img src="/blog/viajes/img/historia-de-los-tatuajes/W54.jpg" alt="" style="object-position:50% 30%" fetchpriority="high">
+  <header class="bd-hero car">
+    <img src="/blog/viajes/img/historia-de-los-tatuajes.jpg" alt="" fetchpriority="high">
     <div class="bd-hero-txt">
       <span class="bd-kicker">Documentales · Documental</span>
       <h1 class="bd-title">Tatuajes por el mundo: un viaje desde Ötzi hasta la Yakuza</h1>
       <p class="bd-lead">La historia de los tatuajes en 5.300 años: del hombre de hielo de los Alpes a los maoríes, las cárceles rusas, las maras y la Yakuza. Por qué nos tatuamos y por qué las mafias empiezan a esconderlo.</p>
     </div>
-    <span class="bd-hero-cred">Foto: <a href="https://commons.wikimedia.org/wiki/File:Waiting_Face.jpg" target="_blank" rel="noopener">Bhrigu bayan</a> · CC BY-SA 4.0</span>
   </header>
   <div class="bd-layout con-hero h">
 

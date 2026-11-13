@@ -382,6 +382,7 @@ module.exports = [
     cap: 'Documental',
     pais: 'Filipinas',
     formato: '16:9',
+    caratula: 'baler', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     titulo: 'Los últimos de Filipinas: 337 días encerrados en una iglesia',
     resumen: 'Baler, 1898-1899: cincuenta soldados españoles resisten 337 días encerrados en una iglesia sin saber que la guerra ha terminado. Lo cuenta su teniente, Saturnino Martín Cerezo, con las palabras de su propio libro, y entre medias, trescientos años de España en Filipinas.',
     video: 'los-ultimos-de-filipinas-el-diario-de-baler.mp4',

@@ -14,6 +14,8 @@ const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'pueblos')) ? ROOT 
 const VIDEO_SRC = path.join(MKT, 'salma marketing', 'ligeras-portada');
 const OUT = path.join(ROOT, 'blog', 'viajes');
 const OUT_VIDEO = path.join(OUT, 'video');
+// Carátula de YouTube = portada del blog y de la Web Story (Y15/Y18, 13 nov 2026): c.caratula = id de salma marketing/canal-youtube/caratulas-y18/<id>-Y18.jpg
+const CARATULAS = path.join(MKT, 'salma marketing', 'canal-youtube', 'caratulas-y18');
 const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
@@ -57,6 +59,13 @@ caps.forEach((c, i) => {
   // En una copia sin «salma marketing» (worktree), vale el vídeo ya publicado en blog/viajes/video/
   if (!fs.existsSync(src)) { if (!fs.existsSync(dst)) throw new Error('Falta el vídeo ' + src); }
   else if (!fs.existsSync(dst) || fs.statSync(dst).size !== fs.statSync(src).size) fs.copyFileSync(src, dst);
+  if (c.caratula) { // la carátula manda: se copia a 1280×720 cuando cambia (en una copia sin «salma marketing», vale la ya publicada)
+    const car = path.join(CARATULAS, c.caratula + '-Y18.jpg'), dp = path.join(OUT, 'img', c.slug + '.jpg');
+    if (fs.existsSync(car)) { // siempre: ffmpeg da el mismo JPG si la carátula no cambia
+      const r = require('child_process').spawnSync(path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), ['-v', 'error', '-y', '-i', car, '-vf', 'scale=1280:720', '-map_metadata', '-1', '-q:v', '3', dp]);
+      if (r.status || r.error) throw new Error('No puedo copiar la carátula de ' + c.slug + ': ' + (r.stderr || r.error));
+    }
+  }
   if (!fs.existsSync(path.join(OUT, 'img', c.slug + '.jpg'))) throw new Error('Falta la portada blog/viajes/img/' + c.slug + '.jpg');
   c.dur = duracionMp4(dst);
   c.n = i;
@@ -217,6 +226,7 @@ document.addEventListener("click",function(e){var a=e.target.closest("a[data-t]"
 const CSS_16_9 = `<style>
 .bd-layout.h .bd-media{max-width:none}.bd-layout.h .bd-video{aspect-ratio:16/9}
 .pg .bd-cap a,.pg .bd-enlaces a,.pg .bd-ia a,.pg .bd-ficha a[data-t]{color:var(--accent);text-decoration:none;font-weight:600}.pg .bd-cap a:hover,.pg .bd-enlaces a:hover,.pg .bd-ficha a[data-t]:hover{text-decoration:underline}.pg .bd-ficha a[data-t] strong{color:var(--text-primary)}
+.bd-hero.car{min-height:0;display:block;background:none}.bd-hero.car>img{position:static;display:block;width:100%;height:auto;aspect-ratio:16/9}.bd-hero.car::after{display:none}.bd-hero.car .bd-hero-txt{padding:20px 16px 0}.pg .bd-hero.car .bd-title{color:var(--text-primary);text-shadow:none}.pg .bd-hero.car .bd-lead{color:var(--text-secondary)!important;text-shadow:none}
 .bd-enlaces{font-size:15px}.bd-enlaces a+a::before{content:" · ";color:var(--text-muted)}
 @media (min-width:960px){.bd-layout.h,.bd-layout.h.con-hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "body" "next";grid-template-rows:auto}
 .bd-layout.h .bd-media{position:static;margin:0 auto 34px;width:100%;max-width:1000px}.bd-layout.h .bd-body,.bd-layout.h .bd-next{max-width:760px;width:100%;margin-left:auto;margin-right:auto}}
@@ -259,7 +269,7 @@ function pagina(c) {
 ${s.min ? `      <p class="bd-cap"><a href="?t=${aSeg(s.min)}" data-t="${aSeg(s.min)}">▶ Ver en el vídeo · ${s.min}</a></p>\n` : ''}${s.p.map((p, j) => `      <p>${md(p)}</p>\n${j === 0 && s.foto ? figura(c, s.foto) : ''}`).join('').replace(/\n$/, '')}${s.enlaces ? `\n      <p class="bd-enlaces">${s.enlaces.map(([t, u]) => `<a href="${esc(u)}">${esc(t)}</a>`).join('')}</p>` : ''}
     </section>${cita(i)}`).join('\n\n');
   const indiceCaps = caps16.length ? `    <aside class="bd-ficha">\n      <h3>Capítulos</h3>\n      <ul>\n${caps16.map((s) => `        <li><a href="?t=${aSeg(s.min)}" data-t="${aSeg(s.min)}"><strong>${s.min}</strong> ${esc(s.h)}</a></li>`).join('\n')}\n      </ul>\n    </aside>\n` : '';
-  const hero = c.fotos ? foto(c, c.fotos.portada) : null;
+  const hero = c.caratula ? { src: `/blog/viajes/img/${c.slug}.jpg`, credito: '' } : c.fotos ? foto(c, c.fotos.portada) : null;
   const cabeza = `      <span class="bd-kicker">${esc(c.serie)} · ${esc(c.cap)}</span>
       <h1 class="bd-title">${esc(c.titulo)}</h1>
       <p class="bd-lead">${esc(c.resumen)}</p>`;
@@ -304,8 +314,8 @@ ${HEAD_COMUN}${c.formato === '16:9' ? '\n' + CSS_16_9 : ''}
 ${barra || CABECERA}
 <main class="bd-main">
 ${barra ? '' : `  <p class="bd-crumbs"><a href="/blog/">Historias</a> · ${esc(paisH || c.serie)}</p>
-`}${hero ? `  <header class="bd-hero">
-    <img src="${hero.src}" alt=""${c.fotos.posicion ? ` style="object-position:${c.fotos.posicion}"` : ''} fetchpriority="high">
+`}${hero ? `  <header class="bd-hero${c.caratula ? ' car' : ''}">
+    <img src="${hero.src}" alt=""${!c.caratula && c.fotos.posicion ? ` style="object-position:${c.fotos.posicion}"` : ''} fetchpriority="high">
     <div class="bd-hero-txt">
 ${cabeza}
     </div>

@@ -259,6 +259,7 @@ module.exports = [
     cap: 'Documental',
     pais: 'Vietnam',
     formato: '16:9',
+    caratula: 'vietnam-historia', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     titulo: 'Qué saber antes de ir a Vietnam: 2.000 años sin rendirse',
     resumen: 'La historia de Vietnam contada en moto, por los lugares donde ocurrió: China, los mongoles, los Ming, Francia, Japón, Estados Unidos y otra vez China. Todos entraron y todos acabaron marchándose.',
     video: 'vietnam-2000-anos-largo.mp4',
@@ -377,6 +378,7 @@ module.exports = [
     cap: 'Documental',
     pais: 'Vietnam',
     formato: '16:9',
+    caratula: 'vietnam-caos', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     titulo: 'Así es VIETNAM: un caos que engancha',
     resumen: 'Crónica de 45 días por el norte de Vietnam en moto: un control de policía, un permiso de conducir que allí no sirve, Hanói, las montañas de la frontera con China, Hạ Long y las cuevas de Phong Nha. Con lo que hay que saber antes de ir y lo que costó.',
     video: 'vietnam-en-moto-cronica.mp4',

@@ -230,6 +230,7 @@ module.exports = [
     cap: 'Documental',
     pais: 'India',
     formato: '16:9',
+    caratula: 'india', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     titulo: 'Así es la INDIA: donde se viene a morir',
     resumen: 'Las 10 preguntas que todo el mundo hace antes de viajar a la India (seguridad, visado, vacunas, agua, dinero, cómo moverse) y 25 días por el norte: Rishikesh, Dharamsala y Benarés, la ciudad donde se viene a morir.',
     video: 'viajar-a-la-india-donde-se-viene-a-morir.mp4',

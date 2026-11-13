@@ -25,6 +25,7 @@ module.exports = [
     cap: 'Temporada 1',
     pais: 'Asia',
     formato: '16:9',
+    caratula: 'pueblos', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     // youtube: '_SnSzkDIkmw' SOLO cuando sea público (jue 19 nov 15:30): con youtube puesto la entrada usa ese reproductor y, privado, da error
     titulo: 'Pueblos que se están borrando del mapa: 10 culturas de Asia',
     resumen: 'Diez pueblos de Asia cuyas culturas se están borrando del mapa: la última gran tatuadora de Filipinas, las buceadoras de Jeju, los últimos konyak con la cara tatuada y los nómadas del mar. Quiénes son, qué están perdiendo y cómo llegar con respeto.',
@@ -110,6 +111,7 @@ module.exports = [
     cap: 'Documental',
     salmaPais: 'viajar',
     formato: '16:9',
+    caratula: 'tatuajes', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     titulo: 'Tatuajes por el mundo: un viaje desde Ötzi hasta la Yakuza',
     resumen: 'La historia de los tatuajes en 5.300 años: del hombre de hielo de los Alpes a los maoríes, las cárceles rusas, las maras y la Yakuza. Por qué nos tatuamos y por qué las mafias empiezan a esconderlo.',
     video: 'historia-de-los-tatuajes.mp4',
@@ -241,10 +243,11 @@ module.exports = [
     cap: 'Documental',
     pais: 'Tuvalu',
     formato: '16:9',
+    caratula: 'tuvalu', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     titulo: 'Tuvalu se hunde: así se vive en el país que desaparece',
     resumen: 'El punto más alto de Tuvalu está a 4,6 metros sobre el mar. Así se vive en el país que puede desaparecer: cuánta gente vive allí, de qué vive, qué ha pactado con Australia y cómo se viaja hasta él.',
     video: 'tuvalu-se-hunde-asi-se-vive.mp4',
-    realidad: 'Documental narrado por Salma con fotos de Wikimedia Commons con licencia libre y planos de vídeo del Banco Asiático de Desarrollo y de la Fondation Tara Océan. No hemos estado en Tuvalu: cada dato sale de las fuentes que citamos al final.',
+    realidad: 'Documental narrado por Salma con fotos de Wikimedia Commons con licencia libre y planos de vídeo del Banco Asiático de Desarrollo y de la Fondation Tara Océan. No hemos estado en Tuvalu: cada dato sale de las fuentes que citamos al final. La imagen de portada es una ilustración.',
     creditosDe: 'salma marketing/pueblos/tuvalu',
     creditosIntro: 'Fotos de Wikimedia Commons y vídeo con licencia libre. Gracias a sus autores:',
     creditosExtra: [
