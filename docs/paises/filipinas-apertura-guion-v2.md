@@ -2,7 +2,7 @@
 
 **v2.1 (Paco, 13 nov):** primera imagen = vuelo de dron (excepción a M15 solo en este vídeo); lo muy práctico primero (qué necesito, cuándo ir, seguridad); «por qué se llama Filipinas» se promete en el gancho y se cuenta al final; texto del gancho en pantalla más sugerente; el idioma de casa es el tagalo (comprobado en el censo).
 
-**Estado: APROBADO por Paco el 13 nov 2026 («Sí, adelante»): orden, gancho y texto. Pendiente: título y carátula (apartado 3). La voz completa, tras la frase de prueba con coste (F5).**
+**Estado: APROBADO por Paco el 13 nov 2026 («Sí, adelante»): orden, gancho y texto. Título elegido (13 nov). Pendiente: carátula (apartado 3). La voz completa, tras la frase de prueba con coste (F5).**
 Sale para el **mar 15 dic, 10:00, solo YouTube** (plan §0). Rehace la v1 (`filipinas-apertura-guion-direccion.md`, montada el 5 nov, 6:45, nunca publicada).
 Datos: los `[F]` son del expediente aprobado (`filipinas-expediente.md`). Los `[N…]` son **nuevos, buscados hoy**; van a la voz solo si Paco da el OK a la fuente (F4).
 
@@ -27,11 +27,10 @@ Duración: **~6 min** (v1: 6:45). Voz: **~4.300 caracteres**.
 - **Carátula:** con foto real, 0 €. Solo si Paco quiere montaje con IA (Y16), coste de Runway dicho antes.
 
 ## 3 · TÍTULO Y CARÁTULA (Y11-Y14), para elegir
-**Títulos (≤ 60):**
-1. «FILIPINAS antes de viajar: 10 preguntas que todos hacen 🇵🇭» (57)
-2. «Así es FILIPINAS: el país asiático que fue español 🇵🇭» (51)
-3. «¿Por qué FILIPINAS no habla español? Antes de viajar 🇵🇭» (55)
-En inglés (Y10): «PHILIPPINES Before You Go: 10 Things Nobody Tells You 🇵🇭».
+**Título ELEGIDO por Paco (13 nov): «Viajar a FILIPINAS: la realidad que nadie te cuenta 🇵🇭»** (51).
+Prueba A/B (Y17, si Studio la deja): «Por esto FILIPINAS no es lo que crees 🇵🇭» y «FILIPINAS sin filtros: lo que tienes que saber antes de ir 🇵🇭».
+En inglés (Y10): «The PHILIPPINES: The Reality Nobody Tells You Before You Go 🇵🇭».
+Estudio (Y12): `docs/paises/filipinas-apertura-estudio-titulo.md`.
 
 **Carátulas (persona y acción, 3-4 palabras, sello BORRADO DEL MAPA):**
 - A · barquero en su bangka entre islas (foto de la v1) + «FUE ESPAÑOLA».
