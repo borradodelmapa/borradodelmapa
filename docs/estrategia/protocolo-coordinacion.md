@@ -1,6 +1,6 @@
 # PROTOCOLO DE COORDINACIÓN — 📈 Estrategia es la torre de control (13 nov 2026)
 
-**Estado: PROPUESTA para Paco.** Paco: «Estrategia como chat has de coordinar tú las tareas que te lleguen y estar pendiente de las tareas que están haciendo. Vamos a crear un protocolo para que no me tengas liado. Ha de ser muy eficaz. Todas las tareas tienen muchas normas que han de cumplirse.»
+**Estado: APROBADO por Paco el 13 nov 2026 («Sí, apruébalo»). En vigor.** Paco: «Estrategia como chat has de coordinar tú las tareas que te lleguen y estar pendiente de las tareas que están haciendo. Vamos a crear un protocolo para que no me tengas liado. Ha de ser muy eficaz. Todas las tareas tienen muchas normas que han de cumplirse.»
 Completa `docs/sistemas.md` (quién hace qué) y el modo producción; no lo sustituye. Las normas siguen en `docs/video-checklist.md`, `CLAUDE.md` y los manuales.
 
 ## 1 · Las 6 reglas
