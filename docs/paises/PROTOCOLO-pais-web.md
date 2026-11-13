@@ -16,6 +16,10 @@ Nació con el piloto de Filipinas (4 nov 2026). Vídeo y blog: `docs/video-check
 6. **Blog** (chat 2): una entrada por guía + enlaces cruzados destino ↔ entrada (solo a entradas publicadas).
 7. **Tanda a Google**: `abrir-tanda.cjs` cuando Search Console esté dado de alta.
 
+## Fichas y tips (13 nov 2026, tras revisar Nepal)
+- Las fichas antiguas del KV pueden llevar datos falsos y frases rotas: se corrigen en `scripts/paises/<país>/sitios-extra.json` → `ficha` (campo a campo), `faqs`, `sobre: true` (pinta el «Sobre…» también en sitios con guía) y `tip`. El KV no se toca.
+- **Tip de Salma: verificado o no sale** (regla de Paco). Dato con fuente enlazada en la página, o viaje real de Paco. Sin primera persona inventada.
+
 ## Tiempos del piloto (Filipinas, 4 nov 2026)
 Expediente ~45 min · guía ~15 min (+ fallo del Worker) · página del país y su diseño ~1 h · 10 destinos (fotos, textos, diseño) ~45 min · atasco de Pages ~25 min.
 Total ~3 h de reloj con las revisiones de Paco. **Coste: ~0,40 €** (la guía).

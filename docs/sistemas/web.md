@@ -25,6 +25,8 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 - **Fotos:** solo de Wikimedia o de los episodios, **revisadas una a una**, con su autor; mejor sin foto que con una de otro sitio. Ningún país sale con el diseño nuevo sin sus fotos revisadas.
 - **Explorar** (app) es el mapa de guías; las guías públicas cuentan en Explorar.
 - **Textos públicos:** nunca «IA»; datos con fuente y fecha; lo dudoso no se afirma.
+- **Tip de Salma verificado (regla de Paco, 13 nov 2026):** uno por página en todo lo que se modifique, y solo si sale de un dato comprobado con su fuente enlazada en la misma página o de un viaje real de Paco. Sin primera persona inventada: Salma dice «haz esto», no «yo hago esto». Sin fuente, no se publica.
+- **Páginas de ayuda del blog** (`blog/<imprevisto>.html`): diseño propio en `ayuda.css`, solo para ellas (Paco, 13 nov 2026: «las guías siempre por otro lado»).
 
 ## 3 · Recursos ya creados
 | Recurso | Para qué |
