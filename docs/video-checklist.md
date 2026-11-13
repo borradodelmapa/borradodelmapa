@@ -157,6 +157,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 13 nov 2026 · 19:15 | 📈 Estrategia (Claude) | **P13** (Paco): un día, un vídeo. El día de un largo no sale short; los shorts de los martes pasan al lunes de antes a las 10:00 (10 posts movidos en Metricool: 16 y 23 nov, 30 nov, 7 y 14 dic). |
 | 12 nov 2026 · 18:30 | 🎬 Vídeo (Claude) | **N8** (Paco): en el documental de Baler narra el teniente con la voz «Carmelo» (ElevenLabs, eleven_v4). Solo este vídeo; las voces de voces.cjs no cambian. |
 | 12 nov 2026 · 02:30 | 🎬 Vídeo (Claude, por encargo del chat Vídeo 2) | Decisiones de Paco en el largo de Tuvalu: **M15** (primera imagen, la isla), **M11/Y16** (carátula C con IA, ilustración marcada), **F10** (vídeo CC BY del Asian Development Bank y Tara Océan), **M10/Y10** (sin inglés, solo este vídeo). Música «Fading Shoreline» por tramos (S5; licencia de Paco). Excepciones de un vídeo; las reglas no cambian. |
 | 12 nov 2026 · 13:00 | 📈 Estrategia (Claude), por Vídeo 2 | Excepciones de Paco solo en el largo de **Tuvalu** (QMWkfY186lk): **M15**, la primera imagen es la isla, no una persona («ha de ser la isla»); **M11/Y14**, carátula ilustración con IA («una marea más alta que la isla»), marcada como contenido sintético; **M10/Y10**, sin subtítulos ni paquete en inglés («no son necesarios, esta vez»). El resto de vídeos, sin cambios. |
