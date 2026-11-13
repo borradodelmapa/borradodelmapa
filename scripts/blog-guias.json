@@ -2,73 +2,85 @@
  {
   "u": "/blog/sin-hotel-de-noche",
   "t": "Sin hotel de noche en un país que no conoces",
-  "d": "Son las 11 de la noche, no tienes dónde dormir y no hablas el idioma. Qué hacer paso a paso, sin dramas.",
+  "d": "Son las 11 de la noche, no tienes dónde dormir y te queda poca batería. Qué hacer paso a paso.",
   "f": "26 marzo 2026"
  },
  {
   "u": "/blog/me-han-robado-pasaporte",
   "t": "Me han robado el pasaporte en el extranjero",
-  "d": "Denuncia, embajada, salvoconducto. Todo lo que necesitas hacer en orden, sin perder la cabeza.",
+  "d": "Denuncia, consulado y salvoconducto para volver. Y qué hacer si no hay consulado español.",
   "f": "26 marzo 2026"
  },
  {
   "u": "/blog/no-hablo-el-idioma",
   "t": "No hablo el idioma y necesito que me entiendan",
-  "d": "5 frases que funcionan en cualquier país, apps offline y gestos universales que te sacan de cualquier apuro.",
+  "d": "Traductores que funcionan sin internet, las cinco frases que llevar y cómo pedir ayuda.",
   "f": "26 marzo 2026"
  },
  {
   "u": "/blog/averia-en-carretera",
   "t": "Avería en carretera en el extranjero",
-  "d": "Pinchazo, batería muerta o motor recalentado a 200 km de la ciudad más cercana. Paso a paso.",
+  "d": "Cómo ponerte a salvo, a quién llamar primero y cómo no pagar de más por la grúa.",
   "f": "26 marzo 2026"
  },
  {
   "u": "/blog/vuelo-cancelado",
-  "t": "Te han cancelado el vuelo — qué hacer paso a paso",
-  "d": "El panel de salidas se pone en rojo. Tus derechos, cómo pedir compensación de hasta 600€ y cómo llegar igual.",
+  "t": "Me han cancelado el vuelo: reembolso y compensación",
+  "d": "En el aeropuerto o días antes de salir: qué puedes elegir y cuándo te corresponden de 250 a 600 €.",
   "f": "2 abril 2026"
  },
  {
   "u": "/blog/enfermo-en-el-extranjero",
-  "t": "Enfermo en el extranjero — qué hacer y cómo no arruinar el viaje",
-  "d": "Fiebre, intoxicación o dolor a 3.000 km de casa. Médico, seguro y medicamentos: todo lo que necesitas saber.",
+  "t": "Enfermo en el extranjero: médico y seguro",
+  "d": "Cuándo ir a urgencias, qué cubre la Tarjeta Sanitaria Europea y cómo usar el seguro.",
   "f": "2 abril 2026"
  },
  {
   "u": "/blog/perder-el-avion",
-  "t": "He perdido el avión — qué hacer ahora",
-  "d": "El avión cerró la puerta mientras corrías. Opciones reales, derechos y plan B. Sin entrar en pánico.",
+  "t": "He perdido el vuelo: qué hacer y qué derechos tienes",
+  "d": "El avión se ha ido sin ti. El mostrador, la vuelta, las conexiones y cuándo paga el seguro.",
   "f": "2 abril 2026"
  },
  {
   "u": "/blog/robo-tarjeta-extranjero",
-  "t": "Me han robado la tarjeta en el extranjero",
-  "d": "Cómo bloquearla en segundos, conseguir dinero de emergencia y no quedarte tirado. Paso a paso.",
+  "t": "Tarjeta robada o perdida en el extranjero",
+  "d": "Bloquearla, pedir la tarjeta de emergencia y conseguir efectivo. Con los teléfonos oficiales.",
   "f": "2 abril 2026"
  },
  {
   "u": "/blog/viajar-solo-primera-vez",
-  "t": "Viajar solo por primera vez — todo lo que nadie te cuenta",
-  "d": "El primer viaje solo da miedo. El segundo da ganas de repetir. Lo que necesitas saber antes de salir.",
+  "t": "Viajar solo por primera vez",
+  "d": "Dónde alojarte para conocer gente, qué dejar preparado y con qué destino empezar.",
   "f": "2 abril 2026"
  },
  {
   "u": "/blog/presupuesto-viaje-real",
-  "t": "Presupuesto real de un viaje — lo que nadie te dice",
-  "d": "Los costes ocultos que siempre se olvidan y cómo calcular cuánto necesitas de verdad. Sin sorpresas.",
+  "t": "Presupuesto real de un viaje: cómo calcularlo",
+  "d": "Los gastos que siempre se olvidan, la regla del 1,3 y las comisiones de la tarjeta fuera del euro.",
   "f": "2 abril 2026"
  },
  {
   "u": "/blog/maleta-perfecta",
-  "t": "La maleta perfecta — lo que sobra y lo que no puede faltar",
-  "d": "El 80% vuelve con la mitad sin usar. La guía honesta de qué meter, qué dejar y cómo organizarlo.",
+  "t": "Cómo hacer la maleta perfecta",
+  "d": "Qué no puede faltar, qué sobra casi siempre y qué no puede ir en la maleta facturada.",
   "f": "2 abril 2026"
  },
  {
   "u": "/blog/seguro-de-viaje",
-  "t": "Seguro de viaje — qué cubre realmente y cuál merece la pena",
-  "d": "Qué cubre, qué no cubre, las trampas de la letra pequeña y cuánto necesitas gastar de verdad.",
+  "t": "Seguro de viaje: qué cubre, qué no y cómo elegirlo",
+  "d": "Cuándo hace falta, qué mirar en la póliza antes de pagar y cómo reclamar si no responde.",
   "f": "2 abril 2026"
+ },
+ {
+  "u": "/blog/vuelo-retrasado",
+  "t": "Vuelo retrasado: qué te corresponde según las horas",
+  "d": "Desde 2 horas, comida; desde 5, el reembolso; y si llegas más de 3 horas tarde, de 250 a 600 €.",
+  "f": "13 noviembre 2026"
+ },
+ {
+  "u": "/blog/maleta-perdida",
+  "t": "Mi maleta no ha llegado: qué hacer y cuánto pagan",
+  "d": "El parte antes de salir del aeropuerto, los plazos de 7 y 21 días y el tope de la indemnización.",
+  "f": "13 noviembre 2026"
  }
 ]
