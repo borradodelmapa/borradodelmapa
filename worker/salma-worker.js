@@ -6689,6 +6689,124 @@ async function preciosConFuente(stops, pais, env) {
 }
 function _norm2(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
 
+// ═══════════════════════════════════════════════════════════════
+// DATOS CON FUENTE EN LAS GUÍAS (14 nov 2026, Paco, caso p-mwfityix43c: «otro verificador para el texto, y cualquier cosa que
+// se ponga en la guía»). Hermano de preciosConFuente, mismo método: Haiku saca los DATOS CONCRETOS que se pueden comprobar
+// (fechas, horarios, normas, animales que se ven, dónde está algo, temporadas, récords…; los precios no, son de preciosConFuente),
+// cada uno se busca en Brave y Haiku dice si los resultados lo confirman, lo contradicen o no dicen nada, con cita LITERAL.
+//   · confirmado → se queda igual.
+//   · falso (la fuente dice otra cosa) → la frase se cambia por la misma frase corregida con lo que dice la fuente.
+//   · sin fuente → si es un dato práctico (norma, horario, fecha, obligación) se quita la frase; si es historia o naturaleza
+//     se deja (que Google no lo encuentre no lo hace falso).
+// Auditoría de Nepal (13 nov): «ciervos barasinga» en Chitwan (extinguidos allí), «lago dentro del parque» (está fuera),
+// «monzón junio-agosto» (es junio-septiembre), «guía armado obligatorio» (sin norma).
+// Devuelve Map(frase original → frase nueva, '' = quitar). Nunca toca nombres, coordenadas ni place_id. Si algo falla, devuelve
+// lo que tenga (nunca rompe la guía). Caché 90 días por país + dato (`dato1:`): cada dato se paga una vez para todas las guías.
+// Coste: 1 Haiku para sacar los datos + por dato NUEVO 1 búsqueda de Brave y 1 Haiku (~0,005-0,008 € por dato), tope 30.
+async function datosConFuente(textos, pais, env, tope = 30) {
+  const cambios = new Map();
+  if (!env.BRAVE_SEARCH_KEY || !env.ANTHROPIC_API_KEY || !Array.isArray(textos)) return cambios;
+  const lista0 = textos.map(t => String(t || '').trim()).filter(t => t.length > 20);
+  if (!lista0.length) return cambios;
+  const extraer = {
+    name: 'extraer_datos', description: 'Datos concretos comprobables que aparecen en los textos',
+    input_schema: { type: 'object', properties: { datos: { type: 'array', items: { type: 'object', properties: {
+      n: { type: 'integer', description: 'número del texto' },
+      dato: { type: 'string', description: 'lo que afirma, corto y concreto (ej. «en Chitwan se ven ciervos barasinga»)' },
+      frase: { type: 'string', description: 'la frase ENTERA del texto donde está el dato, LITERAL, de mayúscula a punto' },
+      tipo: { type: 'string', enum: ['practico', 'hecho'], description: 'practico = norma, obligación, horario, fecha de apertura, temporada, requisito; hecho = historia, naturaleza, geografía' },
+      busqueda: { type: 'string', description: 'búsqueda corta en INGLÉS para comprobarlo en Google' },
+    }, required: ['n', 'dato', 'frase', 'tipo', 'busqueda'] } } }, required: ['datos'] },
+  };
+  const juzgar = {
+    name: 'juzgar_dato', description: 'Lo que dicen las fuentes sobre el dato',
+    input_schema: { type: 'object', properties: {
+      estado: { type: 'string', enum: ['confirmado', 'falso', 'sin_fuente'] },
+      fuente: { type: 'integer', description: 'número del resultado que lo confirma o lo contradice (0 si sin_fuente)' },
+      cita: { type: 'string', description: 'fragmento LITERAL del resultado que lo confirma o lo contradice (vacío si sin_fuente)' },
+      frase_corregida: { type: 'string', description: 'solo si falso: la MISMA frase del texto, COPIADA ENTERA palabra por palabra, cambiando SOLO las palabras del dato equivocado (todo lo demás se queda, también el final y el punto); vacío si no se puede arreglar (entonces se quita)' },
+    }, required: ['estado', 'fuente', 'cita', 'frase_corregida'] },
+  };
+  let lista = [];
+  try {
+    const ex = await _haikuHerramienta(env, `Viaje por ${pais || 'el destino'}. Saca de estos textos los DATOS CONCRETOS que se pueden comprobar en internet y que, si estuvieran mal, engañarían al viajero: fechas, horarios, normas y obligaciones, animales o plantas que se ven, si algo está dentro o fuera de un sitio, distancias, alturas, temporadas, récords («el más grande»), años y nombres de personas. NO saques precios (van aparte), ni opiniones, ni consejos («llega temprano»), ni descripciones («ambiente de viajero»). Como mucho ${tope}, los más arriesgados primero. Si no hay, lista vacía.\n\n${lista0.map((t, i) => `${i + 1}. ${t}`).join('\n')}`, extraer, 4000);
+    // Los precios no: los lleva preciosConFuente, que además pone la fuente al lado.
+    const _esPrecio = t => /\d[\d.,]*\s*(?:[A-Z]{3}\b|€|\$|euros?|d[oó]lares|rupias|pesos|bahts?|dongs?|soles|yenes)|\b(?:precio|cuesta|cuestan|tarifa)\b/i.test(t);
+    lista = ((ex && ex.datos) || []).filter(d => lista0[d.n - 1] && d.frase && d.dato && !_esPrecio(d.dato)).slice(0, tope);
+  } catch (e) { console.log('[DATOS] extraer: ' + e.message); return cambios; }
+  // La frase REAL del texto (la que copió Haiku a veces no es literal): la que comparte más palabras con la suya.
+  const pal = s => _nq(s).replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter(w => w.length > 2);
+  lista.forEach(d => {
+    const frases = lista0[d.n - 1].split(/(?<=[.!?])\s+/);
+    if (frases.includes(d.frase)) { d.real = d.frase; return; }
+    const pd = new Set(pal(d.frase));
+    let mejor = null, pts = 0;
+    frases.forEach(f => { const p = pal(f).filter(w => pd.has(w)).length; if (p > pts) { pts = p; mejor = f; } });
+    d.real = (mejor && pts >= Math.min(4, pd.size)) ? mejor : null;
+  });
+  lista = lista.filter(d => d.real);
+  const dominio = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (_) { return ''; } };
+  const resolver = async (d) => {
+    const kvKey = `dato1:${_norm2(pais)}:${_norm2(d.dato)}`.slice(0, 480);
+    try { const c = env.SALMA_KB && await env.SALMA_KB.get(kvKey, 'json'); if (c) return c; } catch (_) {}
+    let res = [];
+    try {
+      const r = await fetch('https://api.search.brave.com/res/v1/web/search?' + new URLSearchParams({ q: d.busqueda, count: 8, extra_snippets: 'true' }),
+        { headers: { 'Accept': 'application/json', 'X-Subscription-Token': env.BRAVE_SEARCH_KEY }, signal: AbortSignal.timeout(8000) });
+      if (!r.ok) return null;   // error de búsqueda: no se decide nada (el texto se queda como estaba, sin guardar)
+      const j = await r.json();
+      const limpio = t => String(t || '').replace(/<[^>]+>/g, '').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+      res = ((j.web && j.web.results) || []).slice(0, 8).map(o => ({ link: o.url, snippet: limpio([o.description, ...(o.extra_snippets || [])].join(' … ')) }));
+    } catch (_) { return null; }
+    let j = null;
+    if (res.length) {
+      try { j = await _haikuHerramienta(env, `Nuestro texto de viaje (${pais}) dice: «${d.real}». El dato a comprobar: «${d.dato}». Mira SOLO estos resultados de Google. «confirmado» si alguno lo dice; «falso» si alguno dice claramente lo contrario o otra cosa (otra fecha, otro sitio, extinguido, no obligatorio…); «sin_fuente» si ninguno habla de eso. La cita tiene que ser LITERAL del resultado. Si es falso, da la frase corregida.\n\n${res.map((x, i) => `[${i + 1}] ${x.link}\n${x.snippet}`).join('\n\n')}`, juzgar, 700); } catch (_) { return null; }
+    }
+    const f = j && j.fuente ? res[j.fuente - 1] : null;
+    const citaOk = !!(j && f && j.cita && j.cita.length >= 12 && _nq(f.snippet).includes(_nq(j.cita)));
+    const out = (j && j.estado !== 'sin_fuente' && citaOk)
+      ? { estado: j.estado, corregida: j.estado === 'falso' ? String(j.frase_corregida || '').replace(/\s+/g, ' ').trim() : '', original: d.real, dominio: dominio(f.link) }
+      : { estado: 'sin_fuente' };
+    try { if (env.SALMA_KB) await env.SALMA_KB.put(kvKey, JSON.stringify(out), { expirationTtl: _PRECIO_TTL }); } catch (_) {}
+    return out;
+  };
+  const resultados = new Array(lista.length);
+  for (let i = 0; i < lista.length; i += 4) {
+    const tanda = await Promise.all(lista.slice(i, i + 4).map(resolver));
+    tanda.forEach((r, k) => { resultados[i + k] = r; });
+  }
+  let nFalso = 0, nQuita = 0;
+  lista.forEach((d, i) => {
+    const r = resultados[i];
+    if (!r || r.estado === 'confirmado') return;
+    if (r.estado === 'falso') {
+      // La corrección cacheada vale si es para esta misma frase; si no (otra guía con el mismo dato), se quita la frase.
+      let c = (r.original === d.real && r.corregida) ? r.corregida : '';
+      if (c && /[.!?]$/.test(d.real) && !/[.!?]$/.test(c)) c += d.real.slice(-1);
+      // Que conserve la frase: al menos 6 de cada 10 palabras de la original siguen ahí (si no, Haiku la ha recortado: fuera)
+      const po = pal(d.real), pc = new Set(pal(c));
+      const parecida = c && po.filter(w => pc.has(w)).length >= po.length * 0.6 && c.length <= d.real.length * 1.8;
+      cambios.set(d.real, parecida ? c : '');
+      nFalso++;
+      console.log(`[DATOS] ✗ FALSO «${d.dato}» (${r.dominio}) → ${parecida ? 'corregida' : 'quitada'}`);
+    } else if (d.tipo === 'practico') {
+      cambios.set(d.real, '');
+      nQuita++;
+      console.log(`[DATOS] ? SIN FUENTE (práctico) «${d.dato}» → quitada`);
+    }
+  });
+  console.log(`[DATOS] ${lista.length} datos: ${resultados.filter(r => r && r.estado === 'confirmado').length} confirmados, ${nFalso} falsos, ${nQuita} prácticos sin fuente quitados, ${resultados.filter(r => r && r.estado === 'sin_fuente').length - nQuita} sin fuente que se quedan, ${resultados.filter(r => !r).length} sin decidir`);
+  return cambios;
+}
+// Aplica los cambios de datosConFuente a un texto: cambia o quita frases enteras. Nunca deja el texto vacío.
+function aplicarDatos(texto, cambios) {
+  if (!texto || !cambios || !cambios.size) return texto;
+  let t = String(texto);
+  cambios.forEach((nueva, vieja) => { if (t.includes(vieja)) t = t.replace(vieja, nueva); });
+  t = t.replace(/\s{2,}/g, ' ').replace(/\s+([,.;:])/g, '$1').trim();
+  return t || texto;
+}
+
 // Historia por hitos a partir del artículo. Devuelve { historia, source } o { historia: null, sin_fuente: true }; lanza si falla
 // la llamada. «art» ({lang, pageid}) lo manda la web tras el resumen; si no viene, se busca el artículo por el nombre.
 // La caché va por ARTÍCULO: dos paradas que son el mismo sitio comparten historia, y nadie puede colar la de otro lugar.
@@ -17665,6 +17783,19 @@ INSTRUCCIONES:
                 let kv = kvCountryData || null;
                 if (!kv && cc && env.SALMA_KB) { try { const raw = await env.SALMA_KB.get('dest:' + cc + ':base'); if (raw) kv = JSON.parse(raw); } catch (_) {} }
                 const pres = await presentacionGuia(_fpr, sourceText, antesDeIrCompleto(_fpr.antes_de_ir, kv), env, _reqUsage);
+                // DATOS CON FUENTE también en la presentación (intro, respuestas de la FAQ, consejos), 14 nov 2026.
+                if (pres && env.DATOS_GUIAS === '1' && _usageKind === 'guide') {
+                  try {
+                    const faq = Array.isArray(pres.faq) ? pres.faq : [];
+                    const cons = Array.isArray(pres.consejos) ? pres.consejos : [];
+                    const dc = await datosConFuente([pres.intro, ...faq.map(f => f.r), ...cons], _fpr.country || '', env, 15);
+                    if (dc.size) {
+                      pres.intro = aplicarDatos(pres.intro, dc);
+                      pres.faq = faq.map(f => ({ ...f, r: aplicarDatos(f.r, dc) })).filter(f => f.r && dc.get(f.r) !== '');
+                      pres.consejos = cons.map(c => aplicarDatos(c, dc)).filter(c => c && dc.get(c) !== '');
+                    }
+                  } catch (e) { console.log('[DATOS] presentación: ' + (e && e.message)); }
+                }
                 return { kv, pres, antesPlan: _fpr.antes_de_ir || null };
               })().catch(e => { console.log('[GUÍA-EXTRA] ' + (e && e.message)); return null; });
             }
@@ -18619,9 +18750,20 @@ REGLAS:
               const _preciosP = (env.PRECIOS_GUIAS === '1' && _usageKind === 'guide' && Array.isArray(route?.stops))
                 ? preciosConFuente(route.stops, route.country || (anchorCountry && anchorCountry.countryName) || '', env).catch(e => { console.log('[PRECIOS] ' + e.message); return new Map(); })
                 : Promise.resolve(new Map());
+              // DATOS CON FUENTE (14 nov 2026, caso p-mwfityix43c): el resto de datos del texto de las paradas y los consejos, también
+              // a la vez que Google. Interruptor DATOS_GUIAS (wrangler.toml), "0" lo apaga.
+              const _datosP = (env.DATOS_GUIAS === '1' && _usageKind === 'guide' && Array.isArray(route?.stops))
+                ? datosConFuente([...route.stops.map(s => s.narrative), ...(Array.isArray(route.tips) ? route.tips : [])], route.country || (anchorCountry && anchorCountry.countryName) || '', env).catch(e => { console.log('[DATOS] ' + e.message); return new Map(); })
+                : Promise.resolve(new Map());
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts, env);
               const _precios = await _preciosP;
               if (_precios.size && verified && Array.isArray(verified.stops)) verified.stops.forEach(s => { if (_precios.has(s.narrative)) s.narrative = _precios.get(s.narrative); });
+              const _datos = await _datosP;
+              if (_datos.size && verified) {
+                if (Array.isArray(verified.stops)) verified.stops.forEach(s => { s.narrative = aplicarDatos(s.narrative, _datos); });
+                if (Array.isArray(verified.tips)) verified.tips = verified.tips.map(t => aplicarDatos(t, _datos)).filter(t => t && _datos.get(t) !== '');
+                if (_t2log) _t2log.motivo = [_t2log.motivo, `datos: ${_datos.size} frases cambiadas`].filter(Boolean).join(' · ');
+              }
               if (_t2log && _precios.size) _t2log.motivo = [_t2log.motivo, `precios: ${_precios.size} paradas cambiadas`].filter(Boolean).join(' · ');
               if (_fastPathRoute) console.log(`[T2-TIEMPO] comprobación de Google: ${Math.round((Date.now() - _tVer) / 1000)} s (${route.stops?.length || 0} paradas${route._lector ? ', lector' : ''})`);
               if (_t2log) _t2log.ms_google = Date.now() - _tVer;
