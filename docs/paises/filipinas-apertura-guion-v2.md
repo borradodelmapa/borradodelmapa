@@ -53,9 +53,10 @@ Estudio (Y12): `docs/paises/filipinas-apertura-estudio-titulo.md`.
 - **Imagen:** cielo de tifón (foto de la v1) → dron de la playa de El Nido (ZokStar1).
 
 ### 3 · ¿ES SEGURO?
-- **Salma (texto aprobado por Paco el 13 nov, en el chat de Vídeo):** «El Ministerio de Exteriores pide evitar el centro y el suroeste de Mindanao, en el sur, y las islas de Sulu, por los secuestros y los grupos armados. En las montañas de la Cordillera, en el norte de Luzón, pide precaución. Antes de ir, mira su página: cambia.» [N4]
-- **Pantalla:** «Datos a 13 nov 2026 · confírmalos en exteriores.gob.es».
-- **Imagen:** dron de las Colinas de Chocolate, Bohol (hikangs 4K) → Coron (My Daily Flight).
+- **Salma (texto ampliado aprobado por Paco el 13 nov en el chat de Vídeo: «Sí, con ese texto»; sustituye al anterior):** «El Ministerio de Exteriores divide Mindanao, la gran isla del sur, en dos. En el centro y el suroeste, en Maguindanao, Lanao del Sur, Cotabato y Zamboanga, y en las islas de Basilan, Sulu y Tawi-Tawi, pide no viajar: hay secuestros, atentados y choques del ejército con el grupo Abu Sayyaf. En el resto de Mindanao pide precaución, salvo en la ciudad de Davao. También desaconseja navegar por el mar de Sulu, por la piratería. En las montañas de la Cordillera, en el norte de Luzón, pide precaución. Antes de ir, mira su página: cambia.» [N4]
+- **Pantalla:** «DATOS A 13 NOV 2026 · CONFÍRMALOS EN EXTERIORES.GOB.ES».
+- **Imagen:** mapa de Mindanao (zonas en rojo, Davao en verde) → mapa fijo «NO VIAJAR · CENTRO Y SUROESTE DE MINDANAO · SULU» → mapa de Davao «RESTO DE MINDANAO: PRECAUCIÓN» → bangka de pesca (Siargao, sin rótulo) → terrazas de Banaue → El Nido.
+- Fuente (N4): página de Exteriores releída el 13 nov 2026 por Vídeo.
 
 ### 4 · ¿QUÉ VER? LA RUTA DEL NORTE EN 4 DÍAS
 - **Salma:** «Si vas a la Cordillera, en el norte: Banaue y sus miradores, Batad a pie, Sagada con sus cuevas y sus ataúdes colgantes, y Buscalan, el pueblo de Whang-Od, con guía local obligatorio.» [F28][F29]
