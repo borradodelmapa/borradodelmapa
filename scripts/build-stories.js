@@ -89,7 +89,7 @@ function portada(c) {
   }
   const t = tamJpg(dest);
   if (t.w < 640 || t.h < 853 || Math.abs(t.w / t.h - 0.75) > 0.01) throw new Error(`${c.slug}: la portada sale de ${t.w}×${t.h}; tiene que ser 3:4 y al menos 640×853 (elige otra foto)`);
-  return `/stories/${c.slug}/portada.jpg`;
+  return require('./video-info.cjs').vUrl(`/stories/${c.slug}/portada.jpg`); // con marca de versión: ver vUrl
 }
 
 const CSS = `amp-story{font-family:'Inter',sans-serif;color:#fff}

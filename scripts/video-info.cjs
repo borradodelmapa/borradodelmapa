@@ -22,4 +22,16 @@ function duracionDe(slug) {
   return (cache[slug] = d ? d.txt : '');
 }
 
-module.exports = { duracionMp4, duracionDe };
+// Portada de una historia con su marca de versión (14 nov 2026): /blog/viajes/img/<slug>.jpg?v=<8 letras del contenido>.
+// La web guarda las imágenes en el móvil (sw.js) y enseña primero la guardada: sin la marca, al cambiar una carátula
+// se seguía viendo la vieja. Con ella, cada imagen nueva es una dirección nueva. Mismo uso para cualquier JPG (vUrl).
+const crypto = require('crypto');
+const vCache = {};
+function vUrl(url) {
+  if (url in vCache) return vCache[url];
+  const f = path.join(__dirname, '..', url.split('?')[0]);
+  return (vCache[url] = fs.existsSync(f) ? url + '?v=' + crypto.createHash('md5').update(fs.readFileSync(f)).digest('hex').slice(0, 8) : url);
+}
+const portadaDe = (slug) => vUrl('/blog/viajes/img/' + slug + '.jpg');
+
+module.exports = { duracionMp4, duracionDe, vUrl, portadaDe };

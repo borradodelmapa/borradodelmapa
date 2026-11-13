@@ -46,7 +46,7 @@ const PIE_Y_MENU = ref.slice(ref.indexOf('<footer class="pg-footer">'), ref.inde
 if (!PIE_Y_MENU.includes('app-bottom-bar')) throw new Error('No encuentro el menú de abajo en blog/perder-el-avion.html');
 
 // Web Story (8 nov 2026): si la entrada tiene `story`, debajo del vídeo sale el enlace a /stories/<slug>/ (la genera scripts/build-stories.js)
-const { duracionMp4 } = require('./video-info.cjs');
+const { duracionMp4, portadaDe } = require('./video-info.cjs');
 
 fs.mkdirSync(OUT_VIDEO, { recursive: true });
 caps.forEach((c, i) => {
@@ -243,7 +243,7 @@ function pagina(c) {
   const ant = vale(caps[c.n - 1]) ? caps[c.n - 1] : null, sig = vale(caps[c.n + 1]) ? caps[c.n + 1] : null;
   const yt = c.formato === '16:9' && c.youtube; // documental público: reproductor de YouTube al pulsar
   const url = `${SITE}/blog/viajes/${c.slug}`;
-  const img = `/blog/viajes/img/${c.slug}.jpg`;
+  const img = portadaDe(c.slug);
   const serieCaps = caps.filter((x) => x.serie === c.serie);
   const caps16 = c.secciones.filter((s) => s.min);
   const ld = [
@@ -269,7 +269,7 @@ function pagina(c) {
 ${s.min ? `      <p class="bd-cap"><a href="?t=${aSeg(s.min)}" data-t="${aSeg(s.min)}">▶ Ver en el vídeo · ${s.min}</a></p>\n` : ''}${s.p.map((p, j) => `      <p>${md(p)}</p>\n${j === 0 && s.foto ? figura(c, s.foto) : ''}`).join('').replace(/\n$/, '')}${s.enlaces ? `\n      <p class="bd-enlaces">${s.enlaces.map(([t, u]) => `<a href="${esc(u)}">${esc(t)}</a>`).join('')}</p>` : ''}
     </section>${cita(i)}`).join('\n\n');
   const indiceCaps = caps16.length ? `    <aside class="bd-ficha">\n      <h3>Capítulos</h3>\n      <ul>\n${caps16.map((s) => `        <li><a href="?t=${aSeg(s.min)}" data-t="${aSeg(s.min)}"><strong>${s.min}</strong> ${esc(s.h)}</a></li>`).join('\n')}\n      </ul>\n    </aside>\n` : '';
-  const hero = c.caratula ? { src: `/blog/viajes/img/${c.slug}.jpg`, credito: '' } : c.fotos ? foto(c, c.fotos.portada) : null;
+  const hero = c.caratula ? { src: portadaDe(c.slug), credito: '' } : c.fotos ? foto(c, c.fotos.portada) : null;
   const cabeza = `      <span class="bd-kicker">${esc(c.serie)} · ${esc(c.cap)}</span>
       <h1 class="bd-title">${esc(c.titulo)}</h1>
       <p class="bd-lead">${esc(c.resumen)}</p>`;
@@ -284,7 +284,7 @@ ${c.fuentes.map((f) => `        <li><a href="${esc(f.u)}" target="_blank" rel="n
     </details>`;
   const [dSlug, dNombre] = c.destino || []; // sin página de destino (p. ej. la India no tiene): se quita el «Más sobre…»
   const nx = (x, lado) => x ? `      <a class="bd-nx${lado === 'der' ? ' der' : ''}${x.formato === '16:9' ? ' h' : ''}" href="/blog/viajes/${x.slug}">
-        <img src="/blog/viajes/img/${x.slug}.jpg" alt="" loading="lazy">
+        <img src="${portadaDe(x.slug)}" alt="" loading="lazy">
         <span><small>${lado === 'der' ? 'Siguiente' : 'Anterior'}</small><b>${esc(x.titulo)}</b></span>
       </a>` : '';
   const nav = [nx(ant, 'izq'), nx(sig, 'der')].filter(Boolean).join('\n');
@@ -366,7 +366,7 @@ caps.forEach((c) => fs.writeFileSync(path.join(OUT, c.slug + '.html'), pagina(c)
 // ─── Portada del blog ───
 const series = [...new Set(caps.map((c) => c.serie))];
 const rail = (c) => `      <a class="bv-card${c.formato === '16:9' ? ' doc' : ''}" href="/blog/viajes/${c.slug}">
-        <div class="bv-poster"><img src="/blog/viajes/img/${c.slug}.jpg" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip"${c.formato === '16:9' ? ' style="left:auto;right:0"' : ''}>${c.formato === '16:9' ? 'Documental' : esc(capCorto(c))}</span>${c.dur ? `<span class="bv-dur">${c.dur.txt}</span><span class="bv-play" aria-hidden="true"></span>` : ''}</div>
+        <div class="bv-poster"><img src="${portadaDe(c.slug)}" alt="${esc(c.titulo)}" loading="lazy"><span class="bv-chip"${c.formato === '16:9' ? ' style="left:auto;right:0"' : ''}>${c.formato === '16:9' ? 'Documental' : esc(capCorto(c))}</span>${c.dur ? `<span class="bv-dur">${c.dur.txt}</span><span class="bv-play" aria-hidden="true"></span>` : ''}</div>
         <div class="bv-card-t">${esc(c.titulo)}</div>
         <div class="bv-card-m">${c.dur ? 'Vídeo' : 'Lectura'}</div>
       </a>`;
@@ -378,7 +378,7 @@ function fotoPais(p) {
   const elegida = path.join(OUT, 'img', 'paises', slugify(p.nombre) + '.jpg');
   if (fs.existsSync(elegida)) return '/blog/viajes/img/paises/' + slugify(p.nombre) + '.jpg';
   const c = [...p.lista].reverse().find((x) => x.fotos && x.fotos.portada && fs.existsSync(path.join(OUT, 'img', x.slug, x.fotos.portada + '.jpg')));
-  return c ? `/blog/viajes/img/${c.slug}/${c.fotos.portada}.jpg` : `/blog/viajes/img/${p.lista[p.lista.length - 1].slug}.jpg`;
+  return c ? `/blog/viajes/img/${c.slug}/${c.fotos.portada}.jpg` : portadaDe(p.lista[p.lista.length - 1].slug);
 }
 const bloquePaises = paises.length ? `  <style>
   .bv-paises{margin:22px 0 8px}
