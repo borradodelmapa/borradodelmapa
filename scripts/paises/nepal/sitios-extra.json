@@ -7,8 +7,14 @@
    "El terremoto de 1934 destruyó más de 6.000 edificios, y el del 25 de abril de 2015, de magnitud 7,8, dañó 116 monumentos, 67 de ellos por completo. Parte de lo que ves está reconstruido o sigue en obras."
   ],
   "fuentes": [
-   { "t": "Wikipedia: Bhaktapur", "u": "https://en.wikipedia.org/wiki/Bhaktapur" },
-   { "t": "UNESCO: Valle de Katmandú", "u": "https://whc.unesco.org/en/list/121" }
+   {
+    "t": "Wikipedia: Bhaktapur",
+    "u": "https://en.wikipedia.org/wiki/Bhaktapur"
+   },
+   {
+    "t": "UNESCO: Valle de Katmandú",
+    "u": "https://whc.unesco.org/en/list/121"
+   }
   ],
   "tip": [
    "Quédate a dormir. Casi todo el mundo viene en excursión de un día desde Katmandú y se marcha a media tarde.",
@@ -27,10 +33,22 @@
    "plan_b_lluvia": "Los museos están a cubierto: la Galería Nacional de Arte, en la plaza Durbar, y el museo de talla en madera, junto al templo de Dattatreya."
   },
   "faqs": [
-   { "q": "¿Cuántos días hacen falta en Bhaktapur?", "a": "Un día da para las plazas, los templos y la plaza de la Cerámica. Si puedes, quédate una noche: la ciudad cambia cuando se van las excursiones." },
-   { "q": "¿La entrada de Bhaktapur vale también para Patan?", "a": "No. Cada ciudad cobra su propia entrada. Guarda el tique de Bhaktapur durante la visita, porque lo piden en controles dentro del casco histórico." },
-   { "q": "¿Cuál es la mejor época para ir a Bhaktapur?", "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios. El monzón va, a grandes rasgos, de junio a septiembre." },
-   { "q": "¿Quedan daños del terremoto de 2015?", "a": "Sí. El terremoto del 25 de abril de 2015 dañó 116 monumentos de la ciudad, 67 de ellos por completo. Muchos están reconstruidos y otros siguen en obras." }
+   {
+    "q": "¿Cuántos días hacen falta en Bhaktapur?",
+    "a": "Un día da para las plazas, los templos y la plaza de la Cerámica. Si puedes, quédate una noche: la ciudad cambia cuando se van las excursiones."
+   },
+   {
+    "q": "¿La entrada de Bhaktapur vale también para Patan?",
+    "a": "No. Cada ciudad cobra su propia entrada. Guarda el tique de Bhaktapur durante la visita, porque lo piden en controles dentro del casco histórico."
+   },
+   {
+    "q": "¿Cuál es la mejor época para ir a Bhaktapur?",
+    "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios. El monzón va, a grandes rasgos, de junio a septiembre."
+   },
+   {
+    "q": "¿Quedan daños del terremoto de 2015?",
+    "a": "Sí. El terremoto del 25 de abril de 2015 dañó 116 monumentos de la ciudad, 67 de ellos por completo. Muchos están reconstruidos y otros siguen en obras."
+   }
   ]
  },
  "patan-nepal": {
@@ -41,8 +59,14 @@
    "Es la ciudad de los artesanos del metal, la madera y la piedra: los talleres newar llevan siglos trabajando para templos de toda Asia. El terremoto de 2015 dañó gravemente la plaza."
   ],
   "fuentes": [
-   { "t": "Wikipedia: Lalitpur", "u": "https://en.wikipedia.org/wiki/Lalitpur,_Nepal" },
-   { "t": "UNESCO: Valle de Katmandú", "u": "https://whc.unesco.org/en/list/121" }
+   {
+    "t": "Wikipedia: Lalitpur",
+    "u": "https://en.wikipedia.org/wiki/Lalitpur,_Nepal"
+   },
+   {
+    "t": "UNESCO: Valle de Katmandú",
+    "u": "https://whc.unesco.org/en/list/121"
+   }
   ],
   "tip": [
    "Métete en los patios. Detrás de puertas bajas que parecen de casa particular están los bahal, los patios de los antiguos monasterios budistas.",
@@ -61,10 +85,22 @@
    "plan_b_lluvia": "El Museo de Patan cubre de sobra una mañana de lluvia."
   },
   "faqs": [
-   { "q": "¿Patan y Lalitpur son lo mismo?", "a": "Sí. Lalitpur es el nombre oficial de la ciudad y Patan el tradicional. En newar se llama Yala." },
-   { "q": "¿Cuánto tiempo hace falta para ver Patan?", "a": "Medio día para la plaza Durbar y el museo. Con un día entero da tiempo a perderse por los patios y los talleres de los artesanos." },
-   { "q": "¿Sirve la entrada de Bhaktapur para Patan?", "a": "No. Cada ciudad cobra su propia entrada." },
-   { "q": "¿Cuál es la mejor época para ir a Patan?", "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios." }
+   {
+    "q": "¿Patan y Lalitpur son lo mismo?",
+    "a": "Sí. Lalitpur es el nombre oficial de la ciudad y Patan el tradicional. En newar se llama Yala."
+   },
+   {
+    "q": "¿Cuánto tiempo hace falta para ver Patan?",
+    "a": "Medio día para la plaza Durbar y el museo. Con un día entero da tiempo a perderse por los patios y los talleres de los artesanos."
+   },
+   {
+    "q": "¿Sirve la entrada de Bhaktapur para Patan?",
+    "a": "No. Cada ciudad cobra su propia entrada."
+   },
+   {
+    "q": "¿Cuál es la mejor época para ir a Patan?",
+    "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios."
+   }
   ]
  },
  "chitwan-nepal": {
@@ -75,9 +111,18 @@
    "Los tharu, el pueblo de estas llanuras, fueron desplazados cuando se creó el parque. El monzón va de mediados de junio a finales de septiembre y deja la mayor parte de la lluvia del año."
   ],
   "fuentes": [
-   { "t": "Wikipedia: Parque Nacional de Chitwan", "u": "https://en.wikipedia.org/wiki/Chitwan_National_Park" },
-   { "t": "UNESCO: Chitwan", "u": "https://whc.unesco.org/en/list/284" },
-   { "t": "NTNC: recuento de rinocerontes 2021", "u": "https://www.ntnc.org.np/news/752-one-horned-rhinos-nepal-determined-national-rhino-count-2021" }
+   {
+    "t": "Wikipedia: Parque Nacional de Chitwan",
+    "u": "https://en.wikipedia.org/wiki/Chitwan_National_Park"
+   },
+   {
+    "t": "UNESCO: Chitwan",
+    "u": "https://whc.unesco.org/en/list/284"
+   },
+   {
+    "t": "NTNC: recuento de rinocerontes 2021",
+    "u": "https://www.ntnc.org.np/news/752-one-horned-rhinos-nepal-determined-national-rhino-count-2021"
+   }
   ],
   "tip": [
    "Elige las salidas a pie, en canoa o en todoterreno. Los paseos a lomos de elefante se siguen ofreciendo, pero no los necesitas para ver rinocerontes.",
@@ -96,10 +141,22 @@
    "plan_b_lluvia": "Pregunta en Sauraha por el museo de cultura tharu, para entender a la gente de estas llanuras."
   },
   "faqs": [
-   { "q": "¿Cuál es la mejor época para ir a Chitwan?", "a": "De octubre a marzo. El monzón, de mediados de junio a finales de septiembre, concentra la mayor parte de la lluvia del año." },
-   { "q": "¿Se ven rinocerontes en Chitwan?", "a": "Es el mejor sitio de Nepal para intentarlo: el recuento de 2021 contó 694 rinocerontes indios en el parque, de los 752 del país. Aun así, son animales salvajes y nadie puede garantizarlo." },
-   { "q": "¿Cuántos días hacen falta?", "a": "Dos días completos permiten combinar una salida en todoterreno, otra a pie y una en canoa." },
-   { "q": "¿Chitwan es Patrimonio Mundial?", "a": "Sí, desde 1984. Fue además el primer parque nacional de Nepal, creado en 1973." }
+   {
+    "q": "¿Cuál es la mejor época para ir a Chitwan?",
+    "a": "De octubre a marzo. El monzón, de mediados de junio a finales de septiembre, concentra la mayor parte de la lluvia del año."
+   },
+   {
+    "q": "¿Se ven rinocerontes en Chitwan?",
+    "a": "Es el mejor sitio de Nepal para intentarlo: el recuento de 2021 contó 694 rinocerontes indios en el parque, de los 752 del país. Aun así, son animales salvajes y nadie puede garantizarlo."
+   },
+   {
+    "q": "¿Cuántos días hacen falta?",
+    "a": "Dos días completos permiten combinar una salida en todoterreno, otra a pie y una en canoa."
+   },
+   {
+    "q": "¿Chitwan es Patrimonio Mundial?",
+    "a": "Sí, desde 1984. Fue además el primer parque nacional de Nepal, creado en 1973."
+   }
   ]
  },
  "pokhara-nepal": {
@@ -110,8 +167,14 @@
    "Estuvo en una antigua ruta comercial entre China e India. Su aeropuerto internacional abrió el 1 de enero de 2023. Es una de las zonas más lluviosas del país, con unos 3.350 mm al año."
   ],
   "fuentes": [
-   { "t": "Wikipedia: Pokhara", "u": "https://en.wikipedia.org/wiki/Pokhara" },
-   { "t": "The Kathmandu Post: guía obligatorio desde abril de 2023", "u": "https://kathmandupost.com/money/2023/03/04/no-more-solo-treks-guides-mandatory-from-april-1" }
+   {
+    "t": "Wikipedia: Pokhara",
+    "u": "https://en.wikipedia.org/wiki/Pokhara"
+   },
+   {
+    "t": "The Kathmandu Post: guía obligatorio desde abril de 2023",
+    "u": "https://kathmandupost.com/money/2023/03/04/no-more-solo-treks-guides-mandatory-from-april-1"
+   }
   ],
   "tip": [
    "Madruga para ver las montañas. Las nubes suelen subir a media mañana y tapan los picos; al amanecer están limpios.",
@@ -130,10 +193,318 @@
    "plan_b_lluvia": "El Museo Internacional de la Montaña, abierto en 2004, cuenta la historia del alpinismo en el Himalaya y de los pueblos de la montaña."
   },
   "faqs": [
-   { "q": "¿Cuántos días hacen falta en Pokhara?", "a": "Tres días dan para el lago, el amanecer en Sarangkot y la Pagoda de la Paz. Si vas a hacer un trekking, añade los días de la ruta." },
-   { "q": "¿Se ve el Annapurna desde Pokhara?", "a": "Sí. Desde la ciudad se ven tres ochomiles (Dhaulagiri, Annapurna I y Manaslu) y el Machhapuchhre, de 6.993 metros. Lo más seguro es mirar al amanecer, antes de que suban las nubes." },
-   { "q": "¿Hace falta guía para hacer trekking desde Pokhara?", "a": "En abril de 2023 la Junta de Turismo de Nepal empezó a exigir guía a quienes caminan por su cuenta. La norma ha tenido cambios desde entonces, así que confírmala antes de salir en la Junta de Turismo o con una agencia autorizada." },
-   { "q": "¿Cuál es la mejor época para ir a Pokhara?", "a": "Octubre y noviembre, y de marzo a mayo. Es una de las zonas más lluviosas de Nepal, sobre todo durante el monzón." }
+   {
+    "q": "¿Cuántos días hacen falta en Pokhara?",
+    "a": "Tres días dan para el lago, el amanecer en Sarangkot y la Pagoda de la Paz. Si vas a hacer un trekking, añade los días de la ruta."
+   },
+   {
+    "q": "¿Se ve el Annapurna desde Pokhara?",
+    "a": "Sí. Desde la ciudad se ven tres ochomiles (Dhaulagiri, Annapurna I y Manaslu) y el Machhapuchhre, de 6.993 metros. Lo más seguro es mirar al amanecer, antes de que suban las nubes."
+   },
+   {
+    "q": "¿Hace falta guía para hacer trekking desde Pokhara?",
+    "a": "En abril de 2023 la Junta de Turismo de Nepal empezó a exigir guía a quienes caminan por su cuenta. La norma ha tenido cambios desde entonces, así que confírmala antes de salir en la Junta de Turismo o con una agencia autorizada."
+   },
+   {
+    "q": "¿Cuál es la mejor época para ir a Pokhara?",
+    "a": "Octubre y noviembre, y de marzo a mayo. Es una de las zonas más lluviosas de Nepal, sobre todo durante el monzón."
+   }
+  ]
+ },
+ "kathmandu-nepal": {
+  "sobre": true,
+  "p": [
+   "Katmandú es la capital de Nepal, a unos 1.400 metros de altitud. La ciudad ronda los 850.000 habitantes según el censo de 2021, y el área metropolitana, unos cuatro millones. Su nombre viene de Kasthamandap, un pabellón de madera de tres pisos.",
+   "El reino de Gorkha la tomó en 1768 y la convirtió en su capital. Dentro de la ciudad hay cuatro de los siete conjuntos del valle que son Patrimonio Mundial: la plaza Durbar, las estupas de Swayambhunath y Boudhanath y el templo de Pashupatinath, a orillas del río Bagmati, donde los hindúes incineran a sus muertos.",
+   "El terremoto del 25 de abril de 2015, de magnitud 7,8, mató a 8.856 personas en todo el país. En Katmandú se derrumbó la torre Dharahara y la plaza Durbar quedó muy dañada."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Katmandú",
+    "u": "https://en.wikipedia.org/wiki/Kathmandu"
+   },
+   {
+    "t": "UNESCO: Valle de Katmandú",
+    "u": "https://whc.unesco.org/en/list/121"
+   }
+  ],
+  "tip": [
+   "Ve a Boudhanath a primera o a última hora del día. Es cuando los vecinos dan la vuelta a la estupa, la kora, siempre en el sentido de las agujas del reloj.",
+   "Camina con ellos, en esa dirección y a su ritmo. Entiendes más de la ciudad en esas tres vueltas que en una mañana entera en Thamel."
+  ],
+  "ficha": {
+   "descripcion": "Capital y puerta de entrada al país. Reúne en poco espacio la plaza Durbar, las grandes estupas budistas y el templo hindú de Pashupatinath, y es la base desde la que se organiza cualquier trekking. El tráfico, el incienso y el patrimonio conviven sin separarse: no deja indiferente.",
+   "como_llegar": "Por el aeropuerto internacional Tribhuvan, el principal del país. Desde Europa no hay vuelos directos: lo habitual es una escala.",
+   "donde_dormir": {
+    "mochilero": "Casas de huéspedes en Thamel",
+    "medio": "Pequeños hoteles en Thamel y alrededores",
+    "comfort": "Hoteles de categoría repartidos por la ciudad"
+   },
+   "donde_comer": "Dal bhat en cualquier restaurante local y momos (empanadillas al vapor) por toda la ciudad. En Thamel hay de todo; los sitios más vistosos no suelen ser los mejores.",
+   "consejo_local": "Acuerda el precio del taxi antes de subir. Y cuenta con el aire: la contaminación es un problema serio en la ciudad, así que si eres sensible, lleva mascarilla para las calles con más tráfico.",
+   "plan_b_lluvia": "Un día de museos, o de papeles: si vas a hacer trekking, aprovecha para tramitar los permisos."
+  },
+  "faqs": [
+   {
+    "q": "¿Cuántos días hacen falta en Katmandú?",
+    "a": "Tres días permiten ver la plaza Durbar, Swayambhunath, Boudhanath y Pashupatinath, y dedicar un día a Patan o a Bhaktapur."
+   },
+   {
+    "q": "¿Qué es Patrimonio Mundial en Katmandú?",
+    "a": "Cuatro de los siete conjuntos del valle están en la ciudad: la plaza Durbar, las estupas de Swayambhunath y Boudhanath y el templo de Pashupatinath. Los otros tres son las plazas Durbar de Patan y Bhaktapur y el templo de Changu Narayan."
+   },
+   {
+    "q": "¿Cuál es la mejor época para ir?",
+    "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios."
+   },
+   {
+    "q": "¿Se nota todavía el terremoto de 2015?",
+    "a": "Sí. La plaza Durbar quedó muy dañada y la torre Dharahara se derrumbó. Parte del patrimonio está reconstruido y parte sigue en obras."
+   }
+  ]
+ },
+ "lumbini-nepal": {
+  "sobre": true,
+  "p": [
+   "Lumbini, en el distrito de Rupandehi, en las llanuras del Terai, es el lugar donde la tradición sitúa el nacimiento de Siddharta Gautama, Buda, hacia el año 563 antes de nuestra era según la cronología más usada. Es Patrimonio Mundial desde 1997.",
+   "El pilar del emperador Ashoka, con la inscripción de su visita en el siglo III antes de nuestra era, se redescubrió en 1896. Dentro del templo de Maya Devi, una piedra señala el punto exacto del nacimiento; las excavaciones de 2013 hallaron debajo una estructura de madera aún más antigua.",
+   "Alrededor del Jardín Sagrado se extiende la zona monástica, donde países budistas de todo el mundo han ido levantando sus monasterios, y siguen haciéndolo."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Lumbini",
+    "u": "https://en.wikipedia.org/wiki/Lumbini"
+   },
+   {
+    "t": "UNESCO: Lumbini",
+    "u": "https://whc.unesco.org/en/list/666"
+   }
+  ],
+  "tip": [
+   "El recinto es mucho más grande de lo que parece en el mapa: los monasterios están repartidos a lo largo de un canal central, lejos unos de otros.",
+   "Recórrelo en bicicleta o en rickshaw, y deja el Jardín Sagrado para primera hora, antes del calor y de los grupos de peregrinos."
+  ],
+  "ficha": {
+   "descripcion": "El lugar donde la tradición sitúa el nacimiento de Buda, Patrimonio Mundial desde 1997. El recinto sagrado incluye el templo de Maya Devi, el pilar de Ashoka y monasterios construidos por países budistas de todo el mundo. Es a la vez un lugar de peregrinación vivo y un yacimiento arqueológico.",
+   "como_llegar": "Está a media hora por carretera de Bhairahawa (Siddharthanagar), donde hay aeropuerto. Desde Katmandú son unas diez horas por carretera. También se llega desde Pokhara en autobús y desde la frontera india de Sunauli.",
+   "donde_dormir": {
+    "mochilero": "Casas de huéspedes en Bhairahawa o junto al recinto",
+    "medio": "Hoteles en la zona de Lumbini",
+    "comfort": "Hoteles de categoría cerca del recinto"
+   },
+   "donde_comer": "Dentro del recinto hay poco donde elegir. Lo habitual es comer en los alrededores de la entrada o en Bhairahawa.",
+   "consejo_local": "Es un lugar de culto: viste con respeto y descálzate donde lo pidan. Llega al Jardín Sagrado temprano; a mediodía el calor del Terai aprieta.",
+   "plan_b_lluvia": "Los monasterios de la zona monástica están a cubierto y se pueden visitar con lluvia."
+  },
+  "faqs": [
+   {
+    "q": "¿Qué hay que ver en Lumbini?",
+    "a": "El Jardín Sagrado, con el templo de Maya Devi, la piedra que marca el lugar del nacimiento de Buda, el estanque sagrado y el pilar de Ashoka; y la zona monástica, con monasterios de muchos países."
+   },
+   {
+    "q": "¿Cuánto tiempo hace falta?",
+    "a": "Un día completo. El recinto es grande: lo mejor es recorrerlo en bicicleta o en rickshaw."
+   },
+   {
+    "q": "¿Cuál es la mejor época para ir a Lumbini?",
+    "a": "De noviembre a febrero. Está en las llanuras del Terai y el resto del año hace mucho calor."
+   },
+   {
+    "q": "¿Nació Buda en Nepal?",
+    "a": "La tradición sitúa su nacimiento en Lumbini, hoy Nepal. La fecha más usada es hacia el 563 antes de nuestra era, aunque hay otras cronologías. La inscripción del pilar de Ashoka, del siglo III antes de nuestra era, señala el lugar."
+   }
+  ]
+ },
+ "langtang-nepal": {
+  "sobre": true,
+  "p": [
+   "El Parque Nacional de Langtang se creó en 1976 y fue el primer parque nacional del Himalaya nepalí. Ocupa 1.710 km² al norte de Katmandú, desde bosques por debajo de los 1.000 metros hasta el hielo permanente. Su cima más alta es el Langtang Lirung, de más de 7.200 metros.",
+   "El 25 de abril de 2015, una avalancha provocada por el terremoto sepultó el pueblo de Langtang y mató al menos a 215 personas. El valle se ha reconstruido, y el trekking es hoy su principal fuente de ingresos.",
+   "En el parque está también el lago sagrado de Gosainkunda, a unos 4.300 metros."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Parque Nacional de Langtang",
+    "u": "https://en.wikipedia.org/wiki/Langtang_National_Park"
+   }
+  ],
+  "tip": [
+   "Sube despacio y quédate dos noches en Kyanjin Gompa, el último pueblo del valle. La primera es para aclimatar; la segunda te regala un día entero para subir a un mirador sin prisa y sin mochila.",
+   "Y duerme y come en las casas de las familias del valle: después de 2015, cada noche que pasas allí es lo que mantiene el pueblo en pie."
+  ],
+  "ficha": {
+   "descripcion": "El valle glaciar más cercano a Katmandú. El terremoto de 2015 lo golpeó de lleno, pero está reconstruido y el trekking es vital para su gente. Las vistas del Langtang Lirung y la cultura tamang son sus puntos fuertes, con mucha menos gente que en el Everest o el Annapurna.",
+   "como_llegar": "Por carretera desde Katmandú hasta Syabrubesi, donde empieza el camino. Es un viaje largo y lento: cuenta con el día entero.",
+   "donde_dormir": {
+    "mochilero": "Albergues de montaña a lo largo del valle",
+    "medio": "Albergues con habitación propia en los pueblos grandes",
+    "comfort": "No hay alojamiento de lujo en ruta; los mejores albergues están en Kyanjin Gompa"
+   },
+   "donde_comer": "Se come en los propios albergues: dal bhat, sopas y fideos. En Kyanjin Gompa hacen queso de yak.",
+   "consejo_local": "Infórmate antes de salir de las normas del momento sobre guías y permisos: en abril de 2023 Nepal empezó a exigir guía a quien camina por su cuenta, y la norma ha tenido cambios. Y respeta la altitud: sube despacio aunque te encuentres bien.",
+   "plan_b_lluvia": "Con niebla o mal tiempo, quédate en el pueblo: el monasterio de Kyanjin Gompa y la quesería se visitan a cubierto."
+  },
+  "faqs": [
+   {
+    "q": "¿Cuántos días hacen falta para el trekking de Langtang?",
+    "a": "Alrededor de una semana, contando la ida y la vuelta por carretera desde Katmandú y un día de margen para aclimatar."
+   },
+   {
+    "q": "¿Qué pasó en Langtang en el terremoto de 2015?",
+    "a": "Una avalancha provocada por el terremoto del 25 de abril de 2015 sepultó el pueblo de Langtang y mató al menos a 215 personas. El valle se ha reconstruido y vuelve a recibir caminantes."
+   },
+   {
+    "q": "¿Cuál es la mejor época?",
+    "a": "Octubre y noviembre, y de marzo a mayo."
+   },
+   {
+    "q": "¿Hace falta guía?",
+    "a": "En abril de 2023 Nepal empezó a exigir guía a quien camina por su cuenta. La norma ha tenido cambios desde entonces: confírmala antes de salir en la Junta de Turismo o con una agencia autorizada."
+   }
+  ]
+ },
+ "circuito-annapurna-nepal": {
+  "sobre": true,
+  "p": [
+   "El Circuito del Annapurna rodea el macizo del Annapurna, en el centro de Nepal. Mide entre 160 y 230 km, según dónde se use transporte, y su punto más alto es el paso de Thorong La, a 5.416 metros. La zona se abrió a los caminantes extranjeros en 1977.",
+   "Casi todo el mundo lo hace en sentido contrario a las agujas del reloj: así se gana altura más despacio y el cruce del paso es más fácil y más seguro. Buena parte del recorrido queda a la sombra de lluvia de las montañas, pero el Thorong La suele estar cerrado por la nieve de diciembre a marzo.",
+   "Las carreteras han cambiado el trekking: hasta tres cuartas partes del trazado original están afectadas. En octubre de 2014, una ventisca repentina mató a más de 43 personas en la zona del paso."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Circuito del Annapurna",
+    "u": "https://en.wikipedia.org/wiki/Annapurna_Circuit"
+   }
+  ],
+  "tip": [
+   "Busca las marcas de los senderos NATT. Son las rutas alternativas que se trazaron para esquivar la pista de coches, y devuelven al circuito el camino que tenía antes de la carretera.",
+   "Cuestan un poco más de tiempo, pero cambian el polvo de los todoterrenos por bosque y pueblos. Pregunta por ellas en cada albergue: no siempre están bien señaladas."
+  ],
+  "ficha": {
+   "descripcion": "Uno de los grandes trekkings del mundo: rodea el macizo del Annapurna y cruza el paso de Thorong La, a 5.416 metros. En dos o tres semanas pasa del bosque subtropical al paisaje alpino y al altiplano seco de cultura tibetana. Las carreteras han cambiado el recorrido clásico, pero sigue mereciendo la pena.",
+   "como_llegar": "El comienzo habitual es Besisahar, a unas siete horas por carretera de Katmandú. Muchos caminantes empiezan más arriba para ahorrarse los tramos con carretera.",
+   "donde_dormir": {
+    "mochilero": "Albergues de montaña en todos los pueblos de la ruta",
+    "medio": "Albergues con habitación propia en los pueblos grandes",
+    "comfort": "No hay alojamiento de lujo en ruta; los albergues más cómodos están en Manang"
+   },
+   "donde_comer": "Se come en los albergues: dal bhat, pasta y sopas. Cuanto más arriba, más caro, porque todo sube a hombros o a lomos de animales.",
+   "consejo_local": "Lleva efectivo en billetes pequeños: en altura no hay cajeros. No te saltes los días de aclimatación antes del paso, y pregunta cada tarde por el estado del Thorong La: si hay nieve o mal tiempo, se espera o se da la vuelta.",
+   "plan_b_lluvia": "Si el paso está cerrado por nieve o por mal tiempo, la única decisión sensata es esperar o volver por donde has venido. No improvises pasos alternativos."
+  },
+  "faqs": [
+   {
+    "q": "¿Cuántos días dura el Circuito del Annapurna?",
+    "a": "Entre 15 y 20 días en su versión completa, contando los traslados. Con las carreteras, muchos caminantes hacen solo una parte."
+   },
+   {
+    "q": "¿En qué sentido se hace?",
+    "a": "En sentido contrario a las agujas del reloj: se gana altura más despacio y el cruce del Thorong La, a 5.416 metros, es más fácil y más seguro."
+   },
+   {
+    "q": "¿Cuál es la mejor época?",
+    "a": "Octubre y noviembre son los meses con más gente y mejor tiempo. De diciembre a marzo el paso de Thorong La suele estar cerrado por la nieve."
+   },
+   {
+    "q": "¿Es peligroso?",
+    "a": "El riesgo real es la altitud y el tiempo en el paso. En octubre de 2014, una ventisca repentina mató a más de 43 personas. Sube despacio, aclimata y no cruces con mal pronóstico."
+   }
+  ]
+ },
+ "everest-base-camp-nepal": {
+  "sobre": true,
+  "p": [
+   "El campo base sur del Everest está en Nepal, a 5.364 metros. Cada año llegan caminando unas 40.000 personas desde el aeropuerto de Lukla, a 2.846 metros, al que se vuela desde Katmandú.",
+   "El camino pasa por Namche Bazaar (3.440 metros), Dingboche (4.260) y Gorakshep, y sube al mirador de Kala Patthar, a 5.545 metros, antes de llegar al campo base.",
+   "El 25 de abril de 2015, el terremoto provocó una avalancha que barrió el campo base y mató al menos a 19 personas. En junio de 2022 las autoridades anunciaron que quieren bajarlo entre 200 y 400 metros, porque el glaciar de Khumbu se está derritiendo."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Campos base del Everest",
+    "u": "https://en.wikipedia.org/wiki/Everest_base_camps"
+   }
+  ],
+  "tip": [
+   "Deja días de margen al final. Los vuelos de Lukla dependen del tiempo y se cancelan a menudo: no reserves el vuelo de vuelta a casa para el día siguiente de bajar.",
+   "Y sube despacio aunque te encuentres bien. Los días de descanso en Namche y en Dingboche no son tiempo perdido: son lo que hace que llegues."
+  ],
+  "ficha": {
+   "descripcion": "El trekking más famoso del planeta: sube hasta los 5.364 metros del campo base sur, con vistas del Everest, el Lhotse, el Nuptse y el Ama Dablam. La cultura sherpa, con los monasterios y los pueblos del Khumbu, es tan importante como las montañas.",
+   "como_llegar": "En avión desde Katmandú a Lukla, a 2.846 metros, donde empieza el camino. Los vuelos se cancelan con frecuencia por el tiempo. La alternativa es llegar por carretera más abajo y caminar varios días más.",
+   "donde_dormir": {
+    "mochilero": "Albergues de montaña a lo largo de toda la ruta",
+    "medio": "Albergues con más comodidades en Namche Bazaar",
+    "comfort": "Algunos hoteles de montaña en la parte baja del valle"
+   },
+   "donde_comer": "Se come en los albergues: dal bhat, sopas, fideos. En Namche Bazaar hay panaderías y cafés.",
+   "consejo_local": "Lleva efectivo desde abajo: en altura no puedes contar con cajeros. El mal de altura no distingue entre gente en forma y gente que no lo está: si los síntomas empeoran, la única solución es bajar.",
+   "plan_b_lluvia": "Con nubes bajas, quédate en Namche: el pueblo y su mercado dan para un día entero y, además, aclimatas."
+  },
+  "faqs": [
+   {
+    "q": "¿A qué altura está el campo base del Everest?",
+    "a": "El campo base sur, en Nepal, está a 5.364 metros. El mirador de Kala Patthar, desde donde mejor se ve el Everest, está a 5.545."
+   },
+   {
+    "q": "¿Cuántos días hacen falta?",
+    "a": "Unas dos semanas entre subir, bajar y aclimatar, más algún día de margen por si se cancela el vuelo de Lukla."
+   },
+   {
+    "q": "¿Cuál es la mejor época?",
+    "a": "Octubre y noviembre, y de marzo a mayo."
+   },
+   {
+    "q": "¿Van a mover el campo base?",
+    "a": "En junio de 2022 las autoridades de Nepal anunciaron que quieren trasladarlo entre 200 y 400 metros más abajo, porque el glaciar de Khumbu se derrite y pierde espesor."
+   }
+  ]
+ },
+ "upper-mustang-nepal": {
+  "sobre": true,
+  "p": [
+   "El Alto Mustang es el antiguo reino de Lo, fundado en 1380 y ligado durante siglos al Tíbet. Pasó a depender de Nepal en 1795 y su monarquía terminó el 7 de octubre de 2008. Su último rey, Jigme Dorje Palbar Bista, murió en 2016.",
+   "Estuvo cerrado a los extranjeros hasta 1992. Su capital, Lo Manthang, es una ciudad amurallada que ha cambiado muy poco. Viven allí unas 7.000 personas, en su mayoría de lengua tibetana.",
+   "Está a la sombra de lluvia del Annapurna y el Dhaulagiri: caen entre 250 y 400 mm al año. En 2007, un pastor encontró en unas cuevas 55 pinturas sobre la vida de Buda."
+  ],
+  "fuentes": [
+   {
+    "t": "Wikipedia: Alto Mustang",
+    "u": "https://en.wikipedia.org/wiki/Upper_Mustang"
+   }
+  ],
+  "tip": [
+   "Mustang es el trekking del verano. Cuando el monzón cierra el resto del Himalaya nepalí, aquí apenas llueve, porque las montañas del sur paran las nubes.",
+   "Si puedes elegir fechas, pregunta cuándo cae ese año el festival Tiji de Lo Manthang: es cuando la ciudad se llena de su propia gente."
+  ],
+  "ficha": {
+   "descripcion": "El antiguo reino budista de Lo, cerrado a los extranjeros hasta 1992: desierto de altura, cañones de colores y cuevas excavadas en los acantilados. Su capital, Lo Manthang, sigue dentro de sus murallas. Es una zona restringida, con permiso especial y guía obligatorios, lo que mantiene bajo el número de visitantes.",
+   "como_llegar": "Desde Pokhara se llega a Jomsom en avión o por carretera, y de ahí a Kagbeni, donde empieza la zona restringida. El resto se hace caminando o en todoterreno.",
+   "donde_dormir": {
+    "mochilero": "Albergues sencillos en los pueblos de la ruta",
+    "medio": "Albergues en Lo Manthang",
+    "comfort": "Pequeños hoteles en Lo Manthang"
+   },
+   "donde_comer": "Se come en los albergues, con cocina tibetana: tsampa, thukpa (sopa de fideos) y momos. Lleva algo de comida desde Jomsom: arriba hay poco suministro.",
+   "consejo_local": "El permiso de zona restringida se tramita con una agencia autorizada antes de salir, y obliga a ir con guía. El importe ha cambiado con los años: confírmalo con la agencia cuando reserves.",
+   "plan_b_lluvia": "Aquí casi no llueve. Lo que hay es viento, sobre todo por la tarde: es el momento de visitar por dentro los monasterios de Lo Manthang."
+  },
+  "faqs": [
+   {
+    "q": "¿Hace falta permiso para ir al Alto Mustang?",
+    "a": "Sí. Es una zona restringida: hace falta un permiso especial, que se tramita con una agencia autorizada, e ir con guía. El importe ha cambiado con los años, así que confírmalo al reservar."
+   },
+   {
+    "q": "¿Cuál es la mejor época?",
+    "a": "De mayo a octubre. Al estar a la sombra de lluvia del Annapurna y el Dhaulagiri, se puede caminar incluso durante el monzón."
+   },
+   {
+    "q": "¿Cuántos días hacen falta?",
+    "a": "Unos diez días para llegar a Lo Manthang y volver."
+   },
+   {
+    "q": "¿Desde cuándo se puede visitar?",
+    "a": "Desde 1992. Antes era un territorio cerrado a los extranjeros."
+   }
   ]
  }
 }

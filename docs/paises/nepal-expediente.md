@@ -67,6 +67,14 @@ catorce ochomiles. Esa escalera de climas, y el hecho de que nunca fue colonia, 
 4. Textos rotos por quitar precios («45 min, menos.») y «en 1 días» en las preguntas → **corregido** con ficha y preguntas propias.
 5. **SIN CORREGIR (es la guía, no la ficha):** en la guía de Bhaktapur la parada 3 se llama «Bhaktapur Durbar Square» pero el texto describe la plaza de Dattatreya; y dice «Palacio de los 55 Ventanas». (Las fechas «siglo XV» de la Ventana del Pavo Real y de Siddha Pokhari coinciden con la mayoría de fuentes: no son error.) Revisión parada a parada de las cuatro guías: ver «Auditoría de las guías» abajo.
 
+## Los otros seis sitios (añadidos el 13 nov 2026, noche)
+Katmandú, Lumbini, Langtang, Circuito del Annapurna, campo base del Everest y Alto Mustang: «Sobre», Tip de Salma, ficha y preguntas en `scripts/paises/nepal/sitios-extra.json`. Fuente de cada uno: su artículo de Wikipedia [F14-F19].
+- ⚠ Katmandú: la fuente da 856.767 y 845.767 habitantes, y 1.400 y 1.324 m → en la web, «ronda los 850.000» y «unos 1.400 metros».
+- ⚠ Langtang Lirung: 7.234 m en la ficha antigua, 7.245 m en la fuente → en la web, «más de 7.200 metros».
+- ⚠ Alto Mustang: permiso de 500 USD por 10 días según la fuente; no se da importe en la web (cambia) y se manda a confirmarlo con la agencia.
+- Quitado de la ficha antigua: el «paso alternativo de Mesokanto La» del Annapurna (consejo arriesgado y sin fuente), nombres de hoteles, todos los precios y «templos en el barrio de Thamel».
+- Sin fuente enlazada, por ser experiencia de viaje: la kora de Boudhanath, la bicicleta en Lumbini, las cancelaciones de vuelos de Lukla y los senderos NATT (estos sí figuran en F17).
+
 ## Auditoría de las guías de Nepal (13 nov 2026; guías creadas en marzo de 2026)
 | Guía | Parada | Qué pasa | Estado |
 |---|---|---|---|
@@ -99,6 +107,12 @@ catorce ochomiles. Esa escalera de climas, y el hecho de que nunca fue colonia, 
 
 - [F12] Barasinga en Nepal: https://en.wikipedia.org/wiki/Barasingha
 - [F13] Bishazari Tal: https://en.wikipedia.org/wiki/Bishazari_Tal
+- [F14] Katmandú: https://en.wikipedia.org/wiki/Kathmandu
+- [F15] Lumbini: https://en.wikipedia.org/wiki/Lumbini
+- [F16] Langtang: https://en.wikipedia.org/wiki/Langtang_National_Park
+- [F17] Circuito del Annapurna: https://en.wikipedia.org/wiki/Annapurna_Circuit
+- [F18] Campos base del Everest: https://en.wikipedia.org/wiki/Everest_base_camps
+- [F19] Alto Mustang: https://en.wikipedia.org/wiki/Upper_Mustang
 
 ## Lo aprendido
 - Las fichas del KV de la primera tanda llevaban datos falsos y, al quitarles los precios, frases rotas. Antes de dar por bueno un país antiguo: leer cada ficha.
