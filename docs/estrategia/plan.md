@@ -6,7 +6,7 @@ Manda: CLAUDE.md, `docs/video-checklist.md` (L1, L2, P13), `docs/sistemas.md`. E
 ---
 
 ## 0 · LARGOS MARTES Y JUEVES (decisión de Paco, 11 nov 2026). Manda sobre el calendario de abajo
-Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts = avances de un largo. Si un largo no está hecho y aprobado por Paco, el hueco se queda vacío. Se revisa el lun 14 dic.
+Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts = avances de un largo. **Un día, un vídeo (Paco, 13 nov):** los días de largo no sale short; los shorts van lunes y miércoles (lunes: 16 y 23 nov, 30 nov, 7 y 14 dic). Si un largo no está hecho y aprobado por Paco, el hueco se queda vacío. Se revisa el lun 14 dic.
 
 | Día | Largo | Estado |
 |---|---|---|
