@@ -1,0 +1,58 @@
+/* ayuda.css — diseño de las PÁGINAS DE AYUDA del blog («fichas de emergencia»: tarjeta robada, vuelo perdido…).
+   Solo para blog/<imprevisto>.html (article.ay). Las guías y las historias NO lo cargan (Paco, 13 nov 2026).
+   Va después de blog-viajes.css y reutiliza sus piezas (.bd-hero, .bd-stats): aquí solo lo propio. */
+
+/* 1 · Cabecera con foto: la de las historias, más baja (quien llega tiene prisa) */
+.ay .bd-hero { min-height:clamp(330px,54vh,460px); margin-top:-28px; }
+.ay .bd-hero > img { object-position:center 62%; }
+.ay .bd-hero::after { background:linear-gradient(180deg,rgba(13,15,16,.25) 0%,rgba(13,15,16,.6) 45%,rgba(13,15,16,.96) 100%); }
+.ay .bd-hero-txt { padding-bottom:26px; }
+.ay .bd-hero .bg-kicker { margin:0 0 12px; color:#f2f2f2; }
+.pg .ay .bd-hero .blog-title { color:#fff; font-size:clamp(31px,7.4vw,46px); margin:0 0 12px; text-shadow:0 2px 18px rgba(0,0,0,.55); }
+.pg .ay .bd-hero .blog-subtitle { color:#f2f2f2 !important; font-size:17px !important; margin:0 !important; text-shadow:0 1px 10px rgba(0,0,0,.6); }
+
+/* 2 · «Si te acaba de pasar»: los pasos en grande, cada uno lleva a su sección */
+.ay-urgente { margin:0 0 30px; border:2px solid var(--accent); background:var(--bg-row); }
+.ay-urgente-t { margin:0; padding:10px 14px; background:var(--accent); color:var(--text-on-accent); font-family:var(--font-cond); font-weight:800; font-size:17px; letter-spacing:.1em; text-transform:uppercase; }
+.pg .ay-urgente a { display:flex; align-items:center; gap:14px; padding:13px 14px; border-top:1px solid var(--border); color:var(--text-primary); text-decoration:none; }
+.ay-urgente a:first-of-type { border-top:0; }
+.ay-urgente a b { flex:0 0 34px; font-family:var(--font-cond); font-weight:800; font-size:38px; line-height:1; color:var(--accent); text-align:center; }
+.ay-urgente a span { flex:1; font-size:16px; line-height:1.35; }
+.ay-urgente a span strong { display:block; font-size:17px; color:var(--text-primary); }
+.ay-urgente a::after { content:'›'; font-family:var(--font-cond); font-weight:800; font-size:30px; line-height:1; color:var(--accent); }
+.pg .ay-urgente a:hover { background:rgba(244,99,11,.12); }
+
+/* 3 · Pasos con número grande (sustituye al «01, 02…» pequeño de blog-viajes.css) */
+.pg .ay h2::before { content:none; }
+.pg .ay h2 { scroll-margin-top:84px; padding-top:14px; border-top:3px solid var(--accent); margin-top:46px; }
+.pg .ay h2.ay-paso { display:flex; align-items:center; gap:14px; border-top:0; padding-top:0; }
+.ay-paso .ay-n { flex:0 0 auto; min-width:58px; padding:2px 8px 4px; background:var(--accent); color:var(--text-on-accent); font-family:var(--font-cond); font-weight:800; font-size:54px; line-height:1; text-align:center; }
+.ay-paso .ay-n small { display:block; font-size:11px; letter-spacing:.16em; font-weight:800; }
+
+/* 4 · Teléfonos que se pulsan */
+.ay-tels { margin:14px 0 18px; border:1px solid var(--border); }
+.ay-tel-fila { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:12px 14px; border-top:1px solid var(--border); }
+.ay-tel-fila:first-child { border-top:0; }
+.ay-tel-fila > div { flex:1 1 200px; }
+.ay-tel-fila b { display:block; font-family:var(--font-cond); font-weight:800; font-size:20px; letter-spacing:.04em; text-transform:uppercase; color:var(--text-primary); }
+.ay-tel-fila small { display:block; font-size:14px; line-height:1.35; color:var(--text-secondary); }
+.pg a.ay-tel { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; background:var(--accent); color:var(--text-on-accent); font-family:var(--font-cond); font-weight:800; font-size:19px; letter-spacing:.03em; text-decoration:none; white-space:nowrap; }
+.ay-tel::before { content:'LLAMAR'; font-size:11px; letter-spacing:.14em; padding-right:8px; border-right:1px solid rgba(0,0,0,.35); }
+.pg a.ay-tel:hover { filter:brightness(1.1); }
+.ay-tel-pie { margin:0; padding:10px 14px; border-top:1px solid var(--border); font-size:14px !important; color:var(--text-secondary); }
+
+/* 5 · Cifras: la pieza .bd-stats de las historias, con aire propio */
+.ay .bd-stats { margin:20px 0 22px; }
+.ay .bd-stat span { font-size:13px; color:var(--text-secondary); }
+
+/* 6 · Tip de Salma con más presencia */
+.pg .ay .ay-tip { position:relative; margin:34px 0; padding:22px 18px 18px 18px; background:rgba(244,99,11,.10); border:0; border-left:5px solid var(--accent); }
+.ay .ay-tip .bloque-label { display:flex; align-items:center; gap:12px; margin:0 0 12px; font-family:var(--font-cond); font-weight:800; font-size:24px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); }
+.ay .ay-tip .salma-avatar { width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); }
+.ay .ay-tip p { font-size:17px; color:var(--text-primary); }
+
+@media (min-width:760px) {
+  .ay .bd-hero { margin-left:0; margin-right:0; margin-top:0; }
+  .ay .bd-hero-txt { padding:0 28px 30px; }
+  .ay-urgente a b { font-size:44px; flex-basis:42px; }
+}
