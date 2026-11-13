@@ -2,7 +2,7 @@
 
 **v2.1 (Paco, 13 nov):** primera imagen = vuelo de dron (excepción a M15 solo en este vídeo); lo muy práctico primero (qué necesito, cuándo ir, seguridad); «por qué se llama Filipinas» se promete en el gancho y se cuenta al final; texto del gancho en pantalla más sugerente; el idioma de casa es el tagalo (comprobado en el censo).
 
-**Estado: APROBADO por Paco el 13 nov 2026 («Sí, adelante»): orden, gancho y texto. Título elegido (13 nov). Pendiente: carátula (apartado 3). La voz completa, tras la frase de prueba con coste (F5).**
+**Estado: APROBADO por Paco el 13 nov 2026 («Sí, adelante»): orden, gancho y texto. Título elegido (13 nov). Carátula elegida (13 nov). La voz completa, tras la frase de prueba con coste (F5).**
 Sale para el **mar 15 dic, 10:00, solo YouTube** (plan §0). Rehace la v1 (`filipinas-apertura-guion-direccion.md`, montada el 5 nov, 6:45, nunca publicada).
 Datos: los `[F]` son del expediente aprobado (`filipinas-expediente.md`). Los `[N…]` son **nuevos, buscados hoy**; van a la voz solo si Paco da el OK a la fuente (F4).
 
@@ -32,10 +32,7 @@ Prueba A/B (Y17, si Studio la deja): «Por esto FILIPINAS no es lo que crees �
 En inglés (Y10): «The PHILIPPINES: The Reality Nobody Tells You Before You Go 🇵🇭».
 Estudio (Y12): `docs/paises/filipinas-apertura-estudio-titulo.md`.
 
-**Carátulas (persona y acción, 3-4 palabras, sello BORRADO DEL MAPA):**
-- A · barquero en su bangka entre islas (foto de la v1) + «FUE ESPAÑOLA».
-- B · mujer ifugao en la terraza + «7.641 ISLAS».
-- C · rostro tatuado kalinga + «¿Y EL ESPAÑOL?».
+**Carátula ELEGIDA por Paco (13 nov): B «destacada».** Mujer ifugao de Banaue (foto W33 de pueblos/ifugao, Julia Sumangil, CC BY-SA 4.0) muy cerca y mirando a cámara; fondo oscurecido y desenfocado; persona con más color y contraste; «7.641» enorme en naranja #F4630B y «ISLAS» en blanco (Barlow Condensed 900) en el lado libre, sin tapar la cara; sello BORRADO DEL MAPA arriba a la derecha. Maqueta: `salma marketing/filipinas/apertura/caratulas/maqueta-B-destacada-y-antes.png` (y `maqueta-B.html`). Para la final: que no se corte el tocado de plumas ni lo roce el sello; si hay herramienta, persona recortada con borde fino. Es la portada del blog y de la Web Story (Y15) y va en el primer fotograma (M11).
 
 ## 4 · GUION v2.1 (pregunta en pantalla · voz · imagen). Orden: gancho → lo muy práctico → qué ver → el país → la historia → por qué se llama Filipinas (al final)
 
