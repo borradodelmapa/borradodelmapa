@@ -5,7 +5,7 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 
 | Id | Tarea | Quién | Estado | Siguiente paso | Falta de Paco | Para |
 |---|---|---|---|---|---|---|
-| T1 | Largo «Viajar a FILIPINAS: la realidad que nadie te cuenta» | 🎬 Vídeo | 🙋 | Exportar en calidad máxima → subida a Studio → programar → tarea del comentario | (1) qué planos de dron se mueven raro (editor localhost:8114) · (2) OK al texto ampliado de Mindanao (~480 car., mapa nuevo, 0 €) · (3) arrastrar el archivo a Studio | mar 15 dic 10:00 |
+| T1 | Largo «Viajar a FILIPINAS: la realidad que nadie te cuenta» | 🎬 Vídeo | 🔨 | Remontaje con el texto ampliado de Mindanao (OK de Paco, 423 car. del saldo, 0 € extra, mapa nuevo) y los 14 clips de dron pasados a 30 fps con interpolación (los tirones venían de 24/25/50 fps) → enlace para que Paco lo vea (F8) → exportar → Studio | verlo y oírlo · arrastrar el archivo a Studio | mar 15 dic 10:00 |
 | T2 | Entrada de blog, Web Story y web de Filipinas con ese largo (misma entrada: /blog/viajes/filipinas-historia-culturas-antes-de-viajar) | 🌍 Web | 📥 | Espera el vídeo ligero y los capítulos definitivos de Vídeo | verlo en local antes de subir | antes del 15 dic |
 | T3 | Largos de Tailandia 1, 2 y 3 | 📈 → 🎬 | ⏸ | Empieza al cerrar Filipinas (orden de Paco: «terminamos con Filipinas y seguimos con Tailandia») | aprobar guion, título y carátula | mar 1 · mar 8 · jue 10 dic |
 | T4 | Largo del jue 17 dic | 📈 | ⏸ | Proponer tema | decidir | jue 17 dic |
