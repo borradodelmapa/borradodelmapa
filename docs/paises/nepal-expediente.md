@@ -22,9 +22,9 @@ catorce ochomiles. Esa escalera de climas, y el hecho de que nunca fue colonia, 
 
 ## 3 · Antes de la unificación: los reinos del valle
 - Periodo Licchavi desde hacia el año 400; los Malla, asentados en el valle a mediados del siglo XIV; el reino se divide a finales del XV [F1].
-- Bhaktapur fue capital del reino Malla desde el siglo XII hasta 1482 [F6]. Krishna Mandir de Patan: 1637, rey Siddhi Narsingh Malla [F7]. Nyatapola de Bhaktapur: 1702, rey Bhupatindra Malla [F6]. Ventana del Pavo Real: hacia 1750 [F6].
+- Bhaktapur fue capital del reino Malla desde el siglo XII hasta 1482 [F6]. Krishna Mandir de Patan: 1637, rey Siddhi Narsingh Malla [F7]. Nyatapola de Bhaktapur: 1702, rey Bhupatindra Malla [F6].
 - Patrimonio Mundial «Valle de Katmandú», 1979, siete conjuntos: plazas Durbar de Katmandú, Patan y Bhaktapur, Swayambhunath, Boudhanath, Pashupatinath y Changu Narayan. En la lista en peligro de 2003 a 2007 [F3][F4].
-- ⚠ Siddha Pokhari (Bhaktapur): la fuente da 1118; la guía publicada dice «siglo XV». No se afirma fecha en la web.
+- ⚠ Ventana del Pavo Real y Siddha Pokhari (Bhaktapur): las fuentes no coinciden. Para la ventana, la mayoría dice siglo XV (reinado de Yaksha Malla) y una, hacia 1750; para el estanque van del periodo Licchavi al siglo XV. **No se afirma fecha en la web.**
 
 ## 4 · La dominación exterior que no fue: nunca colonia
 - Prithvi Narayan Shah: reino de Nepal en 1768, valle de Katmandú en 1769; Patan anexionada en 1768, Bhaktapur en 1769 [F1][F6][F7].
@@ -65,7 +65,24 @@ catorce ochomiles. Esa escalera de climas, y el hecho de que nunca fue colonia, 
 2. Chitwan: «reserva de la biosfera UNESCO» y «guía armado» → **corregido**.
 3. Pokhara: consejo de trekking «sin guía» sin mencionar la norma de 2023 → **corregido**.
 4. Textos rotos por quitar precios («45 min, menos.») y «en 1 días» en las preguntas → **corregido** con ficha y preguntas propias.
-5. **SIN CORREGIR (es la guía, no la ficha):** en la guía de Bhaktapur la parada 3 se llama «Bhaktapur Durbar Square» pero el texto describe la plaza de Dattatreya; dice «Palacio de los 55 Ventanas», y fecha la Ventana del Pavo Real y Siddha Pokhari en el siglo XV. Las guías de Patan, Chitwan y Pokhara no se han revisado parada a parada.
+5. **SIN CORREGIR (es la guía, no la ficha):** en la guía de Bhaktapur la parada 3 se llama «Bhaktapur Durbar Square» pero el texto describe la plaza de Dattatreya; y dice «Palacio de los 55 Ventanas». (Las fechas «siglo XV» de la Ventana del Pavo Real y de Siddha Pokhari coinciden con la mayoría de fuentes: no son error.) Revisión parada a parada de las cuatro guías: ver «Auditoría de las guías» abajo.
+
+## Auditoría de las guías de Nepal (13 nov 2026; guías creadas en marzo de 2026)
+| Guía | Parada | Qué pasa | Estado |
+|---|---|---|---|
+| Bhaktapur | 3 | Se llama «Bhaktapur Durbar Square» y tiene las mismas coordenadas que la parada 1, pero el texto describe la plaza de Dattatreya: el mapa manda al sitio equivocado | Error confirmado |
+| Bhaktapur | 1 | «Palacio de los 55 Ventanas» | Errata |
+| Chitwan | 1, 2, 6 y 7 | Cuatro paradas con el mismo nombre («Parque Nacional de Chitwan») y el mismo punto del mapa, que no es ni Sauraha ni el lago | Error confirmado |
+| Chitwan | 2 | «Ciervos barasinga»: se extinguieron en Chitwan en los años 60-70 y la reintroducción de 2017 fracasó [F12] | Error confirmado |
+| Chitwan | 7 | El lago Bis Hazari está en la zona de amortiguación, no «dentro del parque» [F13] | Error confirmado |
+| Chitwan | 6 | «Guía armado obligatorio por normativa»: no hay fuente; un viajero describe guías con un bastón | Sin confirmar |
+| Chitwan | 5 | El centro de cría de elefantes como «interacción ética»: es una opinión discutible | Opinión |
+| Chitwan | consejos | «Monzón (junio-agosto)»: la fuente dice de mediados de junio a finales de septiembre [F5] | Impreciso |
+| Las cuatro | consejos | Precios de entradas, taxis y comidas (de marzo de 2026, sin fuente; el de Bhaktapur no coincide con otras fuentes) | Sin confirmar |
+| Patan | 6 y consejos | «Sin entrada» en Rudra Varna y «Café de Patan dentro del museo» | Sin confirmar |
+| Pokhara | — | Sin errores en lo que se pudo comprobar | — |
+
+**Patrón:** los datos históricos están casi todos bien. Fallan (a) las paradas que no son un lugar concreto sino una actividad, que salen con nombre y punto genéricos y repetidos, y (b) los datos prácticos concretos (precios, normas), que se afirman sin fuente.
 
 ## Fuentes (consultadas el 13 nov 2026)
 - [F1] Wikipedia, «Nepal»: https://en.wikipedia.org/wiki/Nepal
@@ -79,6 +96,9 @@ catorce ochomiles. Esa escalera de climas, y el hecho de que nunca fue colonia, 
 - [F9] Departamento de Inmigración de Nepal: https://immigration.gov.np/visa-information
 - [F10] The Kathmandu Post, 4 mar 2023: https://kathmandupost.com/money/2023/03/04/no-more-solo-treks-guides-mandatory-from-april-1
 - [F11] NTNC, recuento de rinocerontes de 2021: https://www.ntnc.org.np/news/752-one-horned-rhinos-nepal-determined-national-rhino-count-2021
+
+- [F12] Barasinga en Nepal: https://en.wikipedia.org/wiki/Barasingha
+- [F13] Bishazari Tal: https://en.wikipedia.org/wiki/Bishazari_Tal
 
 ## Lo aprendido
 - Las fichas del KV de la primera tanda llevaban datos falsos y, al quitarles los precios, frases rotas. Antes de dar por bueno un país antiguo: leer cada ficha.
