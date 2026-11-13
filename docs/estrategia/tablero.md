@@ -10,6 +10,9 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 | T3 | Largos de Tailandia 1, 2 y 3 | 📈 → 🎬 | ⏸ | Empieza al cerrar Filipinas (orden de Paco: «terminamos con Filipinas y seguimos con Tailandia») | aprobar guion, título y carátula | mar 1 · mar 8 · jue 10 dic |
 | T4 | Largo del jue 17 dic | 📈 | ⏸ | Proponer tema | decidir | jue 17 dic |
 | T5 | Tuvalu: comprobar 1080p en el canal | 🎬 Vídeo | 📥 | Mirar en Studio | — | antes del 26 nov |
+| T6 | Web: Paco mira en su móvil las portadas nuevas y las historias de destinos (0e56a30af, ya subido) | 🌍 Web | 🙋 | — | mirarlo en el móvil | — |
+| T7 | Web: reproductor de YouTube en cada largo cuando sea público: Pueblos T1 (jue 19 nov), Tuvalu (jue 26 nov), Tatuajes (mar 24 nov, 0nNCUhMiSdI), India (mar 17 nov), Baler (jue 3 dic), Filipinas (mar 15 dic) | 🌍 Web | 📥 | Cada día de estreno, después de las 10:00 | OK en el chat de Web antes de subir | según fecha |
+| T8 | Web: 7 decisiones abiertas (freno del generador, «IA» en entradas antiguas, enlace naranja, datos de Vietnam, «Compartir info», rediseño a más países, foto de la guía de Andalucía y Algarve) | 📈 → Paco | 🙋 | Parte a Paco con recomendación | decidir | — |
 
 ## Programado y vigilado (no hace falta nada salvo comprobar al salir)
 - Largos en Studio a las 10:00, con las carátulas Y18: India 17 nov · Pueblos T1 19 nov · Tatuajes 24 nov · Tuvalu 26 nov · Baler 3 dic.
