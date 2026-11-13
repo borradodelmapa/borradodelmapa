@@ -1,0 +1,48 @@
+{
+ "hilo": "Nepal cabe entre la llanura del Ganges y la cima del mundo: en muy poca distancia se pasa de la selva del Terai, a cien metros de altitud, a ocho de los catorce ochomiles del planeta. Esa escalera de climas, y el hecho de que nunca fue colonia, explican que en un país pequeño sigan vivas 124 lenguas y 142 pueblos.",
+ "apartados": [
+  {
+   "t": "Geografía",
+   "p": "Unos 147.000 km² repartidos en tres franjas que van de sur a norte: el Terai, la llanura baja pegada a la India; las colinas, donde está el valle de Katmandú; y el Himal, la alta montaña. En Nepal o en su frontera con China están ocho de los catorce ochomiles, entre ellos el Everest, de 8.848,86 metros. El censo de 2021 contó 29.164.578 habitantes.",
+   "foto": { "src": "/destinos/img/everest-base-camp-nepal/hero.jpg", "pie": "El Everest, el techo del mundo.", "autor": "Rdevany · CC BY-SA 3.0" }
+  },
+  {
+   "t": "Los primeros",
+   "p": "Hay restos de poblamiento de hace unos 30.000 años. Según la tradición, el valle de Katmandú fue un lago que el bodhisattva Manjushri vació de un tajo de espada; los newar son sus habitantes originarios y los autores de su civilización urbana. En Lumbini, en el Terai, la tradición sitúa el nacimiento de Buda, y el pilar que dejó allí el emperador Ashoka marca el comienzo de la historia escrita de Nepal.",
+   "foto": { "src": "/destinos/img/lumbini-nepal/hero.jpg", "pie": "El templo de Maya Devi y el pilar de Ashoka, en Lumbini.", "autor": "Bibek Raj Pandeya · CC BY-SA 4.0" }
+  },
+  {
+   "t": "Los reinos del valle",
+   "p": "El periodo Licchavi empezó hacia el año 400 y los Malla se asentaron en el valle a mediados del siglo XIV. A finales del XV el reino se dividió, y Katmandú, Patan y Bhaktapur compitieron durante tres siglos levantando plazas, palacios y templos: el Krishna Mandir de Patan es de 1637 y la pagoda Nyatapola de Bhaktapur, de 1702. Siete conjuntos del valle son Patrimonio Mundial desde 1979.",
+   "foto": { "src": "/destinos/img/bhaktapur-nepal/hero.jpg", "pie": "Bhaktapur, una de las tres ciudades reales del valle.", "autor": "Saroj Pandey · CC BY-SA 3.0" }
+  },
+  {
+   "t": "Nunca fue colonia",
+   "p": "Prithvi Narayan Shah, rey de Gorkha, fundó el reino de Nepal en 1768 y tomó el valle de Katmandú en 1769. La guerra con los británicos de 1815 y 1816 terminó con el Tratado de Sugauli, pero Nepal no llegó a ser colonizado: quedó como estado tapón entre el Imperio británico y China. Entre 1846 y 1951 gobernó la familia Rana."
+  },
+  {
+   "t": "El siglo XX y hoy",
+   "p": "En 1951 cayeron los Rana y llegó la democracia parlamentaria. La insurgencia maoísta, de 1996 a 2006, dejó más de 16.000 muertos. La monarquía se abolió el 28 de mayo de 2008 y la constitución del 20 de septiembre de 2015 dividió el país en siete provincias. Ese mismo año, el 25 de abril, un terremoto de magnitud 7,8 causó miles de muertos y dañó buena parte del patrimonio del valle."
+  },
+  {
+   "t": "Culturas de hoy",
+   "p": "El censo de 2021 recoge 142 grupos de casta o etnia y 124 lenguas maternas. El nepalí es la lengua materna de cerca del 45 % de la población. El 81 % es hindú y el 8 %, budista. Los newar son el pueblo del valle de Katmandú; los tharu, el de las llanuras del Terai; y gurung y magar, los de las montañas de Pokhara, de donde salen la mayoría de los soldados gurkha.",
+   "foto": { "src": "/destinos/img/patan-nepal/hero.jpg", "pie": "Patan, la ciudad de los artesanos newar.", "autor": "Gerd Eichmann · CC BY-SA 4.0" }
+  }
+ ],
+ "fuentes": [
+  { "t": "Censo de Nepal de 2021", "u": "https://en.wikipedia.org/wiki/2021_Nepal_census" },
+  { "t": "UNESCO: Valle de Katmandú", "u": "https://whc.unesco.org/en/list/121" },
+  { "t": "UNESCO: Chitwan", "u": "https://whc.unesco.org/en/list/284" },
+  { "t": "Wikipedia: Nepal", "u": "https://en.wikipedia.org/wiki/Nepal" },
+  { "t": "Wikipedia: valle de Katmandú", "u": "https://en.wikipedia.org/wiki/Kathmandu_Valley" }
+ ],
+ "portada": { "src": "/destinos/img/pokhara-nepal/hero.jpg", "pie": "Pokhara, a los pies del Annapurna.", "autor": "Utsab Raj Giri · CC BY-SA 4.0" },
+ "galeria": [
+  { "src": "/destinos/img/kathmandu-nepal/hero.jpg", "pie": "Katmandú.", "autor": "Gerd Eichmann · CC BY-SA 4.0" },
+  { "src": "/destinos/img/chitwan-nepal/hero.jpg", "pie": "Rinoceronte indio en el Parque Nacional de Chitwan.", "autor": "Benjila Dhital · CC BY-SA 4.0" },
+  { "src": "/destinos/img/circuito-annapurna-nepal/hero.jpg", "pie": "Manang, en el Circuito del Annapurna.", "autor": "Solundir · CC BY-SA 3.0" },
+  { "src": "/destinos/img/langtang-nepal/hero.jpg", "pie": "Parque nacional de Langtang.", "autor": "Q-lieb-in · CC BY-SA 4.0" },
+  { "src": "/destinos/img/upper-mustang-nepal/hero.jpg", "pie": "Jomsom, puerta del Alto Mustang.", "autor": "Saddam19 · CC BY-SA 4.0" }
+ ]
+}

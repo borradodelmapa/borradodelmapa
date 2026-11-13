@@ -57,7 +57,7 @@
 .pb-logo .ce-mark{display:inline-block;width:1.2em;height:1.2em;margin:0;background:#F4630B;-webkit-mask:url(/logo-pin.svg) center/contain no-repeat;mask:url(/logo-pin.svg) center/contain no-repeat}
 </style>
 <script>try{if(window.top!==window.self)document.documentElement.classList.add('pb-en-app')}catch(e){}</script><style>.pb-en-app .pb-logo{display:none}</style>
-<nav class="pb" aria-label="Nepal"><div class="pb-in"><a class="pb-logo" href="/" aria-label="Borrado del Mapa: inicio"><i class="ce-mark" aria-hidden="true"></i></a><a class="pb-pais" href="/destinos/nepal.html"><b>›</b> Nepal</a><div class="pb-tabs"><a href="/destinos/nepal.html#sitios">Sitios<span>10</span></a><a href="/destinos/nepal.html#guias">Guías<span>10</span></a></div></div></nav>
+<nav class="pb" aria-label="Nepal"><div class="pb-in"><a class="pb-logo" href="/" aria-label="Borrado del Mapa: inicio"><i class="ce-mark" aria-hidden="true"></i></a><a class="pb-pais" href="/destinos/nepal.html"><b>›</b> Nepal</a><div class="pb-tabs"><a href="/destinos/nepal.html#conoce">Conoce</a><a href="/destinos/nepal.html#sitios">Sitios<span>10</span></a><a href="/destinos/nepal.html#guias">Guías<span>10</span></a></div></div></nav>
 <p class="pb-crumb"><a href="/blog/">Blog de viajes</a> › <a href="/destinos/">Destinos</a> › <b>Nepal</b></p>
 
   <div class="chat-empty destino-clock-wrap">
@@ -194,7 +194,51 @@
       <a class="dg-cta" href="/?go=chat">Hazte la tuya personalizada →</a>
     </section>
 
-    
+    <style>
+.dc{margin:40px 0 8px;border-top:1px solid var(--border)}
+.dc-hero{position:relative;margin:0 0 6px;overflow:hidden;background:#000}
+.dc-hero img{width:100%;aspect-ratio:16/9;max-height:520px;object-fit:cover;display:block;opacity:.82}
+.dc-hero-txt{position:absolute;left:0;right:0;bottom:0;padding:28px 18px 18px;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.dc-kicker{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-cond);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;margin-bottom:8px}
+.dc-hero h2{font-family:var(--font-cond);font-weight:800;font-size:clamp(34px,7vw,64px);line-height:.95;text-transform:uppercase;margin:0;color:#fff}
+.dc-cap{font-size:12px;line-height:1.4;color:var(--text-muted);margin:6px 0 0}
+.dc-hilo{font-size:clamp(18px,2.4vw,22px);line-height:1.55;color:var(--text-primary);border-left:4px solid var(--accent);padding:4px 0 4px 16px;margin:26px 0 30px;max-width:780px}
+.dc-b{display:grid;gap:18px;margin:0 0 34px;align-items:start}
+.dc-b figure{margin:0}
+.dc-b img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;border:1px solid var(--border)}
+.dc-n{font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.14em;color:var(--accent);display:block;margin-bottom:2px}
+.dc-b h3{font-family:var(--font-cond);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase;margin:0 0 10px;color:var(--text-primary)}
+.dc-b p{font-size:17px;line-height:1.7;color:var(--text-secondary);margin:0}
+.dc-b--sin{max-width:780px}
+@media(min-width:760px){.dc-b--foto{grid-template-columns:1fr 1fr;gap:28px}.dc-b--der figure{order:2}}
+.dc-gal h3,.dc-dia h3{font-family:var(--font-cond);font-weight:800;font-size:22px;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 12px;color:var(--text-primary)}
+.dc-gal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 30px}
+@media(min-width:760px){.dc-gal-grid{grid-template-columns:repeat(3,1fr)}}
+.dc-gal-grid figure{margin:0}
+.dc-gal-grid img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border:1px solid var(--border)}
+.dc-dia-grid{display:grid;gap:12px;margin:0 0 26px}
+@media(min-width:620px){.dc-dia-grid{grid-template-columns:1fr 1fr}}
+.dc-card{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;text-decoration:none;border:1px solid var(--border);background:var(--bg-row);color:var(--text-primary)}
+.dc-card:hover{border-color:var(--accent)}
+.dc-card img{width:110px;height:110px;object-fit:cover;display:block}
+.dc-card span{display:block;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.dc-card strong{font-size:16px;line-height:1.3;padding-right:10px;display:block}
+.dc-fuentes{font-size:13px;color:var(--text-muted);line-height:1.6}
+.dc-fuentes a{color:var(--text-secondary)}
+</style>
+    <section class="dc" id="conoce">
+      <figure class="dc-hero"><img src="/destinos/img/pokhara-nepal/hero.jpg" alt="Nepal: Pokhara, a los pies del Annapurna." loading="lazy" decoding="async"><div class="dc-hero-txt"><span class="dc-kicker">Antes de viajar</span><h2>Conoce Nepal</h2></div></figure>
+      <figcaption class="dc-cap">Pokhara, a los pies del Annapurna. Foto: Utsab Raj Giri · CC BY-SA 4.0</figcaption>
+      <p class="dc-hilo">Nepal cabe entre la llanura del Ganges y la cima del mundo: en muy poca distancia se pasa de la selva del Terai, a cien metros de altitud, a ocho de los catorce ochomiles del planeta. Esa escalera de climas, y el hecho de que nunca fue colonia, explican que en un país pequeño sigan vivas 124 lenguas y 142 pueblos.</p>
+      <article class="dc-b dc-b--foto"><figure><img src="/destinos/img/everest-base-camp-nepal/hero.jpg" alt="El Everest, el techo del mundo." loading="lazy" decoding="async"><figcaption class="dc-cap">El Everest, el techo del mundo. Foto: Rdevany · CC BY-SA 3.0</figcaption></figure><div><span class="dc-n">01</span><h3>Geografía</h3><p>Unos 147.000 km² repartidos en tres franjas que van de sur a norte: el Terai, la llanura baja pegada a la India; las colinas, donde está el valle de Katmandú; y el Himal, la alta montaña. En Nepal o en su frontera con China están ocho de los catorce ochomiles, entre ellos el Everest, de 8.848,86 metros. El censo de 2021 contó 29.164.578 habitantes.</p></div></article>
+      <article class="dc-b dc-b--foto dc-b--der"><figure><img src="/destinos/img/lumbini-nepal/hero.jpg" alt="El templo de Maya Devi y el pilar de Ashoka, en Lumbini." loading="lazy" decoding="async"><figcaption class="dc-cap">El templo de Maya Devi y el pilar de Ashoka, en Lumbini. Foto: Bibek Raj Pandeya · CC BY-SA 4.0</figcaption></figure><div><span class="dc-n">02</span><h3>Los primeros</h3><p>Hay restos de poblamiento de hace unos 30.000 años. Según la tradición, el valle de Katmandú fue un lago que el bodhisattva Manjushri vació de un tajo de espada; los newar son sus habitantes originarios y los autores de su civilización urbana. En Lumbini, en el Terai, la tradición sitúa el nacimiento de Buda, y el pilar que dejó allí el emperador Ashoka marca el comienzo de la historia escrita de Nepal.</p></div></article>
+      <article class="dc-b dc-b--foto"><figure><img src="/destinos/img/bhaktapur-nepal/hero.jpg" alt="Bhaktapur, una de las tres ciudades reales del valle." loading="lazy" decoding="async"><figcaption class="dc-cap">Bhaktapur, una de las tres ciudades reales del valle. Foto: Saroj Pandey · CC BY-SA 3.0</figcaption></figure><div><span class="dc-n">03</span><h3>Los reinos del valle</h3><p>El periodo Licchavi empezó hacia el año 400 y los Malla se asentaron en el valle a mediados del siglo XIV. A finales del XV el reino se dividió, y Katmandú, Patan y Bhaktapur compitieron durante tres siglos levantando plazas, palacios y templos: el Krishna Mandir de Patan es de 1637 y la pagoda Nyatapola de Bhaktapur, de 1702. Siete conjuntos del valle son Patrimonio Mundial desde 1979.</p></div></article>
+      <article class="dc-b dc-b--sin"><div><span class="dc-n">04</span><h3>Nunca fue colonia</h3><p>Prithvi Narayan Shah, rey de Gorkha, fundó el reino de Nepal en 1768 y tomó el valle de Katmandú en 1769. La guerra con los británicos de 1815 y 1816 terminó con el Tratado de Sugauli, pero Nepal no llegó a ser colonizado: quedó como estado tapón entre el Imperio británico y China. Entre 1846 y 1951 gobernó la familia Rana.</p></div></article>
+      <article class="dc-b dc-b--sin"><div><span class="dc-n">05</span><h3>El siglo XX y hoy</h3><p>En 1951 cayeron los Rana y llegó la democracia parlamentaria. La insurgencia maoísta, de 1996 a 2006, dejó más de 16.000 muertos. La monarquía se abolió el 28 de mayo de 2008 y la constitución del 20 de septiembre de 2015 dividió el país en siete provincias. Ese mismo año, el 25 de abril, un terremoto de magnitud 7,8 causó miles de muertos y dañó buena parte del patrimonio del valle.</p></div></article>
+      <article class="dc-b dc-b--foto dc-b--der"><figure><img src="/destinos/img/patan-nepal/hero.jpg" alt="Patan, la ciudad de los artesanos newar." loading="lazy" decoding="async"><figcaption class="dc-cap">Patan, la ciudad de los artesanos newar. Foto: Gerd Eichmann · CC BY-SA 4.0</figcaption></figure><div><span class="dc-n">06</span><h3>Culturas de hoy</h3><p>El censo de 2021 recoge 142 grupos de casta o etnia y 124 lenguas maternas. El nepalí es la lengua materna de cerca del 45 % de la población. El 81 % es hindú y el 8 %, budista. Los newar son el pueblo del valle de Katmandú; los tharu, el de las llanuras del Terai; y gurung y magar, los de las montañas de Pokhara, de donde salen la mayoría de los soldados gurkha.</p></div></article>
+      <div class="dc-gal"><h3>En imágenes</h3><div class="dc-gal-grid"><figure><img src="/destinos/img/kathmandu-nepal/hero.jpg" alt="Katmandú." loading="lazy" decoding="async"><figcaption class="dc-cap">Katmandú. Foto: Gerd Eichmann · CC BY-SA 4.0</figcaption></figure><figure><img src="/destinos/img/chitwan-nepal/hero.jpg" alt="Rinoceronte indio en el Parque Nacional de Chitwan." loading="lazy" decoding="async"><figcaption class="dc-cap">Rinoceronte indio en el Parque Nacional de Chitwan. Foto: Benjila Dhital · CC BY-SA 4.0</figcaption></figure><figure><img src="/destinos/img/circuito-annapurna-nepal/hero.jpg" alt="Manang, en el Circuito del Annapurna." loading="lazy" decoding="async"><figcaption class="dc-cap">Manang, en el Circuito del Annapurna. Foto: Solundir · CC BY-SA 3.0</figcaption></figure><figure><img src="/destinos/img/langtang-nepal/hero.jpg" alt="Parque nacional de Langtang." loading="lazy" decoding="async"><figcaption class="dc-cap">Parque nacional de Langtang. Foto: Q-lieb-in · CC BY-SA 4.0</figcaption></figure><figure><img src="/destinos/img/upper-mustang-nepal/hero.jpg" alt="Jomsom, puerta del Alto Mustang." loading="lazy" decoding="async"><figcaption class="dc-cap">Jomsom, puerta del Alto Mustang. Foto: Saddam19 · CC BY-SA 4.0</figcaption></figure></div></div>
+      <p class="dc-fuentes">Fuentes: <a href="https://en.wikipedia.org/wiki/2021_Nepal_census" rel="noopener" target="_blank">Censo de Nepal de 2021</a> · <a href="https://whc.unesco.org/en/list/121" rel="noopener" target="_blank">UNESCO: Valle de Katmandú</a> · <a href="https://whc.unesco.org/en/list/284" rel="noopener" target="_blank">UNESCO: Chitwan</a> · <a href="https://en.wikipedia.org/wiki/Nepal" rel="noopener" target="_blank">Wikipedia: Nepal</a> · <a href="https://en.wikipedia.org/wiki/Kathmandu_Valley" rel="noopener" target="_blank">Wikipedia: valle de Katmandú</a>. Fotos: Wikimedia Commons, con su autor en cada pie.</p>
+    </section>
 
     
 

@@ -646,7 +646,11 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const rd = REDISENO.has(slug);
   const extraR = rd ? DESTINOS_EXTRA[slug] : null;
-  const faqs = (extraR && extraR.faqs) || generateFAQs(dest, countryName);
+  // Ficha VERIFICADA (13 nov 2026, Nepal): sitios-extra.json → "ficha" sustituye campo a campo los textos del KV
+  // (descripción, cómo llegar, dónde dormir, dónde comer, consejo local, plan B) y "faqs" las preguntas. El KV no se toca.
+  const extraF = DESTINOS_EXTRA[slug] && DESTINOS_EXTRA[slug].ficha ? DESTINOS_EXTRA[slug] : null;
+  if (extraF) dest = { ...dest, ...extraF.ficha, donde_dormir: { ...(dest.donde_dormir || {}), ...(extraF.ficha.donde_dormir || {}) } };
+  const faqs = (extraR && extraR.faqs) || (extraF && extraF.faqs) || generateFAQs(dest, countryName);
   let coords = COORDS[`${countryCode}:${dest.id}`] || (typeof dest.lat === 'number' && typeof dest.lng === 'number' ? { lat: dest.lat, lng: dest.lng } : null);
   // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
   if (!coords && route && route.stops) {
@@ -710,6 +714,14 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
     ${histSitio.map(x => `<a class="dx-c${esDoc(x) ? ' d' : ''}" href="/blog/viajes/${escapeHTML(x.slug)}"><i class="dx-i"><img src="/blog/viajes/img/${escapeHTML(x.slug)}.jpg" alt="" loading="lazy">${duracionDe(x.slug) ? `<b class="dx-dur">${duracionDe(x.slug)}</b>` : ''}</i><div><span>${esDoc(x) ? 'Documental' : 'Historia en vídeo'}</span><strong>${escapeHTML(x.titulo)}</strong></div></a>`).join('')}
   </div></section>` : '';
   const extra = DESTINOS_EXTRA[slug];
+  // «Tip de Salma» (Paco, 13 nov 2026: uno por página, concreto y comprobado): sitios-extra.json → "tip": ["párrafo", …]
+  const tipHTML = extra && extra.tip ? `<style>
+.dq-tip{margin:26px 0 8px;padding:20px 18px 16px;background:rgba(244,99,11,.10);border-left:5px solid var(--accent)}
+.dq-tip-h{display:flex;align-items:center;gap:12px;margin:0 0 10px;font-family:var(--font-cond);font-weight:800;font-size:24px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.dq-tip-h img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)}
+.dq-tip p{font-size:17px;line-height:1.65;color:var(--text-primary);margin:0 0 10px}.dq-tip p:last-child{margin:0}
+</style>
+    <section class="dq-tip"><h2 class="dq-tip-h"><img src="/salma_ai_avatar.png" alt="Salma" width="56" height="56" loading="lazy">Tip de Salma</h2>${extra.tip.map(t => `<p>${escapeHTML(t)}</p>`).join('')}</section>` : '';
   const sobreHTML = extra ? `<section class="dq-sobre">
       <h2>Sobre ${escapeHTML(dest.nombre)}</h2>
       ${extra.p.map(t => `<p>${escapeHTML(t)}</p>`).join('')}
@@ -876,7 +888,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
       </div>
     </div>
 
-    ${route ? buildStaticItinerary(route, slug, fotos) : ((sobreHTML || queHacerHTML) ? DQ_CSS + sobreHTML + queHacerHTML : '')}
+    ${route ? buildStaticItinerary(route, slug, fotos) + (extra && extra.sobre ? DQ_CSS + sobreHTML + tipHTML : '') : ((sobreHTML || queHacerHTML) ? DQ_CSS + sobreHTML + tipHTML + queHacerHTML : '')}
 
     ${rd ? rdFicha(dest, faqs, coords, hrefGuiaApp) : `<!-- Más info en acordeón -->
     <div class="destino-accordion">

@@ -1,0 +1,139 @@
+{
+ "bhaktapur-nepal": {
+  "sobre": true,
+  "p": [
+   "Bhaktapur (Khwopa en newar, antes llamada Bhadgaon) está a unos 13 km al este de Katmandú, a 1.401 metros. Tenía 79.136 habitantes en el censo de 2021, la gran mayoría newar. Fue capital del reino Malla desde el siglo XII hasta 1482, y las tropas de Gorkha la anexionaron en 1769.",
+   "Su plaza Durbar forma parte del Patrimonio Mundial del Valle de Katmandú desde 1979. El Nyatapola, la pagoda de cinco tejados de la plaza Taumadhi, la mandó levantar el rey Bhupatindra Malla y se terminó en 1702. La Ventana del Pavo Real es de hacia 1750.",
+   "El terremoto de 1934 destruyó más de 6.000 edificios, y el del 25 de abril de 2015, de magnitud 7,8, dañó 116 monumentos, 67 de ellos por completo. Parte de lo que ves está reconstruido o sigue en obras."
+  ],
+  "fuentes": [
+   { "t": "Wikipedia: Bhaktapur", "u": "https://en.wikipedia.org/wiki/Bhaktapur" },
+   { "t": "UNESCO: Valle de Katmandú", "u": "https://whc.unesco.org/en/list/121" }
+  ],
+  "tip": [
+   "Quédate a dormir. Casi todo el mundo viene en excursión de un día desde Katmandú y se marcha a media tarde.",
+   "A primera hora, en la plaza de la Cerámica están sacando las piezas a secar; al anochecer, las plazas se quedan para la gente de la ciudad. Es cuando Bhaktapur se entiende."
+  ],
+  "ficha": {
+   "descripcion": "La mejor conservada de las tres ciudades medievales del Valle de Katmandú, junto con Patan y la propia Katmandú. Su plaza Durbar, la pagoda Nyatapola y los alfareros de la plaza de la Cerámica siguen en una ciudad donde vive gente, no en un museo. Está a unos 13 km de Katmandú.",
+   "como_llegar": "Desde Katmandú hay autobuses y microbuses frecuentes, y también se llega en taxi. Son unos 13 km, pero manda el tráfico del valle: cuenta con entre media hora y una hora.",
+   "donde_dormir": {
+    "mochilero": "Casas de huéspedes dentro del casco antiguo",
+    "medio": "Pequeños hoteles en casas newar restauradas",
+    "comfort": "Hoteles con encanto alrededor de las plazas"
+   },
+   "donde_comer": "Alrededor de las plazas Durbar y Taumadhi hay restaurantes con dal bhat y cocina newar. No te vayas sin probar el juju dhau, el yogur de leche de búfala que es la especialidad de la ciudad.",
+   "consejo_local": "La entrada al casco histórico se paga en los accesos y es solo para Bhaktapur: no sirve para Patan, que cobra la suya. Guarda el tique, porque lo piden en controles dentro de la ciudad. Si vas a volver otro día, pregunta en la taquilla, con el pasaporte, si te lo amplían.",
+   "plan_b_lluvia": "Los museos están a cubierto: la Galería Nacional de Arte, en la plaza Durbar, y el museo de talla en madera, junto al templo de Dattatreya."
+  },
+  "faqs": [
+   { "q": "¿Cuántos días hacen falta en Bhaktapur?", "a": "Un día da para las plazas, los templos y la plaza de la Cerámica. Si puedes, quédate una noche: la ciudad cambia cuando se van las excursiones." },
+   { "q": "¿La entrada de Bhaktapur vale también para Patan?", "a": "No. Cada ciudad cobra su propia entrada. Guarda el tique de Bhaktapur durante la visita, porque lo piden en controles dentro del casco histórico." },
+   { "q": "¿Cuál es la mejor época para ir a Bhaktapur?", "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios. El monzón va, a grandes rasgos, de junio a septiembre." },
+   { "q": "¿Quedan daños del terremoto de 2015?", "a": "Sí. El terremoto del 25 de abril de 2015 dañó 116 monumentos de la ciudad, 67 de ellos por completo. Muchos están reconstruidos y otros siguen en obras." }
+  ]
+ },
+ "patan-nepal": {
+  "sobre": true,
+  "p": [
+   "Patan se llama oficialmente Lalitpur (Yala en newar). Está al sur del río Bagmati, que la separa de Katmandú, a unos 1.350 metros, y tenía unos 299.000 habitantes en el censo de 2021.",
+   "Fue uno de los reinos Malla del valle hasta que Prithvi Narayan Shah la anexionó en 1768. Su plaza Durbar es Patrimonio Mundial desde 1979. El Krishna Mandir, el templo de piedra de la plaza, lo construyó el rey Siddhi Narsingh Malla en 1637.",
+   "Es la ciudad de los artesanos del metal, la madera y la piedra: los talleres newar llevan siglos trabajando para templos de toda Asia. El terremoto de 2015 dañó gravemente la plaza."
+  ],
+  "fuentes": [
+   { "t": "Wikipedia: Lalitpur", "u": "https://en.wikipedia.org/wiki/Lalitpur,_Nepal" },
+   { "t": "UNESCO: Valle de Katmandú", "u": "https://whc.unesco.org/en/list/121" }
+  ],
+  "tip": [
+   "Métete en los patios. Detrás de puertas bajas que parecen de casa particular están los bahal, los patios de los antiguos monasterios budistas.",
+   "El del Templo Dorado (Hiranya Varna Mahavihar) es el más conocido, pero hay muchos más repartidos por los callejones. Se entra con respeto, y descalzo donde lo pidan."
+  ],
+  "ficha": {
+   "descripcion": "La ciudad de los artesanos del valle. Su plaza Durbar reúne palacio y templos en muy poco espacio, y el Museo de Patan, en el antiguo palacio real, es la mejor forma de entender el arte hindú y budista de Nepal antes de salir a ver los templos.",
+   "como_llegar": "Está pegada a Katmandú, al otro lado del río Bagmati: se llega en taxi o en autobús local, y el tiempo depende del tráfico. El aeropuerto está a unos 7 km.",
+   "donde_dormir": {
+    "mochilero": "Casas de huéspedes en Patan o en Katmandú",
+    "medio": "Casas newar restauradas cerca de la plaza",
+    "comfort": "Hoteles de categoría en Katmandú, a poca distancia"
+   },
+   "donde_comer": "Más tranquila que Katmandú para sentarse a comer. Alrededor de la plaza hay cocina newar: prueba el choila (carne especiada) y el bara (torta de lentejas).",
+   "consejo_local": "Patan cobra su propia entrada y no vale la de Bhaktapur. Pregunta en la taquilla si incluye el Museo de Patan, y entra primero al museo: los templos de la plaza se entienden mucho mejor después.",
+   "plan_b_lluvia": "El Museo de Patan cubre de sobra una mañana de lluvia."
+  },
+  "faqs": [
+   { "q": "¿Patan y Lalitpur son lo mismo?", "a": "Sí. Lalitpur es el nombre oficial de la ciudad y Patan el tradicional. En newar se llama Yala." },
+   { "q": "¿Cuánto tiempo hace falta para ver Patan?", "a": "Medio día para la plaza Durbar y el museo. Con un día entero da tiempo a perderse por los patios y los talleres de los artesanos." },
+   { "q": "¿Sirve la entrada de Bhaktapur para Patan?", "a": "No. Cada ciudad cobra su propia entrada." },
+   { "q": "¿Cuál es la mejor época para ir a Patan?", "a": "Octubre y noviembre, y marzo y abril: tiempo seco y cielos más limpios." }
+  ]
+ },
+ "chitwan-nepal": {
+  "sobre": true,
+  "p": [
+   "Chitwan fue el primer parque nacional de Nepal: se creó en 1973 y es Patrimonio Mundial desde 1984. Ocupa 952,63 km² de las llanuras del Terai, entre los 100 metros de los valles y los 815 de las colinas Siwalik.",
+   "Antes fue coto de caza de la clase gobernante. Hoy protege la mayor población de rinoceronte indio de Nepal: el recuento nacional de 2021 contó 752 en todo el país, 694 de ellos en Chitwan. También hay tigre de Bengala, gavial y más de 500 especies de aves.",
+   "Los tharu, el pueblo de estas llanuras, fueron desplazados cuando se creó el parque. El monzón va de mediados de junio a finales de septiembre y deja la mayor parte de la lluvia del año."
+  ],
+  "fuentes": [
+   { "t": "Wikipedia: Parque Nacional de Chitwan", "u": "https://en.wikipedia.org/wiki/Chitwan_National_Park" },
+   { "t": "UNESCO: Chitwan", "u": "https://whc.unesco.org/en/list/284" },
+   { "t": "NTNC: recuento de rinocerontes 2021", "u": "https://www.ntnc.org.np/news/752-one-horned-rhinos-nepal-determined-national-rhino-count-2021" }
+  ],
+  "tip": [
+   "Elige las salidas a pie, en canoa o en todoterreno. Los paseos a lomos de elefante se siguen ofreciendo, pero no los necesitas para ver rinocerontes.",
+   "Y sal a primera hora, antes de que apriete el calor: es cuando más se mueven los animales."
+  ],
+  "ficha": {
+   "descripcion": "Patrimonio Mundial y uno de los mejores sitios de Asia para ver rinoceronte indio. Es la selva del Terai: llanura, ríos y hierba alta, con tigres, gaviales y cientos de especies de aves. Además de los safaris en todoterreno, se puede salir a pie y en canoa con guía.",
+   "como_llegar": "En autobús turístico desde Katmandú o desde Pokhara, o en avión a Bharatpur, la ciudad más cercana. La mayoría de los alojamientos están en Sauraha.",
+   "donde_dormir": {
+    "mochilero": "Casas de huéspedes en Sauraha",
+    "medio": "Lodges con jardín en Sauraha",
+    "comfort": "Lodges de selva con las salidas incluidas"
+   },
+   "donde_comer": "En Sauraha hay restaurantes de todo tipo y dal bhat en los locales. Muchos lodges incluyen las comidas.",
+   "consejo_local": "Contrata las salidas con guía autorizado y haz caso de sus normas, sobre todo a pie: los rinocerontes son animales salvajes y cargan. Reserva la salida del amanecer la tarde anterior.",
+   "plan_b_lluvia": "Pregunta en Sauraha por el museo de cultura tharu, para entender a la gente de estas llanuras."
+  },
+  "faqs": [
+   { "q": "¿Cuál es la mejor época para ir a Chitwan?", "a": "De octubre a marzo. El monzón, de mediados de junio a finales de septiembre, concentra la mayor parte de la lluvia del año." },
+   { "q": "¿Se ven rinocerontes en Chitwan?", "a": "Es el mejor sitio de Nepal para intentarlo: el recuento de 2021 contó 694 rinocerontes indios en el parque, de los 752 del país. Aun así, son animales salvajes y nadie puede garantizarlo." },
+   { "q": "¿Cuántos días hacen falta?", "a": "Dos días completos permiten combinar una salida en todoterreno, otra a pie y una en canoa." },
+   { "q": "¿Chitwan es Patrimonio Mundial?", "a": "Sí, desde 1984. Fue además el primer parque nacional de Nepal, creado en 1973." }
+  ]
+ },
+ "pokhara-nepal": {
+  "sobre": true,
+  "p": [
+   "Pokhara es la segunda ciudad de Nepal, con unos 600.000 habitantes en el censo de 2021. Está a unos 200 km al oeste de Katmandú, a 822 metros, a orillas del lago Phewa.",
+   "Desde la ciudad se ven tres ochomiles (Dhaulagiri, Annapurna I y Manaslu) y el Machhapuchhre, la «Cola de Pez», de 6.993 metros, que es el pico más cercano. Es la base de los trekkings del Área de Conservación del Annapurna.",
+   "Estuvo en una antigua ruta comercial entre China e India. Su aeropuerto internacional abrió el 1 de enero de 2023. Es una de las zonas más lluviosas del país, con unos 3.350 mm al año."
+  ],
+  "fuentes": [
+   { "t": "Wikipedia: Pokhara", "u": "https://en.wikipedia.org/wiki/Pokhara" },
+   { "t": "The Kathmandu Post: guía obligatorio desde abril de 2023", "u": "https://kathmandupost.com/money/2023/03/04/no-more-solo-treks-guides-mandatory-from-april-1" }
+  ],
+  "tip": [
+   "Madruga para ver las montañas. Las nubes suelen subir a media mañana y tapan los picos; al amanecer están limpios.",
+   "Por eso se sube a Sarangkot de noche. Y por eso conviene mirar al norte antes del desayuno todos los días que estés: puede que sea la única hora en que se dejen ver."
+  ],
+  "ficha": {
+   "descripcion": "Segunda ciudad del país y base de los trekkings del Annapurna. El lago Phewa con el Machhapuchhre, la «Cola de Pez», reflejado es una de las imágenes más conocidas de Nepal. El ambiente es mucho más tranquilo que en Katmandú, con la orilla del lago llena de cafés y tiendas de material de montaña.",
+   "como_llegar": "En avión desde Katmandú, un vuelo corto, o por carretera en autobús turístico: son unos 200 km, pero cuenta con buena parte del día.",
+   "donde_dormir": {
+    "mochilero": "Casas de huéspedes en Lakeside",
+    "medio": "Hoteles con vistas al lago en Lakeside",
+    "comfort": "Hoteles en las colinas, con vistas al Himalaya"
+   },
+   "donde_comer": "Lakeside tiene de todo: dal bhat en los restaurantes locales y cafés con vistas al lago. Con la fruta pelada de los puestos callejeros, prudencia.",
+   "consejo_local": "Si vas a salir de trekking, infórmate antes de las normas del momento: en abril de 2023 la Junta de Turismo de Nepal empezó a exigir guía a quienes caminan por su cuenta, y desde entonces la norma ha tenido cambios. Los permisos del Annapurna se piden antes de salir y se controlan en ruta. Confírmalo en la Junta de Turismo o con una agencia autorizada.",
+   "plan_b_lluvia": "El Museo Internacional de la Montaña, abierto en 2004, cuenta la historia del alpinismo en el Himalaya y de los pueblos de la montaña."
+  },
+  "faqs": [
+   { "q": "¿Cuántos días hacen falta en Pokhara?", "a": "Tres días dan para el lago, el amanecer en Sarangkot y la Pagoda de la Paz. Si vas a hacer un trekking, añade los días de la ruta." },
+   { "q": "¿Se ve el Annapurna desde Pokhara?", "a": "Sí. Desde la ciudad se ven tres ochomiles (Dhaulagiri, Annapurna I y Manaslu) y el Machhapuchhre, de 6.993 metros. Lo más seguro es mirar al amanecer, antes de que suban las nubes." },
+   { "q": "¿Hace falta guía para hacer trekking desde Pokhara?", "a": "En abril de 2023 la Junta de Turismo de Nepal empezó a exigir guía a quienes caminan por su cuenta. La norma ha tenido cambios desde entonces, así que confírmala antes de salir en la Junta de Turismo o con una agencia autorizada." },
+   { "q": "¿Cuál es la mejor época para ir a Pokhara?", "a": "Octubre y noviembre, y de marzo a mayo. Es una de las zonas más lluviosas de Nepal, sobre todo durante el monzón." }
+  ]
+ }
+}
