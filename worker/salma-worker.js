@@ -9761,16 +9761,34 @@ async function verifyAllStops(route, placesKey, opts = {}, env) {
   // ── DEDUP POR place_id — dos paradas que Google ha llevado al MISMO sitio (30 sept 2026, Ronda: "Ciudad Árabe"
   //    acabó en la ficha de los "Baños Árabes", que ya era parada → salía dos veces). Se queda una: la que se llama
   //    como el sitio de Google; si ninguna, la primera. ──
+  //    14 nov 2026 (Paco, caso p-mwfityix43c): las que caen en el mismo sitio el MISMO día se JUNTAN en vez de tirarse —
+  //    eran actividades (Chitwan: safari en jeep, paseo a pie, lago) que Salma ponía con el nombre del parque y se perdían.
+  //    La que se queda lleva el texto de todas, en su orden. En días distintos cada día conserva la suya.
   {
-    const _keepByPid = new Map();
+    const _grupoDe = s => s.place_id + '|' + (s.day == null ? '' : s.day);
+    const _grupos = new Map();
     finalStops.forEach(s => {
       if (!s.place_id) return;
-      const prev = _keepByPid.get(s.place_id);
-      if (!prev || (!_nameMatched.has(prev) && _nameMatched.has(s))) _keepByPid.set(s.place_id, s);
+      const k = _grupoDe(s);
+      if (!_grupos.has(k)) _grupos.set(k, []);
+      _grupos.get(k).push(s);
     });
-    const _before = finalStops.length;
-    finalStops = finalStops.filter(s => !s.place_id || _keepByPid.get(s.place_id) === s);
-    if (finalStops.length < _before) console.log(`[VERIFY] ⚠ DEDUP place_id: ${_before - finalStops.length} parada(s) repetida(s) fuera`);
+    const _fuera = new Set();
+    _grupos.forEach(grupo => {
+      if (grupo.length < 2) return;
+      const keep = grupo.find(s => _nameMatched.has(s)) || grupo[0];
+      const textos = [];
+      grupo.forEach(s => {
+        const t = String(s.narrative || s.description || '').trim();
+        if (t && !textos.some(x => x.includes(t))) textos.push(t);
+      });
+      if (textos.length) keep.narrative = textos.join(' ');
+      const horas = grupo.reduce((a, s) => a + (typeof s.estimated_hours === 'number' ? s.estimated_hours : 0), 0);
+      if (horas > 0) keep.estimated_hours = horas;
+      grupo.forEach(s => { if (s !== keep) _fuera.add(s); });
+      console.log(`[VERIFY] ⚠ JUNTAR place_id: ${grupo.length} paradas del día ${keep.day ?? '?'} en "${keep.name}"`);
+    });
+    if (_fuera.size) finalStops = finalStops.filter(s => !_fuera.has(s));
   }
 
   // ── DEDUP POR CERCANÍA — mismo sitio con dos place_id distintos ──
