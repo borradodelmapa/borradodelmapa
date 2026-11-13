@@ -1,4 +1,6 @@
-# Filipinas · largo «antes de viajar» — GUION v2 (13 nov 2026, 📈 Estrategia, para Paco)
+# Filipinas · largo «antes de viajar» — GUION v2.1 (13 nov 2026, 📈 Estrategia, para Paco)
+
+**v2.1 (Paco, 13 nov):** primera imagen = vuelo de dron (excepción a M15 solo en este vídeo); lo muy práctico primero (qué necesito, cuándo ir, seguridad); «por qué se llama Filipinas» se promete en el gancho y se cuenta al final; texto del gancho en pantalla más sugerente; el idioma de casa es el tagalo (comprobado en el censo).
 
 **Estado: PROPUESTA. ⏸ No se genera voz ni se monta hasta el OK de Paco a los cambios y al texto (F3, G1).**
 Sale para el **mar 15 dic, 10:00, solo YouTube** (plan §0). Rehace la v1 (`filipinas-apertura-guion-direccion.md`, montada el 5 nov, 6:45, nunca publicada).
@@ -36,57 +38,60 @@ En inglés (Y10): «PHILIPPINES Before You Go: 10 Things Nobody Tells You 🇵�
 - B · mujer ifugao en la terraza + «7.641 ISLAS».
 - C · rostro tatuado kalinga + «¿Y EL ESPAÑOL?».
 
-## 4 · GUION (pregunta en pantalla · voz · imagen)
+## 4 · GUION v2.1 (pregunta en pantalla · voz · imagen). Orden: gancho → lo muy práctico → qué ver → el país → la historia → por qué se llama Filipinas (al final)
+
 ### 0 · GANCHO (0-20 s)
-- **Imagen:** barquero en su bangka (persona primero, M15) → dron sobre las islas de El Nido (One Month Travel) → cráter del Pinatubo (Laurent Bugnion) → terrazas de Bangaan (Laurent Bugnion) → título.
-- **Salma:** «Siete mil seiscientas cuarenta y una islas. Trescientos años de España. Y casi nadie habla español. Antes de ir a Filipinas, esto es lo que todo el mundo pregunta.» [F1][F14]
-- **Pantalla:** «7.641 ISLAS».
+- **Imagen (Paco: primera imagen = vuelo de dron):** vuelo de dron sobre las islas de El Nido (One Month Travel) → cráter del Pinatubo (Laurent Bugnion) → terrazas de Bangaan (Laurent Bugnion) → Intramuros desde el aire (Dr. Jon's Desk).
+- **Texto en pantalla (va cambiando con la imagen):** «LLEVA EL NOMBRE DE UN REY» → «300 AÑOS ESPAÑOLA» → «Y NO HABLA ESPAÑOL».
+- **Salma:** «Lleva el nombre de un rey de España. Fue española más de trescientos años. Y hoy casi nadie habla allí español. Por qué se llama Filipinas te lo cuento al final. Antes, lo que de verdad necesitas saber para ir.» [N1][F14][N2]
 - **Mapa A** (globo → archipiélago) con la sintonía, sin voz. Sígueme a los 20 s (M13).
 
-### 1 · ¿DÓNDE ESTÁ Y CÓMO ES?
-- **Salma:** «Son siete mil seiscientas cuarenta y una islas, según la agencia cartográfica del país; solo unas dos mil están habitadas. Tres grupos: Luzón al norte, las Visayas en el centro y Mindanao al sur. [F1] Está sobre el Cinturón de Fuego: el instituto de vulcanología cuenta veinticuatro volcanes activos.» [F2]
-- **Imagen:** Mapa B (placas) → dron del Mayon (Dr. Jon's Desk) → Taal (Clear to climb) → Pinatubo, el lago del cráter (Hobby Dad).
-- **Cifras (M9):** 7.641 · 2.000 · 24.
+### 1 · ¿QUÉ NECESITO PARA ENTRAR?
+- **Salma:** «Con pasaporte español no necesitas visado para treinta días o menos. Lleva billete de salida y el pasaporte en vigor seis meses. [F30] Y en las setenta y dos horas antes de volar, el registro eTravel: es gratis y solo vale la web oficial. Las que cobran no lo son.» [F31]
+- **Pantalla:** «30 DÍAS SIN VISADO» · «eTravel: GRATIS» + «Datos a diciembre de 2026 · confírmalos en fuentes oficiales» (P9).
+- **Imagen:** dron de Manila (Dr. Jon's Desk, winelfredpasamba) → foto de aeropuerto.
 
-### 2 · ¿POR QUÉ SE LLAMA FILIPINAS?
-- **Salma:** «Por un rey de España. Una expedición española les puso el nombre en honor del príncipe Felipe, el que después fue Felipe II. Al principio era solo para dos islas; luego se quedó para todas.» [N1]
-- **Imagen:** grabado antiguo (foto de la v1) → dron de Cebú (My Daily Flight) → estatuas de los conquistadores en Cebú.
-
-### 3 · ¿CUÁNTO TIEMPO FUE ESPAÑOLA?
-- **Salma:** «Desde 1565, cuando Legazpi fundó en Cebú el primer asentamiento español, hasta 1898. [F14][F22] Durante doscientos cincuenta años, el galeón de Manila unió Asia con América. [F14] Pero hubo un sitio donde España nunca llegó a mandar del todo: el interior de la Cordillera, en el norte de Luzón.» [F20]
-- **Imagen:** Mapa D (galeón, sígueme n.º 2) → dron de Intramuros y el fuerte de Santiago (Dr. Jon's Desk, MartinsTravel) → Vigan, puente sobre el Abra (Laurent Bugnion) → montañas de la Cordillera.
-
-### 4 · ¿POR QUÉ NO HABLAN ESPAÑOL?
-- **Salma:** «En 1898 España cedió Filipinas a Estados Unidos, que la gobernó hasta 1946. [F22] Los estadounidenses llevaron profesores de inglés, y el inglés se convirtió en la lengua de la escuela. [N2] Hoy las lenguas oficiales son el filipino y el inglés. [F27] Pero el español sigue dentro: según el Instituto Cervantes de Manila, cerca de un tercio de las palabras del tagalo vienen del español.» [N3]
-- **Imagen:** foto de archivo de 1898 (v1) → dron de Manila (Dr. Jon's Desk, winelfredpasamba) → calle con rótulos en tagalo (foto).
-- **Pantalla:** «≈ 30 % DEL TAGALO».
-
-### 5 · ¿QUÉ TIENE QUE NO TENGA OTRO SITIO?
-- **Salma:** «En la cueva de Callao apareció una especie humana que no se ha encontrado en ningún otro lugar: Homo luzonensis, de al menos cincuenta mil años. [F6][F7] Y en la Cordillera, terrazas de arroz que son Patrimonio de la Humanidad desde 1995. [F15] La UNESCO dice que tienen dos mil años. Un arqueólogo de la Universidad de California las dató con carbono catorce y propone otra cosa: que se construyeron para resistir a los españoles. [F17] El debate sigue abierto.»
-- **Imagen:** dron de la cueva de Callao (Vitto Viajero) → fósiles en museo (foto) → terrazas de Banaue y Batad (GypsyJWalk, MartinsTravel) → **plano largo de Bangaan, el pico del vídeo** (Laurent Bugnion), con la música.
-- **Pantalla:** «¿2.000 AÑOS… O 400?».
-
-### 6 · ¿QUÉ SE ESTÁ BORRANDO?
-- **Salma:** «Los ataúdes colgantes de Sagada, el tatuaje batok de Whang-Od, los cantos hudhud que las mujeres mayores cantan en la cosecha. [F13][F28][F29] Las terrazas estuvieron once años en la lista de patrimonio en peligro: los jóvenes se van y la erosión y el turismo hacen el resto.» [F16]
-- **Imagen:** Mapa E (pueblos, sígueme n.º 3) → dron de los ataúdes de Sagada (Weekend Drive Philippines) → Whang-Od (foto) → terrazas de Fidelisan (Imagination Tech) → mujer mayor ifugao (foto).
-
-### 7 · ¿ES SEGURO?
-- **Salma:** «El Ministerio de Exteriores pide extremar la precaución en Mindanao, en el sur, por los grupos armados que operan allí. [N4] Las rutas de este vídeo están en el norte: la Cordillera de Luzón, Palawan y las Visayas. Antes de ir, mira la página de recomendaciones de viaje de Exteriores: cambia.»
-- **Imagen:** dron de Bohol, las Colinas de Chocolate (hikangs 4K) → Coron (My Daily Flight).
-- **⚠ Para Paco:** la frase «las rutas de este vídeo están en el norte» es nuestra; la zona exacta de riesgo se copia tal cual de Exteriores el día del montaje.
-
-### 8 · ¿CUÁNDO IR?
-- **Salma:** «Cada año entran unos veinte tifones en la zona que vigila el servicio meteorológico, y ocho o nueve cruzan el país. [F3] La temporada fuerte va de julio a octubre: evítala.» [F4]
+### 2 · ¿CUÁNDO IR?
+- **Salma:** «Cada año entran unos veinte tifones en la zona que vigila el servicio meteorológico, y ocho o nueve cruzan el país. Ningún otro recibe tantos. [F3] La temporada fuerte va de julio a octubre: evítala.» [F4]
+- **Pantalla:** «JULIO-OCTUBRE: TIFONES».
 - **Imagen:** cielo de tifón (foto de la v1) → dron de la playa de El Nido (ZokStar1).
 
-### 9 · ¿QUÉ NECESITO?
-- **Salma:** «Con pasaporte español no necesitas visado para treinta días o menos, con billete de salida y el pasaporte en vigor seis meses. [F30] Y en las setenta y dos horas antes de volar, el registro eTravel: gratis y solo en la web oficial. Las que cobran no lo son.» [F31]
-- **Pantalla:** «30 DÍAS SIN VISADO · eTravel GRATIS» + «Datos a diciembre de 2026 · confírmalos en fuentes oficiales» (P9).
-- **Imagen:** dron de Manila → foto de aeropuerto.
+### 3 · ¿ES SEGURO?
+- **Salma:** «El Ministerio de Exteriores pide extremar la precaución en Mindanao, en el sur, por los grupos armados que operan allí. [N4] Las rutas de este vídeo están en el norte de Luzón, en Palawan y en las Visayas. Antes de ir, mira la página de Exteriores: cambia.»
+- **Imagen:** dron de las Colinas de Chocolate, Bohol (hikangs 4K) → Coron (My Daily Flight).
+- **⚠ Para Paco:** «las rutas de este vídeo están en…» es frase nuestra; la zona de riesgo se copia tal cual de Exteriores el día del montaje.
 
-### 10 · ¿QUÉ VER? LA RUTA DEL NORTE EN 4 DÍAS
-- **Salma:** «Si vas a la Cordillera: Banaue y sus miradores, Batad a pie, Sagada con sus cuevas y sus ataúdes, y Buscalan, el pueblo de Whang-Od, con guía local obligatorio.» [F28][F29]
-- **Imagen:** ruta animada sobre el mapa (Banaue → Batad → Sagada → Buscalan) → dron de Banaue (MartinsTravel) → cueva de Sumaguing (MartinsTravel) → Kiltepan desde el aire (Diwags TV) → clip común de la app (M16, sin hablar de la app) → tarjeta final 16:9 (M14) con «Whang-Od · Sagada · Los ifugao».
+### 4 · ¿QUÉ VER? LA RUTA DEL NORTE EN 4 DÍAS
+- **Salma:** «Si vas a la Cordillera, en el norte: Banaue y sus miradores, Batad a pie, Sagada con sus cuevas y sus ataúdes colgantes, y Buscalan, el pueblo de Whang-Od, con guía local obligatorio.» [F28][F29]
+- **Imagen:** ruta animada (Banaue → Batad → Sagada → Buscalan) con la sintonía (sígueme n.º 2) → dron de Banaue (MartinsTravel) → Batad (GypsyJWalk) → cueva de Sumaguing (MartinsTravel) → Kiltepan desde el aire (Diwags TV).
+
+### 5 · ¿CÓMO ES EL PAÍS?
+- **Salma:** «Son siete mil seiscientas cuarenta y una islas, según la agencia cartográfica del país; solo unas dos mil están habitadas. Tres grupos: Luzón al norte, las Visayas en el centro y Mindanao al sur. [F1] Está sobre el Cinturón de Fuego: el instituto de vulcanología cuenta veinticuatro volcanes activos.» [F2]
+- **Imagen:** Mapa B (placas) → dron del Mayon (Dr. Jon's Desk) → Taal (Clear to climb) → lago del cráter del Pinatubo (Hobby Dad).
+- **Cifras (M9):** 7.641 · 2.000 · 24.
+
+### 6 · ¿QUÉ TIENE QUE NO TENGA OTRO SITIO?
+- **Salma:** «En la cueva de Callao apareció una especie humana que no se ha encontrado en ningún otro lugar: Homo luzonensis, de al menos cincuenta mil años. [F6][F7] Y en la Cordillera, terrazas de arroz Patrimonio de la Humanidad desde 1995. [F15] La UNESCO dice que tienen dos mil años. Un arqueólogo de la Universidad de California las dató con carbono catorce y propone otra cosa: que se levantaron para resistir a los españoles. [F17] El debate sigue abierto.»
+- **Imagen:** dron de la cueva de Callao (Vitto Viajero) → fósiles en museo (foto) → **plano largo de Bangaan, el pico del vídeo** (Laurent Bugnion), con la música.
+- **Pantalla:** «¿2.000 AÑOS… O 400?».
+
+### 7 · ¿QUÉ SE ESTÁ BORRANDO?
+- **Salma:** «Los ataúdes colgantes de Sagada, el tatuaje batok de Whang-Od, los cantos hudhud que las mujeres mayores cantan en la cosecha. [F13][F28][F29] Las terrazas estuvieron once años en la lista de patrimonio en peligro: los jóvenes se van, y la erosión y el turismo hacen el resto.» [F16]
+- **Imagen:** Mapa E (pueblos) → dron de los ataúdes de Sagada (Weekend Drive Philippines) → Whang-Od (foto) → terrazas de Fidelisan (Imagination Tech) → mujer mayor ifugao (foto).
+
+### 8 · ¿CUÁNTO TIEMPO FUE ESPAÑOLA?
+- **Salma:** «Desde 1565, cuando Legazpi fundó en Cebú el primer asentamiento español, hasta 1898. [F14][F22] Durante doscientos cincuenta años, el galeón de Manila unió Asia con América. [F14] Pero en el interior de la Cordillera, España nunca llegó a mandar del todo.» [F20]
+- **Imagen:** Mapa D (galeón, sígueme n.º 3) → dron de Cebú (My Daily Flight) → Intramuros y el fuerte de Santiago (MartinsTravel) → puente de Vigan sobre el Abra (Laurent Bugnion).
+
+### 9 · ¿POR QUÉ NO HABLAN ESPAÑOL?
+- **Salma:** «En 1898 España cedió Filipinas a Estados Unidos, que la gobernó hasta 1946. [F22] Los estadounidenses llevaron profesores de inglés, y el inglés se convirtió en la lengua de la escuela. [N2] Hoy en cuatro de cada diez casas se habla tagalo, según el último censo; el filipino, que es oficial con el inglés, se basa en él. [N5] Pero el español sigue dentro: según el Instituto Cervantes de Manila, cerca de un tercio de las palabras del tagalo vienen del español.» [N3]
+- **Imagen:** foto de archivo de 1898 (v1) → dron de Manila → calle con rótulos en tagalo (foto).
+- **Pantalla:** «TAGALO · 4 DE CADA 10 CASAS» → «≈ 1/3 DE SUS PALABRAS, DEL ESPAÑOL».
+
+### 10 · ¿POR QUÉ SE LLAMA FILIPINAS? (la promesa del gancho)
+- **Salma:** «Por un rey de España. Una expedición española les puso el nombre en honor del príncipe Felipe, el que después fue Felipe II. Al principio era solo para dos islas; luego se quedó para todas.» [N1]
+- **Imagen:** grabado antiguo (foto de la v1) → estatuas de los conquistadores en Cebú → último vuelo de dron sobre las islas (Coron, My Daily Flight) → clip común de la app (M16, sin hablar de la app) → tarjeta final 16:9 (M14) con «Whang-Od · Sagada · Los ifugao».
+- Cierre con el dato, sin moraleja (N6).
 
 ## 5 · DATOS NUEVOS Y SU FUENTE (⏸ OK de Paco antes de la voz)
 | ID | Dato | Fuente | Ojo |
@@ -94,6 +99,7 @@ En inglés (Y10): «PHILIPPINES Before You Go: 10 Things Nobody Tells You 🇵�
 | N1 | Nombre por el príncipe Felipe (Felipe II), primero para Leyte y Sámar | Rappler, comprobación de datos: https://www.rappler.com/newsbreak/fact-check/magellan-gave-the-name-philippines-to-country · Wikipedia, *Ruy López de Villalobos* | Año 1542 o 1543 y quién exactamente (Villalobos o su capitán): por eso **la voz no dice ni año ni nombre** |
 | N2 | EE. UU. llevó profesores de inglés y el inglés fue la lengua de la escuela | Global Voices: https://globalvoices.org/2014/12/14/they-dont-speak-spanish-in-the-philippines/ · Real Instituto Elcano: https://www.realinstitutoelcano.org/en/analyses/new-prospects-for-the-spanish-language-in-the-philippines-ari/ | Buscar una fuente oficial filipina antes de montar |
 | N3 | ~30 % del vocabulario tagalo de origen español | Galván-Guijo, director del Instituto Cervantes de Manila (citado en Real Instituto Elcano) | «Cerca de un tercio», nunca «el 30 % exacto» |
+| N5 | El tagalo es la lengua de casa en el 39,9 % de los hogares (10,5 millones), la primera del país; la segunda, el bisaya (16 %) | PSA, censo 2020 (publicado el 7 mar 2023): https://www.psa.gov.ph/statistics/population-and-housing/node/1684041577 | «Cuatro de cada diez casas». El filipino, oficial con el inglés, se basa en el tagalo (Constitución de 1987, art. XIV) |
 | N4 | Exteriores: grupos terroristas con especial incidencia en Mindanao | https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=filipinas | Se relee el día del montaje |
 
 **Sale de la voz respecto a la v1 (va a la descripción y al blog):** escritura de Laguna (año 900), escrituras mangyan, ayta y ADN denisovano, austronesios, Feria de San Luis 1904, misión de Sagada 1904, río Chico y Macli-ing Dulag, ley de 1997.
@@ -102,5 +108,5 @@ En inglés (Y10): «PHILIPPINES Before You Go: 10 Things Nobody Tells You 🇵�
 1. ¿OK a los cambios del apartado 1?
 2. ¿OK al texto de la voz (bloques 0-10), o correcciones por número?
 3. Título (1, 2 o 3) y carátula (A, B o C).
-4. ¿OK a las 4 fuentes nuevas (N1-N4)?
+4. ¿OK a las 5 fuentes nuevas (N1-N5)?
 Después: frase de prueba de voz (coste antes) → montaje con el motor → tu editor → exportar en calidad máxima.
