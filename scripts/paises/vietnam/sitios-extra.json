@@ -8,7 +8,9 @@
       { "t": "Wikipedia: bahía de Ha Long", "u": "https://en.wikipedia.org/wiki/Ha_Long_Bay" },
       { "t": "Wikipedia: isla de Cát Bà", "u": "https://en.wikipedia.org/wiki/C%C3%A1t_B%C3%A0_Island" },
       { "t": "Turismo de Vietnam: cueva Sung Sot", "u": "https://seagames31.vietnamtourism.gov.vn/?p=2540" },
-      { "t": "The Maritime Executive: naufragio de julio de 2025", "u": "https://maritime-executive.com/article/tourist-vessel-capsizes-in-ha-long-bay-killing-at-least-37-people" }
+      { "t": "The Maritime Executive: naufragio de julio de 2025", "u": "https://maritime-executive.com/article/tourist-vessel-capsizes-in-ha-long-bay-killing-at-least-37-people" },
+      { "t": "Vietnam Tourism: de Hanói a la bahía de Hạ Long", "u": "https://www.vietnamtourism.com/en/getting-to-ha-long-bay-from-hanoi-by-bus-car-and-high-speed-boat" },
+      { "t": "Wikipedia: chả mực", "u": "https://en.wikipedia.org/wiki/Ch%E1%BA%A3_m%E1%BB%B1c" }
     ],
     "seguridad": "Seguro; ojo a las tormentas en barco",
     "que_hacer": [
@@ -23,7 +25,9 @@
       { "q": "¿Dónde se duerme?", "a": "Lo habitual es en el propio crucero. Si prefieres ir por libre, en la isla de Cát Bà duermes en tierra y sales a la bahía de día." },
       { "q": "¿Es seguro el crucero?", "a": "El mayor riesgo es el mal tiempo. En julio de 2025, una tormenta repentina volcó un barco turístico en la bahía y murieron decenas de personas. Mira la previsión antes de salir, pregunta por los chalecos y acepta los cambios si cancelan por tormenta." },
       { "q": "¿Cuál es la mejor época?", "a": "De octubre a diciembre suele haber cielos más claros. El verano es caluroso y húmedo, y con mal tiempo los cruceros pueden cancelar: deja margen en tu viaje." }
-    ]
+    ],
+    "como_llegar": "Desde Hanói, unas 2,5-3,5 horas por autopista en bus o furgoneta hasta los muelles de Bãi Cháy o Tuần Châu. Casi todos los cruceros incluyen el traslado desde el casco antiguo de Hanói: pregúntalo al reservar.",
+    "donde_comer": "En los cruceros de una o dos noches la comida va incluida, con mucho marisco. En tierra, prueba el chả mực, el pastel de calamar de Hạ Long."
   },
   "hanoi-vietnam": {
     "p": [
@@ -35,7 +39,10 @@
       { "t": "Wikipedia: Edicto del traslado de la capital", "u": "https://en.wikipedia.org/wiki/Edict_on_the_Transfer_of_the_Capital" },
       { "t": "VTV: Hanói prohíbe los tours a la calle del tren", "u": "https://english.vtv.vn/news/hanoi-bans-tours-on-train-street-20250310095147632.htm" },
       { "t": "Tuổi Trẻ: los cafés reabren tras la redada", "u": "https://news.tuoitre.vn/hanois-train-street-cafes-resume-operations-days-after-police-sweep-media-103251128170957732.htm" },
-      { "t": "Vietcetera: menos trenes por la calle", "u": "https://vietcetera.com/en/hanoi-cuts-train-services-to-famous-train-street-can-it-remain-a-tourist-magnet" }
+      { "t": "Vietcetera: menos trenes por la calle", "u": "https://vietcetera.com/en/hanoi-cuts-train-services-to-famous-train-street-can-it-remain-a-tourist-magnet" },
+      { "t": "Your Vietnam Travel: el bus 86 desde Nội Bài", "u": "https://www.yourvietnamtravel.com/bus-from-noi-bai-airport-to-hanoi-old-quarter" },
+      { "t": "Wikipedia: bún chả", "u": "https://en.wikipedia.org/wiki/Bun_cha" },
+      { "t": "Wikipedia: café con huevo", "u": "https://en.wikipedia.org/wiki/Egg_coffee" }
     ],
     "que_hacer": [
       "Perderte a pie por el casco antiguo: Sus 36 calles llevan el nombre de lo que se vendía en ellas. Madrugar o salir al atardecer ayuda a esquivar el tráfico de motos.",
@@ -49,7 +56,9 @@
       { "q": "¿Se puede visitar la calle del tren?", "a": "Depende del momento. Los tours están prohibidos desde marzo de 2025 y la policía ha cerrado el paso más de una vez, aunque los cafés han vuelto a abrir. Pregunta en tu alojamiento ese mismo día y respeta el acceso si está cerrado." },
       { "q": "¿Cuál es la mejor época?", "a": "De octubre a diciembre, con tiempo seco y fresco." },
       { "q": "¿Sirve como base para el norte?", "a": "Sí. Desde Hanói salen los transportes a Ha Long, Ninh Bình y Sa Pa." }
-    ]
+    ],
+    "como_llegar": "El aeropuerto de Nội Bài está a unos 45-60 minutos del centro, según el tráfico. El bus 86 va del aeropuerto al casco antiguo y a la estación de tren; también hay taxis oficiales y Grab. No hay metro al aeropuerto.",
+    "donde_comer": "Bún chả (cerdo a la brasa con fideos), el plato de Hanói, en cualquier casa de comidas del casco antiguo. Phở de ternera para desayunar, como el de Phở Gia Truyền en la calle Bát Đàn. Y el café con huevo, que nació en Hanói en 1946, en el Café Giảng."
   },
   "ninh-binh-vietnam": {
     "p": [
@@ -57,7 +66,8 @@
       "El conjunto incluye Tam Cốc y Bích Động al sur y, al norte, Hoa Lư, la antigua capital de Vietnam."
     ],
     "fuentes": [
-      { "t": "Wikipedia: paisaje de Tràng An", "u": "https://en.wikipedia.org/wiki/Tr%C3%A0ng_An_Scenic_Landscape_Complex" }
+      { "t": "Wikipedia: paisaje de Tràng An", "u": "https://en.wikipedia.org/wiki/Tr%C3%A0ng_An_Scenic_Landscape_Complex" },
+      { "t": "Rough Guides: de Hanói a Ninh Bình", "u": "https://www.roughguides.com/vietnam/getting-around/hanoi-to-ninh-binh/" }
     ],
     "que_hacer": [
       "Barca por Tam Cốc: Remeros que te llevan por el río entre arrozales y cuevas. Es la parte sur del conjunto de Tràng An.",
@@ -70,7 +80,9 @@
       { "q": "¿Tam Cốc o Tràng An?", "a": "Las dos están dentro del mismo conjunto. Tam Cốc se combina fácil con los campos y Múa; el paseo de Tràng An dura unas dos horas y pasa por más cuevas." },
       { "q": "¿Cuál es la mejor época?", "a": "Mayo y junio para el arroz verde, y septiembre para verlo dorado." },
       { "q": "¿Se puede ir por libre desde Hanói?", "a": "Sí, en bus o en tren, y una vez allí te mueves en bici o moto." }
-    ]
+    ],
+    "como_llegar": "Está a unos 90 km de Hanói: unas 2-2,5 horas en tren, o 1,5-3 horas en bus o furgoneta según el tipo. Desde la estación, taxi o Grab a Tam Cốc o Tràng An.",
+    "donde_comer": "La especialidad es la cabra de montaña (dê núi), a la brasa o salteada, con cơm cháy, el arroz crujiente del fondo de la olla. La encuentras en los restaurantes de Tam Cốc."
   },
   "phong-nha-vietnam": {
     "descripcion": "Cuevas enormes y selva en el centro de Vietnam. Son Đoòng, considerada la mayor cueva del mundo, solo se visita en una expedición cara y limitada; Paradise Cave y Phong Nha son mucho más accesibles.",
@@ -79,7 +91,8 @@
       "Paradise Cave la encontró un vecino en 2005; exploradores británicos midieron unos 31 km y desde 2010 tiene una pasarela turística de 1,1 km. Son Đoòng la encontró Hồ Khanh, un vecino de la zona, y la midieron científicos británicos en 2009."
     ],
     "fuentes": [
-      { "t": "Wikipedia: parque nacional Phong Nha-Kẻ Bàng", "u": "https://en.wikipedia.org/wiki/Phong_Nha-K%E1%BA%BB_B%C3%A0ng_National_Park" }
+      { "t": "Wikipedia: parque nacional Phong Nha-Kẻ Bàng", "u": "https://en.wikipedia.org/wiki/Phong_Nha-K%E1%BA%BB_B%C3%A0ng_National_Park" },
+      { "t": "Gecko Routes: de Đồng Hới a Phong Nha", "u": "https://geckoroutes.com/vietnam/dong-hoi-to-phong-nha/" }
     ],
     "que_hacer": [
       "Paradise Cave: Unos 31 km de galerías, de los que se recorre una pasarela de 1,1 km entre estalactitas enormes.",
@@ -92,7 +105,9 @@
       { "q": "¿Se puede visitar Son Đoòng?", "a": "Solo en expedición organizada, de varios días, con plazas limitadas y precio muy alto. Si no entra en tu viaje, Paradise Cave es la alternativa." },
       { "q": "¿Cuál es la mejor época?", "a": "De febrero a agosto suele ser más seco. Entre julio y diciembre cae la mayor parte de la lluvia del año." },
       { "q": "¿Qué hacer si llueve?", "a": "Las cuevas son el plan B natural. Con mucha lluvia, confirma que la barca de Phong Nha está funcionando." }
-    ]
+    ],
+    "como_llegar": "El aeropuerto más cercano es el de Đồng Hới, a unos 45 km: hay vuelos desde Hanói y Ho Chi Minh. Desde allí, bus local (alrededor de 1 hora), furgoneta compartida o taxi. También llegan buses nocturnos desde Hanói y Huế.",
+    "donde_comer": "El pueblo es pequeño y hay pocas opciones: comida vietnamita sencilla en la calle principal y en los alojamientos de los alrededores, muchos con restaurante propio. Cena pronto: cierran antes que en las ciudades."
   },
   "hue-vietnam": {
     "p": [
@@ -101,7 +116,9 @@
     ],
     "fuentes": [
       { "t": "Wikipedia: monumentos de Huế", "u": "https://en.wikipedia.org/wiki/Complex_of_Hu%E1%BA%BF_Monuments" },
-      { "t": "Wikipedia: batalla de Huế", "u": "https://en.wikipedia.org/wiki/Battle_of_Hu%E1%BA%BF" }
+      { "t": "Wikipedia: batalla de Huế", "u": "https://en.wikipedia.org/wiki/Battle_of_Hu%E1%BA%BF" },
+      { "t": "Vietnam Tourism: horarios de tren de Đà Nẵng a Huế", "u": "https://www.vietnamtourism.com/en/transport/da-nang-hue" },
+      { "t": "Wikipedia: bún bò Huế", "u": "https://en.wikipedia.org/wiki/B%C3%BAn_b%C3%B2_Hu%E1%BA%BF" }
     ],
     "que_hacer": [
       "Ciudad Imperial: El recinto amurallado de los emperadores Nguyễn, con la Puerta del Mediodía como entrada. Calcula al menos tres horas.",
@@ -114,7 +131,9 @@
       { "q": "¿Cuál es la mejor época?", "a": "De febrero a abril, con tiempo seco y templado. De octubre a diciembre llueve mucho en el centro de Vietnam." },
       { "q": "¿Qué hacer si llueve?", "a": "La Ciudad Imperial tiene partes cubiertas, y es buen momento para una clase de cocina." },
       { "q": "¿Qué se come en Huế?", "a": "El plato de la ciudad es el bún bò Huế, una sopa picante de fideos." }
-    ]
+    ],
+    "como_llegar": "Desde Đà Nẵng, unas 2,5 horas en tren por la costa del paso de Hải Vân, uno de los tramos más bonitos de la vía. En coche por el túnel, unas 2-2,5 horas. Huế tiene también aeropuerto propio (Phú Bài), con vuelos desde Hanói y Ho Chi Minh.",
+    "donde_comer": "El bún bò Huế, la sopa de fideos picante de la ciudad, se toma en cualquier puesto. Prueba también los platos de la antigua cocina de la corte en pequeñas porciones (bánh bèo, bánh nậm) y desayuna en el mercado de Đông Ba."
   },
   "sapa-vietnam": {
     "p": [
@@ -122,7 +141,9 @@
       "El pueblo es muy turístico; el valle de Mường Hoa, con sus terrazas de arroz y sus aldeas, es la razón para venir."
     ],
     "fuentes": [
-      { "t": "Wikipedia: Sa Pa", "u": "https://en.wikipedia.org/wiki/Sa_Pa" }
+      { "t": "Wikipedia: Sa Pa", "u": "https://en.wikipedia.org/wiki/Sa_Pa" },
+      { "t": "North Vietnam: de Hanói a Sa Pa", "u": "https://north-vietnam.com/?p=9174" },
+      { "t": "Wikipedia: thắng cố", "u": "https://en.wikipedia.org/wiki/Th%E1%BA%AFng_c%E1%BB%91" }
     ],
     "que_hacer": [
       "Trekking con noche en una aldea: Dos días por los valles con guía local, durmiendo en casa de una familia. Mejor con guías de las propias aldeas.",
@@ -135,7 +156,9 @@
       { "q": "¿Cuál es la mejor época?", "a": "Septiembre y octubre para el arroz dorado, y de marzo a mayo para verlo verde." },
       { "q": "¿Cómo se contrata un guía?", "a": "Busca guías de las propias aldeas en vez de agencias del pueblo: el dinero se queda en la comunidad." },
       { "q": "¿Qué pasa si llueve?", "a": "Los senderos se vuelven de barro. Lleva calzado con buen agarre y acorta la ruta si hace falta." }
-    ]
+    ],
+    "como_llegar": "Desde Hanói, en bus directo (unas 5,5-7 horas, de día o de noche con literas) o en tren nocturno a Lào Cai (unas 8 horas) y después 1-1,5 horas por carretera hasta Sa Pa.",
+    "donde_comer": "Si duermes en una casa de familia en las aldeas, la cena suele ir incluida y es comida de casa. En el pueblo hay puestos de brochetas a la brasa por la noche y, en el mercado, thắng cố, el guiso de los hmong."
   },
   "hoi-an-vietnam": {
     "p": [
@@ -143,7 +166,9 @@
       "Desde 2025, Hội An pertenece administrativamente a la ciudad de Đà Nẵng."
     ],
     "fuentes": [
-      { "t": "Wikipedia: casco antiguo de Hội An", "u": "https://en.wikipedia.org/wiki/H%E1%BB%99i_An_Old_Town" }
+      { "t": "Wikipedia: casco antiguo de Hội An", "u": "https://en.wikipedia.org/wiki/H%E1%BB%99i_An_Old_Town" },
+      { "t": "Vietnam Tourism: llegar a Hội An desde el aeropuerto de Đà Nẵng", "u": "https://www.vietnamtourism.com/en/getting-to-hoi-an-from-da-nang-airport-and-beyond" },
+      { "t": "Wikipedia: cao lầu", "u": "https://en.wikipedia.org/wiki/Cao_l%E1%BA%A7u" }
     ],
     "que_hacer": [
       "Casco antiguo: Casas de comerciantes, farolillos y el Puente Japonés. Por la mañana temprano hay menos gente; de noche es cuando más luce.",
@@ -156,7 +181,9 @@
       { "q": "¿Cuál es la mejor época?", "a": "De febrero a mayo, con tiempo seco y calor agradable. En octubre y noviembre son frecuentes las lluvias y las inundaciones." },
       { "q": "¿Cuándo son los farolillos?", "a": "Se apagan las luces eléctricas la noche 14 de cada mes lunar. Comprueba la fecha antes de planificar." },
       { "q": "¿Cómo se llega?", "a": "Por el aeropuerto de Đà Nẵng, a unos 30 minutos por carretera." }
-    ]
+    ],
+    "como_llegar": "El aeropuerto más cercano es el de Đà Nẵng, a unos 30 km: 40-50 minutos en Grab o taxi. Desde Huế, unas 3-4 horas en coche o bus.",
+    "donde_comer": "El cao lầu, los fideos gruesos que solo se hacen bien aquí, y los white rose (dumplings de gamba). Para un bánh mì, Bánh Mì Phượng, que se hizo famoso tras la visita de Anthony Bourdain."
   },
   "ho-chi-minh-vietnam": {
     "p": [
@@ -165,7 +192,10 @@
     ],
     "fuentes": [
       { "t": "Wikipedia: Museo de los Vestigios de la Guerra", "u": "https://en.wikipedia.org/wiki/War_Remnants_Museum" },
-      { "t": "Wikipedia: túneles de Củ Chi", "u": "https://en.wikipedia.org/wiki/C%E1%BB%A7_Chi_tunnels" }
+      { "t": "Wikipedia: túneles de Củ Chi", "u": "https://en.wikipedia.org/wiki/C%E1%BB%A7_Chi_tunnels" },
+      { "t": "Saigoneer: el bus 109 entre el aeropuerto y el centro", "u": "https://saigoneer.com/saigon-news/6576-photos-saigon-launches-new-bus-connecting-d1-and-tan-son-nhat" },
+      { "t": "VnEconomy: abre la primera línea de metro", "u": "https://en.vneconomy.vn/vietnams-first-metro-line-put-into-commercial-operation.htm" },
+      { "t": "Wikipedia: cơm tấm", "u": "https://en.wikipedia.org/wiki/C%C6%A1m_t%E1%BA%A5m" }
     ],
     "que_hacer": [
       "Museo de los Vestigios de la Guerra: Abierto en 1975, cuenta la guerra con fotos, aviones y carros de combate, y muestra las consecuencias del Agente Naranja. Es duro, y cuenta sobre todo la versión vietnamita.",
@@ -178,7 +208,9 @@
       { "q": "¿Qué túneles de Củ Chi elegir?", "a": "Bến Dược conserva parte del sistema original. Bến Đình está más cerca de la ciudad, con reconstrucciones y túneles ensanchados para turistas." },
       { "q": "¿Cuál es la mejor época?", "a": "De diciembre a abril, en temporada seca. De mayo a noviembre llueve a menudo por la tarde." },
       { "q": "¿Qué hacer si llueve?", "a": "Los chaparrones suelen pasar pronto: es buen momento para un café o para el museo." }
-    ]
+    ],
+    "como_llegar": "El aeropuerto de Tân Sơn Nhất está dentro de la ciudad: 30-45 minutos al centro (más en hora punta) en Grab, taxi o el bus 109, que para cerca del mercado de Bến Thành. La línea 1 de metro, abierta en diciembre de 2024, va de Bến Thành a Suối Tiên; no llega al aeropuerto.",
+    "donde_comer": "Cơm tấm (arroz partido con cerdo a la brasa), el plato de la ciudad, en cualquier puesto. Bánh mì en Huỳnh Hoa (hay cola, va rápido) y phở en Phở Hòa Pasteur, uno de los clásicos del centro."
   },
   "dalat-vietnam": {
     "p": [
@@ -186,7 +218,9 @@
       "Su clima explica el café y las flores, y también la Crazy House, una casa de 1990 con forma de árbol gigante."
     ],
     "fuentes": [
-      { "t": "Wikipedia: Đà Lạt", "u": "https://en.wikipedia.org/wiki/Da_Lat" }
+      { "t": "Wikipedia: Đà Lạt", "u": "https://en.wikipedia.org/wiki/Da_Lat" },
+      { "t": "Vietnam Airlines: del aeropuerto de Đà Lạt al centro", "u": "https://www.vietnamairlines.com/en/useful-information/travel-guide/airport-dalat" },
+      { "t": "Wikipedia: bánh tráng", "u": "https://en.wikipedia.org/wiki/B%C3%A1nh_tr%C3%A1ng" }
     ],
     "que_hacer": [
       "Ruta de cascadas en moto: Datanla, Elephant y Pongour se pueden unir en un día por carretera de montaña.",
@@ -199,7 +233,9 @@
       { "q": "¿Cuál es la mejor época?", "a": "De noviembre a marzo, con tiempo seco y fresco." },
       { "q": "¿Hace frío?", "a": "Refresca bastante para Vietnam, sobre todo de noche: las medias van de 14 a 23 °C. Lleva algo de abrigo." },
       { "q": "¿Qué hacer si llueve?", "a": "Cafeterías, la Crazy House y los invernaderos de flores." }
-    ]
+    ],
+    "como_llegar": "El aeropuerto de Liên Khương está a unos 30 km del centro (30-40 minutos en coche), con vuelos desde Hanói y Ho Chi Minh. En bus, unas 7-8 horas desde Ho Chi Minh y unas 4 desde Nha Trang.",
+    "donde_comer": "En el mercado nocturno, el bánh tráng nướng: oblea de arroz a la brasa con huevo y otros ingredientes. Con el fresco de la montaña, el lẩu (olla caliente para compartir) es lo típico de la cena. Y café: Đà Lạt es tierra de cafetales."
   },
   "phu-quoc-vietnam": {
     "p": [
@@ -207,7 +243,9 @@
       "La isla es conocida por su salsa de pescado y su pimienta negra. El sur y el oeste están muy urbanizados; el norte y el este conservan más calma."
     ],
     "fuentes": [
-      { "t": "Wikipedia: Phú Quốc", "u": "https://en.wikipedia.org/wiki/Ph%C3%BA_Qu%E1%BB%91c" }
+      { "t": "Wikipedia: Phú Quốc", "u": "https://en.wikipedia.org/wiki/Ph%C3%BA_Qu%E1%BB%91c" },
+      { "t": "Premier Residences: ferris a Phú Quốc", "u": "https://blog.premierresidencesphuquoc.com/ferry-to-phu-quoc/" },
+      { "t": "Wikipedia: salsa de pescado de Phú Quốc", "u": "https://en.wikipedia.org/wiki/Phu_Quoc_fish_sauce" }
     ],
     "que_hacer": [
       "Snorkel en las islas del sur: Salidas en barco de un día con comida. Mejor en temporada seca, con el mar en calma.",
@@ -220,6 +258,8 @@
       { "q": "¿Cuál es la mejor época?", "a": "De diciembre a marzo, en temporada seca. De abril a noviembre es temporada de lluvias." },
       { "q": "¿Se necesita visado?", "a": "Los españoles pueden entrar en Vietnam sin visado hasta 45 días. Phú Quốc tiene además su propia exención de hasta 30 días para quien llega directamente: confírmalo en fuentes oficiales antes de ir." },
       { "q": "¿Qué zona elegir?", "a": "Para más servicios, el oeste y el sur. Para más calma, el norte y el este." }
-    ]
+    ],
+    "como_llegar": "En avión desde Ho Chi Minh (unos 50 minutos) o Hanói. En barco rápido: unas 2,5 horas desde Rạch Giá y unas 1,5 horas desde Hà Tiên.",
+    "donde_comer": "El mercado nocturno de Dinh Cậu, donde eliges el marisco y te lo cocinan. Phú Quốc es famosa por su salsa de pescado (nước mắm), con denominación de origen protegida en la Unión Europea."
   }
 }

@@ -2,7 +2,7 @@
 // añade el <link> a blog-viajes.css y un rótulo «Guía práctica · fecha · N min de lectura». Idempotente.
 // Uso: node scripts/restyle-guias.js   (si cambia BV_CSS_V en build-blog-viajes.js, cambiar aquí también)
 const fs = require('fs'), path = require('path');
-const BV_CSS_V = 3;
+const BV_CSS_V = 8;
 const dir = path.join(__dirname, '..', 'blog');
 let n = 0;
 for (const f of fs.readdirSync(dir)) {

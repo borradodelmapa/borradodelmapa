@@ -25,7 +25,11 @@ const { barraPais, historiasDe } = createRequire(import.meta.url)('./barra-pais.
 const { duracionDe, portadaDe } = createRequire(import.meta.url)('./video-info.cjs');
 const { BOTON_COMPARTIR, COMPARTIR_JS } = createRequire(import.meta.url)('./redes.cjs');
 // Maqueta nueva de destino (Paco, 7 nov 2026), EN PRUEBA: solo estas páginas. Lo útil a la vista, fotos en «Qué hacer», preguntas visibles, iconos de línea sin emojis.
-const REDISENO = new Set(['ha-long', 'hanoi', 'ninh-binh', 'phong-nha', 'hue', 'sapa', 'hoi-an', 'ho-chi-minh', 'dalat', 'phu-quoc'].map((x) => x + '-vietnam'));
+const REDISENO = new Set([
+  ...['ha-long', 'hanoi', 'ninh-binh', 'phong-nha', 'hue', 'sapa', 'hoi-an', 'ho-chi-minh', 'dalat', 'phu-quoc'].map((x) => x + '-vietnam'),
+  // Tanda 2 (Paco, 13 nov 2026: «el rediseño a más países, por tandas de un país»): Filipinas entera
+  ...['banaue', 'batad', 'batanes', 'bohol', 'buscalan', 'cebu', 'coron-palawan', 'manila', 'palawan-el-nido', 'puerto-princesa', 'sagada', 'siargao', 'vigan'].map((x) => x + '-filipinas'),
+]);
 const ic = (cuerpo) => `<svg class="dg-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${cuerpo}</svg>`;
 const IC = {
   dias: ic('<rect x="3" y="4" width="18" height="18"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'),
@@ -38,6 +42,11 @@ const IC = {
   lluvia: ic('<path d="M23 12a11 11 0 0 0-22 0z"/><path d="M18 19a3 3 0 0 1-6 0v-7"/>'),
   preguntas: ic('<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12" y2="17.01"/>'),
 };
+// Botón «Compartir info» (redes.cjs) en todas las páginas de destino y de país (Paco, 13 nov 2026; antes solo en las rediseñadas,
+// y el resto tenía un «Compartir esta guía» que no hacía nada)
+const COMPARTIR_CSS = `<style>.dg-fin{margin:30px 0 0;text-align:center}
+.bd-compartir{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;background:var(--accent);color:var(--text-on-accent);border:1px solid var(--accent);border-radius:0;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}.bd-compartir:hover{background:var(--dorado2);border-color:var(--dorado2)}
+</style>`;
 const RD_CSS = `<style>
 .destino-rd .dg-ic{display:block;color:var(--accent);flex:0 0 auto}
 .destino-rd .destino-hero--foto{min-height:min(50vh,400px)}.destino-rd .destino-hero-inner{padding-top:60px;padding-bottom:26px}.destino-rd .destino-hero--foto .destino-title{font-size:clamp(38px,8vw,72px)}
@@ -45,8 +54,7 @@ const RD_CSS = `<style>
 .destino-rd .destino-content--wide .destino-fact{display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center;text-align:left;padding:12px 14px}
 .destino-rd .destino-fact-icon{grid-row:1/3;margin:0;font-size:0}.destino-rd .destino-fact-label{margin:0;font-family:var(--font-cond);font-weight:800;font-size:12px;letter-spacing:.1em;color:var(--text-muted)}.destino-rd .destino-fact-value{margin:0;font-size:16px;font-weight:700;color:var(--text-primary)}.destino-rd .destino-fact-value span{color:inherit;background:none;border:0;padding:0;font:inherit}
 @media(min-width:700px){.destino-rd .destino-content--wide .destino-facts{grid-template-columns:repeat(3,1fr)}}
-.destino-rd .bd-acc{margin:0 0 24px}.dg-fin{margin:30px 0 0;text-align:center}
-.bd-compartir{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;background:var(--accent);color:var(--text-on-accent);border:1px solid var(--accent);border-radius:0;font-family:var(--font-cond);font-weight:800;font-size:15px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}.bd-compartir:hover{background:var(--dorado2);border-color:var(--dorado2)}
+.destino-rd .bd-acc{margin:0 0 24px}
 .dg-sec-h{font-family:var(--font-cond);font-weight:800;font-size:clamp(26px,5vw,34px);line-height:1;text-transform:uppercase;margin:0 0 14px;color:var(--text-primary)}
 .dg-mapa{margin:30px 0}.dg-mapa .destino-map{height:260px}
 .dg-grid{display:grid;gap:12px;margin:0 0 34px}@media(min-width:700px){.dg-grid{grid-template-columns:1fr 1fr}}
@@ -109,8 +117,11 @@ function guiasDelPais(countrySlug, countryName, destName) {
   const k = String(destName || '').split(/[,(]/)[0].trim().toLowerCase();
   if (k) l.sort((a, b) => (b.nombre.toLowerCase().includes(k) ? 1 : 0) - (a.nombre.toLowerCase().includes(k) ? 1 : 0));
   const items = l.slice(0, 12).map(g => {
+    // Sin mapa (guias-img/<slug>.png), la foto de portada de la guía (guias-img/<slug>-portada.jpg, la pone build-guias.js); sin ninguna, tarjeta naranja (13 nov 2026)
     const img = fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '.png'))
-      ? `<img src="/guias-img/${e(g.slug)}.png" alt="Mapa de la guía ${e(g.nombre)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(countryName)}</span>`;
+      ? `<img src="/guias-img/${e(g.slug)}.png" alt="Mapa de la guía ${e(g.nombre)}" loading="lazy" decoding="async">`
+      : fs.existsSync(path.join(ROOT, 'guias-img', g.slug + '-portada.jpg'))
+      ? `<img src="/guias-img/${e(g.slug)}-portada.jpg" alt="${e(g.nombre)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(countryName)}</span>`;
     const pasa = k && g.nombre.toLowerCase().includes(k);
     return `<li><a class="dr-c" href="/${e(g.slug)}">${img}<div class="dr-t"><span class="dr-chip">${pasa ? 'Pasa por aquí' : 'Guía con mapa'}</span><strong>${e(g.nombre)}</strong></div></a></li>`;
   }).join('');
@@ -646,6 +657,8 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
   const rd = REDISENO.has(slug);
   const extraR = rd ? DESTINOS_EXTRA[slug] : null;
+  // Cómo llegar y dónde comer revisados con fuente (sitios-extra.json, 13 nov 2026) mandan sobre los del KV, que eran antiguos
+  if (extraR) for (const k of ['como_llegar', 'donde_comer']) if (extraR[k]) dest = { ...dest, [k]: extraR[k] };
   // Ficha VERIFICADA (13 nov 2026, Nepal): sitios-extra.json → "ficha" sustituye campo a campo los textos del KV
   // (descripción, cómo llegar, dónde dormir, dónde comer, consejo local, plan B) y "faqs" las preguntas. El KV no se toca.
   const extraF = DESTINOS_EXTRA[slug] && DESTINOS_EXTRA[slug].ficha ? DESTINOS_EXTRA[slug] : null;
@@ -971,9 +984,7 @@ ${activitiesHTML}
     ${masDestinos(siblings, countrySlug, countryName, !(GUIAS_POR_PAIS[countrySlug] || []).length)}
 
     <!-- SHARE -->
-    ${rd ? `<div class="dg-fin">${BOTON_COMPARTIR}</div>` : `<div class="destino-share-wrap">
-      <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
-    </div>`}
+    <div class="dg-fin">${BOTON_COMPARTIR}</div>
 
     <!-- SALMA — solo saludo como gancho, sin chat interactivo anónimo: para
          seguir hablando con ella hace falta entrar (gratis), como en el resto
@@ -1008,7 +1019,8 @@ ${activitiesHTML}
   </script>
   <script src="/destinos/destinos.js"${heroFoto ? " defer" : ""}></script>
 
-  ${rd ? RD_CSS + COMPARTIR_JS + '\n  ' : ''}${BOTTOM_NAV}
+  ${rd ? RD_CSS : ''}${COMPARTIR_CSS}${COMPARTIR_JS}
+  ${BOTTOM_NAV}
 <script src="/instalar-app.js?v=2" defer></script>
 <script src="/ga4.js?v=1" defer></script>
 </body>
@@ -1175,6 +1187,8 @@ function buildCountryHTML(countryName, countryCode, destinos) {
       <div class="destino-community-grid" id="destino-community-grid"></div>
     </section>
 
+    <div class="dg-fin">${BOTON_COMPARTIR}</div>
+
     <!-- SALMA — solo saludo como gancho (ver mismo criterio en buildHTML) -->
     <a class="destino-salma-section" href="/?go=chat">
       <div class="destino-salma-header">
@@ -1198,6 +1212,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
 
+  ${COMPARTIR_CSS}${COMPARTIR_JS}
   ${BOTTOM_NAV}
   <script>
   window.DESTINO = ${JSON.stringify({ nombre: countryName, pais: countryName, id: countryCode, code: countryCode })};
@@ -1374,6 +1389,10 @@ function siblingsOf(list, i, countrySlug) {
 
 async function main() {
   const args = process.argv.slice(2);
+  // Freno (Paco, 13 nov 2026, tras la subida mala 070c63053): una opción que no existe no lanza la pasada completa
+  const OPCIONES = new Set(['--dry-run', '--country', '--index-only', '--sitemap-only', '--only']);
+  const raras = args.filter((a, i) => a.startsWith('-') && !OPCIONES.has(a) && !(i > 0 && ['--country', '--only'].includes(args[i - 1])));
+  if (raras.length) { console.error('❌ Opción desconocida: ' + raras.join(' ') + '. Uso: node scripts/build-destinos.js [--country xx | --only a,b | --index-only | --sitemap-only | --dry-run]'); process.exitCode = 1; return; }
   const dryRun = args.includes('--dry-run');
   const countryFlag = args.indexOf('--country');
   const onlyCountry = countryFlag >= 0 ? args[countryFlag + 1] : null;
@@ -1455,6 +1474,14 @@ async function main() {
     }
   }
 
+  // Freno (Paco, 13 nov 2026): con errores no se reescriben ni el índice ni el sitemap (el 070c63053 salió con 80 errores
+  // y dejó destinos/index.html y sitemap-destinos.xml a medias). Las páginas que sí salieron bien quedan escritas: mirar el diff.
+  if (errors) {
+    console.error(`\n❌ ${errors} errores: NO se reescriben destinos/index.html ni sitemap-destinos.xml. Arréglalos y vuelve a generar; no subas nada así.`);
+    process.exitCode = 1;
+    return;
+  }
+
   // ── Nivel 1: página índice ──
   if (!dryRun && !onlyCountry && !sitemapOnly && !onlySet) {
     // Sort countries within each continent
@@ -1489,4 +1516,4 @@ async function main() {
   if (sitemapOnly) console.log(`   (sitemap-only — solo se reescribió sitemap-destinos.xml)`);
 }
 
-main().catch(console.error);
+main().catch((e) => { console.error(e); process.exitCode = 1; });

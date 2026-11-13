@@ -20,7 +20,7 @@ const SITE = 'https://borradodelmapa.com';
 const FECHA = '2026-10-18'; // fecha de los diarios antiguos; las entradas nuevas llevan la suya (c.fecha) para Google
 const FECHA_TXT = '18 octubre 2026';
 const CSS_V = 196;      // styles.css (= APP_CSS_V de build-destinos.js)
-const BV_CSS_V = 7;     // blog-viajes.css
+const BV_CSS_V = 8;     // blog-viajes.css
 
 // Entradas con `borrador: true` (contenido producido que aún no se publica, L2) solo salen con BORRADORES=1, para enseñarlas en local (4 nov 2026).
 const capsTodas = require('./blog-viajes-data.js');
@@ -343,7 +343,7 @@ ${c.dur ? `      ${yt ? `<a class="bd-yt" href="https://youtu.be/${esc(c.youtube
       <div class="bd-video-meta"><span>Vídeo · ${c.dur.txt}</span><span>${esc(c.narra || 'Narra Salma')}</span></div>
       <div class="bd-acciones">${BOTON_SUSCRIBIRSE}${BOTON_COMPARTIR}</div>${c.youtube ? `\n      <p class="bd-ia"><a href="https://youtu.be/${esc(c.youtube)}" target="_blank" rel="noopener">Verlo en YouTube</a></p>` : ''}${c.story ? `\n      <p class="bd-ia"><a href="/stories/${c.slug}/">Verlo en formato story</a>, a pantalla completa y deslizando.</p>` : ''}` : `      <img class="bd-video" src="${img}" alt="${esc(c.titulo)}">
       <div class="bd-video-meta"><span>Lectura</span><span>Escribe Salma</span></div>`}
-      <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje hechos con ayuda de IA.')}</p>
+      <p class="bd-ia">${esc(c.realidad || 'Viaje, fotos y vivencias 100 % reales. Guion, voz y montaje: Borrado del Mapa.')}</p>
     </div>
 
     <article class="bd-body">

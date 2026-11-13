@@ -49,7 +49,7 @@ export function sinPrecios(t) {
     .replace(/\s*[:–-]\s*\u0001\s*(?=[.,;)]|$)/gu, M)
     .replace(/\u0001/g, ' ')
     // puntuación y espacios
-    .replace(/\(\s+/g, '(').replace(/\s+\)/g, ')').replace(/[,;]\s*\)/g, ')')
+    .replace(/\(\s+/g, '(').replace(/\(\s*[,;]\s*/g, '(').replace(/\s+\)/g, ')').replace(/[,;]\s*\)/g, ')') // «(~2 EUR, no fotos)» → «(no fotos)»
     .replace(/[ \t]+([.,;:!?])/g, '$1').replace(/([.,;])\1+/g, '$1').replace(/,\s*\./g, '.').replace(/\.\s*,/g, '.')
     .replace(/:\s*,/g, ':').replace(/,\s*,/g, ',').replace(/^\s*[,.;:]\s*/, '').replace(/[ \t]{2,}/g, ' ').trim()
     .replace(/\s*[,;]$/, '').replace(/\(\s*[~≈]\s*/g, '('); // coma suelta al final y «(~» del precio quitado

@@ -119,6 +119,21 @@ for (const c of require('./datos-pais.cjs').historias()) {
     fallos.push(`blog/viajes/${c.slug}.html: la entrada tiene vídeo y no tiene Web Story (campo story en historias.js → node scripts/build-stories.js)`);
 }
 
+// Índice y sitemap de destinos (Paco, 13 nov 2026, tras la subida mala 070c63053, que los dejó a medias):
+// el índice enlaza a todas las páginas de país, y el sitemap lleva todas las páginas indexables que existen.
+{
+  const idx = fs.existsSync(path.join(ROOT, 'destinos/index.html')) ? leer('destinos/index.html') : '';
+  const enlaces = new Set((idx.match(/href="\/destinos\/[a-z0-9-]+\.html"/g) || []).map((x) => x.slice(16, -1)));
+  const paises = paginas.filter((f) => /^destinos\/[a-z0-9-]+\.html$/.test(f) && f !== 'destinos/index.html' && leer(f).includes('dp-tiene'));
+  const sinEnlace = paises.filter((f) => !enlaces.has(f.slice(9)));
+  if (!idx) fallos.push('destinos/index.html: no existe');
+  else if (sinEnlace.length) fallos.push(`destinos/index.html: no enlaza a ${sinEnlace.length} de ${paises.length} páginas de país (p. ej. ${sinEnlace.slice(0, 3).join(', ')}): node scripts/build-destinos.js --index-only`);
+  const sm = fs.existsSync(path.join(ROOT, 'sitemap-destinos.xml')) ? leer('sitemap-destinos.xml') : '';
+  const indexables = JSON.parse(leer('scripts/destinos-indexables.json')).slugs;
+  const faltan = indexables.filter((s) => (s === 'index' || paginas.includes(`destinos/${s}.html`)) && !sm.includes(s === 'index' ? '/destinos/</loc>' : `/destinos/${s}.html</loc>`));
+  if (faltan.length) fallos.push(`sitemap-destinos.xml: faltan ${faltan.length} de las ${indexables.length} páginas indexables (p. ej. ${faltan.slice(0, 3).join(', ')}): node scripts/build-destinos.js --sitemap-only`);
+}
+
 console.log(`Páginas revisadas: ${paginas.length}` + (stories.length ? ` (+ ${stories.length} web stories)` : ''));
 for (const p of PIEZAS) if (unica[p]) console.log(`  ${p}?v=${unica[p]}`);
 if (fallos.length) {
