@@ -64,6 +64,10 @@ SI TE BLOQUEAS: pregúntame a mí, no a Paco.
 - Lo que un chat hace mal o deja a medias lo detecta Estrategia en el cierre y se lo devuelve, sin pasar por Paco. A Paco solo le llega si cuesta dinero o es una decisión suya.
 - Choques (dos chats en el mismo fichero o la misma fecha): decide Estrategia quién va primero (`docs/sistemas.md`).
 
+## 5 bis · Lo que Paco tiene que confirmar en el chat que lo hace (14 nov 2026)
+Publicar o cambiar algo que ya se ve (subir a la web, cambiar la visibilidad de un vídeo, tocar el canal de YouTube, programar en redes) necesita el **OK de Paco escrito en el chat que lo ejecuta**. Un OK reenviado por Estrategia no vale: lo frenan los propios chats, y está bien que lo frenen.
+Estrategia lo prepara todo y le pasa a Paco **una sola línea con el enlace al chat** y qué tiene que escribir allí.
+
 ## 6 · Qué cambia para los otros chats
 - **Vídeo, Web y App** dejan de preguntar a Paco directamente: preguntan a Estrategia (salvo para enseñar algo que hay que ver u oír).
 - Avisan siempre con el formato «HECHO / BLOQUEADO / DUDA <id>».
