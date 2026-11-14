@@ -51,7 +51,8 @@ CACHE_1H = "1"     # punto 12: caché del prompt de 1 h en vez de 5 min (encendi
 CACHE_TAIL = "1"   # contexto variable (fecha, GPS, datos del país…) al final, junto al mensaje nuevo: el historial se lee de caché (caso p-mulprefz0fz). Revertir = "0"
 CHAT_EFFORT = "medium"   # esfuerzo de Claude en la conversación normal (no guías): respuestas más escuetas. Revertir = "" (caso p-mulprefz0fz)
 PRECIOS_GUIAS = "1"   # precios con fuente en las guías (preciosConFuente). "0" apaga. (21 oct: se apagó creyendo que era la causa de las paradas sin verificar; era la cuota diaria de Google)
-DATOS_GUIAS = "1"    # datos con fuente en las guías (datosConFuente: fechas, normas, fauna, dónde está algo…). "0" apaga. 14 nov 2026, caso p-mwfityix43c
+DATOS_GUIAS = "j94ldKhMTkgT7k3u2CRSG2UxP6X2"   # datos con fuente en las guías (datosConFuente): "*" = todas; uid = solo esas cuentas (hoy, la de pruebas claude@); "" = apagado. 14 nov 2026, caso p-mwfityix43c
+DATOS_GUIAS_MODO = "avisar"   # "avisar" = comprueba y apunta en el KV (datoslog:) lo que cambiaría, sin tocar la guía; "cambiar" = aplica los cambios
 GUIDES_NO_DAILY_CAP = "j94ldKhMTkgT7k3u2CRSG2UxP6X2"   # cuentas sin tope diario de guías: la de pruebas claude@ (producción de guías, 21 oct 2026). Revertir = ""
 GUIAS_EXTRAS = "guilin-en-4-dias-1wva,butan-en-15-dias-de-paro-a-trashigang-xolc"   # guías públicas viejas que /guia-extras puede completar (intro, antes de ir, FAQ). "*" = todas. 23 oct 2026
 PROMPT_UNICO = "*"   # prompt único (22 oct 2026, caso mvj8dc8qqbl7): "*" = todos; uid = solo esas cuentas (hoy, la de pruebas claude@); "" = el de siempre

@@ -6796,7 +6796,21 @@ async function datosConFuente(textos, pais, env, tope = 30) {
     }
   });
   console.log(`[DATOS] ${lista.length} datos: ${resultados.filter(r => r && r.estado === 'confirmado').length} confirmados, ${nFalso} falsos, ${nQuita} prácticos sin fuente quitados, ${resultados.filter(r => r && r.estado === 'sin_fuente').length - nQuita} sin fuente que se quedan, ${resultados.filter(r => !r).length} sin decidir`);
+  cambios.resumen = { datos: lista.length, confirmados: resultados.filter(r => r && r.estado === 'confirmado').length, falsos: nFalso, quitados: nQuita, sin_decidir: resultados.filter(r => !r).length, lista: lista.map((d, i) => ({ dato: d.dato, tipo: d.tipo, estado: resultados[i] ? resultados[i].estado : 'sin_decidir', fuente: (resultados[i] && resultados[i].dominio) || '' })) };
   return cambios;
+}
+// ¿Esta cuenta pasa el comprobador de datos, y cómo? DATOS_GUIAS (wrangler.toml): "*" = todas; uid separados por comas = solo
+// esas (la de pruebas); vacío = apagado. DATOS_GUIAS_MODO: "avisar" (por defecto: comprueba y APUNTA lo que cambiaría en el KV,
+// `datoslog:`, sin tocar la guía ni hacerla esperar) o "cambiar" (aplica los cambios al texto).
+function datosGuiasModo(env, uid) {
+  const v = String((env && env.DATOS_GUIAS) || '').trim();
+  if (!v || v === '0') return '';
+  if (v !== '*' && !(uid && v.split(',').map(x => x.trim()).includes(uid))) return '';
+  return String(env.DATOS_GUIAS_MODO || '').trim() === 'cambiar' ? 'cambiar' : 'avisar';
+}
+// Modo «avisar»: lo que el comprobador habría cambiado, guardado 30 días para leerlo (wrangler kv key list --prefix datoslog:).
+async function apuntarDatosLog(env, info) {
+  try { if (env.SALMA_KB) await env.SALMA_KB.put('datoslog:' + new Date().toISOString() + ':' + (info.parte || ''), JSON.stringify(info), { expirationTtl: 30 * 24 * 3600 }); } catch (_) {}
 }
 // Aplica los cambios de datosConFuente a un texto: cambia o quita frases enteras. Nunca deja el texto vacío.
 function aplicarDatos(texto, cambios) {
@@ -17784,11 +17798,16 @@ INSTRUCCIONES:
                 if (!kv && cc && env.SALMA_KB) { try { const raw = await env.SALMA_KB.get('dest:' + cc + ':base'); if (raw) kv = JSON.parse(raw); } catch (_) {} }
                 const pres = await presentacionGuia(_fpr, sourceText, antesDeIrCompleto(_fpr.antes_de_ir, kv), env, _reqUsage);
                 // DATOS CON FUENTE también en la presentación (intro, respuestas de la FAQ, consejos), 14 nov 2026.
-                if (pres && env.DATOS_GUIAS === '1' && _usageKind === 'guide') {
-                  try {
+                const _dgModoP = datosGuiasModo(env, authUser && authUser.uid);
+                if (pres && _dgModoP && _usageKind === 'guide') {
+                  const _presDatos = async () => datosConFuente([pres.intro, ...(Array.isArray(pres.faq) ? pres.faq : []).map(f => f.r), ...(Array.isArray(pres.consejos) ? pres.consejos : [])], _fpr.country || '', env, 15);
+                  if (_dgModoP === 'avisar') {
+                    const _t0 = Date.now();
+                    ctx.waitUntil(_presDatos().then(dc => apuntarDatosLog(env, { parte: 'presentacion', guia: _fpr.title || '', pais: _fpr.country || '', ms: Date.now() - _t0, cambios: [...dc], resumen: dc.resumen || null })).catch(() => {}));
+                  } else try {
                     const faq = Array.isArray(pres.faq) ? pres.faq : [];
                     const cons = Array.isArray(pres.consejos) ? pres.consejos : [];
-                    const dc = await datosConFuente([pres.intro, ...faq.map(f => f.r), ...cons], _fpr.country || '', env, 15);
+                    const dc = await _presDatos();
                     if (dc.size) {
                       pres.intro = aplicarDatos(pres.intro, dc);
                       pres.faq = faq.map(f => ({ ...f, r: aplicarDatos(f.r, dc) })).filter(f => f.r && dc.get(f.r) !== '');
@@ -18751,10 +18770,15 @@ REGLAS:
                 ? preciosConFuente(route.stops, route.country || (anchorCountry && anchorCountry.countryName) || '', env).catch(e => { console.log('[PRECIOS] ' + e.message); return new Map(); })
                 : Promise.resolve(new Map());
               // DATOS CON FUENTE (14 nov 2026, caso p-mwfityix43c): el resto de datos del texto de las paradas y los consejos, también
-              // a la vez que Google. Interruptor DATOS_GUIAS (wrangler.toml), "0" lo apaga.
-              const _datosP = (env.DATOS_GUIAS === '1' && _usageKind === 'guide' && Array.isArray(route?.stops))
+              // a la vez que Google. Interruptor DATOS_GUIAS + DATOS_GUIAS_MODO (wrangler.toml), ver datosGuiasModo.
+              const _dgModo = datosGuiasModo(env, authUser && authUser.uid);
+              const _tDatos = Date.now();
+              const _datosCrudoP = (_dgModo && _usageKind === 'guide' && Array.isArray(route?.stops))
                 ? datosConFuente([...route.stops.map(s => s.narrative), ...(Array.isArray(route.tips) ? route.tips : [])], route.country || (anchorCountry && anchorCountry.countryName) || '', env).catch(e => { console.log('[DATOS] ' + e.message); return new Map(); })
                 : Promise.resolve(new Map());
+              // Modo «avisar»: no se espera ni se aplica nada; al acabar se apunta lo que habría cambiado y cuánto tardó.
+              if (_dgModo === 'avisar') { const _gt = route.title || route.name || ''; const _gp = route.country || ''; ctx.waitUntil(_datosCrudoP.then(dc => apuntarDatosLog(env, { parte: 'paradas', guia: _gt, pais: _gp, ms: Date.now() - _tDatos, cambios: [...dc], resumen: dc.resumen || null })).catch(() => {})); }
+              const _datosP = _dgModo === 'cambiar' ? _datosCrudoP : Promise.resolve(new Map());
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts, env);
               const _precios = await _preciosP;
               if (_precios.size && verified && Array.isArray(verified.stops)) verified.stops.forEach(s => { if (_precios.has(s.narrative)) s.narrative = _precios.get(s.narrative); });
