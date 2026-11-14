@@ -11,6 +11,7 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 | T4 | Largo del jue 17 dic | 📈 | ⏸ | Proponer tema | decidir | jue 17 dic |
 | T5 | Tuvalu: comprobar 1080p en el canal | 🎬 Vídeo | 📥 | Mirar en Studio | — | antes del 26 nov |
 | T10 | Limpieza del canal: pasar a OCULTO (no privado) el short repetido de Pai (PHfw-RDTL90) y el vídeo de la app (p6sP8zpeTIY; lo usa Google Play, tiene que seguir viéndose por enlace) | 🎬 Vídeo | 📥 | Después de T1 | — (OK de Paco, 14 nov) | — |
+| T11 | Ordenar el canal: vídeo destacado = último largo; secciones de Inicio Documentales → Vietnam → Tailandia → Pueblos → Shorts; listas completas y en orden de serie | 🎬 Vídeo | 📥 | Después de T10 | — (orden de Paco, 14 nov) | — |
 | T9 | Prueba A/B de carátulas («Probar y comparar») en 6 largos: India, Pueblos T1, Tuvalu, Baler, Vietnam 2.000 años, Vietnam en moto (Tatuajes no). A = actual, B = nueva Y18 (salma marketing/canal-youtube/caratulas-ab/) | 🎨 Carátulas (hechas) → 🎬 Vídeo (Studio) | 📥 | Vídeo, después de corregir T1 | — (orden directa de Paco, 14 nov) | — |
 | T7 | Web: reproductor de YouTube en cada largo cuando sea público: Pueblos T1 (jue 19 nov), Tuvalu (jue 26 nov), Tatuajes (mar 24 nov, 0nNCUhMiSdI), India (mar 17 nov), Baler (jue 3 dic), Filipinas (mar 15 dic) | 🌍 Web | 📥 | Cada estreno, la tarea del comentario (10:05) avisa a Web | OK en el chat de Web antes de subir | según fecha |
 
