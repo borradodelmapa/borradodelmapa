@@ -6,7 +6,6 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 | Id | Tarea | Quién | Estado | Siguiente paso | Falta de Paco | Para |
 |---|---|---|---|---|---|---|
 | T1 | Largo «Viajar a FILIPINAS: la realidad que nadie te cuenta» | 🎬 Vídeo | 🔨 | Montaje aprobado por Paco («Sí, exporta») → exportación máxima relanzada (falló por disco C lleno) → Studio (Paco arrastra y confirma en el chat de Vídeo) → comentario → ligero y capítulos a Web | arrastrar el archivo y confirmar en el chat de Vídeo | mar 15 dic 10:00 |
-| T2 | Entrada de blog, Web Story y web de Filipinas con ese largo (misma entrada: /blog/viajes/filipinas-historia-culturas-antes-de-viajar) | 🌍 Web | 📥 | Espera el vídeo ligero y los capítulos definitivos de Vídeo | verlo en local antes de subir | antes del 15 dic |
 | T3 | Largos de Tailandia: 1 «qué saber antes de ir» · 2 el norte en moto · 3 Koh Samui y Muay Thai | 🎬 Vídeo 2 (guion y montaje) · 🎨 Carátulas (título, carátula y descripción) | ⏸ | T3.1: guion aprobado, voz generada (4.407 letras, 0 €), montaje v1 devuelto por Estrategia (textos fuera de pantalla, imágenes que no casan, sin vídeo, ambiente de banco); 2.ª pasada BLOQUEADA porque el disco D está lleno. T3.2 y T3.3: guiones escritos, sin revisar todavía. Carátulas: T3.2 (mapa del bucle, 1.864 CURVAS) y T3.3 (ANTES DEL RING) aprobadas por Paco y entregadas a Vídeo 2; T3.1 sin título ni carátula; descripciones cuando haya minutaje | mover o borrar 35 GB de temporales de D | mar 1 · mar 8 · jue 10 dic |
 | T4 | Largo del jue 17 dic | 📈 | ⏸ | Proponer tema | decidir | jue 17 dic |
 | T5 | Tuvalu: comprobar 1080p en el canal | 🎬 Vídeo | 📥 | Mirar en Studio | — | antes del 26 nov |
@@ -23,6 +22,7 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 ## Cerradas
 | Fecha | Id | Qué | Comprobado |
 |---|---|---|---|
+| 14 nov | T2 | Web de Filipinas con el largo (entrada, Web Story, «Míralo en vídeo» en el país, Documentales) | 227595106 + c77ee6629; en vivo: las 3 páginas dan 200, título nuevo, tarjeta en destinos/filipinas.html. El reproductor de YouTube, el 15 dic (T7) |
 | 14 nov | T10 | Ocultos (sin listar): short repetido de Pai y vídeo de la app | Studio (registro 9e5ec2310); comprobado por Estrategia: fuera de las pestañas del canal y la app se ve por enlace (oEmbed 200) |
 | 14 nov | T8 | 7 mejoras de Web (OK de Paco): freno del generador, «Compartir info», Vietnam con fuente, Filipinas rediseñada, blog sin «IA», enlace naranja, foto de Andalucía | f2102f257 en main; en vivo: sitemap 27, Bohol con «Compartir info», blog con la frase nueva |
 | 14 nov | T6 | Portadas con ?v= e historias en destinos | 0e56a30af (Paco lo mira en el móvil cuando quiera) |
