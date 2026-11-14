@@ -5,14 +5,13 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 
 | Id | Tarea | Quién | Estado | Siguiente paso | Falta de Paco | Para |
 |---|---|---|---|---|---|---|
-| T1 | Largo «Viajar a FILIPINAS: la realidad que nadie te cuenta» | 🎬 Vídeo | 🔨 | Remontaje con el texto ampliado de Mindanao (OK de Paco, 423 car. del saldo, 0 € extra, mapa nuevo) y los 14 clips de dron pasados a 30 fps con interpolación (los tirones venían de 24/25/50 fps) → enlace para que Paco lo vea (F8) → exportar → Studio | verlo y oírlo · arrastrar el archivo a Studio | mar 15 dic 10:00 |
+| T1 | Largo «Viajar a FILIPINAS: la realidad que nadie te cuenta» | 🎬 Vídeo | 🔨 | Montaje aprobado por Paco («Sí, exporta») → exportación máxima relanzada (falló por disco C lleno) → Studio (Paco arrastra y confirma en el chat de Vídeo) → comentario → ligero y capítulos a Web | arrastrar el archivo y confirmar en el chat de Vídeo | mar 15 dic 10:00 |
 | T2 | Entrada de blog, Web Story y web de Filipinas con ese largo (misma entrada: /blog/viajes/filipinas-historia-culturas-antes-de-viajar) | 🌍 Web | 📥 | Espera el vídeo ligero y los capítulos definitivos de Vídeo | verlo en local antes de subir | antes del 15 dic |
-| T3 | Largos de Tailandia: 1 «qué saber antes de ir» · 2 el norte en moto · 3 Koh Samui y Muay Thai | 🎬 Vídeo 2 (local_2f519bd5…) guion y montaje · 🎨 Carátulas (local_ad0e90bf…) título, carátula y descripción | 🙋 | Guiones escritos y repasados con fuentes de 2026: T3.1 v4 (revisado por Estrategia, ya con Paco) · T3.2 v2 y T3.3 v2 (Estrategia los repasa antes de Paco). Carátulas: T3.3 vale; T3.1 y T3.2 en corrección. Pendiente: corregir en el blog y el Especial el dato de veladas de Samui (P9; el Especial solo con OK de Paco) | uno a uno: guion T3.1 → T3.2 → T3.3 → carátulas → coste de voz → ver montajes | mar 1 · mar 8 · jue 10 dic |
+| T3 | Largos de Tailandia: 1 «qué saber antes de ir» · 2 el norte en moto · 3 Koh Samui y Muay Thai | 🎬 Vídeo 2 (guion y montaje) · 🎨 Carátulas (título, carátula y descripción) | ⏸ | T3.1: guion aprobado, voz generada (4.407 letras, 0 €), montaje v1 devuelto por Estrategia (textos fuera de pantalla, imágenes que no casan, sin vídeo, ambiente de banco); 2.ª pasada BLOQUEADA porque el disco D está lleno. T3.2 y T3.3: guiones escritos, sin revisar todavía. Carátulas: Paco las trabaja en el chat de Carátulas | mover o borrar 35 GB de temporales de D | mar 1 · mar 8 · jue 10 dic |
 | T4 | Largo del jue 17 dic | 📈 | ⏸ | Proponer tema | decidir | jue 17 dic |
 | T5 | Tuvalu: comprobar 1080p en el canal | 🎬 Vídeo | 📥 | Mirar en Studio | — | antes del 26 nov |
-| T10 | Limpieza del canal: pasar a OCULTO (no privado) el short repetido de Pai (PHfw-RDTL90) y el vídeo de la app (p6sP8zpeTIY; lo usa Google Play, tiene que seguir viéndose por enlace) | 🎬 Vídeo | 📥 | Después de T1 | — (OK de Paco, 14 nov) | — |
-| T11 | Ordenar el canal: vídeo destacado = último largo; secciones de Inicio Documentales → Vietnam → Tailandia → Pueblos → Shorts; listas completas y en orden de serie | 🎬 Vídeo | 📥 | Después de T10 | — (orden de Paco, 14 nov) | — |
-| T9 | Prueba A/B de carátulas («Probar y comparar») en 6 largos: India, Pueblos T1, Tuvalu, Baler, Vietnam 2.000 años, Vietnam en moto (Tatuajes no). A = actual, B = nueva Y18 (salma marketing/canal-youtube/caratulas-ab/) | 🎨 Carátulas (hechas) → 🎬 Vídeo (Studio) | 📥 | Vídeo, después de corregir T1 | — (orden directa de Paco, 14 nov) | — |
+| T11 | Ordenar el canal | 🎬 Vídeo | 🔨 | HECHO: vídeo destacado = Vietnam 2.000 años; Inicio Documentales → Vietnam → Tailandia → Pueblos → Shorts. FALTA: sacar el short oculto de Pai de la lista de Tailandia y ordenar las listas por capítulo (Chrome se colgaba) | — | — |
+| T9 | Prueba A/B de carátulas | 🎬 Vídeo | 🔨 | En marcha en los dos de Vietnam. India (A+B+C), Pueblos T1 y Baler guardadas: arrancan al hacerse públicos (17 nov, 19 nov, 3 dic); comprobarlo ese día. Tuvalu y Tatuajes fuera (Paco) | — | 17 nov · 19 nov · 3 dic |
 | T7 | Web: reproductor de YouTube en cada largo cuando sea público: Pueblos T1 (jue 19 nov), Tuvalu (jue 26 nov), Tatuajes (mar 24 nov, 0nNCUhMiSdI), India (mar 17 nov), Baler (jue 3 dic), Filipinas (mar 15 dic) | 🌍 Web | 📥 | Cada estreno, la tarea del comentario (10:05) avisa a Web | OK en el chat de Web antes de subir | según fecha |
 
 ## Programado y vigilado (no hace falta nada salvo comprobar al salir)
@@ -24,6 +23,7 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 ## Cerradas
 | Fecha | Id | Qué | Comprobado |
 |---|---|---|---|
+| 14 nov | T10 | Ocultos (sin listar): short repetido de Pai y vídeo de la app | Studio (registro 9e5ec2310); comprobado por Estrategia: fuera de las pestañas del canal y la app se ve por enlace (oEmbed 200) |
 | 14 nov | T8 | 7 mejoras de Web (OK de Paco): freno del generador, «Compartir info», Vietnam con fuente, Filipinas rediseñada, blog sin «IA», enlace naranja, foto de Andalucía | f2102f257 en main; en vivo: sitemap 27, Bohol con «Compartir info», blog con la frase nueva |
 | 14 nov | T6 | Portadas con ?v= e historias en destinos | 0e56a30af (Paco lo mira en el móvil cuando quiera) |
 | 13 nov | — | Carátulas Y18 de los 7 largos en Studio, blog y Web Story | Studio (registro 5ba282db0) · web (515011fa4) |
