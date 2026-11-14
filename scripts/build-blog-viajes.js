@@ -72,8 +72,8 @@ caps.forEach((c, i) => {
   // En una copia sin «salma marketing» (worktree), vale el vídeo ya publicado en blog/viajes/video/
   if (!fs.existsSync(src)) { if (!fs.existsSync(dst)) throw new Error('Falta el vídeo ' + src); }
   else if (!fs.existsSync(dst) || fs.statSync(dst).size !== fs.statSync(src).size) fs.copyFileSync(src, dst);
-  if (c.caratula) { // la carátula manda: se copia a 1280×720 cuando cambia (en una copia sin «salma marketing», vale la ya publicada)
-    const car = path.join(CARATULAS, c.caratula + '-Y18.jpg'), dp = path.join(OUT, 'img', c.slug + '.jpg');
+  if (c.caratula && c.caratula !== 'web') { // 'web' = la carátula es la imagen ya publicada en blog/viajes/img/<slug>.jpg (se cambió a mano en la web); no se copia nada. // la carátula manda: se copia a 1280×720 cuando cambia (en una copia sin «salma marketing», vale la ya publicada)
+    const car = c.caratula.includes('/') ? path.join(MKT, c.caratula) : path.join(CARATULAS, c.caratula + '-Y18.jpg'), dp = path.join(OUT, 'img', c.slug + '.jpg'); // c.caratula: id de caratulas-y18 o ruta dentro de salma marketing
     if (fs.existsSync(car)) { // siempre: ffmpeg da el mismo JPG si la carátula no cambia
       const r = require('child_process').spawnSync(path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), ['-v', 'error', '-y', '-i', car, '-vf', 'scale=1280:720', '-map_metadata', '-1', '-q:v', '3', dp]);
       if (r.status || r.error) throw new Error('No puedo copiar la carátula de ' + c.slug + ': ' + (r.stderr || r.error));
@@ -288,6 +288,9 @@ ${s.min ? `      <p class="bd-cap"><a href="?t=${aSeg(s.min)}" data-t="${aSeg(s.
       <p class="bd-lead">${esc(c.resumen)}</p>`;
   const ficha = c.ficha ? `    <aside class="bd-ficha">\n      <h3>Ficha útil</h3>\n      <ul>\n${c.ficha.map((f) => `        <li>${md(f)}</li>`).join('\n')}\n      </ul>\n    </aside>\n` : '';
   const cierre = c.cierre ? `    <p class="bd-cierre">${md(c.cierre)}</p>\n` : '';
+  // Toda historia de un país enlaza a su documental «antes de viajar» (serie «Conoce cada país»), si lo hay (13 nov 2026, Filipinas)
+  const intro = caps.find((x) => x.pais === c.pais && x.serie === 'Conoce cada país' && x.video && x.slug !== c.slug);
+  const antesDeIr = intro ? `    <p class="bd-enlaces"><a href="/blog/viajes/${intro.slug}">Antes de ir: ${esc(intro.titulo)}</a></p>\n` : '';
   const fuentes = `    <details class="bd-src">
       <summary>Datos y fuentes</summary>
       <p>${md(c.nota)}</p>
@@ -350,7 +353,7 @@ ${c.dur ? `      ${yt ? `<a class="bd-yt" href="https://youtu.be/${esc(c.youtube
 ${pasos}${stats}${indiceCaps}
 ${secciones}
 
-${galeria(c)}${guia(c)}${ficha}${cierre}
+${galeria(c)}${guia(c)}${ficha}${cierre}${antesDeIr}
 ${fuentes}${creditos(c)}
 
       <div class="bd-acciones bd-acciones-fin">${BOTON_COMPARTIR}</div>
@@ -423,7 +426,7 @@ ${p.lista.map(rail).join('\n')}
 `).join('')}` : '';
 // Paco, 11 nov 2026: un país sin página de destino (India) decía «3 historias» y su tarjeta abría solo una; ahora lleva a su fila con todas.
 // Documentales de una serie o país que se enseñan en «Documentales» y no en el carril de su serie (Paco, 9 nov 2026)
-const DOCS_EXTRA = ['pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale', 'viajar-a-la-india-donde-se-viene-a-morir'];
+const DOCS_EXTRA = ['filipinas-historia-culturas-antes-de-viajar', 'pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale', 'viajar-a-la-india-donde-se-viene-a-morir'];
 const bloqueSeries = series.map((s) => {
   const lista = caps.filter((c) => c.serie === s && !DOCS_EXTRA.includes(c.slug));
   return `  <section class="bv-serie" id="${slugSerie(s)}">

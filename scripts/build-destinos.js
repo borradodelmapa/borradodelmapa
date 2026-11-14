@@ -158,6 +158,8 @@ const PAISES_INTRO = DATOS_PAIS.introPaises();
 // revisadas de los episodios (F9) con autor (P2), enlazadas desde blog/viajes/img/. El estilo va aquí dentro (CONOCE_CSS) y solo
 // sale en las páginas de país con expediente: así no hay que subir el ?v= de destinos.css ni regenerar las 1.793 páginas.
 const CONOCE_CSS = `<style>
+.dc-doc{display:grid;margin:0 0 26px;border:1px solid var(--accent);background:rgba(244,99,11,.07);color:inherit;text-decoration:none}.dc-doc img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.dc-doc div{padding:12px 14px 14px}.dc-doc span{font-family:var(--font-cond);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}.dc-doc strong{display:block;margin-top:4px;font-family:var(--font-cond);font-weight:800;font-size:24px;line-height:1.05;text-transform:uppercase;color:var(--text-primary)}
+@media(min-width:620px){.dc-doc{grid-template-columns:minmax(0,3fr) minmax(0,2fr);align-items:center}.dc-doc div{padding:16px 22px}}
 .dc{margin:40px 0 8px;border-top:1px solid var(--border)}
 .dc-hero{position:relative;margin:0 0 6px;overflow:hidden;background:#000}
 .dc-hero img{width:100%;aspect-ratio:16/9;max-height:520px;object-fit:cover;display:block;opacity:.82}
@@ -189,6 +191,14 @@ const CONOCE_CSS = `<style>
 .dc-fuentes{font-size:13px;color:var(--text-muted);line-height:1.6}
 .dc-fuentes a{color:var(--text-secondary)}
 </style>`;
+// El documental «antes de viajar» del país (serie «Conoce cada país», con vídeo), arriba de «Conoce <país>» (Paco, 13 nov 2026: Filipinas «a todos sitios»)
+function docPais(countryName) {
+  const c = DATOS_PAIS.historias().find((h) => h.pais === countryName && h.serie === 'Conoce cada país' && h.video && !h.borrador);
+  if (!c) return '';
+  const e = escapeHTML, d = duracionDe(c.slug);
+  return `<a class="dc-doc" href="/blog/viajes/${e(c.slug)}"><img src="${e(portadaDe(c.slug))}" alt="" loading="lazy" decoding="async"><div><span>▶ Míralo en vídeo${d ? ' · ' + d : ''}</span><strong>${e(c.titulo)}</strong></div></a>
+      `;
+}
 function conocePais(countrySlug, countryName) {
   const x = PAISES_INTRO[countrySlug];
   if (!x || !x.apartados) return '';
@@ -211,7 +221,7 @@ function conocePais(countrySlug, countryName) {
       <figure class="dc-hero">${x.portada ? img(x.portada, `${countryName}: ${x.portada.pie}`) : ''}<div class="dc-hero-txt"><span class="dc-kicker">Antes de viajar</span><h2>Conoce ${e(countryName)}</h2></div></figure>
       ${x.portada ? cap(x.portada) : ''}
       <p class="dc-hilo">${e(x.hilo)}</p>
-      ${bloques}
+      ${docPais(countryName)}${bloques}
       ${gal}
       ${fue ? `<p class="dc-fuentes">Fuentes: ${fue}. Fotos: Wikimedia Commons, con su autor en cada pie.</p>` : ''}
     </section>`;

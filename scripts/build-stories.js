@@ -71,7 +71,7 @@ function creditoBruto(c, s) {
 const FFS = [path.join(ROOT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), 'ffmpeg'];
 // Con c.caratula (Y15/Y18): la portada es la carátula de YouTube entera, sobre ella misma desenfocada y oscurecida (3:4), y es también el fondo de la primera slide
 const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'pueblos')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
-const caratula = (c) => c.caratula && path.join(MKT, 'salma marketing', 'canal-youtube', 'caratulas-y18', c.caratula + '-Y18.jpg');
+const caratula = (c) => c.caratula && (c.caratula === 'web' ? path.join(ROOT, 'blog', 'viajes', 'img', c.slug + '.jpg') : c.caratula.includes('/') ? path.join(MKT, c.caratula) : path.join(MKT, 'salma marketing', 'canal-youtube', 'caratulas-y18', c.caratula + '-Y18.jpg'));
 function portada(c) {
   const dest = path.join(OUT, c.slug, 'portada.jpg'), car = caratula(c);
   if (car && fs.existsSync(car)) { // siempre: ffmpeg da el mismo JPG si la carátula no cambia
