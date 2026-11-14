@@ -114,8 +114,8 @@
 
 | Pieza | Texto |
 |---|---|
-| **Título** (56 car.) | Parque Nacional de Chitwan: qué ver y cómo ir (2026) |
-| **Descripción** (153 car.) | Rinocerontes, canoa por el río Rapti y safaris a pie en el primer parque nacional de Nepal. Cuándo ir, entrada, normas y qué se ve de verdad. Con fuentes. |
+| **Título** (52 car.) | Parque Nacional de Chitwan: qué ver y cómo ir (2026) |
+| **Descripción** (154 car.) | Rinocerontes, canoa por el río Rapti y safaris a pie en el primer parque nacional de Nepal. Cuándo ir, entrada, normas y qué se ve de verdad. Con fuentes. |
 | **Encabezado** | Parque Nacional de Chitwan |
 | **Línea de confianza, visible arriba** | Revisado en noviembre de 2026 · 9 fuentes · próxima revisión: mayo de 2027 |
 | **Búsquedas que cubre** | chitwan nepal · parque nacional de chitwan · safari chitwan · sauraha · rinocerontes nepal · cuándo ir a chitwan · entrada chitwan precio |
