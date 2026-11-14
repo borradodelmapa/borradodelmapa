@@ -260,7 +260,7 @@ module.exports = [
     pais: 'Vietnam',
     formato: '16:9',
     caratula: 'vietnam-historia', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
-    titulo: 'Qué saber antes de ir a Vietnam: 2.000 años sin rendirse',
+    titulo: 'Vietnam: 2.000 años sin rendirse',
     resumen: 'La historia de Vietnam contada en moto, por los lugares donde ocurrió: China, los mongoles, los Ming, Francia, Japón, Estados Unidos y otra vez China. Todos entraron y todos acabaron marchándose.',
     video: 'vietnam-2000-anos-largo.mp4',
     realidad: 'Basado en un viaje real: las fotos y vídeos del recorrido son de Paco. La historia va con fotos, grabados y vídeos de archivo con licencia libre; las animaciones y recreaciones llevan rótulo. Autores y fuentes, al final de la página.',
@@ -439,7 +439,7 @@ module.exports = [
         'Hanói se oye antes de verse: millones de motos, día y noche. Aquí una moto es un puesto de comida, un camión de reparto y el coche de una familia entera. Hay una calle donde el tren pasa a un palmo de las mesas: la gente levanta la silla, deja pasar los vagones y vuelve a sentarse.',
         'El aire pesa. Hanói ha vuelto a estar este año entre las diez ciudades más contaminadas del mundo, según IQAir, y lo peor llega de octubre a abril. La recorrí a pie y no lo recomiendo: mejor un Grab de un sitio a otro. La ciudad quiere sacar del centro las motos de gasolina, por fases, a partir de 2028.',
         'China gobernó esta tierra unos mil años, y las primeras en levantarse fueron dos hermanas, las Trưng. Después llegaron los franceses y dejaron una cárcel, **Hỏa Lò**: la construyeron para encerrar vietnamitas y más tarde los vietnamitas encerraron allí a los pilotos americanos (50.000 dong). A unas calles, gratis, los restos de un **B-52** asoman en un lago entre casas: cayó en los bombardeos de la Navidad de 1972. Para comer, bún chả en Hương Liên, donde cenaron Obama y Bourdain, y café de huevo en Giảng.' ],
-        enlaces: [['Hanói', '/destinos/hanoi-vietnam.html'], ['Guía de un día en Hanói', '/1-dia-en-hanoi-59zg'], ['Qué saber antes de ir a Vietnam: 2.000 años sin rendirse', H('historia-de-vietnam-2000-anos-sin-rendirse')]] },
+        enlaces: [['Hanói', '/destinos/hanoi-vietnam.html'], ['Guía de un día en Hanói', '/1-dia-en-hanoi-59zg'], ['Vietnam: 2.000 años sin rendirse', H('historia-de-vietnam-2000-anos-sin-rendirse')]] },
       { h: 'El norte: Pù Luông, Mai Châu y Cao Bằng', min: '2:57', foto: ['265', 'Una vecina cruza un arroyo entre arrozales, en la zona de Pù Luông.'], p: [
         'Salí hacia el oeste bajo la lluvia; llovió un poco casi todos los días. **Pù Luông y Mai Châu** son arrozales y norias de bambú. Dormía donde me pillaba la tarde, por entre 10 y 30 euros, y la diferencia de un sitio a otro es enorme.',
         'Más arriba está **Cao Bằng**, pegado a China. Por estas montañas entraron los mongoles tres veces, y en una cueva junto a la frontera se escondió Hồ Chí Minh cuando volvió al país en secreto. En cada parada pensaba lo mismo: la capacidad de lucha de esta gente. La carretera es un videojuego: se te cruza todo tipo de animales. Y un aviso: aquí arriba, a veces no hay dónde comer.' ] },
@@ -471,6 +471,6 @@ module.exports = [
       W('Batalla de Huế (Wikipedia)', 'https://en.wikipedia.org/wiki/Battle_of_Hu%E1%BA%BF'),
     ],
     nota: 'Los precios en dong y las fechas previstas cambian: son los de noviembre de 2026.',
-    cierre: 'La historia que hay detrás de cada parada está en el documental «Qué saber antes de ir a Vietnam: 2.000 años sin rendirse».',
+    cierre: 'La historia que hay detrás de cada parada está en el documental «Vietnam: 2.000 años sin rendirse».',
   },
 ];
