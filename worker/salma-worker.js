@@ -986,6 +986,38 @@ function usaPromptUnico(env, uid) {
   return !!uid && v.split(',').map(x => x.trim()).filter(Boolean).some(x => x === uid || (x.endsWith('*') && x.length >= 9 && uid.startsWith(x.slice(0, -1))));
 }
 
+// FICHAS CON FUENTES (14 nov 2026, Paco, caso p-mwfityix43c). Modelo aprobado: docs/fichas/MODELO-chitwan-nepal.md; los datos,
+// en worker/kv/fichas/ y en el KV como `ficha:<cc>:<id>` (la misma referencia que `spot:` → `dest:<cc>:spot:<id>`).
+// Cuando el destino tiene ficha, Salma recibe ESA en vez de la de abril (output-spots, sin fuentes).
+// Interruptor FICHAS_FUENTE (wrangler.toml): "*" = todas las cuentas; uid separados por comas = solo esas; vacío = apagado.
+function usaFichas(env, uid) {
+  const v = String((env && env.FICHAS_FUENTE) || '').trim();
+  if (!v) return false;
+  if (v === '*') return true;
+  return !!uid && v.split(',').map(x => x.trim()).includes(uid);
+}
+// El bloque que recibe Salma. Sin las fuentes (no las cita en el chat): van en la ficha, para la web y para revisarla.
+function fichaContexto(fi) {
+  const L = (arr) => (Array.isArray(arr) ? arr : []).map(x => '· ' + x.t).join('\n');
+  const fecha = (iso) => { const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? `${+m[3]} ${['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][+m[2] - 1]} ${m[1]}` : ''; };
+  const sitios = (fi.sitios || []).map(x => `· ${x.hace} → ${x.maps}${x.nota ? ' (' + x.nota + ')' : ''}`).join('\n');
+  const partes = [
+    `[FICHA DEL DESTINO CON FUENTES — ${fi.nombre} (${fi.pais}) · revisada el ${fecha(fi.revisada)}. Son los datos comprobados de este sitio: úsalos tal cual en el plan y en la guía.`,
+    fi.estable && fi.estable.length ? 'LO ESTABLE:\n' + L(fi.estable) : '',
+    fi.cuando && fi.cuando.length ? 'CUÁNDO IR:\n' + L(fi.cuando) : '',
+    fi.fauna && fi.fauna.length ? 'QUÉ SE VE DE VERDAD:\n' + L(fi.fauna) : '',
+    sitios ? 'SITIOS — cada actividad va en su sitio, con este nombre exacto de Google Maps:\n' + sitios : '',
+    fi.normas && fi.normas.length ? 'NORMAS:\n' + L(fi.normas) : '',
+    fi.cambia && fi.cambia.length ? 'LO QUE CAMBIA — dalo como orientativo y di que se confirme allí:\n' + L(fi.cambia) : '',
+    fi.llegar && fi.llegar.length ? 'CÓMO LLEGAR:\n' + L(fi.llegar) : '',
+    fi.gente && fi.gente.length ? 'LA GENTE DEL LUGAR:\n' + L(fi.gente) : '',
+    fi.delicado && fi.delicado.length ? 'LO DELICADO:\n' + L(fi.delicado) : '',
+    fi.no_escribir && fi.no_escribir.length ? 'NO ESCRIBAS: ' + fi.no_escribir.join('; ') + '.' : '',
+    'De este sitio, los horarios, normas, precios y animales que no estén en la ficha no los des como hechos.]',
+  ];
+  return partes.filter(Boolean).join('\n');
+}
+
 // ═══════════════════════════════════════════════════════════════
 // PROMPT DINÁMICO — Lee de Firestore con caché 60s, fallback hardcoded
 // ═══════════════════════════════════════════════════════════════
@@ -7307,6 +7339,7 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
 async function detectCountryAndKV(env, message, history, currentRoute, guidedRoute, userCountryCode, frontendCountryCode, opts = {}) {
   let kvCountryData = null;
   let kvDestinationData = null;
+  let kvFichaData = null;   // ficha con fuentes del mismo destino (solo si opts.fichas)
   let kvCachedRoute = null;
   let kvTransportData = null;
   let countryFromMessage = false;
@@ -7460,12 +7493,16 @@ async function detectCountryAndKV(env, message, history, currentRoute, guidedRou
 
       // Destino específico: si spotRef existe, leer el detalle (segunda ronda, unavoidable)
       if (spotRef) {
-        const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
+        const [spotJson, fichaJson] = await Promise.all([
+          env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:')),
+          opts.fichas ? env.SALMA_KB.get('ficha:' + spotRef) : Promise.resolve(null),
+        ]);
         if (spotJson) kvDestinationData = JSON.parse(spotJson);
+        if (fichaJson) { try { kvFichaData = JSON.parse(fichaJson); } catch (_) {} }
       }
     }
   } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
-  return { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvCachedRoute, kvTransportData };
+  return { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvFichaData, kvCachedRoute, kvTransportData };
 }
 
 function tryKVDirectAnswer(message, country, destination) {
@@ -7764,7 +7801,9 @@ INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps p
     }
   }
 
-  if (kvDestinationData) {
+  if (opts.ficha) {
+    ctx.push(fichaContexto(opts.ficha));
+  } else if (kvDestinationData) {
     const d = kvDestinationData;
     let destCtx = `[DATOS VERIFICADOS DEL DESTINO — usa estos datos para la ruta:
 Destino: ${d.nombre} (${d.tipo}) | Región: ${d.region}
@@ -17389,8 +17428,8 @@ INSTRUCCIONES:
 
     // ─── KV LOOKUP (pre-Claude) ─── extraído a detectCountryAndKV() — reutilizada también
     // por el webhook de WhatsApp (25 sept 2026), ver esa función para el detalle.
-    const _kvRes = await detectCountryAndKV(env, message, history, currentRoute, guidedRoute, userCountryCode, frontendCountryCode, { guidedIsReco, guidedMapStage });
-    let { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvCachedRoute, kvTransportData } = _kvRes;
+    const _kvRes = await detectCountryAndKV(env, message, history, currentRoute, guidedRoute, userCountryCode, frontendCountryCode, { guidedIsReco, guidedMapStage, fichas: usaFichas(env, authUser && authUser.uid) });
+    let { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvFichaData, kvCachedRoute, kvTransportData } = _kvRes;
 
     // Determinar si es consulta local (GPS coincide con destino) o remota
     const gpsCountry = (userCountryCode || frontendCountryCode || '').toUpperCase();
@@ -17455,7 +17494,7 @@ INSTRUCCIONES:
     const dynamicPrompt = SALMA_SYSTEM_BASE;
     // PROMPT ÚNICO (22 oct 2026): solo las cuentas de PROMPT_UNICO (wrangler.toml); el resto, el prompt de siempre.
     const _promptUnico = usaPromptUnico(env, authUser && authUser.uid);
-    let { systemPrompt, systemBase, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute, { promptUnico: _promptUnico, editingRoute: _editingRoute });
+    let { systemPrompt, systemBase, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute, { promptUnico: _promptUnico, editingRoute: _editingRoute, ficha: skipKV ? null : kvFichaData });
     // Charla con el prompt único (sin plan, sin guía en JSON y sin estar cambiando una guía): lo mismo que antes era
     // SALMA_SYSTEM_CHAT para la caché barata, el modo de pensar y las fotos abajo.
     const _charlaUnico = systemBase === SALMA_UNICO_WEB && !guidedIsReco && !guidedRoute && !routeFromHere && !editingActiveRoute && !_editingRoute;
