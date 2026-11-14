@@ -27,7 +27,7 @@ module.exports = [
     formato: '16:9',
     caratula: 'pueblos', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
     // youtube: '_SnSzkDIkmw' SOLO cuando sea público (jue 19 nov 10:00): con youtube puesto la entrada usa ese reproductor y, privado, da error
-    titulo: 'Pueblos que se están borrando del mapa: 10 culturas de Asia',
+    titulo: 'TRIBUS que desaparecen: las 10 últimas culturas de Asia',
     resumen: 'Diez pueblos de Asia cuyas culturas se están borrando del mapa: la última gran tatuadora de Filipinas, las buceadoras de Jeju, los últimos konyak con la cara tatuada y los nómadas del mar. Quiénes son, qué están perdiendo y cómo llegar con respeto.',
     video: 'pueblos-t1-largo.mp4',
     realidad: 'Documental narrado por Salma con fotos y vídeos de archivo con licencia libre. Algunas escenas son recreaciones y llevan rótulo. Autores y fuentes, al final de la página.',
@@ -112,7 +112,7 @@ module.exports = [
     salmaPais: 'viajar',
     formato: '16:9',
     caratula: 'tatuajes', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
-    titulo: 'Tatuajes por el mundo: un viaje desde Ötzi hasta la Yakuza',
+    titulo: 'La HISTORIA de los tatuajes: de Ötzi a la Yakuza',
     resumen: 'La historia de los tatuajes en 5.300 años: del hombre de hielo de los Alpes a los maoríes, las cárceles rusas, las maras y la Yakuza. Por qué nos tatuamos y por qué las mafias empiezan a esconderlo.',
     video: 'historia-de-los-tatuajes.mp4',
     realidad: 'Documental narrado por Salma con fotos de archivo con licencia libre. Algunas escenas están animadas a partir de fotos antiguas: Ötzi, el retrato maorí, la mujer ainu, los tatuadores samoanos y el tatuado japonés. El resto son fotos reales. Autores y fuentes, al final de la página.',
