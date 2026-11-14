@@ -6695,7 +6695,10 @@ function _norm2(s) { return String(s || '').toLowerCase().normalize('NFD').repla
 // (fechas, horarios, normas, animales que se ven, dónde está algo, temporadas, récords…; los precios no, son de preciosConFuente),
 // cada uno se busca en Brave y Haiku dice si los resultados lo confirman, lo contradicen o no dicen nada, con cita LITERAL.
 //   · confirmado → se queda igual.
-//   · falso (la fuente dice otra cosa) → la frase se cambia por la misma frase corregida con lo que dice la fuente.
+//   · falso → la frase se cambia por la misma frase corregida. SOLO si lo contradice una fuente OFICIAL, o dos webs distintas con
+//     al menos una de referencia y ninguna que lo confirme (método del 14 nov tras la 1ª prueba: una web suelta «corregía» mal).
+//   · dudoso (una web suelta en contra, o unas confirman y otras no) → no se toca; queda apuntado.
+//   Fuentes: Wikipedia (gratis) + buscador; si sale una web oficial, se lee la página entera, no el trocito.
 //   · sin fuente → si es un dato práctico (norma, horario, fecha, obligación) se quita la frase; si es historia o naturaleza
 //     se deja (que Google no lo encuentre no lo hace falso).
 // Auditoría de Nepal (13 nov): «ciervos barasinga» en Chitwan (extinguidos allí), «lago dentro del parque» (está fuera),
@@ -6719,17 +6722,19 @@ async function datosConFuente(textos, pais, env, tope = 30) {
     }, required: ['n', 'dato', 'frase', 'tipo', 'busqueda'] } } }, required: ['datos'] },
   };
   const juzgar = {
-    name: 'juzgar_dato', description: 'Lo que dicen las fuentes sobre el dato',
+    name: 'juzgar_dato', description: 'Lo que dice cada fuente sobre el dato',
     input_schema: { type: 'object', properties: {
-      estado: { type: 'string', enum: ['confirmado', 'falso', 'sin_fuente'] },
-      fuente: { type: 'integer', description: 'número del resultado que lo confirma o lo contradice (0 si sin_fuente)' },
-      cita: { type: 'string', description: 'fragmento LITERAL del resultado que lo confirma o lo contradice (vacío si sin_fuente)' },
-      frase_corregida: { type: 'string', description: 'solo si falso: la MISMA frase del texto, COPIADA ENTERA palabra por palabra, cambiando SOLO las palabras del dato equivocado (todo lo demás se queda, también el final y el punto); vacío si no se puede arreglar (entonces se quita)' },
-    }, required: ['estado', 'fuente', 'cita', 'frase_corregida'] },
+      fuentes: { type: 'array', description: 'SOLO las fuentes que hablan de ESE dato (máx. 4); vacío si ninguna', items: { type: 'object', properties: {
+        n: { type: 'integer', description: 'número de la fuente' },
+        postura: { type: 'string', enum: ['confirma', 'contradice'] },
+        cita: { type: 'string', description: 'fragmento LITERAL de esa fuente donde lo dice' },
+      }, required: ['n', 'postura', 'cita'] } },
+      frase_corregida: { type: 'string', description: 'solo si alguna fuente contradice: la MISMA frase del texto, EN ESPAÑOL, COPIADA ENTERA palabra por palabra, cambiando SOLO las palabras del dato equivocado por lo que dicen las fuentes (todo lo demás se queda, también el principio, el final y el punto); vacío si no se puede arreglar' },
+    }, required: ['fuentes', 'frase_corregida'] },
   };
   let lista = [];
   try {
-    const ex = await _haikuHerramienta(env, `Viaje por ${pais || 'el destino'}. Saca de estos textos los DATOS CONCRETOS que se pueden comprobar en internet y que, si estuvieran mal, engañarían al viajero: fechas, horarios, normas y obligaciones, animales o plantas que se ven, si algo está dentro o fuera de un sitio, distancias, alturas, temporadas, récords («el más grande»), años y nombres de personas. NO saques precios (van aparte), ni opiniones, ni consejos («llega temprano»), ni descripciones («ambiente de viajero»). Como mucho ${tope}, los más arriesgados primero. Si no hay, lista vacía.\n\n${lista0.map((t, i) => `${i + 1}. ${t}`).join('\n')}`, extraer, 4000);
+    const ex = await _haikuHerramienta(env, `Viaje por ${pais || 'el destino'}. Saca de estos textos los DATOS CONCRETOS que se pueden comprobar en internet y que, si estuvieran mal, engañarían al viajero: fechas, horarios, normas y obligaciones, animales o plantas que se ven, si algo está dentro o fuera de un sitio, distancias, alturas, temporadas, récords («el más grande»), años y nombres de personas. NO saques precios (van aparte), ni opiniones, ni consejos («llega temprano»), ni descripciones («ambiente de viajero»). UN dato por cosa: si una frase nombra tres animales son tres datos («se ven rinocerontes», «se ven ciervos barasinga», «se ven tigres»), y si dice dónde está algo y qué se ve allí son dos; nunca juntes varias afirmaciones en un dato, porque una falsa quedaría tapada por las verdaderas. La búsqueda, de ESE dato solo. Como mucho ${tope}, los más arriesgados primero (lo raro o muy concreto antes que lo que sabe todo el mundo). Si no hay, lista vacía.\n\n${lista0.map((t, i) => `${i + 1}. ${t}`).join('\n')}`, extraer, 4000);
     // Los precios no: los lleva preciosConFuente, que además pone la fuente al lado.
     const _esPrecio = t => /\d[\d.,]*\s*(?:[A-Z]{3}\b|€|\$|euros?|d[oó]lares|rupias|pesos|bahts?|dongs?|soles|yenes)|\b(?:precio|cuesta|cuestan|tarifa)\b/i.test(t);
     lista = ((ex && ex.datos) || []).filter(d => lista0[d.n - 1] && d.frase && d.dato && !_esPrecio(d.dato)).slice(0, tope);
@@ -6746,27 +6751,63 @@ async function datosConFuente(textos, pais, env, tope = 30) {
   });
   lista = lista.filter(d => d.real);
   const dominio = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (_) { return ''; } };
+  // Nivel de cada fuente (Paco, 14 nov 2026: «primero la de la propiedad»): 3 = oficial (gobiernos, UNESCO, organismos),
+  // 2 = de referencia (Wikipedia, enciclopedias, prensa y guías serias, universidades), 1 = cualquier otra web (blogs, hoteles, agencias).
+  const nivel = h => /(^|\.)(gov|gob|gouv)(\.[a-z]{2,3})?$|(^|\.)unesco\.org$|\.int$|(^|\.)iucnredlist\.org$|(^|\.)un\.org$|(^|\.)europa\.eu$/.test(h) ? 3
+    : /(^|\.)(wikipedia|wikivoyage|britannica|lonelyplanet|nationalgeographic|roughguides|theguardian|nytimes|reuters|bbc|elpais|worldwildlife|wwf|birdlife|smithsonianmag|nature|sciencedirect|springer|worldbank)\.[a-z.]+$|\.edu(\.[a-z]{2})?$|\.ac\.[a-z]{2}$/.test(h) ? 2 : 1;
+  const limpio = t => String(t || '').replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
   const resolver = async (d) => {
-    const kvKey = `dato1:${_norm2(pais)}:${_norm2(d.dato)}`.slice(0, 480);
+    const kvKey = `dato2:${_norm2(pais)}:${_norm2(d.dato)}`.slice(0, 480);
     try { const c = env.SALMA_KB && await env.SALMA_KB.get(kvKey, 'json'); if (c) return c; } catch (_) {}
     let res = [];
+    // 1) Wikipedia (gratis): los dos artículos que mejor casan con la búsqueda, con su entradilla.
+    const wikiP = fetch('https://en.wikipedia.org/w/api.php?' + new URLSearchParams({ action: 'query', generator: 'search', gsrsearch: d.busqueda, gsrlimit: '2', prop: 'extracts', exintro: '1', explaintext: '1', exchars: '1200', format: 'json', origin: '*' }),
+      { headers: { 'User-Agent': 'BorradoDelMapa/1.0 (https://borradodelmapa.com)' }, signal: AbortSignal.timeout(6000) })
+      .then(r => r.ok ? r.json() : null).then(j => Object.values((j && j.query && j.query.pages) || {}).filter(p => p.extract).map(p => ({ link: 'https://en.wikipedia.org/?curid=' + p.pageid, snippet: p.title + ': ' + limpio(p.extract) }))).catch(() => []);
+    // 2) El buscador
     try {
       const r = await fetch('https://api.search.brave.com/res/v1/web/search?' + new URLSearchParams({ q: d.busqueda, count: 8, extra_snippets: 'true' }),
         { headers: { 'Accept': 'application/json', 'X-Subscription-Token': env.BRAVE_SEARCH_KEY }, signal: AbortSignal.timeout(8000) });
       if (!r.ok) return null;   // error de búsqueda: no se decide nada (el texto se queda como estaba, sin guardar)
       const j = await r.json();
-      const limpio = t => String(t || '').replace(/<[^>]+>/g, '').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
       res = ((j.web && j.web.results) || []).slice(0, 8).map(o => ({ link: o.url, snippet: limpio([o.description, ...(o.extra_snippets || [])].join(' … ')) }));
     } catch (_) { return null; }
-    let j = null;
-    if (res.length) {
-      try { j = await _haikuHerramienta(env, `Nuestro texto de viaje (${pais}) dice: «${d.real}». El dato a comprobar: «${d.dato}». Mira SOLO estos resultados de Google. «confirmado» si alguno lo dice; «falso» si alguno dice claramente lo contrario o otra cosa (otra fecha, otro sitio, extinguido, no obligatorio…); «sin_fuente» si ninguno habla de eso. La cita tiene que ser LITERAL del resultado. Si es falso, da la frase corregida.\n\n${res.map((x, i) => `[${i + 1}] ${x.link}\n${x.snippet}`).join('\n\n')}`, juzgar, 700); } catch (_) { return null; }
+    // 3) Si hay una web OFICIAL entre los resultados, se lee la página (no solo el trocito): el trozo que habla del dato.
+    const oficial = res.find(x => nivel(dominio(x.link)) === 3);
+    if (oficial) {
+      try {
+        const r = await fetch(oficial.link, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BorradoDelMapa/1.0)' }, signal: AbortSignal.timeout(6000) });
+        if (r.ok && /text\/html|text\/plain/.test(r.headers.get('content-type') || '')) {
+          const txt = limpio((await r.text()).slice(0, 400000));
+          const claves = d.busqueda.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+          let mejor = 0, pts = -1;
+          for (let i = 0; i < txt.length; i += 800) { const tr = txt.slice(i, i + 2400).toLowerCase(); const p = claves.filter(w => tr.includes(w)).length; if (p > pts) { pts = p; mejor = i; } }
+          if (pts >= Math.min(2, claves.length)) oficial.snippet = (oficial.snippet + ' … ' + txt.slice(mejor, mejor + 2400)).slice(0, 3600);
+        }
+      } catch (_) {}
     }
-    const f = j && j.fuente ? res[j.fuente - 1] : null;
-    const citaOk = !!(j && f && j.cita && j.cita.length >= 12 && _nq(f.snippet).includes(_nq(j.cita)));
-    const out = (j && j.estado !== 'sin_fuente' && citaOk)
-      ? { estado: j.estado, corregida: j.estado === 'falso' ? String(j.frase_corregida || '').replace(/\s+/g, ' ').trim() : '', original: d.real, dominio: dominio(f.link) }
-      : { estado: 'sin_fuente' };
+    res = [...(await wikiP), ...res].map(x => ({ ...x, dom: dominio(x.link), niv: nivel(dominio(x.link)) }));
+    if (!res.length) return { estado: 'sin_fuente' };
+    let j = null;
+    try { j = await _haikuHerramienta(env, `Nuestro texto de viaje (${pais}) dice: «${d.real}». El dato a comprobar: «${d.dato}». Mira SOLO estas fuentes y di, de cada una que hable de ESE dato, si lo confirma o lo contradice, con una cita LITERAL suya. «contradice» SOLO si dice claramente otra cosa incompatible (otro año, otro sitio, extinguido, prohibido, no obligatorio…). Diferencias pequeñas NO son contradicción: horas o duraciones que se solapan o se parecen (40 min y 30 min; 4-5 h y 5-6 h; «sobre las 7» y «6:30»), cifras redondeadas, o que una fuente hable de otro trayecto, otra temporada u otro sitio parecido. Si una fuente no habla de eso, no la pongas. Si dudas, no es contradicción.\n\n${res.map((x, i) => `[${i + 1}] ${x.link} (${x.niv === 3 ? 'OFICIAL' : x.niv === 2 ? 'de referencia' : 'web cualquiera'})\n${x.snippet}`).join('\n\n')}`, juzgar, 900); } catch (_) { return null; }
+    const vistas = new Set();
+    const fuentes = ((j && j.fuentes) || []).map(x => ({ f: res[x.n - 1], postura: x.postura, cita: String(x.cita || '') }))
+      .filter(x => x.f && x.cita.length >= 12 && _nq(x.f.snippet).includes(_nq(x.cita)))
+      .filter(x => { const k = x.f.dom + '|' + x.postura; if (vistas.has(k)) return false; vistas.add(k); return true; });   // una web cuenta una vez
+    const conf = fuentes.filter(x => x.postura === 'confirma'), contra = fuentes.filter(x => x.postura === 'contradice');
+    const max = arr => arr.reduce((m, x) => Math.max(m, x.f.niv), 0);
+    // La regla: se CAMBIA solo si lo contradice una fuente oficial (y ninguna oficial lo confirma), o dos webs distintas con
+    // al menos una de referencia y ninguna que lo confirme. Si hay quien confirma y quien contradice, o una sola web suelta
+    // en contra, queda DUDOSO: no se toca, se apunta.
+    let estado = 'sin_fuente';
+    if (contra.length && max(contra) === 3 && max(conf) < 3) estado = 'falso';
+    else if (conf.length && !contra.length) estado = 'confirmado';
+    else if (conf.length && contra.length) estado = max(conf) >= max(contra) ? 'confirmado' : 'dudoso';
+    else if (contra.length >= 2 && max(contra) >= 2) estado = 'falso';
+    else if (contra.length) estado = 'dudoso';
+    const quien = (estado === 'confirmado' ? conf : contra).sort((x, y) => y.f.niv - x.f.niv)[0];
+    const out = { estado, corregida: estado === 'falso' ? String((j && j.frase_corregida) || '').replace(/\s+/g, ' ').trim() : '', original: d.real, dominio: quien ? quien.f.dom : '',
+      fuentes: fuentes.map(x => ({ dom: x.f.dom, niv: x.f.niv, postura: x.postura })) };
     try { if (env.SALMA_KB) await env.SALMA_KB.put(kvKey, JSON.stringify(out), { expirationTtl: _PRECIO_TTL }); } catch (_) {}
     return out;
   };
@@ -6778,7 +6819,7 @@ async function datosConFuente(textos, pais, env, tope = 30) {
   let nFalso = 0, nQuita = 0;
   lista.forEach((d, i) => {
     const r = resultados[i];
-    if (!r || r.estado === 'confirmado') return;
+    if (!r || r.estado === 'confirmado' || r.estado === 'dudoso') return;
     if (r.estado === 'falso') {
       // La corrección cacheada vale si es para esta misma frase; si no (otra guía con el mismo dato), se quita la frase.
       let c = (r.original === d.real && r.corregida) ? r.corregida : '';
@@ -6796,7 +6837,7 @@ async function datosConFuente(textos, pais, env, tope = 30) {
     }
   });
   console.log(`[DATOS] ${lista.length} datos: ${resultados.filter(r => r && r.estado === 'confirmado').length} confirmados, ${nFalso} falsos, ${nQuita} prácticos sin fuente quitados, ${resultados.filter(r => r && r.estado === 'sin_fuente').length - nQuita} sin fuente que se quedan, ${resultados.filter(r => !r).length} sin decidir`);
-  cambios.resumen = { datos: lista.length, confirmados: resultados.filter(r => r && r.estado === 'confirmado').length, falsos: nFalso, quitados: nQuita, sin_decidir: resultados.filter(r => !r).length, lista: lista.map((d, i) => ({ dato: d.dato, tipo: d.tipo, estado: resultados[i] ? resultados[i].estado : 'sin_decidir', fuente: (resultados[i] && resultados[i].dominio) || '' })) };
+  cambios.resumen = { datos: lista.length, confirmados: resultados.filter(r => r && r.estado === 'confirmado').length, falsos: nFalso, quitados: nQuita, sin_decidir: resultados.filter(r => !r).length, lista: lista.map((d, i) => ({ dato: d.dato, tipo: d.tipo, estado: resultados[i] ? resultados[i].estado : 'sin_decidir', fuente: (resultados[i] && resultados[i].dominio) || '', fuentes: (resultados[i] && resultados[i].fuentes) || [] })), dudosos: resultados.filter(r => r && r.estado === 'dudoso').length };
   return cambios;
 }
 // ¿Esta cuenta pasa el comprobador de datos, y cómo? DATOS_GUIAS (wrangler.toml): "*" = todas; uid separados por comas = solo
