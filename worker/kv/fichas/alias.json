@@ -1,0 +1,10 @@
+{
+  "_nota": "Nombres extra con los que la gente pide cada ficha (además del nombre de la ficha y de las palabras clave de abril). En minúsculas. Lo usa scripts/fichas/indice.mjs.",
+  "np:upper-mustang": ["mustang", "alto mustang", "lo manthang"],
+  "np:circuito-annapurna": ["annapurna", "circuito del annapurna", "vuelta al annapurna", "annapurna circuit"],
+  "np:everest-base-camp": ["everest", "campo base del everest", "everest base camp", "ebc", "trekking del everest"],
+  "np:kathmandu": ["katmandu", "kathmandu"],
+  "np:chitwan": ["chitwan", "parque nacional de chitwan", "chitwan national park", "sauraha"],
+  "np:patan": ["patan", "lalitpur"],
+  "np:langtang": ["langtang", "valle de langtang", "langtang valley"]
+}

@@ -1,0 +1,131 @@
+[
+ {
+  "r": "np:bhaktapur",
+  "n": [
+   "bhaktapur",
+   "bhadgaon",
+   "durbar square bhaktapur",
+   "nyatapola",
+   "potters square",
+   "juju dhau"
+  ]
+ },
+ {
+  "r": "np:chitwan",
+  "n": [
+   "parque nacional de chitwan",
+   "chitwan",
+   "parque nacional chitwan",
+   "chitwan national park",
+   "sauraha",
+   "bharatpur"
+  ]
+ },
+ {
+  "r": "np:circuito-annapurna",
+  "n": [
+   "circuito de annapurna",
+   "annapurna circuit",
+   "circuito annapurna",
+   "thorong la",
+   "manang",
+   "marpha",
+   "tatopani",
+   "acap",
+   "annapurna",
+   "circuito del annapurna",
+   "vuelta al annapurna"
+  ]
+ },
+ {
+  "r": "np:everest-base-camp",
+  "n": [
+   "campo base del everest",
+   "everest base camp",
+   "campo base everest",
+   "khumbu",
+   "lukla",
+   "namche bazaar",
+   "kala patthar",
+   "tengboche",
+   "trekking everest",
+   "sagarmatha",
+   "everest",
+   "trekking del everest"
+  ]
+ },
+ {
+  "r": "np:kathmandu",
+  "n": [
+   "kathmandu",
+   "katmandu",
+   "thamel",
+   "boudhanath",
+   "pashupatinath",
+   "swayambhunath",
+   "templo de los monos",
+   "valle de katmandu"
+  ]
+ },
+ {
+  "r": "np:langtang",
+  "n": [
+   "valle de langtang",
+   "langtang",
+   "valle langtang",
+   "langtang valley",
+   "kyanjin gompa",
+   "syabrubesi",
+   "langtang lirung",
+   "trekking cerca katmandu"
+  ]
+ },
+ {
+  "r": "np:lumbini",
+  "n": [
+   "lumbini",
+   "nacimiento buda",
+   "birthplace buddha",
+   "templo maya devi",
+   "pilar ashoka",
+   "siddharthanagar",
+   "bhairahawa"
+  ]
+ },
+ {
+  "r": "np:patan",
+  "n": [
+   "patan lalitpur",
+   "lalitpur",
+   "patan",
+   "patan durbar square",
+   "museo patan",
+   "mangal bazaar",
+   "kumbheshwar"
+  ]
+ },
+ {
+  "r": "np:pokhara",
+  "n": [
+   "pokhara",
+   "lago phewa",
+   "phewa lake",
+   "sarangkot",
+   "annapurna base camp",
+   "machapuchare",
+   "fish tail"
+  ]
+ },
+ {
+  "r": "np:upper-mustang",
+  "n": [
+   "upper mustang",
+   "lo manthang",
+   "mustang prohibido",
+   "reino lo",
+   "festival tiji",
+   "mustang",
+   "alto mustang"
+  ]
+ }
+]

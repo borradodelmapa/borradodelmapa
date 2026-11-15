@@ -997,6 +997,38 @@ function usaFichas(env, uid) {
   if (v === '*') return true;
   return !!uid && v.split(',').map(x => x.trim()).includes(uid);
 }
+// BUSCADOR DE FICHAS (15 nov 2026, caso p-mwfityix43c). El de `spot:` solo encuentra una palabra suelta con mayúscula
+// («Chitwan» sí; «parque nacional de chitwan», «Upper Mustang», «chitwan» en minúsculas o tres sitios en una frase, no).
+// Este mira el mensaje ENTERO, sin mayúsculas ni acentos, contra los nombres de cada ficha (índice `fichas:indice` en el KV,
+// lo genera scripts/fichas/indice.mjs: [{ r: "np:pokhara", n: ["pokhara", ...] }]) y devuelve hasta 3 referencias.
+// Un nombre que tienen fichas de dos países solo vale si el país detectado coincide. Batería: scripts/fichas/probar-buscador.mjs (0 €).
+const _normFicha = s => ' ' + String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim() + ' ';
+function buscarFichas(texto, indice, cc) {
+  if (!Array.isArray(indice) || !texto) return [];
+  const t = _normFicha(texto);
+  const pais = String(cc || '').toLowerCase();
+  const porNombre = new Map();   // nombre → refs que lo tienen
+  for (const e of indice) for (const n of (e.n || [])) {
+    if (!n || n.length < 4 || !t.includes(' ' + n + ' ')) continue;
+    if (!porNombre.has(n)) porNombre.set(n, []);
+    porNombre.get(n).push(e.r);
+  }
+  const mejor = new Map();      // ref → largo del nombre más largo encontrado (más largo = más concreto)
+  porNombre.forEach((refs, n) => {
+    const paises = new Set(refs.map(r => r.split(':')[0]));
+    const validas = paises.size > 1 ? refs.filter(r => pais && r.startsWith(pais + ':')) : refs;
+    for (const r of validas) if (!mejor.has(r) || mejor.get(r) < n.length) mejor.set(r, n.length);
+  });
+  let out = [...mejor.entries()];
+  if (pais) { const mismo = out.filter(([r]) => r.startsWith(pais + ':')); if (mismo.length) out = mismo; }
+  return out.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([r]) => r);
+}
+let _fichasIndice = null, _fichasIndiceT = 0;   // en memoria 10 min por isolate: una lectura de KV, no una por mensaje
+async function leerIndiceFichas(env) {
+  if (_fichasIndice && Date.now() - _fichasIndiceT < 600000) return _fichasIndice;
+  try { const j = env.SALMA_KB && await env.SALMA_KB.get('fichas:indice', 'json'); if (Array.isArray(j)) { _fichasIndice = j; _fichasIndiceT = Date.now(); } } catch (_) {}
+  return _fichasIndice || [];
+}
 // El bloque que recibe Salma. Sin las fuentes (no las cita en el chat): van en la ficha, para la web y para revisarla.
 function fichaContexto(fi) {
   const L = (arr) => (Array.isArray(arr) ? arr : []).map(x => '· ' + x.t + (x.de_cuando ? ` (dato de ${x.de_cuando})` : '')).join('\n');
@@ -7342,7 +7374,8 @@ async function waCallClaudeWithTools(env, system, messages, userCoords, uid) {
 async function detectCountryAndKV(env, message, history, currentRoute, guidedRoute, userCountryCode, frontendCountryCode, opts = {}) {
   let kvCountryData = null;
   let kvDestinationData = null;
-  let kvFichaData = null;   // ficha con fuentes del mismo destino (solo si opts.fichas)
+  let kvFichasData = [];    // fichas con fuentes (solo si opts.fichas): la del destino y las que nombre el mensaje
+  let kvSpotRef = null;
   let kvCachedRoute = null;
   let kvTransportData = null;
   let countryFromMessage = false;
@@ -7496,16 +7529,20 @@ async function detectCountryAndKV(env, message, history, currentRoute, guidedRou
 
       // Destino específico: si spotRef existe, leer el detalle (segunda ronda, unavoidable)
       if (spotRef) {
-        const [spotJson, fichaJson] = await Promise.all([
-          env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:')),
-          opts.fichas ? env.SALMA_KB.get('ficha:' + spotRef) : Promise.resolve(null),
-        ]);
+        const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
         if (spotJson) kvDestinationData = JSON.parse(spotJson);
-        if (fichaJson) { try { kvFichaData = JSON.parse(fichaJson); } catch (_) {} }
+        kvSpotRef = spotRef;
       }
     }
+    // FICHAS CON FUENTES: la del destino de `spot:` y las que el buscador encuentre en el mensaje, hasta 3 (15 nov 2026).
+    if (opts.fichas) {
+      const texto = [message, guidedRoute && guidedRoute.destino].filter(Boolean).join(' ');
+      const refs = [...new Set([kvSpotRef, ...buscarFichas(texto, await leerIndiceFichas(env), countryCode)].filter(Boolean))].slice(0, 3);
+      const leidas = await Promise.all(refs.map(r => env.SALMA_KB.get('ficha:' + r).catch(() => null)));
+      kvFichasData = leidas.map(j => { try { return j ? JSON.parse(j) : null; } catch (_) { return null; } }).filter(Boolean);
+    }
   } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
-  return { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvFichaData, kvCachedRoute, kvTransportData };
+  return { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvFichasData, kvCachedRoute, kvTransportData };
 }
 
 function tryKVDirectAnswer(message, country, destination) {
@@ -7804,9 +7841,11 @@ INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps p
     }
   }
 
-  if (opts.ficha) {
-    ctx.push(fichaContexto(opts.ficha));
-  } else if (kvDestinationData) {
+  // Fichas con fuentes (hasta 3). Los datos de abril del destino solo van si ese mismo destino no tiene ficha.
+  const _fichas = Array.isArray(opts.fichas) ? opts.fichas : [];
+  _fichas.forEach(fi => ctx.push(fichaContexto(fi)));
+  const _abrilConFicha = kvDestinationData && _fichas.some(fi => String(fi.ref || '').endsWith(':' + kvDestinationData.id));
+  if (kvDestinationData && !_abrilConFicha) {
     const d = kvDestinationData;
     let destCtx = `[DATOS ORIENTATIVOS DEL DESTINO — sin fuentes ni fecha de revisión: sirven para orientarte (qué hay, cuántos días, cómo llegar), pero sus precios, horarios, normas y consejos NO son hechos comprobados; si los usas, dalos como aproximados y di que se confirmen allí:
 Destino: ${d.nombre} (${d.tipo}) | Región: ${d.region}
@@ -17432,7 +17471,7 @@ INSTRUCCIONES:
     // ─── KV LOOKUP (pre-Claude) ─── extraído a detectCountryAndKV() — reutilizada también
     // por el webhook de WhatsApp (25 sept 2026), ver esa función para el detalle.
     const _kvRes = await detectCountryAndKV(env, message, history, currentRoute, guidedRoute, userCountryCode, frontendCountryCode, { guidedIsReco, guidedMapStage, fichas: usaFichas(env, authUser && authUser.uid) });
-    let { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvFichaData, kvCachedRoute, kvTransportData } = _kvRes;
+    let { countryCode, countryFromMessage, kvCountryData, kvDestinationData, kvFichasData, kvCachedRoute, kvTransportData } = _kvRes;
 
     // Determinar si es consulta local (GPS coincide con destino) o remota
     const gpsCountry = (userCountryCode || frontendCountryCode || '').toUpperCase();
@@ -17497,7 +17536,7 @@ INSTRUCCIONES:
     const dynamicPrompt = SALMA_SYSTEM_BASE;
     // PROMPT ÚNICO (22 oct 2026): solo las cuentas de PROMPT_UNICO (wrangler.toml); el resto, el prompt de siempre.
     const _promptUnico = usaPromptUnico(env, authUser && authUser.uid);
-    let { systemPrompt, systemBase, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute, { promptUnico: _promptUnico, editingRoute: _editingRoute, ficha: skipKV ? null : kvFichaData });
+    let { systemPrompt, systemBase, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry, editingActiveRoute, { promptUnico: _promptUnico, editingRoute: _editingRoute, fichas: skipKV ? [] : kvFichasData });
     // Charla con el prompt único (sin plan, sin guía en JSON y sin estar cambiando una guía): lo mismo que antes era
     // SALMA_SYSTEM_CHAT para la caché barata, el modo de pensar y las fotos abajo.
     const _charlaUnico = systemBase === SALMA_UNICO_WEB && !guidedIsReco && !guidedRoute && !routeFromHere && !editingActiveRoute && !_editingRoute;
