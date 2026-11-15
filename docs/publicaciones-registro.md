@@ -154,3 +154,5 @@ Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P
 - 26 oct · «Hoy a las 10:00 sale el capítulo 4 en Shorts: si has oído mujeres jirafa, olvídalo…»
 - 26 oct · «Mañana a las 10:00, capítulo 5: el techo de Tailandia, y un santuario de elefantes…»
 - 27 oct · «Hoy a las 10:00 sale el capítulo 5 en Shorts: el techo de Tailandia…»
+
+**15 nov 2026 — T13 HECHO (con el «Sí, bórralas» de Paco en el chat de Vídeo).** Borradas definitivamente las 10 publicaciones de arriba (Studio → Contenido → Publicaciones queda vacío) y quitada la sección «Publicaciones» de la pestaña Inicio (Personalización → Pestaña Inicio → Publicar: «Cambios publicados»). Comprobado sin sesión: el canal no muestra publicaciones y el Inicio enseña tráiler, las 4 listas, Shorts y Vídeos.
