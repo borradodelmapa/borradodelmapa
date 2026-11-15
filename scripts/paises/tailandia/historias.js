@@ -267,7 +267,7 @@ module.exports = [
         { foto: 'IMG_4238', h: 'Una oración en movimiento', t: 'Rodea el ring rezando en cada esquina, se inclina en el centro y honra a sus maestros, a sus padres y a sus antepasados.' },
         { foto: 'IMG_4253', h: 'Las ocho extremidades', t: 'Nació como arte de guerra en el antiguo Siam. Usa puños, codos, rodillas y piernas.' },
         { foto: 'IMG_4269', h: 'La leyenda de 1767', t: 'Cuentan que Nai Khanom Tom venció a diez luchadores birmanos seguidos y quedó libre. Es leyenda, probablemente del siglo XX.' },
-        { foto: 'IMG_4011', h: 'Veladas en Samui', t: 'En Chaweng hay veladas casi cada noche, desde las nueve. Llega pronto y siéntate frente al ring.', salida: 'Leer el capítulo completo' },
+        { foto: 'IMG_4011', h: 'Veladas en Samui', t: 'En Chaweng, el estadio Phetch Buncha tiene veladas los lunes, miércoles y sábados desde las 21:00. Confírmalo antes de ir.', salida: 'Leer el capítulo completo' },
       ],
     },
     secciones: [
@@ -282,7 +282,7 @@ module.exports = [
       ] },
     ],
     ficha: [
-      'En Samui hay veladas en Chaweng casi cada noche, desde las nueve.',
+      'En Samui, el estadio **Phetch Buncha** (Chaweng) tiene veladas los **lunes, miércoles y sábados desde las 21:00**; entradas de 1.500 y 2.000 bahts. Confírmalo antes de ir: cambia.',
       'Llega pronto y siéntate frente al ring, no en diagonal.',
       'Respeta el deporte. Aprende su historia.',
     ],
@@ -290,9 +290,10 @@ module.exports = [
       W('Wai khru ram muay (Wikipedia)', 'https://en.wikipedia.org/wiki/Wai_khru_ram_muay'),
       W('Qué es el Wai Kru Ram Muay (Muay Thai Records)', 'https://muaythairecords.com/guides/what-is-the-wai-kru-ram-muay-in-muay-thai'),
       W('Día Nacional del Muay Thai (Yokkao)', 'https://th.yokkao.com/blogs/news/national-muay-thai-day'),
+      W('Thai Holiday Guide: estadio Phetchbuncha (Chaweng)', 'https://www.thaiholidayguide.com/surat-thani/koh-samui/phetch-buncha-boxing-stadium'),
       W('Nai Khanom Tom (Bernie Gourley)', 'https://berniegourley.com/tag/nai-khanomtom/'),
     ],
-    nota: 'Lo de Nai Khanom Tom es leyenda, no historia documentada. Las veladas de Samui son lo que nos contaron en 2026; confirma el horario del día.',
+    nota: 'Lo de Nai Khanom Tom es leyenda, no historia documentada. Horario y precios de Phetch Buncha comprobados en noviembre de 2026; confírmalos antes de ir.',
     cierre: 'Este capítulo es para Lola, para cuando vayamos a Tailandia a pelear. Una semana después, Vietnam.',
   },
   // Ep.5 Los moken · guion y fuentes: docs/pueblos-ep5-moken-guion-direccion.md · vídeo: salma marketing/pueblos/moken/ULTIMA
@@ -371,5 +372,89 @@ module.exports = [
       W('Sonido: «Korean island shore at night», rizzin, CC BY 3.0', 'https://freesound.org/people/rizzin/sounds/400791/'),
     ],
     cierre: 'Próximo episodio: los ainu, el pueblo indígena del norte de Japón.',
+  },
+  // Largo 16:9 «Tailandia 1» (T3.1/T12) · guion: docs/tailandia-1-preguntas-guion.md (v5) · descripción y capítulos: salma marketing/tailandia-largos/caratulas-y18/ENTREGA/T3.1-descripcion.md
+  // YouTube: mar 1 dic 2026 a las 10:00 (poner youtube: '<id>' SOLO cuando sea público). Minutos: los del montaje final (revisar al recibir el vídeo).
+  {
+    orden: 70,
+    slug: 'viajar-a-tailandia-10-dudas',
+    borrador: true,
+    formato: '16:9',
+    caratula: 'salma marketing/tailandia-largos/caratulas-y18/ENTREGA/T3.1-que-saber-antes-de-ir-caratula.jpg', // Y15; aprobada por Paco el 15 nov 2026
+    fecha: '2026-12-01',
+    serie: 'Conoce cada país',
+    cap: 'Tailandia',
+    pais: 'Tailandia',
+    titulo: '10 cosas que debes saber antes de viajar a Tailandia', // guion v6.2 (docs/tailandia-1-guion-v6-2.md): esperar vídeo y capítulos nuevos de Vídeo 2
+    resumen: 'Las 10 dudas que todo el mundo tiene antes de ir a Tailandia: visado, cuándo ir, si es seguro, cuánto cuesta, la moto, lo que no debes hacer, vacunas, dinero y si elegir el norte o las islas.',
+    video: 'viajar-a-tailandia-10-dudas.mp4',
+    realidad: 'Basado en el viaje de Paco por Tailandia, de enero a abril de 2026: las fotos son suyas. Los datos prácticos llevan su fuente al final. La imagen de portada está retocada.',
+    destino: ['tailandia', 'Tailandia'],
+    fotosDe: {
+      cm: 'salma marketing/editor/listas/origen/chiang-mai-todo.lst',
+      to: 'salma marketing/editor/listas/origen/triangulo-oro.lst',
+      pa: 'salma marketing/editor/listas/origen/pai.lst',
+      bc: 'salma marketing/editor/listas/origen/ban-rak-thai.lst',
+      di: 'salma marketing/editor/listas/origen/doi-inthanon-a.lst',
+    },
+    fotos: { portada: 'cm014', galeria: [['to13', 'El Templo Blanco de Chiang Rai, todavía en obras.'], ['pa61', 'El valle de Pai desde un mirador.'], ['bc05', 'El lago de Ban Rak Thai, junto a la frontera con Birmania.'], ['di41', 'Doi Inthanon, el techo del país.'], ['cm039', 'Monjes junto al foso de Chiang Mai.'], ['to47', 'El Buda dorado del Triángulo de Oro.']] },
+    cifras: [['30', 'Días sin visado'], ['1.864', 'Curvas del bucle'], ['5 min', 'De vídeo']],
+    story: {
+      portada: 'cm014',
+      slides: [
+        { foto: 'cm014', h: 'Viajar a Tailandia', t: 'Las 10 dudas de antes de ir, resueltas en cinco minutos.' },
+        { foto: 'cm028', h: 'Visado: 30 días', t: 'Con pasaporte español, 30 días sin visado desde el 15 de septiembre de 2026. Y la tarjeta de llegada digital, tres días antes.' },
+        { foto: 'cm039', h: 'Cuándo ir', t: 'De noviembre a febrero, la época seca y fresca. De enero a marzo, humo en el norte por las quemas.' },
+        { foto: 'pa55', h: 'La moto', t: 'Te la alquilan sin pedirte el carné, pero sin permiso internacional el seguro no te cubre.' },
+        { foto: 'di58', h: 'Elefantes, sin montar', t: 'En Chiang Mai hay santuarios donde no se montan ni hacen espectáculos.' },
+        { foto: 'to13', h: 'Cuánto cuesta', t: 'La camioneta roja de Chiang Mai, unos 30 bahts. El Templo Blanco subió a 200 bahts en enero de 2026.' },
+        { foto: 'bc05', h: '¿Norte o islas?', t: 'Templos, montaña y carretera, o el ring de Koh Samui. Las dos cosas, en el vídeo.', salida: 'Ver el vídeo' },
+      ],
+    },
+    secciones: [
+      { h: 'Tres meses en Tailandia', min: '0:00', foto: ['cm014', 'Chiang Mai.'], p: [
+        'Tres meses en Tailandia, del ring de una isla a las 1.864 curvas del norte. Antes de ir, todo el mundo tiene las mismas dudas: el visado, el dinero, la moto, si es seguro. Aquí van las respuestas, rápidas y con su fuente.' ] },
+      { h: '¿Necesito visado?', min: '0:16', p: [
+        'Con **pasaporte español y de turismo, no**. Pero cambió: desde el **15 de septiembre de 2026** son **30 días** sin visado (antes eran 60), con una prórroga de otros 30 en una oficina de Inmigración.',
+        'El pasaporte, con **6 meses de validez**. Y un trámite obligatorio: la **tarjeta de llegada digital**, que se rellena por internet en los **tres días antes de entrar**.',
+        'Pasarse de fecha cuesta **500 bahts por día** (hasta 20.000) y puede acabar en **deportación**.' ] },
+      { h: '¿Cuándo ir?', min: '0:43', foto: ['cm028', 'Un templo del casco antiguo de Chiang Mai.'], p: [
+        'La mejor época es la seca y fresca: **de noviembre a febrero**. **De mayo a noviembre llueve**: inundaciones en las ciudades y corrientes fuertes en la costa.',
+        'Y un aviso que casi nadie mira: **de enero a marzo el aire empeora mucho**, sobre todo en el norte, cuando se quema el campo.' ] },
+      { h: '¿Es seguro?', min: '1:03', p: [
+        'Para viajar, sí. Exteriores pide no ir a **tres zonas**: la **frontera con Camboya** (con los pasos por tierra cerrados: a Camboya, en avión), las provincias de **Yala, Pattani y Narathiwat**, en el extremo sur, y la **frontera con Birmania**.',
+        'El peligro de verdad es **la carretera**: las muertes por accidente de moto son muy comunes. Y dos timos clásicos: las joyerías con «gangas» para revender en España y las bebidas de un desconocido.',
+        'Policía turística: **1155**.' ] },
+      { h: '¿Cuánto cuesta?', min: '1:31', foto: ['to13', 'El Templo Blanco de Chiang Rai.'], p: [
+        'Moverse por Chiang Mai: la **camioneta roja compartida**, unos **30 bahts** por persona dentro de la ciudad; el precio se acuerda antes de subir. Con la aplicación **Grab** ves el precio antes de pedir el coche.',
+        'Lo que sube la cuenta son las **entradas para extranjeros**: **Doi Inthanon**, el techo del país, **300 bahts**; el **Templo Blanco** de Chiang Rai dobló la suya en enero de 2026: **200 bahts**.' ], enlaces: [['Doi Inthanon', '/blog/viajes/tailandia-doi-inthanon'], ['El Triángulo de Oro y el Templo Blanco', '/blog/viajes/tailandia-triangulo-de-oro']] },
+      { h: '¿Cómo me muevo?', min: '1:57', p: [
+        'En ciudad, **camioneta compartida o Grab**. El **tuk-tuk**, negociando el precio antes de subir. El centro viejo de Chiang Mai es un cuadrado con foso: se cruza andando en **veinticinco minutos**.',
+        'En barcos y ferris, mira que haya **chalecos**: muchos van sobrecargados.' ], enlaces: [['Chiang Mai', '/blog/viajes/tailandia-chiang-mai']] },
+      { h: '¿Puedo alquilar una moto?', min: '2:16', foto: ['pa55', 'La carretera a Pai.'], p: [
+        'Te la alquilan sin pedirte el carné. Y ese es el problema: para conducir hace falta el **permiso internacional**, y con el **carné de coche europeo no se puede llevar moto**. Sin él, si te caes, **el seguro no te cubre**.',
+        'Es muy común **dejar el pasaporte como fianza**, pero no es recomendable: si hay un problema, se queda con él quien te alquila. Revisa la moto antes de salir: al devolverla, pueden pedirte dinero por daños que ya estaban.',
+        'Paco hizo el norte en moto: **762 curvas** hasta Pai y **1.864** en el bucle de Mae Hong Son. Se conduce **por la izquierda**, y con casco siempre.' ], enlaces: [['762 curvas hasta Pai', '/blog/viajes/tailandia-carretera-a-pai']] },
+      { h: '¿Qué no debo hacer?', min: '2:58', foto: ['di58', 'Un elefante en un santuario de Chiang Mai.'], p: [
+        '**Vapear**: los cigarrillos electrónicos están **prohibidos**; si te paran, te lo quitan y te multan, y según Exteriores la multa puede llegar a los **1.000 €**. Con las **drogas, cárcel**, también por consumir.',
+        'La **marihuana** es otra historia: verás tiendas por todas partes. Desde junio de 2025 hace falta **receta médica**, y en la tienda te la hacen allí mismo. Lo que no se puede es **fumar en la calle**.',
+        'En el norte te ofrecerán ver a las «mujeres jirafa». Se llaman **kayán**, y ese nombre se considera despectivo. Huyeron de la guerra de Birmania y muchos siguen **sin ciudadanía**. Si vas, pregunta adónde va el dinero de la entrada y pide permiso antes de hacer una foto.',
+        'Si quieres ver **elefantes**, en Chiang Mai hay **santuarios donde no se montan ni hacen espectáculos**. El más conocido es **Elephant Nature Park**, a unos 60 km al norte de la ciudad: se reserva antes por internet.' ], enlaces: [['Los kayán de Ban Rak Thai', '/blog/viajes/tailandia-ban-rak-thai']] },
+      { h: 'Vacunas, agua y seguro', min: '3:56', p: [
+        'Viajando desde España, **ninguna vacuna es obligatoria**. Exteriores recomienda **hepatitis A y B, tétanos, rabia y encefalitis japonesa**: pregunta con tiempo en un centro de vacunación internacional.',
+        'El agua, **embotellada**. En época de lluvias hay **dengue**: con fiebre, al médico, y sin aspirina. Y **seguro de viaje**: la Seguridad Social no te cubre allí.' ] },
+      { h: 'Dinero y cajeros', min: '4:21', p: [
+        'La moneda es el **baht**. Hay cajeros por todas partes y funcionan con tarjeta española. Pero van **al revés** que en España: **primero te dan el dinero y después sale la tarjeta**. Espérala: si te olvidas, el cajero se la traga.',
+        'Cuidado con pagar con tarjeta en discotecas y clubes de Bangkok y Chiang Mai: hay **fraudes y extorsiones**.' ] },
+      { h: '¿Norte o islas?', min: '4:44', foto: ['bc05', 'El lago de Ban Rak Thai.'], p: [
+        'El **norte** es templos, montaña y carretera: Chiang Mai, la «ciudad nueva» de 1296; el Templo Blanco de Chiang Rai, en obras desde 1997; y el Triángulo de Oro, donde se tocan tres países.',
+        'La **isla** es otra cosa. En Koh Samui, una luchadora alemana reza en cada esquina del ring antes de su pelea: el **Wai Khru**, el saludo al maestro. Las dos historias tienen su vídeo: el norte en moto, el 8 de diciembre, y el muay thai, el 10.' ], enlaces: [['Muay thai en Koh Samui', '/blog/viajes/tailandia-muay-thai-ko-samui'], ['Tailandia: qué ver', '/destinos/tailandia.html']] },
+    ],
+    nota: 'Datos de noviembre de 2026 (Exteriores, recomendaciones vigentes a 14 de noviembre); confírmalos siempre en fuentes oficiales antes de viajar. Lo de los cajeros, la marihuana en tiendas y el pasaporte de fianza es lo que vio Paco en su viaje (enero-abril de 2026).',
+    fuentes: [
+      W('Ministerio de Asuntos Exteriores: recomendaciones de viaje a Tailandia', 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=Tailandia'),
+      W('Khaosod English: el Templo Blanco dobla su entrada (2026)', 'https://www.khaosodenglish.com/tourism/2025/11/10/chiang-rais-white-temple-doubles-admission-fee-for-foreign-tourists/'),
+    ],
+    cierre: 'Sigue con la serie del viaje: Chiang Mai, el Triángulo de Oro, la carretera a Pai, Ban Rak Thai, Doi Inthanon y el muay thai de Koh Samui.',
   },
 ];

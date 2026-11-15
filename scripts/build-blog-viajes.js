@@ -426,7 +426,7 @@ ${p.lista.map(rail).join('\n')}
 `).join('')}` : '';
 // Paco, 11 nov 2026: un país sin página de destino (India) decía «3 historias» y su tarjeta abría solo una; ahora lleva a su fila con todas.
 // Documentales de una serie o país que se enseñan en «Documentales» y no en el carril de su serie (Paco, 9 nov 2026)
-const DOCS_EXTRA = ['filipinas-historia-culturas-antes-de-viajar', 'pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale', 'viajar-a-la-india-donde-se-viene-a-morir'];
+const DOCS_EXTRA = ['viajar-a-tailandia-10-dudas', 'filipinas-historia-culturas-antes-de-viajar', 'pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale', 'viajar-a-la-india-donde-se-viene-a-morir'];
 const bloqueSeries = series.map((s) => {
   const lista = caps.filter((c) => c.serie === s && !DOCS_EXTRA.includes(c.slug));
   return `  <section class="bv-serie" id="${slugSerie(s)}">
