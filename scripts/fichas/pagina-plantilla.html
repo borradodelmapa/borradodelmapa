@@ -1,0 +1,194 @@
+<title>Fichas de __PAIS__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Mesa de revisión: barra de destinos a la izquierda (arriba en el móvil), ficha a la derecha. Naranja Borrado del Mapa, esquinas rectas. */
+:root {
+  --bg: #f6f4f1; --panel: #ffffff; --fg: #1d1a17; --muted: #6b635b; --line: #e3ddd6;
+  --accent: #f4630b; --accent-ink: #b8460a; --accent-soft: #fde9dc;
+  --ok: #2f7d4f; --ok-soft: #e2f1e7; --warn: #a66a00; --warn-soft: #fbf0d9; --bad: #b3261e; --bad-soft: #f9e1df;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161412; --panel: #1f1c19; --fg: #f1ece6; --muted: #a59d94; --line: #34302b;
+  --accent: #ff7a2a; --accent-ink: #ffa06a; --accent-soft: #3a2416;
+  --ok: #6cc391; --ok-soft: #1c2e23; --warn: #e3b35a; --warn-soft: #33290f; --bad: #f08a83; --bad-soft: #3a1d1b; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161412; --panel: #1f1c19; --fg: #f1ece6; --muted: #a59d94; --line: #34302b;
+  --accent: #ff7a2a; --accent-ink: #ffa06a; --accent-soft: #3a2416;
+  --ok: #6cc391; --ok-soft: #1c2e23; --warn: #e3b35a; --warn-soft: #33290f; --bad: #f08a83; --bad-soft: #3a1d1b; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: .01em; text-wrap: balance; margin: 0 }
+h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1 }
+h1 span { color: var(--accent) }
+.lede { color: var(--muted); max-width: 68ch; margin: 10px 0 0 }
+.estado { display: inline-block; margin-top: 14px; padding: 4px 10px; background: var(--warn-soft); color: var(--warn); font: 600 13px/1.4 var(--body); letter-spacing: .04em; text-transform: uppercase }
+.cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 24px }
+.cifras div { background: var(--panel); padding: 14px 16px }
+.cifras b { display: block; font: 700 30px/1 var(--display); font-variant-numeric: tabular-nums }
+.cifras small { color: var(--muted); font-size: 13px }
+.mesa { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 24px; margin-top: 28px; align-items: start }
+nav { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--panel) }
+nav a { display: flex; justify-content: space-between; gap: 8px; padding: 10px 14px; color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line); font-weight: 500 }
+nav a:last-child { border-bottom: 0 }
+nav a small { color: var(--muted); font-variant-numeric: tabular-nums }
+nav a[aria-current="true"] { background: var(--accent); color: #fff }
+nav a[aria-current="true"] small { color: #fff }
+nav a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px }
+main { min-width: 0 }
+.cab { background: var(--panel); border: 1px solid var(--line); padding: 20px 22px }
+.cab h2 { font-size: clamp(28px, 4vw, 38px) }
+.fechas { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; color: var(--muted); font-size: 14px }
+.fechas b { color: var(--fg); font-weight: 600 }
+.fuentes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px }
+.fuentes a { font: 500 12px/1.4 var(--mono); padding: 3px 8px; border: 1px solid var(--line); color: var(--fg); text-decoration: none }
+.fuentes a:hover { border-color: var(--accent) }
+.bloque { margin-top: 18px; background: var(--panel); border: 1px solid var(--line) }
+.bloque h3 { font-size: 20px; padding: 12px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 10px; align-items: baseline }
+.bloque h3 small { font: 500 13px var(--body); color: var(--muted) }
+.bloque .nota { padding: 10px 18px 0; color: var(--muted); font-size: 14px; margin: 0 }
+ul.datos { list-style: none; margin: 0; padding: 4px 0 }
+ul.datos li { border-bottom: 1px solid var(--line) }
+ul.datos li:last-child { border-bottom: 0 }
+details { padding: 9px 18px }
+summary { cursor: pointer; list-style: none; display: flex; gap: 10px; align-items: baseline }
+summary::-webkit-details-marker { display: none }
+summary .t { flex: 1; min-width: 0 }
+.tag { flex: none; font: 500 11px/1.6 var(--mono); padding: 0 6px; border: 1px solid var(--line); color: var(--muted) }
+.tag.viejo { border-color: var(--warn); color: var(--warn); background: var(--warn-soft) }
+.tag.sin { color: var(--muted) }
+blockquote { margin: 8px 0 2px; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--accent-soft); font: 400 14px/1.5 var(--mono); overflow-wrap: anywhere }
+blockquote cite { display: block; margin-top: 4px; font: 500 12px var(--body); color: var(--muted); font-style: normal }
+.tabla { overflow-x: auto }
+table { width: 100%; border-collapse: collapse; font-size: 15px }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { font: 600 12px var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted) }
+td.mono { font-family: var(--mono); font-size: 13px }
+.pendiente { color: var(--warn); font-weight: 600; white-space: nowrap }
+ul.no { margin: 0; padding: 10px 18px 12px 36px }
+ul.no li { margin: 4px 0 }
+.serp { padding: 16px 18px }
+.serp .url { font: 400 13px var(--body); color: var(--ok) }
+.serp .tit { font: 500 20px/1.3 var(--body); color: #1a0dab; margin: 2px 0 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .serp .tit { color: #8ab4f8 } }
+:root[data-theme="dark"] .serp .tit { color: #8ab4f8 }
+.serp .desc { color: var(--muted); font-size: 14px; max-width: 62ch }
+.medida { font: 500 12px var(--mono); color: var(--muted); margin-left: 6px }
+.medida.mal { color: var(--bad) }
+.faq details { border-top: 1px solid var(--line) }
+.faq summary { font-weight: 600 }
+.faq p { margin: 6px 0 2px; color: var(--fg) }
+.dudas { margin-top: 40px }
+.dudas h2 { font-size: 28px; margin-bottom: 10px }
+.revisar { margin: 0; padding-left: 20px; max-width: 75ch }
+.revisar li { margin: 6px 0 }
+@media (max-width: 760px) {
+  .mesa { grid-template-columns: minmax(0, 1fr) }
+  nav { position: static; flex-direction: row; overflow-x: auto }
+  nav a { border-bottom: 0; border-right: 1px solid var(--line); white-space: nowrap }
+}
+@media (prefers-reduced-motion: no-preference) { nav a { transition: background .15s } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Fichas de <span>__PAIS__</span></h1>
+    <p class="lede">Diez fichas hechas por el programa con fuentes. Cada dato lleva una cita copiada letra por letra de Wikipedia o Wikivoyage, y el programa comprobó que esa cita está de verdad en la fuente. Toca un dato para ver de dónde sale.</p>
+    <span class="estado">Sin revisar · no están en la app</span>
+    <div class="cifras" id="cifras"></div>
+  </header>
+
+  <div class="mesa">
+    <nav id="nav" aria-label="Destinos"></nav>
+    <main id="ficha" aria-live="polite"></main>
+  </div>
+
+  <section class="dudas">
+    <h2>Lo que hay que mirar</h2>
+    <ol class="revisar">
+      <li><b>Precios y horarios con año viejo</b> (marcados en amarillo): la cita es correcta, pero el dato puede haber cambiado.</li>
+      <li><b>Nombres de los sitios:</b> salen de las fuentes, no están comprobados en Google Maps. La app los comprueba al crear la guía.</li>
+      <li><b>Cifras que las webs oficiales tienen más nuevas.</b> Ejemplo: Wikipedia da 605 rinocerontes en Chitwan (2015); el recuento oficial de 2021 da 694.</li>
+      <li><b>Frases que estiran la cita.</b> Ejemplo en Pokhara: «las montañas se ven mejor por la mañana» sale de una frase sobre el aeropuerto.</li>
+    </ol>
+    <div class="bloque">
+      <h3>Datos que se cayeron <small>la cita no estaba en la fuente</small></h3>
+      <div class="tabla"><table><thead><tr><th>Destino</th><th>Bloque</th><th>Dato</th><th>Motivo</th></tr></thead><tbody id="caidos"></tbody></table></div>
+    </div>
+  </section>
+</div>
+
+<script id="datos" type="application/json">/*DATOS*/</script>
+<script>
+const D = JSON.parse(document.getElementById('datos').textContent);
+const BLOQUES = [
+  ['estable', 'Lo estable', 'Historia, geografía y fechas clave'],
+  ['cuando', 'Cuándo ir', ''],
+  ['fauna', 'Qué se ve de verdad', ''],
+  ['normas', 'Normas', ''],
+  ['cambia', 'Lo que cambia', 'Precios y horarios: Salma los da como orientativos'],
+  ['llegar', 'Cómo llegar', ''],
+  ['gente', 'La gente del lugar', ''],
+  ['delicado', 'Lo delicado', 'Lo que conviene saber antes de pagar o hacer algo'],
+];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const n = f => BLOQUES.reduce((a, [k]) => a + (f[k] || []).length, 0);
+const fecha = iso => { const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${+m[3]} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][+m[2]-1]} ${m[1]}` : '—'; };
+const viejo = s => { const y = String(s || '').match(/(19|20)\d{2}/); return y ? +y[0] < 2023 : false; };
+
+const total = D.fichas.reduce((a, f) => a + n(f), 0);
+const sitios = D.fichas.reduce((a, f) => a + f.sitios.length, 0);
+document.getElementById('cifras').innerHTML = [
+  [D.fichas.length, 'destinos'], [total, 'datos con cita comprobada'], [sitios, 'sitios con su actividad'],
+  [D.caidos.length, 'datos caídos'], [D.coste, 'coste total'],
+].map(([v, t]) => `<div><b>${esc(v)}</b><small>${esc(t)}</small></div>`).join('');
+
+document.getElementById('caidos').innerHTML = D.caidos.map(c => `<tr><td>${esc(c[0])}</td><td>${esc(c[1])}</td><td>${esc(c[2])}</td><td>${esc(c[3])}</td></tr>`).join('');
+
+const slug = f => f.id;
+function dato(x, fu) {
+  const src = (x.f || []).map(k => fu[k] ? fu[k].nombre : k).join(' · ');
+  const etiqueta = x.de_cuando !== undefined
+    ? (x.de_cuando ? `<span class="tag ${viejo(x.de_cuando) ? 'viejo' : ''}">${esc(x.de_cuando)}</span>` : `<span class="tag sin">sin año</span>`)
+    : `<span class="tag">${esc((x.f || []).join(' '))}</span>`;
+  return `<li><details><summary><span class="t">${esc(x.t)}</span>${etiqueta}</summary><blockquote>«${esc(x.cita)}»<cite>${esc(src)}</cite></blockquote></details></li>`;
+}
+function pintar(id) {
+  const f = D.fichas.find(x => slug(x) === id) || D.fichas[0];
+  document.querySelectorAll('#nav a').forEach(a => a.setAttribute('aria-current', a.dataset.id === slug(f) ? 'true' : 'false'));
+  const fu = f.fuentes;
+  let h = `<div class="cab"><h2>${esc(f.nombre)}</h2>
+    <div class="fechas"><span>Revisada: <b>${fecha(f.revisada)}</b></span><span>Próxima revisión de precios y horarios: <b>${fecha(f.proxima_revision_cambia)}</b></span><span>De lo estable: <b>${fecha(f.proxima_revision_estable)}</b></span></div>
+    <div class="fuentes">${Object.entries(fu).map(([k, s]) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(k)} · ${esc(s.nombre)}</a>`).join('')}</div></div>`;
+  for (const [k, titulo, nota] of BLOQUES) {
+    const L = f[k] || [];
+    if (!L.length) continue;
+    h += `<section class="bloque"><h3>${esc(titulo)} <small>${L.length}</small></h3>${nota ? `<p class="nota">${esc(nota)}</p>` : ''}<ul class="datos">${L.map(x => dato(x, fu)).join('')}</ul></section>`;
+  }
+  if (f.sitios.length) {
+    h += `<section class="bloque"><h3>Sitios <small>${f.sitios.length} · cada actividad en su sitio</small></h3><div class="tabla"><table><thead><tr><th>Qué se hace</th><th>Nombre para Google Maps</th><th>Nota</th><th>Maps</th></tr></thead><tbody>${
+      f.sitios.map(s => `<tr><td>${esc(s.hace)}</td><td class="mono">${esc(s.maps)}</td><td>${esc(s.nota || '')}</td><td class="pendiente">sin comprobar</td></tr>`).join('')}</tbody></table></div></section>`;
+  }
+  if (f.no_escribir && f.no_escribir.length) {
+    h += `<section class="bloque"><h3>No escribir <small>lo que estas fuentes no confirman</small></h3><ul class="no">${f.no_escribir.map(x => `<li>${esc(x)}</li>`).join('')}</ul></section>`;
+  }
+  if (f.seo) {
+    const lt = f.seo.titulo.length, ld = f.seo.descripcion.length;
+    h += `<section class="bloque"><h3>SEO <small>así saldría en Google</small></h3>
+      <div class="serp"><div class="url">borradodelmapa.com › destinos</div>
+      <div class="tit">${esc(f.seo.titulo)}<span class="medida ${lt > 60 ? 'mal' : ''}">${lt} car.</span></div>
+      <div class="desc">${esc(f.seo.descripcion)}<span class="medida ${ld > 160 ? 'mal' : ''}">${ld} car.</span></div></div>
+      <div class="faq">${f.seo.faq.map(q => `<details><summary>${esc(q.p)}</summary><p>${esc(q.r)}</p></details>`).join('')}</div></section>`;
+  }
+  document.getElementById('ficha').innerHTML = h;
+}
+document.getElementById('nav').innerHTML = D.fichas.map(f => `<a href="#${esc(slug(f))}" data-id="${esc(slug(f))}"><span>${esc(f.nombre)}</span><small>${n(f)}</small></a>`).join('');
+const ir = () => pintar(decodeURIComponent(location.hash.slice(1)) || D.fichas[0].id);
+window.addEventListener('hashchange', () => { ir(); document.getElementById('ficha').scrollIntoView({ block: 'start' }); });
+ir();
+</script>

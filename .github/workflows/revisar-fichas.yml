@@ -1,0 +1,44 @@
+name: Revisar fichas con fuentes
+
+# Revisión automática de las fichas de sitios (caso p-mwfityix43c, Paco 15 nov 2026: «fecha de revisión y próxima
+# revisión automática, programada»). El día 1 de cada mes revisa las fichas cuya próxima revisión ya ha llegado:
+# vuelve a leer sus fuentes (Wikipedia, Wikivoyage…) y comprueba que la cita de cada dato sigue ahí.
+#   · Si todo sigue igual → renueva las fechas, sube la ficha a la app (KV ficha:<ref>) y hace commit.
+#   · Si algo ha cambiado o una fuente no responde → NO toca la ficha; deja el informe docs/fichas/revision-<fecha>.md
+#     para que lo decida Paco.
+# 0 €: no llama a Claude ni a ninguna API de pago. Solo escribe claves ficha:* y fichas:indice del KV.
+# Usa el mismo secret que "Deploy Worker" (CLOUDFLARE_API_TOKEN).
+on:
+  schedule:
+    - cron: '30 4 1 * *'   # día 1 de cada mes, 04:30 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: revisar-fichas
+  cancel-in-progress: false
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Revisar y subir las renovadas
+        working-directory: scripts/fichas
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: node revisar.mjs --subir
+      - name: Commit si hay cambios
+        run: |
+          git add -A -- worker/kv/fichas docs/fichas
+          if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
+          git config user.name "fichas-bot"
+          git config user.email "fichas-bot@users.noreply.github.com"
+          git commit -m "Fichas: revisión mensual automática (fechas renovadas e informe)"
+          git pull --rebase origin main
+          git push origin HEAD:main

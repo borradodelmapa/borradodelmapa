@@ -35,16 +35,17 @@ Puedes tener **2-3 países a la vez** (ver «CHATS DE PAÍS» en `docs/sistemas.
 | 8 | **Paquete de redes** de cada vídeo (título, descripción, hashtags, `.srt`, primer comentario con autores) + **SEO de YouTube** (Y) | 🎬 Vídeo | checklist P6, Y |
 | 9 | **Tanda a Google** de las páginas del país (máx. 30) + pedir indexación de las 3-4 clave | 🌍 Web | `web.md` → Tanda a Google |
 | 10 | **Programación** en Metricool (YouTube 15:30, TikTok 10:00, P13) | 🎬 Vídeo | checklist P13 |
+| 11 | **Fichas con fuentes** de los sitios del país: cada dato con cita literal comprobada, fechas de revisión y SEO. Las usa Salma al escribir guías (y la web, cuando se conecte) | 📱 App | `docs/fichas/MODELO-chitwan-nepal.md` · `scripts/fichas/` (generar → revisar → subir) |
 
 ## El orden (dos paradas tuyas, nada más)
 | Fase | Qué pasa | Quién | Tu parte |
 |---|---|---|---|
 | **0 · Lote** | País, piezas, fechas y presupuesto máximo | 📈 | **⏸1: «sí» al lote y su tope de gasto** |
-| **1 · Base** | Expediente con fuentes (lo dudoso marcado ⚠) | 🌍 | — (se revisa en la ⏸2) |
+| **1 · Base** | Expediente con fuentes (lo dudoso marcado ⚠) · fichas con fuentes de sus sitios (`node scripts/fichas/generar.mjs <cc>`) | 🌍 📱 | — (se revisa en la ⏸2) |
 | **2 · Producción** (a la vez) | 🌍 guías, país, sitios, fotos · 🎬 guiones, fotos, voz, montajes, mapas | 🌍 🎬 | — |
 | **3 · Montaje web** | Historias con sus vídeos, enlaces cruzados, comprobadores en ✅ | 🌍 | — |
-| **4 · Revisión** | **Una página de revisión** con enlaces a todo: páginas en copia, vídeos, textos de redes, guías, y la lista de dudas (datos ⚠, fotos delicadas) | 📈 la reúne | **⏸2: «publica» o qué cambiar** |
-| **5 · Publicar** | Web en producción → guías públicas → tanda a Google → vídeos a R2 y Metricool (la web sale ≥ 1 semana antes que su vídeo) | 🌍 🎬 | — |
+| **4 · Revisión** | **Una página de revisión** con enlaces a todo: páginas en copia, vídeos, textos de redes, guías, la página de las fichas del país y la lista de dudas (datos ⚠, fotos delicadas, precios viejos de las fichas) | 📈 la reúne | **⏸2: «publica» o qué cambiar** |
+| **5 · Publicar** | Fichas a la app (`node scripts/fichas/subir.mjs <cc>`, con el buscador en ✅) → web en producción → guías públicas → tanda a Google → vídeos a R2 y Metricool (la web sale ≥ 1 semana antes que su vídeo) | 📱 🌍 🎬 | — |
 | **6 · Cerrar** | Explorar ha subido lo que toca, Search Console pedido, Metricool comprobado, coste y tiempo reales anotados | 📈 | Lo lees en el informe semanal |
 
 ## Terminado = todo esto en ✅
@@ -53,6 +54,7 @@ Puedes tener **2-3 países a la vez** (ver «CHATS DE PAÍS» en `docs/sistemas.
 - [ ] Historias publicadas y enlazadas desde el país y sus sitios.
 - [ ] Indexación pedida en Search Console; páginas en `destinos-indexables.json` y en el sitemap.
 - [ ] Vídeos con informe del motor sin ❌, en R2, programados en Metricool con descripción y primer comentario; anotados en `publicaciones-registro.md`.
+- [ ] Fichas del país en la app: `subir.mjs <cc>` hecho y 2-3 planes probados con la cuenta de pruebas (salen los datos de la ficha, sin hablar de «fuentes»).
 - [ ] `docs/paises/<pais>.md` al día; coste y tiempo reales en `docs/estrategia/plan.md`.
 
 ## Coste a ojo por país (medido en Filipinas; Estrategia lo ajusta con cada país)
@@ -61,8 +63,9 @@ Puedes tener **2-3 países a la vez** (ver «CHATS DE PAÍS» en `docs/sistemas.
 | Guía de la app | ~0,40 € cada una (0,4-1 €) |
 | Voz de un short | ~0,30 € |
 | Voz de la apertura | ~1,30 € |
+| Ficha con fuentes de un sitio (medido en Nepal, 15 nov 2026) | ~0,40 € cada una (0,25-0,60 €) |
 | Expediente, páginas, fotos de Wikimedia, montaje, mapas, blog | 0 € |
-| **País típico** (2 guías, apertura, 2-3 shorts de serie, 3-4 derivados) | **~3-5 €** |
+| **País típico** (2 guías, apertura, 2-3 shorts de serie, 3-4 derivados, ~10 fichas) | **~7-9 €** |
 
 ## Tiempo a ojo
 Filipinas, el piloto: ~3 h de web y una tarde de vídeo, con muchas paradas. Con el modo producción y el diseño ya hecho:
