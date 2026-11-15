@@ -10,7 +10,7 @@ const ORANGE_ASS = '&H0B63F4&';
 const run = (a, o = {}) => { const r = spawnSync(FF, ['-v', 'error', '-y', ...a], { encoding: 'utf8', maxBuffer: 1e9, ...o }); if (r.status) { console.error('FFMPEG FALLÓ:\n', a.join(' ').slice(0, 500), '\n', (r.stderr || '').slice(0, 1200)); process.exit(1); } return r; };
 // Caché de planos (Paco, 31 oct 2026: «solo he cambiado una foto, debería ser mil veces más rápido»): cada plano ya revelado se guarda en cache-planos/
 // con una huella de TODO lo que lo define (orden de ffmpeg + archivo de origen con su fecha y tamaño). Al remontar, los planos iguales se copian y solo se rehacen los que cambian.
-const CPL = path.join(__dirname, 'cache-planos');
+const CPL = process.env.CACHE_PLANOS || path.join(__dirname, 'cache-planos'); // CACHE_PLANOS: otra carpeta para la caché (14 nov 2026: el disco D, donde apunta cache-planos, se llenó)
 const runPlano = (a, out, src) => {
   let st = ''; try { const x = fs.statSync(src); st = x.size + ':' + x.mtimeMs; } catch (e) { /* sin origen legible: se rehace */ }
   const key = crypto.createHash('md5').update(JSON.stringify([a.map(v => v === out ? 'OUT' : v), src, st])).digest('hex').slice(0, 20), c = `${CPL}/${key}.mp4`;
@@ -166,9 +166,12 @@ async function build(cfg) {
         cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h},setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       } else {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
-        const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 1.6; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
+        // M12 (Paco, 16 nov 2026: «muchísimo paneo… eso qué es»): por defecto las fotos van QUIETAS (cfg.kb = 0). Una config antigua con kb: 1.6 sigue igual que antes.
+        // N14 (10) ZOOM DE ÉNFASIS (s.enfasis: true): el único movimiento permitido en las fotos; acerca ≈10 % en 0,4 s al empezar el plano y se queda ahí (solo en los datos importantes).
+        const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 0; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
         const z = s.zfijo ? s.z : (s.z ?? AUTO[s.sc] ?? 0.05) * KB, [fx, fy] = s.foc || [0.5, 0.5], cx = s.cx ?? 0.5, inn = (s.dir || dirAuto) === 'in';
-        let zexpr = inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
+        const ENF = s.enfasis ? (typeof s.enfasis === 'number' ? s.enfasis : 0.10) : 0;
+        let zexpr = ENF ? `1+${ENF}*min(1,on/12)` : inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
         const f0 = Math.max(1, frames - 12); // GOLPE (s.golpe): en los últimos 0,4 s el zoom se dispara hacia el foco y la cámara se sacude
         if (s.golpe) zexpr += `+${s.golpeZ ?? 0.6}*pow(max(0,on-${f0})/12,3)`;
         const shake = s.golpe ? `,scale=${F.w + 80}:${F.h + 144},crop=${F.w}:${F.h}:x='40+36*sin(n*9.1)*gt(n,${f0})':y='72+36*cos(n*11.7)*gt(n,${f0})'` : '';
@@ -182,10 +185,12 @@ async function build(cfg) {
         // (0 = izquierda/arriba, 1 = derecha/abajo), arrancando y frenando suave. s.z = cuánto se acerca (por defecto 0.3: ventana 1/1,3 del máximo). Sin s.pan, la orden es la de siempre.
         let pin = ['-i', f], vf = `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=${F.w}x${F.h}:fps=30${shake}${tail}`;
         if (s.pan) {
+          // ENCUADRE FIJO (M12, 16 nov 2026): pan con inicio = fin ([x, y, x, y]) y z: 0 → ventana quieta a pantalla completa, elegida foto a foto (verticales). s.enfasis también vale aquí.
           const [a0, b0, a1, b1] = s.pan, Z = 1 + (s.z ?? 0.3), d0 = (frames / 30).toFixed(3), e = `(0.5-0.5*cos(PI*min(t,${d0})/${d0}))`;
+          const enfZ = ENF ? `,zoompan=z='1+${ENF}*min(1,on/12)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=1:s=${F.w}x${F.h}:fps=30` : ''; // énfasis sobre la ventana ya encuadrada (el tamaño del recorte no puede variar en el tiempo)
           const ww = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}/2)*2`, wh = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}*${F.b}/${F.a}/2)*2`;
           pin = ['-loop', '1', '-i', f];
-          vf = `crop=w='${ww}':h='${wh}':x='(iw-ow)*(${a0}+${(a1 - a0).toFixed(3)}*${e})':y='(ih-oh)*(${b0}+${(b1 - b0).toFixed(3)}*${e})',scale=${F.w}:${F.h}:flags=lanczos,setsar=1,fps=30${tail}`;
+          vf = `crop=w='${ww}':h='${wh}':x='(iw-ow)*(${a0}+${(a1 - a0).toFixed(3)}*${e})':y='(ih-oh)*(${b0}+${(b1 - b0).toFixed(3)}*${e})',scale=${F.w}:${F.h}:flags=lanczos,setsar=1,fps=30${enfZ}${tail}`;
         }
         cacheN[runPlano([...pin, '-vf', vf, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
@@ -253,12 +258,21 @@ async function build(cfg) {
   fs.writeFileSync(`${W}/fv.txt`, fv); run([...vin, '-filter_complex_script', `${W}/fv.txt`, '-map', '[voz]', '-ac', '2', '-ar', '44100', `${W}/voz.wav`]);
   const bedFiles = []; const cache = {};
   cfg.blocks.forEach(b => {
-    if (!b.amb) return; const a = b.amb; const f = resolve(a.src); const key = a.src + '|' + (a.ss || 0);
+    // b.amb puede ser una capa o una lista de capas (Baler, 12 nov 2026: lluvia + disparos lejanos a la vez); con una sola, todo igual que antes
+    for (const a of (Array.isArray(b.amb) ? b.amb : b.amb ? [b.amb] : [])) {
+    const f = resolve(a.src); const key = a.src + '|' + (a.ss || 0);
     if (!cache[key]) { const o = `${W}/amb_${a.src}_${a.ss || 0}.wav`; run(['-ss', String(a.ss || 0), '-i', f, '-vn', '-t', '25', '-ac', '2', '-ar', '44100', o]); cache[key] = { f: o, mean: meanDb(o), d: dur(o) }; }
     const c = cache[key]; const gain = (a.db ?? -26) - c.mean; const L = b.D + 0.8; const off = ((b.t0 * 1.7) % (2 * c.d));
     const o2 = `${W}/bed_${bedFiles.length}.wav`;
     run(['-i', c.f, '-filter_complex', `[0:a]highpass=f=140,asplit[x][y];[y]areverse[r];[x][r]concat=n=2:v=0:a=1,aloop=loop=-1:size=2147483647,atrim=start=${off.toFixed(2)}:end=${(off + L).toFixed(2)},asetpts=PTS-STARTPTS,volume=${gain.toFixed(1)}dB,afade=t=in:d=0.5,afade=t=out:st=${(L - 0.5).toFixed(2)}:d=0.5,adelay=${Math.round(Math.max(0, b.t0 - 0.3) * 1000)}:all=1[o]`, '-map', '[o]', o2]);
     bedFiles.push(o2);
+    }
+    // b.fx: efectos puntuales [{ src, at (s desde el inicio del bloque), db }] — un cañonazo, un golpe en la mesa. Suenan una vez, sin bucle.
+    for (const x of (b.fx || [])) {
+      const f = resolve(x.src), m = meanDb(f), o3 = `${W}/fx_${bedFiles.length}.wav`;
+      run(['-i', f, '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${((x.db ?? -16) - m).toFixed(1)}dB,adelay=${Math.round((b.t0 + (x.at || 0)) * 1000)}:all=1`, o3]);
+      bedFiles.push(o3);
+    }
   });
   if (!bedFiles.length) { const o = `${W}/bed_mudo.wav`; run(['-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo', '-t', TOTAL.toFixed(2), o]); bedFiles.push(o); } // capítulo sin ambiente: pista muda
   const bin = bedFiles.flatMap(f => ['-i', f]);
@@ -327,7 +341,12 @@ async function build(cfg) {
   // 6) composición
   console.log('ETAPA 6/6 Montaje final y exportación'); // composición final
   const mapB = cfg.blocks.find(b => b.video); const cStart = mapB ? mapB.t0 + mapB.D : 0;
-  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})'` : '';
+  // Huecos sin cartel de esquina (Baler, 12 nov 2026): un plano con real:true (foto real de época) o un bloque con sinCounter:true no lleva «RECREACIÓN». Sin esas marcas, todo igual que antes.
+  const sinCnt = cfg.blocks.flatMap(b => b.sinCounter ? [[b.t0, b.t0 + b.D]] : (b.shots || []).filter(s => s.real && s._t != null).map(s => [s._t, s._t + s._d]));
+  const cntOn = `between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})` + sinCnt.map(([a, z]) => `*not(between(t,${a.toFixed(2)},${z.toFixed(2)}))`).join('');
+  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='${cntOn}'` : '';
+  // s.etiqueta: cartel propio de un plano en el sitio del de esquina (p. ej. «FOTO REAL · 1899 · COLOREADA»); solo mientras dura ese plano
+  const etq = cfg.blocks.flatMap(b => (b.shots || []).filter(s => s.etiqueta && s._t != null)).map(s => `drawtext=fontfile='${IMPACT}':text='${esc(s.etiqueta)}':fontsize=46:fontcolor=white:box=1:boxcolor=0x222222@0.85:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='between(t,${s._t.toFixed(2)},${(s._t + s._d).toFixed(2)})'`);
   const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(cfg.rotuloSegs ? Math.min(b.t0 + 0.4 + cfg.rotuloSegs, b.t0 + b.D - 0.3) : b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s (uno por cada elemento de SGL)
   let sgIn = [];
@@ -353,10 +372,10 @@ async function build(cfg) {
       xBand: `if(lt(${u},0.5),-w+((${F.w}-w)/2+w)*(1-pow(1-${u}/0.5,3)),if(lt(${u},4.6),(${F.w}-w)/2,(${F.w}-w)/2+(${F.w}-(${F.w}-w)/2)*pow((${u}-4.6)/0.5,3)))` };
     return { sgT, sgF };
   });
-  const vf = [cnt, rot, numF].filter(Boolean).join(','), subF = `subtitles=sub.ass:fontsdir='${FONTD}'`; // los subtítulos van ENCIMA de la franja y el corazón
+  const vf = [cnt, ...etq, rot, numF].filter(Boolean).join(','), subF = `subtitles=sub.ass:fontsdir='${FONTD}'`; // los subtítulos van ENCIMA de la franja y el corazón
   const outFile = `${OUT}/${cfg.id}.mp4`;
   // icono de Salma arriba a la izquierda, latiendo, hasta la tarjeta final (igual que la serie Asia)
-  const AV = ROOT + '/salma marketing/editor/ep1/avatar.png';
+  const AV = cfg.avatar || ROOT + '/salma marketing/editor/ep1/avatar.png'; // cfg.avatar: otro icono (p. ej. transparente si no narra Salma; Baler, 12 nov 2026)
   // portada por defecto (modelo Tailandia): se pone encima en los primeros 0,2 s para que sea el fotograma de portada en las redes
   // en horizontal, la portada sale con el mismo diseño en 16:9 (portada.cjs generarH; P.vivo = colores vivos) — Paco, 4 nov 2026
   const P = cfg.portada && (cfg.portada.foto || cfg.portada.png) ? cfg.portada : null; let covIn = [];

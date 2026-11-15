@@ -48,7 +48,11 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   chk('M9', !todos.some(b => b.cifra), 'sin cifras grandes animadas (b.cifra)');
   chk('M10', voz.some(b => !b.en), 'sin subtítulos EN en: ' + voz.filter(b => !b.en).map(b => b.id).join(', ') + ' (b.en)');
   chk('M11', !(cfg.portada && (cfg.portada.foto || cfg.portada.png)), 'sin portada (cfg.portada)');
-  chk('M12', cfg.kb === 0, 'Ken Burns apagado (cfg.kb = 0)');
+  // M12 (Paco, 16 nov 2026): fotos QUIETAS a pantalla completa. ❌ si hay Ken Burns (cfg.kb > 0) o una foto con barrido (pan con inicio ≠ fin). El encuadre fijo (pan [x,y,x,y]) y el zoom de énfasis (enfasis: true, N14) sí valen.
+  const fotos = todos.flatMap(b => (b.shots || []).filter(s => s.a && !/^(RW|V)/.test(s.a) && !/\.mp4$/i.test(s.a)));
+  const barridos = fotos.filter(s => s.pan && (s.pan[0] !== s.pan[2] || s.pan[1] !== s.pan[3]));
+  chk('M12', (cfg.kb ?? 0) > 0 || barridos.length > 0, 'fotos con movimiento: ' + ((cfg.kb ?? 0) > 0 ? 'Ken Burns activo (cfg.kb = ' + cfg.kb + '); ' : '') + (barridos.length ? barridos.length + ' con barrido (pan con inicio ≠ fin): ' + barridos.slice(0, 6).map(s => s.a.split('/').pop()).join(', ') : '') + ' — van quietas; las verticales con encuadre fijo pan [x, y, x, y]');
+  const enf = fotos.filter(s => s.enfasis).length; if (enf) I.push('ℹ [N14] zoom de énfasis en ' + enf + ' foto' + (enf > 1 ? 's' : '') + ' (solo en los datos importantes)');
   chk('M13', !(cfg.seguir && cfg.seguir.activo !== false), 'aviso «Si te está gustando, sígueme» desactivado o sin configurar (cfg.seguir)');
   chk('M14', (cfg.cardSecs || 8) < 8 || !cfg.card, 'tarjeta final de menos de 8 s o sin cfg.card');
   chk('N5', voz.some(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)), 'la app se menciona en la voz (va en la tarjeta final): ' + voz.filter(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)).map(b => b.id).join(', '));
