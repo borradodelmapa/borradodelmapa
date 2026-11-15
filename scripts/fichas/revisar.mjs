@@ -82,7 +82,10 @@ const md = [`# Revisión de fichas — ${hoy}`, '',
   filas.some(r => r.estado !== '✅ renovada') ? 'Lo que no está en ✅ no se ha tocado: lo decide Paco (rehacer la ficha con `generar.mjs`, corregir a mano o dejarla).' : 'Todo en orden.', ''].join('\n');
 const salida = path.join(RAIZ, 'docs', 'fichas', `revision-${hoy}.md`);
 if (filas.length) { fs.writeFileSync(salida, md); console.log(md); } else console.log('Ninguna ficha tocaba revisar hoy.');
+const paises = [...new Set(renovadas.map(r => r.split(':')[0]))];
 if (subir && renovadas.length) {
-  const paises = [...new Set(renovadas.map(r => r.split(':')[0]))];
   for (const cc of paises) execSync(`node subir.mjs ${cc}`, { cwd: AQUI, stdio: 'inherit' });
 }
+// Para el workflow: qué países han renovado alguna ficha (sus páginas de destino se regeneran después).
+if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `paises=${paises.join(' ')}\n`);
+console.log(`\nPaíses con fichas renovadas: ${paises.join(' ') || 'ninguno'}`);
