@@ -7805,7 +7805,7 @@ INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps p
     ctx.push(fichaContexto(opts.ficha));
   } else if (kvDestinationData) {
     const d = kvDestinationData;
-    let destCtx = `[DATOS VERIFICADOS DEL DESTINO — usa estos datos para la ruta:
+    let destCtx = `[DATOS ORIENTATIVOS DEL DESTINO — sin fuentes ni fecha de revisión: sirven para orientarte (qué hay, cuántos días, cómo llegar), pero sus precios, horarios, normas y consejos NO son hechos comprobados; si los usas, dalos como aproximados y di que se confirmen allí:
 Destino: ${d.nombre} (${d.tipo}) | Región: ${d.region}
 Días recomendados: ${d.dias_recomendados} | Mejor época: ${d.mejor_epoca}
 Cómo llegar: ${d.como_llegar}
