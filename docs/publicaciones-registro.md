@@ -142,3 +142,15 @@ Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P
 **14 nov 2026 — largo «Viajar a FILIPINAS: la realidad que nadie te cuenta 🇵🇭» subido a YouTube (Paco arrastró el archivo; montaje aprobado por Paco: «Sí, exporta»):** https://youtu.be/4gTGf2JPEHk · **programado mar 15 dic 2026, 10:00** · 5:10, 1080p, 20,7 Mb/s (CALIDAD MÁXIMA, informe de reglas sin ❌). Puesto y comprobado tras recargar: título, descripción con capítulos, preguntas frecuentes, fuentes y autores (4.162 caracteres), carátula B (caratula-B-final.jpg), lista «Documentales», no creado para niños, contenido alterado = Sí (voz sintética, P1), etiquetas (Y8), idioma español; inglés: título y descripción + subtítulos EN publicados (Y10, M10). Textos en `salma marketing/filipinas/apertura/ULTIMA/textos-youtube.txt`. **Pendiente:** tarea del comentario fijado del 15 dic 10:05 (necesita OK de Paco) y prueba A/B de título (Y17), que solo puede empezar cuando sea público. Vídeo ligero y capítulos pasados a Web (T2).
 
 **15 nov 2026 — canal de YouTube, cierre de T11 y T5 (orden de Paco):** el short oculto «Las 762 curvas hasta Pai» (PHfw-RDTL90) sale de la lista «Tailandia: el norte, su historia y sus pueblos». Las listas de **Tailandia** y **Vietnam** pasan a «Fecha de publicación (más antiguos)», que deja los capítulos en orden (Tailandia: Chiang Mai → Triángulo de Oro → Pai → Doi Inthanon → kayan → Muay Thai; Vietnam: 1/5 → 2/5 → 3/5 → largos). Comprobado en Studio tras guardar. **Tuvalu (QMWkfY186lk):** procesado en SD, HD (1080p) y 4K. En la lista de Tailandia se está subiendo «10 Cosas que debes saber ANTES de viajar a TAILANDIA» (de Vídeo 2; no tocado).
+
+**15 nov 2026 — T13 · publicaciones de comunidad caducadas (lista ANTES de borrar; borrar es irreversible y espera el «sí» de Paco en el chat de Vídeo).** Las 10 publicaciones del canal son avisos de los capítulos 1-5 de Tailandia, todos ya publicados, todos con imagen y públicos, 0 comentarios y 0 «me gusta»:
+- 20 oct · «Mañana a las 10:00 sale el primer capítulo: ¿cuándo fue la última vez que empezaste algo de cero?…»
+- 21 oct · «Hoy a las 10:00 sale el primer capítulo en Shorts: ¿cuándo fue la última vez que empezaste algo de cero?…»
+- 21 oct · «Mañana a las 10:00, capítulo 2: hay un sitio donde un río decide dónde acaba un país…»
+- 22 oct · «Hoy a las 10:00 sale el capítulo 2 en Shorts: hay un sitio donde un río decide dónde acaba un país…»
+- 22 oct · «Mañana a las 10:00, capítulo 3: setecientas sesenta y dos curvas hasta Pai…»
+- 23 oct · «Hoy a las 10:00 sale el capítulo 3 en Shorts: setecientas sesenta y dos curvas hasta Pai…»
+- 25 oct · «Mañana a las 10:00, capítulo 4: si has oído mujeres jirafa, olvídalo: se llaman kayan…»
+- 26 oct · «Hoy a las 10:00 sale el capítulo 4 en Shorts: si has oído mujeres jirafa, olvídalo…»
+- 26 oct · «Mañana a las 10:00, capítulo 5: el techo de Tailandia, y un santuario de elefantes…»
+- 27 oct · «Hoy a las 10:00 sale el capítulo 5 en Shorts: el techo de Tailandia…»
