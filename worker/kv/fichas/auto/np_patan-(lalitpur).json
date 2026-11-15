@@ -1,0 +1,608 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:patan.",
+  "ref": "np:patan",
+  "nombre": "Patan (Lalitpur)",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "La plaza Durbar de Patan está en el centro de Lalitpur y es una de las tres plazas Durbar del valle de Katmandú, todas Patrimonio de la Humanidad de la UNESCO.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It is one of the three Durbar Squares in the Kathmandu Valley, all of which are UNESCO World Heritage Sites."
+    },
+    {
+      "t": "Su principal atractivo es el palacio real medieval donde vivían los reyes Malla de Lalitpur.",
+      "f": [
+        "W1"
+      ],
+      "cita": "One of its attractions is the medieval royal palace where the Malla Kings of Lalitpur resided."
+    },
+    {
+      "t": "Patan es una de las ciudades más grandes de Nepal y está al otro lado del río Bagmati desde Katmandú.",
+      "f": [
+        "WV"
+      ],
+      "cita": "is one of the largest cities in Nepal and is located just across the Bagmati river from Kathmandu"
+    },
+    {
+      "t": "Patan y Lalitpur son dos nombres de la misma ciudad; ambos vienen del sánscrito «Lalitapattan».",
+      "f": [
+        "WV"
+      ],
+      "cita": "Confusingly, it is also known as Lalitpur, both names deriving from the Sanskrit \"Lalitapattan\"."
+    },
+    {
+      "t": "Es centro hinduista y budista, con 136 bahals (patios) y 55 templos principales.",
+      "f": [
+        "W1"
+      ],
+      "cita": "A center of both Hinduism and Buddhism, Patan Durbar Square has 136 \"bahals\" (courtyards) and 55 major temples."
+    },
+    {
+      "t": "Hay indicios de que Patan fue fundada en el siglo III a. C. por la dinastía Kirat y ampliada en el siglo VI.",
+      "f": [
+        "W1"
+      ],
+      "cita": "There is also an evidence that the Patan was founded during the 3rd century BC by the Kirat dynasty and was later expanded in the sixth century."
+    },
+    {
+      "t": "La mayor parte de la arquitectura actual es del siglo XVII, del reinado de Siddhi Narsingh Malla y su hijo.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Most of the current architecture is from the 1600s, constructed during the reign of King Siddhi Narsingh Malla and his son Srinivasa Sukriti."
+    },
+    {
+      "t": "El palacio se levantó sobre un fuerte que existió hasta 1734 y fue residencia de los gobernantes Malla.",
+      "f": [
+        "WV"
+      ],
+      "cita": "was built on the site of a fort that stood until 1734 and served as the residence of the Malla rulers of the then Patan state."
+    },
+    {
+      "t": "El Krishna Mandir lo construyó el rey Siddhi Narsingh Malla en 1667.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The temple was built in 1667 by King Siddhi Narsingh Malla."
+    },
+    {
+      "t": "La plaza sufrió graves daños en el terremoto de abril de 2015.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The square was heavily damaged by the earthquake in April 2015."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "Durante Krishnastami la plaza se llena de miles de peregrinos hindúes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The square is crowded with thousands of Hindu Pilgrims and devotees during Krishnastami."
+    },
+    {
+      "t": "El desfile del carro de Machchhendranath, de 25 m de alto, se celebra entre abril y junio.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The parade takes place between April and June, with the chariot staying the night at different locations."
+    },
+    {
+      "t": "Hacia agosto se celebra el Kumbheshwar Mela en luna llena y el templo se llena de gente.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The sunken basin is usually empty but around August is filled for the Kumbheshwar Mela full moon day festival. At this time the temple becomes packed."
+    }
+  ],
+  "fauna": [],
+  "sitios": [
+    {
+      "hace": "Recorrer la plaza del palacio, con el palacio a un lado y los templos al otro.",
+      "maps": "Patan Durbar Square",
+      "nota": "Entrando por el sur, el palacio queda a la derecha y los templos a la izquierda.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Approaching the square from the south side you have the palace on your right and a series of temples on your left.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el museo, con explicaciones sobre técnicas artísticas.",
+      "maps": "Patan Museum",
+      "nota": "Está en el patio Keshav Narayan Chowk; la entrada va incluida en el billete de la plaza.",
+      "f": [
+        "WV"
+      ],
+      "cita": "An excellent and well-presented little museum with descriptions of various artistic techniques.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo de piedra con relieves del Mahabharata y el Ramayana.",
+      "maps": "Krishna Mandir",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Krishna Mandir is one of the most important temple in Patan Durbar Square.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver desde fuera sus tres ventanas doradas interconectadas.",
+      "maps": "Bhimsen Temple",
+      "nota": "Los turistas no pueden entrar ni hacer fotos dentro.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Bhimsen (Bhin : dya) Temple was built by Srinivasa Malla in 1680. It is renowned for its three interconnected golden windows.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo de Shiva custodiado por dos elefantes de piedra.",
+      "maps": "Vishwanath Temple",
+      "nota": "Está entre el Krishna Mandir y el templo de Bhimsen.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Vishwanath Temple is dedicated to Lord Shiva.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver por fuera el templo de cinco pisos de la diosa de los reyes Malla.",
+      "maps": "Taleju Temple",
+      "nota": "No está abierto al público.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It is a five-storey temple with triple-roofs.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el patio con el estanque hundido Tusha Hiti.",
+      "maps": "Sundari Chowk",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Sundari Chowk is to the south of the Mul Chowk. It is designed with a sunken tank known as Tusha Hiti.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el patio central del palacio, el mayor de los tres.",
+      "maps": "Mul Chowk",
+      "nota": "Ha sufrido muchos robos de tallas de madera.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Mul Chowk is the central courtyard. It is the most famous and largest courtyard among the three main chowks.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo octogonal de piedra dedicado a Krishna.",
+      "maps": "Chyasin Dewal",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Octagonal stone Krishna temple (Chyasaldewal). constructed in 1647",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo más antiguo del conjunto, de 1565.",
+      "maps": "Char Narayan Temple",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The oldest temple in the complex, dating back to 1565.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la gran campana de 1737.",
+      "maps": "Taleju Bell",
+      "nota": "Se toca una vez al año.",
+      "f": [
+        "WV"
+      ],
+      "cita": "A huge bell that dates back to 1737 which is rung once a year.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la fuente en forma de loto con cabezas de cocodrilo talladas.",
+      "maps": "Manga Hiti",
+      "nota": "Detrás del pabellón Mani Mandap.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Manga Hiti (behind Mani Mandap). A lotus shaped pool and three carved stone crocodile head.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo de terracota con 1008 imágenes de Buda.",
+      "maps": "Mahabouddha Temple",
+      "nota": "A 5-10 minutos a pie al sureste de la plaza Durbar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "This is a stone temple covered with terracotta tiles, which include 1008 Buddha images.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver uno de los templos más antiguos del valle, poco visitado.",
+      "maps": "Uku Bahal",
+      "nota": "A 100 m al sur del templo Mahaboudha.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Rudravarna Mahavihar (Uku Bahal) (100 m south of Mahaboudha Temple). A gem of a temple close to Mahaboudha, but much less visited.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo rojo de Machchhendranath, que da nombre al festival del carro.",
+      "maps": "Rato Machhindranath Temple",
+      "nota": "A 500 m al sur de la plaza Durbar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Machchhendranath temple (Rato Temple, Red Temple, Machhindra Bahal temple), Near to Prayag Pokhari Marg (500 m south from Durbar Square).",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver decoraciones de oro y plata y estatuas de bronce.",
+      "maps": "Golden Temple (Hiranya Varna Mahavihar)",
+      "nota": "Es el único templo de Patan en el que se paga entrada.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Golden Temple (Hiranayavarna Makavikar, Kwa Bahal), Kwalakhu Rd (Near to Nag Bahal).",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver una de las dos pagodas de cinco pisos del valle, dedicada a Shiva.",
+      "maps": "Kumbeshwar Temple",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Baglamukhi Mandir (Banglamukhi Temple, Kumbeswar Temple, Kumbheshwore Temple), Kwalakhu Rd. Shiva Temple. One of the two five-story pagoda temples of the Valley.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la antigua estupa budista y las ruedas del carro de Machchhendranath.",
+      "maps": "Ashok Stupa",
+      "nota": "Junto a ella está el edificio donde se guarda el carro.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Immediately after the pedestrian bridge at Pulchowk is the old Buddhist stupa of Ashok.",
+      "comprobado": null
+    },
+    {
+      "hace": "Comer platos newari como bara, choila y samay baji.",
+      "maps": "Honacha",
+      "nota": "En Mangal Bazaar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Popular local eatery known for traditional Newari dishes such as bara, choila, and samay baji.",
+      "comprobado": null
+    },
+    {
+      "hace": "Zoológico de la ciudad.",
+      "maps": "Central Zoo",
+      "nota": "Cerca de la parada de autobús de Jawalakhel.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Central Zoo, Zoo Rd (Jawalakhel Bus Stop in nearby).",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "En el templo de Bhimsen los turistas no pueden entrar ni hacer fotos dentro.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Tourists are not allowed inside the temple. Photos are also not allowed to be taken inside the temple."
+    },
+    {
+      "t": "El templo de Taleju no está abierto al público.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Taleju Bhawani was the personal deity of the Malla kings. It is a five-storey temple with triple-roofs."
+    },
+    {
+      "t": "Del palacio solo abre con regularidad el último patio, el del museo, por los robos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Unfortunately only the last of these on the right, which houses the museum, is open on a regular basis due to problems with theft of artifacts."
+    },
+    {
+      "t": "Según W1, el Sundari Chowk ya está abierto al público (contradice en parte a WV).",
+      "f": [
+        "W1"
+      ],
+      "cita": "Smaller than the Mul Chowk, it is now open to the public."
+    },
+    {
+      "t": "La entrada se paga en una taquilla del extremo sur de la plaza o en otra entrada más al norte.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You should pay this at a booth at the south end of Durbar Square or at another entrance to the area further to the north."
+    },
+    {
+      "t": "El billete de la plaza incluye el museo sin coste extra.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It is also your entry ticket to the museum (no extra cost)."
+    },
+    {
+      "t": "Conviene llevar el billete visible; si no, se acercan trabajadores de la plaza.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You will likely be approached by various square workers if your entrance ticket isn't visible."
+    },
+    {
+      "t": "Para visitas repetidas se puede ampliar la validez del billete en taquilla, mostrando pasaporte y visado.",
+      "f": [
+        "WV"
+      ],
+      "cita": "get the ticket booth attendant to endorse your entrance ticket for a longer period. You will likely have to show your passport and entry visa."
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Entrada a la plaza Durbar para turistas: 1000 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "Admission to the area for tourists is Rs 1000 (March 2023)."
+    },
+    {
+      "t": "Museo de Patan: de 10:30 a 17:30; 1000 rupias, incluido en la entrada de la plaza.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "10.30 to 17.30. An excellent and well-presented little museum with descriptions of various artistic techniques. 1000 Rs. (included in entry for Durbar Square). (updated Mar 2023)"
+    },
+    {
+      "t": "Templo Dorado: entrada de 50 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "the only temple in Patan you have to pay to enter. Construction dates back to the early 1400s, although some pieces pre-date construction. Admission NPR50."
+    },
+    {
+      "t": "Microbús desde Ratnapark: 15 rupias (10 para estudiantes o voluntarios con carné nepalí).",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Micro Bus from Ratnapark in Kathmandu (15 rps, 10 rps for students/volunteers with a Nepalese ID card)."
+    },
+    {
+      "t": "Taxi desde Katmandú: 200-350 rupias (unos 3-5 USD).",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Taxis are a more expensive option 200-350 rps (~3-5 USD)."
+    },
+    {
+      "t": "Autobús azul o verde por la Ring Road: 15-20 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Catch a blue or green bus on Kathmandu's Ring Road (loops around Kathmandu Valley) for 15 to 20 rps."
+    },
+    {
+      "t": "Honacha abre todos los días de 10:00 a 20:30.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "abril de 2026",
+      "cita": "Daily 10:00AM-8:30PM. Popular local eatery known for traditional Newari dishes such as bara, choila, and samay baji. (updated Apr 2026)"
+    }
+  ],
+  "llegar": [
+    {
+      "t": "Hay microbuses desde Ratnapark, en Katmandú.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Micro Bus from Ratnapark in Kathmandu (15 rps, 10 rps for students/volunteers with a Nepalese ID card)."
+    },
+    {
+      "t": "Desde la parada de la Ring Road hay 15 minutos a pie hasta la plaza Durbar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It's only a 15 min walk to Patan Dubar Square from Ring Road."
+    },
+    {
+      "t": "Se puede ir andando desde Thamel en unos 90 minutos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It is quite straightforward to walk from Thamel to Patan in about 90 minutes with many things to see along the way."
+    },
+    {
+      "t": "Patan está a 4 km de Thamel.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Patan which is 4 km from Thamel is fast becoming an area of preference"
+    },
+    {
+      "t": "El puente del Bagmati une Patan con Katmandú.",
+      "f": [
+        "WV"
+      ],
+      "cita": "A two lanes bridge over River Bagmati connecting Patan with Kathmandu"
+    },
+    {
+      "t": "Autobuses y microbuses son viejos e incómodos y poco aptos para personas con movilidad reducida.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Note: Nepal Buses & Micro buses are not very good for handicapped people or the faint of heart."
+    },
+    {
+      "t": "La ciudad se visita mejor a pie.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The city and its sites are best seen on foot."
+    }
+  ],
+  "gente": [
+    {
+      "t": "La plaza es una muestra de la arquitectura newa.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Durbar Square is a marvel of Newa architecture."
+    },
+    {
+      "t": "Patan es una de las ciudades budistas más antiguas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Patan is one of the oldest Buddhist cities."
+    },
+    {
+      "t": "Los newa veneran a Bhimsen como dios de los negocios y el comercio.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Newa people worship him as a god of business and trade."
+    },
+    {
+      "t": "Taleju Bhawani era la diosa personal de los reyes Malla.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Taleju Bhawani was the personal deity of the Malla kings."
+    },
+    {
+      "t": "La cocina newari incluye yomari, kachela, chhoila, judías negras, arroz batido y la bebida de arroz chhyang.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Newari cuisine consists of yomari, kachela, chhoila, black beans, beaten rice, vegetables along with the Newari drink called chhyang which is made from rice."
+    },
+    {
+      "t": "Hay muchos talleres de metal cerca de la plaza Durbar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are many metalworking shops near Durbar Square."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "El robo de piezas es un problema: el templo de Machchhendranath está vallado y cada estatua tiene su propia valla.",
+      "f": [
+        "WV"
+      ],
+      "cita": "This is a good illustration of the problems now faced with theft of artifacts. The temple is now surrounded by a strong fence and each statue has its own individual fence."
+    },
+    {
+      "t": "El Mul Chowk ha sufrido muchos robos de tallas de madera.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Mul Chowk was the central part of the old palace and in recent times has suffered much theft of ornamental woodwork."
+    },
+    {
+      "t": "En el templo de Kumbheshwar hay ovejas que se han librado del sacrificio.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Sheep roaming the temple are those that have been spared sacrifice."
+    },
+    {
+      "t": "El templo de Vishwanath tiene tallas eróticas en los soportes del tejado.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The roof supports are decorated with erotic carvings similar to imagery widespread in Shiva temples in India."
+    }
+  ],
+  "no_escribir": [
+    "Estado actual de la reconstrucción tras el terremoto de 2015: las fuentes solo dicen que hubo daños graves.",
+    "Que las estupas de Patan las construyó el emperador Ashoka: WV solo las llama «stupa of Ashok», sin fecha ni autoría.",
+    "Precios de entrada distintos de las 1000 rupias de marzo de 2023.",
+    "Mejor época del año, clima por meses o altitud: las fuentes no los dan.",
+    "Población de la ciudad: las fuentes no la dan.",
+    "Traducciones del nombre como «ciudad de la belleza» o «ciudad de las bellas artes»: las fuentes solo dicen que viene del sánscrito «Lalitapattan».",
+    "Que todos los patios del palacio se pueden visitar: WV dice que solo abre con regularidad el del museo.",
+    "Número de pisos del templo Degutale: WV dice tres en un lugar y cinco en otro.",
+    "Kumari de Patan y excursiones a Bungamati o Khokana: las fuentes no los mencionan.",
+    "Fecha exacta del Krishnastami o del festival de Machchhendranath: las fuentes no la dan."
+  ],
+  "seo": {
+    "titulo": "Patan (Lalitpur): qué ver y cómo ir (2026)",
+    "descripcion": "Plaza Durbar de Patan, Patrimonio UNESCO: entrada 1000 rupias con museo incluido. A 4 km de Thamel; microbús desde Ratnapark por 15 rupias o taxi.",
+    "faq": [
+      {
+        "p": "¿Cómo se llega a Patan desde Katmandú?",
+        "r": "Patan está a 4 km de Thamel, al otro lado del río Bagmati. Hay microbuses desde Ratnapark por 15 rupias (10 para estudiantes o voluntarios con carné nepalí). También puedes coger un autobús azul o verde por la Ring Road por 15-20 rupias y caminar 15 minutos hasta la plaza Durbar. Otra opción es un taxi, por 200-350 rupias (unos 3-5 USD), o ir andando desde Thamel en unos 90 minutos. Ten en cuenta que autobuses y microbuses son viejos, incómodos y poco aptos para personas con movilidad reducida."
+      },
+      {
+        "p": "¿Cuánto cuesta la entrada a la plaza Durbar de Patan?",
+        "r": "La entrada para turistas cuesta 1000 rupias e incluye el Museo de Patan sin coste extra. Se paga en una taquilla del extremo sur de la plaza o en otra entrada más al norte. Conviene llevar el billete visible; si no, se acercan trabajadores de la plaza. Para visitas repetidas puedes ampliar su validez en taquilla mostrando pasaporte y visado."
+      },
+      {
+        "p": "¿Qué horario tiene el Museo de Patan?",
+        "r": "Abre de 10:30 a 17:30. Está en el último patio del palacio, el único que abre con regularidad, y su entrada está incluida en el billete de la plaza Durbar."
+      },
+      {
+        "p": "¿Qué ver en Patan?",
+        "r": "Lo principal es la plaza Durbar, una de las tres del valle de Katmandú declaradas Patrimonio de la Humanidad, con el palacio real medieval de los reyes Malla y una gran muestra de arquitectura newa. Destacan el Krishna Mandir, construido en 1667 por Siddhi Narsingh Malla; el Templo Dorado (50 rupias); el templo de Kumbheshwar, con ovejas librada del sacrificio, y el templo de Vishwanath, con tallas eróticas en los soportes del tejado. La ciudad cuenta con 136 bahals (patios) y 55 templos principales, y se visita mejor a pie."
+      },
+      {
+        "p": "¿Hay templos de Patan que no se pueden visitar?",
+        "r": "Sí. El templo de Taleju no está abierto al público, y en el templo de Bhimsen los turistas no pueden entrar ni hacer fotos dentro. Del palacio, por los robos, solo abre con regularidad el último patio, el del museo."
+      },
+      {
+        "p": "¿Cuándo ir a Patan para ver sus festivales?",
+        "r": "Entre abril y junio se celebra el desfile del carro de Machchhendranath, de 25 m de alto. Hacia agosto, con luna llena, tiene lugar el Kumbheshwar Mela, cuando el templo se llena de gente. Durante Krishnastami la plaza Durbar recibe a miles de peregrinos hindúes."
+      },
+      {
+        "p": "¿Patan y Lalitpur son la misma ciudad?",
+        "r": "Sí, son dos nombres de la misma ciudad y ambos vienen del sánscrito «Lalitapattan». Es una de las ciudades más grandes de Nepal y una de las ciudades budistas más antiguas."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Patan Durbar Square»",
+      "url": "https://en.wikipedia.org/wiki/Patan_Durbar_Square",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Patan», revisión del 2026-11-01",
+      "url": "https://en.wikivoyage.org/wiki/Patan",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

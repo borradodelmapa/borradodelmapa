@@ -1,0 +1,430 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:upper-mustang.",
+  "ref": "np:upper-mustang",
+  "nombre": "Upper Mustang",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Upper Mustang, antes Reino de Lo, es la parte norte del distrito de Mustang, en la provincia de Gandaki (Nepal).",
+      "f": [
+        "W1"
+      ],
+      "cita": "Upper Mustang or Lo Tsho Dyun, formerly known as Kingdom of Lo, is the upper part (northern areas) of the Mustang District in the Gandaki Province of Nepal."
+    },
+    {
+      "t": "Fue territorio cerrado a los extranjeros hasta 1992.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Upper Mustang was a closed territory until 1992, off limits to outsiders"
+    },
+    {
+      "t": "Tiene dos municipios rurales: Lo Manthang y Lo-Ghekar Damodarkunda.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It consists of two rural municipalities namely Lo Manthang and Lo-Ghekar Damodarkunda."
+    },
+    {
+      "t": "El reino lo fundó el guerrero Ame Pal en 1380.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Ame Pal, the warrior who founded this Buddhist kingdom in 1380."
+    },
+    {
+      "t": "Entre los siglos XV y XVII controló el comercio entre el Himalaya y la India.",
+      "f": [
+        "W1"
+      ],
+      "cita": "From the 15th to the 17th century, its strategic location granted Mustang control over the trade between the Himalayas and India."
+    },
+    {
+      "t": "Nepal lo anexionó a finales del siglo XVIII y pasó a ser dependencia nepalí en 1795.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the kingdom was annexed by Nepal and became a dependency of the Kingdom of Nepal in 1795."
+    },
+    {
+      "t": "Dejó de ser reino en 2008, cuando Nepal se convirtió en república.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Mustang's status as a kingdom ended in 2008 when its suzerain Kingdom of Nepal became a republic."
+    },
+    {
+      "t": "El último rey fue Jigme Dorje Palbar Bista (1930–2016).",
+      "f": [
+        "W1"
+      ],
+      "cita": "The last official and later unofficial king (raja or gyelpo) was Jigme Dorje Palbar Bista (1930–2016)"
+    },
+    {
+      "t": "El Mustang tradicional mide 53 km de norte a sur y 60 km de este a oeste.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Traditional Mustang (the Lo Kingdom) is 53 km (33 mi) north–south at its longest, 60 km (37 mi) east–west at its widest"
+    },
+    {
+      "t": "La altitud va de 2.750 m junto al Kali Gandaki, al norte de Kagbeni, a 6.700 m en el Khamjung Himal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "ranges from a low point of 2,750 m (9,020 ft) above sea level on the Kali Gandaki River just north of Kagbeni to 6,700 m (22,000 ft) at Khamjung Himal"
+    },
+    {
+      "t": "El valle del río fue una gran ruta comercial entre el Tíbet y la India, sobre todo de sal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Routes paralleling the river once served as a major trade route between Tibet and India, especially for salt."
+    },
+    {
+      "t": "En 2007 un pastor descubrió 55 pinturas rupestres sobre la vida de Buda.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 2007, a shepherd in Mustang discovered a collection of 55 cave paintings depicting the life of the Buddha."
+    },
+    {
+      "t": "La vida local gira en torno al turismo, la ganadería y el comercio.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Life in Mustang revolves around tourism, animal husbandry, and trade."
+    },
+    {
+      "t": "El primer occidental en llegar fue el suizo Toni Hagen, en 1952.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The first westerner in Mustang was Toni Hagen, Swiss explorer and geologist, who visited the Kingdom in 1952"
+    },
+    {
+      "t": "El francés Michel Peissel fue el primer occidental en alojarse en Lo Manthang, en 1964.",
+      "f": [
+        "W1"
+      ],
+      "cita": "French Michel Peissel is considered the first westerner to stay in Lo Manthang, during the first authorised exploration of Mustang in 1964."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "Clima transhimalayo, fresco y semiárido, con 250–400 mm de lluvia al año.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Upper Mustang has a trans-Himalayan climate which is cool and semi-arid with precipitation in the range of 250–400 mm (9.8–15.7 in)."
+    },
+    {
+      "t": "Está a la sombra pluviométrica del Annapurna y el Dhaulagiri.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It is in the rain shadow of the Annapurna and Dhaulagiri ranges."
+    },
+    {
+      "t": "Agosto y octubre son los meses con más visitantes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "August and October are the peak visiting months."
+    },
+    {
+      "t": "Por la dureza del clima, mucha población baja a zonas más bajas de Nepal en invierno.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The tough conditions cause a large winter migration into lower regions of Nepal."
+    }
+  ],
+  "fauna": [],
+  "sitios": [
+    {
+      "hace": "Recorrer la antigua capital amurallada del Reino de Lo",
+      "maps": "Lo Manthang",
+      "nota": "Ciudad amurallada que apenas ha cambiado desde su fundación",
+      "f": [
+        "W1"
+      ],
+      "cita": "Ame Pal oversaw the founding and building of much of the Lo and Mustang capital of Lo Manthang, a walled city that has changed little in appearance since that time.",
+      "comprobado": null
+    },
+    {
+      "hace": "Asistir al festival Tiji para conocer la cultura local",
+      "maps": "Lo Manthang",
+      "nota": "La fuente no da fechas del festival",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Tiji festival in Lo-Manthang is another popular destination for tourists in the area seeking to experience the native culture.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el palacio real donde nació el último rey",
+      "maps": "Lo Manthang Palace",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "King Jigme Dorje Palbar Bista was born in Lo-Manthang Palace in Upper Mustang in the Himalayan Range of Nepal.",
+      "comprobado": null
+    },
+    {
+      "hace": "Llegar en avión; principal puerta de entrada turística",
+      "maps": "Jomsom Airport",
+      "nota": "Jomsom está 8 km al sur de Kagbeni",
+      "f": [
+        "W1"
+      ],
+      "cita": "The administrative center of Mustang District is at Jomsom (eight kilometres (5.0 mi) south of Kagbeni) which has had an airport since 1962 and has become the main tourist entry point",
+      "comprobado": null
+    },
+    {
+      "hace": "Paso fronterizo activo entre Nepal y China, a 4.660 m",
+      "maps": "Kora La",
+      "nota": "La fuente no dice si pueden cruzarlo turistas",
+      "f": [
+        "W1"
+      ],
+      "cita": "Kora La currently serves as one of the active border crossings between China and Nepal.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el desfiladero del Kali Gandaki",
+      "maps": "Kali Gandaki Gorge",
+      "nota": "Está en el sur del distrito, fuera de Upper Mustang",
+      "f": [
+        "W1"
+      ],
+      "cita": "Part of the river valley in the southern Mustang District forms the Kali Gandaki Gorge, by some measures the deepest gorge in the world.",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "El turismo en Upper Mustang está regulado; los extranjeros pueden entrar desde 1992.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Foreign visitors have been allowed to the region since 1992, but tourism to Upper Mustang is regulated."
+    },
+    {
+      "t": "Los extranjeros necesitan un permiso especial para entrar.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Foreigners need to obtain a special permit to enter, costing $500 for ten days, followed by $50 per day."
+    },
+    {
+      "t": "El permiso de trekking de «Upper Mustang» cubre las zonas de Lo Manthang y Baragau.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The trekking permit for \"Upper Mustang\" consists of Lo Manthang and Baragau regions"
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Permiso especial: 500 dólares por diez días y después 50 dólares por día.",
+      "f": [
+        "W1"
+      ],
+      "de_cuando": "",
+      "cita": "Foreigners need to obtain a special permit to enter, costing $500 for ten days, followed by $50 per day."
+    },
+    {
+      "t": "Más de 7.000 visitantes entre mediados de julio de 2018 y mediados de julio de 2019.",
+      "f": [
+        "W1"
+      ],
+      "de_cuando": "julio 2018 – julio 2019",
+      "cita": "Over a thousand western trekkers now visit each year, with over 7,000 between (mid-July 2018 to mid-July 2019)."
+    }
+  ],
+  "llegar": [
+    {
+      "t": "Jomsom tiene aeropuerto desde 1962 y es la principal entrada turística.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Jomsom (eight kilometres (5.0 mi) south of Kagbeni) which has had an airport since 1962 and has become the main tourist entry point"
+    },
+    {
+      "t": "La carretera desde el sur se terminó antes de 2015 y es apta para vehículos altos y 4x4.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the road was completed before 2015 and is suitable for high clearance and four wheel drive vehicles."
+    },
+    {
+      "t": "China terminó en 2001 una carretera de 20 km desde la frontera hasta Lo Manthang.",
+      "f": [
+        "W1"
+      ],
+      "cita": "in 2001 completed a 20-kilometre (12 mi) road from the international border to Lo Manthang."
+    },
+    {
+      "t": "Está en la antigua ruta comercial Nepal–Tíbet por el paso Kora La, de 4.660 m.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Upper Mustang is on an ancient trade route between Nepal and Tibet exploiting the lowest 4,660-metre (15,300 ft) pass Kora La through the Himalaya west of Sikkim."
+    },
+    {
+      "t": "Las rutas de trekking siguen en gran parte la ruta comercial del siglo XV.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Most tourists visit for the region's trekking trails, which largely follow the same trade route used in the 15th century"
+    }
+  ],
+  "gente": [
+    {
+      "t": "La mayoría de la población sigue hablando lenguas tibéticas tradicionales.",
+      "f": [
+        "W1"
+      ],
+      "cita": "making it one of the most culturally-preserved regions in the world, with a majority of the population still speaking traditional Tibetic languages."
+    },
+    {
+      "t": "La cultura tibetana se ha conservado por el aislamiento de la región.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Tibetan culture of the region has been preserved by the relative isolation of the region from the outside world."
+    },
+    {
+      "t": "Mustang tiene una fuerte cultura budista tibetana.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Mustang is rich in Tibetan Buddhist culture."
+    },
+    {
+      "t": "En la parte alta de Baragau (Chusang, Tangbe, Tetang, Gyaka, Cheile) y en Thak se habla la lengua seke.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The people in the upper part of Baragau (Chusang, Tangbe, Tetang, Gyaka and Cheile villages) and Thak retain their original Seke language"
+    },
+    {
+      "t": "En Kagbeni y Muktinath se habla un dialecto tibetano occidental.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the people of the Kagbeni and Muktinath areas speak a West Tibetan dialect."
+    },
+    {
+      "t": "El sur del distrito (Thak) es tierra de los thakali, con cultura mixta tibetana y nepalí.",
+      "f": [
+        "W1"
+      ],
+      "cita": "is the homeland of the Thakali community, who speak the Thakali language and whose culture combines Tibetan and Nepalese elements."
+    },
+    {
+      "t": "En 2001 el distrito de Mustang tenía 14.981 habitantes: thakalis, gurung y, en el Mustang tradicional, sobre todo tibetanos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The inhabitants are either Thakalis, Gurung or, in traditional Mustang, primarily Tibetan."
+    },
+    {
+      "t": "Muchos habitantes siguen reconociendo la monarquía, abolida el 7 de octubre de 2008.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Though still recognized by many Mustang residents, the monarchy ceased to exist on October 7, 2008, by order of the Government of Nepal."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "La influencia exterior, sobre todo de China, está cambiando deprisa la vida local.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The influence of the outside world, especially China, is growing and contributing to rapid change in the lives of Mustang's people."
+    },
+    {
+      "t": "La construcción de carreteras empieza a afectar a las rutas de trekking.",
+      "f": [
+        "W1"
+      ],
+      "cita": "although road construction is beginning to impact the areas trekking routes."
+    },
+    {
+      "t": "En 2010 jóvenes locales amenazaron con vetar a los turistas porque la tasa diaria de 50 dólares no llegaba a la economía local.",
+      "f": [
+        "W1"
+      ],
+      "cita": "local youth leaders in Mustang threatened to bar tourists beginning October 1, 2010 due to the refusal of the Nepalese government to provide any of the $50 per day fee to the local economy."
+    },
+    {
+      "t": "El permiso incluye Baragau, pero históricamente Baragau no forma parte de Upper Mustang.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The trekking permit for \"Upper Mustang\" consists of Lo Manthang and Baragau regions, leading to confusion that Baragau lies within Upper Mustang."
+    }
+  ],
+  "no_escribir": [
+    "Que Upper Mustang sigue siendo un reino con rey en activo: la monarquía se abolió en 2008.",
+    "Que Kagbeni, Muktinath o Baragau forman parte histórica de Upper Mustang.",
+    "Fechas concretas del festival Tiji: la fuente no las da.",
+    "Que es obligatorio ir con guía o en grupo mínimo de dos personas: la fuente no lo dice.",
+    "Precio actual del permiso con año: la fuente da 500 $/10 días y 50 $/día sin fecha.",
+    "Que la tasa del permiso revierte en las comunidades locales: la fuente recoge una protesta por lo contrario.",
+    "Que en Upper Mustang no llueve nada en monzón: la fuente habla de 250–400 mm anuales.",
+    "Que el desfiladero más profundo del mundo está en Upper Mustang: está en el sur del distrito y solo 'según algunas mediciones'.",
+    "Que los turistas pueden cruzar al Tíbet por Kora La: la fuente no lo dice.",
+    "Fauna como el leopardo de las nieves u otros animales: la fuente no menciona fauna.",
+    "Antigüedad y detalles de las cuevas de Mustang: la fuente solo cita las 55 pinturas halladas en 2007."
+  ],
+  "seo": {
+    "titulo": "Upper Mustang: qué ver y cómo llegar (2026)",
+    "descripcion": "Antiguo Reino de Lo, cerrado a extranjeros hasta 1992. Permiso de 500 $ por 10 días, entrada por Jomsom y cultura tibetana entre 2.750 y 6.700 m.",
+    "faq": [
+      {
+        "p": "¿Necesito un permiso para entrar en Upper Mustang?",
+        "r": "Sí. Los extranjeros necesitan un permiso especial que cuesta 500 dólares por diez días y 50 dólares por cada día adicional. El permiso de trekking de «Upper Mustang» cubre las zonas de Lo Manthang y Baragau."
+      },
+      {
+        "p": "¿Cómo se llega a Upper Mustang?",
+        "r": "La principal entrada turística es Jomsom, que tiene aeropuerto desde 1962. También hay una carretera desde el sur, terminada antes de 2015, apta para vehículos altos y 4x4."
+      },
+      {
+        "p": "¿Cuál es la mejor época para ir a Upper Mustang?",
+        "r": "Agosto y octubre son los meses con más visitantes. Al estar a la sombra pluviométrica del Annapurna y el Dhaulagiri, el clima es fresco y semiárido, con solo 250–400 mm de lluvia al año. En invierno el clima es tan duro que mucha población baja a zonas más bajas de Nepal."
+      },
+      {
+        "p": "¿Qué se puede ver en Upper Mustang?",
+        "r": "Una región de fuerte cultura budista tibetana, conservada gracias a su aislamiento, con Lo Manthang como núcleo del antiguo Reino de Lo. Las rutas de trekking siguen en gran parte la ruta comercial del siglo XV entre el Tíbet y la India, con el paso Kora La a 4.660 m. En 2007 un pastor descubrió además 55 pinturas rupestres sobre la vida de Buda."
+      },
+      {
+        "p": "¿Qué altitud tiene Upper Mustang?",
+        "r": "La altitud va de 2.750 m junto al río Kali Gandaki, al norte de Kagbeni, hasta 6.700 m en el Khamjung Himal."
+      },
+      {
+        "p": "¿Desde cuándo pueden visitar Upper Mustang los extranjeros?",
+        "r": "Desde 1992; hasta entonces fue territorio cerrado a los extranjeros. Hoy el turismo sigue regulado y requiere permiso especial."
+      },
+      {
+        "p": "¿Qué idiomas se hablan en Upper Mustang?",
+        "r": "La mayoría de la población sigue hablando lenguas tibéticas tradicionales. En la parte alta de Baragau y en Thak se habla la lengua seke, y en Kagbeni y Muktinath un dialecto tibetano occidental."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Upper Mustang»",
+      "url": "https://en.wikipedia.org/wiki/Upper_Mustang",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

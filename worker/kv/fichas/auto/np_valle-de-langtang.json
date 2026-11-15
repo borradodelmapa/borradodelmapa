@@ -1,0 +1,606 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:langtang.",
+  "ref": "np:langtang",
+  "nombre": "Valle de Langtang",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Valle del Himalaya en el centro-norte de Nepal, conocido por sus rutas de trekking.",
+      "f": [
+        "W1"
+      ],
+      "cita": "also known as Lamtang Valley is a Himalayan valley in the mountains of north-central Nepal, known for its trekking routes and natural environment."
+    },
+    {
+      "t": "Está en el distrito de Rasuwa, provincia de Bagmati.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Langtang Valley lies in Rasuwa district of the Bagmati Province in Nepal."
+    },
+    {
+      "t": "Está a unos 80 km al norte del valle de Katmandú, dentro del Parque Nacional de Langtang, que limita con el Tíbet.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Situated about 80 kilometres north of the Kathmandu Valley, the valley lies within the Langtang National Park, which borders the Tibet Autonomous Region in Southwest China."
+    },
+    {
+      "t": "Antes del terremoto de 2015 vivían en el valle unas 668 personas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Prior to the 2015 earthquake, 668 individuals were estimated to be living within the valley."
+    },
+    {
+      "t": "El parque se creó en 1976. Fue el primer parque nacional del Himalaya y el cuarto de Nepal.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The park was established in 1976 as the first Himalayan and fourth national park in Nepal."
+    },
+    {
+      "t": "El parque tiene 1.710 km² y una zona de amortiguación de 420 km². Conecta con la reserva de Qomolangma, en el Tíbet.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It covers 1,710 km2 (660 sq mi), with a 420 km2 (160 sq mi) buffer zone, and is linked with the Qomolangma National Nature Preserve in Tibet."
+    },
+    {
+      "t": "El pico más alto del parque es el Langtang Lirung, de 7.245 m.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The highest peak is Langtang Lirung at 7,245 m (23,770 ft)."
+    },
+    {
+      "t": "La vegetación va del bosque tropical por debajo de 1.000 m al matorral alpino y el hielo perpetuo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "vegetation ranging from tropical forests below 1,000 m (3,300 ft) altitude to alpine scrub and perennial ice."
+    },
+    {
+      "t": "La cordillera Langtang Himal queda al norte del valle.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Langtang Himal is a mountain range in the Himalayas north of Langtang Valley"
+    },
+    {
+      "t": "La cordillera Jugal Himal queda al sureste del valle.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Jugal Himal is a mountain range in the Himalayas south-east of Langtang Valley"
+    },
+    {
+      "t": "En abril de 2015, una avalancha provocada por el terremoto destruyó casi por completo el pueblo de Langtang. Solo quedó en pie un edificio.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The village of Langtang was almost completely destroyed (1 building survived) by a massive avalanche caused by the April 2015 Nepal earthquake."
+    },
+    {
+      "t": "En el pueblo murieron unas 310 personas: 176 vecinos, 80 extranjeros y 10 militares.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The village suffered an estimated 310 deaths, including 176 Langtang residents, 80 foreigners, and 10 army personnel."
+    },
+    {
+      "t": "El gompa centenario de Kyanjin Gompa, destruido en el terremoto, estaba reconstruido a principios de 2018.",
+      "f": [
+        "W1"
+      ],
+      "cita": "By early 2018, the centuries-old gompa at Kyanjin Gompa, which had also been destroyed in the earthquake, had been rebuilt."
+    },
+    {
+      "t": "La superficie del glaciar de Langtang se ha reducido. Los científicos lo atribuyen al cambio climático causado por el ser humano desde los años setenta.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Scientists have attributed the reduction in the glacier area of the Langtang glacier directly to anthropogenic climate change since the 1970s."
+    },
+    {
+      "t": "Desde mediados de la década de 2010 se han secado la mayoría de los manantiales del valle.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Since the mid-2010s, Langtangpas have noticed that most natural springs in the valley have gone dry."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "El clima es bastante seco. Nieva en algunas zonas en enero y febrero.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The climate is relatively dry, with snow locally in January–February."
+    },
+    {
+      "t": "El monzón va de junio a agosto.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The monsoon period is June to August."
+    },
+    {
+      "t": "El otoño se considera la mejor época para ir.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The autumn is regarded the best period to visit."
+    },
+    {
+      "t": "En septiembre hay mucha floración.",
+      "f": [
+        "WV"
+      ],
+      "cita": "In September there is a spectacular display of flowers."
+    },
+    {
+      "t": "En pleno invierno los senderos quedan bloqueados y los albergues cierran. En primavera florecen los rododendros.",
+      "f": [
+        "WV"
+      ],
+      "cita": "In peak winter, trails are blocked and the lodges are closed. In spring the rhododendrons flourish."
+    },
+    {
+      "t": "En agosto se celebra un festival en el lago Gosainkunda con miles de peregrinos hindúes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "In August there is a festival at the Gosainkunda lake, with thousands of Hindu pilgrims."
+    },
+    {
+      "t": "Las caminatas por el parque duran entre 3 días y 3 semanas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The park offers hiking of different difficulty, duration ranging from 3 days to 3 weeks."
+    }
+  ],
+  "fauna": [
+    {
+      "t": "Alrededor del 25 % del parque es bosque: robles, arces, pinos y varios tipos de rododendro.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Approximately 25% of the park is forested. Trees include the deciduous oak and maple, evergreens like pine, and various types of rhododendron."
+    },
+    {
+      "t": "En el parque viven el oso negro del Himalaya, el tahr, macacos, langures, el leopardo de las nieves, yaks, el panda rojo y más de 250 especies de aves. La fuente no da la probabilidad de verlos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Animal life includes the Himalayan black bear, Himalayan tahr, Red monkey, langur Assam macaque, snow leopard, yak, red panda and more than 250 species of birds."
+    },
+    {
+      "t": "La fuente en español cita el oso tibetano, el tahr del Himalaya, el macaco rhesus y el panda rojo.",
+      "f": [
+        "W2"
+      ],
+      "cita": "en el parque vive el oso tibetano, un tipo de cabra, la hemitragus jemlahicus, el mono rhesus y el panda rojo."
+    },
+    {
+      "t": "Los rebaños de yaks y chauris, que suben en verano huyendo del calor, bajan después a pastos más bajos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Yak and Chauri herds, which ascended to avoid the summer heat, return to lower pastures."
+    }
+  ],
+  "sitios": [
+    {
+      "hace": "Punto de partida de la mayoría de los treks. Hasta aquí llega la carretera.",
+      "maps": "Syabrubesi",
+      "nota": "Último punto al que se llega en vehículo",
+      "f": [
+        "W1"
+      ],
+      "cita": "The nearest motorable roadhead for the Langtang Valley is Syaphrubesi, which is also the base for most treks into the Langtang Valley.",
+      "comprobado": null
+    },
+    {
+      "hace": "Final del trek del valle de Langtang, que sale de Syaphrubesi y vuelve por el mismo camino.",
+      "maps": "Kyanjin Gompa",
+      "nota": "Hay control de permisos",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Langtang Valley trek, from Syaphrubesi to Kyanjin Gompa and back, is the third most popular trek in Nepal",
+      "comprobado": null
+    },
+    {
+      "hace": "Fábrica de queso suizo. Se destruyó en el terremoto y ya se ha reconstruido.",
+      "maps": "Kyanjin Gompa Cheese Factory",
+      "nota": "Vuelve a estar en funcionamiento",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Swiss-cheese factory at Kyanjin Gompa village was destroyed too, but has been rebuilt and since then become operational again.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el pueblo y sus sitios culturales.",
+      "maps": "Langtang Village",
+      "nota": "Casi destruido por la avalancha de 2015. Hay control de permisos",
+      "f": [
+        "WV"
+      ],
+      "cita": "cultural sites, such as in Langtang village, Melamchighyang, Tarkeghayang and Shemathang",
+      "comprobado": null
+    },
+    {
+      "hace": "Punto de control de permisos en la ruta del trek.",
+      "maps": "Bamboo",
+      "nota": "Control de permisos",
+      "f": [
+        "W1"
+      ],
+      "cita": "at several checkpoints along the trekking route, including Bamboo, Langtang Village, and Kyanjin Gompa.",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir a una cima de unos 5.000 m de dificultad relativamente baja.",
+      "maps": "Kyanjin Ri",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "ranging from relatively easy-to-climb peaks around 5,000 m high, such as Kyanjin Ri and Tsergo Ri",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir a una cima de unos 5.000 m de dificultad relativamente baja.",
+      "maps": "Tsergo Ri",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "ranging from relatively easy-to-climb peaks around 5,000 m high, such as Kyanjin Ri and Tsergo Ri",
+      "comprobado": null
+    },
+    {
+      "hace": "Escalada técnicamente exigente.",
+      "maps": "Langtang Lirung",
+      "nota": "Montaña sagrada para los langtangpa",
+      "f": [
+        "W1"
+      ],
+      "cita": "to technically challenging peaks, such as Dorje Lhakpa and Langtang Lirung.",
+      "comprobado": null
+    },
+    {
+      "hace": "Escalada técnicamente exigente.",
+      "maps": "Dorje Lakpa",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "to technically challenging peaks, such as Dorje Lhakpa and Langtang Lirung.",
+      "comprobado": null
+    },
+    {
+      "hace": "Lago sagrado hindú y lugar de peregrinación.",
+      "maps": "Gosaikunda",
+      "nota": "Peregrinación en agosto",
+      "f": [
+        "W2"
+      ],
+      "cita": "El lago Gosainkunda es sagrado para esta religión y es lugar de peregrinaje en el mes de agosto.",
+      "comprobado": null
+    },
+    {
+      "hace": "Valle vecino que se une con Langtang en varios treks.",
+      "maps": "Helambu",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Several treks go through the Langtang valley and link it to nearby valleys, like the Helambu valley.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar sitios culturales.",
+      "maps": "Melamchi Ghyang",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "cultural sites, such as in Langtang village, Melamchighyang, Tarkeghayang and Shemathang",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar sitios culturales.",
+      "maps": "Tarkeghyang",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "cultural sites, such as in Langtang village, Melamchighyang, Tarkeghayang and Shemathang",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "Todos, salvo los vecinos, necesitan el permiso TIMS y el permiso de entrada al Parque Nacional de Langtang.",
+      "f": [
+        "W1"
+      ],
+      "cita": "entering the Langtang Valley requires everyone except locals to have the TIMS permit and the Langtang National Park entry permit."
+    },
+    {
+      "t": "La misma fuente dice en otra sección que la tarjeta TIMS puede exigirse solo a algunos senderistas, según la normativa vigente.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Depending on the trekking regulations in force, a Trekkers' Information Management System (TIMS) card may also be required for some trekkers."
+    },
+    {
+      "t": "Para hacer un trek hace falta la tarjeta TIMS.",
+      "f": [
+        "WV"
+      ],
+      "cita": "going on a trek you need a TIMS card."
+    },
+    {
+      "t": "El permiso del parque lo emite el Departamento de Parques Nacionales y se tramita a través del Nepal Tourism Board.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Langtang National Park Entry Permit is issued by the Department of National Parks and Wildlife Conservation and is available through the Nepal Tourism Board."
+    },
+    {
+      "t": "El permiso se saca en el Nepal Tourism Board de Katmandú o con una agencia de trekking registrada, antes del trek.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Permits may be obtained directly from the Nepal Tourism Board in Kathmandu or arranged through a registered trekking agency before the trek."
+    },
+    {
+      "t": "Se revisan los permisos en la entrada del parque, cerca de Syabrubesi, y en varios controles de la ruta.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Permit checks are carried out at the entrance to Langtang National Park near Syabrubesi and at several checkpoints along the trekking route"
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Permiso del parque: 3.000 NPR para no ciudadanos de la SAARC y 1.500 NPR para ciudadanos de la SAARC.",
+      "f": [
+        "W1"
+      ],
+      "de_cuando": "2026",
+      "cita": "As of 2026, the permit fee is NPR 3,000 for non-SAARC nationals and NPR 1,500 for citizens of SAARC member states."
+    },
+    {
+      "t": "Entrada al parque: 3.000 rupias por una sola entrada.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "2018",
+      "cita": "The entrance fee to the park is Rs. 3,000 for a single entry (2018)."
+    }
+  ],
+  "llegar": [
+    {
+      "t": "Syaphrubesi está a 113 km de Katmandú. Por el mal estado de la carretera, se tarda de 6 a 8 horas en coche.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The distance of Syaphrubesi from Kathmandu is 113 km. But due to bad road conditions, it usually takes 6-8 hours to drive from Kathmandu to Syaphrubesi."
+    },
+    {
+      "t": "Syaphrubesi es el último punto con carretera y la base de la mayoría de los treks al valle.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The nearest motorable roadhead for the Langtang Valley is Syaphrubesi, which is also the base for most treks into the Langtang Valley."
+    }
+  ],
+  "gente": [
+    {
+      "t": "Los habitantes del valle se llaman a sí mismos «langtangpa».",
+      "f": [
+        "W1"
+      ],
+      "cita": "Among themselves, the local inhabitants of the Langtang valley refer to each other as 'Langtangpa'."
+    },
+    {
+      "t": "Suelen practicar el budismo tibetano y hablan una lengua tibetana cercana a la de Kyirong, en el sur del Tíbet.",
+      "f": [
+        "W1"
+      ],
+      "cita": "They generally follow Tibetan Buddhism, and speak a Tibetan language that is closely related to the Tibetan spoken in Kyirong, southern Tibet."
+    },
+    {
+      "t": "Para los langtangpa, el Langtang Lirung es su dios local («yu-lha»).",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Langtangpas regard the mountain Langtang Lirung as their 'yu-lha', their local country god."
+    },
+    {
+      "t": "En el censo oficial, los langtangpa figuran como tamang.",
+      "f": [
+        "W1"
+      ],
+      "cita": "However, in the state census, the Langtangpas are categorised as Tamang."
+    },
+    {
+      "t": "Se cree que el valle es Beyul Dagam Namgo, uno de los valles ocultos bendecidos por Guru Padmasambhava.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Langtang valley is believed to be the Beyul Dagam Namgo, one of the many hidden valleys blessed by Guru Padmasambhava."
+    },
+    {
+      "t": "Su forma de vida tradicional es la agricultura y el pastoreo. Desde mediados de los setenta, el turismo es una fuente de ingresos importante.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The traditional livelihoods of the Langtangpas have centered around agropastoralism. Since the mid-1970s, tourism has grown to become an important source of livelihoods in the Langtang Valley."
+    },
+    {
+      "t": "Werner Schulthess introdujo el queso suizo en los años cincuenta. Se sigue elaborando en el valle.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Swiss cheese-making was introduced in Langtang in the 1950s by Werner Schulthess."
+    },
+    {
+      "t": "Las casas de té las llevan los vecinos, en casi todos los pueblos. Ofrecen alojamiento y comida básicos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "one can stay at local 'tea houses', which are run by locals in nearly every village in the valley, and where one gets basic lodging and food."
+    },
+    {
+      "t": "Las comunidades locales gestionan la zona de amortiguación junto con el parque y reciben parte de sus ingresos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Buffer zone management is a joint venture between the park office and the local communities, with local communities receiving part of the park revenue, to ensure sustainability."
+    },
+    {
+      "t": "Tras el terremoto, muchos langtangpa volvieron al valle y buena parte de la reconstrucción se hizo en el primer año.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Many Langtangpas returned to the valley in the following months, and a significant amount of reconstruction was completed within the first year after the earthquake."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "El pueblo de Langtang es lugar de una tragedia: más de 100 cuerpos nunca se recuperaron.",
+      "f": [
+        "W1"
+      ],
+      "cita": "More than 100 bodies were never recovered. Several other villages in upper Langtang valley were also destroyed."
+    },
+    {
+      "t": "El Langtang Lirung, que se ofrece como escalada, es el dios local de los langtangpa.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Langtangpas regard the mountain Langtang Lirung as their 'yu-lha', their local country god."
+    },
+    {
+      "t": "Las fuentes no coinciden sobre si la tarjeta TIMS es obligatoria para todos. Conviene confirmarlo antes de ir.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Depending on the trekking regulations in force, a Trekkers' Information Management System (TIMS) card may also be required for some trekkers."
+    },
+    {
+      "t": "Hay riesgo de mal de altura, sobre todo por encima de unos 3.000 m, y de deshidratación.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Mind altitude sickness especially when ascending above about 3000 m (10,000 feet), and risk of dehydration."
+    },
+    {
+      "t": "No hay asistencia médica en casi todo el parque. Hay que llevar un botiquín completo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are no medical facilities in most of the park, carry an extensive first aid pack."
+    },
+    {
+      "t": "Algunos senderos resbalan tras la lluvia o la helada. En las pedreras hay riesgo de caída de piedras.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Some trails are rocky and slippery after rain or frost. Do not stop while crossing stone fields, but watch out for falling rocks."
+    },
+    {
+      "t": "Hay teléfono en Singh Gompa y en los pueblos principales de Helambu.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Telephone facilities are available at Singh Gompa and at major settlements in Helambu."
+    },
+    {
+      "t": "Se recomienda mucho contratar un guía local en algunas rutas. La fuente no dice que sea obligatorio.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Hiring local guides is strongly recommended on some routes."
+    }
+  ],
+  "no_escribir": [
+    "Que el guía sea obligatorio en Langtang: las fuentes solo lo recomiendan en algunas rutas.",
+    "Que Kodari, Tatopani o el bus Katmandú–Kodari sirvan para llegar al valle de Langtang: WV los sitúa en el parque, pero W1 da Syaphrubesi como acceso al valle.",
+    "Que el valle esté a 32 km de Katmandú: esa cifra de WV es del parque. W1 sitúa el valle a unos 80 km.",
+    "Que el Shishapangma esté dentro del parque o se vea desde el valle: W2 dice que está entero en China.",
+    "Avistamientos del yeti: W2 solo habla de leyendas tibetanas.",
+    "Que se vean con facilidad leopardos de las nieves o pandas rojos: las fuentes solo los nombran como fauna del parque, sin probabilidad.",
+    "Que el queso de Kyanjin Gompa sea de yak: las fuentes solo hablan de queso suizo.",
+    "Altitudes exactas de Kyanjin Gompa, Kyanjin Ri o Tsergo Ri: las fuentes solo dicen «alrededor de 5.000 m» para los picos.",
+    "Duración concreta del trek del valle (por ejemplo, 7–10 días): las fuentes solo dan de 3 días a 3 semanas para el parque.",
+    "Precio de la tarjeta TIMS: ninguna fuente lo da.",
+    "Que en el valle vivan 4.500 personas: esa cifra de W2 es del parque. W1 da 668 en el valle antes de 2015.",
+    "Rafting en el valle de Langtang: W2 lo atribuye al parque en general.",
+    "Altura del Langtang Lirung distinta de 7.245 m."
+  ],
+  "seo": {
+    "titulo": "Valle de Langtang: qué ver y cómo ir (2026)",
+    "descripcion": "Valle de Langtang, a 80 km al norte del valle de Katmandú: treks de 3 días a 3 semanas, el Langtang Lirung (7.245 m), permisos y mejor época en 2026.",
+    "faq": [
+      {
+        "p": "¿Cuál es la mejor época para ir al valle de Langtang?",
+        "r": "El otoño se considera la mejor época. En septiembre hay mucha floración y en primavera florecen los rododendros. El monzón va de junio a agosto. En pleno invierno los senderos quedan bloqueados y los albergues cierran. En enero y febrero nieva en algunas zonas."
+      },
+      {
+        "p": "¿Cómo se llega al valle de Langtang desde Katmandú?",
+        "r": "Hay que ir por carretera hasta Syaphrubesi, a 113 km de Katmandú. Por el mal estado de la carretera, se tarda de 6 a 8 horas en coche. Syaphrubesi es el último punto con carretera y la base de la mayoría de los treks al valle."
+      },
+      {
+        "p": "¿Qué permisos necesito para hacer trekking en Langtang?",
+        "r": "Hace falta el permiso de entrada al Parque Nacional de Langtang: 3.000 NPR para no ciudadanos de la SAARC y 1.500 NPR para ciudadanos de la SAARC. Se saca antes del trek en el Nepal Tourism Board de Katmandú o con una agencia de trekking registrada. Las fuentes no coinciden sobre si la tarjeta TIMS es obligatoria para todos, así que conviene confirmarlo antes de ir. Los permisos se revisan en la entrada del parque, cerca de Syabrubesi, y en varios controles de la ruta."
+      },
+      {
+        "p": "¿Cuántos días dura un trek por el Parque Nacional de Langtang?",
+        "r": "Las caminatas por el parque duran entre 3 días y 3 semanas. Casi todos los pueblos tienen casas de té, que llevan los vecinos y ofrecen alojamiento y comida básicos."
+      },
+      {
+        "p": "¿Qué se puede ver en el valle de Langtang?",
+        "r": "El valle queda entre las cordilleras Langtang Himal, al norte, y Jugal Himal, al sureste. El pico más alto del parque es el Langtang Lirung, de 7.245 m. Destacan el gompa de Kyanjin Gompa, reconstruido tras el terremoto de 2015, el queso que se elabora en el valle desde los años cincuenta y bosques de robles, arces, pinos y rododendros. En el parque viven el panda rojo, el leopardo de las nieves, el oso negro del Himalaya, el tahr y más de 250 especies de aves, aunque la fuente no da la probabilidad de verlos."
+      },
+      {
+        "p": "¿Es obligatorio contratar un guía para el trek de Langtang?",
+        "r": "La fuente no dice que sea obligatorio, pero se recomienda mucho contratar un guía local en algunas rutas."
+      },
+      {
+        "p": "¿Qué riesgos hay en el trekking de Langtang?",
+        "r": "Hay riesgo de mal de altura, sobre todo por encima de unos 3.000 m, y de deshidratación. No hay asistencia médica en casi todo el parque, así que hay que llevar un botiquín completo. Algunos senderos resbalan tras la lluvia o la helada, y en las pedreras hay riesgo de caída de piedras."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Langtang»",
+      "url": "https://en.wikipedia.org/wiki/Langtang",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Langtang»",
+      "url": "https://es.wikipedia.org/wiki/Langtang",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Langtang National Park», revisión del 2026-08-27",
+      "url": "https://en.wikivoyage.org/wiki/Langtang_National_Park",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

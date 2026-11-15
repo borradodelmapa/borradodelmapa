@@ -1,0 +1,712 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:chitwan.",
+  "ref": "np:chitwan",
+  "nombre": "Parque Nacional de Chitwan",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Primer parque nacional de Nepal, creado en 1973 con el nombre de Royal Chitwan National Park.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Chitwan National Park is the first national park of Nepal and was established in 1973 as Royal Chitwan National Park."
+    },
+    {
+      "t": "Es Patrimonio de la Humanidad de la UNESCO desde 1984.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It was granted the status of a World Heritage Site in 1984."
+    },
+    {
+      "t": "Ocupa 952,63 km² en el Terai, en el centro-sur de Nepal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It covers an area of 952.63 km2 (367.81 sq mi) in the Terai region of south-central Nepal."
+    },
+    {
+      "t": "La altitud va de unos 100 m en los valles fluviales a 815 m en las colinas Siwalik.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It ranges in elevation from about 100 m (330 ft) in the river valleys to 815 m (2,674 ft) in the Sivalik Hills."
+    },
+    {
+      "t": "Se declaró en diciembre de 1970 y empezó con 544 km².",
+      "f": [
+        "W1"
+      ],
+      "cita": "the Chitwan National Park was gazetted in December 1970, with borders delineated the following year and established in 1973, initially encompassing an area of 544 km2"
+    },
+    {
+      "t": "En 1977 se amplió hasta su superficie actual.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 1977, the park was enlarged to its present area of 952.63 km2 (367.81 sq mi)."
+    },
+    {
+      "t": "En 1997 se añadió una zona de amortiguación de 766,1 km².",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 1997, a bufferzone of 766.1 km2 (295.8 sq mi) was added to the north and west of the Narayani-Rapti river system"
+    },
+    {
+      "t": "En 2006, al acabar la guerra civil, se quitó la palabra «Royal» del nombre.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The word 'Royal' was dropped from the park's name in 2006, at the end of the Nepalese Civil War."
+    },
+    {
+      "t": "Desde finales del siglo XIX fue coto de caza de la clase gobernante en invierno.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Since the end of the 19th century Chitwan used to be a favorite hunting ground for Nepal's ruling class during the cool winter seasons."
+    },
+    {
+      "t": "A finales de los años sesenta se había talado el 70 % de la selva y solo quedaban 95 rinocerontes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "By the end of the 1960s, 70% of Chitwan's jungles had been cleared, malaria eradicated using DDT, thousands of people had settled there, and only 95 rhinos remained."
+    },
+    {
+      "t": "Limita al este con el Parque Nacional de Parsa y al sur con el indio de Valmiki.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Adjacent to the east of Chitwan National Park is Parsa National Park, contiguous in the south is the Indian Tiger Reserve Valmiki National Park."
+    },
+    {
+      "t": "Abarca partes de los distritos de Nawalpur, Chitwan, Makwanpur y Parsa.",
+      "f": [
+        "W1"
+      ],
+      "cita": "it encompasses parts of the Nawalpur, Chitwan, Makwanpur and Parsa Districts."
+    },
+    {
+      "t": "El bosque de sal cubre cerca del 70 % del parque.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Himalayan subtropical broadleaf forests with predominantly sal trees covering about 70% of the national park area."
+    },
+    {
+      "t": "Sabanas y praderas cubren cerca del 20 % del parque.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Terai-Duar savanna and grasslands cover about 20% of the park's area."
+    },
+    {
+      "t": "Las praderas ocupan las llanuras de inundación de los ríos Rapti, Reu y Narayani.",
+      "f": [
+        "WV"
+      ],
+      "cita": "riverine grasslands in the flood plains of the Rapti, Reu and Narayani Rivers."
+    },
+    {
+      "t": "«Chitawan» significa «el corazón de la jungla».",
+      "f": [
+        "W2"
+      ],
+      "cita": "La palabra chitawan significa el corazón de la jungla."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "Humedad alta todo el año.",
+      "f": [
+        "W1"
+      ],
+      "cita": "humid subtropical monsoon influenced climate (Cwa) with high humidity all through the year."
+    },
+    {
+      "t": "El monzón va de mediados de junio a finales de septiembre.",
+      "f": [
+        "W1"
+      ],
+      "cita": "monsoon starts in mid-June and eases off in late September."
+    },
+    {
+      "t": "En esas 14-15 semanas cae casi toda la lluvia anual, unos 2.500 mm.",
+      "f": [
+        "W1"
+      ],
+      "cita": "During these 14–15 weeks most of the 2,500 mm (98 in) annual precipitation falls."
+    },
+    {
+      "t": "Desde mediados de octubre baja la humedad y la máxima pasa de unos 36 °C a 18 °C.",
+      "f": [
+        "W1"
+      ],
+      "cita": "After mid-October, the monsoon clouds retreat, humidity drops off, and the top daily temperature gradually subsides from around 36 °C (97 °F) to 18 °C (64 °F)."
+    },
+    {
+      "t": "Las noches bajan a 5 °C hasta finales de diciembre, cuando suele llover suave unos días.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Nights cool down to 5 °C (41 °F) until late December, when it usually rains softly for a few days."
+    },
+    {
+      "t": "Hace calor y humedad casi todo el año.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It is quite hot and humid most of the year."
+    },
+    {
+      "t": "Para ver fauna, mejor marzo o abril, con la hierba corta, y varias salidas en varios días.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Maximize your chances by visiting in March or April when the elephant grass is short and by planning multiple excursions into the park over several days."
+    }
+  ],
+  "fauna": [
+    {
+      "t": "Muchos visitantes se van sin ver los grandes mamíferos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "and many visitors leave without spotting the park's large mammals."
+    },
+    {
+      "t": "El tigre es muy difícil de ver: un guía puede verlo una o dos veces al año.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Tigers are especially rare; a guide may only catch a glimpse once or twice per year."
+    },
+    {
+      "t": "En canoa se ven seguro varias especies de aves, y los cocodrilos son muy comunes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "you will certainly see several species of bird and crocodiles are very common."
+    },
+    {
+      "t": "Ciervos, monos, pavos reales, martines pescadores y garzas se ven con mucha facilidad.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Hay otros animales que podemos ver muy fácilmente en el parque, por ejemplo ciervos, monos, pavos reales, martines pescadores, garzas, golondrinas o patos de Siberia."
+    },
+    {
+      "t": "Tiene la mayor población de rinoceronte indio de Nepal: 605 de 645 en 2015.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Chitwan has the largest population of Indian rhinoceros in Nepal, estimated at 605 of 645 individuals in total in the country as of 2015."
+    },
+    {
+      "t": "En 2026 se estimaban 145 tigres en el parque y sus alrededores.",
+      "f": [
+        "W1"
+      ],
+      "cita": "By 2026, the tiger population in and around Chitwan National Park was estimated at 145 individuals"
+    },
+    {
+      "t": "Los tigres son mucho menos activos de día, cuando hay más actividad humana.",
+      "f": [
+        "W1"
+      ],
+      "cita": "They offset their temporal activity patterns to be much less active during the day when human activity peaked."
+    },
+    {
+      "t": "Densidad de osos bezudos muy alta: entre 200 y 250 ejemplares.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Chitwan National Park is considered to have the highest population density of sloth bears with an estimated 200 to 250 individuals."
+    },
+    {
+      "t": "El leopardo abunda más en los bordes del parque.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Indian leopards are most prevalent on the peripheries of the park."
+    },
+    {
+      "t": "Los gaures bajan a las praderas en primavera, cuando rebrota la hierba.",
+      "f": [
+        "W1"
+      ],
+      "cita": "when the bush fires ease off in springtime and lush grasses start growing up again, they descend into the grassland and riverine forests to graze and browse."
+    },
+    {
+      "t": "Hay 68 especies de mamíferos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Chitwan National Park is home to 68 mammal species."
+    },
+    {
+      "t": "En 2006 se registraron 543 especies de aves, más que en ninguna otra área protegida de Nepal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 2006 they recorded 543 species in the Chitwan National Park, much more than in any other protected area in Nepal"
+    },
+    {
+      "t": "Unas 160 especies de aves migratorias llegan en otoño para pasar el invierno.",
+      "f": [
+        "W1"
+      ],
+      "cita": "about 160 migrating and vagrant species arrive in Chitwan in autumn from northern latitudes to spend the winter here"
+    },
+    {
+      "t": "Bandadas de ánsar indio paran unos días en febrero.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Large flocks of bar-headed geese just rest for a few days in February on their way north."
+    },
+    {
+      "t": "El gavial silvestre bajó a solo 38 ejemplares en 2003.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The population has dramatically declined to only 38 wild gharials in 2003."
+    }
+  ],
+  "sitios": [
+    {
+      "hace": "Pueblo base: alojamiento, agencias y salida de excursiones de día al parque.",
+      "maps": "Sauraha",
+      "nota": "Fuera del parque; para entrar hay que cruzar el río en canoa.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Most visitors travel to Sauraha and then day trip into the park.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el centro de cría de gaviales.",
+      "maps": "Gharial Breeding Center",
+      "nota": "Cerca de Kasara.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Gharial Breeding Center near Kasara, 1 km.",
+      "comprobado": null
+    },
+    {
+      "hace": "Centro de cría y adiestramiento de elefantes.",
+      "maps": "Elephant Breeding Center",
+      "nota": "Creado en 1985.",
+      "f": [
+        "W1"
+      ],
+      "cita": "houses the Khorsor Elephant Breeding and Training Centre, established in 1985.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar un lugar religioso.",
+      "maps": "Bikram Baba",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Bikram Baba', a religious site.",
+      "comprobado": null
+    },
+    {
+      "hace": "Templo y ermita; ver a la gente en el ghat por la mañana y por la tarde.",
+      "maps": "Valmiki Ashram",
+      "nota": "Justo dentro del parque. Hacia el 15 de febrero se celebra Magha Sankranti.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Valmiki Ashram. A small temple and ashram or hermitage just inside Chitwan National Park.",
+      "comprobado": null
+    },
+    {
+      "hace": "Bajar el río en canoa viendo aves, cocodrilos y gaviales.",
+      "maps": "Rapti River",
+      "nota": "Salidas desde Sauraha.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Take a leisurely float down the Rapti river as the boatman steers you past flocks of birds, crocodiles, gharial, monkeys",
+      "comprobado": null
+    },
+    {
+      "hace": "Praderas donde vive sobre todo el nilgó.",
+      "maps": "Kumroj",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Nilgai are predominantly found in the grasslands of Kumroj",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "Para entrar hacen falta permiso y al menos dos guías, aunque vayas solo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Permits and at least two guides - even for a single visitor - are required for anyone venturing into the park."
+    },
+    {
+      "t": "Todo el mundo debe salir del parque al ponerse el sol.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Everyone must leave the park at sunset."
+    },
+    {
+      "t": "Desde 2018 no hay alojamiento dentro del parque ni se permite quedarse de noche.",
+      "f": [
+        "WV"
+      ],
+      "cita": "As of 2018 there is no longer any accommodation inside the park and visitors are not permitted to remain after dark."
+    },
+    {
+      "t": "Las excursiones con noche duermen en el bosque comunitario de la zona de amortiguación.",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you have planned an overnight excursion you will sleep adjacent to the park in the Community Forest (Buffer Zone)."
+    },
+    {
+      "t": "No hay bares dentro del parque; sí en Sauraha.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are no drinking establishments in the park. However, there are several bars in the nearby town of Sauraha."
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Permiso para cualquier actividad dentro del parque: 2.000 rupias por día.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "For all activities inside the park, visitors must pay Rs. 2000 per day for a permit."
+    },
+    {
+      "t": "Visitar el bosque comunitario cuesta aparte; presupuestos de 300 a 500 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "It's difficult to get tour operators to commit to a price, but quotes range from Rs. 300-500."
+    },
+    {
+      "t": "Las canoas salen de Sauraha a las 7:00 o a las 13:00 y duran 1-2 horas.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Dugout canoes depart from Sauraha at 7AM or 1PM, take 1 - 2 hours"
+    },
+    {
+      "t": "Canoa: de 800 a 1.500 rupias por persona, más el permiso.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "2018",
+      "cita": "Prices range from Rs. 800–1,500 (+ park permit) per person (2018) depending on the duration and number of passengers."
+    },
+    {
+      "t": "Los jeeps salen desde la otra orilla frente a Sauraha a las 7:00 o a las 13:00.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Jeeps depart across the river from Sauraha at 7AM or 1PM - ensure the tour includes crossing by boat as there is no bridge."
+    },
+    {
+      "t": "Jeep de medio día: unas 1.500 rupias por persona, más el permiso.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "2018",
+      "cita": "Expect to pay around Rs. 1,500 (+ park permit) per person for a half day (2018)."
+    },
+    {
+      "t": "Caminata de día completo: salida a las 7:00 y vuelta a las 17:00.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Full day walks depart at 7AM and return at 5PM with a 1 to 2 hour lunch break."
+    },
+    {
+      "t": "Caminata de un día: desde 4.300 rupias por persona en grupo grande y sin comidas, permiso incluido.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "2018",
+      "cita": "Expect to pay from Rs. 4,300 (inc. park permit) per person (2018) for a large group with no meals"
+    },
+    {
+      "t": "Caminata privada con comidas: hasta 10.000 rupias, permiso incluido.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "2018",
+      "cita": "to Rs. 10,000 (inc. park permit) for a personal tour with meals included (2018)."
+    },
+    {
+      "t": "Rickshaw de bicicleta hasta la frontera en Sonauli: 30-50 rupias nepalíes.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "It should only cost NPR30-50 so bargain accordingly"
+    }
+  ],
+  "llegar": [
+    {
+      "t": "El aeropuerto más cercano es Bharatpur (BHR), a unos 10 km.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Bharatpur (Nepal) (BHR IATA) is the nearest airport, about 10 km away."
+    },
+    {
+      "t": "Sauraha tiene buenas conexiones en autobús con Katmandú y Pokhara.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The nearby town of Sauraha has good bus connections with Kathmandu and Pokhara."
+    },
+    {
+      "t": "No quedan puentes cerca de Sauraha: al parque se cruza en canoa.",
+      "f": [
+        "WV"
+      ],
+      "cita": "all the bridges crossing the river into the park near Sauraha have been removed so visitors must cross by canoe."
+    },
+    {
+      "t": "La frontera con India, en Sonauli, está a unas 4 horas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Sonauli is the border town and is about 4 hours from Chitwan."
+    }
+  ],
+  "gente": [
+    {
+      "t": "Con las primeras áreas protegidas, los tharu fueron obligados a dejar sus tierras.",
+      "f": [
+        "W1"
+      ],
+      "cita": "When the first protected areas were established in Chitwan, Tharu people were forced to relocate from their traditional lands."
+    },
+    {
+      "t": "Los soldados destruyeron las aldeas dentro del parque, quemaron casas y arrasaron campos con elefantes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "When the national park was designated, Nepalese soldiers destroyed the villages located inside the boundary of the park, burning down houses and trampling fields using elephants."
+    },
+    {
+      "t": "A los tharu se les negó la propiedad de la tierra y quedaron en la pobreza.",
+      "f": [
+        "W1"
+      ],
+      "cita": "They were denied any right to own land and thus forced into a situation of landlessness and poverty."
+    },
+    {
+      "t": "Agricultores pobres de las colinas medias colonizaron el valle buscando tierra cultivable.",
+      "f": [
+        "W1"
+      ],
+      "cita": "When poor farmers from the mid-hills moved to the Chitwan Valley in search of arable land"
+    },
+    {
+      "t": "Las danzas locales con palos son muy ruidosas y suelen ir en el paquete del hotel.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Stick dancing is very loud as they hit sticks together to form a rhythm."
+    },
+    {
+      "t": "Hay rutas en moto por aldeas tharu tradicionales.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Explore traditional Tharu villages per motorcycle."
+    },
+    {
+      "t": "En el ghat del Valmiki Ashram se ve a la gente en sus ritos y aseo por la mañana y la tarde.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Walk around the large ghat area in the morning and evening to see locals performing their religious as well hygienic duties."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "Varias agencias desaconsejan montar en elefante por crueldad con el animal.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Several agencies actively discourage elephant rides on the grounds that it is cruel to the animal."
+    },
+    {
+      "t": "La mayoría de los elefantes son domésticos y se usan para pasear turistas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Most elephants are domesticated and used for taking tourists on sightseeing excursions."
+    },
+    {
+      "t": "La fuente cita dos empresas como alternativa ética a montar en elefante.",
+      "f": [
+        "WV"
+      ],
+      "cita": "As a great alternative to the elephant rides there are two companies organising ethical tour."
+    },
+    {
+      "t": "Los paquetes cambian mucho en precio y contenido: confirma qué incluyen, mejor por escrito, antes de pagar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Packages vary greatly both in cost and what's included (meals, accommodation, transportation, park permit) so confirm the details, preferably in writing, before any money changes hands."
+    },
+    {
+      "t": "En la caminata de dos días, alojamiento y cena no suelen ir incluidos en el precio.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Your accommodation and dinner are typically not included in the price quoted by agencies"
+    },
+    {
+      "t": "Al barquero se le da propina al llegar: lleva billetes pequeños.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You'll be asked to tip the boatman when he drops you off so consider bringing some small bills."
+    },
+    {
+      "t": "Las caminatas piden forma física moderada: de 10 a 15 km a pie.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Visitors should be moderately fit as you will have to cover 10 km (6.2 mi) to 15 km (9.3 mi) on foot"
+    },
+    {
+      "t": "Para caminar: pantalón y manga larga de colores apagados y terrosos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Pants and a log-sleeved shirt of dull, earthy colors"
+    },
+    {
+      "t": "Lleva 2 litros de agua por persona y día.",
+      "f": [
+        "WV"
+      ],
+      "cita": "2L of water per person per day"
+    },
+    {
+      "t": "Protector solar y repelente con DEET contra mosquitos y garrapatas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Sunscreen and DEET-based bug spray to repel mosquitoes and ticks"
+    },
+    {
+      "t": "La caza furtiva amenaza al rinoceronte: en 2002 mataron 37 para vender sus cuernos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "in 2002 alone, poachers killed 37 individuals in order to saw off and sell their valuable horns."
+    },
+    {
+      "t": "En la frontera de Sonauli, algunos rickshaws paran en una casa de cambio y luego piden más dinero.",
+      "f": [
+        "WV"
+      ],
+      "cita": "some drivers will take you to a money change office just in front of the Nepal immigration office and then demand extra payment"
+    },
+    {
+      "t": "No pagues una falsa tasa de salida en la frontera.",
+      "f": [
+        "WV"
+      ],
+      "cita": "After getting your exit stamp (don't let them try to charge you a fake exit fee)"
+    }
+  ],
+  "no_escribir": [
+    "Superficie de 932 km² como dato actual: W2 y WV la dan, pero W1 detalla 952,63 km² tras la ampliación de 1977.",
+    "Que se puede dormir en lodges dentro del parque: desde 2018 no hay alojamiento dentro y hay que salir al ponerse el sol.",
+    "Que ver tigres o rinocerontes está garantizado: las fuentes dicen que muchos se van sin ver grandes mamíferos y que el tigre es muy raro.",
+    "Que hay puente para entrar al parque desde Sauraha: se cruza en canoa.",
+    "Los paseos o el baño con elefantes como actividad recomendada: las fuentes recogen que se desaconsejan por crueldad.",
+    "Que los rinocerontes se cazan «por placer» (W2): W1 dice que es para vender los cuernos.",
+    "Que el rinoceronte indio es endémico de Chitwan: ninguna fuente lo confirma.",
+    "Cifras de rinocerontes más recientes que la de 2015 (605): las fuentes no dan otras.",
+    "Que se puede entrar al parque sin guía o con uno solo: hacen falta permiso y al menos dos guías.",
+    "Que Shuklaphanta es una «reserva de vida silvestre» (W2): W1 la llama parque nacional."
+  ],
+  "seo": {
+    "titulo": "Parque Nacional de Chitwan: qué ver y cómo ir (2026)",
+    "descripcion": "Chitwan, primer parque nacional de Nepal y Patrimonio UNESCO: 605 rinocerontes, 543 especies de aves, canoa desde Sauraha y permiso de 2.000 rupias/día.",
+    "faq": [
+      {
+        "p": "¿Cuál es la mejor época para visitar Chitwan?",
+        "r": "Para ver fauna, marzo o abril, cuando la hierba está corta. Conviene hacer varias salidas repartidas en varios días. El monzón va de mediados de junio a finales de septiembre y deja casi toda la lluvia anual, unos 2.500 mm. Desde mediados de octubre baja la humedad y la máxima pasa de unos 36 °C a 18 °C, con noches de hasta 5 °C hasta finales de diciembre."
+      },
+      {
+        "p": "¿Cómo se llega al Parque Nacional de Chitwan?",
+        "r": "El aeropuerto más cercano es Bharatpur (BHR), a unos 10 km. Sauraha, el pueblo base, tiene buenas conexiones en autobús con Katmandú y Pokhara. Cerca de Sauraha no quedan puentes, así que al parque se cruza en canoa. La frontera con India, en Sonauli, está a unas 4 horas."
+      },
+      {
+        "p": "¿Se puede entrar al parque por libre?",
+        "r": "No. Necesitas un permiso y al menos dos guías, aunque vayas solo. Todo el mundo debe salir del parque al ponerse el sol. Desde 2018 no hay alojamiento dentro ni se permite pasar la noche: las excursiones de dos días duermen en el bosque comunitario de la zona de amortiguación."
+      },
+      {
+        "p": "¿Cuánto cuestan las actividades en Chitwan?",
+        "r": "El permiso para cualquier actividad dentro del parque cuesta 2.000 rupias por día. La canoa sale por 800-1.500 rupias por persona y el jeep de medio día por unas 1.500, en ambos casos más el permiso. La caminata de un día va desde 4.300 rupias en grupo grande sin comidas hasta 10.000 en privado con comidas, con el permiso incluido. El bosque comunitario se paga aparte, entre 300 y 500 rupias."
+      },
+      {
+        "p": "¿Qué animales se ven en Chitwan? ¿Es fácil ver un tigre?",
+        "r": "El tigre es muy difícil de ver: un guía puede encontrarlo una o dos veces al año, aunque en 2026 se estimaban 145 en el parque y sus alrededores. Chitwan tiene la mayor población de rinoceronte indio de Nepal, con 605 ejemplares en 2015. Ciervos, monos, pavos reales, martines pescadores y garzas se ven con mucha facilidad, y en canoa los cocodrilos son muy comunes. Aun así, muchos visitantes se van sin ver los grandes mamíferos."
+      },
+      {
+        "p": "¿Es recomendable montar en elefante en Chitwan?",
+        "r": "Varias agencias lo desaconsejan por crueldad con el animal. La mayoría de los elefantes de la zona son domésticos y se usan para pasear turistas."
+      },
+      {
+        "p": "¿Qué hay que llevar para caminar por el parque?",
+        "r": "Lleva pantalón y manga larga de colores apagados y terrosos, 2 litros de agua por persona y día, protector solar y repelente con DEET contra mosquitos y garrapatas. Las caminatas exigen una forma física moderada, porque se recorren de 10 a 15 km a pie."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Chitwan National Park»",
+      "url": "https://en.wikipedia.org/wiki/Chitwan_National_Park",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Parque nacional de Royal Chitwan»",
+      "url": "https://es.wikipedia.org/wiki/Parque_nacional_de_Royal_Chitwan",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Chitwan National Park», revisión del 2026-10-12",
+      "url": "https://en.wikivoyage.org/wiki/Chitwan_National_Park",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

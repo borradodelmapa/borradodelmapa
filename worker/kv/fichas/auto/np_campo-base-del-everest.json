@@ -1,0 +1,800 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:everest-base-camp.",
+  "ref": "np:everest-base-camp",
+  "nombre": "Campo Base del Everest",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Hay dos campos base, uno a cada lado del Everest; el sur está en Nepal y el norte en el Tíbet.",
+      "f": [
+        "W2"
+      ],
+      "cita": "son, en realidad, dos campamentos base, localizados cada uno en los lados opuestos del monte Everest"
+    },
+    {
+      "t": "El campo base sur, en Nepal, está a 5.364 m de altitud.",
+      "f": [
+        "W2"
+      ],
+      "cita": "El campamento base sur (south base camp) se encuentra en Nepal a una altitud de 5,364 metros (17,598 pies)"
+    },
+    {
+      "t": "Son zonas de acampada rudimentarias que usan los escaladores al subir y bajar.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Son zonas de acampada rudimentarias situadas en las laderas del Monte Everest que son utilizadas por los escaladores durante su ascensión y posterior descenso."
+    },
+    {
+      "t": "El campo base sur sirve para la vía sureste de escalada.",
+      "f": [
+        "W2"
+      ],
+      "cita": "El campamento base sur se utiliza cuando se toma la vía sureste para realizar la escalada"
+    },
+    {
+      "t": "Los escaladores pasan varios días en el campo base para aclimatarse.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Los escaladores descansan varios días en estos campamentos base con el objetivo de aclimatarse y evitar posibles peligros derivados del mal de altura."
+    },
+    {
+      "t": "En 2015, unas 40.000 personas al año hacían la caminata desde Lukla hasta el campo base.",
+      "f": [
+        "W2"
+      ],
+      "cita": "En el 2015, se observó que cerca de 40,000 personas al año toman la caminata desde el aeropuerto de Lukla al campamento base del Everest en Nepal"
+    },
+    {
+      "t": "El 25 de abril de 2015 un terremoto de magnitud 7,8 provocó una avalancha en el Pumori que arrasó el campo base sur.",
+      "f": [
+        "W2"
+      ],
+      "cita": "El 25 de abril de 2015, un terremoto de magnitud 7.8 MW golpeó Nepal y desencadenó una avalancha en el Pumori que barrió el campamento base sur."
+    },
+    {
+      "t": "En esa avalancha murieron al menos 19 personas.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Al menos 19 personas murieron como resultado."
+    },
+    {
+      "t": "El 12 de mayo de 2015 hubo un segundo terremoto de magnitud 7,3 en la misma zona.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Dos semanas después, el 12 de mayo, un segundo terremoto de magnitud 7.3 MW golpeó la misma zona"
+    },
+    {
+      "t": "Los terremotos dañaron algunos senderos hacia el campo base.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Algunos de los senderos que conectaban al campamento base del Everest resultaron dañados y necesitaron reparaciones."
+    },
+    {
+      "t": "La región del Everest (Khumbu) incluye el Parque Nacional de Sagarmatha (por encima de Monju) y su zona de amortiguación (entre Lukla y Monju).",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Everest region includes the Sagarmatha National Park (above Monju) and the Sagarmatha National Park Buffer Zone (between Lukla and Monju)."
+    },
+    {
+      "t": "El Parque Nacional de Sagarmatha es Patrimonio Mundial de la UNESCO.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The former is listed as a UNESCO World Heritage site."
+    },
+    {
+      "t": "Namche Bazaar está a 3.440 m, en el valle del río Dudh Kosi.",
+      "f": [
+        "W2"
+      ],
+      "cita": "a la capital sherpa de Namche Bazaar, 3,440 metros (11,290 pies), siguiendo el valle del río Dudh Kosi."
+    },
+    {
+      "t": "Antes del campo base se pasa por Gorakshep, terreno llano bajo el Kala Patthar (5.545 m) y el Pumori.",
+      "f": [
+        "W2"
+      ],
+      "cita": "por la vía de Gorakshep, el terreno llano bajo el Kala Patthar, 5,545 metros (18,192 pies) y el Pumori."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "Se puede hacer trekking todo el año.",
+      "f": [
+        "WV"
+      ],
+      "cita": "While trekking is possible in this area the whole year round"
+    },
+    {
+      "t": "Mejores épocas: de principios de marzo a mediados de mayo y de principios de septiembre a finales de noviembre.",
+      "f": [
+        "WV"
+      ],
+      "cita": "the best times to visit are from the beginning of March to mid May and from the beginning of September to end of November."
+    },
+    {
+      "t": "En invierno hace mucho frío; la nieve puede impedir subir más allá de Tengboche y los albergues de más arriba pueden estar cerrados.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The winters are very cold and snow may make it difficult to travel higher than Tengboche, and also lodges may be closed above this altitude."
+    },
+    {
+      "t": "En verano llueve y las cumbres suelen quedar tapadas por las nubes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Summers, on the other hand, are wet, and the spectacular peaks often lost in the clouds."
+    },
+    {
+      "t": "En primavera el polvo de las llanuras de la India resta visibilidad a las montañas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "dust from the plains of India during the spring routinely provide less than ideal conditions for clear mountain views."
+    },
+    {
+      "t": "Tras el monzón las vistas son mejores, pero los días son más cortos y fríos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The views are much better after the summer monsoons have cleared the atmosphere of dust, but the days are shorter and cooler."
+    },
+    {
+      "t": "De Lukla a Namche Bazaar se tarda unos dos días.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Toma aproximadamente dos días alcanzar la villa, que es un centro de actividad de la zona."
+    },
+    {
+      "t": "En Namche se suele hacer un día de descanso para aclimatarse.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Normalmente en este punto, los escaladores se toman un día de descanso para aclimatarse."
+    },
+    {
+      "t": "De Namche a Dingboche son dos días más, y allí se descansa otro día.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Entonces toman otra caminata de dos días hasta Dingboche, 4,260 metros (13,980 pies) antes de descansar otro día para continuar con la aclimatación."
+    },
+    {
+      "t": "De Dingboche al campo base, por Gorakshep, son otros dos días.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Les lleva dos días más llegar al campamento base del Everest por la vía de Gorakshep"
+    }
+  ],
+  "fauna": [
+    {
+      "t": "Son comunes el danfe (faisán, ave nacional), varias aves de montaña y las cabras de montaña.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The national bird, danfe (a kind of pheasant), white-winged gros beak, Horn lark, Robin Accentor, Tibetan Snow Cock, red-billed chugh, yellow-billed chugh and mountain goats are common in the Khumbu area"
+    },
+    {
+      "t": "Como los sherpas no matan animales, a menudo se puede uno acercar mucho a ellos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "because the Sherpas do not kill animals or birds, people can often get very close before they take off."
+    },
+    {
+      "t": "Ciervo almizclero y leopardo de las nieves viven en la zona, pero se ven menos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Musk deer and snow leopards are also natives of the Khumbu mountains, albeit rarer."
+    },
+    {
+      "t": "En abril y principios de mayo florecen los rododendros.",
+      "f": [
+        "WV"
+      ],
+      "cita": "April and early May is a good time to see the hedgerows and trees bursting into bloom, with Rhododendrons, in particular, adding a spectacular splash of colour to the landscape."
+    }
+  ],
+  "sitios": [
+    {
+      "hace": "Final de la caminata; zona de acampada de los escaladores",
+      "maps": "Everest Base Camp",
+      "nota": "A 5.364 m",
+      "f": [
+        "W2"
+      ],
+      "cita": "El campamento base sur (south base camp) se encuentra en Nepal a una altitud de 5,364 metros (17,598 pies)",
+      "comprobado": null
+    },
+    {
+      "hace": "Primera noche tras llegar a Lukla; control de entrada al parque",
+      "maps": "Monjo",
+      "nota": "El control del parque está justo después del pueblo",
+      "f": [
+        "WV"
+      ],
+      "cita": "Just after the village of Monju, there is check point for entering the Sagarmatha National Park.",
+      "comprobado": null
+    },
+    {
+      "hace": "Día de aclimatación; restaurantes, cafés, museos y clínica de medicina tibetana",
+      "maps": "Namche Bazaar",
+      "nota": "Capital sherpa no oficial",
+      "f": [
+        "WV"
+      ],
+      "cita": "Namche Bazaar – the unofficial Sherpa capital, with restaurants, cafés, museums and a Tibetan medical clinic",
+      "comprobado": null
+    },
+    {
+      "hace": "Paseo de aclimatación desde Namche; cueva sagrada",
+      "maps": "Khumjung",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Khumjung – good place to take an acclimatisation walk when staying in Namche; sacred cave",
+      "comprobado": null
+    },
+    {
+      "hace": "Atención médica occidental",
+      "maps": "Kunde Clinic",
+      "nota": "Por encima de Namche; médicos de formación occidental",
+      "f": [
+        "WV"
+      ],
+      "cita": "Kunde Clinic, in Kunde Village (above Namche) has Western trained doctors and is a surprisingly well equipped facility",
+      "comprobado": null
+    },
+    {
+      "hace": "Tratamientos de medicina tibetana",
+      "maps": "The Healing Centre Namche",
+      "nota": "Junto al hotel Camp de Base",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Healing Centre in Namche offers treatments using natural formulas. It is next to the Camp de Base hotel",
+      "comprobado": null
+    },
+    {
+      "hace": "Alojarse en un hotel de lujo",
+      "maps": "Hotel Everest View",
+      "nota": "Cerca de Khumjung",
+      "f": [
+        "WV"
+      ],
+      "cita": "ranges from the luxurious Everest View Hotel near Khumjung to the very comfortable lodges in Namche",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el gran monasterio",
+      "maps": "Tengboche Monastery",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Tengboche – large monastery",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver un pequeño monasterio en el pueblo",
+      "maps": "Pangboche",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Pangboche – picturesque village with small monastery",
+      "comprobado": null
+    },
+    {
+      "hace": "Día de descanso para aclimatarse",
+      "maps": "Dingboche",
+      "nota": "A 4.260 m",
+      "f": [
+        "W2"
+      ],
+      "cita": "Entonces toman otra caminata de dos días hasta Dingboche, 4,260 metros (13,980 pies) antes de descansar otro día para continuar con la aclimatación.",
+      "comprobado": null
+    },
+    {
+      "hace": "Parada en la ruta del Everest",
+      "maps": "Pheriche",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Pheriche – station on the Mount Everest Trek",
+      "comprobado": null
+    },
+    {
+      "hace": "Último tramo antes del campo base",
+      "maps": "Gorak Shep",
+      "nota": "Terreno llano bajo el Kala Patthar",
+      "f": [
+        "W2"
+      ],
+      "cita": "Les lleva dos días más llegar al campamento base del Everest por la vía de Gorakshep, el terreno llano bajo el Kala Patthar",
+      "comprobado": null
+    },
+    {
+      "hace": "Pico de 5.545 m junto a Gorak Shep",
+      "maps": "Kala Patthar",
+      "nota": "",
+      "f": [
+        "W2"
+      ],
+      "cita": "el terreno llano bajo el Kala Patthar, 5,545 metros (18,192 pies) y el Pumori.",
+      "comprobado": null
+    },
+    {
+      "hace": "Base para el trekking al Island Peak o excursión de un día al Chhukhung Ri",
+      "maps": "Chhukhung",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Chhukhung – support village for the trekking to Island Peak or day trip to Chhukhung Ri",
+      "comprobado": null
+    },
+    {
+      "hace": "Centro de la ruta de Gokyo",
+      "maps": "Gokyo",
+      "nota": "A 4.790 m",
+      "f": [
+        "WV"
+      ],
+      "cita": "Gokyo – a village at 4,790 m, which forms the centre of the Gokyo trail.",
+      "comprobado": null
+    },
+    {
+      "hace": "Cruzar el paso con vistas al Everest, Nuptse, Lhotse y Makalu",
+      "maps": "Renjo La Pass",
+      "nota": "A 5.360 m, entre Gokyo y Lungden",
+      "f": [
+        "WV"
+      ],
+      "cita": "Renjo La is a pass between Gokyo and Lungden with an elevation of 5,360 m and excellent views of Everest, Nuptse, Lhotse, Makalu, etc.",
+      "comprobado": null
+    },
+    {
+      "hace": "Centro de rescate de emergencia",
+      "maps": "Machermo",
+      "nota": "En el Namgyal lodge; dos médicos voluntarios",
+      "f": [
+        "WV"
+      ],
+      "cita": "There is an emergency rescue centre in Namgyal lodge in the village of Machermo in the Gokyo Valley manned by two volunteer doctors.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar un pueblo tradicional al final de la antigua ruta comercial desde Tingri",
+      "maps": "Thame",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Thame – traditional and pretty village, at the end of the old trade route from Tingri",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "Hace falta el permiso TIMS para cualquier trekking, también en Khumbu.",
+      "f": [
+        "WV"
+      ],
+      "cita": "TIMS (Trekking Information Management System) permits are required to venture forth for any trek, also for the Khumbu region"
+    },
+    {
+      "t": "El TIMS se saca en Katmandú, en el Nepal Tourism Board, con una foto de carné y un formulario.",
+      "f": [
+        "WV"
+      ],
+      "cita": "they are easy to obtain in Kathmandu at Nepal Tourism Board against US$20, a recent passport size photo and filling in the required form"
+    },
+    {
+      "t": "Si se va con un grupo organizado, el operador tramita el permiso.",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you are with an organised trekking party your tour operator will do this for you."
+    },
+    {
+      "t": "Hay que pagar la entrada al parque nacional, en Katmandú o al entrar al parque.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Also a National Park Entry Fee is required and can be obtained either in Kathmandu or while entering the Park."
+    },
+    {
+      "t": "En el control del parque hay que enseñar el pasaporte.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Passports need to be shown and there is a 1,000 Rs entry fee."
+    },
+    {
+      "t": "Albergues y restaurantes solo aceptan rupias nepalíes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Lodges and restaurants in Khumbu only accept Nepalese rupees."
+    },
+    {
+      "t": "Pasar las piedras mani dejándolas a la derecha y rodear estupas y girar ruedas de oración en el sentido de las agujas del reloj.",
+      "f": [
+        "WV"
+      ],
+      "cita": "always pass mani stones and other religious objects with your right side nearest to the object and circumambulate stupas and turn prayer wheels in a clockwise direction."
+    },
+    {
+      "t": "No sentarse nunca sobre piedras mani, estupas u objetos religiosos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Never sit on mani stones, stupas or religious objects."
+    },
+    {
+      "t": "No dejar residuos no biodegradables en Khumbu: llevarlos de vuelta a Katmandú.",
+      "f": [
+        "WV"
+      ],
+      "cita": "trekkers can help by not leaving any kind of non-biodegradable material in Khumbu, but instead take it back to Kathmandu for disposal."
+    },
+    {
+      "t": "El campo base norte (Tíbet) exige un permiso del Gobierno chino además del permiso del Tíbet.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Para visitar el campamento base norte (en el lado de China) es necesario un permiso del gobierno de China, además del permiso requerido para visitar el Tíbet mismo."
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Permiso TIMS: 20 dólares.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "they are easy to obtain in Kathmandu at Nepal Tourism Board against US$20"
+    },
+    {
+      "t": "Entrada al parque en el control de Monju: 1.000 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Passports need to be shown and there is a 1,000 Rs entry fee."
+    },
+    {
+      "t": "Para ciudadanos de países SAARC: TIMS 650 rupias y parque nacional 1.695 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "For SAARC country TIMS fees rs 650 and for Sagarmatha National Park Rs 1695"
+    },
+    {
+      "t": "Comida y alojamiento: 1.500–2.000 rupias por persona y día; sube con la altitud.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Budget can vary hugely between Rs 1,500–2,000 per person per day for food and accommodation – prices rise with the altitude"
+    },
+    {
+      "t": "Una botella de agua en Namche cuesta unas 100 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "A bottle in Namche costs about 100rs."
+    },
+    {
+      "t": "Té, café instantáneo o limonada: 50–150 rupias la taza.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "are available in every lodge or tea shop for Rs 50 to 150 a cup."
+    },
+    {
+      "t": "Internet por satélite en Namche: 20–25 rupias por minuto.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Satellite access costs between Rs 20–25 per minute, so keep a sharp eye on the clock when online."
+    }
+  ],
+  "llegar": [
+    {
+      "t": "Lo normal es volar de Katmandú a Lukla.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Normalmente los senderistas toman un vuelo de Katmandú a Lukla para ahorrar tiempo y energía"
+    },
+    {
+      "t": "No hay carretera de Katmandú a Lukla.",
+      "f": [
+        "W2"
+      ],
+      "cita": "ya que no hay carreteras de Katmandú a Lukla, el único medio para transportar suministros grandes y pesados es solo por avión."
+    },
+    {
+      "t": "El vuelo desde Katmandú dura unos 25 minutos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Flights from Kathmandu take around 25 minutes."
+    },
+    {
+      "t": "Hay menos vuelos en temporada baja.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are numerous flights flying the Kathmandu–Lukla route, though with a much reduced service during the off-season months."
+    },
+    {
+      "t": "En la época de lluvias los retrasos pueden llegar a una semana.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Be aware that during the summer rainy season there may be substantial delays, and even a wait of one week is not uncommon."
+    },
+    {
+      "t": "A pie: autobús de Katmandú a Jiri o Shivalaya y unos seis días andando hasta Namche.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Some buses are going a bit further to Shivalaya. From here to Namche Bazaar it is about a six-day walk."
+    },
+    {
+      "t": "Otra opción menos usada es caminar desde Tumlingtar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "A less popular alternative is to walk from Tumlingtar."
+    },
+    {
+      "t": "Desde Jainagar (India), día o día y medio en autobús o jeep hasta Phaplu.",
+      "f": [
+        "WV"
+      ],
+      "cita": "From Jainagar it's about 1–1½ days by bus or jeep to Phaplu via Madar, Sirha, Mirchaya Ramnagar, Katari, Okhaldunga and Salleri."
+    },
+    {
+      "t": "De Phaplu a Namche, unos 5 días de trekking por Ringmo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Phaplu to Ringmo and 5 days trek to Namche."
+    },
+    {
+      "t": "En Khumbu no hay carreteras: se va a pie y a veces a caballo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "On foot. There are no roads in the Khumbu region. And sometimes by horse."
+    }
+  ],
+  "gente": [
+    {
+      "t": "La región es tierra sherpa; Namche Bazaar es su capital.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Desde Lukla, los escaladores viajan cuesta arriba a la capital sherpa de Namche Bazaar"
+    },
+    {
+      "t": "Los sherpas hablan su propia lengua, el sherpa, emparentada con el tibetano.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Sherpas speak their own language called Sherpa, which is related to Tibetan."
+    },
+    {
+      "t": "La mayoría de sherpas de menos de 50 años entiende inglés básico y muchos lo hablan con fluidez.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Most Sherpas under the age of fifty can at least understand basic English, and many speak it fluently."
+    },
+    {
+      "t": "La mayoría de los sherpas practica el budismo tibetano.",
+      "f": [
+        "WV"
+      ],
+      "cita": "According to the customs of respect in Tibetan Buddhism (which most Sherpas adhere)"
+    },
+    {
+      "t": "Sherpas y porteadores abastecen el campo base sur con animales de carga, sobre todo yaks.",
+      "f": [
+        "W2"
+      ],
+      "cita": "El campamento base sur es abastecido por sherpas o porteadores ayudados por animales de carga, por lo general yaks."
+    },
+    {
+      "t": "Para orientarse basta con preguntar a la gente local por el siguiente pueblo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "just ask a local the way to the next village on your route, and they will direct you."
+    },
+    {
+      "t": "El riki-kur, tortitas de patata sherpa, no suele estar en la carta: hay que pedirlo con antelación.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Due to the effort involved in making them, they are generally not listed on lodge menus. However, most places will oblige if you order well in advance."
+    },
+    {
+      "t": "El sábado es día de mercado en Namche.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Expect a lengthy queue on Saturdays (market day)."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "El mal de altura afecta también a gente joven y sana.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Altitude sickness affects even young and healthy people and is a genuine problem in Khumbu."
+    },
+    {
+      "t": "Con mareo, palpitaciones o dolor de cabeza fuerte, bajar de inmediato.",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you feel dizzy, suffer palpitations or a severe headache, return immediately to lower altitude."
+    },
+    {
+      "t": "El mal de altura puede matar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Do not take altitude sickness lightly. It can and does kill."
+    },
+    {
+      "t": "Los yaks son agresivos: dejarlos pasar siempre desde el lado de arriba del sendero.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Always stand on the upper slope (i.e., above the path, away from the drop-off) to let yaks pass."
+    },
+    {
+      "t": "No beber agua de los arroyos sin hervirla o potabilizarla.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Do not drink water directly from streams, no matter how pristine it appears."
+    },
+    {
+      "t": "El centro de Machermo solo atiende emergencias.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Note: This is purely an emergency rescue centre, and the doctors will not treat common ailments."
+    },
+    {
+      "t": "Los puestos médicos del camino solo tratan dolencias leves.",
+      "f": [
+        "WV"
+      ],
+      "cita": "These stations generally have very rudimentary facilities and can only realistically offer treatment for very minor ailments"
+    },
+    {
+      "t": "Las botellas de plástico no se pueden reciclar en Khumbu; mejor llevar recipiente propio.",
+      "f": [
+        "WV"
+      ],
+      "cita": "As there is no way to recycle plastic bottles in Khumbu (there are bins available on all walks for plastic and paper)"
+    },
+    {
+      "t": "Usar poca leña o ninguna.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Wood for fires should be used sparingly, and not at all when possible."
+    },
+    {
+      "t": "Zona segura, pero conviene vigilar los objetos de valor.",
+      "f": [
+        "WV"
+      ],
+      "cita": "owing to the number of people flowing through the area on treks, it is advisable to always keep your valuables in sight."
+    },
+    {
+      "t": "En casi toda la región no hay teléfono fijo ni internet público.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are no telephone lines or public internet in most of the Everest region."
+    }
+  ],
+  "no_escribir": [
+    "Que desde el campo base se ve la cima del Everest: las fuentes no lo dicen.",
+    "Que el Kala Patthar es el mejor mirador del Everest: las fuentes solo dan su altitud.",
+    "Que Lukla es el aeropuerto más peligroso del mundo o su nombre Tenzing-Hillary: las fuentes no lo dicen.",
+    "Duración total del trekking de ida y vuelta (12-14 días u otra cifra): las fuentes solo dan tramos de subida.",
+    "Que el guía es obligatorio: las fuentes no lo mencionan.",
+    "Permiso o tasa local del municipio de Khumbu Pasang Lhamu: las fuentes no lo mencionan.",
+    "Precios del parque en dólares o vigentes para un año concreto: las fuentes dan cifras en rupias sin fecha.",
+    "Acceso en jeep o carretera hasta Lukla o el campo base sur: las fuentes dicen que no hay carreteras.",
+    "Vuelos de vuelta en helicóptero: las fuentes no los mencionan.",
+    "Edad hasta la que los sherpas hablan inglés: WV dice 50 años en un apartado y 70 en otro; no dar cifra exacta.",
+    "Datos del campo base norte (Tíbet) aplicados al lado nepalí.",
+    "W1 es una página de desambiguación y no aporta datos del destino."
+  ],
+  "seo": {
+    "titulo": "Campo Base del Everest: qué ver y cómo ir (2026)",
+    "descripcion": "Trekking al Campo Base del Everest (5.364 m): vuelo de 25 min a Lukla, ruta por Namche, permisos TIMS y parque, mejores épocas y mal de altura.",
+    "faq": [
+      {
+        "p": "¿Cuál es la mejor época para ir al Campo Base del Everest?",
+        "r": "Se puede hacer trekking todo el año, pero las mejores épocas son de principios de marzo a mediados de mayo y de principios de septiembre a finales de noviembre. En invierno hace mucho frío, la nieve puede impedir pasar de Tengboche y los albergues de más arriba pueden estar cerrados. En verano llueve y las cumbres suelen quedar tapadas. Tras el monzón las vistas son mejores, aunque los días son más cortos y fríos. En abril y principios de mayo florecen los rododendros."
+      },
+      {
+        "p": "¿Cómo se llega al Campo Base del Everest?",
+        "r": "Lo normal es volar de Katmandú a Lukla, un vuelo de unos 25 minutos, ya que no hay carretera. En temporada baja hay menos vuelos y en la época de lluvias los retrasos pueden llegar a una semana. Otra opción es ir en autobús de Katmandú a Jiri o Shivalaya y caminar unos seis días hasta Namche. En Khumbu no hay carreteras: se va a pie y a veces a caballo."
+      },
+      {
+        "p": "¿Cuántos días se tarda en llegar desde Lukla?",
+        "r": "De Lukla a Namche Bazaar se tarda unos dos días, y en Namche se suele hacer un día de descanso para aclimatarse. De Namche a Dingboche son dos días más, con otro día de descanso allí, y de Dingboche al campo base, pasando por Gorakshep, otros dos días."
+      },
+      {
+        "p": "¿Qué permisos hacen falta y cuánto cuestan?",
+        "r": "Hace falta el permiso TIMS (20 dólares), que se saca en Katmandú en el Nepal Tourism Board con una foto de carné y un formulario; si vas con grupo organizado lo tramita el operador. Además hay que pagar la entrada al Parque Nacional de Sagarmatha, 1.000 rupias en el control de Monju, donde hay que enseñar el pasaporte. Para ciudadanos de países SAARC el TIMS cuesta 650 rupias y el parque 1.695 rupias."
+      },
+      {
+        "p": "¿Cuánto dinero se necesita al día en el trekking?",
+        "r": "Comida y alojamiento cuestan entre 1.500 y 2.000 rupias por persona y día, y los precios suben con la altitud. Una botella de agua en Namche ronda las 100 rupias y una taza de té, café instantáneo o limonada, entre 50 y 150. Albergues y restaurantes solo aceptan rupias nepalíes."
+      },
+      {
+        "p": "¿Es peligroso el mal de altura en el Campo Base del Everest?",
+        "r": "Sí. El campo base sur está a 5.364 m y el mal de altura afecta también a gente joven y sana, y puede matar. Si notas mareo, palpitaciones o un dolor de cabeza fuerte, baja de inmediato. Los puestos médicos del camino solo tratan dolencias leves y el centro de Machermo solo atiende emergencias."
+      },
+      {
+        "p": "¿Qué normas hay que respetar en la región de Khumbu?",
+        "r": "Pasa las piedras mani dejándolas a la derecha y rodea estupas y gira ruedas de oración en el sentido de las agujas del reloj; nunca te sientes sobre objetos religiosos. No dejes residuos no biodegradables: llévalos de vuelta a Katmandú. Usa poca leña o ninguna y deja pasar a los yaks siempre desde el lado de arriba del sendero."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «EBC»",
+      "url": "https://en.wikipedia.org/wiki/EBC",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Campo Base del Everest»",
+      "url": "https://es.wikipedia.org/wiki/Campo_Base_del_Everest",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Khumbu», revisión del 2026-09-20",
+      "url": "https://en.wikivoyage.org/wiki/Khumbu",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

@@ -1,0 +1,599 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:bhaktapur.",
+  "ref": "np:bhaktapur",
+  "nombre": "Bhaktapur",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Ciudad del extremo este del valle de Katmandú, a unos 13 km de Katmandú.",
+      "f": [
+        "W1"
+      ],
+      "cita": "is a city in the east corner of the Kathmandu Valley in Nepal located about 13 kilometres (8.1 mi) from the capital city, Kathmandu"
+    },
+    {
+      "t": "Es el municipio más pequeño de Nepal y el más densamente poblado.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Bhaktapur is the smallest municipality of Nepal by size as well as the most densely populated."
+    },
+    {
+      "t": "El casco histórico está a 1401 m de altitud.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The conch-shaped historic city is at an altitude of 1,401 m"
+    },
+    {
+      "t": "Fue capital de Nepal desde el siglo XII hasta 1482.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Bhaktapur served as the capital of Nepal during the first half of Malla dynasty from the 12th century to 1482 when Nepal split into three independent kingdoms."
+    },
+    {
+      "t": "En 1769 fue conquistada y anexionada por el reino de Gorkha.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 1769, Bhaktapur was attacked and annexed into the expanding Gorkha Kingdom (which later became the Kingdom of Nepal)."
+    },
+    {
+      "t": "Patrimonio de la Humanidad de la UNESCO desde 1979.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Due to its well preserved medieval nature, UNESCO inscribed Bhaktapur as a World Heritage Site since 1979."
+    },
+    {
+      "t": "El terremoto de 2015 dañó 116 monumentos: 67 por completo y 49 parcialmente.",
+      "f": [
+        "W1"
+      ],
+      "cita": "damaged 116 heritages in the city. 67 of those heritages were completely damaged while 49 suffered from partial damages."
+    },
+    {
+      "t": "Se restauró tras el terremoto de 1934, pero aún se ven daños del de 2015.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Bhaktapur has been heavily restored following an earthquake in 1934 which severely damaged the city, but you will still see signs of damage from the 2015 quakes."
+    },
+    {
+      "t": "Desde los años 80 mejoró gracias al turismo y al Bhaktapur Development Project, financiado por Alemania Occidental.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Bhaktapur's economy and infrastructure would only improve from the 1980s, largely due to tourism and aid provided by West Germany as part of the Bhaktapur Development Project."
+    },
+    {
+      "t": "Según el censo de 2021, tiene 79.136 habitantes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The results of the 2021 Nepal census put the population of Bhaktapur at 79,136"
+    },
+    {
+      "t": "En 2014 recibió 301.012 turistas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Bhaktapur is one of the most visited tourist destination of Nepal with the city attracting 301,012 tourists in 2014."
+    },
+    {
+      "t": "El Nyatapola, pagoda de cinco tejados terminada en 1702, es su edificio más conocido.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Nyatapola, a five roofed pagoda completed in 1702 is the most famous structure of Bhaktapur"
+    }
+  ],
+  "cuando": [
+    {
+      "t": "Sus fiestas principales son Biskā jātrā, en primavera, y el carnaval de Sāpāru (Gai jatra).",
+      "f": [
+        "W1"
+      ],
+      "cita": "The city is also famous for its numerous festivals and carnivals like the spring festival of Biskā jātrā and the carnival of Sāpāru (or Gai jatra)"
+    },
+    {
+      "t": "La mayoría de sus más de 200 danzas tradicionales, casi todas con máscaras, forman parte del carnaval de Sāpāru.",
+      "f": [
+        "W1"
+      ],
+      "cita": "over 200 types of traditional dances, most of which are masked dances and except for a few, are a part of the annual carnival of Sāpāru (or Gai jatra)"
+    },
+    {
+      "t": "Si se visita varios días, la entrada puede valer hasta una semana.",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you plan to visit for several days, you can ask the counter to add a note to permit access to the city with the same ticket (at most one week)."
+    }
+  ],
+  "fauna": [],
+  "sitios": [
+    {
+      "hace": "Recorrer la antigua plaza real, con su palacio y sus templos.",
+      "maps": "Bhaktapur Durbar Square",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Bhaktapur Durbar Square was the seat of royalty before 1769 AD. The building now houses the National Art Gallery.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el palacio de las 55 ventanas y la Galería Nacional de Arte.",
+      "maps": "55 Window Palace",
+      "nota": "En la plaza Durbar",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Durbar square houses various monuments like the palace of fifty five windows, the Simhādhwākhā Lyākū palace which houses the National Art Gallery, one of the first museum of Nepal",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la Puerta Dorada, entrada al complejo del templo de Taleju.",
+      "maps": "Golden Gate",
+      "nota": "Las fuentes no coinciden en la fecha",
+      "f": [
+        "WV"
+      ],
+      "cita": "It has a famous Golden Gate dating back to 1756 AD and is the entrance to the marvelous Taleju Temple Complex",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo de tipo shikhara más alto de Nepal.",
+      "maps": "Silu Mahadev Temple",
+      "nota": "En el lado este de la plaza Durbar",
+      "f": [
+        "W1"
+      ],
+      "cita": "The temple of Silu Māhādeo (meaning \"the Shiva of Silu\") located on the eastern part of Bhaktapur Durbar Square is the tallest Shikhara style building in Nepal.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el pabellón reconstruido con técnicas antisísmicas.",
+      "maps": "Chyasilin Mandap",
+      "nota": "Reconstruido en 1990; resistió el terremoto de 2015",
+      "f": [
+        "W1"
+      ],
+      "cita": "Chyasilin Mandap has been rebuilt in 1990 using contemporary earthquake proof technology. The building survived the 2015 earthquake unharmed.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la pagoda de cinco pisos, la más alta del país.",
+      "maps": "Nyatapola Temple",
+      "nota": "En la plaza Taumadhi",
+      "f": [
+        "WV"
+      ],
+      "cita": "Taumadhi Square's Nyatapol Temple dates back to 1702 AD. The colossal five-storied edifice is the country's tallest pagoda temple.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo dedicado a Bhairav.",
+      "maps": "Bhairavnath Temple",
+      "nota": "Junto al Nyatapola",
+      "f": [
+        "WV"
+      ],
+      "cita": "Next to the Nyatapol Temple is the rectangular shaped Bhairavnath Temple. It houses a gilded bust of Bhairav, the ferocious manifestation of Lord Shiva.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo de tres pisos que, según la tradición, se hizo con el tronco de un solo árbol.",
+      "maps": "Dattatreya Temple",
+      "nota": "En la plaza Dattatreya",
+      "f": [
+        "WV"
+      ],
+      "cita": "Constructed by King Yaksha Malla, the giant three-storied temple is believed to have been built with the trunk of a single tree.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la Ventana del Pavo Real.",
+      "maps": "Peacock Window",
+      "nota": "En el lateral del Museo de Talla en Madera, en la plaza Dattatreya",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Peacock Window, one of Nepal's signature sights, it's along the side of the Wood Carving Museum in Dattatraya Square.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el museo de talla en madera y bronce del antiguo Pujari Math.",
+      "maps": "Woodcarving Museum",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Today, the Pujari Math has been converted into a Woodcraft and Bronze Museum.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver cómo se modelan, cuecen y secan al sol las vasijas de barro.",
+      "maps": "Pottery Square",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Clay pots are molded and fired in the alleys adjacent to Pottery Square, and the square itself is full of pottery drying in the sun.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver lingams y ghats de cremación junto al río.",
+      "maps": "Hanumante Ghat",
+      "nota": "Hay cremaciones",
+      "f": [
+        "WV"
+      ],
+      "cita": "Hanumanghat: a collection of lingams (including Nepal's largest) and riverside cremation ghats.",
+      "comprobado": null
+    },
+    {
+      "hace": "Fotografiar los grandes estanques y sus reflejos.",
+      "maps": "Siddha Pokhari",
+      "nota": "A 10 minutos a pie al oeste, por Nagarkot Road",
+      "f": [
+        "WV"
+      ],
+      "cita": "The largest, Siddha Pokhari and Guhya Pokhari (Na Pukhu), are 10 minutes' walk to the west of the city boundary along Nargarkot Road.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver uno de los estanques pequeños de dentro de la ciudad.",
+      "maps": "Nag Pokhari",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are also a number of smaller ones in the city itself, Nag Pokhari is particularly attractive.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el antiguo templo de Vishnu, también Patrimonio de la UNESCO.",
+      "maps": "Changu Narayan Temple",
+      "nota": "Fuera de la ciudad, 6 km al norte; los no hindúes no pueden entrar al templo",
+      "f": [
+        "WV"
+      ],
+      "cita": "Changu Narayan, Changu (6 km to the north of Bhaktapur and 22 km east of Kathmandu.)",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el santuario de Ganesh.",
+      "maps": "Surya Binayak Temple",
+      "nota": "Fuera de la ciudad, unos 2 km al sur a pie",
+      "f": [
+        "WV"
+      ],
+      "cita": "Surya Vinayak is at the walking distance of about 2 km to the south of the city and is the holy shrine of god Ganesh",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el amanecer y la panorámica de montañas.",
+      "maps": "Nagarkot",
+      "nota": "A 18 km al noreste, a 2195 m",
+      "f": [
+        "WV"
+      ],
+      "cita": "Nagarkot is nestled on hill at altitude of 2,195 m to the north east of Bhaktapur at a distance of 18 km.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el trabajo de cerámica y de máscaras.",
+      "maps": "Madhyapur Thimi",
+      "nota": "Entre Katmandú y Bhaktapur",
+      "f": [
+        "WV"
+      ],
+      "cita": "Thimi - a town between Kathmandu and Bhaktapur well known for its pottery work.",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "Dentro de la ciudad no se permiten rickshaws, tuk-tuks ni taxis.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Rickshaws, tuk-tuks or taxis are not allowed inside the city: an inconvenience more than made up for by the quiet and clean air."
+    },
+    {
+      "t": "La entrada se paga en los accesos principales o en la puerta de la plaza Durbar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Entrance fee of the heritage site can be paid at the main entrances of the heritage site and also the gate of Durbar Square"
+    },
+    {
+      "t": "Se puede pedir en taquilla que la entrada valga varios días, hasta una semana.",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you plan to visit for several days, you can ask the counter to add a note to permit access to the city with the same ticket (at most one week)."
+    },
+    {
+      "t": "Los no hindúes no pueden entrar al templo de Changu Narayan.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Non-Hindus are not allowed to enter the temple."
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Entrada a la zona patrimonial para extranjeros: 1800 NPR, que ayudan a pagar las reparaciones del terremoto de 2015.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The entrance fee of the heritage site (a larger area containing the Durbar Square) for foreigners is 1800 NPR, which is used to partly fund repairs following the 2015 earthquake."
+    },
+    {
+      "t": "Los visitantes de países de la SAARC y de China pagan 500 NPR.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Visitors from SAARC member countries (Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan and Sri Lanka) and China pay NPR 500."
+    },
+    {
+      "t": "Según Wikipedia en español, la entrada cuesta 15 USD por persona. Es un dato distinto al de Wikivoyage.",
+      "f": [
+        "W2"
+      ],
+      "de_cuando": "",
+      "cita": "El turista ha de tener en cuenta que cobran una entrada a la ciudad de 15 usd por persona, por ser ciudad histórica."
+    },
+    {
+      "t": "El bus desde Katmandú costaba unos 40 NPR a los locales y unos 50 NPR a los extranjeros.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The fare from Kathmandu to Bhaktapur was approximately 40 NPR by bus for local people. Foreigner's will be charged more, e.g. 50 NPR."
+    },
+    {
+      "t": "Un taxi de ida desde Thamel cuesta de media 1000 rupias, para un trayecto de 16 km.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The average cost for a one-way taxi from Thamel to Bhaktapur is Rs 1000 for the 16 km drive."
+    },
+    {
+      "t": "Comer en Mi:loco Cafe, junto a la entrada y la parada de bus, cuesta entre 500 y 1000 NPR.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "octubre de 2024",
+      "cita": "Near the entrance of the heritage site and the bus stop. A good option if you just get off a bus from Kathmandu and are hungry. NPR 500 – 1000. (updated Oct 2024)"
+    }
+  ],
+  "llegar": [
+    {
+      "t": "Desde la parada junto a Bhadrakali salen un minibús hasta la parada Kamal Binayak y un bus grande hasta Charansingh.",
+      "f": [
+        "WV"
+      ],
+      "cita": "you may take minibus (bound for Kamal Binayak stop in Bhaktapur) or big bus (bound for Charansingh stop in Bhaktapur) from the bus stop near Bhadrakali"
+    },
+    {
+      "t": "Un bus exprés sale de Bag Bazar, en Katmandú, y solo para en Maitighar y Sallaghari.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You can save time by taking Express Bus (this does not stop in between except in Maitighar and Sallaghari) from Bag bazar in Kathmandu."
+    },
+    {
+      "t": "El trayecto dura de 40 a 60 minutos y termina justo fuera de la ciudad.",
+      "f": [
+        "WV"
+      ],
+      "cita": "In either case it takes about 40–60 minutes and drops you off just outside of the city."
+    },
+    {
+      "t": "Para volver a Patan o Katmandú hay taxis y buses fuera de la primera puerta principal.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You can easily hail a taxi or pick up a return bus to either Patan or Kathmandu just outside of the first main gate that leads into the city."
+    },
+    {
+      "t": "Está cerca del aeropuerto internacional de Katmandú y en la carretera hacia Kodari, en la frontera china.",
+      "f": [
+        "WV"
+      ],
+      "cita": "it is located close to the Kathmandu international airport and on the road connecting Kathmandu and Kodari (Chinese border)"
+    },
+    {
+      "t": "Dentro de la ciudad, lo mejor es moverse a pie.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Once in Bhaktapur, walking is the best way to experience the quiet, dusty lanes squares."
+    },
+    {
+      "t": "A Changu Narayan se llega en 1,5 horas a pie, con los 2 últimos km empinados, o en un minibús de unos 30 minutos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "To get there it's about a 1.5 hour relatively pleasant walk, though the final 2km are steep, or local minibuses leave from the corner of Nagarkot Road and Changunarayan Road"
+    }
+  ],
+  "gente": [
+    {
+      "t": "Alrededor del 90 % de la población es newar.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Around 90% of the population of Bhaktapur belong to the Newar ethnic group."
+    },
+    {
+      "t": "Es una ciudad mayoritariamente hindú y habla un dialecto propio del newar (Nepal Bhasa).",
+      "f": [
+        "W1"
+      ],
+      "cita": "Compared to other Newar settlements, Bhaktapur is predominantly Hindu and speaks a distinct dialect of Nepal Bhasa."
+    },
+    {
+      "t": "Muchos habitantes, sobre todo los mayores, no hablan nepalí sino newari.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Buena parte de sus habitantes, especialmente los más ancianos, no hablan nepalí, sino newari."
+    },
+    {
+      "t": "La ciudad se divide en barrios (toles), cada uno organizado en torno a una plaza con fuente o pozo y un altar.",
+      "f": [
+        "W2"
+      ],
+      "cita": "estando dividida la ciudad en diferentes barrios (toles) articulados en torno a una plaza con un pozo o una fuente pública y un altar religioso permanente."
+    },
+    {
+      "t": "Su plato más conocido es el jūjū dhau, un yogur de leche de búfala.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It is also famous for its cuisine with the jūjū dhau, a type of yogurt made from buffalo milk being the most popular."
+    },
+    {
+      "t": "Es un centro alfarero conocido también por sus máscaras de arcilla negra.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The city is equally famous for artistic masks made from black clay with colourful decoration."
+    },
+    {
+      "t": "Hay 364 phalchas, espacios comunales de descanso que los vecinos usan para reunirse.",
+      "f": [
+        "W1"
+      ],
+      "cita": "today there are 364 phalcas in Bhaktapur consecrated with most dating from the Malla dynasty."
+    },
+    {
+      "t": "Cada barrio tiene al menos un hiti (fuente tradicional), unos 104 en total.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Today, there is at least one hiti in each of Bhaktapur's neighborhood totaling to about 104."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "Hanumanghat es un lugar de cremaciones junto al río.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Hanumanghat: a collection of lingams (including Nepal's largest) and riverside cremation ghats."
+    },
+    {
+      "t": "En el templo de Changu Narayan no pueden entrar los no hindúes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Non-Hindus are not allowed to enter the temple."
+    },
+    {
+      "t": "En el bus se paga al bajar; conviene preguntar el precio antes de subir porque a los extranjeros se les cobra distinto.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Since foreigners may be charged for a different price, do ask about the price before getting on the bus to avoid disputes when getting off the bus."
+    },
+    {
+      "t": "Los vecinos sí pueden circular en moto, así que hay que tener cuidado en las callejuelas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "However, locals are permitted to use motorbikes, and consequently some caution is needed when walking around the narrow streets."
+    },
+    {
+      "t": "Las casas de huéspedes aceptan Visa, pero cobran un pequeño recargo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "the guest houses accept Visa but add a small percentage to cover bank charges."
+    },
+    {
+      "t": "Durante la fiesta de Dasain se sacrifican animales macho a la diosa Durga.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Dasain (en hindi Dussehra) en la que se sacrifican animales macho a la diosa Durga."
+    }
+  ],
+  "no_escribir": [
+    "Que la entrada cuesta 15 USD: lo dice Wikipedia en español, pero Wikivoyage da 1800 NPR para extranjeros.",
+    "Una fecha única para la Puerta Dorada: Wikipedia (en) da 1751–1754 y Wikivoyage 1756.",
+    "Que el templo Dattatreya se hizo de un solo árbol como hecho comprobado: las fuentes lo presentan como creencia popular.",
+    "Que Changu Narayan es sin duda el templo más antiguo del valle: Wikipedia (en) dice solo «uno de los más antiguos».",
+    "La población de 72.543 habitantes (censo de 2001): el censo de 2021 da 79.136.",
+    "Que «Bhadgaon» es el nombre en bengalí: Wikipedia (en) lo da como nombre histórico (Bhatgaon, en hindustaní y khas).",
+    "Mejor época para viajar, clima por meses o número de días recomendado: ninguna fuente lo dice.",
+    "Que el fundador se llamaba Ananda Deva «Malla»: Wikipedia (en) dice Ananda Deva y explica que el apellido Malla surgió después.",
+    "Que las vistas del Himalaya se tienen desde Bhaktapur: las fuentes las sitúan en Nagarkot, a 18 km."
+  ],
+  "seo": {
+    "titulo": "Bhaktapur: qué ver y cómo ir desde Katmandú (2026)",
+    "descripcion": "Nyatapola, plaza Durbar y barrios newar a 13 km de Katmandú. Entrada 1800 NPR para extranjeros, bus de 40-60 min y sin taxis dentro de la ciudad.",
+    "faq": [
+      {
+        "p": "¿Cuánto cuesta la entrada a Bhaktapur?",
+        "r": "La entrada a la zona patrimonial cuesta 1800 NPR para extranjeros y 500 NPR para visitantes de países de la SAARC y de China. El dinero ayuda a pagar las reparaciones del terremoto de 2015. Se paga en los accesos principales o en la puerta de la plaza Durbar. Wikipedia en español habla de 15 USD por persona, una cifra distinta a la de Wikivoyage."
+      },
+      {
+        "p": "¿Puedo usar la misma entrada varios días?",
+        "r": "Sí. Si vas a quedarte varios días, pide en la taquilla que la entrada sea válida durante más tiempo, hasta un máximo de una semana."
+      },
+      {
+        "p": "¿Cómo se llega a Bhaktapur desde Katmandú?",
+        "r": "Bhaktapur está a unos 13 km de Katmandú. Un bus exprés sale de Bag Bazar y solo para en Maitighar y Sallaghari. El trayecto dura de 40 a 60 minutos y termina justo fuera de la ciudad. El billete costaba unos 50 NPR a los extranjeros y unos 40 NPR a los locales. Se paga al bajar, así que conviene preguntar el precio antes de subir. Un taxi de ida desde Thamel cuesta de media 1000 rupias por un recorrido de 16 km."
+      },
+      {
+        "p": "¿Cómo moverse dentro de Bhaktapur?",
+        "r": "Lo mejor es ir a pie, porque dentro de la ciudad no se permiten rickshaws, tuk-tuks ni taxis. Los vecinos sí pueden circular en moto, así que hay que tener cuidado en las callejuelas. Para volver a Patan o a Katmandú hay taxis y buses fuera de la primera puerta principal."
+      },
+      {
+        "p": "¿Qué ver en Bhaktapur?",
+        "r": "El edificio más conocido es el Nyatapola, una pagoda de cinco tejados terminada en 1702. La ciudad es Patrimonio de la Humanidad de la UNESCO desde 1979. Merece la pena recorrer sus barrios o toles, cada uno organizado en torno a una plaza con fuente o pozo y un altar. Hay unas 104 fuentes tradicionales (hitis) y 364 phalchas, espacios comunales de descanso. Otros puntos de interés son Hanumanghat, lugar de cremaciones junto al río, y sus talleres de alfarería y de máscaras de arcilla negra. No te vayas sin probar el jūjū dhau, un yogur de leche de búfala."
+      },
+      {
+        "p": "¿Cuándo son las fiestas principales de Bhaktapur?",
+        "r": "La fiesta de Biskā jātrā se celebra en primavera. La otra gran fiesta es el carnaval de Sāpāru (Gai jatra), que reúne la mayoría de sus más de 200 danzas tradicionales, casi todas con máscaras. Durante la fiesta de Dasain se sacrifican animales macho a la diosa Durga."
+      },
+      {
+        "p": "¿Se puede visitar Changu Narayan desde Bhaktapur?",
+        "r": "Sí. Se llega en unas 1,5 horas a pie, con los 2 últimos km empinados, o en un minibús de unos 30 minutos. Ten en cuenta que los no hindúes no pueden entrar en el templo."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Bhaktapur»",
+      "url": "https://en.wikipedia.org/wiki/Bhaktapur",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Bhaktapur»",
+      "url": "https://es.wikipedia.org/wiki/Bhaktapur",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Bhaktapur», revisión del 2026-10-19",
+      "url": "https://en.wikivoyage.org/wiki/Bhaktapur",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

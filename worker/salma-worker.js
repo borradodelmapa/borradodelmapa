@@ -999,7 +999,7 @@ function usaFichas(env, uid) {
 }
 // El bloque que recibe Salma. Sin las fuentes (no las cita en el chat): van en la ficha, para la web y para revisarla.
 function fichaContexto(fi) {
-  const L = (arr) => (Array.isArray(arr) ? arr : []).map(x => '· ' + x.t).join('\n');
+  const L = (arr) => (Array.isArray(arr) ? arr : []).map(x => '· ' + x.t + (x.de_cuando ? ` (dato de ${x.de_cuando})` : '')).join('\n');
   const fecha = (iso) => { const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? `${+m[3]} ${['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][+m[2] - 1]} ${m[1]}` : ''; };
   const sitios = (fi.sitios || []).map(x => `· ${x.hace} → ${x.maps}${x.nota ? ' (' + x.nota + ')' : ''}`).join('\n');
   const partes = [

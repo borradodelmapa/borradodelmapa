@@ -1,0 +1,698 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:lumbini.",
+  "ref": "np:lumbini",
+  "nombre": "Lumbini",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Lumbini es un lugar de peregrinación budista en el distrito de Rupandehi, provincia de Lumbini, Nepal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "is a Buddhist pilgrimage site in the Rupandehi District of Lumbini Province in Nepal"
+    },
+    {
+      "t": "Según los textos sagrados, la reina Maya dio a luz allí a Siddhartha Gautama, el Buda, hacia el 563 a. C.",
+      "f": [
+        "W1"
+      ],
+      "cita": "According to sacred texts and Buddhist commentaries, Queen Maya gave birth to Siddhartha Gautama, the Buddha, in Lumbini, c. 563 BCE."
+    },
+    {
+      "t": "Es uno de los cuatro lugares de peregrinación más sagrados de la vida del Buda.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Lumbini is one of the four most sacred pilgrimage sites pivotal in the life of the Buddha."
+    },
+    {
+      "t": "Patrimonio de la Humanidad de la UNESCO desde 1997.",
+      "f": [
+        "W2"
+      ],
+      "cita": "El lugar se clasificó como Patrimonio de la Humanidad por la Unesco en el año 1997."
+    },
+    {
+      "t": "El pilar de Ashoka, con inscripción en escritura brahmi, se descubrió en Rupandehi en 1896.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Ashoka Pillar of Lumbini, a monolithic column with a Brahmi script inscription discovered at Rupandehi in 1896"
+    },
+    {
+      "t": "El pilar mide 6 m y lo levantó Ashoka en el 249 a. C. para conmemorar el nacimiento de Buda.",
+      "f": [
+        "W2"
+      ],
+      "cita": "un gran pilar de piedra de 6 m de alto erigido por Ashoka en 249 a. C. para conmemorar el nacimiento de Buda"
+    },
+    {
+      "t": "La inscripción del pilar es la más antigua de Nepal y declara Lumbini libre de impuestos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The inscription, which is the oldest in Nepal, grants Lumbini a tax-free status in honour of Buddha’s birth."
+    },
+    {
+      "t": "Antes de descubrirse el pilar, el lugar no se conocía como Lumbini.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The site was not known as Lumbini before the pillar was discovered."
+    },
+    {
+      "t": "El recinto mide 4,8 km de largo por 1,6 km de ancho.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Lumbini is 4.8 km (3 mi) in length and 1.6 km (1.0 mi) in width."
+    },
+    {
+      "t": "Se divide en tres áreas: Jardín Sagrado, Zona Monástica y Centro Cultural con el Nuevo Pueblo de Lumbini.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Lumbini complex is divided into three areas: the Sacred Garden, the Monastic Zone and the Cultural Center and New Lumbini Village."
+    },
+    {
+      "t": "La Zona Monástica Este es theravada y la Oeste, mahayana y vajrayana, separadas por un canal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the East Monastic Zone which represents Theravada school of Buddhism and the West Monastic Zone which represents Mahayana and Vajrayana school of Buddhism"
+    },
+    {
+      "t": "Las excavaciones de 2013 sitúan el inicio de la actividad humana en Lumbini hacia el 1000 a. C.",
+      "f": [
+        "W1"
+      ],
+      "cita": "optically stimulated luminescence dating of elements in the soil suggests human activity began at Lumbini around 1000 BCE."
+    },
+    {
+      "t": "Cerca no se ha hallado rastro de la antigua Kapilavastu.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Sin embargo, no se ha encontrado en las cercanías ningún rastro de la antigua Kapilavastu."
+    },
+    {
+      "t": "En 1967 U Thant, secretario general de la ONU, impulsó la revitalización del lugar.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In April of 1967, former United Nations secretary-general U Thant advocated for the site's revitalization"
+    },
+    {
+      "t": "En 2019 recibió 1,5 millones de turistas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 2019, Lumbini received 1.5 million tourists from around the world."
+    },
+    {
+      "t": "Cáceres (España) es una de sus cuatro ciudades hermanadas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Lumbini has four official sister cities:"
+    }
+  ],
+  "cuando": [
+    {
+      "t": "La mayoría de visitantes extranjeros va de octubre a marzo.",
+      "f": [
+        "W1"
+      ],
+      "cita": "most foreign visitors tend to visit Lumbini from October to March"
+    },
+    {
+      "t": "Abril-mayo y noviembre-diciembre son épocas fuertes de visitantes indios y nepalíes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "April-May holidays and November-December festival period are popular times for Indian and Nepalese visitors"
+    },
+    {
+      "t": "Miles de hindúes peregrinan en la luna llena del mes nepalí de Baisakh (abril-mayo).",
+      "f": [
+        "W1"
+      ],
+      "cita": "thousands of Hindus have begun to come here on pilgrimage during the full moon of the Nepali month of Baisakh (April–May)"
+    },
+    {
+      "t": "Los peregrinos cantan y meditan desde primera hora hasta el atardecer.",
+      "f": [
+        "W1"
+      ],
+      "cita": "From early morning to early evening, pilgrims from various countries perform chanting and meditation at the site."
+    },
+    {
+      "t": "En invierno los campos del Terai forman un mosaico bueno para observar aves.",
+      "f": [
+        "WV"
+      ],
+      "cita": "In winter, the farmland in this area of the Terai is a mosaic of different crops and stubbles"
+    }
+  ],
+  "fauna": [
+    {
+      "t": "Toda la zona es buena para ver aves.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The entire area is good for birds."
+    },
+    {
+      "t": "En Khadara Phanta hay buenas opciones de ver la grulla sarus, vulnerable, el ave voladora más alta del mundo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "particularly good for seeing the vulnerable Sarus Crane, the tallest flying bird in the world"
+    },
+    {
+      "t": "En los árboles viejos de las aldeas duermen buitres y grandes aves acuáticas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "often have very large, old trees used by roosting vultures and large water birds"
+    },
+    {
+      "t": "En el recinto sagrado hay un árbol Bodhi sagrado.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The holy site of Lumbini has ruins of ancient monasteries, a sacred Bodhi tree, an ancient bathing pond"
+    }
+  ],
+  "sitios": [
+    {
+      "hace": "Ver la piedra que marca el lugar de nacimiento del Buda",
+      "maps": "Maya Devi Temple",
+      "nota": "Acceso de visitantes muy restringido",
+      "f": [
+        "W1"
+      ],
+      "cita": "The temple contains a stone marker that commemorates Lumbini as the Buddha's place of birth.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el pilar inscrito de Ashoka",
+      "maps": "Ashoka Pillar",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Ashokan Pillar - an inscribed pillar erected by Emperor Ashoka (249 BC) on the spot of Buddha's birth.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el estanque sagrado donde, según la tradición, Mayadevi se purificó y bañaron al Buda",
+      "maps": "Puskarini Sacred Pond",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "There is a puskarini, or holy pond, where Mayadevi, the Buddha's mother, is believed to have taken ritual cleansing prior to his birth",
+      "comprobado": null
+    },
+    {
+      "hace": "Recorrer el núcleo del recinto con el templo, el pilar, la piedra marcadora y las ruinas",
+      "maps": "Lumbini Sacred Garden",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Sacred Garden remains the epicenter of the Lumbini area and consists of the birthplace of Buddha and other monuments",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar monasterios y estupas construidos por distintos países",
+      "maps": "Lumbini Monastic Zone",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "many countries have established Buddhist stupas and monasteries in the monastic zone with their unique historical, cultural and spiritual designs",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la estupa japonesa de 41 m",
+      "maps": "World Peace Pagoda Lumbini",
+      "nota": "En el extremo norte de los jardines",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Japan Peace Stupa - the 41m imposing structure is situated at the northern end of the gardens.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver objetos de los periodos maurya y kushana y manuscritos",
+      "maps": "Lumbini Museum",
+      "nota": "Cerrado los martes",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Lumbini Museum displays artifacts from the Mauryan and Kushana periods, religious manuscripts and other items discovered at the site.",
+      "comprobado": null
+    },
+    {
+      "hace": "Consultar su biblioteca sobre religión, arte y arquitectura",
+      "maps": "Lumbini International Research Institute",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Lumbini International Research Institute (LIRI) is devoted to the study of Buddhism and other religions.",
+      "comprobado": null
+    },
+    {
+      "hace": "Santuario de grullas dentro del Centro Cultural",
+      "maps": "Lumbini Crane Sanctuary",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "comprises Lumbini Museum, Lumbini International Research Institute, World Peace Pagoda of Japan, Lumbini Crane Sanctuary and other administrative offices",
+      "comprobado": null
+    },
+    {
+      "hace": "Templo de estilo tibetano",
+      "maps": "Dharma Swami Maharaja Buddha Temple",
+      "nota": "Construido por el rey de Mustang",
+      "f": [
+        "WV"
+      ],
+      "cita": "one in Tibetan style, the Dharma Swami Maharaja Buddha Temple, which was built by the king of Mustang",
+      "comprobado": null
+    },
+    {
+      "hace": "Templo theravada nepalí con frescos tibetanos e imágenes newari",
+      "maps": "Lumbini Buddha Vihar",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "one Nepalese Theravada style building, the Lumbini Buddha Vihar",
+      "comprobado": null
+    },
+    {
+      "hace": "Retiros de meditación vipassana",
+      "maps": "Panditarama Lumbini",
+      "nota": "Estancias de 7 a 90 días",
+      "f": [
+        "WV"
+      ],
+      "cita": "Panditarama Lumbini is a vipassana meditation center in the Mahasi Sayadaw tradition.",
+      "comprobado": null
+    },
+    {
+      "hace": "Observar la grulla sarus en humedal y pradera",
+      "maps": "Khadara Phanta",
+      "nota": "Al norte de Lumbini",
+      "f": [
+        "WV"
+      ],
+      "cita": "ask for the wetland grassland area north of Lumbini called Khadara Phanta",
+      "comprobado": null
+    },
+    {
+      "hace": "Observación de aves",
+      "maps": "Jagdishpur Reservoir",
+      "nota": "Casi 30 km al oeste de Lumbini",
+      "f": [
+        "WV"
+      ],
+      "cita": "Jagdishpur Reservoir and Bird Sanctuary, at Niglihawa is considered nationally to be an important bird area in Kapilvastu District",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver un segundo pilar de Ashoka con inscripción",
+      "maps": "Nigali Sagar",
+      "nota": "Unos 22 km al noroeste de Lumbini",
+      "f": [
+        "W1"
+      ],
+      "cita": "A second pillar of Ashoka is located about 22 kilometers to the northwest of Lumbini, the Nigali Sagar pillar (with inscription)",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver un tercer pilar de Ashoka, sin inscripción",
+      "maps": "Gotihawa Pillar",
+      "nota": "24 km al oeste",
+      "f": [
+        "W1"
+      ],
+      "cita": "and a third one 24 kilometers to the west, the Gotihawa pillar (without inscription).",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "En la zona monástica solo se construyen monasterios: no hay tiendas, hoteles ni restaurantes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "in which only monasteries can be built: no shops, hotels or restaurants are permitted."
+    },
+    {
+      "t": "El acceso al templo de Maya Devi está muy restringido para conservar el yacimiento.",
+      "f": [
+        "W1"
+      ],
+      "cita": "To preserve the site's archeological condition, visitor access is heavily restricted."
+    },
+    {
+      "t": "El Museo de Lumbini cierra los martes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "religious manuscripts and other items discovered at the site. Closed on Tuesdays."
+    },
+    {
+      "t": "Vestir con respeto por el carácter sagrado del lugar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Wear clothing that expresses respect for the sacred nature of the site."
+    },
+    {
+      "t": "Rodear estupas y objetos sagrados en el sentido de las agujas del reloj.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Circumambulate the stupas and other sacred objects in a clockwise direction."
+    },
+    {
+      "t": "No subirse a estatuas ni objetos sagrados.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Do not climb onto statues or other sacred objects."
+    },
+    {
+      "t": "En el monasterio coreano no se fuma dentro ni se permite música, baile ni juegos de cartas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "No smoking inside, and no music, dancing, card games, etc."
+    },
+    {
+      "t": "Los monasterios permiten rezar, organizan sermones y retiros y dan alojamiento a monjes y peregrinos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The local monasteries in Lumbini allow visitors to worship, organize sermons and retreats, as well as providing monks and pilgrims a place to stay."
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Autobuses Bhairahawa-Lumbini cada 15 minutos; el último de vuelta sale a las 17:00.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Bhairahawa-Lumbini buses depart every 15 minutes. The last return bus departs at 5PM."
+    },
+    {
+      "t": "Taxi de Butwal a Lumbini: 2 dólares o 200 NRs.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "It will take 2 US dollars or 200 NRs from Butwal to reach Lumbini."
+    },
+    {
+      "t": "Alquiler de bicicleta en hoteles: 100 NRs al día.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Bicycles can be rented at hotels in Lumbini (100 NRs/day)"
+    },
+    {
+      "t": "Dormitorio en el monasterio coreano: 300 NRs con tres comidas.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "mayo de 2015",
+      "cita": "sleep in a dorm for 300 NRs, including 3 meals a day"
+    },
+    {
+      "t": "Lumbini Garden Lodge: 400-650 NRs.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "mayo de 2015",
+      "cita": "Maduwani-8, Mahilwar, Rupandehi, Lumbini, ☏ +977 71 580146.  400-650 NRs."
+    },
+    {
+      "t": "Gautam Buddha Lodge: 200-400 NRs.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "mayo de 2015",
+      "cita": "Gautam Buddha Lodge. is situated in a nearby village. 200-400 NRs."
+    },
+    {
+      "t": "Panditarama: pago por donativo, seis entrevistas semanales con un maestro.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2018",
+      "cita": "Meditators have six interviews a week with a teacher. Cost is by donation."
+    },
+    {
+      "t": "Comida en los dhabas del pueblo: 20 NRs la ración.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "puri in the morning, \"curry\" during the day, at 20 NRs a portion"
+    }
+  ],
+  "llegar": [
+    {
+      "t": "Lumbini está a 10 horas en coche de Katmandú y a 30 minutos de Bhairahawa.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Lumbini is a 10-hour drive from Kathmandu and a 30-minute drive from Bhairahawa."
+    },
+    {
+      "t": "El aeropuerto más cercano es el Gautam Buddha de Bhairahawa, con vuelos a Katmandú.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The closest airport is Gautam Buddha Airport at Bhairahawa, with flights to and from Kathmandu."
+    },
+    {
+      "t": "Bhairahawa (Siddhartha Nagar) está a 22 km.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The closest airport is at Bhairahawa (also known as Siddhartha Nagar) (22 km), where there are flights from Kathmandu."
+    },
+    {
+      "t": "Gorakhpur y Faizabad, en India, tienen aeropuertos con más destinos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Other airports serving more destinations include Gorakhpur and Faizabad in India."
+    },
+    {
+      "t": "No hay estación de tren en Nepal cerca; la más próxima está en Nautanwa (India).",
+      "f": [
+        "WV"
+      ],
+      "cita": "There is no railway station in Nepal near Lumbini. The closest station is in Nautanwa, India"
+    },
+    {
+      "t": "El tren turístico Mahaparinirvan Express para en Gorakhpur; luego se sigue por carretera.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Mahaparinirvan Express tourist train stops in Gorakhpur where tourists continue to Lumbini by road."
+    },
+    {
+      "t": "Hay autobuses de Sunauli a Lumbini desde la parada frente al Hotel Yeti; bajar en la puerta principal.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Buses ply the route between Sunauli, from the stop across from Hotel Yeti, and Lumbini. At Lumbini alight at the main gate."
+    },
+    {
+      "t": "Desde la frontera se puede ir en jeep compartido a Bhairahawa y luego en autobús.",
+      "f": [
+        "WV"
+      ],
+      "cita": "one can take a shared jeep to Bhairahawa (4 kilometres)"
+    },
+    {
+      "t": "Hay autobuses a Sunauli desde Katmandú, Pokhara, Gorakhpur y Varanasi.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Buses also run from Kathmandu, Pokhara, Gorakhpur and Varanasi to Sunauli."
+    },
+    {
+      "t": "Los sitios están lejos entre sí: conviene moverse en bici o bicitaxi.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Given that the sights in Lumbini are far across, bicycles and cycle rickshaws offer a good way to get around."
+    },
+    {
+      "t": "En el extremo norte del canal hay barcas a motor que hacen recorridos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The canal is serviced by simple outboard motor boats at the north end which provides tours."
+    }
+  ],
+  "gente": [
+    {
+      "t": "Algunos hindúes ven al Buda como encarnación de Visnú y veneran a Mayadevi como Rupa Devi, diosa madre de Lumbini.",
+      "f": [
+        "W1"
+      ],
+      "cita": "to worship Queen Mayadevi as Rupa Devi, the mother goddess of Lumbini"
+    },
+    {
+      "t": "Los visitantes hacen reverencias al pilar, visitan el estanque, rezan y meditan en el jardín.",
+      "f": [
+        "W1"
+      ],
+      "cita": "visitors participating in rituals have been seen bowing to the Ashoka pillar, visiting Pushkarini Lake, praying, and meditating"
+    },
+    {
+      "t": "La mayoría de visitantes internacionales viene de Sri Lanka, China, Japón, Tailandia y Corea del Sur.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Majority of these international visitors come from other Buddhist countries such as Sri Lanka, China, Japan, Thailand and South Korea."
+    },
+    {
+      "t": "Junto a los peregrinos llegan visitantes no religiosos atraídos por la arquitectura y el patrimonio.",
+      "f": [
+        "W1"
+      ],
+      "cita": "other non-religious visitors travel to the site to see its architecture, monuments, and heritage"
+    },
+    {
+      "t": "Agencias ofrecen visitas a aldeas en torno a Lumbini y Kapilvastu.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Several tour guide companies are offering village tours especially around Lumbini and Kapilvastu"
+    }
+  ],
+  "delicado": [
+    {
+      "t": "Si las excavaciones de 2013 hallaron un santuario budista está discutido entre expertos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Other scholars state that the excavations revealed nothing that is Buddhist, and they only confirm that the site predates the Buddha."
+    },
+    {
+      "t": "El templo de Maya Devi es el punto de nacimiento según la tradición, no un hecho probado.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the Mayadevi Temple, a site traditionally considered to be the birthplace of the Buddha"
+    },
+    {
+      "t": "En el taxi desde Sunauli hay que conocer la tarifa y pactarla antes de salir.",
+      "f": [
+        "WV"
+      ],
+      "cita": "you will need to know the going rate to avoid paying well over the odds"
+    },
+    {
+      "t": "Revisar ruedas, sillín y candado de la bici alquilada.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Make sure of the condition of the tires, as a flat will mean pushing it back over miles."
+    },
+    {
+      "t": "Algunos templos nuevos siguen en obras.",
+      "f": [
+        "W1"
+      ],
+      "cita": "several new temples funded by Buddhist organizations from various countries, a few of which are still under construction"
+    }
+  ],
+  "no_escribir": [
+    "Precio de la entrada al Jardín Sagrado o al templo de Maya Devi: ninguna fuente lo da.",
+    "Horario de apertura del Jardín Sagrado y del templo: no aparece en las fuentes.",
+    "Temperaturas, monzón o clima por meses: las fuentes no lo dicen.",
+    "Número de días recomendados para la visita: no lo dan las fuentes.",
+    "Que el nacimiento del Buda en 563 a. C. es un hecho: W1 lo da como «c.» y según textos sagrados.",
+    "Que Ashoka «descubrió» o fundó Lumbini como lugar de nacimiento: las excavaciones de 2013 lo cuestionan.",
+    "Que las excavaciones de 2013 probaron un santuario budista del siglo VI a. C.: está discutido.",
+    "Que el pilar marca el punto exacto del nacimiento: W1 dice que marca la visita de Ashoka; WV dice que el nacimiento. No afirmarlo.",
+    "Que Lumbini estaba dentro de Kapilavastu: W2 dice que no se ha hallado rastro de Kapilavastu cerca.",
+    "Antiguo nombre del parque: W1 dice Rupandehi y WV Rummindei; no dar uno solo como seguro.",
+    "Que hay estación de tren en Lumbini o cerca en Nepal: WV lo desmiente.",
+    "Que ver la grulla sarus está garantizado: WV solo dice que Khadara Phanta es especialmente buena zona.",
+    "Cifras de visitantes posteriores a 2019: no aparecen."
+  ],
+  "seo": {
+    "titulo": "Lumbini (Nepal): qué ver y cómo llegar (2026)",
+    "descripcion": "Lumbini, cuna de Buda y Patrimonio UNESCO desde 1997: pilar de Ashoka, Zona Monástica, aves del Terai. A 22 km de Bhairahawa, con bus cada 15 minutos.",
+    "faq": [
+      {
+        "p": "¿Cuándo es mejor visitar Lumbini?",
+        "r": "La mayoría de visitantes extranjeros va de octubre a marzo. En invierno los campos del Terai forman un mosaico ideal para observar aves. Abril-mayo y noviembre-diciembre son temporadas fuertes de visitantes indios y nepalíes, y en la luna llena del mes nepalí de Baisakh (abril-mayo) llegan miles de peregrinos hindúes."
+      },
+      {
+        "p": "¿Cómo llegar a Lumbini?",
+        "r": "El aeropuerto más cercano es el Gautam Buddha de Bhairahawa (Siddhartha Nagar), a 22 km, con vuelos a Katmandú. Desde Bhairahawa salen autobuses cada 15 minutos (unos 30 minutos de trayecto; el último de vuelta sale a las 17:00). Por carretera, Katmandú queda a unas 10 horas. Desde la frontera de Sunauli hay autobuses frente al Hotel Yeti hasta la puerta principal, o jeep compartido a Bhairahawa. La estación de tren más próxima está en Nautanwa (India), y el Mahaparinirvan Express para en Gorakhpur."
+      },
+      {
+        "p": "¿Qué ver en Lumbini?",
+        "r": "El recinto, de 4,8 por 1,6 km, se divide en Jardín Sagrado, Zona Monástica y Centro Cultural con el Nuevo Pueblo de Lumbini. Destacan el templo de Maya Devi, el pilar de Ashoka de 6 m (249 a. C.), cuya inscripción en brahmi es la más antigua de Nepal, el estanque, el árbol Bodhi sagrado y los monasterios theravada (este) y mahayana y vajrayana (oeste), separados por un canal."
+      },
+      {
+        "p": "¿Qué normas hay que respetar en Lumbini?",
+        "r": "Hay que vestir con respeto, rodear estupas y objetos sagrados en el sentido de las agujas del reloj y no subirse a estatuas ni objetos sagrados. El acceso al templo de Maya Devi está muy restringido para conservar el yacimiento, y en el monasterio coreano no se puede fumar dentro ni hay música, baile ni juegos de cartas."
+      },
+      {
+        "p": "¿Cómo moverse dentro del recinto de Lumbini?",
+        "r": "Los sitios están lejos entre sí, así que conviene ir en bici o bicitaxi. Los hoteles alquilan bicicletas por 100 NRs al día; revisa ruedas, sillín y candado. En el extremo norte del canal hay barcas a motor que hacen recorridos."
+      },
+      {
+        "p": "¿Dónde dormir en Lumbini y cuánto cuesta?",
+        "r": "En la Zona Monástica no hay hoteles, pero algunos monasterios acogen peregrinos: el coreano ofrece dormitorio por 300 NRs con tres comidas y Panditarama funciona por donativo, con seis entrevistas semanales con un maestro. Otras opciones son Lumbini Garden Lodge (400-650 NRs) y Gautam Buddha Lodge (200-400 NRs). En los dhabas del pueblo se come por unas 20 NRs la ración."
+      },
+      {
+        "p": "¿Qué día cierra el Museo de Lumbini?",
+        "r": "El Museo de Lumbini cierra los martes."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Lumbini»",
+      "url": "https://en.wikipedia.org/wiki/Lumbini",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Lumbini»",
+      "url": "https://es.wikipedia.org/wiki/Lumbini",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Lumbini», revisión del 2026-11-15",
+      "url": "https://en.wikivoyage.org/wiki/Lumbini",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

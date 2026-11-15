@@ -1,0 +1,890 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:kathmandu.",
+  "ref": "np:kathmandu",
+  "nombre": "Kathmandú",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Capital y mayor ciudad de Nepal, en el centro del país, dentro del valle de Katmandú.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Kathmandu is the capital and largest city of Nepal, situated in the central part of the country within the Kathmandu Valley."
+    },
+    {
+      "t": "Según el censo de 2021, la ciudad tiene 845.767 habitantes y el área metropolitana unos 4 millones.",
+      "f": [
+        "W1"
+      ],
+      "cita": "As per the 2021 Nepal census, it has a population of 845,767 residing in 105,649 households, with approximately 4 million people in the surrounding metropolitan area."
+    },
+    {
+      "t": "Superficie de 50,7 km², al norte del río Bagmati.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Kathmandu is in the northwestern part of the Kathmandu Valley to the north of the Bagmati River and covers an area of 50.7 km2 (19.6 sq mi)."
+    },
+    {
+      "t": "El nombre viene de Kasthamandap, un pabellón de madera.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Nepali name Kathmandu comes from Kasthamandap."
+    },
+    {
+      "t": "Su historia se remonta al siglo II d. C.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Recognized as one of the oldest continuously inhabited places in the world, Kathmandu's history dates back to the 2nd century AD."
+    },
+    {
+      "t": "Siete zonas monumentales del valle son Patrimonio Mundial: tres plazas Durbar, Pashupatinath, Changunarayan, Swayambhunath y Boudhanath.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Seven Monument Zones inscribed originally in 1979 and with a minor modification in 2006 are the Durbar squares of Hanuman Dhoka, Patan and Bhaktapur, the Hindu temples of Pashupatinath and Changunarayan, the Buddhist stupas of Swayambhunath and Boudhanath."
+    },
+    {
+      "t": "El terremoto del 25 de abril de 2015 derribó la torre Dharahara y dañó gravemente la plaza Durbar.",
+      "f": [
+        "W1"
+      ],
+      "cita": "On 25 April 2015, a magnitude 7.8 earthquake struck Nepal, killing 8,856 people. In Kathmandu, the Dharahara tower collapsed, killing 132 people, and Kathmandu Durbar Square was severely damaged."
+    },
+    {
+      "t": "El 28 de mayo de 2008 se abolió la monarquía y Nepal pasó a ser república.",
+      "f": [
+        "W1"
+      ],
+      "cita": "On 28 May 2008, the newly elected Constituent Assembly, meeting in Kathmandu, voted 560 to 4 to abolish the monarchy and declare Nepal a republic."
+    },
+    {
+      "t": "En septiembre de 2025 hubo protestas masivas de la Generación Z en Katmandú tras la prohibición de redes sociales.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In September 2025, widespread Gen Z protests erupted in Kathmandu after the government imposed a ban on multiple social media platforms."
+    },
+    {
+      "t": "Balendra Shah, exalcalde de Katmandú, juró como primer ministro el 27 de marzo de 2026.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Its leader, former Kathmandu mayor Balendra Shah, was sworn in as prime minister on 27 March 2026."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "Unas dos terceras partes de la lluvia caen en el monzón, de junio a septiembre según W1.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Rainfall is mostly monsoon-based (about 65% of the total concentrated during the monsoon months of June to September)"
+    },
+    {
+      "t": "Lluvia anual media de unos 1.400 mm.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The average annual rainfall for the city is around 1400 mm (55 in)."
+    },
+    {
+      "t": "Días cálidos y noches y mañanas frescas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The city generally has a climate with warm days followed by cool nights and mornings."
+    },
+    {
+      "t": "Temperatura media en invierno de 10,1 °C.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The average winter temperature is 10.1 °C (50.2 °F)."
+    },
+    {
+      "t": "En invierno la temperatura puede bajar a 0 °C o menos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Unpredictable weather is expected, given that temperatures can drop to 0 °C (32 °F) or less during the winter."
+    },
+    {
+      "t": "En festivos cierran muchos negocios, también días antes y después; Dashain paraliza buena parte de la ciudad en octubre.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Note that many businesses are closed for all of these holidays—and often a few days before and after. Dasain in particular tend to shut down much of the city for October."
+    },
+    {
+      "t": "Dashain dura quince días entre septiembre y octubre.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Dashain, the most important of Nepal's religious festivals takes place over fifteen days, between September and October each year."
+    },
+    {
+      "t": "Tihar dura cinco días, hacia finales de octubre o principios de noviembre.",
+      "f": [
+        "WV"
+      ],
+      "cita": "A five-day festival which takes place each year on the fifteenth day of Kartika, around the end of October/start of November"
+    },
+    {
+      "t": "Indra Jatra se celebra ocho días cada septiembre en la plaza Durbar, con la Kumari paseada en su carro.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Indra Jatra Harvest festival held in Kathmandu's Dubar Square for 8 days each September. The Goddess Kumari is paraded in her sacred chariot."
+    },
+    {
+      "t": "Holi se celebra en marzo con agua y polvos de colores.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Holi is celebrated in March with splashes of water and colored powder that is both good luck and very messy."
+    },
+    {
+      "t": "Shivaratri es la fiesta principal de Pashupatinath y atrae a miles de devotos y sadhus.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Shivaratri, or the night of Shiva, is the most important festival that takes place here, attracting thousands of devotees and sadhus."
+    }
+  ],
+  "fauna": [],
+  "sitios": [
+    {
+      "hace": "Recorrer la plaza de los palacios, con 50 templos en dos patios.",
+      "maps": "Kathmandu Durbar Square",
+      "nota": "Gravemente dañada en el terremoto de 2015.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The complex has 50 temples and is distributed in two quadrangles of the Durbar Square.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el antiguo palacio real de los Malla y los Shah.",
+      "maps": "Hanuman Dhoka Palace",
+      "nota": "Está en el patio interior de la plaza Durbar.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Hanuman Dhoka is a complex of structures with the royal palace of the Malla kings and of the Shah dynasty.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el palacio donde reside la Kumari real.",
+      "maps": "Kumari Ghar",
+      "nota": "Junto a la plaza Durbar.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Kumari Ghar is a palace in the centre of the Kathmandu city, next to the Durbar square where a royal Kumari selected from several Kumaris resides.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo de madera de tres pisos que da nombre a la ciudad.",
+      "maps": "Kasthamandap",
+      "nota": "Construido como posada para viajeros.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Kasthamandap is a three-storeyed temple enshrining an image of Gorakhnath.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el templo hindú dedicado a Shiva a orillas del Bagmati.",
+      "maps": "Pashupatinath Temple",
+      "nota": "Los no hindúes solo pueden verlo desde la otra orilla del río.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Believers in Pashupatinath (mainly Hindus) are allowed to enter the temple premises, but non-Hindu visitors are allowed to view the temple only from the across the Bagmati River.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver una de las mayores estupas esféricas de Nepal.",
+      "maps": "Boudhanath Stupa",
+      "nota": "A unos 11 km del centro, en el noreste.",
+      "f": [
+        "W1"
+      ],
+      "cita": "About 11 km (7 mi) from the centre and northeastern outskirts of Kathmandu, the stupa's massive mandala makes it one of the largest spherical stupas in Nepal.",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir a la estupa budista de la colina, con los ojos de Buda.",
+      "maps": "Swayambhunath",
+      "nota": "En una colina al noroeste de la ciudad.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Swayambhunath (Nepali: स्वयम्भू स्तूप) is a Buddhist stupa atop a hillock at the northwestern part of the city.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el estanque histórico construido en 1670.",
+      "maps": "Rani Pokhari",
+      "nota": "Solo se abre un día al año (Bhai Tika y Chhath).",
+      "f": [
+        "W1"
+      ],
+      "cita": "Rani Pokhari is opened once a year during the final day of Tihar i.e. Bhai Tika and Chhath festival.",
+      "comprobado": null
+    },
+    {
+      "hace": "Alojarse, comer, comprar y salir de noche en el barrio turístico.",
+      "maps": "Thamel",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "The neighbourhood of Thamel is Kathmandu's primary go-to place for tourists and is widely regarded as the center of Kathmandu's nightlife",
+      "comprobado": null
+    },
+    {
+      "hace": "Pasear por la antigua calle de viajeros de los años 60 y 70.",
+      "maps": "Freak Street",
+      "nota": "Tiene algunas pensiones más baratas que Thamel.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Jhochhen Tol, also known as Freak Street remains a traveler haunt.",
+      "comprobado": null
+    },
+    {
+      "hace": "Recorrer el bazar y plaza ceremonial de la antigua ruta al Tíbet.",
+      "maps": "Asan Tole",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Ason is a bazaar and ceremonial square on the old trade route to Tibet.",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir en teleférico a las colinas de Chandragiri.",
+      "maps": "Chandragiri Cable Car",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "At present, cable cars are operated from Kathmandu to the Chandragiri Hills.",
+      "comprobado": null
+    },
+    {
+      "hace": "Vuelo panorámico de una hora sobre el Himalaya.",
+      "maps": "Tribhuvan International Airport",
+      "nota": "Salidas de 06:30 a 09:00; reservar con antelación en temporada alta.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Most local airlines offer one hour flights over the Himalayas departing 06:30-09:00 from Kathmandu airport, costing US$197.",
+      "comprobado": null
+    },
+    {
+      "hace": "Pedir información turística.",
+      "maps": "Nepal Tourism Board",
+      "nota": "Al lado del parque Bhrikuti Mandap.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Nepal Tourism Board, Exhibition Rd (Right next to Bhrikuti Mandap Park (Bhrikutimandi))",
+      "comprobado": null
+    },
+    {
+      "hace": "Comprar tela y encargar ropa a sastres.",
+      "maps": "Indra Chowk",
+      "nota": "Entre Thamel y la plaza Durbar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The alleys around Indra Chowk, between Thamel and Durbar Square, have dozens of fabric shops and tailors",
+      "comprobado": null
+    },
+    {
+      "hace": "Comprar tela y encargar ropa en un centro comercial.",
+      "maps": "Bishal Bazaar",
+      "nota": "Cerca de la esquina de New Road con la plaza Durbar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Bishal Bazaar near the corner of New Road and Durbar Square is a mall-like experience which also boasts several fabric shops and tailors.",
+      "comprobado": null
+    },
+    {
+      "hace": "Comprar estatuas de metal y bronces cerca de donde se fabrican.",
+      "maps": "Patan",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you want to get closer to the source, Patan is a good place to buy such items.",
+      "comprobado": null
+    },
+    {
+      "hace": "Sacar dinero en cajero sin comisión.",
+      "maps": "Kathmandu Guest House",
+      "nota": "Dentro de la verja, en Thamel.",
+      "f": [
+        "WV"
+      ],
+      "cita": "the only fee-free ATMs are (1) at the airport before immigration and (2) inside the gates of Kathmandu Guest House in Thamel.",
+      "comprobado": null
+    },
+    {
+      "hace": "Hacer cursos de nepal bhasa, tibetano, sánscrito y nepalí.",
+      "maps": "Bisho Bhasa Campus",
+      "nota": "En Exhibition Road.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Bisho Bhasa Campus, (Campus of International Language) located at Exhibition Road, Kathmandu, offers Nepal Bhasa, Tibetan, Sanskrit and Nepali languages courses.",
+      "comprobado": null
+    },
+    {
+      "hace": "Atención médica para viajeros.",
+      "maps": "CIWEC Clinic",
+      "nota": "En Lazimpat, frente a la embajada británica.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Ciwec Clinic Travel Medicine Center caters to western visitors and the ex-pat community.",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "Los no hindúes no pueden entrar en Pashupatinath; solo verlo desde la otra orilla del Bagmati.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Believers in Pashupatinath (mainly Hindus) are allowed to enter the temple premises, but non-Hindu visitors are allowed to view the temple only from the across the Bagmati River."
+    },
+    {
+      "t": "Rani Pokhari solo abre un día al año.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Rani Pokhari is opened once a year during the final day of Tihar i.e. Bhai Tika and Chhath festival."
+    },
+    {
+      "t": "No se pueden sacar del país antigüedades de más de 100 años.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Nepalese government does not permit real antiques older than 100 years to leave the country"
+    },
+    {
+      "t": "Es ilegal entrar billetes indios de más de 100 rupias; se confiscan.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It is illegal to bring in Indian banknotes in denominations of greater than Rs 100, and any found will be confiscated."
+    },
+    {
+      "t": "El visado se puede pedir en línea antes de embarcar para evitar el trámite en el aeropuerto.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You can avoid this procedure by applying for the visa online prior to boarding"
+    },
+    {
+      "t": "La tasa de visado se paga en divisas principales, mejor en dólares.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Visa fees can be paid at the airport in most major currencies, with US dollars preferred."
+    },
+    {
+      "t": "No hay trenes y no se puede alquilar coche sin conductor.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are no trains in Kathmandu and renting a car without a driver is not possible."
+    },
+    {
+      "t": "Para ir al Tíbet hace falta permiso especial de China y viajar en grupo organizado por agencia.",
+      "f": [
+        "WV"
+      ],
+      "cita": "foreigners need special permits from government of PRC to travel in Tibet legally and must travel in groups arranged by travel agents."
+    },
+    {
+      "t": "Los recargos de servicio e IVA deben figurar en la carta.",
+      "f": [
+        "WV"
+      ],
+      "cita": "These additional charges must be clearly stated on the menu."
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Vuelo panorámico sobre el Himalaya: 197 USD.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Most local airlines offer one hour flights over the Himalayas departing 06:30-09:00 from Kathmandu airport, costing US$197."
+    },
+    {
+      "t": "Taxi prepago del aeropuerto a Thamel o Boudha: 900 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "(e.g. Nrs900 to Thamel or Boudha) before exiting the building."
+    },
+    {
+      "t": "Taxi normal del aeropuerto: unas 650 rupias a Thamel y 450 a Boudha, aunque al extranjero le piden más.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The rate to Thamel and Boudha is around Nrs650 and Nrs450 respectively, but it is difficult for foreigners to get that price at the airport"
+    },
+    {
+      "t": "Autobús local desde la puerta del aeropuerto: 10 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The buses generally do not have fixed schedules and are often crowded and painful but cost only Rs10."
+    },
+    {
+      "t": "Taxi de Thamel a Patan unas 500 rupias; a Bhaktapur unas 1.500.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "It should be possible to hire a taxi from Thamel for Nrs500 one-way to Patan and around Nrs1,500 to Bakhtapur from Thamel or the airport."
+    },
+    {
+      "t": "Tempos y microbuses: 20-30 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The Tempos, small three-wheeled buses, and microbuses are a very cheap (Nrs20-30) way to get around the city."
+    },
+    {
+      "t": "Autobús a Pokhara: turístico 800 rupias, local 400-600; 6-7 horas.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Tourist buses (Rs800, 6-7 hr) and crowded local buses/microbuses (Rs400-600, 6-7 hr) travel the 200 km journey between Kathmandu and Pokhara"
+    },
+    {
+      "t": "Greenline Thamel–Lakeside (Pokhara): 20 USD con comida.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Greenline operates a convenient bus every morning between the popular tourist areas of Thamel in Kathmandu and Lakeside in Pokhara (US$20, lunch included)."
+    },
+    {
+      "t": "Vuelos nacionales: unos 100-175 USD, alrededor de una hora.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Domestic flights take about an hour and cost US$100-175."
+    },
+    {
+      "t": "Autobús nocturno de Siliguri a Katmandú con Green Line: 2.000 rupias indias, sale a las 15:00.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "mayo de 2025",
+      "cita": "Green Line operates a daily overnight A/C Volvo bus service from Siliguri (Tenzing Norgay Bus Station) , departing at 3PM and arriving at 8:30AM. ₹2,000."
+    },
+    {
+      "t": "Autobús desde Delhi: 25-28 horas, 2.100-2.300 rupias indias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The journey time is between 25 to 28 hours. Fare varies from between ₹2,100- ₹2,300"
+    },
+    {
+      "t": "La mayoría de cajeros que aceptan tarjetas extranjeras cobran 650 rupias por operación.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Most that do implement a charge of Rs650 per transaction"
+    },
+    {
+      "t": "Restaurantes turísticos suman 10 % de servicio y 13 % de IVA (24,5 % en total).",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Note that most restaurants that cater to tourists will add a 10% service charge and then a 13% VAT charge (total of 24.5%) to the prices stated on the menu."
+    },
+    {
+      "t": "Una docena de momos: 150-250 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "expect to pay between Rs150-250 for a dozen"
+    },
+    {
+      "t": "Consulta en la clínica Ciwec: 50 USD solo por ver al médico.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "It is well equipped, but it costs US$50 just to be seen by a doctor."
+    }
+  ],
+  "llegar": [
+    {
+      "t": "El aeropuerto internacional Tribhuvan está en Ring Road, a 5,5 km al este de Thamel.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Ring Road (located 5.5 km east of the popular tourist area of Thamel)"
+    },
+    {
+      "t": "La mayoría de vuelos internacionales llegan desde Delhi, Emiratos, Catar o Bangkok.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Most international flights to Kathmandu arrive from Delhi, UAE, Qatar, or Bangkok."
+    },
+    {
+      "t": "Hay SIM turísticas en el aeropuerto, entre inmigración y aduana.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Tourist SIM cards are available at two counters, which are located between immigration and customs."
+    },
+    {
+      "t": "Mejor no cambiar dinero en el aeropuerto: peor cambio que en Thamel; mejor usar cajero.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Try not to exchange money at the airport as there are service charges and lower rates offered than what you can get in Thamel"
+    },
+    {
+      "t": "Los vuelos nacionales casi siempre van con retraso y los de tarde pueden cancelarse.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Domestic flights are almost always delayed and afternoon flights run the risk of cancellation as delays from the morning compound."
+    },
+    {
+      "t": "Carreteras: Tribhuvan al sur (India), Prithvi al oeste y Araniko al norte (China).",
+      "f": [
+        "W1"
+      ],
+      "cita": "Kathmandu is connected by the Tribhuvan Highway to the south connecting India, Prithvi Highway to the west and Araniko Highway to the north connecting China."
+    },
+    {
+      "t": "Los autobuses desde India terminan en la estación de Swayambhu.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Indian bus from India terminate at the Swayambu Bus Stand"
+    },
+    {
+      "t": "La frontera de Siliguri vuelve a estar abierta a todos los pasaportes con visado válido.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The Nepal-Indian border at Siliguri, which was only open to Bhutanese, Indian, and Nepalese passport holders since the pandemic, is now open to all passport holders with valid visas."
+    },
+    {
+      "t": "En la época de lluvias la carretera a Pokhara puede dar problemas y compensa volar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "During the rainy season, there may be problems with the roads and flying may make more sense."
+    },
+    {
+      "t": "Sajha Yatayat ofrece autobuses regulares por el valle, también al aeropuerto.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Sajha Yatayat, established in 1962, provides regular bus services throughout Kathmandu and the surrounding valley, including to the airport."
+    },
+    {
+      "t": "Funcionan Pathao, Tootle e inDrive; solo inDrive admite números extranjeros.",
+      "f": [
+        "WV"
+      ],
+      "cita": "To use Pathao and Tootle, you need to have a Nepali mobile number, while inDrive supports international numbers."
+    },
+    {
+      "t": "Después de las 22:00 cuesta encontrar taxi fuera de las zonas turísticas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "After 22:00 it can be very difficult to find taxis away from central tourist areas or major hotels."
+    },
+    {
+      "t": "Al taxi hay que negociar el precio antes de salir.",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you hail a taxi, negotiate the fare before starting off. Fares are higher after dark and in less busy areas."
+    }
+  ],
+  "gente": [
+    {
+      "t": "Los newar, pueblo nativo del valle, son el mayor grupo (24,59 %).",
+      "f": [
+        "W1"
+      ],
+      "cita": "The largest group is the native Newars, whose various sub-groups combine to make up 24.59% of the population."
+    },
+    {
+      "t": "El budismo newar es la única tradición budista en sánscrito que sobrevive.",
+      "f": [
+        "W1"
+      ],
+      "cita": "This created the basis of Newar Buddhism, which is the only surviving Sanskrit-based Buddhist tradition in the world."
+    },
+    {
+      "t": "Mayoría hindú y fuerte presencia budista vajrayana.",
+      "f": [
+        "W1"
+      ],
+      "cita": "It has a multi-ethnic population with a Hindu majority and a significant Vajrayana Buddhist presence."
+    },
+    {
+      "t": "El nepalí es lengua materna del 62 %; el newari, del 19 %; muchos hablan inglés.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Newari is spoken by 19%, and the other languages spoken in the city include Tamang (6%), Maithili (3%), Bhojpuri (2%), Gurung (2%), Magar (2%) and Sherpa (1%)"
+    },
+    {
+      "t": "La Kumari se considera encarnación de la diosa Taleju hasta su primera menstruación.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Kumari is believed to be a bodily incarnation of the goddess Taleju (the Nepali name for Durga) until she menstruates"
+    },
+    {
+      "t": "En Boudhanath los peregrinos tibetanos se postran, giran con molinillos de oración, cantan y rezan.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Every year the stupa attracts many Tibetan Buddhist pilgrims who perform full body prostrations in the inner lower enclosure, walk around the stupa with prayer wheels, chant, and pray."
+    },
+    {
+      "t": "Hay más de 50 monasterios tibetanos alrededor de Boudhanath.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The influx of many Tibetan refugees from China has seen the construction of over 50 Tibetan gompas (monasteries) around Boudhanath."
+    },
+    {
+      "t": "Swayambhunath lo veneran budistas e hindúes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Although the site is considered Buddhist, it is revered by both Buddhists and Hindus."
+    },
+    {
+      "t": "Los newar celebran fiestas propias todo el año.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The indigenous Newa population of Kathmandu have many festivals going on around the whole year."
+    },
+    {
+      "t": "La comida newa se sirve en bhatti (restaurantes locales) o cafés.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There are hundreds of traditional Newa delicacies, which can be found in bhatti (local restaurants) or cafes."
+    },
+    {
+      "t": "Hay casas de huéspedes en pueblos newar históricos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You can find many homestays in historical Newa towns, where you can live in a traditional Newa houses."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "El Bagmati es río sagrado; en sus orillas se incinera a los hindúes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The importance of the Bagmati also lies in the fact that Hindus are cremated on its banks"
+    },
+    {
+      "t": "Dashain incluye sacrificios de animales.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Dashain celebrates all of the manifestations of the goddess Durga, it is marked by animal sacrifices and feasting."
+    },
+    {
+      "t": "Los monos, también los de Swayambhunath, pueden transmitir la rabia.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Animals, such as bats and monkeys (including those at Swayambhunath), may be carriers of rabies and other diseases."
+    },
+    {
+      "t": "No beber agua del grifo ni tomar ensaladas o hielo sin saber si el agua está filtrada y hervida.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Do not, under any circumstances, drink from taps or consume salads and ice unless you are confident that the water used in their preparation has been filtered and boiled."
+    },
+    {
+      "t": "Calidad del aire muy mala, sobre todo junto a Ring Road; conviene mascarilla.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Air quality in Kathmandu has been very poor since the 2015 earthquake, particularly around the ring road. Buying a dust mask is advisable."
+    },
+    {
+      "t": "El alcohol casero puede llevar metanol.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Homemade Alcohol (chang, roxi, three panni roxi, toongba) may contain methanol and is not recommended"
+    },
+    {
+      "t": "Se recomiendan vacunas de rabia, tétanos, tifoidea y hepatitis antes de llegar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Vaccinations for rabies, tetanus, typhoid, and hepatitis are recommended prior to arriving in Kathmandu"
+    },
+    {
+      "t": "Hay carteristas en sitios con mucha gente.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Violent crime is rare; pickpockets are not, especially in crowded places."
+    },
+    {
+      "t": "Evitar a quien ofrece llevarte a dance bars: ha habido estafas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Avoid seeking help from random individuals on the streets who offer taking you to dance bars."
+    },
+    {
+      "t": "Evitar manifestaciones; las huelgas (bandh) paran el transporte y cierran tiendas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The frequent strikes, locally known as bandh or banda, that are still held on occasion, are a major inconvenience for most tourists as all transportation stops, and many shops and restaurants close."
+    },
+    {
+      "t": "No llevar objetos de valor en el equipaje facturado.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Do not keep anything of value in checked bags, and if you lock the bag, the zip may be forced open and broken."
+    },
+    {
+      "t": "Quien te lleva a un hotel desde la calle cobra comisión que pagas tú.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Remember anyone on the street who takes you to a hotel will be receiving a commission from the hotel"
+    },
+    {
+      "t": "Hay muchas falsificaciones; las antigüedades auténticas pueden ser robadas de templos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Beware that there are lots of counterfeits, sly salesmen, and plastics presented as wood. Most real antiques are illegal to export. Genuine antiquities may have been looted from temples."
+    },
+    {
+      "t": "Las pashminas falsas son frecuentes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Look for those produced by charitable organisations such as the Tibetan refugee camp just outside Patan but be aware fakes are common"
+    }
+  ],
+  "no_escribir": [
+    "Una altitud única: las fuentes no coinciden (1.324 m en W1, 1.317 m en W2, unos 1.400 m en WV).",
+    "Una población única sin año: W1 da 845.767 (censo 2021), W2 1.003.285 (2013) y WV 2,5 millones (2011).",
+    "Una temperatura media de verano: W1 dice 22-25 °C y W2/WV 28-30 °C.",
+    "Que el monzón va de junio a agosto o de junio a septiembre como dato cerrado: W1 dice junio-septiembre; W2 y WV, junio-agosto.",
+    "Una mínima récord: W1 da −3,5 °C en 1978 y WV −9,2 °C en 2013.",
+    "Que Kasthamandap es del año 159 d. C. (W2): W1 lo sitúa en el siglo XVI, reconstruido en 1596.",
+    "Precios de entrada a la plaza Durbar, Swayambhunath, Boudhanath o Pashupatinath: ninguna fuente los da.",
+    "Que la torre Dharahara está reconstruida o se puede visitar: las fuentes solo dicen que se derrumbó en 2015.",
+    "Que la Kumari actual es Trishna Shakya: W1 lo dice solo con fecha de 2017.",
+    "Que el problema del agua se resolvió con el proyecto Melamchi: W1 solo dice que debía resolverse a finales de 2019.",
+    "Que los vuelos panorámicos permiten ver el Everest: WV solo dice vuelos sobre el Himalaya.",
+    "Que los no hindúes pueden entrar en Pashupatinath: W1 dice que solo pueden verlo desde la otra orilla."
+  ],
+  "seo": {
+    "titulo": "Katmandú (Nepal): qué ver y cómo llegar (2026)",
+    "descripcion": "Katmandú, capital de Nepal: 7 zonas Patrimonio Mundial, taxi prepago del aeropuerto a Thamel por 900 rupias y cuándo ir para evitar el monzón.",
+    "faq": [
+      {
+        "p": "¿Cuándo es mejor viajar a Katmandú?",
+        "r": "Conviene tener en cuenta que unas dos terceras partes de la lluvia anual (unos 1.400 mm) caen durante el monzón, de junio a septiembre. En invierno la media es de 10,1 °C y puede bajar a 0 °C o menos. Ojo con los festivos: Dashain dura quince días entre septiembre y octubre y paraliza buena parte de la ciudad, y muchos negocios cierran también los días antes y después."
+      },
+      {
+        "p": "¿Cómo se va del aeropuerto de Katmandú al centro?",
+        "r": "El aeropuerto internacional Tribhuvan está a 5,5 km al este de Thamel. El taxi prepago a Thamel o Boudha cuesta 900 rupias; un taxi normal, unas 650 rupias a Thamel y 450 a Boudha, aunque al extranjero suelen pedirle más. Desde la puerta sale un autobús local por 10 rupias. Mejor no cambiar dinero allí: el cambio es peor que en Thamel y compensa usar el cajero."
+      },
+      {
+        "p": "¿Qué ver en Katmandú y su valle?",
+        "r": "Siete zonas monumentales del valle son Patrimonio Mundial: las tres plazas Durbar, Pashupatinath, Changunarayan, Swayambhunath y Boudhanath. En Boudhanath los peregrinos tibetanos giran con molinillos de oración y hay más de 50 monasterios alrededor. Swayambhunath lo veneran budistas e hindúes."
+      },
+      {
+        "p": "¿Se puede entrar en el templo de Pashupatinath?",
+        "r": "No si no eres hindú. Los no hindúes solo pueden verlo desde la otra orilla del río Bagmati, donde se incinera a los hindúes."
+      },
+      {
+        "p": "¿Cómo ir de Katmandú a Pokhara?",
+        "r": "En autobús se tarda 6-7 horas: el turístico cuesta 800 rupias y el local, 400-600. Greenline va de Thamel a Lakeside por 20 USD con comida. Los vuelos nacionales cuestan unos 100-175 USD y duran alrededor de una hora, aunque casi siempre van con retraso. En época de lluvias la carretera puede dar problemas y compensa volar."
+      },
+      {
+        "p": "¿Necesito visado para viajar a Katmandú?",
+        "r": "Sí. Se puede pedir en línea antes de embarcar para evitar el trámite en el aeropuerto. La tasa se paga en divisas principales, mejor en dólares."
+      },
+      {
+        "p": "¿Qué precauciones de salud hay que tomar en Katmandú?",
+        "r": "No bebas agua del grifo ni tomes ensaladas o hielo sin saber si el agua está filtrada y hervida. Se recomiendan vacunas de rabia, tétanos, tifoidea y hepatitis; los monos, también los de Swayambhunath, pueden transmitir la rabia. La calidad del aire es muy mala, sobre todo junto a Ring Road, así que conviene llevar mascarilla."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Kathmandu»",
+      "url": "https://en.wikipedia.org/wiki/Kathmandu",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Katmandú»",
+      "url": "https://es.wikipedia.org/wiki/Katmand%C3%BA",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Kathmandu», revisión del 2026-11-01",
+      "url": "https://en.wikivoyage.org/wiki/Kathmandu",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

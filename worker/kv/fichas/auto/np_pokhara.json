@@ -1,0 +1,954 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:pokhara.",
+  "ref": "np:pokhara",
+  "nombre": "Pokhara",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "Pokhara es la capital de la provincia de Gandaki, en el centro de Nepal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "is a metropolitan city located in central Nepal, which serves as the capital of Gandaki Province"
+    },
+    {
+      "t": "Está a unos 200 km al oeste de Katmandú.",
+      "f": [
+        "W2"
+      ],
+      "cita": "aproximadamente 200 kilómetros al oeste de la capital, Katmandú"
+    },
+    {
+      "t": "Está a orillas del lago Phewa, a unos 822 m de altitud media.",
+      "f": [
+        "W1"
+      ],
+      "cita": "on the shore of Phewa Lake, and sits at an average elevation of approximately 822 m above sea level"
+    },
+    {
+      "t": "El nombre viene de «pokhari», que en nepalí significa «estanque».",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Nepali word \"pokhari\" (Nepali: पोखरी, pronounced [ˈpokʰʌɾi]) means \"pond\"; pokhara is a local variant."
+    },
+    {
+      "t": "Está en una antigua ruta comercial entre China e India.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Pokhara lies on an important old trading route between China and India."
+    },
+    {
+      "t": "En el siglo XVII formaba parte del Reino de Kaski, uno de los 24 reinos de Nepal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In the 17th century, it was part of the Kingdom of Kaski which was one of the Chaubisi rajya (24 Kingdoms of Nepal"
+    },
+    {
+      "t": "Un estudio de 2023 atribuye a un deslizamiento hacia el año 1190, desde el Annapurna IV, gran parte del terreno donde se construyó la ciudad.",
+      "f": [
+        "W1"
+      ],
+      "cita": "estimated that a single landslide, dated approximately to 1190 AD, removed as much as 23 cubic kilometers of material from Annapurna IV"
+    },
+    {
+      "t": "Hasta finales de los años sesenta solo se llegaba a pie.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Until the end of the 1960s, the town was only accessible by foot"
+    },
+    {
+      "t": "La primera carretera, la Siddhartha Highway, se terminó en 1968; después llegaron el turismo y el crecimiento de la ciudad.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The first road was completed in 1968 (Siddhartha Highway) after which tourism set in and the city grew rapidly."
+    },
+    {
+      "t": "En 2024 fue declarada capital turística de Nepal. Es la base del circuito del Annapurna.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 2024, Pokhara was declared as the tourism capital of Nepal, being a base for trekkers undertaking the Annapurna Circuit"
+    },
+    {
+      "t": "Desde la ciudad se ven tres cumbres de más de 8.000 m: Dhaulagiri, Annapurna y Manaslu.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Three 8,000-metre (26,000-foot) peaks (Dhaulagiri, Annapurna, Manaslu) can be seen from the city."
+    },
+    {
+      "t": "El Machhapuchchhre (Fishtail), de 6.993 m, es la montaña más cercana a la ciudad.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Machhapuchchhre (Fishtail) with an elevation of 6,993 metres (22,943 feet) is the closest to the city."
+    },
+    {
+      "t": "El lago Phewa mide 4,4 km² y está a unos 800 m de altitud.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the city borders Phewa Tal (or Phewa Lake) (4.4 km2) at an elevation of about 800 metres"
+    },
+    {
+      "t": "Desde 2017 es la mayor ciudad metropolitana de Nepal por superficie: 464,24 km².",
+      "f": [
+        "W1"
+      ],
+      "cita": "In 2017, Pokhara Lekhnath Metropolitan City became Nepal's largest metropolitan city by area, occupying 464.24 km2"
+    },
+    {
+      "t": "El río Seti Gandaki atraviesa la ciudad por gargantas de cientos de metros de profundidad.",
+      "f": [
+        "W1"
+      ],
+      "cita": "These long sections of terraces are interrupted by gorges that are hundreds of metres deep."
+    },
+    {
+      "t": "La ciudad es especialmente vulnerable a terremotos e inundaciones.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Pokhara is considered particularly vulnerable to earthquakes and floods because the Seti Gandaki River flows through the city."
+    },
+    {
+      "t": "La presa del lago Phewa se hundió en 1974 y después se reconstruyó.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The dam collapsed in 1974 which resulted in draining of its water and exposing the land leading to illegal land encroachment; since then the dam has been rebuilt."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "La mayor parte de la lluvia cae con el monzón, de junio a septiembre.",
+      "f": [
+        "W1"
+      ],
+      "cita": "most precipitation occurs during the monsoon season (June–September). Winter and spring skies are generally clear and sunny."
+    },
+    {
+      "t": "En invierno y primavera el cielo suele estar despejado.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Winter and spring skies are generally clear and sunny."
+    },
+    {
+      "t": "En verano la temperatura media va de 25 a 35 °C; en invierno, de −2 a 15 °C.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Temperatures in summer average between 25 and 35 °C; in winter around −2 to 15 °C."
+    },
+    {
+      "t": "Es una de las zonas más lluviosas del país: unos 3.350 mm al año en el valle.",
+      "f": [
+        "W1"
+      ],
+      "cita": "one of the highest precipitation rates in the country (3,350 mm/year or 131 inches/year in the valley"
+    },
+    {
+      "t": "En el valle no nieva; en las colinas de alrededor nieva a veces en invierno.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Snowfall is not observed in the valley, but surrounding hills experience occasional snowfall in the winter."
+    },
+    {
+      "t": "En la época de lluvias puede haber problemas en las carreteras, y volar puede compensar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "During the rainy season, there may be problems with the roads, and flying may make more sense."
+    },
+    {
+      "t": "Las montañas se ven mejor por la mañana.",
+      "f": [
+        "W1"
+      ],
+      "cita": "This airport is more busy in the morning time when the mountains to the north of the valley are visible."
+    },
+    {
+      "t": "En Sarangkot las mejores vistas son por la mañana.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Morning views are best."
+    },
+    {
+      "t": "Los reflejos en el lago Phewa impresionan a primera hora de la mañana.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The reflections in the mirror-like water in the early mornings are impressive."
+    },
+    {
+      "t": "Devi's Falls impresiona sobre todo después de lluvias fuertes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Spectacular, especially after heavy rains. Devi's Falls plunge into a cave and disappear into the earth."
+    },
+    {
+      "t": "En el monzón hay sanguijuelas en el sendero a la World Peace Pagoda.",
+      "f": [
+        "WV"
+      ],
+      "cita": "take a very steep hike through the forest (watch out for leeches during the monsoon)"
+    },
+    {
+      "t": "Dipawali, la fiesta hindú de las luces, cae en octubre o noviembre y es buena época para ir.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Dipawali — the Hindu festival of lights and worshipping of Laxmi, celebrated in either October or November, is a great time to be in Pokhara."
+    },
+    {
+      "t": "El Street Festival se celebra en la calle de Lakeside del 27 de diciembre al 2 de enero.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Street Festival — is celebrated every year from 27 December to 2 January. Thousands of people gather and celebrate the festival on Lakeside street."
+    },
+    {
+      "t": "Holi, la fiesta del color, se celebra mucho, con conciertos en Lakeside.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Holi — the festival of colour is heavily celebrated. Concerts and musical events are held on Pokhara, Lakeside."
+    }
+  ],
+  "fauna": [
+    {
+      "t": "El lago Phewa está rodeado de bosques con muchos monos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Phewa Tal is surrounded by a combination of monkey-filled forests and high white peaks."
+    },
+    {
+      "t": "En el lago Dipang hay lotos y cisnes silvestres.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Beautiful lake where you can find wild lotus and wild swan."
+    },
+    {
+      "t": "En la Bat Cave se ven murciélagos colgados del techo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "This cave is famous for the bats that can be seen hanging from the ceilings."
+    },
+    {
+      "t": "Hay excursiones a primera hora para ver comer a los buitres en un proyecto de conservación con vacas al final de su vida.",
+      "f": [
+        "WV"
+      ],
+      "cita": "When the cows eventually die they are given as food to the vultures. Trips are arranged to view such early morning vulture feasts."
+    },
+    {
+      "t": "El jacinto de agua, una planta invasora, está ocupando el lago Phewa.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The lake is currently being encroached upon by invasive water hyacinth"
+    },
+    {
+      "t": "El Annapurna Natural History Museum tiene una gran colección de mariposas de la región.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Annapurna Natural History Museum which houses preserved specimens of flora and fauna, and contains a particularly extensive collection of the butterflies"
+    }
+  ],
+  "sitios": [
+    {
+      "hace": "Alquilar una barca y remar por el lago, o contratar a alguien que reme",
+      "maps": "Phewa Lake",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Hire a boat and row yourself across the lake, or hire a local to do it for you",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el templo de la isla del lago Phewa",
+      "maps": "Tal Barahi Temple",
+      "nota": "Solo se llega en barca",
+      "f": [
+        "W1"
+      ],
+      "cita": "Boating is a required form of transport to get to the Tal Barahi Temple.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver el amanecer o el atardecer sobre Pokhara y los Annapurnas",
+      "maps": "World Peace Pagoda",
+      "nota": "En una colina al sur del lago Phewa; subida a pie muy empinada por el bosque",
+      "f": [
+        "WV"
+      ],
+      "cita": "This is a great place to watch the sunrise or sunset over Pokhara.",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir a pie, en moto o en teleférico para ver las montañas; parapente",
+      "maps": "Sarangkot",
+      "nota": "Subida empinada; mejores vistas por la mañana",
+      "f": [
+        "WV"
+      ],
+      "cita": "Head up Sarangkot, and be prepared as it's steep and hard work.",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir en teleférico de Lakeside a Sarangkot",
+      "maps": "Annapurna Cable Car",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Annapurna Cable Car takes tourists from Lakeside to Sarangkot and back.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la cascada que se hunde en una cueva",
+      "maps": "Devi's Falls",
+      "nota": "Más espectacular tras lluvias fuertes",
+      "f": [
+        "WV"
+      ],
+      "cita": "Devi's Falls plunge into a cave and disappear into the earth.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar la cueva-templo con una estalagmita venerada como Shiva",
+      "maps": "Gupteshwor Mahadev Cave",
+      "nota": "Al sur de Damside, junto a Devi's Falls",
+      "f": [
+        "WV"
+      ],
+      "cita": "Gupteshwor Mahadev Cave (south of Damside near Devi's Falls)",
+      "comprobado": null
+    },
+    {
+      "hace": "Recorrer la cueva",
+      "maps": "Mahendra Cave",
+      "nota": "Al norte, cerca de Batulechaur; para las zonas ocultas hace falta guía extra",
+      "f": [
+        "WV"
+      ],
+      "cita": "Mahendra Cave (Mahendra Gufa) (North of Pokhara near Batulechaur)",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver murciélagos en la cueva",
+      "maps": "Bat Cave (Chamere Gufa)",
+      "nota": "A 10 minutos al sur de Mahendra Cave",
+      "f": [
+        "WV"
+      ],
+      "cita": "Bat Cave (Chamare Gufa) (10 minutes south from the famous Mahendra cave)",
+      "comprobado": null
+    },
+    {
+      "hace": "Museo sobre los pueblos del Himalaya, las 14 cumbres más altas y sus expediciones",
+      "maps": "International Mountain Museum",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "International Mountain Museum, Ghari Patan",
+      "comprobado": null
+    },
+    {
+      "hace": "Museo de los soldados gurkha: uniformes, cuchillos y banderas",
+      "maps": "Gurkha Memorial Museum",
+      "nota": "Al norte, junto al puente KI Singh, frente al campamento británico gurkha",
+      "f": [
+        "WV"
+      ],
+      "cita": "Gurkha Memorial Museum (In the northern part of Pokhara, near KI Sing Bridge at the front of the British Gurkhas Pokhara camp.)",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver ejemplares de flora y fauna, sobre todo mariposas",
+      "maps": "Annapurna Natural History Museum",
+      "nota": "",
+      "f": [
+        "W1"
+      ],
+      "cita": "Annapurna Natural History Museum which houses preserved specimens of flora and fauna",
+      "comprobado": null
+    },
+    {
+      "hace": "Lago tranquilo fuera de la ciudad, con retiro de meditación Vipassana",
+      "maps": "Begnas Lake",
+      "nota": "13,3 km al sureste, por la Prithvi Rajmarg",
+      "f": [
+        "WV"
+      ],
+      "cita": "Out of town and away from the hustle, Begnas Tal is quiet, clean and peaceful.",
+      "comprobado": null
+    },
+    {
+      "hace": "Lago apartado y tranquilo",
+      "maps": "Rupa Lake",
+      "nota": "Acceso limitado",
+      "f": [
+        "WV"
+      ],
+      "cita": "Rupa Lake (Rupa Tal) (15 km south-east from Pokhara, along the Prithvi Rajmarg road)",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver loto y cisnes silvestres",
+      "maps": "Dipang Lake",
+      "nota": "A unos 25 minutos a pie de Sisuwa",
+      "f": [
+        "WV"
+      ],
+      "cita": "Dipang Lake (Dipang Tal) (12.7 km south-east from Pokhara, along the Prithvi Rajmarg road)",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir a la torre mirador con vistas a los Annapurnas y al valle",
+      "maps": "Kahun Dharahara",
+      "nota": "Arriba no hay tiendas, cafés ni hoteles: lleva lo necesario",
+      "f": [
+        "WV"
+      ],
+      "cita": "At the top of Kahun there's a view tower locally called \"Kahun Dharhara\".",
+      "comprobado": null
+    },
+    {
+      "hace": "Caminar 2-3 horas por Armala hasta una colina con vistas cercanas al Himalaya",
+      "maps": "Dhiki Danda",
+      "nota": "Al norte de Mahendra Cave",
+      "f": [
+        "WV"
+      ],
+      "cita": "Dhiki Danda. One of the hills that provides a closer view to the Himalayas.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el templo en la parte antigua de la ciudad",
+      "maps": "Bindhyabasini Temple",
+      "nota": "",
+      "f": [
+        "W2"
+      ],
+      "cita": "Vale la pena visitar dos templos en la parte más antigua de la ciudad: el Bindhyabasini y el Bhimsen.",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el templo en la parte antigua de la ciudad",
+      "maps": "Bhimsen Temple",
+      "nota": "",
+      "f": [
+        "W2"
+      ],
+      "cita": "Vale la pena visitar dos templos en la parte más antigua de la ciudad: el Bindhyabasini y el Bhimsen.",
+      "comprobado": null
+    },
+    {
+      "hace": "Pasear por el antiguo centro",
+      "maps": "Purano Bazar",
+      "nota": "",
+      "f": [
+        "W2"
+      ],
+      "cita": "está a medio camino entre el lago y Purano Bazar, el antiguo centro.",
+      "comprobado": null
+    },
+    {
+      "hace": "Barrio turístico con tiendas, hoteles, restaurantes y bares con música en directo",
+      "maps": "Lakeside",
+      "nota": "En la orilla norte del lago Phewa",
+      "f": [
+        "W1"
+      ],
+      "cita": "The tourist district is along the north shore of the Phewa lake (Baidam, Lakeside, and Damside).",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "Al templo Barahi solo se llega en barca, que se alquila en las orillas del lago.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Es accesible solo a través de barcos, disponibles en las orillas del lago."
+    },
+    {
+      "t": "Para ver las zonas ocultas de Mahendra Cave hace falta un guía extra.",
+      "f": [
+        "WV"
+      ],
+      "cita": "however you will need an extra guide to see the hidden parts"
+    },
+    {
+      "t": "El teleférico de Sarangkot hace varias pausas al día.",
+      "f": [
+        "WV"
+      ],
+      "cita": "or an easy ride with the cable car (notice their many breaks during the day)"
+    },
+    {
+      "t": "Por la pista de Sarangkot no se recomienda subir en moto ni bici porque tiene muchas piedras.",
+      "f": [
+        "WV"
+      ],
+      "cita": "don't try to ride a motorbike or bike up this road, too rocky"
+    },
+    {
+      "t": "A las casas de huéspedes de lo alto de Sarangkot no se llega en coche: son 20 minutos cuesta arriba a pie.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Note that these hotels are not accessible by car - they are a 20-minute walk uphill on gravel from the taxi stand in Sarangkot"
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Autobús turístico Katmandú-Pokhara: 700-800 rupias, 6-7 horas; local: 400-600 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Tourist buses (Rs700-800, 6-7 hr) and crowded local buses/microbuses (Rs400-600, 6-7 hr) travel the 200-km journey between Kathmandu and Pokhara"
+    },
+    {
+      "t": "Por obras en la carretera, el viaje en autobús desde Katmandú puede llevar 8-10 horas.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "mayo de 2023",
+      "cita": "Plan on spend at least 8 and possibly 9 or 10 hours on the road now"
+    },
+    {
+      "t": "Greenline: autobús diario de Thamel a Lakeside por 20 USD, con comida.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Greenline operates a convenient bus every morning between the popular tourist areas of Thamel in Kathmandu and Lakeside in Pokhara (US$20, lunch included)"
+    },
+    {
+      "t": "Vuelo Katmandú-Pokhara: 102-106 USD, 40 minutos.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "operate regular flights (US$102-106, 40 minutes) that can be purchased online and at the last minute"
+    },
+    {
+      "t": "Taxi del aeropuerto a Lakeside: 250 rupias negociadas; autobús urbano, 20 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "A taxi from the Pokhara airport to Lakeside should cost Rs250 if negotiated in advance, but the city bus passes the airport and costs Rs20."
+    },
+    {
+      "t": "Autobús urbano: 20-40 rupias por trayecto.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "Fare is Rs20–40 per way (as of March 2023)."
+    },
+    {
+      "t": "World Peace Pagoda: abierta a diario de 05:00 a 18:00, gratis.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "World Peace Pagoda (Shanti Stupa). Daily 05:00–18:00."
+    },
+    {
+      "t": "Taxi hasta la base de la World Peace Pagoda: 1.000 rupias ida y vuelta, con espera.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "take a taxi to the base of the Peace Pagoda (Rs1000 return, including waiting)"
+    },
+    {
+      "t": "Teleférico de Sarangkot: 660 rupias solo ida, 1.185 ida y vuelta.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "Cable car: Rs660 single trip, Rs1185 return."
+    },
+    {
+      "t": "Horario del teleférico de Sarangkot: 05:00-07:00, 07:30-11:30 y 12:30-17:30.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "Cable car: 05:00–07:00, 07:30–11:30, 12:30–17:30."
+    },
+    {
+      "t": "Mahendra Cave y Bat Cave: 150 rupias para extranjeros, con horario según la época.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "marzo de 2023",
+      "cita": "May-Aug 07:00-18:30; Sep-Nov & Feb-Apr 07:00-18:00; Dec-Jan 07:00-17:00. This cave is famous for the bats that can be seen hanging from the ceilings. Foreigners Rs150"
+    },
+    {
+      "t": "Devi's Falls: entrada de 25 rupias.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "The name is from a Swiss couple who were washed away (or fell in) and drowned. Rs25."
+    },
+    {
+      "t": "International Mountain Museum: de 09:00 a 17:00; 300 rupias para no SAARC.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Daily 09:00-17:00. Displays about the people living in the Himalayas"
+    },
+    {
+      "t": "Gurkha Memorial Museum: de 08:00 a 16:30; 200 rupias para extranjeros.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "08:00-16:30 everyday. Museum dedicated to the famous soldiers from Nepal."
+    },
+    {
+      "t": "Parapente: 120 USD.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Don't miss soaring around Lake Pokhara and the Annapurnas. US$120."
+    },
+    {
+      "t": "Alquiler de scooter o moto en Lakeside desde 550 rupias al día; gasolina a 120 rupias el litro.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "It is also possible to hire a scooter or a motorbike in Lakeside (from Rs550/day). You will have to buy petrol (Rs120/litre)."
+    },
+    {
+      "t": "Alquiler de bicicleta en Lakeside: 300-2.000 rupias al día.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "Bicycles can be hired in a lot of shops in Lakeside (Rs300-2,000/day)."
+    },
+    {
+      "t": "Los cajeros cobran 500 rupias por retirada.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "",
+      "cita": "All charge a withdrawal fee of Rs500 per transaction."
+    }
+  ],
+  "llegar": [
+    {
+      "t": "El aeropuerto regional internacional (PHH) abrió el 1 de enero de 2023; en abril de 2025 solo operaba una aerolínea internacional.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Pokhara Regional International Airport (PHH) opened 1 January 2023. Domestic airlines operate there. However, as of April 2025, only one international airline serves the airport."
+    },
+    {
+      "t": "Desde el aeropuerto antiguo (PKR) siguen saliendo en 2025 los vuelos a Jomsom, los helicópteros y los ultraligeros.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the domestic operations to Jomsom, helicopters, and ultralights are still operated from this airport in 2025"
+    },
+    {
+      "t": "El vuelo desde Katmandú dura unos 30 minutos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Flight duration from Kathmandu to Pokhara is approximately 30 minutes."
+    },
+    {
+      "t": "Los vuelos suelen retrasarse y los de la tarde pueden cancelarse.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Flights are almost always delayed and afternoon flights run the risk of cancellation as delays from the morning compound."
+    },
+    {
+      "t": "Por carretera llegan la Prithvi Highway, la Siddhartha Highway y otras; el Purano Bus Park es la terminal principal.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the Purano Bus Park is the main hub for buses plying countrywide"
+    },
+    {
+      "t": "La carretera desde Katmandú tiene muchas curvas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The road is winding with many switchbacks but offers wonderful views of hills and rural Nepalese lifestyle."
+    },
+    {
+      "t": "Hay autobuses desde Sunauli, en la frontera con India, en unas 10 horas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Buses are available from the border town of Sunauli (Rs500-700, 10 hours)."
+    },
+    {
+      "t": "Por la ciudad circulan autobuses, microbuses y taxis con taxímetro.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The public transport mainly consists of local and city buses, micros, micro-buses and metered-taxis."
+    },
+    {
+      "t": "Se puede pedir taxi o moto con la aplicación InDrive.",
+      "f": [
+        "WV"
+      ],
+      "cita": "You may also use InDrive app to hail a taxi or motorbike."
+    },
+    {
+      "t": "Con scooter automático no se llega a Sarangkot ni a la World Peace Pagoda; hace falta moto de marchas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It is not possible to reach Sarangkot or the World Peace Pagoda with an automatic motorbike or scooter due to the steep uphill road"
+    }
+  ],
+  "gente": [
+    {
+      "t": "Los khas, gurung (tamu) y magar son las comunidades dominantes; también hay una población newar importante.",
+      "f": [
+        "W1"
+      ],
+      "cita": "At present, the Khas, Gurung (Tamu) and Magar form the dominant community of Pokhara. There is also a sizeable Newari population in the city."
+    },
+    {
+      "t": "Las colinas cercanas están llenas de aldeas gurung.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The nearby hills around Pokhara are covered by Gurung villages with few places belonging to the Khas community."
+    },
+    {
+      "t": "El último rey de Kaski trajo dieciséis familias newar de Bhaktapur en la década de 1770 para crear el mercado antiguo.",
+      "f": [
+        "W1"
+      ],
+      "cita": "brought sixteen families of Newars from Kathmandu (Bhaktapur) to develop the present-day market (i.e., old market) in the 1770s"
+    },
+    {
+      "t": "En Batulechaur viven los gandharva o gaaine, la casta de músicos.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Batulechaur in the far north of Pokhara is home to the Gandharvas or Gaaineys (the tribe of the musicians)."
+    },
+    {
+      "t": "En la ciudad viven muchos soldados gurkha, sobre todo de etnia gurung y magar.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Pokhara also has the highest number of Gurkha soldiers, the majority of them belonging to Gurung and Magar ethnic groups"
+    },
+    {
+      "t": "Hay cuatro asentamientos tibetanos: Jampaling, Paljorling, Tashi Ling y Tashi Palkhel, cada uno con su gompa.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The four Tibetan settlements in Pokhara are Jampaling, Paljorling, Tashi Ling, and Tashi Palkhel."
+    },
+    {
+      "t": "El asentamiento tibetano camino del aeropuerto tiene monasterio, escuela y puestos de artesanía hecha por refugiados.",
+      "f": [
+        "WV"
+      ],
+      "cita": "on the way to the Tibetan settlement where there is a nice little monastery, a school, and refugee-made jewellery and craft stalls"
+    },
+    {
+      "t": "Según el censo de 2021, el 82,4 % es hindú y el 13,2 % budista.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In terms of religion, 82.4% were Hindu, 13.2% Buddhist, 2.4% Christian"
+    },
+    {
+      "t": "Muchos templos son lugar de culto común para hindúes y budistas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Many temples serve as combined places of worship for Hindus and Buddhists."
+    },
+    {
+      "t": "El Panché Baaja es la banda tradicional que tocan los músicos damaai en las bodas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the Panché Baaja (पञ्चे बाजा), a traditional musical band performed generally during marriage ceremonies by the damaai musicians"
+    },
+    {
+      "t": "Kriayt Social Business vende artesanía en Lakeside para dar ingresos a mujeres nepalíes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Kriayt Social Business is a marketplace in central Lakeside with the mission of empowering Nepali women to earn a living."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "La estalagmita de la cueva Gupteshwor se venera como Shiva: es un templo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Contains a large stalagmite venerated as a representation of Shiva; two caverns: one the temple and the other leading to a spot near Devi's Falls."
+    },
+    {
+      "t": "Wikivoyage advierte que quedarse en Lakeside da una versión poco auténtica de Nepal.",
+      "f": [
+        "WV"
+      ],
+      "cita": "If you intend to stay on the lakeside road, para-glide, and trek to Annapurna, you will be getting a very inauthentic version of Nepal."
+    },
+    {
+      "t": "Muchos locales son bares de «girl dance» donde las bailarinas son empleadas que piden a los clientes que les inviten a copas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "\"girl dance\" bars where the only women are the staff, paid to 'dance' on the stage and then come ask male patrons to buy them drinks"
+    },
+    {
+      "t": "Hay que regatear con las vendedoras tibetanas: los precios de salida están muy inflados.",
+      "f": [
+        "WV"
+      ],
+      "cita": "make sure you bargain as starting prices generally are highly inflated"
+    },
+    {
+      "t": "El material de montaña de Lakeside tiene fama de mala calidad.",
+      "f": [
+        "WV"
+      ],
+      "cita": "hiking gear sold in lakeside is of notoriously poor quality — often not even surviving one trek"
+    },
+    {
+      "t": "Algunas fiestas trance publican carteles falsos; conviene confirmarlo con los artistas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "There have been several instances of festivals publishing fake line-ups so check with the artists."
+    },
+    {
+      "t": "Hay avisos de una web falsa del Crown Hotel que podría llevar a reservas fraudulentas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "there have been reports of a fake website for this hotel, that shows real pictures of the hotel but is rumoured to lead to fraudulent bookings"
+    },
+    {
+      "t": "Muchos voluntariados y estancias en granjas piden dinero para la comida de los voluntarios.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Work-aways and farm stays are common, many will ask for money to cover volunteers food."
+    },
+    {
+      "t": "Wikivoyage avisa de que el «precio local» de 300 USD al mes en alquileres largos no es real.",
+      "f": [
+        "WV"
+      ],
+      "cita": "When they say that US$300 is \"local price\", it is of course not true."
+    }
+  ],
+  "no_escribir": [
+    "Cifra de población única: las fuentes no coinciden (600.051 y 599.504 en W1; unos 520.000 en WV; 599.504 en W2).",
+    "Que sea la tercera ciudad de Nepal: W2 lo dice, pero W1 y WV la dan como la segunda.",
+    "Año en que Prithvi Narayan Shah anexionó Pokhara: W1 dice 1786 y W2 dice 1768.",
+    "Año de la World Peace Pagoda: W1 dice construida en 1996 y WV dice abierta en 1999.",
+    "Que en invierno no hiele: W2 lo dice, pero W1 da mínimas de −2 °C.",
+    "Lluvia anual exacta: W1 da 3.350 mm en el valle y W2 más de 4.000 mm.",
+    "Duración del vuelo desde Katmandú: W1 dice unos 30 minutos y WV 40.",
+    "Origen del nombre Devi's/Davis Falls: W1 habla de alguien que «supuestamente» cayó y WV de una pareja suiza; no está confirmado.",
+    "Que las montañas suban de 1.000 a 8.000 m en 30 km: W2 lo dice, pero W1 da 7.500 m.",
+    "Teleférico del lago Phewa a la World Peace Pagoda: según W1 estaba en construcción, no en servicio.",
+    "Vuelos regulares internacionales frecuentes a Pokhara: en abril de 2025 había una sola aerolínea internacional con un vuelo semanal.",
+    "Vuelos desde Pokhara a Manang, Bhairahawa y Bharatpur: solo lo dice W2, sin fecha, y W1 no lo confirma.",
+    "Que la zona turística esté al sur de la ciudad: W2 lo dice, pero W1 la sitúa en la orilla norte del lago Phewa."
+  ],
+  "seo": {
+    "titulo": "Pokhara (Nepal): qué ver y cómo llegar (2026)",
+    "descripcion": "Pokhara, a orillas del lago Phewa y a 200 km de Katmandú: vistas a tres ochomiles, Sarangkot, la World Peace Pagoda y autobús local desde 400 rupias.",
+    "faq": [
+      {
+        "p": "¿Cuál es la mejor época para ir a Pokhara?",
+        "r": "En invierno y primavera el cielo suele estar despejado y las montañas se ven mejor, sobre todo por la mañana. Con el monzón, de junio a septiembre, cae la mayor parte de la lluvia (unos 3.350 mm al año en el valle) y puede haber problemas en las carreteras. Dipawali, en octubre o noviembre, también es buena época. En verano la media va de 25 a 35 °C y en invierno, de −2 a 15 °C."
+      },
+      {
+        "p": "¿Cómo se llega a Pokhara desde Katmandú?",
+        "r": "En autobús turístico cuesta 700-800 rupias y tarda 6-7 horas (8-10 con obras en la carretera, que tiene muchas curvas). El local cuesta 400-600 rupias. Greenline sale a diario de Thamel a Lakeside por 20 USD, con comida. El vuelo cuesta 102-106 USD y dura entre 30 y 40 minutos, pero suele retrasarse y los de la tarde pueden cancelarse. En época de lluvias, volar puede compensar."
+      },
+      {
+        "p": "¿Qué ver en Pokhara?",
+        "r": "El lago Phewa, con el templo Barahi, al que solo se llega en barca; la World Peace Pagoda; Sarangkot, con vistas al Dhaulagiri, el Annapurna, el Manaslu y el Machhapuchchhre; Devi's Falls; las cuevas Mahendra, Bat Cave y Gupteshwor; el International Mountain Museum, el Gurkha Memorial Museum, el Annapurna Natural History Museum y los asentamientos tibetanos."
+      },
+      {
+        "p": "¿Cómo subir a Sarangkot?",
+        "r": "El teleférico cuesta 660 rupias solo ida y 1.185 ida y vuelta, y funciona de 05:00 a 07:00, de 07:30 a 11:30 y de 12:30 a 17:30. No se recomienda subir por la pista en moto ni en bici porque tiene muchas piedras. A las casas de huéspedes de lo alto no se llega en coche: hay 20 minutos cuesta arriba a pie. Las mejores vistas son por la mañana."
+      },
+      {
+        "p": "¿Cuánto cuestan las entradas en Pokhara?",
+        "r": "La World Peace Pagoda es gratis y abre a diario de 05:00 a 18:00. Devi's Falls cuesta 25 rupias; Mahendra Cave y Bat Cave, 150 rupias para extranjeros; el International Mountain Museum, 300 rupias para no SAARC (de 09:00 a 17:00); y el Gurkha Memorial Museum, 200 rupias para extranjeros (de 08:00 a 16:30)."
+      },
+      {
+        "p": "¿Cómo moverse por Pokhara?",
+        "r": "El autobús urbano cuesta 20-40 rupias por trayecto, y también hay microbuses, taxis con taxímetro y la aplicación InDrive. Del aeropuerto a Lakeside, el taxi sale por unas 250 rupias negociadas. Se alquilan scooters desde 550 rupias al día, pero con scooter automático no se llega a Sarangkot ni a la World Peace Pagoda: hace falta una moto de marchas."
+      },
+      {
+        "p": "¿Qué precauciones hay que tomar en Pokhara?",
+        "r": "Hay que regatear con las vendedoras tibetanas porque los precios de salida están muy inflados. El material de montaña de Lakeside tiene fama de mala calidad, los cajeros cobran 500 rupias por retirada y hay avisos de una web falsa del Crown Hotel. Algunas fiestas trance publican carteles falsos, así que conviene confirmarlo con los artistas. En el monzón hay sanguijuelas en el sendero a la World Peace Pagoda."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Pokhara»",
+      "url": "https://en.wikipedia.org/wiki/Pokhara",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Pokhara»",
+      "url": "https://es.wikipedia.org/wiki/Pokhara",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Pokhara», revisión del 2026-11-07",
+      "url": "https://en.wikivoyage.org/wiki/Pokhara",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}

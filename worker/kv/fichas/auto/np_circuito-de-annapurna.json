@@ -1,0 +1,910 @@
+{
+  "_nota": "FICHA AUTOMÁTICA CON FUENTES (scripts/fichas/generar.mjs, 2026-11-15). Cada dato pasó la comprobación de cita literal. SIN REVISAR por Paco. Clave en KV cuando se apruebe: ficha:np:circuito-annapurna.",
+  "ref": "np:circuito-annapurna",
+  "nombre": "Circuito de Annapurna",
+  "pais": "Nepal",
+  "revisada": "2026-11-15",
+  "proxima_revision_cambia": "2027-05-14",
+  "proxima_revision_estable": "2027-11-15",
+  "estable": [
+    {
+      "t": "La ruta mide entre 160 y 230 km, según dónde se use transporte motorizado y dónde se termine.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The total length of the route varies between 160 and 230 km (100-145 mi), depending on where motor transportation is used and where the trek is ended."
+    },
+    {
+      "t": "Cruza dos valles fluviales y rodea el macizo del Annapurna.",
+      "f": [
+        "W1"
+      ],
+      "cita": "This trek crosses two different river valleys and encircles the Annapurna Massif."
+    },
+    {
+      "t": "El punto más alto es el paso Thorung La, a 5416 m, en el borde de la meseta tibetana.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The path reaches its highest point at Thorung La pass (5416 m/17,769 ft), reaching the edge of the Tibetan Plateau."
+    },
+    {
+      "t": "Empieza en Besisahar o Bhulbhule, en el valle del Marshyangdi, y acaba en la garganta del Kali Gandaki.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The trek begins at Besisahar or Bhulbhule in the Marshyangdi river valley and concludes in the Kali Gandaki Gorge."
+    },
+    {
+      "t": "La mayoría lo hace en sentido antihorario: se gana altitud más despacio y el Thorong La es más fácil y seguro.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Most trekkers hike the route anticlockwise, as this way the daily altitude gain is slower, and crossing the high Thorong La pass is easier and safer."
+    },
+    {
+      "t": "Va desde zonas tropicales a 600 m hasta clima ártico a 5416 m en el Thorong La.",
+      "f": [
+        "W1"
+      ],
+      "cita": "from the tropics at 600 m above sea level, to arctic at 5416 m at the Thorong La pass"
+    },
+    {
+      "t": "La ruta rodea el Manaslu, el Annapurna I y el Dhaulagiri, los tres de más de 8000 m.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The route circumnavigates Manaslu, Annapurna I, and Dhaulagiri—all exceeding 8,000 meters—and plunges through the Kali Gandaki"
+    },
+    {
+      "t": "La garganta del Kali Gandaki, entre el Dhaulagiri y el Annapurna I, es una de las más profundas del mundo.",
+      "f": [
+        "WV"
+      ],
+      "cita": "A long descent through the Kali Gandaki gorge — one of the deepest in the world, carved between Dhaulagiri (8,167 m) and Annapurna I (8,091 m)"
+    },
+    {
+      "t": "La zona se abrió a senderistas extranjeros en 1977, tras resolverse los conflictos con la guerrilla khampa.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The Annapurna area was opened to foreign trekkers in 1977 after the disputes between Khampa guerrillas operating from the area into Tibet, the local populace and the Nepal army were settled."
+    },
+    {
+      "t": "La construcción de carreteras empezó a principios de los años ochenta.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Road construction started in the early 1980s both from Dhumre to the north and from Pokhara to the west and then up the Kali Gandaki valley."
+    },
+    {
+      "t": "La carretera ya llega a Manang por un lado y a Muktinath por el otro.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The road has now reached Manang on the Marsyangdi river valley and Muktinath on the Kali Gandaki side."
+    },
+    {
+      "t": "Hasta el 75 % de la ruta original se ha visto afectada por carreteras nuevas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In recent years, up to 75% of the original Annapurna Circuit route has been impacted by the construction of new roads linking the region's villages."
+    },
+    {
+      "t": "Solo dos tramos siguen sin carretera: el paso Thorong La y la zona de Ghorepani/Poon Hill.",
+      "f": [
+        "W1"
+      ],
+      "cita": "only 2 sections of 2-3 walking days in the length of the trek are now without a motor road, namely Thorong La pass and the section over Ghorepani/Poon Hill."
+    },
+    {
+      "t": "Las rutas alternativas NATT, creadas por el guía Prem Rai, evitan buena parte de las carreteras; según W1 van marcadas en azul y rojo.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The NATT trails are way-marked blue and red, as opposed to the red and white of the original trail."
+    },
+    {
+      "t": "Desde 2011 se alquilan bicicletas de montaña en Muktinath y Jomsom.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Since 2011, companies in Muktinath and Jomsom rent out mountain bikes to tourists."
+    },
+    {
+      "t": "En bici se puede bajar de Muktinath a Tatopani, casi 3000 m de desnivel, en 2-3 días.",
+      "f": [
+        "W1"
+      ],
+      "cita": "one can ride downhill (dirt road and/or single track) from Muktinath to Tatopani and descend almost 3000 meters in 2–3 days."
+    },
+    {
+      "t": "En octubre de 2014 una ventisca repentina mató a más de 43 personas; la mitad eran nepalíes.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In October 2014, a sudden blizzard killed over 43 people, half of whom were Nepalese."
+    },
+    {
+      "t": "A finales de octubre de 2025 una gran nevada obligó a suspender trekkings en los distritos de Myagdi y Mustang.",
+      "f": [
+        "W1"
+      ],
+      "cita": "In late October 2025, heavy snowfall affected the Annapurna Base Camp and surrounding trekking routes, prompting local authorities in Myagdi and Mustang districts to halt treks due to safety risks"
+    },
+    {
+      "t": "Manang está a 3519 m según W2 (WV da 3540 m).",
+      "f": [
+        "W2"
+      ],
+      "cita": "Está situada en una altitud de 3519 metros."
+    },
+    {
+      "t": "Manang tenía 630 habitantes según el censo preliminar de 2011.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Según el resultado preliminar del censo de Nepal 2011 tiene una población de 630 personas."
+    }
+  ],
+  "cuando": [
+    {
+      "t": "El trekking suele durar entre 15 y 20 días contando la salida desde Katmandú.",
+      "f": [
+        "W1"
+      ],
+      "cita": "The trek usually takes about 15–20 days, leaving from Kathmandu with a stopover in Pokhara before returning to the capital."
+    },
+    {
+      "t": "Wikivoyage calcula entre 17 y 21 días.",
+      "f": [
+        "WV"
+      ],
+      "cita": "17 to 21 days long, this trek takes you through distinct regional scenery of rivers, flora, fauna and above all, mountains."
+    },
+    {
+      "t": "Gran parte del circuito está en sombra pluviométrica y se puede caminar casi todo el año, monzón incluido.",
+      "f": [
+        "W1"
+      ],
+      "cita": "much of the Annapurna circuit sits within a rain shadow, so it is possible to trek most parts of the circuit year-round, including during the monsoon period."
+    },
+    {
+      "t": "En monzón los días son húmedos y las nubes tapan muchas vistas.",
+      "f": [
+        "W1"
+      ],
+      "cita": "However, the days are often damp and many of the views are obscured by clouds."
+    },
+    {
+      "t": "Octubre-noviembre es la época de más gente; los albergues se llenan rápido.",
+      "f": [
+        "W1"
+      ],
+      "cita": "This is the busiest period on the circuit and tea houses book up very quickly."
+    },
+    {
+      "t": "En octubre-noviembre hace buen tiempo de día pero por la noche hiela.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Though the weather is generally warm, nighttime temperatures drop below freezing."
+    },
+    {
+      "t": "De diciembre a marzo es lo más frío; el Thorung La se bloquea a menudo por nieve y puede cerrar días.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Thorung La Pass, which stands at over 5,400 meters, is often blocked with snow and may be closed for days on end."
+    },
+    {
+      "t": "De diciembre a marzo es cuando más aludes hay.",
+      "f": [
+        "W1"
+      ],
+      "cita": "This period is also when avalanches are most common."
+    },
+    {
+      "t": "Abril-mayo es la segunda temporada más popular; casi toda la nieve se ha fundido.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Because of the warming weather, April to May is the second most popular trekking season on the circuit."
+    },
+    {
+      "t": "De junio a septiembre (monzón) el norte recibe menos del 10 % de la lluvia que cae cerca de Pokhara.",
+      "f": [
+        "W1"
+      ],
+      "cita": "the northern parts often receive less than 10% of the precipitation due to their location within a rain shadow."
+    },
+    {
+      "t": "La mayoría de grupos pasa días de descanso en Manang para aclimatarse antes del Thorong La.",
+      "f": [
+        "W2"
+      ],
+      "cita": "La mayoría de los grupos de trekking alrededor de la cordillera del Annapurna significa pasar días de descanso en Manang para aclimatarse a la alta altitud, antes de tomar el paso Thorong La."
+    },
+    {
+      "t": "En el lago Tilicho conviene llegar antes de media mañana: el viento sube hacia las 11 y las nubes pueden formarse desde las 8.",
+      "f": [
+        "WV"
+      ],
+      "cita": "aim to be at the lake before mid-morning, as wind builds by 11 am and cloud can form as early as 8 am."
+    }
+  ],
+  "fauna": [
+    {
+      "t": "En la zona del lago Tilicho son habituales el bharal (oveja azul) y los yaks; hay leopardo de las nieves pero rara vez se ve.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Blue sheep and yaks are common; snow leopards are present but rarely seen."
+    },
+    {
+      "t": "En Yak Kharka se ven a menudo rebaños de yaks y bharales en las laderas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "herds of yak and blue sheep are a common sight on the surrounding slopes"
+    },
+    {
+      "t": "Ghasa es buen sitio para observar aves.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The trail passes through Ghasa (2,010 m) after 7 km — a good birdwatching spot, with the gorge narrowing sharply here"
+    },
+    {
+      "t": "Los rododendros empiezan a florecer hacia marzo.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Towards March the rhododendrons start flowering."
+    }
+  ],
+  "sitios": [
+    {
+      "hace": "Inicio tradicional del circuito.",
+      "maps": "Besisahar",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The traditional starting point for the Annapurna Circuit is Besisahar.",
+      "comprobado": null
+    },
+    {
+      "hace": "Control de permisos ACAP y cascada.",
+      "maps": "Bhulbhule",
+      "nota": "control ACAP",
+      "f": [
+        "WV"
+      ],
+      "cita": "reaching Bhulbhule (840 m) after 2 km, where there is an ACAP checkpoint and a waterfall just beyond.",
+      "comprobado": null
+    },
+    {
+      "hace": "Dormir en un pueblo abierto, alternativa a Jagat.",
+      "maps": "Ghermu",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Ghermu (1,130 m), 5 km along, sits in a pleasant open bowl and is a popular overnight alternative to pushing on",
+      "comprobado": null
+    },
+    {
+      "hace": "Pueblo donde la garganta se abre en una terraza fluvial ancha.",
+      "maps": "Tal",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "leads 5 km up to Tal (1,700 m), which announces itself dramatically as the narrow gorge suddenly opens into a wide, flat river terrace",
+      "comprobado": null
+    },
+    {
+      "hace": "Cruce con el circuito del Manaslu y control de permisos.",
+      "maps": "Dharapani",
+      "nota": "se revisan permisos",
+      "f": [
+        "WV"
+      ],
+      "cita": "passing Karte (1,870 m) to reach 4 Dharapani (1,900 m), where the Manaslu Circuit joins from the east and permits are checked.",
+      "comprobado": null
+    },
+    {
+      "hace": "Vistas del Manaslu y del Annapurna tras subir escaleras de piedra.",
+      "maps": "Timang",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "A steep climb on stone steps from Danaqyu rises through dense rhododendron and pine forest to Timang (2,710 m), rewarded with some of the finest views of the entire lower circuit",
+      "comprobado": null
+    },
+    {
+      "hace": "Capital del distrito de Manang: tiendas, banco y aguas termales junto al río.",
+      "maps": "Chame",
+      "nota": "hay banco",
+      "f": [
+        "WV"
+      ],
+      "cita": "Chame is the administrative headquarters of Manang District — busier and better-served than anything since Besisahar, with shops, a bank, and hot springs by the river.",
+      "comprobado": null
+    },
+    {
+      "hace": "Parar a tomar zumo de manzana en sus huertos.",
+      "maps": "Bhratang",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The trail follows the Marsyangdi 7 km to Bhratang (2,850 m), famous for its apple orchards and a large apple farm — the fresh juice is worth a stop.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la gran pared de roca cóncava sobre el río.",
+      "maps": "Paungda Danda",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "swinging around to reveal Paungda Danda: a vast, impossibly smooth concave rock wall rising over 1,500 m from the river, known locally as Swarga Dwar",
+      "comprobado": null
+    },
+    {
+      "hace": "Dormir en el pueblo alto y oír los cantos del monasterio.",
+      "maps": "Upper Pisang",
+      "nota": "mejor que Lower Pisang para dormir",
+      "f": [
+        "WV"
+      ],
+      "cita": "Upper Pisang is the better choice for the night — a maze of narrow stone alleyways, old flat-roofed houses, and an active monastery whose morning and evening chants carry across the valley.",
+      "comprobado": null
+    },
+    {
+      "hace": "Subida de aclimatación con vistas a los Annapurna II, III, IV y Gangapurna.",
+      "maps": "Ghyaru",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "A stiff switchback climb of around 4.5 km gains 420 m to reach Ghyaru (3,730 m), perched high above the valley with sweeping views of Annapurna II, III, IV, and Gangapurna",
+      "comprobado": null
+    },
+    {
+      "hace": "Visitar el monasterio más importante del distrito de Manang.",
+      "maps": "Braga Monastery",
+      "nota": "500 años",
+      "f": [
+        "WV"
+      ],
+      "cita": "The 500-year-old Bhraga Gompa clings to the rock face above the village — the most important monastery in the Manang district",
+      "comprobado": null
+    },
+    {
+      "hace": "Charlas diarias sobre el mal de altura.",
+      "maps": "Himalayan Rescue Association Manang",
+      "nota": "cada noche",
+      "f": [
+        "WV"
+      ],
+      "cita": "Manang is the main hub before the pass — clean, well-supplied, and lively by high-altitude standards, with bakeries, gear shops, and nightly talks on altitude sickness at the Himalayan Rescue Association office.",
+      "comprobado": null
+    },
+    {
+      "hace": "Excursión de aclimatación de un día desde Manang.",
+      "maps": "Ice Lake",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The classic acclimatisation hike is Ice Lake (4,620 m), a full-day outing with big views.",
+      "comprobado": null
+    },
+    {
+      "hace": "Desvío de 2-3 días a uno de los lagos más altos del mundo.",
+      "maps": "Tilicho Lake",
+      "nota": "desde Manang",
+      "f": [
+        "WV"
+      ],
+      "cita": "Tilicho Lake at 4,920 m is one of the highest lakes in the world, and a worthy 2–3 day detour from Manang.",
+      "comprobado": null
+    },
+    {
+      "hace": "Última parada antes del paso, con dos albergues principales.",
+      "maps": "Thorung Phedi",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Thorung Phedi is the last stop before the pass, with two main teahouses and a social atmosphere driven by trekkers psyching up for the crossing.",
+      "comprobado": null
+    },
+    {
+      "hace": "Dormir más alto para acortar el día del paso.",
+      "maps": "Thorong High Camp",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Some continue 400 m higher to High Camp (4,900 m) for a shorter summit day; most stay at Phedi.",
+      "comprobado": null
+    },
+    {
+      "hace": "Cruzar el paso antes de que suba el viento.",
+      "maps": "Thorong La Pass",
+      "nota": "salir a las 4-5 h",
+      "f": [
+        "WV"
+      ],
+      "cita": "Leave before dawn — by 4–5 am — to cross Thorung La (5,416 m) before the winds build.",
+      "comprobado": null
+    },
+    {
+      "hace": "Lugar de peregrinación hindú y budista con 108 caños de agua y una llama natural.",
+      "maps": "Muktinath Temple",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Muktinath (3,800 m) is a major pilgrimage site sacred to both Hindus and Buddhists, with a temple complex featuring 108 water spouts and a continuously burning natural flame.",
+      "comprobado": null
+    },
+    {
+      "hace": "Pueblo tibetano de adobe con monasterio del siglo XV.",
+      "maps": "Jharkot",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The high trail descends through Jharkot (3,540 m) after 3 km — an ancient, almost medieval Tibetan village of mud-brick houses and a 15th-century monastery",
+      "comprobado": null
+    },
+    {
+      "hace": "Pasear por sus callejones; puerta al Alto Mustang.",
+      "maps": "Kagbeni",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Kagbeni (2,800 m) after 6 km, a maze of narrow alleys at the confluence of the Jhong Khola and the Kali Gandaki, and the gateway to Upper Mustang.",
+      "comprobado": null
+    },
+    {
+      "hace": "Alojarse cerca del aeropuerto.",
+      "maps": "Jomsom Airport",
+      "nota": "a unos 15 min andando del pueblo",
+      "f": [
+        "WV"
+      ],
+      "cita": "Jomsom is more spread out than it looks — most guesthouses cluster near the airport at the far end, about 15 minutes through town.",
+      "comprobado": null
+    },
+    {
+      "hace": "Pasear entre casas encaladas y probar sidra y brandy de manzana.",
+      "maps": "Marpha",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The first stop is 15 Marpha (2,670 m) after 6 km, the standout village of this section",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver antiguas casas de mercaderes thakali.",
+      "maps": "Tukuche",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Continue 6 km to Tukuche (2,590 m), a former Thakali trading hub with large old merchant houses and carved wooden shutters",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver a la vez el Dhaulagiri y el Annapurna I en días claros.",
+      "maps": "Kalopani",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "At Kalopani the rain shadow ends, conifer forest appears, and on a clear day both Dhaulagiri and Annapurna I are visible simultaneously from the village.",
+      "comprobado": null
+    },
+    {
+      "hace": "Ver la cascada en la parte más profunda de la garganta.",
+      "maps": "Rupse Chhahara",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "The highlight of the descent is the thundering Rupse Chhahara waterfall (1,500 m), roughly at the deepest point of the gorge between Annapurna and Dhaulagiri, 2 km further.",
+      "comprobado": null
+    },
+    {
+      "hace": "Bañarse en las aguas termales junto al río.",
+      "maps": "Tatopani",
+      "nota": "",
+      "f": [
+        "WV"
+      ],
+      "cita": "Tatopani — \"hot water\" — takes its name from the springs beside the river below the village, which make a very welcome finish after a day of hard descent.",
+      "comprobado": null
+    },
+    {
+      "hace": "Subir al amanecer para ver el Annapurna y el Dhaulagiri.",
+      "maps": "Poon Hill",
+      "nota": "desde Ghorepani",
+      "f": [
+        "WV"
+      ],
+      "cita": "Most trekkers wake before dawn to climb from 20 Ghorepani (2,870 m) to Poon Hill (3,210 m) for sunrise over the Annapurna and Dhaulagiri ranges before breakfast and descent.",
+      "comprobado": null
+    }
+  ],
+  "normas": [
+    {
+      "t": "Desde 2024 el Gobierno exige que todo senderista extranjero vaya con guía o porteador-guía con licencia de una agencia registrada.",
+      "f": [
+        "WV"
+      ],
+      "cita": "As of 2024, the government has reinforced the mandate that all foreign trekkers must be accompanied by a licensed guide or porter-guide through a registered agency."
+    },
+    {
+      "t": "Ir sin guía puede suponer expulsión inmediata de la ruta o multas fuertes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "trekking without a guide now risks immediate removal from the route or heavy fines."
+    },
+    {
+      "t": "Hay controles de permisos ACAP a lo largo de la ruta, por ejemplo en Bhulbhule.",
+      "f": [
+        "WV"
+      ],
+      "cita": "reaching Bhulbhule (840 m) after 2 km, where there is an ACAP checkpoint and a waterfall just beyond."
+    },
+    {
+      "t": "Alto Mustang, Nar-Phu, Manaslu y Tsum exigen permisos y costes extra.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Currently, trekking in these areas is restricted and subject to extra permits, costs, and other limitations."
+    },
+    {
+      "t": "Es costumbre cenar y desayunar en el albergue donde se duerme.",
+      "f": [
+        "WV"
+      ],
+      "cita": "It is customary, and often expected, that you eat both dinner and breakfast at the lodge where you spend the night"
+    },
+    {
+      "t": "La zona de Ghorepani hacia Chomrong suele cerrar de julio a mediados de septiembre.",
+      "f": [
+        "WV"
+      ],
+      "cita": "This area is generally closed July to mid-September during the core monsoon."
+    }
+  ],
+  "cambia": [
+    {
+      "t": "Gasto diario de unas 1500-2000 rupias, hasta 4000 en zonas altas.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "sin fecha en el texto; revisión de Wikivoyage 2026-11-08",
+      "cita": "you should expect a daily budget of approximately Rs 1,500 to Rs 2,000 for modest spending, or up to Rs 4,000 at higher points."
+    },
+    {
+      "t": "Habitaciones de 100 a 500 rupias, hasta 800 cerca del paso.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "sin fecha en el texto; revisión de Wikivoyage 2026-11-08",
+      "cita": "Rooms are generally inexpensive, ranging from Rs 100 to Rs 500, though prices can rise to Rs 800 at higher elevations near the Pass."
+    },
+    {
+      "t": "Con cerveza y comidas abundantes, 50 000-60 000 rupias por persona de Besisahar a Jomsom.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "sin fecha en el texto; revisión de Wikivoyage 2026-11-08",
+      "cita": "a total budget of Rs 50,000 to Rs 60,000 per person is sufficient for the journey from Besisahar to Jomsom."
+    },
+    {
+      "t": "El tramo Tal-Chame suele ser más caro que el de Manang.",
+      "f": [
+        "WV"
+      ],
+      "de_cuando": "sin fecha en el texto; revisión de Wikivoyage 2026-11-08",
+      "cita": "the stretch between Tal and Chame is often more expensive than the more remote path to Manang."
+    }
+  ],
+  "llegar": [
+    {
+      "t": "Besisahar está a unas siete horas por carretera de Katmandú.",
+      "f": [
+        "W1"
+      ],
+      "cita": "Besisahar can be reached after a seven-hour drive from Kathmandu."
+    },
+    {
+      "t": "Bus turístico diario a Besisahar desde la nueva estación de autobuses de Katmandú, 6-8 horas; también jeep o coche privado.",
+      "f": [
+        "WV"
+      ],
+      "cita": "This town is accessible from Kathmandu (KTM IATA) by a tourist bus, which is a six to eight-hour journey departing daily from Kathmandu's new bus station"
+    },
+    {
+      "t": "Si se llega tarde, se puede dormir en Khudi, a 7 km y 2 horas de Besisahar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "it is worth stopping in Khudi, about 7 km and 2 hr from Besisahar, for a cheaper, quieter first night"
+    },
+    {
+      "t": "En jeep se puede empezar en Syange, Jagat o Chame y ahorrar días.",
+      "f": [
+        "WV"
+      ],
+      "cita": "This allows them to start their trek from villages such as Syange, Jagat, or Chame, which can save several days of walking."
+    },
+    {
+      "t": "Manang tiene un pequeño aeropuerto a 2,5 km al este, abierto en 1985.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Un pequeño aeropuerto, situado a 2,5 km al este de la ciudad, sirve a todo el valle. El aeropuerto se inició en 1985."
+    },
+    {
+      "t": "De Muktinath salen jeeps y camiones a Jomsom con regularidad.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Some trekkers take motor transport from Muktinath; jeeps and trucks run to Jomsom regularly."
+    },
+    {
+      "t": "Vuelo Jomsom-Pokhara de unos 20 minutos; el bus implica transbordos y llega de noche.",
+      "f": [
+        "WV"
+      ],
+      "cita": "From Jomsom a flight to Pokhara takes about 20 minutes; buses run but involve multiple changes and typically arrive after dark."
+    },
+    {
+      "t": "Muchos terminan en Muktinath o Jomsom y vuelven a Pokhara en jeep, bus o avioneta.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Many trekkers choose to finish their trek in Muktinath or Jomsom, either taking a very bumpy jeep or bus ride from Muktinath to Pokhara, or a small plane from Jomsom."
+    },
+    {
+      "t": "En Nayapul, final de la ruta, hay transporte a Pokhara.",
+      "f": [
+        "WV"
+      ],
+      "cita": "a final 1 km to Nayapul (1,070 m), where transport to Pokhara awaits."
+    }
+  ],
+  "gente": [
+    {
+      "t": "Se pasa de pueblos hindúes en las zonas bajas a la cultura tibetana de Manang y el Bajo Mustang.",
+      "f": [
+        "W1"
+      ],
+      "cita": "cultural variety from Hindu villages at the low foothills to the Tibetan culture of Manang Valley and lower Mustang."
+    },
+    {
+      "t": "En Manang viven los gurung; en Mustang se practica aún la religión bon, en pueblos como Thini y Lupra.",
+      "f": [
+        "WV"
+      ],
+      "cita": "In Manang, the Gurung people maintain a unique heritage, while Mustang remains a rare sanctuary for the ancient Bonpo religion, still practiced in villages like Thini and Lupra."
+    },
+    {
+      "t": "Para los gurung, la pared de Paungda Danda es el camino de los espíritus tras la muerte.",
+      "f": [
+        "WV"
+      ],
+      "cita": "known locally as Swarga Dwar — \"Gateway to Heaven\" — and believed by the Gurung people to be the path spirits climb after death."
+    },
+    {
+      "t": "Bahundanda («colina brahmán») es el asentamiento brahmán más al norte del valle.",
+      "f": [
+        "WV"
+      ],
+      "cita": "the village sits high on a ridge as the most northerly Brahmin settlement in the valley"
+    },
+    {
+      "t": "Bagarchhap es el primer pueblo de estilo tibetano de la ruta.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Bagarchhap (2,160 m), the first visibly Tibetan-style village on the route, with flat-roofed stone houses and a small monastery"
+    },
+    {
+      "t": "Muktinath es sagrado para hindúes y budistas.",
+      "f": [
+        "WV"
+      ],
+      "cita": "from the centuries-old monastery in Braga to the sacred shrines of Muktinath, a holy site for both faiths."
+    },
+    {
+      "t": "En Manang se vive de atender a senderistas, la agricultura y el pastoreo de yaks.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Además de abastecer a los excursionistas y ofrecerles servicios de ayuda en la escalada, que es una de las actividades más rentables de la zona, existe algún comercio de agricultura y pastoreo de yaks."
+    },
+    {
+      "t": "Los albergues viven de las comidas, no de las habitaciones.",
+      "f": [
+        "WV"
+      ],
+      "cita": "as these businesses rely on meal sales rather than room rates to remain viable."
+    }
+  ],
+  "delicado": [
+    {
+      "t": "Ante síntomas de mal de altura (dolor de cabeza, náuseas) que empeoran, hay que bajar.",
+      "f": [
+        "WV"
+      ],
+      "cita": "never ignoring the early signs of Acute Mountain Sickness like headaches or nausea; if symptoms worsen, you must descend."
+    },
+    {
+      "t": "Manang tiene un centro médico especializado en mal de altura.",
+      "f": [
+        "W2"
+      ],
+      "cita": "Existe un centro médico, que está especializado en el mal de altura"
+    },
+    {
+      "t": "Hacerlo en sentido horario es peligroso: subida de 1,5 km de desnivel sin senderos marcados ni albergues.",
+      "f": [
+        "WV"
+      ],
+      "cita": "the ascent from West to East requires a grueling 1.5 km vertical climb over unstable gullies with no marked trails or teahouses."
+    },
+    {
+      "t": "No hay cajeros entre Manang y Muktinath/Jomsom; llevar rupias suficientes.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Cash is essential because there are no ATMs after Manang until you reach Muktinath and Jomsom."
+    },
+    {
+      "t": "Entre Ledar y Thorung Phedi hay una zona de desprendimientos; dejar paso a los animales de carga.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The 5 km from Ledar to 11 Thorung Phedi (4,450 m) includes a known landslide zone — move steadily through it and give pack animals plenty of room on the narrow traverses."
+    },
+    {
+      "t": "La bajada del Thorong La son 10 km de pedregal suelto y 1600 m de desnivel.",
+      "f": [
+        "WV"
+      ],
+      "cita": "The descent is longer and harder on the knees than expected — 10 km of loose scree dropping 1,600 m"
+    },
+    {
+      "t": "El camino sur de Manang a Khangsar que sale en algunos mapas está abandonado por desprendimientos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Some maps show a path along the south side of the valley from Manang toward Khangsar — ignore it; that route is abandoned and destroyed by landslides."
+    },
+    {
+      "t": "El albergue del lago Tilicho da comida pero no alojamiento; confirmar que está abierto.",
+      "f": [
+        "WV"
+      ],
+      "cita": "A teahouse at the lake provides food and tea but no accommodation; staff walk up daily from base camp, so confirm it is open before heading up."
+    },
+    {
+      "t": "Evitar andar por las carreteras: hay mucho polvo de los vehículos.",
+      "f": [
+        "WV"
+      ],
+      "cita": "Avoid walking on the motorable roads, as they are often choked with heavy dust from passing vehicles."
+    },
+    {
+      "t": "Entre Ghasa y Tatopani, ir por la orilla este, donde está marcado el NATT, para evitar tráfico y obras.",
+      "f": [
+        "WV"
+      ],
+      "cita": "stick to the east bank of the river where the NATT trail is marked, as this avoids much of the traffic and construction."
+    },
+    {
+      "t": "Entre Kagbeni y Jomsom el viento de cara sube a mediodía; salir temprano.",
+      "f": [
+        "WV"
+      ],
+      "cita": "the valley's notorious afternoon headwinds typically build by midday and the final stretch to Jomsom is fully exposed."
+    },
+    {
+      "t": "Jagat tiene peor fama que Ghermu y algunos guías aconsejan no dormir allí.",
+      "f": [
+        "WV"
+      ],
+      "cita": "it has a rougher reputation than Ghermu and some guides recommend skipping it for the night."
+    },
+    {
+      "t": "Sábanas y mantas a menudo solo se airean, sobre todo en altura.",
+      "f": [
+        "WV"
+      ],
+      "cita": "they are often just aired out rather than washed, particularly at higher altitudes"
+    }
+  ],
+  "no_escribir": [
+    "Precios de los permisos ACAP o TIMS: las fuentes mencionan controles pero no dan tarifas.",
+    "Que es 'la garganta más profunda del mundo' como dato cerrado: WV dice eso y a la vez 'una de las más profundas'.",
+    "Color de las marcas NATT: W1 dice azul y rojo, WV habla de senderos secundarios azul y blanco; no afirmar uno sin matizar.",
+    "Altitud exacta de Manang: W2 da 3519 m y WV 3540 m.",
+    "Altitud exacta del lago Tilicho: WV da 4919 m y 4920 m.",
+    "Duración única: W1 dice 15-20 días y WV 17-21 días.",
+    "Que es 'el mejor trekking del mundo' como hecho: W1 solo dice que fue votado así, sin decir por quién.",
+    "Récords de velocidad: el de 2017 aparece en W1 como 'It is reported', sin confirmar.",
+    "Fecha exacta de entrada en vigor del guía obligatorio (se repite abril de 2023): WV solo dice que en 2024 se reforzó.",
+    "Disponibilidad de wifi, cobertura móvil o rescate en helicóptero: las fuentes no lo dicen.",
+    "Número exacto de muertos de la ventisca de 2014 (se repite 43): W1 dice 'más de 43'."
+  ],
+  "seo": {
+    "titulo": "Circuito de Annapurna: qué ver y cómo ir (2026)",
+    "descripcion": "Trekking de 160-230 km por Nepal hasta el Thorong La (5416 m): 15-20 días, guía obligatorio desde 2024, mejor época y cómo llegar a Besisahar.",
+    "faq": [
+      {
+        "p": "¿Cuál es la mejor época para hacer el Circuito de Annapurna?",
+        "r": "Octubre-noviembre es la temporada más popular: buen tiempo de día, heladas por la noche y albergues que se llenan rápido. Abril-mayo es la segunda, con casi toda la nieve fundida y rododendros en flor desde marzo. De diciembre a marzo hace más frío, hay más aludes y el Thorong La puede cerrar días por nieve. En monzón (junio-septiembre) se puede caminar porque gran parte del circuito está en sombra pluviométrica, pero los días son húmedos y las nubes tapan muchas vistas."
+      },
+      {
+        "p": "¿Es obligatorio ir con guía?",
+        "r": "Sí. Desde 2024 el Gobierno de Nepal exige que todo senderista extranjero vaya con guía o porteador-guía con licencia de una agencia registrada. Ir sin guía puede suponer la expulsión inmediata de la ruta o multas fuertes. Además, hay controles de permisos ACAP a lo largo del camino, por ejemplo en Bhulbhule."
+      },
+      {
+        "p": "¿Cómo se llega al inicio del circuito desde Katmandú?",
+        "r": "Hay un bus turístico diario a Besisahar desde la nueva estación de autobuses de Katmandú (6-8 horas); también se puede ir en jeep o coche privado. Si se llega tarde, se puede dormir en Khudi, a 7 km y unas 2 horas de Besisahar. En jeep también se puede empezar más arriba, en Syange, Jagat o Chame, y ahorrar días."
+      },
+      {
+        "p": "¿Cuántos días se necesitan y en qué sentido se recorre?",
+        "r": "Suele durar entre 15 y 20 días contando la salida desde Katmandú (Wikivoyage calcula 17-21). La mayoría lo hace en sentido antihorario, desde el valle del Marshyangdi hacia el Kali Gandaki: se gana altitud más despacio y el Thorong La es más fácil y seguro. En sentido horario es peligroso, con una subida de 1,5 km de desnivel sin senderos marcados ni albergues. Muchos grupos descansan en Manang para aclimatarse."
+      },
+      {
+        "p": "¿Qué se ve en el Circuito de Annapurna?",
+        "r": "La ruta rodea el Manaslu, el Annapurna I y el Dhaulagiri, los tres de más de 8000 m, y pasa por la garganta del Kali Gandaki, una de las más profundas del mundo. Va de zonas tropicales a 600 m al clima ártico del Thorong La (5416 m) y de pueblos hindúes a la cultura tibetana de Manang y el Bajo Mustang. Muktinath es sagrado para hindúes y budistas, y en la zona del lago Tilicho y Yak Kharka son habituales los yaks y los bharales."
+      },
+      {
+        "p": "¿Cuánto cuesta el trekking al día?",
+        "r": "El gasto diario ronda las 1500-2000 rupias, hasta 4000 en zonas altas. Las habitaciones cuestan de 100 a 500 rupias, hasta 800 cerca del paso, porque los albergues viven de las comidas y es costumbre cenar y desayunar donde se duerme. Con cerveza y comidas abundantes, de Besisahar a Jomsom se calculan 50 000-60 000 rupias por persona. No hay cajeros entre Manang y Muktinath/Jomsom, así que hay que llevar rupias suficientes."
+      },
+      {
+        "p": "¿Las carreteras han afectado a la ruta?",
+        "r": "Sí: hasta el 75 % de la ruta original se ha visto afectado por carreteras nuevas, que ya llegan a Manang por un lado y a Muktinath por el otro. Solo el paso Thorong La y la zona de Ghorepani/Poon Hill siguen sin carretera. Las rutas alternativas NATT, creadas por el guía Prem Rai, evitan buena parte del tráfico y el polvo."
+      }
+    ]
+  },
+  "fuentes": {
+    "W1": {
+      "nombre": "Wikipedia (en), «Annapurna Circuit»",
+      "url": "https://en.wikipedia.org/wiki/Annapurna_Circuit",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "W2": {
+      "nombre": "Wikipedia (es), «Manang»",
+      "url": "https://es.wikipedia.org/wiki/Manang",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    },
+    "WV": {
+      "nombre": "Wikivoyage (en), «Annapurna Circuit», revisión del 2026-11-08",
+      "url": "https://en.wikivoyage.org/wiki/Annapurna_Circuit",
+      "tipo": "referencia",
+      "leida": "2026-11-15"
+    }
+  }
+}
