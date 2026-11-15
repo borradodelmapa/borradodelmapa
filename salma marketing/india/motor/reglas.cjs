@@ -52,7 +52,7 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   const fotos = todos.flatMap(b => (b.shots || []).filter(s => s.a && !/^(RW|V)/.test(s.a) && !/\.mp4$/i.test(s.a)));
   const barridos = fotos.filter(s => s.pan && (s.pan[0] !== s.pan[2] || s.pan[1] !== s.pan[3]));
   chk('M12', (cfg.kb ?? 0) > 0 || barridos.length > 0, 'fotos con movimiento: ' + ((cfg.kb ?? 0) > 0 ? 'Ken Burns activo (cfg.kb = ' + cfg.kb + '); ' : '') + (barridos.length ? barridos.length + ' con barrido (pan con inicio ≠ fin): ' + barridos.slice(0, 6).map(s => s.a.split('/').pop()).join(', ') : '') + ' — van quietas; las verticales con encuadre fijo pan [x, y, x, y]');
-  const enf = fotos.filter(s => s.enfasis).length; if (enf) I.push('ℹ [N14] zoom de énfasis en ' + enf + ' foto' + (enf > 1 ? 's' : '') + ' (solo en los datos importantes)');
+  const enf = fotos.filter(s => s.enfasis).length; if (enf) I.push('ℹ zoom de énfasis (la del punto 10 de la regla de enganche) en ' + enf + ' foto' + (enf > 1 ? 's' : '') + ' (solo en los datos importantes)');
   chk('M13', !(cfg.seguir && cfg.seguir.activo !== false), 'aviso «Si te está gustando, sígueme» desactivado o sin configurar (cfg.seguir)');
   chk('M14', (cfg.cardSecs || 8) < 8 || !cfg.card, 'tarjeta final de menos de 8 s o sin cfg.card');
   chk('N5', voz.some(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)), 'la app se menciona en la voz (va en la tarjeta final): ' + voz.filter(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)).map(b => b.id).join(', '));
