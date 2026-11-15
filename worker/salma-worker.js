@@ -1015,7 +1015,8 @@ function fichaContexto(fi) {
     fi.delicado && fi.delicado.length ? 'LO DELICADO:\n' + L(fi.delicado) : '',
     fi.no_escribir && fi.no_escribir.length ? 'NO ESCRIBAS: ' + fi.no_escribir.join('; ') + '.' : '',
     'De este sitio, los horarios, normas, precios y animales que no estén en la ficha no los des como hechos.',
-    'Cuenta estos datos con tu voz: nunca nombres la ficha, las fuentes, Wikipedia ni Wikivoyage, ni digas que «las fuentes no coinciden»; si un dato no está claro, simplemente no lo des.]',
+    'Cuenta estos datos con tu voz: nunca nombres la ficha, las fuentes, Wikipedia ni Wikivoyage, ni digas que «las fuentes no coinciden»; si un dato no está claro, simplemente no lo des.',
+    'La ficha no trae restaurantes ni alojamientos: para «Dónde comer» y para dormir haz lo de siempre.]',
   ];
   return partes.filter(Boolean).join('\n');
 }
