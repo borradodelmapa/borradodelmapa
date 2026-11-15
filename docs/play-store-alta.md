@@ -28,6 +28,20 @@ Hasta que Paco confirme a) a g), el paquete NO está terminado (§2: «desplegad
 Cambiar también: Play Console → Ficha principal de la tienda → «Icono de la aplicación» (PNG 512×512, p. ej. `icon-salma-512.png`) → Guardar →
 **Resumen de publicación → «Enviar cambios a revisión»** (guardado ≠ enviado: mientras no se envíe, la tienda sigue enseñando el icono viejo).
 
+## Estado a 15 nov 2026 — SOLICITUD DE ACCESO A PRODUCCIÓN ENVIADA (manda sobre lo de abajo)
+- **Prueba cerrada «Testers»:** versión 4 (1.0.3.0) aprobada y publicada el 22 oct. **12+ testers durante 14 días** cumplidos; el 15 nov a las 23:14
+  se envió la solicitud de acceso a producción. Google responde por correo al propietario (paco.defoto@gmail.com), «7 días o menos».
+- **Testers: usar LISTA DE CORREOS, no grupo de Google.** El grupo `testers-borrado-del-mapa@googlegroups.com` lo bloqueó Google como spam
+  (30 oct), los añadidos a mano no funcionaban y las exportaciones recortan los correos. Lista «Testers» (15 correos) + lista «BORRADO DEL MAPA»
+  (licencias, 1 correo). **Cambiar la lista de testers es un cambio que hay que ENVIAR A REVISIÓN en Resumen de publicación**
+  (guardar ≠ enviar; hasta enviarlo, a los nuevos les sale «Elemento no encontrado»).
+- **Icono de la ficha** (distinto del del `.aab`): ya es la Salma 512 (`icon-salma-512.png`), enviado a revisión a finales de oct y ya visible en la consola el 31 oct.
+- **Estado de operador (DSA):** declarado como **operador/comerciante** (cobra guías y suscripciones). Los datos de contacto se muestran públicamente en la UE.
+- **Cuidado con la caché:** un tester que ya había abierto la web vio la versión vieja de la UI y «Failed to fetch» (caché del móvil, comparte almacenamiento con Chrome).
+- **Pendiente:** (1) casilla «Licencia para testing» + **compra de prueba** (debe decir «compra de prueba»; si no, no confirmar); (2) esperar respuesta de Google;
+  (3) si aprueba: publicar en producción (revisar ficha, precios por país, política de privacidad, seguridad de los datos);
+  (4) comprobar que el icono pequeño de las descargas sale ya con Salma.
+
 ## Estado a 13 oct 2026 (manda sobre lo de abajo)
 - **Productos únicos ACTIVOS:** `guia` 9,99 · `trimestral` 19,99 · `anual` 49,99 · `anual_oferta` 39,99 (opciones de compra `<id>-compra`,
   `anual-oferta-compra`). El «error inesperado» al activar era que **solo España tenía precio**: en el paso 2 hay que usar
