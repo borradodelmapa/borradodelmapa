@@ -8,8 +8,6 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 | T3 | Largos de Tailandia: 1 «qué saber antes de ir» · 2 el norte en moto · 3 Koh Samui y Muay Thai | 🎬 Vídeo 2 (guion y montaje) · 🎨 Carátulas (título, carátula y descripción) | ⏸ | T3.1: REHECHO por Paco con Vídeo 2 el 15 nov: guion v6.2 (docs/tailandia-1-guion-v6-2.md), título «10 Cosas que debes saber ANTES de viajar a TAILANDIA», voz nueva (4.316 letras, 0 €), montaje nuevo en curso; carátula del elefante aprobada (revisar si el texto choca con el título nuevo).407 letras, 0 €), montaje v1 devuelto por Estrategia (textos fuera de pantalla, imágenes que no casan, sin vídeo, ambiente de banco); 2.ª pasada BLOQUEADA porque el disco D está lleno. T3.2 y T3.3: guiones escritos, sin revisar todavía. Carátulas: T3.2 (mapa del bucle, 1.864 CURVAS) y T3.3 (ANTES DEL RING) aprobadas por Paco y entregadas a Vídeo 2; T3.1 sin título ni carátula; descripciones cuando haya minutaje | mover o borrar 35 GB de temporales de D | mar 1 · mar 8 · jue 10 dic |
 | T12 | Blog y Web Story de los largos de Tailandia (T3.1 ya; T3.2 y T3.3 cuando estén) + corregir el dato de veladas de Samui (P9) | 🌍 Web | 📥 | Espera el vídeo ligero de Vídeo 2 | OK en el chat de Web | antes del 1 dic |
 | T4 | Largo del jue 17 dic | 📈 | ⏸ | Proponer tema | decidir | jue 17 dic |
-| T5 | Tuvalu: comprobar 1080p en el canal | 🎬 Vídeo | 📥 | Mirar en Studio | — | antes del 26 nov |
-| T11 | Ordenar el canal | 🎬 Vídeo | 🔨 | HECHO: vídeo destacado = Vietnam 2.000 años; Inicio Documentales → Vietnam → Tailandia → Pueblos → Shorts. FALTA: sacar el short oculto de Pai de la lista de Tailandia y ordenar las listas por capítulo (Chrome se colgaba) | — | — |
 | T9 | Prueba A/B de carátulas | 🎬 Vídeo | 🔨 | En marcha en los dos de Vietnam. India (A+B+C), Pueblos T1 y Baler guardadas: arrancan al hacerse públicos (17 nov, 19 nov, 3 dic); comprobarlo ese día. Tuvalu y Tatuajes fuera (Paco) | — | 17 nov · 19 nov · 3 dic |
 | T7 | Web: reproductor de YouTube en cada largo cuando sea público: Pueblos T1 (jue 19 nov), Tuvalu (jue 26 nov), Tatuajes (mar 24 nov, 0nNCUhMiSdI), India (mar 17 nov), Baler (jue 3 dic), Filipinas (mar 15 dic) | 🌍 Web | 📥 | Cada estreno, la tarea del comentario (10:05) avisa a Web | OK en el chat de Web antes de subir | según fecha |
 
@@ -22,6 +20,8 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 ## Cerradas
 | Fecha | Id | Qué | Comprobado |
 |---|---|---|---|
+| 16 nov | T11 | Canal ordenado: Inicio por secciones, short de Pai fuera de la lista, listas en orden de capítulo | Registro 2f2f6db81; lista pública de Tailandia comprobada por Estrategia en orden y sin el de Pai |
+| 16 nov | T5 | Tuvalu procesado en 1080p y 4K | Registro 2f2f6db81 |
 | 15 nov | T1 | Largo «Viajar a FILIPINAS: la realidad que nadie te cuenta» en Studio (https://youtu.be/4gTGf2JPEHk), programado mar 15 dic 10:00, 1080p 20,7 Mb/s, paquete EN, carátula B | Registro 61aa82193; privado hasta el 15 (oEmbed 403); tarea comentario-largo-filipinas-15-dic, una sola |
 | 14 nov | T2 | Web de Filipinas con el largo (entrada, Web Story, «Míralo en vídeo» en el país, Documentales) | 227595106 + c77ee6629; en vivo: las 3 páginas dan 200, título nuevo, tarjeta en destinos/filipinas.html. El reproductor de YouTube, el 15 dic (T7) |
 | 14 nov | T10 | Ocultos (sin listar): short repetido de Pai y vídeo de la app | Studio (registro 9e5ec2310); comprobado por Estrategia: fuera de las pestañas del canal y la app se ve por enlace (oEmbed 200) |
