@@ -54,6 +54,9 @@ jobs:
           if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
           git config user.name "fichas-bot"
           git config user.email "fichas-bot@users.noreply.github.com"
-          git commit -m "Fichas: revisión mensual automática (fechas renovadas, informe y páginas de destino regeneradas)"
+          # Regenerar un país publica también cualquier cambio pendiente del generador para ese país (aviso de 🌍 Web):
+          # el commit lista qué páginas y fichas cambiaron, para poder revisarlo después.
+          CAMBIOS=$(git diff --cached --name-only | sed 's/^/- /')
+          git commit -m "Fichas: revisión mensual automática (fechas renovadas, informe y páginas de destino regeneradas)" -m "Cambiado:" -m "$CAMBIOS"
           git pull --rebase origin main
           git push origin HEAD:main
