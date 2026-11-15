@@ -152,6 +152,26 @@ function masDestinos(siblings, countrySlug, countryName, conCss) {
 const DATOS_PAIS = createRequire(import.meta.url)('./datos-pais.cjs');
 const DESTINOS_NUEVOS = DATOS_PAIS.sitiosNuevos();
 const DESTINOS_EXTRA = DATOS_PAIS.extraSitios();
+// Fichas de sitio CON FUENTES (las hace el chat App en worker/kv/fichas/; 15 nov 2026, caso p-mwfityix43c). Aquí solo se LEEN:
+// la hecha a mano (worker/kv/fichas/<ref>.json) gana a la automática (worker/kv/fichas/auto/). Clave: ref = "<país>:<id del destino>".
+// Solo las páginas con ficha dicen «Revisado en…» (Paco: nunca decir revisado sin serlo).
+const FICHAS = (() => {
+  const r = {}, dir = path.join(ROOT, 'worker', 'kv', 'fichas');
+  const leer = (d) => (fs.existsSync(d) ? fs.readdirSync(d) : []).filter((x) => /^[a-z]{2}_.+\.json$/.test(x)).map((x) => JSON.parse(fs.readFileSync(path.join(d, x), 'utf8')));
+  for (const j of leer(path.join(dir, 'auto'))) if (j.ref && j.revisada) r[j.ref] = j;
+  for (const j of leer(dir)) if (j.ref && j.revisada) r[j.ref] = j;
+  return r;
+})();
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const mesAno = (d) => { const m = /^(\d{4})-(\d{2})/.exec(d || ''); return m ? `${MESES[+m[2] - 1]} de ${m[1]}` : ''; };
+const TIPO_FUENTE = { oficial: 'oficial', prensa: 'prensa', referencia: 'referencia', web: 'web' };
+const FICHA_CSS = `<style>
+.df-rev{display:block;margin:0 0 18px;padding:9px 12px;border-left:4px solid var(--accent);background:rgba(244,99,11,.08);font-size:14px;line-height:1.4;color:var(--text-primary)}
+.df-rev svg{vertical-align:-4px;margin-right:6px;color:var(--accent)}.df-rev a{margin-left:8px;white-space:nowrap;color:var(--accent);font-weight:600;text-decoration:none}.df-rev a:hover{text-decoration:underline}
+.df-fuentes{margin:30px 0 8px}.df-fuentes h2{font-family:var(--font-cond);font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin:0 0 10px;color:var(--text-primary)}
+.df-fuentes p{font-size:14px;color:var(--text-muted);margin:0 0 10px}.df-fuentes ol{margin:0;padding-left:20px}.df-fuentes li{font-size:15px;line-height:1.5;color:var(--text-secondary);margin:0 0 6px}
+.df-fuentes li a{color:var(--text-primary)}.df-fuentes li span{color:var(--text-muted);font-size:13px}
+</style>`;
 const PAISES_INTRO = DATOS_PAIS.introPaises();
 // Maqueta (Paco, 4 nov: «necesita maquetación, imágenes y diseño atractivo»): portada a lo ancho, bloques numerados con foto y pie
 // (foto solo si es de lo que se cuenta; si no, el bloque va sin foto), galería de 6 y tarjetas a los diarios del blog. Fotos ya
@@ -564,7 +584,7 @@ function generateFAQs(dest, countryName) {
 // ── Schema.org ───────────────────────────────────────────────
 
 function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
-  const { fotos, route, coords, countrySlug, canonical, pageTitle } = x;
+  const { fotos, route, coords, countrySlug, canonical, pageTitle, revisada } = x;
   const heroUrl = fotos && fotos.hero ? `${DOMAIN}/destinos/img/${slug}/${fotos.hero.file}` : null;
   const tourist = {
     "@type": "TouristDestination",
@@ -591,6 +611,8 @@ function buildSchemaOrg(dest, countryName, slug, faqs, x = {}) {
   };
 
   const graph = [tourist, crumbs];
+  // Ficha con fuentes: la página dice a Google cuándo se revisó (dateModified / lastReviewed)
+  if (revisada) graph.push({ "@type": "WebPage", "@id": canonical, "url": canonical, "name": pageTitle, "dateModified": revisada, "lastReviewed": revisada, "about": { "@id": `${canonical}#destino` } });
 
   // La guía de la página, como viaje con paradas (Google entiende itinerarios)
   if (route && route.stops && route.stops.length) {
@@ -673,7 +695,9 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   // (descripción, cómo llegar, dónde dormir, dónde comer, consejo local, plan B) y "faqs" las preguntas. El KV no se toca.
   const extraF = DESTINOS_EXTRA[slug] && DESTINOS_EXTRA[slug].ficha ? DESTINOS_EXTRA[slug] : null;
   if (extraF) dest = { ...dest, ...extraF.ficha, donde_dormir: { ...(dest.donde_dormir || {}), ...(extraF.ficha.donde_dormir || {}) } };
-  const faqs = (extraR && extraR.faqs) || (extraF && extraF.faqs) || generateFAQs(dest, countryName);
+  const ficha = FICHAS[`${countryCode}:${dest.id}`] || null;
+  const fichaFaqs = ficha && ficha.seo && Array.isArray(ficha.seo.faq) && ficha.seo.faq.length ? ficha.seo.faq.map((x) => ({ q: x.p, a: x.r })) : null;
+  const faqs = fichaFaqs || (extraR && extraR.faqs) || (extraF && extraF.faqs) || generateFAQs(dest, countryName);
   let coords = COORDS[`${countryCode}:${dest.id}`] || (typeof dest.lat === 'number' && typeof dest.lng === 'number' ? { lat: dest.lat, lng: dest.lng } : null);
   // Sin coordenadas propias: el centro de las paradas de la guía (así toda página con guía lleva mapa)
   if (!coords && route && route.stops) {
@@ -695,9 +719,12 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   const metaFull = conGuia
     ? `Qué ver en ${dest.nombre} (${countryName}) en ${nDias} ${nDias === 1 ? 'día' : 'días'}: ${route.stops.length} paradas con fotos y mapa${dest.mejor_epoca ? ' y mejor época: ' + dest.mejor_epoca : ''}.`
     : `Guía para viajar a ${dest.nombre} (${countryName}). ${dest.mejor_epoca ? 'Mejor época: ' + dest.mejor_epoca + '.' : ''} Dónde dormir y qué ver.`;
-  const metaDesc = metaFull.length > 158 ? metaFull.slice(0, 155).replace(/\s+\S*$/, '') + '…' : metaFull;
+  let metaDesc = metaFull.length > 158 ? metaFull.slice(0, 155).replace(/\s+\S*$/, '') + '…' : metaFull;
+  // Con ficha con fuentes, el título y la descripción de su SEO (escritos para Google, con el año)
+  if (ficha && ficha.seo && ficha.seo.titulo) pageTitle = ficha.seo.titulo;
+  if (ficha && ficha.seo && ficha.seo.descripcion) metaDesc = ficha.seo.descripcion;
   const canonical = `${DOMAIN}/destinos/${slug}.html`;
-  const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs, { fotos, route, coords, countrySlug, canonical, pageTitle });
+  const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs, { fotos, route, coords, countrySlug, canonical, pageTitle, revisada: ficha && ficha.revisada });
   const heroUrl = heroFoto ? `${DOMAIN}/destinos/img/${slug}/${heroFoto.file}` : null;
   const linkSlugGuia = route && route._public_slug ? route._public_slug : slug + '-ruta';
   // Sin guía propia (Paco, 5 nov 2026: «el mapa abre Google Maps; que abra una guía nuestra»): la guía del país que pasa por
@@ -889,6 +916,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
   ${heroFoto ? `${hrefGuiaApp ? `<a class="destino-side-cta" href="${hrefGuiaApp}"><strong>${guiaPais ? escapeHTML(guiaPais.nombre) : 'Esta guía en tu móvil'}</strong><span>${guiaPais ? (guiaPasa ? 'La guía que pasa por aquí, con' : `Nuestra guía de ${escapeHTML(countryName)}, con`) : 'Con'} mapa interactivo, para guardarla y llevarla en el viaje. Gratis con cuenta.</span><em>ABRIR LA GUÍA →</em></a>` : `<a class="destino-side-cta" href="/?go=chat"><strong>Tu guía de ${escapeHTML(dest.nombre)}</strong><span>Dile a Salma cuántos días tienes y te la hace con mapa.</span><em>HAZTE LA TUYA →</em></a>`}
   </aside><div class="destino-main">` : ''}
 
+    ${ficha ? `${FICHA_CSS}<p class="df-rev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Revisado en ${mesAno(ficha.revisada)} · ${Object.keys(ficha.fuentes || {}).length} fuentes${ficha.proxima_revision_cambia ? ` · próxima revisión: ${mesAno(ficha.proxima_revision_cambia)}` : ''}</span><a href="#fuentes-ficha">Ver fuentes</a></p>` : ''}
     <!-- Descripción -->
     <p class="destino-desc">${escapeHTML((extraR && extraR.descripcion) || dest.descripcion)}</p>${rd ? `
     <div class="bd-acc">${BOTON_COMPARTIR}</div>` : ''}
@@ -995,6 +1023,8 @@ ${activitiesHTML}
 
     <!-- SHARE -->
     <div class="dg-fin">${BOTON_COMPARTIR}</div>
+
+    ${ficha ? `<section class="df-fuentes" id="fuentes-ficha"><h2>Fuentes</h2><p>Revisado en ${mesAno(ficha.revisada)}. Las preguntas frecuentes de esta página salen de estas fuentes; cada mes se comprueba que siguen diciendo lo mismo.</p><ol>${Object.values(ficha.fuentes || {}).map((x) => `<li><a href="${escapeHTML(x.url)}" target="_blank" rel="noopener">${escapeHTML(x.nombre)}</a>${TIPO_FUENTE[x.tipo] ? ` <span>· ${TIPO_FUENTE[x.tipo]}${x.leida ? `, leída en ${mesAno(x.leida)}` : ''}</span>` : ''}</li>`).join('')}</ol></section>` : ''}
 
     <!-- SALMA — solo saludo como gancho, sin chat interactivo anónimo: para
          seguir hablando con ella hace falta entrar (gratis), como en el resto
