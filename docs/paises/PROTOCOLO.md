@@ -49,6 +49,7 @@ Puedes tener **2-3 países a la vez** (ver «CHATS DE PAÍS» en `docs/sistemas.
 | **6 · Cerrar** | Explorar ha subido lo que toca, Search Console pedido, Metricool comprobado, coste y tiempo reales anotados | 📈 | Lo lees en el informe semanal |
 
 ## Terminado = todo esto en ✅
+**Compruébalo con `node scripts/comprobar-pais.cjs <código>`** (p. ej. `np`; 0 €, solo lee el repo): dice en ✅/⚠/❌ qué falta de esta lista y lo que hay que mirar a mano (16 nov 2026).
 - [ ] Explorar: el total de guías ha subido lo que toca (`/explorar`).
 - [ ] Página del país y de sus sitios servidas por la web; `comprobar-nada-atras.cjs` ✅.
 - [ ] Historias publicadas y enlazadas desde el país y sus sitios.
