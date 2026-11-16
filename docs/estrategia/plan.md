@@ -20,7 +20,7 @@ Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts 
 | **mar 8 dic** | **Tailandia 2: el norte en moto** (Chiang Mai, Pai, Mae Hong Son) | por hacer |
 | **jue 10 dic** | **Tailandia 3: Koh Samui y el Muay Thai** | por hacer |
 | **mar 15 dic** | **Filipinas: qué saber antes de ir** (rehacer la apertura v1 en formato preguntas, con la ruta de Luzón norte; orden de Paco, 13 nov) | por hacer |
-| jue 17 dic | **Mujeres que sostienen una cultura** (documental, material de Pueblos; Paco «ok», 16 nov) | encargado a Vídeo |
+| jue 17 dic | libre («Mujeres que sostienen una cultura» en pausa, Paco 16 nov) | — |
 | enero | Filipinas durante y al volver (viaje de Paco) | — |
 
 Material propio por GPS (D:salma-movil): Tailandia 76 días con archivos, Vietnam 28, España 96, Portugal 9.
