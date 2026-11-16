@@ -1,0 +1,104 @@
+[
+ {
+  "clip": "curvas-a",
+  "dura": 7,
+  "origen": "VID_20260205_143745.mp4",
+  "desde": 3
+ },
+ {
+  "clip": "curvas-b",
+  "dura": 7,
+  "origen": "VID_20260205_143745.mp4",
+  "desde": 26
+ },
+ {
+  "clip": "pai-atardecer",
+  "dura": 7,
+  "origen": "VID_20260205_182048.mp4",
+  "desde": 1
+ },
+ {
+  "clip": "lago-tarde",
+  "dura": 7,
+  "origen": "VID_20260206_182747.mp4",
+  "desde": 5
+ },
+ {
+  "clip": "lago-barcas",
+  "dura": 8,
+  "origen": "VID_20260207_073610.mp4",
+  "desde": 12
+ },
+ {
+  "clip": "lago-niebla",
+  "dura": 8,
+  "origen": "VID_20260207_074859.mp4",
+  "desde": 2
+ },
+ {
+  "clip": "niebla-2",
+  "dura": 7,
+  "origen": "VID_20260207_074928.mp4",
+  "desde": 2
+ },
+ {
+  "clip": "pista",
+  "dura": 6,
+  "origen": "VID_20260207_112922.mp4",
+  "desde": 30
+ },
+ {
+  "clip": "kayan-casas",
+  "dura": 6,
+  "origen": "VID_20260207_114816.mp4",
+  "desde": 5
+ },
+ {
+  "clip": "kayan-calle",
+  "dura": 6,
+  "origen": "VID_20260207_122603.mp4",
+  "desde": 1
+ },
+ {
+  "clip": "rio-sariang",
+  "dura": 5,
+  "origen": "VID_20260208_140458.mp4",
+  "desde": 9
+ },
+ {
+  "clip": "cascada-2",
+  "dura": 7,
+  "origen": "VID_20260210_101357.mp4",
+  "desde": 7
+ },
+ {
+  "clip": "elefante-2",
+  "dura": 8,
+  "origen": "VID_20260210_122043.mp4",
+  "desde": 10
+ },
+ {
+  "clip": "carretera-c",
+  "dura": 6,
+  "origen": "VID_20260208_163844.mp4",
+  "desde": 3
+ },
+ {
+  "clip": "foso",
+  "dura": 6,
+  "origen": "VID_20260214_104734.mp4",
+  "desde": 6
+ },
+ {
+  "clip": "calle-noche",
+  "dura": 7,
+  "origen": "VID_20260205_191224.mp4",
+  "desde": 13
+ },
+ {
+  "clip": "lago",
+  "dura": 8,
+  "origen": "VID_20260207_072345.mp4",
+  "desde": 4
+ }
+]

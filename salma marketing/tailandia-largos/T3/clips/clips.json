@@ -1,0 +1,32 @@
+[
+ {
+  "clip": "manoplas-a",
+  "dura": 6,
+  "origen": "VID_20260131_090317.mp4",
+  "desde": 8
+ },
+ {
+  "clip": "manoplas-b",
+  "dura": 6,
+  "origen": "VID_20260131_090539.mp4",
+  "desde": 26
+ },
+ {
+  "clip": "manoplas-c",
+  "dura": 6,
+  "origen": "VID_20260131_090317.mp4",
+  "desde": 68
+ },
+ {
+  "clip": "patada",
+  "dura": 5,
+  "origen": "VID_20260214_101503.mp4",
+  "desde": 75
+ },
+ {
+  "clip": "fas",
+  "dura": 6,
+  "origen": "VID_20260220_104915.mp4",
+  "desde": 11
+ }
+]

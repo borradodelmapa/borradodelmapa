@@ -1,0 +1,62 @@
+[
+ {
+  "clip": "carretera-a",
+  "dura": 7,
+  "origen": "VID_20260131_134554.mp4",
+  "desde": 14
+ },
+ {
+  "clip": "carretera-b",
+  "dura": 7,
+  "origen": "VID_20260131_144830.mp4",
+  "desde": 6
+ },
+ {
+  "clip": "carretera-c",
+  "dura": 6,
+  "origen": "VID_20260208_163844.mp4",
+  "desde": 3
+ },
+ {
+  "clip": "mercado-noche",
+  "dura": 5,
+  "origen": "VID_20260116_203326.mp4",
+  "desde": 0
+ },
+ {
+  "clip": "avenida",
+  "dura": 7,
+  "origen": "VID_20260117_094143.mp4",
+  "desde": 2
+ },
+ {
+  "clip": "foso",
+  "dura": 6,
+  "origen": "VID_20260214_104734.mp4",
+  "desde": 6
+ },
+ {
+  "clip": "calle-noche",
+  "dura": 7,
+  "origen": "VID_20260205_191224.mp4",
+  "desde": 13
+ },
+ {
+  "clip": "lago",
+  "dura": 8,
+  "origen": "VID_20260207_072345.mp4",
+  "desde": 4
+ },
+ {
+  "clip": "cascada",
+  "dura": 7,
+  "origen": "VID_20260210_101420.mp4",
+  "desde": 3
+ },
+ {
+  "clip": "elefante",
+  "dura": 7,
+  "origen": "VID_20260210_121234.mp4",
+  "desde": 1
+ }
+]
