@@ -37,7 +37,7 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 | **`scripts/paises/<país>/`** + `scripts/datos-pais.cjs` | **Los datos web de cada país, uno por carpeta** (`intro.json`, `sitios-extra.json`, `sitios-nuevos.json`, `historias.js`, `rutas.json`): un chat de país solo escribe en la suya. Detalle en la cabecera de `datos-pais.cjs` |
 | `scripts/build-guias.js` | Páginas fijas de las guías públicas (también lo pasa una Action cada noche) |
 | `scripts/fotos-destinos.cjs <slugs>` | Foto de portada de cada sitio desde Wikimedia (0 €), con `destinos/img/<slug>/fotos.json` |
-| Hoja de contactos con ffmpeg (`salma marketing/india/herramientas/…/ffmpeg.exe`) | Revisar fotos a ojo antes de usarlas |
+| **`node scripts/fotos-sitio.cjs candidatas <sitio>`** · `poner <sitio> <hero|qN> <nº|File:…> "alt" ["pie"]` · `quitar` | Candidatas de Commons para la portada y cada actividad de «Qué hacer», en **hojas de contactos numeradas** (carpeta temporal); poner o quitar la elegida con autor y licencia en `fotos.json` (0 €; 16 nov 2026) |
 | `probar-chat.cjs` → `crear-guia.cjs "<País>"` → `guardar-guia.cjs` → `publicar-guia.cjs <id>` | Guía nueva con la app (0,4-1 € por guía de 3-5 días) |
 | `node scripts/abrir-tanda.cjs <slugs>` · `--confirmar` | Abrir páginas a Google (máx. 30 por tanda) |
 | `node scripts/verificar-destinos.cjs` | Título, h1, JSON-LD, fotos, mapa y guía de cada página |
@@ -55,8 +55,8 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 7. ⏸2 **Revisión final:** página de revisión con enlaces a todo (país, sitios, guías, historias) → «publica» → push → comprobar que la web lo sirve.
 
 ### Sitio
-1. Foto de portada (`fotos-destinos.cjs`) → revisarla a ojo; si es mala, un archivo concreto de Commons.
-2. Fotos de «Qué hacer»: candidatas por actividad → hoja de contactos → elegir; sin foto si ninguna es del sitio.
+1. Foto de portada (`fotos-destinos.cjs`) → revisarla a ojo; si es mala: `fotos-sitio.cjs candidatas <sitio>` → hoja `hoja-hero.jpg` → `fotos-sitio.cjs poner <sitio> hero <nº> "alt"`.
+2. Fotos de «Qué hacer»: `fotos-sitio.cjs candidatas <sitio>` (una hoja de contactos por actividad) → elegir por número → `poner <sitio> qN <nº> "alt" "Pie."`; sin foto si ninguna es del sitio (F9). Una equivocada: `quitar <sitio> qN`.
 3. «Sobre…» con fuentes, avisos de datos que han cambiado, diario del blog → `paises/<país>/sitios-extra.json`.
 4. Regenerar el país → comprobar en local. (Entra en la ⏸2 del lote.)
 

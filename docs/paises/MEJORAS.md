@@ -19,6 +19,6 @@ Estrategia lo repasa cada semana con el informe y marca el estado.
 | 13 nov 2026 | Y15 carátulas | En los móviles seguían las carátulas viejas: el service worker guarda las imágenes → cada imagen con `?v=<huella>` (`vUrl`/`portadaDe` de `scripts/video-info.cjs`) | 🌍 Web | ✅ arreglado |
 | 13 nov 2026 | (generador) | `build-destinos.js` con una opción desconocida regeneraba las 1.793 páginas, y con errores dejaba índice y sitemap a medias → ahora rechaza opciones desconocidas y con errores no toca índice ni sitemap | 🌍 Web | ✅ arreglado |
 | 5 nov 2026 | Filipinas (piloto) | Las guías de varias zonas perdían paradas por el radio del Worker | 📱 App | ✅ arreglado (Worker 69b021be) |
-| 5 nov 2026 | Filipinas (piloto) | Herramientas hechas sobre la marcha (candidatas de fotos por actividad, hoja de contactos, portada a mano) sin pasar a `scripts/` | 🌍 Web | pendiente |
+| 5 nov 2026 | Filipinas (piloto) | Herramientas hechas sobre la marcha (candidatas de fotos por actividad, hoja de contactos, portada a mano) sin pasar a `scripts/` | 🌍 Web | ✅ hecho 16 nov: `scripts/fotos-sitio.cjs` |
 | 5 nov 2026 | Filipinas (piloto) | Wikimedia cuela fotos de otros sitios con el mismo nombre (volcán Batok de Indonesia): revisar una a una (F9) | 🎬 🌍 | regla vigente |
 | 5 nov 2026 | Filipinas (piloto) | GitHub Pages se atasca a veces («in progress deployment»): un commit vacío lo relanza | todos | apuntado |
