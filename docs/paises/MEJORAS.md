@@ -8,7 +8,7 @@ Estrategia lo repasa cada semana con el informe y marca el estado.
 | Fecha | País | Qué pasó / qué mejorar | Para | Estado |
 |---|---|---|---|---|
 | 16 nov 2026 | (generador) | Las fuentes de «Conoce <país>» se copiaban a mano en intro.json → ahora salen del expediente (`f: [1, 3]` en cada apartado, `scripts/expediente.cjs`) y `comprobar-pais.cjs` vigila citas rotas y expediente cambiado después del resumen. Hecho en Nepal y Filipinas | 🌍 Web | ✅ hecho |
-| 16 nov 2026 | (comprobador) | India no tiene datos de destinos (`worker/kv/output-nivel2/in.json`): sin página de país ni de sus sitios, aunque tiene historias y vídeo. Lo destapó `comprobar-pais.cjs in` | 📈 decide · 🌍 Web | pendiente |
+| 16 nov 2026 | (comprobador) | India no tiene datos de destinos (`worker/kv/output-nivel2/in.json`): sin página de país ni de sus sitios, aunque tiene historias y vídeo. Lo destapó `comprobar-pais.cjs in`. Eran 30 países sin la copia local de `dest:<cc>:destinos` (el KV sí la tenía): bajada del KV (solo lectura, 0 €) y 335 páginas generadas | 🌍 Web | ✅ hecho 16 nov (OK de Paco) |
 | 16 nov 2026 | (comprobador) | La lista «Terminado» se revisaba a ojo → `node scripts/comprobar-pais.cjs <código>` la mira sola (0 €) | 🌍 Web | ✅ hecho (1e1d9dbc3) |
 | 16 nov 2026 | T3.3 muay thai | Un vídeo de 46 MB colgó el `git push` («remote end hung up»): subir primero las páginas y luego el vídeo en otro commit, con `-c http.version=HTTP/1.1 -c http.postBuffer=1048576000` | todos | apuntado |
 | 16 nov 2026 | T3.3 muay thai | Editar `historias.js` con un script lo dejó en CRLF: los scripts que lo reescriben deben respetar los finales de línea | 🌍 Web | regla vigente |
