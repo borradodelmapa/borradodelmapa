@@ -123,11 +123,15 @@ async function candidatas(slug, n) {
   const dir = path.join(TMP, slug); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
   const huecos = { hero: { busca: `${s.nombre} ${s.pais}`, ancho: 1280 } };
   const lugar = norm(s.nombre).split(/[ ,(]/)[0];
+  // Palabras que no identifican un sitio (no valen para dar por buena una foto)
+  const GEN = new Set(['paseo', 'mercado', 'templo', 'temple', 'playa', 'playas', 'fuerte', 'palacio', 'museo', 'local', 'locales', 'ciudad', 'atardecer', 'amanecer', 'gratis', 'bazar', 'bazaar', 'vistas', 'recorrido', 'ceremonia', 'centro', 'parque', 'jardin', 'garden', 'sunset', 'sunrise', 'monasterio', 'ferrocarril', 'plantacion', 'tour', 'visita', 'barrio', 'calle', 'lago', 'colina', 'puerta', 'nocturno', 'mercados', 'templos', 'artesania', 'compras']);
   s.queHacer.forEach((a, i) => {
     const q = consulta(a), pal = q.split(' ');
-    // De más concreta a más general, hasta juntar n: «boudhanath stupa amanecer» → «boudhanath stupa» → «boudhanath»
-    const lista = [q.includes(lugar) ? q : `${q} ${lugar}`, q, pal.slice(0, 2).join(' '), pal[0]].filter((x, k, arr) => x && arr.indexOf(x) === k);
-    huecos['q' + i] = { busca: lista[0], otras: lista.slice(1), ancho: 720, actividad: a };
+    // De más concreta a más general, SIEMPRE con el sitio (sin él, Commons trae fotos de otros países: Darjeeling, 16 nov 2026)
+    const con = (x) => (x.includes(lugar) ? x : `${x} ${lugar}`);
+    const lista = [con(q), con(pal.slice(0, 2).join(' ')), con(pal[0]), q].filter((x, k, arr) => x && arr.indexOf(x) === k);
+    const claves = [lugar].concat(pal.filter((w) => w.length >= 5 && !GEN.has(w)));
+    huecos['q' + i] = { busca: lista[0], otras: lista.slice(1), ancho: 720, actividad: a, claves };
   });
   const json = { sitio: slug, nombre: s.nombre, huecos: {} };
   console.log(`\n📷 Candidatas para ${s.nombre} (${s.pais}) → ${dir}`);
@@ -137,6 +141,8 @@ async function candidatas(slug, n) {
     if (h === 'hero' && s.coords) titles = titles.concat(await cercanas(s.coords.lat, s.coords.lng));
     titles = [...new Set(titles)];
     let cands = (await info(titles, 400)).filter((c) => (h === 'hero' ? c.w >= 1280 && c.w / c.h >= 1.2 : c.w >= 720));
+    // Solo fotos cuyo título o descripción nombra el sitio o algo concreto de la actividad (F9: mejor sin foto)
+    if (x.claves) cands = cands.filter((c) => { const t = norm(c.title + ' ' + c.desc); return x.claves.some((k) => t.includes(k)); });
     cands = titles.map((t) => cands.find((c) => c.title === t)).filter(Boolean).slice(0, n);
     const sheet = await hoja(dir, h, cands);
     json.huecos[h] = { busca: x.busca, actividad: x.actividad, candidatas: cands.map((c, i) => ({ n: i + 1, title: c.title, autor: c.autor, licencia: c.licencia, url: c.url, desc: c.desc })) };

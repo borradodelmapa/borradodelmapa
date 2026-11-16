@@ -10,5 +10,29 @@
   "url": "https://commons.wikimedia.org/wiki/File:Varanasi,_India,_Ghats,_Cremation_ceremony_in_progress.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 454,
+   "alt": "El aarti nocturno en los ghats de Varanasi",
+   "pie": "El aarti, cada noche en los ghats.",
+   "autor": "Partha Sarathi Sahana",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Night_Arati_in_Varanasi.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "El templo Kashi Vishwanath",
+   "pie": "El templo Kashi Vishwanath.",
+   "autor": "Gannu03",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Shri_Kashi_Vishwanath_Temple.jpg",
+   "ok_manual": true
+  }
+ }
 }

@@ -10,5 +10,40 @@
   "url": "https://commons.wikimedia.org/wiki/File:Mumbai_Bandra-Worli_Sea_Link.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "La Puerta de la India, en Bombay",
+   "pie": "La Puerta de la India.",
+   "autor": "Joe Ravi",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gateway_Of_India.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Marine Drive al atardecer, en Bombay",
+   "pie": "Marine Drive al atardecer.",
+   "autor": "GiffyTiffy",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sunset_at_Marine_Drive_2026.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 404,
+   "alt": "Las cuevas de Elefanta",
+   "pie": "Las cuevas de Elefanta.",
+   "autor": "Nayan Soren",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:ElephantaCaves-Mumbai-Maharashtra-WP_20161208.jpg",
+   "ok_manual": true
+  }
+ }
 }

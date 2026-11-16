@@ -10,5 +10,29 @@
   "url": "https://commons.wikimedia.org/wiki/File:DarjeelingTrainFruitshop_(2).jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Tiger Hill, en Darjeeling",
+   "pie": "Tiger Hill, el mirador de Darjeeling.",
+   "autor": "Shahnoor Habib Munmun",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tiger_Hill_Darjeeling_West_Bengal_India_(3).JPG",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1114,
+   "alt": "El tren de juguete del Darjeeling Himalayan Railway",
+   "pie": "El tren de juguete, Patrimonio de la Humanidad.",
+   "autor": "Syed Sajidul Islam",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Darjeeling_Himalayan_Railway,toy_train_(8).jpg",
+   "ok_manual": true
+  }
+ }
 }

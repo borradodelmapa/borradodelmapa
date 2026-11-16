@@ -10,5 +10,40 @@
   "url": "https://commons.wikimedia.org/wiki/File:Evening_view,_City_Palace,_Udaipur.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 388,
+   "alt": "El lago Pichola al atardecer",
+   "pie": "El lago Pichola al atardecer.",
+   "autor": "Pallav.journo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Udaipur_Lake_Pichola_Sunset.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El City Palace de Udaipur",
+   "pie": "El City Palace.",
+   "autor": "Hirumon",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:City_Palace_Udaipur_Rajasthan_India.JPG",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "El templo Jagdish de Udaipur",
+   "pie": "El templo Jagdish.",
+   "autor": "LBM1948",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Udaipur,_Jagdish_(2002)_01.jpg",
+   "ok_manual": true
+  }
+ }
 }

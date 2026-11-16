@@ -10,5 +10,40 @@
   "url": "https://commons.wikimedia.org/wiki/File:Pushkar.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 576,
+   "alt": "Camellos en la feria de Pushkar",
+   "pie": "La feria de camellos de Pushkar.",
+   "autor": "Sudipta Dutta Chowdhury",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Camels_of_Pushkar_Camel_Fair_(2015).jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 532,
+   "alt": "El templo de Brahma en Pushkar",
+   "pie": "El templo de Brahma.",
+   "autor": "Adityavijayavargia",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Brahma_Temple,_Pushkar,_RJ.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "El templo de Savitri, sobre Pushkar",
+   "pie": "El templo de Savitri, en lo alto de la colina.",
+   "autor": "Jakub Hałun",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:20191215_%C5%9Awi%C4%85tynia_Savitri_w_Puszkarze_1016_8669_DxO.jpg",
+   "ok_manual": true
+  }
+ }
 }

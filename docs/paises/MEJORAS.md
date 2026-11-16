@@ -7,6 +7,7 @@ Estrategia lo repasa cada semana con el informe y marca el estado.
 
 | Fecha | País | Qué pasó / qué mejorar | Para | Estado |
 |---|---|---|---|---|
+| 16 nov 2026 | India (fotos) | La búsqueda de respaldo de `fotos-sitio.cjs` quitaba el nombre del sitio y traía fotos de otros países (té de Argentina para Darjeeling) → ahora siempre busca con el sitio y solo acepta fotos cuyo título lo nombre o nombre algo concreto de la actividad. Aun así, revisar a ojo: salieron carteles y retratos de turistas | 🌍 Web | ✅ arreglado |
 | 16 nov 2026 | (generador) | Las fuentes de «Conoce <país>» se copiaban a mano en intro.json → ahora salen del expediente (`f: [1, 3]` en cada apartado, `scripts/expediente.cjs`) y `comprobar-pais.cjs` vigila citas rotas y expediente cambiado después del resumen. Hecho en Nepal y Filipinas | 🌍 Web | ✅ hecho |
 | 16 nov 2026 | (comprobador) | India no tiene datos de destinos (`worker/kv/output-nivel2/in.json`): sin página de país ni de sus sitios, aunque tiene historias y vídeo. Lo destapó `comprobar-pais.cjs in`. Eran 30 países sin la copia local de `dest:<cc>:destinos` (el KV sí la tenía): bajada del KV (solo lectura, 0 €) y 335 páginas generadas | 🌍 Web | ✅ hecho 16 nov (OK de Paco) |
 | 16 nov 2026 | (comprobador) | La lista «Terminado» se revisaba a ojo → `node scripts/comprobar-pais.cjs <código>` la mira sola (0 €) | 🌍 Web | ✅ hecho (1e1d9dbc3) |

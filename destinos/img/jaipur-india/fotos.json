@@ -10,5 +10,51 @@
   "url": "https://commons.wikimedia.org/wiki/File:East_facade_Hawa_Mahal_Jaipur_from_ground_level_(July_2022)_-_img_01.jpg",
   "ok_manual": true
  },
- "stops": {}
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El Hawa Mahal de Jaipur",
+   "pie": "El Hawa Mahal, el palacio de los vientos.",
+   "autor": "Wander-earth",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hawa_Mahal_in_Jaipur_India.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "El fuerte de Nahargarh, sobre Jaipur",
+   "pie": "El fuerte de Nahargarh.",
+   "autor": "Jakub Hałun",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nahargarh_Fort,_Jaipur,_20191218_1529_9314.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 642,
+   "alt": "El Chandra Mahal del City Palace de Jaipur",
+   "pie": "El Chandra Mahal, en el City Palace.",
+   "autor": "Jakub Hałun",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chandra_Mahal,_City_Palace,_Jaipur,_20191218_0951_9043.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "El observatorio Jantar Mantar de Jaipur",
+   "pie": "El Jantar Mantar.",
+   "autor": "Marcin Białek",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Jantar_Mantar_in_Jaipur_2011.jpg",
+   "ok_manual": true
+  }
+ }
 }
