@@ -3,6 +3,7 @@
   "apartados": [
     {
       "t": "Geografía",
+      "f": [1, 2, 3, 4, 5],
       "p": "7.641 islas, unas 2.000 habitadas, en tres grandes grupos: Luzón, Visayas y Mindanao. Está en el Cinturón de Fuego del Pacífico, con 24 volcanes activos, y le entran de media 20 tifones al año, la mayoría de julio a octubre. Tiene 112,7 millones de habitantes (censo de 2024).",
       "foto": {
         "src": "/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga/W65.jpg",
@@ -12,10 +13,12 @@
     },
     {
       "t": "Los primeros",
+      "f": [6, 7, 9, 10],
       "p": "En la cueva de Callao, en el norte de Luzón, apareció el Homo luzonensis, una especie humana propia de hace al menos 50.000 años. Los ayta descienden de los primeros cazadores y son el pueblo con más ADN de humanos arcaicos del mundo. Hace unos 4.000 años llegaron desde Taiwán los agricultores austronesios, de los que vienen casi todas sus lenguas."
     },
     {
       "t": "Antes de los españoles",
+      "f": [11, 12, 13],
       "p": "El documento escrito más antiguo del país es del año 900: una lámina de cobre que perdona una deuda. Los mangyan de Mindoro aún usan escrituras propias, y los ifugao cantan el hudhud, más de 200 cantos para la siembra, la cosecha y los funerales.",
       "foto": {
         "src": "/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga/W11.jpg",
@@ -25,6 +28,7 @@
     },
     {
       "t": "La colonia",
+      "f": [14, 15, 17, 18, 20, 21],
       "p": "Magallanes llegó en 1521 y Legazpi fundó el primer asentamiento español en Cebú en 1565. Durante 250 años, el galeón de Manila unió Asia con Acapulco. Pero la Cordillera no se rindió: sus pueblos guardaron su independencia y sus minas de oro. Un estudio arqueológico reciente cree que las terrazas de arroz de los ifugao fueron precisamente su respuesta a la llegada de los españoles; la UNESCO habla de un paisaje de dos milenios.",
       "foto": {
         "src": "/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga/W47.jpg",
@@ -34,10 +38,12 @@
     },
     {
       "t": "Siglo XX",
+      "f": [22, 25],
       "p": "En 1898 España cedió Filipinas a Estados Unidos, que la gobernó hasta la independencia, el 4 de julio de 1946. En 1980, el jefe kalinga Macli-ing Dulag fue asesinado por oponerse a las presas del río Chico, en Tinglayan, el municipio del pueblo de Whang-Od; el proyecto se abandonó."
     },
     {
       "t": "Lo que se está borrando",
+      "f": [13, 15, 16, 27, 28],
       "p": "Unas 175 lenguas indígenas siguen vivas. Las terrazas de arroz, Patrimonio de la Humanidad desde 1995, estuvieron de 2001 a 2012 en la lista de patrimonio en peligro por el abandono y la erosión. Los cantos hudhud se quedan sin uso con la cosecha a máquina, y el tatuaje batok vive de las aprendices de Whang-Od.",
       "foto": {
         "src": "/blog/viajes/img/filipinas-whang-od-tatuadora-kalinga/W94.jpg",
@@ -71,32 +77,6 @@
       "t": "Sagada: el pueblo donde a los muertos se les cuelga",
       "u": "/blog/viajes/filipinas-sagada-ataudes-colgantes",
       "img": "/blog/viajes/img/filipinas-sagada-ataudes-colgantes.jpg"
-    }
-  ],
-  "fuentes": [
-    {
-      "t": "UNESCO",
-      "u": "https://whc.unesco.org/en/list/722"
-    },
-    {
-      "t": "PAGASA",
-      "u": "https://www.pagasa.dost.gov.ph/climate/tropical-cyclone-information"
-    },
-    {
-      "t": "CNRS (Homo luzonensis)",
-      "u": "https://www.cnrs.fr/en/press/homo-luzonensis-new-human-species-contemporaneous-homo-sapiens-discovered-philippines"
-    },
-    {
-      "t": "Current Biology (ayta)",
-      "u": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8596304"
-    },
-    {
-      "t": "Journal of Field Archaeology (terrazas)",
-      "u": "https://digitalscholarship.unlv.edu/anthro_fac_articles/501"
-    },
-    {
-      "t": "Bantayog ng mga Bayani",
-      "u": "https://bantayogngmgabayani.org/bayani/macli-ing/"
     }
   ],
   "portada": {

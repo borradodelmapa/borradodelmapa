@@ -173,6 +173,9 @@ const FICHA_CSS = `<style>
 .df-fuentes li a{color:var(--text-primary)}.df-fuentes li span{color:var(--text-muted);font-size:13px}
 </style>`;
 const PAISES_INTRO = DATOS_PAIS.introPaises();
+// Fuentes de «Conoce <país>» = las del EXPEDIENTE (docs/paises/<país>-expediente.md, una sola lista; 16 nov 2026). Cada apartado de
+// intro.json cita sus [F#] con `f: [1, 3]`; sin expediente, se usan las `fuentes` de intro.json como antes. Ver scripts/expediente.cjs.
+const { leerExpediente } = createRequire(import.meta.url)('./expediente.cjs');
 // Maqueta (Paco, 4 nov: «necesita maquetación, imágenes y diseño atractivo»): portada a lo ancho, bloques numerados con foto y pie
 // (foto solo si es de lo que se cuenta; si no, el bloque va sin foto), galería de 6 y tarjetas a los diarios del blog. Fotos ya
 // revisadas de los episodios (F9) con autor (P2), enlazadas desde blog/viajes/img/. El estilo va aquí dentro (CONOCE_CSS) y solo
@@ -210,6 +213,9 @@ const CONOCE_CSS = `<style>
 .dc-card strong{font-size:16px;line-height:1.3;padding-right:10px;display:block}
 .dc-fuentes{font-size:13px;color:var(--text-muted);line-height:1.6}
 .dc-fuentes a{color:var(--text-secondary)}
+.dc-ref{font-size:12px;line-height:0;margin-left:3px;white-space:nowrap}.dc-ref a{color:var(--accent);font-weight:700;text-decoration:none;padding:0 1px}
+.dc-fue{margin:6px 0 26px}.dc-fue h3{font-family:var(--font-cond);font-weight:800;font-size:22px;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 8px;color:var(--text-primary)}
+.dc-fue p{font-size:14px;color:var(--text-muted);margin:0 0 10px}.dc-fue ol{margin:0;padding-left:26px}.dc-fue li{font-size:14px;line-height:1.5;color:var(--text-secondary);margin:0 0 5px;scroll-margin-top:80px}.dc-fue li a{color:var(--text-primary)}.dc-fue li:target{background:rgba(244,99,11,.12)}
 </style>`;
 // El documental «antes de viajar» del país (serie «Conoce cada país», con vídeo), arriba de «Conoce <país>» (Paco, 13 nov 2026: Filipinas «a todos sitios»)
 function docPais(countryName) {
@@ -225,25 +231,36 @@ function conocePais(countrySlug, countryName) {
   const e = escapeHTML;
   const cap = f => `<figcaption class="dc-cap">${e(f.pie)}${f.autor ? ` Foto: ${e(f.autor)}` : ''}</figcaption>`;
   const img = (f, alt) => `<img src="${e(f.src)}" alt="${e(alt || f.pie)}" loading="lazy" decoding="async">`;
+  const ex = leerExpediente(countrySlug);
+  const citas = (a) => (ex && a.f ? a.f.filter((n) => ex.fuentes[n]) : []);
+  const usadas = [...new Set(x.apartados.flatMap(citas))].sort((a, b) => a - b);
+  const ref = (a) => (citas(a).length ? `<sup class="dc-ref">${citas(a).map((n) => `<a href="#fx-${n}" aria-label="Fuente ${n}">[${n}]</a>`).join('')}</sup>` : '');
   let nFoto = 0;
   const bloques = x.apartados.map((a, i) => {
     const n = String(i + 1).padStart(2, '0');
-    const txt = `<div><span class="dc-n">${n}</span><h3>${e(a.t)}</h3><p>${e(a.p)}</p></div>`;
+    const txt = `<div><span class="dc-n">${n}</span><h3>${e(a.t)}</h3><p>${e(a.p)}${ref(a)}</p></div>`;
     return a.foto
       ? `<article class="dc-b dc-b--foto${nFoto++ % 2 ? ' dc-b--der' : ''}"><figure>${img(a.foto)}${cap(a.foto)}</figure>${txt}</article>`
       : `<article class="dc-b dc-b--sin">${txt}</article>`;
   }).join('\n      ');
   const gal = (x.galeria || []).length ? `<div class="dc-gal"><h3>En imágenes</h3><div class="dc-gal-grid">${x.galeria.map(f => `<figure>${img(f)}${cap(f)}</figure>`).join('')}</div></div>` : '';
   const dia = (x.enlaces || []).length ? `<div class="dc-dia"><h3>Diarios de viaje</h3><div class="dc-dia-grid">${x.enlaces.map(l => `<a class="dc-card" href="${e(l.u)}">${l.img ? `<img src="${e(l.img)}" alt="" loading="lazy">` : ''}<div><span>Diario de viaje</span><strong>${e(l.t)}</strong></div></a>`).join('')}</div></div>` : '';
-  const fue = (x.fuentes || []).map(f => `<a href="${e(f.u)}" rel="noopener" target="_blank">${e(f.t)}</a>`).join(' · ');
+  const fue = usadas.length ? '' : (x.fuentes || []).map(f => `<a href="${e(f.u)}" rel="noopener" target="_blank">${e(f.t)}</a>`).join(' · ');
+  const host = (u) => { try { return new URL(u).hostname.replace(/^www./, ''); } catch (_) { return u; } };
+  const lnk = (u, t) => `<a href="${e(u)}" rel="noopener" target="_blank">${e(t)}</a>`;
+  const fx = (n) => { const f = ex.fuentes[n]; return f.urls.length === 1 ? lnk(f.urls[0], f.t) : `${e(f.t)}${f.urls.length ? ': ' + f.urls.map((u) => lnk(u, host(u))).join(' · ') : ''}`; };
+  const cuando = ex && ex.consultado ? mesAno(ex.consultado) : '';
+  const listaFue = usadas.length ? `<div class="dc-fue" id="fuentes-pais"><h3>Fuentes</h3><p>${cuando ? `Datos consultados en ${cuando}. ` : ''}Cada número del texto lleva a su fuente. Fotos: Wikimedia Commons, con su autor en cada pie.</p><ol>${usadas.map((n) => `<li id="fx-${n}" value="${n}">${fx(n)}</li>`).join('')}</ol></div>` : '';
+  const rev = usadas.length ? `<p class="df-rev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>${cuando ? `Datos consultados en ${cuando} · ` : ''}${usadas.length} fuentes</span><a href="#fuentes-pais">Ver fuentes</a></p>` : '';
   return `${CONOCE_CSS}
     <section class="dc" id="conoce">
       <figure class="dc-hero">${x.portada ? img(x.portada, `${countryName}: ${x.portada.pie}`) : ''}<div class="dc-hero-txt"><span class="dc-kicker">Antes de viajar</span><h2>Conoce ${e(countryName)}</h2></div></figure>
       ${x.portada ? cap(x.portada) : ''}
       <p class="dc-hilo">${e(x.hilo)}</p>
+      ${rev ? FICHA_CSS + rev : ''}
       ${docPais(countryName)}${bloques}
       ${gal}
-      ${fue ? `<p class="dc-fuentes">Fuentes: ${fue}. Fotos: Wikimedia Commons, con su autor en cada pie.</p>` : ''}
+      ${listaFue}${fue ? `<p class="dc-fuentes">Fuentes: ${fue}. Fotos: Wikimedia Commons, con su autor en cada pie.</p>` : ''}
     </section>`;
 }
 

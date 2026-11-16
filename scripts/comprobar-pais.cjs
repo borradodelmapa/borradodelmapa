@@ -33,6 +33,25 @@ existe(`docs/paises/${ps}.md`) ? ok(`Plan del país: docs/paises/${ps}.md`) : ma
 existe(`docs/paises/${ps}-expediente.md`) ? ok(`Expediente: docs/paises/${ps}-expediente.md`) : mal(`Falta el expediente docs/paises/${ps}-expediente.md (desde PLANTILLA-expediente.md)`);
 const exp = leer(`docs/paises/${ps}-expediente.md`) || '';
 if (exp) { const dudas = (exp.match(/⚠/g) || []).length; dudas ? av(`El expediente tiene ${dudas} datos marcados ⚠ (no van a la voz; revisar en la ⏸2)`) : ok('Expediente sin datos ⚠ pendientes'); }
+const EX = require('./expediente.cjs').leerExpediente(ps);
+if (EX) {
+  EX.aprobado ? ok('Expediente aprobado por Paco') : av(`Expediente sin aprobar por Paco («${EX.estado.slice(0, 60)}…»): se aprueba en la ⏸2`);
+  const nF = Object.keys(EX.fuentes).length;
+  nF ? ok(`${nF} fuentes en el expediente${EX.consultado ? '' : ' (falta la fecha de consulta en «## Fuentes (consultadas el …)»)'}`) : mal('El expediente no tiene la lista «## Fuentes» con líneas «- [F1] …»');
+  const intro = json(`scripts/paises/${ps}/intro.json`);
+  if (intro && intro.apartados) {
+    const sinF = intro.apartados.filter((a) => !(a.f || []).length).map((a) => a.t);
+    sinF.length ? mal(`Apartados de «Conoce» sin citar sus fuentes del expediente (f: [1, 3] en intro.json): ${lista(sinF)}`) : ok('Cada apartado de «Conoce» cita sus fuentes del expediente');
+    const rotas = intro.apartados.flatMap((a) => (a.f || []).filter((n) => !EX.fuentes[n]).map((n) => `${a.t} → F${n}`));
+    if (rotas.length) mal(`Citas que no existen en el expediente: ${lista(rotas)}`);
+    if (intro.fuentes) av('intro.json aún tiene su propia lista «fuentes»: sobra, las fuentes salen del expediente');
+    // ¿Cambió el expediente después del resumen? (fecha del último commit de cada uno)
+    const { execSync } = require('child_process');
+    const fecha = (p) => { try { return +execSync(`git log -1 --format=%ct -- "${p}"`, { cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || 0; } catch (_) { return 0; } };
+    const fe = fecha(EX.file), fi = fecha(`scripts/paises/${ps}/intro.json`);
+    if (fe && fi && fe > fi) av(`El expediente ha cambiado después de «Conoce ${nombre}» (intro.json): repasar que el resumen siga diciendo lo mismo`);
+  }
+}
 
 // ── 2 · Páginas del país y de sus sitios ──
 seccion('Páginas');
