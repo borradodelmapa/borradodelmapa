@@ -249,42 +249,74 @@ module.exports = [
   {
     orden: 60,
     slug: 'tailandia-muay-thai-ko-samui',
-    cifras: [["8","Extremidades"],["1767","Fecha de la leyenda"],["17 mar","Día Nacional"]],
+    formato: '16:9',
+    // Largo T3.3 (Paco lo aprobó el 16 nov 2026). YouTube: jue 10 dic 2026 a las 10:00 (poner youtube: '<id>' SOLO cuando sea público)
+    // textos: salma marketing/tailandia-largos/T3.3-textos-finales.md · guion: docs/tailandia-3-muay-thai-guion-n14.md
+    caratula: 'salma marketing/tailandia-largos/caratulas-y18/ENTREGA/T3.3-muay-thai-caratula.jpg', // Y15; foto de Paco, sin retoque
+    cifras: [["8","Extremidades"],["2022","Primer combate femenino en Rajadamnern"],["17 mar","Día Nacional"]],
     destino: ['tailandia', 'Tailandia'],
     serie: 'Tailandia en moto',
     cap: 'Especial',
-    titulo: 'Muay Thai en Ko Samui: el saludo al maestro',
-    resumen: 'Una luchadora alemana, un estadio y un ritual de oración antes de la primera pelea.',
-    video: 'cp-muaythai.mp4',
+    titulo: 'Una noche de muay thai en Tailandia: así es por dentro',
+    resumen: 'Así es una velada de muay thai por dentro: del vestuario al ring, con Lina, luchadora profesional alemana, la noche de su pelea en el estadio Phetch Buncha de Koh Samui. Y lo que conviene saber para verlo en directo.',
+    video: 'una-noche-de-muay-thai-en-tailandia.mp4',
+    realidad: 'Fotos y vídeo del viaje de Borrado del Mapa, con permiso de Lina (@lina.srk) y de su equipo. Las fotos antiguas y las del estadio de Bangkok son de archivo (autores al final).',
     fotosDe: { '': 'salma marketing/editor/proyectos/muay-thai/drive.lst' }, fotosBase: 'D:/salma-movil/camara-canon/drive/',
-    fotos: { portada: 'IMG_4212', galeria: [['IMG_4048', 'La oración antes de salir.'], ['IMG_4036', 'Vendaje antes de la pelea.'], ['IMG_4206', 'Entrada al ring.'], ['IMG_4238', 'El Wai Khru, paso a paso.'], ['IMG_4269', 'La pelea.'], ['IMG_4011', 'Ko Samui.']] },
-    // Web Story (stories/<slug>/, scripts/build-stories.js, 8 nov 2026): 5-7 slides, una idea por slide, frases cortas. La última lleva al artículo.
+    creditosIntro: 'Fotos de archivo de Wikimedia Commons, con licencia libre. Gracias a sus autores:',
+    creditosExtra: [
+      ['Kojach', 'CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:Rajadamnern_stadium.jpg'],
+      ['kwankwan', 'CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:Rajadamnern_Stadium_2.jpg'],
+      ['kwankwan', 'CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:Rajadamnern_Stadium_3.jpg'],
+      ['BrokenSphere', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Muay_Thai_match_at_Rajadamnern_Stadium_2007-05-20_15.JPG'],
+      ['BrokenSphere', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Muay_Thai_match_at_Rajadamnern_Stadium_2007-05-20_4.JPG'],
+      ['BrokenSphere', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Muay_Thai_match_at_Rajadamnern_Stadium_2007-05-20_7.JPG'],
+      ['Kru Tony Moore', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Muay_Boran_old.jpg'],
+      ['Kru Tony Moore', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Nai_Khanom_Dtom_story.jpg'],
+      ['Judge761', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%A3%E0%B8%B3%E0%B8%A5%E0%B8%B6%E0%B8%81%E0%B8%99%E0%B8%B2%E0%B8%A2%E0%B8%82%E0%B8%99%E0%B8%A1%E0%B8%95%E0%B9%89%E0%B8%A1_2560.jpg'],
+      ['DiverDave', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Rajadamnern_Stadium.jpg'],
+      ['John Thomson, 1865', 'Dominio público', 'https://commons.wikimedia.org/wiki/File:Muay_Thai_match_in_Siam_1865_John_Thomson.jpg'],
+      ['Autor desconocido, hacia 1915', 'Dominio público', 'https://commons.wikimedia.org/wiki/File:Muay_Thai_Boran_Fighters_Bang_vs_Tian_c1915.png'],
+      ['Autor desconocido, años veinte', 'Dominio público', 'https://commons.wikimedia.org/wiki/File:Siamese_Boxing_in_Bangkok_(Muay_Thai_Boran)_1920s.png'],
+    ],
+    fotos: { portada: 'IMG_4212', galeria: [['IMG_4048', 'Concentración antes de salir.'], ['IMG_4036', 'El vendaje, antes de la pelea.'], ['IMG_4206', 'La entrada al ring.'], ['IMG_4238', 'El Wai Khru, paso a paso.'], ['IMG_4269', 'La pelea.'], ['IMG_4011', 'Koh Samui.']] },
+    // Web Story (stories/<slug>/): la primera slide lleva la carátula (Y15)
     story: {
       portada: 'IMG_4206',
       slides: [
-        { foto: 'IMG_4206', h: 'Muay Thai en Ko Samui', t: 'Una luchadora alemana, un estadio y un ritual de oración antes de la primera pelea.' },
-        { foto: 'IMG_4233', h: 'El saludo al maestro', t: 'Antes de pelear, Lina hace el Wai Khru Ram Muay: «saludo al maestro» y una danza propia de cada gimnasio.' },
-        { foto: 'IMG_4238', h: 'Una oración en movimiento', t: 'Rodea el ring rezando en cada esquina, se inclina en el centro y honra a sus maestros, a sus padres y a sus antepasados.' },
-        { foto: 'IMG_4253', h: 'Las ocho extremidades', t: 'Nació como arte de guerra en el antiguo Siam. Usa puños, codos, rodillas y piernas.' },
-        { foto: 'IMG_4269', h: 'La leyenda de 1767', t: 'Cuentan que Nai Khanom Tom venció a diez luchadores birmanos seguidos y quedó libre. Es leyenda, probablemente del siglo XX.' },
-        { foto: 'IMG_4011', h: 'Veladas en Samui', t: 'En Chaweng, el estadio Phetch Buncha tiene veladas los lunes, miércoles y sábados desde las 21:00. Confírmalo antes de ir.', salida: 'Leer el capítulo completo' },
+        { foto: 'IMG_4206', h: 'Una noche de muay thai', t: 'Lina, luchadora profesional alemana, la noche de su pelea en Koh Samui. Así es por dentro.' },
+        { foto: 'IMG_4036', h: 'En el vestuario', t: 'El vendaje, vuelta a vuelta. Un masaje con aceite. Y el entrenador y ella, concentrados en silencio.' },
+        { foto: 'IMG_4238', h: 'El Wai Khru', t: 'Rodea el ring parándose en cada esquina, se inclina en el centro y honra a sus maestros, a sus padres y a sus antepasados.' },
+        { foto: 'IMG_4253', h: 'Mujeres en el ring', t: 'En Rajadamnern, en Bangkok, el primer combate femenino llegó en 2022. Esa noche, Lina estaba en el cartel.' },
+        { foto: 'IMG_4269', h: 'La leyenda de 1767', t: 'Nai Khanom Tom habría vencido a diez luchadores birmanos seguidos. Es una leyenda, escrita mucho después.' },
+        { foto: 'IMG_4011', h: 'Dónde verlo', t: 'Phetch Buncha, en Chaweng: lunes, miércoles y sábados desde las 21:00. 1.500 bahts; 2.000 a pie de ring.', salida: 'Ver el documental' },
       ],
     },
     secciones: [
-      { h: 'Antes de pelear, el Wai Khru', foto: ['IMG_4233', 'Lina, durante el Wai Khru Ram Muay.'], p: [
-        'En Ko Samui, en el estadio **Phetch Buncha**, hay una luchadora profesional alemana, Lina. Antes de pelear hace el **Wai Khru Ram Muay**: *wai khru* es «saludo al maestro» y *ram muay* es una danza propia de cada gimnasio.',
-        'Es una oración en movimiento. El luchador rodea el ring rezando en cada esquina, se inclina en el centro y honra a sus maestros, a sus padres y a sus antepasados. Lina lo conoce al detalle y lo hace con respeto. Y entonces sí, empieza la pelea.',
-      ] },
-      { h: 'De dónde viene el Muay Thai', foto: ['IMG_4253', 'Puños, codos, rodillas y piernas: las ocho extremidades.'], p: [
-        'Nació como arte de guerra, entrenado por los soldados del antiguo Siam. Se peleaba con las manos vendadas con cuerda, sin guantes ni asaltos. Se le llama el «arte de las ocho extremidades» porque usa puños, codos, rodillas y piernas.',
-        'La leyenda cuenta que en 1767, tras la caída de Ayutthaya, un prisionero llamado **Nai Khanom Tom** venció a diez luchadores birmanos seguidos y quedó libre. Es una leyenda: los historiadores la consideran probablemente del siglo XX, ligada a la identidad nacional, y cambian el nombre del rey y la cuenta de combates. El 17 de marzo se celebra el Día Nacional del Muay Thai.',
-        'Las reglas modernas, con guantes, asaltos y árbitro, llegaron en los años treinta.',
-      ] },
+      { h: 'Una noche de muay thai, por dentro', min: '0:00', foto: ['IMG_4036', 'El vendaje, antes de la pelea.'], p: [
+        'Faltan minutos para que suba al ring. Le vendan las manos. Nadie habla. Se llama **Lina**, es luchadora profesional, es alemana, y esta noche pelea en una isla de Tailandia, en el estadio **Phetch Buncha** de Koh Samui. Antes del primer golpe hará el **Wai Khru**, delante de todo el estadio.' ] },
+      { h: '¿Qué es el muay thai?', min: '0:22', foto: ['IMG_4253', 'Puños, codos, rodillas y piernas: las ocho extremidades.'], p: [
+        'Puños, codos, rodillas y piernas: por eso lo llaman **el arte de las ocho extremidades**. Nació como arte de guerra, entre los soldados del antiguo Siam: manos vendadas con cuerda, sin guantes y sin asaltos.',
+        'Las reglas de hoy, con **guantes, asaltos y árbitro**, llegaron en los años treinta.' ] },
+      { h: '¿Qué pasa en el vestuario?', min: '0:48', foto: ['IMG_4048', 'Concentración antes de salir.'], p: [
+        'Esto casi nunca se ve. Una sala pequeña, con ventiladores, compartida con los demás luchadores de la noche. Primero, el **vendaje**: vuelta a vuelta, hasta que el puño es una piedra. Después, un **masaje con aceite** en las piernas. Y antes de salir, el entrenador y ella se concentran juntos, en silencio.' ] },
+      { h: '¿Qué es el Wai Khru?', min: '1:16', foto: ['IMG_4238', 'El Wai Khru, paso a paso.'], p: [
+        'Sube con una cinta en la cabeza, el **mongkhon**. Se la pone su entrenador, y se la quitará él antes de pelear. Entonces empieza el **Wai Khru**, el saludo al maestro: rodea el ring parándose en cada esquina, se inclina en el centro y honra a sus maestros, a sus padres y a sus antepasados.',
+        'Después, el **Ram Muay**: una danza personal que también honra a sus maestros. En sus movimientos se ve quién le enseñó y de dónde viene. Lina lo hizo entero, despacio.' ] },
+      { h: '¿Pelean mujeres?', min: '1:55', foto: ['IMG_4233', 'Lina, en el ring de Phetch Buncha.'], p: [
+        'En los dos grandes estadios de Bangkok, las mujeres **tuvieron prohibido subir al ring durante décadas**. No era una ley: era tradición. En **Rajadamnern**, el primer combate femenino llegó en **2022**. Y esa noche, en Koh Samui, Lina estaba en el cartel.' ] },
+      { h: '¿Es verdad la historia de 1767?', min: '2:23', foto: ['IMG_4269', 'La pelea.'], p: [
+        'Te la contarán: en 1767, tras la caída de Ayutthaya, un prisionero, **Nai Khanom Tom**, habría vencido a diez luchadores birmanos seguidos y ganado su libertad. Los historiadores la consideran **una leyenda**, escrita mucho después.',
+        'Pero cada **17 de marzo** Tailandia celebra el día del muay thai.' ] },
+      { h: '¿Dónde verlo y cuánto cuesta?', min: '2:45', foto: ['IMG_4011', 'Koh Samui.'], p: [
+        'En **Chaweng**, en Koh Samui, el estadio **Phetch Buncha** tiene velada los **lunes, miércoles y sábados, desde las 21:00**. Seis combates o más, y no suele empezar puntual.',
+        'La entrada normal cuesta **1.500 bahts**; a pie de ring, **2.000**. En las webs de reventa, bastante más: compra en la del estadio o en taquilla. Datos de noviembre de 2026: confírmalos antes de ir.' ] },
+      { h: '¿Cómo comportarse en el estadio?', min: '3:10', p: [
+        'Llega pronto y busca un buen sitio **frente al ring**. Durante el Wai Khru, **mira y calla**: es un ritual. Y aprende un poco de su historia antes de ir: cambia lo que ves.' ] },
     ],
     ficha: [
-      'En Samui, el estadio **Phetch Buncha** (Chaweng) tiene veladas los **lunes, miércoles y sábados desde las 21:00**; entradas de 1.500 y 2.000 bahts. Confírmalo antes de ir: cambia.',
+      'Estadio **Phetch Buncha** (Chaweng, Koh Samui): veladas los **lunes, miércoles y sábados desde las 21:00**; entradas de 1.500 bahts y 2.000 a pie de ring, en la web del estadio o en taquilla. Confírmalo antes de ir: cambia.',
       'Llega pronto y siéntate frente al ring, no en diagonal.',
-      'Respeta el deporte. Aprende su historia.',
+      'Durante el Wai Khru, mira y calla.',
     ],
     fuentes: [
       W('Wai khru ram muay (Wikipedia)', 'https://en.wikipedia.org/wiki/Wai_khru_ram_muay'),
@@ -292,9 +324,10 @@ module.exports = [
       W('Día Nacional del Muay Thai (Yokkao)', 'https://th.yokkao.com/blogs/news/national-muay-thai-day'),
       W('Thai Holiday Guide: estadio Phetchbuncha (Chaweng)', 'https://www.thaiholidayguide.com/surat-thani/koh-samui/phetch-buncha-boxing-stadium'),
       W('Nai Khanom Tom (Bernie Gourley)', 'https://berniegourley.com/tag/nai-khanomtom/'),
+      W('The Nation Thailand: las primeras luchadoras en Rajadamnern (2022)', 'https://www.nationthailand.com/life/40018547'),
     ],
-    nota: 'Lo de Nai Khanom Tom es leyenda, no historia documentada. Horario y precios de Phetch Buncha comprobados en noviembre de 2026; confírmalos antes de ir.',
-    cierre: 'Este capítulo es para Lola, para cuando vayamos a Tailandia a pelear. Una semana después, Vietnam.',
+    nota: 'Lo de Nai Khanom Tom es leyenda, no historia documentada. Horario y precios de Phetch Buncha comprobados en noviembre de 2026; confírmalos antes de ir. Gracias, Lina: @lina.srk.',
+    cierre: 'Este capítulo es para Lola, para cuando vayamos a Tailandia a pelear.',
   },
   // Ep.5 Los moken · guion y fuentes: docs/pueblos-ep5-moken-guion-direccion.md · vídeo: salma marketing/pueblos/moken/ULTIMA
   {
@@ -448,7 +481,7 @@ module.exports = [
         'Cuidado con pagar con tarjeta en discotecas y clubes de Bangkok y Chiang Mai: hay **fraudes y extorsiones**.' ] },
       { h: '¿Norte o islas?', min: '4:44', foto: ['bc05', 'El lago de Ban Rak Thai.'], p: [
         'El **norte** es templos, montaña y carretera: Chiang Mai, la «ciudad nueva» de 1296; el Templo Blanco de Chiang Rai, en obras desde 1997; y el Triángulo de Oro, donde se tocan tres países.',
-        'La **isla** es otra cosa. En Koh Samui, una luchadora alemana reza en cada esquina del ring antes de su pelea: el **Wai Khru**, el saludo al maestro. Las dos historias tienen su vídeo: el norte en moto, el 8 de diciembre, y el muay thai, el 10.' ], enlaces: [['Muay thai en Koh Samui', '/blog/viajes/tailandia-muay-thai-ko-samui'], ['Tailandia: qué ver', '/destinos/tailandia.html']] },
+        'La **isla** es otra cosa. En Koh Samui, una luchadora alemana se para en cada esquina del ring antes de su pelea: el **Wai Khru**, el saludo al maestro. Las dos historias tienen su vídeo: el norte en moto, el 8 de diciembre, y el muay thai, el 10.' ], enlaces: [['Muay thai en Koh Samui', '/blog/viajes/tailandia-muay-thai-ko-samui'], ['Tailandia: qué ver', '/destinos/tailandia.html']] },
     ],
     nota: 'Datos de noviembre de 2026 (Exteriores, recomendaciones vigentes a 14 de noviembre); confírmalos siempre en fuentes oficiales antes de viajar. Lo de los cajeros, la marihuana en tiendas y el pasaporte de fianza es lo que vio Paco en su viaje (enero-abril de 2026).',
     fuentes: [
