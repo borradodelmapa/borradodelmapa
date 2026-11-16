@@ -20,7 +20,7 @@ QUÉ: <entregable en 1-3 líneas> · PARA: <fecha/hora>
 TERMINADO = lista de cierre «<tipo>» (protocolo-coordinacion.md §3) + estas normas que más se olvidan: <IDs>
 COSTE: <0 € / rango; si va a pasar, PARAR y avisar a Estrategia>
 PARADAS: <qué tiene que ver o decidir Paco y en qué momento>
-AL ACABAR, AVÍSAME CON: «HECHO <id> · dónde está (commit/enlace/ruta) · qué normas cumple · qué queda o qué dudas»
+AL ACABAR, AVÍSAME CON: «HECHO <id> · dónde está (commit/enlace/ruta) · qué normas cumple · qué queda o qué dudas · aprendido: <la línea añadida a docs/paises/MEJORAS.md, o «nada nuevo»>»
 SI TE BLOQUEAS: pregúntame a mí, no a Paco.
 ```
 
@@ -71,4 +71,5 @@ Estrategia lo prepara todo y le pasa a Paco **una sola línea con el enlace al c
 ## 6 · Qué cambia para los otros chats
 - **Vídeo, Web y App** dejan de preguntar a Paco directamente: preguntan a Estrategia (salvo para enseñar algo que hay que ver u oír).
 - Avisan siempre con el formato «HECHO / BLOQUEADO / DUDA <id>».
+- **Cada HECHO apunta lo aprendido (Paco, 16 nov 2026):** si algo costó, falló o se puede hacer mejor, una línea arriba del todo en `docs/paises/MEJORAS.md`, en el mismo commit, y el HECHO la cita («aprendido: …»). Si no hubo nada, «aprendido: nada nuevo». Estrategia no da la tarea por cerrada sin ese campo.
 - Siguen cumpliendo sus normas igual; la lista de cierre es la comprobación final, no las sustituye.
