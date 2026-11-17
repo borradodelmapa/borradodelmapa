@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 629,
+  "alt": "Maputo, Mozambique",
+  "autor": "AmigoDia",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Maputo_seen_from_southeast_-_October_2006_(cropped).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 696,
+   "alt": "Pasear por la Baixa colonial y Avenida Samora Machel",
+   "pie": "Pasear por la Baixa colonial y Avenida Samora Machel.",
+   "autor": "Salazar Sérgio",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ruinas_do_Predio_de_1914_-_Rua_Consiglieri_Pedroso,_Maputo_Setembro_de_2025.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Mercado de Matosinhos para artesanía local",
+   "pie": "Mercado de Matosinhos para artesanía local.",
+   "autor": "lucianf from Bucharest, Romania",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mercado_Municipal_(4106426871).jpg",
+   "ok_manual": true
+  }
+ }
+}

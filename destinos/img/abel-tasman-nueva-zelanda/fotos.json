@@ -1,0 +1,59 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 753,
+  "alt": "Abel Tasman National Park, Nueva Zelanda",
+  "autor": "Pseudopanax at English Wikipedia",
+  "licencia": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:View_south_over_Anatakapau_Bay_and_Mutton_Cove.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 492,
+   "alt": "Abel Tasman Coast Track tramping",
+   "pie": "Abel Tasman Coast Track tramping.",
+   "autor": "Krzysztof Golik",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chroicocephalus_novaehollandiae_in_Abel_Tasman_NP_02.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 720,
+   "alt": "Kayak en la bahía",
+   "pie": "Kayak en la bahía.",
+   "autor": "Ryancoke2020",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Abel_Tasman_-_New_Zealand.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Paseo Observation Deck",
+   "pie": "Paseo Observation Deck.",
+   "autor": "Tyk",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Paseo_Abel_S%C3%A1nchez,_M%C3%A1laga_04.JPG",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Anchorage Beach",
+   "pie": "Anchorage Beach.",
+   "autor": "Christoph Strässler from Oberdorf BL, Schweiz",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Anchorage_Bay,_Abel_Tasman_National_Park_(16351895238).jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,29 @@
+{
+ "generado": "2026-11-17",
+ "hero": null,
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Casco antiguo",
+   "pie": "Casco antiguo.",
+   "autor": "Tony Castle",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Berna._Fuente.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Torre del Reloj",
+   "pie": "Torre del Reloj.",
+   "autor": "Tecmotiva",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Calle_Berna_torre_del_reloj.jpg",
+   "ok_manual": true
+  }
+ }
+}

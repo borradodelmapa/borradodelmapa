@@ -1,0 +1,71 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 568,
+  "alt": "Florencia",
+  "autor": "Diego Delso",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Vista_de_Florencia_desde_Piazzale_Michelangelo,_Italia,_2022-09-18,_DD_212-214_HDR.jpg",
+  "ok_manual": true
+ },
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 720,
+   "alt": "Galería Uffizi",
+   "pie": "Galería Uffizi.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Galer%C3%ADa_Uffizi,_Florencia,_Italia,_2022-09-18,_DD_72.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 1082,
+   "alt": "Galería Academia",
+   "pie": "Galería Academia.",
+   "autor": "Xosema",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Florencia_-_Firenze_-_Monumento_a_Elisa_Bonaparte_Baciocchi_-_Lorenzo_Bartolini_-_Molde_-_Galeria_de_la_Academia_-_Florencia_-_01.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 538,
+   "alt": "Ponte Vecchio y paseo Oltrarno",
+   "pie": "Ponte Vecchio y paseo Oltrarno.",
+   "autor": "Martin Falbisoner",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fireworks_over_Ponte_Vecchio_2.JPG",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 720,
+   "alt": "Palacio Pitti + jardines Boboli",
+   "pie": "Palacio Pitti + jardines Boboli.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Palacio_Pitti,_Florencia,_Italia,_2022-09-18,_DD_163-165_HDR.jpg",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 494,
+   "alt": "Iglesia Santa María Novella",
+   "pie": "Iglesia Santa María Novella.",
+   "autor": "Commonists",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Santa_Maria_Novella_(Florence).jpg",
+   "ok_manual": true
+  }
+ }
+}

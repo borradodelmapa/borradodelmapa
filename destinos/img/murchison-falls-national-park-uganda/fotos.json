@@ -1,0 +1,49 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Murchison Falls National Park",
+  "autor": "Kateregga1",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Vegetation_in_Murchison_Falls_National_Park_Uganda_03.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Nile river cruise a cataratas",
+   "pie": "Nile river cruise a cataratas.",
+   "autor": "Josefito123",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:River_Nile_-_Murchison_Falls_National_Park_20190916_143012.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 280,
+   "alt": "Safari game drive sector norte",
+   "pie": "Safari game drive sector norte.",
+   "autor": "BMKME",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Uganda_Kobs_Grazing_Along_the_Kyobe_Safari_Lodge_Drive,_Murchison_Falls_National_Park.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Top of the Falls hike",
+   "pie": "Top of the Falls hike.",
+   "autor": "Jingo Faizal",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Top_of_Murchison_falls.jpg",
+   "ok_manual": true
+  }
+ }
+}

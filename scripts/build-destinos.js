@@ -30,6 +30,9 @@ const REDISENO = new Set([
   // Tanda 2 (Paco, 13 nov 2026: «el rediseño a más países, por tandas de un país»): Filipinas entera
   ...['banaue', 'batad', 'batanes', 'bohol', 'buscalan', 'cebu', 'coron-palawan', 'manila', 'palawan-el-nido', 'puerto-princesa', 'sagada', 'siargao', 'vigan'].map((x) => x + '-filipinas'),
 ]);
+// Países enteros con la maqueta nueva (Paco, 17 nov 2026: «aplica el diseño nuevo a los 30 y a partir de ahora siempre a todas las
+// nuevas»). Los 30 países que no tenían páginas hasta el 16 nov. TODO país que se añada a partir de ahora entra aquí.
+const REDISENO_PAISES = new Set(['in', 'it', 'jp', 'ma', 'mu', 'mx', 'mn', 'me', 'mz', 'na', 'nr', 'ni', 'ne', 'ng', 'no', 'nz', 'om', 'nl', 'pk', 'ps', 'pa', 'pe', 'pt', 'do', 'sl', 'sy', 'ch', 'ua', 'ug', 've']);
 const ic = (cuerpo) => `<svg class="dg-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${cuerpo}</svg>`;
 const IC = {
   dias: ic('<rect x="3" y="4" width="18" height="18"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'),
@@ -704,7 +707,7 @@ function rdFicha(dest, faqs, coords, hrefGuiaApp) {
 
 function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, countrySlug) {
   const accOpen = route ? ' open' : ''; // con guía completa, el resto de la ficha va abierto (se lee de seguido)
-  const rd = REDISENO.has(slug);
+  const rd = REDISENO.has(slug) || REDISENO_PAISES.has(countryCode);
   const extraR = rd ? DESTINOS_EXTRA[slug] : null;
   // Cómo llegar y dónde comer revisados con fuente (sitios-extra.json, 13 nov 2026) mandan sobre los del KV, que eran antiguos
   if (extraR) for (const k of ['como_llegar', 'donde_comer']) if (extraR[k]) dest = { ...dest, [k]: extraR[k] };

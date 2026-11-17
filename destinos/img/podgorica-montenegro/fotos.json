@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 907,
+  "alt": "Podgorica, Montenegro",
+  "autor": "Savo Prelevic",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:P064720-426794_-_Panoramic_view_of_Podgorica.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Museo de Arte Contemporáneo",
+   "pie": "Museo de Arte Contemporáneo.",
+   "autor": "Sailko",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Podgorica,_museo_nazionale,_esterno_01.JPG",
+   "ok_manual": true
+  }
+ }
+}

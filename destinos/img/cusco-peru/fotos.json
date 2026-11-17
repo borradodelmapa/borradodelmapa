@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Cusco, Perú",
+  "autor": "tomscoffin",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Vista_Calle_Suecia.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 598,
+   "alt": "Plaza de Armas y Catedral",
+   "pie": "Plaza de Armas y Catedral.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Catedral,_Plaza_de_Armas,_Cusco,_Per%C3%BA,_2015-07-31,_DD_57.JPG",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 494,
+   "alt": "Qorikancha - templo del sol inca",
+   "pie": "Qorikancha - templo del sol inca.",
+   "autor": "Håkan Svensson (Xauxa)",
+   "licencia": "CC BY 2.5",
+   "url": "https://commons.wikimedia.org/wiki/File:Cusco_Coricancha_Inti-Huasi_main_view.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 148,
+   "alt": "Barrio de San Blas con vistas",
+   "pie": "Barrio de San Blas con vistas.",
+   "autor": "Johnattan Rupire",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vista_panor%C3%A1mica_de_la_ciudad_del_Cusco_desde_el_hospedaje_Aguaymanto_en_el_barrio_de_San_Blas.jpg",
+   "ok_manual": true
+  }
+ }
+}

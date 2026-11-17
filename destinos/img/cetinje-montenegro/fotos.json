@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 834,
+  "alt": "Cetinje, Montenegro",
+  "autor": "photo by Darko Bulatovic",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Njego%C5%A1ev_mauzolej.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Monasterio de Cetinje",
+   "pie": "Monasterio de Cetinje.",
+   "autor": "Koroner",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cetinje_monastery.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 396,
+   "alt": "Palacio del Rey Nikola",
+   "pie": "Palacio del Rey Nikola.",
+   "autor": "Milica Buha",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:King_Nikola%27s_Palace_in_Cetinje.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Iglesia Ortodoxa",
+   "pie": "Iglesia Ortodoxa.",
+   "autor": "Wikimedia Commons",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:The_Convent,_Cetinje,_Montenegro_WDL2609.png",
+   "ok_manual": true
+  }
+ }
+}

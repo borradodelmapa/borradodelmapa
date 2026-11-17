@@ -1,0 +1,38 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 444,
+  "alt": "Parque Nacional Peneda-Gerês",
+  "autor": "Harpagornis",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Parque_Nacional_Peneda-G%C3%A9res,_Portugal.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "Cascada de Arado",
+   "pie": "Cascada de Arado.",
+   "autor": "ines s.",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Peneda-Ger%C3%AAs_National_Park_(53485117699).jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Termas de Caldas do Gerês",
+   "pie": "Termas de Caldas do Gerês.",
+   "autor": "Vitor Oliveira from Torres Vedras, PORTUGAL",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Parque_das_Termas_de_Vizela_-_Caldas_de_Vizela_-_Portugal_(26000391268).jpg",
+   "ok_manual": true
+  }
+ }
+}

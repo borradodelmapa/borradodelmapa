@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Swat Valley, Pakistán",
+  "autor": "Alakazou1978 (talk)",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Swat_River_Pakistan.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 476,
+   "alt": "Trekking a Malam Jabba",
+   "pie": "Trekking a Malam Jabba.",
+   "autor": "Haidrhaidr",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:MalamJabba-.JPG",
+   "ok_manual": true
+  }
+ }
+}

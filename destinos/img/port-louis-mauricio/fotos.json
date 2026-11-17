@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Port Louis, Mauricio",
+  "autor": "Kadrewvel Pillay vythilingum",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Mauricio_in_the_center_of_the_City_of_Port_louis.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 444,
+   "alt": "Mercado central",
+   "pie": "Mercado central.",
+   "autor": "Phillip Capper from Wellington, New Zealand",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Port_Vila_market.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 452,
+   "alt": "Caudan Waterfront",
+   "pie": "Caudan Waterfront.",
+   "autor": "Martin Falbisoner",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Umbrellas_at_Caudan_Waterfront_Mall.JPG",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 474,
+   "alt": "Catedral de St Louis",
+   "pie": "Catedral de St Louis.",
+   "autor": "Karsten Ratzke",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Port_Louis,_Saint_Louis_Cathedral.jpg",
+   "ok_manual": true
+  }
+ }
+}

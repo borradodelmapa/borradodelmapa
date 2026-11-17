@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 959,
+  "alt": "Puerto La Cruz y Cumaná, Venezuela",
+  "autor": "BID Ciudades Sostenibles",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Cumana_sucre.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paseo marítimo",
+   "pie": "Paseo marítimo.",
+   "autor": "Frank Vincentz",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:La_Palma_-_Los_Llanos_-_Puerto_Naos_-_Paseo_Maritimo_07_ies.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 296,
+   "alt": "Playa de Puerto La Cruz",
+   "pie": "Playa de Puerto La Cruz.",
+   "autor": "Cayambe",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Puerto_de_la_Cruz_-_Playa_Jard%C3%ADn_y_Castillo_San_Felipe_Dec_2017.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Cumaná",
+   "pie": "Cumaná.",
+   "autor": "Luis X Montaño",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Iglesia_Santa_In%C3%A9s_de_Cuman%C3%A1..jpg",
+   "ok_manual": true
+  }
+ }
+}

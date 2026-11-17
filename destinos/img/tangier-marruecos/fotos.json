@@ -1,0 +1,27 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 978,
+  "alt": "Tánger",
+  "autor": "Diego Delso",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Comercio_en_la_plaza_del_9_de_abril_de_1947,_T%C3%A1nger,_Marruecos,_2015-12-11,_DD_77.JPG",
+  "ok_manual": true
+ },
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Medina a pie",
+   "pie": "Medina a pie.",
+   "autor": "رشيدة رقي",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dar_Abdellah_Guennoun_(Tanger).jpg",
+   "ok_manual": true
+  }
+ }
+}

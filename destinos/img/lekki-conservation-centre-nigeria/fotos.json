@@ -1,0 +1,18 @@
+{
+ "generado": "2026-11-17",
+ "hero": null,
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Canoa en la laguna Lekki",
+   "pie": "Canoa en la laguna Lekki.",
+   "autor": "Py3cvs",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cap%C3%A3o_da_Canoa_centro_sul.JPG",
+   "ok_manual": true
+  }
+ }
+}

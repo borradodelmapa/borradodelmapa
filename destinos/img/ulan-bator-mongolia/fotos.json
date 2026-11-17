@@ -1,0 +1,49 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 806,
+  "alt": "Ulán Bator",
+  "autor": "Bernard Gagnon",
+  "licencia": "CC0",
+  "url": "https://commons.wikimedia.org/wiki/File:Naadam_2023,_Ulan_Bator_01.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 1162,
+   "alt": "Monasterio de Ganden",
+   "pie": "Monasterio de Ganden.",
+   "autor": "Hans Bernhard (Schnobby)",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lama_in_the_Gandan_Monastery_in_Ulan_Bator,_Mongolia,_1981.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Museo Nacional de Mongolia",
+   "pie": "Museo Nacional de Mongolia.",
+   "autor": "Chongkian",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Mongolia_(2023).jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 420,
+   "alt": "Plaza de Sukhbaatar y Parlamento",
+   "pie": "Plaza de Sukhbaatar y Parlamento.",
+   "autor": "Bernard Gagnon",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:S%C3%BCkhbaatar_Square.jpg",
+   "ok_manual": true
+  }
+ }
+}

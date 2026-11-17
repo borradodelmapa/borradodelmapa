@@ -1,0 +1,38 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 620,
+  "alt": "Lago Titicaca",
+  "autor": "Diego Delso",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Amanecer_en_el_lago_Titicaca,_Puno,_Per%C3%BA,_2015-08-01,_DD_01.JPG",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 530,
+   "alt": "Islas Uros - casas flotantes",
+   "pie": "Islas Uros - casas flotantes.",
+   "autor": "Kataleya Torrsh",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%22TITIKAKA%22_a_orillas_del_Lago_Titicaca,_con_un_cielo_despejado_y_casas_flotantes_en_el_fondo._Es_un_s%C3%ADmbolo_representativo_de_la_ic%C3%B3nica_Isla_de_los_Urus.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Isla de Taquile - trekking y textiles",
+   "pie": "Isla de Taquile - trekking y textiles.",
+   "autor": "Olivier Issaly from Paris, France",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Isla_Taquile_Lago_Titicaca_(4463616824).jpg",
+   "ok_manual": true
+  }
+ }
+}

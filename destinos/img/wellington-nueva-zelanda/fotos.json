@@ -1,0 +1,50 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 572,
+   "alt": "Cuba Street",
+   "pie": "Cuba Street.",
+   "autor": "Samuel Cairncross",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cuba_Street,_Wellington_by_Sam_Cairncross.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1516,
+   "alt": "Museo Te Papa",
+   "pie": "Museo Te Papa.",
+   "autor": "Wikimedia Commons",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Waharoa_by_Neke_Kapua_in_mus%C3%A9um_Te_Papa_Tongarewa_Wellington_(N.Z).jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Botanic Gardens",
+   "pie": "Botanic Gardens.",
+   "autor": "Wainuiomartian",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Playground,_Wellington_Botanic_Garden.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 390,
+   "alt": "Paseo por el puerto y waterfront",
+   "pie": "Paseo por el puerto y waterfront.",
+   "autor": "CopperAlchemy",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Forest_walk_in_Island_Bay,_Wellington,_nz,_with_native_plants.jpg",
+   "ok_manual": true
+  }
+ }
+}

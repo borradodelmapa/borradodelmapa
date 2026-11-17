@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Festival Naadam, Mongolia",
+  "autor": "Chongkian",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Naadam_Festival_2024_Opening_Ceremony.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Carreras de caballos",
+   "pie": "Carreras de caballos.",
+   "autor": "Pedro J Pacheco",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Caballos_del_Vino._Cuesta_del_Castillo.jpg",
+   "ok_manual": true
+  }
+ }
+}

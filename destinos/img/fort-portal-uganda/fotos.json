@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 857,
+  "alt": "Fort Portal, Uganda",
+  "autor": "Dave Proffer",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Fort_Portal_-_Flickr_-_Dave_Proffer_(1).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 432,
+   "alt": "Crater lakes hiking alrededor",
+   "pie": "Crater lakes hiking alrededor.",
+   "autor": "Andre Carrotflower",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lake_Ontario_shoreline_at_Fort_Niagara_State_Park,_Porter,_New_York_-_20210705.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Kabarole Museum",
+   "pie": "Kabarole Museum.",
+   "autor": "Aqoragye",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Evening_in_Fort_Portal_Kabarole_District.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Kibale National Park day trips",
+   "pie": "Kibale National Park day trips.",
+   "autor": "B722N",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kibale_Forest_in_Kibale_National_Park_in_Fort_Portal_in_2025_03.jpg",
+   "ok_manual": true
+  }
+ }
+}

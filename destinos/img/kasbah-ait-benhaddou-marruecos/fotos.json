@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 631,
+  "alt": "Kasbah Aït Benhaddou, Marruecos",
+  "autor": "Abdel Charaf",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Kasbah_Ait_Ben_Haddou.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 548,
+   "alt": "Fotos desde colinas",
+   "pie": "Fotos desde colinas.",
+   "autor": "Rijksmuseum",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gezicht_op_Place_de_la_Kasbah_in_Tunis_Place_de_la_Kasbah_(Tunis)_(titel_op_object),_RP-F-F01091-E.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Café con vista",
+   "pie": "Café con vista.",
+   "autor": "Roland Tanglao",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kasbah_Bazaar_%26_Cafe-02.jpg",
+   "ok_manual": true
+  }
+ }
+}

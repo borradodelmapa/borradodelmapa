@@ -1,0 +1,59 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Arequipa, Perú",
+  "autor": "Hans Brian Brandsberg Berg",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_Armas,_Arequipa_2006.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Plaza de Armas y Catedral",
+   "pie": "Plaza de Armas y Catedral.",
+   "autor": "Blas2025wiki",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_Armas_de_Arequipa_-_La_Catedral_de_Arequipa.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Monasterio de Santa Catalina",
+   "pie": "Monasterio de Santa Catalina.",
+   "autor": "Markus Leupold-Löwenthal",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:MonasterioDeSantaCatalinaBell.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Museo Santuarios Andinos - momia inca",
+   "pie": "Museo Santuarios Andinos - momia inca.",
+   "autor": "Estuardo02",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Portada_del_museo_de_Santuarios_andinos,_Arequipa.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 330,
+   "alt": "Volcán Misti - ascenso",
+   "pie": "Volcán Misti - ascenso.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Volc%C3%A1n_Misti_desde_Arequipa,_Per%C3%BA,_2015-08-02,_DD_03.JPG",
+   "ok_manual": true
+  }
+ }
+}

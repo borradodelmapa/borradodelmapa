@@ -1,0 +1,59 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 897,
+  "alt": "Roma, Italia",
+  "autor": "FeaturedPics",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Colosseo_2020.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Coliseo + Foro Romano",
+   "pie": "Coliseo + Foro Romano.",
+   "autor": "NibasH",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Foro_Romano_y_Coliseo_al_fondo_desde_los_balcones_del_Palatino_-_panoramio.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 376,
+   "alt": "Basílica de San Pedro",
+   "pie": "Basílica de San Pedro.",
+   "autor": "Alvesgaspar",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 438,
+   "alt": "Fuente de Trevi al atardecer",
+   "pie": "Fuente de Trevi al atardecer.",
+   "autor": "Wilfredor",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fontaine_Trevi_-_Rome.jpg",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Caminar Trastevere y Testaccio",
+   "pie": "Caminar Trastevere y Testaccio.",
+   "autor": "Gobbler",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Roma_Testaccio_Ponte_Sublicio.jpg",
+   "ok_manual": true
+  }
+ }
+}

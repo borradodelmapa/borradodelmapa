@@ -1,0 +1,28 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 986,
+   "alt": "Mercado viejo",
+   "pie": "Mercado viejo.",
+   "autor": "Raimundo Pastor",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ciudad_Real_(RPS_20-07-2012)_casa_de_la_calle_Mercado_Viejo.png",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Barrio antiguo y callejuelas",
+   "pie": "Barrio antiguo y callejuelas.",
+   "autor": "JT Curses",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:B-20_Vall_d_Hebron_Barcelona_-_2007-02-26_-_JT_Curses.jpg",
+   "ok_manual": true
+  }
+ }
+}

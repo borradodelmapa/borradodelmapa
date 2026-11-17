@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Hama, Siria",
+  "autor": "Bernard Gagnon",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Hama,_Syria.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Norias de Hama",
+   "pie": "Norias de Hama.",
+   "autor": "Vyacheslav Argenberg",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Norias_of_Hama_2,_Orontes_River,_Hama,_Syria.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 482,
+   "alt": "Mezquita al-Nuri",
+   "pie": "Mezquita al-Nuri.",
+   "autor": "LBM1948",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hama_(2001)_05.jpg",
+   "ok_manual": true
+  }
+ }
+}

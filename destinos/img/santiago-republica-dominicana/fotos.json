@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 719,
+  "alt": "Santiago de los Caballeros, República Dominicana",
+  "autor": "derivative work: Fogster (talk) [2]: ChezSant",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:SantiagoCitySkyline2.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Centro histórico",
+   "pie": "Centro histórico.",
+   "autor": "Travellete",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Santiago_de_Quer%C3%A9taro_Centro_Historico_C.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 1108,
+   "alt": "Monumento a los Héroes de la Restauración",
+   "pie": "Monumento a los Héroes de la Restauración.",
+   "autor": "Phyrexian",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Santiago_de_los_Caballeros_-_Monumento_a_los_H%C3%A9roes_de_la_Restauraci%C3%B3n_0467.jpg",
+   "ok_manual": true
+  }
+ }
+}

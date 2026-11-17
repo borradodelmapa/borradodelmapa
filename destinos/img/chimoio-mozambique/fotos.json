@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Chimoio, Mozambique",
+  "autor": "Jcornelius",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Chimoio_Airport,_Mozambique.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 396,
+   "alt": "Parque Nacional Gorongosa",
+   "pie": "Parque Nacional Gorongosa.",
+   "autor": "Brian Dell",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Gorongosa_Park_Gate.JPG",
+   "ok_manual": true
+  }
+ }
+}

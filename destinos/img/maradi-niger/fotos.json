@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 720,
+  "alt": "Maradi, Níger",
+  "autor": "Mab.black",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Maradi_2.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Mezquita local",
+   "pie": "Mezquita local.",
+   "autor": "Ibrahimassoumane",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mosqu%C3%A9e_de_Jinguil%C3%A9_de_Maradi_17.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Mercado de ganado",
+   "pie": "Mercado de ganado.",
+   "autor": "Mab.black",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:March%C3%A9_de_Maradi.JPG",
+   "ok_manual": true
+  }
+ }
+}

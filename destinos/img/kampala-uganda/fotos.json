@@ -1,0 +1,59 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Kampala, Uganda",
+  "autor": "Chapelle musa",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Urban_Rising,_KAMPALA,_Uganda.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Uganda Museum",
+   "pie": "Uganda Museum.",
+   "autor": "Sandra Aceng",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Uganda_Museum,_kampala.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Kasubi Tombs",
+   "pie": "Kasubi Tombs.",
+   "autor": "not not phil from SF, CA, US",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kampala_Kasubi_Tombs.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Kabaka's Palace visita",
+   "pie": "Kabaka's Palace visita.",
+   "autor": "RomanDeckert",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:GravesKatharineAndAlbertCook-RubagaCemeteryKampala_RomanDeckert28042024.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Owino Market",
+   "pie": "Owino Market.",
+   "autor": "Alvinategyeka",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:ST._BALIKUDEMBE_OWINO_MARKET.jpg",
+   "ok_manual": true
+  }
+ }
+}

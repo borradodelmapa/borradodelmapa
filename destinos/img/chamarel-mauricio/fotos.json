@@ -1,0 +1,28 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Coloured Earths",
+   "pie": "Coloured Earths.",
+   "autor": "CEphoto, Uwe Aranas",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mauritius_Seven-Coloured-Earths-01.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Chamarel Falls",
+   "pie": "Chamarel Falls.",
+   "autor": "Martin Falbisoner",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chamarel_Falls_Mauritius_2.JPG",
+   "ok_manual": true
+  }
+ }
+}

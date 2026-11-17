@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 837,
+  "alt": "Isla de Mozambique, Mozambique",
+  "autor": "Steve Evans from Bangalore, India",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Mozambique_n2.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 490,
+   "alt": "Fortaleza de São Sebastião",
+   "pie": "Fortaleza de São Sebastião.",
+   "autor": "Diego Tirira from Quito, Ecuador",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:MZ_Isla_de_Mozambique_0201_021_(16637846143).jpg",
+   "ok_manual": true
+  }
+ }
+}

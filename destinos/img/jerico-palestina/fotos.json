@@ -1,0 +1,61 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 490,
+   "alt": "Tell es-Sultan",
+   "pie": "Tell es-Sultan.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tell_es-Sultan,_Jericho,_Palestine2.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Montaña de la Tentación - teleférico",
+   "pie": "Montaña de la Tentación - teleférico.",
+   "autor": "Xemenendura",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Monta%C3%B1as_Jeric%C3%B3.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Río Jordán - sitio bautismal",
+   "pie": "Río Jordán - sitio bautismal.",
+   "autor": "Dora Duque",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Rio_Piedras_Jerico_Antioquia_Colombia.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Monasterio de la Tentación",
+   "pie": "Monasterio de la Tentación.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Monasterio_de_la_Tentaci%C3%B3n,_Jeric%C3%B3.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Parque arqueológico",
+   "pie": "Parque arqueológico.",
+   "autor": "Lakehmaria",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fuente_parque_de_Jeric%C3%B3.jpg",
+   "ok_manual": true
+  }
+ }
+}

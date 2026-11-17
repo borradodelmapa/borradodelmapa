@@ -1,0 +1,71 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Puerto Plata",
+  "autor": "Ontheway Advice",
+  "licencia": "CC0",
+  "url": "https://commons.wikimedia.org/wiki/File:Hotel_Barcelo_Puerto_Plata,_San_Felipe_de_Puerto_Plata,_Puerto_Plata,_Rep%C3%BAblica_Dominicana_(34333553235).jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paseo Marítimo",
+   "pie": "Paseo Marítimo.",
+   "autor": "Frank Vincentz",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:La_Palma_-_Los_Llanos_-_Puerto_Naos_-_Paseo_Maritimo_07_ies.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Playa Long Beach y playas cercanas",
+   "pie": "Playa Long Beach y playas cercanas.",
+   "autor": "Luis Miguel Bugallo Sánchez (Lmbuga)",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Beach_in_Playa_Blanca_-_Lanzarote_-B20.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Teleférico a Pico Isabel de Torres",
+   "pie": "Teleférico a Pico Isabel de Torres.",
+   "autor": "Asurnipal",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Barcelona-Teleferic-de-Puerto-06.JPG",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Museo de Ámbar Dominicano",
+   "pie": "Museo de Ámbar Dominicano.",
+   "autor": "P. Hughes",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Santurce_-_Museo_de_Puerto_Rico.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Excursión a Isla Isabela",
+   "pie": "Excursión a Isla Isabela.",
+   "autor": "Alexrebolledo",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Muelle_de_Puerto_Anchorena_en_la_Isla_Victoria.JPG",
+   "ok_manual": true
+  }
+ }
+}

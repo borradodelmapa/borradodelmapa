@@ -1,0 +1,28 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 1348,
+   "alt": "Catedral Dom y Torre Dom",
+   "pie": "Catedral Dom y Torre Dom.",
+   "autor": "Massimo Catarinella",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:DomTorenUtrechtNederland.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 484,
+   "alt": "Museo Central",
+   "pie": "Museo Central.",
+   "autor": "GodeNehler",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Barberini_August_2023-Vincent_van_Gogh_-_Borabend,_1885_-_Centraal_Museum,_Utrecht.jpg",
+   "ok_manual": true
+  }
+ }
+}

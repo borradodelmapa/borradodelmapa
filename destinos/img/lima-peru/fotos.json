@@ -1,0 +1,70 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 865,
+  "alt": "Lima, Perú",
+  "autor": "David Felipe Ruiz Hoyos",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_Catedral_Metropolitana_de_Lima_(cropped).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 878,
+   "alt": "Museo Larco - arte prehispánico",
+   "pie": "Museo Larco - arte prehispánico.",
+   "autor": "Wikimedia Commons",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Seated_Figure_Bottle_in_Museo_Larco_-_Lima.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Museo Nacional de Antropología",
+   "pie": "Museo Nacional de Antropología.",
+   "autor": "Ibrehaut",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Plaza_Bolivar._Pueblo_Libre,_Lima,_Per%C3%BA_01.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 454,
+   "alt": "Centro Histórico y Catedral",
+   "pie": "Centro Histórico y Catedral.",
+   "autor": "Johanmck",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Centro_historico_de_lima_,_patrimonio_cultural_de_la_humanidad.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 720,
+   "alt": "Miraflores - acantilados y parques",
+   "pie": "Miraflores - acantilados y parques.",
+   "autor": "Nano119",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Malecon_Barranco_Miraflores.JPG",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Barranco - barrio bohemio con galerías",
+   "pie": "Barranco - barrio bohemio con galerías.",
+   "autor": "Travelour",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Neighborhood_of_Lima.jpg",
+   "ok_manual": true
+  }
+ }
+}

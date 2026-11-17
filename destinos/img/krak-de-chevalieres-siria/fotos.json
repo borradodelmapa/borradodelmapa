@@ -1,0 +1,27 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 724,
+  "alt": "Krak de Chevaliers",
+  "autor": "Bernard Gagnon",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Krak_des_Chevaliers_01.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Torres defensivas",
+   "pie": "Torres defensivas.",
+   "autor": "Mappo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Keep_of_Krak_des_Chevaliers.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Essaouira",
+  "autor": "Goldfinchshuffle",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Essaouira_port,_Morocco.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Paseo por puerto y mercado de pescado",
+   "pie": "Paseo por puerto y mercado de pescado.",
+   "autor": "dimitri from Millau, France",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dajla_(Sahara_Occidental)_-_Esquina_entre_la_calle_Essaouira_y_el_paseo_maritimo.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Medina a pie",
+   "pie": "Medina a pie.",
+   "autor": "Kayaky",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ramparts_of_Essaouira.JPG",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Windsurf o kitesurfing",
+   "pie": "Windsurf o kitesurfing.",
+   "autor": "Lars Curfs (Grashoofd)",
+   "licencia": "CC BY-SA 3.0 nl",
+   "url": "https://commons.wikimedia.org/wiki/File:Surfers_at_Essaouira,_Morocco.JPG",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 1014,
+   "alt": "Isla de Mogador en bote",
+   "pie": "Isla de Mogador en bote.",
+   "autor": "Luc Viatour0",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Maroc_Essaouira_Luc_Viatour_4.JPG",
+   "ok_manual": true
+  }
+ }
+}

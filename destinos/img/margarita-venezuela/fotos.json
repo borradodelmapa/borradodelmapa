@@ -1,0 +1,27 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 862,
+  "alt": "Isla de Margarita",
+  "autor": "Wilfredor",
+  "licencia": "CC0",
+  "url": "https://commons.wikimedia.org/wiki/File:Backlit_Margarita_Island_Sunset_in_Las_Guevaras,_Venezuela_CaptureNX2.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 366,
+   "alt": "Playa El Agua",
+   "pie": "Playa El Agua.",
+   "autor": "Antoniofermin",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Playa_El_Agua.JPG",
+   "ok_manual": true
+  }
+ }
+}

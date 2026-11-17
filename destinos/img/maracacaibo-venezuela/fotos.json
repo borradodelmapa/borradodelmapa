@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Maracaibo y Lago de Maracaibo, Venezuela",
+  "autor": "Mgta122001vzla",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Contaminaci%C3%B3n_de_lemna_y_residuos_en_el_Lago_de_Maracaibo._09.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 498,
+   "alt": "Paseo de la Cintura",
+   "pie": "Paseo de la Cintura.",
+   "autor": "Wilfredor",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ca%C3%B1ada_del_Paseo_del_Lago,_Maracaibo,_Estado_Zulia,_Venezuela_2.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Mercado Las Pulgas",
+   "pie": "Mercado Las Pulgas.",
+   "autor": "Wilfredor",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Flea_Market_Maracaibo_2.jpg",
+   "ok_manual": true
+  }
+ }
+}

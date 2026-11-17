@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 850,
+  "alt": "Ginebra, Suiza",
+  "autor": "Luisfpizarro",
+  "licencia": "CC0",
+  "url": "https://commons.wikimedia.org/wiki/File:Geneva_harbor_and_jet_d%27eau.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Museo Ariana",
+   "pie": "Museo Ariana.",
+   "autor": "Benjamín Núñez González",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ginebra,_Museo_Calvinismo,_Suiza,_2015_03.JPG",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Catedral San Pedro",
+   "pie": "Catedral San Pedro.",
+   "autor": "Benjamín Núñez González",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ginebra,_Catedral_de_San_Pedro,_Suiza,_2015_01.JPG",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,82 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 916,
+  "alt": "Marrakech",
+  "autor": "I.Barrios & J.Ligero",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Babuchas_02_--_2014_--_Marrakech,_Marruecos.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Recorrer medina y Plaza Jemaa el-Fnaa",
+   "pie": "Recorrer medina y Plaza Jemaa el-Fnaa.",
+   "autor": "Petar Milošević",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lamp_maker,_Medina_of_Marrakech.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 982,
+   "alt": "Palacio Bahía",
+   "pie": "Palacio Bahía.",
+   "autor": "Yastay",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Palacio_de_La_Bah%C3%ADa_en_Marrakech_08.JPG",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Jardines de Menara",
+   "pie": "Jardines de Menara.",
+   "autor": "Marrakech,_Agdal_Gardens,_2007-08-01.jpg: Patrice derivative work: Teofilo (talk",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Marrakech,_Agdal_Gardens,_2007-08-01_retouched.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Mercado de especias y teñidería",
+   "pie": "Mercado de especias y teñidería.",
+   "autor": "Herokk",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Jemaa_el-Fnaa_Marrakech_at_sunset.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 498,
+   "alt": "Museo Bereber",
+   "pie": "Museo Bereber.",
+   "autor": "J.Ligero & I.Barrios",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Patr%C3%B3n_geom%C3%A9trico_isl%C3%A1mico_--_2014_--_Museo_de_Marrakech,_Marruecos.jpg",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Excursión Atlas y pueblos de montaña",
+   "pie": "Excursión Atlas y pueblos de montaña.",
+   "autor": "Viault",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:La_Palmeraie_de_Marrakech_707.JPG",
+   "ok_manual": true
+  }
+ }
+}

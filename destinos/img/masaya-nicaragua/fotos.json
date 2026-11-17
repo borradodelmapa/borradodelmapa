@@ -1,0 +1,70 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 848,
+  "alt": "Masaya, Nicaragua",
+  "autor": "Acana689",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Cratervolcan.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Mercado Artesanal",
+   "pie": "Mercado Artesanal.",
+   "autor": "Chicho96",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mercado_de_Artesan%C3%ADas_de_Masaya.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Laguna de Masaya",
+   "pie": "Laguna de Masaya.",
+   "autor": "Judgefloro",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:8952Paciano_Rizal_Masaya,_Bay,_Laguna_41.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 432,
+   "alt": "Iglesia de Santiago",
+   "pie": "Iglesia de Santiago.",
+   "autor": "Byralaal",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Masaya_church.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Taller de cerámica",
+   "pie": "Taller de cerámica.",
+   "autor": "Martin Kulldorff",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Taller_de_Ceramica.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Fortaleza del Coyotepe",
+   "pie": "Fortaleza del Coyotepe.",
+   "autor": "AxeEffect",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Coyotepe.JPG",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Bacalar",
+  "autor": "David Cabrera",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Hamaca_-_Bacalar,_QR_2009.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Laguna paseo gratis",
+   "pie": "Laguna paseo gratis.",
+   "autor": "Sharon Hahn Darlin",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bacalar_Lagoon,_Bacalar_Quintana_Roo,_Mexico_-_It%E2%80%99s_so_shallow_I%E2%80%99m_sitting_down_here.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Cenote Azul snorkel sumergido",
+   "pie": "Cenote Azul snorkel sumergido.",
+   "autor": "holachetumal",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cenote_Azul,_Bacalar,_Q._Roo_-_panoramio.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 304,
+   "alt": "Fuerte de San Felipe museo",
+   "pie": "Fuerte de San Felipe museo.",
+   "autor": "Sharon Hahn Darlin",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fuerte_de_San_Felipe_de_Bacalar,_Bacalar,_Quintana_Roo,_Mexico,_Mayo_2021_-_03.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Balneario Xul-Ha cenote",
+   "pie": "Balneario Xul-Ha cenote.",
+   "autor": "holachetumal",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Balneario_Bacalar,_Q._Roo._-_panoramio.jpg",
+   "ok_manual": true
+  }
+ }
+}

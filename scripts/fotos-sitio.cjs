@@ -12,6 +12,8 @@
 //        (ok_manual: revisada a ojo). q0 = la primera actividad de «Qué hacer».
 //   node scripts/fotos-sitio.cjs quitar <sitio> <hero|qN>
 //        Quita una foto equivocada (la tarjeta se queda sin foto).
+//   node scripts/fotos-sitio.cjs auto <sitio> [<sitio>…]
+//        Pone sola la primera candidata en cada actividad sin foto. REVISAR después a ojo y quitar las malas.
 // Después: node scripts/build-destinos.js --country <cc> --only <sitio>, y mirarlo en local.
 // <sitio> = slug de la página: banaue-filipinas, kathmandu-nepal…
 const fs = require('fs');
@@ -118,14 +120,18 @@ async function hoja(dir, hueco, cands) {
   return k ? sheet : null;
 }
 
-async function candidatas(slug, n) {
+// Fotos que nunca valen para un sitio aunque lo nombren (17 nov 2026: estadios, aeropuertos, barcos, cuadros, conciertos, mapas)
+const NO_VALE = /\b(stadium|stadion|estadio|arena|airport|aeropuerto|aerodrome|ferry|ship|cruise|concert|painting|caravaggio|map|satellite|sentinel|landsat|logo|bombing|explosion|accident|protest|riot|war)\b/i;
+
+async function candidatas(slug, n, hojas = true, soloPortada = false) {
   const s = datosSitio(slug);
   const dir = path.join(TMP, slug); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
-  const huecos = { hero: { busca: `${s.nombre} ${s.pais}`, ancho: 1280 } };
   const lugar = norm(s.nombre).split(/[ ,(]/)[0];
+  // Portada: el título tiene que nombrar el sitio (17 nov 2026: salían un ferry en Florencia y un Caravaggio en Odesa)
+  const huecos = { hero: { busca: `${s.nombre} ${s.pais}`, otras: [s.nombre], ancho: 1280, claves: [lugar] } };
   // Palabras que no identifican un sitio (no valen para dar por buena una foto)
   const GEN = new Set(['paseo', 'mercado', 'templo', 'temple', 'playa', 'playas', 'fuerte', 'palacio', 'museo', 'local', 'locales', 'ciudad', 'atardecer', 'amanecer', 'gratis', 'bazar', 'bazaar', 'vistas', 'recorrido', 'ceremonia', 'centro', 'parque', 'jardin', 'garden', 'sunset', 'sunrise', 'monasterio', 'ferrocarril', 'plantacion', 'tour', 'visita', 'barrio', 'calle', 'lago', 'colina', 'puerta', 'nocturno', 'mercados', 'templos', 'artesania', 'compras']);
-  s.queHacer.forEach((a, i) => {
+  if (!soloPortada) s.queHacer.forEach((a, i) => {
     const q = consulta(a), pal = q.split(' ');
     // De más concreta a más general, SIEMPRE con el sitio (sin él, Commons trae fotos de otros países: Darjeeling, 16 nov 2026)
     const con = (x) => (x.includes(lugar) ? x : `${x} ${lugar}`);
@@ -143,14 +149,15 @@ async function candidatas(slug, n) {
     let cands = (await info(titles, 400)).filter((c) => (h === 'hero' ? c.w >= 1280 && c.w / c.h >= 1.2 : c.w >= 720));
     // Solo fotos cuyo título o descripción nombra el sitio o algo concreto de la actividad (F9: mejor sin foto)
     if (x.claves) cands = cands.filter((c) => { const t = norm(c.title + ' ' + c.desc); return x.claves.some((k) => t.includes(k)); });
+    cands = cands.filter((c) => !NO_VALE.test(c.title + ' ' + c.desc));
     cands = titles.map((t) => cands.find((c) => c.title === t)).filter(Boolean).slice(0, n);
-    const sheet = await hoja(dir, h, cands);
+    const sheet = hojas ? await hoja(dir, h, cands) : '(sin hoja)';
     json.huecos[h] = { busca: x.busca, actividad: x.actividad, candidatas: cands.map((c, i) => ({ n: i + 1, title: c.title, autor: c.autor, licencia: c.licencia, url: c.url, desc: c.desc })) };
     console.log(`  ${h.padEnd(4)} ${x.actividad ? `«${String(x.actividad).slice(0, 60)}»` : 'portada'} · búsqueda «${x.busca}» → ${cands.length ? `${cands.length} candidatas: ${sheet}` : 'ninguna (mejor sin foto)'}`);
     await sleep(300);
   }
   fs.writeFileSync(path.join(dir, 'candidatas.json'), JSON.stringify(json, null, 1));
-  console.log(`\nMira cada hoja y elige por su número; ninguna buena = sin foto (F9). Luego:\n  node scripts/fotos-sitio.cjs poner ${slug} q0 3 "texto alternativo" "Pie de foto."\n`);
+  if (hojas) console.log(`\nMira cada hoja y elige por su número; ninguna buena = sin foto (F9). Luego:\n  node scripts/fotos-sitio.cjs poner ${slug} q0 3 "texto alternativo" "Pie de foto."\n`);
 }
 
 async function poner(slug, hueco, cual, alt, pie) {
@@ -183,6 +190,31 @@ async function poner(slug, hueco, cual, alt, pie) {
   console.log(`✅ ${slug} ${hueco} = ${c.title} (${c.autor} · ${c.licencia})${hueco === 'hero' ? '' : ` — «${String(s.queHacer[+hueco.slice(1)] || '').slice(0, 60)}»`}\n   Ahora: node scripts/build-destinos.js --country ${s.cc} --only ${slug}`);
 }
 
+// AUTO (17 nov 2026, Paco: «los 28 países de un tirón»): en cada actividad de «Qué hacer» SIN foto pone la primera candidata
+// que nombra el sitio o la actividad. Después hay que REVISAR el resultado a ojo (hoja por país) y quitar las que no valgan.
+async function auto(slug) {
+  const fj = path.join(ROOT, 'destinos', 'img', slug, 'fotos.json');
+  const ya = fs.existsSync(fj) ? (JSON.parse(fs.readFileSync(fj, 'utf8')).que_hacer || {}) : {};
+  await candidatas(slug, 3, false);
+  const j = JSON.parse(fs.readFileSync(path.join(TMP, slug, 'candidatas.json'), 'utf8'));
+  for (const [h, x] of Object.entries(j.huecos)) {
+    if (h === 'hero' || ya[h.slice(1)] || !x.candidatas.length) continue;
+    const t = String(x.actividad).split(/:\s|\s\(/)[0].trim();
+    try { await poner(slug, h, '1', t, t.replace(/\.?$/, '.')); } catch (e) { console.error(`  ❌ ${slug} ${h}: ${e.message}`); }
+    await sleep(300);
+  }
+}
+
+// PORTADA (17 nov 2026): pone sola la portada de un sitio que no la tiene, con el filtro estricto. REVISAR después a ojo.
+async function portada(slug) {
+  const s = datosSitio(slug);
+  const fj = path.join(ROOT, 'destinos', 'img', slug, 'fotos.json');
+  if (fs.existsSync(fj) && JSON.parse(fs.readFileSync(fj, 'utf8')).hero) return;
+  await candidatas(slug, 3, false, true);
+  const j = JSON.parse(fs.readFileSync(path.join(TMP, slug, 'candidatas.json'), 'utf8'));
+  if (j.huecos.hero.candidatas.length) await poner(slug, 'hero', '1', s.nombre);
+}
+
 function quitar(slug, hueco) {
   const fj = path.join(ROOT, 'destinos', 'img', slug, 'fotos.json');
   if (!fs.existsSync(fj)) throw new Error('Ese sitio no tiene fotos.json');
@@ -202,6 +234,8 @@ function quitar(slug, hueco) {
     if (cmd === 'candidatas' && slug) { const i = r.indexOf('--n'); await candidatas(slug, i >= 0 ? +r[i + 1] || 8 : 8); }
     else if (cmd === 'poner' && slug) await poner(slug, r[0], r[1], r[2], r[3]);
     else if (cmd === 'quitar' && slug) quitar(slug, r[0]);
-    else { console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 17).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); process.exitCode = cmd ? 1 : 0; }
+    else if (cmd === 'portada' && slug) { for (const x of [slug, ...r]) { try { await portada(x); } catch (e) { console.error('❌ ' + x + ': ' + e.message); } } }
+    else if (cmd === 'auto' && slug) { for (const x of [slug, ...r]) { try { await auto(x); } catch (e) { console.error('❌ ' + x + ': ' + e.message); } } }
+    else { console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(1, 20).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); process.exitCode = cmd ? 1 : 0; }
   } catch (e) { console.error('❌ ' + e.message); process.exitCode = 1; }
 })();

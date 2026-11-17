@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Nizwa, Omán",
+  "autor": "Andries Oudshoorn",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Nizwa_(5).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 904,
+   "alt": "Fortaleza de Nizwa",
+   "pie": "Fortaleza de Nizwa.",
+   "autor": "Martin Falbisoner",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nizwa_Fort_Detail.JPG",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1266,
+   "alt": "Souq tradicional de Nizwa",
+   "pie": "Souq tradicional de Nizwa.",
+   "autor": "Francesco Bini",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nizwa,_souq,_porta_intagliata.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 1144,
+   "alt": "Museo de Nizwa",
+   "pie": "Museo de Nizwa.",
+   "autor": "Francesco Bini",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nizwa,_citt%C3%A0_vecchia_di_alaqr,_museo_del_passato,_portale.jpg",
+   "ok_manual": true
+  }
+ }
+}

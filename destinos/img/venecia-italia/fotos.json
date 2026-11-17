@@ -1,0 +1,71 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Venecia",
+  "autor": "sky_hlv",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Venice_(Italy)_-_Venecia_(Italia).jpg",
+  "ok_manual": true
+ },
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 486,
+   "alt": "Basílica San Marcos",
+   "pie": "Basílica San Marcos.",
+   "autor": "This photo was taken by Roman Bonnefoy ( Romanceor [parlons-en]). Feel free to u",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:San_Alipio_facade_door_of_Saint_Mark%27s_Basilica_of_Venice.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1078,
+   "alt": "Palacio Ducal",
+   "pie": "Palacio Ducal.",
+   "autor": "This Photo was taken by Wolfgang Moroder. Feel free to use my photos, but please",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gondole_sul_retro_del_Palazzo_Ducale_Venezia_Ponte_della_Paglia.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 320,
+   "alt": "Puente de Rialto",
+   "pie": "Puente de Rialto.",
+   "autor": "Martin Falbisoner",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Panorama_of_Canal_Grande_and_Ponte_di_Rialto,_Venice_-_September_2017.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Paseo gondola",
+   "pie": "Paseo gondola.",
+   "autor": "Mariancita456",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Venecia,_la_gondola_y_el_mar....jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 476,
+   "alt": "Iglesia Santa Maria Gloriosa dei Frari",
+   "pie": "Iglesia Santa Maria Gloriosa dei Frari.",
+   "autor": "Didier Descouens",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Frari_(Venice)_Chapel_Corner_-_Altar.jpg",
+   "ok_manual": true
+  }
+ }
+}

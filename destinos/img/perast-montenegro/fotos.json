@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 863,
+  "alt": "Perast, Montenegro",
+  "autor": "Marcin Konsek",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Widok_na_Perast_z_zachodu_01.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 484,
+   "alt": "Iglesia Sveti Nikolajevska y su interior barroco",
+   "pie": "Iglesia Sveti Nikolajevska y su interior barroco.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Iglesia_de_San_Nicol%C3%A1s,_Perast,_Bah%C3%ADa_de_Kotor,_Montenegro,_2014-04-19,_DD_37.JPG",
+   "ok_manual": true
+  }
+ }
+}

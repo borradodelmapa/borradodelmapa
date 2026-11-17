@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Bwindi Impenetrable National Park, Uganda",
+  "autor": "Wikimedia Commons",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Bwindi.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Mountain gorilla trekking",
+   "pie": "Mountain gorilla trekking.",
+   "autor": "Charles J. Sharp",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mountain_gorilla_(Gorilla_beringei_beringei)_eating.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Forest walk con guías locales",
+   "pie": "Forest walk con guías locales.",
+   "autor": "USAID Biodiversity & Forestry",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:USAID_Measuring_Impact_Conservation_Enterprise_Retrospective_(Uganda;_International_Gorilla_Conservation_Program)_(38484020430).jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Rushaga sector exploration",
+   "pie": "Rushaga sector exploration.",
+   "autor": "Ebriskin",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bwindi_Mountain_Gorillas_Nshongi_Family_2019.jpg",
+   "ok_manual": true
+  }
+ }
+}

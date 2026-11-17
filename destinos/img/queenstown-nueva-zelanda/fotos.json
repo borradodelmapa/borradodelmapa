@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Queenstown, Nueva Zelanda",
+  "autor": "Diego Delso",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Queenstown-Nueva_Zelanda06.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 476,
+   "alt": "Bungee jumping AJ Hackett",
+   "pie": "Bungee jumping AJ Hackett.",
+   "autor": "DAVID HOLT",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pipeline_Bungy_Bridge_Queenstown,_New_Zealand_216.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Jet boat en Shotover River",
+   "pie": "Jet boat en Shotover River.",
+   "autor": "Alex Proimos from Sydney, Australia",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Shotover_Jet,_Jet_Boating_the_Shotover_River_Canyons,_Queenstown,_New_Zealand.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Wine tours por Central Otago",
+   "pie": "Wine tours por Central Otago.",
+   "autor": "Jimmyjrg",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:40-42_Orr_Street,_Queenstown_TAS_-_Moonscape_Wine_Bar_and_Cafe.jpg",
+   "ok_manual": true
+  }
+ }
+}

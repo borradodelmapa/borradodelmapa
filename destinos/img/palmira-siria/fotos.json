@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 857,
+  "alt": "Palmira, Siria",
+  "autor": "Quim Bahí from Catalunya",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Palmira_al_capvespre_(2495033007).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Teatro romano",
+   "pie": "Teatro romano.",
+   "autor": "Gianfranco Gazzetti",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Palmira_Teatro_Romano_-_GAR_-_1-01.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Necrópolis y torres funerarias",
+   "pie": "Necrópolis y torres funerarias.",
+   "autor": "Mappo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tomba_di_Elahbel,_Palmira.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Museo de Palmira",
+   "pie": "Museo de Palmira.",
+   "autor": "Carlos Figueroa Rojas",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Museo_Palmira_Romano,_Limache_20230525_01.jpg",
+   "ok_manual": true
+  }
+ }
+}

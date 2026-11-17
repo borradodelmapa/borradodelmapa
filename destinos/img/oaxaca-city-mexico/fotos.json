@@ -1,0 +1,70 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 850,
+  "alt": "Oaxaca, México",
+  "autor": "Prsjl",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Oaxaqa_(41).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Zócalo y Catedral",
+   "pie": "Zócalo y Catedral.",
+   "autor": "Maria de los Angeles…",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Zocalo,_oaxaca,_oaxaca_-_panoramio.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Iglesia Santo Domingo museo de oro",
+   "pie": "Iglesia Santo Domingo museo de oro.",
+   "autor": "Radiodreamer",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Nave_central_Iglesia_de_Santo_Domingo_Oaxaca_Centro.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Mercado 20 de Noviembre comida y artesanías",
+   "pie": "Mercado 20 de Noviembre comida y artesanías.",
+   "autor": "WeltKonnte",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mercado_20_de_Noviembre_en_Oaxaca,_M%C3%A9xico.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 404,
+   "alt": "Hierve el Agua cascadas petrificadas",
+   "pie": "Hierve el Agua cascadas petrificadas.",
+   "autor": "AmbarPM",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cascadas_Petrificadas_en_Oaxaca,_M%C3%A9xico..JPG",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Teotitlán del Valle tejedores y mezcal",
+   "pie": "Teotitlán del Valle tejedores y mezcal.",
+   "autor": "User:Gengiskanhg",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Museo-Teotitl%C3%A1n_del_Valle-Oaxaca-Mexico.jpg",
+   "ok_manual": true
+  }
+ }
+}

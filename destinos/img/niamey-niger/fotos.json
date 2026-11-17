@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 987,
+  "alt": "Niamey, Níger",
+  "autor": "Roland Huziaker",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Niamey_from_grand_mosque_theatre_2006.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 542,
+   "alt": "Museo Nacional",
+   "pie": "Museo Nacional.",
+   "autor": "Jean Rebiffé (Flickr userpage)",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Zoo_du_Mus%C3%A9e_national_de_Niamey.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Mercado de Niamey",
+   "pie": "Mercado de Niamey.",
+   "autor": "Roland Huziaker",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Grand_marche_niamey_2006.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 368,
+   "alt": "Palacio del Presidente",
+   "pie": "Palacio del Presidente.",
+   "autor": "fatima @ Mapillary.com",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Old_Presidential_Palace_in_Niamey_-_Mapillary_(1zunKARfz0wkJExHFVEFng).jpg",
+   "ok_manual": true
+  }
+ }
+}

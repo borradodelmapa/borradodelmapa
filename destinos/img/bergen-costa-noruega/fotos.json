@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Bergen, Noruega",
+  "autor": "TomasEE",
+  "licencia": "CC BY 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Bergen_panorama_at_night_-_panoramio_(1).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Bryggen",
+   "pie": "Bryggen.",
+   "autor": "JoachimKohler-HB",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fassaden_in_Bryggen,_Bergen_N.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 528,
+   "alt": "Mercado de pescado Fish Market",
+   "pie": "Mercado de pescado Fish Market.",
+   "autor": "Wikimedia Commons",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Fish_Market,_Bergen,_Norway_WDL2614.png",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 428,
+   "alt": "Museo Hanseático",
+   "pie": "Museo Hanseático.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vista_de_la_Universidad_de_Bergen_desde_la_monta%C3%B1a_Fl%C3%B8yen,_Bergen,_Noruega,_2019-09-08,_DD_44.jpg",
+   "ok_manual": true
+  }
+ }
+}

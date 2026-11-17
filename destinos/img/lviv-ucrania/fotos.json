@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 792,
+  "alt": "Lviv",
+  "autor": "Lestat (Jan Mehlich)",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Lw%C3%B3w_-_Widok_z_wie%C5%BCy_ratuszowej_01.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 558,
+   "alt": "Ayuntamiento y Plaza del Mercado",
+   "pie": "Ayuntamiento y Plaza del Mercado.",
+   "autor": "Aeou",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:1_Market_Square,_Lviv_(05).jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 500,
+   "alt": "Catedral Latina - 2 EUR",
+   "pie": "Catedral Latina - 2 EUR.",
+   "autor": "Rbrechko",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:46-101-0548_Lviv_Latin_Cathedral_RB_18.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 542,
+   "alt": "Museo de Artes Aplicadas - 3 EUR",
+   "pie": "Museo de Artes Aplicadas - 3 EUR.",
+   "autor": "Kaftaj",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lviv_art-gallery_Hutin-puilo.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 552,
+   "alt": "Café Lviv para probar café tradicional - 1.5 EUR",
+   "pie": "Café Lviv para probar café tradicional - 1.5 EUR.",
+   "autor": "Сергій",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:27_Prospekt_Shevchenka,_Lviv.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 858,
+  "alt": "Oslo",
+  "autor": "cs:Wikipedista:Li-sung",
+  "licencia": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:Oslo_palace1.jpg",
+  "ok_manual": true
+ },
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paseo por Vigeland Park",
+   "pie": "Paseo por Vigeland Park.",
+   "autor": "Bene Riobó",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Paseo_en_Oslo.jpg",
+   "ok_manual": true
+  }
+ }
+}

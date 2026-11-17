@@ -1,0 +1,49 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 794,
+  "alt": "Tromsø",
+  "autor": "Diego Delso",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Catedral,_Troms%C3%B8,_Noruega,_2019-09-04,_DD_61-63_HDR.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Paseo en trineo con huskies",
+   "pie": "Paseo en trineo con huskies.",
+   "autor": "Pablo Alejandro Araujo Granda",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:The_Arctic_Cathedral_(11367541626).jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Teleférico Fjellheisen",
+   "pie": "Teleférico Fjellheisen.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Telef%C3%A9rico,_Troms%C3%B8,_Noruega,_2019-09-04,_DD_29.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Museo Polaria",
+   "pie": "Museo Polaria.",
+   "autor": "Carlos Delgado",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Polaria_i_Troms%C3%B8.jpg",
+   "ok_manual": true
+  }
+ }
+}

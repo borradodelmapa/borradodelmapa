@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 651,
+  "alt": "Zinder, Níger",
+  "autor": "Mab.black",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Zinder_centre_ville.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Medina antigua",
+   "pie": "Medina antigua.",
+   "autor": "PEPE GADEIRAS",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Altar_de_la_Virgen_de_la_Antigua,_Medina_Sidonia.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Palacio del Sultán",
+   "pie": "Palacio del Sultán.",
+   "autor": "Roland",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Zinder_(6328132791).jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Mezquita de Zinder",
+   "pie": "Mezquita de Zinder.",
+   "autor": "Roland",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Zinder_DSC_4499_(6328132379).jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -22,6 +22,7 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 - **Dos puertas:** el **Blog** para leer (Historias por país, Pueblos borrados del mapa, Consejos plegados, «Todos los países →») y **Destinos**, el catálogo y control de todos los países (su diseño lo pensará Paco: de momento no se toca, solo que enlace bien).
 - **Destinos y guías públicas se enseñan COMPLETAS** (§10); la app (`?ruta=`) sigue con el avance «día 1 + candado».
 - **El mapa y el botón de cada sitio abren nuestra guía** en la app (la que pasa por ahí o la del país), nunca Google Maps si hay guía.
+- **Diseño de las páginas de sitios (Paco, 17 nov 2026):** la maqueta nueva (foto grande, «Qué hacer» con fotos, preguntas a la vista) va en Vietnam, Filipinas y los 30 países añadidos el 16 nov, y **siempre en todo país nuevo**: su código entra en `REDISENO_PAISES` de `scripts/build-destinos.js`.
 - **Fotos:** solo de Wikimedia o de los episodios, **revisadas una a una**, con su autor; mejor sin foto que con una de otro sitio. Ningún país sale con el diseño nuevo sin sus fotos revisadas.
 - **Explorar** (app) es el mapa de guías; las guías públicas cuentan en Explorar.
 - **Textos públicos:** nunca «IA»; datos con fuente y fecha; lo dudoso no se afirma.

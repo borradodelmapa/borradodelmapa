@@ -1,0 +1,18 @@
+{
+ "generado": "2026-11-17",
+ "hero": null,
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Trekking al lago",
+   "pie": "Trekking al lago.",
+   "autor": "Muhammad Javed",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lake_Saif-ul_Malook_track.jpg",
+   "ok_manual": true
+  }
+ }
+}

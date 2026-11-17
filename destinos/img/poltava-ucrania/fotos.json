@@ -1,0 +1,39 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Catedral de la Asunción - 1 EUR",
+   "pie": "Catedral de la Asunción - 1 EUR.",
+   "autor": "Oleh Kushch",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dormition_Cathedral,_Poltava_(2019-01-12)_01.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Monumento a la Batalla de Poltava - gratis",
+   "pie": "Monumento a la Batalla de Poltava - gratis.",
+   "autor": "Oleh Kushch",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Monument_to_the_Ukrainian_Cossacks,_Poltava.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 548,
+   "alt": "Museo de Historia Local - 2 EUR",
+   "pie": "Museo de Historia Local - 2 EUR.",
+   "autor": "Batsv",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Poltava_building_architect_Aleshin.jpg",
+   "ok_manual": true
+  }
+ }
+}

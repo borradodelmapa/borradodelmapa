@@ -1,0 +1,38 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 852,
+  "alt": "Basel",
+  "autor": "Norbert Aepli, Switzerland (User:Noebu)",
+  "licencia": "CC BY 2.5",
+  "url": "https://commons.wikimedia.org/wiki/File:Rhine_Rhein_Basel_2006_871.JPG",
+  "ok_manual": true
+ },
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Catedral de Basel",
+   "pie": "Catedral de Basel.",
+   "autor": "Aurora Iannello (P900)",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Basel_Minster_night.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Museo Tinguely",
+   "pie": "Museo Tinguely.",
+   "autor": "Alan Philip Müller from Milano, Italy",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Basel_Museum_Tinguely_2008-5-31.jpg",
+   "ok_manual": true
+  }
+ }
+}

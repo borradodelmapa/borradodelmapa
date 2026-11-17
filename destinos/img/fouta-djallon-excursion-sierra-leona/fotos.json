@@ -1,0 +1,29 @@
+{
+ "generado": "2026-11-17",
+ "hero": null,
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Senderismo hacia Ditinn Falls",
+   "pie": "Senderismo hacia Ditinn Falls.",
+   "autor": "Ana Rodriguez, Casa …",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sierra_Nevada,_chorrera_del_deshielo_excursion_de_senderismo_-_panoramio.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 1600,
+   "alt": "Bañarse en piscinas naturales de cascadas",
+   "pie": "Bañarse en piscinas naturales de cascadas.",
+   "autor": "OLMO1976",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cascadas_Bahia_Malaga.jpg",
+   "ok_manual": true
+  }
+ }
+}

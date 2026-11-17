@@ -70,6 +70,9 @@ sinFotos.length ? av(`${sinFotos.length} sitios sin fotos revisadas (destinos/im
 const extra = json(`scripts/paises/${ps}/sitios-extra.json`) || {};
 const sinSobre = sitios.filter((d) => !extra[slugSitio(d)]).map(slugSitio);
 sinSobre.length ? av(`${sinSobre.length} sitios sin bloque «Sobre…» (scripts/paises/${ps}/sitios-extra.json): ${lista(sinSobre)}`) : sitios.length && ok('Todos los sitios con «Sobre…»');
+// Diseño nuevo en todo país nuevo (Paco, 17 nov 2026): la maqueta se reconoce por sus títulos de sección (dg-sec-h)
+const sinDiseno = sitios.filter((d) => existe(`destinos/${slugSitio(d)}.html`) && !(leer(`destinos/${slugSitio(d)}.html`) || '').includes('dg-sec-h')).map(slugSitio);
+if (sitios.length) sinDiseno.length ? mal(`${sinDiseno.length} sitios con el diseño antiguo: añade «${cc}» a REDISENO_PAISES (scripts/build-destinos.js) y regenera`) : ok('Sitios con el diseño nuevo');
 
 // ── 3 · Fichas con fuentes (las hace 📱 App; aquí solo se miran) ──
 seccion('Fichas con fuentes (📱 App)');

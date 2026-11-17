@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 851,
+  "alt": "Cañón del Colca, Perú",
+  "autor": "world-wide-gifts.com",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Colca_Canyon_Puno.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 1132,
+   "alt": "Mirador Cruz del Cóndor - avistamiento cóndores",
+   "pie": "Mirador Cruz del Cóndor - avistamiento cóndores.",
+   "autor": "Ozesama",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mirador_de_la_Cruz_del_C%C3%B3ndor.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 634,
+   "alt": "Trekking 2 días por el fondo",
+   "pie": "Trekking 2 días por el fondo.",
+   "autor": "Lukas 3z",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Grand_Trekking_Alu_in_Krak%C3%B3w_(1).jpg",
+   "ok_manual": true
+  }
+ }
+}

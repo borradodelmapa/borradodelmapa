@@ -1,0 +1,27 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 852,
+  "alt": "Nápoles",
+  "autor": "Diego Delso",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Iglesia_del_Ges%C3%B9_Nuovo,_N%C3%A1poles,_Italia,_2023-03-25,_DD_05-07_HDR.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Pizza fritta en mercado",
+   "pie": "Pizza fritta en mercado.",
+   "autor": "El Nuevo Doge",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pizza_N%C3%A1poles,_Mazatl%C3%A1n,_8_de_mayo_de_2023.jpg",
+   "ok_manual": true
+  }
+ }
+}

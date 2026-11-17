@@ -1,0 +1,70 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 790,
+  "alt": "Oporto (Porto), Portugal",
+  "autor": "Diego Delso",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Puente_Don_Luis_I,_Oporto,_Portugal,_2012-05-09,_DD_13.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "Casco antiguo",
+   "pie": "Casco antiguo.",
+   "autor": "El fosilmaníaco",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tranv%C3%ADa_Oporto.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 404,
+   "alt": "Bodegas de Oporto en Vila Nova de Gaia con degustación",
+   "pie": "Bodegas de Oporto en Vila Nova de Gaia con degustación.",
+   "autor": "Alvaro Marques Hijazo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bodega_Offley_en_Oporto_2.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 466,
+   "alt": "Livraria Lello",
+   "pie": "Livraria Lello.",
+   "autor": "Turismo En Portugal",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Livraria_Lello_e_Irm%C3%A3o,_Oporto_(16542729692).jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 1412,
+   "alt": "Torre de los Clérigos",
+   "pie": "Torre de los Clérigos.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Torre_de_los_Cl%C3%A9rigos,_Oporto,_Portugal,_2012-05-09,_DD_01.JPG",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 504,
+   "alt": "Paseo fluvial y Ponte da Arrábida",
+   "pie": "Paseo fluvial y Ponte da Arrábida.",
+   "autor": "TurismoenPortugal",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ruas_do_Oporto.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 915,
+  "alt": "Granada, Nicaragua",
+  "autor": "Guillaume Baviere from Uppsala, Sweden",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Nicaragua_2017-03-15_(33978834325).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Paseo por casco histórico y Convento de San Francisco",
+   "pie": "Paseo por casco histórico y Convento de San Francisco.",
+   "autor": "José Luiz",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Paseo_de_los_Tristes_-_Granada.JPG",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Mercado Central de Granada",
+   "pie": "Mercado Central de Granada.",
+   "autor": "Jesus Abizanda from Barbastro, Huesca, Spain",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Entrada_a_la_alcaicer%C3%ADa_de_Granada.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 510,
+  "alt": "Algarve (Lagos, Silves), Portugal",
+  "autor": "Bextrel",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Vista_Centro_Hist%C3%B3rico_de_Lagos_(cropped).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Kayak en calas",
+   "pie": "Kayak en calas.",
+   "autor": "Marek Ślusarczyk (Tupungato) Photo portfolio",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:004_Benagil_Beach_(Praia_Benagil)_sea_kayaking_recreational_activity_in_Algarve,_Portugal.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 256,
+   "alt": "Castillo de Silves",
+   "pie": "Castillo de Silves.",
+   "autor": "Hovallef",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica_del_castillo_de_Silves.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 370,
+   "alt": "Paseo de barco de pesca al atardecer",
+   "pie": "Paseo de barco de pesca al atardecer.",
+   "autor": "Enric Rubio Ros from Terrassa, Spain",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:L%C2%B4Algarve_(33513247456).jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Wadi Shab, Omán",
+  "autor": "A1000 (talk) 16:33, 3 January 2019 (UTC)",
+  "licencia": "CC0",
+  "url": "https://commons.wikimedia.org/wiki/File:Oman-wadi-tiwi-furt.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 392,
+   "alt": "Baño en las piscinas naturales",
+   "pie": "Baño en las piscinas naturales.",
+   "autor": "P. Subraelu, Alaa Ahmed, Abdel Azim Ebraheem, Mohsen Sherif, Shaher Bano Mirza, ",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Water_flowed_over_the_Wadi_Ham_South_Dam_during_the_floods_of_July_2022.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 544,
+   "alt": "Fotografía de acantilados y cascadas",
+   "pie": "Fotografía de acantilados y cascadas.",
+   "autor": "Evdpnl",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Overview_of_Wadi_Manaydra_and_Wadi_Farsh_from_SCC_6_Gebel_Sukhn,_South_Sinai,_1983.jpg",
+   "ok_manual": true
+  }
+ }
+}

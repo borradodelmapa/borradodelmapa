@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 852,
+  "alt": "Bosra, Siria",
+  "autor": "Dosseman",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Bosra_theatre_cavea_0654.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Teatro romano",
+   "pie": "Teatro romano.",
+   "autor": "Ilario Di Nardo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bosra_Teatro_Romano_-_GAR_-_1-01.jpg",
+   "ok_manual": true
+  }
+ }
+}

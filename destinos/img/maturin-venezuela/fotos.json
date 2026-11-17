@@ -1,0 +1,18 @@
+{
+ "generado": "2026-11-17",
+ "hero": null,
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 606,
+   "alt": "Camino de los Guácharos",
+   "pie": "Camino de los Guácharos.",
+   "autor": "Cesar Pérez",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Camino_de_flores_al_infinito_en_La_Cascada_de_Maturin.jpg",
+   "ok_manual": true
+  }
+ }
+}

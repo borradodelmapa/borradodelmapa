@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Nazaré, Portugal",
+  "autor": "Kent Wang",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Miradouro_do_Suberco_13.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 118,
+   "alt": "Playa de Nazaré para baño seguro",
+   "pie": "Playa de Nazaré para baño seguro.",
+   "autor": "Alvaro Marques Hijazo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica_de_la_playa_de_Nazar%C3%A9.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Ascensor de Nazaré antiguamente",
+   "pie": "Ascensor de Nazaré antiguamente.",
+   "autor": "Vitor Oliveira from Torres Vedras, PORTUGAL",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ascensor_da_Nazar%C3%A9_-_Portugal_(173753306).jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Museu da Nazaré",
+   "pie": "Museu da Nazaré.",
+   "autor": "Vitor Oliveira from Torres Vedras, PORTUGAL",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Navio-Museu_Santo_Andr%C3%A9_-_Jardim_Oudinot_-_Gafanha_da_Nazar%C3%A9_-_Portugal_(29794826184).jpg",
+   "ok_manual": true
+  }
+ }
+}

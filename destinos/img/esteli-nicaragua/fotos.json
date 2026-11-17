@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Estelí, Nicaragua",
+  "autor": "Tisey",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Esteli_Nicaragua_Skyline_from_Tisey.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 482,
+   "alt": "Reserva Natural Miraflor",
+   "pie": "Reserva Natural Miraflor.",
+   "autor": "Adam Baker",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Miraflor_Cascade.jpg",
+   "ok_manual": true
+  }
+ }
+}

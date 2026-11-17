@@ -1,0 +1,27 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Rotorua",
+  "autor": "W. Bulach",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:00_2009_03_20_1524_Rotorua_-_i-Site_(Informationszentrum).jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 932,
+   "alt": "Géiser Pohutu",
+   "pie": "Géiser Pohutu.",
+   "autor": "Archives New Zealand",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Auckland_Province_-_Rotorua_-_Pohutu_Geyser_Publicity_Caption_Pohutu_Geyser,_Whakarewarewa,_Rotorua_Photographer_R_Anderson.jpg",
+   "ok_manual": true
+  }
+ }
+}

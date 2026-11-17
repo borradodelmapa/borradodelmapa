@@ -1,0 +1,59 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 666,
+  "alt": "Queen Elizabeth National Park, Uganda",
+  "autor": "Robert Weinkove using Minolta Dynax 4 camera",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Crater_lake_in_Queen_Elizabeth_National_Park.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Kazinga Channel boat cruise",
+   "pie": "Kazinga Channel boat cruise.",
+   "autor": "Alvinategyeka",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Wild_Life_at_the_banks_of_Kazinga_channel,_Queen_Elizabeth_National_Park_12.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Game drive sector norte",
+   "pie": "Game drive sector norte.",
+   "autor": "Isabirye Mark Allan",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hire_a_Car_Uganda.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 638,
+   "alt": "Rwenzori foothills hike",
+   "pie": "Rwenzori foothills hike.",
+   "autor": "Fiktube",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lions_of_Queen_Elizabeth_National_Park.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Salt Lake",
+   "pie": "Salt Lake.",
+   "autor": "Alvinategyeka",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Salt_Lake_in_Queen_Elizabeth_National_Park_Uganda_03.jpg",
+   "ok_manual": true
+  }
+ }
+}

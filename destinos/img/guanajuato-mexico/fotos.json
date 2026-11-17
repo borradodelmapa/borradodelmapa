@@ -1,0 +1,61 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Callejones subterráneos tour",
+   "pie": "Callejones subterráneos tour.",
+   "autor": "Juan Carlos Fonseca Mata",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Callejones_perdidos_de_Guanajuato.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 482,
+   "alt": "Mina de oro San Cayetano",
+   "pie": "Mina de oro San Cayetano.",
+   "autor": "Eneas De Troya from Mexico City, México",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Templo_de_San_Cayetano_(La_Valenciana),_Guanajuato._(4171468220).jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 476,
+   "alt": "Basílica y Plaza de la Paz",
+   "pie": "Basílica y Plaza de la Paz.",
+   "autor": "Juan Carlos Fonseca Mata",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_la_Paz,_Guanajuato_Capital,_Guanajuato_-_Bas%C3%ADlica.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "Teatro Juárez",
+   "pie": "Teatro Juárez.",
+   "autor": "Tomascastelazo",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Teatro_juarez_columns_guanajuato.jpg",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 408,
+   "alt": "Paseo nocturno callejoneadas",
+   "pie": "Paseo nocturno callejoneadas.",
+   "autor": "Juan Carlos Fonseca Mata",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Paseo_de_la_Presa,_Guanajuato_Capital,_Guanajuato_-_Casa_1.jpg",
+   "ok_manual": true
+  }
+ }
+}

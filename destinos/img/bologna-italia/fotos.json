@@ -1,0 +1,50 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 156,
+   "alt": "Piazza Maggiore y Basílica San Petronio",
+   "pie": "Piazza Maggiore y Basílica San Petronio.",
+   "autor": "Andrzej Otrębski",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bologna_Piazza_Maggiore_panorama_2.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1078,
+   "alt": "Torres Asinelli y Garisenda",
+   "pie": "Torres Asinelli y Garisenda.",
+   "autor": "bluefootedbooby",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Two_towers_in_Bologna,_Italy.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Pinacoteca Nacional",
+   "pie": "Pinacoteca Nacional.",
+   "autor": "Miguel Hermoso Cuesta",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bolonia_Vivarini_02.jpg",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Pórticos cubiertos",
+   "pie": "Pórticos cubiertos.",
+   "autor": "Onanymous",
+   "licencia": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Calles_de_Bolonia_2.jpg",
+   "ok_manual": true
+  }
+ }
+}

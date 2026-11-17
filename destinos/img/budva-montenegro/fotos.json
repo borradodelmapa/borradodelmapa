@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Budva, Montenegro",
+  "autor": "Nick Savchenko from Kiev, Ukraine",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Budva_(26871774051).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Playa de Mogren",
+   "pie": "Playa de Mogren.",
+   "autor": "Falk2",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:D02.30_Budva,_Stadtstrand_und_Zitadelle.jpg",
+   "ok_manual": true
+  }
+ }
+}

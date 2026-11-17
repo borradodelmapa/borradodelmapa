@@ -1,0 +1,27 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Kamianets-Podilskyi",
+  "autor": "Rbrechko",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:68-104-9007_Kamianets-Podilskyi_Fortress_RB_18_2.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Iglesias ortodoxas",
+   "pie": "Iglesias ortodoxas.",
+   "autor": "Sergiy Klymenko",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Church_of_Ss._Peter_%26_Paul_(Kamianets_Old_Town).jpg",
+   "ok_manual": true
+  }
+ }
+}

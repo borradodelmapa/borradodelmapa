@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 1031,
+  "alt": "Sognefjord, Noruega",
+  "autor": "Johan Christian Dahl",
+  "licencia": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:Johan_Christian_Dahl_-_Winter_at_the_Sognefjord_-_Google_Art_Project.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Kayak en rama Nærøyfjord, Patrimonio UNESCO",
+   "pie": "Kayak en rama Nærøyfjord, Patrimonio UNESCO.",
+   "autor": "Felix Andrews (Floybix)",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sognefjord_narrow.jpg",
+   "ok_manual": true
+  }
+ }
+}

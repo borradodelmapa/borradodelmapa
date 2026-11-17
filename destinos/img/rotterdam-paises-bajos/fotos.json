@@ -1,0 +1,28 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 476,
+   "alt": "Blaak Market y Cube Houses",
+   "pie": "Blaak Market y Cube Houses.",
+   "autor": "Rijksmuseum",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gezicht_op_de_Beurs_te_Rotterdam,_RP-P-AO-13-41.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "Euromast tower",
+   "pie": "Euromast tower.",
+   "autor": "W. Bulach",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:.00_2435_Euromast_-_Rotterdam.jpg",
+   "ok_manual": true
+  }
+ }
+}

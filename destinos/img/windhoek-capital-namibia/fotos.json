@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 720,
+  "alt": "Windhoek, Namibia",
+  "autor": "Christoph Strässler",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Christ_Church_in_Windhoek,_Namibia.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 464,
+   "alt": "Christuskirche",
+   "pie": "Christuskirche.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Iglesia_de_Cristo,_Windhoek,_Namibia,_2018-08-04,_DD_02.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 306,
+   "alt": "Parlamento de Namibia",
+   "pie": "Parlamento de Namibia.",
+   "autor": "Damien du Toit (coda)",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Parliament_gardens,_Windhoek.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 866,
+   "alt": "Museo Nacional de Namibia",
+   "pie": "Museo Nacional de Namibia.",
+   "autor": "Zairon",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Windhuk_Christuskirche_%26_Independence_Memorial_Museum_3.jpg",
+   "ok_manual": true
+  }
+ }
+}

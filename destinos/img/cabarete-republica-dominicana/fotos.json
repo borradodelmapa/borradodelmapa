@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Cabarete, República Dominicana",
+  "autor": "Reimar Hoven (user Reimarhoven)",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Cabarete.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Kitesurf o lecciones",
+   "pie": "Kitesurf o lecciones.",
+   "autor": "Loupiot77",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kitesurfing_Cabarete.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Playa Cabarete",
+   "pie": "Playa Cabarete.",
+   "autor": "aroom",
+   "licencia": "CC BY-SA 2.5",
+   "url": "https://commons.wikimedia.org/wiki/File:Kitebeach_at_cabarete_2.JPG",
+   "ok_manual": true
+  }
+ }
+}

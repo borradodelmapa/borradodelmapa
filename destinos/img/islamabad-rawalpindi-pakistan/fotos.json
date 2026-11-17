@@ -1,0 +1,40 @@
+{
+ "generado": "2026-11-17",
+ "hero": null,
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 500,
+   "alt": "Faisal Mosque",
+   "pie": "Faisal Mosque.",
+   "autor": "Ali Mujtaba",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ali_Mujtaba_WLM2015_FAISAL_MOSQUE_m_10.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Pakistan Monument",
+   "pie": "Pakistan Monument.",
+   "autor": "Muhammad Ashar",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Blue_Hour_at_Pakistan_Monument.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "Lok Virsa Museum",
+   "pie": "Lok Virsa Museum.",
+   "autor": "Ymblanter",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Islamabad_Lok_Virsa_Museum_exterior_03.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Kibale National Park, Uganda",
+  "autor": "Giles Laurent",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:013_Alpha_male_chimpanzee_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 950,
+   "alt": "Chimpanzee trekking",
+   "pie": "Chimpanzee trekking.",
+   "autor": "Rod Waddington",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chimpanzee,_Kibale,_Uganda_(22061375371).jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Bigodi Wetland Sanctuary walk",
+   "pie": "Bigodi Wetland Sanctuary walk.",
+   "autor": "Tebba Christopher",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bigodi_Swamp_in_Kibale_park_02.jpg",
+   "ok_manual": true
+  }
+ }
+}

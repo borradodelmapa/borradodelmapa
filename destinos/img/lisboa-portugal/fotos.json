@@ -1,0 +1,49 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Lisboa",
+  "autor": "Ana Correia 28",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Museu_Nacional_de_Arte_antiga-Lisboa.jpg",
+  "ok_manual": true
+ },
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 810,
+   "alt": "Tranvía 28 clásico por la ciudad",
+   "pie": "Tranvía 28 clásico por la ciudad.",
+   "autor": "Raimundo Pastor",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lisboa_(RPS_01-05-2015)_tranv%C3%ADa_o_el%C3%A9trico.png",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 472,
+   "alt": "Mirador de Graça y Mirador da Senhora do Monte",
+   "pie": "Mirador de Graça y Mirador da Senhora do Monte.",
+   "autor": "LBM1948",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lisboa,_Gra%C3%A7a_4.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Pastel de Nata en Pastéis de Belém",
+   "pie": "Pastel de Nata en Pastéis de Belém.",
+   "autor": "ProtoplasmaKid",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pasteles_de_nata_en_Pasteis_de_Bel%C3%A9m.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 720,
+  "alt": "Punta Cana, República Dominicana",
+  "autor": "Doodybutch",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:MDPC_Airport.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 328,
+   "alt": "Playas de arena blanca",
+   "pie": "Playas de arena blanca.",
+   "autor": "Ezarate",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:PlayaArenasBlancasPtaMogotesMDP-0038.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Cenote Ojo Agua",
+   "pie": "Cenote Ojo Agua.",
+   "autor": "https://www.flickr.com/photos/asw909/",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dominican_Republic_Blue_Hole.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 472,
+   "alt": "Kitesurf o paddleboard en Laguna Gri-Gri",
+   "pie": "Kitesurf o paddleboard en Laguna Gri-Gri.",
+   "autor": "nicolas badel",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vista_de_Punta_Ballena_@_casaurora_-_panoramio.jpg",
+   "ok_manual": true
+  }
+ }
+}

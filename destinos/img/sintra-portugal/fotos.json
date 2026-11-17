@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 613,
+  "alt": "Sintra, Portugal",
+  "autor": "Singa Hitam",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Sintra_-_Palacio_da_Pena_(20332995770)_(cropped2).jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Palácio Nacional de Pena",
+   "pie": "Palácio Nacional de Pena.",
+   "autor": "CEphoto, Uwe Aranas",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sintra_Portugal_Pal%C3%A1cio_da_Pena-01.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 484,
+   "alt": "Quinta da Regaleira",
+   "pie": "Quinta da Regaleira.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Quinta_da_Regaleira,_Sintra,_Portugal,_2019-05-25,_DD_69.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Castelo dos Mouros ruinas",
+   "pie": "Castelo dos Mouros ruinas.",
+   "autor": "Vitor Oliveira from Torres Vedras, PORTUGAL",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Castelo_dos_Mouros_-_Sintra_(_Portugal_)2.jpg",
+   "ok_manual": true
+  }
+ }
+}

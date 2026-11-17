@@ -1,0 +1,71 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 924,
+  "alt": "Sicilia - Palermo",
+  "autor": "Sharon Hahn Darlin",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Palermo,_Sicilia,_Italia_Ap_2024_-_Wheels.jpg",
+  "ok_manual": true
+ },
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Catedral de Monreale",
+   "pie": "Catedral de Monreale.",
+   "autor": "Berthold Werner",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Monreale_Cathedral_exterior_BW_2012-10-09_10-23-10.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Mercado Vucciria y Capo",
+   "pie": "Mercado Vucciria y Capo.",
+   "autor": "No machine-readable author provided. Nme94~commonswiki assumed (based on copyrig",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Augusta,_Sicilia_Mercado_Publico_2002-08-25.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Playa Mondello",
+   "pie": "Playa Mondello.",
+   "autor": "Benjamín Núñez González",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Playa,_Alicudi,_Islas_Eolias,_Sicilia,_Italia,_2015.JPG",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 1578,
+   "alt": "Iglesia de la Martorana",
+   "pie": "Iglesia de la Martorana.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Iglesia_del_Carmine,_Noto,_Sicilia,_Italia,_2025-04-07,_DD_52.jpg",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Paseo Quattro Canti y Via Maqueda",
+   "pie": "Paseo Quattro Canti y Via Maqueda.",
+   "autor": "Benjamín Núñez González",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Paseo_del_puerto,_Alicudi,_Islas_Eolias,_Sicilia,_Italia,_2015.JPG",
+   "ok_manual": true
+  }
+ }
+}

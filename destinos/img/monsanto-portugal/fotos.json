@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 826,
+  "alt": "Monsanto, Portugal",
+  "autor": "Alvesgaspar",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Monsanto_April_2015-7.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Fotografía y exploración del diseño urbano único",
+   "pie": "Fotografía y exploración del diseño urbano único.",
+   "autor": "Sérgio Correia",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Castle_of_Monsanto.jpg",
+   "ok_manual": true
+  }
+ }
+}

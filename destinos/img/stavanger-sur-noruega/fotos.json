@@ -1,0 +1,28 @@
+{
+ "generado": "2026-11-17",
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "Catedral de Stavanger + casco antiguo",
+   "pie": "Catedral de Stavanger + casco antiguo.",
+   "autor": "Benyamin Farnam",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Stavanger_Cathedral.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Restaurantes de clase mundial",
+   "pie": "Restaurantes de clase mundial.",
+   "autor": "Zairon",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Stavanger_Altstadt_29.JPG",
+   "ok_manual": true
+  }
+ }
+}

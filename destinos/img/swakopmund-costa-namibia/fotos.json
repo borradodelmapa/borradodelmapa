@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 862,
+  "alt": "Swakopmund, Namibia",
+  "autor": "Olga Ernst",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Mole,_Jetty_and_Lighthouse_Swakopmund,_Namibia.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 478,
+   "alt": "Tour de focas y delfines",
+   "pie": "Tour de focas y delfines.",
+   "autor": "Lidine Mia",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Swakopmund_-_Woermannhaus_-_tour_carr%C3%A9e.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Quad biking en dunas",
+   "pie": "Quad biking en dunas.",
+   "autor": "Sarvesh Lutchmun",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Quad_Bikes_in_Swakopmund,_Namibia.jpg",
+   "ok_manual": true
+  }
+ }
+}

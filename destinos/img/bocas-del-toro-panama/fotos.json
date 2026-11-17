@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 719,
+  "alt": "Bocas del Toro, Panamá",
+  "autor": "Dronepicr",
+  "licencia": "CC BY 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Bocas_del_Toro_Panama.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Playa Estrella",
+   "pie": "Playa Estrella.",
+   "autor": "Marissa Strniste from Upala, Costa Rica",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Paradise_-_Bocas_del_drago_(6778445008).jpg",
+   "ok_manual": true
+  }
+ }
+}

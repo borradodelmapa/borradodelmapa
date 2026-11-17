@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 720,
+  "alt": "Desierto de Merzouga, Marruecos",
+  "autor": "Jorge Franganillo",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Merzouga_2024.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Noche en campamento bajo estrellas",
+   "pie": "Noche en campamento bajo estrellas.",
+   "autor": "Sisnisanti",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ermita,_Desierto_de_los_Leones.jpg",
+   "ok_manual": true
+  }
+ }
+}

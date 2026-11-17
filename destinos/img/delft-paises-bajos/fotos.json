@@ -1,0 +1,49 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Delft",
+  "autor": "W. Bulach",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:00_0781_Canal_in_Delft_(NL).jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Fabrica de cerámica Royal Delft",
+   "pie": "Fabrica de cerámica Royal Delft.",
+   "autor": "M.Minderhoud",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:De_Porceleyne_Fles_Delft.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "Iglesia Oude Kerk",
+   "pie": "Iglesia Oude Kerk.",
+   "autor": "Viajar Sin Imprevistos",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Iglesia_vieja_de_Delft.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 294,
+   "alt": "Market Square en mercado",
+   "pie": "Market Square en mercado.",
+   "autor": "Herebedug",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Delft_Central_Market_Square.jpg",
+   "ok_manual": true
+  }
+ }
+}

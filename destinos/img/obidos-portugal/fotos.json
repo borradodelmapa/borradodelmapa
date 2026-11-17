@@ -1,0 +1,48 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Óbidos, Portugal",
+  "autor": "Lacobrigo",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:%C3%93bidos_view592.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Muralla medieval y paseo completo",
+   "pie": "Muralla medieval y paseo completo.",
+   "autor": "joselomba",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Murallas_de_Obidos_-_panoramio.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 620,
+   "alt": "Iglesia de Santa María",
+   "pie": "Iglesia de Santa María.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Iglesia_de_Santa_Mar%C3%ADa,_%C3%93bidos,_Portugal,_2021-09-09,_DD_13-15_HDR.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 170,
+   "alt": "Castillo",
+   "pie": "Castillo.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Castillo_de_%C3%93bidos,_%C3%93bidos,_Portugal,_2021-09-09,_DD_36-42_PAN.jpg",
+   "ok_manual": true
+  }
+ }
+}

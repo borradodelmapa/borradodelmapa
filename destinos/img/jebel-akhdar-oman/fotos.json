@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 631,
+  "alt": "Jebel Akhdar, Omán",
+  "autor": "Philipp Weigell",
+  "licencia": "CC BY 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Jebel_Akhdar_view.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 476,
+   "alt": "Trekking Wadi Ghul",
+   "pie": "Trekking Wadi Ghul.",
+   "autor": "Laith Wark from Dubai, United Arab Emirates",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Jebel_Qihwi_(16730252546).jpg",
+   "ok_manual": true
+  }
+ }
+}

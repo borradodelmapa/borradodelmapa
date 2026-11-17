@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 960,
+  "alt": "Belén",
+  "autor": "Benjamín Núñez González",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Gruta_de_la_Natividad,_Bel%C3%A9n,_Palestina,_2017_11.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Mercado de Belén",
+   "pie": "Mercado de Belén.",
+   "autor": "Suedehead",
+   "licencia": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Belen_Market.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 406,
+   "alt": "Iglesia de Santa Catalina",
+   "pie": "Iglesia de Santa Catalina.",
+   "autor": "Burkhard Mücke",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Catedral_de_Santa_Catalina_e_Iglesias_in_Cajamarca.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Callejear por la Medina",
+   "pie": "Callejear por la Medina.",
+   "autor": "Axel Cotón Gutiérrez",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Arco_de_Bel%C3%A9n_y_Muralla_en_Medina-Sidonia_2.jpg",
+   "ok_manual": true
+  },
+  "5": {
+   "file": "q5.jpg",
+   "w": 720,
+   "h": 1012,
+   "alt": "Gruta de la Leche",
+   "pie": "Gruta de la Leche.",
+   "autor": "Diego Delso",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gruta_de_la_Leche,_Bel%C3%A9n,_Palestina,_2011-09-29,_DD_01.JPG",
+   "ok_manual": true
+  }
+ }
+}

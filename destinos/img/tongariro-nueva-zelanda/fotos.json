@@ -1,0 +1,49 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 720,
+  "alt": "Tongariro National Park",
+  "autor": "Mike Dickison",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Rotopounamu_MRD_03.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Tongariro Alpine Crossing",
+   "pie": "Tongariro Alpine Crossing.",
+   "autor": "Borvan53",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tongariro_alpine_crossing_Ngauruhoe_behind_volcanic_mouth.JPG",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 224,
+   "alt": "Blue Lake Walk",
+   "pie": "Blue Lake Walk.",
+   "autor": "User Yogi de on en.wikipedia",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tongariro_Crossing_Emerald_Lakes_Blue_Lake.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Chateau Tongariro resort tour",
+   "pie": "Chateau Tongariro resort tour.",
+   "autor": "Air Force",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chateau_Tongariro_(1963).jpg",
+   "ok_manual": true
+  }
+ }
+}

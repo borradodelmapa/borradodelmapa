@@ -1,0 +1,37 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Jinja & Nile Source, Uganda",
+  "autor": "Ilona1001",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Uganda_Jinja_Streetview.JPG"
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Rafting en Nilo",
+   "pie": "Rafting en Nilo.",
+   "autor": "Owobusingye",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:River_Nile_rafting_in_Jinja,_Uganda_10.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Nile Source monument",
+   "pie": "Nile Source monument.",
+   "autor": "Dror Feitelson",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Jinja_source_of_Nile.jpg",
+   "ok_manual": true
+  }
+ }
+}

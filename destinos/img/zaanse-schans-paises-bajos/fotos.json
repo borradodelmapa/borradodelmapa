@@ -1,0 +1,26 @@
+{
+ "generado": "2026-11-17",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "Zaanse Schans, Países Bajos",
+  "autor": "Murdockcrc",
+  "licencia": "CC BY 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Zaanse_Schans_LCD.jpg"
+ },
+ "stops": {},
+ "que_hacer": {
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Molino funcionando",
+   "pie": "Molino funcionando.",
+   "autor": "Beethoven",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:De_Kat_and_De_Zoeker_at_Zaanse_Schans,_viewed_from_the_southeast_(2004).jpg",
+   "ok_manual": true
+  }
+ }
+}
