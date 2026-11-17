@@ -11,7 +11,7 @@ Lo más urgente arriba. Lo cerrado baja a «Cerradas» con la fecha.
 | T14 | 5 páginas de destino con tilde o ñ en la dirección (milán-italia, cañon-colca-peru, belén…), salidas el 16 nov (da63e1d15). Cambiarlas cambia la URL: antes de indexarlas | 🌍 Web | ⏸ | Sin prisa: están en noindex | decidir antes de la tanda SEO que las incluya | — |
 | T15 | `revisar-fichas.yml` (App) solo puede regenerar Nepal y Vietnam en GitHub: las demás copias de `worker/kv/output-nivel2` no están en git | 📱 App | ⏸ | Avisado por Web el 16 nov | proponer a Paco con coste | — |
 | T9 | Prueba A/B de carátulas | 🎬 Vídeo | 🔨 | En marcha en los dos de Vietnam. India (A+B+C), Pueblos T1 y Baler guardadas: arrancan al hacerse públicos (17 nov, 19 nov, 3 dic); comprobarlo ese día. Tuvalu y Tatuajes fuera (Paco) | — | 17 nov · 19 nov · 3 dic |
-| T7 | Web: reproductor de YouTube en cada largo cuando sea público: Pueblos T1 (jue 19 nov), Tuvalu (jue 26 nov), Tatuajes (mar 24 nov, 0nNCUhMiSdI), India (mar 17 nov), Baler (jue 3 dic), Filipinas (mar 15 dic) | 🌍 Web | 📥 | Cada estreno, la tarea del comentario (10:05) avisa a Web | OK en el chat de Web antes de subir | según fecha |
+| T7 | Web: reproductor de YouTube en cada largo cuando sea público: Pueblos T1 (jue 19 nov), Tuvalu (jue 26 nov), Tatuajes (mar 24 nov, 0nNCUhMiSdI), ✅ India (17 nov, 993541dcb, comprobado), Baler (jue 3 dic), Filipinas (mar 15 dic) | 🌍 Web | 📥 | Cada estreno, la tarea del comentario (10:05) avisa a Web | OK en el chat de Web antes de subir | según fecha |
 
 ## Programado y vigilado (no hace falta nada salvo comprobar al salir)
 - Largos en Studio a las 10:00, con las carátulas Y18: India 17 nov · Pueblos T1 19 nov · Tatuajes 24 nov · Tuvalu 26 nov · Baler 3 dic · Filipinas 15 dic.
