@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-16",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 854,
+  "alt": "Los toriis de Fushimi Inari, en Kioto",
+  "autor": "Basile Morin",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Double_torii_path_at_Fushimi_Inari_Taisha_Shrine,_Kyoto,_Japan.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Los toriis de Fushimi Inari",
+   "pie": "Los toriis de Fushimi Inari.",
+   "autor": "Basile Morin",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine,_Kyoto,_Japan.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El bosque de bambú de Arashiyama",
+   "pie": "El bosque de bambú de Arashiyama.",
+   "autor": "Basile Morin",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bamboo_Forest,_Arashiyama,_Kyoto,_Japan.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El Pabellón Dorado, Kinkaku-ji",
+   "pie": "El Kinkaku-ji, el Pabellón Dorado.",
+   "autor": "Nacaru",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Golden_Pavilion_Kinkaku-ji_2024.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 472,
+   "alt": "Una calle de Gion, en Kioto",
+   "pie": "Gion.",
+   "autor": "LBM1948",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kioto,_Gion_(2005)_04.jpg",
+   "ok_manual": true
+  }
+ }
+}

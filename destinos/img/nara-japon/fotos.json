@@ -1,0 +1,38 @@
+{
+ "generado": "2026-11-16",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "El Daigokuden del palacio Heijo, en Nara",
+  "autor": "663highland",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:181103_Heijo_Palace_Daigokuden_Nara_Japan02bs.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Ciervos en el parque de Nara",
+   "pie": "Los ciervos del parque de Nara.",
+   "autor": "Arczi",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Sika_Deer_in_Nara_Park,_Japan.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "El santuario Kasuga Taisha",
+   "pie": "Kasuga Taisha.",
+   "autor": "Guilhem Vellut",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kasuga_Taisha_Shrine_@_Nara.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-16",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 853,
+  "alt": "El castillo de Osaka",
+  "autor": "663highland",
+  "licencia": "CC BY 2.5",
+  "url": "https://commons.wikimedia.org/wiki/File:Osaka_Castle_03bs3200.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 900,
+   "alt": "La torre del castillo de Osaka",
+   "pie": "El castillo de Osaka.",
+   "autor": "DXR",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Osaka_Castle,_Keep_tower,_South_view_20190415_1.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 882,
+   "alt": "Dotonbori de noche",
+   "pie": "Dotonbori de noche.",
+   "autor": "Martin Falbisoner",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dotonbori,_Osaka,_at_night,_November_2016.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "La torre Tsutenkaku, en Shinsekai",
+   "pie": "Tsutenkaku, en Shinsekai.",
+   "autor": "Jaienviedunburger",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ts%C5%ABtenkaku_at_night,_Osaka.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 466,
+   "alt": "El Umeda Sky Building",
+   "pie": "El Umeda Sky Building.",
+   "autor": "Martin Falbisoner",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Umeda_Sky_Building,_Osaka,_November_2016_-02.jpg",
+   "ok_manual": true
+  }
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-16",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 850,
+  "alt": "El jardín Kenroku-en de Kanazawa",
+  "autor": "663highland",
+  "licencia": "CC BY 2.5",
+  "url": "https://commons.wikimedia.org/wiki/File:131109_Kenrokuen_Kanazawa_Ishikawa_pref_Japan01s3.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El jardín Kenroku-en",
+   "pie": "El jardín Kenroku-en.",
+   "autor": "sergejf",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kanazawa,_Kenroku-en_gardens.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "El castillo de Kanazawa",
+   "pie": "El castillo de Kanazawa.",
+   "autor": "Balon Greyjoy",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:20190705_Kanazawa_Castle-1.jpg",
+   "ok_manual": true
+  },
+  "2": {
+   "file": "q2.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "El barrio de Higashi Chaya, en Kanazawa",
+   "pie": "El barrio de Higashi Chaya.",
+   "autor": "Ben & Gab",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Higashiyama_Higashi_Chaya_District_Kanazawa_(29103739857).jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El Museo de Arte Contemporáneo del Siglo XXI de Kanazawa",
+   "pie": "El Museo del Siglo XXI.",
+   "autor": "金沢市",
+   "licencia": "CC BY 2.1 jp",
+   "url": "https://commons.wikimedia.org/wiki/File:21st_Century_Museum_of_Contemporary_Art,_Kanazawa011.jpg",
+   "ok_manual": true
+  }
+ }
+}

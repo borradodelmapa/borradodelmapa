@@ -221,10 +221,11 @@ module.exports = [
     },
   },
   // Largo 16:9 · versión v3 (10 preguntas rápidas + el viaje, N13) · montaje: salma marketing/india/motor/india-v3.cjs · guion: docs/india-guion-v3.md
-  // YouTube 04Ibzy_MxQQ, programado mar 17 nov 2026 a las 10:00 (poner youtube: '04Ibzy_MxQQ' cuando sea público)
+  // YouTube 04Ibzy_MxQQ, público desde el mar 17 nov 2026 a las 10:00
   {
     orden: 119,
     slug: 'viajar-a-la-india-donde-se-viene-a-morir',
+    youtube: '04Ibzy_MxQQ', // público desde el 17 nov 2026 (comprobado con oEmbed)
     fecha: '2026-11-12',
     serie: 'India',
     cap: 'Documental',

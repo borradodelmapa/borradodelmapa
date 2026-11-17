@@ -1,0 +1,60 @@
+{
+ "generado": "2026-11-16",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 822,
+  "alt": "La Cúpula de la Bomba Atómica junto al río Motoyasu, en Hiroshima",
+  "autor": "DXR",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Atomic_Bomb_Dome_and_Motoyaso_River,_Hiroshima,_Northwest_view_20190417_1.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "El Parque Memorial de la Paz de Hiroshima",
+   "pie": "El Parque Memorial de la Paz.",
+   "autor": "lumoplank",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hiroshima_Peace_Memorial_Park_-_HiroshimaPeace136.jpg",
+   "ok_manual": true
+  },
+  "1": {
+   "file": "q1.jpg",
+   "w": 720,
+   "h": 1080,
+   "alt": "El torii de Itsukushima, en Miyajima",
+   "pie": "El torii flotante de Itsukushima.",
+   "autor": "Balon Greyjoy",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:20181111_Itsukushima_Shrine_torii-1.jpg",
+   "ok_manual": true
+  },
+  "3": {
+   "file": "q3.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "Okonomiyaki de Hiroshima",
+   "pie": "Okonomiyaki al estilo de Hiroshima.",
+   "autor": "EllieBellie25",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Prepared_okonomiyaki_in_Hiroshima.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 960,
+   "alt": "El castillo de Hiroshima",
+   "pie": "El castillo de Hiroshima.",
+   "autor": "Hyppolyte de Saint-Rambert",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hiroshima-jo_Castle_hdsr_S5_01.jpg",
+   "ok_manual": true
+  }
+ }
+}

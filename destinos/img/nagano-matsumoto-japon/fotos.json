@@ -1,0 +1,38 @@
+{
+ "generado": "2026-11-16",
+ "hero": {
+  "file": "hero.jpg",
+  "w": 1280,
+  "h": 852,
+  "alt": "El castillo de Matsumoto",
+  "autor": "663highland",
+  "licencia": "CC BY 2.5",
+  "url": "https://commons.wikimedia.org/wiki/File:Matsumoto_Castle05s5s4592.jpg",
+  "ok_manual": true
+ },
+ "stops": {},
+ "que_hacer": {
+  "0": {
+   "file": "q0.jpg",
+   "w": 720,
+   "h": 480,
+   "alt": "El castillo de Matsumoto",
+   "pie": "El castillo de Matsumoto.",
+   "autor": "663highland",
+   "licencia": "CC BY 2.5",
+   "url": "https://commons.wikimedia.org/wiki/File:130608_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan02bs4.jpg",
+   "ok_manual": true
+  },
+  "4": {
+   "file": "q4.jpg",
+   "w": 720,
+   "h": 540,
+   "alt": "Pistas de esquí de Happo-one, en Hakuba",
+   "pie": "Happo-one, sede olímpica de 1998.",
+   "autor": "Tsutomu Shinohara",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:With_a_view_of_the_Happo-one_(Olympic_Winter_Games_NAGANO_1998,_Men%27s_Downhill_Starting_Point)_-_panoramio.jpg",
+   "ok_manual": true
+  }
+ }
+}
