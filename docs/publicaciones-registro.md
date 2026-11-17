@@ -156,3 +156,5 @@ Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P
 - 27 oct · «Hoy a las 10:00 sale el capítulo 5 en Shorts: el techo de Tailandia…»
 
 **15 nov 2026 — T13 HECHO (con el «Sí, bórralas» de Paco en el chat de Vídeo).** Borradas definitivamente las 10 publicaciones de arriba (Studio → Contenido → Publicaciones queda vacío) y quitada la sección «Publicaciones» de la pestaña Inicio (Personalización → Pestaña Inicio → Publicar: «Cambios publicados»). Comprobado sin sesión: el canal no muestra publicaciones y el Inicio enseña tráiler, las 4 listas, Shorts y Vídeos.
+
+**17 nov 2026 — Largo de la India (https://youtu.be/04Ibzy_MxQQ, «Así es la INDIA: donde se viene a morir») — primer comentario fijado (P6, tarea programada).** Vídeo Público en Studio. Publicado a las ~10:00 el texto literal de `salma marketing/india/cronica/primer-comentario.txt` y fijado; tras recargar sale «Fijado por @Borradodelmapa», entero (7 emojis y enlace). Reproductor: 1080p disponible; capítulos visibles en la barra (18 tramos).
