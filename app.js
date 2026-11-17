@@ -3549,9 +3549,20 @@ function _isBenignPopupCancel(e) {
 // ya abierta): crear el doc de Firestore si es la primera vez, y ofrecer la huella.
 // Compartida entre doGoogleLogin() (popup) y el respaldo por redirect (paso 3, ver
 // abajo) para no duplicar esta lógica en los dos sitios.
+// Medición en Google Analytics (17 nov 2026): registro, guía guardada y pago. Solo avisa si Analytics está
+// cargado (quien no aceptó las cookies no se mide, index.html → loadGA4) y nunca puede romper lo que mide.
+const _MEDIR_PRECIOS = { guia: 9.99, trimestral: 19.99, anual: 49.99, anual_oferta: 39.99 };
+function _medir(evento, datos) {
+  try {
+    if (!document.getElementById('ga4-script') || typeof gtag !== 'function') return;
+    gtag('event', evento, datos || {});
+  } catch (_) {}
+}
+
 async function _afterGoogleAuth(user) {
   const doc = await db.collection('users').doc(user.uid).get();
   if (!doc.exists) {
+    _medir('sign_up', { method: 'google' });
     await db.collection('users').doc(user.uid).set({
       name: user.displayName || user.email.split('@')[0],
       email: user.email,
@@ -4461,6 +4472,7 @@ async function guardarGuiaDirecto(routeData, opts = {}) {
     };
 
     const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
+    _medir('guia_guardada', { origen: 'creada', pais: countryNormalized, dias: numDias });
     showToast('Guía guardada');
     // Bucle viral + reseña: tanto al pulsar GUARDAR como en el guardado automático al crear la ruta (algo más tarde, para que vea antes la ruta)
     setTimeout(() => { try { _momentoTrasGuardar(docRef.id, r); } catch (_) {} }, opts.publicar === false ? 5000 : 1200);
@@ -4533,6 +4545,7 @@ async function guardarRutaDeOtro(routeData) {
     };
     if (src.thumb) ruta.map_thumbnail_url = src.thumb;
     const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
+    _medir('guia_guardada', { origen: 'explorar', pais: ruta.country, dias: numDias });
     showToast('Guardada en Mis Viajes → Rutas guardadas');
     try {
       localStorage.setItem('offline_route_' + docRef.id, JSON.stringify({ id: docRef.id, ...ruta, _savedAt: Date.now() }));
@@ -4953,7 +4966,7 @@ async function pagarPlanDirecto(planKey) {
   if (!authUser) { showToast('Tu sesión ha caducado, vuelve a entrar'); return; }
   try {
     const idToken = await authUser.getIdToken();
-    try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); } catch (_) {}
+    try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); sessionStorage.setItem('bdm_pay_plan', planKey); } catch (_) {}
     if (_viaPlay) { await _playPay(planKey, idToken); return; }
     showToast('Abriendo el pago…');
     const res = await fetch(window.SALMA_API + '/create-payment', {
@@ -4998,7 +5011,7 @@ function openCoinsModal() {
 
       // App de Google Play: compra con Play Billing (Digital Goods API + Payment Request) y validación en el Worker
       if (_viaPlay) {
-        try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); } catch (_) {}
+        try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); sessionStorage.setItem('bdm_pay_plan', planKey); } catch (_) {}
         await _playPay(planKey, idToken);
         if (handle && handle.close) handle.close();
         return;
@@ -5013,7 +5026,7 @@ function openCoinsModal() {
       if (!data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
 
       // Fecha de Premium ANTES de pagar, para _verificarPagoPremium (vale para cualquier pago, no solo tras un límite)
-      try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); } catch (_) {}
+      try { sessionStorage.setItem('bdm_pay_pu', JSON.stringify({ pu: currentUser.premium_until || null })); sessionStorage.setItem('bdm_pay_plan', planKey); } catch (_) {}
       window.location.href = data.url; // Redirige a Stripe Checkout (pantalla hospedada)
     },
     onClose: () => { if (window.popModal) window.popModal('coins'); },
@@ -5158,6 +5171,13 @@ window.openWhatsAppLinkModal = openWhatsAppLinkModal;
 // ═══ RETORNO DE PAGO STRIPE (?pago=ok / ?pago=cancel) ═══
 
 async function _verificarPagoPremium() {
+  // Analytics: el pago ya está hecho al llegar aquí (vuelta de Stripe con ?pago=ok o compra validada de Google Play)
+  try {
+    const _plan = sessionStorage.getItem('bdm_pay_plan') || '';
+    sessionStorage.removeItem('bdm_pay_plan');
+    const _eur = _MEDIR_PRECIOS[_plan];
+    _medir('purchase', _eur ? { currency: 'EUR', value: _eur, items: [{ item_id: _plan, item_name: _plan, price: _eur, quantity: 1 }] } : { plan: _plan || 'desconocido' });
+  } catch (_) {}
   if (!currentUser) return;
   showToast('Verificando tu pago…');
   // Caso p-mui1yhp9ls1 (26 sept 2026): si el pago viene de chocar con un límite, comparar con la fecha
