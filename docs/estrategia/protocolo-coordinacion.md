@@ -27,6 +27,7 @@ SI TE BLOQUEAS: pregúntame a mí, no a Paco.
 ## 3 · LISTAS DE CIERRE (lo que comprueba Estrategia antes de decir «terminado»)
 ### Largo de YouTube
 - [ ] Guion aprobado (F3) y gancho (G1); título y carátula elegidos antes que el vídeo, con su estudio (Y11-Y14, Y18).
+- [ ] **Carátula y título, lado a lado (Y3; Paco, 18 nov: «que no vuelva a pasar»):** la carátula lleva la palabra fuerte del gancho y la cara; el título, OTRA información del gancho. No repiten la misma frase. Vale también para los shorts.
 - [ ] Datos con fuente y fecha (F4, P9); fotos y vídeos de terceros revisados, con autores (F9, F10, P2).
 - [ ] Montaje: informe de reglas sin ❌ (P5); Paco lo ha visto y oído (F8).
 - [ ] Exportado en calidad máxima, con el nombre de archivo en palabras clave (P14, Y7).
@@ -36,6 +37,7 @@ SI TE BLOQUEAS: pregúntame a mí, no a Paco.
 - [ ] Entrada de blog con Web Story y misma carátula, enseñada a Paco y subida con `comprobar-nada-atras` en ✅ (P12, P15, Y15).
 - [ ] Plan y tablero al día.
 ### Short
+- [ ] Carátula y título comparados lado a lado, sin repetir frase (Y3); sin clip de la app al final, con la tarjeta (M16, 18 nov).
 - [ ] ≤ 60 s (N10); persona en el primer fotograma (M15); sígueme (M13); sintonía en el mapa (S3); informe sin ❌.
 - [ ] En Metricool, con el texto, el primer comentario y la carátula a la vez (P6), en día sin largo y a las 10:00 (P13).
 - [ ] Al salir, comprobado en cada red (P11) y anotado (P7).
