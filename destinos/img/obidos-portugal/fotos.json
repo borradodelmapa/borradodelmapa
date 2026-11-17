@@ -7,7 +7,13 @@
   "alt": "Óbidos, Portugal",
   "autor": "Lacobrigo",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:%C3%93bidos_view592.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:%C3%93bidos_view592.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Remote views of Castelo de Óbidos - south facade"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "joselomba",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Murallas_de_Obidos_-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Castelo de Óbidos - east facade"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "Diego Delso",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Iglesia_de_Santa_Mar%C3%ADa,_%C3%93bidos,_Portugal,_2021-09-09,_DD_13-15_HDR.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Interior of Igreja de Santa Maria (Óbidos)"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -42,7 +58,12 @@
    "autor": "Diego Delso",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Castillo_de_%C3%93bidos,_%C3%93bidos,_Portugal,_2021-09-09,_DD_36-42_PAN.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Castelo de Óbidos - north facade"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

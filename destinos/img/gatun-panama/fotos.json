@@ -7,20 +7,13 @@
   "alt": "Lago Gatún, Panamá",
   "autor": "User:Stan Shebs",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Gatun_Lake.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gatun_Lake.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Gatun Lake"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 960,
-   "alt": "Crucero por el lago",
-   "pie": "Crucero por el lago.",
-   "autor": "Lin linao",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Crucero_gallego_en_Castro.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

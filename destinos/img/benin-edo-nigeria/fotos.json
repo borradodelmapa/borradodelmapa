@@ -7,7 +7,13 @@
   "alt": "Benín (Ciudad), Nigeria",
   "autor": "Fidelis ogunseri ocsfilms",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:New_Benin_Market,_Benin_City.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:New_Benin_Market,_Benin_City.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Benin City"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

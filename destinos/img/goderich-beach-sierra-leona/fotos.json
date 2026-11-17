@@ -8,7 +8,12 @@
   "autor": "Emily CA (MPL)",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Main_Beach_in_Goderich,_Ontario.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches in Goderich, Ontario"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -8,7 +8,12 @@
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Parque_nacional_Gargantas_del_R%C3%ADo_Negro,_Chamarel,_Mauricio,_2025-09-25,_DD_34-40_PAN.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Black River Gorges National Park"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

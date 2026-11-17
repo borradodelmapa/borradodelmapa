@@ -1,27 +1,4 @@
 {
  "generado": "2026-11-17",
- "stops": {},
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 960,
-  "alt": "Los Roques y archipiélagos",
-  "autor": "No machine-readable author provided. Pedrosanch assumed (based on copyright clai",
-  "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:LosRoquesFaroGranRoque.JPG",
-  "ok_manual": true
- },
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 1076,
-   "alt": "Buceo",
-   "pie": "Buceo.",
-   "autor": "Seauton",
-   "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Montevideo_buceo_jaureguito_21.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

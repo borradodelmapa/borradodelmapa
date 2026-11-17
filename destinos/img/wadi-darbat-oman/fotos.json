@@ -8,7 +8,12 @@
   "autor": "Muiad123",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Wadi_darbat_(2).jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Wadi Darbat"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "P. Subraelu, Alaa Ahmed, Abdel Azim Ebraheem, Mohsen Sherif, Shaher Bano Mirza, ",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Water_flowed_over_the_Wadi_Ham_South_Dam_during_the_floods_of_July_2022.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Wadi Ham"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -32,7 +42,12 @@
    "autor": "Evdpnl",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Overview_of_Wadi_Manaydra_and_Wadi_Farsh_from_SCC_6_Gebel_Sukhn,_South_Sinai,_1983.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Wadis in Egypt"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

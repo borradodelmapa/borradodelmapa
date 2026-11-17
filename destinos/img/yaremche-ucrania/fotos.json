@@ -8,7 +8,12 @@
   "autor": "Skoropadsky",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Yaremche2.JPG",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Yaremche"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

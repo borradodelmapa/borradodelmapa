@@ -1,18 +1,5 @@
 {
  "generado": "2026-11-17",
  "hero": null,
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 1082,
-   "alt": "Teatro Jenin - performances culturales",
-   "pie": "Teatro Jenin - performances culturales.",
-   "autor": "Guillaume Paumier",
-   "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Freedom_Theatre_in_Jenin_003_-_Aug_2011.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

@@ -7,21 +7,16 @@
   "alt": "San Cristóbal de Las Casas, México",
   "autor": "Odysseus79",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:San_Crist%C3%B3bal_de_Las_Casas_18.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:San_Crist%C3%B3bal_de_Las_Casas_18.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2003 in San Cristobal de las Casas"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 814,
-   "alt": "Catedral y Zócalo",
-   "pie": "Catedral y Zócalo.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Catedral_de_Puebla,_M%C3%A9xico,_2013-10-11,_DD_17.JPG",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -31,18 +26,12 @@
    "autor": "Unleonfoto",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mercado_de_san_Cristobal_de_Las_Casas,_Chiapas.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 1080,
-   "alt": "Cascadas Agua Azul 60km",
-   "pie": "Cascadas Agua Azul 60km.",
-   "autor": "Frank Vincentz",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:La_Palma_-_San_Andr%C3%A9s_y_Sauces_-_Barranco_del_Agua_-_Cascada_de_los_Tilos_03_ies.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2017 in San Cristobal de las Casas"
+   },
+   "vista": "2026-11-18"
   },
   "5": {
    "file": "q5.jpg",
@@ -53,7 +42,12 @@
    "autor": "Yarfpr",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ca%C3%B1%C3%B3n_de_San_Crist%C3%B3bal,_Aibonito-Barranquitas,_Puerto_Rico.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "San Cristóbal Canyon"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

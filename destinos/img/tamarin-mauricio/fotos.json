@@ -8,7 +8,12 @@
   "autor": "carrotmadman6 from Mauritius",
   "licencia": "CC BY 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Tamarin_(4823918620).jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Tamarin, Mauritius"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

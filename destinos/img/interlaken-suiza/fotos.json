@@ -7,21 +7,16 @@
   "alt": "Interlaken, Suiza",
   "autor": "Dietrich Michael Weidmann",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:2011-07-22_Berna_Oberlando_(Foto_Dietrich_Michael_Weidmann)_141.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:2011-07-22_Berna_Oberlando_(Foto_Dietrich_Michael_Weidmann)_141.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Matten bei Interlaken"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Tren a Jungfraujoch",
-   "pie": "Tren a Jungfraujoch.",
-   "autor": "TurkAviator",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Eigergletscher_(train_to_Jungfraujoch).jpg",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -31,7 +26,12 @@
    "autor": "Tran Mau Tri Tam tranmautritam",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Paragliding_Interlaken_-_Switzerland_(Unsplash).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2017 in Interlaken"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -42,7 +42,12 @@
    "autor": "Tinelot Wittermans",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Interlaken,_Zwitserland.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Panoramas of Interlaken"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

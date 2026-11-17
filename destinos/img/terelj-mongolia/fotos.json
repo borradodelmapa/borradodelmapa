@@ -7,7 +7,13 @@
   "alt": "Parque Nacional de Terelj, Mongolia",
   "autor": "Chongkian",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Gorkhi-Terelj_National_Park.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gorkhi-Terelj_National_Park.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Gorkhi-Terelj National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

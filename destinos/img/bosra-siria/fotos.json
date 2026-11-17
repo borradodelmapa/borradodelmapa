@@ -7,7 +7,13 @@
   "alt": "Bosra, Siria",
   "autor": "Dosseman",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bosra_theatre_cavea_0654.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bosra_theatre_cavea_0654.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ancient Roman theatre (Bosra)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Ilario Di Nardo",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bosra_Teatro_Romano_-_GAR_-_1-01.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Media of World Heritage sites from Gruppo Archeologico Romano"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

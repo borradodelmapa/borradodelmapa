@@ -9,6 +9,11 @@
   "autor": "Daniel Kraft",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:Skeleton_Coast_Dunes.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Dunes in Skeleton Coast"
+  },
+  "vista": "2026-11-18"
  }
 }

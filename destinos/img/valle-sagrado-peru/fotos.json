@@ -7,7 +7,13 @@
   "alt": "Valle Sagrado, Perú",
   "autor": "Charles Gadbois",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Urubamba_-_Valle_Sagrado_3.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Urubamba_-_Valle_Sagrado_3.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Urubamba River"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "H.dav.are",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Facade_of_the_Mercado_Artesanal_de_Pisac_in_Cusco,_Peru.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 542,
-   "alt": "Salineras de Maras",
-   "pie": "Salineras de Maras.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Salineras_de_Maras,_Maras,_Per%C3%BA,_2015-07-30,_DD_12.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Písac Market"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -42,7 +42,12 @@
    "autor": "McKay Savage from London, UK",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Peru_-_Lares_Trek_008_-_looking_back_down_on_the_pueblo_of_Cancha_Cancha_(7584220954).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Ollantaytambo-Lares-Valle Lacco"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

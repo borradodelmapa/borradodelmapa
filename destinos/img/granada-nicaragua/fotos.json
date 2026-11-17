@@ -7,7 +7,13 @@
   "alt": "Granada, Nicaragua",
   "autor": "Guillaume Baviere from Uppsala, Sweden",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nicaragua_2017-03-15_(33978834325).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nicaragua_2017-03-15_(33978834325).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Our Lady of the Assumption Cathedral in Granada, Nicaragua"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "José Luiz",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Paseo_de_los_Tristes_-_Granada.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Paseo de los Tristes, Granada"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -31,7 +42,12 @@
    "autor": "Jesus Abizanda from Barbastro, Huesca, Spain",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Entrada_a_la_alcaicer%C3%ADa_de_Granada.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2010 in Granada"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

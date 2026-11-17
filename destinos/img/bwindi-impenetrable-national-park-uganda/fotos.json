@@ -7,7 +7,13 @@
   "alt": "Bwindi Impenetrable National Park, Uganda",
   "autor": "Wikimedia Commons",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bwindi.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Bwindi.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bwindi Impenetrable Forest"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Charles J. Sharp",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mountain_gorilla_(Gorilla_beringei_beringei)_eating.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Gorilla beringei beringei of Bwindi"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "USAID Biodiversity & Forestry",
    "licencia": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:USAID_Measuring_Impact_Conservation_Enterprise_Retrospective_(Uganda;_International_Gorilla_Conservation_Program)_(38484020430).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Buhoma, Uganda"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -42,7 +58,12 @@
    "autor": "Ebriskin",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bwindi_Mountain_Gorillas_Nshongi_Family_2019.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Bwindi Impenetrable National Park in the 2010s"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

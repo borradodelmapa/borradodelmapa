@@ -7,7 +7,13 @@
   "alt": "Cabarete, República Dominicana",
   "autor": "Reimar Hoven (user Reimarhoven)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cabarete.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cabarete.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cabarete"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Loupiot77",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kitesurfing_Cabarete.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kitesurfing"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "aroom",
    "licencia": "CC BY-SA 2.5",
    "url": "https://commons.wikimedia.org/wiki/File:Kitebeach_at_cabarete_2.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Playa Enquentro, Cabarete"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

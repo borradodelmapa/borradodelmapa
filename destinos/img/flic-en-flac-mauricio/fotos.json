@@ -7,7 +7,13 @@
   "alt": "Flic-en-Flac, Mauricio",
   "autor": "Arne Müseler",
   "licencia": "CC BY-SA 3.0 de",
-  "url": "https://commons.wikimedia.org/wiki/File:Mauritius_flic_en_flac_beach.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mauritius_flic_en_flac_beach.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Flic-en-Flac beach"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

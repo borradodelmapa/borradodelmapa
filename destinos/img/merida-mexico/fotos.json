@@ -7,7 +7,13 @@
   "alt": "Mérida, México",
   "autor": "Patrickrichaud",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Catedral_de_San_Ildefonso_1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Catedral_de_San_Ildefonso_1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2018 in Mérida, Yucatán"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Carlos.morales.valladarez",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Calandria_en_m%C3%A9rida_Yucat%C3%A1n.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2017 in Mérida, Yucatán"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,7 +42,12 @@
    "autor": "Denise Aulie",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Chichen_Itza_Merida,_Mexico.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Reliefs in Chichén Itzá"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -42,18 +58,12 @@
    "autor": "Valentina Tosi",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:T01_Chichen_Itza_(108720909).jpeg",
-   "ok_manual": true
-  },
-  "5": {
-   "file": "q5.jpg",
-   "w": 720,
-   "h": 542,
-   "alt": "Mercado Lucas de Galvez comida local",
-   "pie": "Mercado Lucas de Galvez comida local.",
-   "autor": "Pedro Guerra Jordan (d. 1917)",
-   "licencia": "Public domain",
-   "url": "https://commons.wikimedia.org/wiki/File:Mercado_Lucas_de_G%C3%A1lvez,_M%C3%A9rida,_Yucat%C3%A1n,_1882.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Chichen Itza - Cenotes"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

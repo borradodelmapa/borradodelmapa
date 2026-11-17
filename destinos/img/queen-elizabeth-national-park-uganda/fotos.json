@@ -7,7 +7,13 @@
   "alt": "Queen Elizabeth National Park, Uganda",
   "autor": "Robert Weinkove using Minolta Dynax 4 camera",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Crater_lake_in_Queen_Elizabeth_National_Park.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Crater_lake_in_Queen_Elizabeth_National_Park.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Crater lakes in Uganda"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Alvinategyeka",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Wild_Life_at_the_banks_of_Kazinga_channel,_Queen_Elizabeth_National_Park_12.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Loxodonta africana in Queen Elizabeth National Park"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,18 +42,12 @@
    "autor": "Isabirye Mark Allan",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Hire_a_Car_Uganda.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 638,
-   "alt": "Rwenzori foothills hike",
-   "pie": "Rwenzori foothills hike.",
-   "autor": "Fiktube",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Lions_of_Queen_Elizabeth_National_Park.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Queen Elizabeth National Park"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -53,7 +58,12 @@
    "autor": "Alvinategyeka",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Salt_Lake_in_Queen_Elizabeth_National_Park_Uganda_03.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Queen Elizabeth National Park"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

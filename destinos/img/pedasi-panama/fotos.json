@@ -7,7 +7,13 @@
   "alt": "Pedasí, Panamá",
   "autor": "Inzay20",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Panam%C3%A1-Playa.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Panam%C3%A1-Playa.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Pedasí District"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

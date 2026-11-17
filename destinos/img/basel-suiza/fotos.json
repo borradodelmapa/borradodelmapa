@@ -9,7 +9,12 @@
   "autor": "Norbert Aepli, Switzerland (User:Noebu)",
   "licencia": "CC BY 2.5",
   "url": "https://commons.wikimedia.org/wiki/File:Rhine_Rhein_Basel_2006_871.JPG",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Martinskirche (Basel)"
+  },
+  "vista": "2026-11-18"
  },
  "que_hacer": {
   "1": {
@@ -21,18 +26,12 @@
    "autor": "Aurora Iannello (P900)",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Basel_Minster_night.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Museo Tinguely",
-   "pie": "Museo Tinguely.",
-   "autor": "Alan Philip Müller from Milano, Italy",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Basel_Museum_Tinguely_2008-5-31.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Basel Minster at night"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

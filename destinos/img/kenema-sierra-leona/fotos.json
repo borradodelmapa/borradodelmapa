@@ -8,7 +8,12 @@
   "autor": "dorothy.voorhees",
   "licencia": "CC BY-SA 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Kenema.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kenema"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

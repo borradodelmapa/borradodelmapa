@@ -12,7 +12,12 @@
    "autor": "Muhammad Javed",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lake_Saif-ul_Malook_track.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Trekking to Saiful Muluk Lake"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

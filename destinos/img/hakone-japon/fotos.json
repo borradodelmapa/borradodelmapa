@@ -1,28 +1,7 @@
 {
  "generado": "2026-11-16",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 720,
-  "alt": "El torii de la paz en el lago Ashi, Hakone",
-  "autor": "Joli Rumi",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:A_view_of_Lake_Ashi_with_Peace_Torii_gate,_Hakone,_Japan1.jpg",
-  "ok_manual": true
- },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Un onsen de Hakone Yumoto",
-   "pie": "Onsen en Hakone Yumoto.",
-   "autor": "Quercus acuta",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Hakone_yumoto_onsen_2.jpg",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -32,7 +11,12 @@
    "autor": "Charlie fong",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lake_Ashi_%26_Mt_Fuji_%26_Hakone_Shrine.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Mount Fuji from Lake Ashi"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -43,7 +27,12 @@
    "autor": "Suicasmo",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Hakone_Open-air_Museum_20211202-9.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hakone Open-air Museum"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

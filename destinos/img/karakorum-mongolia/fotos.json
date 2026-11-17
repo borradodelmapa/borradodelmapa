@@ -7,7 +7,13 @@
   "alt": "Karakórum (Harhorin), Mongolia",
   "autor": "Bernard Gagnon",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Erdene_Zuu_Monastery_05.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Erdene_Zuu_Monastery_05.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Erdene Zuu Monastery"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "SamarMagicTours1",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Entrada_al_Monasterio_Erdene_Zuu_en_Karakorum.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Erdene Zuu Monastery Gate"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

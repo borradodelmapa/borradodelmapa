@@ -7,7 +7,13 @@
   "alt": "Pemba, Mozambique",
   "autor": "Ton Rulkens from Mozambique",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Wimbe_Beach_2_(4871485865).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Wimbe_Beach_2_(4871485865).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Cabo Delgado (province)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

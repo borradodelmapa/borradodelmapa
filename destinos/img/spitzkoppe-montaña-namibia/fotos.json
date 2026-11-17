@@ -7,7 +7,13 @@
   "alt": "Spitzkoppe, Namibia",
   "autor": "Wikimedia Commons",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Spitzkoppe.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Spitzkoppe.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Spitzkoppe"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

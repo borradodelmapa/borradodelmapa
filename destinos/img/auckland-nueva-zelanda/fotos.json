@@ -7,7 +7,13 @@
   "alt": "Auckland, Nueva Zelanda",
   "autor": "elpinto007",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Auckland_skyline_-_May_2024_(2).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Auckland_skyline_-_May_2024_(2).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Skylines of Auckland"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,29 +26,12 @@
    "autor": "Krzysztof Golik",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Sky_Tower_Auckland_01.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 448,
-   "alt": "Museo de Nueva Zelanda Te Papa",
-   "pie": "Museo de Nueva Zelanda Te Papa.",
-   "autor": "LBM1948",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Auckland_20.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 344,
-   "alt": "Ferry a Waitemata Harbour",
-   "pie": "Ferry a Waitemata Harbour.",
-   "autor": "Archives New Zealand from New Zealand",
-   "licencia": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Auckland_Harbour_Bridge_(14232548292).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Sky Tower (Auckland)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

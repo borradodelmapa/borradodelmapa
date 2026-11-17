@@ -8,7 +8,12 @@
   "autor": "Globetrotteur17... Ici, là-bas ou ailleurs...",
   "licencia": "CC BY-SA 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Port_Jackson_on_the_Coromandel_Peninsula.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Coromandel Peninsula"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Krzysztof Golik",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cathedral_Cove_06.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Cathedral Cove (Coromandel)"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "Krzysztof Golik",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Hot_Water_Beach_on_Coromandel_Peninsula_02.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hot Water Beach"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -43,7 +58,12 @@
    "autor": "Takver from Australia",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cathedral_cave_and_sea_kayak_1_-_Seakayaking_from_Hahei,_New_Zealand_(7078954337).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Cathedral Cove (Coromandel)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

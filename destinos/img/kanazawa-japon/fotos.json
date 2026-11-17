@@ -8,7 +8,12 @@
   "autor": "663highland",
   "licencia": "CC BY 2.5",
   "url": "https://commons.wikimedia.org/wiki/File:131109_Kenrokuen_Kanazawa_Ishikawa_pref_Japan01s3.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kasumigaike Pond at Kenrokuen"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "sergejf",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kanazawa,_Kenroku-en_gardens.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "October 2024 in Kanazawa"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "Balon Greyjoy",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:20190705_Kanazawa_Castle-1.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hishi Yagura, Kanazawa Castle"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -43,7 +58,12 @@
    "autor": "Ben & Gab",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Higashiyama_Higashi_Chaya_District_Kanazawa_(29103739857).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Sanbanchō Street (Kanazawa)"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -54,7 +74,12 @@
    "autor": "金沢市",
    "licencia": "CC BY 2.1 jp",
    "url": "https://commons.wikimedia.org/wiki/File:21st_Century_Museum_of_Contemporary_Art,_Kanazawa011.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "21st Century Museum of Contemporary Art, Kanazawa"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

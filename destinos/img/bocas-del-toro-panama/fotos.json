@@ -7,7 +7,13 @@
   "alt": "Bocas del Toro, Panamá",
   "autor": "Dronepicr",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bocas_del_Toro_Panama.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bocas_del_Toro_Panama.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bocas del Toro, Panama"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Marissa Strniste from Upala, Costa Rica",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Paradise_-_Bocas_del_drago_(6778445008).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Playa Estrella, Colón Island"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

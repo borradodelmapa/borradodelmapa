@@ -8,7 +8,12 @@
   "autor": "Mike Dickison",
   "licencia": "CC BY 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Rotopounamu_MRD_03.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Forests in New Zealand in 2020"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Borvan53",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tongariro_alpine_crossing_Ngauruhoe_behind_volcanic_mouth.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Eruptive vents in New Zealand"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,18 +42,12 @@
    "autor": "User Yogi de on en.wikipedia",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tongariro_Crossing_Emerald_Lakes_Blue_Lake.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Chateau Tongariro resort tour",
-   "pie": "Chateau Tongariro resort tour.",
-   "autor": "Air Force",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Chateau_Tongariro_(1963).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Blue Lake (Mount Tongariro)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

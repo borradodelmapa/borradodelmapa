@@ -1,15 +1,5 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 960,
-  "alt": "Lucerna",
-  "autor": "Leandro Kibisz",
-  "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Romoos-Lucerna-Suiza-2.JPG",
-  "ok_manual": true
- },
  "stops": {},
  "que_hacer": {
   "0": {
@@ -21,7 +11,12 @@
    "autor": "Francisco Conde Sánchez",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:LUCERNA_-_SUIZA.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Wasserturm Luzern"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

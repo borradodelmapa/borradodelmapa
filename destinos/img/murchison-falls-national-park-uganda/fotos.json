@@ -8,7 +8,12 @@
   "autor": "Kateregga1",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Vegetation_in_Murchison_Falls_National_Park_Uganda_03.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Murchison Falls National Park"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Josefito123",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:River_Nile_-_Murchison_Falls_National_Park_20190916_143012.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nile in Murchison Falls National Park"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "BMKME",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Uganda_Kobs_Grazing_Along_the_Kyobe_Safari_Lodge_Drive,_Murchison_Falls_National_Park.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Murchison Falls National Park"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -43,7 +58,12 @@
    "autor": "Jingo Faizal",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Top_of_Murchison_falls.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Murchison Falls"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

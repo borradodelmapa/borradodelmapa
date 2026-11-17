@@ -7,7 +7,13 @@
   "alt": "Isla de Ibo, Mozambique",
   "autor": "Rosino",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ilha_do_Ibo-sunset-02.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ilha_do_Ibo-sunset-02.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Cabo Delgado (province)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

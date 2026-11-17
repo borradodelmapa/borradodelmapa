@@ -8,31 +8,12 @@
   "autor": "Bernard Gagnon",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:Maaloula_01.jpg",
-  "ok_manual": true
- },
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Iglesia de Santa Tecla",
-   "pie": "Iglesia de Santa Tecla.",
-   "autor": "Threecharlie",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Santa_Tecla,_facade_(2)_(Este).JPG",
-   "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Maaloula"
   },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 1282,
-   "alt": "Iglesia de Nostra Señora",
-   "pie": "Iglesia de Nostra Señora.",
-   "autor": "AntoVedat",
-   "licencia": "CC BY-SA 3.0 es",
-   "url": "https://commons.wikimedia.org/wiki/File:Iglesia_Nuestra_Se%C3%B1ora_de_la_Asunci%C3%B3n,_Utiel.jpg",
-   "ok_manual": true
-  }
- }
+  "vista": "2026-11-18"
+ },
+ "stops": {}
 }

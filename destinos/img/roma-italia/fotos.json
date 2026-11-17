@@ -7,7 +7,13 @@
   "alt": "Roma, Italia",
   "autor": "FeaturedPics",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Colosseo_2020.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Colosseo_2020.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Exterior of the Colosseum"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "NibasH",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Foro_Romano_y_Coliseo_al_fondo_desde_los_balcones_del_Palatino_-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Forum Romanum"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,18 +42,12 @@
    "autor": "Alvesgaspar",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 438,
-   "alt": "Fuente de Trevi al atardecer",
-   "pie": "Fuente de Trevi al atardecer.",
-   "autor": "Wilfredor",
-   "licencia": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:Fontaine_Trevi_-_Rome.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Blue sky in the Vatican City"
+   },
+   "vista": "2026-11-18"
   },
   "5": {
    "file": "q5.jpg",
@@ -53,7 +58,12 @@
    "autor": "Gobbler",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Roma_Testaccio_Ponte_Sublicio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "September 2009 in Rome"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

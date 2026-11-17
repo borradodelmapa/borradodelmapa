@@ -2,17 +2,6 @@
  "generado": "2026-11-17",
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 720,
-   "alt": "Malecón paseo gratis atardecer",
-   "pie": "Malecón paseo gratis atardecer.",
-   "autor": "Danaeef1294",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Puerto_de_Veracruz_Malec%C3%B3n.JPG",
-   "ok_manual": true
-  },
   "1": {
    "file": "q1.jpg",
    "w": 720,
@@ -22,29 +11,12 @@
    "autor": "Another Believer",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Puerto_Vallarta,_Jalisco_(February_2023)_-_305.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 360,
-   "alt": "Old Town compras arte y tiendas",
-   "pie": "Old Town compras arte y tiendas.",
-   "autor": "Dennis Sylvester Hurd",
-   "licencia": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:Overlooking_Old_Town,_Puerto_Vallarta.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 720,
-   "alt": "Playa Mismaloya cine y playas",
-   "pie": "Playa Mismaloya cine y playas.",
-   "autor": "Ferfive",
-   "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Mismaloya,_Vallarta.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "February 2023 in Puerto Vallarta"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

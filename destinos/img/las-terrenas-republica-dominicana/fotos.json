@@ -7,20 +7,13 @@
   "alt": "Las Terrenas, República Dominicana",
   "autor": "UR3IRS",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Las-Terrenas.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Las-Terrenas.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Streets in Las Terrenas"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Playas cercanas",
-   "pie": "Playas cercanas.",
-   "autor": "María Luján T",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Playa_de_Chapadmalal.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

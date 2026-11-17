@@ -7,7 +7,13 @@
   "alt": "Ivano-Frankivsk, Ucrania",
   "autor": "Muraszka",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:%D0%A3%D0%B3%D0%BE%D1%80%D1%81%D1%8C%D0%BA%D1%96_%D1%81%D0%BA%D0%B5%D0%BB%D1%96_%D0%BF%D1%96%D1%81%D0%BB%D1%8F_%D0%B4%D0%BE%D1%89%D1%83.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:%D0%A3%D0%B3%D0%BE%D1%80%D1%81%D1%8C%D0%BA%D1%96_%D1%81%D0%BA%D0%B5%D0%BB%D1%96_%D0%BF%D1%96%D1%81%D0%BB%D1%8F_%D0%B4%D0%BE%D1%89%D1%83.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Clouds and blue sky in Ivano-Frankivsk Oblast"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Alex Zelenko",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ukraine-Ivano-Frankivsk-Church_of_Virgin_Mary-1.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2006 in Ivano-Frankivsk"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,7 +42,12 @@
    "autor": "Posterrr",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cathedral_of_the_Resurrection_of_Christ,_Ivano-Frankivsk_P1300874.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2016 in Ivano-Frankivsk"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

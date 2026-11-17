@@ -8,7 +8,12 @@
   "autor": "Daniel Case",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:View_west_along_Duomo_roof,_Milan.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Duomo (Milan) - Roof"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Paolobon140",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Veduta_della_Galleria_Vittorio_Emanuele_II_da_piazza_del_Duomo,_Milano.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Galleria Vittorio Emanuele II (Milan) - Triumphal arch"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -32,18 +42,12 @@
    "autor": "Marcin Białek",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Santa_Maria_delle_Grazie_Milan_2013.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 898,
-   "alt": "Pinacoteca Brera",
-   "pie": "Pinacoteca Brera.",
-   "autor": "Francesco Hayez",
-   "licencia": "Public domain",
-   "url": "https://commons.wikimedia.org/wiki/File:El_Beso_(Pinacoteca_de_Brera,_Mil%C3%A1n,_1859).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Santa Maria delle Grazie (Milan) - Facade"
+   },
+   "vista": "2026-11-18"
   },
   "5": {
    "file": "q5.jpg",
@@ -54,7 +58,12 @@
    "autor": "Nelson Pérez",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Castillo_Sforzesco,_Mil%C3%A1n,_Italia_-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Castello Sforzesco (Milan) - Round towers"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

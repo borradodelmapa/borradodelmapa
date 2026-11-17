@@ -1,38 +1,4 @@
 {
  "generado": "2026-11-16",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 720,
-  "alt": "Cola Beach, al norte de Agonda, en el sur de Goa",
-  "autor": "Sam 8393",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:BeachFun.jpg",
-  "ok_manual": true
- },
- "stops": {},
- "que_hacer": {
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 478,
-   "alt": "La basílica del Bom Jesus, en Goa Velha",
-   "pie": "La basílica del Bom Jesus.",
-   "autor": "Thomas Tholath",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Bom_Jesus_Basilica_Goa.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Una plantación de especias en Goa",
-   "pie": "Plantación de especias en Goa.",
-   "autor": "Jennifer Rose Stankowski",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Spice_Plantation_in_Goa.JPG",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

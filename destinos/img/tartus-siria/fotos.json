@@ -8,7 +8,12 @@
   "autor": "Oida 666",
   "licencia": "CC BY-SA 3.0 de",
   "url": "https://commons.wikimedia.org/wiki/File:Zitadelle_Tartus_Befestigung.JPG",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Citadel of Tartus"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,18 +26,12 @@
    "autor": "Hayan Alhasan",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Sunset_over_the_sea_in_Tartus_Syria.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paseo por puerto",
-   "pie": "Paseo por puerto.",
-   "autor": "Cayambe",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Paseo_Vi%C3%B1atigo_in_Puerto_de_la_Cruz,_Tenerife.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Beaches of Tartus"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

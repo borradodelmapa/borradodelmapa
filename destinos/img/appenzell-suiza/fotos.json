@@ -8,7 +8,12 @@
   "autor": "böhringer friedrich",
   "licencia": "CC BY-SA 2.5",
   "url": "https://commons.wikimedia.org/wiki/File:Gais_AR_Dorfplatz_Panorama_1.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "February 2011 in the canton of Appenzell Ausserrhoden"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

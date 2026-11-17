@@ -7,20 +7,13 @@
   "alt": "Festival Naadam, Mongolia",
   "autor": "Chongkian",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Naadam_Festival_2024_Opening_Ceremony.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Naadam_Festival_2024_Opening_Ceremony.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2024 events in Mongolia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Carreras de caballos",
-   "pie": "Carreras de caballos.",
-   "autor": "Pedro J Pacheco",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Caballos_del_Vino._Cuesta_del_Castillo.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

@@ -9,7 +9,12 @@
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Vista_de_%C3%85lesund_desde_Aksla,_Noruega,_2019-09-01,_DD_16.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Ålesund from Aksla"
+  },
+  "vista": "2026-11-18"
  },
  "que_hacer": {
   "2": {
@@ -21,7 +26,12 @@
    "autor": "Pabernosmatao",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Museo_del_Art_Nouveau.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Art Nouveau architecture"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

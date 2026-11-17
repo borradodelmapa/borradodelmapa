@@ -7,7 +7,13 @@
   "alt": "Peshawar, Pakistán",
   "autor": "Zafarmaini",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Islamia_College_Peshawar_(Public_Sector_University),_Khyber_Pakhtunkhwa,_Pakistan_cropped.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Islamia_College_Peshawar_(Public_Sector_University),_Khyber_Pakhtunkhwa,_Pakistan_cropped.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Islamia College University Peshawar"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Taken by Z Alam. Original uploader was Zakksez at en.wikipedia",
    "licencia": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:Mohabbat_Khan_Mosque,_Peshawar.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Mohabbat Khan Mosque"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,7 +42,12 @@
    "autor": "Khalid Mahmood",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Peshawar_Museum.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Peshawar Museum"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

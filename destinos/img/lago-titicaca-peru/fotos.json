@@ -8,7 +8,12 @@
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Amanecer_en_el_lago_Titicaca,_Puno,_Per%C3%BA,_2015-08-01,_DD_01.JPG",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Sunrises of the Titicaca Lake"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Kataleya Torrsh",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%22TITIKAKA%22_a_orillas_del_Lago_Titicaca,_con_un_cielo_despejado_y_casas_flotantes_en_el_fondo._Es_un_s%C3%ADmbolo_representativo_de_la_ic%C3%B3nica_Isla_de_los_Urus.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Images from Wikimixtura Titicaca 2025"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "Olivier Issaly from Paris, France",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Isla_Taquile_Lago_Titicaca_(4463616824).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Taquile Island"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

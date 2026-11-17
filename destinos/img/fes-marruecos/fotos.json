@@ -8,7 +8,12 @@
   "autor": "This Photo was taken by Timothy A. Gonsalves. Feel free to use my photos, but pl",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Bab_Bou_Jeloud_Frame_Minaret_Fes_Nov25_A7CR_09127-8_HDR3.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "geo",
+   "km": 5.3
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,21 +7,16 @@
   "alt": "Zinder, Níger",
   "autor": "Mab.black",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Zinder_centre_ville.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Zinder_centre_ville.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Zinder"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 960,
-   "alt": "Medina antigua",
-   "pie": "Medina antigua.",
-   "autor": "PEPE GADEIRAS",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Altar_de_la_Virgen_de_la_Antigua,_Medina_Sidonia.jpg",
-   "ok_manual": true
-  },
   "1": {
    "file": "q1.jpg",
    "w": 720,
@@ -31,7 +26,12 @@
    "autor": "Roland",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Zinder_(6328132791).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Sultan's palace, Zinder"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -42,7 +42,12 @@
    "autor": "Roland",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Zinder_DSC_4499_(6328132379).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Zinder Grand Mosque"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

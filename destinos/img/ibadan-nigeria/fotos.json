@@ -1,26 +1,4 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 720,
-  "alt": "Ibadán, Nigeria",
-  "autor": "ExploreWithTunde",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_the_National_Museum_of_Unity,_Aleshinloye,_Ibadan_2024-06-02.jpg"
- },
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Forestal de Ibadán - bosque con vistas",
-   "pie": "Forestal de Ibadán - bosque con vistas.",
-   "autor": "IamMKO",
-   "licencia": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:Department_of_Forest_Production_and_Product,_University_of_Ibadan.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

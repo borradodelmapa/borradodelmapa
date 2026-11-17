@@ -7,7 +7,13 @@
   "alt": "Ulcinj, Montenegro",
   "autor": "Andrey from Russia",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ulcinj,_Montenegro_-_Sept._2010.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ulcinj,_Montenegro_-_Sept._2010.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ulcinj"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "krysi@",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Czarnog%C3%B3ra_-_Ulcinj_-_Wielka_Pla%C5%BCa_-_panoramio.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Isla de Ada Bojana",
-   "pie": "Isla de Ada Bojana.",
-   "autor": "Ammartivari",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Old_Ulcinj.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "geo",
+    "km": 2.9
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -121,6 +121,7 @@ async function hoja(dir, hueco, cands) {
 }
 
 // Fotos que nunca valen para un sitio aunque lo nombren (17 nov 2026: estadios, aeropuertos, barcos, cuadros, conciertos, mapas)
+const VERIF = require('./verificar-fotos.cjs');
 const NO_VALE = /\b(stadium|stadion|estadio|arena|airport|aeropuerto|aerodrome|ferry|ship|cruise|concert|painting|caravaggio|map|satellite|sentinel|landsat|logo|bombing|explosion|accident|protest|riot|war)\b/i;
 
 async function candidatas(slug, n, hojas = true, soloPortada = false) {
@@ -140,6 +141,8 @@ async function candidatas(slug, n, hojas = true, soloPortada = false) {
     huecos['q' + i] = { busca: lista[0], otras: lista.slice(1), ancho: 720, actividad: a, claves };
   });
   const json = { sitio: slug, nombre: s.nombre, huecos: {} };
+  const sv = VERIF.sitio(slug);
+  if (!sv || sv.lat == null) console.log('  ⚠ El sitio no tiene coordenadas en el KV: solo valdrán fotos por categoría de Commons.');
   console.log(`\n📷 Candidatas para ${s.nombre} (${s.pais}) → ${dir}`);
   for (const [h, x] of Object.entries(huecos)) {
     let titles = await buscar(x.busca, n);
@@ -150,6 +153,10 @@ async function candidatas(slug, n, hojas = true, soloPortada = false) {
     // Solo fotos cuyo título o descripción nombra el sitio o algo concreto de la actividad (F9: mejor sin foto)
     if (x.claves) cands = cands.filter((c) => { const t = norm(c.title + ' ' + c.desc); return x.claves.some((k) => t.includes(k)); });
     cands = cands.filter((c) => !NO_VALE.test(c.title + ' ' + c.desc));
+    // REGLA (18 nov 2026, Paco: una bici de Cracovia salió como «Trekking» del Colca): solo vale una foto que Wikimedia SITÚA
+    // en el sitio (coordenadas a menos de 15 km o categoría del sitio). Las palabras del título no prueban nada.
+    const datosW = await VERIF.datosArchivos(cands.map((c) => c.title));
+    cands = cands.filter((c) => (c.prueba = VERIF.probar(sv, datosW[c.title] || { coords: [], cats: [] })));
     cands = titles.map((t) => cands.find((c) => c.title === t)).filter(Boolean).slice(0, n);
     const sheet = hojas ? await hoja(dir, h, cands) : '(sin hoja)';
     json.huecos[h] = { busca: x.busca, actividad: x.actividad, candidatas: cands.map((c, i) => ({ n: i + 1, title: c.title, autor: c.autor, licencia: c.licencia, url: c.url, desc: c.desc })) };
@@ -160,7 +167,7 @@ async function candidatas(slug, n, hojas = true, soloPortada = false) {
   if (hojas) console.log(`\nMira cada hoja y elige por su número; ninguna buena = sin foto (F9). Luego:\n  node scripts/fotos-sitio.cjs poner ${slug} q0 3 "texto alternativo" "Pie de foto."\n`);
 }
 
-async function poner(slug, hueco, cual, alt, pie) {
+async function poner(slug, hueco, cual, alt, pie, sinRevisar = false) {
   if (!/^(hero|q\d+)$/.test(hueco || '')) throw new Error('El hueco es hero, q0, q1…');
   if (!cual || !alt) throw new Error('Falta el número (o File:…) y el texto alternativo');
   const s = datosSitio(slug);
@@ -175,6 +182,9 @@ async function poner(slug, hueco, cual, alt, pie) {
   const ancho = hueco === 'hero' ? 1280 : 720;
   const [c] = await info([title.replace(/^File:/, '')], ancho);
   if (!c) throw new Error(`«${title}» no existe en Commons o su licencia no es libre (sin NC)`);
+  const datosW = await VERIF.datosArchivos([c.title]);
+  const prueba = VERIF.probar(VERIF.sitio(slug) || {}, datosW[c.title] || { coords: [], cats: [] });
+  if (!prueba) throw new Error(`«${c.title}» no tiene prueba de ser de ${s.nombre}: ni coordenadas a menos de ${VERIF.MAX_KM} km ni categoría del sitio en Commons. Mejor sin foto.`);
   const dir = path.join(ROOT, 'destinos', 'img', slug); fs.mkdirSync(dir, { recursive: true });
   const file = hueco === 'hero' ? 'hero.jpg' : hueco + '.jpg';
   const raw = path.join(TMP, `poner-${Date.now()}`); fs.mkdirSync(TMP, { recursive: true });
@@ -184,7 +194,9 @@ async function poner(slug, hueco, cual, alt, pie) {
   const w = Math.min(ancho, c.w), h = Math.round(c.h * w / c.w / 2) * 2;
   const fj = path.join(dir, 'fotos.json');
   const j = fs.existsSync(fj) ? JSON.parse(fs.readFileSync(fj, 'utf8')) : { generado: new Date().toISOString().slice(0, 10), stops: {} };
-  const dato = { file, w, h, alt, ...(hueco === 'hero' ? {} : { pie: pie || alt.replace(/\.?$/, '.') }), autor: c.autor, licencia: c.licencia, url: c.url, ok_manual: true };
+  const dato = { file, w, h, alt, ...(hueco === 'hero' ? {} : { pie: pie || alt.replace(/\.?$/, '.') }), autor: c.autor, licencia: c.licencia, url: c.url, prueba,
+    // «poner» a mano = la persona la ha visto; «auto» = pendiente de ver (comprobar-nada-atras no deja subirla así)
+    ...(sinRevisar ? { pendiente_revision: true } : { ok_manual: true, vista: new Date().toISOString().slice(0, 10) }) };
   if (hueco === 'hero') j.hero = dato; else (j.que_hacer = j.que_hacer || {})[hueco.slice(1)] = dato;
   escribirJson(fj, j);
   console.log(`✅ ${slug} ${hueco} = ${c.title} (${c.autor} · ${c.licencia})${hueco === 'hero' ? '' : ` — «${String(s.queHacer[+hueco.slice(1)] || '').slice(0, 60)}»`}\n   Ahora: node scripts/build-destinos.js --country ${s.cc} --only ${slug}`);
@@ -200,7 +212,7 @@ async function auto(slug) {
   for (const [h, x] of Object.entries(j.huecos)) {
     if (h === 'hero' || ya[h.slice(1)] || !x.candidatas.length) continue;
     const t = String(x.actividad).split(/:\s|\s\(/)[0].trim();
-    try { await poner(slug, h, '1', t, t.replace(/\.?$/, '.')); } catch (e) { console.error(`  ❌ ${slug} ${h}: ${e.message}`); }
+    try { await poner(slug, h, '1', t, t.replace(/\.?$/, '.'), true); } catch (e) { console.error(`  ❌ ${slug} ${h}: ${e.message}`); }
     await sleep(300);
   }
 }
@@ -212,7 +224,7 @@ async function portada(slug) {
   if (fs.existsSync(fj) && JSON.parse(fs.readFileSync(fj, 'utf8')).hero) return;
   await candidatas(slug, 3, false, true);
   const j = JSON.parse(fs.readFileSync(path.join(TMP, slug, 'candidatas.json'), 'utf8'));
-  if (j.huecos.hero.candidatas.length) await poner(slug, 'hero', '1', s.nombre);
+  if (j.huecos.hero.candidatas.length) await poner(slug, 'hero', '1', s.nombre, undefined, true);
 }
 
 function quitar(slug, hueco) {

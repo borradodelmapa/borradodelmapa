@@ -8,53 +8,12 @@
   "autor": "Byralaal",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Leon_Cathedral_2018.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "León Cathedral, Nicaragua"
+  },
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 960,
-   "alt": "Tour de murales y arte callejero",
-   "pie": "Tour de murales y arte callejero.",
-   "autor": "w_lemay",
-   "licencia": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Molly_Wiley_art_building,_Artist_Studios_Building,_Ponce_de_Leon_Hotel,_Flagler_College.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Volcán Cerro Negro",
-   "pie": "Volcán Cerro Negro.",
-   "autor": "Adam Jones from Kelowna, BC, Canada",
-   "licencia": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Cerro_Negro_Volcano_-_Near_Leon_-_Nicaragua_-_18_(31571917256).jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Playa Las Peñitas",
-   "pie": "Playa Las Peñitas.",
-   "autor": "Juan José Mendoza",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Las_Pe%C3%B1itas,_Nicaragua_-_panoramio_(8).jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Museo de la Revolución",
-   "pie": "Museo de la Revolución.",
-   "autor": "Hormiga errante",
-   "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Fachada_Museo_de_la_Revoluci%C3%B3n_Nacional.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

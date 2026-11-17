@@ -7,7 +7,13 @@
   "alt": "Preikestolen (Púlpito de Roca), Noruega",
   "autor": "No machine-readable author provided. Vicente Rodríguez González assumed (based o",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Preikestolen_01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Preikestolen_01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Preikestolen"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

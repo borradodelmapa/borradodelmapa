@@ -8,7 +8,12 @@
   "autor": "Otomeonoge",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Calabar_carnival_9.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Calabar carnival"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

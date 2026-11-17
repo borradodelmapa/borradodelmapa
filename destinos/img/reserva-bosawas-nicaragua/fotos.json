@@ -7,7 +7,13 @@
   "alt": "Reserva de la Biosfera Bosawás, Nicaragua",
   "autor": "Rebecca Ore",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:PenasBlancas,_part_of_the_Bosawas_Reserve,_Jinotega_Department,_Nicaragua.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:PenasBlancas,_part_of_the_Bosawas_Reserve,_Jinotega_Department,_Nicaragua.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bosawás Natural Reserve"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

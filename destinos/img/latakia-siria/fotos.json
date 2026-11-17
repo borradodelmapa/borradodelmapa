@@ -11,18 +11,12 @@
    "autor": "LBM1948",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Latakia_(distrito)_2001_04.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Paseo Corniche",
-   "pie": "Paseo Corniche.",
-   "autor": "Vyacheslav Argenberg",
-   "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Beirut_Corniche,_Beirut,_Lebanon.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Coasts of Latakia Governorate"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -33,7 +27,12 @@
    "autor": "Gianfranco Gazzetti",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Latakia_Museo_-_GAR_-_2-01.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Latakia Museum"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

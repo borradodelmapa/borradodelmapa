@@ -7,7 +7,13 @@
   "alt": "Kyiv (Kiev), Ucrania",
   "autor": "Falin",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:%D0%9B%D0%B0%D0%B2%D1%80%D0%B0.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:%D0%9B%D0%B0%D0%B2%D1%80%D0%B0.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Remote views of Kyiv Pechersk Lavra"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Ralf Roletschek",
    "licencia": "GFDL 1.2",
    "url": "https://commons.wikimedia.org/wiki/File:17-07-02-Maidan_Nezalezhnosti_RR74377-PANORAMA.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Clouds and blue sky in Kyiv"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,7 +42,12 @@
    "autor": "Rbrechko",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:80-391-0151_Kyiv_St.Sophia%27s_Cathedral_RB_18_2.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "October 2017 in Kyiv"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -42,7 +58,12 @@
    "autor": "Dimant",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Petrivska_alley_in_Kyiv.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2011 in Kyiv"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

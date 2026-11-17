@@ -8,7 +8,12 @@
   "autor": "663highland",
   "licencia": "CC BY 2.5",
   "url": "https://commons.wikimedia.org/wiki/File:Osaka_Castle_03bs3200.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2009 at Osaka Castle"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "DXR",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Osaka_Castle,_Keep_tower,_South_view_20190415_1.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Osaka Castle Keep Tower"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,18 +42,12 @@
    "autor": "Martin Falbisoner",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Dotonbori,_Osaka,_at_night,_November_2016.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 1080,
-   "alt": "La torre Tsutenkaku, en Shinsekai",
-   "pie": "Tsutenkaku, en Shinsekai.",
-   "autor": "Jaienviedunburger",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ts%C5%ABtenkaku_at_night,_Osaka.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Asahi Super Dry advertisements in Osaka"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -54,7 +58,12 @@
    "autor": "Martin Falbisoner",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Umeda_Sky_Building,_Osaka,_November_2016_-02.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Interior of the Kuchu Escalators (Umeda Sky Building)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

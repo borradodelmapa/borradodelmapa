@@ -7,7 +7,13 @@
   "alt": "Inhambane, Mozambique",
   "autor": "hermansmit",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Inhambane_Province,_Mozambique_-_panoramio_(2).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Inhambane_Province,_Mozambique_-_panoramio_(2).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Pomene, Inhambane"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

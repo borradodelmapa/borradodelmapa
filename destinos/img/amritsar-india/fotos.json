@@ -8,7 +8,12 @@
   "autor": "Shubhashish",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Golden_Temple_Amritsar_Gurudwara_(cropped).jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Golden Temple (Harmandir Sahib)"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,29 +26,12 @@
    "autor": "Bernard Gagnon",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Golden_Temple,_Amritsar_01.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 474,
-   "alt": "El memorial de Jallianwala Bagh",
-   "pie": "Jallianwala Bagh.",
-   "autor": "Bijay chaurasia",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Panorama_of_Jallianwala_Bagh-IMG_6348.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "El templo Durgiana de Amritsar",
-   "pie": "El templo Durgiana.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Templo_Durgiana-Amritsar-India09.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Golden Temple (Harmandir Sahib)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

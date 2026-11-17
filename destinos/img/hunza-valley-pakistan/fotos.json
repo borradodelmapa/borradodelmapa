@@ -7,7 +7,13 @@
   "alt": "Hunza Valley, Pakistán",
   "autor": "FaizanAhmad",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Hunza_Valley_HDR.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Hunza_Valley_HDR.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Hunza Valley"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "Abdul Salam Alvi",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:My_Village_Passu.JPG",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Jeep safari por Karakoram Highway",
-   "pie": "Jeep safari por Karakoram Highway.",
-   "autor": "Shakeel Ahmad",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Hunza_River.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Passu"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

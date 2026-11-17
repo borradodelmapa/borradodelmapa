@@ -12,7 +12,12 @@
    "autor": "Maria Feofilova",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Jungfraubahn_train_at_the_Kleine_Scheidegg_railway_station.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Eiger and Mönch"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

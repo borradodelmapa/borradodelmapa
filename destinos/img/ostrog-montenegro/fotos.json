@@ -8,20 +8,12 @@
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:Monasterio_de_Ostrog,_Montenegro,_2014-04-14,_DD_14.JPG",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ostrog Monastery"
+  },
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 514,
-   "alt": "Visita al monasterio",
-   "pie": "Visita al monasterio.",
-   "autor": "Luis García (Zaqarbal)",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Real_Monasterio_de_la_Encarnaci%C3%B3n_(Madrid)_01.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Kinderdijk, Países Bajos",
   "autor": "Lucas Hirschegger",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:KinderdijkMolens02.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:KinderdijkMolens02.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Groups of mills in the Netherlands"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

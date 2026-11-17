@@ -7,7 +7,13 @@
   "alt": "Nizwa, Omán",
   "autor": "Andries Oudshoorn",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nizwa_(5).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nizwa_(5).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Nizwa Fort Gates"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Martin Falbisoner",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nizwa_Fort_Detail.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nizwa Fort"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "Francesco Bini",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nizwa,_souq,_porta_intagliata.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Doors in Nizwa"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -42,7 +58,12 @@
    "autor": "Francesco Bini",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nizwa,_citt%C3%A0_vecchia_di_alaqr,_museo_del_passato,_portale.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Doors in Nizwa"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -8,21 +8,15 @@
   "autor": "FramesHaus",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Festival_de_las_Flores_2024._Jarabacoa,_Rep%C3%BAblica_Dominicana.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Jarabacoa"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 960,
-   "alt": "Cascada de Jiménoa",
-   "pie": "Cascada de Jiménoa.",
-   "autor": "Will056t",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Salto_jimenoa.jpg",
-   "ok_manual": true
-  },
   "1": {
    "file": "q1.jpg",
    "w": 720,
@@ -32,7 +26,12 @@
    "autor": "Jos1950",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Salto_de_Jimenoa_816.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Jarabacoa"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

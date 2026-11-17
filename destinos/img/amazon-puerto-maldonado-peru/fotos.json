@@ -7,7 +7,13 @@
   "alt": "Amazonía - Puerto Maldonado, Perú",
   "autor": "Martin St-Amant (S23678)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:7_-_Itahuania_-_Ao%C3%BBt_2008.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:7_-_Itahuania_-_Ao%C3%BBt_2008.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Amazon Rainforest in Peru"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Montreux & Riviera, Suiza",
   "autor": "Maude Rion",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Champ_de_narcisses_-.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Champ_de_narcisses_-.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Montreux"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "Giles Laurent",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:001_Chateau_de_Chillon_and_Dents_du_Midi_Photo_by_Giles_Laurent.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 468,
-   "alt": "Tren de montaña Rochers de Naye",
-   "pie": "Tren de montaña Rochers de Naye.",
-   "autor": "indication : éditeur Schmitt",
-   "licencia": "Public domain",
-   "url": "https://commons.wikimedia.org/wiki/File:Gare-Montreux-Vieux-CPancienne.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Château de Chillon with Dents du Midi"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

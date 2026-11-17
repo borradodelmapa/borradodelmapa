@@ -1,14 +1,5 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 850,
-  "alt": "Oaxaca, México",
-  "autor": "Prsjl",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Oaxaqa_(41).jpg"
- },
  "stops": {},
  "que_hacer": {
   "0": {
@@ -20,7 +11,12 @@
    "autor": "Maria de los Angeles…",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Zocalo,_oaxaca,_oaxaca_-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2009 in Oaxaca de Juárez"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +27,12 @@
    "autor": "Radiodreamer",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nave_central_Iglesia_de_Santo_Domingo_Oaxaca_Centro.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2016 in Oaxaca de Juárez"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -42,7 +43,12 @@
    "autor": "WeltKonnte",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mercado_20_de_Noviembre_en_Oaxaca,_M%C3%A9xico.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2020 in Oaxaca de Juárez"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -53,7 +59,12 @@
    "autor": "AmbarPM",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cascadas_Petrificadas_en_Oaxaca,_M%C3%A9xico..JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Landscapes of Oaxaca"
+   },
+   "vista": "2026-11-18"
   },
   "5": {
    "file": "q5.jpg",
@@ -64,7 +75,12 @@
    "autor": "User:Gengiskanhg",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Museo-Teotitl%C3%A1n_del_Valle-Oaxaca-Mexico.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2006 in Oaxaca"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

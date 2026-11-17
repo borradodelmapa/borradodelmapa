@@ -7,7 +7,13 @@
   "alt": "Isla Taboga, Panamá",
   "autor": "Ayaita",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:TabogaBeachPanama.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:TabogaBeachPanama.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Taboga Island"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

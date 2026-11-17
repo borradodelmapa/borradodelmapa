@@ -134,6 +134,28 @@ for (const c of require('./datos-pais.cjs').historias()) {
   if (faltan.length) fallos.push(`sitemap-destinos.xml: faltan ${faltan.length} de las ${indexables.length} páginas indexables (p. ej. ${faltan.slice(0, 3).join(', ')}): node scripts/build-destinos.js --sitemap-only`);
 }
 
+// Fotos de destinos con PRUEBA (Paco, 18 nov 2026: una bici de Cracovia salió como «Trekking» del Colca). Toda foto de
+// destinos/img/<sitio>/fotos.json lleva "prueba" (Wikimedia la sitúa a menos de 15 km o en la categoría del sitio; la pone
+// scripts/verificar-fotos.cjs o fotos-sitio.cjs) y está vista por una persona (sin "pendiente_revision"). Las fotos de antes de
+// la regla están en scripts/fotos-sin-prueba.json: esa lista solo puede ir a menos (verificarlas o quitarlas), nunca crecer.
+{
+  const base = new Set(JSON.parse(leer('scripts/fotos-sin-prueba.json')).fotos);
+  if (base.size > 848) fallos.push(`scripts/fotos-sin-prueba.json: tiene ${base.size} fotos y nunca puede pasar de 848 (18 nov 2026): una foto nueva necesita prueba, no entrar en esta lista`);
+  const dir = path.join(ROOT, 'destinos', 'img');
+  let sinPrueba = 0, pendientes = 0; const ej = [];
+  for (const s of fs.existsSync(dir) ? fs.readdirSync(dir) : []) {
+    const fj = path.join(dir, s, 'fotos.json'); if (!fs.existsSync(fj)) continue;
+    const j = JSON.parse(fs.readFileSync(fj, 'utf8'));
+    const huecos = [['hero', j.hero], ...Object.entries(j.que_hacer || {}).map(([k, v]) => ['q' + k, v]), ...Object.entries(j.stops || {}).map(([k, v]) => ['s' + k, v])];
+    for (const [h, v] of huecos) {
+      if (!v) continue;
+      if (v.pendiente_revision) { pendientes++; if (ej.length < 3) ej.push(`${s} ${h} (sin revisar)`); }
+      else if (!v.prueba && !base.has(`${s} ${h} ${v.url}`)) { sinPrueba++; if (ej.length < 3) ej.push(`${s} ${h}`); }
+    }
+  }
+  if (sinPrueba || pendientes) fallos.push(`destinos/img: ${sinPrueba} fotos sin prueba de ser del sitio y ${pendientes} sin revisar a ojo (p. ej. ${ej.join(', ')}): node scripts/verificar-fotos.cjs <sitio> --aplicar y mirarlas`);
+}
+
 console.log(`Páginas revisadas: ${paginas.length}` + (stories.length ? ` (+ ${stories.length} web stories)` : ''));
 for (const p of PIEZAS) if (unica[p]) console.log(`  ${p}?v=${unica[p]}`);
 if (fallos.length) {

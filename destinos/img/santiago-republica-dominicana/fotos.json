@@ -7,7 +7,13 @@
   "alt": "Santiago de los Caballeros, República Dominicana",
   "autor": "derivative work: Fogster (talk) [2]: ChezSant",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:SantiagoCitySkyline2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:SantiagoCitySkyline2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "City Skylines Santiago de los Caballeros"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Travellete",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Santiago_de_Quer%C3%A9taro_Centro_Historico_C.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Historic centre of Santiago de Querétaro"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,7 +42,12 @@
    "autor": "Phyrexian",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Santiago_de_los_Caballeros_-_Monumento_a_los_H%C3%A9roes_de_la_Restauraci%C3%B3n_0467.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Monumento a los Héroes de la Restauración"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -3,17 +3,6 @@
  "hero": null,
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Castelo Rodrigo",
-   "pie": "Castelo Rodrigo.",
-   "autor": "Pmvandrade",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:74248_-_Muralhas_da_Cidade_da_Covilh%C3%A3.jpg",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -23,18 +12,12 @@
    "autor": "Pedro Silva from Vila do Conde",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lagoa_Comprida,_Serra_da_Estrela_(32339620197).jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 1080,
-   "alt": "Queijo da Serra",
-   "pie": "Queijo da Serra.",
-   "autor": "Vitor Oliveira from Torres Vedras, PORTUGAL",
-   "licencia": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Torre_-_Serra_da_Estrela_-_Portugal_(7561701786).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Lagoa Comprida (Serra da Estrela)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -8,7 +8,12 @@
   "autor": "CEphoto, Uwe Aranas",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:Giethoorn_Netherlands_Channels-and-houses-of-Giethoorn-05.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Canals in Giethoorn"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -11,7 +11,12 @@
    "autor": "Abdul.wasiq",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Chikaar,_District_Chitral,_Khyber_Pakhtonkhwa,_Pakistan.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Chitral District"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

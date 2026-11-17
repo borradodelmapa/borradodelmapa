@@ -8,7 +8,12 @@
   "autor": "W. Bulach",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:00_2009_03_20_1524_Rotorua_-_i-Site_(Informationszentrum).jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2009 in Rotorua"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Archives New Zealand",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Auckland_Province_-_Rotorua_-_Pohutu_Geyser_Publicity_Caption_Pohutu_Geyser,_Whakarewarewa,_Rotorua_Photographer_R_Anderson.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Pohutu Geyser"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

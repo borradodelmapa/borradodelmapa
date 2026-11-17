@@ -8,7 +8,12 @@
   "autor": "663highland",
   "licencia": "CC BY 2.5",
   "url": "https://commons.wikimedia.org/wiki/File:Matsumoto_Castle05s5s4592.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of the Matsumoto Castle Keep Tower with the Inner Moat from southwest"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "663highland",
    "licencia": "CC BY 2.5",
    "url": "https://commons.wikimedia.org/wiki/File:130608_Matsumoto_Castle_Matsumoto_Nagano_pref_Japan02bs4.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "June 2013 in Nagano prefecture"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -32,7 +42,12 @@
    "autor": "Tsutomu Shinohara",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:With_a_view_of_the_Happo-one_(Olympic_Winter_Games_NAGANO_1998,_Men%27s_Downhill_Starting_Point)_-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "February 2007 in Nagano prefecture"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

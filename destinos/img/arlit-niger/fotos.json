@@ -8,20 +8,12 @@
   "autor": "NigerTZai",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Niger,_Arlit_(18),_street_scene.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Arlit"
+  },
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 126,
-   "alt": "Puesta de sol en desierto",
-   "pie": "Puesta de sol en desierto.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Puesta_de_sol,_desierto_de_Namib,_Namibia,_2018-08-05,_DD_84-90_PAN.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

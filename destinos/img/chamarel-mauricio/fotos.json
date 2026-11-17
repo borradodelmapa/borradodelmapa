@@ -11,7 +11,12 @@
    "autor": "CEphoto, Uwe Aranas",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mauritius_Seven-Coloured-Earths-01.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Seven Coloured Earths"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -22,7 +27,12 @@
    "autor": "Martin Falbisoner",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Chamarel_Falls_Mauritius_2.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Chamarel Falls"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

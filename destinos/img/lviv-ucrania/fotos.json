@@ -8,7 +8,12 @@
   "autor": "Lestat (Jan Mehlich)",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:Lw%C3%B3w_-_Widok_z_wie%C5%BCy_ratuszowej_01.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Lviv"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Aeou",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:1_Market_Square,_Lviv_(05).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Lviv City Council"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,29 +42,12 @@
    "autor": "Rbrechko",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:46-101-0548_Lviv_Latin_Cathedral_RB_18.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 542,
-   "alt": "Museo de Artes Aplicadas - 3 EUR",
-   "pie": "Museo de Artes Aplicadas - 3 EUR.",
-   "autor": "Kaftaj",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Lviv_art-gallery_Hutin-puilo.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 552,
-   "alt": "Café Lviv para probar café tradicional - 1.5 EUR",
-   "pie": "Café Lviv para probar café tradicional - 1.5 EUR.",
-   "autor": "Сергій",
-   "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:27_Prospekt_Shevchenka,_Lviv.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "January 2017 in Lviv"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

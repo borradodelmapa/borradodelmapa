@@ -7,21 +7,16 @@
   "alt": "Swakopmund, Namibia",
   "autor": "Olga Ernst",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mole,_Jetty_and_Lighthouse_Swakopmund,_Namibia.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mole,_Jetty_and_Lighthouse_Swakopmund,_Namibia.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2017 aerial photographs of Namibia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 478,
-   "alt": "Tour de focas y delfines",
-   "pie": "Tour de focas y delfines.",
-   "autor": "Lidine Mia",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Swakopmund_-_Woermannhaus_-_tour_carr%C3%A9e.jpg",
-   "ok_manual": true
-  },
   "3": {
    "file": "q3.jpg",
    "w": 720,
@@ -31,7 +26,12 @@
    "autor": "Sarvesh Lutchmun",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Quad_Bikes_in_Swakopmund,_Namibia.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Deserts of Namibia"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

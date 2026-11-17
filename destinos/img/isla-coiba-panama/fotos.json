@@ -7,20 +7,13 @@
   "alt": "Isla Coiba, Panamá",
   "autor": "Alex Proimos from Sydney, Australia",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Coiba_National_Park,_Panama_(View_from_Isla_Coiba)_(8371374375).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Coiba_National_Park,_Panama_(View_from_Isla_Coiba)_(8371374375).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Parque Nacional Coiba"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 438,
-   "alt": "Buceo",
-   "pie": "Buceo.",
-   "autor": "Fedaro",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Isla_del_Mono,_Buceo,_Montevideo_(cropped).png",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

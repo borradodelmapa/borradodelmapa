@@ -8,20 +8,12 @@
   "autor": "https://www.flickr.com/photos/stupiddingo/",
   "licencia": "CC BY 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Sosua_Beach_Dominican_Republic.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Sosua beach"
+  },
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 476,
-   "alt": "Paseo a Cabarete",
-   "pie": "Paseo a Cabarete.",
-   "autor": "Rafysindema",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Paseo_en_vote_laguna_cabarete.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

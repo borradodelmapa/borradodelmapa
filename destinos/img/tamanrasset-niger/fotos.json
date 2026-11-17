@@ -12,7 +12,12 @@
    "autor": "magharebia",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tassili_Desert_Algeria.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Tassili n'Ajjer"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

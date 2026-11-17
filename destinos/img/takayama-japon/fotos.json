@@ -1,15 +1,5 @@
 {
  "generado": "2026-11-16",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 850,
-  "alt": "Hida no Sato, el pueblo de casas tradicionales de Takayama",
-  "autor": "Balou46",
-  "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:JP-Takayama-hida-no-sato-2.jpg",
-  "ok_manual": true
- },
  "stops": {},
  "que_hacer": {
   "3": {
@@ -21,7 +11,12 @@
    "autor": "hashi photo",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Old_Japanese_houses_Museum_Shirakawa.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Gassho-zukuri Farmhouse from Hida Shirakawa (Open-Air Museum of Old Japanese Farmhouses)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

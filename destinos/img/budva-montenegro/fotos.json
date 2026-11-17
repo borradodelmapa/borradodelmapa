@@ -7,7 +7,13 @@
   "alt": "Budva, Montenegro",
   "autor": "Nick Savchenko from Kiev, Ukraine",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Budva_(26871774051).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Budva_(26871774051).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 4.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Falk2",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:D02.30_Budva,_Stadtstrand_und_Zitadelle.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2006 in Budva"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,7 +7,13 @@
   "alt": "Isla de Mozambique, Mozambique",
   "autor": "Steve Evans from Bangalore, India",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mozambique_n2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mozambique_n2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2005 in Mozambique"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Diego Tirira from Quito, Ecuador",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:MZ_Isla_de_Mozambique_0201_021_(16637846143).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Fortaleza de São Sebastião (Ilha de Moçambique)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

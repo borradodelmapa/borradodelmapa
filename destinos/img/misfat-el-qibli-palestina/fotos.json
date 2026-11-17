@@ -1,18 +1,5 @@
 {
  "generado": "2026-11-17",
  "hero": null,
- "stops": {},
- "que_hacer": {
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Paseos por el pueblo",
-   "pie": "Paseos por el pueblo.",
-   "autor": "Billy Hathorn at English Wikipedia",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Paseo_Del_Pueblo_Norte_in_Taos,_NM_Picture_2006.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

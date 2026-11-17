@@ -7,7 +7,13 @@
   "alt": "Niamey, Níger",
   "autor": "Roland Huziaker",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Niamey_from_grand_mosque_theatre_2006.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Niamey_from_grand_mosque_theatre_2006.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Streets in Niamey"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Jean Rebiffé (Flickr userpage)",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Zoo_du_Mus%C3%A9e_national_de_Niamey.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "National Museum of Niger Zoo"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,7 +42,12 @@
    "autor": "Roland Huziaker",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Grand_marche_niamey_2006.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Grand Marché, Niamey"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -42,7 +58,12 @@
    "autor": "fatima @ Mapillary.com",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Old_Presidential_Palace_in_Niamey_-_Mapillary_(1zunKARfz0wkJExHFVEFng).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Government buildings in Niamey"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

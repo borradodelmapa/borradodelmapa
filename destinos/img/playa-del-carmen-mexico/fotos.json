@@ -11,40 +11,12 @@
    "autor": "Azul Pagnotta",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cenote_privado_en_Playa_del_Carmen.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Xcaret parque ecológico",
-   "pie": "Xcaret parque ecológico.",
-   "autor": "Kar Almaguer",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:XcaretPlayaPanoramaMX.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 406,
-   "alt": "Tulum ruinas mayas 45min al sur",
-   "pie": "Tulum ruinas mayas 45min al sur.",
-   "autor": "Bernard DUPONT",
-   "licencia": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Playa_Ruinas_-_Tulum_Maya_site_QR_Feb_2020.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Playa Paradise o Mamitas Beach Club",
-   "pie": "Playa Paradise o Mamitas Beach Club.",
-   "autor": "User: (WT-shared) Gobbler at wts wikivoyage",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Playa_Paraiso.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2021 in Quintana Roo"
+   },
+   "vista": "2026-11-18"
   },
   "5": {
    "file": "q5.jpg",
@@ -55,7 +27,12 @@
    "autor": "Dennis Sylvester Hurd",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Walking_on_Quinta_Avenida,_Playa_del_Carmen,_QR,_Mexico.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2021 in Quintana Roo"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

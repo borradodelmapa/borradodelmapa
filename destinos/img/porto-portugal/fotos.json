@@ -7,7 +7,13 @@
   "alt": "Oporto (Porto), Portugal",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Puente_Don_Luis_I,_Oporto,_Portugal,_2012-05-09,_DD_13.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Puente_Don_Luis_I,_Oporto,_Portugal,_2012-05-09,_DD_13.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "1 bridge in Porto"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,40 +26,12 @@
    "autor": "El fosilmaníaco",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tranv%C3%ADa_Oporto.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 404,
-   "alt": "Bodegas de Oporto en Vila Nova de Gaia con degustación",
-   "pie": "Bodegas de Oporto en Vila Nova de Gaia con degustación.",
-   "autor": "Alvaro Marques Hijazo",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Bodega_Offley_en_Oporto_2.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 466,
-   "alt": "Livraria Lello",
-   "pie": "Livraria Lello.",
-   "autor": "Turismo En Portugal",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Livraria_Lello_e_Irm%C3%A3o,_Oporto_(16542729692).jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 1412,
-   "alt": "Torre de los Clérigos",
-   "pie": "Torre de los Clérigos.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Torre_de_los_Cl%C3%A9rigos,_Oporto,_Portugal,_2012-05-09,_DD_01.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Oporto trams in 2013"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -64,7 +42,12 @@
    "autor": "TurismoenPortugal",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ruas_do_Oporto.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Rua de São João (Porto)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,7 +7,13 @@
   "alt": "Sur, Omán",
   "autor": "Dr. Thomas Liptak",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Oman,_Sur_(city_view).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Oman,_Sur_(city_view).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Dhows in Oman"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

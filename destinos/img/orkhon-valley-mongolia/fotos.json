@@ -7,7 +7,13 @@
   "alt": "Valle de Orkhon, Mongolia",
   "autor": "He-ba-mue",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Orchon-mongolei.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Orchon-mongolei.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Orkhon River"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

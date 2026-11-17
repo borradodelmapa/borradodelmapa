@@ -7,20 +7,13 @@
   "alt": "Xai-Xai, Mozambique",
   "autor": "A Verdade from Maputo, Moçambique",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Conselho_Municipal_Xai-Xai_(9496291468).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Conselho_Municipal_Xai-Xai_(9496291468).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Town halls in Mozambique"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 528,
-   "alt": "Parque Nacional Limpopo",
-   "pie": "Parque Nacional Limpopo.",
-   "autor": "Derek Keats from Johannesburg, South Africa",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Grey-backed_Camaroptera,_Camaroptera_brachyura,_at_Mapungubwe_National_Park,_Limpopo,_South_Africa_(17944990509).jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

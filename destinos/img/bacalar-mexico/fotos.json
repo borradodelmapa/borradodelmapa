@@ -8,7 +8,12 @@
   "autor": "David Cabrera",
   "licencia": "CC BY-SA 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Hamaca_-_Bacalar,_QR_2009.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bacalar"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Sharon Hahn Darlin",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bacalar_Lagoon,_Bacalar_Quintana_Roo,_Mexico_-_It%E2%80%99s_so_shallow_I%E2%80%99m_sitting_down_here.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Bacalar"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "holachetumal",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cenote_Azul,_Bacalar,_Q._Roo_-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Cenote Azul"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -43,7 +58,12 @@
    "autor": "Sharon Hahn Darlin",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Fuerte_de_San_Felipe_de_Bacalar,_Bacalar,_Quintana_Roo,_Mexico,_Mayo_2021_-_03.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Fuerte de San Felipe, Bacalar"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -54,7 +74,12 @@
    "autor": "holachetumal",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Balneario_Bacalar,_Q._Roo._-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Laguna de Bacalar"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

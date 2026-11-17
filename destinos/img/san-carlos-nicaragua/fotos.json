@@ -7,7 +7,13 @@
   "alt": "San Carlos, Nicaragua",
   "autor": "David Berkowitz",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:San_Carlos_Nicaragua-2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:San_Carlos_Nicaragua-2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "San Carlos, Nicaragua"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "Eduibanezm",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Fuerte_San_Carlos_de_Pur%C3%A9n.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 960,
-   "alt": "Crucero río San Juan hacia refugio Bartola",
-   "pie": "Crucero río San Juan hacia refugio Bartola.",
-   "autor": "Miguel Hermoso Cuesta",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Colegiata_San_Carlos_Rottmayr.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Fuerte San Carlos de Purén"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -11,7 +11,12 @@
    "autor": "Andrzej Otrębski",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bologna_Piazza_Maggiore_panorama_2.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Palazzo d'Accursio (Bologna)"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -22,7 +27,12 @@
    "autor": "bluefootedbooby",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Two_towers_in_Bologna,_Italy.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Towers in Bologna"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -33,7 +43,12 @@
    "autor": "Miguel Hermoso Cuesta",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bolonia_Vivarini_02.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Paintings of Madonna and Child in the Pinacoteca Nazionale (Bologna)"
+   },
+   "vista": "2026-11-18"
   },
   "5": {
    "file": "q5.jpg",
@@ -44,7 +59,12 @@
    "autor": "Onanymous",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Calles_de_Bolonia_2.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Porticos in Bologna"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

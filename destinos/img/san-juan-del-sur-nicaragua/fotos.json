@@ -7,7 +7,13 @@
   "alt": "San Juan del Sur, Nicaragua",
   "autor": "Biomedeng at English Wikipedia",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:San_juan_del_sur.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:San_juan_del_sur.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "San Juan del Sur"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Lubi nuñez",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vista_del_Cristo_De_La_Misericordia_Hac%C3%ADa_la_Playa_San_Juan_Del_Sur.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "San Juan del Sur"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,7 +7,13 @@
   "alt": "Perast, Montenegro",
   "autor": "Marcin Konsek",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Widok_na_Perast_z_zachodu_01.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Widok_na_Perast_z_zachodu_01.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Diego Delso",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Iglesia_de_San_Nicol%C3%A1s,_Perast,_Bah%C3%ADa_de_Kotor,_Montenegro,_2014-04-19,_DD_37.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Saint Nicholas church in Perast"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

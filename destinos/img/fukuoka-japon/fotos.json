@@ -8,7 +8,12 @@
   "autor": "Chihaya Sta",
   "licencia": "CC BY 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Fukuoka_Seaside_Momochi_Aerial_Shoot.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Fukuoka"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Ominae",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Hakata_Ramen_preparation_at_Yatai_Keiji.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hakata ramen"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "Jacklee.",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Yatai_beside_Naka-gawa,_Fukuoka,_Japan_-_20110525-03.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Yatai in Fukuoka, Fukuoka"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -43,7 +58,12 @@
    "autor": "Masgatotkaca",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Fukuoka_Castle_in_April.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "April 2008 in Fukuoka prefecture"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

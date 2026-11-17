@@ -7,7 +7,13 @@
   "alt": "Bergen, Noruega",
   "autor": "TomasEE",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bergen_panorama_at_night_-_panoramio_(1).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bergen_panorama_at_night_-_panoramio_(1).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Night in Bergen, Norway"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "JoachimKohler-HB",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Fassaden_in_Bryggen,_Bergen_N.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Bryggen, Bergen"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "Wikimedia Commons",
    "licencia": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:Fish_Market,_Bergen,_Norway_WDL2614.png",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Bergen, Norway in the 1890s"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -42,7 +58,12 @@
    "autor": "Diego Delso",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vista_de_la_Universidad_de_Bergen_desde_la_monta%C3%B1a_Fl%C3%B8yen,_Bergen,_Noruega,_2019-09-08,_DD_44.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Universitetsmuseet i Bergen"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

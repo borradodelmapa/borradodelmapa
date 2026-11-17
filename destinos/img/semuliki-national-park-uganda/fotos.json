@@ -7,7 +7,13 @@
   "alt": "Semuliki National Park, Uganda",
   "autor": "Jim Joel",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Flat_lash_plains_of_semiliki_national_park.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Flat_lash_plains_of_semiliki_national_park.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Semuliki National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Nambasa Sabrina Kalibbala",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Male_hotspring_in_Semuliki.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Protected areas of Uganda"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "Pearl Aketch",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Semuliki_boardwalk.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Protected areas of Uganda"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

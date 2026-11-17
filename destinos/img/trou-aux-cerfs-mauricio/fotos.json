@@ -8,7 +8,12 @@
   "autor": "Arne Müseler",
   "licencia": "CC BY-SA 3.0 de",
   "url": "https://commons.wikimedia.org/wiki/File:Mauritius_trou_aux_cerfs_volcano.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Doppler Weather Radar Station (Curepipe)"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

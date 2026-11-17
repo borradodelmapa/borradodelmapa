@@ -1,16 +1,6 @@
 {
  "generado": "2026-11-17",
  "stops": {},
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 868,
-  "alt": "Lagos",
-  "autor": "Ayorinde Ogundele",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_a_busy_tomato_market_in_Lagos_Nigeria.jpg",
-  "ok_manual": true
- },
  "que_hacer": {
   "1": {
    "file": "q1.jpg",
@@ -21,7 +11,12 @@
    "autor": "Steven Fruitsmaak",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mercado_municipal_Lagos.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Mercado Municipal da Avenida de Lagos"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

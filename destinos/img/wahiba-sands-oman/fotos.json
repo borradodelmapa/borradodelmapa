@@ -7,7 +7,13 @@
   "alt": "Wahiba Sands, Omán",
   "autor": "Andries Oudshoorn",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Wahiba_Sands_(12).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Wahiba_Sands_(12).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Dune bashing in the Wahiba Sands"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

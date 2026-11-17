@@ -7,7 +7,13 @@
   "alt": "Swat Valley, Pakistán",
   "autor": "Alakazou1978 (talk)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Swat_River_Pakistan.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Swat_River_Pakistan.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Rapids on the Swat River"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Haidrhaidr",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:MalamJabba-.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Malam Jabba in winter"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

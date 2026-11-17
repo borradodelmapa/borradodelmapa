@@ -7,32 +7,16 @@
   "alt": "Masaya, Nicaragua",
   "autor": "Acana689",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cratervolcan.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cratervolcan.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Different heights of Masaya lava lake"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 406,
-   "alt": "Mercado Artesanal",
-   "pie": "Mercado Artesanal.",
-   "autor": "Chicho96",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Mercado_de_Artesan%C3%ADas_de_Masaya.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Laguna de Masaya",
-   "pie": "Laguna de Masaya.",
-   "autor": "Judgefloro",
-   "licencia": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:8952Paciano_Rizal_Masaya,_Bay,_Laguna_41.jpg",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -42,7 +26,12 @@
    "autor": "Byralaal",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Masaya_church.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Our Lady of the Assumption Church, Masaya"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -53,18 +42,12 @@
    "autor": "Martin Kulldorff",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Taller_de_Ceramica.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Fortaleza del Coyotepe",
-   "pie": "Fortaleza del Coyotepe.",
-   "autor": "AxeEffect",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Coyotepe.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Buildings in Masaya Department"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

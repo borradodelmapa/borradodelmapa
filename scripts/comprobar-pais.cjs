@@ -70,6 +70,15 @@ sinFotos.length ? av(`${sinFotos.length} sitios sin fotos revisadas (destinos/im
 const extra = json(`scripts/paises/${ps}/sitios-extra.json`) || {};
 const sinSobre = sitios.filter((d) => !extra[slugSitio(d)]).map(slugSitio);
 sinSobre.length ? av(`${sinSobre.length} sitios sin bloque «Sobre…» (scripts/paises/${ps}/sitios-extra.json): ${lista(sinSobre)}`) : sitios.length && ok('Todos los sitios con «Sobre…»');
+// Fotos con prueba de ser del sitio (Paco, 18 nov 2026): coordenadas o categoría de Wikimedia, y vistas por una persona
+{
+  let conP = 0; const sinP = [];
+  for (const d of sitios) {
+    const j = json(`destinos/img/${slugSitio(d)}/fotos.json`); if (!j) continue;
+    for (const [h, v] of [['hero', j.hero], ...Object.entries(j.que_hacer || {}).map(([k, x]) => ['q' + k, x])]) if (v) (v.prueba && !v.pendiente_revision ? conP++ : sinP.push(`${slugSitio(d)} ${h}`));
+  }
+  sinP.length ? mal(`${sinP.length} fotos sin prueba de ser del sitio o sin revisar (node scripts/verificar-fotos.cjs --pais ${cc} --aplicar y mirarlas): ${lista(sinP)}`) : conP && ok(`${conP} fotos con prueba de Wikimedia y revisadas`);
+}
 // Diseño nuevo en todo país nuevo (Paco, 17 nov 2026): la maqueta se reconoce por sus títulos de sección (dg-sec-h)
 const sinDiseno = sitios.filter((d) => existe(`destinos/${slugSitio(d)}.html`) && !(leer(`destinos/${slugSitio(d)}.html`) || '').includes('dg-sec-h')).map(slugSitio);
 if (sitios.length) sinDiseno.length ? mal(`${sinDiseno.length} sitios con el diseño antiguo: añade «${cc}» a REDISENO_PAISES (scripts/build-destinos.js) y regenera`) : ok('Sitios con el diseño nuevo');

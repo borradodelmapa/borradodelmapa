@@ -1,37 +1,4 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 960,
-  "alt": "Freetown, Sierra Leona",
-  "autor": "Ghassan Mroue",
-  "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:African_Cottage_around_Port_loko_river_-_panoramio.jpg"
- },
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 560,
-   "alt": "Visitar Sierra Leone National Museum",
-   "pie": "Visitar Sierra Leone National Museum.",
-   "autor": "danbjoseph @ Mapillary.com",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Sierra_Leone_at_Cotton_tree_in_Freetown_-_Mapillary_(Yp2BPDsT7TyNtrN6lZ4z9Q).jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Subir a Cotton Tree Hill para vistas panorámicas de la bahía",
-   "pie": "Subir a Cotton Tree Hill para vistas panorámicas de la bahía.",
-   "autor": "Christian Trede",
-   "licencia": "CC BY-SA 2.0 de",
-   "url": "https://commons.wikimedia.org/wiki/File:Cotton_Tree_(Sierra_Leone).jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

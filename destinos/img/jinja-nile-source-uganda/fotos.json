@@ -7,7 +7,13 @@
   "alt": "Jinja & Nile Source, Uganda",
   "autor": "Ilona1001",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Uganda_Jinja_Streetview.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Uganda_Jinja_Streetview.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Jinja, Uganda"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Owobusingye",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:River_Nile_rafting_in_Jinja,_Uganda_10.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Rafting in Uganda"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -31,7 +42,12 @@
    "autor": "Dror Feitelson",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Jinja_source_of_Nile.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Lake Victoria in art"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

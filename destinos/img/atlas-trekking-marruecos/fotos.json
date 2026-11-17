@@ -3,17 +3,6 @@
  "hero": null,
  "stops": {},
  "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 1084,
-   "alt": "Trekking Imlil-Aremd",
-   "pie": "Trekking Imlil-Aremd.",
-   "autor": "Josep M. Gracia",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:ABC_-_Trekking_lodge_in_Chhomrong,_Nepal,_2016.jpg",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -23,7 +12,12 @@
    "autor": "LBM1948",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Atlas,_pueblos_(1983)_03.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Snow in High Atlas"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

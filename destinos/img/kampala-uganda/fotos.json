@@ -7,7 +7,13 @@
   "alt": "Kampala, Uganda",
   "autor": "Chapelle musa",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Urban_Rising,_KAMPALA,_Uganda.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Urban_Rising,_KAMPALA,_Uganda.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings in Kampala"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Sandra Aceng",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Uganda_Museum,_kampala.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Uganda Museum main building"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,18 +42,12 @@
    "autor": "not not phil from SF, CA, US",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kampala_Kasubi_Tombs.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Kabaka's Palace visita",
-   "pie": "Kabaka's Palace visita.",
-   "autor": "RomanDeckert",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:GravesKatharineAndAlbertCook-RubagaCemeteryKampala_RomanDeckert28042024.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2007 in Uganda"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -53,7 +58,12 @@
    "autor": "Alvinategyeka",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:ST._BALIKUDEMBE_OWINO_MARKET.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "St. Balikudembe (Owino) Market"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,7 +7,13 @@
   "alt": "Anibare Bay, Nauru",
   "autor": "Hadi Zaher from Melbourne, Australia",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Living_on_a_Blue_Planet_-_Nauru.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Living_on_a_Blue_Planet_-_Nauru.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Anibare Bay"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

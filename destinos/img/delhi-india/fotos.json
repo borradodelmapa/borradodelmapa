@@ -1,50 +1,7 @@
 {
  "generado": "2026-11-16",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 854,
-  "alt": "El bazar cubierto Chatta Chowk, dentro del Fuerte Rojo de Delhi",
-  "autor": "Syed Sajidul Islam",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Red_Fort_-Delhi_-Delhi_-SSI_028.jpg",
-  "ok_manual": true
- },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 344,
-   "alt": "El Fuerte Rojo de Delhi",
-   "pie": "El Fuerte Rojo.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Fuerte_Rojo-Delhi-India62.JPG",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 372,
-   "alt": "La Puerta de la India, en Nueva Delhi",
-   "pie": "La Puerta de la India.",
-   "autor": "Yann",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:India_Gate,_New_Delhi.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Raj Ghat, el memorial de Gandhi",
-   "pie": "Raj Ghat, el memorial de Gandhi.",
-   "autor": "Mbigul",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Raj_Ghat_%E2%80%93_Memorial_of_Mahatma_Gandhi.jpg",
-   "ok_manual": true
-  },
   "4": {
    "file": "q4.jpg",
    "w": 720,
@@ -54,7 +11,12 @@
    "autor": "Komal Sambhudas",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Humayun%27s_Tomb-Delhi_front_view.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Humayun's Tomb, Delhi"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

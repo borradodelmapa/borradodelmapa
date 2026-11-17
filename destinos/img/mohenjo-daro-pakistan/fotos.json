@@ -7,7 +7,13 @@
   "alt": "Mohenjo-daro, Pakistán",
   "autor": "Saqib Qayyum",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mohenjo-daro.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mohenjo-daro.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "The Great Bath of Moenjodaro"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Yaren, Nauru",
   "autor": "Sean Kelleher from Melbourne, Australia",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Parliament_(15403802091).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Parliament_(15403802091).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2012 in Nauru"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "User:CdaMVvWgS",
    "licencia": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:Nauru-parliament.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Coats of arms of Nauru"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

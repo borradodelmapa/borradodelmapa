@@ -1,26 +1,4 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 960,
-  "alt": "Tiwai Island, Sierra Leona",
-  "autor": "Dorothy Voorhees",
-  "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Tiwa_Island_-_flickr.jpg"
- },
- "stops": {},
- "que_hacer": {
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Birdwatching",
-   "pie": "Birdwatching.",
-   "autor": "Аркадий Зарубин",
-   "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Birdwatching_area_borgoy1.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

@@ -8,7 +8,12 @@
   "autor": "Wilfredor",
   "licencia": "CC0",
   "url": "https://commons.wikimedia.org/wiki/File:Backlit_Margarita_Island_Sunset_in_Las_Guevaras,_Venezuela_CaptureNX2.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Sunsets of Margarita island"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Antoniofermin",
    "licencia": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:Playa_El_Agua.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "El Agua beach"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

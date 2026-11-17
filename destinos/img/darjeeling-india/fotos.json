@@ -8,7 +8,12 @@
   "autor": "Arne Hückelheim 2010-09-21 12:41:53 This is a cropped in which the glare has bee",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:DarjeelingTrainFruitshop_(2).jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2010 in Darjeeling"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Shahnoor Habib Munmun",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tiger_Hill_Darjeeling_West_Bengal_India_(3).JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Tiger Hill, Darjeeling"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "Syed Sajidul Islam",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Darjeeling_Himalayan_Railway,toy_train_(8).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Quality images of Darjeeling"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

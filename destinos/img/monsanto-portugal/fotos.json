@@ -7,7 +7,13 @@
   "alt": "Monsanto, Portugal",
   "autor": "Alvesgaspar",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Monsanto_April_2015-7.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Monsanto_April_2015-7.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aldeia Velha de Monsanto"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Sérgio Correia",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Castle_of_Monsanto.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Castelo de Monsanto"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

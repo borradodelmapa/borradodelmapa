@@ -1,16 +1,6 @@
 {
  "generado": "2026-11-17",
  "stops": {},
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 720,
-  "alt": "Mérida y Los Andes",
-  "autor": "Raymvc97",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Museo_de_los_Andes_Benigno_y_Vicenta_S%C3%A1nchez.jpg",
-  "ok_manual": true
- },
  "que_hacer": {
   "0": {
    "file": "q0.jpg",
@@ -21,18 +11,12 @@
    "autor": "Cesar Pérez",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Teleferico_Barinitas,_Merida,_Estado_Merida.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Paseo a caballo en páramo",
-   "pie": "Paseo a caballo en páramo.",
-   "autor": "Carlos.morales.valladarez",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Calandria_en_m%C3%A9rida_Yucat%C3%A1n.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Cabinas del Teleférico de Mérida"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -43,18 +27,12 @@
    "autor": "Hilda Sulbaran",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Jaji_merida.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 406,
-   "alt": "Mérida Extrema",
-   "pie": "Mérida Extrema.",
-   "autor": "Bromoxido",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Carnaval_M%C3%A9rida,_2023.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Streets in Mérida (state)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

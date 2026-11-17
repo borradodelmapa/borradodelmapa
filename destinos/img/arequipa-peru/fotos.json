@@ -7,7 +7,13 @@
   "alt": "Arequipa, Perú",
   "autor": "Hans Brian Brandsberg Berg",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_Armas,_Arequipa_2006.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_Armas,_Arequipa_2006.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Plaza de Armas (Arequipa)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Blas2025wiki",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_Armas_de_Arequipa_-_La_Catedral_de_Arequipa.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Plaza de Armas (Arequipa)"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "Markus Leupold-Löwenthal",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:MonasterioDeSantaCatalinaBell.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Santa Catalina Monastery, Arequipa"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -42,7 +58,12 @@
    "autor": "Estuardo02",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Portada_del_museo_de_Santuarios_andinos,_Arequipa.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Architectural elements in Arequipa"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -53,7 +74,12 @@
    "autor": "Diego Delso",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Volc%C3%A1n_Misti_desde_Arequipa,_Per%C3%BA,_2015-08-02,_DD_03.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "El Misti in 2015"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

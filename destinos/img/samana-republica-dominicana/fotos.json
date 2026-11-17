@@ -7,7 +7,13 @@
   "alt": "Samaná, República Dominicana",
   "autor": "Anton Bielousov",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Santa_Barbara_de_Saman%C3%A1_(Dominican_Republic).jpeg"
+  "url": "https://commons.wikimedia.org/wiki/File:Santa_Barbara_de_Saman%C3%A1_(Dominican_Republic).jpeg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings in Santa Bárbara de Samaná"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Pierre Mangin from Paris, France",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Playa_Las_Galeras_-_Samana_-_Republica_Dominicana_(3114015139).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Playa Las Galeras"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,18 +42,12 @@
    "autor": "https://www.flickr.com/photos/viajor/",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cayo_Levantado,_Samana,_Dominican_Republic.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 960,
-   "alt": "Parque Nacional de Samaná",
-   "pie": "Parque Nacional de Samaná.",
-   "autor": "GPSOruxMaps",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Parque_Nacional_Natural_Selva_de_Florencia_-_Saman%C3%A1.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Beaches of Cayo Levantado"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

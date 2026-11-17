@@ -7,7 +7,13 @@
   "alt": "Podgorica, Montenegro",
   "autor": "Savo Prelevic",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:P064720-426794_-_Panoramic_view_of_Podgorica.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:P064720-426794_-_Panoramic_view_of_Podgorica.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Sailko",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Podgorica,_museo_nazionale,_esterno_01.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nova varoš (Podgorica)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

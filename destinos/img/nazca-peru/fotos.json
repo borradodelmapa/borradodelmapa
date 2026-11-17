@@ -1,14 +1,5 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 777,
-  "alt": "Nazca, Perú",
-  "autor": "Diego Delso",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:L%C3%ADneas_de_Nazca,_Nazca,_Per%C3%BA,_2015-07-29,_DD_52.JPG"
- },
  "stops": {},
  "que_hacer": {
   "1": {
@@ -20,7 +11,12 @@
    "autor": "Codas",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mirador_El_Telar,_Nazca_03.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Mirador El Telar, Nazca"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,29 +27,12 @@
    "autor": "Dorieo",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tejido_Nazca_de_algod%C3%B3n._600-1000_d._C._Museo_de_Am%C3%A9rica.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 486,
-   "alt": "Acueductos Cantalloc",
-   "pie": "Acueductos Cantalloc.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Acueductos_subterr%C3%A1neos_de_Cantalloc,_Nazca,_Per%C3%BA,_2015-07-29,_DD_09.JPG",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 590,
-   "alt": "Desierto observación astronómica nocturna",
-   "pie": "Desierto observación astronómica nocturna.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:L%C3%ADneas_de_Nazca,_Nazca,_Per%C3%BA,_2015-07-29,_DD_54.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nazca artefacts in the Museo de América, Madrid"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

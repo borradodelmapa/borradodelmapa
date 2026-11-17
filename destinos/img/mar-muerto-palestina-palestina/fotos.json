@@ -1,18 +1,5 @@
 {
  "generado": "2026-11-17",
  "hero": null,
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 332,
-   "alt": "Baño flotante en aguas hipersalinas",
-   "pie": "Baño flotante en aguas hipersalinas.",
-   "autor": "4nhedone",
-   "licencia": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:Vista_de_Castillo_de_Ba%C3%B1os_de_Abajo_desde_el_mar.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

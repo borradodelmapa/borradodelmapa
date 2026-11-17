@@ -8,7 +8,12 @@
   "autor": "Bernard Gagnon",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Krak_des_Chevaliers_01.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Remote views of the Krak des Chevaliers"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Mappo",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Keep_of_Krak_des_Chevaliers.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Keep of Krak des Chevaliers"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

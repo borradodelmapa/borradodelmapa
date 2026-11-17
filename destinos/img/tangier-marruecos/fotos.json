@@ -9,7 +9,12 @@
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Comercio_en_la_plaza_del_9_de_abril_de_1947,_T%C3%A1nger,_Marruecos,_2015-12-11,_DD_77.JPG",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2015 in Tangier"
+  },
+  "vista": "2026-11-18"
  },
  "que_hacer": {
   "0": {
@@ -21,7 +26,12 @@
    "autor": "رشيدة رقي",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Dar_Abdellah_Guennoun_(Tanger).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "geo",
+    "km": 4.1
+   },
+   "vista": "2026-11-18"
   }
  }
 }

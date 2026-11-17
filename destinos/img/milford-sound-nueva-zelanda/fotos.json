@@ -7,7 +7,13 @@
   "alt": "Milford Sound, Nueva Zelanda",
   "autor": "Wikikiwiman at English Wikipedia",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:MilfordSound.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:MilfordSound.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Milford Sound"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "AlasdairW",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Milford_Track_through_forest.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 478,
-   "alt": "Chasm Walk",
-   "pie": "Chasm Walk.",
-   "autor": "Bgabel",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:NZL-milford-chasm-strukturen.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Milford Track"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

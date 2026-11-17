@@ -7,21 +7,16 @@
   "alt": "Ciudad de México, México",
   "autor": "Gobierno CDMX",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sobrevuelos_CDMX_HJ2A4913_(25514321687)_(cropped).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sobrevuelos_CDMX_HJ2A4913_(25514321687)_(cropped).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Sobrevuelos CDMX"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 482,
-   "alt": "Templo Mayor ruinas aztecas",
-   "pie": "Templo Mayor ruinas aztecas.",
-   "autor": "Phyrexian",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ciudad_de_M%C3%A9xico_-_Hotel_Templo_Mayor_6994.jpg",
-   "ok_manual": true
-  },
   "3": {
    "file": "q3.jpg",
    "w": 720,
@@ -31,7 +26,12 @@
    "autor": "Juan Carlos Fonseca Mata",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mariachis_-_Xochimilco,_Ciudad_de_M%C3%A9xico_II.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Mariachi musicians from Mexico"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -42,7 +42,12 @@
    "autor": "Machristen",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:1._Coyoac%C3%A1n_Ciudad_de_M%C3%A9xico.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "June 2009 in Mexico City"
+   },
+   "vista": "2026-11-18"
   },
   "5": {
    "file": "q5.jpg",
@@ -53,7 +58,12 @@
    "autor": "Comisión Mexicana de Filmaciones from México D. F., México",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mercado_de_Lamerced,_Ciudad_de_M%C3%A9xico_(32576193550).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Merced Market, Mexico City"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

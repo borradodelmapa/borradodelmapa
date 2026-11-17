@@ -1,18 +1,5 @@
 {
  "generado": "2026-11-17",
  "hero": null,
- "stops": {},
- "que_hacer": {
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 474,
-   "alt": "Callejear por Bab Touma y barrio cristiano",
-   "pie": "Callejear por Bab Touma y barrio cristiano.",
-   "autor": "LBM1948",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Damasco_(2001)_02.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

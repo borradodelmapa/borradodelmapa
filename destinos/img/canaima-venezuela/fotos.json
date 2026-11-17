@@ -1,14 +1,5 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 782,
-  "alt": "Parque Nacional Canaima, Venezuela",
-  "autor": "Paolo Costa Baldi",
-  "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Wadakapiapo_Yuruani_tepuy_2010.jpg"
- },
  "stops": {},
  "que_hacer": {
   "0": {
@@ -20,7 +11,12 @@
    "autor": "Inti",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Salto_angel_descubierto.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Angel Falls"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

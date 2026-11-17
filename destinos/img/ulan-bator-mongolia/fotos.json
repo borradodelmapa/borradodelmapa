@@ -8,7 +8,12 @@
   "autor": "Bernard Gagnon",
   "licencia": "CC0",
   "url": "https://commons.wikimedia.org/wiki/File:Naadam_2023,_Ulan_Bator_01.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2023 Naadam in Ulaanbaatar"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,18 +26,12 @@
    "autor": "Hans Bernhard (Schnobby)",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lama_in_the_Gandan_Monastery_in_Ulan_Bator,_Mongolia,_1981.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Museo Nacional de Mongolia",
-   "pie": "Museo Nacional de Mongolia.",
-   "autor": "Chongkian",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Mongolia_(2023).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Ulaanbaatar in the 20th century"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -43,7 +42,12 @@
    "autor": "Bernard Gagnon",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:S%C3%BCkhbaatar_Square.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Central Tower (Ulaanbaatar)"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

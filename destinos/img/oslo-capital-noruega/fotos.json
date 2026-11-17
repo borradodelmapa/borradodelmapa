@@ -9,7 +9,12 @@
   "autor": "cs:Wikipedista:Li-sung",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Oslo_palace1.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2003 in Oslo"
+  },
+  "vista": "2026-11-18"
  },
  "que_hacer": {
   "2": {
@@ -21,7 +26,12 @@
    "autor": "Bene Riobó",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Paseo_en_Oslo.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "April 2016 in Oslo"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

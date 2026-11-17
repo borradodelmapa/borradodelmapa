@@ -7,20 +7,13 @@
   "alt": "Isla de Texel, Países Bajos",
   "autor": "Carsten Steger",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Texel_(view_from_the_southwest).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Texel_(view_from_the_southwest).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Texel"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 498,
-   "alt": "Senderismo por dunas naturales",
-   "pie": "Senderismo por dunas naturales.",
-   "autor": "El Coleccionista de Instantes Fotografía & Video",
-   "licencia": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Foto_A%C3%A9rea_de_Las_Dunas_de_Maspal%C3%B3mas._Costa_Tur%C3%ADstica_de_San_Bartolom%C3%A9_de_Tirajana_Gran_Canaria_(7923116096).jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

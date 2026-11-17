@@ -7,7 +7,13 @@
   "alt": "Maputo, Mozambique",
   "autor": "AmigoDia",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Maputo_seen_from_southeast_-_October_2006_(cropped).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Maputo_seen_from_southeast_-_October_2006_(cropped).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2006 in Mozambique"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Salazar Sérgio",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ruinas_do_Predio_de_1914_-_Rua_Consiglieri_Pedroso,_Maputo_Setembro_de_2025.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Buildings in Maputo"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "lucianf from Bucharest, Romania",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mercado_Municipal_(4106426871).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2009 in Maputo"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

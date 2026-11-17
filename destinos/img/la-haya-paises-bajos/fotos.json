@@ -1,17 +1,4 @@
 {
  "generado": "2026-11-17",
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 536,
-   "alt": "Museo Mauritshuis",
-   "pie": "Museo Mauritshuis.",
-   "autor": "Roman Boed from The Netherlands",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Mauritshuis_Museum_(14346890947).jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Lago de Como, Italia",
   "autor": "Luca Casartelli",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sentiero_del_Viandante_DSC_6340_(14020554463).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sentiero_del_Viandante_DSC_6340_(14020554463).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bellagio"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "2019 © FAI - Fondo Ambiente Italiano",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vista_dal_lago_su_Villa_del_Balbianello,_Bene_FAI_sul_Lago_di_Como.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Lake Como"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

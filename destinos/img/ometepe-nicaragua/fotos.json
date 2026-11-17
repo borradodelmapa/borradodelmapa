@@ -7,7 +7,13 @@
   "alt": "Isla de Ometepe, Nicaragua",
   "autor": "Wikimedia Commons",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ometepe.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ometepe.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Concepción (volcano)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "Wikiwanito",
    "licencia": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:Maderas_seen_from_the_South_by_ET.JPG",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Playa Santo Domingo",
-   "pie": "Playa Santo Domingo.",
-   "autor": "Captain Herbert",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Lake_Nicaragua_Isla_de_Ometepe.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Maderas Volcano"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

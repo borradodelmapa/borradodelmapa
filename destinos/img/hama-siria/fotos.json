@@ -7,7 +7,13 @@
   "alt": "Hama, Siria",
   "autor": "Bernard Gagnon",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Hama,_Syria.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Hama,_Syria.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Norias of Hama"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Vyacheslav Argenberg",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Norias_of_Hama_2,_Orontes_River,_Hama,_Syria.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Norias of Hama"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -31,7 +42,12 @@
    "autor": "LBM1948",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Hama_(2001)_05.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hama in the 2000s"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,7 +7,13 @@
   "alt": "Islas Lofoten, Noruega",
   "autor": "Lukas Beck",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Moskenes_Reinebringen_lub_2025-07-21_img09_Aussicht.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Moskenes_Reinebringen_lub_2025-07-21_img09_Aussicht.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Reinefjorden"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

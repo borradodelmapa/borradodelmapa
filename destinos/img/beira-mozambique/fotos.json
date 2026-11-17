@@ -7,31 +7,13 @@
   "alt": "Beira, Mozambique",
   "autor": "Cornelius Kibelka from Berlin, Germany",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pra%C3%A7a_do_Munic%C3%ADpio,_Beira,_Mozambique_(23864553149).jpg"
- },
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 528,
-   "alt": "Mercado de Beira",
-   "pie": "Mercado de Beira.",
-   "autor": "Companhia de Moçambique",
-   "licencia": "Public domain",
-   "url": "https://commons.wikimedia.org/wiki/File:TT_CMZ-AF-GT_E_2-1_4_16_-_Constru%C3%A7%C3%A3o_do_mercado_da_Beira.jpg",
-   "ok_manual": true
+  "url": "https://commons.wikimedia.org/wiki/File:Pra%C3%A7a_do_Munic%C3%ADpio,_Beira,_Mozambique_(23864553149).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2016 photographs of Mozambique"
   },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Museu de Beira si existe",
-   "pie": "Museu de Beira si existe.",
-   "autor": "José Lemos Silva",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Habita%C3%A7%C3%A3o_em_furna_e_fontan%C3%A1rio,_Ribeira_Brava,_Jos%C3%A9_Lemos_Silva_-_2022_-_Image_205877.jpg",
-   "ok_manual": true
-  }
- }
+  "ok_manual": true,
+  "vista": "2026-11-18"
+ },
+ "stops": {}
 }

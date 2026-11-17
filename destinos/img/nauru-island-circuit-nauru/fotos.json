@@ -1,18 +1,5 @@
 {
  "generado": "2026-11-17",
  "hero": null,
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 404,
-   "alt": "Baños en 2-3 playas diferentes",
-   "pie": "Baños en 2-3 playas diferentes.",
-   "autor": "Wasiwatana",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Bajada_de_los_Ba%C3%B1os_en_el_circuito_de_playas.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

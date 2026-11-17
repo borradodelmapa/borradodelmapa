@@ -23,6 +23,7 @@ Toda la **web pública**: páginas de país y de sitio (`destinos/`), guías pú
 - **Destinos y guías públicas se enseñan COMPLETAS** (§10); la app (`?ruta=`) sigue con el avance «día 1 + candado».
 - **El mapa y el botón de cada sitio abren nuestra guía** en la app (la que pasa por ahí o la del país), nunca Google Maps si hay guía.
 - **Diseño de las páginas de sitios (Paco, 17 nov 2026):** la maqueta nueva (foto grande, «Qué hacer» con fotos, preguntas a la vista) va en Vietnam, Filipinas y los 30 países añadidos el 16 nov, y **siempre en todo país nuevo**: su código entra en `REDISENO_PAISES` de `scripts/build-destinos.js`.
+- **Fotos con prueba (Paco, 18 nov 2026):** una foto de un sitio solo vale si Wikimedia la sitúa a menos de 15 km o en la categoría del sitio (`node scripts/verificar-fotos.cjs`); nunca por palabras del título. Y se marca vista solo después de verla con su pie. Lo exige `comprobar-nada-atras`.
 - **Fotos:** solo de Wikimedia o de los episodios, **revisadas una a una**, con su autor; mejor sin foto que con una de otro sitio. Ningún país sale con el diseño nuevo sin sus fotos revisadas.
 - **Explorar** (app) es el mapa de guías; las guías públicas cuentan en Explorar.
 - **Textos públicos:** nunca «IA»; datos con fuente y fecha; lo dudoso no se afirma.

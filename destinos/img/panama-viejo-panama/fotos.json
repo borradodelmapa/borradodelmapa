@@ -7,32 +7,16 @@
   "alt": "Panamá Viejo (Ruinas), Panamá",
   "autor": "Rodolfo Aragundi",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Catedral_Panam%C3%A1_Viejo.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Catedral_Panam%C3%A1_Viejo.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cabildo (Panamá Viejo)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Recorrido por ruinas con audioguía",
-   "pie": "Recorrido por ruinas con audioguía.",
-   "autor": "Bärbel Miemietz",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:2026-03-26_Bus_Red_Devil_(Panama_City)_111527.jpeg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Museo de Sitio",
-   "pie": "Museo de Sitio.",
-   "autor": "Anelly Celis from Panama, Panamá",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:07-007-DMHN_Sitio_donde_naci%C3%B3_el_Dr._Belisario_Porras_-_Flickr_-_Anelita_PunkRock.jpg",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -42,18 +26,12 @@
    "autor": "MichelleRodz",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_la_Catedral._Casco_Antiguo_de_Panama.JPG",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Atardecer en paseo junto al mar",
-   "pie": "Atardecer en paseo junto al mar.",
-   "autor": "Daniestrada01",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Paseo_Esteban_Huertas_Panam%C3%A1.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Main facade of the Catedral Metropolitana de Panamá"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

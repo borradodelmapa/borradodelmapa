@@ -8,7 +8,12 @@
   "autor": "663highland",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:181103_Heijo_Palace_Daigokuden_Nara_Japan02bs.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Autumn in Nara"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "Arczi",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Sika_Deer_in_Nara_Park,_Japan.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "December 2023 in Nara"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -32,7 +42,12 @@
    "autor": "Guilhem Vellut",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kasuga_Taisha_Shrine_@_Nara.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nanmon (south gate) of Kasuga-taisha"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -12,7 +12,12 @@
    "autor": "Abdulrosheed Fadipe",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Osun_Osogbo_Festival_2026.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Osun-Osogbo Festival"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

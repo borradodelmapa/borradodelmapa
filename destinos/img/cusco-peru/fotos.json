@@ -7,7 +7,13 @@
   "alt": "Cusco, Perú",
   "autor": "tomscoffin",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vista_Calle_Suecia.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vista_Calle_Suecia.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2017 in Cusco"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Diego Delso",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Catedral,_Plaza_de_Armas,_Cusco,_Per%C3%BA,_2015-07-31,_DD_57.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Templo de la Sagrada Familia (Cusco)"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -31,18 +42,12 @@
    "autor": "Håkan Svensson (Xauxa)",
    "licencia": "CC BY 2.5",
    "url": "https://commons.wikimedia.org/wiki/File:Cusco_Coricancha_Inti-Huasi_main_view.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 148,
-   "alt": "Barrio de San Blas con vistas",
-   "pie": "Barrio de San Blas con vistas.",
-   "autor": "Johnattan Rupire",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Vista_panor%C3%A1mica_de_la_ciudad_del_Cusco_desde_el_hospedaje_Aguaymanto_en_el_barrio_de_San_Blas.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2002 in Cusco"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

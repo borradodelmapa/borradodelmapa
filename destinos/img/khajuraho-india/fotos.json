@@ -8,21 +8,15 @@
   "autor": "PLBechly",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:1_Khajuraho.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Devi Jagdambi Temple Khajuraho"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 468,
-   "alt": "Templos de Khajuraho",
-   "pie": "Los templos de Khajuraho.",
-   "autor": "Wikimedia Commons",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Khajuraho_tempel_india.jpg",
-   "ok_manual": true
-  },
   "2": {
    "file": "q2.jpg",
    "w": 720,
@@ -32,7 +26,12 @@
    "autor": "Marcin Białek",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Khajuraho_Dulhadeo_2010.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "DulhaDeo Temple Khajuraho"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

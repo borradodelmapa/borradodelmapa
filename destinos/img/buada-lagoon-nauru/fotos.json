@@ -7,7 +7,13 @@
   "alt": "Buada Lagoon, Nauru",
   "autor": "Lorrie Graham/AusAID",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Buada_Lagoon,_Nauru_2007.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Buada_Lagoon,_Nauru_2007.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buada Lagoon"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

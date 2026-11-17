@@ -7,7 +7,13 @@
   "alt": "Skardu, Pakistán",
   "autor": "S SHER XAMAN photography",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Shangrila_resort_skardu.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Shangrila_resort_skardu.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Shangrila Resorts, Skardu"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Cooolvirus",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Skardu_pics_439.JPG",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Skardu District"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "Abbas pakistani",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Small_peaks_skardu_gondo_goro_la.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Baltoro Glacier"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -42,7 +58,12 @@
    "autor": "HQRaja",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Deosai_Plains,_Skardu,_Pakistan.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Deosai Plains"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

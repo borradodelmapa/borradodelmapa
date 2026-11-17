@@ -9,6 +9,11 @@
   "autor": "Ll1324",
   "licencia": "CC0",
   "url": "https://commons.wikimedia.org/wiki/File:Entrada_de_La_Romana_Rep%C3%BAblica_Dominicana.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "La Romana (La Romana)"
+  },
+  "vista": "2026-11-18"
  }
 }

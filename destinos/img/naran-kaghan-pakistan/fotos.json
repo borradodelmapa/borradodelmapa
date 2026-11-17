@@ -1,14 +1,5 @@
 {
  "generado": "2026-11-17",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 738,
-  "alt": "Naran-Kaghan, Pakistán",
-  "autor": "Adeel ur Rehman Mughal",
-  "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Siri_Paye,_Shogran,_Kaghan_Valley.jpg"
- },
  "stops": {},
  "que_hacer": {
   "0": {
@@ -20,7 +11,12 @@
    "autor": "Faizi.be87",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Naran_-_Saif_ul_Malook_track.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Trekking to Saiful Muluk Lake"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

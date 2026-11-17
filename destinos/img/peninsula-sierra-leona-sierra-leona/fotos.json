@@ -1,18 +1,5 @@
 {
  "generado": "2026-11-17",
  "hero": null,
- "stops": {},
- "que_hacer": {
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 478,
-   "alt": "Acampar en la playa bajo las estrellas",
-   "pie": "Acampar en la playa bajo las estrellas.",
-   "autor": "Paolostefano1412",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Araya_-_Pen%C3%ADnsula_de_Araya_-_Venezuela.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

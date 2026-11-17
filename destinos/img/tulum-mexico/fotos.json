@@ -7,21 +7,16 @@
   "alt": "Tulum, México",
   "autor": "Popo le Chien",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Tulum_2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Tulum_2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Tulum (archaeological site)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Ruinas Tulum entrada y playa",
-   "pie": "Ruinas Tulum entrada y playa.",
-   "autor": "Carlos Delgado",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Tulum_-_01.jpg",
-   "ok_manual": true
-  },
   "1": {
    "file": "q1.jpg",
    "w": 720,
@@ -31,7 +26,12 @@
    "autor": "diego_cue",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cenote_Dos_Ojos,_M%C3%A9xico_-_panoramio.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Dos Ojos Caves"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -42,7 +42,12 @@
    "autor": "Erik Cleves Kristensen",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Playa_Paraiso,_Tulum_QR_Oct_2023.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Beaches of Tulum"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -53,18 +58,12 @@
    "autor": "dronepicr",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nationalparc_Sian_Ka%C2%B4an_Tulum_(21201025028).jpg",
-   "ok_manual": true
-  },
-  "5": {
-   "file": "q5.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Pueblo Tulum tiendas y restaurantes",
-   "pie": "Pueblo Tulum tiendas y restaurantes.",
-   "autor": "Chuck Homler, Focus On Wildlife",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Agouti_Tulum_Take_2.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Beaches of Tulum"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

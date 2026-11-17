@@ -8,7 +8,12 @@
   "autor": "David Kernan",
   "licencia": "CC BY 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Shibuya_Crossing,_Aerial.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Shibuya Crossing at night in the 2020s"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,29 +26,12 @@
    "autor": "Benh LIEU SONG (Flickr)",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tokyo_Shibuya_Scramble_Crossing_2018-10-09.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 478,
-   "alt": "El templo Senso-ji, en Asakusa",
-   "pie": "El Senso-ji.",
-   "autor": "Jakub Hałun",
-   "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Main_Hall,_Sens%C5%8D-ji_Temple,_Tokyo,_20240824_1104_5619.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "El parque Yoyogi",
-   "pie": "El parque Yoyogi.",
-   "autor": "Guilhem Vellut from Annecy, France",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Yoyogi_Park_@_Tokyo_(13406878405).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2018 advertisements in Tokyo"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

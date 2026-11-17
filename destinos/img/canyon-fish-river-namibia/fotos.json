@@ -7,7 +7,13 @@
   "alt": "Cañón del río Fish, Namibia",
   "autor": "Thomas Schoch",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Fish_River_Canyon_Namibia.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Fish_River_Canyon_Namibia.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Fish River Canyon National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -11,18 +11,12 @@
    "autor": "Massimo Catarinella",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:DomTorenUtrechtNederland.jpg",
-   "ok_manual": true
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 484,
-   "alt": "Museo Central",
-   "pie": "Museo Central.",
-   "autor": "GodeNehler",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Barberini_August_2023-Vincent_van_Gogh_-_Borabend,_1885_-_Centraal_Museum,_Utrecht.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Utrecht Dom Tower"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

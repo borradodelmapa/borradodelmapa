@@ -8,20 +8,12 @@
   "autor": "mwanasimba from La Réunion",
   "licencia": "CC BY-SA 2.0",
   "url": "https://commons.wikimedia.org/wiki/File:Grand_Baie_(2990325541).jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Grand-Baie"
+  },
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 442,
-   "alt": "Excursión a islas del norte",
-   "pie": "Excursión a islas del norte.",
-   "autor": "Otto C. Perry",
-   "licencia": "Public domain",
-   "url": "https://commons.wikimedia.org/wiki/File:Denver_and_Rio_Grande_excursion_1954.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

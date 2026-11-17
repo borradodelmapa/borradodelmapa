@@ -7,7 +7,13 @@
   "alt": "Jebel Akhdar, Omán",
   "autor": "Philipp Weigell",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Jebel_Akhdar_view.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Jebel_Akhdar_view.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Jebel Akhdar, Oman"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Laith Wark from Dubai, United Arab Emirates",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Jebel_Qihwi_(16730252546).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Jebel Qihwi"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

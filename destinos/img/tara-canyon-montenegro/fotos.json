@@ -12,7 +12,12 @@
    "autor": "Aigars Mahinovs from Riga, Latvia",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Rafting_Vrbas_(5984391544).jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Rafting in Banja Luka"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

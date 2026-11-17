@@ -8,7 +8,12 @@
   "autor": "DXR",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Atomic_Bomb_Dome_and_Motoyaso_River,_Hiroshima,_Northwest_view_20190417_1.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "April 2019 in Hiroshima"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,7 +26,12 @@
    "autor": "lumoplank",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Hiroshima_Peace_Memorial_Park_-_HiroshimaPeace136.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hiroshima Cenotaph"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -32,7 +42,12 @@
    "autor": "Balon Greyjoy",
    "licencia": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:20181111_Itsukushima_Shrine_torii-1.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Itsukushima-jinja torii"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -43,7 +58,12 @@
    "autor": "EllieBellie25",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Prepared_okonomiyaki_in_Hiroshima.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Cuisine of Hiroshima prefecture"
+   },
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -54,7 +74,12 @@
    "autor": "Hyppolyte de Saint-Rambert",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Hiroshima-jo_Castle_hdsr_S5_01.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hiroshima Castle"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

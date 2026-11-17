@@ -8,7 +8,12 @@
   "autor": "Michal Klajban",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Northern_part_of_Lake_Wanaka_with_surrounding_mountains,_New_Zealand.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Lake Wānaka"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -21,18 +26,12 @@
    "autor": "Paul Bica from Toronto",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Morning_view,_Wanaka.jpg",
-   "ok_manual": true
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 720,
-   "h": 260,
-   "alt": "Esquí Cardrona Mountain en invierno",
-   "pie": "Esquí Cardrona Mountain en invierno.",
-   "autor": "Chensiyuan",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:1_wanaka_panorama_2018.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Buildings in Wānaka"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

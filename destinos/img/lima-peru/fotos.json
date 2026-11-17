@@ -7,7 +7,13 @@
   "alt": "Lima, Perú",
   "autor": "David Felipe Ruiz Hoyos",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_Catedral_Metropolitana_de_Lima_(cropped).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_Catedral_Metropolitana_de_Lima_(cropped).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Archiepiscopal Palace of Lima"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,18 +26,12 @@
    "autor": "Wikimedia Commons",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Seated_Figure_Bottle_in_Museo_Larco_-_Lima.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Museo Nacional de Antropología",
-   "pie": "Museo Nacional de Antropología.",
-   "autor": "Ibrehaut",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Plaza_Bolivar._Pueblo_Libre,_Lima,_Per%C3%BA_01.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Seated Figure Bottle in Museo Larco - Lima"
+   },
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -42,7 +42,12 @@
    "autor": "Johanmck",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Centro_historico_de_lima_,_patrimonio_cultural_de_la_humanidad.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2016 in Lima"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -53,18 +58,12 @@
    "autor": "Nano119",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Malecon_Barranco_Miraflores.JPG",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Barranco - barrio bohemio con galerías",
-   "pie": "Barranco - barrio bohemio con galerías.",
-   "autor": "Travelour",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Neighborhood_of_Lima.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Costa Verde, Lima"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

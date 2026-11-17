@@ -7,7 +7,13 @@
   "alt": "Keetmanshoop y Bosque de Árboles de Carcaj, Namibia",
   "autor": "Bjørn Christian Tørrissen",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Quiver-Tree-Forest-2015.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Quiver-Tree-Forest-2015.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Trees in Namibia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Le Grand Portage, derivative work: Fletcher6 (talk)",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Aloe_dichotoma_-Keetmanshoop,_Namibia-21Aug2009-2.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Quiver Tree Forest"
+   },
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -31,7 +42,12 @@
    "autor": "Reinhard Kraasch",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:RK_1910_Giants_Playground_P1750169.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Giants' Playground"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

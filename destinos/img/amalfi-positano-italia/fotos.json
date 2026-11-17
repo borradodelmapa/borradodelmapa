@@ -7,7 +7,13 @@
   "alt": "Costa de Amalfi, Italia",
   "autor": "Bruno Rijsman",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Amalfi_Coast_(Italy,_October_2020)_-_75_(50558355441).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Amalfi_Coast_(Italy,_October_2020)_-_75_(50558355441).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Amalfi Coast"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,20 +7,13 @@
   "alt": "Boquete, Panamá",
   "autor": "Dronepicr",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%BCcke_In_Boquete_Panama_(155901895).jpeg"
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%BCcke_In_Boquete_Panama_(155901895).jpeg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Boquete"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Piedra Pintada",
-   "pie": "Piedra Pintada.",
-   "autor": "DnTrotaMundos ☮",
-   "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Redondos_boquetes_en_la_edificaci%C3%B3n,_s%C3%ADndrome_de_la_ausencia_de_vigas_de_tronco_de_pino_-_panoramio.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

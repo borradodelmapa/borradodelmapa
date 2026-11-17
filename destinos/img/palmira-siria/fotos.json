@@ -7,7 +7,13 @@
   "alt": "Palmira, Siria",
   "autor": "Quim Bahí from Catalunya",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Palmira_al_capvespre_(2495033007).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Palmira_al_capvespre_(2495033007).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Great Colonnade at Palmyra"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +26,12 @@
    "autor": "Gianfranco Gazzetti",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Palmira_Teatro_Romano_-_GAR_-_1-01.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Ancient Roman theater (Palmyra)"
+   },
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -31,18 +42,12 @@
    "autor": "Mappo",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tomba_di_Elahbel,_Palmira.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Museo de Palmira",
-   "pie": "Museo de Palmira.",
-   "autor": "Carlos Figueroa Rojas",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Museo_Palmira_Romano,_Limache_20230525_01.jpg",
-   "ok_manual": true
+   "ok_manual": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Reliefs in tombs of Palmyra"
+   },
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,42 +7,13 @@
   "alt": "Monte Gerizim y Samaritanos, Palestina",
   "autor": "יאיר דב",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:%D7%A8%D7%9B%D7%A1_%D7%94%D7%A8_%D7%92%D7%A8%D7%99%D7%96%D7%99%D7%9D.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:%D7%A8%D7%9B%D7%A1_%D7%94%D7%A8_%D7%92%D7%A8%D7%99%D7%96%D7%99%D7%9D.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Mount Gerizim"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
- "stops": {},
- "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Ruinas de la Mezquita de Justiniano",
-   "pie": "Ruinas de la Mezquita de Justiniano.",
-   "autor": "Öskr Rck",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ruinas_de_Monte_Alban,_Oaxaca.jpg",
-   "ok_manual": true
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 720,
-   "h": 230,
-   "alt": "Vistas panorámicas desde la cumbre",
-   "pie": "Vistas panorámicas desde la cumbre.",
-   "autor": "Diego Delso",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Vista_de_Horta_desde_Monte_da_Guia,_isla_de_Fayal,_Azores,_Portugal,_2020-07-27,_DD_07-18_HDR_PAN.jpg",
-   "ok_manual": true
-  },
-  "4": {
-   "file": "q4.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Museo samaritano",
-   "pie": "Museo samaritano.",
-   "autor": "Archeologia91",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Museo_civico_archeologico_Monte_Rinaldo.jpg",
-   "ok_manual": true
-  }
- }
+ "stops": {}
 }

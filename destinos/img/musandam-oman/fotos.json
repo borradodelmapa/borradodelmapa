@@ -7,7 +7,13 @@
   "alt": "Musandam, Omán",
   "autor": "Eckhard Pecher",
   "licencia": "CC BY 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Musandam_fjord.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Musandam_fjord.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bukha, Musandam"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }
