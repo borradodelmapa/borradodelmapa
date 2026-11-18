@@ -26,7 +26,7 @@ module.exports = [
     pais: 'Asia',
     formato: '16:9',
     caratula: 'pueblos', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
-    // youtube: '_SnSzkDIkmw' SOLO cuando sea público (jue 19 nov 10:00): con youtube puesto la entrada usa ese reproductor y, privado, da error
+    youtube: '_SnSzkDIkmw', // público desde el 18 nov 2026 (comprobado con oEmbed)
     titulo: 'TRIBUS que desaparecen: las 10 últimas culturas de Asia',
     resumen: 'Diez pueblos de Asia cuyas culturas se están borrando del mapa: la última gran tatuadora de Filipinas, las buceadoras de Jeju, los últimos konyak con la cara tatuada y los nómadas del mar. Quiénes son, qué están perdiendo y cómo llegar con respeto.',
     video: 'pueblos-t1-largo.mp4',
