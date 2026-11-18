@@ -176,7 +176,8 @@ for (const c of caps) {
 // Sitemap propio (entra en sitemap.xml). Google descubre las stories por aquí y por el enlace desde cada artículo.
 fs.writeFileSync(path.join(ROOT, 'sitemap-stories.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${caps.map((c) => `  <url><loc>${SITE}/stories/${c.slug}/</loc><lastmod>${c.fecha || FECHA}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`).join('\n')}
+${caps.map((c) => `  <url><loc>${SITE}/stories/${c.slug}/</loc><lastmod>${require('./sitemap-fechas.cjs').lastmod(`stories/${c.slug}/index.html`)}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`).join('\n')}
 </urlset>
 `);
+require('./sitemap-fechas.cjs').actualizarIndice(); // fecha de sitemap-stories.xml en sitemap.xml
 console.log('✓ sitemap-stories.xml (' + caps.length + ')');

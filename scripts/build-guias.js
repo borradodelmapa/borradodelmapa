@@ -19,6 +19,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+const SMF = createRequire(import.meta.url)('./sitemap-fechas.cjs'); // fechas reales de los sitemaps (18 nov 2026)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -376,8 +378,8 @@ async function main() {
   }
   if (!DRY) fs.writeFileSync(path.join(ROOT, 'guias-por-pais.json'), JSON.stringify(porPais, null, 1) + '\n');
   const sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    good.map(g => '  <url><loc>' + DOMAIN + '/' + g.slug + '</loc>' + (g.updatedAt ? '<lastmod>' + String(g.updatedAt).slice(0, 10) + '</lastmod>' : '') + '<changefreq>monthly</changefreq><priority>0.7</priority></url>').join('\n') + '\n</urlset>\n';
-  if (!DRY) fs.writeFileSync(path.join(ROOT, 'sitemap-guias.xml'), sm);
+    good.map(g => '  <url><loc>' + DOMAIN + '/' + g.slug + '</loc>' + '<lastmod>' + SMF.lastmod(g.slug + '.html', g.updatedAt ? String(g.updatedAt).slice(0, 10) : null) + '</lastmod>' + '<changefreq>monthly</changefreq><priority>0.7</priority></url>').join('\n') + '\n</urlset>\n';
+  if (!DRY) { fs.writeFileSync(path.join(ROOT, 'sitemap-guias.xml'), sm); SMF.actualizarIndice(); }
   console.log('guías buenas (index + sitemap): ' + good.length + ' de ' + guides.length);
   if (!DRY) fs.writeFileSync(MANIFEST, JSON.stringify([...now].sort(), null, 1) + '\n');
   console.log(`${DRY ? '[dry-run] ' : ''}guías: ${guides.length} · escritas: ${written} · sin cambios: ${same} · borradas: ${removed}`);

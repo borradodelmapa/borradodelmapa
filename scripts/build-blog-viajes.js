@@ -572,9 +572,12 @@ fs.writeFileSync(path.join(ROOT, 'pueblos.html'), paginaPueblos);
 const smFile = path.join(ROOT, 'sitemap-blog.xml');
 let sm = fs.readFileSync(smFile, 'utf8');
 sm = sm.replace(/\s*<!-- VIAJES:START -->[\s\S]*?<!-- VIAJES:END -->/, '');
-const urls = caps.map((c) => `  <url><loc>${SITE}/blog/viajes/${c.slug}</loc><lastmod>${c.fecha || FECHA}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
+// lastmod = cuándo cambió de verdad la página (nunca una fecha futura): scripts/sitemap-fechas.cjs (18 nov 2026)
+const SMF = require('./sitemap-fechas.cjs');
+const urls = caps.map((c) => `  <url><loc>${SITE}/blog/viajes/${c.slug}</loc><lastmod>${SMF.lastmod(`blog/viajes/${c.slug}.html`)}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
 const urlPueblos = `  <url><loc>${SITE}/pueblos</loc><lastmod>2026-11-09</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>`;
 sm = sm.replace('</urlset>', `  <!-- VIAJES:START -->\n${urlPueblos}\n${urls}\n  <!-- VIAJES:END -->\n</urlset>`);
 fs.writeFileSync(smFile, sm);
+SMF.actualizarIndice();
 
 console.log(`✔ ${caps.length} diarios · ${series.length} series · ${guias.length} guías · portada del blog`);

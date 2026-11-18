@@ -1418,8 +1418,11 @@ function buildIndexHTML(countriesByContinent) {
 // ── Sitemap ──────────────────────────────────────────────────
 
 function buildSitemap(allUrls) {
+  // lastmod = cuándo cambió de verdad la página (scripts/sitemap-fechas.cjs, 18 nov 2026)
+  const SMF = createRequire(import.meta.url)('./sitemap-fechas.cjs');
   const urls = allUrls.map(u => `  <url>
     <loc>${u.url}</loc>
+    <lastmod>${SMF.lastmod(u.url.replace(DOMAIN + '/', '').replace(/\/$/, '/index.html'))}</lastmod>
     <changefreq>${u.freq || 'monthly'}</changefreq>
     <priority>${u.priority || 0.8}</priority>
   </url>`).join('\n');
@@ -1561,6 +1564,7 @@ async function main() {
   // lo toque sin querer.
   if (!dryRun && !onlyCountry && !indexOnly && !onlySet && allSitemapUrls.length > 0) {
     fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls.filter(u => INDEXABLES.has(u.url.replace(`${DOMAIN}/destinos/`, '').replace(/.html$/, '') || 'index'))));
+    createRequire(import.meta.url)('./sitemap-fechas.cjs').actualizarIndice();
     console.log(`   🗺️ Sitemap: ${allSitemapUrls.length} URLs`);
   } else if (onlyCountry || indexOnly || onlySet) {
     console.log(`   🗺️ Sitemap: sin tocar (solo se regenera en una pasada completa)`);
