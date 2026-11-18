@@ -249,6 +249,54 @@ Límites:
 - Los despidos y el cierre de las Casas de la Cultura van como dato con fecha y fuente, sin adjetivos.
 - La llamada se dirige al presidente y al país, no a un partido.
 
+## 4c · LA OFICINA DE LA PRIMERA DAMA, SI LOS CIERRES FUERON REALES Y CÓMO ESTÁN HOY (Paco, 18 nov: «documentarse un poco más sobre la oficina de la primera dama, si los cierres son efectivos, un poco de polémica pero sin cargar las tintas, y centrarnos en la situación actual de esta gente»)
+
+### La oficina de la primera dama y Crecer Juntos (hechos, sin adjetivos)
+- **Gabriela Rodríguez de Bukele** es primera dama desde el 1 de junio de 2019. Es un cargo sin elección. [W5]
+- Su despacho presentó la **Ley Crecer Juntos** (primera infancia, niñez y adolescencia).
+  - La Asamblea la aprobó en 2022 con 76 votos y entró en vigor el **1 de enero de 2023**. [S32]
+  - Sustituyó a la LEPINA de 2009 y disolvió el ISNA y el CONNA, que pasaron a un organismo nuevo, el CONAPINA. También derogó la Ley de Salas Cuna. [S32]
+  - Premio Mundial de las Infancias 2022 (OMEEDI), según la Presidencia. [S33]
+- **La polémica, contada tal cual:**
+  - Diputadas de la oposición (FMLN) y la exdirectora del CONNA, Zaira Navas (Cristosal), reconocieron «avances importantes» en primera infancia, pero dudaron de algunos puntos.
+  - Otros críticos vieron un retroceso en derogar la LEPINA.
+  - El oficialismo negó que se suprimieran plazas. [S32]
+  - ⚠ En 2022 la prensa publicó que la ley «carece de presupuesto» (elsalvador.com). Falta leerla antes de usarla.
+- **El vínculo con el náhuat:** la ley y el programa Crecer Juntos son los que dieron paso, en 2023, a los «Nidos de inmersión lingüística» del Ministerio de Educación. Según El Faro, ese programa lo «impulsa el despacho de la primera dama». [S24][S30]
+  - ⚠ **No hay ninguna fuente oficial que diga que la primera dama decidió lo de las cunas.** En la voz NO se le atribuye. A lo sumo: «el nuevo programa de primera infancia, Crecer Juntos».
+
+### ¿Las cunas cerraron de verdad? NO del todo: las trasladaron y las comunidades las volvieron a abrir
+- **Febrero de 2023:** el ministerio retira el dinero del Estado y traslada maestras y niños a los nidos de Crecer Juntos. Las cunas de Santo Domingo y Santa Catarina no pueden empezar el curso. [S30]
+- **Las comunidades las reabren «con apoyo internacional»** (web oficial del programa, cunanahuat.org: «en 2023 superó la retirada de fondos estatales»). [S34]
+- **Hoy funcionan las tres, sin dinero del Estado** según las fuentes:
+  - **Santo Domingo de Guzmán** (Witzapan): la original.
+  - **Santa Catarina Masahuat.**
+  - **Nahuizalco:** edificio nuevo, la **Kuna Nawat**, inaugurado en noviembre de 2025 y pagado por el **Ayuntamiento de Pamplona**. Participaron la Universidad Pública de Navarra, el colectivo navarro El Salvador Elkartasuna, PRO-VIDA y la alcaldía de Sonsonate Norte. Tiene **17 niños de 3 a 5 años**, de lunes a viernes, y clases los sábados para todas las edades. [S35]
+  - Elkartasuna cuenta que al principio mucha gente del pueblo «se opuso fuertemente» y que después «muchos de quienes rechazaban la idea se acercaron para solicitar cupo para sus hijos». [S35]
+  - **Ningún ministerio aparece en la inauguración**: solo el alcalde. [S35]
+  - Más de 600 niños han pasado por las cunas desde el principio. [S25][S34]
+- **Los nidos de Crecer Juntos, hoy:** ⚠ no hay ningún dato público de 2024-26 sobre si siguen, cuántos niños tienen o si enseñan náhuat con el mismo método. El MINED no respondió a la prensa en 2023. [S31]
+  - **En la voz no se dice que funcionen ni que no funcionen.**
+- **⭐ El dato fuerte para el vídeo, sin cargar las tintas:** el Estado retiró el dinero y las abuelas y los pueblos las volvieron a abrir con ayuda de fuera. **El edificio nuevo de Nahuizalco lo pagó una ciudad española, Pamplona.**
+
+### Cómo está hoy esta gente (noviembre de 2026)
+- **Hablantes:**
+  - El censo de 2024 cuenta 1.135 personas que dicen hablar náhuat.
+  - Las que lo tienen como lengua materna son muchas menos: «menos de 70», según Jorge Lemus; «menos de 100, todos adultos mayores en pobreza extrema», según la Universidad Don Bosco; 48 en Santo Domingo en 2024, según Wikipedia. [S1][W4][S36]
+  - **En la voz:** «quienes lo aprendieron de niños son ya muy pocos, casi todos mayores».
+- **Pobreza:** en junio de 2026, la ONG PRO-VIDA reparte semillas a agricultores indígenas de Santo Domingo de Guzmán y Santa Catarina Masahuat por la **inseguridad alimentaria** y la subida de los costes. [S37]
+- **Lo que se mueve, todo desde la sociedad civil y la universidad:**
+  - **21 de febrero de 2026:** nace la Wikipedia en náhuat (Timumachtikan Nawat).
+  - **27 de junio de 2026:** jornada de grabación en Santo Domingo para un repositorio de más de 6.500 palabras, con Wikimedia.
+  - Hugo Salgado (Universidad de Iowa) tiene un archivo abierto de entrevistas. [S12]
+  - En septiembre de 2025, niños de Izalco cantan el himno en náhuat en la Asamblea. [S13]
+- **Personas que ya no están:** Antonia Ramírez (foto 03), alfarera, cantante y coordinadora de la Casa de la Cultura de Santo Domingo, murió el 11 de junio de 2024 (ver respeto, P4, en la sección 4b). [W4]
+- **El hilo para el final del vídeo:** quienes sostienen hoy el náhuat son las abuelas maestras, los niños de las cunas, los jóvenes de la Wikipedia y una ciudad española. Y queda la pregunta: «¿lo hará también el Estado?».
+
+### Cambia la frase de la voz sobre las cunas (sustituye a la de la sección 4b)
+- «En 2023, el Ministerio de Educación trasladó las Cunas Náhuat a su nuevo programa, sin consultar a las comunidades. De trece maestras, quedaron cinco. Las abuelas y los pueblos las volvieron a abrir, con ayuda de fuera. La última, en Nahuizalco, la pagó una ciudad española: Pamplona.»
+- ⚠ La última frase es para que Estrategia la valide. Es un dato verificado (Co Latino, 28 nov 2025), pero hay que decidir si «la pagó» es exacto: el edificio lo financió el Ayuntamiento de Pamplona, no la cuna entera. Más exacto: **«el edificio nuevo lo pagó…»**.
+
 ## 5 · ¿SE PUEDE VISITAR? (P9)
 
 - **Sí.** La **Ruta de las Flores** (Nahuizalco, Salcoatitán, Juayúa, Apaneca, Ataco) está en Sonsonate y Ahuachapán, a 1-2 h de San Salvador. Izalco está al pie del volcán del mismo nombre. [W3]
@@ -380,6 +428,13 @@ Rehechas el 18 nov con Bukele (Paco: «tiene tirón»).
 - [S30] Emerson Del Cid, Diario El Mundo, 26 feb 2023, «Las cunas náhuat buscan renacer en occidente de El Salvador». https://diario.elmundo.sv/nacionales/las-cunas-nahuat-buscan-renacer-en-occidente-de-el-salvador
 - [W4] Wikipedia (en), *Antonia Ramírez*.
 - [S31] El Independiente, 20 feb 2023, «Programa Cunas Náhuat sin apoyo del MINED». https://www.elindependiente.sv/2023/02/20/programa-cunas-nahuat-sin-apoyo-del-mined/ · Diario Co Latino, «PRO VIDA da apoyo a Centros de Inmersión Lingüística Nahuat».
+- [W5] Wikipedia (en), *Gabriela Rodríguez de Bukele* y *First Lady of El Salvador*.
+- [S32] Diario El Mundo, 2022, «Aprueban ley Crecer Juntos y entrará en vigencia en 2023»; elsalvador.com, 2022, «Ley Crecer Juntos sustituirá a la Lepina y a la de salas cuna» y «Ley Crecer Juntos carece de presupuesto».
+- [S33] Presidencia de la República, 2022, «Primera Dama recibe reconocimiento internacional por la Política Crecer Juntos».
+- [S34] cunanahuat.org (web del programa, 2026).
+- [S35] Diario Co Latino, 28 nov 2025, «Inauguran edificio de Kuna Nawat para revitalizar el náhuat pipil en Nahuizalco». https://www.diariocolatino.com/inauguran-edificio-de-kuna-nawat-para-revitalizar-el-nahuat-pipil-en-nahuizalco/ · Izcanal, «La Cuna Nahuat tendrá una sede en Nahuizalco».
+- [S36] Universidad Don Bosco, «Cuna Nahuat: donde florece el nahuat» (udb.edu.sv); Diario Co Latino.
+- [S37] Diario Co Latino, edición del 5 jun 2026: PRO-VIDA entrega semillas en Santo Domingo de Guzmán y Santa Catarina Masahuat.
 
 ## 9 · LO QUE FALTA ANTES DEL GUION (dudas para Estrategia)
 
