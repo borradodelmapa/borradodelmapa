@@ -429,6 +429,14 @@ Ruta: `salma marketing/el-salvador/hoja/hoja-personas.png`.
 ## 7 · GANCHO (20 s), TÍTULO Y CARÁTULA: TRES CAMINOS, LADO A LADO (v2, 18 nov; Paco: «quiero empezar por el gancho, la carátula y el título, y eso definirá el resto del documental»)
 Carátulas montadas: `salma marketing/el-salvador/caratula/A.png`, `D.png` (= B) y `C.png`; las tres juntas en `lado-a-lado.png`.
 
+### v3 · CARÁTULAS NARRATIVAS (Y23, Paco 18 nov: «la carátula es una putísima mierda… tiene que ser también narrativa: El Salvador masacró a sus indígenas, ¿cómo están ahora?»)
+- Las A, B (D) y C de abajo quedan **descartadas**: no contaban la historia.
+- **N1** (`caratula/N1.png`): bandera + «EL SALVADOR» · «En 1932 masacró a sus **INDÍGENAS**» · «¿Cómo están hoy?», con Elva Pérez mirando a cámara. Título que la acompaña (Y3, otra información): «El Salvador: los indígenas que se escondieron por miedo» (55).
+- **N3** (`caratula/N3.png`): Guadalupe Estrada · «Su familia vivió la **MATANZA** de 1932. ¿Y hoy?». Es verdad según la ficha de su foto: «las heridas causadas en su familia por este evento». Título: «¿El Salvador tiene indígenas? Así viven hoy» (43).
+- **N2** (`caratula/N2.html`, pendiente de la foto de Feliciano Ama, que Commons está limitando): partida en dos, «1932» (Feliciano Ama en blanco y negro) | «HOY» (Guadalupe a color), con «Masacró a sus **INDÍGENAS**. ¿Cómo están hoy?».
+- **Prueba a 160 px hecha** (`caratula/prueba-160.png`): en N1 se lee «INDÍGENAS» y «¿Cómo están hoy?»; en N3, «MATANZA» y «1932».
+- ⚠ F4: «El Salvador masacró» es un titular. Lo que hizo la matanza fue el ejército del general Hernández Martínez, y en la voz se dice así. En la carátula vale como resumen del Estado, que es como lo pidió Paco.
+
 **Palabras de búsqueda (Y2, sugerencias de YouTube y Google, 18 nov, 0 €):**
 - «**matanza de 1932**» y «masacre 1932 el salvador» **no dan ninguna sugerencia**: casi nadie lo busca. Se descarta como palabra principal del título.
 - «**bukele**»: muy buscado (en YouTube sugiere «bukele el salvador», «bukele españa», «bukele discurso»…).
