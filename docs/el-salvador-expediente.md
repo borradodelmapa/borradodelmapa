@@ -295,7 +295,12 @@ Límites:
 
 ### Cambia la frase de la voz sobre las cunas (sustituye a la de la sección 4b)
 - «En 2023, el Ministerio de Educación trasladó las Cunas Náhuat a su nuevo programa, sin consultar a las comunidades. De trece maestras, quedaron cinco. Las abuelas y los pueblos las volvieron a abrir, con ayuda de fuera. La última, en Nahuizalco, la pagó una ciudad española: Pamplona.»
-- ⚠ La última frase es para que Estrategia la valide. Es un dato verificado (Co Latino, 28 nov 2025), pero hay que decidir si «la pagó» es exacto: el edificio lo financió el Ayuntamiento de Pamplona, no la cuna entera. Más exacto: **«el edificio nuevo lo pagó…»**.
+- ✅ **Validada por Estrategia (18 nov), con la condición de una fuente primaria para Pamplona. Hay tres:**
+  1. **Ayuntamiento de Pamplona, Memoria 2022** (pamplona.es, Cooperación al Desarrollo): «Desarrollo integral la Cuna Náhuat de Nahuizalco y apoyo a las cunas ya existentes (SCM y SDG)», **33.250 €** para Garabide Kultur Elkartea. Además, 40.000 € para El Salvador Elkartasuna por la «Promoción y revitalización del nahuat…». [S38]
+  2. **El Salvador Elkartasuna** (elsalvadorelkartasuna.eus): «El 28 de noviembre de 2025 ha quedado inaugurado el edificio que para la Kuna nawat ha sido en Nahuizalco… con fondos procedentes del ayuntamiento de Pamplona – Iruñea». [S39]
+  3. **Diario Co Latino**, 28 nov 2025 (Redacción Nacionales): «fue financiado con fondos del Ayuntamiento de Pamplona, Navarra». [S35]
+  - Frase exacta: **«El edificio nuevo de Nahuizalco lo pagó una ciudad española: Pamplona.»** (el edificio, no la cuna entera).
+  - **Va en la PARTE FINAL del vídeo** (Estrategia: «un gancho buenísimo para el público español»). Antes de la voz, se dice solo hasta «con ayuda de fuera».
 
 ## 5 · ¿SE PUEDE VISITAR? (P9)
 
@@ -435,6 +440,8 @@ Rehechas el 18 nov con Bukele (Paco: «tiene tirón»).
 - [S35] Diario Co Latino, 28 nov 2025, «Inauguran edificio de Kuna Nawat para revitalizar el náhuat pipil en Nahuizalco». https://www.diariocolatino.com/inauguran-edificio-de-kuna-nawat-para-revitalizar-el-nahuat-pipil-en-nahuizalco/ · Izcanal, «La Cuna Nahuat tendrá una sede en Nahuizalco».
 - [S36] Universidad Don Bosco, «Cuna Nahuat: donde florece el nahuat» (udb.edu.sv); Diario Co Latino.
 - [S37] Diario Co Latino, edición del 5 jun 2026: PRO-VIDA entrega semillas en Santo Domingo de Guzmán y Santa Catarina Masahuat.
+- [S38] Ayuntamiento de Pamplona, Memoria 2022, Servicios Sociales, Acción Comunitaria y Deporte (Cooperación). https://www.pamplona.es/aytomemoria2022/areas-municipales/serviciossociales/274.html · Memoria 2023: https://www.pamplona.es/aytomemoria2023/pdf/MEMORIA%20AYTO-ESP%202023-110325.pdf
+- [S39] Colectivo El Salvador Elkartasuna, portada de su web (2025). https://www.elsalvadorelkartasuna.eus/
 
 ## 9 · LO QUE FALTA ANTES DEL GUION (dudas para Estrategia)
 
