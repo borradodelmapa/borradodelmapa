@@ -407,7 +407,7 @@ module.exports = [
     cierre: 'Próximo episodio: los ainu, el pueblo indígena del norte de Japón.',
   },
   // Largo 16:9 «Tailandia 1» (T3.1/T12) · guion: docs/tailandia-1-preguntas-guion.md (v5) · descripción y capítulos: salma marketing/tailandia-largos/caratulas-y18/ENTREGA/T3.1-descripcion.md
-  // YouTube: mar 1 dic 2026 a las 10:00 (poner youtube: '<id>' SOLO cuando sea público). Minutos: los del montaje final (revisar al recibir el vídeo).
+  // YouTube: lun 30 nov 2026 a las 10:00 (poner youtube: '<id>' SOLO cuando sea público). Minutos: los del montaje final (revisar al recibir el vídeo).
   {
     orden: 70,
     slug: 'viajar-a-tailandia-10-dudas',
