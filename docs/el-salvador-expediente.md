@@ -332,7 +332,10 @@ Límites:
 - ⚠ **No decir que el euskera estuvo «prohibido» como algo absoluto**, ni comparar el franquismo con una matanza. La frase segura, que es la del colectivo: «en Navarra recuerdan cómo el euskera se fue perdiendo durante la dictadura».
 - ⚠ El colectivo escribe que «el dictador Hernández prohibió el uso del náhuat». Sigue sin aparecer el decreto (ver la sección 1), así que en la voz se sigue diciendo **«por miedo»**.
 - ⚠ No sé cuándo nació El Salvador Elkartasuna ni si fue por la guerra civil. No lo dicen sus fuentes; no va a la voz.
-- **Texto de trabajo para la parte final** (para Estrategia): «¿Por qué Pamplona? Porque allí saben lo que es casi perder una lengua. El euskera se fue apagando durante la dictadura y volvió con escuelas como esta. Ahora, cada año, estudiantes de Magisterio de Navarra vienen a las cunas a ayudar a que el náhuat haga lo mismo.»
+- **✅ TEXTO VALIDADO POR ESTRATEGIA (18 nov) para la parte final:** «¿Por qué Pamplona? Lo explican ellos: en Navarra saben lo que es ver retroceder una lengua y recuperarla con escuelas como esta, las ikastolas. Desde 2012, estudiantes de Magisterio de Navarra han venido a las cunas…»
+  - **Sin «dictadura» ni franquismo en la voz.** El vídeo ya lleva a Bukele; si además entra el franquismo, los comentarios se van a esa pelea. Y que el euskera retrocediera tiene más causas.
+  - **«Cada año» NO:** no hay ninguna fuente de que las prácticas de la UPNA sigan en 2025-26 (búsqueda del 18 nov sin resultado). Si aparece, se cambia.
+  - El motivo va **atribuido** a ellos («lo explican ellos»).
   - Corregido: las que van cada año son estudiantes de Magisterio de la UPNA, no maestras.
 
 ## 5 · ¿SE PUEDE VISITAR? (P9)
