@@ -338,6 +338,25 @@ Límites:
   - El motivo va **atribuido** a ellos («lo explican ellos»).
   - Corregido: las que van cada año son estudiantes de Magisterio de la UPNA, no maestras.
 
+### ¿Hay partidos políticos detrás? (Paco, 18 nov: «hay partidos políticos detrás de la iniciativa y de la ONG española»)
+**Lo que dicen las fuentes: no aparece ningún partido como promotor ni como financiador directo. El dinero es público y sale por convocatoria técnica, con gobiernos municipales de signo opuesto.**
+
+| Quién | Qué consta | Partido |
+|---|---|---|
+| **El Salvador Elkartasuna** | ONG de desarrollo fundada en **2001** en Burlada (Navarra) por navarros con lazos con El Salvador; oficina también en Azpeitia (Gipuzkoa). Trabaja en cinco municipios pobres del centro-norte del país. Premio Solidario de Onda Cero (Navarra). [S42] | **No consta ninguno.** ⚠ En enero de 2024 invitó a Navarra al periodista salvadoreño Francisco Elías Valencia, que habló en el Parlamento de Navarra contra el régimen de excepción de Bukele (Noticias de Navarra: «Con el estado de excepción Bukele ha metido a 75.000 personas en las cárceles…»). **Es una ONG con postura crítica con Bukele.** No es un partido, pero conviene saberlo por neutralidad (N14). [S43] |
+| **Garabide Kultur Elkartea** | Asociación cultural registrada el 12 de octubre de 2005 en Eskoriatza (Gipuzkoa); **declarada de utilidad pública** por el Gobierno Vasco (Decreto 64/2016). Recibe subvenciones de la Diputación de Bizkaia (2023 y 2024) y del Gobierno Vasco (24.000 € en 2025 para formación en cooperación lingüística). [S44] | **No consta ninguno.** Su objetivo es lingüístico (el euskera como modelo). |
+| **PRO-VIDA** (la contraparte en El Salvador) | Asociación Salvadoreña de Ayuda Humanitaria. Firmó en 2019 un convenio con el **Ministerio de Agricultura salvadoreño** (paquetes agrícolas en Chalatenango). [S45] | **No consta ninguno.** ⚠ No confundir con los grupos católicos «provida» antiaborto: es otra cosa. |
+| **Ayuntamiento de Pamplona** | Programa de cooperación desde 1996, con **al menos el 0,7 % del presupuesto** mantenido «desde su inicio». Los proyectos se puntúan sobre 100 (mínimo 70; 61 puntos son de calidad técnica y presupuestaria) y se financia como mucho el 90 %, hasta 40.000 € por proyecto. [S46] | **Gobiernos de signo opuesto:** las ayudas de **2022** al náhuat (33.250 € para Garabide y 40.000 € para Elkartasuna) se dieron con el alcalde **Enrique Maya (UPN, Navarra Suma, centroderecha)**. El edificio se inauguró en **noviembre de 2025**, con el alcalde **Joseba Asiron (EH Bildu)**, que gobierna desde la moción de censura del 28 de diciembre de 2023. [S38][S47] |
+
+**Conclusión para el vídeo:**
+- Lo del náhuat lo han pagado ayuntamientos de colores distintos, por concurso técnico.
+- **No es la iniciativa de un partido.**
+- En la voz: **«lo pagó el Ayuntamiento de Pamplona»**, sin nombrar alcaldes ni partidos. Nombrar a uno abriría la pelea política de España, que es justo lo que Estrategia quiere evitar.
+- ⚠ Lo único con color político claro es la postura **crítica con Bukele** de El Salvador Elkartasuna. Por eso:
+  1. En el vídeo, Elkartasuna aparece solo como dato («un colectivo navarro»), no como fuente de nada sobre Bukele.
+  2. Todo lo de Bukele va con fuentes salvadoreñas o internacionales, nunca con fuentes de Elkartasuna.
+- ⚠ No he mirado quién gobernaba en cada uno de los seis ayuntamientos pequeños (Antsoain, Berriozar, Burlada, Irurtzun, Noáin, Villava). No va a la voz.
+
 ## 5 · ¿SE PUEDE VISITAR? (P9)
 
 - **Sí.** La **Ruta de las Flores** (Nahuizalco, Salcoatitán, Juayúa, Apaneca, Ataco) está en Sonsonate y Ahuachapán, a 1-2 h de San Salvador. Izalco está al pie del volcán del mismo nombre. [W3]
@@ -481,6 +500,12 @@ Rehechas el 18 nov con Bukele (Paco: «tiene tirón»).
 - [S39b] El Salvador Elkartasuna, «Cuna NÁHUAT» (Qué hacemos). https://www.elsalvadorelkartasuna.eus/zertan-ari-gara-que-hacemos/cuna-nahuat/
 - [S40] Gobierno de Navarra, «Visita El Salvador Elkartasuna» (proyectos en Cabañas). https://www.navarra.es/NR/rdonlyres/3D6351EB-C4E7-48FC-B335-A2005E1343CB/217049/Visita_ElSalvadorElkartasuna.pdf
 - [S41] Garabide, memorias (2019-2025; la de 2025 tiene el capítulo «Las cunas del Nawat pipil»), garabide.eus; Onda Vasca, «Beasain reúne a 18 activistas de 14 lenguas minorizadas del mundo» (programa ADITU, con el náhuat pipil).
+- [S42] Colectivo El Salvador Elkartasuna, «Quiénes somos» (elsalvadorelkartasuna.eus); Navarra Norte, X Premios Solidarios Onda Cero.
+- [S43] Noticias de Navarra, 18 ene 2024, «Con el estado de excepción Bukele ha metido a 75.000 personas en las cárceles, más de 20.000 inocentes». https://www.noticiasdenavarra.com/politica/2024/01/18/excepcion-bukele-metido-75-000-7755626.html
+- [S44] Registro de Asociaciones del Gobierno Vasco (euskadi.eus, Garabide Kultur Elkartea, AS/G/12143/2005); Decreto 64/2016; Diputación Foral de Bizkaia (DF 215/2023 y 241/2024); euskalankidetza (Gobierno Vasco, 2025).
+- [S45] Convenio PRO-VIDA y MAG, mayo de 2019 (transparencia.gob.sv).
+- [S46] Ayuntamiento de Pamplona, bases de la convocatoria de cooperación y Plan Operativo Anual 2024 del PMCD (pamplona.es).
+- [S47] Noticias de Navarra, 28 dic 2023, «Claves de la histórica moción de censura en Pamplona»; The Objective, 28 dic 2023.
 
 ## 9 · LO QUE FALTA ANTES DEL GUION (dudas para Estrategia)
 
