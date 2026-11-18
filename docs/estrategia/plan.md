@@ -5,6 +5,30 @@ Manda: CLAUDE.md, `docs/video-checklist.md` (L1, L2, P13), `docs/sistemas.md`. E
 
 ---
 
+## 00 · NUEVO CALENDARIO (Paco, 18 nov 2026). Manda sobre todo lo de abajo
+YouTube: **shorts de martes a jueves, largos de viernes a lunes**, todo a las 10:00 y programado en **YouTube Studio** (Metricool solo TikTok: tope de 20/mes del plan gratis, rechazó Sagada YT el 18 nov). TikTok sigue los días de los shorts.
+
+| Largo | Antes | Ahora |
+|---|---|---|
+| Pueblos borrados del mapa T1 (_SnSzkDIkmw) | jue 19 nov | **mié 18 nov, publicado hoy (orden de Paco)** |
+| Tatuajes (0nNCUhMiSdI) | mar 24 nov | lun 23 nov |
+| Tuvalu (QMWkfY186lk) | jue 26 nov | vie 27 nov |
+| Los últimos de Filipinas (Zf0nX0EJtrk) | jue 3 dic | vie 4 dic |
+| T3.3 (YHatBARXBf4) | jue 10 dic | vie 11 dic |
+| Filipinas: qué saber antes de ir (4gTGf2JPEHk, en revisión T17) | mar 15 dic | lun 14 dic |
+
+| Short YouTube (a Studio) | Antes | Ahora |
+|---|---|---|
+| Sagada | jue 19 nov | jue 19 nov |
+| Haenyeo | lun 23 nov | mar 24 nov |
+| Konyak | mié 25 nov | mié 25 nov |
+| Sentineleses (v2) | lun 30 nov | mar 1 dic |
+| Ainu | mié 2 dic | mié 2 dic |
+| Dukha | lun 7 dic | mar 8 dic |
+| Cazadores con águila | mié 9 dic | mié 9 dic |
+| Moken | lun 14 dic | mar 15 dic |
+| Mosuo | mié 16 dic | mié 16 dic |
+
 ## 0 · LARGOS MARTES Y JUEVES (decisión de Paco, 11 nov 2026). Manda sobre el calendario de abajo
 Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts = avances de un largo. **Un día, un vídeo (Paco, 13 nov):** los días de largo no sale short; los shorts van lunes y miércoles (lunes: 16 y 23 nov, 30 nov, 7 y 14 dic). Si un largo no está hecho y aprobado por Paco, el hueco se queda vacío. Se revisa el lun 14 dic.
 
