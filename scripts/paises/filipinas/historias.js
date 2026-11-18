@@ -230,7 +230,7 @@ module.exports = [
     formato: '16:9',
     // carátula del largo (Y15; aprobada por Paco el 13 nov 2026). Foto: Julia Sumangil, CC BY-SA 4.0
     caratula: 'salma marketing/filipinas/apertura/caratulas/caratula-B-final.jpg',
-    // youtube: 'id' SOLO cuando sea público (mar 15 dic 2026, 10:00): privado, el reproductor da error
+    // youtube: 'id' SOLO cuando sea público (lun 14 dic 2026, 10:00): privado, el reproductor da error
     fecha: '2026-11-05',
     serie: 'Conoce cada país',
     cap: 'Filipinas',
@@ -420,7 +420,7 @@ module.exports = [
     ],
     cierre: 'Antes de ir, lee la introducción: Filipinas, antes de viajar.',
   },
-  // Largo 16:9 · documental de historia · montaje: india/motor/baler.cjs · guion: filipinas/baler/guion-final.json · investigación: docs/filipinas-baler-investigacion.md · YouTube Zf0nX0EJtrk, jue 3 dic 2026 a las 10:00 (poner youtube: 'Zf0nX0EJtrk' cuando sea público)
+  // Largo 16:9 · documental de historia · montaje: india/motor/baler.cjs · guion: filipinas/baler/guion-final.json · investigación: docs/filipinas-baler-investigacion.md · YouTube Zf0nX0EJtrk, vie 4 dic 2026 a las 10:00 (poner youtube: 'Zf0nX0EJtrk' cuando sea público)
   {
     orden: 218,
     slug: 'los-ultimos-de-filipinas-el-diario-de-baler',

@@ -101,7 +101,7 @@ module.exports = [
     nota: 'Datos de octubre y noviembre de 2026. Permisos, accesos y precios cambian: confírmalos en fuentes oficiales antes de ir. Estas son las fuentes de los diez episodios.',
     get fuentes() { return fuentes(); },
   },
-  // Largo 16:9 · montaje: india/motor/tatuajes-doc.cjs · minutos: tatuajes/capitulos.txt · fuentes: docs/tatuajes-documental-fuentes.md · YouTube 0nNCUhMiSdI, mar 24 nov 2026 a las 10:00 (poner youtube: '0nNCUhMiSdI' cuando sea público)
+  // Largo 16:9 · montaje: india/motor/tatuajes-doc.cjs · minutos: tatuajes/capitulos.txt · fuentes: docs/tatuajes-documental-fuentes.md · YouTube 0nNCUhMiSdI, lun 23 nov 2026 a las 10:00 (poner youtube: '0nNCUhMiSdI' cuando sea público)
   {
     orden: 216,
     slug: 'historia-de-los-tatuajes',
@@ -233,7 +233,7 @@ module.exports = [
       W('AP en Sun Journal: Nuevo Laredo, 2009', 'https://www.sunjournal.com/?p=85763'),
     ],
   },
-  // Largo 16:9 · montaje: india/motor/tuvalu-preguntas.cjs (v5) · minutos: pueblos/tuvalu/capitulos.txt · guion y fuentes: docs/tuvalu-guion-direccion.md · YouTube, jue 26 nov 2026 a las 10:00 (poner youtube: 'QMWkfY186lk' SOLO cuando sea público)
+  // Largo 16:9 · montaje: india/motor/tuvalu-preguntas.cjs (v5) · minutos: pueblos/tuvalu/capitulos.txt · guion y fuentes: docs/tuvalu-guion-direccion.md · YouTube, vie 27 nov 2026 a las 10:00 (poner youtube: 'QMWkfY186lk' SOLO cuando sea público)
   {
     orden: 217,
     slug: 'tuvalu-se-hunde-asi-se-vive',

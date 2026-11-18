@@ -250,7 +250,7 @@ module.exports = [
     orden: 60,
     slug: 'tailandia-muay-thai-ko-samui',
     formato: '16:9',
-    // Largo T3.3 (Paco lo aprobó el 16 nov 2026). YouTube: jue 10 dic 2026 a las 10:00 (poner youtube: '<id>' SOLO cuando sea público)
+    // Largo T3.3 (Paco lo aprobó el 16 nov 2026). YouTube: vie 11 dic 2026 a las 10:00 (poner youtube: '<id>' SOLO cuando sea público)
     // textos: salma marketing/tailandia-largos/T3.3-textos-finales.md · guion: docs/tailandia-3-muay-thai-guion-n14.md
     caratula: 'salma marketing/tailandia-largos/caratulas-y18/ENTREGA/T3.3-muay-thai-caratula.jpg', // Y15; foto de Paco, sin retoque
     cifras: [["8","Extremidades"],["2022","Primer combate femenino en Rajadamnern"],["17 mar","Día Nacional"]],
