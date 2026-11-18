@@ -302,6 +302,39 @@ Límites:
   - Frase exacta: **«El edificio nuevo de Nahuizalco lo pagó una ciudad española: Pamplona.»** (el edificio, no la cuna entera).
   - **Va en la PARTE FINAL del vídeo** (Estrategia: «un gancho buenísimo para el público español»). Antes de la voz, se dice solo hasta «con ayuda de fuera».
 
+## 4d · ¿POR QUÉ PAMPLONA? (Paco, 18 nov: «¿por qué Pamplona se interesó por salvar el idioma de esta gente?»)
+
+**La respuesta corta, con fuente:** porque en Navarra y en el País Vasco ven en el náhuat su propia historia con el euskera, una lengua que se perdió bajo una dictadura y se recuperó con escuelas de inmersión.
+- Lo dice el propio colectivo navarro que lleva el proyecto: **«La similitud histórica de la decadencia de la lengua euskera en tiempos de la dictadura»** (y la recuperación con las ikastolas). Por eso la relación entre Navarra y El Salvador tiene, según ellos, un sentido especial. [S39b]
+
+**Quién está detrás, en orden:**
+1. **El Salvador Elkartasuna** (colectivo de solidaridad de Navarra):
+   - Lleva años con proyectos en El Salvador. En Cabañas (Cinquera, Tejutepeque), con dinero del Gobierno de Navarra, desde al menos 2005. [S40]
+   - Es el socio de las cunas en Navarra.
+   - Antes del edificio de Pamplona, los gastos de las cunas los pagaron **los ayuntamientos navarros de Antsoain, Berriozar, Burlada, Irurtzun, Noáin y Villava-Atarrabia**. [S39b]
+2. **Garabide Kultur Elkartea** (ONG vasca, fundada en 2005 y con sede en Donostia):
+   - Su razón de ser es **compartir la experiencia de recuperación del euskera con pueblos de lenguas minorizadas**.
+   - Lo hace con un programa de unas seis semanas en Euskal Herria para 20 activistas al año, el ADITU. **El náhuat pipil de El Salvador figura entre las lenguas participantes.** [S41]
+   - En su memoria de 2025 hay un capítulo propio: «Las cunas del Nawat pipil». [S41]
+   - Recibió del Ayuntamiento de Pamplona **33.250 €** para el proyecto «Desarrollo integral la Cuna Náhuat de Nahuizalco y apoyo a las cunas ya existentes» (Memoria de 2022). [S38]
+3. **Universidad Pública de Navarra (UPNA):** desde 2012, cada año dos estudiantes de Magisterio pasan tres meses de prácticas solidarias en la Cuna Náhuat. Hay también intercambios académicos con la Universidad Don Bosco. [S39b]
+4. **Ayuntamiento de Pamplona:**
+   - Tiene programa de cooperación al desarrollo desde 1996 y reparte el dinero por convocatoria anual.
+   - De ahí salen los 33.250 € para Garabide y 40.000 € para Elkartasuna por la «Promoción y revitalización del nahuat…» (2022).
+   - Y el **edificio de la Kuna Nawat de Nahuizalco**, inaugurado el 28 de noviembre de 2025. [S38][S39][S35]
+
+**Por qué es buen material para el vídeo (público español):**
+- Es un **espejo**: dos lenguas que callaron por miedo, en dos países distintos y casi a la vez (El Salvador desde 1932; el euskera bajo el franquismo).
+- Una de las dos se recuperó, y ahora ayuda a la otra.
+- Encaja con la tesis del vídeo sin atacar a nadie: lo que el Estado salvadoreño no sostiene lo sostienen las abuelas, los pueblos… y unos ayuntamientos navarros que saben lo que es perder una lengua.
+
+**Límites (F4, N14):**
+- ⚠ **No decir que el euskera estuvo «prohibido» como algo absoluto**, ni comparar el franquismo con una matanza. La frase segura, que es la del colectivo: «en Navarra recuerdan cómo el euskera se fue perdiendo durante la dictadura».
+- ⚠ El colectivo escribe que «el dictador Hernández prohibió el uso del náhuat». Sigue sin aparecer el decreto (ver la sección 1), así que en la voz se sigue diciendo **«por miedo»**.
+- ⚠ No sé cuándo nació El Salvador Elkartasuna ni si fue por la guerra civil. No lo dicen sus fuentes; no va a la voz.
+- **Texto de trabajo para la parte final** (para Estrategia): «¿Por qué Pamplona? Porque allí saben lo que es casi perder una lengua. El euskera se fue apagando durante la dictadura y volvió con escuelas como esta. Ahora, cada año, estudiantes de Magisterio de Navarra vienen a las cunas a ayudar a que el náhuat haga lo mismo.»
+  - Corregido: las que van cada año son estudiantes de Magisterio de la UPNA, no maestras.
+
 ## 5 · ¿SE PUEDE VISITAR? (P9)
 
 - **Sí.** La **Ruta de las Flores** (Nahuizalco, Salcoatitán, Juayúa, Apaneca, Ataco) está en Sonsonate y Ahuachapán, a 1-2 h de San Salvador. Izalco está al pie del volcán del mismo nombre. [W3]
@@ -442,6 +475,9 @@ Rehechas el 18 nov con Bukele (Paco: «tiene tirón»).
 - [S37] Diario Co Latino, edición del 5 jun 2026: PRO-VIDA entrega semillas en Santo Domingo de Guzmán y Santa Catarina Masahuat.
 - [S38] Ayuntamiento de Pamplona, Memoria 2022, Servicios Sociales, Acción Comunitaria y Deporte (Cooperación). https://www.pamplona.es/aytomemoria2022/areas-municipales/serviciossociales/274.html · Memoria 2023: https://www.pamplona.es/aytomemoria2023/pdf/MEMORIA%20AYTO-ESP%202023-110325.pdf
 - [S39] Colectivo El Salvador Elkartasuna, portada de su web (2025). https://www.elsalvadorelkartasuna.eus/
+- [S39b] El Salvador Elkartasuna, «Cuna NÁHUAT» (Qué hacemos). https://www.elsalvadorelkartasuna.eus/zertan-ari-gara-que-hacemos/cuna-nahuat/
+- [S40] Gobierno de Navarra, «Visita El Salvador Elkartasuna» (proyectos en Cabañas). https://www.navarra.es/NR/rdonlyres/3D6351EB-C4E7-48FC-B335-A2005E1343CB/217049/Visita_ElSalvadorElkartasuna.pdf
+- [S41] Garabide, memorias (2019-2025; la de 2025 tiene el capítulo «Las cunas del Nawat pipil»), garabide.eus; Onda Vasca, «Beasain reúne a 18 activistas de 14 lenguas minorizadas del mundo» (programa ADITU, con el náhuat pipil).
 
 ## 9 · LO QUE FALTA ANTES DEL GUION (dudas para Estrategia)
 
