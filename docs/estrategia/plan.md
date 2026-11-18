@@ -16,6 +16,8 @@ YouTube: **shorts de martes a jueves, largos de viernes a lunes**, todo a las 10
 | Los últimos de Filipinas (Zf0nX0EJtrk) | jue 3 dic | vie 4 dic |
 | T3.3 (YHatBARXBf4) | jue 10 dic | vie 11 dic |
 | Filipinas: qué saber antes de ir (4gTGf2JPEHk, en revisión T17) | mar 15 dic | lun 14 dic |
+| Tailandia 1: 10 cosas antes de ir | mar 1 dic | **lun 30 nov** (Paco 18 nov: «Sí, a lunes») |
+| Tailandia 2: el norte en moto | mar 8 dic | **lun 7 dic** (ídem) |
 
 | Short YouTube (a Studio) | Antes | Ahora |
 |---|---|---|
@@ -42,9 +44,9 @@ Todo a las 10:00, shorts y largos, YouTube y TikTok (P13, Paco, 12 nov). Shorts 
 | jue 19 nov | Pueblos borrados del mapa T1 | programado (_SnSzkDIkmw) |
 | **mar 24 nov** | **Tatuajes por el mundo** (adelantado del 10 dic, orden de Paco) | programado en Studio 10:00 (0nNCUhMiSdI) |
 | **jue 26 nov** | **Tuvalu se hunde: así se vive en el país que desaparece** (5 min, piloto «lugares aislados», Vídeo 2) | programado en Studio 10:00 (QMWkfY186lk); blog y Web Story hechos |
-| **mar 1 dic** | **Tailandia 1: qué saber antes de ir** (N13, material de Paco) | por hacer |
+| **lun 30 nov** | **Tailandia 1: qué saber antes de ir** (N13, material de Paco) | por hacer |
 | **jue 3 dic** | **Los últimos de Filipinas: 337 días encerrados en una iglesia** (Zf0nX0EJtrk, 6:42; hecho por Vídeo con orden de Paco el 12 nov) | ✅ programado. «Filipinas: qué saber antes de ir» pasa al mar 15 dic |
-| **mar 8 dic** | **Tailandia 2: el norte en moto** (Chiang Mai, Pai, Mae Hong Son) | por hacer |
+| **lun 7 dic** | **Tailandia 2: el norte en moto** (Chiang Mai, Pai, Mae Hong Son) | por hacer |
 | **jue 10 dic** | **Tailandia 3: Koh Samui y el Muay Thai** | por hacer |
 | **mar 15 dic** | **Filipinas: qué saber antes de ir** (rehacer la apertura v1 en formato preguntas, con la ruta de Luzón norte; orden de Paco, 13 nov) | por hacer |
 | jue 17 dic | libre («Mujeres que sostienen una cultura» en pausa, Paco 16 nov) | — |
