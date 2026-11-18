@@ -7,7 +7,13 @@
   "alt": "Kuala Belait, Brunéi",
   "autor": "IQRemix from Canada",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kuala_Belait_at_Night_(18623608099).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kuala_Belait_at_Night_(18623608099).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

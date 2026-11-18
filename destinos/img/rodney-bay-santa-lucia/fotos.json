@@ -7,7 +7,13 @@
   "alt": "Rodney Bay, Santa Lucía",
   "autor": "Paul Harrison",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:St_Croix_Roadstead,_Rodney_Bay,_St_Lucia_2011_0652.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:St_Croix_Roadstead,_Rodney_Bay,_St_Lucia_2011_0652.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Pigeon Island, Saint Lucia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

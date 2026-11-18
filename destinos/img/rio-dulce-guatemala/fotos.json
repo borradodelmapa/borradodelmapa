@@ -7,7 +7,13 @@
   "alt": "Río Dulce, Guatemala",
   "autor": "BBCLCD",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:RioDulce1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:RioDulce1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2020 in Guatemala"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

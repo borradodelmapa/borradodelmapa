@@ -7,7 +7,13 @@
   "alt": "Cluj-Napoca, Rumanía",
   "autor": "Robert Puțeanu",
   "licencia": "CC BY-SA 3.0 ro",
-  "url": "https://commons.wikimedia.org/wiki/File:Biserica_romano-catolic%C4%83_%22Sf%C3%A2ntul_Mihail%22.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Biserica_romano-catolic%C4%83_%22Sf%C3%A2ntul_Mihail%22.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Exterior of the Saint Michael Church in Cluj-Napoca"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

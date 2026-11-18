@@ -7,7 +7,13 @@
   "alt": "Isla de Hiiumaa, Estonia",
   "autor": "Blizzard1",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vaade_tahkuna_tuletornist4.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vaade_tahkuna_tuletornist4.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Estonia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

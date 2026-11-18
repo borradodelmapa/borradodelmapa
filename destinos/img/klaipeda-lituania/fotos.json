@@ -7,7 +7,13 @@
   "alt": "Klaipėda, Lituania",
   "autor": "Mantas Volungevicius",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Quite_summer_evening_in_the_port_city_Klaipeda.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Quite_summer_evening_in_the_port_city_Klaipeda.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Castle Harbour, Klaipėda"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Musanze (Ruhengeri), Ruanda",
   "autor": "Wikimedia Commons",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ruhengeri.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ruhengeri.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ruhengeri"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

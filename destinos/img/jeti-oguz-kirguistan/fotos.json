@@ -7,7 +7,13 @@
   "alt": "Jeti-Oguz, Kirguistán",
   "autor": "Bernard Gagnon",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:The_Seven_Bulls.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:The_Seven_Bulls.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 10.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "El Nido, Palawan, Filipinas",
   "autor": "Philippine Fly Boy",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:El_Nido_Palawan_2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:El_Nido_Palawan_2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "El Nido, Palawan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +25,13 @@
    "pie": "La entrada a la Big Lagoon, en la isla de Miniloc.",
    "autor": "Tuderna",
    "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Big_lagoon_entrance,_Miniloc_island_-_panoramio.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Big_lagoon_entrance,_Miniloc_island_-_panoramio.jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 11.9
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -29,7 +41,13 @@
    "pie": "En kayak junto a la isla de Cadlao.",
    "autor": "Lancegio2020",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Kayaking_in_Cadlao_island_El_Nido,_Palawan.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Kayaking_in_Cadlao_island_El_Nido,_Palawan.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Cadlao Island"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -39,7 +57,13 @@
    "pie": "La playa del pueblo de El Nido.",
    "autor": "Micluna",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:El_Nido_Town_Beach.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:El_Nido_Town_Beach.jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 4.3
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

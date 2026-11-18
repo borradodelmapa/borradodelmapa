@@ -7,7 +7,13 @@
   "alt": "Labé, Guinea",
   "autor": "Nicolas Martin",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ville_de_Lab%C3%A9.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ville_de_Lab%C3%A9.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Streets in Labé"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

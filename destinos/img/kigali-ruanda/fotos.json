@@ -7,7 +7,13 @@
   "alt": "Kigali, Ruanda",
   "autor": "Emmanuelkwizera",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:High_Angle_View_Of_Kigali_City_Street_on_November_29,_2018._Emmanuel_Kwizera.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:High_Angle_View_Of_Kigali_City_Street_on_November_29,_2018._Emmanuel_Kwizera.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Building construction in Rwanda"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

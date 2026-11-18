@@ -7,7 +7,13 @@
   "alt": "Split, Croacia",
   "autor": "dronepicr",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ferry_Port_of_Split,_Croatia_(48693924822).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ferry_Port_of_Split,_Croatia_(48693924822).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2019 in Split"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

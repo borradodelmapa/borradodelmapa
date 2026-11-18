@@ -7,7 +7,13 @@
   "alt": "Lago Issyk-Kul, Kirguistán",
   "autor": "Paul Munhoven",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Lac_Issyk_Koul_-_Paul_Munhoven.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Lac_Issyk_Koul_-_Paul_Munhoven.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Issyk-Kul"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

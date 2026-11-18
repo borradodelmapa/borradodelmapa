@@ -7,7 +7,13 @@
   "alt": "Colonia, Alemania",
   "autor": "Xarucoponce",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Villa_Baviera.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Villa_Baviera.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Colonia Dignidad"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

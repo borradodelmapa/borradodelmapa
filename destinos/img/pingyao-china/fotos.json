@@ -7,7 +7,13 @@
   "alt": "Pingyao, China",
   "autor": "Zhangzhugang",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pingyao_Shilou_2013.08.25_07-01-33.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Pingyao_Shilou_2013.08.25_07-01-33.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

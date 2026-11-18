@@ -7,7 +7,13 @@
   "alt": "Jasper, Canadá",
   "autor": "Harvey Barrison from Massapequa, NY, USA",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Jasper_from_the_Jasper_Tramway_2008.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Jasper_from_the_Jasper_Tramway_2008.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Zanzíbar (isla principal Unguja), Tanzania",
   "autor": "Freestylerob",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Zanzibar_Beach.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Zanzibar_Beach.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Zanzibar"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

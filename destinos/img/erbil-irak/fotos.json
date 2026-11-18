@@ -7,7 +7,13 @@
   "alt": "Erbil, Irak",
   "autor": "jan kurdistani",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Hawler_Castle.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Hawler_Castle.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Citadel of Erbil"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

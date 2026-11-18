@@ -7,7 +7,13 @@
   "alt": "Margaret River, Australia",
   "autor": "Bahnfrend",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bussell_Highway,_Margaret_River,_2015_(05).JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Bussell_Highway,_Margaret_River,_2015_(05).JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Utila, Honduras",
   "autor": "CIA Factbook",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Utila_0001.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Utila_0001.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Architecture of Honduras"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

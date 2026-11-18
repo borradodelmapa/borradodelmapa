@@ -7,7 +7,13 @@
   "alt": "Levi / Kittilä, Finlandia",
   "autor": "Janne Karaste, Janne Karaste",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Levi_hiihtokeskus_2003.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Levi_hiihtokeskus_2003.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Levi, Finland"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

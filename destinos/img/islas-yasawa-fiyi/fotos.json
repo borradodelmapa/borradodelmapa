@@ -7,7 +7,13 @@
   "alt": "Islas Yasawa, Fiyi",
   "autor": "User:Doron",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:WayaYalobi.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:WayaYalobi.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Coasts of Fiji"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

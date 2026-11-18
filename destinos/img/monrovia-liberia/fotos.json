@@ -7,7 +7,13 @@
   "alt": "Monrovia, Liberia",
   "autor": "blk24ga",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Liberia,_Africa_-_panoramio_(256).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Liberia,_Africa_-_panoramio_(256).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

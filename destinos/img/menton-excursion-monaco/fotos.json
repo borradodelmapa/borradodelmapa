@@ -7,7 +7,13 @@
   "alt": "Mentón, Mónaco",
   "autor": "Jpgross",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Altstadt_von_Menton.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Altstadt_von_Menton.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Port of Menton"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

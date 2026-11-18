@@ -7,7 +7,13 @@
   "alt": "Qohaito (Kohaito), Eritrea",
   "autor": "Sailko",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kohaito,_zona_dei_palazzi_axumiti_09.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Kohaito,_zona_dei_palazzi_axumiti_09.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Qohaito"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

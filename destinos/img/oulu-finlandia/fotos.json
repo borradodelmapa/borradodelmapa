@@ -7,7 +7,13 @@
   "alt": "Oulu, Finlandia",
   "autor": "Tumi-1983",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kajaanin_yliopistokeskuksen_opettajankoulutusyksik%C3%B6n_p%C3%A4%C3%A4rakennus.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Kajaanin_yliopistokeskuksen_opettajankoulutusyksik%C3%B6n_p%C3%A4%C3%A4rakennus.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "University of Oulu"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Antigua Guatemala, Guatemala",
   "autor": "Juan Francisco",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Antigua_-_Arco.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Antigua_-_Arco.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2017 in Antigua Guatemala"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

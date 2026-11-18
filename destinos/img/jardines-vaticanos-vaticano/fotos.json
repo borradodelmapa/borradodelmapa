@@ -7,7 +7,13 @@
   "alt": "Jardines Vaticanos, Vaticano",
   "autor": "Marek69",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vatican_Gardens.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vatican_Gardens.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Gardener's Lodge, Vatican City"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

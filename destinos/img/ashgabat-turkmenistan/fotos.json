@@ -7,7 +7,13 @@
   "alt": "Ashgabat, Turkmenistán",
   "autor": "John Pavelka from Austin, TX, USA",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:View_of_Ashgabat_(42376779291).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:View_of_Ashgabat_(42376779291).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 5.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

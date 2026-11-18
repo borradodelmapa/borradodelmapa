@@ -7,7 +7,13 @@
   "alt": "İzmir, Turquía",
   "autor": "Michael ksk",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cumhuriyet_Square.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cumhuriyet_Square.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cumhuriyet Square (İzmir)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

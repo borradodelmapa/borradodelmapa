@@ -7,7 +7,13 @@
   "alt": "Blue Mountains, Jamaica",
   "autor": "Wolmadrian",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Blue_Mountains,_Jamaica.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Blue_Mountains,_Jamaica.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Blue Mountains, Jamaica"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

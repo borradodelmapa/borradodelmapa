@@ -7,7 +7,13 @@
   "alt": "Gonur Depe, Turkmenistán",
   "autor": "Kilian Teuwsen",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:%C3%9Cbersichtsfoto_von_S%C3%BCdosten_(Unit_B,_C,_D_und_E).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:%C3%9Cbersichtsfoto_von_S%C3%BCdosten_(Unit_B,_C,_D_und_E).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Archaeology in Turkmenistan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

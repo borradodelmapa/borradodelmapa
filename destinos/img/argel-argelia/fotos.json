@@ -7,7 +7,13 @@
   "alt": "Argel, Argelia",
   "autor": "LBM1948",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Argel_3.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Argel_3.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Algiers Province"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

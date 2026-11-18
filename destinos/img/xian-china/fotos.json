@@ -7,7 +7,13 @@
   "alt": "Xi'an, China",
   "autor": "xiquinhosilva",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:City_wall_of_Xi%27an_51550-Xian_(27959363326).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:City_wall_of_Xi%27an_51550-Xian_(27959363326).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 7
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

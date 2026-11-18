@@ -7,7 +7,13 @@
   "alt": "Zhangjiajie, China",
   "autor": "HighestBridges",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:ZhangjiajieGlassByHighestBridges.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:ZhangjiajieGlassByHighestBridges.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bridges in China photographed in 2016"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,19 +7,15 @@
   "alt": "Patan (Lalitpur), Nepal",
   "autor": "Gerd Eichmann",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Patan-Palastplatz-14-Tauben-2013-gje.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Patan-Palastplatz-14-Tauben-2013-gje.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Patan Durbar Square"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
-  "Patan Museum": {
-   "file": "s2.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Patan Museum, Patan (Lalitpur)",
-   "autor": "Bijay chaurasia",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Patan_Museum-_02.jpg",
-   "fuente": "Patan Museum- 02.jpg"
-  },
   "Golden Temple Patan": {
    "file": "s4.jpg",
    "w": 720,
@@ -28,17 +24,13 @@
    "autor": "Nabin K. Sapkota",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Photowalk_at_Hiranya_Varna_Mahavihar_21.jpg",
-   "fuente": "Photowalk at Hiranya Varna Mahavihar 21.jpg"
-  },
-  "Mahabuddha Temple": {
-   "file": "s5.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Mahabuddha Temple, Patan (Lalitpur)",
-   "autor": "Sanjib Chaudhary",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Terracotta_Buddhas,_Mahabuddha_Temple.jpg",
-   "fuente": "Terracotta Buddhas, Mahabuddha Temple.jpg"
+   "fuente": "Photowalk at Hiranya Varna Mahavihar 21.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hiranyabarna Mahavihar, Patan"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Rudra Varna Mahavihar , Oku Bahal": {
    "file": "s6.jpg",
@@ -48,28 +40,13 @@
    "autor": "Christopher J. Fynn",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Rudravarna_Mahavihar_(01).jpg",
-   "fuente": "Rudravarna Mahavihar (01).jpg"
-  },
-  "Mangal Bazar": {
-   "file": "s7.jpg",
-   "w": 720,
-   "h": 477,
-   "alt": "Mangal Bazar, Patan (Lalitpur)",
-   "autor": "lienyuan lee",
-   "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Mangal_Bazaar_-_panoramio.jpg",
-   "fuente": "Mangal Bazaar - panoramio.jpg"
-  },
-  "Patan Darbar Square": {
-   "file": "s1.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Patan Darbar Square, Patan (Lalitpur)",
-   "autor": "Sushan116",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:The_throne_of_Patan_Kings.jpg",
-   "fuente": "The throne of Patan Kings.jpg",
-   "cercana": true
+   "fuente": "Rudravarna Mahavihar (01).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Rudravarna Mahavihar"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Kumbheshwor Temple(Patan)": {
    "file": "s3.jpg",
@@ -80,7 +57,13 @@
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kumbheshwar_Temple_(16800).jpg",
    "fuente": "Kumbheshwar Temple (16800).jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kumbeshwar Temple, Patan"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

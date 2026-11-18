@@ -7,7 +7,13 @@
   "alt": "Caacupé, Paraguay",
   "autor": "Garcia.dennis",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_de_Caacup%C3%A9.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_de_Caacup%C3%A9.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

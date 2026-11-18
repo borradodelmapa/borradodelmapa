@@ -7,7 +7,13 @@
   "alt": "Isfahán, Irán",
   "autor": "Pedram forouzanfar",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Naghshe_jahan_01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Naghshe_jahan_01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2020 aerial photographs of Iran"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

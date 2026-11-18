@@ -7,7 +7,13 @@
   "alt": "Quinhámel, Guinea-Bisáu",
   "autor": "Nammarci",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Quinhamel_main_street.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Quinhamel_main_street.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "People of Guinea-Bissau"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

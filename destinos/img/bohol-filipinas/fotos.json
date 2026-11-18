@@ -8,7 +8,12 @@
   "autor": "Wolfgang Hägele",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Chocolate_Hills_Carmen_Bohol_2019.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Carmen, Bohol"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +25,13 @@
    "pie": "Las Chocolate Hills de Bohol.",
    "autor": "Ramir Borja derivative work: MrPanyGoff",
    "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Chocolate_Hills_-_edit.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Chocolate_Hills_-_edit.jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 5.8
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -30,7 +41,13 @@
    "pie": "Un tarsero filipino, el primate diminuto de Bohol.",
    "autor": ". Ray in Manila",
    "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Philippine_Tarsier,_Bohol_-_Flickr_-_._Ray_in_Manila.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Philippine_Tarsier,_Bohol_-_Flickr_-_._Ray_in_Manila.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Philippine Tarsier Sanctuary (Corella, Bohol)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -40,7 +57,13 @@
    "pie": "Alona Beach, en la isla de Panglao.",
    "autor": "Jeroen36",
    "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Alona_Beach,_Panglao_-_panoramio.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Alona_Beach,_Panglao_-_panoramio.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Alona Beach"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -50,7 +73,13 @@
    "pie": "Crucero por el río Loboc.",
    "autor": "Øyvind Holmstad",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Loboc_river_cruise_Bohol_2017.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Loboc_river_cruise_Bohol_2017.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Loboc River"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

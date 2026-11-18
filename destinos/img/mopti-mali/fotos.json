@@ -7,7 +7,13 @@
   "alt": "Mopti, Malí",
   "autor": "Arensond",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Mopti_053.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mopti_053.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cycling in Mali"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

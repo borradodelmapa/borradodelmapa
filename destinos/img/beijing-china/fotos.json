@@ -7,7 +7,13 @@
   "alt": "Pekín (Beijing), China",
   "autor": "N509FZ",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Skyline_of_Beijing_CBD_with_B-5906_approaching_(20211016171955)_(1).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Skyline_of_Beijing_CBD_with_B-5906_approaching_(20211016171955)_(1).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "China Zun"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

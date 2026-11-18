@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Odzala-Kokoua, Congo",
   "autor": "Leighcn",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Primage2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Primage2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Children of the Republic of the Congo"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

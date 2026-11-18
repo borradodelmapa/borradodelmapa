@@ -7,7 +7,13 @@
   "alt": "Sierra Maestra, Cuba",
   "autor": "CO8MRF",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cascada_en_rio_Brazo_de_Buey.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cascada_en_rio_Brazo_de_Buey.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Outcrops in Cuba"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

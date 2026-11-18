@@ -7,7 +7,13 @@
   "alt": "Isla de Bubaque, Guinea-Bisáu",
   "autor": "Nammarci",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bubaque_port.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bubaque_port.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2010 in Guinea-Bissau"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

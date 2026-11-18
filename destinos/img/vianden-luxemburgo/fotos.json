@@ -7,7 +7,13 @@
   "alt": "Vianden, Luxemburgo",
   "autor": "Johnny Chicago at lb.wikipedia",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:OurVei23.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:OurVei23.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Our river in Vianden"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

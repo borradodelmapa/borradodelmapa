@@ -7,7 +7,13 @@
   "alt": "Djemila, Argelia",
   "autor": "Alioueche Mokhtar",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Roman_Ruins_of_Djemila_in_S%C3%A9tif,_Algeria.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Roman_Ruins_of_Djemila_in_S%C3%A9tif,_Algeria.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

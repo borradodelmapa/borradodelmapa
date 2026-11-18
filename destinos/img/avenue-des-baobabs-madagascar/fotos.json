@@ -7,7 +7,13 @@
   "alt": "Avenida de los Baobabs, Madagascar",
   "autor": "Pat Hooper from Chicago, IL, USA",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Adansonia_grandidieri_Pat_Hooper.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Adansonia_grandidieri_Pat_Hooper.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Avenue of the Baobabs"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

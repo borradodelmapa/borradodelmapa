@@ -7,7 +7,13 @@
   "alt": "Semuc Champey, Guatemala",
   "autor": "Lucía García González",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Semuc_Champey_natural_wonder.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Semuc_Champey_natural_wonder.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Semuc Champey"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

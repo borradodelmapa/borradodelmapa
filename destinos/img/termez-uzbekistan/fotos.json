@@ -7,7 +7,13 @@
   "alt": "Termez, Uzbekistán",
   "autor": "Farkhod Sayd",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sulton_Saodat_Komplex.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sulton_Saodat_Komplex.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings in Termez"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

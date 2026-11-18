@@ -7,7 +7,13 @@
   "alt": "Anuradhapura, Sri Lanka",
   "autor": "Thisaru Tharuka",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ruwanweli_Maha_Saaya.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ruwanweli_Maha_Saaya.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Pilgrims in Ruwanweliseya (Sri Lanka)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

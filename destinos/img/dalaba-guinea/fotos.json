@@ -7,7 +7,13 @@
   "alt": "Dalaba, Guinea",
   "autor": "Jonathan Müller",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Dalaba_Market_street.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Dalaba_Market_street.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Dalaba"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

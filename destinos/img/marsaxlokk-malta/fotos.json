@@ -7,7 +7,13 @@
   "alt": "Marsaxlokk, Malta",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Puerto_de_Marsaxlokk,_isla_de_Malta,_Malta,_2021-08-21,_DD_14.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Puerto_de_Marsaxlokk,_isla_de_Malta,_Malta,_2021-08-21,_DD_14.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Marsaxlokk Harbour"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

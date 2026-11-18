@@ -7,7 +7,13 @@
   "alt": "Ciudad del Este, Paraguay",
   "autor": "Cmasi",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Downtown_Ciudad_del_Este_view_134135.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Downtown_Ciudad_del_Este_view_134135.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Markets in Paraguay"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

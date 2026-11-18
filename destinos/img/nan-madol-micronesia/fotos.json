@@ -7,7 +7,13 @@
   "alt": "Nan Madol, Micronesia",
   "autor": "NOAA",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Nan_madol.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nan_madol.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Nan Madol"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

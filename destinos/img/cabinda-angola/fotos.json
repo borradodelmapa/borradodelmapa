@@ -7,7 +7,13 @@
   "alt": "Cabinda, Angola",
   "autor": "Le Schéma",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mes_voyages_04.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mes_voyages_04.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cabinda (city)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

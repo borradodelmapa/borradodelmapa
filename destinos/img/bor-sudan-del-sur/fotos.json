@@ -7,7 +7,13 @@
   "alt": "Bor, Sudán del Sur",
   "autor": "Mr leroy playpus (Tuttle)",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Merol_Market,_Bor_Town,_Jonglei_State,_South_Sudan.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Merol_Market,_Bor_Town,_Jonglei_State,_South_Sudan.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.7
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

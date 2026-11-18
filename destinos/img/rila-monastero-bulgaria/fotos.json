@@ -7,7 +7,13 @@
   "alt": "Monasterio de Rila, Bulgaria",
   "autor": "Droben",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Church_Monastry_Rila.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Church_Monastry_Rila.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings of the Rila Monastery"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

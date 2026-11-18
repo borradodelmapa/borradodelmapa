@@ -7,7 +7,13 @@
   "alt": "Tofino, Canadá",
   "autor": "Olivier Lévy",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Tofino.Vue_vers_l%27est.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Tofino.Vue_vers_l%27est.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings in Tofino"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

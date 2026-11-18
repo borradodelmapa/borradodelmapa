@@ -7,7 +7,13 @@
   "alt": "El Chaltén, Argentina",
   "autor": "David",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:El_Chalt%C3%A9n.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:El_Chalt%C3%A9n.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Clouds and blue sky in Argentina"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

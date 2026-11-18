@@ -7,7 +7,13 @@
   "alt": "Amman, Jordania",
   "autor": "David Bjorgen",
   "licencia": "CC BY 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Amman_Citadel.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Amman_Citadel.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Amman Citadel"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

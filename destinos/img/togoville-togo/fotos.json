@@ -7,7 +7,13 @@
   "alt": "Togoville, Togo",
   "autor": "Александра Пугачевская (Alexandra Pugachevsky)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Togoville,_Togo_view.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Togoville,_Togo_view.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2007 in Togoville"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

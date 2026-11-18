@@ -7,7 +7,13 @@
   "alt": "Monte Kilimanjaro, Tanzania",
   "autor": "Sergey Pesterev",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kilimanjaro_from_Amboseli.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kilimanjaro_from_Amboseli.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kilimanjaro from Amboseli National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Lago Kaindy, Kazajistán",
   "autor": "Jonas Satkauskas",
   "licencia": "Attribution",
-  "url": "https://commons.wikimedia.org/wiki/File:Kaindy_lake_south-east_Kazakhstan.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kaindy_lake_south-east_Kazakhstan.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2006 in Kazakhstan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

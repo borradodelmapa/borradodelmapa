@@ -7,7 +7,13 @@
   "alt": "Anse Chastanet, Santa Lucía",
   "autor": "Martin Tuchscherer",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Anse_Chastanet_-_panoramio.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Anse_Chastanet_-_panoramio.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

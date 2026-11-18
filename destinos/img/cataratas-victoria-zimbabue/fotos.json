@@ -7,7 +7,13 @@
   "alt": "Cataratas Victoria, Zimbabue",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cataratas_Victoria,_Zambia-Zimbabue,_2018-07-27,_DD_05.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cataratas_Victoria,_Zambia-Zimbabue,_2018-07-27,_DD_05.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 5.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

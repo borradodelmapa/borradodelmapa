@@ -7,7 +7,13 @@
   "alt": "Los Pitons y Soufrière, Santa Lucía",
   "autor": "Wikimedia Commons",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Pitons_landview.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Pitons_landview.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "1988 in Saint Lucia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

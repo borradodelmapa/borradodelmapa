@@ -7,7 +7,13 @@
   "alt": "Boké, Guinea",
   "autor": "Aboubacarkhoraa",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_de_Bok%C3%A9.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_de_Bok%C3%A9.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

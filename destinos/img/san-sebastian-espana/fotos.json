@@ -7,7 +7,13 @@
   "alt": "San Sebastián, España",
   "autor": "Zarateman",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Exterior of the Town hall of Donostia-San Sebastián"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

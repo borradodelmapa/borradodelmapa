@@ -7,7 +7,13 @@
   "alt": "Gaborone, Botsuana",
   "autor": "Shoodho",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Gaborone_road.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gaborone_road.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Gaborone in the 2010s"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

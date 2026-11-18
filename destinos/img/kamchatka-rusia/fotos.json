@@ -7,7 +7,13 @@
   "alt": "Kamchatka, Rusia",
   "autor": "Rubin16",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kamchatka_river_20230926_101910_02.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kamchatka_river_20230926_101910_02.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kamchatka River (Milkovsky District)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

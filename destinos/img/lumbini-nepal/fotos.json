@@ -7,7 +7,13 @@
   "alt": "Lumbini, Nepal",
   "autor": "Bibek Raj Pandeya",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:BRP_Lumbini_Mayadevi_temple.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:BRP_Lumbini_Mayadevi_temple.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Maya Devi Temple, Lumbini"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
   "अशोक स्तम्भ Ashoka Pillar": {
@@ -18,7 +24,13 @@
    "autor": "Youb Raj Basnet",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Birth_Mark_Place_of_Lors_Buddha.jpg",
-   "fuente": "Birth Mark Place of Lors Buddha.jpg"
+   "fuente": "Birth Mark Place of Lors Buddha.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Ashoka pillar (Lumbini)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Lumbini Buddhist Temple": {
    "file": "s3.jpg",
@@ -28,7 +40,13 @@
    "autor": "Harry Paudyal",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lumbini_Buddhist_pilgrimage_IMG_0678_18.jpg",
-   "fuente": "Lumbini Buddhist pilgrimage IMG 0678 18.jpg"
+   "fuente": "Lumbini Buddhist pilgrimage IMG 0678 18.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Lumbini Shanti Stupa"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Myanmar Golden Temple": {
    "file": "s7.jpg",
@@ -38,7 +56,13 @@
    "autor": "Raunak Maskay",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lumbini_Myanmar_Golden_Temple.jpg",
-   "fuente": "Lumbini Myanmar Golden Temple.jpg"
+   "fuente": "Lumbini Myanmar Golden Temple.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Lokamani Cula Pagoda (Lumbini)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Templo Maya Devi": {
    "file": "s1.jpg",
@@ -49,7 +73,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mayadevi_temple_1.jpg",
    "fuente": "Mayadevi temple 1.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Maya Devi Temple, Lumbini"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "World Peace Pagoda , Lumbini": {
    "file": "s4.jpg",
@@ -60,7 +90,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lumbini,_Nepal_2019-04-09_1.jpg",
    "fuente": "Lumbini, Nepal 2019-04-09 1.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Flora of Lumbini"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Lumbini Museum": {
    "file": "s8.jpg",
@@ -71,7 +107,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Eichhornia_crassipes_in_Lumbini,_Nepal_2.jpg",
    "fuente": "Eichhornia crassipes in Lumbini, Nepal 2.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Flora of Lumbini"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,7 +7,13 @@
   "alt": "Mostar, Bosnia y Herzegovina",
   "autor": "Wolfgang Pehlemann",
   "licencia": "CC BY-SA 3.0 de",
-  "url": "https://commons.wikimedia.org/wiki/File:Gymnasium_Mostar_1898-1902_Gimnazija_Mostar_damaged_B-War_renovated_2009_United_World_College_Foto_Wolfgang_Pehlemann_DSCN6157.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gymnasium_Mostar_1898-1902_Gimnazija_Mostar_damaged_B-War_renovated_2009_United_World_College_Foto_Wolfgang_Pehlemann_DSCN6157.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2014 in Mostar"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

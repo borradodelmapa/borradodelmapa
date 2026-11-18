@@ -7,7 +7,13 @@
   "alt": "Nuristan, Afganistán",
   "autor": "Tech. Sgt. Brian Christiansen (U.S. Armed Forces)",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Stream_in_Nuristan_province.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Stream_in_Nuristan_province.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Nuristan Province"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

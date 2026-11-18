@@ -7,7 +7,13 @@
   "alt": "Dublín, Irlanda",
   "autor": "瑞丽江的河水",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Dublin_-_aerial_-_2025-07-07_01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Dublin_-_aerial_-_2025-07-07_01.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,12 @@
   "alt": "Los restos del B-52 en el lago Hữu Tiệp",
   "autor": "Borrado del Mapa",
   "licencia": "",
-  "url": "https://www.instagram.com/borradodelmapa/"
+  "url": "https://www.instagram.com/borradodelmapa/",
+  "prueba": {
+   "tipo": "propia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +24,12 @@
    "pie": "Una calle del casco antiguo de Hanói.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -29,7 +39,12 @@
    "pie": "La entrada del Templo de la Literatura.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -39,7 +54,12 @@
    "pie": "Las vías del tren entre las casas de Hanói.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -49,7 +69,12 @@
    "pie": "Café con huevo en el casco antiguo.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "4": {
    "file": "q4.jpg",
@@ -59,7 +84,12 @@
    "pie": "El B-52 entre las casas del barrio.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

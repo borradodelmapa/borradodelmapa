@@ -7,7 +7,13 @@
   "alt": "Lefkara, Chipre",
   "autor": "Leonid Mamchenkov",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Lefkara_view.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Lefkara_view.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Pano Lefkara"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

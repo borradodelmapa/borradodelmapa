@@ -7,7 +7,13 @@
   "alt": "Domoni, Comoras",
   "autor": "Melle L'hermitte Aurélie",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Happy_colours.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Happy_colours.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Domoni"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

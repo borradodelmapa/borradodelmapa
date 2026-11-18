@@ -7,7 +7,13 @@
   "alt": "Parque Nacional de Koli, Finlandia",
   "autor": "Lobke Thijssen",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Koli_hill_view.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Koli_hill_view.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views from the top of Koli Hill"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -8,7 +8,12 @@
   "autor": "Mike Gonzalez",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:Puerto_Princesa_Underground_River.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Puerto Princesa Subterranean River National Park"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +25,13 @@
    "pie": "Dentro del río subterráneo de Puerto Princesa.",
    "autor": "Vyacheslav Argenberg",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Puerto_Princesa_Subterranean_River_Cave,_Palawan,_Philippines.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Puerto_Princesa_Subterranean_River_Cave,_Palawan,_Philippines.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Puerto Princesa Subterranean River National Park"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -30,7 +41,13 @@
    "pie": "Isla de Barlas, en la bahía de Honda.",
    "autor": "Ray in Manila",
    "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Barlas_Island,_Honda_Bay,_Palawan,_Philippines_-_24080283775.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Barlas_Island,_Honda_Bay,_Palawan,_Philippines_-_24080283775.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Honda Bay"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

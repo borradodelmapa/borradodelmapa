@@ -7,7 +7,13 @@
   "alt": "Banfora y región de las Cascadas, Burkina Faso",
   "autor": "Marco Schmidt [1]",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Markt_Banfora_MS_2255.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Markt_Banfora_MS_2255.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2006 in Burkina Faso"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

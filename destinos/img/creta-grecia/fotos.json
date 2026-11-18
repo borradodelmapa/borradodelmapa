@@ -7,7 +7,13 @@
   "alt": "Creta, Grecia",
   "autor": "Tomisti",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:University_of_Crete,_Rethymno_Campus_04_-_Department_of_History_and_Archaeology.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:University_of_Crete,_Rethymno_Campus_04_-_Department_of_History_and_Archaeology.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "University of Crete"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

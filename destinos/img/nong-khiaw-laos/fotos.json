@@ -7,7 +7,13 @@
   "alt": "Nong Khiaw, Laos",
   "autor": "Ekrem Canli",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nong_Khiaw_pano(4).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nong_Khiaw_pano(4).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Laos"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

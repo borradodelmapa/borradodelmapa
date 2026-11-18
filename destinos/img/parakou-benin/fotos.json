@@ -7,7 +7,13 @@
   "alt": "Parakou, Benín",
   "autor": "Dowomiche",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Place_de_la_municipalit%C3%A9_10.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Place_de_la_municipalit%C3%A9_10.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Parakou"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

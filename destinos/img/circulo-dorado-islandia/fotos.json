@@ -7,7 +7,13 @@
   "alt": "Círculo Dorado, Islandia",
   "autor": "Andreas Tille",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Thingvellir.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Thingvellir.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "1998 in Þingvellir"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

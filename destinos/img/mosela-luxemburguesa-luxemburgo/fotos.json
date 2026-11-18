@@ -7,7 +7,13 @@
   "alt": "Valle del Mosela Luxemburgués, Luxemburgo",
   "autor": "Kiefer. from Frankfurt, Germany",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Moselschleife_Bremm,_Rheinland-Pfalz,_Germany_(21476475103).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Moselschleife_Bremm,_Rheinland-Pfalz,_Germany_(21476475103).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Moselle River in Bremm in 2015"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

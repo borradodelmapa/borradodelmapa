@@ -7,7 +7,13 @@
   "alt": "Bolgatanga, Ghana",
   "autor": "Hugues",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bolgatanga_street1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bolgatanga_street1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Adansonia digitata in Ghana"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Maun, Botsuana",
   "autor": "jonrawlinson",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Maun_Botswana2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Maun_Botswana2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Maun"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

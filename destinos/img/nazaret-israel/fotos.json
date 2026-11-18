@@ -7,7 +7,13 @@
   "alt": "Nazaret, Israel",
   "autor": "Israel_photo_gallery",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nazareth_Panorama_Dafna_Tal_IMOT_(14532097313).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nazareth_Panorama_Dafna_Tal_IMOT_(14532097313).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Nazareth"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

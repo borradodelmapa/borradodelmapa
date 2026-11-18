@@ -7,7 +7,13 @@
   "alt": "Pantanos de Mesopotamia (Ahwar), Irak",
   "autor": "Hassan Janali, U.S. Army Corps of Engineers",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Marsh_Arabs_in_a_mashoof.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Marsh_Arabs_in_a_mashoof.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "April 2003 in Iraq"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

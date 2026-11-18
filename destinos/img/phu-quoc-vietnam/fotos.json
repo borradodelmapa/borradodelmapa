@@ -7,7 +7,13 @@
   "alt": "Phu Quoc, Vietnam",
   "autor": "[//commons.wikimedia.org/wiki/User:Trantuonglam Trantuonglam]",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bai-sao-phu-quoc-tuonglamphotos.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bai-sao-phu-quoc-tuonglamphotos.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Vietnam"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +25,13 @@
    "pie": "La playa de Bãi Sao.",
    "autor": "Vnecofriendly",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Star_Beach_(B%C3%A3i_Sao).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Star_Beach_(B%C3%A3i_Sao).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Beaches of Phu Quoc"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -29,7 +41,13 @@
    "pie": "Barricas en una fábrica de salsa de pescado.",
    "autor": "Frank Fox",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Vats_at_a_Fish_Sauce_Factory_on_Phu_Quoc_Island_in_Vietnam_01.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Vats_at_a_Fish_Sauce_Factory_on_Phu_Quoc_Island_in_Vietnam_01.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Culture of Phu Quoc"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -39,7 +57,13 @@
    "pie": "Erizos de mar en el mercado de Dinh Cậu.",
    "autor": "Fox Travels",
    "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Dinh_Cau_Night_Market_-_panoramio_(2).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Dinh_Cau_Night_Market_-_panoramio_(2).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Dinh Cau Night Market"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

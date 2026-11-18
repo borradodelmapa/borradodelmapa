@@ -7,7 +7,13 @@
   "alt": "Cracovia, Polonia",
   "autor": "Andrzej Otrębski",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Krakow_Rynek_Glowny_panorama_2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Krakow_Rynek_Glowny_panorama_2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Adam Mickiewicz Monument in Kraków"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

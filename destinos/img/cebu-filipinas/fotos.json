@@ -7,20 +7,16 @@
   "alt": "Cebu City y alrededores, Filipinas",
   "autor": "P199",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Cebu_City.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cebu_City.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Skylines of Cebu City"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
-  "0": {
-   "file": "q0.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "El templete de la Cruz de Magallanes, en Cebú",
-   "pie": "El templete de la Cruz de Magallanes, en Cebú.",
-   "autor": "Elmer B. Domingo",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Magellan%27s_Cross_Cebu_City.jpg"
-  },
   "1": {
    "file": "q1.jpg",
    "w": 720,
@@ -29,7 +25,13 @@
    "pie": "El Fuerte San Pedro, en Cebú.",
    "autor": "Philip Nalangan",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:San_Pedro_Fort_Cebu_02.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:San_Pedro_Fort_Cebu_02.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Fort San Pedro (Cebu City)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -39,7 +41,13 @@
    "pie": "Un banco de sardinas en Moalboal.",
    "autor": "Iampjanz",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Sardine_run_over_seafloor_in_Moalboal_04.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Sardine_run_over_seafloor_in_Moalboal_04.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Moalboal"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -49,7 +57,13 @@
    "pie": "Las cascadas de Kawasan.",
    "autor": "Andrewhaimerl",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Kawasan_Falls,_Cebu,_Philippines1.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Kawasan_Falls,_Cebu,_Philippines1.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kawasan Falls (Badian, Cebu)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

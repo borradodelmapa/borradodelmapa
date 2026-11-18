@@ -7,7 +7,13 @@
   "alt": "Inari / Saariselkä, Finlandia",
   "autor": "Birit Schenk (Birit)",
   "licencia": "CC BY 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Huippu-ravintola.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Huippu-ravintola.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "January 2007 in Inari"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

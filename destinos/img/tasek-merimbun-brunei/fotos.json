@@ -7,7 +7,13 @@
   "alt": "Tasek Merimbun, Brunéi",
   "autor": "Bernard Spragg. NZ from Christchurch, New Zealand",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Tasek_Merimbun_Heritage_Park.Brunei._(9565514695).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Tasek_Merimbun_Heritage_Park.Brunei._(9565514695).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

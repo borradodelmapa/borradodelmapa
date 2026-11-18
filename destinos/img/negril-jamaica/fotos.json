@@ -7,7 +7,13 @@
   "alt": "Negril, Jamaica",
   "autor": "Wikimedia Commons",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Negril_Jamaica_2007-09.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Negril_Jamaica_2007-09.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Negril"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

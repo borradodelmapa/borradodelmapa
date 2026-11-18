@@ -7,7 +7,13 @@
   "alt": "Tash Rabat, Kirguistán",
   "autor": "WikiTofu",
   "licencia": "CC BY-SA 3.0 de",
-  "url": "https://commons.wikimedia.org/wiki/File:Tash_Rabat.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Tash_Rabat.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Tash Rabat"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

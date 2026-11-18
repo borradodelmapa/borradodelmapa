@@ -7,7 +7,13 @@
   "alt": "Haapsalu, Estonia",
   "autor": "Tiia Monto",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Haapsalu_-_view_from_Castle.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Haapsalu_-_view_from_Castle.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings in Haapsalu"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

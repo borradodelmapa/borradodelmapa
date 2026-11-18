@@ -7,7 +7,13 @@
   "alt": "Bosque Iwokrama, Guyana",
   "autor": "M M from Switzerland",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Iwokrama_Rainforest,_Guyana_(12179003713).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Iwokrama_Rainforest,_Guyana_(12179003713).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Iwokrama Forest"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

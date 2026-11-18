@@ -7,7 +7,13 @@
   "alt": "Tozeur y el Chott el-Jerid, Túnez",
   "autor": "HalloulimedAmeur",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Chott_ejjerid.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Chott_ejjerid.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Chott el Djerid"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

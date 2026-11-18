@@ -7,7 +7,13 @@
   "alt": "Bafatá, Guinea-Bisáu",
   "autor": "jbdodane",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Rua_principal_de_Bafat%C3%A1_-_20130612-DSC_9045.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Rua_principal_de_Bafat%C3%A1_-_20130612-DSC_9045.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

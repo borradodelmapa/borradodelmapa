@@ -7,7 +7,13 @@
   "alt": "Madaba y Monte Nebo, Jordania",
   "autor": "Berthold Werner",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mount_Nebo_BW_6.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Mount_Nebo_BW_6.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.4
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

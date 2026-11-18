@@ -7,7 +7,13 @@
   "alt": "Masai Mara, Kenia",
   "autor": "Self",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Masai_Mara.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Masai_Mara.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Eudorcas thomsonii in Masai Mara"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

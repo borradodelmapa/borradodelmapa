@@ -7,7 +7,13 @@
   "alt": "Sarandë, Albania",
   "autor": "Photo: Gary Bembridge",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:CIty_of_Saranda_Albania_2016.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:CIty_of_Saranda_Albania_2016.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Albanian Ionian Sea Coast"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

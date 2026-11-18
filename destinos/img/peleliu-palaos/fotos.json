@@ -7,7 +7,13 @@
   "alt": "Peleliu, Palaos",
   "autor": "Babiesan",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Orange_beach_-_panoramio.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Orange_beach_-_panoramio.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

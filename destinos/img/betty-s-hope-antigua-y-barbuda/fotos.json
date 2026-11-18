@@ -7,7 +7,13 @@
   "alt": "Betty's Hope, Antigua y Barbuda",
   "autor": "Dr. Thomas Liptak",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Antigua_Pares_Betty%27s_Hope_Historic_Sugar_Plantation_1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Antigua_Pares_Betty%27s_Hope_Historic_Sugar_Plantation_1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Betty's Hope"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Islas Batanes, Filipinas",
   "autor": "Ranieljosecastaneda",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sabtang_Batanes.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sabtang_Batanes.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Sabtang"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +25,13 @@
    "pie": "La carretera del norte de la isla de Batan.",
    "autor": "Jeremy.alinea",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Exploring_the_North_Batan,_Batanes.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Exploring_the_North_Batan,_Batanes.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Batan Island"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -29,7 +41,13 @@
    "pie": "Una casa de piedra tradicional de Batanes.",
    "autor": "Greenthumb331",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Batanes_Stone_house.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Batanes_Stone_house.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Buildings in Batanes"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -39,7 +57,13 @@
    "pie": "El faro de Naidi, en Basco.",
    "autor": "Luceen",
    "licencia": "Public domain",
-   "url": "https://commons.wikimedia.org/wiki/File:Naidi_Lighthouse.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Naidi_Lighthouse.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Basco Lighthouse"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

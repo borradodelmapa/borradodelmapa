@@ -7,7 +7,13 @@
   "alt": "Islas Mamanuca, Fiyi",
   "autor": "ogwen",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mamanuca_Islands_-_panoramio_(1).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mamanuca_Islands_-_panoramio_(1).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 6.4
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Benguela, Angola",
   "autor": "F H Mira",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Igreja_Benguela,_Angola.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Igreja_Benguela,_Angola.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2008 in Angola"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Djenné, Malí",
   "autor": "qiv",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Moschee_von_Djenn%C3%A9.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Moschee_von_Djenn%C3%A9.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Cockscomb Basin Wildlife Sanctuary, Belice",
   "autor": "Pgbk87",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:CB_Upper_Falls.png"
+  "url": "https://commons.wikimedia.org/wiki/File:CB_Upper_Falls.png",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cockscomb Basin Wildlife Sanctuary"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

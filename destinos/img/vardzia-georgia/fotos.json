@@ -7,7 +7,13 @@
   "alt": "Vardzia, Georgia",
   "autor": "Alexkom000",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:2025-05-25_Vardzia_9.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:2025-05-25_Vardzia_9.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

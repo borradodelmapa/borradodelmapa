@@ -7,7 +7,13 @@
   "alt": "Khor Virap, Armenia",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Monasterio_Khor_Virap,_Armenia,_2016-10-01,_DD_25.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Monasterio_Khor_Virap,_Armenia,_2016-10-01,_DD_25.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Blue sky in Armenia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

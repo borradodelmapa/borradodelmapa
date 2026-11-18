@@ -7,7 +7,13 @@
   "alt": "Riviera de Makarska, Croacia",
   "autor": "SKas",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Biokovo1_2019.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Biokovo1_2019.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Makarska"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

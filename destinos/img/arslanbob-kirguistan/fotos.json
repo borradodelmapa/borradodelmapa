@@ -7,7 +7,13 @@
   "alt": "Arslanbob, Kirguistán",
   "autor": "surrealpenguin",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Panorama_in_Arslanbob.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Panorama_in_Arslanbob.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Arslanbob"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

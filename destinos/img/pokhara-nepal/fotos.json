@@ -7,19 +7,15 @@
   "alt": "Pokhara, Nepal",
   "autor": "Utsab Raj Giri",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pokhara_Valley.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Pokhara_Valley.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Pokhara"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
-  "Sarangkot": {
-   "file": "s1.jpg",
-   "w": 720,
-   "h": 383,
-   "alt": "Sarangkot, Pokhara",
-   "autor": "Q-lieb-in",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Sunset_flying_above_Himalayas.jpg",
-   "fuente": "Sunset flying above Himalayas.jpg"
-  },
   "Phewa": {
    "file": "s2.jpg",
    "w": 720,
@@ -28,7 +24,13 @@
    "autor": "Jmhullot",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Phewa_lake,_Pokhara.jpg",
-   "fuente": "Phewa lake, Pokhara.jpg"
+   "fuente": "Phewa lake, Pokhara.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Phewa Lake"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Devi's Fall Pokhara": {
    "file": "s5.jpg",
@@ -38,7 +40,13 @@
    "autor": "Shiva Gurung",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Phewa_lake_Pokhara.jpg",
-   "fuente": "Phewa lake Pokhara.jpg"
+   "fuente": "Phewa lake Pokhara.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Phewa Lake"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Gupteshwor Mahadev Cave": {
    "file": "s6.jpg",
@@ -48,7 +56,13 @@
    "autor": "Q-lieb-in",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:In_Gupteshwor_Cave.jpg",
-   "fuente": "In Gupteshwor Cave.jpg"
+   "fuente": "In Gupteshwor Cave.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Gupteshwor Mahadev Cave"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "International Mountain Museum": {
    "file": "s7.jpg",
@@ -58,7 +72,13 @@
    "autor": "en:User:MMuzammils",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:International_Mountain_Museum_(2010),_Pokhara,_Nepal-04.jpg",
-   "fuente": "International Mountain Museum (2010), Pokhara, Nepal-04.jpg"
+   "fuente": "International Mountain Museum (2010), Pokhara, Nepal-04.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "International Mountain Museum"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Lago Begnas": {
    "file": "s8.jpg",
@@ -68,18 +88,13 @@
    "autor": "Utsab Raj Giri",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Begnas_pokhara.jpg",
-   "fuente": "Begnas pokhara.jpg"
-  },
-  "Lakeside Pokhara": {
-   "file": "s4.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Paisaje cerca de Lakeside Pokhara, Pokhara",
-   "autor": "Fuwuyuan",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Shanti_Guest_House_Pokhara.jpg",
-   "fuente": "Shanti Guest House Pokhara.jpg",
-   "cercana": true
+   "fuente": "Begnas pokhara.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Boats on Begnas Lake"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "World Peace Pagoda, Pokhara": {
    "file": "s9.jpg",
@@ -90,7 +105,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:View_of_pokhara.jpg",
    "fuente": "View of pokhara.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Views of Pokhara from Shanti Stupa"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

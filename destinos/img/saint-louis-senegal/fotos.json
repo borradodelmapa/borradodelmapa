@@ -7,7 +7,13 @@
   "alt": "Saint-Louis, Senegal",
   "autor": "Jim Williams",
   "licencia": "CC BY-SA 3.0 igo",
-  "url": "https://commons.wikimedia.org/wiki/File:Island_of_Saint-Louis-113799.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Island_of_Saint-Louis-113799.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.4
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

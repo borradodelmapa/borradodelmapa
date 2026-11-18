@@ -7,7 +7,13 @@
   "alt": "Cráter del Ngorongoro, Tanzania",
   "autor": "Muhammad Mahdi Karim",
   "licencia": "GFDL 1.2",
-  "url": "https://commons.wikimedia.org/wiki/File:Ngorongoro_Crater_Overview.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ngorongoro_Crater_Overview.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ngorongoro"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

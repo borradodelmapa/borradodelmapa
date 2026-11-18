@@ -7,7 +7,13 @@
   "alt": "Boa Vista, Cabo Verde",
   "autor": "Ingo Wölbern",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Deserto_Viana,_Boa_Vista.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Deserto_Viana,_Boa_Vista.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2007 in Boa Vista (Cape Verde)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

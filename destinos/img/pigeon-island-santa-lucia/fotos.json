@@ -7,7 +7,13 @@
   "alt": "Pigeon Island National Landmark, Santa Lucía",
   "autor": "Frank Schulenburg",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pigeon_Point_Lighthouse_(2016).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Pigeon_Point_Lighthouse_(2016).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Pigeon Point Formation"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

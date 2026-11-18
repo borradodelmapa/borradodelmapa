@@ -7,7 +7,13 @@
   "alt": "Lijiang y Yunnan, China",
   "autor": "Chris cgreb",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Lijiang_vue.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Lijiang_vue.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Geography of Lijiang"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

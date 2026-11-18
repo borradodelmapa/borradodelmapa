@@ -7,7 +7,13 @@
   "alt": "Sidi Bou Said, Túnez",
   "autor": "Mohamed Moslem Mosbah",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sidi_Chebaan.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sidi_Chebaan.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2013 in Sidi Bou Said"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

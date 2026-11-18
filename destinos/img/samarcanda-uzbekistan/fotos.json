@@ -7,7 +7,13 @@
   "alt": "Samarcanda, Uzbekistán",
   "autor": "Registan_-_Gusjer.jpg: Gustavo Jeronimo from Aranjuez, Spain derivative work: Mr",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:RegistanSquare_Samarkand.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:RegistanSquare_Samarkand.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

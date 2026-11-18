@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Ala-Archa, Kirguistán",
   "autor": "The original uploader was Garthwillis at English Wikipedia.",
   "licencia": "CC BY 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Ala_archa.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Ala_archa.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ala Archa trek"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

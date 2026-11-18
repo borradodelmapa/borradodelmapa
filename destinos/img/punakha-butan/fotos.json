@@ -7,7 +7,13 @@
   "alt": "Punakha, Bután",
   "autor": "Gerd Eichmann",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Punakha-08-Reisterrassen-2015-gje.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Punakha-08-Reisterrassen-2015-gje.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Punakha District"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

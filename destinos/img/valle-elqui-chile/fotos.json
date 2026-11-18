@@ -7,7 +7,13 @@
   "alt": "Valle del Elqui, Chile",
   "autor": "ZKP",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Valle_del_Elqui,_La_Serena-Chile.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Valle_del_Elqui,_La_Serena-Chile.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Elqui Valley"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

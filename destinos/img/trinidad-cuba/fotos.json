@@ -7,7 +7,13 @@
   "alt": "Trinidad, Cuba",
   "autor": "Schwarzenfelder",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Trinidad_in_Kuba.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Trinidad_in_Kuba.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Trinidad, Cuba"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

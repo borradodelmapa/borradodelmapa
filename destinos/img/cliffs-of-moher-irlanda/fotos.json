@@ -7,7 +7,13 @@
   "alt": "Acantilados de Moher, Irlanda",
   "autor": "Bjørn Christian Tørrissen",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cliffs-Of-Moher-OBriens-From-South.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Cliffs-Of-Moher-OBriens-From-South.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

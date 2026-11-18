@@ -7,7 +7,13 @@
   "alt": "Kandahar, Afganistán",
   "autor": "Karla Marshall",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_a_section_of_Kandahar_in_2013.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_a_section_of_Kandahar_in_2013.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Kandahar Province"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

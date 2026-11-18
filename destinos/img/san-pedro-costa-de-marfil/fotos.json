@@ -7,7 +7,13 @@
   "alt": "San Pédro, Costa de Marfil",
   "autor": "Axe",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:San_P%C3%A9dro_centre-ville.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:San_P%C3%A9dro_centre-ville.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Streets in San Pédro"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

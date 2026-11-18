@@ -7,7 +7,13 @@
   "alt": "Nukuʻalofa, Tonga",
   "autor": "Uhooep",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Royal_Palace,_Nuku%27alofa,_Nov_18.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Royal_Palace,_Nuku%27alofa,_Nov_18.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Royal Palace, Nuku'alofa"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

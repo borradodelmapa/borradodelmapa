@@ -7,7 +7,13 @@
   "alt": "Tallin, Estonia",
   "autor": "Jorge Franganillo",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Raekoja_plats_at_night.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Raekoja_plats_at_night.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

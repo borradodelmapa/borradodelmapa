@@ -7,7 +7,13 @@
   "alt": "Marib, Yemen",
   "autor": "بدرالدين الشهاري",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:MaribCity001.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:MaribCity001.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Marib"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

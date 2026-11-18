@@ -7,7 +7,13 @@
   "alt": "Vallnord (Arcalís-Pal-Arinsal), Andorra",
   "autor": "Matiasjoseriba",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Esgl%C3%A9sia_de_Sant_Andreu_d%27Arinsal_1b.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Esgl%C3%A9sia_de_Sant_Andreu_d%27Arinsal_1b.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Orán, Argelia",
   "autor": "R hakka",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:31-4_Chapelle_de_Santa-Cruz_(7).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:31-4_Chapelle_de_Santa-Cruz_(7).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Santa-Cruz Chapel, Oran"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

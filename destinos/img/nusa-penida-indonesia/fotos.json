@@ -7,7 +7,13 @@
   "alt": "Nusa Penida, Indonesia",
   "autor": "Georgi Kovachev",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Broken_Bay,_Nusa_Penida.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Broken_Bay,_Nusa_Penida.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Broken Beach, Nusa Penida"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

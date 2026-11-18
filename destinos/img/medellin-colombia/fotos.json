@@ -7,7 +7,13 @@
   "alt": "Medellín, Colombia",
   "autor": "Juan Gómez",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Centro_de_Medell%C3%ADn_en_dron_04.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Centro_de_Medell%C3%ADn_en_dron_04.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Medellín"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

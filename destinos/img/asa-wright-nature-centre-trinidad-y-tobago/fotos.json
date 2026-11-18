@@ -7,7 +7,13 @@
   "alt": "Asa Wright Nature Centre, Trinidad y Tobago",
   "autor": "Tereva at English Wikipedia",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:089_Northern_Range,_Asa_Wright_Nature_Centre_-_28.11.07.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:089_Northern_Range,_Asa_Wright_Nature_Centre_-_28.11.07.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Asa Wright Nature Centre"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

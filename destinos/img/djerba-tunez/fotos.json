@@ -7,7 +7,13 @@
   "alt": "Djerba, Túnez",
   "autor": "DrFO.Jr.Tn",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:D%C3%A9l%C3%A9gation_de_Djerba_Adjim.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:D%C3%A9l%C3%A9gation_de_Djerba_Adjim.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Government buildings in Djerba"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

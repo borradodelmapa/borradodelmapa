@@ -22,14 +22,23 @@ const slugify = (s) => norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // Palabras que no identifican un sitio (no valen para dar por buena una categoría)
 const GEN = new Set(['region', 'parque', 'nacional', 'national', 'park', 'isla', 'island', 'islands', 'islas', 'ciudad', 'city', 'district', 'costa', 'coast', 'capital', 'valle', 'valley', 'lago', 'lake', 'monte', 'mount', 'playa', 'beach', 'beaches', 'playas', 'canon', 'canyon', 'rio', 'river', 'bahia', 'bay', 'desierto', 'desert', 'reserva', 'reserve', 'sierra', 'centro', 'norte', 'north', 'south', 'east', 'west', 'old', 'town', 'casco', 'antiguo', 'viejo', 'nueva', 'nuevo', 'santa', 'santo', 'saint', 'san', 'grande', 'gran', 'great', 'little', 'trekking', 'montana', 'mountains', 'mountain', 'islands', 'gorges', 'falls', 'cataratas', 'castle', 'castillo', 'fort', 'fuerte', 'palace', 'palacio', 'church', 'iglesia', 'temple', 'templo', 'museum', 'museo', 'market', 'mercado', 'square', 'plaza', 'peninsula', 'circuit', 'route', 'ruta', 'road', 'festival', 'riviera', 'district', 'capital', 'sur', 'del', 'las', 'los', 'the']);
-const PAISES = JSON.parse(fs.readFileSync(path.join(ROOT, 'worker', 'kv', 'countries.json'), 'utf8'));
+// Palabras corrientes de los pies de foto que no nombran ningún sitio
+const GEN2 = new Set(['paisaje', 'cerca', 'desde', 'donde', 'hace', 'entre', 'sobre', 'para', 'nocturno', 'nocturna', 'crucero', 'cascada', 'carretera', 'barranquismo', 'vista', 'vistas', 'atardecer', 'amanecer', 'paseo', 'antiguo', 'antigua', 'tradicional', 'calle', 'barrio', 'puerto', 'mercado', 'templo', 'iglesia', 'catedral', 'playa', 'isla', 'terrazas', 'arroz', 'montanas', 'tatuando', 'sobrina', 'nieta', 'aprendiz', 'como', 'esta', 'este', 'todo', 'gente', 'mujeres', 'hombres', 'ninos', 'casa', 'casas', 'jardin', 'jardines', 'ruinas', 'torre', 'puente', 'lago', 'parque', 'noche', 'foto']);
+const pal = (t) => norm(t).split(/[^a-z0-9]+/).filter((w) => w.length >= 4 && !GEN.has(w) && !GEN2.has(w));
+const PAISES =JSON.parse(fs.readFileSync(path.join(ROOT, 'worker', 'kv', 'countries.json'), 'utf8'));
 const { sitiosNuevos } = require('./datos-pais.cjs');
 
 async function api(params) {
   const url = 'https://commons.wikimedia.org/w/api.php?format=json&' + new URLSearchParams(params).toString();
-  for (let i = 0; i < 4; i++) {
-    try { const r = await fetch(url, { headers: { 'User-Agent': UA } }); if (r.ok) return r.json(); } catch (_) {}
-    await sleep(2000 * (i + 1));
+  // Wikimedia frena si se le pide mucho seguido (429): se espera lo que pida y se reintenta, hasta ~3 minutos
+  for (let i = 0; i < 9; i++) {
+    let espera = 3000 * (i + 1);
+    try {
+      const r = await fetch(url, { headers: { 'User-Agent': UA } });
+      if (r.ok) { const j = await r.json(); if (!j.error) return j; }
+      const ra = +r.headers.get('retry-after'); if (ra) espera = Math.max(espera, ra * 1000);
+    } catch (_) {}
+    await sleep(espera);
   }
   throw new Error('No responde Wikimedia Commons');
 }
@@ -43,7 +52,6 @@ function sitio(slug) {
   const kv = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')).destinos || [] : [];
   const d = kv.concat(sitiosNuevos()[p.code] || []).find((x) => x.id === id);
   if (!d) return null;
-  const pal = (s) => norm(s).split(/[^a-z0-9]+/).filter((w) => w.length >= 4 && !GEN.has(w));
   const claves = [...new Set([...pal(d.nombre), ...pal(id), ...(d.keywords || []).slice(0, 4).flatMap(pal)])];
   return { cc: p.code, nombre: d.nombre, lat: d.lat, lng: d.lng, claves };
 }
@@ -65,7 +73,7 @@ async function datosArchivos(titulos) {
       }
       cont = j.continue || {};
     } while (cont.clcontinue || cont.cocontinue);
-    await sleep(250);
+    await sleep(800);
   }
   return out;
 }
@@ -94,9 +102,10 @@ async function main() {
     const info = await datosArchivos(huecos.map(([, v]) => titulo(v)).filter(Boolean));
     for (const [h, v] of huecos) {
       const d = info[titulo(v)] || { coords: [], cats: [] };
-      let prueba = null;
-      if (s.lat != null && s.lng != null) for (const [a, b] of d.coords) { const dist = km(s.lat, s.lng, a, b); if (dist <= MAX_KM && (!prueba || dist < prueba.km)) prueba = { tipo: 'geo', km: Math.round(dist * 10) / 10 }; }
-      if (!prueba) { const cat = d.cats.find((c) => s.claves.some((w) => norm(c).includes(w))); if (cat) prueba = { tipo: 'categoria', cat }; }
+      // La categoría también vale si nombra lo que enseña la foto: la parada de la ruta o lo que dice su pie (nunca el título del archivo)
+      // Foto propia del viaje de Paco (no está en Wikimedia): vale por ser suya
+      const propia = v.autor === 'Borrado del Mapa' && !/commons\.wikimedia\.org/.test(v.url || '');
+      const prueba = propia ? { tipo: 'propia' } : probar(s, d, [...pal(v.alt), ...(h[0] === 's' ? pal(h.slice(1)) : [])]);
       if (prueba) { bien++; v.prueba = prueba; }
       else { mal++; quitadas.push([slug, h, titulo(v).slice(0, 60), v.alt]); }
     }
@@ -115,10 +124,10 @@ async function main() {
   console.log(`\n${aplicar ? 'Aplicado' : 'Sin aplicar'}: ${bien} fotos con prueba · ${mal} sin prueba${aplicar ? ' (quitadas)' : ''}`);
 }
 // La prueba de UNA foto (la usa fotos-sitio.cjs al poner fotos): {tipo:'geo',km} | {tipo:'categoria',cat} | null
-function probar(s, d) {
-  let prueba = null;
+function probar(s, d, extra = []) {
+  let prueba = null; const claves = [...(s.claves || []), ...extra];
   if (s.lat != null && s.lng != null) for (const [a, b] of d.coords) { const dist = km(s.lat, s.lng, a, b); if (dist <= MAX_KM && (!prueba || dist < prueba.km)) prueba = { tipo: 'geo', km: Math.round(dist * 10) / 10 }; }
-  if (!prueba) { const cat = d.cats.find((c) => s.claves.some((w) => norm(c).includes(w))); if (cat) prueba = { tipo: 'categoria', cat }; }
+  if (!prueba) { const cat = d.cats.find((c) => claves.some((w) => norm(c).includes(w))); if (cat) prueba = { tipo: 'categoria', cat }; }
   return prueba;
 }
 module.exports = { datosArchivos, sitio, probar, MAX_KM };

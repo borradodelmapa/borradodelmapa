@@ -7,7 +7,13 @@
   "alt": "Otepää, Estonia",
   "autor": "Ivo Kruusamägi",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Otep%C3%A4%C3%A4_-_wmee-007.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Otep%C3%A4%C3%A4_-_wmee-007.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

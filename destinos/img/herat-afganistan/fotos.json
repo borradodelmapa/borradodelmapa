@@ -7,7 +7,13 @@
   "alt": "Herat, Afganistán",
   "autor": "Sven Dirks, Wien",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Herat_view_mosques.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Herat_view_mosques.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

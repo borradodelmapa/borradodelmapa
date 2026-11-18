@@ -7,7 +7,13 @@
   "alt": "Toronto, Canadá",
   "autor": "Dillan Payne",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Toronto_Skyline_from_Snake_Island,_September_11_2026_(01).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Toronto_Skyline_from_Snake_Island,_September_11_2026_(01).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "September 2026 in Toronto"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

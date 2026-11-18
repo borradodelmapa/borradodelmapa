@@ -7,7 +7,13 @@
   "alt": "Templos de Ħaġar Qim y Mnajdra, Malta",
   "autor": "Hamelin de Guettelet",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Facade_Hagar_Qim.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Facade_Hagar_Qim.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ħaġar Qim (without protective tent)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

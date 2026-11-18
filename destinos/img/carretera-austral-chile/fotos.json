@@ -7,7 +7,13 @@
   "alt": "Carretera Austral, Chile",
   "autor": "Rakela",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Carretera_Austral_-_Leones.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Carretera_Austral_-_Leones.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Carretera Austral"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

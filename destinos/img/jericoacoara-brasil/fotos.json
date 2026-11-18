@@ -7,7 +7,13 @@
   "alt": "Jericoacoara, Brasil",
   "autor": "Anderps",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Anderps_067.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Anderps_067.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Parque Nacional de Jericoacoara"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

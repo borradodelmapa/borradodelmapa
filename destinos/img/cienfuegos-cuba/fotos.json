@@ -7,7 +7,13 @@
   "alt": "Cienfuegos, Cuba",
   "autor": "Dan Lundberg",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cuba_20160320_4849_Cienfuegos_sRGB.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cuba_20160320_4849_Cienfuegos_sRGB.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

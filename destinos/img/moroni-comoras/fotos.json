@@ -7,7 +7,13 @@
   "alt": "Moroni, Comoras",
   "autor": "Woodlouse",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Moroni-Harbour.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Moroni-Harbour.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Moroni old harbour"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

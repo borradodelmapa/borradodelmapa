@@ -7,7 +7,13 @@
   "alt": "Serekunda, Gambia",
   "autor": "Victoria Reay from Standish, UK",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Serekunda_0001.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Serekunda_0001.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2005 in the Gambia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

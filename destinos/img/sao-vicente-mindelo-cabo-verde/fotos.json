@@ -7,7 +7,13 @@
   "alt": "São Vicente / Mindelo, Cabo Verde",
   "autor": "Cuenqui",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mindelo_panoramica.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Mindelo_panoramica.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2012 in Cape Verde"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

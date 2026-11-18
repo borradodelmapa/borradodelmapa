@@ -7,7 +7,13 @@
   "alt": "Ushuaia y Tierra del Fuego, Argentina",
   "autor": "Deensel",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ushuaia_aerial_panorama.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ushuaia_aerial_panorama.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

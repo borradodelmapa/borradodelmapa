@@ -7,7 +7,13 @@
   "alt": "Bobo-Dioulasso, Burkina Faso",
   "autor": "No machine-readable author provided. Semiliki assumed (based on copyright claims",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:BoboDioulasso-Market.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:BoboDioulasso-Market.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2006 in Burkina Faso"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

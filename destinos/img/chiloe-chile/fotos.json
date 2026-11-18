@@ -7,7 +7,13 @@
   "alt": "Chiloé, Chile",
   "autor": "Michelle Maria",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Castro,_Chile_-_panoramio_(16).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Castro,_Chile_-_panoramio_(16).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Castro, Chile"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

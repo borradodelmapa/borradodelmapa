@@ -7,7 +7,13 @@
   "alt": "Polotsk, Bielorrusia",
   "autor": "Szeder László",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Dzvina_Hotel_and_Frantsyska_Skaryny_Avenue_in_Polack.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Dzvina_Hotel_and_Frantsyska_Skaryny_Avenue_in_Polack.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Fountains in Belarus"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

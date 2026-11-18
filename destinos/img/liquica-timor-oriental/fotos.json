@@ -7,7 +7,13 @@
   "alt": "Liquiçá, Timor Oriental",
   "autor": "Natália Carrascalão Antunes",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Fazenda_Algarve_-Distrito_de_Liqui%C3%A7%C3%A1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Fazenda_Algarve_-Distrito_de_Liqui%C3%A7%C3%A1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Landforms of East Timor"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

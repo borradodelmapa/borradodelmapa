@@ -7,7 +7,13 @@
   "alt": "Isla de Korčula, Croacia",
   "autor": "Wikimedia Commons",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Korcula_City.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Korcula_City.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Panorama photos of Korčula"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

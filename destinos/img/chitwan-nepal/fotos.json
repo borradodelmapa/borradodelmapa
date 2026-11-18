@@ -7,7 +7,13 @@
   "alt": "Rinoceronte indio en el Parque Nacional de Chitwan",
   "autor": "Benjila Dhital",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Rhinoceros_in_Chitwan_National_Park.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Rhinoceros_in_Chitwan_National_Park.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Rhinoceros unicornis of Chitwan National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
   "Elephant Breeding Center": {
@@ -18,7 +24,13 @@
    "autor": "Janak Bhatta",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Wild_Elephant_(Ronaldo).jpg",
-   "fuente": "Wild Elephant (Ronaldo).jpg"
+   "fuente": "Wild Elephant (Ronaldo).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Elephant Breeding Center"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  },
  "porIndice": {

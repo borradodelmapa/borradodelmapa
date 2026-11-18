@@ -7,7 +7,13 @@
   "alt": "Malbun, Liechtenstein",
   "autor": "Valo139",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Malbun_seen_from_Augstenberg_(valo139).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Malbun_seen_from_Augstenberg_(valo139).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

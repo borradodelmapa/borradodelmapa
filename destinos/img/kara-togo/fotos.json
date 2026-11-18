@@ -7,7 +7,13 @@
   "alt": "Kara, Togo",
   "autor": "Milos58",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kara,_Togo_-_panoramio.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kara,_Togo_-_panoramio.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

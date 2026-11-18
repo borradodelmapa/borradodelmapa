@@ -7,7 +7,13 @@
   "alt": "Túnez (capital), Túnez",
   "autor": "Habib M'henni",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vue_de_Tunis,_27_d%C3%A9cembre_2014.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vue_de_Tunis,_27_d%C3%A9cembre_2014.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Sunsets of Tunisia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

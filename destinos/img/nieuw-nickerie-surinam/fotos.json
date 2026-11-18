@@ -7,7 +7,13 @@
   "alt": "Nieuw Nickerie y Reserva Bigi Pan, Surinam",
   "autor": "Ian Mackenzie",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nickerie.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nickerie.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2008 in Suriname"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

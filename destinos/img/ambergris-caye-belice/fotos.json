@@ -7,7 +7,13 @@
   "alt": "Ambergris Caye / San Pedro, Belice",
   "autor": "danakosko",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:San_Pedro,_Belize_by_danakosko,_March_2008.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:San_Pedro,_Belize_by_danakosko,_March_2008.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "San Pedro, Belize"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Ngarchelong y norte de Babeldaob, Palaos",
   "autor": "Abasaa",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Badrulchau_Stone_Monoliths_1.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Badrulchau_Stone_Monoliths_1.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Badrulchau Stone Monoliths"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

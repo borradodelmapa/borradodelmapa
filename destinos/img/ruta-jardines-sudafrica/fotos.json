@@ -7,7 +7,13 @@
   "alt": "Garden Route, Sudáfrica",
   "autor": "Conrad88",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Tsitsikamma_Morning.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Tsitsikamma_Morning.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Shoreline of Tsitsikamma National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

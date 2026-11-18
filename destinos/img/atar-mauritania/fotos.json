@@ -7,7 +7,13 @@
   "alt": "Atar, Mauritania",
   "autor": "Ji-Elle",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Atar_Market_(1).JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Atar_Market_(1).JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Atar"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Dohuk, Irak",
   "autor": "Kushared (Mohammed Sardar)",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Duhok_Dam.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Duhok_Dam.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

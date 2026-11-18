@@ -7,7 +7,13 @@
   "alt": "Malanje, Angola",
   "autor": "L.Willms",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Malanje_centro_2011-08_IMG1321.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Malanje_centro_2011-08_IMG1321.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

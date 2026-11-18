@@ -7,7 +7,13 @@
   "alt": "Aldea hanok de Jeonju",
   "autor": "Shamus7792003",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Jeonju_Hanok_Village_-_July_2018_(1).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Jeonju_Hanok_Village_-_July_2018_(1).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Jeonju Hanok Village"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

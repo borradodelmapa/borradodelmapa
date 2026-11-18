@@ -7,7 +7,13 @@
   "alt": "Tazumal y Chalchuapa, El Salvador",
   "autor": "Mariordo (Mario Roberto Durán Ortiz)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:ES_Tazumal_06_2011_2236.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:ES_Tazumal_06_2011_2236.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Colonnades in El Salvador"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

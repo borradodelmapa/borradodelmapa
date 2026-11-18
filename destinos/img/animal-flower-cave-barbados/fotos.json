@@ -7,7 +7,13 @@
   "alt": "Animal Flower Cave, Barbados",
   "autor": "JERRYE AND ROY KLOTZ MD",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:ANIMAL_FLOWER_CAVE_-_BARBADOS.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:ANIMAL_FLOWER_CAVE_-_BARBADOS.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2005 in Barbados"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Auschwitz-Birkenau (Oświęcim), Polonia",
   "autor": "Michel Zacharz AKA Grippenn[1]",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Birkenau_gate.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Birkenau_gate.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Auschwitz II (Birkenau) gatehouse from the train tracks"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

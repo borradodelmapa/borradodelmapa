@@ -7,7 +7,13 @@
   "alt": "Santiago de Cuba, Cuba",
   "autor": "Alex Cano",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Santiago_de_cuba_al_atardecer.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Santiago_de_cuba_al_atardecer.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

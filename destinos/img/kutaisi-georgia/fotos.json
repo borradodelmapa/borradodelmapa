@@ -7,7 +7,13 @@
   "alt": "Kutaisi, Georgia",
   "autor": "Kober",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Downtown_Kutaisi_%26_White_Bridge_as_seen_from_Mt_Gora_(August_2011)-cropped.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Downtown_Kutaisi_%26_White_Bridge_as_seen_from_Mt_Gora_(August_2011)-cropped.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cityscapes of Kutaisi"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

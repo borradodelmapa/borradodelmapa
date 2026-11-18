@@ -7,19 +7,15 @@
   "alt": "Campo Base del Everest, Nepal",
   "autor": "Rdevany",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mt._Everest_from_Gokyo_Ri_November_5,_2012.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mt._Everest_from_Gokyo_Ri_November_5,_2012.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Mount Everest from Gokyo Ri"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
-  "Aeropuerto Tenzing-Hillary": {
-   "file": "s1.jpg",
-   "w": 720,
-   "h": 540,
-   "alt": "Aeropuerto Tenzing-Hillary, Campo Base del Everest",
-   "autor": "Jeremy Broomfield",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Lukla_Airport_April_2010.JPG",
-   "fuente": "Lukla Airport April 2010.JPG"
-  },
   "Namche Bazaar": {
    "file": "s3.jpg",
    "w": 720,
@@ -28,7 +24,13 @@
    "autor": "Guillaume Baviere from Uppsala, Sweden",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-03-27_(40012223170).jpg",
-   "fuente": "Nepal 2018-03-27 (40012223170).jpg"
+   "fuente": "Nepal 2018-03-27 (40012223170).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Namche Bazaar"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Dingboche": {
    "file": "s6.jpg",
@@ -38,7 +40,13 @@
    "autor": "Guillaume Baviere from Uppsala, Sweden",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-03-29_(40171814610).jpg",
-   "fuente": "Nepal 2018-03-29 (40171814610).jpg"
+   "fuente": "Nepal 2018-03-29 (40171814610).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Pangboche to Dingboche"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Lobuche": {
    "file": "s8.jpg",
@@ -48,17 +56,13 @@
    "autor": "Guillaume Baviere from Uppsala, Sweden",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-04-02_(41453148084).jpg",
-   "fuente": "Nepal 2018-04-02 (41453148084).jpg"
-  },
-  "Gorakshep": {
-   "file": "s9.jpg",
-   "w": 720,
-   "h": 405,
-   "alt": "Gorakshep, Campo Base del Everest",
-   "autor": "I Kd",
-   "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Walls_Of_Ancient_Ocean_(169950955).jpeg",
-   "fuente": "Walls Of Ancient Ocean (169950955).jpeg"
+   "fuente": "Nepal 2018-04-02 (41453148084).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Lobuche to Dukla"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Kala Patthar": {
    "file": "s11.jpg",
@@ -68,7 +72,13 @@
    "autor": "Vyacheslav Argenberg",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kala_Patthar_and_Pumori,_Nepal,_Asia.jpg",
-   "fuente": "Kala Patthar and Pumori, Nepal, Asia.jpg"
+   "fuente": "Kala Patthar and Pumori, Nepal, Asia.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kala Patthar"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Pheriche": {
    "file": "s12.jpg",
@@ -78,7 +88,13 @@
    "autor": "Guillaume Baviere from Uppsala, Sweden",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-04-03_(42137670142).jpg",
-   "fuente": "Nepal 2018-04-03 (42137670142).jpg"
+   "fuente": "Nepal 2018-04-03 (42137670142).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Pheriche to Pangboche"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Thamel, Kathmandu": {
    "file": "s17.jpg",
@@ -88,7 +104,13 @@
    "autor": "Sergey Ashmarin",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Thamel_sidestreets_at_night_-_Kathmandu,_Nepal_-_panoramio.jpg",
-   "fuente": "Thamel sidestreets at night - Kathmandu, Nepal - panoramio.jpg"
+   "fuente": "Thamel sidestreets at night - Kathmandu, Nepal - panoramio.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Night in Kathmandu"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

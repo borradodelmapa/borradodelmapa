@@ -7,7 +7,13 @@
   "alt": "Bhaktapur, Nepal",
   "autor": "Saroj Pandey",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nyatpola_%26_Bhairav_Temple.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nyatpola_%26_Bhairav_Temple.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bhairavnath Temple, Bhaktapur"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
   "Bhaktapur Durbar Square": {
@@ -18,7 +24,13 @@
    "autor": "Bikram Pratap Singh",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:View_of_Bhaktapur_Durbar_Square.jpg",
-   "fuente": "View of Bhaktapur Durbar Square.jpg"
+   "fuente": "View of Bhaktapur Durbar Square.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Views of Bhaktapur Durbar Square"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Taumadhi Square (𑐟𑑅𑐩𑐵𑐬𑐷‎, Tamārhi)": {
    "file": "s2.jpg",
@@ -28,7 +40,13 @@
    "autor": "Guillaume Baviere from Uppsala, Sweden",
    "licencia": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nepal_2018-04-09_(42395654422).jpg",
-   "fuente": "Nepal 2018-04-09 (42395654422).jpg"
+   "fuente": "Nepal 2018-04-09 (42395654422).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nyatapola Temple, Bhaktapur"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Siddha Pokhari (Ta Pukhu)": {
    "file": "s6.jpg",
@@ -38,7 +56,13 @@
    "autor": "Shadow Ayush",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Siddha_Pokhari_(Ta_Pukhu_),_Bhaktapur.jpg",
-   "fuente": "Siddha Pokhari (Ta Pukhu ), Bhaktapur.jpg"
+   "fuente": "Siddha Pokhari (Ta Pukhu ), Bhaktapur.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Siddha Pokhari, Bhaktapur"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Peacock Window Bhaktapur": {
    "file": "s4.jpg",
@@ -49,18 +73,13 @@
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:2015-03-30_04-15_Nepal_398_Bhaktapur_(16747654633).jpg",
    "fuente": "2015-03-30 04-15 Nepal 398 Bhaktapur (16747654633).jpg",
-   "cercana": true
-  },
-  "Pottery Square कुम्हः त्वः": {
-   "file": "s5.jpg",
-   "w": 720,
-   "h": 480,
-   "alt": "Paisaje cerca de Pottery Square कुम्हः त्वः, Bhaktapur",
-   "autor": "Wolfgang Weigelt from Berlin, Germany",
-   "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Pottery_Square,_Bhaktapur_(40575440250).jpg",
-   "fuente": "Pottery Square, Bhaktapur (40575440250).jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Dattatreya Temple, Bhaktapur"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

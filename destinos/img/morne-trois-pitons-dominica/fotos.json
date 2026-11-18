@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Morne Trois Pitons, Dominica",
   "autor": "Nelro (talk)",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Valley_of_desolation.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Valley_of_desolation.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Morne Trois Pitons National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Reserva Selous / Parque Nacional Nyerere, Tanzania",
   "autor": "User:Digr",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:TZ_Selous_Game_Reserve_Aeroview.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:TZ_Selous_Game_Reserve_Aeroview.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Tanzania"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

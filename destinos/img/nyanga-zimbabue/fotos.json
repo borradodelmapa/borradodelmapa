@@ -7,7 +7,13 @@
   "alt": "Nyanga, Zimbabue",
   "autor": "Babakathy",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pungwefalls.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Pungwefalls.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Nyanga National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

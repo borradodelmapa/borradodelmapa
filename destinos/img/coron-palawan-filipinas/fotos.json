@@ -7,7 +7,13 @@
   "alt": "Coron, Palawan, Filipinas",
   "autor": "Patrickroque01",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Coron_skyline_Tapyas_(Coron,_Palwan;_03-16-2024).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Coron_skyline_Tapyas_(Coron,_Palwan;_03-16-2024).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Coron, Palawan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +25,13 @@
    "pie": "El lago Kayangan, en la isla de Coron.",
    "autor": "Lyndon Aguila",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Kayangan_Lake,_Coron_Island.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Kayangan_Lake,_Coron_Island.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kayangan Lake"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -29,7 +41,13 @@
    "pie": "La Twin Lagoon, en Coron.",
    "autor": "André Héroux",
    "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Twin_Lagoon,_Coron,_Palawan,_Philippines_-_panoramio.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Twin_Lagoon,_Coron,_Palawan,_Philippines_-_panoramio.jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 5.7
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -39,7 +57,13 @@
    "pie": "Siete Pecados, el parque marino de Coron.",
    "autor": "Firth m",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Siete_Pecados.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Siete_Pecados.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Coron, Palawan"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

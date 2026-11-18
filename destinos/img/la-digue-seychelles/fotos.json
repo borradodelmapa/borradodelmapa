@@ -7,7 +7,13 @@
   "alt": "La Digue, Seychelles",
   "autor": "dronepicr",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Luftbild_Insel_La_Digue_Seychellen.DNG_(39617026111).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Luftbild_Insel_La_Digue_Seychellen.DNG_(39617026111).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

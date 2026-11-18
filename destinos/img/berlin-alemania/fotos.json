@@ -7,7 +7,13 @@
   "alt": "Berlín, Alemania",
   "autor": "File:Museumsinsel Berlin Juli 2021 1 (cropped).jpg: Kasa Fue derivative work: Ge",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Museumsinsel_Berlin_Juli_2021_1_(cropped)_b.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Museumsinsel_Berlin_Juli_2021_1_(cropped)_b.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Berliner Fernsehturm and another building"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

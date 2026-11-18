@@ -7,7 +7,13 @@
   "alt": "Mazar-i-Sharif, Afganistán",
   "autor": "Peretz Partensky from San Francisco, USA",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nowruz_in_northern_Afghanistan-2011.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nowruz_in_northern_Afghanistan-2011.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

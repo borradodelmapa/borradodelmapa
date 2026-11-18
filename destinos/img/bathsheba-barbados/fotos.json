@@ -7,7 +7,13 @@
   "alt": "Bathsheba, Barbados",
   "autor": "Postdlf",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bathsheba,_Barbados_08.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bathsheba,_Barbados_08.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bathsheba, Barbados"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

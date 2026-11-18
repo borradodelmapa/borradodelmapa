@@ -7,7 +7,13 @@
   "alt": "Cataratas Maletsunyane, Lesoto",
   "autor": "BagelBelt",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Maletsunyanefalls.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Maletsunyanefalls.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

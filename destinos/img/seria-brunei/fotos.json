@@ -7,7 +7,13 @@
   "alt": "Seria, Brunéi",
   "autor": "Yu Chu Chin",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Zebra_crossing_on_Jalan_Sultan_Omar_Ali_at_Seria,_Brunei.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Zebra_crossing_on_Jalan_Sultan_Omar_Ali_at_Seria,_Brunei.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Seria"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

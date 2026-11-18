@@ -7,7 +7,13 @@
   "alt": "Banská Štiavnica, Eslovaquia",
   "autor": "Adrian Tync",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bansk%C3%A1_%C5%A0tiavnica_from_Nov%C3%BD_z%C3%A1mok_2007.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bansk%C3%A1_%C5%A0tiavnica_from_Nov%C3%BD_z%C3%A1mok_2007.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

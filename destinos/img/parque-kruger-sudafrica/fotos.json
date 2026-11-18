@@ -7,7 +7,13 @@
   "alt": "Parque Kruger, Sudáfrica",
   "autor": "Amada44",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Landscape_kruger-park.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Landscape_kruger-park.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Landscapes of the Kruger Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

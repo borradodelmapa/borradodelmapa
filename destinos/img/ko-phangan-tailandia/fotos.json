@@ -7,7 +7,13 @@
   "alt": "Ko Pha Ngan",
   "autor": "Alexey Komarov",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ko_Pha_Ngan,_April,_2018-2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ko_Pha_Ngan,_April,_2018-2.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 6.7
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

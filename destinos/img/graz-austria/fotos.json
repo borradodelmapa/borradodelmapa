@@ -7,7 +7,13 @@
   "alt": "Graz, Austria",
   "autor": "Nick Savchenko from Kiev, Ukraine",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Graz_(35932179023).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Graz_(35932179023).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.7
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

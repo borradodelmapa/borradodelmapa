@@ -7,7 +7,13 @@
   "alt": "Arusha, Tanzania",
   "autor": "Halidtz",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Arusha_City_view.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Arusha_City_view.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.7
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

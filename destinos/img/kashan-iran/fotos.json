@@ -7,7 +7,13 @@
   "alt": "Kashan, Irán",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Casa_hist%C3%B3rica_de_Boroujerdi,_Kashan,_Ir%C3%A1n,_2016-09-19,_DD_34-36_HDR.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Casa_hist%C3%B3rica_de_Boroujerdi,_Kashan,_Ir%C3%A1n,_2016-09-19,_DD_34-36_HDR.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "September 2016 in Kashan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

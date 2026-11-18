@@ -7,7 +7,13 @@
   "alt": "Árbol de la Vida (Tree of Life), Baréin",
   "autor": "Alawadhi3000",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Tree_of_Life_Bahrain.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Tree_of_Life_Bahrain.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Tree of Life, Bahrain"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

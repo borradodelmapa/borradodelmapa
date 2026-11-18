@@ -7,7 +7,13 @@
   "alt": "Chinguetti, Mauritania",
   "autor": "François COLIN",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Chinguetti-Vue_Goblale_Vieille_ville.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Chinguetti-Vue_Goblale_Vieille_ville.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

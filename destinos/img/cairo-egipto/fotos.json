@@ -7,7 +7,13 @@
   "alt": "El Cairo, Egipto",
   "autor": "Jorge Láscar from Melbourne, Australia",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cairo_Opera_House,_Al_Hurriyah_Park_and_the_Nile_river_(14797782354).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cairo_Opera_House,_Al_Hurriyah_Park_and_the_Nile_river_(14797782354).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views from Cairo Tower"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

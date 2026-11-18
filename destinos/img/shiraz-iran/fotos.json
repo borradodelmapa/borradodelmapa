@@ -7,7 +7,13 @@
   "alt": "Shiraz, Irán",
   "autor": "آرش (Arche)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Darvaze_Ghoran11.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Darvaze_Ghoran11.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 5.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

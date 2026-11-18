@@ -7,7 +7,13 @@
   "alt": "Vang Vieng, Laos",
   "autor": "Gerd Eichmann",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vang_Vieng_district-14-Fluss-Landschaft-gje.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vang_Vieng_district-14-Fluss-Landschaft-gje.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Vang Vieng District"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Île Sainte-Marie (Nosy Boraha), Madagascar",
   "autor": "M worm",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Beache_of_La_Crique_Sainte_Marie.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Beache_of_La_Crique_Sainte_Marie.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Île Sainte-Marie"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

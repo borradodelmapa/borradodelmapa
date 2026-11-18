@@ -1,14 +1,5 @@
 {
  "generado": "2026-11-05",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 865,
-  "alt": "Da Lat, Vietnam",
-  "autor": "Roy Kim",
-  "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Dalat_market,_Vietnam.jpg"
- },
  "stops": {},
  "que_hacer": {
   "0": {
@@ -19,7 +10,13 @@
    "pie": "La cascada de Datanla.",
    "autor": "Du Tran",
    "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Datanla_Waterfall_1.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Datanla_Waterfall_1.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Datanla Waterfall"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -29,17 +26,13 @@
    "pie": "Datanla, donde se hace barranquismo.",
    "autor": "thalling55",
    "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Datanla_Waterfall_2.jpg"
-  },
-  "3": {
-   "file": "q3.jpg",
-   "w": 500,
-   "h": 376,
-   "alt": "El mercado nocturno de Đà Lạt",
-   "pie": "El mercado nocturno de Đà Lạt.",
-   "autor": "The Erica Chang",
-   "licencia": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Dalat_night_market_-_panoramio.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Datanla_Waterfall_2.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Datanla Waterfall"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

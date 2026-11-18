@@ -7,7 +7,13 @@
   "alt": "Maio, Cabo Verde",
   "autor": "Christian Pirkl",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cidade_do_Maio_294A6403_Porto_Ingl%C3%AAs.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cidade_do_Maio_294A6403_Porto_Ingl%C3%AAs.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Vila do Maio"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

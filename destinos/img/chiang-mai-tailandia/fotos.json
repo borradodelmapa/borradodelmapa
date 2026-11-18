@@ -7,7 +7,13 @@
   "alt": "Wat Phra That Doi Suthep, Chiang Mai",
   "autor": "ผู้สร้างสรรค์ผลงาน/ส่งข้อมูลเก็บในคลังข้อมูลเสรีวิกิมีเดียคอมมอนส์ - เทวประภาส ม",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Phra_That_Doi_Suthep_01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Phra_That_Doi_Suthep_01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Chedi at Wat Phra That Doi Suthep"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

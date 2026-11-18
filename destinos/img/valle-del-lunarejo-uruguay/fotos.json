@@ -7,7 +7,13 @@
   "alt": "Valle del Lunarejo, Uruguay",
   "autor": "Frvaleria",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:El_verdadero_valle.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:El_verdadero_valle.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Valle del Lunarejo"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

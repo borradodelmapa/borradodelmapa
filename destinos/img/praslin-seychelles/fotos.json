@@ -7,7 +7,13 @@
   "alt": "Praslin, Seychelles",
   "autor": "Tobias Alt, Tobi 87",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Anse_Lazio-Praslin-Seychellen.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Anse_Lazio-Praslin-Seychellen.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 6.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

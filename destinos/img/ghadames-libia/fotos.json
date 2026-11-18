@@ -7,7 +7,13 @@
   "alt": "Ghadames, Libia",
   "autor": "Mohamed alazrak",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ghadames_Old_city_from_the_air_other_side.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ghadames_Old_city_from_the_air_other_side.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ghadames"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

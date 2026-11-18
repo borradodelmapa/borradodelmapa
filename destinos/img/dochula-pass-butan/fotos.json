@@ -7,7 +7,13 @@
   "alt": "Paso Dochula, Bután",
   "autor": "Bernard Gagnon",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Druk_Wangyal_Chortens,_Bhutan_01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Druk_Wangyal_Chortens,_Bhutan_01.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

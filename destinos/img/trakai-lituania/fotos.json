@@ -7,7 +7,13 @@
   "alt": "Trakai, Lituania",
   "autor": "Dudva",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Trakai_Island_Castle_03.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Trakai_Island_Castle_03.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Trakai Island Castle"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

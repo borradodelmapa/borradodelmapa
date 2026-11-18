@@ -7,7 +7,13 @@
   "alt": "Kuwait City, Kuwait",
   "autor": "Zairon",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kuwait_City_Skyline_1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kuwait_City_Skyline_1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kuwait City"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

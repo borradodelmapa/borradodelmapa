@@ -7,7 +7,13 @@
   "alt": "Novi Sad, Serbia",
   "autor": "Bybbisch94, Christian Gebhardt",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:20230429.Ansichten_in_Novi_Sad.-039.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:20230429.Ansichten_in_Novi_Sad.-039.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

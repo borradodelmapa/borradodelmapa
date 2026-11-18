@@ -7,7 +7,13 @@
   "alt": "Monterrico, Guatemala",
   "autor": "amslerPIX",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Monterrico_13.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Monterrico_13.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Monterrico"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

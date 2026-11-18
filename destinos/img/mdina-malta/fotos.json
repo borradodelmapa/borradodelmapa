@@ -7,7 +7,13 @@
   "alt": "Mdina, Malta",
   "autor": "Frank Vincentz",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Malta_-_Mdina_(Triq_San_Oswald)_02_ies.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Malta_-_Mdina_(Triq_San_Oswald)_02_ies.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2014 photographs of Malta"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

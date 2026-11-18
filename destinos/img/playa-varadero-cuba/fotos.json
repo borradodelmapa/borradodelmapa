@@ -7,7 +7,13 @@
   "alt": "Varadero, Cuba",
   "autor": "Laslovarga",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Aerial_photo_of_Varadero_16.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Aerial_photo_of_Varadero_16.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Varadero"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

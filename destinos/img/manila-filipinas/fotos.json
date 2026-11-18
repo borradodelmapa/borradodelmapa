@@ -8,7 +8,12 @@
   "autor": "Vyacheslav Argenberg",
   "licencia": "CC BY 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Fort_Santiago,_Walled_city_of_Intramuros,_Philippines.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Fort Santiago Gate in Manila"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +25,13 @@
    "pie": "Un patio de Intramuros, la ciudad amurallada.",
    "autor": "Vyacheslav Argenberg",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Intramuros,_Patio,_Philippines.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Intramuros,_Patio,_Philippines.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Intramuros"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -30,7 +41,13 @@
    "pie": "El Museo Nacional de Bellas Artes de Filipinas.",
    "autor": "PhiliptheNumber1",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Fine_Arts_(Ermita,_Manila)(06-30-2024).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Fine_Arts_(Ermita,_Manila)(06-30-2024).jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 1.4
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -40,7 +57,13 @@
    "pie": "El museo de Chinatown, en Binondo.",
    "autor": "Ralff Nestor Nacor",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Chinatown_Museum,_Binondo,_Manila,_May_2025.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Chinatown_Museum,_Binondo,_Manila,_May_2025.jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 1.2
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -50,7 +73,13 @@
    "pie": "El monumento a José Rizal, en el Parque Rizal.",
    "autor": "Vyacheslav Argenberg",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Rizal_Monument_(Motto_Stella),_Rizal_Park,_Philippines.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Manila,_Rizal_Monument_(Motto_Stella),_Rizal_Park,_Philippines.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Rizal Monument (Manila)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

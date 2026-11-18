@@ -7,7 +7,13 @@
   "alt": "Larvotto, Mónaco",
   "autor": "Pilgab",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Monaco_landscape.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Monaco_landscape.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Coasts of Monaco"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

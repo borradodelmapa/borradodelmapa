@@ -7,7 +7,13 @@
   "alt": "Nukus, Uzbekistán",
   "autor": "Kuwanishbek",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Berdaq_National_Museum.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Berdaq_National_Museum.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings in Nukus"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

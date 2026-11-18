@@ -7,7 +7,13 @@
   "alt": "Champagne Beach, Vanuatu",
   "autor": "Jae Lee",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Champagne_Beach.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Champagne_Beach.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Espiritu Santo"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

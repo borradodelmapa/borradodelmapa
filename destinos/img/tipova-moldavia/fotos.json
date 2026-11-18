@@ -7,7 +7,13 @@
   "alt": "Monasterio de Ţipova, Moldavia",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Monasterio_de_%C8%9Aipova,_%C8%9Aipova,_Moldavia,_2023-11-01,_DD_27.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Monasterio_de_%C8%9Aipova,_%C8%9Aipova,_Moldavia,_2023-11-01,_DD_27.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Țipova Monastery"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Pico Basile, Guinea Ecuatorial",
   "autor": "Serge Moons",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pico_Basil%C3%A9.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Pico_Basil%C3%A9.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2010 in Equatorial Guinea"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

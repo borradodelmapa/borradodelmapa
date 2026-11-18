@@ -7,7 +7,13 @@
   "alt": "Sharm el-Sheikh, Egipto",
   "autor": "cpadula",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sharm_el_sheikh_-_8697702453.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sharm_el_sheikh_-_8697702453.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Sharm el-Sheikh"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Luang Namtha, Laos",
   "autor": "Sainamtha",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Luang_Namtha_Stupa.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Luang_Namtha_Stupa.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2010 in Luang Namtha Province"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

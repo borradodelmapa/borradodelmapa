@@ -7,7 +7,13 @@
   "alt": "Balzers, Liechtenstein",
   "autor": "St9191",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Burg_Gutenberg_-_Balzers-_Liechtenstein.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Burg_Gutenberg_-_Balzers-_Liechtenstein.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2010 in Liechtenstein"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

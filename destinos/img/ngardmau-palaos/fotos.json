@@ -7,7 +7,13 @@
   "alt": "Cascada de Ngardmau, Palaos",
   "autor": "Abasaa",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Ngardmau_Dock_1.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Ngardmau_Dock_1.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ngardmau Dock"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

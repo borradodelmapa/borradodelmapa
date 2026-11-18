@@ -7,7 +7,13 @@
   "alt": "Península de Snæfellsnes, Islandia",
   "autor": "C-M",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sv%C3%B6rtuloft_Lighthouse.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sv%C3%B6rtuloft_Lighthouse.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Lava flows of the Snæfellsjökull volcanic system"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

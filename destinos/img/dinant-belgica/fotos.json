@@ -7,7 +7,13 @@
   "alt": "Dinant, Bélgica",
   "autor": "https://www.flickr.com/photos/jiuguangw/",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Dinant_reflected.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Dinant_reflected.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

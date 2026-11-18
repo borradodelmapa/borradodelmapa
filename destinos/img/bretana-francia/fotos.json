@@ -7,7 +7,13 @@
   "alt": "Bretaña (Costa y Carnac), Francia",
   "autor": "--Pinpin 17:43, 1 August 2006 (UTC)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:France-Carnac-Alignement_de_Kermario.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:France-Carnac-Alignement_de_Kermario.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

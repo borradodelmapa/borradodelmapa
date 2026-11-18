@@ -7,7 +7,13 @@
   "alt": "Shell Beach, Guyana",
   "autor": "Marco Farouk Basir",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Coconut_Trees_on_the_Shell_Beach_-_panoramio.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Coconut_Trees_on_the_Shell_Beach_-_panoramio.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Erosion in Guyana"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

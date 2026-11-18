@@ -7,7 +7,13 @@
   "alt": "Visoko y las Pirámides de Bosnia, Bosnia y Herzegovina",
   "autor": "Mhare",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Visoko_from_the_Viso%C4%8Dica_hill.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Visoko_from_the_Viso%C4%8Dica_hill.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cityscapes of Visoko"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

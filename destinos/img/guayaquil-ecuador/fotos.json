@@ -7,7 +7,13 @@
   "alt": "Guayaquil, Ecuador",
   "autor": "PhoenixTeam1",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:LDS_Temple_Ecuador.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:LDS_Temple_Ecuador.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Guayaquil Ecuador Temple"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Diani Beach, Kenia",
   "autor": "User:Bkmiles",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Diani_Beach_Kenya.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Diani_Beach_Kenya.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beach at Diani Beach"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

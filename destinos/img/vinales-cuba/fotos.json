@@ -7,7 +7,13 @@
   "alt": "Viñales, Cuba",
   "autor": "AxelF",
   "licencia": "CC BY 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Cuba_Vinales_Centro.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cuba_Vinales_Centro.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Viñales"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

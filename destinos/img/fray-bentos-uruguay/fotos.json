@@ -7,7 +7,13 @@
   "alt": "Fray Bentos, Uruguay",
   "autor": "Elbetobm",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Glorieta_kiosco_-_Pergola_Plaza_Pueblo_-_Fray_Bentos_-_Rio_Negro_-_Uruguay.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Glorieta_kiosco_-_Pergola_Plaza_Pueblo_-_Fray_Bentos_-_Rio_Negro_-_Uruguay.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Glorieta de Fray Bentos"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Suakin, Sudán",
   "autor": "Bertramz",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Suakin,el-Geyf_mosque.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Suakin,el-Geyf_mosque.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Minarets in Sudan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

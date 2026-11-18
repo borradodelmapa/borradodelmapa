@@ -7,7 +7,13 @@
   "alt": "Tsingy de Bemaraha, Madagascar",
   "autor": "ASMaloney at English Wikipedia",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Tsingy_de_Bemaraha_Strict_Nature_Reserve.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Tsingy_de_Bemaraha_Strict_Nature_Reserve.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Karst topography in Madagascar"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

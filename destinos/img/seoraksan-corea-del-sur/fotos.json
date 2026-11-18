@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Seoraksan, Corea del Sur",
   "autor": "Herge.tw",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:SeoRakSan_1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:SeoRakSan_1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Landscapes of Seoraksan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

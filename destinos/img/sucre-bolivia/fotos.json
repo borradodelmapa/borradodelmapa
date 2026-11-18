@@ -7,7 +7,13 @@
   "alt": "Sucre, Bolivia",
   "autor": "Parallelepiped09",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sucre,_Capital_de_Bolivia.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sucre,_Capital_de_Bolivia.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

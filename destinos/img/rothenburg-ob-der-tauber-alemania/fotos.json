@@ -7,7 +7,13 @@
   "alt": "Rothenburg ob der Tauber, Alemania",
   "autor": "Berthold Werner",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Rothenburg_BW_4.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Rothenburg_BW_4.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

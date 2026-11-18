@@ -7,7 +7,13 @@
   "alt": "Tegucigalpa, Honduras",
   "autor": "Luis Alfredo Romero",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Museo_para_la_Identidad_Nacional.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Museo_para_la_Identidad_Nacional.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2022 in Tegucigalpa"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

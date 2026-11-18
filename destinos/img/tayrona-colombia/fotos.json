@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Tayrona, Colombia",
   "autor": "OpenAperture",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cabo_San_Juan,_Colombia.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cabo_San_Juan,_Colombia.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cabo San Juan, Tayrona"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

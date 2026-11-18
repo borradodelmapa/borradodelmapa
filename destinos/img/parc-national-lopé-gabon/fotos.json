@@ -7,7 +7,13 @@
   "alt": "Parque Nacional de Lopé, Gabón",
   "autor": "Ngangorica",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Elephants_in_Lop%C3%A9_National_Park.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Elephants_in_Lop%C3%A9_National_Park.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Lopé National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

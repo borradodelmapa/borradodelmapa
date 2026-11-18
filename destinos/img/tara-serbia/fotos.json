@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Tara, Serbia",
   "autor": "ZivojinMisic slike",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Planina_tara.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Planina_tara.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Tara Mountain"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

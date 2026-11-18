@@ -7,7 +7,13 @@
   "alt": "Granada, España",
   "autor": "Ingo Mehling",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Granada_-_Cathedral_Front.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Granada_-_Cathedral_Front.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Facade of Cathedral of Granada in Plaza de las Pasiegas"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

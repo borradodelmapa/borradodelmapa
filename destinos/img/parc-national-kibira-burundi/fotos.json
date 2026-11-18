@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Kibira, Burundi",
   "autor": "NZISABIRA Léopold",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Dans_les_arbres_de_la_Kibira.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Dans_les_arbres_de_la_Kibira.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kibira National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

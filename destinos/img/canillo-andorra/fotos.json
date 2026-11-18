@@ -7,7 +7,13 @@
   "alt": "Canillo y Santuario de Meritxell, Andorra",
   "autor": "MARIA ROSA FERRE ✿",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Santuari_nou_de_Meritxell_-_30.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Santuari_nou_de_Meritxell_-_30.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Santuari nou de Meritxell"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

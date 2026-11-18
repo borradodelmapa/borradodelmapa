@@ -7,7 +7,13 @@
   "alt": "N'Djamena, Chad",
   "autor": "Kayhan ERTUGRUL",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Building_of_National_Assembly_DJAMENA.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Building_of_National_Assembly_DJAMENA.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 3.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

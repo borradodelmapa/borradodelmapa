@@ -7,7 +7,13 @@
   "alt": "Sentosa Island, Singapur",
   "autor": "Bob Tan",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Aerial_perspective_of_Sentosa_Island.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Aerial_perspective_of_Sentosa_Island.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

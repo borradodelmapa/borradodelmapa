@@ -7,7 +7,13 @@
   "alt": "Zlatibor, Serbia",
   "autor": "Mandic Milan",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sjenicko_Jezero_-_panoramio.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sjenicko_Jezero_-_panoramio.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Zlatibor District"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

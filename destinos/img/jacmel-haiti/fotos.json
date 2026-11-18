@@ -7,7 +7,13 @@
   "alt": "Jacmel, Haití",
   "autor": "User:Doron",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:JacmelView.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:JacmelView.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Jacmel"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

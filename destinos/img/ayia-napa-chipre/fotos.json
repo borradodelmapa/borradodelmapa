@@ -7,7 +7,13 @@
   "alt": "Ayia Napa, Chipre",
   "autor": "dimitrisvetsikas1969",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cyprus,_Ayia_Napa._2017-12-30.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cyprus,_Ayia_Napa._2017-12-30.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Agia Napa"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

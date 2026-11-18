@@ -7,7 +7,13 @@
   "alt": "Serravalle, San Marino",
   "autor": "LigaDue",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:SerravalleRSMPanorama.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:SerravalleRSMPanorama.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Serravalle (San Marino)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

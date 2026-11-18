@@ -7,7 +7,13 @@
   "alt": "Pics de Sindou, Burkina Faso",
   "autor": "This Photo was taken by croucrou / Sylvain Crouzillat Cette Photo a été prise pa",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Burkina_20110120_164655.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Burkina_20110120_164655.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

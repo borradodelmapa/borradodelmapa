@@ -7,7 +7,13 @@
   "alt": "San Salvador, El Salvador",
   "autor": "Frankjh",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Monumento_al_Salvador_del_Mundo_1.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Monumento_al_Salvador_del_Mundo_1.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Monumento al Divino Salvador del Mundo"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

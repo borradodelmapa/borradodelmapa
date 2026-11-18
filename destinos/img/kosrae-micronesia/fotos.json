@@ -7,7 +7,13 @@
   "alt": "Kosrae, Micronesia",
   "autor": "Mike LaMonaca",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:KosraeAirport.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:KosraeAirport.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

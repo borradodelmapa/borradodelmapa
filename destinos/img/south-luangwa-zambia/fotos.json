@@ -7,7 +7,13 @@
   "alt": "Parque Nacional South Luangwa, Zambia",
   "autor": "Geoff Gallice",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Luangwa_River_crossing.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Luangwa_River_crossing.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "July 2011 in Zambia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

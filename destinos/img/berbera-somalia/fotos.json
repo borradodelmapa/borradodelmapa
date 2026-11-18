@@ -7,7 +7,13 @@
   "alt": "Berbera, Somalia",
   "autor": "Seepsimon",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Berbera_6666.png"
+  "url": "https://commons.wikimedia.org/wiki/File:Berbera_6666.png",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Berbera"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

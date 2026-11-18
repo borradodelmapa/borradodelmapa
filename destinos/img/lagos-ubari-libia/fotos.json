@@ -7,7 +7,13 @@
   "alt": "Lagos de Ubari (Mandara), Libia",
   "autor": "Luca Galuzzi (Lucag)",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Libya_4608_Idehan_Ubari_Dunes_Luca_Galuzzi_2007.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Libya_4608_Idehan_Ubari_Dunes_Luca_Galuzzi_2007.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Dunes of Libya"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

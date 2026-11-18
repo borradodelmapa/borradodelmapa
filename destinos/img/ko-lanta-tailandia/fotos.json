@@ -7,7 +7,13 @@
   "alt": "Playa Klong Khong, Ko Lanta",
   "autor": "Marcin Konsek",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:2016_Prowincja_Krabi,_Ko_Lanta_Yai,_Pla%C5%BCa_Klong_Khong_(16).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:2016_Prowincja_Krabi,_Ko_Lanta_Yai,_Pla%C5%BCa_Klong_Khong_(16).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Klong Khong beach, Ko Lanta Yai"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

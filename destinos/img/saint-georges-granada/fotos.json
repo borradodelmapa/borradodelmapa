@@ -7,7 +7,13 @@
   "alt": "Saint George's, Granada",
   "autor": "Anneli Salo",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cathedral_of_the_Immaculate_Conception_C_IMG_0519.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Cathedral_of_the_Immaculate_Conception_C_IMG_0519.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cathedral of the Immaculate Conception, St. George's, Grenada"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

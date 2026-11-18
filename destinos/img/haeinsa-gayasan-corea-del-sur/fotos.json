@@ -7,7 +7,13 @@
   "alt": "Templo Haeinsa, monte Gaya",
   "autor": "Bernard Gagnon",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Haeinsa_Temple_03.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Haeinsa_Temple_03.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

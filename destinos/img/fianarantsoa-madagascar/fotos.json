@@ -7,7 +7,13 @@
   "alt": "Fianarantsoa, Madagascar",
   "autor": "HoneyGaLe",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vue_globale_de_la_ville_Fianarantsoa_2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vue_globale_de_la_ville_Fianarantsoa_2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Fianarantsoa"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

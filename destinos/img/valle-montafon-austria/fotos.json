@@ -7,7 +7,13 @@
   "alt": "Valle de Montafon, Austria",
   "autor": "Anton-kurt",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:2008.07.24.MontafonerSteinschafBartholomaebergH.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:2008.07.24.MontafonerSteinschafBartholomaebergH.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Montafoner Steinschaf"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

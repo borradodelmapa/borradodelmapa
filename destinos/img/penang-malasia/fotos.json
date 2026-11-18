@@ -7,7 +7,13 @@
   "alt": "Penang (George Town), Malasia",
   "autor": "Milei.vencel",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Old_town_of_Georgetown..JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Old_town_of_Georgetown..JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cityscapes of George Town, Penang"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

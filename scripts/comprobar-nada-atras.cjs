@@ -140,7 +140,7 @@ for (const c of require('./datos-pais.cjs').historias()) {
 // la regla están en scripts/fotos-sin-prueba.json: esa lista solo puede ir a menos (verificarlas o quitarlas), nunca crecer.
 {
   const base = new Set(JSON.parse(leer('scripts/fotos-sin-prueba.json')).fotos);
-  if (base.size > 848) fallos.push(`scripts/fotos-sin-prueba.json: tiene ${base.size} fotos y nunca puede pasar de 848 (18 nov 2026): una foto nueva necesita prueba, no entrar en esta lista`);
+  if (base.size > 0) fallos.push(`scripts/fotos-sin-prueba.json: tiene ${base.size} fotos y debe estar vacía (18 nov 2026): una foto nueva necesita prueba, no entrar en esta lista`);
   const dir = path.join(ROOT, 'destinos', 'img');
   let sinPrueba = 0, pendientes = 0; const ej = [];
   for (const s of fs.existsSync(dir) ? fs.readdirSync(dir) : []) {

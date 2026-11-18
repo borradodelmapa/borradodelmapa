@@ -7,7 +7,13 @@
   "alt": "Hegra (Madá'in Sálih), Arabia Saudita",
   "autor": "KELANTAN JOTTINGS",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Fantastic_Walls_2_(4264825923).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Fantastic_Walls_2_(4264825923).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Meda'in Saleh"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

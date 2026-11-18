@@ -7,7 +7,13 @@
   "alt": "Parque Nacional de Fazao-Malfakassa, Togo",
   "autor": "Zayneb Dhahbi",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vue_de_la_montagne_%C3%A0_Fazao.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vue_de_la_montagne_%C3%A0_Fazao.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "21st-century photographs of Togo"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

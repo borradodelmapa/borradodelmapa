@@ -7,7 +7,13 @@
   "alt": "Kutná Hora, República Checa",
   "autor": "Thomas Ledl",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Church_of_Saint_Barbara,_North_Facade,_Kurna_Hora.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Church_of_Saint_Barbara,_North_Facade,_Kurna_Hora.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "North facade of the Church of Saint Barbara (Kutná Hora)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

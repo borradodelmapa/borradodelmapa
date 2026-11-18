@@ -7,7 +7,13 @@
   "alt": "La Paz, Bolivia",
   "autor": "EEJCC",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Illimani_La_Paz.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Illimani_La_Paz.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Altiplano de Bolivia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Sidón (Saida), Líbano",
   "autor": "Peripitus",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Saida_Municipal_Stadium_with_beachgoers.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Saida_Municipal_Stadium_with_beachgoers.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Saida Municipal Stadium"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Luganville, Vanuatu",
   "autor": "Simon_sees from Australia",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Main_Street_Luganville_(28661070193).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Main_Street_Luganville_(28661070193).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Streets in Luganville"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Plaza de San Pedro, Vaticano",
   "autor": "Diliff",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:St_Peter%27s_Square,_Vatican_City_-_April_2007.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:St_Peter%27s_Square,_Vatican_City_-_April_2007.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

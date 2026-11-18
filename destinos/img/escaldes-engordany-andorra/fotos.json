@@ -7,7 +7,13 @@
   "alt": "Escaldes-Engordany y Caldea, Andorra",
   "autor": "Luis Miguel Bugallo Sánchez (Lmbuga)",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mountains_in_Escaldes-Engordany._Andorra_173.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mountains_in_Escaldes-Engordany._Andorra_173.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Mountains in Escaldes-Engordany"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

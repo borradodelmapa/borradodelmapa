@@ -7,7 +7,13 @@
   "alt": "Puerto de Yeosu",
   "autor": "Mar del Este",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Yeosu_harbour_2015-08-13(1).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Yeosu_harbour_2015-08-13(1).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Yeosu"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

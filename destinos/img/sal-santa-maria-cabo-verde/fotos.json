@@ -7,7 +7,13 @@
   "alt": "Sal / Santa Maria, Cabo Verde",
   "autor": "Adriao",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Praia_da_Atalanta.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Praia_da_Atalanta.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2011 in Boa Vista (Cape Verde)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

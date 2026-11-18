@@ -7,7 +7,13 @@
   "alt": "Sevilla, España",
   "autor": "Gzzz",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Plaza_Nueva_de_Sevilla_(april_2015).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Plaza_Nueva_de_Sevilla_(april_2015).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

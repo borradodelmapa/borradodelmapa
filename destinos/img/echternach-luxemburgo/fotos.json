@@ -7,7 +7,13 @@
   "alt": "Echternach, Luxemburgo",
   "autor": "Marc Ryckaert",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Echternach_St_Willibrord_Basilika_R02.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Echternach_St_Willibrord_Basilika_R02.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 8.6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

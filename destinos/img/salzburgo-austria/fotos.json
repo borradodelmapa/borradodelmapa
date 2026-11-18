@@ -7,7 +7,13 @@
   "alt": "Salzburgo, Austria",
   "autor": "Photo: Andreas Praefcke",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Salzburg_Altstadt_vom_M%C3%B6nchsberg.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Salzburg_Altstadt_vom_M%C3%B6nchsberg.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Festung Hohensalzburg photographed in 2009"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

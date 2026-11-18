@@ -7,7 +7,12 @@
   "alt": "El río Son, en Phong Nha",
   "autor": "Borrado del Mapa",
   "licencia": "",
-  "url": "https://www.instagram.com/borradodelmapa/"
+  "url": "https://www.instagram.com/borradodelmapa/",
+  "prueba": {
+   "tipo": "propia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +24,12 @@
    "pie": "Dentro de Paradise Cave.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -29,7 +39,13 @@
    "pie": "La entrada de la cueva de Phong Nha.",
    "autor": "Tycho",
    "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Phong_Nha_cave_entrance.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Phong_Nha_cave_entrance.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Caves in Vietnam"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -39,7 +55,12 @@
    "pie": "Selva y montañas desde la carretera del parque.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

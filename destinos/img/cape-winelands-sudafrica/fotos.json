@@ -7,7 +7,13 @@
   "alt": "Cape Winelands, Sudáfrica",
   "autor": "Andrew Atina",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Beautiful_road_from_Cape_Town_to_Stellenbosch.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Beautiful_road_from_Cape_Town_to_Stellenbosch.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Simonsberg (Stellenbosch)"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

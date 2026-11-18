@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Akagera, Ruanda",
   "autor": "Braunov",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Topi_in_Akagera_National_Park.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Topi_in_Akagera_National_Park.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "1980 photographs of Rwanda"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

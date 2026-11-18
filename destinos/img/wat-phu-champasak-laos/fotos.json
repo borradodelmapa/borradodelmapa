@@ -7,7 +7,13 @@
   "alt": "Wat Phu (Champasak), Laos",
   "autor": "Mattun0211",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:ViewFromWatPhu.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:ViewFromWatPhu.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Wat Phou"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

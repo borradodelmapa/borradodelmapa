@@ -7,7 +7,13 @@
   "alt": "Tiro (Sour), Líbano",
   "autor": "RomanDeckert",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:SubmergedEgyptianHarbour_TyreSour_Lebanon_RomanDeckert04112019.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:SubmergedEgyptianHarbour_TyreSour_Lebanon_RomanDeckert04112019.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Columns in Lebanon"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

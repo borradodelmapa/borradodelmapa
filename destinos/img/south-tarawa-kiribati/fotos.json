@@ -7,7 +7,13 @@
   "alt": "South Tarawa, Kiribati",
   "autor": "Photo taken by Government of Kiribati employee in the course of their work",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:South_Tarawa_from_the_air.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:South_Tarawa_from_the_air.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Tarawa Atoll"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

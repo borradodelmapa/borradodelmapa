@@ -7,7 +7,13 @@
   "alt": "Cayo Levisa, Cuba",
   "autor": "https://www.flickr.com/photos/gmagnan/",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cayo_Levisa_in_2013.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cayo_Levisa_in_2013.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of Cayo Levisa"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

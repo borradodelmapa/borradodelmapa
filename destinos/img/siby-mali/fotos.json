@@ -7,7 +7,13 @@
   "alt": "Siby, Malí",
   "autor": "Jean René Wilfer AMON",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Home_and_people.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Home_and_people.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Buildings in Mali"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Lubango, Angola",
   "autor": "Erik Cleves Kristensen",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Lubango.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Lubango.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Angola"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

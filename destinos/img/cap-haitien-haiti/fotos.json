@@ -7,7 +7,13 @@
   "alt": "Cap-Haïtien, Haití",
   "autor": "Rémi Kaupp",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cap-Haitien_seen_from_Morne_Jean.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cap-Haitien_seen_from_Morne_Jean.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

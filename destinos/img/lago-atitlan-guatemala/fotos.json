@@ -7,7 +7,13 @@
   "alt": "Lago Atitlán, Guatemala",
   "autor": "Geoff Gallice from Gainesville, FL, USA",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Flickr_-_ggallice_-_Lago_de_Atitl%C3%A1n,_de_Panajachel.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Flickr_-_ggallice_-_Lago_de_Atitl%C3%A1n,_de_Panajachel.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 5.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

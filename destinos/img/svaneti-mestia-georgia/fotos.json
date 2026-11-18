@@ -7,7 +7,13 @@
   "alt": "Svaneti / Mestia, Georgia",
   "autor": "Alexey Komarov",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mestia,_June,_2018-2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mestia,_June,_2018-2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Svan towers in Mestia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

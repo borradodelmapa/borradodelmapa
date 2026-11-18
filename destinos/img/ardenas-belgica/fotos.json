@@ -7,7 +7,13 @@
   "alt": "Las Ardenas, Bélgica",
   "autor": "Jean-Pol GRANDMONT",
   "licencia": "CC BY-SA 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Frahan_JPG01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Frahan_JPG01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2005 in Bouillon"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

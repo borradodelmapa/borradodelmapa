@@ -7,7 +7,13 @@
   "alt": "Colombo, Sri Lanka",
   "autor": "T Chamika",
   "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Colombo_skyline_2024.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Colombo_skyline_2024.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Cityscapes in Sri Lanka"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

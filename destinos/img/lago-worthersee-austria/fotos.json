@@ -7,7 +7,13 @@
   "alt": "Lago Wörthersee, Austria",
   "autor": "Carsten Steger",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_W%C3%B6rthersee_(view_from_the_southeast).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_W%C3%B6rthersee_(view_from_the_southeast).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 10.4
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

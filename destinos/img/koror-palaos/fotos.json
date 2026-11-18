@@ -7,7 +7,13 @@
   "alt": "Koror, Palaos",
   "autor": "ito1117",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Main_St,_Koror,_Palau_-_panoramio_(1).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Main_St,_Koror,_Palau_-_panoramio_(1).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

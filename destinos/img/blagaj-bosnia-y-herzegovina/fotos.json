@@ -7,7 +7,13 @@
   "alt": "Blagaj, Bosnia y Herzegovina",
   "autor": "Julian Nyča",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Blagaj_%E2%80%93_Grad_2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Blagaj_%E2%80%93_Grad_2.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

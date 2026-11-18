@@ -7,7 +7,13 @@
   "alt": "Puerto Hércules (Port Hercule), Mónaco",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vista_de_M%C3%B3naco,_2016-06-23,_DD_10.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vista_de_M%C3%B3naco,_2016-06-23,_DD_10.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2016 in Monaco"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

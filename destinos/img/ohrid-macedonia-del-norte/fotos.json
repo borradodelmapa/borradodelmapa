@@ -7,7 +7,13 @@
   "alt": "Ohrid, Macedonia del Norte",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Fortaleza_de_Samuel,_Ohrid,_Macedonia,_2014-04-17,_DD_56.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Fortaleza_de_Samuel,_Ohrid,_Macedonia,_2014-04-17,_DD_56.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2014 photographs of North Macedonia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

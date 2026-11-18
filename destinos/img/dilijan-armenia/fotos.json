@@ -7,7 +7,13 @@
   "alt": "Dilijan, Armenia",
   "autor": "Armen.khachikyan",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Fountain_in_front_of_Dilijan_Municipality.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Fountain_in_front_of_Dilijan_Municipality.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Dilijan City Hall"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

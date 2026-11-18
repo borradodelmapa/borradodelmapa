@@ -7,7 +7,13 @@
   "alt": "Korhogo, Costa de Marfil",
   "autor": "Ariel Palmon",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Mosque_in_Korhogo_ap_001.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mosque_in_Korhogo_ap_001.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

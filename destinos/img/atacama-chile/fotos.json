@@ -7,7 +7,13 @@
   "alt": "San Pedro de Atacama, Chile",
   "autor": "Pierre cb",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:San_Pedro_de_Atacama_oasis.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:San_Pedro_de_Atacama_oasis.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "San Pedro de Atacama River"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

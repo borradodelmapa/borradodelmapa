@@ -7,7 +7,13 @@
   "alt": "Fráncfort, Alemania",
   "autor": "Dr. Thomas Liptak",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Frankfurt_am_Main,_Skyline_von_der_Alten_Br%C3%BCcke.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Frankfurt_am_Main,_Skyline_von_der_Alten_Br%C3%BCcke.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Kasane y Cuatro Fronteras, Botsuana",
   "autor": "Cretep",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Tourist_Resort_at_Kasane.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Tourist_Resort_at_Kasane.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Chobe Safari Lodge"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

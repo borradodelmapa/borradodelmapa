@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Kopaonik, Serbia",
   "autor": "Ratko Bozovic",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pan%C4%8Di%C4%87ev_vrh_during_winter.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Pan%C4%8Di%C4%87ev_vrh_during_winter.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kopaonik ski resort"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

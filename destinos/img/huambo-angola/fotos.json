@@ -7,7 +7,13 @@
   "alt": "Huambo, Angola",
   "autor": "Abanul",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Huambo,_Pal%C3%A1cio_do_Governador.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Huambo,_Pal%C3%A1cio_do_Governador.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

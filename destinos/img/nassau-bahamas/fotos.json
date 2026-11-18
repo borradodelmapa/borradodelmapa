@@ -7,7 +7,13 @@
   "alt": "Nassau, Bahamas",
   "autor": "Quintin Soloviev",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nassau,_Bahamas_aerial_view_(cropped).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nassau,_Bahamas_aerial_view_(cropped).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 3.6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

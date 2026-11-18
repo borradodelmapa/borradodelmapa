@@ -7,7 +7,13 @@
   "alt": "Parque Nacional del Triglav, Eslovenia",
   "autor": "Andrej Jakobčič",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Triglav.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Triglav.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Triglav from the east"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

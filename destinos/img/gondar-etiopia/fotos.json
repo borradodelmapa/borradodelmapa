@@ -7,7 +7,13 @@
   "alt": "Gondar, Etiopía",
   "autor": "Giustino",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Gonder_from_the_Goha_hotel.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gonder_from_the_Goha_hotel.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Fasil Ghebbi"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

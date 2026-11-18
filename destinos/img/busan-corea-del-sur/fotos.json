@@ -7,7 +7,13 @@
   "alt": "Gamcheon, Busan",
   "autor": "Ken Eckert",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Gamcheon_Colored_Houses,_Busan,_Korea.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gamcheon_Colored_Houses,_Busan,_Korea.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Gamcheon Culture Village"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

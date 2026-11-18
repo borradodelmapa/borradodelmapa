@@ -7,7 +7,13 @@
   "alt": "Hallstatt, Austria",
   "autor": "C.Stadler/Bwag",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Hallstatt_-_Zentrum_.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Hallstatt_-_Zentrum_.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

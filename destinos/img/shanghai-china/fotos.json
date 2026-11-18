@@ -7,7 +7,13 @@
   "alt": "Shanghái, China",
   "autor": "xiquinhosilva",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Huangpu_Park_20124-Shanghai_(32208802494).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Huangpu_Park_20124-Shanghai_(32208802494).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2016 in Pudong"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

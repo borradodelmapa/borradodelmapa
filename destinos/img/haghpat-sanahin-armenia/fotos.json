@@ -7,7 +7,13 @@
   "alt": "Haghpat y Sanahin, Armenia",
   "autor": "Diego Delso",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Monasterio_de_Haghpat,_Armenia,_2016-09-30,_DD_21.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Monasterio_de_Haghpat,_Armenia,_2016-09-30,_DD_21.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Churches in Armenia photographed in 2016"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

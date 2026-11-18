@@ -7,7 +7,13 @@
   "alt": "Chamonix y el Mont Blanc, Francia",
   "autor": "Tiia Monto",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Chamonix_-_Arve_river.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Chamonix_-_Arve_river.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

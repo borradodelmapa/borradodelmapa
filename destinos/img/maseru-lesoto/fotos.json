@@ -7,7 +7,13 @@
   "alt": "Maseru, Lesoto",
   "autor": "OER Africa",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Maseru_from_Parliament_Hill.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Maseru_from_Parliament_Hill.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.4
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

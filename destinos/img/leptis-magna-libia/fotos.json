@@ -7,7 +7,13 @@
   "alt": "Leptis Magna, Libia",
   "autor": "joepyrek from Richmond, Va, USA",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Leptis_Magna_(29)_(8288918733).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Leptis_Magna_(29)_(8288918733).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.4
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

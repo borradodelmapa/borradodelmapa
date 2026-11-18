@@ -8,7 +8,12 @@
   "autor": "Patrickroque01",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Sagada_overlooking_houses_(Sagada,_Mountain_Province;_12-01-2022).jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Sagada"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +25,13 @@
    "pie": "Ataúdes colgados en el Valle del Eco.",
    "autor": "David Stanley from Nanaimo, Canada",
    "licencia": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Hanging_Coffins_(47982368342).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Hanging_Coffins_(47982368342).jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 1.9
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -30,7 +41,13 @@
    "pie": "La entrada de la cueva de Sumaguing.",
    "autor": "Patrickroque01",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Sumaguing_Cave_(South_Road,_Sagada,_Mountain_Province;_12-01-2022).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Sumaguing_Cave_(South_Road,_Sagada,_Mountain_Province;_12-01-2022).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Sumaguing Cave"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

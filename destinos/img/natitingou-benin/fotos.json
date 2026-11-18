@@ -7,7 +7,13 @@
   "alt": "Natitingou, Benín",
   "autor": "Baliola",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Benin_Natitingou.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Benin_Natitingou.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Natitingou"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

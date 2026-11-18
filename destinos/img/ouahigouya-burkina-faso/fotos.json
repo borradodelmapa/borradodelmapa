@@ -7,7 +7,13 @@
   "alt": "Ouahigouya, Burkina Faso",
   "autor": "Martin Wegmann",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ouahigouya_road.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ouahigouya_road.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "International borders of Burkina Faso"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

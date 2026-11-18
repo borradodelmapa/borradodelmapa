@@ -7,7 +7,13 @@
   "alt": "Lago Song-Kul, Kirguistán",
   "autor": "Ondřej Žváček",
   "licencia": "CC BY 2.5",
-  "url": "https://commons.wikimedia.org/wiki/File:Song-K%C3%B6l.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Song-K%C3%B6l.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Song Kol"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

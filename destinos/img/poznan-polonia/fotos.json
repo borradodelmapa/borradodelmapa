@@ -7,7 +7,13 @@
   "alt": "Poznań, Polonia",
   "autor": "Rzuwig",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Fort_6_Pozna%C5%84.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Fort_6_Pozna%C5%84.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Fort VI w Poznaniu"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

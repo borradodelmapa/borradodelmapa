@@ -7,7 +7,13 @@
   "alt": "Klagenfurt, Austria",
   "autor": "Johann Jaritz",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Klagenfurt_Villacher_Vorstadt_Kreuzbergl-Stadtblick_20102015_8306.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Klagenfurt_Villacher_Vorstadt_Kreuzbergl-Stadtblick_20102015_8306.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "October 2015 in Klagenfurt"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

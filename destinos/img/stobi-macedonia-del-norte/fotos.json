@@ -7,7 +7,13 @@
   "alt": "Stobi, Macedonia del Norte",
   "autor": "Vaurien",
   "licencia": "CC BY-SA 3.0 de",
-  "url": "https://commons.wikimedia.org/wiki/File:Stobi.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Stobi.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ancient Roman archaeological sites in North Macedonia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

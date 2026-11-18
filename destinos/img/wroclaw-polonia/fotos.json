@@ -7,7 +7,13 @@
   "alt": "Wrocław, Polonia",
   "autor": "Jar.ciurus",
   "licencia": "CC BY-SA 3.0 pl",
-  "url": "https://commons.wikimedia.org/wiki/File:Wroclaw-_Most_Grunwaldzki.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Wroclaw-_Most_Grunwaldzki.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.9
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

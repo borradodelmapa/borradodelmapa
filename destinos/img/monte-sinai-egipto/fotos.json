@@ -7,7 +7,13 @@
   "alt": "Monte Sinaí y Santa Catalina, Egipto",
   "autor": "Berthold Werner",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Katharinenkloster_Sinai_BW_2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Katharinenkloster_Sinai_BW_2.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

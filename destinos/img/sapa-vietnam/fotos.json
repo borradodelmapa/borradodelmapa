@@ -1,15 +1,5 @@
 {
  "generado": "2026-11-05",
- "hero": {
-  "file": "hero.jpg",
-  "w": 1280,
-  "h": 854,
-  "alt": "Arrozales en terrazas de Sa Pa, Vietnam",
-  "autor": "Jakub Hałun",
-  "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Paddy_fields_in_L%C3%A0o_Cai,_Sa_Pa,_Vietnam,_20240125_1051_3423.jpg",
-  "ok_manual": true
- },
  "stops": {},
  "que_hacer": {
   "0": {
@@ -20,7 +10,13 @@
    "pie": "Terrazas del valle de Mường Hoa, en Tả Van.",
    "autor": "Andre Hospers",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ta_Van_Muong_Ha_vallei_(84346).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Ta_Van_Muong_Ha_vallei_(84346).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Muong Hoa River"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -30,7 +26,13 @@
    "pie": "Mar de nubes desde la cima del Fansipan.",
    "autor": "Vivu Vietnam",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Fansipan_summit_spiritual_complex_bare_tree_sea_of_clouds_Sa_Pa_Vietnam.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Fansipan_summit_spiritual_complex_bare_tree_sea_of_clouds_Sa_Pa_Vietnam.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Fansipan"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -40,7 +42,13 @@
    "pie": "Día de mercado en Bắc Hà.",
    "autor": "Peter Olshevsky",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Bac_Ha_market_day,_Vietnam.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Bac_Ha_market_day,_Vietnam.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Hmong in Vietnam"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -50,7 +58,13 @@
    "pie": "El valle de Mường Hoa.",
    "autor": "Andre Hospers",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ta_Van_Muong_Ha_vallei_(70294).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Ta_Van_Muong_Ha_vallei_(70294).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Muong Hoa River"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

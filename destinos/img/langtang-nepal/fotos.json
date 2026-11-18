@@ -7,7 +7,13 @@
   "alt": "Valle de Langtang, Nepal: Parque nacional de Langtang",
   "autor": "Q-lieb-in",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Starry_night_in_Langtang_National_Park.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Starry_night_in_Langtang_National_Park.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Langtang National Park"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
   "Tserko Ri": {
@@ -18,7 +24,13 @@
    "autor": "Ummidnp",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tserko_ri.jpg",
-   "fuente": "Tserko ri.jpg"
+   "fuente": "Tserko ri.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Langtang Khola"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Parque nacional de Langtang": {
    "file": "s3.jpg",
@@ -29,7 +41,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Yak_in_Langtang_Valley.jpg",
    "fuente": "Yak in Langtang Valley.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Langtang National Park"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

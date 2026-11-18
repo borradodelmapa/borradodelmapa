@@ -7,7 +7,13 @@
   "alt": "Templo Bulguksa, Gyeongju",
   "autor": "nzj© at w:Picasa",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Corridor_at_Bulguksa-Gyeongju-Korea-01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Corridor_at_Bulguksa-Gyeongju-Korea-01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2007 in Gyeongju"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Baracoa, Cuba",
   "autor": "Ralf1010",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Cuidad_de_Baracoa.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Cuidad_de_Baracoa.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2007 in Cuba"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

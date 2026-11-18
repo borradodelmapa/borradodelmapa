@@ -7,7 +7,13 @@
   "alt": "Trongsa, Bután",
   "autor": "Gerd Eichmann",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Trongsa-Dzong-120-2015-gje.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Trongsa-Dzong-120-2015-gje.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Trongsa Dzong"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

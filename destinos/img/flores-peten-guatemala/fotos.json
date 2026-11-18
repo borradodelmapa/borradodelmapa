@@ -7,7 +7,13 @@
   "alt": "Flores y el Petén, Guatemala",
   "autor": "Juan Francisco",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Flores_Island.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Flores_Island.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Flores, El Petén"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

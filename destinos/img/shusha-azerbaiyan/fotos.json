@@ -7,7 +7,13 @@
   "alt": "Shusha, Azerbaiyán",
   "autor": "Safi-iren",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Real_school,_Shushi_-_Artsakh.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Real_school,_Shushi_-_Artsakh.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 5.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

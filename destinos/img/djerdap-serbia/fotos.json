@@ -7,7 +7,13 @@
   "alt": "Parque Nacional Đerdap (Puertas de Hierro), Serbia",
   "autor": "Frans van Nes",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:IronGate2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:IronGate2.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Danube in Serbia in 2003"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Río Li entre Guilin y Yangshuo",
   "autor": "chensiyuan",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:1_li_jiang_guilin_yangshuo_2011.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:1_li_jiang_guilin_yangshuo_2011.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Karst topography in Guangxi"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Crucero por el Nilo (Luxor-Asuán), Egipto",
   "autor": "Alchemica",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:River-Nile-near-Aswan.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:River-Nile-near-Aswan.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Nile in Aswan"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

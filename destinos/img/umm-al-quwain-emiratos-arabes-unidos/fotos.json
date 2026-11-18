@@ -7,7 +7,13 @@
   "alt": "Umm Al Quwain, Emiratos Árabes Unidos",
   "autor": "Peter Dowley from Dubai, United Arab Emirates",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Umm_Al_Quwain_mangroves_(7267363924).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Umm_Al_Quwain_mangroves_(7267363924).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Umm al-Quwain"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

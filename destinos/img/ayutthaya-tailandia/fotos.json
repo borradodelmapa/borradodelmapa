@@ -7,7 +7,13 @@
   "alt": "Wat Chaiwatthanaram, Ayutthaya",
   "autor": "Evilarry",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Ayutthaya_Thailand_2004.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ayutthaya_Thailand_2004.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Wat Chaiwatthanaram"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

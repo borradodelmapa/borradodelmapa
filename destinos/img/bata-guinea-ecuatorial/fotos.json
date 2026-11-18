@@ -7,7 +7,13 @@
   "alt": "Bata, Guinea Ecuatorial",
   "autor": "Ben Sutherland from Crystal Palace, London, UK",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Bata,_2015-02_-i---i-_(16325440088).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Bata,_2015-02_-i---i-_(16325440088).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Bata, Equatorial Guinea"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

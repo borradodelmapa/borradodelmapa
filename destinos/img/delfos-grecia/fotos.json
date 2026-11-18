@@ -7,7 +7,13 @@
   "alt": "Delfos, Grecia",
   "autor": "Copyright © 2004 David Monniaux",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Delphi_amphitheater_from_above_dsc06297.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Delphi_amphitheater_from_above_dsc06297.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

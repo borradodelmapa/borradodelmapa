@@ -7,7 +7,13 @@
   "alt": "Conakry, Guinea",
   "autor": "Boubacar Bila Diao Balde",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ville_de_Conaky.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ville_de_Conaky.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Kaloum"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

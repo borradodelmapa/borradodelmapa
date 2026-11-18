@@ -7,7 +7,13 @@
   "alt": "Byblos (Jbeil), Líbano",
   "autor": "User:Linaduliban",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:St_JohnByblos.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:St_JohnByblos.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Saint John, Byblos"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Fraser Island (K'gari), Australia",
   "autor": "Rhain",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Indian_Head_view_on_Fraser_Island_(May_2016).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Indian_Head_view_on_Fraser_Island_(May_2016).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Beaches of K'gari"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

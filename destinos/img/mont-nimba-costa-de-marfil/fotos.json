@@ -7,7 +7,13 @@
   "alt": "Montes Nimba, Costa de Marfil",
   "autor": "Guy Debonnet",
   "licencia": "CC BY-SA 3.0 igo",
-  "url": "https://commons.wikimedia.org/wiki/File:Mount_Nimba_Strict_Nature_Reserve-108450.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Mount_Nimba_Strict_Nature_Reserve-108450.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Mont Nimba"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

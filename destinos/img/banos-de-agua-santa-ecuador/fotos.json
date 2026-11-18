@@ -7,7 +7,13 @@
   "alt": "Baños de Agua Santa, Ecuador",
   "autor": "Eddyl",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ba%C3%B1os,_Ecuador.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Ba%C3%B1os,_Ecuador.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Baños"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Rurrenabaque y la Amazonía, Bolivia",
   "autor": "Fale Wanderlust Bolivia",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Rurre_6.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Rurre_6.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Our Lady churches in Bolivia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Selva Negra, Alemania",
   "autor": "MWolf89",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Blick_vom_Hohfelsen.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Blick_vom_Hohfelsen.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Landscapes of the Northern Black Forest"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Memoriales de Nyamata y Ntarama, Ruanda",
   "autor": "Adam Jones, Ph.D.",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Exterior_of_Ntarama_Genocide_Memorial_Site_-_Rwanda_-_01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Exterior_of_Ntarama_Genocide_Memorial_Site_-_Rwanda_-_01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Ntarama Memorial Site"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

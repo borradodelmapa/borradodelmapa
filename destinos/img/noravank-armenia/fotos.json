@@ -7,7 +7,13 @@
   "alt": "Noravank, Armenia",
   "autor": "Eupator",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Noravank.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Noravank.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Holy Mother of God in Noravank Monastery"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

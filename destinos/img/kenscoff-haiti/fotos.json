@@ -7,7 +7,13 @@
   "alt": "Kenscoff, Haití",
   "autor": "Kendra Helmer, USAID",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Amid_rows_of_cabbage,_Haiti.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Amid_rows_of_cabbage,_Haiti.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Agriculture in Kenscoff"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

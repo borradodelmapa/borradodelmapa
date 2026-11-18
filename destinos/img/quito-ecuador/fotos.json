@@ -7,7 +7,13 @@
   "alt": "Quito, Ecuador",
   "autor": "Asamblea Nacional del Ecuador",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:FACHADA_ASAMBLEA_NACIONAL._QUITO,_20_DE_FEBRERO_2020._01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:FACHADA_ASAMBLEA_NACIONAL._QUITO,_20_DE_FEBRERO_2020._01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2020 in Quito"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

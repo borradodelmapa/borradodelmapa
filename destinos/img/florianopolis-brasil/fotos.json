@@ -7,7 +7,13 @@
   "alt": "Florianópolis, Brasil",
   "autor": "oscar fava",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Morro_da_Cruz,_Florian%C3%B3polis_-_SC,_Brazil_-_panoramio_(cropped).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Morro_da_Cruz,_Florian%C3%B3polis_-_SC,_Brazil_-_panoramio_(cropped).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.7
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

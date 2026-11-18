@@ -7,7 +7,13 @@
   "alt": "Whistler, Canadá",
   "autor": "Ruth Hartnup from Vancouver, Canada",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Autumn_colours_and_plenty_of_dogs_to_pet_(37560004544).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Autumn_colours_and_plenty_of_dogs_to_pet_(37560004544).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2017 in Whistler, British Columbia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

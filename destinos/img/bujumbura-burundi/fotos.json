@@ -7,7 +7,13 @@
   "alt": "Bujumbura, Burundi",
   "autor": "SteveRwanda",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:BujumburaFromCathedral.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:BujumburaFromCathedral.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Bujumbura"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

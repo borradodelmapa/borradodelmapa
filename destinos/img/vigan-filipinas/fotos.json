@@ -7,7 +7,13 @@
   "alt": "Vigan, Filipinas",
   "autor": "Ray in Manila",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Calle_Crisologo,_Vigan,_Philippines_(50025182191).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Calle_Crisologo,_Vigan,_Philippines_(50025182191).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Calle Crisologo"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +25,13 @@
    "pie": "Una kalesa, el carruaje de caballos de Vigan.",
    "autor": "Riccian (Ian Limpangog)",
    "licencia": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Kalesa_Vigan.JPG"
+   "url": "https://commons.wikimedia.org/wiki/File:Kalesa_Vigan.JPG",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Calle Crisologo at night"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -29,17 +41,13 @@
    "pie": "La plaza Salcedo y la iglesia de Vigan.",
    "autor": "Jesstine Co",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Plaza_Salcedo_Vigan_Church.jpg"
-  },
-  "2": {
-   "file": "q2.jpg",
-   "w": 720,
-   "h": 468,
-   "alt": "Un alfarero de burnay, la cerámica de Vigan",
-   "pie": "Un alfarero de burnay, la cerámica de Vigan.",
-   "autor": "Ranieljosecastaneda",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Burnayan_Pottery_making_of_Vigan.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Plaza_Salcedo_Vigan_Church.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Plaza Salcedo (Vigan)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -49,7 +57,13 @@
    "pie": "Empanada de Vigan.",
    "autor": "Jessartcam",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Empanada_de_Vigan.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Empanada_de_Vigan.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Empanadas of the Philippines"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

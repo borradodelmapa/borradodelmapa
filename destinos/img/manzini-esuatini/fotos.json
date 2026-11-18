@@ -7,7 +7,13 @@
   "alt": "Manzini, Esuatini",
   "autor": "Entropy1963",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Ex_Tum%27s_George_Hotel_Manzini_Swaziland.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ex_Tum%27s_George_Hotel_Manzini_Swaziland.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

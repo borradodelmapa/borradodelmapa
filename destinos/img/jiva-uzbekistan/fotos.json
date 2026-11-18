@@ -7,7 +7,13 @@
   "alt": "Jiva, Uzbekistán",
   "autor": "Lomita",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:L80_-_Vue_g%C3%A9n%C3%A9rale_de_Khyva.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:L80_-_Vue_g%C3%A9n%C3%A9rale_de_Khyva.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Khiva"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

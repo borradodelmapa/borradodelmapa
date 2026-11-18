@@ -7,7 +7,13 @@
   "alt": "Souq Mubarakiya, Kuwait",
   "autor": "Zairon",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kuwait_City_Souq_al-Mubarakeya_at_Night_01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kuwait_City_Souq_al-Mubarakeya_at_Night_01.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Culture of Kuwait City"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

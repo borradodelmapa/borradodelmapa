@@ -8,7 +8,12 @@
   "autor": "Philip Nalangan",
   "licencia": "CC BY-SA 4.0",
   "url": "https://commons.wikimedia.org/wiki/File:Batad_Rice_Terraces_4.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Batad Rice Terraces"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +25,13 @@
    "pie": "Batad desde el aire.",
    "autor": "Bien02",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Batad_Rice_Terraces_(aerial).jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Batad_Rice_Terraces_(aerial).jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 0
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -30,7 +41,13 @@
    "pie": "Siembra en grupo en las terrazas de Batad.",
    "autor": "BENNY GROSS.1",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Planting_rice_in_Batad%27s_rice_terraces_03.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Planting_rice_in_Batad%27s_rice_terraces_03.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Batad Rice Terraces"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -40,7 +57,13 @@
    "pie": "Un agricultor con su carabao en el arrozal de Batad.",
    "autor": "Ekaterina Kvelidze",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Traditional_rice_field_cultivation,_Batad,_Banaue.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Traditional_rice_field_cultivation,_Batad,_Banaue.jpg",
+   "prueba": {
+    "tipo": "geo",
+    "km": 0.2
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

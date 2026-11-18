@@ -7,7 +7,13 @@
   "alt": "Robertsport, Liberia",
   "autor": "mjmkeating",
   "licencia": "CC BY 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Robertsport_hillside.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Robertsport_hillside.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Robertsport"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Quetzaltenango (Xela), Guatemala",
   "autor": "PabloRosado",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Palacio_Municipal_de_Quetzaltenango.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Palacio_Municipal_de_Quetzaltenango.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2020 in Quetzaltenango"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

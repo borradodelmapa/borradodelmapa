@@ -7,7 +7,13 @@
   "alt": "Borgo Maggiore, San Marino",
   "autor": "Messapi",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Borgo_maggiore_-_San_Marino.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Borgo_maggiore_-_San_Marino.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Borgo Maggiore"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

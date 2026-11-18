@@ -7,7 +7,13 @@
   "alt": "Buenos Aires, Argentina",
   "autor": "Fernando",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:CABA_-_Avenida_9_de_Julio.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:CABA_-_Avenida_9_de_Julio.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Avenida 9 de Julio, Buenos Aires"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

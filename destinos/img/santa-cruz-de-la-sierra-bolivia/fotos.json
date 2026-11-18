@@ -7,7 +7,13 @@
   "alt": "Santa Cruz de la Sierra, Bolivia",
   "autor": "Parallelepiped09",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Santa_Cruz_de_la_Sierra_3.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Santa_Cruz_de_la_Sierra_3.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Basse Santa Su, Gambia",
   "autor": "Catjacket",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Basse_Bridge.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Basse_Bridge.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2021 photographs of the Gambia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

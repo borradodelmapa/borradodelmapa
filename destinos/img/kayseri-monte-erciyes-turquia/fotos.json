@@ -7,7 +7,13 @@
   "alt": "Kayseri y Monte Erciyes, Turquía",
   "autor": "Bjørn Christian Tørrissen",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Erciyes_From_Aktepe_Goreme.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Erciyes_From_Aktepe_Goreme.JPG",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.8
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,13 @@
   "alt": "Mallorca, España",
   "autor": "Chixoy",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vista_a%C3%A8ria_de_Santa_Eug%C3%A8nia.JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Vista_a%C3%A8ria_de_Santa_Eug%C3%A8nia.JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Aerial photographs of Mallorca"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

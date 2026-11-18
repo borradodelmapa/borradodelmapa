@@ -7,7 +7,13 @@
   "alt": "Triesenberg, Liechtenstein",
   "autor": "Lucas Kendall",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:View_of_Triesenberg.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:View_of_Triesenberg.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 2.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

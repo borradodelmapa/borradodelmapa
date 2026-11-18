@@ -7,7 +7,13 @@
   "alt": "Grupo Haʻapai, Tonga",
   "autor": "David Broad",
   "licencia": "CC BY 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Ha%27apai_Islands_near_Tonga,_South_Pacific_-_panoramio_(2).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Ha%27apai_Islands_near_Tonga,_South_Pacific_-_panoramio_(2).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Haʻapai Islands"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

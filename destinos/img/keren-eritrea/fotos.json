@@ -7,7 +7,13 @@
   "alt": "Keren, Eritrea",
   "autor": "Voice of Clam",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Keren_-_2008-11-01.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Keren_-_2008-11-01.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

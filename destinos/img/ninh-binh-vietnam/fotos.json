@@ -7,7 +7,12 @@
   "alt": "El valle desde el mirador de la cueva Múa",
   "autor": "Borrado del Mapa",
   "licencia": "",
-  "url": "https://www.instagram.com/borradodelmapa/"
+  "url": "https://www.instagram.com/borradodelmapa/",
+  "prueba": {
+   "tipo": "propia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,7 +24,12 @@
    "pie": "Karst y agua junto a Tam Cốc.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "1": {
    "file": "q1.jpg",
@@ -29,7 +39,13 @@
    "pie": "Una barca en Tràng An.",
    "autor": "Jakub Hałun",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Trang_An_Landscape_Complex,_Ninh_Binh_Province,_Vietnam,_20240202_1353_5165.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Trang_An_Landscape_Complex,_Ninh_Binh_Province,_Vietnam,_20240202_1353_5165.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Tràng An Landscape Complex"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -39,7 +55,12 @@
    "pie": "La pagoda del mirador de Múa.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -49,7 +70,12 @@
    "pie": "Campos de loto cerca de Tam Cốc.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

@@ -7,7 +7,13 @@
   "alt": "Narva, Estonia",
   "autor": "WeaponizingArchitecture",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Narva,_Estonia_(May_2026).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Narva,_Estonia_(May_2026).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Views of Narva"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

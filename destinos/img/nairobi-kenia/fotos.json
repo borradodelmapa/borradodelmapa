@@ -7,7 +7,13 @@
   "alt": "Nairobi, Kenia",
   "autor": "Daniel Case",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Nairobi_skyline_from_Gem_Hotel.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Nairobi_skyline_from_Gem_Hotel.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 6.6
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

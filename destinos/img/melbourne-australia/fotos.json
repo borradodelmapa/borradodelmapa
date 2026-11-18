@@ -7,7 +7,13 @@
   "alt": "Melbourne, Australia",
   "autor": "Melbpal",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Melbourne_skyline_sor.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Melbourne_skyline_sor.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Skylines of Melbourne"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

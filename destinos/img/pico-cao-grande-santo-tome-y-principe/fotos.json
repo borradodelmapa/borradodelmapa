@@ -7,7 +7,13 @@
   "alt": "Pico Cão Grande, Santo Tomé y Príncipe",
   "autor": "Philippe Bourachot",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Pico_C%C3%A3o_Grande.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Pico_C%C3%A3o_Grande.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Pico Cão Grande"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

@@ -7,7 +7,12 @@
   "alt": "La bahía de Ha Long, desde el ferri a Cát Bà",
   "autor": "Borrado del Mapa",
   "licencia": "",
-  "url": "https://www.instagram.com/borradodelmapa/"
+  "url": "https://www.instagram.com/borradodelmapa/",
+  "prueba": {
+   "tipo": "propia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -19,17 +24,12 @@
    "pie": "Barcos de crucero frente a Cát Bà.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
-  },
-  "1": {
-   "file": "q1.jpg",
-   "w": 500,
-   "h": 376,
-   "alt": "La bahía de Lan Ha",
-   "pie": "La bahía de Lan Ha.",
-   "autor": "Christophe95",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Lan_Ha_Bay_20.jpg"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "2": {
    "file": "q2.jpg",
@@ -39,7 +39,13 @@
    "pie": "Interior de la cueva Sung Sot.",
    "autor": "Jakub Hałun",
    "licencia": "CC BY 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Sung_Sot_Cave,_Ha_Long_Bay,_Vietnam,_20240128_1623_3921.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Sung_Sot_Cave,_Ha_Long_Bay,_Vietnam,_20240128_1623_3921.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Sung Sot Cave"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "3": {
    "file": "q3.jpg",
@@ -49,7 +55,12 @@
    "pie": "Islas frente a la costa de Cát Bà.",
    "autor": "Borrado del Mapa",
    "licencia": "",
-   "url": "https://www.instagram.com/borradodelmapa/"
+   "url": "https://www.instagram.com/borradodelmapa/",
+   "prueba": {
+    "tipo": "propia"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

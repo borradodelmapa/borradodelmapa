@@ -7,7 +7,13 @@
   "alt": "Banjul, Gambia",
   "autor": "Hannu Sääskilahti",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Gambia,_Banjul,_Arch_22.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gambia,_Banjul,_Arch_22.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

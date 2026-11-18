@@ -7,7 +7,13 @@
   "alt": "Saná, Yemen",
   "autor": "Dan from Brussels, Europe",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Sana%27a_(2286825748).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Sana%27a_(2286825748).jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

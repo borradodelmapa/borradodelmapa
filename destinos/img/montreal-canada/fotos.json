@@ -7,7 +7,13 @@
   "alt": "Montreal, Canadá",
   "autor": "Quintin Soloviev",
   "licencia": "CC BY 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Montreal,_Quebec_skyline.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Montreal,_Quebec_skyline.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 1.5
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

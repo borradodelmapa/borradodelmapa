@@ -7,7 +7,13 @@
   "alt": "Templo Blanco (Wat Rong Khun), Chiang Rai",
   "autor": "Jakub Hałun",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:20171107_White_Temple_Chiang_Rai_0197_DxO.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:20171107_White_Temple_Chiang_Rai_0197_DxO.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2017 in Chiang Rai"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

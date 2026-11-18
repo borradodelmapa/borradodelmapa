@@ -7,7 +7,13 @@
   "alt": "Lago de Yojoa, Honduras",
   "autor": "Frank Domínguez 15",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Yojoa_Lake.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Yojoa_Lake.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Lago de Yojoa"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

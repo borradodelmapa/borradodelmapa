@@ -8,7 +8,12 @@
   "autor": "CEphoto, Uwe Aranas",
   "licencia": "CC BY-SA 3.0",
   "url": "https://commons.wikimedia.org/wiki/File:Banaue_Philippines_Ifugao-Tribesman-01.jpg",
-  "ok_manual": true
+  "ok_manual": true,
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Banaue Rice Terraces"
+  },
+  "vista": "2026-11-18"
  },
  "stops": {},
  "que_hacer": {
@@ -20,7 +25,13 @@
    "pie": "Mujeres ifugao en Banaue.",
    "autor": "Julia Sumangil",
    "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ifugao_women_in_Banaue.jpg"
+   "url": "https://commons.wikimedia.org/wiki/File:Ifugao_women_in_Banaue.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Banaue"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

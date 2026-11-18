@@ -7,7 +7,13 @@
   "alt": "Kolonia, Micronesia",
   "autor": "Gargoylepni at en.wikipedia",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Koloniasokehs.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Koloniasokehs.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2003 in the Federated States of Micronesia"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

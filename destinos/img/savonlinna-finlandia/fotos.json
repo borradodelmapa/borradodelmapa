@@ -7,7 +7,13 @@
   "alt": "Savonlinna, Finlandia",
   "autor": "Miraceti",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Olavinlinna2.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Olavinlinna2.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.2
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

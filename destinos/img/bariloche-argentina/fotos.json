@@ -7,7 +7,13 @@
   "alt": "San Carlos de Bariloche, Argentina",
   "autor": "enzofloyd",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Catedral_desde_el_Lago_Nahuel_Huapi_-_panoramio.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Catedral_desde_el_Lago_Nahuel_Huapi_-_panoramio.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 0.7
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

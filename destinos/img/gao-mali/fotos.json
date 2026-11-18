@@ -7,7 +7,13 @@
   "alt": "Gao, Malí",
   "autor": "David Sessoms",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Gao_Assemble_Regionale.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Gao_Assemble_Regionale.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "2006 in Mali"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

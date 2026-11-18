@@ -7,7 +7,13 @@
   "alt": "Kathmandú, Nepal",
   "autor": "Gerd Eichmann",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Kathmandu-Durbar_Square-06-Mahavishnu-Kuh-Vishnu-Pratapamalla-Jagannath-2007-gje.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Kathmandu-Durbar_Square-06-Mahavishnu-Kuh-Vishnu-Pratapamalla-Jagannath-2007-gje.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Feral pigeons in Nepal"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
   "Durbar Square": {
@@ -18,7 +24,13 @@
    "autor": "Alexander Shafir",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nepal_Kathmandu_Durbar_Square_Panorama.jpg",
-   "fuente": "Nepal Kathmandu Durbar Square Panorama.jpg"
+   "fuente": "Nepal Kathmandu Durbar Square Panorama.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Taleju Temple, Kathmandu"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Kumari Ghar": {
    "file": "s2.jpg",
@@ -28,7 +40,13 @@
    "autor": "Matt Zimmerman",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kumari_Ghar,_Kathmandu,_Nepal_(23824765334).jpg",
-   "fuente": "Kumari Ghar, Kathmandu, Nepal (23824765334).jpg"
+   "fuente": "Kumari Ghar, Kathmandu, Nepal (23824765334).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kumari Chowk, Kathmandu"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Kasthamandap": {
    "file": "s3.jpg",
@@ -38,7 +56,13 @@
    "autor": "Chainwit.",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kasthamandap_Kathmandu_(2023).jpg",
-   "fuente": "Kasthamandap Kathmandu (2023).jpg"
+   "fuente": "Kasthamandap Kathmandu (2023).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kasthamandap, Kathmandu"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Swayambhunath": {
    "file": "s4.jpg",
@@ -48,7 +72,13 @@
    "autor": "Nabin K. Sapkota",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Swayambhunath_2018.jpg",
-   "fuente": "Swayambhunath 2018.jpg"
+   "fuente": "Swayambhunath 2018.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Base of Swayambhunath stupa (north)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Boudhanath": {
    "file": "s5.jpg",
@@ -58,7 +88,13 @@
    "autor": "Juan Antonio Segal from Madrid, Spain",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Boudhanath,_Nepal_(23780541996).jpg",
-   "fuente": "Boudhanath, Nepal (23780541996).jpg"
+   "fuente": "Boudhanath, Nepal (23780541996).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2015 in Boudhanath"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Pashupatinath Temple": {
    "file": "s6.jpg",
@@ -68,7 +104,13 @@
    "autor": "Bijay Chaurasia",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Pashupatinath_Temple-2020.jpg",
-   "fuente": "Pashupatinath Temple-2020.jpg"
+   "fuente": "Pashupatinath Temple-2020.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2020 in Kathmandu"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Thamel Bazar Kathmandu": {
    "file": "s7.jpg",
@@ -78,7 +120,13 @@
    "autor": "Alexey Komarov",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Thamel,_Kathmandu_-_panoramio.jpg",
-   "fuente": "Thamel, Kathmandu - panoramio.jpg"
+   "fuente": "Thamel, Kathmandu - panoramio.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "2015 in Kathmandu"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Patan Darbar Square": {
    "file": "s8.jpg",
@@ -88,7 +136,13 @@
    "autor": "R.M. Calamar",
    "licencia": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Durbar_Square_2010.jpg",
-   "fuente": "Durbar Square 2010.jpg"
+   "fuente": "Durbar Square 2010.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Bhimsen Temple, Patan Durbar Square"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Bhaktapur Durbar Square": {
    "file": "s9.jpg",
@@ -98,7 +152,13 @@
    "autor": "sushan116",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Artwork_at_Bhaktapur_Durbar_Square.jpg",
-   "fuente": "Artwork at Bhaktapur Durbar Square.jpg"
+   "fuente": "Artwork at Bhaktapur Durbar Square.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Wood carving in Bhaktapur Durbar Square"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Nyatapola Temple": {
    "file": "s10.jpg",
@@ -108,7 +168,13 @@
    "autor": "Saurab Mani Rimal",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nyatapole_Temple.jpg",
-   "fuente": "Nyatapole Temple.jpg"
+   "fuente": "Nyatapole Temple.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nyatapola Temple, Bhaktapur"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

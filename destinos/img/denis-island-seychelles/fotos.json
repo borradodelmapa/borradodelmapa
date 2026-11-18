@@ -7,7 +7,13 @@
   "alt": "Denis Island, Seychelles",
   "autor": "Adrian Scottow from London, England",
   "licencia": "CC BY-SA 2.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Lighthouse_on_Denis_Island_(5147326886).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Lighthouse_on_Denis_Island_(5147326886).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Denis Island"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

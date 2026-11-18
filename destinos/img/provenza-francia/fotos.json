@@ -7,7 +7,13 @@
   "alt": "Provenza (Luberon y Verdon), Francia",
   "autor": "Sébastien Thébault",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Coop%C3%A9rative_agricole_de_Vinon-sur-Verdon_(de_Corbi%C3%A8res).JPG"
+  "url": "https://commons.wikimedia.org/wiki/File:Coop%C3%A9rative_agricole_de_Vinon-sur-Verdon_(de_Corbi%C3%A8res).JPG",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Vinon-sur-Verdon"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

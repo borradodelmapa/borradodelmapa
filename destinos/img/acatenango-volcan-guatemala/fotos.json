@@ -7,7 +7,13 @@
   "alt": "Volcán Acatenango, Guatemala",
   "autor": "User:Stan Shebs",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Guatemala_Volcano_Fuego.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Guatemala_Volcano_Fuego.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Acatenango"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

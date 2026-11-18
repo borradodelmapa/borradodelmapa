@@ -7,7 +7,13 @@
   "alt": "Chapada Diamantina, Brasil",
   "autor": "Jeilsonandrade",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Morr%C3%A3o_-_Parque_Nacional_da_Chapada_Diamantina_-_Bahia_03.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Morr%C3%A3o_-_Parque_Nacional_da_Chapada_Diamantina_-_Bahia_03.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Flora of Chapada Diamantina"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

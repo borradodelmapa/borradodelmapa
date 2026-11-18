@@ -7,7 +7,13 @@
   "alt": "Vlorë, Albania",
   "autor": "Vlorari",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Qyteti_I_Vlores_Naten_(cropped).jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Qyteti_I_Vlores_Naten_(cropped).jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Night in Vlorë"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

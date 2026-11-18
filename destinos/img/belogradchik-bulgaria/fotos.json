@@ -7,7 +7,13 @@
   "alt": "Belogradchik y las Rocas, Bulgaria",
   "autor": "Yanko Malinov",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Belogradchik_Fortress_Entrance.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Belogradchik_Fortress_Entrance.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Belogradchik Fortress"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

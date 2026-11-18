@@ -7,7 +7,13 @@
   "alt": "Tel Aviv, Israel",
   "autor": "אור פ",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Tel_Aviv_University_from_Air.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Tel_Aviv_University_from_Air.jpg",
+  "prueba": {
+   "tipo": "geo",
+   "km": 4.3
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }

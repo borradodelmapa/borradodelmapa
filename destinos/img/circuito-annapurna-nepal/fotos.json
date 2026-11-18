@@ -7,7 +7,13 @@
   "alt": "Circuito de Annapurna, Nepal: Manang",
   "autor": "Solundir",
   "licencia": "CC BY-SA 3.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Manang_Annapurna3_Gangapurna.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Manang_Annapurna3_Gangapurna.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "Annapurna Himal"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {
   "Bagarchhap": {
@@ -18,7 +24,13 @@
    "autor": "Solundir",
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bagarchhap.jpg",
-   "fuente": "Bagarchhap.jpg"
+   "fuente": "Bagarchhap.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Bagarchhap"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Khicho Ice Lake": {
    "file": "s9.jpg",
@@ -28,7 +40,13 @@
    "autor": "Kondephy",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ice_Lake_near_Bhraga_below_snow.jpg",
-   "fuente": "Ice Lake near Bhraga below snow.jpg"
+   "fuente": "Ice Lake near Bhraga below snow.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Annapurna Circuit east of Thorong La"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Thorong La": {
    "file": "s10.jpg",
@@ -38,7 +56,13 @@
    "autor": "Vyacheslav Argenberg",
    "licencia": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Muktinath_Valley,_View_of_Thorong_La_Pass,_Mountains,_Nepal.jpg",
-   "fuente": "Muktinath Valley, View of Thorong La Pass, Mountains, Nepal.jpg"
+   "fuente": "Muktinath Valley, View of Thorong La Pass, Mountains, Nepal.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Annapurna Circuit"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Naya Pul": {
    "file": "s20.jpg",
@@ -48,7 +72,13 @@
    "autor": "Manuel Velazquez",
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:PUENTE_EN_NAYA_PUL_-_panoramio.jpg",
-   "fuente": "PUENTE EN NAYA PUL - panoramio.jpg"
+   "fuente": "PUENTE EN NAYA PUL - panoramio.jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Nayapul (Kaski District)"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Pokhara": {
    "file": "s21.jpg",
@@ -58,7 +88,13 @@
    "autor": "Rajesh Dhungana",
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mankamana_Bhagwati_Temple_Devis_Falls_Pokhara_Nepal_Rajesh_Dhungana_(2).jpg",
-   "fuente": "Mankamana Bhagwati Temple Devis Falls Pokhara Nepal Rajesh Dhungana (2).jpg"
+   "fuente": "Mankamana Bhagwati Temple Devis Falls Pokhara Nepal Rajesh Dhungana (2).jpg",
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Wishing well at Davis Falls, Pokhara, Nepal"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Besisahar": {
    "file": "s1.jpg",
@@ -69,7 +105,13 @@
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Besi_Sahar.JPG",
    "fuente": "Besi Sahar.JPG",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Besisahar"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Bahundanda": {
    "file": "s2.jpg",
@@ -80,7 +122,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:View_from_Bahundanda.jpg",
    "fuente": "View from Bahundanda.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Annapurna Circuit east of Thorong La"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Chame": {
    "file": "s6.jpg",
@@ -91,18 +139,13 @@
    "licencia": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Prayer_Wheels_-_Chame,_Nepal_-_panoramio.jpg",
    "fuente": "Prayer Wheels - Chame, Nepal - panoramio.jpg",
-   "cercana": true
-  },
-  "Pisang": {
-   "file": "s7.jpg",
-   "w": 720,
-   "h": 475,
-   "alt": "Paisaje cerca de Pisang, Circuito de Annapurna",
-   "autor": "Solundir",
-   "licencia": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:The_Marsyangdi_river_near_Pisang.jpg",
-   "fuente": "The Marsyangdi river near Pisang.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Chame, Nepal"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Kagbeni": {
    "file": "s13.jpg",
@@ -113,7 +156,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Nilgiri_North_seen_from_Kagbeni.jpg",
    "fuente": "Nilgiri North seen from Kagbeni.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Kagbeni"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Tatopani": {
    "file": "s17.jpg",
@@ -124,7 +173,13 @@
    "licencia": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:160316-031_Bridge_near_Tatopani.jpg",
    "fuente": "160316-031 Bridge near Tatopani.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Annapurna Circuit west of Thorong La"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   },
   "Ghode Pani": {
    "file": "s18.jpg",
@@ -135,7 +190,13 @@
    "licencia": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ghode_Pani_33200,_Nepal_-_panoramio.jpg",
    "fuente": "Ghode Pani 33200, Nepal - panoramio.jpg",
-   "cercana": true
+   "cercana": true,
+   "prueba": {
+    "tipo": "categoria",
+    "cat": "Ghorepani"
+   },
+   "ok_manual": true,
+   "vista": "2026-11-18"
   }
  }
 }

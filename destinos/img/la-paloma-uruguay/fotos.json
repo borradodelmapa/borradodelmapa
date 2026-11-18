@@ -7,7 +7,13 @@
   "alt": "La Paloma, Uruguay",
   "autor": "Igna",
   "licencia": "CC BY-SA 4.0",
-  "url": "https://commons.wikimedia.org/wiki/File:Vista_de_La_Paloma,_desde_el_Faro_de_Cabo_de_Santa_Mar%C3%ADa.jpg"
+  "url": "https://commons.wikimedia.org/wiki/File:Vista_de_La_Paloma,_desde_el_Faro_de_Cabo_de_Santa_Mar%C3%ADa.jpg",
+  "prueba": {
+   "tipo": "categoria",
+   "cat": "La Paloma, Rocha"
+  },
+  "ok_manual": true,
+  "vista": "2026-11-18"
  },
  "stops": {}
 }
