@@ -426,28 +426,57 @@ Ruta: `salma marketing/el-salvador/hoja/hoja-personas.png`.
   - la memoria de hoy: la conmemoración de Nahuizalco y Guadalupe Estrada.
 
 ---
-## 7 · CUATRO PROPUESTAS: GANCHO, TÍTULO Y CARÁTULA, LADO A LADO (Y3 + reparto: carátula = el golpe; título = otra información)
+## 7 · GANCHO (20 s), TÍTULO Y CARÁTULA: TRES CAMINOS, LADO A LADO (v2, 18 nov; Paco: «quiero empezar por el gancho, la carátula y el título, y eso definirá el resto del documental»)
+Carátulas montadas: `salma marketing/el-salvador/caratula/A.png`, `D.png` (= B) y `C.png`; las tres juntas en `lado-a-lado.png`.
 
-Rehechas el 18 nov con Bukele (Paco: «tiene tirón»).
-- Van por curiosidad, no por miedo (N14).
-- Cumplen la N33: lo que promete el título (1932, el esconderse y la pregunta a Bukele) se cuenta en el primer minuto.
-- Bukele va **como pregunta, nunca como acusación**. Su foto sale de Casa Presidencial (CC0) y es un uso editorial de una figura pública.
+**Palabras de búsqueda (Y2, sugerencias de YouTube y Google, 18 nov, 0 €):**
+- «**matanza de 1932**» y «masacre 1932 el salvador» **no dan ninguna sugerencia**: casi nadie lo busca. Se descarta como palabra principal del título.
+- «**bukele**»: muy buscado (en YouTube sugiere «bukele el salvador», «bukele españa», «bukele discurso»…).
+- «**indígenas de el salvador**», «pueblos indígenas de el salvador» y **«el salvador tiene indígenas»** (Google): la gente se pregunta si existen.
+- «**nahuat el salvador**» (YouTube) y «lengua náhuatl el salvador».
 
-| | **A · La lengua escondida** | **B · La matanza** | **C · La pregunta a Bukele** ⭐ | **D · Bukele en la carátula** |
-|---|---|---|---|---|
-| **Gancho (voz)** | (audio real: «Naja nitajtaketza nawat») «Esta mujer acaba de decir "yo hablo náhuat". En El Salvador, durante décadas, decir esa frase en voz alta daba miedo.» | «En 1932, en El Salvador, llevar esta ropa o hablar esta lengua podía costarte la vida. Y durante ochenta años, casi nadie lo contó.» | (audio real en náhuat) «Esta lengua estuvo a punto de desaparecer por una matanza en 1932. Bukele ha cambiado El Salvador… pero sobre esto, ningún presidente ha hablado desde 2010.» | «Bukele ha cambiado El Salvador. Pero hay una herida de 1932 de la que no ha dicho ni una palabra.» |
-| **Carátula** | **ESCONDIDOS** · Anastacia López (02) | **ESCONDIDOS** · Guadalupe Estrada (01) + «1932» | **ESCONDIDOS** · Anastacia López (02) mirando a cámara | **¿Y ESTO, BUKELE?** · Bukele de perfil (CC0) + Guadalupe Estrada (01) |
-| **Título (≤ 60)** | «El Salvador: la lengua que sus indígenas callaron por miedo» (57) | «Matanza de 1932: por qué El Salvador escondió a sus indígenas» (59) | «Bukele y la matanza de 1932: la deuda con los indígenas» (54) | «El Salvador escondió a sus indígenas tras la matanza de 1932» (60) |
-| **Comparten** | Solo «El Salvador/indígenas» ✅ | Solo «El Salvador» ✅ | Solo el nombre del vídeo ✅ | Solo «Bukele» va en la carátula y no se repite ✅ |
-| **Búsqueda (Y2)** | «el salvador» + «lengua» | «matanza de 1932» | **«bukele»** + «matanza de 1932» | «matanza de 1932» + «indígenas» |
+| | **A · «¿El Salvador tiene indígenas?»** | **B · Bukele** | **C · Pamplona** |
+|---|---|---|---|
+| **Carátula** | «1932 · **ESCONDIDOS**», con Elva Pérez mirando a cámara (huipil bordado) | «¿Y ESTO, **BUKELE?**», con Bukele de perfil en blanco y negro y Guadalupe Estrada a color | «¿POR QUÉ **PAMPLONA?**», con Anastacia López (lengua materna náhuat) |
+| **Título** | «¿El Salvador tiene indígenas? Lo que pasó en 1932» (49) | «Bukele y los indígenas de El Salvador: la herida de 1932» (56) | «El Salvador: la lengua indígena que ayuda a salvar Pamplona» (59) ⚠ *se lee mal* → mejor «La lengua indígena de El Salvador que Pamplona ayuda a salvar» (60) |
+| **Búsqueda** | «el salvador tiene indígenas» / «indígenas de el salvador» | «bukele» + «indígenas de el salvador» | «el salvador» + «lengua indígena»; público español |
+| **Reparto (Y3)** | Carátula: el golpe (ESCONDIDOS + cara). Título: la pregunta y el año. Solo comparten «1932» ✅ | Solo comparten «Bukele» ✅ | Solo comparten «Pamplona» ✅ |
+| **Riesgo** | El más seguro y el más «documental» | Más clics, pero la carátula se puede leer como ataque; los comentarios pueden irse a la política | Sorpresa para España; desplaza a Pamplona del final al principio (cambia la estructura) |
 
-**Mi recomendación: C.**
-- Junta las dos búsquedas fuertes («bukele» y «matanza de 1932»).
-- La carátula se queda en la cara indígena con ESCONDIDOS, que es más respetuoso y no parece un vídeo político.
-- El gancho abre con la voz real en náhuat.
-- D funciona más para clics, pero «¿Y ESTO, BUKELE?» en la carátula se puede leer como ataque. ⚠ Lo decide Paco.
+### Gancho A (20 s)
+- **0-3 s** · Imagen: Elva Pérez mirando a cámara (M15/M21). Sonido: la voz real en náhuat («Naja nitajtaketza nawat», La Radio Tomada, CC BY-SA).
+- **Salma:** «Esta mujer acaba de decir "yo hablo náhuat". Mucha gente busca en Google si **El Salvador** tiene indígenas. Los tiene… pero durante casi un siglo se escondieron.»
+- **Anclaje (N15):** «En 1932, en el occidente del país, hablar esta lengua o llevar esta ropa podía costarte la vida. Y hoy, por primera vez, cinco veces más personas se atreven a decir que son indígenas.»
+- **Bucle abierto (N16), que se cierra al final con las cunas:** «Esta es la historia de por qué se escondieron… y de quién les está ayudando a volver.»
 
-⚠ En C, «la deuda» es una interpretación nuestra; en la voz siempre se dice con datos (no hay ley, no ha ratificado el 169, nadie ha hablado de 1932 desde 2010). Alternativa más neutra: «Bukele y la matanza de 1932: lo que falta por hacer» (51).
+### Gancho B (20 s)
+- **0-3 s** · Imagen: Bukele (CC0) → corte a Guadalupe Estrada mirando a cámara.
+- **Salma:** «**Bukele** ha cambiado El Salvador. Pero hay una herida de la que ningún presidente ha vuelto a hablar desde 2010.»
+- **Anclaje:** «En 1932, una matanza obligó a los indígenas de El Salvador a esconder su lengua y su ropa. Hoy, quienes la aprendieron de niños son ya muy pocos, casi todos mayores.»
+- **Bucle:** «Y las escuelas donde los niños vuelven a aprenderla… no las sostiene el Estado. ¿Cambiará también esto?»
+- ⚠ «Ningún presidente ha vuelto a hablar desde 2010» es la conclusión de la búsqueda (sección 4b), no una fuente que lo diga. Más seguro: «ningún presidente ha vuelto a pedir perdón desde 2010».
+
+### Gancho C (20 s)
+- **0-3 s** · Imagen: Anastacia López mirando a cámara. Sonido: voz real en náhuat.
+- **Salma:** «Esta lengua casi desaparece en **El Salvador**. Hoy, una de sus escuelas la ha pagado una ciudad española: Pamplona.»
+- **Anclaje:** «¿Por qué Pamplona? Para entenderlo hay que volver a 1932, cuando hablar náhuat podía costarte la vida.»
+- **Bucle:** el «¿por qué Pamplona?» se cierra al final, con «lo explican ellos: las ikastolas».
+- ⚠ Esto cambia lo que pactó Estrategia (Pamplona al final). Aquí Pamplona abre el bucle en el gancho y se explica al final.
+
+### Recomendación de Vídeo 2: **A**
+1. Va a la búsqueda real («el salvador tiene indígenas» sale sola en Google).
+2. La cara mira a cámara (M15, M21).
+3. Cumple la N33: el título promete 1932 y el gancho lo cuenta antes de los 20 s.
+4. No mete la política en la portada.
+
+**Bukele** entra dentro del vídeo (sección 4b) y en la descripción. **Pamplona** se guarda para el final, que es lo que pactó Estrategia.
+- Si Paco quiere más clics a costa de riesgo: B.
+- Si quiere el gancho español: C.
+
+---
+
+### Propuestas anteriores (v1, 18 nov), sustituidas por las de arriba
+Ver en git el commit 3f0184b89 y los siguientes.
 
 ---
 ## 8 · FUENTES
