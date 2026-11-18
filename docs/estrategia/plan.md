@@ -26,8 +26,8 @@ YouTube: **shorts de martes a jueves, largos de viernes a lunes**, todo a las 10
 | Ainu | mié 2 dic | mié 2 dic |
 | Dukha | lun 7 dic | mar 8 dic |
 | Cazadores con águila | mié 9 dic | mié 9 dic |
-| Moken | lun 14 dic | mar 15 dic |
-| Mosuo | mié 16 dic | mié 16 dic |
+| Moken | lun 14 dic | jue 10 dic |
+| Mosuo | mié 16 dic | mar 15 dic (shorts mar-mié-jue sin huecos; Shompen jue 26, Mustang jue 3) |
 
 **TikTok (Metricool, Paco 18 nov: «pasarlos a diciembre»):** Sentineleses v2 mar 1 · Ainu mié 2 · Haenyeo jue 3 · Dukha mar 8 · Águila mié 9 · Konyak jue 10 · Moken mar 15 · Mosuo mié 16 dic (8 de 20). **Vídeo relacionado:** los 9 shorts de YouTube → largo Pueblos T1 (_SnSzkDIkmw). Encargo T22 a Vídeo.
 **Nuevos (Paco 18 nov, «Sí, esas»):** Shompen YT jue 26 nov · TikTok jue 17 dic. Mustang YT jue 3 dic · TikTok mar 22 dic. Sentineleses v2 sustituye al v1 el mar 1 dic. Los tres con relacionado a Pueblos T1.
