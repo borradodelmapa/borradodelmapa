@@ -24,14 +24,14 @@ const ruta = n => { const c = [`${ES}/fotos/${n}.jpg`, `${ES}/fotos/${n}.png`, `
   const f = c.find(x => fs.existsSync(x)); if (!f && !process.env.SOLO_TEXTO) throw new Error('falta la foto ' + n); return f || c[0]; };
 const aspecto = f => { if (process.env.SOLO_TEXTO) return 1.5; const r = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r.stderr || '').match(/(\d{2,5})x(\d{2,5})/); return m ? m[1] / m[2] : 1.5; };
 let panN = 0;
-// M12/N12: en 16:9 la pantalla siempre llena; toda foto más estrecha que 16:9 se recorre de arriba abajo (empieza por la cara: v)
+// M12 (Paco, 16 nov 2026): FOTOS QUIETAS, sin barridos ni Ken Burns. Las más estrechas que 16:9 llevan un encuadre FIJO a todo el ancho, con la cara dentro (v[0] = altura de la cara, mirada foto a foto)
 const F = (n, sc = 'GP', o = {}) => { const f = ruta(n), estrecha = aspecto(f) < 1.69, v = o.v || (panN++ % 2 ? [0.6, 0.3] : [0.2, 0.6]);
-  const { v: _, ...resto } = o; return { a: 'FILE:' + uso(f), sc, ...(estrecha && !o.pan ? { pan: [0.5, v[0], 0.5, v[1]], z: 0 } : {}), ...resto }; };
+  const { v: _, ...resto } = o; return { a: 'FILE:' + uso(f), sc, ...(estrecha && !o.pan ? { pan: [0.5, v[0], 0.5, v[0]], z: 0 } : {}), ...resto }; };
 const BN = (n, sc = 'GP', o = {}) => F(n, sc, { look: 'trix', ...o }); // archivo histórico en blanco y negro (M4)
 const durClip = f => { const r = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r.stderr || '').match(/Duration: (\d+):(\d+):([\d.]+)/); return m ? +m[1] * 3600 + +m[2] * 60 + +m[3] : 5; };
 const V = (n, sc = 'GP') => { const f = `${ES}/clips/${n}.mp4`; if (!fs.existsSync(f)) throw new Error('no existe el clip ' + n); return { a: 'FILE:' + uso(f), sc, cap: durClip(f) - 0.2 }; };
 const MAPA = n => ({ a: 'FILE:' + uso(`${ES}/mapas/mapa-${n}.mp4`), sc: 'GP', cap: 5.3, fijo: 5.3 });
-const CANTO = `FILE:${ES}/clips/canto-audio.wav`;
+const CANTO = 'SFX_es-canto'; // sfx/es-canto.mp3 = clips/canto-audio.wav (el fondo no admite rutas FILE:)
 const A = { VI: { src: 'SFX_viento-libre', db: -36 }, PAJ: { src: 'SFX_pajaros-libre', db: -36 }, NOCHE: { src: 'SFX_noche-calma', db: -34 }, CANTO: (ss, db = -16) => ({ src: CANTO, ss, db }) };
 const C = (word, text, sub = '', dur = 2) => ({ word, text, sub, dur });
 const R74 = { CANTO25: 'ASAMBLEA LEGISLATIVA · 10 SEPT 2025', MEMORIA: 'NAHUIZALCO · MEMORIA DE 1932 · 2017' };
@@ -44,7 +44,7 @@ const P = [
   /*3*/[[F('bukele-2', 'PM', { v: [0.1, 0.4] }), V('canto-ninos-3', 'GP')], { id: 'g3', amb: A.VI, cifra: [C('vez', 'PRIMERA VEZ', 'EL HIMNO EN NÁHUAT, EN LA ASAMBLEA', 2.2)] }],
   /*4*/[[F('bukele-3', 'PP', { v: [0.1, 0.35] })], { id: 'g4', amb: A.VI, pause: 0.8 }],
   /*5 1932*/[[BN('CAFE1927'), BN('CAFE2', 'PM')], { id: 'matanza', preg: ['¿QUÉ PASÓ EN 1932?'], amb: A.VI, rotulo: 'PLANTACIÓN DE CAFÉ · EL SALVADOR, 1927' }],
-  /*6*/[[BN('MAPA1932')], { amb: A.NOCHE, cifra: [C('veintidós', '22 DE ENERO', '1932', 2)] }],
+  /*6*/[[F('MAPA1932')], { amb: A.NOCHE, cifra: [C('veintidós', '22 DE ENERO', '1932', 2)] }],
   /*7*/[[BN('MARTI', 'PP'), BN('AMA2', 'PP')], { amb: A.VI }],
   /*8*/[[BN('IZALCO')], { amb: A.VI, cifra: [C('Matanza', '«LA MATANZA»', '', 1.8)] }],
   /*9*/[[BN('MARTINEZ', 'PP'), F('tacuba', 'PP', { v: [0.1, 0.5] })], { amb: A.VI }],
@@ -73,8 +73,8 @@ const P = [
   /*32*/[[V('abuela-sentada')], { amb: A.PAJ }],
   /*33*/[[V('ollas')], { amb: A.PAJ, cifra: [C('cinco', '13 → 5', 'MAESTRAS', 2.2)], pause: 1.0 }],
   /*34*/[[V('barro-manos', 'PP')], { amb: A.PAJ, pause: 0.8 }],
-  /*35 ayuda*/[[F('GRABA18'), F('GRABA31', 'PM')], { id: 'ayuda', preg: ['¿QUIÉN LES AYUDA A VOLVER?'], amb: A.PAJ }],
-  /*36*/[[F('WIKI_TALLER')], { amb: A.PAJ, cifra: [C('Wikipedia', 'WIKIPEDIA EN NÁHUAT', 'FEBRERO DE 2026', 2.2)] }],
+  /*35 ayuda*/[[F('GRABA18')], { id: 'ayuda', preg: ['¿QUIÉN LES AYUDA A VOLVER?'], amb: A.PAJ }],
+  /*36*/[[F('GRABA31', 'PM')], { amb: A.PAJ, cifra: [C('Wikipedia', 'WIKIPEDIA EN NÁHUAT', 'FEBRERO DE 2026', 2.2)] }],
   /*37*/[[F('NAHUI2')], { amb: A.PAJ, cifra: [C('diecisiete', '17 NIÑOS', 'DE 3 A 5 AÑOS', 2)] }],
   /*38*/[[MAPA('pamplona')], { amb: A.VI, pause: 0.5 }],
   /*39*/[[F('PAMPLONA')], { amb: A.VI }],
@@ -122,8 +122,8 @@ const cfg = {
   titulo: 'INDÍGENAS DE EL SALVADOR', formato: '16:9', id: 'el-salvador-v1', out: ES + '/salida', ultima: ES + '/ULTIMA', ultimaNombre: 'indigenas-de-el-salvador-del-exterminio-a-cantar-el-himno',
   look: 'portra', counter: 'EL SALVADOR', voices: { salma: SALMA_DOC }, musica, sintonia: { src: 'SFX_sintonia-pueblos', db: -8, dbVoz: -14, mapas: true }, rotuloSegs: 4,
   seguir: [{ en: 'g4', texto: 'Si te está gustando, suscríbete' }, { en: 'pais', texto: 'Hay más documentales: suscríbete' }, { en: 'visitar', texto: 'Guárdalo y compártelo' }],
-  cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5, gap: { same: 0.3, change: 0.6 },
-  portada: { png: ES + '/caratula/himno-A4.png' }, // ⚠ pendiente: Paco elige A3 o A4
+  cardSecs: 8, kb: 0, voiceDb: { salma: -25 }, duckRatio: 5, gap: { same: 0.3, change: 0.6 },
+  portada: { png: ES + '/caratula/ENTREGA/caratula-el-salvador-1920.png' }, // A4-fila, aprobada por Paco (19 nov, chat de Carátulas)
   descartes: { M10: 'borrador: los subtítulos EN se hacen cuando Paco apruebe el montaje (Y10)', M14: 'Paco no ha estado: sin «Basado en un viaje real» (F2)' },
   card: { l1: 'INDÍGENAS DE EL SALVADOR', l2: 'DEL EXTERMINIO AL HIMNO', l3: 'ÚNETE · SUSCRÍBETE', l4: '▼ Mira el vídeo relacionado', l5: 'Borrado del Mapa' },
   blocks,
@@ -131,7 +131,7 @@ const cfg = {
 (async () => {
   const frases = []; for (let i = 0; i < textos.length; i++) { const v = await voice(voz(textos[i]), SALMA_DOC); frases.push(frase(textos[i], P[i][0], P[i][1], v.al)); }
   // gancho: 3,2 s del canto real antes de la primera frase (G1, M15: caras desde el fotograma 0); mapa del occidente tras el gancho (M40, S3)
-  const canto0 = { id: 'canto0', video: `${ES}/clips/canto-coro.mp4`, fixed: 3.2, audioFile: `${ES}/clips/canto-audio.wav`, gainAudio: -4, amb: { ...A.VI, db: -60, ss: 0 } };
+  const canto0 = { id: 'canto0', video: `${ES}/clips/canto0-30.mp4`, fixed: 3.2, audioFile: `${ES}/clips/canto-audio.wav`, gainAudio: -4, amb: { ...A.VI, db: -60, ss: 0 } };
   const mapa = { id: 'mapa', video: `${ES}/mapas/mapa-occidente.mp4`, fixed: 5.5, amb: { ...A.VI, ss: 0 } };
   const iMat = frases.findIndex(b => b.id === 'matanza');
   blocks.push(canto0, ...frases.slice(0, iMat), mapa, ...frases.slice(iMat));
