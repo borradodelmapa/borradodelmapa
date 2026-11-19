@@ -123,18 +123,20 @@ if (process.env.SOLO_VOZ) { (async () => { let g = 0; for (const t of textos) g 
 const VOZ = (de, a, ss, db = -10) => ({ de: { b: de }, a: { b: a, fin: 1, off: 0.4 }, ss, db, fi: 1.5, fo: 1.5, voz: 1 });
 const musica = { src: 'SFX_fading-shoreline', ratio: 3, trozos: [VOZ('matanza', 'f9', 16), VOZ('pais', 'f29', 48), VOZ('ayuda', 'f43', 24), VOZ('f46', 'f49', 110, -8)] };
 const blocks = [];
+// Y10 / M10: pista .srt en inglés (una frase inglesa por cada frase española), aprobado el montaje v2 por Paco el 19 nov 2026
+const EN = require('./el-salvador-en.json'); if (EN.length !== textos.length) throw new Error('el-salvador-en.json no tiene 49 entradas');
 const cfg = {
   titulo: 'INDÍGENAS DE EL SALVADOR', formato: '16:9', id: 'el-salvador-v2', out: ES + '/salida', ultima: ES + '/ULTIMA', ultimaNombre: 'indigenas-de-el-salvador-del-exterminio-a-cantar-el-himno',
   look: 'portra', counter: 'EL SALVADOR', voices: { salma: SALMA_DOC }, musica, sintonia: { src: 'SFX_sintonia-pueblos', db: -8, dbVoz: -14, mapas: true }, rotuloSegs: 4,
   seguir: [{ en: 'g4', texto: 'Si te está gustando, suscríbete' }, { en: 'pais', texto: 'Hay más documentales: suscríbete' }, { en: 'visitar', texto: 'Guárdalo y compártelo' }],
   cardSecs: 8, kb: 0.8, voiceDb: { salma: -25 }, duckRatio: 5, gap: { same: 0.3, change: 0.6 },
   portada: { png: ES + '/caratula/ENTREGA/caratula-el-salvador-1920.png' }, // A4-fila, aprobada por Paco (19 nov, chat de Carátulas)
-  descartes: { M12: 'Paco, 19 nov 2026: «movimiento suave» (M12 actualizada): acercamiento lento y desplazamiento corto que termina en la cara; el informe aún marca ❌ con kb > 0', M10: 'borrador: los subtítulos EN se hacen cuando Paco apruebe el montaje (Y10)', M14: 'Paco no ha estado: sin «Basado en un viaje real» (F2)' },
+  descartes: { M12: 'Paco, 19 nov 2026: «movimiento suave» (M12 actualizada): acercamiento lento y desplazamiento corto que termina en la cara; el informe aún marca ❌ con kb > 0', M14: 'Paco no ha estado: sin «Basado en un viaje real» (F2)' },
   card: { l1: 'INDÍGENAS DE EL SALVADOR', l2: 'DEL EXTERMINIO AL HIMNO', l3: 'ÚNETE · SUSCRÍBETE', l4: '▼ Mira el vídeo relacionado', l5: 'Borrado del Mapa' },
   blocks,
 };
 (async () => {
-  const frases = []; for (let i = 0; i < textos.length; i++) { const v = await voice(voz(textos[i]), SALMA_DOC); frases.push(frase(textos[i], P[i][0], P[i][1], v.al)); }
+  const frases = []; for (let i = 0; i < textos.length; i++) { const v = await voice(voz(textos[i]), SALMA_DOC); frases.push({ ...frase(textos[i], P[i][0], P[i][1], v.al), en: EN[i] }); }
   // gancho: 3,2 s del canto real antes de la primera frase (G1, M15: caras desde el fotograma 0); mapa del occidente tras el gancho (M40, S3)
   const canto0 = { id: 'canto0', video: `${ES}/clips/canto0-30.mp4`, fixed: 4.4, audioFile: `${ES}/clips/canto-audio.wav`, gainAudio: -4, amb: { ...A.VI, db: -60, ss: 0 } };
   const mapa = { id: 'mapa', video: `${ES}/mapas/mapa-occidente.mp4`, fixed: 5.5, amb: { ...A.VI, ss: 0 } };
