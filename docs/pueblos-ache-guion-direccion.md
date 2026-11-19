@@ -1,4 +1,4 @@
-# «Los ACHÉ» · Pueblos borrados del mapa — short · GUION DE DIRECCIÓN v1 (19 nov 2026, 🎬 Vídeo, encargo T27)
+# «Los ACHÉ» · Pueblos borrados del mapa — short · GUION DE DIRECCIÓN v2 (19 nov 2026, revisado por Estrategia, 🎬 Vídeo, encargo T27)
 Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para un short» → «Sí, encárgalo». Expediente: `docs/ache-expediente.md`.
 
 - **Formato:** short 9:16, **60 s como máximo** (N10). Sin clip de la app (M16). Tarjeta final de YouTube y de TikTok (M14).
@@ -17,7 +17,7 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
 | Los ypeti fueron los primeros contactados (1959). Eran **unos 40** y **en 1987 quedaban 30** | Kim Hill, *Encyclopedia of World Cultures* |
 | «More than half these Ache died from virgin-soil epidemics» en pocos años tras el contacto pacífico | Kim Hill, ídem |
 | Hoy viven en comunidades del este de Paraguay; Kuetuvy está junto a la reserva de Mbaracayú. Desde 2014, el proyecto Ache Djawu sube su lengua y su cultura a internet desde Kuetuvy | Wikipedia (en), *Aché*; Commons (foto de Kuetuvy, 2014) |
-| «Aché» significa «persona» | Rótulo de entrada del documental de Cerro Morotí (IPAC, 2010). ⚠ **Por confirmar en una segunda fuente** antes de la voz; si no se confirma, el cierre se queda en la escena 5 |
+| «Aché» significa «persona» | CONFIRMADO en dos fuentes más (19 nov): Revista Población y Desarrollo (redalyc 394051442010: «se llaman a sí mismos aché, término que significa persona») y un trabajo lingüístico (core.ac.uk 235519988: «Aché "persona, gente" es la autodenominación»). También lo dice el documental de Cerro Morotí (IPAC, 2010). |
 | ⚠ **Fuera de la voz:** el 38 % de 1971-78, la cifra de población actual (no está en el censo de 2022 abierto) y la palabra «genocidio» | — |
 
 ## ESCENA 0 · GANCHO (0-7 s) — G2 (nombre antes de los 5 s), N16 (bucle abierto), M15/M21 (cara primero)
@@ -30,7 +30,7 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
 
 ## ESCENA 0b · ANCLAJE (7-10 s) — N15
 - **Imagen:** primer plano de un anciano de Cerro Morotí mirando a cámara (1:00, sin subtítulo grabado).
-- **Salma:** «Y eran el grupo más pequeño de todos.» Abre el bucle: «¿cuántos?», que se cierra en la escena 4 (N17).
+- **Salma:** «Y eran muy pocos.» Abre el bucle: «¿cuántos?», que se cierra en la escena 4 (N17). (v2: «el grupo más pequeño» era falso; según Hill, los más pequeños eran los ñacunday, 28.)
 
 ## ESCENA 1 · CÓMO (10-20 s) — N28 (dato e imagen separados), M26
 - **Imagen:** hombres con arcos y flechas en Puerto Barra (29:20-30:00, recortado) → manos en el arco.
@@ -47,7 +47,7 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
   - Atardecer en Mbaracayú (W7).
   - Silencio de 0,6 s.
   - Primer plano de un anciano de Cerro Morotí (6:00), encuadrado por encima del subtítulo amarillo grabado y quieto 1-2 s más (M19).
-- **Salma:** «En 1959, los ypeti fueron los primeros en salir del bosque.» (S9, silencio) «Según el antropólogo Kim Hill, en pocos años murió más de la mitad de los aché, de epidemias que nunca habían conocido.»
+- **Salma:** «En 1959, los ypeti fueron los primeros en salir del bosque.» (S9, silencio) «Según el antropólogo Kim Hill, en pocos años murió más de la mitad de los que salieron del bosque, de epidemias que nunca habían conocido.»
 - **Cifra** (N20, comparación cotidiana): «1 DE CADA 2» · sub «EPIDEMIAS TRAS EL CONTACTO».
 
 ## ESCENA 4 · CIERRE DEL BUCLE (36-44 s) — N16, F11 (tramo neutro después del pico)
@@ -62,19 +62,18 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
 
 ## ESCENA 6 · ÚLTIMO PLANO (53-57 s) — M18, M43, M47
 - **Imagen:** el anciano de la barba mirando a cámara (Puerto Barra) → 1,2 s de imagen sin voz (M43).
-- **Salma** (solo si se confirma en una segunda fuente): «Aché significa "persona".»
+- **Salma:** «Aché significa "persona".» (confirmado en dos fuentes, ver la tabla)
 
 ## TARJETA (57-60 s) — M14
 - **YouTube:** «MÁS PUEBLOS BORRADOS» · «SUSCRÍBETE AL CANAL» · «▼ Mira el vídeo relacionado». En Studio, el vídeo relacionado es Pueblos T1 (_SnSzkDIkmw).
 - **TikTok** (`TIKTOK=1`): «MÁS PUEBLOS BORRADOS» · «SÍGUEME PARA MÁS».
 
 ## CARÁTULA (Y18, Y22, Y3) — maqueta en `salma marketing/pueblos/ache/caratula/ache-A.png`
-- **Texto:** «🇵🇾 PARAGUAY» · «En vez de pelear,» · **«COSQUILLAS»** en naranja · «Los ACHÉ».
+- **Texto:** «🇵🇾 PARAGUAY» · «En vez de pelear,» · **«COSQUILLAS»** en naranja · «Un pueblo ACHÉ» (v2: «Los ACHÉ» daba a entender que todos se hacían cosquillas; F4).
 - **Cara:** el anciano de la barba con los arcos. Es un fotograma de Puerto Barra, 2012 (CC BY), recortado sin micrófono.
 - **Prueba a 160 px (Y23-3):** se entiende «un pueblo de Paraguay que se hacía cosquillas en vez de pelear». Es la historia del vídeo.
 - **Avisos:**
   - El fotograma sale de un vídeo de 480p: a tamaño completo se nota que es blando, y a 160 px se ve bien.
-  - La carátula dice «Los ACHÉ», pero las cosquillas eran solo de los **ypeti**. La voz lo precisa desde el segundo 4. Si se quiere exacto también en la carátula, quedaría «Los ACHÉ YPETI» (menos conocido).
   - Niños: ninguno.
 
 ## TÍTULO (Y2, Y3, Y13) — 3 propuestas, la palabra de búsqueda a la izquierda
