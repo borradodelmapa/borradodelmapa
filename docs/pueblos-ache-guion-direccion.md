@@ -1,4 +1,4 @@
-# «Los ACHÉ» · Pueblos borrados del mapa — short · GUION DE DIRECCIÓN v3 (19 nov 2026, revisado por Estrategia, 🎬 Vídeo, encargo T27)
+# «Los ACHÉ» · Pueblos borrados del mapa — short · GUION DE DIRECCIÓN v7 = LO MONTADO (19 nov 2026, revisado por Estrategia, 🎬 Vídeo, encargo T27)
 Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para un short» → «Sí, encárgalo». Expediente: `docs/ache-expediente.md`.
 
 - **Formato:** short 9:16, **60 s como máximo** (N10). Sin clip de la app (M16). Tarjeta final de YouTube y de TikTok (M14).
@@ -25,7 +25,7 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
   - Primer fotograma = carátula (M11).
   - Después, el anciano de la barba con los arcos (Puerto Barra, 36:46-37:04, recortado sin micrófono).
   - Después, el bosque (W4, túnel de árboles de Mbaracayú).
-- **Salma (v3, Paco 19 nov: «empieza por los que arreglaban los conflictos con cosquillas. llama más la atención»):** «En el bosque de Paraguay hubo un pueblo que arreglaba sus conflictos con cosquillas: los aché ypeti.» (pausa 0,3) «Los demás aché lo hacían a garrotazos.»
+- **Salma (v7, montado; Paco 19 nov: «empieza por los que arreglaban los conflictos con cosquillas»; G2: «aché» suena hacia el segundo 2):** «En el bosque de Paraguay, los aché ypeti arreglaban sus conflictos con cosquillas.» (pausa 0,3) «Los demás aché lo hacían a garrotazos.»
 - **Rótulo** (sobre la segunda frase, medio segundo después, M30/M46): «TÕ MUMBU · "PARTIR CABEZAS"».
 - **F4:** según DOBES, en las reuniones entre bandas, donde los otros grupos hacían el *tõ mumbu* para vengar una ofensa o una muerte, los ypeti se emparejaban y se hacían cosquillas. «Arreglar sus conflictos con cosquillas» lo resume sin inventar. La escena 1 cuenta cómo.
 
@@ -35,7 +35,7 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
 
 ## ESCENA 1 · CÓMO (10-20 s) — N28 (dato e imagen separados), M26
 - **Imagen:** hombres con arcos y flechas en Puerto Barra (29:20-30:00, recortado) → manos en el arco.
-- **Salma:** «Se pintaban con carbón y plumón de buitre, igual que para la pelea. Se emparejaban hombres de bandas rivales… y cosquillas. Después, cantos y un juego: "coger el frijol".»
+- **Salma (v7, montado; la frase del carbón salió para caber en 60 s):** «Se emparejaban hombres de bandas rivales… y cosquillas. Después, cantos y un juego: coger el frijol.»
 - **Cifra:** «PROAA MATA» · sub «"COGER EL FRIJOL"».
 - **Fuente en pantalla** (F4, con nombre): «INSTITUTO MAX PLANCK».
 - **Sígueme a los 20 s (M13).**
@@ -58,12 +58,12 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
 
 ## ESCENA 5 · HOY (44-53 s) — N31 (estado actual), M40
 - **Imagen:** foto de Kuetuvy con el móvil (W3, Barrioflores, CC BY-SA) → bosque de Mbaracayú (W6).
-- **Salma:** «Hoy viven en comunidades del este de Paraguay. Y desde Kuetuvy, junto a la reserva de Mbaracayú, suben su lengua a internet.»
+- **Salma (v7, montado; acortada para caber en 60 s):** «Hoy, desde Kuetuvy, junto a la reserva de Mbaracayú, suben su lengua a internet.»
 - **Rótulo:** «ACHE DJAWU · DESDE 2014».
 
 ## ESCENA 6 · ÚLTIMO PLANO (53-57 s) — M18, M43, M47
 - **Imagen:** el anciano de la barba mirando a cámara (Puerto Barra) → 1,2 s de imagen sin voz (M43).
-- **Salma:** «Aché significa "persona".» (confirmado en dos fuentes, ver la tabla)
+- **v7: SIN VOZ.** La frase «Aché significa "persona"» salió para caber en 60 s (N10), como preveía el guion; el dato va en la descripción. El último plano es el anciano de la barba mirando a cámara, 1,3 s sin voz (M43), y después la tarjeta.
 
 ## TARJETA (57-60 s) — M14
 - **YouTube:** «MÁS PUEBLOS BORRADOS» · «SUSCRÍBETE AL CANAL» · «▼ Mira el vídeo relacionado». En Studio, el vídeo relacionado es Pueblos T1 (_SnSzkDIkmw).
@@ -101,3 +101,28 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
   - red interior tv – Canal 16 Santa Rita (CC BY)
   - Barrioflores (CC BY-SA 4.0)
   - Víctor Azcona (CC BY-SA 4.0)
+
+## MONTAJE v7 (19 nov 2026) — lo que se publica: `india/motor/ache-ep.cjs`, 57,9 s, informe sin ❌
+Antes de la v7 se repasó la checklist entera (F1). Paco comparó la v3 con la v7 y dijo: «está mil veces mejor el que está hecho con las reglas».
+
+Planos, en orden:
+| Tiempo | Voz | Imagen |
+|---|---|---|
+| 0-5,6 | gancho | Anciano de la barba con los arcos (PP) → anciano del gorro junto a la casa (PM, recortado desde 21:50,7 para que el primer fotograma ya esté resuelto, M28). Rótulo «PUERTO BARRA · CANAL 16 · 2012» (F10). |
+| 6-8,9 | garrotazos | Manos en el arco (D). Rótulo «TÕ MUMBU · «PARTIR CABEZAS»». |
+| 9,4-11,3 | muy pocos | Anciano de Cerro Morotí (PP, por encima del subtítulo grabado). Rótulo «CERRO MOROTÍ · 2010». |
+| 11,7-19,3 | cómo | Hombres con arcos (PM) → árboles de la comunidad. Rótulo «FUENTE: INSTITUTO MAX PLANCK». Cifra «PROAA MATA · «COGER EL FRIJOL»». |
+| 19,5-23,5 | — | Mapa de Madrid a Mbaracayú (4 s, sintonía, S3). Sígueme a los 20 s (M13). |
+| 23,7-29,2 | salida | W4, túnel de árboles (3 s) → W1, bosque atlántico (PM). |
+| 29,9-39,1 | giro | W7, atardecer → W8, nubes (desde «en pocos») → anciano pensativo de Cerro Morotí (desde «salieron»). Cifra «1 DE CADA 2». |
+| 39,7-46,9 | bucle | Casas → comunidad. Cifra «40 → 30 · LOS YPETI · KIM HILL» (1,4 s). |
+| 47,4-52,8 | hoy | W3, Kuetuvy → W6, tronco (desde «junto») → W5, detalle (desde «suben»). Rótulo «ACHE DJAWU · DESDE 2014». |
+| 53-54,4 | — | Anciano de la barba, 1,3 s sin voz (M43). |
+| 54,4-57,9 | — | Tarjeta: YouTube «MÁS PUEBLOS BORRADOS · SUSCRÍBETE AL CANAL · ▼ Mira el vídeo relacionado»; TikTok «MÁS PUEBLOS BORRADOS · SÍGUEME PARA MÁS» (M14). |
+
+Ninguna foto fija pasa de 3,5 s (N14-9). Las fotos llevan movimiento suave (M12, kb 0,8). Música: fading-shoreline bajo la voz en dos tramos. Ambiente: pájaros con licencia de la biblioteca, porque no hay sonido limpio del lugar (S1, S4).
+
+Publicación:
+- YouTube: mar 22 dic 2026, 10:00, en Studio.
+- TikTok: mar 29 dic 2026, 10:00, en Metricool (434727553).
+- Las fechas evitan repetir música en la misma semana (S10).
