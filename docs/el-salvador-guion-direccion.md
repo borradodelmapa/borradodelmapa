@@ -11,7 +11,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 
 **Lo que manda en el orden (N33):**
 - **Título (Paco, Y2/Y3):** «Indígenas de El Salvador: del exterminio a cantar el himno» (57 caracteres). Empieza por la búsqueda real, «indígenas de el salvador».
-- **Carátula (Y23):** Bukele y los niños cantando, con el texto que proponga 🎨 Carátulas. No puede repetir la frase del título (Y3).
+- **Carátula (Paco, 19 nov: «la A»):** `salma marketing/el-salvador/caratula/himno-A.png`, de 🎨 Carátulas. Imagen partida por una raya naranja: a un lado las niñas cantando con la mano en el pecho (vx8crmplcos, 32,5 s), al otro Bukele (CC0) en su propio panel. Texto: «EL SALVADOR · En 1932 los mataban por su **LENGUA** · ¿Y con **BUKELE**?». Con el título solo comparte «El Salvador» (Y3). Va en el primer fotograma (M11). Niños en la portada: excepción a P4 de Paco.
 - **Lo que prometen:** el exterminio de 1932, el himno de 2025 y qué ha pasado en medio. El gancho cuenta las dos puntas en 20 s; el bloque 1, el exterminio, en el primer minuto y medio.
 
 **Formato:**
