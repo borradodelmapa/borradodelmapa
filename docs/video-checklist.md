@@ -49,7 +49,7 @@ Orden de trabajo. Cada paso cita sus reglas de abajo. ⏸ = se para y se espera 
 ## A · Flujo de trabajo
 | ID | Regla | Comprobación |
 |---|---|---|
-| F1 | Leer esta checklist entera antes de empezar (punto 1 de arriba). | manual |
+| F1 | Leer esta checklist entera antes de empezar (punto 1 de arriba). **Y otra vez, entera, ANTES DE CADA MONTAJE (Paco, 19 nov 2026, largo de El Salvador: «no vuelvas a montar un vídeo sin ver el checklist»).** En la v1 de El Salvador se montó sin repasarla y salieron cinco fallos que ya estaban escritos: fotos recortadas (M12), el canto de los niños pisando a Salma (S1, S5), rótulos que no cabían en pantalla, mujeres hablando en clip sin su voz (S1, S4) y fotos quietas demasiado tiempo (N14(9)). | manual |
 | F2 | El contenido personal lo cuenta Paco (recuerdos hablados); **no se inventa nada que no haya contado**. En shorts de guía, el contenido sale de la guía y de fuentes. | manual |
 | F3 | **Guion de dirección por escena** aprobado por Paco ANTES de generar voz (emoción, imagen concreta, quién habla, sonido dominante, IA sí/no). Plantilla: `docs/india-cap4-guion-direccion.md`. | manual |
 | F4 | **Datos con fuente** registrados en `docs/india-notas-y-fuentes.md` (varias fuentes se dicen; una sola «según algunas fuentes»; si discrepan, no se dicen). **En la voz, la fuente va con nombre (Paco, 9 nov 2026, largo de Tatuajes: «según un policía, según un criminólogo especializado… muy flojo, poca credibilidad»):** persona, institución o medio; nunca «un experto» ni «una investigación académica». | manual |
@@ -260,6 +260,7 @@ Amplía N2 (gancho en los primeros 5 s) a los 20 primeros segundos, que es donde
 ## Registro de cambios (lo más nuevo arriba; subir la versión en cada cambio)
 | Versión (fecha · hora) | Sesión/tema | Qué cambió |
 |---|---|---|
+| 19 nov 2026 · 14:10 | 🎬 Vídeo 2 (Claude), orden de Paco | **F1** reforzada: la checklist se repasa entera antes de CADA montaje, no solo al empezar el vídeo (El Salvador v1 salió con cinco fallos ya escritos). |
 | 19 nov 2026 · 10:15 | 🎬 Vídeo 2 (Claude), orden de Paco | **P4, excepción en el largo de El Salvador**: niños en la carátula (los niños de Izalco cantando el himno en náhuat en la Asamblea), por orden de Paco. Lo avisó 🎨 Carátulas. |
 | 19 nov 2026 · 09:30 | 🎬 Vídeo 2 (Claude), orden de Paco | **F10, excepción en el largo de El Salvador**: planos y sonido oficiales de la Asamblea Legislativa (canto del himno en náhuat, 2025 y 2026), con rótulo de fuente y fecha. Arreglado también el título de este archivo, donde había quedado pegada la fila de Y23. |
 | 18 nov 2026 · 23:50 | 🎬 Vídeo 2 (Claude), orden de Paco | **Y23 nueva**: la carátula de los largos cuenta la historia (qué pasó + qué pregunta responde el vídeo), con prueba a 160 px. Gana sobre el límite de 2-3 palabras de **Y14/Y18(4)** en los largos, porque Paco vio que con tan poco texto «no se sabe de qué va la historia». |
