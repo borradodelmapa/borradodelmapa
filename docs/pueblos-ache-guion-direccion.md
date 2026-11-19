@@ -1,4 +1,4 @@
-# «Los ACHÉ» · Pueblos borrados del mapa — short · GUION DE DIRECCIÓN v2 (19 nov 2026, revisado por Estrategia, 🎬 Vídeo, encargo T27)
+# «Los ACHÉ» · Pueblos borrados del mapa — short · GUION DE DIRECCIÓN v3 (19 nov 2026, revisado por Estrategia, 🎬 Vídeo, encargo T27)
 Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para un short» → «Sí, encárgalo». Expediente: `docs/ache-expediente.md`.
 
 - **Formato:** short 9:16, **60 s como máximo** (N10). Sin clip de la app (M16). Tarjeta final de YouTube y de TikTok (M14).
@@ -25,8 +25,9 @@ Orden de Paco a 📈 Estrategia (19 nov 2026): «investiga más a los aché para
   - Primer fotograma = carátula (M11).
   - Después, el anciano de la barba con los arcos (Puerto Barra, 36:46-37:04, recortado sin micrófono).
   - Después, el bosque (W4, túnel de árboles de Mbaracayú).
-- **Salma:** «En el bosque de Paraguay, los aché arreglaban sus ofensas a garrotazos.» (pausa 0,3) «Todos menos un grupo: los ypeti. Ellos se hacían cosquillas.»
-- **Rótulo** (entra medio segundo después, M30/M46): «TÕ MUMBU · "PARTIR CABEZAS"».
+- **Salma (v3, Paco 19 nov: «empieza por los que arreglaban los conflictos con cosquillas. llama más la atención»):** «En el bosque de Paraguay hubo un pueblo que arreglaba sus conflictos con cosquillas: los aché ypeti.» (pausa 0,3) «Los demás aché lo hacían a garrotazos.»
+- **Rótulo** (sobre la segunda frase, medio segundo después, M30/M46): «TÕ MUMBU · "PARTIR CABEZAS"».
+- **F4:** según DOBES, en las reuniones entre bandas, donde los otros grupos hacían el *tõ mumbu* para vengar una ofensa o una muerte, los ypeti se emparejaban y se hacían cosquillas. «Arreglar sus conflictos con cosquillas» lo resume sin inventar. La escena 1 cuenta cómo.
 
 ## ESCENA 0b · ANCLAJE (7-10 s) — N15
 - **Imagen:** primer plano de un anciano de Cerro Morotí mirando a cámara (1:00, sin subtítulo grabado).
