@@ -1,5 +1,7 @@
 # INDÍGENAS DE EL SALVADOR · DEL EXTERMINIO A CANTAR EL HIMNO — largo de YouTube · GUION DE DIRECCIÓN v2 (19 nov 2026, 🎬 Vídeo 2, encargo T25). Sin voz generada
 
+**v2.1 (19 nov):** Paco aprueba el guion («Ok al guión, sigue») y Estrategia resuelve las 6 dudas de datos (abajo, en cada bloque).
+
 **v2 (Paco, 19 nov):**
 - «Bukele es lo que tiene más tirón. Si podemos, empezar por ahí»: el gancho abre con el himno cantado en náhuat en la Asamblea (10 sept 2025) y después va la historia, con sus ganchos.
 - Gancho y título con su frase: «Del exterminio a cantar el himno nacional en su idioma. Indígenas de El Salvador».
@@ -74,9 +76,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 - **N17, pregunta antes de la cifra:** «¿Cuántos murieron? Nadie lo sabe con exactitud.»
 **S:** ¿Cuántos murieron? Nadie lo sabe con exactitud. Al menos diez mil, según los historiadores Gould y Lauria-Santiago. Otros hablan de hasta treinta mil.
 `{10.000-30.000}`
-**S (N20, la comparación):** Treinta mil: más que todos los que hoy, en El Salvador, se declaran nahuas.
-`{HOY SE DECLARAN NAHUAS: 29.445}`
-- ⚠ **La cifra (expediente, duda 4):** «al menos diez mil… hasta treinta mil» junta la prudente (Gould y Lauria-Santiago, S7) con la de Beverly (W1). **Lo decide Estrategia.** Si prefiere solo la prudente, sale la comparación.
+- **La cifra (Estrategia, 19 nov):** «al menos diez mil… hasta treinta mil», sin comparación (usaba la cifra alta, la discutida, y quedaba efectista).
 - ⚠ **Fuera de la voz:** los 4.800 del general Calderón (la cifra del verdugo) y el Decreto 121 de amnistía, que aún no se ha visto en el Diario Oficial.
 - **Imagen:** no hay fotos libres de la matanza, y tampoco se usarían (F9). Se cubre con el mapa, los retratos, el look de historia y la conmemoración de hoy.
 - **Gancho al siguiente bloque (N14(2)):** **S:** Los fusilamientos duraron dos semanas. El miedo, mucho más.
@@ -89,9 +89,9 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 *(pausa larga)*
 **S:** Muchas familias hicieron lo contrario. Las mujeres guardaron el refajo y el huipil. Los padres dejaron de hablar náhuat a sus hijos.
 `[mujer con refajo y huipil de espaldas o en plano detalle (Tacuba, M. Galicia, CC BY 4.0); manos, telas]`
-**S:** No hizo falta una ley. Bastó el miedo.
-`{NO HIZO FALTA UNA LEY}`
-- ⚠ «Una ley prohibió el náhuat» no va a la voz: no ha aparecido el decreto (expediente, sección 1). **«No hizo falta una ley» tampoco afirma que la hubiera:** dice que la causa fue el miedo, que sí está documentado (W1, W2). Si Estrategia lo ve ambiguo, queda «Bastó el miedo».
+**S:** Bastó el miedo.
+`{EL TRAJE, GUARDADO}`
+- ⚠ **Estrategia (19 nov): solo «Bastó el miedo».** Ni «una ley prohibió el náhuat» ni «no hizo falta una ley»: no se ha encontrado ningún decreto, pero eso no demuestra que no lo hubiera (F4).
 **S:** Hablarlo fuera de casa daba vergüenza. Y miedo.
 `[Anastacia López, retrato de René Figueroa]`
 **S:** Anastacia López, de Santo Domingo de Guzmán, sí lo aprendió en casa. El castellano, dice, lo aprendió a los nueve años.
@@ -118,23 +118,21 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 **S:** Y unas mil cien personas dicen hablar náhuat, según el censo de 2024.
 `{1.135 HABLANTES}`
 **S (N20):** Caben todas en un teatro grande.
-- ⚠ N20: comprobar antes de la voz un teatro concreto con más de 1.135 butacas (por ejemplo, el Teatro Real de Madrid tiene unas 1.700). Si no se comprueba, sale la frase.
+- **N20 (Estrategia, 19 nov):** se queda, porque los 1.135 tienen fuente con fecha: censo de 2024 del BCR, publicado en Diario El Mundo (S1, S2). La fuente va en la descripción.
 *(cambio de ritmo: la mala noticia, N14(7))*
 **S:** Lo que no ha llegado:
 **S:** Ningún presidente ha vuelto a pedir perdón desde 2010. El Estado no ha investigado 1932. Sigue sin aprobarse una ley de pueblos indígenas. Y El Salvador no ha firmado el convenio de la ONU que protege a estos pueblos, el 169.
 `{SIN LEY · SIN CONVENIO 169}`
 - **Fuentes:** sección 4 y 4b del expediente (S15, S16, S19). «Firmado» = ratificado; si Estrategia prefiere la precisión, «no ha ratificado».
 - **El convenio es de la OIT, que es un organismo de la ONU.** En la voz se dice «de la ONU» para que se entienda; en el rótulo y la descripción, «Convenio 169 de la OIT».
-**S (opcional, lo decide Estrategia: expediente, duda 3):** En 2024, el Gobierno despidió a más de trescientos trabajadores del Ministerio de Cultura y cerró la red de Casas de la Cultura del país.
-`{CASAS DE LA CULTURA: CERRADAS · 2024}`
-- ⚠ **Solo como dato con fecha, sin adjetivos y sin relacionarlo con el náhuat:** ninguna fuente dice que esos despidos o cierres tocaran clases de náhuat (expediente, 4b). Nada sobre la obra drag ni sobre las «agendas»: no son de este vídeo.
+- **Despidos de Cultura y Casas de la Cultura (Estrategia, 19 nov): NO van en la voz.** Solo en la descripción, con fuente primaria: el Decreto Legislativo 33 (Diario Oficial n.º 121, julio de 2024), citado por Diario Co Latino (S22).
 - **Gancho al siguiente bloque (N14(5), aviso antes del bloque denso):** **S:** Y a las escuelas donde los niños vuelven a aprenderlo les pasó algo que casi nadie conoce fuera de El Salvador.
 
 ## 4 · ¿QUÉ PASÓ CON LAS CUNAS? (≈ 4:15-5:30) — el caso concreto (N26); despacio en lo humano
 `[vídeo CC BY: niños y maestras en la cuna (CCESV «Ne Nawat Suchikisa» l5s5JR5paYo o Leslie Ortiz -zk99vCKLl4); se ve entero antes (F10)]`
 **S:** Se llaman Cunas Náhuat. Niños de tres a cinco años pasan el día entero en náhuat, sin una palabra de castellano.
 **S:** Las maestras son abuelas que lo aprendieron de niñas. Las llaman *nantzin*.
-`{NANTZIN: «MADRECITA»}` ⚠ comprobar la traducción de *nantzin* antes del rótulo; si no hay fuente, el rótulo queda {LAS ABUELAS MAESTRAS}.
+`{LAS ABUELAS MAESTRAS}` (sin traducir *nantzin*: no aparece en un diccionario de náhuat-pipil; en el uso es un tratamiento de respeto para las mujeres mayores, y viene de *nan*, «madre». Búsqueda del 19 nov; Estrategia).
 **S:** La primera abrió en 2010, en Santo Domingo de Guzmán. Por ellas han pasado más de seiscientos niños.
 `{+600 NIÑOS}`
 *(cambio a dato: N28)*
@@ -184,10 +182,11 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 *(pausa)*
 `[niños de la cuna, vídeo CC BY]`
 **S (vuelta al gancho, N16):** Mientras, la lengua que sonó en la Asamblea la sostienen unas abuelas. Y niños de cinco años.
-**S (siguiente vídeo, N14(6)):** En el próximo vídeo, otro pueblo que casi borran del mapa.
+**S (siguiente vídeo, N14(6)):** Hay más pueblos que estuvieron a punto de borrarse del mapa. Te dejo aquí sus historias.
+`[tarjeta con «▼ Mira el vídeo relacionado»: «Pueblos borrados del mapa · Temporada 1» (_SnSzkDIkmw), en Studio (M14)]`
 - **«Contado» y «un día»:** el censo de 2024 y el 9 de agosto (bloque 3). Lo que espera, expediente 4b.
 - ⚠ «Niños de cinco años»: las cunas son de 3 a 5 años (S34, S35); es verdad. Si el plano no es de un niño de la cuna, se cambia la imagen, no la frase.
-- **El siguiente vídeo:** se concreta con Estrategia antes de la voz (la serie Pueblos borrados del mapa u otro largo).
+- **El siguiente vídeo (Estrategia, 19 nov):** no se promete un «próximo», porque no hay ningún largo de pueblos con fecha. El vídeo relacionado es «Pueblos borrados del mapa · Temporada 1» (`_SnSzkDIkmw`).
 - **N31:** tras la matanza, el vídeo cierra con el estado actual: el censo, las cunas, los niños.
 - `[tarjeta final (M14) sin «viaje real» + clip de la app]`
 
@@ -228,13 +227,8 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
   - Gancho y orden: G1 · G2 · G3 · M13 · M15/M21 · N2 · N15 · N16 · N17 · N33 (las dos puntas del título en el gancho; el exterminio, en el primer minuto y medio) · Y3 (título y carátula se reparten la información).
   - Narración: N4 · N6 · N11 (fechas solo donde cierran etapa; el resto narrado) · N12 · N14 (1-8) · N20 · N21 · N26 · N28 · N29 · N31 · N32 · M39 · M40 · F11 (mapa entre el gancho y el primer pico; bloque 2 lento entre 1 y 3).
   - Datos, imágenes y respeto: F2 · F4 · F9 · F10 (con la excepción de Paco) · P4 · P9.
-- **⚠ Para Estrategia antes de aprobar:**
-  1. La cifra de muertos (bloque 1).
-  2. La frase opcional de los despidos y las Casas de la Cultura (bloque 3).
-  3. «No hizo falta una ley» (bloque 2).
-  4. La comparación del teatro (bloque 3).
-  5. *Nantzin* (bloque 4).
-  6. El siguiente vídeo (cierre).
+- **Las 6 dudas de datos, resueltas por Estrategia (19 nov):** cifra de muertos sin comparación · fuera los despidos · solo «Bastó el miedo» · el teatro se queda · {LAS ABUELAS MAESTRAS} · el vídeo relacionado es Pueblos T1.
+- **Pendiente:** el OK de Paco a la carátula A2 (en el chat de Carátulas) y comprobar que el audio del canto es el real.
 
 ## Fuentes del acto de la Asamblea (nuevas en v2)
 - [H1] La Página, 10 sept 2025, «Por primera vez en la historia suena en la Asamblea Legislativa el himno Nacional en Náhuat». https://lapagina.com.sv/nacionales/por-primera-vez-en-la-historia-suena-en-la-asamblea-legislativa-el-himno-nacional-en-nahuat/
