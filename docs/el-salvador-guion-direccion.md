@@ -13,8 +13,8 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 
 **Lo que manda en el orden (N33):**
 - **Título (Paco, Y2/Y3):** «Indígenas de El Salvador: del exterminio a cantar el himno» (57 caracteres). Empieza por la búsqueda real, «indígenas de el salvador».
-- **Carátula: himno-A2, PENDIENTE DEL OK DE PACO** (`salma marketing/el-salvador/caratula/himno-A2.png`, de 🎨 Carátulas). Imagen partida por una raya naranja: a un lado las niñas cantando con la mano en el pecho (vx8crmplcos, 32,5 s), al otro Bukele (CC0) en su propio panel. Texto: «EL SALVADOR · Tras 1932, por miedo, callaron su **LENGUA** · ¿Y con **BUKELE?**». Con el título solo comparte «El Salvador» (Y3). Va en el primer fotograma (M11). Niños en la portada: excepción a P4 de Paco.
-  - Paco eligió la A («En 1932 los mataban por su LENGUA») el 19 nov, pero Estrategia y Carátulas la descartaron por F4: los mataron por ser indígenas, y la lengua fue una de las señas que usó el ejército para elegirlos, no la causa. La A está en `caratula/descartadas/`.
+- **Carátula: A4-fila, APROBADA POR PACO (19 nov, en el chat de 🎨 Carátulas)** — `salma marketing/el-salvador/caratula/ENTREGA/caratula-el-salvador.png` (y `-1920.png` para el primer fotograma, M11). Texto: «EL SALVADOR · 1932: la **MATANZA** de indígenas · ¿Y con **BUKELE**?». Imagen partida: a la izquierda, los niños en fila con traje típico (vx8crmplcos, 52 s, sin rótulo); a la derecha, Bukele (CC0) en su propio panel, porque no estuvo en el acto (F4). Con el título no repite ninguna frase (Y3). Niños en la portada: excepción a P4 de Paco.
+  - Descartadas: la A («los mataban por su LENGUA», F4), la A2 («por miedo callaron su LENGUA»: Paco, «no es por miedo, los masacraron») y la A3. Están en `caratula/descartadas/`.
 - **Lo que prometen:** el exterminio de 1932, el himno de 2025 y qué ha pasado en medio. El gancho cuenta las dos puntas en 20 s; el bloque 1, el exterminio, en el primer minuto y medio.
 
 **Formato:**
@@ -228,7 +228,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
   - Narración: N4 · N6 · N11 (fechas solo donde cierran etapa; el resto narrado) · N12 · N14 (1-8) · N20 · N21 · N26 · N28 · N29 · N31 · N32 · M39 · M40 · F11 (mapa entre el gancho y el primer pico; bloque 2 lento entre 1 y 3).
   - Datos, imágenes y respeto: F2 · F4 · F9 · F10 (con la excepción de Paco) · P4 · P9.
 - **Las 6 dudas de datos, resueltas por Estrategia (19 nov):** cifra de muertos sin comparación · fuera los despidos · solo «Bastó el miedo» · el teatro se queda · {LAS ABUELAS MAESTRAS} · el vídeo relacionado es Pueblos T1.
-- **Pendiente:** el OK de Paco a la carátula A2 (en el chat de Carátulas) y comprobar que el audio del canto es el real.
+- **Resuelto (19 nov):** carátula A4-fila aprobada por Paco; el audio del canto es el real (Paco: «sí se escucha a los niños»).
 
 ## Fuentes del acto de la Asamblea (nuevas en v2)
 - [H1] La Página, 10 sept 2025, «Por primera vez en la historia suena en la Asamblea Legislativa el himno Nacional en Náhuat». https://lapagina.com.sv/nacionales/por-primera-vez-en-la-historia-suena-en-la-asamblea-legislativa-el-himno-nacional-en-nahuat/
