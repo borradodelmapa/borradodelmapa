@@ -10,7 +10,7 @@ Versión: 19 nov 2026.
 - **M18** El último plano antes de la tarjeta es un pico: la imagen o el dato más fuerte, no relleno.
 - **M37** Dentro de un bloque de datos se alternan foto, clip, mapa y gráfico; no todo fotos.
 - **N7** Ninguna imagen contradice lo que se dice en ese momento.
-- **M10 · M25 · M45** Los subtítulos no tapan la zona de botones, tienen 2 líneas como máximo y se pueden leer enteros.
+- **M10 · M25** Los subtítulos no tapan la zona de botones y tienen 2 líneas como máximo. (Que duren lo bastante para leerlos, M45, lo hace el motor y avisa si no puede.)
 - **M14 · M43** La tarjeta final se ve entera y antes hay un instante de imagen sin voz.
 
 ## 👂 Para Paco (Claude no oye)

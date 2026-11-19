@@ -98,6 +98,7 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   // ⚙️ lo que el motor HACE solo (T29): se anota en el informe para que quede constancia
   I.push('ℹ [M30] las cifras entran ' + (cfg.cifraRetraso ?? 0.5) + ' s después de decir su palabra');
   I.push('ℹ [M41] los rótulos entran ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte');
+  I.push('ℹ [M45] cada subtítulo dura al menos lo necesario para leerlo (' + (cfg.subPalabrasSeg ?? 3.5) + ' palabras/s); el resultado, al final de este informe');
   const emoB = todos.filter(b => b.emocion).map(b => b.id + ' ' + b.emocion), picoB = todos.filter(b => b.pico).map(b => b.id);
   if (emoB.length) I.push('ℹ [M23] temperatura de color: ' + emoB.join(', ')); else L.push('⚠ [M23] ningún bloque marcado con emocion (calida | fria): el color no cambia con la emoción');
   if (picoB.length) I.push('ℹ [M27] fondo oscurecido en el plano pico de: ' + picoB.join(', ')); else L.push('⚠ [M27] ningún bloque marcado pico: no se oscurece el fondo en el momento fuerte');

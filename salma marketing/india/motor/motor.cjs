@@ -52,7 +52,7 @@ const LOOKS = {
 // FORMATO (cfg.formato): '9:16' vertical (por defecto, shorts; sus números son los de siempre) o '16:9' horizontal (documental largo de YouTube, Paco 3 nov 2026).
 // a:b = proporción · sub = subtítulos (letra, borde, caracteres por línea, posición) · card = [tamaño, y] de cada texto de la tarjeta final
 const FORMATOS = {
-  '9:16': { w: 1080, h: 1920, a: 9, b: 16, sub: { letra: 66, borde: 6, ancho: 26, pos: '\\an5\\pos(540,1150)' }, cifra: { y: 640, size: 230, sub: 270 }, counterY: 140, rotY: 900, sgY: 1450,
+  '9:16': { w: 1080, h: 1920, a: 9, b: 16, sub: { letra: 66, borde: 6, ancho: 26, pos: '\\an5\\pos(540,1150)' }, cifra: { y: 560, size: 230, sub: 270 }, counterY: 140, rotY: 900, sgY: 1450,
     card: { av: [360, 170], l1: [96, 720], l2: [76, 850], l3: [44, 1050], crea: [104, 640], con: [140, 770], desc: [54, 990], grat: [54, 1065], web: [74, 1220], l4: [46, 1560], l5: [52, 1655] } },
   // horizontal: subtítulos abajo y centrados (crecen hacia arriba), rótulo de lugar encima de ellos; las fotos más estrechas que 16:9 se ven enteras sobre su propio fondo difuminado
   '16:9': { w: 1920, h: 1080, a: 16, b: 9, sub: { letra: 58, borde: 5, ancho: 42, pos: '\\an2\\pos(960,1020)' }, cifra: { y: 290, size: 200, sub: 230 }, counterY: 60, rotY: 790, sgY: 700,
@@ -238,7 +238,12 @@ async function build(cfg) {
       const lines = []; let line = [], ll = 0; ph.ks.forEach(i => { const L = toks[i].w.length; if (line.length && ll + 1 + L > F.sub.ancho) { lines.push(line); line = []; ll = 0; } line.push(i); ll += (ll ? 1 : 0) + L; }); if (line.length) lines.push(line);
       // la frase termina como muy tarde cuando entra la siguiente: antes se veían las dos a la vez ~0,1 s (Paco, 3 nov 2026)
       const sig = split[pi + 1], tSig = sig ? T(toks[sig.ks[0]].s) - 0.05 : Infinity, ultS = T(toks[ph.ks[ph.ks.length - 1]].s);
-      const t0 = T(toks[ph.ks[0]].s) - 0.05, tEnd = Math.max(ultS + 0.05, Math.min(T(toks[ph.ks[ph.ks.length - 1]].e) + 0.12, tSig));
+      const t0 = T(toks[ph.ks[0]].s) - 0.05; let tEnd = Math.max(ultS + 0.05, Math.min(T(toks[ph.ks[ph.ks.length - 1]].e) + 0.12, tSig));
+      // M45 (T29 bis, 19 nov 2026): cada subtítulo dura lo que hace falta para leerlo (unas 3,5 palabras por segundo, cfg.subPalabrasSeg).
+      // Si dura menos, se alarga hasta que entra el siguiente (o hasta el final del bloque); si aun así no llega, queda anotado para el informe (⚠ M45).
+      { const need = ph.ks.length / (cfg.subPalabrasSeg ?? 3.5), lim = sig ? tSig : b.t0 + b.D - 0.15;
+        if (tEnd - t0 < need) tEnd = Math.max(tEnd, Math.min(t0 + need, lim));
+        if (tEnd - t0 < need - 0.05) (cfg._subCortos = cfg._subCortos || []).push(b.id + ' «' + ph.ks.map(i => toks[i].w).join(' ') + '» ' + (tEnd - t0).toFixed(1) + ' s de ' + need.toFixed(1)); }
       ph.ks.forEach((kc, idx) => {
         const a = idx === 0 ? t0 : T(toks[kc].s), e = idx === ph.ks.length - 1 ? tEnd : T(toks[ph.ks[idx + 1]].s);
         const txt = lines.map(ln => ln.map(i => i === kc ? `{\\c${ORANGE_ASS}}${toks[i].w}{\\r}` : toks[i].w).join(' ')).join('\\N');
@@ -251,6 +256,10 @@ async function build(cfg) {
     if (b.en) { const sents = []; let cs = []; toks.forEach(k => { cs.push(k); if (/[.?!…]$/.test(k.w)) { sents.push(cs); cs = []; } }); if (cs.length) sents.push(cs); sents.forEach((s, i) => { if (b.en[i]) srtEn.push({ a: T(s[0].s) - 0.05, e: T(s[s.length - 1].e) + 0.12, t: b.en[i] }); }); }
   }
   fs.writeFileSync(`${W}/sub.ass`, ass);
+  // M45 (T29 bis): el resultado de la duración mínima de los subtítulos va al informe y al acta (se calculan después de reglas())
+  { const sc = cfg._subCortos || [], lin = sc.length ? sc.map(x => '⚠ [M45] subtítulo corto, sin hueco para alargarlo: ' + x).join('\n') : '✅ M45 todos los subtítulos duran lo necesario para leerlos (' + (cfg.subPalabrasSeg ?? 3.5) + ' palabras/s)';
+    if (sc.length) console.log(lin);
+    for (const f of [`${OUT}/${cfg.id}-informe-reglas.txt`, `${OUT}/${cfg.id}-acta.txt`]) if (fs.existsSync(f)) fs.appendFileSync(f, '\n' + lin + '\n'); }
   fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-es.srt`, srt.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
   if (srtEn.length) fs.writeFileSync(`${OUT}/${cfg.id}-subtitulos-en.srt`, srtEn.map((x, i) => `${i + 1}\n${ts(x.a).replace('.', ',')}0 --> ${ts(x.e).replace('.', ',')}0\n${x.t}\n`).join('\n'));
   const numF = nums.map(c => { const al = `if(lt(t,${c.t0.toFixed(2)}),0,min(1,(t-${c.t0.toFixed(2)})/0.25))*if(gt(t,${c.t1.toFixed(2)}),max(0,1-(t-${c.t1.toFixed(2)})/0.3),1)`; return `drawtext=fontfile='${IMPACT}':text='${esc(c.text)}':fontsize=${c.size || F.cifra.size}:fontcolor=white:borderw=10:bordercolor=0xF4630B:x=(w-text_w)/2:y=${c.y || F.cifra.y}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})',drawtext=fontfile='${ARIALB}':text='${esc(c.sub)}':fontsize=48:fontcolor=white:borderw=5:bordercolor=black:x=(w-text_w)/2:y=${(c.y || F.cifra.y) + F.cifra.sub}:alpha='${al}':enable='between(t,${c.t0.toFixed(2)},${(c.t1 + 0.3).toFixed(2)})'`; }).join(',');
