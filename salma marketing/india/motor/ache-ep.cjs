@@ -16,10 +16,10 @@ const MUS = (de, a, ss, db = -12) => ({ de: { b: de }, a: { b: a, fin: 1, off: 0
 const YP = 'ipetí'; // pronunciación de «ypeti» (guaraní: y = vocal), solo en la voz
 const cfg = {
   titulo: 'LOS ACHÉ · PUEBLOS BORRADOS DEL MAPA',
-  id: 'pueblos-ache-v9' + (TT ? '-tiktok' : ''), // v9 (19 nov 2026): propuesta aprobada por Paco — N23, N26, N32, M48; un solo pico
+  id: 'pueblos-ache-v9b' + (TT ? '-tiktok' : ''), // v9 (19 nov 2026): propuesta aprobada por Paco — N23, N26, N32, M48; un solo pico
   // MARCAS (T29, ficha ① E): nombre → G2 · fecha / fechaTikTok → S10 · b.pico → M27 y F11 · b.emocion → M23
   nombre: ['aché'], fecha: '2026-12-22', fechaTikTok: '2026-12-29',
-  out: B + '/salida', fotosSerie: B + '/fotos', ultima: B + (TT ? '/ULTIMA-v9-tiktok' : '/ULTIMA-v9'), ultimaNombre: 'tribus-de-paraguay-los-ache-casi-se-borran-del-mapa', // v8 = prueba del motor nuevo: el v7 programado (ULTIMA) no se toca
+  out: B + '/salida', fotosSerie: B + '/fotos', ultima: B + (TT ? '/ULTIMA-v9b-tiktok' : '/ULTIMA-v9b'), ultimaNombre: 'tribus-de-paraguay-los-ache-casi-se-borran-del-mapa', // v8 = prueba del motor nuevo: el v7 programado (ULTIMA) no se toca
   look: 'portra', counter: 'PUEBLOS BORRADOS',
   portada: { png: B + '/caratula/ache-A.png' },
   voices: { salma: SALMA_EXPRESIVA }, sintonia: { src: 'SFX_sintonia-pueblos', db: -8 },
@@ -56,10 +56,10 @@ const cfg = {
       cifra: [{ word: 'treinta', text: '40 → 30', sub: 'LOS YPETI · KIM HILL', dur: 1.0 }, { word: 'mitad', text: '1 DE CADA 2', sub: 'EPIDEMIAS TRAS EL CONTACTO', dur: 2.2, size: 170 }],
       shots: [{ a: 'W4', sc: 'GP' }, { ...V('moroti-anciano2', 'PP'), from: 'hace menos' }, { a: 'W1', sc: 'PM', from: 'los ypeti' }, { ...V('casas', 'GP'), from: 'Eran unos' }, { ...V('comunidad', 'PM'), from: 'En 1987' }, { a: 'W7', sc: 'GP', from: 'No fueron' }, { a: 'W8', sc: 'PM', from: 'en pocos' }, { ...V('moroti-pensando', 'PP'), from: 'salieron' }] }),
     // 5 · HOY (N31)
-    S({ id: 'hoy', emocion: 'calida', pause: 0.4, amb: PAJAROS(-30, 2), rotulo: 'ACHE DJAWU · DESDE 2014',
+    S({ id: 'hoy', emocion: 'calida', pause: 0.4, amb: PAJAROS(-30, 2), rotulo: 'ACHE DJAWU · 2014', rotuloSegs: 1.4, // v9b: el rótulo solo sobre la foto del móvil (M8, N7)
       text: 'Hoy, desde Kuetuvy, junto a la reserva de Mbaracayú, suben su lengua a internet.',
       voz: 'Hoy, desde Kuetuví, junto a la reserva de Mbaracayú, suben su lengua a internet.',
-      shots: [{ a: 'W3', sc: 'PM' }, { a: 'W6', sc: 'GP', from: 'junto' }, { a: 'W5', sc: 'D', from: 'suben' }] }),
+      shots: [{ a: 'W12', sc: 'PM' }, { a: 'W6', sc: 'GP', from: 'junto' }, { a: 'W3', sc: 'PM', from: 'suben' }] }), // v9b (N7, M48): el móvil vuelve justo en «suben su lengua a internet»
     // 6 · «Aché significa persona»: quitada para caber en 60 s (N10), como preveía el guion
     // M43: imagen sola antes de la tarjeta
     { id: 'silencio', video: CL + '/anciano-barba-fin-13.mp4', fixed: 1.3, amb: PAJAROS(-30, 2) },

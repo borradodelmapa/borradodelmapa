@@ -353,7 +353,7 @@ async function build(cfg) {
   const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='${cntOn}'` : '';
   // s.etiqueta: cartel propio de un plano en el sitio del de esquina (p. ej. «FOTO REAL · 1899 · COLOREADA»); solo mientras dura ese plano
   const etq = cfg.blocks.flatMap(b => (b.shots || []).filter(s => s.etiqueta && s._t != null)).map(s => `drawtext=fontfile='${IMPACT}':text='${esc(s.etiqueta)}':fontsize=46:fontcolor=white:box=1:boxcolor=0x222222@0.85:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='between(t,${s._t.toFixed(2)},${(s._t + s._d).toFixed(2)})'`);
-  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + (cfg.rotuloRetraso ?? 0.5)).toFixed(2)},${(cfg.rotuloSegs ? Math.min(b.t0 + 0.4 + cfg.rotuloSegs, b.t0 + b.D - 0.3) : b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
+  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + (cfg.rotuloRetraso ?? 0.5)).toFixed(2)},${((b.rotuloSegs ?? cfg.rotuloSegs) ? Math.min(b.t0 + 0.4 + (b.rotuloSegs ?? cfg.rotuloSegs), b.t0 + b.D - 0.3) : b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s (uno por cada elemento de SGL)
   let sgIn = [];
   const avisos = SGL.map((SG, i) => {
