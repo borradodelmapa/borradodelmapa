@@ -11,6 +11,14 @@ Versión del 19 nov 2026. La fuente es `docs/video-checklist.md`, con el texto e
 4. **Ficha ③** Revisión del montaje: cada vez que sale un borrador.
 5. **Ficha ④** Publicación: antes de subir y programar.
 
+## EL CANDADO (Paco, 20 nov 2026: «quiero que metas las 145… 138 de 145 automáticas»)
+Antes de «★ Exportar para publicar», y otra vez antes de publicar, se pasa `node scripts/revisar-video.cjs "<carpeta ULTIMA>"` (`--fase publicar --fecha AAAA-MM-DDTHH:MM --tipo short|largo` antes de programar). Cuenta TODAS las reglas de la checklist (150) y no deja pasar ni una sin resolver:
+- **36 del motor:** informe sin ❌.
+- **24 del script:** textos, archivo, calidad, fechas, blog y registro.
+- **56 del revisor de guion** (`revisor-guion.md`) y **27 del revisor de imagen** (`revisor-imagen.md`): los hace un subagente con ojos nuevos y los deja en `revision-guion.json` y `revision-imagen.json`.
+- **7 de Paco**, en `ok-paco.json` con sus palabras: F3 guion y 20 primeros segundos · F5 coste · F6 foto protagonista y audios · S5 música de oído · N25 entonación · F8 ve y oye el montaje · Y13 título y carátula.
+Si sale ❌, no se exporta ni se publica.
+
 ## Reglas de trabajo
 - **F12** Todas las normas se cumplen, sí o sí. La que no se pueda cumplir se explica en el ACTA, con el motivo y lo que se hizo en su lugar. El acta va junto al vídeo como `<nombre> - acta.txt`. Estrategia no enseña nada a Paco sin revisarla.
 - **F1** Antes de cada montaje, también de cada remontaje, se lee la ficha del paso entera, no de memoria.
