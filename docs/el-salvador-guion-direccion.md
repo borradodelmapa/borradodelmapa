@@ -1,21 +1,28 @@
-# EL SALVADOR · LOS INDÍGENAS QUE SE ESCONDIERON POR MIEDO — largo de YouTube · GUION DE DIRECCIÓN v1 (19 nov 2026, 🎬 Vídeo 2, encargo T25). Sin voz generada
+# INDÍGENAS DE EL SALVADOR · DEL EXTERMINIO A CANTAR EL HIMNO — largo de YouTube · GUION DE DIRECCIÓN v2 (19 nov 2026, 🎬 Vídeo 2, encargo T25). Sin voz generada
 
-Orden de Paco (19 nov): «continúa tú con el guion». La foto de la carátula la decide Paco con 🎨 Carátulas.
-Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W5). **No se ha añadido ningún dato nuevo.** Lo marcado con ⚠ no va a la voz.
+**v2 (Paco, 19 nov):**
+- «Bukele es lo que tiene más tirón. Si podemos, empezar por ahí»: el gancho abre con el himno cantado en náhuat en la Asamblea (10 sept 2025) y después va la historia, con sus ganchos.
+- Gancho y título con su frase: «Del exterminio a cantar el himno nacional en su idioma. Indígenas de El Salvador».
+- **«Sí, excepción: canto en la Asamblea»:** excepción a F10 solo en este vídeo (abajo, «Material»).
+- La carátula la hace 🎨 Carátulas con Bukele y los niños cantando.
+- v1 (gancho con «Naja nitajtaketza nawat»): commit 50ac53ca3.
+
+Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W5), más el acto de la Asamblea (fuentes H1-H4, al final). Lo marcado con ⚠ no va a la voz.
 
 **Lo que manda en el orden (N33):**
-- **Carátula (Y23, aprobada en texto):** bandera + «EL SALVADOR» · «En 1932 masacró a sus **INDÍGENAS**» · «¿Cómo están hoy?».
-- **Título (N1):** «El Salvador: los indígenas que se escondieron por miedo».
-- Las dos prometen dos cosas: **qué pasó en 1932 y por qué se escondieron** (se cuenta en el primer minuto y medio), y **cómo están hoy** (la segunda mitad).
+- **Título (Paco, Y2/Y3):** «Indígenas de El Salvador: del exterminio a cantar el himno» (57 caracteres). Empieza por la búsqueda real, «indígenas de el salvador».
+- **Carátula (Y23):** Bukele y los niños cantando, con el texto que proponga 🎨 Carátulas. No puede repetir la frase del título (Y3).
+- **Lo que prometen:** el exterminio de 1932, el himno de 2025 y qué ha pasado en medio. El gancho cuenta las dos puntas en 20 s; el bloque 1, el exterminio, en el primer minuto y medio.
 
 **Formato:**
-- Largo de unos **7 minutos** (unas 860 palabras de voz, más pausas, mapas y tarjeta). Los tiempos de cada bloque son aproximados y se miden al montar.
+- Largo de unos **7 minutos** (unas 870 palabras de voz, más pausas, mapas y tarjeta). Los tiempos de cada bloque son aproximados y se miden al montar.
 - **Narración:** narra solo Salma, en crónica (N12) y sin primera persona: no ha estado allí (F2, N4).
 - Sin «Basado en un viaje real» (M14). La tarjeta final y el clip de la app se quedan (N14(6)).
 - **Tono (N14):** de memoria y de curiosidad, no de mitin.
   - Bukele entra como dato y como pregunta, nunca como acusación.
   - Nada sobre el régimen de excepción.
-  - Ningún partido ni alcalde, ni salvadoreño ni español.
+  - Ningún partido ni alcalde español. De El Salvador solo se nombra su partido (Nuevas Ideas) como «el partido de Bukele», porque tiene la mayoría de la Asamblea.
+- **⚠ Bukele NO estuvo en el acto** (o no consta: ni foto, ni vídeo, ni frase suya; búsqueda del 19 nov). En la voz nunca se dice que lo impulsara o lo presenciara. Su imagen va como «el presidente», no en el Salón Azul.
 
 **Leyenda:**
 - **S:** Salma.
@@ -25,18 +32,22 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 
 ---
 
-## 0 · GANCHO (0-20 s) — G1, G2, M15/M21, N15, N16. Paco lo aprueba primero
-`[0-2 s: la cara de la carátula, mirando a cámara (la misma que elija Paco: Y3/M21). Sonido: la voz REAL de Blas López diciendo «Naja nitajtaketza nawat» (La Radio Tomada, CC BY-SA 4.0), sin música]`
-**S:** En El Salvador, esta frase daba miedo.
-*(pausa 0,5)*
-**S:** Significa «yo hablo náhuat». En 1932, el ejército mató a miles de indígenas. Y para elegirlos, se fijó en su ropa… y en su lengua.
-`{OCCIDENTE DE EL SALVADOR · 1932}` `[retrato de Feliciano Ama, dominio público, look de historia]`
-**S:** Después, muchos se escondieron: dejaron el traje y dejaron de hablarla.
-`[Guadalupe Estrada mirando a cámara]`
-**S:** Hoy, cinco veces más personas que hace menos de veinte años se atreven a decir que son indígenas. ¿Qué ha cambiado? ¿Y quién les está ayudando a volver?
-`{×5 EN 17 AÑOS}`
-- **G2:** se dice «El Salvador» a los ~2,5 s.
-- **N16 (bucle abierto):** «¿quién les está ayudando a volver?» se cierra en el bloque 5, con las abuelas y Pamplona.
+## 0 · GANCHO (0-20 s) — G1, G2, M15/M21, N15, N16. Paco lo aprobó el 19 nov
+`[0-4 s: los niños de Izalco cantando el himno en náhuat en el Salón Azul, con su sonido real (vídeo de la Asamblea, excepción a F10). Rótulo {ASAMBLEA LEGISLATIVA · 10 SEPT 2025}. Sin música]`
+**S:** Del exterminio… a cantar el himno nacional en su idioma.
+*(el canto sube 1 s)*
+**S:** Son los indígenas de El Salvador.
+`[retrato de Feliciano Ama, dominio público, look de historia]` `{1932}`
+**S:** En 1932, el ejército mató a miles de ellos. Y los eligió por su ropa y por su lengua.
+`[Bukele (Casa Presidencial, CC0), imagen neutra] → [vuelta a los niños cantando]`
+**S:** Noventa y tres años después, en la Asamblea del partido de Bukele, unos niños de Izalco cantaron el himno en náhuat. Era la primera vez.
+`{PRIMERA VEZ EN NÁHUAT}`
+**S:** ¿Qué pasó en medio? ¿Y qué ha cambiado con Bukele?
+- **G2:** «El Salvador» se dice a los ~3 s y «Bukele», a los ~12 s.
+- **M15/M21:** caras desde el fotograma 0 (los niños).
+- **«Exterminio»:** es la palabra del presidente Funes al pedir perdón en 2010 (S3); se recuerda en el bloque 3.
+- **«Era la primera vez»:** según la prensa y la propia Asamblea (H1-H3). Lo nuevo es que fuera dentro de la Asamblea: la misma escuela ya lo había cantado en 2009, en Suchitoto (H4). Va en la descripción.
+- **N16 (bucle abierto):** «¿qué ha cambiado con Bukele?» se contesta en el bloque 3 (lo que sí y lo que no) y se cierra en el cierre.
 - **Sígueme a los 20 s (M13).**
 - **G3:** la frase de apertura no se parece a la de ningún otro largo.
 
@@ -89,12 +100,15 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 - **N32:** «setenta y ocho años» ancla 2010 sin decir la fecha en pantalla (N11).
 
 ## 3 · ¿QUÉ HA HECHO EL PAÍS? (≈ 2:40-4:15) — datos a ritmo rápido, contraste bueno/malo (N14(7))
-**S:** Fue en 2010. El presidente Mauricio Funes pidió perdón a los pueblos indígenas por la «persecución y el exterminio». Era la primera vez.
+**S:** Fue en 2010. El presidente Mauricio Funes pidió perdón a los pueblos indígenas por la «persecución y el exterminio». La palabra del principio. Era la primera vez.
 `{PRIMER PERDÓN · 2010}`
 **S:** Cuatro años después, la Constitución cambió una frase: «El Salvador reconoce a los pueblos indígenas».
 `[texto del artículo 63 animado sobre fondo; rótulo {ARTÍCULO 63}]`
-**S:** Y llegó otro presidente: Nayib Bukele. Con su Gobierno, la Asamblea declaró el nueve de agosto Día Nacional de los Pueblos Indígenas. Por unanimidad.
+**S:** Y llegó Nayib Bukele. Con él en la presidencia, la Asamblea declaró el nueve de agosto Día Nacional de los Pueblos Indígenas. Por unanimidad.
 `[Bukele, Casa Presidencial, CC0; sin efecto ni filtro: imagen neutra]`
+**S (M39, vuelta al gancho):** En esa Asamblea sonó el himno en náhuat. Y al año siguiente, otra escuela lo volvió a cantar allí.
+`[niños de San Juan Talpa cantando, vídeo de la Asamblea de 2026 (H5), excepción a F10]` `{OTRA VEZ · 2026}`
+- **Fuente:** noticiero de la Asamblea del 3 sept 2026 (H5): niños del Complejo Educativo Profesor Alberto Varela, de San Juan Talpa (La Paz), abren el mes cívico con el himno en náhuat y en español.
 **S (N17):** Y el censo volvió a preguntar algo sencillo: ¿es usted indígena? En 2007 dijeron que sí trece mil personas. ¿Cuántas, diecisiete años después?
 *(pausa 0,8)*
 **S:** Sesenta y ocho mil. Cinco veces más.
@@ -131,7 +145,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 - **Lo que no se dice:** ni que los nidos de Crecer Juntos funcionen ni que no; ni la primera dama (expediente, 4c).
 - **Gancho al siguiente bloque:** **S:** Una de esas ayudas viene de un sitio que, si ves esto desde España, conoces.
 
-## 5 · ¿QUIÉN LES ESTÁ AYUDANDO A VOLVER? (≈ 5:30-7:00) — cierra el bucle del gancho (N16)
+## 5 · ¿QUIÉN LES ESTÁ AYUDANDO A VOLVER? (≈ 5:30-7:00) — contesta el «con ayuda de fuera» del bloque 4
 **S:** Los jóvenes, primero. Veinticinco chicos de Santo Domingo, de quince a diecisiete años, aprendieron a grabar a sus mayores para que su lengua no se perdiera.
 `{GRABAR A LOS MAYORES}` `[vídeo CC BY de jóvenes y mayores (CCESV)]`
 **S:** En febrero de 2026, el náhuat estrenó su propia Wikipedia.
@@ -157,39 +171,50 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 `[sonido real: «Yek peyna» (La Radio Tomada, CC BY-SA 4.0)]`
 - ⚠ P9: precios, horarios y entrada al país van en la descripción, con fuente oficial y fecha, no en la voz.
 
-## 7 · CIERRE (≈ 7:40-8:30) — la imagen del himno, la pregunta (no un mitin) y el siguiente vídeo (N14(6))
-`[niños de Izalco cantando; si no hay vídeo libre del acto, foto o plano de niños de la cuna con el sonido del himno en náhuat solo si es libre]`
-**S:** En septiembre de 2025, unos niños de una escuela de Izalco cantaron el himno nacional en náhuat dentro de la Asamblea. Según la prensa, era la primera vez que sonaba allí en una lengua indígena.
-`{EL HIMNO, EN NÁHUAT}`
-*(pausa larga, sin voz: el sonido del canto si lo hay; si no, ambiente)*
-**S:** El presidente que cambió El Salvador… ¿cambiará también esto?
-**S:** Lo que falta tiene nombre: una palabra sobre 1932. Una ley. Y náhuat en las escuelas de Sonsonate.
+## 7 · CIERRE (≈ 7:40-8:30) — contesta la pregunta del gancho (N16), sin mitin, y llama al siguiente vídeo (N14(6))
+`[vuelven los niños de Izalco cantando en el Salón Azul, con su sonido real (excepción a F10)]`
+**S:** Del exterminio al himno.
+*(el canto, 2 s sin voz)*
+**S:** Con Bukele, el país ha contado a sus indígenas y les ha dado un día. Lo que sigue esperando tiene nombre: una palabra sobre 1932. Una ley. Y náhuat en las escuelas de Sonsonate.
 `{UNA PALABRA SOBRE 1932}`
-**S (vuelta al gancho, N16):** La frase que daba miedo hoy la dicen niños de cinco años.
-`[la cara del gancho, o un niño de la cuna; vuelve el audio «Naja nitajtaketza nawat»]`
+`[Bukele, CC0, imagen neutra]`
+**S:** El presidente que cambió El Salvador… ¿cambiará también esto?
+*(pausa)*
+`[niños de la cuna, vídeo CC BY]`
+**S (vuelta al gancho, N16):** Mientras, la lengua que sonó en la Asamblea la sostienen unas abuelas. Y niños de cinco años.
 **S (siguiente vídeo, N14(6)):** En el próximo vídeo, otro pueblo que casi borran del mapa.
-- ⚠ «La dicen niños de cinco años»: las cunas son de 3 a 5 años y enseñan a hablar náhuat (S34, S35); es verdad. Si el plano no es de un niño de la cuna, se cambia la imagen, no la frase.
+- **«Contado» y «un día»:** el censo de 2024 y el 9 de agosto (bloque 3). Lo que espera, expediente 4b.
+- ⚠ «Niños de cinco años»: las cunas son de 3 a 5 años (S34, S35); es verdad. Si el plano no es de un niño de la cuna, se cambia la imagen, no la frase.
 - **El siguiente vídeo:** se concreta con Estrategia antes de la voz (la serie Pueblos borrados del mapa u otro largo).
 - **N31:** tras la matanza, el vídeo cierra con el estado actual: el censo, las cunas, los niños.
 - `[tarjeta final (M14) sin «viaje real» + clip de la app]`
 
 ---
 
-## Material por bloque (F9, F10; todo libre y comprobado en el expediente, sección 6)
+## Material por bloque (F9, F10; libre y comprobado en el expediente, sección 6, salvo la excepción de abajo)
 | Bloque | Imagen | Sonido |
 |---|---|---|
-| 0 | Cara de la carátula (la elige Paco) · Feliciano Ama · Guadalupe Estrada | «Naja nitajtaketza nawat» (La Radio Tomada) |
+| 0 | Niños cantando en el Salón Azul (excepción) · Feliciano Ama · Bukele (CC0) | El canto real del himno en náhuat (excepción) |
 | Mapa | Mapa del motor (`mapa-*.cjs`) + SVG del levantamiento | Sintonía |
 | 1 | Café en ladera · Martí · Ama · Hernández Martínez (dominio público) | Música baja → silencio |
 | 2 | Guadalupe Estrada · traje de Tacuba (detalle) · Anastacia López | Sin música |
-| 3 | Funes ⚠ (buscar foto libre; si no, texto) · Bukele (CC0) · rótulos | Música de datos |
+| 3 | Funes ⚠ (buscar foto libre; si no, texto) · Bukele (CC0) · niños de San Juan Talpa (excepción) · rótulos | Música de datos |
 | 4 | Cunas (vídeo CC BY del CCESV / Leslie Ortiz) | Ambiente de la cuna |
 | 5 | Jóvenes grabando · Nahuizalco (TouRuralES) · mapa Pamplona → Nahuizalco | Sintonía corta |
 | 6 | Ruta de las Flores · conmemoración (The World of Suiri) | «Yek peyna» |
-| 7 | Niños de Izalco / de la cuna · la cara del gancho | Himno en náhuat (solo si es libre) |
+| 7 | Niños de Izalco cantando (excepción) · Bukele (CC0) · niños de la cuna | El canto real del himno (excepción) |
 - **Respeto (P4):** si sale Antonia Ramírez, el rótulo dice «ANTONIA RAMÍREZ · †2024», sin relacionar su muerte con nada.
 - **Fuera:** la foto de Ama ahorcado (F9) y los niños desnudos de la foto de 1900 (P4).
-- **⚠ Faltan:** foto libre de Funes y vídeo libre del himno en la Asamblea. Si no aparecen, se cubren con rótulo y plano de la cuna.
+- **⚠ Falta:** foto libre de Funes. Si no aparece, se cubre con rótulo.
+
+### EXCEPCIÓN A F10 SOLO EN ESTE VÍDEO (Paco, 19 nov 2026: «sí, excepción, canto en la Asamblea»)
+- **Qué:** planos y sonido del canto del himno en náhuat en el Salón Azul. Son vídeos oficiales, con la licencia normal de YouTube (no CC):
+  - `vx8crmplcos` · canal de Ernesto Castro, presidente de la Asamblea, 10 sept 2025, 1080p, 68 s («Histórico: Himno Nacional en náhuat en la Asamblea Legislativa»).
+  - `z-g9c9PhJ90` · canal de la Asamblea Legislativa, noticiero del 10 sept 2025, 1080p.
+  - `Jp3vUDO32M8` · canal de la Asamblea Legislativa, noticiero del 3 sept 2026 (San Juan Talpa), 1080p.
+- **Cómo:** trozos cortos (4-5 s en el gancho, unos 3 s en el bloque 3 y en el cierre), siempre con el rótulo de fuente y fecha: {ASAMBLEA LEGISLATIVA · 10 SEPT 2025}. Autor en la descripción y en el comentario fijado (P2).
+- **Riesgo (dicho a Paco):** que la Asamblea o Castro reclamen el vídeo en YouTube. Poco probable, pero existe.
+- Bajados en `salma marketing/el-salvador/asamblea/`.
 
 ## Coste (F5, §8) — nada generado todavía
 - Voz de Salma: unos **5.200 caracteres** de ElevenLabs (con la voz de Salma de los largos). Antes se prueba una frase.
@@ -198,9 +223,9 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 
 ## Repaso contra la checklist
 - **Se cumplen:**
-  - Gancho y orden: G1 · G2 · G3 · M13 · M15/M21 · N2 · N15 · N16 · N17 · N33 (1932 y el miedo, en el primer minuto y medio) · Y3 (título y carátula se reparten la información).
+  - Gancho y orden: G1 · G2 · G3 · M13 · M15/M21 · N2 · N15 · N16 · N17 · N33 (las dos puntas del título en el gancho; el exterminio, en el primer minuto y medio) · Y3 (título y carátula se reparten la información).
   - Narración: N4 · N6 · N11 (fechas solo donde cierran etapa; el resto narrado) · N12 · N14 (1-8) · N20 · N21 · N26 · N28 · N29 · N31 · N32 · M39 · M40 · F11 (mapa entre el gancho y el primer pico; bloque 2 lento entre 1 y 3).
-  - Datos, imágenes y respeto: F2 · F4 · F9 · F10 · P4 · P9.
+  - Datos, imágenes y respeto: F2 · F4 · F9 · F10 (con la excepción de Paco) · P4 · P9.
 - **⚠ Para Estrategia antes de aprobar:**
   1. La cifra de muertos (bloque 1).
   2. La frase opcional de los despidos y las Casas de la Cultura (bloque 3).
@@ -208,3 +233,10 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
   4. La comparación del teatro (bloque 3).
   5. *Nantzin* (bloque 4).
   6. El siguiente vídeo (cierre).
+
+## Fuentes del acto de la Asamblea (nuevas en v2)
+- [H1] La Página, 10 sept 2025, «Por primera vez en la historia suena en la Asamblea Legislativa el himno Nacional en Náhuat». https://lapagina.com.sv/nacionales/por-primera-vez-en-la-historia-suena-en-la-asamblea-legislativa-el-himno-nacional-en-nahuat/
+- [H2] elsalvador.com, 12 sept 2025. https://www.elsalvador.com/noticias/nacional/himno-el-salvador-nahuat/1242187/2025/
+- [H3] Ernesto Castro (YouTube, 10 sept 2025): «El himno nacional sonó en la Asamblea Legislativa, por primera vez, en náhuat». https://www.youtube.com/watch?v=vx8crmplcos · Asamblea Legislativa, noticiero del 10 sept 2025: https://www.youtube.com/watch?v=z-g9c9PhJ90
+- [H4] Wikipedia (es), *Himno Nacional de El Salvador*: el 1 sept 2009, en Suchitoto, el coro de la misma escuela ya lo cantó en náhuat.
+- [H5] Asamblea Legislativa, noticiero del 3 sept 2026 (San Juan Talpa). https://www.youtube.com/watch?v=Jp3vUDO32M8
