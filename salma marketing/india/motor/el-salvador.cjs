@@ -25,68 +25,73 @@ const ruta = n => { const c = [`${ES}/fotos/${n}.jpg`, `${ES}/fotos/${n}.png`, `
 const aspecto = f => { if (process.env.SOLO_TEXTO) return 1.5; const r = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r.stderr || '').match(/(\d{2,5})x(\d{2,5})/); return m ? m[1] / m[2] : 1.5; };
 let panN = 0;
 // M12 (Paco, 16 nov 2026): FOTOS QUIETAS, sin barridos ni Ken Burns. Las más estrechas que 16:9 llevan un encuadre FIJO a todo el ancho, con la cara dentro (v[0] = altura de la cara, mirada foto a foto)
-const F = (n, sc = 'GP', o = {}) => { const f = ruta(n), estrecha = aspecto(f) < 1.69, v = o.v || (panN++ % 2 ? [0.6, 0.3] : [0.2, 0.6]);
-  const { v: _, ...resto } = o; return { a: 'FILE:' + uso(f), sc, ...(estrecha && !o.pan ? { pan: [0.5, v[0], 0.5, v[0]], z: 0 } : {}), ...resto }; };
+// Encuadre mirado FOTO A FOTO (19 nov, tras Paco: «fotos cortadas»): posición vertical de la ventana 16:9 (0 = arriba, 1 = abajo) para que la cabeza entre entera
+const Y = { AMA: 0, AMA2: 0.28, BUKELE4: 0.17, CORETO: 0.16, FUNES: 0.23, GRABA31: 0.5, GRABA53: 0.6, MARTI: 0.2, MARTINEZ: 0.28, SIXTA1: 0, anastacia: 0.05, 'bukele-1': 0.16, 'bukele-2': 0.23, 'bukele-3': 0.26, e: 0, elva: 0.05, f: 0.19, guadalupe: 0, l: 0.58, tacuba: 0.05,
+  'QUIETO-hombre-sombrero': 0.2, 'QUIETO-abuela-2': 0.2, 'QUIETO-abuela-3': 0.2, 'QUIETO-abuela-sentada': 0.3 };
+// M12 (Paco, 19 nov 2026: «movimiento suave»): las más estrechas que 16:9 se desplazan un poco (≈8 %) y TERMINAN en el encuadre de la cara; las horizontales, acercamiento lento (cfg.kb)
+const F = (n, sc = 'GP', o = {}) => { const f = ruta(n), estrecha = aspecto(f) < 1.69; const y = o.y ?? Y[n] ?? 0.45, y0 = Math.min(1, y + 0.08);
+  const { y: _, v: __, ...resto } = o; return { a: 'FILE:' + uso(f), sc, ...(estrecha && !o.pan ? { pan: [0.5, y0, 0.5, y], z: 0 } : {}), ...resto }; };
 const BN = (n, sc = 'GP', o = {}) => F(n, sc, { look: 'trix', ...o }); // archivo histórico en blanco y negro (M4)
 const durClip = f => { const r = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r.stderr || '').match(/Duration: (\d+):(\d+):([\d.]+)/); return m ? +m[1] * 3600 + +m[2] * 60 + +m[3] : 5; };
 const V = (n, sc = 'GP') => { const f = `${ES}/clips/${n}.mp4`; if (!fs.existsSync(f)) throw new Error('no existe el clip ' + n); return { a: 'FILE:' + uso(f), sc, cap: durClip(f) - 0.2 }; };
 const MAPA = n => ({ a: 'FILE:' + uso(`${ES}/mapas/mapa-${n}.mp4`), sc: 'GP', cap: 5.3, fijo: 5.3 });
 const CANTO = 'SFX_es-canto'; // sfx/es-canto.mp3 = clips/canto-audio.wav (el fondo no admite rutas FILE:)
 const A = { VI: { src: 'SFX_viento-libre', db: -36 }, PAJ: { src: 'SFX_pajaros-libre', db: -36 }, NOCHE: { src: 'SFX_noche-calma', db: -34 }, CANTO: (ss, db = -16) => ({ src: CANTO, ss, db }) };
-const C = (word, text, sub = '', dur = 2) => ({ word, text, sub, dur });
+const tam = t => Math.min(200, Math.floor(1680 / (t.length * 0.56)));
+const C = (word, text, sub = '', dur = 2) => ({ word, text, sub, dur, size: tam(text) });
 const R74 = { CANTO25: 'ASAMBLEA LEGISLATIVA · 10 SEPT 2025', MEMORIA: 'NAHUIZALCO · MEMORIA DE 1932 · 2017' };
 
 // [imágenes, opciones] por frase del guion (49). preg = la pregunta del bloque en grande (N13), como en Tuvalu.
 const P = [
-  /*0 gancho*/[[V('canto-ninas', 'PP')], { id: 'g0', amb: A.CANTO(3.2, -14), rotulo: R74.CANTO25 }],
-  /*1*/[[V('canto-cerca-2', 'PM')], { id: 'g1', amb: A.CANTO(7.5, -16) }],
-  /*2*/[[BN('AMA', 'PP'), F('elva', 'PP', { v: [0.15, 0.5] })], { id: 'g2', amb: A.VI, cifra: [C('1932', '1932', 'LA MATANZA', 1.8)] }],
-  /*3*/[[F('bukele-2', 'PM', { v: [0.1, 0.4] }), V('canto-ninos-3', 'GP')], { id: 'g3', amb: A.VI, cifra: [C('vez', 'PRIMERA VEZ', 'EL HIMNO EN NÁHUAT, EN LA ASAMBLEA', 2.2)] }],
-  /*4*/[[F('bukele-3', 'PP', { v: [0.1, 0.35] })], { id: 'g4', amb: A.VI, pause: 0.8 }],
+  /*0 gancho*/[[V('canto-ninas', 'PP')], { id: 'g0', amb: A.CANTO(4.4, -34), rotulo: R74.CANTO25 }],
+  /*1*/[[V('canto-cerca-2', 'PM')], { id: 'g1', amb: A.CANTO(8.5, -34) }],
+  /*2*/[[BN('AMA', 'PP'), F('elva', 'PP')], { id: 'g2', amb: A.VI, cifra: [C('1932', '1932', 'LA MATANZA', 1.8)] }],
+  /*3*/[[F('bukele-2', 'PM'), V('bus', 'PM'), V('canto-ninos-3', 'GP')], { id: 'g3', amb: A.VI, cifra: [C('vez', 'PRIMERA VEZ', 'EL HIMNO EN NÁHUAT, EN LA ASAMBLEA', 2.2)] }],
+  /*4*/[[F('bukele-3', 'PP')], { id: 'g4', amb: A.VI, pause: 0.8 }],
   /*5 1932*/[[BN('CAFE1927'), BN('CAFE2', 'PM')], { id: 'matanza', preg: ['¿QUÉ PASÓ EN 1932?'], amb: A.VI, rotulo: 'PLANTACIÓN DE CAFÉ · EL SALVADOR, 1927' }],
-  /*6*/[[F('MAPA1932')], { amb: A.NOCHE, cifra: [C('veintidós', '22 DE ENERO', '1932', 2)] }],
+  /*6*/[[F('MAPA1932'), BN('IZALCO', 'PM')], { amb: A.NOCHE, cifra: [C('veintidós', '22 DE ENERO', '1932', 2)] }],
   /*7*/[[BN('MARTI', 'PP'), BN('AMA2', 'PP')], { amb: A.VI }],
-  /*8*/[[BN('IZALCO')], { amb: A.VI, cifra: [C('Matanza', '«LA MATANZA»', '', 1.8)] }],
-  /*9*/[[BN('MARTINEZ', 'PP'), F('tacuba', 'PP', { v: [0.1, 0.5] })], { amb: A.VI }],
+  /*8*/[[V('velas-2'), V('ramas-2', 'PM')], { amb: A.VI, cifra: [C('Matanza', '«LA MATANZA»', '', 1.8)] }],
+  /*9*/[[BN('MARTINEZ', 'PP'), F('tacuba', 'PM')], { amb: A.VI }],
   /*10*/[[BN('IZALCO2')], { amb: A.VI, pause: 1.2 }],
   /*11*/[[V('velas'), V('ofrenda', 'PM')], { amb: A.NOCHE, rotulo: R74.MEMORIA, cifra: [C('mil', '10.000-30.000', 'SEGÚN LOS HISTORIADORES', 2.4)], pause: 1.0 }],
-  /*12 escondieron*/[[F('guadalupe', 'PP', { v: [0.1, 0.4] })], { id: 'escondieron', preg: ['¿POR QUÉ SE ESCONDIERON?'], amb: A.PAJ, rotulo: 'GUADALUPE ESTRADA · SONSONATE', pause: 0.8 }],
-  /*13*/[[F('e', 'PM')], { amb: A.PAJ, pause: 0.8 }],
+  /*12 escondieron*/[[F('guadalupe', 'PP')], { id: 'escondieron', preg: ['¿POR QUÉ SE ESCONDIERON?'], amb: A.PAJ, rotulo: 'GUADALUPE ESTRADA · SONSONATE', pause: 0.8 }],
+  /*13*/[[F('e', 'PM'), V('alfarera-2', 'GP')], { amb: A.PAJ, pause: 0.8 }],
   /*14*/[[F('h', 'PM'), V('alfarera', 'GP')], { amb: A.PAJ, pause: 0.8 }],
-  /*15*/[[V('abuela-2', 'PP')], { amb: A.PAJ, pause: 1.2 }],
-  /*16*/[[V('hombre-sombrero', 'PP')], { amb: A.PAJ, pause: 0.8 }],
-  /*17*/[[F('anastacia', 'PP', { v: [0.1, 0.4] }), F('l', 'PP', { v: [0.2, 0.5] })], { amb: A.PAJ, rotulo: 'ANASTACIA LÓPEZ · SANTO DOMINGO DE GUZMÁN', cifra: [C('nueve', '9 AÑOS', 'EL CASTELLANO, DESPUÉS', 2)], pause: 0.8 }],
-  /*18*/[[V('abuela-habla', 'PP'), V('abuela-3', 'PP')], { amb: A.PAJ, pause: 1.0 }],
-  /*19 país*/[[F('FUNES', 'PM')], { id: 'pais', preg: ['¿QUÉ HA HECHO EL PAÍS?'], amb: A.VI, cifra: [C('2010', 'PRIMER PERDÓN', '2010', 2)] }],
+  /*15*/[[F('QUIETO-abuela-2', 'PP')], { amb: A.PAJ, pause: 1.2 }],
+  /*16*/[[F('QUIETO-hombre-sombrero', 'PP')], { amb: A.PAJ, pause: 0.8 }],
+  /*17*/[[F('anastacia', 'PP'), F('l', 'PM')], { amb: A.PAJ, rotulo: 'ANASTACIA LÓPEZ · SANTO DOMINGO DE GUZMÁN', cifra: [C('nueve', '9 AÑOS', 'EL CASTELLANO, DESPUÉS', 2)], pause: 0.8 }],
+  /*18*/[[F('QUIETO-abuela-3', 'PP')], { amb: A.PAJ, pause: 1.0 }],
+  /*19 país*/[[F('FUNES', 'PM'), V('fuego-3', 'GP')], { id: 'pais', preg: ['¿QUÉ HA HECHO EL PAÍS?'], amb: A.VI, cifra: [C('2010', 'PRIMER PERDÓN', '2010', 2)] }],
   /*20*/[[F('SALON2016')], { amb: A.VI, cifra: [C('frase', 'ARTÍCULO 63', 'CONSTITUCIÓN · 2014', 2.2)] }],
-  /*21*/[[F('BUKELE4', 'PM')], { amb: A.VI, cifra: [C('agosto', '9 DE AGOSTO', 'DÍA NACIONAL DE LOS PUEBLOS INDÍGENAS', 2.4)] }],
+  /*21*/[[F('BUKELE4', 'PM'), BN('CRISTOS', 'GP', { look: 'portra' })], { amb: A.VI, cifra: [C('agosto', '9 DE AGOSTO', 'DÍA NACIONAL DE LOS PUEBLOS INDÍGENAS', 2.4)] }],
   /*22*/[[V('ninos-entran'), V('talpa')], { amb: A.VI, cifra: [C('siguiente', 'OTRA VEZ', 'ASAMBLEA LEGISLATIVA · 3 SEPT 2026', 2.4)] }],
   /*23*/[[F('j'), F('c', 'PM')], { amb: A.PAJ }],
   /*24*/[[F('d', 'PM')], { amb: A.PAJ, cifra: [C('mil', '68.148', '×5 DESDE 2007', 2.2)] }],
   /*25*/[[F('CORETO', 'PM')], { amb: A.PAJ, cifra: [C('cien', '1.135', 'HABLANTES · CENSO 2024', 2.2)] }],
   /*26*/[[F('GRABA07')], { amb: A.PAJ }],
   /*27*/[[V('ramas')], { amb: A.VI, pause: 0.5 }],
-  /*28*/[[V('fuego-1'), V('fuego-2', 'PM')], { amb: A.NOCHE, cifra: [C('169', 'SIN LEY · SIN CONVENIO 169', '', 2.6)], pause: 1.0 }],
-  /*29 cunas*/[[F('f', 'PP', { v: [0.1, 0.4] })], { id: 'cunas', preg: ['¿QUÉ PASÓ CON LAS CUNAS?'], amb: A.PAJ, rotulo: 'PAULA LÓPEZ · MAESTRA DE NÁHUAT · 1959-2016', pause: 0.8 }],
+  /*28*/[[V('fuego-1'), V('olla-cerca', 'D'), V('fuego-2', 'PM')], { amb: A.NOCHE, cifra: [C('169', 'SIN LEY · SIN CONVENIO 169', '', 2.6)], pause: 1.0 }],
+  /*29 cunas*/[[F('f', 'PP')], { id: 'cunas', preg: ['¿QUÉ PASÓ CON LAS CUNAS?'], amb: A.PAJ, rotulo: 'PAULA LÓPEZ · MAESTRA DE NÁHUAT · 1959-2016', pause: 0.8 }],
   /*30*/[[F('ELSA', 'PP')], { amb: A.PAJ, cifra: [C('nantzin', 'LAS ABUELAS MAESTRAS', '', 2)], pause: 0.8 }],
   /*31*/[[F('GRABA14')], { amb: A.PAJ, cifra: [C('seiscientos', '+600 NIÑOS', 'DESDE 2010', 2)] }],
-  /*32*/[[V('abuela-sentada')], { amb: A.PAJ }],
+  /*32*/[[F('QUIETO-abuela-sentada', 'PM')], { amb: A.PAJ }],
   /*33*/[[V('ollas')], { amb: A.PAJ, cifra: [C('cinco', '13 → 5', 'MAESTRAS', 2.2)], pause: 1.0 }],
   /*34*/[[V('barro-manos', 'PP')], { amb: A.PAJ, pause: 0.8 }],
-  /*35 ayuda*/[[F('GRABA18')], { id: 'ayuda', preg: ['¿QUIÉN LES AYUDA A VOLVER?'], amb: A.PAJ }],
-  /*36*/[[F('GRABA31', 'PM')], { amb: A.PAJ, cifra: [C('Wikipedia', 'WIKIPEDIA EN NÁHUAT', 'FEBRERO DE 2026', 2.2)] }],
+  /*35 ayuda*/[[F('GRABA18'), F('GRABA48', 'PM')], { id: 'ayuda', preg: ['¿QUIÉN LES AYUDA A VOLVER?'], amb: A.PAJ }],
+  /*36*/[[F('GRABA31', 'PM'), F('WIKI_TALLER', 'PM')], { amb: A.PAJ, cifra: [C('Wikipedia', 'WIKIPEDIA EN NÁHUAT', 'FEBRERO DE 2026', 2.2)] }],
   /*37*/[[F('NAHUI2')], { amb: A.PAJ, cifra: [C('diecisiete', '17 NIÑOS', 'DE 3 A 5 AÑOS', 2)] }],
   /*38*/[[MAPA('pamplona')], { amb: A.VI, pause: 0.5 }],
   /*39*/[[F('PAMPLONA')], { amb: A.VI }],
-  /*40*/[[F('GRABA48')], { amb: A.PAJ }],
+  /*40*/[[F('GRABA53', 'PM')], { amb: A.PAJ }],
   /*41 visitar*/[[F('RUTA')], { id: 'visitar', preg: ['¿SE PUEDE VISITAR?'], amb: A.PAJ }],
-  /*42*/[[F('NAHUIZALCO'), BN('CRISTOS', 'PM')], { amb: A.PAJ, cifra: [C('veintidós', 'IZALCO · 22 DE ENERO', 'SE RECUERDA EL LEVANTAMIENTO', 2.2)] }],
+  /*42*/[[F('NAHUIZALCO')], { amb: A.PAJ, cifra: [C('veintidós', 'IZALCO · 22 DE ENERO', 'SE RECUERDA EL LEVANTAMIENTO', 2.2)] }],
   /*43*/[[F('SIXTA1', 'PP')], { amb: A.PAJ }],
-  /*44 cierre*/[[V('canto-sala', 'PM')], { id: 'cierre', amb: A.CANTO(0, -12), pause: 0.8 }],
-  /*45*/[[F('bukele-1', 'PM', { v: [0.1, 0.35] })], { amb: A.VI, cifra: [C('1932', 'UNA PALABRA SOBRE 1932', '', 2.2)] }],
+  /*44 cierre*/[[V('canto-sala', 'PM')], { id: 'cierre', amb: A.CANTO(0, -32), pause: 0.8 }],
+  /*45*/[[F('bukele-1', 'PM'), V('ninos-pasillo', 'GP'), V('talpa-2', 'PM')], { amb: A.VI, cifra: [C('1932', 'UNA PALABRA SOBRE 1932', '', 2.2)] }],
   /*46*/[[V('salon-azul-fuera')], { amb: A.VI, pause: 1.0 }],
   /*47*/[[F('GRABA38'), V('ninos-saludan', 'PM')], { amb: A.PAJ }],
-  /*48*/[[F('GRABA53')], { amb: A.PAJ }],
+  /*48*/[[V('manos-olla', 'PP')], { amb: A.PAJ }],
 ];
 if (P.length !== textos.length) throw new Error('reparto de imágenes: ' + P.length + ' frente a ' + textos.length + ' frases');
 
@@ -119,21 +124,23 @@ const VOZ = (de, a, ss, db = -10) => ({ de: { b: de }, a: { b: a, fin: 1, off: 0
 const musica = { src: 'SFX_fading-shoreline', ratio: 3, trozos: [VOZ('matanza', 'f9', 16), VOZ('pais', 'f29', 48), VOZ('ayuda', 'f43', 24), VOZ('f46', 'f49', 110, -8)] };
 const blocks = [];
 const cfg = {
-  titulo: 'INDÍGENAS DE EL SALVADOR', formato: '16:9', id: 'el-salvador-v1', out: ES + '/salida', ultima: ES + '/ULTIMA', ultimaNombre: 'indigenas-de-el-salvador-del-exterminio-a-cantar-el-himno',
+  titulo: 'INDÍGENAS DE EL SALVADOR', formato: '16:9', id: 'el-salvador-v2', out: ES + '/salida', ultima: ES + '/ULTIMA', ultimaNombre: 'indigenas-de-el-salvador-del-exterminio-a-cantar-el-himno',
   look: 'portra', counter: 'EL SALVADOR', voices: { salma: SALMA_DOC }, musica, sintonia: { src: 'SFX_sintonia-pueblos', db: -8, dbVoz: -14, mapas: true }, rotuloSegs: 4,
   seguir: [{ en: 'g4', texto: 'Si te está gustando, suscríbete' }, { en: 'pais', texto: 'Hay más documentales: suscríbete' }, { en: 'visitar', texto: 'Guárdalo y compártelo' }],
-  cardSecs: 8, kb: 0, voiceDb: { salma: -25 }, duckRatio: 5, gap: { same: 0.3, change: 0.6 },
+  cardSecs: 8, kb: 0.8, voiceDb: { salma: -25 }, duckRatio: 5, gap: { same: 0.3, change: 0.6 },
   portada: { png: ES + '/caratula/ENTREGA/caratula-el-salvador-1920.png' }, // A4-fila, aprobada por Paco (19 nov, chat de Carátulas)
-  descartes: { M10: 'borrador: los subtítulos EN se hacen cuando Paco apruebe el montaje (Y10)', M14: 'Paco no ha estado: sin «Basado en un viaje real» (F2)' },
+  descartes: { M12: 'Paco, 19 nov 2026: «movimiento suave» (M12 actualizada): acercamiento lento y desplazamiento corto que termina en la cara; el informe aún marca ❌ con kb > 0', M10: 'borrador: los subtítulos EN se hacen cuando Paco apruebe el montaje (Y10)', M14: 'Paco no ha estado: sin «Basado en un viaje real» (F2)' },
   card: { l1: 'INDÍGENAS DE EL SALVADOR', l2: 'DEL EXTERMINIO AL HIMNO', l3: 'ÚNETE · SUSCRÍBETE', l4: '▼ Mira el vídeo relacionado', l5: 'Borrado del Mapa' },
   blocks,
 };
 (async () => {
   const frases = []; for (let i = 0; i < textos.length; i++) { const v = await voice(voz(textos[i]), SALMA_DOC); frases.push(frase(textos[i], P[i][0], P[i][1], v.al)); }
   // gancho: 3,2 s del canto real antes de la primera frase (G1, M15: caras desde el fotograma 0); mapa del occidente tras el gancho (M40, S3)
-  const canto0 = { id: 'canto0', video: `${ES}/clips/canto0-30.mp4`, fixed: 3.2, audioFile: `${ES}/clips/canto-audio.wav`, gainAudio: -4, amb: { ...A.VI, db: -60, ss: 0 } };
+  const canto0 = { id: 'canto0', video: `${ES}/clips/canto0-30.mp4`, fixed: 4.4, audioFile: `${ES}/clips/canto-audio.wav`, gainAudio: -4, amb: { ...A.VI, db: -60, ss: 0 } };
   const mapa = { id: 'mapa', video: `${ES}/mapas/mapa-occidente.mp4`, fixed: 5.5, amb: { ...A.VI, ss: 0 } };
   const iMat = frases.findIndex(b => b.id === 'matanza');
+  const vozAbuela = { id: 'abuela', video: `${ES}/clips/abuela-voz-30.mp4`, fixed: 5.3, audioFile: `${ES}/clips/abuela-voz.wav`, gainAudio: 2, amb: { ...A.PAJ, db: -60, ss: 0 } };
+  const iHab = frases.findIndex(b => b.text.startsWith('Hablarlo fuera de casa')); frases.splice(iHab + 1, 0, vozAbuela);
   blocks.push(canto0, ...frases.slice(0, iMat), mapa, ...frases.slice(iMat));
   blocks.push({ id: 'app', video: ROOT + '/salma marketing/pueblos/comun/clip-app-16x9.mp4', fixed: 5.9, amb: { ...A.PAJ, db: -40, ss: 0 } });
   console.log('PLANOS', blocks.reduce((a, b) => a + (b.shots || []).length, 0));
