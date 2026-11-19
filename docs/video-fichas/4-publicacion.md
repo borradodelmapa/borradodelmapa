@@ -33,7 +33,6 @@ Versión: 19 nov 2026.
 ## Programar
 - **P10** YouTube se programa en Studio y Metricool solo se usa para TikTok, mirando antes cuántas publicaciones quedan del mes.
 - **P13** Shorts de martes a jueves y largos de viernes a lunes, a las 10:00. TikTok va en los días de los shorts. Un vídeo por día. El motor avisa si no cuadra.
-- **S10** La misma pista de música no puede salir dos veces en la misma semana. El motor lo comprueba.
 - **Y1** Antes de programar se repasan título, descripción, etiquetas, capítulos, miniatura, lista y pantalla final.
 - **Y17** En los largos, tres carátulas en «Probar y comparar» de Studio en cuanto se pueda.
 - **Comentario** Una sola tarea programada por vídeo para fijar el comentario.

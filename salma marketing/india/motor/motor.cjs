@@ -147,7 +147,7 @@ async function build(cfg) {
   const clips = []; let nclip = 0, kbN = 0; const cacheN = { 'caché': 0, nuevo: 0 };
   const tow = (b, from) => { const i = b.text.indexOf(from); if (i < 0) throw new Error(`no encuentro «${from}» en el bloque ${b.id}`); const wi = b.text.slice(0, i).split(' ').length - 1; const sp = (b.voz || b.text).split(' '); let p = 0; for (let q = 0; q < wi; q++) p += sp[q].length + 1; return b.v.al.st[Math.min(p, b.v.al.st.length - 1)]; };
   for (const b of cfg.blocks) {
-    if (b.video) { clips.push({ file: b.video, d: b.D, raw: true }); continue; }
+    if (b.video) { let fv0 = b.video; const dv = dur(fv0); if (dv > b.D + 0.05) { fv0 = `${W}/raw_${b.id}.mp4`; run(['-i', b.video, '-t', b.D.toFixed(3), '-an', '-c:v', 'libx264', ...Q.plano, '-r', '30', '-pix_fmt', 'yuv420p', fv0]); } clips.push({ file: fv0, d: b.D, raw: true }); (cfg._raw = cfg._raw || []).push({ id: b.id, D: b.D, dur: dur(fv0) }); continue; } // M14 (T29, 19 nov 2026): el vídeo crudo se recorta a su duración para que no empuje la tarjeta fuera (fallo de los aché v3)
     const S = b.shots; const starts = S.map((s, k) => k === 0 ? 0 : Math.max(0.9, b.lead + tow(b, s.from) - 0.06));
     for (let k = 1; k < S.length; k++) if (starts[k] < starts[k - 1] + 0.9) starts[k] = starts[k - 1] + 0.9;
     if (b.golpe) { const kg = S.findIndex(x => x.from === b.golpe.en); if (kg >= 0) b._golpeT = b.t0 + starts[kg]; }
@@ -156,7 +156,9 @@ async function build(cfg) {
       console.log('PLANO ' + n); const frames = Math.round(d * 30); const last = k === S.length - 1;
       const fadeV = (b.scene && k === 0 ? `,fade=t=in:st=0:d=0.3` : '') + (b.sceneEnd && last ? `,fade=t=out:st=${Math.max(0, d - 0.3).toFixed(2)}:d=0.3` : '');
       const lk = LOOKS[s.look || b.look || cfg.look || 'portra']; const norm = isVideo(s.a) ? '' : normFilter(f);
-      const tail = lk.plain ? `,format=yuv420p${fadeV}` : `${norm},${lk.tone},noise=alls=${lk.grain}:allf=t+u,vignette=PI/6,format=yuv420p${fadeV}`;
+      const emo = s.emocion || b.emocion, EMO = { calida: ',colorbalance=rm=0.035:gm=0.01:bm=-0.035:rh=0.03:bh=-0.03', fria: ',colorbalance=rm=-0.03:bm=0.035:rh=-0.02:bh=0.03,eq=saturation=0.9' }; // M23 (T29): temperatura de color por bloque (marca emocion: calida | fria), encima del look de M4
+      const pico = !!(s.pico || (b.pico && k === (b.picoPlano ?? S.length - 1))); // M27 (T29): en el plano marcado pico (por defecto el último del bloque pico), el fondo se oscurece con una viñeta fuerte para que el ojo vaya a la cara
+      const tail = lk.plain ? `,format=yuv420p${fadeV}` : `${norm},${lk.tone}${EMO[emo] || ''},noise=alls=${lk.grain}:allf=t+u,vignette=${pico ? 'PI/3.2' : 'PI/6'},format=yuv420p${fadeV}`;
       if (isVideo(s.a)) {
         let loopV = [];
         let ss = s.ss || 0, fin = f; const td = dur(f);
@@ -194,10 +196,14 @@ async function build(cfg) {
         }
         cacheN[runPlano([...pin, '-vf', vf, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
-      clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra' });
+      clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra', foto: !isVideo(s.a), t: s._t, emo, pico, n: S.length, pan: s.pan });
     });
   }
   console.log(`Planos: ${cacheN.nuevo} hechos ahora, ${cacheN['caché']} reutilizados de la caché`);
+  // G2 (T29): segundo en que suena por primera vez el nombre del pueblo o lugar (cfg.nombre: texto o lista), con los tiempos de palabra de la voz
+  { const noms = [].concat(cfg.nombre || []).map(x => String(x).toLowerCase()); cfg._nombreT = null;
+    if (noms.length) for (const b of cfg.blocks) { if (!b.text || cfg._nombreT != null) continue; const lt = b.text.toLowerCase(); let best = -1; noms.forEach(n => { const i = lt.indexOf(n); if (i >= 0 && (best < 0 || i < best)) best = i; }); if (best < 0) continue; const wi = b.text.slice(0, best).split(' ').length - 1; const sp = (b.voz || b.text).split(' '); let p = 0; for (let q = 0; q < wi; q++) p += sp[q].length + 1; cfg._nombreT = b.t0 + b.lead + b.v.al.st[Math.min(p, b.v.al.st.length - 1)]; } }
+  cfg._cardT = cardT; cfg._F = F;
   reglas(cfg, TOTAL, OUT);
   // tarjeta final
   const card = `${W}/card.mp4`;
@@ -240,7 +246,7 @@ async function build(cfg) {
       });
       srt.push({ a: t0, e: tEnd, t: ph.ks.map(i => toks[i].w).join(' ') });
     });
-    [].concat(b.cifra || []).forEach(c0 => { const k = toks.find(x => x.w.replace(/[^A-Za-z0-9áéíóúñ]/gi, '').toLowerCase() === c0.word.toLowerCase()); const t0 = T(k ? k.s : 0); nums.push({ ...c0, t0, t1: t0 + (c0.dur || 3) }); }); // cifra: una o varias por bloque
+    [].concat(b.cifra || []).forEach(c0 => { const k = toks.find(x => x.w.replace(/[^A-Za-z0-9áéíóúñ]/gi, '').toLowerCase() === c0.word.toLowerCase()); const t0 = T(k ? k.s : 0) + (c0.retraso ?? cfg.cifraRetraso ?? 0.5); nums.push({ ...c0, t0, t1: t0 + (c0.dur || 3) }); (cfg._cifras = cfg._cifras || []).push({ blk: b.id, word: c0.word, encontrada: !!k, palabraT: T(k ? k.s : 0), t0 }); }); // M30 (T29): la cifra entra 0,5 s DESPUÉS de decir la palabra (c0.retraso o cfg.cifraRetraso para cambiarlo) // cifra: una o varias por bloque
     // subtítulos en inglés (pista .srt aparte): b.en = una frase por cada frase española (corte en . ? !)
     if (b.en) { const sents = []; let cs = []; toks.forEach(k => { cs.push(k); if (/[.?!…]$/.test(k.w)) { sents.push(cs); cs = []; } }); if (cs.length) sents.push(cs); sents.forEach((s, i) => { if (b.en[i]) srtEn.push({ a: T(s[0].s) - 0.05, e: T(s[s.length - 1].e) + 0.12, t: b.en[i] }); }); }
   }
@@ -347,7 +353,7 @@ async function build(cfg) {
   const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='${cntOn}'` : '';
   // s.etiqueta: cartel propio de un plano en el sitio del de esquina (p. ej. «FOTO REAL · 1899 · COLOREADA»); solo mientras dura ese plano
   const etq = cfg.blocks.flatMap(b => (b.shots || []).filter(s => s.etiqueta && s._t != null)).map(s => `drawtext=fontfile='${IMPACT}':text='${esc(s.etiqueta)}':fontsize=46:fontcolor=white:box=1:boxcolor=0x222222@0.85:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='between(t,${s._t.toFixed(2)},${(s._t + s._d).toFixed(2)})'`);
-  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + 0.4).toFixed(2)},${(cfg.rotuloSegs ? Math.min(b.t0 + 0.4 + cfg.rotuloSegs, b.t0 + b.D - 0.3) : b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
+  const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + (cfg.rotuloRetraso ?? 0.5)).toFixed(2)},${(cfg.rotuloSegs ? Math.min(b.t0 + 0.4 + cfg.rotuloSegs, b.t0 + b.D - 0.3) : b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s (uno por cada elemento de SGL)
   let sgIn = [];
   const avisos = SGL.map((SG, i) => {
@@ -398,7 +404,7 @@ async function build(cfg) {
   // carpeta ÚLTIMA (cfg.ultima): siempre la versión más reciente con nombre fijo, para no tener que buscar entre v1, v2, -editor… (Paco, 31 oct 2026: «me tienes un follón montado»)
   if (cfg.ultima) {
     const U = cfg.ultima, nom = cfg.ultimaNombre || cfg.id; fs.mkdirSync(U, { recursive: true });
-    [['.mp4', '.mp4'], ['-portada.png', ' - PORTADA.png'], ['-subtitulos-es.srt', ' - subtitulos ES.srt'], ['-subtitulos-en.srt', ' - subtitulos EN.srt'], ['-informe-reglas.txt', ' - informe de reglas.txt']].forEach(([a, b]) => {
+    [['.mp4', '.mp4'], ['-portada.png', ' - PORTADA.png'], ['-subtitulos-es.srt', ' - subtitulos ES.srt'], ['-subtitulos-en.srt', ' - subtitulos EN.srt'], ['-informe-reglas.txt', ' - informe de reglas.txt'], ['-acta.txt', ' - acta (parte del motor).txt']].forEach(([a, b]) => {
       const f = `${OUT}/${cfg.id}${a}`; if (fs.existsSync(f)) try { fs.copyFileSync(f, `${U}/${nom}${b}`); } catch (e) { console.log('No pude copiar a ÚLTIMA (¿lo tienes abierto?):', e.message); } });
     fs.writeFileSync(`${U}/VERSION.txt`, `${cfg.id} · ${PUB ? 'CALIDAD MÁXIMA (para publicar)' : 'borrador (rápido)'} · montado el ${new Date().toLocaleString('es-ES')}\n`);
   }

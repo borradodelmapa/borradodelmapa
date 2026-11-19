@@ -23,4 +23,3 @@ Versión: 19 nov 2026.
 - **S4** Un sonido creado nunca se presenta como sonido real del lugar. Mantras, oraciones y voces reales no se simulan.
 - **S5 · 👂** La música la elige Paco de oído. En los largos va por trozos: bajo la voz, solo lo que no lleva melodía; la melodía, donde Salma calla; primero se oye el lugar y después la música; nada de música en lo más duro.
 - **S6** El tempo del trozo, según el tramo: más vivo en el pico y más lento en lo íntimo.
-- **S10** No repetir la misma pista en dos vídeos de la misma semana: se mira el registro de publicaciones antes de elegirla. El motor también lo comprueba.

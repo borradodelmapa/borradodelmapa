@@ -33,20 +33,17 @@ Versión: 19 nov 2026 (sacada de la checklist del 19 nov · 23:00). Si la checkl
 - **F3** Guion de dirección por escena, aprobado por Paco antes de la voz: emoción, imagen concreta, quién habla, sonido dominante, IA sí/no.
 - **G1** Los 20 primeros segundos se diseñan aparte y Paco los aprueba primero. El gancho acaba en el sígueme (20 s).
 - **N2** Gancho en los primeros 5 s, útil desde el fotograma 0: pregunta o imagen concreta.
-- **G2** El nombre del lugar o del protagonista se DICE en voz antes del segundo 5, no solo en rótulo. (El motor lo comprueba.)
 - **G3** La frase de apertura literal cambia de un episodio a otro de la misma serie.
 - **N15** Justo después del gancho, una frase de promesa concreta (un dato o imagen real del vídeo), no un «te lo cuento» vacío.
 - **N16** Algo sin resolver desde el segundo 1 que solo se cierra al final. Verdad, sin alarmismo, y siempre se cierra.
 - **M1** Estructura: gancho → mapa → desarrollo alternando escalas → pico → ficha rápida → cierre lento → tarjeta.
 - **N9** Shorts: gancho → contexto → viaje → dato clave → cierre con dato o «continuará» → tarjeta.
-- **N10** Shorts ≤ 60 s contando todo; lo que no cabe va al blog o al largo. (El motor lo comprueba.)
 - **N27** El short que es avance de un largo cierra con una pregunta concreta que el largo contesta.
 - **N14 (1)** Cada bloque abre en sus 3 primeros segundos con el cambio, la amenaza o el beneficio; el dato duro, después.
 - **N14 (2)** La última frase de un bloque vende el siguiente con un dato real de ese bloque.
 - **N14 (5)** Antes de un bloque denso, una frase dice por qué merece la pena quedarse.
 - **N14 (6)** Cierre con llamada al siguiente vídeo; nada de «eso es todo» ni pantalla negra.
 - **N14 (7)** Contraste buena/mala noticia cuando el dato lo tiene.
-- **F11** Dos picos nunca seguidos: un tramo neutro entre medias. (Marcar los picos; el motor lo comprueba.)
 - **M20** En los largos, un tramo tranquilo (ambiente, sin música, sin cortes rápidos) antes del tramo más fuerte. No aplica a shorts.
 - **M39** En los largos, al volver a un lugar o persona de hace minutos, una frase o rótulo que lo recuerde.
 - **M40** Al empezar un bloque en un lugar nuevo, un plano general breve antes de los detalles, si existe.
@@ -81,4 +78,5 @@ Sin estas marcas, el motor no puede aplicar sus reglas. Cada escena del guion di
 - `advertencia` → zoom de énfasis (N14-10).
 - `humano` → tramo más lento y sin música (N14-4).
 - `cambioTono` → respiro en la música antes (S8).
-- `nombre` (en la cabecera del guion) → el motor comprueba que suena antes de 5 s (G2).
+- `nombre` (en la cabecera del guion) → el motor comprueba que suena antes de 5 s (G2). Escribe el gancho para que el nombre llegue pronto.
+- `fecha` y `fechaTikTok` (en la config, cuando se sepa) → el motor comprueba que la música no se repite esa semana (S10).

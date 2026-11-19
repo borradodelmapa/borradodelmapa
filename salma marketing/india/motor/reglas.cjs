@@ -51,14 +51,56 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   // M12 (Paco, 16 nov 2026): fotos QUIETAS a pantalla completa. ❌ si hay Ken Burns (cfg.kb > 0) o una foto con barrido (pan con inicio ≠ fin). El encuadre fijo (pan [x,y,x,y]) y el zoom de énfasis (enfasis: true, N14) sí valen.
   const fotos = todos.flatMap(b => (b.shots || []).filter(s => s.a && !/^(RW|V)/.test(s.a) && !/\.mp4$/i.test(s.a)));
   const barridos = fotos.filter(s => s.pan && (s.pan[0] !== s.pan[2] || s.pan[1] !== s.pan[3]));
-  chk('M12', (cfg.kb ?? 0) > 0 || barridos.length > 0, 'fotos con movimiento: ' + ((cfg.kb ?? 0) > 0 ? 'Ken Burns activo (cfg.kb = ' + cfg.kb + '); ' : '') + (barridos.length ? barridos.length + ' con barrido (pan con inicio ≠ fin): ' + barridos.slice(0, 6).map(s => s.a.split('/').pop()).join(', ') : '') + ' — van quietas; las verticales con encuadre fijo pan [x, y, x, y]');
+  const barridosLargos = barridos.filter(s => Math.hypot(s.pan[2] - s.pan[0], s.pan[3] - s.pan[1]) > 0.15);
+  // M12 (Paco, 19 nov 2026: «movimiento suave»): vale un acercamiento lento (cfg.kb hasta 1,2) y desplazamientos cortos (hasta el 15 % de la foto). ❌ solo con Ken Burns fuerte o barridos largos.
+  chk('M12', (cfg.kb ?? 0) > 1.2 || barridosLargos.length > 0, 'movimiento demasiado fuerte: ' + ((cfg.kb ?? 0) > 1.2 ? 'Ken Burns cfg.kb = ' + cfg.kb + ' (máximo 1,2); ' : '') + (barridosLargos.length ? barridosLargos.length + ' con barrido largo (más del 15 % de la foto): ' + barridosLargos.slice(0, 6).map(s => s.a.split('/').pop()).join(', ') : '') + ' — movimiento suave: acercamiento lento y desplazamiento corto que termina en la cara');
   const enf = fotos.filter(s => s.enfasis).length; if (enf) I.push('ℹ zoom de énfasis (la del punto 10 de la regla de enganche) en ' + enf + ' foto' + (enf > 1 ? 's' : '') + ' (solo en los datos importantes)');
   chk('M13', !(cfg.seguir && cfg.seguir.activo !== false), 'aviso «Si te está gustando, sígueme» desactivado o sin configurar (cfg.seguir)');
-  chk('M14', (cfg.cardSecs || 8) < 8 || !cfg.card, 'tarjeta final de menos de 8 s o sin cfg.card');
+  const F9x16 = !cfg.formato || cfg.formato === '9:16', esShort = F9x16 && TOTAL <= 65, minCard = esShort ? 3 : 8;
+  // M14 (T29): tarjeta final presente, de 3 s o más en shorts (8 en largos), y que ningún vídeo crudo la empuje fuera del final (fallo de los aché v3)
+  const rawLargos = (cfg._raw || []).filter(x => x.dur > x.D + 0.1);
+  chk('M14', !cfg.card || (cfg.cardSecs || 8) < minCard || rawLargos.length > 0, !cfg.card ? 'sin tarjeta final (cfg.card)' : (cfg.cardSecs || 8) < minCard ? 'tarjeta final de ' + cfg.cardSecs + ' s (mínimo ' + minCard + ' s)' : 'la tarjeta se corta: ' + rawLargos.map(x => x.id + ' dura ' + x.dur.toFixed(1) + ' s y tiene ' + x.D.toFixed(1)).join(', '));
   chk('N5', voz.some(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)), 'la app se menciona en la voz (va en la tarjeta final): ' + voz.filter(b => /\b(app|aplicaci[oó]n|borradodelmapa)\b/i.test(b.voz || b.text)).map(b => b.id).join(', '));
   chk('S1', !todos.some(b => b.amb || b.intro) && !cfg.musica, 'solo hay voz: sin ambiente, detalle ni música (cfg.musica / b.amb)');
   const MP = mapasDe(cfg); chk('S3', MP.bloques.length + MP.planos.length > 0 && cfg.sintonia === false, 'hay un mapa sin su sintonía (solo se quita con cfg.descartes.S3 y un motivo)');
   const VD = cfg.voiceDb || {}; chk('S2', (VD.salma != null && VD.salma !== -25) || (VD.paco != null && VD.paco !== -21), 'nivel de voz distinto del protocolo (Paco −21, Salma −25)');
+  // ---- T29 (19 nov 2026): comprobaciones nuevas. Marcas en la config (ficha ①, apartado E): cfg.nombre · b.pico · cfg.fecha / cfg.fechaTikTok ----
+  // N14 (9): ninguna FOTO fija más de 3,5 s (los clips de vídeo no cuentan: se mueven)
+  const fijas = sh.filter(s => s.foto && s.d > 3.55);
+  chk('N14', fijas.length > 0, 'foto fija de más de 3,5 s (punto 9 de la regla de enganche): ' + fijas.map(s => String(s.id).split('/').pop() + ' ' + s.d.toFixed(1) + ' s en ' + s.blk).join(', '));
+  // G2: el nombre del pueblo o lugar (cfg.nombre) suena antes del segundo 5
+  chk('G2', !cfg.nombre || cfg._nombreT == null || cfg._nombreT > 5, !cfg.nombre ? 'falta la marca cfg.nombre (el pueblo o lugar que tiene que sonar antes de 5 s)' : cfg._nombreT == null ? 'el nombre «' + [].concat(cfg.nombre).join(' / ') + '» no se dice en la voz' : 'el nombre suena en el segundo ' + cfg._nombreT.toFixed(1) + ' (tiene que ser antes del 5)');
+  // N10: shorts (9:16) de 60 s como máximo, tarjeta incluida
+  chk('N10', F9x16 && TOTAL > 60.05, 'short de ' + TOTAL.toFixed(1) + ' s (máximo 60 s, tarjeta incluida)');
+  // F11: dos bloques marcados pico (b.pico) seguidos, sin un bloque con voz entre medias
+  const vozB = todos.filter(b => b.text), picosSeg = [];
+  vozB.forEach((b, i) => { if (i && b.pico && vozB[i - 1].pico) picosSeg.push(vozB[i - 1].id + ' → ' + b.id); });
+  chk('F11', picosSeg.length > 0, 'dos picos seguidos sin tramo neutro: ' + picosSeg.join(', '));
+  // S10: la misma pista de música en otro vídeo que se publica la misma semana (cfg.fecha / cfg.fechaTikTok en las configs del motor)
+  const pista = cfg.musica && cfg.musica.src;
+  const semana = d => { const t = new Date(d + 'T12:00:00Z'); const dia = (t.getUTCDay() + 6) % 7; t.setUTCDate(t.getUTCDate() - dia); return t.toISOString().slice(0, 10); };
+  const choques = [];
+  if (pista && (cfg.fecha || cfg.fechaTikTok)) {
+    for (const f of fs.readdirSync(__dirname).filter(f => /\.cjs$/.test(f))) {
+      let t; try { t = fs.readFileSync(path.join(__dirname, f), 'utf8'); } catch (e) { continue; }
+      if (!t.includes(pista)) continue;
+      const id = (t.match(/id:\s*'([^']+)'/) || [])[1]; if (!id || id === String(cfg.id).replace(/-tiktok$/, '')) continue;
+      for (const [campo, mia] of [['fecha', cfg.fecha], ['fechaTikTok', cfg.fechaTikTok]]) {
+        if (!mia) continue; const m = t.match(new RegExp(campo + ":\\s*'(\\d{4}-\\d\\d-\\d\\d)'"));
+        if (m && semana(m[1]) === semana(mia)) choques.push(f + ' (' + campo + ' ' + m[1] + ')');
+      }
+    }
+  }
+  chk('S10', choques.length > 0, 'la pista ' + pista + ' sale otra vez la misma semana: ' + choques.join(', '));
+  if (pista && !cfg.fecha && !cfg.fechaTikTok) L.push('⚠ [S10] sin cfg.fecha: no se puede comprobar si la música se repite la misma semana');
+  // M34 (aviso): con 3 planos o más, el último del bloque no debería ser el más largo (el ritmo se acelera al final). El motor no inventa cortes.
+  for (const blk of Object.keys(byBlk)) { const a = byBlk[blk]; if (a.length >= 3 && a[a.length - 1].d > Math.max(...a.slice(0, -1).map(s => s.d)) + 0.2) L.push('⚠ [M34] bloque ' + blk + ': el último plano es el más largo; el ritmo no se acelera al final'); }
+  // ⚙️ lo que el motor HACE solo (T29): se anota en el informe para que quede constancia
+  I.push('ℹ [M30] las cifras entran ' + (cfg.cifraRetraso ?? 0.5) + ' s después de decir su palabra');
+  I.push('ℹ [M41] los rótulos entran ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte');
+  const emoB = todos.filter(b => b.emocion).map(b => b.id + ' ' + b.emocion), picoB = todos.filter(b => b.pico).map(b => b.id);
+  if (emoB.length) I.push('ℹ [M23] temperatura de color: ' + emoB.join(', ')); else L.push('⚠ [M23] ningún bloque marcado con emocion (calida | fria): el color no cambia con la emoción');
+  if (picoB.length) I.push('ℹ [M27] fondo oscurecido en el plano pico de: ' + picoB.join(', ')); else L.push('⚠ [M27] ningún bloque marcado pico: no se oscurece el fondo en el momento fuerte');
   const info = [...I]; if (TOTAL > 100) info.push('ℹ duración ' + TOTAL.toFixed(0) + ' s: preferible 60-90 s, pero si la historia lo pide, sin problema (regla de Paco, 26 oct 2026)');
   const looks = {}; sh.forEach(s => { looks[s.look] = (looks[s.look] || 0) + 1; });
   const sc = ['GP', 'PM', 'PP', 'D'].map(k => k + ' ' + sh.filter(s => s.sc === k).length).join(' · ');
@@ -66,6 +108,38 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
     'Comprobado contra docs/video-checklist.md (última actualización: ' + versionChecklist() + ')',
     X.length ? '❌ ' + X.length + ' PIEZAS DE LA CHECKLIST SIN CUMPLIR — NO DARLO POR TERMINADO:' : '✅ Piezas automáticas de la checklist cumplidas (lo manual —guion, fuentes, sonido, publicación— lo revisan quien monta y Paco).',
     ...X, L.length ? L.length + ' avisos:' : 'Sin avisos.'];
-  const txt = head.concat(L, info).join('\n'); fs.writeFileSync(OUT + '/' + cfg.id + '-informe-reglas.txt', txt); console.log(txt); return L.concat(X);
+  const txt = head.concat(L, info).join('\n'); fs.writeFileSync(OUT + '/' + cfg.id + '-informe-reglas.txt', txt); console.log(txt);
+  acta(cfg, TOTAL, OUT, X, L, I, { esShort });
+  return L.concat(X);
 };
 module.exports.mapasDe = mapasDe;
+
+// ---- ACTA DE CUMPLIMIENTO (F12; T29, 19 nov 2026): las reglas que hace (⚙️) o comprueba (🔎) el motor salen rellenas; las 📋 las rellena el chat con su ficha ----
+// Qué marca de la config usa cada regla (ficha ①, apartado E): pico → M27 y F11 · emocion (calida | fria) → M23 · nombre → G2 · fecha / fechaTikTok → S10.
+// Ajustes: cfg.cifraRetraso (M30, 0,5 s) · cfg.rotuloRetraso (M41, 0,5 s) · b.picoPlano (qué plano del bloque pico se oscurece; por defecto el último).
+function acta(cfg, TOTAL, OUT, X, L, I, o) {
+  const falla = id => X.find(x => x.includes('[' + id + ']')), aviso = id => L.filter(x => x.includes('[' + id + ']')), desc = id => I.find(x => x.includes('[' + id + ']'));
+  const est = (id, ok) => falla(id) || desc(id) || (aviso(id).length ? '⚠ ' + id + ' ' + ok + ' · avisos: ' + aviso(id).join(' | ') : '✅ ' + id + ' ' + ok);
+  const sh = cfg._shots || [], fotos = sh.filter(s => s.foto), emo = sh.filter(s => s.emo), pic = sh.filter(s => s.pico);
+  const lin = [
+    '🔎 LO COMPRUEBA EL MOTOR',
+    est('N14', '(9) ninguna foto fija pasa de 3,5 s: la más larga dura ' + (fotos.length ? Math.max(...fotos.map(s => s.d)).toFixed(1) : '—') + ' s (' + fotos.length + ' fotos)'),
+    est('G2', 'el nombre suena en el segundo ' + (cfg._nombreT != null ? cfg._nombreT.toFixed(1) : '—')),
+    est('M14', 'tarjeta final de ' + (cfg.cardSecs || 8) + ' s, entera hasta el final (ningún vídeo crudo la empuja)'),
+    est('N10', 'dura ' + TOTAL.toFixed(1) + ' s' + (o.esShort ? ' (short: máximo 60)' : '')),
+    est('F11', 'picos marcados: ' + (cfg.blocks.filter(b => b.pico).map(b => b.id).join(', ') || 'ninguno') + '; ninguno seguido de otro'),
+    est('S10', 'música ' + ((cfg.musica && cfg.musica.src) || 'sin música') + ' · fecha ' + (cfg.fecha || '—') + (cfg.fechaTikTok ? ' · TikTok ' + cfg.fechaTikTok : '') + ': ninguna otra pieza con la misma pista esa semana'),
+    est('M12', 'movimiento suave: cfg.kb = ' + (cfg.kb ?? 0) + ', sin barridos largos'),
+    '⚙️ LO HACE EL MOTOR',
+    '✅ M30 la cifra entra ' + (cfg.cifraRetraso ?? 0.5) + ' s después de decir su palabra (' + cfg.blocks.filter(b => b.cifra).length + ' bloques con cifra)',
+    '✅ M41 el rótulo entra ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte de su bloque',
+    (emo.length ? '✅' : '⚠') + ' M23 temperatura de color por bloque: ' + (emo.length ? [...new Set(emo.map(s => s.blk + ' ' + s.emo))].join(', ') : 'ningún bloque marcado con emocion (calida | fria): hay que marcarlos en el guion'),
+    (pic.length ? '✅' : '⚠') + ' M27 fondo oscurecido en el plano pico: ' + (pic.length ? pic.map(s => s.blk + ' (' + String(s.id).split('/').pop() + ')').join(', ') : 'ningún plano marcado pico'),
+    aviso('M34').length ? '⚠ M34 ' + aviso('M34').map(x => x.replace('⚠ [M34] ', '')).join(' | ') + ' (el motor no inventa cortes: hay que añadir un plano o mover el corte)' : '✅ M34 en ningún bloque de 3 planos o más el último plano es el más largo',
+    'Además, del informe: M2 M3 M4 M6 M7 M8 M9 M10 M11 M13 N5 S1 S2 S3 (ver «informe de reglas»).',
+    '',
+    '📋 LAS RELLENA EL CHAT (✅ con cómo se comprobó / ❌ con el motivo y qué se hizo), con la ficha de cada paso delante (docs/video-fichas/):',
+    '① guion, título y carátula · ② material · ③ revisión del montaje · ④ publicación'];
+  fs.writeFileSync(OUT + '/' + cfg.id + '-acta.txt', ['ACTA DE CUMPLIMIENTO (F12) · ' + cfg.id + ' · ' + new Date().toLocaleString('es-ES'), 'Parte automática del motor. El acta no está completa hasta que el chat rellena las 📋.', ...lin].join('\n') + '\n');
+}
+module.exports.acta = acta;
