@@ -31,6 +31,10 @@ const lista = fs.readFileSync(path.join(R, 'docs/video-checklist.md'), 'utf8');
 const TODAS = [...new Set(lista.split(/\r?\n/).map(l => l.match(/^\|\s*([A-Z]\d{1,2})\s*\|.*\|\s*(motor[^|]*|manual[^|]*|script[^|]*)\|\s*$/)).filter(Boolean).map(m => m[1]))];
 const ficha0 = fs.readFileSync(path.join(R, 'docs/video-fichas/0-como-se-trabaja.md'), 'utf8');
 const MOTOR = new Set(((ficha0.match(/^MOTOR:(.*)$/m) || [])[1] || '').trim().split(/\s+/).filter(Boolean));
+// De la línea MOTOR, solo cuentan como resueltas por el motor las que la checklist marca «motor» o las que el motor ya aplica sin más (HACEYA).
+// Las demás (programadas pero aún no subidas) las revisa el revisor de imagen a mano hasta que estén en el motor.
+const COLMOTOR = new Set(lista.split(/\r?\n/).map(l => l.match(/^\|\s*([A-Z]\d{1,2})\s*\|.*\|\s*motor\s*\|\s*$/)).filter(Boolean).map(m => m[1]));
+const HACEYA = new Set(['M5', 'M16', 'M29', 'N8', 'N22', 'Y22']);
 const PACO = { F3: 'aprueba el guion y los 20 primeros segundos (G1)', F5: 'da el OK al coste', F6: 'elige la foto protagonista y los audios',
   S5: 'elige la música de oído (y su tempo, S6)', N25: 'oye la entonación al cierre de cada bloque', F8: 've y oye el montaje y lo aprueba', Y13: 'elige el título y la carátula' };
 const SCRIPT = new Set(['Y3', 'Y5', 'Y6', 'Y7', 'Y8', 'Y10', 'Y12', 'P2', 'P5', 'P6', 'P9', 'P14', 'P18', 'F12', 'P3', 'P7', 'P10', 'P11', 'P12', 'P13', 'P15', 'Y1', 'Y9', 'Y17', 'S10']);
@@ -117,7 +121,8 @@ if (fase === 'publicar') {
 // ── 9. Reparto: cada una de las reglas tiene que estar resuelta ──
 const SIN = [];
 for (const id of TODAS) {
-  if (MOTOR.has(id)) continue;                        // las mira el informe del motor (paso 2)
+  if (MOTOR.has(id) && (COLMOTOR.has(id) || HACEYA.has(id))) continue;   // las mira el informe del motor (paso 2)
+  if (MOTOR.has(id)) { if (rev[id]) { const e = rev[id]; if (e.estado === '✅' && e.como) ok(id, '(aún no la hace el motor; revisada a mano) ' + e.como); else if (e.estado === '❌' && e.motivo) aviso(id, 'no se cumple, explicado: ' + e.motivo); else mal(id, 'revisión sin estado o sin explicación'); } else if (!faltanRev) SIN.push(id); continue; }
   if (PACO[id]) { if (fase === 'publicar' || ['F3', 'F5', 'F6', 'Y13'].includes(id)) { okp[id] ? ok(id, 'Paco: ' + okp[id]) : mal(id, 'falta el OK de Paco: ' + PACO[id] + ' (ok-paco.json, con sus palabras)'); } continue; }
   if (rev[id]) { const e = rev[id]; if (e.estado === '✅' && e.como) ok(id, e.como); else if (e.estado === '❌' && e.motivo) aviso(id, 'no se cumple, explicado: ' + e.motivo); else mal(id, 'revisión sin estado o sin explicación'); continue; }
   if (SCRIPT.has(id)) { if (![...OK, ...MAL, ...AVISO].some(l => l.includes(' ' + id + ' ') || l.includes(' ' + id + '·'))) { if (['P12', 'P15', 'P13', 'P7', 'P3', 'P10', 'P11', 'Y1', 'Y9', 'Y17'].includes(id) && fase !== 'publicar') continue; if (!rev[id]) SIN.push(id); } continue; }

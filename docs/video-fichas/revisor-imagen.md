@@ -13,6 +13,7 @@ Paco, 20 nov 2026: «quiero que metas las 145… 138 automáticas». Este reviso
 **Primer fotograma y carátula:** M15 Y4 Y14 Y16 Y18 Y23
 **Plano a plano:** N7 M18 M21 M24 M26 M28 M35 M36 M37 M40 M43 M44 M47 M48
 **Subtítulos en pantalla:** M10 M25
+**Mientras el motor no las haga** (están programadas, pero aún no subidas, en T30): M17 M22 M31 M38 M42 S7. Se miran en la hoja de fotogramas y en el audio, y se quitan de aquí cuando la checklist las marque «motor». El candado las pide hasta entonces.
 
 ## Cómo se comprueba lo que más se escapa
 - **N7:** en cada segundo, ¿la imagen es de lo que dice el subtítulo? Si se habla de internet y se ven setas, ❌ y se arregla.
