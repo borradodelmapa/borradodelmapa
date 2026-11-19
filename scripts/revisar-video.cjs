@@ -5,6 +5,7 @@
 //   🤖 REVISORES → revision-guion.json y revision-imagen.json en la carpeta ULTIMA, que hace el chat siguiendo
 //                  docs/video-fichas/revisor-guion.md y revisor-imagen.md. Cada ID: { "estado": "✅"|"❌", "como"|"motivo": "…" }.
 //   👤 PACO      → las 7 que solo puede hacer Paco, en ok-paco.json con sus palabras: { "F3": "«Ok al guión sigue» (19 nov)", … }.
+// textos-youtube.txt, revision-*.json y ok-paco.json pueden estar en la carpeta del mp4 o en la del vídeo (la de encima). El motor lo llama sobre la carpeta temporal de la exportación ANTES de copiar a ULTIMA.
 // Uso: node scripts/revisar-video.cjs "<carpeta ULTIMA>" [--fase exportar|publicar] [--fecha 2026-12-22T10:00] [--tipo short|largo]
 //   --fase exportar (por defecto): lo que tiene que estar antes de «★ Exportar para publicar».
 //   --fase publicar: además, blog, Web Story, fecha válida, registro y OK de Paco a todo.
@@ -35,7 +36,8 @@ const SCRIPT = new Set(['Y3', 'Y5', 'Y6', 'Y7', 'Y8', 'Y10', 'Y12', 'P2', 'P5', 
 const mp4 = ls.find(f => f.endsWith('.mp4'));
 const informe = ls.find(f => /informe de reglas\.txt$/.test(f));
 const acta = ls.find(f => / - acta\.txt$/.test(f));
-const textos = leer(path.join(dir, 'textos-youtube.txt'));
+const leerAqui = f => leer(path.join(dir, f)) ?? leer(path.join(base, f)); // en la carpeta del mp4 o en la del vídeo
+const textos = leerAqui('textos-youtube.txt');
 if (!mp4) mal('F7', 'no hay mp4 en la carpeta');
 if (!informe) mal('P5', 'falta el informe de reglas del motor');
 else { const inf = leer(path.join(dir, informe)); const x = (inf.match(/^❌.*$/gm) || []); x.length ? mal('P5', 'el informe del motor tiene ' + x.length + ' ❌: ' + x.slice(0, 3).join(' | ')) : ok('P5', 'informe del motor sin ❌'); }
@@ -86,12 +88,12 @@ fs.existsSync(path.join(base, 'estudio-titulo.md')) ? ok('Y12', 'estudio-titulo.
 // ── 6. Revisores (guion e imagen) ──
 const rev = {}; let faltanRev = false;
 for (const f of ['revision-guion.json', 'revision-imagen.json']) {
-  const t = leer(path.join(dir, f));
+  const t = leerAqui(f);
   if (!t) { mal('REVISOR', 'falta ' + f + ' (docs/video-fichas/' + f.replace('revision-', 'revisor-').replace('.json', '.md') + ')'); faltanRev = true; continue; }
   try { Object.assign(rev, JSON.parse(t)); } catch (e) { mal('REVISOR', f + ' no es JSON válido'); faltanRev = true; }
 }
 // ── 7. OK de Paco ──
-let okp = {}; const tp = leer(path.join(dir, 'ok-paco.json')); if (tp) { try { okp = JSON.parse(tp); } catch (e) { mal('PACO', 'ok-paco.json no es JSON válido'); } }
+let okp = {}; const tp = leerAqui('ok-paco.json'); if (tp) { try { okp = JSON.parse(tp); } catch (e) { mal('PACO', 'ok-paco.json no es JSON válido'); } }
 
 // ── 8. Fase publicar ──
 if (fase === 'publicar') {
