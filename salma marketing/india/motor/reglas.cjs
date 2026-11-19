@@ -84,7 +84,7 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
     for (const f of fs.readdirSync(__dirname).filter(f => /\.cjs$/.test(f))) {
       let t; try { t = fs.readFileSync(path.join(__dirname, f), 'utf8'); } catch (e) { continue; }
       if (!t.includes(pista)) continue;
-      const id = (t.match(/id:\s*'([^']+)'/) || [])[1]; if (!id || id === String(cfg.id).replace(/-tiktok$/, '')) continue;
+      const id = (t.match(/id:\s*'([^']+)'/) || [])[1]; if (!id || String(cfg.id).startsWith(id)) continue; // el propio vídeo (también su versión TikTok o una prueba) no cuenta
       for (const [campo, mia] of [['fecha', cfg.fecha], ['fechaTikTok', cfg.fechaTikTok]]) {
         if (!mia) continue; const m = t.match(new RegExp(campo + ":\\s*'(\\d{4}-\\d\\d-\\d\\d)'"));
         if (m && semana(m[1]) === semana(mia)) choques.push(f + ' (' + campo + ' ' + m[1] + ')');
@@ -95,6 +95,29 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   if (pista && !cfg.fecha && !cfg.fechaTikTok) L.push('⚠ [S10] sin cfg.fecha: no se puede comprobar si la música se repite la misma semana');
   // M34 (aviso): con 3 planos o más, el último del bloque no debería ser el más largo (el ritmo se acelera al final). El motor no inventa cortes.
   for (const blk of Object.keys(byBlk)) { const a = byBlk[blk]; if (a.length >= 3 && a[a.length - 1].d > Math.max(...a.slice(0, -1).map(s => s.d)) + 0.2) L.push('⚠ [M34] bloque ' + blk + ': el último plano es el más largo; el ritmo no se acelera al final'); }
+  // ---- T30 (20 nov 2026): comprobaciones de la tanda 2 ----
+  // M17: algo reinicia la atención cada 45 s como mucho (cambio de bloque, rótulo o cifra)
+  { const ev = [0, ...todos.filter(b => b.t0 != null).map(b => b.t0), ...todos.filter(b => b.rotulo && b.t0 != null).map(b => b.t0 + 0.5), cfg._cardT || TOTAL].sort((a, b) => a - b);
+    let peor = 0, en = 0; for (let i = 1; i < ev.length; i++) if (ev[i] - ev[i - 1] > peor) { peor = ev[i] - ev[i - 1]; en = ev[i - 1]; }
+    chk('M17', peor > 45, 'más de 45 s sin reinicio de atención (ni bloque nuevo, ni rótulo, ni cifra): ' + peor.toFixed(0) + ' s desde el segundo ' + en.toFixed(0)); }
+  // N14 (3): sin cortinilla de más de 2 s (bloque de vídeo sin voz que no es mapa, marcado cortinilla o con id intro/cortinilla/logo)
+  { const MPb = mapasDe(cfg).bloques; const cort = todos.filter(b => b.video && !b.text && !MPb.includes(b) && (b.cortinilla || /intro|cortinilla|logo/i.test(b.id)) && (b.D ?? b.fixed) > 2);
+    chk('N14', cort.length > 0, 'cortinilla de más de 2 s (punto 3 de la regla de enganche): ' + cort.map(b => b.id + ' ' + (b.D ?? b.fixed).toFixed(1) + ' s').join(', ')); }
+  // M31 (aviso): el corte de imagen cae a mitad de una frase (antes de la palabra «from» no hay , . : ; ? ! …)
+  { const mitad = []; todos.forEach(b => (b.shots || []).forEach((sh2, k) => { if (!k || !sh2.from || !b.text) return; const i = b.text.indexOf(sh2.from); if (i > 0 && !/[,.:;!?…]$/.test(b.text.slice(0, i).trim())) mitad.push(b.id + ' «' + sh2.from + '»'); }));
+    if (mitad.length) L.push('⚠ [M31] ' + mitad.length + ' cortes a mitad de frase (suele ser para que ninguna foto pase de 3,5 s, N14-9): ' + mitad.join(', ')); }
+  // M38 (aviso): tres planos seguidos de un bloque con casi la misma duración (±5 %)
+  for (const blk of Object.keys(byBlk)) { const a = byBlk[blk]; for (let i = 2; i < a.length; i++) { const ds = [a[i - 2].d, a[i - 1].d, a[i].d], m = (ds[0] + ds[1] + ds[2]) / 3; if (ds.every(x => Math.abs(x - m) / m < 0.05)) { L.push('⚠ [M38] bloque ' + blk + ': tres planos seguidos casi iguales (' + ds.map(x => x.toFixed(1)).join(' / ') + ' s)'); break; } } }
+  // M42 (aviso): dos paneos seguidos en la misma dirección (el acercamiento/alejamiento automático ya se alterna solo)
+  { const pans = sh.filter(x => x.pan && (x.pan[0] !== x.pan[2] || x.pan[1] !== x.pan[3])); for (let i = 1; i < pans.length; i++) { const d0 = [Math.sign(pans[i - 1].pan[2] - pans[i - 1].pan[0]), Math.sign(pans[i - 1].pan[3] - pans[i - 1].pan[1])], d1 = [Math.sign(pans[i].pan[2] - pans[i].pan[0]), Math.sign(pans[i].pan[3] - pans[i].pan[1])]; if (d0[0] === d1[0] && d0[1] === d1[1]) L.push('⚠ [M42] dos paneos seguidos en la misma dirección: ' + String(pans[i - 1].id).split('/').pop() + ' y ' + String(pans[i].id).split('/').pop()); } }
+  // ⚙️ lo que el motor HACE solo (T30): constancia en el informe
+  if (todos.some(b => b.datoFuerte)) I.push('ℹ [M19] datoFuerte: ' + todos.filter(b => b.datoFuerte).map(b => b.id).join(', ') + ' aguanta un 30 % más · [S9] con 0,6 s de silencio total antes'); else L.push('⚠ [S9] ningún bloque marcado datoFuerte: sin silencio antes del dato más fuerte ni plano que aguante más (M19)');
+  I.push('ℹ [S7] el ambiente entra ' + (cfg.ambPrelap ?? 0.17) + ' s antes de cada corte');
+  if (todos.some(b => b.cambioTono)) I.push('ℹ [S8] la música baja antes del cambio de tono en: ' + todos.filter(b => b.cambioTono).map(b => b.id).join(', '));
+  if (todos.some(b => b.humano)) I.push('ℹ N14 (4) bloque humano más lento y sin música: ' + todos.filter(b => b.humano).map(b => b.id).join(', '));
+  if (todos.some(b => b.advertencia)) I.push('ℹ N14 (10) zoom de énfasis en: ' + todos.filter(b => b.advertencia).map(b => b.id).join(', '));
+  I.push('ℹ [F7] hoja de planos automática; en calidad máxima, copia con fecha en VIDEOS-TERMINADOS · [P14] en calidad máxima se mide el mp4 de ULTIMA (≥ 1080 px y ≥ 10 Mb/s)');
+  L.push('⚠ M22 (golpe de sonido al fotograma del corte o del rótulo): pendiente de un golpe con licencia que elija Paco de oído (S4, F6); el motor no lo inventa');
   // ⚙️ lo que el motor HACE solo (T29): se anota en el informe para que quede constancia
   I.push('ℹ [M30] las cifras entran ' + (cfg.cifraRetraso ?? 0.5) + ' s después de decir su palabra');
   I.push('ℹ [M41] los rótulos entran ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte');
@@ -131,7 +154,21 @@ function acta(cfg, TOTAL, OUT, X, L, I, o) {
     est('F11', 'picos marcados: ' + (cfg.blocks.filter(b => b.pico).map(b => b.id).join(', ') || 'ninguno') + '; ninguno seguido de otro'),
     est('S10', 'música ' + ((cfg.musica && cfg.musica.src) || 'sin música') + ' · fecha ' + (cfg.fecha || '—') + (cfg.fechaTikTok ? ' · TikTok ' + cfg.fechaTikTok : '') + ': ninguna otra pieza con la misma pista esa semana'),
     est('M12', 'movimiento suave: cfg.kb = ' + (cfg.kb ?? 0) + ', sin barridos largos'),
-    '⚙️ LO HACE EL MOTOR',
+    est('M17', 'ningún tramo de más de 45 s sin bloque nuevo, rótulo o cifra'),
+    est('M31', 'los cortes caen al final de una frase'),
+    est('M38', 'las duraciones de los planos varían dentro de cada bloque'),
+    est('M42', 'acercamiento y alejamiento alternados; ningún paneo seguido en la misma dirección'),
+    '⚙️ LO HACE EL MOTOR (T30)',
+    (cfg.blocks.some(b => b.datoFuerte) ? '✅ M19 · S9 datoFuerte en ' + cfg.blocks.filter(b => b.datoFuerte).map(b => b.id).join(', ') + ': el plano aguanta un 30 % más y antes hay 0,6 s de silencio total' : '⚠ M19 · S9 ningún bloque marcado datoFuerte (márcalo en el guion: ficha ① E)'),
+    '✅ S7 el ambiente entra ' + (cfg.ambPrelap ?? 0.17) + ' s antes de cada corte',
+    (cfg.blocks.some(b => b.cambioTono) ? '✅' : '·') + ' S8 respiro de la música antes del cambio de tono' + (cfg.blocks.some(b => b.cambioTono) ? ': ' + cfg.blocks.filter(b => b.cambioTono).map(b => b.id).join(', ') : ' (ningún bloque marcado cambioTono)'),
+    (cfg.blocks.some(b => b.humano) ? '✅' : '·') + ' N14 (4) bloque humano más lento y sin música' + (cfg.blocks.some(b => b.humano) ? ': ' + cfg.blocks.filter(b => b.humano).map(b => b.id).join(', ') : ' (ningún bloque marcado humano)'),
+    (cfg.blocks.some(b => b.advertencia) ? '✅' : '·') + ' N14 (10) zoom de énfasis en las advertencias' + (cfg.blocks.some(b => b.advertencia) ? ': ' + cfg.blocks.filter(b => b.advertencia).map(b => b.id).join(', ') : ' (ningún bloque marcado advertencia)'),
+    '✅ N14 (11) la música baja 6 dB bajo el ambiente real (amb.real)' + (cfg.blocks.some(b => [].concat(b.amb || []).some(a => a && a.real)) ? '' : ' (este vídeo no tiene ambiente real marcado)'),
+    '✅ F7 hoja de planos numerada en ULTIMA; en calidad máxima, copia con fecha en VIDEOS-TERMINADOS',
+    '· P14 se mide al exportar en calidad máxima (el resultado va al final del acta de ULTIMA)',
+    '⚠ M22 golpe de sonido al fotograma: pendiente de un golpe con licencia elegido por Paco (S4, F6)',
+    '⚙️ LO HACE EL MOTOR (T29)',
     '✅ M30 la cifra entra ' + (cfg.cifraRetraso ?? 0.5) + ' s después de decir su palabra (' + cfg.blocks.filter(b => b.cifra).length + ' bloques con cifra)',
     '✅ M41 el rótulo entra ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte de su bloque',
     (emo.length ? '✅' : '⚠') + ' M23 temperatura de color por bloque: ' + (emo.length ? [...new Set(emo.map(s => s.blk + ' ' + s.emo))].join(', ') : 'ningún bloque marcado con emocion (calida | fria): hay que marcarlos en el guion'),

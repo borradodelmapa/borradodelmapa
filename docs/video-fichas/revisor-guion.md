@@ -21,10 +21,10 @@ Después: `node scripts/revisar-video.cjs "<carpeta ULTIMA>"`. Sin estas 56 resu
 
 ## Las 56 reglas (la línea de cada una está en su ficha)
 **Qué contamos:** L1 L2 L3 F2 F4 N4 N6 N12 N13 N33 · tono sin alarmismo (N14)
-**Estructura:** F1 G1 G3 N2 N9 N14 N15 N16 N27 M1 M19 M20 M32 M33 M39 M46
+**Estructura:** F1 G1 G3 N2 N9 N14 N15 N16 N27 M1 M20 M32 M33 M39 M46
 **Cada frase (mirar el .srt real, no solo el guion):** N1 N3 N11 N17 N18 N19 N20 N21 N23 N24 N26 N28 N29 N30 N31 N32
-**Sonido que depende del guion:** S6 S8 S9 (con las marcas `cambioTono` y `datoFuerte`)
-**Entrega:** F7 (hoja de planos y copia en VIDEOS-TERMINADOS)
+**Sonido que depende del guion:** S6 (S8 y S9 los hace el motor con las marcas `cambioTono` y `datoFuerte`: basta con ponerlas)
+
 **Título y textos:** Y2 Y11 Y15 Y19 Y20 Y21 P1 P8 P16 P17
 
 ## Cómo se comprueba lo que más se escapa

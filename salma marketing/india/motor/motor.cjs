@@ -133,10 +133,17 @@ async function build(cfg) {
   console.log('ETAPA 2/6 Línea de tiempo');
   let t = 0; const G = cfg.gap || { same: 0.4, change: 0.85 }, LC = cfg.leadChange ?? 0.45;
   const vb = cfg.blocks.filter(x => x.text);
-  for (const b of cfg.blocks) {
+  cfg._silencios = []; // S9 (T30): tramos de silencio total antes de un datoFuerte
+  for (const [bi, b] of cfg.blocks.entries()) {
     b.t0 = t;
     if (b.text) { const i = vb.indexOf(b), prev = vb[i - 1], next = vb[i + 1]; b.lead = prev && prev.who !== b.who ? LC : LEAD; const need = next && next.who !== b.who ? G.change : G.same; b.D = b.lead + b.vEnd + Math.max(b.pause ?? 0, need); } else b.D = b.fixed;
     if (b.minD && b.D < b.minD) b.D = b.minD;
+    // M19 (T30): el bloque marcado datoFuerte aguanta un 30 % más su último plano (hasta 1,2 s)
+    if (b.datoFuerte && b.text) b.D += Math.min(1.2, 0.3 * b.vEnd / Math.max(1, (b.shots || []).length));
+    // N14 (4) (T30): un bloque humano va más despacio (0,4 s más de respiro); la música se quita en él (más abajo)
+    if (b.humano && b.text) b.D += cfg.humanoExtra ?? 0.4;
+    // S9 (T30): el bloque datoFuerte empieza con 0,6 s de silencio total (sin voz, ambiente ni música) antes de que hable Salma
+    if (b.datoFuerte && b.text) { const sil = cfg.silencioDato ?? 0.6; b.lead += sil; b.D += sil; cfg._silencios.push([t + 0.05, t + sil]); }
     t += b.D;
   }
   const cardT = t; const TOTAL = t + (cfg.cardSecs || 8);
@@ -172,7 +179,7 @@ async function build(cfg) {
         // N14 (10) ZOOM DE ÉNFASIS (s.enfasis: true): el único movimiento permitido en las fotos; acerca ≈10 % en 0,4 s al empezar el plano y se queda ahí (solo en los datos importantes).
         const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 0; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
         const z = s.zfijo ? s.z : (s.z ?? AUTO[s.sc] ?? 0.05) * KB, [fx, fy] = s.foc || [0.5, 0.5], cx = s.cx ?? 0.5, inn = (s.dir || dirAuto) === 'in';
-        const ENF = s.enfasis ? (typeof s.enfasis === 'number' ? s.enfasis : 0.10) : 0;
+        const ENF = (s.enfasis || b.advertencia) ? (typeof s.enfasis === 'number' ? s.enfasis : 0.10) : 0; // N14 (10) (T30): también en los bloques marcados advertencia
         let zexpr = ENF ? `1+${ENF}*min(1,on/12)` : inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
         const f0 = Math.max(1, frames - 12); // GOLPE (s.golpe): en los últimos 0,4 s el zoom se dispara hacia el foco y la cámara se sacude
         if (s.golpe) zexpr += `+${s.golpeZ ?? 0.6}*pow(max(0,on-${f0})/12,3)`;
@@ -279,7 +286,7 @@ async function build(cfg) {
     if (!cache[key]) { const o = `${W}/amb_${a.src}_${a.ss || 0}.wav`; run(['-ss', String(a.ss || 0), '-i', f, '-vn', '-t', '25', '-ac', '2', '-ar', '44100', o]); cache[key] = { f: o, mean: meanDb(o), d: dur(o) }; }
     const c = cache[key]; const gain = (a.db ?? -26) - c.mean; const L = b.D + 0.8; const off = ((b.t0 * 1.7) % (2 * c.d));
     const o2 = `${W}/bed_${bedFiles.length}.wav`;
-    run(['-i', c.f, '-filter_complex', `[0:a]highpass=f=140,asplit[x][y];[y]areverse[r];[x][r]concat=n=2:v=0:a=1,aloop=loop=-1:size=2147483647,atrim=start=${off.toFixed(2)}:end=${(off + L).toFixed(2)},asetpts=PTS-STARTPTS,volume=${gain.toFixed(1)}dB,afade=t=in:d=0.5,afade=t=out:st=${(L - 0.5).toFixed(2)}:d=0.5,adelay=${Math.round(Math.max(0, b.t0 - 0.3) * 1000)}:all=1[o]`, '-map', '[o]', o2]);
+    run(['-i', c.f, '-filter_complex', `[0:a]highpass=f=140,asplit[x][y];[y]areverse[r];[x][r]concat=n=2:v=0:a=1,aloop=loop=-1:size=2147483647,atrim=start=${off.toFixed(2)}:end=${(off + L).toFixed(2)},asetpts=PTS-STARTPTS,volume=${gain.toFixed(1)}dB,afade=t=in:d=0.5,afade=t=out:st=${(L - 0.5).toFixed(2)}:d=0.5,adelay=${Math.round(Math.max(0, b.t0 - (cfg.ambPrelap ?? 0.17)) * 1000)}:all=1[o]`, '-map', '[o]', o2]); // S7 (T30): el ambiente entra unos 5 fotogramas antes del corte
     bedFiles.push(o2);
     }
     // b.fx: efectos puntuales [{ src, at (s desde el inicio del bloque), db }] — un cañonazo, un golpe en la mesa. Suenan una vez, sin bucle.
@@ -318,7 +325,11 @@ async function build(cfg) {
       run(['-ss', String(x.ss), '-t', len.toFixed(2), '-i', fx, '-vn', '-ac', '2', '-ar', '44100', '-af', `${x.af ? x.af + ',' : ''}${x.voz ? 'equalizer=f=1800:t=o:w=2:g=-6,' : ''}volume=${x.db}dB,afade=t=in:d=${fi},afade=t=out:st=${Math.max(0, len - fo).toFixed(2)}:d=${fo},adelay=${Math.round(t * 1000)}:all=1`, o]);
       console.log(`música ${i}: ${t.toFixed(1)} s, ${len.toFixed(1)} s, de la pista ${x.ss} s, ${x.db} dB${x.voz ? ', bajo la voz' : ', sin voz'}`); return o;
     });
-    const fm2 = partes.map((_, i) => `[${i}:a]`).join('') + `amix=inputs=${partes.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)}[mus]`;
+    const vol = (a, b2, v) => `,volume=enable='between(t,${Math.max(0, a).toFixed(2)},${b2.toFixed(2)})':volume=${v}`;
+    const ajustes = cfg.blocks.map(b => (b.humano ? vol(b.t0, b.t0 + b.D, 0) : '') // N14 (4) (T30): en un bloque humano, sin música
+      + (b.cambioTono ? vol(b.t0 - 1.0, b.t0 + 0.2, 0.3) : '') // S8 (T30): la música baja en el segundo antes de un cambio de tono
+      + ([].concat(b.amb || []).some(a => a && a.real) ? vol(b.t0, b.t0 + b.D, 0.5) : '')).join(''); // N14 (11) (T30): bajo el ambiente real del lugar (amb.real), la música baja 6 dB
+    const fm2 = partes.map((_, i) => `[${i}:a]`).join('') + `amix=inputs=${partes.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)}${ajustes}[mus]`;
     fs.writeFileSync(`${W}/fm.txt`, fm2); run([...partes.flatMap(f => ['-i', f]), '-filter_complex_script', `${W}/fm.txt`, '-map', '[mus]', `${W}/musica.wav`]);
     run(['-i', mixIn, '-i', `${W}/musica.wav`, '-i', `${W}/voz.wav`, '-filter_complex', `[1:a][2:a]sidechaincompress=threshold=0.02:ratio=${MU.ratio ?? 6}:attack=30:release=700[md];[0:a][md]amix=inputs=2:normalize=0:duration=first[mm]`, '-map', '[mm]', `${W}/mixm.wav`]); mixIn = `${W}/mixm.wav`;
   }
@@ -350,7 +361,8 @@ async function build(cfg) {
     run(['-i', resolve(SGs.sonido || 'SFX_sigueme-batok'), '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${SGs.sonidoDb ?? 8}dB,adelay=${Math.round(sgInicio(SGs) * 1000)}:all=1`, o]);
     run(['-i', mixIn, '-i', o, '-filter_complex', `[0:a][1:a]amix=inputs=2:normalize=0:duration=first[m3]`, '-map', '[m3]', `${W}/mix3${suf(i)}.wav`]); mixIn = `${W}/mix3${suf(i)}.wav`;
   });
-  run(['-i', mixIn, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
+  const silF = (cfg._silencios || []).map(([a, b2]) => `volume=enable='between(t,${a.toFixed(2)},${b2.toFixed(2)})':volume=0,`).join(''); // S9 (T30): silencio total antes del datoFuerte
+  run(['-i', mixIn, '-af', silF + 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
   // SOLO_AUDIO=<carpeta>: guarda la mezcla y sus pistas y para, sin exportar vídeo, para oír niveles antes de un render largo (Paco, 6 nov 2026). Sin esa variable, nada cambia.
   if (process.env.SOLO_AUDIO) { const SA = process.env.SOLO_AUDIO; fs.mkdirSync(SA, { recursive: true }); for (const n of ['voz', 'amb', 'musica', 'final']) if (fs.existsSync(`${W}/${n}.wav`)) fs.copyFileSync(`${W}/${n}.wav`, `${SA}/${n}.wav`); fs.writeFileSync(`${SA}/tiempos.json`, JSON.stringify(cfg.blocks.filter(b => b.id).map(b => ({ id: b.id, t0: b.t0, D: b.D })))); console.log('SOLO_AUDIO: mezcla guardada en ' + SA); process.exit(0); }
   // 6) composición
@@ -411,11 +423,37 @@ async function build(cfg) {
   console.log('LISTO', outFile, TOTAL.toFixed(1) + ' s', clips.length, 'planos');
   fs.writeFileSync(`${OUT}/${cfg.id}-tiempos.json`, JSON.stringify(cfg.blocks.map(b => ({ id: b.id, t0: +b.t0.toFixed(2), D: +b.D.toFixed(2), shots: (b.shots || []).map(s => s.a) })), null, 1));
   // carpeta ÚLTIMA (cfg.ultima): siempre la versión más reciente con nombre fijo, para no tener que buscar entre v1, v2, -editor… (Paco, 31 oct 2026: «me tienes un follón montado»)
-  if (cfg.ultima) {
+  // F7 (T30): hoja de planos automática (un fotograma numerado por plano), para corregir por número
+  try {
+    const FONT = 'C\\:/Windows/Fonts/arialbd.ttf', H = `${W}/hoja`; fs.mkdirSync(H, { recursive: true });
+    clips.filter(c => !c.raw && fs.existsSync(c.file)).forEach((c, i) => run(['-ss', String(Math.max(0, c.d * 0.4)), '-i', c.file, '-frames:v', '1', '-vf', `scale=216:-2,drawtext=fontfile='${FONT}':text='${i + 1}':x=8:y=8:fontsize=40:fontcolor=white:box=1:boxcolor=0xF4630B`, `${H}/h_${String(i + 1).padStart(3, '0')}.jpg`]));
+    const nH = fs.readdirSync(H).length; if (nH) run(['-framerate', '1', '-i', `${H}/h_%03d.jpg`, '-vf', `tile=${Math.min(8, nH)}x${Math.ceil(nH / 8)}`, '-frames:v', '1', `${OUT}/${cfg.id}-hoja-planos.jpg`]);
+  } catch (e) { console.log('⚠ [F7] no pude hacer la hoja de planos:', e.message); }
+  // CANDADO (T30, Paco 20 nov 2026): «★ Exportar para publicar» no escribe ULTIMA si scripts/revisar-video.cjs <carpeta del vídeo> sale en ❌
+  let candado = true;
+  if (PUB && cfg.ultima) {
+    const RV = ROOT + '/scripts/revisar-video.cjs';
+    // al script se le pasa la carpeta y, además, el informe, el acta y el mp4 recién montados (aún no están en ULTIMA)
+    if (fs.existsSync(RV)) { const rv = spawnSync('node', [RV, path.dirname(cfg.ultima), '--informe', `${OUT}/${cfg.id}-informe-reglas.txt`, '--acta', `${OUT}/${cfg.id}-acta.txt`, '--mp4', outFile, '--id', cfg.id, '--nombre', cfg.ultimaNombre || cfg.id], { encoding: 'utf8' }); console.log((rv.stdout || '') + (rv.stderr || '')); if (rv.status !== 0) { candado = false; console.log('❌ [CANDADO] revisar-video.cjs da ❌ → NO se escribe ULTIMA ni VIDEOS-TERMINADOS. Arregla lo que dice y vuelve a exportar.'); try { fs.writeFileSync(`${OUT}/${cfg.id}-revision-candado.txt`, (rv.stdout || '') + (rv.stderr || '')); } catch (e) {} } }
+    else { candado = false; console.log('❌ [CANDADO] falta scripts/revisar-video.cjs: NO se escribe ULTIMA'); }
+  }
+  if (cfg.ultima && candado) {
     const U = cfg.ultima, nom = cfg.ultimaNombre || cfg.id; fs.mkdirSync(U, { recursive: true });
-    [['.mp4', '.mp4'], ['-portada.png', ' - PORTADA.png'], ['-subtitulos-es.srt', ' - subtitulos ES.srt'], ['-subtitulos-en.srt', ' - subtitulos EN.srt'], ['-informe-reglas.txt', ' - informe de reglas.txt'], ['-acta.txt', ' - acta (parte del motor).txt']].forEach(([a, b]) => {
+    [['.mp4', '.mp4'], ['-portada.png', ' - PORTADA.png'], ['-subtitulos-es.srt', ' - subtitulos ES.srt'], ['-subtitulos-en.srt', ' - subtitulos EN.srt'], ['-informe-reglas.txt', ' - informe de reglas.txt'], ['-acta.txt', ' - acta (parte del motor).txt'], ['-hoja-planos.jpg', ' - hoja de planos.jpg']].forEach(([a, b]) => {
       const f = `${OUT}/${cfg.id}${a}`; if (fs.existsSync(f)) try { fs.copyFileSync(f, `${U}/${nom}${b}`); } catch (e) { console.log('No pude copiar a ÚLTIMA (¿lo tienes abierto?):', e.message); } });
     fs.writeFileSync(`${U}/VERSION.txt`, `${cfg.id} · ${PUB ? 'CALIDAD MÁXIMA (para publicar)' : 'borrador (rápido)'} · montado el ${new Date().toLocaleString('es-ES')}\n`);
+    if (PUB) {
+      // P14 (T30): el mp4 de ULTIMA en calidad máxima tiene que tener 1080 px de lado corto y 10 Mb/s o más
+      const fU = `${U}/${nom}.mp4`, inf = info(fU), m = inf.match(/, (\d{3,5})x(\d{3,5})/), d = dur(fU), mbps = d ? fs.statSync(fU).size * 8 / d / 1e6 : 0;
+      const ok = m && Math.min(+m[1], +m[2]) >= 1080 && mbps >= 10, lin = (ok ? '✅ P14 ' : '❌ [P14] ') + (m ? m[1] + 'x' + m[2] : 'sin resolución') + ', ' + mbps.toFixed(1) + ' Mb/s' + (ok ? ' (mínimo 1080 px y 10 Mb/s)' : ' — NO SE PUBLICA: hay que volver a exportar');
+      console.log(lin); for (const f of [`${U}/${nom} - informe de reglas.txt`, `${U}/${nom} - acta (parte del motor).txt`]) if (fs.existsSync(f)) fs.appendFileSync(f, '\n' + lin + '\n');
+      // F7 (T30): copia con fecha en VIDEOS-TERMINADOS; la anterior del mismo vídeo pasa a ANTIGUOS (cfg.sinCopia = true en las pruebas)
+      if (!cfg.sinCopia) try {
+        const VT = BASE + '/VIDEOS-TERMINADOS', AN = VT + '/ANTIGUOS', st = new Date().toISOString().slice(0, 16).replace('T', '_').replace(':', ''); fs.mkdirSync(AN, { recursive: true });
+        const vid = String(cfg.id).replace(/-v\d+[a-z]?(?=-tiktok|$)/, ''); for (const f of fs.readdirSync(VT)) if (f.endsWith('_' + cfg.id + '.mp4') || (f.includes('_' + vid) && f.endsWith('.mp4') && f.includes('-tiktok') === String(cfg.id).includes('-tiktok'))) { if (fs.statSync(VT + '/' + f).isFile()) fs.renameSync(VT + '/' + f, AN + '/' + f); }
+        fs.copyFileSync(fU, `${VT}/${st}_${cfg.id}.mp4`); console.log('F7: copia en VIDEOS-TERMINADOS/' + st + '_' + cfg.id + '.mp4');
+      } catch (e) { console.log('⚠ [F7] no pude copiar a VIDEOS-TERMINADOS:', e.message); }
+    }
   }
   return outFile;
 }

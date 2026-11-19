@@ -30,6 +30,6 @@ Si sale ❌, no se exporta ni se publica.
 - **Las dudas no van a Paco:** cualquier duda se le pregunta a 📈 Estrategia (protocolo de coordinación).
 
 ## Las que no salen en ninguna ficha (las hace o las comprueba el motor; van en el informe y en el acta)
-MOTOR: F11 G2 M2 M3 M4 M5 M6 M7 M8 M9 M11 M12 M13 M14 M16 M17 M22 M23 M27 M29 M30 M31 M34 M38 M41 M45 M42 N5 N8 N10 N22 S2 S3 S7 S10 Y22
+MOTOR: F7 F11 G2 M2 M3 M4 M5 M6 M7 M8 M9 M11 M12 M13 M14 M16 M17 M19 M22 M23 M27 M29 M30 M31 M34 M38 M41 M42 M45 N5 N8 N10 N22 P14 S2 S3 S7 S8 S9 S10 Y22
 (T29, 19 nov 2026: el motor comprueba N14 (9), G2, M14, N10, F11, S10 y M12, y hace M30, M41, M23, M27 y M14; las marcas `nombre`, `pico`, `emocion`, `fecha` y `fechaTikTok` van en la config, ficha ① apartado E.)
 **Regla nueva = sitio nuevo:** al añadir una regla a la checklist, se pone en su ficha o en esta línea MOTOR, en el mismo commit. `node scripts/comprobar-checklist-video.cjs` falla si una regla no tiene sitio.

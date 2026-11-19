@@ -50,7 +50,7 @@ const cfg = {
     { id: 'mapa', video: B + '/mapa-ache.mp4', fixed: 4.0, amb: PAJAROS(-34, 2) },
     // 3 · EL GIRO (pico; silencio antes, S9; dato quieto, M19)
     // 3 · EL CASO Y LA CIFRA, en un solo bloque pico (v9): primero los ypeti (N26), 1959 con referencia (N32); después la cifra general de Kim Hill
-    S({ id: 'giro', pico: true, emocion: 'fria', pause: 0.5, amb: VIENTO(-30, 4),
+    S({ id: 'giro', pico: true, datoFuerte: true, emocion: 'fria', pause: 0.5, amb: VIENTO(-30, 4),
       text: 'En 1959, hace menos de setenta años, los ypeti fueron los primeros en salir del bosque. Eran unos cuarenta. En 1987 quedaban treinta. No fueron los únicos: según el antropólogo Kim Hill, en pocos años murió más de la mitad de los que salieron del bosque, de epidemias que nunca habían conocido.',
       voz: `En 1959, hace menos de setenta años, los ${YP} fueron los primeros en salir del bosque. Eran unos cuarenta. En 1987 quedaban treinta. No fueron los únicos: según el antropólogo Kim Jil, en pocos años murió más de la mitad de los que salieron del bosque, de epidemias que nunca habían conocido.`,
       cifra: [{ word: 'treinta', text: '40 → 30', sub: 'LOS YPETI · KIM HILL', dur: 1.0 }, { word: 'mitad', text: '1 DE CADA 2', sub: 'EPIDEMIAS TRAS EL CONTACTO', dur: 2.2, size: 170 }],

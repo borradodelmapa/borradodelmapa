@@ -15,19 +15,9 @@ Versión: 19 nov 2026.
 
 ## Las del motor que AÚN NO hace el motor: se miran a mano hasta que estén programadas (Estrategia, 20 nov 2026)
 Están en la línea MOTOR de la ficha ⓪, pero todavía no las aplica ni las comprueba nadie automáticamente. Hasta que el informe las dé, van al acta a mano:
-- **M17** En vídeos de más de 45 s, algo reinicia la atención cada 30-45 s: un cambio de bloque, un rótulo o una cifra.
-- **M19** El plano del `datoFuerte` aguanta un poco más que los de alrededor.
 - **M22** El golpe de sonido cae en el fotograma exacto del corte o del rótulo.
-- **M31** El corte cae al final de una idea hablada. Si choca con los 3,5 s, se dice cuál se ha preferido.
 - **M34** Los cortes se aceleran al final de cada bloque. El motor solo avisa.
-- **M38** Las duraciones de los planos de un bloque varían un poco; no son todas iguales.
-- **M42** No hay dos movimientos de cámara seguidos en la misma dirección.
-- **S7** El ambiente entra un instante antes del corte.
-- **S8** La música tiene un respiro antes del `cambioTono`.
-- **S9** Silencio total justo antes del `datoFuerte`.
 - **N14 (3)(4)(10)(11)** Sin cortinilla de más de 2 s · tramo `humano` más lento y sin música · zoom de énfasis en la `advertencia` · ambiente real por encima de la música.
-- **F7** Hoja de planos y copia en `VIDEOS-TERMINADOS/`.
-- **P14** La copia de `ULTIMA` cumple 1080 px y ≥ 10 Mb/s.
 
 ## 👂 Para Paco (Claude no oye)
 - **N25** La última frase de cada bloque baja un poco el tono, no queda plana. Se le pregunta a Paco al enseñar el borrador.
