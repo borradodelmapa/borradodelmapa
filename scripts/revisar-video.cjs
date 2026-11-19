@@ -6,6 +6,7 @@
 //                  docs/video-fichas/revisor-guion.md y revisor-imagen.md. Cada ID: { "estado": "✅"|"❌", "como"|"motivo": "…" }.
 //   👤 PACO      → las 7 que solo puede hacer Paco, en ok-paco.json con sus palabras: { "F3": "«Ok al guión sigue» (19 nov)", … }.
 // textos-youtube.txt, revision-*.json y ok-paco.json pueden estar en la carpeta del mp4 o en la del vídeo (la de encima). El motor lo llama sobre la carpeta temporal de la exportación ANTES de copiar a ULTIMA.
+// Desde el motor: node scripts/revisar-video.cjs "<carpeta del vídeo>" --mp4 <salida/id.mp4> --informe <salida/id-informe-reglas.txt> --acta <salida/id-acta.txt> --nombre <nombre final> [--fase …]
 // Uso: node scripts/revisar-video.cjs "<carpeta ULTIMA>" [--fase exportar|publicar] [--fecha 2026-12-22T10:00] [--tipo short|largo]
 //   --fase exportar (por defecto): lo que tiene que estar antes de «★ Exportar para publicar».
 //   --fase publicar: además, blog, Web Story, fecha válida, registro y OK de Paco a todo.
@@ -17,8 +18,10 @@ const dir = args.find(a => !a.startsWith('--'));
 const opt = k => { const i = args.indexOf('--' + k); return i >= 0 ? args[i + 1] : null; };
 const fase = opt('fase') || 'exportar';
 if (!dir || !fs.existsSync(dir)) { console.log('Uso: node scripts/revisar-video.cjs "<carpeta ULTIMA>" [--fase exportar|publicar] [--fecha AAAA-MM-DDTHH:MM] [--tipo short|largo]'); process.exit(2); }
-const base = path.dirname(path.resolve(dir));
-const ls = fs.readdirSync(dir);
+// Llamada desde el motor (antes de escribir ULTIMA): dir = carpeta del vídeo, con --mp4, --informe, --acta (los recién montados en salida/) y --nombre (el nombre final de ULTIMA).
+const MP4 = opt('mp4'), desdeMotor = !!MP4;
+const base = desdeMotor ? path.resolve(dir) : path.dirname(path.resolve(dir));
+const ls = fs.readdirSync(desdeMotor ? path.dirname(path.resolve(MP4)) : dir);
 const leer = f => { try { return fs.readFileSync(f, 'utf8'); } catch (e) { return null; } };
 const OK = [], MAL = [], AVISO = [];
 const ok = (id, t) => OK.push('✅ ' + id + ' ' + t), mal = (id, t) => MAL.push('❌ ' + id + ' ' + t), aviso = (id, t) => AVISO.push('⚠ ' + id + ' ' + t);
@@ -33,20 +36,23 @@ const PACO = { F3: 'aprueba el guion y los 20 primeros segundos (G1)', F5: 'da e
 const SCRIPT = new Set(['Y3', 'Y5', 'Y6', 'Y7', 'Y8', 'Y10', 'Y12', 'P2', 'P5', 'P6', 'P9', 'P14', 'P18', 'F12', 'P3', 'P7', 'P10', 'P11', 'P12', 'P13', 'P15', 'Y1', 'Y9', 'Y17', 'S10']);
 
 // ── 2. Archivos de la carpeta ──
-const mp4 = ls.find(f => f.endsWith('.mp4'));
-const informe = ls.find(f => /informe de reglas\.txt$/.test(f));
-const acta = ls.find(f => / - acta\.txt$/.test(f));
-const leerAqui = f => leer(path.join(dir, f)) ?? leer(path.join(base, f)); // en la carpeta del mp4 o en la del vídeo
+const mp4Path = desdeMotor ? path.resolve(MP4) : (ls.find(f => f.endsWith('.mp4')) ? path.join(dir, ls.find(f => f.endsWith('.mp4'))) : null);
+const mp4 = desdeMotor ? ((opt('nombre') || '').replace(/\.mp4$/, '') + '.mp4') : (mp4Path ? path.basename(mp4Path) : null);
+const informePath = opt('informe') || (ls.find(f => /informe de reglas\.txt$/.test(f)) ? path.join(dir, ls.find(f => /informe de reglas\.txt$/.test(f))) : null);
+const actaPath = opt('acta') || (ls.find(f => / - acta\.txt$/.test(f)) ? path.join(dir, ls.find(f => / - acta\.txt$/.test(f))) : null);
+const leerAqui = f => [dir, base, path.join(base, 'ULTIMA')].map(d => leer(path.join(d, f))).find(x => x != null) ?? null; // carpeta del mp4, del vídeo o su ULTIMA
 const textos = leerAqui('textos-youtube.txt');
-if (!mp4) mal('F7', 'no hay mp4 en la carpeta');
+if (!mp4Path || !fs.existsSync(mp4Path)) mal('F7', 'no encuentro el mp4' + (MP4 ? ' (' + MP4 + ')' : ' en la carpeta'));
+if (desdeMotor && !opt('nombre')) mal('Y7', 'el motor no ha pasado --nombre (el nombre final del mp4 en ULTIMA)');
+const informe = informePath && leer(informePath);
 if (!informe) mal('P5', 'falta el informe de reglas del motor');
-else { const inf = leer(path.join(dir, informe)); const x = (inf.match(/^❌.*$/gm) || []); x.length ? mal('P5', 'el informe del motor tiene ' + x.length + ' ❌: ' + x.slice(0, 3).join(' | ')) : ok('P5', 'informe del motor sin ❌'); }
-acta ? ok('F12', 'hay acta (' + acta + ')') : mal('F12', 'falta el acta «<nombre> - acta.txt»');
+else { const x = (informe.match(/^❌.*$/gm) || []); x.length ? mal('P5', 'el informe del motor tiene ' + x.length + ' ❌: ' + x.slice(0, 3).join(' | ')) : ok('P5', 'informe del motor sin ❌'); }
+actaPath && leer(actaPath) ? ok('F12', 'hay acta (' + path.basename(actaPath) + ')') : mal('F12', 'falta el acta');
 
 // ── 3. Calidad del archivo (P14) y nombre (Y7) ──
-if (mp4) {
+if (mp4Path && fs.existsSync(mp4Path)) {
   const FF = [path.join(R, 'salma marketing'), 'C:/Users/User/Desktop/salma/salma marketing'].map(b => path.join(b, 'india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe')).find(f => fs.existsSync(f)) || 'ffmpeg';
-  const r = spawnSync(FF, ['-hide_banner', '-i', path.join(dir, mp4)], { encoding: 'utf8' });
+  const r = spawnSync(FF, ['-hide_banner', '-i', mp4Path], { encoding: 'utf8' });
   const t = (r.stderr || '') + (r.stdout || '');
   const res = t.match(/Video: [^\n]*?, (\d{3,4})x(\d{3,4})/), br = t.match(/bitrate:\s*(\d+)\s*kb\/s/), dur = t.match(/Duration:\s*(\d+):(\d+):([\d.]+)/);
   if (!res || !br) mal('P14', 'no se pudo leer resolución o Mb/s del mp4');
@@ -69,12 +75,12 @@ else {
   /(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)[a-z]*\.? (de )?20\d\d|20\d\d-\d\d-\d\d/i.test(des) && /confírm|fuentes oficiales/i.test(des) ? ok('P9', 'datos de viaje con fecha y aviso de confirmarlos') : mal('P9', 'faltan datos de viaje con fecha («noviembre de 2026; confírmalos…»)');
   const tags = (des.match(/(^|\s)#[\wÀ-ÿ]+/g) || []).length; (tags >= 3 && tags <= 5) ? ok('P6·hashtags', tags + ' hashtags') : mal('P6', tags + ' hashtags en la descripción (3 en YouTube)');
   const largo = (opt('tipo') || '') === 'largo' || /CAP[IÍ]TULOS/.test(des);
-  if (largo) /(^|\n)0:00 /.test(des) ? ok('Y6', 'capítulos con 0:00') : mal('Y6', 'largo sin capítulos 0:00 en la descripción');
+  if (largo) /(^|\n)0:00 /.test(des) ? ok('Y6', 'capítulos con 0:00') : mal('Y6', 'largo sin capítulos 0:00 en la descripción'); else ok('Y6', 'short: YouTube no enseña capítulos en Shorts');
   eti ? ok('Y8', 'etiquetas: ' + eti.split(',').length) : mal('Y8', 'sin etiquetas');
   com && /\?/.test(com) ? ok('P18', 'comentario fijado con pregunta') : mal('P18', 'el comentario fijado no lleva pregunta');
   /borradodelmapa\.com/.test(com) ? ok('P6·comentario', 'llamada a la app en el comentario') : mal('P6', 'el comentario fijado no lleva borradodelmapa.com');
   (/📷|autores/i.test(com)) ? ok('P2·comentario', 'autores en el comentario') : mal('P2', 'el comentario fijado no lleva los autores (📷 … o «autores de todas las fotos en la descripción»)');
-  const srtEN = ls.some(f => /subtitulos EN\.srt$/i.test(f));
+  const srtEN = [ls, ...[base, path.join(base, 'ULTIMA')].map(d => { try { return fs.readdirSync(d); } catch (e) { return []; } })].some(a => a.some(f => /subtitulos[ -]en\.srt$/i.test(f)));
   (srtEN && /TITLE/i.test(en)) ? ok('Y10', 'paquete EN: título, descripción y .srt') : mal('Y10', 'falta ' + (srtEN ? '' : 'el .srt EN ') + (/TITLE/i.test(en) ? '' : 'el título/descripción EN'));
   // P2: cada autor de ATRIBUCIONES en la descripción
   const atrib = [path.join(dir, 'ATRIBUCIONES.txt'), path.join(base, 'ATRIBUCIONES.txt'), path.join(base, 'videos', 'ATRIBUCIONES.txt'), path.join(base, 'fotos', 'ATRIBUCIONES.txt'), path.join(base, 'caratula', 'ATRIBUCIONES.txt')].filter(f => fs.existsSync(f));
