@@ -20,3 +20,7 @@ Versión del 19 nov 2026. La fuente es `docs/video-checklist.md`, con el texto e
 - **F8** Paco corrige por número de escena. Nunca se dice «arreglado», sino «montado, dime qué ves y oyes».
 - **L2** Se trabaja por países: vídeo, web y redes de un país se planifican juntos.
 - **Las dudas no van a Paco:** cualquier duda se le pregunta a 📈 Estrategia (protocolo de coordinación).
+
+## Las que no salen en ninguna ficha (las hace o las comprueba el motor; van en el informe y en el acta)
+MOTOR: M2 M3 M4 M5 M6 M7 M8 M9 M11 M12 M13 M16 M17 M22 M29 M30 M31 M34 M38 M41 M42 N5 N8 N22 S2 S3 S7 Y22
+**Regla nueva = sitio nuevo:** al añadir una regla a la checklist, se pone en su ficha o en esta línea MOTOR, en el mismo commit. `node scripts/comprobar-checklist-video.cjs` falla si una regla no tiene sitio.

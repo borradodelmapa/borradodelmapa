@@ -15,7 +15,8 @@ try {
 } catch (e) { /* sin archivo: el aviso sale igual */ }
 console.log([
   'PROTOCOLO DE VÍDEO (aviso automático del repo, no lo ha escrito Paco): este mensaje habla de vídeo.',
-  'ANTES de responder o tocar nada: lee ENTERO docs/video-checklist.md (fuente única, se modifica mucho) y pásala punto a punto.',
+  'ANTES de responder o tocar nada: lee ENTERA la FICHA DEL PASO en que estás, en docs/video-fichas/ (⓪ al empezar, ① guion, ② material, ③ revisión del montaje, ④ publicación). La fuente con el texto entero de cada regla es docs/video-checklist.md.',
+  'Cada montaje se entrega con su ACTA (F12): todas las reglas, ✅ con cómo se comprobó o ❌ con el motivo.',
   'Última actualización de la checklist: ' + ultima,
   'Si Paco decide algo nuevo de vídeo, escríbelo EN ESE ARCHIVO en el mismo turno (sección «Editar esta checklist desde varios chats a la vez»), no solo en el chat.',
   'Nunca digas «listo/arreglado»: «montado — dime qué ves y oyes». Informe de reglas del motor sin ❌ antes de entregar.'
