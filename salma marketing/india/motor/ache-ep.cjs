@@ -19,7 +19,7 @@ const cfg = {
   id: 'pueblos-ache-v8' + (TT ? '-tiktok' : ''),
   // MARCAS (T29, ficha ① E): nombre → G2 · fecha / fechaTikTok → S10 · b.pico → M27 y F11 · b.emocion → M23
   nombre: ['aché'], fecha: '2026-12-22', fechaTikTok: '2026-12-29',
-  out: B + '/salida', fotosSerie: B + '/fotos', ultima: B + (TT ? '/ULTIMA-v8-tiktok' : '/ULTIMA-v8'), // v8 = prueba del motor nuevo: el v7 programado (ULTIMA) no se toca ultimaNombre: 'tribus-de-paraguay-los-ache-casi-se-borran-del-mapa',
+  out: B + '/salida', fotosSerie: B + '/fotos', ultima: B + (TT ? '/ULTIMA-v8-tiktok' : '/ULTIMA-v8'), ultimaNombre: 'tribus-de-paraguay-los-ache-casi-se-borran-del-mapa', // v8 = prueba del motor nuevo: el v7 programado (ULTIMA) no se toca
   look: 'portra', counter: 'PUEBLOS BORRADOS',
   portada: { png: B + '/caratula/ache-A.png' },
   voices: { salma: SALMA_EXPRESIVA }, sintonia: { src: 'SFX_sintonia-pueblos', db: -8 },
