@@ -12,7 +12,7 @@ Antes de pasarlo a guion, 🎬 Vídeo comprueba en la fuente primaria todo lo ma
 
 ## 2 · El giro: casi los borran del mapa
 - **Contacto:** los ypety fueron los primeros. En 1959, la mitad de la banda salió del bosque para vivir con Manuel de Jesús Pereira, y la otra mitad lo hizo poco después. Los yvytyruzu fueron contactados en 1962-1963, los del norte a partir de 1970 y los ñacunday en 1976 (S3, Kim Hill).
-- **Los ypety eran unos 40 al contactarlos. En 1987 quedaban 30** (S3). El grupo de las cosquillas era el más pequeño.
+- **Los ypety eran unos 40 al contactarlos. En 1987 quedaban 30** (S3). ❌ CORREGIDO (19 nov): NO eran el grupo más pequeño. Al contacto había unos 650 aché del norte, unos 60 yvytyruzu, unos 40 ypety y 28 ñacunday (S3). Hill: «more than half these Ache died from virgin-soil epidemics within a few years of peaceful contact» y, para los del norte, «about one-half of the population died».
 - Entre **1971 y 1978 murió en torno al 38 % de los aché del norte**, sobre todo de enfermedades respiratorias del contacto. Otros 49 fueron secuestrados y nunca volvieron (Hill y Hurtado, *Aché Life History*, citado por S4). ⚠ Comprobar en el libro.
 - **De 1959 a 1978**, la tala, los ataques de colonos y las epidemias los obligaron a ir a reservas (S1).
 - **«Genocidio»:** lo denunció el antropólogo Mark Münzel en dos informes para IWGIA (1973 y 1974). El Gobierno de Stroessner lo negó (S5). Es un término discutido: decirlo como **denuncia**, no como hecho juzgado.
