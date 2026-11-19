@@ -11,7 +11,8 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 
 **Lo que manda en el orden (N33):**
 - **Título (Paco, Y2/Y3):** «Indígenas de El Salvador: del exterminio a cantar el himno» (57 caracteres). Empieza por la búsqueda real, «indígenas de el salvador».
-- **Carátula (Paco, 19 nov: «la A»):** `salma marketing/el-salvador/caratula/himno-A.png`, de 🎨 Carátulas. Imagen partida por una raya naranja: a un lado las niñas cantando con la mano en el pecho (vx8crmplcos, 32,5 s), al otro Bukele (CC0) en su propio panel. Texto: «EL SALVADOR · En 1932 los mataban por su **LENGUA** · ¿Y con **BUKELE**?». Con el título solo comparte «El Salvador» (Y3). Va en el primer fotograma (M11). Niños en la portada: excepción a P4 de Paco.
+- **Carátula: himno-A2, PENDIENTE DEL OK DE PACO** (`salma marketing/el-salvador/caratula/himno-A2.png`, de 🎨 Carátulas). Imagen partida por una raya naranja: a un lado las niñas cantando con la mano en el pecho (vx8crmplcos, 32,5 s), al otro Bukele (CC0) en su propio panel. Texto: «EL SALVADOR · Tras 1932, por miedo, callaron su **LENGUA** · ¿Y con **BUKELE?**». Con el título solo comparte «El Salvador» (Y3). Va en el primer fotograma (M11). Niños en la portada: excepción a P4 de Paco.
+  - Paco eligió la A («En 1932 los mataban por su LENGUA») el 19 nov, pero Estrategia y Carátulas la descartaron por F4: los mataron por ser indígenas, y la lengua fue una de las señas que usó el ejército para elegirlos, no la causa. La A está en `caratula/descartadas/`.
 - **Lo que prometen:** el exterminio de 1932, el himno de 2025 y qué ha pasado en medio. El gancho cuenta las dos puntas en 20 s; el bloque 1, el exterminio, en el primer minuto y medio.
 
 **Formato:**
@@ -45,6 +46,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 **S:** ¿Qué pasó en medio? ¿Y qué ha cambiado con Bukele?
 - **G2:** «El Salvador» se dice a los ~3 s y «Bukele», a los ~12 s.
 - **M15/M21:** caras desde el fotograma 0 (los niños).
+- **«Los eligió por su ropa y por su lengua»** (F4): «the army used indigenous appearance, dress, and language to help designate who should be targeted», en Lindo Fuentes, Ching y Lara Martínez, *Remembering a Massacre in El Salvador* (2007), p. 62, citado en W1. La voz dice que eligió *por* esas señas, no que los mataran *por* hablar la lengua (que es lo que descartó la carátula A).
 - **«Exterminio»:** es la palabra del presidente Funes al pedir perdón en 2010 (S3); se recuerda en el bloque 3.
 - **«Era la primera vez»:** según la prensa y la propia Asamblea (H1-H3). Lo nuevo es que fuera dentro de la Asamblea: la misma escuela ya lo había cantado en 2009, en Suchitoto (H4). Va en la descripción.
 - **N16 (bucle abierto):** «¿qué ha cambiado con Bukele?» se contesta en el bloque 3 (lo que sí y lo que no) y se cierra en el cierre.
