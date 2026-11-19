@@ -126,3 +126,34 @@ Publicación:
 - YouTube: mar 22 dic 2026, 10:00, en Studio.
 - TikTok: mar 29 dic 2026, 10:00, en Metricool (434727553).
 - Las fechas evitan repetir música en la misma semana (S10).
+
+## PROPUESTA v9 (19 nov 2026, encargo de Estrategia tras el acta F12): arreglar N26, N32, M48 y N23. SIN MONTAR: la decide Paco.
+Voz nueva: unos 330 caracteres, dentro del saldo de ElevenLabs (0 € extra). Planos y material, los mismos. Duración estimada: unos 57 s (cabe en 60).
+
+**1 · Anclaje (arregla N23: la frase empezaba con el conector «Y»)**
+- Ahora: «Y eran muy pocos.»
+- v9: «Eran muy pocos.»
+
+**2 · Salida, giro y bucle en UN solo bloque (arregla N26, N32 y, de paso, F11)**
+- N26: primero el caso concreto, los ypeti (40 → 30), y después la cifra general (más de la mitad).
+- N32: 1959 lleva una referencia conocida.
+- F11: al ir juntos, hay un solo momento fuerte en vez de dos seguidos.
+- Ahora (tres bloques):
+  - «En 1959, los ypeti fueron los primeros en salir del bosque.»
+  - «Según el antropólogo Kim Hill, en pocos años murió más de la mitad de los que salieron del bosque, de epidemias que nunca habían conocido.»
+  - «Los ypeti, los de las cosquillas, eran unos cuarenta. En 1987 quedaban treinta.»
+- v9 (un bloque, marcado `pico`):
+  - «En 1959, hace menos de setenta años, los ypeti fueron los primeros en salir del bosque. Eran unos cuarenta. En 1987 quedaban treinta.»
+  - (pausa)
+  - «No fueron los únicos: según el antropólogo Kim Hill, en pocos años murió más de la mitad de los que salieron del bosque, de epidemias que nunca habían conocido.»
+- Cifras: «40 → 30 · LOS YPETI · KIM HILL» con «treinta», y «1 DE CADA 2 · EPIDEMIAS TRAS EL CONTACTO» con «mitad».
+- Fuentes: Kim Hill (las dos cifras). «Hace menos de setenta años» es la cuenta 2026 − 1959 = 67.
+- El bucle del segundo 9 («Eran muy pocos») se cierra antes, en «Eran unos cuarenta», y el vídeo sigue con el dato general.
+
+**3 · Un plano que intriga sin explicarse (M48)**
+- En el anclaje («Eran muy pocos»), un detalle de 0,8 s de las manos con el móvil en Kuetuvy (recorte de W3), sin rótulo.
+- Se explica al final: «Hoy, desde Kuetuvy… suben su lengua a internet», con la foto entera.
+- Aviso: es la misma foto en dos encuadres. El motor lo marca como ⚠ M3 (imagen repetida, sin ❌). Si no vale, M48 se queda en ❌, con el motivo de que no hay otra imagen libre del lugar.
+
+**Lo que no cambia:** el gancho, «cómo», el mapa, «hoy», la tarjeta, la carátula y el título (salvo que Paco elija el del estudio Y12: «Los ACHÉ, la tribu de Paraguay que casi se borra del mapa 🇵🇾», en `salma marketing/pueblos/ache/estudio-titulo.md`).
+**Si Paco la aprueba:** se monta la v9 con el motor nuevo, con su informe, su acta y el vídeo de comparación, y Paco decide si sustituye a la v7 programada (YouTube 22 dic, TikTok 29 dic).
