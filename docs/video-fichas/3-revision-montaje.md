@@ -17,7 +17,6 @@ Versión: 19 nov 2026.
 Están en la línea MOTOR de la ficha ⓪, pero todavía no las aplica ni las comprueba nadie automáticamente. Hasta que el informe las dé, van al acta a mano:
 - **M22** El golpe de sonido cae en el fotograma exacto del corte o del rótulo.
 - **M34** Los cortes se aceleran al final de cada bloque. El motor solo avisa.
-- **N14 (3)(4)(10)(11)** Sin cortinilla de más de 2 s · tramo `humano` más lento y sin música · zoom de énfasis en la `advertencia` · ambiente real por encima de la música.
 
 ## 👂 Para Paco (Claude no oye)
 - **N25** La última frase de cada bloque baja un poco el tono, no queda plana. Se le pregunta a Paco al enseñar el borrador.

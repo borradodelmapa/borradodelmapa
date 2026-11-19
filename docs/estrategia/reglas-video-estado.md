@@ -4,10 +4,10 @@
 |---|---|
 | 🤖 Revisor de guion | 52 |
 | 👤 Paco | 7 |
-| ⚙️ Motor (tanda 2) | 10 |
+| ⚙️ Motor | 40 |
 | 🤖 Revisor de imagen | 27 |
-| ⚙️ Motor | 30 |
-| 🧮 Script del candado | 24 |
+| 🧮 Script del candado | 23 |
+| ⚙️ Motor (pendiente) | 1 |
 | **Total** | **150** |
 
 | ID | Qué dice | Quién la cumple | Estado |
@@ -21,7 +21,7 @@
 | F4 | Datos con fuente registrados en docs/india-notas-y-fuentes.md (varias fuentes se dicen; una … | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
 | F5 | Coste dicho antes (voz ElevenLabs, música, Runway; CLAUDE.md §8) | 👤 Paco | Tú: OK al coste |
 | F6 | Paco elige la foto protagonista de cada escena (banco por temas) y los audios, oyendo candid… | 👤 Paco | Tú: elige foto protagonista y audios |
-| F7 | Monta Claude con el motor (un solo editor/motor | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de guion) |
+| F7 | Monta Claude con el motor (un solo editor/motor | ⚙️ Motor | ✅ Funciona |
 | F8 | Paco corrige por escena/número y se remonta | 👤 Paco | Tú: ve y oye el montaje y lo aprueba |
 | F9 | NORMA | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | F10 | Vídeo de archivo ajeno | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
@@ -76,12 +76,12 @@
 | M16 | SHORTS SIN CLIP DE LA APP | ⚙️ Motor | ✅ Funciona |
 | M15 | Persona primero | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M14 | MANDA EN LOS SHORTS NUEVOS | ⚙️ Motor | ✅ Funciona |
-| M17 | REINICIO DE ATENCIÓN CADA 30-45 s | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de imagen) |
+| M17 | REINICIO DE ATENCIÓN CADA 30-45 s | ⚙️ Motor | ✅ Funciona |
 | M18 | EL ÚLTIMO PLANO ANTES DE LA TARJETA ES UN PICO, NO UN DESCANSO | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
-| M19 | EL DATO MÁS IMPORTANTE SE QUEDA QUIETO UN POCO MÁS | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de guion) |
+| M19 | EL DATO MÁS IMPORTANTE SE QUEDA QUIETO UN POCO MÁS | ⚙️ Motor | ✅ Funciona |
 | M20 | CONTRASTE DE INTENSIDAD, NO TODO A TOPE | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
 | M21 | MIRADA DIRECTA A CÁMARA EN EL PICO | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
-| M22 | SONIDO DE IMPACTO, FOTOGRAMA A FOTOGRAMA | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de imagen) |
+| M22 | SONIDO DE IMPACTO, FOTOGRAMA A FOTOGRAMA | ⚙️ Motor (pendiente) | ⏳ Falta que Paco elija de oído el golpe de sonido. Mientras tanto lo exige el candado a mano (revisor de imagen) |
 | M23 | TEMPERATURA DE COLOR SEGÚN LA EMOCIÓN DEL BLOQUE | ⚙️ Motor | ✅ Funciona |
 | M24 | UN PLANO DE ASOMBRO POR VÍDEO, SOSTENIDO | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M25 | SUBTÍTULOS | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
@@ -90,18 +90,18 @@
 | M28 | EL PRIMER FOTOGRAMA DE CADA CORTE YA RESUELTO, NO A MEDIO GESTO | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M29 | VARIAR LA DISTANCIA DE PLANO ENTRE CORTES CONSECUTIVOS DE UN MISMO BLOQUE | ⚙️ Motor | ✅ Funciona |
 | M30 | EL DATO FUERTE SE DICE PRIMERO, LIMPIO; EL TEXTO/TARJETA ENTRA UN INSTANTE DESPUÉS | ⚙️ Motor | ✅ Funciona |
-| M31 | EL CORTE DE IMAGEN COINCIDE CON EL FINAL DE UNA IDEA HABLADA, NUNCA LA PARTE A MITAD | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de imagen) |
+| M31 | EL CORTE DE IMAGEN COINCIDE CON EL FINAL DE UNA IDEA HABLADA, NUNCA LA PARTE A MITAD | ⚙️ Motor | ✅ Funciona |
 | M32 | RECURSO A VALORAR, no norma fija | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
 | M33 | RECURSO A VALORAR, no norma fija | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
 | M34 | EL RITMO DE CORTE SE ACELERA LIGERAMENTE HACIA EL FINAL DE CADA BLOQUE | ⚙️ Motor | ✅ Funciona |
 | M35 | LA CARA DE LA PERSONA RELEVANTE ENTRA ANTES DEL DATO ASOCIADO A ELLA, NO DESPUÉS | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M36 | PLANO DE REACCIÓN REAL TRAS UN DATO FUERTE, CUANDO EXISTA | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M37 | VARIAR EL TIPO DE RECURSO VISUAL DENTRO DE UN MISMO BLOQUE DE DATOS, NO SOLO LA DISTANCIA DE… | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
-| M38 | LA DURACIÓN DE CADA PLANO DENTRO DE UN BLOQUE VARÍA LIGERAMENTE, NO TODOS IGUALES | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de imagen) |
+| M38 | LA DURACIÓN DE CADA PLANO DENTRO DE UN BLOQUE VARÍA LIGERAMENTE, NO TODOS IGUALES | ⚙️ Motor | ✅ Funciona |
 | M39 | RECORDATORIO BREVE AL VOLVER A UN LUGAR O PERSONA YA PRESENTADO ANTES EN EL MISMO VÍDEO | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
 | M40 | PLANO DE ESTABLECIMIENTO AL EMPEZAR UN BLOQUE EN UN LUGAR NUEVO, CUANDO EXISTA | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M41 | EL RÓTULO DE IDENTIFICACIÓN (LUGAR, NOMBRE, FECHA) ENTRA UN INSTANTE DESPUÉS DEL CORTE, NO A… | ⚙️ Motor | ✅ Funciona |
-| M42 | NO ENCADENAR DOS MOVIMIENTOS DE CÁMARA SEGUIDOS EN LA MISMA DIRECCIÓN | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de imagen) |
+| M42 | NO ENCADENAR DOS MOVIMIENTOS DE CÁMARA SEGUIDOS EN LA MISMA DIRECCIÓN | ⚙️ Motor | ✅ Funciona |
 | M43 | INSTANTE DE IMAGEN SOLA, SIN VOZ, JUSTO ANTES DEL CIERRE/SÍGUEME, ANTES DE LA TARJETA | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M44 | CÁMARA A LA ALTURA DE LOS OJOS EN ENTREVISTAS/TESTIMONIOS, NO MIRANDO HACIA ABAJO | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M45 | CADA SUBTÍTULO DURA EN PANTALLA LO SUFICIENTE PARA LEERSE A VELOCIDAD NORMAL, NO SOLO CUMPLI… | ⚙️ Motor | ✅ Funciona |
@@ -113,9 +113,9 @@
 | S3 | Serie «Pueblos borrados del mapa» | ⚙️ Motor | ✅ Funciona |
 | S4 | El sonido creado no se presenta como «sonido real del destino» | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | S6 | TEMPO DE LA MÚSICA SEGÚN LA ACTIVACIÓN QUE SE BUSCA EN CADA TRAMO | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
-| S7 | EL AMBIENTE REAL EMPIEZA UN INSTANTE ANTES DEL CORTE DE IMAGEN, NO EXACTO CON ÉL | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de imagen) |
-| S8 | RESPIRO EN LA MÚSICA JUSTO ANTES DE UN CAMBIO DE TONO EMOCIONAL FUERTE | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de guion) |
-| S9 | SILENCIO TOTAL (NO SOLO BAJAR VOLUMEN) JUSTO ANTES DEL DATO MÁS FUERTE DEL VÍDEO | ⚙️ Motor (tanda 2) | ⏳ Programado por Vídeo, SIN SUBIR. Mientras tanto lo exige el candado a mano (revisor de guion) |
+| S7 | EL AMBIENTE REAL EMPIEZA UN INSTANTE ANTES DEL CORTE DE IMAGEN, NO EXACTO CON ÉL | ⚙️ Motor | ✅ Funciona |
+| S8 | RESPIRO EN LA MÚSICA JUSTO ANTES DE UN CAMBIO DE TONO EMOCIONAL FUERTE | ⚙️ Motor | ✅ Funciona |
+| S9 | SILENCIO TOTAL (NO SOLO BAJAR VOLUMEN) JUSTO ANTES DEL DATO MÁS FUERTE DEL VÍDEO | ⚙️ Motor | ✅ Funciona |
 | S5 | Música por trozos en documentales largos | 👤 Paco | Tú: elige la música de oído |
 | S10 | NO REPETIR LA MISMA PISTA DE MÚSICA EN DOS VÍDEOS PUBLICADOS LA MISMA SEMANA, AUNQUE LA LICE… | ⚙️ Motor | ✅ Funciona |
 | P1 | Marca de IA en cada red, solo cuando la red lo exige | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
@@ -131,7 +131,7 @@
 | P10 | Redes activas | 🧮 Script del candado | ✅ Funciona |
 | P11 | Cada edición de texto se comprueba en la red y se anota | 🧮 Script del candado | ✅ Funciona |
 | P13 | MANDA SOBRE TODO LO DE ABAJO | 🧮 Script del candado | ✅ Funciona |
-| P14 | TODOS LOS VÍDEOS SALEN CON LA MÁXIMA CALIDAD POSIBLE, SIN EXCEPCIÓN | 🧮 Script del candado | ✅ Funciona |
+| P14 | TODOS LOS VÍDEOS SALEN CON LA MÁXIMA CALIDAD POSIBLE, SIN EXCEPCIÓN | ⚙️ Motor | ✅ Funciona |
 | P15 | CADA ENTRADA DE BLOG CON VÍDEO LLEVA SU WEB STORY | 🧮 Script del candado | ✅ Funciona |
 | P16 | LAS 2-3 PRIMERAS LÍNEAS DE LA DESCRIPCIÓN REPITEN LA PROMESA DEL GANCHO, NO SOLO KEYWORDS | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
 | P17 | EL HASHTAG MÁS ESPECÍFICO VA PRIMERO, EL MÁS GENÉRICO AL FINAL | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
