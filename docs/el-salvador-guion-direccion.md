@@ -126,6 +126,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 - **Fuentes:** sección 4 y 4b del expediente (S15, S16, S19). «Firmado» = ratificado; si Estrategia prefiere la precisión, «no ha ratificado».
 - **El convenio es de la OIT, que es un organismo de la ONU.** En la voz se dice «de la ONU» para que se entienda; en el rótulo y la descripción, «Convenio 169 de la OIT».
 - **Despidos de Cultura y Casas de la Cultura (Estrategia, 19 nov): NO van en la voz.** Solo en la descripción, con fuente primaria: el Decreto Legislativo 33 (Diario Oficial n.º 121, julio de 2024), citado por Diario Co Latino (S22).
+- **«El Estado no ha investigado 1932» se queda en la voz (Paco, 19 nov 2026: «Déjala»)**, avisado de que el expediente solo tiene apoyo indirecto: los consejos indígenas piden que se esclarezca (S16) y Juliana Ama, «ningún gobierno se lo ha tomado en serio» (S6). En la descripción va la versión con fuente (S16).
 - **Gancho al siguiente bloque (N14(5), aviso antes del bloque denso):** **S:** Y a las escuelas donde los niños vuelven a aprenderlo les pasó algo que casi nadie conoce fuera de El Salvador.
 
 ## 4 · ¿QUÉ PASÓ CON LAS CUNAS? (≈ 4:15-5:30) — el caso concreto (N26); despacio en lo humano
