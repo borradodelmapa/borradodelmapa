@@ -53,7 +53,7 @@ const LOOKS = {
 // a:b = proporción · sub = subtítulos (letra, borde, caracteres por línea, posición) · card = [tamaño, y] de cada texto de la tarjeta final
 const FORMATOS = {
   '9:16': { w: 1080, h: 1920, a: 9, b: 16, sub: { letra: 66, borde: 6, ancho: 26, pos: '\\an5\\pos(540,1150)' }, cifra: { y: 560, size: 230, sub: 270 }, counterY: 140, rotY: 900, sgY: 300, sgW: 860, // M10 (T31): la franja del sígueme sale arriba (antes 1.450, en la zona de botones de Shorts y TikTok) y con ≥ 100 px de margen
-    card: { av: [360, 170], l1: [96, 720], l2: [76, 850], l3: [44, 1050], crea: [104, 640], con: [140, 770], desc: [54, 990], grat: [54, 1065], web: [74, 1220], l4: [46, 1560], l5: [52, 1655] } },
+    card: { av: [360, 170], l1: [80, 720], /* M10 (T31): «MÁS PUEBLOS BORRADOS» cabe entre 100 y 980 px */ l2: [76, 850], l3: [44, 1050], crea: [104, 640], con: [140, 770], desc: [54, 990], grat: [54, 1065], web: [74, 1220], l4: [46, 1560], l5: [52, 1655] } },
   // horizontal: subtítulos abajo y centrados (crecen hacia arriba), rótulo de lugar encima de ellos; las fotos más estrechas que 16:9 se ven enteras sobre su propio fondo difuminado
   '16:9': { w: 1920, h: 1080, a: 16, b: 9, sub: { letra: 58, borde: 5, ancho: 42, pos: '\\an2\\pos(960,1020)' }, cifra: { y: 290, size: 200, sub: 230 }, counterY: 60, rotY: 790, sgY: 700,
     card: { av: [220, 60], l1: [96, 330], l2: [76, 450], l3: [70, 620], crea: [90, 300], con: [120, 400], desc: [46, 560], grat: [46, 620], web: [64, 720], l4: [40, 880], l5: [44, 950] } },
@@ -241,8 +241,17 @@ async function build(cfg) {
     const phr = []; let cur = []; toks.forEach((k, i) => { cur.push(i); if (/[,.:;!?…]$/.test(k.w)) { phr.push(cur); cur = []; } }); if (cur.length) phr.push(cur);
     const merged = []; phr.forEach(p => { const len = p.map(i => toks[i].w).join(' ').length; if (merged.length && merged[merged.length - 1].len < 14) { merged[merged.length - 1].ks.push(...p); merged[merged.length - 1].len += len + 1; } else merged.push({ ks: [...p], len }); });
     const split = []; merged.forEach(ph => { if ((ph.len > 52 || ph.len > 2 * F.sub.ancho - 6) && ph.ks.length > 4) { const half = Math.ceil(ph.ks.length / 2); split.push({ ks: ph.ks.slice(0, half) }, { ks: ph.ks.slice(half) }); } else split.push(ph); });
+    if (b.subPartes) { // M25 (T31): partición a mano por sentido
+      split.length = 0; let p = 0;
+      for (const sub of b.subPartes) { const ks = [], lin = []; for (const ln of sub) { const ws = ln.trim().split(/\s+/), li = []; for (const w of ws) { if (!toks[p] || toks[p].w !== w) throw new Error(`subPartes del bloque ${b.id}: esperaba «${toks[p] && toks[p].w}» y pone «${w}»`); ks.push(p); li.push(p); p++; } lin.push(li); } split.push({ ks, lin }); }
+      if (p !== toks.length) throw new Error(`subPartes del bloque ${b.id}: faltan palabras desde «${toks[p] && toks[p].w}»`);
+    }
     split.forEach((ph, pi) => {
       const lines = []; let line = [], ll = 0; ph.ks.forEach(i => { const L = toks[i].w.length; if (line.length && ll + 1 + L > F.sub.ancho) { lines.push(line); line = []; ll = 0; } line.push(i); ll += (ll ? 1 : 0) + L; }); if (line.length) lines.push(line);
+      if (ph.lin) lines.splice(0, lines.length, ...ph.lin);
+      // M25 (T31): corte de línea por sentido. Una línea no acaba en palabra de enlace (de, la, el, a, y…) ni parte un nombre propio (Kim / Hill): esa palabra baja a la línea siguiente si cabe
+      { const ENL = /^(de|del|la|las|el|los|lo|a|al|y|e|o|u|en|que|con|por|para|un|una|unos|unas|su|sus|más|muy)$/i, cap = w => /^[A-ZÁÉÍÓÚÑ]/.test(w);
+        for (let li = 0; !ph.lin && li + 1 < lines.length; li++) { let g = 0; while (lines[li].length > 1 && g++ < 3) { const last = toks[lines[li][lines[li].length - 1]].w, next = toks[lines[li + 1][0]].w, larg = lines[li + 1].reduce((n, x) => n + toks[x].w.length + 1, 0) + last.length; if ((ENL.test(last.replace(/[,.:;]/g, '')) || (cap(last) && cap(next) && !/[,.:;]$/.test(last) && li + lines[li].length > 1)) && larg <= F.sub.ancho + 4) lines[li + 1].unshift(lines[li].pop()); else break; } } }
       // la frase termina como muy tarde cuando entra la siguiente: antes se veían las dos a la vez ~0,1 s (Paco, 3 nov 2026)
       const sig = split[pi + 1], tSig = sig ? T(toks[sig.ks[0]].s) - 0.05 : Infinity, ultS = T(toks[ph.ks[ph.ks.length - 1]].s);
       const t0 = T(toks[ph.ks[0]].s) - 0.05; let tEnd = Math.max(ultS + 0.05, Math.min(T(toks[ph.ks[ph.ks.length - 1]].e) + 0.12, tSig));
@@ -417,10 +426,10 @@ async function build(cfg) {
   const P = cfg.portada && (cfg.portada.foto || cfg.portada.png) ? cfg.portada : null; let covIn = [];
   if (P && P.png) { const covPng = `${W}/portada.png`; fs.copyFileSync(P.png, covPng); covIn = ['-loop', '1', '-i', covPng]; } // portada ya hecha, elegida por Paco (P.png); sin ella, todo como siempre
   else if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng, ...(F.a > F.b ? { formato: '16:9', vivo: P.vivo } : {}) }); covIn = ['-loop', '1', '-i', covPng]; }
-  let fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=40+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})${avisos.map(({ sgT }) => `*not(between(t,${sgT.a},${sgT.b}))`).join('')}'${vf ? ',' + vf : ''}[m0]`;
+  let fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=${F.a < F.b ? 100 : 40}+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})${avisos.map(({ sgT }) => `*not(between(t,${sgT.a},${sgT.b}))`).join('')}'${vf ? ',' + vf : ''}[m0]`;
   let ult = 'm0';
   avisos.forEach(({ sgT, sgF }, i) => { const ib = (P ? 4 : 3) + 2 * i, k = suf(i);
-    fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][hc${k}]overlay=x='125-w/2':y='145-h/2':enable='between(t,${sgT.a},${sgT.b})'[mh${k}];[mh${k}][sg${k}]overlay=x='${sgF.xBand}':y=${F.sgY}:enable='between(t,${sgT.a},${sgT.b})'[m1${k}]`; ult = `m1${k}`; });
+    fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][hc${k}]overlay=x='${F.a < F.b ? 185 : 125}-w/2':y='145-h/2':enable='between(t,${sgT.a},${sgT.b})'[mh${k}];[mh${k}][sg${k}]overlay=x='${sgF.xBand}':y=${F.sgY}:enable='between(t,${sgT.a},${sgT.b})'[m1${k}]`; ult = `m1${k}`; });
   fc += `;[${ult}]${subF}[ms]`; ult = 'ms';
   fc += P ? `;[${ult}][3:v]overlay=0:0:enable='lt(t,0.2)'[v]` : `;[${ult}]null[v]`;
   run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', ...Q.final, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ac', '2', '-b:a', Q.audio, '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
@@ -435,7 +444,7 @@ async function build(cfg) {
   // F7 (T30): hoja de planos automática (un fotograma numerado por plano), para corregir por número
   try {
     const FONT = 'C\\:/Windows/Fonts/arialbd.ttf', H = `${W}/hoja`; fs.mkdirSync(H, { recursive: true });
-    clips.filter(c => !c.raw && fs.existsSync(c.file)).forEach((c, i) => run(['-ss', String(Math.max(0, c.d * 0.4)), '-i', c.file, '-frames:v', '1', '-vf', `scale=216:-2,drawtext=fontfile='${FONT}':text='${i + 1}':x=8:y=8:fontsize=40:fontcolor=white:box=1:boxcolor=0xF4630B`, `${H}/h_${String(i + 1).padStart(3, '0')}.jpg`]));
+    clips.filter(c => fs.existsSync(c.file)).forEach((c, i) => run(['-ss', String(Math.max(0, c.d * 0.4)), '-i', c.file, '-frames:v', '1', '-vf', `scale=216:-2,drawtext=fontfile='${FONT}':text='${i + 1}':x=8:y=8:fontsize=40:fontcolor=white:box=1:boxcolor=0xF4630B`, `${H}/h_${String(i + 1).padStart(3, '0')}.jpg`]));
     const nH = fs.readdirSync(H).length; if (nH) run(['-framerate', '1', '-i', `${H}/h_%03d.jpg`, '-vf', `tile=${Math.min(8, nH)}x${Math.ceil(nH / 8)}`, '-frames:v', '1', `${OUT}/${cfg.id}-hoja-planos.jpg`]);
   } catch (e) { console.log('⚠ [F7] no pude hacer la hoja de planos:', e.message); }
   // CANDADO (T30, Paco 20 nov 2026): «★ Exportar para publicar» no escribe ULTIMA si scripts/revisar-video.cjs <carpeta del vídeo> sale en ❌

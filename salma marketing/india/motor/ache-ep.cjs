@@ -31,19 +31,20 @@ const cfg = {
   blocks: [
     // 0 · GANCHO: cosquillas primero (Paco, 19 nov: «empieza por los que arreglaban los conflictos con cosquillas»)
     S({ id: 'g0', emocion: 'calida', minD: 3, pause: 0.3, amb: PAJAROS(-30), rotulo: 'PUERTO BARRA · CANAL 16 · 2012',
-      text: 'En el bosque de Paraguay, los aché ypeti arreglaban sus conflictos con cosquillas.',
+      text: 'En el bosque de Paraguay, los aché ypeti arreglaban sus conflictos con cosquillas.', subPartes: [['En el bosque de Paraguay,'], ['los aché ypeti', 'arreglaban sus conflictos'], ['con cosquillas.']], // M25: corte por sentido (revisor de imagen 5)
       voz: `En el bosque de Paraguay, los aché ${YP} arreglaban sus conflictos con cosquillas.`,
       shots: [V('anciano-barba', 'PP'), { ...V('anciano-casa', 'PM'), from: 'arreglaban' }] }),
     S({ id: 'g1', emocion: 'calida', pause: 0.4, amb: PAJAROS(-30, 0), rotulo: 'TÕ MUMBU · «PARTIR CABEZAS»',
-      text: 'Los demás aché lo hacían a garrotazos.',
+      text: 'Los demás aché lo hacían a garrotazos.', subPartes: [['Los demás aché', 'lo hacían a garrotazos.']], // M25: corte por sentido (T31, Estrategia)
       shots: [V('arco-manos', 'D')] }),
     // 0b · ANCLAJE (N15) y bucle abierto (N16): la cifra llega en «bucle»
     S({ id: 'ancla', pause: 0.4, amb: PAJAROS(-30, 4), // v10: sin rótulo (la foto W11 es de Commons; F10)
-      text: 'Eran tan pocos que casi desaparecen.', // v10 (Y20): el gancho cumple lo que promete el título
+      text: 'Eran tan pocos que casi desaparecen.', subPartes: [['Eran tan pocos', 'que casi desaparecen.']], // M25: corte por sentido // v10 (Y20): el gancho cumple lo que promete el título
       shots: [{ a: 'W11', sc: 'D' }] }), // M48: las manos con el móvil, sin explicar; se resuelve en «hoy» // M48: las manos con el móvil, sin explicar; se resuelve en «hoy»
     // 1 · CÓMO (DOBES, Instituto Max Planck)
     S({ id: 'como', emocion: 'calida', pause: 0.4, amb: PAJAROS(-28, 2), rotulo: 'PUERTO BARRA · CANAL 16 · 2012', // F10 (v10): los clips de este bloque son de Puerto Barra; la fuente del dato va en la cifra
-      text: 'Se emparejaban hombres de bandas distintas y se hacían cosquillas. Después, cantos y un juego: coger el frijol.', // v10: «distintas», como dice DOBES (F4), y la frase entera (N1, N23)
+      text: 'Se emparejaban hombres de bandas distintas y se hacían cosquillas. Después, cantos y un juego: coger el frijol.',
+      subPartes: [['Se emparejaban hombres', 'de bandas distintas'], ['y se hacían cosquillas.'], ['Después, cantos', 'y un juego:'], ['coger el frijol.']], // M25: corte por sentido // v10: «distintas», como dice DOBES (F4), y la frase entera (N1, N23)
       cifra: { word: 'frijol', text: 'PROAA MATA', sub: '«COGER EL FRIJOL» · MAX PLANCK', dur: 0.6, size: 170, retraso: 0.3, y: 480 },
       shots: [V('rosa-arcos', 'PM'), { ...V('bosque-arboles', 'GP'), from: 'Después' }] }),
     // 2 · MAPA (sintonía, S3)
@@ -51,6 +52,7 @@ const cfg = {
     // 3 · EL GIRO (pico; silencio antes, S9; dato quieto, M19)
     // 3 · EL CASO Y LA CIFRA, en un solo bloque pico (v9): primero los ypeti (N26), 1959 con referencia (N32); después la cifra general de Kim Hill
     S({ id: 'giro', pico: true, datoFuerte: true, emocion: 'fria', pause: 0.5, amb: VIENTO(-30, 4),
+      subPartes: [['En 1959,', 'hace menos de setenta años,'], ['los ypeti fueron', 'los primeros'], ['en salir del bosque.'], ['Eran unos cuarenta.'], ['En 1987 quedaban treinta.'], ['No fueron los únicos', 'en salir,'], ['y fuera había epidemias'], ['que nunca habían conocido.'], ['Según el antropólogo', 'Kim Hill,'], ['en pocos años', 'murió más de la mitad.']], // M25: corte por sentido («los primeros en salir del bosque» no cabe en una línea: 33 caracteres de 26)
       text: 'En 1959, hace menos de setenta años, los ypeti fueron los primeros en salir del bosque. Eran unos cuarenta. En 1987 quedaban treinta. No fueron los únicos en salir, y fuera había epidemias que nunca habían conocido. Según el antropólogo Kim Hill, en pocos años murió más de la mitad.', // v10: la causa antes que las muertes (N24) y frases más cortas (N1)
       voz: `En 1959, hace menos de setenta años, los ${YP} fueron los primeros en salir del bosque. Eran unos cuarenta. En 1987 quedaban treinta. No fueron los únicos en salir, y fuera había epidemias que nunca habían conocido. Según el antropólogo Kim Jil, en pocos años murió más de la mitad.`,
       cifra: [{ word: 'treinta', text: '40 → 30', sub: '1959 → 1987 · 28 AÑOS · KIM HILL', dur: 0.7, retraso: 0.1 }, { word: 'mitad', text: '1 DE CADA 2', sub: 'EPIDEMIAS TRAS EL CONTACTO', dur: 1.4, size: 170, retraso: 0.3 }],
@@ -62,7 +64,7 @@ const cfg = {
       shots: [{ a: 'W12', sc: 'PM' }, { a: 'W6', sc: 'GP', from: 'junto' }, { a: 'W3', sc: 'PM', from: 'suben' }] }), // v9b (N7, M48): el móvil vuelve justo en «suben su lengua a internet»
     // 6 · «Aché significa persona»: quitada para caber en 60 s (N10), como preveía el guion
     // M43: imagen sola antes de la tarjeta
-    { id: 'silencio', video: CL + '/anciano-gorro-cerca-13.mp4', fixed: 1.3, amb: PAJAROS(-30, 2) }, // M18 (v10): cierre con otra cara aché (antes, el anciano del principio)
+    { id: 'silencio', video: CL + '/anciano-gorro-cerca-13.mp4', fixed: 1.3, amb: PAJAROS(-30, 2), rotulo: 'PUERTO BARRA · 2012', rotuloSegs: 0.75 }, // M18 (v10): cierre con otra cara aché (antes, el anciano del principio)
   ],
 };
 build(cfg).catch(e => { console.error('FALLO:', e.message); process.exit(1); });
