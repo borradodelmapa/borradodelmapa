@@ -165,7 +165,7 @@ async function build(cfg) {
     if (b === ultBlk) return M34.push({ blk: b.id, ok: true, exento: 'cierre: plano general lento (M1, M18)' });
     if (b.humano) return M34.push({ blk: b.id, ok: true, exento: 'tramo humano: más lento (N14-4)' });
     const fijo = !!(b.datoFuerte || S[n - 1].asombro), k = fijo ? n - 2 : n - 1, sh = S[k], d = du(k), t0 = starts[k], t1 = t0 + d;
-    const no = motivo => M34.push({ blk: b.id, ok: false, motivo });
+    const no = motivo => M34.push({ blk: b.id, ok: false, motivo }), M34MIN = 0.8; // ningún trozo baja de 0,8 s, el mínimo de un detalle (M2; Estrategia, T32)
     if (d < 1.5) return no('el plano ' + (k + 1) + ' dura ' + d.toFixed(1) + ' s (menos de 1,5 s): no se puede partir');
     if (sh.golpe) return no('el plano ' + (k + 1) + ' lleva golpe de zoom: no se parte');
     const [iw, ih] = medidas(resolve(sh.a)), ancho = Math.min(iw, ih * F.a / F.b) / (sh.pan ? 1 + (sh.z ?? 0.3) : 1); // píxeles de la fuente que llenan el ancho del encuadre
@@ -173,12 +173,12 @@ async function build(cfg) {
     const punto = sh.cara || sh.foc || (sh.pan && [(sh.pan[0] + sh.pan[2]) / 2, (sh.pan[1] + sh.pan[3]) / 2]), detalle = !!punto && ancho / 1.6 >= F.w * 0.5; // sin punto de cara marcado, el detalle podría dejar fuera a la persona: solo general → medio (prueba sentineleses, T32)
     // límites de palabra dentro del plano (mismo cálculo que tow), con «pausa» si la palabra anterior acaba en , . : ; ? ! …
     const tw = b.text.split(' '), sp = (b.voz || b.text).split(' '), cand = []; let p = 0;
-    for (let q = 0; q < Math.min(tw.length, sp.length); q++) { const t = b.lead + b.v.al.st[Math.min(p, b.v.al.st.length - 1)] - 0.06; if (q && t > t0 + 0.55 && t < t1 - 0.55) cand.push({ t, pausa: /[,.:;!?…]$/.test(tw[q - 1]) }); p += sp[q].length + 1; }
-    { const tf = b.lead + b.v.al.en[b.v.al.en.length - 1] + 0.05; if (tf > t0 + 0.55 && tf < t1 - 0.55) cand.push({ t: tf, pausa: true }); } // también al acabar la voz: el último trozo cae en la pausa (fin de idea, M31)
+    for (let q = 0; q < Math.min(tw.length, sp.length); q++) { const t = b.lead + b.v.al.st[Math.min(p, b.v.al.st.length - 1)] - 0.06; if (q && t > t0 + M34MIN && t < t1 - M34MIN) cand.push({ t, pausa: /[,.:;!?…]$/.test(tw[q - 1]) }); p += sp[q].length + 1; }
+    { const tf = b.lead + b.v.al.en[b.v.al.en.length - 1] + 0.05; if (tf > t0 + M34MIN && tf < t1 - M34MIN) cand.push({ t: tf, pausa: true }); } // también al acabar la voz: el último trozo cae en la pausa (fin de idea, M31)
     const intento = props => { const cuts = []; let acc = t0;
-      for (const pr of props.slice(0, -1)) { acc += d * pr; const c = cand.filter(x => x.t > (cuts.length ? cuts[cuts.length - 1] : t0) + 0.55).sort((a, b2) => (Math.abs(a.t - acc) - (a.pausa ? 0.25 : 0)) - (Math.abs(b2.t - acc) - (b2.pausa ? 0.25 : 0)))[0]; if (!c) return null; cuts.push(c.t); }
-      const ps = [t0, ...cuts, t1].slice(1).map((x, i, a) => x - (i ? a[i - 1] : t0)); return ps.every((x, i) => x >= 0.55 && (!i || x < ps[i - 1])) ? { cuts, ps } : null; };
-    const r3 = detalle && d >= 2.4 ? intento([0.42, 0.32, 0.26]) : null, r2 = r3 ? null : intento([0.58, 0.42]), R = r3 || r2;
+      for (const pr of props.slice(0, -1)) { acc += d * pr; const c = cand.filter(x => x.t > (cuts.length ? cuts[cuts.length - 1] : t0) + M34MIN).sort((a, b2) => (Math.abs(a.t - acc) - (a.pausa ? 0.25 : 0)) - (Math.abs(b2.t - acc) - (b2.pausa ? 0.25 : 0)))[0]; if (!c) return null; cuts.push(c.t); }
+      const ps = [t0, ...cuts, t1].slice(1).map((x, i, a) => x - (i ? a[i - 1] : t0)); return ps.every((x, i) => x >= M34MIN && (!i || x < ps[i - 1])) ? { cuts, ps } : null; };
+    const r3 = detalle && d >= 3 * M34MIN + 0.3 ? intento([0.42, 0.32, 0.26]) : null, r2 = r3 ? null : intento([0.58, 0.42]), R = r3 || r2;
     if (!R) return no('en el plano ' + (k + 1) + ' no hay un corte de palabra que deje los trozos cada vez más cortos');
     const zs = r3 ? [1.25, 1.6] : [punto ? 1.3 : 1.2], foc = punto || [0.5, 0.5];
     const subs = R.cuts.map((c, i) => { const x = { ...sh, _zc: zs[i], foc, _m34: true, ss: (sh.ss || 0) + (c - t0) }; for (const q of ['from', 'rotulo', 'etiqueta', 'golpe', 'enfasis', 'asombro', 'cifra']) delete x[q]; return x; });
