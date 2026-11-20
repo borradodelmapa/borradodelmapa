@@ -122,9 +122,9 @@ if (fase === 'publicar') {
 const SIN = [];
 for (const id of TODAS) {
   if (MOTOR.has(id) && (COLMOTOR.has(id) || HACEYA.has(id))) continue;   // las mira el informe del motor (paso 2)
-  if (MOTOR.has(id)) { if (rev[id]) { const e = rev[id]; if (e.estado === '✅' && e.como) ok(id, '(aún no la hace el motor; revisada a mano) ' + e.como); else if (e.estado === '❌' && e.motivo) aviso(id, 'no se cumple, explicado: ' + e.motivo); else mal(id, 'revisión sin estado o sin explicación'); } else if (!faltanRev) SIN.push(id); continue; }
+  if (MOTOR.has(id)) { if (rev[id]) { const e = rev[id]; if (e.estado === '✅' && e.como) ok(id, '(aún no la hace el motor; revisada a mano) ' + e.como); else if (e.estado === '❌' && e.motivo && /\bArreglo\b/i.test(e.motivo) && !e.paco) mal(id, 'TIENE ARREGLO y no está hecho (F12: lo que tiene arreglo se arregla): ' + e.motivo); else if (e.estado === '❌' && e.motivo) aviso(id, 'no se cumple, explicado: ' + e.motivo); else mal(id, 'revisión sin estado o sin explicación'); } else if (!faltanRev) SIN.push(id); continue; }
   if (PACO[id]) { if (fase === 'publicar' || ['F3', 'F5', 'F6', 'Y13'].includes(id)) { okp[id] ? ok(id, 'Paco: ' + okp[id]) : mal(id, 'falta el OK de Paco: ' + PACO[id] + ' (ok-paco.json, con sus palabras)'); } continue; }
-  if (rev[id]) { const e = rev[id]; if (e.estado === '✅' && e.como) ok(id, e.como); else if (e.estado === '❌' && e.motivo) aviso(id, 'no se cumple, explicado: ' + e.motivo); else mal(id, 'revisión sin estado o sin explicación'); continue; }
+  if (rev[id]) { const e = rev[id]; if (e.estado === '✅' && e.como) ok(id, e.como); else if (e.estado === '❌' && e.motivo && /\bArreglo\b/i.test(e.motivo) && !e.paco) mal(id, 'TIENE ARREGLO y no está hecho (F12: lo que tiene arreglo se arregla): ' + e.motivo); else if (e.estado === '❌' && e.motivo) aviso(id, 'no se cumple, explicado: ' + e.motivo); else mal(id, 'revisión sin estado o sin explicación'); continue; }
   if (SCRIPT.has(id)) { if (![...OK, ...MAL, ...AVISO].some(l => l.includes(' ' + id + ' ') || l.includes(' ' + id + '·'))) { if (['P12', 'P15', 'P13', 'P7', 'P3', 'P10', 'P11', 'Y1', 'Y9', 'Y17'].includes(id) && fase !== 'publicar') continue; if (!rev[id]) SIN.push(id); } continue; }
   if (!faltanRev) SIN.push(id);
 }
