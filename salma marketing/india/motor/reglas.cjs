@@ -77,6 +77,15 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   const vozB = todos.filter(b => b.text), picosSeg = [];
   vozB.forEach((b, i) => { if (i && b.pico && vozB[i - 1].pico) picosSeg.push(vozB[i - 1].id + ' → ' + b.id); });
   chk('F11', picosSeg.length > 0, 'dos picos seguidos sin tramo neutro: ' + picosSeg.join(', '));
+  // M49 (Paco, 20 nov 2026): el recorte de los vídeos sigue la cara marcada (s.cara); sin cara, va por el centro y puede dejar a la persona fuera
+  { const vids = (cfg.blocks || []).flatMap(b => (b.shots || []).map(s => ({ b: b.id, s }))).filter(x => /.(mp4|mov|mkv|webm)$/i.test(String(x.s.a)) && !/^RW/.test(String(x.s.a)));
+    const sin = vids.filter(x => !x.s.cara && ['PP', 'PM', 'D'].includes(x.s.sc));
+    L.push('ℹ [M49] recorte por la cara en ' + vids.filter(x => x.s.cara).length + ' de ' + vids.length + ' planos de vídeo' + (sin.length ? ' · sin cara marcada (van por el centro): ' + sin.map(x => x.b + ' ' + String(x.s.a).split('/').pop()).join(', ') : '')); }
+  // M50 (Paco, 20 nov 2026): un vídeo suelto (bloque video:) que no tiene la proporción del formato se ESTIRA al montarlo (cierre de los mlabri): hay que recortarlo antes
+  { const ob = (cfg.formato === '16:9') ? 16 / 9 : 9 / 16, mal = (cfg._raw || []).filter(x => x.w && x.h && Math.abs(x.w / x.h - ob) / ob > 0.02);
+    chk('M50', mal.length > 0, 'vídeo suelto con otra proporción (se vería estirado): ' + mal.map(x => x.id + ' ' + x.w + 'x' + x.h).join(', ') + ' · recórtalo al formato o móntalo como plano (shots) con cara'); }
+  // M51 (Paco, 20 nov 2026): salto de montaje dentro de un trozo de clip ajeno (lo vieron los revisores en los mlabri): aviso con el segundo del clip para mover el ss
+  for (const x of (cfg._saltos || [])) L.push('⚠ [M51] plano ' + x.plano + ' (' + x.blk + ', ' + x.a + ', ss ' + x.ss + '): salto de imagen a ' + x.en.map(t => '+' + t + ' s').join(', ') + ' (en el clip: ' + x.en.map(t => (x.ss + t).toFixed(2)).join(', ') + ' s) · mueve el ss o acorta el plano');
   // S10: la misma pista de música en otro vídeo que se publica la misma semana (cfg.fecha / cfg.fechaTikTok en las configs del motor)
   const pista = cfg.musica && cfg.musica.src;
   const semana = d => { const t = new Date(d + 'T12:00:00Z'); const dia = (t.getUTCDay() + 6) % 7; t.setUTCDate(t.getUTCDate() - dia); return t.toISOString().slice(0, 10); };

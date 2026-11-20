@@ -186,7 +186,7 @@ async function build(cfg) {
     M34.push({ blk: b.id, ok: true, plano: k + 1, fijo, partes: R.ps.map(x => +x.toFixed(2)), zooms: [1, ...zs] });
   };
   for (const b of cfg.blocks) {
-    if (b.video) { let fv0 = b.video; const dv = dur(fv0); if (dv > b.D + 0.05) { fv0 = `${W}/raw_${b.id}.mp4`; run(['-i', b.video, '-t', b.D.toFixed(3), '-an', '-c:v', 'libx264', ...Q.plano, '-r', '30', '-pix_fmt', 'yuv420p', fv0]); } clips.push({ file: fv0, d: b.D, raw: true }); (cfg._raw = cfg._raw || []).push({ id: b.id, D: b.D, dur: dur(fv0) }); continue; } // M14 (T29, 19 nov 2026): el vídeo crudo se recorta a su duración para que no empuje la tarjeta fuera (fallo de los aché v3)
+    if (b.video) { let fv0 = b.video; const dv = dur(fv0); if (dv > b.D + 0.05) { fv0 = `${W}/raw_${b.id}.mp4`; run(['-i', b.video, '-t', b.D.toFixed(3), '-an', '-c:v', 'libx264', ...Q.plano, '-r', '30', '-pix_fmt', 'yuv420p', fv0]); } clips.push({ file: fv0, d: b.D, raw: true }); { const [rw, rh] = medidas(b.video); (cfg._raw = cfg._raw || []).push({ id: b.id, D: b.D, dur: dur(fv0), w: rw, h: rh }); } continue; } // M50 (Paco, 20 nov 2026): se guardan sus medidas para avisar si se estira // M14 (T29, 19 nov 2026): el vídeo crudo se recorta a su duración para que no empuje la tarjeta fuera (fallo de los aché v3)
     const S = b.shots; const starts = S.map((s, k) => k === 0 ? 0 : Math.max(0.9, b.lead + tow(b, s.from) - 0.06));
     for (let k = 1; k < S.length; k++) if (starts[k] < starts[k - 1] + 0.9) starts[k] = starts[k - 1] + 0.9;
     m34(b, S, starts);
@@ -204,8 +204,18 @@ async function build(cfg) {
         let ss = s.ss || 0, fin = f; const td = dur(f);
         // clip corto generado (Runway) y plano más largo: se repite de ida y vuelta (sin salto ni fotograma congelado)
         if (/^RW/.test(s.a) && td - ss < d) { const pp = `${W}/pp_${s.a}.mp4`; if (!fs.existsSync(pp)) run(['-ss', String(ss), '-i', f, '-an', '-vf', 'split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '17', pp]); fin = pp; ss = 0; loopV = ['-stream_loop', '-1']; }
+        // M49 (Paco, 20 nov 2026, mlabri: «sí, mételas»): el recorte al formato sigue la cara (s.cara = [x, y] en la imagen ORIGINAL, de 0 a 1), no el centro.
+        // El detalle de M34 (s._zc) se centra entonces en la cara dentro del recorte. Sin s.cara, recorte centrado como siempre.
+        let cropXY = '', focV = s.foc;
+        if (s.cara && !loopV.length) { const [vw, vh] = medidas(fin); if (vw && vh) { const sc = Math.max(F.w / vw, F.h / vh), iw = Math.round(vw * sc), ih = Math.round(vh * sc), cl = (v, a) => Math.max(0, Math.min(a, v));
+          const x0 = Math.round(cl(iw * s.cara[0] - F.w / 2, iw - F.w)), y0 = Math.round(cl(ih * s.cara[1] - F.h / 2, ih - F.h)); cropXY = ':' + x0 + ':' + y0;
+          focV = [+((iw * s.cara[0] - x0) / F.w).toFixed(3), +((ih * s.cara[1] - y0) / F.h).toFixed(3)]; } }
+        // M51 (Paco, 20 nov 2026): salto de montaje DENTRO del trozo de clip (el vídeo ajeno ya venía editado): se busca con detección de escena y sale ⚠ en el informe
+        if (!loopV.length && cfg.m51 !== false) { const rs = spawnSync(FF, ['-ss', String(ss), '-t', d.toFixed(2), '-i', fin, '-an', '-vf', "select='gt(scene,0.3)',showinfo", '-f', 'null', '-'], { encoding: 'utf8', maxBuffer: 1e8 });
+          const ts = [...String(rs.stderr || '').matchAll(/pts_time:([\d.]+)/g)].map(m => +m[1]).filter(t => t > 0.12 && t < d - 0.06);
+          if (ts.length) (cfg._saltos = cfg._saltos || []).push({ blk: b.id, plano: n, a: String(s.a).split('/').pop(), ss: +ss.toFixed(2), en: ts.map(t => +t.toFixed(2)) }); }
         const td2 = dur(fin); const pad = !loopV.length && td2 - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td2 - ss) + 0.2).toFixed(2)}` : '';
-        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h},setsar=1${s._zc ? `,crop=trunc(iw/${s._zc}/2)*2:trunc(ih/${s._zc}/2)*2:(iw-ow)*${(s.foc || [0.5, 0.4])[0]}:(ih-oh)*${(s.foc || [0.5, 0.4])[1]},scale=${F.w}:${F.h}:flags=lanczos` : ''},fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
+        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h}${cropXY},setsar=1${s._zc ? `,crop=trunc(iw/${s._zc}/2)*2:trunc(ih/${s._zc}/2)*2:(iw-ow)*${(focV || [0.5, 0.4])[0]}:(ih-oh)*${(focV || [0.5, 0.4])[1]},scale=${F.w}:${F.h}:flags=lanczos` : ''},fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       } else {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
         // M12 (Paco, 16 nov 2026: «muchísimo paneo… eso qué es»): por defecto las fotos van QUIETAS (cfg.kb = 0). Una config antigua con kb: 1.6 sigue igual que antes.
