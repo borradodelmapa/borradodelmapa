@@ -148,8 +148,8 @@ module.exports = [
     ],
     cierre: 'Próximo episodio: los ainu, el pueblo indígena del norte de Japón.',
   },
-  // Short vertical · CRÓNICA (N12) · montaje: salma marketing/india/motor/india-3-lugares.cjs · borrador de 74 s (Paco rehará el texto a 60 s para redes)
-  // Sin programar en Metricool: Paco decide la fecha cuando esté el largo de la India. Monos que enseñan los dientes = clips hechos con IA (RW9001, RW9002).
+  // Short vertical · CRÓNICA (N12) · montaje v3 (21 nov 2026, guion y voz nuevos, 59,9 s): salma marketing/india/motor/india-3-lugares-v3.cjs · guion: docs/india-3-lugares-guion-direccion.md
+  // Sale el mié 25 nov 2026 a las 10:00 (YouTube «Benarés: el hotel donde te dan dos semanas para MORIR» y TikTok). Monos que enseñan los dientes = clips recreados con IA (RW9001, RW9002); RW416, RW546 y RW598, fotos de Paco animadas.
   {
     orden: 118,
     slug: 'india-3-lugares-sagrados-rishikesh-dharamsala-benares',
@@ -185,17 +185,17 @@ module.exports = [
         '**El consejo:** los monos tienen mala leche de verdad. No los molestes, no les enseñes comida y no les des de comer. En la India sigue habiendo rabia: si te muerde un mono o un perro, al médico ese mismo día.' ] },
       { h: 'Dharamsala: el Dalái Lama en el exilio', foto: ['152', 'El Dalái Lama, en Dharamsala.'], p: [
         'Ruedas de oración, monjes de granate, banderas al viento. En Dharamsala vive el Dalái Lama desde que huyó del Tíbet en 1959, y aquí tiene su sede el gobierno tibetano en el exilio. En noviembre de 2019 daba enseñanzas en el templo principal, y allí lo vi.',
-        '**El consejo:** sus enseñanzas son gratis, pero hay que inscribirse con el pasaporte en McLeod Ganj, el barrio alto. Mira su calendario oficial antes de ir: las fechas cambian, y su salud también.' ] },
+        '**El consejo:** para sus enseñanzas públicas hay que registrarse antes con copia del pasaporte, del visado y del formulario C (en 2024 costaba 10 rupias), y dentro no se permiten cámaras ni móviles. Mira su calendario oficial en dalailama.com antes de ir: las fechas cambian, y su salud también.' ] },
       { h: 'Benarés: más vieja que la leyenda', foto: ['598', 'Lámparas en los ghats de Benarés.'], p: [
         'Escaleras de piedra que bajan al río, barcas de madera al amanecer, miles de lámparas por la noche. En las mismas escaleras hay bodas, con música y flores, y a unos metros se queman los muertos. **Manikarnika** es el crematorio más antiguo: ya aparece en una inscripción del siglo V.',
-        '**El consejo:** los crematorios se miran desde la barca, en silencio. Y ni una foto a nadie.' ] },
+        '**El consejo:** las cremaciones se miran desde la barca, en silencio. Fotos de cuerpos, ninguna: es un funeral.' ] },
       { h: 'Sarnath: diez kilómetros más allá', foto: ['588', 'Monjes ante la estupa de Sarnath.'], p: [
         'A unos diez kilómetros de Benarés vuelve el silencio. En **Sarnath**, Buda dio su primer sermón. Hoy hay monjes sentados frente a una estupa enorme, la Dhamek. Hinduismo y budismo, a un paseo de distancia: si vas a Benarés, guárdate una mañana para Sarnath.' ] },
     ],
     ficha: [
       '**Rabia:** no te acerques a monos ni a perros; si te muerden, al médico el mismo día.',
-      '**Dalái Lama:** enseñanzas gratis, con inscripción y pasaporte en McLeod Ganj; calendario en dalailama.com.',
-      '**Crematorios de Benarés:** desde la barca, en silencio y sin fotos.',
+      '**Dalái Lama:** inscripción previa con pasaporte, visado y formulario C (10 rupias en 2024); sin cámaras ni móviles; calendario en dalailama.com.',
+      '**Crematorios de Benarés:** desde la barca, en silencio y sin fotos de cuerpos.',
       '**Seguridad:** lee las recomendaciones de Exteriores antes de ir; emergencias en la India, 112.',
     ],
     fuentes: [
