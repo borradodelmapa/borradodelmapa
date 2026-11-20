@@ -66,7 +66,8 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   const VD = cfg.voiceDb || {}; chk('S2', (VD.salma != null && VD.salma !== -25) || (VD.paco != null && VD.paco !== -21), 'nivel de voz distinto del protocolo (Paco −21, Salma −25)');
   // ---- T29 (19 nov 2026): comprobaciones nuevas. Marcas en la config (ficha ①, apartado E): cfg.nombre · b.pico · cfg.fecha / cfg.fechaTikTok ----
   // N14 (9): ninguna FOTO fija más de 3,5 s (los clips de vídeo no cuentan: se mueven)
-  const fijas = sh.filter(s => s.foto && s.d > 3.55);
+  const fijas = sh.filter(s => s.foto && s.d > 3.55 && !s.asombro); // M24 (T31): el plano de asombro (s.asombro) es la única foto que puede pasar de 3,5 s
+  const asom = sh.filter(s => s.asombro); if (asom.length > 1) L.push('⚠ M24 hay ' + asom.length + ' planos de asombro: la regla pide uno por vídeo'); else if (asom.length) I.push('ℹ M24 plano de asombro: ' + String(asom[0].id).split('/').pop() + ', ' + asom[0].d.toFixed(1) + ' s');
   chk('N14', fijas.length > 0, 'foto fija de más de 3,5 s (punto 9 de la regla de enganche): ' + fijas.map(s => String(s.id).split('/').pop() + ' ' + s.d.toFixed(1) + ' s en ' + s.blk).join(', '));
   // G2: el nombre del pueblo o lugar (cfg.nombre) suena antes del segundo 5
   chk('G2', !cfg.nombre || cfg._nombreT == null || cfg._nombreT > 5, !cfg.nombre ? 'falta la marca cfg.nombre (el pueblo o lugar que tiene que sonar antes de 5 s)' : cfg._nombreT == null ? 'el nombre «' + [].concat(cfg.nombre).join(' / ') + '» no se dice en la voz' : 'el nombre suena en el segundo ' + cfg._nombreT.toFixed(1) + ' (tiene que ser antes del 5)');
@@ -117,7 +118,7 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   if (todos.some(b => b.humano)) I.push('ℹ N14 (4) bloque humano más lento y sin música: ' + todos.filter(b => b.humano).map(b => b.id).join(', '));
   if (todos.some(b => b.advertencia)) I.push('ℹ N14 (10) zoom de énfasis en: ' + todos.filter(b => b.advertencia).map(b => b.id).join(', '));
   I.push('ℹ [F7] hoja de planos automática; en calidad máxima, copia con fecha en VIDEOS-TERMINADOS · [P14] en calidad máxima se mide el mp4 de ULTIMA (≥ 1080 px y ≥ 10 Mb/s)');
-  L.push('⚠ M22 (golpe de sonido al fotograma del corte o del rótulo): pendiente de un golpe con licencia que elija Paco de oído (S4, F6); el motor no lo inventa');
+  if (cfg.golpeCifra !== false && todos.some(b => b.cifra)) I.push('ℹ [M22] golpe del batok (sfx/golpe-cifra.mp3, elegido por Paco de oído el 20 nov 2026) al fotograma exacto de cada cifra'); else if (todos.some(b => b.cifra)) L.push('⚠ [M22] cfg.golpeCifra = false: las cifras entran sin golpe de sonido');
   // ⚙️ lo que el motor HACE solo (T29): se anota en el informe para que quede constancia
   I.push('ℹ [M30] las cifras entran ' + (cfg.cifraRetraso ?? 0.5) + ' s después de decir su palabra');
   I.push('ℹ [M41] los rótulos entran ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte');
@@ -167,7 +168,7 @@ function acta(cfg, TOTAL, OUT, X, L, I, o) {
     '✅ N14 (11) la música baja 6 dB bajo el ambiente real (amb.real)' + (cfg.blocks.some(b => [].concat(b.amb || []).some(a => a && a.real)) ? '' : ' (este vídeo no tiene ambiente real marcado)'),
     '✅ F7 hoja de planos numerada en ULTIMA; en calidad máxima, copia con fecha en VIDEOS-TERMINADOS',
     '· P14 se mide al exportar en calidad máxima (el resultado va al final del acta de ULTIMA)',
-    '⚠ M22 golpe de sonido al fotograma: pendiente de un golpe con licencia elegido por Paco (S4, F6)',
+    (cfg.golpeCifra !== false ? '✅ M22 golpe del batok al fotograma exacto de cada cifra (elegido por Paco de oído)' : '⚠ M22 sin golpe en las cifras (cfg.golpeCifra = false)'),
     '⚙️ LO HACE EL MOTOR (T29)',
     '✅ M30 la cifra entra ' + (cfg.cifraRetraso ?? 0.5) + ' s después de decir su palabra (' + cfg.blocks.filter(b => b.cifra).length + ' bloques con cifra)',
     '✅ M41 el rótulo entra ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte de su bloque',

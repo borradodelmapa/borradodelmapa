@@ -13,7 +13,7 @@ Paco, 20 nov 2026: «quiero que metas las 145… 138 automáticas». Este reviso
 **Primer fotograma y carátula:** M15 Y4 Y14 Y16 Y18 Y23
 **Plano a plano:** N7 M18 M21 M24 M26 M28 M35 M36 M37 M40 M43 M44 M47 M48
 **Subtítulos en pantalla:** M10 M25
-**Mientras el motor no las haga:** M22 (golpe de sonido al fotograma del corte: falta un golpe con licencia que elija Paco de oído). M17, M31, M38, M42 y S7 ya los comprueba o hace el motor desde T30 (salen en el informe y en el acta).
+**Del motor (ya no se miran a mano):** M17, M22, M31, M38, M42 y S7 los hace o comprueba el motor (salen en el informe y en el acta). M22: el golpe del *batok* en cada cifra, elegido por Paco el 20 nov 2026.
 
 ## Cómo se comprueba lo que más se escapa
 - **N7:** en cada segundo, ¿la imagen es de lo que dice el subtítulo? Si se habla de internet y se ven setas, ❌ y se arregla.

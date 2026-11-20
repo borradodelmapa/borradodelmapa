@@ -55,15 +55,15 @@ function svg(t) {
    <path d="${arcPath}" fill="none" stroke="#F4630B" stroke-opacity="0.28" stroke-width="14" stroke-linecap="round"/>
    <path d="${arcPath}" fill="none" stroke="#F4630B" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/>
    ${marks}
-   <defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0D0D0D" stop-opacity="0"/><stop offset="0.55" stop-color="#0D0D0D" stop-opacity="0.9"/><stop offset="1" stop-color="#0D0D0D" stop-opacity="1"/></linearGradient><linearGradient id="gt" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#0D0D0D" stop-opacity="0"/><stop offset="0.6" stop-color="#0D0D0D" stop-opacity="0.85"/><stop offset="1" stop-color="#0D0D0D" stop-opacity="1"/></linearGradient></defs><rect x="0" y="1400" width="1080" height="520" fill="url(#gb)"/><rect x="0" y="0" width="1080" height="480" fill="url(#gt)"/>
+   <defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0D0D0D" stop-opacity="0"/><stop offset="0.55" stop-color="#0D0D0D" stop-opacity="0.9"/><stop offset="1" stop-color="#0D0D0D" stop-opacity="1"/></linearGradient><linearGradient id="gt" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#0D0D0D" stop-opacity="0"/><stop offset="0.6" stop-color="#0D0D0D" stop-opacity="0.85"/><stop offset="1" stop-color="#0D0D0D" stop-opacity="1"/></linearGradient></defs><rect x="0" y="1000" width="1080" height="920" fill="url(#gb)"/><rect x="0" y="0" width="1080" height="480" fill="url(#gt)"/>
    <g opacity="${titleA.toFixed(2)}">
     <text x="540" y="305" font-family="Impact" font-size="104" fill="#F4630B" text-anchor="middle" letter-spacing="3">BORRADO DEL MAPA</text>
     <text x="540" y="385" font-family="Arial" font-weight="700" font-size="52" fill="#ffffff" text-anchor="middle" letter-spacing="4">PUEBLOS BORRADOS</text>
     <rect x="440" y="415" width="200" height="6" fill="#F4630B"/>
    </g>
    <g opacity="${nameA.toFixed(2)}">
-    <text x="540" y="1640" font-family="Impact" font-size="150" fill="#ffffff" text-anchor="middle" letter-spacing="4">PARAGUAY</text>
-    <text x="540" y="1710" font-family="Arial" font-weight="700" font-size="40" fill="#F4630B" text-anchor="middle" letter-spacing="3">BOSQUE DE MBARACAYÚ · CANINDEYÚ</text>
+    <text x="540" y="1180" font-family="Impact" font-size="150" fill="#ffffff" text-anchor="middle" letter-spacing="4">PARAGUAY</text>
+    <text x="540" y="1240" font-family="Arial" font-weight="700" font-size="40" fill="#F4630B" text-anchor="middle" letter-spacing="3">BOSQUE DE MBARACAYÚ · CANINDEYÚ</text>
    </g>
   </g></svg>`;
 }

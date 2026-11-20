@@ -15,7 +15,6 @@ Versión: 19 nov 2026.
 
 ## Las del motor que AÚN NO hace el motor: se miran a mano hasta que estén programadas (Estrategia, 20 nov 2026)
 Están en la línea MOTOR de la ficha ⓪, pero todavía no las aplica ni las comprueba nadie automáticamente. Hasta que el informe las dé, van al acta a mano:
-- **M22** El golpe de sonido cae en el fotograma exacto del corte o del rótulo.
 - **M34** Los cortes se aceleran al final de cada bloque. El motor solo avisa.
 
 ## 👂 Para Paco (Claude no oye)

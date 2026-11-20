@@ -52,7 +52,7 @@ const LOOKS = {
 // FORMATO (cfg.formato): '9:16' vertical (por defecto, shorts; sus números son los de siempre) o '16:9' horizontal (documental largo de YouTube, Paco 3 nov 2026).
 // a:b = proporción · sub = subtítulos (letra, borde, caracteres por línea, posición) · card = [tamaño, y] de cada texto de la tarjeta final
 const FORMATOS = {
-  '9:16': { w: 1080, h: 1920, a: 9, b: 16, sub: { letra: 66, borde: 6, ancho: 26, pos: '\\an5\\pos(540,1150)' }, cifra: { y: 560, size: 230, sub: 270 }, counterY: 140, rotY: 900, sgY: 1450,
+  '9:16': { w: 1080, h: 1920, a: 9, b: 16, sub: { letra: 66, borde: 6, ancho: 26, pos: '\\an5\\pos(540,1150)' }, cifra: { y: 560, size: 230, sub: 270 }, counterY: 140, rotY: 900, sgY: 300, sgW: 860, // M10 (T31): la franja del sígueme sale arriba (antes 1.450, en la zona de botones de Shorts y TikTok) y con ≥ 100 px de margen
     card: { av: [360, 170], l1: [96, 720], l2: [76, 850], l3: [44, 1050], crea: [104, 640], con: [140, 770], desc: [54, 990], grat: [54, 1065], web: [74, 1220], l4: [46, 1560], l5: [52, 1655] } },
   // horizontal: subtítulos abajo y centrados (crecen hacia arriba), rótulo de lugar encima de ellos; las fotos más estrechas que 16:9 se ven enteras sobre su propio fondo difuminado
   '16:9': { w: 1920, h: 1080, a: 16, b: 9, sub: { letra: 58, borde: 5, ancho: 42, pos: '\\an2\\pos(960,1020)' }, cifra: { y: 290, size: 200, sub: 230 }, counterY: 60, rotY: 790, sgY: 700,
@@ -203,7 +203,7 @@ async function build(cfg) {
         }
         cacheN[runPlano([...pin, '-vf', vf, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
-      clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra', foto: !isVideo(s.a), t: s._t, emo, pico, n: S.length, pan: s.pan });
+      clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra', foto: !isVideo(s.a), t: s._t, emo, pico, n: S.length, pan: s.pan, asombro: !!s.asombro });
     });
   }
   console.log(`Planos: ${cacheN.nuevo} hechos ahora, ${cacheN['caché']} reutilizados de la caché`);
@@ -240,7 +240,7 @@ async function build(cfg) {
     const T = x => b.t0 + b.lead + x;
     const phr = []; let cur = []; toks.forEach((k, i) => { cur.push(i); if (/[,.:;!?…]$/.test(k.w)) { phr.push(cur); cur = []; } }); if (cur.length) phr.push(cur);
     const merged = []; phr.forEach(p => { const len = p.map(i => toks[i].w).join(' ').length; if (merged.length && merged[merged.length - 1].len < 14) { merged[merged.length - 1].ks.push(...p); merged[merged.length - 1].len += len + 1; } else merged.push({ ks: [...p], len }); });
-    const split = []; merged.forEach(ph => { if (ph.len > 52 && ph.ks.length > 4) { const half = Math.ceil(ph.ks.length / 2); split.push({ ks: ph.ks.slice(0, half) }, { ks: ph.ks.slice(half) }); } else split.push(ph); });
+    const split = []; merged.forEach(ph => { if ((ph.len > 52 || ph.len > 2 * F.sub.ancho - 6) && ph.ks.length > 4) { const half = Math.ceil(ph.ks.length / 2); split.push({ ks: ph.ks.slice(0, half) }, { ks: ph.ks.slice(half) }); } else split.push(ph); });
     split.forEach((ph, pi) => {
       const lines = []; let line = [], ll = 0; ph.ks.forEach(i => { const L = toks[i].w.length; if (line.length && ll + 1 + L > F.sub.ancho) { lines.push(line); line = []; ll = 0; } line.push(i); ll += (ll ? 1 : 0) + L; }); if (line.length) lines.push(line);
       // la frase termina como muy tarde cuando entra la siguiente: antes se veían las dos a la vez ~0,1 s (Paco, 3 nov 2026)
@@ -308,6 +308,13 @@ async function build(cfg) {
     conAudio.forEach((b, i) => { ain.push('-i', b.audioFile); af.push(`[${i + 1}:a]volume=${b.gainAudio ?? 0}dB,adelay=${Math.round(b.t0 * 1000)}:all=1[x${i}]`); });
     run(['-i', mixIn, ...ain, '-filter_complex', af.join(';') + ';[0:a]' + conAudio.map((_, i) => `[x${i}]`).join('') + `amix=inputs=${conAudio.length + 1}:normalize=0:duration=first[m1]`, '-map', '[m1]', `${W}/mix1.wav`]); mixIn = `${W}/mix1.wav`;
   }
+  // M22 (T31, Paco 20 nov 2026: «el C»): golpe del batok (sfx/golpe-cifra.mp3, sonido creado, 0 €) al fotograma exacto en que entra cada cifra. cfg.golpeCifra = false lo quita; cfg.golpeCifraDb ajusta el volumen.
+  if (cfg.golpeCifra !== false && nums.length) {
+    const gf = resolve('SFX_golpe-cifra'), gin = [], gfl = [];
+    nums.forEach((c, i) => { gin.push('-i', gf); gfl.push(`[${i + 1}:a]volume=${cfg.golpeCifraDb ?? -6}dB,adelay=${Math.round(c.t0 * 1000)}:all=1[gc${i}]`); });
+    run(['-i', mixIn, ...gin, '-filter_complex', gfl.join(';') + ';[0:a]' + nums.map((_, i) => `[gc${i}]`).join('') + `amix=inputs=${nums.length + 1}:normalize=0:duration=first[mgc]`, '-map', '[mgc]', `${W}/mixgc.wav`]); mixIn = `${W}/mixgc.wav`;
+    cfg._golpesCifra = nums.map(c => c.t0);
+  }
   if (golpes.length) {
     const gin = [], gf = [];
     golpes.forEach((b, i) => { const g = b.golpe, o = `${W}/golpe_${i}.wav`; run(['-ss', String(g.ss), '-i', resolve(g.src), '-vn', '-t', String(g.dur), '-ac', '2', '-ar', '44100', '-af', `highpass=f=40,volume=${g.gain ?? 0}dB`, o]); gin.push('-i', o); gf.push(`[${i + 1}:a]adelay=${Math.max(0, Math.round((b._golpeT - g.pico) * 1000))}:all=1[g${i}]`); });
@@ -371,9 +378,11 @@ async function build(cfg) {
   // Huecos sin cartel de esquina (Baler, 12 nov 2026): un plano con real:true (foto real de época) o un bloque con sinCounter:true no lleva «RECREACIÓN». Sin esas marcas, todo igual que antes.
   const sinCnt = cfg.blocks.flatMap(b => b.sinCounter ? [[b.t0, b.t0 + b.D]] : (b.shots || []).filter(s => s.real && s._t != null).map(s => [s._t, s._t + s._d]));
   const cntOn = `between(t,${cStart.toFixed(2)},${cardT.toFixed(2)})` + sinCnt.map(([a, z]) => `*not(between(t,${a.toFixed(2)},${z.toFixed(2)}))`).join('');
-  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='${cntOn}'` : '';
+  const cnt = cfg.counter ? `drawtext=fontfile='${IMPACT}':text='${esc(cfg.counter)}':fontsize=46:fontcolor=white:box=1:boxcolor=0xF4630B@0.9:boxborderw=14:x=w-text_w-114:y=${F.counterY}:enable='${cntOn}'` : '';
   // s.etiqueta: cartel propio de un plano en el sitio del de esquina (p. ej. «FOTO REAL · 1899 · COLOREADA»); solo mientras dura ese plano
-  const etq = cfg.blocks.flatMap(b => (b.shots || []).filter(s => s.etiqueta && s._t != null)).map(s => `drawtext=fontfile='${IMPACT}':text='${esc(s.etiqueta)}':fontsize=46:fontcolor=white:box=1:boxcolor=0x222222@0.85:boxborderw=14:x=w-text_w-100:y=${F.counterY}:enable='between(t,${s._t.toFixed(2)},${(s._t + s._d).toFixed(2)})'`);
+  const etq = cfg.blocks.flatMap(b => (b.shots || []).filter(s => s.etiqueta && s._t != null)).map(s => `drawtext=fontfile='${IMPACT}':text='${esc(s.etiqueta)}':fontsize=46:fontcolor=white:box=1:boxcolor=0x222222@0.85:boxborderw=14:x=w-text_w-114:y=${F.counterY}:enable='between(t,${s._t.toFixed(2)},${(s._t + s._d).toFixed(2)})'`);
+  // F10 (T31): rótulo por plano (s.rotulo), para que la fuente y la fecha de un clip ajeno salgan solo sobre ese clip; 0,5 s después del corte (M41) y 4 s como mucho (M8)
+  const rotP = cfg.blocks.flatMap(b => (b.shots || []).filter(sh => sh.rotulo && sh._t != null)).map(sh => `drawtext=fontfile='${ARIALB}':text='${esc(sh.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(sh._t + 0.5).toFixed(2)},${Math.min(sh._t + 4.5, sh._t + sh._d - 0.15).toFixed(2)})'`);
   const rot = cfg.blocks.filter(b => b.rotulo).map(b => `drawtext=fontfile='${ARIALB}':text='${esc(b.rotulo)}':fontsize=44:fontcolor=white:box=1:boxcolor=0xF4630B@0.92:boxborderw=16:x=100:y=${F.rotY}:enable='between(t,${(b.t0 + (cfg.rotuloRetraso ?? 0.5)).toFixed(2)},${((b.rotuloSegs ?? cfg.rotuloSegs) ? Math.min(b.t0 + 0.4 + (b.rotuloSegs ?? cfg.rotuloSegs), b.t0 + b.D - 0.3) : b.t0 + b.D - 0.3).toFixed(2)})'`).join(',');
   // aviso de seguir: franja naranja diagonal (como la portada) que entra deslizando desde la izquierda, ♥ + frase en Impact, ~5 s (uno por cada elemento de SGL)
   let sgIn = [];
@@ -382,24 +391,24 @@ async function build(cfg) {
     // Coreografía (u = segundos desde t0): 0-0.5 la franja cruza entrando por la izquierda · 0.3 aparece el corazón naranja detrás y late (varios latidos) ·
     // 4.6-5.1 la franja sale por la derecha · 5.1-5.5 el corazón revienta (crece y se desvanece)
     const t0 = sgInicio(SG); sgT = { a: t0.toFixed(2), b: (t0 + 5.1).toFixed(2), c: (t0 + 5.55).toFixed(2) };
-    const txt = String(SG.texto || 'Si te está gustando, sígueme').toUpperCase(), tam = Math.min(70, Math.floor(900 / (txt.length * 0.5)));
+    const txt = String(SG.texto || 'Si te está gustando, sígueme').toUpperCase(), tam = Math.min(70, Math.floor(((F.sgW || 1000) - 100) / (txt.length * 0.5)));
     const rot5 = 'rotate=-5*PI/180:ow=rotw(-5*PI/180):oh=roth(-5*PI/180):c=none';
     sgIn.push('-loop', '1', '-i', `${W}/sg-banda${suf(i)}.png`, '-loop', '1', '-i', `${W}/sg-corazon.png`);
     // franja naranja + tira negra debajo (como la portada), texto centrado, todo inclinado
-    const band = `drawbox=x=0:y=130:w=1000:h=48:color=0x0D0D0D:t=fill,drawtext=expansion=none:fontfile='${IMPACT}':text='${esc(txt)}':fontsize=${tam}:fontcolor=black:x=(w-text_w)/2:y=(130-text_h)/2+6,drawtext=expansion=none:fontfile='${ARIALB}':text='BORRADO DEL MAPA':fontsize=28:fontcolor=white:x=(w-text_w)/2:y=140,${rot5}`;
+    const band = `drawbox=x=0:y=130:w=${F.sgW || 1000}:h=48:color=0x0D0D0D:t=fill,drawtext=expansion=none:fontfile='${IMPACT}':text='${esc(txt)}':fontsize=${tam}:fontcolor=black:x=(w-text_w)/2:y=(130-text_h)/2+6,drawtext=expansion=none:fontfile='${ARIALB}':text='BORRADO DEL MAPA':fontsize=28:fontcolor=white:x=(w-text_w)/2:y=140,${rot5}`;
     const u = `(t-${sgT.a})`, Ub = 5.1;
     // tamaño del corazón: nace (0-0.3 s), late con latidos secos, y revienta al final
     // el corazón sustituye al icono de Salma (arriba a la izquierda) solo mientras sale la franja: nace con un pop y late con latidos secos
     const S = `if(lt(${u},0.25),0.3+0.7*${u}/0.25,1+0.2*pow(sin(PI*(${u}-0.25)*2.6),8))`;
     const heart = `drawtext=expansion=none:fontfile='${FONTD}/seguisym.ttf':text='♥':fontsize=560:fontcolor=0xF4630B:borderw=9:bordercolor=white:shadowcolor=black@0.5:shadowx=6:shadowy=8:x=(w-text_w)/2:y=(h-text_h)/2-30`;
     // banda y corazón se dibujan UNA vez en PNG (rápido); en el montaje solo se mueven/escalan
-    run(['-f', 'lavfi', '-i', 'color=c=0xF4630B:s=1000x178,format=rgba', '-vf', band, '-frames:v', '1', `${W}/sg-banda${suf(i)}.png`]);
+    run(['-f', 'lavfi', '-i', `color=c=0xF4630B:s=${F.sgW || 1000}x178,format=rgba`, '-vf', band, '-frames:v', '1', `${W}/sg-banda${suf(i)}.png`]);
     if (!i) run(['-f', 'lavfi', '-i', 'color=c=black@0.0:s=700x700,format=rgba', '-vf', heart, '-frames:v', '1', `${W}/sg-corazon.png`]);
     sgF = { band: `format=rgba[sg${suf(i)}]`, heart: `scale=w='max(2,240*${S})':h=-1:eval=frame[hc${suf(i)}]`,
       xBand: `if(lt(${u},0.5),-w+((${F.w}-w)/2+w)*(1-pow(1-${u}/0.5,3)),if(lt(${u},4.6),(${F.w}-w)/2,(${F.w}-w)/2+(${F.w}-(${F.w}-w)/2)*pow((${u}-4.6)/0.5,3)))` };
     return { sgT, sgF };
   });
-  const vf = [cnt, ...etq, rot, numF].filter(Boolean).join(','), subF = `subtitles=sub.ass:fontsdir='${FONTD}'`; // los subtítulos van ENCIMA de la franja y el corazón
+  const vf = [cnt, ...etq, rot, rotP.join(','), numF].filter(Boolean).join(','), subF = `subtitles=sub.ass:fontsdir='${FONTD}'`; // los subtítulos van ENCIMA de la franja y el corazón
   const outFile = `${OUT}/${cfg.id}.mp4`;
   // icono de Salma arriba a la izquierda, latiendo, hasta la tarjeta final (igual que la serie Asia)
   const AV = cfg.avatar || ROOT + '/salma marketing/editor/ep1/avatar.png'; // cfg.avatar: otro icono (p. ej. transparente si no narra Salma; Baler, 12 nov 2026)
