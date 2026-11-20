@@ -4,10 +4,9 @@
 |---|---|
 | 🤖 Revisor de guion | 52 |
 | 👤 Paco | 7 |
-| ⚙️ Motor | 40 |
+| ⚙️ Motor | 41 |
 | 🤖 Revisor de imagen | 27 |
 | 🧮 Script del candado | 23 |
-| ⚙️ Motor (pendiente) | 1 |
 | **Total** | **150** |
 
 | ID | Qué dice | Quién la cumple | Estado |
@@ -81,7 +80,7 @@
 | M19 | EL DATO MÁS IMPORTANTE SE QUEDA QUIETO UN POCO MÁS | ⚙️ Motor | ✅ Funciona |
 | M20 | CONTRASTE DE INTENSIDAD, NO TODO A TOPE | 🤖 Revisor de guion | ✅ Listo · aún no usado en ningún vídeo |
 | M21 | MIRADA DIRECTA A CÁMARA EN EL PICO | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
-| M22 | SONIDO DE IMPACTO, FOTOGRAMA A FOTOGRAMA | ⚙️ Motor (pendiente) | ⏳ Falta que Paco elija de oído el golpe de sonido. Mientras tanto lo exige el candado a mano (revisor de imagen) |
+| M22 | SONIDO DE IMPACTO, FOTOGRAMA A FOTOGRAMA | ⚙️ Motor | ✅ Funciona |
 | M23 | TEMPERATURA DE COLOR SEGÚN LA EMOCIÓN DEL BLOQUE | ⚙️ Motor | ✅ Funciona |
 | M24 | UN PLANO DE ASOMBRO POR VÍDEO, SOSTENIDO | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
 | M25 | SUBTÍTULOS | 🤖 Revisor de imagen | ✅ Listo · aún no usado en ningún vídeo |
