@@ -1,0 +1,121 @@
+{
+  "video": "E:/tmp-motor/india3-v3/india-3-lugares-v3.mp4",
+  "revisor": "imagen (subagente, ojos nuevos, 3.ª pasada, 20 nov 2026)",
+  "fotogramas": "E:/tmp-motor/india3-v3-rev-img3/ (f_*.jpg cada 0,5 s, hoja_1-4.jpg, inicio.jpg a 10 fps, final.jpg y final5.jpg con los últimos segundos, zz_*.jpg ampliados, portada_160.png)",
+  "comprobado_de_la_revision_anterior": "S154: el sígueme ya no tapa la cabeza (queda justo encima de la coronilla, ~20 px de aire a 21 s). S152: sin rótulo encima de la cara. M75 en lugar de M77. M100 dura ~4,4 s (36,0-40,5 s). M104 fuera: en s1 solo queda un amanecer (M112). S523 (sadhu) con RESPETO sobre el pecho: la cara queda limpia. Subtítulos partidos por frase, nunca más de 2 líneas. La web de la tarjeta acaba en y≈1.150, fuera de la zona de botones.",
+  "F9": {
+    "estado": "✅",
+    "como": "Todo es del sitio que se nombra: Rishikesh (V31, RW416, M75, M78, monos ante el cartel del bar de Rishikesh), Dharamsala (V06, S152, S154, S153, V05) y Benarés (S558, RW546, S494, RW598, M100, S536, S542, S523, M112, S559, S560). No hay fotos de otro sitio. Sobre los cuerpos amortajados de RW546, ver P4."
+  },
+  "F10": {
+    "estado": "✅",
+    "como": "No hay material ajeno: todo es de Paco (2019) o animado o recreado a partir de sus fotos. RW9001 y RW9002 llevan el rótulo RECREACIÓN. RW416, RW546 y RW598 van animados sin rótulo, y textos-youtube.txt ya marca contenido alterado: SÍ en YouTube y AIGC en TikTok."
+  },
+  "P4": {
+    "estado": "✅",
+    "como": "Excepción de Paco para RW546 («RW546, RW598, RW9002»). En 2,6-4,4 s se ven, de lejos y sin cara, cuerpos amortajados bajados por la escalera, y bañistas con el torso desnudo. En S153 hay niños entre los monjes rezando: es una escena digna. El sadhu S523 lo eligió Paco («SUSTITUYE LA PRIMERA CAPTURA POR LA SEGUNDA»). No hay datos personales."
+  },
+  "S1": {
+    "estado": "✅",
+    "como": "Según el acta y el informe del motor: la voz manda, hay ambiente real de sus vídeos con ducking y música aparte, b2 va sin música y suena el golpe del batok en las cifras."
+  },
+  "S4": {
+    "estado": "✅",
+    "como": "No se simulan mantras ni oraciones. El ambiente (RIO, MONJES, GHAT) sale de vídeos de Paco."
+  },
+  "M15": {
+    "estado": "✅",
+    "como": "De 0 a 0,17 s va la portada con el barquero. Desde 0,2 s, el mismo barquero (S558) en primer plano, mirando a cámara."
+  },
+  "Y4": {
+    "estado": "✅",
+    "como": "La portada va en los primeros 0,2 s (inicio.jpg). Cara expresiva, verde y naranja vivos, alto contraste y texto breve."
+  },
+  "Y14": {
+    "estado": "✅",
+    "como": "El texto es «para MORIR · en Benarés» (4 palabras), con la etiqueta INDIA. El barquero, muy cerca, ocupa la mitad de abajo. Se ha comprobado a 160 px."
+  },
+  "Y16": {
+    "estado": "✅",
+    "como": "Es la foto S558 con el fondo oscurecido. No hay personas inventadas ni escenas que no pasaron."
+  },
+  "Y18": {
+    "estado": "✅",
+    "como": "Una sola protagonista, mirando a cámara, con el fondo oscurecido. Solo MORIR va grande y en naranja. El texto queda arriba, lejos de la cara, y el logo arriba a la derecha."
+  },
+  "Y23": {
+    "estado": "✅",
+    "como": "A 160 px se entiende: «un barquero de la India; en Benarés se va a morir». Es el gancho del vídeo (el hotel para morir). Y3 (cruce): carátula y título solo comparten MORIR y Benarés."
+  },
+  "N7": {
+    "estado": "✅",
+    "como": "Segundo a segundo, la imagen acompaña la voz. Excepciones de Paco: con «Si llevas un plátano» no se ve plátano (pidió quitarlo) y sale el mono del cartel. Con «dos semanas para morir» se ve el crematorio (RW546), no el hotel. El rótulo «10 RUPIAS · LA INSCRIPCIÓN» va sobre el monasterio de Dharamsala con «Tú te registras». Los rótulos de lugar solo van sobre su sitio."
+  },
+  "M18": {
+    "estado": "✅",
+    "como": "El cierre (53,1-55,9 s) va sobre S560, el ghat desde la barca, con la pregunta abierta «¿Por qué vienen a morir aquí?» y el silencio después. El dato fuerte del cierre es esa pregunta, no la imagen: el plano es tranquilo y no es el más fuerte del vídeo. Paco lo ha visto: «ME GUSTA, EXPORTA»."
+  },
+  "M21": {
+    "estado": "✅",
+    "como": "El gancho, S558, mira a cámara. En el pico, el sadhu S523 también mira a cámara."
+  },
+  "M24": {
+    "estado": "✅",
+    "como": "M100 es el amanecer sobre el Ganges con barcas, en GP: 36,0-40,5 s, ~4,4 s sostenido (el informe dice 4,4 s). Ya no hay tres amaneceres seguidos: en s1 queda M112, con otro encuadre (bambúes)."
+  },
+  "M26": {
+    "estado": "✅",
+    "como": "No aplica: no es un vídeo de oficio."
+  },
+  "M28": {
+    "estado": "✅",
+    "como": "Cada corte arranca resuelto. S152 entra a 20,0 s sin rótulo encima de la cara. En S154 el sígueme queda por encima de la coronilla. M75 se ve algo blando, a través de un cristal con alguna mota, pero el mono se lee bien y quieto en la barandilla. RW9002 entra con el mono ya en el cuadro."
+  },
+  "M35": {
+    "estado": "✅",
+    "como": "La cara del Dalái Lama (S152) entra a 20,0 s, antes de su nombre (~21,3 s) y de «puedes verlo». La cifra «¿VERLO? AL DALÁI LAMA» (19,0 s) es una pregunta que lo anuncia, no un dato."
+  },
+  "M36": {
+    "estado": "✅",
+    "como": "Tras «Fotos de cuerpos, ninguna» entra el sadhu S523 (45,5-48,4 s), mirando a cámara con la palma alzada. Es la elección de Paco. RESPETO va sobre el pecho y la cara queda limpia todo el plano."
+  },
+  "M37": {
+    "estado": "✅",
+    "como": "r1: vídeo V31, clip IA RW416 y foto M75. r2: clip IA, clip IA y foto M78. d1: vídeo, foto y foto. d2: foto S153 y vídeos V06 y V05. b1: foto S494, clip RW598 y foto M100. b2: foto, foto y foto con fondo oscurecido, en un tramo humano y lento."
+  },
+  "M40": {
+    "estado": "✅",
+    "como": "Cada bloque abre con un plano general: Rishikesh con V31, el río (8,5 s); Dharamsala con V06, el patio del monasterio (18,5 s); Benarés con S494, las barcas en el ghat (31,9 s)."
+  },
+  "M43": {
+    "estado": "✅",
+    "como": "Entre 54,86 y 55,9 s se ve S560 sin voz ni subtítulo, antes de la tarjeta."
+  },
+  "M44": {
+    "estado": "✅",
+    "como": "No aplica: no hay entrevistas."
+  },
+  "M47": {
+    "estado": "✅",
+    "como": "La aparición principal del Dalái Lama (S152) es una toma sonriente. En S154 saluda con la mano."
+  },
+  "M48": {
+    "estado": "✅",
+    "como": "El crematorio (RW546) sale sin explicar en el gancho (2,6 s) y se explica en b2 (41-45 s)."
+  },
+  "M10": {
+    "estado": "✅",
+    "como": "Nada grabado entre 1.260 y 1.920 px. Los subtítulos van a ~1.150, los rótulos a ~900 y las cifras arriba. En la tarjeta, la web «borradodelmapa.com» acaba en y≈1.150. La pista EN va aparte en .srt."
+  },
+  "M25": {
+    "estado": "✅",
+    "como": "Arreglado (revisor nuevo, 21 nov 2026, sobre el mp4 de las 0:02). Fotogramas cada 0,5 s de 0 a 5 s y ampliados a 1,0 y 3,2 s: «Hay un hotel en Benarés / donde te dan» (0,2-2,4 s) y «unas dos semanas / para morir.» (2,4-4,4 s); «unas dos semanas» ya va junto. Repasados los 24 subtítulos del .srt ES y los subPartes de la config: todos cortan por frase o por pausa natural, nunca más de 2 líneas."
+  },
+  "excepciones_paco": {
+    "RW9001": "«VAS A PONER EL MONO DEL CARTEL… LA FOTO ANIMADA Y VAS A QUITAR EL PLATANO»: va con RECREACIÓN. Lo que conviene saber: el cartel lleva el nombre y el Instagram de un bar real («OpenMicCafeRishikesh»), que es publicidad gratis, y abajo la IA deforma las letras («…MIC CAFE RIONN…»). La cifra ¿COMIDA? tapa el morro del mono unos instantes.",
+    "RW9002": "«RW546, RW598, RW9002»: recortado sin bandas y con RECREACIÓN. Lo que conviene saber: el letrero vuelve a salir deformado, y el subtítulo «No les des de comer» cae encima del texto del cartel (se lee, pero con menos limpieza).",
+    "RW546": "En el gancho, desde «dos semanas». Lo que conviene saber: se ven cuerpos amortajados de lejos y sin cara. Va sin rótulo de IA (se marca al publicar) y choca un poco con el consejo del propio vídeo, «Fotos de cuerpos, ninguna».",
+    "RW598": "Benarés (34,8-36,0 s): el ghat de noche con luces verdes. No se ven defectos de IA. Va sin rótulo de IA (se marca al publicar).",
+    "S523": "«SUSTITUYE LA PRIMERA CAPTURA POR LA SEGUNDA»: el sadhu con la palma alzada funciona como gesto de «no» con «Fotos de cuerpos, ninguna»."
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "_nota": "Revisor de guion (ojos nuevos, 3.ª pasada), 20 nov 2026, sobre el borrador final v3 (E:/tmp-motor/india3-v3/india-3-lugares-v3.mp4, 59,9 s). Leídos: .srt ES, tiempos.json, acta, informe, config india-3-lugares-v3.cjs (manda), guion-v3.txt (704 caracteres, coincide con ok-paco F5), guion de dirección, estudio-titulo.md, textos-youtube.txt, ok-paco.json, ATRIBUCIONES.txt, revisión anterior y revision-imagen.json. Comprobado en la web hoy: dalailama.com «Attending the Teachings» (copias de pasaporte, visado y formulario C; 10 rupias; «other electronic gadgets will not be allowed»), el aviso de tibet.net enlazado (existe; es del 19 ene 2019 y pide no llevar cámaras ni móviles) y el calendario de dalailama.com (sin enseñanzas anunciadas en Dharamsala; solo una ceremonia el 24 feb 2027). Sobre N14-2: Paco contestó «ME GUSTA, EXPORTA» a la pregunta directa de si aceptaba que no hubiera puentes; lo tomo como excepción suya (vio y oyó el montaje sabiendo el límite). Conviene copiar pregunta y respuesta en ok-paco.json para que quede escrito.",
+  "L1": {
+    "estado": "✅",
+    "como": "No es de la serie «Pueblos»: short de viaje del canal (L3). Nada de «mira qué raros». Los monos recreados llevan RECREACIÓN."
+  },
+  "L2": {
+    "estado": "✅",
+    "como": "Fecha fijada por Paco en textos-youtube.txt: mié 25 nov 2026, 10:00, dentro del plan de la India, con el short de los konyak movido a las 19:00 (Paco, 20 nov). Aviso, no de esta lista: la config no lleva cfg.fecha/fechaTikTok, así que el motor no puede comprobar S10 (la misma música en la misma semana). Hay que ponerla al exportar."
+  },
+  "L3": {
+    "estado": "✅",
+    "como": "Historia y viaje (Rishikesh, Dharamsala, Benarés), contado por la reportera con lo práctico dentro."
+  },
+  "F2": {
+    "estado": "✅",
+    "como": "Nada inventado en la voz. El mono y el plátano son la anécdota de Paco en Rishikesh. «Yo lo vi con pase de prensa» = acreditado como fotógrafo (india-preguntas-guion.md:89). Los monos recreados llevan RECREACIÓN. Ojo, aunque es de imagen: RW546 (gancho, desde «dos semanas») enseña cuerpos amortajados a lo lejos, y la voz luego dice «Fotos de cuerpos, ninguna». Paco lo aceptó (P4 en revision-imagen) y no es un dato falso."
+  },
+  "F4": {
+    "estado": "✅",
+    "como": "Arreglado. La descripción dice «vive allí desde 1960, en el exilio desde 1959». Comprobado hoy en dalailama.com, «Chronology of Events»: «20 April 1959: Arrives Mussoorie…» y «30 April 1960: Arrives in Dharamsala to take up residence at Swarg Ashram»; también Wikipedia (Dharamshala): la administración tibetana pasó a Dharamsala en mayo de 1960. El resto de datos de la voz ya tenía su fuente. Mejora, no fallo: en el guion de dirección la fuente dice «dalailama.com, biografía», pero la biografía breve no da el año 1960; la página que lo da es «Chronology of Events» (https://www.dalailama.com/the-dalai-lama/events-and-awards/chronology-of-events)."
+  },
+  "N4": {
+    "estado": "✅",
+    "como": "Salma no huele, prueba, camina ni toca. El único «yo» (el pase de prensa) es lo vivido por Paco."
+  },
+  "N6": {
+    "estado": "✅",
+    "como": "Sin moraleja ni relleno. El cierre es dato (Mukti Bhawan), pregunta y vídeo largo. La triple «Más vieja que…» es la cita de Twain que Paco quiso entera; el nombre va en la descripción."
+  },
+  "N12": {
+    "estado": "✅",
+    "como": "Gancho en la primera frase, sin saludo. El «yo» solo para lo vivido. Frases cortas. Tiene las tres capas: lo vivido (el mono, el pase de prensa), la historia (la cita de Benarés) y la India de hoy (rabia, inscripción, cremaciones). Las fuentes van en la descripción."
+  },
+  "N13": {
+    "estado": "✅",
+    "como": "En los tres consejos hay pregunta en pantalla, respuesta corta y prueba: r2 «¿COMIDA? / A LOS MONOS» → «No les des de comer»; d1 «¿VERLO? / AL DALÁI LAMA» → «puedes verlo» + «Yo lo vi»; b2 «¿VERLAS? / LAS CREMACIONES» → «desde la barca». Mirado en la config."
+  },
+  "N33": {
+    "estado": "❌",
+    "motivo": "El título (el hotel de las dos semanas) y la portada («para MORIR en Benarés») se cumplen en el gancho, de 0,2 a 4,4 s. El hilo vuelve en b1 («la ciudad de ese hotel», 31,9 s) y se cierra en s1 con el nombre (48,7 s). La historia del hotel no se desarrolla: son tres frases, con unos 27 s de monos y Dalái Lama en medio, y el porqué lo cuenta el largo. Paco eligió este título sabiendo el aviso (estudio-titulo.md). Es excepción suya y en el guion no queda nada que cambiar. Al publicar, mirar la retención a los 8-10 s.",
+    "paco": "«LOS TITULOS SON UNA PUTA MIERDA. ME GUSTABA EL GANCHO DEL HOTEL» y «ADELANTE» a «¿… con el título 1?» (20 nov 2026, ok-paco.json Y13)"
+  },
+  "F1": {
+    "estado": "✅",
+    "como": "Revisor nuevo (5.ª pasada, 21 nov 2026). Comparado el guion de dirección entero (Formato, Material, Cuerpos, Cambios, las dos tablas, Marcas, Lo montado, OK de Paco) y la cabecera de india-3-lugares-v3.cjs con los blocks de la config. Cada P(...) con su from resuelto como el motor (tow: b.text.indexOf(from), primera aparición, distingue mayúsculas): g0 «dos»→RW546 en «dos semanas»; r1 «Aquí»→RW416, «la»→M75 en «la primera»; r2 «No»→RW9002 (RECREACIÓN, igual que RW9001), «hay»→M78 en «hay rabia»; d1 «Aquí»→S152, «sus»→S154 en «sus enseñanzas» (ya no cae en «en el exilio»); d2 «Tú»→V06, «dentro»→V05; b1 «Más»→RW598, «más»→M100 en «más vieja que la tradición» (asombro); b2 «desde»→S542, «Fotos»→S523; s1 «Por»→S559, «Te»→S560. Rótulos (RISHIKESH, DHARAMSALA, BENARÉS solo en S494, RECREACIÓN), preguntas y cifras (¿COMIDA?/A LOS MONOS, ¿VERLO?/AL DALÁI LAMA, 10 RUPIAS/LA INSCRIPCIÓN · DATO DE 2024, ¿VERLAS?/LAS CREMACIONES, RESPETO/ES UN FUNERAL), sonidos (V57, V33, V09; sin música en b2), marcas (r2 y b2 advertencia con zoom de énfasis, b2 pico/datoFuerte/humano/cambioTono), sígueme a 20,5 s tras la pregunta de Dharamsala (18,6-19,6 s) y tarjeta 4 s (2,2 + fotograma de la app) coinciden. Los cinco RW (RW416, RW546, RW598, RW9001, RW9002) marcados como IA en tabla, Material y cabecera. Voz: 704 caracteres (contados en guion-v3.txt). Montado: el mp4 (21 nov 00:10) es posterior a la config (00:08); tiempos.json da 55,9 s + 4 s = 59,9 s, la foto más larga 4,4 s (M100) y el acta lista el corte de d1 en «sus»; fotogramas a 21,0/22,3/23,2 s: S152 con «el exilio… Dalái Lama» y S154 saludando con «y en sus enseñanzas». OK de Paco del guion = ok-paco.json (F3, F5, Y13, F6, S5, N25, F8, N14, N33)."
+  },
+  "G1": {
+    "estado": "✅",
+    "como": "Los 20 primeros segundos (g0, g1, r1 y el comienzo de r2) están diseñados aparte en el guion, y Paco los aprobó (ok-paco F3). El sígueme entra a los 20,5 s (cfg.seguir.seg)."
+  },
+  "G3": {
+    "estado": "✅",
+    "como": "La apertura del short, «Hay un hotel en Benarés donde te dan unas dos semanas para morir.», es distinta de la del largo («En Benarés hay un hotel donde no se viene a dormir. Se viene a morir.»)."
+  },
+  "N2": {
+    "estado": "✅",
+    "como": "Frase concreta desde 0,2 s y una persona en el primer fotograma: S558, el barquero mirando a cámara."
+  },
+  "N9": {
+    "estado": "✅",
+    "como": "Gancho (g0) → contexto con mapa (g1) → viaje y consejos (r1-b1) → pico (b2, datoFuerte) → cierre con pregunta y llamada al largo (s1) → 0,9 s de silencio → tarjeta. Mirado en tiempos.json."
+  },
+  "N14": {
+    "estado": "❌",
+    "motivo": "Tono: bien. Ni «trampa», ni «peligro», ni dramatismo; «hay rabia» sale una vez y con calma. También bien: (1) cada bloque engancha en sus 3 primeros segundos; (4) b2 va más lento y sin música; (6) el cierre llama al largo; (8) los rótulos no repiten la voz. No se cumple (2): ninguna última frase vende el bloque siguiente (r2 acaba en «hay rabia», d2 en «ni cámara ni móvil», b1 en «la leyenda»). Con 59,9 s de 60 no cabe ni una palabra más de voz. Hacen de puente la promesa «Tres lugares sagrados, un consejo en cada uno» con el mapa y el hilo del hotel. Paco lo aceptó como límite del formato: se le preguntó por esto y contestó «ME GUSTA, EXPORTA». Lo doy por excepción suya: es una respuesta directa a esa pregunta, después de ver y oír el montaje. Conviene copiar pregunta y respuesta en ok-paco.json.",
+    "paco": "«ME GUSTA, EXPORTA» a la pregunta de si aceptaba que no haya puentes entre bloques porque no caben en 60 s (20 nov 2026)"
+  },
+  "N15": {
+    "estado": "✅",
+    "como": "Justo tras el gancho: «Tres lugares sagrados, un consejo en cada uno», con el mapa. Se cumple: tres lugares, tres consejos."
+  },
+  "N16": {
+    "estado": "✅",
+    "como": "El bucle se abre a 0,2 s (el hotel), se recuerda en b1 («la ciudad de ese hotel») y se cierra en s1 con el nombre real, Mukti Bhawan. Es verdad, con varias fuentes."
+  },
+  "N27": {
+    "estado": "✅",
+    "como": "Cierra con «¿Por qué vienen a morir aquí? Te lo cuento en el vídeo largo.» El largo 04Ibzy_MxQQ lo contesta y es el vídeo relacionado (textos-youtube.txt, tarjeta «▼ Mira el vídeo relacionado»)."
+  },
+  "M1": {
+    "estado": "✅",
+    "como": "Gancho (S558, RW546) → mapa → desarrollo en GP y PM → pico b2 (datoFuerte, fondo oscurecido en S523) → cierre en GP (M112, S559, S560) con 0,9 s de silencio → tarjeta de 4 s."
+  },
+  "M20": {
+    "estado": "✅",
+    "como": "No aplica a un short de 60 s. Aun así, b2 va sin música y con 0,6 s de silencio antes (acta: S8, S9)."
+  },
+  "M32": {
+    "estado": "✅",
+    "como": "Recurso valorado: no hay gesto de oficio ni cámara lenta."
+  },
+  "M33": {
+    "estado": "✅",
+    "como": "Recurso valorado: cada salto de lugar lo marcan el mapa de g1 y el nombre, dicho y rotulado (RISHIKESH, DHARAMSALA, BENARÉS)."
+  },
+  "M39": {
+    "estado": "✅",
+    "como": "Al volver a Benarés: «Benarés, la ciudad de ese hotel» y el rótulo BENARÉS; en s1, «Ese hotel» reconecta con el gancho."
+  },
+  "M46": {
+    "estado": "✅",
+    "como": "Ningún rótulo repite la voz: «10 RUPIAS / LA INSCRIPCIÓN · DATO DE 2024» y «RESPETO / ES UN FUNERAL» añaden un dato o una consecuencia. Las preguntas van antes de su respuesta."
+  },
+  "N1": {
+    "estado": "✅",
+    "como": "Leído en voz alta desde el .srt: frases cortas. La más larga es la triple de Benarés, que es paralela y se sigue de oído."
+  },
+  "N3": {
+    "estado": "✅",
+    "como": "Un dato fuerte por intervención: la rabia (r2), la inscripción sin cámara (d2) y las cremaciones desde la barca (b2), cada uno con su escena."
+  },
+  "N11": {
+    "estado": "✅",
+    "como": "No aplica (short). No hay años en la voz."
+  },
+  "N17": {
+    "estado": "✅",
+    "como": "Las preguntas en pantalla entran al empezar su bloque, antes de la respuesta: r2 en «Si», d1 en «Dharamsala», b2 en «Las» (config, cifra Q)."
+  },
+  "N18": {
+    "estado": "✅",
+    "como": "No hay prueba social en la voz (leídos los 24 subtítulos ES)."
+  },
+  "N19": {
+    "estado": "✅",
+    "como": "Abre con lo más fuerte (morir en Benarés) y cierra con lo segundo más fuerte (las cremaciones y el bucle del hotel); lo más flojo va en medio."
+  },
+  "N20": {
+    "estado": "✅",
+    "como": "No hay cifras grandes: «unas dos semanas» y «10 RUPIAS» se entienden sin comparación."
+  },
+  "N21": {
+    "estado": "✅",
+    "como": "Los consejos van en segunda persona: «Si llevas», «No les des», «puedes verlo», «Tú te registras», «las miras»."
+  },
+  "N23": {
+    "estado": "✅",
+    "como": "En el .srt ES ninguna frase empieza por Y, Pero, Entonces ni Además. Empiezan por: Hay, Tres, Rishikesh, Aquí, Si, No, Dharamsala, Aquí, Yo, Tú, Benarés, Más, Las, Fotos, Ese, ¿Por qué, Te. («y en sus», «y dentro» van dentro de la frase.)"
+  },
+  "N24": {
+    "estado": "✅",
+    "como": "El único «por qué» es la pregunta que lleva al largo: entra en la excepción."
+  },
+  "N26": {
+    "estado": "✅",
+    "como": "No aplica: ningún dato tiene a la vez un caso concreto y una cifra general."
+  },
+  "N28": {
+    "estado": "✅",
+    "como": "Los bloques no mezclan frase a frase: r2, d2 y b2 dan el consejo, y b1 es el asombro. En d2, lo vivido («Yo lo vi») va antes del dato práctico."
+  },
+  "N29": {
+    "estado": "✅",
+    "como": "No aplica: no hay testimonios."
+  },
+  "N30": {
+    "estado": "✅",
+    "como": "«donde te dan unas dos semanas para morir»: el contexto va antes de la cifra. No hay más cifras en la voz."
+  },
+  "N31": {
+    "estado": "✅",
+    "como": "Excepción de Paco: quitó de la voz «Si muerde, al médico ese día». Ya está en la descripción: «Si te muerde uno, ve al médico ese mismo día» (textos-youtube.txt). Las cremaciones no son un peligro."
+  },
+  "N32": {
+    "estado": "✅",
+    "como": "No hay fechas en la voz. En pantalla, «DATO DE 2024» dice hasta cuándo vale el dato. En la descripción, 1897 va con la obra de Twain (lo de 1959, en F4)."
+  },
+  "S6": {
+    "estado": "✅",
+    "como": "Una pista tranquila (SFX_fading-shoreline) de g1 a b1, sin música en el pico humano (b2) y vuelta suave en s1. Las marcas cambioTono y datoFuerte están en b2 (config), y el acta confirma S8 y S9."
+  },
+  "Y2": {
+    "estado": "✅",
+    "como": "estudio-titulo.md recoge el buscador predictivo (benares, varanasi, rishikesh, dharamsala, viajar a la india, monos india) y los primeros vídeos de cada búsqueda, con sus patrones."
+  },
+  "Y11": {
+    "estado": "✅",
+    "como": "Paco eligió el título 1 antes de generar la voz y de montar (ok-paco Y13 y F5), y el guion se hizo para cumplirlo con el hilo del hotel."
+  },
+  "Y15": {
+    "estado": "✅",
+    "como": "Portada mirada (india-3-lugares-v3-portada.png, y revision-imagen Y14/Y18): sello BORRADO DEL MAPA arriba a la derecha, naranja #F4630B y Barlow Condensed. Reparto con el título: la portada lleva la palabra fuerte (MORIR · en Benarés) y el título añade el hotel y las dos semanas, sin repetir la frase."
+  },
+  "Y19": {
+    "estado": "✅",
+    "como": "Solo una de las tres propuestas va encuadrada como pérdida (la 3, «lo que NO debes hacer»)."
+  },
+  "Y20": {
+    "estado": "✅",
+    "como": "El título «Benarés: el hotel donde te dan dos semanas para MORIR» se dice casi literal en la voz de 0,2 a 4,4 s, y la promesa de la portada se cumple ahí mismo."
+  },
+  "Y21": {
+    "estado": "✅",
+    "como": "Arreglado. La línea de Fuentes dice ya «enseñanzas en Dharamsala». Buscado en textos-youtube.txt, guion-v3.txt, los .srt ES y EN, la config, el guion de dirección y estudio-titulo.md: 26 veces «Dharamsala». Solo quedan dos «dharamshala» que no son texto público: la URL de tibet.net en el guion de dirección y una búsqueda predictiva copiada en estudio-titulo.md."
+  },
+  "P1": {
+    "estado": "✅",
+    "como": "textos-youtube.txt: YouTube «contenido alterado» SÍ, con los cinco clips de IA (RW416, RW546, RW598, RW9001, RW9002); TikTok AIGC sí. Los textos públicos no dicen «IA»: «Algunas fotos van animadas y dos monos están recreados»."
+  },
+  "P8": {
+    "estado": "✅",
+    "como": "No hay nada publicado de la v1 ni de la v2 de este short. El remontaje no toca nada publicado."
+  },
+  "P16": {
+    "estado": "✅",
+    "como": "La primera línea de la descripción repite la promesa del gancho casi con las palabras del título: «En Benarés hay un hotel donde te dan unas dos semanas para morir». Después vienen los tres lugares. TikTok y el inglés empiezan igual."
+  },
+  "P17": {
+    "estado": "✅",
+    "como": "Arreglado, de más específico a más genérico. YouTube: «#Benarés #ViajarALaIndia #India». TikTok: «#Benarés #Rishikesh #Dharamsala #ViajarALaIndia #India». Inglés: «#Varanasi #TravelIndia #India»."
+  }
+}

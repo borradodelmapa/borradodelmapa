@@ -1,0 +1,6 @@
+BENARÉS: EL HOTEL PARA MORIR (short, 20 nov 2026) · ATRIBUCIONES
+Fotos (S = Sony A7III, M = móvil) y vídeos (V = móvil): Paco, viaje por el norte de la India, noviembre de 2019. Propias, sin licencia ajena.
+Fotos animadas con IA (Runway gen4_turbo a partir de fotos de Paco): RW416 (S416, Rishikesh), RW546 (S546, Benarés), RW598 (S598, Benarés).
+Monos recreados con IA a partir de la foto de Paco S138 (Rishikesh): RW9001 (Kling 3.0 Pro), RW9002 (Veo 3.1 Fast). Llevan el rótulo RECREACIÓN.
+Mapa: hecho por 🎬 Vídeo (mapa-india3.cjs), datos Natural Earth / world-atlas (dominio público).
+Voz: Salma (ElevenLabs, voz propia del canal). Música: biblioteca del canal (SFX_fading-shoreline) y sintonía de la serie (ElevenLabs Music, plan con licencia comercial). Golpes del batok: sonido creado (0 €).

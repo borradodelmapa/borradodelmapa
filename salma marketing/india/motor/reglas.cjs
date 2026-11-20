@@ -81,6 +81,12 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   { const vids = (cfg.blocks || []).flatMap(b => (b.shots || []).map(s => ({ b: b.id, s }))).filter(x => /.(mp4|mov|mkv|webm)$/i.test(String(x.s.a)) && !/^RW/.test(String(x.s.a)));
     const sin = vids.filter(x => !x.s.cara && ['PP', 'PM', 'D'].includes(x.s.sc));
     L.push('ℹ [M49] recorte por la cara en ' + vids.filter(x => x.s.cara).length + ' de ' + vids.length + ' planos de vídeo' + (sin.length ? ' · sin cara marcada (van por el centro): ' + sin.map(x => x.b + ' ' + String(x.s.a).split('/').pop()).join(', ') : '')); }
+  // F13 (Paco, 20 nov 2026: «asegúrame que para el próximo vídeo se lean y se cumplan las reglas»): ningún borrador se enseña sin los dos revisores.
+  // Busca revision-guion.json y revision-imagen.json en la carpeta del vídeo (cfg.revisiones o la de encima de cfg.ultima). Si faltan, o si queda un ❌ con arreglo, ❌ F13.
+  { const dirV = cfg.revisiones || (cfg.ultima ? path.dirname(cfg.ultima) : null), falt = [], pend = [];
+    if (dirV) for (const f of ['revision-guion.json', 'revision-imagen.json']) { const p = path.join(dirV, f); if (!fs.existsSync(p)) { falt.push(f); continue; }
+      try { const j = JSON.parse(fs.readFileSync(p, 'utf8')); for (const [k, v] of Object.entries(j.reglas || j)) if (v && v.estado === '❌' && /arregl/i.test(v.motivo || '')) pend.push(k); } catch (e) { falt.push(f + ' (no es JSON)'); } }
+    chk('F13', !dirV || falt.length > 0 || pend.length > 0, !dirV ? 'no sé dónde buscar las revisiones (cfg.revisiones)' : falt.length ? 'faltan los revisores (' + falt.join(', ') + ' en ' + dirV + '): pasa revisor-guion.md y revisor-imagen.md ANTES de enseñar el borrador' : 'los revisores dejaron ❌ con arreglo sin hacer: ' + pend.join(' ') + ' (arréglalo y que vuelva a pasar un revisor nuevo)'); }
   // M50 (Paco, 20 nov 2026): un vídeo suelto (bloque video:) que no tiene la proporción del formato se ESTIRA al montarlo (cierre de los mlabri): hay que recortarlo antes
   { const ob = (cfg.formato === '16:9') ? 16 / 9 : 9 / 16, mal = (cfg._raw || []).filter(x => x.w && x.h && Math.abs(x.w / x.h - ob) / ob > 0.02);
     chk('M50', mal.length > 0, 'vídeo suelto con otra proporción (se vería estirado): ' + mal.map(x => x.id + ' ' + x.w + 'x' + x.h).join(', ') + ' · recórtalo al formato o móntalo como plano (shots) con cara'); }
@@ -95,6 +101,7 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
       let t; try { t = fs.readFileSync(path.join(__dirname, f), 'utf8'); } catch (e) { continue; }
       if (!t.includes(pista)) continue;
       const id = (t.match(/id:\s*'([^']+)'/) || [])[1]; if (!id || String(cfg.id).startsWith(id)) continue; // el propio vídeo (también su versión TikTok o una prueba) no cuenta
+      if (cfg.id && t.includes("'" + String(cfg.id).replace(/-prueba.*$/, '') + "'")) continue; // (21 nov 2026) la config del propio vídeo aunque su primer «id:» sea el de un bloque (India 3 lugares)
       for (const [campo, mia] of [['fecha', cfg.fecha], ['fechaTikTok', cfg.fechaTikTok]]) {
         if (!mia) continue; const m = t.match(new RegExp(campo + ":\\s*'(\\d{4}-\\d\\d-\\d\\d)'"));
         if (m && semana(m[1]) === semana(mia)) choques.push(f + ' (' + campo + ' ' + m[1] + ')');

@@ -53,7 +53,7 @@ const LOOKS = {
 // a:b = proporción · sub = subtítulos (letra, borde, caracteres por línea, posición) · card = [tamaño, y] de cada texto de la tarjeta final
 const FORMATOS = {
   '9:16': { w: 1080, h: 1920, a: 9, b: 16, sub: { letra: 66, borde: 6, ancho: 26, pos: '\\an5\\pos(540,1150)' }, cifra: { y: 560, size: 230, sub: 270 }, counterY: 140, rotY: 900, sgY: 300, sgW: 860, // M10 (T31): la franja del sígueme sale arriba (antes 1.450, en la zona de botones de Shorts y TikTok) y con ≥ 100 px de margen
-    card: { av: [360, 170], l1: [80, 720], /* M10 (T31): «MÁS PUEBLOS BORRADOS» cabe entre 100 y 980 px */ l2: [76, 850], l3: [44, 1050], crea: [104, 640], con: [140, 770], desc: [54, 990], grat: [54, 1065], web: [74, 1220], l4: [46, 1560], l5: [52, 1655] } },
+    card: { av: [360, 170], l1: [80, 720], /* M10 (T31): «MÁS PUEBLOS BORRADOS» cabe entre 100 y 980 px */ l2: [76, 850], l3: [44, 1050], crea: [104, 640], con: [140, 770], desc: [54, 950], grat: [54, 1022], web: [74, 1110], /* M10 (20 nov 2026, India 3 lugares): el recuadro de la web acababa en 1.307 px, dentro de la zona de botones */ l4: [46, 1560], l5: [52, 1655] } },
   // horizontal: subtítulos abajo y centrados (crecen hacia arriba), rótulo de lugar encima de ellos; las fotos más estrechas que 16:9 se ven enteras sobre su propio fondo difuminado
   '16:9': { w: 1920, h: 1080, a: 16, b: 9, sub: { letra: 58, borde: 5, ancho: 42, pos: '\\an2\\pos(960,1020)' }, cifra: { y: 290, size: 200, sub: 230 }, counterY: 60, rotY: 790, sgY: 700,
     card: { av: [220, 60], l1: [96, 330], l2: [76, 450], l3: [70, 620], crea: [90, 300], con: [120, 400], desc: [46, 560], grat: [46, 620], web: [64, 720], l4: [40, 880], l5: [44, 950] } },
