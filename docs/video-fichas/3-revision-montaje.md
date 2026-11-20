@@ -13,9 +13,6 @@ Versión: 19 nov 2026.
 - **M10 · M25** Los subtítulos no tapan la zona de botones y tienen 2 líneas como máximo. (Que duren lo bastante para leerlos, M45, lo hace el motor y avisa si no puede.)
 - **M14 · M43** La tarjeta final se ve entera y antes hay un instante de imagen sin voz.
 
-## Las del motor que AÚN NO hace el motor: se miran a mano hasta que estén programadas (Estrategia, 20 nov 2026)
-Están en la línea MOTOR de la ficha ⓪, pero todavía no las aplica ni las comprueba nadie automáticamente. Hasta que el informe las dé, van al acta a mano:
-- **M34** Los cortes se aceleran al final de cada bloque. El motor solo avisa.
 
 ## 👂 Para Paco (Claude no oye)
 - **N25** La última frase de cada bloque baja un poco el tono, no queda plana. Se le pregunta a Paco al enseñar el borrador.

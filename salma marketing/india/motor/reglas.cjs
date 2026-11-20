@@ -94,8 +94,9 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
   }
   chk('S10', choques.length > 0, 'la pista ' + pista + ' sale otra vez la misma semana: ' + choques.join(', '));
   if (pista && !cfg.fecha && !cfg.fechaTikTok) L.push('⚠ [S10] sin cfg.fecha: no se puede comprobar si la música se repite la misma semana');
-  // M34 (aviso): con 3 planos o más, el último del bloque no debería ser el más largo (el ritmo se acelera al final). El motor no inventa cortes.
-  for (const blk of Object.keys(byBlk)) { const a = byBlk[blk]; if (a.length >= 3 && a[a.length - 1].d > Math.max(...a.slice(0, -1).map(s => s.d)) + 0.2) L.push('⚠ [M34] bloque ' + blk + ': el último plano es el más largo; el ritmo no se acelera al final'); }
+  // M34 (T32): el motor parte el último plano (general → medio → detalle); aquí solo queda el aviso de lo que no ha podido, con su motivo
+  { const m3 = Object.fromEntries((cfg._m34 || []).map(x => [x.blk, x]));
+    for (const blk of Object.keys(byBlk)) { const a = byBlk[blk], x = m3[blk]; if (x && x.ok) continue; if (x) { L.push('⚠ [M34] bloque ' + blk + ': ' + x.motivo); continue; } if (a.length >= 2 && a[a.length - 1].d > Math.max(...a.slice(0, -1).map(s => s.d)) + 0.2) L.push('⚠ [M34] bloque ' + blk + ': el último plano es el más largo; el ritmo no se acelera al final'); } }
   // ---- T30 (20 nov 2026): comprobaciones de la tanda 2 ----
   // M17: algo reinicia la atención cada 45 s como mucho (cambio de bloque, rótulo o cifra)
   { const ev = [0, ...todos.filter(b => b.t0 != null).map(b => b.t0), ...todos.filter(b => b.rotulo && b.t0 != null).map(b => b.t0 + 0.5), cfg._cardT || TOTAL].sort((a, b) => a - b);
@@ -174,7 +175,7 @@ function acta(cfg, TOTAL, OUT, X, L, I, o) {
     '✅ M41 el rótulo entra ' + (cfg.rotuloRetraso ?? 0.5) + ' s después del corte de su bloque',
     (emo.length ? '✅' : '⚠') + ' M23 temperatura de color por bloque: ' + (emo.length ? [...new Set(emo.map(s => s.blk + ' ' + s.emo))].join(', ') : 'ningún bloque marcado con emocion (calida | fria): hay que marcarlos en el guion'),
     (pic.length ? '✅' : '⚠') + ' M27 fondo oscurecido en el plano pico: ' + (pic.length ? pic.map(s => s.blk + ' (' + String(s.id).split('/').pop() + ')').join(', ') : 'ningún plano marcado pico'),
-    aviso('M34').length ? '⚠ M34 ' + aviso('M34').map(x => x.replace('⚠ [M34] ', '')).join(' | ') + ' (el motor no inventa cortes: hay que añadir un plano o mover el corte)' : '✅ M34 en ningún bloque de 3 planos o más el último plano es el más largo',
+    aviso('M34').length ? '⚠ M34 ' + aviso('M34').map(x => x.replace('⚠ [M34] ', '')).join(' | ') + ' (el motor no ha podido partir el plano: añade uno o mueve el corte)' : '✅ M34 el ritmo se acelera al final de cada bloque' + ((cfg._m34 || []).length ? ': ' + cfg._m34.map(x => x.blk + (x.exento ? ' (no se acelera: ' + x.exento + ')' : ' plano ' + x.plano + (x.fijo ? ' (penúltimo: el último es el dato fuerte)' : '') + ' partido en ' + x.partes.join(' · ') + ' s')).join(' | ') : ''),
     'Además, del informe: M2 M3 M4 M6 M7 M8 M9 M10 M11 M13 N5 S1 S2 S3 (ver «informe de reglas»).',
     '',
     '📋 LAS RELLENA EL CHAT (✅ con cómo se comprobó / ❌ con el motivo y qué se hizo), con la ficha de cada paso delante (docs/video-fichas/):',

@@ -153,10 +153,43 @@ async function build(cfg) {
   console.log('ETAPA 3/6 Cortando y revelando cada plano (looks Kodak, zooms)');
   const clips = []; let nclip = 0, kbN = 0; const cacheN = { 'caché': 0, nuevo: 0 };
   const tow = (b, from) => { const i = b.text.indexOf(from); if (i < 0) throw new Error(`no encuentro «${from}» en el bloque ${b.id}`); const wi = b.text.slice(0, i).split(' ').length - 1; const sp = (b.voz || b.text).split(' '); let p = 0; for (let q = 0; q < wi; q++) p += sp[q].length + 1; return b.v.al.st[Math.min(p, b.v.al.st.length - 1)]; };
+  // M34 (T32, Paco 20 nov 2026: «si cambia el motor»): si el último plano de un bloque es el más largo, se parte en 2-3 cortes de la MISMA imagen
+  // (general → medio → detalle, cada uno más corto), con el corte en límite de palabra y mejor tras una pausa de la voz (M31). El detalle se centra en la cara
+  // (s.cara, s.foc o el centro del paneo) y solo si la fuente tiene resolución (si no, general → medio). datoFuerte (M19) o asombro (M24): se parte el penúltimo.
+  // No se acelera el cierre (M1/M18, último bloque) ni un bloque humano (N14-4). cfg.m34 = false lo quita. Lo que no se puede, sale como ⚠ en el informe con su motivo.
+  const M34 = cfg._m34 = [], ultBlk = [...cfg.blocks].reverse().find(x => !x.video && (x.shots || []).length);
+  const m34 = (b, S, starts) => {
+    if (cfg.m34 === false || S.length < 2) return;
+    const du = k => (k + 1 < S.length ? starts[k + 1] : b.D) - starts[k], n = S.length;
+    if (du(n - 1) <= Math.max(...S.slice(0, -1).map((_, k) => du(k))) + 0.2) return; // ya se acelera
+    if (b === ultBlk) return M34.push({ blk: b.id, ok: true, exento: 'cierre: plano general lento (M1, M18)' });
+    if (b.humano) return M34.push({ blk: b.id, ok: true, exento: 'tramo humano: más lento (N14-4)' });
+    const fijo = !!(b.datoFuerte || S[n - 1].asombro), k = fijo ? n - 2 : n - 1, sh = S[k], d = du(k), t0 = starts[k], t1 = t0 + d;
+    const no = motivo => M34.push({ blk: b.id, ok: false, motivo });
+    if (d < 1.5) return no('el plano ' + (k + 1) + ' dura ' + d.toFixed(1) + ' s (menos de 1,5 s): no se puede partir');
+    if (sh.golpe) return no('el plano ' + (k + 1) + ' lleva golpe de zoom: no se parte');
+    const [iw, ih] = medidas(resolve(sh.a)), ancho = Math.min(iw, ih * F.a / F.b) / (sh.pan ? 1 + (sh.z ?? 0.3) : 1); // píxeles de la fuente que llenan el ancho del encuadre
+    if (!iw || ancho / 1.3 < F.w * 0.25) return no('el plano ' + (k + 1) + ' (' + String(sh.a).split('/').pop() + ', ' + iw + 'x' + ih + ') no tiene resolución para acercarse');
+    const punto = sh.cara || sh.foc || (sh.pan && [(sh.pan[0] + sh.pan[2]) / 2, (sh.pan[1] + sh.pan[3]) / 2]), detalle = !!punto && ancho / 1.6 >= F.w * 0.5; // sin punto de cara marcado, el detalle podría dejar fuera a la persona: solo general → medio (prueba sentineleses, T32)
+    // límites de palabra dentro del plano (mismo cálculo que tow), con «pausa» si la palabra anterior acaba en , . : ; ? ! …
+    const tw = b.text.split(' '), sp = (b.voz || b.text).split(' '), cand = []; let p = 0;
+    for (let q = 0; q < Math.min(tw.length, sp.length); q++) { const t = b.lead + b.v.al.st[Math.min(p, b.v.al.st.length - 1)] - 0.06; if (q && t > t0 + 0.55 && t < t1 - 0.55) cand.push({ t, pausa: /[,.:;!?…]$/.test(tw[q - 1]) }); p += sp[q].length + 1; }
+    { const tf = b.lead + b.v.al.en[b.v.al.en.length - 1] + 0.05; if (tf > t0 + 0.55 && tf < t1 - 0.55) cand.push({ t: tf, pausa: true }); } // también al acabar la voz: el último trozo cae en la pausa (fin de idea, M31)
+    const intento = props => { const cuts = []; let acc = t0;
+      for (const pr of props.slice(0, -1)) { acc += d * pr; const c = cand.filter(x => x.t > (cuts.length ? cuts[cuts.length - 1] : t0) + 0.55).sort((a, b2) => (Math.abs(a.t - acc) - (a.pausa ? 0.25 : 0)) - (Math.abs(b2.t - acc) - (b2.pausa ? 0.25 : 0)))[0]; if (!c) return null; cuts.push(c.t); }
+      const ps = [t0, ...cuts, t1].slice(1).map((x, i, a) => x - (i ? a[i - 1] : t0)); return ps.every((x, i) => x >= 0.55 && (!i || x < ps[i - 1])) ? { cuts, ps } : null; };
+    const r3 = detalle && d >= 2.4 ? intento([0.42, 0.32, 0.26]) : null, r2 = r3 ? null : intento([0.58, 0.42]), R = r3 || r2;
+    if (!R) return no('en el plano ' + (k + 1) + ' no hay un corte de palabra que deje los trozos cada vez más cortos');
+    const zs = r3 ? [1.25, 1.6] : [punto ? 1.3 : 1.2], foc = punto || [0.5, 0.5];
+    const subs = R.cuts.map((c, i) => { const x = { ...sh, _zc: zs[i], foc, _m34: true, ss: (sh.ss || 0) + (c - t0) }; for (const q of ['from', 'rotulo', 'etiqueta', 'golpe', 'enfasis', 'asombro', 'cifra']) delete x[q]; return x; });
+    S.splice(k + 1, 0, ...subs); starts.splice(k + 1, 0, ...R.cuts);
+    M34.push({ blk: b.id, ok: true, plano: k + 1, fijo, partes: R.ps.map(x => +x.toFixed(2)), zooms: [1, ...zs] });
+  };
   for (const b of cfg.blocks) {
     if (b.video) { let fv0 = b.video; const dv = dur(fv0); if (dv > b.D + 0.05) { fv0 = `${W}/raw_${b.id}.mp4`; run(['-i', b.video, '-t', b.D.toFixed(3), '-an', '-c:v', 'libx264', ...Q.plano, '-r', '30', '-pix_fmt', 'yuv420p', fv0]); } clips.push({ file: fv0, d: b.D, raw: true }); (cfg._raw = cfg._raw || []).push({ id: b.id, D: b.D, dur: dur(fv0) }); continue; } // M14 (T29, 19 nov 2026): el vídeo crudo se recorta a su duración para que no empuje la tarjeta fuera (fallo de los aché v3)
     const S = b.shots; const starts = S.map((s, k) => k === 0 ? 0 : Math.max(0.9, b.lead + tow(b, s.from) - 0.06));
     for (let k = 1; k < S.length; k++) if (starts[k] < starts[k - 1] + 0.9) starts[k] = starts[k - 1] + 0.9;
+    m34(b, S, starts);
     if (b.golpe) { const kg = S.findIndex(x => x.from === b.golpe.en); if (kg >= 0) b._golpeT = b.t0 + starts[kg]; }
     S.forEach((s, k) => {
       const d = (k + 1 < S.length ? starts[k + 1] : b.D) - starts[k]; s._t = b.t0 + starts[k]; s._d = d; const n = ++nclip; const out = `${W}/c${String(n).padStart(2, '0')}.mp4`; const f = resolve(s.a);
@@ -172,7 +205,7 @@ async function build(cfg) {
         // clip corto generado (Runway) y plano más largo: se repite de ida y vuelta (sin salto ni fotograma congelado)
         if (/^RW/.test(s.a) && td - ss < d) { const pp = `${W}/pp_${s.a}.mp4`; if (!fs.existsSync(pp)) run(['-ss', String(ss), '-i', f, '-an', '-vf', 'split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '17', pp]); fin = pp; ss = 0; loopV = ['-stream_loop', '-1']; }
         const td2 = dur(fin); const pad = !loopV.length && td2 - ss < d ? `,tpad=stop_mode=clone:stop_duration=${(d - (td2 - ss) + 0.2).toFixed(2)}` : '';
-        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h},setsar=1,fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
+        cacheN[runPlano([...loopV, '-ss', String(ss), '-i', fin, '-an', '-t', String(d + 0.1), '-vf', `scale=${F.w}:${F.h}:force_original_aspect_ratio=increase,crop=${F.w}:${F.h},setsar=1${s._zc ? `,crop=trunc(iw/${s._zc}/2)*2:trunc(ih/${s._zc}/2)*2:(iw-ow)*${(s.foc || [0.5, 0.4])[0]}:(ih-oh)*${(s.foc || [0.5, 0.4])[1]},scale=${F.w}:${F.h}:flags=lanczos` : ''},fps=30${pad}${tail}`, '-frames:v', String(frames), '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       } else {
         // Ken Burns: intensidad por escala (GP más que D) x cfg.kb; entrar/salir se alternan entre fotos seguidas; s.zfijo = valor absoluto fijado desde el editor
         // M12 (Paco, 16 nov 2026: «muchísimo paneo… eso qué es»): por defecto las fotos van QUIETAS (cfg.kb = 0). Una config antigua con kb: 1.6 sigue igual que antes.
@@ -180,7 +213,7 @@ async function build(cfg) {
         const AUTO = { GP: 0.06, PM: 0.05, PP: 0.04, D: 0.025 }, KB = cfg.kb ?? 0; const dirAuto = (kbN++ % 2 === 0) ? 'in' : 'out';
         const z = s.zfijo ? s.z : (s.z ?? AUTO[s.sc] ?? 0.05) * KB, [fx, fy] = s.foc || [0.5, 0.5], cx = s.cx ?? 0.5, inn = (s.dir || dirAuto) === 'in';
         const ENF = (s.enfasis || b.advertencia) ? (typeof s.enfasis === 'number' ? s.enfasis : 0.10) : 0; // N14 (10) (T30): también en los bloques marcados advertencia
-        let zexpr = ENF ? `1+${ENF}*min(1,on/12)` : inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`;
+        let zexpr = s._zc ? String(s._zc) : ENF ? `1+${ENF}*min(1,on/12)` : inn ? `1+${z}*on/${frames}` : `${1 + z}-${z}*on/${frames}`; // M34 (T32): s._zc = encuadre más cerrado y quieto
         const f0 = Math.max(1, frames - 12); // GOLPE (s.golpe): en los últimos 0,4 s el zoom se dispara hacia el foco y la cámara se sacude
         if (s.golpe) zexpr += `+${s.golpeZ ?? 0.6}*pow(max(0,on-${f0})/12,3)`;
         const shake = s.golpe ? `,scale=${F.w + 80}:${F.h + 144},crop=${F.w}:${F.h}:x='40+36*sin(n*9.1)*gt(n,${f0})':y='72+36*cos(n*11.7)*gt(n,${f0})'` : '';
@@ -195,7 +228,7 @@ async function build(cfg) {
         let pin = ['-i', f], vf = `${pre},zoompan=z='${zexpr}':x='(iw-iw/zoom)*${fx}':y='(ih-ih/zoom)*${fy}':d=${frames}:s=${F.w}x${F.h}:fps=30${shake}${tail}`;
         if (s.pan) {
           // ENCUADRE FIJO (M12, 16 nov 2026): pan con inicio = fin ([x, y, x, y]) y z: 0 → ventana quieta a pantalla completa, elegida foto a foto (verticales). s.enfasis también vale aquí.
-          const [a0, b0, a1, b1] = s.pan, Z = 1 + (s.z ?? 0.3), d0 = (frames / 30).toFixed(3), e = `(0.5-0.5*cos(PI*min(t,${d0})/${d0}))`;
+          const [a0, b0, a1, b1] = s.pan, Z = (1 + (s.z ?? 0.3)) * (s._zc || 1), d0 = (frames / 30).toFixed(3), e = `(0.5-0.5*cos(PI*min(t,${d0})/${d0}))`;
           const enfZ = ENF ? `,zoompan=z='1+${ENF}*min(1,on/12)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=1:s=${F.w}x${F.h}:fps=30` : ''; // énfasis sobre la ventana ya encuadrada (el tamaño del recorte no puede variar en el tiempo)
           const ww = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}/2)*2`, wh = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}*${F.b}/${F.a}/2)*2`;
           pin = ['-loop', '1', '-i', f];
@@ -203,7 +236,7 @@ async function build(cfg) {
         }
         cacheN[runPlano([...pin, '-vf', vf, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
       }
-      clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra', foto: !isVideo(s.a), t: s._t, emo, pico, n: S.length, pan: s.pan, asombro: !!s.asombro });
+      clips.push({ file: out, d }); (cfg._shots = cfg._shots || []).push({ blk: b.id, i: k, id: s.a, sc: s.sc, d, ok: s.ok, look: s.look || b.look || cfg.look || 'portra', foto: !isVideo(s.a), t: s._t, emo, pico, n: S.length, pan: s.pan, asombro: !!s.asombro, m34: !!s._m34 });
     });
   }
   console.log(`Planos: ${cacheN.nuevo} hechos ahora, ${cacheN['caché']} reutilizados de la caché`);
