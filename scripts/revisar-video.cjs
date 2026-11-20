@@ -37,7 +37,7 @@ const COLMOTOR = new Set(lista.split(/\r?\n/).map(l => l.match(/^\|\s*([A-Z]\d{1
 const HACEYA = new Set(['M5', 'M16', 'M29', 'N8', 'N22', 'Y22']);
 const PACO = { F3: 'aprueba el guion y los 20 primeros segundos (G1)', F5: 'da el OK al coste', F6: 'elige la foto protagonista y los audios',
   S5: 'elige la música de oído (y su tempo, S6)', N25: 'oye la entonación al cierre de cada bloque', F8: 've y oye el montaje y lo aprueba', Y13: 'elige el título y la carátula' };
-const SCRIPT = new Set(['Y3', 'Y5', 'Y6', 'Y7', 'Y8', 'Y10', 'Y12', 'P2', 'P5', 'P6', 'P9', 'P14', 'P18', 'F12', 'P3', 'P7', 'P10', 'P11', 'P12', 'P13', 'P15', 'Y1', 'Y9', 'Y17', 'S10']);
+const SCRIPT = new Set(['Y3', 'Y5', 'Y6', 'Y7', 'Y8', 'Y10', 'Y12', 'P2', 'P5', 'P6', 'P9', 'P14', 'P18', 'F12', 'F13', 'P3', 'P7', 'P10', 'P11', 'P12', 'P13', 'P15', 'Y1', 'Y9', 'Y17', 'S10']);
 
 // ── 2. Archivos de la carpeta ──
 const mp4Path = desdeMotor ? path.resolve(MP4) : (ls.find(f => f.endsWith('.mp4')) ? path.join(dir, ls.find(f => f.endsWith('.mp4'))) : null);
@@ -102,6 +102,8 @@ for (const f of ['revision-guion.json', 'revision-imagen.json']) {
   if (!t) { mal('REVISOR', 'falta ' + f + ' (docs/video-fichas/' + f.replace('revision-', 'revisor-').replace('.json', '.md') + ')'); faltanRev = true; continue; }
   try { Object.assign(rev, JSON.parse(t)); } catch (e) { mal('REVISOR', f + ' no es JSON válido'); faltanRev = true; }
 }
+// F13 (Paco, 20 nov 2026): los revisores pasan sobre cada borrador antes de enseñarlo; aquí se exige al menos que existan las dos revisiones
+faltanRev ? mal('F13', 'los revisores no han pasado sobre el borrador (faltan revision-guion.json o revision-imagen.json)') : ok('F13', 'los dos revisores pasaron sobre el borrador');
 // ── 7. OK de Paco ──
 let okp = {}; const tp = leerAqui('ok-paco.json'); if (tp) { try { okp = JSON.parse(tp); } catch (e) { mal('PACO', 'ok-paco.json no es JSON válido'); } }
 

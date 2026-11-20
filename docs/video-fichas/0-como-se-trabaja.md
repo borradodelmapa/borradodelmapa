@@ -21,6 +21,7 @@ Si sale ❌, no se exporta ni se publica.
 
 ## Reglas de trabajo
 - **F12** Todas las normas se cumplen, sí o sí. La que no se pueda cumplir se explica en el ACTA, con el motivo y lo que se hizo en su lugar. El acta va junto al vídeo como `<nombre> - acta.txt`. Estrategia no enseña nada a Paco sin revisarla.
+- **F13** Los dos revisores pasan sobre CADA borrador antes de enseñárselo a Paco, no solo al exportar (ficha ③).
 - **F1** Antes de cada montaje, también de cada remontaje, se lee la ficha del paso entera, no de memoria.
 - **P5** El informe del motor no tiene ningún ❌, y el acta está completa.
 - **F5** El coste se dice antes de gastar: voz, música o Runway. Primero una frase de prueba.

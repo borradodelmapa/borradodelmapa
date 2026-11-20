@@ -3,6 +3,7 @@ Se lee entera en este paso. Lo que el motor hace o comprueba ya sale en el infor
 Versión: 19 nov 2026.
 
 ## Lo primero: el informe y el acta
+- **F13** Antes de enseñarle el borrador a Paco, pasan los dos revisores (`revisor-guion.md` y `revisor-imagen.md`, subagentes nuevos). Se le enseña con la lista de ❌ que queden y su arreglo. «Sin ❌» del motor no quiere decir sin fallos: el motor solo ve sus reglas. Remontar un vídeo con las reglas nuevas = checklist entera desde la ficha ①.
 - **P5 · F12** El informe no tiene ningún ❌. El acta está completa: todas las ⚙️ y 🔎 rellenas por el motor, y las 📋 de las fichas ①, ② y ④ con ✅ y cómo se comprobó, o con ❌ y el motivo.
 
 ## Mirar el vídeo de verdad (hoja de fotogramas cada 1-2 s y el final)
