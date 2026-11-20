@@ -189,3 +189,8 @@ Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P
 - **TikTok (Metricool):** el post 434727553 se ha actualizado y ahora es el **434850014**. Lleva el vídeo v9b en `ULTIMA-v9b-tiktok` (R2 `los-ache-tribu-de-paraguay-tiktok-v9b.mp4`) y el título nuevo. Sigue el **mar 29 dic, 10:00**, con AIGC.
 - **Archivo:** CALIDAD MÁXIMA, 56,1 s, 14,4 Mb/s (P14).
 - **Comentario fijado:** la tarea `comentarios-shorts-pueblos-studio` ya apunta al id nuevo (§14 de textos-shorts.md).
+
+**20 nov 2026 — T33 short de los mlabri (OK de Paco en el chat de 🎬 Vídeo: «si» a la excepción S10, a exportar y a programar; «si me gusta» a la versión final).** «Mlabri, los ESPÍRITUS de las hojas amarillas 🇹🇭», 59,8 s, CALIDAD MÁXIMA (1080×1920, 14,9 Mb/s), candado ✅ (revisores nuevos: guion 52/52, imagen 27/27). Config `india/motor/mlabri-ep.cjs`; vídeo en `pueblos/mlabri/ULTIMA` y `ULTIMA-tiktok`.
+- **TikTok (Metricool): 435602675, mar 24 nov 19:00** (prueba de Paco: dos shorts el mismo día; las haenyeo a las 10:00). Lleva la versión ULTIMA-tiktok (R2 `mlabri-espiritus-hojas-amarillas-tiktok.mp4`), portada mlabri-A, primer comentario con autores, y AIGC sí.
+- **YouTube Studio: PENDIENTE.** Paco arrastra el archivo (111 MB) y después se rellenan título, descripción P6, carátula, lista Pueblos, etiquetas, EN (Y10) y vídeo relacionado tToGJVR1VFE. Va el mar 24 nov a las 19:00.
+- **S10:** misma pista que los shompen (jue 26 nov), con excepción de Paco: «Si la dejamos pasar total tenemos pocas visitas».
