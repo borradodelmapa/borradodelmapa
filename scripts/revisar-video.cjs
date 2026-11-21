@@ -131,6 +131,9 @@ for (const id of TODAS) {
   if (!faltanRev) SIN.push(id);
 }
 if (SIN.length) mal('SIN RESOLVER', SIN.length + ' reglas sin revisar: ' + SIN.join(' '));
+// Excepción de Paco (21 nov 2026, P13 de El Salvador «SI A LAS 16»; S10 de los mlabri): un ❌ de una regla que NO es de Paco
+// pasa a «explicado» si ok-paco.json trae esa regla con sus palabras. Solo Paco abre excepciones; se anotan en la checklist.
+for (let i = MAL.length - 1; i >= 0; i--) { const id = MAL[i].slice(2).split(' ')[0]; if (!PACO[id] && typeof okp[id] === 'string' && okp[id].trim()) { aviso(id, 'excepción de Paco: ' + okp[id] + ' · era: ' + MAL[i].slice(2 + id.length + 1)); MAL.splice(i, 1); } }
 
 // ── 10. Resultado ──
 const total = TODAS.length;
