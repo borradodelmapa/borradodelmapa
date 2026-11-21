@@ -58,3 +58,12 @@ Nombre de la fuente en la voz (Acabado, UCLA) y la UNESCO con sus dos mil años,
 - borra: W127 → W98 → W141 (sin personas en «dos vidas») → W91.
 - cierre: W89 → W147 → **W131 gente plantando a mano** (M18); silencio sobre W131.
 - Portada: `caratula/ifugao-A.png` (W23), luces bajadas y el hombre del fondo oscurecido (Y18). Música: bosque-invierno (S10: fading-shoreline ya la llevan los kalash el 16 dic).
+
+## Cambios de Paco tras ver el borrador (21 nov)
+- **Portada:** «la imagen de la carátula está quemada. Pon otra imagen» → `caratula/ifugao-B.png`, W41 (mujer ifugao con el tocado rojo, Yves Picq, CC BY-SA 4.0), texto arriba sobre el tocado.
+- **Historia del pueblo:** «sobre los ifugao no dice nada. Podría hablar un poco de su historia» y su texto. Bloque `historia` DESPUÉS del debate y antes de «borra» (revisor: N33 y N15, la respuesta del título llega antes del minuto; 243 caracteres de voz nueva, unos 5 céntimos):
+  «Los ifugao, de Filipinas, habitan estas montañas. El arroz está protegido con un bulul, un dios tallado en madera. Al cosechar cantaban los hudhud, largos cantos sobre sus héroes y antepasados, que hoy recuerdan sobre todo las mujeres mayores.»
+  Imágenes: W33 mujeres ifugao en Banaue → W15 anciano con el tocado → W163 y W165 bulul de museo (CC0) → W32 mujeres con ropa tradicional → W39 anciana → W41 la mujer de la portada (en «las mujeres mayores»).
+  Fuentes: bulul [I4] (The Met; Wikipedia, *Bulul*) · hudhud [F13] (UNESCO: más de 200 cantos de unos 40 episodios, al sembrar, cosechar y en funerales, los cantan sobre todo mujeres mayores; cuentan héroes, antepasados, leyes y creencias).
+- Duración: 90,6 s (excepción N10 de Paco: «si es necesario no importa en esta ocasión que supere los 60 segundos»).
+- **Paco, 21 nov: «B y si cambia la frase».** Portada B (W41; no mira a cámara: excepción suya, Y18). Historia sin «Los ifugao, de Filipinas, habitan estas montañas» (repetía lo dicho) y empezando por «Su arroz lo protege un bulul, un dios tallado en madera.» (W163 → W165 → W32 → W39 → W41). «Borra» empieza «Ahora los jóvenes se van y muchas terrazas se abandonan.» Voz regenerada de los dos bloques: 315 caracteres (unos 7 céntimos). Duración: 87 s.

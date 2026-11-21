@@ -1,0 +1,45 @@
+INFORME DE REGLAS · pueblos-ifugao-short-v1 · 87 s · 33 planos · escalas: GP 18 · PM 13 · PP 1 · D 1 · looks: portra 30, trix 3
+Comprobado contra docs/video-checklist.md (última actualización: 21 nov 2026 · 10:00)
+✅ Piezas automáticas de la checklist cumplidas (lo manual —guion, fuentes, sonido, publicación— lo revisan quien monta y Paco).
+24 avisos:
+⚠ [M2] plano 8 (W125, GP): dura 1.6 s, mínimo recomendado 2 s
+⚠ [M2] plano 11 (W90, GP): dura 1.0 s, mínimo recomendado 2 s
+⚠ [M2] plano 16 (W112, GP): dura 1.4 s, mínimo recomendado 2 s
+⚠ [M2] plano 19 (W86, GP): dura 1.7 s, mínimo recomendado 2 s
+⚠ [M2] plano 20 (W87, GP): dura 1.8 s, mínimo recomendado 2 s
+⚠ [M2] plano 31 (W89, GP): dura 1.5 s, mínimo recomendado 2 s
+⚠ [M2] bloque g0: W23 y W118 repiten escala PM seguidas
+⚠ [M2] bloque g0: W67 y W78 repiten escala GP seguidas
+⚠ [M2] bloque situar: W85 y W114 repiten escala GP seguidas
+⚠ [M2] bloque situar: W114 y W125 repiten escala GP seguidas
+⚠ [M2] bloque como: W93 y W90 repiten escala GP seguidas
+⚠ [M2] bloque como: W99 y W100 repiten escala PM seguidas
+⚠ [M2] bloque debate: W112 y W120 repiten escala GP seguidas
+⚠ [M2] bloque debate: W86 y W87 repiten escala GP seguidas
+⚠ [M2] bloque debate: W87 y W71 repiten escala GP seguidas
+⚠ [M2] bloque historia: W165 y W32 repiten escala PM seguidas
+⚠ [M2] bloque historia: W32 y W39 repiten escala PM seguidas
+⚠ [M2] bloque historia: W39 y W41 repiten escala PM seguidas
+⚠ [M2] bloque borra: W98 y W141 repiten escala GP seguidas
+⚠ [M2] bloque borra: W141 y W91 repiten escala GP seguidas
+⚠ [M2] bloque cierre: W147 y W131 repiten escala PM seguidas
+⚠ [M3] imagen repetida: W140 (2 veces)
+ℹ [M49] recorte por la cara en 0 de 0 planos de vídeo
+⚠ [M31] 15 cortes a mitad de frase (suele ser para que ninguna foto pase de 3,5 s, N14-9): g0 «durante», g0 «tifón», situar «1995», como «muyong», como «bancal», debate «UNESCO», debate «Acabado», debate «carbono», debate «levantaron», historia «dios», historia «sobre sus», borra «muchas», borra «canal», cierre «levantar», cierre «mano»
+ℹ [M14] descartado a propósito: tarjeta de short (4 s, con el fotograma de la app, M14 del 20 nov): el vídeo pasa de 65 s solo por la excepción N10 de Paco
+ℹ M24 plano de asombro: W79, 4.1 s
+ℹ [N10] descartado a propósito: excepción de Paco solo para este short: «si es necesario no importa en esta ocasión que supere los 60 segundos» (21 nov 2026)
+ℹ [M19] datoFuerte: debate aguanta un 30 % más · [S9] con 0,6 s de silencio total antes
+ℹ [S7] el ambiente entra 0.17 s antes de cada corte
+ℹ [S8] la música baja antes del cambio de tono en: borra
+ℹ N14 (4) bloque humano más lento y sin música: borra
+ℹ [F7] hoja de planos automática; en calidad máxima, copia con fecha en VIDEOS-TERMINADOS · [P14] en calidad máxima se mide el mp4 de ULTIMA (≥ 1080 px y ≥ 10 Mb/s)
+ℹ [M22] golpe del batok (sfx/golpe-cifra.mp3, elegido por Paco de oído el 20 nov 2026) al fotograma exacto de cada cifra
+ℹ [M30] las cifras entran 0.5 s después de decir su palabra
+ℹ [M41] los rótulos entran 0.5 s después del corte
+ℹ [M45] cada subtítulo dura al menos lo necesario para leerlo (3.5 palabras/s); el resultado, al final de este informe
+ℹ [M23] temperatura de color: g0 fria, promesa fria, situar calida, como calida, debate fria, historia calida, borra fria, cierre calida
+ℹ [M27] fondo oscurecido en el plano pico de: debate
+⚠ [M45] subtítulo corto, sin hueco para alargarlo: como «De ahí baja el agua que las riega,» 2.2 s de 2.3
+
+✅ P14 1080x1920, 17.2 Mb/s (mínimo 1080 px y 10 Mb/s)

@@ -1,55 +1,222 @@
 {
-  "_meta": { "video": "Los ifugao · short 9:16 · Pueblos T2 Filipinas", "mp4": "E:/tmp-motor/ifugao-v1/pueblos-ifugao-short-v1.mp4 (73,4 s; N10 excepción de Paco)", "revisado": "2026-11-21", "revisor": "revisor de guion nuevo (subagente, ojos nuevos; 2.ª pasada tras arreglar M46, N14-8 y N20)", "leido": "srt ES real (09:08), ifugao-short.cjs (09:08, anterior al montaje de 09:08-09:10), guion de dirección con «Lo montado», estudio-titulo.md, textos-youtube.txt, ok-paco.json, acta e informe del motor, fuentes [I2][I3][I6][I7] y [F15]-[F18]; fotogramas sacados del mp4 a 19,5 · 25,8 · 38,6 · 49,2 s para ver los rótulos montados", "nota": "La carpeta E:/tmp-motor/ifugao-v1/ULTIMA es de las 08:40 (borrador anterior): al exportar, que salga de nuevo. La parte «Los 20 primeros segundos» y «El resto» del guion de dirección siguen con la versión de antes (W122, CARBONO 14 · UCLA, «sin cifra»); manda «Lo montado» y la config." },
-  "L1": { "estado": "✅", "como": "Título «Los ifugao: ¿terrazas de 2.000 años… o de 400?»: primero el pueblo; la historia y el dato (edad, tifón), sin «mira qué raros»; sin IA; cómo ir con respeto en la descripción («Confirma el estado del sendero…»)." },
-  "L2": { "estado": "✅", "como": "Bloque Filipinas, mié 16 dic 2026 (config fecha y fechaTikTok 2026-12-16; textos-youtube.txt)." },
-  "L3": { "estado": "✅", "como": "Serie Pueblos dentro del canal de historia y viajes; manda la historia del lugar (terrazas, españoles, tifón)." },
-  "F2": { "estado": "✅", "como": "Paco no ha estado: en el .srt no hay «yo» ni vivencias; narra solo Salma con fuentes." },
-  "F4": { "estado": "✅", "como": "Cada nombre y cifra del .srt tiene fila: siglos, 1.500 m, 1995 [F15][I2]; muyong [I3]; UNESCO dos mil [F15]; Acabado, UCLA, carbono 14, unos 400, españoles, hacerse fuertes [F17][F18]; jóvenes y abandono [F16][I3]; tifón nov 2025, Batad, canal de siglos, dos vidas [I6][I7]; vecinos a mano [I7] bachang. La comparación nueva (Torre Eiffel ≈ 330 m → 1.500/330 ≈ 4,5) ilustra la cifra sin inflarla." },
-  "N4": { "estado": "✅", "como": "Salma no huele, toca ni camina; nada inventado en el .srt." },
-  "N6": { "estado": "✅", "como": "Sin relleno ni moraleja; cierre = dato con fuente (reparación vecinal a mano [I7])." },
-  "N12": { "estado": "✅", "como": "Noticia en la primera frase (tifón a los 4,4 s), sin saludos ni «yo», frases cortas; capas: historia (edad, españoles) y hoy (abandono, tifón, reparación)." },
-  "N13": { "estado": "✅", "como": "Short de Pueblos, no vídeo práctico: no aplica el orden por preguntas; lo práctico en la descripción." },
-  "N33": { "estado": "✅", "como": "Título (la edad) y carátula (UN TIFÓN): tifón a los 4,4 s, promesa de la edad a los 8,9-12,6 s y respuesta a los 37-53 s, todo en el primer minuto." },
-  "N14": { "estado": "✅", "como": "Sin alarmismo (ni «trampa» ni «ruina»; «dos vidas» una vez y con el estado de hoy). (8) arreglado: visto en el fotograma de 49,2 s, «400 AÑOS / LO QUE DICE LA ARQUEOLOGÍA» ya no repite la voz («arqueólogo… UCLA… carbono 14»); «1.500 M / 4 TORRES EIFFEL Y MEDIA» añade la comparación. «IFUGAO · FILIPINAS» es rótulo de identificación (M41), como en el resto de la serie. (4) borra sin música y más lento (acta); (9) ninguna foto pasa de 3,4 s (acta)." },
-  "F1": { "estado": "✅", "como": "revisor-guion.md leído entero; reglas dudosas consultadas en video-checklist.md (N2, N14, N15, N16, N20, N26, N30-N33, M1, M41, M46, G3, Y15, Y20, Y21, P16, P17)." },
-  "G1": { "estado": "✅", "como": "20 primeros s diseñados aparte y aprobados por Paco (ok-paco.json F3, «Sí, adelante», 21 nov); sígueme a los 20 s en la config." },
-  "G3": { "estado": "✅", "como": "«Los ifugao cultivaron estas montañas…» distinta de las demás aperturas de Pueblos (aché «En el bosque…», kalash «Dicen que…», haenyeo «Tienen más de setenta…», konyak «Cada línea…», dukha «Viven en la taiga…», ainu «Este tatuaje…»); grep de los .cjs del motor." },
-  "N2": { "estado": "✅", "como": "Fotograma 0 = W23, el anciano ifugao mirando a cámara (hoja de planos n.º 1); la noticia («un tifón se llevó un trozo») empieza a los 4,4 s." },
-  "N9": { "estado": "✅", "como": "gancho → promesa → mapa → situar → cómo → debate (pico) → hoy → cierre con dato → silencio → tarjeta." },
-  "N15": { "estado": "✅", "como": "Tras el gancho, «Lo que se llevó quizá no tenía la edad que se dijo» (8,9-12,6 s): promesa concreta que paga el pico de los 400 años." },
-  "N16": { "estado": "✅", "como": "El tifón abre en el s 4 y se cierra en borra + cierre (vecinos reparando a mano); la duda de la edad abre a los 9 s y se cierra en el pico." },
-  "N27": { "estado": "✅", "como": "No es short-avance de un largo: no aplica." },
-  "M1": { "estado": "✅", "como": "gancho → mapa (12,8 s) → situar/cómo → pico (debate, datoFuerte, aguanta +30 %) → cierre lento (W89 GP → gente plantando) → silencio 0,9 s → tarjeta." },
-  "M20": { "estado": "✅", "como": "Regla de largos; aun así el pico lleva 0,6 s de silencio antes (acta S9)." },
-  "M32": { "estado": "✅", "como": "Todo fotos y el clip quieto del silencio; no hay gesto de oficio en vídeo que ralentizar." },
-  "M33": { "estado": "✅", "como": "Cortes duros dentro de las terrazas (misma escena); el salto de lugar lo marca el mapa y el de tiempo el paso B/N → color del pico." },
-  "M39": { "estado": "✅", "como": "No aplica (short de un solo hilo)." },
-  "M46": { "estado": "✅", "como": "Arreglado y visto en el mp4: «¿2.000 AÑOS? / LO QUE DICE LA UNESCO» entra con «¿Cuántos…?» (38,6 s), antes de que la voz lo diga; «400 AÑOS / LO QUE DICE LA ARQUEOLOGÍA» (49,2 s) no repite «arqueólogo… UCLA… carbono 14»; «1.500 M / 4 TORRES EIFFEL Y MEDIA» añade la comparación. Las cifras salen al decirse (M9)." },
-  "N1": { "estado": "✅", "como": "Leído en el .srt: frases cortas para el oído; la de Acabado va troceada en comas; la voz deletrea U.C.L.A. y dice «catorce»." },
-  "N3": { "estado": "✅", "como": "Un dato potente por intervención (tifón · 1.500 m/1995 · muyong · edad · dos vidas · reparación); silencio antes del pico." },
-  "N11": { "estado": "✅", "como": "Regla de largos; en este short solo 2025 y 1995 en la voz." },
-  "N17": { "estado": "✅", "como": "«¿Cuántos años tienen?» (37,1 s) antes del dato." },
-  "N18": { "estado": "✅", "como": "Sin prueba social en la voz (.srt)." },
-  "N19": { "estado": "✅", "como": "No es vídeo de lista: no aplica." },
-  "N20": { "estado": "✅", "como": "Arreglado: «1.500 metros» lleva en pantalla «1.500 M / 4 TORRES EIFFEL Y MEDIA» (config cifra en «metros»; visto a 25,8 s); 1.500/330 ≈ 4,5, sin decir Batad (Batad ~1.100 m [I7]). Dos mil y cuatrocientos años llevan su referencia (romanos, españoles: N32)." },
-  "N21": { "estado": "✅", "como": "Sin tramo práctico en la voz: no aplica." },
-  "N23": { "estado": "✅", "como": "Mirado en el .srt: las frases empiezan por Los, En, Lo, Ifugao, Terrazas, Arriba, De, ¿Cuántos, La, Según, Hoy, El, Los; ninguna por Y/Pero/Entonces/Además (la «y» del subtítulo 18 es corte dentro de la frase)." },
-  "N24": { "estado": "✅", "como": "Causa→efecto: muyong → baja el agua; llegan los españoles → las levantan para hacerse fuertes; los jóvenes se van → se abandonan." },
-  "N26": { "estado": "✅", "como": "Batad (canal, dos vidas) es el caso concreto; no hay cifra general del mismo dato enfrentada (los ~150 agricultores y 2 ha solo en la descripción)." },
-  "N28": { "estado": "✅", "como": "Datos (situar, cómo, debate) y lo humano (borra, cierre) en tramos separados y consecutivos." },
-  "N29": { "estado": "✅", "como": "Sin testimonios: no aplica." },
-  "N30": { "estado": "✅", "como": "Cifras al final de frase cuando cabe: «hasta unos 1.500 metros», «desde 1995», «unos cuatrocientos»." },
-  "N31": { "estado": "✅", "como": "Tras «se llevó dos vidas» (62 s), el estado de hoy: «Los muros los vuelven a levantar los vecinos, a mano» (Al Jazeera jul 2026, reparación bachang en curso: el presente es correcto)." },
-  "N32": { "estado": "✅", "como": "«dos mil» → «desde tiempos de los romanos»; «cuatrocientos» → «al llegar los españoles»; 1995 y 2025 son fechas recientes." },
-  "S6": { "estado": "✅", "como": "Música (bosque-invierno) solo en situar-cómo y en el cierre; pico sin música con silencio antes; borra sin música (N14-4); marcas cambioTono (borra) y datoFuerte (debate) puestas; acta: S8 y S9 hechos." },
-  "Y2": { "estado": "✅", "como": "estudio-titulo.md con el buscador predictivo de YouTube (es-ES) y los 10 primeros vídeos anotados." },
-  "Y11": { "estado": "✅", "como": "Estudio y tres títulos antes del guion; Paco eligió el título 2 (ok-paco.json Y13, 21 nov) y la carátula del tifón; el guion los cumple (promesa N15)." },
-  "Y15": { "estado": "✅", "como": "caratula/ifugao-A.png (portada del mp4): naranja en «UN TIFÓN» e «IFUGAO», letra condensada de la marca, sello «BORRADO DEL MAPA» arriba a la derecha, bandera y FILIPINAS arriba." },
-  "Y19": { "estado": "✅", "como": "Solo la propuesta 3 va como pérdida; el título elegido es el de la edad." },
-  "Y20": { "estado": "✅", "como": "El título promete la edad: la promesa «no tenía la edad que se dijo» está a los 9-12 s, dentro del gancho; la carátula (tifón) a los 4 s." },
-  "Y21": { "estado": "✅", "como": "Sin vídeos previos con Ifugao/Batad en publicaciones-registro.md; título, descripción, voz y etiquetas usan «ifugao», «Batad» y «Filipinas» igual." },
-  "P1": { "estado": "✅", "como": "Fotos reales de Wikimedia montadas por el motor y voz de Salma: «contenido alterado o sintético: NO» y TikTok AIGC no (textos-youtube.txt)." },
-  "P8": { "estado": "✅", "como": "Vídeo nuevo: no aplica." },
-  "P16": { "estado": "✅", "como": "Primera línea de la descripción: «¿tienen dos mil años, como dice la UNESCO, o unos cuatrocientos, como dice la arqueología?» + el tifón de Batad: la promesa del título y del gancho." },
-  "P17": { "estado": "✅", "como": "#Ifugao #TerrazasDeArroz #Filipinas (YouTube) y + #PueblosIndígenas (TikTok): de lo más específico a lo más genérico." }
+  "_meta": {
+    "video": "Los ifugao · short 9:16 · Pueblos T2 Filipinas",
+    "mp4": "E:/tmp-motor/ifugao-v1/pueblos-ifugao-short-v1.mp4 (86,97 s; N10 excepción de Paco)",
+    "revisado": "2026-11-21",
+    "revisor": "revisor de guion nuevo (subagente, ojos nuevos; 2.ª pasada tras arreglar M46, N14-8 y N20)",
+    "leido": "srt ES real (09:08), ifugao-short.cjs (09:08, anterior al montaje de 09:08-09:10), guion de dirección con «Lo montado», estudio-titulo.md, textos-youtube.txt, ok-paco.json, acta e informe del motor, fuentes [I2][I3][I6][I7] y [F15]-[F18]; fotogramas sacados del mp4 a 19,5 · 25,8 · 38,6 · 49,2 s para ver los rótulos montados",
+    "nota": "La carpeta E:/tmp-motor/ifugao-v1/ULTIMA es de las 08:40 (borrador anterior): al exportar, que salga de nuevo. La parte «Los 20 primeros segundos» y «El resto» del guion de dirección siguen con la versión de antes (W122, CARBONO 14 · UCLA, «sin cifra»); manda «Lo montado» y la config.",
+    "revisor4": "revisor nuevo, 21 nov 2026, 4.ª pasada: bloque historia (36,3-53,5 s) y portada ifugao-B (W41); .srt ES de 10:44 y ifugao-short.cjs; fotogramas en E:/tmp-motor/ifugao-rev4/",
+    "nota_P2": "5.ª pasada: P2 sigue ❌ (ver revision-imagen.json, clave P2).",
+    "revisor5": "revisor nuevo, 21 nov 2026, 5.ª pasada: render 10:53 (historia detrás del debate), .srt ES de 10:51, ifugao-short.cjs y textos-youtube.txt de 10:50; fotogramas y audio en E:/tmp-motor/ifugao-rev5/",
+    "revisor6": "revisor nuevo, 21 nov 2026, 6.ª pasada: render 11:21 (86,97 s), .srt ES 11:19, ifugao-short.cjs 11:17, textos-youtube.txt 10:58, ok-paco.json 11:17; fotogramas en E:/tmp-motor/ifugao-rev6/"
+  },
+  "L1": {
+    "estado": "✅",
+    "como": "Título «Los ifugao: ¿terrazas de 2.000 años… o de 400?»: primero el pueblo; la historia y el dato (edad, tifón), sin «mira qué raros»; sin IA; cómo ir con respeto en la descripción («Confirma el estado del sendero…»)."
+  },
+  "L2": {
+    "estado": "✅",
+    "como": "Bloque Filipinas, mié 16 dic 2026 (config fecha y fechaTikTok 2026-12-16; textos-youtube.txt)."
+  },
+  "L3": {
+    "estado": "✅",
+    "como": "Serie Pueblos dentro del canal de historia y viajes; manda la historia del lugar (terrazas, españoles, tifón)."
+  },
+  "F2": {
+    "estado": "✅",
+    "como": "Paco no ha estado: en el .srt no hay «yo» ni vivencias; narra solo Salma con fuentes."
+  },
+  "F4": {
+    "estado": "✅",
+    "como": "Cada nombre y cifra del .srt tiene fila: siglos, 1.500 m, 1995 [F15][I2]; muyong [I3]; UNESCO dos mil [F15]; Acabado, UCLA, carbono 14, unos 400, españoles, hacerse fuertes [F17][F18]; jóvenes y abandono [F16][I3]; tifón nov 2025, Batad, canal de siglos, dos vidas [I6][I7]; vecinos a mano [I7] bachang. La comparación nueva (Torre Eiffel ≈ 330 m → 1.500/330 ≈ 4,5) ilustra la cifra sin inflarla. Historia: bulul guardián del arroz, dios tallado en madera [I4] (The Met; Wikipedia «Bulul»; W163/W165 «rice granary guardian»); hudhud cantados al sembrar/cosechar y en funerales, sobre héroes y antepasados, sobre todo por mujeres mayores [F13] UNESCO."
+  },
+  "N4": {
+    "estado": "✅",
+    "como": "Salma no huele, toca ni camina; nada inventado en el .srt."
+  },
+  "N6": {
+    "estado": "✅",
+    "como": "Sin relleno ni moraleja; cierre = dato con fuente (reparación vecinal a mano [I7])."
+  },
+  "N12": {
+    "estado": "✅",
+    "como": "Noticia en la primera frase (tifón a los 4,4 s), sin saludos ni «yo», frases cortas; capas: historia (edad, españoles) y hoy (abandono, tifón, reparación)."
+  },
+  "N13": {
+    "estado": "✅",
+    "como": "Short de Pueblos, no vídeo práctico: no aplica el orden por preguntas; lo práctico en la descripción."
+  },
+  "N33": {
+    "estado": "✅",
+    "como": "Visto en el .srt de 10:51 y en el mp4: «¿Cuántos años tienen?» a 37,1 s, «dos mil… romanos» a 38,7-41,9 s y «unos cuatrocientos» a 45,8-48,7 s (cifra «400 AÑOS» en pantalla ~47 s): la respuesta del título llega dentro del primer minuto."
+  },
+  "N14": {
+    "estado": "✅",
+    "como": "6.ª pasada, .srt de 11:19: (1) debate → historia: «…para hacerse fuertes en la montaña.» → «Su arroz lo protege un bulul, un dios tallado en madera.» (53,7 s): ya no repite «montañas» ni «ifugao, de Filipinas»; «su» sigue al sujeto de «las levantaron» (los ifugao) y la imagen (bulul W163) lo ancla; quitar «Los ifugao, de Filipinas, habitan estas montañas» lo aprobó Paco (ok-paco F3b). (2) historia → borra: «…sobre todo las mujeres mayores.» → «Ahora los jóvenes se van / y muchas terrazas se abandonan.» (66,9 s): el sujeto es «terrazas», ya no se confunde con las mujeres, y sin «hoy… Hoy» seguidos. borra → «El tifón de 2025 rompió en Batad…» sigue bien. Tono sin alarmismo: sin «trampa», «ruina» ni dramatismo."
+  },
+  "F1": {
+    "estado": "✅",
+    "como": "revisor-guion.md leído entero; reglas dudosas consultadas en video-checklist.md (N2, N14, N15, N16, N20, N26, N30-N33, M1, M41, M46, G3, Y15, Y20, Y21, P16, P17)."
+  },
+  "G1": {
+    "estado": "✅",
+    "como": "20 primeros s diseñados aparte y aprobados por Paco (ok-paco.json F3, «Sí, adelante», 21 nov); sígueme a los 20 s en la config."
+  },
+  "G3": {
+    "estado": "✅",
+    "como": "«Los ifugao cultivaron estas montañas…» distinta de las demás aperturas de Pueblos (aché «En el bosque…», kalash «Dicen que…», haenyeo «Tienen más de setenta…», konyak «Cada línea…», dukha «Viven en la taiga…», ainu «Este tatuaje…»); grep de los .cjs del motor."
+  },
+  "N2": {
+    "estado": "✅",
+    "como": "Fotograma 0 = W23, el anciano ifugao mirando a cámara (hoja de planos n.º 1); la noticia («un tifón se llevó un trozo») empieza a los 4,4 s."
+  },
+  "N9": {
+    "estado": "✅",
+    "como": "Orden montado (tiempos.json 10:53): gancho → promesa → mapa → situar → cómo → debate (pico, 36,3 s) → historia (53,5 s) → hoy/borra (70,7 s) → cierre con dato (80,3 s) → silencio 0,9 s → tarjeta."
+  },
+  "N15": {
+    "estado": "✅",
+    "como": "Promesa a 8,9-12,6 s («quizá no tenía la edad que se dijo»); se paga en el debate a 37-52,7 s, tras situar y cómo (24 s, de los que 5,5 son el mapa)."
+  },
+  "N16": {
+    "estado": "✅",
+    "como": "El tifón abre en el s 4 y se cierra en borra + cierre (vecinos reparando a mano); la duda de la edad abre a los 9 s y se cierra en el pico."
+  },
+  "N27": {
+    "estado": "✅",
+    "como": "No es short-avance de un largo: no aplica."
+  },
+  "M1": {
+    "estado": "✅",
+    "como": "gancho → mapa (12,8 s) → situar/cómo → pico (debate, datoFuerte, aguanta +30 %) → cierre lento (W89 GP → gente plantando) → silencio 0,9 s → tarjeta."
+  },
+  "M20": {
+    "estado": "✅",
+    "como": "Regla de largos; aun así el pico lleva 0,6 s de silencio antes (acta S9)."
+  },
+  "M32": {
+    "estado": "✅",
+    "como": "Todo fotos y el clip quieto del silencio; no hay gesto de oficio en vídeo que ralentizar."
+  },
+  "M33": {
+    "estado": "✅",
+    "como": "Cortes duros dentro de las terrazas (misma escena); el salto de lugar lo marca el mapa y el de tiempo el paso B/N → color del pico."
+  },
+  "M39": {
+    "estado": "✅",
+    "como": "No aplica (short de un solo hilo)."
+  },
+  "M46": {
+    "estado": "✅",
+    "como": "Arreglado y visto en el mp4: «¿2.000 AÑOS? / LO QUE DICE LA UNESCO» entra con «¿Cuántos…?» (38,6 s), antes de que la voz lo diga; «400 AÑOS / LO QUE DICE LA ARQUEOLOGÍA» (49,2 s) no repite «arqueólogo… UCLA… carbono 14»; «1.500 M / 4 TORRES EIFFEL Y MEDIA» añade la comparación. Las cifras salen al decirse (M9)."
+  },
+  "N1": {
+    "estado": "✅",
+    "como": "Leído en el .srt: frases cortas para el oído; la de Acabado va troceada en comas; la voz deletrea U.C.L.A. y dice «catorce»."
+  },
+  "N3": {
+    "estado": "✅",
+    "como": "Un dato potente por intervención (tifón · 1.500 m/1995 · muyong · edad · dos vidas · reparación); silencio antes del pico."
+  },
+  "N11": {
+    "estado": "✅",
+    "como": "Regla de largos; en este short solo 2025 y 1995 en la voz."
+  },
+  "N17": {
+    "estado": "✅",
+    "como": "«¿Cuántos años tienen?» (37,1 s) antes del dato."
+  },
+  "N18": {
+    "estado": "✅",
+    "como": "Sin prueba social en la voz (.srt)."
+  },
+  "N19": {
+    "estado": "✅",
+    "como": "No es vídeo de lista: no aplica."
+  },
+  "N20": {
+    "estado": "✅",
+    "como": "Arreglado: «1.500 metros» lleva en pantalla «1.500 M / 4 TORRES EIFFEL Y MEDIA» (config cifra en «metros»; visto a 25,8 s); 1.500/330 ≈ 4,5, sin decir Batad (Batad ~1.100 m [I7]). Dos mil y cuatrocientos años llevan su referencia (romanos, españoles: N32)."
+  },
+  "N21": {
+    "estado": "✅",
+    "como": "Sin tramo práctico en la voz: no aplica."
+  },
+  "N23": {
+    "estado": "✅",
+    "como": "Mirado en el .srt de 11:19: las frases nuevas empiezan por «Su arroz», «Al cosechar», «Ahora los jóvenes»; ninguna por Y/Pero/Entonces/Además («y muchas terrazas» es continuación de línea, no inicio de frase)."
+  },
+  "N24": {
+    "estado": "✅",
+    "como": "Causa→efecto: muyong → baja el agua; llegan los españoles → las levantan para hacerse fuertes; los jóvenes se van → se abandonan."
+  },
+  "N26": {
+    "estado": "✅",
+    "como": "Batad (canal, dos vidas) es el caso concreto; no hay cifra general del mismo dato enfrentada (los ~150 agricultores y 2 ha solo en la descripción)."
+  },
+  "N28": {
+    "estado": "✅",
+    "como": "Datos (situar, cómo, debate) y lo humano (borra, cierre) en tramos separados y consecutivos."
+  },
+  "N29": {
+    "estado": "✅",
+    "como": "Sin testimonios: no aplica."
+  },
+  "N30": {
+    "estado": "✅",
+    "como": "Cifras al final de frase cuando cabe: «hasta unos 1.500 metros», «desde 1995», «unos cuatrocientos»."
+  },
+  "N31": {
+    "estado": "✅",
+    "como": "Tras «se llevó dos vidas» (62 s), el estado de hoy: «Los muros los vuelven a levantar los vecinos, a mano» (Al Jazeera jul 2026, reparación bachang en curso: el presente es correcto)."
+  },
+  "N32": {
+    "estado": "✅",
+    "como": "«dos mil» → «desde tiempos de los romanos»; «cuatrocientos» → «al llegar los españoles»; 1995 y 2025 son fechas recientes."
+  },
+  "S6": {
+    "estado": "✅",
+    "como": "Música (bosque-invierno) solo en situar-cómo y en el cierre; pico sin música con silencio antes; borra sin música (N14-4); marcas cambioTono (borra) y datoFuerte (debate) puestas; acta: S8 y S9 hechos."
+  },
+  "Y2": {
+    "estado": "✅",
+    "como": "estudio-titulo.md con el buscador predictivo de YouTube (es-ES) y los 10 primeros vídeos anotados."
+  },
+  "Y11": {
+    "estado": "✅",
+    "como": "Estudio y tres títulos antes del guion; Paco eligió el título 2 (ok-paco.json Y13, 21 nov) y la carátula del tifón; el guion los cumple (promesa N15)."
+  },
+  "Y15": {
+    "estado": "✅",
+    "como": "textos-youtube.txt (10:50): «Miniatura: … caratula/ifugao-B.png, W41, mujer ifugao con el tocado rojo, Yves Picq, CC BY-SA 4.0»; ifugao-B.png con naranja, sello arriba a la derecha, bandera y FILIPINAS (portada del mp4 = pueblos-ifugao-short-v1-portada.png)."
+  },
+  "Y19": {
+    "estado": "✅",
+    "como": "Solo la propuesta 3 va como pérdida; el título elegido es el de la edad."
+  },
+  "Y20": {
+    "estado": "✅",
+    "como": "El título promete la edad: la promesa «no tenía la edad que se dijo» está a los 9-12 s, dentro del gancho; la carátula (tifón) a los 4 s."
+  },
+  "Y21": {
+    "estado": "✅",
+    "como": "Sin vídeos previos con Ifugao/Batad en publicaciones-registro.md; título, descripción, voz y etiquetas usan «ifugao», «Batad» y «Filipinas» igual."
+  },
+  "P1": {
+    "estado": "✅",
+    "como": "Fotos reales de Wikimedia montadas por el motor y voz de Salma: «contenido alterado o sintético: NO» y TikTok AIGC no (textos-youtube.txt)."
+  },
+  "P8": {
+    "estado": "✅",
+    "como": "Vídeo nuevo: no aplica."
+  },
+  "P16": {
+    "estado": "✅",
+    "como": "Primera línea de la descripción: «¿tienen dos mil años, como dice la UNESCO, o unos cuatrocientos, como dice la arqueología?» + el tifón de Batad: la promesa del título y del gancho."
+  },
+  "P17": {
+    "estado": "✅",
+    "como": "#Ifugao #TerrazasDeArroz #Filipinas (YouTube) y + #PueblosIndígenas (TikTok): de lo más específico a lo más genérico."
+  }
 }

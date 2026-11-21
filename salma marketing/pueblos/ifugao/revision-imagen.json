@@ -1,8 +1,8 @@
 {
-  "_video": "E:/tmp-motor/ifugao-v1/pueblos-ifugao-short-v1.mp4 (73,4 s, borrador 3) · revisor de imagen NUEVO (ojos nuevos), 21 nov 2026 · comprobados Y18, M24, M10 y alrededores; fotogramas cada 0,25 s (8,5-13 s y 18-30 s), zooms y portada a 160 px en E:/tmp-motor/ifugao-rev-img3/",
+  "_video": "E:/tmp-motor/ifugao-v1/pueblos-ifugao-short-v1.mp4 (86,97 s, render 11:21) · revisor nuevo 6.ª pasada, 21 nov 2026: historia y costuras 52-72 s cada 0,5 s (hist_52-72.jpg), fotogramas a tamaño real 54-86,5 s (f_*.png), final 76-87,5 s (fin_76-87.jpg); todo en E:/tmp-motor/ifugao-rev6/",
   "F9": {
     "estado": "✅",
-    "como": "W63 (difunto en la silla funeraria) ya no está en el vídeo y está en fotos/descartadas-otro-sitio/ con su nota. Todas las fotos usadas son de Batad/Banaue/Ifugao según ATRIBUCIONES.txt (W61 y W140 de archivo, ifugao). Sin restos humanos ni exhibiciones."
+    "como": "W63 (difunto en la silla funeraria) ya no está en el vídeo y está en fotos/descartadas-otro-sitio/ con su nota. Todas las fotos usadas son de Batad/Banaue/Ifugao según ATRIBUCIONES.txt (W61 y W140 de archivo, ifugao). Sin restos humanos ni exhibiciones. Nuevas: W33, W15, W32, W39, W41 de Banaue/Ifugao; W163 y W165 bulul ifugao fotografiados en un museo de Honolulu (objeto del pueblo, CC0, no se rotulan como Ifugao); todas en ATRIBUCIONES.txt."
   },
   "F10": {
     "estado": "✅",
@@ -26,31 +26,32 @@
   },
   "Y4": {
     "estado": "✅",
-    "como": "Fotogramas 0 y 0,1 s = portada ifugao-A.png (persona, cara expresiva, alto contraste, texto que complementa el título)."
+    "como": "0-0,2 s = ifugao-B.png (ini.jpg): persona muy cerca, color vivo, alto contraste, «Y llegó UN TIFÓN» complementa el título."
   },
   "Y14": {
     "estado": "✅",
-    "como": "Anciano ifugao muy cerca, más de media imagen, foto real W23 (CC BY-SA 3.0); texto fuerte «Y llegó UN TIFÓN» distinto del título («terrazas de arroz… 2.000 o 400 años»)."
+    "como": "W41 mujer ifugao muy cerca, más de media imagen, foto real (Yves Picq, CC BY-SA 4.0), expresión cálida; texto igual que en la A, distinto del título; a 160 px se lee «UN TIFÓN» e «IFUGAO» (car160.png)."
   },
   "Y16": {
     "estado": "✅",
-    "como": "Solo composición: recorte de la persona sobre su propia foto desenfocada y oscurecida; no se inventa nada."
+    "como": "ifugao-B: solo luz y fondo oscurecido sobre la propia foto; nada inventado ni rasgos cambiados."
   },
   "Y18": {
     "estado": "✅",
-    "como": "Portada = foto entera anciano-23.jpg, sin recorte ni fondo borroso: ya no hay cabeza repetida. El pelo es el del original (zoom lado a lado en ifugao-rev-img3/portada-cabeza.png y orig-cabeza.png: la parte de arriba ya viene quemada en la diapositiva; los mechones de los lados se ven igual). El hombre del fondo queda oscurecido por el degradado de la derecha. A 160 px se lee anciano + «UN TIFÓN»; texto en el lado libre, no sobre la cara; bandera, país y sello."
+    "como": "Excepción de Paco (ok-paco.json Y18): portada B, W41, la mujer del tocado rojo, aunque no mira a cámara (se le dijo): «B y si cambia la frase» (21 nov 2026). El resto de Y18 se cumple (una sola protagonista muy cerca, fondo oscurecido, color, texto en el lado libre, bandera y FILIPINAS, sello arriba a la derecha, visto a 160 px).",
+    "anterior": "Pendiente de Paco: aceptar W41 (no mira a cámara, mira a su izquierda; resto de Y18 bien) o buscar otra que mire a cámara. Candidatas de la serie con una sola persona mirando a cámara (cand.jpg): W40 (PHIL2753a, Yves Picq, CC BY-SA 4.0, 1280×1920: anciano ifugao riendo, tocado de plumas rojo, fondo claro; la mejor; ojo, un hombre asoma en el borde derecho: recortar) · W46 (Romeo the Ifugao Man 02, Beyond Neon, CC BY 2.0, 1280×1280: hombre con tocado y lanza, mira a cámara; posa para turistas en el mirador) · W45 (Romeo 01, misma persona, 1280×1024) · W23 (anciano, ya fue la portada A que Paco vio quemada; hay otra persona detrás) · W15 (CEphoto, mira a cámara pero pequeño en un GP de 1280×853: no aguanta el primer plano). Sin cambiar nada hasta que decida Paco."
   },
   "Y23": {
     "estado": "✅",
-    "como": "A 160 px: «A los ifugao de Filipinas, los de las terrazas, les llegó un tifón». Es la historia del vídeo, y el título añade la edad (en shorts rige Y22)."
+    "como": "A 160 px: «A las terrazas de los ifugao (Filipinas) les llegó un tifón», con una anciana ifugao: es la historia del vídeo."
   },
   "N7": {
     "estado": "✅",
-    "como": "42-46 s ya son terrazas (W120, W86, W140 detalle) al nombrar a Acabado: fuera los niños y el difunto. Tifón sobre Batad, mapa al situar, muyong sobre bosque/terrazas, abandono sobre W127 con terrazas comidas por la hierba, cierre «a mano» sobre gente trabajando el bancal delante de un muro de piedra (no hay foto de muros rehechos). W61 (ritual de archivo B/N, 39-42 s) va con «la UNESCO habla de dos mil años»: imagen antigua de los ifugao, no lo contradice."
+    "como": "Render 11:21. Tifón sobre Batad, mapa al situar, muyong sobre bosque/terrazas, debate sobre terrazas y W61 de archivo. Historia (53,5-66,7 s): W163 bulul en «Su arroz lo protege un bulul», W165 bulules en «un dios tallado en madera», W32 mujeres cantando en «cantaban los hudhud», W39 anciana con tocado en «héroes y antepasados», W41 anciana en «las mujeres mayores» (W33 y W15 salieron con su frase). Borra: W127 terrazas comidas por la hierba en «los jóvenes se van», W98 bancales descuidados en «muchas terrazas se abandonan», tifón sobre Batad. Cierre «a mano, piedra a piedra» sobre W131, gente trabajando el bancal delante de un muro de piedra."
   },
   "M18": {
     "estado": "✅",
-    "como": "El último plano (65,9-69,4 s) es W131: varias personas trabajando a mano el bancal, delante de un muro de piedra: es la idea fuerte del cierre («los vecinos, a mano»), no un paisaje de relleno."
+    "como": "El último plano (~80,4-82,9 s) es W131: varias personas trabajando a mano el bancal delante de un muro de piedra: la idea fuerte del cierre («a mano, piedra a piedra»)."
   },
   "M21": {
     "estado": "✅",
@@ -66,7 +67,7 @@
   },
   "M28": {
     "estado": "✅",
-    "como": "Todo son fotos fijas, enfocadas y quietas desde el primer fotograma de cada corte; los pasos a negro (8,5, 12,5, 18, 28, 36 s) son fundidos."
+    "como": "Fotos fijas resueltas desde el primer fotograma. Costuras del nuevo orden vistas: cómo → debate con fundido y W140 B/N (36,3 s), debate → historia fundido a negro (~53 s; audio -27,5 dB, sin voz pisada), historia → borra fundido a negro (~70,7 s). Silencio antes del pico intacto (36,45-37,05 s: -37,6 dB). Música sin cambios (trozos situar-cómo y cierre; borra sin música), sígueme a 26,5 s sin tapar la cifra (sig.png), final W131 + silencio + tarjeta intacto (fin.jpg)."
   },
   "M35": {
     "estado": "✅",
@@ -86,7 +87,7 @@
   },
   "M43": {
     "estado": "✅",
-    "como": "La voz acaba a 68,3 s; W131 sigue sola, sin voz ni subtítulo, hasta ~69,4 s y entra la tarjeta."
+    "como": "La voz acaba a 81,9 s; W131 sigue sola, sin voz ni subtítulo, hasta ~82,9 s y entran las tarjetas (MÁS PUEBLOS BORRADOS → CREA TUS RUTAS CONMIGO) hasta 86,97 s (fin_76-87.jpg)."
   },
   "M44": {
     "estado": "✅",
@@ -102,11 +103,16 @@
   },
   "M10": {
     "estado": "✅",
-    "como": "Revisor nuevo, 21 nov 2026, render de las 9:47 (después del arreglo de ifugao-short.cjs de las 9:43). (1) 37-40 s cada 0,1 s (E:/tmp-motor/ifugao-rev-m10b/tira37-40.png y f37/): «¿2.000 AÑOS? / LO QUE DICE LA UNESCO» entra a ~37,3 s y se apaga del todo a ~38,6 s, siempre sobre W140 (terrazas B/N, sin gente); W61 entra a 38,7 s ya sin cifra: sobre W61 solo sello, logo y el subtítulo, que va a ~1.090-1.210 px, por debajo de las caras de los dos hombres y del niño (f37/f_019.png). (2) Márgenes medidos en TODO el vídeo cada 0,1 s (margenes.tsv, píxeles de texto con contorno en la franja 940-1.300) + hojas cada 0,5 s con rejilla x=100/980 y línea 1.260 (hoja_0-2.png) + recortes de las líneas más largas (recortes_largos.png): todos los subtítulos de 30 s en adelante entre x=101 y x=976 (la más ancha, «desde tiempos de los romanos.», justo en el límite: 101 px izq., 103 px der.); las tres líneas que fallaban ya están partidas («De ahí baja el agua / que las riega,», «El tifón de 2025 / rompió en Batad», «Los muros los vuelven / a levantar los vecinos,») y quedan muy dentro. Nada grabado entre 1.260 y 1.920 px (subtítulos ~1.030-1.215, tarjetas finales por encima de la línea). Únicos textos a menos de 100 px: la placa del rótulo «IFUGAO · FILIPINAS» (84 px, texto a 100, estándar del motor, ya aceptado) y la portada (0-0,1 s). Nunca más de 2 líneas (M25). 0 €.",
-    "anterior": "Revisor nuevo, 21 nov 2026, render de las 9:39 (después del arreglo; fotogramas cada 0,1 s 17-32 s, hoja cada 0,5 s y recortes con rejilla de 100 px en E:/tmp-motor/ifugao-rev-m10/). ARREGLADO 17-32 s: rótulo «IFUGAO · FILIPINAS» solo sobre W85 (18,5-21 s, sin caras), cifra 1.500 M de 24,2 a ~25,7 s solo sobre W114/W125, W135 entra a 26,0 s ya sin cifra, sígueme a 26,5 s arriba (≈300-560 px, 104-972 px de ancho) sobre el cielo/terrazas, por encima del sombrero; nunca más de 3 textos (sello, subtítulo, sígueme). QUEDAN DOS COSAS: (1) 38,7-39,2 s: la cifra «¿2.000 AÑOS? / LO QUE DICE LA UNESCO» (Q dur 1,6) sigue en pantalla cuando entra W61 (from «UNESCO», ~38,6 s): «LO QUE DICE LA UNESCO» cruza los turbantes y la frente de los dos hombres y la cifra apagándose pasa por la cara del niño del fondo (w61_zoom.png). Arreglo en ifugao-short.cjs, bloque del debate: cifra de 'Cuántos' con dur 1.1 (Q(...,1.1)) o W61 con from: 'habla'. (2) Margen lateral < 100 px en tres líneas de subtítulo (empiezan a ~75-85 px y acaban a ~1.000 px; subs_margen.png y subs_margen2.png): «De ahí baja el agua que las riega,» (34 car., 32-36 s), «El tifón de 2025 rompió en Batad» (32, 57-61 s) y «Los muros los vuelven a levantar» (32, 63-66 s). Arreglo: recortar el corte de línea a ≤ 30 caracteres por unidades de sentido (p. ej. ['De ahí baja el agua', 'que las riega,'] + ['de bancal en bancal.']; ['El tifón de 2025', 'rompió en Batad'] + ['un canal de siglos']; ['Los muros los vuelven', 'a levantar los vecinos,']), siempre 2 líneas máx. (M25). Lo demás bien: subtítulos a ~1.030-1.110 px, nada entre 1.260 y 1.920, rótulo con texto a x=100 (placa a 84, estándar del motor), 400 AÑOS (48-50 s) sobre paisaje, tarjetas finales en zona segura. 0 €. — Revisión anterior: Mejorado pero no del todo: la cifra entra a 24,25 s y casi toda cae sobre paisaje (W114 y W125, ✅), pero dura hasta ~26,15 s y W135 entra a ~25,75 s («desde»): durante ~0,4 s «1.500 M» y «4 TORRES EIFFEL Y MEDIA» vuelven a estar sobre el campesino, y «4 TORRES…» cruza su cara bajo el sombrero (fotogramas 25,8 y 26,0 en ifugao-rev-img3/zona26.png). A 26,0-26,15 s coinciden aún cifra desvaneciéndose, rótulo, subtítulo y el sígueme entrando (cinco textos otra vez, aunque un instante). Arreglo en ifugao-short.cjs (situar): W135 con from: \"1995\" (entra ~26,2 s, cuando la cifra ya se ha ido; de paso W125 pasa de 1,3 s a ~1,7 s, aviso M2) o cifra dur 1.3; y seguir.seg 26.5 para que el sígueme no entre mientras se apaga la cifra. Zona segura y márgenes siguen bien: sígueme arriba (~360-500 px), rótulo a ~850 px, subtítulos ~1.030-1.110 px. 0 €."
+    "como": "Render 11:21, f_65.5.png a tamaño real: W41 reencuadrada; boca ~800-890 px y barbilla ~1.050 px, el subtítulo «que hoy recuerdan sobre todo / las mujeres mayores.» va a ~1.095-1.210 px sobre el cuello y el pañuelo: la cara queda libre. Márgenes: esa línea, la más ancha del tramo, de ~115 a ~965 px (≥100 por lado); W39 (61,4-63,3 s) con el subtítulo bajo la boca; nada entre 1.260 y 1.920 px en todo el tramo 52-87 s (hist_52-72.jpg, fin_76-87.jpg).",
+    "anterior3": "Render 10:53, recortes a tamaño real (zall.png): (1) márgenes ✅: «Al cosechar cantaban / los hudhud, largos cantos» ~170-905 px, «sobre sus héroes / y antepasados,» ~290-780 px, «que hoy recuerdan sobre todo / las mujeres mayores.» ~114-966 px; zona 1.260-1.920 libre; 2 líneas máx. (2) W39 (65,5-67,5 s): el subtítulo (~1.090-1.200 px) queda bajo la boca, sobre barbilla y cuello: boca libre, ✅. (3) W41 (67,5-70,7 s): «PM» no ha cambiado nada porque la foto ya es un primerísimo plano: el subtítulo (~1.090-1.210 px) sigue tapando de la nariz al labio de arriba (boca ~1.230-1.270 px). Arreglo en ifugao-short.cjs, historia, W41: bajar la ventana para subir la cara (p. ej. pan: [0.5, 0.75, 0.5, 0.8] con z bajo) hasta tener la boca por encima de ~1.000 px, o cambiar W41 por una foto con la cara más arriba."
   },
   "M25": {
     "estado": "✅",
-    "como": "Todos los subtítulos en 1-2 líneas, cortadas por unidades de sentido (comprobado en la hoja cada 0,5 s)."
+    "como": "Voz nueva revisada en pantalla (hist_52-72.jpg, fin_76-87.jpg): «Su arroz lo protege un bulul,» y «Ahora los jóvenes se van» en 1 línea; «y muchas terrazas / se abandonan.», «El tifón de 2025 / rompió en Batad», «un canal de siglos / y se llevó dos vidas.» en 2, cortadas por sentido; nunca más de 2 líneas."
+  },
+  "P2": {
+    "estado": "✅",
+    "como": "textos-youtube.txt (10:58): los 20 autores de las 33 fotos del montaje (cruce de tiempos.json con ATRIBUCIONES.txt: Rainer Neu, Jophel Botero Ybiosa, CEphoto/Uwe Aranas, Vinnie Cartabiano, Bien02, Philip Nalangan, Rodan Rome Tongohan, Jesse Paul Ramos, Ranieljosecastaneda, Patrickroque01, UW Digital Collections, Internet Archive Book Images, Aninah Ong, Caitriana Nicholson, Hiart, David Stanley, Yves Picq, Cid Jacobo, Ekaterina Kvelidze, BENNY GROSS.1) están en la línea «📷 Fotos (Wikimedia Commons)» de la descripción; el comentario fijado dice «📷 Autores de todas las fotos en la descripción»; Worcester ya no está. Sobra Julia Sumangil (W33 salió del montaje) y CEphoto ya solo es CC BY-SA 4.0 (W15 también salió): conviene quitarlos, no incumple P2.",
+    "anterior": "textos-youtube.txt (10:50): la descripción no lleva ningún autor («autores principales en el primer comentario; todos… en borradodelmapa.com/pueblos») y el comentario nombra solo 6, uno de ellos sin foto en el montaje (Dean C. Worcester: W61 es «Internet Archive Book Images»). P2 pide los autores en la descripción y, en el comentario, todos o «autores de todas las fotos en la descripción». Fotos del montaje (34 planos, 21 autores en ATRIBUCIONES.txt): Patrickroque01, Jophel Botero Ybiosa, Philip Nalangan, Yves Picq (CC BY-SA 4.0) · Hiart (CC0) · Dr. Rainer Neu, Cid Jacobo (CC BY-SA 3.0) · CEphoto, Uwe Aranas (CC BY-SA 3.0/4.0) · Julia Sumangil, Rodan Rome Tongohan, Ranieljosecastaneda, Jesse Paul Ramos, Ekaterina Kvelidze, BENNY GROSS.1, Aninah Ong (CC BY-SA 4.0) · Bien02 (CC BY 4.0) · Vinnie Cartabiano, David Stanley (CC BY 2.0) · Caitriana Nicholson (CC BY-SA 2.0) · Internet Archive Book Images, UW Digital Collections (sin restricciones). Arreglo: poner esa línea «📷 Fotos (Wikimedia Commons): …» en la descripción y en el comentario dejar «📷 Autores de todas las fotos en la descripción» (o la lista entera), quitando a Worcester."
   }
 }

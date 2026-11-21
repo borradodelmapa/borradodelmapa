@@ -43,10 +43,16 @@ const blocks = [
     sub: [['¿Cuántos años tienen?'], ['La UNESCO habla de dos mil,', 'desde tiempos de los romanos.'], ['Según el arqueólogo', 'Stephen Acabado, de la UCLA,'], ['con carbono 14,', 'unos cuatrocientos:'], ['las levantaron', 'al llegar los españoles,'], ['para hacerse fuertes', 'en la montaña.']],
     cifra: [{ ...Q('Cuántos', '¿2.000 AÑOS?', 'LO QUE DICE LA UNESCO', 1.1), size: 150 }, { word: 'cuatrocientos', text: '400 AÑOS', sub: 'LO QUE DICE LA ARQUEOLOGÍA', dur: 1.8, size: 190 }],
     shots: [{ a: 'W140', sc: 'GP', look: 'trix' }, { a: 'W61', sc: 'PM', from: 'UNESCO', look: 'trix' }, { a: 'W112', sc: 'GP', from: 'Según' }, { a: 'W120', sc: 'GP', from: 'Acabado' }, { a: 'W140', sc: 'D', from: 'carbono', look: 'trix', pan: [0.6, 0.55, 0.68, 0.5], z: 0.5 }, { a: 'W86', sc: 'GP', from: 'unos' }, { a: 'W87', sc: 'GP', from: 'levantaron' }, { a: 'W71', sc: 'GP', from: 'para' }] }),
+  // Historia del pueblo (Paco, 21 nov 2026: «sobre los ifugao no dice nada. Podría hablar un poco de su historia»; texto suyo: «Los ifugao Filipinas habitan estas montañas. El arroz está protegido con un bulul un dios tallado en madera. Al cosechar cantaban los hudhud (¿qué es?)»)
+  S({ id: 'historia', emocion: 'calida', amb: PAJAROS(-30, 16),
+    text: 'Su arroz lo protege un bulul, un dios tallado en madera. Al cosechar cantaban los hudhud, largos cantos sobre sus héroes y antepasados, que hoy recuerdan sobre todo las mujeres mayores.',
+    en: ['Their rice is protected by a bulul, a god carved in wood.', 'At harvest they sang the hudhud, long chants about their heroes and ancestors, which today are remembered mostly by older women.'],
+    sub: [['Su arroz lo protege un bulul,'], ['un dios tallado en madera.'], ['Al cosechar cantaban', 'los hudhud, largos cantos'], ['sobre sus héroes', 'y antepasados,'], ['que hoy recuerdan sobre todo', 'las mujeres mayores.']],
+    shots: [{ a: 'W163', sc: 'PP' }, { a: 'W165', sc: 'PM', from: 'dios' }, { a: 'W32', sc: 'PM', from: 'Al' }, { a: 'W39', sc: 'PM', from: 'sobre sus' }, { a: 'W41', sc: 'PM', from: 'que', pan: [0.5, 1.0, 0.5, 1.0], z: 0.6 }] }),
   S({ id: 'borra', emocion: 'fria', humano: true, cambioTono: true, amb: VIENTO(-30, 4),
-    text: 'Hoy los jóvenes se van y muchas se abandonan. El tifón de 2025 rompió en Batad un canal de siglos y se llevó dos vidas.',
-    en: ['Today the young people leave and many are abandoned.', 'The 2025 typhoon broke a centuries-old canal in Batad and took two lives.'],
-    sub: [['Hoy los jóvenes se van', 'y muchas se abandonan.'], ['El tifón de 2025', 'rompió en Batad'], ['un canal de siglos', 'y se llevó dos vidas.']],
+    text: 'Ahora los jóvenes se van y muchas terrazas se abandonan. El tifón de 2025 rompió en Batad un canal de siglos y se llevó dos vidas.',
+    en: ['Now the young people leave and many terraces are abandoned.', 'The 2025 typhoon broke a centuries-old canal in Batad and took two lives.'],
+    sub: [['Ahora los jóvenes se van'], ['y muchas terrazas', 'se abandonan.'], ['El tifón de 2025', 'rompió en Batad'], ['un canal de siglos', 'y se llevó dos vidas.']],
     shots: [{ a: 'W127', sc: 'PM' }, { a: 'W98', sc: 'GP', from: 'muchas' }, { a: 'W141', sc: 'GP', from: 'El' }, { a: 'W91', sc: 'GP', from: 'canal' }] }),
   S({ id: 'cierre', emocion: 'calida', pause: 0.3, amb: PAJAROS(-30, 10),
     text: 'Los muros los vuelven a levantar los vecinos, a mano, piedra a piedra.',
@@ -60,9 +66,9 @@ console.log('VOZ: ' + blocks.filter(b => b.who).reduce((a, b) => a + (b.voz || b
 if (process.env.SOLO_TEXTO) process.exit(0);
 build({
   titulo: 'LOS IFUGAO · PUEBLOS BORRADOS DEL MAPA', id: 'pueblos-ifugao-short-v1' + (TT ? '-tiktok' : ''),
-  nombre: ['ifugao'], fecha: '2026-12-16', fechaTikTok: '2026-12-16', // calendario de Estrategia: mié 16 dic
+  nombre: ['ifugao'], fecha: '2026-12-17', fechaTikTok: '2026-12-30', // Estrategia (21 nov): YouTube jue 17 dic 10:00 (el 16 es de los kalash); TikTok mié 30 dic 10:00 (primer mar-jue libre en Metricool desde el 29)
   out: B + '/salida-short', fotosSerie: B + '/fotos', ultima: B + (TT ? '/ULTIMA-short-tiktok' : '/ULTIMA-short'), ultimaNombre: 'ifugao-terrazas-de-arroz-2000-o-400-anos',
-  look: 'portra', counter: 'PUEBLOS BORRADOS · T2', portada: { png: B + '/caratula/ifugao-A.png' },
+  look: 'portra', counter: 'PUEBLOS BORRADOS · T2', portada: { png: B + '/caratula/ifugao-B.png' } /* Paco, 21 nov: «la imagen de la carátula está quemada. Pon otra imagen» → W41 */,
   voices: { salma: SALMA_EXPRESIVA }, sintonia: { src: 'SFX_sintonia-pueblos', db: -8 },
   musica: { src: 'SFX_bosque-invierno', ratio: 3, trozos: [MUS('situar', 'como', 2), MUS('cierre', 'cierre', 42)] }, // N14-4: sin música en lo humano (borra)
   cardSecs: 4.0, cardP1: 2.2, kb: 1.0, humanoExtra: 0, gap: { same: 0.2, change: 0.4 }, voiceDb: { salma: -25 }, duckRatio: 5,

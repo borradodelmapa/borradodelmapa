@@ -101,7 +101,7 @@ module.exports = function reglas(cfg, TOTAL, OUT) {
       let t; try { t = fs.readFileSync(path.join(__dirname, f), 'utf8'); } catch (e) { continue; }
       if (!t.includes(pista)) continue;
       const id = (t.match(/id:\s*'([^']+)'/) || [])[1]; if (!id || String(cfg.id).startsWith(id)) continue; // el propio vídeo (también su versión TikTok o una prueba) no cuenta
-      if (cfg.id && t.includes("'" + String(cfg.id).replace(/-prueba.*$/, '') + "'")) continue; // (21 nov 2026) la config del propio vídeo aunque su primer «id:» sea el de un bloque (India 3 lugares)
+      if (cfg.id && t.includes("'" + String(cfg.id).replace(/-prueba.*$/, '').replace(/-tiktok$/, '') + "'")) continue; // (21 nov 2026) la config del propio vídeo aunque su primer «id:» sea el de un bloque (India 3 lugares)
       for (const [campo, mia] of [['fecha', cfg.fecha], ['fechaTikTok', cfg.fechaTikTok]]) {
         if (!mia) continue; const m = t.match(new RegExp(campo + ":\\s*'(\\d{4}-\\d\\d-\\d\\d)'"));
         if (m && semana(m[1]) === semana(mia)) choques.push(f + ' (' + campo + ' ' + m[1] + ')');

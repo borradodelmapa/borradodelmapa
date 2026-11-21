@@ -200,3 +200,9 @@ Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P
 - **TikTok (Metricool): 435602675, mar 24 nov 19:00** (prueba de Paco: dos shorts el mismo día; las haenyeo a las 10:00). Lleva la versión ULTIMA-tiktok (R2 `mlabri-espiritus-hojas-amarillas-tiktok.mp4`), portada mlabri-A, primer comentario con autores, y AIGC sí.
 - **YouTube Studio: PENDIENTE.** Paco arrastra el archivo (111 MB) y después se rellenan título, descripción P6, carátula, lista Pueblos, etiquetas, EN (Y10) y vídeo relacionado tToGJVR1VFE. Va el mar 24 nov a las 19:00.
 - **S10:** misma pista que los shompen (jue 26 nov), con excepción de Paco: «Si la dejamos pasar total tenemos pocas visitas».
+
+**21 nov 2026 — Short «Los ifugao: ¿terrazas de 2.000 años… o de 400? 🇵🇭» (Pueblos T2 · Filipinas; 87 s con la excepción N10 de Paco: «si es necesario no importa en esta ocasión que supere los 60 segundos»). Fechas propuestas por 📈 Estrategia y confirmadas por Paco en el chat de 🎬 Vídeo («Sí, programa»).**
+- **YouTube (Studio): https://youtube.com/shorts/gXVrplSEgYs, jue 17 dic 10:00.** Subido por Paco y rellenado por Claude en Chrome: título y descripción de `pueblos/ifugao/textos-youtube.txt` (20 autores de fotos), etiquetas, no para niños, contenido alterado NO, lista «Pueblos borrados del mapa», vídeo relacionado «Ataúdes colgantes de Sagada», paquete EN (título, descripción y subtítulos EN publicados). La ES va grabada.
+- **TikTok (Metricool): 436719550, mié 30 dic 10:00.** Versión ULTIMA-short-tiktok (R2 `ifugao-terrazas-de-arroz-2000-o-400-anos-tiktok.mp4`), AIGC no.
+- **Archivo:** CALIDAD MÁXIMA, 87 s, 17,2 Mb/s, ~187 MB (P14); las dos versiones pasan el candado.
+- **Pendiente:** fijar el primer comentario cuando se publique (textos-youtube.txt → PRIMER COMENTARIO).

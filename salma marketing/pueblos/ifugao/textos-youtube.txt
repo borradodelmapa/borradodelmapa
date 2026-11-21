@@ -5,9 +5,9 @@ ARCHIVO
 ifugao-terrazas-de-arroz-2000-o-400-anos.mp4 (CALIDAD MÁXIMA, P14; nombre con la búsqueda «ifugao», «terrazas de arroz», Y7)
 
 AJUSTES (P1, P10, P13, Y10)
-Short. Fecha: mié 16 dic 2026 (calendario de Estrategia: el día de los ifugao). Hora y reparto con otros vídeos de ese día: los fija Estrategia (ojo: la config de los kalash también lleva fecha 16 dic).
+Short. PROGRAMADO (OK de Paco, «Sí, programa», 21 nov): YouTube jue 17 dic 2026 10:00 (Studio, gXVrplSEgYs); TikTok mié 30 dic 2026 10:00 (Metricool 436719550).
 Contenido alterado o sintético: NO (fotos reales de Wikimedia Commons montadas por el motor; voz de Salma). TikTok: AIGC no. No creado para niños. Idioma: español.
-Miniatura: fotograma de portada (caratula/ifugao-A.png, el anciano ifugao; Y22). Subtítulos: SOLO la pista EN; la ES va grabada (M10).
+Miniatura: fotograma de portada (caratula/ifugao-B.png, W41, mujer ifugao con el tocado rojo, Yves Picq, CC BY-SA 4.0; Y22). Subtítulos: SOLO la pista EN; la ES va grabada (M10).
 Vídeo relacionado: «Ataúdes colgantes de Sagada · Filipinas» (se elige en Studio) (M14). Lista: «Pueblos borrados del mapa».
 
 ═══════════ TÍTULO (≤ 60 caracteres, Y3) ═══════════
@@ -25,7 +25,7 @@ LO QUE CUENTA EL VÍDEO (datos de noviembre de 2026; confírmalos siempre en fue
 · Para ir: Batad está en la provincia de Ifugao, en Luzón norte; desde Banaue se llega andando. Confirma el estado del sendero tras el corrimiento antes de ir.
 
 Fuentes: UNESCO, «Rice Terraces of the Philippine Cordilleras» · Acabado S., Journal of Field Archaeology (2019) · Philstar (27 jun 2026) · Al Jazeera (27 jul 2026) · Inquirer, «On the edge: Saving Ifugao rice terraces».
-📷 Fotos: Wikimedia Commons, con licencia libre; los autores, uno a uno, en el primer comentario y en borradodelmapa.com/pueblos.
+📷 Fotos (Wikimedia Commons): Patrickroque01, Jophel Botero Ybiosa, Philip Nalangan, Yves Picq (CC BY-SA 4.0) · Hiart (CC0) · Dr. Rainer Neu, Cid Jacobo (CC BY-SA 3.0) · CEphoto, Uwe Aranas (CC BY-SA 4.0) · Rodan Rome Tongohan, Ranieljosecastaneda, Jesse Paul Ramos, Ekaterina Kvelidze, BENNY GROSS.1, Aninah Ong (CC BY-SA 4.0) · Bien02 (CC BY 4.0) · Vinnie Cartabiano, David Stanley (CC BY 2.0) · Caitriana Nicholson (CC BY-SA 2.0) · Internet Archive Book Images, UW Digital Collections (sin restricciones conocidas).
 🎬 Es parte de «Pueblos borrados del mapa». En Filipinas también: los ataúdes colgantes de Sagada.
 
 #Ifugao #TerrazasDeArroz #Filipinas
@@ -36,7 +36,7 @@ ifugao, terrazas de arroz, banaue, batad, filipinas, rice terraces, unesco, pueb
 ═══════════ PRIMER COMENTARIO (fijado, P6 · P18) ═══════════
 ¿Dos mil años o cuatrocientos? ¿Qué te parece más increíble? 👇
 ¿Te apetece ir a Filipinas? Crea tu ruta gratis con Salma en borradodelmapa.com
-📷 Autores de todas las fotos (Wikimedia Commons, licencias libres): ver ATRIBUCIONES en borradodelmapa.com/pueblos.
+📷 Autores de todas las fotos en la descripción (Wikimedia Commons, licencias libres).
 
 ═══════════ ENGLISH PACKAGE (Studio → Languages, Y10) ═══════════
 TITLE: The Ifugao: rice terraces 2,000 years old… or 400? 🇵🇭
