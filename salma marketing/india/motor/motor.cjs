@@ -241,7 +241,7 @@ async function build(cfg) {
           const [a0, b0, a1, b1] = s.pan, Z = (1 + (s.z ?? 0.3)) * (s._zc || 1), d0 = (frames / 30).toFixed(3), e = `(0.5-0.5*cos(PI*min(t,${d0})/${d0}))`;
           const enfZ = ENF ? `,zoompan=z='1+${ENF}*min(1,on/12)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=1:s=${F.w}x${F.h}:fps=30` : ''; // énfasis sobre la ventana ya encuadrada (el tamaño del recorte no puede variar en el tiempo)
           const ww = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}/2)*2`, wh = `trunc(min(iw,ih*${F.a}/${F.b})/${Z}*${F.b}/${F.a}/2)*2`;
-          pin = ['-loop', '1', '-i', f];
+          pin = ['-framerate', '30', '-loop', '1', '-i', f]; // T35: 30 fps, no 25 (las fotos con paneo saltaban)
           vf = `crop=w='${ww}':h='${wh}':x='(iw-ow)*(${a0}+${(a1 - a0).toFixed(3)}*${e})':y='(ih-oh)*(${b0}+${(b1 - b0).toFixed(3)}*${e})',scale=${F.w}:${F.h}:flags=lanczos,setsar=1,fps=30${enfZ}${tail}`;
         }
         cacheN[runPlano([...pin, '-vf', vf, '-frames:v', String(frames), '-an', '-c:v', 'libx264', ...Q.plano, out], out, f)]++;
@@ -268,7 +268,7 @@ async function build(cfg) {
     dtx('Descarga la app de guías de viaje', ARIALB, K.desc[0], 'white', K.desc[1], P1, CS), dtx('Gratis', ARIALB, K.grat[0], 'white', K.grat[1], P1, CS),
     dtx('borradodelmapa.com', IMPACT, K.web[0], 'white', K.web[1], P1, CS, ':box=1:boxcolor=0xF4630B:boxborderw=22'),
     dtx(ct.l4, ARIALB, K.l4[0], '0xF4630B', K.l4[1], P1, CS), dtx(ct.l5, ARIALB, K.l5[0], 'white', K.l5[1], P1, CS)].join(',') + ',format=yuv420p[vout]';
-  run(['-f', 'lavfi', '-i', `color=c=0x0d0d0d:s=${F.w}x${F.h}:r=30:d=${CS}`, '-loop', '1', '-i', AVC, '-filter_complex', ctF, '-map', '[vout]', '-an', '-t', String(CS), '-c:v', 'libx264', '-crf', '19', '-pix_fmt', 'yuv420p', card]);
+  run(['-f', 'lavfi', '-i', `color=c=0x0d0d0d:s=${F.w}x${F.h}:r=30:d=${CS}`, '-framerate', '30', '-loop', '1', '-i', AVC, '-filter_complex', ctF, '-map', '[vout]', '-an', '-t', String(CS), '-c:v', 'libx264', '-crf', '19', '-pix_fmt', 'yuv420p', card]);
   clips.push({ file: card, d: CS });
   fs.writeFileSync(`${W}/lista.txt`, clips.map(c => `file '${c.file.replace(/\\/g, '/')}'`).join('\n'));
   run(['-f', 'concat', '-safe', '0', '-i', `${W}/lista.txt`, '-c', 'copy', `${W}/mudo.mp4`]);
@@ -445,7 +445,7 @@ async function build(cfg) {
     const t0 = sgInicio(SG); sgT = { a: t0.toFixed(2), b: (t0 + 5.1).toFixed(2), c: (t0 + 5.55).toFixed(2) };
     const txt = String(SG.texto || 'Si te está gustando, sígueme').toUpperCase(), tam = Math.min(70, Math.floor(((F.sgW || 1000) - 100) / (txt.length * 0.5)));
     const rot5 = 'rotate=-5*PI/180:ow=rotw(-5*PI/180):oh=roth(-5*PI/180):c=none';
-    sgIn.push('-loop', '1', '-i', `${W}/sg-banda${suf(i)}.png`, '-loop', '1', '-i', `${W}/sg-corazon.png`);
+    sgIn.push('-framerate', '30', '-loop', '1', '-i', `${W}/sg-banda${suf(i)}.png`, '-framerate', '30', '-loop', '1', '-i', `${W}/sg-corazon.png`); // T35
     // franja naranja + tira negra debajo (como la portada), texto centrado, todo inclinado
     const band = `drawbox=x=0:y=130:w=${F.sgW || 1000}:h=48:color=0x0D0D0D:t=fill,drawtext=expansion=none:fontfile='${IMPACT}':text='${esc(txt)}':fontsize=${tam}:fontcolor=black:x=(w-text_w)/2:y=(130-text_h)/2+6,drawtext=expansion=none:fontfile='${ARIALB}':text='BORRADO DEL MAPA':fontsize=28:fontcolor=white:x=(w-text_w)/2:y=140,${rot5}`;
     const u = `(t-${sgT.a})`, Ub = 5.1;
@@ -467,15 +467,15 @@ async function build(cfg) {
   // portada por defecto (modelo Tailandia): se pone encima en los primeros 0,2 s para que sea el fotograma de portada en las redes
   // en horizontal, la portada sale con el mismo diseño en 16:9 (portada.cjs generarH; P.vivo = colores vivos) — Paco, 4 nov 2026
   const P = cfg.portada && (cfg.portada.foto || cfg.portada.png) ? cfg.portada : null; let covIn = [];
-  if (P && P.png) { const covPng = `${W}/portada.png`; fs.copyFileSync(P.png, covPng); covIn = ['-loop', '1', '-i', covPng]; } // portada ya hecha, elegida por Paco (P.png); sin ella, todo como siempre
-  else if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng, ...(F.a > F.b ? { formato: '16:9', vivo: P.vivo } : {}) }); covIn = ['-loop', '1', '-i', covPng]; }
+  if (P && P.png) { const covPng = `${W}/portada.png`; fs.copyFileSync(P.png, covPng); covIn = ['-framerate', '30', '-loop', '1', '-i', covPng]; } // portada ya hecha, elegida por Paco (P.png); sin ella, todo como siempre
+  else if (P) { const covPng = `${W}/portada.png`; await require('./portada.cjs').generar({ src: resolve(P.foto), foco: P.foco || [0.5, 0.5, 0.9], l1: P.l1, l2: P.l2, tag: P.tag, out: covPng, ...(F.a > F.b ? { formato: '16:9', vivo: P.vivo } : {}) }); covIn = ['-framerate', '30', '-loop', '1', '-i', covPng]; }
   let fc = `[2:v]scale=w='170*(1+0.035*sin(2*PI*t*2.2))':h=-1:eval=frame[av];[0:v][av]overlay=x=${F.a < F.b ? 100 : 40}+(170-w)/2:y=50+(170-h)/2:enable='lt(t,${cardT.toFixed(2)})${avisos.map(({ sgT }) => `*not(between(t,${sgT.a},${sgT.b}))`).join('')}'${vf ? ',' + vf : ''}[m0]`;
   let ult = 'm0';
   avisos.forEach(({ sgT, sgF }, i) => { const ib = (P ? 4 : 3) + 2 * i, k = suf(i);
     fc += `;[${ib}:v]${sgF.band};[${ib + 1}:v]${sgF.heart};[${ult}][hc${k}]overlay=x='${F.a < F.b ? 185 : 125}-w/2':y='145-h/2':enable='between(t,${sgT.a},${sgT.b})'[mh${k}];[mh${k}][sg${k}]overlay=x='${sgF.xBand}':y=${F.sgY}:enable='between(t,${sgT.a},${sgT.b})'[m1${k}]`; ult = `m1${k}`; });
   fc += `;[${ult}]${subF}[ms]`; ult = 'ms';
   fc += P ? `;[${ult}][3:v]overlay=0:0:enable='lt(t,0.2)'[v]` : `;[${ult}]null[v]`;
-  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', ...Q.final, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ac', '2', '-b:a', Q.audio, '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
+  run(['-i', 'mudo.mp4', '-i', 'final.wav', '-framerate', '30', '-loop', '1', '-i', AV, ...covIn, ...sgIn, '-filter_complex', fc, '-map', '[v]', '-map', '1:a', '-c:v', 'libx264', ...Q.final, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ac', '2', '-b:a', Q.audio, '-t', TOTAL.toFixed(2), '-movflags', '+faststart', outFile], { cwd: W });
   // la portada también va como CARÁTULA del archivo (la miniatura del Explorador / del móvil) y suelta en un PNG para subirla a las redes
   if (P) { const cov = `${W}/portada.png`, tmp = `${OUT}/${cfg.id}-tmp.mp4`;
     fs.copyFileSync(cov, `${OUT}/${cfg.id}-portada.png`);
