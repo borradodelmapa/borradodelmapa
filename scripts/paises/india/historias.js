@@ -86,7 +86,7 @@ module.exports = [
     redes: { tituloYT: 'Los sentineleses: la isla que no se visita · Andamán, India', tituloTT: 'Sentinel del Norte: la isla que no se visita', hashtags: ['#sentineleses', '#andaman', '#pueblosborradosdelmapa'] },
     titulo: 'Los sentineleses: la isla que no se visita',
     resumen: 'En la isla Sentinel del Norte, en las Andamán, vive un pueblo que no deja entrar a nadie. Nadie sabe cuántos son ni entiende su idioma, y tienen buenas razones para no querer visitas: nuestras enfermedades podrían acabar con ellos.',
-    video: 'pueblos-ep6-sentineleses.mp4',
+    video: 'pueblos-sentineleses-v2.mp4', // v2 (18 nov 2026, «Sentinel del Norte: la isla de la que no sales vivo»), en YouTube el 1 dic; la v1 se descartó (T36)
     realidad: 'Capítulo documental: lo cuenta Salma con imágenes de la isla vista desde lejos (Wikimedia Commons, autores al final), una foto antigua de otros andamaneses y fuentes citadas. No hay ninguna imagen de sentineleses: está prohibido fotografiarlos y no queremos hacerlo. No es un viaje de Paco.',
     creditosDe: 'salma marketing/pueblos/sentineleses',
     fotos: { portada: 'W9', galeria: [['W1', 'La isla por la ventanilla de un avión comercial.'], ['W10', 'Sentinel del Norte desde el satélite (NASA).'], ['W11', 'La isla desde la Estación Espacial Internacional.'], ['W6', 'El arrecife que rodea la isla.'], ['W18', 'Las islas Andamán desde el espacio.'], ['W15', 'Corbyn\'s Cove, una playa de Port Blair.']] },
@@ -311,5 +311,69 @@ module.exports = [
         { foto: '598', h: 'Benarés', t: 'Miles de lámparas sobre el río. Los crematorios, desde la barca y sin fotos.', salida: 'Ver el documental' },
       ],
     },
+  },
+  // Short 9:16 · montaje: salma marketing/pueblos/shompen (ULTIMA) · expediente: docs/pueblos-shompen-expediente.md · textos: pueblos/shompen/textos-short.md
+  // YouTube jue 26 nov 2026 (T36: cada vídeo con su entrada). «Genocidio» y «exterminio», solo atribuidos (F4). Sin fotos actuales de shompen: solo las de 1886 (dominio público).
+  {
+    orden: 171,
+    slug: 'shompen-gran-nicobar-megapuerto-va-a-devorar-su-selva',
+    fecha: '2026-11-26',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'India',
+    pais: 'Gran Nicobar',
+    titulo: 'Los shompen: un megapuerto va a devorar su selva',
+    resumen: 'Un megapuerto está a punto de devorar la selva de los shompen, uno de los últimos pueblos no contactados del planeta, en la isla de Gran Nicobar (India). Treinta y nueve expertos en genocidio lo llaman «una sentencia de muerte».',
+    video: 'pueblos-shompen.mp4',
+    realidad: 'Capítulo documental narrado por Salma con fotos de Wikimedia Commons (autores al final): paisajes de Gran Nicobar y retratos de 1886. No hay fotos actuales de shompen con licencia libre, y no hemos estado allí: cada dato sale de las fuentes que citamos.',
+    creditosDe: 'salma marketing/pueblos/shompen',
+    fotos: { portada: 'W1', galeria: [
+      ['W2', 'La selva de Gran Nicobar.'],
+      ['W3', 'Selva y costa de Gran Nicobar.'],
+      ['W4', 'Retrato de 1886 de un shompen.'],
+      ['W5', 'Retrato de 1886 de un shompen.'],
+      ['W6', 'Retrato de 1886 de un shompen.'],
+      ['W1', 'Lluvia sobre la reserva de la biosfera de Gran Nicobar.'],
+    ] },
+    cifras: [['200-300', 'Shompen'], ['+700.000', 'Árboles a talar, según el Gobierno'], ['166 km²', 'De proyecto, más que Barcelona']],
+    story: {
+      portada: 'W2',
+      slides: [
+        { foto: 'W1', h: 'Una selva en peligro', t: 'Un megapuerto está a punto de devorar la selva de los shompen, en la isla de Gran Nicobar (India).', credito: ['Prasun Goswami', 'CC BY-SA 4.0'] },
+        { foto: 'W4', h: 'Los shompen', t: 'Uno de los últimos pueblos no contactados del planeta. Quedan entre 200 y 300.', credito: ['Autor desconocido, 1886', 'Dominio público'] },
+        { foto: 'W2', h: 'Más de 700.000 árboles', t: 'Es lo que el propio Gobierno calcula que hay que talar. Y a ellos nadie les ha preguntado.', credito: ['T. Harshavardan', 'CC BY-SA 4.0'] },
+        { foto: 'W3', h: 'Más grande que Barcelona', t: 'Puerto, aeropuerto, central eléctrica y una ciudad para cientos de miles de personas: 166 km².', credito: ['T. Harshavardan', 'CC BY-SA 4.0'] },
+        { foto: 'W5', h: '«Una sentencia de muerte»', t: 'Así lo llaman 39 expertos en genocidio. El Gobierno dice que no desplazará a nadie.', credito: ['Autor desconocido, 1886', 'Dominio público'] },
+        { foto: 'W6', h: '¿Y ahora?', t: 'La ONU pidió suspenderlo. Las obras ya han empezado y un tribunal aún debe decidir.', credito: ['Autor desconocido, 1886', 'Dominio público'], salida: 'Leer la historia completa' },
+      ],
+    },
+    secciones: [
+      { h: 'Uno de los últimos pueblos no contactados', foto: ['W4', 'Retrato de 1886 de un shompen.'], p: [
+        'Los **shompen** viven en el interior de **Gran Nicobar**, la isla más al sur de la India, en el océano Índico. Cazan y recolectan en la selva y casi no tienen contacto con el exterior. Quedan **entre 200 y 300**. La reserva tribal ocupa casi toda la isla.',
+        'No hay fotos actuales de shompen con licencia libre: los retratos de esta página son de 1886.',
+      ] },
+      { h: 'El megapuerto', foto: ['W3', 'Selva y costa de Gran Nicobar.'], p: [
+        'El proyecto del Gobierno indio incluye un **puerto**, un **aeropuerto**, una **central eléctrica** y una **ciudad** para cientos de miles de personas: **166 km²**, más que toda Barcelona. Gran Nicobar está a la entrada del estrecho de Malaca, y por eso la India lo considera estratégico.',
+        'El propio Gobierno calcula que habrá que talar **más de 700.000 árboles**. Y, según Survival International, la India reconoció ante el comité de la ONU que no pudo consultar a los shompen.',
+      ] },
+      { h: '«Una sentencia de muerte»', foto: ['W5', 'Retrato de 1886 de un shompen.'], p: [
+        'En febrero de 2024, **39 expertos en genocidio** firmaron una carta (*The Guardian*) en la que advierten que, si nadie lo para, el proyecto será «una sentencia de muerte» para los shompen. El Gobierno dice que **no desplazará a nadie**.',
+        'En agosto de 2026, el comité de la ONU contra la discriminación racial pidió **suspenderlo**. Las obras ya han empezado, y un tribunal de Calcuta aún debe decidir sobre una demanda contra el proyecto.',
+      ] },
+      { h: '¿Se puede visitar?', foto: ['W1', 'Lluvia sobre la reserva de la biosfera de Gran Nicobar.'], p: [
+        'No. La reserva tribal está cerrada, y así debe ser: un pueblo sin contacto no tiene defensas contra enfermedades que para nosotros son leves.',
+      ] },
+    ],
+    cierre: 'Datos de noviembre de 2026.',
+    nota: 'Datos revisados en noviembre de 2026. «Genocidio» y «exterminio» son palabras de los 39 expertos que firmaron la carta, no nuestras. La cifra de árboles es la del Gobierno; otras estimaciones son más altas.',
+    fuentes: [
+      W('The Guardian: carta de 39 expertos en genocidio (7 feb 2024)', 'https://www.theguardian.com/global-development/2024/feb/07/india-port-airport-power-plant-military-project-great-nicobar-island-death-sentence-shompen-indigenous-people-warning'),
+      W('Survival International: la ONU pide a la India suspenderlo (27 ago 2026)', 'https://www.survivalinternational.org/news/14550'),
+      W('ABC News: qué es el proyecto de Gran Nicobar (5 jun 2026)', 'https://www.abc.net.au/news/2026-06-05/what-is-indias-great-nicobar-island-project/106726126'),
+      W('NPR: «Here come the bulldozers» (7 jun 2026)', 'https://www.npr.org/2026/06/07/g-s1-125586/island-isolated-india-great-nicobar-china-development'),
+      W('Scroll.in: la demanda en el Tribunal Superior de Calcuta', 'https://scroll.in/article/1078901/great-nicobar-island-project-violates-several-laws-rights-of-shompen-petition-in-calcutta-hc'),
+      W('Daily Pioneer: «No tribal to be displaced»', 'https://dailypioneer.com/2025/india/no-tribal-to-be-displaced--oram.html'),
+      W('Wikipedia: Great Nicobar Island Development Project', 'https://en.wikipedia.org/wiki/Great_Nicobar_Island_Development_Project'),
+      W('Wikipedia: shompen', 'https://en.wikipedia.org/wiki/Shompen_people'),
+    ],
   },
 ];

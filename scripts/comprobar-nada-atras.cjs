@@ -130,6 +130,24 @@ for (const f of stories) {
     }
   }
 }
+// CADA VÍDEO, CON SU ENTRADA (Paco, 22 nov 2026: «CADA VIDEO QUE SE SUBA HAN DE ESTAR TAMBIEN EN LA WEB LISTADOS»; encargo T36): toda carpeta de montaje con
+// vídeo terminado (salma marketing/pueblos/<x>/ULTIMA o tailandia-largos/<x>/ULTIMA) tiene que tener su entrada publicada, que la nombre en creditosDe,
+// fotosEpisodios o «montaje». Solo se mira donde está la carpeta «salma marketing» completa (en GitHub no está).
+{
+  const MKTC = fs.existsSync(path.join(ROOT, 'salma marketing', 'india', 'herramientas', 'node_modules')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
+  const entradas = JSON.stringify(require('./datos-pais.cjs').historias().filter((c) => !c.borrador));
+  for (const base of ['pueblos', 'tailandia-largos']) {
+    const d = path.join(MKTC, 'salma marketing', base);
+    if (!fs.existsSync(d)) continue;
+    for (const x of fs.readdirSync(d)) {
+      const u = path.join(d, x, 'ULTIMA');
+      if (!fs.existsSync(u) || !fs.readdirSync(u).some((f) => f.endsWith('.mp4'))) continue;
+      if (!entradas.includes(`${base}/${x}"`) && !entradas.includes(`${base}/${x}/`)) fallos.push(`salma marketing/${base}/${x}: vídeo terminado sin entrada en el blog (P12) → hacer su entrada con build-blog-viajes.js`);
+    }
+  }
+}
+// Ningún «undefined» en una entrada o story (22 nov 2026: a una entrada le faltaba la nota y salía <p>undefined</p>)
+for (const p of [...paginas.filter((x) => x.startsWith('blog/viajes/')), ...stories]) if (/>\s*undefined\s*</.test(leer(p))) fallos.push(`${p}: sale «undefined» en la página (falta un campo en historias.js)`);
 // Paso obligatorio (Paco, 9 nov 2026; P15 de docs/video-checklist.md): toda entrada publicada del blog con vídeo tiene su story
 for (const c of require('./datos-pais.cjs').historias()) {
   if (c.video && !c.borrador && fs.existsSync(path.join(ROOT, 'blog', 'viajes', c.slug + '.html')) && !stories.includes(`stories/${c.slug}/index.html`))

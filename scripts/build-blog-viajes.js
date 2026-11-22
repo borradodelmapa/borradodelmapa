@@ -115,7 +115,7 @@ ${dias ? `      <ul>\n${dias}\n      </ul>\n` : ''}      <p><a class="pg-btn" hr
 // Autores y licencias de las fotos del episodio (<creditosDe>/fotos/ATRIBUCIONES.txt)
 function atribuciones(c) {
   const atr = {};
-  fs.readFileSync(path.join(MKT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.trim().split(' · '); atr[p[0]] = { autor: p[2], lic: (p[3] || '').replace(/\s*\(.*$/, ''), u: p[4] || (p[1] ? 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(p[1].replace(/[«»]/g, '').trim().replace(/ /g, '_')) : '') }; }); // sin URL (formato «W1 · «fichero» · autor · licencia», aché 22 nov 2026): la de su ficha en Commons
+  fs.readFileSync(path.join(MKT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.trim().split(' · '); atr[p[0]] = { autor: (p[2] || '').replace(/^\(Photo:\s*(.*?)\)$/i, '$1'), lic: (p[3] || '').replace(/\s*\(.*$/, ''), u: p[4] || (p[1] ? 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(p[1].replace(/[«»]/g, '').trim().replace(/ /g, '_')) : '') }; }); // sin URL (formato «W1 · «fichero» · autor · licencia», aché 22 nov 2026): la de su ficha en Commons
   return atr;
 }
 // Entrada de varios episodios (largo de temporada, 6 nov 2026): c.fotosEpisodios = carpeta de la serie; cada foto es 'episodio/W39' y lleva el autor de SU episodio.
@@ -138,7 +138,7 @@ function origen(c, id) {
   if (c.otraSerie && id.includes('/')) { const [ep, n] = id.split('/'), d = path.join(MKT, c.otraSerie, ep, 'fotos'), g = path.join(d, n + '-g.jpg'); return fs.existsSync(g) ? g : path.join(d, n + '.jpg'); } // foto de otra serie (c.otraSerie), con su autor
   if (c.fotosArchivo && id.startsWith('a/')) { const b = path.join(MKT, c.fotosArchivo, id.slice(2)); return fs.existsSync(b + '.jpg') ? b + '.jpg' : b + '.png'; }
   if (c.fotosEpisodios) { const [ep, n] = id.split('/'), d = path.join(MKT, c.fotosEpisodios, ep, 'fotos'), g = path.join(d, n + '-g.jpg'); return fs.existsSync(g) ? g : path.join(d, n + '.jpg'); }
-  if (!c.fotosDe) return path.join(MKT, c.creditosDe, 'fotos', id + '.jpg');
+  if (!c.fotosDe) return path.join(MKT, c.creditosDe, 'fotos', /\.(jpe?g|png)$/i.test(id) ? id : id + '.jpg'); // id con extensión (mlabri: «C1-grupo-mlabri.png»)
   const pre = Object.keys(c.fotosDe).sort((a, b) => b.length - a.length).find((p) => id.startsWith(p));
   const L = Object.fromEntries(fs.readFileSync(path.join(fs.existsSync(path.join(ROOT, c.fotosDe[pre])) ? ROOT : MKT, c.fotosDe[pre]), 'utf8').split('\n').filter(Boolean).map((l) => l.trim().split('|')));
   const rel = L[id.slice(pre.length)];
@@ -157,7 +157,7 @@ v.addEventListener("click",function(e){if(e.target!==im)cerrar();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrar();});window.addEventListener("popstate",function(){cerrar(false);});})();</script>
 `;
 function foto(c, id) {
-  const nom = id.replace('/', '-'), dest = path.join(OUT, 'img', c.slug, nom + '.jpg');
+  const nom = id.replace('/', '-').replace(/\.(jpe?g|png)$/i, ''), dest = path.join(OUT, 'img', c.slug, nom + '.jpg');
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     const r = require('child_process').spawnSync(FF, ['-v', 'error', '-y', '-i', origen(c, id), '-vf', "scale='min(1200,iw)':-2", '-q:v', '4', dest]);
@@ -217,7 +217,7 @@ ${c.creditosExtra.map(([a, l, u]) => `        <li><a href="${esc(u)}" target="_b
   if (!c.creditosDe) return '';
   const dir = path.join(MKT, c.creditosDe), sal = path.join(dir, 'salida');
   const t = !fs.existsSync(sal) ? null : fs.readdirSync(sal).filter((f) => f.endsWith('-tiempos.json')).map((f) => path.join(sal, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
-  if (!t && c.video) throw new Error('No encuentro tiempos.json en ' + sal); // sin vídeo: solo las fotos de la entrada
+  if (!t && c.video && !c.creditosIds) throw new Error('No encuentro tiempos.json en ' + sal); // sin vídeo: solo las fotos de la entrada; sin tiempos.json (kalash), c.creditosIds = fotos del vídeo
   const enBlog = c.fotos ? [c.fotos.portada, ...c.secciones.filter((s) => s.foto).map((s) => s.foto[0]), ...(c.fotos.galeria || []).map((g) => g[0])] : [];
   const enVideo = t && c.video ? JSON.parse(fs.readFileSync(t, 'utf8')).flatMap((b) => b.shots || []) : [];
   const usadas = c.fotosEpisodios
@@ -442,7 +442,7 @@ ${p.lista.map(rail).join('\n')}
 `).join('')}` : '';
 // Paco, 11 nov 2026: un país sin página de destino (India) decía «3 historias» y su tarjeta abría solo una; ahora lleva a su fila con todas.
 // Documentales de una serie o país que se enseñan en «Documentales» y no en el carril de su serie (Paco, 9 nov 2026)
-const DOCS_EXTRA = ['tailandia-muay-thai-ko-samui', 'viajar-a-tailandia-10-dudas', 'filipinas-historia-culturas-antes-de-viajar', 'pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale', 'viajar-a-la-india-donde-se-viene-a-morir'];
+const DOCS_EXTRA = ['tailandia-muay-thai-ko-samui', 'viajar-a-tailandia-10-dudas', 'asi-es-el-norte-de-tailandia-en-moto', 'filipinas-historia-culturas-antes-de-viajar', 'pueblos-borrados-del-mapa-temporada-1', 'historia-de-vietnam-2000-anos-sin-rendirse', 'vietnam-en-moto-45-dias-carne-que-no-vale', 'viajar-a-la-india-donde-se-viene-a-morir'];
 const bloqueSeries = series.map((s) => {
   const lista = caps.filter((c) => c.serie === s && !DOCS_EXTRA.includes(c.slug));
   return `  <section class="bv-serie" id="${slugSerie(s)}">

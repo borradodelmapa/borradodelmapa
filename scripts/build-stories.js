@@ -32,7 +32,7 @@ const CONSENT = `
 const caps = require('./datos-pais.cjs').historias().filter((c) => c.story && (!c.borrador || process.env.BORRADORES === '1'));
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const nom = (id) => id.replace('/', '-');
+const nom = (id) => id.replace('/', '-').replace(/\.(jpe?g|png)$/i, ''); // id con extensión (mlabri)
 const fotoUrl = (c, id) => `/blog/viajes/img/${c.slug}/${nom(id)}.jpg`;
 const fotoFile = (c, id) => path.join(ROOT, 'blog', 'viajes', 'img', c.slug, nom(id) + '.jpg');
 

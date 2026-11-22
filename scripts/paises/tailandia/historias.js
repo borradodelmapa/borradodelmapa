@@ -260,6 +260,7 @@ module.exports = [
     titulo: 'Una noche de muay thai en Tailandia: así es por dentro',
     resumen: 'Así es una velada de muay thai por dentro: del vestuario al ring, con Lina, luchadora profesional alemana, la noche de su pelea en el estadio Phetch Buncha de Koh Samui. Y lo que conviene saber para verlo en directo.',
     video: 'una-noche-de-muay-thai-en-tailandia.mp4',
+    montaje: 'salma marketing/tailandia-largos/T3', // carpeta del montaje: la usa comprobar-nada-atras para saber que este vídeo tiene entrada (T36)
     realidad: 'Fotos y vídeo del viaje de Borrado del Mapa, con permiso de Lina (@lina.srk) y de su equipo. Las fotos antiguas y las del estadio de Bangkok son de archivo (autores al final).',
     fotosDe: { '': 'salma marketing/editor/proyectos/muay-thai/drive.lst' }, fotosBase: 'D:/salma-movil/camara-canon/drive/',
     creditosIntro: 'Fotos de archivo de Wikimedia Commons, con licencia libre. Gracias a sus autores:',
@@ -411,16 +412,16 @@ module.exports = [
   {
     orden: 70,
     slug: 'viajar-a-tailandia-10-dudas',
-    borrador: true,
     formato: '16:9',
     caratula: 'salma marketing/tailandia-largos/caratulas-y18/ENTREGA/T3.1-que-saber-antes-de-ir-caratula.jpg', // Y15; aprobada por Paco el 15 nov 2026
-    fecha: '2026-12-01',
+    fecha: '2026-11-30',
     serie: 'Conoce cada país',
     cap: 'Tailandia',
     pais: 'Tailandia',
     titulo: '10 cosas que debes saber antes de viajar a Tailandia', // guion v6.2 (docs/tailandia-1-guion-v6-2.md): esperar vídeo y capítulos nuevos de Vídeo 2
     resumen: 'Las 10 dudas que todo el mundo tiene antes de ir a Tailandia: visado, cuándo ir, si es seguro, cuánto cuesta, la moto, lo que no debes hacer, vacunas, dinero y si elegir el norte o las islas.',
     video: 'viajar-a-tailandia-10-dudas.mp4',
+    montaje: 'salma marketing/tailandia-largos/T1', // v12 (15 nov 2026), YouTube yCfScNFFLFA el lun 30 nov: poner youtube: 'yCfScNFFLFA' cuando sea público (T36)
     realidad: 'Basado en el viaje de Paco por Tailandia, de enero a abril de 2026: las fotos son suyas. Los datos prácticos llevan su fuente al final. La imagen de portada está retocada.',
     destino: ['tailandia', 'Tailandia'],
     fotosDe: {
@@ -447,39 +448,39 @@ module.exports = [
     secciones: [
       { h: 'Tres meses en Tailandia', min: '0:00', foto: ['cm014', 'Chiang Mai.'], p: [
         'Tres meses en Tailandia, del ring de una isla a las 1.864 curvas del norte. Antes de ir, todo el mundo tiene las mismas dudas: el visado, el dinero, la moto, si es seguro. Aquí van las respuestas, rápidas y con su fuente.' ] },
-      { h: '¿Necesito visado?', min: '0:16', p: [
+      { h: '¿Necesito visado?', min: '0:19', p: [
         'Con **pasaporte español y de turismo, no**. Pero cambió: desde el **15 de septiembre de 2026** son **30 días** sin visado (antes eran 60), con una prórroga de otros 30 en una oficina de Inmigración.',
         'El pasaporte, con **6 meses de validez**. Y un trámite obligatorio: la **tarjeta de llegada digital**, que se rellena por internet en los **tres días antes de entrar**.',
         'Pasarse de fecha cuesta **500 bahts por día** (hasta 20.000) y puede acabar en **deportación**.' ] },
-      { h: '¿Cuándo ir?', min: '0:43', foto: ['cm028', 'Un templo del casco antiguo de Chiang Mai.'], p: [
+      { h: '¿Cuándo ir?', min: '0:48', foto: ['cm028', 'Un templo del casco antiguo de Chiang Mai.'], p: [
         'La mejor época es la seca y fresca: **de noviembre a febrero**. **De mayo a noviembre llueve**: inundaciones en las ciudades y corrientes fuertes en la costa.',
         'Y un aviso que casi nadie mira: **de enero a marzo el aire empeora mucho**, sobre todo en el norte, cuando se quema el campo.' ] },
-      { h: '¿Es seguro?', min: '1:03', p: [
+      { h: '¿Es seguro?', min: '1:13', p: [
         'Para viajar, sí. Exteriores pide no ir a **tres zonas**: la **frontera con Camboya** (con los pasos por tierra cerrados: a Camboya, en avión), las provincias de **Yala, Pattani y Narathiwat**, en el extremo sur, y la **frontera con Birmania**.',
         'El peligro de verdad es **la carretera**: las muertes por accidente de moto son muy comunes. Y dos timos clásicos: las joyerías con «gangas» para revender en España y las bebidas de un desconocido.',
         'Policía turística: **1155**.' ] },
-      { h: '¿Cuánto cuesta?', min: '1:31', foto: ['to13', 'El Templo Blanco de Chiang Rai.'], p: [
+      { h: '¿Cuánto cuesta?', min: '1:38', foto: ['to13', 'El Templo Blanco de Chiang Rai.'], p: [
         'Moverse por Chiang Mai: la **camioneta roja compartida**, unos **30 bahts** por persona dentro de la ciudad; el precio se acuerda antes de subir. Con la aplicación **Grab** ves el precio antes de pedir el coche.',
         'Lo que sube la cuenta son las **entradas para extranjeros**: **Doi Inthanon**, el techo del país, **300 bahts**; el **Templo Blanco** de Chiang Rai dobló la suya en enero de 2026: **200 bahts**.' ], enlaces: [['Doi Inthanon', '/blog/viajes/tailandia-doi-inthanon'], ['El Triángulo de Oro y el Templo Blanco', '/blog/viajes/tailandia-triangulo-de-oro']] },
-      { h: '¿Cómo me muevo?', min: '1:57', p: [
+      { h: '¿Cómo me muevo?', min: '1:59', p: [
         'En ciudad, **camioneta compartida o Grab**. El **tuk-tuk**, negociando el precio antes de subir. El centro viejo de Chiang Mai es un cuadrado con foso: se cruza andando en **veinticinco minutos**.',
         'En barcos y ferris, mira que haya **chalecos**: muchos van sobrecargados.' ], enlaces: [['Chiang Mai', '/blog/viajes/tailandia-chiang-mai']] },
-      { h: '¿Puedo alquilar una moto?', min: '2:16', foto: ['pa55', 'La carretera a Pai.'], p: [
+      { h: '¿Puedo alquilar una moto?', min: '2:22', foto: ['pa55', 'La carretera a Pai.'], p: [
         'Te la alquilan sin pedirte el carné. Y ese es el problema: para conducir hace falta el **permiso internacional**, y con el **carné de coche europeo no se puede llevar moto**. Sin él, si te caes, **el seguro no te cubre**.',
         'Es muy común **dejar el pasaporte como fianza**, pero no es recomendable: si hay un problema, se queda con él quien te alquila. Revisa la moto antes de salir: al devolverla, pueden pedirte dinero por daños que ya estaban.',
         'Paco hizo el norte en moto: **762 curvas** hasta Pai y **1.864** en el bucle de Mae Hong Son. Se conduce **por la izquierda**, y con casco siempre.' ], enlaces: [['762 curvas hasta Pai', '/blog/viajes/tailandia-carretera-a-pai']] },
-      { h: '¿Qué no debo hacer?', min: '2:58', foto: ['di58', 'Un elefante en un santuario de Chiang Mai.'], p: [
+      { h: '¿Qué no debo hacer?', min: '3:04', foto: ['di58', 'Un elefante en un santuario de Chiang Mai.'], p: [
         '**Vapear**: los cigarrillos electrónicos están **prohibidos**; si te paran, te lo quitan y te multan, y según Exteriores la multa puede llegar a los **1.000 €**. Con las **drogas, cárcel**, también por consumir.',
         'La **marihuana** es otra historia: verás tiendas por todas partes. Desde junio de 2025 hace falta **receta médica**, y en la tienda te la hacen allí mismo. Lo que no se puede es **fumar en la calle**.',
         'En el norte te ofrecerán ver a las «mujeres jirafa». Se llaman **kayán**, y ese nombre se considera despectivo. Huyeron de la guerra de Birmania y muchos siguen **sin ciudadanía**. Si vas, pregunta adónde va el dinero de la entrada y pide permiso antes de hacer una foto.',
         'Si quieres ver **elefantes**, en Chiang Mai hay **santuarios donde no se montan ni hacen espectáculos**. El más conocido es **Elephant Nature Park**, a unos 60 km al norte de la ciudad: se reserva antes por internet.' ], enlaces: [['Los kayán de Ban Rak Thai', '/blog/viajes/tailandia-ban-rak-thai']] },
-      { h: 'Vacunas, agua y seguro', min: '3:56', p: [
+      { h: 'Vacunas, agua y seguro', min: '4:00', p: [
         'Viajando desde España, **ninguna vacuna es obligatoria**. Exteriores recomienda **hepatitis A y B, tétanos, rabia y encefalitis japonesa**: pregunta con tiempo en un centro de vacunación internacional.',
         'El agua, **embotellada**. En época de lluvias hay **dengue**: con fiebre, al médico, y sin aspirina. Y **seguro de viaje**: la Seguridad Social no te cubre allí.' ] },
-      { h: 'Dinero y cajeros', min: '4:21', p: [
+      { h: 'Dinero y cajeros', min: '4:24', p: [
         'La moneda es el **baht**. Hay cajeros por todas partes y funcionan con tarjeta española. Pero van **al revés** que en España: **primero te dan el dinero y después sale la tarjeta**. Espérala: si te olvidas, el cajero se la traga.',
         'Cuidado con pagar con tarjeta en discotecas y clubes de Bangkok y Chiang Mai: hay **fraudes y extorsiones**.' ] },
-      { h: '¿Norte o islas?', min: '4:44', foto: ['bc05', 'El lago de Ban Rak Thai.'], p: [
+      { h: '¿Norte o islas?', min: '4:46', foto: ['bc05', 'El lago de Ban Rak Thai.'], p: [
         'El **norte** es templos, montaña y carretera: Chiang Mai, la «ciudad nueva» de 1296; el Templo Blanco de Chiang Rai, en obras desde 1997; y el Triángulo de Oro, donde se tocan tres países.',
         'La **isla** es otra cosa. En Koh Samui, una luchadora alemana se para en cada esquina del ring antes de su pelea: el **Wai Khru**, el saludo al maestro. Las dos historias tienen su vídeo: el norte en moto, el 8 de diciembre, y el muay thai, el 10.' ], enlaces: [['Muay thai en Koh Samui', '/blog/viajes/tailandia-muay-thai-ko-samui'], ['Tailandia: qué ver', '/destinos/tailandia.html']] },
     ],
@@ -489,5 +490,159 @@ module.exports = [
       W('Khaosod English: el Templo Blanco dobla su entrada (2026)', 'https://www.khaosodenglish.com/tourism/2025/11/10/chiang-rais-white-temple-doubles-admission-fee-for-foreign-tourists/'),
     ],
     cierre: 'Sigue con la serie del viaje: Chiang Mai, el Triángulo de Oro, la carretera a Pai, Ban Rak Thai, Doi Inthanon y el muay thai de Koh Samui.',
+  },
+  // Short 9:16 · T33 · montaje: salma marketing/pueblos/mlabri (ULTIMA) · expediente: docs/mlabri-expediente.md · textos: pueblos/mlabri/textos-youtube.txt
+  // YouTube y TikTok mar 24 nov 2026 (T36: cada vídeo con su entrada). Los shorts llevan su vídeo propio en la entrada.
+  {
+    orden: 165,
+    slug: 'mlabri-los-espiritus-de-las-hojas-amarillas',
+    fecha: '2026-11-24',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Tailandia',
+    pais: 'Tailandia',
+    titulo: 'Mlabri, los espíritus de las hojas amarillas',
+    resumen: 'En el norte de Tailandia a los mlabri los llaman «Phi Tong Luang», los espíritus de las hojas amarillas: cuando las hojas de sus refugios amarilleaban, se iban. Su ADN y una leyenda de sus vecinos cuentan la misma historia.',
+    video: 'pueblos-mlabri.mp4',
+    realidad: 'Capítulo documental narrado por Salma con fotos de Wikimedia Commons y vídeo con licencia libre (autores al final). No hemos estado en sus aldeas: cada dato sale de las fuentes que citamos.',
+    creditosDe: 'salma marketing/pueblos/mlabri',
+    creditosIntro: 'Fotos de Wikimedia Commons y vídeo con licencia libre. Gracias a sus autores:',
+    creditosExtra: [
+      ['Vídeo: BN SAOLAO, visitas a los mlabri en Laos y a la aldea de Huai Lu, Nan (2023-2024)', 'CC BY', 'https://www.youtube.com/@BNSAOLAO'],
+    ],
+    fotos: { portada: 'C1-grupo-mlabri.png', galeria: [
+      ['C2-refugio-museo-1.jpg', 'Un refugio mlabri de hojas, reconstruido en un museo de pueblos del norte de Tailandia.'],
+      ['C3-refugio-museo-2.jpg', 'Otro refugio de hojas en el mismo museo.'],
+      ['C5-doi-phu-kha-montes.jpg', 'Las montañas de Doi Phu Kha, en la provincia de Nan.'],
+      ['C7-rio-nan.jpg', 'El río Nan.'],
+      ['C9-chaloem-phra-kiat-nan.jpg', 'El distrito de Chaloem Phra Kiat, en Nan.'],
+      ['C6-doi-phu-kha-cima.jpg', 'La cima de Doi Phu Kha.'],
+    ] },
+    cifras: [['58 de 58', 'Muestras de ADN materno idénticas'], ['356', 'Mlabri en Tailandia (recuento de 2010)'], ['500-800', 'Años desde su origen, según el estudio']],
+    story: {
+      portada: 'C2-refugio-museo-1.jpg',
+      slides: [
+        { foto: 'C2-refugio-museo-1.jpg', h: 'Los espíritus de las hojas amarillas', t: 'Así llaman a los mlabri en el norte de Tailandia: cuando las hojas de sus refugios amarilleaban, se iban.', credito: ['FredTC', 'CC BY-SA 4.0'] },
+        { foto: 'C1-grupo-mlabri.png', h: '58 de 58', t: 'En 2005, el genetista Hiroki Oota analizó el ADN materno de 58 mlabri. Las 58 secuencias eran idénticas.', credito: ['Takafumi Ishida', 'CC BY 2.5'] },
+        { foto: 'C4-grafico-fundadoras.png', h: '¿Una sola mujer?', t: 'Según el estudio, el pueblo se fundó hace unos 500-800 años con no más de dos mujeres, quizá solo una.', credito: ['Oota y otros, PLoS Biology', 'CC BY 2.5'] },
+        { foto: 'C8-rio-nan-2.jpg', h: 'La leyenda', t: 'Sus vecinos, los tin, cuentan que una aldea echó río abajo a dos niños en una balsa. De ellos vendrían los mlabri.', credito: ['Ellnik', 'CC BY-SA 3.0'] },
+        { foto: 'C5-doi-phu-kha-montes.jpg', h: 'De vuelta a la selva', t: 'Según el mismo estudio, sus antepasados probablemente eran agricultores y volvieron a vivir de la caza y la recolección.', credito: ['Takeaway', 'CC BY-SA 3.0'] },
+        { foto: 'C9-chaloem-phra-kiat-nan.jpg', h: 'Hoy', t: 'En 2010 eran 356 en Tailandia, en aldeas de Nan y Phrae. Muchos trabajan de jornaleros para sus vecinos hmong.', credito: ['Takeaway', 'CC BY-SA 3.0'], salida: 'Leer la historia completa' },
+      ],
+    },
+    secciones: [
+      { h: 'Los espíritus de las hojas amarillas', foto: ['C2-refugio-museo-1.jpg', 'Un refugio mlabri de hojas, reconstruido en un museo de pueblos del norte de Tailandia.'], p: [
+        'En el norte de Tailandia, a los **mlabri** los llaman ***Phi Tong Luang***, «los espíritus de las hojas amarillas». Vivían en el bosque, en refugios de hojas, y cuando las hojas amarilleaban se iban a otro sitio: solo se encontraba el refugio vacío.',
+      ] },
+      { h: 'Lo que dice su ADN', foto: ['C4-grafico-fundadoras.png', 'Gráfico del estudio de 2005: cuántas fundadoras explican que no haya diversidad en el ADN materno.'], p: [
+        'En **2005**, el equipo del genetista **Hiroki Oota** analizó el ADN mitocondrial, el que se hereda de la madre, de **58 mlabri**. Las 58 secuencias eran **idénticas**.',
+        'Según el estudio (*PLoS Biology*), el pueblo se fundó hace unos **500-800 años** con «no más de dos mujeres… quizá solo una». Por eso en el vídeo es un «quizá»: el antropólogo Tony Waters discutió en la misma revista cómo se interpretaban esos datos.',
+      ] },
+      { h: 'La leyenda de los tin', foto: ['C8-rio-nan-2.jpg', 'El río Nan.'], p: [
+        'Sus vecinos, los **tin**, ya lo contaban: hace siglos, una de sus aldeas echó río abajo a dos niños en una balsa. Sobrevivieron en la selva y de ellos vendrían los mlabri. El estudio de 2005 dice que la leyenda se parece de forma llamativa a lo que muestran los genes.',
+        'Y añade algo más: sus antepasados probablemente eran **agricultores** y pasaron a vivir de la caza y la recolección. Los genetistas lo llaman «reversión cultural».',
+      ] },
+      { h: 'Los mlabri hoy', foto: ['C1-grupo-mlabri.png', 'Un grupo de mlabri.'], p: [
+        'En el recuento de **2010** eran **356** en Tailandia: 238 en la provincia de Nan y 118 en la de Phrae. No hay un censo posterior. Muchos trabajan de jornaleros para sus vecinos hmong (Sakkarin Na Nan, *Senri Ethnological Studies*, 2016).',
+        'Las aldeas mlabri están en Nan y Phrae. A una aldea se entra con permiso de la comunidad, y antes de fotografiar a nadie se pide permiso.',
+      ], enlaces: [['Tailandia', '/destinos/tailandia.html']] },
+    ],
+    cierre: 'Datos de noviembre de 2026: confírmalos antes de ir.',
+    nota: 'Datos revisados en noviembre de 2026. Que todos desciendan de una sola mujer es una posibilidad que plantea el estudio de 2005, no un hecho cerrado. La cifra de 356 es de 2010: no hay un recuento posterior.',
+    fuentes: [
+      W('Oota y otros: «Recent Origin and Cultural Reversion of a Hunter–Gatherer Group», PLoS Biology (2005)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC1044832'),
+      W('Waters: comentario en PLoS Biology (2005)', 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1187857/'),
+      W('Wikipedia: mlabri', 'https://en.wikipedia.org/wiki/Mlabri_people'),
+      W('Asian Geographic: «Spirits of the Yellow Leaves»', 'https://asiangeo.com/culture_and_people/spirits-of-the-yellow-leaves'),
+      W('Chiang Mai City Life: los mlabri', 'https://www.chiangmaicitylife.com/clg/our-city/mlabri-the-resilient-nnes/'),
+    ],
+  },
+  // Largo 16:9 «Tailandia 2» (T3.2) · montaje: salma marketing/tailandia-largos/T2 (v3, ULTIMA) · textos: tailandia-largos/T3.2-textos-finales.md · guion: docs/tailandia-2-norte-en-moto-guion.md
+  // YouTube tToGJVR1VFE, lun 7 dic 2026 a las 10:00: poner youtube: 'tToGJVR1VFE' SOLO cuando sea público (T36). Fotos de Paco (fotosDe), sin autor.
+  {
+    orden: 75,
+    slug: 'asi-es-el-norte-de-tailandia-en-moto',
+    formato: '16:9',
+    caratula: 'salma marketing/tailandia-largos/caratulas-y18/ENTREGA/T3.2-norte-en-moto-caratula.jpg', // Y15
+    fecha: '2026-12-07',
+    serie: 'Conoce cada país',
+    cap: 'Tailandia',
+    pais: 'Tailandia',
+    titulo: 'Así es el norte de Tailandia en moto: Chiang Mai y Pai',
+    resumen: 'El bucle de Mae Hong Son en moto: unos 600 kilómetros de montaña y 1.864 curvas pegados a la frontera con Birmania, de Chiang Mai a Chiang Mai. Lo recorrimos entero en seis días, y aquí va todo lo que necesitas saber antes de arrancar.',
+    video: 'tailandia-norte-en-moto.mp4',
+    montaje: 'salma marketing/tailandia-largos/T2',
+    fotosDe: {
+      cm: 'salma marketing/editor/listas/origen/chiang-mai-todo.lst',
+      pa: 'salma marketing/editor/listas/origen/pai.lst',
+      bc: 'salma marketing/editor/listas/origen/ban-rak-thai.lst',
+      ky: 'salma marketing/editor/listas/origen/kayan-canon-feb7.lst',
+      di: 'salma marketing/editor/listas/origen/doi-inthanon-a.lst',
+    },
+    fotos: { portada: 'pa55', galeria: [
+      ['pa06', 'Más curvas, entre pinos, camino de Pai.'],
+      ['pa61', 'El valle de Pai desde un mirador.'],
+      ['pa68', 'Farolillos al caer la noche en Pai.'],
+      ['bc05', 'El lago de Ban Rak Thai, junto a la frontera con Birmania.'],
+      ['di03', 'Valles del bucle de Mae Hong Son.'],
+      ['di17', 'Atardecer sobre el río.'],
+    ] },
+    cifras: [['1.864', 'Curvas del bucle'], ['600 km', 'De montaña'], ['6 días', 'Para hacerlo entero']],
+    story: {
+      portada: 'pa55',
+      slides: [
+        { foto: 'pa55', h: '1.864 curvas', t: 'El bucle de Mae Hong Son: seis días en moto por el norte de Tailandia, pegados a la frontera con Birmania.' },
+        { foto: 'cm014', h: '¿Cuántos días?', t: 'Cuatro, como mínimo. Con cinco o seis te da tiempo a desviarte.' },
+        { foto: 'pa06', h: 'Los papeles', t: 'Hace falta el permiso internacional: el carné de coche europeo no vale para moto. Sin él, el seguro puede no cubrirte.' },
+        { foto: 'pa61', h: '762 curvas hasta Pai', t: 'Un pueblo en un valle, con herencia shan y tailandesa, y una calle que de noche se llena de puestos.' },
+        { foto: 'bc05', h: 'Un pueblo chino', t: 'Ban Rak Thai lo levantaron soldados chinos nacionalistas que salieron de China en 1949.' },
+        { foto: 'di03', h: 'El techo de Tailandia', t: 'Doi Inthanon, 2.565 metros. La entrada cuesta 300 bahts por extranjero.' },
+        { foto: 'di17', h: 'Cuándo ir', t: 'Noviembre y diciembre. De mayo a noviembre llueve, y de enero a marzo el aire empeora por la quema del campo.', salida: 'Ver el vídeo' },
+      ],
+    },
+    secciones: [
+      { h: '1.864 curvas en moto', min: '0:00', foto: ['pa55', 'La carretera a Pai.'], p: [
+        'Mil ochocientas sesenta y cuatro curvas, seis días, una moto y un pueblo chino en mitad de Tailandia. Es el **bucle de Mae Hong Son**, una de las rutas en moto más famosas del país. Lo hicimos entero.',
+      ] },
+      { h: '¿Qué es el bucle de Mae Hong Son?', min: '0:18', foto: ['cm014', 'Chiang Mai.'], p: [
+        'Unos **600 kilómetros** de montaña, pegados a la frontera con Birmania. Es un circuito: sale de **Chiang Mai** y vuelve a Chiang Mai por dos carreteras, la **1095** y la **108**, pasando por Pai, Mae Hong Son y Mae Sariang. Y empieza en una ciudad con foso: Chiang Mai, fundada en 1296.',
+      ], enlaces: [['Chiang Mai', '/blog/viajes/tailandia-chiang-mai']] },
+      { h: '¿Cuántos días hacen falta?', min: '0:42', p: [
+        '**Cuatro, como mínimo.** Con cinco o seis te da tiempo a desviarte. Nosotros tardamos seis: Pai, el lago de Ban Rak Thai, Mae Sariang y la subida al techo del país.',
+      ] },
+      { h: '¿Qué carné hace falta?', min: '1:00', foto: ['pa56', 'Casco puesto, y a seguir.'], p: [
+        'Para conducir hace falta el **permiso internacional**, porque el carné de coche europeo **no vale para moto**. Sin él, si tienes un percance, el seguro puede no cubrirte.',
+        'Alquila en una tienda seria de Chiang Mai: hay muchas. Mejor no dejar el pasaporte de fianza, y haz fotos a la moto antes de salir.',
+      ] },
+      { h: '¿Cómo son las curvas?', min: '1:31', foto: ['pa06', 'Curvas entre pinos, camino de Pai.'], p: [
+        '**762 curvas** en poco más de cien kilómetros, y eso solo hasta Pai. Se disfruta sin prisa: en Tailandia, donde más cuidado hay que tener es en la carretera. Por la izquierda, con casco y calzado cerrado, y atención a la grava y la arena en las curvas, sobre todo si llueve.',
+      ], enlaces: [['La carretera a Pai', '/blog/viajes/tailandia-carretera-a-pai']] },
+      { h: '¿Qué hay en Pai?', min: '1:57', foto: ['pa68', 'Farolillos al caer la noche en Pai.'], p: [
+        '**Pai** es un pueblo pequeño en un valle, con herencia shan y tailandesa. De noche, su calle peatonal se llena de puestos de comida, artesanía y música. De día, el cañón: un precipicio con vistas.',
+        'Y la carretera que te lleva hasta allí la abrió como pista de tierra el ejército japonés en la Segunda Guerra Mundial, camino de Birmania.',
+      ] },
+      { h: 'Ban Rak Thai, un pueblo chino', min: '2:26', foto: ['bc05', 'El lago de Ban Rak Thai.'], p: [
+        'Farolillos rojos, tejados chinos y plantaciones de té junto a un lago entre montañas, al norte de Mae Hong Son. **Ban Rak Thai** lo levantaron soldados chinos nacionalistas que salieron de China tras perder la guerra civil, en **1949**, y vivieron años a caballo de la frontera con Birmania. El pueblo no tuvo nombre tailandés hasta los años ochenta.',
+        'A las siete de la mañana, el lago es niebla, barcas y monjes pidiendo limosna.',
+      ], enlaces: [['Ban Rak Thai y los kayán', '/blog/viajes/tailandia-ban-rak-thai']] },
+      { h: '¿Y los kayán?', min: '3:04', p: [
+        'A veces los anuncian como «mujeres jirafa», un nombre que se considera despectivo. Se llaman **kayán** y huyeron de la guerra en el este de Birmania; muchos siguen sin ciudadanía en ningún país.',
+        'Se puede ir por libre: a nosotros no nos cobraron nada. Si vas con agencia, pregunta cuánto llega a la aldea, y pide permiso antes de cada foto. Y antes de ir, mira la ficha de Exteriores: pide no acercarse a la frontera con Birmania.',
+      ] },
+      { h: 'Khun Yuam y Doi Inthanon', min: '3:50', foto: ['di03', 'Valles del bucle de Mae Hong Son.'], p: [
+        'Bajando hacia el sur, en **Khun Yuam**, un museo pequeño recuerda a los soldados japoneses que pasaron por allí hacia Birmania en la Segunda Guerra Mundial, y a los que volvieron en retirada.',
+        'Y al final, el techo de Tailandia: **Doi Inthanon**, 2.565 metros. Lleva el nombre de Inthawichayanon, uno de los últimos reyes de Chiang Mai, y sus cenizas están en la cumbre. La entrada cuesta **300 bahts** por extranjero adulto. Por el camino hay santuarios de elefantes: los buenos, sin montar y sin espectáculos.',
+      ], enlaces: [['Doi Inthanon', '/blog/viajes/tailandia-doi-inthanon']] },
+      { h: '¿Cuándo ir?', min: '4:27', foto: ['di17', 'Atardecer sobre el río.'], p: [
+        'De mayo a noviembre llueve, y en moto se nota. De noviembre a febrero es seco y fresco, pero de enero a marzo el aire del norte empeora mucho por la quema del campo. Lo mejor: **noviembre y diciembre**.',
+        'Último consejo: llena el depósito en Mae Hong Son. En algunos tramos hay pocas gasolineras.',
+      ], enlaces: [['Tailandia', '/destinos/tailandia.html']] },
+    ],
+    cierre: 'Datos de noviembre de 2026: confírmalos siempre en fuentes oficiales antes de ir.',
+    nota: 'Datos revisados en noviembre de 2026. Ruta, días, curvas y consejos salen de nuestro viaje; los papeles, la época y los precios, de las fuentes que citamos.',
+    fuentes: [
+      W('Ministerio de Asuntos Exteriores de España: recomendaciones de viaje a Tailandia', 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=Tailandia'),
+      W('Wikivoyage: el bucle de Mae Hong Son', 'https://en.wikivoyage.org/wiki/Mae_Hong_Son_Loop'),
+      W('Wikivoyage: Ban Rak Thai', 'https://en.wikivoyage.org/wiki/Ban_Rak_Thai'),
+    ],
   },
 ];
