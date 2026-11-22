@@ -112,6 +112,8 @@ function prepararIntro(b, W, F = FORMATOS['9:16']) {
   }
 }
 async function build(cfg) {
+  // S7 ampliada, S11 (corte en L) y S12 (subida antes del datoFuerte): ENCENDIDAS POR DEFECTO desde el 22 nov 2026 (T34, Paco de oído: «Con las tres»). false en la config las quita.
+  if (cfg.s7Lugar === undefined) cfg.s7Lugar = 1.0; if (cfg.corteL === undefined) cfg.corteL = true; if (cfg.subidaDato === undefined) cfg.subidaDato = true;
   setSerie(cfg.fotosSerie); const F = formato(cfg);
   // CALIDAD: «borrador» (por defecto: editor y pruebas, rápido) o «publicar» (máxima calidad para subir a redes: planos casi sin pérdida y montaje final lento). CALIDAD=publicar node <capítulo>.cjs
   const PUB = (process.env.CALIDAD || cfg.calidad) === 'publicar', Q = PUB ? { plano: ['-preset', 'slow', '-crf', '12'], final: ['-preset', 'slow', '-crf', '16'], audio: '256k' } : { plano: ['-preset', 'veryfast', '-crf', '19'], final: ['-preset', 'veryfast', '-crf', '20'], audio: '192k' };
@@ -459,8 +461,8 @@ async function build(cfg) {
   run(['-i', mixIn, '-af', silF + 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
   // T34 (prueba): los segundos exactos de S7 larga y de la subida van al informe y al acta (se calculan en la mezcla, después de reglas())
   if (cfg.s7Lugar || cfg.subidaDato) { const lin = [
-    ...(cfg.s7Lugar ? (cfg._s7.length ? cfg._s7.map(x => 'ℹ [T34 S7 larga] ' + x.blk + ': el ambiente del lugar nuevo entra en ' + x.entra.toFixed(2) + ' s, corte en ' + x.corte.toFixed(2) + ' s') : ['⚠ [T34 S7 larga] ningún cambio de lugar entre bloques']) : []),
-    ...(cfg.subidaDato ? (cfg._subidas.length ? cfg._subidas.map(x => 'ℹ [T34 subida] de ' + x.empieza.toFixed(2) + ' a ' + x.acaba.toFixed(2) + ' s, justo antes del silencio de S9') : ['⚠ [T34 subida] ningún datoFuerte: no hay subida']) : [])].join('\n');
+    ...(cfg.s7Lugar ? (cfg._s7.length ? cfg._s7.map(x => 'ℹ [S7] larga: ' + x.blk + ': el ambiente del lugar nuevo entra en ' + x.entra.toFixed(2) + ' s, corte en ' + x.corte.toFixed(2) + ' s') : ['⚠ [S7] larga: ningún cambio de lugar entre bloques']) : []),
+    ...(cfg.subidaDato ? (cfg._subidas.length ? cfg._subidas.map(x => 'ℹ [S12] subida: de ' + x.empieza.toFixed(2) + ' a ' + x.acaba.toFixed(2) + ' s, justo antes del silencio de S9') : ['⚠ [S12] subida: ningún datoFuerte: no hay subida']) : [])].join('\n');
     console.log(lin); for (const f of [`${OUT}/${cfg.id}-informe-reglas.txt`, `${OUT}/${cfg.id}-acta.txt`]) if (fs.existsSync(f)) fs.appendFileSync(f, '\n' + lin + '\n'); }
   // SOLO_AUDIO=<carpeta>: guarda la mezcla y sus pistas y para, sin exportar vídeo, para oír niveles antes de un render largo (Paco, 6 nov 2026). Sin esa variable, nada cambia.
   if (process.env.SOLO_AUDIO) { const SA = process.env.SOLO_AUDIO; fs.mkdirSync(SA, { recursive: true }); for (const n of ['voz', 'amb', 'musica', 'final']) if (fs.existsSync(`${W}/${n}.wav`)) fs.copyFileSync(`${W}/${n}.wav`, `${SA}/${n}.wav`); fs.writeFileSync(`${SA}/tiempos.json`, JSON.stringify(cfg.blocks.filter(b => b.id).map(b => ({ id: b.id, t0: b.t0, D: b.D })))); console.log('SOLO_AUDIO: mezcla guardada en ' + SA); process.exit(0); }
