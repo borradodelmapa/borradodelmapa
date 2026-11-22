@@ -180,7 +180,7 @@ Con esto, el chat de Vídeo lee unas **56 líneas antes del guion, 14 antes de b
 | Y9 | Blog: palabra clave y datos estructurados | 📋 ④ (🌍 Web) |
 | Y10 | Paquete en inglés | ⚙️ Ya (srt EN) + 📋 ④ (título y descripción EN) |
 | Y11, Y12, Y13 | Título y carátula antes que el vídeo; estudio de los 10 primeros; 3 propuestas de título | 📋 ① |
-| Y14, Y16, Y18, Y19, Y20, Y23 | Carátula con persona y acción; montaje con IA permitido y prohibido; carátula que destaca; lo que se pierde; el título promete lo que el gancho cumple; la carátula cuenta la historia | 📋 ① |
+| Y14, Y18, Y19, Y20, Y23 | Carátula con persona y acción; carátula que destaca; lo que se pierde; el título promete lo que el gancho cumple; la carátula cuenta la historia | 📋 ① |
 | Y15 | Carátula con la marca de la web | ⚙️ Ya (plantilla de carátula) |
 | Y17 | 3 carátulas y prueba A/B | 📋 ④ |
 | Y21 | El mismo lugar, siempre con las mismas palabras | 📋 ④ |

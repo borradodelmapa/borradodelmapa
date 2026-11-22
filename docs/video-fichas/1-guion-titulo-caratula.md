@@ -13,7 +13,7 @@ Versión: 19 nov 2026 (sacada de la checklist del 19 nov · 23:00). Si la checkl
 - **Y4 · Y14** Carátula: persona del lugar, muy cerca, con expresión o haciendo algo, al menos media imagen; foto real, color intenso, contraste alto.
 - **Y18** Una sola protagonista mirando a cámara · fondo oscurecido y desenfocado · más color en la persona · texto en el lado libre, nunca sobre la cara, palabra fuerte en naranja #F4630B y Barlow Condensed 900, el resto en caja de frase · bandera y país encima · sello real de BORRADO DEL MAPA arriba a la derecha · comprobada a 160 px junto a la versión sin tratar.
 - **Y23** En los largos la carátula cuenta la historia sola: el hecho (con el lugar y la palabra fuerte) + la pregunta que responde el vídeo, hasta 8-9 palabras. Imagen partida solo si cada mitad se entiende a 160 px. Prueba: a 160 px, una línea con lo que entendería alguien que no sabe nada; si no es la historia, se rehace.
-- **Y16** Montaje con IA en la carátula: sí para componer (recortar, cambiar el fondo del mismo lugar, luz); no para inventar personas, cambiar rasgos o ropa, poner niños ni escenas que no pasaron. Si queda realista, «contenido alterado» en Studio.
+- **Y16** ANULADA (Paco, 22 nov 2026). Siguen L1, P4, P1 y F4 para lo que lleve IA la carátula.
 - **F4 en la carátula** Lo que dice la carátula es verdad y tiene fuente en el expediente (no en el guion).
 
 ## B · Qué contamos
