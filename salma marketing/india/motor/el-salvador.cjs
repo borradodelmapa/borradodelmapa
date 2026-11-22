@@ -10,7 +10,7 @@ const ROOT = 'C:/Users/User/Desktop/salma', ES = ROOT + '/salma marketing/el-sal
 const FFM = ROOT + '/salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe';
 const textos = fs.readFileSync(ROOT + '/docs/el-salvador-guion-direccion.md', 'utf8').split(/\r?\n/)
   .filter(l => /^\*\*S[^*]*\*\* /.test(l)).map(l => l.replace(/^\*\*S[^*]*\*\* /, '').replace(/\*/g, '').trim());
-if (textos.length !== 49) throw new Error('el guion tiene ' + textos.length + ' frases de Salma; esta configuración espera 49');
+if (textos.length !== 53) throw new Error('el guion tiene ' + textos.length + ' frases de Salma; esta configuración espera 53 (v5: 49 + 4 frases-puente)');
 // Pronunciación (N8): mismo número de palabras que el texto; el subtítulo sigue bien escrito
 const PR = [['Gould', 'Gúld'], ['Lauria-Santiago', 'Láuria-Santiago'], ['nantzin', 'nántsin'], ['yek peyna', 'yek péina']];
 const voz = t => PR.reduce((s, [a, b]) => s.split(a).join(b), t);
@@ -29,28 +29,40 @@ let panN = 0;
 const Y = { AMA: 0, AMA2: 0.28, BUKELE4: 0.17, CORETO: 0.16, FUNES: 0.23, GRABA31: 0.5, GRABA53: 0.6, MARTI: 0.2, MARTINEZ: 0.28, SIXTA1: 0, anastacia: 0.05, 'bukele-1': 0.16, 'bukele-2': 0.23, 'bukele-3': 0.26, e: 0, elva: 0.05, f: 0.19, guadalupe: 0, l: 0.58, tacuba: 0.05,
   'QUIETO-hombre-sombrero': 0.2, 'QUIETO-abuela-2': 0.2, 'QUIETO-abuela-3': 0.2, 'QUIETO-abuela-sentada': 0.3 };
 // M12 (Paco, 19 nov 2026: «movimiento suave»): las más estrechas que 16:9 se desplazan un poco (≈8 %) y TERMINAN en el encuadre de la cara; las horizontales, acercamiento lento (cfg.kb)
-const F = (n, sc = 'GP', o = {}) => { const f = ruta(n), estrecha = aspecto(f) < 1.69; const y = o.y ?? Y[n] ?? 0.45, y0 = Math.min(1, y + 0.08);
-  const { y: _, v: __, ...resto } = o; return { a: 'FILE:' + uso(f), sc, n, ...(estrecha && !o.pan ? { pan: [0.5, y0, 0.5, y], z: 0 } : {}), ...resto }; };
+// v5 (Paco, 21 nov 2026: «las fotos fijas parece que saltan»): el recorrido corto de las verticales avanzaba a saltos de 1 px sobre fotos pequeñas
+// (medido: un fotograma se mueve, el siguiente no). Se amplían a 3840 px de ancho antes del recorrido, así cada fotograma avanza y el movimiento es continuo.
+const hd = f => { const r = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r.stderr || '').match(/, (\d{2,5})x(\d{2,5})/); if (!m || +m[1] >= 3840) return f;
+  const out = `${ES}/fotos/hd/${f.split('/').pop().replace(/\.\w+$/, '')}.jpg`; fs.mkdirSync(ES + '/fotos/hd', { recursive: true }); if (!fs.existsSync(out)) spawnSync(FFM, ['-v', 'error', '-y', '-i', f, '-vf', 'scale=3840:-2:flags=lanczos', '-q:v', '2', out]); return out; };
+const F = (n, sc = 'GP', o = {}) => { const f0 = ruta(n), estrecha = aspecto(f0) < 1.69, f = estrecha ? hd(f0) : f0; const y = o.y ?? Y[n] ?? 0.45, y0 = Math.min(1, y + 0.08);
+  const { y: _, v: __, ...resto } = o;
+  // v5 (21 nov): el recorrido (pan) del motor se generaba a 25 imágenes/s y se pasaba a 30, repitiendo 1 fotograma de cada 6 (las fotos «saltaban»).
+  // Las verticales van ahora como encuadre fijo 16:9 en la cara (mismo y de siempre) y llevan el acercamiento lento de las horizontales (zoompan, 30 imágenes/s, medido sin repeticiones).
+  if (estrecha && !o.pan) { const [Wh, Hh] = dims(f), wh = Math.round(Wh * 9 / 16 / 2) * 2, top = Math.round(y * (Hh - wh)); const o169 = `${ES}/fotos/hd/${n}-169.jpg`; fs.mkdirSync(ES + '/fotos/hd', { recursive: true });
+    spawnSync(FFM, ['-v', 'error', '-y', '-i', f, '-vf', `crop=${Wh}:${wh}:0:${top}`, '-q:v', '2', o169]); return { a: 'FILE:' + uso(o169), sc, n, src: f, ...resto }; }
+  return { a: 'FILE:' + uso(f), sc, n, ...(o.pan ? {} : {}), ...resto }; };
 // N14(9) (v3, 19 nov 2026, acta F12 y encargo de Estrategia: «se parten con detalle, recorte o movimiento suave»): ninguna foto más de 3,5 s.
 // No hay fotos libres de estas personas y lugares, así que la foto larga se parte en ella misma + 1-2 DETALLES (recortes 16:9 de la misma foto: la cara, otra zona), guardados en fotos/det/.
 // Salvo UN plano de asombro (M24), marcado aquí. DET = encuadre del detalle mirado foto a foto: nombre → [[cx, cy, ancho], …] en fracciones de la foto.
 const ASOMBRO = new Set(); const PARTES = { 'bukele-1': 3 }; // partes mínimas cuando el reparto real alarga la foto (f46: 3,7 s con 2 partes) // M24: sin plano aéreo ni panorámica que aguante; RUTA también se parte (el motor marca ❌ toda foto > 3,5 s)
-const DET = { AMA2: [[0.5, 0.25, 0.6]], BUKELE4: [[0.5, 0.36, 0.6]], 'QUIETO-abuela-3': [[0.6, 0.45, 0.6], [0.6, 0.55, 0.45]], 'QUIETO-abuela-sentada': [[0.68, 0.3, 0.45], [0.67, 0.75, 0.45]], SIXTA1: [[0.5, 0.2, 0.6], [0.5, 0.33, 0.72]], f: [null, [0.5, 0.3, 0.42], [0.5, 0.36, 0.62]], guadalupe: [null, [0.5, 0.3, 0.45]], ELSA: [[0.45, 0.5, 0.6], [0.3, 0.2, 0.45]], GRABA53: [null, [0.3, 0.4, 0.6]] }; // mirados en la hoja de detalles del v3 (19 nov): sin cortar frentes ni barbillas
+const DET = { AMA2: [[0.5, 0.25, 0.6]], BUKELE4: [[0.5, 0.36, 0.6]], 'QUIETO-abuela-3': [[0.6, 0.45, 0.6], [0.6, 0.55, 0.45]], 'QUIETO-abuela-sentada': [[0.68, 0.3, 0.45], [0.67, 0.75, 0.45], [0.63, 0.25, 0.4]], SIXTA1: [[0.5, 0.24, 0.6], [0.5, 0.27, 0.8]], f: [null, [0.52, 0.24, 0.42], [0.52, 0.27, 0.6]], e: [null, [0.5, 0.18, 0.5], [0.5, 0.15, 0.35]], CORETO: [null, [0.5, 0.27, 0.5]], 'ortiz-172': [[0.6, 0.3, 0.55]], 'bukele-1': [[0.58, 0.32, 0.6], [0.56, 0.36, 0.85]], guadalupe: [null, [0.5, 0.3, 0.45]], ELSA: [[0.45, 0.5, 0.6], [0.3, 0.2, 0.45]], GRABA53: [null, [0.3, 0.4, 0.6]] }; // mirados en la hoja de detalles del v3 (19 nov): sin cortar frentes ni barbillas
 const dims = f => { const r = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r.stderr || '').match(/, (\d{2,5})x(\d{2,5})/); return m ? [+m[1], +m[2]] : [1600, 1000]; };
-const detalle = (s, j) => { const f = s.a.slice(5), [W, H] = dims(f); let cx, cy, fr;
+const detalle = (s, j) => { const f = s.src || s.a.slice(5), [W, H] = dims(f); let cx, cy, fr;
   if (DET[s.n] && DET[s.n][j - 1]) [cx, cy, fr] = DET[s.n][j - 1];
   else if (W / H < 1.69) { const winH = W * 9 / 16, top = (Y[s.n] ?? 0.45) * (H - winH); cy = (top + 0.45 * winH) / H + [0, 0, 0.22, 0.05][j]; cx = 0.5; fr = [0, 0.6, 0.72, 0.42][j]; }
   else { cx = [0, 0.36, 0.64, 0.5][j]; cy = [0, 0.45, 0.45, 0.6][j]; fr = [0, 0.6, 0.6, 0.48][j]; }
   const w = Math.round(fr * Math.min(W, H * 16 / 9) / 2) * 2, h = Math.round(w * 9 / 16 / 2) * 2;
   const x = Math.round(Math.max(0, Math.min(W - w, cx * W - w / 2))), yy = Math.round(Math.max(0, Math.min(H - h, cy * H - h / 2)));
   const out = `${ES}/fotos/det/${s.n}-d${j}.jpg`; fs.mkdirSync(ES + '/fotos/det', { recursive: true });
-  const r = spawnSync(FFM, ['-v', 'error', '-y', '-i', f, '-vf', `crop=${w}:${h}:${x}:${yy}`, '-q:v', '2', out]); if (r.status) throw new Error('detalle ' + s.n);
-  const { pan, z, ...resto } = s; return { ...resto, a: 'FILE:' + uso(out), sc: s.sc === 'GP' ? 'PM' : 'PP', n: s.n + '-d' + j }; };
+  const r = spawnSync(FFM, ['-v', 'error', '-y', '-i', f, '-vf', `crop=${w}:${h}:${x}:${yy},scale=3840:-2:flags=lanczos`, '-q:v', '2', out]); if (r.status) throw new Error('detalle ' + s.n);
+  const { pan, z, src, ...resto } = s; return { ...resto, a: 'FILE:' + uso(out), sc: s.sc === 'GP' ? 'PM' : 'PP', n: s.n + '-d' + j }; };
 const reparte = (shots, D) => { const dur = shots.map(() => 0), libre = new Set(shots.map((_, i) => i)); let resto = D;
   for (;;) { const m = resto / libre.size, pasa = [...libre].filter(i => shots[i].fijo || (shots[i].cap || 99) < m); if (!pasa.length) { for (const i of libre) dur[i] = m; break; } for (const i of pasa) { dur[i] = shots[i].fijo || shots[i].cap; resto -= dur[i]; libre.delete(i); } if (!libre.size) break; } return dur; };
 const partir = (shots, D) => { const dur = reparte(shots, D), out = [];
   shots.forEach((s, i) => { out.push(s); if (s.cap || s.fijo || !s.n || ASOMBRO.has(s.n) || dur[i] <= 3.1 && !PARTES[s.n]) return; const k = Math.max(PARTES[s.n] || 0, Math.min(4, Math.ceil(dur[i] / 2.9))); for (let j = 1; j < k; j++) out.push(detalle(s, j)); });
   return out; };
+const REC = (n, [cx, cy, fr], sc = 'PP', o = {}) => { const f = ruta(n), r0 = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r0.stderr || '').match(/, (\d{2,5})x(\d{2,5})/); const W = +m[1], H = +m[2];
+  const w = Math.round(fr * Math.min(W, H * 16 / 9) / 2) * 2, h = Math.round(w * 9 / 16 / 2) * 2, x = Math.round(Math.max(0, Math.min(W - w, cx * W - w / 2))), y = Math.round(Math.max(0, Math.min(H - h, cy * H - h / 2)));
+  const out = `${ES}/fotos/det/${n}-r.jpg`; fs.mkdirSync(ES + '/fotos/det', { recursive: true }); spawnSync(FFM, ['-v', 'error', '-y', '-i', f, '-vf', `crop=${w}:${h}:${x}:${y},scale=3840:-2:flags=lanczos`, '-q:v', '2', out]); return { a: 'FILE:' + uso(out), sc, n: n + '-r', ...o }; };
 const BN = (n, sc = 'GP', o = {}) => F(n, sc, { look: 'trix', ...o }); // archivo histórico en blanco y negro (M4)
 const durClip = f => { const r = spawnSync(FFM, ['-hide_banner', '-i', f], { encoding: 'utf8' }); const m = (r.stderr || '').match(/Duration: (\d+):(\d+):([\d.]+)/); return m ? +m[1] * 3600 + +m[2] * 60 + +m[3] : 5; };
 // M28 (ficha ③, revisión del v2, 19 nov 2026): parte útil de los clips que acaban en algo que no es el plano: canto-ninas acaba en fundido a blanco (salía 0,6 s de pantalla blanca en el segundo 8); ninos-saludan acaba en la cartela «Ernesto Castro · redes oficiales» (desde 3,0 s)
@@ -65,55 +77,59 @@ const R74 = { CANTO25: 'ASAMBLEA LEGISLATIVA · 10 SEPT 2025', MEMORIA: 'NAHUIZA
 
 // [imágenes, opciones] por frase del guion (49). preg = la pregunta del bloque en grande (N13), como en Tuvalu.
 const P = [
-  /*0 gancho*/[[V('canto-ninas', 'PP'), V('canto-coro', 'PM')], { id: 'g0', amb: A.CANTO(4.4, -34), rotulo: R74.CANTO25 }],
+  /*0 gancho*/[[{ ...V('canto-ninas', 'PP'), ss: 0.5, cap: 2.8 }, V('canto-coro', 'PM')], { id: 'g0', amb: A.CANTO(4.4, -34), rotulo: R74.CANTO25 }],
   /*1*/[[V('canto-cerca-2', 'PM')], { id: 'g1', amb: A.CANTO(8.5, -34) }],
   /*2*/[[BN('AMA', 'PP'), F('elva', 'PP')], { id: 'g2', amb: A.VI, cifra: [C('1932', '1932', 'LA MATANZA', 1.8)] }],
-  /*3*/[[F('bukele-2', 'PM'), V('bus', 'PM'), V('canto-ninos-3', 'GP')], { id: 'g3', amb: A.VI, cifra: [C('vez', 'PRIMERA VEZ', 'EL HIMNO EN NÁHUAT, EN LA ASAMBLEA', 2.2)] }],
+  /*3*/[[F('bukele-2', 'PM'), V('bus', 'PM'), V('canto-ninos-3', 'GP')], { id: 'g3', amb: A.VI, cifra: [C('náhuat', 'PRIMERA VEZ', 'SALÓN AZUL · 10 SEPT 2025', 2.0)] }],
   /*4*/[[F('bukele-3', 'PP')], { id: 'g4', amb: A.VI, pause: 0.8 }],
   /*5 1932*/[[BN('CAFE1927'), BN('CAFE2', 'PM')], { id: 'matanza', preg: ['¿QUÉ PASÓ EN 1932?'], amb: A.VI, rotulo: 'PLANTACIÓN DE CAFÉ · EL SALVADOR, 1927' }],
-  /*6*/[[F('MAPA1932'), BN('IZALCO', 'PM')], { amb: A.NOCHE, cifra: [C('veintidós', '22 DE ENERO', '1932', 2)] }],
+  /*6*/[[F('MAPA1932'), BN('IZALCO', 'PM')], { amb: A.NOCHE, cifra: [C('veintidós', '22 DE ENERO', '1932 · 4 AÑOS ANTES DE LA GUERRA CIVIL ESPAÑOLA', 2.2)] }],
   /*7*/[[BN('MARTI', 'PP'), BN('AMA2', 'PP')], { amb: A.VI }],
-  /*8*/[[V('velas-2'), V('ramas-2', 'PM')], { amb: A.VI, cifra: [C('Matanza', '«LA MATANZA»', '', 1.8)] }],
+  /*8*/[[V('velas-2'), V('ramas-2', 'PM')], { amb: A.VI, rotulo: R74.MEMORIA, cifra: [C('Entonces', '«LA MATANZA»', 'DIRIGIÓ LA REPRESIÓN EL GRAL. JOSÉ TOMÁS CALDERÓN', 2.2)] }],
   /*9*/[[BN('MARTINEZ', 'PP'), F('tacuba', 'PM')], { amb: A.VI }],
   /*10*/[[BN('IZALCO2')], { amb: A.VI, pause: 1.2 }],
-  /*11*/[[V('velas'), V('ofrenda', 'PM')], { amb: A.NOCHE, rotulo: R74.MEMORIA, pico: true, cifra: [C('mil', '10.000-30.000', 'SEGÚN LOS HISTORIADORES', 2.4)], pause: 1.0 }],
-  /*12 escondieron*/[[F('guadalupe', 'PP')], { id: 'escondieron', preg: ['¿POR QUÉ SE ESCONDIERON?'], amb: A.PAJ, rotulo: 'GUADALUPE ESTRADA · SONSONATE', pause: 0.8 }],
-  /*13*/[[F('e', 'PM'), V('alfarera-2', 'GP')], { amb: A.PAJ, pause: 0.8 }],
-  /*14*/[[F('h', 'PM'), V('alfarera', 'GP')], { amb: A.PAJ, pause: 0.8 }],
+  /*11*/[[V('velas'), V('ofrenda', 'PM')], { amb: A.NOCHE, pico: true, datoFuerte: true, cifra: [C('mil', '10.000-30.000', 'SEGÚN LOS HISTORIADORES', 2.4)], pause: 1.0 }],
+  /*11b puente*/[[REC('IZALCO', [0.5, 0.45, 0.6], 'PM', { look: 'trix' })], { amb: A.NOCHE, pause: 0.8 }],
+  /*12 escondieron*/[[F('guadalupe', 'PP')], { id: 'escondieron', preg: ['¿POR QUÉ SE ESCONDIERON?'], amb: A.PAJ, rotulo: 'GUADALUPE ESTRADA · SONSONATE', pause: 0.8, cambioTono: true }],
+  /*13*/[[F('e', 'PM')], { amb: A.PAJ, pause: 0.8 }],
+  /*14*/[[V('alfarera-2', 'GP'), V('alfarera', 'GP'), F('h', 'PM')], { amb: A.PAJ, rotulo: 'SANTO DOMINGO DE GUZMÁN · «NE NAWAT MULINI»', pause: 0.8 }],
   /*15*/[[F('QUIETO-abuela-2', 'PP')], { amb: A.PAJ, pause: 1.2 }],
   /*16*/[[F('QUIETO-hombre-sombrero', 'PP')], { amb: A.PAJ, pause: 0.8 }],
-  /*17*/[[F('anastacia', 'PP'), F('l', 'PM')], { amb: A.PAJ, rotulo: 'ANASTACIA LÓPEZ · SANTO DOMINGO DE GUZMÁN', cifra: [C('nueve', '9 AÑOS', 'EL CASTELLANO, DESPUÉS', 2)], pause: 0.8 }],
-  /*18*/[[F('QUIETO-abuela-3', 'PP')], { amb: A.PAJ, pause: 1.0 }],
-  /*19 país*/[[F('FUNES', 'PM'), F('FUNES2', 'PP'), V('fuego-3', 'GP')], { id: 'pais', preg: ['¿QUÉ HA HECHO EL PAÍS?'], amb: A.VI, cifra: [C('2010', 'PRIMER PERDÓN', '2010', 2)] }],
+  /*17*/[[F('anastacia', 'PP')], { amb: A.PAJ, rotulo: 'ANASTACIA LÓPEZ · SANTO DOMINGO DE GUZMÁN', cifra: [C('nueve', '9 AÑOS', 'EL CASTELLANO, DESPUÉS', 2)], pause: 0.8 }],
+  /*18*/[[F('l', 'PM'), F('QUIETO-abuela-3', 'PP')], { amb: A.PAJ, pause: 1.0 }],
+  /*18b puente*/[[REC('MARTINEZ', [0.5, 0.4, 0.62], 'PP', { look: 'trix' })], { amb: A.VI, pause: 0.8 }],
+  /*19 país*/[[F('FUNES', 'PM'), F('FUNES2', 'PP'), V('fuego-3', 'GP')], { id: 'pais', preg: ['¿QUÉ HA HECHO EL PAÍS?'], amb: A.VI, cifra: [C('2010', 'PRIMER PERDÓN', '2010 · 78 AÑOS DESPUÉS DE LA MATANZA', 2.2)] }],
   /*20*/[[F('SALON2016')], { amb: A.VI, cifra: [C('frase', 'ARTÍCULO 63', 'CONSTITUCIÓN · 2014', 2.2)] }],
-  /*21*/[[F('BUKELE4', 'PM'), BN('CRISTOS', 'GP', { look: 'portra' })], { amb: A.VI, cifra: [C('agosto', '9 DE AGOSTO', 'DÍA NACIONAL DE LOS PUEBLOS INDÍGENAS', 2.4)] }],
+  /*21*/[[F('BUKELE4', 'PM'), BN('CRISTOS', 'GP', { look: 'portra' })], { amb: A.VI, cifra: [C('agosto', '9 DE AGOSTO', 'ASAMBLEA · 2023 · 75 VOTOS DE 75', 2.4)] }],
   /*22*/[[V('ninos-entran'), V('talpa')], { amb: A.VI, cifra: [C('siguiente', 'OTRA VEZ', 'ASAMBLEA LEGISLATIVA · 3 SEPT 2026', 2.4)] }],
-  /*23*/[[F('j'), F('c', 'PM')], { amb: A.PAJ }],
-  /*24*/[[F('d', 'PM')], { amb: A.PAJ, pico: true, cifra: [C('mil', '68.148', '×5 DESDE 2007', 2.2)] }],
+  /*23*/[[F('j'), F('c', 'PM')], { id: 'censo', amb: A.PAJ }],
+  /*24*/[[F('d', 'PM')], { amb: A.PAJ, pico: true, pause: 1.0, cifra: [C('mil', '68.148', '×5 DESDE 2007', 2.2)] }],
   /*25*/[[F('CORETO', 'PM')], { amb: A.PAJ, cifra: [C('cien', '1.135', 'HABLANTES · CENSO 2024', 2.2)] }],
   /*26*/[[F('GRABA07')], { amb: A.PAJ }],
-  /*27*/[[V('ramas')], { amb: A.VI, pause: 0.5 }],
-  /*28*/[[V('fuego-1'), V('olla-cerca', 'D'), V('fuego-2', 'PM')], { amb: A.NOCHE, cifra: [C('169', 'SIN LEY · SIN CONVENIO 169', '', 2.6)], pause: 1.0 }],
+  /*27*/[[V('ramas')], { amb: A.VI, pause: 0.5, cambioTono: true }],
+  /*28*/[[V('fuego-1'), V('olla-cerca', 'D'), V('fuego-2', 'PM')], { id: 'faltan', amb: A.NOCHE, rotulo: R74.MEMORIA, cifra: [C('169', 'SIN LEY · SIN CONVENIO 169', 'CONVENIO 169 DE LA OIT · LO PIDEN EL CCNIS Y ASIES', 1.4)], pause: 1.0 }],
+  /*28b puente*/[[V('manos-olla', 'PP')], { amb: A.PAJ, rotulo: 'SANTO DOMINGO DE GUZMÁN · «NE NAWAT MULINI»', pause: 0.8 }],
   /*29 cunas*/[[F('f', 'PP')], { id: 'cunas', preg: ['¿QUÉ PASÓ CON LAS CUNAS?'], amb: A.PAJ, rotulo: 'PAULA LÓPEZ · MAESTRA DE NÁHUAT · 1959-2016', pause: 0.8 }],
   /*30*/[[F('ELSA', 'PP')], { amb: A.PAJ, cifra: [C('nantzin', 'LAS ABUELAS MAESTRAS', '', 2)], pause: 0.8 }],
   /*31*/[[F('GRABA14')], { amb: A.PAJ, cifra: [C('seiscientos', '+600 NIÑOS', 'DESDE 2010', 2)] }],
-  /*32*/[[F('QUIETO-abuela-sentada', 'PM')], { amb: A.PAJ }],
-  /*33*/[[V('ollas')], { amb: A.PAJ, cifra: [C('cinco', '13 → 5', 'MAESTRAS', 2.2)], pause: 1.0 }],
+  /*32*/[[F('QUIETO-abuela-sentada', 'PM')], { amb: A.PAJ, cambioTono: true }],
+  /*33*/[[{ ...V('ollas'), ss: 0.7, cap: 1.2 }, { ...V('abuela-habla', 'PP'), cap: 2.6 }], { amb: A.PAJ, cifra: [C('cinco', '13 → 5', 'MAESTRAS', 2.2)], pause: 1.0 }],
   /*34*/[[V('barro-manos', 'PP')], { amb: A.PAJ, pause: 0.8 }],
-  /*35 ayuda*/[[F('GRABA18'), F('GRABA48', 'PM')], { id: 'ayuda', preg: ['¿QUIÉN LES AYUDA A VOLVER?'], amb: A.PAJ }],
-  /*36*/[[F('GRABA31', 'PM'), F('WIKI_TALLER', 'PM')], { amb: A.PAJ, cifra: [C('Wikipedia', 'WIKIPEDIA EN NÁHUAT', 'FEBRERO DE 2026', 2.2)] }],
+  /*34b puente*/[[F('GRABA18'), F('GRABA48', 'PM')], { amb: A.PAJ }],
+  /*35 ayuda*/[[F('GRABA38', 'PM'), F('ortiz-172', 'PM')], { id: 'ayuda', preg: ['¿QUIÉN LES AYUDA A VOLVER?'], amb: A.PAJ }],
+  /*36*/[[F('GRABA31', 'PM'), F('WIKI_TALLER', 'PM')], { amb: A.PAJ, cifra: [C('náhuat', 'WIKIPEDIA EN NÁHUAT', 'TIMUMACHTIKAN NAWAT · 21 FEB 2026', 2.0)] }],
   /*37*/[[F('NAHUI2')], { amb: A.PAJ, cifra: [C('diecisiete', '17 NIÑOS', 'DE 3 A 5 AÑOS', 2)] }],
   /*38*/[[MAPA('pamplona')], { amb: A.VI, pause: 0.5 }],
   /*39*/[[F('PAMPLONA')], { amb: A.VI }],
-  /*40*/[[F('GRABA53', 'PM')], { amb: A.PAJ }],
+  /*40*/[[F('GRABA53', 'PM')], { id: 'navarra', amb: A.PAJ }],
   /*41 visitar*/[[F('RUTA')], { id: 'visitar', preg: ['¿SE PUEDE VISITAR?'], amb: A.PAJ }],
-  /*42*/[[F('NAHUIZALCO')], { amb: A.PAJ, cifra: [C('veintidós', 'IZALCO · 22 DE ENERO', 'SE RECUERDA EL LEVANTAMIENTO', 2.2)] }],
+  /*42*/[[F('NAHUIZALCO'), REC('IZALCO2', [0.5, 0.5, 0.75], 'GP')], { id: 'izalco22', amb: A.PAJ, cifra: [C('veintidós', 'IZALCO · 22 DE ENERO', 'LO ORGANIZAN EL CCNIS Y LA FUNDACIÓN AMA', 2.2)] }],
   /*43*/[[F('SIXTA1', 'PP')], { amb: A.PAJ }],
-  /*44 cierre*/[[V('canto-sala', 'PM')], { id: 'cierre', amb: A.CANTO(0, -32), pause: 0.8 }],
-  /*45*/[[F('bukele-1', 'PM'), V('ninos-pasillo', 'GP'), V('talpa-2', 'PM')], { amb: A.VI, pico: true, cifra: [C('1932', 'UNA PALABRA SOBRE 1932', '', 2.2)] }],
+  /*44 cierre*/[[V('canto-sala', 'PM')], { id: 'cierre', amb: A.CANTO(0, -32), pause: 0.8, cambioTono: true }],
+  /*45*/[[F('bukele-1', 'PM'), { ...V('ninos-pasillo', 'GP'), ss: 2, cap: 2.3 }, V('talpa-2', 'PM')], { id: 'cierre2', amb: A.VI, pico: true, cifra: [C('1932', 'UNA PALABRA SOBRE 1932', 'COMO LA DE FUNES EN 2010', 2.2)] }],
   /*46*/[[V('salon-azul-fuera')], { amb: A.VI, pause: 1.0 }],
-  /*47*/[[F('GRABA38'), V('ninos-saludan', 'PM')], { amb: A.PAJ }],
-  /*48*/[[{ ...V('canto-largo', 'GP'), ss: 1.5 }], { amb: A.CANTO(4, -32) }], // M18 (v3): el último plano antes de la app es el pico (los niños cantando en la Asamblea, la parte central del clip, sin repetir el plano del gancho), no la vasija
+  /*47*/[[F('k', 'PP'), V('ninos-saludan', 'PM')], { amb: A.PAJ }],
+  /*48*/[[{ ...V('canto-largo', 'GP'), ss: 1.0 }], { id: 'despedida', amb: A.CANTO(4, -32), pause: 1.4 }], // M18 (v3): el último plano antes de la app es el pico (los niños cantando en la Asamblea, la parte central del clip, sin repetir el plano del gancho), no la vasija
 ];
 if (P.length !== textos.length) throw new Error('reparto de imágenes: ' + P.length + ' frente a ' + textos.length + ' frases');
 
@@ -129,10 +145,32 @@ const reparto = (text, vz, al, shots) => { const D = al.en[al.en.length - 1] + 0
     if (best < 0) throw new Error('no puedo colocar el plano ' + j + ' de «' + text.slice(0, 30) + '»'); out[j] = { ...shots[j], from: bf }; qPrev = best; t = tw(best); }
   const fin = D - t, ult = shots[n - 1]; if (ult.cap && fin > ult.cap + 0.3) console.log(`⚠ el último plano de «${text.slice(0, 30)}…» pide ${fin.toFixed(1)} s y su recorte da ${ult.cap.toFixed(1)}`);
   return out.map(({ cap, fijo, ...s }) => s); };
+// M23 (ficha ① E): temperatura de color por frase (índice del guion). Cálida = niños, abuelas, lo que vuelve; fría = 1932, el miedo, lo que falta.
+const C_ = 'calida', F_ = 'fria';
+const EMO = [C_, C_, F_, C_, C_, F_, F_, F_, F_, F_, F_, F_, F_, F_, F_, F_, F_, F_, C_, F_, F_, C_, C_, C_, C_, C_, C_, C_, C_, F_, F_, C_, C_, C_, C_, C_, F_, C_, C_, C_, C_, C_, C_, C_, C_, C_, C_, C_, C_, F_, C_, C_, C_];
+if (EMO.length !== 53) throw new Error('EMO necesita 53');
+// M25 (21 nov 2026, revisor de imagen del v5): subtítulos cortados por unidades de sentido (cfg subPartes del motor, T31)
+const SUB_ANCHO = 42, ENL_S = /^(de|del|la|las|el|los|lo|a|al|y|e|o|u|en|que|con|por|para|un|una|unos|unas|su|sus|más|muy|se|le|les|ha|han|no|ni|como|sin|cada)$/i,
+  NUM_S = /^(dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|diecisiete|dieciocho|veinte|veinticinco|treinta|setenta|noventa|cien|mil|seiscientos|1\.?\d+)$/i,
+  MAY_S = w => /^[«"(]?[A-ZÁÉÍÓÚÑ]/.test(w), LEN_S = ws => ws.join(' ').length, FIN_S = w => /[,.;:?!…»]$/.test(w);
+const sentido = text => { const ws = text.split(' '), cl = []; let c = [];
+  ws.forEach(w => { c.push(w); if (FIN_S(w)) { cl.push(c); c = []; } }); if (c.length) cl.push(c);
+  const corta = ws => { if (LEN_S(ws) <= SUB_ANCHO) return [ws]; let best = -1, bs = -1e9; const mid = LEN_S(ws) / 2;
+    for (let k = 1; k < ws.length; k++) { const a = ws.slice(0, k), b = ws.slice(k), last = ws[k - 1].replace(/[«»"]/g, ''), next = ws[k];
+      if (ENL_S.test(last) || NUM_S.test(last) || (MAY_S(last) && MAY_S(next) && k > 1) || (next === '—')) continue;
+      let s = -Math.abs(LEN_S(a) - mid); if (ENL_S.test(next)) s += 12; if (LEN_S(a) > SUB_ANCHO) s -= 100; if (b.length < 2) s -= 50; if (s > bs) { bs = s; best = k; } }
+    if (best < 0) best = Math.ceil(ws.length / 2); return [...corta(ws.slice(0, best)), ...corta(ws.slice(best))]; };
+  const subs = []; for (const x of cl) { const prev = subs[subs.length - 1];
+    if (prev && LEN_S([...prev, ...x]) <= SUB_ANCHO && !/[.?!…]$/.test(prev[prev.length - 1]) && LEN_S(x) < 18) prev.push(...x); else subs.push(...corta(x)); }
+  return subs.map(s => [s.join(' ')]); };
+const MANO_S = { 6: ['Primero, el café.', 'Con él,', 'los pueblos indígenas del occidente', 'habían ido perdiendo sus tierras comunales.'],
+  9: ['Tres días después,', 'el ejército ya había recuperado', 'todos los pueblos.', 'Entonces empezó lo que en El Salvador', 'llaman, simplemente, «la Matanza».'],
+  32: ['A las escuelas donde los niños', 'vuelven a aprenderlo', 'les pasó algo que casi nadie conoce', 'fuera de El Salvador.'],
+  47: ['En Nahuizalco hay mercado de noche', 'y artesanía de tule.', 'En Izalco, cada veintidós de enero,', 'se recuerda el levantamiento.'] }; // los cuatro que el corte automático aún partía mal, mirados uno a uno
 let idn = 0;
-const frase = (text, shots, o = {}, al) => { idn++; const words = text.split(/\s+/); const vz = voz(text); shots = reparto(text, vz, al, partir(shots, al.en[al.en.length - 1] + 0.6 + (o.pause ?? 0.3) + 0.3)).map(({ n, ...s }) => s);
+const frase = (text, shots, o = {}, al) => { idn++; const words = text.split(/\s+/); const vz = voz(text); shots = reparto(text, vz, al, partir(shots, al.en[al.en.length - 1] + 0.6 + (o.pause ?? 0.3) + 0.3)).map(({ n, src, ...s }) => s);
   const cifra = [...(o.preg ? [C(limpia(words[0]), o.preg[0], o.preg[1] || '', 1.6)] : []), ...(o.cifra || [])];
-  return { id: o.id || 'f' + idn, who: 'salma', scene: !!o.preg || idn <= 5, sceneEnd: true, pause: o.pause ?? 0.3, amb: { ...(o.amb || A.VI), ss: o.amb?.ss ?? (idn % 4) * 2 }, text, ...(vz !== text ? { voz: vz } : {}), shots, ...(cifra.length ? { cifra } : {}), ...(o.rotulo ? { rotulo: o.rotulo } : {}), ...(o.pico ? { pico: true } : {}), ...(o.look ? { look: o.look } : {}) }; };
+  return { id: o.id || 'f' + idn, who: 'salma', scene: !!o.preg || idn <= 5, sceneEnd: true, pause: o.pause ?? 0.3, amb: { ...(o.amb || A.VI), ss: o.amb?.ss ?? (idn % 4) * 2 }, text, ...(vz !== text ? { voz: vz } : {}), subPartes: MANO_S[idn] ? MANO_S[idn].map(x => [x]) : sentido(text), shots, ...(cifra.length ? { cifra } : {}), ...(o.rotulo ? { rotulo: o.rotulo } : {}), ...(o.pico ? { pico: true } : {}), ...(o.datoFuerte ? { datoFuerte: true } : {}), ...(o.cambioTono ? { cambioTono: true } : {}), emocion: o.emocion || EMO[idn - 1], ...(o.look ? { look: o.look } : {}) }; };
 const CAPIS = [['canto0', 'Del exterminio a cantar el himno'], ['matanza', '¿Qué pasó en 1932?'], ['escondieron', '¿Por qué se escondieron?'], ['pais', '¿Qué ha hecho el país?'], ['cunas', '¿Qué pasó con las Cunas Náhuat?'], ['ayuda', '¿Quién les ayuda a volver?'], ['visitar', '¿Se puede visitar?'], ['cierre', '¿Y con Bukele?']];
 
 const nuevas = textos.filter(t => !vozEnCache(voz(t), SALMA_DOC));
@@ -143,17 +181,17 @@ if (process.env.SOLO_VOZ) { (async () => { let g = 0; for (const t of textos) g 
 // ---------- montaje ----------
 // MÚSICA POR TRAMOS (S5): «Fading Shoreline», como en Tatuajes, Vietnam y Tuvalu. Sin música en el gancho (canto real), en lo humano (bloques 2 y 4, N14(4)) ni en los mapas (sintonía).
 const VOZ = (de, a, ss, db = -10) => ({ de: { b: de }, a: { b: a, fin: 1, off: 0.4 }, ss, db, fi: 1.5, fo: 1.5, voz: 1 });
-const musica = { src: 'SFX_fading-shoreline', ratio: 3, trozos: [VOZ('matanza', 'f9', 16), VOZ('pais', 'f29', 48), VOZ('ayuda', 'f43', 24), VOZ('f46', 'f49', 110, -8)] };
+const musica = { src: 'SFX_fading-shoreline', ratio: 3, trozos: [VOZ('matanza', 'f9', 16), VOZ('pais', 'faltan', 48), VOZ('ayuda', 'izalco22', 24), VOZ('cierre2', 'despedida', 110, -8)] };
 const blocks = [];
 // Y10 / M10: pista .srt en inglés (una frase inglesa por cada frase española), aprobado el montaje v2 por Paco el 19 nov 2026
-const EN = require('./el-salvador-en.json'); if (EN.length !== textos.length) throw new Error('el-salvador-en.json no tiene 49 entradas');
+const EN = require('./el-salvador-en.json'); if (EN.length !== textos.length) throw new Error('el-salvador-en.json no tiene ' + textos.length + ' entradas');
 const cfg = {
-  titulo: 'INDÍGENAS DE EL SALVADOR', nombre: 'El Salvador', fecha: '2026-11-21', formato: '16:9', id: 'el-salvador-v3', out: ES + '/salida', ultima: ES + (process.env.CALIDAD === 'publicar' ? '/ULTIMA' : '/ULTIMA-borrador'), ultimaNombre: 'indigenas-de-el-salvador-del-exterminio-a-cantar-el-himno',
+  titulo: 'INDÍGENAS DE EL SALVADOR', nombre: 'El Salvador', fecha: '2026-11-21', formato: '16:9', id: 'el-salvador-v5', out: ES + '/salida', ultima: ES + (process.env.CALIDAD === 'publicar' ? '/ULTIMA' : '/ULTIMA-borrador'), ultimaNombre: 'indigenas-de-el-salvador-del-exterminio-a-cantar-el-himno',
   look: 'portra', counter: 'EL SALVADOR', voices: { salma: SALMA_DOC }, musica, sintonia: { src: 'SFX_sintonia-pueblos', db: -8, dbVoz: -14, mapas: true }, rotuloSegs: 4,
-  seguir: [{ seg: 20, texto: 'Si te está gustando, suscríbete' }, { en: 'f24', texto: 'Hay más documentales: suscríbete' }, { en: 'f41', texto: 'Guárdalo y compártelo' }], // M13 a los 20 s (v3: el canto real acaba a los 13 s; a los 20 s solo habla Salma); los otros dos, en bloques sin pregunta ni cifra para no tapar texto
+  seguir: [{ seg: 20, texto: 'Si te está gustando, suscríbete' }, { en: 'censo', texto: 'Hay más documentales: suscríbete' }, { en: 'navarra', texto: 'Guárdalo y compártelo' }], // M13 a los 20 s (v3: el canto real acaba a los 13 s; a los 20 s solo habla Salma); los otros dos, en bloques sin pregunta ni cifra para no tapar texto
   cardSecs: 8, kb: 0.8, voiceDb: { salma: -25 }, duckRatio: 5, gap: { same: 0.3, change: 0.6 },
   portada: { png: ES + '/caratula/ENTREGA/caratula-el-salvador-1920.png' }, // A4-fila, aprobada por Paco (19 nov, chat de Carátulas)
-  descartes: { M12: 'Paco, 19 nov 2026: «movimiento suave» (M12 actualizada): acercamiento lento y desplazamiento corto que termina en la cara; el informe aún marca ❌ con kb > 0', M14: 'Paco no ha estado: sin «Basado en un viaje real» (F2)', G2: 'v3, 19 nov 2026: «El Salvador» suena a los 9,2 s; de 0 a 4,4 s va el canto real de los niños (S1) y la primera frase es la promesa del título (N2, N33). Explicado en el acta (F12)' },
+  descartes: { M12: 'Paco, 19 nov 2026: «movimiento suave» (M12 actualizada): acercamiento lento y desplazamiento corto que termina en la cara; el informe aún marca ❌ con kb > 0', M14: 'Paco no ha estado: sin «Basado en un viaje real» (F2)', S10: 'Paco, 19 nov 2026: deja la misma de momento (no es cambio de regla)', G2: 'Paco, 19 nov 2026: «Sí» (excepción solo de este vídeo): «El Salvador» suena a los 9,2 s para no pisar el canto del gancho aprobado; de 0 a 4,4 s va el canto real de los niños (S1) y la primera frase es la promesa del título (N2, N33). Explicado en el acta (F12)' },
   card: { l1: 'INDÍGENAS DE EL SALVADOR', l2: 'DEL EXTERMINIO AL HIMNO', l3: 'ÚNETE · SUSCRÍBETE', l4: '▼ Mira el vídeo relacionado', l5: 'Borrado del Mapa' },
   blocks,
 };

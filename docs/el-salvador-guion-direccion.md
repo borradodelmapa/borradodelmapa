@@ -35,13 +35,15 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 
 ---
 
+> **v5 (21 nov 2026, revisores F13; OK de Paco «VE HACIENDO LOS CAMBIOS… DALE»):** entran en la voz las 4 frases-puente (N14), se quita la «Y» inicial de 8 frases de dato (N23), se narran 5 fechas (N11) y «náhuat en cada escuela de Sonsonate» (F4, hay náhuat en escuelas desde 2003 [S11]).
+
 ## 0 · GANCHO (0-20 s) — G1, G2, M15/M21, N15, N16. Paco lo aprobó el 19 nov
 `[0-4 s: los niños de Izalco cantando el himno en náhuat en el Salón Azul, con su sonido real (vídeo de la Asamblea, excepción a F10). Rótulo {ASAMBLEA LEGISLATIVA · 10 SEPT 2025}. Sin música]`
 **S:** Del exterminio… a cantar el himno nacional en su idioma.
 *(el canto sube 1 s)*
 **S:** Son los indígenas de El Salvador.
 `[retrato de Feliciano Ama, dominio público, look de historia]` `{1932}`
-**S:** En 1932, el ejército mató a miles de ellos. Y los eligió por su ropa y por su lengua.
+**S:** En 1932, el ejército mató a miles de ellos. Los eligió por su ropa y por su lengua.
 `[Bukele (Casa Presidencial, CC0), imagen neutra] → [vuelta a los niños cantando]`
 **S:** Noventa y tres años después, en la Asamblea del partido de Bukele, unos niños de Izalco cantaron el himno en náhuat. Era la primera vez.
 `{PRIMERA VEZ EN NÁHUAT}`
@@ -67,7 +69,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 `{22 DE ENERO}`
 **S:** Pedían la tierra que habían perdido. Con ellos estaban el Partido Comunista de Farabundo Martí y líderes indígenas como Feliciano Ama, de Izalco.
 `[retratos de Farabundo Martí (1929) y Feliciano Ama, dominio público]`
-**S:** Tres días después, el ejército ya había recuperado todos los pueblos. Y entonces empezó lo que en El Salvador llaman, simplemente, «la Matanza».
+**S:** Tres días después, el ejército ya había recuperado todos los pueblos. Entonces empezó lo que en El Salvador llaman, simplemente, «la Matanza».
 `{«LA MATANZA»}`
 **S:** Gobernaba el general Maximiliano Hernández Martínez. Durante unas dos semanas, sus soldados fusilaron a quien pareciera indígena: por cómo vestía, por cómo hablaba.
 `[retrato del general Hernández Martínez (1940, dominio público), zoom de énfasis (N14(10))]`
@@ -79,11 +81,12 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 - **La cifra (Estrategia, 19 nov):** «al menos diez mil… hasta treinta mil», sin comparación (usaba la cifra alta, la discutida, y quedaba efectista).
 - ⚠ **Fuera de la voz:** los 4.800 del general Calderón (la cifra del verdugo) y el Decreto 121 de amnistía, que aún no se ha visto en el Diario Oficial.
 - **Imagen:** no hay fotos libres de la matanza, y tampoco se usarían (F9). Se cubre con el mapa, los retratos, el look de historia y la conmemoración de hoy.
-- **Gancho al siguiente bloque (N14(2)):** **S:** Los fusilamientos duraron dos semanas. El miedo, mucho más.
+- **Gancho al siguiente bloque (N14(2))** (en la voz desde la v5, 21 nov 2026: revisor de guion, N14; OK de Paco «DALE»)
+**S:** Los fusilamientos duraron dos semanas. El miedo, mucho más.
 
 ## 2 · ¿POR QUÉ SE ESCONDIERON? (≈ 1:35-2:40) — lo humano: despacio, sin música (N14(4)), testimonio antes que cifra (N26, N29)
 `[Guadalupe Estrada, retrato de René Figueroa (CCESV, CC BY-SA 2.0), plano largo sin movimiento]`
-**S:** Guadalupe Estrada nació en Sonsonate en 1948, dieciséis años después de la Matanza.
+**S:** Guadalupe Estrada nació en Sonsonate dieciséis años después de la Matanza.
 **S:** Según la ficha de su retrato, las heridas que 1932 dejó en su familia la llevaron a decir en voz alta que es indígena.
 `{GUADALUPE ESTRADA · SONSONATE}`
 *(pausa larga)*
@@ -98,7 +101,8 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 `{«EL CASTELLANO LO APRENDÍ A LOS 9 AÑOS»}`
 **S:** Hoy, quienes aprendieron el náhuat de niños, como ella, son ya muy pocos. Casi todos, mayores.
 - **N28:** el bloque es solo de personas; las cifras del censo van en el bloque 3.
-- **Gancho al siguiente bloque:** **S:** Durante setenta y ocho años, ningún presidente pidió perdón por aquello. Hasta que uno lo hizo.
+- **Gancho al siguiente bloque** (en la voz desde la v5, 21 nov 2026: revisor de guion, N14; OK de Paco «DALE»)
+**S:** Durante setenta y ocho años, ningún presidente pidió perdón por aquello. Hasta que uno lo hizo.
 - **N32:** «setenta y ocho años» ancla 2010 sin decir la fecha en pantalla (N11).
 
 ## 3 · ¿QUÉ HA HECHO EL PAÍS? (≈ 2:40-4:15) — datos a ritmo rápido, contraste bueno/malo (N14(7))
@@ -106,16 +110,16 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 `{PRIMER PERDÓN · 2010}`
 **S:** Cuatro años después, la Constitución cambió una frase: «El Salvador reconoce a los pueblos indígenas».
 `[texto del artículo 63 animado sobre fondo; rótulo {ARTÍCULO 63}]`
-**S:** Y llegó Nayib Bukele. Con él en la presidencia, la Asamblea declaró el nueve de agosto Día Nacional de los Pueblos Indígenas. Por unanimidad.
+**S:** Llegó Nayib Bukele. Con él en la presidencia, la Asamblea declaró el nueve de agosto Día Nacional de los Pueblos Indígenas. Por unanimidad.
 `[Bukele, Casa Presidencial, CC0; sin efecto ni filtro: imagen neutra]`
-**S (M39, vuelta al gancho):** En esa Asamblea sonó el himno en náhuat. Y al año siguiente, otra escuela lo volvió a cantar allí.
+**S (M39, vuelta al gancho):** En esa Asamblea sonó el himno en náhuat. Al año siguiente, otra escuela lo volvió a cantar allí.
 `[niños de San Juan Talpa cantando, vídeo de la Asamblea de 2026 (H5), excepción a F10]` `{OTRA VEZ · 2026}`
 - **Fuente:** noticiero de la Asamblea del 3 sept 2026 (H5): niños del Complejo Educativo Profesor Alberto Varela, de San Juan Talpa (La Paz), abren el mes cívico con el himno en náhuat y en español.
-**S (N17):** Y el censo volvió a preguntar algo sencillo: ¿es usted indígena? En 2007 dijeron que sí trece mil personas. ¿Cuántas, diecisiete años después?
+**S (N17):** El censo volvió a preguntar algo sencillo: ¿es usted indígena? En 2007 dijeron que sí trece mil personas. ¿Cuántas, diecisiete años después?
 *(pausa 0,8)*
 **S:** Sesenta y ocho mil. Cinco veces más.
 `{68.148}` → `{×5}`
-**S:** Y unas mil cien personas dicen hablar náhuat, según el censo de 2024.
+**S:** Unas mil cien personas dicen hablar náhuat, según el censo de 2024.
 `{1.135 HABLANTES}`
 **S (N20):** Caben todas en un teatro grande.
 - **N20 (Estrategia, 19 nov):** se queda, porque los 1.135 tienen fuente con fecha: censo de 2024 del BCR, publicado en Diario El Mundo (S1, S2). La fuente va en la descripción.
@@ -127,38 +131,40 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 - **El convenio es de la OIT, que es un organismo de la ONU.** En la voz se dice «de la ONU» para que se entienda; en el rótulo y la descripción, «Convenio 169 de la OIT».
 - **Despidos de Cultura y Casas de la Cultura (Estrategia, 19 nov): NO van en la voz.** Solo en la descripción, con fuente primaria: el Decreto Legislativo 33 (Diario Oficial n.º 121, julio de 2024), citado por Diario Co Latino (S22).
 - **«El Estado no ha investigado 1932» se queda en la voz (Paco, 19 nov 2026: «Déjala»)**, avisado de que el expediente solo tiene apoyo indirecto: los consejos indígenas piden que se esclarezca (S16) y Juliana Ama, «ningún gobierno se lo ha tomado en serio» (S6). En la descripción va la versión con fuente (S16).
-- **Gancho al siguiente bloque (N14(5), aviso antes del bloque denso):** **S:** Y a las escuelas donde los niños vuelven a aprenderlo les pasó algo que casi nadie conoce fuera de El Salvador.
+- **Gancho al siguiente bloque (N14(5), aviso antes del bloque denso)** (en la voz desde la v5, 21 nov 2026: revisor de guion, N14; OK de Paco «DALE»)
+**S:** A las escuelas donde los niños vuelven a aprenderlo les pasó algo que casi nadie conoce fuera de El Salvador.
 
 ## 4 · ¿QUÉ PASÓ CON LAS CUNAS? (≈ 4:15-5:30) — el caso concreto (N26); despacio en lo humano
 `[vídeo CC BY: niños y maestras en la cuna (CCESV «Ne Nawat Suchikisa» l5s5JR5paYo o Leslie Ortiz -zk99vCKLl4); se ve entero antes (F10)]`
 **S:** Se llaman Cunas Náhuat. Niños de tres a cinco años pasan el día entero en náhuat, sin una palabra de castellano.
 **S:** Las maestras son abuelas que lo aprendieron de niñas. Las llaman *nantzin*.
 `{LAS ABUELAS MAESTRAS}` (sin traducir *nantzin*: no aparece en un diccionario de náhuat-pipil; en el uso es un tratamiento de respeto para las mujeres mayores, y viene de *nan*, «madre». Búsqueda del 19 nov; Estrategia).
-**S:** La primera abrió en 2010, en Santo Domingo de Guzmán. Por ellas han pasado más de seiscientos niños.
+**S:** La primera abrió el mismo año del perdón, en Santo Domingo de Guzmán. Por ellas han pasado más de seiscientos niños.
 `{+600 NIÑOS}`
 *(cambio a dato: N28)*
-**S:** En 2023, el Ministerio de Educación trasladó las Cunas Náhuat a su nuevo programa, sin consultar a las comunidades.
+**S:** Hace tres años, el Ministerio de Educación trasladó las Cunas Náhuat a su nuevo programa, sin consultar a las comunidades.
 **S:** De trece maestras, quedaron cinco.
 `{13 → 5}`
 *(pausa 1 s)*
 **S:** Las abuelas y los pueblos las volvieron a abrir, con ayuda de fuera.
 - **Texto validado por Estrategia (18 nov)**, tal cual. Fuera de la voz: el corte de 2017, la cita de Lemus y el número de niños.
 - **Lo que no se dice:** ni que los nidos de Crecer Juntos funcionen ni que no; ni la primera dama (expediente, 4c).
-- **Gancho al siguiente bloque:** **S:** Una de esas ayudas viene de un sitio que, si ves esto desde España, conoces.
+- **Gancho al siguiente bloque** (en la voz desde la v5, 21 nov 2026: revisor de guion, N14; OK de Paco «DALE»)
+**S:** Una de esas ayudas viene de un sitio que, si ves esto desde España, conoces.
 
 ## 5 · ¿QUIÉN LES ESTÁ AYUDANDO A VOLVER? (≈ 5:30-7:00) — contesta el «con ayuda de fuera» del bloque 4
 **S:** Los jóvenes, primero. Veinticinco chicos de Santo Domingo, de quince a diecisiete años, aprendieron a grabar a sus mayores para que su lengua no se perdiera.
 `{GRABAR A LOS MAYORES}` `[vídeo CC BY de jóvenes y mayores (CCESV)]`
-**S:** En febrero de 2026, el náhuat estrenó su propia Wikipedia.
+**S:** Este año, el náhuat estrenó su propia Wikipedia.
 `{WIKIPEDIA EN NÁHUAT · 2026}`
-**S:** Y en Nahuizalco, el pueblo que se alzó en 1932, la cuna tiene edificio nuevo: diecisiete niños, de lunes a viernes, y clases los sábados para todas las edades.
+**S:** En Nahuizalco, el pueblo que se alzó en 1932, la cuna tiene edificio nuevo: diecisiete niños, de lunes a viernes, y clases los sábados para todas las edades.
 `[Nahuizalco hoy, TouRuralES 20NjHeQ_ZKA, CC BY]`
 - **M39 (recordatorio):** «el pueblo que se alzó en 1932» recuerda Nahuizalco, que salió en el bloque 1.
 *(pausa 0,8)*
 **S:** Lo pagó una ciudad española: Pamplona.
 `{PAMPLONA · NAVARRA}` `[mapa: Pamplona → Nahuizalco, con la sintonía corta]`
 **S:** ¿Por qué Pamplona? Lo explican ellos: en Navarra saben lo que es ver retroceder una lengua y recuperarla con escuelas como esta, las ikastolas.
-**S:** Desde 2012, estudiantes de Magisterio de Navarra han venido a las cunas a hacer sus prácticas.
+**S:** Desde hace más de diez años, estudiantes de Magisterio de Navarra han venido a las cunas a hacer sus prácticas.
 `{DE LAS IKASTOLAS A LAS CUNAS}`
 - **Texto validado por Estrategia (18 nov)**, con «a hacer sus prácticas» al final para cerrar la frase que allí quedaba abierta. Sin «dictadura», sin «cada año», sin alcaldes ni partidos (expediente, 4d).
 - **Frase exacta de fuente:** el *edificio*, no la cuna entera (S35, S38, S39). «Lo pagó una ciudad» = el Ayuntamiento de Pamplona.
@@ -166,7 +172,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 ## 6 · ¿SE PUEDE VISITAR? (≈ 7:00-7:40) — segunda persona (N21); datos prácticos en la descripción (P9)
 **S:** Si vas a El Salvador, estos pueblos están a una o dos horas de la capital, en la Ruta de las Flores.
 `[Ruta de las Flores, vídeo CC BY o Commons]`
-**S:** En Nahuizalco hay mercado de noche y artesanía de tule. Y en Izalco, cada veintidós de enero, se recuerda el levantamiento.
+**S:** En Nahuizalco hay mercado de noche y artesanía de tule. En Izalco, cada veintidós de enero, se recuerda el levantamiento.
 `{IZALCO · 22 DE ENERO}` `[conmemoración de 1932 en Nahuizalco, The World of Suiri F08PTTLu6Q4, CC BY]`
 **S:** Si te cruzas con alguien que habla náhuat, ya sabes cómo saludar: *yek peyna*, buenos días.
 `[sonido real: «Yek peyna» (La Radio Tomada, CC BY-SA 4.0)]`
@@ -176,7 +182,7 @@ Todos los datos salen de `docs/el-salvador-expediente.md` (fuentes S1-S47 y W1-W
 `[vuelven los niños de Izalco cantando en el Salón Azul, con su sonido real (excepción a F10)]`
 **S:** Del exterminio al himno.
 *(el canto, 2 s sin voz)*
-**S:** Con Bukele, el país ha contado a sus indígenas y les ha dado un día. Lo que sigue esperando tiene nombre: una palabra sobre 1932. Una ley. Y náhuat en las escuelas de Sonsonate.
+**S:** Con Bukele, el país ha contado a sus indígenas y les ha dado un día. Lo que sigue esperando tiene nombre: una palabra sobre 1932. Una ley. Y náhuat en cada escuela de Sonsonate.
 `{UNA PALABRA SOBRE 1932}`
 `[Bukele, CC0, imagen neutra]`
 **S:** El presidente que cambió El Salvador… ¿cambiará también esto?
