@@ -167,8 +167,15 @@ function foto(c, id) {
   const a = (c.otraSerie && id.includes('/') ? atrDe({ fotosEpisodios: c.otraSerie }, id) : c.fotosArchivo ? archivoDe(c)[id.slice(2)] : c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
   return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
 }
+// CABEZAS NUNCA CORTADAS (Paco, 22 nov 2026: «mira que las cabezas no salgan cortadas. Y que no vuelva a pasar»). El hueco de cada apartado es 3:2 y la
+// galería es cuadrada, con recorte al centro: una foto vertical perdía la cabeza. Ahora el generador mira el tamaño de cada foto: en los apartados, la
+// vertical (o cuadrada) se enseña ENTERA, sin recorte; en la galería, el recorte de una vertical se hace por arriba, donde está la cara.
+function medidas(file) { const b = fs.readFileSync(file); let i = 2; while (i < b.length) { if (b[i] !== 0xFF) { i++; continue; } const m = b[i + 1], L = b.readUInt16BE(i + 2); if (m >= 0xC0 && m <= 0xCF && ![0xC4, 0xC8, 0xCC].includes(m)) return { h: b.readUInt16BE(i + 5), w: b.readUInt16BE(i + 7) }; i += 2 + L; } return null; }
+const esVertical = (src) => { const d = medidas(path.join(ROOT, src.replace(/^\//, ''))); return !!d && d.h >= d.w * 0.95; };
+const ENTERA = ' style="aspect-ratio:auto;width:auto;max-width:100%;max-height:82vh;margin:0 auto;object-fit:contain"';
+const ARRIBA = ' style="object-position:50% 12%"';
 const figura = (c, [id, pie]) => { const f = foto(c, id); return `      <figure class="bd-fig">
-        <img src="${f.src}" alt="${esc(pie)}" loading="lazy">
+        <img src="${f.src}" alt="${esc(pie)}" loading="lazy"${esVertical(f.src) ? ENTERA : ''}>
         <figcaption>${md(pie)}${f.credito ? ` <span>${f.credito}</span>` : ''}</figcaption>
       </figure>
 `; };
@@ -177,7 +184,7 @@ function galeria(c) {
   return `    <section class="bd-galeria">
       <h2>En imágenes</h2>
       <div class="bd-gal-grid">
-${c.fotos.galeria.map(([id, pie]) => { const f = foto(c, id); return `        <figure><a href="${f.src}" target="_blank"><img src="${f.src}" alt="${esc(pie)}" loading="lazy"></a><figcaption>${md(pie)}${f.credito ? ` <span>${f.credito}</span>` : ''}</figcaption></figure>`; }).join('\n')}
+${c.fotos.galeria.map(([id, pie]) => { const f = foto(c, id); return `        <figure><a href="${f.src}" target="_blank"><img src="${f.src}" alt="${esc(pie)}" loading="lazy"${esVertical(f.src) ? ARRIBA : ''}></a><figcaption>${md(pie)}${f.credito ? ` <span>${f.credito}</span>` : ''}</figcaption></figure>`; }).join('\n')}
       </div>
     </section>
 `;

@@ -71,6 +71,8 @@ const esDoc = (x) => x.formato === '16:9'; // documental horizontal: tarjeta a l
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
+// Cabezas nunca cortadas (Paco, 22 nov 2026): una foto vertical en un hueco más ancho se recorta por arriba, donde está la cara; la medida sale de fotos.json (w/h).
+const arriba = (f) => (f && f.w && f.h && f.h >= f.w * 0.95 ? ' style="object-position:50% 12%"' : '');
 const KV_DIR = path.join(ROOT, 'worker', 'kv', 'output-nivel2');
 const ROUTES_DIR = path.join(ROOT, 'worker', 'kv', 'routes-nivel3');
 const COUNTRIES_FILE = path.join(ROOT, 'worker', 'kv', 'countries.json');
@@ -140,7 +142,7 @@ function masDestinos(siblings, countrySlug, countryName, conCss) {
   const e = escapeHTML;
   const items = siblings.map(x => {
     const h = (loadFotos(x.slug) || {}).hero;
-    const img = h ? `<img src="/destinos/img/${x.slug}/${h.file}" alt="${e(h.alt || x.name)}" loading="lazy" decoding="async">` : `<span class="dr-ph">${e(x.name)}</span>`;
+    const img = h ? `<img src="/destinos/img/${x.slug}/${h.file}" alt="${e(h.alt || x.name)}" loading="lazy" decoding="async"${arriba(h)}>` : `<span class="dr-ph">${e(x.name)}</span>`;
     return `<li><a class="dr-c" href="/destinos/${x.slug}.html">${img}<div class="dr-t">${x.menos ? '<span class="dr-chip">Menos turístico</span>' : ''}<strong>${e(x.name)}</strong></div></a></li>`;
   }).join('');
   return `${conCss ? RAIL_CSS : ''}
@@ -533,7 +535,7 @@ function buildStaticItinerary(route, appSlug, fotos) {
       const foto = fotos && ((fotos.porIndice && fotos.porIndice[n - 1]) || (fotos.stops && fotos.stops[name]));
       html += `    <article class="destino-stop${foto ? ' destino-stop--foto' : ''}">\n`;
       html += `      <span class="destino-stop-num">${n}</span>\n`;
-      if (foto) html += `      <figure class="destino-stop-foto"><img src="/destinos/img/${appSlug}/${foto.file}" alt="${escapeHTML(foto.alt)}" width="${foto.w}" height="${foto.h}" loading="lazy" decoding="async"><figcaption>${fotoCredito(foto)}</figcaption></figure>\n`;
+      if (foto) html += `      <figure class="destino-stop-foto"><img src="/destinos/img/${appSlug}/${foto.file}" alt="${escapeHTML(foto.alt)}" width="${foto.w}" height="${foto.h}" loading="lazy" decoding="async"${arriba(foto)}><figcaption>${fotoCredito(foto)}</figcaption></figure>\n`;
       html += '      <div class="destino-stop-body">\n';
       html += `      <h4 class="destino-stop-name">${escapeHTML(name)}</h4>\n`;
       if (stop.headline && stop.headline.trim() && stop.headline.trim() !== name.trim()) html += `      <p class="destino-stop-headline">${escapeHTML(stop.headline)}</p>\n`;
@@ -804,7 +806,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
     const f = qhFotos[n];
     const [tit, ...resto] = String(a).split(/:\s/);
     const desc0 = resto.join(': '); const desc = desc0 ? desc0.charAt(0).toUpperCase() + desc0.slice(1) : '';
-    return `<li class="dq-c${f ? '' : ' dq-c--sin'}">${f ? `<figure><img src="/destinos/img/${slug}/${f.file}" alt="${escapeHTML(f.alt)}" loading="lazy" decoding="async" width="${f.w}" height="${f.h}"><figcaption>${escapeHTML(f.pie)} ${fotoCredito(f)}</figcaption></figure>` : ''}<div><span class="dq-n">${String(n + 1).padStart(2, '0')}</span><h3>${escapeHTML(tit)}</h3>${desc ? `<p>${escapeHTML(desc)}</p>` : ''}</div></li>`;
+    return `<li class="dq-c${f ? '' : ' dq-c--sin'}">${f ? `<figure><img src="/destinos/img/${slug}/${f.file}" alt="${escapeHTML(f.alt)}" loading="lazy" decoding="async" width="${f.w}" height="${f.h}"${arriba(f)}><figcaption>${escapeHTML(f.pie)} ${fotoCredito(f)}</figcaption></figure>` : ''}<div><span class="dq-n">${String(n + 1).padStart(2, '0')}</span><h3>${escapeHTML(tit)}</h3>${desc ? `<p>${escapeHTML(desc)}</p>` : ''}</div></li>`;
   }).join('');
   const DQ_CSS = `<style>
 .dq-sobre{margin:26px 0 8px}.dq-sobre h2,.dq-qh h2{font-family:var(--font-cond);font-weight:800;font-size:26px;line-height:1;text-transform:uppercase;margin:0 0 12px;color:var(--text-primary)}
@@ -905,7 +907,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav, siblings, c
 
   <!-- HERO -->
   ${heroFoto ? `<section class="destino-hero destino-hero--foto">
-    <img class="destino-hero-img" src="/destinos/img/${slug}/${heroFoto.file}" alt="${escapeHTML(heroFoto.alt)}" width="${heroFoto.w}" height="${heroFoto.h}" fetchpriority="high" decoding="async">
+    <img class="destino-hero-img" src="/destinos/img/${slug}/${heroFoto.file}" alt="${escapeHTML(heroFoto.alt)}" width="${heroFoto.w}" height="${heroFoto.h}" fetchpriority="high" decoding="async"${arriba(heroFoto)}>
     <div class="destino-hero-shade"></div>
     <div class="destino-hero-inner">
       <span class="destino-badge">${rd ? typeBadge(dest.tipo).replace(/^\S+\s/, '') : typeBadge(dest.tipo)}</span>
@@ -1124,7 +1126,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
     const badge = typeBadge(dest.tipo);
     const fh = (loadFotos(destSlug) || {}).hero;
     if (fh) hayMini = true;
-    const mini = fh ? `<img class="dcc-mini" src="/destinos/img/${destSlug}/${fh.file}" alt="${escapeHTML(fh.alt || dest.nombre)}" loading="lazy" decoding="async">` : '';
+    const mini = fh ? `<img class="dcc-mini" src="/destinos/img/${destSlug}/${fh.file}" alt="${escapeHTML(fh.alt || dest.nombre)}" loading="lazy" decoding="async"${arriba(fh)}>` : '';
     return `
       <a href="/destinos/${destSlug}.html" class="destino-country-card${fh ? ' dcc-con-mini' : ''}${dest.menos_turistico ? ' dcc-menos' : ''}">
         ${mini}<div class="destino-country-card-badge">${dest.menos_turistico ? '<span class="dcc-chip">Menos turístico</span> ' : ''}${badge}</div>

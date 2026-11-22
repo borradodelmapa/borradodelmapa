@@ -113,6 +113,23 @@ for (const f of stories) {
   if (fs.existsSync(path.join(ROOT, art)) && !leer(art).includes(`/stories/${slug}/`)) fallos.push(`${art}: no enlaza a su story /stories/${slug}/`);
 }
 
+// CABEZAS NUNCA CORTADAS (Paco, 22 nov 2026: «mira que las cabezas no salgan cortadas. Y que no vuelva a pasar»): una foto vertical no puede ir recortada
+// al centro en un hueco más ancho. Blog: la de un apartado va entera (object-fit:contain); destinos: recortada por arriba (object-position). Lo ponen los generadores.
+{
+  const medidas = (file) => { try { const b = fs.readFileSync(file); let i = 2; while (i < b.length) { if (b[i] !== 0xFF) { i++; continue; } const m = b[i + 1], L = b.readUInt16BE(i + 2); if (m >= 0xC0 && m <= 0xCF && ![0xC4, 0xC8, 0xCC].includes(m)) return { h: b.readUInt16BE(i + 5), w: b.readUInt16BE(i + 7) }; i += 2 + L; } } catch (e) {} return null; };
+  for (const p of paginas.filter((x) => /^blog\/viajes\/[^/]+\.html$/.test(x))) {
+    for (const m of leer(p).matchAll(/<figure class="bd-fig">\s*<img src="([^"]+)"([^>]*)>/g)) {
+      const d = medidas(path.join(ROOT, m[1].replace(/^\//, '')));
+      if (d && d.h >= d.w * 0.95 && !m[2].includes('object-fit:contain')) fallos.push(`${p}: foto vertical recortada (cabeza cortada): ${m[1]} → regenerar con build-blog-viajes.js`);
+    }
+  }
+  for (const p of paginas.filter((x) => x.startsWith('destinos/'))) {
+    for (const m of leer(p).matchAll(/<img[^>]*src="\/destinos\/img\/[^"]+"[^>]*>/g)) {
+      const w = +(m[0].match(/width="(\d+)"/) || [])[1], h = +(m[0].match(/height="(\d+)"/) || [])[1];
+      if (w && h && h >= w * 0.95 && !m[0].includes('object-position')) fallos.push(`${p}: foto vertical recortada (cabeza cortada) → regenerar con build-destinos.js`);
+    }
+  }
+}
 // Paso obligatorio (Paco, 9 nov 2026; P15 de docs/video-checklist.md): toda entrada publicada del blog con vídeo tiene su story
 for (const c of require('./datos-pais.cjs').historias()) {
   if (c.video && !c.borrador && fs.existsSync(path.join(ROOT, 'blog', 'viajes', c.slug + '.html')) && !stories.includes(`stories/${c.slug}/index.html`))
