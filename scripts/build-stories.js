@@ -68,7 +68,7 @@ function creditoBruto(c, s) {
 }
 
 // Portada vertical 3:4 (Google: mínimo 640×853): recorte centrado de la foto elegida, una sola vez
-const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'pueblos')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
+const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'india', 'herramientas', 'node_modules')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
 // En una copia (worktree) el ffmpeg está en la carpeta principal (MKT), 19 nov 2026
 const FFS = [path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), 'ffmpeg'];
 // Con c.caratula (Y15/Y18): la portada es la carátula de YouTube entera, sobre ella misma desenfocada y oscurecida (3:4), y es también el fondo de la primera slide

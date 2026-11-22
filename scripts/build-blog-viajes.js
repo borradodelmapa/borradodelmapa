@@ -10,7 +10,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 // En una copia (worktree) sin «salma marketing» completo, las fotos, créditos y vídeos se leen de la carpeta principal
-const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'pueblos')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
+const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'india', 'herramientas', 'node_modules')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
 const VIDEO_SRC = path.join(MKT, 'salma marketing', 'ligeras-portada');
 const OUT = path.join(ROOT, 'blog', 'viajes');
 const OUT_VIDEO = path.join(OUT, 'video');
