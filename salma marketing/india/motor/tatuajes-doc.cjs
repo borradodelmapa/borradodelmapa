@@ -20,14 +20,14 @@ const GOLPES = (db, ss = 0) => ({ src: 'SFX_golpecitos-creados', ss, db }); // s
 // el motor pone el sonido en (inicio del plano − pico), así que pico = 0,35 − (4,8 − ss del plano) para que el impacto caiga con el puño.
 const PUNETAZO = (en, ss) => ({ src: 'SFX_punetazo-creado', ss: 0, dur: 0.89, pico: 0.35 - (4.8 - ss), en, gain: 2 });
 const cfg = {
-  titulo: 'TATUAJES DEL MUNDO', formato: '16:9',
+  titulo: 'TATUAJES DEL MUNDO', formato: '16:9', rotuloSegs: 4, // rótulos de lugar 4 s y fuera (Paco, 9 nov 2026: duraban el bloque entero y tapaban el «UN GATO»)
   id: 'tatuajes-doc-completo-v5', out: T + '/salida', ultima: T + '/ULTIMA', ultimaNombre: 'historia-de-los-tatuajes', fotosSerie: T + '/fotos',
   look: 'portra', counter: 'TATUAJES DEL MUNDO',
-  voices: { salma: SALMA_DOC },
+  voices: { salma: SALMA_DOC }, sintonia: { src: 'SFX_sintonia-pueblos', db: -8, mapas: true }, // sintonía del canal en los mapas y la tarjeta (Paco, 9 nov 2026); el resto sin música
   // TRES avisos de seguir (Paco, 4 nov 2026), el modelo de siempre (franja + corazón + batok), cada uno al empezar un mapa (sin voz encima) y con su texto
-  seguir: [{ seg: 105.90, texto: 'Si te está gustando, suscríbete' }, { seg: 233.21, texto: 'Hay más documentales: suscríbete' }, { seg: 307.44, texto: 'Dale a me gusta y compártelo' }], cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
+  seguir: [{ seg: 105.90, texto: 'Si te está gustando, suscríbete' }, { seg: 233.21, texto: 'Hay más documentales: suscríbete' }, { seg: 308.90, texto: 'Dale a me gusta y compártelo' }], cardSecs: 8, kb: 1.6, voiceDb: { salma: -25 }, duckRatio: 5,
   // portada (Paco, 4 nov 2026): el tatuado de Kimbei de espaldas (W85, en grande W85-g), muy cerca y con colores vivos; mismo diseño que los shorts en 16:9
-  portada: { foto: 'W85', foco: [0.5, 0.42, 0.32], vivo: true, l1: 'TATUAJES', l2: 'DE LA MEDICINA A LA MAFIA', tag: 'BORRADO DEL MAPA' },
+  portada: { png: T + '/caratula-final.png' }, // carátula D, elegida por Paco el 9 nov 2026: texto enorme sobre la imagen (excepción M11, como Vietnam); antes W85 con la franja
   card: { l1: 'TATUAJES DEL MUNDO', l2: 'BORRADO DEL MAPA', l3: 'ÚNETE · SUSCRÍBETE', l4: 'GRACIAS POR VERLO', l5: 'Borrado del Mapa' },
   descartes: { M3: 'el clip del puñetazo va al final del gancho, del bloque 1 y del documental, y el cierre repite tatuajes ya vistos, a propósito (Paco, 3-4 nov 2026)' },
   blocks: [
@@ -69,7 +69,6 @@ const cfg = {
       text: 'La palabra «tattoo» viene del tahitiano y samoano tatau. La escribió así, por primera vez en inglés, el capitán Cook en 1769.',
       voz: 'La palabra «tatú» viene del tahitiano y samoano tatau. La escribió así, por primera vez en inglés, el capitán Cook en 1769.',
       en: ['The word "tattoo" comes from the Tahitian and Samoan tatau.', 'Captain Cook first wrote it that way in English in 1769.'],
-      cifra: { word: '1769', text: '1769', sub: 'CAPITÁN COOK', dur: 2.6 },
       shots: [
         { a: 'W11', sc: 'GP' },                                  // mapa antiguo con la ruta del Endeavour
         { a: 'W36', sc: 'PM', from: 'samoano' },                 // tatau samoano (foto de Thomas Andrew, 1890s)
@@ -141,7 +140,6 @@ const cfg = {
     { id: 'ainu', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'HOKKAIDO · JAPÓN', amb: BOSQUE(-30),
       text: 'Las mujeres ainu, en el norte de Japón, se tatuaban la boca y los antebrazos. Empezaban entre los diez y los trece años — a veces antes — y terminaban hacia los quince o dieciséis: la señal de que estaban listas para casarse. La colonización japonesa de Hokkaido, entre 1869 y 1904, acabó prohibiéndolo.',
       en: ['Ainu women, in northern Japan, tattooed their mouths and forearms.', 'They started between ten and thirteen — sometimes earlier — and finished around fifteen or sixteen: the sign that they were ready to marry.', 'The Japanese colonisation of Hokkaido, between 1869 and 1904, ended up banning it.'],
-      cifra: { word: '1869', text: '1869-1904', sub: 'COLONIZACIÓN DE HOKKAIDO', dur: 2.6, y: 560 },
       shots: [
         { a: 'FILE:' + T + '/runway/ainu-color-kling-5s.mp4', sc: 'PP', look: 'app' }, // Runway (IA, Kling 3.0 Pro): la mujer ainu (W4, h. 1930) pasa a color, sonríe y se le mueve el pelo (Paco, 4 nov 2026)
         { a: AINU('W7'), sc: 'PM', look: 'trix', from: 'Empezaban' },
@@ -165,7 +163,7 @@ const cfg = {
     // ═══ BLOQUE 3 · TATUAJES TALEGUEROS ═══
     { id: 'mapa-rusia', video: T + '/mapa-ziro-rusia.mp4', fixed: 5.5, amb: SALA(-30) },
     // 3.1 · RUSIA — EL CÓDIGO VORY V ZAKONE (esquemas propios: no hay fotos libres de estos tatuajes)
-    { id: 'vory', who: 'salma', scene: true, pause: 0.8, rotulo: 'CÓDIGO DE LAS CÁRCELES SOVIÉTICAS · FOTOS: LITUANIA, 2010', amb: SALA(-28, 4), golpe: PUERTA('En las'),
+    { id: 'vory', who: 'salma', scene: true, pause: 0.8, rotulo: 'CÁRCELES SOVIÉTICAS · FOTOS: LITUANIA, 2010', amb: SALA(-28, 4), golpe: PUERTA('En las'),
       text: 'En las cárceles rusas, cada tatuaje del código vory v zakone dice algo concreto. Estrellas en los hombros o las rodillas: «no me arrodillo ante nadie» — la de ocho puntas marca rango. Cúpulas de iglesia ortodoxa en el pecho: cada cúpula, una condena; tres cúpulas, preso para siempre. Un ojo en el pecho: «te vigilo». Un gato, a veces con sombrero: el ladrón profesional.',
       voz: 'En las cárceles rusas, cada tatuaje del código vori v zakone dice algo concreto. Estrellas en los hombros o las rodillas: «no me arrodillo ante nadie» — la de ocho puntas marca rango. Cúpulas de iglesia ortodoxa en el pecho: cada cúpula, una condena; tres cúpulas, preso para siempre. Un ojo en el pecho: «te vigilo». Un gato, a veces con sombrero: el ladrón profesional.',
       en: ['In Russian prisons, every tattoo in the vory v zakone code says something specific.', 'Stars on the shoulders or knees: "I kneel before no one" — the eight-pointed one marks rank.', 'Orthodox church domes on the chest: each dome, one sentence; three domes, a prisoner for life.', 'An eye on the chest: "I am watching you."', 'A cat, sometimes wearing a hat: the professional thief.'],
@@ -197,9 +195,9 @@ const cfg = {
     // 3.2 · MS-13 — EL GIRO: ABANDONAR LA MARCA (sin caras; nada que dé escaparate a la pandilla)
     { id: 'mapa-maras', video: T + '/mapa-rusia-honduras.mp4', fixed: 5.5, amb: CALLE(-32) },
     { id: 'maras', who: 'salma', scene: true, sceneEnd: true, pause: 1.2, rotulo: 'MS-13 · FOTOS: EL SALVADOR Y EE. UU.', amb: CALLE(-30, 6),
-      text: 'En Honduras, según un policía que investiga a las maras, muchos miembros de la MS-13   han dejado de tatuarse símbolos de la pandilla. El mismo tatuaje que antes marcaba pertenencia hoy los hace fáciles de identificar — por la policía, y por bandas rivales.',
-      voz: 'En Honduras, según un policía que investiga a las maras, muchos miembros de la eme ese trece han dejado de tatuarse símbolos de la pandilla. El mismo tatuaje que antes marcaba pertenencia hoy los hace fáciles de identificar — por la policía, y por bandas rivales.',
-      en: ['In Honduras, according to a police officer who investigates the maras, many MS-13 members have stopped getting gang symbols tattooed.', 'The same tattoo that once marked belonging now makes them easy to identify — by the police, and by rival gangs.'],
+      text: 'En Honduras, un informe de inteligencia que publicó el diario El Heraldo reveló que muchos miembros de la MS-13   habían dejado de tatuarse símbolos de la pandilla. El mismo tatuaje que antes marcaba pertenencia hoy los hace fáciles de identificar — por la policía, y por bandas rivales.',
+      voz: 'En Honduras, un informe de inteligencia que publicó el diario El Heraldo reveló que muchos miembros de la eme ese trece habían dejado de tatuarse símbolos de la pandilla. El mismo tatuaje que antes marcaba pertenencia hoy los hace fáciles de identificar — por la policía, y por bandas rivales.',
+      en: ['In Honduras, an intelligence report published by the newspaper El Heraldo revealed that many MS-13 members had stopped getting gang symbols tattooed.', 'The same tattoo that once marked belonging now makes them easy to identify — by the police, and by rival gangs.'],
       shots: [
         { a: 'W146', sc: 'GP', z: 1.2, zfijo: true, dir: 'in', foc: [0.5, 0.45] },   // preso con la cara tatuada («MS» en la frente), CECOT, El Salvador, 2025: acercamiento lento a la cara (Paco)
         { a: 'W113', sc: 'PP', pan: [0.2, 0.25, 0.8, 0.45], z: 0.5, from: 'muchos' }, // espalda, sin cara
@@ -237,30 +235,42 @@ const cfg = {
       ] },
     // 4.3 · TRÍADAS
     { id: 'triadas', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'HONG KONG', amb: CALLE(-30, 2),
-      text: 'En las tríadas chinas, los tatuajes de dragón y tigre marcaban antiguamente el rango. Pero, según un criminólogo especializado, hoy el tatuaje ya no forma parte de la iniciación: los grupos lo evitan para no ser detectados. Muchos líderes no llevan ninguno. Un tatuaje de tríada, por sí solo, ya no prueba nada.',
-      en: ['In the Chinese triads, dragon and tiger tattoos once marked rank.', 'But, according to a specialist criminologist, tattoos are no longer part of initiation today: groups avoid them so as not to be detected.', 'Many leaders have none.', 'A triad tattoo, on its own, no longer proves anything.'],
+      text: 'En las tríadas chinas, los tatuajes de dragón y tigre marcaban antiguamente el rango. Pero, según el criminólogo Sundramoorthy, de la Universidad Sains de Malasia, hoy, en Malasia, el tatuaje ya no forma parte de la iniciación: los grupos lo evitan para no ser detectados. Muchos líderes no llevan ninguno. Un tatuaje de tríada, por sí solo, ya no prueba nada.',
+      voz: 'En las tríadas chinas, los tatuajes de dragón y tigre marcaban antiguamente el rango. Pero, según el criminólogo Sundramurti, de la Universidad Sáins de Malasia, hoy, en Malasia, el tatuaje ya no forma parte de la iniciación: los grupos lo evitan para no ser detectados. Muchos líderes no llevan ninguno. Un tatuaje de tríada, por sí solo, ya no prueba nada.',
+      en: ['In the Chinese triads, dragon and tiger tattoos once marked rank.', 'But, according to criminologist Sundramoorthy, of Universiti Sains Malaysia, today, in Malaysia, tattoos are no longer part of initiation: groups avoid them so as not to be detected.', 'Many leaders have none.', 'A triad tattoo, on its own, no longer proves anything.'],
       shots: [
         { a: 'W193', sc: 'GP', look: 'trix', pan: [0.5, 0.2, 0.5, 0.8], z: 0.2 }, // ciudad amurallada de Kowloon desde el aire
         { a: 'W228', sc: 'PP', pan: [0.5, 0.1, 0.5, 0.8], z: 0.4, from: 'los tatuajes' }, // espalda con dragón, Hong Kong
         { a: 'W226', sc: 'PM', pan: [0.5, 0.2, 0.5, 0.6], z: 0.3, from: 'tigre' },  // espalda tatuada en un mercado de Hong Kong
         { a: 'W184', sc: 'PM', from: 'Pero,' },                                  // calle de Kowloon
-        { a: 'W227', sc: 'PP', pan: [0.2, 0.4, 0.5, 0.5], z: 0.5, from: 'hoy el' }, // brazo con dragón, Hong Kong
+        { a: 'W227', sc: 'PP', pan: [0.2, 0.4, 0.5, 0.5], z: 0.5, from: 'hoy,' }, // brazo con dragón, Hong Kong
         { a: 'W196', sc: 'PP', from: 'los grupos' },                             // callejón
         { a: 'W197', sc: 'GP', from: 'Muchos' },                                 // Kowloon de noche
         { a: 'W165', sc: 'D', pan: [0.3, 0.3, 0.6, 0.7], z: 0.4, from: 'Un tatuaje' }, // dragón tatuado
       ] },
     // 4.4 · MÉXICO, SANTA MUERTE
-    { id: 'mexico', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'MÉXICO', amb: CALLE(-30, 12),
-      text: 'En México, la Santa Muerte se tatúa pidiendo protección. Se la ha llamado «la santa narco» — pero una investigación académica de más de diez años de observación dice que esa etiqueta es reduccionista: también la veneran policías, militares y guardias de prisión, pidiendo protección para ellos y sus familias. Hay más de mil grupos y decenas de miles de devotos. Las autoridades mexicanas han destruido miles de altares.',
-      en: ['In Mexico, people tattoo the Santa Muerte asking for protection.', 'She has been called "the narco saint" — but academic research based on more than ten years of observation calls that label reductive: police officers, soldiers and prison guards also worship her, asking protection for themselves and their families.', 'There are more than a thousand groups and tens of thousands of devotees.', 'Mexican authorities have destroyed thousands of altars.'],
+    { id: 'mexico', who: 'salma', scene: true, pause: 0.8, rotulo: 'MÉXICO', amb: CALLE(-30, 12),
+      text: 'En México, la Santa Muerte se tatúa pidiendo protección. La llaman «la santa narco». Pero los investigadores Kate Kingsbury y Andrew Chesnut rechazan esa etiqueta: para ellos es la santa de los dos bandos de la guerra contra el narco. También la veneran policías, militares y guardias de prisión, pidiendo protección para sus familias. Hay más de mil grupos y decenas de miles de devotos.',
+      voz: 'En México, la Santa Muerte se tatúa pidiendo protección. La llaman «la santa narco». Pero los investigadores Keit Kíngsberi y Ándriu Chésnat rechazan esa etiqueta: para ellos es la santa de los dos bandos de la guerra contra el narco. También la veneran policías, militares y guardias de prisión, pidiendo protección para sus familias. Hay más de mil grupos y decenas de miles de devotos.',
+      en: ['In Mexico, people tattoo the Santa Muerte asking for protection.', 'She is called "the narco saint".', 'But researchers Kate Kingsbury and Andrew Chesnut reject that label: to them she is the saint of both sides of the war on drugs.', 'Police officers, soldiers and prison guards also worship her, asking protection for their families.', 'There are more than a thousand groups and tens of thousands of devotees.'],
       cifra: { word: 'mil', text: '+1.000', sub: 'GRUPOS', dur: 2.4, y: 560 },
       shots: [
         { a: 'W155', sc: 'PP', pan: [0.5, 0.25, 0.5, 0.55], z: 0.4 },          // espalda con la Santa Muerte tatuada
-        { a: 'W229', sc: 'D', pan: [0.5, 0.2, 0.5, 0.8], z: 0.4, from: 'Se la' }, // Santa Muerte tatuada en la pierna
-        { a: 'W161', sc: 'GP', pan: [0, 0.5, 1, 0.5], z: 0.25, from: 'pero una' }, // templo de la Santa Muerte (Querétaro)
-        { a: 'W231', sc: 'PP', pan: [0.3, 0.3, 0.6, 0.6], z: 0.4, from: 'también' }, // calavera tatuada
+        { a: 'W229', sc: 'D', pan: [0.5, 0.2, 0.5, 0.8], z: 0.4, from: 'La llaman' }, // Santa Muerte tatuada en la pierna
+        { a: 'W161', sc: 'GP', pan: [0, 0.5, 1, 0.5], z: 0.25, from: 'Pero los' }, // templo de la Santa Muerte (Querétaro)
+        { a: 'W231', sc: 'PP', pan: [0.3, 0.3, 0.6, 0.6], z: 0.4, from: 'También' }, // calavera tatuada
+        { a: 'W230', sc: 'D', pan: [0.3, 0.5, 0.7, 0.5], z: 0.3, from: 'pidiendo' }, // calavera tatuada en el pie
         { a: 'W157', sc: 'PM', from: 'Hay más' },                                // velas
-        { a: 'W230', sc: 'D', pan: [0.3, 0.5, 0.7, 0.5], z: 0.3, from: 'Las autoridades' }, // calavera tatuada en el pie
+      ] },
+    // Demolición de Nuevo Laredo, marzo de 2009: NPR (abril 2009) y AP. Las fotos NO son de allí: altares de otros lugares de México (N7, F10), con rótulo.
+    { id: 'mexico-altares', who: 'salma', sceneEnd: true, pause: 1.0, rotulo: 'FOTOS: OTROS ALTARES DE MÉXICO', amb: CALLE(-30, 16),
+      text: 'En 2009, en Nuevo Laredo, con soldados vigilando, las excavadoras arrasaron más de treinta altares. La versión oficial: estaban en terreno público sin permiso. Los militares los llamaban narcoaltares.',
+      en: ['In 2009, in Nuevo Laredo, with soldiers standing guard, excavators razed more than thirty altars.', 'The official version: they stood on public land without permission.', 'The military called them narco-altars.'],
+      shots: [
+        { a: 'W240', sc: 'GP' },                                                 // capilla de carretera (CC BY 3.0)
+        { a: 'W241', sc: 'PM', pan: [0.3, 0.5, 0.7, 0.5], z: 0.2, from: 'las excavadoras' }, // altar en Santa Ana Chapitiro, Michoacán
+        { a: 'W242', sc: 'PP', from: 'La versión' },                             // altar con veladoras
+        { a: 'W243', sc: 'GP', from: 'Los militares' },                          // altar de Tepito
       ] },
     // 4.5 · RUSIA HOY
     { id: 'rusia-hoy', who: 'salma', scene: true, sceneEnd: true, pause: 1.0, rotulo: 'RUSIA · FOTOS: LITUANIA, 2010', amb: SALA(-28, 20),
@@ -279,8 +289,8 @@ const cfg = {
       ] },
     // 4.6 · CIERRE (aprobado por Paco el 4 nov 2026) — último plano: el puñetazo del tatuado
     { id: 'cierre', who: 'salma', scene: true, sceneEnd: true, pause: 1.6, amb: GOLPES(-30, 10), golpe: PUNETAZO('Quizá', 1.5),
-      text: 'Yakuza, tríadas, maras: tres mafias, en tres continentes, han llegado a la misma conclusión. El tatuaje que antes probaba pertenencia hoy puede delatarte. Pero fuera de las cárceles, casi todos nos tatuamos por gusto: por un viaje, por un recuerdo, por alguien a quien no queremos olvidar. Hace cinco mil trescientos años, Ötzi se tatuó para curarse. Quizá nosotros seguimos haciendo lo mismo.',
-      en: ['Yakuza, triads, maras: three mafias, on three continents, have reached the same conclusion.', 'The tattoo that once proved belonging can now give you away.', 'But outside prisons, almost all of us get tattooed because we want to: for a journey, for a memory, for someone we do not want to forget.', 'Five thousand three hundred years ago, Ötzi got tattooed to heal himself.', 'Perhaps we are still doing the same.'],
+      text: 'Yakuza, tríadas, maras: tres mafias, en dos continentes, han llegado a la misma conclusión. El tatuaje que antes probaba pertenencia hoy puede delatarte. Pero fuera de las cárceles, casi todos nos tatuamos por gusto: por un viaje, por un recuerdo, por alguien a quien no queremos olvidar. Hace cinco mil trescientos años, Ötzi se tatuó para curarse. Quizá nosotros seguimos haciendo lo mismo.',
+      en: ['Yakuza, triads, maras: three mafias, on two continents, have reached the same conclusion.', 'The tattoo that once proved belonging can now give you away.', 'But outside prisons, almost all of us get tattooed because we want to: for a journey, for a memory, for someone we do not want to forget.', 'Five thousand three hundred years ago, Ötzi got tattooed to heal himself.', 'Perhaps we are still doing the same.'],
       shots: [
         { a: 'W84', sc: 'PM', pan: [0.5, 0.15, 0.5, 0.85], z: 0.3 },           // irezumi de hoy (repaso)
         { a: 'W39', sc: 'PP', pan: [0.5, 0.2, 0.5, 0.8], z: 0.3, from: 'El tatuaje' }, // pe'a samoano (repaso)
@@ -288,6 +298,21 @@ const cfg = {
         { a: 'FILE:' + T + '/runway/otzi-camina-tatuado-muylento.mp4', sc: 'GP', look: 'app', from: 'por un viaje' }, // Ötzi andando (Runway, IA) desde 7:26 (Paco), en vez de la foto fija
         { a: 'FILE:' + T + '/runway/kimbei-golpe-kling-5s.mp4', sc: 'PM', ss: 1.5, from: 'Quizá' }, // ÚLTIMO PLANO: el puñetazo (Runway, IA)
       ] },
+    { id: 'app', video: 'C:/Users/User/Desktop/salma/salma marketing/pueblos/comun/clip-app-16x9.mp4', fixed: 5.9 }, // M16: clip común de la app antes de la tarjeta, sin mencionarlo en la voz (Paco, 9 nov 2026)
   ],
 };
+// MÚSICA POR TRAMOS (Paco, 9 nov 2026; S5): «Fading Shoreline», la del largo de Vietnam, con su mismo método. Bajo la voz, solo pulso (0:15-0:45) y capas (0:45-1:30); la melodía (1:31-2:30), solo donde Salma calla. Primero se oye el lugar. Nunca en las cárceles rusas (vory, vory-castigo, rusia-hoy). Licencia: tatuajes/MUSICA-licencia.txt.
+cfg.musica = { src: 'SFX_fading-shoreline', ratio: 3, trozos: [
+  { de: { b: 'otzi', p: 'Uno,', off: -0.3 }, a: { b: 'otzi', fin: 1, off: 0.4 }, ss: 48, db: -10, fi: 2, fo: 1.5, voz: 1 },                    // capas: «no era decoración, era medicina»
+  { de: { b: 'japon', p: 'Pero', off: -0.3 }, a: { b: 'japon', p: 'legalizó', off: -0.6 }, ss: 18, db: -10, fi: 1.5, fo: 1.5, voz: 1 },            // pulso: la prohibición Meiji
+  { de: { b: 'maories', p: 'origen', off: -0.5 }, a: { b: 'maories', fin: 1, off: 0.4 }, ss: 66, db: -10, fi: 2, fo: 1.5, voz: 1 },               // capas: el luto
+  { de: { b: 'ainu', p: 'Empezaban' }, a: { b: 'ainu', fin: 1, off: 0.4 }, ss: 48, db: -6.5, fi: 2, fo: 1.5, voz: 1 },                           // capas: las niñas ainu
+  { de: { b: 'maras', p: 'mismo', off: -0.3 }, a: { b: 'maras', fin: 1, off: 0.5 }, ss: 18, db: -10, fi: 1.5, fo: 1.5, voz: 1 },                 // pulso: el tatuaje que delata
+  { de: { b: 'italia', p: 'Nápoles,', off: -0.3 }, a: { b: 'italia', fin: 1, off: 0.4 }, ss: 26, db: -10, fi: 1.5, fo: 1.5, voz: 1 },             // pulso: la Camorra
+  { de: { b: 'mexico-altares', off: 0.8 }, a: { b: 'mexico-altares', fin: 1, off: 0.4 }, ss: 24, db: -10, fi: 1.5, fo: 1.2, voz: 1 },            // pulso: la demolición de Nuevo Laredo
+  { de: { b: 'cierre', p: 'Pero' }, a: { b: 'cierre', fin: 1, off: 0.3 }, ss: 66, db: -10, fi: 2, fo: 0.6, voz: 1 },                              // capas que crecen hacia la melodía
+  { de: { b: 'cierre', fin: 1, off: 0.3 }, a: { b: 'app', finB: 1 }, ss: 91, db: -9, fi: 0.6, fo: 1.5 },                                          // la melodía, cuando Salma ya ha callado
+] };
+if (process.env.VISTA_BLOQUES) { cfg.blocks = cfg.blocks.filter(b => process.env.VISTA_BLOQUES.split(',').includes(b.id)); cfg.id += '-vista'; cfg.musica.trozos = cfg.musica.trozos.filter(x => cfg.blocks.some(b => b.id === x.de.b) && cfg.blocks.some(b => b.id === x.a.b)); cfg.ultima = T + '/revisar/vista'; delete cfg.seguir; cfg.descartes = { ...cfg.descartes, M7: 'vista parcial', M13: 'vista parcial', M14: 'vista parcial' }; }
+if (process.env.APLICAR_EDITOR !== 'no' && require('fs').existsSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-tatuajes-doc.json')) require('./editor/aplicar.cjs')(cfg, JSON.parse(require('fs').readFileSync(process.env.EDITOR_OVR || __dirname + '/editor/overrides-tatuajes-doc.json', 'utf8'))); // correcciones hechas en el editor (puerto 8113)
 build(cfg).catch(e => { console.error('FALLO:', e.message); process.exit(1); });

@@ -1,6 +1,46 @@
 {
- "shots": {},
+ "shots": {
+  "antigua": [
+   "S499",
+   "S479"
+  ],
+  "barca": [
+   "S534",
+   "S567",
+   "S554"
+  ],
+  "siglos": [
+   "S593",
+   "S594"
+  ],
+  "cierre": [
+   "S585",
+   "S586",
+   "S354"
+  ],
+  "mapa-final": [
+   "S385"
+  ]
+ },
  "amb": {},
- "text": {},
+ "text": {
+  "llegada": "Llegué de noche, en avión desde Rishikesh. Y mira... lo que más me chocó fue el silencio. La humedad del Ganges,  las luces tenues, nada de ruido.",
+  "normalidad": "Y a cuatro pasos, quemando cuerpos. Los niños jugando. Lo flipante es la normalidad. Nadie se inmuta. Benares es asi juega entre la Vida y la muerte",
+  "lamparas": "Otra noche, miles de lámparas en el ghat. joder si parecía un concierto de AC/DC. Esta gente cualquier día salen ardiendo."
+ },
+ "ss": {},
+ "portada": {
+  "foto": "S481",
+  "foco": [
+   0.5,
+   0.5,
+   0.88
+  ],
+  "l1": "BENARÉS",
+  "l2": "ENTRE LA VIDA Y LA MUERTE",
+  "tag": "BORRADO DEL MAPA · INDIA 4/7"
+ },
+ "mov": {},
+ "seguir": {},
  "audio": {}
 }

@@ -2,16 +2,17 @@
 // Uso: node editor/server.cjs  →  http://localhost:8095     (el motor reutiliza las voces ya generadas: no gasta ElevenLabs si no cambias texto)
 const http = require('http'), fs = require('fs'), path = require('path'), Module = require('module'), { spawn, spawnSync } = require('child_process');
 const HERE = path.resolve(__dirname, '..'), BASE = path.resolve(HERE, '..'), FF = BASE + '/herramientas/node_modules/ffmpeg-static/ffmpeg.exe';
-const CACHE = __dirname + '/cache', CAP = process.argv[2] || 'cap4', OVR = __dirname + (CAP === 'cap4' ? '/overrides.json' : '/overrides-' + CAP + '.json'), PORT = { cap4: 8095, monos: 8096, cap3: 8097, 'whang-od-ep1': 8098, 'sagada-ep2': 8102 }[CAP] || 8103; // un servidor por capítulo: cap4 → 8095, monos → 8096
+const CACHE = __dirname + '/cache', CAP = process.argv[2] || 'cap4', OVR = __dirname + (CAP === 'cap4' ? '/overrides.json' : '/overrides-' + CAP + '.json'), PORT = { cap4: 8095, monos: 8096, cap3: 8097, 'whang-od-ep1': 8098, 'sagada-ep2': 8102, 'haenyeo-ep3': 8104, 'konyak-ep4': 8105, 'moken-ep5': 8106, 'sentineleses-ep6': 8107, 'ainu-ep7': 8108, 'mosuo-ep8': 8109, 'dukha-ep9': 8110, 'aguila-ep10': 8111, 'pueblos-t1-largo': 8112, 'tatuajes-doc': 8113, 'filipinas-v2': 8114 }[CAP] || 8103; // un servidor por capítulo: cap4 → 8095, monos → 8096
 if (!fs.existsSync(OVR)) fs.writeFileSync(OVR, '{"shots":{},"amb":{},"text":{},"audio":{}}');
 fs.mkdirSync(CACHE, { recursive: true });
-const ck = id => /^[WH]\d+$/.test(id) ? CAP + '-' + id : id; // nombre en la caché: las fotos W/H de cada serie llevan su capítulo delante (W05 de Sagada ≠ W05 de Whang-Od)
+const ck = id => /^FILE:/.test(id) ? 'f-' + require('crypto').createHash('md5').update(id).digest('hex').slice(0, 16) : /^[WH]\d+$/.test(id) ? CAP + '-' + id : id; // FILE: = foto con ruta completa (documentales largos)
+// · // nombre en la caché: las fotos W/H de cada serie llevan su capítulo delante (W05 de Sagada ≠ W05 de Whang-Od)
 const { resolve, setSerie, RW, vozEnCache } = require('../motor.cjs');
 const aplicar = require('./aplicar.cjs');
 const crypto = require('crypto');
 const { generar: generarPortada } = require('../portada.cjs');
 const leerOv = () => ({ shots: {}, amb: {}, text: {}, audio: {}, ss: {}, portada: {}, mov: {}, seguir: {}, intro: {}, ...JSON.parse(fs.readFileSync(OVR, 'utf8')) });
-const isVideo = id => /^(RW|V)/.test(id);
+const isVideo = id => /^(RW|V)/.test(id) || /^FILE:.*\.mp4$/i.test(id);
 
 // configuración base del capítulo (sin overrides): misma técnica que hoja.cjs
 const cargarCfg = () => {
@@ -126,7 +127,7 @@ http.createServer((req, res) => {
     if (p.startsWith('/audio-propio/')) { const f = path.basename(decodeURIComponent(p.slice(14))); return file(req, res, __dirname + '/uploads/' + f, 'audio/mpeg'); }
     if (p === '/api/montar' && req.method === 'POST') { montar(u.searchParams.get('calidad')); return send(res, 200, { ok: true }); }
     if (p === '/api/estado') { const L = job.log, et = [...L.matchAll(/ETAPA (\d)\/6 ([^\n]*)/g)].pop(), pl = [...L.matchAll(/PLANO (\d+)/g)].pop(); return send(res, 200, { estado: job.estado, log: L.split('\n').filter(x => !/^(PLANO|ETAPA)/.test(x)).join('\n'), fin: job.fin, seg: job.ini ? Math.round(((job.estado === 'montando' ? Date.now() : job.fin) - job.ini) / 1000) : 0, etapa: et ? +et[1] : 0, etapaTxt: et ? et[2] : '', plano: pl ? +pl[1] : 0, total: job.total, cambios: job.cambios, tieneVideo: fs.existsSync(VIDEO()), tieneOriginal: fs.existsSync(ORIG()), copia: job.copia || '' }); }
-    if (p.startsWith('/thumb/')) { const id = p.slice(7); if (!/^(S|M|V|RW|W|H)\d+$/.test(id)) return send(res, 400, 'id', 'text/plain'); return thumb(id).then(f => file(req, res, f, 'image/jpeg')); }
+    if (p.startsWith('/thumb/')) { const id = decodeURIComponent(p.slice(7)); if (!/^(S|M|V|RW|W|H)\d+$/.test(id) && !/^FILE:[A-Za-z]:\//.test(id)) return send(res, 400, 'id', 'text/plain'); return thumb(id).then(f => file(req, res, f, 'image/jpeg')); }
     if (p.startsWith('/audio/')) { const f = decodeURIComponent(p.slice(7)); if (!audioFiles().some(a => a.file === f)) return send(res, 404, 'no', 'text/plain'); return file(req, res, BASE + '/audios-candidatos/' + f, 'audio/mpeg'); }
     if (p === '/video-original') return file(req, res, ORIG(), 'video/mp4');
     if (p === '/video') return file(req, res, VIDEO(), 'video/mp4');

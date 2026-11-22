@@ -1,1 +1,58 @@
-{"shots":{},"amb":{},"text":{},"audio":{}}
+{
+ "shots": {
+  "cierre": [
+   "RW9002"
+  ]
+ },
+ "amb": {},
+ "text": {
+  "gancho": "Mi habitación en Rishikesh tenía vistas al Ganges con un balcón estrecho y un cristal finísimo. Todos los dias pasaba por delante una familia de monos.",
+  "platano": "Un día se me ocurrió dar un golpecito al cristal. Y pelarle un plátano delante de sus narices.",
+  "cara": "Uno se quedó mirándome fijo. Le cambió la cara.  Se tiró contra el cristal.",
+  "escondi": "Me tuve que esconder acojonado."
+ },
+ "ss": {
+  "cierre": [
+   3.3
+  ]
+ },
+ "portada": {
+  "foto": "S138",
+  "foco": [
+   1,
+   0.5,
+   0.68
+  ],
+  "l1": "LOS MONOS",
+  "l2": "DE RISHIKESH",
+  "tag": "BORRADO DEL MAPA · INDIA 2019"
+ },
+ "mov": {},
+ "seguir": {
+  "activo": true,
+  "seg": 10,
+  "texto": "Si te está gustando, sígueme"
+ },
+ "intro": {
+  "clip": "RW9001",
+  "ss": 3.1,
+  "gainAudio": -5,
+  "sonidos": [
+   {
+    "src": "SFX_mono-grito",
+    "ss": 0,
+    "at": 0.45,
+    "db": -4,
+    "fadeIn": 0.15
+   },
+   {
+    "src": "SFX_mono-ataque",
+    "ss": 0.9,
+    "at": 3.7,
+    "db": 0
+   }
+  ],
+  "dur": 5.03
+ },
+ "audio": {}
+}
