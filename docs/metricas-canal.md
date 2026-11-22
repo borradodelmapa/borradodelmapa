@@ -3,6 +3,37 @@
 Leído en YouTube Studio y TikTok Studio (Chrome de Paco, **solo lectura**, 0 €). Metricool no da estos datos.
 Cada lectura nueva se añade arriba con su fecha; no se borran las anteriores.
 
+## Lectura del 22 nov 2026 (🎬 Vídeo 2, a petición de Paco; Studio de YouTube y TikTok en su Chrome, solo lectura, 0 €)
+
+### YouTube, desde la publicación
+| Vídeo | Formato | Publicado | Dura | Visitas | Se quedaron | Media | Suscr. |
+|---|---|---|---|---|---|---|---|
+| Whang-Od: 3 cosas antes de ir | nuevo (persona + pregunta) | 16 nov | 0:40 | 877 | 54,8 % | ~13 s (32 %) | 0 |
+| Ataúdes colgantes de Sagada | nuevo | 19 nov | 1:00 | 21 | 57,1 % | — | 0 |
+| Viajar a Vietnam en 2026: 5 cosas | práctico | 10 nov | 1:00 | 35 | 47,6 % | — | 0 |
+| Mil años bajo China (Vietnam 1/5) | antiguo, historia | 3 nov | 1:43 | 1,0 K | 71,5 % | ~53 s | +5 |
+| Así es la INDIA (largo) | largo | 17 nov | 11:20 | 28 | — | 3:59 (35 %) | 0 |
+
+- **Los otros largos:** Vietnam caos (11 nov) 30 · Vietnam 2.000 años (12 nov) 13 · 10 pueblos (18 nov) 7 · El Salvador (22 nov) 2 visitas.
+- **El canal en 28 días:** 4,0 K visitas, 33,9 h vistas, +14 suscriptores (14 en total).
+- **Programados sin publicar:** casi todos los shorts de Pueblos (del 24 nov al 22 dic: haenyeo, konyak, shompen, sentinel, ainu, Mustang, dukha, águila, moken, mosuo, kalash, ifugao y aché) y 7 largos. **El formato de Pueblos casi no se ha medido todavía.**
+
+### TikTok
+| Vídeo | Visitas | Media | Completo | Seguidores | Dónde se van |
+|---|---|---|---|---|---|
+| Sagada (18 nov, 0:59) | 714 | 6,5 s | 0,4 % | +1 | 0:01 |
+| Whang-Od (16 nov, 0:39) | 716 | 6,7 s | 1,4 % | 0 | 0:01 |
+| Mausoleo Hồ Chí Minh (11 nov) | 737 | — | — | — | — |
+
+El 99 % viene de «Para ti».
+
+### Lo que se ve (hechos)
+1. **TikTok sigue igual que el 9 nov:** la mayoría se va en el segundo 1, con o sin persona en el primer fotograma. La media sube un poco: 6,5-6,7 s, antes 4-9 s.
+2. **En YouTube, el formato nuevo retiene MENOS que los mejores antiguos:** 55-57 % se quedan, frente al 71-73 % de Vietnam 1/5 y kayan. Los dos con más retención y los únicos con suscriptores son de historia, de 1:34-1:43; los de «3 cosas / 5 cosas» prácticos están en 48-55 %.
+3. **Los largos casi no se reparten** (2-30 visitas). Con 14 suscriptores no hay a quién enseñárselos; el de la India retiene un 35 %.
+4. **Muestra pequeña:** solo 2 shorts del formato nuevo publicados. Lo de Pueblos se sabrá entre el 24 nov y el 22 dic.
+
+
 ## Lectura del 9 nov 2026 (primera)
 
 ### YouTube Shorts (desde la publicación de cada uno)
