@@ -146,6 +146,25 @@ async function build(cfg) {
     if (b.datoFuerte && b.text) { const sil = cfg.silencioDato ?? 0.6; b.lead += sil; b.D += sil; cfg._silencios.push([t + 0.05, t + sil]); }
     t += b.D;
   }
+  // CORTE EN L (T34, prueba; cfg.corteL = true, apagado por defecto): la cola de la última frase de un bloque (≤ 0,5 s, la última palabra) suena ya sobre
+  // la primera imagen del bloque siguiente. El corte se adelanta: el bloque A acorta su imagen y el B empieza antes con más «lead», así que la voz de B,
+  // el silencio de S9 y el total del vídeo no se mueven. No se aplica (⚠ en el informe, N7) si la cola nombra algo (nombre propio o cifra) que la imagen
+  // de B podría contradecir, si B es un vídeo/mapa sin voz o si el bloque lleva corteL: false.
+  cfg._corteL = [];
+  if (cfg.corteL) for (let i = 0; i + 1 < cfg.blocks.length; i++) {
+    const A = cfg.blocks[i], Bk = cfg.blocks[i + 1];
+    if (!A.text || !A.v || A.video || A.intro) continue;
+    const pal = (A.voz || A.text).split(' '), ultima = A.text.split(' ').pop(), iU = (A.voz || A.text).lastIndexOf(' ') + 1;
+    const no = motivo => cfg._corteL.push({ de: A.id, a: Bk.id, ok: false, motivo });
+    if (A.corteL === false || Bk.corteL === false) { no('marcado corteL: false'); continue; }
+    if (A.datoFuerte || A.humano) { no(A.datoFuerte ? 'el bloque es datoFuerte: su último plano aguanta (M19)' : 'tramo humano: va más despacio (N14-4)'); continue; }
+    if (!Bk.text || Bk.video || !(Bk.shots || []).length) { no('el bloque siguiente es un vídeo o mapa sin voz'); continue; }
+    if (/^[0-9]/.test(ultima) || (/^[A-ZÁÉÍÓÚÑ]/.test(ultima) && pal.length > 1 && !/[.!?…]$/.test(pal[pal.length - 2]))) { no('la cola nombra «' + ultima.replace(/[.,;:!?…»]+$/, '') + '»: la primera imagen del bloque siguiente podría contradecirla (N7)'); continue; }
+    const cola = Math.min(0.5, A.vEnd - A.v.al.st[Math.min(iU, A.v.al.st.length - 1)]), hueco = A.D - A.lead - A.vEnd, sh = hueco + cola;
+    if (cola <= 0.05 || hueco < 0) { no('sin cola medible'); continue; }
+    A.D -= sh; Bk.t0 -= sh; Bk.lead += sh; Bk.D += sh;
+    cfg._corteL.push({ de: A.id, a: Bk.id, ok: true, corte: Bk.t0, cola: +cola.toFixed(2), palabra: ultima.replace(/[.,;:!?…»]+$/, '') });
+  }
   const cardT = t; const TOTAL = t + (cfg.cardSecs || 8);
   [].concat(cfg.seguir || []).forEach(sg => { if (sg && sg.en) { const b = cfg.blocks.find(x => x.id === sg.en); if (!b) throw new Error('aviso de seguir: no existe el bloque ' + sg.en); sg.seg = b.t0 + 0.1; } }); // sg.en = al empezar ese bloque, sin recalcular segundos a mano
   const sgInicio = sg => Math.min(sg.seg ?? 20, Math.max(1, cardT - 7)); // aviso de seguir: a los 20 s por defecto (Paco, 30 oct 2026; antes 30)
@@ -331,14 +350,22 @@ async function build(cfg) {
   fv = vparts.map(p => `[${p.idx}:a]highpass=f=80,volume=${p.g.toFixed(2)}dB,adelay=${Math.round(p.t * 1000)}:all=1[p${p.idx}]`).join(';') + ';' + vparts.map(p => `[p${p.idx}]`).join('') + `amix=inputs=${vparts.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL.toFixed(2)},atrim=0:${TOTAL.toFixed(2)},acompressor=threshold=0.12:ratio=3:attack=15:release=200:makeup=2[voz]`;
   fs.writeFileSync(`${W}/fv.txt`, fv); run([...vin, '-filter_complex_script', `${W}/fv.txt`, '-map', '[voz]', '-ac', '2', '-ar', '44100', `${W}/voz.wav`]);
   const bedFiles = []; const cache = {};
+  // S7 LARGA EN LOS CAMBIOS DE LUGAR (T34, prueba; cfg.s7Lugar = segundos, p. ej. 1, apagado por defecto): si el bloque es de otro sitio que el anterior
+  // (otro ambiente o rótulo de lugar distinto), su ambiente entra cfg.s7Lugar s antes del corte, con la subida repartida en ese tiempo. Dentro del mismo lugar, 0,17 s.
+  const esLugar = r => r && !/^(FOTO|V[IÍ]DEO|IMAGEN|ARCHIVO)\b/i.test(String(r)); // los rótulos de crédito («FOTO: …») no son un lugar
+  const lugarDe = b => { const a = [].concat(b.amb || [])[0], r = [b.rotulo, ...(b.shots || []).map(s => s.rotulo)].find(esLugar); return { amb: a ? a.src : '', rot: r ? String(r).split('·')[0].trim() : '' }; };
+  cfg._s7 = []; let lugarPrev = null;
   cfg.blocks.forEach(b => {
+    const lugar = lugarDe(b), otro = lugarPrev && (lugar.amb !== lugarPrev.amb || (lugar.rot && lugarPrev.rot && lugar.rot !== lugarPrev.rot));
+    const cambia = cfg.s7Lugar && otro && b.t0 > 0 && [].concat(b.amb || []).length; lugarPrev = lugar;
+    const pre = cambia ? cfg.s7Lugar : (cfg.ambPrelap ?? 0.17); if (cambia) cfg._s7.push({ blk: b.id, entra: Math.max(0, b.t0 - pre), corte: b.t0 });
     // b.amb puede ser una capa o una lista de capas (Baler, 12 nov 2026: lluvia + disparos lejanos a la vez); con una sola, todo igual que antes
     for (const a of (Array.isArray(b.amb) ? b.amb : b.amb ? [b.amb] : [])) {
     const f = resolve(a.src); const key = a.src + '|' + (a.ss || 0);
     if (!cache[key]) { const o = `${W}/amb_${a.src}_${a.ss || 0}.wav`; run(['-ss', String(a.ss || 0), '-i', f, '-vn', '-t', '25', '-ac', '2', '-ar', '44100', o]); cache[key] = { f: o, mean: meanDb(o), d: dur(o) }; }
-    const c = cache[key]; const gain = (a.db ?? -26) - c.mean; const L = b.D + 0.8; const off = ((b.t0 * 1.7) % (2 * c.d));
+    const c = cache[key]; const gain = (a.db ?? -26) - c.mean; const L = b.D + 0.8 + Math.max(0, pre - 0.17); const off = ((b.t0 * 1.7) % (2 * c.d)), fin = cambia ? Math.min(pre, b.t0) : 0.5;
     const o2 = `${W}/bed_${bedFiles.length}.wav`;
-    run(['-i', c.f, '-filter_complex', `[0:a]highpass=f=140,asplit[x][y];[y]areverse[r];[x][r]concat=n=2:v=0:a=1,aloop=loop=-1:size=2147483647,atrim=start=${off.toFixed(2)}:end=${(off + L).toFixed(2)},asetpts=PTS-STARTPTS,volume=${gain.toFixed(1)}dB,afade=t=in:d=0.5,afade=t=out:st=${(L - 0.5).toFixed(2)}:d=0.5,adelay=${Math.round(Math.max(0, b.t0 - (cfg.ambPrelap ?? 0.17)) * 1000)}:all=1[o]`, '-map', '[o]', o2]); // S7 (T30): el ambiente entra unos 5 fotogramas antes del corte
+    run(['-i', c.f, '-filter_complex', `[0:a]highpass=f=140,asplit[x][y];[y]areverse[r];[x][r]concat=n=2:v=0:a=1,aloop=loop=-1:size=2147483647,atrim=start=${off.toFixed(2)}:end=${(off + L).toFixed(2)},asetpts=PTS-STARTPTS,volume=${gain.toFixed(1)}dB,afade=t=in:d=${fin.toFixed(2)},afade=t=out:st=${(L - 0.5).toFixed(2)}:d=0.5,adelay=${Math.round(Math.max(0, b.t0 - pre) * 1000)}:all=1[o]`, '-map', '[o]', o2]); // S7 (T30): el ambiente entra unos 5 fotogramas antes del corte
     bedFiles.push(o2);
     }
     // b.fx: efectos puntuales [{ src, at (s desde el inicio del bloque), db }] — un cañonazo, un golpe en la mesa. Suenan una vez, sin bucle.
@@ -420,8 +447,21 @@ async function build(cfg) {
     run(['-i', resolve(SGs.sonido || 'SFX_sigueme-batok'), '-vn', '-ac', '2', '-ar', '44100', '-af', `volume=${SGs.sonidoDb ?? 8}dB,adelay=${Math.round(sgInicio(SGs) * 1000)}:all=1`, o]);
     run(['-i', mixIn, '-i', o, '-filter_complex', `[0:a][1:a]amix=inputs=2:normalize=0:duration=first[m3]`, '-map', '[m3]', `${W}/mix3${suf(i)}.wav`]); mixIn = `${W}/mix3${suf(i)}.wav`;
   });
+  // SUBIDA ANTES DEL datoFuerte (T34, prueba; cfg.subidaDato = true o { src, db }, apagado por defecto): un sonido ascendente suave que ACABA justo donde
+  // empieza el silencio de S9. sfx/subida-dato.mp3 lo creamos nosotros con ffmpeg (barrido de seno + ruido rosa filtrado, 1,4 s, 22 nov 2026, 0 €, sin licencia de terceros).
+  cfg._subidas = [];
+  if (cfg.subidaDato && (cfg._silencios || []).length) {
+    const SD = cfg.subidaDato === true ? {} : cfg.subidaDato, f = resolve(SD.src || 'SFX_subida-dato'), d = dur(f), sin = [], sfl = [];
+    cfg._silencios.forEach(([a], i) => { const t0 = Math.max(0, a - d); sin.push('-i', f); sfl.push(`[${i + 1}:a]volume=${SD.db ?? -4}dB,adelay=${Math.round(t0 * 1000)}:all=1[sd${i}]`); cfg._subidas.push({ empieza: t0, acaba: a }); });
+    run(['-i', mixIn, ...sin, '-filter_complex', sfl.join(';') + ';[0:a]' + cfg._silencios.map((_, i) => `[sd${i}]`).join('') + `amix=inputs=${cfg._silencios.length + 1}:normalize=0:duration=first[msd]`, '-map', '[msd]', `${W}/mixsd.wav`]); mixIn = `${W}/mixsd.wav`;
+  }
   const silF = (cfg._silencios || []).map(([a, b2]) => `volume=enable='between(t,${a.toFixed(2)},${b2.toFixed(2)})':volume=0,`).join(''); // S9 (T30): silencio total antes del datoFuerte
   run(['-i', mixIn, '-af', silF + 'loudnorm=I=-14:TP=-1.5:LRA=9', '-ar', '44100', `${W}/final.wav`]);
+  // T34 (prueba): los segundos exactos de S7 larga y de la subida van al informe y al acta (se calculan en la mezcla, después de reglas())
+  if (cfg.s7Lugar || cfg.subidaDato) { const lin = [
+    ...(cfg.s7Lugar ? (cfg._s7.length ? cfg._s7.map(x => 'ℹ [T34 S7 larga] ' + x.blk + ': el ambiente del lugar nuevo entra en ' + x.entra.toFixed(2) + ' s, corte en ' + x.corte.toFixed(2) + ' s') : ['⚠ [T34 S7 larga] ningún cambio de lugar entre bloques']) : []),
+    ...(cfg.subidaDato ? (cfg._subidas.length ? cfg._subidas.map(x => 'ℹ [T34 subida] de ' + x.empieza.toFixed(2) + ' a ' + x.acaba.toFixed(2) + ' s, justo antes del silencio de S9') : ['⚠ [T34 subida] ningún datoFuerte: no hay subida']) : [])].join('\n');
+    console.log(lin); for (const f of [`${OUT}/${cfg.id}-informe-reglas.txt`, `${OUT}/${cfg.id}-acta.txt`]) if (fs.existsSync(f)) fs.appendFileSync(f, '\n' + lin + '\n'); }
   // SOLO_AUDIO=<carpeta>: guarda la mezcla y sus pistas y para, sin exportar vídeo, para oír niveles antes de un render largo (Paco, 6 nov 2026). Sin esa variable, nada cambia.
   if (process.env.SOLO_AUDIO) { const SA = process.env.SOLO_AUDIO; fs.mkdirSync(SA, { recursive: true }); for (const n of ['voz', 'amb', 'musica', 'final']) if (fs.existsSync(`${W}/${n}.wav`)) fs.copyFileSync(`${W}/${n}.wav`, `${SA}/${n}.wav`); fs.writeFileSync(`${SA}/tiempos.json`, JSON.stringify(cfg.blocks.filter(b => b.id).map(b => ({ id: b.id, t0: b.t0, D: b.D })))); console.log('SOLO_AUDIO: mezcla guardada en ' + SA); process.exit(0); }
   // 6) composición
