@@ -475,4 +475,70 @@ module.exports = [
       W('Ministerio de Asuntos Exteriores de España: recomendaciones de viaje a El Salvador', 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=El%20Salvador'),
     ],
   },
+  // Short 9:16 · T27 · montaje: salma marketing/pueblos/ache (v7, ULTIMA) · expediente: docs/ache-expediente.md · guion: docs/pueblos-ache-guion-direccion.md
+  // YouTube _lnY6gA-40o, mar 22 dic 2026 (los shorts llevan su vídeo propio en la entrada). Límites (F4, Estrategia 19 nov): «genocidio» solo como denuncia de Münzel;
+  // los ypeti NO eran el grupo más pequeño; sin cifra de población actual.
+  {
+    orden: 221,
+    slug: 'tribus-de-paraguay-los-ache-casi-se-borran-del-mapa',
+    variosPaises: true,
+    fecha: '2026-12-22',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Paraguay',
+    pais: 'Paraguay',
+    titulo: 'Tribus de Paraguay: los aché casi se borran del mapa',
+    resumen: 'En el bosque de Paraguay, los aché ypeti arreglaban sus conflictos con cosquillas, mientras otros grupos aché lo hacían a garrotazos. En 1959 fueron los primeros en salir del bosque. Tras el contacto, las epidemias se llevaron a más de la mitad de los aché. Hoy suben su lengua a internet.',
+    video: 'pueblos-ache.mp4',
+    realidad: 'Capítulo documental narrado por Salma con fotos de Wikimedia Commons y vídeos con licencia libre o de una televisión local, con su autor al final. No hemos estado allí: cada dato sale de las fuentes que citamos.',
+    creditosDe: 'salma marketing/pueblos/ache',
+    creditosIntro: 'Fotos de Wikimedia Commons y vídeos. Gracias a sus autores:',
+    creditosExtra: [
+      ['Vídeo: Carito Serafini, «Los Aché de Cerro Morotí» (IPAC, 2010)', 'CC BY', 'https://www.youtube.com/watch?v=VrKhoKqq0Hc'],
+      ['Vídeo: red interior tv, Canal 16 Santa Rita, «Indígenas ACHE de Puerto Barra» (2012)', 'CC BY', 'https://www.youtube.com/watch?v=0ztV_-LzhPU'],
+    ],
+    fotos: { portada: 'W3', posicion: '50% 0%', galeria: [
+      ['W4', 'Un túnel de árboles en la reserva de Mbaracayú.'],
+      ['W1', 'El bosque Atlántico de Paraguay.'],
+      ['W6', 'Un tronco en la reserva de Mbaracayú.'],
+      ['W7', 'Atardecer en la reserva de Mbaracayú.'],
+      ['W8', 'Nubes sobre la reserva de Mbaracayú.'],
+      ['W5', 'Hongos en el bosque de Mbaracayú.'],
+    ] },
+    cifras: [['1959', 'Los ypeti salen del bosque'], ['40 → 30', 'Ypeti, del contacto a 1987'], ['+ de la mitad', 'De todos los aché, tras el contacto']],
+    story: {
+      portada: 'W3',
+      slides: [
+        { foto: 'W4', h: 'Paz con cosquillas', t: 'En el bosque de Paraguay, los aché ypeti arreglaban sus conflictos con cosquillas. Los demás aché lo hacían a garrotazos.', credito: ['Víctor Azcona', 'CC BY-SA 4.0'] },
+        { foto: 'W1', h: 'Cómo era', t: 'Se emparejaban hombres de bandas rivales y se hacían cosquillas. Después, cantos y un juego: coger el frijol.', credito: ['Ilosuna', 'CC BY-SA 3.0'] },
+        { foto: 'W7', h: '1959', t: 'Los ypeti fueron los primeros aché en salir del bosque.', credito: ['Víctor Azcona', 'CC BY-SA 4.0'] },
+        { foto: 'W8', h: 'Más de la mitad', t: 'Entre todos los grupos aché, tras el contacto, más de la mitad murió en pocos años de epidemias que nunca habían conocido (Kim Hill).', credito: ['Víctor Azcona', 'CC BY-SA 4.0'] },
+        { foto: 'W6', h: 'Unos cuarenta', t: 'Los ypeti eran unos cuarenta cuando salieron del bosque. En 1987 quedaban treinta.', credito: ['Víctor Azcona', 'CC BY-SA 4.0'] },
+        { foto: 'W3', h: 'Hoy', t: 'Desde Kuetuvy, junto a la reserva de Mbaracayú, suben su lengua y su cultura a internet.', credito: ['Barrioflores', 'CC BY-SA 4.0'], salida: 'Leer la historia completa' },
+      ],
+    },
+    secciones: [
+      { h: 'Paz con cosquillas', foto: ['W4', 'Un túnel de árboles en la reserva de Mbaracayú, en el bosque Atlántico de Paraguay.'], p: [
+        'Los **aché** son un pueblo cazador y recolector del bosque del este de **Paraguay**. Su nombre quiere decir «persona». Vivían en varios grupos, y la mayoría resolvía las ofensas y las muertes con el ***tõ mumbu*** («partir cabezas»): una pelea a garrotazos entre hombres de bandas distintas.',
+        'Los **ypeti** no. Según el proyecto de lenguas DOBES, del Instituto Max Planck, en sus reuniones los hombres de bandas rivales **se emparejaban y se hacían cosquillas**. Se pintaban con carbón y plumón de buitre, como los demás para la pelea, y después venían los cantos y un juego, el *proaa mata*: «coger el frijol».',
+      ] },
+      { h: 'Salir del bosque', foto: ['W7', 'Atardecer en la reserva de Mbaracayú.'], p: [
+        'En **1959**, los ypeti fueron los primeros aché en salir del bosque y quedarse en contacto con los paraguayos. Lo que vino después lo cuenta el antropólogo **Kim Hill**, que trabajó décadas con los aché: entre todos los grupos aché, tras el contacto, **más de la mitad** murió en pocos años de epidemias que nunca habían conocido.',
+        'Los ypeti eran **unos cuarenta** cuando salieron; en **1987 quedaban treinta**.',
+        'En los años setenta, el antropólogo alemán **Mark Münzel** denunció lo que les pasaba a los aché como un genocidio (IWGIA, 1973). Es un término discutido, y el Gobierno de Paraguay lo negó. En 2014 se presentó una querella en Argentina; no consta sentencia.',
+      ] },
+      { h: 'Los aché hoy', foto: ['W3', 'Aché de Kuetuvy con el móvil, en el proyecto Ache Djawu (2014).'], p: [
+        'Hoy los aché viven en comunidades del este de Paraguay. Una de ellas, **Kuetuvy**, está junto a la reserva de **Mbaracayú**. Desde allí, el proyecto **Ache Djawu** sube a internet su lengua y su cultura desde 2014.',
+        'No hemos encontrado una cifra fiable de cuántos aché hay hoy en los datos abiertos del censo indígena de 2022, así que no damos ninguna.',
+      ], enlaces: [['Paraguay', '/destinos/paraguay.html']] },
+    ],
+    cierre: 'Si visitas comunidades indígenas, hazlo con permiso y con guías de la propia comunidad: son personas, no una atracción.',
+    nota: 'Datos revisados en noviembre de 2026. Lo de las cosquillas sale de DOBES (Instituto Max Planck); las cifras de los ypeti y de las epidemias, de Kim Hill. «Genocidio» es la denuncia de Münzel, un término discutido; no lo afirmamos. No damos cifra de población actual porque no hemos encontrado una fuente abierta.',
+    fuentes: [
+      W('DOBES (Instituto Max Planck): los aché', 'https://dobes.mpi.nl/projects/ache/people'),
+      W('Kim Hill: «Ache», Encyclopedia of World Cultures', 'https://www.encyclopedia.com/humanities/encyclopedias-almanacs-transcripts-and-maps/ache'),
+      W('Traditions of Conflict: «Tickle-fight Diplomacy» (2021)', 'https://traditionsofconflict.com/blog/2021/10/17/tickle-fight-diplomacy-and-other-methods-of-greeting-and-conflict-management'),
+      W('Wikipedia: aché', 'https://en.wikipedia.org/wiki/Ach%C3%A9'),
+      W('ABC Color: la querella de 2014 en Argentina', 'https://www.abc.com.py/edicion-impresa/internacionales/garzon-apoya-querella-por-genocidio-contra-etnia-ache-1233028.html'),
+    ],
+  },
 ];

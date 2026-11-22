@@ -115,7 +115,7 @@ ${dias ? `      <ul>\n${dias}\n      </ul>\n` : ''}      <p><a class="pg-btn" hr
 // Autores y licencias de las fotos del episodio (<creditosDe>/fotos/ATRIBUCIONES.txt)
 function atribuciones(c) {
   const atr = {};
-  fs.readFileSync(path.join(MKT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.split(' · '); atr[p[0]] = { autor: p[2], lic: p[3], u: p[4] }; });
+  fs.readFileSync(path.join(MKT, c.creditosDe, 'fotos', 'ATRIBUCIONES.txt'), 'utf8').split('\n').filter(Boolean).forEach((l) => { const p = l.trim().split(' · '); atr[p[0]] = { autor: p[2], lic: (p[3] || '').replace(/\s*\(.*$/, ''), u: p[4] || (p[1] ? 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(p[1].replace(/[«»]/g, '').trim().replace(/ /g, '_')) : '') }; }); // sin URL (formato «W1 · «fichero» · autor · licencia», aché 22 nov 2026): la de su ficha en Commons
   return atr;
 }
 // Entrada de varios episodios (largo de temporada, 6 nov 2026): c.fotosEpisodios = carpeta de la serie; cada foto es 'episodio/W39' y lleva el autor de SU episodio.
@@ -347,7 +347,7 @@ ${barra || CABECERA}
 <main class="bd-main">
 ${barra ? '' : `  <p class="bd-crumbs"><a href="/blog/">Historias</a> · ${esc(paisH || c.serie)}</p>
 `}${hero ? `  <header class="bd-hero${c.caratula ? ' car' : ''}">
-    <img src="${hero.src}" alt=""${!c.caratula && c.fotos.posicion ? ` style="object-position:${c.fotos.posicion}"` : ''} fetchpriority="high">
+    <img src="${hero.src}" alt=""${!c.caratula && (c.fotos.posicion || esVertical(hero.src)) ? ` style="object-position:${c.fotos.posicion || '50% 10%'}"` : ''} fetchpriority="high">
     <div class="bd-hero-txt">
 ${cabeza}
     </div>
