@@ -216,3 +216,5 @@ Hoy salieron a la vez Vietnam 2/5 y 3/5 (de casi 2 min, sin primer comentario: P
 - **Vídeo relacionado:** «Kayan, no "mujeres jirafa"» en lugar de «el norte en moto» (tToGJVR1VFE): ese no se publica hasta el 7 dic y Studio solo deja elegir vídeos públicos. Se puede cambiar a tToGJVR1VFE a partir del 7 dic.
 - **TikTok:** Metricool 435602675, mismo día a las 19:00 (AIGC sí), ya programado.
 - **Pendiente:** fijar el primer comentario cuando se publique (tarea `comentarios-shorts-pueblos-studio`).
+
+**24 nov 2026 — Short de las haenyeo (X1BKop_8I8E) — primer comentario fijado (P6, tarea «comentarios-shorts-pueblos-studio»).** Público en Studio y con vídeo relacionado «Las últimas tribus de Asia: 10 pueblos borrados del mapa» (_SnSzkDIkmw). Publicado el «Primer comentario (fijado)» literal de `textos-shorts.md` §02 (con 🌊) y fijado; tras recargar sale «Fijado por @Borradodelmapa», entero y con enlace. El short de los mlabri (3oq1bW4b0TA, hoy 19:00) no está en el calendario de esta tarea: su comentario sigue pendiente.
