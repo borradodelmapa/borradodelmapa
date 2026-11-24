@@ -142,6 +142,9 @@ for (const f of stories) {
     for (const x of fs.readdirSync(d)) {
       const u = path.join(d, x, 'ULTIMA');
       if (!fs.existsSync(u) || !fs.readdirSync(u).some((f) => f.endsWith('.mp4'))) continue;
+      // Un montaje marcado «borrador» en ULTIMA/VERSION.txt aún no es un vídeo que se sube: se mira cuando sea el definitivo
+      const ver = path.join(u, 'VERSION.txt');
+      if (fs.existsSync(ver) && /borrador/i.test(fs.readFileSync(ver, 'utf8'))) continue;
       if (!entradas.includes(`${base}/${x}"`) && !entradas.includes(`${base}/${x}/`)) fallos.push(`salma marketing/${base}/${x}: vídeo terminado sin entrada en el blog (P12) → hacer su entrada con build-blog-viajes.js`);
     }
   }
