@@ -164,7 +164,8 @@ function foto(c, id) {
     if (r.status) throw new Error('No puedo preparar la foto ' + id + ' de ' + c.slug + ': ' + r.stderr);
   }
   if (c.fotosDe && !id.startsWith('a/')) return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: '' };
-  const a = (c.otraSerie && id.includes('/') ? atrDe({ fotosEpisodios: c.otraSerie }, id) : c.fotosArchivo ? archivoDe(c)[id.slice(2)] : c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
+  // c.atrFotos = { id: { autor, lic, u } }: autor de una foto cuya carpeta tiene ATRIBUCIONES.txt en otro formato (Isabella Bird, 25 nov 2026)
+  const a = (c.atrFotos && c.atrFotos[id]) || (c.otraSerie && id.includes('/') ? atrDe({ fotosEpisodios: c.otraSerie }, id) : c.fotosArchivo ? archivoDe(c)[id.slice(2)] : c.fotosEpisodios ? atrDe(c, id) : atribuciones(c)[id]) || {};
   return { src: `/blog/viajes/img/${c.slug}/${nom}.jpg`, credito: `Foto: <a href="${esc(a.u || '#')}" target="_blank" rel="noopener">${esc(a.autor || 'autor desconocido')}</a> · ${esc(a.lic || '')}` };
 }
 // CABEZAS NUNCA CORTADAS (Paco, 22 nov 2026: «mira que las cabezas no salgan cortadas. Y que no vuelva a pasar»). El hueco de cada apartado es 3:2 y la

@@ -68,4 +68,97 @@ module.exports = [
     ],
     cierre: 'Próximo episodio: los mosuo, junto al lago Lugu, en China.',
   },
+  // Short 9:16 · «Diario de grandes viajeros · 1» (P12/P15, encargo de Vídeo 2, 25 nov 2026) · montaje: salma marketing/pueblos/ainu-bird (ULTIMA)
+  // Textos y fuentes: pueblos/ainu-bird/textos-youtube.txt y el guion v4 (claude.ai/artifact/RsTGVLoKfbhEusSRnDYxiL). YouTube jue 26 nov 2026 a las 16:00.
+  // Va en el carril de «Pueblos borrados del mapa» porque el vídeo manda a borradodelmapa.com/pueblos. Las escenas de Runway no se usan como fotos.
+  {
+    orden: 167,
+    slug: 'los-ainu-confiaron-en-una-viajera-inglesa',
+    fecha: '2026-11-26',
+    serie: 'Pueblos borrados del mapa',
+    cap: 'Diario de grandes viajeros · 1',
+    pais: 'Japón',
+    titulo: 'Isabella Bird y los ainu: le pidieron que el Gobierno no se enterara',
+    resumen: 'En 1878, los ainu de Biratori, en Hokkaido, le suplicaron a una viajera inglesa que no contara al Gobierno japonés lo que le enseñaban. Dos años después, Isabella Bird lo publicó todo en Londres. Hoy ese libro se lee en japonés.',
+    video: 'viajeros-1-bird-ainu.mp4',
+    realidad: 'Capítulo documental narrado por Salma. Lo que pasó en Biratori sale de las cartas de Isabella Bird; las fotos son de Wikimedia Commons (autores al final). En el vídeo, la viajera a caballo, su carta, Londres y la mujer que pasa a color son recreaciones. No es un viaje de Paco.',
+    creditosDe: 'salma marketing/pueblos/ainu-bird',
+    otraSerie: 'salma marketing/pueblos',
+    atrFotos: {
+      'Isabella_Bird.jpg': { autor: 'autor desconocido', lic: 'Public domain', u: 'https://commons.wikimedia.org/wiki/File:Isabella_Bird.jpg' },
+      'Ainu_by_Isabella_Bird.jpg': { autor: 'Isabella Bird', lic: 'CC BY-SA 4.0', u: 'https://commons.wikimedia.org/wiki/File:Ainu_by_Isabella_Bird.jpg' },
+      'Nibutani-lago.jpg': { autor: 'Calistemon', lic: 'CC BY-SA 4.0', u: 'https://commons.wikimedia.org/wiki/File:Swans_on_Lake_Nibutani,_Hokkaido,_April_2023_01.jpg' },
+    },
+    creditosExtra: [
+      ['Grabado de Isabella Bird · autor desconocido', 'Public domain', 'https://commons.wikimedia.org/wiki/File:Isabella_Bird.jpg'],
+      ['Grabado «Ainu» de su libro · Isabella Bird', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Ainu_by_Isabella_Bird.jpg'],
+      ['Lago de Nibutani · Calistemon', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Swans_on_Lake_Nibutani,_Hokkaido,_April_2023_01.jpg'],
+    ],
+    fotos: { portada: 'Isabella_Bird.jpg', galeria: [
+      ['ainu/W16', 'Jefes ainu de Piratori, el Biratori de hoy.'],
+      ['ainu/W20', 'Mujeres y niños ainu ante una casa.'],
+      ['ainu/W5', 'Mujer ainu con el tatuaje de la boca (colección Bälz).'],
+      ['ainu/W11', 'Mujer de Shiraoi con el traje de fiesta.'],
+      ['Nibutani-lago.jpg', 'El lago de Nibutani, en el valle del río Saru (Biratori).'],
+      ['ainu/W39', 'Upopoy, el Museo Nacional Ainu, en Shiraoi.'],
+    ] },
+    cifras: [['1878', 'Bird llega a Biratori'], ['1880', 'Su libro sale en Londres'], ['1973', 'Primera traducción al japonés']],
+    story: {
+      portada: 'Isabella_Bird.jpg',
+      slides: [
+        { foto: 'Isabella_Bird.jpg', h: 'Le pidieron silencio', t: 'En 1878, los ainu le suplicaron a una viajera inglesa que no se lo contara al Gobierno japonés. Ella lo publicó todo.', credito: ['autor desconocido', 'Public domain'] },
+        { foto: 'ainu/W16', h: 'Biratori, 1878', t: 'Isabella Bird tenía 46 años. Salió de Tokio en junio y llegó a esta aldea de Hokkaido el 23 de agosto.' },
+        { foto: 'ainu/W3', h: 'Un tatuaje prohibido', t: 'Japón lo había prohibido en 1871. Bird vio cómo tatuaban la boca a una niña con un cuchillo y hollín.' },
+        { foto: 'ainu/W13', h: 'El miedo', t: 'Un padre rechazó la medicina para su hijo enfermo, «porque el Gobierno japonés se enfadaría».' },
+        { foto: 'Ainu_by_Isabella_Bird.jpg', h: 'Londres, 1880', t: 'Dos años después, todo estaba impreso. En el mismo párrafo, voces «las más dulces» y «niños adultos».', credito: ['Isabella Bird', 'CC BY-SA 4.0'] },
+        { foto: 'ainu/W39', h: 'Y Japón lo leyó', t: 'Su libro se tradujo al japonés en 1973. En 2019, una ley reconoció a los ainu como pueblo indígena.', salida: 'Leer la historia completa' },
+      ],
+    },
+    secciones: [
+      { h: 'Una isla que cambió de nombre', foto: ['ainu/W9', 'Un matrimonio ainu; ella lleva el tatuaje de la boca.'], p: [
+        'La isla del norte de Japón se llamaba **Ezo** y era la tierra de los **ainu**. En **1869**, Japón la anexionó, la rebautizó como **Hokkaido** y creó una Comisión de Colonización (*Kaitakushi*) para llenarla de colonos.',
+        'En **1871** prohibió el tatuaje de las mujeres ainu, el que llevaban alrededor de la boca.',
+      ] },
+      { h: 'Una inglesa a caballo', foto: ['Isabella_Bird.jpg', 'Isabella Bird, en un grabado.'], p: [
+        '**Isabella Bird** era inglesa y tenía **46 años**. Enferma desde niña, los médicos le recetaron viajar, y acabó recorriendo medio mundo: de las Montañas Rocosas al Tíbet.',
+        'Salió de Tokio en junio de **1878** con un intérprete, **Itō Tsurukichi**, y llegó a **Biratori**, en el valle del río Saru, el **23 de agosto**. Lo que sigue lo cuenta ella en sus cartas.',
+      ] },
+      { h: 'El tatuaje', foto: ['ainu/W3', 'Mujer ainu con el tatuaje de la boca.'], p: [
+        'En Biratori vio cómo una mujer le hacía cortes en el labio a una niña con un cuchillo grande y le frotaba hollín. La niña apretó las manos y no lloró.',
+        'Le explicaron que sin ese tatuaje ninguna mujer podía casarse («*no woman could marry without it*»), y que la prohibición los tenía muy afligidos.',
+      ] },
+      { h: 'El secreto', foto: ['ainu/W13', 'Una familia ainu ante su casa.'], p: [
+        'Antes de contarle nada, le suplicaron que no informara al Gobierno japonés. Tenían miedo: un padre no quiso que le enviara medicina para su niño enfermo, porque «el Gobierno japonés se enfadaría».',
+        'Aun así, la subieron al monte que hay sobre la aldea y le enseñaron su templo, que según le dijeron no había visto ningún extranjero. Otra vez le pidieron que el Gobierno no se enterara.',
+      ] },
+      { h: 'El libro', foto: ['Ainu_by_Isabella_Bird.jpg', 'Grabado «Ainu» de su libro.'], p: [
+        'Dos años después, en **1880**, todo estaba impreso en Londres: *Unbeaten Tracks in Japan* (John Murray).',
+        'En el mismo párrafo escribió que su voz era «más suave y dulce que nada que haya oído» y que eran «*adult children*», niños adultos.',
+      ] },
+      { h: 'Lo que pasó después', foto: ['ainu/W39', 'Upopoy, el Museo Nacional Ainu, en Shiraoi.'], p: [
+        'Japón mantuvo la prohibición. Según las fuentes divulgativas, la última mujer con el tatuaje completo murió en **1998**.',
+        'En **2019**, una ley reconoció por primera vez a los ainu como pueblo indígena de Japón, y en 2020 abrió **Upopoy**, el Museo Nacional Ainu, en Shiraoi.',
+        'El libro que no debía llegar al Gobierno se tradujo al japonés en **1973** (Kenkichi Takanashi, Heibonsha) y hoy tiene varias traducciones más.',
+      ], enlaces: [['Los ainu: el tatuaje que Japón prohibió', '/blog/viajes/japon-ainu-hokkaido-tatuaje-prohibido']] },
+    ],
+    ficha: [
+      '**Upopoy (Shiraoi):** de 9:00 a 17:00 (cambia según la época), cerrado los lunes; entrada de adulto, 1.200 yenes (web oficial, abril de 2026). A una hora de Sapporo en tren.',
+      '**Nibutani (Biratori):** museos ainu en el valle del río Saru, al sur de Hokkaido.',
+      '**Respeto:** pregunta antes de fotografiar a nadie en las danzas o talleres.',
+    ],
+    nota: 'Datos de noviembre de 2026; horarios y precios cambian, confírmalos en la web oficial de Upopoy antes de ir. Lo que pasó en Biratori es lo que cuenta Bird en su libro.',
+    fuentes: [
+      W('Isabella Bird: «Unbeaten Tracks in Japan» (1880), texto en Internet Archive', 'https://archive.org/details/unbeatentracksin02184gut'),
+      W('Wikipedia: Unbeaten Tracks in Japan', 'https://en.wikipedia.org/wiki/Unbeaten_Tracks_in_Japan'),
+      W('Wikipedia (japonés): 日本奥地紀行, traducciones', 'https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E5%A5%A5%E5%9C%B0%E7%B4%80%E8%A1%8C'),
+      W('Wikipedia: Isabella Bird', 'https://en.wikipedia.org/wiki/Isabella_Bird'),
+      W('Wikipedia: Hokkaido', 'https://en.wikipedia.org/wiki/Hokkaido'),
+      W('Wikipedia: Hokkaidō Development Commission', 'https://en.wikipedia.org/wiki/Hokkaid%C5%8D_Development_Commission'),
+      W('Rekishi Nihon: el tatuaje ainu', 'https://rekishinihon.com/2013/12/05/ainu-tattooing/'),
+      W('Nippon.com: el tatuaje en Japón', 'https://www.nippon.com/en/articles/-/12663'),
+      W('FPCJ: la ley ainu de 2019', 'https://fpcj.jp/wp/wp-content/uploads/2019/11/b8102b519c7b7c4a4e129763f23ed690.pdf'),
+      W('Upopoy: información oficial (abril de 2026)', 'https://ainu-upopoy.go.jp/en/wp-content/uploads/sites/2/2026/04/0a861bc42e82b35e4bc85ab3090b23c2.pdf'),
+    ],
+    cierre: 'Diario de grandes viajeros: viajeros que contaron lo que vieron, y lo que pasó después.',
+  },
 ];
