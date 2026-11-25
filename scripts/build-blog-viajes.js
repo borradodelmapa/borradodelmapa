@@ -61,6 +61,13 @@ if (!PIE_Y_MENU.includes('app-bottom-bar')) throw new Error('No encuentro el men
 // Web Story (8 nov 2026): si la entrada tiene `story`, debajo del vídeo sale el enlace a /stories/<slug>/ (la genera scripts/build-stories.js)
 const { duracionMp4, portadaDe } = require('./video-info.cjs');
 
+// Carátula 16:9 → se escala tal cual; otra proporción (la vertical de un short) → entera sobre su propio fondo desenfocado, sin estirar (25 nov 2026)
+function filtroCaratula(car) {
+  const m = require('child_process').spawnSync(path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), ['-i', car]).stderr.toString().match(/, (\d{2,5})x(\d{2,5})/);
+  if (m && Math.abs(m[1] / m[2] - 16 / 9) < 0.02) return ['-vf', 'scale=1280:720'];
+  return ['-filter_complex', '[0]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,boxblur=28:2,eq=brightness=-0.22[bg];[0]scale=1280:720:force_original_aspect_ratio=decrease[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2'];
+}
+
 fs.mkdirSync(OUT_VIDEO, { recursive: true });
 caps.forEach((c, i) => {
   if (!c.video) { // entrada sin vídeo (artículo de país, guía, fiestas…; 4 nov 2026): solo portada
@@ -72,10 +79,10 @@ caps.forEach((c, i) => {
   // En una copia sin «salma marketing» (worktree), vale el vídeo ya publicado en blog/viajes/video/
   if (!fs.existsSync(src)) { if (!fs.existsSync(dst)) throw new Error('Falta el vídeo ' + src); }
   else if (!fs.existsSync(dst) || fs.statSync(dst).size !== fs.statSync(src).size) fs.copyFileSync(src, dst);
-  if (c.caratula && c.caratula !== 'web') { // 'web' = la carátula es la imagen ya publicada en blog/viajes/img/<slug>.jpg (se cambió a mano en la web); no se copia nada. // la carátula manda: se copia a 1280×720 cuando cambia (en una copia sin «salma marketing», vale la ya publicada)
+  if (c.caratula && c.caratula !== 'web') { // 'web' = la carátula es la imagen ya publicada en blog/viajes/img/<slug>.jpg (se cambió a mano en la web); no se copia nada. // la carátula manda: se copia a 1280×720 cuando cambia; una vertical va entera sobre su fondo desenfocado, sin estirar (25 nov 2026) (en una copia sin «salma marketing», vale la ya publicada)
     const car = c.caratula.includes('/') ? path.join(MKT, c.caratula) : path.join(CARATULAS, c.caratula + '-Y18.jpg'), dp = path.join(OUT, 'img', c.slug + '.jpg'); // c.caratula: id de caratulas-y18 o ruta dentro de salma marketing
     if (fs.existsSync(car)) { // siempre: ffmpeg da el mismo JPG si la carátula no cambia
-      const r = require('child_process').spawnSync(path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), ['-v', 'error', '-y', '-i', car, '-vf', 'scale=1280:720', '-map_metadata', '-1', '-q:v', '3', dp]);
+      const r = require('child_process').spawnSync(path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), ['-v', 'error', '-y', '-i', car, ...filtroCaratula(car), '-map_metadata', '-1', '-q:v', '3', dp]);
       if (r.status || r.error) throw new Error('No puedo copiar la carátula de ' + c.slug + ': ' + (r.stderr || r.error));
     }
   }
