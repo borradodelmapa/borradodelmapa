@@ -84,7 +84,7 @@ La v5 aplica lo que marcó el revisor de guion sobre la v4 (25 nov):
 2. **«Isabella Bird, la gran VIAJERA de cuando era imposible 🇬🇧»** (55). Es la frase de Paco.
 3. **«Isabella Bird: «una mujer es un ESTORBO»… y subió igual 🇬🇧»** (53). Paga en el segundo 44 y no en el gancho, así que solo vale si esa escena sube al tráiler.
 
-**Carátula:** retrato real de Bird (Y4/Y14 piden foto real, y así no hace falta la excepción L1) con «HACE **150** AÑOS · sola por el mundo».
+**Carátula ELEGIDA por Paco (25 nov):** «LA TERCERA PERO QUE EL LOGO ESTE TAMBIEN CENTRADO». Archivo: `salma marketing/pueblos/bird-vida/caratula/bird-vida-caratula.png` (cine-3.html). Es un cartel de cine: la cara recreada con Runway, con escarcha (Paco: «hazlo cinematográfico»; L1 con la excepción de Bird del 22 nov, rótulo RECREACIÓN). Arriba el logo centrado y «VIAJEROS DEL MUNDO»; en grande «LA INSENSATA VIAJERA · ISABELLA BIRD» (texto de Paco). Coste: 4 imágenes gen4, 32 créditos ≈ 0,32 $.
 
 ## COSTE (F5)
 - **Runway, unos 13 planos:** gen4 + Kling, unos 890 créditos ≈ **9 $**. Se reutiliza el caballo-v4. Antes, una prueba con el primer plano (≈ 0,7 $).
