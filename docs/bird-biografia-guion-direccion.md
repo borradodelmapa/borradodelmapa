@@ -79,7 +79,14 @@ La v5 aplica lo que marcó el revisor de guion sobre la v4 (25 nov):
 | Al encontrarse con Jim: «a true easterly fog», él «frozen from head to foot»; la tormenta empieza después, en la llanura («the snowstorm began in earnest») | *A Lady's Life*, carta XVI |
 | «I think it more than likely that my next journey will be to the grave of my kindred» | Stoddart, carta del 30 nov 1903 |
 
-## TÍTULO Y CARÁTULA (Y11, Y13): elige Paco
+## TÍTULO Y CARÁTULA (Y11, Y13)
+**Título ELEGIDO por Paco (25 nov):** «LA 1. HAZLO SEO» → **«Mujeres viajeras: viajó SOLA cuando era imposible 🇬🇧»** (51 caracteres).
+- Búsqueda en el predictivo de YouTube (25 nov): «mujeres viajeras», «mujeres viajeras solas», «pioneras mujeres viajeras» y «mujer viajera». «Isabella Bird» casi no se busca en español.
+- La palabra clave va a la izquierda (Y13). El nombre va en la descripción y en las etiquetas (excepción de Paco, 25 nov · 23:00).
+- **Etiquetas:** mujeres viajeras, mujeres viajeras solas, pioneras mujeres viajeras, mujer viajera, viajera sola, isabella bird, viajeros del mundo, montañas rocosas, historia de viajeros.
+- **EN:** «She Travelled ALONE When It Was Impossible for a Woman 🇬🇧».
+
+(Propuestas anteriores:)
 1. **«ISABELLA BIRD: un forajido, una ventisca y una ESCALERA 🇬🇧»** (55). Es la que recomienda el revisor: todo lo que promete sale en el tráiler (Y20) y no repite la carátula (Y3).
 2. **«Isabella Bird, la gran VIAJERA de cuando era imposible 🇬🇧»** (55). Es la frase de Paco.
 3. **«Isabella Bird: «una mujer es un ESTORBO»… y subió igual 🇬🇧»** (53). Paga en el segundo 44 y no en el gancho, así que solo vale si esa escena sube al tráiler.
