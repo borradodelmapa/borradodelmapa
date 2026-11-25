@@ -1,0 +1,98 @@
+ACTA DE CUMPLIMIENTO (F12) · «Los daasanach: de niña a mujer y de padre a ANCIANO» · short 9:16 · borrador 15 (25 nov 2026)
+Hecha por 🎬 Vídeo contra docs/video-checklist.md (versión 24 nov 2026 · 22:10) y las fichas ①-④.
+Parte del motor: «<nombre> - acta (parte del motor).txt» e «informe de reglas» (sin ❌). Revisores con ojos nuevos sobre este borrador: revision-guion.json y revision-imagen.json. OKs de Paco con sus palabras: ok-paco.json.
+Comprobado con: hojas de fotogramas cada 0,5-1 s, tiempos.json, .srt ES/EN, la config india/motor/dimi-short.cjs, ATRIBUCIONES (fotos, satélite, clips) e investigacion-dimi.md.
+✅ = se cumple (cómo se comprobó) · ❌ = no se cumple (por qué y qué se hizo) · ⏳ = pendiente de Paco.
+
+POR QUÉ ESTA ACTA LLEGA AHORA (Paco, 24 nov: «NO ESTÁN TODAS LAS REGLAS DE VÍDEO METIDAS»)
+Los borradores 6-11 se enseñaron sin acta completa y sin pasar el candado (F12, F13): se arreglaban solo los ❌ y se dejaban los ⚠. Desde el borrador 12, el candado (scripts/revisar-video.cjs) se pasa antes de enseñar nada.
+
+① GUION, TÍTULO Y CARÁTULA
+Y11 ✅ Título y carátula elegidos antes de cerrar el guion (ok-paco.json: Y13, F6).
+Y2 ✅ estudio-titulo.md: buscador predictivo y búsquedas reales.
+Y12 ✅ estudio-titulo.md en la carpeta del vídeo.
+Y13 ✅ Título de Paco: «Los daasanach: de niña a mujer y de padre a ANCIANO 🇪🇹» («Solo en el título»).
+Y3 ✅ Carátula «111 PIELES» y título no comparten frase; la palabra fuerte de la carátula sale en el rótulo de la promesa (~7,5 s).
+Y20 ✅ La promesa del título suena y se ve en 0,2-7 s (niña W04 bajo «una niña…», padre W46 bajo «su padre…»).
+Y19 ✅ El título no se plantea como pérdida.
+Y4 ✅ Portada en 0-0,2 s.
+Y14 ⚠ Texto rehecho: solo «111 PIELES» (2 palabras) + ETIOPÍA · KENIA; se lee a 160 px (dimi-A-160.png). La foto es en blanco y negro (Y14 pide color intenso): es W44, la que eligió Paco («w44», F6). Se respeta su elección y se avisa.
+Y18 ✅ Anciana mirando a cámara, alto contraste.
+Y23 ✅ Comprobado a 160 px: se lee «111 PIELES» y se ve la cara.
+Y16 ✅ Sin IA en la imagen.
+L1 ✅ Pueblos borrados del mapa, con dato y fuente, sin exotismo.
+L3 ✅ Serie Pueblos, lista «Pueblos borrados del mapa».
+F2 ✅ Paco no ha estado: narra solo Salma, sin «yo».
+F4 ✅ Cada dato de la voz tiene fuente (Oryx 2023; Sagawa; NASA/UNEP). La ablación queda fuera por dudosa. «De niña a mujer» solo en el título (decisión de Paco, avisado de que la fuente no lo dice).
+N6 ✅ Sin moraleja; cierra con un dato (pieles sintéticas).
+N4 ✅ Salma no huele ni toca.
+N12 ✅ Tono de crónica.
+N7 ✅ Ninguna imagen contradice la voz: «pieles de leopardo y guepardo» sobre la lámina de pieles y la entrada del leopardo vivo (⚠ «leopardo» cae sobre el panel de la piel de guepardo: se dejó así para que la cifra no coincida con el rótulo); «la mayoría se alquilan» sobre el leopardo vivo; quién lo dijo y la cita de Oryx sobre el poblado sin personas (no se pone en boca de nadie); la ley sobre guepardos vivos; «nunca han juzgado» sobre el poblado (revisores).
+N13 ✅ Una idea por bloque.
+N33 ✅ El gancho cuenta lo que promete el título.
+F3 ✅ Guion v4 aprobado por Paco («Sí, adelante»). La imagen cambió después por sus órdenes (ok-paco.json F6-mov, F6-borrador9).
+G1 ✅ 20 primeros segundos diseñados en el guion; el sígueme a los 20 s. ⚠ Paco ve los 20 s nuevos en este borrador.
+N2 ✅ Abre con imagen concreta y en movimiento (Paco: «desde la primera imagen tiene que haber movimiento»).
+G3 ✅ Apertura distinta de otros shorts de Pueblos.
+N15 ✅ «Así es el Dimi.» + rótulo «EL DIMI · 111 PIELES».
+N16 ✅ Bucle «111 pieles» abierto a los ~8 s y explicado en el pico.
+M1 ✅ Montaje planificado (tiempos.json).
+N9 ✅ Gancho → contexto → humano → pico → ley → cierre → tarjeta.
+N27 ✅ Cada bloque avanza la historia.
+N14 (1)(2)(5)(6)(7) ✅ Impacto primero, sin alarmismo (no se habla de caza furtiva: solo el 13 % se cazaron), rótulos sin repetir la voz.
+M20 ✅ No aplica a shorts; aun así 0,6 s de silencio antes del pico.
+M39 ✅ No aplica a shorts.
+M40 ✅ Mapa a los 9,5 s y delta a los 12,7 s.
+M48 ✅ Las pieles se ven (O2) antes de explicarlas.
+M35 ✅ Niña y padre entran con su palabra.
+M32 · M33 ✅ Clips a velocidad real; cambios de lugar marcados por bloque y rótulo.
+N1 ✅ Frases cortas. N3 ✅ Un dato por frase. N23 ✅ Sin «Y» inicial. N17 ✅ La pregunta va implícita en el gancho. N19 ✅. N20 ✅ «≈ 47 $» como comparación cotidiana. N32 ✅. N26 ✅ El caso concreto (un Dimi, 111 pieles) va antes de lo general. N30 ✅ Cifras al final de la frase. N24 ✅ Causa antes que efecto. N28 ✅ Humano y datos separados. N29 ✅. N31 ✅ La ley va con cómo está hoy («nunca han juzgado»). N21 ✅. N11 ✅. N18 ✅ Sin prueba social en la voz.
+
+② MATERIAL
+F9 ✅ Fotos revisadas una a una; descartadas W07, W08, W10, W29, W31, W32 (desnudos) y W35 (no confirmado), S07 (otro sitio), W33 (desnudos), dos clips de Pexels de zoo y uno de gatos, y el leopardo comiendo una presa.
+F10 ✅ Vídeo ajeno solo con licencia libre (Romaliens CC BY con yt-dlp; Pexels). No hay vídeo libre del Dimi: Paco decide no pedir permiso a nadie (checklist 24 nov · 22:10). Cada clip lleva rótulo con lugar y fecha, sin coincidir con ninguna cifra: RÍO OMO · OMORATE · 2025, MAASAI MARA · KENIA · 2025, SABANA AFRICANA · 2025, POBLADO DAASANACH · 2025. Pexels no da fecha de grabación: se pone el año de publicación (apuntado en ATRIBUCIONES).
+P4 ✅ Excepción de Paco solo para la cara de la niña W04: se ve cara y mano, sin torso; sin nombre ni lugar. El resto, adultos.
+P2 ✅ Autor y licencia de cada pieza en ATRIBUCIONES (fotos, satélite, clips) y en la descripción.
+F6 ✅ Paco eligió W44 (carátula) y pidió la niña, el padre, guepardos vivos y una sola foto de la piel (ok-paco.json).
+M15 ✅ Primer fotograma: carátula con persona; primer plano de vídeo: mujer daasanach en el puente del Omo.
+M21 ✅ Niña, padre y anciano miran a cámara.
+M47 ✅ Padre y anciano con media sonrisa.
+M26 ✅ No es un oficio.
+M36 ✅ No hay reacción real en el material.
+M44 ✅ Sin entrevistas.
+M24 ⚠ Plano de asombro: el Dimi desde el aire (O1, 2018), 6 s, sin cifra ni rótulo. La original es de baja resolución: se ha mejorado (contraste y nitidez, O1-aerea-dimi-2018-c.png) y el paneo va hacia el campamento. El «sígueme» de los 20 s cae encima en la parte de arriba (cielo): no se puede mover sin cambiar G1/M13.
+S1 ❌ No hay sonido real del lugar limpio: los clips de Pexels no traen audio y el vídeo de Romaliens lleva la música del grupo encima en todo el metraje (comprobado el 22 nov). Qué se hizo: viento suave (SFX_viento-libre) como base, sin presentarlo como sonido real (S4).
+S4 ✅ Nada se presenta como sonido real del lugar.
+S5 ⏳ La música la elige Paco de oído (provisional: fading-shoreline).
+S6 ⏳ Tempo, cuando Paco elija la música.
+
+③ REVISIÓN DEL MONTAJE
+F13 ✅ Los dos revisores, subagentes nuevos, pasan sobre este borrador (revision-*.json). Sus ❌ se arreglaron y volvió a pasar un revisor nuevo.
+P5 ✅ Informe del motor sin ❌.
+F12 ✅ Esta acta + la parte del motor.
+M28 ✅ Cortes con el encuadre resuelto.
+M18 ✅ Último plano antes de la tarjeta: anciana W28 a cámara, cabeza entera (W44 viene cortada de origen y queda solo en la carátula).
+M37 ✅ El pico alterna lámina (foto, dos paneles), leopardo (vídeo con cifras) y poblado (vídeo).
+M10 · M25 ✅ Subtítulos repartidos por sentido («ciento once pieles», «hasta doce veces más»…); pies de cifra a más de 100 px del borde. Ninguna cara bajo subtítulo, cifra o rótulo (W04 y W46 con fondo difuminado debajo, sin costura); 2 líneas como máximo.
+M14 · M43 ✅ Instante sin voz (0,75 s) y tarjeta de 4 s entera.
+Cabezas (regla de Paco, 22 nov) ✅ El cierre (W28) con la cabeza entera; W46 entera; W04 lleva la corona cortada por arriba en la foto original.
+M3 ⚠ O2 (hombres de espaldas) 3 veces, como pidió Paco; la lámina y cada felino, una vez.
+M2 ⚠ Avisos del motor: S09 dura menos de 2 s (lo marca la voz); escalas GP seguidas en el satélite; el leopardo dura unos 7 s (es vídeo y se sostiene).
+N25 ⏳ Entonación: la valida Paco de oído (Claude no oye).
+F8 ✅ Paco corrige y se remonta; nunca «arreglado».
+
+④ PUBLICACIÓN (textos-youtube.txt)
+P14 ⏳ Calidad máxima al exportar (el borrador sale a 4,8 Mb/s; la exportación, a ≥ 10 Mb/s).
+Y7 ✅ Nombre: daasanach-dimi-de-nina-a-mujer-de-padre-a-anciano.mp4.
+P6 ✅ Paquete completo en textos-youtube.txt.
+P16 · Y5 ✅ La descripción abre con la promesa y tiene varias líneas.
+P9 ✅ Datos de viaje con fecha (noviembre de 2026) y aviso de confirmarlos.
+Y6 ✅ Short: sin capítulos.
+P17 ✅ Hashtags #Daasanach → #ValleDelOmo → #Etiopía.
+Y8 ✅ Etiquetas.
+Y21 ✅ Ningún vídeo previo de los daasanach (publicaciones-registro.md); se escribe «daasanach» como Oryx.
+P18 ✅ Comentario fijado con pregunta y autores.
+N18 ✅ Sin prueba social inventada.
+Y10 ✅ Paquete EN (título, descripción, .srt). ⚠ El .srt EN trae dos solapes de 0,09 s: se recortan al exportar.
+P1 ✅ YouTube: contenido alterado NO; TikTok: etiqueta de IA SÍ (voz de Salma).
+P10 · P13 · Y1 · Y17 · P11 · P7 · P8 · P3 · P12 · P15 · Y9 ⏳ Fecha, hora, vídeo relacionado y registro: los fija Estrategia y se rellenan al programar.

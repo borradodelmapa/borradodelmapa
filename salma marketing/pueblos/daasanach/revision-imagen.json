@@ -1,0 +1,120 @@
+{
+  "_revision": "Revisor de imagen nuevo (subagente, ojos frescos, F13), 25 nov 2026, 0 €. BORRADOR 15 E:/tmp-motor/dimi/borrador15/pueblos-dimi-short-v1.mp4 (60,0 s, 21 planos). Mirado en E:/tmp-motor/dimi/revimg15/: hoja cada 0,5 s (hoja1-4.jpg), los primeros 3,2 s a 10 fps (inicio.jpg), 26-30 s a 8 fps (pico1.jpg), el corte lámina → leopardo de 29,4 a 30,7 s a 25 fps (corte_leo.jpg), 30-38,5 s a 4 fps (pico2.jpg), el final 53,5-59,9 s (final.jpg); carátula a 160 px. Cambios del 15 comprobados: lámina en dos encuadres (leopardo → guepardo desde «pieles») con la cifra 60 + 51 ✅; leopardo vivo entra en «guepardo» (≈ 29,55 s) y su rótulo MAASAI MARA · KENIA · 2025 sale SOLO de 30,07 a ≈ 33,8 s ✅; guepardo andando fuera del pico ✅; cita de Oryx entera sobre el poblado sin personas con POBLADO DAASANACH · 2025 ✅. Queda 0 ❌ con arreglo; 2 ❌ que no son de arreglo (M24 decide Paco; S1 se dice en el acta).",
+  "F9": {
+    "estado": "✅",
+    "como": "Ninguna foto de otro sitio: W04, W46 y W28 de Rod Waddington (daasanach, Omorate); O1, O2, O3 y la lámina de D. Burgas/Oryx (Dimi, norte de Kenia); satélite del delta del Omo (ESA, NASA/UNEP); clips del puente y de los poblados daasanach (CC BY). Los felinos de Pexels se rotulan como Maasai Mara/sabana africana, nunca como del Dimi (decisión de Paco del 24 nov, animales vivos). Sin presas ni restos."
+  },
+  "F10": {
+    "estado": "✅",
+    "como": "Arreglado el ❌ del 14: la cifra «60 + 51 · LEOPARDOS + GUEPARDOS · 2021» va sobre la lámina (28,2-29,55 s) y el rótulo «MAASAI MARA · KENIA · 2025» entra solo a 30,07 s, sin nada apilado, y se lee ≈ 3,7 s. Licencias en clips/ATRIBUCIONES.txt (Pexels con autor, enlace y fecha; Romaliens CC BY). Cada clip ajeno con rótulo de lugar y fecha: RÍO OMO · OMORATE · 2025, MAASAI MARA · KENIA · 2025, POBLADO DAASANACH · 2025 (cita, 37,5-41,2 s; jóvenes, 50,8-52,8 s), SABANA AFRICANA · 2025 (44,9-47,4 s). ⚠ (no ❌): el fundido de la cifra 60 + 51 aún se ve, semitransparente, 0,13 s sobre el leopardo (29,57-29,70 s), y el de «400 → 5.000 CHELINES» 0,15 s sobre la choza del poblado (36,95-37,10 s); el rótulo no coincide con ninguno. Si se quiere limpio del todo: bajar dur de la cifra 60 + 51 de 1,3 a ≈ 1,15 y la de 400 → 5.000 de 1,8 a ≈ 1,65 en dimi-short.cjs."
+  },
+  "P4": {
+    "estado": "✅",
+    "como": "Excepción de Paco (registro 24 nov 2026 · 22:10) cumplida: W04 (2,68-5,5 s) solo la cara y la mano en la barbilla, sin torso ni desnudo, sin nombre ni lugar (el rótulo de Omorate va solo sobre el puente); no está en la portada ni en la carátula. W46 (padre ilustrativo, 5,5-6,95 s) adulto. Ningún otro niño reconocible; la persona de poblado-jovenes va de espaldas. Nada humillante ni pobreza exhibida."
+  },
+  "S1": {
+    "estado": "❌",
+    "motivo": "Se dice en el acta: no hay ambiente REAL limpio del lugar (los clips de Pexels no traen audio y el vídeo CC BY de Romaliens lleva música en todo el metraje). El motor pone viento creado + música + golpes; las capas no quedan vacías, pero la de ambiente no es real. Posible mejora, sin comprobar que exista: una toma CC0/CC BY del delta del Omo o del lago Turkana en Freesound."
+  },
+  "S4": {
+    "estado": "✅",
+    "como": "Ni el vídeo ni textos-youtube.txt presentan el viento creado como sonido real del destino; no se simulan cantos, oraciones ni voces del Dimi."
+  },
+  "M15": {
+    "estado": "✅",
+    "como": "Portada 0-0,2 s (W44 a cara completa, «111 PIELES»); desde 0,2 s la mujer daasanach andando por el puente del Omo (movimiento desde la primera imagen, orden de Paco). Primera cara a cámara a 2,68 s (W04)."
+  },
+  "Y4": {
+    "estado": "✅",
+    "como": "Portada en los primeros fotogramas (0-0,2 s): persona expresiva a cámara, alto contraste, «111 PIELES» que complementa el título sin repetirlo, banderas y «ETIOPÍA · KENIA», sello."
+  },
+  "Y14": {
+    "estado": "✅",
+    "como": "Carátula dimi-A.png: W44 muy cerca, más de media imagen, expresión fuerte, foto real en B/N (elegido por Paco, ok-paco.json F6). «111 PIELES» + «ETIOPÍA · KENIA», distinto del título; se lee a 160 px."
+  },
+  "Y18": {
+    "estado": "✅",
+    "como": "Una protagonista a cámara, fondo oscuro, contraste alto; «111 PIELES» enorme arriba sin tapar ojos, nariz ni boca; banderas; sello arriba a la derecha; comprobada a 160 px (dimi-A-160.png)."
+  },
+  "Y23": {
+    "estado": "✅",
+    "como": "A 160 px se entiende: «una anciana de un pueblo de Etiopía/Kenia y 111 pieles: algo pasa con 111 pieles allí». Es la historia del vídeo (el Dimi con 111 pieles); el título da la otra mitad (Y3: no comparten frase)."
+  },
+  "N7": {
+    "estado": "✅",
+    "como": "Cada segundo casa con lo que se dice: puente bajo «ceremonia» (decisión de Paco), W04 bajo «una niña», W46 bajo «su padre», O2 bajo «Así es el Dimi», mapa y satélite bajo «el Omo entra en el lago Turkana / entre Etiopía y Kenia», O1 (campamento del Dimi desde el aire) bajo «El padre lo hace… cumpla diez años», O2 bajo «semanas de ceremonia, vestido con pieles», lámina de pieles (panel leopardo, luego panel guepardo) bajo «ciento once pieles», leopardo vivo desde «guepardo» bajo «se alquilan o se heredan» y «doce veces más», la cita de Oryx entera («Un daasanach lo dijo…», «tener una piel / es como tener una cuenta en el banco») sobre el poblado SIN personas (no se pone en boca de nadie: arreglado el ⚠ del 14), guepardo en la hierba y guepardo de Sibiloi bajo la ley de Kenia, poblado bajo «nunca han juzgado a un daasanach», joven andando bajo «algunos jóvenes», O2 bajo «pieles sintéticas». ⚠ leve: en «de leopardo y guepardo» la palabra «leopardo» cae sobre el panel de piel de guepardo y «guepardo» sobre el leopardo vivo (orden cruzado; no contradice, la frase nombra los dos)."
+  },
+  "M18": {
+    "estado": "✅",
+    "como": "Último plano antes de la tarjeta (55,33-56,08 s): W28, anciana daasanach a cámara con la cabeza entera, cálida; entra en corte limpio tras el fundido de O2. Elegido por Paco. ⚠ solo dura ~0,75 s."
+  },
+  "M21": {
+    "estado": "✅",
+    "como": "Gancho: W04 y W46 miran a cámara. Cierre: W28 a cámara. El pico ya no tiene cara humana (W47 salió) y va con animales vivos (decisión de Paco); M21 se cumple en el gancho."
+  },
+  "M24": {
+    "estado": "❌",
+    "motivo": "Decide Paco: el plano de asombro O1 (campamento del Dimi desde el aire, 17,83-24,0 s) lleva encima la franja «SI TE ESTÁ GUSTANDO, SÍGUEME» + corazón de 20,0 a ~24,6 s, y M24 lo quiere sin cifra ni rótulo. Choca con M13/G1 (sígueme a los 20 s, de Paco). Opciones para Paco: mover el sígueme a ~12,8 s (sobre el satélite) y dejar O1 limpio, o dejarlo en 20 s y anotarlo como excepción suya en ok-paco.json (M24)."
+  },
+  "M26": {
+    "estado": "✅",
+    "como": "No aplica: no es un vídeo de oficio o destreza."
+  },
+  "M28": {
+    "estado": "✅",
+    "como": "Cada corte entra resuelto: puente con la mujer ya andando y enfocada, retratos quietos, cambio de panel de la lámina limpio, leopardo ya andando y enfocado, poblado de la cita con encuadre quieto, guepardos enfocados, W28 en corte limpio."
+  },
+  "M35": {
+    "estado": "✅",
+    "como": "La niña (W04) entra con «una niña» (2,68 s), el padre (W46) con «padre», O2 antes de «Así es el Dimi», el panel del guepardo con «pieles», el leopardo vivo con «guepardo» y el poblado de la cita con «Un daasanach»."
+  },
+  "M36": {
+    "estado": "✅",
+    "como": "No hay plano de reacción real en el material; la regla no pide provocarlo."
+  },
+  "M37": {
+    "estado": "✅",
+    "como": "Bloque pieles alterna recursos: lámina (foto, dos encuadres) con cifra, clip del leopardo con la cifra 400 → 5.000, clip del poblado con la cita. Bloque ley: clip, foto, clip."
+  },
+  "M40": {
+    "estado": "✅",
+    "como": "Lugar nuevo: mapa (9,5-12,7 s) y satélite del delta (12,7-17,8 s) antes de los datos; O1 abre el bloque del Dimi; el bloque de la ley abre con un plano general de sabana."
+  },
+  "M43": {
+    "estado": "✅",
+    "como": "La voz termina a 55,21 s; de 55,33 a 56,08 s, W28 sin voz antes de la tarjeta."
+  },
+  "M44": {
+    "estado": "✅",
+    "como": "Sin entrevistas; los retratos (W04, W46, W28) están a la altura de los ojos."
+  },
+  "M47": {
+    "estado": "✅",
+    "como": "W46 con media sonrisa, W04 cálida, W28 con gesto amable."
+  },
+  "M48": {
+    "estado": "✅",
+    "como": "Los hombres con pieles y plumas (O2) aparecen a 6,95 s, antes de explicar qué es el Dimi; el rótulo «EL DIMI · 111 PIELES» entra después sin explicar para qué son."
+  },
+  "M10": {
+    "estado": "✅",
+    "como": "Ningún texto entre 1.260 y 1.920 px; sígueme arriba; subtítulos y pies dentro de márgenes (lo más ancho, «puede costar cadena perpetua;», ≥ 100 px por lado); ninguna cara humana bajo subtítulo, cifra o rótulo (W04 y W46: subtítulo bajo la barbilla). Rótulo MAASAI MARA encima del subtítulo, sin cifra al lado. ⚠ (no ❌): «SABANA AFRICANA · 2025» sigue rozando la barbilla del guepardo sentado (44,9-47,4 s); el cuerpo del leopardo queda bajo los subtítulos (es un animal, no una cara humana)."
+  },
+  "M25": {
+    "estado": "✅",
+    "como": "Todos en 1-2 líneas y cortados por sentido: «En una, contaron / ciento once pieles» + «de leopardo y guepardo.», «La mayoría se alquilan / o se heredan.», «Alquilarlas cuesta / hasta doce veces más» + «que en los noventa.», «Un daasanach lo dijo / a la revista Oryx:», «tener una piel», «es como tener una cuenta / en el banco.», «En Kenia, matar un guepardo / puede costar cadena perpetua;», «nunca han juzgado / a un daasanach.», «Ahora, algunos jóvenes» + «proponen pasar / a pieles sintéticas.»."
+  },
+  "_otros": "Cruces: Y3 ✅ (carátula «111 PIELES» y título no comparten frase); P2 ✅ (textos-youtube.txt nombra a los autores). Felinos vivos, sin presas ✅. Fotos > 3,5 s: solo O1 (asombro). M3: O2 3 veces (permitido por Paco), lámina 2 encuadres. M2: leopardo 7,4 s, avanza todo el rato. Primeros 3 s y final revisados: portada 0-0,2 s, puente en movimiento desde 0,2 s; W28 (55,33-≈ 56,0 s) y tarjeta.",
+  "_avisos": "2 ❌ sin arreglo de montaje: M24 (decide Paco: sígueme a 20 s sobre O1), S1 (sin ambiente real; se dice en el acta). F10 arreglado. ⚠: fundido de las cifras 0,13-0,15 s sobre el plano siguiente (60 + 51 sobre el leopardo, 400 → 5.000 sobre la choza; recortar dur ≈ 0,15 s si se quiere limpio); «leopardo»/«guepardo» cruzados con los paneles; rótulo SABANA AFRICANA rozando la barbilla del guepardo sentado; W28 de cierre ≈ 0,7 s; acta-chat.txt línea 76 (M10 · M25) aún nombra a W47.",
+  "_historial": [
+    "Borrador 14 (24 nov 2026): 3 ❌ — F10 (con arreglo: la cifra 60 + 51 seguía sobre el leopardo 28,9-29,7 s y se apilaba 0,3 s con «MAASAI MARA · KENIA · 2025»), M24 (decide Paco: sígueme a 20 s sobre O1), S1 (acta). ⚠: guepardo andando bajo «Un daasanach lo dijo a la revista Oryx»; rótulo SABANA AFRICANA rozando la barbilla del guepardo sentado; W28 de cierre 0,75 s; acta desfasada (W47, chozas).",
+    "Borrador 13 (24 nov 2026): 4 ❌ — F10 (rótulo del leopardo 0,7 s apilado con la cifra; guepardo-andando sin rótulo de lugar), M10 («Ahora, algunos jóvenes proponen» a 62 px del borde), M24 (decide Paco: sígueme sobre O1), S1 (acta). ⚠: rótulo SABANA AFRICANA sobre la boca del guepardo; CHELINES sobre la cabeza del guepardo; franja del margen de la lámina 26,6-28 s; W28 0,8 s; salto de guepardo-andando.",
+    "Borrador 12 (24 nov 2026): 5 ❌ — N7 (lámina con serval/civeta bajo «leopardo y guepardo» y costura entre paneles, 27-29,6 s), F10 (rótulos de Pexels sin fecha; leopardo 1,1 s con rótulo ilegible), M10 (pie de cifra a 35 px del borde; 400 → 5.000 a ~85 px), M24 (sígueme sobre O1), M25 (cuatro cortes de línea a mitad de unidad); S1 ❌ explicado. ⚠: W28 0,75 s; salto de guepardo-andando; cuatro textos apilados a 33,5-35 s; W47 roza la coronilla; O1-c sin línea en ATRIBUCIONES.",
+    "Borrador 11 (24 nov 2026): sin ❌. ⚠: W47 con la coronilla cortada por arriba; cifra y rótulo del leopardo apilados (29,4-30 s); «y su padre se convierte» empieza aún sobre la niña (5,16-5,6 s); W44 sin coronilla; O1 lavado bajo el sígueme (M24); S1; Y14; rótulos de Pexels sin fecha; P2 (faltaba textos-youtube.txt con todos los autores).",
+    "Borrador 10 (24 nov 2026): 2 ❌ — P4 (W04 enseñaba el pecho desnudo de la niña, 2,67-5,6 s) y M10 (subtítulo sobre boca y barbilla de W46, 5,6-6,95 s). ⚠: costura visible del fondo difuminado en W04 y W47, cifra y rótulo del leopardo apilados (29,4-30 s), W44 sin coronilla, O1 lavado bajo el sígueme (M24), S1, Y14, rótulos de Pexels sin fecha, P2.",
+    "Borrador 9 (24 nov 2026): 3 ❌ — F10 (rótulo de la ley sobre el clip de guepardo, 43,9 s), N7 (mujeres W28/W30 bajo «se alquilan»/«alquilarlas» y granero W34 bajo la cifra), M10 (subtítulos sobre las caras de W04, W46, W47 y W28; W47 con la cabeza cortada). ⚠: cifra y rótulo del leopardo apilados, W44 sin coronilla, O1 lavado (M24), S1, Y14, rótulos de Pexels sin fecha, P2.",
+    "Borrador 8 (24 nov 2026): sin ❌ (P4 arreglado: O2 entra antes de «una niña»). ⚠: S1, Y14, N7 (ceremonia sobre el puente; O1 lavado), M15/M21/M35 (sin cara a cámara en el gancho), M24, P2, M3 (O2 7 veces, lámina 8), título de W44 en ATRIBUCIONES.",
+    "Borrador 7 (24 nov 2026): 1 ❌ P4 (de 2,68 a ~3,0 s «una niña queda bendecida para casarse» sobre la mujer del clip puente-omo, nuevo plano de apertura CC BY). ⚠: S1, Y14, N7 (ceremonia sobre el puente; O1 lavado), M15/M21/M35 (sin cara a cámara en el gancho), M24, P2, M3, título de W44 en ATRIBUCIONES.",
+    "Borrador 6 (24 nov 2026): sin ❌. Arreglados los 2 ❌ del borrador 5 (W44 con cara entera y subtítulo en barbilla; W05 quitada de «una niña queda bendecida», que pasó a O2) y M28 del clip del poblado. ⚠: S1, Y14, N7/M24 (O1 lavado bajo el sígueme), unión visible del relleno de W44-g en 0,2-3 s, P2, M3, título de W44 en ATRIBUCIONES."
+  ]
+}

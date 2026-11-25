@@ -1,0 +1,109 @@
+{
+  "_revision": "Revisor de guion nuevo (subagente, ojos frescos, F13), 25 nov 2026, 0 €. BORRADOR 15 (E:/tmp-motor/dimi/borrador15/pueblos-dimi-short-v1.mp4, 60,0 s según el motor; contenedor 60,07 por la portada adjunta): .srt ES (21 trozos) y EN (10), tiempos.json, acta del motor, informe de reglas, b15.log, dimi-short.cjs (manda), investigacion-dimi.md, textos-youtube.txt, acta-chat.txt (ya del borrador 15), ok-paco.json, guion de dirección (sección «MONTAJE ACTUAL · borrador 15», igual que la config), fila de la checklist «24 nov 2026 · 22:10»; 36 fotogramas entre 26 y 55,6 s (densos en 28,6-30,3 y 36,9-37,5). Voz sin cambios (mismo texto en el .srt ES). RESUELTO el ❌ N7 del borrador 14: «Un daasanach lo dijo a la revista Oryx» y la cita van juntas sobre el poblado de chozas sin personas (37,08-44,39 s); el guepardo andando ya no está. RESUELTO el apilado de rótulos del 13-14: la cifra 60 + 51 se ha ido (fantasma a 29,6 s) antes de que entre «MAASAI MARA · KENIA · 2025» (~30,1 s). Ningún ❌ con arreglo. ❌ explicado: S1 (se dice en el acta). ⏳: S6 (música sin elegir). Avisos (⚠): (1) cruce leve en «de leopardo y guepardo» (28,8-30,29 s): «leopardo» suena sobre el panel de la piel de guepardo y «guepardo» sobre el leopardo vivo (corte a ~29,55 s); la frase nombra a los dos y no se contradice, pero quien distinga las manchas lo verá al revés — si se quiere afinar: leopardo vivo desde «leopardo» y aceptar ~0,3 s de cifra fundiéndose encima, o dejarlo; (2) la cifra «400 → 5.000 / CHELINES» aún se funde sobre el poblado a 37,1 s con «Un» iluminado (~0,1-0,2 s; antes pasaba sobre el guepardo): un fantasma, no dos textos legibles; (3) acta-chat.txt N7 dice «pieles de leopardo y guepardo sobre la lámina de pieles», pero «guepardo» cae ya sobre el leopardo vivo; y su M10 sigue nombrando W47, que ya no está en el montaje; (4) ~0,2 s de un joven de espaldas, sin cara, en el fundido ley → cierre (50,2-50,4 s), como en el 14; (5) «· 2025» = año de publicación del clip (acta, F10); (6) .srt EN sigue con los dos solapes de 0,09 s (EN 6 acaba 33,17 / EN 7 empieza 33,08; EN 7 acaba 37,17 / EN 8 empieza 37,08): recortar al exportar; (7) la canoa del «Para ir» sigue sin fila en investigacion-dimi.md; (8) N10 sin margen (60,0 s exactos).",
+  "L1": {
+    "estado": "✅",
+    "como": "Serie Pueblos, título que empieza por el pueblo, rito contado con datos de Oryx, sin morbo ni IA; animales vivos (leopardo, guepardos) en lugar de pieles muertas salvo la lámina única (Paco, checklist 24 nov · 22:10, punto 4). textos-youtube.txt trae el «Para ir» con «Pide permiso antes de fotografiar a nadie». ⚠ (no bloquea): la canoa no tiene fila en investigacion-dimi.md."
+  },
+  "L2": { "estado": "✅", "como": "No aplica: short de la serie Pueblos, no lanzamiento de país." },
+  "L3": { "estado": "✅", "como": "Historia de un pueblo y su rito, dentro del canal de historia y viajes." },
+  "F2": { "estado": "✅", "como": "Mirado en el .srt ES del borrador 15: sin «yo» ni vivencias de Paco; todo sale de Oryx 2023, Sagawa y NASA/UNEP." },
+  "F4": {
+    "estado": "✅",
+    "como": "Voz idéntica a los borradores 11-14 (.srt ES del 15, mismo texto): cada cifra y nombre con su fuente en investigacion-dimi.md (111 = 60 + 51 en 2021; alquiler/herencia; ×12 = 400 → 5.000 KES ≈ 47 $; cita del banco de Oryx; cadena perpetua y ningún daasanach procesado; sintéticas). Rótulos contra clips/ATRIBUCIONES.txt: leopardo de Maasai Mara (2025) y poblado daasanach (2025); el guepardo andando ya no se usa. ⚠: «2025» es el año de publicación del clip (acta, F10). «De niña a mujer» fuera de la fuente: decisión de Paco solo en el título (ok-paco.json Y13)."
+  },
+  "N4": { "estado": "✅", "como": "Salma no huele, prueba, camina ni toca; sin hallazgos fingidos (.srt ES)." },
+  "N6": { "estado": "✅", "como": "Sin relleno ni moraleja; el cierre es un dato (pieles sintéticas)." },
+  "N12": { "estado": "✅", "como": "Gancho en la primera frase (0,2 s), sin saludo; la fuente con nombre (la revista Oryx, .srt 15, 37,08-39,96 s)." },
+  "N13": { "estado": "✅", "como": "No aplica: historia de un pueblo, no vídeo práctico; manda N33." },
+  "N33": {
+    "estado": "✅",
+    "como": "Título (niña / padre a anciano) en la primera frase, 0,2-7,57 s (.srt 1-3), con la niña W04 y el padre W46 en imagen; carátula «111 PIELES» en el rótulo «EL DIMI · 111 PIELES» (~7,5 s) y en la voz (26,4 s)."
+  },
+  "N14": {
+    "estado": "✅",
+    "como": "Mirado en el .srt y en pantalla (borrador 15): sin «trampa», «peligro», «ruina» ni caza; felinos vivos andando o sentados (leopardo ~29,55-37,08 s; guepardo sentado 44,4 s en adelante), sin presas; una sola lámina de pieles en dos paneles (decisión de Paco 22:10). La cita del banco va sobre chozas sin personas, sin ponerla en boca de nadie; la ley con su estado de hoy («nunca han juzgado»). El pico es dinero, no miedo. ⚠: ~0,2 s de un joven de espaldas, sin cara, en el fundido ley → cierre (50,2-50,4 s)."
+  },
+  "F1": {
+    "estado": "✅",
+    "como": "dimi-short.cjs lleva las marcas: humano (dimi), pico + datoFuerte (pieles), advertencia + cambioTono (ley); el acta del motor del 15 confirma M19·S9, S8, N14-4 y N14-10."
+  },
+  "G1": { "estado": "✅", "como": "Gancho igual que en los borradores 12-14 (misma voz y planos de g0, promesa, mapa y situar); sígueme a los 20 s ya en el Dimi." },
+  "G3": { "estado": "✅", "como": "«En una sola ceremonia de los daasanach…» no repite la apertura de otros shorts de Pueblos." },
+  "N2": { "estado": "✅", "como": "Primer plano: clip en movimiento del puente del Omo con «RÍO OMO · OMORATE · 2025»; a los 2,68 s la cara de la niña con «una niña» (sin cambios desde el 14)." },
+  "N9": { "estado": "✅", "como": "Gancho → promesa → mapa → situar → el Dimi → pico (111, alquiler, ×12, banco) → ley → cierre con dato → silencio 0,75 s (W28) → tarjeta 4 s (tiempos.json)." },
+  "N15": { "estado": "✅", "como": "«Así es el Dimi.» + rótulo «EL DIMI · 111 PIELES» sobre O2." },
+  "N16": { "estado": "✅", "como": "El hilo «111 PIELES» abre en la promesa (~7,5 s), se explica en el pico (26-44 s) y el cierre lo resuelve (sintéticas)." },
+  "N27": { "estado": "✅", "como": "No aplica: no es avance de un largo." },
+  "M1": {
+    "estado": "✅",
+    "como": "Config, tiempos.json y fotogramas del 15: puente del Omo → W04 → W46 → O2 → mapa → S01/1973/2006 → aérea del Dimi → O2 → lámina panel leopardo (25,6 s) → «pieles» panel guepardo con 60 + 51 (~28 s) → «guepardo» leopardo vivo (~29,55-37,08 s, con 400 → 5.000 en «doce») → «Un» poblado sin personas con la atribución y la cita (37,08-44,39 s) → guepardo en la hierba → O3 Sibiloi → poblado (nunca juzgado) → jóvenes → O2 → W28 → tarjeta. Orden con sentido. ⚠: cruce leve leopardo/guepardo en 28,8-30,3 s (ver N7)."
+  },
+  "M20": { "estado": "✅", "como": "No aplica a shorts; aun así 0,6 s de silencio antes del pico (S9, acta)." },
+  "M32": { "estado": "✅", "como": "Clips (puente, leopardo, guepardo, poblados) a velocidad normal en los fotogramas; sin cámara lenta." },
+  "M33": {
+    "estado": "✅",
+    "como": "Cambios de lugar con cambio de temperatura (M23 del acta) y rótulo de lugar: «MAASAI MARA · KENIA · 2025» (~30,1 s), «POBLADO DAASANACH · 2025» (~37,6 s), «SABANA AFRICANA · 2025» (~44,9 s), «POBLADO DAASANACH · 2025» (~50,8 s). Resuelto el aviso del 14: «SABANA AFRICANA» sale ya una sola vez."
+  },
+  "M39": { "estado": "✅", "como": "No aplica: short." },
+  "M46": {
+    "estado": "✅",
+    "como": "Rótulos y cifras del 15 (config y fotogramas): «RÍO OMO · OMORATE · 2025», «EL DIMI · 111 PIELES», «1973 · NASA · UNEP», «2006 · +12 KM EN 33 AÑOS», «60 + 51 · LEOPARDOS + GUEPARDOS · 2021», «MAASAI MARA · KENIA · 2025», «400 → 5.000 · CHELINES (≈ 47 $)», «POBLADO DAASANACH · 2025» (×2), «SABANA AFRICANA · 2025»: ninguno repite la voz palabra por palabra. Resuelto el apilado: a 29,5 s la cifra 60 + 51 sigue sobre el panel; a 29,6 s, ya sobre el leopardo, solo queda su fantasma; el rótulo de Maasai Mara entra ~30,1 s, solo. ⚠ (no bloquea): «400 → 5.000 / CHELINES» aún se funde ~0,1-0,2 s sobre el poblado (fotograma 37,1 s, con «Un» iluminado)."
+  },
+  "N1": { "estado": "✅", "como": "Frases cortas para el oído en el .srt (21 trozos). «En una, contaron…» va sobre la lámina de pieles y lo ancla la cifra «LEOPARDOS + GUEPARDOS · 2021»." },
+  "N3": { "estado": "✅", "como": "El dato cuelga de la historia del padre; silencio antes (datoFuerte) y la ley en bloque aparte." },
+  "N11": { "estado": "✅", "como": "Short: ninguna fecha en la voz salvo «en los noventa»; 1973, 2006, 2021 y 2025 en pantalla." },
+  "N17": { "estado": "✅", "como": "La transformación del gancho hace de intriga, con las dos caras (niña, padre)." },
+  "N18": { "estado": "✅", "como": "Sin prueba social en la voz." },
+  "N19": { "estado": "✅", "como": "No es vídeo de lista." },
+  "N20": { "estado": "✅", "como": "×12 con «≈ 47 $» en pantalla y la comparación de la cuenta en el banco; 111 desglosado en 60 + 51; las pieles se ven en la lámina y en O2." },
+  "N21": { "estado": "✅", "como": "No aplica: sin tramo práctico." },
+  "N23": { "estado": "✅", "como": "Mirado en el .srt ES del 15 (21 trozos): ninguna frase empieza por «Y», «Pero», «Entonces» ni «Además» («y su padre», trozo 3, sigue la misma frase)." },
+  "N24": { "estado": "✅", "como": "Se alquilan → sube el alquiler → cuenta en el banco: causa antes que efecto." },
+  "N26": { "estado": "✅", "como": "Primero el caso (un Dimi, 111 pieles) y después lo general (la mayoría se alquilan o se heredan)." },
+  "N28": { "estado": "✅", "como": "Cálido (gancho, Dimi) → frío (pieles, ley) → cálido (cierre), por bloques (M23 del acta)." },
+  "N29": {
+    "estado": "✅",
+    "como": "Un solo testimonio (Oryx, .srt 15-17, 37,08-43,21 s), sin cara: atribución y cita juntas sobre el poblado de chozas SIN personas (fotogramas 37,1-43,5 s, sin nadie en cuadro): no queda en boca de nadie ni sobre un animal."
+  },
+  "N30": { "estado": "✅", "como": "El Dimi y la ceremonia antes de «ciento once»." },
+  "N31": { "estado": "✅", "como": "Tras la cadena perpetua (.srt 18): «nunca han juzgado a un daasanach» (.srt 19, 48,75-50,92 s), sobre el poblado sin personas (fotogramas 49,0 y 50,2 s)." },
+  "N32": { "estado": "✅", "como": "«en los noventa» ya es referencia; delta con «EN 33 AÑOS»; 2021 y 2025 como rótulos de dato/lugar; la ley sin fecha en pantalla." },
+  "S6": {
+    "estado": "⏳",
+    "motivo": "Música sin elegir (S5, Paco, de oído): sigue SFX_fading-shoreline provisional. El tempo se juzga cuando Paco la elija; el reparto ya está en la config: solo en situar y cierre (b15.log: música a 12,7 s y 50,3 s), nada en lo humano (dimi) ni en lo duro (pieles, ley)."
+  },
+  "S1": {
+    "estado": "❌",
+    "motivo": "No hay ambiente REAL limpio del lugar: los clips de Pexels (leopardo, guepardo) vienen sin audio y los de Romaliens (puente, poblados) llevan la música del grupo en todo el metraje. En su lugar va SFX_viento-libre (-30 a -34 dB) sin presentarlo como sonido real (S4). Se dice en el acta (acta-chat.txt, S1)."
+  },
+  "Y2": { "estado": "✅", "como": "estudio-titulo.md: «daasanach»/«dimi» sin sugerencias, se busca «tribu» + Etiopía; las etiquetas de textos-youtube.txt cubren las dos formas (daasanach, dassanech)." },
+  "Y11": { "estado": "✅", "como": "Título (Paco, 24 nov) y carátula elegidos antes de cerrar el guion (ok-paco.json: Y13, F6)." },
+  "Y15": { "estado": "✅", "como": "Portada sin cambios (pueblos-dimi-short-v1-portada.png, 23:27, la misma en ULTIMA): solo «111 PIELES» en naranja, Barlow Condensed, banderas de Etiopía y Kenia, anciana W44 (elección de Paco)." },
+  "Y19": { "estado": "✅", "como": "El título no va encuadrado como pérdida." },
+  "Y20": { "estado": "✅", "como": "La promesa del título suena en 0,2-7,57 s con la niña W04 y el padre W46 en imagen; la de la carátula, en el rótulo «EL DIMI · 111 PIELES» (~7,5 s) y en la voz (26,4 s)." },
+  "Y21": { "estado": "✅", "como": "Grep en docs/publicaciones-registro.md: 0 vídeos previos de daasanach; se escribe «daasanach» (Oryx) en título, descripción, voz, rótulos y carátula. «Dasenech» en la descripción es el distrito, no el pueblo." },
+  "Y3": { "estado": "✅", "como": "Carátula «111 PIELES» y título «Los daasanach: de niña a mujer y de padre a ANCIANO 🇪🇹» (≤ 60) no comparten palabra; la palabra fuerte de la carátula sale en el gancho (~7,5 s)." },
+  "P1": { "estado": "✅", "como": "textos-youtube.txt, AJUSTES: YouTube «Contenido alterado o sintético: NO» (material real montado, voz de Salma); TikTok: etiqueta de IA SÍ, siempre." },
+  "P8": { "estado": "✅", "como": "No aplica: regla parada desde el 30 oct y vídeo nuevo." },
+  "P16": { "estado": "✅", "como": "Primeras líneas de la descripción: el Dimi, el padre que bendice a su primera hija y se convierte en anciano, y las 111 pieles de 2021: promesa del gancho y de la carátula." },
+  "P17": { "estado": "✅", "como": "textos-youtube.txt: «#Daasanach #ValleDelOmo #Etiopía» (EN #Daasanach #OmoValley #Ethiopia): del más específico al más genérico." },
+  "_fuera_de_las_52": {
+    "N7": {
+      "estado": "✅",
+      "como": "Fotogramas del borrador 15 contra el .srt. Resuelto el ❌ del 14: «Un daasanach lo dijo a la revista Oryx:» (37,08-39,96 s) y «tener una piel / es como tener una cuenta en el banco» (39,96-43,21 s) van juntas sobre el poblado de chozas sin personas, con «POBLADO DAASANACH · 2025» (~37,6 s): la voz habla de un daasanach y se ve su poblado, sin poner la frase en boca de nadie. Resto bien: «una niña» W04; «su padre» W46; «ciento once pieles» lámina; «La mayoría se alquilan…» y «Alquilarlas cuesta… noventa» sobre el leopardo vivo (animales vivos en lugar de pieles, Paco 22:10 punto 4); ley sobre el guepardo vivo y O3 Sibiloi; «nunca han juzgado» sobre el poblado; cierre sobre jóvenes y O2. ⚠ (no bloquea): en «de leopardo y guepardo» (28,8-30,29 s), «leopardo» suena sobre el panel de la piel de guepardo y «guepardo» sobre el leopardo vivo (corte ~29,55 s; fotogramas 29,0-29,9 s). La frase nombra a los dos animales y la imagen no la contradice, pero el emparejamiento palabra-imagen va cruzado. Si Paco quiere afinarlo: leopardo vivo desde «leopardo» (28,8 s) aceptando ~0,3 s de la cifra 60 + 51 fundiéndose encima (es lo que el 15 quiso evitar: decide Paco con el revisor de imagen)."
+    },
+    "N10": {
+      "estado": "✅",
+      "como": "60,0 s según el motor (límite 60,05 en reglas.cjs; el contenedor marca 60,07 por la portada adjunta). Voz hasta 55,21 s (.srt 21), silencio de 0,75 s sobre W28 y tarjeta de 4 s. Sin margen: cualquier pausa nueva lo pasa de 60."
+    },
+    "G2": { "estado": "✅", "como": "«daasanach» suena a 1,8 s (acta del motor 15, G2)." },
+    "Y10": {
+      "estado": "✅",
+      "como": "Subtítulos EN fieles al ES (10 trozos). ⚠ Siguen los dos solapes de 0,09 s (EN 6 acaba 33,17 y EN 7 empieza 33,08; EN 7 acaba 37,17 y EN 8 empieza 37,08): recortar los finales a 33,08 y 37,08 al exportar (acta-chat lo dice)."
+    },
+    "doc_vs_config": {
+      "estado": "✅",
+      "como": "docs/pueblos-daasanach-dimi-short-guion-direccion.md, «MONTAJE ACTUAL · borrador 15», igual que dimi-short.cjs (lámina en dos paneles → «guepardo» leopardo vivo hasta «Un» con 400 → 5.000 en «doce» → «Un» poblado sin personas). ⚠ acta-chat.txt: su N7 dice «pieles de leopardo y guepardo sobre la lámina», pero «guepardo» cae ya sobre el leopardo vivo; su M10 nombra W47, que ya no está en el montaje."
+    }
+  }
+}
