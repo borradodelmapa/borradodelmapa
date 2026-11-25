@@ -27,6 +27,7 @@ Versión: 19 nov 2026 (sacada de la checklist del 19 nov · 23:00). Si la checkl
 - **N7** La imagen siempre es de lo que se dice y nunca lo contradice.
 - **N13** Vídeos de viaje: por preguntas frecuentes (pregunta en pantalla → respuesta corta con su dato → 5-10 s de lo vivido). Gana sobre N12 en el orden.
 - **N33** El título manda en el orden: lo que promete se cuenta en el primer minuto · preguntas prácticas al principio solo si el título las promete · nunca «primero X, después lo que has venido a ver». Estrategia compara título, carátula y primer minuto antes de aprobar. Gana sobre N13.
+- **Biografías (registro 25 nov 2026 · 19:00)** La vida de un viajero se cuenta como película de aventuras, nunca como catálogo: se abre en mitad de la escena más peligrosa (con sus palabras y fuente), cada escena con peligro y suspense, el origen en flashback, a más hasta el giro final; «hace 150 años» en el gancho.
 - **Tono (N14)** Sin alarmismo: enganche por curiosidad, no por miedo. Los avisos, claros y una sola vez. Lo vivido por Paco manda sobre las guías.
 
 ## C · Estructura
