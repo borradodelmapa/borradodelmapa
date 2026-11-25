@@ -1,109 +1,90 @@
-# «Diario de grandes viajeros · 2 · Isabella Bird, su vida» · GUION DE DIRECCIÓN v3
-25 nov 2026, 🎬 Vídeo 2. **Pendiente del OK de Paco**: primero los 20 primeros segundos (G1), luego el resto (F3).
+# «Diario de grandes viajeros · 2 · Isabella Bird» · GUION DE DIRECCIÓN v5
+25 nov 2026, 🎬 Vídeo 2. **Pendiente del OK de Paco:** primero los 20 primeros segundos (G1) y después el resto (F3).
+- Sale de la biografía del documento «Isabella Bird, la mujer que no cabía en una casa» (claude.ai/artifact/GxZEh21SK4SnhvY296K3mj).
+- El gancho es el de Paco (25 nov): «GRANDES VIAJEROS NO OS PERDAIS A ISABELLA BIRD LA GRAN VIAJERA CUANDO ERA IMPOSIBLE PARA LA MUJER. LA GENTE TIENE QUE SABER UN POCO LO QUE VA A COMPRAR».
 
-Paco rechazó la v1 (25 nov): «ES UN PUTO CATALOGO… Cuéntala como si fuera una película de aventuras. El espectador tiene que pensar: "¿Cómo es posible que esta mujer hiciera todo eso hace 150 años?"». La regla está en la checklist (registro del 25 nov · 19:00).
+La v5 aplica lo que marcó el revisor de guion sobre la v4 (25 nov):
+- **Dos datos falsos fuera:**
+  - Cuando Jim le salió al paso había niebla helada; la ventisca llegó después, en la llanura.
+  - Lo que cuesta menos que unas horas de tren son cinco días a caballo, no uno.
+- **El tráiler ya no destapa el final** de la promesa.
+- **Biografía comprimida en 12 s,** con una pregunta.
+- **Escena nueva en la montaña, la mejor para el gancho de Paco:** uno del grupo dice que una mujer es «un estorbo peligroso» y Jim contesta que, si no es para subir a una dama, él no sube.
+- **Unas 100 palabras menos.**
 
-**Cambios de la v3, tras el revisor de guion (subagente, 25 nov):**
-- Cada frase está cotejada con sus propias cartas: *A Lady's Life in the Rocky Mountains*, 1879, y la biografía de Stoddart, 1906.
-- **«¿Qué hacía allí?» se contesta ahora:** bajaba a por las cartas de su hermana, y el forajido del acto 1 le salió al paso en la niebla para decirle que estaba loca.
-- **Final corregido:** no murió «haciendo las maletas». Dejó el equipaje hecho para Pekín y escribió que su próximo viaje sería a la tumba.
-- **Fuera:** lo de «no vuelve a parar» (pasó 18 años en casa), la Real Sociedad Geográfica (va a la descripción) y los años sueltos en la voz.
+**Montaje para que nadie se vaya:**
+- Una idea por plano y un cambio cada 2-3 s.
+- Tres intrigas abiertas que se cierran más tarde: la promesa (abre en el s. 17, cierra en el 100), la ventisca (tráiler → s. 70) y la escalera (tráiler → s. 112).
+- Dos respiros de humor: la «cena feroz» y el «estorbo».
+- Picos separados (F11) y silencio antes de cada `datoFuerte` (S9).
+- Las palabras de Bird, con su voz (Alice, N8). `nombre: Isabella Bird` en el s. 0 (G2).
 
-**Formato:**
-- **Voces:** una narradora (SALMA_DOC). La voz de Bird (Alice, N8) dice sus dos frases.
-- **Imagen:** mapa animado entre escenas. Recreaciones de Runway con el rótulo RECREACIÓN.
-- **Marcas:**
-  - `nombre: Isabella Bird` en el segundo 0 (G2).
-  - Misterio (N16): «¿Qué hacía allí?», segundo 18 → se contesta en el 56. La ventisca se cierra en el 83.
-
-**Decisiones pendientes de Paco:**
-- **N10:** dura unos 2:00. La excepción de 2 minutos era solo para el de los ainu. ¿Se amplía, o se recorta a unos 70 s?
-- **L3:** ¿es el capítulo 2 de la serie o un especial?
-
-## LOS 20 PRIMEROS SEGUNDOS (G1)
-| Seg. | Imagen | IA | Texto (voz de Salma) | Marcas |
+## LOS 20 PRIMEROS SEGUNDOS (G1) · el tráiler
+| Seg. | Imagen | IA | Texto (Salma) | Marcas |
 |---|---|---|---|---|
-| 0-5 | Una mujer a caballo en una penumbra blanca de nieve, viento de lado | sí, Runway | «Isabella Bird cabalga sola por Colorado, en plena ventisca. El viento, cargado de hielo, le hace sangrar la cara.» | `pico`, emocion: fria |
-| 5-9 | La poni pisa un lago helado; el hielo cruje y se hunde | sí, Runway | «Su poni, Birdie, se mete en un lago helado. El hielo se rompe.» | `datoFuerte` |
-| 9-15 | Primer plano: pestañas con hielo; una mano sin guante se abre un ojo | sí, Runway | «Las lágrimas se le congelan y le cierran los ojos. Se quita un guante y se abre uno con los dedos.» | |
-| 15-20 | Corte a negro → grabado real de Bird. Rótulo «COLORADO · 1873» | no | «Esto pasó hace más de ciento cincuenta años. Era una inglesa enferma desde niña. ¿Qué hacía allí?» | → sígueme (20 s) |
+| 0-5 | Cara de mujer con hielo en las pestañas en plena ventisca. Rótulo «GRANDES VIAJEROS · NO OS LA PERDÁIS» | sí, Runway (RECREACIÓN) | «Isabella Bird. Una ventisca le sella los ojos con hielo.» | `pico`, emocion: fria |
+| 5-9 | Un trampero tuerto tira de ella por la roca | sí | «Un trampero con cara de forajido la sube a pulso a una montaña.» | |
+| 9-12 | Un caballo negro enorme; ella sube por una escalera de mano | sí | «A los sesenta y nueve, sube al caballo con escalera.» | |
+| 12-16 | Grabado real de Bird. Rótulo «HACE 150 AÑOS» | no | «La gran viajera de cuando viajar era imposible para una mujer.» | |
+| 16-21 | El trampero, de espaldas, en la niebla | sí | «Con el forajido se juró algo. Él lo cumplió… de la forma más extraña.» | `datoFuerte` → sígueme |
 
 ## EL RESTO
 | Seg. | Imagen | IA | Texto | Marcas |
 |---|---|---|---|---|
-| **FLASHBACK** | | | | |
-| 20-27 | Mapa: Inglaterra, 1854 | no | «Casi veinte años antes, la operan de la columna. La receta del médico: un viaje por mar. Su padre le da cien libras: puede estar fuera mientras le duren.» | emocion: calida |
-| 27-33 | Mapa: el barco vuelve; rótulo **£10** | no | «Vuelve a los siete meses, con diez libras en el bolsillo. Pasan dieciocho años en casa hasta que se va otra vez.» | |
-| **ACTO 1 · EL FORAJIDO** | | | | |
-| 33-39 | Foto real del pico Longs; rótulo «4.346 M · MÁS ALTO QUE EL TEIDE» | no | «Otoño de 1873, Montañas Rocosas. Quiere subir el pico Longs: más de cuatro mil trescientos metros.» | |
-| 39-46 | Foto de época de un trampero armado (si la hay, de Nugent). Cita: «"DESPERADO" WAS WRITTEN ALL OVER HIM» | no | «Su guía es Jim Nugent: tuerto, revólver en el bolsillo, cuchillo al cinto. Ella escribe que llevaba "forajido" escrito por todas partes.» | `cambioTono` |
-| 46-52 | Runway: él sube a pulso a una mujer por la roca | sí | Bird (Alice): «Seis horas de terror. Jim me arrastró hacia arriba como un fardo.» Salma: «Llega a la cumbre.» | `pico` |
-| **VUELTA A LA VENTISCA** | | | | |
-| 52-58 | Mapa: de la cabaña de la montaña a la llanura; rótulo «DOS MESES DESPUÉS» | no | «Dos meses después baja sola a la llanura, a por las cartas de su hermana. Ya está nevando.» | |
-| 58-64 | Runway: en la niebla aparece un hombre con el pelo blanco de escarcha; fogonazo de pistola junto a la cabeza de ella | sí | «En la niebla le sale un hombre con el pelo blanco de escarcha y dispara junto a su oreja. Es Jim: una broma de forajido.» | `datoFuerte` |
-| 64-69 | Cita en pantalla | no | Jim (en pantalla): «NUNCA HE VISTO A NADIE TAN INSENSATO COMO TÚ». Salma: «Le dice que ni él bajaría con ese tiempo. Ella sigue.» | |
-| 69-76 | Runway: la poni sale del agua; luces lejanas entre la nieve | sí | «Sale del lago a la fuerza. Sigue con un solo ojo, quitándose el hielo con los dedos. Hasta que ve unas luces.» | |
-| 76-83 | Runway: un hombre baja en brazos a una mujer helada del caballo | sí | «Llega tan helada que no puede bajarse. El posadero la baja en brazos. Media hora después pide, dice ella, una cena feroz.» | `humano` |
-| **ACTO 2 · A MÁS** | | | | |
-| 83-88 | Mapa: la línea corre Japón → Cachemira → Tíbet → Persia → Corea → China | no | «Cinco años después, Japón. Viuda y pasados los cincuenta y cinco: Cachemira, el Tíbet, Persia, Corea, China.» | |
-| 88-96 | Mapa de Sichuan → fotos reales hechas por Bird en China | no | «Con sesenta y cuatro, en China, la gente rodea su silla de manos para verla. Los porteadores no paran. Una piedra le da en la cabeza: tarda casi un año en recuperarse.» | `datoFuerte` |
-| 96-103 | Runway: el Atlas; un caballo negro enorme, silla roja alta, una escalera junto al estribo | sí | «Con sesenta y nueve, en Marruecos, monta un caballo negro del sultán. Escribe que le da terror. Para subirse, lleva una escalera.» | `pico` |
-| **FINAL** | | | | |
-| 103-111 | Baúles cerrados en una habitación; rótulo «PEKÍN» en una etiqueta | sí | «Con setenta y dos, deja en Londres el equipaje hecho para Pekín. Enferma en Edimburgo.» | `cambioTono` |
-| 111-117 | Cita en pantalla sobre negro | no | Bird (Alice): «Mi próximo viaje será a la tumba de los míos.» Salma: «Murió en Edimburgo en 1904. Pekín se quedó esperando.» | cifra **1904** |
-| 117-121 | Tarjeta | no | «En 1878 se metió en una aldea ainu. Esa historia es el capítulo uno.» | DIARIO DE GRANDES VIAJEROS · 2 |
+| **1 · LA NIÑA CANSADA** | | | | |
+| 21-33 | Mapa de Yorkshire → barco por el Atlántico, rótulo **£100** → Canadá | no | «¿Cómo llega ahí una niña enferma? De pequeña, su queja era "estoy muy cansada". El médico le receta un barco; su padre, cien libras. Vuelve más sana que nunca.» | emocion: calida |
+| **2 · EL ESTORBO** | | | | |
+| 33-40 | Foto real del pico Longs. Rótulo «1873 · 4.346 M · MÁS ALTO QUE EL TEIDE» | no | «Montañas Rocosas, 1873. Su guía para subir un pico más alto que el Teide: Jim Nugent. Tuerto, revólver y cuchillo.» | |
+| 40-44 | Runway: el trampero de cerca. Cita «"DESPERADO" WAS WRITTEN ALL OVER HIM» | sí | «"Llevaba forajido escrito por todas partes", escribe ella.» | `cambioTono` |
+| 44-52 | Runway: el grupo en la roca; un joven la señala | sí | «Uno del grupo dice que una mujer es un estorbo peligroso. Jim le contesta que, si no es para subir a una dama, él no sube.» | (humor) |
+| 52-56 | Runway: la subida a pulso | sí | Bird: «Seis horas de terror. Me arrastró hacia arriba como un fardo.» | `pico` |
+| **3 · LA VENTISCA** | | | | |
+| 56-63 | Runway: niebla que se congela; un hombre blanco de escarcha; un fogonazo | sí | «Dos meses después baja sola al llano, entre una niebla helada. Un fogonazo junto a su oreja: es Jim, con una broma de forajido.» | |
+| 63-66 | Cita en pantalla: «NUNCA HE VISTO A NADIE TAN INSENSATO COMO TÚ» | no | «Ella sigue.» | |
+| 66-71 | Runway: la ventisca; la poni pisa el lago y el hielo se rompe | sí | «Llega la ventisca. Su poni pisa un lago helado. El hielo se rompe.» | `datoFuerte` |
+| 71-80 | Runway: pestañas heladas → el posadero la baja en brazos → un plato humeante | sí | «Las lágrimas le sellan los ojos. Llega tan helada que el posadero la baja en brazos. Media hora después, escribe, está lista "para una cena feroz".» | `humano` (humor) |
+| **4 · LA PROMESA** | | | | |
+| 80-87 | Runway: despedida en un camino | sí | «Al despedirse, Jim se derrumba: "Tengo que volver a verte". Se juran algo: el primero que muera se le aparecerá al otro.» | `cambioTono` |
+| 87-90 | Negro. Rótulo «1874» | no | «Meses después, a Jim le pegan un tiro.» | |
+| 90-100 | Runway: habitación de hotel en Suiza al amanecer; un trampero de pie hace una reverencia y se desvanece | sí | «Su biógrafa cuenta que una mañana, en Suiza, ella lo ve de pie en su cuarto. Le hace una reverencia… y desaparece. La fecha coincidía con la de su muerte.» | `pico`, `datoFuerte` |
+| **5 · NO PARA** | | | | |
+| 100-106 | Mapa de China → foto real hecha por Bird | no | «No para. A los sesenta y cuatro, en China, le dan una pedrada en la cabeza.» | |
+| 106-113 | Runway: mar brava, una cesta de carbón colgada de una grúa → la escalera junto al caballo negro | sí | «A los sesenta y nueve, en Marruecos, la bajan del barco en una cesta de carbón y sube con escalera al caballo del sultán.» | |
+| 113-121 | Baúles con la etiqueta «PEKÍN» → cita sobre negro | sí | «A los setenta y dos deja el equipaje hecho para Pekín.» Bird: «Creo que mi próximo viaje será a la tumba de los míos.» | cifra **1904** |
+| 121-125 | Tarjeta | no | «En 1878 se metió en una aldea ainu: esa historia es el capítulo uno.» | DIARIO DE GRANDES VIAJEROS · 2 |
 
-**Duración:** unas 320 palabras, alrededor de 2:05.
-**Versión de ~70 s** (si Paco no amplía N10): la ventisca (0-20), «Era su guía en la montaña…» en una frase, el encuentro con Jim, la llegada con el posadero, la escalera y el final. Fuera el flashback y el acto 2.
+**Duración:** unas 350 palabras de voz. Sale en unos 2:15 con pausas, cifras y tarjeta.
+- Si se aprueba en 2 min (N10), se recortan unos 10 s del bloque 1.
+- Versión corta, de unos 80 s: el tráiler y los bloques 2, 3 y 4. Del 5 solo queda la última frase.
 
 ## FUENTES (F4)
 | Dato | Fuente |
 |---|---|
-| Ventisca camino de Longmount (carta XVI, 4 dic 1873), sola: cristales helados que «literally made my face bleed»; lágrimas que «froze and closed up my eyelids»; «take off one glove to pick one eye open» | Isabella Bird, *A Lady's Life in the Rocky Mountains* (1879), carta XVI (archive.org, ladyslifeinrocky00birdrich) |
-| La poni Birdie «took me on a lake and we fell through the ice into the water 100 yards from land, and had a hard fight back again» | Ídem |
-| Bajaba por las cartas de su hermana: «Your letters, however, outweighed everything but danger» | Ídem |
-| Jim en la niebla, «frozen from head to foot… with his snowy hair»; «the flash of a pistol close to my ear»; «a "desperado's" grim jest»; «I've seen many foolish people, but never one so foolish as you»; «I, an old mountaineer, wouldn't go down to the plains to-day» | Ídem |
-| Un ojo helado: se lo tapó y fue quitándose el hielo del otro con los dedos; «blessed lights of Longmount»; «the worthy host lifted me off and carried me in»; «in half an hour I was all right and ready for a ferocious meal» | Ídem |
-| Enferma desde niña; en 1850 le quitaron un tumor junto a la columna | Wikipedia EN, «Isabella Bird» |
-| Viaje por mar (1854); 100 libras «as long as it lasted»; volvió a los siete meses con 10 libras | Wikipedia EN; Stoddart, *The Life of Isabella Bird* (1906): «after seven months' absence, with £10 of the original £100 in her pocket» |
-| Volvió a salir en 1872 (Australia, Hawái, Rocosas) | Wikipedia EN |
-| Pico Longs: 4.346 m; Teide: 3.715 m | Wikipedia EN, «Longs Peak»; Wikipedia ES, «Teide» |
-| Subida al Longs (finales de sept. o principios de oct. de 1873): «six succeeding hours of terror»; «"Jim" dragged me up, like a bale of goods, by sheer force of muscle»; llegó a la cumbre («humiliated by my success») | *A Lady's Life*, carta VII |
-| Nugent: «One eye was entirely gone»; cuchillo al cinto y revólver en el bolsillo del pecho; «"Desperado" was written in large letters all over him» | *A Lady's Life*, carta VI |
-| Japón 1878; Cachemira y el Tíbet (Ladakh) 1889; Persia 1890; Corea y China 1894-97 | Wikipedia EN; Stoddart |
-| Viuda en 1886; en 1889 tenía 57 años | Wikipedia EN |
-| Pedrada (1896, 64 años, cerca de Mien-Chou): la gente quería verla y los porteadores no paraban; «hit, on the back of her head, by a stone»; efectos «for nearly a year» | Stoddart (testimonio del Dr. Horsburgh y carta de Bird) |
-| Marruecos 1901, 69 años: «a magnificent barb, the property of the Sultan; a most powerful black charger… far too much for me»; «what is a terror to me»; «I have to carry a light ladder for getting on and off!» | Stoddart (carta desde Marrakech) |
-| Carta del 30 nov 1903 (72 años): «I left there my luggage packed for Peking»; «more than likely that my next journey will be to the grave of my kindred in the Dean Cemetery» | Stoddart |
-| Murió el 7 oct 1904 en Edimburgo | Stoddart; Wikipedia EN (la ES dice el 8; va el 7) |
+| «I very tired» de niña; el médico propuso que su padre la llevara en un cojín a caballo | Stoddart, *The Life of Isabella Bird* (1906) |
+| Columna, dolores de cabeza, insomnio; tumor fibroso quitado en 1850 | Wikipedia EN; Stoddart |
+| Receta de un viaje por mar; 100 libras «as long as it lasted»; volvió a los 7 meses con 10 libras, «better in health» | Wikipedia EN; Stoddart |
+| «The invalid at home and the Samson abroad» | Artículo de un médico de Edimburgo en *The Edinburgh Medical Journal* (1904), citado por Stoddart |
+| Diez chelines al día; cinco días a caballo, menos que unas horas de tren; equipaje en un fardo | Bird, *A Lady's Life in the Rocky Mountains* (1879) |
+| 4 ft 11½ in (≈ 1,51 m); «scarce five feet of superb will» | Stoddart (carta de 1876 y comentario de la biógrafa) |
+| Pico Longs, 4.346 m; Teide, 3.715 m | Wikipedia «Longs Peak» y «Teide» |
+| Nugent: tuerto, revólver, cuchillo, «"Desperado" was written in large letters all over him»; «six succeeding hours of terror»; «dragged me up, like a bale of goods» | *A Lady's Life*, cartas VI y VII |
+| Ventisca (carta XVI, dic. 1873): pistola junto a la oreja, «a "desperado's" grim jest», «never one so foolish as you»; la poni en el lago helado; los ojos sellados; el posadero; «ready for a ferocious meal» | *A Lady's Life*, carta XVI |
+| Despedida: «I must see you again»; la promesa de aparecerse; Evans le dispara (1874); la visión en Interlaken; «its date coincided with that of the vision» | Stoddart, pp. 83-84 |
+| Cachemira 1889 (con 57 años); pedrada en Sichuan, 1896, con 64 años | Stoddart; Wikipedia EN |
+| Marruecos 1901: bajada en una cesta de carbón con la grúa del barco; «a light ladder for getting on and off»; caballo del sultán | Stoddart (cartas desde Marruecos) |
+| Carta del 30 nov 1903: «my luggage packed for Peking»; «my next journey will be to the grave of my kindred» | Stoddart |
+| Murió el 7 oct 1904 en Edimburgo | Stoddart; Wikipedia EN |
+| Un joven del grupo: «a woman was a dangerous encumbrance»; Jim: «if it were not to take a lady up he would not go up at all» | *A Lady's Life*, carta VII |
+| Al encontrarse con Jim: «a true easterly fog», él «frozen from head to foot»; la tormenta empieza después, en la llanura («the snowstorm began in earnest») | *A Lady's Life*, carta XVI |
+| «I think it more than likely that my next journey will be to the grave of my kindred» | Stoddart, carta del 30 nov 1903 |
 
 ## TÍTULO Y CARÁTULA (Y11, Y13): elige Paco
-Lo que se busca (Y2):
-- En inglés: «isabella bird», «isabella bird explorer».
-- En español: «mujeres viajeras en la historia».
+1. **«ISABELLA BIRD: un forajido, una ventisca y una ESCALERA 🇬🇧»** (55). Es la que recomienda el revisor: todo lo que promete sale en el tráiler (Y20) y no repite la carátula (Y3).
+2. **«Isabella Bird, la gran VIAJERA de cuando era imposible 🇬🇧»** (55). Es la frase de Paco.
+3. **«Isabella Bird: «una mujer es un ESTORBO»… y subió igual 🇬🇧»** (53). Paga en el segundo 44 y no en el gancho, así que solo vale si esa escena sube al tráiler.
 
-Propuestas:
-1. **«Isabella Bird: se le CONGELARON los ojos a caballo 🇺🇸»** (51). El gancho lo cuenta entre los segundos 9 y 15.
-2. **«Isabella Bird, 1873: el FORAJIDO le disparó junto a la oreja 🇺🇸»** (60). Paga en el segundo 58, así que choca con Y20. Solo vale si se adelanta.
-3. **«ISABELLA BIRD cruzó una ventisca SOLA con un ojo congelado 🇺🇸»** (59).
-
-**Bandera:** 🇺🇸, porque la historia pasa en Colorado; 🇬🇧 si prefieres marcar que era inglesa. Tú decides.
-
-**Carátula:** recreación (la cara con hielo en las pestañas) y el texto «HACE **150** AÑOS · sola en la ventisca».
-- Reparto (Y3): la carátula lleva el «hace 150 años»; el título, los ojos.
-- Es la cara de una persona real recreada con IA: necesita tu excepción L1 explícita y el rótulo RECREACIÓN (Y4 pide foto real).
+**Carátula:** retrato real de Bird (Y4/Y14 piden foto real, y así no hace falta la excepción L1) con «HACE **150** AÑOS · sola por el mundo».
 
 ## COSTE (F5)
-- **Runway, 9 planos:**
-  - ventisca;
-  - el lago;
-  - los ojos;
-  - la subida a pulso;
-  - Jim en la niebla;
-  - la salida del lago con luces;
-  - el posadero;
-  - el caballo y la escalera;
-  - los baúles.
-- Cada plano lleva imagen gen4 (8 créditos) y Kling (60): unos 610 créditos, **≈ 6 $**. Se reutiliza el caballo-v4 donde encaje.
-- **Antes, una prueba con el primer plano:** 68 créditos, ≈ 0,7 $.
-- **Voz:** unos 1.900 caracteres de Salma y unos 120 de Bird, dentro del plan (0 € extra).
+- **Runway, unos 13 planos:** gen4 + Kling, unos 890 créditos ≈ **9 $**. Se reutiliza el caballo-v4. Antes, una prueba con el primer plano (≈ 0,7 $).
+- **Voz:** unos 2.000 caracteres de Salma y 120 de Bird, dentro del plan (0 € extra).
