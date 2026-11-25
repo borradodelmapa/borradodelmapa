@@ -22,11 +22,12 @@ La v5 aplica lo que marcó el revisor de guion sobre la v4 (25 nov):
 ## LOS 20 PRIMEROS SEGUNDOS (G1) · el tráiler
 | Seg. | Imagen | IA | Texto (Salma) | Marcas |
 |---|---|---|---|---|
-| 0-5 | Cara de mujer con hielo en las pestañas en plena ventisca. Rótulo «GRANDES VIAJEROS · NO OS LA PERDÁIS» | sí, Runway (RECREACIÓN) | «Isabella Bird. Una ventisca le sella los ojos con hielo.» | `pico`, emocion: fria |
-| 5-9 | Un trampero tuerto tira de ella por la roca | sí | «Un trampero con cara de forajido la sube a pulso a una montaña.» | |
-| 9-12 | Un caballo negro enorme; ella sube por una escalera de mano | sí | «A los sesenta y nueve, sube al caballo con escalera.» | |
-| 12-16 | Grabado real de Bird. Rótulo «HACE 150 AÑOS» | no | «La gran viajera de cuando viajar era imposible para una mujer.» | |
-| 16-21 | El trampero, de espaldas, en la niebla | sí | «Con el forajido se juró algo. Él lo cumplió… de la forma más extraña.» | `datoFuerte` → sígueme |
+**Elegido por Paco (25 nov, opción C con su texto).** Él había dicho de la v5 que la voz describía la imagen: «así es aburrido». Ahora la voz no cuenta lo que se ve.
+| 0-3 | Negro. En letras grandes, con el diseño de la carátula: «NUNCA HE VISTO A NADIE TAN INSENSATO COMO TÚ», y debajo «— JIM NUGENT, FORAJIDO · 1873». Sin voz, solo viento | no | (silencio) | `pico` |
+| 3-12 | Cortes rápidos: cara con hielo en las pestañas → el trampero tuerto tirando de ella por la roca → la escalera junto al caballo negro → grabado real de Bird. Rótulos «GRANDES VIAJEROS · NO OS LA PERDÁIS» y «HACE 150 AÑOS» | sí, Runway (RECREACIÓN) + grabado real | Salma: «Se lo dijo a una viajera incansable. Se llamaba Isabella Bird, era 1873 y hizo lo que ninguna mujer había hecho.» | emocion: fria |
+| 12-20 | El trampero de espaldas, en la niebla | sí | Propuesta para el final del gancho: «Con aquel forajido se juró algo. Él lo cumplió… de la forma más extraña.» | `datoFuerte` → sígueme |
+
+⚠ **Aviso F4 a Paco:** «hizo lo que ninguna mujer había hecho» no se puede demostrar tal cual. Al pico Longs, por ejemplo, ya habían subido otras mujeres: según el Servicio de Parques de EE. UU. (nps.gov/romo/bird_climb_longs_peak.htm), Bird fue la cuarta. Lo que sí tiene fuente es «fue la primera mujer que admitió la Real Sociedad Geográfica». Alternativas verdaderas: «…y hizo lo que casi ninguna mujer se atrevía a hacer» o «…y acabó siendo la primera mujer de la Real Sociedad Geográfica». Decide Paco.
 
 ## EL RESTO
 | Seg. | Imagen | IA | Texto | Marcas |
