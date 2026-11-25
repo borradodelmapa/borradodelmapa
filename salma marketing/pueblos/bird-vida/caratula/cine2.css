@@ -1,0 +1,18 @@
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+.c{position:relative;width:1080px;height:1920px;overflow:hidden}
+.bg{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;filter:contrast(1.1) saturate(1.1)}
+.sh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.55) 12%,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 58%,rgba(0,0,0,.8) 72%,#000 92%)}
+.vig{position:absolute;inset:0;box-shadow:inset 0 0 260px 60px rgba(0,0,0,.75)}
+.logo{position:absolute;left:50%;transform:translateX(-50%);top:36px;height:52px;opacity:.9}
+.serie{position:absolute;left:0;right:0;top:175px;text-align:center;font-family:'Cinzel',serif;font-weight:900;line-height:.95}
+.serie .v{display:block;font-size:132px;letter-spacing:10px}
+.serie .d{display:block;font-size:58px;letter-spacing:26px;margin-top:6px;margin-left:26px}
+.gold .v,.gold .d{background:linear-gradient(180deg,#fff6e0 0%,#f7c27a 45%,#d9771f 70%,#fbd9a0 100%);-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 6px 18px rgba(0,0,0,.9)) drop-shadow(0 0 30px rgba(244,99,11,.35))}
+.white .v,.white .d{color:#fff;text-shadow:0 0 40px rgba(244,99,11,.55),0 8px 30px #000}
+.white .d{color:#F4630B}
+.t{position:absolute;left:0;right:0;bottom:120px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-shadow:0 8px 40px #000}
+.t .la{display:block;color:#fff;font-size:80px;letter-spacing:30px;line-height:1;margin-left:30px}
+.t .big{display:block;color:#F4630B;font-size:212px;line-height:.85;letter-spacing:3px;text-shadow:0 0 60px rgba(244,99,11,.4),0 10px 40px #000}
+.t .via{display:block;color:#fff;font-size:140px;line-height:.9;letter-spacing:22px;margin-left:22px}
+.t .nom{display:block;color:#fff;font-family:'Cinzel',serif;font-weight:700;font-size:40px;letter-spacing:16px;margin-top:34px;margin-left:16px;opacity:.85}
+.rec{position:absolute;right:30px;bottom:30px;color:rgba(255,255,255,.5);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:4px}
