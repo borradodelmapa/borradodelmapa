@@ -82,6 +82,7 @@ module.exports = [
     resumen: 'En 1878, los ainu de Biratori, en Hokkaido, le suplicaron a una viajera inglesa que no contara al Gobierno japonés lo que le enseñaban. Dos años después, Isabella Bird lo publicó todo en Londres. Hoy ese libro se lee en japonés.',
     video: 'viajeros-1-bird-ainu.mp4',
     realidad: 'Capítulo documental narrado por Salma. Lo que pasó en Biratori sale de las cartas de Isabella Bird; las fotos son de Wikimedia Commons (autores al final). En el vídeo, la viajera a caballo, su carta, Londres y la mujer que pasa a color son recreaciones. No es un viaje de Paco.',
+    caratula: 'salma marketing/pueblos/ainu-bird/caratula/bird-F3.png', // carátula de YouTube (F3) = portada del blog y de la story (Y15), aviso de Vídeo 2 del 25 nov 2026
     creditosDe: 'salma marketing/pueblos/ainu-bird',
     otraSerie: 'salma marketing/pueblos',
     atrFotos: {
@@ -104,6 +105,7 @@ module.exports = [
     ] },
     cifras: [['1878', 'Bird llega a Biratori'], ['1880', 'Su libro sale en Londres'], ['1973', 'Primera traducción al japonés']],
     story: {
+      portadaSola: true, // la carátula F3 ya lleva su texto: va sola delante
       portada: 'Isabella_Bird.jpg',
       slides: [
         { foto: 'Isabella_Bird.jpg', h: 'Le pidieron silencio', t: 'En 1878, los ainu le suplicaron a una viajera inglesa que no se lo contara al Gobierno japonés. Ella lo publicó todo.', credito: ['autor desconocido', 'Public domain'] },

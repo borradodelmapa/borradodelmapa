@@ -71,14 +71,14 @@ function creditoBruto(c, s) {
 const MKT = fs.existsSync(path.join(ROOT, 'salma marketing', 'india', 'herramientas', 'node_modules')) ? ROOT : path.resolve(ROOT, '..', '..', '..');
 // En una copia (worktree) el ffmpeg está en la carpeta principal (MKT), 19 nov 2026
 const FFS = [path.join(MKT, 'salma marketing/india/herramientas/node_modules/ffmpeg-static/ffmpeg.exe'), 'ffmpeg'];
-// Con c.caratula (Y15/Y18): la portada es la carátula de YouTube entera, sobre ella misma desenfocada y oscurecida (3:4), y es también el fondo de la primera slide
+// Con c.caratula (Y15/Y18): la portada es la carátula de YouTube entera (horizontal o vertical: cabe siempre entera, 25 nov 2026), sobre ella misma desenfocada y oscurecida (3:4), y es también el fondo de la primera slide
 const caratula = (c) => c.caratula && (c.caratula === 'web' ? path.join(ROOT, 'blog', 'viajes', 'img', c.slug + '.jpg') : c.caratula.includes('/') ? path.join(MKT, c.caratula) : path.join(MKT, 'salma marketing', 'canal-youtube', 'caratulas-y18', c.caratula + '-Y18.jpg'));
 function portada(c) {
   const dest = path.join(OUT, c.slug, 'portada.jpg'), car = caratula(c);
   if (car && fs.existsSync(car)) { // siempre: ffmpeg da el mismo JPG si la carátula no cambia
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     const ff = FFS.find((f) => f === 'ffmpeg' || fs.existsSync(f));
-    const fc = '[0]scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280,boxblur=28:2,eq=brightness=-0.22[bg];[0]scale=960:-2[fg];[bg][fg]overlay=0:(H-h)*0.3';
+    const fc = '[0]scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280,boxblur=28:2,eq=brightness=-0.22[bg];[0]scale=960:1280:force_original_aspect_ratio=decrease[fg];[bg][fg]overlay=(W-w)/2:(H-h)*0.3';
     const r = spawnSync(ff, ['-v', 'error', '-y', '-i', car, '-filter_complex', fc, '-map_metadata', '-1', '-q:v', '3', dest]);
     if (r.status || r.error) throw new Error('No puedo hacer la portada con la carátula de ' + c.slug + ': ' + (r.stderr || r.error));
   } else if (!fs.existsSync(dest)) {
@@ -115,7 +115,7 @@ function pagina(c) {
     const cr = creditoDe(c, s), H = i === 0 ? 'h1' : 'h2';
     return `    <amp-story-page id="p${i + 1}">
       <amp-story-grid-layer template="fill">
-        <amp-img src="${i === 0 && c.caratula ? poster : fotoUrl(c, s.foto)}" layout="fill" alt="${esc(s.h)}"></amp-img>
+        <amp-img src="${i === 0 && c.caratula && !c.story.portadaSola ? poster : fotoUrl(c, s.foto)}" layout="fill" alt="${esc(s.h)}"></amp-img>
       </amp-story-grid-layer>
       <amp-story-grid-layer template="fill" class="velo"></amp-story-grid-layer>
       <amp-story-grid-layer template="vertical" class="txt">
@@ -128,6 +128,13 @@ function pagina(c) {
       </amp-story-page-outlink>` : ''}
     </amp-story-page>`;
   }).join('\n');
+  // story.portadaSola (25 nov 2026): carátula vertical que ya lleva su texto → página propia al principio, sin texto encima
+  const tapa = c.story.portadaSola ? `    <amp-story-page id="p0">
+      <amp-story-grid-layer template="fill">
+        <amp-img src="${poster}" layout="fill" alt="${esc(c.titulo)}"></amp-img>
+      </amp-story-grid-layer>
+    </amp-story-page>
+` : '';
   const fecha = c.fecha || FECHA;
   const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: c.titulo, description: c.resumen, image: [SITE + poster],
     datePublished: fecha, dateModified: fecha, author: { '@type': 'Organization', name: 'Borrado del Mapa', url: SITE },
@@ -160,7 +167,7 @@ ${CSS}
 </head>
 <body>
   <amp-story standalone title="${esc(c.titulo)}" publisher="Borrado del Mapa" publisher-logo-src="${SITE}${LOGO}" poster-portrait-src="${SITE}${poster}">
-${paginas}${CONSENT}
+${tapa}${paginas}${CONSENT}
   </amp-story>
 </body>
 </html>
