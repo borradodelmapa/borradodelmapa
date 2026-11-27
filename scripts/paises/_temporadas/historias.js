@@ -112,6 +112,7 @@ module.exports = [
     salmaPais: 'viajar',
     formato: '16:9',
     caratula: 'tatuajes', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
+    youtube: '0nNCUhMiSdI', // público desde el 23 nov 2026 (comprobado con oEmbed el 27 nov)
     titulo: 'La HISTORIA de los tatuajes: de Ötzi a la Yakuza',
     resumen: 'La historia de los tatuajes en 5.300 años: del hombre de hielo de los Alpes a los maoríes, las cárceles rusas, las maras y la Yakuza. Por qué nos tatuamos y por qué las mafias empiezan a esconderlo.',
     video: 'historia-de-los-tatuajes.mp4',
@@ -244,6 +245,7 @@ module.exports = [
     pais: 'Tuvalu',
     formato: '16:9',
     caratula: 'tuvalu', // carátula de YouTube (Y18, aprobada por Paco el 13 nov 2026) = portada del blog y de la story (Y15)
+    youtube: 'QMWkfY186lk', // público desde el 27 nov 2026 (comprobado con oEmbed)
     titulo: 'Tuvalu se hunde: así se vive en el país que desaparece',
     resumen: 'El punto más alto de Tuvalu está a 4,6 metros sobre el mar. Así se vive en el país que puede desaparecer: cuánta gente vive allí, de qué vive, qué ha pactado con Australia y cómo se viaja hasta él.',
     video: 'tuvalu-se-hunde-asi-se-vive.mp4',
