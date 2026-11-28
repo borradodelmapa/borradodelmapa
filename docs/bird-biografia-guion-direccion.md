@@ -72,12 +72,25 @@ La v5 aplica lo que marcó el revisor de guion sobre la v4 (25 nov):
 | Ventisca (carta XVI, dic. 1873): pistola junto a la oreja, «a "desperado's" grim jest», «never one so foolish as you»; la poni en el lago helado; los ojos sellados; el posadero; «ready for a ferocious meal» | *A Lady's Life*, carta XVI |
 | Despedida: «I must see you again»; la promesa de aparecerse; Evans le dispara (1874); la visión en Interlaken; «its date coincided with that of the vision» | Stoddart, pp. 83-84 |
 | Cachemira 1889 (con 57 años); pedrada en Sichuan, 1896, con 64 años | Stoddart; Wikipedia EN |
+| Cuadro del pico Longs y Estes Park, Albert Bierstadt, circa 1876 (dominio público) | Wikimedia Commons |
+| Nació el 15 oct 1831: 41 años en 1873 y 69 en 1901 (Marruecos) | Stoddart; Wikipedia EN |
+| «Casi treinta años más» de viajes: de 1874 a Marruecos, 1901 (27 años) | Stoddart |
+| «Soñando con volver a China»: carta del 30 nov 1903 («I did hope to see it once again»; China, «harder to give up than all else»). Corrige el «planning another trip to China» de Wikipedia EN | Stoddart |
+| «Never one so foolish as you» (Jim, diciembre de 1873); «I was roped to Jim» en la subida | Bird, *A Lady's Life in the Rocky Mountains*, cartas XVI y VII |
 | Marruecos 1901: bajada en una cesta de carbón con la grúa del barco; «a light ladder for getting on and off»; caballo del sultán | Stoddart (cartas desde Marruecos) |
 | Carta del 30 nov 1903: «my luggage packed for Peking»; «my next journey will be to the grave of my kindred» | Stoddart |
 | Murió el 7 oct 1904 en Edimburgo | Stoddart; Wikipedia EN |
 | Un joven del grupo: «a woman was a dangerous encumbrance»; Jim: «if it were not to take a lady up he would not go up at all» | *A Lady's Life*, carta VII |
 | Al encontrarse con Jim: «a true easterly fog», él «frozen from head to foot»; la tormenta empieza después, en la llanura («the snowstorm began in earnest») | *A Lady's Life*, carta XVI |
 | «I think it more than likely that my next journey will be to the grave of my kindred» | Stoddart, carta del 30 nov 1903 |
+| 1889: Ladakh, el «Little Tibet» (no entró en el Tíbet propiamente) | Stoddart; Bird, cartas de 1889 |
+| 1890: cruzó Persia (Bagdad → Teherán → país bajtiari → Trebisonda) | Bird, *Journeys in Persia and Kurdistan* (1891) |
+| 1896, Liang-shan: la turba gritando «foreign devil», barro y piedras; una piedra en la parte de atrás de la cabeza, con marca casi un año | Bird, *The Yangtze Valley and Beyond* (1899), cap. XX; Stoddart |
+| Jim «lingered for ten days» tras el tiro; la visión coincidió con el día de su muerte | Stoddart, p. 84 |
+| Boda el 8 mar 1881 (49 años) con John Bishop, médico de su hermana Henrietta; él murió en 1886; hospital John Bishop Memorial en Cachemira (1889; Stoddart lo sitúa en Islamabad, hoy Anantnag) | Stoddart, pp. 205-207; Wikipedia EN |
+| 1892: primera mujer elegida Fellow de la Royal Geographical Society | Wikipedia EN; Stoddart |
+| Fotos propias de China (Yangtsé, 1896), publicadas en *The Yangtze Valley and Beyond* | Bird (1899), dominio público |
+| «The invalid at home and the Samson abroad» (literal, con «and») | Edinburgh Medical Journal (1904), citado por Stoddart |
 
 ## TÍTULO Y CARÁTULA (Y11, Y13)
 **Título ELEGIDO por Paco (25 nov):** «LA 1. HAZLO SEO» → **«Mujeres viajeras: viajó SOLA cuando era imposible 🇬🇧»** (51 caracteres).
