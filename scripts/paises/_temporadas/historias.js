@@ -344,6 +344,7 @@ module.exports = [
     pais: 'El Salvador',
     formato: '16:9',
     caratula: 'salma marketing/el-salvador/caratula/ENTREGA/caratula-el-salvador.jpg', // carátula de YouTube aprobada por Paco (19 nov 2026, «La 2, en fila») = portada del blog y de la story (Y15)
+    youtube: 'kSyVLU5tdvw', // público desde el 22 nov 2026 (comprobado con oEmbed el 28 nov)
     titulo: 'Indígenas de El Salvador: del exterminio a cantar el himno',
     resumen: 'En 1932, el ejército de El Salvador mató a miles de indígenas y los eligió por su ropa y por su lengua. Noventa y tres años después, unos niños de Izalco cantaron el himno nacional en náhuat en la Asamblea Legislativa. Qué pasó en medio, qué ha hecho el país y qué ha cambiado con Bukele.',
     video: 'indigenas-de-el-salvador.mp4',
