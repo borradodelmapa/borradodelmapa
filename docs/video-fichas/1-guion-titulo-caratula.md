@@ -40,6 +40,7 @@ Versión: 19 nov 2026 (sacada de la checklist del 19 nov · 23:00). Si la checkl
 - **M1** Estructura: gancho → mapa → desarrollo alternando escalas → pico → ficha rápida → cierre lento → tarjeta.
 - **N9** Shorts: gancho → contexto → viaje → dato clave → cierre con dato o «continuará» → tarjeta.
 - **N27** El short que es avance de un largo cierra con una pregunta concreta que el largo contesta.
+- **P19** Comunidad: el guion acaba (voz de Salma, antes de la tarjeta) con una pregunta concreta del tema que se conteste en una línea; la franja de los 20 s dice «📌 Guárdalo para tu viaje · compártelo con quien iría contigo» (sustituye al «sígueme» de M13).
 - **N14 (1)** Cada bloque abre en sus 3 primeros segundos con el cambio, la amenaza o el beneficio; el dato duro, después.
 - **N14 (2)** La última frase de un bloque vende el siguiente con un dato real de ese bloque.
 - **N14 (5)** Antes de un bloque denso, una frase dice por qué merece la pena quedarse.

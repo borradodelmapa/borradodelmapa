@@ -23,6 +23,7 @@ Versión: 19 nov 2026.
 - **Y21** El mismo lugar, siempre con las mismas palabras exactas en todos los vídeos de ese destino.
 - **P2** Los autores de cada foto y clip ajenos van en la descripción y al final del comentario fijado. Si no caben en el comentario: «autores de todas las fotos en la descripción».
 - **P18** El comentario fijado lleva una pregunta concreta del vídeo, y la llamada a la app nombra el lugar.
+- **P19** Comunidad: la pregunta del final va arriba del comentario fijado y, antes de los créditos, «📌 Guárdalo para tu viaje y compártelo con quien iría contigo»; los comentarios se contestan en 24 h con respuestas que aprueba Paco.
 - **N18** La prueba social va aquí, nunca en la voz.
 - **Y10** Paquete en inglés en Studio: título, descripción y .srt EN.
 - **P1** Marca de IA:
